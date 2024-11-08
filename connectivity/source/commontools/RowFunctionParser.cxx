@@ -404,11 +404,11 @@ std::shared_ptr<ExpressionNode> const & FunctionParser::parseFunction( const OUS
     // TODO(Q1): Check if a combination of the RTL_UNICODETOTEXT_FLAGS_*
     // gives better conversion robustness here (we might want to map space
     // etc. to ASCII space here)
-    const OString& rAsciiFunction(
+    const OString aAsciiFunction(
         OUStringToOString( _sFunction, RTL_TEXTENCODING_ASCII_US ) );
 
-    StringIteratorT aStart( rAsciiFunction.getStr() );
-    StringIteratorT aEnd( rAsciiFunction.getStr()+rAsciiFunction.getLength() );
+    StringIteratorT aStart( aAsciiFunction.getStr() );
+    StringIteratorT aEnd( aAsciiFunction.getStr()+aAsciiFunction.getLength() );
 
     // static parser context, because the actual
     // Spirit parser is also a static object

@@ -133,7 +133,7 @@ ObjectType Tables::appendObject(const OUString& rName,
                                                             m_xMetaData->getConnection())); */
     OUStringBuffer aSqlBuffer("CREATE TABLE ");
     OUString sCatalog, sSchema, sComposedName, sTable;
-    const Reference< XConnection>& xConnection = m_xMetaData->getConnection();
+    const Reference< XConnection> xConnection = m_xMetaData->getConnection();
 
     ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
 

@@ -44,12 +44,12 @@ uno::Any jsonToUnoAny(const boost::property_tree::ptree& aTree)
     sal_Int32 nFields;
     uno::Reference<reflection::XIdlField> aField;
     boost::property_tree::ptree aNodeNull, aNodeValue, aNodeField;
-    const std::string& rType = aTree.get<std::string>("type", "");
-    const std::string& rValue = aTree.get<std::string>("value", "");
+    const std::string aType = aTree.get<std::string>("type", "");
+    const std::string aValueStr = aTree.get<std::string>("value", "");
     uno::Sequence<uno::Reference<reflection::XIdlField>> aFields;
     uno::Reference<reflection::XIdlClass> xIdlClass
         = css::reflection::theCoreReflection::get(comphelper::getProcessComponentContext())
-              ->forName(OUString::fromUtf8(rType));
+              ->forName(OUString::fromUtf8(aType));
     if (xIdlClass.is())
     {
         uno::TypeClass aTypeClass = xIdlClass->getTypeClass();
@@ -70,28 +70,28 @@ uno::Any jsonToUnoAny(const boost::property_tree::ptree& aTree)
                 }
             }
         }
-        else if (!rValue.empty())
+        else if (!aValueStr.empty())
         {
             if (aTypeClass == uno::TypeClass_VOID)
                 aAny.clear();
             else if (aTypeClass == uno::TypeClass_BYTE)
-                aAny <<= static_cast<sal_Int8>(o3tl::toInt32(rValue));
+                aAny <<= static_cast<sal_Int8>(o3tl::toInt32(aValueStr));
             else if (aTypeClass == uno::TypeClass_BOOLEAN)
-                aAny <<= rtl_str_toBoolean(rValue.c_str());
+                aAny <<= rtl_str_toBoolean(aValueStr.c_str());
             else if (aTypeClass == uno::TypeClass_SHORT)
-                aAny <<= static_cast<sal_Int16>(o3tl::toInt32(rValue));
+                aAny <<= static_cast<sal_Int16>(o3tl::toInt32(aValueStr));
             else if (aTypeClass == uno::TypeClass_UNSIGNED_SHORT)
-                aAny <<= static_cast<sal_uInt16>(o3tl::toUInt32(rValue));
+                aAny <<= static_cast<sal_uInt16>(o3tl::toUInt32(aValueStr));
             else if (aTypeClass == uno::TypeClass_LONG)
-                aAny <<= o3tl::toInt32(rValue);
+                aAny <<= o3tl::toInt32(aValueStr);
             else if (aTypeClass == uno::TypeClass_UNSIGNED_LONG)
-                aAny <<= static_cast<sal_uInt32>(o3tl::toInt32(rValue));
+                aAny <<= static_cast<sal_uInt32>(o3tl::toInt32(aValueStr));
             else if (aTypeClass == uno::TypeClass_FLOAT)
-                aAny <<= rtl_str_toFloat(rValue.c_str());
+                aAny <<= rtl_str_toFloat(aValueStr.c_str());
             else if (aTypeClass == uno::TypeClass_DOUBLE)
-                aAny <<= o3tl::toDouble(rValue);
+                aAny <<= o3tl::toDouble(aValueStr);
             else if (aTypeClass == uno::TypeClass_STRING)
-                aAny <<= OUString::fromUtf8(rValue);
+                aAny <<= OUString::fromUtf8(aValueStr);
         }
     }
     return aAny;
@@ -308,46 +308,46 @@ static std::vector<css::beans::PropertyValue> JsonToPropertyValues(const boost::
     boost::property_tree::ptree aNodeNull, aNodeValue;
     for (const auto& rPair : aTree)
     {
-        const std::string& rType = rPair.second.get<std::string>("type", "");
-        const std::string& rValue = rPair.second.get<std::string>("value", "");
+        const std::string aType = rPair.second.get<std::string>("type", "");
+        const std::string aValueStr = rPair.second.get<std::string>("value", "");
 
         beans::PropertyValue aValue;
         aValue.Name = OUString::fromUtf8(rPair.first);
-        if (rType == "string")
-            aValue.Value <<= OUString::fromUtf8(rValue);
-        else if (rType == "boolean")
-            aValue.Value <<= rtl_str_toBoolean(rValue.c_str());
-        else if (rType == "float")
-            aValue.Value <<= rtl_str_toFloat(rValue.c_str());
-        else if (rType == "long")
-            aValue.Value <<= o3tl::toInt32(rValue);
-        else if (rType == "short")
-            aValue.Value <<= sal_Int16(o3tl::toInt32(rValue));
-        else if (rType == "unsigned short")
-            aValue.Value <<= sal_uInt16(o3tl::toUInt32(rValue));
-        else if (rType == "int64")
-            aValue.Value <<= o3tl::toInt64(rValue);
-        else if (rType == "int32")
-            aValue.Value <<= o3tl::toInt32(rValue);
-        else if (rType == "int16")
-            aValue.Value <<= sal_Int16(o3tl::toInt32(rValue));
-        else if (rType == "uint64")
-            aValue.Value <<= rtl_str_toUInt64(rValue.c_str(), 10);
-        else if (rType == "uint32")
-            aValue.Value <<= o3tl::toUInt32(rValue);
-        else if (rType == "uint16")
-            aValue.Value <<= sal_uInt16(o3tl::toUInt32(rValue));
-        else if (rType == "[]byte")
+        if (aType == "string")
+            aValue.Value <<= OUString::fromUtf8(aValueStr);
+        else if (aType == "boolean")
+            aValue.Value <<= rtl_str_toBoolean(aValueStr.c_str());
+        else if (aType == "float")
+            aValue.Value <<= rtl_str_toFloat(aValueStr.c_str());
+        else if (aType == "long")
+            aValue.Value <<= o3tl::toInt32(aValueStr);
+        else if (aType == "short")
+            aValue.Value <<= sal_Int16(o3tl::toInt32(aValueStr));
+        else if (aType == "unsigned short")
+            aValue.Value <<= sal_uInt16(o3tl::toUInt32(aValueStr));
+        else if (aType == "int64")
+            aValue.Value <<= o3tl::toInt64(aValueStr);
+        else if (aType == "int32")
+            aValue.Value <<= o3tl::toInt32(aValueStr);
+        else if (aType == "int16")
+            aValue.Value <<= sal_Int16(o3tl::toInt32(aValueStr));
+        else if (aType == "uint64")
+            aValue.Value <<= rtl_str_toUInt64(aValueStr.c_str(), 10);
+        else if (aType == "uint32")
+            aValue.Value <<= o3tl::toUInt32(aValueStr);
+        else if (aType == "uint16")
+            aValue.Value <<= sal_uInt16(o3tl::toUInt32(aValueStr));
+        else if (aType == "[]byte")
         {
             aNodeValue = rPair.second.get_child("value", aNodeNull);
             if (aNodeValue != aNodeNull && aNodeValue.size() == 0)
             {
-                uno::Sequence<sal_Int8> aSeqByte(reinterpret_cast<const sal_Int8*>(rValue.c_str()),
-                                                 rValue.size());
+                uno::Sequence<sal_Int8> aSeqByte(reinterpret_cast<const sal_Int8*>(aValueStr.c_str()),
+                                                 aValueStr.size());
                 aValue.Value <<= aSeqByte;
             }
         }
-        else if (rType == "any")
+        else if (aType == "any")
         {
             aNodeValue = rPair.second.get_child("value", aNodeNull);
             if (aNodeValue != aNodeNull && !aNodeValue.empty())
@@ -355,7 +355,7 @@ static std::vector<css::beans::PropertyValue> JsonToPropertyValues(const boost::
                 aValue.Value = jsonToUnoAny(aNodeValue);
             }
         }
-        else if (rType == "[]any")
+        else if (aType == "[]any")
         {
             aNodeValue = rPair.second.get_child("value", aNodeNull);
             if (aNodeValue != aNodeNull && !aNodeValue.empty())
@@ -366,12 +366,12 @@ static std::vector<css::beans::PropertyValue> JsonToPropertyValues(const boost::
                 aValue.Value <<= aSeq;
             }
         }
-        else if (rType == "[]com.sun.star.beans.PropertyValue")
+        else if (aType == "[]com.sun.star.beans.PropertyValue")
         {
             aNodeValue = rPair.second.get_child("value", aNodeNull);
             aValue.Value <<= comphelper::containerToSequence(JsonToPropertyValues(aNodeValue));
         }
-        else if (rType == "[][]com.sun.star.beans.PropertyValue")
+        else if (aType == "[][]com.sun.star.beans.PropertyValue")
         {
             aNodeValue = rPair.second.get_child("value", aNodeNull);
             std::vector<uno::Sequence<beans::PropertyValue>> aSeqs;
@@ -382,7 +382,7 @@ static std::vector<css::beans::PropertyValue> JsonToPropertyValues(const boost::
             aValue.Value <<= comphelper::containerToSequence(aSeqs);
         }
         else
-            SAL_WARN("comphelper", "JsonToPropertyValues: unhandled type '" << rType << "'");
+            SAL_WARN("comphelper", "JsonToPropertyValues: unhandled type '" << aType << "'");
         aArguments.push_back(aValue);
     }
     return aArguments;

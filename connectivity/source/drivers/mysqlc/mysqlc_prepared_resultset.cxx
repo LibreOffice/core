@@ -258,7 +258,7 @@ template <typename T> T OPreparedResultSet::retrieveValue(sal_Int32 nColumnIndex
         return *static_cast<T*>(m_aData[nColumnIndex - 1].buffer);
     else
     {
-        auto const& row = getRowSetValue(nColumnIndex);
+        auto const row = getRowSetValue(nColumnIndex);
         if constexpr (std::is_same_v<sal_Int64, T>)
             return row.getLong();
         else if constexpr (std::is_same_v<sal_Int32, T>)

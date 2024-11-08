@@ -497,7 +497,7 @@ void OStatement_Base::GetAssignValues()
         OSL_ENSURE(SQL_ISRULE(pOptColumnCommalist,opt_column_commalist),"OResultSet: Error in Parse Tree");
         if (pOptColumnCommalist->count() == 0)
         {
-            const Sequence< OUString>& aNames = m_xColNames->getElementNames();
+            const Sequence< OUString> aNames = m_xColNames->getElementNames();
             aColumnNameList.insert(aColumnNameList.end(), aNames.begin(), aNames.end());
         }
         else

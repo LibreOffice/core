@@ -948,7 +948,7 @@ void NetProducer::produceService(
 
         if (ctor.defaultConstructor)
         {
-            const auto& returnType(getNetName(entity->getBase()));
+            const auto returnType(getNetName(entity->getBase()));
 
             file.beginLine()
                 .append("public static ")
@@ -1009,7 +1009,7 @@ void NetProducer::produceService(
         }
         else
         {
-            const auto& returnType(getNetName(entity->getBase()));
+            const auto returnType(getNetName(entity->getBase()));
             const auto* restParam = !ctor.parameters.empty() && ctor.parameters.front().rest
                                         ? &ctor.parameters.front()
                                         : nullptr;
