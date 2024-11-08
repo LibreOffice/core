@@ -559,12 +559,12 @@ namespace oglcanvas
                 {
                     // copy state from Gradient polypoly locally
                     // (given object might change!)
-                    const ::canvas::ParametricPolyPolygon::Values& rValues(
+                    const ::canvas::ParametricPolyPolygon::Values aValues(
                         pGradient->getValues() );
 
                     rAct.maFunction = std::bind(&lcl_fillGradientPolyPolygon,
                                                     std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4,
-                                                    rValues,
+                                                    aValues,
                                                     textures[0],
                                                     std::placeholders::_6);
                 }
@@ -681,22 +681,22 @@ namespace oglcanvas
 
             auto pLayoutFont = xLayoutetText->getFont();
             CanvasFont* pFont=dynamic_cast<CanvasFont*>(pLayoutFont.get());
-            const rendering::StringContext& rTxt=xLayoutetText->getText();
-            if( pFont && rTxt.Length )
+            const rendering::StringContext aTxt=xLayoutetText->getText();
+            if( pFont && aTxt.Length )
             {
                 // create the font
-                const rendering::FontRequest& rFontRequest = pFont->getFontRequest();
+                const rendering::FontRequest  aFontRequest = pFont->getFontRequest();
                 const geometry::Matrix2D&     rFontMatrix = pFont->getFontMatrix();
                 vcl::Font aFont(
-                    rFontRequest.FontDescription.FamilyName,
-                    rFontRequest.FontDescription.StyleName,
-                    Size( 0, ::basegfx::fround<tools::Long>(rFontRequest.CellSize)));
+                    aFontRequest.FontDescription.FamilyName,
+                    aFontRequest.FontDescription.StyleName,
+                    Size( 0, ::basegfx::fround<tools::Long>(aFontRequest.CellSize)));
 
                 aFont.SetAlignment( ALIGN_BASELINE );
-                aFont.SetCharSet( (rFontRequest.FontDescription.IsSymbolFont==util::TriState_YES) ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE );
-                aFont.SetVertical( rFontRequest.FontDescription.IsVertical==util::TriState_YES );
-                aFont.SetWeight( static_cast<FontWeight>(rFontRequest.FontDescription.FontDescription.Weight) );
-                aFont.SetItalic( (rFontRequest.FontDescription.FontDescription.Letterform<=8) ? ITALIC_NONE : ITALIC_NORMAL );
+                aFont.SetCharSet( (aFontRequest.FontDescription.IsSymbolFont==util::TriState_YES) ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE );
+                aFont.SetVertical( aFontRequest.FontDescription.IsVertical==util::TriState_YES );
+                aFont.SetWeight( static_cast<FontWeight>(aFontRequest.FontDescription.FontDescription.Weight) );
+                aFont.SetItalic( (aFontRequest.FontDescription.FontDescription.Letterform<=8) ? ITALIC_NONE : ITALIC_NORMAL );
 
                 if (pFont->getEmphasisMark())
                     aFont.SetEmphasisMark(FontEmphasisMark(pFont->getEmphasisMark()));
@@ -735,10 +735,10 @@ namespace oglcanvas
 
                     // get the glyphs
                     pVDev->GetTextOutlines(rAct.maPolyPolys,
-                                          rTxt.Text,
+                                          aTxt.Text,
                                           0,
-                                          rTxt.StartPosition,
-                                          rTxt.Length,
+                                          aTxt.StartPosition,
+                                          aTxt.Length,
                                           0,
                                           aDXArray,
                                           aKashidaArray);
@@ -747,10 +747,10 @@ namespace oglcanvas
                 {
                     // get the glyphs
                     pVDev->GetTextOutlines(rAct.maPolyPolys,
-                                          rTxt.Text,
+                                          aTxt.Text,
                                           0,
-                                          rTxt.StartPosition,
-                                          rTxt.Length );
+                                          aTxt.StartPosition,
+                                          aTxt.Length );
                 }
 
                 // own copy, for thread safety

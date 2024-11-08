@@ -294,14 +294,14 @@ class DemoRenderer
                                              maBox.Height()*.5 );
             const basegfx::B2DPoint aRadii( maBox.Width()*.3,
                                             maBox.Height()*.3 );
-            const basegfx::B2DPolygon& rEllipse(
+            const basegfx::B2DPolygon aEllipse(
                 basegfx::utils::createPolygonFromEllipse( aCenter,
                                                           aRadii.getX(),
                                                           aRadii.getY() ));
 
             uno::Reference< rendering::XPolyPolygon2D > xPoly(
                 basegfx::unotools::xPolyPolygonFromB2DPolygon(mxDevice,
-                                                              rEllipse) );
+                                                              aEllipse) );
 
             rendering::StrokeAttributes aStrokeAttrs;
             aStrokeAttrs.StrokeWidth = 4.0;

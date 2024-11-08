@@ -111,7 +111,7 @@ namespace vclcanvas
         OutputDevice& rOutDev = mpOutDevProvider->getOutDev();
         ScopedVclPtrInstance< VirtualDevice > pVDev( rOutDev );
         pVDev->SetFont(getVCLFont());
-        const ::FontMetric& aMetric( pVDev->GetFontMetric() );
+        const ::FontMetric aMetric( pVDev->GetFontMetric() );
 
         return rendering::FontMetrics(
             aMetric.GetAscent(),

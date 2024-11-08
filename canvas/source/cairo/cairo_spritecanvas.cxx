@@ -165,9 +165,9 @@ namespace cairocanvas
     {
         BitmapSystemData aData;
         if( rBitmap.GetSystemData( aData ) ) {
-            const Size& rSize = rBitmap.GetSizePixel();
+            const Size aSize = rBitmap.GetSizePixel();
 
-            return maDeviceHelper.createSurface( aData, rSize );
+            return maDeviceHelper.createSurface( aData, aSize );
         }
 
         return SurfaceSharedPtr();

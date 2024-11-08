@@ -260,9 +260,9 @@ namespace cairocanvas
         // the sprite.
         ::basegfx::B2IRange aSourceRect(
             ::canvas::tools::spritePixelAreaFromB2DRange( rMoveStart ) );
-        const ::basegfx::B2IRange& rDestRect(
+        const ::basegfx::B2IRange aDestRect(
             ::canvas::tools::spritePixelAreaFromB2DRange( rMoveEnd ) );
-        ::basegfx::B2IPoint aDestPos( rDestRect.getMinimum() );
+        ::basegfx::B2IPoint aDestPos( aDestRect.getMinimum() );
 
         std::vector< ::basegfx::B2IRange > aUnscrollableAreas;
 
@@ -296,10 +296,10 @@ namespace cairocanvas
             const ::basegfx::B2IVector aSourceUpperLeftPos( aSourceRect.getMinimum() );
 
             // clip dest area (which must be inside rDestBounds)
-            ::basegfx::B2IRange aDestRect( rDestRect );
-            aDestRect.intersect( aOutputBounds );
+            ::basegfx::B2IRange aClipDestRect( aDestRect );
+            aClipDestRect.intersect( aOutputBounds );
 
-            ::basegfx::B2ISize aScrollSize( aDestRect.getWidth(), aDestRect.getHeight() );
+            ::basegfx::B2ISize aScrollSize( aClipDestRect.getWidth(), aClipDestRect.getHeight() );
             SurfaceSharedPtr pScrollSurface( getTemporarySurface() );
             CairoSharedPtr pScrollCairo( pScrollSurface->getCairo() );
 
@@ -354,7 +354,7 @@ namespace cairocanvas
         std::vector< ::basegfx::B2DRange > aUncoveredAreas;
         ::basegfx::computeSetDifference( aUncoveredAreas,
                                          rUpdateArea.maTotalBounds,
-                                         ::basegfx::B2DRange( rDestRect ) );
+                                         ::basegfx::B2DRange( aDestRect ) );
         for( const auto& rArea : aUncoveredAreas )
             repaintBackground( pCompositingCairo,
                                mpOwningSpriteCanvas->getBufferSurface(), rArea );

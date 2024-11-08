@@ -210,13 +210,13 @@ namespace vclcanvas
             // the 'left'. Since we postpone actual rendering into the
             // loop below, we set the _right_ edge here, which will be
             // readily copied into the left edge in the loop below
-            const ::basegfx::B2DPoint& rPoint1( aLeftTop - 2.0*nDiagonalLength*aDirection );
-            aTempPoly[1] = ::Point( ::basegfx::fround<::tools::Long>( rPoint1.getX() ),
-                                    ::basegfx::fround<::tools::Long>( rPoint1.getY() ) );
+            const ::basegfx::B2DPoint aPoint1( aLeftTop - 2.0*nDiagonalLength*aDirection );
+            aTempPoly[1] = ::Point( ::basegfx::fround<::tools::Long>( aPoint1.getX() ),
+                                    ::basegfx::fround<::tools::Long>( aPoint1.getY() ) );
 
-            const ::basegfx::B2DPoint& rPoint2( aLeftBottom - 2.0*nDiagonalLength*aDirection );
-            aTempPoly[2] = ::Point( ::basegfx::fround<::tools::Long>( rPoint2.getX() ),
-                                    ::basegfx::fround<::tools::Long>( rPoint2.getY() ) );
+            const ::basegfx::B2DPoint aPoint2( aLeftBottom - 2.0*nDiagonalLength*aDirection );
+            aTempPoly[2] = ::Point( ::basegfx::fround<::tools::Long>( aPoint2.getX() ),
+                                    ::basegfx::fround<::tools::Long>( aPoint2.getY() ) );
 
 
             // iteratively render all other strips
@@ -255,17 +255,17 @@ namespace vclcanvas
                 // increased by one, to account for the fact that we
                 // calculate the right border here (whereas the fill
                 // color is governed by the left edge)
-                const ::basegfx::B2DPoint& rPoint3(
+                const ::basegfx::B2DPoint aPoint3(
                     (nStepCount - i-1)/double(nStepCount)*aLeftTop +
                     (i+1)/double(nStepCount)*aRightTop );
-                aTempPoly[1] = ::Point( ::basegfx::fround<::tools::Long>( rPoint3.getX() ),
-                                        ::basegfx::fround<::tools::Long>( rPoint3.getY() ) );
+                aTempPoly[1] = ::Point( ::basegfx::fround<::tools::Long>( aPoint3.getX() ),
+                                        ::basegfx::fround<::tools::Long>( aPoint3.getY() ) );
 
-                const ::basegfx::B2DPoint& rPoint4(
+                const ::basegfx::B2DPoint aPoint4(
                     (nStepCount - i-1)/double(nStepCount)*aLeftBottom +
                     (i+1)/double(nStepCount)*aRightBottom );
-                aTempPoly[2] = ::Point( ::basegfx::fround<::tools::Long>( rPoint4.getX() ),
-                                        ::basegfx::fround<::tools::Long>( rPoint4.getY() ) );
+                aTempPoly[2] = ::Point( ::basegfx::fround<::tools::Long>( aPoint4.getX() ),
+                                        ::basegfx::fround<::tools::Long>( aPoint4.getY() ) );
 
                 rOutDev.DrawPolygon( aTempPoly );
             }
@@ -282,13 +282,13 @@ namespace vclcanvas
             // calculate new right edge, by moving right edge of the
             // gradient rect two times the bound rect's diagonal to
             // the 'right'.
-            const ::basegfx::B2DPoint& rPoint3( aRightTop + 2.0*nDiagonalLength*aDirection );
-            aTempPoly[0] = aTempPoly[4] = ::Point( ::basegfx::fround<::tools::Long>( rPoint3.getX() ),
-                                                   ::basegfx::fround<::tools::Long>( rPoint3.getY() ) );
+            const ::basegfx::B2DPoint aPoint3( aRightTop + 2.0*nDiagonalLength*aDirection );
+            aTempPoly[0] = aTempPoly[4] = ::Point( ::basegfx::fround<::tools::Long>( aPoint3.getX() ),
+                                                   ::basegfx::fround<::tools::Long>( aPoint3.getY() ) );
 
-            const ::basegfx::B2DPoint& rPoint4( aRightBottom + 2.0*nDiagonalLength*aDirection );
-            aTempPoly[3] = ::Point( ::basegfx::fround<::tools::Long>( rPoint4.getX() ),
-                                    ::basegfx::fround<::tools::Long>( rPoint4.getY() ) );
+            const ::basegfx::B2DPoint aPoint4( aRightBottom + 2.0*nDiagonalLength*aDirection );
+            aTempPoly[3] = ::Point( ::basegfx::fround<::tools::Long>( aPoint4.getX() ),
+                                    ::basegfx::fround<::tools::Long>( aPoint4.getY() ) );
 
             rOutDev.SetFillColor( rColors.back() );
 
@@ -629,20 +629,20 @@ namespace vclcanvas
                 {
                     // copy state from Gradient polypoly locally
                     // (given object might change!)
-                    const ::canvas::ParametricPolyPolygon::Values& rValues(
+                    const ::canvas::ParametricPolyPolygon::Values aValues(
                         pGradient->getValues() );
 
-                    if( rValues.maColors.getLength() < 2 )
+                    if( aValues.maColors.getLength() < 2 )
                     {
                         rendering::RenderState aTempState=renderState;
-                        aTempState.DeviceColor = rValues.maColors[0];
+                        aTempState.DeviceColor = aValues.maColors[0];
                         fillPolyPolygon(pCanvas, xPolyPolygon, viewState, aTempState);
                     }
                     else
                     {
-                        std::vector< ::Color > aColors(rValues.maColors.getLength());
-                        std::transform(&rValues.maColors[0],
-                                       &rValues.maColors[0]+rValues.maColors.getLength(),
+                        std::vector< ::Color > aColors(aValues.maColors.getLength());
+                        std::transform(&aValues.maColors[0],
+                                       &aValues.maColors[0]+aValues.maColors.getLength(),
                                        aColors.begin(),
                                        [](const uno::Sequence< double >& aColor) {
                                            return vcl::unotools::stdColorSpaceSequenceToColor( aColor );
@@ -652,7 +652,7 @@ namespace vclcanvas
                         // TODO(F1): FillRule
                         gradientFill( mpOutDevProvider->getOutDev(),
                                       mp2ndOutDevProvider ? &mp2ndOutDevProvider->getOutDev() : nullptr,
-                                      rValues,
+                                      aValues,
                                       aColors,
                                       aPolyPoly,
                                       viewState,

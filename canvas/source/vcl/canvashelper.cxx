@@ -219,26 +219,26 @@ namespace vclcanvas
         tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDevProvider );
         setupOutDevState( viewState, renderState, LINE_COLOR );
 
-        const Point& rStartPoint( tools::mapRealPoint2D( geometry::RealPoint2D(aBezierSegment.Px,
+        const Point aStartPoint( tools::mapRealPoint2D( geometry::RealPoint2D(aBezierSegment.Px,
                                                                                aBezierSegment.Py),
                                                         viewState, renderState ) );
-        const Point& rCtrlPoint1( tools::mapRealPoint2D( geometry::RealPoint2D(aBezierSegment.C1x,
+        const Point aCtrlPoint1( tools::mapRealPoint2D( geometry::RealPoint2D(aBezierSegment.C1x,
                                                                                aBezierSegment.C1y),
                                                         viewState, renderState ) );
-        const Point& rCtrlPoint2( tools::mapRealPoint2D( geometry::RealPoint2D(aBezierSegment.C2x,
+        const Point aCtrlPoint2( tools::mapRealPoint2D( geometry::RealPoint2D(aBezierSegment.C2x,
                                                                                aBezierSegment.C2y),
                                                          viewState, renderState ) );
-        const Point& rEndPoint( tools::mapRealPoint2D( _aEndPoint,
+        const Point aEndPoint( tools::mapRealPoint2D( _aEndPoint,
                                                        viewState, renderState ) );
 
         ::tools::Polygon aPoly(4);
-        aPoly.SetPoint( rStartPoint, 0 );
+        aPoly.SetPoint( aStartPoint, 0 );
         aPoly.SetFlags( 0, PolyFlags::Normal );
-        aPoly.SetPoint( rCtrlPoint1, 1 );
+        aPoly.SetPoint( aCtrlPoint1, 1 );
         aPoly.SetFlags( 1, PolyFlags::Control );
-        aPoly.SetPoint( rCtrlPoint2, 2 );
+        aPoly.SetPoint( aCtrlPoint2, 2 );
         aPoly.SetFlags( 2, PolyFlags::Control );
-        aPoly.SetPoint( rEndPoint, 3 );
+        aPoly.SetPoint( aEndPoint, 3 );
         aPoly.SetFlags( 3, PolyFlags::Normal );
 
         // TODO(F2): alpha
@@ -260,11 +260,11 @@ namespace vclcanvas
             tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDevProvider );
             setupOutDevState( viewState, renderState, LINE_COLOR );
 
-            const ::basegfx::B2DPolyPolygon& rPolyPoly(
+            const ::basegfx::B2DPolyPolygon aBasegfxPolyPoly(
                 ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon) );
-            const ::tools::PolyPolygon aPolyPoly( tools::mapPolyPolygon( rPolyPoly, viewState, renderState ) );
+            const ::tools::PolyPolygon aPolyPoly( tools::mapPolyPolygon( aBasegfxPolyPoly, viewState, renderState ) );
 
-            if( rPolyPoly.isClosed() )
+            if( aBasegfxPolyPoly.isClosed() )
             {
                 mpOutDevProvider->getOutDev().DrawPolyPolygon( aPolyPoly );
 
@@ -318,7 +318,7 @@ namespace vclcanvas
             // apply dashing, if any
             if( strokeAttributes.DashArray.hasElements() )
             {
-                const std::vector<double>& aDashArray(
+                const std::vector<double> aDashArray(
                     ::comphelper::sequenceToContainer< std::vector<double> >(strokeAttributes.DashArray) );
 
                 ::basegfx::B2DPolyPolygon aDashedPolyPoly;

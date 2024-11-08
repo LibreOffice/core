@@ -811,7 +811,7 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
                         bool bNoLineJoin,
                         const uno::Sequence< rendering::Texture >* pTextures ) const
     {
-        const ::basegfx::B2DPolyPolygon& rPolyPoly(
+        const ::basegfx::B2DPolyPolygon aPolyPoly(
             ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon) );
 
         cairo_t* pCairo = mpCairo.get();
@@ -819,9 +819,9 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
         if(bNoLineJoin && aOperation == Stroke)
         {
             // emulate rendering::PathJoinType::NONE by painting single edges
-            for(sal_uInt32 a(0); a < rPolyPoly.count(); a++)
+            for(sal_uInt32 a(0); a < aPolyPoly.count(); a++)
             {
-                const basegfx::B2DPolygon& aCandidate(rPolyPoly.getB2DPolygon(a));
+                const basegfx::B2DPolygon& aCandidate(aPolyPoly.getB2DPolygon(a));
                 const sal_uInt32 nPointCount(aCandidate.count());
 
                 if(nPointCount)
@@ -852,7 +852,7 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
         }
         else
         {
-            doPolyPolygonImplementation( rPolyPoly, aOperation,
+            doPolyPolygonImplementation( aPolyPoly, aOperation,
                                          pCairo, pTextures,
                                          mpSurfaceProvider,
                                          xPolyPolygon->getFillRule() );

@@ -286,11 +286,11 @@ namespace canvas
         // marked as "don't need update"
         for( const auto& pUnchangedSprite : aUnchangedSprites )
         {
-            const ::basegfx::B2DRange& rUpdateArea( pUnchangedSprite->getUpdateArea() );
+            const ::basegfx::B2DRange aUpdateArea( pUnchangedSprite->getUpdateArea() );
             rUpdateAreas.addRange(
-                ::basegfx::unotools::b2DSurroundingIntegerRangeFromB2DRange( rUpdateArea ),
+                ::basegfx::unotools::b2DSurroundingIntegerRangeFromB2DRange( aUpdateArea ),
                 SpriteInfo( pUnchangedSprite,
-                            rUpdateArea,
+                            aUpdateArea,
                             false ) );
         }
     }

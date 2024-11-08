@@ -100,12 +100,12 @@ namespace canvas
         prepareRendering();
 
         // convert size to normalized device coordinates
-        const ::basegfx::B2DRectangle& rUV( getUVCoords() );
+        const ::basegfx::B2DRectangle aUV( getUVCoords() );
 
-        const double u1(rUV.getMinX());
-        const double v1(rUV.getMinY());
-        const double u2(rUV.getMaxX());
-        const double v2(rUV.getMaxY());
+        const double u1(aUV.getMinX());
+        const double v1(aUV.getMinY());
+        const double u2(aUV.getMaxX());
+        const double v2(aUV.getMaxY());
 
         // concat transforms
         // 1) offset of surface subarea
@@ -144,10 +144,10 @@ namespace canvas
             ######################################
         */
 
-        const ::basegfx::B2DPoint& p0(aTransform * ::basegfx::B2DPoint(maSize.getWidth(),maSize.getHeight()));
-        const ::basegfx::B2DPoint& p1(aTransform * ::basegfx::B2DPoint(0.0,maSize.getHeight()));
-        const ::basegfx::B2DPoint& p2(aTransform * ::basegfx::B2DPoint(0.0,0.0));
-        const ::basegfx::B2DPoint& p3(aTransform * ::basegfx::B2DPoint(maSize.getWidth(),0.0));
+        const ::basegfx::B2DPoint p0(aTransform * ::basegfx::B2DPoint(maSize.getWidth(),maSize.getHeight()));
+        const ::basegfx::B2DPoint p1(aTransform * ::basegfx::B2DPoint(0.0,maSize.getHeight()));
+        const ::basegfx::B2DPoint p2(aTransform * ::basegfx::B2DPoint(0.0,0.0));
+        const ::basegfx::B2DPoint p3(aTransform * ::basegfx::B2DPoint(maSize.getWidth(),0.0));
 
         canvas::Vertex vertex;
         vertex.r = 1.0f;
@@ -222,13 +222,13 @@ namespace canvas
             aDestOffset = mpFragment->getPos();
 
         // convert size to normalized device coordinates
-        const ::basegfx::B2DRectangle& rUV(
+        const ::basegfx::B2DRectangle aUV(
             getUVCoords(aPos1 - maSourceOffset + aDestOffset,
                         basegfx::B2ISize(aSize.getX(), aSize.getY())) );
-        const double u1(rUV.getMinX());
-        const double v1(rUV.getMinY());
-        const double u2(rUV.getMaxX());
-        const double v2(rUV.getMaxY());
+        const double u1(aUV.getMinX());
+        const double v1(aUV.getMinY());
+        const double u2(aUV.getMaxX());
+        const double v2(aUV.getMaxY());
 
         // concatenate transforms
         // 1) offset of surface subarea
@@ -264,10 +264,10 @@ namespace canvas
             ######################################
         */
 
-        const ::basegfx::B2DPoint& p0(aTransform * ::basegfx::B2DPoint(aSize.getX(),aSize.getY()));
-        const ::basegfx::B2DPoint& p1(aTransform * ::basegfx::B2DPoint(0.0,         aSize.getY()));
-        const ::basegfx::B2DPoint& p2(aTransform * ::basegfx::B2DPoint(0.0,         0.0));
-        const ::basegfx::B2DPoint& p3(aTransform * ::basegfx::B2DPoint(aSize.getX(),0.0));
+        const ::basegfx::B2DPoint p0(aTransform * ::basegfx::B2DPoint(aSize.getX(),aSize.getY()));
+        const ::basegfx::B2DPoint p1(aTransform * ::basegfx::B2DPoint(0.0,         aSize.getY()));
+        const ::basegfx::B2DPoint p2(aTransform * ::basegfx::B2DPoint(0.0,         0.0));
+        const ::basegfx::B2DPoint p3(aTransform * ::basegfx::B2DPoint(aSize.getX(),0.0));
 
         canvas::Vertex vertex;
         vertex.r = 1.0f;
@@ -360,7 +360,7 @@ namespace canvas
 
         // uv coordinates that map the surface rectangle
         // to the destination rectangle.
-        const ::basegfx::B2DRectangle& rUV( getUVCoords() );
+        const ::basegfx::B2DRectangle aUV( getUVCoords() );
 
         basegfx::B2DPolygon rTriangleList(basegfx::utils::clipTriangleListOnRange(rClipPoly,
                                                                                   aSurfaceClipRect));
@@ -385,8 +385,8 @@ namespace canvas
             {
                 const basegfx::B2DPoint &aPoint = rTriangleList.getB2DPoint(nIndex);
                 basegfx::B2DPoint aTransformedPoint(aTransform * aPoint);
-                const double tu(((aPoint.getX()-aSurfaceClipRect.getMinX())*rUV.getWidth()/w)+rUV.getMinX());
-                const double tv(((aPoint.getY()-aSurfaceClipRect.getMinY())*rUV.getHeight()/h)+rUV.getMinY());
+                const double tu(((aPoint.getX()-aSurfaceClipRect.getMinX())*aUV.getWidth()/w)+aUV.getMinX());
+                const double tv(((aPoint.getY()-aSurfaceClipRect.getMinY())*aUV.getHeight()/h)+aUV.getMinY());
                 vertex.u=static_cast<float>(tu);
                 vertex.v=static_cast<float>(tv);
                 vertex.x=static_cast<float>(aTransformedPoint.getX());

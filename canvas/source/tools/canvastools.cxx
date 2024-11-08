@@ -958,13 +958,13 @@ namespace canvas::tools
 
             // compute full destination area (to determine uninitialized
             // areas below)
-            const ::basegfx::B2I64Tuple& rRange( io_rSourceArea.getRange() );
+            const ::basegfx::B2I64Tuple aRange( io_rSourceArea.getRange() );
             ::basegfx::B2IRange aInputDestArea( io_rDestPoint.getX(),
                                                 io_rDestPoint.getY(),
                                                 (io_rDestPoint.getX()
-                                                 + static_cast<sal_Int32>(rRange.getX())),
+                                                 + static_cast<sal_Int32>(aRange.getX())),
                                                 (io_rDestPoint.getY()
-                                                 + static_cast<sal_Int32>(rRange.getY())) );
+                                                 + static_cast<sal_Int32>(aRange.getY())) );
             // limit to output area (no point updating outside of it)
             aInputDestArea.intersect( rBounds );
 

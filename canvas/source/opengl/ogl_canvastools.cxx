@@ -29,9 +29,9 @@ namespace oglcanvas
         ::basegfx::B2DPolyPolygon aPolyPoly(rPolyPoly);
         if( aPolyPoly.areControlPointsUsed() )
             aPolyPoly = rPolyPoly.getDefaultAdaptiveSubdivision();
-        const ::basegfx::B2DRange& rBounds(aPolyPoly.getB2DRange());
-        const double nWidth=rBounds.getWidth();
-        const double nHeight=rBounds.getHeight();
+        const ::basegfx::B2DRange aBounds(aPolyPoly.getB2DRange());
+        const double nWidth=aBounds.getWidth();
+        const double nHeight=aBounds.getHeight();
         const ::basegfx::triangulator::B2DTriangleVector rTriangulatedPolygon(
             ::basegfx::triangulator::triangulate(aPolyPoly));
 

@@ -247,7 +247,7 @@ namespace vclcanvas
 
         // need metrics for Y offset, the XCanvas always renders
         // relative to baseline
-        const ::FontMetric& aMetric( pVDev->GetFontMetric() );
+        const ::FontMetric aMetric( pVDev->GetFontMetric() );
 
         setupLayoutMode( *pVDev, mnTextDirection );
 

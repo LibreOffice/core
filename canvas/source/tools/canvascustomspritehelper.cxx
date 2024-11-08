@@ -61,7 +61,7 @@ namespace canvas
 
             // clip which is about to be set, expressed as a
             // b2drectangle
-            const ::basegfx::B2DRectangle& rClipBounds(
+            const ::basegfx::B2DRectangle aClipBounds(
                 ::basegfx::utils::getRange( aClipPath ) );
 
             const ::basegfx::B2DRectangle aBounds( 0.0, 0.0,
@@ -77,7 +77,7 @@ namespace canvas
 
             // aClipBoundsA = new clip bound rect, intersected
             // with sprite area
-            ::basegfx::B2DRectangle aClipBoundsA(rClipBounds);
+            ::basegfx::B2DRectangle aClipBoundsA(aClipBounds);
             aClipBoundsA.intersect( aSpriteRectPixel );
 
             if( nNumClipPolygons != 1 )
@@ -191,7 +191,7 @@ namespace canvas
         if( xBitmap->hasAlpha() )
             return;
 
-        const geometry::IntegerSize2D& rInputSize(xBitmap->getSize());
+        const geometry::IntegerSize2D aInputSize(xBitmap->getSize());
         basegfx::B2DSize rOurSize(rSprite->getSizePixel().getX(), rSprite->getSizePixel().getY());
 
         ::basegfx::B2DHomMatrix aTransform;
@@ -200,8 +200,8 @@ namespace canvas
                                          rOurSize.getWidth(),
                                          rOurSize.getHeight() ),
                 ::basegfx::B2DRectangle( 0.0,0.0,
-                                         rInputSize.Width,
-                                         rInputSize.Height ),
+                                         aInputSize.Width,
+                                         aInputSize.Height ),
                 ::canvas::tools::mergeViewAndRenderTransform(aTransform,
                                                              viewState,
                                                              renderState) ) )
@@ -252,7 +252,7 @@ namespace canvas
         if( aPoint == maPosition )
             return;
 
-        const ::basegfx::B2DRectangle&  rBounds
+        const ::basegfx::B2DRectangle aBounds
             = getUpdateArea( ::basegfx::B2DRectangle( 0.0, 0.0,
                                                       maSize.getX(),
                                                       maSize.getY() ) );
@@ -260,9 +260,9 @@ namespace canvas
         if( mbActive )
         {
             mpSpriteCanvas->moveSprite( rSprite,
-                                        rBounds.getMinimum(),
-                                        rBounds.getMinimum() - maPosition + aPoint,
-                                        rBounds.getRange() );
+                                        aBounds.getMinimum(),
+                                        aBounds.getMinimum() - maPosition + aPoint,
+                                        aBounds.getRange() );
         }
 
         maPosition = aPoint;
@@ -279,7 +279,7 @@ namespace canvas
             return;
 
         // retrieve bounds before and after transformation change.
-        const ::basegfx::B2DRectangle& rPrevBounds( getUpdateArea() );
+        const ::basegfx::B2DRectangle aPrevBounds( getUpdateArea() );
 
         maTransform = aMatrix;
 
@@ -288,7 +288,7 @@ namespace canvas
         {
             mpSpriteCanvas->updateSprite( rSprite,
                                           maPosition,
-                                          rPrevBounds );
+                                          aPrevBounds );
             mpSpriteCanvas->updateSprite( rSprite,
                                           maPosition,
                                           getUpdateArea() );
@@ -303,7 +303,7 @@ namespace canvas
         // NULL xClip explicitly allowed here (to clear clipping)
 
         // retrieve bounds before and after clip change.
-        const ::basegfx::B2DRectangle& rPrevBounds( getUpdateArea() );
+        const ::basegfx::B2DRectangle aPrevBounds( getUpdateArea() );
 
         mxClipPoly = xClip;
 
@@ -312,7 +312,7 @@ namespace canvas
         {
             mpSpriteCanvas->updateSprite( rSprite,
                                           maPosition,
-                                          rPrevBounds );
+                                          aPrevBounds );
             mpSpriteCanvas->updateSprite( rSprite,
                                           maPosition,
                                           getUpdateArea() );

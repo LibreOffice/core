@@ -111,16 +111,16 @@ namespace canvas
                              const ::basegfx::B2DPolyPolygon& rClipPoly,
                              const ::basegfx::B2DHomMatrix&   rTransform )
     {
-        const ::basegfx::triangulator::B2DTriangleVector& rTriangulatedVector(
+        const ::basegfx::triangulator::B2DTriangleVector aTriangulatedVector(
             ::basegfx::triangulator::triangulate(rClipPoly));
 
         // we have now an explicit ::B2DTriangle and ::B2DTriangleVector,
         // but I do not know enough about 'drawWithClip' or 'clipTriangleListOnRange'
         // to adapt to that. Convert back to old three-point-in-polygon convention
         ::basegfx::B2DPolygon aTriangulatedPolygon;
-        aTriangulatedPolygon.reserve(rTriangulatedVector.size() * 3);
+        aTriangulatedPolygon.reserve(aTriangulatedVector.size() * 3);
 
-        for(const auto& rCandidate : rTriangulatedVector)
+        for(const auto& rCandidate : aTriangulatedVector)
         {
             aTriangulatedPolygon.append(rCandidate.getA());
             aTriangulatedPolygon.append(rCandidate.getB());
