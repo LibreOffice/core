@@ -99,7 +99,7 @@ void ORelationTableView::ReSync()
     TTableWindowData::const_reverse_iterator aIter = rTabWinDataList.rbegin();
     for(;aIter != rTabWinDataList.rend();++aIter)
     {
-        TTableWindowData::value_type pData = *aIter;
+        const TTableWindowData::value_type& pData = *aIter;
         VclPtr<OTableWindow> pTabWin = createWindow(pData);
 
         if (!pTabWin->Init())

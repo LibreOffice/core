@@ -491,7 +491,7 @@ bool OJoinTableView::isMovementAllowed(const Point& _rPoint,const Size& _rSize)
 void OJoinTableView::EnsureVisible(const OTableWindow* _pWin)
 {
     // data about the tab win
-    TTableWindowData::value_type pData = _pWin->GetData();
+    const TTableWindowData::value_type& pData = _pWin->GetData();
     EnsureVisible( pData->GetPosition() , pData->GetSize());
     Invalidate(InvalidateFlags::NoChildren);
 }

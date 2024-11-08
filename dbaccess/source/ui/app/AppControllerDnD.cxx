@@ -92,7 +92,7 @@ void OApplicationController::deleteTables(const std::vector< OUString>& _rList)
         std::vector< OUString>::const_iterator aEnd = _rList.end();
         for (std::vector< OUString>::const_iterator aIter = _rList.begin(); aIter != aEnd; ++aIter)
         {
-            OUString sTableName = *aIter;
+            const OUString& sTableName = *aIter;
 
             sal_Int32 nResult = RET_YES;
             if ( bConfirm )

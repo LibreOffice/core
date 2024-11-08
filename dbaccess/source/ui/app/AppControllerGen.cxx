@@ -102,7 +102,7 @@ void OApplicationController::convertToView(const OUString& _sName)
         OSaveAsDlg aDlg(getFrameWeld(), CommandType::TABLE, getORB(), xConnection, aDefaultName, aNameChecker, SADFlags::NONE);
         if (aDlg.run() == RET_OK)
         {
-            OUString sName = aDlg.getName();
+            const OUString& sName = aDlg.getName();
             OUString sCatalog = aDlg.getCatalog();
             OUString sSchema  = aDlg.getSchema();
             OUString sNewName(

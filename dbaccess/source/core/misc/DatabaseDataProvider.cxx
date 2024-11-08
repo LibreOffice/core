@@ -661,7 +661,7 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(bool _bHasCategor
         const sal_Int32 nCount = aImposedColumnNames.getLength();
         for ( sal_Int32 i = 0 ; i < nCount; ++i )
         {
-            const OUString sColumnName( aImposedColumnNames[i] );
+            const OUString& sColumnName( aImposedColumnNames[i] );
             if ( !xColumns->hasByName( sColumnName ) )
                 continue;
 
