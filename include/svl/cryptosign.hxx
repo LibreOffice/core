@@ -92,6 +92,17 @@ private:
     OUString m_aSignPassword;
 };
 
+/// Wrapper around a certificate: allows either an actual signing or extracting enough info, so a
+/// 3rd-party can sign our document.
+class SVL_DLLPUBLIC SigningContext
+{
+public:
+    /// If set, the certificate used for signing.
+    css::uno::Reference<css::security::XCertificate> m_xCertificate;
+    /// If m_xCertificate is not set, the time that would be used.
+    sal_Int64 m_nSignatureTime = 0;
+};
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

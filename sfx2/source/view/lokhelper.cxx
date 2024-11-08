@@ -42,6 +42,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/base64.hxx>
 #include <tools/json_writer.hxx>
+#include <svl/cryptosign.hxx>
 
 #include <boost/property_tree/json_parser.hpp>
 
@@ -990,6 +991,32 @@ void SfxLokHelper::addCertificates(const std::vector<std::string>& rCerts)
     }
 
     pObjectShell->RecheckSignature(false);
+}
+
+bool SfxLokHelper::supportsCommand(std::u16string_view rCommand)
+{
+    static const std::initializer_list<std::u16string_view> vSupport = { u"Signature" };
+
+    return std::find(vSupport.begin(), vSupport.end(), rCommand) != vSupport.end();
+}
+
+void SfxLokHelper::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand)
+{
+    static constexpr OStringLiteral aSignature(".uno:Signature");
+    if (!o3tl::starts_with(rCommand, aSignature))
+    {
+        return;
+    }
+
+    SfxObjectShell* pObjectShell = SfxObjectShell::Current();
+    if (!pObjectShell)
+    {
+        return;
+    }
+
+    svl::crypto::SigningContext aSigningContext;
+    pObjectShell->SignDocumentContentUsingCertificate(aSigningContext);
+    rJsonWriter.put("signatureTime", aSigningContext.m_nSignatureTime);
 }
 
 void SfxLokHelper::notifyUpdate(SfxViewShell const* pThisView, int nType)

@@ -23,6 +23,7 @@
 #include <sfx2/objsh.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
 #include <vcl/filter/pdfdocument.hxx>
+#include <svl/cryptosign.hxx>
 
 using namespace ::com::sun::star;
 
@@ -109,7 +110,9 @@ CPPUNIT_TEST_FIXTURE(VclFilterIpdfTest, testPDFAddVisibleSignatureLastPage)
     pObjectShell->SetModified(false);
 
     // When: do the actual signing.
-    pObjectShell->SignDocumentContentUsingCertificate(xCert);
+    svl::crypto::SigningContext aSigningContext;
+    aSigningContext.m_xCertificate = xCert;
+    pObjectShell->SignDocumentContentUsingCertificate(aSigningContext);
 
     // Then: count the # of shapes on the signature widget/annotation.
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();

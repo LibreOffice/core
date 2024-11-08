@@ -147,6 +147,7 @@ namespace o3tl
 }
 
 namespace weld { class Window; }
+namespace svl::crypto { class SigningContext; }
 
 enum class HiddenWarningFact
 {
@@ -368,7 +369,7 @@ public:
         const css::uno::Reference<css::security::XDocumentDigitalSignatures>& xSigner
         = css::uno::Reference<css::security::XDocumentDigitalSignatures>());
 
-    bool SignDocumentContentUsingCertificate(const css::uno::Reference<css::security::XCertificate>& xCertificate);
+    bool SignDocumentContentUsingCertificate(svl::crypto::SigningContext& rSigningContext);
     bool ResignDocument(css::uno::Sequence< css::security::DocumentSignatureInformation >& rSignaturesInfo);
 
     void SignSignatureLine(weld::Window* pDialogParent, const OUString& aSignatureLineId,

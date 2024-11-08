@@ -101,6 +101,7 @@
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 
 #include <osl/file.hxx>
+#include <svl/cryptosign.hxx>
 
 #ifdef _WIN32
 #include <Shlobj.h>
@@ -1922,7 +1923,9 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
                     {
                         bFoundCert = true;
                         SfxObjectShell* pDocShell = SfxViewShell::Current()->GetObjectShell();
-                        bool bSigned = pDocShell->SignDocumentContentUsingCertificate(xCert);
+                        svl::crypto::SigningContext aSigningContext;
+                        aSigningContext.m_xCertificate = xCert;
+                        bool bSigned = pDocShell->SignDocumentContentUsingCertificate(aSigningContext);
                         if (bSigned && pDocShell->HasValidSignatures())
                         {
                             std::unique_ptr<weld::MessageDialog> xBox(

@@ -74,6 +74,7 @@
 #include <rtl/bootstrap.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/uri.hxx>
+#include <svl/cryptosign.hxx>
 #include <linguistic/misc.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/random.hxx>
@@ -6836,6 +6837,12 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
         pDoc->getCommandValues(aJsonWriter, aCommand);
         return convertOString(aJsonWriter.finishAndGetAsOString());
     }
+    else if (SfxLokHelper::supportsCommand(INetURLObject(OUString::fromUtf8(aCommand)).GetURLPath()))
+    {
+        tools::JsonWriter aJsonWriter;
+        SfxLokHelper::getCommandValues(aJsonWriter, aCommand);
+        return convertOString(aJsonWriter.finishAndGetAsOString());
+    }
     else
     {
         SetLastExceptionMsg(OUString::fromUtf8(aCommand) + u" : Unknown command, no values returned"_ustr);
@@ -7272,7 +7279,9 @@ static bool doc_insertCertificate(LibreOfficeKitDocument* pThis,
 
     SolarMutexGuard aGuard;
 
-    return pObjectShell->SignDocumentContentUsingCertificate(xCertificate);
+    svl::crypto::SigningContext aSigningContext;
+    aSigningContext.m_xCertificate = xCertificate;
+    return pObjectShell->SignDocumentContentUsingCertificate(aSigningContext);
 }
 
 static bool doc_addCertificate(LibreOfficeKitDocument* pThis,
