@@ -352,13 +352,13 @@ public:
         maLine.append(value);
     }
 
-    void writeString(std::string_view key, char* pString, sal_Int32 nSize)
+    /*void writeString(std::string_view key, char* pString, sal_Int32 nSize)
     {
         maLine.append(key);
         maLine.append(" (");
         appendLiteralString(pString, nSize, maLine);
         maLine.append(")");
-    }
+    }*/
 
     void writeUnicodeEncrypt(std::string_view key, OUString const& rString, sal_Int32 nObject)
     {
@@ -370,6 +370,17 @@ public:
     {
         maLine.append(key);
         mrWriterImpl.appendLiteralStringEncrypt(value, nObject, maLine);
+    }
+
+    void writeHexArray(std::string_view key, sal_uInt8* pData, size_t nSize)
+    {
+        maLine.append(key);
+        maLine.append(" <");
+        for (size_t i = 0; i < nSize; i++)
+        {
+            appendHex(sal_Int8(pData[i]), maLine);
+        }
+        maLine.append(">");
     }
 };
 
@@ -6093,6 +6104,7 @@ sal_Int32 PDFWriterImpl::emitEncrypt()
 
     if (updateObject(nObject))
     {
+        PDFEncryptionProperties& rProperties = m_aContext.Encryption;
         PDFStructureWriter aWriter(*this);
         aWriter.startObject(nObject);
         aWriter.startDict();
@@ -6101,8 +6113,8 @@ sal_Int32 PDFWriterImpl::emitEncrypt()
         aWriter.write("/Length", 128);
         aWriter.write("/R", 3);
         // emit the owner password, must not be encrypted
-        aWriter.writeString("/O", reinterpret_cast<char*>(m_aContext.Encryption.OValue.data()), sal_Int32(m_aContext.Encryption.OValue.size()));
-        aWriter.writeString("/U", reinterpret_cast<char*>(m_aContext.Encryption.UValue.data()), sal_Int32(m_aContext.Encryption.UValue.size()));
+        aWriter.writeHexArray("/O", rProperties.OValue.data(), rProperties.OValue.size());
+        aWriter.writeHexArray("/U", rProperties.UValue.data(), rProperties.UValue.size());
         aWriter.write("/P", m_pPDFEncryptor->getAccessPermissions());
         aWriter.endDict();
         aWriter.endObject();
