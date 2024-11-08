@@ -729,7 +729,7 @@ void OSQLParseNode::impl_parseLikeNodeToString_throw( OUStringBuffer& rString, c
     const OSQLParseNode* pEscNode = nullptr;
     const OSQLParseNode* pParaNode = nullptr;
 
-    SQLParseNodeParameter aNewParam(rParam);
+    const SQLParseNodeParameter& aNewParam(rParam);
     //aNewParam.bQuote = sal_True; // why setting this to true? @see https://bz.apache.org/ooo/show_bug.cgi?id=75557
 
     if ( !(bSimple && rParam.bPredicate && rParam.xField.is() && SQL_ISRULE(m_aChildren[0],column_ref) && columnMatchP(m_aChildren[0].get(), rParam)) )

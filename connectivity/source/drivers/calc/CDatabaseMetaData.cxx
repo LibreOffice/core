@@ -167,7 +167,7 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTables(
     sal_Int32 nSheetCount = aSheetNames.getLength();
     for (sal_Int32 nSheet=0; nSheet<nSheetCount; nSheet++)
     {
-        OUString aName = aSheetNames[nSheet];
+        const OUString& aName = aSheetNames[nSheet];
         if ( !lcl_IsEmptyOrHidden( xSheets, aName ) && match(tableNamePattern,aName,'\0') )
         {
             aRows.push_back( { nullptr, nullptr, nullptr,
@@ -191,7 +191,7 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTables(
             sal_Int32 nDBCount = aDBNames.getLength();
             for (sal_Int32 nRange=0; nRange<nDBCount; nRange++)
             {
-                OUString aName = aDBNames[nRange];
+                const OUString& aName = aDBNames[nRange];
                 if ( !lcl_IsUnnamed( xRanges, aName ) && match(tableNamePattern,aName,'\0') )
                 {
                     aRows.push_back( { nullptr, nullptr, nullptr,

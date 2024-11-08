@@ -610,7 +610,7 @@ void OStatement_Base::GetAssignValues()
 void OStatement_Base::ParseAssignValues(const std::vector< OUString>& aColumnNameList,OSQLParseNode* pRow_Value_Constructor_Elem, sal_Int32 nIndex)
 {
     OSL_ENSURE(o3tl::make_unsigned(nIndex) <= aColumnNameList.size(),"SdbFileCursor::ParseAssignValues: nIndex > aColumnNameList.GetTokenCount()");
-    OUString aColumnName(aColumnNameList[nIndex]);
+    const OUString& aColumnName(aColumnNameList[nIndex]);
     OSL_ENSURE(aColumnName.getLength() > 0,"OResultSet: Column-Name not found");
     assert(pRow_Value_Constructor_Elem != nullptr && "OResultSet: pRow_Value_Constructor_Elem must not be NULL!");
 
