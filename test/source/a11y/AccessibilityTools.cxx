@@ -70,6 +70,23 @@ AccessibilityTools::getAccessibleObjectForPredicate(
     return getAccessibleObjectForPredicate(xAcc->getAccessibleContext(), cPredicate);
 }
 
+uno::Reference<accessibility::XAccessibleContext> AccessibilityTools::getAccessibleObjectForId(
+    const uno::Reference<accessibility::XAccessibleContext>& xCtx, std::u16string_view sId)
+{
+    return getAccessibleObjectForPredicate(
+        xCtx, [&](const uno::Reference<accessibility::XAccessibleContext>& xObjCtx) {
+            uno::Reference<accessibility::XAccessibleContext2> xContext2(xObjCtx, uno::UNO_QUERY);
+            return (xContext2 && xContext2->getAccessibleId() == sId);
+        });
+}
+
+css::uno::Reference<css::accessibility::XAccessibleContext>
+AccessibilityTools::getAccessibleObjectForId(
+    const css::uno::Reference<css::accessibility::XAccessible>& xacc, const std::u16string_view sId)
+{
+    return getAccessibleObjectForId(xacc->getAccessibleContext(), sId);
+}
+
 uno::Reference<accessibility::XAccessibleContext> AccessibilityTools::getAccessibleObjectForRole(
     const uno::Reference<accessibility::XAccessibleContext>& xCtx, sal_Int16 role)
 {

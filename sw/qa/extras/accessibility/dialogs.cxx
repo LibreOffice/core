@@ -9,6 +9,10 @@
 
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
+#include <com/sun/star/accessibility/XAccessibleContext2.hpp>
+#include <com/sun/star/linguistic2/LinguServiceManager.hpp>
+#include <com/sun/star/linguistic2/XLinguServiceManager2.hpp>
+#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 
 #include <vcl/scheduler.hxx>
 
@@ -16,6 +20,7 @@
 #include <test/a11y/AccessibilityTools.hxx>
 
 using namespace css;
+using namespace css::accessibility;
 
 // FIXME: dialog API doesn't work on macos yet
 #if !defined(MACOSX)
@@ -188,6 +193,56 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, BasicTestFrameDialog)
 
     CPPUNIT_ASSERT_EQUAL(u"<PARAGRAPH/><TEXT_FRAME name=\"Frame1\"><PARAGRAPH/></TEXT_FRAME>"_ustr,
                          collectText());
+}
+
+/* Verify that UI elements in the spell check dialog have the accessible IDs
+ * set that that Orca screen reader's logic to identify them depends on,
+ * see tdf#155447 and following Orca commits:
+ *
+ * https://gitlab.gnome.org/GNOME/orca/-/commit/6221f4ecf542646a80e47ee7236380360f0e1a85
+ * https://gitlab.gnome.org/GNOME/orca/-/commit/40a2d302eb52295433fd84e6c254a7dbe5108a24
+ *
+ * (Changes should be discussed with the Orca maintainer first.)
+ *
+ * While the Orca logic depends only on case-insensitive name starting
+ * with a certain string, this test uses the full accessible ID
+ * (which matches the GtkBuilder ID in ./cui/uiconfig/ui/spellingdialog.ui)
+ * in order to identify the elements.
+ */
+CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, SpellingDialog)
+{
+    // spell check depends on dictionary being available, so skip test if unavailable
+    uno::Reference<linguistic2::XLinguServiceManager2> xLSM2
+        = linguistic2::LinguServiceManager::create(m_xContext);
+    uno::Reference<linguistic2::XSpellChecker1> xSpell(xLSM2->getSpellChecker(), uno::UNO_QUERY);
+    if (!xSpell.is() || !xSpell->hasLanguage(static_cast<sal_uInt16>(LANGUAGE_ENGLISH_US)))
+        return;
+
+    loadFromSrc(u"/sw/qa/extras/accessibility/testdocuments/tdf155705.fodt"_ustr);
+
+    auto dialogWaiter = awaitDialog(u"Spelling: English (USA)", [](Dialog& dialog) {
+        uno::Reference<XAccessible> xDialogAcc = dialog.getAccessible();
+
+        uno::Reference<XAccessibleContext2> xDialogContext(xDialogAcc->getAccessibleContext(),
+                                                           uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xDialogContext.is());
+        CPPUNIT_ASSERT_EQUAL(u"SpellingDialog"_ustr, xDialogContext->getAccessibleId());
+
+        uno::Reference<XAccessibleContext> xSentenceAcc
+            = AccessibilityTools::getAccessibleObjectForId(xDialogContext, u"errorsentence");
+        CPPUNIT_ASSERT(xSentenceAcc.is());
+
+        uno::Reference<XAccessibleContext> xSuggestionsAcc
+            = AccessibilityTools::getAccessibleObjectForId(xDialogContext, u"suggestionslb");
+        CPPUNIT_ASSERT(xSuggestionsAcc.is());
+
+        CPPUNIT_ASSERT(dialog.tabTo(accessibility::AccessibleRole::PUSH_BUTTON, u"Close"));
+        dialog.postKeyEventAsync(0, awt::Key::RETURN);
+        Scheduler::ProcessEventsToIdle();
+    });
+
+    CPPUNIT_ASSERT(activateMenuItem(u"Tools", u"Spelling..."));
+    CPPUNIT_ASSERT(dialogWaiter->waitEndDialog());
 }
 
 #endif //defined(MACOSX)

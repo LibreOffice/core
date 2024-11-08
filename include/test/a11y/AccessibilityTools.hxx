@@ -52,6 +52,14 @@ public:
         const css::uno::Reference<css::accessibility::XAccessible>& xAcc,
         const std::function<
             bool(const css::uno::Reference<css::accessibility::XAccessibleContext>&)>& cPredicate);
+
+    static css::uno::Reference<css::accessibility::XAccessibleContext> getAccessibleObjectForId(
+        const css::uno::Reference<css::accessibility::XAccessibleContext>& xCtx,
+        std::u16string_view sId);
+    static css::uno::Reference<css::accessibility::XAccessibleContext>
+    getAccessibleObjectForId(const css::uno::Reference<css::accessibility::XAccessible>& xacc,
+                             std::u16string_view sId);
+
     static css::uno::Reference<css::accessibility::XAccessibleContext> getAccessibleObjectForRole(
         const css::uno::Reference<css::accessibility::XAccessibleContext>& xCtx, sal_Int16 role);
     static css::uno::Reference<css::accessibility::XAccessibleContext>
