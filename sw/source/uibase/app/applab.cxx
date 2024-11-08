@@ -282,7 +282,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
 
         //frame represents label itself, no border space
         SvxULSpaceItem aFrameNoULSpace( 0, 0, RES_UL_SPACE );
-        SvxLRSpaceItem aFrameNoLRSpace( 0, 0, 0, RES_LR_SPACE );
+        SvxLRSpaceItem aFrameNoLRSpace(0, 0, SvxIndentValue::zero(), RES_LR_SPACE);
         pFormat->SetFormatAttr( aFrameNoULSpace );
         pFormat->SetFormatAttr( aFrameNoLRSpace );
 

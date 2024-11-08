@@ -67,6 +67,7 @@ class OutlinerSearchable;
 
 class SvxSearchItem;
 class SvxLRSpaceItem;
+struct SvxFontUnitMetrics;
 class TextRanger;
 class SvKeyValueIterator;
 class SvxForbiddenCharactersTable;
@@ -1270,6 +1271,7 @@ public:
     SvxAdjust               GetJustification( sal_Int32 nPara ) const;
     SvxCellJustifyMethod    GetJustifyMethod( sal_Int32 nPara ) const;
     SvxCellVerJustify       GetVerJustification( sal_Int32 nPara ) const;
+    SvxFontUnitMetrics GetFontUnitMetrics(ContentNode* pNode);
 
     void setScalingParameters(ScalingParameters const& rScalingParameters);
 

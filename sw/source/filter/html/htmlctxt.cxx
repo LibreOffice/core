@@ -644,7 +644,7 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
                 pContext->SetMargins( nLeft, nRight, nIndent );
 
                 // Set the attribute on the current paragraph
-                SvxFirstLineIndentItem firstLine(nIndent, css::util::MeasureUnit::TWIP,
+                SvxFirstLineIndentItem firstLine(SvxIndentValue::twips(nIndent),
                                                  RES_MARGIN_FIRSTLINE);
                 NewAttr(m_xAttrTab, &m_xAttrTab->pFirstLineIndent, firstLine);
                 EndAttr(m_xAttrTab->pFirstLineIndent, false);

@@ -3254,8 +3254,8 @@ void RtfAttributeOutput::ParaNumRule_Impl(const SwTextNode* pTextNd, sal_Int32 n
     SvxTextLeftMarginItem leftMargin(rNdSet.Get(RES_MARGIN_TEXTLEFT));
     leftMargin.SetTextLeft(leftMargin.GetTextLeft() + pFormat->GetIndentAt());
 
-    firstLine.SetTextFirstLineOffset(pFormat->GetFirstLineOffset(),
-                                     pFormat->GetFirstLineOffsetUnit());
+    firstLine.SetTextFirstLineOffset(SvxIndentValue{
+        static_cast<double>(pFormat->GetFirstLineOffset()), pFormat->GetFirstLineOffsetUnit() });
 
     sal_uInt16 nStyle = m_rExport.GetId(pFormat->GetCharFormat());
     OString* pString = m_rExport.GetStyle(nStyle);
@@ -3459,7 +3459,7 @@ void RtfAttributeOutput::FormatLRSpace(const SvxLRSpaceItem& rLRSpace)
             m_aStyles.append(OOO_STRING_SVTOOLS_RTF_RIN);
             m_aStyles.append(static_cast<sal_Int32>(rLRSpace.GetRight()));
             m_aStyles.append(OOO_STRING_SVTOOLS_RTF_FI);
-            m_aStyles.append(static_cast<sal_Int32>(rLRSpace.GetTextFirstLineOffset()));
+            m_aStyles.append(rLRSpace.ResolveTextFirstLineOffset({}));
         }
     }
     else if (m_rExport.GetRTFFlySyntax())

@@ -9397,7 +9397,8 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
         {
             pLRSpaceAttrList->add( FSNS(XML_w, (bEcma ? XML_right : XML_end)), OString::number(pLRSpace->GetRight()) );
         }
-        sal_Int32 const nFirstLineAdjustment = pLRSpace->GetTextFirstLineOffset();
+        // tdf#83844: TODO: export FONT_CJK_ADVANCE first line indent as HangingChars/FirstLineChars
+        sal_Int32 const nFirstLineAdjustment = pLRSpace->ResolveTextFirstLineOffset({});
         if (nFirstLineAdjustment > 0)
             pLRSpaceAttrList->add( FSNS( XML_w, XML_firstLine ), OString::number( nFirstLineAdjustment ) );
         else

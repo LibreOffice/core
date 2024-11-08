@@ -1085,7 +1085,6 @@ void SwTextNode::GetMinMaxSize( SwNodeOffset nIndex, sal_uLong& rMin, sal_uLong 
     tools::Long nLROffset = rTextLeftMargin.GetTextLeft() + GetLeftMarginWithNum( true );
     short nFLOffs;
     // For enumerations a negative first line indentation is probably filled already
-    // tdf#36709: TODO: Handle font-relative units
     if (!GetFirstLineOfsWithNum(nFLOffs, {}) || nFLOffs > nLROffset)
         nLROffset = nFLOffs;
 

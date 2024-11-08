@@ -770,7 +770,8 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         case EE_PARA_LRSPACE:
         {
             rOutput.WriteOString( OOO_STRING_SVTOOLS_RTF_FI );
-            sal_Int32 nTxtFirst = static_cast<const SvxLRSpaceItem&>(rItem).GetTextFirstLineOffset();
+            sal_Int32 nTxtFirst
+                = static_cast<const SvxLRSpaceItem&>(rItem).ResolveTextFirstLineOffset({});
             nTxtFirst = LogicToTwips( nTxtFirst );
             rOutput.WriteNumberAsString( nTxtFirst );
             rOutput.WriteOString( OOO_STRING_SVTOOLS_RTF_LI );

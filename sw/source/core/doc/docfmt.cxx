@@ -1706,8 +1706,9 @@ void SwDoc::MoveLeftMargin(const SwPaM& rPam, bool bRight, bool bModulus,
                             }
                             if (indents & ::sw::ListLevelIndents::FirstLine)
                             {
-                                firstLine.SetTextFirstLineOffset(rFormat.GetFirstLineIndent(),
-                                                                 rFormat.GetFirstLineIndentUnit());
+                                firstLine.SetTextFirstLineOffset(SvxIndentValue{
+                                    static_cast<double>(rFormat.GetFirstLineIndent()),
+                                    rFormat.GetFirstLineIndentUnit() });
                             }
                         }
                     }

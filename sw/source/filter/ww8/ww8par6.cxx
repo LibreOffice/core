@@ -523,7 +523,8 @@ void wwSectionManager::SetPage(SwPageDesc &rInPageDesc, SwFrameFormat &rFormat,
     aSz.SetHeight(SvxPaperInfo::GetSloppyPaperDimension(rSection.GetPageHeight()));
     rFormat.SetFormatAttr(aSz);
 
-    SvxLRSpaceItem aLR(rSection.GetPageLeft(), rSection.GetPageRight(), 0, RES_LR_SPACE);
+    SvxLRSpaceItem aLR(rSection.GetPageLeft(), rSection.GetPageRight(), SvxIndentValue::zero(),
+                       RES_LR_SPACE);
     aLR.SetGutterMargin(rSection.m_nPgGutter);
     rFormat.SetFormatAttr(aLR);
 
@@ -761,7 +762,7 @@ SwSectionFormat *wwSectionManager::InsertSection(
     tools::Long nSectionRight = rSection.GetPageRight() - nPageRight;
     if ((nSectionLeft != 0) || (nSectionRight != 0))
     {
-        SvxLRSpaceItem aLR(nSectionLeft, nSectionRight, 0, RES_LR_SPACE);
+        SvxLRSpaceItem aLR(nSectionLeft, nSectionRight, SvxIndentValue::zero(), RES_LR_SPACE);
         pFormat->SetFormatAttr(aLR);
     }
 
@@ -2198,7 +2199,8 @@ WW8FlySet::WW8FlySet(SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
     Put( SwFormatVertOrient( pFS->nYPos, pFS->eVAlign, pFS->eVRel ) );
 
     if (pFS->nLeftMargin || pFS->nRightMargin)     // set borders
-        Put(SvxLRSpaceItem(pFS->nLeftMargin, pFS->nRightMargin, 0, RES_LR_SPACE));
+        Put(SvxLRSpaceItem(pFS->nLeftMargin, pFS->nRightMargin, SvxIndentValue::zero(),
+                           RES_LR_SPACE));
 
     if (pFS->nUpperMargin || pFS->nLowerMargin)
         Put(SvxULSpaceItem(pFS->nUpperMargin, pFS->nLowerMargin, RES_UL_SPACE));
@@ -2259,7 +2261,7 @@ WW8FlySet::WW8FlySet( SwWW8ImplReader& rReader, const SwPaM* pPaM,
         brcVer9[i] = WW8_BRCVer9(rPic.rgbrc[i]);
     if (SwWW8ImplReader::SetFlyBordersShadow( *this, brcVer9, &aSizeArray[0]))
     {
-        Put(SvxLRSpaceItem( aSizeArray[WW8_LEFT], 0, 0, RES_LR_SPACE ) );
+        Put(SvxLRSpaceItem(aSizeArray[WW8_LEFT], 0, SvxIndentValue::zero(), RES_LR_SPACE));
         Put(SvxULSpaceItem( aSizeArray[WW8_TOP], 0, RES_UL_SPACE ));
         aSizeArray[WW8_RIGHT]*=2;
         aSizeArray[WW8_BOT]*=2;
@@ -4306,8 +4308,9 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
             if ( pFormat && pFormat->GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
             {
                 pLeftMargin->SetTextLeft(pFormat->GetIndentAt());
-                pFirstLine->SetTextFirstLineOffset(pFormat->GetFirstLineIndent(),
-                                                   pFormat->GetFirstLineIndentUnit());
+                pFirstLine->SetTextFirstLineOffset(
+                    SvxIndentValue{ static_cast<double>(pFormat->GetFirstLineIndent()),
+                                    pFormat->GetFirstLineIndentUnit() });
                 // make paragraph have hard-set indent attributes
                 pTextNode->SetAttr(*pLeftMargin);
                 pTextNode->SetAttr(*pFirstLine);
@@ -4385,7 +4388,7 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
             }
 
             // tdf#80596: TODO handle sprmPDxcLeft1
-            pFirstLine->SetTextFirstLineOffset(nPara, css::util::MeasureUnit::TWIP);
+            pFirstLine->SetTextFirstLineOffset(SvxIndentValue::twips(nPara));
 
             if (!m_pCurrentColl)
             {

@@ -244,7 +244,10 @@ void FuPage::ExecuteAsyncDialog(weld::Window* pParent, const SfxRequest& rReq)
     SvxPaperBinItem aPaperBinItem( SID_ATTR_PAGE_PAPERBIN, static_cast<sal_uInt8>(mpPage->GetPaperBin()) );
     aNewAttr->Put( aPaperBinItem );
 
-    SvxLRSpaceItem aLRSpaceItem( static_cast<sal_uInt16>(mpPage->GetLeftBorder()), static_cast<sal_uInt16>(mpPage->GetRightBorder()), 0, mpDoc->GetPool().GetWhichIDFromSlotID(SID_ATTR_LRSPACE));
+    SvxLRSpaceItem aLRSpaceItem(static_cast<sal_uInt16>(mpPage->GetLeftBorder()),
+                                static_cast<sal_uInt16>(mpPage->GetRightBorder()),
+                                SvxIndentValue::zero(),
+                                mpDoc->GetPool().GetWhichIDFromSlotID(SID_ATTR_LRSPACE));
     aNewAttr->Put( aLRSpaceItem );
 
     SvxULSpaceItem aULSpaceItem( static_cast<sal_uInt16>(mpPage->GetUpperBorder()), static_cast<sal_uInt16>(mpPage->GetLowerBorder()), mpDoc->GetPool().GetWhichIDFromSlotID(SID_ATTR_ULSPACE));

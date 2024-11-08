@@ -29,6 +29,7 @@
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/beans/Pair.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
@@ -153,6 +154,7 @@ struct SfxItemPropertyMapEntry;
     { UNO_NAME_EDIT_PARA_TABSTOP_DEFAULT_DISTANCE, EE_PARA_TABS, ::cppu::UnoType<sal_Int32>::get(), 0, MID_TABSTOP_DEFAULT_DISTANCE }, \
     { UNO_NAME_EDIT_PARA_TMARGIN,      EE_PARA_ULSPACE,            ::cppu::UnoType<sal_Int32>::get(),            0, MID_UP_MARGIN, PropertyMoreFlags::METRIC_ITEM },\
     { UNO_NAME_EDIT_PARA_FIRST_LINE_INDENT,     EE_PARA_LRSPACE,   ::cppu::UnoType<sal_Int32>::get(),            0, MID_FIRST_LINE_INDENT, PropertyMoreFlags::METRIC_ITEM}, \
+    { UNO_NAME_EDIT_PARA_FIRST_LINE_INDENT_UNIT, EE_PARA_LRSPACE, ::cppu::UnoType<css::beans::Pair<double, sal_Int16>>::get(), 0, MID_FIRST_LINE_UNIT_INDENT }, \
     { UNO_NAME_EDIT_PARA_IS_HANGING_PUNCTUATION,EE_PARA_HANGINGPUNCTUATION,  cppu::UnoType<bool>::get(),                0 ,0 }, \
     { UNO_NAME_EDIT_PARA_IS_CHARACTER_DISTANCE, EE_PARA_ASIANCJKSPACING,   cppu::UnoType<bool>::get(),                0 ,0 }, \
     { UNO_NAME_EDIT_PARA_IS_FORBIDDEN_RULES,    EE_PARA_FORBIDDENRULES,     cppu::UnoType<bool>::get(),                0 ,0 },\

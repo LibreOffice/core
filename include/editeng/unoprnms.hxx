@@ -305,6 +305,8 @@ inline constexpr OUString UNO_NAME_EDIT_PARA_IS_HANGING_PUNCTUATION = u"ParaIsHa
 inline constexpr OUString UNO_NAME_EDIT_PARA_IS_CHARACTER_DISTANCE = u"ParaIsCharacterDistance"_ustr;
 inline constexpr OUString UNO_NAME_EDIT_PARA_IS_FORBIDDEN_RULES = u"ParaIsForbiddenRules"_ustr;
 inline constexpr OUString UNO_NAME_EDIT_PARA_FIRST_LINE_INDENT = u"ParaFirstLineIndent"_ustr;
+inline constexpr OUString UNO_NAME_EDIT_PARA_FIRST_LINE_INDENT_UNIT
+    = u"ParaFirstLineIndentUnit"_ustr;
 
 inline constexpr OUString UNO_NAME_EDIT_CHAR_HEIGHT = u"CharHeight"_ustr;
 inline constexpr OUString UNO_NAME_EDIT_CHAR_FONTNAME = u"CharFontName"_ustr;

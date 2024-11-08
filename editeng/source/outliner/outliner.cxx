@@ -1492,9 +1492,11 @@ tools::Rectangle Outliner::ImpCalcBulletArea( sal_Int32 nPara, bool bAdjust, boo
         const auto nSpaceBefore = pFmt->GetAbsLSpace() + pFmt->GetFirstLineOffset();
 
         const SvxLRSpaceItem& rLR = pEditEngine->GetParaAttrib( nPara, bOutlineMode ? EE_PARA_OUTLLRSPACE : EE_PARA_LRSPACE );
-        aTopLeft.setX( rLR.GetTextLeft() + rLR.GetTextFirstLineOffset() + nSpaceBefore );
+        aTopLeft.setX(rLR.GetTextLeft() + rLR.ResolveTextFirstLineOffset({}) + nSpaceBefore);
 
-        tools::Long nBulletWidth = std::max( static_cast<tools::Long>(-rLR.GetTextFirstLineOffset()), static_cast<tools::Long>((-pFmt->GetFirstLineOffset()) + pFmt->GetCharTextDistance()) );
+        tools::Long nBulletWidth = std::max(
+            static_cast<tools::Long>(-rLR.ResolveTextFirstLineOffset({})),
+            static_cast<tools::Long>((-pFmt->GetFirstLineOffset()) + pFmt->GetCharTextDistance()));
         if ( nBulletWidth < aBulletSize.Width() )   // The Bullet creates its space
             nBulletWidth = aBulletSize.Width();
 

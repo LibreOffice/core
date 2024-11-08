@@ -815,9 +815,8 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                 mpDrawView->GetAttributes( aEditAttr );
 
                 nId = EE_PARA_LRSPACE;
-                SvxLRSpaceItem aLRSpaceItem( rItem.GetLeft(),
-                        rItem.GetRight(),
-                        rItem.GetTextFirstLineOffset(), nId );
+                SvxLRSpaceItem aLRSpaceItem(rItem.GetLeft(), rItem.GetRight(),
+                                            rItem.GetTextFirstLineOffset(), nId);
 
                 const sal_Int16 nOutlineLevel = aEditAttr.Get( EE_PARA_OUTLLEVEL ).GetValue();
                 const SvxLRSpaceItem& rOrigLRSpaceItem = aEditAttr.Get( EE_PARA_LRSPACE );
@@ -843,21 +842,19 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
 
                     // negative first line indent goes to the number
                     // format, positive to the lrSpace item
-                    if( rItem.GetTextFirstLineOffset() < 0 )
+                    if (rItem.GetTextFirstLineOffsetValue() < 0.0)
                     {
-                        aFormat.SetFirstLineOffset(
-                            rItem.GetTextFirstLineOffset()
-                            - rOrigLRSpaceItem.GetTextFirstLineOffset()
-                            + aFormat.GetCharTextDistance());
-                        aLRSpaceItem.SetTextFirstLineOffset(0);
+                        aFormat.SetFirstLineOffset(rItem.ResolveTextFirstLineOffset({})
+                                                   - rOrigLRSpaceItem.ResolveTextFirstLineOffset({})
+                                                   + aFormat.GetCharTextDistance());
+                        aLRSpaceItem.SetTextFirstLineOffset(SvxIndentValue::zero());
                     }
                     else
                     {
                         aFormat.SetFirstLineOffset(0);
-                        aLRSpaceItem.SetTextFirstLineOffset(
-                            rItem.GetTextFirstLineOffset()
-                            - aFormat.GetFirstLineOffset() //TODO: overflow
-                            + aFormat.GetCharTextDistance());
+                        aLRSpaceItem.SetTextFirstLineOffset(SvxIndentValue::twips(
+                            rItem.ResolveTextFirstLineOffset({}) - aFormat.GetFirstLineOffset()
+                            + aFormat.GetCharTextDistance()));
                     }
 
                     if( rFormat != aFormat )
@@ -945,9 +942,9 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
                     rSet.Put( rItem );
 
                     const SvxLRSpaceItem& rLRSpaceItem = aEditAttr.Get( EE_PARA_LRSPACE );
-                    SvxLRSpaceItem aLRSpaceItem( rLRSpaceItem.GetLeft(),
-                            rLRSpaceItem.GetRight(),
-                            rLRSpaceItem.GetTextFirstLineOffset(), SID_ATTR_PARA_LRSPACE );
+                    SvxLRSpaceItem aLRSpaceItem(rLRSpaceItem.GetLeft(), rLRSpaceItem.GetRight(),
+                                                rLRSpaceItem.GetTextFirstLineOffset(),
+                                                SID_ATTR_PARA_LRSPACE);
 
                     const sal_Int16 nOutlineLevel = aEditAttr.Get( EE_PARA_OUTLLEVEL ).GetValue();
                     const SvxNumBulletItem& rNumBulletItem = aEditAttr.Get( EE_PARA_NUMBULLET );
@@ -956,10 +953,9 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
                     {
                         const SvxNumberFormat& rFormat = rNumBulletItem.GetNumRule().GetLevel(nOutlineLevel);
                         aLRSpaceItem.SetTextLeft(rFormat.GetAbsLSpace() + rLRSpaceItem.GetTextLeft());
-                        aLRSpaceItem.SetTextFirstLineOffset(
-                            rLRSpaceItem.GetTextFirstLineOffset() + rFormat.GetFirstLineOffset()
-                                //TODO: overflow
-                            - rFormat.GetCharTextDistance());
+                        aLRSpaceItem.SetTextFirstLineOffset(SvxIndentValue::twips(
+                            rLRSpaceItem.ResolveTextFirstLineOffset({})
+                            + rFormat.GetFirstLineOffset() - rFormat.GetCharTextDistance()));
                     }
 
                     rSet.Put( aLRSpaceItem );

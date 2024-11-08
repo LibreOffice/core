@@ -2130,6 +2130,21 @@ SvxCellVerJustify ImpEditEngine::GetVerJustification( sal_Int32 nPara ) const
     return static_cast<SvxCellVerJustify>(rItem.GetEnumValue());
 }
 
+SvxFontUnitMetrics ImpEditEngine::GetFontUnitMetrics(ContentNode* pNode)
+{
+    SvxFont aTmpFont{ pNode->GetCharAttribs().GetDefFont() };
+    SeekCursor(pNode, /*index*/ 1, aTmpFont);
+    aTmpFont.SetPhysFont(*GetRefDevice());
+
+    // tdf#36709: Metrics conversion should use em and ic values from the bound fonts.
+    // Unfortunately, this currently poses a problem due to font substitution: tests
+    // abort when a missing font is set on a device.
+    // In the interim, use height for all metrics. This is technically not correct, but
+    // should be close enough for common fonts.
+    auto dTextLineHeight = static_cast<double>(aTmpFont.GetPhysTxtSize(GetRefDevice()).Height());
+    return SvxFontUnitMetrics{ /*em*/ dTextLineHeight, /*ic*/ dTextLineHeight };
+}
+
 //  Text changes
 void ImpEditEngine::ImpRemoveChars( const EditPaM& rPaM, sal_Int32 nChars )
 {
@@ -3452,6 +3467,7 @@ sal_uInt32 ImpEditEngine::CalcParaWidth( sal_Int32 nPara, bool bIgnoreExtraSpace
         const SvxLRSpaceItem& rLRItem = GetLRSpaceItem( pPortion->GetNode() );
         sal_Int32 nSpaceBeforeAndMinLabelWidth = GetSpaceBeforeAndMinLabelWidth( pPortion->GetNode() );
 
+        auto stMetrics = GetFontUnitMetrics(pPortion->GetNode());
 
         // On the lines of the paragraph ...
 
@@ -3467,7 +3483,7 @@ sal_uInt32 ImpEditEngine::CalcParaWidth( sal_Int32 nPara, bool bIgnoreExtraSpace
             tools::Long nCurWidth = scaleXSpacingValue(rLRItem.GetTextLeft() + nSpaceBeforeAndMinLabelWidth);
             if ( nLine == 0 )
             {
-                tools::Long nFI = scaleXSpacingValue(rLRItem.GetTextFirstLineOffset());
+                tools::Long nFI = scaleXSpacingValue(rLRItem.ResolveTextFirstLineOffset(stMetrics));
                 nCurWidth -= nFI;
                 if ( pPortion->GetBulletX() > nCurWidth )
                 {
@@ -3770,6 +3786,9 @@ Point ImpEditEngine::GetDocPosTopLeft( sal_Int32 nParagraph )
 {
     const ParaPortion* pPPortion = maParaPortionList.SafeGetObject(nParagraph);
     DBG_ASSERT( pPPortion, "Paragraph not found: GetWindowPosTopLeft" );
+
+    auto stMetrics = GetFontUnitMetrics(pPPortion->GetNode());
+
     Point aPoint;
     if ( pPPortion )
     {
@@ -3789,8 +3808,8 @@ Point ImpEditEngine::GetDocPosTopLeft( sal_Int32 nParagraph )
             sal_Int32 nSpaceBefore = 0;
             GetSpaceBeforeAndMinLabelWidth(pPPortion->GetNode(), &nSpaceBefore);
             short nX = static_cast<short>(rLRItem.GetTextLeft()
-                            + rLRItem.GetTextFirstLineOffset()
-                            + nSpaceBefore);
+                                          + rLRItem.ResolveTextFirstLineOffset(stMetrics)
+                                          + nSpaceBefore);
 
             aPoint.setX(scaleXSpacingValue(nX));
         }

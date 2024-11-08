@@ -3021,7 +3021,6 @@ static SwTwips lcl_CalcAutoWidth( const SwLayoutFrame& rFrame )
             SvxRightMarginItem const& rRightMargin(rParaSet.GetRightMargin());
             if (!static_cast<const SwTextFrame*>(pFrame)->IsLocked())
             {
-                // tdf#36709: TODO: Handle font-relative first-line indent
                 nMin += rRightMargin.GetRight() + rLeftMargin.GetTextLeft()
                         + rFirstLine.ResolveTextFirstLineOffset({});
             }

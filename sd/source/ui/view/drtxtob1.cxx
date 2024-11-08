@@ -347,14 +347,14 @@ void TextObjectBar::ExecuteImpl(ViewShell* mpViewShell, ::sd::View* mpView, SfxR
 
             SvxLRSpaceItem aNewMargin( EE_PARA_LRSPACE );
 
-            ::tools::Long nIndentDist = aParaMargin.GetTextFirstLineOffset();
+            auto nIndentDist = aParaMargin.ResolveTextFirstLineOffset({});
 
-            if (nIndentDist == 0)
+            if (nIndentDist == 0.0)
                 nIndentDist = nIndentDefaultDist;
 
             aNewMargin.SetTextLeft(aParaMargin.GetTextLeft() + nIndentDist);
             aNewMargin.SetRight(aParaMargin.GetRight());
-            aNewMargin.SetTextFirstLineOffset(nIndentDist * -1);
+            aNewMargin.SetTextFirstLineOffset(SvxIndentValue::twips(nIndentDist * -1));
 
             aLRSpaceSet.Put( aNewMargin );
             mpView->SetAttributes( aLRSpaceSet );

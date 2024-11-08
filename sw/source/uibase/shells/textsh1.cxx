@@ -1746,7 +1746,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     SvxFirstLineIndentItem firstLine(RES_MARGIN_FIRSTLINE);
                     SvxTextLeftMarginItem leftMargin(RES_MARGIN_TEXTLEFT);
                     SvxRightMarginItem rightMargin(RES_MARGIN_RIGHT);
-                    firstLine.SetTextFirstLineOffset(aParaMargin.GetTextFirstLineOffset(), aParaMargin.GetPropTextFirstLineOffset());
+                    firstLine.SetTextFirstLineOffset(aParaMargin.GetTextFirstLineOffset(),
+                                                     aParaMargin.GetPropTextFirstLineOffset());
                     firstLine.SetAutoFirst(aParaMargin.IsAutoFirst());
                     leftMargin.SetTextLeft(aParaMargin.GetTextLeft(), aParaMargin.GetPropLeft());
                     rightMargin.SetRight(aParaMargin.GetRight(), aParaMargin.GetPropRight());

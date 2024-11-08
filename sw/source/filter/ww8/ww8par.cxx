@@ -1249,15 +1249,16 @@ void SyncIndentWithList( SvxFirstLineIndentItem & rFirstLine,
         tools::Long nWantedFirstLinePos;
         tools::Long nExtraListIndent = lcl_GetTrueMargin(rFirstLine, rLeftMargin, rFormat, nWantedFirstLinePos);
         rLeftMargin.SetTextLeft(nWantedFirstLinePos - nExtraListIndent);
-        rFirstLine.SetTextFirstLineOffset(0.0, css::util::MeasureUnit::TWIP);
+        rFirstLine.SetTextFirstLineOffset(SvxIndentValue::zero());
     }
     else if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
     {
         if ( !bFirstLineOfstSet && bLeftIndentSet &&
              rFormat.GetFirstLineIndent() != 0 )
         {
-            rFirstLine.SetTextFirstLineOffset(rFormat.GetFirstLineIndent(),
-                                              rFormat.GetFirstLineIndentUnit());
+            rFirstLine.SetTextFirstLineOffset(
+                SvxIndentValue{ static_cast<double>(rFormat.GetFirstLineIndent()),
+                                rFormat.GetFirstLineIndentUnit() });
         }
         else if ( bFirstLineOfstSet && !bLeftIndentSet &&
                   rFormat.GetIndentAt() != 0 )
@@ -1268,8 +1269,9 @@ void SyncIndentWithList( SvxFirstLineIndentItem & rFirstLine,
         {
             if ( rFormat.GetFirstLineIndent() != 0 )
             {
-                rFirstLine.SetTextFirstLineOffset(rFormat.GetFirstLineIndent(),
-                                                  rFormat.GetFirstLineIndentUnit());
+                rFirstLine.SetTextFirstLineOffset(
+                    SvxIndentValue{ static_cast<double>(rFormat.GetFirstLineIndent()),
+                                    rFormat.GetFirstLineIndentUnit() });
             }
             if ( rFormat.GetIndentAt() != 0 )
             {
@@ -1358,8 +1360,7 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                     {
                         SvxFirstLineIndentItem const firstLineEntry(*static_cast<SvxFirstLineIndentItem*>(rEntry.m_pAttr.get()));
                         firstLineNew.SetTextFirstLineOffset(
-                            firstLineEntry.GetTextFirstLineOffsetValue(),
-                            firstLineEntry.GetTextFirstLineOffsetUnit(),
+                            firstLineEntry.GetTextFirstLineOffset(),
                             firstLineEntry.GetPropTextFirstLineOffset());
                         firstLineNew.SetAutoFirst(firstLineEntry.IsAutoFirst());
                     }
@@ -1386,8 +1387,7 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                         else
                         {
                             firstLineNew.SetTextFirstLineOffset(
-                                firstLineOld.GetTextFirstLineOffsetValue(),
-                                firstLineOld.GetTextFirstLineOffsetUnit(),
+                                firstLineOld.GetTextFirstLineOffset(),
                                 firstLineOld.GetPropTextFirstLineOffset());
                             firstLineNew.SetAutoFirst(firstLineOld.IsAutoFirst());
                         }

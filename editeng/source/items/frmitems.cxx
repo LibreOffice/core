@@ -291,7 +291,6 @@ bool SvxSizeItem::HasMetrics() const
 
 SvxLRSpaceItem::SvxLRSpaceItem(const sal_uInt16 nId)
     : SfxPoolItem(nId, SfxItemType::SvxLRSpaceItemType)
-    , nFirstLineOffset(0)
     , nLeftMargin(0)
     , nRightMargin(0)
     , m_nGutterMargin(0)
@@ -305,23 +304,21 @@ SvxLRSpaceItem::SvxLRSpaceItem(const sal_uInt16 nId)
 {
 }
 
-
-SvxLRSpaceItem::SvxLRSpaceItem( const tools::Long nLeft, const tools::Long nRight,
-                                const short nOfset,
-                                const sal_uInt16 nId )
+SvxLRSpaceItem::SvxLRSpaceItem(const tools::Long nLeft, const tools::Long nRight,
+                               SvxIndentValue stOffset, const sal_uInt16 nId)
     : SfxPoolItem(nId, SfxItemType::SvxLRSpaceItemType)
-    , nFirstLineOffset(nOfset)
     , nLeftMargin(nLeft)
     , nRightMargin(nRight)
     , m_nGutterMargin(0)
-    , m_nRightGutterMargin(0),
-    nPropFirstLineOffset( 100 ),
-    nPropLeftMargin( 100 ),
-    nPropRightMargin( 100 ),
-    bAutoFirst      ( false ),
-    bExplicitZeroMarginValRight(false),
-    bExplicitZeroMarginValLeft(false)
+    , m_nRightGutterMargin(0)
+    , nPropFirstLineOffset(100)
+    , nPropLeftMargin(100)
+    , nPropRightMargin(100)
+    , bAutoFirst(false)
+    , bExplicitZeroMarginValRight(false)
+    , bExplicitZeroMarginValLeft(false)
 {
+    SetTextFirstLineOffset(stOffset);
 }
 
 
@@ -341,7 +338,10 @@ bool SvxLRSpaceItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             aLRSpace.Right = static_cast<sal_Int32>(bConvert ? convertTwipToMm100(nRightMargin) : nRightMargin);
             aLRSpace.ScaleLeft = static_cast<sal_Int16>(nPropLeftMargin);
             aLRSpace.ScaleRight = static_cast<sal_Int16>(nPropRightMargin);
-            aLRSpace.FirstLine = static_cast<sal_Int32>(bConvert ? convertTwipToMm100(nFirstLineOffset) : nFirstLineOffset);
+
+            auto nFirstLineOffsetTwips = ResolveTextFirstLineOffset({});
+            aLRSpace.FirstLine = static_cast<sal_Int32>(bConvert ? convertTwipToMm100(nFirstLineOffsetTwips) : nFirstLineOffsetTwips);
+
             aLRSpace.ScaleFirstLine = static_cast<sal_Int16>(nPropFirstLineOffset);
             aLRSpace.AutoFirstLine = IsAutoFirst();
             rVal <<= aLRSpace;
@@ -365,12 +365,38 @@ bool SvxLRSpaceItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         break;
 
         case MID_FIRST_LINE_INDENT:
-            rVal <<= static_cast<sal_Int32>(bConvert ? convertTwipToMm100(nFirstLineOffset) : nFirstLineOffset);
-            break;
+            // MID_FIRST_LINE_INDENT only supports statically-convertible measures.
+            // In practice, these are always stored here in twips.
+            if (m_nFirstLineUnit == css::util::MeasureUnit::TWIP)
+            {
+                auto nConvOffset
+                    = (bConvert ? convertTwipToMm100(m_dFirstLineOffset) : m_dFirstLineOffset);
+                rVal <<= static_cast<sal_Int32>(std::llround(nConvOffset));
+            }
+            else
+            {
+                bRet = false;
+            }
+        break;
 
         case MID_FIRST_LINE_REL_INDENT:
             rVal <<= static_cast<sal_Int16>(nPropFirstLineOffset);
             break;
+
+        case MID_FIRST_LINE_UNIT_INDENT:
+            // MID_FIRST_LINE_UNIT_INDENT is used for any values that must be serialized
+            // as a unit-value pair. In practice, this will be limited to font-relative
+            // units (e.g. em, ic), and all other units will be pre-converted to twips.
+            if (m_nFirstLineUnit != css::util::MeasureUnit::TWIP)
+            {
+                rVal
+                    <<= css::beans::Pair<double, sal_Int16>{ m_dFirstLineOffset, m_nFirstLineUnit };
+            }
+            else
+            {
+                bRet = false;
+            }
+        break;
 
         case MID_FIRST_AUTO:
             rVal <<= IsAutoFirst();
@@ -395,8 +421,8 @@ bool SvxLRSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     bool bConvert = 0 != (nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     sal_Int32 nVal = 0;
-    if( nMemberId != 0 && nMemberId != MID_FIRST_AUTO &&
-            nMemberId != MID_L_REL_MARGIN && nMemberId != MID_R_REL_MARGIN)
+    if (nMemberId != 0 && nMemberId != MID_FIRST_AUTO && nMemberId != MID_L_REL_MARGIN
+        && nMemberId != MID_R_REL_MARGIN && nMemberId != MID_FIRST_LINE_UNIT_INDENT)
         if(!(rVal >>= nVal))
             return false;
 
@@ -413,7 +439,9 @@ bool SvxLRSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             SetRight(bConvert ? o3tl::toTwips(aLRSpace.Right, o3tl::Length::mm100) : aLRSpace.Right);
             nPropLeftMargin = aLRSpace.ScaleLeft;
             nPropRightMargin = aLRSpace.ScaleRight;
-            SetTextFirstLineOffset(bConvert ? o3tl::toTwips(aLRSpace.FirstLine, o3tl::Length::mm100) : aLRSpace.FirstLine);
+            SetTextFirstLineOffset(SvxIndentValue::twips(
+                bConvert ? o3tl::toTwips(aLRSpace.FirstLine, o3tl::Length::mm100)
+                         : aLRSpace.FirstLine));
             SetPropTextFirstLineOffset ( aLRSpace.ScaleFirstLine );
             SetAutoFirst( aLRSpace.AutoFirstLine );
             break;
@@ -445,12 +473,25 @@ bool SvxLRSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         }
         break;
         case MID_FIRST_LINE_INDENT     :
-            SetTextFirstLineOffset(bConvert ? o3tl::toTwips(nVal, o3tl::Length::mm100) : nVal);
+            SetTextFirstLineOffset(
+                SvxIndentValue::twips(bConvert ? o3tl::toTwips(nVal, o3tl::Length::mm100) : nVal));
             break;
 
         case MID_FIRST_LINE_REL_INDENT:
             SetPropTextFirstLineOffset ( nVal );
             break;
+
+        case MID_FIRST_LINE_UNIT_INDENT:
+        {
+            css::beans::Pair<double, sal_Int16> stVal;
+            if (!(rVal >>= stVal))
+            {
+                return false;
+            }
+
+            SetTextFirstLineOffset(SvxIndentValue{ stVal.First, stVal.Second });
+            break;
+        }
 
         case MID_FIRST_AUTO:
             SetAutoFirst( Any2Bool(rVal) );
@@ -476,7 +517,8 @@ void SvxLeftMarginItem::SetLeft(const tools::Long nL, const sal_uInt16 nProp)
 void SvxLRSpaceItem::SetLeft(const tools::Long nL, const sal_uInt16 nProp)
 {
     nLeftMargin = (nL * nProp) / 100;
-    SAL_WARN_IF(nFirstLineOffset != 0, "editeng", "probably call SetTextLeft instead? looks inconsistent otherwise");
+    SAL_WARN_IF(m_dFirstLineOffset != 0.0, "editeng",
+                "probably call SetTextLeft instead? looks inconsistent otherwise");
     nPropLeftMargin = nProp;
 }
 
@@ -497,18 +539,26 @@ void SvxLRSpaceItem::SetRight(const tools::Long nR, const sal_uInt16 nProp)
     nPropRightMargin = nProp;
 }
 
-void SvxLRSpaceItem::SetTextFirstLineOffset(const short nF, const sal_uInt16 nProp)
+void SvxLRSpaceItem::SetTextFirstLineOffset(SvxIndentValue stValue, sal_uInt16 nProp)
 {
     // note: left margin contains any negative first line offset - preserve it!
-    if (nFirstLineOffset < 0)
+    if (m_dFirstLineOffset < 0.0)
     {
-        nLeftMargin -= nFirstLineOffset;
+        nLeftMargin -= ResolveTextFirstLineOffset({});
     }
-    nFirstLineOffset = short((tools::Long(nF) * nProp ) / 100);
+
+    m_dFirstLineOffset = stValue.m_dValue;
+    m_nFirstLineUnit = stValue.m_nUnit;
     nPropFirstLineOffset = nProp;
-    if (nFirstLineOffset < 0)
+
+    if (nProp != 100)
     {
-        nLeftMargin += nFirstLineOffset;
+        m_dFirstLineOffset = (stValue.m_dValue * static_cast<double>(nProp)) / 100.0;
+    }
+
+    if (m_dFirstLineOffset < 0.0)
+    {
+        nLeftMargin += ResolveTextFirstLineOffset({});
     }
 }
 
@@ -542,10 +592,45 @@ void SvxLRSpaceItem::SetTextLeft(const tools::Long nL, const sal_uInt16 nProp)
     auto const nTxtLeft = (nL * nProp) / 100;
     nPropLeftMargin = nProp;
     // note: left margin contains any negative first line offset
-    if ( 0 > nFirstLineOffset )
-        nLeftMargin = nTxtLeft + nFirstLineOffset;
+    if (0.0 > m_dFirstLineOffset)
+        nLeftMargin = nTxtLeft + ResolveTextFirstLineOffset({});
     else
         nLeftMargin = nTxtLeft;
+}
+
+SvxIndentValue SvxLRSpaceItem::GetTextFirstLineOffset() const
+{
+    return { m_dFirstLineOffset, m_nFirstLineUnit };
+}
+
+double SvxLRSpaceItem::GetTextFirstLineOffsetValue() const { return m_dFirstLineOffset; }
+
+sal_Int16 SvxLRSpaceItem::GetTextFirstLineOffsetUnit() const { return m_nFirstLineUnit; }
+
+double SvxLRSpaceItem::ResolveTextFirstLineOffsetDouble(const SvxFontUnitMetrics& rMetrics) const
+{
+    if (m_nFirstLineUnit == css::util::MeasureUnit::TWIP)
+        return m_dFirstLineOffset;
+
+    SAL_WARN_IF(!rMetrics.m_bInitialized, "editeng", "font-relative indentation lost");
+
+    switch (m_nFirstLineUnit)
+    {
+        case css::util::MeasureUnit::FONT_EM:
+            return m_dFirstLineOffset * rMetrics.m_dEmTwips;
+
+        case css::util::MeasureUnit::FONT_CJK_ADVANCE:
+            return m_dFirstLineOffset * rMetrics.m_dIcTwips;
+
+        default:
+            SAL_WARN("editeng", "unhandled type conversion");
+            return 0.0;
+    }
+}
+
+sal_Int32 SvxLRSpaceItem::ResolveTextFirstLineOffset(const SvxFontUnitMetrics& rMetrics) const
+{
+    return static_cast<sal_Int32>(std::llround(ResolveTextFirstLineOffsetDouble(rMetrics)));
 }
 
 tools::Long SvxTextLeftMarginItem::GetTextLeft() const
@@ -569,9 +654,7 @@ tools::Long SvxTextLeftMarginItem::GetLeft(const SvxFirstLineIndentItem& rFirstL
 tools::Long SvxLRSpaceItem::GetTextLeft() const
 {
     // remove any negative first line offset from left margin to get text-left
-    return (nFirstLineOffset < 0)
-        ? nLeftMargin - nFirstLineOffset
-        : nLeftMargin;
+    return (m_dFirstLineOffset < 0) ? nLeftMargin - ResolveTextFirstLineOffset({}) : nLeftMargin;
 }
 
 SvxLeftMarginItem::SvxLeftMarginItem(const sal_uInt16 nId)
@@ -935,11 +1018,10 @@ SvxFirstLineIndentItem::SvxFirstLineIndentItem(const sal_uInt16 nId)
 {
 }
 
-SvxFirstLineIndentItem::SvxFirstLineIndentItem(double dValue, sal_uInt16 nUnit,
-                                               const sal_uInt16 nId)
+SvxFirstLineIndentItem::SvxFirstLineIndentItem(SvxIndentValue stValue, const sal_uInt16 nId)
     : SvxFirstLineIndentItem(nId)
 {
-    SetTextFirstLineOffset(dValue, nUnit);
+    SetTextFirstLineOffset(stValue);
 }
 
 bool SvxFirstLineIndentItem::IsAutoFirst() const { return m_bAutoFirst; }
@@ -961,18 +1043,22 @@ sal_uInt16 SvxFirstLineIndentItem::GetPropTextFirstLineOffset() const
     return m_nPropFirstLineOffset;
 }
 
-void SvxFirstLineIndentItem::SetTextFirstLineOffset(double dValue, sal_Int16 nUnit,
-                                                    sal_uInt16 nProp)
+void SvxFirstLineIndentItem::SetTextFirstLineOffset(SvxIndentValue stValue, sal_uInt16 nProp)
 {
     ASSERT_CHANGE_REFCOUNTED_ITEM;
-    m_dFirstLineOffset = dValue;
-    m_nUnit = nUnit;
+    m_dFirstLineOffset = stValue.m_dValue;
+    m_nUnit = stValue.m_nUnit;
     m_nPropFirstLineOffset = nProp;
 
     if (nProp != 100)
     {
-        m_dFirstLineOffset = (dValue * static_cast<double>(nProp)) / 100.0;
+        m_dFirstLineOffset = (stValue.m_dValue * static_cast<double>(nProp)) / 100.0;
     }
+}
+
+SvxIndentValue SvxFirstLineIndentItem::GetTextFirstLineOffset() const
+{
+    return { m_dFirstLineOffset, m_nUnit };
 }
 
 double SvxFirstLineIndentItem::GetTextFirstLineOffsetValue() const { return m_dFirstLineOffset; }
@@ -1098,9 +1184,7 @@ bool SvxFirstLineIndentItem::PutValue(const uno::Any& rVal, sal_uInt8 nMemberId)
                 return false;
             }
 
-            m_dFirstLineOffset = stVal.First;
-            m_nUnit = stVal.Second;
-            m_nPropFirstLineOffset = 100;
+            SetTextFirstLineOffset(SvxIndentValue{ stVal.First, stVal.Second });
             break;
         }
         case MID_FIRST_AUTO:
@@ -1669,18 +1753,15 @@ bool SvxLRSpaceItem::operator==( const SfxPoolItem& rAttr ) const
 
     const SvxLRSpaceItem& rOther = static_cast<const SvxLRSpaceItem&>(rAttr);
 
-    return (
-        nFirstLineOffset == rOther.GetTextFirstLineOffset() &&
-        m_nGutterMargin == rOther.GetGutterMargin() &&
-        m_nRightGutterMargin == rOther.GetRightGutterMargin() &&
-        nLeftMargin == rOther.GetLeft()  &&
-        nRightMargin == rOther.GetRight() &&
-        nPropFirstLineOffset == rOther.GetPropTextFirstLineOffset() &&
-        nPropLeftMargin == rOther.GetPropLeft()  &&
-        nPropRightMargin == rOther.GetPropRight() &&
-        bAutoFirst == rOther.IsAutoFirst() &&
-        bExplicitZeroMarginValRight == rOther.IsExplicitZeroMarginValRight() &&
-        bExplicitZeroMarginValLeft == rOther.IsExplicitZeroMarginValLeft() );
+    return std::tie(m_dFirstLineOffset, m_nFirstLineUnit, m_nGutterMargin, m_nRightGutterMargin,
+                    nLeftMargin, nRightMargin, nPropFirstLineOffset, nPropLeftMargin,
+                    nPropRightMargin, bAutoFirst, bExplicitZeroMarginValRight,
+                    bExplicitZeroMarginValLeft)
+           == std::tie(rOther.m_dFirstLineOffset, rOther.m_nFirstLineUnit, rOther.m_nGutterMargin,
+                       rOther.m_nRightGutterMargin, rOther.nLeftMargin, rOther.nRightMargin,
+                       rOther.nPropFirstLineOffset, rOther.nPropLeftMargin, rOther.nPropRightMargin,
+                       rOther.bAutoFirst, rOther.bExplicitZeroMarginValRight,
+                       rOther.bExplicitZeroMarginValLeft);
 }
 
 SvxLRSpaceItem* SvxLRSpaceItem::Clone( SfxItemPool* ) const
@@ -1714,9 +1795,15 @@ bool SvxLRSpaceItem::GetPresentation
                 rText += unicode::formatPercent(nPropFirstLineOffset,
                     Application::GetSettings().GetUILanguageTag());
             }
+            else if (m_nFirstLineUnit != css::util::MeasureUnit::TWIP)
+            {
+                OUStringBuffer stBuf;
+                sax::Converter::convertMeasureUnit(stBuf, m_dFirstLineOffset, m_nFirstLineUnit);
+                rText += stBuf.makeStringAndClear();
+            }
             else
-                rText += GetMetricText( static_cast<tools::Long>(nFirstLineOffset),
-                                        eCoreUnit, ePresUnit, &rIntl );
+                rText += GetMetricText(static_cast<tools::Long>(m_dFirstLineOffset), eCoreUnit,
+                                       ePresUnit, &rIntl);
             rText += cpDelim;
             if ( 100 != nRightMargin )
             {
@@ -1740,17 +1827,23 @@ bool SvxLRSpaceItem::GetPresentation
                         " " + EditResId(GetMetricId(ePresUnit));
             }
             rText += cpDelim;
-            if ( 100 != nPropFirstLineOffset || nFirstLineOffset )
+            if (100 != nPropFirstLineOffset || m_dFirstLineOffset != 0.0)
             {
                 rText += EditResId(RID_SVXITEMS_LRSPACE_FLINE);
                 if ( 100 != nPropFirstLineOffset )
                     rText += unicode::formatPercent(nPropFirstLineOffset,
                                 Application::GetSettings().GetUILanguageTag());
+                else if (m_nFirstLineUnit != css::util::MeasureUnit::TWIP)
+                {
+                    OUStringBuffer stBuf;
+                    sax::Converter::convertMeasureUnit(stBuf, m_dFirstLineOffset, m_nFirstLineUnit);
+                    rText += stBuf.makeStringAndClear();
+                }
                 else
                 {
-                    rText += GetMetricText( static_cast<tools::Long>(nFirstLineOffset),
-                                            eCoreUnit, ePresUnit, &rIntl ) +
-                            " " + EditResId(GetMetricId(ePresUnit));
+                    rText += GetMetricText(static_cast<tools::Long>(m_dFirstLineOffset), eCoreUnit,
+                                           ePresUnit, &rIntl)
+                             + " " + EditResId(GetMetricId(ePresUnit));
                 }
                 rText += cpDelim;
             }
@@ -1774,7 +1867,8 @@ bool SvxLRSpaceItem::GetPresentation
 
 void SvxLRSpaceItem::ScaleMetrics( tools::Long nMult, tools::Long nDiv )
 {
-    nFirstLineOffset = static_cast<short>(BigInt::Scale( nFirstLineOffset, nMult, nDiv ));
+    m_dFirstLineOffset
+        = (m_dFirstLineOffset * static_cast<double>(nMult)) / static_cast<double>(nDiv);
     nLeftMargin = BigInt::Scale( nLeftMargin, nMult, nDiv );
     nRightMargin = BigInt::Scale( nRightMargin, nMult, nDiv );
 }
@@ -1790,7 +1884,10 @@ void SvxLRSpaceItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SvxLRSpaceItem"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nFirstLineOffset"), BAD_CAST(OString::number(nFirstLineOffset).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_dFirstLineOffset"),
+                                      BAD_CAST(OString::number(m_dFirstLineOffset).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nFirstLineUnit"),
+                                      BAD_CAST(OString::number(m_nFirstLineUnit).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nLeftMargin"), BAD_CAST(OString::number(nLeftMargin).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nRightMargin"), BAD_CAST(OString::number(nRightMargin).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nGutterMargin"),
@@ -1821,8 +1918,8 @@ boost::property_tree::ptree SvxLRSpaceItem::dumpAsJSON() const
     OUString sRight = GetMetricText(GetRight(),
                         MapUnit::MapTwip, eTargetUnit, nullptr);
 
-    OUString sFirstline = GetMetricText(GetTextFirstLineOffset(),
-                        MapUnit::MapTwip, eTargetUnit, nullptr);
+    OUString sFirstline
+        = GetMetricText(ResolveTextFirstLineOffset({}), MapUnit::MapTwip, eTargetUnit, nullptr);
 
     aState.put("left", sLeft);
     aState.put("right", sRight);

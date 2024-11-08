@@ -69,7 +69,8 @@ struct DebOutBuffer
     }
     void append(std::string_view descr, const SvxLRSpaceItem& rItem)
     {
-        str.append(OString::Concat(descr) + "FI=" + OString::number(rItem.GetTextFirstLineOffset())
+        str.append(OString::Concat(descr)
+                   + "FI=" + OString::number(rItem.ResolveTextFirstLineOffset({}))
                    + ", LI=" + OString::number(rItem.GetTextLeft())
                    + ", RI=" + OString::number(rItem.GetRight()));
     }

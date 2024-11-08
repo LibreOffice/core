@@ -3062,17 +3062,15 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                     {
                         if (bParaRTL)
                         {
-                            firstLine.SetTextFirstLineOffset(
+                            firstLine.SetTextFirstLineOffset(SvxIndentValue::twips(
                                 firstLine.ResolveTextFirstLineOffset({}) + pFormat->GetAbsLSpace()
-                                    - pFormat->GetFirstLineOffset(),
-                                css::util::MeasureUnit::TWIP);
+                                - pFormat->GetFirstLineOffset()));
                         }
                         else
                         {
                             firstLine.SetTextFirstLineOffset(
-                                firstLine.ResolveTextFirstLineOffset({})
-                                    + GetWordFirstLineOffset(*pFormat),
-                                css::util::MeasureUnit::TWIP);
+                                SvxIndentValue::twips(firstLine.ResolveTextFirstLineOffset({})
+                                                      + GetWordFirstLineOffset(*pFormat)));
                         }
                     }
 
@@ -3205,7 +3203,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 // (first line indent is ignored)
                 if (!bParaRTL)
                 {
-                    firstLine.SetTextFirstLineOffset(0.0, css::util::MeasureUnit::TWIP);
+                    firstLine.SetTextFirstLineOffset(SvxIndentValue::zero());
                 }
 
                 // put back the new item

@@ -815,7 +815,8 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
         tools::Long nStartXNextLine = nStartX;
         if ( nIndex == 0 )
         {
-            tools::Long nFI = scaleXSpacingValue(rLRItem.GetTextFirstLineOffset());
+            auto stMetrics = GetFontUnitMetrics(pNode);
+            tools::Long nFI = scaleXSpacingValue(rLRItem.ResolveTextFirstLineOffset(stMetrics));
             nStartX += nFI;
 
             if (!nLine && rParaPortion.GetBulletX() > nStartX)
@@ -1791,17 +1792,22 @@ void ImpEditEngine::CreateAndInsertEmptyLine(ParaPortion& rParaPortion)
     pTmpLine->SetEnd(rParaPortion.GetNode()->Len());
     rParaPortion.GetLines().Append(std::unique_ptr<EditLine>(pTmpLine));
 
+    auto stMetrics = GetFontUnitMetrics(rParaPortion.GetNode());
+
     bool bLineBreak = rParaPortion.GetNode()->Len() > 0;
     sal_Int32 nSpaceBefore = 0;
     sal_Int32 nSpaceBeforeAndMinLabelWidth = GetSpaceBeforeAndMinLabelWidth(rParaPortion.GetNode(), &nSpaceBefore);
     const SvxLRSpaceItem& rLRItem = GetLRSpaceItem(rParaPortion.GetNode());
     const SvxLineSpacingItem& rLSItem = rParaPortion.GetNode()->GetContentAttribs().GetItem( EE_PARA_SBL );
-    tools::Long nStartX = scaleXSpacingValue(rLRItem.GetTextLeft() + rLRItem.GetTextFirstLineOffset() + nSpaceBefore);
+    tools::Long nStartX = scaleXSpacingValue(
+        rLRItem.GetTextLeft() + rLRItem.ResolveTextFirstLineOffset(stMetrics) + nSpaceBefore);
 
     tools::Rectangle aBulletArea { Point(), Point() };
     if ( bLineBreak )
     {
-        nStartX = scaleXSpacingValue(rLRItem.GetTextLeft() + rLRItem.GetTextFirstLineOffset() + nSpaceBeforeAndMinLabelWidth);
+        nStartX = scaleXSpacingValue(rLRItem.GetTextLeft()
+                                     + rLRItem.ResolveTextFirstLineOffset(stMetrics)
+                                     + nSpaceBeforeAndMinLabelWidth);
     }
     else
     {
@@ -1812,7 +1818,9 @@ void ImpEditEngine::CreateAndInsertEmptyLine(ParaPortion& rParaPortion)
             rParaPortion.SetBulletX( 0 ); // If Bullet set incorrectly.
         if (rParaPortion.GetBulletX() > nStartX)
         {
-            nStartX = scaleXSpacingValue(rLRItem.GetTextLeft() + rLRItem.GetTextFirstLineOffset() + nSpaceBeforeAndMinLabelWidth);
+            nStartX = scaleXSpacingValue(rLRItem.GetTextLeft()
+                                         + rLRItem.ResolveTextFirstLineOffset(stMetrics)
+                                         + nSpaceBeforeAndMinLabelWidth);
             if (rParaPortion.GetBulletX() > nStartX)
                 nStartX = rParaPortion.GetBulletX();
         }

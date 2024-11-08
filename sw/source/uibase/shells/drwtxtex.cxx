@@ -242,7 +242,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                     SvxLRSpaceItem aParaMargin = aEditAttr.Get( EE_PARA_LRSPACE );
                     aParaMargin.SetWhich( EE_PARA_LRSPACE );
 
-                    tools::Long nIndentDist = aParaMargin.GetTextFirstLineOffset();
+                    tools::Long nIndentDist = aParaMargin.ResolveTextFirstLineOffset({});
 
                     if (nIndentDist == 0)
                     {
@@ -252,7 +252,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
 
                     aParaMargin.SetTextLeft(aParaMargin.GetTextLeft() + nIndentDist);
                     aParaMargin.SetRight(aParaMargin.GetRight());
-                    aParaMargin.SetTextFirstLineOffset(nIndentDist * -1);
+                    aParaMargin.SetTextFirstLineOffset(SvxIndentValue::twips(nIndentDist * -1));
 
                     aNewAttr.Put(aParaMargin);
                     rReq.Done();

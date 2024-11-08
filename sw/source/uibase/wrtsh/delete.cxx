@@ -74,13 +74,13 @@ bool SwWrtShell::TryRemoveIndent()
 
     if (aOldFirstLineOfst > 0)
     {
-        firstLine.SetTextFirstLineOffset(0.0, css::util::MeasureUnit::TWIP);
+        firstLine.SetTextFirstLineOffset(SvxIndentValue::zero());
         bResult = true;
     }
     else if (aOldFirstLineOfst < 0)
     {
         // this used to call SetLeft() but this should be the same result
-        firstLine.SetTextFirstLineOffset(0.0, css::util::MeasureUnit::TWIP);
+        firstLine.SetTextFirstLineOffset(SvxIndentValue::zero());
         leftMargin.SetTextLeft(leftMargin.GetTextLeft() + aOldFirstLineOfst);
         bResult = true;
     }

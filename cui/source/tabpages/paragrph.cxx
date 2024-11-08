@@ -412,22 +412,21 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
             if (m_aFLineIndent.IsRelative())
             {
                 item.SetTextFirstLineOffset(
-                    rOldItem.GetTextFirstLineOffsetValue(), rOldItem.GetTextFirstLineOffsetUnit(),
+                    rOldItem.GetTextFirstLineOffset(),
                     static_cast<sal_uInt16>(m_aFLineIndent.get_value(FieldUnit::NONE)));
             }
             else
             {
                 // tdf#36709: TODO: Handle font-relative units from GUI
                 item.SetTextFirstLineOffset(
-                    static_cast<sal_uInt16>(m_aFLineIndent.GetCoreValue(eUnit)),
+                    SvxIndentValue::twips(m_aFLineIndent.GetCoreValue(eUnit)),
                     css::util::MeasureUnit::TWIP);
             }
         }
         else
         {
             // tdf#36709: TODO: Handle font-relative units from GUI
-            item.SetTextFirstLineOffset(static_cast<sal_uInt16>(m_aFLineIndent.GetCoreValue(eUnit)),
-                                        css::util::MeasureUnit::TWIP);
+            item.SetTextFirstLineOffset(SvxIndentValue::twips(m_aFLineIndent.GetCoreValue(eUnit)));
         }
         item.SetAutoFirst(m_xAutoCB->get_active());
         if (item.GetTextFirstLineOffsetValue() < 0)
@@ -474,19 +473,26 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
                 aMargin.SetRight(m_aRightIndent.GetCoreValue(eUnit));
 
             if ( m_aFLineIndent.IsRelative() )
-                aMargin.SetTextFirstLineOffset( rOldItem.GetTextFirstLineOffset(),
-                                             static_cast<sal_uInt16>(m_aFLineIndent.get_value(FieldUnit::NONE)) );
+                aMargin.SetTextFirstLineOffset(
+                    rOldItem.GetTextFirstLineOffset(),
+                    static_cast<sal_uInt16>(m_aFLineIndent.get_value(FieldUnit::NONE)));
             else
-                aMargin.SetTextFirstLineOffset(static_cast<sal_uInt16>(m_aFLineIndent.GetCoreValue(eUnit)));
+            {
+                // tdf#36709: TODO: Handle font-relative units from GUI
+                aMargin.SetTextFirstLineOffset(
+                    SvxIndentValue::twips(m_aFLineIndent.GetCoreValue(eUnit)));
+            }
         }
         else
         {
             aMargin.SetTextLeft(m_aLeftIndent.GetCoreValue(eUnit));
             aMargin.SetRight(m_aRightIndent.GetCoreValue(eUnit));
-            aMargin.SetTextFirstLineOffset(static_cast<sal_uInt16>(m_aFLineIndent.GetCoreValue(eUnit)));
+            // tdf#36709: TODO: Handle font-relative units from GUI
+            aMargin.SetTextFirstLineOffset(
+                SvxIndentValue::twips(m_aFLineIndent.GetCoreValue(eUnit)));
         }
         aMargin.SetAutoFirst(m_xAutoCB->get_active());
-        if ( aMargin.GetTextFirstLineOffset() < 0 )
+        if ( aMargin.GetTextFirstLineOffsetValue() < 0.0 )
             bNullTab = true;
 
         if ( !pOld || *static_cast<const SvxLRSpaceItem*>(pOld) != aMargin ||
@@ -733,7 +739,8 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
                 m_aFLineIndent.SetRelative(false);
                 m_aFLineIndent.set_min(-9999, FieldUnit::NONE);
                 m_aFLineIndent.SetFieldUnit(eFUnit);
-                m_aFLineIndent.SetMetricValue(rOldItem.GetTextFirstLineOffset(), eUnit);
+                // tdf#36709: TODO: Populate GUI with font-relative unit
+                m_aFLineIndent.SetMetricValue(rOldItem.GetTextFirstLineOffsetValue(), eUnit);
             }
             m_xAutoCB->set_active(rOldItem.IsAutoFirst());
         }
@@ -744,7 +751,8 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
 
             m_aLeftIndent.SetMetricValue(rSpace.GetTextLeft(), eUnit);
             m_aRightIndent.SetMetricValue(rSpace.GetRight(), eUnit);
-            m_aFLineIndent.SetMetricValue(rSpace.GetTextFirstLineOffset(), eUnit);
+            // tdf#36709: TODO: Populate GUI with font-relative units
+            m_aFLineIndent.SetMetricValue(rSpace.GetTextFirstLineOffsetValue(), eUnit);
             m_xAutoCB->set_active(rSpace.IsAutoFirst());
         }
         AutoHdl_Impl(*m_xAutoCB);

@@ -2415,8 +2415,10 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
         {
             aDescriptor.Put(SvxSizeItem(RPTUI_ID_SIZE,
                                         VCLUnoHelper::ConvertToVCLSize(getStyleProperty<awt::Size>(m_xReportDefinition,PROPERTY_PAPERSIZE))));
-            aDescriptor.Put(SvxLRSpaceItem(getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_LEFTMARGIN)
-                                            ,getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_RIGHTMARGIN),0,RPTUI_ID_LRSPACE));
+            aDescriptor.Put(SvxLRSpaceItem(
+                getStyleProperty<sal_Int32>(m_xReportDefinition, PROPERTY_LEFTMARGIN),
+                getStyleProperty<sal_Int32>(m_xReportDefinition, PROPERTY_RIGHTMARGIN),
+                SvxIndentValue::zero(), RPTUI_ID_LRSPACE));
             aDescriptor.Put(SvxULSpaceItem(static_cast<sal_uInt16>(getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_TOPMARGIN))
                                             ,static_cast<sal_uInt16>(getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_BOTTOMMARGIN)),RPTUI_ID_ULSPACE));
             aDescriptor.Put(SfxUInt16Item(SID_ATTR_METRIC,static_cast<sal_uInt16>(eUserMetric)));

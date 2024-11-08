@@ -2135,9 +2135,10 @@ static void lcl_MergeListLevelIndentAsLRSpaceItem( const SwTextNode& rTextNode,
         {
             if (indents & ::sw::ListLevelIndents::FirstLine)
             {
-                SvxFirstLineIndentItem const firstLine(rFormat.GetFirstLineIndent(),
-                                                       rFormat.GetFirstLineIndentUnit(),
-                                                       RES_MARGIN_FIRSTLINE);
+                SvxFirstLineIndentItem const firstLine(
+                    SvxIndentValue{ static_cast<double>(rFormat.GetFirstLineIndent()),
+                                    rFormat.GetFirstLineIndentUnit() },
+                    RES_MARGIN_FIRSTLINE);
                 rSet.Put(firstLine);
             }
             if (indents & ::sw::ListLevelIndents::LeftMargin)

@@ -1729,9 +1729,9 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
             const SvxLRSpaceItem &rPageLR =
                 pPdFormat->GetFormatAttr( RES_LR_SPACE );
 
-            SvxLRSpaceItem aResultLR( rPageLR.GetLeft() +
-                    rSectionLR.GetLeft(), rPageLR.GetRight() +
-                    rSectionLR.GetRight(), 0, RES_LR_SPACE );
+            SvxLRSpaceItem aResultLR(rPageLR.GetLeft() + rSectionLR.GetLeft(),
+                                     rPageLR.GetRight() + rSectionLR.GetRight(),
+                                     SvxIndentValue::zero(), RES_LR_SPACE);
             //i120133: The Section width should consider section indent value.
             if (rSectionLR.GetLeft()+rSectionLR.GetRight()!=0)
             {

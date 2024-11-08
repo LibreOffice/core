@@ -63,6 +63,24 @@ struct SvxFontUnitMetrics
     }
 };
 
+/// helper struct for passing indentation along with units
+struct SvxIndentValue
+{
+    double m_dValue;
+    sal_Int16 m_nUnit;
+
+    SvxIndentValue() = delete;
+    SvxIndentValue(double dValue, sal_Int16 nUnit)
+        : m_dValue(dValue)
+        , m_nUnit(nUnit)
+    {
+    }
+
+    static SvxIndentValue twips(double dValue) { return { dValue, css::util::MeasureUnit::TWIP }; }
+
+    static SvxIndentValue zero() { return twips(0.0); }
+};
+
 /// GetLeft() - for everything that's not applied to a paragraph
 class EDITENG_DLLPUBLIC SvxLeftMarginItem final : public SfxPoolItem
 {
@@ -166,14 +184,15 @@ public:
     void SetPropTextFirstLineOffset(sal_uInt16 nProp);
     sal_uInt16 GetPropTextFirstLineOffset() const;
 
-    void SetTextFirstLineOffset(double dValue, sal_Int16 nUnit, sal_uInt16 nProp = 100);
+    void SetTextFirstLineOffset(SvxIndentValue stValue, sal_uInt16 nProp = 100);
+    SvxIndentValue GetTextFirstLineOffset() const;
     double GetTextFirstLineOffsetValue() const;
     sal_Int16 GetTextFirstLineOffsetUnit() const;
     double ResolveTextFirstLineOffsetDouble(const SvxFontUnitMetrics& rMetrics) const;
     sal_Int32 ResolveTextFirstLineOffset(const SvxFontUnitMetrics& rMetrics) const;
 
     explicit SvxFirstLineIndentItem(const sal_uInt16 nId);
-    SvxFirstLineIndentItem(double dValue, sal_uInt16 nUnit, const sal_uInt16 nId);
+    SvxFirstLineIndentItem(SvxIndentValue stValue, const sal_uInt16 nId);
     SvxFirstLineIndentItem(SvxFirstLineIndentItem const &) = default; // SfxPoolItem copy function dichotomy
 
     // "pure virtual Methods" from SfxPoolItem
@@ -306,7 +325,8 @@ public:
 class EDITENG_DLLPUBLIC SvxLRSpaceItem final : public SfxPoolItem
 {
     /// First-line indent always relative to GetTextLeft()
-    short   nFirstLineOffset;
+    double m_dFirstLineOffset = 0.0;
+    sal_Int16 m_nFirstLineUnit = css::util::MeasureUnit::TWIP;
     tools::Long    nLeftMargin;        // nLeft or the negative first-line indent
     tools::Long    nRightMargin;       // The unproblematic right edge
     /// The amount of extra space added to the left margin.
@@ -324,9 +344,8 @@ public:
     static SfxPoolItem* CreateDefault();
 
     explicit SvxLRSpaceItem( const sal_uInt16 nId  );
-    SvxLRSpaceItem( const tools::Long nLeft, const tools::Long nRight,
-                    const short nOfset /*= 0*/,
-                    const sal_uInt16 nId  );
+    SvxLRSpaceItem(const tools::Long nLeft, const tools::Long nRight, SvxIndentValue stValue,
+                   const sal_uInt16 nId);
     SvxLRSpaceItem(SvxLRSpaceItem const &) = default; // SfxPoolItem copy function dichotomy
 
     // "pure virtual Methods" from SfxPoolItem
@@ -351,7 +370,11 @@ public:
     // Query/direct setting of the absolute values
     tools::Long GetLeft()  const { return nLeftMargin; }
     tools::Long GetRight() const { return nRightMargin;}
-    void SetLeftValue( const tools::Long nL ) { assert(nFirstLineOffset == 0); nLeftMargin = nL; }
+    void SetLeftValue(const tools::Long nL)
+    {
+        assert(m_dFirstLineOffset == 0.0);
+        nLeftMargin = nL;
+    }
     void SetRightValue( const tools::Long nR ) { nRightMargin = nR; }
     bool IsAutoFirst()  const { return bAutoFirst; }
     void SetAutoFirst( const bool bNew ) { bAutoFirst = bNew; }
@@ -367,14 +390,17 @@ public:
     void SetTextLeft(const tools::Long nL, const sal_uInt16 nProp = 100);
     tools::Long GetTextLeft() const;
 
-    void SetTextFirstLineOffset(const short nF, const sal_uInt16 nProp = 100);
-    short  GetTextFirstLineOffset() const { return nFirstLineOffset; }
+    void SetTextFirstLineOffset(SvxIndentValue stValue, sal_uInt16 nProp = 100);
+    SvxIndentValue GetTextFirstLineOffset() const;
+    double GetTextFirstLineOffsetValue() const;
+    sal_Int16 GetTextFirstLineOffsetUnit() const;
+    double ResolveTextFirstLineOffsetDouble(const SvxFontUnitMetrics& rMetrics) const;
+    sal_Int32 ResolveTextFirstLineOffset(const SvxFontUnitMetrics& rMetrics) const;
+
     void SetPropTextFirstLineOffset( const sal_uInt16 nProp )
                     { nPropFirstLineOffset = nProp; }
     sal_uInt16 GetPropTextFirstLineOffset() const
                     { return nPropFirstLineOffset; }
-    void SetTextFirstLineOffsetValue( const short nValue )
-                    { nFirstLineOffset = nValue; }
     void SetGutterMargin(const tools::Long nGutterMargin) { m_nGutterMargin = nGutterMargin; }
     tools::Long GetGutterMargin() const { return m_nGutterMargin; }
     void SetRightGutterMargin(const tools::Long nRightGutterMargin) { m_nRightGutterMargin = nRightGutterMargin; }

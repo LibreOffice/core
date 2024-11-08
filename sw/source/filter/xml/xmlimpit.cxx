@@ -367,7 +367,8 @@ bool SvXMLImportItemMapper::PutXMLValue(
                         bOk = rUnitConverter.convertMeasureToCore(nAbs, rValue,
                                                              -0x7fff, 0x7fff );
 
-                    rLRSpace.SetTextFirstLineOffset( static_cast<short>(nAbs), o3tl::narrowing<sal_uInt16>(nProp) );
+                    rLRSpace.SetTextFirstLineOffset(SvxIndentValue::twips(nAbs),
+                                                    o3tl::narrowing<sal_uInt16>(nProp));
                 }
                 break;
 

@@ -212,8 +212,9 @@ namespace
                 {
                     SvxFirstLineIndentItem firstLine(pColl->GetFormatAttr(RES_MARGIN_FIRSTLINE));
                     SvxTextLeftMarginItem leftMargin(pColl->GetFormatAttr(RES_MARGIN_TEXTLEFT));
-                    firstLine.SetTextFirstLineOffset(rNFormat.GetFirstLineOffset(),
-                                                     rNFormat.GetFirstLineOffsetUnit());
+                    firstLine.SetTextFirstLineOffset(
+                        SvxIndentValue{ static_cast<double>(rNFormat.GetFirstLineOffset()),
+                                        rNFormat.GetFirstLineOffsetUnit() });
                     leftMargin.SetTextLeft(rNFormat.GetAbsLSpace());
                     pColl->SetFormatAttr(firstLine);
                     pColl->SetFormatAttr(leftMargin);
@@ -257,7 +258,7 @@ namespace
                             sal_uInt16 nNxt, SwTwips nEZ, SwTwips nLeft,
                             SwTwips nUpper, SwTwips nLower )
     {
-        SvxFirstLineIndentItem firstLine(nEZ, css::util::MeasureUnit::TWIP, RES_MARGIN_FIRSTLINE);
+        SvxFirstLineIndentItem firstLine(SvxIndentValue::twips(nEZ), RES_MARGIN_FIRSTLINE);
 
         SvxTextLeftMarginItem const leftMargin(sal_uInt16(nLeft), RES_MARGIN_TEXTLEFT);
         rSet.Put(firstLine);
@@ -711,7 +712,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
         case RES_POOLCOLL_TEXT_IDENT:           // Text body indentation
             {
                 auto const first(o3tl::convert(5, o3tl::Length::mm, o3tl::Length::twip));
-                SvxFirstLineIndentItem const firstLine(first, css::util::MeasureUnit::TWIP,
+                SvxFirstLineIndentItem const firstLine(SvxIndentValue::twips(first),
                                                        RES_MARGIN_FIRSTLINE);
                 SvxTextLeftMarginItem const leftMargin(0, RES_MARGIN_TEXTLEFT);
                 aSet.Put(firstLine);
@@ -722,7 +723,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
             {
                 auto const first(-o3tl::convert(5, o3tl::Length::mm, o3tl::Length::twip));
                 auto const left(o3tl::convert(1, o3tl::Length::cm, o3tl::Length::twip));
-                SvxFirstLineIndentItem const firstLine(first, css::util::MeasureUnit::TWIP,
+                SvxFirstLineIndentItem const firstLine(SvxIndentValue::twips(first),
                                                        RES_MARGIN_FIRSTLINE);
                 SvxTextLeftMarginItem const leftMargin(left, RES_MARGIN_TEXTLEFT);
                 aSet.Put(firstLine);
@@ -747,7 +748,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
             {
                 auto const first(-o3tl::convert(45, o3tl::Length::mm, o3tl::Length::twip));
                 auto const left(o3tl::convert(5, o3tl::Length::cm, o3tl::Length::twip));
-                SvxFirstLineIndentItem const firstLine(first, css::util::MeasureUnit::TWIP,
+                SvxFirstLineIndentItem const firstLine(SvxIndentValue::twips(first),
                                                        RES_MARGIN_FIRSTLINE);
                 SvxTextLeftMarginItem const leftMargin(left, RES_MARGIN_TEXTLEFT);
                 aSet.Put(firstLine);
@@ -956,7 +957,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
             {
                 auto const first(-o3tl::convert(6, o3tl::Length::mm, o3tl::Length::twip));
                 auto const left(o3tl::convert(6, o3tl::Length::mm, o3tl::Length::twip));
-                SvxFirstLineIndentItem const firstLine(first, css::util::MeasureUnit::TWIP,
+                SvxFirstLineIndentItem const firstLine(SvxIndentValue::twips(first),
                                                        RES_MARGIN_FIRSTLINE);
                 SvxTextLeftMarginItem const leftMargin(left, RES_MARGIN_TEXTLEFT);
                 aSet.Put(firstLine);
@@ -1683,7 +1684,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
                 aBox.SetLine( &aLine, SvxBoxItemLine::RIGHT );
                 aBox.SetAllDistances( 85 );
                 aSet.Put( aBox );
-                aSet.Put( SvxLRSpaceItem( 114, 114, 0, RES_LR_SPACE ) );
+                aSet.Put(SvxLRSpaceItem(114, 114, SvxIndentValue::zero(), RES_LR_SPACE));
                 aSet.Put( SvxULSpaceItem( 114, 114, RES_UL_SPACE ) );
             }
 
@@ -1705,7 +1706,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
         {
             aSet.Put( SwFormatAnchor( RndStdIds::FLY_AS_CHAR ) );
             aSet.Put( SwFormatVertOrient( 0, text::VertOrientation::CHAR_CENTER, text::RelOrientation::FRAME ) );
-            aSet.Put( SvxLRSpaceItem( 0, 0, 0, RES_LR_SPACE ) );
+            aSet.Put(SvxLRSpaceItem(0, 0, SvxIndentValue::zero(), RES_LR_SPACE));
 
             if ( RES_POOLFRM_INLINE_HEADING == nId )
             {
@@ -1746,7 +1747,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
         {
             aSet.Put( SwFormatAnchor( RndStdIds::FLY_AS_CHAR ) );
             aSet.Put( SwFormatVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ) );
-            aSet.Put( SvxLRSpaceItem( 114, 114, 0, RES_LR_SPACE ) );
+            aSet.Put(SvxLRSpaceItem(114, 114, SvxIndentValue::zero(), RES_LR_SPACE));
 
             SvxProtectItem aProtect( RES_PROTECT );
             aProtect.SetSizeProtect( true );

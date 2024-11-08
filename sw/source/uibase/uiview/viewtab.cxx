@@ -705,8 +705,8 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
             {
                 SvxFirstLineIndentItem firstLine(aLRSpaceSet.Get(RES_MARGIN_FIRSTLINE));
                 const OUString ratio = fLineIndent->GetValue();
-                firstLine.SetTextFirstLineOffset(nPageWidth * ratio.toFloat(),
-                                                 css::util::MeasureUnit::TWIP);
+                firstLine.SetTextFirstLineOffset(
+                    SvxIndentValue::twips(nPageWidth * ratio.toFloat()));
                 rSh.SetAttrItem(firstLine);
             }
             else if (const SfxStringItem *pLeftIndent = pReqArgs->GetItemIfSet(SID_PARAGRAPH_LEFT_INDENT))
@@ -744,7 +744,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
         }
 
         leftMargin.SetTextLeft(leftMargin.GetTextLeft() + nIndentDist);
-        firstLine.SetTextFirstLineOffset(nIndentDist * -1, css::util::MeasureUnit::TWIP);
+        firstLine.SetTextFirstLineOffset(SvxIndentValue::twips(nIndentDist * -1));
 
         firstLine.SetAutoFirst(false); // old code would do this, is it wanted?
         rSh.SetAttrItem(firstLine);
@@ -765,7 +765,8 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
             SwTextFormatColl* pColl = rSh.GetCurTextFormatColl();
 
             SvxFirstLineIndentItem firstLine(RES_MARGIN_FIRSTLINE);
-            firstLine.SetTextFirstLineOffset(aParaMargin.GetTextFirstLineOffset(), aParaMargin.GetPropTextFirstLineOffset());
+            firstLine.SetTextFirstLineOffset(aParaMargin.GetTextFirstLineOffset(),
+                                             aParaMargin.GetPropTextFirstLineOffset());
             firstLine.SetAutoFirst(aParaMargin.IsAutoFirst());
             SvxTextLeftMarginItem const leftMargin(aParaMargin.GetTextLeft(), RES_MARGIN_TEXTLEFT);
             SvxRightMarginItem const rightMargin(aParaMargin.GetRight(), RES_MARGIN_RIGHT);
@@ -801,7 +802,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                 rSh.SetAttrItem(rightMargin);
             }
 
-            if ( aParaMargin.GetTextFirstLineOffset() < 0 )
+            if (aParaMargin.GetTextFirstLineOffsetValue() < 0.0)
             {
                 SfxItemSetFixed<RES_PARATR_TABSTOP, RES_PARATR_TABSTOP> aSet( GetPool() );
 
@@ -1673,8 +1674,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     SvxTextLeftMarginItem const& rLeftMargin(aCoreSet.Get(RES_MARGIN_TEXTLEFT));
                     SvxRightMarginItem const& rRightMargin(aCoreSet.Get(RES_MARGIN_RIGHT));
 
-                    // tdf#36709: TODO: Handle font-relative first-line indentation
-                    aLR->SetTextFirstLineOffset(rFirstLine.ResolveTextFirstLineOffset({}),
+                    aLR->SetTextFirstLineOffset(rFirstLine.GetTextFirstLineOffset(),
                                                 rFirstLine.GetPropTextFirstLineOffset());
                     aLR->SetAutoFirst(rFirstLine.IsAutoFirst());
                     aLR->SetTextLeft(rLeftMargin.GetTextLeft(), rLeftMargin.GetPropLeft());

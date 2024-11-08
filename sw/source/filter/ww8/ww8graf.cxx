@@ -525,8 +525,8 @@ void SwWW8ImplReader::InsertTxbxStyAttrs(SfxItemSet& rS, sal_uInt16 nColl, ManTy
                        && "unnecessary when EditEng learns about the separate pieces");
 
                 SvxLRSpaceItem aLR(rS.Get(EE_PARA_LRSPACE));
-                aLR.SetTextFirstLineOffset(
-                    pStyInf->m_pFormat->GetFirstLineIndent().ResolveTextFirstLineOffset({}));
+                const auto& rFirstLine = pStyInf->m_pFormat->GetFirstLineIndent();
+                aLR.SetTextFirstLineOffset(rFirstLine.GetTextFirstLineOffset());
                 aLR.SetTextLeft(pStyInf->m_pFormat->GetTextLeftMargin().GetTextLeft());
                 aLR.SetRight(pStyInf->m_pFormat->GetRightMargin().GetRight());
                 rS.Put(aLR);
@@ -771,9 +771,9 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(WW8_CP nStartCp, WW8_CP nEndCp,
                             SvxLRSpaceItem aLR(pS->Get(EE_PARA_LRSPACE));
                             if (nWhich == RES_MARGIN_FIRSTLINE)
                             {
-                                aLR.SetTextFirstLineOffset(
-                                    static_cast<const SvxFirstLineIndentItem*>(pItem)
-                                        ->ResolveTextFirstLineOffset({}));
+                                const auto* pFirstLine
+                                    = static_cast<const SvxFirstLineIndentItem*>(pItem);
+                                aLR.SetTextFirstLineOffset(pFirstLine->GetTextFirstLineOffset());
                             }
                             else if (nWhich == RES_MARGIN_TEXTLEFT)
                             {
@@ -2052,7 +2052,8 @@ void SwWW8ImplReader::MapWrapIntoFlyFormat(const SvxMSDffImportRec& rRecord,
     if (rRecord.nDxWrapDistLeft || rRecord.nDxWrapDistRight)
     {
         SvxLRSpaceItem aLR(writer_cast<sal_uInt16>(rRecord.nDxWrapDistLeft),
-                           writer_cast<sal_uInt16>(rRecord.nDxWrapDistRight), 0, RES_LR_SPACE);
+                           writer_cast<sal_uInt16>(rRecord.nDxWrapDistRight),
+                           SvxIndentValue::zero(), RES_LR_SPACE);
         AdjustLRWrapForWordMargins(rRecord, aLR);
         rFlyFormat.SetFormatAttr(aLR);
     }

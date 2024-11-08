@@ -252,8 +252,7 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
             if (100 != pOldFirstLineIndent->GetPropTextFirstLineOffset())
             {
                 const double dOld = pOldFirstLineIndent->GetTextFirstLineOffsetValue();
-                aNew.SetTextFirstLineOffset(pNewFirstLineIndent->GetTextFirstLineOffsetValue(),
-                                            pNewFirstLineIndent->GetTextFirstLineOffsetUnit(),
+                aNew.SetTextFirstLineOffset(pNewFirstLineIndent->GetTextFirstLineOffset(),
                                             pOldFirstLineIndent->GetPropTextFirstLineOffset());
                 bChg = dOld != aNew.GetTextFirstLineOffsetValue();
             }

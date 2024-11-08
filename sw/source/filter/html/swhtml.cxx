@@ -4846,7 +4846,7 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
         SvxFirstLineIndentItem firstLine(rFirstLine);
         SvxTextLeftMarginItem leftMargin(rTextLeftMargin);
         SvxRightMarginItem rightMargin(rRightMargin);
-        firstLine.SetTextFirstLineOffset(nFirstLineIndent, css::util::MeasureUnit::TWIP);
+        firstLine.SetTextFirstLineOffset(SvxIndentValue::twips(nFirstLineIndent));
         leftMargin.SetTextLeft(nLeftMargin);
         rightMargin.SetRight(nRightMargin);
         if( pItemSet )
@@ -5081,7 +5081,7 @@ void SwHTMLParser::InsertSpacer()
                 GetMarginsFromContextWithNumberBullet( nLeft, nRight, nIndent );
                 nIndent = nIndent + static_cast<short>(nSize);
 
-                SvxFirstLineIndentItem const firstLine(nIndent, css::util::MeasureUnit::TWIP,
+                SvxFirstLineIndentItem const firstLine(SvxIndentValue::twips(nIndent),
                                                        RES_MARGIN_FIRSTLINE);
                 SvxTextLeftMarginItem const leftMargin(nLeft, RES_MARGIN_TEXTLEFT);
                 SvxRightMarginItem const rightMargin(nRight, RES_MARGIN_RIGHT);

@@ -2091,9 +2091,9 @@ bool SwSectionIndentTabPage::FillItemSet(SfxItemSet* rSet)
 {
     if (m_xBeforeMF->get_value_changed_from_saved() || m_xAfterMF->get_value_changed_from_saved())
     {
-        SvxLRSpaceItem aLRSpace(
-                m_xBeforeMF->denormalize(m_xBeforeMF->get_value(FieldUnit::TWIP)) ,
-                m_xAfterMF->denormalize(m_xAfterMF->get_value(FieldUnit::TWIP)), 0, RES_LR_SPACE);
+        SvxLRSpaceItem aLRSpace(m_xBeforeMF->denormalize(m_xBeforeMF->get_value(FieldUnit::TWIP)),
+                                m_xAfterMF->denormalize(m_xAfterMF->get_value(FieldUnit::TWIP)),
+                                SvxIndentValue::zero(), RES_LR_SPACE);
         rSet->Put(aLRSpace);
     }
     return true;

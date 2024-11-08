@@ -574,7 +574,12 @@ void ConvertItem( std::unique_ptr<SfxPoolItem>& rPoolItem, MapUnit eSourceUnit, 
         {
             assert(dynamic_cast<const SvxLRSpaceItem *>(rPoolItem.get()) != nullptr);
             SvxLRSpaceItem& rItem = static_cast<SvxLRSpaceItem&>(*rPoolItem);
-            rItem.SetTextFirstLineOffset( sal::static_int_cast< short >( OutputDevice::LogicToLogic( rItem.GetTextFirstLineOffset(), eSourceUnit, eDestUnit ) ) );
+            if (rItem.GetTextFirstLineOffsetUnit() == css::util::MeasureUnit::TWIP)
+            {
+                rItem.SetTextFirstLineOffset(
+                    SvxIndentValue::twips(sal::static_int_cast<short>(OutputDevice::LogicToLogic(
+                        rItem.ResolveTextFirstLineOffset({}), eSourceUnit, eDestUnit))));
+            }
             rItem.SetTextLeft( OutputDevice::LogicToLogic( rItem.GetTextLeft(), eSourceUnit, eDestUnit ) );
             rItem.SetRight( OutputDevice::LogicToLogic( rItem.GetRight(), eSourceUnit, eDestUnit ) );
         }

@@ -3311,7 +3311,6 @@ tools::Long SwTextNode::GetLeftMarginWithNum( bool bTextLeft ) const
             if( pRule->IsAbsSpaces() )
             {
                 SvxFirstLineIndentItem const& rFirst(GetSwAttrSet().GetFirstLineIndent());
-                // tdf#36709: TODO: Handle font-relative units
                 nRet = nRet - GetSwAttrSet().GetTextLeftMargin().GetLeft(rFirst, /*metrics*/ {});
             }
         }
@@ -3325,7 +3324,6 @@ tools::Long SwTextNode::GetLeftMarginWithNum( bool bTextLeft ) const
             // list/paragraph items. (this is rather inelegant)
             SvxFirstLineIndentItem firstLine(GetSwAttrSet().GetFirstLineIndent());
             SvxTextLeftMarginItem leftMargin(GetSwAttrSet().GetTextLeftMargin());
-            // tdf#36709: TODO: Handle font-relative units
             nRet = bTextLeft ? -leftMargin.GetTextLeft()
                              : -leftMargin.GetLeft(firstLine, /*metrics*/ {});
             if (indents & ::sw::ListLevelIndents::LeftMargin)
@@ -3334,10 +3332,10 @@ tools::Long SwTextNode::GetLeftMarginWithNum( bool bTextLeft ) const
             }
             if (indents & ::sw::ListLevelIndents::FirstLine)
             {
-                firstLine.SetTextFirstLineOffset(rFormat.GetFirstLineIndent(),
-                                                 rFormat.GetFirstLineIndentUnit());
+                firstLine.SetTextFirstLineOffset(
+                    SvxIndentValue{ static_cast<double>(rFormat.GetFirstLineIndent()),
+                                    rFormat.GetFirstLineIndentUnit() });
             }
-            // tdf#36709: TODO: Handle font-relative units
             nRet += bTextLeft ? leftMargin.GetTextLeft()
                               : leftMargin.GetLeft(firstLine, /*metrics*/ {});
         }
@@ -3402,12 +3400,10 @@ SwTwips SwTextNode::GetAdditionalIndentForStartingNewList() const
         {
             SvxFirstLineIndentItem const& rFirst(GetSwAttrSet().GetFirstLineIndent());
 
-            // tdf#36709: TODO: Handle font-relative indentation
             nAdditionalIndent = GetSwAttrSet().GetTextLeftMargin().GetLeft(rFirst, /*metrics*/ {});
 
             if (getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
             {
-                // tdf#36709: TODO: Handle font-relative indentation
                 nAdditionalIndent
                     = nAdditionalIndent
                       - GetSwAttrSet().GetFirstLineIndent().ResolveTextFirstLineOffset({});
@@ -3420,21 +3416,21 @@ SwTwips SwTextNode::GetAdditionalIndentForStartingNewList() const
             // other use of it.
             ::sw::ListLevelIndents const indents(AreListLevelIndentsApplicable());
             SvxFirstLineIndentItem const aFirst(
-                    indents & ::sw::ListLevelIndents::FirstLine
-                    ? SvxFirstLineIndentItem(rFormat.GetFirstLineIndent(),
-                                             rFormat.GetFirstLineIndentUnit(), RES_MARGIN_FIRSTLINE)
+                indents & ::sw::ListLevelIndents::FirstLine
+                    ? SvxFirstLineIndentItem(
+                          SvxIndentValue{ static_cast<double>(rFormat.GetFirstLineIndent()),
+                                          rFormat.GetFirstLineIndentUnit() },
+                          RES_MARGIN_FIRSTLINE)
                     : GetSwAttrSet().GetFirstLineIndent());
             SvxTextLeftMarginItem const aLeft(
                     indents & ::sw::ListLevelIndents::LeftMargin
                     ? SvxTextLeftMarginItem(rFormat.GetIndentAt(), RES_MARGIN_TEXTLEFT)
                     : GetSwAttrSet().GetTextLeftMargin());
-            // tdf#36709: TODO: Handle font-relative indentation
             nAdditionalIndent = aLeft.GetLeft(aFirst, /*metrics*/ {});
             if (!(indents & ::sw::ListLevelIndents::FirstLine))
             {
                 if (getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
                 {
-                    // tdf#36709: TODO: Handle font-relative first line indentation
                     nAdditionalIndent = nAdditionalIndent - aFirst.ResolveTextFirstLineOffset({});
                 }
             }
@@ -3442,7 +3438,6 @@ SwTwips SwTextNode::GetAdditionalIndentForStartingNewList() const
     }
     else
     {
-        // tdf#36709: TODO: Handle font-relative first line indentation
         SvxFirstLineIndentItem const& rFirst(GetSwAttrSet().GetFirstLineIndent());
         nAdditionalIndent = GetSwAttrSet().GetTextLeftMargin().GetLeft(rFirst, /*metrics*/ {});
     }

@@ -425,10 +425,17 @@ bool SvXMLExportItemMapper::QueryXMLValue(
                             ::sax::Converter::convertPercent(
                                 aOut, rLRSpace.GetPropTextFirstLineOffset() );
                         }
+                        else if (rLRSpace.GetTextFirstLineOffsetUnit()
+                                 != css::util::MeasureUnit::TWIP)
+                        {
+                            ::sax::Converter::convertMeasureUnit(
+                                aOut, rLRSpace.GetTextFirstLineOffsetValue(),
+                                rLRSpace.GetTextFirstLineOffsetUnit());
+                        }
                         else
                         {
                             rUnitConverter.convertMeasureToXML(
-                                    aOut, rLRSpace.GetTextFirstLineOffset() );
+                                aOut, rLRSpace.GetTextFirstLineOffsetValue());
                         }
                     }
                     else

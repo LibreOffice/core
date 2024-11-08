@@ -575,7 +575,6 @@ bool SwTextFrame::PaintEmpty( const SwRect &rRect, bool bCheck ) const
                 const SvxFirstLineIndentItem& rFirstLine(
                     GetTextNodeForParaProps()->GetSwAttrSet().GetFirstLineIndent());
 
-                // tdf#36709: TODO: Handle font-relative first-line indentation
                 if (0.0 < rFirstLine.GetTextFirstLineOffsetValue())
                 {
                     aPos.AdjustX(rFirstLine.ResolveTextFirstLineOffset({}));
