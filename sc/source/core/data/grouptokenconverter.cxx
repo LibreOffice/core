@@ -70,13 +70,13 @@ SCROW ScGroupTokenConverter::trimLength(SCTAB nTab, SCCOL nCol1, SCCOL nCol2, SC
         // This can end up negative! Was that the original intent, or
         // is it accidental? Was it not like that originally but the
         // surrounding conditions changed?
-        nRowLen = nLastRow - nRow + 1;
+        const bool bFail = o3tl::checked_sub(nLastRow + 1, nRow, nRowLen);
         // Anyway, let's assume it doesn't make sense to return a
         // negative value here. But should we then return 0 or 1? In
         // the "Column is empty" case below, we return 1, why!? And,
         // at the callsites there are tests for a zero value returned
         // from this function (but not for a negative one).
-        if (nRowLen < 0)
+        if (bFail || nRowLen < 0)
             nRowLen = 0;
     }
     else if (nLastRow == 0)

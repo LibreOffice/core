@@ -4420,10 +4420,10 @@ struct ScDependantsCalculator
             // This can end up negative! Was that the original intent, or
             // is it accidental? Was it not like that originally but the
             // surrounding conditions changed?
-            nRowLen = nLastRow - nRow + 1;
+            const bool bFail = o3tl::checked_sub(nLastRow + 1, nRow, nRowLen);
             // Anyway, let's assume it doesn't make sense to return a
             // negative or zero value here.
-            if (nRowLen <= 0)
+            if (bFail || nRowLen <= 0)
                 nRowLen = 1;
         }
         else if (nLastRow == 0)
