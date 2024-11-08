@@ -26,9 +26,9 @@
 #include <com/sun/star/awt/XTopWindowListener.hpp>
 #include <com/sun/star/awt/XMouseListener.hpp>
 #include <com/sun/star/awt/XFocusListener.hpp>
-#include <cppuhelper/weak.hxx>
+#include <comphelper/compbase.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <comphelper/multicontainer2.hxx>
+#include <comphelper/multiinterfacecontainer4.hxx>
 
 namespace com::sun::star::awt { class XWindow; }
 namespace com::sun::star::awt { struct KeyEvent; }
@@ -38,14 +38,13 @@ namespace com::sun::star::awt { struct WindowEvent; }
 
 namespace unocontrols {
 
-class OMRCListenerMultiplexerHelper final : public css::awt::XFocusListener
-                                    , public css::awt::XWindowListener
-                                    , public css::awt::XKeyListener
-                                    , public css::awt::XMouseListener
-                                    , public css::awt::XMouseMotionListener
-                                    , public css::awt::XPaintListener
-                                    , public css::awt::XTopWindowListener
-                                    , public ::cppu::OWeakObject
+class OMRCListenerMultiplexerHelper final : public comphelper::WeakImplHelper< css::awt::XFocusListener
+                                                                             , css::awt::XWindowListener
+                                                                             , css::awt::XKeyListener
+                                                                             , css::awt::XMouseListener
+                                                                             , css::awt::XMouseMotionListener
+                                                                             , css::awt::XPaintListener
+                                                                             , css::awt::XTopWindowListener >
 {
 public:
 
@@ -59,50 +58,7 @@ public:
     OMRCListenerMultiplexerHelper(  const   css::uno::Reference< css::awt::XWindow >& xControl    ,
                                     const   css::uno::Reference< css::awt::XWindow >& xPeer       );
 
-    /**
-        @short      copy-constructor
-        @descr
-        @param      rCopyInstance   C++-Reference to instance to make copy from.
-    */
-
-    OMRCListenerMultiplexerHelper( const OMRCListenerMultiplexerHelper& aCopyInstance );
-
     virtual ~OMRCListenerMultiplexerHelper() override;
-
-    //  XInterface
-
-    /**
-        @short      give answer, if interface is supported
-        @descr      The interfaces are searched by type.
-
-        @seealso    XInterface
-
-        @param      "rType" is the type of searched interface.
-
-        @return     Any     information about found interface
-
-        @onerror    A RuntimeException is thrown.
-    */
-
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-
-    /**
-        @short      increment refcount
-        @seealso    XInterface
-        @seealso    release()
-        @onerror    A RuntimeException is thrown.
-    */
-
-    virtual void SAL_CALL acquire() noexcept override;
-
-    /**
-        @short      decrement refcount
-        @seealso    XInterface
-        @seealso    acquire()
-        @onerror    A RuntimeException is thrown.
-    */
-
-    virtual void SAL_CALL release() noexcept override;
 
     OMRCListenerMultiplexerHelper& operator= ( const OMRCListenerMultiplexerHelper& aCopyInstance );
 
@@ -126,14 +82,14 @@ public:
     */
 
     void advise(    const   css::uno::Type&                              aType       ,
-                    const   css::uno::Reference< css::uno::XInterface >&  xListener   );
+                    const   css::uno::Reference< css::lang::XEventListener >&  xListener   );
 
     /**
         @short      Remove the specified listener from the source.
     */
 
     void unadvise(  const   css::uno::Type&                              aType       ,
-                    const   css::uno::Reference< css::uno::XInterface >&  xListener   );
+                    const   css::uno::Reference< css::lang::XEventListener >&  xListener   );
 
     //  XEventListener
 
@@ -217,14 +173,15 @@ private:
     void impl_unadviseFromPeer( const   css::uno::Reference< css::awt::XWindow >& xPeer   ,
                                 const   css::uno::Type&                          aType   );
 
+    template <class Interface, typename Event>
+    void Multiplex(void (SAL_CALL Interface::*method)(const Event&), const Event& event);
+
 //  private variables
 
 private:
-    ::osl::Mutex                                m_aMutex;
     css::uno::Reference< css::awt::XWindow >      m_xPeer;   /// The source of the events. Normally this is the peer object.
     css::uno::WeakReference< css::awt::XWindow >  m_xControl;
-    comphelper::OMultiTypeInterfaceContainerHelper2  m_aListenerHolder;
-
+    comphelper::OMultiTypeInterfaceContainerHelperVar4<css::uno::Type, css::lang::XEventListener> m_aListenerHolder;
 };
 
 }
