@@ -515,8 +515,8 @@ void SdrEditView::ImpCheckToTopBtmPossible()
             const size_t nRestrict=pRestrict->GetOrdNum();
             if (nRestrict>nMin) nMin=nRestrict;
         }
-        m_bToTopPossible=nObjNum<nMax-1;
-        m_bToBtmPossible=nObjNum>nMin;
+        m_bToTopPossible = nObjNum+1 < nMax;
+        m_bToBtmPossible = nObjNum > nMin;
     } else { // multiple selection
         SdrObjList* pOL0=nullptr;
         size_t nPos0 = 0;
