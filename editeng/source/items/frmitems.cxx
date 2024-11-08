@@ -4392,7 +4392,7 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
                 ASSERT_CHANGE_REFCOUNTED_ITEM;
                 std::unique_ptr<GraphicObject> xOldGrfObj(std::move(xGraphicObject));
-                xGraphicObject.reset(new GraphicObject(aGraphic));
+                xGraphicObject.reset(new GraphicObject(std::move(aGraphic)));
                 ApplyGraphicTransparency_Impl();
                 xOldGrfObj.reset();
 
