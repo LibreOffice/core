@@ -69,6 +69,8 @@ public:
     virtual void setContext(QObject* pObject,
                             std::vector<vcl::EnumContext::Context>&& aContext) override;
 
+    virtual bool isHorizontalTabControl(QObject* pObject) override;
+
     virtual void set_response(std::u16string_view sID, short nResponse) override;
 
 private:

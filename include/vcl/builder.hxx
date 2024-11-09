@@ -300,6 +300,8 @@ private:
     void setContext(vcl::Window* pWindow,
                     std::vector<vcl::EnumContext::Context>&& aContext) override;
 
+    virtual bool isHorizontalTabControl(vcl::Window* pWindow) override;
+
     PackingData get_window_packing_data(const vcl::Window *pWindow) const;
     void        set_window_packing_position(const vcl::Window *pWindow, sal_Int32 nPosition);
 

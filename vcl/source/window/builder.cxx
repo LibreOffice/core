@@ -2491,9 +2491,6 @@ VclPtr<vcl::Window> VclBuilder::insertObject(vcl::Window *pParent, const OUStrin
 
 void VclBuilder::handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &reader)
 {
-    TabControl *pTabControl = pParent && pParent->GetType() == WindowType::TABCONTROL ?
-        static_cast<TabControl*>(pParent) : nullptr;
-
     std::vector<OUString> sIDs;
 
     int nLevel = 1;
@@ -2538,7 +2535,7 @@ void VclBuilder::handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &read
             }
             else if (name == "property")
                 collectProperty(reader, aProperties);
-            else if (pTabControl && name == "child")
+            else if (name == "child" && isHorizontalTabControl(pParent))
             {
                 // just to collect the atk properties (if any) for the label
                 handleChild(nullptr, &aAtkProperties, reader);
@@ -2559,6 +2556,7 @@ void VclBuilder::handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &read
     if (!pParent)
         return;
 
+    TabControl* pTabControl = isHorizontalTabControl(pParent) ? static_cast<TabControl*>(pParent) : nullptr;
     VerticalTabControl *pVerticalTabControl = pParent->GetType() == WindowType::VERTICALTABCONTROL ?
         static_cast<VerticalTabControl*>(pParent) : nullptr;
     assert(pTabControl || pVerticalTabControl);
@@ -3004,6 +3002,11 @@ void VclBuilder::setContext(vcl::Window* pWindow, std::vector<vcl::EnumContext::
     SAL_WARN_IF(!pContextControl, "vcl", "context set for not supported item");
     if (pContextControl)
         pContextControl->SetContext(std::move(aContext));
+}
+
+bool VclBuilder::isHorizontalTabControl(vcl::Window* pWindow)
+{
+    return pWindow && pWindow->GetType() == WindowType::TABCONTROL;
 }
 
 std::vector<ComboBoxTextItem> BuilderBase::handleItems(xmlreader::XmlReader& reader) const

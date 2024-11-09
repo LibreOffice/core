@@ -298,6 +298,9 @@ protected:
     virtual void setPriority(Widget* pWidget, int nPriority) = 0;
     virtual void setContext(Widget* pWidget, std::vector<vcl::EnumContext::Context>&& aContext) = 0;
 
+    // Whether the given widget is a horizontal, i.e. non-vertical tab control
+    virtual bool isHorizontalTabControl(Widget* pWidget) = 0;
+
     // These methods are currently only implemented by VclBuilder and should be
     // refactored as described in the class documentation above (split into
     // parsing done in this class + overridable methods that don't need XmlReader

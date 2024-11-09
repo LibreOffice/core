@@ -29,6 +29,7 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QRadioButton>
 #include <QtWidgets/QScrollArea>
+#include <QtWidgets/QTabWidget>
 #include <QtWidgets/QTreeView>
 
 namespace
@@ -396,6 +397,17 @@ void QtBuilder::setPriority(QObject*, int) { SAL_WARN("vcl.qt", "Ignoring priori
 void QtBuilder::setContext(QObject*, std::vector<vcl::EnumContext::Context>&&)
 {
     SAL_WARN("vcl.qt", "Ignoring context");
+}
+
+bool QtBuilder::isHorizontalTabControl(QObject* pObject)
+{
+    QTabWidget* pTabWidget = qobject_cast<QTabWidget*>(pObject);
+    if (!pTabWidget)
+        return false;
+
+    const QTabWidget::TabPosition ePosition = pTabWidget->tabPosition();
+    return ePosition == QTabWidget::TabPosition::North
+           || ePosition == QTabWidget::TabPosition::South;
 }
 
 void QtBuilder::applyAtkProperties(QObject* pObject, const stringmap& rProperties, bool)
