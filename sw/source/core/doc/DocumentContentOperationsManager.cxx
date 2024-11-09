@@ -893,17 +893,17 @@ namespace
     void lcl_SaveRedlines(const SwNodeRange& rRg, SaveRedlines_t& rArr)
     {
         SwDoc& rDoc = rRg.aStart.GetNode().GetDoc();
+        SwRedlineTable& rRedlTable = rDoc.getIDocumentRedlineAccess().GetRedlineTable();
         SwRedlineTable::size_type nRedlPos;
         SwPosition aSrchPos( rRg.aStart );
         aSrchPos.Adjust(SwNodeOffset(-1));
         if( rDoc.getIDocumentRedlineAccess().GetRedline( aSrchPos, &nRedlPos ) && nRedlPos )
             --nRedlPos;
-        else if( nRedlPos >= rDoc.getIDocumentRedlineAccess().GetRedlineTable().size() )
+        else if( nRedlPos >= rRedlTable.size() )
             return ;
 
         RedlineFlags eOld = rDoc.getIDocumentRedlineAccess().GetRedlineFlags();
         rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( ( eOld & ~RedlineFlags::Ignore) | RedlineFlags::On );
-        SwRedlineTable& rRedlTable = rDoc.getIDocumentRedlineAccess().GetRedlineTable();
 
         for (;;)
         {
@@ -958,7 +958,7 @@ namespace
             else
                 break;
 
-            if (nRedlPos >= rDoc.getIDocumentRedlineAccess().GetRedlineTable().size())
+            if (nRedlPos >= rRedlTable.size())
                 break;
             ++nRedlPos;
         }
