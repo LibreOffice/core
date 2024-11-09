@@ -29,6 +29,7 @@
 #include <svx/xgrscit.hxx>
 #include <cuitabarea.hxx>
 #include <sfx2/tabdlg.hxx>
+#include <unotools/pathoptions.hxx>
 
 using namespace com::sun::star;
 
@@ -67,6 +68,20 @@ void lclExtendSize(Size& rSize, const Size& rInputSize)
 
 } // end anonymous namespace
 
+OUString AreaTabHelper::GetPalettePath()
+{
+    const OUString aPalettePath = SvtPathOptions().GetPalettePath();
+    OUString aPath;
+    sal_Int32 nIndex = 0;
+    do
+    {
+        aPath = aPalettePath.getToken(0, ';', nIndex);
+    }
+    while (nIndex >= 0);
+
+    return aPath;
+}
+
 /*************************************************************************
 |*
 |*  Dialog to modify fill-attributes
@@ -80,10 +95,6 @@ SvxAreaTabPage::SvxAreaTabPage(weld::Container* pPage, weld::DialogController* p
     , maFixed_ChangeType(ChangeType::NONE)
     // init with pointers to fixed ChangeType
     , m_pnColorListState(&maFixed_ChangeType)
-    , m_pnBitmapListState(&maFixed_ChangeType)
-    , m_pnPatternListState(&maFixed_ChangeType)
-    , m_pnGradientListState(&maFixed_ChangeType)
-    , m_pnHatchingListState(&maFixed_ChangeType)
     , m_aXFillAttr(rInAttrs.GetPool())
     , m_rXFSet(m_aXFillAttr.GetItemSet())
     , m_xFillTab(m_xBuilder->weld_container(u"fillstylebox"_ustr))
@@ -478,7 +489,6 @@ void SvxAreaTabPage::CreatePage(sal_Int32 nId, SfxTabPage& rTab)
         auto& rGradientTab = static_cast<SvxGradientTabPage&>(rTab);
         rGradientTab.SetColorList(m_pColorList);
         rGradientTab.SetGradientList(m_pGradientList);
-        rGradientTab.SetGrdChgd(m_pnGradientListState);
         rGradientTab.SetColorChgd(m_pnColorListState);
         rGradientTab.Construct();
         rGradientTab.ActivatePage(m_rXFSet);
@@ -490,7 +500,6 @@ void SvxAreaTabPage::CreatePage(sal_Int32 nId, SfxTabPage& rTab)
         auto& rHatchTab = static_cast<SvxHatchTabPage&>(rTab);
         rHatchTab.SetColorList(m_pColorList);
         rHatchTab.SetHatchingList(m_pHatchingList);
-        rHatchTab.SetHtchChgd(m_pnHatchingListState);
         rHatchTab.SetColorChgd(m_pnColorListState);
         rHatchTab.Construct();
         rHatchTab.ActivatePage(m_rXFSet);
@@ -501,7 +510,6 @@ void SvxAreaTabPage::CreatePage(sal_Int32 nId, SfxTabPage& rTab)
     {
         auto& rBitmapTab = static_cast<SvxBitmapTabPage&>(rTab);
         rBitmapTab.SetBitmapList(m_pBitmapList);
-        rBitmapTab.SetBmpChgd(m_pnBitmapListState);
         rBitmapTab.Construct();
         rBitmapTab.ActivatePage(m_rXFSet);
         rBitmapTab.Reset(&m_rXFSet);
@@ -512,7 +520,6 @@ void SvxAreaTabPage::CreatePage(sal_Int32 nId, SfxTabPage& rTab)
         auto& rPatternTab = static_cast<SvxPatternTabPage&>(rTab);
         rPatternTab.SetColorList(m_pColorList);
         rPatternTab.SetPatternList(m_pPatternList);
-        rPatternTab.SetPtrnChgd(m_pnPatternListState);
         rPatternTab.SetColorChgd(m_pnColorListState);
         rPatternTab.Construct();
         rPatternTab.ActivatePage(m_rXFSet);

@@ -20,6 +20,7 @@
 #include <memory>
 #include <stdlib.h>
 #include <tools/urlobj.hxx>
+#include <svx/drawitem.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/svxids.hrc>
 #include <strings.hrc>
@@ -36,6 +37,7 @@
 #include <dialmgr.hxx>
 #include <svx/dlgutil.hxx>
 #include <svl/intitem.hxx>
+#include <sfx2/objsh.hxx>
 #include <sfx2/opengrf.hxx>
 #include <vcl/image.hxx>
 #include <vcl/svapp.hxx>
@@ -69,7 +71,7 @@ enum TileOffset
 SvxBitmapTabPage::SvxBitmapTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
     : SfxTabPage(pPage, pController, u"cui/ui/imagetabpage.ui"_ustr, u"ImageTabPage"_ustr, &rInAttrs)
     , m_rOutAttrs(rInAttrs)
-    , m_pnBitmapListState(nullptr)
+    , m_nBitmapListState(ChangeType::NONE)
     , m_fObjectWidth(0.0)
     , m_fObjectHeight(0.0)
     , m_bLogicalSize(false)
@@ -140,6 +142,17 @@ SvxBitmapTabPage::~SvxBitmapTabPage()
     m_xBitmapLBWin.reset();
     m_xBitmapLB.reset();
     m_xCtlBitmapPreview.reset();
+
+    if (m_nBitmapListState & ChangeType::MODIFIED)
+    {
+        m_pBitmapList->SetPath(AreaTabHelper::GetPalettePath());
+        m_pBitmapList->Save();
+
+        // ToolBoxControls are informed:
+        SfxObjectShell* pShell = SfxObjectShell::Current();
+        if (pShell)
+            pShell->PutItem(SvxBitmapListItem(m_pBitmapList, SID_BITMAP_LIST));
+    }
 }
 
 void SvxBitmapTabPage::Construct()
@@ -538,7 +551,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickRenameHdl, SvxPresetListBox*, void)
 
             m_xBitmapLB->SetItemText(nId, aName);
 
-            *m_pnBitmapListState |= ChangeType::MODIFIED;
+            m_nBitmapListState |= ChangeType::MODIFIED;
         }
         else
         {
@@ -581,7 +594,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickDeleteHdl, SvxPresetListBox*, void)
         m_aCtlBitmapPreview.Invalidate();
     }
     ModifyBitmapHdl(m_xBitmapLB.get());
-    *m_pnBitmapListState |= ChangeType::MODIFIED;
+    m_nBitmapListState |= ChangeType::MODIFIED;
 }
 
 IMPL_LINK_NOARG( SvxBitmapTabPage, ModifyBitmapSizeHdl, weld::MetricSpinButton&, void )
@@ -776,7 +789,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl, weld::Button&, void)
 
             m_xBitmapLB->InsertItem( nId + 1, Image(aBitmap), aName );
             m_xBitmapLB->SelectItem( nId + 1 );
-            *m_pnBitmapListState |= ChangeType::MODIFIED;
+            m_nBitmapListState |= ChangeType::MODIFIED;
 
             ModifyBitmapHdl(m_xBitmapLB.get());
         }

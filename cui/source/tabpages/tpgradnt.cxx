@@ -22,8 +22,10 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/dialoghelper.hxx>
+#include <sfx2/objsh.hxx>
 
 #include <strings.hrc>
+#include <svx/drawitem.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflgrit.hxx>
 #include <svx/colorbox.hxx>
@@ -34,6 +36,7 @@
 #include <dialmgr.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
+#include <svx/svxids.hrc>
 #include <basegfx/utils/gradienttools.hxx>
 #include <sal/log.hxx>
 
@@ -42,7 +45,7 @@ using namespace com::sun::star;
 SvxGradientTabPage::SvxGradientTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
     : SfxTabPage(pPage, pController, u"cui/ui/gradientpage.ui"_ustr, u"GradientPage"_ustr, &rInAttrs)
     , m_rOutAttrs(rInAttrs)
-    , m_pnGradientListState(nullptr)
+    , m_nGradientListState(ChangeType::NONE)
     , m_pnColorListState(nullptr)
     , m_aXFillAttr(rInAttrs.GetPool())
     , m_rXFSet(m_aXFillAttr.GetItemSet())
@@ -122,6 +125,17 @@ SvxGradientTabPage::~SvxGradientTabPage()
     m_xGradientLB.reset();
     m_xLbColorTo.reset();
     m_xLbColorFrom.reset();
+
+    if (m_nGradientListState & ChangeType::MODIFIED)
+    {
+        m_pGradientList->SetPath(AreaTabHelper::GetPalettePath());
+        m_pGradientList->Save();
+
+        // ToolBoxControls are informed:
+        SfxObjectShell* pShell = SfxObjectShell::Current();
+        if (pShell)
+            pShell->PutItem(SvxGradientListItem(m_pGradientList, SID_GRADIENT_LIST));
+    }
 }
 
 void SvxGradientTabPage::Construct()
@@ -383,7 +397,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl, weld::Button&, void)
         m_xGradientLB->SelectItem( nId + 1 );
         m_xGradientLB->Resize();
 
-        *m_pnGradientListState |= ChangeType::MODIFIED;
+        m_nGradientListState |= ChangeType::MODIFIED;
 
         ChangeGradientHdl_Impl();
     }
@@ -426,7 +440,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl, weld::Button&, void)
     m_xGradientLB->InsertItem( nId, Image(aBitmap), aName, static_cast<sal_uInt16>(nPos) );
     m_xGradientLB->SelectItem( nId );
 
-    *m_pnGradientListState |= ChangeType::MODIFIED;
+    m_nGradientListState |= ChangeType::MODIFIED;
 }
 
 IMPL_LINK_NOARG(SvxGradientTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, void)
@@ -452,7 +466,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, void
 
             ChangeGradientHdl_Impl();
 
-            *m_pnGradientListState |= ChangeType::MODIFIED;
+            m_nGradientListState |= ChangeType::MODIFIED;
         }
     }
     // determine button state
@@ -488,7 +502,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void
 
             m_xGradientLB->SetItemText( nId, aName );
 
-            *m_pnGradientListState |= ChangeType::MODIFIED;
+            m_nGradientListState |= ChangeType::MODIFIED;
         }
         else
         {

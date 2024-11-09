@@ -87,6 +87,12 @@ enum class PageType
     Transparence,
 };
 
+class AreaTabHelper
+{
+public:
+    static OUString GetPalettePath();
+};
+
 class SvxAreaTabDialog final : public SfxTabDialogController
 {
     SdrModel*           mpDrawModel;
@@ -103,10 +109,6 @@ class SvxAreaTabDialog final : public SfxTabDialogController
     XPatternListRef       mpNewPatternList;
 
     ChangeType          mnColorListState;
-    ChangeType          mnBitmapListState;
-    ChangeType          mnPatternListState;
-    ChangeType          mnGradientListState;
-    ChangeType          mnHatchingListState;
 
     virtual void        PageCreated(const OUString& rId, SfxTabPage &rPage) override;
 
@@ -230,10 +232,6 @@ private:
     ChangeType          maFixed_ChangeType;
 
     ChangeType*         m_pnColorListState;
-    ChangeType*         m_pnBitmapListState;
-    ChangeType*         m_pnPatternListState;
-    ChangeType*         m_pnGradientListState;
-    ChangeType*         m_pnHatchingListState;
 
     XFillAttrSetItem    m_aXFillAttr;
     SfxItemSet&         m_rXFSet;
@@ -294,10 +292,6 @@ public:
     virtual void PageCreated(const SfxAllItemSet& aSet) override;
     void    CreatePage(sal_Int32 nId, SfxTabPage& rTab);
     void    SetColorChgd( ChangeType* pIn ) { m_pnColorListState = pIn; }
-    void    SetGrdChgd( ChangeType* pIn ) { m_pnGradientListState = pIn; }
-    void    SetHtchChgd( ChangeType* pIn ) { m_pnHatchingListState = pIn; }
-    void    SetBmpChgd( ChangeType* pIn ) { m_pnBitmapListState = pIn; }
-    void    SetPtrnChgd( ChangeType* pIn ) { m_pnPatternListState = pIn; }
 };
 
 
@@ -362,7 +356,7 @@ private:
     XColorListRef         m_pColorList;
     XGradientListRef      m_pGradientList;
 
-    ChangeType*         m_pnGradientListState;
+    ChangeType m_nGradientListState;
     ChangeType*         m_pnColorListState;
 
     XFillAttrSetItem    m_aXFillAttr;
@@ -429,7 +423,6 @@ public:
     void    SetColorList( XColorListRef const & pColorList ) { m_pColorList = pColorList; }
     void    SetGradientList( XGradientListRef const & pGrdLst)
                 { m_pGradientList = pGrdLst; }
-    void    SetGrdChgd( ChangeType* pIn ) { m_pnGradientListState = pIn; }
     void    SetColorChgd( ChangeType* pIn ) { m_pnColorListState = pIn; }
 };
 
@@ -443,7 +436,7 @@ private:
     XColorListRef         m_pColorList;
     XHatchListRef         m_pHatchingList;
 
-    ChangeType*         m_pnHatchingListState;
+    ChangeType m_nHatchingListState;
     ChangeType*         m_pnColorListState;
 
     XFillAttrSetItem    m_aXFillAttr;
@@ -498,7 +491,6 @@ public:
     void    SetHatchingList( XHatchListRef const & pHtchLst)
                 { m_pHatchingList = pHtchLst; }
 
-    void    SetHtchChgd( ChangeType* pIn ) { m_pnHatchingListState = pIn; }
     void    SetColorChgd( ChangeType* pIn ) { m_pnColorListState = pIn; }
 };
 
@@ -511,7 +503,7 @@ private:
     const SfxItemSet&          m_rOutAttrs;
 
     XBitmapListRef             m_pBitmapList;
-    ChangeType*                m_pnBitmapListState;
+    ChangeType m_nBitmapListState;
 
     double                     m_fObjectWidth;
     double                     m_fObjectHeight;
@@ -574,7 +566,6 @@ public:
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
     void    SetBitmapList( const XBitmapListRef& pBmpLst) { m_pBitmapList = pBmpLst; }
-    void    SetBmpChgd( ChangeType* pIn ) { m_pnBitmapListState = pIn; }
 };
 
 /************************************************************************/
@@ -587,7 +578,7 @@ private:
     XColorListRef         m_pColorList;
     XPatternListRef       m_pPatternList;
 
-    ChangeType*         m_pnPatternListState;
+    ChangeType m_nPatternListState;
     ChangeType*         m_pnColorListState;
 
     XFillAttrSetItem    m_aXFillAttr;
@@ -631,7 +622,6 @@ public:
 
     void    SetColorList( XColorListRef const & pColorList ) { m_pColorList = pColorList; }
     void    SetPatternList( XPatternListRef const & pPatternList) { m_pPatternList = pPatternList; }
-    void    SetPtrnChgd( ChangeType* pIn ) { m_pnPatternListState = pIn; }
     void    SetColorChgd( ChangeType* pIn ) { m_pnColorListState = pIn; }
     void    ChangeColor_Impl();
 };

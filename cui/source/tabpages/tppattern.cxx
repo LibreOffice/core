@@ -20,14 +20,17 @@
 #include <memory>
 #include <tools/urlobj.hxx>
 #include <sfx2/dialoghelper.hxx>
+#include <sfx2/objsh.hxx>
 #include <svx/colorbox.hxx>
 #include <svx/dialmgr.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svx/strings.hrc>
+#include <svx/svxids.hrc>
 
 #include <strings.hrc>
+#include <svx/drawitem.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xtable.hxx>
@@ -72,7 +75,7 @@ public:
 SvxPatternTabPage::SvxPatternTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
     : SvxTabPage(pPage, pController, u"cui/ui/patterntabpage.ui"_ustr, u"PatternTabPage"_ustr, rInAttrs)
     , m_rOutAttrs(rInAttrs)
-    , m_pnPatternListState(nullptr)
+    , m_nPatternListState(ChangeType::NONE)
     , m_pnColorListState(nullptr)
     , m_aXFillAttr(rInAttrs.GetPool())
     , m_rXFSet(m_aXFillAttr.GetItemSet())
@@ -123,6 +126,17 @@ SvxPatternTabPage::~SvxPatternTabPage()
     m_xLbBackgroundColor.reset();
     m_xLbColor.reset();
     m_xCtlPixel.reset();
+
+    if (m_nPatternListState & ChangeType::MODIFIED)
+    {
+        m_pPatternList->SetPath(AreaTabHelper::GetPalettePath());
+        m_pPatternList->Save();
+
+        // ToolBoxControls are informed:
+        SfxObjectShell* pShell = SfxObjectShell::Current();
+        if (pShell)
+            pShell->PutItem(SvxPatternListItem(m_pPatternList, SID_PATTERN_LIST));
+    }
 }
 
 void SvxPatternTabPage::Construct()
@@ -386,7 +400,7 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickAddHdl_Impl, weld::Button&, void)
             m_xPatternLB->SelectItem( nId + 1 );
             m_xPatternLB->Resize();
 
-            *m_pnPatternListState |= ChangeType::MODIFIED;
+            m_nPatternListState |= ChangeType::MODIFIED;
 
             ChangePatternHdl_Impl(m_xPatternLB.get());
         }
@@ -419,7 +433,7 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickModifyHdl_Impl, weld::Button&, void)
     m_xPatternLB->InsertItem( nId, Image(aBitmap), aName, static_cast<sal_uInt16>(nPos) );
     m_xPatternLB->SelectItem( nId );
 
-    *m_pnPatternListState |= ChangeType::MODIFIED;
+    m_nPatternListState |= ChangeType::MODIFIED;
 }
 
 
@@ -453,7 +467,7 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void)
 
             m_xPatternLB->SetItemText( nId, aName );
 
-            *m_pnPatternListState |= ChangeType::MODIFIED;
+            m_nPatternListState |= ChangeType::MODIFIED;
         }
         else
         {
@@ -488,7 +502,7 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, void)
 
             ChangePatternHdl_Impl(m_xPatternLB.get());
 
-            *m_pnPatternListState |= ChangeType::MODIFIED;
+            m_nPatternListState |= ChangeType::MODIFIED;
         }
     }
     // determine button state

@@ -46,12 +46,7 @@ SvxAreaTabDialog::SvxAreaTabDialog
     mpNewBitmapList      ( pModel->GetBitmapList() ),
     mpPatternList        ( pModel->GetPatternList() ),
     mpNewPatternList     ( pModel->GetPatternList() ),
-
-    mnColorListState ( ChangeType::NONE ),
-    mnBitmapListState ( ChangeType::NONE ),
-    mnPatternListState ( ChangeType::NONE ),
-    mnGradientListState ( ChangeType::NONE ),
-    mnHatchingListState ( ChangeType::NONE )
+    mnColorListState(ChangeType::NONE)
 {
     if (bSlideBackground)
         AddTabPage(u"RID_SVXPAGE_AREA"_ustr, SvxAreaTabPage::CreateWithSlideBackground, nullptr);
@@ -119,56 +114,6 @@ void SvxAreaTabDialog::SavePalettes()
     }
 
     // save the tables when they have been changed
-
-    OUString aPalettePath(SvtPathOptions().GetPalettePath());
-    OUString aPath;
-    sal_Int32 nIndex = 0;
-    do
-    {
-        aPath = aPalettePath.getToken(0, ';', nIndex);
-    }
-    while (nIndex >= 0);
-
-    if( mnHatchingListState & ChangeType::MODIFIED )
-    {
-        mpHatchingList->SetPath( aPath );
-        mpHatchingList->Save();
-
-        SvxHatchListItem aItem( mpHatchingList, SID_HATCH_LIST );
-        // ToolBoxControls are informed:
-        pShell->PutItem( aItem );
-    }
-
-    if( mnBitmapListState & ChangeType::MODIFIED )
-    {
-        mpBitmapList->SetPath( aPath );
-        mpBitmapList->Save();
-
-        SvxBitmapListItem aItem( mpBitmapList, SID_BITMAP_LIST );
-        // ToolBoxControls are informed:
-        pShell->PutItem( aItem );
-    }
-
-    if( mnPatternListState & ChangeType::MODIFIED )
-    {
-        mpPatternList->SetPath( aPath );
-        mpPatternList->Save();
-
-        SvxPatternListItem aItem( mpPatternList, SID_PATTERN_LIST );
-        // ToolBoxControls are informed:
-        pShell->PutItem( aItem );
-    }
-
-    if( mnGradientListState & ChangeType::MODIFIED )
-    {
-        mpGradientList->SetPath( aPath );
-        mpGradientList->Save();
-
-        SvxGradientListItem aItem( mpGradientList, SID_GRADIENT_LIST );
-        // ToolBoxControls are informed:
-        pShell->PutItem( aItem );
-    }
-
     if (mnColorListState & ChangeType::MODIFIED && mpColorList.is())
     {
         SvxColorListItem aItem( mpColorList, SID_COLOR_TABLE );
@@ -201,10 +146,6 @@ void SvxAreaTabDialog::PageCreated(const OUString& rId, SfxTabPage &rPage)
         static_cast<SvxAreaTabPage&>(rPage).SetHatchingList( mpHatchingList );
         static_cast<SvxAreaTabPage&>(rPage).SetBitmapList( mpBitmapList );
         static_cast<SvxAreaTabPage&>(rPage).SetPatternList( mpPatternList );
-        static_cast<SvxAreaTabPage&>(rPage).SetGrdChgd( &mnGradientListState );
-        static_cast<SvxAreaTabPage&>(rPage).SetHtchChgd( &mnHatchingListState );
-        static_cast<SvxAreaTabPage&>(rPage).SetBmpChgd( &mnBitmapListState );
-        static_cast<SvxAreaTabPage&>(rPage).SetPtrnChgd( &mnPatternListState );
         static_cast<SvxAreaTabPage&>(rPage).SetColorChgd( &mnColorListState );
     }
     else if (rId == "RID_SVXPAGE_SHADOW")

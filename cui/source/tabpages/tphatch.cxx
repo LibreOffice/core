@@ -23,8 +23,10 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/dialoghelper.hxx>
+#include <sfx2/objsh.hxx>
 
 #include <strings.hrc>
+#include <svx/drawitem.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflhtit.hxx>
 #include <svx/xflclit.hxx>
@@ -46,7 +48,7 @@ using namespace com::sun::star;
 SvxHatchTabPage::SvxHatchTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs)
     : SfxTabPage(pPage, pController, u"cui/ui/hatchpage.ui"_ustr, u"HatchPage"_ustr, &rInAttrs)
     , m_rOutAttrs(rInAttrs)
-    , m_pnHatchingListState(nullptr)
+    , m_nHatchingListState(ChangeType::NONE)
     , m_pnColorListState(nullptr)
     , m_aXFillAttr(rInAttrs.GetPool())
     , m_rXFSet(m_aXFillAttr.GetItemSet())
@@ -124,6 +126,17 @@ SvxHatchTabPage::~SvxHatchTabPage()
     m_xHatchLB.reset();
     m_xLbBackgroundColor.reset();
     m_xLbLineColor.reset();
+
+    if (m_nHatchingListState & ChangeType::MODIFIED)
+    {
+        m_pHatchingList->SetPath(AreaTabHelper::GetPalettePath());
+        m_pHatchingList->Save();
+
+        // ToolBoxControls are informed:
+        SfxObjectShell* pShell = SfxObjectShell::Current();
+        if (pShell)
+            pShell->PutItem(SvxHatchListItem(m_pHatchingList, SID_HATCH_LIST));
+    }
 }
 
 void SvxHatchTabPage::Construct()
@@ -455,7 +468,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl, weld::Button&, void)
     m_xHatchLB->SelectItem( nId + 1 );
     m_xHatchLB->Resize();
 
-    *m_pnHatchingListState |= ChangeType::MODIFIED;
+    m_nHatchingListState |= ChangeType::MODIFIED;
 
     ChangeHatchHdl_Impl();
 }
@@ -489,7 +502,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickModifyHdl_Impl, weld::Button&, void)
     m_xLbLineColor->SaveValue();
     m_xLbBackgroundColor->SaveValue();
 
-    *m_pnHatchingListState |= ChangeType::MODIFIED;
+    m_nHatchingListState |= ChangeType::MODIFIED;
 }
 
 IMPL_LINK_NOARG(SvxHatchTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, void)
@@ -517,7 +530,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, void)
 
     ChangeHatchHdl_Impl();
 
-    *m_pnHatchingListState |= ChangeType::MODIFIED;
+    m_nHatchingListState |= ChangeType::MODIFIED;
 }
 
 IMPL_LINK_NOARG(SvxHatchTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void )
@@ -548,7 +561,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void )
 
             m_xHatchLB->SetItemText(nId, aName);
 
-            *m_pnHatchingListState |= ChangeType::MODIFIED;
+            m_nHatchingListState |= ChangeType::MODIFIED;
         }
         else
         {
