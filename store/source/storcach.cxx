@@ -163,7 +163,6 @@ static constexpr int highbit(std::size_t n)
     return k;
 }
 
-
 PageCache::PageCache (sal_uInt16 nPageSize)
     : m_hash_table   (m_hash_table_0),
       m_hash_size    (theTableSize),
@@ -173,8 +172,7 @@ PageCache::PageCache (sal_uInt16 nPageSize)
       m_nHit         (0),
       m_nMissed      (0)
 {
-    static size_t const theSize = SAL_N_ELEMENTS(m_hash_table_0);
-    static_assert(theSize == theTableSize, "must be equal");
+    static_assert(theTableSize == SAL_N_ELEMENTS(m_hash_table_0), "must be equal");
 }
 
 PageCache::~PageCache()
