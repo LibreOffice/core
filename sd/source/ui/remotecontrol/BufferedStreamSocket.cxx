@@ -107,7 +107,10 @@ sal_Int32 BufferedStreamSocket::readLine( OString& aLine )
 
         sal_Int32 nRet;
         if (!usingCSocket)
+        {
+            // coverity[ tainted_data_return : FALSE ] version 2023.12.2
             nRet = StreamSocket::recv( &aBuffer[aRead], 100 );
+        }
         else
             nRet = ::recv( mSocket, &aBuffer[aRead], 100, 0 );
 
