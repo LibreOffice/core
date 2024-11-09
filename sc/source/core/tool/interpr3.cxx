@@ -5274,7 +5274,10 @@ static void lcl_roundUpNearestPow2(SCSIZE& nNum, SCSIZE& nNumBits)
     }
 
     if (nPow2 != nNum)
+    {
+        assert(nPow2 < 1UL << (std::numeric_limits<unsigned long>::digits - 1));
         nNum = nPow2 ? (nPow2 << 1) : 1;
+    }
     else
         --nNumBits;
 }
