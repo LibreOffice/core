@@ -2306,7 +2306,7 @@ void SAL_CALL SdDrawPage::setName( const OUString& rName )
 
     GetPage()->SetName( aName );
 
-    sal_uInt16 nNotesPageNum = (GetPage()->GetPageNum()-1)>>1;
+    sal_uInt16 nNotesPageNum = static_cast<sal_uInt16>( ( GetPage()->GetPageNum() - 1 ) >> 1 );
     if( GetModel()->GetDoc()->GetSdPageCount( PageKind::Notes ) > nNotesPageNum )
     {
         SdPage* pNotesPage = GetModel()->GetDoc()->GetSdPage( nNotesPageNum, PageKind::Notes );
