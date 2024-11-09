@@ -27,6 +27,7 @@ $(eval $(call gb_CppunitTest_use_libraries,vcl_filter_ipdf, \
     sal \
     sfx \
     subsequenttest \
+    svl \
     svx \
     test \
     tl \
