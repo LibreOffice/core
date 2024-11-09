@@ -275,11 +275,85 @@ protected:
         return pCurrentChild;
     }
 
+    void handleTabChild(Widget* pParent, xmlreader::XmlReader& reader)
+    {
+        std::vector<OUString> sIDs;
+
+        int nLevel = 1;
+        stringmap aProperties;
+        stringmap aAtkProperties;
+        std::vector<vcl::EnumContext::Context> context;
+
+        while (true)
+        {
+            xmlreader::Span name;
+            int nsId;
+
+            xmlreader::XmlReader::Result res
+                = reader.nextItem(xmlreader::XmlReader::Text::NONE, &name, &nsId);
+
+            if (res == xmlreader::XmlReader::Result::Begin)
+            {
+                ++nLevel;
+                if (name == "object")
+                {
+                    while (reader.nextAttribute(&nsId, &name))
+                    {
+                        if (name == "id")
+                        {
+                            name = reader.getAttributeValue(false);
+                            OUString sID(name.begin, name.length, RTL_TEXTENCODING_UTF8);
+                            sal_Int32 nDelim = sID.indexOf(':');
+                            if (nDelim != -1)
+                            {
+                                aProperties[u"customproperty"_ustr] = sID.copy(nDelim + 1);
+                                sID = sID.copy(0, nDelim);
+                            }
+                            sIDs.push_back(sID);
+                        }
+                    }
+                }
+                else if (name == "style")
+                {
+                    int nPriority = 0;
+                    context = handleStyle(reader, nPriority);
+                    --nLevel;
+                }
+                else if (name == "property")
+                    collectProperty(reader, aProperties);
+                else if (name == "child" && isHorizontalTabControl(pParent))
+                {
+                    // just to collect the atk properties (if any) for the label
+                    handleChild(nullptr, &aAtkProperties, reader);
+                    --nLevel;
+                }
+            }
+
+            if (res == xmlreader::XmlReader::Result::End)
+                --nLevel;
+
+            if (!nLevel)
+                break;
+
+            if (res == xmlreader::XmlReader::Result::Done)
+                break;
+        }
+
+        if (!pParent)
+            return;
+
+        applyTabChildProperties(pParent, sIDs, context, aProperties, aAtkProperties);
+    }
+
     virtual void applyAtkProperties(Widget* pWidget, const stringmap& rProperties,
                                     bool bToolbarItem)
         = 0;
     virtual void applyPackingProperties(Widget* pCurrentChild, Widget* pParent,
                                         const stringmap& rPackingProperties)
+        = 0;
+    virtual void applyTabChildProperties(Widget* pParent, const std::vector<OUString>& rIDs,
+                                         std::vector<vcl::EnumContext::Context>& rContext,
+                                         stringmap& rProperties, stringmap& rAtkProperties)
         = 0;
     virtual void insertComboBoxOrListBoxItems(Widget* pWidget, stringmap& rMap,
                                               const std::vector<ComboBoxTextItem>& rItems)
@@ -310,12 +384,6 @@ protected:
     // not using the corresponding features (attributes/objects in the .ui file).
     virtual void handleMenu(xmlreader::XmlReader& /*reader*/, Widget* /*pParent*/,
                             const OUString& /*rID*/, bool /*bMenuBar*/)
-    {
-        assert(false && "Functionality not implemented by this subclass yet.");
-    }
-
-    virtual void handleTabChild(Widget* /*pParent*/, xmlreader::XmlReader& /*reader*/)
-
     {
         assert(false && "Functionality not implemented by this subclass yet.");
     }

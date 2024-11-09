@@ -53,6 +53,10 @@ public:
                                     bool bToolbarItem) override;
     virtual void applyPackingProperties(QObject* pCurrentChild, QObject* pParent,
                                         const stringmap& rPackingProperties) override;
+    virtual void applyTabChildProperties(QObject* pParent, const std::vector<OUString>& rIDs,
+                                         std::vector<vcl::EnumContext::Context>& rContext,
+                                         stringmap& rProperties,
+                                         stringmap& rAtkProperties) override;
     virtual void insertComboBoxOrListBoxItems(QObject* pObject, stringmap& rMap,
                                               const std::vector<ComboBoxTextItem>& rItems) override;
 

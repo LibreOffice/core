@@ -477,6 +477,13 @@ void QtBuilder::applyPackingProperties(QObject* pCurrentChild, QObject* pParent,
         SAL_WARN("vcl.qt", "QtBuilder::applyPackingProperties not yet implemented for this case");
 }
 
+void QtBuilder::applyTabChildProperties(QObject*, const std::vector<OUString>&,
+                                        std::vector<vcl::EnumContext::Context>&, stringmap&,
+                                        stringmap&)
+{
+    assert(false && "Not implemented yet");
+}
+
 void QtBuilder::set_response(std::u16string_view sID, short nResponse)
 {
     QPushButton* pPushButton = get<QPushButton>(sID);

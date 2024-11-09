@@ -2489,94 +2489,31 @@ VclPtr<vcl::Window> VclBuilder::insertObject(vcl::Window *pParent, const OUStrin
     return pCurrentChild;
 }
 
-void VclBuilder::handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &reader)
+void VclBuilder::applyTabChildProperties(vcl::Window* pParent, const std::vector<OUString>& rIDs,
+                                         std::vector<vcl::EnumContext::Context>& rContext, stringmap& rProperties,
+                                         stringmap& rAtkProperties)
 {
-    std::vector<OUString> sIDs;
-
-    int nLevel = 1;
-    stringmap aProperties;
-    stringmap aAtkProperties;
-    std::vector<vcl::EnumContext::Context> context;
-
-    while(true)
-    {
-        xmlreader::Span name;
-        int nsId;
-
-        xmlreader::XmlReader::Result res = reader.nextItem(
-            xmlreader::XmlReader::Text::NONE, &name, &nsId);
-
-        if (res == xmlreader::XmlReader::Result::Begin)
-        {
-            ++nLevel;
-            if (name == "object")
-            {
-                while (reader.nextAttribute(&nsId, &name))
-                {
-                    if (name == "id")
-                    {
-                        name = reader.getAttributeValue(false);
-                        OUString sID(name.begin, name.length, RTL_TEXTENCODING_UTF8);
-                        sal_Int32 nDelim = sID.indexOf(':');
-                        if (nDelim != -1)
-                        {
-                            aProperties[u"customproperty"_ustr] = sID.copy(nDelim + 1);
-                            sID = sID.copy(0, nDelim);
-                        }
-                        sIDs.push_back(sID);
-                    }
-                }
-            }
-            else if (name == "style")
-            {
-                int nPriority = 0;
-                context = handleStyle(reader, nPriority);
-                --nLevel;
-            }
-            else if (name == "property")
-                collectProperty(reader, aProperties);
-            else if (name == "child" && isHorizontalTabControl(pParent))
-            {
-                // just to collect the atk properties (if any) for the label
-                handleChild(nullptr, &aAtkProperties, reader);
-                --nLevel;
-            }
-        }
-
-        if (res == xmlreader::XmlReader::Result::End)
-            --nLevel;
-
-        if (!nLevel)
-            break;
-
-        if (res == xmlreader::XmlReader::Result::Done)
-            break;
-    }
-
-    if (!pParent)
-        return;
-
     TabControl* pTabControl = isHorizontalTabControl(pParent) ? static_cast<TabControl*>(pParent) : nullptr;
     VerticalTabControl *pVerticalTabControl = pParent->GetType() == WindowType::VERTICALTABCONTROL ?
         static_cast<VerticalTabControl*>(pParent) : nullptr;
     assert(pTabControl || pVerticalTabControl);
-    VclBuilder::stringmap::iterator aFind = aProperties.find(u"label"_ustr);
-    if (aFind != aProperties.end())
+    VclBuilder::stringmap::iterator aFind = rProperties.find(u"label"_ustr);
+    if (aFind != rProperties.end())
     {
-        OUString sTooltip(extractTooltipText(aProperties));
+        OUString sTooltip(extractTooltipText(rProperties));
         if (pTabControl)
         {
             sal_uInt16 nPageId = pTabControl->GetCurPageId();
             pTabControl->SetPageText(nPageId, aFind->second);
-            pTabControl->SetPageName(nPageId, sIDs.back());
+            pTabControl->SetPageName(nPageId, rIDs.back());
             pTabControl->SetHelpText(nPageId, sTooltip);
-            if (!context.empty())
+            if (!rContext.empty())
             {
                 TabPage* pPage = pTabControl->GetTabPage(nPageId);
-                pPage->SetContext(std::move(context));
+                pPage->SetContext(std::move(rContext));
             }
 
-            for (auto const& [ rKey, rValue ] : aAtkProperties)
+            for (auto const& [ rKey, rValue ] : rAtkProperties)
             {
                 if (rKey == "AtkObject::accessible-name")
                     pTabControl->SetAccessibleName(nPageId, rValue);
@@ -2590,8 +2527,8 @@ void VclBuilder::handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &read
         else
         {
             OUString sLabel(BuilderUtils::convertMnemonicMarkup(aFind->second));
-            OUString sIconName(extractIconName(aProperties));
-            pVerticalTabControl->InsertPage(sIDs.front(), sLabel, loadThemeImage(sIconName), sTooltip,
+            OUString sIconName(extractIconName(rProperties));
+            pVerticalTabControl->InsertPage(rIDs.front(), sLabel, loadThemeImage(sIconName), sTooltip,
                                             pVerticalTabControl->GetPageParent()->GetWindow(GetWindowType::LastChild));
         }
     }

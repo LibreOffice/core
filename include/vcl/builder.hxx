@@ -274,6 +274,9 @@ private:
 
     void applyPackingProperties(vcl::Window* pCurrent, vcl::Window* pParent,
                                 const stringmap& rPackingProperties) override;
+    virtual void applyTabChildProperties(vcl::Window* pParent, const std::vector<OUString>& rIDs,
+                                         std::vector<vcl::EnumContext::Context>& rContext, stringmap& rProperties,
+                                         stringmap& rAtkProperties) override;
 
     void        insertMenuObject(
                    Menu *pParent,
@@ -287,7 +290,6 @@ private:
     void        handleMenuChild(Menu *pParent, xmlreader::XmlReader &reader);
     void        handleMenuObject(Menu *pParent, xmlreader::XmlReader &reader);
 
-    void        handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &reader) override;
     void handleMenu(xmlreader::XmlReader& reader, vcl::Window* pParent, const OUString& rID,
                     bool bMenuBar) override;
 
