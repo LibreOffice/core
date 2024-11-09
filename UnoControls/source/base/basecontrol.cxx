@@ -442,84 +442,84 @@ Rectangle SAL_CALL BaseControl::getPosSize()
 
 void SAL_CALL BaseControl::addWindowListener( const Reference< XWindowListener >& xListener )
 {
-    impl_getMultiplexer()->advise( cppu::UnoType<XWindowListener>::get(), xListener );
+    impl_getMultiplexer()->advise(xListener);
 }
 
 //  XWindow
 
 void SAL_CALL BaseControl::addFocusListener( const Reference< XFocusListener >& xListener )
 {
-    impl_getMultiplexer()->advise( cppu::UnoType<XFocusListener>::get(), xListener );
+    impl_getMultiplexer()->advise(xListener);
 }
 
 //  XWindow
 
 void SAL_CALL BaseControl::addKeyListener( const Reference< XKeyListener >& xListener )
 {
-    impl_getMultiplexer()->advise( cppu::UnoType<XKeyListener>::get(), xListener );
+    impl_getMultiplexer()->advise(xListener);
 }
 
 //  XWindow
 
 void SAL_CALL BaseControl::addMouseListener( const Reference< XMouseListener >& xListener )
 {
-    impl_getMultiplexer()->advise( cppu::UnoType<XMouseListener>::get(), xListener );
+    impl_getMultiplexer()->advise(xListener);
 }
 
 //  XWindow
 
 void SAL_CALL BaseControl::addMouseMotionListener( const Reference< XMouseMotionListener >& xListener )
 {
-    impl_getMultiplexer()->advise( cppu::UnoType<XMouseMotionListener>::get(), xListener );
+    impl_getMultiplexer()->advise(xListener);
 }
 
 //  XWindow
 
 void SAL_CALL BaseControl::addPaintListener( const Reference< XPaintListener >& xListener )
 {
-    impl_getMultiplexer()->advise( cppu::UnoType<XPaintListener>::get(), xListener );
+    impl_getMultiplexer()->advise(xListener);
 }
 
 //  XWindow
 
 void SAL_CALL BaseControl::removeWindowListener( const Reference< XWindowListener >& xListener )
 {
-    impl_getMultiplexer()->unadvise( cppu::UnoType<XWindowListener>::get(), xListener );
+    impl_getMultiplexer()->unadvise(xListener);
 }
 
 //  XWindow
 
 void SAL_CALL BaseControl::removeFocusListener( const Reference< XFocusListener >& xListener )
 {
-    impl_getMultiplexer()->unadvise( cppu::UnoType<XFocusListener>::get(), xListener );
+    impl_getMultiplexer()->unadvise(xListener);
 }
 
 //  XWindow
 
 void SAL_CALL BaseControl::removeKeyListener( const Reference< XKeyListener >& xListener )
 {
-    impl_getMultiplexer()->unadvise( cppu::UnoType<XKeyListener>::get(), xListener );
+    impl_getMultiplexer()->unadvise(xListener);
 }
 
 //  XWindow
 
 void SAL_CALL BaseControl::removeMouseListener( const Reference< XMouseListener >& xListener )
 {
-    impl_getMultiplexer()->unadvise( cppu::UnoType<XMouseListener>::get(), xListener );
+    impl_getMultiplexer()->unadvise(xListener);
 }
 
 //  XWindow
 
 void  SAL_CALL BaseControl::removeMouseMotionListener( const Reference< XMouseMotionListener >& xListener )
 {
-    impl_getMultiplexer()->unadvise( cppu::UnoType<XMouseMotionListener>::get(), xListener );
+    impl_getMultiplexer()->unadvise(xListener);
 }
 
 //  XWindow
 
 void SAL_CALL BaseControl::removePaintListener( const Reference< XPaintListener >& xListener )
 {
-    impl_getMultiplexer()->unadvise( cppu::UnoType<XPaintListener>::get(), xListener );
+    impl_getMultiplexer()->unadvise(xListener);
 }
 
 //  XView

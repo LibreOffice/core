@@ -22,9 +22,6 @@
 #include <osl/diagnose.h>
 #include <cppuhelper/queryinterface.hxx>
 
-#include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/awt/XTopWindow.hpp>
-
 using namespace ::cppu;
 using namespace ::osl;
 using namespace ::com::sun::star::uno;
@@ -38,33 +35,14 @@ void OMRCListenerMultiplexerHelper::Multiplex(void (SAL_CALL Interface::*method)
                                               const Event& event)
 {
     std::unique_lock aGuard(m_aMutex);
-    /* First get all interfaces from container with right type.*/
-    auto* pContainer = m_aListenerHolder.getContainer(aGuard, cppu::UnoType<Interface>::get());
-    /* Do the follow only, if elements in container exist.*/
-    if (!pContainer)
-        return;
-    comphelper::OInterfaceIteratorHelper4 aIterator(aGuard, *pContainer);
     Event aLocalEvent = event;
     /* Remark: The control is the event source not the peer.*/
     /*         We must change the source of the event.      */
     aLocalEvent.Source = m_xControl;
-    aGuard.unlock();
     /* Is the control not destroyed? */
     if (!aLocalEvent.Source)
         return;
-    while (aIterator.hasMoreElements())
-    {
-        auto* pListener = aIterator.next().get();
-        assert(dynamic_cast<Interface*>(pListener));
-        try
-        {
-            (static_cast<Interface*>(pListener)->*method)(aLocalEvent);
-        }
-        catch (const RuntimeException&)
-        {
-            /* Ignore all system exceptions from the listener! */
-        }
-    }
+    Listeners<Interface>::list.notifyEach(aGuard, method, aLocalEvent);
 }
 
 //  construct/destruct
@@ -90,20 +68,22 @@ void OMRCListenerMultiplexerHelper::setPeer( const Reference< XWindow >& xPeer )
 
     if( m_xPeer.is() )
     {
-        // get all types from the listener added to the peer
-        const std::vector< Type > aContainedTypes = m_aListenerHolder.getContainedTypes(aGuard);
-        // loop over all listener types and remove the listeners from the peer
-        for( const auto& rContainedType : aContainedTypes )
-            impl_unadviseFromPeer( m_xPeer, rContainedType );
+        for_each_container(
+            [this, &aGuard]<class Ifc>(const comphelper::OInterfaceContainerHelper4<Ifc>& c)
+            {
+                if (c.getLength(aGuard) > 0)
+                    notifyPeer(m_xPeer, Remove<Ifc>);
+            });
     }
     m_xPeer = xPeer;
     if( m_xPeer.is() )
     {
-        // get all types from the listener added to the peer
-        const std::vector< Type > aContainedTypes = m_aListenerHolder.getContainedTypes(aGuard);
-        // loop over all listener types and add the listeners to the peer
-        for( const auto& rContainedType : aContainedTypes )
-            impl_adviseToPeer( m_xPeer, rContainedType );
+        for_each_container(
+            [this, &aGuard]<class Ifc>(const comphelper::OInterfaceContainerHelper4<Ifc>& c)
+            {
+                if (c.getLength(aGuard) > 0)
+                    notifyPeer(m_xPeer, Add<Ifc>);
+            });
     }
 }
 
@@ -114,40 +94,7 @@ void OMRCListenerMultiplexerHelper::disposeAndClear()
     std::unique_lock aGuard(m_aMutex);
     EventObject aEvent;
     aEvent.Source = m_xControl;
-    m_aListenerHolder.disposeAndClear(aGuard, aEvent);
-}
-
-//  container method
-
-void OMRCListenerMultiplexerHelper::advise( const   Type&                       aType       ,
-                                            const   Reference< XEventListener >&    xListener   )
-{
-    assert(xListener && xListener->queryInterface(aType).getValue());
-    std::unique_lock aGuard(m_aMutex);
-    if (m_aListenerHolder.addInterface(aGuard, aType, xListener) == 1)
-    {
-        // the first listener is added
-        if( m_xPeer.is() )
-        {
-            impl_adviseToPeer( m_xPeer, aType );
-        }
-    }
-}
-
-//  container method
-
-void OMRCListenerMultiplexerHelper::unadvise(   const   Type&                       aType       ,
-                                                const   Reference< XEventListener >&    xListener   )
-{
-    std::unique_lock aGuard(m_aMutex);
-    if (m_aListenerHolder.removeInterface(aGuard, aType, xListener) == 0)
-    {
-        // the last listener is removed
-        if ( m_xPeer.is() )
-        {
-            impl_unadviseFromPeer( m_xPeer, aType );
-        }
-    }
+    for_each_container([&aGuard, &aEvent](auto& c) { c.disposeAndClear(aGuard, aEvent); });
 }
 
 //  XEventListener
@@ -311,66 +258,6 @@ void OMRCListenerMultiplexerHelper::windowActivated( const EventObject& aEvent )
 void OMRCListenerMultiplexerHelper::windowDeactivated( const EventObject& aEvent )
 {
     Multiplex(&XTopWindowListener::windowDeactivated, aEvent);
-}
-
-//  protected method
-
-void OMRCListenerMultiplexerHelper::impl_adviseToPeer(  const   Reference< XWindow >&   xPeer   ,
-                                                        const   Type&                   aType   )
-{
-    // add a listener to the source (peer)
-    if( aType == cppu::UnoType<XWindowListener>::get())
-        xPeer->addWindowListener( this );
-    else if( aType == cppu::UnoType<XKeyListener>::get())
-        xPeer->addKeyListener( this );
-    else if( aType == cppu::UnoType<XFocusListener>::get())
-        xPeer->addFocusListener( this );
-    else if( aType == cppu::UnoType<XMouseListener>::get())
-        xPeer->addMouseListener( this );
-    else if( aType == cppu::UnoType<XMouseMotionListener>::get())
-        xPeer->addMouseMotionListener( this );
-    else if( aType == cppu::UnoType<XPaintListener>::get())
-        xPeer->addPaintListener( this );
-    else if( aType == cppu::UnoType<XTopWindowListener>::get())
-    {
-        Reference< XTopWindow > xTop( xPeer, UNO_QUERY );
-        if( xTop.is() )
-            xTop->addTopWindowListener( this );
-    }
-    else
-    {
-        OSL_FAIL( "unknown listener" );
-    }
-}
-
-//  protected method
-
-void OMRCListenerMultiplexerHelper::impl_unadviseFromPeer(  const   Reference< XWindow >&   xPeer   ,
-                                                            const   Type&                   aType   )
-{
-    // the last listener is removed, remove the listener from the source (peer)
-    if( aType == cppu::UnoType<XWindowListener>::get())
-        xPeer->removeWindowListener( this );
-    else if( aType == cppu::UnoType<XKeyListener>::get())
-        xPeer->removeKeyListener( this );
-    else if( aType == cppu::UnoType<XFocusListener>::get())
-        xPeer->removeFocusListener( this );
-    else if( aType == cppu::UnoType<XMouseListener>::get())
-        xPeer->removeMouseListener( this );
-    else if( aType == cppu::UnoType<XMouseMotionListener>::get())
-        xPeer->removeMouseMotionListener( this );
-    else if( aType == cppu::UnoType<XPaintListener>::get())
-        xPeer->removePaintListener( this );
-    else if( aType == cppu::UnoType<XTopWindowListener>::get())
-    {
-        Reference< XTopWindow >  xTop( xPeer, UNO_QUERY );
-        if( xTop.is() )
-            xTop->removeTopWindowListener( this );
-    }
-    else
-    {
-        OSL_FAIL( "unknown listener" );
-    }
 }
 
 } // namespace unocontrols

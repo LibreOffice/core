@@ -22,29 +22,100 @@
 #include <com/sun/star/awt/XKeyListener.hpp>
 #include <com/sun/star/awt/XPaintListener.hpp>
 #include <com/sun/star/awt/XMouseMotionListener.hpp>
+#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>
+#include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/XTopWindowListener.hpp>
 #include <com/sun/star/awt/XMouseListener.hpp>
 #include <com/sun/star/awt/XFocusListener.hpp>
 #include <comphelper/compbase.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <comphelper/multiinterfacecontainer4.hxx>
 
-namespace com::sun::star::awt { class XWindow; }
-namespace com::sun::star::awt { struct KeyEvent; }
-namespace com::sun::star::awt { struct MouseEvent; }
-namespace com::sun::star::awt { struct PaintEvent; }
-namespace com::sun::star::awt { struct WindowEvent; }
+#include <type_traits>
 
 namespace unocontrols {
 
-class OMRCListenerMultiplexerHelper final : public comphelper::WeakImplHelper< css::awt::XFocusListener
-                                                                             , css::awt::XWindowListener
-                                                                             , css::awt::XKeyListener
-                                                                             , css::awt::XMouseListener
-                                                                             , css::awt::XMouseMotionListener
-                                                                             , css::awt::XPaintListener
-                                                                             , css::awt::XTopWindowListener >
+template <class Listener> extern int Add; // dummy
+template <class Listener> extern int Remove; // dummy
+
+template <> constexpr inline auto Add<css::awt::XFocusListener> = &css::awt::XWindow::addFocusListener;
+template <> constexpr inline auto Remove<css::awt::XFocusListener> = &css::awt::XWindow::removeFocusListener;
+
+template <> constexpr inline auto Add<css::awt::XWindowListener> = &css::awt::XWindow::addWindowListener;
+template <> constexpr inline auto Remove<css::awt::XWindowListener> = &css::awt::XWindow::removeWindowListener;
+
+template <> constexpr inline auto Add<css::awt::XKeyListener> = &css::awt::XWindow::addKeyListener;
+template <> constexpr inline auto Remove<css::awt::XKeyListener> = &css::awt::XWindow::removeKeyListener;
+
+template <> constexpr inline auto Add<css::awt::XMouseListener> = &css::awt::XWindow::addMouseListener;
+template <> constexpr inline auto Remove<css::awt::XMouseListener> = &css::awt::XWindow::removeMouseListener;
+
+template <> constexpr inline auto Add<css::awt::XMouseMotionListener> = &css::awt::XWindow::addMouseMotionListener;
+template <> constexpr inline auto Remove<css::awt::XMouseMotionListener> = &css::awt::XWindow::removeMouseMotionListener;
+
+template <> constexpr inline auto Add<css::awt::XPaintListener> = &css::awt::XWindow::addPaintListener;
+template <> constexpr inline auto Remove<css::awt::XPaintListener> = &css::awt::XWindow::removePaintListener;
+
+template <> constexpr inline auto Add<css::awt::XTopWindowListener> = &css::awt::XTopWindow::addTopWindowListener;
+template <> constexpr inline auto Remove<css::awt::XTopWindowListener> = &css::awt::XTopWindow::removeTopWindowListener;
+
+template <class Ifc> class Listeners
+{
+protected:
+    comphelper::OInterfaceContainerHelper4<Ifc> list;
+};
+
+template <class... Ifc>
+class ContainersHolder : public comphelper::WeakImplHelper<Ifc...>, public Listeners<Ifc>...
+{
+protected:
+    template <typename F> void for_each_container(F f) { (..., f(Listeners<Ifc>::list)); }
+
+    template <class WinIfc, class Ifc1>
+    void notifyPeer(const css::uno::Reference<css::awt::XWindow>& peer,
+                    void (SAL_CALL WinIfc::*func)(const css::uno::Reference<Ifc1>&))
+    {
+        if constexpr (std::is_same_v<WinIfc, css::awt::XWindow>)
+        {
+            if (peer)
+                (peer.get()->*func)(this);
+        }
+        else if (auto cast_peer = peer.query<WinIfc>())
+            (cast_peer.get()->*func)(this);
+    }
+
+    template <class Ifc1>
+    void add(std::unique_lock<std::mutex>& guard, const css::uno::Reference<Ifc1>& listener,
+             const css::uno::Reference<css::awt::XWindow>& peer)
+    {
+        assert(listener);
+        if (Listeners<Ifc1>::list.addInterface(guard, listener) == 1)
+        {
+            // the first listener is added
+            notifyPeer(peer, Add<Ifc1>);
+        }
+    }
+
+    template <class Ifc1>
+    void remove(std::unique_lock<std::mutex>& guard, const css::uno::Reference<Ifc1>& listener,
+                const css::uno::Reference<css::awt::XWindow>& peer)
+    {
+        if (Listeners<Ifc1>::list.removeInterface(guard, listener) == 0)
+        {
+            // the last listener is removed
+            notifyPeer(peer, Remove<Ifc1>);
+        }
+    }
+};
+
+class OMRCListenerMultiplexerHelper final : public ContainersHolder< css::awt::XFocusListener
+                                                                   , css::awt::XWindowListener
+                                                                   , css::awt::XKeyListener
+                                                                   , css::awt::XMouseListener
+                                                                   , css::awt::XMouseMotionListener
+                                                                   , css::awt::XPaintListener
+                                                                   , css::awt::XTopWindowListener >
 {
 public:
 
@@ -81,15 +152,21 @@ public:
         @short      Add the specified listener to the source.
     */
 
-    void advise(    const   css::uno::Type&                              aType       ,
-                    const   css::uno::Reference< css::lang::XEventListener >&  xListener   );
+    template <class Interface> void advise(const css::uno::Reference<Interface>& xListener)
+    {
+        std::unique_lock aGuard(m_aMutex);
+        add(aGuard, xListener, m_xPeer);
+    }
 
     /**
         @short      Remove the specified listener from the source.
     */
 
-    void unadvise(  const   css::uno::Type&                              aType       ,
-                    const   css::uno::Reference< css::lang::XEventListener >&  xListener   );
+    template <class Interface> void unadvise(const css::uno::Reference<Interface>& xListener)
+    {
+        std::unique_lock aGuard(m_aMutex);
+        remove(aGuard, xListener, m_xPeer);
+    }
 
     //  XEventListener
 
@@ -154,25 +231,6 @@ public:
     virtual void SAL_CALL windowDeactivated( const css::lang::EventObject& aEvent ) override;
 
 private:
-
-    /**
-        @short      Remove the listener from the peer.
-        @param      xPeer   The peer from which the listener is removed.
-        @param      rType   The listener type, which specify the type of the listener.
-    */
-
-    void impl_adviseToPeer( const   css::uno::Reference< css::awt::XWindow >& xPeer   ,
-                            const   css::uno::Type&                          aType   );
-
-    /**
-        @short      Add the listener to the peer.
-        @param      xPeer   The peer to which the listener is added.
-        @param      rType   The listener type, which specify the type of the listener.
-    */
-
-    void impl_unadviseFromPeer( const   css::uno::Reference< css::awt::XWindow >& xPeer   ,
-                                const   css::uno::Type&                          aType   );
-
     template <class Interface, typename Event>
     void Multiplex(void (SAL_CALL Interface::*method)(const Event&), const Event& event);
 
@@ -181,7 +239,6 @@ private:
 private:
     css::uno::Reference< css::awt::XWindow >      m_xPeer;   /// The source of the events. Normally this is the peer object.
     css::uno::WeakReference< css::awt::XWindow >  m_xControl;
-    comphelper::OMultiTypeInterfaceContainerHelperVar4<css::uno::Type, css::lang::XEventListener> m_aListenerHolder;
 };
 
 }
