@@ -1924,7 +1924,7 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
                         bFoundCert = true;
                         SfxObjectShell* pDocShell = SfxViewShell::Current()->GetObjectShell();
                         svl::crypto::SigningContext aSigningContext;
-                        aSigningContext.m_xCertificate = xCert;
+                        aSigningContext.m_xCertificate = std::move(xCert);
                         bool bSigned = pDocShell->SignDocumentContentUsingCertificate(aSigningContext);
                         if (bSigned && pDocShell->HasValidSignatures())
                         {

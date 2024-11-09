@@ -581,7 +581,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             {
 
                 svl::crypto::SigningContext aSigningContext;
-                aSigningContext.m_xCertificate = xCertificate;
+                aSigningContext.m_xCertificate = std::move(xCertificate);
                 bHaveWeSigned |= SignDocumentContentUsingCertificate(aSigningContext);
 
                 // Reload to show how the PDF actually looks like after signing. This also
@@ -2198,7 +2198,7 @@ bool SfxObjectShell::ResignDocument(uno::Sequence< security::DocumentSignatureIn
         if (xCert.is())
         {
             svl::crypto::SigningContext aSigningContext;
-            aSigningContext.m_xCertificate = xCert;
+            aSigningContext.m_xCertificate = std::move(xCert);
             bSignSuccess &= SignDocumentContentUsingCertificate(aSigningContext);
         }
     }

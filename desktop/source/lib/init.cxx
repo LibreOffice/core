@@ -7280,7 +7280,7 @@ static bool doc_insertCertificate(LibreOfficeKitDocument* pThis,
     SolarMutexGuard aGuard;
 
     svl::crypto::SigningContext aSigningContext;
-    aSigningContext.m_xCertificate = xCertificate;
+    aSigningContext.m_xCertificate = std::move(xCertificate);
     return pObjectShell->SignDocumentContentUsingCertificate(aSigningContext);
 }
 
