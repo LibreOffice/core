@@ -22,6 +22,7 @@
 #include <QtInstanceLevelBar.hxx>
 #include <QtInstanceLinkButton.hxx>
 #include <QtInstanceMessageDialog.hxx>
+#include <QtInstanceNotebook.hxx>
 #include <QtInstanceProgressBar.hxx>
 #include <QtInstanceRadioButton.hxx>
 #include <QtInstanceSpinButton.hxx>
@@ -150,10 +151,12 @@ std::unique_ptr<weld::ScrolledWindow> QtInstanceBuilder::weld_scrolled_window(co
     return nullptr;
 }
 
-std::unique_ptr<weld::Notebook> QtInstanceBuilder::weld_notebook(const OUString&)
+std::unique_ptr<weld::Notebook> QtInstanceBuilder::weld_notebook(const OUString& rId)
 {
-    assert(false && "Not implemented yet");
-    return nullptr;
+    QTabWidget* pTabWidget = m_xBuilder->get<QTabWidget>(rId);
+    std::unique_ptr<weld::Notebook> xRet(
+        pTabWidget ? std::make_unique<QtInstanceNotebook>(pTabWidget) : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::Button> QtInstanceBuilder::weld_button(const OUString& rId)

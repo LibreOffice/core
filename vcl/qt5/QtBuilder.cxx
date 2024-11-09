@@ -245,6 +245,10 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
 
         pObject = pLabel;
     }
+    else if (sName == u"GtkNotebook")
+    {
+        pObject = new QTabWidget(pParentWidget);
+    }
     else if (sName == u"GtkRadioButton")
     {
         pObject = new QRadioButton(pParentWidget);

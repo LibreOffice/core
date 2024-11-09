@@ -110,6 +110,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_qt6,\
     vcl/qt6/QtInstanceLevelBar \
     vcl/qt6/QtInstanceLinkButton \
     vcl/qt6/QtInstanceMessageDialog \
+    vcl/qt6/QtInstanceNotebook \
     vcl/qt6/QtInstanceProgressBar \
     vcl/qt6/QtInstanceRadioButton \
     vcl/qt6/QtInstanceSpinButton \
