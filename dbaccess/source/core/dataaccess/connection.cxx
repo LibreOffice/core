@@ -316,6 +316,16 @@ OConnection::OConnection(ODatabaseSource& _rDB
                     }
                 }
             }
+            // tdf#130564: getTableTypes retrieves only the table types of the current database and not all the possible table types
+            // provided by the DBMS. JDBC would need a new function, something like "supportsViews()"
+            // do the same for MySQL/MariaDB since we're on it
+            OUString strDbProductName = xMeta->getDatabaseProductName();
+            if (!m_bSupportsViews && xMeta->getURL().startsWith("sdbc:odbc:") &&
+                 (strDbProductName == "PostgreSQL" || strDbProductName == "MySQL")
+               )
+            {
+                m_bSupportsViews = true;
+            }
             // some dbs don't support this type so we should ask if a XViewsSupplier is supported
             if(!m_bSupportsViews)
             {
