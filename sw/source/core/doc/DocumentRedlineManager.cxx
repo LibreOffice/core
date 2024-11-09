@@ -2676,11 +2676,14 @@ bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUnd
     auto [pStt, pEnd] = rRange.StartEnd(); // SwPosition*
     SwRedlineTable::size_type n = 0;
     GetRedline( *pStt, &n );
-    for( ; n < maRedlineTable.size() ; ++n )
+    while (n < maRedlineTable.size())
     {
         SwRangeRedline* pRedl = maRedlineTable[ n ];
         if( RedlineType::Any != nDelType && nDelType != pRedl->GetType() )
+        {
+            ++n;
             continue;
+        }
 
         auto [pRStt, pREnd] = pRedl->StartEnd(); // SwPosition*
         switch( ComparePosition( *pStt, *pEnd, *pRStt, *pREnd ) )
@@ -2688,7 +2691,7 @@ bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUnd
         case SwComparePosition::Equal:
         case SwComparePosition::Outside:
             pRedl->InvalidateRange(SwRangeRedline::Invalidation::Remove);
-            maRedlineTable.DeleteAndDestroy( n-- );
+            maRedlineTable.DeleteAndDestroy( n );
             bChg = true;
             break;
 
@@ -2699,7 +2702,6 @@ bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUnd
                 // re-insert
                 maRedlineTable.Remove( n );
                 maRedlineTable.Insert( pRedl );
-                --n;
             break;
 
         case SwComparePosition::OverlapBehind:
@@ -2711,8 +2713,9 @@ bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUnd
                     // re-insert
                     maRedlineTable.Remove( n );
                     maRedlineTable.Insert( pRedl );
-                    --n;
                 }
+                else
+                    ++n;
             break;
 
         case SwComparePosition::Inside:
@@ -2726,7 +2729,6 @@ bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUnd
                     // re-insert
                     maRedlineTable.Remove( n );
                     maRedlineTable.Insert( pRedl );
-                    --n;
                 }
                 else
                 {
@@ -2746,8 +2748,9 @@ bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUnd
                         // re-insert
                         maRedlineTable.Remove( n );
                         maRedlineTable.Insert( pRedl );
-                        --n;
                     }
+                    else
+                        ++n;
                     if( pCpy )
                         maRedlineTable.Insert( pCpy );
                 }
@@ -2760,16 +2763,17 @@ bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUnd
             if ( pRedl->HasMark() && *pRedl->GetMark() == *pRedl->GetPoint() )
             {
                 pRedl->InvalidateRange(SwRangeRedline::Invalidation::Remove);
-                maRedlineTable.DeleteAndDestroy( n-- );
+                maRedlineTable.DeleteAndDestroy( n );
                 bChg = true;
                 break;
             }
             [[fallthrough]];
 
         case SwComparePosition::Before:
-            n = maRedlineTable.size();
+            n = maRedlineTable.size() + 1;
             break;
         default:
+            ++n;
             break;
         }
     }
