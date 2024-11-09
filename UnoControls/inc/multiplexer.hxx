@@ -24,8 +24,6 @@
 #include <com/sun/star/awt/XMouseMotionListener.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>
-#include <com/sun/star/awt/XTopWindow.hpp>
-#include <com/sun/star/awt/XTopWindowListener.hpp>
 #include <com/sun/star/awt/XMouseListener.hpp>
 #include <com/sun/star/awt/XFocusListener.hpp>
 #include <comphelper/compbase.hxx>
@@ -57,9 +55,6 @@ template <> constexpr inline auto Remove<css::awt::XMouseMotionListener> = &css:
 template <> constexpr inline auto Add<css::awt::XPaintListener> = &css::awt::XWindow::addPaintListener;
 template <> constexpr inline auto Remove<css::awt::XPaintListener> = &css::awt::XWindow::removePaintListener;
 
-template <> constexpr inline auto Add<css::awt::XTopWindowListener> = &css::awt::XTopWindow::addTopWindowListener;
-template <> constexpr inline auto Remove<css::awt::XTopWindowListener> = &css::awt::XTopWindow::removeTopWindowListener;
-
 template <class Ifc> class Listeners
 {
 protected:
@@ -72,17 +67,12 @@ class ContainersHolder : public comphelper::WeakImplHelper<Ifc...>, public Liste
 protected:
     template <typename F> void for_each_container(F f) { (..., f(Listeners<Ifc>::list)); }
 
-    template <class WinIfc, class Ifc1>
+    template <class Ifc1>
     void notifyPeer(const css::uno::Reference<css::awt::XWindow>& peer,
-                    void (SAL_CALL WinIfc::*func)(const css::uno::Reference<Ifc1>&))
+                    void (SAL_CALL css::awt::XWindow::*func)(const css::uno::Reference<Ifc1>&))
     {
-        if constexpr (std::is_same_v<WinIfc, css::awt::XWindow>)
-        {
-            if (peer)
-                (peer.get()->*func)(this);
-        }
-        else if (auto cast_peer = peer.query<WinIfc>())
-            (cast_peer.get()->*func)(this);
+        if (peer)
+            (peer.get()->*func)(this);
     }
 
     template <class Ifc1>
@@ -114,8 +104,7 @@ class OMRCListenerMultiplexerHelper final : public ContainersHolder< css::awt::X
                                                                    , css::awt::XKeyListener
                                                                    , css::awt::XMouseListener
                                                                    , css::awt::XMouseMotionListener
-                                                                   , css::awt::XPaintListener
-                                                                   , css::awt::XTopWindowListener >
+                                                                   , css::awt::XPaintListener >
 {
 public:
 
@@ -213,22 +202,6 @@ public:
     //  XPaintListener
 
     virtual void SAL_CALL windowPaint(const css::awt::PaintEvent& aEvent ) override;
-
-    //  XTopWindowListener
-
-    virtual void SAL_CALL windowOpened( const css::lang::EventObject& aEvent ) override;
-
-    virtual void SAL_CALL windowClosing( const css::lang::EventObject& aEvent ) override;
-
-    virtual void SAL_CALL windowClosed( const css::lang::EventObject& aEvent ) override;
-
-    virtual void SAL_CALL windowMinimized( const css::lang::EventObject& aEvent ) override;
-
-    virtual void SAL_CALL windowNormalized( const css::lang::EventObject& aEvent ) override;
-
-    virtual void SAL_CALL windowActivated( const css::lang::EventObject& aEvent ) override;
-
-    virtual void SAL_CALL windowDeactivated( const css::lang::EventObject& aEvent ) override;
 
 private:
     template <class Interface, typename Event>

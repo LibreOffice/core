@@ -211,55 +211,6 @@ void OMRCListenerMultiplexerHelper::windowPaint(const PaintEvent& aEvent)
     Multiplex(&XPaintListener::windowPaint, aEvent);
 }
 
-//  XTopWindowListener
-
-void OMRCListenerMultiplexerHelper::windowOpened(const EventObject& aEvent)
-{
-    Multiplex(&XTopWindowListener::windowOpened, aEvent);
-}
-
-//  XTopWindowListener
-
-void OMRCListenerMultiplexerHelper::windowClosing( const EventObject& aEvent )
-{
-    Multiplex(&XTopWindowListener::windowClosing, aEvent);
-}
-
-//  XTopWindowListener
-
-void OMRCListenerMultiplexerHelper::windowClosed( const EventObject& aEvent )
-{
-    Multiplex(&XTopWindowListener::windowClosed, aEvent);
-}
-
-//  XTopWindowListener
-
-void OMRCListenerMultiplexerHelper::windowMinimized( const EventObject& aEvent )
-{
-    Multiplex(&XTopWindowListener::windowMinimized, aEvent);
-}
-
-//  XTopWindowListener
-
-void OMRCListenerMultiplexerHelper::windowNormalized( const EventObject& aEvent )
-{
-    Multiplex(&XTopWindowListener::windowNormalized, aEvent);
-}
-
-//  XTopWindowListener
-
-void OMRCListenerMultiplexerHelper::windowActivated( const EventObject& aEvent )
-{
-    Multiplex(&XTopWindowListener::windowActivated, aEvent);
-}
-
-//  XTopWindowListener
-
-void OMRCListenerMultiplexerHelper::windowDeactivated( const EventObject& aEvent )
-{
-    Multiplex(&XTopWindowListener::windowDeactivated, aEvent);
-}
-
 } // namespace unocontrols
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
