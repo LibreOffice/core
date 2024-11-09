@@ -142,8 +142,8 @@ void ScChartPositioner::GlueState()
         if ( i < nRanges )
             pR = &(*aRangeListRef)[i];
     }
-    assert(nEndCol >= nStartCol);
     SCCOL nC = nEndCol - nStartCol + 1;
+    assert(nC > 0 && "coverity 2023.12.2");
     if ( nC == 1 )
     {
         eGlue = ScChartGlue::Rows;
