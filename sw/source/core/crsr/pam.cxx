@@ -1138,7 +1138,7 @@ void GoStartSection( SwPosition * pPos )
 {
     // jump to section's beginning
     SwNodes& rNodes = pPos->GetNodes();
-    sal_uInt16 nLevel = SwNodes::GetSectionLevel( pPos->GetNode() );
+    int nLevel = SwNodes::GetSectionLevel( pPos->GetNode() );
     if( pPos->GetNode() < *rNodes.GetEndOfContent().StartOfSectionNode() )
     {
         assert(nLevel > 0);
@@ -1162,7 +1162,7 @@ void GoEndSection( SwPosition * pPos )
 {
     // jump to section's beginning/end
     SwNodes& rNodes = pPos->GetNodes();
-    sal_uInt16 nLevel = SwNodes::GetSectionLevel( pPos->GetNode() );
+    int nLevel = SwNodes::GetSectionLevel( pPos->GetNode() );
     if( pPos->GetNode() < *rNodes.GetEndOfContent().StartOfSectionNode() )
     {
         assert(nLevel > 0);
