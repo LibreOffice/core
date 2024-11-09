@@ -14,6 +14,7 @@
 #include <rtl/digest.h>
 
 #include <memory>
+#include <string>
 #include <vector>
 
 namespace rtl {
