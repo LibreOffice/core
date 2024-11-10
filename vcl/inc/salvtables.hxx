@@ -1215,7 +1215,7 @@ public:
 
     virtual OUString get_secondary_text() const override;
 
-    virtual weld::Container* weld_message_area() override;
+    virtual std::unique_ptr<weld::Container> weld_message_area() override;
 };
 
 class SalInstanceLinkButton : public SalInstanceWidget, public virtual weld::LinkButton

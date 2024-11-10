@@ -7371,12 +7371,12 @@ public:
         return ::get_secondary_text(m_pMessageDialog);
     }
 
-    virtual Container* weld_message_area() override
+    virtual std::unique_ptr<weld::Container> weld_message_area() override
     {
 #if !GTK_CHECK_VERSION(4, 0, 0)
-        return new GtkInstanceContainer(GTK_CONTAINER(gtk_message_dialog_get_message_area(m_pMessageDialog)), m_pBuilder, false);
+        return std::make_unique<GtkInstanceContainer>(GTK_CONTAINER(gtk_message_dialog_get_message_area(m_pMessageDialog)), m_pBuilder, false);
 #else
-        return new GtkInstanceContainer(gtk_message_dialog_get_message_area(m_pMessageDialog), m_pBuilder, false);
+        return std::make_unique<GtkInstanceContainer>(gtk_message_dialog_get_message_area(m_pMessageDialog), m_pBuilder, false);
 #endif
     }
 };

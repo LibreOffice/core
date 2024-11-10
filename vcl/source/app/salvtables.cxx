@@ -2016,9 +2016,10 @@ OUString SalInstanceMessageDialog::get_secondary_text() const
     return m_xMessageDialog->get_secondary_text();
 }
 
-weld::Container* SalInstanceMessageDialog::weld_message_area()
+std::unique_ptr<weld::Container> SalInstanceMessageDialog::weld_message_area()
 {
-    return new SalInstanceContainer(m_xMessageDialog->get_message_area(), m_pBuilder, false);
+    return std::make_unique<SalInstanceContainer>(m_xMessageDialog->get_message_area(), m_pBuilder,
+                                                  false);
 }
 
 int SalInstanceAssistant::find_page(std::u16string_view rIdent) const

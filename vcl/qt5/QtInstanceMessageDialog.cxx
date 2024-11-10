@@ -52,9 +52,9 @@ void QtInstanceMessageDialog::set_secondary_text(const rtl::OUString& rText)
     m_pMessageDialog->setInformativeText(toQString(rText));
 }
 
-weld::Container* QtInstanceMessageDialog::weld_message_area()
+std::unique_ptr<weld::Container> QtInstanceMessageDialog::weld_message_area()
 {
-    return new QtInstanceContainer(m_pExtraControlsContainer);
+    return std::make_unique<QtInstanceContainer>(m_pExtraControlsContainer);
 }
 
 OUString QtInstanceMessageDialog::get_primary_text() const

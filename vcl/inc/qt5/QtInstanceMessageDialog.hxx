@@ -29,7 +29,7 @@ public:
 
     virtual void set_secondary_text(const rtl::OUString& rText) override;
 
-    virtual Container* weld_message_area() override;
+    virtual std::unique_ptr<weld::Container> weld_message_area() override;
 
     virtual OUString get_primary_text() const override;
 
