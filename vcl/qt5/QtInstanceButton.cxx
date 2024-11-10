@@ -99,6 +99,10 @@ bool QtInstanceButton::hasCustomClickHandler(QAbstractButton& rButton)
     return aProp.toBool();
 }
 
-void QtInstanceButton::buttonClicked() { signal_clicked(); }
+void QtInstanceButton::buttonClicked()
+{
+    SolarMutexGuard g;
+    signal_clicked();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
