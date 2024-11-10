@@ -43,7 +43,7 @@ private:
 
     std::unique_ptr<weld::RadioButton> m_xRbtStandard;
     std::unique_ptr<weld::RadioButton> m_xRbtWindow;
-    std::unique_ptr<weld::RadioButton> m_xRbtAuto;
+    std::unique_ptr<weld::CheckButton> m_xCbxAuto;
     std::unique_ptr<weld::FormattedSpinButton> m_xTmfPause;
     std::unique_ptr<weld::TimeFormatter> m_xFormatter;
     std::unique_ptr<weld::CheckButton> m_xCbxAutoLogo;
