@@ -433,6 +433,12 @@ QMenu* QtBuilder::createMenu(const OUString&)
     return nullptr;
 }
 
+void QtBuilder::insertMenuObject(QMenu*, QMenu*, const OUString&, const OUString&, stringmap&,
+                                 stringmap&, accelmap&)
+{
+    assert(false && "Not implemented yet");
+}
+
 void QtBuilder::applyAtkProperties(QObject* pObject, const stringmap& rProperties, bool)
 {
     if (!pObject || !pObject->isWidgetType())

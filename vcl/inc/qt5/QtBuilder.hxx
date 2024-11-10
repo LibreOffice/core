@@ -77,6 +77,9 @@ public:
     virtual bool isHorizontalTabControl(QObject* pObject) override;
 
     virtual QMenu* createMenu(const OUString& rID) override;
+    virtual void insertMenuObject(QMenu* pParent, QMenu* pSubMenu, const OUString& rClass,
+                                  const OUString& rID, stringmap& rProps, stringmap& rAtkProps,
+                                  accelmap& rAccels) override;
 
     virtual void set_response(std::u16string_view sID, short nResponse) override;
 

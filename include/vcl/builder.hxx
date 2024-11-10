@@ -50,7 +50,6 @@ class ToolBox;
 class VclExpander;
 class VclMultiLineEdit;
 struct NotebookBarAddonsItem;
-namespace xmlreader { class XmlReader; }
 namespace com::sun::star::frame { class XFrame; }
 
 /// Creates a hierarchy of vcl::Windows (widgets) from a .ui file for dialogs, sidebar, etc.
@@ -267,16 +266,9 @@ private:
                                          std::vector<vcl::EnumContext::Context>& rContext, stringmap& rProperties,
                                          stringmap& rAtkProperties) override;
 
-    void        insertMenuObject(
-                   Menu *pParent,
-                   PopupMenu *pSubMenu,
-                   const OUString &rClass,
-                   const OUString &rID,
-                   stringmap &rProps,
-                   stringmap &rAtkProps,
-                   accelmap &rAccels);
-
-    void handleMenuObject(PopupMenu* pParent, xmlreader::XmlReader& reader) override;
+    void insertMenuObject(PopupMenu* pParent, PopupMenu* pSubMenu, const OUString& rClass,
+                          const OUString& rID, stringmap& rProps, stringmap& rAtkProps,
+                          accelmap& rAccels) override;
 
     // if bToolbarItem=true, pParent is the ToolBox that the item belongs to, since there's no widget for the item itself
     void applyAtkProperties(vcl::Window* pWindow, const stringmap& rProperties,

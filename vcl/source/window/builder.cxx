@@ -3018,88 +3018,6 @@ std::vector<ComboBoxTextItem> BuilderBase::handleItems(xmlreader::XmlReader& rea
     return aItems;
 }
 
-void VclBuilder::handleMenuObject(PopupMenu* pParent, xmlreader::XmlReader& reader)
-{
-    OUString sClass;
-    OUString sID;
-    OUString sCustomProperty;
-    PopupMenu *pSubMenu = nullptr;
-
-    xmlreader::Span name;
-    int nsId;
-
-    while (reader.nextAttribute(&nsId, &name))
-    {
-        if (name == "class")
-        {
-            name = reader.getAttributeValue(false);
-            sClass = OUString(name.begin, name.length, RTL_TEXTENCODING_UTF8);
-        }
-        else if (name == "id")
-        {
-            name = reader.getAttributeValue(false);
-            sID = OUString(name.begin, name.length, RTL_TEXTENCODING_UTF8);
-            if (isLegacy())
-            {
-                sal_Int32 nDelim = sID.indexOf(':');
-                if (nDelim != -1)
-                {
-                    sCustomProperty = sID.subView(nDelim+1);
-                    sID = sID.copy(0, nDelim);
-                }
-            }
-        }
-    }
-
-    int nLevel = 1;
-
-    stringmap aProperties;
-    stringmap aAtkProperties;
-    accelmap aAccelerators;
-
-    if (!sCustomProperty.isEmpty())
-        aProperties[u"customproperty"_ustr] = sCustomProperty;
-
-    while(true)
-    {
-        xmlreader::XmlReader::Result res = reader.nextItem(
-            xmlreader::XmlReader::Text::NONE, &name, &nsId);
-
-        if (res == xmlreader::XmlReader::Result::Done)
-            break;
-
-        if (res == xmlreader::XmlReader::Result::Begin)
-        {
-            if (name == "child")
-            {
-                size_t nChildMenuIdx = m_aMenus.size();
-                handleChild(nullptr, &aAtkProperties, reader);
-                bool bSubMenuInserted = m_aMenus.size() > nChildMenuIdx;
-                if (bSubMenuInserted)
-                    pSubMenu = m_aMenus[nChildMenuIdx].m_pMenu.get();
-            }
-            else
-            {
-                ++nLevel;
-                if (name == "property")
-                    collectProperty(reader, aProperties);
-                else if (name == "accelerator")
-                    collectAccelerator(reader, aAccelerators);
-            }
-        }
-
-        if (res == xmlreader::XmlReader::Result::End)
-        {
-            --nLevel;
-        }
-
-        if (!nLevel)
-            break;
-    }
-
-    insertMenuObject(pParent, pSubMenu, sClass, sID, aProperties, aAtkProperties, aAccelerators);
-}
-
 void BuilderBase::handleSizeGroup(xmlreader::XmlReader& reader)
 {
     m_pParserState->m_aSizeGroups.emplace_back();
@@ -3199,8 +3117,9 @@ namespace
     }
 }
 
-void VclBuilder::insertMenuObject(Menu *pParent, PopupMenu *pSubMenu, const OUString &rClass, const OUString &rID,
-    stringmap &rProps, stringmap &rAtkProps, accelmap &rAccels)
+void VclBuilder::insertMenuObject(PopupMenu* pParent, PopupMenu* pSubMenu, const OUString& rClass,
+                                  const OUString& rID, stringmap& rProps, stringmap& rAtkProps,
+                                  accelmap& rAccels)
 {
     sal_uInt16 nOldCount = pParent->GetItemCount();
     sal_uInt16 nNewId = ++m_pVclParserState->m_nLastMenuItemId;

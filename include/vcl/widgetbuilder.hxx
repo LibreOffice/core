@@ -19,18 +19,11 @@
 /* Template class for a Builder to create a hierarchy of widgets from a .ui file
  * for dialogs, sidebar, etc.
  *
- * The idea is for this class to parse the .ui file and call overridable methods
+ * This class parses the .ui file and calls overridable methods
  * so subclasses can create the widgets of a specific toolkit.
  *
- * VclBuilder is the implementation using LibreOffice's own VCL toolkit
- * and there is a work-in-progress implementation using native Qt widgets
- * at https://gerrit.libreoffice.org/c/core/+/161831 .
- *
- * Currently, .ui file parsing isn't yet fully done by this class as described
- * above, but needs further refactoring to split the corresponding VclBuilder
- * methods into methods that do the parsing (which should reside in this class)
- * and overridable methods to actually create the widgets,... (which should reside in
- * VclBuilder and other subclasses).
+ * The VclBuilder subclass is the implementation using LibreOffice's own VCL toolkit
+ * and the QtBuilder subclass uses native Qt widgets.
  */
 template <typename Widget, typename WidgetPtr, typename MenuClass, typename MenuPtr>
 class WidgetBuilder : public BuilderBase
@@ -445,6 +438,89 @@ protected:
         }
     }
 
+    void handleMenuObject(MenuClass* pParent, xmlreader::XmlReader& reader)
+    {
+        OUString sClass;
+        OUString sID;
+        OUString sCustomProperty;
+        MenuClass* pSubMenu = nullptr;
+
+        xmlreader::Span name;
+        int nsId;
+
+        while (reader.nextAttribute(&nsId, &name))
+        {
+            if (name == "class")
+            {
+                name = reader.getAttributeValue(false);
+                sClass = OUString(name.begin, name.length, RTL_TEXTENCODING_UTF8);
+            }
+            else if (name == "id")
+            {
+                name = reader.getAttributeValue(false);
+                sID = OUString(name.begin, name.length, RTL_TEXTENCODING_UTF8);
+                if (isLegacy())
+                {
+                    sal_Int32 nDelim = sID.indexOf(':');
+                    if (nDelim != -1)
+                    {
+                        sCustomProperty = sID.subView(nDelim + 1);
+                        sID = sID.copy(0, nDelim);
+                    }
+                }
+            }
+        }
+
+        int nLevel = 1;
+
+        stringmap aProperties;
+        stringmap aAtkProperties;
+        accelmap aAccelerators;
+
+        if (!sCustomProperty.isEmpty())
+            aProperties[u"customproperty"_ustr] = sCustomProperty;
+
+        while (true)
+        {
+            xmlreader::XmlReader::Result res
+                = reader.nextItem(xmlreader::XmlReader::Text::NONE, &name, &nsId);
+
+            if (res == xmlreader::XmlReader::Result::Done)
+                break;
+
+            if (res == xmlreader::XmlReader::Result::Begin)
+            {
+                if (name == "child")
+                {
+                    size_t nChildMenuIdx = m_aMenus.size();
+                    handleChild(nullptr, &aAtkProperties, reader);
+                    bool bSubMenuInserted = m_aMenus.size() > nChildMenuIdx;
+                    if (bSubMenuInserted)
+                        pSubMenu = m_aMenus[nChildMenuIdx].m_pMenu;
+                }
+                else
+                {
+                    ++nLevel;
+                    if (name == "property")
+                        collectProperty(reader, aProperties);
+                    else if (name == "accelerator")
+                        collectAccelerator(reader, aAccelerators);
+                }
+            }
+
+            if (res == xmlreader::XmlReader::Result::End)
+            {
+                --nLevel;
+            }
+
+            if (!nLevel)
+                break;
+        }
+
+        insertMenuObject(pParent, pSubMenu, sClass, sID, aProperties, aAtkProperties,
+                         aAccelerators);
+    }
+
     virtual void applyAtkProperties(Widget* pWidget, const stringmap& rProperties,
                                     bool bToolbarItem)
         = 0;
@@ -476,18 +552,10 @@ protected:
     virtual bool isHorizontalTabControl(Widget* pWidget) = 0;
 
     virtual MenuPtr createMenu(const OUString& rID) = 0;
-
-    // These methods are currently only implemented by VclBuilder and should be
-    // refactored as described in the class documentation above (split into
-    // parsing done in this class + overridable methods that don't need XmlReader
-    // that get implemented in the subclasses)
-    //
-    // Until that's done, other subclasses can be used to handle only those .ui files
-    // not using the corresponding features (attributes/objects in the .ui file).
-    virtual void handleMenuObject(MenuClass* /*pParent*/, xmlreader::XmlReader& /*reader*/)
-    {
-        assert(false && "Functionality not implemented by this subclass yet.");
-    }
+    virtual void insertMenuObject(MenuClass* pParent, MenuClass* pSubMenu, const OUString& rClass,
+                                  const OUString& rID, stringmap& rProps, stringmap& rAtkProps,
+                                  accelmap& rAccels)
+        = 0;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
