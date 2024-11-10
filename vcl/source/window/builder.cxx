@@ -3011,15 +3011,9 @@ std::vector<ComboBoxTextItem> BuilderBase::handleItems(xmlreader::XmlReader& rea
     return aItems;
 }
 
-void VclBuilder::handleMenu(xmlreader::XmlReader& reader, vcl::Window* pParent, const OUString& rID,
-                            bool bMenuBar)
+void VclBuilder::handleMenu(xmlreader::XmlReader& reader, const OUString& rID)
 {
-    VclPtr<Menu> pCurrentMenu;
-    if (bMenuBar)
-        pCurrentMenu = VclPtr<MenuBar>::Create();
-    else
-        pCurrentMenu = VclPtr<PopupMenu>::Create();
-
+    VclPtr<Menu> pCurrentMenu = VclPtr<PopupMenu>::Create();
     pCurrentMenu->set_id(rID);
 
     int nLevel = 1;
@@ -3061,12 +3055,6 @@ void VclBuilder::handleMenu(xmlreader::XmlReader& reader, vcl::Window* pParent, 
     }
 
     m_aMenus.emplace_back(rID, pCurrentMenu);
-
-    if (bMenuBar && pParent)
-    {
-        if (SystemWindow* pTopLevel = pParent->GetSystemWindow())
-            pTopLevel->SetMenuBar(dynamic_cast<MenuBar*>(pCurrentMenu.get()));
-    }
 }
 
 void VclBuilder::handleMenuChild(Menu *pParent, xmlreader::XmlReader &reader)

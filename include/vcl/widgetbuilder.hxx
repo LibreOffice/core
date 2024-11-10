@@ -154,12 +154,7 @@ protected:
         }
         else if (sClass == "GtkMenu")
         {
-            handleMenu(reader, pParent, sID, false);
-            return nullptr;
-        }
-        else if (sClass == "GtkMenuBar")
-        {
-            handleMenu(reader, pParent, sID, true);
+            handleMenu(reader, sID);
             return nullptr;
         }
         else if (sClass == "GtkSizeGroup")
@@ -382,8 +377,7 @@ protected:
     //
     // Until that's done, other subclasses can be used to handle only those .ui files
     // not using the corresponding features (attributes/objects in the .ui file).
-    virtual void handleMenu(xmlreader::XmlReader& /*reader*/, Widget* /*pParent*/,
-                            const OUString& /*rID*/, bool /*bMenuBar*/)
+    virtual void handleMenu(xmlreader::XmlReader& /*reader*/, const OUString& /*rID*/)
     {
         assert(false && "Functionality not implemented by this subclass yet.");
     }

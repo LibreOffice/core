@@ -290,8 +290,7 @@ private:
     void        handleMenuChild(Menu *pParent, xmlreader::XmlReader &reader);
     void        handleMenuObject(Menu *pParent, xmlreader::XmlReader &reader);
 
-    void handleMenu(xmlreader::XmlReader& reader, vcl::Window* pParent, const OUString& rID,
-                    bool bMenuBar) override;
+    void handleMenu(xmlreader::XmlReader& reader, const OUString& rID) override;
 
     // if bToolbarItem=true, pParent is the ToolBox that the item belongs to, since there's no widget for the item itself
     void applyAtkProperties(vcl::Window* pWindow, const stringmap& rProperties,
