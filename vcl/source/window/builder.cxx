@@ -3013,7 +3013,7 @@ std::vector<ComboBoxTextItem> BuilderBase::handleItems(xmlreader::XmlReader& rea
 
 void VclBuilder::handleMenu(xmlreader::XmlReader& reader, const OUString& rID)
 {
-    VclPtr<Menu> pCurrentMenu = VclPtr<PopupMenu>::Create();
+    VclPtr<PopupMenu> pCurrentMenu = VclPtr<PopupMenu>::Create();
     pCurrentMenu->set_id(rID);
 
     int nLevel = 1;
@@ -3147,7 +3147,7 @@ void VclBuilder::handleMenuObject(Menu *pParent, xmlreader::XmlReader &reader)
                 handleChild(nullptr, &aAtkProperties, reader);
                 bool bSubMenuInserted = m_aMenus.size() > nChildMenuIdx;
                 if (bSubMenuInserted)
-                    pSubMenu = dynamic_cast<PopupMenu*>(m_aMenus[nChildMenuIdx].m_pMenu.get());
+                    pSubMenu = m_aMenus[nChildMenuIdx].m_pMenu.get();
             }
             else
             {
@@ -3871,7 +3871,7 @@ PopupMenu *VclBuilder::get_menu(std::u16string_view sID)
     for (auto const& menu : m_aMenus)
     {
         if (menu.m_sID == sID)
-            return dynamic_cast<PopupMenu*>(menu.m_pMenu.get());
+            return menu.m_pMenu.get();
     }
 
     return nullptr;
@@ -4195,7 +4195,7 @@ VclBuilder::VclParserState::VclParserState()
     , m_nLastMenuItemId(0)
 {}
 
-VclBuilder::MenuAndId::MenuAndId(OUString aId, Menu *pMenu)
+VclBuilder::MenuAndId::MenuAndId(OUString aId, PopupMenu *pMenu)
     : m_sID(std::move(aId))
     , m_pMenu(pMenu)
 {}
