@@ -276,10 +276,7 @@ private:
                    stringmap &rAtkProps,
                    accelmap &rAccels);
 
-    void        handleMenuChild(Menu *pParent, xmlreader::XmlReader &reader);
-    void        handleMenuObject(Menu *pParent, xmlreader::XmlReader &reader);
-
-    void handleMenu(xmlreader::XmlReader& reader, const OUString& rID) override;
+    void handleMenuObject(PopupMenu* pParent, xmlreader::XmlReader& reader) override;
 
     // if bToolbarItem=true, pParent is the ToolBox that the item belongs to, since there's no widget for the item itself
     void applyAtkProperties(vcl::Window* pWindow, const stringmap& rProperties,

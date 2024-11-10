@@ -368,6 +368,83 @@ protected:
         applyTabChildProperties(pParent, sIDs, context, aProperties, aAtkProperties);
     }
 
+    void handleMenu(xmlreader::XmlReader& reader, const OUString& rID)
+    {
+        MenuPtr pCurrentMenu = createMenu(rID);
+
+        int nLevel = 1;
+
+        stringmap aProperties;
+
+        while (true)
+        {
+            xmlreader::Span name;
+            int nsId;
+
+            xmlreader::XmlReader::Result res
+                = reader.nextItem(xmlreader::XmlReader::Text::NONE, &name, &nsId);
+
+            if (res == xmlreader::XmlReader::Result::Done)
+                break;
+
+            if (res == xmlreader::XmlReader::Result::Begin)
+            {
+                if (name == "child")
+                {
+                    handleMenuChild(pCurrentMenu, reader);
+                }
+                else
+                {
+                    ++nLevel;
+                    if (name == "property")
+                        collectProperty(reader, aProperties);
+                }
+            }
+
+            if (res == xmlreader::XmlReader::Result::End)
+            {
+                --nLevel;
+            }
+
+            if (!nLevel)
+                break;
+        }
+
+        m_aMenus.emplace_back(rID, pCurrentMenu);
+    }
+
+    void handleMenuChild(MenuClass* pParent, xmlreader::XmlReader& reader)
+    {
+        xmlreader::Span name;
+        int nsId;
+
+        int nLevel = 1;
+        while (true)
+        {
+            xmlreader::XmlReader::Result res
+                = reader.nextItem(xmlreader::XmlReader::Text::NONE, &name, &nsId);
+
+            if (res == xmlreader::XmlReader::Result::Begin)
+            {
+                if (name == "object" || name == "placeholder")
+                {
+                    handleMenuObject(pParent, reader);
+                }
+                else
+                    ++nLevel;
+            }
+
+            if (res == xmlreader::XmlReader::Result::End)
+                --nLevel;
+
+            if (!nLevel)
+                break;
+
+            if (res == xmlreader::XmlReader::Result::Done)
+                break;
+        }
+    }
+
     virtual void applyAtkProperties(Widget* pWidget, const stringmap& rProperties,
                                     bool bToolbarItem)
         = 0;
@@ -407,7 +484,7 @@ protected:
     //
     // Until that's done, other subclasses can be used to handle only those .ui files
     // not using the corresponding features (attributes/objects in the .ui file).
-    virtual void handleMenu(xmlreader::XmlReader& /*reader*/, const OUString& /*rID*/)
+    virtual void handleMenuObject(MenuClass* /*pParent*/, xmlreader::XmlReader& /*reader*/)
     {
         assert(false && "Functionality not implemented by this subclass yet.");
     }
