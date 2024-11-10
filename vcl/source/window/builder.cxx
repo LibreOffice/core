@@ -2946,6 +2946,13 @@ bool VclBuilder::isHorizontalTabControl(vcl::Window* pWindow)
     return pWindow && pWindow->GetType() == WindowType::TABCONTROL;
 }
 
+VclPtr<PopupMenu> VclBuilder::createMenu(const OUString& rID)
+{
+    VclPtr<PopupMenu> pMenu = VclPtr<PopupMenu>::Create();
+    pMenu->set_id(rID);
+    return pMenu;
+}
+
 std::vector<ComboBoxTextItem> BuilderBase::handleItems(xmlreader::XmlReader& reader) const
 {
     int nLevel = 1;
@@ -3013,8 +3020,7 @@ std::vector<ComboBoxTextItem> BuilderBase::handleItems(xmlreader::XmlReader& rea
 
 void VclBuilder::handleMenu(xmlreader::XmlReader& reader, const OUString& rID)
 {
-    VclPtr<PopupMenu> pCurrentMenu = VclPtr<PopupMenu>::Create();
-    pCurrentMenu->set_id(rID);
+    VclPtr<PopupMenu> pCurrentMenu = createMenu(rID);
 
     int nLevel = 1;
 

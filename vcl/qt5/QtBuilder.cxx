@@ -427,6 +427,12 @@ bool QtBuilder::isHorizontalTabControl(QObject* pObject)
            || ePosition == QTabWidget::TabPosition::South;
 }
 
+QMenu* QtBuilder::createMenu(const OUString&)
+{
+    assert(false && "Not implemented yet");
+    return nullptr;
+}
+
 void QtBuilder::applyAtkProperties(QObject* pObject, const stringmap& rProperties, bool)
 {
     if (!pObject || !pObject->isWidgetType())

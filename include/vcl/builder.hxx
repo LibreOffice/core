@@ -292,6 +292,8 @@ private:
 
     virtual bool isHorizontalTabControl(vcl::Window* pWindow) override;
 
+    virtual VclPtr<PopupMenu> createMenu(const OUString& rID) override;
+
     PackingData get_window_packing_data(const vcl::Window *pWindow) const;
     void        set_window_packing_position(const vcl::Window *pWindow, sal_Int32 nPosition);
 
