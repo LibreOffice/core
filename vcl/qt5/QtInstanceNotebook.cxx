@@ -10,6 +10,15 @@
 #include <QtInstanceNotebook.hxx>
 #include <QtInstanceNotebook.moc>
 
+#include <vcl/qt/QtUtils.hxx>
+
+#include <QtWidgets/QTabBar>
+#include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QWidget>
+
+// property on each tab's widget holding the accessible identifier of that tab
+const char* const PROPERTY_TAB_PAGE_ID = "tab-page-id";
+
 QtInstanceNotebook::QtInstanceNotebook(QTabWidget* pTabWidget)
     : QtInstanceWidget(pTabWidget)
     , m_pTabWidget(pTabWidget)
@@ -19,65 +28,143 @@ QtInstanceNotebook::QtInstanceNotebook(QTabWidget* pTabWidget)
 
 int QtInstanceNotebook::get_current_page() const
 {
-    assert(false && "Not implemented yet");
-    return -1;
+    SolarMutexGuard g;
+    int nCurrentIndex = 0;
+    GetQtInstance().RunInMainThread([&] { nCurrentIndex = m_pTabWidget->currentIndex(); });
+    return nCurrentIndex;
 }
 
-int QtInstanceNotebook::get_page_index(const OUString&) const
+int QtInstanceNotebook::get_page_index(const OUString& rIdent) const
 {
-    assert(false && "Not implemented yet");
-    return -1;
+    SolarMutexGuard g;
+
+    const QString sId = toQString(rIdent);
+    int nIndex = -1;
+    GetQtInstance().RunInMainThread([&] {
+        for (int i = 0; i < m_pTabWidget->count(); ++i)
+        {
+            if (get_page_ident(i) == rIdent)
+            {
+                nIndex = i;
+                return;
+            }
+        }
+    });
+    return nIndex;
 }
 
-OUString QtInstanceNotebook::get_page_ident(int) const
+OUString QtInstanceNotebook::get_page_ident(int nPage) const
 {
-    assert(false && "Not implemented yet");
-    return OUString();
+    SolarMutexGuard g;
+
+    OUString sIdent;
+    GetQtInstance().RunInMainThread([&] {
+        QWidget* pPage = m_pTabWidget->widget(nPage);
+        assert(pPage);
+        QVariant aIdVariant = pPage->property(PROPERTY_TAB_PAGE_ID);
+        if (aIdVariant.canConvert<QString>())
+            sIdent = toOUString(aIdVariant.toString());
+    });
+    return sIdent;
 }
 
 OUString QtInstanceNotebook::get_current_page_ident() const
 {
-    assert(false && "Not implemented yet");
-    return OUString();
+    SolarMutexGuard g;
+
+    OUString sIdent;
+    GetQtInstance().RunInMainThread([&] { sIdent = get_page_ident(m_pTabWidget->currentIndex()); });
+    return sIdent;
 }
 
-void QtInstanceNotebook::set_current_page(int) { assert(false && "Not implemented yet"); }
-
-void QtInstanceNotebook::set_current_page(const OUString&)
+void QtInstanceNotebook::set_current_page(int nPage)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+    GetQtInstance().RunInMainThread([&] { m_pTabWidget->setCurrentIndex(nPage); });
 }
 
-void QtInstanceNotebook::remove_page(const OUString&) { assert(false && "Not implemented yet"); }
-
-void QtInstanceNotebook::insert_page(const OUString&, const OUString&, int)
+void QtInstanceNotebook::set_current_page(const OUString& rIdent)
 {
-    assert(false && "Not implemented yet");
+    set_current_page(get_page_index(rIdent));
 }
 
-void QtInstanceNotebook::set_tab_label_text(const OUString&, const OUString&)
+void QtInstanceNotebook::remove_page(const OUString& rIdent)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+    GetQtInstance().RunInMainThread([&] { m_pTabWidget->removeTab(get_page_index(rIdent)); });
 }
 
-OUString QtInstanceNotebook::get_tab_label_text(const OUString&) const
+void QtInstanceNotebook::insert_page(const OUString& rIdent, const OUString& rLabel, int nPos)
 {
-    assert(false && "Not implemented yet");
-    return OUString();
+    SolarMutexGuard g;
+    GetQtInstance().RunInMainThread([&] {
+        QWidget* pPage = new QWidget;
+        pPage->setLayout(new QVBoxLayout);
+        pPage->setProperty(PROPERTY_TAB_PAGE_ID, toQString(rIdent));
+        m_pTabWidget->insertTab(nPos, pPage, toQString(rLabel));
+    });
 }
 
-void QtInstanceNotebook::set_show_tabs(bool) { assert(false && "Not implemented yet"); }
+void QtInstanceNotebook::set_tab_label_text(const OUString& rIdent, const OUString& rLabel)
+{
+    SolarMutexGuard g;
+    GetQtInstance().RunInMainThread([&] {
+        const int nIndex = get_page_index(rIdent);
+        m_pTabWidget->setTabText(nIndex, toQString(rLabel));
+    });
+}
+
+OUString QtInstanceNotebook::get_tab_label_text(const OUString& rIdent) const
+{
+    SolarMutexGuard g;
+    OUString sText;
+    GetQtInstance().RunInMainThread([&] {
+        const int nIndex = get_page_index(rIdent);
+        sText = toOUString(m_pTabWidget->tabText(nIndex));
+    });
+    return sText;
+}
+
+void QtInstanceNotebook::set_show_tabs(bool bShow)
+{
+    SolarMutexGuard g;
+    GetQtInstance().RunInMainThread([&] { m_pTabWidget->tabBar()->setVisible(bShow); });
+}
 
 int QtInstanceNotebook::get_n_pages() const
 {
-    assert(false && "Not implemented yet");
-    return 0;
+    SolarMutexGuard g;
+    int nCount = 0;
+    GetQtInstance().RunInMainThread([&] { nCount = m_pTabWidget->count(); });
+    return nCount;
 }
 
-weld::Container* QtInstanceNotebook::get_page(const OUString&) const
+weld::Container* QtInstanceNotebook::get_page(const OUString& rIdent) const
 {
-    assert(false && "Not implemented yet");
-    return nullptr;
+    SolarMutexGuard g;
+
+    QWidget* pWidget = nullptr;
+    GetQtInstance().RunInMainThread([&] {
+        const int nIndex = get_page_index(rIdent);
+        pWidget = m_pTabWidget->widget(nIndex);
+    });
+
+    if (!m_aPageContainerInstances.contains(pWidget))
+        m_aPageContainerInstances.emplace(pWidget, std::make_unique<QtInstanceContainer>(pWidget));
+
+    return m_aPageContainerInstances.at(pWidget).get();
+}
+
+void QtInstanceNotebook::setTabIdAndLabel(QTabWidget& rTabWidget, int nPage, const OUString& rIdent,
+                                          const OUString& rLabel)
+{
+    SolarMutexGuard g;
+    GetQtInstance().RunInMainThread([&] {
+        QWidget* pPage = rTabWidget.widget(nPage);
+        assert(pPage);
+        pPage->setProperty(PROPERTY_TAB_PAGE_ID, toQString(rIdent));
+        rTabWidget.setTabText(nPage, toQString(rLabel));
+    });
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

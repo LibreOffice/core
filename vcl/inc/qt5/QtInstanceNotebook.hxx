@@ -9,15 +9,20 @@
 
 #pragma once
 
+#include "QtInstanceContainer.hxx"
 #include "QtInstanceWidget.hxx"
 
 #include <QtWidgets/QTabWidget>
+
+#include <map>
 
 class QtInstanceNotebook : public QObject, public QtInstanceWidget, public virtual weld::Notebook
 {
     Q_OBJECT
 
     QTabWidget* m_pTabWidget;
+
+    mutable std::map<QWidget*, std::unique_ptr<QtInstanceContainer>> m_aPageContainerInstances;
 
 public:
     QtInstanceNotebook(QTabWidget* pTabWidget);
@@ -35,6 +40,9 @@ public:
     virtual void set_show_tabs(bool bShow) override;
     virtual int get_n_pages() const override;
     virtual weld::Container* get_page(const OUString& rIdent) const override;
+
+    static void setTabIdAndLabel(QTabWidget& rTabWidget, int nPage, const OUString& rIdent,
+                                 const OUString& rLabel);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

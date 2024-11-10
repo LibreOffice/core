@@ -11,6 +11,7 @@
 
 #include <QtInstanceLinkButton.hxx>
 #include <QtInstanceMessageDialog.hxx>
+#include <QtInstanceNotebook.hxx>
 #include <QtTools.hxx>
 
 #include <rtl/ustrbuf.hxx>
@@ -289,6 +290,18 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
     if (!pWidget)
         pWidget = pLayoutParentWidget;
 
+    QTabWidget* pParentTabWidget = qobject_cast<QTabWidget*>(pParentWidget);
+    if (pParentTabWidget)
+    {
+        // remove QTabWidget child widget, set via QTabWidget::addTab instead
+        assert(pWidget);
+        pWidget->setParent(nullptr);
+        // initially, add tab with empty label, QtBuilder::applyTabChildProperties will evaluate actual one
+        pParentTabWidget->addTab(pWidget, QStringLiteral());
+        // unset pParentWidget to not not create a layout below
+        pParentWidget = nullptr;
+    }
+
     if (pWidget)
     {
         if (!pParentLayout && pParentWidget)
@@ -481,11 +494,17 @@ void QtBuilder::applyPackingProperties(QObject* pCurrentChild, QObject* pParent,
         SAL_WARN("vcl.qt", "QtBuilder::applyPackingProperties not yet implemented for this case");
 }
 
-void QtBuilder::applyTabChildProperties(QObject*, const std::vector<OUString>&,
-                                        std::vector<vcl::EnumContext::Context>&, stringmap&,
-                                        stringmap&)
+void QtBuilder::applyTabChildProperties(QObject* pParent, const std::vector<OUString>& rIDs,
+                                        std::vector<vcl::EnumContext::Context>&,
+                                        stringmap& rProperties, stringmap&)
 {
-    assert(false && "Not implemented yet");
+    QTabWidget* pTabWidget = qobject_cast<QTabWidget*>(pParent);
+    assert(pTabWidget && "parent must be a QTabWidget");
+
+    // set ID and label for the last inserted tab
+    assert(rProperties.contains(u"label"_ustr) && "Tab has no label");
+    QtInstanceNotebook::setTabIdAndLabel(*pTabWidget, pTabWidget->count() - 1, rIDs.front(),
+                                         rProperties.at(u"label"_ustr));
 }
 
 void QtBuilder::set_response(std::u16string_view sID, short nResponse)
