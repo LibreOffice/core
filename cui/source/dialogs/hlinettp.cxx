@@ -23,6 +23,7 @@
 
 #include <hlinettp.hxx>
 #include <hlmarkwn_def.hxx>
+#include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
 
 
 /*************************************************************************
@@ -72,8 +73,42 @@ SvxHyperlinkInternetTp::~SvxHyperlinkInternetTp()
 |************************************************************************/
 void SvxHyperlinkInternetTp::FillDlgFields(const OUString& rStrURL)
 {
-    INetURLObject aURL(rStrURL);
-    OUString aStrScheme(GetSchemeFromURL(rStrURL));
+    // tdf#146576 - propose clipboard content when inserting a hyperlink
+    OUString aStrURL(rStrURL);
+    if (aStrURL.isEmpty())
+    {
+        if (auto xClipboard = GetSystemClipboard())
+        {
+            if (auto xTransferable = xClipboard->getContents())
+            {
+                css::datatransfer::DataFlavor aFlavor;
+                SotExchange::GetFormatDataFlavor(SotClipboardFormatId::STRING, aFlavor);
+                if (xTransferable->isDataFlavorSupported(aFlavor))
+                {
+                    OUString aClipBoardContent;
+                    try
+                    {
+                        if (xTransferable->getTransferData(aFlavor) >>= aClipBoardContent)
+                        {
+                            // tdf#162753 - allow only syntactically valid hyperlink targets
+                            INetURLObject aURL(aClipBoardContent);
+                            if (!aURL.HasError())
+                                aStrURL
+                                    = aURL.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous);
+                        }
+                    }
+                    // tdf#158345: Opening Hyperlink dialog leads to crash
+                    // MimeType = "text/plain;charset=utf-16"
+                    catch (const css::datatransfer::UnsupportedFlavorException&)
+                    {
+                    }
+                }
+            }
+        }
+    }
+
+    INetURLObject aURL(aStrURL);
+    OUString aStrScheme(GetSchemeFromURL(aStrURL));
 
     // set URL-field
     // Show the scheme, #72740
