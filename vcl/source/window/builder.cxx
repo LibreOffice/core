@@ -3866,17 +3866,6 @@ vcl::Window *VclBuilder::get_by_name(std::u16string_view sID)
     return nullptr;
 }
 
-PopupMenu *VclBuilder::get_menu(std::u16string_view sID)
-{
-    for (auto const& menu : m_aMenus)
-    {
-        if (menu.m_sID == sID)
-            return menu.m_pMenu.get();
-    }
-
-    return nullptr;
-}
-
 void VclBuilder::set_response(std::u16string_view sID, short nResponse)
 {
     PushButton* pPushButton = get<PushButton>(sID);
@@ -4193,11 +4182,6 @@ void VclBuilder::mungeTextBuffer(VclMultiLineEdit &rTarget, const TextBuffer &rT
 VclBuilder::VclParserState::VclParserState()
     : m_nLastToolbarId(0)
     , m_nLastMenuItemId(0)
-{}
-
-VclBuilder::MenuAndId::MenuAndId(OUString aId, PopupMenu *pMenu)
-    : m_sID(std::move(aId))
-    , m_pMenu(pMenu)
 {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

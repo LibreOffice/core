@@ -16,6 +16,7 @@
 #include <QtWidgets/QDialogButtonBox>
 #include <QtWidgets/QDoubleSpinBox>
 #include <QtWidgets/QGridLayout>
+#include <QtWidgets/QMenu>
 #include <QtWidgets/QMessageBox>
 #include <QtWidgets/QPushButton>
 
@@ -23,7 +24,7 @@
 #include <unotools/resmgr.hxx>
 #include <vcl/builder.hxx>
 
-class QtBuilder : public WidgetBuilder<QObject, QObject*>
+class QtBuilder : public WidgetBuilder<QObject, QObject*, QMenu, QMenu*>
 {
 private:
     QObject* get_by_name(std::u16string_view sID);

@@ -32,15 +32,43 @@
  * and overridable methods to actually create the widgets,... (which should reside in
  * VclBuilder and other subclasses).
  */
-template <typename Widget, typename WidgetPtr> class WidgetBuilder : public BuilderBase
+template <typename Widget, typename WidgetPtr, typename MenuClass, typename MenuPtr>
+class WidgetBuilder : public BuilderBase
 {
 protected:
+    struct MenuAndId
+    {
+        OUString m_sID;
+        MenuPtr m_pMenu;
+        MenuAndId(OUString sId, MenuClass* pMenu)
+            : m_sID(std::move(sId))
+            , m_pMenu(pMenu)
+        {
+        }
+    };
+
     WidgetBuilder(std::u16string_view sUIDir, const OUString& rUIFile, bool bLegacy)
         : BuilderBase(sUIDir, rUIFile, bLegacy)
     {
     }
     virtual ~WidgetBuilder() = default;
 
+    std::vector<MenuAndId> m_aMenus;
+
+public:
+    //sID may not exist
+    MenuClass* get_menu(std::u16string_view sID)
+    {
+        for (auto const& menu : m_aMenus)
+        {
+            if (menu.m_sID == sID)
+                return menu.m_pMenu.get();
+        }
+
+        return nullptr;
+    }
+
+protected:
     void processUIFile(Widget* pParent)
     {
         try

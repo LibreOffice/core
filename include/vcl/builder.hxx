@@ -54,7 +54,7 @@ namespace xmlreader { class XmlReader; }
 namespace com::sun::star::frame { class XFrame; }
 
 /// Creates a hierarchy of vcl::Windows (widgets) from a .ui file for dialogs, sidebar, etc.
-class VCL_DLLPUBLIC VclBuilder : public WidgetBuilder<vcl::Window, VclPtr<vcl::Window>>
+class VCL_DLLPUBLIC VclBuilder : public WidgetBuilder<vcl::Window, VclPtr<vcl::Window>, PopupMenu, VclPtr<PopupMenu>>
 {
 public:
     /// These functions create a new widget with parent pParent and return it in rRet
@@ -75,9 +75,6 @@ public:
     template <typename T = vcl::Window> T* get(std::u16string_view sID);
 
     vcl::Window*    get_widget_root();
-
-    //sID may not exist
-    PopupMenu*      get_menu(std::u16string_view sID);
 
     //release ownership of pWindow, i.e. don't delete it
     void            drop_ownership(const vcl::Window *pWindow);
@@ -130,14 +127,6 @@ private:
         }
     };
     std::vector<WinAndId> m_aChildren;
-
-    struct MenuAndId
-    {
-        OUString m_sID;
-        VclPtr<PopupMenu> m_pMenu;
-        MenuAndId(OUString sId, PopupMenu *pMenu);
-    };
-    std::vector<MenuAndId> m_aMenus;
 
     typedef StringPair RadioButtonGroupMap;
 
