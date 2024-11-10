@@ -48,20 +48,33 @@ OUString QtInstanceWindow::get_title() const
     return toOUString(getQWidget()->windowTitle());
 }
 
-void QtInstanceWindow::window_move(int, int) {}
+void QtInstanceWindow::window_move(int, int) { assert(false && "Not implemented yet"); }
 
-bool QtInstanceWindow::get_resizable() const { return true; }
+bool QtInstanceWindow::get_resizable() const
+{
+    assert(false && "Not implemented yet");
+    return true;
+}
 
-Size QtInstanceWindow::get_size() const { return Size(); }
+Size QtInstanceWindow::get_size() const
+{
+    assert(false && "Not implemented yet");
+    return Size();
+}
 
-Point QtInstanceWindow::get_position() const { return Point(); }
+Point QtInstanceWindow::get_position() const
+{
+    assert(false && "Not implemented yet");
+    return Point();
+}
 
 AbsoluteScreenPixelRectangle QtInstanceWindow::get_monitor_workarea() const
 {
+    assert(false && "Not implemented yet");
     return AbsoluteScreenPixelRectangle();
 }
 
-void QtInstanceWindow::set_centered_on_parent(bool) {}
+void QtInstanceWindow::set_centered_on_parent(bool) { assert(false && "Not implemented yet"); }
 
 bool QtInstanceWindow::has_toplevel_focus() const
 {
@@ -80,34 +93,52 @@ void QtInstanceWindow::present()
     });
 }
 
-void QtInstanceWindow::change_default_widget(weld::Widget*, weld::Widget*) {}
+void QtInstanceWindow::change_default_widget(weld::Widget*, weld::Widget*)
+{
+    assert(false && "Not implemented yet");
+}
 
-bool QtInstanceWindow::is_default_widget(const weld::Widget*) const { return true; }
+bool QtInstanceWindow::is_default_widget(const weld::Widget*) const
+{
+    assert(false && "Not implemented yet");
+    return true;
+}
 
-void QtInstanceWindow::set_window_state(const OUString&) {}
+void QtInstanceWindow::set_window_state(const OUString&) { assert(false && "Not implemented yet"); }
 
-OUString QtInstanceWindow::get_window_state(vcl::WindowDataMask) const { return OUString(); }
+OUString QtInstanceWindow::get_window_state(vcl::WindowDataMask) const
+{
+    assert(false && "Not implemented yet");
+    return OUString();
+}
 
 css::uno::Reference<css::awt::XWindow> QtInstanceWindow::GetXWindow()
 {
+    assert(false && "Not implemented yet");
     return css::uno::Reference<css::awt::XWindow>();
 }
 
 SystemEnvData QtInstanceWindow::get_system_data() const
 {
+    assert(false && "Not implemented yet");
     const SystemEnvData* pEnvData = nullptr;
 
     return *pEnvData;
 }
 
-void QtInstanceWindow::resize_to_request() {}
+void QtInstanceWindow::resize_to_request() { assert(false && "Not implemented yet"); }
 
 weld::ScreenShotCollection QtInstanceWindow::collect_screenshot_data()
 {
+    assert(false && "Not implemented yet");
     return weld::ScreenShotCollection();
 }
 
-VclPtr<VirtualDevice> QtInstanceWindow::screenshot() { return nullptr; }
+VclPtr<VirtualDevice> QtInstanceWindow::screenshot()
+{
+    assert(false && "Not implemented yet");
+    return nullptr;
+}
 
 const vcl::ILibreOfficeKitNotifier* QtInstanceWindow::GetLOKNotifier() { return nullptr; }
 
