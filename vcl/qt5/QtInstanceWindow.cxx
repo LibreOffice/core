@@ -63,7 +63,13 @@ AbsoluteScreenPixelRectangle QtInstanceWindow::get_monitor_workarea() const
 
 void QtInstanceWindow::set_centered_on_parent(bool) {}
 
-bool QtInstanceWindow::has_toplevel_focus() const { return true; }
+bool QtInstanceWindow::has_toplevel_focus() const
+{
+    SolarMutexGuard g;
+    bool bFocus;
+    GetQtInstance().RunInMainThread([&] { bFocus = QApplication::activeWindow() == getQWidget(); });
+    return bFocus;
+}
 
 void QtInstanceWindow::present()
 {
