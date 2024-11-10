@@ -52,8 +52,14 @@ void QtInstanceWindow::window_move(int, int) { assert(false && "Not implemented 
 
 bool QtInstanceWindow::get_resizable() const
 {
-    assert(false && "Not implemented yet");
-    return true;
+    SolarMutexGuard g;
+    bool bResizable = true;
+    GetQtInstance().RunInMainThread([&] {
+        const QSizePolicy aSizePolicy = getQWidget()->sizePolicy();
+        bResizable = (aSizePolicy.horizontalPolicy() != QSizePolicy::Policy::Fixed)
+                     || (aSizePolicy.verticalPolicy() != QSizePolicy::Policy::Fixed);
+    });
+    return bResizable;
 }
 
 Size QtInstanceWindow::get_size() const
