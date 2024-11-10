@@ -55,7 +55,7 @@ public:
 
     virtual void set_default_response(int) override;
 
-    virtual weld::Container* weld_content_area() override;
+    virtual std::unique_ptr<weld::Container> weld_content_area() override;
 
     static void handleButtonClick(QDialog& rDialog, QAbstractButton& rButton);
 

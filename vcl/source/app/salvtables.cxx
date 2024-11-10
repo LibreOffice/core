@@ -1941,9 +1941,9 @@ void SalInstanceDialog::set_default_response(int nResponse)
     m_xDialog->set_default_response(nResponse);
 }
 
-weld::Container* SalInstanceDialog::weld_content_area()
+std::unique_ptr<weld::Container> SalInstanceDialog::weld_content_area()
 {
-    return new SalInstanceContainer(m_xDialog->get_content_area(), m_pBuilder, false);
+    return std::make_unique<SalInstanceContainer>(m_xDialog->get_content_area(), m_pBuilder, false);
 }
 
 IMPL_LINK(SalInstanceDialog, PopupScreenShotMenuHdl, const CommandEvent&, rCEvt, bool)

@@ -146,7 +146,7 @@ weld::Button* QtInstanceDialog::weld_widget_for_response(int)
 
 void QtInstanceDialog::set_default_response(int) { assert(false && "Not implemented yet"); }
 
-weld::Container* QtInstanceDialog::weld_content_area()
+std::unique_ptr<weld::Container> QtInstanceDialog::weld_content_area()
 {
     assert(false && "Not implemented yet");
     return nullptr;

@@ -555,7 +555,7 @@ public:
 
     virtual void set_default_response(int nResponse) override;
 
-    virtual weld::Container* weld_content_area() override;
+    virtual std::unique_ptr<weld::Container> weld_content_area() override;
 };
 
 class SalInstanceAssistant : public SalInstanceDialog, public virtual weld::Assistant

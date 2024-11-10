@@ -627,7 +627,7 @@ public:
     virtual void add_button(const OUString& rText, int response, const OUString& rHelpId = {}) = 0;
     virtual void set_default_response(int response) = 0;
     virtual Button* weld_widget_for_response(int response) = 0;
-    virtual Container* weld_content_area() = 0;
+    virtual std::unique_ptr<weld::Container> weld_content_area() = 0;
 
     // shrink the dialog down to shown just these widgets
     virtual void collapse(weld::Widget* pEdit, weld::Widget* pButton) = 0;

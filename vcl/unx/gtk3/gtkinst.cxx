@@ -7184,12 +7184,12 @@ public:
 
     virtual weld::Button* weld_widget_for_response(int nVclResponse) override;
 
-    virtual Container* weld_content_area() override
+    virtual std::unique_ptr<weld::Container> weld_content_area() override
     {
 #if !GTK_CHECK_VERSION(4, 0, 0)
-        return new GtkInstanceContainer(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(m_pDialog))), m_pBuilder, false);
+        return std::make_unique<GtkInstanceContainer>(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(m_pDialog))), m_pBuilder, false);
 #else
-        return new GtkInstanceContainer(gtk_dialog_get_content_area(GTK_DIALOG(m_pDialog)), m_pBuilder, false);
+        return std::make_unique<GtkInstanceContainer>(gtk_dialog_get_content_area(GTK_DIALOG(m_pDialog)), m_pBuilder, false);
 #endif
     }
 
