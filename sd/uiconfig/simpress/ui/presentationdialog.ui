@@ -527,14 +527,13 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkRadioButton" id="auto">
+                          <object class="GtkCheckButton" id="auto">
                             <property name="label" translatable="yes" context="presentationdialog|auto">_Loop and repeat after:</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="receives-default">False</property>
                             <property name="use-underline">True</property>
                             <property name="draw-indicator">True</property>
-                            <property name="group">default</property>
                             <accessibility>
                               <relation type="label-for" target="pauseduration"/>
                             </accessibility>

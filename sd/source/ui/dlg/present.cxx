@@ -55,7 +55,7 @@ SdStartPresentationDlg::SdStartPresentationDlg(weld::Window* pWindow, const SfxI
     , m_xLbCustomshow(m_xBuilder->weld_combo_box(u"customslideshow_cb"_ustr))
     , m_xRbtStandard(m_xBuilder->weld_radio_button(u"default"_ustr))
     , m_xRbtWindow(m_xBuilder->weld_radio_button(u"window"_ustr))
-    , m_xRbtAuto(m_xBuilder->weld_radio_button(u"auto"_ustr))
+    , m_xCbxAuto(m_xBuilder->weld_check_button(u"auto"_ustr))
     , m_xTmfPause(m_xBuilder->weld_formatted_spin_button(u"pauseduration"_ustr))
     , m_xFormatter(new weld::TimeFormatter(*m_xTmfPause))
     , m_xCbxAutoLogo(m_xBuilder->weld_check_button(u"showlogo"_ustr))
@@ -92,7 +92,7 @@ SdStartPresentationDlg::SdStartPresentationDlg(weld::Window* pWindow, const SfxI
     aLink = LINK( this, SdStartPresentationDlg, ClickWindowPresentationHdl );
     m_xRbtStandard->connect_toggled( aLink );
     m_xRbtWindow->connect_toggled( aLink );
-    m_xRbtAuto->connect_toggled( aLink );
+    m_xCbxAuto->connect_toggled( aLink );
     m_xCbxShowNavigationButton->connect_toggled( aLink );
 
     m_xTmfPause->connect_value_changed( LINK( this, SdStartPresentationDlg, ChangePauseHdl ) );
@@ -155,10 +155,11 @@ SdStartPresentationDlg::SdStartPresentationDlg(weld::Window* pWindow, const SfxI
 
     if( bWindow )
         m_xRbtWindow->set_active(true);
-    else if( bEndless )
-        m_xRbtAuto->set_active(true);
     else
         m_xRbtStandard->set_active(true);
+
+    if( bEndless )
+        m_xCbxAuto->set_active(true);
 
     if (!officecfg::Office::Impress::Misc::Start::EnablePresenterScreen::get())
         m_xLbConsole->set_active(PresenterConsoleMode::Disabled);
@@ -335,7 +336,7 @@ void SdStartPresentationDlg::GetAttr( SfxItemSet& rAttr )
     rAttr.Put( SfxBoolItem ( ATTR_PRESENT_CHANGE_PAGE, m_xCbxChangePage->get_active() ) );
     rAttr.Put( SfxBoolItem ( ATTR_PRESENT_ALWAYS_ON_TOP, m_xCbxAlwaysOnTop->get_active() ) );
     rAttr.Put( SfxBoolItem ( ATTR_PRESENT_FULLSCREEN, !m_xRbtWindow->get_active() ) );
-    rAttr.Put( SfxBoolItem ( ATTR_PRESENT_ENDLESS, m_xRbtAuto->get_active() ) );
+    rAttr.Put( SfxBoolItem ( ATTR_PRESENT_ENDLESS, m_xCbxAuto->get_active() ) );
     rAttr.Put( SfxUInt32Item ( ATTR_PRESENT_PAUSE_TIMEOUT, m_xFormatter->GetTime().GetMSFromTime() / 1000 ) );
     rAttr.Put( SfxBoolItem ( ATTR_PRESENT_SHOW_PAUSELOGO, m_xCbxAutoLogo->get_active() ) );
     rAttr.Put( SfxBoolItem ( ATTR_PRESENT_INTERACTIVE, m_xCbxInteractiveMode->get_active() ) );
@@ -368,7 +369,7 @@ IMPL_LINK_NOARG(SdStartPresentationDlg, ChangeRangeHdl, weld::Toggleable&, void)
  */
 IMPL_LINK_NOARG(SdStartPresentationDlg, ClickWindowPresentationHdl, weld::Toggleable&, void)
 {
-    const bool bAuto = m_xRbtAuto->get_active();
+    const bool bAuto = m_xCbxAuto->get_active();
     const bool bWindow = m_xRbtWindow->get_active();
 
     m_xTmfPause->set_sensitive( bAuto );
@@ -401,7 +402,7 @@ IMPL_LINK_NOARG(SdStartPresentationDlg, ChangePauseHdl, weld::FormattedSpinButto
 
 void SdStartPresentationDlg::ChangePause()
 {
-    m_xCbxAutoLogo->set_sensitive(m_xRbtAuto->get_active() && ( m_xFormatter->GetTime().GetMSFromTime() > 0 ));
+    m_xCbxAutoLogo->set_sensitive(m_xCbxAuto->get_active() && ( m_xFormatter->GetTime().GetMSFromTime() > 0 ));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
