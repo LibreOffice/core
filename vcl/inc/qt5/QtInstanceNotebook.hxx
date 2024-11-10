@@ -22,6 +22,8 @@ class QtInstanceNotebook : public QObject, public QtInstanceWidget, public virtu
 
     QTabWidget* m_pTabWidget;
 
+    OUString m_sCurrentTabId;
+
     mutable std::map<QWidget*, std::unique_ptr<QtInstanceContainer>> m_aPageContainerInstances;
 
 public:
@@ -43,6 +45,9 @@ public:
 
     static void setTabIdAndLabel(QTabWidget& rTabWidget, int nPage, const OUString& rIdent,
                                  const OUString& rLabel);
+
+private Q_SLOTS:
+    void currentTabChanged();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

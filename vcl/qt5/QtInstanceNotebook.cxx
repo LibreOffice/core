@@ -24,6 +24,12 @@ QtInstanceNotebook::QtInstanceNotebook(QTabWidget* pTabWidget)
     , m_pTabWidget(pTabWidget)
 {
     assert(m_pTabWidget);
+
+    if (m_pTabWidget->count())
+        m_sCurrentTabId = get_current_page_ident();
+
+    connect(m_pTabWidget, &QTabWidget::currentChanged, this,
+            &QtInstanceNotebook::currentTabChanged);
 }
 
 int QtInstanceNotebook::get_current_page() const
@@ -165,6 +171,19 @@ void QtInstanceNotebook::setTabIdAndLabel(QTabWidget& rTabWidget, int nPage, con
         pPage->setProperty(PROPERTY_TAB_PAGE_ID, toQString(rIdent));
         rTabWidget.setTabText(nPage, toQString(rLabel));
     });
+}
+
+void QtInstanceNotebook::currentTabChanged()
+{
+    SolarMutexGuard g;
+
+    if (!m_sCurrentTabId.isEmpty())
+        m_aLeavePageHdl.Call(m_sCurrentTabId);
+
+    m_sCurrentTabId = get_current_page_ident();
+
+    if (!m_sCurrentTabId.isEmpty())
+        m_aLeavePageHdl.Call(m_sCurrentTabId);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
