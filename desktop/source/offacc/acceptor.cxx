@@ -117,10 +117,9 @@ void Acceptor::run()
             // create the bridge. The remote end will have a reference to this bridge
             // thus preventing the bridge from being disposed. When the remote end releases
             // the bridge, it will be destructed.
-            Reference< XBridge > rBridge = m_rBridgeFactory->createBridge(
-                u""_ustr, m_aProtocol, rConnection, rInstanceProvider);
             std::unique_lock g(m_aMutex);
-            m_bridges.add(rBridge);
+            m_bridges.add(m_rBridgeFactory->createBridge(
+                u""_ustr, m_aProtocol, rConnection, rInstanceProvider));
         } catch (const Exception&) {
             TOOLS_WARN_EXCEPTION("desktop.offacc", "");
             // connection failed...
