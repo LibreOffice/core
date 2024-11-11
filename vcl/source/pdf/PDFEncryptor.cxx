@@ -369,9 +369,7 @@ bool PDFEncryptor::prepareEncryption(
 
     if (!bSuccess)
     {
-        rProperties.OValue.clear();
-        rProperties.UValue.clear();
-        rProperties.EncryptionKey.clear();
+        rProperties.clear();
     }
     return bSuccess;
 }
@@ -386,8 +384,7 @@ void PDFEncryptor::setupKeysAndCheck(vcl::PDFEncryptionProperties& rProperties)
     {
         // the field lengths are invalid ? This was not setup by initEncryption.
         // do not encrypt after all
-        rProperties.OValue.clear();
-        rProperties.UValue.clear();
+        rProperties.clear();
         OSL_ENSURE(false, "encryption data failed sanity check, encryption disabled");
     }
     else // setup key lengths
