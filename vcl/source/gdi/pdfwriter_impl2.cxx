@@ -25,6 +25,7 @@
 #include <vcl/metaact.hxx>
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/graph.hxx>
+#include <pdf/IPDFEncryptor.hxx>
 
 #include <unotools/streamwrap.hxx>
 
