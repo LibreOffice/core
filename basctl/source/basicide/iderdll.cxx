@@ -177,7 +177,7 @@ IMPL_STATIC_LINK(ExtraData, GlobalBasicBreakHdl, StarBASIC *, pBasic, BasicDebug
             OSL_ENSURE( aDocument.isValid(), "basctl::ExtraData::GlobalBasicBreakHdl: no document for the basic manager!" );
             if ( aDocument.isValid() )
             {
-                OUString aOULibName( pBasic->GetName() );
+                const OUString& aOULibName( pBasic->GetName() );
                 Reference< script::XLibraryContainer > xModLibContainer = aDocument.getLibraryContainer( E_SCRIPTS );
                 if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
                 {

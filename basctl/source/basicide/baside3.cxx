@@ -801,10 +801,10 @@ bool implImportDialog(weld::Window* pWin, const ScriptDocument& rDocument, const
         Sequence< OUString > aPaths = xFP->getSelectedFiles();
 
         OUString aBasePath;
-        OUString aOUCurPath( aPaths[0] );
-        sal_Int32 iSlash = aOUCurPath.lastIndexOf( '/' );
+        const OUString& rOUCurPath( aPaths[0] );
+        sal_Int32 iSlash = rOUCurPath.lastIndexOf( '/' );
         if( iSlash != -1 )
-            aBasePath = aOUCurPath.copy( 0, iSlash + 1 );
+            aBasePath = rOUCurPath.copy( 0, iSlash + 1 );
 
         try
         {
@@ -816,8 +816,8 @@ bool implImportDialog(weld::Window* pWin, const ScriptDocument& rDocument, const
             Reference< XSimpleFileAccess3 > xSFI( SimpleFileAccess::create(xContext) );
 
             Reference< XInputStream > xInput;
-            if( xSFI->exists( aOUCurPath ) )
-                xInput = xSFI->openFileRead( aOUCurPath );
+            if( xSFI->exists( rOUCurPath ) )
+                xInput = xSFI->openFileRead( rOUCurPath );
 
             ::xmlscript::importDialogModel( xInput, xDialogModel, xContext, rDocument.isDocument() ? rDocument.getDocument() : Reference< frame::XModel >() );
 

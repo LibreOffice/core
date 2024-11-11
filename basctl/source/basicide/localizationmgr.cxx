@@ -387,7 +387,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                         sal_Int32 i;
                         for ( i = 0; i < nPropStringCount; ++i )
                         {
-                            OUString aPropStr = aPropStrings[i];
+                            const OUString& aPropStr = aPropStrings[i];
                             bool bEscAlreadyExisting = aPropStr.startsWith("&");
                             if( bEscAlreadyExisting )
                             {
@@ -417,7 +417,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
 
                         for (sal_Int32 i = 0; i < nPropStringCount; ++i)
                         {
-                            OUString aIdStr = aPropStrings[i];
+                            const OUString& aIdStr = aPropStrings[i];
                             OUString aNewPropStr = aIdStr;
                             if( aIdStr.getLength() > 1 )
                             {
@@ -469,8 +469,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
 
                         for (sal_Int32 i = 0; i < nPropStringCount; ++i)
                         {
-                            OUString aSourceIdStr = aPropStrings[i];
-                            OUString aPureSourceIdStr = aSourceIdStr.copy( 1 );
+                            OUString aPureSourceIdStr = aPropStrings[i].copy( 1 );
 
                             sal_Int32 nUniqueId = xStringResourceManager->getUniqueNumericId();
                             OUString aPureIdStr = OUString::number( nUniqueId )
@@ -509,8 +508,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
 
                         for (sal_Int32 i = 0; i < nPropStringCount; ++i)
                         {
-                            OUString aSourceIdStr = aPropStrings[i];
-                            OUString aPureSourceIdStr = aSourceIdStr.copy( 1 );
+                            OUString aPureSourceIdStr = aPropStrings[i].copy( 1 );
 
                             sal_Int32 nUniqueId = xStringResourceManager->getUniqueNumericId();
                             OUString aPureIdStr = OUString::number( nUniqueId )
