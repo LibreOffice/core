@@ -114,6 +114,7 @@ public final class socketAcceptor implements XAcceptor {
         com.sun.star.lang.IllegalArgumentException
     {
         ServerSocket serv;
+        Boolean noDelay = null;
         synchronized (this) {
             if (server == null) {
                 ConnectionDescriptor desc
@@ -142,6 +143,7 @@ public final class socketAcceptor implements XAcceptor {
                                                     + " vs. "
                                                     + connectionDescription);
             }
+            noDelay = tcpNoDelay;
             serv = server;
         }
         Socket socket = null;
@@ -153,8 +155,8 @@ public final class socketAcceptor implements XAcceptor {
             }
             // we enable tcpNoDelay for loopback connections because
             // it can make a significant speed difference on linux boxes.
-            if (tcpNoDelay != null) {
-                socket.setTcpNoDelay(tcpNoDelay.booleanValue());
+            if (noDelay != null) {
+                socket.setTcpNoDelay(noDelay.booleanValue());
             }
             else {
                 InetSocketAddress address = (InetSocketAddress)socket.getRemoteSocketAddress();
