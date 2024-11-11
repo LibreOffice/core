@@ -1799,7 +1799,7 @@ void DrawingML::WriteXGraphicBlip(uno::Reference<beans::XPropertySet> const & rX
 
     mpFS->startElementNS(XML_a, XML_blip, FSNS(XML_r, XML_embed), sRelId);
 
-    auto pVectorGraphicDataPtr = aGraphic.getVectorGraphicData();
+    const auto& pVectorGraphicDataPtr = aGraphic.getVectorGraphicData();
 
     if (pVectorGraphicDataPtr && pVectorGraphicDataPtr->getType() == VectorGraphicDataType::Svg)
     {
@@ -6567,7 +6567,7 @@ void DrawingML::writeDiagramRels(const uno::Sequence<uno::Sequence<uno::Any>>& x
         // diagramDataRelTuple[0] => RID,
         // diagramDataRelTuple[1] => xInputStream
         // diagramDataRelTuple[2] => extension
-        uno::Sequence<uno::Any> diagramDataRelTuple = xRelSeq[j];
+        const uno::Sequence<uno::Any>& diagramDataRelTuple = xRelSeq[j];
 
         OUString sRelId;
         OUString sExtension;

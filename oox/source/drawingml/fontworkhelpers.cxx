@@ -1079,7 +1079,7 @@ OUString lcl_getWMarkupStringForThemeColor(const model::ComplexColor& rComplexCo
 bool lcl_getThemeColorTransformationValue(const model::ComplexColor& rComplexColor,
                                           const model::TransformationType& rType, sal_Int16& rValue)
 {
-    const std::vector<model::Transformation> aTransVec(rComplexColor.getTransformations());
+    const std::vector<model::Transformation>& aTransVec(rComplexColor.getTransformations());
     auto bItemFound
         = [rType](const model::Transformation& rTrans) { return rType == rTrans.meType; };
     auto pIt = std::find_if(aTransVec.begin(), aTransVec.end(), bItemFound);

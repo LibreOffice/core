@@ -655,7 +655,7 @@ static void lcl_copyCharPropsToShape(const uno::Reference<drawing::XShape>& xSha
                                     });
     if (aParaIt != rParagraphs.cend())
     {
-        std::shared_ptr<TextParagraph> pParagraph = *aParaIt;
+        const std::shared_ptr<TextParagraph>& pParagraph = *aParaIt;
         const TextRunVector& rRuns = pParagraph->getRuns();
         auto aRunIt = std::find_if_not(rRuns.cbegin(), rRuns.cend(),
                                        [](const std::shared_ptr<TextRun> pRun)
@@ -666,14 +666,14 @@ static void lcl_copyCharPropsToShape(const uno::Reference<drawing::XShape>& xSha
                                        });
         if (aRunIt != rRuns.cend())
         {
-            std::shared_ptr<TextRun> pRun = *aRunIt;
+            const std::shared_ptr<TextRun>& pRun = *aRunIt;
             TextCharacterProperties& rCharProps = pRun->getTextCharacterProperties();
 
             // set language
             if (rCharProps.moLang.has_value() && !rCharProps.moLang.value().isEmpty())
             {
                 LanguageTag aTag(rCharProps.moLang.value());
-                css::lang::Locale aLocale(aTag.getLocale(false));
+                const css::lang::Locale& aLocale(aTag.getLocale(false));
                 switch (MsLangId::getScriptType(aTag.getLanguageType()))
                 {
                     case css::i18n::ScriptType::LATIN:

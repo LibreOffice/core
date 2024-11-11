@@ -1918,7 +1918,7 @@ ShapeExport& ShapeExport::WriteConnectorShape( const Reference< XShape >& xShape
         tools::PolyPolygon aPolyPolygon = EscherPropertyContainer::GetPolyPolygon(xShape);
         if (aPolyPolygon.Count() > 0)
         {
-            tools::Polygon aPoly = aPolyPolygon.GetObject(0);
+            const tools::Polygon& aPoly = aPolyPolygon.GetObject(0);
             lcl_GetConnectorAdjustValue(xShape, aPoly, eConnectorType, aAdjustValueList);
             nAngle = lcl_GetAngle(aPoly);
             lcl_FlipHFlipV(aPoly, nAngle, bFlipH, bFlipV);

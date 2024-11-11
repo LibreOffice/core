@@ -1212,8 +1212,8 @@ void XmlFilterBase::exportCustomFragments()
     // Expect customXmlDomPropslist.getLength() == customXmlDomlist.getLength().
     for (sal_Int32 j = 0; j < customXmlDomlist.getLength(); j++)
     {
-        uno::Reference<xml::dom::XDocument> customXmlDom = customXmlDomlist[j];
-        uno::Reference<xml::dom::XDocument> customXmlDomProps = customXmlDomPropslist[j];
+        const uno::Reference<xml::dom::XDocument>& customXmlDom = customXmlDomlist[j];
+        const uno::Reference<xml::dom::XDocument>& customXmlDomProps = customXmlDomPropslist[j];
         const OUString fragmentPath = "customXml/item" + OUString::number(j+1) + ".xml";
         if (customXmlDom.is())
         {
@@ -1246,7 +1246,7 @@ void XmlFilterBase::exportCustomFragments()
     for (sal_Int32 j = 0; j < customFragments.getLength(); j++)
     {
         addRelation(customFragmentTypes[j], customFragmentTargets[j]);
-        const OUString aFilename = customFragmentTargets[j];
+        const OUString& aFilename = customFragmentTargets[j];
         Reference<XOutputStream> xOutStream = openOutputStream(aFilename);
         if (xOutStream.is())
         {

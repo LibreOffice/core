@@ -911,14 +911,14 @@ std::shared_ptr< ListType > Config::createNameList( const String& rListName )
 template< typename Type >
 OUString Config::getName( const NameListWrapper& rListWrp, Type nKey ) const
 {
-    NameListRef xList = rListWrp.getNameList( *this );
+    const NameListRef& xList = rListWrp.getNameList( *this );
     return xList ? xList->getName( *this, nKey ) : OOX_DUMP_ERR_NOMAP;
 }
 
 template< typename Type >
 bool Config::hasName( const NameListWrapper& rListWrp, Type nKey ) const
 {
-    NameListRef xList = rListWrp.getNameList( *this );
+    const NameListRef& xList = rListWrp.getNameList( *this );
     return xList.get() && xList->hasName( nKey );
 }
 

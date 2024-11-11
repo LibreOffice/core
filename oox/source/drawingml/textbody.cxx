@@ -57,14 +57,12 @@ void TextBody::insertAt(
         const TextCharacterProperties& rTextStyleProperties,
         const TextListStylePtr& pMasterTextListStylePtr ) const
 {
-    TextListStyle aMasterTextStyle(*pMasterTextListStylePtr);
-
     Reference<css::beans::XPropertySet> xPropertySet(xAt, UNO_QUERY);
     float nCharHeight = xPropertySet->getPropertyValue(u"CharHeight"_ustr).get<float>();
     size_t nIndex = 0;
     for (auto const& paragraph : maParagraphs)
     {
-        paragraph->insertAt(rFilterBase, xText, xAt, rTextStyleProperties, aMasterTextStyle,
+        paragraph->insertAt(rFilterBase, xText, xAt, rTextStyleProperties, *pMasterTextListStylePtr,
                             maTextListStyle, (nIndex == 0), nCharHeight);
         ++nIndex;
     }
