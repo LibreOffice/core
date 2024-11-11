@@ -77,15 +77,16 @@ class VCL_DLLPUBLIC PDFOutputStream
 struct PDFEncryptionProperties
 {
     //for both 40 and 128 bit security, see 3.5.2 PDF v 1.4 table 3.15, v 1.5 and v 1.6 table 3.20.
-    bool CanPrintTheDocument;
-    bool CanModifyTheContent;
-    bool CanCopyOrExtract;
-    bool CanAddOrModify;
+    bool CanPrintTheDocument = false;
+    bool CanModifyTheContent = false;
+    bool CanCopyOrExtract = false;
+    bool CanAddOrModify = false;
+
     //for revision 3 (bit 128 security) only
-    bool CanFillInteractive;
-    bool CanExtractForAccessibility;
-    bool CanAssemble;
-    bool CanPrintFull;
+    bool CanFillInteractive = false;
+    bool CanExtractForAccessibility = true;
+    bool CanAssemble = false;
+    bool CanPrintFull = false;
 
     // encryption will only happen if EncryptionKey is not empty
     // EncryptionKey is actually a construct out of OValue, UValue and DocumentIdentifier
@@ -98,22 +99,16 @@ struct PDFEncryptionProperties
     std::vector<sal_uInt8> EncryptionKey;
     std::vector<sal_uInt8> DocumentIdentifier;
 
-    //permission default set for 128 bit, accessibility only
-    PDFEncryptionProperties() :
-        CanPrintTheDocument         ( false ),
-        CanModifyTheContent         ( false ),
-        CanCopyOrExtract            ( false ),
-        CanAddOrModify              ( false ),
-        CanFillInteractive          ( false ),
-        CanExtractForAccessibility  ( true ),
-        CanAssemble                 ( false ),
-        CanPrintFull                ( false )
-        {}
-
-
-    bool Encrypt() const
+    bool canEncrypt() const
     {
-        return ! OValue.empty() && ! UValue.empty() && ! DocumentIdentifier.empty();
+        return !OValue.empty() && !UValue.empty() && !DocumentIdentifier.empty();
+    }
+
+    void clear()
+    {
+        OValue.clear();
+        UValue.clear();
+        EncryptionKey.clear();
     }
 };
 

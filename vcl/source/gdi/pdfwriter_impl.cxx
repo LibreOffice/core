@@ -1461,7 +1461,7 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext,
         m_pPDFEncryptor->prepareEncryption(xEncryptionMaterialHolder, m_aContext.Encryption);
     }
 
-    if (m_pPDFEncryptor && m_aContext.Encryption.Encrypt())
+    if (m_pPDFEncryptor && m_aContext.Encryption.canEncrypt())
     {
         m_pPDFEncryptor->setupKeysAndCheck(m_aContext.Encryption);
     }
@@ -1597,7 +1597,7 @@ append the string as unicode hex, encrypted if needed
 inline void PDFWriterImpl::appendUnicodeTextStringEncrypt( const OUString& rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer )
 {
     rOutBuffer.append( "<" );
-    if (m_aContext.Encryption.Encrypt())
+    if (m_aContext.Encryption.canEncrypt())
     {
         const sal_Unicode* pStr = rInString.getStr();
         sal_Int32 nLen = rInString.getLength();
@@ -1631,7 +1631,7 @@ inline void PDFWriterImpl::appendLiteralStringEncrypt( std::string_view rInStrin
     rOutBuffer.append( "(" );
     sal_Int32 nChars = rInString.size();
     //check for encryption, if ok, encrypt the string, then convert with appndLiteralString
-    if (m_aContext.Encryption.Encrypt())
+    if (m_aContext.Encryption.canEncrypt())
     {
         m_vEncryptionBuffer.resize(nChars);
         //encrypt the string in a buffer, then append it
@@ -6184,7 +6184,7 @@ bool PDFWriterImpl::emitTrailer()
 
     sal_Int32 nSecObject = 0;
 
-    if( m_aContext.Encryption.Encrypt() )
+    if (m_aContext.Encryption.canEncrypt())
     {
         nSecObject = emitEncrypt();
     }
@@ -9808,7 +9808,7 @@ bool PDFWriterImpl::writeBitmapObject( const BitmapEmit& rObject, bool bMask )
             aLine.append( "[ /Indexed/DeviceRGB " );
             aLine.append( static_cast<sal_Int32>(pAccess->GetPaletteEntryCount()-1) );
             aLine.append( "\n<" );
-            if( m_aContext.Encryption.Encrypt() )
+            if (m_aContext.Encryption.canEncrypt())
             {
                 enableStringEncryption(rObject.m_nObject);
                 //check encryption buffer size
