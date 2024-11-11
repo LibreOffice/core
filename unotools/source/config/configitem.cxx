@@ -330,7 +330,7 @@ Sequence< sal_Bool > ConfigItem::GetReadOnlyStates(const css::uno::Sequence< OUS
     {
         try
         {
-            OUString sName = rNames[i];
+            const OUString& sName = rNames[i];
             OUString sPath;
             OUString sProperty;
 

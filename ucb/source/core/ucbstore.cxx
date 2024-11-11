@@ -1669,7 +1669,7 @@ Sequence< PropertyValue > SAL_CALL PersistentPropertySet::getPropertyValues()
                         for ( sal_Int32 n = 0; n < nCount; ++n )
                         {
                             PropertyValue& rValue = pValues[ n ];
-                            OUString rName    = aElems[ n ];
+                            const OUString& rName    = aElems[ n ];
                             OUString aXMLName
                                         = makeHierarchalNameSegment( rName );
 
@@ -1982,7 +1982,7 @@ Sequence< Property > SAL_CALL PropertySetInfo_Impl::getProperties()
                             for ( sal_uInt32 n = 0; n < nCount; ++n )
                             {
                                 Property& rProp = pProps[ n ];
-                                OUString  rName = aElems[ n ];
+                                const OUString&  rName = aElems[ n ];
                                 OUString aXMLName
                                     = makeHierarchalNameSegment( rName );
 

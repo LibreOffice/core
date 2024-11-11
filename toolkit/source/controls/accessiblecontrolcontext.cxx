@@ -199,9 +199,8 @@ namespace toolkit
             if ( !m_xModelPropsInfo.is() && m_xControlModel.is() )
                 m_xModelPropsInfo = m_xControlModel->getPropertySetInfo();
 
-            OUString sPropertyName( _pPropertyName );
-            if ( m_xModelPropsInfo.is() && m_xModelPropsInfo->hasPropertyByName( sPropertyName ) )
-                m_xControlModel->getPropertyValue( sPropertyName ) >>= sReturn;
+            if ( m_xModelPropsInfo.is() && m_xModelPropsInfo->hasPropertyByName( _pPropertyName ) )
+                m_xControlModel->getPropertyValue( _pPropertyName ) >>= sReturn;
         }
         catch( const Exception& )
         {

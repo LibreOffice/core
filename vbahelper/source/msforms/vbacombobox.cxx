@@ -75,7 +75,7 @@ ScVbaComboBox::setListIndex( const uno::Any& _value )
     m_xProps->getPropertyValue( u"StringItemList"_ustr ) >>= sItems;
     if( ( nIndex >= 0 ) && ( sItems.getLength() > nIndex ) )
     {
-        OUString sText = sItems[ nIndex ];
+        const OUString& sText = sItems[ nIndex ];
         m_xProps->setPropertyValue( u"Text"_ustr, uno::Any( sText ) );
 
         // fire the _Change event

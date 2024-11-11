@@ -1378,7 +1378,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 // Only DAV resources support PROPFIND
                 std::vector< OUString > aPropNames;
 
-                uno::Sequence< beans::Property > aProperties(rProperties);
+                const uno::Sequence< beans::Property >& aProperties(rProperties);
 
                 if ( aProperties.getLength() > 0 )
                     ContentProperties::UCBNamesToDAVNames(
@@ -2038,7 +2038,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
         uno::Reference< ucb::XContentIdentifier > xNewId
             = new ::ucbhelper::ContentIdentifier( aNewURL );
-        uno::Reference< ucb::XContentIdentifier > xOldId = xIdentifier;
+        const uno::Reference< ucb::XContentIdentifier >& xOldId = xIdentifier;
 
         try
         {
@@ -3913,7 +3913,7 @@ Content::ResourceType Content::getResourceType(
                 {
                     // extract host name and connection port
                     CurlUri   theUri( rResAccess->getURL() );
-                    OUString  aHostName  = theUri.GetHost();
+                    const OUString&  aHostName  = theUri.GetHost();
                     sal_Int32 nPort      = theUri.GetPort();
                     DAVException::ExceptionCode e{};
                     switch (aDAVOptions.getHttpResponseStatusCode())

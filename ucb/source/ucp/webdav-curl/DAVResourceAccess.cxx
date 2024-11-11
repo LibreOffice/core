@@ -1120,7 +1120,7 @@ void DAVResourceAccess::resetUri()
     {
         auto const it = m_aRedirectURIs.begin();
 
-        CurlUri const aUri( *it );
+        CurlUri const& aUri( *it );
         m_aRedirectURIs.clear();
         setURL ( aUri.GetURI() );
         initialize();
