@@ -364,13 +364,15 @@ bool PDFEncryptor::prepareEncryption(
         = EncryptionHashTransporter::getEncHashTransporter(xEncryptionMaterialHolder);
     if (pTransporter)
     {
-        sal_Int32 nKeyLength = 0, nRC4KeyLength = 0;
+        sal_Int32 nKeyLength = 0;
+        sal_Int32 nRC4KeyLength = 0;
         sal_Int32 nAccessPermissions
             = computeAccessPermissions(rProperties, nKeyLength, nRC4KeyLength);
         rProperties.OValue = pTransporter->getOValue();
         bSuccess
             = computeUDictionaryValue(pTransporter, rProperties, nKeyLength, nAccessPermissions);
     }
+
     if (!bSuccess)
     {
         rProperties.OValue.clear();
