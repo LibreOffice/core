@@ -138,7 +138,7 @@ Transliteration_body::transliterateImpl(
             // take care of TOGGLE_CASE transliteration:
             MappingType nTmpMappingType = lcl_getMappingTypeForToggleCase( nMappingType, in[i] );
 
-            const i18nutil::Mapping &map = i18nutil::casefolding::getValue( in, i, nCount, aLocale, nTmpMappingType );
+            const i18nutil::Mapping map = i18nutil::casefolding::getValue( in, i, nCount, aLocale, nTmpMappingType );
             std::fill_n(offsetDataEnd, map.nmap, i + startPos);
             offsetDataEnd += map.nmap;
             std::copy_n(map.map, map.nmap, out + j);
@@ -154,7 +154,7 @@ Transliteration_body::transliterateImpl(
             // take care of TOGGLE_CASE transliteration:
             MappingType nTmpMappingType = lcl_getMappingTypeForToggleCase( nMappingType, in[i] );
 
-            const i18nutil::Mapping &map = i18nutil::casefolding::getValue( in, i, nCount, aLocale, nTmpMappingType );
+            const i18nutil::Mapping map = i18nutil::casefolding::getValue( in, i, nCount, aLocale, nTmpMappingType );
             std::copy_n(map.map, map.nmap, out + j);
             j += map.nmap;
         }
@@ -166,7 +166,7 @@ Transliteration_body::transliterateImpl(
 OUString SAL_CALL
 Transliteration_body::transliterateChar2String( sal_Unicode inChar )
 {
-    const i18nutil::Mapping &map = i18nutil::casefolding::getValue(&inChar, 0, 1, aLocale, nMappingType);
+    const i18nutil::Mapping map = i18nutil::casefolding::getValue(&inChar, 0, 1, aLocale, nMappingType);
     rtl_uString* pStr = rtl_uString_alloc(map.nmap);
     sal_Unicode* out = pStr->buffer;
     sal_Int32 i;
@@ -181,7 +181,7 @@ Transliteration_body::transliterateChar2String( sal_Unicode inChar )
 sal_Unicode SAL_CALL
 Transliteration_body::transliterateChar2Char( sal_Unicode inChar )
 {
-    const i18nutil::Mapping &map = i18nutil::casefolding::getValue(&inChar, 0, 1, aLocale, nMappingType);
+    const i18nutil::Mapping map = i18nutil::casefolding::getValue(&inChar, 0, 1, aLocale, nMappingType);
     if (map.nmap > 1)
         throw MultipleCharsOutputException();
     return map.map[0];

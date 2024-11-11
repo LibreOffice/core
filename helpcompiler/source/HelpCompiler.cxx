@@ -87,7 +87,7 @@ void HelpCompiler::saveXhpForJar( xmlDocPtr doc, const fs::path &filePath )
 #else
     std::string pathSep = "/";
 #endif
-    const std::string& sourceXhpPath = filePath.native_file_string();
+    const std::string sourceXhpPath = filePath.native_file_string();
     std::string zipdirPath = zipdir.native_file_string();
     const std::string srcdirPath( src.native_file_string() );
     // srcdirPath contains trailing /, but we want the file path with / at the beginning

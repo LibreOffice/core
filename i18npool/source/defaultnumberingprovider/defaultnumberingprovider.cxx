@@ -747,7 +747,7 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
                break;
           case TRANSLITERATION:
                try {
-                    const OUString &tmp = OUString::number( number );
+                    const OUString tmp = OUString::number( number );
                     OUString transliteration;
                     getPropertyByName(aProperties, "Transliteration") >>= transliteration;
                     if ( !translit )

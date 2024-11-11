@@ -296,7 +296,7 @@ TransliterationImpl::loadModulesByImplNames(const Sequence< OUString >& implName
 Sequence<OUString> SAL_CALL
 TransliterationImpl::getAvailableModules( const Locale& rLocale, sal_Int16 sType )
 {
-    const Sequence<OUString> &translist = mxLocaledata->getTransliterations(rLocale);
+    const Sequence<OUString> translist = mxLocaledata->getTransliterations(rLocale);
     std::vector<OUString> r;
     r.reserve(translist.getLength());
     Reference<XExtendedTransliteration> body;
@@ -525,7 +525,7 @@ TransliterationImpl::getRange(const Sequence< OUString > &inStrs,
     std::vector<OUString> ostr;
     ostr.reserve(nMaxOutputLength);
     for (sal_Int32 j = 0; j < length; j+=2) {
-        const Sequence< OUString >& temp = bodyCascade[_numCascade]->transliterateRange(inStrs[j], inStrs[j+1]);
+        const Sequence< OUString > temp = bodyCascade[_numCascade]->transliterateRange(inStrs[j], inStrs[j+1]);
 
         for (const auto& rStr : temp) {
             if ( j_tmp++ >= nMaxOutputLength ) throw RuntimeException();

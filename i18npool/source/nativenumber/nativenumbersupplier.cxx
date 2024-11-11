@@ -600,7 +600,7 @@ OUString getNumberText(const Locale& rLocale, const OUString& rNumberString,
     }
 
     // Handle also month and day names for NatNum12 date formatting
-    const OUString& rNumberStr = (count == 0) ? rNumberString : sBuf.makeStringAndClear();
+    const OUString aNumberStr = (count == 0) ? rNumberString : sBuf.makeStringAndClear();
 
     static auto xNumberText
         = css::linguistic2::NumberText::create(comphelper::getProcessComponentContext());
@@ -616,14 +616,14 @@ OUString getNumberText(const Locale& rLocale, const OUString& rNumberString,
     // of the continuous update of the multiple number names during typing.
     // We fix this by buffering the result of the conversion.
     static std::unordered_map<OUString, std::map<OUString, OUString>> aBuff;
-    auto& rItems = aBuff[rNumberStr];
+    auto& rItems = aBuff[aNumberStr];
     auto& rItem = rItems[numbertext_prefix + aLoc];
     if (rItem.isEmpty())
     {
-        rItem = xNumberText->getNumberText(numbertext_prefix + rNumberStr, rLocale);
+        rItem = xNumberText->getNumberText(numbertext_prefix + aNumberStr, rLocale);
         // use number at missing number to text conversion
         if (rItem.isEmpty())
-            rItem = rNumberStr;
+            rItem = aNumberStr;
     }
     OUString sResult = rItem;
     if (i != 0 && i < len)

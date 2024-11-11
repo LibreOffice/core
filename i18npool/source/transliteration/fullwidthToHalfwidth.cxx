@@ -46,7 +46,7 @@ OUString
 fullwidthToHalfwidth::transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >* pOffset )
 {
     // Decomposition: GA --> KA + voice-mark
-    const OUString& newStr = i18nutil::widthfolding::decompose_ja_voiced_sound_marks (inStr, startPos, nCount, pOffset);
+    const OUString newStr = i18nutil::widthfolding::decompose_ja_voiced_sound_marks (inStr, startPos, nCount, pOffset);
 
     // One to One mapping
     return transliteration_OneToOne::transliterateImpl( newStr, 0, newStr.getLength(), nullptr);
@@ -76,7 +76,7 @@ OUString
 FULLWIDTHKATAKANA_HALFWIDTHKATAKANA::transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >* pOffset )
 {
     // Decomposition: GA --> KA + voice-mark
-    const OUString& newStr = i18nutil::widthfolding::decompose_ja_voiced_sound_marks (inStr, startPos, nCount, pOffset);
+    const OUString newStr = i18nutil::widthfolding::decompose_ja_voiced_sound_marks (inStr, startPos, nCount, pOffset);
 
     // One to One mapping
     return transliteration_OneToOne::transliterateImpl( newStr, 0, newStr.getLength(), nullptr);
@@ -106,7 +106,7 @@ OUString
 FULLWIDTH_HALFWIDTH_LIKE_ASC::transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >* pOffset )
 {
     // Decomposition: GA --> KA + voice-mark
-    const OUString& newStr = i18nutil::widthfolding::decompose_ja_voiced_sound_marks (inStr, startPos, nCount, pOffset);
+    const OUString newStr = i18nutil::widthfolding::decompose_ja_voiced_sound_marks (inStr, startPos, nCount, pOffset);
 
     // One to One mapping
     return transliteration_OneToOne::transliterateImpl( newStr, 0, newStr.getLength(), nullptr);

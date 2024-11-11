@@ -38,7 +38,7 @@ OUString
 halfwidthToFullwidth::transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >* pOffset )
 {
     // One to One mapping
-    const OUString& newStr = transliteration_OneToOne::transliterateImpl( inStr, startPos, nCount, nullptr);
+    const OUString newStr = transliteration_OneToOne::transliterateImpl( inStr, startPos, nCount, nullptr);
 
     // Composition: KA + voice-mark --> GA
     return i18nutil::widthfolding::compose_ja_voiced_sound_marks ( newStr, 0, newStr.getLength(), pOffset );
@@ -56,7 +56,7 @@ OUString
 HALFWIDTHKATAKANA_FULLWIDTHKATAKANA::transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >* pOffset )
 {
     // One to One mapping
-    const OUString& newStr = transliteration_OneToOne::transliterateImpl( inStr, startPos, nCount, nullptr);
+    const OUString newStr = transliteration_OneToOne::transliterateImpl( inStr, startPos, nCount, nullptr);
 
     // Composition: KA + voice-mark --> GA
     return i18nutil::widthfolding::compose_ja_voiced_sound_marks ( newStr, 0, newStr.getLength(), pOffset );
@@ -74,7 +74,7 @@ OUString
 HALFWIDTH_FULLWIDTH_LIKE_JIS::transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >* pOffset )
 {
     // One to One mapping
-    const OUString& newStr = transliteration_OneToOne::transliterateImpl( inStr, startPos, nCount, nullptr);
+    const OUString newStr = transliteration_OneToOne::transliterateImpl( inStr, startPos, nCount, nullptr);
 
     // Composition: KA + voice-mark --> GA
     return i18nutil::widthfolding::compose_ja_voiced_sound_marks ( newStr, 0, newStr.getLength(), pOffset, WIDTHFOLDING_DONT_USE_COMBINED_VU );
