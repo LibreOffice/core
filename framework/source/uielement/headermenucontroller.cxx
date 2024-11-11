@@ -114,7 +114,7 @@ void HeaderMenuController::fillPopupMenu( const Reference< css::frame::XModel >&
             bool bFirstItemInserted( false );
             for ( sal_Int32 n = 0; n < aSeqNames.getLength(); n++ )
             {
-                OUString aName = aSeqNames[n];
+                const OUString& aName = aSeqNames[n];
                 Reference< XPropertySet > xPropSet( xNameContainer->getByName( aName ), UNO_QUERY );
                 if ( xPropSet.is() )
                 {

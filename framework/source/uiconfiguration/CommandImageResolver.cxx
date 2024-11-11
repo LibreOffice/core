@@ -79,7 +79,7 @@ void CommandImageResolver::registerCommands(const Sequence<OUString>& aCommandSe
 
     for (sal_Int32 i = 0; i < nSequenceSize; ++i)
     {
-        OUString aCommandName(aCommandSequence[i]);
+        const OUString& aCommandName(aCommandSequence[i]);
         OUString aImageName;
 
         m_aImageCommandNameVector[i] = aCommandName;
@@ -129,7 +129,7 @@ ImageList* CommandImageResolver::getImageList(ImageType nImageType)
 
     if (!m_pImageList[nImageType])
     {
-        OUString sIconPath = ImageType_Prefixes[nImageType];
+        const OUString& sIconPath = ImageType_Prefixes[nImageType];
         m_pImageList[nImageType].reset( new ImageList(m_aImageNameVector, sIconPath) );
     }
 

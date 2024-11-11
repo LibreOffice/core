@@ -1662,7 +1662,7 @@ bool Desktop::impl_closeFrames(bool bAllowUI)
     {
         try
         {
-            css::uno::Reference< css::frame::XFrame > xFrame = lFrames[i];
+            const css::uno::Reference< css::frame::XFrame >& xFrame = lFrames[i];
 
             // XController.suspend() will show a UI ...
             // Use it in case it was allowed from outside only.

@@ -231,7 +231,7 @@ void StorageHolder::closePath(const OUString& rPath)
            pIt2 != lFolders.rend();
          ++pIt2                     )
     {
-        OUString             sPath = *pIt2;
+        const OUString&             sPath = *pIt2;
         TPath2StorageInfo::iterator pPath = m_lStorages.find(sPath);
         if (pPath == m_lStorages.end())
             continue; // ???

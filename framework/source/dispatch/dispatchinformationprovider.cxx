@@ -51,7 +51,7 @@ css::uno::Sequence< sal_Int16 > SAL_CALL DispatchInformationProvider::getSupport
     for (i1=0; i1<c1; ++i1)
     {
         // ignore controller, which doesn't implement the right interface
-        css::uno::Reference< css::frame::XDispatchInformationProvider > xProvider = lProvider[i1];
+        const css::uno::Reference< css::frame::XDispatchInformationProvider >& xProvider = lProvider[i1];
         if (!xProvider.is())
             continue;
 
@@ -84,7 +84,7 @@ css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL DispatchInformati
         try
         {
             // ignore controller, which doesn't implement the right interface
-            css::uno::Reference< css::frame::XDispatchInformationProvider > xProvider = lProvider[i1];
+            const css::uno::Reference< css::frame::XDispatchInformationProvider >& xProvider = lProvider[i1];
             if (!xProvider.is())
                 continue;
 

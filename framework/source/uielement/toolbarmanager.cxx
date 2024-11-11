@@ -1691,7 +1691,7 @@ void ToolBarManager::notifyRegisteredControllers( const OUString& aUIElementName
     {
         try
         {
-            Reference< XSubToolbarController > xController = aNotifyVector[i];
+            const Reference< XSubToolbarController >& xController = aNotifyVector[i];
             if ( xController.is() )
                 xController->functionSelected( aCommand );
         }

@@ -104,7 +104,7 @@ ReferencePathInfo MenuBarMerger::FindReferencePath(
     do
     {
         ++nLevel;
-        OUString aCmd( rReferencePath[i] );
+        const OUString& aCmd( rReferencePath[i] );
 
         if ( i == nCount-1 )
         {
@@ -350,7 +350,7 @@ bool MenuBarMerger::ProcessFallbackOperation(
             }
             else
             {
-                const OUString aCmd( rReferencePath[nLevel] );
+                const OUString& aCmd( rReferencePath[nLevel] );
 
                 VclPtr<PopupMenu> pPopupMenu = VclPtr<PopupMenu>::Create();
 

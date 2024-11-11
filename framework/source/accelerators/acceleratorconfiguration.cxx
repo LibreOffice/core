@@ -897,16 +897,15 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::removeResetListener(const css::u
     SAL_INFO("fwk.accelerators", "XCUBasedAcceleratorConfiguration::removeResetListener(): implement me");
 }
 
-void SAL_CALL XCUBasedAcceleratorConfiguration::changesOccurred(const css::util::ChangesEvent& aEvent)
+void SAL_CALL XCUBasedAcceleratorConfiguration::changesOccurred(const css::util::ChangesEvent& aReceivedEvents)
 {
     SAL_INFO( "fwk.accelerators", "XCUBasedAcceleratorConfiguration::changesOccurred()" );
 
     css::uno::Reference< css::container::XHierarchicalNameAccess > xHAccess;
-    aEvent.Base >>= xHAccess;
+    aReceivedEvents.Base >>= xHAccess;
     if (! xHAccess.is ())
         return;
 
-    css::util::ChangesEvent aReceivedEvents( aEvent );
     const sal_Int32 c = aReceivedEvents.Changes.getLength();
     for (sal_Int32 i=0; i<c; ++i)
     {
@@ -973,7 +972,7 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( bool bPreferred, const css:
         sal_Int32 nKeys = lKeys.getLength();
         for ( sal_Int32 i=0; i<nKeys; ++i )
         {
-            OUString sKey = lKeys[i];
+            const OUString& sKey = lKeys[i];
             xAccess->getByName(sKey) >>= xKey;
             xKey->getByName(CFG_PROP_COMMAND) >>= xCommand;
 

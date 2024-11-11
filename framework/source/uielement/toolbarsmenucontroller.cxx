@@ -545,7 +545,7 @@ void SAL_CALL ToolbarsMenuController::itemSelected( const css::awt::MenuEvent& r
                 {
                     try
                     {
-                        OUString aElementName = aElementNames[i];
+                        const OUString& aElementName = aElementNames[i];
                         Sequence< PropertyValue > aWindowState;
 
                         if ( xPersistentWindowState->getByName( aElementName ) >>= aWindowState )
