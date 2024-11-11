@@ -238,6 +238,11 @@ static void freezeWindowSizeAndReschedule( NSWindow *pWindow )
     }
 }
 
+static bool isMouseScrollWheelEvent( NSEvent *pEvent )
+{
+    return ( pEvent && [pEvent type] == NSEventTypeScrollWheel && [pEvent phase] == NSEventPhaseNone && [pEvent momentumPhase] == NSEventPhaseNone );
+}
+
 @interface NSResponder (SalFrameWindow)
 -(BOOL)accessibilityIsIgnored;
 @end
@@ -1145,7 +1150,7 @@ static void freezeWindowSizeAndReschedule( NSWindow *pWindow )
         {
             dX += [pEvent deltaX];
             dY += [pEvent deltaY];
-            NSEvent* pNextEvent = [NSApp nextEventMatchingMask: NSEventMaskScrollWheel
+            NSEvent* pNextEvent = [NSApp nextEventMatchingMask: NSEventMaskSwipe
             untilDate: nil inMode: NSDefaultRunLoopMode dequeue: YES ];
             if( !pNextEvent )
                 break;
@@ -1159,7 +1164,11 @@ static void freezeWindowSizeAndReschedule( NSWindow *pWindow )
         aEvent.mnTime           = mpFrame->mnLastEventTime;
         aEvent.mnX = static_cast<tools::Long>(aPt.x) - mpFrame->GetUnmirroredGeometry().x();
         aEvent.mnY = static_cast<tools::Long>(aPt.y) - mpFrame->GetUnmirroredGeometry().y();
-        aEvent.mnCode           = ImplGetModifierMask( mpFrame->mnLastModifierFlags );
+        // tdf#151423 Ignore all modifiers for swipe events
+        // It appears that devices that generate swipe events can generate
+        // both veritical and horizontal swipe events. So, behave like most
+        // macOS applications and ignore all modifiers if this a swipe event.
+        aEvent.mnCode           = 0;
         aEvent.mbDeltaIsPixel   = true;
 
         if( AllSettings::GetLayoutRTL() )
@@ -1185,6 +1194,9 @@ static void freezeWindowSizeAndReschedule( NSWindow *pWindow )
             aEvent.mnScrollLines = SAL_WHEELMOUSE_EVENT_PAGESCROLL;
             mpFrame->CallCallback( SalEvent::WheelMouse, &aEvent );
         }
+
+        // tdf#155266 force flush after scrolling
+        mpFrame->mbForceFlush = true;
     }
 }
 
@@ -1200,13 +1212,14 @@ static void freezeWindowSizeAndReschedule( NSWindow *pWindow )
         // merge pending scroll wheel events
         CGFloat dX = 0.0;
         CGFloat dY = 0.0;
+        bool bAllowModifiers = isMouseScrollWheelEvent( pEvent );
         for(;;)
         {
             dX += [pEvent deltaX];
             dY += [pEvent deltaY];
             NSEvent* pNextEvent = [NSApp nextEventMatchingMask: NSEventMaskScrollWheel
                 untilDate: nil inMode: NSDefaultRunLoopMode dequeue: YES ];
-            if( !pNextEvent )
+            if( !pNextEvent || ( isMouseScrollWheelEvent( pNextEvent ) != bAllowModifiers ) )
                 break;
             pEvent = pNextEvent;
         }
@@ -1218,7 +1231,16 @@ static void freezeWindowSizeAndReschedule( NSWindow *pWindow )
         aEvent.mnTime         = mpFrame->mnLastEventTime;
         aEvent.mnX = static_cast<tools::Long>(aPt.x) - mpFrame->GetUnmirroredGeometry().x();
         aEvent.mnY = static_cast<tools::Long>(aPt.y) - mpFrame->GetUnmirroredGeometry().y();
-        aEvent.mnCode         = ImplGetModifierMask( mpFrame->mnLastModifierFlags );
+        // tdf#151423 Only allow modifiers for mouse scrollwheel events
+        // The Command modifier converts scrollwheel events into
+        // magnification events and the Shift modifier converts vertical
+        // scrollwheel events into horizontal scrollwheel events. This
+        // behavior is reasonable for mouse scrollwheel events since many
+        // mice only have a single, vertical scrollwheel but trackpads
+        // already have specific gestures for magnification and horizontal
+        // scrolling. So, behave like most macOS applications and ignore
+        // all modifiers if this a trackpad scrollwheel event.
+        aEvent.mnCode         = bAllowModifiers ? ImplGetModifierMask( mpFrame->mnLastModifierFlags ) : 0;
         aEvent.mbDeltaIsPixel = false;
 
         if( AllSettings::GetLayoutRTL() )
