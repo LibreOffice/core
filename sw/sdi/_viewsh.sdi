@@ -137,6 +137,25 @@ interface BaseTextEditView
         ExecMethod = ExecViewOptions ;
         StateMethod = StateViewOptions ;
     ]
+
+    FN_SINGLE_PAGE_PER_ROW
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+    ]
+
+    FN_MULTIPLE_PAGES_PER_ROW
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+    ]
+
+    FN_BOOKVIEW
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+    ]
+
     FN_REDLINE_PROTECT
     [
         ExecMethod = Execute;

@@ -299,6 +299,21 @@ interface TextPrintPreview
         ExecMethod = Execute;
         StateMethod = GetState;
     ]
+    FN_SINGLE_PAGE_PER_ROW
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+    FN_MULTIPLE_PAGES_PER_ROW
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+    FN_BOOKVIEW
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
     SID_REFRESH_VIEW // status(final|play)
     [
         StateMethod = GetState ;
