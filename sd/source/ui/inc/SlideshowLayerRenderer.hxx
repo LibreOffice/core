@@ -145,6 +145,8 @@ private:
     SdrModel& mrModel;
     Size maSlideSize;
     RenderState maRenderState;
+    bool mbRenderBackground;
+    bool mbRenderMasterPage;
 
     void createViewAndDraw(RenderContext& rRenderContext,
                            sdr::contact::ViewObjectContactRedirector* pRedirector);
@@ -156,7 +158,7 @@ private:
     void resolveEffect(CustomAnimationEffectPtr const& rEffect);
 
 public:
-    SlideshowLayerRenderer(SdrPage& rPage);
+    SlideshowLayerRenderer(SdrPage& rPage, bool bRenderBackground, bool bRenderMasterPage);
 
     /** Calculate and set the slide size depending on input desired size (in pixels)
      *
