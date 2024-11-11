@@ -1294,8 +1294,8 @@ void XclExpFmlaCompImpl::ProcessDdeLink( const XclExpScToken& rTokData )
     {
         if ( mxData->mpLinkMgr )
         {
-            if( const auto& rResult = mxData->mpLinkMgr->InsertDde( aApplic, aTopic, aItem ) )
-                AppendNameXToken( rResult->mnSupbook, rResult->mnSBTab, rTokData.mnSpaces );
+            if( const auto pResult = mxData->mpLinkMgr->InsertDde( aApplic, aTopic, aItem ) )
+                AppendNameXToken( pResult->mnSupbook, pResult->mnSBTab, rTokData.mnSpaces );
             else
                 AppendErrorToken( EXC_ERR_NA, rTokData.mnSpaces );
         }
@@ -2222,9 +2222,9 @@ void XclExpFmlaCompImpl::ProcessExternalName( const XclExpScToken& rTokData )
             const OUString* pFile = rExtRefMgr.getExternalFileName( nFileId );
             if ( pFile )
             {
-                if ( const auto& rResult = mxData->mpLinkMgr->InsertExtName( *pFile, aName, xArray ) )
+                if ( const auto pResult = mxData->mpLinkMgr->InsertExtName( *pFile, aName, xArray ) )
                 {
-                    AppendNameXToken( rResult->mnSupbook, rResult->mnSBTab, rTokData.mnSpaces );
+                    AppendNameXToken( pResult->mnSupbook, pResult->mnSBTab, rTokData.mnSpaces );
                     return;
                 }
             }
@@ -2435,9 +2435,9 @@ void XclExpFmlaCompImpl::AppendAddInCallToken( const XclExpExtFuncData& rExtFunc
     OUString aXclFuncName;
     if( mxData->mpLinkMgr && ScGlobal::GetAddInCollection()->GetExcelName( rExtFuncData.maFuncName, GetUILanguage(), aXclFuncName ) )
     {
-        if ( const auto& rResult = mxData->mpLinkMgr->InsertAddIn( aXclFuncName ) )
+        if ( const auto pResult = mxData->mpLinkMgr->InsertAddIn( aXclFuncName ) )
         {
-            AppendNameXToken( rResult->mnSupbook, rResult->mnSBTab );
+            AppendNameXToken( pResult->mnSupbook, pResult->mnSBTab );
             return;
         }
     }
@@ -2448,8 +2448,8 @@ void XclExpFmlaCompImpl::AppendEuroToolCallToken( const XclExpExtFuncData& rExtF
 {
     if ( mxData->mpLinkMgr )
     {
-        if( const auto& rResult = mxData->mpLinkMgr->InsertEuroTool( rExtFuncData.maFuncName ) )
-            AppendNameXToken( rResult->mnSupbook, rResult->mnSBTab );
+        if( const auto pResult = mxData->mpLinkMgr->InsertEuroTool( rExtFuncData.maFuncName ) )
+            AppendNameXToken( pResult->mnSupbook, pResult->mnSBTab );
         else
             AppendMacroCallToken( rExtFuncData );
     }

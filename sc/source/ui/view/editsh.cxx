@@ -1039,12 +1039,12 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
                 else
                 {
                     const sal_uInt16 nEEWhich = GetPool().GetWhichIDFromSlotID(nSlot);
-                    const std::optional<NamedColor>& oColor
+                    const std::optional<NamedColor> oColor
                         = rViewData.GetDocShell()->GetRecentColor(nSlot);
                     if (oColor.has_value())
                     {
-                        const model::ComplexColor& rCol = (*oColor).getComplexColor();
-                        aSet.Put(SvxColorItem(rCol.getFinalColor(), rCol, nEEWhich));
+                        const model::ComplexColor aCol = (*oColor).getComplexColor();
+                        aSet.Put(SvxColorItem(aCol.getFinalColor(), aCol, nEEWhich));
                     }
                 }
             }

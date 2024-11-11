@@ -568,8 +568,8 @@ IMPL_LINK( ScPrintAreasDlg, Impl_ModifyHdl, formula::RefEdit&, rEd, void )
 
         for ( i=nFirstCustomPos; i<nEntryCount && !bFound; i++ )
         {
-            const OUString& rSymbol = pLb->get_id(i);
-            bFound = (rSymbol == aStrEd || rSymbol == aEdUpper);
+            const OUString aSymbol = pLb->get_id(i);
+            bFound = (aSymbol == aStrEd || aSymbol == aEdUpper);
         }
 
         pLb->set_active( bFound ? i-1 : nUserDefPos );

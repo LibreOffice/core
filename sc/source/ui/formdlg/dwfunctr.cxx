@@ -646,7 +646,7 @@ IMPL_LINK_NOARG( ScFunctionWin, SetHelpClickHdl, weld::Button&, void )
     {
         if (Help* pHelp = Application::GetHelp())
         {
-            const OUString& sHelpId = pDesc->getHelpId();
+            const OUString sHelpId = pDesc->getHelpId();
             if (!sHelpId.isEmpty())
             {
                 pHelp->Start(sHelpId);

@@ -7365,14 +7365,14 @@ void ScGridWindow::UpdateSparklineGroupOverlay()
             auto* pList = rDocument.GetSparklineList(aCurrentAddress.Tab());
             if (pList)
             {
-                auto const& pSparklines = pList->getSparklinesFor(pSparkline->getSparklineGroup());
+                auto const aSparklines = pList->getSparklinesFor(pSparkline->getSparklineGroup());
 
                 Color aColor = SvtOptionsDrawinglayer::getHilightColor();
 
                 std::vector<basegfx::B2DRange> aRanges;
                 const basegfx::B2DHomMatrix aTransform(GetOutDev()->GetInverseViewTransformation());
 
-                for (auto const& pCurrentSparkline : pSparklines)
+                for (auto const& pCurrentSparkline : aSparklines)
                 {
                     SCCOL nColumn = pCurrentSparkline->getColumn();
                     SCROW nRow = pCurrentSparkline->getRow();

@@ -257,7 +257,7 @@ void ScDocument::PreprocessAllRangeNamesUpdate( const std::map<OUString, ScRange
         if (!pOldRangeNames)
             continue;
 
-        const auto& itNewTab( rRangeMap.find( itTab.first));
+        const auto itNewTab( rRangeMap.find( itTab.first));
         if (itNewTab == rRangeMap.end())
             continue;
 

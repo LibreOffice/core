@@ -838,12 +838,12 @@ void ScDBData::RefreshTableColumnNames( ScDocument* pDoc )
         {
             if (pCell->hasString())
             {
-                const OUString& rStr = pCell->getString( pDoc);
-                if (rStr.isEmpty())
+                const OUString aStr = pCell->getString( pDoc);
+                if (aStr.isEmpty())
                     bHaveEmpty = true;
                 else
                 {
-                    SetTableColumnName( aNewNames, nCol-nStartCol, rStr, 0);
+                    SetTableColumnName( aNewNames, nCol-nStartCol, aStr, 0);
                     if (nLastColFilled < nCol-1)
                         bHaveEmpty = true;
                 }

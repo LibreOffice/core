@@ -301,10 +301,10 @@ void ScChartHelper::AddRangesIfProtectedChart( ScRangeListVector& rRangesVector,
             const ScChartListener* pListener = pCollection->findByName(aChartName);
             if (pListener)
             {
-                const ScRangeListRef& rRangeList = pListener->GetRangeList();
-                if ( rRangeList.is() )
+                const ScRangeListRef xRangeList = pListener->GetRangeList();
+                if ( xRangeList.is() )
                 {
-                    rRangesVector.push_back( *rRangeList );
+                    rRangesVector.push_back( *xRangeList );
                 }
             }
         }

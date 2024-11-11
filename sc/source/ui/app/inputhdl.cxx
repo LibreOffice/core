@@ -2874,8 +2874,8 @@ void ScInputHandler::UpdateFormulaMode()
     bool bIsFormula = !bProtected;
     if (bIsFormula)
     {
-        const OUString& rText = mpEditEngine->GetText(0);
-        bIsFormula = StartsLikeFormula(rText);
+        const OUString aText = mpEditEngine->GetText(0);
+        bIsFormula = StartsLikeFormula(aText);
     }
 
     if ( bIsFormula )

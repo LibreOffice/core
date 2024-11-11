@@ -2446,21 +2446,21 @@ void XclExpLinkManagerImpl8::StoreCellRange( sal_uInt16 nFileId, const OUString&
 
 std::optional<XclExpSBIndex> XclExpLinkManagerImpl8::InsertAddIn( const OUString& rName )
 {
-    const auto & rResult = maSBBuffer.InsertAddIn( rName );
-    if( rResult )
+    const auto pResult = maSBBuffer.InsertAddIn( rName );
+    if( pResult )
     {
-        return XclExpSBIndex(InsertXti( XclExpXti( rResult->mnSupbook, EXC_TAB_EXTERNAL, EXC_TAB_EXTERNAL ) ), rResult->mnSBTab);
+        return XclExpSBIndex(InsertXti( XclExpXti( pResult->mnSupbook, EXC_TAB_EXTERNAL, EXC_TAB_EXTERNAL ) ), pResult->mnSBTab);
     }
     return {};
 }
 
 std::optional<XclExpSBIndex> XclExpLinkManagerImpl8::InsertEuroTool( const OUString& rName )
 {
-    const auto & rResult = maSBBuffer.InsertEuroTool( rName );
-    if( rResult )
+    const auto pResult = maSBBuffer.InsertEuroTool( rName );
+    if( pResult )
     {
-        return XclExpSBIndex(InsertXti( XclExpXti( rResult->mnSupbook, EXC_TAB_EXTERNAL, EXC_TAB_EXTERNAL ) ),
-                             rResult->mnSBTab);
+        return XclExpSBIndex(InsertXti( XclExpXti( pResult->mnSupbook, EXC_TAB_EXTERNAL, EXC_TAB_EXTERNAL ) ),
+                             pResult->mnSBTab);
     }
     return {};
 }
@@ -2468,11 +2468,11 @@ std::optional<XclExpSBIndex> XclExpLinkManagerImpl8::InsertEuroTool( const OUStr
 std::optional<XclExpSBIndex> XclExpLinkManagerImpl8::InsertDde(
      const OUString& rApplic, const OUString& rTopic, const OUString& rItem )
 {
-    const auto & rResult = maSBBuffer.InsertDde( rApplic, rTopic, rItem );
-    if( rResult )
+    const auto pResult = maSBBuffer.InsertDde( rApplic, rTopic, rItem );
+    if( pResult )
     {
-        return XclExpSBIndex(InsertXti( XclExpXti( rResult->mnSupbook, EXC_TAB_EXTERNAL, EXC_TAB_EXTERNAL ) ),
-                             rResult->mnSBTab);
+        return XclExpSBIndex(InsertXti( XclExpXti( pResult->mnSupbook, EXC_TAB_EXTERNAL, EXC_TAB_EXTERNAL ) ),
+                             pResult->mnSBTab);
     }
     return {};
 }
@@ -2480,11 +2480,11 @@ std::optional<XclExpSBIndex> XclExpLinkManagerImpl8::InsertDde(
 std::optional<XclExpSBIndex> XclExpLinkManagerImpl8::InsertExtName( const OUString& rUrl, const OUString& rName,
 const ScExternalRefCache::TokenArrayRef& rArray )
 {
-    const auto & rResult = maSBBuffer.InsertExtName( rUrl, rName, rArray );
-    if( rResult )
+    const auto pResult = maSBBuffer.InsertExtName( rUrl, rName, rArray );
+    if( pResult )
     {
-        return XclExpSBIndex(InsertXti( XclExpXti( rResult->mnSupbook, EXC_TAB_EXTERNAL, EXC_TAB_EXTERNAL ) ),
-                             rResult->mnSBTab);
+        return XclExpSBIndex(InsertXti( XclExpXti( pResult->mnSupbook, EXC_TAB_EXTERNAL, EXC_TAB_EXTERNAL ) ),
+                             pResult->mnSBTab);
     }
     return {};
 }

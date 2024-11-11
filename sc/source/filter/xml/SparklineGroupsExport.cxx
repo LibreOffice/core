@@ -218,7 +218,7 @@ void SparklineGroupsExport::write()
     auto* pDocument = m_rExport.GetDocument();
     if (sc::SparklineList* pSparklineList = pDocument->GetSparklineList(m_nTable))
     {
-        auto const& aSparklineGroups = pSparklineList->getSparklineGroups();
+        auto const aSparklineGroups = pSparklineList->getSparklineGroups();
         if (!aSparklineGroups.empty())
         {
             SvXMLElementExport aElement(m_rExport, XML_NAMESPACE_CALC_EXT, XML_SPARKLINE_GROUPS,
@@ -226,7 +226,7 @@ void SparklineGroupsExport::write()
 
             for (auto const& pSparklineGroup : aSparklineGroups)
             {
-                auto const& aSparklines = pSparklineList->getSparklinesFor(pSparklineGroup);
+                auto const aSparklines = pSparklineList->getSparklinesFor(pSparklineGroup);
                 addSparklineGroup(pSparklineGroup, aSparklines);
             }
         }

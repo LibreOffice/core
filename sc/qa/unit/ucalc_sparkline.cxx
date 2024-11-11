@@ -74,7 +74,7 @@ CPPUNIT_TEST_FIXTURE(SparklineTest, testAddSparkline)
 
     CPPUNIT_ASSERT_EQUAL(size_t(1), pList->getSparklineGroups().size());
 
-    auto const& aSparklineVector = pList->getSparklinesFor(pGetSparkline->getSparklineGroup());
+    auto const aSparklineVector = pList->getSparklinesFor(pGetSparkline->getSparklineGroup());
     CPPUNIT_ASSERT_EQUAL(size_t(1), aSparklineVector.size());
     CPPUNIT_ASSERT_EQUAL(aSparklineVector[0].get(), pSparkline);
 
@@ -336,7 +336,7 @@ CPPUNIT_TEST_FIXTURE(SparklineTest, testUndoRedoDeleteSparklineGroup)
     CPPUNIT_ASSERT_EQUAL(true, m_pDoc->HasSparkline(ScAddress(3, 6, 0))); // D7
 
     // Check if the sparkline has the input range set
-    auto const& pSparkline = m_pDoc->GetSparkline(ScAddress(3, 6, 0));
+    auto const pSparkline = m_pDoc->GetSparkline(ScAddress(3, 6, 0));
     ScRangeList rRangeList = pSparkline->getInputRange();
     CPPUNIT_ASSERT_EQUAL(size_t(1), rRangeList.size());
     CPPUNIT_ASSERT_EQUAL(ScRange(3, 0, 0, 3, 5, 0), rRangeList[0]);

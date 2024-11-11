@@ -3390,7 +3390,7 @@ ClearableClipRegionPtr ScOutputData::Clip( DrawEditParam& rParam, const Size& aC
     bool bClip = AdjustAreaParamClipRect(aAreaParam) || aAreaParam.mbLeftClip || aAreaParam.mbRightClip || bWrapFields;
     bool bSimClip = false;
 
-    const Size& aRefOne = mpRefDevice->PixelToLogic(Size(1,1));
+    const Size aRefOne = mpRefDevice->PixelToLogic(Size(1,1));
     if ( nEngineWidth >= aCellSize.Width() + aRefOne.Width() )
     {
         const ScMergeAttr* pMerge = &rParam.mpPattern->GetItem(ATTR_MERGE);
@@ -3582,7 +3582,7 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
         return;
 
     // output area, excluding margins, in logical units
-    const Size& aCellSize = rParam.mbPixelToLogic
+    const Size aCellSize = rParam.mbPixelToLogic
         ? mpRefDevice->PixelToLogic( Size( nOutWidth, nOutHeight ) )
         : Size( nOutWidth, nOutHeight );
 
@@ -3828,7 +3828,7 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
         return;
 
     // output area, excluding margins, in logical units
-    const Size& aCellSize = rParam.mbPixelToLogic
+    const Size aCellSize = rParam.mbPixelToLogic
         ? mpRefDevice->PixelToLogic( Size( nOutWidth, nOutHeight ) )
         : Size( nOutWidth, nOutHeight );
 

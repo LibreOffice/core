@@ -128,7 +128,7 @@ bool ScTabBgColorDlg::ScTabBgColorValueSet::KeyInput( const KeyEvent& rKEvt )
         case KEY_RETURN:
         {
             sal_uInt16 nItemId = GetSelectedItemId();
-            const Color& aColor = nItemId ? ( GetItemColor( nItemId ) ) : COL_AUTO;
+            const Color aColor = nItemId ? ( GetItemColor( nItemId ) ) : COL_AUTO;
             m_pTabBgColorDlg->m_aTabBgColor = aColor;
             m_pTabBgColorDlg->response(RET_OK);
             return true;

@@ -375,8 +375,8 @@ sal_Int32 ScDPFunctionDlg::FindBaseItemPos( std::u16string_view rEntry, sal_Int3
     while (nPos < mxLbBaseItem->get_count())
     {
         // translate the displayed field name back to its original field name.
-        const OUString& rInName = mxLbBaseItem->get_text(nPos);
-        const OUString& rName = GetBaseItemName(rInName);
+        const OUString aInName = mxLbBaseItem->get_text(nPos);
+        const OUString& rName = GetBaseItemName(aInName);
         if (rName == rEntry)
         {
             bFound = true;

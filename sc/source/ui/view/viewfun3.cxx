@@ -1506,14 +1506,14 @@ bool ScViewFunc::PasteMultiRangesFromClip(InsertDeleteFlags nFlags, ScDocument* 
     ScDocument& rDoc = rViewData.GetDocument();
     ScDocShell* pDocSh = rViewData.GetDocShell();
     ScMarkData aMark(rViewData.GetMarkData());
-    const ScAddress& rCurPos = rViewData.GetCurPos();
+    const ScAddress aCurPos = rViewData.GetCurPos();
     ScClipParam& rClipParam = pClipDoc->GetClipParam();
     SCCOL nColSize = rClipParam.getPasteColSize();
     SCROW nRowSize = rClipParam.getPasteRowSize(*pClipDoc, /*bIncludeFiltered*/false);
 
     if (bTranspose)
     {
-        if (static_cast<SCROW>(rCurPos.Col()) + nRowSize-1 > static_cast<SCROW>(pClipDoc->MaxCol()))
+        if (static_cast<SCROW>(aCurPos.Col()) + nRowSize-1 > static_cast<SCROW>(pClipDoc->MaxCol()))
         {
             ErrorMessage(STR_PASTE_FULL);
             return false;
@@ -1527,7 +1527,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(InsertDeleteFlags nFlags, ScDocument* 
         nRowSize = static_cast<SCROW>(nTempColSize);
     }
 
-    if (!rDoc.ValidCol(rCurPos.Col()+nColSize-1) || !rDoc.ValidRow(rCurPos.Row()+nRowSize-1))
+    if (!rDoc.ValidCol(aCurPos.Col()+nColSize-1) || !rDoc.ValidRow(aCurPos.Row()+nRowSize-1))
     {
         ErrorMessage(STR_PASTE_FULL);
         return false;
@@ -1542,8 +1542,8 @@ bool ScViewFunc::PasteMultiRangesFromClip(InsertDeleteFlags nFlags, ScDocument* 
     // For multi-selection paste, we don't support cell duplication for larger
     // destination range.  In case the destination is marked, we reset it to
     // the clip size.
-    ScRange aMarkedRange(rCurPos.Col(), rCurPos.Row(), nTab1,
-                         rCurPos.Col()+nColSize-1, rCurPos.Row()+nRowSize-1, nTab2);
+    ScRange aMarkedRange(aCurPos.Col(), aCurPos.Row(), nTab1,
+                         aCurPos.Col()+nColSize-1, aCurPos.Row()+nRowSize-1, nTab2);
 
     // Extend the marked range to account for filtered rows in the destination
     // area.
@@ -1610,7 +1610,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(InsertDeleteFlags nFlags, ScDocument* 
     // in case of transpose, links were added in TransposeClip()
     if (bAsLink && bTranspose)
         nCopyFlags |= InsertDeleteFlags::FORMULA;
-    rDoc.CopyMultiRangeFromClip(rCurPos, aMark, nCopyFlags, pClipDoc, true, bAsLink && !bTranspose,
+    rDoc.CopyMultiRangeFromClip(aCurPos, aMark, nCopyFlags, pClipDoc, true, bAsLink && !bTranspose,
                                 /*bIncludeFiltered*/false, bSkipEmptyCells);
 
     if (pMixDoc)
@@ -1621,7 +1621,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(InsertDeleteFlags nFlags, ScDocument* 
     if (nFlags & InsertDeleteFlags::OBJECTS)
     {
         //  Paste the drawing objects after the row heights have been updated.
-        rDoc.CopyMultiRangeFromClip(rCurPos, aMark, InsertDeleteFlags::OBJECTS, pClipDoc, true,
+        rDoc.CopyMultiRangeFromClip(aCurPos, aMark, InsertDeleteFlags::OBJECTS, pClipDoc, true,
                                     false, /*bIncludeFiltered*/false, true);
     }
 
@@ -1693,14 +1693,14 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
         return false;
     }
 
-    const ScAddress& rCurPos = rViewData.GetCurPos();
+    const ScAddress aCurPos = rViewData.GetCurPos();
     ScDocument& rDoc = rViewData.GetDocument();
 
     ScRange aSrcRange = rClipParam.getWholeRange();
     SCROW nRowSize = aSrcRange.aEnd.Row() - aSrcRange.aStart.Row() + 1;
     SCCOL nColSize = aSrcRange.aEnd.Col() - aSrcRange.aStart.Col() + 1;
 
-    if (!rDoc.ValidCol(rCurPos.Col()+nColSize-1) || !rDoc.ValidRow(rCurPos.Row()+nRowSize-1))
+    if (!rDoc.ValidCol(aCurPos.Col()+nColSize-1) || !rDoc.ValidRow(aCurPos.Row()+nRowSize-1))
     {
         ErrorMessage(STR_PASTE_FULL);
         return false;

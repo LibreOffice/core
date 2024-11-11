@@ -270,7 +270,7 @@ bool ScBroadcastAreaSlot::AreaBroadcast( const ScHint& rHint)
 
     mbHasErasedArea = false;
 
-    const ScRange& rRange = rHint.GetRange();
+    const ScRange aRange = rHint.GetRange();
     for (ScBroadcastAreas::const_iterator aIter( aBroadcastAreaTbl.begin()),
             aIterEnd( aBroadcastAreaTbl.end()); aIter != aIterEnd; ++aIter )
     {
@@ -279,13 +279,13 @@ bool ScBroadcastAreaSlot::AreaBroadcast( const ScHint& rHint)
 
         ScBroadcastArea* pArea = (*aIter).mpArea;
         const ScRange& rAreaRange = pArea->GetRange();
-        if (rAreaRange.Intersects( rRange))
+        if (rAreaRange.Intersects( aRange))
         {
             if (pArea->IsGroupListening())
             {
                 if (pBASM->IsInBulkBroadcast())
                 {
-                    pBASM->InsertBulkGroupArea(pArea, rRange);
+                    pBASM->InsertBulkGroupArea(pArea, aRange);
                 }
                 else
                 {

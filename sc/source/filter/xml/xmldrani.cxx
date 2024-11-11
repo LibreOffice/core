@@ -694,7 +694,7 @@ ScXMLSortGroupsContext::ScXMLSortGroupsContext( ScXMLImport& rImport,
         {
             case XML_ELEMENT( TABLE, XML_DATA_TYPE ):
             {
-                const OUString &sValue = aIter.toString();
+                const OUString sValue = aIter.toString();
                 if (sValue.getLength() > 8)
                 {
                     std::u16string_view sTemp = sValue.subView(0, 8);

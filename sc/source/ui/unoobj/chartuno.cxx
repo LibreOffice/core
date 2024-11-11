@@ -567,16 +567,16 @@ void ScChartObj::getFastPropertyValue( std::unique_lock<std::mutex>& /*rGuard*/,
             if (!pListener)
                 break;
 
-            const ScRangeListRef& rRangeList = pListener->GetRangeList();
-            if (!rRangeList.is())
+            const ScRangeListRef xRangeList = pListener->GetRangeList();
+            if (!xRangeList.is())
                 break;
 
-            size_t nCount = rRangeList->size();
+            size_t nCount = xRangeList->size();
             uno::Sequence<table::CellRangeAddress> aCellRanges(nCount);
             table::CellRangeAddress* pCellRanges = aCellRanges.getArray();
             for (size_t i = 0; i < nCount; ++i)
             {
-                ScRange const & rRange = (*rRangeList)[i];
+                ScRange const & rRange = (*xRangeList)[i];
                 table::CellRangeAddress aCellRange;
                 ScUnoConversion::FillApiRange(aCellRange, rRange);
                 pCellRanges[i] = aCellRange;

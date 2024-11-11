@@ -3424,10 +3424,10 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
                             ScChartListener* pListener = pCollection->findByName(aChartName);
                             if (pListener)
                             {
-                                const ScRangeListRef& rRangeList = pListener->GetRangeList();
-                                if ( rRangeList.is() )
+                                const ScRangeListRef xRangeList = pListener->GetRangeList();
+                                if ( xRangeList.is() )
                                 {
-                                    ScRangeStringConverter::GetStringFromRangeList( sRanges, rRangeList.get(), pDoc, FormulaGrammar::CONV_OOO );
+                                    ScRangeStringConverter::GetStringFromRangeList( sRanges, xRangeList.get(), pDoc, FormulaGrammar::CONV_OOO );
                                     if ( !sRanges.isEmpty() )
                                     {
                                         bIsChart = true;
@@ -3750,7 +3750,7 @@ void ScXMLExport::exportAnnotationMeta( const uno::Reference < drawing::XShape >
             : sAuthor );
     }
 
-    const OUString& aDate(bRemovePersonalInfo ? u"1970-01-01"_ustr : pNote->GetDate()); // Epoch time
+    const OUString aDate(bRemovePersonalInfo ? u"1970-01-01"_ustr : pNote->GetDate()); // Epoch time
     if (pDoc)
     {
         SvNumberFormatter* pNumForm = pDoc->GetFormatTable();

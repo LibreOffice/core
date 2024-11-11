@@ -762,7 +762,7 @@ const SfxPoolItem* ScDocument::GetEffItem(
                     {
                         ScAddress aPos(nCol, nRow, nTab);
                         ScRefCellValue aCell(const_cast<ScDocument&>(*this), aPos);
-                        const OUString& aStyle = pForm->GetCellStyle(aCell, aPos);
+                        const OUString aStyle = pForm->GetCellStyle(aCell, aPos);
                         if (!aStyle.isEmpty())
                         {
                             SfxStyleSheetBase* pStyleSheet = mxPoolHelper->GetStylePool()->Find(
@@ -812,7 +812,7 @@ const SfxItemSet* ScDocument::GetCondResult(
         if (!pForm)
             continue;
 
-        const OUString& aStyle = pForm->GetCellStyle(rCell, rPos);
+        const OUString aStyle = pForm->GetCellStyle(rCell, rPos);
         if (!aStyle.isEmpty())
         {
             SfxStyleSheetBase* pStyleSheet =

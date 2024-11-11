@@ -270,7 +270,7 @@ OUString ScTpFormulaOptions::GetAllStrings()
 
     for (const auto& label : labels)
     {
-        if (const auto& pString = m_xBuilder->weld_label(label))
+        if (const auto pString = m_xBuilder->weld_label(label))
             sAllStrings += pString->get_label() + " ";
     }
 
@@ -278,7 +278,7 @@ OUString ScTpFormulaOptions::GetAllStrings()
 
     for (const auto& radio : radioButton)
     {
-        if (const auto& pString = m_xBuilder->weld_radio_button(radio))
+        if (const auto pString = m_xBuilder->weld_radio_button(radio))
             sAllStrings += pString->get_label() + " ";
     }
 
@@ -286,7 +286,7 @@ OUString ScTpFormulaOptions::GetAllStrings()
 
     for (const auto& btn : buttons)
     {
-        if (const auto& pString = m_xBuilder->weld_button(btn))
+        if (const auto pString = m_xBuilder->weld_button(btn))
             sAllStrings += pString->get_label() + " ";
     }
 

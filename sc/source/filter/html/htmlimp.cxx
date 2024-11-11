@@ -65,7 +65,7 @@ ScHTMLImport::ScHTMLImport( ScDocument* pDocP, const OUString& rBaseURL, const S
 {
     Size aPageSize;
     OutputDevice* pDefaultDev = Application::GetDefaultDevice();
-    const OUString& aPageStyle = mpDoc->GetPageStyle( rRange.aStart.Tab() );
+    const OUString aPageStyle = mpDoc->GetPageStyle( rRange.aStart.Tab() );
     ScStyleSheet* pStyleSheet = static_cast<ScStyleSheet*>(mpDoc->
         GetStyleSheetPool()->Find( aPageStyle, SfxStyleFamily::Page ));
     if ( pStyleSheet )

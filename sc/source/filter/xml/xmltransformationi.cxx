@@ -105,15 +105,13 @@ uno::Reference<xml::sax::XFastContextHandler>
     sax_fastparser::FastAttributeList* pAttribList
         = &sax_fastparser::castToFastAttributeList(xAttrList);
 
-    const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList = pAttribList;
-
     switch (nElement)
     {
         case XML_ELEMENT(CALC_EXT, XML_COLUMN):
         {
-            if (rAttrList.is())
+            if (pAttribList)
             {
-                for (auto& aIter : *rAttrList)
+                for (auto& aIter : *pAttribList)
                 {
                     switch (aIter.getToken())
                     {

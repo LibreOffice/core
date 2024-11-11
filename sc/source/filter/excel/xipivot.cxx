@@ -1110,15 +1110,15 @@ static OUString lcl_convertExcelSubtotalName(const OUString& rName)
 
 void XclImpPTField::ConvertRCPField( ScDPSaveData& rSaveData ) const
 {
-    const OUString& rFieldName = GetFieldName();
-    if( rFieldName.isEmpty() )
+    const OUString aFieldName = GetFieldName();
+    if( aFieldName.isEmpty() )
         return;
 
     const XclImpPCField* pCacheField = GetCacheField();
     if( !pCacheField || !pCacheField->IsSupportedField() )
         return;
 
-    ScDPSaveDimension* pTest = rSaveData.GetNewDimensionByName(rFieldName);
+    ScDPSaveDimension* pTest = rSaveData.GetNewDimensionByName(aFieldName);
     if (!pTest)
         return;
 
@@ -1172,15 +1172,15 @@ void XclImpPTField::ConvertRCPField( ScDPSaveData& rSaveData ) const
 
 void XclImpPTField::ConvertFieldInfo( const ScDPSaveData& rSaveData, ScDPObject* pObj, const XclImpRoot& rRoot, bool bPageField ) const
 {
-    const OUString& rFieldName = GetFieldName();
-    if( rFieldName.isEmpty() )
+    const OUString aFieldName = GetFieldName();
+    if( aFieldName.isEmpty() )
         return;
 
     const XclImpPCField* pCacheField = GetCacheField();
     if( !pCacheField || !pCacheField->IsSupportedField() )
         return;
 
-    ScDPSaveDimension* pSaveDim = rSaveData.GetExistingDimensionByName(rFieldName);
+    ScDPSaveDimension* pSaveDim = rSaveData.GetExistingDimensionByName(aFieldName);
     if (!pSaveDim)
         return;
 

@@ -134,7 +134,7 @@ OUString ScTpContentOptions::GetAllStrings()
 
     for (const auto& label : labels)
     {
-        if (const auto& pString = m_xBuilder->weld_label(label))
+        if (const auto pString = m_xBuilder->weld_label(label))
             sAllStrings += pString->get_label() + " ";
     }
 
@@ -145,7 +145,7 @@ OUString ScTpContentOptions::GetAllStrings()
 
     for (const auto& check : checkButton)
     {
-        if (const auto& pString = m_xBuilder->weld_check_button(check))
+        if (const auto pString = m_xBuilder->weld_check_button(check))
             sAllStrings += pString->get_label() + " ";
     }
 
@@ -539,7 +539,7 @@ OUString ScTpLayoutOptions::GetAllStrings()
 
     for (const auto& label : labels)
     {
-        if (const auto& pString = m_xBuilder->weld_label(label))
+        if (const auto pString = m_xBuilder->weld_label(label))
             sAllStrings += pString->get_label() + " ";
     }
 
@@ -550,7 +550,7 @@ OUString ScTpLayoutOptions::GetAllStrings()
 
     for (const auto& check : checkButton)
     {
-        if (const auto& pString = m_xBuilder->weld_check_button(check))
+        if (const auto pString = m_xBuilder->weld_check_button(check))
             sAllStrings += pString->get_label() + " ";
     }
 
@@ -558,7 +558,7 @@ OUString ScTpLayoutOptions::GetAllStrings()
 
     for (const auto& radio : radioButton)
     {
-        if (const auto& pString = m_xBuilder->weld_radio_button(radio))
+        if (const auto pString = m_xBuilder->weld_radio_button(radio))
             sAllStrings += pString->get_label() + " ";
     }
 

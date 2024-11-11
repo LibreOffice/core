@@ -1988,9 +1988,9 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
 
         if( xDataSource.is() && xCompareDataSource.is() )
         {
-            const uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence> >& aOldSequences =
+            const uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence> > aOldSequences =
                 xCompareDataSource->getDataSequences();
-            const uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence> >& aNewSequences =
+            const uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence> > aNewSequences =
                 xDataSource->getDataSequences();
 
             std::map<std::pair<OUString, OUString>,sal_Int32> aOldEntryToIndex;

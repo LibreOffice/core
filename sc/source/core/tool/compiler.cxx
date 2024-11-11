@@ -4452,7 +4452,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
     }
 
     bool bAllowBooleans = bInArray;
-    const std::vector<Whitespace> & vSpaces = NextSymbol(bInArray);
+    const std::vector<Whitespace> vSpaces = NextSymbol(bInArray);
 
     if (!cSymbol[0])
     {

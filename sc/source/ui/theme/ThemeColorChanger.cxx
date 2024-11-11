@@ -254,8 +254,8 @@ void changeSparklines(ScDocShell& rDocShell, model::ColorSet const& rColorSet)
         auto* pSparklineList = rDocument.GetSparklineList(nTab);
         if (pSparklineList && !pSparklineList->getSparklineGroups().empty())
         {
-            auto const& rSparklineGroups = pSparklineList->getSparklineGroups();
-            for (auto const& rSparklineGroup : rSparklineGroups)
+            auto const aSparklineGroups = pSparklineList->getSparklineGroups();
+            for (auto const& rSparklineGroup : aSparklineGroups)
             {
                 auto aAttributes = rSparklineGroup->getAttributes();
 

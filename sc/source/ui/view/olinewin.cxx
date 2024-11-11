@@ -539,12 +539,12 @@ namespace
 
 void ScOutlineWindow::DrawImageRel(tools::Long nLevelPos, tools::Long nEntryPos, const OUString& rId)
 {
-    const Image& rImage = GetImage(rId);
+    const Image aImage = GetImage(rId);
     GetOutDev()->SetLineColor();
     GetOutDev()->SetFillColor( GetBackground().GetColor() );
     Point aPos( GetPoint( nLevelPos, nEntryPos ) );
-    GetOutDev()->DrawRect( tools::Rectangle( aPos, rImage.GetSizePixel() ) );
-    GetOutDev()->DrawImage( aPos, rImage );
+    GetOutDev()->DrawRect( tools::Rectangle( aPos, aImage.GetSizePixel() ) );
+    GetOutDev()->DrawImage( aPos, aImage );
 }
 
 void ScOutlineWindow::DrawBorderRel( size_t nLevel, size_t nEntry, bool bPressed )

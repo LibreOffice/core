@@ -163,7 +163,7 @@ void SetTabNoAndCursor( const ScViewData& rViewData, std::u16string_view rCellId
     sal_uInt32 nId = o3tl::toUInt32(rCellId);
     auto lComp = [nId](const sc::NoteEntry& rNote) { return rNote.mpNote->GetId() == nId; };
 
-    const auto& aFoundNoteIt = std::find_if(aNotes.begin(), aNotes.end(), lComp);
+    const auto aFoundNoteIt = std::find_if(aNotes.begin(), aNotes.end(), lComp);
     if (aFoundNoteIt != aNotes.end())
     {
         ScAddress aFoundPos = aFoundNoteIt->maPos;

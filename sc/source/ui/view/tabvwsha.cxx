@@ -1340,11 +1340,11 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
 
                 case SID_STYLE_NEW_BY_EXAMPLE:
                 {
-                    const OUString& rStrCurStyle = rDoc.GetPageStyle( nCurTab );
+                    const OUString aStrCurStyle = rDoc.GetPageStyle( nCurTab );
 
-                    if ( rStrCurStyle != aStyleName )
+                    if ( aStrCurStyle != aStyleName )
                     {
-                        SfxStyleSheetBase*  pCurStyle = pStylePool->Find( rStrCurStyle, eFamily );
+                        SfxStyleSheetBase*  pCurStyle = pStylePool->Find( aStrCurStyle, eFamily );
                         SfxItemSet          aAttrSet  = pCurStyle->GetItemSet();
                         SCTAB               nInTab;
                         bool                bUsed = rDoc.IsPageStyleInUse( aStyleName, &nInTab );
