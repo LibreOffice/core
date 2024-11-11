@@ -22,6 +22,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <vcl/errinf.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/pdf/PDFEncryptionInitialization.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/passwd.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -1411,7 +1412,7 @@ IMPL_LINK_NOARG(ImpPDFTabSecurityPage, ClickmaPbSetPwdHdl, weld::Button&, void)
             mbHaveUserPassword = !aUserPW.isEmpty();
             mbHaveOwnerPassword = !aOwnerPW.isEmpty();
 
-            mxPreparedPasswords = vcl::PDFWriter::InitEncryption( aOwnerPW, aUserPW );
+            mxPreparedPasswords = vcl::pdf::initEncryption(aOwnerPW, aUserPW);
             if (!mxPreparedPasswords.is())
             {
                 OUString msg;
