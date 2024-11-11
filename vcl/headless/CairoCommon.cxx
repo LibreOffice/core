@@ -1214,7 +1214,7 @@ bool CairoCommon::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevice,
         // MM01 checked/verified for Cairo
         for (sal_uInt32 a(0); a < aPolyPolygonLine.count(); a++)
         {
-            const basegfx::B2DPolygon aPolyLine(aPolyPolygonLine.getB2DPolygon(a));
+            const basegfx::B2DPolygon& aPolyLine(aPolyPolygonLine.getB2DPolygon(a));
 
             if (!bNoJoin)
             {

@@ -20,7 +20,7 @@ BitmapEx BitmapMaskToAlphaFilter::execute(BitmapEx const& rBitmapEx) const
 {
     const Size aSize(rBitmapEx.GetSizePixel());
 
-    Bitmap aBitmap(rBitmapEx.GetBitmap());
+    const Bitmap& aBitmap(rBitmapEx.GetBitmap());
     Bitmap aOutBitmap(aSize, vcl::PixelFormat::N8_BPP, &Bitmap::GetGreyPalette(256));
 
     BitmapScopedReadAccess pRead(aBitmap);

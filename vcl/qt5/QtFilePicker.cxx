@@ -386,7 +386,7 @@ void SAL_CALL QtFilePicker::appendFilterGroup(const OUString& rGroupTitle,
     const sal_uInt16 length = filters.getLength();
     for (sal_uInt16 i = 0; i < length; ++i)
     {
-        beans::StringPair aPair = filters[i];
+        const beans::StringPair& aPair = filters[i];
         appendFilter(aPair.First, aPair.Second);
     }
 }

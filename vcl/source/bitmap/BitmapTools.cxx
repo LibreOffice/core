@@ -289,8 +289,8 @@ BitmapEx CreateFromData( RawBitmap&& rawBitmap )
 
 void fillWithData(sal_uInt8* pData, BitmapEx const& rBitmapEx)
 {
-    Bitmap aBitmap = rBitmapEx.GetBitmap();
-    AlphaMask aAlphaMask = rBitmapEx.GetAlphaMask();
+    const Bitmap& aBitmap = rBitmapEx.GetBitmap();
+    const AlphaMask& aAlphaMask = rBitmapEx.GetAlphaMask();
     BitmapScopedReadAccess aReadAccessBitmap(aBitmap);
     BitmapScopedReadAccess aReadAccessAlpha(aAlphaMask);
 
@@ -413,7 +413,7 @@ BitmapEx CanvasTransformBitmap( const BitmapEx&                 rBitmap,
         return BitmapEx();
 
     const Size aBmpSize( rBitmap.GetSizePixel() );
-    Bitmap aSrcBitmap( rBitmap.GetBitmap() );
+    const Bitmap& aSrcBitmap( rBitmap.GetBitmap() );
     Bitmap aSrcAlpha;
 
     // differentiate mask and alpha channel (on-off
@@ -731,7 +731,7 @@ static bool readAlpha( BitmapReadAccess const * pAlphaReadAcc, tools::Long nY, c
  **/
 void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, unsigned char*& data, bool& bHasAlpha, tools::Long& rnWidth, tools::Long& rnHeight )
 {
-    AlphaMask aAlpha = aBmpEx.GetAlphaMask();
+    const AlphaMask& aAlpha = aBmpEx.GetAlphaMask();
 
     BitmapScopedReadAccess pBitmapReadAcc( aBitmap );
     BitmapScopedReadAccess pAlphaReadAcc;
@@ -1022,7 +1022,7 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, un
 
     uno::Sequence< sal_Int8 > CanvasExtractBitmapData(BitmapEx const & rBitmapEx, const geometry::IntegerRectangle2D& rect)
     {
-        Bitmap aBitmap( rBitmapEx.GetBitmap() );
+        const Bitmap& aBitmap( rBitmapEx.GetBitmap() );
         Bitmap aAlpha( rBitmapEx.GetAlphaMask().GetBitmap() );
 
         BitmapScopedReadAccess pReadAccess( aBitmap );
@@ -1107,7 +1107,7 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, un
 
         if(!rBitmapEx.IsAlpha())
         {
-            Bitmap aBitmap(rBitmapEx.GetBitmap());
+            const Bitmap& aBitmap(rBitmapEx.GetBitmap());
 
             if(8 == aBitmap.GetSizePixel().Width() && 8 == aBitmap.GetSizePixel().Height())
             {
@@ -1220,7 +1220,7 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, un
 
 bool convertBitmap32To24Plus8(BitmapEx const & rInput, BitmapEx & rResult)
 {
-    Bitmap aBitmap(rInput.GetBitmap());
+    const Bitmap& aBitmap(rInput.GetBitmap());
     if (aBitmap.getPixelFormat() != vcl::PixelFormat::N32_BPP)
         return false;
 

@@ -17,7 +17,7 @@ BitmapEx BitmapLightenFilter::execute(BitmapEx const& rBitmapEx) const
 {
     const Size aSize(rBitmapEx.GetSizePixel());
 
-    Bitmap aBitmap(rBitmapEx.GetBitmap());
+    const Bitmap& aBitmap(rBitmapEx.GetBitmap());
     Bitmap aDarkBitmap(aSize, vcl::PixelFormat::N24_BPP);
 
     BitmapScopedReadAccess pRead(aBitmap);

@@ -354,7 +354,7 @@ void TypeSerializer::writeGraphic(const Graphic& rGraphic)
 
             case GraphicType::Bitmap:
             {
-                auto pVectorGraphicData = aGraphic.getVectorGraphicData();
+                const auto& pVectorGraphicData = aGraphic.getVectorGraphicData();
                 if (pVectorGraphicData)
                 {
                     // stream out Vector Graphic defining data (length, byte array and evtl. path)

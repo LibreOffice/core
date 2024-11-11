@@ -156,7 +156,7 @@ void MergeNotebookBarMenuAddons(Menu* pPopupMenu, sal_Int16 nItemId, const OUStr
             AddonNotebookBarItem aAddonNotebookBarItem;
             Image sImage;
             MenuItemBits nBits = MenuItemBits::ICON;
-            const css::uno::Sequence<css::beans::PropertyValue> pExtension = aExtension[nSecIdx];
+            const css::uno::Sequence<css::beans::PropertyValue>& pExtension = aExtension[nSecIdx];
 
             GetAddonNotebookBarItem(pExtension, aAddonNotebookBarItem);
 

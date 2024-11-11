@@ -594,7 +594,7 @@ OString toHexString(const std::vector<unsigned char>& a)
 
 void writeBitmapContentChecksum(tools::XmlWriter& rWriter, Bitmap const& rBitmap)
 {
-    Bitmap aBitmap(rBitmap);
+    const Bitmap& aBitmap(rBitmap);
 
     comphelper::Hash aHashEngine(comphelper::HashType::SHA1);
     BitmapScopedReadAccess pReadAccess(aBitmap);
@@ -659,7 +659,7 @@ void MetafileXmlDump::dump(const GDIMetaFile& rMetaFile, SvStream& rStream)
 
 void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& rWriter)
 {
-    MapMode aMtfMapMode = rMetaFile.GetPrefMapMode();
+    const MapMode& aMtfMapMode = rMetaFile.GetPrefMapMode();
     rWriter.attribute("mapunit", convertMapUnitToString(aMtfMapMode.GetMapUnit()));
     writePoint(rWriter, aMtfMapMode.GetOrigin());
     rWriter.attribute("scalex", convertFractionToString(aMtfMapMode.GetScaleX()));

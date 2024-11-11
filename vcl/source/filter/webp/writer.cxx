@@ -92,7 +92,7 @@ static bool writeWebp(SvStream& rStream, const BitmapEx& bitmapEx, bool lossless
 
     // Apparently libwebp needs the entire image data at once in WebPPicture,
     // so allocate it and copy there.
-    Bitmap bitmap(bitmapEx.GetBitmap());
+    const Bitmap& bitmap(bitmapEx.GetBitmap());
     AlphaMask bitmapAlpha;
     if (bitmapEx.IsAlpha())
         bitmapAlpha = bitmapEx.GetAlphaMask();

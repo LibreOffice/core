@@ -663,7 +663,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos, 
                     xVDev->EnableMapMode(false);
 
                     AlphaMask aAlpha(xVDev->GetBitmap(aPoint, xVDev->GetOutputSizePixel()));
-                    AlphaMask aPaintAlpha(aPaint.GetAlphaMask());
+                    const AlphaMask& aPaintAlpha(aPaint.GetAlphaMask());
                     // The alpha mask is inverted from what
                     // is expected so invert it again
                     aAlpha.Invert(); // convert to alpha
@@ -700,7 +700,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos, 
                     xVDev->EnableMapMode( false );
 
                     AlphaMask aAlpha(xVDev->GetBitmap(Point(), xVDev->GetOutputSizePixel()));
-                    AlphaMask aPaintAlpha(aPaint.GetAlphaMask());
+                    const AlphaMask& aPaintAlpha(aPaint.GetAlphaMask());
                     // The alpha mask is inverted from what
                     // is expected so invert it again
                     aAlpha.Invert(); // convert to alpha

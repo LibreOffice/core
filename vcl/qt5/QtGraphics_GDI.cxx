@@ -383,7 +383,7 @@ bool QtGraphicsBackend::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevic
     // but this NEEDS to be checked/verified
     for (sal_uInt32 a(0); a < aPolyPolygonLine.count(); a++)
     {
-        const basegfx::B2DPolygon aPolyLine(aPolyPolygonLine.getB2DPolygon(a));
+        const basegfx::B2DPolygon& aPolyLine(aPolyPolygonLine.getB2DPolygon(a));
         AddPolygonToPath(aPath, aPolyLine, aPolyLine.isClosed(), !getAntiAlias(), true);
     }
 

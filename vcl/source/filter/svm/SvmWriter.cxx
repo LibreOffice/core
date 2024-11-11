@@ -1380,7 +1380,7 @@ void SvmWriter::FloatTransparentHandler(const MetaFloatTransparentAction* pActio
     VersionCompatWrite aCompat(mrStream, bSVG ? 2 : 1);
 
     SvmWriter aWriter(mrStream);
-    GDIMetaFile aMtf = pAction->GetGDIMetaFile();
+    const GDIMetaFile& aMtf = pAction->GetGDIMetaFile();
     aWriter.Write(aMtf);
     TypeSerializer aSerializer(mrStream);
     aSerializer.writePoint(pAction->GetPoint());
@@ -1415,7 +1415,7 @@ void SvmWriter::EPSHandler(const MetaEPSAction* pAction)
     aSerializer.writeSize(pAction->GetSize());
 
     SvmWriter aWriter(mrStream);
-    GDIMetaFile aMtf = pAction->GetSubstitute();
+    const GDIMetaFile& aMtf = pAction->GetSubstitute();
     aWriter.Write(aMtf);
 }
 

@@ -203,7 +203,7 @@ void Printer::DrawDeviceBitmapEx( const Point& rDestPt, const Size& rDestSize,
     }
     else
     {
-        Bitmap aBmp( rBmpEx.GetBitmap() );
+        const Bitmap& aBmp( rBmpEx.GetBitmap() );
         ImplPrintTransparent( aBmp, rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel );
     }
 }
@@ -842,7 +842,7 @@ Printer::Printer( const JobSetup& rJobSetup )
 {
     ImplInitData();
     const ImplJobSetup& rConstData = rJobSetup.ImplGetConstData();
-    OUString aDriver = rConstData.GetDriver();
+    const OUString& aDriver = rConstData.GetDriver();
     SalPrinterQueueInfo* pInfo = ImplGetQueueInfo( rConstData.GetPrinterName(),
                                                    &aDriver );
     if ( pInfo )
@@ -1086,7 +1086,7 @@ bool Printer::SetPrinterProps( const Printer* pPrinter )
         }
 
         // Construct new printer
-        OUString aDriver = pPrinter->GetDriverName();
+        const OUString& aDriver = pPrinter->GetDriverName();
         SalPrinterQueueInfo* pInfo = ImplGetQueueInfo( pPrinter->GetName(), &aDriver );
         if ( pInfo )
         {

@@ -966,7 +966,7 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute()
                     Sequence < OUString > aPathSeq = getFiles();
                     if( aPathSeq.getLength() == 1 )
                     {
-                        OUString sFileName = aPathSeq[0];
+                        const OUString& sFileName = aPathSeq[0];
                         if (::utl::UCBContentHelper::Exists(sFileName))
                         {
                             INetURLObject aFileObj(sFileName);

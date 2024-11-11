@@ -26,7 +26,7 @@ BitmapEx BitmapDisabledImageFilter::execute(BitmapEx const& rBitmapEx) const
     Bitmap aGrey(aSize, ePixelFormat, pPal);
     BitmapScopedWriteAccess pGrey(aGrey);
 
-    Bitmap aReadBitmap(rBitmapEx.GetBitmap());
+    const Bitmap& aReadBitmap(rBitmapEx.GetBitmap());
     BitmapScopedReadAccess pRead(aReadBitmap);
     if (pRead && pGrey)
     {

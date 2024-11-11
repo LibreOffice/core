@@ -232,7 +232,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL Graphic::applyDuotone(
     ::Graphic aReturnGraphic;
 
     BitmapEx    aBitmapEx( aGraphic.GetBitmapEx() );
-    AlphaMask   aMask( aBitmapEx.GetAlphaMask() );
+    const AlphaMask&   aMask( aBitmapEx.GetAlphaMask() );
 
     BitmapEx    aTmpBmpEx(aBitmapEx.GetBitmap());
     BitmapFilter::Filter(aTmpBmpEx,

@@ -497,7 +497,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                 xVDev->EnableMapMode( false );
 
                                 AlphaMask aAlpha(xVDev->GetBitmap(Point(), xVDev->GetOutputSizePixel()));
-                                AlphaMask aPaintAlpha(aPaint.GetAlphaMask());
+                                const AlphaMask& aPaintAlpha(aPaint.GetAlphaMask());
                                 // The alpha mask is inverted from what is
                                 // expected so invert it again. To test this
                                 // code, export to PDF the transparent shapes,

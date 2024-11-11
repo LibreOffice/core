@@ -14,7 +14,7 @@
 
 BitmapEx BitmapShadowFilter::execute(BitmapEx const& rBitmapEx) const
 {
-    BitmapEx aBitmapEx(rBitmapEx);
+    const BitmapEx& aBitmapEx(rBitmapEx);
     BitmapScopedWriteAccess pWriteAccess(const_cast<Bitmap&>(aBitmapEx.GetBitmap()));
 
     if (!pWriteAccess)

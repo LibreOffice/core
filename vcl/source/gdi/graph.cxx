@@ -200,7 +200,7 @@ Graphic::Graphic(const Image& rImage)
     // FIXME: should really defer the BitmapEx load.
     : mxImpGraphic(new ImpGraphic(rImage.GetBitmapEx()))
 {
-    OUString aStock = rImage.GetStock();
+    const OUString& aStock = rImage.GetStock();
     if (aStock.getLength())
         mxImpGraphic->setOriginURL("private:graphicrepository/" + aStock);
 }

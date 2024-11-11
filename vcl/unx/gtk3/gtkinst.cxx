@@ -4917,7 +4917,7 @@ namespace
     {
         Image aImage(rImage);
 
-        OUString sStock(aImage.GetStock());
+        const OUString& sStock(aImage.GetStock());
         if (!sStock.isEmpty())
             return load_icon_by_name(sStock);
 

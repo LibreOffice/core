@@ -676,7 +676,7 @@ const GDIMetaFile& ImpGraphic::getGDIMetaFile() const
         if (1 == aSequence.size())
         {
             // try to cast to MetafileAccessor implementation
-            const css::uno::Reference< css::graphic::XPrimitive2D > xReference(aSequence[0]);
+            const css::uno::Reference< css::graphic::XPrimitive2D >& xReference(aSequence[0]);
             auto pUnoPrimitive = static_cast< const drawinglayer::primitive2d::UnoPrimitive2D* >(xReference.get());
             if (pUnoPrimitive)
             {
