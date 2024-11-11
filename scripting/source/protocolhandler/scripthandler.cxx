@@ -120,7 +120,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
     if (officecfg::Office::Common::Security::Scripting::DisableMacrosExecution::get())
         return;
 
-    bool bSuccess = false;
+    sal_Int16 aState = css::frame::DispatchResultState::FAILURE;
     Any invokeResult;
     bool bCaughtException = false;
     Any aException;
@@ -204,14 +204,14 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
             if ( bIsDocumentScript )
                 pUndoGuard.reset( new ::framework::DocumentUndoGuard( m_xScriptInvocation ) );
 
-            bSuccess = false;
-            while ( !bSuccess )
+            while ( true )
             {
                 std::exception_ptr aFirstCaughtException;
                 try
                 {
                     invokeResult = xFunc->invoke( inArgs, outIndex, outArgs );
-                    bSuccess = true;
+                    aState = css::frame::DispatchResultState::SUCCESS;
+                    break;
                 }
                 catch( const provider::ScriptFrameworkErrorException& se )
                 {
@@ -265,14 +265,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
 
     aEvent.Source = getXWeak();
     aEvent.Result = invokeResult;
-    if ( bSuccess )
-    {
-        aEvent.State = css::frame::DispatchResultState::SUCCESS;
-    }
-    else
-    {
-        aEvent.State = css::frame::DispatchResultState::FAILURE;
-    }
+    aEvent.State = aState;
 
     try
     {
