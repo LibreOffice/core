@@ -52,7 +52,7 @@
 #include <vcl/weld.hxx>
 #include <vcl/weldutils.hxx>
 #if !ENABLE_WASM_STRIP_PINGUSER
-#include <unotools/VersionConfig.hxx>
+//#include <unotools/VersionConfig.hxx>
 #endif
 #include <unotools/securityoptions.hxx>
 #include <svtools/miscopt.hxx>
@@ -1623,9 +1623,8 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     SfxUnoFrameItem aDocFrame(SID_FILLFRAME, GetFrame().GetFrameInterface());
                     GetDispatcher()->ExecuteList(SID_TIPOFTHEDAY, SfxCallMode::SLOT, {}, { &aDocFrame });
                 }
-#else
-                (void) bIsInfobarShown;
 #endif
+                (void) bIsInfobarShown;
 
                 break;
             }
