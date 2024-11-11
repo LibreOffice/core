@@ -1179,7 +1179,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                 {
                     const ScPatternAttr* pOldAttrs = pTabViewShell->GetSelectionPattern();
                     SfxItemSet aOldSet(pOldAttrs->GetItemSet());
-                    SfxItemSet aNewSet(pOldAttrs->GetItemSet());
+                    SfxItemSet aNewSet(aOldSet);
 
                     if(SID_ATTR_BORDER_DIAG_TLBR == nSlot)
                     {
