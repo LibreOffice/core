@@ -154,6 +154,8 @@ struct CryptoImpl
         {
             case CryptoType::AES_128_ECB:
                 return EVP_aes_128_ecb();
+            case CryptoType::AES_256_ECB:
+                return EVP_aes_256_ecb();
             case CryptoType::AES_128_CBC:
                 return EVP_aes_128_cbc();
             case CryptoType::AES_256_CBC:
@@ -315,6 +317,7 @@ struct CryptoImpl
         switch (type)
         {
             case CryptoType::AES_128_ECB:
+            case CryptoType::AES_256_ECB:
                 mechanism = CKM_AES_ECB;
                 break;
             case CryptoType::AES_128_CBC:

@@ -30,19 +30,9 @@ public:
         NSS_Shutdown();
 #endif
     }
-
-    void testCryptoHash();
-    void testRoundUp();
-    void testEncrypt_AES256();
-
-    CPPUNIT_TEST_SUITE(CryptoTest);
-    CPPUNIT_TEST(testCryptoHash);
-    CPPUNIT_TEST(testRoundUp);
-    CPPUNIT_TEST(testEncrypt_AES256);
-    CPPUNIT_TEST_SUITE_END();
 };
 
-void CryptoTest::testCryptoHash()
+CPPUNIT_TEST_FIXTURE(CryptoTest, testCryptoHash)
 {
     // Check examples from Wikipedia (https://en.wikipedia.org/wiki/HMAC)
     OString aContentString("The quick brown fox jumps over the lazy dog"_ostr);
@@ -86,7 +76,7 @@ void CryptoTest::testCryptoHash()
     }
 }
 
-void CryptoTest::testRoundUp()
+CPPUNIT_TEST_FIXTURE(CryptoTest, testRoundUp)
 {
     CPPUNIT_ASSERT_EQUAL(16, comphelper::roundUp(16, 16));
     CPPUNIT_ASSERT_EQUAL(32, comphelper::roundUp(32, 16));
@@ -97,7 +87,7 @@ void CryptoTest::testRoundUp()
     CPPUNIT_ASSERT_EQUAL(32, comphelper::roundUp(31, 16));
 }
 
-void CryptoTest::testEncrypt_AES256()
+CPPUNIT_TEST_FIXTURE(CryptoTest, testEncrypt_AES256_CBC)
 {
     std::vector<sal_uInt8> key = { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08,
                                    0x09, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16 };
@@ -139,6 +129,46 @@ void CryptoTest::testEncrypt_AES256()
                          comphelper::hashToString(decrypted));
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(CryptoTest);
+CPPUNIT_TEST_FIXTURE(CryptoTest, testEncrypt_AES256_ECB)
+{
+    std::vector<sal_uInt8> key = { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08,
+                                   0x09, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16 };
+
+    std::vector<sal_uInt8> iv = { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08,
+                                  0x09, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16 };
+
+    std::vector<sal_uInt8> original = { 's', 'e', 'c', 'r', 'e', 't', '\0' };
+
+    std::vector<sal_uInt8> encrypted(original.size());
+
+    sal_uInt32 nWrittenSize = 0;
+
+    comphelper::Encrypt aEncryptor(key, iv, comphelper::CryptoType::AES_256_ECB);
+    nWrittenSize = aEncryptor.update(encrypted, original);
+
+    // nothing should be written as the size of the input is not a multiple of block size
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), nWrittenSize);
+
+    original.resize(16, 0); // apply padding to make it multiple of block size
+    encrypted.resize(16, 0);
+
+    CPPUNIT_ASSERT_EQUAL(std::string("73656372657400000000000000000000"),
+                         comphelper::hashToString(original));
+
+    nWrittenSize = aEncryptor.update(encrypted, original);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(16), nWrittenSize);
+
+    CPPUNIT_ASSERT_EQUAL(std::string("11c380204c0bae9f18a795177e28d842"),
+                         comphelper::hashToString(encrypted));
+
+    std::vector<sal_uInt8> decrypted(encrypted.size());
+
+    comphelper::Decrypt aDecryptor(key, iv, comphelper::CryptoType::AES_256_ECB);
+    nWrittenSize = aDecryptor.update(decrypted, encrypted);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(16), nWrittenSize);
+
+    CPPUNIT_ASSERT_EQUAL(std::string("73656372657400000000000000000000"),
+                         comphelper::hashToString(decrypted));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
