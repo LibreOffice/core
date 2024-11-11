@@ -33,99 +33,99 @@ OUString collectPushFlags(vcl::PushFlags nFlags)
     else if ((nFlags & PUSH_ALLFONT) == PUSH_ALLFONT)
         return u"PushAllFont"_ustr;
 
-    std::vector<OUString> aStrings;
+    std::vector<std::u16string_view> aStrings;
 
     if (nFlags & vcl::PushFlags::LINECOLOR)
-        aStrings.emplace_back("PushLineColor");
+        aStrings.emplace_back(u"PushLineColor");
     if (nFlags & vcl::PushFlags::FILLCOLOR)
-        aStrings.emplace_back("PushFillColor");
+        aStrings.emplace_back(u"PushFillColor");
     if (nFlags & vcl::PushFlags::FONT)
-        aStrings.emplace_back("PushFont");
+        aStrings.emplace_back(u"PushFont");
     if (nFlags & vcl::PushFlags::TEXTCOLOR)
-        aStrings.emplace_back("PushTextColor");
+        aStrings.emplace_back(u"PushTextColor");
     if (nFlags & vcl::PushFlags::MAPMODE)
-        aStrings.emplace_back("PushMapMode");
+        aStrings.emplace_back(u"PushMapMode");
     if (nFlags & vcl::PushFlags::CLIPREGION)
-        aStrings.emplace_back("PushClipRegion");
+        aStrings.emplace_back(u"PushClipRegion");
     if (nFlags & vcl::PushFlags::RASTEROP)
-        aStrings.emplace_back("PushRasterOp");
+        aStrings.emplace_back(u"PushRasterOp");
     if (nFlags & vcl::PushFlags::TEXTFILLCOLOR)
-        aStrings.emplace_back("PushTextFillColor");
+        aStrings.emplace_back(u"PushTextFillColor");
     if (nFlags & vcl::PushFlags::TEXTALIGN)
-        aStrings.emplace_back("PushTextAlign");
+        aStrings.emplace_back(u"PushTextAlign");
     if (nFlags & vcl::PushFlags::REFPOINT)
-        aStrings.emplace_back("PushRefPoint");
+        aStrings.emplace_back(u"PushRefPoint");
     if (nFlags & vcl::PushFlags::TEXTLINECOLOR)
-        aStrings.emplace_back("PushTextLineColor");
+        aStrings.emplace_back(u"PushTextLineColor");
     if (nFlags & vcl::PushFlags::TEXTLAYOUTMODE)
-        aStrings.emplace_back("PushTextLayoutMode");
+        aStrings.emplace_back(u"PushTextLayoutMode");
     if (nFlags & vcl::PushFlags::TEXTLANGUAGE)
-        aStrings.emplace_back("PushTextLanguage");
+        aStrings.emplace_back(u"PushTextLanguage");
     if (nFlags & vcl::PushFlags::OVERLINECOLOR)
-        aStrings.emplace_back("PushOverlineColor");
-
-    OUString aString;
+        aStrings.emplace_back(u"PushOverlineColor");
 
     if (aStrings.empty())
-        return aString;
+        return EMPTY_OUSTRING;
 
-    aString = aStrings[0];
+    OUStringBuffer aStringBuffer;
+
+    aStringBuffer.append(aStrings[0]);
     for (size_t i = 1; i < aStrings.size(); ++i)
     {
-        aString += ", " + aStrings[i];
+        aStringBuffer.append(u", "_ustr + aStrings[i]);
     }
-    return aString;
+    return aStringBuffer.makeStringAndClear();
 }
 
 OUString convertDrawTextFlagsToString(DrawTextFlags eDrawTextFlags)
 {
-    std::vector<OUString> aStrings;
+    std::vector<std::u16string_view> aStrings;
     if (eDrawTextFlags & DrawTextFlags::Disable)
-        aStrings.emplace_back("Disable");
+        aStrings.emplace_back(u"Disable");
     if (eDrawTextFlags & DrawTextFlags::Mnemonic)
-        aStrings.emplace_back("Mnemonic");
+        aStrings.emplace_back(u"Mnemonic");
     if (eDrawTextFlags & DrawTextFlags::Mono)
-        aStrings.emplace_back("Mono");
+        aStrings.emplace_back(u"Mono");
     if (eDrawTextFlags & DrawTextFlags::Clip)
-        aStrings.emplace_back("Clip");
+        aStrings.emplace_back(u"Clip");
     if (eDrawTextFlags & DrawTextFlags::Left)
-        aStrings.emplace_back("Left");
+        aStrings.emplace_back(u"Left");
     if (eDrawTextFlags & DrawTextFlags::Center)
-        aStrings.emplace_back("Center");
+        aStrings.emplace_back(u"Center");
     if (eDrawTextFlags & DrawTextFlags::Right)
-        aStrings.emplace_back("Right");
+        aStrings.emplace_back(u"Right");
     if (eDrawTextFlags & DrawTextFlags::Top)
-        aStrings.emplace_back("Top");
+        aStrings.emplace_back(u"Top");
     if (eDrawTextFlags & DrawTextFlags::VCenter)
-        aStrings.emplace_back("VCenter");
+        aStrings.emplace_back(u"VCenter");
     if (eDrawTextFlags & DrawTextFlags::Bottom)
-        aStrings.emplace_back("Bottom");
+        aStrings.emplace_back(u"Bottom");
     if (eDrawTextFlags & DrawTextFlags::EndEllipsis)
-        aStrings.emplace_back("EndEllipsis");
+        aStrings.emplace_back(u"EndEllipsis");
     if (eDrawTextFlags & DrawTextFlags::PathEllipsis)
-        aStrings.emplace_back("PathEllipsis");
+        aStrings.emplace_back(u"PathEllipsis");
     if (eDrawTextFlags & DrawTextFlags::MultiLine)
-        aStrings.emplace_back("MultiLine");
+        aStrings.emplace_back(u"MultiLine");
     if (eDrawTextFlags & DrawTextFlags::WordBreak)
-        aStrings.emplace_back("WordBreak");
+        aStrings.emplace_back(u"WordBreak");
     if (eDrawTextFlags & DrawTextFlags::NewsEllipsis)
-        aStrings.emplace_back("NewsEllipsis");
+        aStrings.emplace_back(u"NewsEllipsis");
     if (eDrawTextFlags & DrawTextFlags::WordBreakHyphenation)
-        aStrings.emplace_back("WordBreakHyphenation");
+        aStrings.emplace_back(u"WordBreakHyphenation");
     if (eDrawTextFlags & DrawTextFlags::CenterEllipsis)
-        aStrings.emplace_back("CenterEllipsis");
-
-    OUString aString;
+        aStrings.emplace_back(u"CenterEllipsis");
 
     if (aStrings.empty())
         return u"None"_ustr;
 
-    aString = aStrings[0];
+    OUStringBuffer aStringBuffer;
+
+    aStringBuffer.append(aStrings[0]);
     for (size_t i = 1; i < aStrings.size(); ++i)
     {
-        aString += " " + aStrings[i];
+        aStringBuffer.append(u" "_ustr + aStrings[i]);
     }
-    return aString;
+    return aStringBuffer.makeStringAndClear();
 };
 
 OUString convertRopToString(RasterOp eRop)
@@ -444,28 +444,28 @@ OUString convertComplexTestLayoutFlags(vcl::text::ComplexTextLayoutFlags nFlags)
     if (nFlags == vcl::text::ComplexTextLayoutFlags::Default)
         return u"Default"_ustr;
 
-    std::vector<OUString> aStrings;
+    std::vector<std::u16string_view> aStrings;
 
     if (nFlags & vcl::text::ComplexTextLayoutFlags::BiDiRtl)
-        aStrings.emplace_back("BiDiRtl");
+        aStrings.emplace_back(u"BiDiRtl");
     if (nFlags & vcl::text::ComplexTextLayoutFlags::BiDiStrong)
-        aStrings.emplace_back("BiDiStrong");
+        aStrings.emplace_back(u"BiDiStrong");
     if (nFlags & vcl::text::ComplexTextLayoutFlags::TextOriginLeft)
-        aStrings.emplace_back("TextOriginLeft");
+        aStrings.emplace_back(u"TextOriginLeft");
     if (nFlags & vcl::text::ComplexTextLayoutFlags::TextOriginRight)
-        aStrings.emplace_back("TextOriginRight");
-
-    OUString aString;
+        aStrings.emplace_back(u"TextOriginRight");
 
     if (aStrings.empty())
-        return aString;
+        return EMPTY_OUSTRING;
 
-    aString = aStrings[0];
+    OUStringBuffer aStringBuffer;
+
+    aStringBuffer.append(aStrings[0]);
     for (size_t i = 1; i < aStrings.size(); ++i)
     {
-        aString += ", " + aStrings[i];
+        aStringBuffer.append(u", "_ustr + aStrings[i]);
     }
-    return aString;
+    return aStringBuffer.makeStringAndClear();
 }
 
 OUString convertGfxLinkTypeToString(GfxLinkType eGfxLinkType)
