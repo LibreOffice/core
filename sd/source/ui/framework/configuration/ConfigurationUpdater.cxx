@@ -291,7 +291,7 @@ void ConfigurationUpdater::CheckPureAnchors (
     sal_Int32 nIndex (nCount-1);
     while (nIndex >= 0)
     {
-        const Reference<XResourceId> xResourceId (aResources[nIndex]);
+        const Reference<XResourceId>& xResourceId (aResources[nIndex]);
         const Reference<XResource> xResource (
             mpResourceManager->GetResource(xResourceId).mxResource);
         bool bDeactiveCurrentResource (false);
@@ -309,7 +309,7 @@ void ConfigurationUpdater::CheckPureAnchors (
             }
             else
             {
-                const Reference<XResourceId> xPrevResourceId (aResources[nIndex+1]);
+                const Reference<XResourceId>& xPrevResourceId (aResources[nIndex+1]);
                 if ( ! xPrevResourceId.is()
                     || ! xPrevResourceId->isBoundTo(xResourceId, AnchorBindingMode_DIRECT))
                 {
@@ -325,12 +325,11 @@ void ConfigurationUpdater::CheckPureAnchors (
             SAL_INFO("sd.fwk", __func__ << ": deactivating pure anchor " <<
                     FrameworkHelper::ResourceIdToString(xResourceId) <<
                     "because it has no children");
+            rResourcesToDeactivate.push_back(xResourceId);
             // Erase element from current configuration.
             for (sal_Int32 nI=nIndex; nI<nCount-2; ++nI)
                 aResourcesRange[nI] = aResources[nI+1];
             nCount -= 1;
-
-            rResourcesToDeactivate.push_back(xResourceId);
         }
         nIndex -= 1;
     }

@@ -832,7 +832,7 @@ void EffectMigration::SetAnimationSpeed( SvxShape* pShape, AnimationSpeed eSpeed
 
     for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); ++aIter )
     {
-        CustomAnimationEffectPtr pEffect( *aIter );
+        const CustomAnimationEffectPtr& pEffect( *aIter );
         if( pEffect->getTargetShape() == xShape )
         {
             if( pEffect->getDuration() != 0.1 )
@@ -861,7 +861,7 @@ AnimationSpeed EffectMigration::GetAnimationSpeed( SvxShape* pShape )
         });
     if (aIter != pMainSequence->getEnd())
     {
-        CustomAnimationEffectPtr pEffect( *aIter );
+        const CustomAnimationEffectPtr& pEffect( *aIter );
         fDuration = pEffect->getDuration();
     }
 
@@ -902,7 +902,7 @@ void EffectMigration::SetDimColor( SvxShape* pShape, sal_Int32 nColor )
 
     for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); ++aIter )
     {
-        CustomAnimationEffectPtr pEffect( *aIter );
+        const CustomAnimationEffectPtr& pEffect( *aIter );
         if( pEffect->getTargetShape() == xShape )
         {
             pEffect->setHasAfterEffect( true );
@@ -935,7 +935,7 @@ sal_Int32 EffectMigration::GetDimColor( SvxShape* pShape )
                 });
             if (aIter != pMainSequence->getEnd())
             {
-                CustomAnimationEffectPtr pEffect( *aIter );
+                const CustomAnimationEffectPtr& pEffect( *aIter );
                 pEffect->getDimColor() >>= nColor;
             }
         }
@@ -964,7 +964,7 @@ void EffectMigration::SetDimHide( SvxShape* pShape, bool bDimHide )
 
     for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); ++aIter )
     {
-        CustomAnimationEffectPtr pEffect( *aIter );
+        const CustomAnimationEffectPtr& pEffect( *aIter );
         if( pEffect->getTargetShape() == xShape )
         {
             pEffect->setHasAfterEffect( bDimHide );
@@ -997,7 +997,7 @@ bool EffectMigration::GetDimHide( SvxShape* pShape )
                 [&xShape](const CustomAnimationEffectPtr& pEffect) { return pEffect->getTargetShape() == xShape; });
             if (aIter != pMainSequence->getEnd())
             {
-                CustomAnimationEffectPtr pEffect( *aIter );
+                const CustomAnimationEffectPtr& pEffect( *aIter );
                 bRet = pEffect->hasAfterEffect() &&
                         !pEffect->getDimColor().hasValue() &&
                         (!pEffect->IsAfterEffectOnNext());
@@ -1033,7 +1033,7 @@ void EffectMigration::SetDimPrevious( SvxShape* pShape, bool bDimPrevious )
 
     for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); ++aIter )
     {
-        CustomAnimationEffectPtr pEffect( *aIter );
+        const CustomAnimationEffectPtr& pEffect( *aIter );
         if( pEffect->getTargetShape() == xShape )
         {
             pEffect->setHasAfterEffect( bDimPrevious );
@@ -1064,7 +1064,7 @@ bool EffectMigration::GetDimPrevious( SvxShape* pShape )
                 [&xShape](const CustomAnimationEffectPtr& pEffect) { return pEffect->getTargetShape() == xShape; });
             if (aIter != pMainSequence->getEnd())
             {
-                CustomAnimationEffectPtr pEffect( *aIter );
+                const CustomAnimationEffectPtr& pEffect( *aIter );
                 bRet = pEffect->hasAfterEffect() &&
                         pEffect->getDimColor().hasValue() &&
                         pEffect->IsAfterEffectOnNext();
@@ -1097,7 +1097,7 @@ void EffectMigration::SetPresentationOrder( SvxShape* pShape, sal_Int32 nNewPos 
         EffectSequence::iterator aEnd( rSequence.end() );
         for( nPos = 0; aIter != aEnd; ++aIter )
         {
-            CustomAnimationEffectPtr pEffect = *aIter;
+            const CustomAnimationEffectPtr& pEffect = *aIter;
 
             if( !xCurrent.is() )
             {
@@ -1210,7 +1210,7 @@ void EffectMigration::UpdateSoundEffect( SvxShape* pShape, SdAnimationInfo const
 
     for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); ++aIter )
     {
-        CustomAnimationEffectPtr pEffect( *aIter );
+        const CustomAnimationEffectPtr& pEffect( *aIter );
         if( pEffect->getTargetShape() == xShape )
         {
             if( !aSoundFile.isEmpty() )
@@ -1248,7 +1248,7 @@ OUString EffectMigration::GetSoundFile( SvxShape* pShape )
                     (aSoundFile.isEmpty()) && (aIter != pMainSequence->getEnd());
                     ++aIter )
             {
-                CustomAnimationEffectPtr pEffect( *aIter );
+                const CustomAnimationEffectPtr& pEffect( *aIter );
                 if( pEffect->getTargetShape() == xShape )
                 {
                     if( pEffect->getAudio().is() )

@@ -158,7 +158,7 @@ static void lcl_IterateBookmarkPages( SdDrawDocument &rDoc, SdDrawDocument* pBoo
         else
         {
             // fetch nPos'th entry from bookmark list, and determine master page
-            OUString aBMPgName(rBookmarkList[nPos]);
+            const OUString& aBMPgName(rBookmarkList[nPos]);
             bool  bIsMasterPage;
 
             sal_uInt16 nBMPage = pBookmarkDoc->GetPageByName( aBMPgName, bIsMasterPage );
@@ -664,7 +664,7 @@ bool SdDrawDocument::InsertBookmarkAsPage(
         ::std::vector<SdPage*> aBookmarkedPages (rBookmarkList.size(), nullptr);
         for ( size_t nPos = 0, n = rBookmarkList.size(); nPos < n; ++nPos)
         {
-            OUString aPgName(rBookmarkList[nPos]);
+            const OUString& aPgName(rBookmarkList[nPos]);
             bool    bIsMasterPage;
             sal_uInt16  nBMPage = pBookmarkDoc->GetPageByName( aPgName, bIsMasterPage );
 
@@ -687,7 +687,7 @@ bool SdDrawDocument::InsertBookmarkAsPage(
                 // delay renaming *after* pages are copied (might destroy source otherwise)
                 // don't change name if source and dest model are the same!
                 // avoid renaming if replacing the same page
-                OUString aPgName(rBookmarkList[nPos]);
+                const OUString& aPgName(rBookmarkList[nPos]);
                 bool    bIsMasterPage;
                 sal_uInt16 nPageSameName = GetPageByName(aPgName, bIsMasterPage);
                 if( pBookmarkDoc != this &&

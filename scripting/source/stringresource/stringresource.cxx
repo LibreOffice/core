@@ -1373,8 +1373,7 @@ void StringResourcePersistenceImpl::importBinary( const Sequence< ::sal_Int8 >& 
         nOldLocaleCount = aLocaleSeq.getLength();
         if( nOldLocaleCount > 0 )
         {
-            Locale aLocale = aLocaleSeq[0];
-            removeLocale( aLocale );
+            removeLocale( aLocaleSeq[0] );
         }
     }
     while( nOldLocaleCount > 0 );

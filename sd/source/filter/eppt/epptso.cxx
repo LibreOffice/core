@@ -87,10 +87,10 @@ sal_uInt16 PPTExBulletProvider::GetId(Graphic const & rGraphic, Size& rGraphicSi
 
     if (!rGraphic.IsNone())
     {
-        Graphic         aMappedGraphic, aGraphic(rGraphic);
-        GraphicObject   aGraphicObject(aGraphic);
-        Size            aPrefSize( aGraphic.GetPrefSize() );
-        BitmapEx        aBmpEx( aGraphic.GetBitmapEx() );
+        Graphic         aMappedGraphic;
+        GraphicObject   aGraphicObject(rGraphic);
+        Size            aPrefSize( rGraphic.GetPrefSize() );
+        BitmapEx        aBmpEx( rGraphic.GetBitmapEx() );
 
         if ( rGraphicSize.Width() && rGraphicSize.Height() )
         {

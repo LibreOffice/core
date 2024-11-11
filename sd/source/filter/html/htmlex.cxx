@@ -270,7 +270,7 @@ namespace
 
 OUString getParagraphStyle( const SdrOutliner* pOutliner, sal_Int32 nPara )
 {
-    SfxItemSet aParaSet( pOutliner->GetParaAttribs( nPara ) );
+    const SfxItemSet& aParaSet( pOutliner->GetParaAttribs( nPara ) );
 
     OUString sStyle;
 

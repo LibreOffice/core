@@ -1394,7 +1394,7 @@ static void CalcAutoLayoutRectangles( SdPage const & rPage,::tools::Rectangle* r
         return;
 
     int count=0;
-    Reference<XNode> layoutNode = *aIter;
+    const Reference<XNode>& layoutNode = *aIter;
     Reference<XNodeList> layoutChildren = layoutNode->getChildNodes();
     const int presobjsize = layoutChildren->getLength();
     for( int j=0; j< presobjsize ; j++)

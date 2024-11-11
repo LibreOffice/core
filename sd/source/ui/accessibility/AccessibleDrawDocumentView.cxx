@@ -525,7 +525,7 @@ OUString AccessibleDrawDocumentView::CreateAccessibleName()
     if (xInfo.is())
     {
         uno::Sequence< OUString > aServices( xInfo->getSupportedServiceNames() );
-        OUString sFirstService = aServices[0];
+        const OUString& sFirstService = aServices[0];
         if ( sFirstService == "com.sun.star.drawing.DrawingDocumentDrawView" )
         {
             if( aServices.getLength() >= 2 && aServices[1] == "com.sun.star.presentation.PresentationView")

@@ -2717,7 +2717,7 @@ void EffectSequenceHelper::setAnimateForm( const CustomAnimationTextGroupPtr& pT
 
         if( !bAnimateForm && (aEffects.size() == 1) )
         {
-            CustomAnimationEffectPtr pEffect( *aIter );
+            const CustomAnimationEffectPtr& pEffect( *aIter );
             pEffect->setTarget( Any( (*aIter)->getTargetShape() ) );
             pEffect->setTargetSubItem( ShapeAnimationSubType::ONLY_TEXT );
             pTextGroup->addEffect( pEffect );
