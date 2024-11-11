@@ -1835,13 +1835,11 @@ void SdrObject::SetOutlinerParaObject(std::optional<OutlinerParaObject> pTextObj
 
     // Don't do this during import.
     SdrObject* pTopGroupObj = nullptr;
-    if (getParentSdrObjectFromSdrObject())
+    SdrObject* pParent = getParentSdrObjectFromSdrObject();
+    while(pParent)
     {
-        pTopGroupObj = getParentSdrObjectFromSdrObject();
-        while (pTopGroupObj->getParentSdrObjectFromSdrObject())
-        {
-            pTopGroupObj = pTopGroupObj->getParentSdrObjectFromSdrObject();
-        }
+        pTopGroupObj = pParent;
+        pParent = pTopGroupObj->getParentSdrObjectFromSdrObject();
     }
     if (pTopGroupObj)
     {
