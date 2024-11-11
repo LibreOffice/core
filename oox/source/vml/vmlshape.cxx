@@ -208,10 +208,16 @@ awt::Rectangle ShapeType::getAbsRectangle() const
     if (nLeft == 0 && maTypeModel.maPosition == "absolute")
         nLeft = 1;
 
-    return awt::Rectangle(
-        nLeft,
-        ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maTypeModel.maTop, 0, false, true ) + ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maTypeModel.maMarginTop, 0, false, true ),
-        nWidth, nHeight );
+    sal_Int32 nTop;
+    if (o3tl::checked_add<sal_Int32>(ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maTypeModel.maTop, 0, false, true),
+                                     ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maTypeModel.maMarginTop, 0, false, true),
+                                     nTop))
+    {
+        SAL_WARN("oox", "overflow in addition");
+        nTop = 0;
+    }
+
+    return awt::Rectangle(nLeft, nTop, nWidth, nHeight);
 }
 
 awt::Rectangle ShapeType::getRelRectangle() const
