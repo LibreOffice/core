@@ -193,7 +193,7 @@ namespace sdr::contact
                 bool const isTaggedPDF,
                 drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor)
         {
-            const rtl::Reference< table::TableModel > xTable = rTableObj.getUnoTable();
+            const rtl::Reference< table::TableModel >& xTable = rTableObj.getUnoTable();
 
             if(xTable.is())
             {

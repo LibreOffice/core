@@ -41,7 +41,7 @@ void SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest const & rReq,
                         const GraphicObject& rInputObject,
                         const std::function<void(const Graphic&)>& f)
 {
-    Graphic aInputGraphic = rInputObject.GetGraphic();
+    const Graphic& aInputGraphic = rInputObject.GetGraphic();
 
     if( aInputGraphic.GetType() != GraphicType::Bitmap )
         return;

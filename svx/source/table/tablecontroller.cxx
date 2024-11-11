@@ -2857,7 +2857,7 @@ bool SvxTableController::PasteObject( SdrTableObj const * pPasteTableObj )
     if( !pPasteTableObj )
         return false;
 
-    rtl::Reference< TableModel > xPasteTable( pPasteTableObj->getUnoTable() );
+    const rtl::Reference< TableModel >& xPasteTable( pPasteTableObj->getUnoTable() );
     if( !xPasteTable.is() )
         return false;
 

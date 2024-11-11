@@ -452,7 +452,7 @@ namespace drawinglayer::primitive2d
 
             if(drawing::FillStyle_NONE == eStyle)
             {
-                XFillUseSlideBackgroundItem aBckItem(rSet.Get(XATTR_FILLUSESLIDEBACKGROUND));
+                const XFillUseSlideBackgroundItem& aBckItem(rSet.Get(XATTR_FILLUSESLIDEBACKGROUND));
                 const bool bSlideBackgroundFill(aBckItem.GetValue());
 
                 if(bSlideBackgroundFill)

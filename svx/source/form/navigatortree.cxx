@@ -1912,7 +1912,7 @@ namespace svxform
     {
         if (pEntryData == nullptr) return false;
 
-        Reference< XPropertySet > xProperties( pEntryData->GetPropertySet() );
+        const Reference< XPropertySet >& xProperties( pEntryData->GetPropertySet() );
         if (::comphelper::hasProperty(FM_PROP_CLASSID, xProperties))
         {
             Any aClassID = xProperties->getPropertyValue( FM_PROP_CLASSID );
@@ -2002,7 +2002,7 @@ namespace svxform
 
         // find and select appropriate SdrObj
         FmFormView*     pFormView       = pFormShell->GetFormView();
-        Reference< XFormComponent >  xFormComponent( pControlData->GetFormComponent());
+        const Reference< XFormComponent >&  xFormComponent( pControlData->GetFormComponent());
         SdrPageView*    pPageView       = pFormView->GetSdrPageView();
         SdrPage*        pPage           = pPageView->GetPage();
 

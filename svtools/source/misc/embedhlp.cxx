@@ -853,7 +853,7 @@ void EmbeddedObjectRef::SetGraphicToContainer( const Graphic& rGraphic,
     SvMemoryStream aStream;
     aStream.SetVersion( SOFFICE_FILEFORMAT_CURRENT );
 
-    auto pGfxLink = rGraphic.GetSharedGfxLink();
+    const auto& pGfxLink = rGraphic.GetSharedGfxLink();
     if (pGfxLink && pGfxLink->IsNative())
     {
         if (pGfxLink->ExportNative(aStream))

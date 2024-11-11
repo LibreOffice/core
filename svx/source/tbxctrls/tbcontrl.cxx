@@ -2186,7 +2186,7 @@ ColorWindow::~ColorWindow()
 NamedColor ColorWindow::GetSelectEntryColor(ValueSet const * pColorSet)
 {
     Color aColor = pColorSet->GetItemColor(pColorSet->GetSelectedItemId());
-    OUString sColorName = pColorSet->GetItemText(pColorSet->GetSelectedItemId());
+    const OUString& sColorName = pColorSet->GetItemText(pColorSet->GetSelectedItemId());
     return { aColor, sColorName };
 }
 

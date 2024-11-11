@@ -125,7 +125,7 @@ void GraphicHelper::GetPreferredExtension( OUString& rExtension, const Graphic& 
 
 OUString GraphicHelper::GetImageType(const Graphic& rGraphic)
 {
-    auto pGfxLink = rGraphic.GetSharedGfxLink();
+    const auto& pGfxLink = rGraphic.GetSharedGfxLink();
     if (pGfxLink)
     {
         auto iter = constGfxTypeToString.find(pGfxLink->GetType());

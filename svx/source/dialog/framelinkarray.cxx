@@ -1277,7 +1277,7 @@ static void HelperClipLine(
 
     if(aResultPP.count() > 0)
     {
-        const basegfx::B2DPolygon aResultP(aResultPP.getB2DPolygon(0));
+        const basegfx::B2DPolygon& aResultP(aResultPP.getB2DPolygon(0));
 
         if(aResultP.count() > 0)
         {

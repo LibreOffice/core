@@ -983,7 +983,7 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys(std::vector<OUString>& rL
     for (size_t i = 0, nPos = nOldListCount; i < aWSStringsDtor.size(); ++i)
     {
         bool bFlag = true;
-        OUString aInsStr(aWSStringsDtor[i]);
+        const OUString& aInsStr(aWSStringsDtor[i]);
         size_t j;
         for (j = 0; j < aList.size(); ++j)
         {

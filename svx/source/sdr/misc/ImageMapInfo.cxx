@@ -62,7 +62,7 @@ IMapObject* SvxIMapInfo::GetHitIMapObject(const SdrObject* pObj, const Point& rW
 
         if (pCmpWnd)
         {
-            MapMode aWndMode = pCmpWnd->GetMapMode();
+            const MapMode& aWndMode = pCmpWnd->GetMapMode();
             aRelPoint = pCmpWnd->LogicToLogic(rWinPoint, &aWndMode, &aMap100);
             aRect = pCmpWnd->LogicToLogic(pObj->GetLogicRect(), &aWndMode, &aMap100);
         }

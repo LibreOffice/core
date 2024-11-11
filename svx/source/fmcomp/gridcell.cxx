@@ -527,7 +527,7 @@ DbCellControl::DbCellControl( DbGridColumn& _rColumn )
     ,m_pPainter( nullptr )
     ,m_pWindow( nullptr )
 {
-    Reference< XPropertySet > xColModelProps = _rColumn.getModel();
+    const Reference< XPropertySet >& xColModelProps = _rColumn.getModel();
     if ( !xColModelProps.is() )
         return;
 

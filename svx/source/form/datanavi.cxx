@@ -415,7 +415,7 @@ namespace svxform
                 {
                     try
                     {
-                        Reference< css::xforms::XSubmission > xNewSubmission = aDlg.GetNewSubmission();
+                        const Reference< css::xforms::XSubmission >& xNewSubmission = aDlg.GetNewSubmission();
                         Reference< XSet > xSubmissions = xModel->getSubmissions();
                         xSubmissions->insert( Any( xNewSubmission ) );
                         AddEntry(xNewSubmission, m_xScratchIter.get());

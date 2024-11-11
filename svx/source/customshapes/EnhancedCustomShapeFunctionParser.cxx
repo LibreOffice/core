@@ -1137,7 +1137,7 @@ std::shared_ptr<ExpressionNode> const & FunctionParser::parseFunction( std::u16s
 
     // static parser context, because the actual
     // Spirit parser is also a static object
-    ParserContextSharedPtr pContext = getParserContext();
+    const ParserContextSharedPtr& pContext = getParserContext();
     pContext->mpCustoShape = &rCustoShape;
 
     ExpressionGrammar aExpressionGrammer( pContext );

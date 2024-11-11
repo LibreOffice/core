@@ -309,7 +309,7 @@ void BulletsTypeMgr::ReplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uIn
 
     SvxNumberFormat aFmt(aNum.GetLevel(nActLv));
     sal_UCS4 cChar = aFmt.GetBulletChar();
-    std::optional<vcl::Font> pFont = aFmt.GetBulletFont();
+    const std::optional<vcl::Font>& pFont = aFmt.GetBulletFont();
 
     pActualBullets[nIndex]->cBulletChar = cChar;
     if ( pFont )

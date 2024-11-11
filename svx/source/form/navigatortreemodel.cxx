@@ -456,7 +456,7 @@ namespace svxform
 
 
         // unregister as PropertyChangeListener
-        Reference< XPropertySet > xSet( pFormData->GetPropertySet() );
+        const Reference< XPropertySet >& xSet( pFormData->GetPropertySet() );
         if ( xSet.is() )
             xSet->removePropertyChangeListener( FM_PROP_NAME, m_pPropChangeList );
     }
@@ -471,7 +471,7 @@ namespace svxform
 
 
         // unregister as PropertyChangeListener
-        Reference< XPropertySet >  xSet( pControlData->GetPropertySet() );
+        const Reference< XPropertySet >&  xSet( pControlData->GetPropertySet() );
         if (xSet.is())
             xSet->removePropertyChangeListener( FM_PROP_NAME, m_pPropChangeList);
     }

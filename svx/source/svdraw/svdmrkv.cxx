@@ -1060,7 +1060,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                                     const basegfx::B2DPolyPolygon aPolyPolygon(pO->TakeXorPoly());
                                     if (aPolyPolygon.count() == 1)
                                     {
-                                        const basegfx::B2DPolygon aPolygon = aPolyPolygon.getB2DPolygon(0);
+                                        const basegfx::B2DPolygon& aPolygon = aPolyPolygon.getB2DPolygon(0);
                                         if (sal_uInt32 nPolySize = aPolygon.count())
                                         {
                                             const OutputDevice* pOut = this->GetFirstOutputDevice();

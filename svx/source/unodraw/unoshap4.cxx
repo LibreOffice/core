@@ -1071,7 +1071,7 @@ bool SvxMediaShape::getPropertyValueImpl( const OUString& rName, const SfxItemPr
             case OWN_ATTR_VALUE_GRAPHIC:
 #if HAVE_FEATURE_AVMEDIA
             {
-                Graphic aGraphic = aItem.getGraphic();
+                const Graphic& aGraphic = aItem.getGraphic();
                 if (!aGraphic.IsNone())
                 {
                     rValue <<= aGraphic.GetXGraphic();

@@ -1536,8 +1536,8 @@ bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int
     // calculate the positions, respecting the settings of the target device
     ::Size aTextSize( _rOutDev.GetTextWidth(sFieldName + _rFieldPostfix), _rOutDev.GetTextHeight() );
 
-    MapMode   eTargetMode( _rOutDev.GetMapMode() ),
-              eSourceMode( MapUnit::Map100thMM );
+    const MapMode & eTargetMode( _rOutDev.GetMapMode() );
+    MapMode eSourceMode( MapUnit::Map100thMM );
 
     // text width is at least 4 centimeters
     // text height is always half a centimeter

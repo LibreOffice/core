@@ -236,7 +236,7 @@ namespace
     void lcl_insertFormObject_throw( const FmFormObj& _object, const Reference< XMap >& _map )
     {
         // the control model
-        Reference< XControlModel > xControlModel = _object.GetUnoControlModel();
+        const Reference< XControlModel >& xControlModel = _object.GetUnoControlModel();
         OSL_ENSURE( xControlModel.is(), "lcl_insertFormObject_throw: suspicious: no control model!" );
         if ( !xControlModel.is() )
             return;
@@ -252,7 +252,7 @@ namespace
     void lcl_removeFormObject_throw( const FmFormObj& _object, const Reference< XMap >& _map )
     {
         // the control model
-        Reference< XControlModel > xControlModel = _object.GetUnoControlModel();
+        const Reference< XControlModel >& xControlModel = _object.GetUnoControlModel();
         OSL_ENSURE( xControlModel.is(), "lcl_removeFormObject: suspicious: no control model!" );
         if ( !xControlModel.is() )
         {

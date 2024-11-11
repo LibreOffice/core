@@ -154,7 +154,7 @@ SdrUnoObj::SdrUnoObj( SdrModel& rSdrModel, SdrUnoObj const & rSource)
     aUnoControlTypeName = rSource.aUnoControlTypeName;
 
     // copy the uno control model
-    const uno::Reference< awt::XControlModel > xSourceControlModel = rSource.GetUnoControlModel();
+    const uno::Reference< awt::XControlModel >& xSourceControlModel = rSource.GetUnoControlModel();
     if ( xSourceControlModel.is() )
     {
         try

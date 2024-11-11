@@ -535,7 +535,7 @@ namespace slideshow::internal
 
             // static parser context, because the actual
             // Spirit parser is also a static object
-            ParserContextSharedPtr pContext = getParserContext();
+            const ParserContextSharedPtr& pContext = getParserContext();
 
             pContext->maShapeBounds = rRelativeShapeBounds;
             pContext->mbParseAnimationFunction = false; // parse with '$' disabled
@@ -578,7 +578,7 @@ namespace slideshow::internal
 
             // static parser context, because the actual
             // Spirit parser is also a static object
-            ParserContextSharedPtr pContext = getParserContext();
+            const ParserContextSharedPtr& pContext = getParserContext();
 
             pContext->maShapeBounds = rRelativeShapeBounds;
             pContext->mbParseAnimationFunction = true; // parse with '$' enabled

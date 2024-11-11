@@ -499,7 +499,7 @@ SgaObjectBmp GalleryFileStorage::insertGraphic(const Graphic& rGraphic, const Gf
 
         if (ConvertDataFormat::SVM == nExportFormat)
         {
-            GDIMetaFile aMtf(rGraphic.GetGDIMetaFile());
+            const GDIMetaFile& aMtf(rGraphic.GetGDIMetaFile());
 
             SvmWriter aWriter(*pOStm);
             aWriter.Write(aMtf);
