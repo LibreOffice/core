@@ -39,6 +39,7 @@ class SvStream;
 struct SignatureInformation;
 
 namespace svl::crypto {
+class SigningContext;
 
 /// Converts a hex-encoded string into a byte array.
 SVL_DLLPUBLIC std::vector<unsigned char> DecodeHexString(std::string_view rHex);
@@ -49,8 +50,8 @@ class SVL_DLLPUBLIC Signing
 {
 public:
 
-    Signing(css::uno::Reference<css::security::XCertificate> xCertificate) :
-        m_xCertificate(std::move(xCertificate))
+    Signing(svl::crypto::SigningContext& rSigningContext) :
+        m_rSigningContext(rSigningContext)
     {
     }
 
@@ -84,7 +85,7 @@ public:
 
 private:
     /// The certificate to use for signing.
-    const css::uno::Reference<css::security::XCertificate> m_xCertificate;
+    svl::crypto::SigningContext& m_rSigningContext;
 
     /// Data blocks (pointer-size pairs).
     std::vector<std::pair<const void*, sal_Int32>> m_dataBlocks;
@@ -99,7 +100,8 @@ class SVL_DLLPUBLIC SigningContext
 public:
     /// If set, the certificate used for signing.
     css::uno::Reference<css::security::XCertificate> m_xCertificate;
-    /// If m_xCertificate is not set, the time that would be used.
+    /// If m_xCertificate is not set, the time that would be used, in milliseconds since the epoch
+    /// (1970-01-01 UTC).
     sal_Int64 m_nSignatureTime = 0;
 };
 

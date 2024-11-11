@@ -35,6 +35,10 @@ namespace tools
 {
 class Rectangle;
 }
+namespace svl::crypto
+{
+class SigningContext;
+}
 
 namespace vcl::filter
 {
@@ -586,8 +590,8 @@ public:
     void SetSignatureLine(std::vector<sal_Int8>&& rSignatureLine);
     void SetSignaturePage(size_t nPage);
     /// Sign the read document with xCertificate in the edit buffer.
-    bool Sign(const css::uno::Reference<css::security::XCertificate>& xCertificate,
-              const OUString& rDescription, bool bAdES);
+    bool Sign(svl::crypto::SigningContext& rSigningContext, const OUString& rDescription,
+              bool bAdES);
     /// Serializes the contents of the edit buffer.
     bool Write(SvStream& rStream);
     /// Get a list of signatures embedded into this document.

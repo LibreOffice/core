@@ -855,8 +855,8 @@ void PDFDocument::WriteXRef(sal_uInt64 nXRefOffset, PDFReferenceElement const* p
     }
 }
 
-bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificate,
-                       const OUString& rDescription, bool bAdES)
+bool PDFDocument::Sign(svl::crypto::SigningContext& rSigningContext, const OUString& rDescription,
+                       bool bAdES)
 {
     m_aEditBuffer.Seek(STREAM_SEEK_TO_END);
     m_aEditBuffer.WriteOString("\n");
@@ -922,11 +922,14 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
     m_aEditBuffer.WriteOString(aByteRangeBuffer);
 
     // Create the PKCS#7 object.
-    css::uno::Sequence<sal_Int8> aDerEncoded = xCertificate->getEncoded();
-    if (!aDerEncoded.hasElements())
+    if (rSigningContext.m_xCertificate)
     {
-        SAL_WARN("vcl.filter", "PDFDocument::Sign: empty certificate");
-        return false;
+        css::uno::Sequence<sal_Int8> aDerEncoded = rSigningContext.m_xCertificate->getEncoded();
+        if (!aDerEncoded.hasElements())
+        {
+            SAL_WARN("vcl.filter", "PDFDocument::Sign: empty certificate");
+            return false;
+        }
     }
 
     m_aEditBuffer.Seek(0);
@@ -940,12 +943,15 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
     m_aEditBuffer.ReadBytes(aBuffer2.get(), nBufferSize2);
 
     OStringBuffer aCMSHexBuffer;
-    svl::crypto::Signing aSigning(xCertificate);
+    svl::crypto::Signing aSigning(rSigningContext);
     aSigning.AddDataRange(aBuffer1.get(), nBufferSize1);
     aSigning.AddDataRange(aBuffer2.get(), nBufferSize2);
     if (!aSigning.Sign(aCMSHexBuffer))
     {
-        SAL_WARN("vcl.filter", "PDFDocument::Sign: PDFWriter::Sign() failed");
+        if (rSigningContext.m_xCertificate.is())
+        {
+            SAL_WARN("vcl.filter", "PDFDocument::Sign: PDFWriter::Sign() failed");
+        }
         return false;
     }
 

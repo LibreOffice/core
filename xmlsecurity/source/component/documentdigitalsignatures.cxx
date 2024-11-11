@@ -331,7 +331,9 @@ sal_Bool DocumentDigitalSignatures::signSignatureLine(
         xSecurityContext = aSignatureManager.getSecurityContext();
 
     sal_Int32 nSecurityId;
-    bool bSuccess = aSignatureManager.add(xCertificate, xSecurityContext, aComment, nSecurityId,
+    svl::crypto::SigningContext aSigningContext;
+    aSigningContext.m_xCertificate = xCertificate;
+    bool bSuccess = aSignatureManager.add(aSigningContext, xSecurityContext, aComment, nSecurityId,
                                           true, aSignatureLineId, xValidGraphic, xInvalidGraphic);
     if (!bSuccess)
         return false;
@@ -923,7 +925,7 @@ bool DocumentDigitalSignatures::signWithCertificateImpl(
 
     sal_Int32 nSecurityId;
 
-    bool bSuccess = aSignatureManager.add(rSigningContext.m_xCertificate, xSecurityContext, "", nSecurityId, true);
+    bool bSuccess = aSignatureManager.add(rSigningContext, xSecurityContext, "", nSecurityId, true);
     if (!bSuccess)
         return false;
 

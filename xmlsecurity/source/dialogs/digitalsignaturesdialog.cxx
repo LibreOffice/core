@@ -68,6 +68,7 @@
 #include <vcl/svapp.hxx>
 #include <unotools/configitem.hxx>
 #include <sfx2/viewsh.hxx>
+#include <svl/cryptosign.hxx>
 
 #ifdef _WIN32
 #include <o3tl/char16_t2wchar_t.hxx>
@@ -550,9 +551,11 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl, weld::Button&, void)
         {
             sal_Int32 nSecurityId;
 
+            svl::crypto::SigningContext aSigningContext;
+            aSigningContext.m_xCertificate = aChooser->GetSelectedCertificates()[0];
             if (moScriptSignatureManager)
             {
-                if (!moScriptSignatureManager->add(aChooser->GetSelectedCertificates()[0],
+                if (!moScriptSignatureManager->add(aSigningContext,
                             aChooser->GetSelectedSecurityContext(),
                             aChooser->GetDescription(), nSecurityId,
                             m_bAdESCompliant))
@@ -566,7 +569,7 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl, weld::Button&, void)
                 maSignatureManager.setScriptingSignatureStream(moScriptSignatureManager->getSignatureStream());
             }
 
-            if (!maSignatureManager.add(aChooser->GetSelectedCertificates()[0], aChooser->GetSelectedSecurityContext(),
+            if (!maSignatureManager.add(aSigningContext, aChooser->GetSelectedSecurityContext(),
                         aChooser->GetDescription(), nSecurityId, m_bAdESCompliant))
                 return;
             mbSignaturesChanged = true;

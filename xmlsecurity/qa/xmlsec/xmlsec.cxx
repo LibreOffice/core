@@ -14,6 +14,7 @@
 
 #include <comphelper/storagehelper.hxx>
 #include <sfx2/lokhelper.hxx>
+#include <svl/cryptosign.hxx>
 
 #include <documentsignaturemanager.hxx>
 
@@ -82,7 +83,9 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertPrivateKey)
     // Get the certificate flags, the certificate chooser dialog does this:
     xSecurityEnvironment->getCertificateCharacters(xCertificate);
     sal_Int32 nSecurityId;
-    CPPUNIT_ASSERT(aManager.add(xCertificate, xSecurityContext, OUString(), nSecurityId, false));
+    svl::crypto::SigningContext aSigningContext;
+    aSigningContext.m_xCertificate = xCertificate;
+    CPPUNIT_ASSERT(aManager.add(aSigningContext, xSecurityContext, OUString(), nSecurityId, false));
 
     // Then make sure that signing succeeds:
     aManager.read(/*bUseTempStream=*/true);

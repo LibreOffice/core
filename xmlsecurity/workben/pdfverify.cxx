@@ -26,6 +26,7 @@
 #include <vcl/filter/pdfdocument.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <svl/sigstruct.hxx>
+#include <svl/cryptosign.hxx>
 
 #include <pdfsignaturehelper.hxx>
 
@@ -183,7 +184,9 @@ int pdfVerify(int nArgc, char** pArgv)
         SAL_WARN("xmlsecurity.workben", "no signing certificates found");
         return 1;
     }
-    if (!aDocument.Sign(aCertificates[0], "pdfverify", /*bAdES=*/true))
+    svl::crypto::SigningContext aSigningContext;
+    aSigningContext.m_xCertificate = aCertificates[0];
+    if (!aDocument.Sign(aSigningContext, "pdfverify", /*bAdES=*/true))
     {
         SAL_WARN("xmlsecurity.workben", "failed to sign");
         return 1;
