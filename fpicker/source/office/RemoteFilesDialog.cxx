@@ -323,13 +323,11 @@ int RemoteFilesDialog::GetSelectedServicePos()
 
 void RemoteFilesDialog::AddFilter( const OUString& rFilter, const OUString& rType )
 {
-    OUString sName = rFilter;
-
     m_aFilters.emplace_back( rFilter, rType );
     if (rType.isEmpty())
         m_xFilter_lb->append_separator(u""_ustr);
     else
-        m_xFilter_lb->append_text(sName);
+        m_xFilter_lb->append_text(rFilter);
 
     if (m_xFilter_lb->get_active() == -1)
         m_xFilter_lb->set_active(0);

@@ -241,7 +241,7 @@ void ImageProducer::ImplInitConsumer( const Graphic& rGraphic )
 void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
 {
     BitmapEx            aBmpEx( rGraphic.GetBitmapEx() );
-    Bitmap              aBmp( aBmpEx.GetBitmap() );
+    const Bitmap&       aBmp( aBmpEx.GetBitmap() );
     BitmapScopedReadAccess pBmpAcc(aBmp);
 
     if( !pBmpAcc )

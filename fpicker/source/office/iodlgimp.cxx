@@ -161,7 +161,7 @@ void SvtExpFileDlg_Impl::InsertFilterListEntry(const SvtFileDialogFilter_Impl* p
 {
     // insert and set user data
     OUString sId(weld::toId(pFilterDesc));
-    OUString sName = pFilterDesc->GetName();
+    const OUString& sName = pFilterDesc->GetName();
     if (pFilterDesc->isGroupSeparator())
         m_xLbFilter->append_separator(sId);
     else
