@@ -235,15 +235,17 @@ void SwInsFootNoteDlg::Init()
     else
         m_xEndNoteBtn->set_active(true);
 
-    bool bNext = m_rSh.GotoNextFootnoteAnchor();
+    // Do not move the shell cursor; move a collapsed SwCursor created in the correct position.
+    // Moving a cursor with a mark will attempt to move only the point, thus a selection from
+    // outside of a table to inside of it could be possible, which would fail.
+    // bNext and bPrev are only false (simultaneously) for single-footnote documents, because
+    // GotoNextFootnoteAnchor / GotoPrevFootnoteAnchor may wrap.
+    const auto anchorPos = *m_rSh.GetCursor()->GetPoint();
+    SwCursor test(anchorPos, nullptr);
+    bool bNext = test.GotoNextFootnoteAnchor() && *test.GetPoint() != anchorPos;
 
-    if (bNext)
-        m_rSh.GotoPrevFootnoteAnchor();
-
-    bool bPrev = m_rSh.GotoPrevFootnoteAnchor();
-
-    if (bPrev)
-        m_rSh.GotoNextFootnoteAnchor();
+    test = SwCursor(anchorPos, nullptr);
+    bool bPrev = test.GotoPrevFootnoteAnchor() && *test.GetPoint() != anchorPos;
 
     m_xPrevBT->set_sensitive(bPrev);
     m_xNextBT->set_sensitive(bNext);

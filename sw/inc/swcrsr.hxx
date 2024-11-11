@@ -181,8 +181,8 @@ public:
     bool GotoRegion( std::u16string_view rName );
     SW_DLLPUBLIC bool GotoFootnoteAnchor();
     bool GotoFootnoteText();
-    bool GotoNextFootnoteAnchor();
-    bool GotoPrevFootnoteAnchor();
+    SW_DLLPUBLIC bool GotoNextFootnoteAnchor();
+    SW_DLLPUBLIC bool GotoPrevFootnoteAnchor();
 
     SW_DLLPUBLIC bool MovePara( SwWhichPara, SwMoveFnCollection const & );
     bool MoveSection( SwWhichSection, SwMoveFnCollection const & );
