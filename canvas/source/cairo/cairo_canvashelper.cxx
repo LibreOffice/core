@@ -421,7 +421,7 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
     static cairo_pattern_t* patternFromParametricPolyPolygon( ::canvas::ParametricPolyPolygon const & rPolygon )
     {
         cairo_pattern_t* pPattern = nullptr;
-        const ::canvas::ParametricPolyPolygon::Values aValues = rPolygon.getValues();
+        const ::canvas::ParametricPolyPolygon::Values& aValues = rPolygon.getValues();
         double x0, x1, y0, y1, cx, cy, r0, r1;
 
         switch( aValues.meType )
