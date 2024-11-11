@@ -736,6 +736,9 @@ static const SwTextNode* lcl_FindChapterNode(const SwNode& rNd, SwRootFrame cons
             SwPosition aPos( *pNd );
             pNd = GetBodyTextNode( pNd->GetDoc(), aPos, *pFrame );
             OSL_ENSURE( pNd, "Where's the paragraph?" );
+            if (!pNd)
+                return nullptr;
+
             // tdf#153636 - search for outline node only if the index is for the current chapter
             if (bIsFromChapter)
                 // tdf#151462 - search for outline node containing the current node
