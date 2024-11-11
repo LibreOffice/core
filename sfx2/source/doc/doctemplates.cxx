@@ -1779,7 +1779,7 @@ sal_Bool SfxDocTplService::storeTemplate( const OUString& rGroupName,
             throw uno::RuntimeException();
 
         const OUString aMediaType {aTypeProps.getUnpackedValueOrDefault(u"MediaType"_ustr, OUString() )};
-        const OUString aExt {aAllExt[0]};
+        const OUString& aExt {aAllExt[0]};
 
         if ( aMediaType.isEmpty() || aExt.isEmpty() )
             throw uno::RuntimeException();

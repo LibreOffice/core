@@ -3729,7 +3729,7 @@ Reference< ui::XUIConfigurationManager2 > SfxBaseModel::getUIConfigurationManage
                         const OUString sId(OUString::number( i + 1 ));
                         const OUString aCustomTbxName = "private:resource/toolbar/custom_OOo1x_" + sId;
 
-                        Reference< container::XIndexContainer > xToolbar = rToolbars[i];
+                        const Reference< container::XIndexContainer >& xToolbar = rToolbars[i];
                         ConvertSlotsToCommands( pObjShell, xToolbar );
                         if ( !xNewUIConfMan->hasSettings( aCustomTbxName ))
                         {

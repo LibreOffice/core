@@ -3683,7 +3683,7 @@ bool SfxObjectShell::SaveAsOwnFormat( SfxMedium& rMedium )
             // calling SwStyleNameMapper::GetTextUINameArray, which uses
             // SvtSysLocale().GetUILanguageTag() to do the mapping, saving indirectly depends
             // on the UI language. This is an unfortunate dependency. Here we use the loader's language.
-            const LanguageTag viewLanguage = comphelper::LibreOfficeKit::getLanguageTag();
+            const LanguageTag& viewLanguage = comphelper::LibreOfficeKit::getLanguageTag();
             const LanguageTag loadLanguage = SfxLokHelper::getLoadLanguage();
 
             // Use the default language for saving and restore later if necessary.

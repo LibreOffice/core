@@ -1205,7 +1205,7 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
     // Check for cmis properties where otherwise unavailable
     if ( rInfoItem.isCmisDocument( ) )
     {
-        const uno::Sequence< document::CmisProperty > aCmisProps = rInfoItem.GetCmisProperties();
+        const uno::Sequence< document::CmisProperty >& aCmisProps = rInfoItem.GetCmisProperties();
         for ( const auto& rCmisProp : aCmisProps )
         {
             if ( rCmisProp.Id == "cmis:contentStreamLength" &&

@@ -707,7 +707,7 @@ IMPL_LINK_NOARG(FileDialogHelper_Impl, TimeOutHdl_Impl, Timer *, void)
 
     if ( mbShowPreview && ( aPathSeq.getLength() == 1 ) )
     {
-        OUString    aURL = aPathSeq[0];
+        const OUString&    aURL = aPathSeq[0];
 
         if ( ERRCODE_NONE == getGraphic( aURL, maGraphic ) )
         {
@@ -1558,7 +1558,7 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
                 if ( ( aValue >>= bPassWord ) && bPassWord )
                 {
                     // ask for a password
-                    OUString aDocName(rpURLList[0]);
+                    const OUString& aDocName(rpURLList[0]);
                     // TODO: tdf#158839 problem: Also asks for a password if CHECKBOX_GPGENCRYPTION && CHECKBOX_PASSWORD
                     //       are checked. But only encrypts using GPG and discards the password.
                     ErrCode errCode = RequestPassword(pCurrentFilter, aDocName, &*rpSet, GetFrameInterface());

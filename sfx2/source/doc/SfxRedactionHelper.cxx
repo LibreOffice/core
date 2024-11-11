@@ -224,7 +224,7 @@ void SfxRedactionHelper::addPagesToDraw(
 
     for (sal_Int32 nPage = 0; nPage < nPages; ++nPage)
     {
-        GDIMetaFile rGDIMetaFile = aMetaFiles[nPage];
+        const GDIMetaFile& rGDIMetaFile = aMetaFiles[nPage];
         Graphic aGraphic(rGDIMetaFile);
 
         sal_Int32 nPageHeight(aPageSizes[nPage].Height());

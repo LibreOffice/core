@@ -117,7 +117,7 @@ static void NotebookbarAddonValues(
 
     for (int nIdx = 0; nIdx < aAddonsItems.GetAddonsNotebookBarCount(); nIdx++)
     {
-        const css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>> aExtension
+        const css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>>& aExtension
             = aAddonsItems.GetAddonsNotebookBarPart(nIdx);
         for (const css::uno::Sequence<css::beans::PropertyValue>& rExtensionVal : aExtension)
         {
@@ -557,7 +557,7 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
 
 void SfxNotebookBar::RemoveListeners(SystemWindow const * pSysWindow)
 {
-    if (auto pNotebookBar = pSysWindow->GetNotebookBar())
+    if (const auto& pNotebookBar = pSysWindow->GetNotebookBar())
     {
         pNotebookBar->SetupListener(false);
     }

@@ -1664,7 +1664,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                         bool bIsBaseFormOpen = false;
 
                         const auto xCurrentFrame = GetFrame().GetFrameInterface();
-                        const auto xContext = comphelper::getProcessComponentContext();
+                        const auto& xContext = comphelper::getProcessComponentContext();
                         const auto xModuleManager = css::frame::ModuleManager::create(xContext);
                         switch (vcl::EnumContext::GetApplicationEnum(
                             vcl::CommandInfoProvider::GetModuleIdentifier(xCurrentFrame)))

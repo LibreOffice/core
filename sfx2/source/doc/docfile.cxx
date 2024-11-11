@@ -1421,7 +1421,7 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand(bool bLoading, bool bN
                                 if ((aContentToLock.getPropertyValue(u"DAV:lockdiscovery"_ustr) >>= aLocks) && aLocks.hasElements())
                                 {
                                     // got at least a lock, show the owner of the first lock returned
-                                    css::ucb::Lock aLock = aLocks[0];
+                                    const css::ucb::Lock& aLock = aLocks[0];
                                     OUString aOwner;
                                     if (aLock.Owner >>= aOwner)
                                     {

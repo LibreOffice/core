@@ -265,7 +265,7 @@ static OUString const & HelpLocaleString()
 
 void AppendConfigToken( OUStringBuffer& rURL, bool bQuestionMark )
 {
-    OUString aLocaleStr = HelpLocaleString();
+    const OUString& aLocaleStr = HelpLocaleString();
 
     // query part exists?
     if ( bQuestionMark )

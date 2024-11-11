@@ -153,7 +153,7 @@ std::shared_ptr<const SfxFilter> SfxFilterContainer::GetDefaultFilter_Impl( std:
         return nullptr;
 
     // For the following code we need some additional information.
-    OUString sServiceName   = aOpt.GetFactoryName(eFactory);
+    const OUString& sServiceName   = aOpt.GetFactoryName(eFactory);
     OUString sDefaultFilter = aOpt.GetFactoryDefaultFilter(eFactory);
 
     // Try to get the default filter. Don't forget to verify it.

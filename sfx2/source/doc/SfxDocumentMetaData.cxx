@@ -2148,7 +2148,7 @@ void SAL_CALL SfxDocumentMetaData::initialize( const css::uno::Sequence< css::un
     css::uno::Reference<css::xml::dom::XDocument> xDoc;
 
     for (sal_Int32 i = 0; i < aArguments.getLength(); ++i) {
-        const css::uno::Any any = aArguments[i];
+        const css::uno::Any& any = aArguments[i];
         if (!(any >>= xDoc)) {
             throw css::lang::IllegalArgumentException(
                 u"SfxDocumentMetaData::initialize: argument must be XDocument"_ustr,
