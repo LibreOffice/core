@@ -270,6 +270,7 @@ class AnalyzeRenderingRedirector : public sdr::contact::ViewObjectContactRedirec
 {
 private:
     RenderState& mrRenderState;
+    bool mbRenderMasterPage;
 
     RenderPass* mpCurrentRenderPass;
     RenderStage mePreviousStage = RenderStage::Master;
@@ -298,8 +299,9 @@ private:
     }
 
 public:
-    AnalyzeRenderingRedirector(RenderState& rRenderState)
+    AnalyzeRenderingRedirector(RenderState& rRenderState, bool bRenderMasterPage)
         : mrRenderState(rRenderState)
+        , mbRenderMasterPage(bRenderMasterPage)
         , mpCurrentRenderPass(newRenderPass())
     {
     }
@@ -362,15 +364,18 @@ public:
             // A placeholder always needs to be exported even if the content is hidden
             // since it could be visible on another slide and master page layers should be cached
             // on the client
-            closeRenderPass();
+            if (mbRenderMasterPage)
+            {
+                closeRenderPass();
 
-            mpCurrentRenderPass->maObjectsAndParagraphs.emplace(pObject, std::deque<sal_Int32>());
-            mpCurrentRenderPass->meStage = eCurrentStage;
-            mpCurrentRenderPass->mbPlaceholder = true;
-            mpCurrentRenderPass->maFieldType = sTextFieldType;
-            mpCurrentRenderPass->mpObject = pObject;
-            closeRenderPass();
-
+                mpCurrentRenderPass->maObjectsAndParagraphs.emplace(pObject,
+                                                                    std::deque<sal_Int32>());
+                mpCurrentRenderPass->meStage = eCurrentStage;
+                mpCurrentRenderPass->mbPlaceholder = true;
+                mpCurrentRenderPass->maFieldType = sTextFieldType;
+                mpCurrentRenderPass->mpObject = pObject;
+                closeRenderPass();
+            }
             // Collect text field content if it's visible
             // Both checks are needed!
             if (bVisible && bIsTextFieldVisible)
@@ -385,6 +390,9 @@ public:
             }
             return;
         }
+
+        if (!mbRenderMasterPage && eCurrentStage == RenderStage::Master)
+            return;
 
         if (!bVisible)
             return;
@@ -519,9 +527,12 @@ SdrObject* getObjectForShape(uno::Reference<drawing::XShape> const& xShape)
 
 } // end anonymous namespace
 
-SlideshowLayerRenderer::SlideshowLayerRenderer(SdrPage& rPage)
+SlideshowLayerRenderer::SlideshowLayerRenderer(SdrPage& rPage, bool bRenderBackground,
+                                               bool bRenderMasterPage)
     : mrPage(rPage)
     , mrModel(rPage.getSdrModelFromSdrPage())
+    , mbRenderBackground(bRenderBackground)
+    , mbRenderMasterPage(bRenderMasterPage)
 {
     maRenderState.meStage = RenderStage::Background;
     setupAnimations();
@@ -678,7 +689,7 @@ void SlideshowLayerRenderer::createViewAndDraw(
     aView.SetGridVisible(false);
     aView.SetHlplVisible(false);
     aView.SetGlueVisible(false);
-    aView.setHideBackground(!maRenderState.includeBackground());
+    aView.setHideBackground(!(mbRenderBackground && maRenderState.includeBackground()));
     aView.ShowSdrPage(&mrPage);
 
     Size aPageSize(mrPage.GetSize());
@@ -885,16 +896,24 @@ bool SlideshowLayerRenderer::render(unsigned char* pBuffer, bool& bIsBitmapLayer
     if (maRenderState.meStage == RenderStage::Background)
     {
         // Render no objects, just the background, but analyze and create rendering passes
-        AnalyzeRenderingRedirector aRedirector(maRenderState);
+        AnalyzeRenderingRedirector aRedirector(maRenderState, mbRenderMasterPage);
         createViewAndDraw(aRenderContext, &aRedirector);
         aRedirector.finalizeRenderPasses();
 
-        bIsBitmapLayer = true;
+        if (mbRenderBackground)
+        {
+            bIsBitmapLayer = true;
 
-        // Write JSON for the Background layer
-        writeBackgroundJSON(rJsonMsg);
+            // Write JSON for the Background layer
+            writeBackgroundJSON(rJsonMsg);
+        }
 
-        maRenderState.meStage = RenderStage::Master;
+        maRenderState.meStage = mbRenderMasterPage ? RenderStage::Master : RenderStage::Slide;
+
+        // We need to return a valid layer, so if background has to be skipped
+        // render the next layer
+        if (!mbRenderBackground)
+            render(pBuffer, bIsBitmapLayer, rScale, rJsonMsg);
     }
     else
     {

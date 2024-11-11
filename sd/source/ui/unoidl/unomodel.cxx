@@ -4755,7 +4755,7 @@ bool isRequestedSlideValid(SdDrawDocument* mpDoc, sal_Int32 nSlideNumber, const 
 bool SdXImpressDocument::createSlideRenderer(
     const OString& rSlideHash,
     sal_Int32 nSlideNumber, sal_Int32& nViewWidth, sal_Int32& nViewHeight,
-    bool /*bRenderBackground*/, bool /*bRenderMasterPage*/)
+    bool bRenderBackground, bool bRenderMasterPage)
 {
     std::string sSlideHash(rSlideHash);
     if (!isRequestedSlideValid(mpDoc, nSlideNumber, sSlideHash))
@@ -4765,7 +4765,7 @@ bool SdXImpressDocument::createSlideRenderer(
     if (!pPage)
         return false;
 
-    mpSlideshowLayerRenderer.reset(new SlideshowLayerRenderer(*pPage));
+    mpSlideshowLayerRenderer.reset(new SlideshowLayerRenderer(*pPage, bRenderBackground, bRenderMasterPage));
     Size aDesiredSize(nViewWidth, nViewHeight);
     Size aCalculatedSize = mpSlideshowLayerRenderer->calculateAndSetSizePixel(aDesiredSize);
     nViewWidth = aCalculatedSize.Width();
