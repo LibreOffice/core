@@ -1079,7 +1079,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
 
 void PDFWriterImpl::checkAndEnableStreamEncryption(sal_Int32 nObject)
 {
-    if (!m_aContext.Encryption.Encrypt() || !m_pPDFEncryptor)
+    if (!m_aContext.Encryption.canEncrypt() || !m_pPDFEncryptor)
         return;
 
     m_pPDFEncryptor->enableStreamEncryption();
@@ -1094,7 +1094,7 @@ void PDFWriterImpl::disableStreamEncryption()
 
 void PDFWriterImpl::enableStringEncryption(sal_Int32 nObject)
 {
-    if (!m_aContext.Encryption.Encrypt() || !m_pPDFEncryptor)
+    if (!m_aContext.Encryption.canEncrypt() || !m_pPDFEncryptor)
         return;
 
     m_pPDFEncryptor->setupEncryption(m_aContext.Encryption.EncryptionKey, nObject);
