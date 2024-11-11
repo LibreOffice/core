@@ -1927,7 +1927,7 @@ bool EscherPropertyContainer::CreatePolygonProperties(
 
     for(sal_uInt16 j(0); j < nPolyCount; ++j)
     {
-        const tools::Polygon aPolygon(aPolyPolygon[j]);
+        const tools::Polygon& aPolygon(aPolyPolygon[j]);
         const sal_uInt16 nPoints(aPolygon.GetSize());
 
         if(0 == nPoints)

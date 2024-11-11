@@ -574,7 +574,7 @@ void XMLFilterTestDialog::import( const OUString& rURL )
         if( m_xCBXDisplaySource->get_active() )
         {
             TempFileNamed aTempFile(u"", true, u".xml");
-            OUString aTempFileURL( aTempFile.GetURL() );
+            const OUString& aTempFileURL( aTempFile.GetURL() );
 
             Reference< XImportFilter > xImporter( mxContext->getServiceManager()->createInstanceWithContext( u"com.sun.star.documentconversion.XSLTFilter"_ustr, mxContext ), UNO_QUERY );
             if( xImporter.is() )

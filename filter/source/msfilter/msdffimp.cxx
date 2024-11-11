@@ -5936,7 +5936,7 @@ void SvxMSDffManager::CheckTxBxStoryChain()
             mark = m_xShapeInfosByTxBxComp->begin();
          iter != m_xShapeInfosByTxBxComp->end(); ++iter)
     {
-        std::shared_ptr<SvxMSDffShapeInfo> const pObj = *iter;
+        std::shared_ptr<SvxMSDffShapeInfo> const& pObj = *iter;
         if( pObj->nTxBxComp )
         {
             // group change?
