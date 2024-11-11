@@ -16,39 +16,18 @@ namespace vcl::pdf
 {
 EncryptionHashTransporter::EncryptionHashTransporter()
     : m_pDigest(new ::comphelper::Hash(::comphelper::HashType::MD5))
+    , maID(reinterpret_cast<sal_IntPtr>(this))
 {
-    maID = reinterpret_cast<sal_IntPtr>(this);
-    while (sTransporters.find(maID) != sTransporters.end()) // paranoia mode
-        maID++;
-    sTransporters[maID] = this;
 }
 
-EncryptionHashTransporter::~EncryptionHashTransporter()
-{
-    sTransporters.erase(maID);
-    SAL_INFO("vcl", "EncryptionHashTransporter freed");
-}
+EncryptionHashTransporter::~EncryptionHashTransporter() {}
 
 EncryptionHashTransporter* EncryptionHashTransporter::getEncHashTransporter(
     const uno::Reference<beans::XMaterialHolder>& xReference)
 {
-    EncryptionHashTransporter* pResult = nullptr;
-    if (xReference.is())
-    {
-        uno::Any aMat(xReference->getMaterial());
-        sal_Int64 nMat = 0;
-        if (aMat >>= nMat)
-        {
-            std::map<sal_IntPtr, EncryptionHashTransporter*>::iterator it
-                = sTransporters.find(static_cast<sal_IntPtr>(nMat));
-            if (it != sTransporters.end())
-                pResult = it->second;
-        }
-    }
+    EncryptionHashTransporter* pResult = dynamic_cast<EncryptionHashTransporter*>(xReference.get());
     return pResult;
 }
-
-std::map<sal_IntPtr, EncryptionHashTransporter*> EncryptionHashTransporter::sTransporters;
 
 } // end vcl::pdf
 

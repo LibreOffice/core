@@ -28,11 +28,9 @@ namespace vcl::pdf
 */
 class EncryptionHashTransporter : public cppu::WeakImplHelper<css::beans::XMaterialHolder>
 {
-    ::std::unique_ptr<::comphelper::Hash> m_pDigest;
-    sal_IntPtr maID;
+    std::unique_ptr<comphelper::Hash> m_pDigest;
     std::vector<sal_uInt8> maOValue;
-
-    static std::map<sal_IntPtr, EncryptionHashTransporter*> sTransporters;
+    sal_IntPtr maID;
 
 public:
     EncryptionHashTransporter();
