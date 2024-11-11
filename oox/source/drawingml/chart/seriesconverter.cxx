@@ -353,11 +353,11 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
                 {
                     oaCellRange = pLabelSource->mxDataSeq->maFormula;
                     const auto& rLabelMap = pLabelSource->mxDataSeq->maData;
-                    const auto& rKV = rLabelMap.find(mrModel.mnIndex);
-                    if (rKV != rLabelMap.end())
+                    const auto aKV = rLabelMap.find(mrModel.mnIndex);
+                    if (aKV != rLabelMap.end())
                     {
                         oaLabelText.emplace();
-                        rKV->second >>= *oaLabelText;
+                        aKV->second >>= *oaLabelText;
                     }
                 }
             }

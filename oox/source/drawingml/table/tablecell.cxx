@@ -556,10 +556,10 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
     }
     if (aBgColor.isUsed())
     {
-        const Color& rCellColor = aFillProperties.getBestSolidColor();
-        const double fTransparency = rCellColor.isUsed() ? 0.01 * rCellColor.getTransparency() : 1.0;
+        const Color aCellColor = aFillProperties.getBestSolidColor();
+        const double fTransparency = aCellColor.isUsed() ? 0.01 * aCellColor.getTransparency() : 1.0;
         ::Color nBgColor( aBgColor.getColor(rFilterBase.getGraphicHelper(), nPhClr) );
-        ::Color nCellColor( rCellColor.getColor(rFilterBase.getGraphicHelper()) );
+        ::Color nCellColor( aCellColor.getColor(rFilterBase.getGraphicHelper()) );
         ::Color aResult( basegfx::interpolate(nBgColor.getBColor(), nCellColor.getBColor(), 1.0 - fTransparency) );
         aFillProperties.maFillColor.clearTransformations();
         aFillProperties.maFillColor.setSrgbClr(sal_Int32(aResult.GetRGBColor()));

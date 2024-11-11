@@ -1811,7 +1811,7 @@ Reference< XShape > const & Shape::createAndInsert(
                     tools::Rectangle aArea{};
                     pTableShape->LayoutTableHeight(aArea);
                     sal_Int32 nCorrectedHeight = aArea.GetHeight();
-                    const auto& aShapeSize = mxShape->getSize();
+                    const auto aShapeSize = mxShape->getSize();
                     if( nCorrectedHeight > aShapeSize.Height )
                         mxShape->setSize( {aShapeSize.Width, nCorrectedHeight} );
                     pTableShape->SetSkipChangeLayout(false);

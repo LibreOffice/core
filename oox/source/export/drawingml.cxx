@@ -1433,16 +1433,16 @@ void GraphicExport::writeBlip(Graphic const& rGraphic, std::vector<model::BlipEf
 
 OUString GraphicExport::writeNewEntryToStorage(const Graphic& rGraphic, bool bRelPathToMedia)
 {
-    GfxLink const& rLink = rGraphic.GetGfxLink();
+    GfxLink const aLink = rGraphic.GetGfxLink();
 
     OUString sMediaType;
     OUString aExtension;
 
     SvMemoryStream aStream;
-    const void* aData = rLink.GetData();
-    std::size_t nDataSize = rLink.GetDataSize();
+    const void* aData = aLink.GetData();
+    std::size_t nDataSize = aLink.GetDataSize();
 
-    switch (rLink.GetType())
+    switch (aLink.GetType())
     {
         case GfxLinkType::NativeGif:
             sMediaType = u"image/gif"_ustr;
@@ -1559,12 +1559,12 @@ OUString GraphicExport::writeNewSvgEntryToStorage(const Graphic& rGraphic, bool 
     OUString sMediaType = u"image/svg"_ustr;
     OUString aExtension = u"svg"_ustr;
 
-    GfxLink const& rLink = rGraphic.GetGfxLink();
-    if (rLink.GetType() != GfxLinkType::NativeSvg)
+    GfxLink const aLink = rGraphic.GetGfxLink();
+    if (aLink.GetType() != GfxLinkType::NativeSvg)
         return OUString();
 
-    const void* aData = rLink.GetData();
-    std::size_t nDataSize = rLink.GetDataSize();
+    const void* aData = aLink.GetData();
+    std::size_t nDataSize = aLink.GetDataSize();
 
     GraphicExportCache& rGraphicExportCache = GraphicExportCache::get();
     auto sImageCountString = OUString::number(rGraphicExportCache.nextImageCount());
@@ -2013,8 +2013,8 @@ void DrawingML::WriteSrcRectXGraphic(uno::Reference<beans::XPropertySet> const &
 {
     Graphic aGraphic(rxGraphic);
     Size aOriginalSize = aGraphic.GetPrefSize();
-    const MapMode& rMapMode = aGraphic.GetPrefMapMode();
-    WriteGraphicCropProperties(rxPropertySet, aOriginalSize, rMapMode);
+    const MapMode aMapMode = aGraphic.GetPrefMapMode();
+    WriteGraphicCropProperties(rxPropertySet, aOriginalSize, aMapMode);
 }
 
 void DrawingML::WriteXGraphicStretch(uno::Reference<beans::XPropertySet> const & rXPropSet,
@@ -2103,9 +2103,9 @@ void DrawingML::WriteXGraphicTile(uno::Reference<beans::XPropertySet> const& rXP
 {
     Graphic aGraphic(rxGraphic);
     Size aOriginalSize(aGraphic.GetPrefSize());
-    const MapMode& rMapMode = aGraphic.GetPrefMapMode();
+    const MapMode aMapMode = aGraphic.GetPrefMapMode();
     // if the original size is in pixel, convert it to mm100
-    if (rMapMode.GetMapUnit() == MapUnit::MapPixel)
+    if (aMapMode.GetMapUnit() == MapUnit::MapPixel)
         aOriginalSize = Application::GetDefaultDevice()->PixelToLogic(aOriginalSize,
                                                                       MapMode(MapUnit::Map100thMM));
     sal_Int32 nSizeX = 0;
@@ -2182,9 +2182,9 @@ void DrawingML::WriteXGraphicCustomPosition(uno::Reference<beans::XPropertySet> 
 {
     Graphic aGraphic(rxGraphic);
     Size aOriginalSize(aGraphic.GetPrefSize());
-    const MapMode& rMapMode = aGraphic.GetPrefMapMode();
+    const MapMode aMapMode = aGraphic.GetPrefMapMode();
     // if the original size is in pixel, convert it to mm100
-    if (rMapMode.GetMapUnit() == MapUnit::MapPixel)
+    if (aMapMode.GetMapUnit() == MapUnit::MapPixel)
         aOriginalSize = Application::GetDefaultDevice()->PixelToLogic(aOriginalSize,
                                                                       MapMode(MapUnit::Map100thMM));
     double nSizeX = 0;
@@ -3497,8 +3497,8 @@ bool DrawingML::WriteParagraphProperties(const Reference<XTextContent>& rParagra
             if (nLevel > -1)
             {
                 Reference< XIndexAccess > xNumberingRules(rXPropSet->getPropertyValue(u"NumberingRules"_ustr), UNO_QUERY);
-                const PropertyValues& rNumRuleOfLevel = xNumberingRules->getByIndex(nLevel).get<PropertyValues>();
-                for (const PropertyValue& rRule : rNumRuleOfLevel)
+                const PropertyValues aNumRuleOfLevel = xNumberingRules->getByIndex(nLevel).get<PropertyValues>();
+                for (const PropertyValue& rRule : aNumRuleOfLevel)
                     if (rRule.Name == "NumberingType" && rRule.Value.hasValue())
                         bNumberingOnThisLevel = rRule.Value.get<sal_uInt16>() != style::NumberingType::NUMBER_NONE;
             }

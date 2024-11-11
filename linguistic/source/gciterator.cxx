@@ -550,7 +550,7 @@ uno::Reference< linguistic2::XProofreader > GrammarCheckingIterator::GetGrammarC
         m_bGCServicesChecked = true;
     }
 
-    if (const auto& [aSvcImplName, oFallbackBcp47] = getServiceForLocale(rLocale);
+    if (const auto [aSvcImplName, oFallbackBcp47] = getServiceForLocale(rLocale);
         !aSvcImplName.isEmpty()) // matching configured language found?
     {
         if (oFallbackBcp47)

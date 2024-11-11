@@ -83,19 +83,19 @@ void ProposalList::Append( const OUString &rOrig, bool bPrepend )
 {
     bool bFound = false;
     // convert ASCII apostrophe to the typographic one
-    const OUString &rText( rOrig.indexOf( '\'' ) > -1 ? rOrig.replace('\'', u'’') : rOrig );
+    const OUString aText( rOrig.indexOf( '\'' ) > -1 ? rOrig.replace('\'', u'’') : rOrig );
     size_t nCnt = aVec.size();
     for (size_t i = 0;  !bFound && i < nCnt;  ++i)
     {
-        if (aVec[i] == rText)
+        if (aVec[i] == aText)
             bFound = true;
     }
     if (!bFound)
     {
         if ( bPrepend )
-            aVec.insert( aVec.begin(), rText );
+            aVec.insert( aVec.begin(), aText );
         else
-            aVec.push_back( rText );
+            aVec.push_back( aText );
     }
 }
 

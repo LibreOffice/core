@@ -316,7 +316,7 @@ void ConnectorHelper::applyConnections(oox::drawingml::ShapePtr& pConnector,
     // It contains maximal two items, each a struct with mbStartShape, maDestShapeId, mnDestGlueId
     for (const auto& aIt : aConnectorShapeProperties)
     {
-        const auto& pItem = rShapeMap.find(aIt.maDestShapeId);
+        const auto pItem = rShapeMap.find(aIt.maDestShapeId);
         if (pItem == rShapeMap.end())
             continue;
 

@@ -935,11 +935,11 @@ Reference<XShape> SimpleShape::finalImplConvertAndInsert(const css::uno::Referen
         && !maShapeModel.mbInGroup)
     {
         const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
-        const auto& nLeft = ConversionHelper::decodeMeasureToHmm(
+        const auto nLeft = ConversionHelper::decodeMeasureToHmm(
             rGraphicHelper, maTypeModel.maMarginLeft, 0, true, true);
         PropertySet aPropertySet(rxShape);
         aPropertySet.setProperty(PROP_HoriOrientPosition, nLeft);
-        const auto& nTop = ConversionHelper::decodeMeasureToHmm(
+        const auto nTop = ConversionHelper::decodeMeasureToHmm(
             rGraphicHelper, maTypeModel.maMarginTop, 0, true, true);
         aPropertySet.setProperty(PROP_VertOrientPosition, nTop);
         aPropertySet.setProperty(PROP_TextBox, true);

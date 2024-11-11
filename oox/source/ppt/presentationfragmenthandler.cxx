@@ -335,10 +335,9 @@ void PresentationFragmentHandler::saveThemeToGrabBag(const oox::drawingml::Theme
                     ::Color nColor;
 
                     rClrScheme.getColor(nToken, nColor);
-                    const uno::Any& rColor = uno::Any(nColor);
 
                     pCurrentTheme[nId].Name = sName;
-                    pCurrentTheme[nId].Value = rColor;
+                    pCurrentTheme[nId].Value <<= nColor;
                 }
 
 

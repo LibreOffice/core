@@ -263,15 +263,15 @@ void PPTShape::addShape(
                 case XML_ftr :
                     if (IsPlaceHolderCandidate(rSlidePersist))
                     {
-                        const OUString& rFooterText = getTextBody()->toString();
+                        const OUString aFooterText = getTextBody()->toString();
 
-                        if( !rFooterText.isEmpty() )
+                        if( !aFooterText.isEmpty() )
                         {
                             // if it is possible to get the footer as a property the LO way,
                             // get it and discard the shape
                             Reference< XPropertySet > xPropertySet( rSlidePersist.getPage(), UNO_QUERY );
                             xPropertySet->setPropertyValue( u"IsFooterVisible"_ustr, Any( true ) );
-                            xPropertySet->setPropertyValue( u"FooterText"_ustr, Any(rFooterText) );
+                            xPropertySet->setPropertyValue( u"FooterText"_ustr, Any(aFooterText) );
                             return;
                         }
                     }

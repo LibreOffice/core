@@ -89,7 +89,7 @@ Reference< XGraphic > lclRotateGraphic(uno::Reference<graphic::XGraphic> const &
     assert (aGraphic.GetType() == GraphicType::Bitmap);
 
     BitmapEx aBitmapEx(aGraphic.GetBitmapEx());
-    const ::Color& aColor = ::Color(0x00);
+    const ::Color aColor(0x00);
     aBitmapEx.Rotate(nRotation, aColor);
     aReturnGraphic = ::Graphic(aBitmapEx);
     aReturnGraphic.setOriginURL(aGraphic.getOriginURL());

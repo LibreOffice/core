@@ -221,7 +221,7 @@ bool DMLPresetShapeExporter::WriteShape()
         if (!m_bHasHandleValues)
         {
             OUString sShapeType = GetShapeType();
-            const OString& sPresetShape = msfilter::util::GetOOXMLPresetGeometry(sShapeType);
+            const OString sPresetShape = msfilter::util::GetOOXMLPresetGeometry(sShapeType);
             m_pDMLexporter->WriteShapeTransformation(m_xShape, XML_a, IsXFlipped(), IsYFlipped(),
                                                      false, false);
             m_pDMLexporter->WritePresetShape(sPresetShape);
@@ -252,8 +252,8 @@ bool DMLPresetShapeExporter::StartAVListWriting()
 {
     try
     {
-        const OString& pShape = msfilter::util::GetOOXMLPresetGeometry(GetShapeType());
-        m_pDMLexporter->GetFS()->startElementNS(XML_a, XML_prstGeom, XML_prst, pShape);
+        const OString aShape = msfilter::util::GetOOXMLPresetGeometry(GetShapeType());
+        m_pDMLexporter->GetFS()->startElementNS(XML_a, XML_prstGeom, XML_prst, aShape);
         m_pDMLexporter->GetFS()->startElementNS(XML_a, XML_avLst);
         return true;
     }

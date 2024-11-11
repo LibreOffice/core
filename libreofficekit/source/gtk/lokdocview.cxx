@@ -1130,7 +1130,7 @@ callback (gpointer pData)
         std::stringstream aStream(pCallback->m_aPayload);
         boost::property_tree::ptree aTree;
         boost::property_tree::read_json(aStream, aTree);
-        const std::string& rRectangle = aTree.get<std::string>("rectangle");
+        const std::string rRectangle = aTree.get<std::string>("rectangle");
         int nViewId = aTree.get<int>("viewId");
 
         priv->m_aVisibleCursor = payloadToRectangle(pDocView, rRectangle.c_str());
@@ -1211,7 +1211,7 @@ callback (gpointer pData)
         boost::property_tree::read_json(aStream, aTree);
         int nViewId = aTree.get<int>("viewId");
         int nPart = aTree.get<int>("part");
-        const std::string& rRectangle = aTree.get<std::string>("selection");
+        const std::string rRectangle = aTree.get<std::string>("selection");
         if (rRectangle != "EMPTY")
             priv->m_aGraphicViewSelections[nViewId] = ViewRectangle(nPart, payloadToRectangle(pDocView, rRectangle.c_str()));
         else
@@ -1295,7 +1295,7 @@ callback (gpointer pData)
         boost::property_tree::read_json(aStream, aTree);
         int nViewId = aTree.get<int>("viewId");
         int nPart = aTree.get<int>("part");
-        const std::string& rRectangle = aTree.get<std::string>("rectangle");
+        const std::string rRectangle = aTree.get<std::string>("rectangle");
         priv->m_aViewCursors[nViewId] = ViewRectangle(nPart, payloadToRectangle(pDocView, rRectangle.c_str()));
         gtk_widget_queue_draw(GTK_WIDGET(pDocView));
         break;
@@ -1307,7 +1307,7 @@ callback (gpointer pData)
         boost::property_tree::read_json(aStream, aTree);
         int nViewId = aTree.get<int>("viewId");
         int nPart = aTree.get<int>("part");
-        const std::string& rSelection = aTree.get<std::string>("selection");
+        const std::string rSelection = aTree.get<std::string>("selection");
         priv->m_aTextViewSelectionRectangles[nViewId] = ViewRectangles(nPart, payloadToRectangles(pDocView, rSelection.c_str()));
         gtk_widget_queue_draw(GTK_WIDGET(pDocView));
         break;
@@ -1318,7 +1318,7 @@ callback (gpointer pData)
         boost::property_tree::ptree aTree;
         boost::property_tree::read_json(aStream, aTree);
         int nViewId = aTree.get<int>("viewId");
-        const std::string& rVisible = aTree.get<std::string>("visible");
+        const std::string rVisible = aTree.get<std::string>("visible");
         priv->m_aViewCursorVisibilities[nViewId] = rVisible == "true";
         gtk_widget_queue_draw(GTK_WIDGET(pDocView));
         break;
@@ -1331,7 +1331,7 @@ callback (gpointer pData)
         boost::property_tree::read_json(aStream, aTree);
         int nViewId = aTree.get<int>("viewId");
         int nPart = aTree.get<int>("part");
-        const std::string& rRectangle = aTree.get<std::string>("rectangle");
+        const std::string rRectangle = aTree.get<std::string>("rectangle");
         if (rRectangle != "EMPTY")
             priv->m_aCellViewCursors[nViewId] = ViewRectangle(nPart, payloadToRectangle(pDocView, rRectangle.c_str()));
         else
@@ -1350,7 +1350,7 @@ callback (gpointer pData)
         boost::property_tree::read_json(aStream, aTree);
         int nViewId = aTree.get<int>("viewId");
         int nPart = aTree.get<int>("part");
-        const std::string& rRectangle = aTree.get<std::string>("rectangle");
+        const std::string rRectangle = aTree.get<std::string>("rectangle");
         if (rRectangle != "EMPTY")
             priv->m_aViewLockRectangles[nViewId] = ViewRectangle(nPart, payloadToRectangle(pDocView, rRectangle.c_str()));
         else
@@ -1762,7 +1762,7 @@ static const GdkRGBA& getDarkColor(int nViewId, LOKDocViewPrivate& priv)
         boost::property_tree::read_json(aStream, aTree);
         for (const auto& rValue : aTree.get_child("authors"))
         {
-            const std::string& rName = rValue.second.get<std::string>("name");
+            const std::string rName = rValue.second.get<std::string>("name");
             guint32 nColor = rValue.second.get<guint32>("color");
             GdkRGBA aColor{static_cast<double>(static_cast<guint8>(nColor>>16))/255, static_cast<double>(static_cast<guint8>(static_cast<guint16>(nColor) >> 8))/255, static_cast<double>(static_cast<guint8>(nColor))/255, 0};
             auto itAuthorViews = g_aAuthorViews.find(rName);

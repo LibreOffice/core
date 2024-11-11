@@ -177,7 +177,7 @@ void SlidePersist::createXShapes( XmlFilterBase& rFilterBase )
             {
                 pPPTShape->addShape( rFilterBase, *this, getTheme().get(), xShapes, aTransformation, &getShapeMap() );
 
-                const auto& pIter = maShapeMap.find(pPPTShape->getId());
+                const auto pIter = maShapeMap.find(pPPTShape->getId());
                 if (pIter != maShapeMap.end())
                     lcl_createShapeMap(pIter->second, aConnectorShapeMap);
             }
@@ -421,7 +421,7 @@ static sal_Int32 lcl_GetAngle(uno::Reference<drawing::XShape>& rXShape, awt::Poi
 
 Reference<XAnimationNode> SlidePersist::getAnimationNode(const OUString& sId) const
 {
-    const auto& pIter = maAnimNodesMap.find(sId);
+    const auto pIter = maAnimNodesMap.find(sId);
     if (pIter != maAnimNodesMap.end())
         return pIter->second;
 
@@ -530,7 +530,7 @@ void SlidePersist::createConnectorShapeConnection(oox::drawingml::ShapePtr& pCon
         for (sal_Int32 j = 0; j < nCount; j++)
         {
             OUString aDestShapeId = aConnectorShapeProperties[j].maDestShapeId;
-            const auto& pShape = maShapeMap.find(aDestShapeId);
+            const auto pShape = maShapeMap.find(aDestShapeId);
             if (pShape == maShapeMap.end())
                 continue;
             uno::Reference<drawing::XShape> xShape(pShape->second->getXShape(), uno::UNO_QUERY);
