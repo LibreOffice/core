@@ -504,6 +504,9 @@ void SwSrcView::GetState(SfxItemSet& rSet)
             case SID_REPEAT:
             case SID_BROWSER_MODE:
             case FN_PRINT_LAYOUT:
+            case FN_SINGLE_PAGE_PER_ROW:
+            case FN_MULTIPLE_PAGES_PER_ROW:
+            case FN_BOOKVIEW:
                 rSet.DisableItem(nWhich);
             break;
             case SID_CUT:

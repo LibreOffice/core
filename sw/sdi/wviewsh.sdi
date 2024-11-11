@@ -153,6 +153,18 @@ interface WebSourceView
     [
         StateMethod = GetState;
     ]
+    FN_SINGLE_PAGE_PER_ROW
+    [
+        StateMethod = GetState;
+    ]
+    FN_MULTIPLE_PAGES_PER_ROW
+    [
+        StateMethod = GetState;
+    ]
+    FN_BOOKVIEW
+    [
+        StateMethod = GetState;
+    ]
 }
 
 shell SwSrcView

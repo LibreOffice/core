@@ -777,6 +777,10 @@ class SwUINumRuleItem;
 #define FN_TO_PREV_PAGE             (FN_SELECTION + 96)
 #define FN_SELECTION_CYCLE          (FN_SELECTION + 97)
 
+#define FN_SINGLE_PAGE_PER_ROW      (FN_SELECTION + 98)   /*Show Single Page per row*/
+#define FN_MULTIPLE_PAGES_PER_ROW   (FN_SELECTION + 99)   /*Show Multiple Page per row*/
+#define FN_BOOKVIEW                 (FN_SELECTION + 100)   /*Show in Bookview*/
+
 // QUERY-Block
 #define FN_TXTATR_INET              (FN_QUERY +29)      /* INet-Attribute */
 

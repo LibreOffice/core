@@ -185,6 +185,9 @@ void SwView::RecheckBrowseMode()
             FN_PRINT_LAYOUT, /*20237*/
             FN_QRY_MERGE,   /*20364*/
             FN_SHADOWCURSOR, /**/
+            FN_SINGLE_PAGE_PER_ROW, /**/
+            FN_MULTIPLE_PAGES_PER_ROW, /**/
+            FN_BOOKVIEW, /**/
             0
         };
     // the view must not exist!
@@ -355,6 +358,15 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
             break;
             case SID_SPOTLIGHT_CHARSTYLES:
                 aBool.SetValue(m_bIsSpotlightCharStyles);
+            break;
+            case FN_SINGLE_PAGE_PER_ROW:
+                aBool.SetValue( !pOpt->IsMultipageView());
+            break;
+            case FN_MULTIPLE_PAGES_PER_ROW:
+                aBool.SetValue( pOpt->GetViewLayoutColumns() == 0);
+            break;
+            case FN_BOOKVIEW:
+                aBool.SetValue( pOpt->IsViewLayoutBookMode());
             break;
         }
 
@@ -697,6 +709,21 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
             bFlag = !pOpt->IsShowChangesInMargin();
 
         pOpt->SetShowChangesInMargin( bFlag );
+        break;
+
+    case FN_SINGLE_PAGE_PER_ROW:
+        pOpt->SetViewLayoutBookMode( false );
+        pOpt->SetViewLayoutColumns( 1 );
+        break;
+
+    case FN_MULTIPLE_PAGES_PER_ROW:
+        pOpt->SetViewLayoutBookMode( false );
+        pOpt->SetViewLayoutColumns( 0 );
+        break;
+
+    case FN_BOOKVIEW:
+        pOpt->SetViewLayoutColumns( 2 );
+        pOpt->SetViewLayoutBookMode( true );
         break;
 
     default:
