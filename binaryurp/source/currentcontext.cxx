@@ -41,9 +41,8 @@ css::uno::UnoInterfaceReference get() {
 }
 
 void set(css::uno::UnoInterfaceReference const & value) {
-    css::uno::UnoInterfaceReference cc(value);
     if (!uno_setCurrentContext(
-            cc.m_pUnoI,
+            value.m_pUnoI,
             u"" UNO_LB_UNO ""_ustr.pData, nullptr))
     {
         throw css::uno::RuntimeException(u"uno_setCurrentContext failed"_ustr);
