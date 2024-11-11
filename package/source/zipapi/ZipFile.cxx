@@ -952,7 +952,7 @@ sal_uInt64 ZipFile::readLOC_Impl(ZipEntry &rEntry, std::vector<sal_Int8>& rNameB
     aGrabber.seek(nPos);
     std::array<sal_Int8, 30> aHeader;
     if (aGrabber.readBytes(aHeader.data(), 30) != 30)
-        throw new uno::RuntimeException();
+        throw uno::RuntimeException();
     MemoryByteGrabber headerMemGrabber(aHeader.data(), 30);
 
     sal_Int32 nTestSig = headerMemGrabber.ReadInt32();
