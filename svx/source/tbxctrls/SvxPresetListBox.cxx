@@ -26,6 +26,7 @@
 SvxPresetListBox::SvxPresetListBox(std::unique_ptr<weld::ScrolledWindow> pWindow)
     : ValueSet(std::move(pWindow))
     , aIconSize(60, 64)
+    , mnContextMenuItemId(0)
 {
     SetEdgeBlending(true);
 }
@@ -49,14 +50,16 @@ bool SvxPresetListBox::Command(const CommandEvent& rEvent)
 {
     if (rEvent.GetCommand() != CommandEventId::ContextMenu)
         return CustomWidgetController::Command(rEvent);
-    const sal_uInt16 nIndex = GetSelectedItemId();
-    if (nIndex > 0)
+    mnContextMenuItemId = GetHighlightedItemId();
+    if (mnContextMenuItemId > 0)
     {
         std::unique_ptr<weld::Builder> xBuilder(
             Application::CreateBuilder(GetDrawingArea(), u"svx/ui/presetmenu.ui"_ustr));
         std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu(u"menu"_ustr));
         OnMenuItemSelected(xMenu->popup_at_rect(
             GetDrawingArea(), tools::Rectangle(rEvent.GetMousePosPixel(), Size(1, 1))));
+
+        mnContextMenuItemId = 0;
         return true;
     }
     return false;

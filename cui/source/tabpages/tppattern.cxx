@@ -425,8 +425,8 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickModifyHdl_Impl, weld::Button&, void)
 
 IMPL_LINK_NOARG(SvxPatternTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void)
 {
-    size_t nPos = m_xPatternLB->GetSelectItemPos();
-    sal_Int32 nId = m_xPatternLB->GetSelectedItemId();
+    const sal_uInt16 nId = m_xPatternLB->GetContextMenuItemId();
+    const size_t nPos = m_xPatternLB->GetItemPos(nId);
 
     if ( nPos == VALUESET_ITEM_NOTFOUND )
         return;
@@ -452,7 +452,6 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void)
             m_pPatternList->GetBitmap(nPos)->SetName(aName);
 
             m_xPatternLB->SetItemText( nId, aName );
-            m_xPatternLB->SelectItem( nId );
 
             *m_pnPatternListState |= ChangeType::MODIFIED;
         }
@@ -467,8 +466,8 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void)
 
 IMPL_LINK_NOARG(SvxPatternTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, void)
 {
-    sal_uInt16 nId = m_xPatternLB->GetSelectedItemId();
-    size_t nPos = m_xPatternLB->GetSelectItemPos();
+    const sal_uInt16 nId = m_xPatternLB->GetContextMenuItemId();
+    const size_t nPos = m_xPatternLB->GetItemPos(nId);
 
     if( nPos != VALUESET_ITEM_NOTFOUND )
     {
@@ -476,14 +475,16 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, void)
         std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog(u"AskDelBitmapDialog"_ustr));
         if (xQueryBox->run() == RET_YES)
         {
+            const bool bDeletingSelectedItem(nId == m_xPatternLB->GetSelectedItemId());
             m_pPatternList->Remove(nPos);
             m_xPatternLB->RemoveItem( nId );
-            nId = m_xPatternLB->GetItemId(0);
-            m_xPatternLB->SelectItem( nId );
+            if (bDeletingSelectedItem)
+            {
+                m_xPatternLB->SelectItem(m_xPatternLB->GetItemId(/*Position=*/0));
+                m_aCtlPreview.Invalidate();
+                m_xCtlPixel->Invalidate();
+            }
             m_xPatternLB->Resize();
-
-            m_aCtlPreview.Invalidate();
-            m_xCtlPixel->Invalidate();
 
             ChangePatternHdl_Impl(m_xPatternLB.get());
 

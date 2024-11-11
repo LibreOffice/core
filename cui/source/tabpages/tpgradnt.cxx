@@ -431,8 +431,8 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl, weld::Button&, void)
 
 IMPL_LINK_NOARG(SvxGradientTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, void)
 {
-    sal_uInt16 nId = m_xGradientLB->GetSelectedItemId();
-    size_t nPos = m_xGradientLB->GetSelectItemPos();
+    const sal_uInt16 nId = m_xGradientLB->GetContextMenuItemId();
+    const size_t nPos = m_xGradientLB->GetItemPos(nId);
 
     if( nPos != VALUESET_ITEM_NOTFOUND )
     {
@@ -440,13 +440,15 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, void
         std::unique_ptr<weld::MessageDialog> xQueryBox(xBuilder->weld_message_dialog(u"AskDelGradientDialog"_ustr));
         if (xQueryBox->run() == RET_YES)
         {
+            const bool bDeletingSelectedItem(nId == m_xGradientLB->GetSelectedItemId());
             m_pGradientList->Remove(nPos);
             m_xGradientLB->RemoveItem( nId );
-            nId = m_xGradientLB->GetItemId( 0 );
-            m_xGradientLB->SelectItem( nId );
+            if (bDeletingSelectedItem)
+            {
+                m_xGradientLB->SelectItem(m_xGradientLB->GetItemId(/*Position=*/0));
+                m_aCtlPreview.Invalidate();
+            }
             m_xGradientLB->Resize();
-
-            m_aCtlPreview.Invalidate();
 
             ChangeGradientHdl_Impl();
 
@@ -460,8 +462,8 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, void
 
 IMPL_LINK_NOARG(SvxGradientTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void)
 {
-    sal_uInt16 nId = m_xGradientLB->GetSelectedItemId();
-    size_t nPos = m_xGradientLB->GetSelectItemPos();
+    const sal_uInt16 nId = m_xGradientLB->GetContextMenuItemId();
+    const size_t nPos = m_xGradientLB->GetItemPos(nId);
 
     if ( nPos == VALUESET_ITEM_NOTFOUND )
         return;
@@ -485,7 +487,6 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void
             m_pGradientList->GetGradient(nPos)->SetName(aName);
 
             m_xGradientLB->SetItemText( nId, aName );
-            m_xGradientLB->SelectItem( nId );
 
             *m_pnGradientListState |= ChangeType::MODIFIED;
         }

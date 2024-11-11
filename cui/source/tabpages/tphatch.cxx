@@ -494,8 +494,8 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickModifyHdl_Impl, weld::Button&, void)
 
 IMPL_LINK_NOARG(SvxHatchTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, void)
 {
-    sal_uInt16 nId = m_xHatchLB->GetSelectedItemId();
-    size_t nPos = m_xHatchLB->GetSelectItemPos();
+    const sal_uInt16 nId = m_xHatchLB->GetContextMenuItemId();
+    const size_t nPos = m_xHatchLB->GetItemPos(nId);
 
     if( nPos == VALUESET_ITEM_NOTFOUND )
         return;
@@ -505,13 +505,15 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, void)
     if (xQueryBox->run() != RET_YES)
         return;
 
+    const bool bDeletingSelectedItem(nId == m_xHatchLB->GetSelectedItemId());
     m_pHatchingList->Remove(nPos);
     m_xHatchLB->RemoveItem( nId );
-    nId = m_xHatchLB->GetItemId(0);
-    m_xHatchLB->SelectItem( nId );
+    if (bDeletingSelectedItem)
+    {
+        m_xHatchLB->SelectItem(m_xHatchLB->GetItemId(/*Position=*/0));
+        m_aCtlPreview.Invalidate();
+    }
     m_xHatchLB->Resize();
-
-    m_aCtlPreview.Invalidate();
 
     ChangeHatchHdl_Impl();
 
@@ -520,8 +522,8 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, void)
 
 IMPL_LINK_NOARG(SvxHatchTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void )
 {
-    sal_uInt16 nId = m_xHatchLB->GetSelectedItemId();
-    size_t nPos = m_xHatchLB->GetSelectItemPos();
+    const sal_uInt16 nId = m_xHatchLB->GetContextMenuItemId();
+    const size_t nPos = m_xHatchLB->GetItemPos(nId);
 
     if( nPos == VALUESET_ITEM_NOTFOUND )
         return;
@@ -545,7 +547,6 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void )
             m_pHatchingList->GetHatch(nPos)->SetName(aName);
 
             m_xHatchLB->SetItemText(nId, aName);
-            m_xHatchLB->SelectItem( nId );
 
             *m_pnHatchingListState |= ChangeType::MODIFIED;
         }

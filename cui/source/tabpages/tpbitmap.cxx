@@ -512,8 +512,8 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ModifyBitmapHdl, ValueSet*, void)
 
 IMPL_LINK_NOARG(SvxBitmapTabPage, ClickRenameHdl, SvxPresetListBox*, void)
 {
-    sal_uInt16 nId = m_xBitmapLB->GetSelectedItemId();
-    size_t nPos = m_xBitmapLB->GetSelectItemPos();
+    const sal_uInt16 nId = m_xBitmapLB->GetContextMenuItemId();
+    const size_t nPos = m_xBitmapLB->GetItemPos(nId);
 
     if( nPos == VALUESET_ITEM_NOTFOUND )
         return;
@@ -537,7 +537,6 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickRenameHdl, SvxPresetListBox*, void)
             m_pBitmapList->GetBitmap(nPos)->SetName(aName);
 
             m_xBitmapLB->SetItemText(nId, aName);
-            m_xBitmapLB->SelectItem( nId );
 
             *m_pnBitmapListState |= ChangeType::MODIFIED;
         }
@@ -552,8 +551,8 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickRenameHdl, SvxPresetListBox*, void)
 
 IMPL_LINK_NOARG(SvxBitmapTabPage, ClickDeleteHdl, SvxPresetListBox*, void)
 {
-    sal_uInt16 nId = m_xBitmapLB->GetSelectedItemId();
-    size_t nPos = m_xBitmapLB->GetSelectItemPos();
+    const sal_uInt16 nId = m_xBitmapLB->GetContextMenuItemId();
+    const size_t nPos = m_xBitmapLB->GetItemPos(nId);
 
     if( nPos == VALUESET_ITEM_NOTFOUND )
         return;
@@ -564,16 +563,23 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickDeleteHdl, SvxPresetListBox*, void)
     if (xQueryBox->run() != RET_YES)
         return;
 
-    sal_uInt16 nNextId = m_xBitmapLB->GetItemId(nPos + 1);
-    if (!nNextId)
-        nNextId = m_xBitmapLB->GetItemId(nPos - 1);
+    sal_uInt16 nNextId = m_xBitmapLB->GetSelectedItemId();
+    const bool bDeletingSelectedItem(nId == nNextId);
+    if (bDeletingSelectedItem)
+    {
+        nNextId = m_xBitmapLB->GetItemId(nPos + 1);
+        if (!nNextId)
+            nNextId = m_xBitmapLB->GetItemId(nPos - 1);
+    }
 
     m_pBitmapList->Remove( static_cast<sal_uInt16>(nPos) );
     m_xBitmapLB->RemoveItem( nId );
 
-    m_xBitmapLB->SelectItem(nNextId);
-
-    m_aCtlBitmapPreview.Invalidate();
+    if (bDeletingSelectedItem)
+    {
+        m_xBitmapLB->SelectItem(nNextId);
+        m_aCtlBitmapPreview.Invalidate();
+    }
     ModifyBitmapHdl(m_xBitmapLB.get());
     *m_pnBitmapListState |= ChangeType::MODIFIED;
 }
