@@ -972,7 +972,7 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
         eFamily = static_cast<SfxStyleFamily>(pFamItem->GetValue());
     else if ( pArgs && (pFamilyNameItem = pArgs->GetItemIfSet( SID_STYLE_FAMILYNAME )) )
     {
-        OUString sFamily = pFamilyNameItem->GetValue();
+        const OUString& sFamily = pFamilyNameItem->GetValue();
         if (sFamily == "CellStyles")
             eFamily = SfxStyleFamily::Para;
         else if (sFamily == "PageStyles")

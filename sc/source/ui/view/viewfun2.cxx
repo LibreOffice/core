@@ -857,11 +857,10 @@ OUString ScViewFunc::GetAutoSumFormula( const ScRangeList& rRangeList, bool bSub
 
     if(!rRangeList.empty())
     {
-        ScRangeList aRangeList = rRangeList;
-        size_t ListSize = aRangeList.size();
+        size_t ListSize = rRangeList.size();
         for ( size_t i = 0; i < ListSize; ++i )
         {
-            const ScRange & r = aRangeList[i];
+            const ScRange & r = rRangeList[i];
             if (i != 0)
                 aArray.AddOpCode(ocSep);
             ScComplexRefData aRef;

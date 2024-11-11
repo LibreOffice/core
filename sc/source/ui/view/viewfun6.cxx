@@ -142,13 +142,12 @@ void ScViewFunc::MarkAndJumpToRanges(const ScRangeList& rRanges)
     ScViewData& rView = GetViewData();
     ScDocShell* pDocSh = rView.GetDocShell();
 
-    ScRangeList aRanges(rRanges);
     ScRangeList aRangesToMark;
     ScAddress aCurPos = rView.GetCurPos();
-    size_t ListSize = aRanges.size();
+    size_t ListSize = rRanges.size();
     for ( size_t i = 0; i < ListSize; ++i )
     {
-        const ScRange & r = aRanges[i];
+        const ScRange & r = rRanges[i];
         // Collect only those ranges that are on the same sheet as the current
         // cursor.
         if (r.aStart.Tab() == aCurPos.Tab())

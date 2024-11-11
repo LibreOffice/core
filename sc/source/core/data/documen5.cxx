@@ -193,7 +193,7 @@ void ScDocument::SetChartRanges( std::u16string_view rChartName, const ::std::ve
     auto aRangeStringsRange = asNonConstRange(aRangeStrings);
     for( sal_Int32 nN=0; nN<nCount; nN++ )
     {
-        ScRangeList aScRangeList( rRangesVector[nN] );
+        const ScRangeList& aScRangeList( rRangesVector[nN] );
         OUString sRangeStr;
         aScRangeList.Format( sRangeStr, ScRefFlags::RANGE_ABS_3D, *this, GetAddressConvention() );
         aRangeStringsRange[nN]=sRangeStr;

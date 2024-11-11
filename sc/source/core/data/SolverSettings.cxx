@@ -644,7 +644,7 @@ void SolverSettings::GetEngineOptions(css::uno::Sequence<css::beans::PropertyVal
 
     for (auto i = 0; i < nOptionsSize; i++)
     {
-        css::beans::PropertyValue aProp = aOptions[i];
+        const css::beans::PropertyValue& aProp = aOptions[i];
         OUString sLOParamName = aProp.Name;
         // Only try to get the parameter value if it is an expected parameter name
         if (SolverParamNames.count(sLOParamName))
@@ -691,7 +691,7 @@ void SolverSettings::SetEngineOptions(const css::uno::Sequence<css::beans::Prope
 
     for (auto i = 0; i < nOptionsSize; i++)
     {
-        css::beans::PropertyValue aProp = aOptions[i];
+        const css::beans::PropertyValue& aProp = aOptions[i];
         OUString sLOParamName = aProp.Name;
         // Only try to set the parameter value if it is an expected parameter name
         if (SolverParamNames.count(sLOParamName))

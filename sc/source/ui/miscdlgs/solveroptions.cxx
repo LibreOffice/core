@@ -85,7 +85,7 @@ ScSolverOptionsDialog::ScSolverOptionsDialog(weld::Window* pParent,
     for (sal_Int32 nImpl=0; nImpl<nImplCount; ++nImpl)
     {
         OUString aImplName( maImplNames[nImpl] );
-        OUString aDescription( rDescriptions[nImpl] );   // user-visible descriptions in list box
+        const OUString& aDescription( rDescriptions[nImpl] );   // user-visible descriptions in list box
         m_xLbEngine->append_text(aDescription);
         if ( aImplName == maEngine )
             nSelect = nImpl;

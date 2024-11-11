@@ -276,7 +276,7 @@ void SharedFormulaUtil::unshareFormulaCell(const CellStoreType::position_type& a
     else
     {
         // In the middle of the shared range. Split it into two groups.
-        ScFormulaCellGroupRef xGroup = rCell.GetCellGroup();
+        const ScFormulaCellGroupRef& xGroup = rCell.GetCellGroup();
         SCROW nEndRow = xGroup->mpTopCell->aPos.Row() + xGroup->mnLength - 1;
         xGroup->mnLength = rCell.aPos.Row() - xGroup->mpTopCell->aPos.Row(); // Shorten the top group.
         if (xGroup->mnLength == 1)

@@ -536,7 +536,7 @@ void PivotTableDataProvider::collectPivotTableData()
             size_t i = 0;
             for (ValueAndFormat & rItem : rDataRow)
             {
-                OUString sName = aDataFieldNamesVectors[i];
+                const OUString& sName = aDataFieldNamesVectors[i];
                 sal_Int32 nNumberFormat = aDataFieldNumberFormatMap[sName];
                 rItem.m_nNumberFormat = nNumberFormat;
                 i++;
@@ -548,7 +548,7 @@ void PivotTableDataProvider::collectPivotTableData()
         size_t i = 0;
         for (std::vector<ValueAndFormat> & rDataRow : m_aDataRowVector)
         {
-            OUString sName = aDataFieldNamesVectors[i];
+            const OUString& sName = aDataFieldNamesVectors[i];
             sal_Int32 nNumberFormat = aDataFieldNumberFormatMap[sName];
             for (ValueAndFormat & rItem : rDataRow)
             {

@@ -374,7 +374,7 @@ void ScColumn::duplicateSparkline(sc::CopyFromClipContext& rContext, sc::ColumnB
     if ((rContext.getInsertFlag() & InsertDeleteFlags::SPARKLINES) == InsertDeleteFlags::NONE)
         return;
 
-    auto pSparkline = rContext.getSingleSparkline(nColOffset);
+    const auto& pSparkline = rContext.getSingleSparkline(nColOffset);
     if (pSparkline)
     {
         auto const& pSparklineGroup = pSparkline->getSparklineGroup();

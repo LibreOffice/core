@@ -276,7 +276,7 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell&   rViewSh,
     if ( pReqArgs &&
          (pGraphicItem = pReqArgs->GetItemIfSet( SID_INSERT_GRAPHIC, true )) )
     {
-        OUString aFileName = pGraphicItem->GetValue();
+        const OUString& aFileName = pGraphicItem->GetValue();
 
         OUString aFilterName;
         if ( const SfxStringItem* pFilterItem = pReqArgs->GetItemIfSet( FN_PARAM_FILTER ) )

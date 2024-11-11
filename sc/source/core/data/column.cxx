@@ -202,10 +202,9 @@ bool ScColumn::HasSelectionMatrixFragment(const ScMarkData& rMark, const ScRange
     ScAddress aCurOrigin = aOrigin;
 
     bool bOpen = false;
-    ScRangeList aRanges = rRangeList; // cached rMark.GetMarkedRanges(), for performance reasons (tdf#148147)
-    for (size_t i = 0, n = aRanges.size(); i < n; ++i)
+    for (size_t i = 0, n = rRangeList.size(); i < n; ++i)
     {
-        const ScRange& r = aRanges[i];
+        const ScRange& r = rRangeList[i];
         if (nTab < r.aStart.Tab() || r.aEnd.Tab() < nTab)
             continue;
 

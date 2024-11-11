@@ -9066,7 +9066,7 @@ void ScInterpreter::ScLet()
             }
             else
             {
-                FormulaConstTokenRef xTok(aInt.GetResultToken());
+                const FormulaConstTokenRef& xTok(aInt.GetResultToken());
                 if (!nResultIndexes.insert(std::make_pair(aStrName, xTok->Clone())).second)
                 {
                     PushIllegalParameter();
@@ -9100,7 +9100,7 @@ void ScInterpreter::ScLet()
     }
     else
     {
-        formula::FormulaConstTokenRef xLambdaResult(aInt.GetResultToken());
+        const formula::FormulaConstTokenRef& xLambdaResult(aInt.GetResultToken());
         if (xLambdaResult)
         {
             nGlobalError = xLambdaResult->GetError();
@@ -11072,7 +11072,7 @@ void ScInterpreter::ScRegex()
         }
         else
         {
-            const OUString aFlags( aFlagsString.getString());
+            const OUString& aFlags( aFlagsString.getString());
             // Empty flags string is valid => no flag set.
             if (aFlags.getLength() > 1)
             {

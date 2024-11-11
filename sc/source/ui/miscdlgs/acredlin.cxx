@@ -317,7 +317,7 @@ bool ScAcceptChgDlg::IsValidAction(const ScChangeAction* pScChangeAction)
     bool bFlag = false;
 
     ScRange aRef=pScChangeAction->GetBigRange().MakeRange(*pDoc);
-    OUString aUser=pScChangeAction->GetUser();
+    const OUString& aUser=pScChangeAction->GetUser();
     DateTime aDateTime=pScChangeAction->GetDateTime();
 
     ScChangeActionType eType=pScChangeAction->GetType();
@@ -513,7 +513,7 @@ std::unique_ptr<weld::TreeIter> ScAcceptChgDlg::AppendFilteredAction(
     bool bFlag = false;
 
     ScRange aRef=pScChangeAction->GetBigRange().MakeRange(*pDoc);
-    OUString aUser=pScChangeAction->GetUser();
+    const OUString& aUser=pScChangeAction->GetUser();
     DateTime aDateTime=pScChangeAction->GetDateTime();
 
     if (pTheView->IsValidEntry(aUser, aDateTime) || bIsGenerated)

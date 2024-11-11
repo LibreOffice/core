@@ -95,7 +95,7 @@ bool lclFillListBox(weld::TreeView& rLBox, const vector<ScDPLabelData::Member>& 
         rLBox.append();
         int pos = rLBox.n_children() - 1;
         rLBox.set_toggle(pos, TRISTATE_FALSE);
-        OUString aName = rMember.getDisplayName();
+        const OUString& aName = rMember.getDisplayName();
         if (!aName.isEmpty())
             rLBox.set_text(pos, aName, 0);
         else

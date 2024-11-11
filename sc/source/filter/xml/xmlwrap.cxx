@@ -113,7 +113,6 @@ ErrCodeMsg ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCo
         xStorage = pMedium->GetStorage();
 
     bool bEncrypted = false;
-    OUString sStream(sDocName);
     if( xStorage.is() )
     {
         try
@@ -152,7 +151,7 @@ ErrCodeMsg ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCo
     OSL_ENSURE( xInfoSet.is(), "missing property set" );
     if( xInfoSet.is() )
     {
-        xInfoSet->setPropertyValue( u"StreamName"_ustr, uno::Any( sStream ) );
+        xInfoSet->setPropertyValue( u"StreamName"_ustr, uno::Any( sDocName ) );
     }
 
     ErrCodeMsg nReturn = ERRCODE_NONE;

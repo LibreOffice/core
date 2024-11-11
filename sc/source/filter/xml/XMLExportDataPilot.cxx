@@ -151,7 +151,7 @@ void ScXMLExportDataPilot::WriteDPFilter(const ScQueryParam& aQueryParam)
 
     for ( j = 0; (j < nQueryEntryCount) && bHasEntries; ++j)
     {
-        ScQueryEntry aEntry = aQueryParam.GetEntry(j);
+        const ScQueryEntry& aEntry = aQueryParam.GetEntry(j);
         if (aEntry.bDoQuery)
         {
             if (nEntries > 0)

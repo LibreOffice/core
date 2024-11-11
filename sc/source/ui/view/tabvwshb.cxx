@@ -74,7 +74,7 @@ void ScTabViewShell::ConnectObject( const SdrOle2Obj* pObj )
 {
     // is called from paint
 
-    uno::Reference < embed::XEmbeddedObject > xObj = pObj->GetObjRef();
+    const uno::Reference < embed::XEmbeddedObject >& xObj = pObj->GetObjRef();
     vcl::Window* pWin = GetActiveWin();
 
     // when already connected do not execute SetObjArea/SetSizeScale again

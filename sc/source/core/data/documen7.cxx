@@ -137,7 +137,7 @@ void ScDocument::Broadcast( const ScHint& rHint )
 bool ScDocument::BroadcastHintInternal( const ScHint& rHint )
 {
     bool bIsBroadcasted = false;
-    const ScAddress address(rHint.GetStartAddress());
+    const ScAddress& address(rHint.GetStartAddress());
     SvtBroadcaster* pLastBC = nullptr;
     // Process all broadcasters for the given row range.
     for( SCROW nRow = 0; nRow < rHint.GetRowCount(); ++nRow )

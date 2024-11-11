@@ -1341,7 +1341,7 @@ void ExcelToSc8::ConvertExternName( std::unique_ptr<ScTokenArray>& rpArray, XclI
                 aSRD.SetFlag3D(true);
                 ExcRelToScRel8(nRow, nGrbitCol, aSRD, true);
                 aCRD.Ref1 = aCRD.Ref2 = aSRD;
-                OUString aTabName = rTabNames[nExtTab1];
+                const OUString& aTabName = rTabNames[nExtTab1];
 
                 if (nExtTab1 == nExtTab2)
                 {
@@ -1384,7 +1384,7 @@ void ExcelToSc8::ConvertExternName( std::unique_ptr<ScTokenArray>& rpArray, XclI
                 rR2.SetFlag3D(true);
                 ExcRelToScRel8(nRow2, nGrbitCol2, rR2, true);
 
-                OUString aTabName = rTabNames[nExtTab1];
+                const OUString& aTabName = rTabNames[nExtTab1];
                 aStack << aPool.StoreExtRef(nFileId, aTabName, aCRD);
             }
             break;

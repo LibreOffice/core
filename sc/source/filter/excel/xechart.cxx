@@ -3086,7 +3086,7 @@ sal_uInt16 XclExpChAxesSet::Convert( Reference< XDiagram > const & xDiagram, sal
         {
             /*  Process first coordinate system only. Import filter puts all
                 chart types into one coordinate system. */
-            Reference< XCoordinateSystem > xCoordSystem = aCoordSysSeq[ 0 ];
+            const Reference< XCoordinateSystem >& xCoordSystem = aCoordSysSeq[ 0 ];
             sal_Int32 nApiAxesSetIdx = GetApiAxesSetIndex();
 
             // 3d mode

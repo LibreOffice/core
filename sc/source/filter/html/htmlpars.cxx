@@ -2283,7 +2283,7 @@ void ScHTMLTable::DataOn( const HtmlImportInfo& rInfo )
                 {
                     // Pick up the number format associated with this class (if
                     // any).
-                    OUString aClass = rOption.GetString();
+                    const OUString& aClass = rOption.GetString();
                     const ScHTMLStyles& rStyles = mpParser->GetStyles();
                     const OUString& rVal = rStyles.getPropertyValue(u"td"_ustr, aClass, u"mso-number-format"_ustr);
                     if (!rVal.isEmpty())
