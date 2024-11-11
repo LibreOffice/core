@@ -60,13 +60,13 @@ class SVXCORE_DLLPUBLIC E3dScene final : public E3dObject, public SdrObjList
     virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
 
     // transformations
-    B3dCamera                   aCameraSet;
-    Camera3D                    aCamera;
+    B3dCamera                   m_aCameraSet;
+    Camera3D                    m_aCamera;
 
     mutable std::unique_ptr<Imp3DDepthRemapper> mp3DDepthRemapper;
 
     // Flag to determine if only selected objects should be drawn
-    bool                        bDrawOnlySelected       : 1;
+    bool                        m_bDrawOnlySelected       : 1;
 
     bool mbSkipSettingDirty : 1;
 
@@ -110,8 +110,8 @@ public:
         { return GetObjectItemSet().Get(SDRATTR_3DSCENE_FOCAL_LENGTH).GetValue(); }
 
     // set flag to draw only selected
-    void SetDrawOnlySelected(bool bNew) { bDrawOnlySelected = bNew; }
-    bool GetDrawOnlySelected() const { return bDrawOnlySelected; }
+    void SetDrawOnlySelected(bool bNew) { m_bDrawOnlySelected = bNew; }
+    bool GetDrawOnlySelected() const { return m_bDrawOnlySelected; }
     virtual SdrObjKind GetObjIdentifier() const override;
 
     virtual void    NbcSetSnapRect(const tools::Rectangle& rRect) override;
@@ -122,7 +122,7 @@ public:
 
     virtual E3dScene* getRootE3dSceneFromE3dObject() const override;
     void SetCamera(const Camera3D& rNewCamera);
-    const Camera3D& GetCamera() const { return aCamera; }
+    const Camera3D& GetCamera() const { return m_aCamera; }
     void removeAllNonSelectedObjects();
 
     virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
@@ -142,8 +142,8 @@ public:
     virtual OUString TakeObjNamePlural() const override;
 
     // get transformations
-    B3dCamera& GetCameraSet() { return aCameraSet; }
-    const B3dCamera& GetCameraSet() const { return aCameraSet; }
+    B3dCamera& GetCameraSet() { return m_aCameraSet; }
+    const B3dCamera& GetCameraSet() const { return m_aCameraSet; }
 
     // break up
     virtual bool IsBreakObjPossible() override;
