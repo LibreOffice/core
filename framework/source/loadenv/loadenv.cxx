@@ -204,6 +204,10 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const
         }
     }
 
+    // if AbortOnLoadFailure is set and we couldn't load the document, assert, intended for use with crashtesting to
+    // detect when we export something we can't import
+    assert(xComponent.is() || comphelper::NamedValueCollection::get(lArgs, u"AbortOnLoadFailure") != uno::Any(true));
+
     return xComponent;
 }
 
