@@ -5727,7 +5727,9 @@ bool PDFWriterImpl::finalizeSignature()
     }
 
     OStringBuffer aCMSHexBuffer;
-    svl::crypto::Signing aSigning(m_aContext.SignCertificate);
+    svl::crypto::SigningContext aSigningContext;
+    aSigningContext.m_xCertificate = m_aContext.SignCertificate;
+    svl::crypto::Signing aSigning(aSigningContext);
     aSigning.AddDataRange(buffer1.get(), bytesRead1);
     aSigning.AddDataRange(buffer2.get(), bytesRead2);
     aSigning.SetSignTSA(m_aContext.SignTSA);

@@ -9,6 +9,8 @@
 
 #include <test/unoapi_test.hxx>
 
+#include <boost/property_tree/json_parser.hpp>
+
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
@@ -21,6 +23,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <sfx2/sfxbasemodel.hxx>
+#include <tools/json_writer.hxx>
 
 using namespace com::sun::star;
 
@@ -108,6 +111,28 @@ CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testLokHelperAddCertifices)
     // - Actual  : 4 (SignatureState::NOTVALIDATED)
     // i.e. the signature status for an opened document was not updated when trusting a CA.
     CPPUNIT_ASSERT_EQUAL(SignatureState::OK, pObjectShell->GetDocumentSignatureState());
+}
+
+CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testLokHelperCommandValuesSignature)
+{
+    // Given an unsigned PDF file:
+    loadFromFile(u"unsigned.pdf");
+
+    // When extracting hashes:
+    tools::JsonWriter aWriter;
+    SfxLokHelper::getCommandValues(aWriter, ".uno:Signature");
+    OString aJson = aWriter.finishAndGetAsOString();
+
+    // Then make sure that we get a signature time:
+    CPPUNIT_ASSERT(SfxLokHelper::supportsCommand(u"Signature"));
+    std::stringstream aStream{ std::string(aJson) };
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    // Non-zero timestamp:
+    auto it = aTree.find("signatureTime");
+    CPPUNIT_ASSERT(it != aTree.not_found());
+    auto nSignatureTime = it->second.get_value<sal_Int64>();
+    CPPUNIT_ASSERT(nSignatureTime != 0);
 }
 #endif
 

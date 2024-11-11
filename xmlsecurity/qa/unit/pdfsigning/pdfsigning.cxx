@@ -29,6 +29,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/filter/pdfdocument.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <svl/cryptosign.hxx>
 
 #include <documentsignaturemanager.hxx>
 #include <pdfsignaturehelper.hxx>
@@ -136,7 +137,9 @@ bool PDFSigningTest::sign(const OUString& rInURL, const OUString& rOutURL,
             // Only try certificates that are already active and not expired
             if (IsValid(cert, xSecurityEnvironment))
             {
-                bool bSignResult = aDocument.Sign(cert, u"test"_ustr, /*bAdES=*/true);
+                svl::crypto::SigningContext aSigningContext;
+                aSigningContext.m_xCertificate = cert;
+                bool bSignResult = aDocument.Sign(aSigningContext, u"test"_ustr, /*bAdES=*/true);
 #ifdef _WIN32
                 if (!bSignResult)
                 {

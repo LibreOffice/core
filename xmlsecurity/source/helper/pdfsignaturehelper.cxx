@@ -536,10 +536,9 @@ PDFSignatureHelper::GetDocumentSignatureInformations(
 
 sal_Int32 PDFSignatureHelper::GetNewSecurityId() const { return m_aSignatureInfos.size(); }
 
-void PDFSignatureHelper::SetX509Certificate(
-    const uno::Reference<security::XCertificate>& xCertificate)
+void PDFSignatureHelper::SetX509Certificate(svl::crypto::SigningContext& rSigningContext)
 {
-    m_xCertificate = xCertificate;
+    m_pSigningContext = &rSigningContext;
 }
 
 void PDFSignatureHelper::SetDescription(const OUString& rDescription)
@@ -571,9 +570,12 @@ bool PDFSignatureHelper::Sign(const uno::Reference<frame::XModel>& xModel,
         aDocument.SetSignatureLine(std::move(aSignatureLineShape));
     }
 
-    if (!aDocument.Sign(m_xCertificate, m_aDescription, bAdES))
+    if (!m_pSigningContext || !aDocument.Sign(*m_pSigningContext, m_aDescription, bAdES))
     {
-        SAL_WARN("xmlsecurity.helper", "failed to sign");
+        if (m_pSigningContext && m_pSigningContext->m_xCertificate.is())
+        {
+            SAL_WARN("xmlsecurity.helper", "failed to sign");
+        }
         return false;
     }
 

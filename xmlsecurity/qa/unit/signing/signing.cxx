@@ -159,7 +159,9 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testDescription)
         return;
     OUString aDescription(u"SigningTest::testDescription"_ustr);
     sal_Int32 nSecurityId;
-    aManager.add(xCertificate, mxSecurityContext, aDescription, nSecurityId, false);
+    svl::crypto::SigningContext aSigningContext;
+    aSigningContext.m_xCertificate = xCertificate;
+    aManager.add(aSigningContext, mxSecurityContext, aDescription, nSecurityId, false);
 
     // Read back the signature and make sure that the description survives the roundtrip.
     aManager.read(/*bUseTempStream=*/true);
@@ -190,7 +192,9 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testECDSA)
     if (!xCertificate.is())
         return;
     sal_Int32 nSecurityId;
-    aManager.add(xCertificate, mxSecurityContext, u""_ustr, nSecurityId, false);
+    svl::crypto::SigningContext aSigningContext;
+    aSigningContext.m_xCertificate = xCertificate;
+    aManager.add(aSigningContext, mxSecurityContext, u""_ustr, nSecurityId, false);
 
     // Read back the signature and make sure that it's valid.
     aManager.read(/*bUseTempStream=*/true);
@@ -224,7 +228,9 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testECDSAOOXML)
     if (!xCertificate.is())
         return;
     sal_Int32 nSecurityId;
-    aManager.add(xCertificate, mxSecurityContext, u""_ustr, nSecurityId,
+    svl::crypto::SigningContext aSigningContext;
+    aSigningContext.m_xCertificate = xCertificate;
+    aManager.add(aSigningContext, mxSecurityContext, u""_ustr, nSecurityId,
                  /*bAdESCompliant=*/false);
 
     // Read back the signature and make sure that it's valid.
@@ -259,7 +265,9 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testECDSAPDF)
     if (!xCertificate.is())
         return;
     sal_Int32 nSecurityId;
-    aManager.add(xCertificate, mxSecurityContext, u""_ustr, nSecurityId,
+    svl::crypto::SigningContext aSigningContext;
+    aSigningContext.m_xCertificate = xCertificate;
+    aManager.add(aSigningContext, mxSecurityContext, u""_ustr, nSecurityId,
                  /*bAdESCompliant=*/true);
 
     // Read back the signature and make sure that it's valid.
@@ -301,7 +309,9 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLDescription)
         return;
     OUString aDescription(u"SigningTest::testDescription"_ustr);
     sal_Int32 nSecurityId;
-    aManager.add(xCertificate, mxSecurityContext, aDescription, nSecurityId, false);
+    svl::crypto::SigningContext aSigningContext;
+    aSigningContext.m_xCertificate = xCertificate;
+    aManager.add(aSigningContext, mxSecurityContext, aDescription, nSecurityId, false);
 
     // Read back the signature and make sure that the description survives the roundtrip.
     aManager.read(/*bUseTempStream=*/true);
@@ -334,7 +344,9 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLAppend)
     if (!xCertificate.is())
         return;
     sal_Int32 nSecurityId;
-    aManager.add(xCertificate, mxSecurityContext, OUString(), nSecurityId, false);
+    svl::crypto::SigningContext aSigningContext;
+    aSigningContext.m_xCertificate = xCertificate;
+    aManager.add(aSigningContext, mxSecurityContext, OUString(), nSecurityId, false);
 
     // Read back the signatures and make sure that we have the expected amount.
     aManager.read(/*bUseTempStream=*/true);
@@ -860,7 +872,9 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testXAdESNotype)
     if (!xCertificate.is())
         return;
     sal_Int32 nSecurityId;
-    aManager.add(xCertificate, mxSecurityContext, /*rDescription=*/OUString(), nSecurityId,
+    svl::crypto::SigningContext aSigningContext;
+    aSigningContext.m_xCertificate = xCertificate;
+    aManager.add(aSigningContext, mxSecurityContext, /*rDescription=*/OUString(), nSecurityId,
                  /*bAdESCompliant=*/true);
 
     // Write to storage.
@@ -915,7 +929,9 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testXAdES)
     if (!xCertificate.is())
         return;
     sal_Int32 nSecurityId;
-    aManager.add(xCertificate, mxSecurityContext, /*rDescription=*/OUString(), nSecurityId,
+    svl::crypto::SigningContext aSigningContext;
+    aSigningContext.m_xCertificate = xCertificate;
+    aManager.add(aSigningContext, mxSecurityContext, /*rDescription=*/OUString(), nSecurityId,
                  /*bAdESCompliant=*/true);
 
     // Write to storage.
@@ -969,7 +985,9 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testSigningMultipleTimes_ODT)
         if (!xCertificate.is())
             return;
         sal_Int32 nSecurityId;
-        aManager.add(xCertificate, mxSecurityContext, /*rDescription=*/OUString(), nSecurityId,
+        svl::crypto::SigningContext aSigningContext;
+        aSigningContext.m_xCertificate = xCertificate;
+        aManager.add(aSigningContext, mxSecurityContext, /*rDescription=*/OUString(), nSecurityId,
                      /*bAdESCompliant=*/true);
 
         // Read back the signature and make sure that it's valid.
@@ -982,7 +1000,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testSigningMultipleTimes_ODT)
                                  rInformations[0].nStatus);
         }
 
-        aManager.add(xCertificate, mxSecurityContext, /*rDescription=*/OUString(), nSecurityId,
+        aManager.add(aSigningContext, mxSecurityContext, /*rDescription=*/OUString(), nSecurityId,
                      /*bAdESCompliant=*/true);
         aManager.read(/*bUseTempStream=*/true);
         {
@@ -993,7 +1011,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testSigningMultipleTimes_ODT)
                                  rInformations[1].nStatus);
         }
 
-        aManager.add(xCertificate, mxSecurityContext, /*rDescription=*/OUString(), nSecurityId,
+        aManager.add(aSigningContext, mxSecurityContext, /*rDescription=*/OUString(), nSecurityId,
                      /*bAdESCompliant=*/true);
         aManager.read(/*bUseTempStream=*/true);
         {
@@ -1042,7 +1060,9 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testSigningMultipleTimes_OOXML)
             return;
 
         sal_Int32 nSecurityId;
-        aManager.add(xCertificate, mxSecurityContext, u""_ustr, nSecurityId,
+        svl::crypto::SigningContext aSigningContext;
+        aSigningContext.m_xCertificate = xCertificate;
+        aManager.add(aSigningContext, mxSecurityContext, u""_ustr, nSecurityId,
                      /*bAdESCompliant=*/false);
         aManager.read(/*bUseTempStream=*/true);
         {
@@ -1053,7 +1073,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testSigningMultipleTimes_OOXML)
                                  rInformations[0].nStatus);
         }
 
-        aManager.add(xCertificate, mxSecurityContext, u""_ustr, nSecurityId,
+        aManager.add(aSigningContext, mxSecurityContext, u""_ustr, nSecurityId,
                      /*bAdESCompliant=*/false);
         aManager.read(/*bUseTempStream=*/true);
         {
@@ -1064,7 +1084,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testSigningMultipleTimes_OOXML)
                                  rInformations[1].nStatus);
         }
 
-        aManager.add(xCertificate, mxSecurityContext, u""_ustr, nSecurityId,
+        aManager.add(aSigningContext, mxSecurityContext, u""_ustr, nSecurityId,
                      /*bAdESCompliant=*/false);
         aManager.read(/*bUseTempStream=*/true);
         {
@@ -1191,11 +1211,14 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testImplicitScriptSign)
     OUString aDescription;
     sal_Int32 nSecurityId;
     bool bAdESCompliant = true;
-    aScriptManager.add(xCertificate, mxSecurityContext, aDescription, nSecurityId, bAdESCompliant);
+    svl::crypto::SigningContext aSigningContext;
+    aSigningContext.m_xCertificate = xCertificate;
+    aScriptManager.add(aSigningContext, mxSecurityContext, aDescription, nSecurityId,
+                       bAdESCompliant);
     aScriptManager.read(/*bUseTempStream=*/true, /*bCacheLastSignature=*/false);
     aScriptManager.write(bAdESCompliant);
     aManager.setScriptingSignatureStream(xScriptingStream);
-    aManager.add(xCertificate, mxSecurityContext, aDescription, nSecurityId, bAdESCompliant);
+    aManager.add(aSigningContext, mxSecurityContext, aDescription, nSecurityId, bAdESCompliant);
     aManager.read(/*bUseTempStream=*/true, /*bCacheLastSignature=*/false);
     aManager.write(bAdESCompliant);
 

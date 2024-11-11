@@ -37,6 +37,10 @@ namespace xml::crypto
 class XSecurityEnvironment;
 }
 }
+namespace svl::crypto
+{
+class SigningContext;
+}
 class SvStream;
 
 /// Handles signatures of a PDF file.
@@ -44,7 +48,7 @@ class XMLSECURITY_DLLPUBLIC PDFSignatureHelper
 {
     SignatureInformations m_aSignatureInfos;
 
-    css::uno::Reference<css::security::XCertificate> m_xCertificate;
+    svl::crypto::SigningContext* m_pSigningContext = nullptr;
     OUString m_aDescription;
 
 public:
@@ -59,7 +63,7 @@ public:
     /// Return the ID of the next created signature.
     sal_Int32 GetNewSecurityId() const;
     /// Certificate to be used next time signing is performed.
-    void SetX509Certificate(const css::uno::Reference<css::security::XCertificate>& xCertificate);
+    void SetX509Certificate(svl::crypto::SigningContext& rSigningContext);
     /// Comment / reason to be used next time signing is performed.
     void SetDescription(const OUString& rDescription);
     /// Append a new signature at the end of xInputStream.
