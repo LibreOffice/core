@@ -363,7 +363,7 @@ void LwpFribField::RegisterStyle(LwpFoundry* pFoundry)
 
 void LwpFribField::RegisterTimeField(const LwpFieldMark* pFieldMark)
 {
-    OUString sFormula
+    const OUString& sFormula
         = pFieldMark->GetFormula(); //now bookmark maybe not all register to bookmarkmgr,
     if (sFormula == "TotalEditingTime") //so check field type now is not correct.
         RegisterTotalTimeStyle();

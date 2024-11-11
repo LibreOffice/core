@@ -89,7 +89,7 @@ javaFrameworkError jfw_findAllJREs(std::vector<std::unique_ptr<JavaInfo>> *pparI
             //get the list of paths to jre locations which have been
             //added manually
             const jfw::MergedSettings settings;
-            const std::vector<OUString> vecJRELocations =
+            const std::vector<OUString>& vecJRELocations =
                 settings.getJRELocations();
             //Check if any plugin can detect JREs at the location
             // of the paths added by jfw_addJRELocation
@@ -230,7 +230,7 @@ javaFrameworkError jfw_startVM(
 
                 vmParams = settings.getVmParametersUtf8();
                 // Expand user classpath (might contain bootstrap vars)
-                OUString sUserPath(settings.getUserClassPath());
+                const OUString& sUserPath(settings.getUserClassPath());
                 std::vector paths = jfw_convertUserPathList(sUserPath);
                 OUString sUserPathExpanded;
                 for (auto& path : paths)

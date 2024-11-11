@@ -238,7 +238,7 @@ static PyObject* getComponentContext(
         Reference<XComponentContext> ctx;
 
         // getLibDir() must be called in order to set bootstrap variables correctly !
-        OUString path( getLibDir());
+        const OUString& path( getLibDir());
         if( Runtime::isInitialized() )
         {
             Runtime runtime;

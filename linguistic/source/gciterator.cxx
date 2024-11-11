@@ -1138,8 +1138,7 @@ void GrammarCheckingIterator::GetConfiguredGCSvcs_Impl()
                 if (aImplNames.hasElements())
                 {
                     // only the first entry is used, there should be only one grammar checker per language
-                    const OUString aImplName( aImplNames[0] );
-                    aTmpGCImplNamesByLang[rElementName] = aImplName;
+                    aTmpGCImplNamesByLang[rElementName] = aImplNames[0];
                 }
             }
             else
