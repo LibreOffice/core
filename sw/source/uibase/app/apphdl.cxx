@@ -283,7 +283,7 @@ std::shared_ptr<SwMailMergeConfigItem> SwView::EnsureMailMergeConfigItem(const S
             GetWrtShell().GetAllUsedDB(aDBNameList, &aAllDBNames);
             if (!aDBNameList.empty())
             {
-                OUString sDBName(aDBNameList[0]);
+                const OUString& sDBName(aDBNameList[0]);
                 SwDBData aDBData;
                 sal_Int32 nIdx{ 0 };
                 aDBData.sDataSource = sDBName.getToken(0, DB_DELIM, nIdx);

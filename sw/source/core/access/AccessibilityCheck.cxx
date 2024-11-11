@@ -2480,7 +2480,7 @@ void AccessibilityCheck::checkObject(SwNode* pCurrent, SdrObject* pObject)
     {
         if (pObject->GetTitle().isEmpty() && pObject->GetDescription().isEmpty())
         {
-            OUString sName = pObject->GetName();
+            const OUString& sName = pObject->GetName();
             OUString sIssueText = SwResId(STR_NO_ALT).replaceAll("%OBJECT_NAME%", sName);
             auto pIssue = lclAddIssue(m_aIssueCollection, sIssueText,
                                       sfx::AccessibilityIssueID::NO_ALT_SHAPE);

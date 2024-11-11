@@ -517,11 +517,10 @@ rtl::Reference<SwXPageStyle> SectionPropertyMap::GetPageStyle(DomainMapper_Impl&
 // removes the content - all the paragraphs of an input XText
 void SectionPropertyMap::removeXTextContent(uno::Reference<text::XText> const& rxText)
 {
-    uno::Reference<text::XText> xText(rxText);
-    if (!xText.is())
+    if (!rxText.is())
         return;
-    xText->setString(OUString());
-    uno::Reference<text::XParagraphAppend> const xAppend(xText, uno::UNO_QUERY_THROW);
+    rxText->setString(OUString());
+    uno::Reference<text::XParagraphAppend> const xAppend(rxText, uno::UNO_QUERY_THROW);
     uno::Reference<lang::XComponent> const xParagraph(xAppend->finishParagraph(uno::Sequence<beans::PropertyValue>()), uno::UNO_QUERY_THROW);
     xParagraph->dispose();
 }
@@ -1445,7 +1444,7 @@ void BeforeConvertToTextFrame(const std::deque<StoredRedline>& rFramedRedlines, 
 
 void AfterConvertToTextFrame(DomainMapper_Impl& rDM_Impl, const std::deque<StoredRedline>& rFramedRedlines, std::vector<sal_Int32>& redPos, std::vector<sal_Int32>& redLen, std::vector<OUString>& redCell, std::vector<OUString>& redTable)
 {
-    rtl::Reference<SwXTextDocument> xTextDocument(rDM_Impl.GetTextDocument());
+    const rtl::Reference<SwXTextDocument>& xTextDocument(rDM_Impl.GetTextDocument());
     rtl::Reference<SwXTextTables> xTables = xTextDocument->getSwTextTables();
     for( size_t i = 0; i < rFramedRedlines.size(); i++)
     {

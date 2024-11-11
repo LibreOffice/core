@@ -987,7 +987,7 @@ static bool lcl_emptyRow(std::vector<RowSequence_t>& rTableRanges, sal_Int32 nRo
         return false;
     }
 
-    const RowSequence_t rRowSeq = rTableRanges[nRow];
+    const RowSequence_t& rRowSeq = rTableRanges[nRow];
     if (!rRowSeq.hasElements())
     {
         SAL_WARN("writerfilter.dmapper", "m_aCellProperties not in sync with rTableRanges?");

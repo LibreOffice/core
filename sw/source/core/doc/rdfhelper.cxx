@@ -191,7 +191,7 @@ void SwRDFHelper::removeTextNodeStatement(const OUString& rType, SwTextNode& rTe
     if (!aGraphNames.hasElements())
         return;
 
-    uno::Reference<rdf::XURI> xGraphName = aGraphNames[0];
+    const uno::Reference<rdf::XURI>& xGraphName = aGraphNames[0];
     uno::Reference<rdf::XNamedGraph> xGraph = xDocumentMetadataAccess->getRDFRepository()->getGraph(xGraphName);
     uno::Reference<rdf::XResource> xSubject(SwXParagraph::CreateXParagraph(rTextNode.GetDoc(), &rTextNode, nullptr));
     uno::Reference<rdf::XURI> xKey = rdf::URI::create(xComponentContext, rKey);

@@ -809,7 +809,7 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                         default:
                             break;
                     }
-                    SwFormatHoriOrient aHOrient(aMgr.GetHoriOrient());
+                    const SwFormatHoriOrient& aHOrient(aMgr.GetHoriOrient());
                     if (nHoriOrient != -1)
                         rSet.Put(SfxBoolItem(nWhich, nHoriOrient == aHOrient.GetHoriOrient()));
                 }

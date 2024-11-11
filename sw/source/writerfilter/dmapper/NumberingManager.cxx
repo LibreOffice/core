@@ -469,7 +469,7 @@ uno::Sequence<uno::Sequence<beans::PropertyValue>> ListDef::GetMergedPropertyVal
     sal_Int32 nAbstractCount = aAbstract.getLength( );
     for ( sal_Int32 i = 0; i < nThisCount && i < nAbstractCount; i++ )
     {
-        uno::Sequence< beans::PropertyValue > level = aThis[i];
+        const uno::Sequence< beans::PropertyValue >& level = aThis[i];
         if (level.hasElements() && GetLevel(i)->HasValues())
         {
             // If the element contains something, merge it, but ignore stub overrides.

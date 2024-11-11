@@ -4387,7 +4387,7 @@ void WW8Export::WriteFormData( const ::sw::mark::Fieldmark& rFieldmark )
         slen += 4; // for num of list items
         const int items = aListItems.size();
         for( int i = 0; i < items; i++ ) {
-            OUString item = aListItems[i];
+            const OUString& item = aListItems[i];
             slen += 2 * item.getLength() + 2;
         }
     }
@@ -4417,7 +4417,7 @@ void WW8Export::WriteFormData( const ::sw::mark::Fieldmark& rFieldmark )
         const int items=aListItems.size();
         m_pDataStrm->WriteUInt32( items );
         for(int i=0;i<items;i++) {
-            OUString item=aListItems[i];
+            const OUString& item=aListItems[i];
             SwWW8Writer::WriteString_xstz( *m_pDataStrm, item, false );
         }
     }

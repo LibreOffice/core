@@ -1457,7 +1457,7 @@ void SwTOXSelectTabPage::LanguageHdl(const weld::ComboBox* pBox)
     sal_Int32 nEnd = aSeq.getLength();
     for( sal_Int32 nCnt = 0; nCnt < nEnd; ++nCnt )
     {
-        const OUString sAlg(aSeq[ nCnt ]);
+        const OUString& sAlg(aSeq[ nCnt ]);
         const OUString sUINm = m_pIndexRes->GetTranslation( sAlg );
         m_xSortAlgorithmLB->append(sAlg, sUINm);
         if( sAlg == sOldString )

@@ -587,7 +587,7 @@ void CommentsPanel::setResolvedStatus(sw::annotation::SwAnnotationWin* pAnnotati
 
 void CommentsPanel::editComment(SwPostItField* pPostItField, Comment* pComment)
 {
-    OUString sText = pPostItField->GetText();
+    const OUString& sText = pPostItField->GetText();
     pComment->SetCommentText(sText);
     pComment->mxTextView->set_text(sText);
 }

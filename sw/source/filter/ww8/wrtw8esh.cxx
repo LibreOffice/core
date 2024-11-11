@@ -185,8 +185,8 @@ void SwBasicEscherEx::WriteHyperlinkWithinFly( SvMemoryStream& rStrm, const SwFo
     SvMemoryStream tmpStrm;
     OUString tmpTextMark;
 
-    OUString rUrl = pINetFormatArg->GetURL();
-    OUString rTarFrame = pINetFormatArg->GetTargetFrameName();
+    const OUString& rUrl = pINetFormatArg->GetURL();
+    const OUString& rTarFrame = pINetFormatArg->GetTargetFrameName();
     sal_uInt32 nFlags = 0;
 
     INetURLObject aUrlObj( rUrl );

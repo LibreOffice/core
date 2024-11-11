@@ -103,10 +103,10 @@ void SwSpellPopup::fillLangPopupMenu(
     // set of languages to be displayed in the sub menus
     std::set< OUString > aLangItems;
 
-    OUString    aCurLang( aSeq[0] );
+    const OUString&    aCurLang( aSeq[0] );
     SvtScriptType  nScriptType = static_cast<SvtScriptType>(aSeq[1].toInt32());
-    OUString    aKeyboardLang( aSeq[2] );
-    OUString    aGuessedTextLang( aSeq[3] );
+    const OUString&    aKeyboardLang( aSeq[2] );
+    const OUString&    aGuessedTextLang( aSeq[3] );
 
     if (!aCurLang.isEmpty() &&
         LANGUAGE_DONTKNOW != SvtLanguageTable::GetLanguageType( aCurLang ))
@@ -257,7 +257,7 @@ SwSpellPopup::SwSpellPopup(
         sal_uInt16 nItemId          = MN_SUGGESTION_START;
         for (sal_uInt16 i = 0; i < nStringCount; ++i)
         {
-            const OUString aEntry = aSuggestions[ i ];
+            const OUString& aEntry = aSuggestions[ i ];
             m_xPopupMenu->InsertItem(nItemId, aEntry, MenuItemBits::NONE, {}, i);
             m_xPopupMenu->SetHelpId(nItemId, HID_LINGU_REPLACE);
             if (!aSuggestionImageUrl.isEmpty())

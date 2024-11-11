@@ -543,7 +543,7 @@ bool  SwDropCapsPage::FillItemSet(SfxItemSet *rSet)
 void  SwDropCapsPage::Reset(const SfxItemSet *rSet)
 {
     // Characters, lines, gap and text
-    SwFormatDrop aFormatDrop( rSet->Get(RES_PARATR_DROP) );
+    const SwFormatDrop& aFormatDrop( rSet->Get(RES_PARATR_DROP) );
     if (aFormatDrop.GetLines() > 1)
     {
         m_xDropCapsField->set_value(aFormatDrop.GetChars());

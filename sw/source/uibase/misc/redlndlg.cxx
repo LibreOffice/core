@@ -766,11 +766,11 @@ void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRa
             pData->bDisabled = true;
 
             OUString sImage(GetActionImage(rRedln, nStack));
-            OUString sAuthor = rRedln.GetAuthorString(nStack);
+            const OUString& sAuthor = rRedln.GetAuthorString(nStack);
             pData->aDateTime = rRedln.GetTimeStamp(nStack);
             pData->eType = rRedln.GetType(nStack);
             OUString sDateEntry = GetAppLangDateTimeString(pData->aDateTime);
-            OUString sComment = rRedln.GetComment(nStack);
+            const OUString& sComment = rRedln.GetComment(nStack);
 
             std::unique_ptr<weld::TreeIter> xChild(rTreeView.make_iterator());
             OUString sId(weld::toId(pData.get()));

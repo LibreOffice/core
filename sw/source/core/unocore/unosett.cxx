@@ -1458,7 +1458,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFormat
             nINT16 = cBullet;
             aPropertyValues.push_back(comphelper::makePropertyValue(u"BulletId"_ustr, nINT16));
 
-            std::optional<vcl::Font> pFont = rFormat.GetBulletFont();
+            const std::optional<vcl::Font>& pFont = rFormat.GetBulletFont();
 
             //BulletChar
             aUString = OUString(&cBullet, 1);
@@ -1630,14 +1630,14 @@ uno::Any SwXNumberingRules::GetPropertyForNumFormat(
             //BulletFontName
             if (rPropName == u"BulletFontName"_ustr)
             {
-                std::optional<vcl::Font> pFont = rFormat.GetBulletFont();
+                const std::optional<vcl::Font>& pFont = rFormat.GetBulletFont();
                 return uno::Any(pFont ? pFont->GetFamilyName() : OUString());
             }
 
             //BulletFont
             if (rPropName == UNO_NAME_BULLET_FONT)
             {
-                if (std::optional<vcl::Font> pFont = rFormat.GetBulletFont())
+                if (const std::optional<vcl::Font>& pFont = rFormat.GetBulletFont())
                 {
                     awt::FontDescriptor aDesc;
                     SvxUnoFontDescriptor::ConvertFromFont( *pFont, aDesc );

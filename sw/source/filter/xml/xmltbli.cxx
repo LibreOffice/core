@@ -1872,7 +1872,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
     }
 
     // Share formats!
-    const OUString sStyleName = pCell->GetStyleName();
+    const OUString& sStyleName = pCell->GetStyleName();
     bool bModifyLocked;
     bool bNew;
     SwTableBoxFormat *pBoxFormat2 = GetSharedBoxFormat(

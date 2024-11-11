@@ -2215,7 +2215,7 @@ void DocxAttributeOutput::DoWriteMoveRangeTagStart(std::u16string_view bookmarkN
             SvtSecurityOptions::EOption::DocWarnKeepRedlineInfo);
 
     const OUString &rAuthor( SW_MOD()->GetRedlineAuthor( pRedlineData->GetAuthor() ) );
-    const DateTime aDateTime = pRedlineData->GetTimeStamp();
+    const DateTime& aDateTime = pRedlineData->GetTimeStamp();
     bool bNoDate = bRemovePersonalInfo ||
         ( aDateTime.GetYear() == 1970 && aDateTime.GetMonth() == 1 && aDateTime.GetDay() == 1 );
 
@@ -2492,7 +2492,7 @@ void DocxAttributeOutput::WriteFFData(  const FieldInfos& rInfos )
     }
     else if ( rInfos.eType == ww::eFORMCHECKBOX )
     {
-        const OUString sName = params.getName();
+        const OUString& sName = params.getName();
         bool bChecked = false;
 
         const sw::mark::CheckboxFieldmark* pCheckboxFm = dynamic_cast<const sw::mark::CheckboxFieldmark*>(&rFieldmark);
@@ -4095,7 +4095,7 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
 
     OString aId( OString::number( pRedlineData->GetSeqNo() ) );
     const OUString &rAuthor( SW_MOD()->GetRedlineAuthor( pRedlineData->GetAuthor() ) );
-    const DateTime aDateTime = pRedlineData->GetTimeStamp();
+    const DateTime& aDateTime = pRedlineData->GetTimeStamp();
     bool bNoDate = bRemovePersonalInfo ||
         ( aDateTime.GetYear() == 1970 && aDateTime.GetMonth() == 1 && aDateTime.GetDay() == 1 );
 
@@ -4255,7 +4255,7 @@ void DocxAttributeOutput::StartRedline( const SwRedlineData * pRedlineData, bool
                         ? "Author" + OUString::number( GetExport().GetInfoID(rAuthor) )
                         : rAuthor, RTL_TEXTENCODING_UTF8 ) );
 
-    const DateTime aDateTime = pRedlineData->GetTimeStamp();
+    const DateTime& aDateTime = pRedlineData->GetTimeStamp();
     bool bNoDate = bRemovePersonalInfo ||
         ( aDateTime.GetYear() == 1970 && aDateTime.GetMonth() == 1 && aDateTime.GetDay() == 1 );
     bool bMoved = pRedlineData->IsMoved() &&
@@ -7902,7 +7902,7 @@ void DocxAttributeOutput::CharCaseMap( const SvxCaseMapItem& rCaseMap )
 void DocxAttributeOutput::CharColor(const SvxColorItem& rColorItem)
 {
     const Color aColor = rColorItem.getColor();
-    const model::ComplexColor aComplexColor = rColorItem.getComplexColor();
+    const model::ComplexColor& aComplexColor = rColorItem.getComplexColor();
 
     OString aColorString = msfilter::util::ConvertColor(aColor);
 
@@ -9786,7 +9786,7 @@ void DocxAttributeOutput::FormatFillGradient( const XFillGradientItem& rFillGrad
         // LO does linear gradients top to bottom, while MSO does bottom to top.
         // LO does axial gradients inner to outer, while MSO does outer to inner.
         // Conclusion: swap start and end colors.
-        const OString sColor1 = sEndColor; // LO end color is MSO start color
+        const OString& sColor1 = sEndColor; // LO end color is MSO start color
         OString sColor2 = sStartColor; // LO start color is MSO end color
 
         switch (rGradient.GetGradientStyle())

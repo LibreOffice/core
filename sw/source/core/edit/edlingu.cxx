@@ -573,7 +573,7 @@ bool SwEditShell::HasLastSentenceGotGrammarChecked()
     bool bTextWasGrammarChecked = false;
     if (g_pSpellIter)
     {
-        svx::SpellPortions aLastPortions( g_pSpellIter->GetLastPortions() );
+        const svx::SpellPortions& aLastPortions( g_pSpellIter->GetLastPortions() );
         for (size_t i = 0;  i < aLastPortions.size() && !bTextWasGrammarChecked;  ++i)
         {
             // bIsGrammarError is also true if the text was only checked but no

@@ -96,7 +96,7 @@ bool SwWrtShell::GotoField( const SwFormatField& rField )
 bool SwWrtShell::GotoContentControl(const SwFormatContentControl& rContentControl,
                                     bool bOnlyRefresh)
 {
-    std::shared_ptr<SwContentControl> pContentControl = rContentControl.GetContentControl();
+    const std::shared_ptr<SwContentControl>& pContentControl = rContentControl.GetContentControl();
     if (IsFrameSelected() && pContentControl && pContentControl->GetPicture())
     {
         // A frame is already selected, and its anchor is inside a picture content control.

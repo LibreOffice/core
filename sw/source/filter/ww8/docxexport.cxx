@@ -1723,8 +1723,8 @@ void DocxExport::WriteCustomXml()
 
     for (sal_Int32 j = 0; j < customXmlDomlist.getLength(); j++)
     {
-        uno::Reference<xml::dom::XDocument> customXmlDom = customXmlDomlist[j];
-        uno::Reference<xml::dom::XDocument> customXmlDomProps = customXmlDomPropslist[j];
+        const uno::Reference<xml::dom::XDocument>& customXmlDom = customXmlDomlist[j];
+        const uno::Reference<xml::dom::XDocument>& customXmlDomProps = customXmlDomPropslist[j];
         if (customXmlDom.is())
         {
             m_rFilter.addRelation( m_pDocumentFS->getOutputStream(),

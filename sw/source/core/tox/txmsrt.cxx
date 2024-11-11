@@ -340,7 +340,7 @@ bool SwTOXIndex::sort_lt(const SwTOXSortTabBase& rCmpBase)
     OSL_ENSURE(pTextMark, "pTextMark == 0, No keyword");
 
     const TextAndReading aMyTaR(GetText());
-    const TextAndReading aOtherTaR(rCmpBase.GetText());
+    const TextAndReading& aOtherTaR(rCmpBase.GetText());
 
     bool bRet = GetLevel() == rCmpBase.GetLevel() &&
                 pTOXIntl->IsLess( aMyTaR, GetLocale(),

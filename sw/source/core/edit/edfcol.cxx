@@ -971,7 +971,7 @@ std::vector<svx::ClassificationResult> SwEditShell::CollectAdvancedClassificatio
     uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName(u"PageStyles"_ustr), uno::UNO_QUERY);
 
     std::vector<OUString> aPageStyles = lcl_getUsedPageStyles(this);
-    OUString aPageStyleString = aPageStyles.back();
+    const OUString& aPageStyleString = aPageStyles.back();
     uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(aPageStyleString), uno::UNO_QUERY);
 
     bool bHeaderIsOn = false;

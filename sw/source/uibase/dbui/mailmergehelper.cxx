@@ -201,7 +201,7 @@ OUString SwAddressPreview::FillData(
     const std::vector<std::pair<OUString, int>>& rDefHeaders = rConfigItem.GetDefaultAddressHeaders();
 
     bool bIncludeCountry = rConfigItem.IsIncludeCountry();
-    const OUString rExcludeCountry = rConfigItem.GetExcludeCountry();
+    const OUString& rExcludeCountry = rConfigItem.GetExcludeCountry();
     bool bSpecialReplacementForCountry = (!bIncludeCountry || !rExcludeCountry.isEmpty());
     OUString sCountryColumn;
     if( bSpecialReplacementForCountry )

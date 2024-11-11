@@ -298,7 +298,7 @@ SwFrameFormat* SwMailMergeLayoutPage::InsertAddressFrame(
 
         bool bIncludeCountry = rConfigItem.IsIncludeCountry();
         bool bHideEmptyParagraphs = rConfigItem.IsHideEmptyParagraphs();
-        const OUString rExcludeCountry = rConfigItem.GetExcludeCountry();
+        const OUString& rExcludeCountry = rConfigItem.GetExcludeCountry();
         bool bSpecialReplacementForCountry = (!bIncludeCountry || !rExcludeCountry.isEmpty());
 
         const std::vector<std::pair<OUString, int>>& rHeaders = rConfigItem.GetDefaultAddressHeaders();
@@ -495,7 +495,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
                 sal_Int32 nCurrent = rConfigItem.GetCurrentGreeting(static_cast<SwMailMergeConfigItem::Gender>(eGender));
                 if( nCurrent >= 0 && nCurrent < aEntries.getLength())
                 {
-                    const OUString sGreeting = aEntries[nCurrent];
+                    const OUString& sGreeting = aEntries[nCurrent];
                     OUString sCondition;
                     OUString sHideParagraphsExpression;
                     switch(eGender)

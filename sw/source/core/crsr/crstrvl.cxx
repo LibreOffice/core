@@ -846,7 +846,7 @@ bool SwCursorShell::GotoFootnoteAnchor(const SwTextFootnote& rTextFootnote)
 
 bool SwCursorShell::GotoFormatContentControl(const SwFormatContentControl& rContentControl)
 {
-    std::shared_ptr<SwContentControl> pContentControl = rContentControl.GetContentControl();
+    const std::shared_ptr<SwContentControl>& pContentControl = rContentControl.GetContentControl();
     const SwTextContentControl* pTextContentControl = pContentControl->GetTextAttr();
     if (!pTextContentControl)
         return false;

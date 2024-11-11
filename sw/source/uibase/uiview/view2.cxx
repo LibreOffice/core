@@ -3050,7 +3050,7 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
         rSh.GetAllUsedDB( aDBNameList, &aAllDBNames );
         if(!aDBNameList.empty())
         {
-            OUString sDBName(aDBNameList[0]);
+            const OUString& sDBName(aDBNameList[0]);
             sal_Int32 nIdx {0};
             aData.sDataSource = sDBName.getToken(0, DB_DELIM, nIdx);
             aData.sCommand = sDBName.getToken(0, DB_DELIM, nIdx);

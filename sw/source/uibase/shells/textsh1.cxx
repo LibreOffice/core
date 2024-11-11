@@ -269,7 +269,7 @@ static void sw_CharDialogResult(const SfxItemSet* pSet, SwWrtShell& rWrtSh, std:
     // The old item is for unknown reasons back in the set again.
     if( !bSelectionPut && (pSelectionItem = aTmpSet.GetItemIfSet(FN_PARAM_SELECTION, false)) )
     {
-        OUString sInsert = pSelectionItem->GetValue();
+        const OUString& sInsert = pSelectionItem->GetValue();
         bInsert = !sInsert.isEmpty();
         if(bInsert)
         {

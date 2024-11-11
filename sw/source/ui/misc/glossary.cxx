@@ -363,7 +363,7 @@ namespace
 
 OUString getCurrentGlossary()
 {
-    const OUString sTemp{ ::GetCurrGlosGroup() };
+    const OUString& sTemp{ ::GetCurrGlosGroup() };
 
     // the zeroth path is not being recorded!
     if (o3tl::starts_with(o3tl::getToken(sTemp, 1, GLOS_DELIM), u"0"))
@@ -756,7 +756,7 @@ IMPL_LINK_NOARG(SwGlossaryDlg, BibHdl, weld::Button&, void)
             {
                 Init();
                 //if new groups were created - select one of them
-                const OUString sNewGroup = aDlg.GetCreatedGroupName();
+                const OUString& sNewGroup = aDlg.GetCreatedGroupName();
 
                 std::unique_ptr<weld::TreeIter> xEntry = m_xCategoryBox->make_iterator();
                 bool bEntry = m_xCategoryBox->get_iter_first(*xEntry);

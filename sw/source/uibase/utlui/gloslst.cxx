@@ -284,7 +284,7 @@ void SwGlossaryList::Update()
                                                     &sExt, &aDateTimeArr );
             for( size_t nFiles = 0; nFiles < aFiles.size(); ++nFiles )
             {
-                const OUString aTitle = aFiles[ nFiles ];
+                const OUString& aTitle = aFiles[ nFiles ];
                 ::DateTime& rDT = aDateTimeArr[ nFiles ];
 
                 OUString sName( aTitle.copy( 0, aTitle.getLength() - sExt.getLength() ));

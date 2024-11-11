@@ -1289,7 +1289,7 @@ static void lcl_collectUsedNums(std::vector<unsigned int>& rSetFlags, sal_Int32 
 
 static void lcl_collectUsedNums(std::vector<unsigned int>& rSetFlags, sal_Int32 nNmLen, const SdrObject& rObj, const OUString& rCmpName)
 {
-    OUString sName = rObj.GetName();
+    const OUString& sName = rObj.GetName();
     lcl_collectUsedNums(rSetFlags, nNmLen, sName, rCmpName);
     // tdf#122487 take groups into account, iterate and recurse through their
     // contents for name collision check

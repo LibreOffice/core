@@ -719,7 +719,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
     {
         // Frame objects have a restricted shadow and no further effects. They have border instead of
         // stroke. LO includes shadow and border in the object size, but Word not.
-        SvxShadowItem aShadowItem = pFrameFormat->GetShadow();
+        const SvxShadowItem& aShadowItem = pFrameFormat->GetShadow();
         if (aShadowItem.GetLocation() != SvxShadowLocation::NONE)
         {
             sal_Int32 nShadowWidth(aShadowItem.GetWidth());
@@ -1435,7 +1435,7 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrameFo
         pDocPrAttrList->add(XML_hidden, OString::number(1));
 
     pFS->startElementNS(XML_wp, XML_docPr, pDocPrAttrList);
-    OUString sHyperlink = pSdrObject->getHyperlink();
+    const OUString& sHyperlink = pSdrObject->getHyperlink();
     if (!sHyperlink.isEmpty())
     {
         OUString sRelId = m_pImpl->getExport().GetFilter().addRelation(

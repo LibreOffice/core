@@ -1824,8 +1824,8 @@ void SwXText::ConvertCell(
                 u"rCell needs to contain 2 elements"_ustr,
                 uno::Reference< text::XTextCopy >( this ), sal_Int16( 2 ) );
     }
-    const uno::Reference<text::XTextRange> xStartRange = rCell[0];
-    const uno::Reference<text::XTextRange> xEndRange = rCell[1];
+    const uno::Reference<text::XTextRange>& xStartRange = rCell[0];
+    const uno::Reference<text::XTextRange>& xEndRange = rCell[1];
     SwUnoInternalPaM aStartCellPam(*m_pDoc);
     SwUnoInternalPaM aEndCellPam(*m_pDoc);
 
