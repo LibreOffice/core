@@ -91,7 +91,7 @@ void SvxHyperlinkInternetTp::FillDlgFields(const OUString& rStrURL)
                         if (xTransferable->getTransferData(aFlavor) >>= aClipBoardContent)
                         {
                             // tdf#162753 - allow only syntactically valid hyperlink targets
-                            INetURLObject aURL(aClipBoardContent);
+                            INetURLObject aURL(o3tl::trim(aClipBoardContent));
                             if (!aURL.HasError())
                                 aStrURL
                                     = aURL.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous);
