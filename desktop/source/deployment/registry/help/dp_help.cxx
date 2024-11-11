@@ -450,9 +450,8 @@ void BackendImpl::implProcessHelp(
                         std::unique_ptr<OUString[]> pXhpFiles(new OUString[nXhpFileCount]);
                         for( sal_Int32 iXhp = 0 ; iXhp < nXhpFileCount ; ++iXhp )
                         {
-                            OUString aXhpFile = aXhpFileVector[iXhp];
-                            OUString aXhpRelFile = aXhpFile.copy( nLenLangFolderURL );
-                            pXhpFiles[iXhp] = aXhpRelFile;
+                            const OUString& aXhpFile = aXhpFileVector[iXhp];
+                            pXhpFiles[iXhp] = aXhpFile.copy( nLenLangFolderURL );
                         }
 
                         OUString aOfficeHelpPath( SvtPathOptions().GetHelpPath() );

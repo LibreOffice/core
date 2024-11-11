@@ -922,7 +922,7 @@ std::vector< MigrationModuleInfo > MigrationImpl::detectUIChangesForAllModules()
     uno::Sequence< OUString > lNames = xModules->getElementNames();
     sal_Int32 nLength = lNames.getLength();
     for (sal_Int32 i=0; i<nLength; ++i) {
-        OUString sModuleShortName = lNames[i];
+        const OUString& sModuleShortName = lNames[i];
         uno::Reference< embed::XStorage > xModule = xModules->openStorageElement(sModuleShortName, embed::ElementModes::READ);
         if (xModule.is()) {
             MigrationModuleInfo aModuleInfo;

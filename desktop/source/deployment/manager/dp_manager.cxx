@@ -411,7 +411,7 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
             // Initialize logger which will be used in ProgressLogImpl (created below)
             rtl::Bootstrap::expandMacros(logFile);
             comphelper::EventLogger logger(xComponentContext, "unopkg");
-            const Reference<XLogger> xLogger(logger.getLogger());
+            const Reference<XLogger>& xLogger(logger.getLogger());
             Reference<XLogFormatter> xLogFormatter(SimpleTextFormatter::create(xComponentContext));
             Sequence < beans::NamedValue > aSeq2 { { u"Formatter"_ustr, Any(xLogFormatter) }, {u"FileURL"_ustr, Any(logFile)} };
             Reference<XLogHandler> xFileHandler(css::logging::FileHandler::createWithSettings(xComponentContext, aSeq2));
