@@ -5088,9 +5088,9 @@ void NfCurrencyEntry::CompletePositiveFormatString(OUStringBuffer& rStr, std::u1
 // static
 void NfCurrencyEntry::CompleteNegativeFormatString(OUStringBuffer& rStr,
                                                    std::u16string_view rSymStr,
-                                                   sal_uInt16 nNegativeFormat)
+                                                   sal_uInt16 nNegaForm)
 {
-    switch( nNegativeFormat )
+    switch( nNegaForm )
     {
         case 0:                                         // ($1)
         {
