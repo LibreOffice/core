@@ -857,13 +857,13 @@ void SbModule::SetSource32( const OUString& r )
             sal_uInt16 nLine1 = aTok.GetLine();
             if( aTok.Next() == SYMBOL )
             {
-                OUString aName_( aTok.GetSym() );
+                const OUString& rName_( aTok.GetSym() );
                 SbxDataType t = aTok.GetType();
                 if( t == SbxVARIANT && eEndTok == ENDSUB )
                 {
                     t = SbxVOID;
                 }
-                pMeth = GetMethod( aName_, t );
+                pMeth = GetMethod( rName_, t );
                 pMeth->nLine1 = pMeth->nLine2 = nLine1;
                 // The method is for a start VALID
                 pMeth->bInvalid = false;

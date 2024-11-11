@@ -1842,7 +1842,7 @@ static OUString Impl_DumpProperties(SbUnoObject& rUnoObj)
     Reference< XIntrospectionAccess > xAccess = rUnoObj.getIntrospectionAccess();
     if( !xAccess.is() )
     {
-        Reference< XInvocation > xInvok = rUnoObj.getInvocation();
+        const Reference< XInvocation >& xInvok = rUnoObj.getInvocation();
         if( xInvok.is() )
             xAccess = xInvok->getIntrospection();
     }
@@ -1916,7 +1916,7 @@ static OUString Impl_DumpMethods(SbUnoObject& rUnoObj)
     Reference< XIntrospectionAccess > xAccess = rUnoObj.getIntrospectionAccess();
     if( !xAccess.is() )
     {
-        Reference< XInvocation > xInvok = rUnoObj.getInvocation();
+        const Reference< XInvocation >& xInvok = rUnoObj.getInvocation();
         if( xInvok.is() )
             xAccess = xInvok->getIntrospection();
     }
