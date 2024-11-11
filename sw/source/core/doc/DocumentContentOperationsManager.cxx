@@ -905,8 +905,7 @@ namespace
         RedlineFlags eOld = rDoc.getIDocumentRedlineAccess().GetRedlineFlags();
         rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( ( eOld & ~RedlineFlags::Ignore) | RedlineFlags::On );
 
-        for (;;)
-        {
+        do {
             SwRangeRedline* pTmp = rRedlTable[ nRedlPos ];
 
             auto [pRStt, pREnd] = pTmp->StartEnd(); // SwPosition*
@@ -931,10 +930,11 @@ namespace
                     SwPosition* pTmpPos = pTmp->End();
                     pTmpPos->Assign(rRg.aEnd);
                 }
+                ++nRedlPos;
             }
             else if( pRStt->GetNode() < rRg.aEnd.GetNode() )
             {
-                rRedlTable.Remove( nRedlPos-- );
+                rRedlTable.Remove( nRedlPos );
                 if( pREnd->GetNode() < rRg.aEnd.GetNode() ||
                     ( pREnd->GetNode() == rRg.aEnd.GetNode() && !pREnd->GetContentIndex()) )
                 {
@@ -957,11 +957,7 @@ namespace
             }
             else
                 break;
-
-            if (nRedlPos >= rRedlTable.size())
-                break;
-            ++nRedlPos;
-        }
+        } while( nRedlPos < rRedlTable.size() );
         rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
     }
 
