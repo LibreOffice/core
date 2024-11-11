@@ -28,6 +28,7 @@
 #include <vcl/mapmod.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/graphic/GraphicMetadata.hxx>
+#include <vcl/pdf/PDFEncryptionInitialization.hxx>
 #include <rtl/ustring.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
@@ -931,7 +932,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 aContext.Encryption.CanCopyOrExtract                = bCanCopyOrExtract;
                 aContext.Encryption.CanExtractForAccessibility  = bCanExtractForAccessibility;
                 if( bEncrypt && ! xEnc.is() )
-                    xEnc = vcl::PDFWriter::InitEncryption( aPermissionPassword, aOpenPassword );
+                    xEnc = vcl::pdf::initEncryption(aPermissionPassword, aOpenPassword);
                 if( bEncrypt && !aPermissionPassword.isEmpty() && ! aPreparedPermissionPassword.hasElements() )
                     aPreparedPermissionPassword = comphelper::OStorageHelper::CreatePackageEncryptionData( aPermissionPassword );
             }

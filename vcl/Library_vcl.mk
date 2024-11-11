@@ -511,6 +511,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/pdf/EncryptionHashTransporter \
     vcl/source/pdf/ExternalPDFStreams \
     vcl/source/pdf/PDFiumTools \
+    vcl/source/pdf/PDFEncryptionInitialization \
     vcl/source/pdf/PDFEncryptor \
     vcl/source/pdf/PDFEncryptorR6 \
     vcl/source/pdf/PdfConfig \
