@@ -71,7 +71,6 @@ namespace xmloff
 
     OFormLayerXMLExport_Impl::OFormLayerXMLExport_Impl(SvXMLExport& _rContext)
         :m_rContext(_rContext)
-        ,m_pControlNumberStyles(nullptr)
     {
         initializePropertyMaps();
 
@@ -702,13 +701,13 @@ namespace xmloff
         OSL_ENSURE(m_xControlNumberFormats.is(), "OFormLayerXMLExport_Impl::getControlNumberStyleExport: could not obtain my default number formats!");
 
         // create the exporter
-        m_pControlNumberStyles = new SvXMLNumFmtExport(m_rContext, xFormatsSupplier, getControlNumberStyleNamePrefix());
+        m_pControlNumberStyles = std::make_unique<SvXMLNumFmtExport>(m_rContext, xFormatsSupplier, getControlNumberStyleNamePrefix());
     }
 
     SvXMLNumFmtExport* OFormLayerXMLExport_Impl::getControlNumberStyleExport()
     {
         ensureControlNumberStyleExport();
-        return m_pControlNumberStyles;
+        return m_pControlNumberStyles.get();
     }
 
     void OFormLayerXMLExport_Impl::excludeFromExport( const Reference< XControlModel >& _rxControl )

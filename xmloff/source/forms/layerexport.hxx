@@ -61,7 +61,7 @@ namespace xmloff
         friend class OFormLayerXMLExport;
 
         SvXMLExport&        m_rContext;
-        SvXMLNumFmtExport*  m_pControlNumberStyles;
+        std::unique_ptr<SvXMLNumFmtExport>  m_pControlNumberStyles;
 
         // ignore list for control models
         PropertySetBag      m_aIgnoreList;
