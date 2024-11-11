@@ -549,7 +549,7 @@ public:
     {
         for (size_t i = 0; i < rSequence.size(); i++)
         {
-            drawinglayer::primitive3d::Primitive3DReference xReference = rSequence[i];
+            const drawinglayer::primitive3d::Primitive3DReference& xReference = rSequence[i];
             const auto* pBasePrimitive
                 = static_cast<const drawinglayer::primitive3d::BasePrimitive3D*>(xReference.get());
             sal_uInt32 nId = pBasePrimitive->getPrimitive3DID();

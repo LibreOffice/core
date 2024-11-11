@@ -640,12 +640,11 @@ void dumpPolygonKindAsAttribute(drawing::PolygonKind ePolygonKind, xmlTextWriter
 void dumpPointSequenceSequence(const drawing::PointSequenceSequence& aPointSequenceSequence, const uno::Sequence<uno::Sequence< drawing::PolygonFlags > >* pFlags, xmlTextWriterPtr xmlWriter)
 {
     // LibreOffice proudly presents - The Sequenception
-    uno::Sequence<uno::Sequence< awt::Point > > pointSequenceSequence = aPointSequenceSequence;
-    sal_Int32 nPointsSequence = pointSequenceSequence.getLength();
+    sal_Int32 nPointsSequence = aPointSequenceSequence.getLength();
 
     for (sal_Int32 i = 0; i < nPointsSequence; ++i)
     {
-        uno::Sequence< awt::Point > pointSequence = pointSequenceSequence[i];
+        const uno::Sequence< awt::Point >& pointSequence = aPointSequenceSequence[i];
         sal_Int32 nPoints = pointSequence.getLength();
 
         uno::Sequence< drawing::PolygonFlags> flagsSequence;

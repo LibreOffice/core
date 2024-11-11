@@ -1153,7 +1153,7 @@ void CairoPixelProcessor2D::paintBitmapAlpha(const BitmapEx& rBitmapEx,
             // use unit geometry as fallback object geometry. Do *not*
             // transform, the below used method will use the already
             // correctly initialized local ViewInformation
-            basegfx::B2DPolygon aPolygon(basegfx::utils::createUnitPolygon());
+            const basegfx::B2DPolygon& aPolygon(basegfx::utils::createUnitPolygon());
 
             // draw directly, done
             paintPolyPoylgonRGBA(basegfx::B2DPolyPolygon(aPolygon), aModifiedColor, fTransparency);

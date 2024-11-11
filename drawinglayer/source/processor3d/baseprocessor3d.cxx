@@ -49,7 +49,7 @@ namespace drawinglayer::processor3d
             for(size_t a(0); a < nCount; a++)
             {
                 // get reference
-                const primitive3d::Primitive3DReference xReference(rSource[a]);
+                const primitive3d::Primitive3DReference& xReference(rSource[a]);
 
                 if(xReference.is())
                 {

@@ -50,7 +50,7 @@ namespace drawinglayer::primitive3d
                 for(size_t a(0); a < nSourceCount; a++)
                 {
                     // get reference
-                    const Primitive3DReference xReference(aSource[a]);
+                    const Primitive3DReference& xReference(aSource[a]);
 
                     if(xReference.is())
                     {

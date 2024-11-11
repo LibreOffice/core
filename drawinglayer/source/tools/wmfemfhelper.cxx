@@ -921,7 +921,7 @@ namespace wmfemfhelper
         TargetHolder& rTarget,
         PropertyHolder const & rProperty)
     {
-        const BitmapEx aBitmapEx(rWallpaper.GetBitmap());
+        const BitmapEx& aBitmapEx(rWallpaper.GetBitmap());
         const WallpaperStyle eWallpaperStyle(rWallpaper.GetStyle());
 
         // if bitmap visualisation is transparent, maybe background
@@ -967,12 +967,10 @@ namespace wmfemfhelper
         else
         {
             // when a transformation is set, embed to it
-            const drawinglayer::primitive2d::Primitive2DReference xPrim(pBitmapWallpaperFill);
-
             rTarget.append(
                 new drawinglayer::primitive2d::TransformPrimitive2D(
                     rProperty.getTransformation(),
-                    drawinglayer::primitive2d::Primitive2DContainer { xPrim }));
+                    drawinglayer::primitive2d::Primitive2DContainer { pBitmapWallpaperFill }));
         }
     }
 
@@ -1227,12 +1225,10 @@ namespace wmfemfhelper
         else
         {
             // when a transformation is set, embed to it
-            const drawinglayer::primitive2d::Primitive2DReference aReference(pResult);
-
             rTarget.append(
                 new drawinglayer::primitive2d::TransformPrimitive2D(
                     rProperty.getTransformation(),
-                    drawinglayer::primitive2d::Primitive2DContainer { aReference }));
+                    drawinglayer::primitive2d::Primitive2DContainer { pResult }));
         }
     }
 

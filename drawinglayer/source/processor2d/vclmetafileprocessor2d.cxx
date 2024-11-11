@@ -2319,7 +2319,7 @@ void VclMetafileProcessor2D::processUnifiedTransparencePrimitive2D(
 
             if (!bForceToMetafile && 1 == rContent.size())
             {
-                const primitive2d::Primitive2DReference xReference(rContent.front());
+                const primitive2d::Primitive2DReference& xReference(rContent.front());
                 pPoPoColor = dynamic_cast<const primitive2d::PolyPolygonColorPrimitive2D*>(
                     xReference.get());
             }
