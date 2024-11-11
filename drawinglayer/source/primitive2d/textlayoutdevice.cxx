@@ -211,36 +211,36 @@ void TextLayouterDevice::setTextColor(const basegfx::BColor& rColor)
 
 double TextLayouterDevice::getOverlineOffset() const
 {
-    const ::FontMetric& rMetric = mrDevice.GetFontMetric();
-    double fRet = (rMetric.GetInternalLeading() / 2.0) - rMetric.GetAscent();
+    const ::FontMetric aMetric = mrDevice.GetFontMetric();
+    double fRet = (aMetric.GetInternalLeading() / 2.0) - aMetric.GetAscent();
     return fRet * mnFontScalingFixY;
 }
 
 double TextLayouterDevice::getUnderlineOffset() const
 {
-    const ::FontMetric& rMetric = mrDevice.GetFontMetric();
-    double fRet = rMetric.GetDescent() / 2.0;
+    const ::FontMetric aMetric = mrDevice.GetFontMetric();
+    double fRet = aMetric.GetDescent() / 2.0;
     return fRet * mnFontScalingFixY;
 }
 
 double TextLayouterDevice::getStrikeoutOffset() const
 {
-    const ::FontMetric& rMetric = mrDevice.GetFontMetric();
-    double fRet = (rMetric.GetAscent() - rMetric.GetInternalLeading()) / 3.0;
+    const ::FontMetric aMetric = mrDevice.GetFontMetric();
+    double fRet = (aMetric.GetAscent() - aMetric.GetInternalLeading()) / 3.0;
     return fRet * mnFontScalingFixY;
 }
 
 double TextLayouterDevice::getOverlineHeight() const
 {
-    const ::FontMetric& rMetric = mrDevice.GetFontMetric();
-    double fRet = rMetric.GetInternalLeading() / 2.5;
+    const ::FontMetric aMetric = mrDevice.GetFontMetric();
+    double fRet = aMetric.GetInternalLeading() / 2.5;
     return fRet * mnFontScalingFixY;
 }
 
 double TextLayouterDevice::getUnderlineHeight() const
 {
-    const ::FontMetric& rMetric = mrDevice.GetFontMetric();
-    double fRet = rMetric.GetDescent() / 4.0;
+    const ::FontMetric aMetric = mrDevice.GetFontMetric();
+    double fRet = aMetric.GetDescent() / 4.0;
     return fRet * mnFontScalingFixY;
 }
 
@@ -319,14 +319,14 @@ basegfx::B2DRange TextLayouterDevice::getTextBoundRect(const OUString& rText, sa
 
 double TextLayouterDevice::getFontAscent() const
 {
-    const ::FontMetric& rMetric = mrDevice.GetFontMetric();
-    return rMetric.GetAscent() * mnFontScalingFixY;
+    const ::FontMetric aMetric = mrDevice.GetFontMetric();
+    return aMetric.GetAscent() * mnFontScalingFixY;
 }
 
 double TextLayouterDevice::getFontDescent() const
 {
-    const ::FontMetric& rMetric = mrDevice.GetFontMetric();
-    return rMetric.GetDescent() * mnFontScalingFixY;
+    const ::FontMetric aMetric = mrDevice.GetFontMetric();
+    return aMetric.GetDescent() * mnFontScalingFixY;
 }
 
 void TextLayouterDevice::addTextRectActions(const ::tools::Rectangle& rRectangle,

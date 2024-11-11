@@ -312,7 +312,7 @@ IMPL_LINK_NOARG(FuncPage, SelHelpClickHdl, weld::Button&, void)
     {
         if (Help* pHelp = Application::GetHelp())
         {
-            const OUString& sHelpId = pDesc->getHelpId();
+            const OUString sHelpId = pDesc->getHelpId();
             if (!sHelpId.isEmpty())
             {
                 pHelp->Start(sHelpId);

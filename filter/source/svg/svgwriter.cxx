@@ -4042,8 +4042,8 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             case MetaActionType::MOVECLIPREGION:
             {
                 const_cast<MetaAction*>(pAction)->Execute( mpVDev );
-                const vcl::Region& rClipRegion = mpVDev->GetActiveClipRegion();
-                ImplWriteClipPath( rClipRegion.GetAsPolyPolygon() );
+                const vcl::Region aClipRegion = mpVDev->GetActiveClipRegion();
+                ImplWriteClipPath( aClipRegion.GetAsPolyPolygon() );
 
                 mbClipAttrChanged = true;
             }

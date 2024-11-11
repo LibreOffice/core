@@ -72,8 +72,8 @@ void AcceleratorConfigurationWriter::flush()
     AcceleratorCache::TKeyList                 lKeys = m_rContainer.getAllKeys();
     for (auto const& lKey : lKeys)
     {
-        const OUString&    rCommand = m_rContainer.getCommandByKey(lKey);
-        impl_ts_writeKeyCommandPair(lKey, rCommand, xExtendedCFG);
+        const OUString aCommand = m_rContainer.getCommandByKey(lKey);
+        impl_ts_writeKeyCommandPair(lKey, aCommand, xExtendedCFG);
     }
 
     /* TODO write key-command list

@@ -644,7 +644,7 @@ void ToolBarManager::CheckAndUpdateImages()
         m_eSymbolSize = eNewSymbolSize;
     }
 
-    const OUString& sCurrentIconTheme = SvtMiscOptions::GetIconTheme();
+    const OUString sCurrentIconTheme = SvtMiscOptions::GetIconTheme();
     if ( m_sIconTheme != sCurrentIconTheme )
     {
         bRefreshImages = true;

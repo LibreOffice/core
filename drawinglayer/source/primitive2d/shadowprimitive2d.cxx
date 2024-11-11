@@ -224,22 +224,22 @@ void ShadowPrimitive2D::create2DDecomposition(
     if (aAlpha.IsEmpty())
         return;
 
-    const Size& rBitmapExSizePixel(aAlpha.GetSizePixel());
-    if (!(rBitmapExSizePixel.Width() > 0 && rBitmapExSizePixel.Height() > 0))
+    const Size aBitmapExSizePixel(aAlpha.GetSizePixel());
+    if (!(aBitmapExSizePixel.Width() > 0 && aBitmapExSizePixel.Height() > 0))
         return;
 
     // We may have to take a corrective scaling into account when the
     // MaximumQuadraticPixel limit was used/triggered
     double fScale(1.0);
 
-    if (static_cast<sal_uInt32>(rBitmapExSizePixel.Width()) != nDiscreteClippedWidth
-        || static_cast<sal_uInt32>(rBitmapExSizePixel.Height()) != nDiscreteClippedHeight)
+    if (static_cast<sal_uInt32>(aBitmapExSizePixel.Width()) != nDiscreteClippedWidth
+        || static_cast<sal_uInt32>(aBitmapExSizePixel.Height()) != nDiscreteClippedHeight)
     {
         // scale in X and Y should be the same (see fReduceFactor in createAlphaMask),
         // so adapt numerically to a single scale value, they are integer rounded values
-        const double fScaleX(static_cast<double>(rBitmapExSizePixel.Width())
+        const double fScaleX(static_cast<double>(aBitmapExSizePixel.Width())
                              / static_cast<double>(nDiscreteClippedWidth));
-        const double fScaleY(static_cast<double>(rBitmapExSizePixel.Height())
+        const double fScaleY(static_cast<double>(aBitmapExSizePixel.Height())
                              / static_cast<double>(nDiscreteClippedHeight));
 
         fScale = (fScaleX + fScaleY) * 0.5;

@@ -1064,12 +1064,12 @@ void RemoteFilesDialog::UpdateControls( const OUString& rURL )
     m_xTreeView->connect_changed(Link<weld::TreeView&,void>());
 
     // read cached data for this url and fill the tree
-    const ::std::vector< SvtContentEntry >& rFolders = m_xFileView->GetContent();
+    const ::std::vector< SvtContentEntry > aContentFolders = m_xFileView->GetContent();
     ::std::vector< std::pair< OUString, OUString > > aFolders;
 
     m_xName_ed->ClearEntries();
 
-    for(const auto & rFolder : rFolders)
+    for(const auto & rFolder : aContentFolders)
     {
         //WebDAV folders path ends in '/', so strip it
         OUString aFolderName = rFolder.maURL;

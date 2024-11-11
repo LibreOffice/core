@@ -111,8 +111,8 @@ void AcceleratorCache::removeKey(const css::awt::KeyEvent& aKey)
 
 void AcceleratorCache::removeCommand(const OUString& sCommand)
 {
-    const TKeyList& lKeys = getKeysByCommand(sCommand);
-    for (auto const& lKey : lKeys)
+    const TKeyList aKeys = getKeysByCommand(sCommand);
+    for (auto const& lKey : aKeys)
     {
         removeKey(lKey);
     }
