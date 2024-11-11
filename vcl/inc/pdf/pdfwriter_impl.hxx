@@ -34,7 +34,6 @@
 #include <pdf/ResourceDict.hxx>
 #include <pdf/BitmapID.hxx>
 #include <pdf/Matrix3.hxx>
-#include <pdf/PDFEncryptor.hxx>
 
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
@@ -683,6 +682,8 @@ struct PDFDocumentAttachedFile
     sal_Int32 mnEmbeddedFileObjectId;
     sal_Int32 mnObjectId;
 };
+
+class IPDFEncryptor;
 
 } // end pdf namespace
 

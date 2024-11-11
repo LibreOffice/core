@@ -96,6 +96,8 @@
 #include <pdf/objectcopier.hxx>
 #include <pdf/pdfwriter_impl.hxx>
 #include <pdf/PdfConfig.hxx>
+#include <pdf/IPDFEncryptor.hxx>
+#include <pdf/PDFEncryptor.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <frozen/bits/defines.h>
 #include <frozen/bits/elsa_std.h>
