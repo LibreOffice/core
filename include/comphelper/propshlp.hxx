@@ -168,7 +168,7 @@ protected:
     /** Override this if you need to do something special during setFastPropertyValue */
     virtual void setFastPropertyValueImpl(std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle,
                                           const css::uno::Any& rValue);
-    /** Override this if you need to do something special during getPropertyValue */
+
     virtual css::uno::Any getPropertyValueImpl(std::unique_lock<std::mutex>& rGuard,
                                                const ::rtl::OUString& aPropertyName) final;
 
