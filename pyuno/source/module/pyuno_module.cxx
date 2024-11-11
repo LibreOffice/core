@@ -171,11 +171,11 @@ void fillStruct(
         for( int i = 0 ; i < remainingPosInitialisers && i < nMembers ; i ++ )
         {
             const int tupleIndex = state.getCntConsumed();
-            const OUString& rMemberName (pCompType->ppMemberNames[i]);
-            state.setInitialised(rMemberName, tupleIndex);
+            const OUString aMemberName (pCompType->ppMemberNames[i]);
+            state.setInitialised(aMemberName, tupleIndex);
             PyObject *element = PyTuple_GetItem( initializer, tupleIndex );
             Any a = runtime.pyObject2Any( element, ACCEPT_UNO_ANY );
-            inv->setValue( rMemberName, a );
+            inv->setValue( aMemberName, a );
         }
     }
     if ( PyTuple_Size( initializer ) <= 0 )

@@ -243,7 +243,7 @@ std::pair<bool, bool> getTimestampFlags(char const *selector)
 
 void maybeOutputTimestamp(std::ostringstream &s) {
     static const std::pair<bool, bool> aEnvFlags = getTimestampFlags(getLogLevelEnvVar());
-    const auto& [outputTimestamp, outputRelativeTimer] = (pLogSelector == nullptr ? aEnvFlags : getTimestampFlags(pLogSelector));
+    const auto [outputTimestamp, outputRelativeTimer] = (pLogSelector == nullptr ? aEnvFlags : getTimestampFlags(pLogSelector));
 
     if (!(outputTimestamp || outputRelativeTimer)) {
         return;

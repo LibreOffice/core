@@ -687,14 +687,14 @@ SaxInvalidCharacterError SaxWriterHelper::startElement(const OUString& rName,
         if (nCurrentPos == SEQUENCESIZE)
             nCurrentPos = writeSequence();
 
-        OUString const& rAttrName(xAttribs->getNameByIndex(i));
+        OUString const aAttrName(xAttribs->getNameByIndex(i));
 #ifdef DBG_UTIL
         // Well-formedness constraint: Unique Att Spec
-        assert(DebugAttributes.find(rAttrName) == DebugAttributes.end());
-        DebugAttributes.insert(rAttrName);
+        assert(DebugAttributes.find(aAttrName) == DebugAttributes.end());
+        DebugAttributes.insert(aAttrName);
 #endif
-        CheckValidName(rAttrName);
-        if (!writeString(rAttrName, false, false))
+        CheckValidName(aAttrName);
+        if (!writeString(aAttrName, false, false))
             eRet = SAX_ERROR;
 
         mp_Sequence[nCurrentPos] = '=';

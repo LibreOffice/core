@@ -210,9 +210,9 @@ void SAL_CALL CallbackDocumentHandler::setDocumentLocator( const Reference< XLoc
 
 void SAL_CALL CallbackDocumentHandler::startFastElement( sal_Int32 nElement , const Reference< XFastAttributeList >& Attribs  )
 {
-    const OUString& rPrefix = CallbackDocumentHandler::getNamespacePrefixFromToken( nElement );
-    const OUString& rLocalName = CallbackDocumentHandler::getNameFromToken( nElement );
-    startUnknownElement( aDefaultNamespace, (rPrefix.isEmpty())? rLocalName : rPrefix + aNamespaceSeparator + rLocalName, Attribs );
+    const OUString aPrefix = CallbackDocumentHandler::getNamespacePrefixFromToken( nElement );
+    const OUString aLocalName = CallbackDocumentHandler::getNameFromToken( nElement );
+    startUnknownElement( aDefaultNamespace, (aPrefix.isEmpty())? aLocalName : aPrefix + aNamespaceSeparator + aLocalName, Attribs );
 }
 
 void SAL_CALL CallbackDocumentHandler::startUnknownElement( const OUString& /*Namespace*/, const OUString& Name, const Reference< XFastAttributeList >& Attribs  )
@@ -228,10 +228,10 @@ void SAL_CALL CallbackDocumentHandler::startUnknownElement( const OUString& /*Na
     {
         const OUString& rAttrValue = rAttr.Value;
         sal_Int32 nToken = rAttr.Token;
-        const OUString& rAttrNamespacePrefix = CallbackDocumentHandler::getNamespacePrefixFromToken( nToken );
+        const OUString aAttrNamespacePrefix = CallbackDocumentHandler::getNamespacePrefixFromToken( nToken );
         OUString sAttrName = CallbackDocumentHandler::getNameFromToken( nToken );
-        if ( !rAttrNamespacePrefix.isEmpty() )
-            sAttrName = rAttrNamespacePrefix + aNamespaceSeparator + sAttrName;
+        if ( !aAttrNamespacePrefix.isEmpty() )
+            sAttrName = aAttrNamespacePrefix + aNamespaceSeparator + sAttrName;
 
         rAttrList->AddAttribute( sAttrName, rAttrValue );
     }
@@ -249,9 +249,9 @@ void SAL_CALL CallbackDocumentHandler::startUnknownElement( const OUString& /*Na
 
 void SAL_CALL CallbackDocumentHandler::endFastElement( sal_Int32 nElement )
 {
-    const OUString& rPrefix = CallbackDocumentHandler::getNamespacePrefixFromToken( nElement );
-    const OUString& rLocalName = CallbackDocumentHandler::getNameFromToken( nElement );
-    endUnknownElement( aDefaultNamespace, (rPrefix.isEmpty())? rLocalName : rPrefix + aNamespaceSeparator + rLocalName );
+    const OUString aPrefix = CallbackDocumentHandler::getNamespacePrefixFromToken( nElement );
+    const OUString aLocalName = CallbackDocumentHandler::getNameFromToken( nElement );
+    endUnknownElement( aDefaultNamespace, (aPrefix.isEmpty())? aLocalName : aPrefix + aNamespaceSeparator + aLocalName );
 }
 
 

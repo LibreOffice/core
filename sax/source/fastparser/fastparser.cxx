@@ -434,7 +434,7 @@ void Entity::startElement( Event const *pEvent )
 
     try
     {
-        const Reference< XFastAttributeList > & xAttr( pEvent->mxAttributes );
+        const Reference< XFastAttributeList > xAttr( pEvent->mxAttributes );
         Reference< XFastContextHandler > xContext;
 
         if ( mxNamespaceHandler.is() )
@@ -1303,9 +1303,9 @@ void FastSaxParserImpl::addUnknownElementWithPrefix(const xmlChar **attributes, 
     OUString aNamespaceURI;
     if ( !m_bIgnoreMissingNSDecl || attributes[i + 2] != nullptr )
         aNamespaceURI = OUString( XML_CAST( attributes[ i + 2 ] ), strlen( XML_CAST( attributes[ i + 2 ] )), RTL_TEXTENCODING_UTF8 );
-    const OString& rPrefix = OString( XML_CAST( attributes[ i + 1 ] ));
-    const OString& rLocalName = OString( XML_CAST( attributes[ i ] ));
-    OString aQualifiedName = (rPrefix.isEmpty())? rLocalName : rPrefix + ":" + rLocalName;
+    const OString aPrefix( XML_CAST( attributes[ i + 1 ] ));
+    const OString aLocalName( XML_CAST( attributes[ i ] ));
+    OString aQualifiedName = (aPrefix.isEmpty())? aLocalName : aPrefix + ":" + aLocalName;
     xAttributes->addUnknown( aNamespaceURI, aQualifiedName,
         OString( XML_CAST( attributes[ i + 3 ] ), attributes[ i + 4 ] - attributes[ i + 3 ] ));
     SAL_INFO("xmloff", "unknown element " << aQualifiedName << " " << aNamespaceURI);
@@ -1580,10 +1580,10 @@ static bool NormalizeW3URI( OUString& rName )
     // - xforms
 
     bool bSuccess = false;
-    const OUString& sURIPrefix = XML_URI_W3_PREFIX;
+    const OUString sURIPrefix = XML_URI_W3_PREFIX;
     if( rName.startsWith( sURIPrefix ) )
     {
-        const OUString& sURISuffix = XML_URI_XFORMS_SUFFIX ;
+        const OUString sURISuffix = XML_URI_XFORMS_SUFFIX ;
         sal_Int32 nCompareFrom = rName.getLength() - sURISuffix.getLength();
         if( rName.subView( nCompareFrom ) == sURISuffix )
         {
@@ -1624,12 +1624,12 @@ static bool NormalizeOasisURN( OUString& rName )
 
     sal_Int32 nNameLen = rName.getLength();
     // :urn:oasis:names:tc.*
-    const OUString& rOasisURN = XML_URN_OASIS_NAMES_TC;
-    if( !rName.startsWith( rOasisURN ) )
+    const OUString aOasisURN = XML_URN_OASIS_NAMES_TC;
+    if( !rName.startsWith( aOasisURN ) )
         return false;
 
     // :urn:oasis:names:tc:.*
-    sal_Int32 nPos = rOasisURN.getLength();
+    sal_Int32 nPos = aOasisURN.getLength();
     if( nPos >= nNameLen || rName[nPos] != ':' )
         return false;
 
@@ -1642,12 +1642,12 @@ static bool NormalizeOasisURN( OUString& rName )
     // :urn:oasis:names:tc:[^:]:xmlns.*
     nPos = nTCIdEnd + 1;
     std::u16string_view sTmp( rName.subView( nPos ) );
-    const OUString& rXMLNS = XML_XMLNS;
-    if( !o3tl::starts_with(sTmp, rXMLNS ) )
+    const OUString aXMLNS = XML_XMLNS;
+    if( !o3tl::starts_with(sTmp, aXMLNS ) )
         return false;
 
     // :urn:oasis:names:tc:[^:]:xmlns:.*
-    nPos += rXMLNS.getLength();
+    nPos += aXMLNS.getLength();
     if( nPos >= nNameLen || rName[nPos] != ':' )
         return false;
 
