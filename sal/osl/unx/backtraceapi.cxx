@@ -169,8 +169,8 @@ void process_file_addr2line( const char* file, std::vector<FrameData>& frameData
         {
             // There should be two lines, first function name and second source file information.
             // If each of them starts with ??, it is invalid/unknown.
-            OString function = lines[linesPos];
-            OString source = lines[linesPos+1];
+            const OString& function = lines[linesPos];
+            const OString& source = lines[linesPos+1];
             linesPos += 2;
             if(function.isEmpty() || function.startsWith("??"))
             {
