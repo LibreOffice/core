@@ -20,10 +20,6 @@ namespace vcl
 struct PDFEncryptionProperties;
 }
 
-namespace com::sun::star::beans
-{
-class XMaterialHolder;
-}
 namespace com::sun::star::uno
 {
 template <typename> class Reference;
@@ -31,6 +27,8 @@ template <typename> class Reference;
 
 namespace vcl::pdf
 {
+class EncryptionHashTransporter;
+
 class PDFEncryptor : public IPDFEncryptor
 {
 private:
@@ -60,10 +58,10 @@ public:
     sal_Int32 getKeyLength() override { return m_nKeyLength; }
     sal_Int32 getRC4KeyLength() { return m_nRC4KeyLength; }
 
-    static css::uno::Reference<css::beans::XMaterialHolder>
-    initEncryption(const OUString& i_rOwnerPassword, const OUString& i_rUserPassword);
+    static void initEncryption(EncryptionHashTransporter& rEncryptionHashTransporter,
+                               const OUString& i_rOwnerPassword, const OUString& i_rUserPassword);
 
-    virtual bool prepareEncryption(
+    bool prepareEncryption(
         const css::uno::Reference<css::beans::XMaterialHolder>& xEncryptionMaterialHolder,
         PDFEncryptionProperties& rProperties) override;
 

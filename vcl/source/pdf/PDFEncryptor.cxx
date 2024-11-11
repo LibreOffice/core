@@ -327,32 +327,26 @@ PDFEncryptor::~PDFEncryptor() { rtl_cipher_destroyARCFOUR(m_aCipher); }
 1. init the document id, used both for building the document id and for building the encryption key(s)
 2. build the encryption key following algorithms described in the PDF specification
  */
-uno::Reference<beans::XMaterialHolder>
-PDFEncryptor::initEncryption(const OUString& i_rOwnerPassword, const OUString& i_rUserPassword)
+void PDFEncryptor::initEncryption(EncryptionHashTransporter& rEncryptionHashTransporter,
+                                  const OUString& i_rOwnerPassword, const OUString& i_rUserPassword)
 {
-    uno::Reference<beans::XMaterialHolder> xResult;
     if (!i_rOwnerPassword.isEmpty() || !i_rUserPassword.isEmpty())
     {
-        rtl::Reference<EncryptionHashTransporter> pTransporter = new EncryptionHashTransporter;
-        xResult = pTransporter;
-
         // get padded passwords
         sal_uInt8 aPadUPW[ENCRYPTED_PWD_SIZE], aPadOPW[ENCRYPTED_PWD_SIZE];
         padPassword(i_rOwnerPassword.isEmpty() ? i_rUserPassword : i_rOwnerPassword, aPadOPW);
         padPassword(i_rUserPassword, aPadUPW);
 
-        if (computeODictionaryValue(aPadOPW, aPadUPW, pTransporter->getOValue(), SECUR_128BIT_KEY))
+        if (computeODictionaryValue(aPadOPW, aPadUPW, rEncryptionHashTransporter.getOValue(),
+                                    SECUR_128BIT_KEY))
         {
-            pTransporter->getUDigest()->update(aPadUPW, ENCRYPTED_PWD_SIZE);
+            rEncryptionHashTransporter.getUDigest()->update(aPadUPW, ENCRYPTED_PWD_SIZE);
         }
-        else
-            xResult.clear();
 
         // trash temporary padded cleartext PWDs
         rtl_secureZeroMemory(aPadOPW, sizeof(aPadOPW));
         rtl_secureZeroMemory(aPadUPW, sizeof(aPadUPW));
     }
-    return xResult;
 }
 
 bool PDFEncryptor::prepareEncryption(
