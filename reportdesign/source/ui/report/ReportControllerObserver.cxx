@@ -150,8 +150,7 @@ void OXReportControllerObserver::AddSection(const uno::Reference< report::XSecti
     {
         uno::Reference<container::XChild> xChild = _xSection;
         m_aSections.push_back(xChild);
-        uno::Reference< uno::XInterface >  xInt(_xSection);
-        AddElement(xInt);
+        AddElement(_xSection);
     }
     catch(const uno::Exception&)
     {
@@ -167,8 +166,7 @@ void OXReportControllerObserver::RemoveSection(const uno::Reference< report::XSe
     {
         uno::Reference<container::XChild> xChild(_xSection);
         std::erase(m_aSections, xChild);
-        uno::Reference< uno::XInterface >  xInt(_xSection);
-        RemoveElement(xInt);
+        RemoveElement(_xSection);
     }
     catch(uno::Exception&)
     {
