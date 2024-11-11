@@ -10,10 +10,10 @@
 
 #pragma once
 
-#include <string_view>
 #include <rtl/cipher.h>
 #include <rtl/ustring.hxx>
 #include <vector>
+#include <pdf/IPDFEncryptor.hxx>
 
 namespace vcl
 {
@@ -31,30 +31,6 @@ template <typename> class Reference;
 
 namespace vcl::pdf
 {
-class EncryptionHashTransporter;
-
-class IPDFEncryptor
-{
-public:
-    virtual ~IPDFEncryptor() {}
-    virtual sal_Int32 getAccessPermissions() = 0;
-    virtual sal_Int32 getKeyLength() = 0;
-    virtual bool prepareEncryption(
-        const css::uno::Reference<css::beans::XMaterialHolder>& xEncryptionMaterialHolder,
-        PDFEncryptionProperties& rProperties)
-        = 0;
-    virtual void setupKeysAndCheck(PDFEncryptionProperties& rProperties) = 0;
-
-    virtual void setupEncryption(std::vector<sal_uInt8> const& rEncryptionKey, sal_Int32 nObject)
-        = 0;
-    virtual void enableStreamEncryption() = 0;
-    virtual void disableStreamEncryption() = 0;
-    virtual bool isStreamEncryptionEnabled() = 0;
-    virtual void encrypt(const void* pInput, sal_uInt64 nInputSize, sal_uInt8* pOutput,
-                         sal_uInt64 nOutputsSize)
-        = 0;
-};
-
 class PDFEncryptor : public IPDFEncryptor
 {
 private:
@@ -70,12 +46,15 @@ private:
     /* set to true if the following stream must be encrypted, used inside writeBuffer() */
     bool m_bEncryptThisStream = false;
 
+    /* used to cipher the stream data and for password management */
+    rtlCipher m_aCipher = nullptr;
+
 public:
     PDFEncryptor();
     ~PDFEncryptor();
 
-    /* used to cipher the stream data and for password management */
-    rtlCipher m_aCipher = nullptr;
+    sal_Int32 getVersion() override { return 2; };
+    sal_Int32 getRevision() override { return 3; };
 
     sal_Int32 getAccessPermissions() override { return m_nAccessPermissions; }
     sal_Int32 getKeyLength() override { return m_nKeyLength; }
