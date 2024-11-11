@@ -430,7 +430,7 @@ DBChangeDialog_Impl::DBChangeDialog_Impl(weld::Window* pParent, const BibDataMan
 
     try
     {
-        OUString sActiveSource = pDatMan->getActiveDataSource();
+        const OUString& sActiveSource = pDatMan->getActiveDataSource();
         for (const OUString& rSourceName : aConfig.GetDataSourceNames())
             m_xSelectionLB->append_text(rSourceName);
         m_xSelectionLB->select_text(sActiveSource);

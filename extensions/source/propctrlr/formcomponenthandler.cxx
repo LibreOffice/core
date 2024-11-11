@@ -407,7 +407,7 @@ namespace pcr
                                     OUString aOldIdStr = pOldIdStrings[i];
                                     aOldPureIdStr = aOldIdStr.copy( 1 );
                                 }
-                                OUString aNewPureIdStr = pNewPureIds[i];
+                                const OUString& aNewPureIdStr = pNewPureIds[i];
 
                                 for ( const Locale& rLocale : aLocaleSeq )
                                 {
