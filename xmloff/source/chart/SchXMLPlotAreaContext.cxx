@@ -158,7 +158,7 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext(
     m_rbHasRangeAtPlotArea = false;
 
     // get Diagram
-    uno::Reference< chart::XChartDocument > xDoc = rImpHelper.GetChartDocument();
+    const uno::Reference< chart::XChartDocument >& xDoc = rImpHelper.GetChartDocument();
     if( xDoc.is())
     {
         mxDiagram = xDoc->getDiagram();

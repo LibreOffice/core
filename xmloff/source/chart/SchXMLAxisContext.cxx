@@ -293,7 +293,7 @@ Reference< chart2::XAxis > lcl_getAxis( const Reference< frame::XModel >& xChart
             sal_Int32 nCooSysIndex = 0;
             if( nCooSysIndex < aCooSysSeq.getLength() )
             {
-                Reference< chart2::XCoordinateSystem > xCooSys( aCooSysSeq[nCooSysIndex] );
+                const Reference< chart2::XCoordinateSystem >& xCooSys( aCooSysSeq[nCooSysIndex] );
                 if( xCooSys.is() && nDimensionIndex < xCooSys->getDimension() )
                 {
                     const sal_Int32 nMaxAxisIndex = xCooSys->getMaximumAxisIndexByDimension(nDimensionIndex);
@@ -499,7 +499,7 @@ void SchXMLAxisContext::CreateAxis()
                                 if( aCooSysSeq.hasElements() )
                                 {
                                     bool bSwapXandYAxis = false;
-                                    Reference< chart2::XCoordinateSystem > xCooSys( aCooSysSeq[0] );
+                                    const Reference< chart2::XCoordinateSystem >& xCooSys( aCooSysSeq[0] );
                                     Reference< beans::XPropertySet > xCooSysProp( xCooSys, uno::UNO_QUERY );
                                     if( xCooSysProp.is() && ( xCooSysProp->getPropertyValue(u"SwapXAndYAxis"_ustr) >>= bSwapXandYAxis )
                                         && bSwapXandYAxis )
@@ -675,7 +675,7 @@ void SchXMLAxisContext::CorrectAxisPositions( const Reference< chart2::XChartDoc
         uno::Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems());
         if( aCooSysSeq.hasElements() )
         {
-            Reference< chart2::XCoordinateSystem > xCooSys( aCooSysSeq[0] );
+            const Reference< chart2::XCoordinateSystem >& xCooSys( aCooSysSeq[0] );
             if( xCooSys.is() )
             {
                 Reference< chart2::XAxis > xMainXAxis = lcl_getAxis( xCooSys, 0, 0 );

@@ -1903,7 +1903,7 @@ OUString SvXMLExport::AddEmbeddedXGraphic(uno::Reference<graphic::XGraphic> cons
     OUString sURL;
 
     Graphic aGraphic(rxGraphic);
-    OUString aOriginURL = aGraphic.getOriginURL();
+    const OUString& aOriginURL = aGraphic.getOriginURL();
 
     if (!aOriginURL.isEmpty())
     {

@@ -466,7 +466,7 @@ void CreateCategories(
                     aCooSysSeq( xCooSysCnt->getCoordinateSystems());
                 if( nCooSysIndex < aCooSysSeq.getLength())
                 {
-                    uno::Reference< chart2::XCoordinateSystem > xCooSys( aCooSysSeq[nCooSysIndex] );
+                    const uno::Reference< chart2::XCoordinateSystem >& xCooSys( aCooSysSeq[nCooSysIndex] );
                     SAL_WARN_IF( !xCooSys.is(), "xmloff.chart", "xCooSys is NULL");
                     if( nDimensionIndex < xCooSys->getDimension() )
                     {

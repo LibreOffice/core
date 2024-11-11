@@ -113,7 +113,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
     }
 
     std::vector< OUString > aCompleteResultVector;
-    OUString scope = aURLParameter.get_scope();
+    const OUString& scope = aURLParameter.get_scope();
     bool bCaptionsOnly = scope == "Heading";
     sal_Int32 hitCount = aURLParameter.get_hitCount();
 
@@ -297,7 +297,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
     int nResultCount = aCompleteResultVector.size();
     for( int r = 0 ; r < nResultCount ; ++r )
     {
-        OUString aURL = aCompleteResultVector[r];
+        const OUString& aURL = aCompleteResultVector[r];
         OUString aResultStr = replWith + aURL.subView(replIdx);
         m_aPath.push_back( aResultStr );
     }
