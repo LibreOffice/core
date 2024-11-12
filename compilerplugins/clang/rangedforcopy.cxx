@@ -69,6 +69,8 @@ bool RangedForCopy::VisitCXXForRangeStmt( const CXXForRangeStmt* stmt )
     // trivial class, ignore it
     if (loplugin::TypeCheck(type).Class("TypedWhichId").GlobalNamespace())
         return true;
+    if (loplugin::TypeCheck(type).Typedef("OUStringChar").Namespace("rtl"))
+        return true;
 
     std::string name = type.getAsString();
     report(
