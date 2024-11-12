@@ -1389,6 +1389,7 @@
           </info>
           <value>
             <it>$(insturl)/@LIBO_SHARE_FOLDER@/autotext/$(vlang)</it>
+            <it>$(insturl)/@LIBO_SHARE_FOLDER@/autotext/common</it>
             <it>$(userurl)/autotext</it>
           </value>
         </prop>

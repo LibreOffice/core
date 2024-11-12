@@ -18,6 +18,7 @@ $(eval $(call gb_Module_add_targets,extras,\
 	CustomTarget_tplpresnt \
 	CustomTarget_tplwizard \
 	Package_autocorr \
+	Package_autotext \
 	Package_autotextuser \
 	Package_cfgsrvnolang \
 	Package_cfgusr \
