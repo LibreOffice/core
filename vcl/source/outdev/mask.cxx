@@ -145,7 +145,7 @@ void OutputDevice::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
     if( !mpAlphaVDev )
         return;
 
-    const Bitmap& rAlphaMask( rMask.CreateMask( rMaskColor ) );
+    const Bitmap aAlphaMask( rMask.CreateMask( rMaskColor ) );
 
     // #i25167# Restrict mask painting to _opaque_ areas
     // of the mask, otherwise we spoil areas where no
@@ -156,7 +156,7 @@ void OutputDevice::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
                                rDestSize,
                                rSrcPtPixel,
                                rSrcSizePixel,
-                               BitmapEx( rAlphaMask, rMask ) );
+                               BitmapEx( aAlphaMask, rMask ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

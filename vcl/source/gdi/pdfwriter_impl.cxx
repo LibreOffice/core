@@ -6950,7 +6950,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         {
             for (const auto& rSubset : m_aSubsets[pFace].m_aSubsets)
             {
-                const auto& it = rSubset.m_aMapping.find(nGlyphId);
+                const auto it = rSubset.m_aMapping.find(nGlyphId);
                 if (it != rSubset.m_aMapping.cend() && it->second.codes() != aCodeUnits)
                 {
                     bUseActualText = true;

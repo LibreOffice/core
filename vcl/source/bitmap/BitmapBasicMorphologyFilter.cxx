@@ -107,11 +107,11 @@ template <typename MorphologyOp> struct Value<MorphologyOp, 0>
     void apply(const BitmapScopedReadAccess& pReadAccess, sal_Int32 x, sal_Int32 y,
                sal_uInt8* /*pHint*/ = nullptr)
     {
-        const auto& rSource = pReadAccess->GetColor(y, x);
-        aResult = Color(ColorAlpha, MorphologyOp::apply(rSource.GetAlpha(), aResult.GetAlpha()),
-                        MorphologyOp::apply(rSource.GetRed(), aResult.GetRed()),
-                        MorphologyOp::apply(rSource.GetGreen(), aResult.GetGreen()),
-                        MorphologyOp::apply(rSource.GetBlue(), aResult.GetBlue()));
+        const auto aSource = pReadAccess->GetColor(y, x);
+        aResult = Color(ColorAlpha, MorphologyOp::apply(aSource.GetAlpha(), aResult.GetAlpha()),
+                        MorphologyOp::apply(aSource.GetRed(), aResult.GetRed()),
+                        MorphologyOp::apply(aSource.GetGreen(), aResult.GetGreen()),
+                        MorphologyOp::apply(aSource.GetBlue(), aResult.GetBlue()));
     }
 
     void copy(BitmapScopedWriteAccess& pWriteAccess, sal_Int32 x, sal_Int32 y,

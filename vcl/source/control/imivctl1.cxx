@@ -807,8 +807,8 @@ void SvxIconChoiceCtrl_Impl::Resize()
     pImpCursor->Clear();
     pGridMap->OutputSizeChanged();
 
-    const Size& rSize = pView->GetOutputSizePixel();
-    PositionScrollBars( rSize.Width(), rSize.Height() );
+    const Size aSize = pView->GetOutputSizePixel();
+    PositionScrollBars( aSize.Width(), aSize.Height() );
     // The scrollbars are shown/hidden asynchronously, so derived classes can
     // do an Arrange during Resize, without the scrollbars suddenly turning
     // on and off again.

@@ -195,12 +195,12 @@ findAnnotations(const std::unique_ptr<vcl::pdf::PDFiumPage>& pPage, basegfx::B2D
 
                 if (eSubtype == vcl::pdf::PDFAnnotationSubType::Polygon)
                 {
-                    auto const& rVertices = pAnnotation->getVertices();
-                    if (!rVertices.empty())
+                    auto const aVertices = pAnnotation->getVertices();
+                    if (!aVertices.empty())
                     {
                         auto pMarker = std::make_shared<vcl::pdf::PDFAnnotationMarkerPolygon>();
                         rPDFGraphicAnnotation.mpMarker = pMarker;
-                        for (auto const& rVertex : rVertices)
+                        for (auto const& rVertex : aVertices)
                         {
                             auto aPoint = convertFromPDFInternalToHMM(rVertex, aPageSize);
                             pMarker->maPolygon.append(aPoint);
@@ -229,12 +229,12 @@ findAnnotations(const std::unique_ptr<vcl::pdf::PDFiumPage>& pPage, basegfx::B2D
                 }
                 else if (eSubtype == vcl::pdf::PDFAnnotationSubType::Ink)
                 {
-                    auto const& rStrokesList = pAnnotation->getInkStrokes();
-                    if (!rStrokesList.empty())
+                    auto const aStrokesList = pAnnotation->getInkStrokes();
+                    if (!aStrokesList.empty())
                     {
                         auto pMarker = std::make_shared<vcl::pdf::PDFAnnotationMarkerInk>();
                         rPDFGraphicAnnotation.mpMarker = pMarker;
-                        for (auto const& rStrokes : rStrokesList)
+                        for (auto const& rStrokes : aStrokesList)
                         {
                             basegfx::B2DPolygon aPolygon;
                             for (auto const& rVertex : rStrokes)
@@ -286,16 +286,16 @@ findAnnotations(const std::unique_ptr<vcl::pdf::PDFiumPage>& pPage, basegfx::B2D
                 }
                 else if (eSubtype == vcl::pdf::PDFAnnotationSubType::Line)
                 {
-                    auto const& rLineGeometry = pAnnotation->getLineGeometry();
-                    if (!rLineGeometry.empty())
+                    auto const aLineGeometry = pAnnotation->getLineGeometry();
+                    if (!aLineGeometry.empty())
                     {
                         auto pMarker = std::make_shared<vcl::pdf::PDFAnnotationMarkerLine>();
                         rPDFGraphicAnnotation.mpMarker = pMarker;
 
-                        auto aPoint1 = convertFromPDFInternalToHMM(rLineGeometry[0], aPageSize);
+                        auto aPoint1 = convertFromPDFInternalToHMM(aLineGeometry[0], aPageSize);
                         pMarker->maLineStart = aPoint1;
 
-                        auto aPoint2 = convertFromPDFInternalToHMM(rLineGeometry[1], aPageSize);
+                        auto aPoint2 = convertFromPDFInternalToHMM(aLineGeometry[1], aPageSize);
                         pMarker->maLineEnd = aPoint2;
 
                         float fWidth = pAnnotation->getBorderWidth();

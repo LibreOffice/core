@@ -781,7 +781,7 @@ void OutputDevice::SetRelativeMapMode( const MapMode& rNewMapMode )
         {
             const auto eFrom = MapToO3tlLength(eOld, o3tl::Length::in);
             const auto eTo = MapToO3tlLength(eNew, o3tl::Length::in);
-            const auto& [mul, div] = o3tl::getConversionMulDiv(eFrom, eTo);
+            const auto [mul, div] = o3tl::getConversionMulDiv(eFrom, eTo);
             Fraction aF(div, mul);
 
             // a?F =  a?F * aF
@@ -996,8 +996,8 @@ tools::PolyPolygon OutputDevice::LogicToPixel( const tools::PolyPolygon& rLogicP
 basegfx::B2DPolyPolygon OutputDevice::LogicToPixel( const basegfx::B2DPolyPolygon& rLogicPolyPoly ) const
 {
     basegfx::B2DPolyPolygon aTransformedPoly = rLogicPolyPoly;
-    const basegfx::B2DHomMatrix& rTransformationMatrix = GetViewTransformation();
-    aTransformedPoly.transform( rTransformationMatrix );
+    const basegfx::B2DHomMatrix aTransformationMatrix = GetViewTransformation();
+    aTransformedPoly.transform( aTransformationMatrix );
     return aTransformedPoly;
 }
 
@@ -1131,8 +1131,8 @@ basegfx::B2DPolyPolygon OutputDevice::LogicToPixel( const basegfx::B2DPolyPolygo
                                                     const MapMode& rMapMode ) const
 {
     basegfx::B2DPolyPolygon aTransformedPoly = rLogicPolyPoly;
-    const basegfx::B2DHomMatrix& rTransformationMatrix = GetViewTransformation( rMapMode );
-    aTransformedPoly.transform( rTransformationMatrix );
+    const basegfx::B2DHomMatrix aTransformationMatrix = GetViewTransformation( rMapMode );
+    aTransformedPoly.transform( aTransformationMatrix );
     return aTransformedPoly;
 }
 
@@ -1241,16 +1241,16 @@ tools::PolyPolygon OutputDevice::PixelToLogic( const tools::PolyPolygon& rDevice
 basegfx::B2DPolyPolygon OutputDevice::PixelToLogic( const basegfx::B2DPolyPolygon& rPixelPolyPoly ) const
 {
     basegfx::B2DPolyPolygon aTransformedPoly = rPixelPolyPoly;
-    const basegfx::B2DHomMatrix& rTransformationMatrix = GetInverseViewTransformation();
-    aTransformedPoly.transform( rTransformationMatrix );
+    const basegfx::B2DHomMatrix aTransformationMatrix = GetInverseViewTransformation();
+    aTransformedPoly.transform( aTransformationMatrix );
     return aTransformedPoly;
 }
 
 basegfx::B2DRectangle OutputDevice::PixelToLogic(const basegfx::B2DRectangle& rDeviceRect) const
 {
     basegfx::B2DRectangle aTransformedRect = rDeviceRect;
-    const basegfx::B2DHomMatrix& rTransformationMatrix = GetInverseViewTransformation();
-    aTransformedRect.transform(rTransformationMatrix);
+    const basegfx::B2DHomMatrix aTransformationMatrix = GetInverseViewTransformation();
+    aTransformedRect.transform(aTransformationMatrix);
     return aTransformedRect;
 }
 
@@ -1388,8 +1388,8 @@ basegfx::B2DPolygon OutputDevice::PixelToLogic( const basegfx::B2DPolygon& rPixe
                                                 const MapMode& rMapMode ) const
 {
     basegfx::B2DPolygon aTransformedPoly = rPixelPoly;
-    const basegfx::B2DHomMatrix& rTransformationMatrix = GetInverseViewTransformation( rMapMode );
-    aTransformedPoly.transform( rTransformationMatrix );
+    const basegfx::B2DHomMatrix aTransformationMatrix = GetInverseViewTransformation( rMapMode );
+    aTransformedPoly.transform( aTransformationMatrix );
     return aTransformedPoly;
 }
 
@@ -1397,8 +1397,8 @@ basegfx::B2DPolyPolygon OutputDevice::PixelToLogic( const basegfx::B2DPolyPolygo
                                                     const MapMode& rMapMode ) const
 {
     basegfx::B2DPolyPolygon aTransformedPoly = rPixelPolyPoly;
-    const basegfx::B2DHomMatrix& rTransformationMatrix = GetInverseViewTransformation( rMapMode );
-    aTransformedPoly.transform( rTransformationMatrix );
+    const basegfx::B2DHomMatrix aTransformationMatrix = GetInverseViewTransformation( rMapMode );
+    aTransformedPoly.transform( aTransformationMatrix );
     return aTransformedPoly;
 }
 
@@ -1598,7 +1598,7 @@ static tools::Long fn3(const tools::Long n1, const o3tl::Length eFrom, const o3t
     const auto nResult = o3tl::convert(n1, eFrom, eTo, bOverflow);
     if (bOverflow)
     {
-        const auto& [n2, n3] = o3tl::getConversionMulDiv(eFrom, eTo);
+        const auto [n2, n3] = o3tl::getConversionMulDiv(eFrom, eTo);
         BigInt a4 = n1;
         a4 *= n2;
 
@@ -1681,12 +1681,12 @@ Point OutputDevice::LogicToLogic( const Point& rPtSource,
 
     if (rMapModeSource.IsSimple() && rMapModeDest.IsSimple())
     {
-        const auto& [eFrom, eTo] = getCorrectedUnit(eUnitSource, eUnitDest);
+        const auto [eFrom, eTo] = getCorrectedUnit(eUnitSource, eUnitDest);
         return Point(fn3(rPtSource.X(), eFrom, eTo), fn3(rPtSource.Y(), eFrom, eTo));
     }
     else
     {
-        const auto& [aMapResSource, aMapResDest] = ENTER4( rMapModeSource, rMapModeDest );
+        const auto [aMapResSource, aMapResDest] = ENTER4( rMapModeSource, rMapModeDest );
 
         return Point( fn5( rPtSource.X() + aMapResSource.mnMapOfsX,
                            aMapResSource.mnMapScNumX, aMapResDest.mnMapScDenomX,
@@ -1712,12 +1712,12 @@ Size OutputDevice::LogicToLogic( const Size& rSzSource,
 
     if (rMapModeSource.IsSimple() && rMapModeDest.IsSimple())
     {
-        const auto& [eFrom, eTo] = getCorrectedUnit(eUnitSource, eUnitDest);
+        const auto [eFrom, eTo] = getCorrectedUnit(eUnitSource, eUnitDest);
         return Size(fn3(rSzSource.Width(), eFrom, eTo), fn3(rSzSource.Height(), eFrom, eTo));
     }
     else
     {
-        const auto& [aMapResSource, aMapResDest] = ENTER4( rMapModeSource, rMapModeDest );
+        const auto [aMapResSource, aMapResDest] = ENTER4( rMapModeSource, rMapModeDest );
 
         return Size( fn5( rSzSource.Width(),
                           aMapResSource.mnMapScNumX, aMapResDest.mnMapScDenomX,
@@ -1759,7 +1759,7 @@ basegfx::B2DHomMatrix OutputDevice::LogicToLogic(const MapMode& rMapModeSource, 
 
     if (rMapModeSource.IsSimple() && rMapModeDest.IsSimple())
     {
-        const auto& [eFrom, eTo] = getCorrectedUnit(eUnitSource, eUnitDest);
+        const auto [eFrom, eTo] = getCorrectedUnit(eUnitSource, eUnitDest);
         const double fScaleFactor(eFrom == o3tl::Length::invalid || eTo == o3tl::Length::invalid
                                       ? std::numeric_limits<double>::quiet_NaN()
                                       : o3tl::convert(1.0, eFrom, eTo));
@@ -1768,7 +1768,7 @@ basegfx::B2DHomMatrix OutputDevice::LogicToLogic(const MapMode& rMapModeSource, 
     }
     else
     {
-        const auto& [aMapResSource, aMapResDest] = ENTER4(rMapModeSource, rMapModeDest);
+        const auto [aMapResSource, aMapResDest] = ENTER4(rMapModeSource, rMapModeDest);
 
         const double fScaleFactorX((double(aMapResSource.mnMapScNumX) * double(aMapResDest.mnMapScDenomX)) / (double(aMapResSource.mnMapScDenomX) * double(aMapResDest.mnMapScNumX)));
         const double fScaleFactorY((double(aMapResSource.mnMapScNumY) * double(aMapResDest.mnMapScDenomY)) / (double(aMapResSource.mnMapScDenomY) * double(aMapResDest.mnMapScNumY)));
@@ -1799,7 +1799,7 @@ tools::Rectangle OutputDevice::LogicToLogic( const tools::Rectangle& rRectSource
 
     if (rMapModeSource.IsSimple() && rMapModeDest.IsSimple())
     {
-        const auto& [eFrom, eTo] = getCorrectedUnit(eUnitSource, eUnitDest);
+        const auto [eFrom, eTo] = getCorrectedUnit(eUnitSource, eUnitDest);
 
         auto left = fn3(rRectSource.Left(), eFrom, eTo);
         auto top = fn3(rRectSource.Top(), eFrom, eTo);
@@ -1812,7 +1812,7 @@ tools::Rectangle OutputDevice::LogicToLogic( const tools::Rectangle& rRectSource
     }
     else
     {
-        const auto& [aMapResSource, aMapResDest] = ENTER4( rMapModeSource, rMapModeDest );
+        const auto [aMapResSource, aMapResDest] = ENTER4( rMapModeSource, rMapModeDest );
 
         auto left = fn5( rRectSource.Left() + aMapResSource.mnMapOfsX,
                                aMapResSource.mnMapScNumX, aMapResDest.mnMapScDenomX,
@@ -1852,7 +1852,7 @@ tools::Long OutputDevice::LogicToLogic( tools::Long nLongSource,
         return nLongSource;
 
     verifyUnitSourceDest( eUnitSource, eUnitDest );
-    const auto& [eFrom, eTo] = getCorrectedUnit(eUnitSource, eUnitDest);
+    const auto [eFrom, eTo] = getCorrectedUnit(eUnitSource, eUnitDest);
     return fn3(nLongSource, eFrom, eTo);
 }
 

@@ -206,8 +206,8 @@ CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawBlackBitmap)
     // test to see if the color is black
     Bitmap aBlackBmp(pVDev->GetBitmap(Point(0, 0), Size(10, 10)));
     BitmapScopedReadAccess pReadAccess(aBlackBmp);
-    const BitmapColor& rColor = pReadAccess->GetColor(0, 0);
-    CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_BLACK), rColor);
+    const BitmapColor aColor = pReadAccess->GetColor(0, 0);
+    CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_BLACK), aColor);
 }
 
 CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawWhiteBitmap)
@@ -250,8 +250,8 @@ CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawWhiteBitmap)
     // test to see if the color is white
     Bitmap aWhiteBmp(pVDev->GetBitmap(Point(0, 0), Size(10, 10)));
     BitmapScopedReadAccess pReadAccess(aWhiteBmp);
-    const BitmapColor& rColor = pReadAccess->GetColor(0, 0);
-    CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_WHITE), rColor);
+    const BitmapColor aColor = pReadAccess->GetColor(0, 0);
+    CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_WHITE), aColor);
 }
 
 CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawBitmap)
@@ -321,8 +321,8 @@ CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawGrayBitmap)
     // check to ensure that the bitmap is red
     {
         BitmapScopedReadAccess pReadAccess(aBmp);
-        const BitmapColor& rColor = pReadAccess->GetColor(0, 0);
-        CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_RED), rColor);
+        const BitmapColor aColor = pReadAccess->GetColor(0, 0);
+        CPPUNIT_ASSERT_EQUAL(BitmapColor(COL_RED), aColor);
     }
 
     ScopedVclPtrInstance<VirtualDevice> pVDev;
@@ -334,8 +334,8 @@ CPPUNIT_TEST_FIXTURE(VclOutdevTest, testDrawGrayBitmap)
     Bitmap aVDevBmp(pVDev->GetBitmap(Point(), Size(1, 1)));
     {
         BitmapScopedReadAccess pReadAccess(aVDevBmp);
-        const BitmapColor& rColor = pReadAccess->GetColor(0, 0);
-        CPPUNIT_ASSERT_EQUAL(BitmapColor(0x26, 0x26, 0x26), rColor);
+        const BitmapColor aColor = pReadAccess->GetColor(0, 0);
+        CPPUNIT_ASSERT_EQUAL(BitmapColor(0x26, 0x26, 0x26), aColor);
     }
 }
 

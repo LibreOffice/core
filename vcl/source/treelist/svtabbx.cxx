@@ -104,17 +104,17 @@ static void lcl_DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter,
                     const SvLBoxContextBmp* pBmpItem = dynamic_cast<const SvLBoxContextBmp*>(&rItem);
                     if (pBmpItem)
                     {
-                        const OUString& rCollapsed = pBmpItem->GetBitmap1().GetStock();
-                        const OUString& rExpanded = pBmpItem->GetBitmap2().GetStock();
+                        const OUString aCollapsed = pBmpItem->GetBitmap1().GetStock();
+                        const OUString aExpanded = pBmpItem->GetBitmap2().GetStock();
 
                         // send identifier only, we will use svg icon
-                        if (!o3tl::trim(rCollapsed).empty() || !o3tl::trim(rExpanded).empty())
+                        if (!o3tl::trim(aCollapsed).empty() || !o3tl::trim(aExpanded).empty())
                         {
                             auto aColumn = rJsonWriter.startStruct();
-                            if (!o3tl::trim(rCollapsed).empty())
-                                rJsonWriter.put("collapsed", rCollapsed);
-                            if (!o3tl::trim(rExpanded).empty())
-                                rJsonWriter.put("expanded", rExpanded);
+                            if (!o3tl::trim(aCollapsed).empty())
+                                rJsonWriter.put("collapsed", aCollapsed);
+                            if (!o3tl::trim(aExpanded).empty())
+                                rJsonWriter.put("expanded", aExpanded);
                         }
                         // custom bitmap - send png
                         else

@@ -176,10 +176,10 @@ bool getControlTypeForXmlString(std::string_view rString, ControlType& reType)
         { "tooltip", ControlType::Tooltip },
     };
 
-    auto const& rIterator = aPartMap.find(rString);
-    if (rIterator != aPartMap.end())
+    auto const aIterator = aPartMap.find(rString);
+    if (aIterator != aPartMap.end())
     {
-        reType = rIterator->second;
+        reType = aIterator->second;
         return true;
     }
     return false;

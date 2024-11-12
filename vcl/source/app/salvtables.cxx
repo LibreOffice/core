@@ -2220,11 +2220,11 @@ IMPL_LINK_NOARG(SalInstanceAssistant, UpdateRoadmap_Hdl, Timer*, void)
     int nPos = 0;
     for (size_t i = 0; i < m_aAddedPages.size(); ++i)
     {
-        const OUString& rLabel = m_aAddedPages[i]->GetText();
+        const OUString aLabel = m_aAddedPages[i]->GetText();
         bool bSensitive = m_aAddedPages[i]->IsEnabled();
-        if (rLabel.isEmpty())
+        if (aLabel.isEmpty())
             continue;
-        m_xWizard->InsertRoadmapItem(nPos++, rLabel, m_aIds[i], bSensitive);
+        m_xWizard->InsertRoadmapItem(nPos++, aLabel, m_aIds[i], bSensitive);
     }
 
     m_xWizard->SelectRoadmapItemByID(m_aIds[get_current_page()], false);

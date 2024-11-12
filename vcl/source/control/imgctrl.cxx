@@ -89,19 +89,19 @@ void ImageControl::ImplDraw(OutputDevice& rDev, const Point& rPos, const Size& r
         return;
     }
 
-    const Size& rBitmapSize = rImage.GetSizePixel();
+    const Size aBitmapSize = rImage.GetSizePixel();
 
     switch ( mnScaleMode )
     {
     case ImageScaleMode::NONE:
     {
-        rDev.DrawImage(lcl_centerWithin( aDrawRect, rBitmapSize ), rImage, nStyle);
+        rDev.DrawImage(lcl_centerWithin( aDrawRect, aBitmapSize ), rImage, nStyle);
     }
     break;
 
     case ImageScaleMode::ISOTROPIC:
     {
-        const Size aPaintSize = lcl_calcPaintSize( aDrawRect, rBitmapSize );
+        const Size aPaintSize = lcl_calcPaintSize( aDrawRect, aBitmapSize );
         rDev.DrawImage(lcl_centerWithin(aDrawRect, aPaintSize), aPaintSize, rImage, nStyle);
     }
     break;

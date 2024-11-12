@@ -732,15 +732,15 @@ void SystemWindow::SetWindowState(const vcl::WindowData& rData)
         tools::Long nY         = rData.y();
         tools::Long nWidth     = rData.width();
         tools::Long nHeight    = rData.height();
-        const SalFrameGeometry& rGeom = pWindow->mpWindowImpl->mpFrame->GetGeometry();
+        const SalFrameGeometry aGeom = pWindow->mpWindowImpl->mpFrame->GetGeometry();
         if( nX < 0 )
             nX = 0;
-        if( nX + nWidth > static_cast<tools::Long>(rGeom.width()) )
-            nX = rGeom.width() - nWidth;
+        if( nX + nWidth > static_cast<tools::Long>(aGeom.width()) )
+            nX = aGeom.width() - nWidth;
         if( nY < 0 )
             nY = 0;
-        if( nY + nHeight > static_cast<tools::Long>(rGeom.height()) )
-            nY = rGeom.height() - nHeight;
+        if( nY + nHeight > static_cast<tools::Long>(aGeom.height()) )
+            nY = aGeom.height() - nHeight;
         setPosSizePixel( nX, nY, nWidth, nHeight, nPosSize );
     }
 

@@ -341,8 +341,8 @@ CPPUNIT_TEST_FIXTURE(PDFiumLibraryTest, testAnnotationsDifferentTypes)
         CPPUNIT_ASSERT_EQUAL(0, pAnnotation->getObjectCount());
         OUString aContentsString = pAnnotation->getString(vcl::pdf::constDictionaryKeyContents);
         CPPUNIT_ASSERT_EQUAL(u"Inline Note"_ustr, aContentsString);
-        auto const& rLineGeometry = pAnnotation->getLineGeometry();
-        CPPUNIT_ASSERT_EQUAL(true, rLineGeometry.empty());
+        auto const aLineGeometry = pAnnotation->getLineGeometry();
+        CPPUNIT_ASSERT_EQUAL(true, aLineGeometry.empty());
     }
 
     {
@@ -353,12 +353,12 @@ CPPUNIT_TEST_FIXTURE(PDFiumLibraryTest, testAnnotationsDifferentTypes)
         OUString aContentsString = pAnnotation->getString(vcl::pdf::constDictionaryKeyContents);
         CPPUNIT_ASSERT_EQUAL(u"Freehand Text"_ustr, aContentsString);
         CPPUNIT_ASSERT_EQUAL(size_t(1), pAnnotation->getInkStrokes().size());
-        auto const& aInkStrokes = pAnnotation->getInkStrokes();
+        auto const aInkStrokes = pAnnotation->getInkStrokes();
         auto const& aPoints = aInkStrokes[0];
         CPPUNIT_ASSERT_EQUAL(size_t(74), aPoints.size());
         CPPUNIT_ASSERT_DOUBLES_EQUAL(2.0f, pAnnotation->getBorderWidth(), 1E-2);
-        auto const& rLineGeometry = pAnnotation->getLineGeometry();
-        CPPUNIT_ASSERT_EQUAL(true, rLineGeometry.empty());
+        auto const aLineGeometry = pAnnotation->getLineGeometry();
+        CPPUNIT_ASSERT_EQUAL(true, aLineGeometry.empty());
     }
 
     {
@@ -368,8 +368,8 @@ CPPUNIT_TEST_FIXTURE(PDFiumLibraryTest, testAnnotationsDifferentTypes)
         CPPUNIT_ASSERT_EQUAL(0, pAnnotation->getObjectCount());
         OUString aContentsString = pAnnotation->getString(vcl::pdf::constDictionaryKeyContents);
         CPPUNIT_ASSERT_EQUAL(u"Line Text"_ustr, aContentsString);
-        auto const& rLineGeometry = pAnnotation->getLineGeometry();
-        CPPUNIT_ASSERT_EQUAL(false, rLineGeometry.empty());
+        auto const aLineGeometry = pAnnotation->getLineGeometry();
+        CPPUNIT_ASSERT_EQUAL(false, aLineGeometry.empty());
     }
 
     {
@@ -380,11 +380,11 @@ CPPUNIT_TEST_FIXTURE(PDFiumLibraryTest, testAnnotationsDifferentTypes)
         CPPUNIT_ASSERT_EQUAL(true, pAnnotation->hasKey("Vertices"_ostr));
         OUString aContentsString = pAnnotation->getString(vcl::pdf::constDictionaryKeyContents);
         CPPUNIT_ASSERT_EQUAL(u"Polygon Text"_ustr, aContentsString);
-        auto const& aVertices = pAnnotation->getVertices();
+        auto const aVertices = pAnnotation->getVertices();
         CPPUNIT_ASSERT_EQUAL(size_t(3), aVertices.size());
         CPPUNIT_ASSERT_DOUBLES_EQUAL(2.0f, pAnnotation->getBorderWidth(), 1E-2);
-        auto const& rLineGeometry = pAnnotation->getLineGeometry();
-        CPPUNIT_ASSERT_EQUAL(true, rLineGeometry.empty());
+        auto const aLineGeometry = pAnnotation->getLineGeometry();
+        CPPUNIT_ASSERT_EQUAL(true, aLineGeometry.empty());
     }
 
     {
@@ -394,8 +394,8 @@ CPPUNIT_TEST_FIXTURE(PDFiumLibraryTest, testAnnotationsDifferentTypes)
         CPPUNIT_ASSERT_EQUAL(0, pAnnotation->getObjectCount());
         OUString aContentsString = pAnnotation->getString(vcl::pdf::constDictionaryKeyContents);
         CPPUNIT_ASSERT_EQUAL(u"Ellipse Text"_ustr, aContentsString);
-        auto const& rLineGeometry = pAnnotation->getLineGeometry();
-        CPPUNIT_ASSERT_EQUAL(true, rLineGeometry.empty());
+        auto const aLineGeometry = pAnnotation->getLineGeometry();
+        CPPUNIT_ASSERT_EQUAL(true, aLineGeometry.empty());
     }
 
     {
@@ -407,8 +407,8 @@ CPPUNIT_TEST_FIXTURE(PDFiumLibraryTest, testAnnotationsDifferentTypes)
         CPPUNIT_ASSERT_EQUAL(u"Rectangle Text"_ustr, aContentsString);
         CPPUNIT_ASSERT_EQUAL(Color(0xFF, 0xE0, 0x00), pAnnotation->getColor());
         CPPUNIT_ASSERT_EQUAL(false, pAnnotation->hasKey(vcl::pdf::constDictionaryKeyInteriorColor));
-        auto const& rLineGeometry = pAnnotation->getLineGeometry();
-        CPPUNIT_ASSERT_EQUAL(true, rLineGeometry.empty());
+        auto const aLineGeometry = pAnnotation->getLineGeometry();
+        CPPUNIT_ASSERT_EQUAL(true, aLineGeometry.empty());
     }
 }
 

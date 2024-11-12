@@ -108,8 +108,8 @@ void QtGraphics::GetDevFontList(vcl::font::PhysicalFontCollection* pPFC)
         // inform FreetypeManager about this font provided by the PsPrint subsystem
         FontAttributes aFA = pFont->m_aFontAttributes;
         aFA.IncreaseQualityBy(4096);
-        const OString& rFileName = rMgr.getFontFileSysPath(nFontId);
-        rFontManager.AddFontFile(rFileName, nFaceNum, nVariantNum, nFontId, aFA);
+        const OString aFileName = rMgr.getFontFileSysPath(nFontId);
+        rFontManager.AddFontFile(aFileName, nFaceNum, nVariantNum, nFontId, aFA);
     }
 
     if (bUseFontconfig)

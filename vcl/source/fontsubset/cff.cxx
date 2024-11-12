@@ -2277,7 +2277,7 @@ void CffSubsetterContext::convertCharStrings(const sal_GlyphId* pGlyphIds, int n
 
         if (!bCheckDuplicates)
         {
-            const auto& it
+            const auto it
                 = std::find_if(rCharStrings.begin(), rCharStrings.end(),
                                [&](const CharString& c) { return c.nCffGlyphId == nCffGlyphId; });
             if (it != rCharStrings.end())

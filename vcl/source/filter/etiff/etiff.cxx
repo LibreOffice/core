@@ -359,10 +359,10 @@ void TIFFWriter::ImplWriteBody()
                 Scanline pScanline = mpAcc->GetScanline( y );
                 for ( x = 0; x < mnWidth; x++ )
                 {
-                    const BitmapColor& rColor = mpAcc->GetPixelFromData( pScanline, x );
-                    Compress( rColor.GetRed() );
-                    Compress( rColor.GetGreen() );
-                    Compress( rColor.GetBlue() );
+                    const BitmapColor aColor = mpAcc->GetPixelFromData( pScanline, x );
+                    Compress( aColor.GetRed() );
+                    Compress( aColor.GetGreen() );
+                    Compress( aColor.GetBlue() );
                 }
             }
         }

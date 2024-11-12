@@ -564,10 +564,10 @@ bool FileDefinitionWidgetDraw::resolveDefinition(ControlType eType, ControlPart 
                                                  tools::Long nHeight)
 {
     bool bOK = false;
-    auto const& pPart = m_pWidgetDefinition->getDefinition(eType, ePart);
+    auto const pPart = m_pWidgetDefinition->getDefinition(eType, ePart);
     if (pPart)
     {
-        auto const& aStates = pPart->getStates(eType, ePart, eState, rValue);
+        auto const aStates = pPart->getStates(eType, ePart, eState, rValue);
         if (!aStates.empty())
         {
             // use last defined state
@@ -793,20 +793,19 @@ bool FileDefinitionWidgetDraw::getNativeControlRegion(
     {
         case ControlType::Spinbox:
         {
-            auto const& pButtonUpPart
+            auto const pButtonUpPart
                 = m_pWidgetDefinition->getDefinition(eType, ControlPart::ButtonUp);
             if (!pButtonUpPart)
                 return false;
             Size aButtonSizeUp(pButtonUpPart->mnWidth, pButtonUpPart->mnHeight);
 
-            auto const& pButtonDownPart
+            auto const pButtonDownPart
                 = m_pWidgetDefinition->getDefinition(eType, ControlPart::ButtonDown);
             if (!pButtonDownPart)
                 return false;
             Size aButtonSizeDown(pButtonDownPart->mnWidth, pButtonDownPart->mnHeight);
 
-            auto const& pEntirePart
-                = m_pWidgetDefinition->getDefinition(eType, ControlPart::Entire);
+            auto const pEntirePart = m_pWidgetDefinition->getDefinition(eType, ControlPart::Entire);
 
             OString sOrientation = pEntirePart->msOrientation;
 
@@ -893,7 +892,7 @@ bool FileDefinitionWidgetDraw::getNativeControlRegion(
         case ControlType::Checkbox:
         case ControlType::Radiobutton:
         {
-            auto const& pPart = m_pWidgetDefinition->getDefinition(eType, ControlPart::Entire);
+            auto const pPart = m_pWidgetDefinition->getDefinition(eType, ControlPart::Entire);
             if (!pPart)
                 return false;
 
@@ -903,7 +902,7 @@ bool FileDefinitionWidgetDraw::getNativeControlRegion(
         }
         case ControlType::TabItem:
         {
-            auto const& pPart = m_pWidgetDefinition->getDefinition(eType, ControlPart::Entire);
+            auto const pPart = m_pWidgetDefinition->getDefinition(eType, ControlPart::Entire);
             if (!pPart)
                 return false;
 
@@ -923,7 +922,7 @@ bool FileDefinitionWidgetDraw::getNativeControlRegion(
         {
             sal_Int32 nHeight = rBoundingControlRegion.GetHeight();
 
-            auto const& pPart = m_pWidgetDefinition->getDefinition(eType, ControlPart::Entire);
+            auto const pPart = m_pWidgetDefinition->getDefinition(eType, ControlPart::Entire);
             if (pPart)
                 nHeight = std::max(nHeight, pPart->mnHeight);
 
@@ -954,7 +953,7 @@ bool FileDefinitionWidgetDraw::getNativeControlRegion(
         case ControlType::Combobox:
         case ControlType::Listbox:
         {
-            auto const& pPart = m_pWidgetDefinition->getDefinition(eType, ControlPart::ButtonDown);
+            auto const pPart = m_pWidgetDefinition->getDefinition(eType, ControlPart::ButtonDown);
             Size aComboButtonSize(pPart->mnWidth, pPart->mnHeight);
 
             if (ePart == ControlPart::ButtonDown)

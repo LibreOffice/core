@@ -119,8 +119,8 @@ bool FreeTypeTextRenderImpl::AddTempDevFont(vcl::font::PhysicalFontCollection* p
         int nFaceNum = rMgr.getFontFaceNumber(nFontId);
         int nVariantNum = rMgr.getFontFaceVariation(nFontId);
 
-        const OString& rFileName = rMgr.getFontFileSysPath(nFontId);
-        rFreetypeManager.AddFontFile(rFileName, nFaceNum, nVariantNum, nFontId, aDFA);
+        const OString aFileName = rMgr.getFontFileSysPath(nFontId);
+        rFreetypeManager.AddFontFile(aFileName, nFaceNum, nVariantNum, nFontId, aDFA);
     }
 
     // announce new font to device's font list
@@ -154,8 +154,8 @@ void FreeTypeTextRenderImpl::GetDevFontList(vcl::font::PhysicalFontCollection* p
         // inform FreetypeManager about this font provided by the PsPrint subsystem
         FontAttributes aDFA = pFont->m_aFontAttributes;
         aDFA.IncreaseQualityBy(4096);
-        const OString& rFileName = rMgr.getFontFileSysPath(nFontId);
-        rFreetypeManager.AddFontFile(rFileName, nFaceNum, nVariantNum, nFontId, aDFA);
+        const OString aFileName = rMgr.getFontFileSysPath(nFontId);
+        rFreetypeManager.AddFontFile(aFileName, nFaceNum, nVariantNum, nFontId, aDFA);
     }
 
     // announce glyphcache fonts

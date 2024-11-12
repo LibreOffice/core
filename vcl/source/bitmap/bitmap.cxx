@@ -1360,10 +1360,10 @@ static void shiftColors(sal_Int32* pColorArray, const BitmapScopedReadAccess& pR
     Scanline pScanlineRead = pReadAcc->GetScanline(0); // Why always 0?
     for (tools::Long n = 0; n < pReadAcc->Width(); ++n)
     {
-        const BitmapColor& rColor = pReadAcc->GetColorFromData(pScanlineRead, n);
-        *pColorArray++ = static_cast<sal_Int32>(rColor.GetBlue()) << 12;
-        *pColorArray++ = static_cast<sal_Int32>(rColor.GetGreen()) << 12;
-        *pColorArray++ = static_cast<sal_Int32>(rColor.GetRed()) << 12;
+        const BitmapColor aColor = pReadAcc->GetColorFromData(pScanlineRead, n);
+        *pColorArray++ = static_cast<sal_Int32>(aColor.GetBlue()) << 12;
+        *pColorArray++ = static_cast<sal_Int32>(aColor.GetGreen()) << 12;
+        *pColorArray++ = static_cast<sal_Int32>(aColor.GetRed()) << 12;
     }
 }
 

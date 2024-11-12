@@ -1027,23 +1027,23 @@ bool GenericSalLayout::HasFontKashidaPositions() const { return m_bHasFontKashid
 bool GenericSalLayout::IsKashidaPosValid(int nCharPos, int nNextCharPos) const
 {
     // Search for glyph items corresponding to nCharPos and nNextCharPos.
-    auto const& rGlyph = std::find_if(m_GlyphItems.begin(), m_GlyphItems.end(),
+    auto const aGlyph = std::find_if(m_GlyphItems.begin(), m_GlyphItems.end(),
                                       [&](const GlyphItem& g) { return g.charPos() == nCharPos; });
-    auto const& rNextGlyph = std::find_if(m_GlyphItems.begin(), m_GlyphItems.end(),
+    auto const aNextGlyph = std::find_if(m_GlyphItems.begin(), m_GlyphItems.end(),
                                           [&](const GlyphItem& g) { return g.charPos() == nNextCharPos; });
 
     // If either is not found then a ligature is created at this position, we
     // can’t insert Kashida here.
-    if (rGlyph == m_GlyphItems.end() || rNextGlyph == m_GlyphItems.end())
+    if (aGlyph == m_GlyphItems.end() || aNextGlyph == m_GlyphItems.end())
         return false;
 
     // If the either character is not supported by this layout, return false so
     // that fallback layouts would be checked for it.
-    if (rGlyph->glyphId() == 0 || rNextGlyph->glyphId() == 0)
+    if (aGlyph->glyphId() == 0 || aNextGlyph->glyphId() == 0)
         return false;
 
     // Lastly check if this position is kashida-safe.
-    return rNextGlyph->IsSafeToInsertKashida();
+    return aNextGlyph->IsSafeToInsertKashida();
 }
 
 void GenericSalLayout::drawSalLayout(void* pSurface, const basegfx::BColor& rTextColor, bool bAntiAliased) const

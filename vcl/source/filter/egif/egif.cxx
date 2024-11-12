@@ -118,20 +118,20 @@ bool GIFWriter::WriteGIF(const Graphic& rGraphic, FilterConfigItem* pFilterConfi
 
     if( rGraphic.IsAnimated() )
     {
-        const Animation& rAnimation = rGraphic.GetAnimation();
+        const Animation aAnimation = rGraphic.GetAnimation();
 
         WriteSignature( true );
 
         if ( bStatus )
         {
-            WriteGlobalHeader( rAnimation.GetDisplaySizePixel() );
+            WriteGlobalHeader( aAnimation.GetDisplaySizePixel() );
 
             if( bStatus )
             {
-                WriteLoopExtension( rAnimation );
+                WriteLoopExtension( aAnimation );
 
                 if( bStatus )
-                    WriteAnimation( rAnimation );
+                    WriteAnimation( aAnimation );
             }
         }
     }

@@ -161,7 +161,7 @@ inline QRect QtGraphics_Controls::subElementRect(QStyle::SubElement element,
 void QtGraphics_Controls::draw(QStyle::ControlElement element, QStyleOption& rOption, QImage* image,
                                const Color& rBackgroundColor, QStyle::State const state, QRect rect)
 {
-    const QRect& targetRect = !rect.isNull() ? rect : image->rect();
+    const QRect targetRect = !rect.isNull() ? rect : image->rect();
 
     rOption.state |= state;
     rOption.rect = downscale(targetRect);
@@ -176,7 +176,7 @@ void QtGraphics_Controls::draw(QStyle::PrimitiveElement element, QStyleOption& r
                                QImage* image, const Color& rBackgroundColor,
                                QStyle::State const state, QRect rect)
 {
-    const QRect& targetRect = !rect.isNull() ? rect : image->rect();
+    const QRect targetRect = !rect.isNull() ? rect : image->rect();
 
     rOption.state |= state;
     rOption.rect = downscale(targetRect);
@@ -191,7 +191,7 @@ void QtGraphics_Controls::draw(QStyle::ComplexControl element, QStyleOptionCompl
                                QImage* image, const Color& rBackgroundColor,
                                QStyle::State const state)
 {
-    const QRect& targetRect = image->rect();
+    const QRect targetRect = image->rect();
 
     rOption.state |= state;
     rOption.rect = downscale(targetRect);

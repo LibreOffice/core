@@ -2736,8 +2736,8 @@ void Window::setPosSizePixel( tools::Long nX, tools::Long nY,
                 OutputDevice *pParentOutDev = pWinParent->GetOutDev();
                 if( pParentOutDev->HasMirroredGraphics() )
                 {
-                    const SalFrameGeometry& aSysGeometry = mpWindowImpl->mpFrame->GetUnmirroredGeometry();
-                    const SalFrameGeometry& aParentSysGeometry =
+                    const SalFrameGeometry aSysGeometry = mpWindowImpl->mpFrame->GetUnmirroredGeometry();
+                    const SalFrameGeometry aParentSysGeometry =
                         pWinParent->mpWindowImpl->mpFrame->GetUnmirroredGeometry();
                     tools::Long myWidth = nOldWidth;
                     if( !myWidth )

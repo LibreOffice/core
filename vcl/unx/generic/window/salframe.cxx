@@ -445,9 +445,9 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
                 {
                     // set a document position and size
                     // the first frame gets positioned by the window manager
-                    const SalFrameGeometry& rGeom( pFrame->GetUnmirroredGeometry() );
-                    x = rGeom.x();
-                    y = rGeom.y();
+                    const SalFrameGeometry aGeom( pFrame->GetUnmirroredGeometry() );
+                    x = aGeom.x();
+                    y = aGeom.y();
                     if( x+static_cast<int>(w)+40 <= static_cast<int>(aScreenSize.Width()) &&
                         y+static_cast<int>(h)+40 <= static_cast<int>(aScreenSize.Height())
                         )

@@ -179,11 +179,11 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
         // from trying conversion & stores before...
         if ( !aBitmapEx.IsAlpha() )
         {
-            const auto& rCacheEntry=m_aPDFBmpCache.find(
+            const auto aCacheEntry=m_aPDFBmpCache.find(
                 aBitmapEx.GetChecksum());
-            if ( rCacheEntry != m_aPDFBmpCache.end() )
+            if ( aCacheEntry != m_aPDFBmpCache.end() )
             {
-                m_rOuterFace.DrawJPGBitmap( *rCacheEntry->second, true, aSizePixel,
+                m_rOuterFace.DrawJPGBitmap( *aCacheEntry->second, true, aSizePixel,
                                             tools::Rectangle( aPoint, aSize ), aAlphaMask, i_Graphic );
                 return;
             }
