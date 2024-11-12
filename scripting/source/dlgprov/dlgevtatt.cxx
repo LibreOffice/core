@@ -554,19 +554,19 @@ namespace dlgprov
             try
             {
                 // call method
-                const Reference< XIdlMethod >& rxMethod = m_xIntrospectionAccess->
+                const Reference< XIdlMethod > xMethod = m_xIntrospectionAccess->
                     getMethod( aMethodName, MethodConcept::ALL - MethodConcept::DANGEROUS );
 
                 Reference< XMaterialHolder > xMaterialHolder =
                     Reference< XMaterialHolder >::query( m_xIntrospectionAccess );
                 Any aHandlerObject = xMaterialHolder->getMaterial();
 
-                Sequence< Reference< XIdlClass > > aParamTypeSeq = rxMethod->getParameterTypes();
+                Sequence< Reference< XIdlClass > > aParamTypeSeq = xMethod->getParameterTypes();
                 sal_Int32 nParamCount = aParamTypeSeq.getLength();
                 if( nParamCount == 0 )
                 {
                     Sequence<Any> args;
-                    rxMethod->invoke( aHandlerObject, args );
+                    xMethod->invoke( aHandlerObject, args );
                     bHandled = true;
                 }
                 else if( nParamCount == 2 )
@@ -585,7 +585,7 @@ namespace dlgprov
                         pArgs[0] <<= xWindow;
                     }
                     pArgs[1] = aEventObject;
-                    aRet = rxMethod->invoke( aHandlerObject, Args );
+                    aRet = xMethod->invoke( aHandlerObject, Args );
                     bHandled = true;
                 }
             }

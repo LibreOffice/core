@@ -3028,7 +3028,7 @@ Content::ResourceType Content::resourceTypeForLocks(
         }
     }
 
-    const OUString & rURL = m_xIdentifier->getContentIdentifier();
+    const OUString aURL = m_xIdentifier->getContentIdentifier();
 
     if ( eResourceTypeForLocks == UNKNOWN )
     {
@@ -3200,7 +3200,7 @@ Content::ResourceType Content::resourceTypeForLocks(
     {
         SAL_WARN_IF(
             eResourceTypeForLocks != m_eResourceTypeForLocks, "ucb.ucp.webdav",
-            "different resource types for <" << rURL << ">: "
+            "different resource types for <" << aURL << ">: "
             << +eResourceTypeForLocks << " vs. " << +m_eResourceTypeForLocks);
     }
     SAL_INFO( "ucb.ucp.webdav", "resourceTypeForLocks() - URL: <"
@@ -3984,7 +3984,7 @@ Content::ResourceType Content::getResourceType(
         osl::MutexGuard aGuard( m_aMutex );
         xResAccess.reset( new DAVResourceAccess( *m_xResAccess ) );
     }
-    const Content::ResourceType & ret = getResourceType( xEnv, xResAccess );
+    const Content::ResourceType ret = getResourceType( xEnv, xResAccess );
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
         m_xResAccess.reset( new DAVResourceAccess( *xResAccess ) );

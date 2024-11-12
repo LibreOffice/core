@@ -91,15 +91,15 @@ const uno::Sequence< beans::Property > & PropertySetInfo::getPropertiesImpl()
             xSet->getPropertySetInfo() );
         if ( xInfo.is() )
         {
-            const uno::Sequence< beans::Property >& rAddProps
+            const uno::Sequence< beans::Property > aAddProps
                 = xInfo->getProperties();
-            sal_Int32 nAddProps = rAddProps.getLength();
+            sal_Int32 nAddProps = aAddProps.getLength();
             if ( nAddProps > 0 )
             {
                 sal_Int32 nPos = m_xProps->getLength();
                 m_xProps->realloc( nPos + nAddProps );
 
-                std::copy(rAddProps.begin(), rAddProps.end(),
+                std::copy(aAddProps.begin(), aAddProps.end(),
                           std::next(m_xProps->getArray(), nPos));
             }
         }

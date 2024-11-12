@@ -16,7 +16,7 @@
 
 inline Fraction conversionFract(o3tl::Length from, o3tl::Length to)
 {
-    const auto & [ mul, div ] = o3tl::getConversionMulDiv(from, to);
+    const auto[mul, div] = o3tl::getConversionMulDiv(from, to);
     return { mul, div };
 }
 

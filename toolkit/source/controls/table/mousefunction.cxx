@@ -53,7 +53,7 @@ namespace svt::table
 
         // set proper pointer
         PointerStyle aNewPointer( PointerStyle::Arrow );
-        ColumnMetrics const & columnMetrics( i_tableControl.getColumnMetrics( m_nResizingColumn ) );
+        ColumnMetrics const columnMetrics( i_tableControl.getColumnMetrics( m_nResizingColumn ) );
         if  (   ( aPoint.X() > tableSize.Width() )
             ||  ( aPoint.X() < columnMetrics.nStartPixel )
             )

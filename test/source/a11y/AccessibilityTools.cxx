@@ -692,7 +692,7 @@ OUString AccessibilityTools::debugName(accessibility::XAccessibleAction* xAct)
 
         r.append("description=\"" + xAct->getAccessibleActionDescription(i) + "\"");
 
-        const auto& xKeyBinding = xAct->getAccessibleActionKeyBinding(i);
+        const auto xKeyBinding = xAct->getAccessibleActionKeyBinding(i);
         if (xKeyBinding)
         {
             r.append(" keybindings=[");

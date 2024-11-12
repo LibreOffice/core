@@ -113,7 +113,7 @@ namespace toolkit
 
     sal_Int32 WindowStyleSettings::ImplGetStyleColor( Color const & (StyleSettings::*i_pGetter)() const ) const
     {
-        const VclPtr<vcl::Window>& pWindow = pOwningWindow->GetWindow();
+        const VclPtr<vcl::Window> pWindow = pOwningWindow->GetWindow();
         const AllSettings aAllSettings = pWindow->GetSettings();
         const StyleSettings& aStyleSettings = aAllSettings.GetStyleSettings();
         return sal_Int32((aStyleSettings.*i_pGetter)());
@@ -131,7 +131,7 @@ namespace toolkit
 
     FontDescriptor WindowStyleSettings::ImplGetStyleFont( vcl::Font const & (StyleSettings::*i_pGetter)() const ) const
     {
-        const VclPtr<vcl::Window>& pWindow = pOwningWindow->GetWindow();
+        const VclPtr<vcl::Window> pWindow = pOwningWindow->GetWindow();
         const AllSettings aAllSettings = pWindow->GetSettings();
         const StyleSettings& aStyleSettings = aAllSettings.GetStyleSettings();
         return VCLUnoHelper::CreateFontDescriptor( (aStyleSettings.*i_pGetter)() );
@@ -375,7 +375,7 @@ namespace toolkit
     ::sal_Int32 SAL_CALL WindowStyleSettings::getFaceGradientColor()
     {
         StyleMethodGuard aGuard( pOwningWindow );
-        const VclPtr<vcl::Window>& pWindow = pOwningWindow->GetWindow();
+        const VclPtr<vcl::Window> pWindow = pOwningWindow->GetWindow();
         const AllSettings aAllSettings = pWindow->GetSettings();
         const StyleSettings& aStyleSettings = aAllSettings.GetStyleSettings();
         return sal_Int32(aStyleSettings.GetFaceGradientColor());
@@ -665,7 +665,7 @@ namespace toolkit
     ::sal_Int32 SAL_CALL WindowStyleSettings::getSeparatorColor()
     {
         StyleMethodGuard aGuard( pOwningWindow );
-        const VclPtr<vcl::Window>& pWindow = pOwningWindow->GetWindow();
+        const VclPtr<vcl::Window> pWindow = pOwningWindow->GetWindow();
         const AllSettings aAllSettings = pWindow->GetSettings();
         const StyleSettings& aStyleSettings = aAllSettings.GetStyleSettings();
         return sal_Int32(aStyleSettings.GetSeparatorColor());
@@ -731,7 +731,7 @@ namespace toolkit
     sal_Bool SAL_CALL WindowStyleSettings::getHighContrastMode()
     {
         StyleMethodGuard aGuard( pOwningWindow );
-        const VclPtr<vcl::Window>& pWindow = pOwningWindow->GetWindow();
+        const VclPtr<vcl::Window> pWindow = pOwningWindow->GetWindow();
         const AllSettings aAllSettings = pWindow->GetSettings();
         const StyleSettings& aStyleSettings = aAllSettings.GetStyleSettings();
         return aStyleSettings.GetHighContrastMode();

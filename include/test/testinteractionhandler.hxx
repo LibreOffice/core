@@ -76,13 +76,13 @@ public:
     {
         mbPasswordRequested = false;
 
-        css::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> const &rContinuations = rRequest->getContinuations();
+        css::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> const aContinuations = rRequest->getContinuations();
         css::uno::Any const aRequest(rRequest->getRequest());
 
-        if (handlePasswordRequest(rContinuations, aRequest))
+        if (handlePasswordRequest(aContinuations, aRequest))
             return true;
 
-        for (auto const & cont : rContinuations)
+        for (auto const & cont : aContinuations)
         {
             css::uno::Reference<css::task::XInteractionApprove> xApprove(cont, css::uno::UNO_QUERY);
             if (xApprove.is())

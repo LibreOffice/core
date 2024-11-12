@@ -193,12 +193,12 @@ public:
 SvtLinguConfigItem::SvtLinguConfigItem() :
     utl::ConfigItem( u"Office.Linguistic"_ustr )
 {
-    const uno::Sequence< OUString > &rPropertyNames = GetPropertyNames();
-    LoadOptions( rPropertyNames );
+    const uno::Sequence< OUString > aPropertyNames = GetPropertyNames();
+    LoadOptions( aPropertyNames );
     ClearModified();
 
     // request notify events when properties change
-    EnableNotification( rPropertyNames );
+    EnableNotification( aPropertyNames );
 }
 
 void SvtLinguConfigItem::Notify( const uno::Sequence< OUString > &rPropertyNames )

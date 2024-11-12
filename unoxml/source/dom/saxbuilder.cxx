@@ -180,8 +180,8 @@ namespace DOM
         }
 
         Reference< XElement > aElement;
-        const OUString& aPrefix(SvXMLImport::getNamespacePrefixFromToken(nElement, nullptr));
-        const OUString& aURI( SvXMLImport::getNamespaceURIFromToken( nElement ) );
+        const OUString aPrefix(SvXMLImport::getNamespacePrefixFromToken(nElement, nullptr));
+        const OUString aURI( SvXMLImport::getNamespaceURIFromToken( nElement ) );
         OUString aQualifiedName( SvXMLImport::getNameFromToken( nElement ) );
         if( !aPrefix.isEmpty() )
             aQualifiedName = aPrefix + SvXMLImport::aNamespaceSeparator + aQualifiedName;
@@ -246,8 +246,8 @@ namespace DOM
         for (auto &it : sax_fastparser::castToFastAttributeList( xAttribs ))
         {
             sal_Int32 nAttrToken = it.getToken();
-            const OUString& aAttrPrefix(SvXMLImport::getNamespacePrefixFromToken(nAttrToken, nullptr));
-            const OUString& aAttrURI( SvXMLImport::getNamespaceURIFromToken( nAttrToken ) );
+            const OUString aAttrPrefix(SvXMLImport::getNamespacePrefixFromToken(nAttrToken, nullptr));
+            const OUString aAttrURI( SvXMLImport::getNamespaceURIFromToken( nAttrToken ) );
             OUString aAttrQualifiedName( SvXMLImport::getNameFromToken( nAttrToken ) );
             if( !aAttrPrefix.isEmpty() )
                 aAttrQualifiedName = aAttrPrefix + SvXMLImport::aNamespaceSeparator + aAttrQualifiedName;
@@ -297,7 +297,7 @@ namespace DOM
 
         Reference< XElement > aElement(aNode, UNO_QUERY);
         OUString aRefName;
-        const OUString& aPrefix = aElement->getPrefix();
+        const OUString aPrefix = aElement->getPrefix();
         if (!aPrefix.isEmpty())
             aRefName = aPrefix + SvXMLImport::aNamespaceSeparator + aElement->getTagName();
         else

@@ -175,7 +175,7 @@ void test::AccessibleTestBase::collectText(
     const uno::Reference<accessibility::XAccessibleContext>& xContext, rtl::OUStringBuffer& buffer,
     bool onlyChildren)
 {
-    const auto& roleName = AccessibilityTools::getRoleName(xContext->getAccessibleRole());
+    const auto roleName = AccessibilityTools::getRoleName(xContext->getAccessibleRole());
 
     std::cout << "collecting text for child of role " << roleName << "..." << std::endl;
 
@@ -243,7 +243,7 @@ test::AccessibleTestBase::getFirstRelationTargetOfType(
     {
         for (sal_Int32 i = 0; i < relset->getRelationCount(); ++i)
         {
-            const auto& rel = relset->getRelation(i);
+            const auto rel = relset->getRelation(i);
             if (rel.RelationType == relationType)
             {
                 for (const uno::Reference<accessibility::XAccessible>& targetAccessible :
@@ -280,7 +280,7 @@ void test::AccessibleTestBase::dumpA11YTree(
                 if (i > 0)
                     std::cout << ", ";
 
-                const auto& rel = xRelSet->getRelation(i);
+                const auto rel = xRelSet->getRelation(i);
                 std::cout << "(type=" << AccessibilityTools::getRelationTypeName(rel.RelationType)
                           << " (" << static_cast<int>(rel.RelationType) << ")";
                 std::cout << " targets=[";

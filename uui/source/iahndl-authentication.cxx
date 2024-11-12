@@ -656,7 +656,7 @@ UUIInteractionHelper::handlePasswordRequest(
     // parameters to be filled for the call to handlePasswordRequest_
     uno::Reference<awt::XWindow> xParent = getParentXWindow();
     task::PasswordRequestMode nMode = task::PasswordRequestMode_PASSWORD_ENTER;
-    uno::Sequence< uno::Reference< task::XInteractionContinuation > > const & rContinuations = rRequest->getContinuations();
+    uno::Sequence< uno::Reference< task::XInteractionContinuation > > const aContinuations = rRequest->getContinuations();
     OUString aDocumentName;
     sal_uInt16 nMaxPasswordLen  = 0;        // any length
     bool bIsPasswordToModify    = false;
@@ -715,7 +715,7 @@ UUIInteractionHelper::handlePasswordRequest(
 
     if (bDoHandleRequest)
     {
-        handlePasswordRequest_( Application::GetFrameWeld(xParent), nMode, rContinuations,
+        handlePasswordRequest_( Application::GetFrameWeld(xParent), nMode, aContinuations,
                 aDocumentName, nMaxPasswordLen, bIsPasswordToModify );
         return true;
     }
