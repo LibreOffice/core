@@ -511,7 +511,7 @@ public:
 
     bool shouldShowExpander() override
     {
-        auto const& xSuperClasses = mxClass->getSuperclasses();
+        auto const xSuperClasses = mxClass->getSuperclasses();
         return xSuperClasses.getLength() > 2
                || (xSuperClasses.getLength() == 1 && !isXInterface(xSuperClasses[0]));
     }
@@ -522,7 +522,7 @@ public:
     void fillChildren(std::unique_ptr<weld::TreeView>& rTree,
                       const weld::TreeIter* pParent) override
     {
-        auto const& xSuperClasses = mxClass->getSuperclasses();
+        auto const xSuperClasses = mxClass->getSuperclasses();
         for (auto const& xSuper : xSuperClasses)
         {
             if (!isXInterface(xSuper))
@@ -745,7 +745,7 @@ void GenericPropertiesNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree,
     if (!xInvocation.is())
         return;
 
-    auto const& xInvocationAccess = xInvocation->getIntrospection();
+    auto const xInvocationAccess = xInvocation->getIntrospection();
     if (!xInvocationAccess.is())
         return;
 

@@ -592,7 +592,7 @@ void SfxNotebookBar::ShowMenubar(bool bShow)
 
             if ( eApp == eCurrentApp )
             {
-                const Reference<frame::XLayoutManager>& xLayoutManager =
+                const Reference<frame::XLayoutManager> xLayoutManager =
                                                         lcl_getLayoutManager( xFrame );
 
                 if (xLayoutManager.is())
@@ -623,7 +623,7 @@ void SfxNotebookBar::ShowMenubar(SfxViewFrame const * pViewFrame, bool bShow)
     Reference<frame::XFrame> xFrame = pViewFrame->GetFrame().GetFrameInterface();
     if (xFrame.is())
     {
-        const Reference<frame::XLayoutManager>& xLayoutManager = lcl_getLayoutManager(xFrame);
+        const Reference<frame::XLayoutManager> xLayoutManager = lcl_getLayoutManager(xFrame);
         if (xLayoutManager.is())
         {
             if (xLayoutManager->getElement(MENUBAR_STR).is())
@@ -648,7 +648,7 @@ void SfxNotebookBar::ToggleMenubar()
     if (!xFrame.is())
         return;
 
-    const Reference<frame::XLayoutManager>& xLayoutManager =
+    const Reference<frame::XLayoutManager> xLayoutManager =
                                             lcl_getLayoutManager(xFrame);
 
     bool bShow = true;

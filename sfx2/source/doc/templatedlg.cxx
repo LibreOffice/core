@@ -1238,7 +1238,7 @@ static std::vector<OUString> lcl_getAllFactoryURLs ()
 {
     SvtModuleOptions aModOpt;
     std::vector<OUString> aList;
-    const css::uno::Sequence<OUString> &aServiceNames = aModOpt.GetAllServiceNames();
+    const css::uno::Sequence<OUString> aServiceNames = aModOpt.GetAllServiceNames();
 
     for( const auto& rServiceName : aServiceNames )
     {

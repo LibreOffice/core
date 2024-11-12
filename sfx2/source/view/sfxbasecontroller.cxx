@@ -681,7 +681,7 @@ GetSlotDispatchWithFallback(SfxViewFrame* pViewFrame, const css::util::URL& aURL
     // try to find parent SfxViewFrame
     if (const auto& xOwnFrame = pViewFrame->GetFrame().GetFrameInterface())
     {
-        if (const auto& xParentFrame = xOwnFrame->getCreator())
+        if (const auto xParentFrame = xOwnFrame->getCreator())
         {
             // TODO/LATER: in future probably SfxViewFrame hierarchy should be the same as XFrame hierarchy
             // SfxViewFrame* pParentFrame = pViewFrame->GetParentViewFrame();

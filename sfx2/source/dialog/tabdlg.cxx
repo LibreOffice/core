@@ -430,9 +430,9 @@ IMPL_LINK_NOARG(SfxTabDialogController, ResetHdl, weld::Button&, void)
         m_xExampleSet.reset(new SfxItemSet(*m_pSet));
 
     const SfxItemPool* pPool = m_pSet->GetPool();
-    const WhichRangesContainer& pTmpRanges = ((*it)->fnGetRanges)();
+    const WhichRangesContainer aTmpRanges = ((*it)->fnGetRanges)();
 
-    for (const auto & rPair : pTmpRanges)
+    for (const auto & rPair : aTmpRanges)
     {
         // Correct Range with multiple values
         sal_uInt16 nTmp = rPair.first, nTmpEnd = rPair.second;
@@ -483,10 +483,10 @@ IMPL_LINK_NOARG(SfxTabDialogController, BaseFmtHdl, weld::Button&, void)
         m_xExampleSet.reset(new SfxItemSet(*m_pSet));
 
     const SfxItemPool* pPool = m_pSet->GetPool();
-    const WhichRangesContainer& pTmpRanges = ((*it)->fnGetRanges)();
+    const WhichRangesContainer aTmpRanges = ((*it)->fnGetRanges)();
     SfxItemSet aTmpSet(*m_xExampleSet);
 
-    for (const auto& rPair : pTmpRanges)
+    for (const auto& rPair : aTmpRanges)
     {
         // Correct Range with multiple values
         sal_uInt16 nTmp = rPair.first, nTmpEnd = rPair.second;
@@ -716,9 +716,9 @@ const WhichRangesContainer & SfxTabDialogController::GetInputRanges(const SfxIte
 
         if ( elem->fnGetRanges )
         {
-            const WhichRangesContainer& pTmpRanges = (elem->fnGetRanges)();
+            const WhichRangesContainer aTmpRanges = (elem->fnGetRanges)();
 
-            for (const auto & rPair : pTmpRanges)
+            for (const auto & rPair : aTmpRanges)
             {
                 sal_uInt16 nWidFrom = rPool.GetWhichIDFromSlotID(rPair.first);
                 sal_uInt16 nWidTo = rPool.GetWhichIDFromSlotID(rPair.second);

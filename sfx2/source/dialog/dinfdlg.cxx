@@ -1115,7 +1115,7 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
     // determine context symbol
     aURL.SetSmartProtocol( INetProtocol::File );
     aURL.SetSmartURL( aFactory);
-    const OUString& rMainURL = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+    const OUString aMainURL = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
     OUString aImage = SvFileInformationManager::GetImageId( aURL, true );
     m_xBmp->set_from_icon_name(aImage);
 
@@ -1130,7 +1130,7 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
         aSizeText = CreateSizeText( nSize );
     m_xShowSizeFT->set_label( aSizeText );
 
-    OUString aDescription = SvFileInformationManager::GetDescription( INetURLObject(rMainURL) );
+    OUString aDescription = SvFileInformationManager::GetDescription( INetURLObject(aMainURL) );
     if ( aDescription.isEmpty() )
         aDescription = SfxResId( STR_SFX_NEWOFFICEDOC );
     m_xShowTypeFT->set_label( aDescription );
@@ -1144,7 +1144,7 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
 
         // Disable setting/changing password on text files.
         // Perhaps this needs to be done for both Online and Desktop.
-        OUString sExtension(INetURLObject(rMainURL).getExtension());
+        OUString sExtension(INetURLObject(aMainURL).getExtension());
         if (!sExtension.isEmpty())
         {
             sExtension = sExtension.toAsciiLowerCase();

@@ -1814,7 +1814,7 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
         OUString sPrintedBy(SfxResId(STR_SFX_FILTERNAME_PDF));
         if (pDocShell && pDocShell->IsUseUserData())
         {
-            const OUString& sFullName = SvtUserOptions().GetFullName();
+            const OUString sFullName = SvtUserOptions().GetFullName();
             if (!sFullName.isEmpty())
                 sPrintedBy += ": " + sFullName;
         }

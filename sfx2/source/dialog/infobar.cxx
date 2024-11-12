@@ -463,9 +463,9 @@ void SfxInfoBarContainerWindow::Resize()
     if (m_bResizing)
         return;
     m_bResizing = true;
-    const Size& rOrigSize = GetSizePixel();
-    auto nOrigWidth = rOrigSize.getWidth();
-    auto nOrigHeight = rOrigSize.getHeight();
+    const Size aWindowOrigSize = GetSizePixel();
+    auto nOrigWidth = aWindowOrigSize.getWidth();
+    auto nOrigHeight = aWindowOrigSize.getHeight();
 
     tools::Long nHeight = 0;
 

@@ -845,7 +845,7 @@ BitmapEx TemplateLocalView::scaleImg (const BitmapEx &rImg, tools::Long width, t
 bool TemplateLocalView::IsDefaultTemplate(const OUString& rPath)
 {
     SvtModuleOptions aModOpt;
-    const css::uno::Sequence<OUString> &aServiceNames = aModOpt.GetAllServiceNames();
+    const css::uno::Sequence<OUString> aServiceNames = aModOpt.GetAllServiceNames();
 
     return std::any_of(aServiceNames.begin(), aServiceNames.end(), [&rPath](const OUString& rName) {
         return SfxObjectFactory::GetStandardTemplate(rName).match(rPath); });

@@ -89,17 +89,17 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
     HTMLOutFuncs::Out_AsciiTag( rStrm, OOO_STRING_SVTOOLS_HTML_title );
     if( i_xDocProps.is() )
     {
-        const OUString& rTitle = i_xDocProps->getTitle();
-        if( !rTitle.isEmpty() )
-            HTMLOutFuncs::Out_String( rStrm, rTitle, pNonConvertableChars );
+        const OUString aTitle = i_xDocProps->getTitle();
+        if( !aTitle.isEmpty() )
+            HTMLOutFuncs::Out_String( rStrm, aTitle, pNonConvertableChars );
     }
     HTMLOutFuncs::Out_AsciiTag( rStrm, OOO_STRING_SVTOOLS_HTML_title, false );
 
     // Target-Frame
     if( i_xDocProps.is() )
     {
-        const OUString& rTarget = i_xDocProps->getDefaultTarget();
-        if( !rTarget.isEmpty() )
+        const OUString aTarget = i_xDocProps->getDefaultTarget();
+        if( !aTarget.isEmpty() )
         {
             rStrm.WriteOString( SAL_NEWLINE_STRING );
             if( pIndent )
@@ -107,7 +107,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
 
             rStrm.WriteOString( "<" OOO_STRING_SVTOOLS_HTML_base " "
                 OOO_STRING_SVTOOLS_HTML_O_target "=\"" );
-            HTMLOutFuncs::Out_String( rStrm, rTarget, pNonConvertableChars )
+            HTMLOutFuncs::Out_String( rStrm, aTarget, pNonConvertableChars )
                .WriteOString( "\">" );
         }
     }
@@ -129,11 +129,11 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
         OUString sContent = OUString::number(
                             i_xDocProps->getAutoloadSecs() );
 
-        const OUString &rReloadURL = i_xDocProps->getAutoloadURL();
-        if( !rReloadURL.isEmpty() )
+        const OUString aReloadURL = i_xDocProps->getAutoloadURL();
+        if( !aReloadURL.isEmpty() )
         {
             sContent += ";URL=" + URIHelper::simpleNormalizedMakeRelative(
-                          rBaseURL, rReloadURL);
+                          rBaseURL, aReloadURL);
         }
 
         OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_refresh, sContent, true,
@@ -141,9 +141,9 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
     }
 
     // Author
-    const OUString& rAuthor = i_xDocProps->getAuthor();
-    if( !rAuthor.isEmpty() )
-        OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_author, rAuthor, false,
+    const OUString aAuthor = i_xDocProps->getAuthor();
+    if( !aAuthor.isEmpty() )
+        OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_author, aAuthor, false,
                  pNonConvertableChars );
 
     // created
@@ -155,9 +155,9 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
              pNonConvertableChars );
 
     // changedby
-    const OUString& rChangedBy = i_xDocProps->getModifiedBy();
-    if( !rChangedBy.isEmpty() )
-        OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_changedby, rChangedBy, false,
+    const OUString aChangedBy = i_xDocProps->getModifiedBy();
+    if( !aChangedBy.isEmpty() )
+        OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_changedby, aChangedBy, false,
                  pNonConvertableChars );
 
     // changed
@@ -168,15 +168,15 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
              pNonConvertableChars );
 
     // Subject
-    const OUString& rTheme = i_xDocProps->getSubject();
-    if( !rTheme.isEmpty() )
-        OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_classification, rTheme, false,
+    const OUString aTheme = i_xDocProps->getSubject();
+    if( !aTheme.isEmpty() )
+        OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_classification, aTheme, false,
                  pNonConvertableChars );
 
     // Description
-    const OUString& rComment = i_xDocProps->getDescription();
-    if( !rComment.isEmpty() )
-        OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_description, rComment, false,
+    const OUString aComment = i_xDocProps->getDescription();
+    if( !aComment.isEmpty() )
+        OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_description, aComment, false,
                  pNonConvertableChars);
 
     // Keywords

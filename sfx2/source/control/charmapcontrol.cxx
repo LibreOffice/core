@@ -311,7 +311,7 @@ void SfxCharmapContainer::updateRecentCharControl()
 void SfxCharmapContainer::updateRecentCharacterList(const OUString& sTitle, const OUString& rFont)
 {
     // if recent char to be added is already in list, remove it
-    if( const auto& [itChar, itChar2] = getRecentChar(sTitle, rFont);
+    if( const auto [itChar, itChar2] = getRecentChar(sTitle, rFont);
         itChar != m_aRecentCharList.end() &&  itChar2 != m_aRecentCharFontList.end() )
     {
         m_aRecentCharList.erase( itChar );
@@ -349,7 +349,7 @@ void SfxCharmapContainer::updateRecentCharacterList(const OUString& sTitle, cons
 void SfxCharmapContainer::updateFavCharacterList(const OUString& sTitle, const OUString& rFont)
 {
     // if Fav char to be added is already in list, remove it
-    if( const auto& [itChar, itChar2] = getFavChar(sTitle, rFont);
+    if( const auto [itChar, itChar2] = getFavChar(sTitle, rFont);
         itChar != m_aFavCharList.end() &&  itChar2 != m_aFavCharFontList.end() )
     {
         m_aFavCharList.erase( itChar );
@@ -385,7 +385,7 @@ void SfxCharmapContainer::updateFavCharacterList(const OUString& sTitle, const O
 void SfxCharmapContainer::deleteFavCharacterFromList(std::u16string_view sTitle, std::u16string_view rFont)
 {
     // if Fav char is found, remove it
-    if( const auto& [itChar, itChar2] = getFavChar(sTitle, rFont);
+    if( const auto [itChar, itChar2] = getFavChar(sTitle, rFont);
         itChar != m_aFavCharList.end() &&  itChar2 != m_aFavCharFontList.end() )
     {
         m_aFavCharList.erase( itChar );
@@ -411,7 +411,7 @@ void SfxCharmapContainer::deleteFavCharacterFromList(std::u16string_view sTitle,
 
 bool SfxCharmapContainer::isFavChar(std::u16string_view sTitle, std::u16string_view rFont)
 {
-    const auto& [itChar, itFont] = getFavChar(sTitle, rFont);
+    const auto [itChar, itFont] = getFavChar(sTitle, rFont);
     return itChar != m_aFavCharList.end() && itFont != m_aFavCharFontList.end();
 }
 
@@ -421,7 +421,7 @@ IMPL_LINK(SfxCharmapContainer, RecentClearClickHdl, SvxCharView*, rView, void)
     OUString sFont = rView->GetFont().GetFamilyName();
 
     // if recent char to be added is already in list, remove it
-    if( const auto& [itChar, itChar2] = getRecentChar(sTitle, sFont);
+    if( const auto [itChar, itChar2] = getRecentChar(sTitle, sFont);
         itChar != m_aRecentCharList.end() &&  itChar2 != m_aRecentCharFontList.end() )
     {
         m_aRecentCharList.erase( itChar );
