@@ -129,14 +129,14 @@ namespace sdr::overlay
         {
             if(getOverlayManager() && maBaseRange.isEmpty())
             {
-                const drawinglayer::primitive2d::Primitive2DContainer& rSequence = getOverlayObjectPrimitive2DSequence();
+                const drawinglayer::primitive2d::Primitive2DContainer aSequence = getOverlayObjectPrimitive2DSequence();
 
-                if(!rSequence.empty())
+                if(!aSequence.empty())
                 {
                     const drawinglayer::geometry::ViewInformation2D & aViewInformation2D(getOverlayManager()->getCurrentViewInformation2D());
 
                     const_cast< sdr::overlay::OverlayObject* >(this)->maBaseRange =
-                        rSequence.getB2DRange(aViewInformation2D);
+                        aSequence.getB2DRange(aViewInformation2D);
                 }
             }
 

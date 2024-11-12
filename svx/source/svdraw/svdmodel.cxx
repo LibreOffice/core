@@ -881,7 +881,7 @@ void SdrModel::ImpSetUIUnit()
     sal_Int32 nMul = 1, nDiv = 1;
     if (eFrom != o3tl::Length::invalid && eTo != o3tl::Length::invalid)
     {
-        const auto& [mul, div] = o3tl::getConversionMulDiv(eFrom, eTo);
+        const auto [mul, div] = o3tl::getConversionMulDiv(eFrom, eTo);
         nMul = mul;
         nDiv = div;
     }

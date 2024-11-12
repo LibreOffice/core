@@ -45,13 +45,13 @@ OString lcl_LOKGetCommentPayload(CommentNotificationType nType, Annotation& rAnn
             aJsonWriter.put("text", rAnnotation.GetText());
             SdrPage const* pPage = rAnnotation.getPage();
             aJsonWriter.put("parthash", pPage ? OString::number(pPage->GetUniqueID()) : OString());
-            geometry::RealPoint2D const& rPoint = rAnnotation.GetPosition();
-            geometry::RealSize2D const& rSize = rAnnotation.GetSize();
+            geometry::RealPoint2D const aPoint = rAnnotation.GetPosition();
+            geometry::RealSize2D const aSize = rAnnotation.GetSize();
             tools::Rectangle aRectangle(
-                Point(std::round(o3tl::toTwips(rPoint.X, o3tl::Length::mm)),
-                      std::round(o3tl::toTwips(rPoint.Y, o3tl::Length::mm))),
-                Size(std::round(o3tl::toTwips(rSize.Width, o3tl::Length::mm)),
-                     std::round(o3tl::toTwips(rSize.Height, o3tl::Length::mm))));
+                Point(std::round(o3tl::toTwips(aPoint.X, o3tl::Length::mm)),
+                      std::round(o3tl::toTwips(aPoint.Y, o3tl::Length::mm))),
+                Size(std::round(o3tl::toTwips(aSize.Width, o3tl::Length::mm)),
+                     std::round(o3tl::toTwips(aSize.Height, o3tl::Length::mm))));
             aJsonWriter.put("rectangle", aRectangle.toString());
         }
     }

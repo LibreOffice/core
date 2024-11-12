@@ -471,7 +471,7 @@ void SvxFillToolBoxControl::Update()
                         rtl::Reference<XHatchList> xHatchList = new XHatchList( u""_ustr, u""_ustr/*TODO?*/ );
                         xHatchList->Insert(std::make_unique<XHatchEntry>(mpHatchItem->GetHatchValue(), aTmpStr));
                         xHatchList->SetDirty( false );
-                        const BitmapEx & aBmp = xHatchList->GetUiBitmap( 0 );
+                        const BitmapEx aBmp = xHatchList->GetUiBitmap( 0 );
 
                         if( !aBmp.IsEmpty() )
                         {

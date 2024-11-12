@@ -87,11 +87,11 @@ namespace sdr::overlay
                     {
                         if(pCandidate->isHittable())
                         {
-                            const drawinglayer::primitive2d::Primitive2DContainer& rSequence = pCandidate->getOverlayObjectPrimitive2DSequence();
+                            const drawinglayer::primitive2d::Primitive2DContainer aSequence = pCandidate->getOverlayObjectPrimitive2DSequence();
 
-                            if(!rSequence.empty())
+                            if(!aSequence.empty())
                             {
-                                aHitTestProcessor2D.process(rSequence);
+                                aHitTestProcessor2D.process(aSequence);
 
                                 if(aHitTestProcessor2D.getHit())
                                 {

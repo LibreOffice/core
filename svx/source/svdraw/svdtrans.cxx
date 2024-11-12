@@ -573,7 +573,7 @@ tools::Long BigMulDiv(tools::Long nVal, tools::Long nMul, tools::Long nDiv)
 
 static FrPair toPair(o3tl::Length eFrom, o3tl::Length eTo)
 {
-    const auto& [nNum, nDen] = o3tl::getConversionMulDiv(eFrom, eTo);
+    const auto [nNum, nDen] = o3tl::getConversionMulDiv(eFrom, eTo);
     return FrPair(nNum, nDen);
 }
 
@@ -653,7 +653,7 @@ void SdrFormatter::Undirty()
     const o3tl::Length eTo = MapToO3tlLength(m_eDstMU, o3tl::Length::invalid);
     if (eFrom != o3tl::Length::invalid && eTo != o3tl::Length::invalid)
     {
-        const auto& [mul, div] = o3tl::getConversionMulDiv(eFrom, eTo);
+        const auto [mul, div] = o3tl::getConversionMulDiv(eFrom, eTo);
         sal_Int64 nMul = mul;
         sal_Int64 nDiv = div;
         short nComma = 0;

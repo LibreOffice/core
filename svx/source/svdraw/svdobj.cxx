@@ -2844,7 +2844,7 @@ void SdrObject::SendUserCall(SdrUserCallType eUserCall, const tools::Rectangle& 
 
 void SdrObject::setUnoShape( const uno::Reference< drawing::XShape >& _rxUnoShape )
 {
-    const uno::Reference< uno::XInterface>& xOldUnoShape( maWeakUnoShape );
+    const uno::Reference< uno::XInterface> xOldUnoShape( maWeakUnoShape );
     // the UNO shape would be gutted by the following code; return early
     if ( _rxUnoShape == xOldUnoShape )
     {

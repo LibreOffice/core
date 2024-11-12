@@ -149,11 +149,11 @@ bool ViewObjectContactOfSdrObj::isPrimitiveVisible(const DisplayInfo& rDisplayIn
     // painted on the page where it is anchored)
     // Note that we cannot check the ViewInformation2D ViewPort for this
     // because it is only the part of the page that is currently visible.
-    basegfx::B2IPoint const& rAnchor(vcl::unotools::b2IPointFromPoint(getSdrObject().GetAnchorPos()));
-    if (rAnchor.getX() || rAnchor.getY()) // only Writer sets anchor position
+    basegfx::B2IPoint const aAnchor(vcl::unotools::b2IPointFromPoint(getSdrObject().GetAnchorPos()));
+    if (aAnchor.getX() || aAnchor.getY()) // only Writer sets anchor position
     {
         if (!rDisplayInfo.GetWriterPageFrame().isEmpty() &&
-            !rDisplayInfo.GetWriterPageFrame().isInside(rAnchor))
+            !rDisplayInfo.GetWriterPageFrame().isInside(aAnchor))
         {
             return false;
         }

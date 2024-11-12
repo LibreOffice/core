@@ -255,8 +255,8 @@ rtl::Reference<SdrObject> IMapWindow::CreateObj( const IMapObject* pIMapObj )
             }
             else
             {
-                const tools::Polygon& rPoly = pIMapPolyObj->GetPolygon( false );
-                tools::Polygon aDrawPoly( rPoly );
+                const tools::Polygon aPoly = pIMapPolyObj->GetPolygon( false );
+                tools::Polygon aDrawPoly( aPoly );
 
                 // clipped on CanvasPane
                 aDrawPoly.Clip( aClipRect );

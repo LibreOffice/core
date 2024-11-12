@@ -2462,7 +2462,7 @@ bool SdrTableObj::createTableEdgesJson(boost::property_tree::ptree & rJsonRoot)
         aTableColumns.put("tableOffset", o3tl::toTwips(aRect.Left(), o3tl::Length::mm100));
 
         boost::property_tree::ptree aEntries;
-        auto const & aEdges = mpImpl->mpLayouter->getVerticalEdges();
+        auto const aEdges = mpImpl->mpLayouter->getVerticalEdges();
         for (auto & rEdge : aEdges)
         {
             if (rEdge.nIndex == 0)
@@ -2492,7 +2492,7 @@ bool SdrTableObj::createTableEdgesJson(boost::property_tree::ptree & rJsonRoot)
         aTableRows.put("tableOffset", o3tl::toTwips(aRect.Top(), o3tl::Length::mm100));
 
         boost::property_tree::ptree aEntries;
-        auto const & aEdges = mpImpl->mpLayouter->getHorizontalEdges();
+        auto const aEdges = mpImpl->mpLayouter->getHorizontalEdges();
         for (auto & rEdge : aEdges)
         {
             if (rEdge.nIndex == 0)

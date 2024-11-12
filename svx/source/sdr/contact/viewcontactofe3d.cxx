@@ -84,7 +84,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfE3d::impCreateWithG
         {
             basegfx::B3DVector aLightNormal;
             const double fShadowSlant(pVCOfE3DScene->getSdrSceneAttribute().getShadowSlant());
-            const basegfx::B3DRange& rAllContentRange = pVCOfE3DScene->getAllContentRange3D();
+            const basegfx::B3DRange aAllContentRange = pVCOfE3DScene->getAllContentRange3D();
             drawinglayer::geometry::ViewInformation3D aViewInformation3D(pVCOfE3DScene->getViewInformation3D());
 
             if(!pVCOfE3DScene->getSdrLightingAttribute().getLightVector().empty())
@@ -116,7 +116,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfE3d::impCreateWithG
                     std::move(aViewInformation3D),
                     aLightNormal,
                     fShadowSlant,
-                    rAllContentRange));
+                    aAllContentRange));
 
             xRetval = drawinglayer::primitive2d::Primitive2DContainer { xReference };
         }

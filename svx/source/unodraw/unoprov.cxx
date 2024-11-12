@@ -1659,7 +1659,7 @@ static bool SvxUnoConvertResourceStringToApi(const TranslateId* pSourceResIds, c
 
     for (int i = 0; i < nCount; ++i)
     {
-        const OUString & aCompare = SvxResId(pSourceResIds[i]);
+        const OUString aCompare = SvxResId(pSourceResIds[i]);
         if( aShortString == aCompare )
         {
             rString = rString.replaceAt( 0, aShortString.size(), pDestResIds[i] );

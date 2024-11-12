@@ -583,8 +583,8 @@ OUString AccessibleControlShape::CreateAccessibleName()
     if (sName.isEmpty())
     {
         // check if we can obtain the "Name" resp. "Label" property from the model
-        const OUString& rAccNameProperty = lcl_getPreferredAccNameProperty( m_xModelPropsMeta );
-        sName = getControlModelStringProperty( rAccNameProperty );
+        const OUString aAccNameProperty = lcl_getPreferredAccNameProperty( m_xModelPropsMeta );
+        sName = getControlModelStringProperty( aAccNameProperty );
         if ( !sName.getLength() )
         {   // no -> use the default
             sName = AccessibleShape::CreateAccessibleName();

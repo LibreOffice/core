@@ -63,9 +63,9 @@ namespace sdr::overlay
 
                 if(rCandidate.isVisible())
                 {
-                    const drawinglayer::primitive2d::Primitive2DContainer& rSequence = rCandidate.getOverlayObjectPrimitive2DSequence();
+                    const drawinglayer::primitive2d::Primitive2DContainer aSequence = rCandidate.getOverlayObjectPrimitive2DSequence();
 
-                    if(!rSequence.empty())
+                    if(!aSequence.empty())
                     {
                         if(rRange.overlaps(rCandidate.getBaseRange()))
                         {
@@ -85,7 +85,7 @@ namespace sdr::overlay
                                 rDestinationDevice.SetDrawMode(nOriginalDrawMode | DrawModeFlags::SettingsForSelection);
                             }
 
-                            pProcessor->process(rSequence);
+                            pProcessor->process(aSequence);
 
                             if (bIsHighContrastSelection)
                             {

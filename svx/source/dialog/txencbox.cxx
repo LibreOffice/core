@@ -218,18 +218,18 @@ void SvxTextEncodingTreeView::InsertTextEncoding( const rtl_TextEncoding nEnc,
 
 void SvxTextEncodingBox::InsertTextEncoding( const rtl_TextEncoding nEnc )
 {
-    const OUString& rEntry = SvxTextEncodingTable::GetTextString(nEnc);
-    if (!rEntry.isEmpty())
-        InsertTextEncoding( nEnc, rEntry );
+    const OUString aEntry = SvxTextEncodingTable::GetTextString(nEnc);
+    if (!aEntry.isEmpty())
+        InsertTextEncoding( nEnc, aEntry );
     else
         SAL_WARN( "svx.dialog", "SvxTextEncodingBox::InsertTextEncoding: no resource string for text encoding: " << static_cast<sal_Int32>( nEnc ) );
 }
 
 void SvxTextEncodingTreeView::InsertTextEncoding( const rtl_TextEncoding nEnc )
 {
-    const OUString& rEntry = SvxTextEncodingTable::GetTextString(nEnc);
-    if (!rEntry.isEmpty())
-        InsertTextEncoding( nEnc, rEntry );
+    const OUString aEntry = SvxTextEncodingTable::GetTextString(nEnc);
+    if (!aEntry.isEmpty())
+        InsertTextEncoding( nEnc, aEntry );
     else
         SAL_WARN( "svx.dialog", "SvxTextEncodingTreeView::InsertTextEncoding: no resource string for text encoding: " << static_cast<sal_Int32>( nEnc ) );
 }

@@ -300,11 +300,11 @@ std::optional<Color> GetDraftFillColor(const SfxItemSet& rSet)
                 {
                     for(sal_uInt32 nX(0); nX < nWidth; nX += nXStep)
                     {
-                        const BitmapColor& rCol2 = pAccess->GetColor(nY, nX);
+                        const BitmapColor aCol2 = pAccess->GetColor(nY, nX);
 
-                        nRt += rCol2.GetRed();
-                        nGn += rCol2.GetGreen();
-                        nBl += rCol2.GetBlue();
+                        nRt += aCol2.GetRed();
+                        nGn += aCol2.GetGreen();
+                        nBl += aCol2.GetBlue();
                         nCount++;
                     }
                 }

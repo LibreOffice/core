@@ -85,10 +85,10 @@ ImplConnectMarkerOverlay::ImplConnectMarkerOverlay(const SdrCreateView& rView, S
             for(sal_uInt16 i(0); i < 4; i++)
             {
                 SdrGluePoint aGluePoint(rObject.GetVertexGluePoint(i));
-                const Point& rPosition = aGluePoint.GetAbsolutePos(rObject);
+                const Point aPosition = aGluePoint.GetAbsolutePos(rObject);
 
-                basegfx::B2DPoint aTopLeft(rPosition.X() - aHalfLogicSize.Width(), rPosition.Y() - aHalfLogicSize.Height());
-                basegfx::B2DPoint aBottomRight(rPosition.X() + aHalfLogicSize.Width(), rPosition.Y() + aHalfLogicSize.Height());
+                basegfx::B2DPoint aTopLeft(aPosition.X() - aHalfLogicSize.Width(), aPosition.Y() - aHalfLogicSize.Height());
+                basegfx::B2DPoint aBottomRight(aPosition.X() + aHalfLogicSize.Width(), aPosition.Y() + aHalfLogicSize.Height());
 
                 basegfx::B2DPolygon aTempPoly;
                 aTempPoly.append(aTopLeft);

@@ -761,8 +761,8 @@ bool SdrMarkView::dumpGluePointsToJSON(boost::property_tree::ptree& rTree)
             {
                 boost::property_tree::ptree node;
                 boost::property_tree::ptree point;
-                const SdrGluePoint& rGP = !VertexObject ? (*pGPL)[i] : pObj->GetVertexGluePoint(i);
-                Point rPoint = rGP.GetAbsolutePos(*pObj);
+                const SdrGluePoint aGP = !VertexObject ? (*pGPL)[i] : pObj->GetVertexGluePoint(i);
+                Point rPoint = aGP.GetAbsolutePos(*pObj);
                 if (bConvertUnit)
                 {
                     rPoint = o3tl::convert(rPoint, o3tl::Length::mm100, o3tl::Length::twip);
