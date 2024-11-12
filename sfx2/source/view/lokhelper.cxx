@@ -1015,6 +1015,12 @@ void SfxLokHelper::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_
     svl::crypto::SigningContext aSigningContext;
     pObjectShell->SignDocumentContentUsingCertificate(aSigningContext);
     rJsonWriter.put("signatureTime", aSigningContext.m_nSignatureTime);
+
+    uno::Sequence<sal_Int8> aDigest(reinterpret_cast<sal_Int8*>(aSigningContext.m_aDigest.data()),
+                                    aSigningContext.m_aDigest.size());
+    OUStringBuffer aBuffer;
+    comphelper::Base64::encode(aBuffer, aDigest);
+    rJsonWriter.put("digest", aBuffer.makeStringAndClear());
 }
 
 void SfxLokHelper::notifyUpdate(SfxViewShell const* pThisView, int nType)

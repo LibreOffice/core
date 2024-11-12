@@ -24,6 +24,8 @@
 #include <sfx2/lokhelper.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 #include <tools/json_writer.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <comphelper/base64.hxx>
 
 using namespace com::sun::star;
 
@@ -121,7 +123,7 @@ CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testLokHelperCommandValuesSignature)
     SfxLokHelper::getCommandValues(aWriter, ".uno:Signature");
     OString aJson = aWriter.finishAndGetAsOString();
 
-    // Then make sure that we get a signature time:
+    // Then make sure that we get a signature time and a hash:
     CPPUNIT_ASSERT(SfxLokHelper::supportsCommand(u"Signature"));
     std::stringstream aStream{ std::string(aJson) };
     boost::property_tree::ptree aTree;
@@ -131,6 +133,13 @@ CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testLokHelperCommandValuesSignature)
     CPPUNIT_ASSERT(it != aTree.not_found());
     auto nSignatureTime = it->second.get_value<sal_Int64>();
     CPPUNIT_ASSERT(nSignatureTime != 0);
+    // Base64 encoded hash, that has the SHA-256 length:
+    it = aTree.find("digest");
+    CPPUNIT_ASSERT(it != aTree.not_found());
+    auto aDigest = OUString::fromUtf8(it->second.get_value<std::string>());
+    uno::Sequence<sal_Int8> aBytes;
+    comphelper::Base64::decode(aBytes, aDigest);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(32), aBytes.getLength());
 }
 #endif
 

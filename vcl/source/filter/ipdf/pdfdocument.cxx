@@ -122,7 +122,8 @@ sal_uInt32 PDFDocument::GetNextSignature()
     return nRet + 1;
 }
 
-sal_Int32 PDFDocument::WriteSignatureObject(const OUString& rDescription, bool bAdES,
+sal_Int32 PDFDocument::WriteSignatureObject(svl::crypto::SigningContext& rSigningContext,
+                                            const OUString& rDescription, bool bAdES,
                                             sal_uInt64& rLastByteRangeOffset,
                                             sal_Int64& rContentOffset)
 {
@@ -146,7 +147,7 @@ sal_Int32 PDFDocument::WriteSignatureObject(const OUString& rDescription, bool b
         aSigBuffer.append("/adbe.pkcs7.detached");
 
     // Time of signing.
-    aSigBuffer.append(" /M (" + vcl::PDFWriter::GetDateTime()
+    aSigBuffer.append(" /M (" + vcl::PDFWriter::GetDateTime(&rSigningContext)
                       + ")"
 
                         // Byte range: we can write offset1-length1 and offset2 right now, will
@@ -863,8 +864,9 @@ bool PDFDocument::Sign(svl::crypto::SigningContext& rSigningContext, const OUStr
 
     sal_uInt64 nSignatureLastByteRangeOffset = 0;
     sal_Int64 nSignatureContentOffset = 0;
-    sal_Int32 nSignatureId = WriteSignatureObject(
-        rDescription, bAdES, nSignatureLastByteRangeOffset, nSignatureContentOffset);
+    sal_Int32 nSignatureId
+        = WriteSignatureObject(rSigningContext, rDescription, bAdES, nSignatureLastByteRangeOffset,
+                               nSignatureContentOffset);
 
     tools::Rectangle aSignatureRectangle;
     sal_Int32 nAppearanceId = WriteAppearanceObject(aSignatureRectangle);
