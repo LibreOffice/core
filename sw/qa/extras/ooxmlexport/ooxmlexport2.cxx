@@ -271,7 +271,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCommentsNested)
 CPPUNIT_TEST_FIXTURE(Test, testMathEscape)
 {
     loadAndReload("math-escape.docx");
-    CPPUNIT_ASSERT_EQUAL(u"\\{ left [ right ] \\( \\) \\}"_ustr, getFormula(getRun(getParagraph(1), 1)));
+    CPPUNIT_ASSERT_EQUAL(u"\\{ \\[ \\] \\( \\) \\}"_ustr, getFormula(getRun(getParagraph(1), 1)));
 }
 
 // Saving left and right for parentheses when importing not from the m:t tag (docx)
@@ -320,12 +320,13 @@ DECLARE_OOXMLEXPORT_TEST(testMathD, "math-d.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testMathEscaping, "math-escaping.docx")
 {
-    CHECK_FORMULA( u"\u2212 \u221E < x < \u221E"_ustr, getFormula( getRun( getParagraph( 1 ), 1 )));
+    CHECK_FORMULA(u"\u2212 \u221E \"<\" x \"<\" \u221E"_ustr,
+                  getFormula(getRun(getParagraph(1), 1)));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testMathLim, "math-lim.docx")
 {
-    CHECK_FORMULA( u"lim from {x \u2192 1} {x}"_ustr, getFormula( getRun( getParagraph( 1 ), 1 )));
+    CHECK_FORMULA(u"lim from {x \u2192 1} {x}"_ustr, getFormula(getRun(getParagraph(1), 1)));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testMathMatrix, "math-matrix.docx")
@@ -336,38 +337,55 @@ DECLARE_OOXMLEXPORT_TEST(testMathMatrix, "math-matrix.docx")
 CPPUNIT_TEST_FIXTURE(Test, testMathMso2k7)
 {
     loadAndReload("math-mso2k7.docx");
-    CHECK_FORMULA( u"A = \u03C0 {r} ^ {2}"_ustr, getFormula( getRun( getParagraph( 1 ), 1 )));
-// TODO check the stack/binom difference
-//    CHECK_FORMULA( "{left (x+a right )} ^ {n} = sum from {k=0} to {n} {left (binom {n} {k} right ) {x} ^ {k} {a} ^ {n-k}}",
-    CHECK_FORMULA( u"{left (x+a right )} ^ {n} = sum from {k=0} to {n} {left (stack {n # k} right ) {x} ^ {k} {a} ^ {n-k}}"_ustr,
-        getFormula( getRun( getParagraph( 2 ), 1 )));
-    CHECK_FORMULA( u"{left (1+x right )} ^ {n} =1+ {nx} over {1!} + {n left (n-1 right ) {x} ^ {2}} over {2!} +\u2026"_ustr,
-        getFormula( getRun( getParagraph( 3 ), 1 )));
-// TODO check (cos/sin miss {})
-//    CHECK_FORMULA( "f left (x right ) = {a} rsub {0} + sum from {n=1} to {\xe2\x88\x9e} {left ({a} rsub {n} cos {{n\xcf\x80x} over {L}} + {b} rsub {n} sin {{n\xcf\x80x} over {L}} right )}",
-    CHECK_FORMULA( u"f left (x right ) = {a} rsub {0} + sum from {n=1} to {\u221E} {left ({a} rsub {n} cos {n\u03C0x} over {L} + {b} rsub {n} sin {n\u03C0x} over {L} right )}"_ustr,
-        getFormula( getRun( getParagraph( 4 ), 1 )));
-    CHECK_FORMULA( u"{a} ^ {2} + {b} ^ {2} = {c} ^ {2}"_ustr, getFormula( getRun( getParagraph( 5 ), 1 )));
-    CHECK_FORMULA( u"x = {- b \u00B1 sqrt {{b} ^ {2} -4 ac}} over {2 a}"_ustr,
-        getFormula( getRun( getParagraph( 6 ), 1 )));
+    CHECK_FORMULA(u"A \"=\" \u03C0 {r} ^ {2}"_ustr, getFormula(getRun(getParagraph(1), 1)));
+    // TODO check the stack/binom difference
+    //    CHECK_FORMULA( "{left (x+a right )} ^ {n} = sum from {k=0} to {n} {left (binom {n} {k} right ) {x} ^ {k} {a} ^ {n-k}}",
     CHECK_FORMULA(
-        u"{e} ^ {x} =1+ {x} over {1!} + {{x} ^ {2}} over {2!} + {{x} ^ {3}} over {3!} +\u2026,    -\u221E<x<\u221E"_ustr,
-        getFormula( getRun( getParagraph( 7 ), 1 )));
+        u"{left (x\"+\"a right )} ^ {n} \"=\" sum from {k\"=\"0} to {n} {left (stack {n # k} right ) {x} ^ {k} {a} ^ {n\"-\"k}}"_ustr,
+        getFormula(getRun(getParagraph(2), 1)));
     CHECK_FORMULA(
-//        "sin {\xce\xb1} \xc2\xb1 sin {\xce\xb2} =2 sin {{1} over {2} left (\xce\xb1\xc2\xb1\xce\xb2 right )} cos {{1} over {2} left (\xce\xb1\xe2\x88\x93\xce\xb2 right )}",
-// TODO check (cos/in miss {})
-        u"sin \u03B1 \u00B1 sin \u03B2 =2 sin {1} over {2} left (\u03B1\u00B1\u03B2 right ) cos {1} over {2} left (\u03B1\u2213\u03B2 right )"_ustr,
-        getFormula( getRun( getParagraph( 8 ), 1 )));
+        u"{left (1\"+\"x right )} ^ {n} \"=\"1\"+\" {nx} over {1!} \"+\" {n left (n\"-\"1 right ) {x} ^ {2}} over {2!} \"+\"\u2026"_ustr,
+        getFormula(getRun(getParagraph(3), 1)));
+    // TODO check (cos/sin miss {})
+    //    CHECK_FORMULA( "f left (x right ) = {a} rsub {0} + sum from {n=1} to {\xe2\x88\x9e} {left ({a} rsub {n} cos {{n\xcf\x80x} over {L}} + {b} rsub {n} sin {{n\xcf\x80x} over {L}} right )}",
     CHECK_FORMULA(
-//        "cos {\xce\xb1} + cos {\xce\xb2} =2 cos {{1} over {2} left (\xce\xb1+\xce\xb2 right )} cos {{1} over {2} left (\xce\xb1-\xce\xb2 right )}",
-// TODO check (cos/sin miss {})
-        u"cos \u03B1 + cos \u03B2 =2 cos {1} over {2} left (\u03B1+\u03B2 right ) cos {1} over {2} left (\u03B1-\u03B2 right )"_ustr,
-        getFormula( getRun( getParagraph( 9 ), 1 )));
+        u"f left (x right ) \"=\" {a} rsub {0} \"+\" sum from {n\"=\"1} to {\u221E} {left ({a} rsub {n} cos {n\u03C0x} over {L} \"+\" {b} rsub {n} sin {n\u03C0x} over {L} right )}"_ustr,
+        getFormula(getRun(getParagraph(4), 1)));
+    CHECK_FORMULA(u"{a} ^ {2} \"+\" {b} ^ {2} \"=\" {c} ^ {2}"_ustr,
+                  getFormula(getRun(getParagraph(5), 1)));
+    CHECK_FORMULA(u"x \"=\" {\"-\" b \u00B1 sqrt {{b} ^ {2} \"-\"4 ac}} over {2 a}"_ustr,
+                  getFormula(getRun(getParagraph(6), 1)));
+    CHECK_FORMULA(
+        u"{left (1\"+\"x right )} ^ {n} \"=\"1\"+\" {nx} over {1!} \"+\" {n left (n\"-\"1 right ) {x} ^ {2}} over {2!} \"+\"\u2026"_ustr,
+        getFormula(getRun(getParagraph(3), 1)));
+    // TODO check (cos/sin miss {})
+    //    CHECK_FORMULA( "f left (x right ) = {a} rsub {0} + sum from {n=1} to {\xe2\x88\x9e} {left ({a} rsub {n} cos {{n\xcf\x80x} over {L}} + {b} rsub {n} sin {{n\xcf\x80x} over {L}} right )}",
+    CHECK_FORMULA(
+        u"f left (x right ) \"=\" {a} rsub {0} \"+\" sum from {n\"=\"1} to {\u221E} {left ({a} rsub {n} cos {n\u03C0x} over {L} \"+\" {b} rsub {n} sin {n\u03C0x} over {L} right )}"_ustr,
+        getFormula(getRun(getParagraph(4), 1)));
+    CHECK_FORMULA("{a} ^ {2} \"+\" {b} ^ {2} \"=\" {c} ^ {2}",
+                  getFormula(getRun(getParagraph(5), 1)));
+    CHECK_FORMULA(u"x \"=\" {\"-\" b \u00B1 sqrt {{b} ^ {2} \"-\"4 ac}} over {2 a}"_ustr,
+                  getFormula(getRun(getParagraph(6), 1)));
+    CHECK_FORMULA(
+        u"{e} ^ {x} \"=\"1\"+\" {x} over {1!} \"+\" {{x} ^ {2}} over {2!} \"+\" {{x} ^ {3}} over {3!} \"+\"\u2026,\" \" \" \" \"-\"\u221E\"<\"x\"<\"\u221E"_ustr,
+        getFormula(getRun(getParagraph(7), 1)));
+    CHECK_FORMULA(
+        //        "sin {\xce\xb1} \xc2\xb1 sin {\xce\xb2} =2 sin {{1} over {2} left (\xce\xb1\xc2\xb1\xce\xb2 right )} cos {{1} over {2} left (\xce\xb1\xe2\x88\x93\xce\xb2 right )}",
+        // TODO check (cos/in miss {})
+        u"sin \u03B1 \u00B1 sin \u03B2 \"=\"2 sin {1} over {2} left (\u03B1\u00B1\u03B2 right ) cos {1} over {2} left (\u03B1\u2213\u03B2 right )"_ustr,
+        getFormula(getRun(getParagraph(8), 1)));
+    CHECK_FORMULA(
+        //        "cos {\xce\xb1} + cos {\xce\xb2} =2 cos {{1} over {2} left (\xce\xb1+\xce\xb2 right )} cos {{1} over {2} left (\xce\xb1-\xce\xb2 right )}",
+        // TODO check (cos/sin miss {})
+        u"cos \u03B1 \"+\" cos \u03B2 \"=\"2 cos {1} over {2} left (\u03B1\"+\"\u03B2 right ) cos {1} over {2} left (\u03B1\"-\"\u03B2 right )"_ustr,
+        getFormula(getRun(getParagraph(9), 1)));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testMathNary, "math-nary.docx")
 {
-    CHECK_FORMULA( u"lllint from {1} to {2} {x + 1}"_ustr, getFormula( getRun( getParagraph( 1 ), 1 )));
+    CHECK_FORMULA(u"lllint from {1} to {2} {x \"+\" 1}"_ustr,
+                  getFormula(getRun(getParagraph(1), 1)));
     CHECK_FORMULA( u"prod from {a} {b}"_ustr, getFormula( getRun( getParagraph( 1 ), 2 )));
     CHECK_FORMULA( u"sum to {2} {x}"_ustr, getFormula( getRun( getParagraph( 1 ), 3 )));
 }
@@ -391,12 +409,12 @@ DECLARE_OOXMLEXPORT_TEST(testMathPlaceholders, "math-placeholders.docx")
 DECLARE_OOXMLEXPORT_TEST(testMathRad, "math-rad.docx")
 {
     CHECK_FORMULA( u"sqrt {4}"_ustr, getFormula( getRun( getParagraph( 1 ), 1 )));
-    CHECK_FORMULA( u"nroot {3} {x + 1}"_ustr, getFormula( getRun( getParagraph( 1 ), 2 )));
+    CHECK_FORMULA(u"nroot {3} {x \"+\" 1}"_ustr, getFormula(getRun(getParagraph(1), 2)));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testMathSubscripts, "math-subscripts.docx")
 {
-    CHECK_FORMULA( u"{x} ^ {y} + {e} ^ {x}"_ustr, getFormula( getRun( getParagraph( 1 ), 1 )));
+    CHECK_FORMULA(u"{x} ^ {y} \"+\" {e} ^ {x}"_ustr, getFormula(getRun(getParagraph(1), 1)));
     CHECK_FORMULA( u"{x} ^ {b}"_ustr, getFormula( getRun( getParagraph( 1 ), 2 )));
     CHECK_FORMULA( u"{x} rsub {b}"_ustr, getFormula( getRun( getParagraph( 1 ), 3 )));
     CHECK_FORMULA( u"{a} rsub {c} rsup {b}"_ustr, getFormula( getRun( getParagraph( 1 ), 4 )));
@@ -640,8 +658,9 @@ DECLARE_OOXMLEXPORT_TEST(testTableStylerPrSz, "table-style-rPr-sz.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testMathLiteral, "math-literal.docx")
 {
-    CHECK_FORMULA( u"iiint from {V} to <?> {\"div\" \"F\"}  dV= llint from {S} to <?> {\"F\" \u2219 \"n \" dS}"_ustr,
-        getFormula( getRun( getParagraph( 1 ), 1 )));
+    CHECK_FORMULA(
+        u"iiint from {V} to <?> {\"div\" \"F\"}  dV\"=\" llint from {S} to <?> {\"F\" \u2219 \"n \" dS}"_ustr,
+        getFormula(getRun(getParagraph(1), 1)));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo48557)
@@ -1145,6 +1164,13 @@ DECLARE_OOXMLEXPORT_TEST(testBnc837302, "bnc837302.docx")
     // make sure we don't introduce a redlined delete in the 2nd paragraph
     xParagraph = getParagraph(2);
     CPPUNIT_ASSERT_EQUAL(false, hasProperty(getRun(xParagraph, 1), u"RedlineType"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf162070Export)
+{
+    loadAndReload("tdf162070_export.docx");
+    CPPUNIT_ASSERT_EQUAL(u"{P} rsub {\"abs\"} \"~\" {B} rsub {0} \u00B2"_ustr,
+                         getFormula(getRun(getParagraph(1), 1)));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

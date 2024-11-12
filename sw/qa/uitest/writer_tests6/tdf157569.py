@@ -26,7 +26,7 @@ class tdf157569(UITestCase):
             if platform.system() == "Windows":
                 self.assertEqual(2155, nWidth) # no idea why it's different on Windows
             else:
-                self.assertEqual(2118, nWidth)
+                self.assertEqual(2120, nWidth)
 
             xDoc = self.xUITest.getTopFocusWindow()
             xEditWin = xDoc.getChild("writer_edit")
