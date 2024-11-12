@@ -382,6 +382,22 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="makeallfootnotesendnotes">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_MAKE_ALL_FOOTNOTES_ENDNOTES">Make All Footnotes Endnotes</property>
+        <property name="use-underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="makeallendnotesfootnotes">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_MAKE_ALL_ENDNOTES_FOOTNOTES">Make All Endnotes Footnotes</property>
+        <property name="use-underline">True</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="502">
         <property name="visible">True</property>
         <property name="can-focus">False</property>

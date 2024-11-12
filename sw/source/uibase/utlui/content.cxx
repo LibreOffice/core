@@ -229,6 +229,43 @@ namespace
     {
         return weld::fromId<const SwRegionContent*>(rTreeView.get_id(rEntry))->GetRegionLevel() < nLevel;
     }
+
+    void lcl_SelectAllFootnotesOrEndnotes(SwWrtShell& rWrtShell, SwContentType* pContentType)
+    {
+        const auto nCount = pContentType->GetMemberCount();
+        if (nCount == 0)
+            return;
+
+        rWrtShell.AssureStdMode();
+        SwCursor* pCursor = rWrtShell.getShellCursor(true);
+
+        rWrtShell.StartAction();
+        rWrtShell.EnterAddMode();
+        for (size_t i = 0; i < nCount; i++)
+        {
+            const SwTextFootnoteContent* pTextFootnoteCnt
+                    = static_cast<const SwTextFootnoteContent*>(pContentType->GetMember(i));
+            if (pTextFootnoteCnt && !pTextFootnoteCnt->IsInvisible())
+            {
+                if (const SwTextAttr* pTextAttr = pTextFootnoteCnt->GetTextFootnote())
+                {
+                    const SwTextFootnote* pTextFootnote
+                            = pTextAttr->GetFootnote().GetTextFootnote();
+                    if (!pTextFootnote)
+                        continue;
+                    const SwTextNode& rTextNode = pTextFootnote->GetTextNode();
+                    auto nStart = pTextAttr->GetStart();
+                    pCursor->GetPoint()->Assign(rTextNode, nStart + 1);
+                    rWrtShell.SetMark();
+                    rWrtShell.SttSelect();
+                    pCursor->GetPoint()->Assign(rTextNode, nStart);
+                    rWrtShell.EndSelect();
+                }
+            }
+        }
+        rWrtShell.LeaveAddMode();
+        rWrtShell.EndAction();
+    }
 }
 
 // Content, contains names and reference at the content type.
@@ -1729,6 +1766,8 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
          bRemoveDeleteFootnoteEntry = true,
          bRemoveDeleteAllEndnotesEntry = true,
          bRemoveDeleteEndnoteEntry = true;
+    bool bRemoveMakeAllFootnotesEndnotesEntry = true,
+         bRemoveMakeAllEndnotesFootnotesEntry = true;
     bool bRemoveRenameEntry = true;
     bool bRemoveSelectEntry = true;
     bool bRemoveToggleExpandEntry = true;
@@ -2033,9 +2072,11 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                         break;
                         case ContentTypeId::FOOTNOTE:
                             bRemoveDeleteAllFootnotesEntry = false;
+                            bRemoveMakeAllFootnotesEndnotesEntry = false;
                         break;
                         case ContentTypeId::ENDNOTE:
                             bRemoveDeleteAllEndnotesEntry = false;
+                            bRemoveMakeAllEndnotesFootnotesEntry = false;
                         break;
                         default: break;
                     }
@@ -2136,7 +2177,11 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     if (bRemoveDeleteEndnoteEntry)
         xPop->remove(u"deleteendnote"_ustr);
 
-    // bRemoveDeleteEntry is used in determining separator 2
+    if (bRemoveMakeAllFootnotesEndnotesEntry)
+        xPop->remove(u"makeallfootnotesendnotes"_ustr);
+    if (bRemoveMakeAllEndnotesFootnotesEntry)
+        xPop->remove(u"makeallendnotesfootnotes"_ustr);
+
     bool bRemoveDeleteEntry =
             bRemoveDeleteChapterEntry &&
             bRemoveDeleteTableEntry &&
@@ -2168,6 +2213,10 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
             bRemoveDeleteAllFootnotesEntry &&
             bRemoveDeleteAllEndnotesEntry;
 
+    bool bRemoveMakeFootnotesEndnotesViceVersaEntry =
+            bRemoveMakeAllFootnotesEndnotesEntry &&
+            bRemoveMakeAllEndnotesFootnotesEntry;
+
     if (bRemoveRenameEntry)
         xPop->remove(OUString::number(502));
 
@@ -2194,6 +2243,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
             bRemoveCopyEntry &&
             bRemoveSelectEntry &&
             bRemoveDeleteEntry &&
+            bRemoveMakeFootnotesEndnotesViceVersaEntry &&
             bRemoveChapterEntries &&
             bRemovePostItEntries &&
             bRemoveRenameEntry &&
@@ -5416,6 +5466,23 @@ IMPL_LINK(SwContentTree, QueryTooltipHdl, const weld::TreeIter&, rEntry, OUStrin
 
 void SwContentTree::ExecuteContextMenuAction(const OUString& rSelectedPopupEntry)
 {
+    if (rSelectedPopupEntry == "makeallfootnotesendnotes"
+            || rSelectedPopupEntry == "makeallendnotesfootnotes")
+    {
+        std::unique_ptr<weld::TreeIter> xEntryIter(m_xTreeView->make_iterator());
+        if (!m_xTreeView->get_selected(xEntryIter.get()))
+            return; // this shouldn't happen
+        SwContentType* pContentType = weld::fromId<SwContentType*>(m_xTreeView->get_id(*xEntryIter));
+        m_pActiveShell->StartUndo(rSelectedPopupEntry == "makeallfootnotesendnotes"
+                                  ? SwUndoId::MAKE_FOOTNOTES_ENDNOTES
+                                  : SwUndoId::MAKE_ENDNOTES_FOOTNOTES);
+        lcl_SelectAllFootnotesOrEndnotes(*m_pActiveShell, pContentType);
+        SwFormatFootnote aNote(rSelectedPopupEntry == "makeallfootnotesendnotes");
+        m_pActiveShell->SetCurFootnote(aNote);
+        m_pActiveShell->EndUndo();
+        return;
+    }
+
     if (rSelectedPopupEntry == "copy")
     {
         CopyOutlineSelections();
@@ -6452,39 +6519,7 @@ void SwContentTree::DeleteAllContentOfEntryContentType(const weld::TreeIter& rEn
     else if (eContentTypeId == ContentTypeId::FOOTNOTE || eContentTypeId == ContentTypeId::ENDNOTE)
     {
         //MakeAllOutlineContentTemporarilyVisible a(m_pActiveShell->GetDoc());
-
-        m_pActiveShell->AssureStdMode();
-
-        SwCursor* pCursor = m_pActiveShell->getShellCursor(true);
-
-        const auto nCount = pContentType->GetMemberCount();
-
-        m_pActiveShell->StartAction();
-        m_pActiveShell->EnterAddMode();
-        for (size_t i = 0; i < nCount; i++)
-        {
-            const SwTextFootnoteContent* pTextFootnoteCnt =
-                    static_cast<const SwTextFootnoteContent*>(pContentType->GetMember(i));
-            if (pTextFootnoteCnt && !pTextFootnoteCnt->IsInvisible())
-            {
-                if (const SwTextAttr* pTextAttr = pTextFootnoteCnt->GetTextFootnote())
-                {
-                    const SwTextFootnote* pTextFootnote = pTextAttr->GetFootnote().GetTextFootnote();
-                    if (!pTextFootnote)
-                        continue;
-                    const SwTextNode& rTextNode = pTextFootnote->GetTextNode();
-                    auto nStart = pTextAttr->GetStart();
-                    pCursor->GetPoint()->Assign(rTextNode, nStart + 1);
-                    m_pActiveShell->SetMark();
-                    m_pActiveShell->SttSelect();
-                    pCursor->GetPoint()->Assign(rTextNode, nStart);
-                    m_pActiveShell->EndSelect();
-                }
-            }
-        }
-        m_pActiveShell->LeaveAddMode();
-        m_pActiveShell->EndAction();
-
+        lcl_SelectAllFootnotesOrEndnotes(*m_pActiveShell, pContentType);
         SwRewriter aRewriter;
         aRewriter.AddRule(UndoArg1, pContentType->GetName());
         m_pActiveShell->StartUndo(SwUndoId::DELETE, &aRewriter);

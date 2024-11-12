@@ -1545,6 +1545,9 @@
 #define STR_BACKGROUND_BITMAP NC_("STR_BACKGROUND_BITMAP", "Background bitmap")
 #define STR_BACKGROUND_PATTERN NC_("STR_BACKGROUND_PATTERN", "Background pattern")
 
+#define STR_UNDO_MAKE_FOOTNOTES_ENDNOTES NC_("STR_UNDO_MAKE_FOOTNOTES_ENDNOTES", "Make all footnotes endnotes")
+#define STR_UNDO_MAKE_ENDNOTES_FOOTNOTES NC_("STR_UNDO_MAKE_ENDNOTES_FOOTNOTES", "Make all endnotes footnotes")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

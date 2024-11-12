@@ -685,6 +685,12 @@ OUString GetUndoComment(SwUndoId eId)
         case SwUndoId::FLYFRMFMT_DECORATIVE:
             pId = STR_UNDO_FLYFRMFMT_DECORATIVE;
             break;
+        case SwUndoId::MAKE_FOOTNOTES_ENDNOTES:
+            pId = STR_UNDO_MAKE_FOOTNOTES_ENDNOTES;
+            break;
+        case SwUndoId::MAKE_ENDNOTES_FOOTNOTES:
+            pId = STR_UNDO_MAKE_ENDNOTES_FOOTNOTES;
+            break;
     }
 
     assert(pId);
