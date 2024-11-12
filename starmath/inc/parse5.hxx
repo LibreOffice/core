@@ -119,4 +119,8 @@ public:
 
 inline bool SmParser5::TokenInGroup(TG nGroup) { return bool(m_aCurToken.nGroup & nGroup); }
 
+const SmTokenTableEntry* GetTokenTableEntry(const OUString& rName);
+
+OUString encloseOrEscapeLiteral(const OUString& string, bool force);
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
