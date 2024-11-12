@@ -425,7 +425,10 @@ void SfxRedactionHelper::searchInMetaFile(const RedactionTarget* pRedactionTarge
     fillSearchOptions(aSearchOptions, pRedactionTarget);
 
     utl::TextSearch textSearch(aSearchOptions);
-    static long aLastFontHeight = 0;
+
+    OutputDevice* pOutputDevice
+        = SfxObjectShell::GetShellFromComponent(xComponent)->GetDocumentRefDev();
+    pOutputDevice->Push(::vcl::PushFlags::FONT);
 
     MetaAction* pCurrAct;
 
@@ -448,18 +451,16 @@ void SfxRedactionHelper::searchInMetaFile(const RedactionTarget* pRedactionTarge
             // If found the string, add the corresponding rectangle to the collection
             while (bFound)
             {
-                OutputDevice* pOutputDevice
-                    = SfxObjectShell::GetShellFromComponent(xComponent)->GetDocumentRefDev();
                 tools::Rectangle aNewRect(
                     ImplCalcActionBounds(*pMetaTextArrayAction, *pOutputDevice, nStart, nEnd));
 
                 if (!aNewRect.IsEmpty())
                 {
-                    // Calculate the difference between current wrong value and value should it be.
-                    // Add the difference to current value.
                     // Then increase 10% of the new value to make it look better.
-                    aNewRect.SetTop(aNewRect.getY() + (aNewRect.getHeight() - aLastFontHeight)
-                                    - aLastFontHeight / 10);
+                    auto const adj(aNewRect.GetHeight() / 20);
+                    aNewRect.AdjustTop(-adj);
+                    aNewRect.AdjustBottom(adj);
+                    aNewRect.AdjustRight(adj); // also add a bit on the right
                     aRedactionRectangles.push_back(aNewRect);
                 }
 
@@ -472,9 +473,12 @@ void SfxRedactionHelper::searchInMetaFile(const RedactionTarget* pRedactionTarge
         else if (pCurrAct->GetType() == MetaActionType::FONT)
         {
             const MetaFontAction* pFontAct = static_cast<const MetaFontAction*>(pCurrAct);
-            aLastFontHeight = pFontAct->GetFont().GetFontSize().getHeight();
+            vcl::Font const font{ pFontAct->GetFont() };
+            pOutputDevice->SetFont(font);
         }
     }
+
+    pOutputDevice->Pop();
 }
 
 void SfxRedactionHelper::addRedactionRectToPage(
