@@ -88,7 +88,7 @@ public:
 
 private:
     /// The certificate to use for signing.
-    svl::crypto::SigningContext& m_rSigningContext;
+    [[maybe_unused]] svl::crypto::SigningContext& m_rSigningContext;
 
     /// Data blocks (pointer-size pairs).
     std::vector<std::pair<const void*, sal_Int32>> m_dataBlocks;
