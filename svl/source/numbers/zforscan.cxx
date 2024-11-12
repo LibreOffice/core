@@ -264,8 +264,8 @@ void ImpSvNumberformatScan::SetDependentKeywords()
     const LocaleDataWrapper* pLocaleData = mrCurrentLanguageData.GetLocaleData();
     // #80023# be sure to generate keywords for the loaded Locale, not for the
     // requested Locale, otherwise number format codes might not match
-    const LanguageTag& rLoadedLocale = pLocaleData->getLoadedLanguageTag();
-    LanguageType eLang = rLoadedLocale.getLanguageType( false);
+    const LanguageTag aLoadedLocale = pLocaleData->getLoadedLanguageTag();
+    LanguageType eLang = aLoadedLocale.getLanguageType( false);
 
     bool bL10n = (meKeywordLocalization != KeywordLocalization::EnglishOnly);
     if (bL10n)
@@ -326,7 +326,7 @@ void ImpSvNumberformatScan::SetDependentKeywords()
     sKeyword = sEnglishKeyword;
 
     // Set the uppercase localized General name, e.g. Standard -> STANDARD
-    i18n::NumberFormatCode aFormat = xNFC->getFormatCode( NF_NUMBER_STANDARD, rLoadedLocale.getLocale() );
+    i18n::NumberFormatCode aFormat = xNFC->getFormatCode( NF_NUMBER_STANDARD, aLoadedLocale.getLocale() );
     sNameStandardFormat = lcl_extractStandardGeneralName( aFormat.Code );
     sKeyword[NF_KEY_GENERAL] = pCharClass->uppercase( sNameStandardFormat );
 

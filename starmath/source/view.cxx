@@ -2229,12 +2229,12 @@ std::optional<OString> SmViewShell::getLOKPayload(int nType, int nViewId) const
 void SmViewShell::SendCaretToLOK() const
 {
     const int nViewId = sal_Int32(GetViewShellId());
-    if (const auto& payload = getLOKPayload(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, nViewId))
+    if (const auto payload = getLOKPayload(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, nViewId))
     {
         libreOfficeKitViewCallbackWithViewId(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR,
                                              *payload, nViewId);
     }
-    if (const auto& payload = getLOKPayload(LOK_CALLBACK_TEXT_SELECTION, nViewId))
+    if (const auto payload = getLOKPayload(LOK_CALLBACK_TEXT_SELECTION, nViewId))
     {
         libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, *payload);
     }

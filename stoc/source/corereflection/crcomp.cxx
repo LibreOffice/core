@@ -222,11 +222,11 @@ sal_Bool CompoundIdlClassImpl::isAssignableFrom( const Reference< XIdlClass > & 
                 return true;
             else
             {
-                const Sequence< Reference< XIdlClass > > & rSeq = xType->getSuperclasses();
-                if (rSeq.hasElements())
+                const Sequence< Reference< XIdlClass > > aSeq = xType->getSuperclasses();
+                if (aSeq.hasElements())
                 {
-                    OSL_ENSURE( rSeq.getLength() == 1, "### unexpected len of super classes!" );
-                    return isAssignableFrom( rSeq[0] );
+                    OSL_ENSURE( aSeq.getLength() == 1, "### unexpected len of super classes!" );
+                    return isAssignableFrom( aSeq[0] );
                 }
             }
         }

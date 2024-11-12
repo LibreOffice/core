@@ -497,9 +497,9 @@ void SmXMLImportContext::characters(const OUString& rChars)
     1 or more whitespace characters is replaced with one blank character).
     */
     //collapsing not done yet!
-    const OUString& rChars2 = rChars.trim();
-    if (!rChars2.isEmpty())
-        TCharacters(rChars2 /*.collapse()*/);
+    const OUString aChars2 = rChars.trim();
+    if (!aChars2.isEmpty())
+        TCharacters(aChars2 /*.collapse()*/);
 }
 
 namespace

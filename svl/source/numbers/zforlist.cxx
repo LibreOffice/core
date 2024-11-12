@@ -1175,8 +1175,8 @@ sal_uInt32 SvNFFormatData::ImpGenerateCL(SvNFLanguageData& rCurrentLanguage, con
         // new CL combination
         if (LocaleDataWrapper::areChecksEnabled())
         {
-            const LanguageTag& rLoadedLocale = rCurrentLanguage.xLocaleData->getLoadedLanguageTag();
-            if ( !rLoadedLocale.equals( rCurrentLanguage.aLanguageTag ) )
+            const LanguageTag aLoadedLocale = rCurrentLanguage.xLocaleData->getLoadedLanguageTag();
+            if ( !aLoadedLocale.equals( rCurrentLanguage.aLanguageTag ) )
             {
                 LocaleDataWrapper::outputCheckMessage( rCurrentLanguage.xLocaleData->appendLocaleInfo( u"SvNumberFormatter::ImpGenerateCL: locales don't match:" ));
             }

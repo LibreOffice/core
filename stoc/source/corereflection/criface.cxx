@@ -708,8 +708,8 @@ sal_Bool InterfaceIdlClassImpl::isAssignableFrom( const Reference< XIdlClass > &
             return true;
         else
         {
-            const Sequence< Reference< XIdlClass > > & rSeq = xType->getSuperclasses();
-            if (std::any_of(rSeq.begin(), rSeq.end(),
+            const Sequence< Reference< XIdlClass > > aSeq = xType->getSuperclasses();
+            if (std::any_of(aSeq.begin(), aSeq.end(),
                     [this](const Reference<XIdlClass>& rType){ return isAssignableFrom(rType); }))
                 return true;
         }

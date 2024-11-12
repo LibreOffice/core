@@ -213,7 +213,7 @@ bool StgCache::Commit()
         std::sort( aToWrite.begin(), aToWrite.end(), StgPage::IsPageGreater );
         for (StgPage* pWr : aToWrite)
         {
-            const rtl::Reference< StgPage > &pPage = pWr;
+            const rtl::Reference< StgPage > pPage = pWr;
             if ( !Write( pPage->GetPage(), pPage->GetData() ) )
                 return false;
         }
