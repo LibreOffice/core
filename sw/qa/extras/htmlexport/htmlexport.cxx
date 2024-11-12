@@ -3374,6 +3374,24 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_162426)
     assertXPath(pDoc, "/html/body/p/img", "border", u"0");
 }
 
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_163873)
+{
+    // Given a document with an image with style:wrap="none":
+    createSwDoc("tdf131728.docx");
+    // Before the fix, an assertion failed in HtmlWriter::attribute when exporting to HTML :
+    ExportToHTML();
+
+    xmlDocUniquePtr pDoc = parseXml(maTempFile);
+    CPPUNIT_ASSERT(pDoc);
+
+    // Before the fix, inline headings weren't inline
+    assertXPath(pDoc, "/html/body/p[5]/span/h2", "style", u"display:inline;");
+    assertXPath(pDoc, "/html/body/p[6]/span/h2", "style", u"display:inline;");
+    assertXPath(pDoc, "/html/body/p[7]/span/h2", "style", u"display:inline;");
+    assertXPath(pDoc, "/html/body/p[11]/span/h2", "style", u"display:inline;");
+    assertXPath(pDoc, "/html/body/p[14]/span/h2", "style", u"display:inline;");
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

@@ -60,7 +60,8 @@ enum class HtmlOut {
     Marquee,
     GraphicFrame,
     OleGraphic,
-    Span
+    Span,
+    InlineHeading
 };
 
 enum class HtmlPosition {

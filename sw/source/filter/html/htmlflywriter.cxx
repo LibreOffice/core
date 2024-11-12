@@ -43,6 +43,7 @@
 #include <osl/diagnose.h>
 #include <svx/svdograf.hxx>
 #include <comphelper/xmlencode.hxx>
+#include <poolfmt.hxx>
 
 #include <fmtanchr.hxx>
 #include <fmtornt.hxx>
@@ -289,11 +290,13 @@ SwHTMLFrameType SwHTMLWriter::GuessFrameType( const SwFrameFormat& rFrameFormat,
 void SwHTMLWriter::CollectFlyFrames()
 {
     SwPosFlyFrames aFlyPos(
-        m_pDoc->GetAllFlyFormats(m_bWriteAll ? nullptr : m_pCurrentPam.get(), true));
+        m_pDoc->GetAllFlyFormats(m_bWriteAll ? nullptr : m_pCurrentPam.get(),
+                /*bDrawAlso=*/true, /*bAsCharAlso=*/true));
 
     for(const SwPosFlyFrame& rItem : aFlyPos)
     {
         const SwFrameFormat& rFrameFormat = rItem.GetFormat();
+        const SwFormat* pParent = rFrameFormat.DerivedFrom();
         const SdrObject *pSdrObj = nullptr;
         const SwNode *pAnchorNode;
         const SwContentNode *pACNd;
@@ -308,7 +311,6 @@ void SwHTMLWriter::CollectFlyFrames()
         case RndStdIds::FLY_AT_FLY:
             nMode = getHTMLOutFramePageFlyTable(eType, m_nExportMode);
             break;
-
         case RndStdIds::FLY_AT_PARA:
             // frames that are anchored to a paragraph are only placed
             // before the paragraph, if the paragraph has a
@@ -329,12 +331,18 @@ void SwHTMLWriter::CollectFlyFrames()
             }
             nMode = getHTMLOutFrameParaPrtAreaTable(eType, m_nExportMode);
             break;
-
+        case RndStdIds::FLY_AS_CHAR:
+            // keep only Inline Heading frames from the frames anchored as characters
+            if ( !(pParent && pParent->GetPoolFormatId() == RES_POOLFRM_INLINE_HEADING) )
+                continue;
+            [[fallthrough]];
         case RndStdIds::FLY_AT_CHAR:
             if( text::RelOrientation::FRAME == eHoriRel || text::RelOrientation::PRINT_AREA == eHoriRel )
                 nMode = getHTMLOutFrameParaPrtAreaTable(eType, m_nExportMode);
             else
                 nMode = getHTMLOutFrameParaOtherTable(eType, m_nExportMode);
+            if ( rAnchor.GetAnchorId()  == RndStdIds::FLY_AS_CHAR )
+                    nMode.nOut = HtmlOut::InlineHeading;
             break;
 
         default:
@@ -389,6 +397,7 @@ bool SwHTMLWriter::OutFlyFrame( SwNodeOffset nNdIdx, sal_Int32 nContentIdx, Html
                 {
                 case HtmlOut::Div:
                 case HtmlOut::Span:
+                case HtmlOut::InlineHeading:
                 case HtmlOut::MultiCol:
                 case HtmlOut::TableNode:
                     bRestart = true; // It could become recursive here
@@ -464,8 +473,13 @@ void SwHTMLWriter::OutFrameFormat( AllHtmlFlags nMode, const SwFrameFormat& rFra
         break;
     case HtmlOut::Div:
     case HtmlOut::Span:
+    case HtmlOut::InlineHeading:
+        if( nOutMode == HtmlOut::InlineHeading )
+            m_bInlineHeading = true;
         OSL_ENSURE( aContainerStr.isEmpty(), "Div: Container is not supposed to be here" );
-        OutHTML_FrameFormatAsDivOrSpan( *this, rFrameFormat, HtmlOut::Span==nOutMode );
+        OutHTML_FrameFormatAsDivOrSpan( *this, rFrameFormat, HtmlOut::Div!=nOutMode );
+        if (nOutMode == HtmlOut::InlineHeading)
+            m_bInlineHeading = false;
         break;
     case HtmlOut::MultiCol:     // OK
         OutHTML_FrameFormatAsMulticol( *this, rFrameFormat, !aContainerStr.isEmpty() );
@@ -488,7 +502,10 @@ void SwHTMLWriter::OutFrameFormat( AllHtmlFlags nMode, const SwFrameFormat& rFra
                     static_cast<const SwDrawFrameFormat &>(rFrameFormat), *pSdrObject );
         break;
     case HtmlOut::GraphicFrame:
-        OutHTML_FrameFormatAsImage( *this, rFrameFormat, /*bPNGFallback=*/true );
+        // skip already exported inline headings
+        const SwFormat* pParent = rFrameFormat.DerivedFrom();
+        if ( !(pParent && pParent->GetPoolFormatId() == RES_POOLFRM_INLINE_HEADING) )
+            OutHTML_FrameFormatAsImage( *this, rFrameFormat, /*bPNGFallback=*/true );
         break;
     }
 

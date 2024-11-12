@@ -282,6 +282,7 @@ class SwHTMLWriter : public Writer
     bool m_bLFPossible = false; // a line break can be inserted
     bool m_bSpacePreserve = false; // Using xml::space="preserve", or "white-space: pre-wrap" style
     bool m_bPreserveSpacesOnWrite = false; // If export should use m_bSpacePreserve
+    bool m_bInlineHeading = false; // If export should use display:inline for inline heading
     // If "Save URLs relative to *" is ignored for self-generated images / objects
     bool m_bRelativeURLsForOwnObjects = false;
 
@@ -633,6 +634,7 @@ public:
     bool IsSpacePreserve() const { return m_bSpacePreserve; }
     void SetSpacePreserve(bool val) { m_bSpacePreserve = val; }
     bool IsPreserveSpacesOnWritePrefSet() const { return m_bPreserveSpacesOnWrite; }
+    bool IsInlineHeading() const { return m_bInlineHeading; }
 
     OUString normalizeURL(const OUString& url, bool own) const;
 };

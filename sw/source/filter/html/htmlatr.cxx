@@ -436,6 +436,7 @@ static void OutHTML_SwFormat( SwHTMLWriter& rWrt, const SwFormat& rFormat,
     rInfo.bInNumberBulletList = false;    // Are we in a list?
     bool bNumbered = false;         // The current paragraph is numbered
     bool bPara = false;             // the current token is <P>
+    bool bHeading = false;          // the current token is <H1> .. <H6>
     rInfo.bParaPossible = false;    // a <P> may be additionally output
     bool bNoEndTag = false;         // don't output an end tag
 
@@ -553,6 +554,15 @@ static void OutHTML_SwFormat( SwHTMLWriter& rWrt, const SwFormat& rFormat,
             rInfo.bParaPossible = !bDT;
             rWrt.m_bNoAlign = true;
             bForceDL = true;
+        }
+        else if (rInfo.aToken == OOO_STRING_SVTOOLS_HTML_head1 ||
+                 rInfo.aToken == OOO_STRING_SVTOOLS_HTML_head2 ||
+                 rInfo.aToken == OOO_STRING_SVTOOLS_HTML_head3 ||
+                 rInfo.aToken == OOO_STRING_SVTOOLS_HTML_head4 ||
+                 rInfo.aToken == OOO_STRING_SVTOOLS_HTML_head5 ||
+                 rInfo.aToken == OOO_STRING_SVTOOLS_HTML_head6)
+        {
+            bHeading = true;
         }
     }
     else
@@ -925,6 +935,12 @@ static void OutHTML_SwFormat( SwHTMLWriter& rWrt, const SwFormat& rFormat,
             HTMLOutFuncs::Out_String( rWrt.Strm(), aClass );
             sOut += "\"";
         }
+
+        // set inline heading (heading in a text frame anchored as character and
+        // formatted with frame style "Inline Heading")
+        if( bHeading && rWrt.IsInlineHeading() )
+            sOut += " " OOO_STRING_SVTOOLS_HTML_O_style "=\"display:inline;\"";
+
         rWrt.Strm().WriteOString( sOut );
         sOut = ""_ostr;
 
