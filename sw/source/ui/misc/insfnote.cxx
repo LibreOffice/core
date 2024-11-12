@@ -240,15 +240,17 @@ void SwInsFootNoteDlg::Init()
     // outside of a table to inside of it could be possible, which would fail.
     // bNext and bPrev are only false (simultaneously) for single-footnote documents, because
     // GotoNextFootnoteAnchor / GotoPrevFootnoteAnchor may wrap.
-    const auto anchorPos = *m_rSh.GetCursor()->GetPoint();
-    SwCursor test(anchorPos, nullptr);
-    bool bNext = test.GotoNextFootnoteAnchor() && *test.GetPoint() != anchorPos;
-
-    test = SwCursor(anchorPos, nullptr);
-    bool bPrev = test.GotoPrevFootnoteAnchor() && *test.GetPoint() != anchorPos;
-
-    m_xPrevBT->set_sensitive(bPrev);
-    m_xNextBT->set_sensitive(bNext);
+    const SwPosition& anchorPos = *m_rSh.GetCursor()->GetPoint();
+    {
+        SwCursor test(anchorPos, nullptr);
+        bool bNext = test.GotoNextFootnoteAnchor() && *test.GetPoint() != anchorPos;
+        m_xNextBT->set_sensitive(bNext);
+    }
+    {
+        SwCursor test(anchorPos, nullptr);
+        const bool bPrev = test.GotoPrevFootnoteAnchor() && *test.GetPoint() != anchorPos;
+        m_xPrevBT->set_sensitive(bPrev);
+    }
 
     m_rSh.Right(SwCursorSkipMode::Chars, true, 1, false );
 
