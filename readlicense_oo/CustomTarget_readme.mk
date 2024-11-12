@@ -46,6 +46,7 @@ endif
 readlicense_oo_README_SED := \
 	-e 's,$${PRODUCTNAME},$(PRODUCTNAME),g' \
 	-e 's,$${PRODUCTVERSION},$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR),g' \
+	-e 's,$${LCPRODUCTNAME},'"$$(printf %s '$(PRODUCTNAME)' | tr A-Z a-z)",g \
 
 $(readlicense_oo_DIR)/$(call gb_README,%) : \
 		$(SRCDIR)/readlicense_oo/docs/readme.xsl \
