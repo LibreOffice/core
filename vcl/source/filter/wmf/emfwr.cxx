@@ -925,10 +925,8 @@ void EMFWriter::ImplWriteTextRecord( const Point& rPos, const OUString& rText, K
 
     if( nLen > 1 )
     {
-        for( i = 1; i < ( nLen - 1 ); i++ )
+        for (i = 1; i < nLen; i++)
             ImplWriteExtent( pDX[ i ] - pDX[ i - 1 ] );
-
-        ImplWriteExtent( pDX[ nLen - 2 ] / ( nLen - 1 ) );
     }
 
     ImplEndRecord();
