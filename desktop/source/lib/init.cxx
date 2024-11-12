@@ -4522,6 +4522,35 @@ inline static void enableViewCallbacks(LibLODocument_Impl* pDocument, const int 
         handlerIt->second->enableCallbacks();
 }
 
+inline static int getAlternativeViewForPaint(LibreOfficeKitDocument* pThis, ITiledRenderable* pDoc, SfxViewShell* pCurrentViewShell,
+    const std::string_view &sCurrentViewRenderState, const int nPart, const int nMode)
+{
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+    while (pViewShell)
+    {
+        bool bIsInEdit = pViewShell->GetDrawView() && pViewShell->GetDrawView()->GetTextEditOutliner();
+
+        if (!bIsInEdit && pViewShell != pCurrentViewShell)
+        {
+            if (pViewShell->getPart() == nPart && pViewShell->getEditMode() == nMode)
+            {
+                OString sNewRenderState = pDoc->getViewRenderState(pViewShell);
+
+                if (sCurrentViewRenderState == sNewRenderState)
+                {
+                    const int nViewId = pViewShell->GetViewShellId().get();
+                    doc_setView(pThis, nViewId);
+                    return nViewId;
+                }
+            }
+        }
+
+        pViewShell = SfxViewShell::GetNext(*pViewShell);
+    }
+
+    return -1;
+}
+
 static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
                               unsigned char* pBuffer,
                               const int nPart,
@@ -4562,82 +4591,38 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
         int nOrigPart = 0;
         const int aType = doc_getDocumentType(pThis);
         const bool isText = (aType == LOK_DOCTYPE_TEXT);
-        const bool isCalc = (aType == LOK_DOCTYPE_SPREADSHEET);
         int nOrigEditMode = 0;
         bool bPaintTextEdit = true;
         int nViewId = nOrigViewId;
-        int nLastNonEditorView = -1;
-        int nViewMatchingMode = -1;
         SfxViewShell* pCurrentViewShell = SfxViewShell::Current();
         const OString sCurrentViewRenderState = pDoc->getViewRenderState(pCurrentViewShell);
 
         if (!isText)
         {
-            // Check if just switching to another view is enough, that has
-            // less side-effects.
-            if (nPart != doc_getPart(pThis) || nMode != pDoc->getEditMode())
+            // Check if just switching to another view is enough, that has less side-effects.
+            // Render state is sometimes empty, don't risk it.
+            if ((nPart != doc_getPart(pThis) || nMode != pDoc->getEditMode()) && !sCurrentViewRenderState.isEmpty())
             {
-                SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-                while (pViewShell)
-                {
-                    bool bIsInEdit = pViewShell->GetDrawView() &&
-                        pViewShell->GetDrawView()->GetTextEditOutliner();
+                nViewId = getAlternativeViewForPaint(pThis, pDoc, pCurrentViewShell, sCurrentViewRenderState, nPart, nMode);
 
-                    OString sNewRenderState = pDoc->getViewRenderState(pViewShell);
-
-                    if (sCurrentViewRenderState == sNewRenderState && !bIsInEdit)
-                        nLastNonEditorView = pViewShell->GetViewShellId().get();
-
-                    if (pViewShell->getPart() == nPart &&
-                        pViewShell->getEditMode() == nMode &&
-                        sCurrentViewRenderState == sNewRenderState &&
-                        !bIsInEdit)
-                    {
-                        nViewId = pViewShell->GetViewShellId().get();
-                        nViewMatchingMode = nViewId;
-                        nLastNonEditorView = nViewId;
-                        doc_setView(pThis, nViewId);
-                        break;
-                    }
-                    else if (pViewShell->getEditMode() == nMode && sCurrentViewRenderState == sNewRenderState && !bIsInEdit)
-                    {
-                        nViewMatchingMode = pViewShell->GetViewShellId().get();
-                    }
-
-                    pViewShell = SfxViewShell::GetNext(*pViewShell);
-                }
-            }
-
-            // if not found view with correct part
-            // - at least avoid rendering active textbox, This is for Impress.
-            // - prefer view with the same mode
-            if (nViewMatchingMode >= 0 && nViewMatchingMode != nViewId)
-            {
-                nViewId = nViewMatchingMode;
-                doc_setView(pThis, nViewId);
-            }
-            else if (!isCalc && nLastNonEditorView >= 0 && nLastNonEditorView != nViewId &&
-                pCurrentViewShell && pCurrentViewShell->GetDrawView() &&
-                pCurrentViewShell->GetDrawView()->GetTextEditOutliner())
-            {
-                nViewId = nLastNonEditorView;
-                doc_setView(pThis, nViewId);
+                if (nViewId == -1)
+                    nViewId = nOrigViewId; // Couldn't find an alternative view.
+                // else -> We found an alternative view and already switched to that.
             }
 
             // Disable callbacks while we are painting - after setting the view
-            if (nViewId != nOrigViewId && nViewId >= 0)
+            if (nViewId != nOrigViewId)
                 disableViewCallbacks(pDocument, nViewId);
-
-            nOrigPart = doc_getPart(pThis);
-            if (nPart != nOrigPart)
+            else
             {
-                doc_setPartImpl(pThis, nPart, false);
-            }
+                // If we are here, we couldn't find an alternative view. We need to check the part and mode.
+                nOrigPart = doc_getPart(pThis);
+                if (nPart != nOrigPart)
+                    doc_setPartImpl(pThis, nPart, false);
 
-            nOrigEditMode = pDoc->getEditMode();
-            if (nOrigEditMode != nMode)
-            {
-                SfxLokHelper::setEditMode(nMode, pDoc);
+                nOrigEditMode = pDoc->getEditMode();
+                if (nOrigEditMode != nMode)
+                    SfxLokHelper::setEditMode(nMode, pDoc);
             }
 
             bPaintTextEdit = (nPart == nOrigPart && nMode == nOrigEditMode);
@@ -4650,18 +4635,18 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
         {
             pDoc->setPaintTextEdit(true);
 
-            if (nMode != nOrigEditMode)
+            if (nViewId == nOrigViewId)
             {
-                SfxLokHelper::setEditMode(nOrigEditMode, pDoc);
-            }
+                // We didn't find an alternative view, set the part and mode back to their initial values if needed.
+                if (nMode != nOrigEditMode)
+                    SfxLokHelper::setEditMode(nOrigEditMode, pDoc);
 
-            if (nPart != nOrigPart)
-            {
-                doc_setPartImpl(pThis, nOrigPart, false);
+                if (nPart != nOrigPart)
+                    doc_setPartImpl(pThis, nOrigPart, false);
             }
-
-            if (nViewId != nOrigViewId)
+            else
             {
+                // We found an alternative view and used it. Enable its callbacks again and turn back to our original view.
                 enableViewCallbacks(pDocument, nViewId);
                 doc_setView(pThis, nOrigViewId);
             }
@@ -4672,10 +4657,7 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
         // Nothing to do but restore the PartTilePainting flag.
     }
 
-    if (nOrigViewId >= 0)
-    {
-        enableViewCallbacks(pDocument, nOrigViewId);
-    }
+    enableViewCallbacks(pDocument, nOrigViewId);
 }
 
 static int doc_getTileMode(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/)
