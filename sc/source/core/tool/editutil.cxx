@@ -522,26 +522,26 @@ ScEditAttrTester::~ScEditAttrTester()
 ScEnginePoolHelper::ScEnginePoolHelper( SfxItemPool* pEnginePoolP,
                 bool bDeleteEnginePoolP )
             :
-            pEnginePool( pEnginePoolP ),
-            pDefaults( nullptr ),
-            bDeleteEnginePool( bDeleteEnginePoolP ),
-            bDeleteDefaults( false )
+            m_pEnginePool( pEnginePoolP ),
+            m_pDefaults( nullptr ),
+            m_bDeleteEnginePool( bDeleteEnginePoolP ),
+            m_bDeleteDefaults( false )
 {
 }
 
 ScEnginePoolHelper::ScEnginePoolHelper( const ScEnginePoolHelper& rOrg )
             :
-            pEnginePool( rOrg.bDeleteEnginePool ? rOrg.pEnginePool->Clone() : rOrg.pEnginePool ),
-            pDefaults( nullptr ),
-            bDeleteEnginePool( rOrg.bDeleteEnginePool ),
-            bDeleteDefaults( false )
+            m_pEnginePool( rOrg.m_bDeleteEnginePool ? rOrg.m_pEnginePool->Clone() : rOrg.m_pEnginePool ),
+            m_pDefaults( nullptr ),
+            m_bDeleteEnginePool( rOrg.m_bDeleteEnginePool ),
+            m_bDeleteDefaults( false )
 {
 }
 
 ScEnginePoolHelper::~ScEnginePoolHelper()
 {
-    if ( bDeleteDefaults )
-        delete pDefaults;
+    if ( m_bDeleteDefaults )
+        delete m_pDefaults;
 }
 
 ScEditEngineDefaulter::ScEditEngineDefaulter( SfxItemPool* pEnginePoolP,
@@ -559,7 +559,7 @@ ScEditEngineDefaulter::ScEditEngineDefaulter( SfxItemPool* pEnginePoolP,
 ScEditEngineDefaulter::ScEditEngineDefaulter( const ScEditEngineDefaulter& rOrg )
             :
             ScEnginePoolHelper( rOrg ),
-            EditEngine( pEnginePool.get() )
+            EditEngine( m_pEnginePool.get() )
 {
     SetDefaultLanguage( ScGlobal::GetEditDefaultLanguage() );
 }
@@ -572,12 +572,12 @@ void ScEditEngineDefaulter::SetDefaults( const SfxItemSet& rSet, bool bRememberC
 {
     if ( bRememberCopy )
     {
-        if ( bDeleteDefaults )
-            delete pDefaults;
-        pDefaults = new SfxItemSet( rSet );
-        bDeleteDefaults = true;
+        if ( m_bDeleteDefaults )
+            delete m_pDefaults;
+        m_pDefaults = new SfxItemSet( rSet );
+        m_bDeleteDefaults = true;
     }
-    const SfxItemSet& rNewSet = bRememberCopy ? *pDefaults : rSet;
+    const SfxItemSet& rNewSet = bRememberCopy ? *m_pDefaults : rSet;
     bool bUndo = IsUndoEnabled();
     EnableUndo( false );
     bool bUpdateMode = SetUpdateLayout( false );
@@ -594,41 +594,41 @@ void ScEditEngineDefaulter::SetDefaults( const SfxItemSet& rSet, bool bRememberC
 
 void ScEditEngineDefaulter::SetDefaults( std::unique_ptr<SfxItemSet> pSet )
 {
-    if ( bDeleteDefaults )
-        delete pDefaults;
-    pDefaults = pSet.release();
-    bDeleteDefaults = true;
-    if ( pDefaults )
-        SetDefaults( *pDefaults, false );
+    if ( m_bDeleteDefaults )
+        delete m_pDefaults;
+    m_pDefaults = pSet.release();
+    m_bDeleteDefaults = true;
+    if ( m_pDefaults )
+        SetDefaults( *m_pDefaults, false );
 }
 
 void ScEditEngineDefaulter::SetDefaultItem( const SfxPoolItem& rItem )
 {
-    if ( !pDefaults )
+    if ( !m_pDefaults )
     {
-        pDefaults = new SfxItemSet( GetEmptyItemSet() );
-        bDeleteDefaults = true;
+        m_pDefaults = new SfxItemSet( GetEmptyItemSet() );
+        m_bDeleteDefaults = true;
     }
-    pDefaults->Put( rItem );
-    SetDefaults( *pDefaults, false );
+    m_pDefaults->Put( rItem );
+    SetDefaults( *m_pDefaults, false );
 }
 
 const SfxItemSet& ScEditEngineDefaulter::GetDefaults()
 {
-    if ( !pDefaults )
+    if ( !m_pDefaults )
     {
-        pDefaults = new SfxItemSet( GetEmptyItemSet() );
-        bDeleteDefaults = true;
+        m_pDefaults = new SfxItemSet( GetEmptyItemSet() );
+        m_bDeleteDefaults = true;
     }
-    return *pDefaults;
+    return *m_pDefaults;
 }
 
 void ScEditEngineDefaulter::SetTextCurrentDefaults( const EditTextObject& rTextObject )
 {
     bool bUpdateMode = SetUpdateLayout( false );
     SetText( rTextObject );
-    if ( pDefaults )
-        SetDefaults( *pDefaults, false );
+    if ( m_pDefaults )
+        SetDefaults( *m_pDefaults, false );
     if ( bUpdateMode )
         SetUpdateLayout( true );
 }
@@ -647,8 +647,8 @@ void ScEditEngineDefaulter::SetTextCurrentDefaults( const OUString& rText )
 {
     bool bUpdateMode = SetUpdateLayout( false );
     SetText( rText );
-    if ( pDefaults )
-        SetDefaults( *pDefaults, false );
+    if ( m_pDefaults )
+        SetDefaults( *m_pDefaults, false );
     if ( bUpdateMode )
         SetUpdateLayout( true );
 }
@@ -665,11 +665,11 @@ void ScEditEngineDefaulter::SetTextNewDefaults( const OUString& rText,
 
 void ScEditEngineDefaulter::RepeatDefaults()
 {
-    if ( pDefaults )
+    if ( m_pDefaults )
     {
         sal_Int32 nPara = GetParagraphCount();
         for ( sal_Int32 j=0; j<nPara; j++ )
-            SetParaAttribs( j, *pDefaults );
+            SetParaAttribs( j, *m_pDefaults );
     }
 }
 
@@ -688,7 +688,7 @@ void ScEditEngineDefaulter::RemoveParaAttribs()
             if ( rParaAttribs.GetItemState( nWhich, false, &pParaItem ) == SfxItemState::SET )
             {
                 //  if defaults are set, use only items that are different from default
-                if ( !pDefaults || *pParaItem != pDefaults->Get(nWhich) )
+                if ( !m_pDefaults || *pParaItem != m_pDefaults->Get(nWhich) )
                 {
                     if (!pCharItems)
                         pCharItems.emplace( GetEmptyItemSet() );

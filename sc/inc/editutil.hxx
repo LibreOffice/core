@@ -108,10 +108,10 @@ public:
 class ScEnginePoolHelper
 {
 protected:
-    rtl::Reference<SfxItemPool> pEnginePool;
-    SfxItemSet*     pDefaults;
-    bool            bDeleteEnginePool;
-    bool            bDeleteDefaults;
+    rtl::Reference<SfxItemPool> m_pEnginePool;
+    SfxItemSet*     m_pDefaults;
+    bool            m_bDeleteEnginePool;
+    bool            m_bDeleteDefaults;
 
                     ScEnginePoolHelper( SfxItemPool* pEnginePool, bool bDeleteEnginePool );
                     ScEnginePoolHelper( const ScEnginePoolHelper& rOrg );
