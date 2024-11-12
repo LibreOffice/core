@@ -103,6 +103,8 @@ public:
     /// If m_xCertificate is not set, the time that would be used, in milliseconds since the epoch
     /// (1970-01-01 UTC).
     sal_Int64 m_nSignatureTime = 0;
+    /// SHA-256 digest.
+    std::vector<unsigned char> m_aDigest;
 };
 
 }

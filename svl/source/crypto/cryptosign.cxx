@@ -977,10 +977,19 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
 
     PRTime now = PR_Now();
 
+    // The context unit is milliseconds, PR_Now() unit is microseconds.
+    if (m_rSigningContext.m_nSignatureTime)
+    {
+        now = m_rSigningContext.m_nSignatureTime * 1000;
+    }
+    else
+    {
+        m_rSigningContext.m_nSignatureTime = now / 1000;
+    }
+
     if (!m_rSigningContext.m_xCertificate.is())
     {
-        // The context unit is milliseconds, PR_Now() unit is microseconds.
-        m_rSigningContext.m_nSignatureTime = now / 1000;
+        m_rSigningContext.m_aDigest = aHashResult;
         // No certificate is provided: don't actually sign -- just update the context with the
         // parameters for the signing and return.
         return false;

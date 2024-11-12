@@ -531,7 +531,8 @@ class VCL_DLLPUBLIC PDFDocument final : public PDFObjectContainer
     /// Suggest a minimal, yet free signature ID to use for the next signature.
     SAL_DLLPRIVATE sal_uInt32 GetNextSignature();
     /// Write the signature object as part of signing.
-    SAL_DLLPRIVATE sal_Int32 WriteSignatureObject(const OUString& rDescription, bool bAdES,
+    SAL_DLLPRIVATE sal_Int32 WriteSignatureObject(svl::crypto::SigningContext& rSigningContext,
+                                                  const OUString& rDescription, bool bAdES,
                                                   sal_uInt64& rLastByteRangeOffset,
                                                   sal_Int64& rContentOffset);
     /// Write the appearance object as part of signing.

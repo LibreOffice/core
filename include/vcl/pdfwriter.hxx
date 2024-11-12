@@ -48,6 +48,10 @@ namespace tools {
     class Polygon;
     class PolyPolygon;
 }
+namespace svl::crypto
+{
+class SigningContext;
+}
 class Bitmap;
 class BitmapEx;
 class Gradient;
@@ -1262,7 +1266,7 @@ The following structure describes the permissions used in PDF security
     static void AppendUnicodeTextString(const OUString& rString, OStringBuffer& rBuffer);
 
     /// Get current date/time in PDF D:YYYYMMDDHHMMSS form.
-    static OString GetDateTime();
+    static OString GetDateTime(svl::crypto::SigningContext* pSigningContext = nullptr);
 };
 
 }

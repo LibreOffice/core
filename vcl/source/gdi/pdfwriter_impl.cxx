@@ -1474,13 +1474,27 @@ void PDFWriterImpl::setupDocInfo()
         m_aContext.Encryption.DocumentIdentifier = std::move(aId);
 }
 
-OString PDFWriter::GetDateTime()
+OString PDFWriter::GetDateTime(svl::crypto::SigningContext* pSigningContext)
 {
     OStringBuffer aRet;
 
     TimeValue aTVal, aGMT;
     oslDateTime aDT;
     osl_getSystemTime(&aGMT);
+
+    if (pSigningContext)
+    {
+        // The context unit is milliseconds, TimeValue is seconds + nanoseconds.
+        if (pSigningContext->m_nSignatureTime)
+        {
+            aGMT = std::chrono::milliseconds(pSigningContext->m_nSignatureTime);
+        }
+        else
+        {
+            pSigningContext->m_nSignatureTime = static_cast<sal_Int64>(aGMT.Seconds) * 1000 + aGMT.Nanosec / 1000000;
+        }
+    }
+
     osl_getLocalTimeFromSystemTime(&aGMT, &aTVal);
     osl_getDateTimeFromTimeValue(&aTVal, &aDT);
 
