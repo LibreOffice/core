@@ -957,7 +957,7 @@ void ShadowModel::pushToPropMap(ShapePropertyMap& rPropMap, const GraphicHelper&
         ? nOffsetY < 0 ? table::ShadowLocation_TOP_LEFT : table::ShadowLocation_BOTTOM_LEFT
         : nOffsetY < 0 ? table::ShadowLocation_TOP_RIGHT : table::ShadowLocation_BOTTOM_RIGHT;
     // The width of the shadow is the average of the x and y values, see SwWW8ImplReader::MatchSdrItemsIntoFlySet().
-    aFormat.ShadowWidth = ((std::abs(nOffsetX) + std::abs(nOffsetY)) / 2);
+    aFormat.ShadowWidth = std::min<sal_Int32>(o3tl::saturating_add(std::abs(nOffsetX), std::abs(nOffsetY)) / 2, SHRT_MAX);
     rPropMap.setProperty(PROP_ShadowFormat, aFormat);
 }
 
