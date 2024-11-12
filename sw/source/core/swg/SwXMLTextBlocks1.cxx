@@ -186,7 +186,7 @@ ErrCode SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
 
         uno::Reference < io::XStream > xDocStream = m_xRoot->openStreamElement(
             u"atevent.xml"_ustr, embed::ElementModes::READ );
-        OSL_ENSURE(xDocStream.is(), "Can't create stream");
+        SAL_INFO("sw", "Can't open atevent.xml stream");
         if ( !xDocStream.is() )
             return ERR_SWG_READ_ERROR;
 
