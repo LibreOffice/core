@@ -680,15 +680,15 @@ AnimationActivitySharedPtr createActivity(
                                        rParms.mbAutoReverse );
 
     // is a formula given?
-    const OUString& rFormulaString( xNode->getFormula() );
-    if( !rFormulaString.isEmpty() )
+    const OUString aFormulaString( xNode->getFormula() );
+    if( !aFormulaString.isEmpty() )
     {
         // yep, parse and pass to ActivityParameters
         try
         {
             aActivityParms.mpFormula =
                 SmilFunctionParser::parseSmilFunction(
-                    rFormulaString,
+                    aFormulaString,
                     calcRelativeShapeBounds(
                         rParms.maSlideBounds,
                         rParms.mpShape->getBounds() ) );
@@ -701,7 +701,7 @@ AnimationActivitySharedPtr createActivity(
     }
 
     // are key times given?
-    const uno::Sequence< double >& aKeyTimes( xNode->getKeyTimes() );
+    const uno::Sequence< double > aKeyTimes( xNode->getKeyTimes() );
     if( aKeyTimes.hasElements() )
     {
         // yes, convert them from Sequence< double >

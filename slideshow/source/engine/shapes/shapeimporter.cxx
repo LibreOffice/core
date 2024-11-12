@@ -379,7 +379,7 @@ bool ShapeImporter::isSkip(
     if(xLayer.is())
     {
         OUString layerName;
-        const uno::Any& a(xLayer->getPropertyValue(u"Name"_ustr) );
+        const uno::Any a(xLayer->getPropertyValue(u"Name"_ustr) );
         bool const bRet = (a >>= layerName);
         if(bRet)
         {

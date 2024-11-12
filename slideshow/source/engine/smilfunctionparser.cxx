@@ -527,11 +527,11 @@ namespace slideshow::internal
             // TODO(Q1): Check if a combination of the RTL_UNICODETOTEXT_FLAGS_*
             // gives better conversion robustness here (we might want to map space
             // etc. to ASCII space here)
-            const OString& rAsciiSmilValue(
+            const OString aAsciiSmilValue(
                 OUStringToOString( rSmilValue, RTL_TEXTENCODING_ASCII_US ) );
 
-            StringIteratorT aStart( rAsciiSmilValue.getStr() );
-            StringIteratorT aEnd( rAsciiSmilValue.getStr()+rAsciiSmilValue.getLength() );
+            StringIteratorT aStart( aAsciiSmilValue.getStr() );
+            StringIteratorT aEnd( aAsciiSmilValue.getStr()+aAsciiSmilValue.getLength() );
 
             // static parser context, because the actual
             // Spirit parser is also a static object
@@ -570,11 +570,11 @@ namespace slideshow::internal
             // TODO(Q1): Check if a combination of the RTL_UNICODETOTEXT_FLAGS_*
             // gives better conversion robustness here (we might want to map space
             // etc. to ASCII space here)
-            const OString& rAsciiSmilFunction(
+            const OString aAsciiSmilFunction(
                 OUStringToOString( rSmilFunction, RTL_TEXTENCODING_ASCII_US ) );
 
-            StringIteratorT aStart( rAsciiSmilFunction.getStr() );
-            StringIteratorT aEnd( rAsciiSmilFunction.getStr()+rAsciiSmilFunction.getLength() );
+            StringIteratorT aStart( aAsciiSmilFunction.getStr() );
+            StringIteratorT aEnd( aAsciiSmilFunction.getStr()+aAsciiSmilFunction.getLength() );
 
             // static parser context, because the actual
             // Spirit parser is also a static object

@@ -106,20 +106,20 @@ namespace slideshow::internal
 
         void MediaShape::implViewChanged( const UnoViewSharedPtr& rView )
         {
-            const ::basegfx::B2DRectangle& rBounds = getBounds();
+            const ::basegfx::B2DRectangle aBounds = getBounds();
             // determine ViewMediaShape that needs update
             for( const auto& pViewMediaShape : maViewMediaShapes )
                 if( pViewMediaShape->getViewLayer()->isOnView( rView ) )
-                    pViewMediaShape->resize( rBounds );
+                    pViewMediaShape->resize( aBounds );
         }
 
 
         void MediaShape::implViewsChanged()
         {
-            const ::basegfx::B2DRectangle& rBounds = getBounds();
+            const ::basegfx::B2DRectangle aBounds = getBounds();
             // resize all ViewShapes
             for( const auto& pViewMediaShape : maViewMediaShapes )
-                pViewMediaShape->resize( rBounds );
+                pViewMediaShape->resize( aBounds );
         }
 
 

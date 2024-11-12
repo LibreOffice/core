@@ -317,22 +317,22 @@ namespace slideshow::internal
             aShapeTransformation.translate( rOrigBounds.getMinX(),
                                             rOrigBounds.getMinY() );
 
-            const ::basegfx::B2DHomMatrix& rCanvasTransform(
+            const ::basegfx::B2DHomMatrix aCanvasTransform(
                 rViewLayer->getSpriteTransformation() );
 
             // area actually needed for the sprite
-            const ::basegfx::B2DRectangle& rSpriteBoundsPixel(
+            const ::basegfx::B2DRectangle aSpriteBoundsPixel(
                 calcUpdateAreaPixel( rUnitBounds,
                                      aShapeTransformation,
-                                     rCanvasTransform,
+                                     aCanvasTransform,
                                      pAttr ) );
 
             // actual area for the shape (without subsetting, but
             // including char scaling)
-            const ::basegfx::B2DRectangle& rShapeBoundsPixel(
+            const ::basegfx::B2DRectangle aShapeBoundsPixel(
                 calcUpdateAreaPixel( ::basegfx::B2DRectangle(0.0,0.0,1.0,1.0),
                                      aShapeTransformation,
-                                     rCanvasTransform,
+                                     aCanvasTransform,
                                      pAttr ) );
 
             // nominal area for the shape (without subsetting, without
@@ -340,8 +340,8 @@ namespace slideshow::internal
             // contained in rSpriteBoundsPixel, this is _without_ any
             // translational component.
             ::basegfx::B2DRectangle        aLogShapeBounds;
-            const ::basegfx::B2DRectangle& rNominalShapeBoundsPixel(
-                shapeArea2AreaPixel( rCanvasTransform,
+            const ::basegfx::B2DRectangle aNominalShapeBoundsPixel(
+                shapeArea2AreaPixel( aCanvasTransform,
                                      ::canvas::tools::calcTransformedRectBounds(
                                          aLogShapeBounds,
                                          ::basegfx::B2DRectangle(0.0,0.0,1.0,1.0),
@@ -349,7 +349,7 @@ namespace slideshow::internal
 
             // create (or resize) sprite with sprite's pixel size, if
             // not done already
-            auto aRange = rSpriteBoundsPixel.getRange();
+            auto aRange = aSpriteBoundsPixel.getRange();
             basegfx::B2DSize rSpriteSizePixel(aRange.getX(), aRange.getY());
             if( !mpSprite )
             {
@@ -381,14 +381,14 @@ namespace slideshow::internal
             // the appropriate output position within the virtual
             // rShapeBoundsPixel area.
             ::basegfx::B2DPoint aSpritePosPixel( rBounds.getCenter() );
-            aSpritePosPixel *= rCanvasTransform;
-            aSpritePosPixel -= rShapeBoundsPixel.getCenter() - rSpriteBoundsPixel.getMinimum();
+            aSpritePosPixel *= aCanvasTransform;
+            aSpritePosPixel -= aShapeBoundsPixel.getCenter() - aSpriteBoundsPixel.getMinimum();
 
             // the difference between rShapeBoundsPixel and
             // rSpriteBoundsPixel upper, left corner is: the offset we
             // have to move sprite output to the right, top (to make
             // the desired subset content visible at all)
-            auto aDifference = rSpriteBoundsPixel.getMinimum() - rNominalShapeBoundsPixel.getMinimum();
+            auto aDifference = aSpriteBoundsPixel.getMinimum() - aNominalShapeBoundsPixel.getMinimum();
             const basegfx::B2DSize rSpriteCorrectionOffset(aDifference.getX(), aDifference.getY());
 
             // offset added top, left for anti-aliasing (otherwise,
@@ -796,15 +796,15 @@ namespace slideshow::internal
             ENSURE_OR_THROW( mpViewLayer->getCanvas(),
                               "ViewShape::getAntialiasingBorder(): Invalid ViewLayer canvas" );
 
-            const ::basegfx::B2DHomMatrix& rViewTransform(
+            const ::basegfx::B2DHomMatrix aViewTransform(
                 mpViewLayer->getTransformation() );
 
             // TODO(F1): As a quick shortcut (did not want to invert
             // whole matrix here), taking only scale components of
             // view transformation matrix. This will be wrong when
             // e.g. shearing is involved.
-            const double nXBorder( ::cppcanvas::Canvas::ANTIALIASING_EXTRA_SIZE / rViewTransform.get(0,0) );
-            const double nYBorder( ::cppcanvas::Canvas::ANTIALIASING_EXTRA_SIZE / rViewTransform.get(1,1) );
+            const double nXBorder( ::cppcanvas::Canvas::ANTIALIASING_EXTRA_SIZE / aViewTransform.get(0,0) );
+            const double nYBorder( ::cppcanvas::Canvas::ANTIALIASING_EXTRA_SIZE / aViewTransform.get(1,1) );
 
             return ::basegfx::B2DSize( nXBorder,
                                        nYBorder );

@@ -259,9 +259,9 @@ namespace slideshow::internal
             SAL_INFO( "slideshow", "::presentation::internal::BackgroundShape: 0x" << std::hex << this );
 
             // gcc again...
-            const ::basegfx::B2DRectangle& rCurrBounds( BackgroundShape::getBounds() );
+            const ::basegfx::B2DRectangle aCurrBounds( BackgroundShape::getBounds() );
 
-            if( rCurrBounds.getRange().equalZero() )
+            if( aCurrBounds.getRange().equalZero() )
             {
                 // zero-sized shapes are effectively invisible,
                 // thus, we save us the rendering...

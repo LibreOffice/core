@@ -451,10 +451,10 @@ public:
                                                    maUserSize.getWidth(),
                                                    maUserSize.getHeight()) );
 
-        basegfx::B2IRange const& rNewLayerPixel(
+        basegfx::B2IRange const aNewLayerPixel(
             getLayerBoundsPixel(maLayerBounds,
                                 maTransformation) );
-        if( rNewLayerPixel != maLayerBoundsPixel )
+        if( aNewLayerPixel != maLayerBoundsPixel )
         {
             // re-gen sprite with new size
             mpOutputCanvas.reset();
@@ -543,9 +543,9 @@ private:
         cppcanvas::CanvasSharedPtr pCanvas=getCanvas()->clone();
 
         // clear whole canvas
-        const basegfx::B2I64Tuple& rSpriteSize(maLayerBoundsPixel.getRange());
+        const basegfx::B2I64Tuple aSpriteSize(maLayerBoundsPixel.getRange());
         clearRect(pCanvas,
-                  basegfx::B2IRange(0,0,rSpriteSize.getX(),rSpriteSize.getY()));
+                  basegfx::B2IRange(0,0,aSpriteSize.getX(),aSpriteSize.getY()));
     }
 
     virtual void clearAll() const override
@@ -557,9 +557,9 @@ private:
         pCanvas->setClip();
 
         // clear whole canvas
-        const basegfx::B2I64Tuple& rSpriteSize(maLayerBoundsPixel.getRange());
+        const basegfx::B2I64Tuple aSpriteSize(maLayerBoundsPixel.getRange());
         clearRect(pCanvas,
-                  basegfx::B2IRange(0,0,rSpriteSize.getX(),rSpriteSize.getY()));
+                  basegfx::B2IRange(0,0,aSpriteSize.getX(),aSpriteSize.getY()));
     }
 
     virtual bool isOnView(ViewSharedPtr const& rView) const override
@@ -584,10 +584,10 @@ private:
                 if( maLayerBoundsPixel.isEmpty() )
                     maLayerBoundsPixel = basegfx::B2IRange(0,0,1,1);
 
-                const basegfx::B2I64Tuple& rSpriteSize(maLayerBoundsPixel.getRange());
+                const basegfx::B2I64Tuple aSpriteSize(maLayerBoundsPixel.getRange());
                 mpSprite = mpSpriteCanvas->createCustomSprite(
-                    basegfx::B2DSize(sal::static_int_cast<sal_Int32>(rSpriteSize.getX()),
-                                       sal::static_int_cast<sal_Int32>(rSpriteSize.getY())) );
+                    basegfx::B2DSize(sal::static_int_cast<sal_Int32>(aSpriteSize.getX()),
+                                       sal::static_int_cast<sal_Int32>(aSpriteSize.getY())) );
 
                 mpSprite->setPriority(
                     maSpriteContainer.getLayerPriority().getMinimum() );
@@ -1139,7 +1139,7 @@ void SlideView::pruneLayers( bool bWithViewLayerUpdate ) const
 {
     ViewLayerVector aValidLayers;
 
-    const basegfx::B2DHomMatrix& rCurrTransform(
+    const basegfx::B2DHomMatrix aCurrTransform(
         getTransformation() );
 
     // check all layers for validity, and retain only the live ones
@@ -1152,7 +1152,7 @@ void SlideView::pruneLayers( bool bWithViewLayerUpdate ) const
             aValidLayers.push_back( xCurrLayer );
 
             if( bWithViewLayerUpdate )
-                xCurrLayer->updateView( rCurrTransform,
+                xCurrLayer->updateView( aCurrTransform,
                                         maUserSize );
         }
     }

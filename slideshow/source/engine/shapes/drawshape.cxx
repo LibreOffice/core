@@ -1011,14 +1011,14 @@ namespace slideshow::internal
             // increase capacity to same size as the container for
             // shape-relative hyperlink regions to avoid reallocation
             aTranslatedRegions.reserve( maHyperlinkRegions.size() );
-            const basegfx::B2DPoint& rOffset(getBounds().getMinimum());
+            const basegfx::B2DPoint aOffset(getBounds().getMinimum());
             for( const auto& cp : maHyperlinkRegions )
             {
                 basegfx::B2DRange const& relRegion( cp.first );
                 aTranslatedRegions.emplace_back(
                         basegfx::B2DRange(
-                            relRegion.getMinimum() + rOffset,
-                            relRegion.getMaximum() + rOffset),
+                            relRegion.getMinimum() + aOffset,
+                            relRegion.getMaximum() + aOffset),
                         cp.second );
             }
 
@@ -1204,13 +1204,13 @@ namespace slideshow::internal
                 // persistent subset, containing all text/only the
                 // background respectively. From _that_ object,
                 // generate the temporary character subset shapes.
-                const ShapeAttributeLayerSharedPtr& rAttrLayer(
+                const ShapeAttributeLayerSharedPtr xAttrLayer(
                     rShape->getTopmostAttributeLayer() );
-                if( rAttrLayer &&
-                    rAttrLayer->isVisibilityValid() &&
-                    rAttrLayer->getVisibility() != isVisible() )
+                if( xAttrLayer &&
+                    xAttrLayer->isVisibilityValid() &&
+                    xAttrLayer->getVisibility() != isVisible() )
                 {
-                    const bool bVisibility( rAttrLayer->getVisibility() );
+                    const bool bVisibility( xAttrLayer->getVisibility() );
 
                     // visibilities differ - adjust ours, then
                     if( mpAttributeLayer )

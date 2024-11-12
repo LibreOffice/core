@@ -286,7 +286,7 @@ namespace slideshow
             OUString const & propName )
         {
             try {
-                const css::uno::Any& a(
+                const css::uno::Any a(
                     xPropSet->getPropertyValue( propName ) );
                 bool const bRet = css::uno::fromAny(a, &rValue);
 #if OSL_DEBUG_LEVEL > 0
@@ -314,7 +314,7 @@ namespace slideshow
         {
             try
             {
-                const css::uno::Any& a(xPropSet->getPropertyValue( propName ));
+                const css::uno::Any a(xPropSet->getPropertyValue( propName ));
                 rIfc.set( a, css::uno::UNO_QUERY );
 
                 bool const bRet = rIfc.is();

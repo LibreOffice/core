@@ -370,8 +370,8 @@ void LOKSlideRenderer::renderBackgroundImpl(VirtualDevice& rDevice)
     std::string sSlideHash = GetInterfaceHash(mxDrawPage);
     aJsonWriter.put("slideHash", sSlideHash);
 
-    ShapeSharedPtr const& rBGShape(mpMPShapesFunctor->importBackgroundShape());
-    mpLayerManager->addShape(rBGShape);
+    ShapeSharedPtr const xBGShape(mpMPShapesFunctor->importBackgroundShape());
+    mpLayerManager->addShape(xBGShape);
 
     // render and collect bitmap
     renderLayerBitmapImpl(rDevice);
@@ -390,7 +390,7 @@ void LOKSlideRenderer::renderBackgroundImpl(VirtualDevice& rDevice)
 
     // clean up
     rDevice.Erase();
-    mpLayerManager->removeShape(rBGShape);
+    mpLayerManager->removeShape(xBGShape);
 
     mbBackgroundRenderingDone = true;
 }
@@ -431,18 +431,18 @@ void LOKSlideRenderer::renderMasterPageImpl(VirtualDevice& rDevice)
     bool bDoRendering = false;
     while (!mpMPShapesFunctor->isImportDone())
     {
-        ShapeSharedPtr const& rShape(mpMPShapesFunctor->importShape());
-        if (!rShape)
+        ShapeSharedPtr const pShape(mpMPShapesFunctor->importShape());
+        if (!pShape)
             continue;
 
-        uno::Reference<drawing::XShape> xShape = rShape->getXShape();
+        uno::Reference<drawing::XShape> xShape = pShape->getXShape();
         if (xShape.is())
         {
             OUString sShapeType = xShape->getShapeType();
             OUString sPlaceholderType = getPlaceholderType(sShapeType);
             if (sPlaceholderType.isEmpty())
             {
-                mpLayerManager->addShape(rShape);
+                mpLayerManager->addShape(pShape);
                 bDoRendering = true;
             }
             else
@@ -482,11 +482,11 @@ void LOKSlideRenderer::renderTextFieldsImpl(VirtualDevice& rDevice)
 {
     while( !mpTFShapesFunctor->isImportDone() )
     {
-        ShapeSharedPtr const& rShape(mpTFShapesFunctor->importShape());
-        if (!rShape)
+        ShapeSharedPtr const pShape(mpTFShapesFunctor->importShape());
+        if (!pShape)
             continue;
 
-        uno::Reference<drawing::XShape> xShape = rShape->getXShape();
+        uno::Reference<drawing::XShape> xShape = pShape->getXShape();
         if (xShape.is())
         {
             OUString sShapeType = xShape->getShapeType();
@@ -498,7 +498,7 @@ void LOKSlideRenderer::renderTextFieldsImpl(VirtualDevice& rDevice)
                     (!mbIsFooterVisible && sPlaceholderType == "Footer"))
                     continue;
 
-                mpLayerManager->addShape(rShape);
+                mpLayerManager->addShape(pShape);
 
                 // render and collect bitmap
                 renderLayerBitmapImpl(rDevice);
@@ -521,7 +521,7 @@ void LOKSlideRenderer::renderTextFieldsImpl(VirtualDevice& rDevice)
 
                 // clean up
                 rDevice.Erase();
-                mpLayerManager->removeShape(rShape);
+                mpLayerManager->removeShape(pShape);
                 return;
             }
         }
@@ -579,26 +579,26 @@ void LOKSlideRenderer::renderDrawPageImpl(VirtualDevice& rDevice)
 
     std::shared_ptr<ShapeImporter> pMasterShapeImporter = std::make_shared<ShapeImporter>(mxMasterPage, mxDrawPage, mxDrawPagesSupplier, mrContext, 0, true);
 
-    ShapeSharedPtr const& rBGShape(pMasterShapeImporter->importBackgroundShape());
-    if (rBGShape)
+    ShapeSharedPtr const pBGShape(pMasterShapeImporter->importBackgroundShape());
+    if (pBGShape)
     {
         bDoRendering = true;
-        mpLayerManager->addShape(rBGShape);
+        mpLayerManager->addShape(pBGShape);
     }
 
     while (!pMasterShapeImporter->isImportDone())
     {
-        ShapeSharedPtr const& rShape(pMasterShapeImporter->importShape());
-        if (!rShape)
+        ShapeSharedPtr const pShape(pMasterShapeImporter->importShape());
+        if (!pShape)
             continue;
 
-        rShape->setIsForeground(false);
+        pShape->setIsForeground(false);
 
-        uno::Reference<drawing::XShape> xShape = rShape->getXShape();
+        uno::Reference<drawing::XShape> xShape = pShape->getXShape();
         if (xShape.is())
         {
 
-            mpLayerManager->addShape(rShape);
+            mpLayerManager->addShape(pShape);
             bDoRendering = true;
         }
     }
@@ -608,27 +608,27 @@ void LOKSlideRenderer::renderDrawPageImpl(VirtualDevice& rDevice)
 
     while (!mpShapesFunctor->isImportDone())
     {
-        ShapeSharedPtr const& rShape(mpShapesFunctor->importShape());
-        if (rShape)
+        ShapeSharedPtr const pShape(mpShapesFunctor->importShape());
+        if (pShape)
         {
-            std::string sShapeId = GetInterfaceHash(rShape->getXShape());
-            const auto& rIter = maAnimatedShapeVisibilityMap.find(sShapeId);
-            bool bIsAnimated = rIter != maAnimatedShapeVisibilityMap.end();
+            std::string sShapeId = GetInterfaceHash(pShape->getXShape());
+            const auto aIter = maAnimatedShapeVisibilityMap.find(sShapeId);
+            bool bIsAnimated = aIter != maAnimatedShapeVisibilityMap.end();
             if (!bIsAnimated)
             {
-                mpLayerManager->addShape(rShape);
+                mpLayerManager->addShape(pShape);
                 bDoRendering = true;
             }
             else
             {
                 if (bDoRendering)
                 {
-                    mpDPLastAnimatedShape = rShape;
+                    mpDPLastAnimatedShape = pShape;
                     renderLayerImpl(rDevice, aJsonWriter);
                 }
                 else
                 {
-                    renderAnimatedShapeImpl(rDevice, rShape, aJsonWriter);
+                    renderAnimatedShapeImpl(rDevice, pShape, aJsonWriter);
                 }
                 msLastJsonMessage = aJsonWriter.finishAndGetAsOString();
                 maJsonMsgList.push_back(msLastJsonMessage);
@@ -1797,12 +1797,12 @@ bool SlideImpl::loadShapes()
 
                 while( !aMPShapesFunctor.isImportDone() )
                 {
-                    ShapeSharedPtr const& rShape(
+                    ShapeSharedPtr const pShape(
                         aMPShapesFunctor.importShape() );
-                    if( rShape )
+                    if( pShape )
                     {
-                        rShape->setIsForeground(false);
-                        mpLayerManager->addShape( rShape );
+                        pShape->setIsForeground(false);
+                        mpLayerManager->addShape( pShape );
                     }
                 }
                 addPolygons(aMPShapesFunctor.getPolygons());
@@ -1842,10 +1842,10 @@ bool SlideImpl::loadShapes()
 
         while( !aShapesFunctor.isImportDone() )
         {
-            ShapeSharedPtr const& rShape(
+            ShapeSharedPtr const pShape(
                 aShapesFunctor.importShape() );
-            if( rShape )
-                mpLayerManager->addShape( rShape );
+            if( pShape )
+                mpLayerManager->addShape( pShape );
         }
         addPolygons(aShapesFunctor.getPolygons());
     }

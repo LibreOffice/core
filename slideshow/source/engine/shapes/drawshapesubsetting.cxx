@@ -329,10 +329,10 @@ namespace slideshow::internal
 
             // subset shape already created for this DocTreeNode?
             SubsetEntry aEntry;
-            const DocTreeNode& rEffectiveSubset( rShape->getSubsetNode() );
+            const DocTreeNode aEffectiveSubset( rShape->getSubsetNode() );
 
-            aEntry.mnStartActionIndex   = rEffectiveSubset.getStartIndex();
-            aEntry.mnEndActionIndex     = rEffectiveSubset.getEndIndex();
+            aEntry.mnStartActionIndex   = aEffectiveSubset.getStartIndex();
+            aEntry.mnEndActionIndex     = aEffectiveSubset.getEndIndex();
 
             ShapeSet::const_iterator aIter;
             if( (aIter=maSubsetShapes.find( aEntry )) != maSubsetShapes.end() )
@@ -361,10 +361,10 @@ namespace slideshow::internal
 
             // lookup subset shape
             SubsetEntry aEntry;
-            const DocTreeNode& rEffectiveSubset( rShape->getSubsetNode() );
+            const DocTreeNode aEffectiveSubset( rShape->getSubsetNode() );
 
-            aEntry.mnStartActionIndex   = rEffectiveSubset.getStartIndex();
-            aEntry.mnEndActionIndex     = rEffectiveSubset.getEndIndex();
+            aEntry.mnStartActionIndex   = aEffectiveSubset.getStartIndex();
+            aEntry.mnEndActionIndex     = aEffectiveSubset.getEndIndex();
 
             ShapeSet::iterator aIter;
             if( (aIter=maSubsetShapes.find( aEntry )) == maSubsetShapes.end() )

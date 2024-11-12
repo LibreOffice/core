@@ -871,10 +871,10 @@ namespace slideshow::internal
             template< typename ValueType > ValueType getDefault( const AnimatableShapeSharedPtr&    rShape,
                                                                  const OUString&             rPropertyName )
             {
-                const uno::Any& rAny( getShapeDefault( rShape,
+                const uno::Any aAny( getShapeDefault( rShape,
                                                        rPropertyName ) );
 
-                if( !rAny.hasValue() )
+                if( !aAny.hasValue() )
                 {
                     SAL_WARN("slideshow", "getDefault(): cannot get shape property " <<  rPropertyName );
                     return ValueType();
@@ -883,7 +883,7 @@ namespace slideshow::internal
                 {
                     ValueType aValue = ValueType();
 
-                    if( !(rAny >>= aValue) )
+                    if( !(aAny >>= aValue) )
                     {
                         SAL_WARN("slideshow", "getDefault(): cannot extract shape property " << rPropertyName);
                         return ValueType();
@@ -896,10 +896,10 @@ namespace slideshow::internal
             template<> RGBColor getDefault< RGBColor >( const AnimatableShapeSharedPtr& rShape,
                                                         const OUString&          rPropertyName )
             {
-                const uno::Any& rAny( getShapeDefault( rShape,
+                const uno::Any aAny( getShapeDefault( rShape,
                                                        rPropertyName ) );
 
-                if( !rAny.hasValue() )
+                if( !aAny.hasValue() )
                 {
                     SAL_WARN("slideshow", "getDefault(): cannot get shape color property " << rPropertyName);
                     return RGBColor();
@@ -908,7 +908,7 @@ namespace slideshow::internal
                 {
                     sal_Int32 nValue = 0;
 
-                    if( !(rAny >>= nValue) )
+                    if( !(aAny >>= nValue) )
                     {
                         SAL_INFO("slideshow", "getDefault(): cannot extract shape color property " << rPropertyName);
                         return RGBColor();
@@ -1320,7 +1320,7 @@ namespace slideshow::internal
                                                                               sal_Int16                             nTransformType,
                                                                               int                                   nFlags )
         {
-            const ::basegfx::B2DRectangle& rBounds( rShape->getBounds() );
+            const ::basegfx::B2DRectangle aBounds( rShape->getBounds() );
 
             switch( nTransformType )
             {
@@ -1334,8 +1334,8 @@ namespace slideshow::internal
                             // Theoretically, our AttrLayer is way down the stack, and
                             // we only have to consider _that_ value, not the one from
                             // the top of the stack as returned by Shape::getBounds()
-                            basegfx::B2DSize(rBounds.getRange().getX(), rBounds.getRange().getY()),
-                            basegfx::B2DSize(rBounds.getRange().getX(), rBounds.getRange().getY()),
+                            basegfx::B2DSize(aBounds.getRange().getX(), aBounds.getRange().getY()),
+                            basegfx::B2DSize(aBounds.getRange().getX(), aBounds.getRange().getY()),
                             &ShapeAttributeLayer::getWidth,
                             &ShapeAttributeLayer::getHeight,
                             &ShapeAttributeLayer::setSize );
@@ -1350,7 +1350,7 @@ namespace slideshow::internal
                             // Theoretically, our AttrLayer is way down the stack, and
                             // we only have to consider _that_ value, not the one from
                             // the top of the stack as returned by Shape::getBounds()
-                            rBounds.getCenter(),
+                            aBounds.getCenter(),
                             basegfx::B2DSize(rSlideSize.getX(), rSlideSize.getY()),
                             &ShapeAttributeLayer::getPosX,
                             &ShapeAttributeLayer::getPosY,

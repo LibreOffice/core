@@ -1111,11 +1111,11 @@ sal_Bool SlideShowImpl::createLOKSlideRenderer(
     if (!mpCurrentSlide)
         return false;
 
-    const Size& rDeviceSize = mpCurrentSlide->createLOKSlideRenderer(nViewWidth, nViewHeight,
+    const Size aDeviceSize = mpCurrentSlide->createLOKSlideRenderer(nViewWidth, nViewHeight,
                                                                      bRenderBackground,
                                                                      bRenderMasterPage);
-    nViewWidth = rDeviceSize.getWidth();
-    nViewHeight = rDeviceSize.getHeight();
+    nViewWidth = aDeviceSize.getWidth();
+    nViewHeight = aDeviceSize.getHeight();
 
     return (nViewWidth > 0 && nViewHeight > 0);
 }

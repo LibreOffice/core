@@ -126,12 +126,12 @@ namespace slideshow::internal
 
         void AppletShape::implViewChanged( const UnoViewSharedPtr& rView )
         {
-            const ::basegfx::B2DRectangle& rBounds = getBounds();
+            const ::basegfx::B2DRectangle aBounds = getBounds();
             // determine ViewAppletShape that needs update
             for( const auto& pViewAppletShape : maViewAppletShapes )
             {
                 if( pViewAppletShape->getViewLayer()->isOnView( rView ) )
-                    pViewAppletShape->resize( rBounds );
+                    pViewAppletShape->resize( aBounds );
             }
         }
 
@@ -139,9 +139,9 @@ namespace slideshow::internal
         void AppletShape::implViewsChanged()
         {
             // resize all ViewShapes
-            const ::basegfx::B2DRectangle& rBounds = getBounds();
+            const ::basegfx::B2DRectangle aBounds = getBounds();
             for( const auto& pViewAppletShape : maViewAppletShapes )
-                pViewAppletShape->resize( rBounds );
+                pViewAppletShape->resize( aBounds );
         }
 
 
@@ -240,9 +240,9 @@ namespace slideshow::internal
 
         bool AppletShape::implStartIntrinsicAnimation()
         {
-            const ::basegfx::B2DRectangle& rBounds = getBounds();
+            const ::basegfx::B2DRectangle aBounds = getBounds();
             for( const auto& pViewAppletShape : maViewAppletShapes )
-                pViewAppletShape->startApplet( rBounds );
+                pViewAppletShape->startApplet( aBounds );
 
             mbIsPlaying = true;
 

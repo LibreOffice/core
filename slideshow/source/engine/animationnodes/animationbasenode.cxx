@@ -131,7 +131,7 @@ AnimationBaseNode::AnimationBaseNode(
                 mpShape->getTreeNodeSupplier().getNumberOfTreeNodes(
                     DocTreeNode::NodeType::LogicalParagraph) > aTarget.Paragraph )
             {
-                const DocTreeNode& rTreeNode(
+                const DocTreeNode aTreeNode(
                     mpShape->getTreeNodeSupplier().getTreeNode(
                         aTarget.Paragraph,
                         DocTreeNode::NodeType::LogicalParagraph ) );
@@ -143,7 +143,7 @@ AnimationBaseNode::AnimationBaseNode(
                 // the Slide class must be changed).
                 mpShapeSubset =
                     std::make_shared<ShapeSubset>( mpShape,
-                                     rTreeNode,
+                                     aTreeNode,
                                      mpSubsetManager );
 
                 // Override NodeContext, and flag this node as

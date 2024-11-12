@@ -232,12 +232,12 @@ namespace slideshow::internal
             ::canvas::tools::calcTransformedRectBounds( aTmpRange,
                                                         rNewBounds,
                                                         mpViewLayer->getTransformation() );
-            const ::basegfx::B2IRange& rRangePix(
+            const ::basegfx::B2IRange aRangePix(
                 ::basegfx::unotools::b2ISurroundingRangeFromB2DRange( aTmpRange ));
 
-            mxPlayerWindow->setEnable( !rRangePix.isEmpty() );
+            mxPlayerWindow->setEnable( !aRangePix.isEmpty() );
 
-            if( rRangePix.isEmpty() )
+            if( aRangePix.isEmpty() )
                 return true;
 
             awt::Rectangle aCanvasArea;
@@ -245,10 +245,10 @@ namespace slideshow::internal
             if (xUnoView)
                 aCanvasArea = xUnoView->getUnoView()->getCanvasArea();
 
-            const Point aPosPixel( rRangePix.getMinX() + maWindowOffset.X + aCanvasArea.X,
-                                   rRangePix.getMinY() + maWindowOffset.Y + aCanvasArea.Y );
-            const Size  aSizePixel( rRangePix.getMaxX() - rRangePix.getMinX(),
-                                    rRangePix.getMaxY() - rRangePix.getMinY() );
+            const Point aPosPixel( aRangePix.getMinX() + maWindowOffset.X + aCanvasArea.X,
+                                   aRangePix.getMinY() + maWindowOffset.Y + aCanvasArea.Y );
+            const Size  aSizePixel( aRangePix.getMaxX() - aRangePix.getMinX(),
+                                    aRangePix.getMaxY() - aRangePix.getMinY() );
 
             if( mpMediaWindow )
             {
@@ -426,15 +426,15 @@ namespace slideshow::internal
                     ::canvas::tools::calcTransformedRectBounds( aTmpRange,
                                                                 rBounds,
                                                                 mpViewLayer->getTransformation() );
-                    const ::basegfx::B2IRange& rRangePix(
+                    const ::basegfx::B2IRange aRangePix(
                         ::basegfx::unotools::b2ISurroundingRangeFromB2DRange( aTmpRange ));
 
-                    if( !rRangePix.isEmpty() )
+                    if( !aRangePix.isEmpty() )
                     {
-                        awt::Rectangle              aAWTRect( rRangePix.getMinX(),
-                                                              rRangePix.getMinY(),
-                                                                rRangePix.getMaxX() - rRangePix.getMinX(),
-                                                                rRangePix.getMaxY() - rRangePix.getMinY() );
+                        awt::Rectangle              aAWTRect( aRangePix.getMinX(),
+                                                              aRangePix.getMinY(),
+                                                                aRangePix.getMaxX() - aRangePix.getMinX(),
+                                                                aRangePix.getMaxY() - aRangePix.getMinY() );
                         {
                             mpMediaWindow.disposeAndClear();
                             mpMediaWindow = VclPtr<SystemChildWindow>::Create( pWindow, WB_CLIPCHILDREN );

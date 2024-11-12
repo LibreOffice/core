@@ -84,10 +84,10 @@ CombTransition::CombTransition(
 void CombTransition::renderComb( double           t,
                                  const ViewEntry& rViewEntry ) const
 {
-    const SlideBitmapSharedPtr& pEnteringBitmap = getEnteringBitmap(rViewEntry);
+    const SlideBitmapSharedPtr xEnteringBitmap = getEnteringBitmap(rViewEntry);
     const cppcanvas::CanvasSharedPtr pCanvas_ = rViewEntry.mpView->getCanvas();
 
-    if( !pEnteringBitmap || !pCanvas_ )
+    if( !xEnteringBitmap || !pCanvas_ )
         return;
 
     // calc bitmap offsets. The enter/leaving bitmaps are only
@@ -124,40 +124,40 @@ void CombTransition::renderComb( double           t,
                            basegfx::B2DSize(enteringSizePixel.getX(), enteringSizePixel.getY()),
                            mnNumStripes, 1 );
 
-    SlideBitmapSharedPtr const & pLeavingBitmap = getLeavingBitmap(rViewEntry);
-    if( pLeavingBitmap )
+    SlideBitmapSharedPtr const xLeavingBitmap = getLeavingBitmap(rViewEntry);
+    if( xLeavingBitmap )
     {
         // render odd strips:
-        pLeavingBitmap->clip( aClipPolygon1 );
+        xLeavingBitmap->clip( aClipPolygon1 );
         // don't modify bitmap object (no move!):
         p = basegfx::B2DPoint( pageOrigin + (t * aPushDirection) );
         pCanvas->setTransformation(basegfx::utils::createTranslateB2DHomMatrix(p.getX(), p.getY()));
-        pLeavingBitmap->draw( pCanvas );
+        xLeavingBitmap->draw( pCanvas );
 
         // render even strips:
-        pLeavingBitmap->clip( aClipPolygon2 );
+        xLeavingBitmap->clip( aClipPolygon2 );
         // don't modify bitmap object (no move!):
         p = basegfx::B2DPoint( pageOrigin - (t * aPushDirection) );
         pCanvas->setTransformation(basegfx::utils::createTranslateB2DHomMatrix(p.getX(), p.getY()));
-        pLeavingBitmap->draw( pCanvas );
+        xLeavingBitmap->draw( pCanvas );
     }
 
     // TODO(Q2): Use basegfx bitmaps here
     // TODO(F1): SlideBitmap is not fully portable between different canvases!
 
     // render odd strips:
-    pEnteringBitmap->clip( aClipPolygon1 );
+    xEnteringBitmap->clip( aClipPolygon1 );
     // don't modify bitmap object (no move!):
     p = basegfx::B2DPoint( pageOrigin + ((t - 1.0) * aPushDirection) );
     pCanvas->setTransformation(basegfx::utils::createTranslateB2DHomMatrix(p.getX(), p.getY()));
-    pEnteringBitmap->draw( pCanvas );
+    xEnteringBitmap->draw( pCanvas );
 
     // render even strips:
-    pEnteringBitmap->clip( aClipPolygon2 );
+    xEnteringBitmap->clip( aClipPolygon2 );
     // don't modify bitmap object (no move!):
     p = basegfx::B2DPoint( pageOrigin + ((1.0 - t) * aPushDirection) );
     pCanvas->setTransformation(basegfx::utils::createTranslateB2DHomMatrix(p.getX(), p.getY()));
-    pEnteringBitmap->draw( pCanvas );
+    xEnteringBitmap->draw( pCanvas );
 }
 
 bool CombTransition::operator()( double t )
