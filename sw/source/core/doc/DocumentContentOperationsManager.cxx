@@ -484,26 +484,28 @@ namespace
     }
 
     // #i86492#
-    bool lcl_ContainsOnlyParagraphsInList( const SwPaM& rPam )
+    bool lcl_ShouldKeepSourceList( const SwPaM& rPam )
     {
-        bool bRet = false;
-
         const SwTextNode* pTextNd = rPam.Start()->GetNode().GetTextNode();
         const SwTextNode* pEndTextNd = rPam.End()->GetNode().GetTextNode();
-        if ( pTextNd && pTextNd->IsInList() &&
-             pEndTextNd && pEndTextNd->IsInList() )
-        {
-            bRet = true;
-            SwNodeIndex aIdx(rPam.Start()->GetNode());
+        bool bRet = pTextNd->IsInListFromStyle();
+        //prefer list if it's a single paragraph with list from style
+        if (pTextNd == pEndTextNd && bRet)
+            return true;
 
+        if (pTextNd && pTextNd->IsInList() && !pTextNd->IsInListFromStyle() &&
+             pEndTextNd && pEndTextNd->IsInList() && !pEndTextNd->IsInListFromStyle())
+        {
+            bRet = false;
+            SwNodeIndex aIdx(rPam.Start()->GetNode());
             do
             {
                 ++aIdx;
                 pTextNd = aIdx.GetNode().GetTextNode();
 
-                if ( !pTextNd || !pTextNd->IsInList() )
+                if (!pTextNd || !pTextNd->IsInList() || pTextNd->IsInListFromStyle())
                 {
-                    bRet = false;
+                    bRet = true;
                     break;
                 }
             } while (pTextNd != pEndTextNd);
@@ -5124,11 +5126,11 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
     // or
     // - source is a table
     // - tdf#163340 overwrite list if source has a list
+    // - overwrite also if all source paragraphs have a list from a style
 
     if ( pNumRuleToPropagate &&
          ((pDestTextNd && !pDestTextNd->GetText().getLength() &&
-         (!pDestTextNd->IsInList() || rPam.GetPointNode().GetTextNode()->IsInList() ) &&
-         !lcl_ContainsOnlyParagraphsInList(rPam)) ||
+         (!pDestTextNd->IsInList() || lcl_ShouldKeepSourceList(rPam) )) ||
          rPam.GetBound().nNode.GetNode().GetNodeType() == SwNodeType::Table) )
     {
         pNumRuleToPropagate = nullptr;

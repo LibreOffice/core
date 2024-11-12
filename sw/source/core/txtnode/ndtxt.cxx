@@ -4659,6 +4659,17 @@ bool SwTextNode::IsInList() const
     return GetNum() != nullptr && GetNum()->GetParent() != nullptr;
 }
 
+bool SwTextNode::IsInListFromStyle()  const
+{
+    if (IsInList())
+    {
+        const SwFormatColl* pFormatColl = GetFormatColl();
+        if (pFormatColl->GetItemState(RES_PARATR_NUMRULE, true) == SfxItemState::SET)
+            return true;
+    }
+    return false;
+
+}
 bool SwTextNode::IsFirstOfNumRule(SwRootFrame const& rLayout) const
 {
     bool bResult = false;
