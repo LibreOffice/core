@@ -34,6 +34,7 @@
     </node>
     <node oor:name="AutoText" oor:op="fuse" oor:mandatory="true">
       <node oor:name="InternalPaths">
+        <node oor:name="$(insturl)/@LIBO_SHARE_FOLDER@/autotext/common" oor:op="fuse"/>
         <node oor:name="$(insturl)/@LIBO_SHARE_FOLDER@/autotext/$(vlang)" oor:op="fuse"/>
       </node>
       <prop oor:name="WritePath">

@@ -959,6 +959,7 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 		extensions_OOoSpotlightImporter \
 	) \
 	extras_autocorr \
+	extras_autotext \
 	extras_autotextuser \
 	extras_cfgsrvnolang \
 	extras_cfgusr \
