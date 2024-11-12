@@ -206,8 +206,8 @@ void WriteAnimateValues(const FSHelperPtr& pFS, const Reference<XAnimate>& rXAni
     if (!aKeyTimes.hasElements())
         return;
     const Sequence<Any> aValues = rXAnimate->getValues();
-    const OUString& sFormula = rXAnimate->getFormula();
-    const OUString& rAttributeName = rXAnimate->getAttributeName();
+    const OUString sFormula = rXAnimate->getFormula();
+    const OUString sAttributeName = rXAnimate->getAttributeName();
 
     SAL_INFO("sd.eppt", "animate values, formula: " << sFormula.toUtf8());
 
@@ -228,13 +228,13 @@ void WriteAnimateValues(const FSHelperPtr& pFS, const Reference<XAnimate>& rXAni
             if (aValues[i] >>= aPair)
             {
                 WriteAnimationProperty(
-                    pFS, AnimationExporter::convertAnimateValue(aPair.First, rAttributeName));
+                    pFS, AnimationExporter::convertAnimateValue(aPair.First, sAttributeName));
                 WriteAnimationProperty(
-                    pFS, AnimationExporter::convertAnimateValue(aPair.Second, rAttributeName));
+                    pFS, AnimationExporter::convertAnimateValue(aPair.Second, sAttributeName));
             }
             else
                 WriteAnimationProperty(
-                    pFS, AnimationExporter::convertAnimateValue(aValues[i], rAttributeName));
+                    pFS, AnimationExporter::convertAnimateValue(aValues[i], sAttributeName));
 
             pFS->endElementNS(XML_p, XML_val);
             pFS->endElementNS(XML_p, XML_tav);
@@ -1244,7 +1244,7 @@ sal_Int32 PPTXAnimationExport::GetNextAnimationNodeId(const Reference<XAnimation
 sal_Int32 PPTXAnimationExport::GetAnimationNodeId(const Reference<XAnimationNode>& xNode)
 {
     sal_Int32 nId = -1;
-    const auto& aIter = maAnimationNodeIdMap.find(xNode);
+    const auto aIter = maAnimationNodeIdMap.find(xNode);
     if (aIter != maAnimationNodeIdMap.end())
     {
         nId = aIter->second;

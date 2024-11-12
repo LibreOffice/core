@@ -367,13 +367,13 @@ IMPL_LINK_NOARG(SdNavigatorWin, ClickObjectHdl, weld::TreeView&, bool)
 
                 // Page entries in the tree have id value 1. Object entries have id value of
                 // the address of the pointer to the object.
-                const auto& rCursorEntryId = mxTlbObjects->get_cursor_id();
-                auto nCursorEntryId = rCursorEntryId.toInt64();
-                SdrObject* pCursorEntryObject = weld::fromId<SdrObject*>(rCursorEntryId);
+                const auto aCursorEntryId = mxTlbObjects->get_cursor_id();
+                auto nCursorEntryId = aCursorEntryId.toInt64();
+                SdrObject* pCursorEntryObject = weld::fromId<SdrObject*>(aCursorEntryId);
 
                 bool bIsCursorEntrySelected(std::find(vSelectedEntryIds.begin(),
                                                       vSelectedEntryIds.end(),
-                                                      rCursorEntryId) != vSelectedEntryIds.end());
+                                                      aCursorEntryId) != vSelectedEntryIds.end());
 
                 if (bIsCursorEntrySelected)
                 {

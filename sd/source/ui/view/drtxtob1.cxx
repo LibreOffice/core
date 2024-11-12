@@ -692,12 +692,12 @@ SET_ADJUST:
                     {
                         const sal_uInt16 nEEWhich
                             = aEditAttr.GetPool()->GetWhichIDFromSlotID(nSlot);
-                        const std::optional<NamedColor>& oColor
+                        const std::optional<NamedColor> oColor
                             = mpViewShell->GetDocSh()->GetRecentColor(nSlot);
                         if (oColor.has_value())
                         {
-                            const model::ComplexColor& rCol = (*oColor).getComplexColor();
-                            aNewAttr.Put(SvxColorItem(rCol.getFinalColor(), rCol, nEEWhich));
+                            const model::ComplexColor aCol = (*oColor).getComplexColor();
+                            aNewAttr.Put(SvxColorItem(aCol.getFinalColor(), aCol, nEEWhich));
                         }
                     }
                     break;

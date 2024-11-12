@@ -269,9 +269,9 @@ geometry::AffineMatrix2D SAL_CALL SlideShowView::getTransformation(  )
     std::unique_lock aGuard( m_aMutex );
     SolarMutexGuard aSolarGuard;
 
-    const Size& rTmpSize( mrOutputWindow.GetSizePixel() );
+    const Size aTmpSize( mrOutputWindow.GetSizePixel() );
 
-    if (rTmpSize.IsEmpty())
+    if (aTmpSize.IsEmpty())
     {
         return geometry::AffineMatrix2D (1,0,0,0,1,0);
     }

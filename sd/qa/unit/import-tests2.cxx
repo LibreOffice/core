@@ -1167,25 +1167,25 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf114821)
 
     // These Labels have custom position, so the exported LabelPlacement (reference point) by MSO is OUTSIDE/OUTEND
     // Check the first label
-    const css::uno::Reference<css::beans::XPropertySet>& rPropSet0(
+    const css::uno::Reference<css::beans::XPropertySet> aPropSet0(
         aSeriesSeq[0]->getDataPointByIndex(0));
-    CPPUNIT_ASSERT(rPropSet0.is());
+    CPPUNIT_ASSERT(aPropSet0.is());
     sal_Int32 aPlacement;
-    rPropSet0->getPropertyValue(u"LabelPlacement"_ustr) >>= aPlacement;
+    aPropSet0->getPropertyValue(u"LabelPlacement"_ustr) >>= aPlacement;
     CPPUNIT_ASSERT_EQUAL(css::chart::DataLabelPlacement::OUTSIDE, aPlacement);
 
     // Check the second label
-    const css::uno::Reference<css::beans::XPropertySet>& rPropSet1(
+    const css::uno::Reference<css::beans::XPropertySet> aPropSet1(
         aSeriesSeq[0]->getDataPointByIndex(1));
-    CPPUNIT_ASSERT(rPropSet1.is());
-    rPropSet1->getPropertyValue(u"LabelPlacement"_ustr) >>= aPlacement;
+    CPPUNIT_ASSERT(aPropSet1.is());
+    aPropSet1->getPropertyValue(u"LabelPlacement"_ustr) >>= aPlacement;
     CPPUNIT_ASSERT_EQUAL(css::chart::DataLabelPlacement::OUTSIDE, aPlacement);
 
     // Check the third label
-    const css::uno::Reference<css::beans::XPropertySet>& rPropSet2(
+    const css::uno::Reference<css::beans::XPropertySet> aPropSet2(
         aSeriesSeq[0]->getDataPointByIndex(2));
-    CPPUNIT_ASSERT(rPropSet2.is());
-    rPropSet2->getPropertyValue(u"LabelPlacement"_ustr) >>= aPlacement;
+    CPPUNIT_ASSERT(aPropSet2.is());
+    aPropSet2->getPropertyValue(u"LabelPlacement"_ustr) >>= aPlacement;
     CPPUNIT_ASSERT_EQUAL(css::chart::DataLabelPlacement::OUTSIDE, aPlacement);
 }
 

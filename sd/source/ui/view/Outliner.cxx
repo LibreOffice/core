@@ -728,8 +728,8 @@ basegfx::B2DRectangle getPDFSelection(const std::unique_ptr<VectorGraphicSearch>
 {
     basegfx::B2DRectangle aSelection;
 
-    auto const & rTextRectangles = rVectorGraphicSearch->getTextRectangles();
-    if (rTextRectangles.empty())
+    auto const aTextRectangles = rVectorGraphicSearch->getTextRectangles();
+    if (aTextRectangles.empty())
         return aSelection;
 
     basegfx::B2DSize aPdfPageSizeHMM = rVectorGraphicSearch->pageSize();

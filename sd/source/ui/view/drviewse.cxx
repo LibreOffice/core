@@ -1706,10 +1706,10 @@ namespace slideshowhelp
             const SfxUInt16Item* pStartingSlide = rReq.GetArg<SfxUInt16Item>(FN_PARAM_1);
             const sal_uInt16 nStartingSlide = pStartingSlide ? pStartingSlide->GetValue() - 1 : 0;
             SdPage* pSlide = rDoc.GetSdPage(nStartingSlide, PageKind::Standard);
-            const OUString& rStartingSlide = pSlide ? pSlide->GetName() : OUString();
+            const OUString aStartingSlide = pSlide ? pSlide->GetName() : OUString();
 
             Sequence< PropertyValue > aArguments{ comphelper::makePropertyValue(u"FirstPage"_ustr,
-                                                                                rStartingSlide) };
+                                                                                aStartingSlide) };
             xPresentation->startWithArguments( aArguments );
         }
         sfx2::SfxNotebookBar::UnlockNotebookBar();

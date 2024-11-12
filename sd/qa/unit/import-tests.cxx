@@ -1770,8 +1770,8 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testPDFImportShared)
             if (pSdrGrafObj == nullptr)
                 continue;
 
-            const GraphicObject& rGraphicObject = pSdrGrafObj->GetGraphicObject().GetGraphic();
-            const Graphic& rGraphic = rGraphicObject.GetGraphic();
+            const GraphicObject aGraphicObject = pSdrGrafObj->GetGraphicObject().GetGraphic();
+            const Graphic& rGraphic = aGraphicObject.GetGraphic();
             CPPUNIT_ASSERT_MESSAGE(
                 "After loading, the PDF shouldn't have the primitive sequence created yet",
                 !rGraphic.getVectorGraphicData()->isPrimitiveSequenceCreated());

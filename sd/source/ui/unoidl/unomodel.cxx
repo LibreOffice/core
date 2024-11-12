@@ -899,9 +899,9 @@ void AnimationsExporter::exportNodeImpl(const Reference<XAnimationNode>& xNode)
                 rValue.Value >>= xMaster;
                 if (xMaster.is())
                 {
-                    const std::string& rIdentifier(GetInterfaceHash(xMaster));
-                    if (!rIdentifier.empty())
-                        mrWriter.put("masterElement", rIdentifier);
+                    const std::string aIdentifier(GetInterfaceHash(xMaster));
+                    if (!aIdentifier.empty())
+                        mrWriter.put("masterElement", aIdentifier);
                 }
             }
             else if (IsXMLToken(rValue.Name, XML_GROUP_ID))
@@ -1007,9 +1007,9 @@ void AnimationsExporter::convertTarget(OStringBuffer& sTmp, const Any& rTarget)
     SAL_WARN_IF(!xRef.is(), "sd", "AnimationsExporter::convertTarget(), invalid target type!");
     if (xRef.is())
     {
-        const std::string& rIdentifier(GetInterfaceHash(xRef));
-        if (!rIdentifier.empty())
-            sTmp.append(rIdentifier);
+        const std::string aIdentifier(GetInterfaceHash(xRef));
+        if (!aIdentifier.empty())
+            sTmp.append(aIdentifier);
     }
 }
 
@@ -3937,9 +3937,9 @@ void SdXImpressDocument::getPostIts(::tools::JsonWriter& rJsonWriter)
             uno::Reference<text::XText> xText(xAnnotation->getTextRange());
             rJsonWriter.put("text", xText->getString());
             rJsonWriter.put("parthash", pPage->GetUniqueID());
-            geometry::RealPoint2D const & rPoint = xAnnotation->getPosition();
-            geometry::RealSize2D const & rSize = xAnnotation->getSize();
-            ::tools::Rectangle aRectangle(Point(rPoint.X * 100.0, rPoint.Y * 100.0), Size(rSize.Width * 100.0, rSize.Height * 100.0));
+            geometry::RealPoint2D const aPoint = xAnnotation->getPosition();
+            geometry::RealSize2D const aSize = xAnnotation->getSize();
+            ::tools::Rectangle aRectangle(Point(aPoint.X * 100.0, aPoint.Y * 100.0), Size(aSize.Width * 100.0, aSize.Height * 100.0));
             aRectangle = o3tl::toTwips(aRectangle, o3tl::Length::mm100);
             OString sRectangle = aRectangle.toString();
             rJsonWriter.put("rectangle", sRectangle.getStr());

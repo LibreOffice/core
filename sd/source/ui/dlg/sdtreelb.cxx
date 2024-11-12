@@ -798,8 +798,8 @@ IMPL_LINK(SdPageObjsTLV, EditedEntryHdl, const IterString&, rIterString, bool)
     }
 
     // set the new name
-    const auto& rEntryId = m_xTreeView->get_id(rIterString.first);
-    if (rEntryId.toInt64() == 1)
+    const auto aEntryId = m_xTreeView->get_id(rIterString.first);
+    if (aEntryId.toInt64() == 1)
     {
         // page name
         if (::sd::DrawDocShell* pDocShell = m_pDoc->GetDocSh())
@@ -811,7 +811,7 @@ IMPL_LINK(SdPageObjsTLV, EditedEntryHdl, const IterString&, rIterString, bool)
             }
         }
     }
-    else if (SdrObject* pCursorEntryObject = weld::fromId<SdrObject*>(rEntryId))
+    else if (SdrObject* pCursorEntryObject = weld::fromId<SdrObject*>(aEntryId))
     {
         // object name
         pCursorEntryObject->SetName(rIterString.second);

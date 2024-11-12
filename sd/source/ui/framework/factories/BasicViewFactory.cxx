@@ -303,8 +303,8 @@ std::shared_ptr<ViewShell> BasicViewFactory::CreateViewShell (
     FrameView* pFrameView)
 {
     std::shared_ptr<ViewShell> pViewShell;
-    const OUString& rsViewURL (rxViewId->getResourceURL());
-    if (rsViewURL == FrameworkHelper::msImpressViewURL)
+    const OUString sViewURL (rxViewId->getResourceURL());
+    if (sViewURL == FrameworkHelper::msImpressViewURL)
     {
         pViewShell =
             std::make_shared<DrawViewShell>(
@@ -314,14 +314,14 @@ std::shared_ptr<ViewShell> BasicViewFactory::CreateViewShell (
                 pFrameView);
         pViewShell->GetContentWindow()->set_id(u"impress_win"_ustr);
     }
-    else if (rsViewURL == FrameworkHelper::msDrawViewURL)
+    else if (sViewURL == FrameworkHelper::msDrawViewURL)
     {
         pViewShell = std::shared_ptr<GraphicViewShell>(
                 new GraphicViewShell(*mpBase, &rWindow, pFrameView),
                 o3tl::default_delete<GraphicViewShell>());
         pViewShell->GetContentWindow()->set_id(u"draw_win"_ustr);
     }
-    else if (rsViewURL == FrameworkHelper::msOutlineViewURL)
+    else if (sViewURL == FrameworkHelper::msOutlineViewURL)
     {
         pViewShell =
             std::make_shared<OutlineViewShell>(
@@ -331,7 +331,7 @@ std::shared_ptr<ViewShell> BasicViewFactory::CreateViewShell (
                 pFrameView);
         pViewShell->GetContentWindow()->set_id(u"outline_win"_ustr);
     }
-    else if (rsViewURL == FrameworkHelper::msNotesViewURL)
+    else if (sViewURL == FrameworkHelper::msNotesViewURL)
     {
         pViewShell =
             std::make_shared<DrawViewShell>(
@@ -341,7 +341,7 @@ std::shared_ptr<ViewShell> BasicViewFactory::CreateViewShell (
                 pFrameView);
         pViewShell->GetContentWindow()->set_id(u"notes_win"_ustr);
     }
-    else if (rsViewURL == FrameworkHelper::msHandoutViewURL)
+    else if (sViewURL == FrameworkHelper::msHandoutViewURL)
     {
         pViewShell =
             std::make_shared<DrawViewShell>(
@@ -351,7 +351,7 @@ std::shared_ptr<ViewShell> BasicViewFactory::CreateViewShell (
                 pFrameView);
         pViewShell->GetContentWindow()->set_id(u"handout_win"_ustr);
     }
-    else if (rsViewURL == FrameworkHelper::msPresentationViewURL)
+    else if (sViewURL == FrameworkHelper::msPresentationViewURL)
     {
         pViewShell =
             std::make_shared<PresentationViewShell>(
@@ -360,7 +360,7 @@ std::shared_ptr<ViewShell> BasicViewFactory::CreateViewShell (
                 pFrameView);
         pViewShell->GetContentWindow()->set_id(u"presentation_win"_ustr);
     }
-    else if (rsViewURL == FrameworkHelper::msSlideSorterURL)
+    else if (sViewURL == FrameworkHelper::msSlideSorterURL)
     {
         pViewShell = ::sd::slidesorter::SlideSorterViewShell::Create (
             &rFrame,
@@ -369,7 +369,7 @@ std::shared_ptr<ViewShell> BasicViewFactory::CreateViewShell (
             pFrameView);
         pViewShell->GetContentWindow()->set_id(u"slidesorter"_ustr);
     }
-    else if (rsViewURL == FrameworkHelper::msNotesPanelViewURL)
+    else if (sViewURL == FrameworkHelper::msNotesPanelViewURL)
     {
         pViewShell = std::make_shared<NotesPanelViewShell>(&rFrame, *mpBase, &rWindow, pFrameView);
         pViewShell->GetContentWindow()->set_id(u"notes_panel_win"_ustr);

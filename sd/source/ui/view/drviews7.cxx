@@ -908,9 +908,9 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         if(GetLayerTabControl()) // #i87182#
         {
             sal_uInt16 nCurrentLayer = GetLayerTabControl()->GetCurPageId();
-            const OUString& rName = GetLayerTabControl()->GetLayerName(nCurrentLayer);
+            const OUString aName = GetLayerTabControl()->GetLayerName(nCurrentLayer);
 
-            if (!IsLayerModeActive() || LayerTabBar::IsRealNameOfStandardLayer(rName))
+            if (!IsLayerModeActive() || LayerTabBar::IsRealNameOfStandardLayer(aName))
             {
                 rSet.DisableItem(SID_DELETE_LAYER);
                 rSet.DisableItem(SID_RENAMELAYER);

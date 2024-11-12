@@ -779,7 +779,7 @@ bool SdXMLFilter::Export()
         bool bUsePrettyPrinting = officecfg::Office::Common::Save::Document::PrettyPrinting::get();
         xInfoSet->setPropertyValue( u"UsePrettyPrinting"_ustr, Any( bUsePrettyPrinting ) );
 
-        const uno::Reference < embed::XStorage >& xStorage = mrMedium.GetOutputStorage();
+        const uno::Reference < embed::XStorage > xStorage = mrMedium.GetOutputStorage();
 
         // Set base URI
         OUString sPropName( u"BaseURI"_ustr );

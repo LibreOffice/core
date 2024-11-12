@@ -1352,7 +1352,7 @@ void ToolBarShellList::UpdateShells (
     if (rpMainViewShell == nullptr)
         return;
 
-    const std::shared_ptr<ViewShell>& pCurrentMainViewShell
+    const std::shared_ptr<ViewShell> pCurrentMainViewShell
         = rpManager->GetOverridingMainShell() ? rpManager->GetOverridingMainShell() : rpMainViewShell;
 
     GroupedShellList aList;

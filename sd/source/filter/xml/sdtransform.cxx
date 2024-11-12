@@ -338,15 +338,15 @@ bool SdTransformOOo2xDocument::removeAlienAttributes( SfxItemSet& rSet, sal_uInt
                     {
                         if( nItem != nFound )
                         {
-                            OUString const& rNamespace(rAttr.GetAttrNamespace(nItem));
-                            OUString const& rPrefix(rAttr.GetAttrPrefix(nItem));
-                            if (rPrefix.isEmpty())
+                            OUString const aNamespace(rAttr.GetAttrNamespace(nItem));
+                            OUString const aPrefix(rAttr.GetAttrPrefix(nItem));
+                            if (aPrefix.isEmpty())
                             {
                                 aNewItem.AddAttr(rAttr.GetAttrLName(nItem), rAttr.GetAttrValue(nItem));
                             }
                             else
                             {
-                                aNewItem.AddAttr(rPrefix, rNamespace, rAttr.GetAttrLName(nItem), rAttr.GetAttrValue(nItem));
+                                aNewItem.AddAttr(aPrefix, aNamespace, rAttr.GetAttrLName(nItem), rAttr.GetAttrValue(nItem));
                             }
                         }
                     }

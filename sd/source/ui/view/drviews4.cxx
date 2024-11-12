@@ -149,24 +149,24 @@ void DrawViewShell::DeleteActualLayer()
 
     SdrLayerAdmin& rAdmin = GetDoc()->GetLayerAdmin();
     sal_uInt16 nId = GetLayerTabControl()->GetCurPageId();
-    const OUString& rName = GetLayerTabControl()->GetLayerName(nId);
-    if(LayerTabBar::IsRealNameOfStandardLayer(rName))
+    const OUString aName = GetLayerTabControl()->GetLayerName(nId);
+    if(LayerTabBar::IsRealNameOfStandardLayer(aName))
     {
         assert(false && "Standard layer may not be deleted.");
         return;
     }
-    const OUString& rDisplayName(GetLayerTabControl()->GetPageText(nId));
+    const OUString aDisplayName(GetLayerTabControl()->GetPageText(nId));
     OUString aString(SdResId(STR_ASK_DELETE_LAYER));
 
     // replace placeholder
-    aString = aString.replaceFirst("$", rDisplayName);
+    aString = aString.replaceFirst("$", aDisplayName);
 
     std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                    VclMessageType::Question, VclButtonsType::YesNo,
                                                    aString));
     if (xQueryBox->run() == RET_YES)
     {
-        const SdrLayer* pLayer = rAdmin.GetLayer(rName);
+        const SdrLayer* pLayer = rAdmin.GetLayer(aName);
         mpDrawView->DeleteLayer( pLayer->GetName() );
 
         /* in order to redraw TabBar and Window; should be initiated later on by
