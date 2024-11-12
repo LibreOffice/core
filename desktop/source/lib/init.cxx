@@ -4241,6 +4241,64 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
 #endif
 }
 
+inline static ITiledRenderable* getDocumentPointer(LibreOfficeKitDocument* pThis)
+{
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+
+    if (!pDoc)
+    {
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
+        return nullptr;
+    }
+    return pDoc;
+}
+
+inline static void writeInfoLog(const int nPart, const int nMode,
+    const int nTileWidth, const int nTileHeight, const int nTilePosX, const int nTilePosY,
+    const int nCanvasWidth, const int nCanvasHeight)
+{
+    SAL_INFO( "lok.tiledrendering", "paintPartTile: painting @ " << nPart << " : " << nMode << " ["
+               << nTileWidth << "x" << nTileHeight << "]@("
+               << nTilePosX << ", " << nTilePosY << ") to ["
+               << nCanvasWidth << "x" << nCanvasHeight << "]px" );
+}
+
+inline static int getFirstViewIdAsFallback(LibreOfficeKitDocument* pThis)
+{
+    // tile painting always needs a SfxViewShell::Current(), but actually
+    // it does not really matter which one - all of them should paint the
+    // same thing. It's important to get a view for the correct document,
+    // though.
+    // doc_getViewsCount() returns the count of views for the document in the current view.
+    int viewCount = doc_getViewsCount(pThis);
+
+    if (viewCount == 0) return -1;
+
+    std::vector<int> viewIds(viewCount);
+    doc_getViewIds(pThis, viewIds.data(), viewCount);
+
+    int result = viewIds[0];
+    doc_setView(pThis, result);
+
+    SAL_WARN("lok.tiledrendering", "Why is this happening? A call to paint without setting a view?");
+
+    return result;
+}
+
+inline static void disableViewCallbacks(LibLODocument_Impl* pDocument, const int viewId)
+{
+    const auto handlerIt = pDocument->mpCallbackFlushHandlers.find(viewId);
+    if (handlerIt != pDocument->mpCallbackFlushHandlers.end())
+        handlerIt->second->disableCallbacks();
+}
+
+inline static void enableViewCallbacks(LibLODocument_Impl* pDocument, const int viewId)
+{
+    const auto handlerIt = pDocument->mpCallbackFlushHandlers.find(viewId);
+    if (handlerIt != pDocument->mpCallbackFlushHandlers.end())
+        handlerIt->second->enableCallbacks();
+}
+
 static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
                               unsigned char* pBuffer,
                               const int nPart,
@@ -4254,46 +4312,26 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    SAL_INFO( "lok.tiledrendering", "paintPartTile: painting @ " << nPart << " : " << nMode << " ["
-               << nTileWidth << "x" << nTileHeight << "]@("
-               << nTilePosX << ", " << nTilePosY << ") to ["
-               << nCanvasWidth << "x" << nCanvasHeight << "]px" );
+    writeInfoLog(nPart, nMode, nTileWidth, nTileHeight, nTilePosX, nTilePosY, nCanvasWidth, nCanvasHeight);
+
+    ITiledRenderable* pDoc = getDocumentPointer(pThis);
+    if (!pDoc)
+        return;
 
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+
     int nOrigViewId = doc_getView(pThis);
 
-    ITiledRenderable* pDoc = getTiledRenderable(pThis);
-    if (!pDoc)
-    {
-        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
-        return;
-    }
-
     if (nOrigViewId < 0)
-    {
-        // tile painting always needs a SfxViewShell::Current(), but actually
-        // it does not really matter which one - all of them should paint the
-        // same thing. It's important to get a view for the correct document,
-        // though.
-        // doc_getViewsCount() returns the count of views for the document in the current view.
-        int viewCount = doc_getViewsCount(pThis);
-        if (viewCount == 0)
-            return;
+        nOrigViewId = getFirstViewIdAsFallback(pThis);
 
-        std::vector<int> viewIds(viewCount);
-        doc_getViewIds(pThis, viewIds.data(), viewCount);
+    if (nOrigViewId == -1)
+        return;
 
-        nOrigViewId = viewIds[0];
-        doc_setView(pThis, nOrigViewId);
-    }
+    // Data validity checks end here.
 
     // Disable callbacks while we are painting.
-    if (nOrigViewId >= 0)
-    {
-        const auto handlerIt = pDocument->mpCallbackFlushHandlers.find(nOrigViewId);
-        if (handlerIt != pDocument->mpCallbackFlushHandlers.end())
-            handlerIt->second->disableCallbacks();
-    }
+    disableViewCallbacks(pDocument, nOrigViewId);
 
     try
     {
@@ -4308,6 +4346,7 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
         int nLastNonEditorView = -1;
         int nViewMatchingMode = -1;
         SfxViewShell* pCurrentViewShell = SfxViewShell::Current();
+        const OString sCurrentViewRenderState = pDoc->getViewRenderState(pCurrentViewShell);
 
         if (!isText)
         {
@@ -4321,7 +4360,6 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
                     bool bIsInEdit = pViewShell->GetDrawView() &&
                         pViewShell->GetDrawView()->GetTextEditOutliner();
 
-                    OString sCurrentViewRenderState = pDoc->getViewRenderState(pCurrentViewShell);
                     OString sNewRenderState = pDoc->getViewRenderState(pViewShell);
 
                     if (sCurrentViewRenderState == sNewRenderState && !bIsInEdit)
@@ -4365,11 +4403,7 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
 
             // Disable callbacks while we are painting - after setting the view
             if (nViewId != nOrigViewId && nViewId >= 0)
-            {
-                const auto handlerIt = pDocument->mpCallbackFlushHandlers.find(nViewId);
-                if (handlerIt != pDocument->mpCallbackFlushHandlers.end())
-                    handlerIt->second->disableCallbacks();
-            }
+                disableViewCallbacks(pDocument, nViewId);
 
             nOrigPart = doc_getPart(pThis);
             if (nPart != nOrigPart)
@@ -4405,13 +4439,7 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
 
             if (nViewId != nOrigViewId)
             {
-                if (nViewId >= 0)
-                {
-                    const auto handlerIt = pDocument->mpCallbackFlushHandlers.find(nViewId);
-                    if (handlerIt != pDocument->mpCallbackFlushHandlers.end())
-                        handlerIt->second->enableCallbacks();
-                }
-
+                enableViewCallbacks(pDocument, nViewId);
                 doc_setView(pThis, nOrigViewId);
             }
         }
@@ -4423,9 +4451,7 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
 
     if (nOrigViewId >= 0)
     {
-        const auto handlerIt = pDocument->mpCallbackFlushHandlers.find(nOrigViewId);
-        if (handlerIt != pDocument->mpCallbackFlushHandlers.end())
-            handlerIt->second->enableCallbacks();
+        enableViewCallbacks(pDocument, nOrigViewId);
     }
 }
 
