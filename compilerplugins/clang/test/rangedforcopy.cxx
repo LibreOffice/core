@@ -8,6 +8,7 @@
  */
 
 #include <vector>
+#include <rtl/ustring.hxx>
 #include <svl/typedwhich.hxx>
 
 struct S
@@ -47,4 +48,12 @@ void f2()
     for (auto nWhich : { EE_CHAR_FONTINFO1, EE_CHAR_FONTINFO2 })
         (void)nWhich;
 }
+
+// no warning expected
+void f3()
+{
+    for (rtl::OUStringChar c : { 'a', 'b' })
+        (void)c;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
