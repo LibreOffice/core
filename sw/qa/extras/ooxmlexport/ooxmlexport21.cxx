@@ -560,7 +560,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf160077_layoutInCellB, "tdf160077_layoutInCellB.d
     // correct ShapeTop: 888 TWIPS, while incorrect value was -480. Cell top is 1148, PageTop is 284
     CPPUNIT_ASSERT_DOUBLES_EQUAL(888, nShapeTop, 50);
 
-    const auto& xShape = getShapeByName(u"Group 1");
+    const auto xShape = getShapeByName(u"Group 1");
     CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::PAGE_PRINT_AREA,
                          getProperty<sal_Int16>(xShape, u"VertOrientRelation"_ustr));
 
@@ -624,7 +624,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf160077_layoutInCellD, "tdf160077_layoutInCellD.d
 
     // In the file it is specified as "page" (PAGE_FRAME), but implemented as if it were "margin"
     // so on import we intentionally changed it to match the closest setting to the implementation.
-    const auto& xShape = getShapeByName(u"logo");
+    const auto xShape = getShapeByName(u"logo");
     CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::PAGE_PRINT_AREA,
                          getProperty<sal_Int16>(xShape, u"VertOrientRelation"_ustr));
 
@@ -647,7 +647,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf160077_layoutInCellD, "tdf160077_layoutInCellD.d
     CPPUNIT_ASSERT_EQUAL(nShapeTop, nPara1Top);
     CPPUNIT_ASSERT(nPara5Top > nShapeBottom); // ShapeBottom is higher than Para5Top
 
-    const auto& xShape2 = getShapeByName(u"logoInverted");
+    const auto xShape2 = getShapeByName(u"logoInverted");
     CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::PAGE_PRINT_AREA,
                          getProperty<sal_Int16>(xShape2, u"VertOrientRelation"_ustr));
 

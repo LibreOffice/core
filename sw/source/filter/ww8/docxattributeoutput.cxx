@@ -5194,8 +5194,8 @@ void DocxAttributeOutput::WriteSrcRect(
     Size aOriginalSize(aGraphic.GetPrefSize());
 
     const MapMode aMap100mm( MapUnit::Map100thMM );
-    const MapMode& rMapMode = aGraphic.GetPrefMapMode();
-    if (rMapMode.GetMapUnit() == MapUnit::MapPixel)
+    const MapMode aMapMode = aGraphic.GetPrefMapMode();
+    if (aMapMode.GetMapUnit() == MapUnit::MapPixel)
     {
         aOriginalSize = Application::GetDefaultDevice()->PixelToLogic(aOriginalSize, aMap100mm);
     }
@@ -6794,9 +6794,9 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
         const SwNumRule* pRule = m_rExport.m_pStyles->GetSwNumRule(nSlot);
         pRule->GetGrabBagItem(aAny);
     }
-    const uno::Sequence<beans::PropertyValue>& rGrabBag = aAny.get< uno::Sequence<beans::PropertyValue> >();
+    const uno::Sequence<beans::PropertyValue> aGrabBag = aAny.get< uno::Sequence<beans::PropertyValue> >();
 
-    for (const auto& rProp : rGrabBag)
+    for (const auto& rProp : aGrabBag)
     {
         if (rProp.Name == "uiPriority")
             aUiPriority = rProp.Value.get<OUString>();

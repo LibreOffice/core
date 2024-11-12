@@ -131,8 +131,8 @@ SwLabelConfig::SwLabelConfig() :
     assert(res == xmlreader::XmlReader::Result::Done);
 
     // add to m_aLabels and m_aManufacturers the custom labels
-    const Sequence<OUString>& rMan = GetNodeNames( OUString() );
-    for ( const OUString& rManufacturer : rMan )
+    const Sequence<OUString> aMan = GetNodeNames( OUString() );
+    for ( const OUString& rManufacturer : aMan )
     {
         const Sequence<OUString> aLabels = GetNodeNames( rManufacturer );
         for( const OUString& rLabel : aLabels )

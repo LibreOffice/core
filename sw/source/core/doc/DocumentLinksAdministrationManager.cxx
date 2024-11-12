@@ -127,7 +127,7 @@ namespace
 
     SwTableNode* lcl_FindTable(const SwDoc& rDoc, const OUString& rItem)
     {
-        const OUString& aItem = GetAppCharClass().lowercase(rItem);
+        const OUString aItem = GetAppCharClass().lowercase(rItem);
         for (const SwFrameFormat* pTableFormat : *rDoc.GetTableFrameFormats())
         {
             OUString sNm(GetAppCharClass().lowercase(pTableFormat->GetName()));

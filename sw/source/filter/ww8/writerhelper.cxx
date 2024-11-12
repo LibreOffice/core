@@ -637,7 +637,7 @@ namespace sw
         tools::Polygon CorrectWordWrapPolygonForExport(const tools::PolyPolygon& rPolyPoly, const SwNoTextNode* pNd, bool bCorrectCrop)
         {
             tools::Polygon aPoly(PolygonFromPolyPolygon(rPolyPoly));
-            const Size &rOrigSize = pNd->GetGraphic().GetPrefSize();
+            const Size aOrigSize = pNd->GetGraphic().GetPrefSize();
 
             const SwAttrSet* pAttrSet = pNd->GetpSwAttrSet();
             if (bCorrectCrop && pAttrSet)
@@ -653,14 +653,14 @@ namespace sw
                     sal_Int32 nCropBottom = convertTwipToMm100(rCrop.GetBottom());
                     aPoly.Move(-nCropLeft, -nCropTop);
 
-                    Fraction aScaleX(rOrigSize.getWidth(), rOrigSize.getWidth() - nCropLeft - nCropRight);
-                    Fraction aScaleY(rOrigSize.getHeight(), rOrigSize.getHeight() - nCropTop - nCropBottom);
+                    Fraction aScaleX(aOrigSize.getWidth(), aOrigSize.getWidth() - nCropLeft - nCropRight);
+                    Fraction aScaleY(aOrigSize.getHeight(), aOrigSize.getHeight() - nCropTop - nCropBottom);
                     aPoly.Scale(double(aScaleX), double(aScaleY));
                 }
             }
 
-            Fraction aMapPolyX(ww::nWrap100Percent, rOrigSize.Width());
-            Fraction aMapPolyY(ww::nWrap100Percent, rOrigSize.Height());
+            Fraction aMapPolyX(ww::nWrap100Percent, aOrigSize.Width());
+            Fraction aMapPolyY(ww::nWrap100Percent, aOrigSize.Height());
             aPoly.Scale(double(aMapPolyX), double(aMapPolyY));
 
             /*
@@ -670,8 +670,8 @@ namespace sw
 
              See the import for details
             */
-            const Size &rSize = pNd->GetTwipSize();
-            Fraction aMoveHack(ww::nWrap100Percent, rSize.Width());
+            const Size aSize = pNd->GetTwipSize();
+            Fraction aMoveHack(ww::nWrap100Percent, aSize.Width());
             aMoveHack *= Fraction(15, 1);
             tools::Long nMove(aMoveHack);
 

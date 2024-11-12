@@ -1076,10 +1076,10 @@ DECLARE_OOXMLEXPORT_TEST(testFdo46361, "fdo46361.docx")
                                      u"CharColor"_ustr));
     // Count the paragraphs
     xTextBox.set(xGroupShape->getByIndex(1), uno::UNO_QUERY_THROW);
-    const auto& sText1 = xTextBox->getString();
+    const auto sText1 = xTextBox->getString();
 
     xTextBox.set(xGroupShape->getByIndex(2), uno::UNO_QUERY_THROW);
-    const auto& sText2 = xTextBox->getString();
+    const auto sText2 = xTextBox->getString();
 
     sal_Int32 nCount1 = 0;
     sal_Int32 nCount2 = 0;

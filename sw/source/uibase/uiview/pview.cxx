@@ -1586,9 +1586,9 @@ void SwPagePreview::ScrollViewSzChg()
         else //vertical scrolling by pixel
         {
             const tools::Rectangle& rDocRect = m_pViewWin->GetPaintedPreviewDocRect();
-            const Size& rPreviewSize =
+            const Size aPreviewSize =
                     GetViewShell()->PagePreviewLayout()->GetPreviewDocSize();
-            m_pVScrollbar->SetRangeMax(rPreviewSize.Height()) ;
+            m_pVScrollbar->SetRangeMax(aPreviewSize.Height()) ;
             tools::Long nVisHeight = rDocRect.GetHeight();
             m_pVScrollbar->SetVisibleSize( nVisHeight );
             m_pVScrollbar->SetThumbPos( rDocRect.Top() );
@@ -1606,17 +1606,17 @@ void SwPagePreview::ScrollViewSzChg()
     if(m_pHScrollbar)
     {
         const tools::Rectangle& rDocRect = m_pViewWin->GetPaintedPreviewDocRect();
-        const Size& rPreviewSize =
+        const Size aPreviewSize =
                 GetViewShell()->PagePreviewLayout()->GetPreviewDocSize();
         Range aRange(0,0);
 
-        if(rDocRect.GetWidth() < rPreviewSize.Width())
+        if(rDocRect.GetWidth() < aPreviewSize.Width())
         {
             bShowHScrollbar = true;
 
             tools::Long nVisWidth = rDocRect.GetWidth();
             tools::Long nThumb = rDocRect.Left();
-            aRange = Range(0, rPreviewSize.Width());
+            aRange = Range(0, aPreviewSize.Width());
 
             m_pHScrollbar->SetRange( aRange );
             m_pHScrollbar->SetVisibleSize( nVisWidth );

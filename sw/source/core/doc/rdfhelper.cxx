@@ -69,7 +69,7 @@ SwRDFHelper::getStatements(const rtl::Reference<SwXTextDocument>& xModel,
     if (!rGraphNames.hasElements())
         return aRet;
 
-    const uno::Reference<rdf::XRepository>& xRepo = xModel->getRDFRepository();
+    const uno::Reference<rdf::XRepository> xRepo = xModel->getRDFRepository();
     for (const uno::Reference<rdf::XURI>& xGraphName : rGraphNames)
     {
         uno::Reference<rdf::XNamedGraph> xGraph = xRepo->getGraph(xGraphName);

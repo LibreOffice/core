@@ -425,7 +425,7 @@ void SwGlossaryList::HasLongName(const std::vector<OUString>& rBeginCandidates,
                        });
     }
 
-    const auto& it = std::unique(
+    const auto it = std::unique(
         aAllResults.begin(), aAllResults.end(),
         [](const std::pair<OUString, sal_uInt16>& s1, const std::pair<OUString, sal_uInt16>& s2) {
             return s1.first.equalsIgnoreAsciiCase(s2.first);

@@ -1761,7 +1761,7 @@ static void lcl_MoveBorderPropertiesToFrame(std::vector<beans::PropertyValue>& r
 
         for( size_t nProperty = 0; nProperty < SAL_N_ELEMENTS( aBorderProperties ); ++nProperty)
         {
-            const OUString & sPropertyName = getPropertyName(aBorderProperties[nProperty]);
+            const OUString sPropertyName = getPropertyName(aBorderProperties[nProperty]);
             beans::PropertyValue aValue;
             aValue.Name = sPropertyName;
             aValue.Value = xTextRangeProperties->getPropertyValue(sPropertyName);
@@ -2820,7 +2820,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                         (isNumberingViaStyle || isNumberingViaRule))
                     {
                         assert(pParaContext);
-                        if (ListDef::Pointer const& pList = m_pListTable->GetList(nListId))
+                        if (ListDef::Pointer const pList = m_pListTable->GetList(nListId))
                         {   // styles could refer to non-existing lists...
                             AbstractListDef::Pointer const& pAbsList =
                                     pList->GetAbstractDefinition();
@@ -3081,7 +3081,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
     {
         if (const OUString sParaId = pParaContext->props().GetParaId(); !sParaId.isEmpty())
         {
-            if (const auto& item = m_aCommentProps.find(sParaId); item != m_aCommentProps.end())
+            if (const auto item = m_aCommentProps.find(sParaId); item != m_aCommentProps.end())
             {
                 m_bAnnotationResolved = item->second.bDone;
                 m_sAnnotationParent = item->second.sParaIdParent;
@@ -4756,7 +4756,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                                 if ( bOnlyApplyCharHeight && eId != PROP_CHAR_HEIGHT )
                                     continue;
 
-                                const OUString & sPropName = getPropertyName(eId);
+                                const OUString sPropName = getPropertyName(eId);
                                 if ( beans::PropertyState_DEFAULT_VALUE == xShapePropertyState->getPropertyState(sPropName) )
                                 {
                                     const uno::Any aProp = GetPropertyFromStyleSheet(eId, pEntry, /*bDocDefaults=*/true, /*bPara=*/true);
@@ -5750,7 +5750,7 @@ void DomainMapper_Impl::SetNumberFormat( const OUString& rCommand,
         {
             try
             {
-                css::uno::Reference<css::i18n::XNumberFormatCode> const& xNumberFormatCode =
+                css::uno::Reference<css::i18n::XNumberFormatCode> const xNumberFormatCode =
                     i18n::NumberFormatMapper::create(m_xComponentContext);
                 sFormatString = xNumberFormatCode->getFormatCode(
                     css::i18n::NumberFormatIndex::DATE_SYSTEM_SHORT, aCurrentLocale).Code;
@@ -6058,7 +6058,7 @@ void DomainMapper_Impl::AttachTextBoxContentToShape(css::uno::Reference<css::dra
         // Check for the existing linking information
         bool bSuccess = false;
         beans::PropertyValues aNewGrabBagSeq;
-        const auto& aHasLink = lcl_getGrabBagValue(aOldGrabBagSeq, u"TxbxHasLink"_ustr);
+        const auto aHasLink = lcl_getGrabBagValue(aOldGrabBagSeq, u"TxbxHasLink"_ustr);
 
         // If there must be a link, do it
         if (aHasLink.hasValue() && aHasLink.get<bool>())
@@ -9648,7 +9648,7 @@ void DomainMapper_Impl::ExecuteFrameConversion()
             sal_Int32 redIdx;
             lcl_CopyRedlines(GetTopTextAppend(), m_aStoredRedlines[StoredRedlines::FRAME], redPos, redLen, redIdx);
 
-            const uno::Reference< text::XTextContent >& xTextContent = xTextAppendAndConvert->convertToTextFrame(
+            const uno::Reference< text::XTextContent > xTextContent = xTextAppendAndConvert->convertToTextFrame(
                 m_xFrameStartRange,
                 m_xFrameEndRange,
                 comphelper::containerToSequence(m_aFrameProperties) );

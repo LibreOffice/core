@@ -3412,20 +3412,20 @@ SwTwips SwTextNode::GetAdditionalIndentForStartingNewList() const
             // was interpreted as left-margin not text-left-margin unlike every
             // other use of it.
             ::sw::ListLevelIndents const indents(AreListLevelIndentsApplicable());
-            SvxFirstLineIndentItem const& rFirst(
+            SvxFirstLineIndentItem const aFirst(
                     indents & ::sw::ListLevelIndents::FirstLine
                     ? SvxFirstLineIndentItem(rFormat.GetFirstLineIndent(), RES_MARGIN_FIRSTLINE)
                     : GetSwAttrSet().GetFirstLineIndent());
-            SvxTextLeftMarginItem const& rLeft(
+            SvxTextLeftMarginItem const aLeft(
                     indents & ::sw::ListLevelIndents::LeftMargin
                     ? SvxTextLeftMarginItem(rFormat.GetIndentAt(), RES_MARGIN_TEXTLEFT)
                     : GetSwAttrSet().GetTextLeftMargin());
-            nAdditionalIndent = rLeft.GetLeft(rFirst);
+            nAdditionalIndent = aLeft.GetLeft(aFirst);
             if (!(indents & ::sw::ListLevelIndents::FirstLine))
             {
                 if (getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
                 {
-                    nAdditionalIndent = nAdditionalIndent - rFirst.GetTextFirstLineOffset();
+                    nAdditionalIndent = nAdditionalIndent - aFirst.GetTextFirstLineOffset();
                 }
             }
         }

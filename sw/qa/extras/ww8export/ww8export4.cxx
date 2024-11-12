@@ -156,7 +156,7 @@ DECLARE_WW8EXPORT_TEST(testTdf91632_layoutInCellD, "tdf91632_layoutInCellD.doc")
 
     // In the file it is specified as "page" (PAGE_FRAME), but implemented as if it were "margin"
     // so on import we intentionally changed it to match the closest setting to the implementation.
-    const auto& xShape = getShape(1);
+    const auto xShape = getShape(1);
     CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::PAGE_PRINT_AREA,
                          getProperty<sal_Int16>(xShape, u"VertOrientRelation"_ustr));
 
@@ -181,7 +181,7 @@ DECLARE_WW8EXPORT_TEST(testTdf91632_layoutInCellD, "tdf91632_layoutInCellD.doc")
     CPPUNIT_ASSERT_EQUAL(nShapeTop, nPara1Top);
     CPPUNIT_ASSERT(nPara5Top > nShapeBottom); // ShapeBottom is higher than Para5Top
 
-    const auto& xShape2 = getShape(2);
+    const auto xShape2 = getShape(2);
     CPPUNIT_ASSERT_EQUAL(css::text::RelOrientation::PAGE_PRINT_AREA,
                          getProperty<sal_Int16>(xShape2, u"VertOrientRelation"_ustr));
 

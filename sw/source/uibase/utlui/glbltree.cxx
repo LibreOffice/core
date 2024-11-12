@@ -813,8 +813,8 @@ void SwGlobalTree::UpdateTracking()
                     || (pSection->GetType() != SectionType::ToxContent
                         && rGlblDocContent->GetSection() == pSection))
             {
-                const OUString& rId(weld::toId(rGlblDocContent.get()));
-                m_xTreeView->select(m_xTreeView->find_id(rId));
+                const OUString aId(weld::toId(rGlblDocContent.get()));
+                m_xTreeView->select(m_xTreeView->find_id(aId));
                 break;
             }
         }
@@ -839,8 +839,8 @@ void SwGlobalTree::UpdateTracking()
                 if (rGlblDocContent->GetType() == GlobalDocContentType::GLBLDOC_UNKNOWN
                         && rGlblDocContent->GetDocPos() == aTextNodeIndex)
                 {
-                    const OUString& rId(weld::toId(rGlblDocContent.get()));
-                    m_xTreeView->select(m_xTreeView->find_id(rId));
+                    const OUString aId(weld::toId(rGlblDocContent.get()));
+                    m_xTreeView->select(m_xTreeView->find_id(aId));
                 }
             }
         }

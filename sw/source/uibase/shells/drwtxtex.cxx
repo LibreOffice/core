@@ -153,13 +153,13 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         {
             if (!rReq.GetArgs())
             {
-                const std::optional<NamedColor>& oColor
+                const std::optional<NamedColor> oColor
                     = GetView().GetDocShell()->GetRecentColor(SID_ATTR_CHAR_COLOR);
                 if (oColor.has_value())
                 {
                     nEEWhich = GetPool().GetWhichIDFromSlotID(SID_ATTR_CHAR_COLOR);
-                    const model::ComplexColor& rCol = (*oColor).getComplexColor();
-                    aNewAttr.Put(SvxColorItem(rCol.getFinalColor(), rCol, nEEWhich));
+                    const model::ComplexColor aCol = (*oColor).getComplexColor();
+                    aNewAttr.Put(SvxColorItem(aCol.getFinalColor(), aCol, nEEWhich));
                     rReq.SetArgs(aNewAttr);
                     rReq.SetSlot(SID_ATTR_CHAR_COLOR);
                 }
@@ -171,12 +171,12 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             nEEWhich = GetPool().GetWhichIDFromSlotID(nSlot);
             if (!rReq.GetArgs())
             {
-                const std::optional<NamedColor>& oColor
+                const std::optional<NamedColor> oColor
                     = m_rView.GetDocShell()->GetRecentColor(nSlot);
                 if (oColor.has_value())
                 {
-                    const model::ComplexColor& rCol = (*oColor).getComplexColor();
-                    aNewAttr.Put(SvxColorItem(rCol.getFinalColor(), rCol, nEEWhich));
+                    const model::ComplexColor aCol = (*oColor).getComplexColor();
+                    aNewAttr.Put(SvxColorItem(aCol.getFinalColor(), aCol, nEEWhich));
                 }
             }
             break;

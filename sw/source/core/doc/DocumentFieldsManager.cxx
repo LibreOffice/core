@@ -431,18 +431,18 @@ void DocumentFieldsManager::InsDeletedFieldType( SwFieldType& rFieldTyp )
             SwFieldIds::Dde == nFieldWhich, "Wrong FieldType" );
 
     const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
-    const OUString& rFieldNm = rFieldTyp.GetName();
+    const OUString aFieldNm = rFieldTyp.GetName();
 
     for( SwFieldTypes::size_type i = INIT_FLDTYPES; i < nSize; ++i )
     {
         SwFieldType* pFnd = (*mpFieldTypes)[i].get();
         if( nFieldWhich == pFnd->Which() &&
-            rSCmp.isEqual( rFieldNm, pFnd->GetName() ) )
+            rSCmp.isEqual( aFieldNm, pFnd->GetName() ) )
         {
             // find new name
             SwFieldTypes::size_type nNum = 1;
             do {
-                OUString sSrch = rFieldNm + OUString::number( nNum );
+                OUString sSrch = aFieldNm + OUString::number( nNum );
                 for( i = INIT_FLDTYPES; i < nSize; ++i )
                 {
                     pFnd = (*mpFieldTypes)[i].get();
@@ -452,7 +452,7 @@ void DocumentFieldsManager::InsDeletedFieldType( SwFieldType& rFieldTyp )
                 }
                 if( i >= nSize )        // not found
                 {
-                    const_cast<OUString&>(rFieldNm) = sSrch;
+                    const_cast<OUString&>(aFieldNm) = sSrch;
                     break;      // exit while loop
                 }
                 ++nNum;
@@ -870,15 +870,15 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
             case SwFieldIds::User:
                 {
                     // Entry present?
-                    const OUString& rNm = pFieldType->GetName();
+                    const OUString aNm = pFieldType->GetName();
                     OUString sExpand(const_cast<SwUserFieldType*>(static_cast<const SwUserFieldType*>(pFieldType))->Expand(nsSwGetSetExpType::GSE_STRING, 0, LANGUAGE_SYSTEM));
-                    auto pFnd = aHashStrTable.find( rNm );
+                    auto pFnd = aHashStrTable.find( aNm );
                     if( pFnd != aHashStrTable.end() )
                         // modify entry in the hash table
                         pFnd->second = sExpand;
                     else
                         // insert the new entry
-                        aHashStrTable.insert( { rNm, sExpand } );
+                        aHashStrTable.insert( { aNm, sExpand } );
                 }
                 break;
             default: break;
@@ -1046,11 +1046,11 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
             if( pMgr->IsDataSourceOpen(aTmpDBData.sDataSource, aTmpDBData.sCommand, false))
                 aCalc.VarChange( sDBNumNm, pMgr->GetSelectedRecordId(aTmpDBData.sDataSource, aTmpDBData.sCommand, aTmpDBData.nCommandType));
 
-            const OUString& rName = pField->GetTyp()->GetName();
+            const OUString aName = pField->GetTyp()->GetName();
 
             // Add entry to hash table
             // Entry present?
-            auto pFnd = aHashStrTable.find( rName );
+            auto pFnd = aHashStrTable.find( aName );
             OUString const value(pField->ExpandField(m_rDoc.IsClipBoard(), nullptr));
             if( pFnd != aHashStrTable.end() )
             {
@@ -1060,7 +1060,7 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
             else
             {
                 // insert new entry
-               aHashStrTable.insert( { rName, value } );
+               aHashStrTable.insert( { aName, value } );
             }
 #endif
         }
@@ -1602,18 +1602,18 @@ void DocumentFieldsManager::FieldsToExpand( std::unordered_map<OUString, OUStrin
             break;
         case SwFieldIds::Database:
             {
-                const OUString& rName = pField->GetTyp()->GetName();
+                const OUString aName = pField->GetTyp()->GetName();
 
                 // Insert entry in the hash table
                 // Entry present?
-                auto pFnd = rHashTable.find( rName );
+                auto pFnd = rHashTable.find( aName );
                 OUString const value(pField->ExpandField(m_rDoc.IsClipBoard(), nullptr));
                 if( pFnd != rHashTable.end() )
                     // modify entry in the hash table
                     pFnd->second = value;
                 else
                     // insert the new entry
-                    rHashTable.insert( { rName, value } );
+                    rHashTable.insert( { aName, value } );
             }
             break;
         default: break;

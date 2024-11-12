@@ -152,13 +152,13 @@ static SwHTMLWriter& OutHTML_SwField( SwHTMLWriter& rWrt, const SwField* pField,
                 }
                 else
                 {
-                    const OUString& rValue = pField->GetPar2();
-                    short nValue = static_cast<short>(rValue.toInt32());
+                    const OUString aPar2Value = pField->GetPar2();
+                    short nValue = static_cast<short>(aPar2Value.toInt32());
                     if( (eSubType == PG_NEXT && nValue!=1) ||
                         (eSubType == PG_PREV && nValue!=-1) ||
                         (eSubType == PG_RANDOM && nValue!=0) )
                     {
-                        aValue = rValue;
+                        aValue = aPar2Value;
                     }
                 }
             }
@@ -488,17 +488,17 @@ SwHTMLWriter& OutHTML_SwFormatField( SwHTMLWriter& rWrt, const SfxPoolItem& rHt 
     {
         // Comments will be written in ANSI character set, but with system
         // line breaks.
-        const OUString& rComment = pField->GetPar2();
+        const OUString aComment = pField->GetPar2();
         bool bWritten = false;
 
-        if( (rComment.getLength() >= 6 && rComment.startsWith("<") && rComment.endsWith(">") &&
-             o3tl::equalsIgnoreAsciiCase(rComment.subView( 1, 4 ), u"" OOO_STRING_SVTOOLS_HTML_meta) ) ||
-            (rComment.getLength() >= 7 &&
-             rComment.startsWith( "<!--" ) &&
-             rComment.endsWith( "-->" )) )
+        if( (aComment.getLength() >= 6 && aComment.startsWith("<") && aComment.endsWith(">") &&
+             o3tl::equalsIgnoreAsciiCase(aComment.subView( 1, 4 ), u"" OOO_STRING_SVTOOLS_HTML_meta) ) ||
+            (aComment.getLength() >= 7 &&
+             aComment.startsWith( "<!--" ) &&
+             aComment.endsWith( "-->" )) )
         {
             // directly output META tags
-            OUString sComment(convertLineEnd(rComment, GetSystemLineEnd()));
+            OUString sComment(convertLineEnd(aComment, GetSystemLineEnd()));
             // TODO: HTML-Tags are written without entities, that for,
             // characters not contained in the destination encoding are lost!
             OString sTmp(OUStringToOString(sComment,
@@ -506,11 +506,11 @@ SwHTMLWriter& OutHTML_SwFormatField( SwHTMLWriter& rWrt, const SfxPoolItem& rHt 
             rWrt.Strm().WriteOString( sTmp );
             bWritten = true;
         }
-        else if( rComment.getLength() >= 7 &&
-                 rComment.endsWith(">") &&
-                 rComment.startsWithIgnoreAsciiCase( "HTML:" ) )
+        else if( aComment.getLength() >= 7 &&
+                 aComment.endsWith(">") &&
+                 aComment.startsWithIgnoreAsciiCase( "HTML:" ) )
         {
-            OUString sComment(comphelper::string::stripStart(rComment.subView(5), ' '));
+            OUString sComment(comphelper::string::stripStart(aComment.subView(5), ' '));
             if( '<' == sComment[0] )
             {
                 sComment = convertLineEnd(sComment, GetSystemLineEnd());
@@ -527,7 +527,7 @@ SwHTMLWriter& OutHTML_SwFormatField( SwHTMLWriter& rWrt, const SfxPoolItem& rHt 
 
         if( !bWritten )
         {
-            OUString sComment(convertLineEnd(rComment, GetSystemLineEnd()));
+            OUString sComment(convertLineEnd(aComment, GetSystemLineEnd()));
             // TODO: ???
             OString sOut =
                 "<" OOO_STRING_SVTOOLS_HTML_comment
@@ -543,7 +543,7 @@ SwHTMLWriter& OutHTML_SwFormatField( SwHTMLWriter& rWrt, const SfxPoolItem& rHt 
             rWrt.OutNewLine( true );
 
         bool bURL = static_cast<const SwScriptField *>(pField)->IsCodeURL();
-        const OUString& rType = pField->GetPar1();
+        const OUString aType = pField->GetPar1();
         OUString aContents, aURL;
         if(bURL)
             aURL = pField->GetPar2();
@@ -552,7 +552,7 @@ SwHTMLWriter& OutHTML_SwFormatField( SwHTMLWriter& rWrt, const SfxPoolItem& rHt 
 
         // otherwise is the script content itself. Since only JavaScript
         // is in fields, it must be JavaScript ...:)
-        HTMLOutFuncs::OutScript( rWrt.Strm(), rWrt.GetBaseURL(), aContents, rType, JAVASCRIPT,
+        HTMLOutFuncs::OutScript( rWrt.Strm(), rWrt.GetBaseURL(), aContents, aType, JAVASCRIPT,
                                  aURL, nullptr, nullptr );
 
         if (rWrt.IsLFPossible())

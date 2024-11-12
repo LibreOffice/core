@@ -85,7 +85,7 @@ bool SwTextGuess::maybeAdjustPositionsForBlockAdjust(tools::Long& rMaxSizeDiff,
                                                      std::optional<SwLinePortionLayoutContext> nLayoutContext)
 {
     const auto& adjObj = rInf.GetTextFrame()->GetTextNodeForParaProps()->GetSwAttrSet().GetAdjust();
-    const SvxAdjust& adjust = adjObj.GetAdjust();
+    const SvxAdjust adjust = adjObj.GetAdjust();
     if (adjust == SvxAdjust::Block)
     {
         if (rInf.DontBlockJustify())
@@ -187,7 +187,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
     SwTwips nLineWidth = rInf.GetLineWidth();
     TextFrameIndex nMaxLen = TextFrameIndex(rInf.GetText().getLength()) - rInf.GetIdx();
 
-    const SvxAdjust& rAdjust = rInf.GetTextFrame()->GetTextNodeForParaProps()->GetSwAttrSet().GetAdjust().GetAdjust();
+    const SvxAdjust aAdjust = rInf.GetTextFrame()->GetTextNodeForParaProps()->GetSwAttrSet().GetAdjust().GetAdjust();
 
     // allow up to 20% shrinking of the spaces
     if ( nSpacesInLine )
@@ -693,7 +693,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
                 m_nBreakPos = rInf.GetIdx() - TextFrameIndex(1);
             }
 
-            if( rAdjust != SvxAdjust::Left )
+            if( aAdjust != SvxAdjust::Left )
             {
                 // Delete any blanks at the end of a line, but be careful:
                 // If a field has been expanded, we do not want to delete any

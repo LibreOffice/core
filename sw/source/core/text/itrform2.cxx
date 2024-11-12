@@ -1635,7 +1635,7 @@ SwLinePortion *SwTextFormatter::WhichFirstPortion(SwTextFormatInfo &rInf)
     // check this *last* so that BuildMultiPortion() can find it!
     if (!pPor && rInf.CheckCurrentPosBookmark())
     {
-        const auto& bookmark = m_pScriptInfo->GetBookmarks(rInf.GetIdx());
+        const auto bookmark = m_pScriptInfo->GetBookmarks(rInf.GetIdx());
         if (!bookmark.empty())
         {
             // only for character width, maybe replaced with ] later

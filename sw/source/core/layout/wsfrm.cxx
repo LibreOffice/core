@@ -4536,7 +4536,7 @@ static void UnHideRedlines(SwRootFrame & rLayout,
                 }
                 else
                 {
-                    if (auto const& pMergedPara = pFrame->GetMergedPara())
+                    if (auto const pMergedPara = pFrame->GetMergedPara())
                     {
                         // invalidate SwInvalidateFlags::Size
                         pFrame->Prepare(PrepareHint::Clear, nullptr, false);

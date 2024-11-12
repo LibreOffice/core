@@ -168,15 +168,15 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
                     pUnknownItem->AddAttr( SvXMLImport::getNameFromToken( nToken ), sValue );
                 else
                 {
-                    const OUString& rAttrNamespacePrefix = SvXMLImport::getNamespacePrefixFromToken(nToken, &rNamespaceMap);
+                    const OUString aAttrNamespacePrefix = SvXMLImport::getNamespacePrefixFromToken(nToken, &rNamespaceMap);
                     OUString sAttrName = SvXMLImport::getNameFromToken( nToken );
-                    if ( !rAttrNamespacePrefix.isEmpty() )
-                        sAttrName = rAttrNamespacePrefix + SvXMLImport::aNamespaceSeparator + sAttrName;
+                    if ( !aAttrNamespacePrefix.isEmpty() )
+                        sAttrName = aAttrNamespacePrefix + SvXMLImport::aNamespaceSeparator + sAttrName;
                     OUString aLocalName, aPrefix, aNamespace;
                     rNamespaceMap.GetKeyByAttrName( sAttrName, &aPrefix, &aLocalName,
                                                         &aNamespace );
-                    if ( !rAttrNamespacePrefix.isEmpty() )
-                        pUnknownItem->AddAttr( rAttrNamespacePrefix, aNamespace, aLocalName,
+                    if ( !aAttrNamespacePrefix.isEmpty() )
+                        pUnknownItem->AddAttr( aAttrNamespacePrefix, aNamespace, aLocalName,
                                                sValue );
                     else
                         pUnknownItem->AddAttr( aLocalName, sValue );

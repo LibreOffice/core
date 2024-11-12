@@ -160,18 +160,18 @@ void SwView::ExecDraw(const SfxRequest& rReq)
                 if ( pObj )
                 {
                     Size            aDocSize( m_pWrtShell->GetDocSize() );
-                    const SwRect&   rVisArea = comphelper::LibreOfficeKit::isActive() ?
+                    const SwRect    aVisArea = comphelper::LibreOfficeKit::isActive() ?
                                                 SwRect(m_pWrtShell->getLOKVisibleArea()) : m_pWrtShell->VisArea();
-                    Point           aPos( rVisArea.Center() );
+                    Point           aPos( aVisArea.Center() );
                     tools::Rectangle aObjRect( pObj->GetLogicRect() );
 
-                    if ( rVisArea.Width() > aDocSize.Width())
-                        aPos.setX( aDocSize.Width() / 2 + rVisArea.Left() );
+                    if ( aVisArea.Width() > aDocSize.Width())
+                        aPos.setX( aDocSize.Width() / 2 + aVisArea.Left() );
                     else if (aPos.getX() > aObjRect.GetWidth() / 2)
                          aPos.AdjustX( -(aObjRect.GetWidth() / 2) );
 
-                    if (rVisArea.Height() > aDocSize.Height())
-                        aPos.setY( aDocSize.Height() / 2 + rVisArea.Top() );
+                    if (aVisArea.Height() > aDocSize.Height())
+                        aPos.setY( aDocSize.Height() / 2 + aVisArea.Top() );
                     else if (aPos.getY() > aObjRect.GetHeight() / 2)
                          aPos.AdjustY( -(aObjRect.GetHeight() / 2) );
 

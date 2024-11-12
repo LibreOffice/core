@@ -442,7 +442,7 @@ static void MetadataToTreeNode(const css::uno::Reference<css::uno::XInterface>& 
     if (SwDocShell* pDocSh = static_cast<SwDocShell*>(SfxObjectShell::Current()))
     {
         rtl::Reference<SwXTextDocument> xDocumentMetadataAccess(pDocSh->GetBaseModel());
-        const uno::Reference<rdf::XRepository>& xRepo = xDocumentMetadataAccess->getRDFRepository();
+        const uno::Reference<rdf::XRepository> xRepo = xDocumentMetadataAccess->getRDFRepository();
         const css::uno::Reference<css::rdf::XResource> xSubject(rSource, uno::UNO_QUERY);
         std::map<OUString, OUString> xStatements
             = SwRDFHelper::getStatements(pDocSh->GetBaseModel(), xRepo->getGraphNames(), xSubject);

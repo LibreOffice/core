@@ -1269,8 +1269,8 @@ void SwDoc::ForEachOverlineItem( const std::function<bool(const SvxOverlineItem&
     const SwCellStyleTable& rCellStyleTable = GetCellStyles();
     for (size_t i=0; i < rCellStyleTable.size(); ++i)
     {
-        const SwCellStyleDescriptor& rCellStyle = rCellStyleTable[i];
-        const SwBoxAutoFormat& rBoxFormat = rCellStyle.GetAutoFormat();
+        const SwCellStyleDescriptor aCellStyle = rCellStyleTable[i];
+        const SwBoxAutoFormat& rBoxFormat = aCellStyle.GetAutoFormat();
         const SvxOverlineItem rOverlineItem = rBoxFormat.GetOverline();
         if (!rFunc(rOverlineItem))
             return;

@@ -623,8 +623,8 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                                 t == SwAuthorityField::TargetType::UseDisplayURL
                                 || t == SwAuthorityField::TargetType::UseTargetURL)
                             {
-                                const OUString& rURL = pAuthorityField->GetAbsoluteURL();
-                                sText += "\n" + SfxHelp::GetURLHelpText(rURL);
+                                const OUString aURL = pAuthorityField->GetAbsoluteURL();
+                                sText += "\n" + SfxHelp::GetURLHelpText(aURL);
                             }
 
                             break;

@@ -2143,7 +2143,7 @@ SwXTextField::getPropertySetInfo()
     }
     const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(
                     lcl_GetPropertyMapOfService(m_pImpl->m_nServiceId));
-    const uno::Reference<beans::XPropertySetInfo>& xInfo = pPropSet->getPropertySetInfo();
+    const uno::Reference<beans::XPropertySetInfo> xInfo = pPropSet->getPropertySetInfo();
     // extend PropertySetInfo!
     const uno::Sequence<beans::Property> aPropSeq = xInfo->getProperties();
     aRef = new SfxExtItemPropertySetInfo(

@@ -1975,8 +1975,8 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                         Size aRootSize( aRootRect.SSize() );
 
                         const MapMode aTmpMap( MapUnit::MapTwip );
-                        const Size& rEditSize = GetEditWin().GetOutputSizePixel();
-                        const Size aWindowSize( GetEditWin().PixelToLogic( rEditSize, aTmpMap ) );
+                        const Size aEditSize = GetEditWin().GetOutputSizePixel();
+                        const Size aWindowSize( GetEditWin().PixelToLogic( aEditSize, aTmpMap ) );
 
                         const tools::Long nOf = pVOpt->GetDocumentBorder() * 2;
                         tools::Long nTmpWidth = bAutomaticViewLayout ? aPageSize.Width() : aRootSize.Width();

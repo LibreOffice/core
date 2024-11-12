@@ -105,7 +105,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTextWatermark)
     assertXPath(pXmlHeader2, "/w:hdr[1]/w:p[1]/w:r[1]/w:pict[1]/v:shape[1]","id",u"PowerPlusWaterMarkObject93701316");
 
     //The second problem was that Word uses also "o:spid"
-    const OUString& sSpid = getXPath(pXmlHeader2, "/w:hdr[1]/w:p[1]/w:r[1]/w:pict[1]/v:shape[1]","spid");
+    const OUString sSpid = getXPath(pXmlHeader2, "/w:hdr[1]/w:p[1]/w:r[1]/w:pict[1]/v:shape[1]","spid");
     CPPUNIT_ASSERT(!sSpid.isEmpty());
 }
 

@@ -111,7 +111,7 @@ SwXMLFontAutoStylePool_Impl::SwXMLFontAutoStylePool_Impl(SwXMLExport& _rExport, 
             pFont->GetCharSet());
     }
 
-    auto const & pDocument = _rExport.getDoc();
+    auto const pDocument = _rExport.getDoc();
 
     m_bEmbedUsedOnly = pDocument->getIDocumentSettingAccess().get(DocumentSettingId::EMBED_USED_FONTS);
     m_bEmbedLatinScript = pDocument->getIDocumentSettingAccess().get(DocumentSettingId::EMBED_LATIN_SCRIPT_FONTS);

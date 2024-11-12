@@ -981,7 +981,7 @@ void StyleSheetTable::ReApplyInheritedOutlineLevelFromChapterNumbering()
                 continue;
 
             const sal_Int16 nListId = pEntry->m_pProperties->props().GetListId();
-            const OUString& sParentNumberingStyleName
+            const OUString sParentNumberingStyleName
                 = m_pImpl->m_rDMapper.GetListStyleName(pParent->m_pProperties->props().GetListId());
             if (nListId == -1 && !sParentNumberingStyleName.isEmpty())
             {

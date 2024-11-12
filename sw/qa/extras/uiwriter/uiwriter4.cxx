@@ -141,8 +141,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf146449)
     uno::Reference<beans::XPropertySet> xFrameProps(
         xShapeProps->getPropertyValue(u"TextBoxContent"_ustr), uno::UNO_QUERY);
 
-    const auto& nShapeZOrder = pObject->GetOrdNum();
-    const auto& nFrameZOrder = xFrameProps->getPropertyValue(u"ZOrder"_ustr);
+    const auto nShapeZOrder = pObject->GetOrdNum();
+    const auto nFrameZOrder = xFrameProps->getPropertyValue(u"ZOrder"_ustr);
 
     CPPUNIT_ASSERT_MESSAGE("Wrong Zorder!", nShapeZOrder < nFrameZOrder.get<sal_uInt32>());
 }

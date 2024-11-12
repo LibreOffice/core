@@ -92,16 +92,16 @@ public:
         {
             nParentIndex = maNodeStack.back()->GetIndex();
         }
-        const OUString& rString
+        const OUString aString
             = pTextNode->GetText().replaceAll(OUStringChar(CH_TXTATR_BREAKWORD), "");
-        if (rString.isEmpty())
+        if (aString.isEmpty())
             return;
         m_rXmlWriter.startElement("paragraph");
         m_rXmlWriter.attribute("index", sal_Int32(pTextNode->GetIndex()));
         m_rXmlWriter.attribute("node_type", "writer"_ostr);
         if (nParentIndex >= SwNodeOffset(0))
             m_rXmlWriter.attribute("parent_index", sal_Int32(nParentIndex));
-        m_rXmlWriter.content(rString);
+        m_rXmlWriter.content(aString);
         m_rXmlWriter.endElement();
     }
 

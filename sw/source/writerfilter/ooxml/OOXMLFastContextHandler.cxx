@@ -431,7 +431,7 @@ void OOXMLFastContextHandler::startParagraphGroup()
     mpStream->startParagraphGroup();
     mpParserState->setInParagraphGroup(true);
 
-    if (const auto& pPropSet = getPropertySet())
+    if (const auto pPropSet = getPropertySet())
     {
         OOXMLPropertySetEntryToString aHandler(NS_ooxml::LN_AG_Parids_paraId);
         pPropSet->resolve(aHandler);

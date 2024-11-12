@@ -1298,9 +1298,9 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testImageComment)
     SwSortedObjs& rDrawObjs = *pTextFrame->GetDrawObjs();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rDrawObjs.size());
     SwAnchoredObject* pDrawObj = rDrawObjs[0];
-    const SwRect& rDrawObjRect = pDrawObj->GetObjRect();
-    Point aPoint = rDrawObjRect.Center();
-    aPoint.setX(aPoint.getX() + rDrawObjRect.Width() / 2);
+    const SwRect aDrawObjRect = pDrawObj->GetObjRect();
+    Point aPoint = aDrawObjRect.Center();
+    aPoint.setX(aPoint.getX() + aDrawObjRect.Width() / 2);
 
     // Ask for the doc model pos of this layout point.
     SwPosition aPosition(*pTextFrame->GetTextNodeForFirstText());

@@ -483,7 +483,7 @@ DECLARE_WW8EXPORT_TEST(testTdf120225_textControlCrossRef, "tdf120225_textControl
     uno::Reference<container::XNamed> xBookmark(getProperty< uno::Reference<beans::XPropertySet> >(xPropertySet, u"Bookmark"_ustr), uno::UNO_QUERY_THROW);
 
     // Critical test: does TextField's bookmark name match cross-reference?
-    const OUString& sTextFieldName( xBookmark->getName() );
+    const OUString sTextFieldName( xBookmark->getName() );
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());

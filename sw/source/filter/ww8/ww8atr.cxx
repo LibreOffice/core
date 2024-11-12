@@ -2841,7 +2841,7 @@ void WW8AttributeOutput::HiddenField( const SwField& rField )
 void WW8AttributeOutput::SetField( const SwField& rField, ww::eField eType, const OUString& rCmd )
 {
     const SwSetExpField* pSet = static_cast<const SwSetExpField*>(&rField);
-    const OUString &rVar = pSet->GetPar2();
+    const OUString aVar = pSet->GetPar2();
 
     sal_uLong nFrom = m_rWW8Export.Fc2Cp(m_rWW8Export.Strm().Tell());
 
@@ -2858,9 +2858,9 @@ void WW8AttributeOutput::SetField( const SwField& rField, ww::eField eType, cons
     */
     m_rWW8Export.MoveFieldMarks(nFrom,m_rWW8Export.Fc2Cp(m_rWW8Export.Strm().Tell()));
 
-    if (!rVar.isEmpty())
+    if (!aVar.isEmpty())
     {
-        SwWW8Writer::WriteString16(m_rWW8Export.Strm(), rVar, false);
+        SwWW8Writer::WriteString16(m_rWW8Export.Strm(), aVar, false);
     }
     GetExport().OutputField(&rField, eType, rCmd, FieldFlags::Close);
 }

@@ -204,12 +204,12 @@ void SwInputWindow::ShowWin()
                                                 SelTableCellsNotify) );
         if( m_bIsTable )
         {
-            const OUString& rPos = m_pWrtShell->GetBoxNms();
+            const OUString aPos = m_pWrtShell->GetBoxNms();
             sal_Int32 nPos = 0;
             short nSrch = -1;
-            while( (nPos = rPos.indexOf( ':',nPos + 1 ) ) != -1 )
+            while( (nPos = aPos.indexOf( ':',nPos + 1 ) ) != -1 )
                 nSrch = static_cast<short>(nPos);
-            mxPos->set_text( rPos.copy( ++nSrch ) );
+            mxPos->set_text( aPos.copy( ++nSrch ) );
             m_aCurrentTableName = m_pWrtShell->GetTableFormat()->GetName();
         }
         else

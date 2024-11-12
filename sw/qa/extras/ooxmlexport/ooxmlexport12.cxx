@@ -817,7 +817,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf120224_textControlCrossRef, "tdf120224_textContr
         uno::UNO_QUERY);
 
     // Critical test: does TextField's bookmark name match cross-reference?
-    const OUString& sTextFieldName(xBookmark->getName());
+    const OUString sTextFieldName(xBookmark->getName());
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(
         xTextFieldsSupplier->getTextFields());

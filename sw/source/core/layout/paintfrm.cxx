@@ -4627,7 +4627,7 @@ void SwTextFrame::PaintParagraphStylesHighlighting() const
             aFrameAreaRect.Right(aFrameAreaRect.Left() + 300);
         }
 
-        const tools::Rectangle& rRect = aFrameAreaRect.SVRect();
+        const tools::Rectangle aRect = aFrameAreaRect.SVRect();
 
         vcl::Font aFont(OutputDevice::GetDefaultFont(DefaultFontType::UI_SANS, GetAppLanguage(),
                                                      GetDefaultFontFlags::OnlyOne, pRenderContext));
@@ -4643,7 +4643,7 @@ void SwTextFrame::PaintParagraphStylesHighlighting() const
         pRenderContext->SetFillColor(rParaStylesColorMap[sStyleName].first);
         pRenderContext->SetLineColor(rParaStylesColorMap[sStyleName].first);
 
-        pRenderContext->DrawRect(rRect);
+        pRenderContext->DrawRect(aRect);
 
         // draw hatch pattern if paragraph has direct formatting
         if (SwDoc::HasParagraphDirectFormatting(SwPosition(*GetTextNodeForParaProps())))
@@ -4652,13 +4652,13 @@ void SwTextFrame::PaintParagraphStylesHighlighting() const
             // make hatch line color 41% darker than the fill color
             aHatchColor.ApplyTintOrShade(-4100);
             Hatch aHatch(HatchStyle::Single, aHatchColor, 50, 450_deg10);
-            pRenderContext->DrawHatch(tools::PolyPolygon(rRect), aHatch);
+            pRenderContext->DrawHatch(tools::PolyPolygon(aRect), aHatch);
         }
 
         pRenderContext->SetFont(aFont);
         pRenderContext->SetLayoutMode(vcl::text::ComplexTextLayoutFlags::Default);
         pRenderContext->SetTextFillColor(rParaStylesColorMap[sStyleName].first);
-        pRenderContext->DrawText(rRect, OUString::number(rParaStylesColorMap[sStyleName].second),
+        pRenderContext->DrawText(aRect, OUString::number(rParaStylesColorMap[sStyleName].second),
                                  DrawTextFlags::Center | DrawTextFlags::VCenter);
 
         pRenderContext->Pop();
@@ -5661,14 +5661,14 @@ void SwFrame::PaintSwFrameShadowAndBorder(
         {
             const SwFrame* pDirRefFrame(IsCellFrame() ? FindTabFrame() : this);
             const SwRectFnSet aRectFnSet(pDirRefFrame);
-            const SwRectFn& _rRectFn(aRectFnSet.FnRect());
+            const SwRectFn _aRectFn(aRectFnSet.FnRect());
 
             if(rAttrs.JoinedWithPrev(*this))
             {
                 // tdf#115296 re-add adaptation of vert distance to close the evtl.
                 // existing gap to previous frame
                 const SwFrame* pPrevFrame(GetPrev());
-                (aRect.*_rRectFn->fnSetTop)( (pPrevFrame->*_rRectFn->fnGetPrtBottom)() );
+                (aRect.*_aRectFn->fnSetTop)( (pPrevFrame->*_aRectFn->fnGetPrtBottom)() );
 
                 // ...and disable top border paint/creation
                 pTopBorder = nullptr;
@@ -5679,7 +5679,7 @@ void SwFrame::PaintSwFrameShadowAndBorder(
                 // tdf#115296 re-add adaptation of vert distance to close the evtl.
                 // existing gap to next frame
                 const SwFrame* pNextFrame(GetNext());
-                (aRect.*_rRectFn->fnSetBottom)( (pNextFrame->*_rRectFn->fnGetPrtTop)() );
+                (aRect.*_aRectFn->fnSetBottom)( (pNextFrame->*_aRectFn->fnGetPrtTop)() );
 
                 // ...and disable bottom border paint/creation
                 pBottomBorder = nullptr;
@@ -6559,7 +6559,7 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
         return;
 
     sal_Int32 nScrollerHeight = pMgr->GetSidebarScrollerHeight();
-    const tools::Rectangle &aVisRect = _pViewShell->VisArea().SVRect();
+    const tools::Rectangle aVisRect = _pViewShell->VisArea().SVRect();
     //draw border and sidepane
     _pViewShell->GetOut()->SetLineColor();
     if (!bRight)

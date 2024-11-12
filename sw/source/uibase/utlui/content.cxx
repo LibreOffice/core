@@ -796,7 +796,7 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                         && m_nContentType == ContentTypeId::ENDNOTE))
                 {
                     const SwFormatFootnote& rFormatFootnote = pTextFootnote->GetFootnote();
-                    const OUString& sText
+                    const OUString sText
                         = rFormatFootnote.GetViewNumStr(*m_pWrtShell->GetDoc(),
                                                         m_pWrtShell->GetLayout(), true)
                           + " " + lcl_GetFootnoteText(*pTextFootnote);
@@ -2577,13 +2577,13 @@ void SwContentTree::Expand(const weld::TreeIter& rParent,
         pNodesToExpand->emplace_back(m_xTreeView->make_iterator(&rParent));
 
     // rParentId is a string representation of a pointer to SwContentType or SwContent
-    const OUString& rParentId = m_xTreeView->get_id(rParent);
+    const OUString aParentId = m_xTreeView->get_id(rParent);
     // bParentIsContentType tells if the passed rParent tree entry is a content type or content
     const bool bParentIsContentType = lcl_IsContentType(rParent, *m_xTreeView);
     // eParentContentTypeId is the content type of the passed rParent tree entry
     const ContentTypeId eParentContentTypeId =
-            bParentIsContentType ? weld::fromId<SwContentType*>(rParentId)->GetType() :
-                                   weld::fromId<SwContent*>(rParentId)->GetParent()->GetType();
+            bParentIsContentType ? weld::fromId<SwContentType*>(aParentId)->GetType() :
+                                   weld::fromId<SwContent*>(aParentId)->GetParent()->GetType();
 
     if (m_nRootType == ContentTypeId::UNKNOWN && bParentIsContentType)
     {
@@ -2644,8 +2644,8 @@ void SwContentTree::Expand(const weld::TreeIter& rParent,
         else // content entry
         {
             SwWrtShell* pShell = GetWrtShell();
-            assert(dynamic_cast<SwOutlineContent*>(weld::fromId<SwTypeNumber*>(rParentId)));
-            auto const nPos = weld::fromId<SwOutlineContent*>(rParentId)->GetOutlinePos();
+            assert(dynamic_cast<SwOutlineContent*>(weld::fromId<SwTypeNumber*>(aParentId)));
+            auto const nPos = weld::fromId<SwOutlineContent*>(aParentId)->GetOutlinePos();
             void* key = static_cast<void*>(pShell->getIDocumentOutlineNodesAccess()->getOutlineNode( nPos ));
             mOutLineNodeMap[key] = true;
         }
@@ -2685,9 +2685,9 @@ void SwContentTree::Expand(const weld::TreeIter& rParent,
         }
         else // content entry
         {
-            assert(dynamic_cast<SwRegionContent*>(weld::fromId<SwTypeNumber*>(rParentId)));
+            assert(dynamic_cast<SwRegionContent*>(weld::fromId<SwTypeNumber*>(aParentId)));
             const void* key = static_cast<const void*>(
-                        weld::fromId<SwRegionContent*>(rParentId)->GetSectionFormat());
+                        weld::fromId<SwRegionContent*>(aParentId)->GetSectionFormat());
             m_aRegionNodeExpandMap[key] = true;
         }
     }
@@ -2726,9 +2726,9 @@ void SwContentTree::Expand(const weld::TreeIter& rParent,
         }
         else // content entry
         {
-            assert(dynamic_cast<SwPostItContent*>(weld::fromId<SwTypeNumber*>(rParentId)));
+            assert(dynamic_cast<SwPostItContent*>(weld::fromId<SwTypeNumber*>(aParentId)));
             const void* key = static_cast<const void*>(
-                        weld::fromId<SwPostItContent*>(rParentId)->GetPostIt());
+                        weld::fromId<SwPostItContent*>(aParentId)->GetPostIt());
             m_aPostItNodeExpandMap[key] = true;
         }
     }
@@ -3298,9 +3298,9 @@ bool SwContentTree::FillTransferData(TransferDataContainer& rTransfer)
                 else
                     return false;
 
-                const OUString& rsFieldTypeName = pField->GetTyp()->GetName();
+                const OUString sFieldTypeName = pField->GetTyp()->GetName();
                 sCrossRef = OUString::number(static_cast<int>(REFERENCESUBTYPE::REF_SEQUENCEFLD))
-                        + u"|" + rsFieldTypeName + u"|" + sVal;
+                        + u"|" + sFieldTypeName + u"|" + sVal;
             }
             else if (eActType == ContentTypeId::REFERENCE)
             {
@@ -5495,11 +5495,11 @@ void SwContentTree::ExecuteContextMenuAction(const OUString& rSelectedPopupEntry
     else if (rSelectedPopupEntry == "sort")
     {
         SwContentType* pCntType;
-        const OUString& rId(m_xTreeView->get_id(*xFirst));
+        const OUString aId(m_xTreeView->get_id(*xFirst));
         if (lcl_IsContentType(*xFirst, *m_xTreeView))
-            pCntType = weld::fromId<SwContentType*>(rId);
+            pCntType = weld::fromId<SwContentType*>(aId);
         else
-            pCntType = const_cast<SwContentType*>(weld::fromId<SwContent*>(rId)->GetParent());
+            pCntType = const_cast<SwContentType*>(weld::fromId<SwContent*>(aId)->GetParent());
 
         // toggle and persist alphabetical sort setting
 

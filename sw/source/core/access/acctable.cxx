@@ -229,8 +229,8 @@ void SwAccessibleTableData_Impl::GetSelection(
         const SwAccessibleChild& rLower = *aIter;
         const SwFrame *pLower = rLower.GetSwFrame();
         OSL_ENSURE( pLower, "child should be a frame" );
-        const SwRect& rBox = rLower.GetBox( mrAccMap );
-        if( pLower && rBox.Overlaps( rArea ) )
+        const SwRect aBox = rLower.GetBox( mrAccMap );
+        if( pLower && aBox.Overlaps( rArea ) )
         {
             if( rLower.IsAccessible( mbIsInPagePreview ) )
             {
@@ -244,16 +244,16 @@ void SwAccessibleTableData_Impl::GetSelection(
                     const Int32Set_Impl rRowsOrCols =
                         bColumns ? maColumns : maRows;
 
-                    sal_Int32 nPos = bColumns ? (rBox.Left() - rTabPos.X())
-                                              : (rBox.Top() - rTabPos.Y());
+                    sal_Int32 nPos = bColumns ? (aBox.Left() - rTabPos.X())
+                                              : (aBox.Top() - rTabPos.Y());
                     Int32Set_Impl::const_iterator aSttRowOrCol(
                         rRowsOrCols.lower_bound( nPos ) );
                     sal_Int32 nRowOrCol =
                         static_cast< sal_Int32 >( std::distance(
                             rRowsOrCols.begin(), aSttRowOrCol ) );
 
-                    nPos = bColumns ? (rBox.Right() - rTabPos.X())
-                                    : (rBox.Bottom() - rTabPos.Y());
+                    nPos = bColumns ? (aBox.Right() - rTabPos.X())
+                                    : (aBox.Bottom() - rTabPos.Y());
                     Int32Set_Impl::const_iterator aEndRowOrCol(
                         rRowsOrCols.upper_bound( nPos ) );
                     sal_Int32 nExt =

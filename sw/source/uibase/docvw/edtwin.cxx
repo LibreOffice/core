@@ -6692,7 +6692,7 @@ void QuickHelpData::SortAndFilter(const OUString &rOrigWord)
                m_aHelpStrings.end(),
                CompareIgnoreCaseAsciiFavorExact(rOrigWord) );
 
-    const auto& it
+    const auto it
         = std::unique(m_aHelpStrings.begin(), m_aHelpStrings.end(), EqualIgnoreCaseAscii());
     m_aHelpStrings.erase( it, m_aHelpStrings.end() );
 

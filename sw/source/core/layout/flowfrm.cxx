@@ -1296,7 +1296,7 @@ bool SwFlowFrame::IsPageBreak( bool bAct ) const
                 return true;
             else
             {
-                const SvxBreak &ePrB = pPrev->GetBreakItem().GetBreak();
+                const SvxBreak ePrB = pPrev->GetBreakItem().GetBreak();
                 if ( ePrB == SvxBreak::PageAfter ||
                      ePrB == SvxBreak::PageBoth  ||
                     m_rThis.GetPageDescItem().GetPageDesc())
@@ -1352,7 +1352,7 @@ bool SwFlowFrame::IsColBreak( bool bAct ) const
                     return true;
                 else
                 {
-                    const SvxBreak &ePrB = pPrev->GetBreakItem().GetBreak();
+                    const SvxBreak ePrB = pPrev->GetBreakItem().GetBreak();
                     if ( ePrB == SvxBreak::ColumnAfter ||
                          ePrB == SvxBreak::ColumnBoth )
                         return true;

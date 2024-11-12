@@ -1479,7 +1479,7 @@ bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape, SdrObject* pOb
                 + aRect.Top());
 
             // Get the distance of the child shape inside its parent
-            const auto& nInshapePos
+            const auto nInshapePos
                 = pObj ? pObj->GetRelativePos() - pShape->FindRealSdrObject()->GetRelativePos()
                        : Point();
 
@@ -1573,12 +1573,12 @@ bool SwTextBoxHelper::syncTextBoxSize(SwFrameFormat* pShape, SdrObject* pObj)
     if (auto pTextBox = getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT, pObj))
     {
         auto aGuard = SwTextBoxLockGuard(*pShape->GetOtherTextBoxFormats());
-        const auto& rSize = getRelativeTextRectangle(pObj).GetSize();
-        if (!rSize.IsEmpty())
+        const auto aSize = getRelativeTextRectangle(pObj).GetSize();
+        if (!aSize.IsEmpty())
         {
-            SwFormatFrameSize aSize(pTextBox->GetFrameSize());
-            aSize.SetSize(rSize);
-            return pTextBox->SetFormatAttr(aSize);
+            SwFormatFrameSize aFrameSize(pTextBox->GetFrameSize());
+            aFrameSize.SetSize(aSize);
+            return pTextBox->SetFormatAttr(aFrameSize);
         }
     }
 

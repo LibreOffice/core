@@ -1097,8 +1097,8 @@ void SwTOXSelectTabPage::ApplyTOXDescription()
     LanguageHdl(nullptr);
     for (int nCnt = 0, nEntryCount = m_xSortAlgorithmLB->get_count(); nCnt < nEntryCount; ++nCnt)
     {
-        const OUString& rEntryData = m_xSortAlgorithmLB->get_id(nCnt);
-        if (rEntryData == rDesc.GetSortAlgorithm())
+        const OUString aEntryData = m_xSortAlgorithmLB->get_id(nCnt);
+        if (aEntryData == rDesc.GetSortAlgorithm())
         {
             m_xSortAlgorithmLB->set_active(nCnt);
             break;
@@ -1240,8 +1240,8 @@ void SwTOXSelectTabPage::FillTOXDescription()
         rDesc.SetStyleNames(m_aStyleArr[i], i);
 
     rDesc.SetLanguage(m_xLanguageLB->get_active_id());
-    const OUString& rEntryData = m_xSortAlgorithmLB->get_active_id();
-    rDesc.SetSortAlgorithm(rEntryData);
+    const OUString aEntryData = m_xSortAlgorithmLB->get_active_id();
+    rDesc.SetSortAlgorithm(aEntryData);
 }
 
 void SwTOXSelectTabPage::Reset( const SfxItemSet* )

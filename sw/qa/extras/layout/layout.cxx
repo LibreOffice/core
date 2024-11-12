@@ -832,11 +832,11 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf136613)
     for (auto pFlyFormat : vFlyFormats)
     {
         //...the rectangle of the fly location...
-        const SwRect& rRect = pFlyFormat->FindLayoutRect();
-        CPPUNIT_ASSERT(!rRect.IsEmpty());
+        const SwRect aRect = pFlyFormat->FindLayoutRect();
+        CPPUNIT_ASSERT(!aRect.IsEmpty());
 
         //...if it is on the page. This will fail if not.
-        CPPUNIT_ASSERT_MESSAGE("The pictures are outside the page!", rPageRect.Contains(rRect));
+        CPPUNIT_ASSERT_MESSAGE("The pictures are outside the page!", rPageRect.Contains(aRect));
     }
 }
 

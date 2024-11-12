@@ -328,8 +328,8 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
 
     // tdf#158776 for the last full text portion, call Guess() again to allow more text in the
     // adjusted line by shrinking spaces using the know space count from the first Guess() call
-    const SvxAdjust& rAdjust = rInf.GetTextFrame()->GetTextNodeForParaProps()->GetSwAttrSet().GetAdjust().GetAdjust();
-    if ( bFull && rAdjust == SvxAdjust::Block &&
+    const SvxAdjust aAdjust = rInf.GetTextFrame()->GetTextNodeForParaProps()->GetSwAttrSet().GetAdjust().GetAdjust();
+    if ( bFull && aAdjust == SvxAdjust::Block &&
          pGuess->BreakPos() != TextFrameIndex(COMPLETE_STRING) &&
          rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
                     DocumentSettingId::JUSTIFY_LINES_WITH_SHRINKING) &&

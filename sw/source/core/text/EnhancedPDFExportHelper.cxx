@@ -2762,14 +2762,14 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                         pPDFExtOutDevData->CreateDest(aRect, nDestPageNum);
 
                     // Outline entry text
-                    const OUString& rEntry = mrSh.getIDocumentOutlineNodesAccess()->getOutlineText(
+                    const OUString aEntry = mrSh.getIDocumentOutlineNodesAccess()->getOutlineText(
                         i, mrSh.GetLayout(), true, false, false );
 
                     // postpone fly outlines
                     if ( bFlyOutline )
                     {
                         aFlyVector.push_back(
-                                    FlyEntry(nDestPageNum, rDestRect, nLevel, rEntry, nDestId) );
+                                    FlyEntry(nDestPageNum, rDestRect, nLevel, aEntry, nDestId) );
                         continue;
                     }
 
@@ -2803,7 +2803,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
 
                     // Create a new outline item:
                     const sal_Int32 nOutlineId =
-                        pPDFExtOutDevData->CreateOutlineItem( nParent, rEntry, nDestId );
+                        pPDFExtOutDevData->CreateOutlineItem( nParent, aEntry, nDestId );
 
                     // Push current level and nOutlineId on stack:
                     aOutlineStack.push( StackEntry( nLevel, nOutlineId ) );
@@ -3008,8 +3008,8 @@ void SwEnhancedPDFExportHelper::ExportAuthorityEntryLinks()
             || targetType == SwAuthorityField::TargetType::UseTargetURL)
         {
             // Since the target type specifies to use an URL, link to it
-            const OUString& rURL = rAuthorityField.GetAbsoluteURL();
-            if (rURL.getLength() == 0)
+            const OUString aURL = rAuthorityField.GetAbsoluteURL();
+            if (aURL.getLength() == 0)
             {
                 continue;
             }
@@ -3036,7 +3036,7 @@ void SwEnhancedPDFExportHelper::ExportAuthorityEntryLinks()
                     sal_Int32 nLinkId = pPDFExtOutDevData->CreateLink(aRect, content, rLinkPageNum);
                     IdMapEntry aLinkEntry(rLinkRect, nLinkId);
                     pPDFExtOutDevData->GetSwPDFState()->m_LinkIdMap.push_back(aLinkEntry);
-                    pPDFExtOutDevData->SetLinkURL(nLinkId, rURL);
+                    pPDFExtOutDevData->SetLinkURL(nLinkId, aURL);
                 }
             }
             mrSh.SwCursorShell::ClearMark();

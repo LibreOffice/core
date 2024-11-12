@@ -3843,7 +3843,7 @@ void DomainMapper::lcl_startParagraphGroup()
     {
         if (m_pImpl->GetTopContext())
         {
-            const OUString& sDefaultParaStyle = m_pImpl->GetDefaultParaStyleName();
+            const OUString sDefaultParaStyle = m_pImpl->GetDefaultParaStyleName();
             auto pContext = static_cast<ParagraphPropertyMap*>(m_pImpl->GetTopContext().get());
             m_pImpl->GetTopContext()->Insert( PROP_PARA_STYLE_NAME, uno::Any( sDefaultParaStyle ) );
             m_pImpl->SetCurrentParaStyleName( sDefaultParaStyle );

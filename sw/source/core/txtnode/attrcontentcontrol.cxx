@@ -286,10 +286,10 @@ std::optional<size_t> SwContentControl::GetSelectedListItem(bool bCheckDocModel)
     if (GetShowingPlaceHolder() || !nLen || !GetTextAttr())
         return std::nullopt;
 
-    const OUString& rText = GetTextAttr()->ToString();
+    const OUString aText = GetTextAttr()->ToString();
     for (size_t i = 0; i < nLen; ++i)
     {
-        if (GetTextAttr()[i].ToString() == rText)
+        if (GetTextAttr()[i].ToString() == aText)
             return i;
     }
     assert(!GetDropDown() && "DropDowns must always have an associated list item");

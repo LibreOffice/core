@@ -1351,14 +1351,14 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
                             // ignore objects that are not actually placed on the page
                             if (pObj->IsFormatPossible())
                             {
-                                const tools::Rectangle &rBound = pObj->GetObjRect().SVRect();
-                                if (rBound.Left() != FAR_AWAY) {
+                                const tools::Rectangle aBound = pObj->GetObjRect().SVRect();
+                                if (aBound.Left() != FAR_AWAY) {
                                     // OD 03.03.2003 #107927# - use correct datatype
-                                    const SwTwips nL = std::max( SwTwips(0), SwTwips(rBound.Left() - nOfst) );
+                                    const SwTwips nL = std::max( SwTwips(0), SwTwips(aBound.Left() - nOfst) );
                                     if ( nL < nMinLeft )
                                         nMinLeft = nL;
-                                    if( rBound.Right() + nOfst > nMaxRight )
-                                        nMaxRight = rBound.Right() + nOfst;
+                                    if( aBound.Right() + nOfst > nMaxRight )
+                                        nMaxRight = aBound.Right() + nOfst;
                                 }
                             }
                         }

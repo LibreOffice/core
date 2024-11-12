@@ -266,7 +266,7 @@ void SwHTMLParser::NewField()
          SwFieldIds::Author == nType) )
     {
         SvtUserOptions aOpt;
-        const OUString& rUser = aOpt.GetFullName();
+        const OUString aUser = aOpt.GetFullName();
         SwDocShell *pDocShell(m_xDoc->GetDocShell());
         OSL_ENSURE(pDocShell, "no SwDocShell");
         if (pDocShell) {
@@ -275,10 +275,10 @@ void SwHTMLParser::NewField()
             uno::Reference<document::XDocumentProperties> xDocProps(
                 xDPS->getDocumentProperties());
             OSL_ENSURE(xDocProps.is(), "Doc has no DocumentProperties");
-            const OUString& rChanged = xDocProps->getModifiedBy();
-            const OUString& rCreated = xDocProps->getAuthor();
-            if( rUser.isEmpty() ||
-                (!rChanged.isEmpty() ? rUser != rChanged : rUser != rCreated) )
+            const OUString aChanged = xDocProps->getModifiedBy();
+            const OUString aCreated = xDocProps->getAuthor();
+            if( aUser.isEmpty() ||
+                (!aChanged.isEmpty() ? aUser != aChanged : aUser != aCreated) )
                 bFixed = true;
         }
     }

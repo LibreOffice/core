@@ -2412,7 +2412,7 @@ public:
             xStyleFamilies->getByName(u"PageStyles"_ustr), uno::UNO_QUERY);
         if (!xStyleFamily.is())
             return;
-        const uno::Sequence<OUString>& xStyleFamilyNames = xStyleFamily->getElementNames();
+        const uno::Sequence<OUString> xStyleFamilyNames = xStyleFamily->getElementNames();
         for (const OUString& rStyleFamilyName : xStyleFamilyNames)
         {
             uno::Reference<beans::XPropertySet> xPropertySet(

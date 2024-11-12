@@ -424,9 +424,9 @@ void SwWrtShell::ClickToField(const SwField& rField, bool bExecHyperlinks)
                 || targetType == SwAuthorityField::TargetType::UseTargetURL)
             {
                 // Since the user selected target type with URL, try to use it if not empty
-                if (const OUString& rURL = pField->GetAbsoluteURL();
-                    rURL.getLength() > 0)
-                    ::LoadURL(*this, rURL, LoadUrlFlags::NewView, /*rTargetFrameName=*/OUString());
+                if (const OUString aURL = pField->GetAbsoluteURL();
+                    aURL.getLength() > 0)
+                    ::LoadURL(*this, aURL, LoadUrlFlags::NewView, /*rTargetFrameName=*/OUString());
             }
             else if (targetType == SwAuthorityField::TargetType::BibliographyTableRow)
             {
@@ -774,13 +774,13 @@ void SwWrtShell::NavigatorPaste(const NaviContentBookmark& rBkmk)
         const SwDocShell* pDocShell = GetView().GetDocShell();
         if(pDocShell->HasName())
         {
-            const OUString& rName = pDocShell->GetMedium()->GetURLObject().GetURLNoMark();
+            const OUString aName = pDocShell->GetMedium()->GetURLObject().GetURLNoMark();
 
-            if (sURL.startsWith(rName))
+            if (sURL.startsWith(aName))
             {
-                if (sURL.getLength()>rName.getLength())
+                if (sURL.getLength()>aName.getLength())
                 {
-                    sURL = sURL.copy(rName.getLength());
+                    sURL = sURL.copy(aName.getLength());
                 }
                 else
                 {

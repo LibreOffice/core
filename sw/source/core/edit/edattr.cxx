@@ -92,7 +92,7 @@ bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
                     if (nListLevel >= MAXLEVEL)
                         nListLevel = MAXLEVEL - 1;
 
-                    const OUString & aCharFormatName =
+                    const OUString aCharFormatName =
                         pNumRule->Get(o3tl::narrowing<sal_uInt16>(nListLevel)).GetCharFormatName();
                     SwCharFormat * pCharFormat =
                         GetDoc()->FindCharFormatByName(aCharFormatName);

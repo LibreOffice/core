@@ -32,10 +32,10 @@
 namespace {
     css::uno::Reference< css::document::XUndoManager > getUndoManager( const css::uno::Reference< css::frame::XFrame >& rxFrame )
     {
-        const css::uno::Reference< css::frame::XController >& xController = rxFrame->getController();
+        const css::uno::Reference< css::frame::XController > xController = rxFrame->getController();
         if ( xController.is() )
         {
-            const css::uno::Reference< css::frame::XModel >& xModel = xController->getModel();
+            const css::uno::Reference< css::frame::XModel > xModel = xController->getModel();
             if ( xModel.is() )
             {
                 const css::uno::Reference< css::document::XUndoManagerSupplier > xSuppUndo( xModel, css::uno::UNO_QUERY_THROW );

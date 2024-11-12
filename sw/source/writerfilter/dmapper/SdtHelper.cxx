@@ -229,7 +229,7 @@ std::optional<OUString> SdtHelper::getValueFromDataBinding()
     lcl_registerNamespaces(m_sDataBindingPrefixMapping, xXpathAPI);
 
     // Find storage by store id and eval xpath there
-    const auto& aSourceIt = m_xPropertiesXMLs.find(m_sDataBindingStoreItemID);
+    const auto aSourceIt = m_xPropertiesXMLs.find(m_sDataBindingStoreItemID);
     if (aSourceIt != m_xPropertiesXMLs.end())
     {
         try

@@ -416,8 +416,8 @@ void QuickFindPanel::FillSearchFindsList()
     m_xSearchFindsList->clear();
     m_xSearchFindFoundTimesLabel->set_label(OUString());
 
-    const OUString& rsFindEntry = m_xSearchFindEntry->get_text();
-    if (rsFindEntry.isEmpty())
+    const OUString sFindEntry = m_xSearchFindEntry->get_text();
+    if (sFindEntry.isEmpty())
         return;
 
     SwWait aWait(*m_pWrtShell->GetDoc()->GetDocShell(), true);
@@ -426,7 +426,7 @@ void QuickFindPanel::FillSearchFindsList()
 
     i18nutil::SearchOptions2 aSearchOptions;
     aSearchOptions.Locale = GetAppLanguageTag().getLocale();
-    aSearchOptions.searchString = rsFindEntry;
+    aSearchOptions.searchString = sFindEntry;
     aSearchOptions.replaceString.clear();
     if (m_bWholeWordsOnly)
         aSearchOptions.searchFlag |= css::util::SearchFlags::NORM_WORD_ONLY;

@@ -1893,13 +1893,13 @@ void SwTextShell::Execute(SfxRequest &rReq)
             if (!pItem)
             {
                 // no color provided: use the pre-selected color shown in the toolbar/sidebar
-                const std::optional<NamedColor>& oColor
+                const std::optional<NamedColor> oColor
                     = GetView().GetDocShell()->GetRecentColor(SID_ATTR_CHAR_COLOR);
                 if (oColor.has_value())
                 {
-                    const model::ComplexColor& rCol = (*oColor).getComplexColor();
+                    const model::ComplexColor aCol = (*oColor).getComplexColor();
                     pRecentColor = std::make_unique<const SvxColorItem>(
-                        rCol.getFinalColor(), rCol, RES_CHRATR_COLOR);
+                        aCol.getFinalColor(), aCol, RES_CHRATR_COLOR);
                     pItem = pRecentColor.get();
                 }
             }
@@ -1938,7 +1938,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             else if (nSlot == SID_ATTR_CHAR_BACK_COLOR)
             {
                 // no color provided: use the pre-selected color shown in the toolbar/sidebar
-                const std::optional<NamedColor>& oColor
+                const std::optional<NamedColor> oColor
                     = GetView().GetDocShell()->GetRecentColor(nSlot);
                 if (oColor.has_value())
                 {

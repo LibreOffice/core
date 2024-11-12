@@ -2261,7 +2261,7 @@ void SwFramePage::Init(const SfxItemSet& rSet)
         if ( m_sDlgType == "ObjectDialog" && ! m_bNew )
         {
             // disable width and height for math objects
-            const SvGlobalName& rFactNm( pSh->GetOLEObject()->getClassID() );
+            const SvGlobalName aFactNm( pSh->GetOLEObject()->getClassID() );
 
             static struct GlobalNameId {
                 sal_uInt32 n1;
@@ -2275,7 +2275,7 @@ void SwFramePage::Init(const SfxItemSet& rSet)
                                      rId.b8, rId.b9, rId.b10, rId.b11,
                                      rId.b12, rId.b13, rId.b14, rId.b15 );
 
-                if( rFactNm == aGlbNm )
+                if( aFactNm == aGlbNm )
                 {
                     // disable size controls for math OLE objects
                     m_xWidthFT->set_sensitive(false);

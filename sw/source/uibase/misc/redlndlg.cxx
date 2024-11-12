@@ -1020,7 +1020,7 @@ void SwRedlineAcceptDlg::InsertParents(SwRedlineTable::size_type nStart, SwRedli
 
         bool bShowDeletedTextAsComment = bIsShowChangesInMargin &&
                 RedlineType::Delete == rRedln.GetType() && rRedln.GetComment().isEmpty();
-        const OUString& sComment = bShowDeletedTextAsComment
+        const OUString sComment = bShowDeletedTextAsComment
                     ? const_cast<SwRangeRedline&>(rRedln).GetDescr()
                     : rRedln.GetComment();
         pRedlineParent->sComment = sComment.replace('\n', ' ');

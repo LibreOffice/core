@@ -209,7 +209,7 @@ void UpdateFramesForAddDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
             }
             if (frames.empty())
             {
-                auto const& layouts(rDoc.GetAllLayouts());
+                auto const layouts(rDoc.GetAllLayouts());
                 assert(std::none_of(layouts.begin(), layouts.end(),
                     [](SwRootFrame const*const pLayout) { return pLayout->IsHideRedlines(); }));
                 (void) layouts;
@@ -313,7 +313,7 @@ void UpdateFramesForRemoveDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
                 // in SwUndoSaveSection::SaveSection(), DelFrames() preceded this call
                 if (!pNode->FindTableBoxStartNode() && !pNode->FindFlyStartNode())
                 {
-                    auto const& layouts(rDoc.GetAllLayouts());
+                    auto const layouts(rDoc.GetAllLayouts());
                     assert(std::none_of(layouts.begin(), layouts.end(),
                         [](SwRootFrame const*const pLayout) { return pLayout->IsHideRedlines(); }));
                     (void) layouts;

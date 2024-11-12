@@ -144,8 +144,8 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
     {
         m_xMain->set_sensitive(false);
     }
-    const OUString& rText = m_xMain->get_label();
-    m_xMain->set_label(rText.replaceAll("%DOCNAME", sDocTitle));
+    const OUString aText = m_xMain->get_label();
+    m_xMain->set_label(aText.replaceAll("%DOCNAME", sDocTitle));
 }
 
 IMPL_LINK_NOARG(SwCompatibilityOptPage, UseAsDefaultHdl, weld::Button&, void)
@@ -196,7 +196,7 @@ void SwCompatibilityOptPage::SetCurrentOptions()
             const bool bReadOnly = defaultCompatOptions.getPropertyReadOnly(option);
             if (bReadOnly)
                 hasReadOnly = true;
-            const auto& [docSettingId, shouldNegate] = DocumentSettingForOption(option);
+            const auto [docSettingId, shouldNegate] = DocumentSettingForOption(option);
             bool bChecked = rIDocumentSettingAccess.get(docSettingId);
             if (shouldNegate)
                 bChecked = !bChecked;
@@ -228,7 +228,7 @@ OUString SwCompatibilityOptPage::GetAllStrings()
 {
     OUString sAllStrings;
 
-    if (const auto& pString = m_xBuilder->weld_label(u"label11"_ustr))
+    if (const auto pString = m_xBuilder->weld_label(u"label11"_ustr))
         sAllStrings += pString->get_label() + " ";
 
     sAllStrings += m_xDefaultPB->get_label() + " ";

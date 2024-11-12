@@ -2116,14 +2116,14 @@ void SwWW8ImplReader::MapWrapIntoFlyFormat(const SvxMSDffImportRec& rRecord,
             */
 
             tools::PolyPolygon aPoly(*rRecord.pWrapPolygon);
-            const Size &rSize = pNd->GetTwipSize();
+            const Size aSize = pNd->GetTwipSize();
             /*
              Move to the left by 15twips, and rescale to
              a) shrink right bound back to orig position
              b) stretch bottom bound to where I think it should have been
              in the first place
             */
-            Fraction aMoveHack(ww::nWrap100Percent, rSize.Width());
+            Fraction aMoveHack(ww::nWrap100Percent, aSize.Width());
             aMoveHack *= Fraction(15, 1);
             tools::Long nMove(aMoveHack);
             aPoly.Move(nMove, 0);
@@ -2133,9 +2133,9 @@ void SwWW8ImplReader::MapWrapIntoFlyFormat(const SvxMSDffImportRec& rRecord,
             aPoly.Scale(double(aHackX), double(aHackY));
 
             // Turn polygon back into units that match the graphic's
-            const Size &rOrigSize = pNd->GetGraphic().GetPrefSize();
-            Fraction aMapPolyX(rOrigSize.Width(), ww::nWrap100Percent);
-            Fraction aMapPolyY(rOrigSize.Height(), ww::nWrap100Percent);
+            const Size aOrigSize = pNd->GetGraphic().GetPrefSize();
+            Fraction aMapPolyX(aOrigSize.Width(), ww::nWrap100Percent);
+            Fraction aMapPolyY(aOrigSize.Height(), ww::nWrap100Percent);
             aPoly.Scale(double(aMapPolyX), double(aMapPolyY));
 
             // #i47277# - contour is already in unit of the
