@@ -1834,15 +1834,10 @@ void SdrObject::SetOutlinerParaObject(std::optional<OutlinerParaObject> pTextObj
         return;
 
     // Don't do this during import.
-    SdrObject* pTopGroupObj = nullptr;
-    SdrObject* pParent = getParentSdrObjectFromSdrObject();
-    while(pParent)
+    if (SdrObject* pTopGroupObj = getParentSdrObjectFromSdrObject())
     {
-        pTopGroupObj = pParent;
-        pParent = pTopGroupObj->getParentSdrObjectFromSdrObject();
-    }
-    if (pTopGroupObj)
-    {
+        while (SdrObject* pParent = pTopGroupObj->getParentSdrObjectFromSdrObject())
+            pTopGroupObj = pParent;
         // A shape was modified, which is in a group shape. Empty the group shape's grab-bag,
         // which potentially contains the old text of the shapes in case of diagrams.
         pTopGroupObj->SetGrabBagItem(uno::Any(uno::Sequence<beans::PropertyValue>()));
