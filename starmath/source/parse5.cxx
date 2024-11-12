@@ -34,6 +34,7 @@
 #include <starmathdatabase.hxx>
 
 #include <stack>
+#include <unordered_set>
 
 using namespace ::com::sun::star::i18n;
 
@@ -323,7 +324,7 @@ static inline bool findCompare(const SmTokenTableEntry& lhs, const OUString& s)
 }
 
 //Returns the SmTokenTableEntry for a keyword
-static const SmTokenTableEntry* GetTokenTableEntry(const OUString& rName)
+const SmTokenTableEntry* GetTokenTableEntry(const OUString& rName)
 {
     if (rName.isEmpty())
         return nullptr; //avoid null pointer exceptions
@@ -335,6 +336,42 @@ static const SmTokenTableEntry* GetTokenTableEntry(const OUString& rName)
     return nullptr; //not found
 }
 
+OUString encloseOrEscapeLiteral(const OUString& string, bool force)
+{
+    if (force)
+        return "\"" + string + "\"";
+    OUStringBuffer result;
+    const std::unordered_set<sal_Unicode> DelimiterTable1{
+        //keeping " as first entry is important to not get into recursive replacement
+        ' ', '\t', '\n', '\r', '+', '-', '*', '/', '=', '^',
+        '_', '#',  '%',  '>',  '<', '&', '|', '~', '`'
+    };
+    const std::unordered_set<sal_Unicode> DelimiterTable2{
+        //keeping " as first entry is important to not get into recursive replacement
+        '{', '}', '(', ')', '[', ']',
+    };
+    for (sal_Int32 i = 0; i < string.getLength(); i++)
+    {
+        if (string[i] == '"')
+            result.append("\"\\\"\"");
+        else if (DelimiterTable1.find(string[i]) != DelimiterTable1.end())
+            result.append("\"" + OUStringChar(string[i]) + "\"");
+        else if (DelimiterTable2.find(string[i]) != DelimiterTable2.end())
+            result.append("\\" + OUStringChar(string[i]));
+        else
+            result.append(string[i]);
+    }
+
+    OUString resultString = result.makeStringAndClear();
+    const SmTokenTableEntry* tkn = GetTokenTableEntry(resultString);
+    // excluding function and operator as they take arguments and can't treat them as litral or else arguments are not displayed correctly
+    if (tkn && tkn->nGroup != TG::Function && tkn->nGroup != TG::Oper)
+    {
+        resultString = "\"" + resultString + "\"";
+    }
+    return resultString;
+}
+
 static bool IsDelimiter(const OUString& rTxt, sal_Int32 nPos)
 { // returns 'true' iff cChar is '\0' or a delimiter
 
@@ -344,7 +381,7 @@ static bool IsDelimiter(const OUString& rTxt, sal_Int32 nPos)
     sal_Unicode cChar = rTxt[nPos];
 
     // check if 'cChar' is in the delimiter table
-    static const sal_Unicode aDelimiterTable[] = {
+    static constexpr sal_Unicode aDelimiterTable[] = {
         ' ', '{', '}', '(', ')', '\t', '\n', '\r', '+', '-',  '*', '/', '=', '[',
         ']', '^', '_', '#', '%', '>',  '<',  '&',  '|', '\\', '"', '~', '`'
     }; //reordered by usage (by eye) for nanoseconds saving.
