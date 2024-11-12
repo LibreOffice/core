@@ -840,6 +840,7 @@ public:
     void RemoveFromListRLHidden();
     void RemoveFromListOrig();
     bool IsInList() const;
+    bool IsInListFromStyle() const;
 
     bool IsFirstOfNumRule(SwRootFrame const& rLayout) const;
 
