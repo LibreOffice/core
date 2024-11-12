@@ -106,8 +106,8 @@ void XMLTextImageContext::startElement(
 {
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
     {
-        const OUString& rAttributeName = xAttribs->getNameByIndex(i);
-        if (rAttributeName == "loext:mime-type" || rAttributeName == "draw:mime-type")
+        const OUString aAttributeName = xAttribs->getNameByIndex(i);
+        if (aAttributeName == "loext:mime-type" || aAttributeName == "draw:mime-type")
             m_aMimeType = OUStringToOString(xAttribs->getValueByIndex(i), RTL_TEXTENCODING_UTF8);
     }
 }
@@ -145,16 +145,16 @@ void XMLTextFrameContext::startElement(
     librevenge::RVNGPropertyList aPropertyList;
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
     {
-        const OUString& rAttributeName = xAttribs->getNameByIndex(i);
-        const OUString& rAttributeValue = xAttribs->getValueByIndex(i);
+        const OUString aAttributeName = xAttribs->getNameByIndex(i);
+        const OUString aAttributeValue = xAttribs->getValueByIndex(i);
 
-        if (rAttributeName == "draw:style-name")
-            FillStyles(rAttributeValue, GetImport().GetAutomaticGraphicStyles(),
+        if (aAttributeName == "draw:style-name")
+            FillStyles(aAttributeValue, GetImport().GetAutomaticGraphicStyles(),
                        GetImport().GetGraphicStyles(), aPropertyList);
         else
         {
-            OString sName = OUStringToOString(rAttributeName, RTL_TEXTENCODING_UTF8);
-            OString sValue = OUStringToOString(rAttributeValue, RTL_TEXTENCODING_UTF8);
+            OString sName = OUStringToOString(aAttributeName, RTL_TEXTENCODING_UTF8);
+            OString sValue = OUStringToOString(aAttributeValue, RTL_TEXTENCODING_UTF8);
             aPropertyList.insert(sName.getStr(), sValue.getStr());
         }
     }

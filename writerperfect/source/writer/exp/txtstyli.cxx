@@ -335,16 +335,16 @@ void XMLStyleContext::startElement(
 {
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
     {
-        const OUString& rAttributeName = xAttribs->getNameByIndex(i);
-        const OUString& rAttributeValue = xAttribs->getValueByIndex(i);
-        if (rAttributeName == "style:name")
-            m_aName = rAttributeValue;
-        else if (rAttributeName == "style:family")
-            m_aFamily = rAttributeValue;
+        const OUString aAttributeName = xAttribs->getNameByIndex(i);
+        const OUString aAttributeValue = xAttribs->getValueByIndex(i);
+        if (aAttributeName == "style:name")
+            m_aName = aAttributeValue;
+        else if (aAttributeName == "style:family")
+            m_aFamily = aAttributeValue;
 
         // Remember properties of the style itself, e.g. parent name.
-        OString sName = OUStringToOString(rAttributeName, RTL_TEXTENCODING_UTF8);
-        OString sValue = OUStringToOString(rAttributeValue, RTL_TEXTENCODING_UTF8);
+        OString sName = OUStringToOString(aAttributeName, RTL_TEXTENCODING_UTF8);
+        OString sValue = OUStringToOString(aAttributeValue, RTL_TEXTENCODING_UTF8);
         m_aTextPropertyList.insert(sName.getStr(), sValue.getStr());
         m_aParagraphPropertyList.insert(sName.getStr(), sValue.getStr());
         m_aGraphicPropertyList.insert(sName.getStr(), sValue.getStr());

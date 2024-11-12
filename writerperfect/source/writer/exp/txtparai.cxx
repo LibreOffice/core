@@ -134,15 +134,15 @@ void XMLSpanContext::startElement(
 {
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
     {
-        const OUString& rAttributeName = xAttribs->getNameByIndex(i);
-        const OUString& rAttributeValue = xAttribs->getValueByIndex(i);
-        if (rAttributeName == "text:style-name")
-            FillStyles(rAttributeValue, GetImport().GetAutomaticTextStyles(),
+        const OUString aAttributeName = xAttribs->getNameByIndex(i);
+        const OUString aAttributeValue = xAttribs->getValueByIndex(i);
+        if (aAttributeName == "text:style-name")
+            FillStyles(aAttributeValue, GetImport().GetAutomaticTextStyles(),
                        GetImport().GetTextStyles(), m_aPropertyList);
         else
         {
-            OString sName = OUStringToOString(rAttributeName, RTL_TEXTENCODING_UTF8);
-            OString sValue = OUStringToOString(rAttributeValue, RTL_TEXTENCODING_UTF8);
+            OString sName = OUStringToOString(aAttributeName, RTL_TEXTENCODING_UTF8);
+            OString sValue = OUStringToOString(aAttributeValue, RTL_TEXTENCODING_UTF8);
             m_aPropertyList.insert(sName.getStr(), sValue.getStr());
         }
     }
@@ -403,24 +403,24 @@ void XMLTextFrameHyperlinkContext::startElement(
     librevenge::RVNGPropertyList aPropertyList;
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
     {
-        const OUString& rAttributeName = xAttribs->getNameByIndex(i);
-        const OUString& rAttributeValue = xAttribs->getValueByIndex(i);
-        if (rAttributeName == "text:style-name")
+        const OUString aAttributeName = xAttribs->getNameByIndex(i);
+        const OUString aAttributeValue = xAttribs->getValueByIndex(i);
+        if (aAttributeName == "text:style-name")
             // This affects the nested span's properties.
-            FillStyles(rAttributeValue, GetImport().GetAutomaticTextStyles(),
+            FillStyles(aAttributeValue, GetImport().GetAutomaticTextStyles(),
                        GetImport().GetTextStyles(), m_aPropertyList);
         else
         {
-            if (rAttributeName == "xlink:href")
+            if (aAttributeName == "xlink:href")
             {
-                m_ePopupState = GetImport().FillPopupData(rAttributeValue, aPropertyList);
+                m_ePopupState = GetImport().FillPopupData(aAttributeValue, aPropertyList);
                 if (m_ePopupState != PopupState::NotConsumed)
                     continue;
             }
 
             // This affects the link's properties.
-            OString sName = OUStringToOString(rAttributeName, RTL_TEXTENCODING_UTF8);
-            OString sValue = OUStringToOString(rAttributeValue, RTL_TEXTENCODING_UTF8);
+            OString sName = OUStringToOString(aAttributeName, RTL_TEXTENCODING_UTF8);
+            OString sValue = OUStringToOString(aAttributeValue, RTL_TEXTENCODING_UTF8);
             aPropertyList.insert(sName.getStr(), sValue.getStr());
         }
     }
@@ -490,24 +490,24 @@ void XMLHyperlinkContext::startElement(
     librevenge::RVNGPropertyList aPropertyList;
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
     {
-        const OUString& rAttributeName = xAttribs->getNameByIndex(i);
-        const OUString& rAttributeValue = xAttribs->getValueByIndex(i);
-        if (rAttributeName == "text:style-name")
+        const OUString aAttributeName = xAttribs->getNameByIndex(i);
+        const OUString aAttributeValue = xAttribs->getValueByIndex(i);
+        if (aAttributeName == "text:style-name")
             // This affects the nested span's properties.
-            FillStyles(rAttributeValue, GetImport().GetAutomaticTextStyles(),
+            FillStyles(aAttributeValue, GetImport().GetAutomaticTextStyles(),
                        GetImport().GetTextStyles(), m_aPropertyList);
         else
         {
-            if (rAttributeName == "xlink:href")
+            if (aAttributeName == "xlink:href")
             {
-                m_ePopupState = GetImport().FillPopupData(rAttributeValue, aPropertyList);
+                m_ePopupState = GetImport().FillPopupData(aAttributeValue, aPropertyList);
                 if (m_ePopupState != PopupState::NotConsumed)
                     continue;
             }
 
             // This affects the link's properties.
-            OString sName = OUStringToOString(rAttributeName, RTL_TEXTENCODING_UTF8);
-            OString sValue = OUStringToOString(rAttributeValue, RTL_TEXTENCODING_UTF8);
+            OString sName = OUStringToOString(aAttributeName, RTL_TEXTENCODING_UTF8);
+            OString sValue = OUStringToOString(aAttributeValue, RTL_TEXTENCODING_UTF8);
             aPropertyList.insert(sName.getStr(), sValue.getStr());
         }
     }
@@ -556,11 +556,11 @@ void XMLParaContext::startElement(
     librevenge::RVNGPropertyList aPropertyList;
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
     {
-        const OUString& rAttributeName = xAttribs->getNameByIndex(i);
-        const OUString& rAttributeValue = xAttribs->getValueByIndex(i);
-        if (rAttributeName == "text:style-name")
+        const OUString aAttributeName = xAttribs->getNameByIndex(i);
+        const OUString aAttributeValue = xAttribs->getValueByIndex(i);
+        if (aAttributeName == "text:style-name")
         {
-            m_aStyleName = rAttributeValue;
+            m_aStyleName = aAttributeValue;
             FillStyles(m_aStyleName, GetImport().GetAutomaticParagraphStyles(),
                        GetImport().GetParagraphStyles(), aPropertyList);
             FillStyles(m_aStyleName, GetImport().GetAutomaticTextStyles(),
@@ -570,8 +570,8 @@ void XMLParaContext::startElement(
         }
         else
         {
-            OString sName = OUStringToOString(rAttributeName, RTL_TEXTENCODING_UTF8);
-            OString sValue = OUStringToOString(rAttributeValue, RTL_TEXTENCODING_UTF8);
+            OString sName = OUStringToOString(aAttributeName, RTL_TEXTENCODING_UTF8);
+            OString sValue = OUStringToOString(aAttributeValue, RTL_TEXTENCODING_UTF8);
             aPropertyList.insert(sName.getStr(), sValue.getStr());
         }
     }

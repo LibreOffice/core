@@ -376,12 +376,12 @@ MSWorksCalcImportFilter::filter(const css::uno::Sequence<css::beans::PropertyVal
                     sWM3Name = aTmpUrl.getName(INetURLObject::LAST_SEGMENT, true,
                                                INetURLObject::DecodeMechanism::WithCharset);
                     aTmpUrl.setExtension(u"FM3");
-                    const OUString& sTestFM3Name
+                    const OUString sTestFM3Name
                         = aTmpUrl.getName(INetURLObject::LAST_SEGMENT, true,
                                           INetURLObject::DecodeMechanism::WithCharset);
                     do
                     {
-                        const OUString& aTitle(xRow->getString(1));
+                        const OUString aTitle(xRow->getString(1));
                         if (aTitle.equalsIgnoreAsciiCase(sTestFM3Name))
                             sFM3Name = aTitle;
                     } while (xResultSet->next() && sFM3Name.isEmpty());

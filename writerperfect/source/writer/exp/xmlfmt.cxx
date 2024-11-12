@@ -175,11 +175,11 @@ void XMLFontFaceFormatContext::startElement(
 {
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
     {
-        const OUString& rAttributeName = xAttribs->getNameByIndex(i);
-        const OUString& rAttributeValue = xAttribs->getValueByIndex(i);
-        if (rAttributeName == "svg:string")
+        const OUString aAttributeName = xAttribs->getNameByIndex(i);
+        const OUString aAttributeValue = xAttribs->getValueByIndex(i);
+        if (aAttributeName == "svg:string")
         {
-            OString aAttributeValueU8 = OUStringToOString(rAttributeValue, RTL_TEXTENCODING_UTF8);
+            OString aAttributeValueU8 = OUStringToOString(aAttributeValue, RTL_TEXTENCODING_UTF8);
             mrFontFaceUri.GetPropertyList().insert("librevenge:mime-type",
                                                    aAttributeValueU8.getStr());
         }
@@ -199,16 +199,16 @@ void XMLFontFaceUriContext::startElement(
 {
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
     {
-        const OUString& rAttributeName = xAttribs->getNameByIndex(i);
-        const OUString& rAttributeValue = xAttribs->getValueByIndex(i);
-        if (rAttributeName == "loext:font-style")
+        const OUString aAttributeName = xAttribs->getNameByIndex(i);
+        const OUString aAttributeValue = xAttribs->getValueByIndex(i);
+        if (aAttributeName == "loext:font-style")
         {
-            OString aAttributeValueU8 = OUStringToOString(rAttributeValue, RTL_TEXTENCODING_UTF8);
+            OString aAttributeValueU8 = OUStringToOString(aAttributeValue, RTL_TEXTENCODING_UTF8);
             maPropertyList.insert("librevenge:font-style", aAttributeValueU8.getStr());
         }
-        else if (rAttributeName == "loext:font-weight")
+        else if (aAttributeName == "loext:font-weight")
         {
-            OString aAttributeValueU8 = OUStringToOString(rAttributeValue, RTL_TEXTENCODING_UTF8);
+            OString aAttributeValueU8 = OUStringToOString(aAttributeValue, RTL_TEXTENCODING_UTF8);
             maPropertyList.insert("librevenge:font-weight", aAttributeValueU8.getStr());
         }
     }
@@ -261,10 +261,10 @@ void XMLFontFaceContext::startElement(
 {
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
     {
-        const OUString& rAttributeName = xAttribs->getNameByIndex(i);
-        const OUString& rAttributeValue = xAttribs->getValueByIndex(i);
-        if (rAttributeName == "style:name")
-            maName = rAttributeValue;
+        const OUString aAttributeName = xAttribs->getNameByIndex(i);
+        const OUString aAttributeValue = xAttribs->getValueByIndex(i);
+        if (aAttributeName == "style:name")
+            maName = aAttributeValue;
     }
 }
 

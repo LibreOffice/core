@@ -80,16 +80,16 @@ void XMLTableCellContext::startElement(
     librevenge::RVNGPropertyList aPropertyList;
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
     {
-        const OUString& rAttributeName = xAttribs->getNameByIndex(i);
-        const OUString& rAttributeValue = xAttribs->getValueByIndex(i);
+        const OUString aAttributeName = xAttribs->getNameByIndex(i);
+        const OUString aAttributeValue = xAttribs->getValueByIndex(i);
 
-        if (rAttributeName == "table:style-name")
-            FillStyles(rAttributeValue, GetImport().GetAutomaticCellStyles(),
+        if (aAttributeName == "table:style-name")
+            FillStyles(aAttributeValue, GetImport().GetAutomaticCellStyles(),
                        GetImport().GetCellStyles(), aPropertyList);
         else
         {
-            OString sName = OUStringToOString(rAttributeName, RTL_TEXTENCODING_UTF8);
-            OString sValue = OUStringToOString(rAttributeValue, RTL_TEXTENCODING_UTF8);
+            OString sName = OUStringToOString(aAttributeName, RTL_TEXTENCODING_UTF8);
+            OString sValue = OUStringToOString(aAttributeValue, RTL_TEXTENCODING_UTF8);
             aPropertyList.insert(sName.getStr(), sValue.getStr());
         }
     }
@@ -133,11 +133,11 @@ void XMLTableColumnContext::startElement(
     librevenge::RVNGPropertyList aPropertyList;
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
     {
-        const OUString& rAttributeName = xAttribs->getNameByIndex(i);
-        const OUString& rAttributeValue = xAttribs->getValueByIndex(i);
+        const OUString aAttributeName = xAttribs->getNameByIndex(i);
+        const OUString aAttributeValue = xAttribs->getValueByIndex(i);
 
-        if (rAttributeName == "table:style-name")
-            FillStyles(rAttributeValue, GetImport().GetAutomaticColumnStyles(),
+        if (aAttributeName == "table:style-name")
+            FillStyles(aAttributeValue, GetImport().GetAutomaticColumnStyles(),
                        GetImport().GetColumnStyles(), aPropertyList);
     }
     m_rColumns.append(aPropertyList);
@@ -169,11 +169,11 @@ void XMLTableRowContext::startElement(
     librevenge::RVNGPropertyList aPropertyList;
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
     {
-        const OUString& rAttributeName = xAttribs->getNameByIndex(i);
-        const OUString& rAttributeValue = xAttribs->getValueByIndex(i);
+        const OUString aAttributeName = xAttribs->getNameByIndex(i);
+        const OUString aAttributeValue = xAttribs->getValueByIndex(i);
 
-        if (rAttributeName == "table:style-name")
-            FillStyles(rAttributeValue, GetImport().GetAutomaticRowStyles(),
+        if (aAttributeName == "table:style-name")
+            FillStyles(aAttributeValue, GetImport().GetAutomaticRowStyles(),
                        GetImport().GetRowStyles(), aPropertyList);
     }
     GetImport().GetGenerator().openTableRow(aPropertyList);
@@ -222,20 +222,20 @@ void XMLTableContext::startElement(
 {
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
     {
-        const OUString& rAttributeName = xAttribs->getNameByIndex(i);
-        const OUString& rAttributeValue = xAttribs->getValueByIndex(i);
+        const OUString aAttributeName = xAttribs->getNameByIndex(i);
+        const OUString aAttributeValue = xAttribs->getValueByIndex(i);
 
-        if (rAttributeName == "table:style-name")
+        if (aAttributeName == "table:style-name")
         {
-            FillStyles(rAttributeValue, GetImport().GetAutomaticTableStyles(),
+            FillStyles(aAttributeValue, GetImport().GetAutomaticTableStyles(),
                        GetImport().GetTableStyles(), m_aPropertyList);
             if (m_bTopLevel)
                 GetImport().HandlePageSpan(m_aPropertyList);
         }
         else
         {
-            OString sName = OUStringToOString(rAttributeName, RTL_TEXTENCODING_UTF8);
-            OString sValue = OUStringToOString(rAttributeValue, RTL_TEXTENCODING_UTF8);
+            OString sName = OUStringToOString(aAttributeName, RTL_TEXTENCODING_UTF8);
+            OString sValue = OUStringToOString(aAttributeValue, RTL_TEXTENCODING_UTF8);
             m_aPropertyList.insert(sName.getStr(), sValue.getStr());
         }
     }
