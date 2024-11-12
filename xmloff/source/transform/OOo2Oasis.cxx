@@ -925,20 +925,20 @@ void XMLDocumentTransformerContext_Impl::StartElement(
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
+        const OUString aAttrName = xAttrList->getNameByIndex( i );
         OUString aLocalName;
         sal_uInt16 nPrefix =
-            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
+            GetTransformer().GetNamespaceMap().GetKeyByAttrName( aAttrName,
                                                                  &aLocalName );
         if( XML_NAMESPACE_OFFICE == nPrefix &&
             IsXMLToken( aLocalName, XML_CLASS ) )
         {
-            const OUString& rValue = xAttrList->getValueByIndex( i );
-            GetTransformer().SetClass( rValue );
+            const OUString aValue = xAttrList->getValueByIndex( i );
+            GetTransformer().SetClass( aValue );
 
             pMutableAttrList = new XMLMutableAttributeList( xAttrList );
             xAttrList = pMutableAttrList;
-            OUString sMime = "application/vnd.oasis.opendocument." + rValue;
+            OUString sMime = "application/vnd.oasis.opendocument." + aValue;
             pMutableAttrList->SetValueByIndex( i, sMime );
             OUString aNewAttrQName( GetTransformer().GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OFFICE, ::xmloff::token::GetXMLToken( XML_MIMETYPE ) ) );
             pMutableAttrList->RenameAttributeByIndex(i, aNewAttrQName );
@@ -946,18 +946,18 @@ void XMLDocumentTransformerContext_Impl::StartElement(
         }
         else if( XML_NAMESPACE_XMLNS == nPrefix )
         {
-            const OUString& rAttrValue = xAttrList->getValueByIndex( i );
-            if( IsXMLToken( rAttrValue, XML_N_OOO ) )
+            const OUString aAttrValue = xAttrList->getValueByIndex( i );
+            if( IsXMLToken( aAttrValue, XML_N_OOO ) )
                 bOOo = true;
-            else if( IsXMLToken( rAttrValue, XML_N_OOOW ) )
+            else if( IsXMLToken( aAttrValue, XML_N_OOOW ) )
                 bOOoW = true;
-            else if( IsXMLToken( rAttrValue, XML_N_OOOC ) )
+            else if( IsXMLToken( aAttrValue, XML_N_OOOC ) )
                 bOOoC = true;
-            else if( IsXMLToken( rAttrValue, XML_N_DOM ) )
+            else if( IsXMLToken( aAttrValue, XML_N_DOM ) )
                 bDOM = true;
-            else if( IsXMLToken( rAttrValue, XML_N_DC ) )
+            else if( IsXMLToken( aAttrValue, XML_N_DC ) )
                 bDC = true;
-            else if( IsXMLToken( rAttrValue, XML_N_SVG ) )
+            else if( IsXMLToken( aAttrValue, XML_N_SVG ) )
                 bSVG = true;
         }
     }
@@ -1106,10 +1106,10 @@ void XMLTabStopOOoTContext_Impl::StartElement(
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
+        const OUString aAttrName = xAttrList->getNameByIndex( i );
         OUString aLocalName;
         sal_uInt16 nPrefix =
-            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
+            GetTransformer().GetNamespaceMap().GetKeyByAttrName( aAttrName,
                                                                  &aLocalName );
         XMLTransformerActions::key_type aKey( nPrefix, aLocalName );
         XMLTransformerActions::const_iterator aIter =
@@ -1122,7 +1122,7 @@ void XMLTabStopOOoTContext_Impl::StartElement(
                     new XMLMutableAttributeList( xAttrList );
                 xAttrList = pMutableAttrList;
             }
-            const OUString& rAttrValue = xAttrList->getValueByIndex( i );
+            const OUString aAttrValue = xAttrList->getValueByIndex( i );
             switch( (*aIter).second.m_nActionType )
             {
             case XML_ATACTION_RENAME:
@@ -1136,8 +1136,8 @@ void XMLTabStopOOoTContext_Impl::StartElement(
                                                               aNewAttrQName );
                 }
                 if( IsXMLToken( aLocalName, XML_LEADER_CHAR ) &&
-                     !rAttrValue.isEmpty() &&
-                    rAttrValue[0] != ' ' )
+                     !aAttrValue.isEmpty() &&
+                    aAttrValue[0] != ' ' )
                 {
                     OUString aNewAttrQName(
                         GetTransformer().GetNamespaceMap().GetQNameByKey(
@@ -1149,10 +1149,10 @@ void XMLTabStopOOoTContext_Impl::StartElement(
                 break;
             case XML_ATACTION_INCH2IN:
                 {
-                    OUString aAttrValue( rAttrValue );
+                    OUString aAttrValue2( aAttrValue );
                     if( XMLTransformerBase::ReplaceSingleInchWithIn(
-                                aAttrValue ) )
-                        pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                                aAttrValue2 ) )
+                        pMutableAttrList->SetValueByIndex( i, aAttrValue2 );
                 }
                 break;
             default:
@@ -1200,10 +1200,10 @@ void XMLTrackedChangesOOoTContext_Impl::StartElement(
     sal_Int16 nAttrCount = rAttrList.is() ? rAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        const OUString& rAttrName = rAttrList->getNameByIndex( i );
+        const OUString aAttrName = rAttrList->getNameByIndex( i );
         OUString aLocalName;
         sal_uInt16 nPrefix =
-            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
+            GetTransformer().GetNamespaceMap().GetKeyByAttrName( aAttrName,
                                                                  &aLocalName );
         if( m_nPrefix == nPrefix && IsXMLToken( aLocalName, m_eToken ) )
         {
@@ -1272,10 +1272,10 @@ void XMLTableOOoTransformerContext_Impl::StartElement(
         sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
         for( sal_Int16 i=0; i < nAttrCount; i++ )
         {
-            const OUString& rAttrName = xAttrList->getNameByIndex( i );
+            const OUString aAttrName = xAttrList->getNameByIndex( i );
             OUString aLocalName;
             sal_uInt16 nPrefix =
-                GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
+                GetTransformer().GetNamespaceMap().GetKeyByAttrName( aAttrName,
                                                                     &aLocalName );
             if( XML_NAMESPACE_TABLE == nPrefix &&
                 IsXMLToken( aLocalName, XML_PRINT_RANGES ) )

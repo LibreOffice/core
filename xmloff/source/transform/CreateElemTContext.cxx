@@ -59,11 +59,11 @@ void XMLCreateElemTransformerContext::StartElement(
         sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
         for( sal_Int16 i=0; i < nAttrCount; ++i )
         {
-            const OUString& rAttrName = xAttrList->getNameByIndex( i );
-            const OUString& rAttrValue = xAttrList->getValueByIndex( i );
+            const OUString aAttrName = xAttrList->getNameByIndex( i );
+            const OUString aAttrValue = xAttrList->getValueByIndex( i );
             OUString aLocalName;
             sal_uInt16 nPrefix =
-                GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
+                GetTransformer().GetNamespaceMap().GetKeyByAttrName( aAttrName,
                                                            &aLocalName );
 
             XMLTransformerActions::key_type aKey( nPrefix, aLocalName );
@@ -89,7 +89,7 @@ void XMLCreateElemTransformerContext::StartElement(
                         rtl::Reference<XMLTransformerContext> pContext(
                             new XMLPersTextContentTContext( GetTransformer(),
                                                        aElemQName ));
-                        pContext->Characters( rAttrValue );
+                        pContext->Characters( aAttrValue );
                         aChildContexts.push_back(pContext);
                         pMutableAttrList->RemoveAttributeByIndex( i );
                         --i;

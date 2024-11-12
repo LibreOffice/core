@@ -56,12 +56,12 @@ void TokenmapTest::test_listEquality()
     for ( sal_Int32 nToken = 0; nToken < XML_TOKEN_COUNT; ++nToken )
     {
         Sequence<sal_Int8> rUtf8Name = token::TokenMap::getUtf8TokenName(nToken);
-        const OUString& rName = OUString( reinterpret_cast< const char* >(
+        const OUString aName( reinterpret_cast< const char* >(
                         rUtf8Name.getConstArray() ), rUtf8Name.getLength(), RTL_TEXTENCODING_UTF8 );
-        if ( rName.endsWith("_DUMMY") )
+        if ( aName.endsWith("_DUMMY") )
             continue;
         const OUString& rTokenName = GetXMLToken( static_cast<xmloff::token::XMLTokenEnum>(nToken) );
-        CPPUNIT_ASSERT_EQUAL(rName, rTokenName);
+        CPPUNIT_ASSERT_EQUAL(aName, rTokenName);
     }
 
     for ( sal_Int32 nToken = xmloff::token::XMLTokenEnum::XML_TOKEN_START + 1;
@@ -69,10 +69,10 @@ void TokenmapTest::test_listEquality()
     {
         const OUString& rTokenName = GetXMLToken( static_cast<xmloff::token::XMLTokenEnum>(nToken) );
         Sequence<sal_Int8> rUtf8Name = token::TokenMap::getUtf8TokenName(nToken);
-        const OUString& rName = OUString( reinterpret_cast< const char* >(
+        const OUString aName( reinterpret_cast< const char* >(
                         rUtf8Name.getConstArray() ), rUtf8Name.getLength(), RTL_TEXTENCODING_UTF8 );
-        if ( !rName.endsWith("_DUMMY") )
-            CPPUNIT_ASSERT_EQUAL(rTokenName, rName);
+        if ( !aName.endsWith("_DUMMY") )
+            CPPUNIT_ASSERT_EQUAL(rTokenName, aName);
     }
 }
 

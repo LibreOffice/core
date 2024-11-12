@@ -61,10 +61,10 @@ void XMLAxisOOoContext::StartElement(
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
+        const OUString aAttrName = xAttrList->getNameByIndex( i );
         OUString aLocalName;
         sal_uInt16 nPrefix =
-            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName );
+            GetTransformer().GetNamespaceMap().GetKeyByAttrName( aAttrName, &aLocalName );
 
         if( nPrefix == XML_NAMESPACE_CHART &&
             IsXMLToken( aLocalName, XML_CLASS ) )
@@ -75,20 +75,20 @@ void XMLAxisOOoContext::StartElement(
                 xAttrList = pMutableAttrList;
             }
 
-            const OUString& rAttrValue = xAttrList->getValueByIndex( i );
+            const OUString aAttrValue = xAttrList->getValueByIndex( i );
             XMLTokenEnum eToken = XML_TOKEN_INVALID;
-            if( IsXMLToken( rAttrValue, XML_DOMAIN ) ||
-                IsXMLToken( rAttrValue, XML_CATEGORY ))
+            if( IsXMLToken( aAttrValue, XML_DOMAIN ) ||
+                IsXMLToken( aAttrValue, XML_CATEGORY ))
             {
                 eToken = XML_X;
-                if( IsXMLToken( rAttrValue, XML_CATEGORY ) )
+                if( IsXMLToken( aAttrValue, XML_CATEGORY ) )
                     m_bIsCategoryAxis = true;
             }
-            else if( IsXMLToken( rAttrValue, XML_VALUE ))
+            else if( IsXMLToken( aAttrValue, XML_VALUE ))
             {
                 eToken = XML_Y;
             }
-            else if( IsXMLToken( rAttrValue, XML_SERIES ))
+            else if( IsXMLToken( aAttrValue, XML_SERIES ))
             {
                 eToken = XML_Z;
             }
@@ -152,10 +152,10 @@ rtl::Reference<XMLTransformerContext> XMLChartPlotAreaOOoTContext::CreateChildCo
 
                 for( sal_Int16 i=0; i < nAttrCount; i++ )
                 {
-                    const OUString & rAttrName = xNewAttrList->getNameByIndex( i );
+                    const OUString aAttrName = xNewAttrList->getNameByIndex( i );
                     OUString aLocalName;
                     sal_uInt16 nNewPrefix =
-                        GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
+                        GetTransformer().GetNamespaceMap().GetKeyByAttrName( aAttrName,
                                                                              &aLocalName );
                     if( nNewPrefix == XML_NAMESPACE_CHART &&
                         pAxisContext->IsCategoryAxis() &&

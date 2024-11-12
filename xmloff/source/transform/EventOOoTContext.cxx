@@ -138,10 +138,10 @@ void XMLEventOOoTransformerContext::StartElement(
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
+        const OUString aAttrName = xAttrList->getNameByIndex( i );
         OUString aLocalName;
         sal_uInt16 nPrefix =
-            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
+            GetTransformer().GetNamespaceMap().GetKeyByAttrName( aAttrName,
                                                                  &aLocalName );
         XMLTransformerActions::key_type aKey( nPrefix, aLocalName );
         XMLTransformerActions::const_iterator aIter =
@@ -154,7 +154,7 @@ void XMLEventOOoTransformerContext::StartElement(
                         new XMLMutableAttributeList( xAttrList );
                 xAttrList = pMutableAttrList;
             }
-            const OUString& rAttrValue = xAttrList->getValueByIndex( i );
+            const OUString aAttrValue = xAttrList->getValueByIndex( i );
             switch( (*aIter).second.m_nActionType )
             {
             case XML_ATACTION_HREF:
@@ -162,26 +162,26 @@ void XMLEventOOoTransformerContext::StartElement(
                 break;
             case XML_ATACTION_EVENT_NAME:
                 pMutableAttrList->SetValueByIndex( i,
-                               GetTransformer().GetEventName( rAttrValue ) );
+                               GetTransformer().GetEventName( aAttrValue ) );
                 break;
             case XML_ATACTION_ADD_NAMESPACE_PREFIX:
                 {
-                    OUString aAttrValue( rAttrValue );
+                    OUString aAttrValue2( aAttrValue );
                     sal_uInt16 nValPrefix =
                         static_cast<sal_uInt16>((*aIter).second.m_nParam1);
-                    GetTransformer().AddNamespacePrefix( aAttrValue,
+                    GetTransformer().AddNamespacePrefix( aAttrValue2,
                                                              nValPrefix );
-                    pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                    pMutableAttrList->SetValueByIndex( i, aAttrValue2 );
                 }
                 break;
             case XML_ATACTION_MACRO_LOCATION:
-                aLocation = rAttrValue;
+                aLocation = aAttrValue;
                 pMutableAttrList->RemoveAttributeByIndex( i );
                 --i;
                 --nAttrCount;
                 break;
             case XML_ATACTION_MACRO_NAME:
-                aMacroName = rAttrValue;
+                aMacroName = aAttrValue;
                 nMacroName = i;
                 break;
             case XML_ATACTION_COPY:

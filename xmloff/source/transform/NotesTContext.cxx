@@ -64,17 +64,17 @@ void XMLNotesTransformerContext::StartElement(
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
+        const OUString aAttrName = xAttrList->getNameByIndex( i );
         OUString aLocalName;
         sal_uInt16 nPrefix =
-            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
+            GetTransformer().GetNamespaceMap().GetKeyByAttrName( aAttrName,
                                                                  &aLocalName );
         XMLTransformerActions::key_type aKey( nPrefix, aLocalName );
         XMLTransformerActions::const_iterator aIter =
             pActions->find( aKey );
         if( aIter != pActions->end() )
         {
-            const OUString& rAttrValue = xAttrList->getValueByIndex( i );
+            const OUString aAttrValue = xAttrList->getValueByIndex( i );
 
             if( !pMutableAttrList )
             {
@@ -86,10 +86,10 @@ void XMLNotesTransformerContext::StartElement(
             {
             case XML_ATACTION_STYLE_FAMILY:
                 {
-                    if( IsXMLToken( rAttrValue, XML_FOOTNOTE ) )
+                    if( IsXMLToken( aAttrValue, XML_FOOTNOTE ) )
                     {
                     }
-                    else if( IsXMLToken( rAttrValue, XML_ENDNOTE ) )
+                    else if( IsXMLToken( aAttrValue, XML_ENDNOTE ) )
                     {
                         m_bEndNote = true;
                     }
@@ -101,9 +101,9 @@ void XMLNotesTransformerContext::StartElement(
             case XML_ATACTION_DECODE_STYLE_NAME:
             case XML_ATACTION_DECODE_STYLE_NAME_REF:
                 {
-                    OUString aAttrValue( rAttrValue );
-                    if( XMLTransformerBase::DecodeStyleName(aAttrValue) )
-                        pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                    OUString aAttrValue2( aAttrValue );
+                    if( XMLTransformerBase::DecodeStyleName(aAttrValue2) )
+                        pMutableAttrList->SetValueByIndex( i, aAttrValue2 );
                 }
                 break;
             }

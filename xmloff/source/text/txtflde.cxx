@@ -1401,7 +1401,7 @@ void XMLTextFieldExport::ExportFieldHelper(
     case FIELD_ID_DATABASE_DISPLAY:
     {
         // get database, table and column name from field master
-        const Reference<XPropertySet> & xMaster = GetMasterPropertySet(rTextField);
+        const Reference<XPropertySet> xMaster = GetMasterPropertySet(rTextField);
         ProcessString(XML_TABLE_NAME,
                       GetStringProperty(gsPropertyDataTableName, xMaster));
         ProcessCommandType(GetIntProperty(gsPropertyDataCommandType, xMaster));

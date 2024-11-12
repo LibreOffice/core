@@ -704,8 +704,8 @@ std::optional<SvXMLNamespaceMap> SvXMLImport::processNSAttributes(
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        if (pImport && rAttrName == "office:version" && !pImport->mpImpl->mxODFVersion)
+        const OUString aAttrName = xAttrList->getNameByIndex( i );
+        if (pImport && aAttrName == "office:version" && !pImport->mpImpl->mxODFVersion)
         {
             pImport->mpImpl->mxODFVersion = xAttrList->getValueByIndex( i );
 
@@ -719,33 +719,33 @@ std::optional<SvXMLNamespaceMap> SvXMLImport::processNSAttributes(
                             packages::zip::ZipIOException(u"Inconsistent ODF versions in content.xml and manifest.xml!"_ustr ) ) );
             }
         }
-        else if( ( rAttrName.getLength() >= 5 ) &&
-            ( rAttrName.startsWith( GetXMLToken(XML_XMLNS) ) ) &&
-            ( rAttrName.getLength() == 5 || ':' == rAttrName[5] ) )
+        else if( ( aAttrName.getLength() >= 5 ) &&
+            ( aAttrName.startsWith( GetXMLToken(XML_XMLNS) ) ) &&
+            ( aAttrName.getLength() == 5 || ':' == aAttrName[5] ) )
         {
             if( !pRewindMap )
             {
                 pRewindMap = std::move(rpNamespaceMap);
                 rpNamespaceMap.emplace(*pRewindMap);
             }
-            const OUString& rAttrValue = xAttrList->getValueByIndex( i );
+            const OUString aAttrValue = xAttrList->getValueByIndex( i );
 
-            OUString aPrefix( ( rAttrName.getLength() == 5 )
+            OUString aPrefix( ( aAttrName.getLength() == 5 )
                                  ? OUString()
-                                 : rAttrName.copy( 6 ) );
+                                 : aAttrName.copy( 6 ) );
             // Add namespace, but only if it is known.
-            sal_uInt16 nKey = rpNamespaceMap->AddIfKnown( aPrefix, rAttrValue );
+            sal_uInt16 nKey = rpNamespaceMap->AddIfKnown( aPrefix, aAttrValue );
             // If namespace is unknown, try to match a name with similar
             // TC Id and version
             if( XML_NAMESPACE_UNKNOWN == nKey  )
             {
-                OUString aTestName( rAttrValue );
+                OUString aTestName( aAttrValue );
                 if( SvXMLNamespaceMap::NormalizeURI( aTestName ) )
                     nKey = rpNamespaceMap->AddIfKnown( aPrefix, aTestName );
             }
             // If that namespace is not known, too, add it as unknown
             if( XML_NAMESPACE_UNKNOWN == nKey  )
-                rpNamespaceMap->Add( aPrefix, rAttrValue );
+                rpNamespaceMap->Add( aPrefix, aAttrValue );
 
         }
     }
@@ -1313,8 +1313,8 @@ uno::Reference<graphic::XGraphic> SvXMLImport::loadGraphicByURL(OUString const &
             }
             else
             {
-                OUString const& rAbsoluteURL = GetAbsoluteReference(rURL);
-                GraphicExternalLink aExternalLink(rAbsoluteURL);
+                OUString const aAbsoluteURL = GetAbsoluteReference(rURL);
+                GraphicExternalLink aExternalLink(aAbsoluteURL);
                 Graphic aGraphic(aExternalLink);
                 xGraphic = aGraphic.GetXGraphic();
             }
@@ -2227,11 +2227,11 @@ void SAL_CALL SvXMLLegacyToFastDocHandler::startElement( const OUString& rName,
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        const OUString& rAttrValue = xAttrList->getValueByIndex( i );
-        if (rAttrName == "xmlns")
+        const OUString aAttrName = xAttrList->getNameByIndex( i );
+        const OUString aAttrValue = xAttrList->getValueByIndex( i );
+        if (aAttrName == "xmlns")
         {
-            sal_uInt16 nNamespaceKey = mrImport->mxNamespaceMap->GetKeyByName(rAttrValue);
+            sal_uInt16 nNamespaceKey = mrImport->mxNamespaceMap->GetKeyByName(aAttrValue);
             if (nNamespaceKey != XML_NAMESPACE_UNKNOWN)
             {
                 nDefaultNamespace = nNamespaceKey;
@@ -2239,19 +2239,19 @@ void SAL_CALL SvXMLLegacyToFastDocHandler::startElement( const OUString& rName,
             }
             assert(false && "unknown namespace");
         }
-        else if (rAttrName.indexOf(":") == -1 && nDefaultNamespace != XML_NAMESPACE_UNKNOWN)
+        else if (aAttrName.indexOf(":") == -1 && nDefaultNamespace != XML_NAMESPACE_UNKNOWN)
         {
-            auto const nToken = SvXMLImport::getTokenFromName(rAttrName);
+            auto const nToken = SvXMLImport::getTokenFromName(aAttrName);
             if (nToken == xmloff::XML_TOKEN_INVALID)
             {
                 mxFastAttributes->addUnknown(mrImport->mxNamespaceMap->GetNameByKey(nDefaultNamespace),
-                    OUStringToOString(rAttrName, RTL_TEXTENCODING_UTF8),
-                    OUStringToOString(rAttrValue, RTL_TEXTENCODING_UTF8));
+                    OUStringToOString(aAttrName, RTL_TEXTENCODING_UTF8),
+                    OUStringToOString(aAttrValue, RTL_TEXTENCODING_UTF8));
             }
             else
             {
                 sal_Int32 const nAttr = NAMESPACE_TOKEN(nDefaultNamespace) | nToken;
-                mxFastAttributes->add(nAttr, OUStringToOString(rAttrValue, RTL_TEXTENCODING_UTF8));
+                mxFastAttributes->add(nAttr, OUStringToOString(aAttrValue, RTL_TEXTENCODING_UTF8));
             }
             continue;
         }
@@ -2260,20 +2260,20 @@ void SAL_CALL SvXMLLegacyToFastDocHandler::startElement( const OUString& rName,
         OUString aNamespace;
         // don't add unknown namespaces to the map
         sal_uInt16 const nAttrPrefix = mrImport->mxNamespaceMap->GetKeyByQName(
-                rAttrName, nullptr, &aLocalAttrName, &aNamespace, SvXMLNamespaceMap::QNameMode::AttrValue);
+                aAttrName, nullptr, &aLocalAttrName, &aNamespace, SvXMLNamespaceMap::QNameMode::AttrValue);
         if( XML_NAMESPACE_XMLNS == nAttrPrefix )
             continue; // ignore
         auto const nToken = SvXMLImport::getTokenFromName(aLocalAttrName);
         if (XML_NAMESPACE_UNKNOWN == nAttrPrefix || nToken == xmloff::XML_TOKEN_INVALID)
         {
             mxFastAttributes->addUnknown(aNamespace,
-                OUStringToOString(rAttrName, RTL_TEXTENCODING_UTF8),
-                OUStringToOString(rAttrValue, RTL_TEXTENCODING_UTF8));
+                OUStringToOString(aAttrName, RTL_TEXTENCODING_UTF8),
+                OUStringToOString(aAttrValue, RTL_TEXTENCODING_UTF8));
         }
         else
         {
             sal_Int32 const nAttr = NAMESPACE_TOKEN(nAttrPrefix) | nToken;
-            mxFastAttributes->add(nAttr, OUStringToOString(rAttrValue, RTL_TEXTENCODING_UTF8));
+            mxFastAttributes->add(nAttr, OUStringToOString(aAttrValue, RTL_TEXTENCODING_UTF8));
         }
     }
     mrImport->startFastElement( mnElement, mxFastAttributes );

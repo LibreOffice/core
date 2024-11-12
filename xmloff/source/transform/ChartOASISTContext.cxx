@@ -54,10 +54,10 @@ void XMLChartOASISTransformerContext::StartElement(
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
+        const OUString aAttrName = xAttrList->getNameByIndex( i );
         OUString aLocalName;
         sal_uInt16 nPrefix =
-            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
+            GetTransformer().GetNamespaceMap().GetKeyByAttrName( aAttrName,
                                                                  &aLocalName );
         XMLTransformerActions::key_type aKey( nPrefix, aLocalName );
         XMLTransformerActions::const_iterator aIter =
@@ -70,22 +70,22 @@ void XMLChartOASISTransformerContext::StartElement(
                         new XMLMutableAttributeList( xAttrList );
                 xAttrList = pMutableAttrList;
             }
-            const OUString& rAttrValue = xAttrList->getValueByIndex( i );
+            const OUString aAttrValue = xAttrList->getValueByIndex( i );
             switch( (*aIter).second.m_nActionType )
             {
             case XML_ATACTION_IN2INCH:
                 {
-                    OUString aAttrValue( rAttrValue );
+                    OUString aAttrValue2( aAttrValue );
                     if( XMLTransformerBase::ReplaceSingleInWithInch(
-                                aAttrValue ) )
-                        pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                                aAttrValue2 ) )
+                        pMutableAttrList->SetValueByIndex( i, aAttrValue2 );
                 }
                 break;
             case XML_ATACTION_DECODE_STYLE_NAME_REF:
                 {
-                    OUString aAttrValue( rAttrValue );
-                    if( XMLTransformerBase::DecodeStyleName(aAttrValue) )
-                        pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                    OUString aAttrValue2( aAttrValue );
+                    if( XMLTransformerBase::DecodeStyleName(aAttrValue2) )
+                        pMutableAttrList->SetValueByIndex( i, aAttrValue2 );
                 }
                 break;
             case XML_ATACTION_REMOVE_ANY_NAMESPACE_PREFIX:
@@ -95,7 +95,7 @@ void XMLChartOASISTransformerContext::StartElement(
                     OUString aChartClass;
                     sal_uInt16 nValuePrefix =
                         GetTransformer().GetNamespaceMap().GetKeyByAttrName(
-                            rAttrValue,
+                            aAttrValue,
                             &aChartClass );
                     if( XML_NAMESPACE_CHART == nValuePrefix )
                     {

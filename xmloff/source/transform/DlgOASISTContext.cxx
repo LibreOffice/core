@@ -53,10 +53,10 @@ void XMLDlgOASISTransformerContext::StartElement(
 
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
+        const OUString aAttrName = xAttrList->getNameByIndex( i );
         OUString aLocalName;
         sal_uInt16 nPrefix =
-            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
+            GetTransformer().GetNamespaceMap().GetKeyByAttrName( aAttrName,
                                                                  &aLocalName );
 
         XMLTransformerActions::key_type aKey( nPrefix, aLocalName );
@@ -71,14 +71,14 @@ void XMLDlgOASISTransformerContext::StartElement(
                         new XMLMutableAttributeList( xAttrList );
                 xAttrList = pMutableAttrList;
             }
-            const OUString& rAttrValue = xAttrList->getValueByIndex( i );
+            const OUString aAttrValue = xAttrList->getValueByIndex( i );
             switch( (*aIter).second.m_nActionType )
             {
             case XML_ATACTION_DLG_BORDER:
                 {
-                    if ( rAttrValue != GetXMLToken( XML_NONE ) &&
-                         rAttrValue != GetXMLToken( XML_SIMPLE ) &&
-                         rAttrValue != GetXMLToken( XML_3D ) )
+                    if ( aAttrValue != GetXMLToken( XML_NONE ) &&
+                         aAttrValue != GetXMLToken( XML_SIMPLE ) &&
+                         aAttrValue != GetXMLToken( XML_3D ) )
                     {
                         pMutableAttrList->SetValueByIndex(
                             i, GetXMLToken( XML_NONE ) );

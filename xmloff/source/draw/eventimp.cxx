@@ -194,9 +194,9 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,
                 }
                 else
                 {
-                    const OUString &rTmp =
+                    const OUString aTmp =
                         rImp.GetAbsoluteReference(aIter.toString());
-                    INetURLObject::translateToInternal( rTmp, maData.msBookmark,
+                    INetURLObject::translateToInternal( aTmp, maData.msBookmark,
                         INetURLObject::DecodeMechanism::Unambiguous );
                 }
             }

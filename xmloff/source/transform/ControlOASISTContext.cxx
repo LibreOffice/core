@@ -62,10 +62,10 @@ void XMLControlOASISTransformerContext::StartElement(
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
+        const OUString aAttrName = xAttrList->getNameByIndex( i );
         OUString aLocalName;
         sal_uInt16 nPrefix =
-            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
+            GetTransformer().GetNamespaceMap().GetKeyByAttrName( aAttrName,
                                                                  &aLocalName );
         XMLTransformerActions::key_type aKey( nPrefix, aLocalName );
         XMLTransformerActions::const_iterator aIter =
@@ -78,14 +78,14 @@ void XMLControlOASISTransformerContext::StartElement(
                     new XMLMutableAttributeList( rAttrList );
                 xAttrList = pMutableAttrList;
             }
-            const OUString& rAttrValue = xAttrList->getValueByIndex( i );
+            const OUString aAttrValue = xAttrList->getValueByIndex( i );
             switch( (*aIter).second.m_nActionType )
             {
             case XML_ATACTION_MOVE_TO_ELEM:
                 if( m_bCreateControl )
                 {
-                    pControlMutableAttrList->AddAttribute( rAttrName,
-                                                           rAttrValue );
+                    pControlMutableAttrList->AddAttribute( aAttrName,
+                                                           aAttrValue );
                     pMutableAttrList->RemoveAttributeByIndex( i );
                     --i;
                     --nAttrCount;
@@ -93,10 +93,10 @@ void XMLControlOASISTransformerContext::StartElement(
                 break;
             case XML_ATACTION_RENAME_REMOVE_NAMESPACE_PREFIX:
                 {
-                    OUString aAttrValue( rAttrValue );
+                    OUString aAttrValue2( aAttrValue );
                     sal_uInt16 nValPrefix =
                         static_cast<sal_uInt16>( (*aIter).second.m_nParam2 );
-                    GetTransformer().RemoveNamespacePrefix( aAttrValue,
+                    GetTransformer().RemoveNamespacePrefix( aAttrValue2,
                                                             nValPrefix );
                     OUString aNewAttrQName(
                         GetTransformer().GetNamespaceMap().GetQNameByKey(
@@ -106,7 +106,7 @@ void XMLControlOASISTransformerContext::StartElement(
                     if( m_bCreateControl )
                     {
                         pControlMutableAttrList->AddAttribute( aNewAttrQName,
-                                                               aAttrValue );
+                                                               aAttrValue2 );
                         pMutableAttrList->RemoveAttributeByIndex( i );
                         --i;
                         --nAttrCount;
@@ -115,16 +115,16 @@ void XMLControlOASISTransformerContext::StartElement(
                     {
                         pMutableAttrList->RenameAttributeByIndex( i,
                                                               aNewAttrQName );
-                        pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                        pMutableAttrList->SetValueByIndex( i, aAttrValue2 );
                     }
                 }
                 break;
             case XML_ATACTION_URI_OASIS:
                 {
-                    OUString aAttrValue( rAttrValue );
-                    if( GetTransformer().ConvertURIToOOo( aAttrValue,
+                    OUString aAttrValue2( aAttrValue );
+                    if( GetTransformer().ConvertURIToOOo( aAttrValue2,
                            static_cast< bool >((*aIter).second.m_nParam1)) )
-                        pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                        pMutableAttrList->SetValueByIndex( i, aAttrValue2 );
                 }
                 break;
             default:

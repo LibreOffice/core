@@ -481,12 +481,12 @@ AnimationNodeContext::AnimationNodeContext(
                     {
                         if( (aIter.getToken() & TOKEN_MASK) == XML_PRESET_ID)
                         {
-                            const OUString& rValue = aIter.toString();
-                            if ( rValue == "ooo-entrance-random" )
+                            const OUString aValue = aIter.toString();
+                            if ( aValue == "ooo-entrance-random" )
                             {
                                 nPresetClass = EffectPresetClass::ENTRANCE;
                             }
-                            else if ( rValue == "ooo-exit-random" )
+                            else if ( aValue == "ooo-exit-random" )
                             {
                                 nPresetClass = EffectPresetClass::EXIT;
                             }

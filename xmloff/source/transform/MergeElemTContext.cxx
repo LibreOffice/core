@@ -131,10 +131,10 @@ void XMLMergeElemTransformerContext::StartElement(
     sal_Int16 nAttrCount = m_xAttrList.is() ? m_xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        const OUString& rAttrName = m_xAttrList->getNameByIndex( i );
+        const OUString aAttrName = m_xAttrList->getNameByIndex( i );
         OUString aLocalName;
         sal_uInt16 nPrefix =
-            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
+            GetTransformer().GetNamespaceMap().GetKeyByAttrName( aAttrName,
                                                                 &aLocalName );
         bool bRemove = true;
         if( XML_NAMESPACE_OFFICE == nPrefix)

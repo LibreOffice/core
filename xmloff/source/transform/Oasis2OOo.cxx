@@ -1103,17 +1103,17 @@ void XMLTableTransformerContext_Impl::StartElement(
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
+        const OUString aAttrName = xAttrList->getNameByIndex( i );
         OUString aLocalName;
         sal_uInt16 nPrefix =
-            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
+            GetTransformer().GetNamespaceMap().GetKeyByAttrName( aAttrName,
                                                                  &aLocalName );
         if( XML_NAMESPACE_TABLE == nPrefix )
         {
             if ( IsXMLToken( aLocalName, XML_IS_SUB_TABLE ) )
             {
-                const OUString& rValue = xAttrList->getValueByIndex( i );
-                if( IsXMLToken( rValue, XML_TRUE ) )
+                const OUString aValue = xAttrList->getValueByIndex( i );
+                if( IsXMLToken( aValue, XML_TRUE ) )
                 {
                     m_aElemQName = GetTransformer().GetNamespaceMap().GetQNameByKey(
                                 XML_NAMESPACE_TABLE,
@@ -1131,8 +1131,8 @@ void XMLTableTransformerContext_Impl::StartElement(
             // Convert attribute table:style-name for <table:table> (#i40011#, #i40015#)
             else if ( IsXMLToken( aLocalName, XML_STYLE_NAME ) )
             {
-                const OUString& rValue = xAttrList->getValueByIndex( i );
-                OUString aAttrValue( rValue );
+                const OUString aValue = xAttrList->getValueByIndex( i );
+                OUString aAttrValue( aValue );
                 if( XMLTransformerBase::DecodeStyleName(aAttrValue) )
                 {
                     if ( !pMutableAttrList )
@@ -1255,10 +1255,10 @@ void XMLTabStopOASISTContext_Impl::StartElement(
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
+        const OUString aAttrName = xAttrList->getNameByIndex( i );
         OUString aLocalName;
         sal_uInt16 nPrefix =
-            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
+            GetTransformer().GetNamespaceMap().GetKeyByAttrName( aAttrName,
                                                                  &aLocalName );
         XMLTransformerActions::key_type aKey( nPrefix, aLocalName );
         XMLTransformerActions::const_iterator aIter =
@@ -1271,15 +1271,15 @@ void XMLTabStopOASISTContext_Impl::StartElement(
                     new XMLMutableAttributeList( xAttrList );
                 xAttrList = pMutableAttrList;
             }
-            const OUString& rAttrValue = xAttrList->getValueByIndex( i );
+            const OUString aAttrValue = xAttrList->getValueByIndex( i );
             switch( (*aIter).second.m_nActionType )
             {
             case XML_ATACTION_REMOVE:
                 if( IsXMLToken( aLocalName, XML_LEADER_STYLE ) )
                 {
-                    if( IsXMLToken( rAttrValue, XML_NONE ) )
+                    if( IsXMLToken( aAttrValue, XML_NONE ) )
                         cStyleLeaderChar = ' ';
-                    else if( IsXMLToken( rAttrValue, XML_DOTTED ) )
+                    else if( IsXMLToken( aAttrValue, XML_DOTTED ) )
                         cStyleLeaderChar = '.';
                     else
                         cStyleLeaderChar = 0;
@@ -1300,20 +1300,20 @@ void XMLTabStopOASISTContext_Impl::StartElement(
                 }
                 if( IsXMLToken( aLocalName, XML_LEADER_TEXT ) )
                 {
-                    if( rAttrValue.getLength() > 1 )
+                    if( aAttrValue.getLength() > 1 )
                     {
-                        OUString aAttrValue( rAttrValue.copy( 0, 1 ) );
-                        pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                        OUString aAttrValue2( aAttrValue.copy( 0, 1 ) );
+                        pMutableAttrList->SetValueByIndex( i, aAttrValue2 );
                         nLeaderText = i;
                     }
                 }
                 break;
             case XML_ATACTION_IN2INCH:
                 {
-                    OUString aAttrValue( rAttrValue );
+                    OUString aAttrValue2( aAttrValue );
                     if( XMLTransformerBase::ReplaceSingleInWithInch(
-                                aAttrValue ) )
-                        pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                                aAttrValue2 ) )
+                        pMutableAttrList->SetValueByIndex( i, aAttrValue2 );
                 }
                 break;
             default:
@@ -1381,21 +1381,21 @@ void XMLConfigItemTContext_Impl::StartElement(
     sal_Int16 nAttrCount = rAttrList.is() ? rAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        const OUString& rAttrName = rAttrList->getNameByIndex( i );
+        const OUString aAttrName = rAttrList->getNameByIndex( i );
         OUString aLocalName;
         sal_uInt16 nPrefix =
-            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
+            GetTransformer().GetNamespaceMap().GetKeyByAttrName( aAttrName,
                                                                  &aLocalName );
         if( XML_NAMESPACE_CONFIG == nPrefix )
         {
             if ( IsXMLToken( aLocalName, XML_NAME ) )
             {
-                const OUString& rValue = rAttrList->getValueByIndex( i );
-                if( rValue == "RedlineProtectionKey" )
+                const OUString aValue = rAttrList->getValueByIndex( i );
+                if( aValue == "RedlineProtectionKey" )
                     m_bIsRedlineProtectionKey = true;
-                else if( rValue == "CursorPositionX" )
+                else if( aValue == "CursorPositionX" )
                     m_bIsCursorX = true;
-                else if( rValue == "CursorPositionY" )
+                else if( aValue == "CursorPositionY" )
                     m_bIsCursorY = true;
 
                 break;

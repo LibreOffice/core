@@ -2329,10 +2329,10 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                 if (!bAutoStyles)
                 {
                     Reference<XNamed> xBookmark(xPropSet->getPropertyValue(gsBookmark), UNO_QUERY);
-                    const OUString& rName = xBookmark->getName();
-                    if (!rName.isEmpty())
+                    const OUString aName = xBookmark->getName();
+                    if (!aName.isEmpty())
                     {
-                        GetExport().AddAttribute(XML_NAMESPACE_OFFICE, XML_NAME, rName);
+                        GetExport().AddAttribute(XML_NAMESPACE_OFFICE, XML_NAME, aName);
                     }
                     SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_OFFICE, XML_ANNOTATION_END, false, false );
                 }

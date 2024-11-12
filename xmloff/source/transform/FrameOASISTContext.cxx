@@ -87,16 +87,16 @@ void XMLFrameOASISTransformerContext::StartElement(
     sal_Int16 nAttrCount = rAttrList.is() ? rAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        const OUString& rAttrName = rAttrList->getNameByIndex( i );
+        const OUString aAttrName = rAttrList->getNameByIndex( i );
         OUString aLocalName;
         sal_uInt16 nPrefix =
-            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName );
+            GetTransformer().GetNamespaceMap().GetKeyByAttrName( aAttrName, &aLocalName );
 
         if( (nPrefix == XML_NAMESPACE_PRESENTATION) && IsXMLToken( aLocalName, XML_CLASS ) )
         {
-            const OUString& rAttrValue = rAttrList->getValueByIndex( i );
-            if( IsXMLToken( rAttrValue, XML_HEADER ) || IsXMLToken( rAttrValue, XML_FOOTER ) ||
-                IsXMLToken( rAttrValue, XML_PAGE_NUMBER ) || IsXMLToken( rAttrValue, XML_DATE_TIME ) )
+            const OUString aAttrValue = rAttrList->getValueByIndex( i );
+            if( IsXMLToken( aAttrValue, XML_HEADER ) || IsXMLToken( aAttrValue, XML_FOOTER ) ||
+                IsXMLToken( aAttrValue, XML_PAGE_NUMBER ) || IsXMLToken( aAttrValue, XML_DATE_TIME ) )
             {
                 m_bIgnoreElement = true;
                 break;

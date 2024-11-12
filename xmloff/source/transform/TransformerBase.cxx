@@ -213,34 +213,34 @@ void SAL_CALL XMLTransformerBase::startElement( const OUString& rName,
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        if( ( rAttrName.getLength() >= 5 ) &&
-            ( rAttrName.startsWith( GetXMLToken(XML_XMLNS) ) ) &&
-            ( rAttrName.getLength() == 5 || ':' == rAttrName[5] ) )
+        const OUString aAttrName = xAttrList->getNameByIndex( i );
+        if( ( aAttrName.getLength() >= 5 ) &&
+            ( aAttrName.startsWith( GetXMLToken(XML_XMLNS) ) ) &&
+            ( aAttrName.getLength() == 5 || ':' == aAttrName[5] ) )
         {
             if( !pRewindMap )
             {
                 pRewindMap = std::move(m_pNamespaceMap);
                 m_pNamespaceMap.reset( new SvXMLNamespaceMap( *pRewindMap ) );
             }
-            const OUString& rAttrValue = xAttrList->getValueByIndex( i );
+            const OUString aAttrValue = xAttrList->getValueByIndex( i );
 
-            OUString aPrefix( ( rAttrName.getLength() == 5 )
+            OUString aPrefix( ( aAttrName.getLength() == 5 )
                                  ? OUString()
-                                 : rAttrName.copy( 6 ) );
+                                 : aAttrName.copy( 6 ) );
             // Add namespace, but only if it is known.
-            sal_uInt16 nKey = m_pNamespaceMap->AddIfKnown( aPrefix, rAttrValue );
+            sal_uInt16 nKey = m_pNamespaceMap->AddIfKnown( aPrefix, aAttrValue );
             // If namespace is unknown, try to match a name with similar
             // TC Id and version
             if( XML_NAMESPACE_UNKNOWN == nKey  )
             {
-                OUString aTestName( rAttrValue );
+                OUString aTestName( aAttrValue );
                 if( SvXMLNamespaceMap::NormalizeOasisURN( aTestName ) )
                     nKey = m_pNamespaceMap->AddIfKnown( aPrefix, aTestName );
             }
             // If that namespace is not known, too, add it as unknown
             if( XML_NAMESPACE_UNKNOWN == nKey  )
-                nKey = m_pNamespaceMap->Add( aPrefix, rAttrValue );
+                nKey = m_pNamespaceMap->Add( aPrefix, aAttrValue );
 
             const OUString& rRepName = m_vReplaceNamespaceMap.GetNameByKey( nKey );
             if( !rRepName.isEmpty() )
@@ -474,10 +474,10 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
         sal_Int16 nAttrCount = rAttrList.is() ? rAttrList->getLength() : 0;
         for( sal_Int16 i=0; i < nAttrCount; ++i )
         {
-            const OUString& rAttrName = rAttrList->getNameByIndex( i );
-            const OUString& rAttrValue = rAttrList->getValueByIndex( i );
+            const OUString aAttrName = rAttrList->getNameByIndex( i );
+            const OUString aAttrValue = rAttrList->getValueByIndex( i );
             OUString aLocalName;
-            sal_uInt16 nPrefix = GetNamespaceMap().GetKeyByAttrName( rAttrName,
+            sal_uInt16 nPrefix = GetNamespaceMap().GetKeyByAttrName( aAttrName,
                                                            &aLocalName );
 
             XMLTransformerActions::key_type aKey( nPrefix, aLocalName );
@@ -512,16 +512,16 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                     [[fallthrough]];
                 case XML_ATACTION_IN2INCH:
                     {
-                        OUString aAttrValue( rAttrValue );
-                        if( ReplaceSingleInWithInch( aAttrValue ) )
-                            pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                        OUString aAttrValue2( aAttrValue );
+                        if( ReplaceSingleInWithInch( aAttrValue2 ) )
+                            pMutableAttrList->SetValueByIndex( i, aAttrValue2 );
                     }
                     break;
                 case XML_ATACTION_INS2INCHS:
                     {
-                        OUString aAttrValue( rAttrValue );
-                        if( ReplaceInWithInch( aAttrValue ) )
-                            pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                        OUString aAttrValue2( aAttrValue );
+                        if( ReplaceInWithInch( aAttrValue2 ) )
+                            pMutableAttrList->SetValueByIndex( i, aAttrValue2 );
                     }
                     break;
                 case XML_ATACTION_RENAME_INCH2IN:
@@ -529,31 +529,31 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                     [[fallthrough]];
                 case XML_ATACTION_INCH2IN:
                     {
-                        OUString aAttrValue( rAttrValue );
-                        if( ReplaceSingleInchWithIn( aAttrValue ) )
-                            pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                        OUString aAttrValue2( aAttrValue );
+                        if( ReplaceSingleInchWithIn( aAttrValue2 ) )
+                            pMutableAttrList->SetValueByIndex( i, aAttrValue2 );
                     }
                     break;
                 case XML_ATACTION_INCHS2INS:
                     {
-                        OUString aAttrValue( rAttrValue );
-                        if( ReplaceInchWithIn( aAttrValue ) )
-                            pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                        OUString aAttrValue2( aAttrValue );
+                        if( ReplaceInchWithIn( aAttrValue2 ) )
+                            pMutableAttrList->SetValueByIndex( i, aAttrValue2 );
                     }
                     break;
                 case XML_ATACTION_TWIPS2IN:
                     {
-                        OUString aAttrValue( rAttrValue );
+                        OUString aAttrValue2( aAttrValue );
 
-                        XMLTransformerBase::ReplaceSingleInchWithIn( aAttrValue );
+                        XMLTransformerBase::ReplaceSingleInchWithIn( aAttrValue2 );
                         if( isWriter() )
                         {
-                            sal_Int16 const nDestUnit = lcl_getUnit(aAttrValue);
+                            sal_Int16 const nDestUnit = lcl_getUnit(aAttrValue2);
 
                             // convert twips value to inch
                             sal_Int32 nMeasure;
                             if (::sax::Converter::convertMeasure(nMeasure,
-                                    aAttrValue))
+                                    aAttrValue2))
                             {
                                 nMeasure = static_cast<sal_Int32>(convertTwipToMm100(nMeasure));
 
@@ -561,11 +561,11 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                                 ::sax::Converter::convertMeasure(aBuffer,
                                         nMeasure, util::MeasureUnit::MM_100TH,
                                         nDestUnit );
-                                aAttrValue = aBuffer.makeStringAndClear();
+                                aAttrValue2 = aBuffer.makeStringAndClear();
                             }
                         }
 
-                        pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                        pMutableAttrList->SetValueByIndex( i, aAttrValue2 );
                     }
                     break;
                 case XML_ATACTION_RENAME_DECODE_STYLE_NAME_REF:
@@ -574,24 +574,24 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                 case XML_ATACTION_DECODE_STYLE_NAME:
                 case XML_ATACTION_DECODE_STYLE_NAME_REF:
                     {
-                        OUString aAttrValue( rAttrValue );
-                        if( DecodeStyleName(aAttrValue) )
-                            pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                        OUString aAttrValue2( aAttrValue );
+                        if( DecodeStyleName(aAttrValue2) )
+                            pMutableAttrList->SetValueByIndex( i, aAttrValue2 );
                     }
                     break;
                 case XML_ATACTION_ENCODE_STYLE_NAME:
                     {
-                        OUString aAttrValue( rAttrValue );
-                        if( EncodeStyleName(aAttrValue) )
+                        OUString aAttrValue2( aAttrValue );
+                        if( EncodeStyleName(aAttrValue2) )
                         {
-                            pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                            pMutableAttrList->SetValueByIndex( i, aAttrValue2 );
                             OUString aNewAttrQName(
                                 GetNamespaceMap().GetQNameByKey(
                                     nPrefix,
                                 ::xmloff::token::GetXMLToken(
                                 XML_DISPLAY_NAME ) ) );
                             pMutableAttrList->AddAttribute( aNewAttrQName,
-                                                            rAttrValue );
+                                                            aAttrValue );
                         }
                     }
                     break;
@@ -600,9 +600,9 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                     [[fallthrough]];
                 case XML_ATACTION_ENCODE_STYLE_NAME_REF:
                     {
-                        OUString aAttrValue( rAttrValue );
-                        if( EncodeStyleName(aAttrValue) )
-                            pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                        OUString aAttrValue2( aAttrValue );
+                        if( EncodeStyleName(aAttrValue2) )
+                            pMutableAttrList->SetValueByIndex( i, aAttrValue2 );
                     }
                     break;
                 case XML_ATACTION_RENAME_NEG_PERCENT:
@@ -610,9 +610,9 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                     [[fallthrough]];
                 case XML_ATACTION_NEG_PERCENT:
                     {
-                        OUString aAttrValue( rAttrValue );
-                        if( NegPercent( aAttrValue ) )
-                            pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                        OUString aAttrValue2( aAttrValue );
+                        if( NegPercent( aAttrValue2 ) )
+                            pMutableAttrList->SetValueByIndex( i, aAttrValue2 );
                     }
                     break;
                 case XML_ATACTION_RENAME_ADD_NAMESPACE_PREFIX:
@@ -620,26 +620,26 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                     [[fallthrough]];
                 case XML_ATACTION_ADD_NAMESPACE_PREFIX:
                     {
-                        OUString aAttrValue( rAttrValue );
+                        OUString aAttrValue2( aAttrValue );
                         sal_uInt16 nValPrefix =
                             static_cast<sal_uInt16>(
                                     bRename ? (*aIter).second.m_nParam2
                                             : (*aIter).second.m_nParam1);
-                        AddNamespacePrefix( aAttrValue, nValPrefix );
-                        pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                        AddNamespacePrefix( aAttrValue2, nValPrefix );
+                        pMutableAttrList->SetValueByIndex( i, aAttrValue2 );
                     }
                     break;
                 case XML_ATACTION_ADD_APP_NAMESPACE_PREFIX:
                     {
-                        OUString aAttrValue( rAttrValue );
+                        OUString aAttrValue2( aAttrValue );
                         sal_uInt16 nValPrefix =
                             static_cast<sal_uInt16>((*aIter).second.m_nParam1);
                         if( IsXMLToken( GetClass(), XML_SPREADSHEET  ) )
                             nValPrefix = XML_NAMESPACE_OOOC;
                         else if( IsXMLToken( GetClass(), XML_TEXT  ) )
                             nValPrefix = XML_NAMESPACE_OOOW;
-                        AddNamespacePrefix( aAttrValue, nValPrefix );
-                        pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                        AddNamespacePrefix( aAttrValue2, nValPrefix );
+                        pMutableAttrList->SetValueByIndex( i, aAttrValue2 );
                     }
                     break;
                 case XML_ATACTION_RENAME_REMOVE_NAMESPACE_PREFIX:
@@ -647,77 +647,77 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                     [[fallthrough]];
                 case XML_ATACTION_REMOVE_NAMESPACE_PREFIX:
                     {
-                        OUString aAttrValue( rAttrValue );
+                        OUString aAttrValue2( aAttrValue );
                         sal_uInt16 nValPrefix =
                             static_cast<sal_uInt16>(
                                     bRename ? (*aIter).second.m_nParam2
                                             : (*aIter).second.m_nParam1);
-                        if( RemoveNamespacePrefix( aAttrValue, nValPrefix ) )
-                            pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                        if( RemoveNamespacePrefix( aAttrValue2, nValPrefix ) )
+                            pMutableAttrList->SetValueByIndex( i, aAttrValue2 );
                     }
                     break;
                 case XML_ATACTION_REMOVE_ANY_NAMESPACE_PREFIX:
                     {
-                        OUString aAttrValue( rAttrValue );
-                        if( RemoveNamespacePrefix( aAttrValue ) )
-                            pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                        OUString aAttrValue2( aAttrValue );
+                        if( RemoveNamespacePrefix( aAttrValue2 ) )
+                            pMutableAttrList->SetValueByIndex( i, aAttrValue2 );
                     }
                     break;
                 case XML_ATACTION_URI_OOO:
                     {
-                        OUString aAttrValue( rAttrValue );
-                        if( ConvertURIToOASIS( aAttrValue,
+                        OUString aAttrValue2( aAttrValue );
+                        if( ConvertURIToOASIS( aAttrValue2,
                             static_cast< bool >((*aIter).second.m_nParam1)))
-                            pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                            pMutableAttrList->SetValueByIndex( i, aAttrValue2 );
                     }
                     break;
                 case XML_ATACTION_URI_OASIS:
                     {
-                        OUString aAttrValue( rAttrValue );
-                        if( ConvertURIToOOo( aAttrValue,
+                        OUString aAttrValue2( aAttrValue );
+                        if( ConvertURIToOOo( aAttrValue2,
                             static_cast< bool >((*aIter).second.m_nParam1)))
-                            pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                            pMutableAttrList->SetValueByIndex( i, aAttrValue2 );
                     }
                     break;
                 case XML_ATACTION_RENAME_ATTRIBUTE:
                     {
-                        OUString aAttrValue( rAttrValue );
+                        OUString aAttrValue2( aAttrValue );
                         RenameAttributeValue(
-                            aAttrValue,
+                            aAttrValue2,
                             (*aIter).second.m_nParam1,
                             (*aIter).second.m_nParam2,
                             (*aIter).second.m_nParam3 );
-                        pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                        pMutableAttrList->SetValueByIndex( i, aAttrValue2 );
                     }
                     break;
                 case XML_ATACTION_RNG2ISO_DATETIME:
                     {
-                        OUString aAttrValue( rAttrValue );
-                        if( ConvertRNGDateTimeToISO( aAttrValue ))
-                            pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                        OUString aAttrValue2( aAttrValue );
+                        if( ConvertRNGDateTimeToISO( aAttrValue2 ))
+                            pMutableAttrList->SetValueByIndex( i, aAttrValue2 );
                     }
                     break;
                 case XML_ATACTION_RENAME_RNG2ISO_DATETIME:
                     {
-                        OUString aAttrValue( rAttrValue );
-                        if( ConvertRNGDateTimeToISO( aAttrValue ))
-                            pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                        OUString aAttrValue2( aAttrValue );
+                        if( ConvertRNGDateTimeToISO( aAttrValue2 ))
+                            pMutableAttrList->SetValueByIndex( i, aAttrValue2 );
                         bRename = true;
                     }
                     break;
                 case XML_ATACTION_IN2TWIPS:
                     {
-                        OUString aAttrValue( rAttrValue );
-                        XMLTransformerBase::ReplaceSingleInWithInch( aAttrValue );
+                        OUString aAttrValue2( aAttrValue );
+                        XMLTransformerBase::ReplaceSingleInWithInch( aAttrValue2 );
 
                         if( isWriter() )
                         {
-                            sal_Int16 const nDestUnit = lcl_getUnit(aAttrValue);
+                            sal_Int16 const nDestUnit = lcl_getUnit(aAttrValue2);
 
                             // convert inch value to twips and export as faked inch
                             sal_Int32 nMeasure;
                             if (::sax::Converter::convertMeasure(nMeasure,
-                                    aAttrValue))
+                                    aAttrValue2))
                             {
                                 nMeasure = o3tl::toTwips(nMeasure, o3tl::Length::mm100);
 
@@ -725,23 +725,23 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                                 ::sax::Converter::convertMeasure( aBuffer,
                                         nMeasure, util::MeasureUnit::MM_100TH,
                                         nDestUnit );
-                                aAttrValue = aBuffer.makeStringAndClear();
+                                aAttrValue2 = aBuffer.makeStringAndClear();
                             }
                         }
 
-                        pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                        pMutableAttrList->SetValueByIndex( i, aAttrValue2 );
                     }
                     break;
                 case XML_ATACTION_SVG_WIDTH_HEIGHT_OOO:
                     {
-                        OUString aAttrValue( rAttrValue );
-                        ReplaceSingleInchWithIn( aAttrValue );
+                        OUString aAttrValue2( aAttrValue );
+                        ReplaceSingleInchWithIn( aAttrValue2 );
 
-                        sal_Int16 const nDestUnit = lcl_getUnit( aAttrValue );
+                        sal_Int16 const nDestUnit = lcl_getUnit( aAttrValue2 );
 
                         sal_Int32 nMeasure;
                         if (::sax::Converter::convertMeasure(nMeasure,
-                                    aAttrValue))
+                                    aAttrValue2))
                         {
 
                             if( nMeasure > 0 )
@@ -753,22 +753,22 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                             OUStringBuffer aBuffer;
                             ::sax::Converter::convertMeasure(aBuffer, nMeasure,
                                    util::MeasureUnit::MM_100TH, nDestUnit);
-                            aAttrValue = aBuffer.makeStringAndClear();
+                            aAttrValue2 = aBuffer.makeStringAndClear();
                         }
 
-                        pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                        pMutableAttrList->SetValueByIndex( i, aAttrValue2 );
                     }
                     break;
                 case XML_ATACTION_SVG_WIDTH_HEIGHT_OASIS:
                     {
-                        OUString aAttrValue( rAttrValue );
-                        ReplaceSingleInWithInch( aAttrValue );
+                        OUString aAttrValue2( aAttrValue );
+                        ReplaceSingleInWithInch( aAttrValue2 );
 
-                        sal_Int16 const nDestUnit = lcl_getUnit( aAttrValue );
+                        sal_Int16 const nDestUnit = lcl_getUnit( aAttrValue2 );
 
                         sal_Int32 nMeasure;
                         if (::sax::Converter::convertMeasure(nMeasure,
-                                aAttrValue))
+                                aAttrValue2))
                         {
 
                             if( nMeasure > 0 )
@@ -780,21 +780,21 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                             OUStringBuffer aBuffer;
                             ::sax::Converter::convertMeasure(aBuffer, nMeasure,
                                     util::MeasureUnit::MM_100TH, nDestUnit );
-                            aAttrValue = aBuffer.makeStringAndClear();
+                            aAttrValue2 = aBuffer.makeStringAndClear();
                         }
 
-                        pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                        pMutableAttrList->SetValueByIndex( i, aAttrValue2 );
                     }
                     break;
                 case XML_ATACTION_DECODE_ID:
                     {
-                        const sal_Int32 nLen = rAttrValue.getLength();
+                        const sal_Int32 nLen = aAttrValue.getLength();
                         OUStringBuffer aBuffer;
 
                         sal_Int32 pos;
                         for( pos = 0; pos < nLen; pos++ )
                         {
-                            sal_Unicode c = rAttrValue[pos];
+                            sal_Unicode c = aAttrValue[pos];
                             if( (c >= '0') && (c <= '9') )
                                 aBuffer.append( c );
                             else
@@ -823,16 +823,16 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                         // read the value. Thus, it's interpreted as 0%
                         if ( !bIsDocumentStyle )
                         {
-                            OUString aAttrValue( rAttrValue );
-                            NegPercent(aAttrValue);
-                            pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                            OUString aAttrValue2( aAttrValue );
+                            NegPercent(aAttrValue2);
+                            pMutableAttrList->SetValueByIndex( i, aAttrValue2 );
                         }
                         bRename = true;
                     }
                     break;
                 case XML_ATACTION_SHAPEID:
                 {
-                    OUString sNewValue = "shape" + rAttrValue;
+                    OUString sNewValue = "shape" + aAttrValue;
                     pMutableAttrList->SetValueByIndex( i, sNewValue );
                     break;
                 }

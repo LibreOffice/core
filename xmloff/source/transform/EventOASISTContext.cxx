@@ -178,10 +178,10 @@ void XMLEventOASISTransformerContext::StartElement(
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
+        const OUString aAttrName = xAttrList->getNameByIndex( i );
         OUString aLocalName;
         sal_uInt16 nPrefix =
-            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
+            GetTransformer().GetNamespaceMap().GetKeyByAttrName( aAttrName,
                                                                  &aLocalName );
         XMLTransformerActions::key_type aKey( nPrefix, aLocalName );
         XMLTransformerActions::const_iterator aIter =
@@ -194,7 +194,7 @@ void XMLEventOASISTransformerContext::StartElement(
                         new XMLMutableAttributeList( xAttrList );
                 xAttrList = pMutableAttrList;
             }
-            const OUString& rAttrValue = xAttrList->getValueByIndex( i );
+            const OUString aAttrValue = xAttrList->getValueByIndex( i );
             switch( (*aIter).second.m_nActionType )
             {
             case XML_ATACTION_HREF:
@@ -202,7 +202,7 @@ void XMLEventOASISTransformerContext::StartElement(
                     OUString aName, aLocation;
 
                     bool bNeedsTransform =
-                        ParseURL( rAttrValue, &aName, &aLocation );
+                        ParseURL( aAttrValue, &aName, &aLocation );
 
                     if ( bNeedsTransform )
                     {
@@ -243,25 +243,25 @@ void XMLEventOASISTransformerContext::StartElement(
 
                         pObjContext->HasNamespace(XML_NAMESPACE_FORM );
                     pMutableAttrList->SetValueByIndex( i,
-                                   GetTransformer().GetEventName( rAttrValue,
+                                   GetTransformer().GetEventName( aAttrValue,
                                                                     bForm ) );
                 }
                 break;
             case XML_ATACTION_REMOVE_NAMESPACE_PREFIX:
                 {
-                    OUString aAttrValue( rAttrValue );
+                    OUString aAttrValue2( aAttrValue );
                     sal_uInt16 nValPrefix =
                         static_cast<sal_uInt16>((*aIter).second.m_nParam1);
                     if( GetTransformer().RemoveNamespacePrefix(
-                                aAttrValue, nValPrefix ) )
-                        pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                                aAttrValue2, nValPrefix ) )
+                        pMutableAttrList->SetValueByIndex( i, aAttrValue2 );
                 }
                 break;
             case XML_ATACTION_MACRO_NAME:
             {
                 OUString aName, aLocation;
                 bool bNeedsTransform =
-                ParseURL( rAttrValue, &aName, &aLocation );
+                ParseURL( aAttrValue, &aName, &aLocation );
 
                 if ( bNeedsTransform )
                 {
@@ -286,24 +286,23 @@ void XMLEventOASISTransformerContext::StartElement(
                 {
                     const OUString& rApp = GetXMLToken( XML_APPLICATION );
                     const OUString& rDoc = GetXMLToken( XML_DOCUMENT );
-                    OUString aAttrValue;
-                    if( rAttrValue.getLength() > rApp.getLength()+1 &&
-                        o3tl::equalsIgnoreAsciiCase(rAttrValue.subView(0,rApp.getLength()), rApp) &&
-                        ':' == rAttrValue[rApp.getLength()] )
+                    OUString aAttrValue2;
+                    if( aAttrValue.getLength() > rApp.getLength()+1 &&
+                        o3tl::equalsIgnoreAsciiCase(aAttrValue.subView(0,rApp.getLength()), rApp) &&
+                        ':' == aAttrValue[rApp.getLength()] )
                     {
                         aLocation = rApp;
-                        aAttrValue = rAttrValue.copy( rApp.getLength()+1 );
+                        aAttrValue2 = aAttrValue.copy( rApp.getLength()+1 );
                     }
-                    else if( rAttrValue.getLength() > rDoc.getLength()+1 &&
-                             o3tl::equalsIgnoreAsciiCase(rAttrValue.subView(0,rDoc.getLength()), rDoc) &&
-                             ':' == rAttrValue[rDoc.getLength()] )
+                    else if( aAttrValue.getLength() > rDoc.getLength()+1 &&
+                             o3tl::equalsIgnoreAsciiCase(aAttrValue.subView(0,rDoc.getLength()), rDoc) &&
+                             ':' == aAttrValue[rDoc.getLength()] )
                     {
                         aLocation= rDoc;
-                        aAttrValue = rAttrValue.copy( rDoc.getLength()+1 );
+                        aAttrValue2 = aAttrValue.copy( rDoc.getLength()+1 );
                     }
-                    if( !aAttrValue.isEmpty() )
-                        pMutableAttrList->SetValueByIndex( i,
-                    aAttrValue );
+                    if( !aAttrValue2.isEmpty() )
+                        pMutableAttrList->SetValueByIndex( i, aAttrValue2 );
                     if( !aLocation.isEmpty() )
                     {
                         OUString aAttrQName( GetTransformer().GetNamespaceMap().

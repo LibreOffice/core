@@ -55,10 +55,10 @@ void XMLChartOOoTransformerContext::StartElement(
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        const OUString& rAttrName = xAttrList->getNameByIndex( i );
+        const OUString aAttrName = xAttrList->getNameByIndex( i );
         OUString aLocalName;
         sal_uInt16 nPrefix =
-            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
+            GetTransformer().GetNamespaceMap().GetKeyByAttrName( aAttrName,
                                                                  &aLocalName );
         XMLTransformerActions::key_type aKey( nPrefix, aLocalName );
         XMLTransformerActions::const_iterator aIter =
@@ -71,45 +71,45 @@ void XMLChartOOoTransformerContext::StartElement(
                         new XMLMutableAttributeList( xAttrList );
                 xAttrList = pMutableAttrList;
             }
-            const OUString& rAttrValue = xAttrList->getValueByIndex( i );
+            const OUString aAttrValue = xAttrList->getValueByIndex( i );
             switch( (*aIter).second.m_nActionType )
             {
             case XML_ATACTION_INCH2IN:
                 {
-                    OUString aAttrValue( rAttrValue );
+                    OUString aAttrValue2( aAttrValue );
                     if( XMLTransformerBase::ReplaceSingleInchWithIn(
-                                aAttrValue ) )
-                        pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                                aAttrValue2 ) )
+                        pMutableAttrList->SetValueByIndex( i, aAttrValue2 );
                 }
                 break;
             case XML_ATACTION_ENCODE_STYLE_NAME_REF:
                 {
-                    OUString aAttrValue( rAttrValue );
-                    if( GetTransformer().EncodeStyleName(aAttrValue) )
-                        pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                    OUString aAttrValue2( aAttrValue );
+                    if( GetTransformer().EncodeStyleName(aAttrValue2) )
+                        pMutableAttrList->SetValueByIndex( i, aAttrValue2 );
                 }
                 break;
             case XML_ATACTION_ADD_NAMESPACE_PREFIX:
                 OSL_ENSURE( ::xmloff::token::IsXMLToken( aLocalName, XML_CLASS ),
                                "unexpected class token" );
-                if( ::xmloff::token::IsXMLToken( rAttrValue, XML_ADD_IN ) )
+                if( ::xmloff::token::IsXMLToken( aAttrValue, XML_ADD_IN ) )
                 {
                     nClassName = i;
                 }
                 else
                 {
-                    OUString aAttrValue( rAttrValue );
+                    OUString aAttrValue2( aAttrValue );
                     sal_uInt16 nValPrefix =
                         static_cast<sal_uInt16>((*aIter).second.m_nParam1);
-                    GetTransformer().AddNamespacePrefix( aAttrValue,
+                    GetTransformer().AddNamespacePrefix( aAttrValue2,
                                                              nValPrefix );
-                    pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                    pMutableAttrList->SetValueByIndex( i, aAttrValue2 );
                 }
                 break;
             case XML_ATACTION_REMOVE:
                 OSL_ENSURE( ::xmloff::token::IsXMLToken( aLocalName, XML_ADD_IN_NAME ),
                                "unexpected class token" );
-                aAddInName = rAttrValue;
+                aAddInName = aAttrValue;
                 pMutableAttrList->RemoveAttributeByIndex( i );
                 --i;
                 --nAttrCount;
