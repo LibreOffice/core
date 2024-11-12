@@ -523,25 +523,19 @@ ScEnginePoolHelper::ScEnginePoolHelper( SfxItemPool* pEnginePoolP,
                 bool bDeleteEnginePoolP )
             :
             m_pEnginePool( pEnginePoolP ),
-            m_pDefaults( nullptr ),
-            m_bDeleteEnginePool( bDeleteEnginePoolP ),
-            m_bDeleteDefaults( false )
+            m_bDeleteEnginePool( bDeleteEnginePoolP )
 {
 }
 
 ScEnginePoolHelper::ScEnginePoolHelper( const ScEnginePoolHelper& rOrg )
             :
             m_pEnginePool( rOrg.m_bDeleteEnginePool ? rOrg.m_pEnginePool->Clone() : rOrg.m_pEnginePool ),
-            m_pDefaults( nullptr ),
-            m_bDeleteEnginePool( rOrg.m_bDeleteEnginePool ),
-            m_bDeleteDefaults( false )
+            m_bDeleteEnginePool( rOrg.m_bDeleteEnginePool )
 {
 }
 
 ScEnginePoolHelper::~ScEnginePoolHelper()
 {
-    if ( m_bDeleteDefaults )
-        delete m_pDefaults;
 }
 
 ScEditEngineDefaulter::ScEditEngineDefaulter( SfxItemPool* pEnginePoolP,
@@ -572,10 +566,7 @@ void ScEditEngineDefaulter::SetDefaults( const SfxItemSet& rSet, bool bRememberC
 {
     if ( bRememberCopy )
     {
-        if ( m_bDeleteDefaults )
-            delete m_pDefaults;
-        m_pDefaults = new SfxItemSet( rSet );
-        m_bDeleteDefaults = true;
+        m_pDefaults = std::make_unique<SfxItemSet>( rSet );
     }
     const SfxItemSet& rNewSet = bRememberCopy ? *m_pDefaults : rSet;
     bool bUndo = IsUndoEnabled();
@@ -594,10 +585,7 @@ void ScEditEngineDefaulter::SetDefaults( const SfxItemSet& rSet, bool bRememberC
 
 void ScEditEngineDefaulter::SetDefaults( std::unique_ptr<SfxItemSet> pSet )
 {
-    if ( m_bDeleteDefaults )
-        delete m_pDefaults;
-    m_pDefaults = pSet.release();
-    m_bDeleteDefaults = true;
+    m_pDefaults = std::move(pSet);
     if ( m_pDefaults )
         SetDefaults( *m_pDefaults, false );
 }
@@ -606,8 +594,7 @@ void ScEditEngineDefaulter::SetDefaultItem( const SfxPoolItem& rItem )
 {
     if ( !m_pDefaults )
     {
-        m_pDefaults = new SfxItemSet( GetEmptyItemSet() );
-        m_bDeleteDefaults = true;
+        m_pDefaults = std::make_unique<SfxItemSet>( GetEmptyItemSet() );
     }
     m_pDefaults->Put( rItem );
     SetDefaults( *m_pDefaults, false );
@@ -617,8 +604,7 @@ const SfxItemSet& ScEditEngineDefaulter::GetDefaults()
 {
     if ( !m_pDefaults )
     {
-        m_pDefaults = new SfxItemSet( GetEmptyItemSet() );
-        m_bDeleteDefaults = true;
+        m_pDefaults = std::make_unique<SfxItemSet>( GetEmptyItemSet() );
     }
     return *m_pDefaults;
 }
