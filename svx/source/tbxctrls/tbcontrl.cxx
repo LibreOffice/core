@@ -1651,7 +1651,7 @@ IMPL_LINK(SvxStyleBox_Base, DumpAsPropertyTreeHdl, tools::JsonWriter&, rJsonWrit
     rJsonWriter.put("command", ".uno:StyleApply");
 }
 
-static bool lcl_GetDocFontList(const FontList** ppFontList, SvxFontNameBox_Base* pBox)
+static bool lcl_GetDocFontList(const FontList** ppFontList, SvxFontNameBox_Base& rBox)
 {
     bool bChanged = false;
     const SfxObjectShell* pDocSh = SfxObjectShell::Current();
@@ -1664,7 +1664,7 @@ static bool lcl_GetDocFontList(const FontList** ppFontList, SvxFontNameBox_Base*
     {
         ::std::unique_ptr<FontList> aFontList(new FontList(Application::GetDefaultDevice()));
         *ppFontList = aFontList.get();
-        pBox->SetOwnFontList(std::move(aFontList));
+        rBox.SetOwnFontList(std::move(aFontList));
         bChanged = true;
     }
 
@@ -1688,17 +1688,16 @@ static bool lcl_GetDocFontList(const FontList** ppFontList, SvxFontNameBox_Base*
             // has already been updated.
             bChanged = !pNewFontList ||
                        *ppFontList != pNewFontList ||
-                       pBox->GetListCount() != pNewFontList->GetFontNameCount();
+                       rBox.GetListCount() != pNewFontList->GetFontNameCount();
             // HACK: Comparing is incomplete
 
             if ( bChanged )
                 *ppFontList = pNewFontList;
         }
 
-        if ( pBox )
-            pBox->set_sensitive(true);
+        rBox.set_sensitive(true);
     }
-    else if ( pBox && ( pDocSh || !ppFontList ))
+    else if ( pDocSh || !ppFontList)
     {
         // Disable box only when we have a SfxObjectShell and didn't get a font list OR
         // we don't have a SfxObjectShell and no current font list.
@@ -1707,16 +1706,16 @@ static bool lcl_GetDocFontList(const FontList** ppFontList, SvxFontNameBox_Base*
         // the help window with F1. After closing the help window, we disable the font name
         // combo box. The SfxObjectShell::Current() method returns in that case zero. But the
         // font list hasn't changed and therefore the combo box shouldn't be disabled!
-        pBox->set_sensitive(false);
+        rBox.set_sensitive(false);
     }
 
     // Fill the FontBox, also the new list if necessary
-    if ( pBox && bChanged )
+    if ( bChanged )
     {
         if (ppFontList && *ppFontList)
-            pBox->Fill( *ppFontList );
+            rBox.Fill( *ppFontList );
         else
-            pBox->Clear();
+            rBox.Clear();
     }
     return bChanged;
 }
@@ -1768,14 +1767,14 @@ void SvxFontNameBox_Base::FillList()
     m_xWidget->get_entry_selection_bounds(nStartPos, nEndPos);
 
     // Did Doc-Fontlist change?
-    lcl_GetDocFontList(&pFontList, this);
+    lcl_GetDocFontList(&pFontList, *this);
 
     m_xWidget->select_entry_region(nStartPos, nEndPos);
 }
 
 bool SvxFontNameBox_Base::CheckFontIsAvailable(std::u16string_view fontname)
 {
-    lcl_GetDocFontList(&pFontList, this);
+    lcl_GetDocFontList(&pFontList, *this);
     return pFontList && pFontList->IsAvailable(fontname);
 }
 
@@ -1928,7 +1927,7 @@ void SvxFontNameBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
     {
         // The old font list in shell has likely been destroyed at this point, so we need to get
         // the new one before doing anything further.
-        lcl_GetDocFontList( &pFontList, this );
+        lcl_GetDocFontList( &pFontList, *this );
     }
 }
 
