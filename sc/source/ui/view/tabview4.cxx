@@ -30,6 +30,7 @@
 #include <inputhdl.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <tools/json_writer.hxx>
+#include <output.hxx>
 
 // ---  Referenz-Eingabe / Fill-Cursor
 
@@ -306,6 +307,23 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
             writer.put("delrange", sDeleteCellAddress);
             OString sPayloadString = writer.finishAndGetAsOString();
             pLOKViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TOOLTIP, sPayloadString);
+
+            // set cell addresses for deletion by autofill
+            tools::Long nX1 = aDelRange.aStart.Col();
+            tools::Long nX2 = aDelRange.aEnd.Col();
+            tools::Long nY1 = aDelRange.aStart.Row();
+            tools::Long nY2 = aDelRange.aEnd.Row();
+            tools::Long nTab = aDelRange.aStart.Tab();
+
+            std::vector<ReferenceMark> aReferenceMarks(1);
+
+            const svtools::ColorConfig& rColorCfg = ScModule::get()->GetColorConfig();
+            Color aSelColor(rColorCfg.GetColorValue(svtools::CALCHIDDENROWCOL).nColor);
+
+            aReferenceMarks[0] = ScInputHandler::GetReferenceMark(
+                aViewData, aViewData.GetDocShell(), nX1, nX2, nY1, nY2, nTab, aSelColor);
+
+            ScInputHandler::SendReferenceMarks(pLOKViewShell, aReferenceMarks);
         }
     }
     else if ( nEndX != aMarkRange.aEnd.Col() || nEndY != aMarkRange.aEnd.Row() )
