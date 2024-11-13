@@ -18,7 +18,7 @@
 -->
 <html>
 <head>
-  <title>LibreOffice %PRODUCT_RELEASE% SDK - Installation Guide</title>
+  <title>%PRODUCTNAME% %PRODUCT_RELEASE% SDK - Installation Guide</title>
   <link rel="stylesheet" type="text/css" href="sdk_styles.css"/>
   <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
 </head>
@@ -53,11 +53,11 @@
                       <table class="table3">
                         <tr>
                           <td colspan="2">
-                            <p>The LibreOffice %PRODUCT_RELEASE% SDK comes with
+                            <p>The %PRODUCTNAME% %PRODUCT_RELEASE% SDK comes with
                               a set of development tools, base libraries, header
                               files and helper class files that can be used to
                               develop Java/C++ components, to embed the
-                              LibreOffice %PRODUCT_RELEASE% application in your
+                              %PRODUCTNAME% %PRODUCT_RELEASE% application in your
                               own programs, or to use the API (scripting or
                               remote control the office). For a complete working
                               environment, we have some additional
@@ -65,13 +65,13 @@
                           </td>
                         </tr>
                         <tr valign="top">
-                          <td><b>LibreOffice %PRODUCT_RELEASE%
+                          <td><b>%PRODUCTNAME% %PRODUCT_RELEASE%
                               installation</b></td>
                           <td class="content80"><p>The SDK works on top of an
-                            existing LibreOffice installation and uses the same
-                            libraries as the LibreOffice installation.</p>
+                            existing %PRODUCTNAME% installation and uses the same
+                            libraries as the %PRODUCTNAME% installation.</p>
                             <p>Download the SDK from the same
-                            source as your LibreOffice packages.</p>
+                            source as your %PRODUCTNAME% packages.</p>
                             <ul>
                               <li>If you have installed an official The
                                 Document Foundation LibreOffice release,
@@ -229,7 +229,7 @@
                             </ul>
                             <p>The configure script
                               requests relevant information
-                              and directories (SDK, LibreOffice, GNU make, Java,
+                              and directories (SDK, %PRODUCTNAME%, GNU make, Java,
                               C++), in order to prepare a working SDK
                               environment. (On Unix-like systems, the configure script recursively
                               starts a new interactive shell with the relevant environment variables
@@ -254,8 +254,8 @@
                               <tr valign="top">
                                 <td class="cell20"><b>OFFICE_HOME</b></td>
                                 <td class="cell80">Path to an existing
-                                  LibreOffice installation, e.g.
-                                  &quot;/opt/libreoffice8&quot;.</td>
+                                  %PRODUCTNAME% installation, e.g.
+                                  &quot;/opt/%LCPRODUCTNAME%%PRODUCT_RELEASE%&quot;.</td>
                               </tr>
                               <tr>
                                 <td class="cell20"><a name="oosdkname"/><b>OO_SDK_NAME</b></td>
@@ -273,7 +273,7 @@
                                 <td class="cell20"><b>OO_SDK_HOME</b></td>
                                 <td class="cell80">Path to the SDK root
                                   directory, e.g.
-                                  &quot;/opt/libreoffice/sdk&quot;</td>
+                                  &quot;/opt/%LCPRODUCTNAME%%PRODUCT_RELEASE%/sdk&quot;</td>
                               </tr>
                               <tr>
                                 <td class="cell20"><b>OO_SDK_JAVA_HOME</b></td>
@@ -327,14 +327,14 @@
                                   directory itself. If an output directory is
                                   specified, the output is generated in an SDK
                                   dependent subdirectory in this directory (e.g.
-                                  &lt;OO_SDK_OUTPUT_DIR&gt; /LibreOffice
+                                  &lt;OO_SDK_OUTPUT_DIR&gt; /%PRODUCTNAME%
                                   %PRODUCT_RELEASE%/LINUXExample.out)</td>
                               </tr>
                               <tr>
                                 <td class="cell20"><b>SDK_AUTO_DEPLOYMENT</b></td>
                                 <td class="cell80">If this variable is set, the
                                   component examples are automatically deployed
-                                  into the LibreOffice installation referenced
+                                  into the %PRODUCTNAME% installation referenced
                                   by OFFICE_HOME. See also section
                                   <a href="https://wiki.documentfoundation.org/Documentation/DevGuide/Extensions#unopkg" title="link to the &quot;Extension Manager - unopkg&quot; section in the Developer's Guide">&quot;Extension Manager - unopkg&quot;</a>
                                   from the Developer's Guide.</td>
@@ -370,19 +370,19 @@
                               <tr valign="top">
                                 <td class="cell20">OO_SDK_URE_BIN_DIR</td>
                                 <td class="cell80">The path within the chosen
-                                  LibreOffice URE installation where binary
+                                  %PRODUCTNAME% URE installation where binary
                                   executables are located.</td>
                               </tr>
                               <tr valign="top">
                                 <td class="cell20">OO_SDK_URE_LIB_DIR</td>
                                 <td class="cell80">The path within the chosen
-                                  LibreOffice URE installation where dynamic
+                                  %PRODUCTNAME% URE installation where dynamic
                                   libraries are located.</td>
                               </tr>
                               <tr valign="top">
                                 <td class="cell20">OO_SDK_URE_JAVA_DIR</td>
                                 <td class="cell80">The path within the chosen
-                                  LibreOffice URE installation where Java JARs
+                                  %PRODUCTNAME% URE installation where Java JARs
                                   are located.</td>
                               </tr>
                               <tr valign="top">
@@ -392,7 +392,7 @@
                                     $CLASSPATH</i><br/>
                                   <p>The classpath will be set or extended to
                                     the necessary jar files of the specified
-                                    LibreOffice installation.</p>
+                                    %PRODUCTNAME% installation.</p>
                                 </td>
                               </tr>
                               <tr valign="top">
@@ -408,7 +408,7 @@
                                 <td class="cell80">=<i>$OFFICE_PROGRAM_PATH</i><br/>
                                   <p>This variable is used to ensure that the
                                     new C++ UNO bootstrap mechanism uses the
-                                    configured LibreOffice installation of the
+                                    configured %PRODUCTNAME% installation of the
                                     SDK. Normally the bootstrap mechanism finds
                                     the default office installation for the user
                                     on the system. This variable is optional but

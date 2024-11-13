@@ -20,7 +20,9 @@ $(eval $(call gb_CustomTarget_register_targets,odk/html,\
 $(gb_CustomTarget_workdir)/odk/html/%.html : $(SRCDIR)/odk/%.html
 	$(call gb_Output_announce,$*.html,$(true),SED,1)
 	$(call gb_Trace_StartRange,$*.html,SED)
-	sed -e 's|%PRODUCT_RELEASE%|$(PRODUCTVERSION)|g' \
+	sed -e 's|%PRODUCTNAME%|$(PRODUCTNAME)|g' \
+	    -e 's|%LCPRODUCTNAME%|'"$$(printf %s '$(PRODUCTNAME)' | tr A-Z a-z)"'|g' \
+	    -e 's|%PRODUCT_RELEASE%|$(PRODUCTVERSION)|g' \
 	    -e 's|%DOXYGEN_PREFIX0%|$(if $(DOXYGEN),.,https://api.libreoffice.org)|g' \
 	    -e 's|%DOXYGEN_PREFIX1%|$(if $(DOXYGEN),..,https://api.libreoffice.org)|g' \
 	    -e 's|%DOXYGEN_PREFIX2%|$(if $(DOXYGEN),../..,https://api.libreoffice.org)|g' \
