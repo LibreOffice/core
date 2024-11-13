@@ -61,8 +61,6 @@ namespace rptui
                 return;
             }
         }
-
-        m_eType = Invalid;
     }
 
 
