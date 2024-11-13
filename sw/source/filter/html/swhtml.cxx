@@ -599,7 +599,6 @@ SvParserState SwHTMLParser::CallParser()
         }
         else
         {
-            m_bViewCreated = true;
             m_nEventId = nullptr;
         }
     }
