@@ -108,6 +108,8 @@ public:
 
     SwFootnoteInfo();
     SwFootnoteInfo(const SwFootnoteInfo&);
+
+    ~SwFootnoteInfo() override;
 };
 
 #endif

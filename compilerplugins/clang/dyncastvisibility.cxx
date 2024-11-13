@@ -66,7 +66,7 @@ bool isDerivedFrom(
             }
             derived = true;
         }
-    }
+        }
     return derived;
 }
 
@@ -157,7 +157,14 @@ public:
         assert(rds != nullptr);
         Bases bs;
         bool hidden = false;
-        if (!(isDerivedFrom(rdd, rds, &bs, &hidden) && hidden)) {
+        if (!isDerivedFrom(rdd, rds, &bs, &hidden)) {
+            return true;
+        }
+        Decl const * missing = nullptr;
+        if (rdd->isEffectivelyFinal()) {
+            missing = missingKeyFunction(rdd);
+        }
+        if (!hidden && missing == nullptr) {
             return true;
         }
         report(
@@ -167,26 +174,44 @@ public:
             expr->getExprLoc())
             << ts << vis(getTypeVisibility(rds)) << td
             << vis(getTypeVisibility(rdd)) << expr->getSourceRange();
-        report(
-            DiagnosticsEngine::Note,
-            "base class %0 with %1 type visibility defined here",
-            rds->getLocation())
-            << ts << vis(getTypeVisibility(rds)) << rds->getSourceRange();
-        for (auto const i: bs) {
-            if (getTypeVisibility(i) != DefaultVisibility) {
+        if (hidden) {
+            report(
+                DiagnosticsEngine::Note,
+                "base class %0 with %1 type visibility defined here",
+                rds->getLocation())
+                << ts << vis(getTypeVisibility(rds)) << rds->getSourceRange();
+            for (auto const i: bs) {
+                if (getTypeVisibility(i) != DefaultVisibility) {
+                    report(
+                        DiagnosticsEngine::Note,
+                        ("intermediary class %0 with %1 type visibility defined"
+                         " here"),
+                        i->getLocation())
+                        << i << vis(getTypeVisibility(i)) << i->getSourceRange();
+                }
+            }
+            report(
+                DiagnosticsEngine::Note,
+                "derived class %0 with %1 type visibility defined here",
+                rdd->getLocation())
+                << td << vis(getTypeVisibility(rdd)) << rdd->getSourceRange();
+        }
+        if (missing != nullptr) {
+            if (isa<CXXRecordDecl>(missing)) {
                 report(
                     DiagnosticsEngine::Note,
-                    ("intermediary class %0 with %1 type visibility defined"
-                     " here"),
-                    i->getLocation())
-                    << i << vis(getTypeVisibility(i)) << i->getSourceRange();
+                    "derived class %0 does not have a key function (at least on some platforms)",
+                    missing->getLocation())
+                    << td << missing->getSourceRange();
+            } else {
+                report(
+                    DiagnosticsEngine::Note,
+                    "derived class %0 has a key function (at least on some platforms) that is"
+                        " inline",
+                    missing->getLocation())
+                    << td << missing->getSourceRange();
             }
         }
-        report(
-            DiagnosticsEngine::Note,
-            "derived class %0 with %1 type visibility defined here",
-            rdd->getLocation())
-            << td << vis(getTypeVisibility(rdd)) << rdd->getSourceRange();
         return true;
     }
 
@@ -199,6 +224,29 @@ private:
             TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
         }
     }
+
+    Decl const * missingKeyFunction(CXXRecordDecl const * decl) {
+        auto const md = compiler.getASTContext().getCurrentKeyFunction(decl);
+        if (md != nullptr && !md->isInlined()) {
+            return nullptr;
+        }
+        // Ignore classes defined in the main file:
+        auto const def = decl->getDefinition();
+        assert(def != nullptr);
+        if (compiler.getSourceManager().isInMainFile(def->getLocation())) {
+            return nullptr;
+        }
+        //TODO: Ignore template instantiations, for which any key function would necessarily be
+        // inline, unless there is an explicit extern template instantiation (as there should
+        // arguably be for such cases, cf. comphelper::DocumentEventHolder in
+        // include/comphelper/asyncnotification.hxx, but which might be complicated to check here):
+        auto const tsk = decl->getTemplateSpecializationKind();
+        if (tsk == TSK_ImplicitInstantiation || tsk == TSK_ExplicitInstantiationDeclaration) {
+            return nullptr;
+        }
+        return md == nullptr ? static_cast<Decl const *>(decl) : static_cast<Decl const *>(md);
+    }
+
 };
 
 static loplugin::Plugin::Registration<DynCastVisibility> dyncastvisibility(

@@ -140,6 +140,7 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/dialog/ClassificationCommon \
     svx/source/dialog/ClassificationDialog \
     svx/source/dialog/ClassificationEditView \
+    svx/source/dialog/ClassificationField \
     svx/source/dialog/databaseregistrationui \
     svx/source/dialog/dialcontrol \
     svx/source/dialog/dlgctl3d \

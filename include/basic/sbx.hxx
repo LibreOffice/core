@@ -82,6 +82,7 @@ class BASIC_DLLPUBLIC SbxHint final : public SfxHint
     SbxVariable* pVar;
 public:
     SbxHint( SfxHintId n, SbxVariable* v ) : SfxHint( n ), pVar( v ) {}
+    ~SbxHint() override;
     SbxVariable* GetVar() const { return pVar; }
 };
 

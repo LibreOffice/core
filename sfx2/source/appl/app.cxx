@@ -60,6 +60,8 @@
 
 using namespace ::com::sun::star;
 
+SfxLinkItem::~SfxLinkItem() = default;
+
 static SfxApplication* g_pSfxApplication = nullptr;
 
 #if HAVE_FEATURE_XMLHELP

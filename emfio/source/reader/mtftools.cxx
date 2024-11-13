@@ -308,6 +308,8 @@ namespace emfio
 #endif
     };
 
+    WinMtfFontStyle::~WinMtfFontStyle() = default;
+
     // tdf#127471
     ScaledFontDetectCorrectHelper::ScaledFontDetectCorrectHelper()
     {

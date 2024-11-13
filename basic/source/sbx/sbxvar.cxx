@@ -569,6 +569,8 @@ SbxInfo::SbxInfo( OUString a, sal_uInt32 n )
        : aHelpFile(std::move( a )), nHelpId( n )
 {}
 
+SbxHint::~SbxHint() = default;
+
 void SbxVariable::Dump( SvStream& rStrm, bool bFill )
 {
     OString aBNameStr(OUStringToOString(GetName( SbxNameType::ShortTypes ), RTL_TEXTENCODING_ASCII_US));

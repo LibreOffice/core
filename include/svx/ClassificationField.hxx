@@ -74,6 +74,8 @@ public:
         , msIdentifier(std::move(sIdentifier))
     {}
 
+    ~ClassificationField() override;
+
     std::unique_ptr<SvxFieldData> Clone() const override
     {
         return std::make_unique<ClassificationField>(meType, msDescription, msFullClassName, msIdentifier);

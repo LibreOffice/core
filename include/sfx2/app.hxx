@@ -78,10 +78,16 @@ enum class SfxToolsModule
 class SFX2_DLLPUBLIC SfxLinkItem final : public SfxPoolItem
 {
     Link<SfxPoolItem const *, void> aLink;
+
+    SfxLinkItem(SfxLinkItem const &) = default;
+    void operator =(SfxLinkItem const &) = delete;
+
 public:
     SfxLinkItem( sal_uInt16 nWhichId, const Link<SfxPoolItem const *, void>& rValue )
         : SfxPoolItem( nWhichId, SfxItemType::SfxLinkItemType )
     {   aLink = rValue; }
+
+    virtual ~SfxLinkItem() override;
 
     virtual SfxLinkItem*     Clone( SfxItemPool* = nullptr ) const override
     {   return new SfxLinkItem( *this ); }

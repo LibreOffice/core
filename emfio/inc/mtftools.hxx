@@ -392,6 +392,8 @@ namespace emfio
         vcl::Font    aFont;
 
         explicit WinMtfFontStyle(LOGFONTW const & rLogFont);
+
+        ~WinMtfFontStyle() override;
     };
 
     enum class WinMtfFillStyleType

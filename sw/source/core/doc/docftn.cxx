@@ -311,6 +311,8 @@ SwFootnoteInfo::SwFootnoteInfo() :
     m_bEndNote = false;
 }
 
+SwFootnoteInfo::~SwFootnoteInfo() = default;
+
 void SwDoc::SetFootnoteInfo(const SwFootnoteInfo& rInfo)
 {
     SwRootFrame* pTmpRoot = getIDocumentLayoutAccess().GetCurrentLayout();

@@ -24,12 +24,16 @@
 
 class SAL_DLLPUBLIC_RTTI SdrEdgeLineDeltaCountItem final : public SfxUInt16Item
 {
+    SdrEdgeLineDeltaCountItem(SdrEdgeLineDeltaCountItem const&) = default;
+    void operator=(SdrEdgeLineDeltaCountItem const&) = delete;
+
 public:
     SdrEdgeLineDeltaCountItem(sal_uInt16 nVal = 0)
         : SfxUInt16Item(SDRATTR_EDGELINEDELTACOUNT, nVal,
                         SfxItemType::SdrEdgeLineDeltaCountItemType)
     {
     }
+    virtual ~SdrEdgeLineDeltaCountItem() override;
     virtual SdrEdgeLineDeltaCountItem* Clone(SfxItemPool*) const override
     {
         return new SdrEdgeLineDeltaCountItem(*this);
