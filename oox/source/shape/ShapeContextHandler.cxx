@@ -113,7 +113,6 @@ uno::Reference<xml::sax::XFastContextHandler> ShapeContextHandler::getWpsContext
     if (!mxWpsContext.is())
     {
         FragmentHandler2Ref rFragmentHandler(new ShapeFragmentHandler(*mxShapeFilterBase, msRelationFragmentPath));
-        ShapePtr pMasterShape;
 
         uno::Reference<drawing::XShape> xShape;
         // No element happens in case of pretty-printed XML, bodyPr is the case when we are called again after <wps:txbx>.
@@ -127,7 +126,7 @@ uno::Reference<xml::sax::XFastContextHandler> ShapeContextHandler::getWpsContext
                 mxWpsContext.set(new WpsContext(
                                      *rFragmentHandler,
                                      xShape,
-                                     pMasterShape,
+                                     nullptr,
                                      std::make_shared<oox::drawingml::Shape>(
                                              "com.sun.star.drawing.CustomShape")));
                 break;
