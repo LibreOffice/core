@@ -1487,8 +1487,8 @@ void ValueSet::ImplFormatItem(vcl::RenderContext const & rRenderContext, ValueSe
     {
         const Color& rTopLeft(rStyleSettings.GetEdgeBlendingTopLeftColor());
         const Color& rBottomRight(rStyleSettings.GetEdgeBlendingBottomRightColor());
-        const sal_uInt8 nAlpha((nEdgeBlendingPercent * 255) / 100);
-        const BitmapEx aBlendFrame(createBlendFrame(aRect.GetSize(), nAlpha, rTopLeft, rBottomRight));
+        const sal_uInt8 nAlpha(255 - ((nEdgeBlendingPercent * 255) / 100));
+        const BitmapEx aBlendFrame(createAlphaBlendFrame(aRect.GetSize(), nAlpha, rTopLeft, rBottomRight));
 
         if (!aBlendFrame.IsEmpty())
         {

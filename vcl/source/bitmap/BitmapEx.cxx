@@ -1024,7 +1024,7 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
     return BitmapEx(aChangedBitmap);
 }
 
-BitmapEx createBlendFrame(
+BitmapEx createAlphaBlendFrame(
     const Size& rSize,
     sal_uInt8 nAlpha,
     Color aColorTopLeft,
@@ -1042,13 +1042,13 @@ BitmapEx createBlendFrame(
         aColTopRight.Merge(aColorBottomRight, 255 - sal_uInt8((nW * 255) / nDE));
         aColBottomLeft.Merge(aColorBottomRight, 255 - sal_uInt8((nH * 255) / nDE));
 
-        return createBlendFrame(rSize, nAlpha, aColorTopLeft, aColTopRight, aColorBottomRight, aColBottomLeft);
+        return createAlphaBlendFrame(rSize, nAlpha, aColorTopLeft, aColTopRight, aColorBottomRight, aColBottomLeft);
     }
 
     return BitmapEx();
 }
 
-BitmapEx createBlendFrame(
+BitmapEx createAlphaBlendFrame(
     const Size& rSize,
     sal_uInt8 nAlpha,
     Color aColorTopLeft,
@@ -1056,8 +1056,6 @@ BitmapEx createBlendFrame(
     Color aColorBottomRight,
     Color aColorBottomLeft)
 {
-    // FIXME the call sites are actually passing in transparency
-    nAlpha = 255 - nAlpha;
     BlendFrameCache* pBlendFrameCache = ImplGetBlendFrameCache();
 
     if(pBlendFrameCache->m_aLastSize == rSize
@@ -1340,7 +1338,7 @@ tools::Polygon  BitmapEx::GetContour( bool bContourEdgeDetect,
     pPoints1.reset(new Point[ nHeight ]);
     pPoints2.reset(new Point[ nHeight ]);
 
-    for (tools::Long nY = nStartY1; nY < nEndY1; nY++ )
+    for (tools::Long nY = nStartY1; nY < nEndY1; nY++)
     {
         tools::Long nX = nStartX1;
         Scanline pScanline = pAcc->GetScanline( nY );

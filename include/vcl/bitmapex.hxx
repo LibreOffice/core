@@ -467,7 +467,7 @@ private:
 };
 
 
-/** Create a blend frame as BitmapEx
+/** Create a blend frame as BitmapEx using an alpha value
 
     @param nAlpha
     The blend value defines how strong the frame will be blended with the
@@ -480,14 +480,13 @@ private:
     @param rSize
     The size of the frame in pixels
     */
-BitmapEx VCL_DLLPUBLIC createBlendFrame(
+BitmapEx VCL_DLLPUBLIC createAlphaBlendFrame(
     const Size& rSize,
     sal_uInt8 nAlpha,
     Color aColorTopLeft,
     Color aColorBottomRight);
 
-
-/** Create a blend frame as BitmapEx
+/** Create a blend frame as BitmapEx using an alpha value
 
     @param nAlpha
     The blend value defines how strong the frame will be blended with the
@@ -499,7 +498,7 @@ BitmapEx VCL_DLLPUBLIC createBlendFrame(
     @param rSize
     The size of the frame in pixels
     */
-BitmapEx createBlendFrame(
+BitmapEx createAlphaBlendFrame(
     const Size& rSize,
     sal_uInt8 nAlpha,
     Color aColorTopLeft,

@@ -1691,8 +1691,8 @@ void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 
             {
                 const Color& rTopLeft(rStyleSettings.GetEdgeBlendingTopLeftColor());
                 const Color& rBottomRight(rStyleSettings.GetEdgeBlendingBottomRightColor());
-                const sal_uInt8 nAlpha((nEdgeBlendingPercent * 255) / 100);
-                const BitmapEx aBlendFrame(createBlendFrame(aImgSz, nAlpha, rTopLeft, rBottomRight));
+                const sal_uInt8 nAlpha(255 - ((nEdgeBlendingPercent * 255) / 100));
+                const BitmapEx aBlendFrame(createAlphaBlendFrame(aImgSz, nAlpha, rTopLeft, rBottomRight));
 
                 if (!aBlendFrame.IsEmpty())
                 {
@@ -2709,8 +2709,8 @@ void ImplWin::DrawEntry(vcl::RenderContext& rRenderContext, bool bLayout)
         {
             const Color& rTopLeft(rStyleSettings.GetEdgeBlendingTopLeftColor());
             const Color& rBottomRight(rStyleSettings.GetEdgeBlendingBottomRightColor());
-            const sal_uInt8 nAlpha((nEdgeBlendingPercent * 255) / 100);
-            const BitmapEx aBlendFrame(createBlendFrame(aImgSz, nAlpha, rTopLeft, rBottomRight));
+            const sal_uInt8 nAlpha(255 - ((nEdgeBlendingPercent * 255) / 100));
+            const BitmapEx aBlendFrame(createAlphaBlendFrame(aImgSz, nAlpha, rTopLeft, rBottomRight));
 
             if(!aBlendFrame.IsEmpty())
             {
