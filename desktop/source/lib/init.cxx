@@ -6629,6 +6629,34 @@ static char* getUndoOrRedo(LibreOfficeKitDocument* pThis, UndoOrRedo eCommand)
     return pJson;
 }
 
+/// Returns only the number of the undo or redo elements
+static char* getUndoOrRedoCount(LibreOfficeKitDocument* pThis, UndoOrRedo eCommand)
+{
+    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+
+    auto pBaseModel = dynamic_cast<SfxBaseModel*>(pDocument->mxComponent.get());
+    if (!pBaseModel)
+        return nullptr;
+
+    SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
+    if (!pObjectShell)
+        return nullptr;
+
+    SfxUndoManager* pUndoManager = pObjectShell->GetUndoManager();
+    if (!pUndoManager)
+        return nullptr;
+
+    size_t nCount;
+    if (eCommand == UndoOrRedo::UNDO)
+        nCount = pUndoManager->GetUndoActionCount();
+    else
+        nCount = pUndoManager->GetRedoActionCount();
+
+    OUString aString = OUString::number(nCount);
+    char* pCountStr = convertOUString(aString);
+    return pCountStr;
+}
+
 /// Returns the JSON representation of the redline stack.
 static char* getTrackedChanges(LibreOfficeKitDocument* pThis)
 {
@@ -6742,6 +6770,14 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     else if (aCommand == ".uno:Redo")
     {
         return getUndoOrRedo(pThis, UndoOrRedo::REDO);
+    }
+    else if (aCommand == ".uno:UndoCount")
+    {
+        return getUndoOrRedoCount(pThis, UndoOrRedo::UNDO);
+    }
+    else if (aCommand == ".uno:RedoCount")
+    {
+        return getUndoOrRedoCount(pThis, UndoOrRedo::REDO);
     }
     else if (aCommand == ".uno:AcceptTrackedChanges")
     {
