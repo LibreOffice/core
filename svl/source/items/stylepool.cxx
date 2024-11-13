@@ -228,8 +228,7 @@ namespace {
             }
         }
 
-        std::shared_ptr<SfxItemSet> pReturn;
-        return pReturn;
+        return std::shared_ptr<SfxItemSet>();
     }
 
     class Iterator
@@ -285,7 +284,6 @@ namespace {
 
     std::shared_ptr<SfxItemSet> Iterator::getNext()
     {
-        std::shared_ptr<SfxItemSet> pReturn;
         while( mpNode || mpCurrParent != maParents.end() )
         {
             if( !mpNode )
@@ -315,7 +313,7 @@ namespace {
                 return mpNode->getItemSetOfIgnorableChild( mbSkipUnusedItemSets );
             }
         }
-        return pReturn;
+        return std::shared_ptr<SfxItemSet>();
     }
 
 }
