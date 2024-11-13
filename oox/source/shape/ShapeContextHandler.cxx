@@ -167,19 +167,18 @@ ShapeContextHandler::getGraphicShapeContext(::sal_Int32 Element )
     if (! mxGraphicShapeContext.is())
     {
         auto pFragmentHandler = std::make_shared<ShapeFragmentHandler>(*mxShapeFilterBase, msRelationFragmentPath);
-        ShapePtr pMasterShape;
 
         switch (Element & 0xffff)
         {
             case XML_graphic:
                 mpShape = std::make_shared<Shape>("com.sun.star.drawing.GraphicObjectShape" );
                 mxGraphicShapeContext.set
-                (new GraphicalObjectFrameContext(*pFragmentHandler, pMasterShape, mpShape, true));
+                (new GraphicalObjectFrameContext(*pFragmentHandler, nullptr, mpShape, true));
                 break;
             case XML_pic:
                 mpShape = std::make_shared<Shape>("com.sun.star.drawing.GraphicObjectShape" );
                 mxGraphicShapeContext.set
-                (new GraphicShapeContext(*pFragmentHandler, pMasterShape, mpShape));
+                (new GraphicShapeContext(*pFragmentHandler, nullptr, mpShape));
                 break;
             default:
                 break;
