@@ -1173,10 +1173,6 @@ void SdOutliner::RememberStartPosition()
         if (pView != nullptr)
             pView->GetSelection();
     }
-    else
-    {
-        mnStartPageIndex = sal_uInt16(-1);
-    }
 }
 
 void SdOutliner::RestoreStartPosition()
