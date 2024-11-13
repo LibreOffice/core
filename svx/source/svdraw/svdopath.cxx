@@ -389,16 +389,14 @@ Point ImpPathCreateUser::CalcLine(const Point& aCsr, tools::Long nDirX, tools::L
     if (bHLin) y=0;
     else if (bVLin) x=0;
     else {
-        tools::Long x1=BigMulDiv(y,nDirX,nDirY);
-        tools::Long y1=y;
-        tools::Long x2=x;
+        tools::Long x2=BigMulDiv(y,nDirX,nDirY);
         tools::Long y2=BigMulDiv(x,nDirY,nDirX);
-        tools::Long l1=std::abs(x1)+std::abs(y1);
-        tools::Long l2=std::abs(x2)+std::abs(y2);
+        tools::Long l1=std::abs(x2)+std::abs(y);
+        tools::Long l2=std::abs(x)+std::abs(y2);
         if ((l1<=l2) != (pView!=nullptr && pView->IsBigOrtho())) {
-            x=x1; y=y1;
+            x = x2;
         } else {
-            x=x2; y=y2;
+            y = y2;
         }
     }
     return Point(x,y);
