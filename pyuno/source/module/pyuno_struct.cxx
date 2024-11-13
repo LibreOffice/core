@@ -125,7 +125,6 @@ static PyObject* PyUNOStruct_getattr( PyObject* self, char* name )
     {
         Runtime runtime;
 
-        me = reinterpret_cast<PyUNO*>(self);
         if (strcmp (name, "__dict__") == 0)
         {
             Py_INCREF (Py_TYPE(me)->tp_dict);
@@ -185,9 +184,7 @@ static PyObject* PyUNOStruct_getattr( PyObject* self, char* name )
 
 static int PyUNOStruct_setattr (PyObject* self, char* name, PyObject* value)
 {
-    PyUNO* me;
-
-    me = reinterpret_cast<PyUNO*>(self);
+    PyUNO* me = reinterpret_cast<PyUNO*>(self);
     try
     {
         Runtime runtime;
