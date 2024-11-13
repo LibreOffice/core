@@ -436,12 +436,10 @@ SwContentType::SwContentType(SwWrtShell* pShell, ContentTypeId nType, sal_uInt8 
         break;
         case ContentTypeId::TEXTFIELD:
             m_bEdit = true;
-            m_bDelete = true;
         break;
         case ContentTypeId::FOOTNOTE:
         case ContentTypeId::ENDNOTE:
             m_bEdit = true;
-            m_bDelete = true;
         break;
         case ContentTypeId::BOOKMARK:
         {
@@ -455,21 +453,17 @@ SwContentType::SwContentType(SwWrtShell* pShell, ContentTypeId nType, sal_uInt8 
         case ContentTypeId::REGION:
             m_sTypeToken = "region";
             m_bEdit = true;
-            m_bDelete = true;
             m_bRenamable = true;
         break;
         case ContentTypeId::INDEX:
             m_bEdit = true;
-            m_bDelete = true;
             m_bRenamable = true;
         break;
         case ContentTypeId::REFERENCE:
             m_bEdit = false;
-            m_bDelete = true;
         break;
         case ContentTypeId::URLFIELD:
             m_bEdit = true;
-            m_bDelete = true;
         break;
         case ContentTypeId::POSTIT:
             m_bEdit = true;
