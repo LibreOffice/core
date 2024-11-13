@@ -2260,7 +2260,7 @@ void BrowseBox::VisibleRowsChanged( sal_Int32, sal_uInt16 )
     }
     else if ( nRowCount > GetRowCount() )
     {
-        RowRemoved(nRowCount-(nRowCount - GetRowCount()),nRowCount - GetRowCount(), false);
+        RowRemoved(GetRowCount(), nRowCount - GetRowCount(), false);
     }
 }
 
