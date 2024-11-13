@@ -151,7 +151,7 @@ bool SwAutoCorrDoc::Delete( sal_Int32 nStt, sal_Int32 nEnd )
                pFrame->MapViewToModelPos(TextFrameIndex(nEnd)));
     DeleteSel( aSel );
 
-    if( m_bUndoIdInitialized )
+    if( !m_bUndoIdInitialized )
         m_bUndoIdInitialized = true;
     return true;
 }
@@ -267,7 +267,7 @@ bool SwAutoCorrDoc::ReplaceRange( sal_Int32 nPos, sal_Int32 nSourceLength, const
             pPam->DeleteMark();
         }
 
-        if( m_bUndoIdInitialized )
+        if( !m_bUndoIdInitialized )
         {
             m_bUndoIdInitialized = true;
             if( 1 == rText.getLength() )
@@ -305,7 +305,7 @@ void SwAutoCorrDoc::SetAttr( sal_Int32 nStt, sal_Int32 nEnd, sal_uInt16 nSlotId,
 
         m_rEditSh.GetDoc()->SetFormatItemByAutoFormat( aPam, aSet );
 
-        if( m_bUndoIdInitialized )
+        if( !m_bUndoIdInitialized )
             m_bUndoIdInitialized = true;
     }
 }
@@ -323,7 +323,7 @@ bool SwAutoCorrDoc::SetINetAttr( sal_Int32 nStt, sal_Int32 nEnd, const OUString&
         aSet( m_rEditSh.GetDoc()->GetAttrPool() );
     aSet.Put( SwFormatINetFormat( rURL, OUString() ));
     m_rEditSh.GetDoc()->SetFormatItemByAutoFormat( aPam, aSet );
-    if( m_bUndoIdInitialized )
+    if( !m_bUndoIdInitialized )
         m_bUndoIdInitialized = true;
     return true;
 }
@@ -362,7 +362,7 @@ OUString const* SwAutoCorrDoc::GetPrevPara(bool const bAtNormalPos)
         pStr = & pFrame->GetText();
     }
 
-    if( m_bUndoIdInitialized )
+    if( !m_bUndoIdInitialized )
         m_bUndoIdInitialized = true;
 
     return pStr;
@@ -372,7 +372,7 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
                                          SvxAutoCorrect& rACorrect,
                                          OUString* pPara )
 {
-    if( m_bUndoIdInitialized )
+    if( !m_bUndoIdInitialized )
         m_bUndoIdInitialized = true;
 
     // Found a beginning of a paragraph or a Blank,
@@ -523,7 +523,7 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
 
 bool SwAutoCorrDoc::TransliterateRTLWord( sal_Int32& rSttPos, sal_Int32 nEndPos, bool bApply )
 {
-    if( m_bUndoIdInitialized )
+    if( !m_bUndoIdInitialized )
         m_bUndoIdInitialized = true;
 
     SwTextNode* pTextNd = m_rCursor.GetPointNode().GetTextNode();
