@@ -14,6 +14,6 @@ $(eval $(call gb_CustomTarget_register_targets,odk/config,\
 ))
 
 $(gb_CustomTarget_workdir)/odk/config/setsdkenv_windows.bat : $(SRCDIR)/odk/config/setsdkenv_windows.bat
-	sed $< -e 's#__SDKNAME__#libreoffice$(PRODUCTVERSION)_sdk#' > $@
+	sed $< -e 's#__SDKNAME__#'"$$(printf %s '$(PRODUCTNAME)' | tr A-Z a-z)"'$(PRODUCTVERSION)_sdk#' > $@
 
 # vim: set noet sw=4 ts=4:
