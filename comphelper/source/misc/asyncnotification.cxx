@@ -173,6 +173,8 @@ namespace comphelper
 
     static std::vector<std::weak_ptr<AsyncEventNotifierAutoJoin>> g_Notifiers;
 
+    template class EventHolder<css::document::DocumentEvent>;
+
     void JoinAsyncEventNotifiers()
     {
         std::vector<std::weak_ptr<AsyncEventNotifierAutoJoin>> notifiers;

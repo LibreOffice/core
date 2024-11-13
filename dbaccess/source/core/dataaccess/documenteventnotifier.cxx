@@ -40,9 +40,6 @@ namespace dbaccess
 
     using namespace ::com::sun::star;
 
-    // DocumentEventHolder
-    typedef ::comphelper::EventHolder< DocumentEvent >  DocumentEventHolder;
-
     // DocumentEventNotifier_Impl
     class DocumentEventNotifier_Impl : public ::comphelper::IEventProcessor
     {
@@ -218,7 +215,7 @@ namespace dbaccess
                 ::comphelper::AsyncEventNotifierAutoJoin::launch(m_pEventBroadcaster);
             }
         }
-        m_pEventBroadcaster->addEvent( new DocumentEventHolder( _rEvent ), this );
+        m_pEventBroadcaster->addEvent( new comphelper::DocumentEventHolder( _rEvent ), this );
     }
 
     void DocumentEventNotifier_Impl::processEvent( const ::comphelper::AnyEvent& _rEvent )
@@ -229,7 +226,7 @@ namespace dbaccess
             if  ( m_bDisposed )
                 return;
         }
-        const DocumentEventHolder& rEventHolder = dynamic_cast< const DocumentEventHolder& >( _rEvent );
+        const comphelper::DocumentEventHolder& rEventHolder = dynamic_cast< const comphelper::DocumentEventHolder& >( _rEvent );
         impl_notifyEvent_nothrow( rEventHolder.getEventObject() );
     }
 
