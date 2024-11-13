@@ -56,8 +56,12 @@ std::pair<TranslateId, FieldUnit> SV_FUNIT_STRINGS[] =
     /* To translators: degree */
     { NC_("SV_FUNIT_STRINGS", "°"), FieldUnit::DEGREE },
     { NC_("SV_FUNIT_STRINGS", "sec"), FieldUnit::SECOND },
+    { NC_("SV_FUNIT_STRINGS", "ms"), FieldUnit::MILLISECOND },
+    /* To translators: standard typographical metric 'em' */
+    { NC_("SV_FUNIT_STRINGS", "em"), FieldUnit::FONT_EM },
     // To translators: This is the last entry of the sequence of measurement unit names
-    { NC_("SV_FUNIT_STRINGS", "ms"), FieldUnit::MILLISECOND }
+    /* To translators: CSS unit 'ic'; CJK full-width advance in the current font */
+    { NC_("SV_FUNIT_STRINGS", "ic"), FieldUnit::FONT_CJK_ADVANCE }
 };
 
 #endif // INCLUDED_VCL_INC_UNITS_HRC

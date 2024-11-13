@@ -72,10 +72,10 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertyMapEntry* pM
 
     if(pItem)
     {
-        pItem->QueryValue( aVal, nMemberId );
+        auto bQuerySucceeded = pItem->QueryValue(aVal, nMemberId);
         if( pMap->nMoreFlags & PropertyMoreFlags::METRIC_ITEM )
         {
-            if( eMapUnit != MapUnit::Map100thMM )
+            if (bQuerySucceeded && eMapUnit != MapUnit::Map100thMM)
             {
                 if ( !bDontConvertNegativeValues || SvxUnoCheckForPositiveValue( aVal ) )
                     SvxUnoConvertToMM( eMapUnit, aVal );

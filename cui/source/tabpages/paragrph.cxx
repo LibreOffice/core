@@ -102,6 +102,44 @@ enum LineSpaceList
     LLINESPACE_FIX  = 7
 };
 
+SvxIndentValue lcl_GetFontRelativeValue(SvxRelativeField& rField, MapUnit eUnit)
+{
+    switch (rField.GetCurrentUnit())
+    {
+        case FieldUnit::FONT_EM:
+            return SvxIndentValue{ static_cast<double>(rField.get_value(FieldUnit::NONE)) / 100.0,
+                                   css::util::MeasureUnit::FONT_EM };
+
+        case FieldUnit::FONT_CJK_ADVANCE:
+            return SvxIndentValue{ static_cast<double>(rField.get_value(FieldUnit::NONE)) / 100.0,
+                                   css::util::MeasureUnit::FONT_CJK_ADVANCE };
+
+        default:
+            return SvxIndentValue::twips(static_cast<double>(rField.GetCoreValue(eUnit)));
+    }
+}
+
+void lcl_SetFontRelativeValue(SvxRelativeField& rField, const SvxIndentValue& rValue, MapUnit eUnit)
+{
+    switch (rValue.m_nUnit)
+    {
+        case css::util::MeasureUnit::FONT_EM:
+            rField.SetFontRelative(FieldUnit::FONT_EM);
+            rField.set_value(static_cast<sal_Int64>(std::llround(rValue.m_dValue * 100.0)),
+                             FieldUnit::FONT_EM);
+            break;
+
+        case css::util::MeasureUnit::FONT_CJK_ADVANCE:
+            rField.SetFontRelative(FieldUnit::FONT_CJK_ADVANCE);
+            rField.set_value(static_cast<sal_Int64>(std::llround(rValue.m_dValue * 100.0)),
+                             FieldUnit::FONT_CJK_ADVANCE);
+            break;
+
+        default:
+            rField.SetMetricValue(static_cast<sal_Int64>(std::llround(rValue.m_dValue)), eUnit);
+            break;
+    }
+}
 }
 
 static void SetLineSpace_Impl( SvxLineSpacingItem&, int, tools::Long lValue = 0 );
@@ -417,16 +455,12 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
             }
             else
             {
-                // tdf#36709: TODO: Handle font-relative units from GUI
-                item.SetTextFirstLineOffset(
-                    SvxIndentValue::twips(m_aFLineIndent.GetCoreValue(eUnit)),
-                    css::util::MeasureUnit::TWIP);
+                item.SetTextFirstLineOffset(lcl_GetFontRelativeValue(m_aFLineIndent, eUnit));
             }
         }
         else
         {
-            // tdf#36709: TODO: Handle font-relative units from GUI
-            item.SetTextFirstLineOffset(SvxIndentValue::twips(m_aFLineIndent.GetCoreValue(eUnit)));
+            item.SetTextFirstLineOffset(lcl_GetFontRelativeValue(m_aFLineIndent, eUnit));
         }
         item.SetAutoFirst(m_xAutoCB->get_active());
         if (item.GetTextFirstLineOffsetValue() < 0)
@@ -478,18 +512,14 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
                     static_cast<sal_uInt16>(m_aFLineIndent.get_value(FieldUnit::NONE)));
             else
             {
-                // tdf#36709: TODO: Handle font-relative units from GUI
-                aMargin.SetTextFirstLineOffset(
-                    SvxIndentValue::twips(m_aFLineIndent.GetCoreValue(eUnit)));
+                aMargin.SetTextFirstLineOffset(lcl_GetFontRelativeValue(m_aFLineIndent, eUnit));
             }
         }
         else
         {
             aMargin.SetTextLeft(m_aLeftIndent.GetCoreValue(eUnit));
             aMargin.SetRight(m_aRightIndent.GetCoreValue(eUnit));
-            // tdf#36709: TODO: Handle font-relative units from GUI
-            aMargin.SetTextFirstLineOffset(
-                SvxIndentValue::twips(m_aFLineIndent.GetCoreValue(eUnit)));
+            aMargin.SetTextFirstLineOffset(lcl_GetFontRelativeValue(m_aFLineIndent, eUnit));
         }
         aMargin.SetAutoFirst(m_xAutoCB->get_active());
         if ( aMargin.GetTextFirstLineOffsetValue() < 0.0 )
@@ -672,18 +702,17 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
             }
             else
             {
-                // tdf#36709: TODO: Handle font-relative units from GUI
                 m_aFLineIndent.SetRelative(false);
                 m_aFLineIndent.set_min(-9999, FieldUnit::NONE);
                 m_aFLineIndent.SetFieldUnit(eFUnit);
-                m_aFLineIndent.SetMetricValue(rOldFirstLine.GetTextFirstLineOffsetValue(), eUnit);
+                lcl_SetFontRelativeValue(m_aFLineIndent, rOldFirstLine.GetTextFirstLineOffset(),
+                                         eUnit);
             }
             m_xAutoCB->set_active(rOldFirstLine.IsAutoFirst());
         }
         else
         {
-            // tdf#36709: TODO: Handle font-relative units from GUI
-            m_aFLineIndent.SetMetricValue(rOldFirstLine.GetTextFirstLineOffsetValue(), eUnit);
+            lcl_SetFontRelativeValue(m_aFLineIndent, rOldFirstLine.GetTextFirstLineOffset(), eUnit);
             m_xAutoCB->set_active(rOldFirstLine.IsAutoFirst());
         }
         AutoHdl_Impl(*m_xAutoCB);
@@ -739,8 +768,7 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
                 m_aFLineIndent.SetRelative(false);
                 m_aFLineIndent.set_min(-9999, FieldUnit::NONE);
                 m_aFLineIndent.SetFieldUnit(eFUnit);
-                // tdf#36709: TODO: Populate GUI with font-relative unit
-                m_aFLineIndent.SetMetricValue(rOldItem.GetTextFirstLineOffsetValue(), eUnit);
+                lcl_SetFontRelativeValue(m_aFLineIndent, rOldItem.GetTextFirstLineOffset(), eUnit);
             }
             m_xAutoCB->set_active(rOldItem.IsAutoFirst());
         }
@@ -751,8 +779,7 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
 
             m_aLeftIndent.SetMetricValue(rSpace.GetTextLeft(), eUnit);
             m_aRightIndent.SetMetricValue(rSpace.GetRight(), eUnit);
-            // tdf#36709: TODO: Populate GUI with font-relative units
-            m_aFLineIndent.SetMetricValue(rSpace.GetTextFirstLineOffsetValue(), eUnit);
+            lcl_SetFontRelativeValue(m_aFLineIndent, rSpace.GetTextFirstLineOffset(), eUnit);
             m_xAutoCB->set_active(rSpace.IsAutoFirst());
         }
         AutoHdl_Impl(*m_xAutoCB);
@@ -951,6 +978,7 @@ SvxStdParagraphTabPage::SvxStdParagraphTabPage(weld::Container* pPage, weld::Dia
 
     Init_Impl();
     m_aFLineIndent.set_min(-9999, FieldUnit::NONE);    // is set to 0 on default
+    m_aFLineIndent.EnableFontRelativeMode();
 }
 
 SvxStdParagraphTabPage::~SvxStdParagraphTabPage()

@@ -18,6 +18,7 @@
  */
 
 #include <svx/relfld.hxx>
+#include <vcl/fieldvalues.hxx>
 
 SvxRelativeField::SvxRelativeField(std::unique_ptr<weld::MetricSpinButton> pControl)
     : m_xSpinButton(std::move(pControl))
@@ -26,7 +27,7 @@ SvxRelativeField::SvxRelativeField(std::unique_ptr<weld::MetricSpinButton> pCont
     , bRelativeMode(false)
     , bRelative(false)
     , bNegativeEnabled(false)
-
+    , bFontRelativeMode(false)
 {
     weld::SpinButton& rSpinButton = m_xSpinButton->get_widget();
     rSpinButton.connect_changed(LINK(this, SvxRelativeField, ModifyHdl));
@@ -34,35 +35,57 @@ SvxRelativeField::SvxRelativeField(std::unique_ptr<weld::MetricSpinButton> pCont
 
 IMPL_LINK_NOARG(SvxRelativeField, ModifyHdl, weld::Entry&, void)
 {
-    if (!bRelativeMode)
-        return;
-
-    OUString  aStr = m_xSpinButton->get_text();
-    bool      bNewMode = bRelative;
-
-    if ( bRelative )
+    if (bRelativeMode)
     {
-        const sal_Unicode* pStr = aStr.getStr();
+        OUString aStr = m_xSpinButton->get_text();
+        bool bNewMode = bRelative;
 
-        while ( *pStr )
+        if (bRelative)
         {
-            if( ( ( *pStr < '0' ) || ( *pStr > '9' ) ) &&
-                ( *pStr != '%' ) )
+            const sal_Unicode* pStr = aStr.getStr();
+
+            while (*pStr)
             {
-                bNewMode = false;
-                break;
+                if (((*pStr < '0') || (*pStr > '9')) && (*pStr != '%'))
+                {
+                    bNewMode = false;
+                    break;
+                }
+                pStr++;
             }
-            pStr++;
+        }
+        else
+        {
+            if (aStr.indexOf("%") != -1)
+                bNewMode = true;
+        }
+
+        if (bNewMode != bRelative)
+            SetRelative(bNewMode);
+    }
+
+    if (bFontRelativeMode)
+    {
+        OUString aStr = m_xSpinButton->get_text();
+        FieldUnit eNewFieldUnit = vcl::GetTextMetricUnit(aStr);
+
+        // Only allow font-relative units
+        switch (eNewFieldUnit)
+        {
+            default:
+                eNewFieldUnit = FieldUnit::NONE;
+                break;
+
+            case FieldUnit::FONT_EM:
+            case FieldUnit::FONT_CJK_ADVANCE:
+                break;
+        }
+
+        if (eNewFieldUnit != eFontRelativeFieldUnit)
+        {
+            SetFontRelative(eNewFieldUnit);
         }
     }
-    else
-    {
-        if ( aStr.indexOf( "%" ) != -1 )
-            bNewMode = true;
-    }
-
-    if ( bNewMode != bRelative )
-        SetRelative( bNewMode );
 }
 
 void SvxRelativeField::EnableRelativeMode(sal_uInt16 nMin, sal_uInt16 nMax)
@@ -73,6 +96,8 @@ void SvxRelativeField::EnableRelativeMode(sal_uInt16 nMin, sal_uInt16 nMax)
     m_xSpinButton->set_unit(FieldUnit::CM);
 }
 
+void SvxRelativeField::EnableFontRelativeMode() { bFontRelativeMode = true; }
+
 void SvxRelativeField::SetRelative( bool bNewRelative )
 {
     weld::SpinButton& rSpinButton = m_xSpinButton->get_widget();
@@ -80,6 +105,8 @@ void SvxRelativeField::SetRelative( bool bNewRelative )
     int nStartPos, nEndPos;
     rSpinButton.get_selection_bounds(nStartPos, nEndPos);
     OUString aStr = rSpinButton.get_text();
+
+    eFontRelativeFieldUnit = FieldUnit::NONE;
 
     if ( bNewRelative )
     {
@@ -94,6 +121,32 @@ void SvxRelativeField::SetRelative( bool bNewRelative )
         m_xSpinButton->set_digits(2);
         m_xSpinButton->set_range(bNegativeEnabled ? -9999 : 0, 9999, FieldUnit::NONE);
         m_xSpinButton->set_unit(FieldUnit::CM);
+    }
+
+    rSpinButton.set_text(aStr);
+    rSpinButton.select_region(nStartPos, nEndPos);
+}
+
+void SvxRelativeField::SetFontRelative(FieldUnit eNewRelativeUnit)
+{
+    weld::SpinButton& rSpinButton = m_xSpinButton->get_widget();
+
+    int nStartPos, nEndPos;
+    rSpinButton.get_selection_bounds(nStartPos, nEndPos);
+    OUString aStr = rSpinButton.get_text();
+
+    bRelative = false;
+    eFontRelativeFieldUnit = eNewRelativeUnit;
+    m_xSpinButton->set_digits(2);
+    m_xSpinButton->set_range(bNegativeEnabled ? -9999 : 0, 9999, FieldUnit::NONE);
+
+    if (eNewRelativeUnit == FieldUnit::NONE)
+    {
+        m_xSpinButton->set_unit(eAbsoluteFieldUnit);
+    }
+    else
+    {
+        m_xSpinButton->set_unit(eNewRelativeUnit);
     }
 
     rSpinButton.set_text(aStr);

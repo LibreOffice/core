@@ -117,6 +117,12 @@ std::string FieldUnitToString(FieldUnit unit)
 
         case FieldUnit::MILLISECOND:
             return "millisecond";
+
+        case FieldUnit::FONT_EM:
+            return "em";
+
+        case FieldUnit::FONT_CJK_ADVANCE:
+            return "ic";
     }
 
     return "";
@@ -1161,6 +1167,8 @@ namespace vcl
              eInUnit == FieldUnit::SECOND ||
              eInUnit == FieldUnit::MILLISECOND ||
              eInUnit == FieldUnit::PIXEL ||
+             eInUnit == FieldUnit::FONT_EM ||
+             eInUnit == FieldUnit::FONT_CJK_ADVANCE ||
              eOutUnit == MapUnit::MapPixel ||
              eOutUnit == MapUnit::MapSysFont ||
              eOutUnit == MapUnit::MapAppFont ||
@@ -1212,6 +1220,8 @@ namespace vcl
 
         return true;
     }
+
+    FieldUnit GetTextMetricUnit(std::u16string_view aStr) { return ImplMetricGetUnit(aStr); }
 }
 
 void MetricFormatter::ImplMetricReformat( const OUString& rStr, double& rValue, OUString& rOutStr )

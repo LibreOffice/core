@@ -47,6 +47,8 @@ enum class FieldUnit : sal_uInt16
     DEGREE,
     SECOND,
     MILLISECOND,
+    FONT_EM,
+    FONT_CJK_ADVANCE,
 };
 
 constexpr o3tl::Length FieldToO3tlLength(FieldUnit eU, o3tl::Length ePixelValue = o3tl::Length::px)

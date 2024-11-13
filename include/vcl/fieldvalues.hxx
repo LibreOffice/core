@@ -38,6 +38,7 @@ VCL_DLLPUBLIC FieldUnit EnglishStringToMetric(std::u16string_view rEnglishMetric
 VCL_DLLPUBLIC bool TextToValue(const OUString& rStr, double& rValue, sal_Int64 nBaseValue,
                                sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper,
                                FieldUnit eUnit);
+VCL_DLLPUBLIC FieldUnit GetTextMetricUnit(std::u16string_view aStr);
 
 VCL_DLLPUBLIC sal_Int64 ConvertValue(sal_Int64 nValue, sal_Int64 mnBaseValue, sal_uInt16 nDecDigits,
                                      FieldUnit eInUnit, FieldUnit eOutUnit);
