@@ -2757,7 +2757,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags aFlags,
                         m_pCurTextFrame->GetTextNodeForParaProps()
                             ->GetSwAttrSet().GetItemIfSet(RES_MARGIN_TEXTLEFT, false));
 
-                    // Unit conversino is not needed here: check the sign only
+                    // Unit conversion is not needed here: check the sign only
                     double dIndentValue = 0.0;
                     if (pFirstLineIndent)
                         dIndentValue = pFirstLineIndent->GetTextFirstLineOffsetValue();
