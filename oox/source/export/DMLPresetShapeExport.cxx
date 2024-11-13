@@ -735,11 +735,6 @@ bool DMLPresetShapeExporter::WriteShapeWithAVlist()
             // Does not have handle points, so preset enough.
             return false;
         }
-        if (sShapeType == "flowChartDecision")
-        {
-            // Does not have handle points, so preset enough.
-            return false;
-        }
         if (sShapeType == "flowChartDelay")
         {
             // Does not have handle points, so preset enough.
@@ -821,11 +816,6 @@ bool DMLPresetShapeExporter::WriteShapeWithAVlist()
             return false;
         }
         if (sShapeType == "flowChartOr")
-        {
-            // Does not have handle points, so preset enough.
-            return false;
-        }
-        if (sShapeType == "flowChartDecision")
         {
             // Does not have handle points, so preset enough.
             return false;
