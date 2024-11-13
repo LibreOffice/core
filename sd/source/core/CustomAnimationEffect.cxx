@@ -3277,8 +3277,7 @@ CustomAnimationEffectPtr MainSequence::getEffectFromOffset( sal_Int32 nOffset ) 
             return (*aIter)->getEffectFromOffset( nOffset );
     }
 
-    CustomAnimationEffectPtr pEffect;
-    return pEffect;
+    return CustomAnimationEffectPtr();
 }
 
 bool MainSequence::disposeShape( const Reference< XShape >& xShape )
