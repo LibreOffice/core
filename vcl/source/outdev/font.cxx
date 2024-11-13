@@ -220,8 +220,6 @@ FontMetric OutputDevice::GetFontMetric() const
 
     SAL_INFO("vcl.gdi.fontmetric", "OutputDevice::GetFontMetric:" << aMetric);
 
-    xFontMetric = nullptr;
-
     return aMetric;
 }
 
