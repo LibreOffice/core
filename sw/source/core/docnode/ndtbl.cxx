@@ -4316,7 +4316,7 @@ void SwDoc::ClearBoxNumAttrs( SwNode& rNode )
 
     // Keep TextFormats!
     sal_uInt16 nWhich1 = RES_BOXATR_FORMAT;
-    if( pFormatItem && GetNumberFormatter()->IsTextFormat(
+    if( GetNumberFormatter()->IsTextFormat(
             pFormatItem->GetValue() ))
         nWhich1 = RES_BOXATR_FORMULA;
     else
