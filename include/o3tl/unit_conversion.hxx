@@ -103,6 +103,7 @@ constexpr sal_Int64 MulDivSaturate(I n, sal_Int64 m, sal_Int64 d)
         {
             if (m > d && std::make_unsigned_t<I>(n) > sal_uInt64(SAL_MAX_INT64 / m * d - d_2))
                 return SAL_MAX_INT64; // saturate
+            // coverity[ tainted_data_return : FALSE ] version 2023.12.2
             return saturating_add<sal_uInt64>(n, d_2) / d * m; // divide before multiplication
         }
         else if constexpr (std::is_signed_v<I>) // n < 0; don't compile for unsigned n

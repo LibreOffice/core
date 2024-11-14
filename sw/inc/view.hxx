@@ -294,8 +294,11 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     DECL_DLLPRIVATE_LINK( TimeoutHdl, Timer*, void );
 
-    inline tools::Long                  GetXScroll() const;
-    inline tools::Long                  GetYScroll() const;
+    // coverity[ tainted_data_return : FALSE ] version 2023.12.2
+    tools::Long GetXScroll() const { return (m_aVisArea.GetWidth() * nScrollX) / 100; }
+    // coverity[ tainted_data_return : FALSE ] version 2023.12.2
+    tools::Long GetYScroll() const { return (m_aVisArea.GetHeight() * nScrollY) / 100; }
+
     SAL_DLLPRIVATE Point         AlignToPixel(const Point& rPt) const;
     SAL_DLLPRIVATE void          CalcPt( Point* pPt,const tools::Rectangle& rRect,
                                     sal_uInt16 nRangeX,
@@ -590,9 +593,10 @@ public:
     }
 
     // hand over Shell
-                 SfxShell       *GetCurShell()  { return m_pShell; }
-                 SwDocShell     *GetDocShell();
-    inline const SwDocShell     *GetDocShell() const;
+    SfxShell       *GetCurShell()  { return m_pShell; }
+    SwDocShell     *GetDocShell();
+    const SwDocShell *GetDocShell() const { return const_cast<SwView*>(this)->GetDocShell(); }
+
     virtual       FmFormShell    *GetFormShell()       override { return m_pFormShell; }
     virtual const FmFormShell    *GetFormShell() const override { return m_pFormShell; }
 
@@ -737,21 +741,6 @@ public:
     void BringToAttention(const tools::Rectangle& rRect);
     void BringToAttention(const SwNode* pNode);
 };
-
-inline tools::Long SwView::GetXScroll() const
-{
-    return (m_aVisArea.GetWidth() * nScrollX) / 100;
-}
-
-inline tools::Long SwView::GetYScroll() const
-{
-    return (m_aVisArea.GetHeight() * nScrollY) / 100;
-}
-
-inline const SwDocShell *SwView::GetDocShell() const
-{
-    return const_cast<SwView*>(this)->GetDocShell();
-}
 
 std::unique_ptr<SfxTabPage> CreatePrintOptionsPage(weld::Container* pPage, weld::DialogController* pController,
                                           const SfxItemSet &rOptions,

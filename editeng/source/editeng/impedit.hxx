@@ -228,7 +228,9 @@ public:
 
     tools::Long GetVisDocLeft() const { return maVisDocStartPos.X(); }
     tools::Long GetVisDocTop() const  { return maVisDocStartPos.Y(); }
+    // coverity[ tainted_data_return : FALSE ] version 2023.12.2
     tools::Long GetVisDocRight() const  { return maVisDocStartPos.X() + (!IsVertical() ? maOutArea.GetWidth() : maOutArea.GetHeight()); }
+    // coverity[ tainted_data_return : FALSE ] version 2023.12.2
     tools::Long GetVisDocBottom() const { return maVisDocStartPos.Y() + (!IsVertical() ? maOutArea.GetHeight() : maOutArea.GetWidth()); }
     tools::Rectangle GetVisDocArea() const;
 
@@ -387,14 +389,10 @@ public:
 
     tools::Long GetVisDocLeft() const { return maVisDocStartPos.X(); }
     tools::Long GetVisDocTop() const { return maVisDocStartPos.Y(); }
-    tools::Long GetVisDocRight() const
-    {
-        return maVisDocStartPos.X() + ( !IsVertical() ? maOutputArea.GetWidth() : maOutputArea.GetHeight() );
-    }
-    tools::Long GetVisDocBottom() const
-    {
-        return maVisDocStartPos.Y() + ( !IsVertical() ? maOutputArea.GetHeight() : maOutputArea.GetWidth() );
-    }
+    // coverity[ tainted_data_return : FALSE ] version 2023.12.2
+    tools::Long GetVisDocRight() const  { return maVisDocStartPos.X() + ( !IsVertical() ? maOutputArea.GetWidth() : maOutputArea.GetHeight() ); }
+    // coverity[ tainted_data_return : FALSE ] version 2023.12.2
+    tools::Long GetVisDocBottom() const { return maVisDocStartPos.Y() + ( !IsVertical() ? maOutputArea.GetHeight() : maOutputArea.GetWidth() ); }
     tools::Rectangle       GetVisDocArea() const;
 
     const EditSelection&  GetEditSelection() const { return maEditSelection; }
