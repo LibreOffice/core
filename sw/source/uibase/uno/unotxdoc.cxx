@@ -3461,6 +3461,8 @@ void SwXTextDocument::getPostIts(tools::JsonWriter& rJsonWriter)
 {
     SolarMutexGuard aGuard;
     auto commentsNode = rJsonWriter.startArray("comments");
+    if (!m_pDocShell)
+        return;
     for (auto const& sidebarItem : *m_pDocShell->GetView()->GetPostItMgr())
     {
         sw::annotation::SwAnnotationWin* pWin = sidebarItem->mpPostIt.get();
