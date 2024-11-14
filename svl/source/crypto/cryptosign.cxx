@@ -989,7 +989,7 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
 
     if (!m_rSigningContext.m_xCertificate.is())
     {
-        m_rSigningContext.m_aDigest = aHashResult;
+        m_rSigningContext.m_aDigest = std::move(aHashResult);
         // No certificate is provided: don't actually sign -- just update the context with the
         // parameters for the signing and return.
         return false;
