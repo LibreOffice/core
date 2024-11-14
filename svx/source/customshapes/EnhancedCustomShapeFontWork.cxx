@@ -402,16 +402,16 @@ static void GetTextAreaOutline(
             }
             else
             {
-                KernArray aDXArry;
+                KernArray aDXArray;
                 if ( ( nCharScaleWidth != 100 ) && nCharScaleWidth )
                 {   // applying character spacing
-                    pVirDev->GetTextArray( rText, &aDXArry);
+                    pVirDev->GetTextArray( rText, &aDXArray);
                     FontMetric aFontMetric( pVirDev->GetFontMetric() );
                     aFont.SetAverageFontWidth( static_cast<sal_Int32>( static_cast<double>(aFontMetric.GetAverageFontWidth()) * ( double(100) / static_cast<double>(nCharScaleWidth) ) ) );
                     pVirDev->SetFont( aFont );
                 }
                 FWCharacterData aCharacterData;
-                if ( pVirDev->GetTextOutlines( aCharacterData.vOutlines, rText, 0, 0, -1, nWidth, aDXArry ) )
+                if ( pVirDev->GetTextOutlines( aCharacterData.vOutlines, rText, 0, 0, -1, nWidth, aDXArray ) )
                 {
                     rParagraph.vCharacters.push_back( aCharacterData );
                 }
@@ -421,19 +421,19 @@ static void GetTextAreaOutline(
                     // not implemented. To make FontWork not fail (it is
                     // dependent of graphic content to get a Range) create
                     // a rectangle substitution for now
-                    pVirDev->GetTextArray( rText, &aDXArry);
+                    pVirDev->GetTextArray( rText, &aDXArray);
                     aCharacterData.vOutlines.clear();
 
-                    if(!aDXArry.empty())
+                    if(!aDXArray.empty())
                     {
-                        for(size_t a(0); a < aDXArry.size(); a++)
+                        for(size_t a(0); a < aDXArray.size(); a++)
                         {
                             const basegfx::B2DPolygon aPolygon(
                                 basegfx::utils::createPolygonFromRect(
                                 basegfx::B2DRange(
-                                    0 == a ? 0 : aDXArry[a - 1],
+                                    0 == a ? 0 : aDXArray[a - 1],
                                     0,
-                                    aDXArry[a],
+                                    aDXArray[a],
                                     aFont.GetFontHeight()
                                 )));
                             aCharacterData.vOutlines.emplace_back(tools::Polygon(aPolygon));
