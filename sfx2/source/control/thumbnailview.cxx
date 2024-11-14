@@ -201,7 +201,7 @@ OUString ThumbnailView::RequestHelp(tools::Rectangle& rHelpRect)
         if (!pItem->mbVisible)
             continue;
         const tools::Rectangle& rDrawArea = pItem->getDrawArea();
-        if (pItem->mbVisible && rDrawArea.Contains(aPos))
+        if (rDrawArea.Contains(aPos))
         {
             rHelpRect = rDrawArea;
             return pItem->getHelpText();
