@@ -795,7 +795,7 @@ void ScModule::SetAppOptions( const ScAppOptions& rOpt )
 
 void global_InitAppOptions()
 {
-    SC_MOD()->GetAppOptions();
+    ScModule::get()->GetAppOptions();
 }
 
 const ScAppOptions& ScModule::GetAppOptions()
@@ -2332,21 +2332,22 @@ bool ScModule::HasThesaurusLanguage( LanguageType nLang )
 std::optional<SfxStyleFamilies> ScModule::CreateStyleFamilies()
 {
     SfxStyleFamilies aStyleFamilies;
+    std::locale resLocale = ScModule::get()->GetResLocale();
 
     aStyleFamilies.emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Para,
                                                     ScResId(STR_STYLE_FAMILY_CELL),
                                                     BMP_STYLES_FAMILY_CELL,
-                                                    RID_CELLSTYLEFAMILY, SC_MOD()->GetResLocale()));
+                                                    RID_CELLSTYLEFAMILY, resLocale));
 
     aStyleFamilies.emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Page,
                                                     ScResId(STR_STYLE_FAMILY_PAGE),
                                                     BMP_STYLES_FAMILY_PAGE,
-                                                    RID_PAGESTYLEFAMILY, SC_MOD()->GetResLocale()));
+                                                    RID_PAGESTYLEFAMILY, resLocale));
 
     aStyleFamilies.emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Frame,
                                                     ScResId(STR_STYLE_FAMILY_GRAPHICS),
                                                     BMP_STYLES_FAMILY_GRAPHICS,
-                                                    RID_GRAPHICSTYLEFAMILY, SC_MOD()->GetResLocale()));
+                                                    RID_GRAPHICSTYLEFAMILY, resLocale));
 
     return aStyleFamilies;
 }

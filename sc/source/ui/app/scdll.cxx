@@ -89,12 +89,12 @@
 
 OUString ScResId(TranslateId aId)
 {
-    return Translate::get(aId, SC_MOD()->GetResLocale());
+    return Translate::get(aId, ScModule::get()->GetResLocale());
 }
 
 OUString ScResId(TranslateNId aContextSingularPlural, int nCardinality)
 {
-    return Translate::nget(aContextSingularPlural, nCardinality, SC_MOD()->GetResLocale());
+    return Translate::nget(aContextSingularPlural, nCardinality, ScModule::get()->GetResLocale());
 }
 
 void ScDLL::Init()

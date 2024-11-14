@@ -2218,7 +2218,7 @@ sal_Int32 SAL_CALL ScAccessibleDocument::getBackground(  )
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
-    return sal_Int32(SC_MOD()->GetColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor);
+    return sal_Int32(ScModule::get()->GetColorConfig().GetColorValue(::svtools::DOCCOLOR).nColor);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

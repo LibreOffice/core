@@ -1658,7 +1658,7 @@ void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
 
     Color aGridColor( COL_BLACK );
     if ( bUseStyleColor )
-        aGridColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
+        aGridColor = ScModule::get()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
     aOutputData.SetGridColor( aGridColor );
 
     if ( !pPrinter )
@@ -2011,7 +2011,7 @@ tools::Long ScPrintFunc::PrintNotes( tools::Long nPageNo, tools::Long nNoteStart
 
         Color aBackgroundColor( COL_WHITE );
         if ( bUseStyleColor )
-            aBackgroundColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
+            aBackgroundColor = ScModule::get()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
 
         pDev->SetMapMode(aOffsetMode);
         pDev->SetLineColor();
@@ -2080,7 +2080,7 @@ void ScPrintFunc::PrintPage( tools::Long nPageNo, SCCOL nX1, SCROW nY1, SCCOL nX
 
         Color aBackgroundColor( COL_WHITE );
         if ( bUseStyleColor )
-            aBackgroundColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
+            aBackgroundColor = ScModule::get()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
 
         pDev->SetMapMode(aOffsetMode);
         pDev->SetLineColor();
@@ -2338,7 +2338,7 @@ void ScPrintFunc::PrintPage( tools::Long nPageNo, SCCOL nX1, SCROW nY1, SCCOL nX
 
     Color aGridColor( COL_BLACK );
     if ( bUseStyleColor )
-        aGridColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
+        aGridColor = ScModule::get()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
 
     if (aTableParam.bHeaders)
     {

@@ -192,7 +192,7 @@ void collectUIInformation(std::map<OUString, OUString>&& aParameters, const OUSt
 void ScViewFunc::StartFormatArea()
 {
     //  anything to do?
-    if ( !SC_MOD()->GetInputOptions().GetExtendFormat() )
+    if (!ScModule::get()->GetInputOptions().GetExtendFormat())
         return;
 
     //  start only with single cell (marked or cursor position)
@@ -214,7 +214,7 @@ void ScViewFunc::StartFormatArea()
 bool ScViewFunc::TestFormatArea( SCCOL nCol, SCROW nRow, SCTAB nTab, bool bAttrChanged )
 {
     //  anything to do?
-    if ( !SC_MOD()->GetInputOptions().GetExtendFormat() )
+    if (!ScModule::get()->GetInputOptions().GetExtendFormat())
         return false;
 
     //  Test: treat input with numberformat (bAttrChanged) always as new Attribute
@@ -495,7 +495,7 @@ namespace
             //  update list of recent functions with all functions that
             //  are not within parentheses
 
-            ScModule* pScMod = SC_MOD();
+            ScModule* pScMod = ScModule::get();
             ScAppOptions aAppOpt = pScMod->GetAppOptions();
             bool bOptChanged = false;
 
@@ -1662,7 +1662,7 @@ void ScViewFunc::RemoveStyleSheetInUse( const SfxStyleSheetBase* pStyleSheet )
     pDocSh->PostPaint( 0,0,0, rDoc.MaxCol(), rDoc.MaxRow(), MAXTAB, PaintPartFlags::Grid|PaintPartFlags::Left );
     aModificator.SetDocumentModified();
 
-    ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
+    ScInputHandler* pHdl = ScModule::get()->GetInputHdl();
     if (pHdl)
         pHdl->ForgetLastPattern();
 }
@@ -1688,7 +1688,7 @@ void ScViewFunc::UpdateStyleSheetInUse( const SfxStyleSheetBase* pStyleSheet )
     pDocSh->PostPaint( 0,0,0, rDoc.MaxCol(), rDoc.MaxRow(), MAXTAB, PaintPartFlags::Grid|PaintPartFlags::Left );
     aModificator.SetDocumentModified();
 
-    ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
+    ScInputHandler* pHdl = ScModule::get()->GetInputHdl();
     if (pHdl)
         pHdl->ForgetLastPattern();
 }
@@ -2637,7 +2637,7 @@ void ScViewFunc::SetMarkedWidthOrHeight( bool bWidth, ScSizeMode eMode, sal_uInt
 
 void ScViewFunc::ModifyCellSize( ScDirection eDir, bool bOptimal )
 {
-    ScModule* pScMod = SC_MOD();
+    ScModule* pScMod = ScModule::get();
     bool bAnyEdit = pScMod->IsInputMode();
     SCCOL nCol = GetViewData().GetCurX();
     SCROW nRow = GetViewData().GetCurY();

@@ -32,7 +32,7 @@ weld::Window* ScTabViewShell::GetDialogParent()
 {
     //  if a ref-input dialog is open, use it as parent
     //  (necessary when a slot is executed from the dialog's OK handler)
-    if (nCurRefDlgId && nCurRefDlgId == SC_MOD()->GetCurRefDlgId())
+    if (nCurRefDlgId && nCurRefDlgId == ScModule::get()->GetCurRefDlgId())
     {
         SfxViewFrame& rViewFrm = GetViewFrame();
         if (rViewFrm.HasChildWindow(nCurRefDlgId))

@@ -149,7 +149,7 @@ ScSelectionTransferObj::ScSelectionTransferObj( ScTabView* pSource, ScSelectionT
 
 ScSelectionTransferObj::~ScSelectionTransferObj()
 {
-    ScModule* pScMod = SC_MOD();
+    ScModule* pScMod = ScModule::get();
     if (pScMod && pScMod->GetSelectionTransfer() == this)
     {
         //  this is reached when the object wasn't really copied to the selection
@@ -405,7 +405,7 @@ void ScSelectionTransferObj::ObjectReleased()
 
     ForgetView();
 
-    ScModule* pScMod = SC_MOD();
+    ScModule* pScMod = ScModule::get();
     if ( pScMod->GetSelectionTransfer() == this )
         pScMod->SetSelectionTransfer( nullptr );
 

@@ -35,12 +35,12 @@ ScReplaceWarnBox::ScReplaceWarnBox(weld::Window* pParent)
 short ScReplaceWarnBox::run()
 {
     short nRet = RET_YES;
-    if (SC_MOD()->GetInputOptions().GetReplaceCellsWarn())
+    ScModule* pScMod = ScModule::get();
+    if (pScMod->GetInputOptions().GetReplaceCellsWarn())
     {
         nRet = MessageDialogController::run();
         if (!m_xWarningOnBox->get_active())
         {
-            ScModule* pScMod = SC_MOD();
             ScInputOptions aInputOpt(pScMod->GetInputOptions());
             aInputOpt.SetReplaceCellsWarn(false);
             pScMod->SetInputOptions(aInputOpt);

@@ -215,7 +215,7 @@ ScDrawTransferObj::~ScDrawTransferObj()
 {
     SolarMutexGuard aSolarGuard;
 
-    ScModule* pScMod = SC_MOD();
+    ScModule* pScMod = ScModule::get();
     if (pScMod && pScMod->GetDragData().pDrawTransfer == this)
     {
         OSL_FAIL("ScDrawTransferObj wasn't released");
@@ -568,7 +568,7 @@ void ScDrawTransferObj::DragFinished( sal_Int8 nDropAction )
             m_pDragSourceView->DeleteMarked();
     }
 
-    ScModule* pScMod = SC_MOD();
+    ScModule* pScMod = ScModule::get();
     if ( pScMod->GetDragData().pDrawTransfer == this )
         pScMod->ResetDragObject();
 

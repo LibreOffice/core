@@ -446,7 +446,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testTrackChangesSimpleXLSX)
 
     } aTest;
 
-    SvtUserOptions& rUserOpt = SC_MOD()->GetUserOptions();
+    SvtUserOptions& rUserOpt = ScModule::get()->GetUserOptions();
     rUserOpt.SetToken(UserOptToken::FirstName, u"Export"_ustr);
     rUserOpt.SetToken(UserOptToken::LastName, u"Test"_ustr);
 

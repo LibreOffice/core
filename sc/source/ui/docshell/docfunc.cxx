@@ -1154,7 +1154,7 @@ void ScDocFunc::NotifyInputHandler( const ScAddress& rPos )
     if ( !(pViewSh && pViewSh->GetViewData().GetDocShell() == &rDocShell) )
         return;
 
-    ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl();
+    ScInputHandler* pInputHdl = ScModule::get()->GetInputHdl();
     if ( pInputHdl && pInputHdl->GetCursorPos() == rPos )
     {
         bool bIsEditMode(pInputHdl->IsEditMode());

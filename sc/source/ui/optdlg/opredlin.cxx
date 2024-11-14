@@ -79,7 +79,8 @@ OUString ScRedlineOptionsTabPage::GetAllStrings()
 
 bool ScRedlineOptionsTabPage::FillItemSet( SfxItemSet* /* rSet */ )
 {
-    ScAppOptions aAppOptions=SC_MOD()->GetAppOptions();
+    ScModule* mod = ScModule::get();
+    ScAppOptions aAppOptions = mod->GetAppOptions();
 
     Color nNew = m_xContentColorLB->GetSelectEntryColor();
     aAppOptions.SetTrackContentColor(nNew);
@@ -93,7 +94,7 @@ bool ScRedlineOptionsTabPage::FillItemSet( SfxItemSet* /* rSet */ )
     nNew = m_xRemoveColorLB->GetSelectEntryColor();
     aAppOptions.SetTrackDeleteColor(nNew);
 
-    SC_MOD()->SetAppOptions(aAppOptions);
+    mod->SetAppOptions(aAppOptions);
 
     //  repaint (if everything would be done by Items (how it should be),
     //  this wouldn't be necessary)
@@ -106,7 +107,7 @@ bool ScRedlineOptionsTabPage::FillItemSet( SfxItemSet* /* rSet */ )
 
 void ScRedlineOptionsTabPage::Reset( const SfxItemSet* /* rSet */ )
 {
-    ScAppOptions aAppOptions=SC_MOD()->GetAppOptions();
+    ScAppOptions aAppOptions = ScModule::get()->GetAppOptions();
 
     Color nColor = aAppOptions.GetTrackContentColor();
     m_xContentColorLB->SelectEntry(nColor);

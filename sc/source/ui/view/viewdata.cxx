@@ -1662,6 +1662,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     if (bLOKPrintTwips)
         notifyCellCursorAt(GetViewShell(), nNewX, nNewY, aPTwipsRect);
 
+    ScModule* pScMod = ScModule::get();
     if ( bActive && eWhich == GetActivePart() )
     {
         // keep the part that has the active edit view available after
@@ -1763,7 +1764,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
         Size aPaperSizePTwips(nSizeXPTwips, nSizeYPTwips);
         // In the LOK case the following code can make the cell background and visible area larger
         // than needed which makes selecting the adjacent right cell impossible in some cases.
-        if ( bBreak && !bAsianVertical && SC_MOD()->GetInputOptions().GetTextWysiwyg() && !bLOKActive )
+        if (bBreak && !bAsianVertical && pScMod->GetInputOptions().GetTextWysiwyg() && !bLOKActive)
         {
             //  if text is formatted for printer, use the exact same paper width
             //  (and same line breaks) as for output.
@@ -1847,7 +1848,6 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     //      background color of the cell
     Color aBackCol = pPattern->GetItem(ATTR_BACKGROUND).GetColor();
 
-    ScModule* pScMod = SC_MOD();
     if ( aBackCol.IsTransparent() )
     {
         aBackCol = pScMod->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
@@ -3650,7 +3650,7 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rDocOpt )
                                 rTabSett.maSplitPos, MapMode( MapUnit::MapTwip ) );  //! Zoom?
                 // the test for use of printer metrics for text formatting here
                 // effectively results in the nFactor = 1.0 regardless of the Option setting.
-                if( pDocShell && SC_MOD()->GetInputOptions().GetTextWysiwyg())
+                if (pDocShell && ScModule::get()->GetInputOptions().GetTextWysiwyg())
                 {
                     double nFactor = pDocShell->GetOutputFactor();
                     aPixel.setX( static_cast<tools::Long>( aPixel.X() * nFactor + 0.5 ) );
@@ -3926,7 +3926,7 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
             {
                 SetFormulaBarLines(nFormulaBarLineCount);
                 // Notify formula bar about changed lines
-                ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl();
+                ScInputHandler* pInputHdl = ScModule::get()->GetInputHdl();
                 if (pInputHdl)
                 {
                     ScInputWindow* pInputWin = pInputHdl->GetInputWindow();
@@ -4148,7 +4148,7 @@ void ScViewData::UpdateOutlinerFlags( Outliner& rOutl ) const
         nCntrl &= ~EEControlBits::ONLINESPELLING;
     rOutl.SetControlWord(nCntrl);
 
-    rOutl.SetCalcFieldValueHdl( LINK( SC_MOD(), ScModule, CalcFieldValueHdl ) );
+    rOutl.SetCalcFieldValueHdl(LINK(ScModule::get(), ScModule, CalcFieldValueHdl));
 
     //  don't call GetSpellChecker if online spelling isn't enabled.
     //  The language for AutoCorrect etc. is taken from the pool defaults

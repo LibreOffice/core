@@ -157,7 +157,7 @@ ScSimpleRefDlgWrapper::ScSimpleRefDlgWrapper( vcl::Window* pParentP,
 
     if (!GetController())
     {
-        SC_MOD()->SetRefDialog( nId, false );
+        ScModule::get()->SetRefDialog(nId, false);
     }
 }
 

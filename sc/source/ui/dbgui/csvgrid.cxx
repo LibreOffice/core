@@ -134,7 +134,7 @@ void
 ScCsvGrid::Init()
 {
     OSL_PRECOND(!mpColorConfig, "the object has already been initialized");
-    mpColorConfig = &SC_MOD()->GetColorConfig();
+    mpColorConfig = &ScModule::get()->GetColorConfig();
     InitColors();
     mpColorConfig->AddListener(this);
 }

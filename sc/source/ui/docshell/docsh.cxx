@@ -250,7 +250,7 @@ void ScDocShell::DoEnterHandler()
 {
     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
     if (pViewSh && pViewSh->GetViewData().GetDocShell() == this)
-        SC_MOD()->InputEnterHandler();
+        ScModule::get()->InputEnterHandler();
 }
 
 SCTAB ScDocShell::GetSaveTab()
@@ -540,9 +540,10 @@ bool ScDocShell::GetRecalcRowHeightsMode()
                                     : static_cast<sal_Int32>(RECALC_NEVER),
                         batch);
 
-                    ScFormulaOptions aOpt = SC_MOD()->GetFormulaOptions();
+                    ScModule* mod = ScModule::get();
+                    ScFormulaOptions aOpt = mod->GetFormulaOptions();
                     aOpt.SetReCalcOptiRowHeights(bHardRecalc ? RECALC_ALWAYS : RECALC_NEVER);
-                    SC_MOD()->SetFormulaOptions(aOpt);
+                    mod->SetFormulaOptions(aOpt);
 
                     batch->commit();
                 }
@@ -618,11 +619,12 @@ bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const css::uno::Reference< css
                 // Always perform selected action in the future.
                 std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
                 officecfg::Office::Calc::Formula::Load::ODFRecalcMode::set(sal_Int32(0), batch);
-                ScFormulaOptions aOpt = SC_MOD()->GetFormulaOptions();
+                ScModule* mod = ScModule::get();
+                ScFormulaOptions aOpt = mod->GetFormulaOptions();
                 aOpt.SetODFRecalcOptions(bHardRecalc ? RECALC_ALWAYS : RECALC_NEVER);
                 /* XXX  is this really supposed to set the ScModule options?
                  *      Not the ScDocShell options? */
-                SC_MOD()->SetFormulaOptions(aOpt);
+                mod->SetFormulaOptions(aOpt);
 
                 batch->commit();
             }
@@ -782,7 +784,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 {
 #if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
                     // the readonly documents should not be opened in shared mode
-                    if ( HasSharedXMLFlagSet() && !SC_MOD()->IsInSharedDocLoading() && !IsReadOnly() )
+                    if ( HasSharedXMLFlagSet() && !ScModule::get()->IsInSharedDocLoading() && !IsReadOnly() )
                     {
                         if ( SwitchToShared( true, false ) )
                         {
@@ -815,10 +817,10 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 #endif
 
 #if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
-                    if ( IsDocShared() && !SC_MOD()->IsInSharedDocLoading()
+                    if (ScModule* mod = ScModule::get(); IsDocShared() && !mod->IsInSharedDocLoading()
                          && !comphelper::LibreOfficeKit::isActive() )
                     {
-                        ScAppOptions aAppOptions = SC_MOD()->GetAppOptions();
+                        ScAppOptions aAppOptions = mod->GetAppOptions();
                         if ( aAppOptions.GetShowSharedDocumentWarning() )
                         {
                             MessageWithCheck aWarningBox(ScDocShell::GetActiveDialogParent(),
@@ -829,7 +831,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                             if (bChecked)
                             {
                                 aAppOptions.SetShowSharedDocumentWarning(false);
-                                SC_MOD()->SetAppOptions( aAppOptions );
+                                mod->SetAppOptions(aAppOptions);
                             }
                         }
                     }
@@ -886,7 +888,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
             case SfxEventHintId::SaveDoc:
                 {
 #if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
-                    if ( IsDocShared() && !SC_MOD()->IsInSharedDocSaving() )
+                    if (ScModule* mod = ScModule::get(); IsDocShared() && !mod->IsInSharedDocSaving())
                     {
                         bool bSuccess = false;
                         bool bRetry = true;
@@ -1023,9 +1025,9 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                                 pValues[aValues.getLength() - 1].Value = pEncryptionItem->GetValue();
                                             }
 
-                                            SC_MOD()->SetInSharedDocSaving( true );
+                                            mod->SetInSharedDocSaving(true);
                                             GetModel()->storeToURL( GetSharedFileURL(), aValues );
-                                            SC_MOD()->SetInSharedDocSaving( false );
+                                            mod->SetInSharedDocSaving(false);
 
                                             if ( bChangedViewSettings )
                                             {
@@ -1066,7 +1068,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                             catch ( uno::Exception& )
                             {
                                 TOOLS_WARN_EXCEPTION( "sc", "SfxEventHintId::SaveDoc" );
-                                SC_MOD()->SetInSharedDocSaving( false );
+                                mod->SetInSharedDocSaving(false);
 
                                 try
                                 {
@@ -1167,7 +1169,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 uno::Any aWorkbook;
                 aWorkbook <<= mxAutomationWorkbookObject;
                 uno::Sequence< uno::Any > aArgs{ aWorkbook };
-                SC_MOD()->CallAutomationApplicationEventSinks( u"NewWorkbook"_ustr, aArgs );
+                ScModule::get()->CallAutomationApplicationEventSinks(u"NewWorkbook"_ustr, aArgs);
             }
             break;
         case SfxEventHintId::OpenDoc:
@@ -1175,7 +1177,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 uno::Any aWorkbook;
                 aWorkbook <<= mxAutomationWorkbookObject;
                 uno::Sequence< uno::Any > aArgs{ aWorkbook };
-                SC_MOD()->CallAutomationApplicationEventSinks( u"WorkbookOpen"_ustr, aArgs );
+                ScModule::get()->CallAutomationApplicationEventSinks(u"WorkbookOpen"_ustr, aArgs);
             }
             break;
         default:
@@ -1870,7 +1872,7 @@ void popFileName(OUString& rPath)
 void ScDocShell::TerminateEditing()
 {
     // Commit any cell changes before saving.
-    SC_MOD()->InputEnterHandler();
+    ScModule::get()->InputEnterHandler();
 }
 
 bool ScDocShell::SaveAs( SfxMedium& rMedium )
@@ -2638,7 +2640,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
 
                 if (m_pDocument->GetTableCount() > 1)
                 {
-                    if (!rMed.GetErrorIgnoreWarning() && SC_MOD()->GetInputOptions().GetWarnActiveSheet())
+                    if (!rMed.GetErrorIgnoreWarning() && ScModule::get()->GetInputOptions().GetWarnActiveSheet())
                     {
                         if (ScTabViewShell* pViewShell = GetBestViewShell())
                             pViewShell->ExecuteOnlyActiveSheetSavedDlg();
@@ -2741,7 +2743,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
             bRet = true;
 
             if (m_pDocument->GetTableCount() > 1)
-                if (!rMed.GetErrorIgnoreWarning() && SC_MOD()->GetInputOptions().GetWarnActiveSheet())
+                if (!rMed.GetErrorIgnoreWarning() && ScModule::get()->GetInputOptions().GetWarnActiveSheet())
                     rMed.SetError(SCWARN_EXPORT_ASCII);
         }
     }
@@ -2843,7 +2845,7 @@ bool ScDocShell::QuerySlotExecutable( sal_uInt16 nSlotId )
 
 bool ScDocShell::PrepareClose( bool bUI )
 {
-    if(SC_MOD()->GetCurRefDlgId()>0)
+    if (ScModule::get()->GetCurRefDlgId() > 0)
     {
         SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this );
         if( pFrame )
@@ -2966,7 +2968,7 @@ ScDocShell::ScDocShell( const SfxModelFlags i_nSfxCreationFlags, const std::shar
     m_nDocumentLock   ( 0 ),
     m_nCanUpdate (css::document::UpdateDocMode::ACCORDING_TO_CONFIG)
 {
-    SetPool( &SC_MOD()->GetPool() );
+    SetPool(&ScModule::get()->GetPool());
 
     m_bIsInplace = (GetCreateMode() == SfxObjectCreateMode::EMBEDDED);
     //  Will be reset if not in place
@@ -3075,7 +3077,7 @@ void ScDocShell::SetDocumentModified()
 
         ScDetOpList* pList = m_pDocument->GetDetOpList();
         if ( pList && ( m_pDocument->IsDetectiveDirty() || pList->HasAddError() ) &&
-             pList->Count() && !IsInUndo() && SC_MOD()->GetAppOptions().GetDetectiveAuto() )
+             pList->Count() && !IsInUndo() && ScModule::get()->GetAppOptions().GetDetectiveAuto() )
         {
             GetDocFunc().DetectiveRefresh(true);    // sal_True = caused by automatic update
         }
@@ -3126,7 +3128,7 @@ void ScDocShell::SetDrawModified()
         m_pDocument->UpdateChartListenerCollection();
         SfxGetpApp()->Broadcast(SfxHint( SfxHintId::ScDrawChanged ));    // Navigator
     }
-    SC_MOD()->AnythingChanged();
+    ScModule::get()->AnythingChanged();
 }
 
 void ScDocShell::SetInUndo(bool bSet)

@@ -146,7 +146,7 @@ void ScHeaderControl::DoPaint( SCCOLROW nStart, SCCOLROW nEnd )
 
 void ScHeaderControl::SetMark( bool bNewSet, SCCOLROW nNewStart, SCCOLROW nNewEnd )
 {
-    bool bEnabled = SC_MOD()->GetInputOptions().GetMarkHeader();    //! cache?
+    bool bEnabled = ScModule::get()->GetInputOptions().GetMarkHeader(); //! cache?
     if (!bEnabled)
         bNewSet = false;
 
@@ -243,7 +243,8 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
     else
         SetTextColor((bBoldSet && !bHighContrast) ? aSelTextColor : aTextColor);
 
-    Color aSelLineColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::CALCCELLFOCUS).nColor;
+    ScModule* mod = ScModule::get();
+    Color aSelLineColor = mod->GetColorConfig().GetColorValue(svtools::CALCCELLFOCUS).nColor;
     aSelLineColor.Merge( COL_BLACK, 0xe0 );        // darken just a little bit
 
     bool bLayoutRTL = IsLayoutRTL();
@@ -336,7 +337,7 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
 
     if ( nLineEnd * nLayoutSign < nPEnd * nLayoutSign )
     {
-        GetOutDev()->SetFillColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::APPBACKGROUND).nColor );
+        GetOutDev()->SetFillColor( mod->GetColorConfig().GetColorValue(svtools::APPBACKGROUND).nColor );
         if ( bVertical )
             aFillRect = tools::Rectangle( 0, nLineEnd+nLayoutSign, nBarSize-1, nPEnd );
         else
@@ -367,7 +368,7 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
             {
                 // background for selection
                 GetOutDev()->SetLineColor();
-                Color aColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::CALCCELLFOCUS).nColor;
+                Color aColor = mod->GetColorConfig().GetColorValue(svtools::CALCCELLFOCUS).nColor;
 // merging the highlightcolor (which is used if accent does not exist) with the background
 // fails in many cases such as Breeze Dark (highlight is too close to background) and
 // Breeze Light (font color is white and not readable anymore)
@@ -714,7 +715,7 @@ void ScHeaderControl::MouseButtonDown( const MouseEvent& rMEvt )
         return;
     if ( ! rMEvt.IsLeft() )
         return;
-    if ( SC_MOD()->IsFormulaMode() )
+    if (ScModule::get()->IsFormulaMode())
     {
         if( !pTabView )
             return;
@@ -802,9 +803,9 @@ void ScHeaderControl::MouseButtonUp( const MouseEvent& rMEvt )
     if ( IsDisabled() )
         return;
 
-    if ( SC_MOD()->IsFormulaMode() )
+    if (ScModule* mod = ScModule::get(); mod->IsFormulaMode())
     {
-        SC_MOD()->EndReference();
+        mod->EndReference();
         bInRefMode = false;
         return;
     }
@@ -863,7 +864,7 @@ void ScHeaderControl::MouseMove( const MouseEvent& rMEvt )
         return;
     }
 
-    if ( bInRefMode && rMEvt.IsLeft() && SC_MOD()->IsFormulaMode() )
+    if (bInRefMode && rMEvt.IsLeft() && ScModule::get()->IsFormulaMode())
     {
         if( !pTabView )
             return;
@@ -940,7 +941,7 @@ void ScHeaderControl::Command( const CommandEvent& rCEvt )
 
                 SelectWindow();     // also deselects drawing objects, stops draw text edit
                 if ( rViewData.HasEditView( rViewData.GetActivePart() ) )
-                    SC_MOD()->InputEnterHandler();  // always end edit mode
+                    ScModule::get()->InputEnterHandler(); // always end edit mode
 
                 bool bBorder;
                 SCCOLROW nPos = GetMousePos(rCEvt.GetMousePosPixel(), bBorder );

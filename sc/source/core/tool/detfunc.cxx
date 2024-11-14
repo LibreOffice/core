@@ -1635,7 +1635,7 @@ void ScDetectiveFunc::InitializeColors()
 {
     // may be called several times to update colors from configuration
 
-    const svtools::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
+    const svtools::ColorConfig& rColorCfg = ScModule::get()->GetColorConfig();
     nArrowColor   = rColorCfg.GetColorValue(svtools::CALCDETECTIVE).nColor;
     nErrorColor   = rColorCfg.GetColorValue(svtools::CALCDETECTIVEERROR).nColor;
     nCommentColor = rColorCfg.GetColorValue(svtools::CALCNOTESBACKGROUND).nColor;

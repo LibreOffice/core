@@ -146,7 +146,7 @@ ScLkUpdMode ScDocShell::GetLinkUpdateModeState() const
         nSet = GetDocument().GetLinkMode();
         if (nSet == LM_UNKNOWN)
         {
-            ScAppOptions aAppOptions = SC_MOD()->GetAppOptions();
+            ScAppOptions aAppOptions = ScModule::get()->GetAppOptions();
             nSet = aAppOptions.GetLinkMode();
         }
     }
@@ -417,7 +417,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     break;
                 }
 
-                if (SC_MOD()->IsEditMode())
+                if (ScModule::get()->IsEditMode())
                 {
                     if (EditView* pEditView = pViewData->GetEditView(pViewData->GetActivePart()))
                     {
@@ -979,14 +979,15 @@ void ScDocShell::Execute( SfxRequest& rReq )
                             {
                                 EnableSharedSettings( true );
 
-                                SC_MOD()->SetInSharedDocSaving( true );
+                                ScModule* mod = ScModule::get();
+                                mod->SetInSharedDocSaving(true);
                                 if ( !SwitchToShared( true, true ) )
                                 {
                                     // TODO/LATER: what should be done in case the switch has failed?
                                     // for example in case the user has cancelled the saveAs operation
                                 }
 
-                                SC_MOD()->SetInSharedDocSaving( false );
+                                mod->SetInSharedDocSaving(false);
 
                                 InvalidateName();
                                 GetUndoManager()->Clear();
@@ -1108,7 +1109,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                             catch ( uno::Exception& )
                             {
                                 TOOLS_WARN_EXCEPTION( "sc", "SID_SHARE_DOC" );
-                                SC_MOD()->SetInSharedDocSaving( false );
+                                ScModule::get()->SetInSharedDocSaving(false);
 
                                 try
                                 {
@@ -1295,7 +1296,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 {
                     if ( ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell() )
                     {
-                        ScInputHandler* pInputHandler = SC_MOD()->GetInputHdl(pViewSh);
+                        ScInputHandler* pInputHandler = ScModule::get()->GetInputHdl(pViewSh);
                         if ( pInputHandler )
                             pInputHandler->UpdateSpellSettings();
 
@@ -1611,7 +1612,7 @@ void ScDocShell::DoRecalc( bool bApi )
     ScDocShellRecalcGuard aGuard(*m_pDocument);
     bool bDone = false;
     ScTabViewShell* pSh = GetBestViewShell();
-    ScInputHandler* pHdl = ( pSh ? SC_MOD()->GetInputHdl( pSh ) : nullptr );
+    ScInputHandler* pHdl = (pSh ? ScModule::get()->GetInputHdl(pSh) : nullptr);
     if ( pSh )
     {
         if ( pHdl && pHdl->IsInputMode() && pHdl->IsFormulaMode() && !bApi )
@@ -2896,9 +2897,10 @@ void ScDocShell::EnableSharedSettings( bool bEnable )
 uno::Reference< frame::XModel > ScDocShell::LoadSharedDocument()
 {
     uno::Reference< frame::XModel > xModel;
+    ScModule* mod = ScModule::get();
     try
     {
-        SC_MOD()->SetInSharedDocLoading( true );
+        mod->SetInSharedDocLoading(true);
         uno::Reference< frame::XDesktop2 > xLoader = frame::Desktop::create( ::comphelper::getProcessComponentContext() );
         uno::Sequence aArgs{ comphelper::makePropertyValue(u"Hidden"_ustr, true) };
 
@@ -2925,12 +2927,12 @@ uno::Reference< frame::XModel > ScDocShell::LoadSharedDocument()
         xModel.set(
             xLoader->loadComponentFromURL( GetSharedFileURL(), u"_blank"_ustr, 0, aArgs ),
             uno::UNO_QUERY_THROW );
-        SC_MOD()->SetInSharedDocLoading( false );
+        mod->SetInSharedDocLoading(false);
     }
     catch ( uno::Exception& )
     {
         OSL_FAIL( "ScDocShell::LoadSharedDocument(): caught exception" );
-        SC_MOD()->SetInSharedDocLoading( false );
+        mod->SetInSharedDocLoading(false);
         try
         {
             uno::Reference< util::XCloseable > xClose( xModel, uno::UNO_QUERY_THROW );

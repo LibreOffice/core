@@ -173,7 +173,7 @@ void ScSpellDialogChildWindow::Init()
 
     // exit edit mode - TODO support spelling in edit mode
     if( mpViewData->HasEditView( mpViewData->GetActivePart() ) )
-        SC_MOD()->InputEnterHandler();
+        ScModule::get()->InputEnterHandler();
 
     mxOldSel.reset( new ScSelectionState( *mpViewData ) );
 

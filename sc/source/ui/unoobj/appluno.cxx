@@ -137,7 +137,7 @@ void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
 {
     SolarMutexGuard aGuard;
 
-    ScModule* pScMod = SC_MOD();
+    ScModule* pScMod = ScModule::get();
     ScAppOptions   aAppOpt(pScMod->GetAppOptions());
     ScInputOptions aInpOpt(pScMod->GetInputOptions());
     bool bSaveApp = false;
@@ -288,7 +288,7 @@ uno::Any SAL_CALL ScSpreadsheetSettings::getPropertyValue( const OUString& aProp
     SolarMutexGuard aGuard;
     uno::Any aRet;
 
-    ScModule* pScMod = SC_MOD();
+    ScModule* pScMod = ScModule::get();
     ScAppOptions   aAppOpt = pScMod->GetAppOptions();
     const ScInputOptions& aInpOpt = pScMod->GetInputOptions();
     // print options aren't loaded until needed
@@ -364,7 +364,7 @@ ScRecentFunctionsObj_get_implementation(css::uno::XComponentContext*, css::uno::
 uno::Sequence<sal_Int32> SAL_CALL ScRecentFunctionsObj::getRecentFunctionIds()
 {
     SolarMutexGuard aGuard;
-    const ScAppOptions& rOpt = SC_MOD()->GetAppOptions();
+    const ScAppOptions& rOpt = ScModule::get()->GetAppOptions();
     sal_uInt16 nCount = rOpt.GetLRUFuncListCount();
     const sal_uInt16* pFuncs = rOpt.GetLRUFuncList();
     if (pFuncs)
@@ -389,7 +389,7 @@ void SAL_CALL ScRecentFunctionsObj::setRecentFunctionIds(
     for (sal_uInt16 i=0; i<nCount; i++)
         pFuncs[i] = static_cast<sal_uInt16>(pAry[i]);        //! check for valid values?
 
-    ScModule* pScMod = SC_MOD();
+    ScModule* pScMod = ScModule::get();
     ScAppOptions aNewOpts(pScMod->GetAppOptions());
     aNewOpts.SetLRUFuncList(pFuncs.get(), nCount);
     pScMod->SetAppOptions(aNewOpts);

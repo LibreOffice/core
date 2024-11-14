@@ -438,7 +438,7 @@ void ScDocShell::SetFormulaOptions( const ScFormulaOptions& rOpt, bool bForLoadi
     {
         bool bForceInit = bInitOnce;
         bInitOnce = false;
-        if (bForceInit || rOpt.GetUseEnglishFuncName() != SC_MOD()->GetFormulaOptions().GetUseEnglishFuncName())
+        if (bForceInit || rOpt.GetUseEnglishFuncName() != ScModule::get()->GetFormulaOptions().GetUseEnglishFuncName())
         {
             // This needs to be called first since it may re-initialize the entire
             // opcode map.
@@ -479,7 +479,7 @@ void ScDocShell::CheckConfigOptions()
     OUString aDecSep = ScGlobal::getLocaleData().getNumDecimalSep();
     OUString aDecSepAlt = ScGlobal::getLocaleData().getNumDecimalSepAlt();
 
-    ScModule* pScMod = SC_MOD();
+    ScModule* pScMod = ScModule::get();
     const ScFormulaOptions& rOpt=pScMod->GetFormulaOptions();
     const OUString& aSepArg = rOpt.GetFormulaSepArg();
     const OUString& aSepArrRow = rOpt.GetFormulaSepArrayRow();

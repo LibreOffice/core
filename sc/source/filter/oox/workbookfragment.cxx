@@ -598,11 +598,12 @@ void WorkbookFragment::recalcFormulaCells()
                 // Always perform selected action in the future.
                 std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
                 officecfg::Office::Calc::Formula::Load::OOXMLRecalcMode::set(sal_Int32(0), batch);
-                ScFormulaOptions aOpt = SC_MOD()->GetFormulaOptions();
+                ScModule* mod = ScModule::get();
+                ScFormulaOptions aOpt = mod->GetFormulaOptions();
                 aOpt.SetOOXMLRecalcOptions(bHardRecalc ? RECALC_ALWAYS : RECALC_NEVER);
                 /* XXX  is this really supposed to set the ScModule options?
                  *      Not the ScDocShell options? */
-                SC_MOD()->SetFormulaOptions(aOpt);
+                mod->SetFormulaOptions(aOpt);
 
                 batch->commit();
             }

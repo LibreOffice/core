@@ -625,7 +625,7 @@ OUString ScGlobal::GetCharsetString( rtl_TextEncoding eVal )
 
 bool ScGlobal::HasStarCalcFunctionList()
 {
-    OUString lang = Translate::getLanguage(SC_MOD()->GetResLocale());
+    OUString lang = Translate::getLanguage(ScModule::get()->GetResLocale());
     auto list = xStarCalcFunctionList.find(lang);
     return list != xStarCalcFunctionList.end();
 }
@@ -633,20 +633,21 @@ bool ScGlobal::HasStarCalcFunctionList()
 ScFunctionList* ScGlobal::GetStarCalcFunctionList()
 {
     assert(!bThreadedGroupCalcInProgress);
-    OUString lang = Translate::getLanguage(SC_MOD()->GetResLocale());
+    ScModule* mod = ScModule::get();
+    OUString lang = Translate::getLanguage(mod->GetResLocale());
     if (auto list = xStarCalcFunctionList.find(lang); list != xStarCalcFunctionList.end())
     {
         return xStarCalcFunctionList[lang].get();
     }
     xStarCalcFunctionList.emplace(
-        lang, new ScFunctionList(SC_MOD()->GetFormulaOptions().GetUseEnglishFuncName()));
+        lang, new ScFunctionList(mod->GetFormulaOptions().GetUseEnglishFuncName()));
     return xStarCalcFunctionList[lang].get();
 }
 
 ScFunctionMgr* ScGlobal::GetStarCalcFunctionMgr()
 {
     assert(!bThreadedGroupCalcInProgress);
-    OUString lang = Translate::getLanguage(SC_MOD()->GetResLocale());
+    OUString lang = Translate::getLanguage(ScModule::get()->GetResLocale());
     if (auto list = xStarCalcFunctionMgr.find(lang); list != xStarCalcFunctionMgr.end())
     {
         return xStarCalcFunctionMgr[lang].get();
@@ -663,13 +664,13 @@ void ScGlobal::ResetFunctionList()
     xStarCalcFunctionList.clear();
     // Building new names also needs InputHandler data to be refreshed.
     maInputHandlerFunctionNames.clear();
-    maInputHandlerFunctionNames.emplace(Translate::getLanguage(SC_MOD()->GetResLocale()),
+    maInputHandlerFunctionNames.emplace(Translate::getLanguage(ScModule::get()->GetResLocale()),
                                         InputHandlerFunctionNames());
 }
 
 const InputHandlerFunctionNames& ScGlobal::GetInputHandlerFunctionNames()
 {
-    OUString lang = Translate::getLanguage(SC_MOD()->GetResLocale());
+    OUString lang = Translate::getLanguage(ScModule::get()->GetResLocale());
     if (maInputHandlerFunctionNames.find(lang) == maInputHandlerFunctionNames.end())
     {
         maInputHandlerFunctionNames.emplace(lang, InputHandlerFunctionNames());

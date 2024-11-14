@@ -156,7 +156,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
 {
     ScTabViewShell* pTabViewShell   = GetViewData().GetViewShell();
     SfxBindings&        rBindings   = pTabViewShell->GetViewFrame().GetBindings();
-    ScModule*           pScMod      = SC_MOD();
+    ScModule* pScMod = ScModule::get();
     const SfxItemSet*   pReqArgs    = rReq.GetArgs();
     sal_uInt16              nSlot       = rReq.GetSlot();
 
@@ -284,7 +284,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     if (pReqArgs->HasItem(FN_PARAM_1, &pDontCommitItem))
                         bCommit = !(static_cast<const SfxBoolItem*>(pDontCommitItem)->GetValue());
 
-                    ScInputHandler* pHdl = SC_MOD()->GetInputHdl( pTabViewShell );
+                    ScInputHandler* pHdl = pScMod->GetInputHdl(pTabViewShell);
                     if (bCommit)
                     {
                         pTabViewShell->EnterData( GetViewData().GetCurX(),
@@ -295,7 +295,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     }
                     else if (pHdl)
                     {
-                        SC_MOD()->SetInputMode(SC_INPUT_TABLE);
+                        pScMod->SetInputMode(SC_INPUT_TABLE);
 
                         EditView* pTableView = pHdl->GetActiveView();
                         pHdl->DataChanging();
@@ -303,7 +303,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                             pTableView->getEditEngine().SetText(aStr);
                         pHdl->DataChanged();
 
-                        SC_MOD()->SetInputMode(SC_INPUT_NONE);
+                        pScMod->SetInputMode(SC_INPUT_NONE);
                     }
 
                     if ( !pHdl || !pHdl->IsInEnterHandler() )
@@ -750,7 +750,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 else
                 {
                     ScViewData& rData      = GetViewData();
-                    FieldUnit   eMetric    = SC_MOD()->GetAppOptions().GetAppMetric();
+                    FieldUnit eMetric = pScMod->GetAppOptions().GetAppMetric();
                     sal_uInt16      nCurHeight = rData.GetDocument().
                                                 GetRowHeight( rData.GetCurY(),
                                                               rData.GetTabNo() );
@@ -793,7 +793,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 }
                 else
                 {
-                    FieldUnit eMetric = SC_MOD()->GetAppOptions().GetAppMetric();
+                    FieldUnit eMetric = pScMod->GetAppOptions().GetAppMetric();
 
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     VclPtr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(
@@ -855,7 +855,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 }
                 else
                 {
-                    FieldUnit   eMetric    = SC_MOD()->GetAppOptions().GetAppMetric();
+                    FieldUnit eMetric = pScMod->GetAppOptions().GetAppMetric();
                     ScViewData& rData      = GetViewData();
                     sal_uInt16      nCurHeight = rData.GetDocument().
                                                 GetColWidth( rData.GetCurX(),
@@ -898,7 +898,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 }
                 else
                 {
-                    FieldUnit eMetric = SC_MOD()->GetAppOptions().GetAppMetric();
+                    FieldUnit eMetric = pScMod->GetAppOptions().GetAppMetric();
 
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     VclPtr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(

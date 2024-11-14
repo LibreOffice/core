@@ -369,7 +369,7 @@ void ScUnoAddInCollection::ReadConfiguration()
 {
     // called only from Initialize
 
-    ScAddInCfg& rAddInConfig = SC_MOD()->GetAddInCfg();
+    ScAddInCfg& rAddInConfig = ScModule::get()->GetAddInCfg();
 
     // Additional, temporary config item for the display names and
     // compatibility names.
@@ -1073,7 +1073,7 @@ static const ScAddInArgDesc* lcl_FindArgDesc( const ScUnoAddInFuncData& rFuncDat
 void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface>& xInterface,
                                             std::u16string_view rServiceName )
 {
-    const bool bEnglishFunctionNames = SC_MOD()->GetFormulaOptions().GetUseEnglishFuncName();
+    const bool bEnglishFunctionNames = ScModule::get()->GetFormulaOptions().GetUseEnglishFuncName();
     uno::Reference<lang::XLocalizable> xLoc( xInterface, uno::UNO_QUERY );
     if ( xLoc.is() )        // optional in new add-ins
         xLoc->setLocale( Application::GetSettings().GetUILanguageTag().getLocale());

@@ -70,7 +70,7 @@ bool ScGridOptions::operator==( const ScGridOptions& rCpy ) const
 
 ScViewRenderingOptions::ScViewRenderingOptions()
     : sColorSchemeName(u"Default"_ustr)
-    , aDocCol(SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor)
+    , aDocCol(ScModule::get()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor)
 {
 }
 

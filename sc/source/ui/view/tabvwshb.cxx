@@ -310,7 +310,7 @@ void ScTabViewShell::DeactivateOle()
 {
     // deactivate inplace editing if currently active
 
-    ScModule* pScMod = SC_MOD();
+    ScModule* pScMod = ScModule::get();
     bool bUnoRefDialog = pScMod->IsRefDialogOpen() && pScMod->GetCurRefDlgId() == WID_SIMPLE_REF;
 
     ScClient* pClient = static_cast<ScClient*>(GetIPClient());
@@ -371,7 +371,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
     sal_uInt16 nSlot = rReq.GetSlot();
     if (nSlot != SID_OBJECTRESIZE )
     {
-        SC_MOD()->InputEnterHandler();
+        ScModule::get()->InputEnterHandler();
         UpdateInputHandler();
     }
 

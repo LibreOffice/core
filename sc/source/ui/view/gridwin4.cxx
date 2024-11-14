@@ -456,8 +456,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     if (comphelper::LibreOfficeKit::isActive())
         return;
 
-    ScModule* pScMod = SC_MOD();
-    bool bTextWysiwyg = pScMod->GetInputOptions().GetTextWysiwyg();
+    bool bTextWysiwyg = ScModule::get()->GetInputOptions().GetTextWysiwyg();
 
     if (mrViewData.IsMinimized())
         return;
@@ -706,7 +705,7 @@ void ScGridWindow::DrawEditView(OutputDevice &rDevice, EditView *pEditView)
 void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableInfo, ScOutputData& aOutputData,
         bool bLogicText)
 {
-    ScModule* pScMod = SC_MOD();
+    ScModule* pScMod = ScModule::get();
     ScDocument& rDoc = mrViewData.GetDocument();
     const ScViewOptions& rOpts = mrViewData.GetOptions();
     bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
@@ -737,7 +736,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     aOutputData.SetShowNullValues   ( rOpts.GetOption( VOPT_NULLVALS ) );
     aOutputData.SetShowFormulas     ( rOpts.GetOption( VOPT_FORMULAS ) );
     aOutputData.SetShowSpellErrors  ( pCurTabViewShell && pCurTabViewShell->IsAutoSpell() );
-    aOutputData.SetMarkClipped      ( SC_MOD()->GetColorConfig().GetColorValue(svtools::CALCTEXTOVERFLOW).bIsVisible );
+    aOutputData.SetMarkClipped      ( pScMod->GetColorConfig().GetColorValue(svtools::CALCTEXTOVERFLOW).bIsVisible );
 
     aOutputData.SetUseStyleColor( true );       // always set in table view
 
@@ -768,10 +767,10 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
         if (officecfg::Office::Calc::Content::Display::EditCellBackgroundHighlighting::get())
         {
-            Color aDocColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
+            Color aDocColor = pScMod->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
             if (!getViewData().GetMarkData().IsMarked() && mrViewData.GetEditHighlight())
             {
-                Color aHighlightColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::CALCCELLFOCUS).nColor;
+                Color aHighlightColor = pScMod->GetColorConfig().GetColorValue(svtools::CALCCELLFOCUS).nColor;
                 aHighlightColor.Merge(aDocColor, 100);
                 aDocColor = aHighlightColor;
             }
@@ -1754,7 +1753,7 @@ void ScGridWindow::SetCellSelectionPixel(int nType, int nPixelX, int nPixelY)
 {
     ScTabView* pTabView = mrViewData.GetView();
     ScTabViewShell* pViewShell = mrViewData.GetViewShell();
-    ScInputHandler* pInputHandler = SC_MOD()->GetInputHdl(pViewShell);
+    ScInputHandler* pInputHandler = ScModule::get()->GetInputHdl(pViewShell);
 
     if (pInputHandler && pInputHandler->IsInputMode())
     {
@@ -1844,7 +1843,7 @@ void ScGridWindow::DrawHiddenIndicator( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW n
 {
     ScDocument& rDoc = mrViewData.GetDocument();
     SCTAB nTab = mrViewData.GetTabNo();
-    const svtools::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
+    const svtools::ColorConfig& rColorCfg = ScModule::get()->GetColorConfig();
     const svtools::ColorConfigValue aColorValue = rColorCfg.GetColorValue(svtools::CALCHIDDENROWCOL);
     if (aColorValue.bIsVisible) {
         rRenderContext.SetLineColor(aColorValue.nColor);
@@ -1883,7 +1882,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
     ScDocument& rDoc = mrViewData.GetDocument();
     SCTAB nTab = mrViewData.GetTabNo();
     Size aWinSize = GetOutputSizePixel();
-    const svtools::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
+    const svtools::ColorConfig& rColorCfg = ScModule::get()->GetColorConfig();
     Color aManual( rColorCfg.GetColorValue(svtools::CALCPAGEBREAKMANUAL).nColor );
     Color aAutomatic( rColorCfg.GetColorValue(svtools::CALCPAGEBREAK).nColor );
 
@@ -2614,7 +2613,7 @@ void ScGridWindow::DataChanged( const DataChangedEvent& rDCEvt )
             //  EditEngine BackgroundColor has to be changed
             if ( mrViewData.IsActive() )
             {
-                ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
+                ScInputHandler* pHdl = ScModule::get()->GetInputHdl();
                 if (pHdl)
                     pHdl->ForgetLastPattern();
             }

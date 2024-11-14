@@ -115,7 +115,7 @@ void ScTabViewShell::Activate(bool bMDI)
     if ( bMDI )
     {
         // for input row (ClearCache)
-        ScModule* pScMod = SC_MOD();
+        ScModule* pScMod = ScModule::get();
         pScMod->ViewShellChanged(/*bStopEditing=*/ !comphelper::LibreOfficeKit::isActive());
 
         ActivateView( true, bFirstActivate );
@@ -246,7 +246,7 @@ void ScTabViewShell::Deactivate(bool bMDI)
 
     SfxViewShell::Deactivate(bMDI);
     bIsActive = false;
-    ScInputHandler* pHdl = SC_MOD()->GetInputHdl(this);
+    ScInputHandler* pHdl = ScModule::get()->GetInputHdl(this);
 
     if( bMDI && !comphelper::LibreOfficeKit::isActive())
     {
@@ -293,7 +293,7 @@ bool ScTabViewShell::PrepareClose(bool bUI)
     // Call EnterHandler even in formula mode here,
     // so a formula change in an embedded object isn't lost
     // (ScDocShell::PrepareClose isn't called then).
-    ScInputHandler* pHdl = SC_MOD()->GetInputHdl( this );
+    ScInputHandler* pHdl = ScModule::get()->GetInputHdl(this);
     if ( pHdl && pHdl->IsInputMode() )
     {
         pHdl->EnterHandler();
@@ -1183,7 +1183,7 @@ void ScTabViewShell::StartSimpleRefDialog(
 
     sal_uInt16 nId = ScSimpleRefDlgWrapper::GetChildWindowId();
 
-    SC_MOD()->SetRefDialog( nId, true, &rViewFrm );
+    ScModule::get()->SetRefDialog(nId, true, &rViewFrm);
 
     ScSimpleRefDlgWrapper* pWnd = static_cast<ScSimpleRefDlgWrapper*>(rViewFrm.GetChildWindow( nId ));
     if (!pWnd)
@@ -1216,7 +1216,7 @@ void ScTabViewShell::StopSimpleRefDialog()
 
 bool ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
 {
-    ScModule* pScMod = SC_MOD();
+    ScModule* pScMod = ScModule::get();
 
     SfxViewFrame& rThisFrame = GetViewFrame();
     if ( rThisFrame.GetChildWindow( SID_OPENDLG_FUNCTION ) )
@@ -1511,7 +1511,8 @@ void ScTabViewShell::Construct( TriState nForceDesignMode )
 
     SetName(u"View"_ustr); // for SBX
     Color aColBlack( COL_BLACK );
-    SetPool( &SC_MOD()->GetPool() );
+    ScModule* mod = ScModule::get();
+    SetPool(&mod->GetPool());
     SetWindow( GetActiveWin() );
 
     pCurFrameLine.reset( new ::editeng::SvxBorderLine(&aColBlack, 20, SvxBorderLineStyle::SOLID) );
@@ -1602,7 +1603,7 @@ void ScTabViewShell::Construct( TriState nForceDesignMode )
             if ( pDocSh->GetCreateMode() != SfxObjectCreateMode::EMBEDDED )
             {
                 // Get the customized initial tab count
-                const ScDefaultsOptions& rOpt = SC_MOD()->GetDefaultsOptions();
+                const ScDefaultsOptions& rOpt = mod->GetDefaultsOptions();
                 SCTAB nInitTabCount = rOpt.GetInitTabCount();
 
                 for (SCTAB i=1; i<nInitTabCount; i++)
@@ -1639,7 +1640,7 @@ void ScTabViewShell::Construct( TriState nForceDesignMode )
                 if ( !pFirst )
                     pFirst = &GetViewFrame();
 
-                if(SC_MOD()->GetCurRefDlgId()==0)
+                if(mod->GetCurRefDlgId()==0)
                 {
                         pFirst->GetDispatcher()->Execute( SID_UPDATETABLINKS,
                                             SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
@@ -1667,7 +1668,7 @@ void ScTabViewShell::Construct( TriState nForceDesignMode )
             {
                 if ( !pFirst )
                     pFirst = &GetViewFrame();
-                if(SC_MOD()->GetCurRefDlgId()==0)
+                if(mod->GetCurRefDlgId()==0)
                 {
                     pFirst->GetDispatcher()->Execute( SID_REIMPORT_AFTER_LOAD,
                                             SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
@@ -2041,7 +2042,7 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame& rViewFrame,
     m_pDragData(new ScDragData),
     m_pScCondFormatDlgItem()
 {
-    const ScAppOptions& rAppOpt = SC_MOD()->GetAppOptions();
+    const ScAppOptions& rAppOpt = ScModule::get()->GetAppOptions();
 
     //  if switching back from print preview,
     //  restore the view settings that were active when creating the preview
@@ -2165,7 +2166,7 @@ ScTabViewShell::~ScTabViewShell()
     EndListening(GetViewFrame());
     EndListening(*SfxGetpApp());           // #i62045# #i62046# needed now - SfxViewShell no longer does it
 
-    SC_MOD()->ViewShellGone(this);
+    ScModule::get()->ViewShellGone(this);
 
     RemoveSubShell();           // all
     SetWindow(nullptr);

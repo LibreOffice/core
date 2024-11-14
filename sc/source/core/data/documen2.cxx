@@ -100,8 +100,8 @@ ScSheetLimits ScSheetLimits::CreateDefault()
 {
 #if HAVE_FEATURE_JUMBO_SHEETS
     bool jumboSheets = false;
-    if( SC_MOD())
-        jumboSheets = SC_MOD()->GetDefaultsOptions().GetInitJumboSheets();
+    if (ScModule* mod = ScModule::get())
+        jumboSheets = mod->GetDefaultsOptions().GetInitJumboSheets();
     else
         assert(o3tl::IsRunningUnitTest());
     if (jumboSheets)

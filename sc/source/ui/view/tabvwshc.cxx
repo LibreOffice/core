@@ -90,7 +90,8 @@ void ScTabViewShell::SetCurRefDlgId( sal_uInt16 nNew )
 //ugly hack to call Define Name from Manage Names
 void ScTabViewShell::SwitchBetweenRefDialogs(SfxModelessDialogController* pDialog)
 {
-   sal_uInt16 nSlotId = SC_MOD()->GetCurRefDlgId();
+   ScModule* mod = ScModule::get();
+   sal_uInt16 nSlotId = mod->GetCurRefDlgId();
    if( nSlotId == FID_ADD_NAME )
    {
         static_cast<ScNameDefDlg*>(pDialog)->GetNewData(maName, maScope);
@@ -99,7 +100,7 @@ void ScTabViewShell::SwitchBetweenRefDialogs(SfxModelessDialogController* pDialo
         SfxViewFrame& rViewFrm = GetViewFrame();
         SfxChildWindow* pWnd = rViewFrm.GetChildWindow( nId );
 
-        SC_MOD()->SetRefDialog( nId, pWnd == nullptr );
+        mod->SetRefDialog( nId, pWnd == nullptr );
    }
    else if (nSlotId == FID_DEFINE_NAME)
    {
@@ -110,7 +111,7 @@ void ScTabViewShell::SwitchBetweenRefDialogs(SfxModelessDialogController* pDialo
         SfxViewFrame& rViewFrm = GetViewFrame();
         SfxChildWindow* pWnd = rViewFrm.GetChildWindow( nId );
 
-        SC_MOD()->SetRefDialog( nId, pWnd == nullptr );
+        mod->SetRefDialog( nId, pWnd == nullptr );
    }
 }
 
@@ -122,7 +123,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
     // only open dialog when called through ScModule::SetRefDialog,
     // so that it does not re appear for instance after a crash (#42341#).
 
-    if ( SC_MOD()->GetCurRefDlgId() != nSlotId )
+    if (ScModule::get()->GetCurRefDlgId() != nSlotId)
         return nullptr;
 
     if ( nCurRefDlgId != nSlotId )
@@ -465,7 +466,7 @@ void ScTabViewShell::afterCallbackRegistered()
 
     UpdateInputHandler(true, false);
 
-    ScInputHandler* pHdl = mpInputHandler ? mpInputHandler.get() : SC_MOD()->GetInputHdl();
+    ScInputHandler* pHdl = mpInputHandler ? mpInputHandler.get() : ScModule::get()->GetInputHdl();
     if (pHdl)
     {
         ScInputWindow* pInputWindow = pHdl->GetInputWindow();

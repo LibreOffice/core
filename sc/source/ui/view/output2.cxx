@@ -223,11 +223,10 @@ ScDrawStringsVars::ScDrawStringsVars(ScOutputData* pData, bool bPTL) :
     nRepeatPos( -1 ),
     nRepeatChar( 0x0 )
 {
-    ScModule* pScMod = SC_MOD();
     bCellContrast = pOutput->mbUseStyleColor &&
             Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
-    const svtools::ColorConfig& rColorConfig = pScMod->GetColorConfig();
+    const svtools::ColorConfig& rColorConfig = ScModule::get()->GetColorConfig();
     aBackConfigColor = rColorConfig.GetColorValue(svtools::DOCCOLOR).nColor;
     aTextConfigColor = rColorConfig.GetColorValue(svtools::FONTCOLOR).nColor;
 }
@@ -2545,7 +2544,7 @@ static Color GetConfBackgroundColor()
 {
     if (const ScTabViewShell* pTabViewShellBg = ScTabViewShell::GetActiveViewShell())
         return pTabViewShellBg->GetViewRenderingData().GetDocColor();
-    return SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
+    return ScModule::get()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
 }
 
 void ScOutputData::DrawEditParam::setPatternToEngine(bool bUseStyleColor)

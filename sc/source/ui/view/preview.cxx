@@ -227,7 +227,7 @@ void ScPreview::CalcPages()
 
     //  PrintOptions is passed to PrintFunc for SkipEmpty flag,
     //  but always all sheets are used (there is no selected sheet)
-    ScPrintOptions aOptions = SC_MOD()->GetPrintOptions();
+    ScPrintOptions aOptions = ScModule::get()->GetPrintOptions();
 
     while (nStart > static_cast<SCTAB>(nPages.size()))
         nPages.push_back(0);
@@ -341,7 +341,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
     bool bDoPrint = ( pFillLocation == nullptr );
     bool bValidPage = ( nPageNo < nTotalPages );
 
-    ScModule* pScMod = SC_MOD();
+    ScModule* pScMod = ScModule::get();
     const svtools::ColorConfig& rColorCfg = pScMod->GetColorConfig();
     Color aBackColor( rColorCfg.GetColorValue(svtools::APPBACKGROUND).nColor );
 
@@ -573,7 +573,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
     if ( !bValidPage )
         return;
 
-    Color aBorderColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
+    Color aBorderColor(ScModule::get()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor);
 
     //  draw border
 
@@ -1294,7 +1294,7 @@ void ScPreview::MouseMove( const MouseEvent& rMEvt )
 
     if ( nPageNo < nTotalPages )
     {
-        ScPrintOptions aOptions = SC_MOD()->GetPrintOptions();
+        ScPrintOptions aOptions = ScModule::get()->GetPrintOptions();
 
         std::unique_ptr<ScPrintFunc, o3tl::default_delete<ScPrintFunc>> pPrintFunc;
         if (bStateValid)

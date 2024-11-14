@@ -935,7 +935,7 @@ namespace {
 OUString getFirstSheetName()
 {
     // Get Custom prefix.
-    const ScDefaultsOptions& rOpt = SC_MOD()->GetDefaultsOptions();
+    const ScDefaultsOptions& rOpt = ScModule::get()->GetDefaultsOptions();
     // Form sheet name identical to the first generated sheet name when
     // creating an internal document, e.g. 'Sheet1'.
     return rOpt.GetInitTabPrefix() + "1";

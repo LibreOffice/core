@@ -121,7 +121,7 @@ ScEditShell::~ScEditShell()
 
 ScInputHandler* ScEditShell::GetMyInputHdl()
 {
-    return SC_MOD()->GetInputHdl( rViewData.GetViewShell() );
+    return ScModule::get()->GetInputHdl(rViewData.GetViewShell());
 }
 
 void ScEditShell::SetEditView(EditView* pView)
@@ -287,7 +287,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 pDlg.disposeAndClear();
 
                 // while the dialog was open, edit mode may have been stopped
-                if (!SC_MOD()->IsInputMode())
+                if (!ScModule::get()->IsInputMode())
                     return;
 
                 if (nFormat != SotClipboardFormatId::NONE)
@@ -427,7 +427,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     ScViewUtil::ExecuteCharMap(rItem, *rViewData.GetViewShell());
 
                     // while the dialog was open, edit mode may have been stopped
-                    if (!SC_MOD()->IsInputMode())
+                    if (!ScModule::get()->IsInputMode())
                         return;
                 }
 
@@ -474,7 +474,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 // pDlg is needed below
 
                 // while the dialog was open, edit mode may have been stopped
-                if (!SC_MOD()->IsInputMode())
+                if (!ScModule::get()->IsInputMode())
                     return;
 
                 if ( nRet == BTN_PASTE_NAME )
@@ -519,7 +519,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 // pDlg is needed below
 
                 // while the dialog was open, edit mode may have been stopped
-                if (!SC_MOD()->IsInputMode())
+                if (!ScModule::get()->IsInputMode())
                     return;
 
                 if ( nRet == RET_OK )
@@ -573,7 +573,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     SvxLinkInsertMode eMode = pHyper->GetInsertMode();
 
                     bool bCellLinksOnly
-                        = (SC_MOD()->GetAppOptions().GetLinksInsertedLikeMSExcel()
+                        = (ScModule::get()->GetAppOptions().GetLinksInsertedLikeMSExcel()
                           && rViewData.GetSfxDocShell()->GetMedium()->GetFilter()->IsMSOFormat())
                           || comphelper::LibreOfficeKit::isActive();
 
@@ -779,7 +779,7 @@ void ScEditShell::GetState( SfxItemSet& rSet )
                 {
                     SvxHyperlinkItem aHLinkItem;
                     bool bCellLinksOnly
-                        = (SC_MOD()->GetAppOptions().GetLinksInsertedLikeMSExcel()
+                        = (ScModule::get()->GetAppOptions().GetLinksInsertedLikeMSExcel()
                           && rViewData.GetSfxDocShell()->GetMedium()->GetFilter()->IsMSOFormat())
                           || comphelper::LibreOfficeKit::isActive();
                     std::unique_ptr<const SvxFieldData> aSvxFieldDataPtr(GetURLField());

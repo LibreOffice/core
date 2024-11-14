@@ -195,7 +195,7 @@ void ScContentTree::InitRoot( ScContentId nType )
         //It does not work in the constructor, that is why it is here.
         if (!m_pResLocaleForLOK)
         {
-            m_pResLocaleForLOK = std::make_unique<std::locale>(SC_MOD()->GetResLocale());
+            m_pResLocaleForLOK = std::make_unique<std::locale>(ScModule::get()->GetResLocale());
         }
         aName = Translate::get(SCSTR_CONTENT_ARY[static_cast<int>(nType)], *m_pResLocaleForLOK);
     }
@@ -1177,7 +1177,7 @@ static bool lcl_DoDragObject( ScDocShell* pSrcShell, std::u16string_view rName, 
             pTransferObj->SetDragSourceObj( *pObject, nTab );
             pTransferObj->SetDragSourceFlags(ScDragSrc::Navigator);
 
-            SC_MOD()->SetDragObject( nullptr, pTransferObj.get() );
+            ScModule::get()->SetDragObject(nullptr, pTransferObj.get());
 
             rtl::Reference<TransferDataContainer> xHelper(pTransferObj);
             rTreeView.enable_drag_source(xHelper, DND_ACTION_COPY | DND_ACTION_LINK);
@@ -1217,7 +1217,7 @@ static bool lcl_DoDragCells( ScDocShell* pSrcShell, const ScRange& rRange, ScDra
         pTransferObj->SetDragSource( pSrcShell, aMark );
         pTransferObj->SetDragSourceFlags( nFlags );
 
-        SC_MOD()->SetDragObject( pTransferObj.get(), nullptr );      // for internal D&D
+        ScModule::get()->SetDragObject(pTransferObj.get(), nullptr); // for internal D&D
 
         rtl::Reference<TransferDataContainer> xHelper(pTransferObj);
         rTreeView.enable_drag_source(xHelper, DND_ACTION_COPY | DND_ACTION_LINK);
@@ -1236,7 +1236,7 @@ IMPL_LINK(ScContentTree, DragBeginHdl, bool&, rUnsetDragIcon, bool)
 
     bool bDisallow = true;
 
-    ScModule* pScMod = SC_MOD();
+    ScModule* pScMod = ScModule::get();
 
     ScContentId nType;
     sal_uLong nChild;
@@ -1372,7 +1372,7 @@ void ScContentTree::SetRootType( ScContentId nNew )
         nRootType = nNew;
         Refresh();
 
-        ScNavipiCfg& rCfg = SC_MOD()->GetNavipiCfg();
+        ScNavipiCfg& rCfg = ScModule::get()->GetNavipiCfg();
         rCfg.SetRootType( nRootType );
     }
 }

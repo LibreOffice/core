@@ -385,7 +385,7 @@ void ScDocShell::CalcOutputFactor()
         return;
     }
 
-    bool bTextWysiwyg = SC_MOD()->GetInputOptions().GetTextWysiwyg();
+    bool bTextWysiwyg = ScModule::get()->GetInputOptions().GetTextWysiwyg();
     if (bTextWysiwyg)
     {
         m_nPrtToScreenFactor = 1.0;
@@ -431,7 +431,7 @@ void ScDocShell::InitOptions(bool bForLoading)      // called from InitNew and L
 
     LanguageType nDefLang, nCjkLang, nCtlLang;
     ScModule::GetSpellSettings( nDefLang, nCjkLang, nCtlLang );
-    ScModule* pScMod = SC_MOD();
+    ScModule* pScMod = ScModule::get();
 
     ScDocOptions  aDocOpt  = pScMod->GetDocOptions();
     ScFormulaOptions aFormulaOpt = pScMod->GetFormulaOptions();
@@ -513,10 +513,10 @@ sal_uInt16 ScDocShell::SetPrinter( VclPtr<SfxPrinter> const & pNewPrinter, SfxPr
 
             CalcOutputFactor();
             */
-            if ( SC_MOD()->GetInputOptions().GetTextWysiwyg() )
+            ScModule* pScMod = ScModule::get();
+            if (pScMod->GetInputOptions().GetTextWysiwyg())
                 UpdateFontList();
 
-            ScModule* pScMod = SC_MOD();
             SfxViewFrame *pFrame = SfxViewFrame::GetFirst( this );
             while (pFrame)
             {

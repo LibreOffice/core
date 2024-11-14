@@ -181,7 +181,7 @@ ScTransferObj::~ScTransferObj()
     SolarMutexGuard aSolarGuard;
 
     bool bIsDisposing = comphelper::LibreOfficeKit::isActive() && !ScTabViewShell::GetActiveViewShell();
-    ScModule* pScMod = SC_MOD();
+    ScModule* pScMod = ScModule::get();
     if (pScMod && !bIsDisposing && pScMod->GetDragData().pCellTransfer == this)
     {
         OSL_FAIL("ScTransferObj wasn't released");
@@ -601,7 +601,7 @@ void ScTransferObj::DragFinished( sal_Int8 nDropAction )
         }
     }
 
-    ScModule* pScMod = SC_MOD();
+    ScModule* pScMod = ScModule::get();
     if ( pScMod && pScMod->GetDragData().pCellTransfer == this )
         pScMod->ResetDragObject();
 

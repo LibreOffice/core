@@ -239,7 +239,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
 void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
 {
-    ScModule*           pScMod          = SC_MOD();
+    ScModule* pScMod = ScModule::get();
     ScTabViewShell*     pTabViewShell   = GetViewData().GetViewShell();
     const SfxItemSet*   pReqArgs        = rReq.GetArgs();
     sal_uInt16          nSlot           = rReq.GetSlot();
@@ -1905,7 +1905,7 @@ void ScFormatShell::ExecuteTextDirection( const SfxRequest& rReq )
     if ( GetViewData().HasEditView( GetViewData().GetActivePart() ) )
     {
         bEditMode=true;
-        SC_MOD()->InputEnterHandler();
+        ScModule::get()->InputEnterHandler();
         pTabViewShell->UpdateInputHandler();
     }
     sal_uInt16 nSlot = rReq.GetSlot();
@@ -1934,7 +1934,7 @@ void ScFormatShell::ExecuteTextDirection( const SfxRequest& rReq )
         break;
     }
     if (bEditMode)
-        SC_MOD()->SetInputMode( SC_INPUT_TABLE );
+        ScModule::get()->SetInputMode(SC_INPUT_TABLE);
 }
 
 void ScFormatShell::GetTextDirectionState( SfxItemSet& rSet )

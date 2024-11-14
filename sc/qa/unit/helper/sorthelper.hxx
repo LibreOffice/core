@@ -26,10 +26,11 @@ public:
     }
     static bool changeTo(bool bSortRefUpdate)
     {
-        ScInputOptions aInputOptions = SC_MOD()->GetInputOptions();
+        ScModule* mod = ScModule::get();
+        ScInputOptions aInputOptions = mod->GetInputOptions();
         bool bRet = aInputOptions.GetSortRefUpdate();
         aInputOptions.SetSortRefUpdate(bSortRefUpdate);
-        SC_MOD()->SetInputOptions(aInputOptions);
+        mod->SetInputOptions(aInputOptions);
         return bRet;
     }
     virtual ~SortTypeSetter() COVERITY_NOEXCEPT_FALSE

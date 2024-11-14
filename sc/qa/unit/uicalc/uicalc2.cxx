@@ -581,7 +581,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf118207)
     ScDocument* pDoc = getScDoc();
 
     // Disable replace cell warning
-    ScModule* pMod = SC_MOD();
+    ScModule* pMod = ScModule::get();
     ScInputOptions aInputOption = pMod->GetInputOptions();
     bool bOldStatus = aInputOption.GetReplaceCellsWarn();
     aInputOption.SetReplaceCellsWarn(false);

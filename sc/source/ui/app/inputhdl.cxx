@@ -359,7 +359,7 @@ static inline void incPos( const sal_Unicode c, sal_Int32& rPos, ESelection& rSe
 void ScInputHandler::InitRangeFinder( const OUString& rFormula )
 {
     DeleteRangeFinder();
-    if ( !pActiveViewSh || !SC_MOD()->GetInputOptions().GetRangeFinder() )
+    if (!pActiveViewSh || !ScModule::get()->GetInputOptions().GetRangeFinder())
         return;
     ScDocShell* pDocSh = pActiveViewSh->GetViewData().GetDocShell();
     ScDocument& rDoc = pDocSh->GetDocument();
@@ -563,7 +563,7 @@ void ScInputHandler::UpdateLokReferenceMarks()
     {
         nAdditionalMarks = 1;
 
-        const svtools::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
+        const svtools::ColorConfig& rColorCfg = ScModule::get()->GetColorConfig();
         Color aRefColor( rColorCfg.GetColorValue( svtools::CALCREFERENCE ).nColor );
         tools::Long nX1 = rViewData.GetRefStartX();
         tools::Long nX2 = rViewData.GetRefEndX();
@@ -879,8 +879,8 @@ ScInputHandler::~ScInputHandler()
     if (!mbDocumentDisposing) // inplace
         EnterHandler(); // Finish input
 
-    if (SC_MOD()->GetRefInputHdl() == this)
-        SC_MOD()->SetRefInputHdl(nullptr);
+    if (ScModule* mod = ScModule::get(); mod->GetRefInputHdl() == this)
+        mod->SetRefInputHdl(nullptr);
 
     if ( pInputWin && pInputWin->GetInputHandler() == this )
         pInputWin->SetInputHandler( nullptr );
@@ -905,7 +905,7 @@ void ScInputHandler::UpdateRefDevice()
     if (!mpEditEngine)
         return;
 
-    bool bTextWysiwyg = SC_MOD()->GetInputOptions().GetTextWysiwyg();
+    bool bTextWysiwyg = ScModule::get()->GetInputOptions().GetTextWysiwyg();
     if ( bTextWysiwyg && pActiveViewSh )
         mpEditEngine->SetRefDevice( pActiveViewSh->GetViewData().GetDocument().GetPrinter() );
     else
@@ -1041,7 +1041,7 @@ void ScInputHandler::GetFormulaData()
     maFormulaChar     = rFunctionNames.maFunctionChar;
 
     // Increase suggestion priority of MRU formulas
-    const ScAppOptions& rOpt = SC_MOD()->GetAppOptions();
+    const ScAppOptions& rOpt = ScModule::get()->GetAppOptions();
     const sal_uInt16 nMRUCount = rOpt.GetLRUFuncListCount();
     const sal_uInt16* pMRUList = rOpt.GetLRUFuncList();
     for (sal_uInt16 i = 0; i < nMRUCount; i++)
@@ -2307,6 +2307,7 @@ void ScInputHandler::ViewShellGone(const ScTabViewShell* pViewSh) // Executed sy
         pLastPattern = nullptr;
     }
 
+    ScModule* mod = ScModule::get();
     if ( pViewSh == pRefViewSh )
     {
         //! The input from the EnterHandler does not arrive anymore
@@ -2315,7 +2316,7 @@ void ScInputHandler::ViewShellGone(const ScTabViewShell* pViewSh) // Executed sy
         bFormulaMode = false;
         pRefViewSh = nullptr;
         SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScRefModeChanged ) );
-        SC_MOD()->SetRefInputHdl(nullptr);
+        mod->SetRefInputHdl(nullptr);
         if (pInputWin)
             pInputWin->SetFormulaMode(false);
         UpdateAutoCorrFlag();
@@ -2329,7 +2330,7 @@ void ScInputHandler::ViewShellGone(const ScTabViewShell* pViewSh) // Executed sy
         pActiveViewSh = nullptr;
     }
 
-    if ( SC_MOD()->GetInputOptions().GetTextWysiwyg() )
+    if (mod->GetInputOptions().GetTextWysiwyg())
         UpdateRefDevice(); // Don't keep old document's printer as RefDevice
 }
 
@@ -2601,7 +2602,7 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
                 //  For transparent cell background, the document background color must be used.
 
                 Color aBackCol = pPattern->GetItem( ATTR_BACKGROUND ).GetColor();
-                ScModule* pScMod = SC_MOD();
+                ScModule* pScMod = ScModule::get();
                 if ( aBackCol.IsTransparent() ||
                         Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
                     aBackCol = pScMod->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
@@ -2653,7 +2654,7 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
 
             UpdateAdjust( cTyped );
 
-            if ( SC_MOD()->GetAppOptions().GetAutoComplete() )
+            if (ScModule::get()->GetAppOptions().GetAutoComplete())
                 GetColData();
 
             if (!cTyped && !bCreatingFuncView && StartsLikeFormula(aStr))
@@ -2886,7 +2887,7 @@ void ScInputHandler::UpdateFormulaMode()
             bFormulaMode = true;
             pRefViewSh = pActiveViewSh;
             pSfxApp->Broadcast( SfxHint( SfxHintId::ScRefModeChanged ) );
-            ScModule* pMod = SC_MOD();
+            ScModule* pMod = ScModule::get();
             pMod->SetRefInputHdl(this);
             if (pInputWin)
                 pInputWin->SetFormulaMode(true);
@@ -2909,7 +2910,7 @@ void ScInputHandler::UpdateFormulaMode()
             bFormulaMode = false;
             pRefViewSh = nullptr;
             pSfxApp->Broadcast( SfxHint( SfxHintId::ScRefModeChanged ) );
-            SC_MOD()->SetRefInputHdl(nullptr);
+            ScModule::get()->SetRefInputHdl(nullptr);
             if (pInputWin)
                 pInputWin->SetFormulaMode(false);
             UpdateAutoCorrFlag();
@@ -3355,7 +3356,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode, bool bBeforeSavingInL
             mpEditEngine->ClearSpellErrors();
             pObject = mpEditEngine->CreateTextObject();
         }
-        else if (SC_MOD()->GetAppOptions().GetAutoComplete()) // Adjust Upper/Lower case
+        else if (ScModule::get()->GetAppOptions().GetAutoComplete()) // Adjust Upper/Lower case
         {
             // Perform case-matching only when the typed text is partial.
             if (pColumnData && aAutoSearch.getLength() < aString.getLength())
@@ -3380,7 +3381,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode, bool bBeforeSavingInL
 
         bFormulaMode = false;
         pSfxApp->Broadcast( SfxHint( SfxHintId::ScRefModeChanged ) );
-        SC_MOD()->SetRefInputHdl(nullptr);
+        ScModule::get()->SetRefInputHdl(nullptr);
         if (pInputWin)
             pInputWin->SetFormulaMode(false);
         UpdateAutoCorrFlag();
@@ -3520,7 +3521,7 @@ void ScInputHandler::CancelHandler()
         }
         bFormulaMode = false;
         SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScRefModeChanged ) );
-        SC_MOD()->SetRefInputHdl(nullptr);
+        ScModule::get()->SetRefInputHdl(nullptr);
         if (pInputWin)
             pInputWin->SetFormulaMode(false);
         UpdateAutoCorrFlag();
@@ -3818,7 +3819,7 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
         if (pActiveViewSh)
             pActiveViewSh->FindNextUnprot( bShift, true );
 
-        ScModule* pScMod = SC_MOD();
+        ScModule* pScMod = ScModule::get();
         const ScInputOptions& rOpt = pScMod->GetInputOptions();
         const bool bKit = comphelper::LibreOfficeKit::isActive();
 
@@ -3866,7 +3867,7 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
                 if (pActiveViewSh)
                     pActiveViewSh->MoveCursorEnter( bShift && !bControl );
 
-                ScModule* pScMod = SC_MOD();
+                ScModule* pScMod = ScModule::get();
                 const ScInputOptions& rOpt = pScMod->GetInputOptions();
                 const bool bKit = comphelper::LibreOfficeKit::isActive();
 
@@ -4019,7 +4020,7 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
                 }
 
                 // AutoInput:
-                if ( bUsed && SC_MOD()->GetAppOptions().GetAutoComplete() )
+                if (bUsed && ScModule::get()->GetAppOptions().GetAutoComplete())
                 {
                     bUseTab = false;
                     if (pFormulaData)
@@ -4278,7 +4279,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
 
     if ( pState && pActiveViewSh )
     {
-        ScModule* pScMod = SC_MOD();
+        ScModule* pScMod = ScModule::get();
 
         ScTabViewShell* pScTabViewShell = dynamic_cast<ScTabViewShell*>(pScMod->GetViewShell());
 
@@ -4482,7 +4483,7 @@ void ScInputHandler::ResetDelayTimer()
 
 IMPL_LINK_NOARG( ScInputHandler, DelayTimer, Timer*, void )
 {
-    if ( !(nullptr == pLastState || SC_MOD()->IsFormulaMode() || SC_MOD()->IsRefDialogOpen()))
+    if (!(nullptr == pLastState || ScModule::get()->IsFormulaMode() || ScModule::get()->IsRefDialogOpen()))
         return;
 
     //! New method at ScModule to query if function autopilot is open

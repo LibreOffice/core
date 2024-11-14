@@ -109,7 +109,7 @@ static void lcl_DocStyleChanged( ScDocument* pDoc, const SfxStyleSheetBase* pSty
     Fraction aZoom(1,1);
     pDoc->StyleSheetChanged( pStyle, bRemoved, pVDev, nPPTX, nPPTY, aZoom, aZoom );
 
-    ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
+    ScInputHandler* pHdl = ScModule::get()->GetInputHdl();
     if (pHdl)
         pHdl->ForgetLastPattern();
 }

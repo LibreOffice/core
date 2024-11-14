@@ -161,7 +161,7 @@ void ScDocument::MakeTable( SCTAB nTab,bool _bNeedsNameCheck )
         return;
 
     // Get Custom prefix
-    const ScDefaultsOptions& rOpt = SC_MOD()->GetDefaultsOptions();
+    const ScDefaultsOptions& rOpt = ScModule::get()->GetDefaultsOptions();
     OUString aString = rOpt.GetInitTabPrefix() + OUString::number(nTab+1);
     if ( _bNeedsNameCheck )
         CreateValidTabName( aString );  // no doubles
@@ -385,7 +385,7 @@ void ScDocument::CreateValidTabName(OUString& rName) const
         // Find new one
 
         // Get Custom prefix
-        const ScDefaultsOptions& rOpt = SC_MOD()->GetDefaultsOptions();
+        const ScDefaultsOptions& rOpt = ScModule::get()->GetDefaultsOptions();
         const OUString& aStrTable = rOpt.GetInitTabPrefix();
 
         bool         bOk   = false;
@@ -428,7 +428,7 @@ void ScDocument::CreateValidTabNames(std::vector<OUString>& aNames, SCTAB nCount
     aNames.clear();//ensure that the vector is empty
 
     // Get Custom prefix
-    const ScDefaultsOptions& rOpt = SC_MOD()->GetDefaultsOptions();
+    const ScDefaultsOptions& rOpt = ScModule::get()->GetDefaultsOptions();
     const OUString& aStrTable = rOpt.GetInitTabPrefix();
 
     OUStringBuffer rName;
@@ -493,8 +493,8 @@ bool ScDocument::InsertTab(
 {
     // auto-accept any in-process input to prevent move the cell into next sheet in online.
     if (comphelper::LibreOfficeKit::isActive())
-        if (!SC_MOD()->IsFormulaMode())
-            SC_MOD()->InputEnterHandler();
+        if (ScModule* mod = ScModule::get(); !mod->IsFormulaMode())
+            mod->InputEnterHandler();
 
     SCTAB nTabCount = GetTableCount();
     bool bValid = ValidTab(nTabCount);

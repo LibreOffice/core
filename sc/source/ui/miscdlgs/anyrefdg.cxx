@@ -53,7 +53,7 @@ ScFormulaReferenceHelper::ScFormulaReferenceHelper(IAnyRefDialog* _pDlg,SfxBindi
  , m_nRefTab(0)
  , m_bHighlightRef(false)
 {
-    ScInputOptions aInputOption=SC_MOD()->GetInputOptions();
+    ScInputOptions aInputOption = ScModule::get()->GetInputOptions();
     m_bEnableColorRef=aInputOption.GetRangeFinder();
 }
 
@@ -68,7 +68,7 @@ void ScFormulaReferenceHelper::dispose()
     HideReference();
     enableInput( true );
 
-    ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl();
+    ScInputHandler* pInputHdl = ScModule::get()->GetInputHdl();
     if ( pInputHdl )
         pInputHdl->ResetDelayTimer();   // stop the timer for disabling the input line
 
@@ -444,7 +444,7 @@ void ScFormulaReferenceHelper::DoClose( sal_uInt16 nId )
         if (pMyDisp)
             pMyViewFrm = pMyDisp->GetFrame();
     }
-    SC_MOD()->SetRefDialog( nId, false, pMyViewFrm );
+    ScModule::get()->SetRefDialog(nId, false, pMyViewFrm);
 
     pSfxApp->Broadcast( SfxHint( SfxHintId::ScKillEditView ) );
 
@@ -589,7 +589,8 @@ bool ScRefHandler::EnterRefMode()
 {
     if( m_bInRefMode ) return false;
 
-    SC_MOD()->InputEnterHandler();
+    ScModule* mod = ScModule::get();
+    mod->InputEnterHandler();
 
     ScTabViewShell* pScViewShell = nullptr;
 
@@ -617,7 +618,7 @@ bool ScRefHandler::EnterRefMode()
     if ( pParentDoc )
         m_aDocName = pParentDoc->GetTitle();
 
-    ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl(pScViewShell);
+    ScInputHandler* pInputHdl = mod->GetInputHdl(pScViewShell);
 
     OSL_ENSURE( pInputHdl, "Missing input handler :-/" );
 

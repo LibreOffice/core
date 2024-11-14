@@ -131,7 +131,7 @@ void ScCornerButton::Resize()
 
 void ScCornerButton::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    ScModule* pScMod = SC_MOD();
+    ScModule* pScMod = ScModule::get();
     bool bDisable = pScMod->IsFormulaMode() || pScMod->IsModalMode();
     if (!bDisable)
     {
@@ -962,7 +962,7 @@ void ScTabView::SetZoomPercentFromCommand(sal_uInt16 nZoomPercent)
 {
     // scroll wheel doesn't set the AppOptions default
 
-    bool bSyncZoom = SC_MOD()->GetAppOptions().GetSynchronizeZoom();
+    bool bSyncZoom = ScModule::get()->GetAppOptions().GetSynchronizeZoom();
     SetZoomType(SvxZoomType::PERCENT, bSyncZoom);
     Fraction aFract(nZoomPercent, 100);
     SetZoom(aFract, aFract, bSyncZoom);

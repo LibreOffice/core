@@ -84,7 +84,7 @@ using namespace com::sun::star;
 
 bool ScTabViewShell::GetFunction( OUString& rFuncStr, FormulaError nErrCode )
 {
-    sal_uInt32 nFuncs = SC_MOD()->GetAppOptions().GetStatusFunc();
+    sal_uInt32 nFuncs = ScModule::get()->GetAppOptions().GetStatusFunc();
     ScViewData& rViewData   = GetViewData();
     ScMarkData& rMark       = rViewData.GetMarkData();
     bool bIgnoreError = (rMark.IsMarked() || rMark.IsMultiMarked());
@@ -532,7 +532,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                 break;
 
             case FID_TOGGLEHIDDENCOLROW:
-                const svtools::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
+                const svtools::ColorConfig& rColorCfg = ScModule::get()->GetColorConfig();
                 rSet.Put( SfxBoolItem( nWhich, rColorCfg.GetColorValue(svtools::CALCHIDDENROWCOL).bIsVisible) );
                 break;
 
@@ -647,8 +647,7 @@ const OUString* ScTabViewShell::GetEditString() const
 
 bool ScTabViewShell::IsRefInputMode() const
 {
-    ScModule* pScMod = SC_MOD();
-    if ( pScMod )
+    if (ScModule* pScMod = ScModule::get())
     {
         if( pScMod->IsRefDialogOpen() )
             return pScMod->IsFormulaMode();
@@ -693,8 +692,7 @@ void ScTabViewShell::ExecuteInputDirect()
 {
     if ( !IsRefInputMode() )
     {
-        ScModule* pScMod = SC_MOD();
-        if ( pScMod )
+        if (ScModule* pScMod = ScModule::get())
         {
             pScMod->InputEnterHandler();
         }
@@ -703,7 +701,7 @@ void ScTabViewShell::ExecuteInputDirect()
 
 void ScTabViewShell::UpdateInputHandler( bool bForce /* = sal_False */, bool bStopEditing /* = sal_True */ )
 {
-    ScInputHandler* pHdl = mpInputHandler ? mpInputHandler.get() : SC_MOD()->GetInputHdl();
+    ScInputHandler* pHdl = mpInputHandler ? mpInputHandler.get() : ScModule::get()->GetInputHdl();
 
     if ( pHdl )
     {
@@ -800,7 +798,7 @@ void ScTabViewShell::UpdateInputHandler( bool bForce /* = sal_False */, bool bSt
 
 void ScTabViewShell::UpdateInputHandlerCellAdjust( SvxCellHorJustify eJust )
 {
-    if( ScInputHandler* pHdl = mpInputHandler ? mpInputHandler.get() : SC_MOD()->GetInputHdl() )
+    if( ScInputHandler* pHdl = mpInputHandler ? mpInputHandler.get() : ScModule::get()->GetInputHdl() )
         pHdl->UpdateCellAdjust( eJust );
 }
 
@@ -824,7 +822,7 @@ void ScTabViewShell::ExecuteSave( SfxRequest& rReq )
         // to save immediately without committing any erroneous input in possibly
         // a cell with validation rules. After save is complete the user
         // can continue editing.
-        SC_MOD()->InputEnterHandler(ScEnterMode::NORMAL, bLOKActive /* bBeforeSavingInLOK */);
+        ScModule::get()->InputEnterHandler(ScEnterMode::NORMAL, bLOKActive /* bBeforeSavingInLOK */);
 
         if (bLOKActive)
         {
@@ -949,7 +947,7 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
     ScDocShell*         pDocSh      = GetViewData().GetDocShell();
     ScDocument&         rDoc        = pDocSh->GetDocument();
     ScMarkData&         rMark       = GetViewData().GetMarkData();
-    ScModule*           pScMod      = SC_MOD();
+    ScModule*           pScMod      = ScModule::get();
     SdrObject*          pEditObject = GetDrawView()->GetTextEditObject();
     OutlinerView*       pOLV        = GetDrawView()->GetTextEditOutlinerView();
     ESelection          aSelection  = pOLV ? pOLV->GetSelection() : ESelection();
@@ -1828,7 +1826,7 @@ void ScTabViewShell::GetStyleState( SfxItemSet& rSet )
 
             case SID_STYLE_WATERCAN:
             {
-                rSet.Put( SfxBoolItem( nSlotId, SC_MOD()->GetIsWaterCan() ) );
+                rSet.Put(SfxBoolItem(nSlotId, ScModule::get()->GetIsWaterCan()));
             }
             break;
 

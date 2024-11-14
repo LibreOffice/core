@@ -499,7 +499,7 @@ void ScAutoFmtPreview::DoPaint(vcl::RenderContext& rRenderContext)
 
     Size aWndSize(GetOutputSizePixel());
     vcl::Font aFont(aVD->GetFont());
-    const Color& aBackCol = SC_MOD()->GetColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor;
+    const Color& aBackCol = ScModule::get()->GetColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor;
     tools::Rectangle aRect(Point(), aWndSize);
 
     aFont.SetTransparent( true );

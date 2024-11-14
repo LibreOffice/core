@@ -70,7 +70,8 @@ void ScTabViewShell::WindowChanged()
 
 void ScTabViewShell::ExecDraw(SfxRequest& rReq)
 {
-    SC_MOD()->InputEnterHandler();
+    ScModule* mod = ScModule::get();
+    mod->InputEnterHandler();
     UpdateInputHandler();
 
     MakeDrawLayer();
@@ -319,7 +320,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         return;
 
     // Create default drawing objects via keyboard
-    const ScAppOptions& rAppOpt = SC_MOD()->GetAppOptions();
+    const ScAppOptions& rAppOpt = mod->GetAppOptions();
     sal_uInt32 nDefaultObjectSizeWidth = rAppOpt.GetDefaultObjectSizeWidth();
     sal_uInt32 nDefaultObjectSizeHeight = rAppOpt.GetDefaultObjectSizeHeight();
 

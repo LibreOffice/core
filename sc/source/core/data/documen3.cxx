@@ -1036,7 +1036,7 @@ void ScDocument::UpdateReference(
 
     std::unique_ptr<sc::ExpandRefsSwitch> pExpandRefsSwitch;
     if (rCxt.isInserted())
-        pExpandRefsSwitch.reset(new sc::ExpandRefsSwitch(*this, SC_MOD()->GetInputOptions().GetExpandRefs()));
+        pExpandRefsSwitch.reset(new sc::ExpandRefsSwitch(*this, ScModule::get()->GetInputOptions().GetExpandRefs()));
 
     size_t nFirstTab, nLastTab;
     if (rCxt.meMode == URM_COPY)

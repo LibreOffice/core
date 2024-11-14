@@ -27,7 +27,7 @@
 
 ScSizeDeviceProvider::ScSizeDeviceProvider( ScDocShell* pDocSh )
 {
-    bool bTextWysiwyg = SC_MOD()->GetInputOptions().GetTextWysiwyg();
+    bool bTextWysiwyg = ScModule::get()->GetInputOptions().GetTextWysiwyg();
     if ( bTextWysiwyg )
     {
         pDevice = pDocSh->GetPrinter();

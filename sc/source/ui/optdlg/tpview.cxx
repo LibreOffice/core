@@ -599,9 +599,10 @@ bool    ScTpLayoutOptions::FillItemSet( SfxItemSet* rCoreSet )
     {
         if(pDoc)
             pDoc->SetLinkMode(nSet);
-        ScAppOptions aAppOptions=SC_MOD()->GetAppOptions();
+        ScModule* mod = ScModule::get();
+        ScAppOptions aAppOptions = mod->GetAppOptions();
         aAppOptions.SetLinkMode(nSet );
-        SC_MOD()->SetAppOptions(aAppOptions);
+        mod->SetAppOptions(aAppOptions);
         bRet = true;
     }
     if (m_xAlignCB->get_state_changed_from_saved())
@@ -731,7 +732,7 @@ void    ScTpLayoutOptions::Reset( const SfxItemSet* rCoreSet )
 
     if(nSet==LM_UNKNOWN)
     {
-        ScAppOptions aAppOptions=SC_MOD()->GetAppOptions();
+        ScAppOptions aAppOptions = ScModule::get()->GetAppOptions();
         nSet=aAppOptions.GetLinkMode();
     }
 

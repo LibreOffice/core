@@ -1139,7 +1139,7 @@ SvxTextForwarder* ScAccessibleHeaderTextData::GetTextForwarder()
         {
             // no access to ScDocument, use temporary CellAttributeHelper.
             // also see ScHeaderFooterTextData::GetTextForwarder for more comments
-            pTmp.reset(new CellAttributeHelper(SC_MOD()->GetPool()));
+            pTmp.reset(new CellAttributeHelper(ScModule::get()->GetPool()));
             pCellAttributeDefault = &pTmp->getDefaultCellAttribute();
         }
 

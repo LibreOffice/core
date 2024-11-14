@@ -142,7 +142,7 @@ ScTabView::~ScTabView()
     sal_uInt16 i;
 
     //  remove selection object
-    ScModule* pScMod = SC_MOD();
+    ScModule* pScMod = ScModule::get();
     ScSelectionTransferObj* pOld = pScMod->GetSelectionTransfer();
     if ( pOld && pOld->GetView() == this )
     {

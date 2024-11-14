@@ -2004,7 +2004,7 @@ ScChangeTrack::ScChangeTrack( ScDocument& rDocP ) :
         rDoc( rDocP )
 {
     Init();
-    SC_MOD()->GetUserOptions().AddListener(this);
+    ScModule::get()->GetUserOptions().AddListener(this);
 
     ppContentSlots.reset( new ScChangeActionContent* [ mnContentSlots ] );
     memset( ppContentSlots.get(), 0, mnContentSlots * sizeof( ScChangeActionContent* ) );
@@ -2016,14 +2016,14 @@ ScChangeTrack::ScChangeTrack( ScDocument& rDocP, std::set<OUString>&& aTempUserC
         rDoc( rDocP )
 {
     Init();
-    SC_MOD()->GetUserOptions().AddListener(this);
+    ScModule::get()->GetUserOptions().AddListener(this);
     ppContentSlots.reset( new ScChangeActionContent* [ mnContentSlots ] );
     memset( ppContentSlots.get(), 0, mnContentSlots * sizeof( ScChangeActionContent* ) );
 }
 
 ScChangeTrack::~ScChangeTrack()
 {
-    SC_MOD()->GetUserOptions().RemoveListener(this);
+    ScModule::get()->GetUserOptions().RemoveListener(this);
     DtorClear();
 }
 
@@ -2171,7 +2171,7 @@ void ScChangeTrack::ConfigurationChanged( utl::ConfigurationBroadcaster*, Config
 
 void ScChangeTrack::CreateAuthorName()
 {
-    const SvtUserOptions& rUserOptions = SC_MOD()->GetUserOptions();
+    const SvtUserOptions& rUserOptions = ScModule::get()->GetUserOptions();
     OUString aFirstName(rUserOptions.GetFirstName());
     OUString aLastName(rUserOptions.GetLastName());
     if (aFirstName.isEmpty() && aLastName.isEmpty())
@@ -3209,7 +3209,7 @@ void ScChangeTrack::UpdateReference( ScChangeAction* pAct, bool bUndo )
     // Formula cells ExpandRefs synchronized to the ones in the Document!
     bool bOldExpandRefs = rDoc.IsExpandRefs();
     if ( (!bUndo && pAct->IsInsertType()) || (bUndo && pAct->IsDeleteType()) )
-        rDoc.SetExpandRefs( SC_MOD()->GetInputOptions().GetExpandRefs() );
+        rDoc.SetExpandRefs(ScModule::get()->GetInputOptions().GetExpandRefs());
 
     if ( pAct->IsDeleteType() )
     {

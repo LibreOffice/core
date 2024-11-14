@@ -180,7 +180,7 @@ void ScTabViewShell::FinishProtectTable()
 
 void ScTabViewShell::ExecProtectTable( SfxRequest& rReq )
 {
-    ScModule*           pScMod      = SC_MOD();
+    ScModule* pScMod = ScModule::get();
     const SfxItemSet*   pReqArgs    = rReq.GetArgs();
     ScDocument&         rDoc = GetViewData().GetDocument();
     SCTAB               nTab = GetViewData().GetTabNo();
@@ -289,7 +289,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 {
     SfxViewFrame&       rThisFrame  = GetViewFrame();
     SfxBindings&        rBindings   = rThisFrame.GetBindings();
-    ScModule*           pScMod      = SC_MOD();
+    ScModule* pScMod = ScModule::get();
     const SfxItemSet*   pReqArgs    = rReq.GetArgs();
     sal_uInt16              nSlot       = rReq.GetSlot();
 
@@ -1007,7 +1007,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                         nNew = std::min(MAXZOOM, basegfx::zoomtools::zoomIn(nOld));
                     if ( nNew != nOld)
                     {
-                        bool bSyncZoom = SC_MOD()->GetAppOptions().GetSynchronizeZoom();
+                        bool bSyncZoom = pScMod->GetAppOptions().GetSynchronizeZoom();
                         SetZoomType(SvxZoomType::PERCENT, bSyncZoom);
                         Fraction aFract(nNew, 100);
                         SetZoom(aFract, aFract, bSyncZoom);
@@ -1027,7 +1027,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
         case SID_ATTR_ZOOM: // status row
         case FID_SCALE:
             {
-                bool bSyncZoom = SC_MOD()->GetAppOptions().GetSynchronizeZoom();
+                bool bSyncZoom = pScMod->GetAppOptions().GetSynchronizeZoom();
                 SvxZoomType eOldZoomType = GetZoomType();
                 SvxZoomType eNewZoomType = eOldZoomType;
                 const Fraction& rOldY = GetViewData().GetZoomY();  // Y is shown
@@ -1128,7 +1128,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
         case SID_ATTR_ZOOMSLIDER:
             {
                 const SfxPoolItem* pItem = nullptr;
-                bool bSyncZoom = SC_MOD()->GetAppOptions().GetSynchronizeZoom();
+                bool bSyncZoom = pScMod->GetAppOptions().GetSynchronizeZoom();
                 if ( pReqArgs && pReqArgs->GetItemState(SID_ATTR_ZOOMSLIDER, true, &pItem) == SfxItemState::SET )
                 {
                     const sal_uInt16 nCurrentZoom = static_cast<const SvxZoomSliderItem *>(pItem)->GetValue();

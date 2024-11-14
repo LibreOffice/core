@@ -766,7 +766,7 @@ void ScPatternAttr::fillColor(model::ComplexColor& rComplexColor, const SfxItemS
                     aBackColor = *pBackConfigColor;
                 }
                 else
-                    aBackColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
+                    aBackColor = ScModule::get()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
             }
             else
             {
@@ -792,7 +792,7 @@ void ScPatternAttr::fillColor(model::ComplexColor& rComplexColor, const SfxItemS
         {
             // pTextConfigColor can be used to avoid repeated lookup of the configured color
             aSysTextColor = *pTextConfigColor;
-            if (SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR, false).nColor == COL_AUTO)
+            if (ScModule::get()->GetColorConfig().GetColorValue(svtools::FONTCOLOR, false).nColor == COL_AUTO)
             {
                 if ( aBackColor.IsDark() && aSysTextColor.IsDark() )
                     aSysTextColor = COL_WHITE;
@@ -802,7 +802,7 @@ void ScPatternAttr::fillColor(model::ComplexColor& rComplexColor, const SfxItemS
         }
         else
         {
-            aSysTextColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
+            aSysTextColor = ScModule::get()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
         }
 
         if (comphelper::LibreOfficeKit::isActive() && SfxViewShell::Current())

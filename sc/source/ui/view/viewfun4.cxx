@@ -329,7 +329,7 @@ void ScViewFunc::DoThesaurus()
     {
         GetViewData().GetEditView(eWhich, pEditView, nCol, nRow);
         pEditSel.reset(new ESelection(pEditView->GetSelection()));
-        SC_MOD()->InputEnterHandler();
+        ScModule::get()->InputEnterHandler();
         GetViewData().GetBindings().Update();          // otherwise the Sfx becomes mixed-up...
     }
     else
@@ -454,7 +454,7 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam )
     if (bIsEditMode)                                            // edit mode active
     {
         rViewData.GetEditView(eWhich, pEditView, nCol, nRow);
-        SC_MOD()->InputEnterHandler();
+        ScModule::get()->InputEnterHandler();
     }
     else
     {

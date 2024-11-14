@@ -495,7 +495,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
             {
                 ScViewData& rViewData = mpViewShell->GetViewData();
 
-                m_bFormulaMode = rViewData.IsRefMode() || SC_MOD()->IsFormulaMode();
+                m_bFormulaMode = rViewData.IsRefMode() || ScModule::get()->IsFormulaMode();
                 if ( m_bFormulaMode )
                 {
                     NotifyRefMode();
@@ -1088,7 +1088,7 @@ sal_Int32 SAL_CALL ScAccessibleSpreadsheet::getBackground(  )
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
-    return sal_Int32(SC_MOD()->GetColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor);
+    return sal_Int32(ScModule::get()->GetColorConfig().GetColorValue(::svtools::DOCCOLOR).nColor);
 }
 
     //=====  XAccessibleContext  ==============================================
@@ -1706,7 +1706,7 @@ sal_Int64 ScAccessibleSpreadsheet::GetAccessibleIndexFormula( sal_Int32 nRow, sa
 bool ScAccessibleSpreadsheet::IsFormulaMode()
 {
     ScViewData& rViewData = mpViewShell->GetViewData();
-    m_bFormulaMode = rViewData.IsRefMode() || SC_MOD()->IsFormulaMode();
+    m_bFormulaMode = rViewData.IsRefMode() || ScModule::get()->IsFormulaMode();
     return m_bFormulaMode ;
 }
 

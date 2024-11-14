@@ -1171,7 +1171,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
         bool bAskIfNotEmpty = bAllowDialogs &&
                                 ( nFlags & InsertDeleteFlags::CONTENTS ) &&
                                 nFunction == ScPasteFunc::NONE &&
-                                SC_MOD()->GetInputOptions().GetReplaceCellsWarn();
+                                ScModule::get()->GetInputOptions().GetReplaceCellsWarn();
         if ( bAskIfNotEmpty )
         {
             ScRangeList aTestRanges(aUserRange);
@@ -1555,7 +1555,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(InsertDeleteFlags nFlags, ScDocument* 
 
     bool bAskIfNotEmpty =
         bAllowDialogs && (nFlags & InsertDeleteFlags::CONTENTS) &&
-        nFunction == ScPasteFunc::NONE && SC_MOD()->GetInputOptions().GetReplaceCellsWarn();
+        nFunction == ScPasteFunc::NONE && ScModule::get()->GetInputOptions().GetReplaceCellsWarn();
 
     if (bAskIfNotEmpty)
     {
@@ -1723,7 +1723,7 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
 
     bool bAskIfNotEmpty =
         bAllowDialogs && (nFlags & InsertDeleteFlags::CONTENTS) &&
-        nFunction == ScPasteFunc::NONE && SC_MOD()->GetInputOptions().GetReplaceCellsWarn();
+        nFunction == ScPasteFunc::NONE && ScModule::get()->GetInputOptions().GetReplaceCellsWarn();
 
     if (bAskIfNotEmpty)
     {

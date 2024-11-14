@@ -375,7 +375,7 @@ void ScAccessibleEditObject::CreateTextHelper()
     mpTextHelper = std::make_unique<::accessibility::AccessibleTextHelper>(std::move(pEditSrc));
     mpTextHelper->SetEventSource(this);
 
-    const ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl();
+    const ScInputHandler* pInputHdl = ScModule::get()->GetInputHdl();
     if ( pInputHdl && pInputHdl->IsEditMode() )
     {
         mpTextHelper->SetFocus();

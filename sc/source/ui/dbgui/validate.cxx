@@ -865,7 +865,7 @@ bool ScValidationDlg::EnterRefStatus()
 
     if (pWnd && pWnd->GetController().get() != this) pWnd = nullptr;
 
-    SC_MOD()->SetRefDialog( nId, pWnd == nullptr );
+    ScModule::get()->SetRefDialog(nId, pWnd == nullptr);
 
     return true;
 }

@@ -186,7 +186,7 @@ SvxTextForwarder* ScHeaderFooterTextData::GetTextForwarder()
             // and gets set in ScTabViewObj::SelectionChanged() by
             // ScFormatShell::ScFormatShell which  calls
             //    SetPool( &pTabViewShell->GetPool() );
-            pTmp.reset(new CellAttributeHelper(SC_MOD()->GetPool()));
+            pTmp.reset(new CellAttributeHelper(ScModule::get()->GetPool()));
             pCellAttributeDefault = &pTmp->getDefaultCellAttribute();
         }
 

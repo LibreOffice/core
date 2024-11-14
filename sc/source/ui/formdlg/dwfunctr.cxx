@@ -188,8 +188,7 @@ void ScFunctionWin::UpdateLRUList()
 {
     if (pFuncDesc && pFuncDesc->nFIndex!=0)
     {
-        ScModule* pScMod = SC_MOD();
-        pScMod->InsertEntryToLRUList(pFuncDesc->nFIndex);
+        ScModule::get()->InsertEntryToLRUList(pFuncDesc->nFIndex);
     }
 }
 
@@ -388,7 +387,7 @@ void ScFunctionWin::DoEnter(bool bDoubleOrEnter)
     if(!aString.isEmpty())
     {
         OUString aFirstArgStr;
-        ScModule* pScMod = SC_MOD();
+        ScModule* pScMod = ScModule::get();
         ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>( pCurSh );
         ScInputHandler* pHdl = pScMod->GetInputHdl( pViewSh );
         if(!pScMod->IsEditMode())

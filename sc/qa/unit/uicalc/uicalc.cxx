@@ -234,7 +234,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf151886)
 
     // change UseEnglishFuncName to true
     ScDocShell* pDocSh = getScDocShell();
-    ScFormulaOptions aFormulaOptions = SC_MOD()->GetFormulaOptions();
+    ScFormulaOptions aFormulaOptions = ScModule::get()->GetFormulaOptions();
     bool bOldStatus = aFormulaOptions.GetUseEnglishFuncName();
     aFormulaOptions.SetUseEnglishFuncName(true);
     pDocSh->SetFormulaOptions(aFormulaOptions);
@@ -297,7 +297,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf162087)
 
     // change UseEnglishFuncName to true
     ScDocShell* pDocSh = getScDocShell();
-    ScFormulaOptions aFormulaOptions = SC_MOD()->GetFormulaOptions();
+    ScFormulaOptions aFormulaOptions = ScModule::get()->GetFormulaOptions();
     bool bOldStatus = aFormulaOptions.GetUseEnglishFuncName();
     aFormulaOptions.SetUseEnglishFuncName(true);
     pDocSh->SetFormulaOptions(aFormulaOptions);
@@ -903,7 +903,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf146795)
     ScDocument* pDoc = getScDoc();
 
     // Disable replace cell warning
-    ScModule* pMod = SC_MOD();
+    ScModule* pMod = ScModule::get();
     ScInputOptions aInputOption = pMod->GetInputOptions();
     bool bOldStatus = aInputOption.GetReplaceCellsWarn();
     aInputOption.SetReplaceCellsWarn(false);
@@ -947,7 +947,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf147744)
     ScDocument* pDoc = getScDoc();
 
     // Disable replace cell warning
-    ScModule* pMod = SC_MOD();
+    ScModule* pMod = ScModule::get();
     ScInputOptions aInputOption = pMod->GetInputOptions();
     bool bOldStatus = aInputOption.GetReplaceCellsWarn();
     aInputOption.SetReplaceCellsWarn(false);
@@ -1151,7 +1151,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf153669)
     ScDocument* pDoc = getScDoc();
 
     // Disable replace cell warning
-    ScModule* pMod = SC_MOD();
+    ScModule* pMod = ScModule::get();
     ScInputOptions aInputOption = pMod->GetInputOptions();
     bool bOldStatus = aInputOption.GetReplaceCellsWarn();
     aInputOption.SetReplaceCellsWarn(false);
@@ -1197,7 +1197,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf100582)
     ScDocument* pDoc = getScDoc();
 
     // Disable replace cell warning
-    ScModule* pMod = SC_MOD();
+    ScModule* pMod = ScModule::get();
     ScInputOptions aInputOption = pMod->GetInputOptions();
     bool bOldStatus = aInputOption.GetReplaceCellsWarn();
     aInputOption.SetReplaceCellsWarn(false);
@@ -1240,7 +1240,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf145640)
     ScDocument* pDoc = getScDoc();
 
     // Enable sorting with update reference
-    ScModule* pMod = SC_MOD();
+    ScModule* pMod = ScModule::get();
     ScInputOptions aInputOption = pMod->GetInputOptions();
     bool bOldStatus = aInputOption.GetSortRefUpdate();
     aInputOption.SetSortRefUpdate(true);
@@ -1273,7 +1273,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf97215)
     ScDocument* pDoc = getScDoc();
 
     // Enable sorting with update reference
-    ScModule* pMod = SC_MOD();
+    ScModule* pMod = ScModule::get();
     ScInputOptions aInputOption = pMod->GetInputOptions();
     bool bOldStatus = aInputOption.GetSortRefUpdate();
     aInputOption.SetSortRefUpdate(true);
@@ -1331,7 +1331,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf92963)
     ScDocument* pDoc = getScDoc();
 
     // Disable replace cell warning
-    ScModule* pMod = SC_MOD();
+    ScModule* pMod = ScModule::get();
     ScInputOptions aInputOption = pMod->GetInputOptions();
     bool bOldStatus = aInputOption.GetReplaceCellsWarn();
     aInputOption.SetReplaceCellsWarn(false);
@@ -1484,7 +1484,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf120660)
     ScDocument* pDoc = getScDoc();
 
     // Disable replace cell warning
-    ScModule* pMod = SC_MOD();
+    ScModule* pMod = ScModule::get();
     ScInputOptions aInputOption = pMod->GetInputOptions();
     bool bOldStatus = aInputOption.GetReplaceCellsWarn();
     aInputOption.SetReplaceCellsWarn(false);
@@ -2072,7 +2072,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf117458)
     createScDoc();
     ScDocShell* pDocSh = getScDocShell();
 
-    ScModule* pMod = SC_MOD();
+    ScModule* pMod = ScModule::get();
     ScInputOptions aInputOption = pMod->GetInputOptions();
     sal_uInt16 bOldStatus = aInputOption.GetMoveDir();
 
@@ -2317,7 +2317,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf163019)
     ScDocument* pDoc = getScDoc();
 
     // Disable replace cell warning
-    ScModule* pMod = SC_MOD();
+    ScModule* pMod = ScModule::get();
     ScInputOptions aInputOption = pMod->GetInputOptions();
     bool bOldStatus = aInputOption.GetReplaceCellsWarn();
     aInputOption.SetReplaceCellsWarn(false);

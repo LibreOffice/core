@@ -63,7 +63,7 @@ ScFormulaDlg::ScFormulaDlg(SfxBindings* pB, SfxChildWindow* pCW,
     , m_pViewShell( nullptr )
 {
     m_aHelper.SetDialog(m_xDialog.get());
-    ScModule* pScMod = SC_MOD();
+    ScModule* pScMod = ScModule::get();
     pScMod->InputEnterHandler();
     m_pViewShell = nullptr;
 
@@ -94,7 +94,7 @@ ScFormulaDlg::ScFormulaDlg(SfxBindings* pB, SfxChildWindow* pCW,
     m_xOpCodeMapper.set(ScServiceProvider::MakeInstance(ScServiceProvider::Type::OPCODEMAPPER,
                                                         m_pDoc->GetDocumentShell()), uno::UNO_QUERY);
 
-    ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl(m_pViewShell);
+    ScInputHandler* pInputHdl = pScMod->GetInputHdl(m_pViewShell);
 
     assert(pInputHdl && "Missing input handler :-/");
 
@@ -185,7 +185,7 @@ void ScFormulaDlg::notifyChange()
 
 void ScFormulaDlg::fill()
 {
-    ScModule* pScMod = SC_MOD();
+    ScModule* pScMod = ScModule::get();
     ScFormEditData* pData = static_cast<ScFormEditData*>(getFormEditData());
     notifyChange();
     OUString rStrExp;
@@ -239,7 +239,7 @@ ScFormulaDlg::~ScFormulaDlg() COVERITY_NOEXCEPT_FALSE
     if (pData) // close doesn't destroy;
     {
         //set back reference input handler
-        SC_MOD()->SetRefInputHdl(nullptr);
+        ScModule::get()->SetRefInputHdl(nullptr);
         StoreFormEditData(pData);
     }
 
@@ -499,8 +499,7 @@ void ScFormulaDlg::SaveLRUEntry(const ScFuncDesc* pFuncDescP)
 {
     if (pFuncDescP && pFuncDescP->nFIndex!=0)
     {
-        ScModule* pScMod = SC_MOD();
-        pScMod->InsertEntryToLRUList(pFuncDescP->nFIndex);
+        ScModule::get()->InsertEntryToLRUList(pFuncDescP->nFIndex);
     }
 }
 
@@ -582,7 +581,7 @@ void ScFormulaDlg::clear()
     m_pDoc = nullptr;
 
     //restore reference inputhandler
-    ScModule* pScMod = SC_MOD();
+    ScModule* pScMod = ScModule::get();
     pScMod->SetRefInputHdl(nullptr);
 
     // force Enable() of edit line
@@ -626,7 +625,7 @@ formula::FormEditData* ScFormulaDlg::getFormEditData() const
 }
 void ScFormulaDlg::setCurrentFormula(const OUString& _sReplacement)
 {
-    ScModule* pScMod = SC_MOD();
+    ScModule* pScMod = ScModule::get();
     {
         //fdo#69971 We need the EditEngine Modification handler of the inputbar that we
         //are feeding to be disabled while this dialog is open. Otherwise we end up in
@@ -648,13 +647,11 @@ void ScFormulaDlg::setCurrentFormula(const OUString& _sReplacement)
 }
 void ScFormulaDlg::setSelection(sal_Int32 _nStart, sal_Int32 _nEnd)
 {
-    ScModule* pScMod = SC_MOD();
-    pScMod->InputSetSelection( _nStart, _nEnd );
+    ScModule::get()->InputSetSelection(_nStart, _nEnd);
 }
 void ScFormulaDlg::getSelection(sal_Int32& _nStart, sal_Int32& _nEnd) const
 {
-    ScModule* pScMod = SC_MOD();
-    pScMod->InputGetSelection( _nStart, _nEnd );
+    ScModule::get()->InputGetSelection(_nStart, _nEnd);
 }
 OUString ScFormulaDlg::getCurrentFormula() const
 {

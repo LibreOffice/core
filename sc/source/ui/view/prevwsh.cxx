@@ -129,7 +129,7 @@ void ScPreviewShell::Construct( vcl::Window* pParent )
 
     pPreview = VclPtr<ScPreview>::Create( pParent, pDocShell, this );
 
-    SetPool( &SC_MOD()->GetPool() );
+    SetPool(&ScModule::get()->GetPool());
     SetWindow( pPreview );
     StartListening(*pDocShell, DuplicateHandling::Prevent);
     StartListening(*SfxGetpApp(), DuplicateHandling::Prevent); // #i62045# #i62046# application is needed for Calc's own hints
@@ -543,7 +543,7 @@ void ScPreviewShell::Activate(bool bMDI)
     if (bMDI)
     {
         // InputHdl is now mostly Null, no more assertion!
-        ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl();
+        ScInputHandler* pInputHdl = ScModule::get()->GetInputHdl();
         if ( pInputHdl )
             pInputHdl->NotifyChange( nullptr );
     }

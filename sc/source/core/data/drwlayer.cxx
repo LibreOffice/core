@@ -307,7 +307,7 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, OUString _aName ) :
     rAdmin.NewLayer(u"hidden"_ustr,   SC_LAYER_HIDDEN.get());
 
     // Set link for URL-Fields
-    ScModule* pScMod = SC_MOD();
+    ScModule* pScMod = ScModule::get();
     Outliner& rOutliner = GetDrawOutliner();
     rOutliner.SetCalcFieldValueHdl( LINK( pScMod, ScModule, CalcFieldValueHdl ) );
     rOutliner.SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(GetStyleSheetPool()));

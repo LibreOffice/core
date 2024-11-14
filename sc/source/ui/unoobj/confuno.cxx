@@ -196,7 +196,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             break;
             case css::document::LinkUpdateModes::GLOBAL_SETTING:
             default:
-                eMode = SC_MOD()->GetAppOptions().GetLinkMode();
+                eMode = ScModule::get()->GetAppOptions().GetLinkMode();
             break;
         }
         rDoc.SetLinkMode( eMode );

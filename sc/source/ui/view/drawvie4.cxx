@@ -97,7 +97,7 @@ void ScDrawView::BeginDrag( vcl::Window* pWindow, const Point& rStartPos )
     pTransferObj->SetDrawPersist(aDragShellRef); // keep persist for ole objects alive
     pTransferObj->SetDragSource( this );               // copies selection
 
-    SC_MOD()->SetDragObject( nullptr, pTransferObj.get() );     // for internal D&D
+    ScModule::get()->SetDragObject(nullptr, pTransferObj.get()); // for internal D&D
     pTransferObj->StartDrag( pWindow, DND_ACTION_COPYMOVE | DND_ACTION_LINK );
 }
 

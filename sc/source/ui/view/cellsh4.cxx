@@ -415,12 +415,12 @@ void ScCellShell::ExecuteMove( SfxRequest& rReq )
             break;
 
         case SID_SETINPUTMODE:
-            SC_MOD()->SetInputMode( SC_INPUT_TABLE );
+            ScModule::get()->SetInputMode(SC_INPUT_TABLE);
             break;
 
         case SID_FOCUS_INPUTLINE:
             {
-                ScInputHandler* pHdl = SC_MOD()->GetInputHdl( pTabViewShell );
+                ScInputHandler* pHdl = ScModule::get()->GetInputHdl(pTabViewShell);
                 if (pHdl)
                 {
                     ScInputWindow* pWin = pHdl->GetInputWindow();

@@ -41,7 +41,7 @@ static OUString lcl_MetricString( tools::Long nTwips, std::u16string_view rText 
         return ScResId(STR_TIP_HIDE);
     else
     {
-        FieldUnit eUserMet = SC_MOD()->GetAppOptions().GetAppMetric();
+        FieldUnit eUserMet = ScModule::get()->GetAppOptions().GetAppMetric();
 
         sal_Int64 nUserVal = vcl::ConvertValue( nTwips*100, 1, 2, FieldUnit::TWIP, eUserMet );
 
@@ -181,8 +181,7 @@ void ScColBar::SelectWindow()
 
 bool ScColBar::IsDisabled() const
 {
-    ScModule* pScMod = SC_MOD();
-    return pScMod->IsModalMode();
+    return ScModule::get()->IsModalMode();
 }
 
 bool ScColBar::ResizeAllowed() const
@@ -341,8 +340,7 @@ void ScRowBar::SelectWindow()
 
 bool ScRowBar::IsDisabled() const
 {
-    ScModule* pScMod = SC_MOD();
-    return pScMod->IsModalMode();
+    return ScModule::get()->IsModalMode();
 }
 
 bool ScRowBar::ResizeAllowed() const

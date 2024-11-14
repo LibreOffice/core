@@ -69,7 +69,8 @@ void ScTable::UpdatePageBreaks(const ScRange* pUserArea)
             return;
 
         // Always update breaks if force breaks option has changed
-        if (mbPageBreaksValid && mbForceBreaks == SC_MOD()->GetPrintOptions().GetForceBreaks())
+        if (mbPageBreaksValid
+            && mbForceBreaks == ScModule::get()->GetPrintOptions().GetForceBreaks())
             return;
     }
 
@@ -123,7 +124,7 @@ void ScTable::UpdatePageBreaks(const ScRange* pUserArea)
     // get bSkipColBreaks/bSkipRowBreaks flags:
     // fdo#40788 - print range scale settings can cause manual breaks to be
     // ignored (see below). This behaviour may now be set by the user.
-    mbForceBreaks = SC_MOD()->GetPrintOptions().GetForceBreaks();
+    mbForceBreaks = ScModule::get()->GetPrintOptions().GetForceBreaks();
     bool bSkipColBreaks = false;
     bool bSkipRowBreaks = false;
 

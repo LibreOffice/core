@@ -511,7 +511,7 @@ IMPL_LINK( ScGridWindow, PopupSpellingHdl, SpellCallbackInfo&, rInfo, void )
     else //IGNOREWORD, ADDTODICTIONARY, WORDLANGUAGE, PARALANGUAGE
     {
         // The spelling status of the word has changed. Close the cell to reset the caches
-        ScInputHandler* pHdl = SC_MOD()->GetInputHdl(mrViewData.GetViewShell());
+        ScInputHandler* pHdl = ScModule::get()->GetInputHdl(mrViewData.GetViewShell());
         if (pHdl)
             pHdl->EnterHandler();
     }
@@ -1658,8 +1658,7 @@ void ScGridWindow::FilterSelect( sal_uLong nSel )
 
 void ScGridWindow::ExecDataSelect( SCCOL nCol, SCROW nRow, const OUString& rStr )
 {
-    ScModule* pScMod = SC_MOD();
-    ScInputHandler* pViewHdl = pScMod->GetInputHdl(mrViewData.GetViewShell());
+    ScInputHandler* pViewHdl = ScModule::get()->GetInputHdl(mrViewData.GetViewShell());
     if (pViewHdl && mrViewData.HasEditView(mrViewData.GetActivePart()))
         pViewHdl->CancelHandler();
 
@@ -1862,7 +1861,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
 
     bEEMouse = false;
 
-    ScModule* pScMod = SC_MOD();
+    ScModule* pScMod = ScModule::get();
     if (pScMod->IsModalMode(mrViewData.GetSfxDocShell()))
         return;
 
@@ -2085,7 +2084,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
 
         if (!bAutoFilterDisable && pRealPosAttr->HasAutoFilter())
         {
-            SC_MOD()->InputEnterHandler();
+            pScMod->InputEnterHandler();
             if (DoAutoFilterButton(nPosX, nRealPosY, rMEvt))
                 return;
         }
@@ -2247,7 +2246,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         return;                         // nothing more should happen here
     }
 
-    ScModule* pScMod = SC_MOD();
+    ScModule* pScMod = ScModule::get();
     if (pScMod->IsModalMode(mrViewData.GetSfxDocShell()))
         return;
 
@@ -2785,7 +2784,7 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
     if (rMEvt.IsLeaveWindow() && mpNoteMarker && !mpNoteMarker->IsByKeyboard())
         HideNoteMarker();
 
-    ScModule* pScMod = SC_MOD();
+    ScModule* pScMod = ScModule::get();
     if (pScMod->IsModalMode(mrViewData.GetSfxDocShell()))
         return;
 
@@ -2909,7 +2908,7 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
         }
     }
 
-    bool bWater = SC_MOD()->GetIsWaterCan() || mrViewData.GetView()->HasPaintBrush();
+    bool bWater = pScMod->GetIsWaterCan() || mrViewData.GetView()->HasPaintBrush();
     if (bWater)
         SetPointer( PointerStyle::Fill );
 
@@ -3082,7 +3081,7 @@ void ScGridWindow::Tracking( const TrackingEvent& rTEvt )
 
     if ( rTEvt.IsTrackingCanceled() )           // Cancel everything...
     {
-        if (!mrViewData.GetView()->IsInActivatePart() && !SC_MOD()->IsRefDialogOpen())
+        if (!mrViewData.GetView()->IsInActivatePart() && !ScModule::get()->IsRefDialogOpen())
         {
             if (bDPMouse)
                 bDPMouse = false;               // Paint for each bDragRect
@@ -3109,7 +3108,7 @@ void ScGridWindow::Tracking( const TrackingEvent& rTEvt )
 
             bool bRefMode = mrViewData.IsRefMode();
             if (bRefMode)
-                SC_MOD()->EndReference();       // Do not let the Dialog remain minimized
+                ScModule::get()->EndReference(); // Do not let the Dialog remain minimized
         }
     }
     else if ( rTEvt.IsTrackingEnded() )
@@ -3144,7 +3143,7 @@ void ScGridWindow::StartDrag( sal_Int8 /* nAction */, const Point& rPosPixel )
         mrViewData.GetEditView( eWhich, pEditView, nEditCol, nEditRow );
 
         // don't remove the edit view while switching views
-        ScModule* pScMod = SC_MOD();
+        ScModule* pScMod = ScModule::get();
         pScMod->SetInEditCommand( true );
 
         pEditView->Command( aDragEvent );
@@ -3196,7 +3195,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
         return;
     }
 
-    ScModule* pScMod = SC_MOD();
+    ScModule* pScMod = ScModule::get();
     OSL_ENSURE( nCmd != CommandEventId::StartDrag, "ScGridWindow::Command called with CommandEventId::StartDrag" );
 
     if (nCmd == CommandEventId::ModKeyChange)
@@ -3304,7 +3303,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
     if (bDisable)
         return;
 
-    if (nCmd != CommandEventId::ContextMenu || SC_MOD()->GetIsWaterCan())
+    if (nCmd != CommandEventId::ContextMenu || pScMod->GetIsWaterCan())
         return;
 
     bool bMouse = rCEvt.IsMouseEvent();
@@ -3545,7 +3544,7 @@ void ScGridWindow::SelectForContextMenu( const Point& rPosPixel, SCCOL nCellX, S
 
     if ( mrViewData.HasEditView(eWhich) )
     {
-        ScModule* pScMod = SC_MOD();
+        ScModule* pScMod = ScModule::get();
         SCCOL nEditStartCol = mrViewData.GetEditViewCol(); //! change to GetEditStartCol after calcrtl is integrated
         SCROW nEditStartRow = mrViewData.GetEditViewRow();
         SCCOL nEditEndCol = mrViewData.GetEditEndCol();
@@ -3728,24 +3727,25 @@ void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
 
 #endif
 
-    if( SC_MOD()->IsRefDialogOpen() )
+    ScModule* mod = ScModule::get();
+    if( mod->IsRefDialogOpen() )
     {
         if( !rKeyCode.GetModifier() && (rKeyCode.GetCode() == KEY_F2) )
         {
-            SC_MOD()->EndReference();
+            mod->EndReference();
         }
         else if( mrViewData.GetViewShell()->MoveCursorKeyInput( rKEvt ) )
         {
             ScRange aRef(
                 mrViewData.GetRefStartX(), mrViewData.GetRefStartY(), mrViewData.GetRefStartZ(),
                 mrViewData.GetRefEndX(), mrViewData.GetRefEndY(), mrViewData.GetRefEndZ() );
-            SC_MOD()->SetReference( aRef, mrViewData.GetDocument() );
+            mod->SetReference(aRef, mrViewData.GetDocument());
         }
         mrViewData.GetViewShell()->SelectionChanged();
         return ;
     }
     else if( rKeyCode.GetCode() == KEY_RETURN && mrViewData.IsPasteMode()
-            && SC_MOD()->GetInputOptions().GetEnterPasteMode() )
+            && mod->GetInputOptions().GetEnterPasteMode() )
     {
         ScTabViewShell* pTabViewShell = mrViewData.GetViewShell();
         ScClipUtil::PasteFromClipboard( mrViewData, pTabViewShell, true );
@@ -3849,8 +3849,7 @@ OUString ScGridWindow::GetSurroundingText() const
     bool bEditView = mrViewData.HasEditView(eWhich);
     if (bEditView)
     {
-        ScModule* pScMod = SC_MOD();
-        ScInputHandler* pHdl = pScMod->GetInputHdl(mrViewData.GetViewShell());
+        ScInputHandler* pHdl = ScModule::get()->GetInputHdl(mrViewData.GetViewShell());
         if (pHdl)
             return pHdl->GetSurroundingText();
     }
@@ -3870,8 +3869,7 @@ Selection ScGridWindow::GetSurroundingTextSelection() const
     bool bEditView = mrViewData.HasEditView(eWhich);
     if (bEditView)
     {
-        ScModule* pScMod = SC_MOD();
-        ScInputHandler* pHdl = pScMod->GetInputHdl(mrViewData.GetViewShell());
+        ScInputHandler* pHdl = ScModule::get()->GetInputHdl(mrViewData.GetViewShell());
         if (pHdl)
             return pHdl->GetSurroundingTextSelection();
     }
@@ -3891,8 +3889,7 @@ bool ScGridWindow::DeleteSurroundingText(const Selection& rSelection)
     bool bEditView = mrViewData.HasEditView(eWhich);
     if (bEditView)
     {
-        ScModule* pScMod = SC_MOD();
-        ScInputHandler* pHdl = pScMod->GetInputHdl(mrViewData.GetViewShell());
+        ScInputHandler* pHdl = ScModule::get()->GetInputHdl(mrViewData.GetViewShell());
         if (pHdl)
             return pHdl->DeleteSurroundingText(rSelection);
     }
@@ -4231,7 +4228,7 @@ sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt, const ScD
 
 sal_Int8 ScGridWindow::AcceptDrop( const AcceptDropEvent& rEvt )
 {
-    const ScDragData& rData = SC_MOD()->GetDragData();
+    const ScDragData& rData = ScModule::get()->GetDragData();
     if ( rEvt.mbLeaving )
     {
         DrawMarkDropObj( nullptr );
@@ -4885,7 +4882,7 @@ sal_Int8 ScGridWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
     DrawMarkDropObj( nullptr );    // drawing layer
 
-    ScModule* pScMod = SC_MOD();
+    ScModule* pScMod = ScModule::get();
     const ScDragData& rData = pScMod->GetDragData();
     if (rData.pCellTransfer)
         return ExecutePrivateDrop( rEvt, rData );
@@ -5022,7 +5019,7 @@ void ScGridWindow::PasteSelection( const Point& rPosPixel )
         }
     }
 
-    ScSelectionTransferObj* pOwnSelection = SC_MOD()->GetSelectionTransfer();
+    ScSelectionTransferObj* pOwnSelection = ScModule::get()->GetSelectionTransfer();
     if ( pOwnSelection )
     {
         //  within Calc
@@ -5076,7 +5073,7 @@ void ScGridWindow::UpdateEditViewPos()
     //  hide EditView?
 
     bool bHide = ( nEndCol<mrViewData.GetPosX(eHWhich) || nEndRow<mrViewData.GetPosY(eVWhich) );
-    if ( SC_MOD()->IsFormulaMode() )
+    if (ScModule::get()->IsFormulaMode())
         if ( mrViewData.GetTabNo() != mrViewData.GetRefTabNo() )
             bHide = true;
 
@@ -5351,7 +5348,7 @@ void ScGridWindow::GetFocus()
     if (pViewShell->HasAccessibilityObjects())
         pViewShell->BroadcastAccessibility(ScAccGridWinFocusGotHint(eWhich));
 
-    if ( !SC_MOD()->IsFormulaMode() )
+    if (!ScModule::get()->IsFormulaMode())
     {
         pViewShell->UpdateInputHandler();
 //      StopMarking();      // If Dialog (error), because then no ButtonUp
@@ -5377,7 +5374,7 @@ bool ScGridWindow::HitRangeFinder( const Point& rMouse, RfCorner& rCorner,
                                 sal_uInt16* pIndex, SCCOL* pAddX, SCROW* pAddY)
 {
     bool bFound = false;
-    ScInputHandler* pHdl = SC_MOD()->GetInputHdl( mrViewData.GetViewShell() );
+    ScInputHandler* pHdl = ScModule::get()->GetInputHdl(mrViewData.GetViewShell());
     if (pHdl)
     {
         ScRangeFindList* pRangeFinder = pHdl->GetRangeFindList();
@@ -5611,7 +5608,7 @@ static void lcl_PaintRefChanged( ScDocShell* pDocSh, const ScRange& rOldUn, cons
 
 void ScGridWindow::RFMouseMove( const MouseEvent& rMEvt, bool bUp )
 {
-    ScInputHandler* pHdl = SC_MOD()->GetInputHdl( mrViewData.GetViewShell() );
+    ScInputHandler* pHdl = ScModule::get()->GetInputHdl(mrViewData.GetViewShell());
     if (!pHdl)
         return;
     ScRangeFindList* pRangeFinder = pHdl->GetRangeFindList();
@@ -6329,7 +6326,7 @@ void ScGridWindow::UpdateCopySourceOverlay()
         return;
     if (!mrViewData.ShowPasteSource())
         return;
-    if (!SC_MOD()->GetInputOptions().GetEnterPasteMode())
+    if (!ScModule::get()->GetInputOptions().GetEnterPasteMode())
         return;
     rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = getOverlayManager();
     if (!xOverlayManager.is())
@@ -6698,10 +6695,11 @@ void ScGridWindow::UpdateCursorOverlay()
 
             if (xOverlayManager.is())
             {
-                Color aCursorColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::CALCCELLFOCUS).nColor;
+                ScModule* mod = ScModule::get();
+                Color aCursorColor = mod->GetColorConfig().GetColorValue(svtools::CALCCELLFOCUS).nColor;
                 if (mrViewData.GetActivePart() != eWhich)
                     // non-active pane uses a different color.
-                    aCursorColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::CALCPAGEBREAKAUTOMATIC).nColor;
+                    aCursorColor = mod->GetColorConfig().GetColorValue(svtools::CALCPAGEBREAKAUTOMATIC).nColor;
                 std::vector< basegfx::B2DRange > aRanges;
                 const basegfx::B2DHomMatrix aTransform(GetOutDev()->GetInverseViewTransformation());
 
@@ -6860,7 +6858,7 @@ void ScGridWindow::UpdateSelectionOverlay()
         pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_SELECTION_AREA, "EMPTY"_ostr);
         SfxLokHelper::notifyOtherViews(pViewShell, LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", "EMPTY"_ostr);
 
-        ScInputHandler* pViewHdl = SC_MOD()->GetInputHdl(pViewShell);
+        ScInputHandler* pViewHdl = ScModule::get()->GetInputHdl(pViewShell);
         if (!pViewHdl || !pViewHdl->IsEditMode())
         {
             std::vector<ReferenceMark> aReferenceMarks;
@@ -6907,8 +6905,9 @@ void ScGridWindow::UpdateHighlightOverlay()
                 }
             }
 
-            const Color aBackgroundColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
-            Color aHighlightColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::CALCCELLFOCUS).nColor;
+            ScModule* mod = ScModule::get();
+            const Color aBackgroundColor = mod->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
+            Color aHighlightColor = mod->GetColorConfig().GetColorValue(svtools::CALCCELLFOCUS).nColor;
             aHighlightColor.Merge(aBackgroundColor, 100);
 
             std::unique_ptr<sdr::overlay::OverlayObject> pOverlay(new sdr::overlay::OverlaySelection(
@@ -7032,10 +7031,11 @@ void ScGridWindow::UpdateAutoFillOverlay()
         aRBInner.transform(aTransform);
         aRangesInner.push_back(aRBInner);
 
-        Color aHandleColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::CALCCELLFOCUS).nColor;
+        ScModule* mod = ScModule::get();
+        Color aHandleColor = mod->GetColorConfig().GetColorValue(svtools::CALCCELLFOCUS).nColor;
         if (mrViewData.GetActivePart() != eWhich)
             // non-active pane uses a different color.
-            aHandleColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::CALCPAGEBREAKAUTOMATIC).nColor;
+            aHandleColor = mod->GetColorConfig().GetColorValue(svtools::CALCPAGEBREAKAUTOMATIC).nColor;
 
         std::unique_ptr<sdr::overlay::OverlayObject> pOverlayInner(new sdr::overlay::OverlaySelection(
             sdr::overlay::OverlayType::Solid,

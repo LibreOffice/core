@@ -1422,7 +1422,7 @@ void ScTabViewObj::SetZoom(sal_Int16 nZoom)
     {
         if (!pViewSh->GetViewData().IsPagebreakMode())
         {
-            ScModule* pScMod = SC_MOD();
+            ScModule* pScMod = ScModule::get();
             ScAppOptions aNewOpt(pScMod->GetAppOptions());
             aNewOpt.SetZoom( nZoom );
             aNewOpt.SetZoomType( pViewSh->GetViewData().GetView()->GetZoomType() );
@@ -1851,7 +1851,7 @@ void SAL_CALL ScTabViewObj::setPropertyValue(
         {
             rViewData.SetFormulaBarLines(nIntVal);
             // Notify formula bar about changed lines
-            ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl();
+            ScInputHandler* pInputHdl = ScModule::get()->GetInputHdl();
             if (pInputHdl)
             {
                 ScInputWindow* pInputWin = pInputHdl->GetInputWindow();

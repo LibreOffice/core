@@ -85,7 +85,7 @@ const Color nAuthorColor[ SC_AUTHORCOLORCOUNT ] = {
 // Helper class for color assignment to avoid repeated lookups for the same user
 
 ScActionColorChanger::ScActionColorChanger( const ScChangeTrack& rTrack ) :
-    rOpt( SC_MOD()->GetAppOptions() ),
+    rOpt( ScModule::get()->GetAppOptions() ),
     rUsers( rTrack.GetUserCollection() ),
     nLastUserIndex( 0 ),
     nColor( COL_BLACK )
@@ -291,7 +291,7 @@ void ScOutputData::SetSyntaxMode( bool bNewMode )
     mbSyntaxMode = bNewMode;
     if ( bNewMode && !mxValueColor )
     {
-        const svtools::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
+        const svtools::ColorConfig& rColorCfg = ScModule::get()->GetColorConfig();
         mxValueColor = rColorCfg.GetColorValue( svtools::CALCVALUE ).nColor;
         mxTextColor = rColorCfg.GetColorValue( svtools::CALCTEXT ).nColor;
         mxFormulaColor = rColorCfg.GetColorValue( svtools::CALCFORMULA ).nColor;
@@ -388,7 +388,7 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
     // break all the drawing by one change.
     // So until that happens, we need to special case.
     bool bWorksInPixels = bMetaFile;
-    const svtools::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
+    const svtools::ColorConfig& rColorCfg = ScModule::get()->GetColorConfig();
     Color aSheetBGColor = rColorCfg.GetColorValue(::svtools::DOCCOLOR).nColor;
 
     if ( eType == OUTTYPE_WINDOW )
@@ -873,7 +873,7 @@ void ScOutputData::DrawDocumentBackground()
     if ( !bSolidBackground )
         return;
 
-    Color aBgColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor );
+    Color aBgColor(ScModule::get()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor);
     mpDev->SetLineColor(aBgColor);
     mpDev->SetFillColor(aBgColor);
 
@@ -1110,7 +1110,7 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
 
     tools::Long nPosY = nScrY;
 
-    const svtools::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
+    const svtools::ColorConfig& rColorCfg = ScModule::get()->GetColorConfig();
     Color aProtectedColor( rColorCfg.GetColorValue( svtools::CALCPROTECTEDBACKGROUND ).nColor );
     auto pProtectedBackground = std::make_shared<SvxBrushItem>( aProtectedColor, ATTR_BACKGROUND );
 
@@ -1263,7 +1263,7 @@ void ScOutputData::DrawExtraShadow(bool bLeft, bool bTop, bool bRight, bool bBot
     bool bCellContrast = mbUseStyleColor && rStyleSettings.GetHighContrastMode();
     Color aAutoTextColor;
     if ( bCellContrast )
-        aAutoTextColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
+        aAutoTextColor = ScModule::get()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
 
     tools::Long nInitPosX = nScrX;
     if ( bLayoutRTL )
@@ -1410,7 +1410,7 @@ void ScOutputData::DrawClear()
     tools::Long nOneY = aOnePixel.Height();
 
     // (called only for ScGridWindow)
-    Color aBgColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor );
+    Color aBgColor(ScModule::get()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor);
 
     if (bMetaFile)
         nOneX = nOneY = 0;
@@ -1490,7 +1490,7 @@ void ScOutputData::DrawFrame(vcl::RenderContext& rRenderContext)
     }
     else if ( bCellContrast )
     {
-        aSingleColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
+        aSingleColor = ScModule::get()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
         bUseSingleColor = true;
     }
 
@@ -2493,13 +2493,14 @@ void ScOutputData::DrawNoteMarks(vcl::RenderContext& rRenderContext)
                 if (!mpDoc->ColHidden(nX, nTab) && mpDoc->GetNote(nX, pRowInfo[nArrY].nRowNo, nTab)
                     && (bIsMerged || (!pInfo->bHOverlapped && !pInfo->bVOverlapped)))
                 {
-                    rRenderContext.SetLineColor(SC_MOD()->GetColorConfig().GetColorValue(svtools::CALCGRID).nColor);
+                    ScModule* mod = ScModule::get();
+                    rRenderContext.SetLineColor(mod->GetColorConfig().GetColorValue(svtools::CALCGRID).nColor);
 
                     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
                     if ( mbUseStyleColor && rStyleSettings.GetHighContrastMode() )
-                        rRenderContext.SetFillColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
+                        rRenderContext.SetFillColor( mod->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
                     else
-                        rRenderContext.SetFillColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::CALCCOMMENTS).nColor );
+                        rRenderContext.SetFillColor( mod->GetColorConfig().GetColorValue(svtools::CALCCOMMENTS).nColor );
 
                     tools::Long nMarkX = nPosX + ( pRowInfo[0].basicCellInfo(nX).nWidth - 1) * nLayoutSign;
                     if ( bIsMerged || pInfo->bMerged )
@@ -2566,7 +2567,7 @@ void ScOutputData::DrawFormulaMarks(vcl::RenderContext& rRenderContext)
 
                         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
                         if ( mbUseStyleColor && rStyleSettings.GetHighContrastMode() )
-                            rRenderContext.SetFillColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
+                            rRenderContext.SetFillColor( ScModule::get()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
                         else
                             rRenderContext.SetFillColor(COL_LIGHTBLUE);
 
@@ -2711,8 +2712,9 @@ void ScOutputData::DrawClipMarks()
     if (!bAnyClipped)
         return;
 
-    Color aArrowFillCol( SC_MOD()->GetColorConfig().GetColorValue(svtools::CALCTEXTOVERFLOW).nColor );
-    const bool bIsDarkBackground = SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor.IsDark();
+    ScModule* mod = ScModule::get();
+    Color aArrowFillCol(mod->GetColorConfig().GetColorValue(svtools::CALCTEXTOVERFLOW).nColor);
+    const bool bIsDarkBackground = mod->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor.IsDark();
 
     DrawModeFlags nOldDrawMode = mpDev->GetDrawMode();
 

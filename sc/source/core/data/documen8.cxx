@@ -199,7 +199,7 @@ OutputDevice* ScDocument::GetRefDevice(bool bForceVirtDev)
 {
     // Create printer like ref device, see Writer...
     OutputDevice* pRefDevice = nullptr;
-    if ( !bForceVirtDev && SC_MOD()->GetInputOptions().GetTextWysiwyg() )
+    if (!bForceVirtDev && ScModule::get()->GetInputOptions().GetTextWysiwyg())
     {
         pRefDevice = GetPrinter();
         SAL_WARN_IF(!pRefDevice, "sc", "unable to get a printer, fallback to virdev");

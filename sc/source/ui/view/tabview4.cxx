@@ -162,7 +162,7 @@ void ScTabView::DoneRefMode( bool bContinue )
 {
     ScDocument& rDoc = aViewData.GetDocument();
     if ( aViewData.GetRefType() == SC_REFTYPE_REF && bContinue )
-        SC_MOD()->AddRefEntry();
+        ScModule::get()->AddRefEntry();
 
     bool bWasRef = aViewData.IsRefMode();
     aViewData.SetRefMode( false, SC_REFTYPE_NONE );
@@ -188,13 +188,13 @@ void ScTabView::DoneRefMode( bool bContinue )
 void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
 {
     ScDocument& rDoc = aViewData.GetDocument();
+    ScModule* pScMod = ScModule::get();
 
     if (!aViewData.IsRefMode())
     {
         //  This will happen, when first at a reference dialog with Control in
         //  the table is clicked. Then append the new reference to the old content:
 
-        ScModule* pScMod = SC_MOD();
         if (pScMod->IsFormulaMode())
             pScMod->AddRefEntry();
 
@@ -238,7 +238,7 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
             ScRange aRef(
                     nStartX, nStartY, aViewData.GetRefStartZ(),
                     nEndX, nEndY, aViewData.GetRefEndZ() );
-            SC_MOD()->SetReference( aRef, rDoc, &rMark );
+            pScMod->SetReference(aRef, rDoc, &rMark);
             ShowRefTip();
         }
         else if ( eType == SC_REFTYPE_EMBED_LT || eType == SC_REFTYPE_EMBED_RB )
@@ -258,7 +258,7 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
         if (aRect.GetDiff( nPaintStartX, nPaintStartY, nPaintEndX, nPaintEndY ))
             PaintArea( nPaintStartX, nPaintStartY, nPaintEndX, nPaintEndY, ScUpdateMode::Marks );
 
-        ScInputHandler* pInputHandler = SC_MOD()->GetInputHdl();
+        ScInputHandler* pInputHandler = pScMod->GetInputHdl();
         if (pInputHandler)
         {
             pInputHandler->UpdateLokReferenceMarks();
@@ -363,6 +363,7 @@ void ScTabView::InitRefMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ, ScRefType eT
     aViewData.SetRefStart( nCurX, nCurY, nCurZ );
     aViewData.SetRefEnd( nCurX, nCurY, nCurZ );
 
+    ScModule* mod = ScModule::get();
     if (nCurZ == aViewData.GetTabNo())
     {
         SCCOL nStartX = nCurX;
@@ -376,10 +377,10 @@ void ScTabView::InitRefMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ, ScRefType eT
 
         //  SetReference without Merge-Adjustment
         ScRange aRef( nCurX,nCurY,nCurZ, nCurX,nCurY,nCurZ );
-        SC_MOD()->SetReference( aRef, rDoc, &rMark );
+        mod->SetReference( aRef, rDoc, &rMark );
     }
 
-    ScInputHandler* pInputHandler = SC_MOD()->GetInputHdl();
+    ScInputHandler* pInputHandler = mod->GetInputHdl();
     if (pInputHandler)
     {
         pInputHandler->UpdateLokReferenceMarks();
@@ -532,7 +533,7 @@ void ScTabView::UpdateScrollBars( HeaderType eHeaderType )
     if ( aViewData.IsActive() )
     {
         if (UpdateVisibleRange())
-            SC_MOD()->AnythingChanged();                // if visible area has changed
+            ScModule::get()->AnythingChanged(); // if visible area has changed
     }
 }
 

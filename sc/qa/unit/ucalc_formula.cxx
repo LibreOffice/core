@@ -36,7 +36,7 @@ using ::std::endl;
 namespace {
 void setExpandRefs(bool bExpand)
 {
-    ScModule* pMod = SC_MOD();
+    ScModule* pMod = ScModule::get();
     ScInputOptions aOpt = pMod->GetInputOptions();
     aOpt.SetExpandRefs(bExpand);
     pMod->SetInputOptions(aOpt);

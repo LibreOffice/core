@@ -181,7 +181,7 @@ SCTAB ScTabControl::GetPrivatDropPos(const Point& rPos )
 
 void ScTabControl::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    ScModule* pScMod = SC_MOD();
+    ScModule* pScMod = ScModule::get();
     if ( !pScMod->IsModalMode() && !pScMod->IsFormulaMode() && !IsInEditMode() )
     {
         // activate View
@@ -228,7 +228,7 @@ void ScTabControl::AddTabClick()
 
     // Insert a new sheet at the right end, with default name.
     ScDocument& rDoc = pViewData->GetDocument();
-    ScModule* pScMod = SC_MOD();
+    ScModule* pScMod = ScModule::get();
     if (!rDoc.IsDocEditable() || pScMod->IsTableLocked())
         return;
 
@@ -252,7 +252,7 @@ void ScTabControl::Select()
         nSelPageIdByMouse (i.e. if called from keyboard). */
     nMouseClickPageId = TabBar::PAGE_NOT_FOUND;
 
-    ScModule* pScMod = SC_MOD();
+    ScModule* pScMod = ScModule::get();
     ScDocument& rDoc = pViewData->GetDocument();
     ScMarkData& rMark = pViewData->GetMarkData();
     SCTAB nCount = rDoc.GetTableCount();
@@ -445,7 +445,7 @@ void ScTabControl::SwitchToPageId(sal_uInt16 nId)
 
 void ScTabControl::Command( const CommandEvent& rCEvt )
 {
-    ScModule*       pScMod   = SC_MOD();
+    ScModule* pScMod = ScModule::get();
     ScTabViewShell* pViewSh  = pViewData->GetViewShell();
     bool            bDisable = pScMod->IsFormulaMode() || pScMod->IsModalMode();
 
@@ -471,7 +471,7 @@ void ScTabControl::Command( const CommandEvent& rCEvt )
 
 void ScTabControl::StartDrag( sal_Int8 /* nAction */, const Point& rPosPixel )
 {
-    ScModule* pScMod = SC_MOD();
+    ScModule* pScMod = ScModule::get();
     bool bDisable = pScMod->IsFormulaMode() || pScMod->IsModalMode();
 
     if (!bDisable)
@@ -512,7 +512,7 @@ void ScTabControl::DoDrag()
     pTransferObj->SetSourceCursorPos( pViewData->GetCurX(), pViewData->GetCurY() );
 
     vcl::Window* pWindow = pViewData->GetActiveWin();
-    SC_MOD()->SetDragObject( pTransferObj.get(), nullptr );      // for internal D&D
+    ScModule::get()->SetDragObject(pTransferObj.get(), nullptr); // for internal D&D
     pTransferObj->StartDrag( pWindow, DND_ACTION_COPYMOVE | DND_ACTION_LINK );
 }
 
@@ -541,7 +541,7 @@ sal_Int8 ScTabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
     EndSwitchPage();
 
     ScDocument& rDoc = pViewData->GetDocument();
-    const ScDragData& rData = SC_MOD()->GetDragData();
+    const ScDragData& rData = ScModule::get()->GetDragData();
     if ( rData.pCellTransfer && (rData.pCellTransfer->GetDragSourceFlags() & ScDragSrc::Table) &&
             rData.pCellTransfer->GetSourceDocument() == &rDoc )
     {
@@ -580,7 +580,7 @@ sal_Int8 ScTabControl::AcceptDrop( const AcceptDropEvent& rEvt )
     }
 
     const ScDocument& rDoc = pViewData->GetDocument();
-    const ScDragData& rData = SC_MOD()->GetDragData();
+    const ScDragData& rData = ScModule::get()->GetDragData();
     if ( rData.pCellTransfer && (rData.pCellTransfer->GetDragSourceFlags() & ScDragSrc::Table) &&
             rData.pCellTransfer->GetSourceDocument() == &rDoc )
     {

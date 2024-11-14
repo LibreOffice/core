@@ -832,7 +832,7 @@ void ScTabView::GetAreaMoveEndPosition(SCCOL nMovX, SCROW nMovY, ScFollowMode eM
     SCCOL nCurX = aViewData.GetCurX();
     SCROW nCurY = aViewData.GetCurY();
 
-    ScModule* pScModule = SC_MOD();
+    ScModule* pScModule = ScModule::get();
     bool bLegacyCellSelection = pScModule->GetInputOptions().GetLegacyCellSelection();
     bool bIncrementallyExpandToDocLimits(false);
 
@@ -1640,7 +1640,7 @@ IMPL_STATIC_LINK_NOARG(ScTabView, InstallLOKNotifierHdl, void*, vcl::ILibreOffic
 
 void ScTabView::ErrorMessage(TranslateId pGlobStrId)
 {
-    if ( SC_MOD()->IsInExecuteDrop() )
+    if (ScModule::get()->IsInExecuteDrop())
     {
         // #i28468# don't show error message when called from Drag&Drop, silently abort instead
         return;

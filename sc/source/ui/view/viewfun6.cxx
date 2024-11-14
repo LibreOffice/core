@@ -276,7 +276,7 @@ void ScViewFunc::InsertCurrentTime(SvNumFormatType nReqFmt, const OUString& rUnd
 {
     ScViewData& rViewData = GetViewData();
 
-    ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl( rViewData.GetViewShell());
+    ScInputHandler* pInputHdl = ScModule::get()->GetInputHdl(rViewData.GetViewShell());
     bool bInputMode = (pInputHdl && pInputHdl->IsInputMode());
 
     ScDocShell* pDocSh = rViewData.GetDocShell();

@@ -441,7 +441,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
             }
         }
 
-        if (SC_MOD()->GetIsWaterCan())
+        if (ScModule::get()->GetIsWaterCan())
         {
             auto pStyleSheet = rViewData.GetDocument().GetStyleSheetPool()->GetActualStyleSheet();
             if (pStyleSheet && pStyleSheet->GetFamily() == SfxStyleFamily::Frame)
@@ -454,7 +454,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 
     if (pIPClient)
     {
-        ScModule* pScMod = SC_MOD();
+        ScModule* pScMod = ScModule::get();
         bool bUnoRefDialog = pScMod->IsRefDialogOpen() && pScMod->GetCurRefDlgId() == WID_SIMPLE_REF;
 
         if ( pIPClient->IsObjectInPlaceActive() && !bUnoRefDialog )

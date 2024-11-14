@@ -166,14 +166,15 @@ void ScTabView::ClickCursor( SCCOL nPosX, SCROW nPosY, bool bControl )
     SCTAB nTab = aViewData.GetTabNo();
     rDoc.SkipOverlapped(nPosX, nPosY, nTab);
 
-    bool bRefMode = SC_MOD()->IsFormulaMode();
+    ScModule* mod = ScModule::get();
+    bool bRefMode = mod->IsFormulaMode();
 
     if ( bRefMode )
     {
         DoneRefMode();
 
         if (bControl)
-            SC_MOD()->AddRefEntry();
+            mod->AddRefEntry();
 
         InitRefMode( nPosX, nPosY, nTab, SC_REFTYPE_REF );
     }
@@ -471,7 +472,7 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
 
 static bool lcl_IsRefDlgActive(SfxViewFrame& rViewFrm)
 {
-    ScModule* pScMod = SC_MOD();
+    ScModule* pScMod = ScModule::get();
     if (!pScMod->IsRefDialogOpen())
        return false;
 
@@ -496,7 +497,7 @@ void ScTabView::CheckSelectionTransfer()
     if ( !aViewData.IsActive() )     // only for active view
         return;
 
-    ScModule* pScMod = SC_MOD();
+    ScModule* pScMod = ScModule::get();
     ScSelectionTransferObj* pOld = pScMod->GetSelectionTransfer();
     rtl::Reference<ScSelectionTransferObj> pNew = ScSelectionTransferObj::CreateFromView( this );
     if ( !pNew )
@@ -648,7 +649,7 @@ void ScTabView::SelectionChanged(bool bFromPaste)
 
 void ScTabView::CursorPosChanged()
 {
-    bool bRefMode = SC_MOD()->IsFormulaMode();
+    bool bRefMode = ScModule::get()->IsFormulaMode();
     if ( !bRefMode ) // check that RefMode works when switching sheets
         aViewData.GetDocShell()->Broadcast( SfxHint( SfxHintId::ScKillEditView ) );
 
@@ -833,7 +834,7 @@ void ScTabView::TestHintWindow()
                  nRow >= aViewData.GetPosY(WhichV(eWhich)) &&
                  aPos.X() < aWinSize.Width() && aPos.Y() < aWinSize.Height() )
             {
-                const svtools::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
+                const svtools::ColorConfig& rColorCfg = ScModule::get()->GetColorConfig();
                 Color aCommentColor = rColorCfg.GetColorValue(svtools::CALCNOTESBACKGROUND).nColor;
                 // create HintWindow, determines its size by itself
                 ScOverlayHint* pOverlay = new ScOverlayHint(aTitle, aMessage, aCommentColor, pFrameWin->GetFont());
@@ -1273,7 +1274,7 @@ void ScTabView::MoveCursorAbs( SCCOL nCurX, SCROW nCurY, ScFollowMode eMode,
             // marks first and then formula mode.
             ScMarkData& rMark = aViewData.GetMarkData();
             bool bMarked = rMark.IsMarked() || rMark.IsMultiMarked();
-            if (bMarked && !SC_MOD()->IsFormulaMode())
+            if (bMarked && !ScModule::get()->IsFormulaMode())
             {
                 rMark.ResetMark();
                 DoneBlockMode();
@@ -1441,7 +1442,7 @@ void ScTabView::MoveCursorScreen( SCCOL nMovX, SCROW nMovY, ScFollowMode eMode, 
 
 void ScTabView::MoveCursorEnter( bool bShift )          // bShift -> up/down
 {
-    const ScInputOptions& rOpt = SC_MOD()->GetInputOptions();
+    const ScInputOptions& rOpt = ScModule::get()->GetInputOptions();
     if (!rOpt.GetMoveSelection())
     {
         aViewData.UpdateInputHandler(true);
@@ -1662,7 +1663,7 @@ void ScTabView::MarkColumns(SCCOL nCol, sal_Int16 nModifier)
     if ((nModifier & KEY_SHIFT) == KEY_SHIFT)
         bMoveIsShift = true;
 
-    if ( SC_MOD()->IsFormulaMode() )
+    if (ScModule::get()->IsFormulaMode())
     {
         DoneRefMode( nModifier != 0 );
         InitRefMode( nCol, 0, nTab, SC_REFTYPE_REF );
@@ -1689,7 +1690,7 @@ void ScTabView::MarkRows(SCROW nRow, sal_Int16 nModifier)
     if ((nModifier & KEY_SHIFT) == KEY_SHIFT)
         bMoveIsShift = true;
 
-    if ( SC_MOD()->IsFormulaMode() )
+    if (ScModule::get()->IsFormulaMode())
     {
         DoneRefMode( nModifier != 0 );
         InitRefMode( 0, nRow, nTab, SC_REFTYPE_REF );
@@ -1947,7 +1948,7 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
     // so the handling of notes still has the sheet selected on which the notes are.
     DrawDeselectAll();
 
-    ScModule* pScMod = SC_MOD();
+    ScModule* pScMod = ScModule::get();
     bool bRefMode = pScMod->IsFormulaMode();
     if ( !bRefMode ) // query, so that RefMode works when switching sheet
     {
@@ -2242,7 +2243,7 @@ void ScTabView::MakeEditView( ScEditEngineDefaulter* pEngine, SCCOL nCol, SCROW 
 
 void ScTabView::UpdateEditView()
 {
-    if (aViewData.GetTabNo() != aViewData.GetRefTabNo() && SC_MOD()->IsFormulaMode())
+    if (aViewData.GetTabNo() != aViewData.GetRefTabNo() && ScModule::get()->IsFormulaMode())
         return;
 
     ScSplitPos eActive = aViewData.GetActivePart();
@@ -2360,7 +2361,7 @@ void ScTabView::KillEditView( bool bNoPaint )
     bool bGrabFocus = false;
     if (aViewData.IsActive())
     {
-        ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl();
+        ScInputHandler* pInputHdl = ScModule::get()->GetInputHdl();
         if ( pInputHdl )
         {
             ScInputWindow* pInputWin = pInputHdl->GetInputWindow();
@@ -2543,7 +2544,7 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
         aStart.AdjustX( -nLayoutSign );      // include change marks
         aStart.AdjustY( -1 );
 
-        bool bMarkClipped = SC_MOD()->GetColorConfig().GetColorValue(svtools::CALCTEXTOVERFLOW).bIsVisible;
+        bool bMarkClipped = ScModule::get()->GetColorConfig().GetColorValue(svtools::CALCTEXTOVERFLOW).bIsVisible;
         if (bMarkClipped)
         {
             // ScColumn::IsEmptyData has to be optimized for this
@@ -2630,7 +2631,7 @@ void ScTabView::PaintRangeFinderEntry (const ScRangeFindData* pData, const SCTAB
 
 void ScTabView::PaintRangeFinder( tools::Long nNumber )
 {
-    ScInputHandler* pHdl = SC_MOD()->GetInputHdl( aViewData.GetViewShell() );
+    ScInputHandler* pHdl = ScModule::get()->GetInputHdl(aViewData.GetViewShell());
     if (!pHdl)
         return;
 
@@ -2954,7 +2955,7 @@ void ScTabView::ActivateView( bool bActivate, bool bFirst )
 
     if (!bActivate)
     {
-        ScModule* pScMod = SC_MOD();
+        ScModule* pScMod = ScModule::get();
         bool bRefMode = pScMod->IsFormulaMode();
 
             // don't cancel reference input, to allow reference
@@ -2963,7 +2964,7 @@ void ScTabView::ActivateView( bool bActivate, bool bFirst )
         if (!bRefMode)
         {
             // pass view to GetInputHdl, this view may not be current anymore
-            ScInputHandler* pHdl = SC_MOD()->GetInputHdl(aViewData.GetViewShell());
+            ScInputHandler* pHdl = pScMod->GetInputHdl(aViewData.GetViewShell());
             if (pHdl)
                 pHdl->EnterHandler();
         }
@@ -3022,7 +3023,7 @@ void ScTabView::ActivatePart( ScSplitPos eWhich )
 
     bInActivatePart = true;
 
-    bool bRefMode = SC_MOD()->IsFormulaMode();
+    bool bRefMode = ScModule::get()->IsFormulaMode();
 
     //  the HasEditView call during SetCursor would fail otherwise
     if ( aViewData.HasEditView(eOld) && !bRefMode )
@@ -3168,7 +3169,7 @@ tools::Long ScTabView::GetGridHeight( ScVSplitPos eWhich )
 
 void ScTabView::UpdateInputLine()
 {
-    SC_MOD()->InputEnterHandler();
+    ScModule::get()->InputEnterHandler();
 }
 
 void ScTabView::SyncGridWindowMapModeFromDrawMapMode()
@@ -3187,7 +3188,7 @@ void ScTabView::SyncGridWindowMapModeFromDrawMapMode()
 
 void ScTabView::ZoomChanged()
 {
-    ScInputHandler* pHdl = SC_MOD()->GetInputHdl(aViewData.GetViewShell());
+    ScInputHandler* pHdl = ScModule::get()->GetInputHdl(aViewData.GetViewShell());
     if (pHdl)
         pHdl->SetRefScale( aViewData.GetZoomX(), aViewData.GetZoomY() );
 

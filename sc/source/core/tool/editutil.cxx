@@ -244,7 +244,7 @@ OUString ScEditUtil::GetCellFieldValue(
 
             if (ppTextColor)
             {
-                *ppTextColor = SC_MOD()->GetColorConfig().GetColorValue(eEntry).nColor;
+                *ppTextColor = ScModule::get()->GetColorConfig().GetColorValue(eEntry).nColor;
                 if (comphelper::LibreOfficeKit::isActive())
                     ScModule::IsLOKViewInDarkMode() ? *ppTextColor = Color(0x1D99F3) : *ppTextColor = Color(0x000080);
             }
@@ -418,7 +418,7 @@ tools::Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bF
         pPattern->GetItem( ATTR_VERTICAL_ASIAN ).GetValue();
 
     if ( eJust == SvxCellVerJustify::Top ||
-            ( bForceToTop && ( SC_MOD()->GetInputOptions().GetTextWysiwyg() || bAsianVertical ) ) )
+            ( bForceToTop && ( ScModule::get()->GetInputOptions().GetTextWysiwyg() || bAsianVertical ) ) )
         nDifY = nTopMargin;
     else
     {

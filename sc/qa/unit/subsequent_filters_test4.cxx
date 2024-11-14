@@ -1808,8 +1808,9 @@ void testSortWithSheetExternalReferencesODS_Impl(ScDocShell& rDocSh, SCROW nRow1
 // Document contains cached external references.
 CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testSortWithSheetExternalReferencesODS)
 {
+    ScModule* mod = ScModule::get();
     // We reset the SortRefUpdate value back to the original in tearDown().
-    ScInputOptions aInputOption = SC_MOD()->GetInputOptions();
+    ScInputOptions aInputOption = mod->GetInputOptions();
     bool bUpdateReferenceOnSort = aInputOption.GetSortRefUpdate();
 
     createScDoc("ods/sort-with-sheet-external-references.ods");
@@ -1822,7 +1823,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testSortWithSheetExternalReferencesODS)
     // modes.
 
     aInputOption.SetSortRefUpdate(true);
-    SC_MOD()->SetInputOptions(aInputOption);
+    mod->SetInputOptions(aInputOption);
 
     // Sort A15:D20 with relative row references. UpdateReferenceOnSort==true
     // With in-sheet relative references.
@@ -1834,7 +1835,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testSortWithSheetExternalReferencesODS)
     pDoc->CalcAll();
 
     aInputOption.SetSortRefUpdate(false);
-    SC_MOD()->SetInputOptions(aInputOption);
+    mod->SetInputOptions(aInputOption);
 
     // Sort A15:D20 with relative row references. UpdateReferenceOnSort==false
     // Without in-sheet relative references.
@@ -1848,7 +1849,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testSortWithSheetExternalReferencesODS)
     // modes.
 
     aInputOption.SetSortRefUpdate(true);
-    SC_MOD()->SetInputOptions(aInputOption);
+    mod->SetInputOptions(aInputOption);
 
     // Sort A23:D28 with absolute row references. UpdateReferenceOnSort==true
     // With in-sheet relative references.
@@ -1859,7 +1860,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testSortWithSheetExternalReferencesODS)
     pDoc->CalcAll();
 
     aInputOption.SetSortRefUpdate(false);
-    SC_MOD()->SetInputOptions(aInputOption);
+    mod->SetInputOptions(aInputOption);
 
     // Sort A23:D28 with absolute row references. UpdateReferenceOnSort==false
     // With in-sheet relative references.
@@ -1868,7 +1869,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testSortWithSheetExternalReferencesODS)
     if (bUpdateReferenceOnSort != aInputOption.GetSortRefUpdate())
     {
         aInputOption.SetSortRefUpdate(bUpdateReferenceOnSort);
-        SC_MOD()->SetInputOptions(aInputOption);
+        mod->SetInputOptions(aInputOption);
     }
 }
 

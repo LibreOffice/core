@@ -67,8 +67,7 @@ bool ScLinkTransferObj::GetData(
 
 void ScLinkTransferObj::DragFinished( sal_Int8 nDropAction )
 {
-    ScModule* pScMod = SC_MOD();
-    pScMod->ResetDragObject();
+    ScModule::get()->ResetDragObject();
 
     TransferDataContainer::DragFinished( nDropAction );
 }

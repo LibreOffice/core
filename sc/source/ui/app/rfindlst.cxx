@@ -38,7 +38,7 @@ ScRangeFindList::ScRangeFindList(OUString aName) :
     bHidden( false ),
     nIndexColor( 0 )
 {
-    bIsDark = SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor.IsDark();
+    bIsDark = ScModule::get()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor.IsDark();
 }
 
 Color ScRangeFindList::Insert( const ScRangeFindData &rNew )

@@ -522,7 +522,7 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
         return false;
     }
 
-    const ScInputOptions aInputOption = SC_MOD()->GetInputOptions();
+    const ScInputOptions aInputOption = ScModule::get()->GetInputOptions();
     const bool bUpdateRefs = aInputOption.GetSortRefUpdate();
 
     // Adjust aLocalParam cols/rows to used data area. Keep sticky top row or

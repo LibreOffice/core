@@ -65,7 +65,7 @@ void ScTpPrintOptions::Reset( const SfxItemSet* rCoreSet )
     else
     {
         // when called from print dialog and no options set, use configuration
-        aOptions = SC_MOD()->GetPrintOptions();
+        aOptions = ScModule::get()->GetPrintOptions();
     }
 
     if ( const SfxBoolItem* pItem = rCoreSet->GetItemIfSet( SID_PRINT_SELECTEDSHEET, false))

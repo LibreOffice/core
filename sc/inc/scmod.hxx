@@ -241,9 +241,9 @@ public:
 
     SC_DLLPUBLIC void RegisterAutomationApplicationEventsCaller(css::uno::Reference< ooo::vba::XSinkCaller > const& xCaller);
     SC_DLLPUBLIC void CallAutomationApplicationEventSinks(const OUString& Method, css::uno::Sequence< css::uno::Any >& Arguments);
-};
 
-#define SC_MOD() ( static_cast<ScModule*>(SfxApplication::GetModule(SfxToolsModule::Calc)) )
+    static auto get() { return static_cast<ScModule*>(SfxApplication::GetModule(SfxToolsModule::Calc)); }
+};
 
 void global_InitAppOptions();
 

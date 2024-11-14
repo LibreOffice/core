@@ -271,7 +271,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView*
             {
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 ScopedVclPtr<SfxAbstractInsertObjectDialog> pDlg(
-                        pFact->CreateInsertObjectDialog( rViewShell.GetFrameWeld(), SC_MOD()->GetSlotPool()->GetSlot(nSlot)->GetCommand(),
+                        pFact->CreateInsertObjectDialog( rViewShell.GetFrameWeld(), ScModule::get()->GetSlotPool()->GetSlot(nSlot)->GetCommand(),
                         xStorage, &aServerLst ));
                 if ( pDlg )
                 {

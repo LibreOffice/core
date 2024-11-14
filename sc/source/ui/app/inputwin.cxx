@@ -250,7 +250,7 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
         aWndPos   ->Show();
     mxTextWindow->Show();
 
-    pInputHdl = SC_MOD()->GetInputHdl( pViewSh, false ); // use own handler even if ref-handler is set
+    pInputHdl = ScModule::get()->GetInputHdl( pViewSh, false ); // use own handler even if ref-handler is set
     if (pInputHdl)
         pInputHdl->SetInputWindow( this );
 
@@ -337,7 +337,7 @@ void ScInputWindow::SetInputHandler( ScInputHandler* pNew )
 
 void ScInputWindow::Select()
 {
-    ScModule* pScMod = SC_MOD();
+    ScModule* pScMod = ScModule::get();
     ToolBox::Select();
 
     ToolBoxItemId curItemId = GetCurItemId();
@@ -380,7 +380,7 @@ void ScInputWindow::Select()
 
 void ScInputWindow::StartFormula()
 {
-    ScModule* pScMod = SC_MOD();
+    ScModule* pScMod = ScModule::get();
     mxTextWindow->StartEditEngine();
     if ( pScMod->IsEditMode() ) // Isn't if e.g. protected
     {
@@ -531,7 +531,7 @@ void ScInputWindow::SetFuncString( const OUString& rString, bool bDoEdit )
     EnableButtons( pViewFrm && !pViewFrm->GetChildWindow( SID_OPENDLG_FUNCTION ) );
     mxTextWindow->StartEditEngine();
 
-    ScModule* pScMod = SC_MOD();
+    ScModule* pScMod = ScModule::get();
     if ( !pScMod->IsEditMode() )
         return;
 
@@ -669,7 +669,7 @@ void ScInputWindow::SwitchToTextWin()
     // used for shift-ctrl-F2
 
     mxTextWindow->StartEditEngine();
-    if ( SC_MOD()->IsEditMode() )
+    if (ScModule::get()->IsEditMode())
     {
         mxTextWindow->TextGrabFocus();
         EditView* pView = mxTextWindow->GetEditView();
@@ -823,7 +823,7 @@ void ScInputWindow::MouseButtonUp( const MouseEvent& rMEvt )
 
 void ScInputWindow::AutoSum( bool& bRangeFinder, bool& bSubTotal, OpCode eCode )
 {
-    ScModule* pScMod = SC_MOD();
+    ScModule* pScMod = ScModule::get();
     ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current()  );
     if ( !pViewSh )
         return;
@@ -1105,7 +1105,7 @@ void ScInputBarGroup::NumLinesChanged()
     TriggerToolboxLayout();
 
     // Restore focus to input line(s) if necessary
-    ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
+    ScInputHandler* pHdl = ScModule::get()->GetInputHdl();
     if ( pHdl && pHdl->IsTopMode() )
         mxTextWndGroup->TextGrabFocus();
 }
@@ -1571,7 +1571,7 @@ void ScTextWnd::InitEditEngine()
     // If the Cell contains URLFields, they need to be taken over into the entry row,
     // or else the position is not correct anymore
     bool bFilled = false;
-    ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
+    ScInputHandler* pHdl = ScModule::get()->GetInputHdl();
     if ( pHdl ) //! Test if it's the right InputHdl?
         bFilled = pHdl->GetTextAndFields(static_cast<ScEditEngineDefaulter&>(*m_xEditEngine));
 
@@ -1660,7 +1660,7 @@ bool ScTextWnd::MouseMove( const MouseEvent& rMEvt )
 
 bool ScTextWnd::CanFocus() const
 {
-    return SC_MOD()->IsEditMode();
+    return ScModule::get()->IsEditMode();
 }
 
 void ScTextWnd::UpdateFocus()
@@ -1705,10 +1705,10 @@ bool ScTextWnd::MouseButtonUp( const MouseEvent& rMEvt )
                  Application::GetSettings().GetMouseSettings().GetMiddleButtonAction() == MouseMiddleButtonAction::PasteSelection )
         {
             //  EditView may have pasted from selection
-            SC_MOD()->InputChanged( m_xEditView.get() );
+            ScModule::get()->InputChanged(m_xEditView.get());
         }
         else
-            SC_MOD()->InputSelection( m_xEditView.get() );
+            ScModule::get()->InputSelection(m_xEditView.get());
     }
     return bRet;
 }
@@ -1721,7 +1721,7 @@ bool ScTextWnd::Command( const CommandEvent& rCEvt )
     CommandEventId nCommand = rCEvt.GetCommand();
     if (m_xEditView)
     {
-        ScModule* pScMod = SC_MOD();
+        ScModule* pScMod = ScModule::get();
         ScTabViewShell* pStartViewSh = ScTabViewShell::GetActiveViewShell();
 
         // don't modify the font defaults here - the right defaults are
@@ -1753,13 +1753,14 @@ bool ScTextWnd::Command( const CommandEvent& rCEvt )
         }
         else if ( nCommand == CommandEventId::EndExtTextInput )
         {
+            ScModule* mod = ScModule::get();
             if (bFormulaMode)
             {
-                ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
+                ScInputHandler* pHdl = mod->GetInputHdl();
                 if (pHdl)
                     pHdl->InputCommand(rCEvt);
             }
-            SC_MOD()->InputChanged( m_xEditView.get() );
+            mod->InputChanged(m_xEditView.get());
         }
         else if ( nCommand == CommandEventId::CursorPos )
         {
@@ -1813,7 +1814,7 @@ bool ScTextWnd::Command( const CommandEvent& rCEvt )
             //pass alt press/release to parent impl
         }
         else
-            SC_MOD()->InputChanged( m_xEditView.get() );
+            ScModule::get()->InputChanged(m_xEditView.get());
     }
 
     if ( comphelper::LibreOfficeKit::isActive() && nCommand == CommandEventId::CursorPos )
@@ -1827,8 +1828,9 @@ bool ScTextWnd::Command( const CommandEvent& rCEvt )
         if (!m_xEditView)
             return true;
 
+        ScModule* mod = ScModule::get();
         // if we focus input after "Accept Formula" command, we need to notify to get it working
-        SC_MOD()->InputChanged(m_xEditView.get());
+        mod->InputChanged(m_xEditView.get());
 
         // information about paragraph is in additional data
         // information about position in a paragraph in a Mouse Pos
@@ -1844,7 +1846,7 @@ bool ScTextWnd::Command( const CommandEvent& rCEvt )
         nPosEnd = m_xEditView->GetPosNoField(nParaEnd, aSelectionStartEnd.Y());
 
         m_xEditView->SetSelection(ESelection(nParaStart, nPosStart, nParaEnd, nPosEnd));
-        SC_MOD()->InputSelection( m_xEditView.get() );
+        mod->InputSelection(m_xEditView.get());
 
         bConsumed = true;
     }
@@ -1870,7 +1872,7 @@ bool ScTextWnd::KeyInput(const KeyEvent& rKEvt)
 {
     bool bUsed = true;
     bInputMode = true;
-    if (!SC_MOD()->InputKeyEvent( rKEvt ))
+    if (!ScModule::get()->InputKeyEvent(rKEvt))
     {
         bUsed = false;
         ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
@@ -1924,7 +1926,7 @@ IMPL_LINK_NOARG(ScTextWnd, ModifyHdl, LinkParamNone*, void)
 {
     if (m_xEditView && !bInputMode)
     {
-        ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
+        ScInputHandler* pHdl = ScModule::get()->GetInputHdl();
 
         //  Use the InputHandler's InOwnChange flag to prevent calling InputChanged
         //  while an InputHandler method is modifying the EditEngine content
@@ -1951,7 +1953,7 @@ void ScTextWnd::StopEditEngine( bool bAll )
         if (!maAccTextDatas.empty())
             maAccTextDatas.back()->EndEdit();
 
-        ScModule* pScMod = SC_MOD();
+        ScModule* pScMod = ScModule::get();
 
         if (!bAll)
             pScMod->InputSelection( m_xEditView.get() );
@@ -2384,7 +2386,7 @@ void ScPosWnd::FillFunctions()
     m_xWidget->freeze();
 
     OUString aFirstName;
-    const ScAppOptions& rOpt = SC_MOD()->GetAppOptions();
+    const ScAppOptions& rOpt = ScModule::get()->GetAppOptions();
     sal_uInt16 nMRUCount = rOpt.GetLRUFuncListCount();
     const sal_uInt16* pMRUList = rOpt.GetLRUFuncList();
     if (pMRUList)
@@ -2572,7 +2574,7 @@ void ScPosWnd::DoEnter()
     {
         if ( bFormulaMode )
         {
-            ScModule* pScMod = SC_MOD();
+            ScModule* pScMod = ScModule::get();
             if ( aText == ScResId(STR_FUNCTIONLIST_MORE) )
             {
                 // Function AutoPilot
@@ -2673,7 +2675,7 @@ void ScPosWnd::DoEnter()
         {
             SfxViewFrame& rViewFrm = pViewSh->GetViewFrame();
             SfxChildWindow* pWnd = rViewFrm.GetChildWindow( nId );
-            SC_MOD()->SetRefDialog( nId, pWnd == nullptr );
+            ScModule::get()->SetRefDialog(nId, pWnd == nullptr);
         }
     }
 }
@@ -2744,7 +2746,7 @@ void ScPosWnd::ReleaseFocus_Impl()
     HideTip();
 
     SfxViewShell* pCurSh = SfxViewShell::Current();
-    ScInputHandler* pHdl = SC_MOD()->GetInputHdl( dynamic_cast<ScTabViewShell*>( pCurSh )  );
+    ScInputHandler* pHdl = ScModule::get()->GetInputHdl(dynamic_cast<ScTabViewShell*>(pCurSh));
     if ( pHdl && pHdl->IsTopMode() )
     {
         // Focus back in input row?

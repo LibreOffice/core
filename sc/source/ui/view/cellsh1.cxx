@@ -211,7 +211,7 @@ void HandleConditionalFormat(sal_uInt32 nIndex, bool bCondFormatDlg, bool bConta
         SfxViewFrame& rViewFrm = pTabViewShell->GetViewFrame();
         SfxChildWindow* pWnd = rViewFrm.GetChildWindow(nId);
 
-        SC_MOD()->SetRefDialog(nId, pWnd == nullptr);
+        ScModule::get()->SetRefDialog(nId, pWnd == nullptr);
     }
 }
 
@@ -272,7 +272,7 @@ void DeleteCells(ScTabViewShell* pTabViewShell, SfxRequest &rReq, DelCellCmd eCm
 
 void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 {
-    ScModule*           pScMod      = SC_MOD();
+    ScModule* pScMod = ScModule::get();
     ScTabViewShell* pTabViewShell   = GetViewData().GetViewShell();
     SfxBindings&        rBindings   = pTabViewShell->GetViewFrame().GetBindings();
     const SfxItemSet*   pReqArgs    = rReq.GetArgs();
@@ -3186,7 +3186,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 const SfxInt32Item* param5 = rReq.GetArg<SfxInt32Item>(FN_PARAM_5);
                 SCROW table = param5 ? param5->GetValue() : 0;
 
-                ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl();
+                ScInputHandler* pInputHdl = pScMod->GetInputHdl();
 
                 if (param3 && param4 && pInputHdl)
                 {
@@ -3201,7 +3201,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     ScRange aRef(
                         colStart, rowStart, rData.GetRefStartZ(),
                         colEnd, rowEnd, rData.GetRefEndZ() );
-                    SC_MOD()->SetReference( aRef, rData.GetDocument(), &rData.GetMarkData() );
+                    pScMod->SetReference( aRef, rData.GetDocument(), &rData.GetMarkData() );
 
                     pInputHdl->UpdateLokReferenceMarks();
                 }
@@ -3419,7 +3419,7 @@ void ErrorOrRunPivotLayoutDialog(TranslateId pSrcErrorId,
 
 void ScCellShell::ExecuteDataPilotDialog()
 {
-    ScModule* pScMod = SC_MOD();
+    ScModule* pScMod = ScModule::get();
     ScTabViewShell* pTabViewShell   = GetViewData().GetViewShell();
     ScViewData& rData = GetViewData();
     ScDocument& rDoc = rData.GetDocument();
@@ -3604,12 +3604,10 @@ void ScCellShell::ExecuteXMLSourceDialog()
     if (!pTabViewShell)
         return;
 
-    ScModule* pScMod = SC_MOD();
-
     sal_uInt16 nId = ScXMLSourceDlgWrapper::GetChildWindowId();
     SfxViewFrame& rViewFrame = pTabViewShell->GetViewFrame();
     SfxChildWindow* pWnd = rViewFrame.GetChildWindow(nId);
-    pScMod->SetRefDialog(nId, pWnd == nullptr);
+    ScModule::get()->SetRefDialog(nId, pWnd == nullptr);
 }
 
 void ScCellShell::ExecuteSubtotals(SfxRequest& rReq)
@@ -3721,7 +3719,7 @@ void ScCellShell::ExecuteFillSingleEdit()
             aInit = aCell.getString(&rDoc);
     }
 
-    SC_MOD()->SetInputMode(SC_INPUT_TABLE, &aInit);
+    ScModule::get()->SetInputMode(SC_INPUT_TABLE, &aInit);
 }
 
 CellShell_Impl::CellShell_Impl() :

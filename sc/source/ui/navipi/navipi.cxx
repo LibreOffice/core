@@ -375,7 +375,7 @@ ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, weld::Widget* pParent, SfxNaviga
     m_xDragModeMenu->connect_activate(LINK(this, ScNavigatorDlg, MenuSelectHdl));
     m_xTbxCmd2->connect_menu_toggled(LINK(this, ScNavigatorDlg, ToolBoxDropdownClickHdl));
 
-    ScNavipiCfg& rCfg = SC_MOD()->GetNavipiCfg();
+    ScNavipiCfg& rCfg = ScModule::get()->GetNavipiCfg();
     nDropMode = rCfg.GetDragMode();
 
     m_xLbDocuments->set_size_request(42, -1); // set a nominal width so it takes width of surroundings
@@ -579,7 +579,7 @@ void ScNavigatorDlg::SetDropMode(sal_uInt16 nNew)
 {
     nDropMode = nNew;
     UpdateButtons();
-    ScNavipiCfg& rCfg = SC_MOD()->GetNavipiCfg();
+    ScNavipiCfg& rCfg = ScModule::get()->GetNavipiCfg();
     rCfg.SetDragMode(nDropMode);
 }
 
@@ -808,7 +808,7 @@ void ScNavigatorDlg::SetListMode(NavListMode eMode)
 
         if (eMode != NAV_LMODE_NONE)
         {
-            ScNavipiCfg& rCfg = SC_MOD()->GetNavipiCfg();
+            ScNavipiCfg& rCfg = ScModule::get()->GetNavipiCfg();
             rCfg.SetListMode( static_cast<sal_uInt16>(eMode) );
         }
 

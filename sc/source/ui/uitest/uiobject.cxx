@@ -99,7 +99,7 @@ StringMap ScGridWinUIObject::get_state()
     nCol = 0;
     aMap[u"CurrentRowHasData"_ustr] = OUString::boolean( rDoc.GetPrintAreaHor( mxGridWindow->getViewData().GetTabNo(), nRow, nRow, nCol ) );
 
-    ScAppOptions aOpt = SC_MOD()->GetAppOptions();
+    ScAppOptions aOpt = ScModule::get()->GetAppOptions();
     aMap[u"Zoom"_ustr] = OUString::number( aOpt.GetZoom() );
     return aMap;
 }
@@ -334,9 +334,9 @@ void ScGridWinUIObject::execute(const OUString& rAction,
             OUString aVal = itr->second;
             sal_Int32 nVal = aVal.toInt32();
             ScTabViewShell* pViewShell = getViewShell();
-            ScModule*  pScMod = SC_MOD();
             if( nVal )
             {
+                ScModule* pScMod = ScModule::get();
                 ScAppOptions aNewOpt = pScMod->GetAppOptions();
                 aNewOpt.SetZoom( nVal );
                 pScMod->SetAppOptions( aNewOpt );

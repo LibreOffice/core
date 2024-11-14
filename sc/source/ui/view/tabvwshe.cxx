@@ -143,7 +143,7 @@ void ScTabViewShell::InsertURL( const OUString& rName, const OUString& rURL, con
     }
     else
     {
-        SC_MOD()->InputEnterHandler();
+        ScModule::get()->InputEnterHandler();
         InsertURLButton( rName, rURL, rTarget, nullptr );
     }
 }
@@ -167,7 +167,7 @@ void ScTabViewShell::InsertURLField( const OUString& rName, const OUString& rURL
     SvxFieldItem aURLItem( aURLField, EE_FEATURE_FIELD );
 
     ScViewData&     rViewData   = GetViewData();
-    ScModule*       pScMod      = SC_MOD();
+    ScModule*       pScMod      = ScModule::get();
     ScInputHandler* pHdl        = pScMod->GetInputHdl( rViewData.GetViewShell() );
 
     bool bSelectFirst = false;

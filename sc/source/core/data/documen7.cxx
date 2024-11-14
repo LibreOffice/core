@@ -593,7 +593,7 @@ void ScDocument::UpdateBroadcastAreas( UpdateRefMode eUpdateRefMode,
 {
     bool bExpandRefsOld = IsExpandRefs();
     if ( eUpdateRefMode == URM_INSDEL && (nDx > 0 || nDy > 0 || nDz > 0) )
-        SetExpandRefs( SC_MOD()->GetInputOptions().GetExpandRefs() );
+        SetExpandRefs(ScModule::get()->GetInputOptions().GetExpandRefs());
     if ( pBASM )
         pBASM->UpdateBroadcastAreas( eUpdateRefMode, rRange, nDx, nDy, nDz );
     SetExpandRefs( bExpandRefsOld );

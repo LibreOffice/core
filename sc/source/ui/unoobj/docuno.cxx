@@ -255,7 +255,7 @@ public:
 
 ScPrintUIOptions::ScPrintUIOptions()
 {
-    const ScPrintOptions& rPrintOpt = SC_MOD()->GetPrintOptions();
+    const ScPrintOptions& rPrintOpt = ScModule::get()->GetPrintOptions();
     sal_Int32 nContent = rPrintOpt.GetAllSheets() ? 0 : 1;
     bool bSuppress = rPrintOpt.GetSkipEmpty();
 
@@ -340,7 +340,7 @@ void ScPrintUIOptions::SetDefaults()
 {
     // re-initialize the default values from print options
 
-    const ScPrintOptions& rPrintOpt = SC_MOD()->GetPrintOptions();
+    const ScPrintOptions& rPrintOpt = ScModule::get()->GetPrintOptions();
     sal_Int32 nContent = rPrintOpt.GetAllSheets() ? 0 : 1;
     bool bSuppress = rPrintOpt.GetSkipEmpty();
 
@@ -864,7 +864,7 @@ void ScModelObj::setTextSelection(int nType, int nX, int nY)
     if (aChartHelper.setTextSelection(nType, nX, nY))
         return;
 
-    ScInputHandler* pInputHandler = SC_MOD()->GetInputHdl(pViewShell);
+    ScInputHandler* pInputHandler = ScModule::get()->GetInputHdl(pViewShell);
     ScDrawView* pDrawView = pViewData->GetScDrawView();
 
     bool bHandled = false;
@@ -1099,7 +1099,7 @@ void ScModelObj::setClientZoom(int nTilePixelWidth_, int nTilePixelHeight_, int 
     if (ScTabViewShell* pViewShell = pViewData->GetViewShell())
         pViewShell->SyncGridWindowMapModeFromDrawMapMode();
     // sync zoom to Input Handler like ScTabViewShell::Activate does
-    if (ScInputHandler* pHdl = SC_MOD()->GetInputHdl())
+    if (ScInputHandler* pHdl = ScModule::get()->GetInputHdl())
         pHdl->SetRefScale(pViewData->GetZoomX(), pViewData->GetZoomY());
 
     // refresh our view's take on other view's cursors & selections
@@ -1293,8 +1293,7 @@ void ScModelObj::getPostItsPos(tools::JsonWriter& rJsonWriter)
 
 void ScModelObj::completeFunction(const OUString& rFunctionName)
 {
-    ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
-    if (pHdl)
+    if (ScInputHandler* pHdl = ScModule::get()->GetInputHdl())
     {
         assert(!rFunctionName.isEmpty());
         pHdl->LOKPasteFunctionData(rFunctionName);
@@ -1320,10 +1319,11 @@ void ScModelObj::initializeForTiledRendering(const css::uno::Sequence<css::beans
 {
     SolarMutexGuard aGuard;
 
+    ScModule* mod = ScModule::get();
     // enable word autocompletion
-    ScAppOptions aAppOptions(SC_MOD()->GetAppOptions());
+    ScAppOptions aAppOptions(mod->GetAppOptions());
     aAppOptions.SetAutoComplete(true);
-    SC_MOD()->SetAppOptions(aAppOptions);
+    mod->SetAppOptions(aAppOptions);
 
     OUString sThemeName;
     OUString sBackgroundThemeName;
@@ -1343,10 +1343,10 @@ void ScModelObj::initializeForTiledRendering(const css::uno::Sequence<css::beans
     }
 
     // show us the text exactly
-    ScInputOptions aInputOptions(SC_MOD()->GetInputOptions());
+    ScInputOptions aInputOptions(mod->GetInputOptions());
     aInputOptions.SetTextWysiwyg(true);
     aInputOptions.SetReplaceCellsWarn(false);
-    SC_MOD()->SetInputOptions(aInputOptions);
+    mod->SetInputOptions(aInputOptions);
     if (pDocShell)
         pDocShell->CalcOutputFactor();
 
@@ -3905,9 +3905,10 @@ void ScModelObj::enableAutomaticDeviceSelection(sal_Bool bForce)
     ScCalcConfig aConfig = ScInterpreter::GetGlobalConfig();
     aConfig.mbOpenCLAutoSelect = true;
     ScInterpreter::SetGlobalConfig(aConfig);
-    ScFormulaOptions aOptions = SC_MOD()->GetFormulaOptions();
+    ScModule* mod = ScModule::get();
+    ScFormulaOptions aOptions = mod->GetFormulaOptions();
     aOptions.SetCalcConfig(aConfig);
-    SC_MOD()->SetFormulaOptions(aOptions);
+    mod->SetFormulaOptions(aOptions);
 #if !HAVE_FEATURE_OPENCL
     (void) bForce;
 #else
@@ -3920,9 +3921,10 @@ void ScModelObj::disableAutomaticDeviceSelection()
     ScCalcConfig aConfig = ScInterpreter::GetGlobalConfig();
     aConfig.mbOpenCLAutoSelect = false;
     ScInterpreter::SetGlobalConfig(aConfig);
-    ScFormulaOptions aOptions = SC_MOD()->GetFormulaOptions();
+    ScModule* mod = ScModule::get();
+    ScFormulaOptions aOptions = mod->GetFormulaOptions();
     aOptions.SetCalcConfig(aConfig);
-    SC_MOD()->SetFormulaOptions(aOptions);
+    mod->SetFormulaOptions(aOptions);
 }
 
 void ScModelObj::selectOpenCLDevice( sal_Int32 nPlatform, sal_Int32 nDevice )

@@ -747,7 +747,7 @@ bool ScViewFunc::PasteDataFormatFormattedText( SotClipboardFormatId nFormatId,
             VclPtr<AbstractScImportAsciiDlg> pDlg(
                 pFact->CreateScImportAsciiDlg(pParent ? pParent->GetFrameWeld() : nullptr, OUString(), pStrm.get(), SC_PASTETEXT));
 
-            bAllowDialogs = bAllowDialogs && !SC_MOD()->IsInExecuteDrop();
+            bAllowDialogs = bAllowDialogs && !ScModule::get()->IsInExecuteDrop();
 
             pDlg->StartExecuteAsync([this, pDlg, &rDoc, pStrm=std::move(pStrm),
                                      nFormatId, pStrBuffer=std::move(pStrBuffer),

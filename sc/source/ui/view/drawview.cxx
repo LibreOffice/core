@@ -359,6 +359,7 @@ void ScDrawView::MarkListHasChanged()
 
     ScTabViewShell* pViewSh = pViewData->GetViewShell();
     const SdrMarkList& rMarkList = GetMarkedObjectList();
+    ScModule* pScMod = ScModule::get();
 
     // #i110829# remove the cell selection only if drawing objects are selected
     if ( !bInConstruct && rMarkList.GetMarkCount() )
@@ -366,12 +367,11 @@ void ScDrawView::MarkListHasChanged()
         pViewSh->Unmark();      // remove cell selection
 
         //  end cell edit mode if drawing objects are selected
-        SC_MOD()->InputEnterHandler();
+        pScMod->InputEnterHandler();
     }
 
     // deactivate IP
 
-    ScModule* pScMod = SC_MOD();
     bool bUnoRefDialog = pScMod->IsRefDialogOpen() && pScMod->GetCurRefDlgId() == WID_SIMPLE_REF;
 
     ScClient* pClient = static_cast<ScClient*>( pViewSh->GetIPClient() );

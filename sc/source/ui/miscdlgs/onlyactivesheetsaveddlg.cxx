@@ -31,7 +31,7 @@ ScOnlyActiveSheetSavedDlg::ScOnlyActiveSheetSavedDlg(weld::Window* pParent)
 short ScOnlyActiveSheetSavedDlg::run()
 {
     short nRet = RET_YES;
-    ScModule* pScMod = SC_MOD();
+    ScModule* pScMod = ScModule::get();
     assert(pScMod);
     if (pScMod->GetInputOptions().GetWarnActiveSheet())
     {

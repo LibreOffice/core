@@ -215,12 +215,12 @@ namespace
         ScValidationRegisteredDlg(weld::Window* pParent, std::shared_ptr<SfxDialogController> xDlg)
             : m_xDlg(std::move(xDlg))
         {
-            SC_MOD()->RegisterRefController(static_cast<sal_uInt16>(ScValidationDlg::SLOTID), m_xDlg, pParent);
+            ScModule::get()->RegisterRefController(static_cast<sal_uInt16>(ScValidationDlg::SLOTID), m_xDlg, pParent);
         }
         ~ScValidationRegisteredDlg()
         {
             m_xDlg->Close();
-            SC_MOD()->UnregisterRefController(static_cast<sal_uInt16>(ScValidationDlg::SLOTID), m_xDlg);
+            ScModule::get()->UnregisterRefController(static_cast<sal_uInt16>(ScValidationDlg::SLOTID), m_xDlg);
         }
     };
 }
@@ -230,7 +230,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
     ScTabViewShell* pTabViewShell   = GetViewData().GetViewShell();
     sal_uInt16 nSlotId = rReq.GetSlot();
     const SfxItemSet*   pReqArgs    = rReq.GetArgs();
-    ScModule*           pScMod      = SC_MOD();
+    ScModule* pScMod = ScModule::get();
 
     pTabViewShell->HideListBox();                   // Autofilter-DropDown-Listbox
 

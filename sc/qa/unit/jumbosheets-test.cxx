@@ -332,16 +332,18 @@ void ScJumboSheetsTest::setUp()
     //Init before GetDefaultsOptions
     ScDLL::Init();
 
-    ScDefaultsOptions aDefaultsOption = SC_MOD()->GetDefaultsOptions();
+    ScModule* mod = ScModule::get();
+    ScDefaultsOptions aDefaultsOption = mod->GetDefaultsOptions();
     aDefaultsOption.SetInitJumboSheets(true);
-    SC_MOD()->SetDefaultsOptions(aDefaultsOption);
+    mod->SetDefaultsOptions(aDefaultsOption);
 }
 
 void ScJumboSheetsTest::tearDown()
 {
-    ScDefaultsOptions aDefaultsOption = SC_MOD()->GetDefaultsOptions();
+    ScModule* mod = ScModule::get();
+    ScDefaultsOptions aDefaultsOption = mod->GetDefaultsOptions();
     aDefaultsOption.SetInitJumboSheets(false);
-    SC_MOD()->SetDefaultsOptions(aDefaultsOption);
+    mod->SetDefaultsOptions(aDefaultsOption);
 
     UnoApiXmlTest::tearDown();
 }

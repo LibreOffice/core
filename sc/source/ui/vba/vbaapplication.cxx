@@ -148,7 +148,7 @@ ScVbaApplication::AddSink( const uno::Reference< XSink >& xSink )
         ScDLL::Init();
     }
     // No harm in potentially calling this several times
-    SC_MOD()->RegisterAutomationApplicationEventsCaller( uno::Reference< XSinkCaller >(this) );
+    ScModule::get()->RegisterAutomationApplicationEventsCaller(uno::Reference<XSinkCaller>(this));
     mvSinks.push_back(xSink);
     return mvSinks.size();
 }
@@ -932,7 +932,7 @@ ScVbaApplication::setShowWindowsInTaskbar( sal_Bool bSet )
 sal_Bool SAL_CALL
 ScVbaApplication::getIteration()
 {
-    return SC_MOD()->GetDocOptions().IsIter();
+    return ScModule::get()->GetDocOptions().IsIter();
 }
 
 void SAL_CALL
@@ -954,9 +954,10 @@ ScVbaApplication::setIteration( sal_Bool bSet )
                 xProps->setPropertyValue(  SC_UNO_ITERENABLED, uno::Any( bSet ) );
         }
     }
-    ScDocOptions aOpts( SC_MOD()->GetDocOptions() );
+    ScModule* mod = ScModule::get();
+    ScDocOptions aOpts(mod->GetDocOptions());
     aOpts.SetIter( bSet );
-    SC_MOD()->SetDocOptions( aOpts );
+    mod->SetDocOptions(aOpts);
 }
 
 void SAL_CALL

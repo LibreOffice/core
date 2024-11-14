@@ -645,7 +645,7 @@ bool ScTable::GetPrintArea( SCCOL& rEndCol, SCROW& rEndRow, bool bNotes, bool bC
     SCROW nMaxY = 0;
     SCCOL i;
 
-    bool bSkipEmpty = SC_MOD()->GetPrintOptions().GetSkipEmpty();
+    bool bSkipEmpty = ScModule::get()->GetPrintOptions().GetSkipEmpty();
 
     for (i=0; i<aCol.size(); i++)               // Test data
     {
@@ -799,7 +799,7 @@ bool ScTable::GetPrintAreaVer( SCCOL nStartCol, SCCOL nEndCol,
     SCROW nMaxY = 0;
     SCCOL i;
 
-    bool bSkipEmpty = SC_MOD()->GetPrintOptions().GetSkipEmpty();
+    bool bSkipEmpty = ScModule::get()->GetPrintOptions().GetSkipEmpty();
 
     for (i=nStartCol; i<=nEndCol && i < aCol.size(); i++)              // Test attribute
     {

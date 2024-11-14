@@ -165,7 +165,7 @@ public:
     virtual ~ScValidationDlg() override;
     static std::shared_ptr<SfxDialogController> Find1AliveObject(const weld::Window *pAncestor)
     {
-        return SC_MOD()->Find1RefWindow(SLOTID, pAncestor);
+        return ScModule::get()->Find1RefWindow(SLOTID, pAncestor);
     }
     ScTabViewShell *GetTabViewShell()
     {
