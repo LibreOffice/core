@@ -1394,7 +1394,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, GotoHdl, Timer *, void)
         }
     }
 
-    SwDocShell* pShell = pSh ? pSh->GetDoc()->GetDocShell() : nullptr;
+    SwDocShell* pShell = pSh->GetDoc()->GetDocShell();
     bool const bEnable = pShell && !pShell->IsReadOnly()
         && !pSh->getIDocumentRedlineAccess().GetRedlinePassword().hasElements();
     m_pTPView->EnableAccept( bEnable && bSel /*&& !bReadonlySel*/ );
