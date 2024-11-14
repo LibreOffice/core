@@ -1107,7 +1107,7 @@ void SwFramePage::Reset( const SfxItemSet *rSet )
             m_xFlySplitCB->hide();
         }
     }
-    else if (pFlyFormat && !m_bNew && InTextBox(*pFlyFormat))
+    else if (!m_bNew && InTextBox(*pFlyFormat))
     {
         // Disallow split flys in fly frames which form a textbox, i.e. non-editeng shape text.
         m_xFlySplitCB->hide();
