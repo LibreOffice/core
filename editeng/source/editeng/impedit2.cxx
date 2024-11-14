@@ -3787,11 +3787,11 @@ Point ImpEditEngine::GetDocPosTopLeft( sal_Int32 nParagraph )
     const ParaPortion* pPPortion = maParaPortionList.SafeGetObject(nParagraph);
     DBG_ASSERT( pPPortion, "Paragraph not found: GetWindowPosTopLeft" );
 
-    auto stMetrics = GetFontUnitMetrics(pPPortion->GetNode());
-
     Point aPoint;
     if ( pPPortion )
     {
+        auto stMetrics = GetFontUnitMetrics(pPPortion->GetNode());
+
         // If someone calls GetLineHeight() with an empty Engine.
         DBG_ASSERT(IsFormatted() || !IsFormatting(), "GetDocPosTopLeft: Doc not formatted - unable to format!");
         if (!IsFormatted())
