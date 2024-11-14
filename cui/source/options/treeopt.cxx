@@ -1712,20 +1712,16 @@ OUString OfaTreeOptionsDialog::getCurrentFactory_Impl( const Reference< XFrame >
 
 void OfaTreeOptionsDialog::generalOptions(const std::vector<sal_uInt16>& vPageId)
 {
-    sal_uInt16 nGroup = 0;
     SvtOptionsDialogOptions aOptionsDlgOpt;
-    sal_uInt16 nPageId = 0;
-
     if ( !lcl_isOptionHidden( SID_GENERAL_OPTIONS, aOptionsDlgOpt ) )
     {
         setGroupName(u"ProductName", CuiResId(SID_GENERAL_OPTIONS_RES[0].first));
-        nGroup = AddGroup(CuiResId(SID_GENERAL_OPTIONS_RES[0].first), nullptr, nullptr, SID_GENERAL_OPTIONS );
-        const sal_uInt16 nEnd = static_cast<sal_uInt16>(std::size(SID_GENERAL_OPTIONS_RES));
+        sal_uInt16 nGroup = AddGroup(CuiResId(SID_GENERAL_OPTIONS_RES[0].first), nullptr, nullptr, SID_GENERAL_OPTIONS );
 
-        for (sal_uInt16 i = 1; i < nEnd; ++i)
+        for (size_t i = 1; i < std::size(SID_GENERAL_OPTIONS_RES); ++i)
         {
             OUString sNewTitle = CuiResId(SID_GENERAL_OPTIONS_RES[i].first);
-            nPageId = SID_GENERAL_OPTIONS_RES[i].second;
+            sal_uInt16 nPageId = SID_GENERAL_OPTIONS_RES[i].second;
             if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                 continue;
 
@@ -1750,17 +1746,14 @@ void OfaTreeOptionsDialog::generalOptions(const std::vector<sal_uInt16>& vPageId
 
 void OfaTreeOptionsDialog::loadAndSaveOptions(const std::vector<sal_uInt16>& vPageId)
 {
-    sal_uInt16 nGroup = 0;
     SvtOptionsDialogOptions aOptionsDlgOpt;
-    sal_uInt16 nPageId = 0;
-
     if ( !lcl_isOptionHidden( SID_FILTER_DLG, aOptionsDlgOpt ) )
     {
         setGroupName( u"LoadSave", CuiResId(SID_FILTER_DLG_RES[0].first) );
-        nGroup = AddGroup( CuiResId(SID_FILTER_DLG_RES[0].first), nullptr, nullptr, SID_FILTER_DLG );
+        sal_uInt16 nGroup = AddGroup( CuiResId(SID_FILTER_DLG_RES[0].first), nullptr, nullptr, SID_FILTER_DLG );
         for ( size_t i = 1; i < std::size(SID_FILTER_DLG_RES); ++i )
         {
-            nPageId = static_cast<sal_uInt16>(SID_FILTER_DLG_RES[i].second);
+            sal_uInt16 nPageId = SID_FILTER_DLG_RES[i].second;
             if ( !lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
             {
                 if (!vPageId.empty())
@@ -1777,18 +1770,14 @@ void OfaTreeOptionsDialog::loadAndSaveOptions(const std::vector<sal_uInt16>& vPa
 
 void OfaTreeOptionsDialog::languageOptions(const std::vector<sal_uInt16>& vPageId)
 {
-    sal_uInt16 nGroup = 0;
     SvtOptionsDialogOptions aOptionsDlgOpt;
-    sal_uInt16 nPageId = 0;
-
-    SvtCTLOptions aCTLLanguageOptions;
     if ( !lcl_isOptionHidden( SID_LANGUAGE_OPTIONS, aOptionsDlgOpt ) )
     {
         setGroupName(u"LanguageSettings", CuiResId(SID_LANGUAGE_OPTIONS_RES[0].first));
-        nGroup = AddGroup(CuiResId(SID_LANGUAGE_OPTIONS_RES[0].first), nullptr, nullptr, SID_LANGUAGE_OPTIONS );
+        sal_uInt16 nGroup = AddGroup(CuiResId(SID_LANGUAGE_OPTIONS_RES[0].first), nullptr, nullptr, SID_LANGUAGE_OPTIONS );
         for (size_t i = 1; i < std::size(SID_LANGUAGE_OPTIONS_RES); ++i)
         {
-            nPageId = static_cast<sal_uInt16>(SID_LANGUAGE_OPTIONS_RES[i].second);
+            sal_uInt16 nPageId = SID_LANGUAGE_OPTIONS_RES[i].second;
             if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                 continue;
 
@@ -1817,33 +1806,28 @@ void OfaTreeOptionsDialog::languageOptions(const std::vector<sal_uInt16>& vPageI
 
 void OfaTreeOptionsDialog::writerOptions(const std::vector<sal_uInt16>& vPageId)
 {
-    sal_uInt16 nGroup = 0;
-    SvtOptionsDialogOptions aOptionsDlgOpt;
-    sal_uInt16 nPageId = 0;
-
-    OUString aFactory = getCurrentFactory_Impl( m_xFrame );
-    DBG_ASSERT( GetModuleIdentifier( m_xFrame ) == aFactory, "This should not happen" );
-
-    SvtModuleOptions aModuleOpt;
-    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::WRITER ) )
+    if (SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::WRITER))
     {
         // text document
+        OUString aFactory = getCurrentFactory_Impl(m_xFrame);
+        DBG_ASSERT(GetModuleIdentifier(m_xFrame) == aFactory, "This should not happen");
         if (   aFactory == "com.sun.star.text.TextDocument"
             || aFactory == "com.sun.star.text.WebDocument"
             || aFactory == "com.sun.star.text.GlobalDocument" )
         {
-            SfxModule* pSwMod = SfxApplication::GetModule(SfxToolsModule::Writer);
+            SvtOptionsDialogOptions aOptionsDlgOpt;
             if ( !lcl_isOptionHidden( SID_SW_EDITOPTIONS, aOptionsDlgOpt ) )
             {
                 if ( aFactory == "com.sun.star.text.WebDocument" )
                     setGroupName( u"WriterWeb", CuiResId(SID_SW_EDITOPTIONS_RES[0].first) );
                 else
                     setGroupName( u"Writer", CuiResId(SID_SW_EDITOPTIONS_RES[0].first) );
-                nGroup = AddGroup(CuiResId(SID_SW_EDITOPTIONS_RES[0].first), pSwMod, pSwMod, SID_SW_EDITOPTIONS );
+                SfxModule* pSwMod = SfxApplication::GetModule(SfxToolsModule::Writer);
+                sal_uInt16 nGroup = AddGroup(CuiResId(SID_SW_EDITOPTIONS_RES[0].first), pSwMod, pSwMod, SID_SW_EDITOPTIONS );
                 SvtCTLOptions aCTLLanguageOptions;
                 for ( size_t i = 1; i < std::size(SID_SW_EDITOPTIONS_RES); ++i )
                 {
-                    nPageId = static_cast<sal_uInt16>(SID_SW_EDITOPTIONS_RES[i].second);
+                    sal_uInt16 nPageId = SID_SW_EDITOPTIONS_RES[i].second;
                     if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                         continue;
                     if ( ( RID_SW_TP_STD_FONT_CJK != nPageId || SvtCJKOptions::IsCJKFontEnabled() ) &&
@@ -1877,30 +1861,24 @@ void OfaTreeOptionsDialog::writerOptions(const std::vector<sal_uInt16>& vPageId)
 
 void OfaTreeOptionsDialog::writerWebOptions(const std::vector<sal_uInt16>& vPageId)
 {
-    sal_uInt16 nGroup = 0;
-    SvtOptionsDialogOptions aOptionsDlgOpt;
-    sal_uInt16 nPageId = 0;
-
-    OUString aFactory = getCurrentFactory_Impl( m_xFrame );
-    DBG_ASSERT( GetModuleIdentifier( m_xFrame ) == aFactory, "This should not happen" );
-
-    SvtModuleOptions aModuleOpt;
-    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::WRITER ) )
+    if (SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::WRITER))
     {
         // text document
+        OUString aFactory = getCurrentFactory_Impl(m_xFrame);
+        DBG_ASSERT(GetModuleIdentifier(m_xFrame) == aFactory, "This should not happen");
         if (   aFactory == "com.sun.star.text.TextDocument"
             || aFactory == "com.sun.star.text.WebDocument"
             || aFactory == "com.sun.star.text.GlobalDocument" )
         {
-            SfxModule* pSwMod = SfxApplication::GetModule(SfxToolsModule::Writer);
-
             // HTML documents
+            SvtOptionsDialogOptions aOptionsDlgOpt;
             if ( !lcl_isOptionHidden( SID_SW_ONLINEOPTIONS, aOptionsDlgOpt ) )
             {
-                nGroup = AddGroup(CuiResId(SID_SW_ONLINEOPTIONS_RES[0].first), pSwMod, pSwMod, SID_SW_ONLINEOPTIONS );
+                SfxModule* pSwMod = SfxApplication::GetModule(SfxToolsModule::Writer);
+                sal_uInt16 nGroup = AddGroup(CuiResId(SID_SW_ONLINEOPTIONS_RES[0].first), pSwMod, pSwMod, SID_SW_ONLINEOPTIONS );
                 for( size_t i = 1; i < std::size(SID_SW_ONLINEOPTIONS_RES); ++i )
                 {
-                    nPageId = static_cast<sal_uInt16>(SID_SW_ONLINEOPTIONS_RES[i].second);
+                    sal_uInt16 nPageId = SID_SW_ONLINEOPTIONS_RES[i].second;
                     if ( !lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                     {
                         if (!vPageId.empty())
@@ -1931,28 +1909,22 @@ void OfaTreeOptionsDialog::writerWebOptions(const std::vector<sal_uInt16>& vPage
 
 void OfaTreeOptionsDialog::calcOptions(const std::vector<sal_uInt16>& vPageId)
 {
-    sal_uInt16 nGroup = 0;
-    SvtOptionsDialogOptions aOptionsDlgOpt;
-    sal_uInt16 nPageId = 0;
-
-    OUString aFactory = getCurrentFactory_Impl( m_xFrame );
-    DBG_ASSERT( GetModuleIdentifier( m_xFrame ) == aFactory, "This should not happen" );
-
-    SvtModuleOptions aModuleOpt;
     // Calc options
-    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::CALC ) )
+    if (SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::CALC))
     {
+        OUString aFactory = getCurrentFactory_Impl(m_xFrame);
+        DBG_ASSERT(GetModuleIdentifier(m_xFrame) == aFactory, "This should not happen");
         if ( aFactory == "com.sun.star.sheet.SpreadsheetDocument" )
         {
+            SvtOptionsDialogOptions aOptionsDlgOpt;
             if ( !lcl_isOptionHidden( SID_SC_EDITOPTIONS, aOptionsDlgOpt ) )
             {
                 SfxModule* pScMod = SfxApplication::GetModule( SfxToolsModule::Calc );
                 setGroupName( u"Calc", CuiResId(SID_SC_EDITOPTIONS_RES[0].first) );
-                nGroup = AddGroup( CuiResId(SID_SC_EDITOPTIONS_RES[0].first), pScMod, pScMod, SID_SC_EDITOPTIONS );
-                const sal_uInt16 nCount = static_cast<sal_uInt16>(std::size(SID_SC_EDITOPTIONS_RES));
-                for ( sal_uInt16 i = 1; i < nCount; ++i )
+                sal_uInt16 nGroup = AddGroup( CuiResId(SID_SC_EDITOPTIONS_RES[0].first), pScMod, pScMod, SID_SC_EDITOPTIONS );
+                for (size_t i = 1; i < std::size(SID_SC_EDITOPTIONS_RES); ++i)
                 {
-                    nPageId = static_cast<sal_uInt16>(SID_SC_EDITOPTIONS_RES[i].second);
+                    sal_uInt16 nPageId = SID_SC_EDITOPTIONS_RES[i].second;
                     if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                         continue;
 
@@ -1971,28 +1943,22 @@ void OfaTreeOptionsDialog::calcOptions(const std::vector<sal_uInt16>& vPageId)
 
 void OfaTreeOptionsDialog::impressOptions(const std::vector<sal_uInt16>& vPageId)
 {
-    sal_uInt16 nGroup = 0;
-    SvtOptionsDialogOptions aOptionsDlgOpt;
-    sal_uInt16 nPageId = 0;
-
-    OUString aFactory = getCurrentFactory_Impl( m_xFrame );
-    DBG_ASSERT( GetModuleIdentifier( m_xFrame ) == aFactory, "This should not happen" );
-    SvtModuleOptions aModuleOpt;
-
     // Impress options
-    SfxModule* pSdMod = SfxApplication::GetModule( SfxToolsModule::Draw );
-    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::IMPRESS ) )
+    if (SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::IMPRESS))
     {
+        OUString aFactory = getCurrentFactory_Impl(m_xFrame);
+        DBG_ASSERT(GetModuleIdentifier(m_xFrame) == aFactory, "This should not happen");
         if ( aFactory == "com.sun.star.presentation.PresentationDocument" )
         {
+            SvtOptionsDialogOptions aOptionsDlgOpt;
             if ( !lcl_isOptionHidden( SID_SD_EDITOPTIONS, aOptionsDlgOpt ) )
             {
+                SfxModule* pSdMod = SfxApplication::GetModule(SfxToolsModule::Draw);
                 setGroupName( u"Impress", CuiResId(SID_SD_EDITOPTIONS_RES[0].first) );
-                nGroup = AddGroup( CuiResId(SID_SD_EDITOPTIONS_RES[0].first), pSdMod, pSdMod, SID_SD_EDITOPTIONS );
-                const sal_uInt16 nCount = static_cast<sal_uInt16>(std::size(SID_SD_EDITOPTIONS_RES));
-                for ( sal_uInt16 i = 1; i < nCount; ++i )
+                sal_uInt16 nGroup = AddGroup( CuiResId(SID_SD_EDITOPTIONS_RES[0].first), pSdMod, pSdMod, SID_SD_EDITOPTIONS );
+                for (size_t i = 1; i < std::size(SID_SD_EDITOPTIONS_RES); ++i)
                 {
-                    nPageId = static_cast<sal_uInt16>(SID_SD_EDITOPTIONS_RES[i].second);
+                    sal_uInt16 nPageId = SID_SD_EDITOPTIONS_RES[i].second;
                     if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                         continue;
 
@@ -2011,28 +1977,22 @@ void OfaTreeOptionsDialog::impressOptions(const std::vector<sal_uInt16>& vPageId
 
 void OfaTreeOptionsDialog::drawOptions(const std::vector<sal_uInt16>& vPageId)
 {
-    sal_uInt16 nGroup = 0;
-    SvtOptionsDialogOptions aOptionsDlgOpt;
-    sal_uInt16 nPageId = 0;
-
-    OUString aFactory = getCurrentFactory_Impl( m_xFrame );
-    DBG_ASSERT( GetModuleIdentifier( m_xFrame ) == aFactory, "This should not happen" );
-    SvtModuleOptions aModuleOpt;
-
     // Draw options
-    SfxModule* pSdMod = SfxApplication::GetModule(SfxToolsModule::Draw);
-    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::DRAW ) )
+    if (SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::DRAW))
     {
+        OUString aFactory = getCurrentFactory_Impl(m_xFrame);
+        DBG_ASSERT(GetModuleIdentifier(m_xFrame) == aFactory, "This should not happen");
         if ( aFactory == "com.sun.star.drawing.DrawingDocument" )
         {
+            SvtOptionsDialogOptions aOptionsDlgOpt;
             if ( !lcl_isOptionHidden( SID_SD_GRAPHIC_OPTIONS, aOptionsDlgOpt ) )
             {
+                SfxModule* pSdMod = SfxApplication::GetModule(SfxToolsModule::Draw);
                 setGroupName( u"Draw", CuiResId(SID_SD_GRAPHIC_OPTIONS_RES[0].first) );
-                nGroup = AddGroup( CuiResId(SID_SD_GRAPHIC_OPTIONS_RES[0].first), pSdMod, pSdMod, SID_SD_GRAPHIC_OPTIONS );
-                const sal_uInt16 nCount = static_cast<sal_uInt16>(std::size(SID_SD_GRAPHIC_OPTIONS_RES));
-                for ( sal_uInt16 i = 1; i < nCount; ++i )
+                sal_uInt16 nGroup = AddGroup( CuiResId(SID_SD_GRAPHIC_OPTIONS_RES[0].first), pSdMod, pSdMod, SID_SD_GRAPHIC_OPTIONS );
+                for (size_t i = 1; i < std::size(SID_SD_GRAPHIC_OPTIONS_RES); ++i)
                 {
-                    nPageId = static_cast<sal_uInt16>(SID_SD_GRAPHIC_OPTIONS_RES[i].second);
+                    sal_uInt16 nPageId = SID_SD_GRAPHIC_OPTIONS_RES[i].second;
                     if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                         continue;
 
@@ -2052,27 +2012,22 @@ void OfaTreeOptionsDialog::drawOptions(const std::vector<sal_uInt16>& vPageId)
 
 void OfaTreeOptionsDialog::mathOptions(const std::vector<sal_uInt16>& vPageId)
 {
-    sal_uInt16 nGroup = 0;
-    SvtOptionsDialogOptions aOptionsDlgOpt;
-    sal_uInt16 nPageId = 0;
-
-    OUString aFactory = getCurrentFactory_Impl( m_xFrame );
-    DBG_ASSERT( GetModuleIdentifier( m_xFrame ) == aFactory, "This should not happen" );
-    SvtModuleOptions aModuleOpt;
-
     // Math options
-    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::MATH ) )
+    if (SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::MATH))
     {
+        OUString aFactory = getCurrentFactory_Impl(m_xFrame);
+        DBG_ASSERT(GetModuleIdentifier(m_xFrame) == aFactory, "This should not happen");
         if ( aFactory == "com.sun.star.formula.FormulaProperties" )
         {
+            SvtOptionsDialogOptions aOptionsDlgOpt;
             if ( !lcl_isOptionHidden( SID_SM_EDITOPTIONS, aOptionsDlgOpt ) )
             {
                 SfxModule* pSmMod = SfxApplication::GetModule(SfxToolsModule::Math);
                 setGroupName( u"Math", CuiResId(SID_SM_EDITOPTIONS_RES[0].first) );
-                nGroup = AddGroup(CuiResId(SID_SM_EDITOPTIONS_RES[0].first), pSmMod, pSmMod, SID_SM_EDITOPTIONS );
+                sal_uInt16 nGroup = AddGroup(CuiResId(SID_SM_EDITOPTIONS_RES[0].first), pSmMod, pSmMod, SID_SM_EDITOPTIONS );
                 for ( size_t i = 1; i < std::size(SID_SM_EDITOPTIONS_RES); ++i )
                 {
-                    nPageId = static_cast<sal_uInt16>(SID_SM_EDITOPTIONS_RES[i].second);
+                    sal_uInt16 nPageId = SID_SM_EDITOPTIONS_RES[i].second;
                     if ( !lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                     {
                         if (!vPageId.empty())
@@ -2092,10 +2047,7 @@ void OfaTreeOptionsDialog::mathOptions(const std::vector<sal_uInt16>& vPageId)
 
 void OfaTreeOptionsDialog::databaseOptions(const std::vector<sal_uInt16>& vPageId)
 {
-    sal_uInt16 nGroup = 0;
     SvtOptionsDialogOptions aOptionsDlgOpt;
-    sal_uInt16 nPageId = 0;
-
     SvtModuleOptions aModuleOpt;
 
     // Database - needed only if there is an application which integrates with databases
@@ -2106,10 +2058,10 @@ void OfaTreeOptionsDialog::databaseOptions(const std::vector<sal_uInt16>& vPageI
         ) )
     {
         setGroupName( u"Base", CuiResId(SID_SB_STARBASEOPTIONS_RES[0].first) );
-        nGroup = AddGroup( CuiResId(SID_SB_STARBASEOPTIONS_RES[0].first), nullptr, nullptr, SID_SB_STARBASEOPTIONS );
+        sal_uInt16 nGroup = AddGroup( CuiResId(SID_SB_STARBASEOPTIONS_RES[0].first), nullptr, nullptr, SID_SB_STARBASEOPTIONS );
         for ( size_t i = 1; i < std::size(SID_SB_STARBASEOPTIONS_RES); ++i )
         {
-            nPageId = static_cast<sal_uInt16>(SID_SB_STARBASEOPTIONS_RES[i].second);
+            sal_uInt16 nPageId = SID_SB_STARBASEOPTIONS_RES[i].second;
             if ( !lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
             {
                 if (!vPageId.empty())
@@ -2126,17 +2078,15 @@ void OfaTreeOptionsDialog::databaseOptions(const std::vector<sal_uInt16>& vPageI
 
 void OfaTreeOptionsDialog::chartOptions(const std::vector<sal_uInt16>& vPageId)
 {
-    sal_uInt16 nGroup = 0;
     SvtOptionsDialogOptions aOptionsDlgOpt;
-    sal_uInt16 nPageId = 0;
 
     if ( !lcl_isOptionHidden( SID_SCH_EDITOPTIONS, aOptionsDlgOpt ) )
     {
         setGroupName( u"Charts", CuiResId(SID_SCH_EDITOPTIONS_RES[0].first) );
-        nGroup = AddGroup( CuiResId(SID_SCH_EDITOPTIONS_RES[0].first), nullptr, nullptr, SID_SCH_EDITOPTIONS );
+        sal_uInt16 nGroup = AddGroup( CuiResId(SID_SCH_EDITOPTIONS_RES[0].first), nullptr, nullptr, SID_SCH_EDITOPTIONS );
         for ( size_t i = 1; i < std::size(SID_SCH_EDITOPTIONS_RES); ++i )
         {
-            nPageId = static_cast<sal_uInt16>(SID_SCH_EDITOPTIONS_RES[i].second);
+            sal_uInt16 nPageId = SID_SCH_EDITOPTIONS_RES[i].second;
             if ( !lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
             {
                 if (!vPageId.empty())
@@ -2153,19 +2103,17 @@ void OfaTreeOptionsDialog::chartOptions(const std::vector<sal_uInt16>& vPageId)
 
 void OfaTreeOptionsDialog::internetOptions(const std::vector<sal_uInt16>& vPageId)
 {
-    sal_uInt16 nGroup = 0;
     SvtOptionsDialogOptions aOptionsDlgOpt;
-    sal_uInt16 nPageId = 0;
 
     if ( lcl_isOptionHidden( SID_INET_DLG, aOptionsDlgOpt ) )
         return;
 
     setGroupName(u"Internet", CuiResId(SID_INET_DLG_RES[0].first));
-    nGroup = AddGroup(CuiResId(SID_INET_DLG_RES[0].first), nullptr, nullptr, SID_INET_DLG );
+    sal_uInt16 nGroup = AddGroup(CuiResId(SID_INET_DLG_RES[0].first), nullptr, nullptr, SID_INET_DLG );
 
     for ( size_t i = 1; i < std::size(SID_INET_DLG_RES); ++i )
     {
-        nPageId = static_cast<sal_uInt16>(SID_INET_DLG_RES[i].second);
+        sal_uInt16 nPageId = SID_INET_DLG_RES[i].second;
         if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
             continue;
 #if defined(_WIN32)
