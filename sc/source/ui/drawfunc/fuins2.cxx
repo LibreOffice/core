@@ -243,7 +243,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView*
     }
     else if ( nSlot == SID_INSERT_SMATH )
     {
-        if ( SvtModuleOptions().IsMath() )
+        if ( SvtModuleOptions().IsMathInstalled() )
         {
             xObj = rViewShell.GetViewFrame().GetObjectShell()->GetEmbeddedObjectContainer().CreateEmbeddedObject( SvGlobalName( SO3_SM_CLASSID_60 ).GetByteSequence(), aName );
             rReq.AppendItem( SfxGlobalNameItem( SID_INSERT_OBJECT, SvGlobalName( SO3_SM_CLASSID_60 ) ) );
@@ -345,7 +345,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView*
             }
 
             //  initialize chart ?
-            if ( SvtModuleOptions().IsChart() && SotExchange::IsChart( SvGlobalName( xObj->getClassID() ) ) )
+            if ( SvtModuleOptions().IsChartInstalled() && SotExchange::IsChart( SvGlobalName( xObj->getClassID() ) ) )
                 lcl_ChartInit(xObj, &rViewSh.GetViewData(), OUString(), false);
 
             ScViewData& rData = rViewSh.GetViewData();
@@ -419,7 +419,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
     if( ! rReq.IsAPI() )
         rReq.Done();
 
-    if (!SvtModuleOptions().IsChart())
+    if (!SvtModuleOptions().IsChartInstalled())
         return;
 
     // BM/IHA --

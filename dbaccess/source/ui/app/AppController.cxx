@@ -598,11 +598,10 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
             case SID_NEWDOC:
             case SID_APP_NEW_FORM:
             case ID_DOCUMENT_CREATE_REPWIZ:
-                aReturn.bEnabled = !isDataSourceReadOnly() && SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::WRITER);
+                aReturn.bEnabled = !isDataSourceReadOnly() && SvtModuleOptions().IsWriterInstalled();
                 break;
             case SID_APP_NEW_REPORT:
-                aReturn.bEnabled = !isDataSourceReadOnly()
-                                    && SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::WRITER);
+                aReturn.bEnabled = !isDataSourceReadOnly() && SvtModuleOptions().IsWriterInstalled();
                 if ( aReturn.bEnabled )
                 {
                     Reference< XContentEnumerationAccess > xEnumAccess(m_xContext->getServiceManager(), UNO_QUERY);
@@ -670,7 +669,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
             case SID_REPORT_CREATE_REPWIZ_PRE_SEL:
             case SID_APP_NEW_REPORT_PRE_SEL:
                 aReturn.bEnabled = !isDataSourceReadOnly()
-                                    && SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::WRITER)
+                                    && SvtModuleOptions().IsWriterInstalled()
                                     && getContainer()->isALeafSelected();
                 if ( aReturn.bEnabled )
                 {

@@ -373,8 +373,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
     break;
     case SID_INSERT_DIAGRAM:
         {
-            SvtModuleOptions aMOpt;
-            if ( !aMOpt.IsChart() )
+            if (!SvtModuleOptions().IsChartInstalled())
                 break;
             if(!rReq.IsAPI())
             {
@@ -621,7 +620,6 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
     SfxWhichIter aIter( rSet );
     SwWrtShell &rSh = GetShell();
     sal_uInt16 nWhich = aIter.FirstWhich();
-    SvtModuleOptions aMOpt;
     SfxObjectCreateMode eCreateMode =
                         GetView().GetDocShell()->GetCreateMode();
     const bool bCursorInHidden = rSh.IsInHiddenRange(/*bSelect=*/false);
@@ -641,7 +639,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
             break;
 
         case SID_INSERT_DIAGRAM:
-            if( !aMOpt.IsChart()
+            if (!SvtModuleOptions().IsChartInstalled()
                 || GetShell().CursorInsideInputField()
                 || eCreateMode == SfxObjectCreateMode::EMBEDDED
                 || bCursorInHidden )
@@ -651,7 +649,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
             break;
 
             case FN_INSERT_SMA:
-                if( !aMOpt.IsMath()
+                if (!SvtModuleOptions().IsMathInstalled()
                     || eCreateMode == SfxObjectCreateMode::EMBEDDED
                     || bCursorInHidden
                     || rSh.CursorInsideInputField() )

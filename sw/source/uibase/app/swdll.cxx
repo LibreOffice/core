@@ -86,12 +86,12 @@ SwDLL::SwDLL()
     if ( SfxApplication::GetModule(SfxToolsModule::Writer) )    // Module already active
         return;
 
-    std::unique_ptr<SvtModuleOptions> xOpt;
+    std::optional<SvtModuleOptions> oOpt;
     if (!comphelper::IsFuzzing())
-        xOpt.reset(new SvtModuleOptions);
+        oOpt.emplace();
     SfxObjectFactory* pDocFact = nullptr;
     SfxObjectFactory* pGlobDocFact = nullptr;
-    if (!xOpt || xOpt->IsWriter())
+    if (!oOpt || oOpt->IsWriterInstalled())
     {
         pDocFact = &SwDocShell::Factory();
         pGlobDocFact = &SwGlobalDocShell::Factory();
@@ -105,7 +105,7 @@ SwDLL::SwDLL()
 
     pWDocFact->SetDocumentServiceName(u"com.sun.star.text.WebDocument"_ustr);
 
-    if (!xOpt || xOpt->IsWriter())
+    if (!oOpt || oOpt->IsWriterInstalled())
     {
         pGlobDocFact->SetDocumentServiceName(u"com.sun.star.text.GlobalDocument"_ustr);
         pDocFact->SetDocumentServiceName(u"com.sun.star.text.TextDocument"_ustr);

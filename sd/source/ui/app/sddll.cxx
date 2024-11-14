@@ -87,7 +87,10 @@ using namespace ::com::sun::star;
 // Register all Factories
 void SdDLL::RegisterFactorys()
 {
-    if (comphelper::IsFuzzing() || SvtModuleOptions().IsImpress())
+    std::optional<SvtModuleOptions> oOpts;
+    if (!comphelper::IsFuzzing())
+        oOpts.emplace();
+    if (!oOpts || oOpts->IsImpressInstalled())
     {
         ::sd::ImpressViewShellBase::RegisterFactory (
             ::sd::IMPRESS_FACTORY_ID);
@@ -110,7 +113,7 @@ void SdDLL::RegisterFactorys()
                 ::sd::PRESENTATION_FACTORY_ID);
         }
     }
-    if (!comphelper::IsFuzzing() && SvtModuleOptions().IsDraw())
+    if (oOpts && oOpts->IsDrawInstalled())
     {
         ::sd::GraphicViewShellBase::RegisterFactory (::sd::DRAW_FACTORY_ID);
     }
@@ -224,24 +227,27 @@ void SdDLL::Init()
     SfxObjectFactory* pDrawFact = nullptr;
     SfxObjectFactory* pImpressFact = nullptr;
 
-    if (comphelper::IsFuzzing() || SvtModuleOptions().IsImpress())
+    std::optional<SvtModuleOptions> oOptions;
+    if (!comphelper::IsFuzzing())
+        oOptions.emplace();
+    if (!oOptions || oOptions->IsImpressInstalled())
         pImpressFact = &::sd::DrawDocShell::Factory();
 
-    if (!comphelper::IsFuzzing() && SvtModuleOptions().IsDraw())
+    if (oOptions && oOptions->IsDrawInstalled())
         pDrawFact = &::sd::GraphicDocShell::Factory();
 
     auto pUniqueModule = std::make_unique<SdModule>(pImpressFact, pDrawFact);
     SdModule* pModule = pUniqueModule.get();
     SfxApplication::SetModule(SfxToolsModule::Draw, std::move(pUniqueModule));
 
-    if (!comphelper::IsFuzzing() && SvtModuleOptions().IsImpress())
+    if (oOptions && oOptions->IsImpressInstalled())
     {
         // Register the Impress shape types in order to make the shapes accessible.
         ::accessibility::RegisterImpressShapeTypes ();
         ::sd::DrawDocShell::Factory().SetDocumentServiceName( u"com.sun.star.presentation.PresentationDocument"_ustr );
     }
 
-    if (!comphelper::IsFuzzing() && SvtModuleOptions().IsDraw())
+    if (oOptions && oOptions->IsDrawInstalled())
     {
         ::sd::GraphicDocShell::Factory().SetDocumentServiceName( u"com.sun.star.drawing.DrawingDocument"_ustr );
     }

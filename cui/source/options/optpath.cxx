@@ -247,7 +247,7 @@ void SvxPathTabPage::Reset( const SfxItemSet* )
     {
         // only writer uses autotext
         if ( static_cast<SvtPathOptions::Paths>(i) == SvtPathOptions::Paths::AutoText
-            && !SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::EModule::WRITER ) )
+            && !SvtModuleOptions().IsWriterInstalled())
             continue;
 
         TranslateId pId;

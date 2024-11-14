@@ -34,7 +34,7 @@ using namespace ::com::sun::star;
 
 static bool IsDocShellRegistered()
 {
-    return SvtModuleOptions().IsWriter();
+    return SvtModuleOptions().IsWriterInstalled();
 }
 
 SwIoDetect aFilterDetect[] =

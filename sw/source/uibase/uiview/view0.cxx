@@ -72,7 +72,7 @@ using namespace ::com::sun::star;
 
 SFX_IMPL_NAMED_VIEWFACTORY(SwView, "Default")
 {
-    if (comphelper::IsFuzzing() || SvtModuleOptions().IsWriter())
+    if (comphelper::IsFuzzing() || SvtModuleOptions().IsWriterInstalled())
     {
         SFX_VIEW_REGISTRATION(SwDocShell);
         SFX_VIEW_REGISTRATION(SwGlobalDocShell);

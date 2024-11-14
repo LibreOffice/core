@@ -291,22 +291,22 @@ void BackingWindow::initControls()
     // collect the URLs of the entries in the File/New menu
     SvtModuleOptions    aModuleOptions;
 
-    if (aModuleOptions.IsModuleInstalled(SvtModuleOptions::EModule::WRITER))
+    if (aModuleOptions.IsWriterInstalled())
         mxAllRecentThumbnails->mnFileTypes |= sfx2::ApplicationType::TYPE_WRITER;
 
-    if (aModuleOptions.IsModuleInstalled(SvtModuleOptions::EModule::CALC))
+    if (aModuleOptions.IsCalcInstalled())
         mxAllRecentThumbnails->mnFileTypes |= sfx2::ApplicationType::TYPE_CALC;
 
-    if (aModuleOptions.IsModuleInstalled(SvtModuleOptions::EModule::IMPRESS))
+    if (aModuleOptions.IsImpressInstalled())
         mxAllRecentThumbnails->mnFileTypes |= sfx2::ApplicationType::TYPE_IMPRESS;
 
-    if (aModuleOptions.IsModuleInstalled(SvtModuleOptions::EModule::DRAW))
+    if (aModuleOptions.IsDrawInstalled())
         mxAllRecentThumbnails->mnFileTypes |= sfx2::ApplicationType::TYPE_DRAW;
 
-    if (aModuleOptions.IsModuleInstalled(SvtModuleOptions::EModule::DATABASE))
+    if (aModuleOptions.IsDataBaseInstalled())
         mxAllRecentThumbnails->mnFileTypes |= sfx2::ApplicationType::TYPE_DATABASE;
 
-    if (aModuleOptions.IsModuleInstalled(SvtModuleOptions::EModule::MATH))
+    if (aModuleOptions.IsMathInstalled())
         mxAllRecentThumbnails->mnFileTypes |= sfx2::ApplicationType::TYPE_MATH;
 
     mxAllRecentThumbnails->mnFileTypes |= sfx2::ApplicationType::TYPE_OTHER;
@@ -433,12 +433,12 @@ void BackingWindow::checkInstalledModules()
 {
     SvtModuleOptions aModuleOpt;
 
-    mxWriterAllButton->set_sensitive( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::WRITER ));
-    mxCalcAllButton->set_sensitive( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::CALC ) );
-    mxImpressAllButton->set_sensitive( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::IMPRESS ) );
-    mxDrawAllButton->set_sensitive( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::DRAW ) );
-    mxMathAllButton->set_sensitive(aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::MATH ));
-    mxDBAllButton->set_sensitive(aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::DATABASE ));
+    mxWriterAllButton->set_sensitive(aModuleOpt.IsWriterInstalled());
+    mxCalcAllButton->set_sensitive(aModuleOpt.IsCalcInstalled());
+    mxImpressAllButton->set_sensitive(aModuleOpt.IsImpressInstalled());
+    mxDrawAllButton->set_sensitive(aModuleOpt.IsDrawInstalled());
+    mxMathAllButton->set_sensitive(aModuleOpt.IsMathInstalled());
+    mxDBAllButton->set_sensitive(aModuleOpt.IsDataBaseInstalled());
 }
 
 bool BackingWindow::PreNotify(NotifyEvent& rNEvt)

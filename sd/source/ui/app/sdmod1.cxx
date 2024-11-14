@@ -479,7 +479,7 @@ SfxFrame* SdModule::CreateFromTemplate(const OUString& rTemplatePath, const Refe
 SfxFrame* SdModule::ExecuteNewDocument( SfxRequest const & rReq )
 {
     SfxFrame* pFrame = nullptr;
-    if ( SvtModuleOptions().IsImpress() )
+    if (SvtModuleOptions().IsImpressInstalled())
     {
         Reference< XFrame > xTargetFrame;
         const SfxUnoFrameItem* pFrmItem = rReq.GetArg<SfxUnoFrameItem>(SID_FILLFRAME);

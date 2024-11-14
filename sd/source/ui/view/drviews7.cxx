@@ -1287,16 +1287,16 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
     // are the modules available?
 
-    if (!SvtModuleOptions().IsCalc())
+    if (!SvtModuleOptions().IsCalcInstalled())
     {
         // remove menu entry if module is not available
         rSet.Put( SfxVisibilityItem( SID_ATTR_TABLE, false ) );
     }
-    if (!SvtModuleOptions().IsChart())
+    if (!SvtModuleOptions().IsChartInstalled())
     {
         rSet.DisableItem( SID_INSERT_DIAGRAM );
     }
-    if (!SvtModuleOptions().IsMath())
+    if (!SvtModuleOptions().IsMathInstalled())
     {
         rSet.DisableItem( SID_INSERT_MATH );
     }

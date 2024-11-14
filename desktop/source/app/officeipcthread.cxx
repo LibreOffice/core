@@ -1089,13 +1089,13 @@ bool IpcThread::process(OString const & arguments, bool * waitProcessed) {
                 SvtModuleOptions    aOpt;
 
                 // Support command line parameters to start a module (as preselection)
-                if ( aCmdLineArgs->IsWriter() && aOpt.IsModuleInstalled( SvtModuleOptions::EModule::WRITER ) )
+                if (aCmdLineArgs->IsWriter() && aOpt.IsWriterInstalled())
                     pRequest->aModule = aOpt.GetFactoryName( SvtModuleOptions::EFactory::WRITER );
-                else if ( aCmdLineArgs->IsCalc() && aOpt.IsModuleInstalled( SvtModuleOptions::EModule::CALC ) )
+                else if (aCmdLineArgs->IsCalc() && aOpt.IsCalcInstalled())
                     pRequest->aModule = aOpt.GetFactoryName( SvtModuleOptions::EFactory::CALC );
-                else if ( aCmdLineArgs->IsImpress() && aOpt.IsModuleInstalled( SvtModuleOptions::EModule::IMPRESS ) )
+                else if (aCmdLineArgs->IsImpress() && aOpt.IsImpressInstalled())
                     pRequest->aModule= aOpt.GetFactoryName( SvtModuleOptions::EFactory::IMPRESS );
-                else if ( aCmdLineArgs->IsDraw() && aOpt.IsModuleInstalled( SvtModuleOptions::EModule::DRAW ) )
+                else if (aCmdLineArgs->IsDraw() && aOpt.IsDrawInstalled())
                     pRequest->aModule= aOpt.GetFactoryName( SvtModuleOptions::EFactory::DRAW );
             }
 

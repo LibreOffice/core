@@ -172,7 +172,7 @@ void SAL_CALL ScChartsObj::addNewByName( const OUString& rName,
     ScRangeListRef xNewRanges( pList );
 
     uno::Reference < embed::XEmbeddedObject > xObj;
-    if ( SvtModuleOptions().IsChart() )
+    if ( SvtModuleOptions().IsChartInstalled() )
         xObj = pDocShell->GetEmbeddedObjectContainer().CreateEmbeddedObject( SvGlobalName( SO3_SCH_CLASSID ).GetByteSequence(), aName );
     if ( !xObj.is() )
             return;

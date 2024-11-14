@@ -231,7 +231,7 @@ void ScTabViewShell::ActivateObject(SdrOle2Obj* pObj, sal_Int32 nVerb)
             // attach listener to selection changes in chart that affect cell
             // ranges, so those can be highlighted
             // note: do that after DoVerb, so that the chart controller exists
-            if ( SvtModuleOptions().IsChart() )
+            if ( SvtModuleOptions().IsChartInstalled() )
             {
                 SvGlobalName aObjClsId ( xObj->getClassID() );
                 if (SotExchange::IsChart( aObjClsId ))
@@ -603,12 +603,12 @@ void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
         switch ( nWhich )
         {
             case SID_INSERT_DIAGRAM:
-                if ( bOle || bTabProt || !SvtModuleOptions().IsChart() || bShared )
+                if ( bOle || bTabProt || !SvtModuleOptions().IsChartInstalled() || bShared )
                     rSet.DisableItem( nWhich );
                 break;
 
             case SID_INSERT_SMATH:
-                if ( bOle || bTabProt || !SvtModuleOptions().IsMath() || bShared )
+                if ( bOle || bTabProt || !SvtModuleOptions().IsMathInstalled() || bShared )
                     rSet.DisableItem( nWhich );
                 break;
 

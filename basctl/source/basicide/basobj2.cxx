@@ -238,7 +238,7 @@ OUString ChooseMacro(weld::Window* pParent,
     SbMethod* pMethod = nullptr;
 
     MacroChooser aChooser(pParent, xDocFrame);
-    if ( bChooseOnly || !SvtModuleOptions::IsBasicIDE() )
+    if (bChooseOnly || !SvtModuleOptions::IsBasicIDEInstalled())
         aChooser.SetMode(MacroChooser::ChooseOnly);
 
     if ( !bChooseOnly && rxLimitToDocument.is() )

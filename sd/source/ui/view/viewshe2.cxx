@@ -707,7 +707,7 @@ bool ViewShell::ActivateObject(SdrOle2Obj* pObj, sal_Int32 nVerb)
 
         if( aName == "StarChart"  || aName == "StarOrg" )
         {
-            if( SvtModuleOptions().IsChart() )
+            if( SvtModuleOptions().IsChartInstalled() )
             {
                 aClass = SvGlobalName( SO3_SCH_CLASSID );
                 bChangeDefaultsForChart = true;
@@ -715,12 +715,12 @@ bool ViewShell::ActivateObject(SdrOle2Obj* pObj, sal_Int32 nVerb)
         }
         else if( aName == "StarCalc" )
         {
-            if( SvtModuleOptions().IsCalc() )
+            if( SvtModuleOptions().IsCalcInstalled() )
                 aClass = SvGlobalName( SO3_SC_CLASSID );
         }
         else if( aName == "StarMath" )
         {
-            if( SvtModuleOptions().IsMath() )
+            if( SvtModuleOptions().IsMathInstalled() )
                 aClass = SvGlobalName( SO3_SM_CLASSID );
         }
 

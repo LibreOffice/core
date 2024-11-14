@@ -331,16 +331,16 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet* )
     SvtModuleOptions aModuleOpt;
 
     // int the same sequence as the enums of MSFltrPg2_CheckBoxEntries
-    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::MATH ) )
+    if (aModuleOpt.IsMathInstalled())
         InsertEntry( sChgToFromMath, MSFltrPg2_CheckBoxEntries::Math );
-    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::WRITER ) )
+    if (aModuleOpt.IsWriterInstalled())
         InsertEntry( sChgToFromWriter, MSFltrPg2_CheckBoxEntries::Writer );
-    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::CALC ) )
+    if (aModuleOpt.IsCalcInstalled())
         InsertEntry( sChgToFromCalc, MSFltrPg2_CheckBoxEntries::Calc );
-    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::IMPRESS ) )
+    if (aModuleOpt.IsImpressInstalled())
         InsertEntry( sChgToFromImpress, MSFltrPg2_CheckBoxEntries::Impress );
     InsertEntry( sChgToFromSmartArt, MSFltrPg2_CheckBoxEntries::SmartArt, false );
-    if (aModuleOpt.IsModuleInstalled(SvtModuleOptions::EModule::DRAW))
+    if (aModuleOpt.IsDrawInstalled())
     {
         InsertEntry(sChgToFromVisio, MSFltrPg2_CheckBoxEntries::Visio, false);
         InsertEntry(sChgToFromPDF, MSFltrPg2_CheckBoxEntries::PDF, false);

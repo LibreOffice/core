@@ -817,7 +817,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         case SID_AUTOREDACTDOC:
         {
             // Actual redaction takes place on a newly generated Draw document
-            if (!SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::DRAW))
+            if (!SvtModuleOptions().IsDrawInstalled())
             {
                 std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
                     pDialogParent, VclMessageType::Warning, VclButtonsType::Ok,
@@ -853,7 +853,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             uno::Reference< lang::XComponent > xSourceDoc( xModel );
 
             // Actual redaction takes place on a newly generated Draw document
-            if (!SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::DRAW))
+            if (!SvtModuleOptions().IsDrawInstalled())
             {
                 std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
                     pDialogParent, VclMessageType::Warning, VclButtonsType::Ok,

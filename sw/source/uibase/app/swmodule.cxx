@@ -212,13 +212,14 @@ void SwDLL::RegisterFactories()
 {
     // These Id's must not be changed. Through these Id's the View (resume Documentview)
     // is created by Sfx.
-    if (comphelper::IsFuzzing() || SvtModuleOptions().IsWriter())
+    SvtModuleOptions aOptions;
+    if (comphelper::IsFuzzing() || aOptions.IsWriterInstalled())
         SwView::RegisterFactory         ( SFX_INTERFACE_SFXDOCSH );
 
 #if HAVE_FEATURE_DESKTOP
     SwWebView::RegisterFactory        ( SFX_INTERFACE_SFXMODULE );
 
-    if (comphelper::IsFuzzing() || SvtModuleOptions().IsWriter())
+    if (comphelper::IsFuzzing() || aOptions.IsWriterInstalled())
     {
         SwSrcView::RegisterFactory      ( SfxInterfaceId(6) );
         SwPagePreview::RegisterFactory  ( SfxInterfaceId(7) );

@@ -140,7 +140,7 @@ SvxSaveTabPage::SvxSaveTabPage(weld::Container* pPage, weld::DialogController* p
     m_xBackupCB->connect_toggled(LINK(this, SvxSaveTabPage, BackupClickHdl_Impl));
 
     SvtModuleOptions aModuleOpt;
-    if ( !aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::MATH ) )
+    if (!aModuleOpt.IsMathInstalled())
     {
         m_xSaveAsLB->remove_id(OUString::number(APP_MATH));
         m_xDocTypeLB->remove_id(OUString::number(APP_MATH));
@@ -151,7 +151,7 @@ SvxSaveTabPage::SvxSaveTabPage(weld::Container* pPage, weld::DialogController* p
         pImpl->aDefaultReadonlyArr[APP_MATH] = aModuleOpt.IsDefaultFilterReadonly(SvtModuleOptions::EFactory::MATH);
     }
 
-    if ( !aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::DRAW ) )
+    if (!aModuleOpt.IsDrawInstalled())
     {
         m_xSaveAsLB->remove_id(OUString::number(APP_DRAW));
         m_xDocTypeLB->remove_id(OUString::number(APP_DRAW));
@@ -162,7 +162,7 @@ SvxSaveTabPage::SvxSaveTabPage(weld::Container* pPage, weld::DialogController* p
         pImpl->aDefaultReadonlyArr[APP_DRAW] = aModuleOpt.IsDefaultFilterReadonly(SvtModuleOptions::EFactory::DRAW);
     }
 
-    if ( !aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::IMPRESS ) )
+    if (!aModuleOpt.IsImpressInstalled())
     {
         m_xSaveAsLB->remove_id(OUString::number(APP_IMPRESS));
         m_xDocTypeLB->remove_id(OUString::number(APP_IMPRESS));
@@ -173,7 +173,7 @@ SvxSaveTabPage::SvxSaveTabPage(weld::Container* pPage, weld::DialogController* p
         pImpl->aDefaultReadonlyArr[APP_IMPRESS] = aModuleOpt.IsDefaultFilterReadonly(SvtModuleOptions::EFactory::IMPRESS);
     }
 
-    if ( !aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::CALC ) )
+    if (!aModuleOpt.IsCalcInstalled())
     {
         m_xSaveAsLB->remove_id(OUString::number(APP_CALC));
         m_xDocTypeLB->remove_id(OUString::number(APP_CALC));
@@ -184,7 +184,7 @@ SvxSaveTabPage::SvxSaveTabPage(weld::Container* pPage, weld::DialogController* p
         pImpl->aDefaultReadonlyArr[APP_CALC] = aModuleOpt.IsDefaultFilterReadonly(SvtModuleOptions::EFactory::CALC);
     }
 
-    if ( !aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::WRITER ) )
+    if (!aModuleOpt.IsWriterInstalled())
     {
         m_xSaveAsLB->remove_id(OUString::number(APP_WRITER));
         m_xSaveAsLB->remove_id(OUString::number(APP_WRITER_WEB));

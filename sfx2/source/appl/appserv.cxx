@@ -1319,7 +1319,7 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
             switch(nWhich)
             {
                 case SID_TEMPLATE_ADDRESSBOOKSOURCE:
-                    if ( !SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::DATABASE) )
+                    if (!SvtModuleOptions().IsDataBaseInstalled())
                         rSet.Put(SfxVisibilityItem(nWhich, false));
                     break;
                 case SID_QUITAPP:
@@ -1930,8 +1930,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
         case SID_NEWSD :
         {
-            SvtModuleOptions aModuleOpt;
-            if ( !aModuleOpt.IsImpress() )
+            if (!SvtModuleOptions().IsImpressInstalled())
             {
                 std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(rReq.GetFrameWeld(),
                                                                          VclMessageType::Warning, VclButtonsType::Ok,
@@ -1999,9 +1998,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
 void SfxApplication::OfaState_Impl(SfxItemSet &rSet)
 {
-    SvtModuleOptions aModuleOpt;
-
-    if( !aModuleOpt.IsWriter())
+    if (!SvtModuleOptions().IsWriterInstalled())
     {
         rSet.DisableItem( FN_LABEL );
         rSet.DisableItem( FN_BUSINESS_CARD );

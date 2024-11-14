@@ -94,7 +94,7 @@ void SAL_CALL TablePivotCharts::addNewByName(OUString const & rName,
 
     uno::Reference<embed::XEmbeddedObject> xObject;
 
-    if (SvtModuleOptions().IsChart())
+    if (SvtModuleOptions().IsChartInstalled())
         xObject = m_pDocShell->GetEmbeddedObjectContainer().CreateEmbeddedObject(SvGlobalName(SO3_SCH_CLASSID).GetByteSequence(), aName);
 
     if (!xObject.is())

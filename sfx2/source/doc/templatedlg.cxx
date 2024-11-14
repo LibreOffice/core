@@ -911,10 +911,10 @@ void SfxTemplateManagerDlg::OnTemplateImportCategory(std::u16string_view sCatego
 
     // add filters of modules which are installed
     SvtModuleOptions aModuleOpt;
-    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::WRITER ) )
+    if (aModuleOpt.IsWriterInstalled())
         sFilterExt += "*.ott;*.stw;*.oth;*.dotx;*.dot";
 
-    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::CALC ) )
+    if (aModuleOpt.IsCalcInstalled())
     {
         if ( !sFilterExt.isEmpty() )
             sFilterExt += ";";
@@ -922,7 +922,7 @@ void SfxTemplateManagerDlg::OnTemplateImportCategory(std::u16string_view sCatego
         sFilterExt += "*.ots;*.stc;*.xltx;*.xlt";
     }
 
-    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::IMPRESS ) )
+    if (aModuleOpt.IsImpressInstalled())
     {
         if ( !sFilterExt.isEmpty() )
             sFilterExt += ";";
@@ -930,7 +930,7 @@ void SfxTemplateManagerDlg::OnTemplateImportCategory(std::u16string_view sCatego
         sFilterExt += "*.otp;*.sti;*.pot;*.potx";
     }
 
-    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::DRAW ) )
+    if (aModuleOpt.IsDrawInstalled())
     {
         if ( !sFilterExt.isEmpty() )
             sFilterExt += ";";

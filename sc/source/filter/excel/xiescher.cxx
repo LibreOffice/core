@@ -1760,7 +1760,7 @@ rtl::Reference<SdrObject> XclImpChartObj::DoCreateSdrObj( XclImpDffConverter& rD
 {
     rtl::Reference<SdrObject> xSdrObj;
     ScDocShell* pDocShell = GetDocShell();
-    if( rDffConv.SupportsOleObjects() && SvtModuleOptions().IsChart() && pDocShell && mxChart && !mxChart->IsPivotChart() )
+    if( rDffConv.SupportsOleObjects() && SvtModuleOptions().IsChartInstalled() && pDocShell && mxChart && !mxChart->IsPivotChart() )
     {
         // create embedded chart object
         OUString aEmbObjName;

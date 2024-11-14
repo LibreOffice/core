@@ -1040,11 +1040,8 @@ void SwDocShell::GetState(SfxItemSet& rSet)
 
         case FN_ABSTRACT_STARIMPRESS:
         case FN_OUTLINE_TO_IMPRESS:
-            {
-                SvtModuleOptions aMOpt;
-                if (!aMOpt.IsImpress() || GetObjectShell()->isExportLocked())
-                    rSet.DisableItem( nWhich );
-            }
+            if (!SvtModuleOptions().IsImpressInstalled() || GetObjectShell()->isExportLocked())
+                rSet.DisableItem(nWhich);
             [[fallthrough]];
         case FN_ABSTRACT_NEWDOC:
         case FN_OUTLINE_TO_CLIPBOARD:

@@ -497,8 +497,7 @@ SwDoc* Reader::GetTemplateDoc(SwDoc& rDoc)
             // we cannot create a SwDocShell. We could create a
             // SwWebDocShell however, because this exists always
             // for the help.
-            SvtModuleOptions aModuleOptions;
-            if (aModuleOptions.IsWriter())
+            if (SvtModuleOptions().IsWriterInstalled())
             {
                 rtl::Reference<SwDocShell> pDocSh = new SwDocShell(SfxObjectCreateMode::INTERNAL);
                 SfxObjectShellLock xDocSh = pDocSh.get();

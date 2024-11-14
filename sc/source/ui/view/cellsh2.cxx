@@ -1175,7 +1175,7 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
 
             case SID_VIEW_DATA_SOURCE_BROWSER:
                 {
-                    if (!SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::DATABASE))
+                    if (!SvtModuleOptions().IsDataBaseInstalled())
                         rSet.Put(SfxVisibilityItem(nWhich, false));
                     else
                         //  get state (BoolItem) from SfxViewFrame

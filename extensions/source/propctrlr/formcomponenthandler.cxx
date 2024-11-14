@@ -853,13 +853,13 @@ namespace pcr
 
             case PROPERTY_ID_LISTSOURCE:
                 // no cursor source if no Base is installed.
-                if ( SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::EModule::DATABASE ) )
+                if (SvtModuleOptions().IsDataBaseInstalled())
                     const_cast< FormComponentPropertyHandler* >( this )->m_bHaveListSource = true;
                 break;
 
             case PROPERTY_ID_COMMAND:
                 // no cursor source if no Base is installed.
-                if ( SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::EModule::DATABASE ) )
+                if (SvtModuleOptions().IsDataBaseInstalled())
                     const_cast< FormComponentPropertyHandler* >( this )->m_bHaveCommand = true;
                 break;
             }   // switch ( nPropId )
@@ -2283,7 +2283,7 @@ namespace pcr
 
         // no data properties if no Base is installed.
         if ( ( nPropertyUIFlags & PROP_FLAG_DATA_PROPERTY ) != 0 )
-            if ( !SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::EModule::DATABASE ) )
+            if (!SvtModuleOptions().IsDataBaseInstalled())
                 return true;
 
         if ((nPropertyUIFlags & PROP_FLAG_REPORT_INVISIBLE) != 0 && isReportModel())

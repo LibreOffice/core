@@ -875,48 +875,6 @@ void SvtModuleOptions::SetFactoryDefaultFilter(       EFactory         eFactory,
     m_pImpl->SetFactoryDefaultFilter( eFactory, sFilter );
 }
 
-bool SvtModuleOptions::IsMath() const
-{
-    // doesn't need mutex, never modified
-    return m_pImpl->IsModuleInstalled( EModule::MATH );
-}
-
-bool SvtModuleOptions::IsChart() const
-{
-    // doesn't need mutex, never modified
-    return m_pImpl->IsModuleInstalled( EModule::CHART );
-}
-
-bool SvtModuleOptions::IsCalc() const
-{
-    // doesn't need mutex, never modified
-    return m_pImpl->IsModuleInstalled( EModule::CALC );
-}
-
-bool SvtModuleOptions::IsDraw() const
-{
-    // doesn't need mutex, never modified
-    return m_pImpl->IsModuleInstalled( EModule::DRAW );
-}
-
-bool SvtModuleOptions::IsWriter() const
-{
-    std::unique_lock aGuard( impl_GetOwnStaticMutex() );
-    return m_pImpl->IsModuleInstalled( EModule::WRITER );
-}
-
-bool SvtModuleOptions::IsImpress() const
-{
-    // doesn't need mutex, never modified
-    return m_pImpl->IsModuleInstalled( EModule::IMPRESS );
-}
-
-bool SvtModuleOptions::IsDataBase() const
-{
-    // doesn't need mutex, never modified
-    return m_pImpl->IsModuleInstalled( EModule::DATABASE );
-}
-
 OUString SvtModuleOptions::GetModuleName( EModule eModule ) const
 {
     switch( eModule )

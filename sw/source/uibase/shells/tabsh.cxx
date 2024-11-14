@@ -1466,7 +1466,7 @@ void SwTableShell::GetState(SfxItemSet &rSet)
             case SID_INSERT_DIAGRAM:
                 {
                     SvtModuleOptions aMOpt;
-                    if ( !aMOpt.IsMath() || rSh.IsTableComplexForChart() )
+                    if ( !aMOpt.IsMathInstalled() || rSh.IsTableComplexForChart() )
                         rSet.DisableItem(nSlot);
                 }
                 break;

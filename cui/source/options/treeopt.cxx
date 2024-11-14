@@ -1806,7 +1806,7 @@ void OfaTreeOptionsDialog::languageOptions(const std::vector<sal_uInt16>& vPageI
 
 void OfaTreeOptionsDialog::writerOptions(const std::vector<sal_uInt16>& vPageId)
 {
-    if (SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::WRITER))
+    if (SvtModuleOptions().IsWriterInstalled())
     {
         // text document
         OUString aFactory = getCurrentFactory_Impl(m_xFrame);
@@ -1861,7 +1861,7 @@ void OfaTreeOptionsDialog::writerOptions(const std::vector<sal_uInt16>& vPageId)
 
 void OfaTreeOptionsDialog::writerWebOptions(const std::vector<sal_uInt16>& vPageId)
 {
-    if (SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::WRITER))
+    if (SvtModuleOptions().IsWriterInstalled())
     {
         // text document
         OUString aFactory = getCurrentFactory_Impl(m_xFrame);
@@ -1910,7 +1910,7 @@ void OfaTreeOptionsDialog::writerWebOptions(const std::vector<sal_uInt16>& vPage
 void OfaTreeOptionsDialog::calcOptions(const std::vector<sal_uInt16>& vPageId)
 {
     // Calc options
-    if (SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::CALC))
+    if (SvtModuleOptions().IsCalcInstalled())
     {
         OUString aFactory = getCurrentFactory_Impl(m_xFrame);
         DBG_ASSERT(GetModuleIdentifier(m_xFrame) == aFactory, "This should not happen");
@@ -1944,7 +1944,7 @@ void OfaTreeOptionsDialog::calcOptions(const std::vector<sal_uInt16>& vPageId)
 void OfaTreeOptionsDialog::impressOptions(const std::vector<sal_uInt16>& vPageId)
 {
     // Impress options
-    if (SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::IMPRESS))
+    if (SvtModuleOptions().IsImpressInstalled())
     {
         OUString aFactory = getCurrentFactory_Impl(m_xFrame);
         DBG_ASSERT(GetModuleIdentifier(m_xFrame) == aFactory, "This should not happen");
@@ -1978,7 +1978,7 @@ void OfaTreeOptionsDialog::impressOptions(const std::vector<sal_uInt16>& vPageId
 void OfaTreeOptionsDialog::drawOptions(const std::vector<sal_uInt16>& vPageId)
 {
     // Draw options
-    if (SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::DRAW))
+    if (SvtModuleOptions().IsDrawInstalled())
     {
         OUString aFactory = getCurrentFactory_Impl(m_xFrame);
         DBG_ASSERT(GetModuleIdentifier(m_xFrame) == aFactory, "This should not happen");
@@ -2013,7 +2013,7 @@ void OfaTreeOptionsDialog::drawOptions(const std::vector<sal_uInt16>& vPageId)
 void OfaTreeOptionsDialog::mathOptions(const std::vector<sal_uInt16>& vPageId)
 {
     // Math options
-    if (SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::MATH))
+    if (SvtModuleOptions().IsMathInstalled())
     {
         OUString aFactory = getCurrentFactory_Impl(m_xFrame);
         DBG_ASSERT(GetModuleIdentifier(m_xFrame) == aFactory, "This should not happen");
@@ -2052,9 +2052,9 @@ void OfaTreeOptionsDialog::databaseOptions(const std::vector<sal_uInt16>& vPageI
 
     // Database - needed only if there is an application which integrates with databases
     if ( !lcl_isOptionHidden( SID_SB_STARBASEOPTIONS, aOptionsDlgOpt ) &&
-        (   aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::DATABASE )
-        ||  aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::WRITER )
-        ||  aModuleOpt.IsModuleInstalled( SvtModuleOptions::EModule::CALC )
+        (   aModuleOpt.IsDataBaseInstalled()
+        ||  aModuleOpt.IsWriterInstalled()
+        ||  aModuleOpt.IsCalcInstalled()
         ) )
     {
         setGroupName( u"Base", CuiResId(SID_SB_STARBASEOPTIONS_RES[0].first) );

@@ -155,14 +155,14 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtModuleOptions final : public utl::de
 
         OUString GetDefaultModuleName() const;
 
-        bool   IsMath     () const;
-        bool   IsChart    () const;
-        bool   IsCalc     () const;
-        bool   IsDraw     () const;
-        bool   IsWriter   () const;
-        bool   IsImpress  () const;
-        static bool   IsBasicIDE () { return true; }
-        bool   IsDataBase () const;
+        bool IsMathInstalled() const { return IsModuleInstalled(EModule::MATH); }
+        bool IsChartInstalled() const { return IsModuleInstalled(EModule::CHART); }
+        bool IsCalcInstalled() const { return IsModuleInstalled(EModule::CALC); }
+        bool IsDrawInstalled() const { return IsModuleInstalled(EModule::DRAW); }
+        bool IsWriterInstalled() const { return IsModuleInstalled(EModule::WRITER); }
+        bool IsImpressInstalled() const { return IsModuleInstalled(EModule::IMPRESS); }
+        static bool IsBasicIDEInstalled() { return true; }
+        bool IsDataBaseInstalled() const { return IsModuleInstalled(EModule::DATABASE); }
 
         css::uno::Sequence < OUString > GetAllServiceNames();
 
