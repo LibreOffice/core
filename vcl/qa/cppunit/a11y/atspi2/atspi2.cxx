@@ -243,7 +243,7 @@ static void dumpAtspiTree(const Atspi::Accessible& pAcc, const int depth = 0)
     std::cout << debugString(pAcc) << std::endl;
 
     sal_Int32 i = 0;
-    for (const auto& pChild : pAcc)
+    for (const auto pChild : pAcc)
     {
         for (auto j = decltype(depth){ 0 }; j < depth; j++)
             std::cout << "  ";
