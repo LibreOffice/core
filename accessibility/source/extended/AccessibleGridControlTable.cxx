@@ -77,7 +77,7 @@ sal_Int64 SAL_CALL AccessibleGridControlTable::getAccessibleIndexInParent()
     ensureIsAlive();
     if(m_aTable.HasRowHeader() && m_aTable.HasColHeader())
         return 0;
-    else if((!m_aTable.HasRowHeader() && m_aTable.HasColHeader()) || (m_aTable.HasRowHeader() && !m_aTable.HasColHeader()) )
+    else if(m_aTable.HasRowHeader() != m_aTable.HasColHeader())
         return 1;
     else
         return 2;
