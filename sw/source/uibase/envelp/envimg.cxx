@@ -44,7 +44,7 @@ SfxPoolItem* SwEnvItem::CreateDefault() { return new SwEnvItem; }
 
 OUString MakeSender()
 {
-    SvtUserOptions& rUserOpt = SW_MOD()->GetUserOptions();
+    SvtUserOptions& rUserOpt = SwModule::get()->GetUserOptions();
 
     const OUString sSenderToken(SwResId(STR_SENDER_TOKENS));
     if (sSenderToken.isEmpty())

@@ -1003,7 +1003,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
             break;
         }
 
-        const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
+        const SwModuleOptions* pModOpt = SwModule::get()->GetModuleConfig();
 
         bool bHTML = 0 != (::GetHtmlMode( m_pView->GetDocShell() ) & HTMLMODE_ON);
         rSh.InsertTable(

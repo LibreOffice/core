@@ -144,7 +144,7 @@ SwOutlineTabDialog::SwOutlineTabDialog(weld::Window* pParent, const SfxItemSet* 
     SwWrtShell &rSh)
     : SfxTabDialogController(pParent, u"modules/swriter/ui/outlinenumbering.ui"_ustr, u"OutlineNumberingDialog"_ustr, pSwItemSet)
     , m_rWrtSh(rSh)
-    , m_pChapterNumRules(SW_MOD()->GetChapterNumRules())
+    , m_pChapterNumRules(SwModule::get()->GetChapterNumRules())
     , m_bModified(m_rWrtSh.IsModified())
     , m_xMenuButton(m_xBuilder->weld_menu_button(u"format"_ustr))
 {

@@ -217,7 +217,7 @@ void SwDrawBaseShell::Execute(SfxRequest& rReq)
                         const WhichRangesContainer aRange = pDlg->GetInputRanges( *aNewAttr.GetPool() );
                         SfxItemSet aSet( *aNewAttr.GetPool(), aRange );
                         FieldUnit eMetric = ::GetDfltMetric( dynamic_cast<SwWebView*>(&GetView()) != nullptr );
-                        SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)) );
+                        SwModule::get()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)) );
 
                         aSet.Put( aNewAttr, false );
 

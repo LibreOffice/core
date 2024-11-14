@@ -695,7 +695,7 @@ IMPL_LINK_NOARG(ApplyStyle, ApplyHdl, LinkParamNone*, void)
                 aUsrPref.SetKeepRatio(pBoolItem->GetValue());
                 if (pBoolItem->GetValue() != pVOpt->IsKeepRatio())
                 {
-                    SW_MOD()->ApplyUsrPref(aUsrPref, &pWrtShell->GetView());
+                    SwModule::get()->ApplyUsrPref(aUsrPref, &pWrtShell->GetView());
                 }
             }
         }
@@ -984,7 +984,7 @@ void SwDocShell::Edit(
 
         PutItem(SfxUInt16Item(SID_HTML_MODE, nHtmlMode));
         FieldUnit eMetric = ::GetDfltMetric(0 != (HTMLMODE_ON&nHtmlMode));
-        SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
+        SwModule::get()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast<sal_uInt16>(eMetric)));
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         if (!pDialogParent)
         {

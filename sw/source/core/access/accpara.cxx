@@ -1837,7 +1837,7 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
     if ( pRedline )
     {
 
-        const SwModuleOptions *pOpt = SW_MOD()->GetModuleConfig();
+        const SwModuleOptions* pOpt = SwModule::get()->GetModuleConfig();
         AuthorCharAttr aChangeAttr;
         if ( pOpt )
         {

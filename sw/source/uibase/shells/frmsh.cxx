@@ -511,7 +511,8 @@ void SwFrameShell::Execute(SfxRequest &rReq)
 
                 aSet.Put(SfxFrameItem( SID_DOCFRAME, &GetView().GetViewFrame().GetFrame()));
                 FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebView*>( &GetView()) != nullptr );
-                SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric) ));
+                SwModule* mod = SwModule::get();
+                mod->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast<sal_uInt16>(eMetric)));
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateFrameTabDialog(
                                                         nSel & SelectionType::Graphic ? u"PictureDialog"_ustr :
@@ -540,7 +541,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                         {
                             SwViewOption aUsrPref( *pVOpt );
                             aUsrPref.SetKeepRatio(pRatioItem->GetValue());
-                            SW_MOD()->ApplyUsrPref(aUsrPref, &GetView());
+                            mod->ApplyUsrPref(aUsrPref, &GetView());
                         }
                         if (const SfxStringItem* pAltNameItem = pOutSet->GetItemIfSet(FN_SET_FRM_ALT_NAME))
                         {

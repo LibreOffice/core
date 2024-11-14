@@ -444,7 +444,7 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
     , m_pContentWrtShell(nullptr)
     , m_pActContView(nullptr)
     , m_pCreateView(nullptr)
-    , m_pConfig(SW_MOD()->GetNavigationConfig())
+    , m_pConfig(SwModule::get()->GetNavigationConfig())
     , m_rBindings(*_pBindings)
     , m_bIsZoomedIn(false)
     , m_bGlobalMode(false)
@@ -1282,7 +1282,7 @@ SwNavigatorWin::SwNavigatorWin(SfxBindings* _pBindings, SfxChildWindow* _pMgr,
 {
     _pBindings->Invalidate(SID_NAVIGATOR);
 
-    SwNavigationConfig* pNaviConfig = SW_MOD()->GetNavigationConfig();
+    SwNavigationConfig* pNaviConfig = SwModule::get()->GetNavigationConfig();
 
     SetMinOutputSizePixel(GetOptimalSize());
     if (pNaviConfig->IsSmall())

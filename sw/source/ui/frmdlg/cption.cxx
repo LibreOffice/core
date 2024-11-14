@@ -95,7 +95,7 @@ SwCaptionDialog::SwCaptionDialog(weld::Window *pParent, SwView &rV)
     , m_rView(rV)
     , m_pMgr(new SwFieldMgr(m_rView.GetWrtShellPtr()))
     , m_bCopyAttributes(false)
-    , m_bOrderNumberingFirst(SW_MOD()->GetModuleConfig()->IsCaptionOrderNumberingFirst())
+    , m_bOrderNumberingFirst(SwModule::get()->GetModuleConfig()->IsCaptionOrderNumberingFirst())
     , m_xTextEdit(m_xBuilder->weld_entry(u"caption_edit"_ustr))
     , m_xCategoryBox(m_xBuilder->weld_combo_box(u"category"_ustr))
     , m_xFormatText(m_xBuilder->weld_label(u"numbering_label"_ustr))
@@ -315,7 +315,7 @@ IMPL_LINK_NOARG(SwCaptionDialog, OptionHdl, weld::Button&, void)
             if( m_bOrderNumberingFirst != pDlg->IsOrderNumberingFirst() )
             {
                 m_bOrderNumberingFirst = pDlg->IsOrderNumberingFirst();
-                SW_MOD()->GetModuleConfig()->SetCaptionOrderNumberingFirst(m_bOrderNumberingFirst);
+                SwModule::get()->GetModuleConfig()->SetCaptionOrderNumberingFirst(m_bOrderNumberingFirst);
                 ApplyCaptionOrder();
             }
             DrawSample();

@@ -92,7 +92,7 @@ SwOneExampleFrame::SwOneExampleFrame(sal_uInt32 nFlags,
                                  const Link<SwOneExampleFrame&,void>* pInitializedLink,
                                  const OUString* pURL)
     : m_aLoadedIdle("sw uibase SwOneExampleFrame Loaded")
-    , m_pModuleView(SW_MOD()->GetView())
+    , m_pModuleView(SwModule::get()->GetView())
     , m_nStyleFlags(nFlags)
     , m_bIsInitialized(false)
 {
@@ -141,7 +141,7 @@ void SwOneExampleFrame::Paint(vcl::RenderContext& rRenderContext, const tools::R
     // invalidate on rRenderContext if it is a vcl::Window, which is the "classic" gen mode
     m_xVirDev->SetOutputSizePixel(aSize);
 
-    Color aBgColor = SW_MOD()->GetColorConfig().GetColorValue(::svtools::DOCCOLOR).nColor;
+    Color aBgColor = SwModule::get()->GetColorConfig().GetColorValue(::svtools::DOCCOLOR).nColor;
     m_xVirDev->DrawWallpaper(tools::Rectangle(Point(), aSize), aBgColor);
 
     if (m_xCursor)
@@ -415,7 +415,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer, void )
             }
         }
 
-        SW_MOD()->SetView(m_pModuleView);
+        SwModule::get()->SetView(m_pModuleView);
 
         Invalidate();
     }

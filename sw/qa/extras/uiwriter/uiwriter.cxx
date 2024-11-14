@@ -1874,7 +1874,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf68183)
     // First disable RSID and check if indeed no such attribute is inserted.
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    SW_MOD()->GetModuleConfig()->SetStoreRsid(false);
+    SwModule* mod = SwModule::get();
+    mod->GetModuleConfig()->SetStoreRsid(false);
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Insert2(u"X"_ustr);
 
@@ -1884,7 +1885,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf68183)
     CPPUNIT_ASSERT_EQUAL(false, pTextNode->GetSwAttrSet().HasItem(RES_PARATR_RSID));
 
     // Then enable storing of RSID and make sure that the attribute is inserted.
-    SW_MOD()->GetModuleConfig()->SetStoreRsid(true);
+    mod->GetModuleConfig()->SetStoreRsid(true);
 
     pWrtShell->DelToStartOfLine();
     pWrtShell->Insert2(u"X"_ustr);

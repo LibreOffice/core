@@ -623,7 +623,7 @@ OUString SwLoadOptPage::GetAllStrings()
 bool SwLoadOptPage::FillItemSet( SfxItemSet* rSet )
 {
     bool bRet = false;
-    SwModule* pMod = SW_MOD();
+    SwModule* pMod = SwModule::get();
 
     sal_Int32 nNewLinkMode = AUTOMATIC;
     if (m_xNeverRB->get_active())
@@ -730,7 +730,7 @@ bool SwLoadOptPage::FillItemSet( SfxItemSet* rSet )
 
 void SwLoadOptPage::Reset( const SfxItemSet* rSet)
 {
-    const SwMasterUsrPref* pUsrPref = SW_MOD()->GetUsrPref(false);
+    const SwMasterUsrPref* pUsrPref = SwModule::get()->GetUsrPref(false);
     const SwPtrItem* pShellItem = rSet->GetItemIfSet(FN_PARAM_WRTSHELL, false);
 
     if(pShellItem)
@@ -1081,7 +1081,7 @@ OUString SwCaptionOptPage::GetAllStrings()
 bool SwCaptionOptPage::FillItemSet( SfxItemSet* )
 {
     bool bRet = false;
-    SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
+    SwModuleOptions* pModOpt = SwModule::get()->GetModuleConfig();
 
     SaveEntry(m_xCheckLB->get_selected_index());    // apply current entry
 
@@ -1177,7 +1177,7 @@ void SwCaptionOptPage::Reset( const SfxItemSet* rSet)
         SetOptions( nPos++, OLE_CAP, &rOleId );
     }
     m_xLbCaptionOrder->set_active(
-        SW_MOD()->GetModuleConfig()->IsCaptionOrderNumberingFirst() ? 1 : 0);
+        SwModule::get()->GetModuleConfig()->IsCaptionOrderNumberingFirst() ? 1 : 0);
     m_xLbCaptionOrder->set_sensitive(!officecfg::Office::Writer::Insert::Caption::CaptionOrderNumberingFirst::isReadOnly());
     m_xLbCaptionOrderImg->set_visible(officecfg::Office::Writer::Insert::Caption::CaptionOrderNumberingFirst::isReadOnly());
     m_xCheckLB->select(0);
@@ -1187,7 +1187,7 @@ void SwCaptionOptPage::Reset( const SfxItemSet* rSet)
 void SwCaptionOptPage::SetOptions(const sal_uLong nPos,
         const SwCapObjType eObjType, const SvGlobalName *pOleId)
 {
-    SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
+    SwModuleOptions* pModOpt = SwModule::get()->GetModuleConfig();
     const InsCaptionOpt* pOpt = pModOpt->GetCapOption(m_bHTMLMode, eObjType, pOleId);
 
     if (pOpt)

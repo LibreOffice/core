@@ -1359,7 +1359,7 @@ void SwRedlineData::dumpAsXml(xmlTextWriterPtr pWriter) const
 
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("id"), BAD_CAST(OString::number(GetSeqNo()).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("author"), BAD_CAST(SW_MOD()->GetRedlineAuthor(GetAuthor()).toUtf8().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("author"), BAD_CAST(SwModule::get()->GetRedlineAuthor(GetAuthor()).toUtf8().getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("date"), BAD_CAST(DateTimeToOString(GetTimeStamp()).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("descr"), BAD_CAST(GetDescr().toUtf8().getStr()));
 
@@ -1572,7 +1572,7 @@ void SwRangeRedline::Show(sal_uInt16 nLoop, size_t nMyPos, bool bForced)
         if (pSh)
             bIsShowChangesInMargin = pSh->GetViewOptions()->IsShowChangesInMargin();
         else
-            bIsShowChangesInMargin = SW_MOD()->GetUsrPref(false)->IsShowChangesInMargin();
+            bIsShowChangesInMargin = SwModule::get()->GetUsrPref(false)->IsShowChangesInMargin();
     }
 
     if( 1 > nLoop && !bIsShowChangesInMargin )
@@ -2268,7 +2268,7 @@ std::size_t SwRangeRedline::GetAuthor( sal_uInt16 nPos ) const
 
 OUString const & SwRangeRedline::GetAuthorString( sal_uInt16 nPos ) const
 {
-    return SW_MOD()->GetRedlineAuthor(GetRedlineData(nPos).m_nAuthor);
+    return SwModule::get()->GetRedlineAuthor(GetRedlineData(nPos).m_nAuthor);
 }
 
 sal_uInt32 SwRangeRedline::GetMovedID(sal_uInt16 nPos) const

@@ -300,8 +300,7 @@ SwTransferable::~SwTransferable()
     }
     m_aDocShellRef.Clear();
 
-    SwModule* pMod = SW_MOD();
-    if(pMod)
+    if (SwModule* pMod = SwModule::get())
     {
         if ( pMod->m_pDragDrop == this )
             pMod->m_pDragDrop = nullptr;
@@ -321,7 +320,7 @@ static SwDoc& lcl_GetDoc(SwDocFac & rDocFac)
 
 void SwTransferable::ObjectReleased()
 {
-    SwModule *pMod = SW_MOD();
+    SwModule* pMod = SwModule::get();
     if (!pMod)
         return;
     if( this == pMod->m_pDragDrop )
@@ -333,8 +332,7 @@ void SwTransferable::ObjectReleased()
 void SwTransferable::AddSupportedFormats()
 {
     // only need if we are the current XSelection Object
-    SwModule *pMod = SW_MOD();
-    if( this == pMod->m_pXSelection || comphelper::LibreOfficeKit::isActive())
+    if (this == SwModule::get()->m_pXSelection || comphelper::LibreOfficeKit::isActive())
     {
         SetDataForDragAndDrop( Point( 0,0) );
     }
@@ -1710,7 +1708,7 @@ bool SwTransferable::PasteData( const TransferableDataHelper& rData,
 {
     SwWait aWait( *rSh.GetView().GetDocShell(), false );
     std::unique_ptr<SwTrnsfrActionAndUndo, o3tl::default_delete<SwTrnsfrActionAndUndo>> pAction;
-    SwModule* pMod = SW_MOD();
+    SwModule* pMod = SwModule::get();
 
     bool bRet = false;
     bool bCallAutoCaption = false;
@@ -3759,7 +3757,7 @@ void SwTransferable::StartDrag( vcl::Window* pWin, const Point& rPos )
     if( m_pWrtShell->IsSelFrameMode() )
         m_pWrtShell->ShowCursor();
 
-    SW_MOD()->m_pDragDrop = this;
+    SwModule::get()->m_pDragDrop = this;
 
     SetDataForDragAndDrop( rPos );
 
@@ -4396,19 +4394,18 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
 void SwTransferable::CreateSelection( SwWrtShell& rSh,
                                       const SwFrameShell * _pCreatorView )
 {
-    SwModule *pMod = SW_MOD();
     rtl::Reference<SwTransferable> pNew = new SwTransferable( rSh );
 
     pNew->m_pCreatorView = _pCreatorView;
 
-    pMod->m_pXSelection = pNew.get();
+    SwModule::get()->m_pXSelection = pNew.get();
     pNew->CopyToPrimarySelection();
 }
 
 void SwTransferable::ClearSelection( const SwWrtShell& rSh,
                                      const SwFrameShell * _pCreatorView)
 {
-    SwModule *pMod = SW_MOD();
+    SwModule* pMod = SwModule::get();
     if( pMod->m_pXSelection &&
         ((!pMod->m_pXSelection->m_pWrtShell) || (pMod->m_pXSelection->m_pWrtShell == &rSh)) &&
         (!_pCreatorView || (pMod->m_pXSelection->m_pCreatorView == _pCreatorView)) )

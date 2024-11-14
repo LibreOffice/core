@@ -295,7 +295,7 @@ void SwExtraPainter::PaintRedline( SwTwips nY, tools::Long nMax )
         }
     }
     const Color aOldCol( m_pSh->GetOut()->GetLineColor() );
-    m_pSh->GetOut()->SetLineColor( SW_MOD()->GetRedlineMarkColor() );
+    m_pSh->GetOut()->SetLineColor(SwModule::get()->GetRedlineMarkColor());
 
     if ( m_pTextFrame->IsVertical() )
     {
@@ -320,7 +320,7 @@ void SwTextFrame::PaintExtraData( const SwRect &rRect ) const
     const SwFormatLineNumber &rLineNum = GetAttrSet()->GetLineNumber();
     bool bLineNum = !IsInTab() && rLineInf.IsPaintLineNumbers() &&
                ( !IsInFly() || rLineInf.IsCountInFlys() ) && rLineNum.IsCount();
-    sal_Int16 eHor = static_cast<sal_Int16>(SW_MOD()->GetRedlineMarkPos());
+    sal_Int16 eHor = static_cast<sal_Int16>(SwModule::get()->GetRedlineMarkPos());
     if (eHor != text::HoriOrientation::NONE
         && (!IDocumentRedlineAccess::IsShowChanges(rIDRA.GetRedlineFlags())
             || getRootFrame()->IsHideRedlines()))

@@ -377,7 +377,8 @@ void SwHTMLWriter::SetupFilterFromPropertyValues(
 
 ErrCode SwHTMLWriter::WriteStream()
 {
-    if (!SW_MOD())
+    SwModule* mod = SwModule::get();
+    if (!mod)
         return ERRCODE_ABORT;
     // Intercept paste output if requested.
     char* pPasteEnv = getenv("SW_DEBUG_HTML_PASTE_TO");
@@ -439,7 +440,7 @@ ErrCode SwHTMLWriter::WriteStream()
     if( IsHTMLMode(HTMLMODE_SOME_STYLES | HTMLMODE_FULL_STYLES) )
         m_nHTMLMode |= HTMLMODE_PRINT_EXT;
 
-    m_eCSS1Unit = SW_MOD()->GetMetric( m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) );
+    m_eCSS1Unit = mod->GetMetric( m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) );
 
     // Only for the MS-IE we favour the export of styles.
     m_bCfgPreferStyles = HTML_CFG_MSIE == m_nExportMode;

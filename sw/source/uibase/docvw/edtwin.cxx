@@ -1667,7 +1667,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
         pACorr = pACfg->GetAutoCorrect();
     }
 
-    SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
+    SwModuleOptions* pModOpt = SwModule::get()->GetModuleConfig();
 
     OUString sFormulaEntry;
 
@@ -4334,7 +4334,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
             if(aRelPos.X() >= 0)
             {
                 FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebView*>( &GetView())  != nullptr );
-                SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
+                SwModule::get()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
                 const SfxPointItem aTmp1( SID_ATTR_POSITION, aRelPos );
                 rBnd.SetState( aTmp1 );
             }

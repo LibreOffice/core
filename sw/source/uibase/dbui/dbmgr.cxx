@@ -1627,7 +1627,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             pViewFrame = SfxViewFrame::GetNext(*pViewFrame, pSourceDocSh);
         }
 
-        SW_MOD()->SetView(&pSourceShell->GetView());
+        SwModule::get()->SetView(&pSourceShell->GetView());
 
         if( xMailDispatcher.is() )
         {
@@ -2532,7 +2532,7 @@ SwDSParam*  SwDBManager::FindDSConnection(const OUString& rDataSource, bool bCre
 
 const SwDBData& SwDBManager::GetAddressDBName()
 {
-    return SW_MOD()->GetDBConfig()->GetAddressSource();
+    return SwModule::get()->GetDBConfig()->GetAddressSource();
 }
 
 uno::Sequence<OUString> SwDBManager::GetExistingDatabaseNames()

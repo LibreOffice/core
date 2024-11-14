@@ -2115,27 +2115,27 @@ bool SwDoc::ConvertFieldsToText(SwRootFrame const& rLayout)
 
 bool SwDoc::IsInsTableFormatNum() const
 {
-    return SW_MOD()->IsInsTableFormatNum(GetDocumentSettingManager().get(DocumentSettingId::HTML_MODE));
+    return SwModule::get()->IsInsTableFormatNum(GetDocumentSettingManager().get(DocumentSettingId::HTML_MODE));
 }
 
 bool SwDoc::IsInsTableChangeNumFormat() const
 {
-    return SW_MOD()->IsInsTableChangeNumFormat(GetDocumentSettingManager().get(DocumentSettingId::HTML_MODE));
+    return SwModule::get()->IsInsTableChangeNumFormat(GetDocumentSettingManager().get(DocumentSettingId::HTML_MODE));
 }
 
 bool SwDoc::IsInsTableAlignNum() const
 {
-    return SW_MOD()->IsInsTableAlignNum(GetDocumentSettingManager().get(DocumentSettingId::HTML_MODE));
+    return SwModule::get()->IsInsTableAlignNum(GetDocumentSettingManager().get(DocumentSettingId::HTML_MODE));
 }
 
 bool SwDoc::IsSplitVerticalByDefault() const
 {
-    return SW_MOD()->IsSplitVerticalByDefault(GetDocumentSettingManager().get(DocumentSettingId::HTML_MODE));
+    return SwModule::get()->IsSplitVerticalByDefault(GetDocumentSettingManager().get(DocumentSettingId::HTML_MODE));
 }
 
 void SwDoc::SetSplitVerticalByDefault(bool value)
 {
-    SW_MOD()->SetSplitVerticalByDefault(GetDocumentSettingManager().get(DocumentSettingId::HTML_MODE), value);
+    SwModule::get()->SetSplitVerticalByDefault(GetDocumentSettingManager().get(DocumentSettingId::HTML_MODE), value);
 }
 
 /// Set up the InsertDB as Undo table

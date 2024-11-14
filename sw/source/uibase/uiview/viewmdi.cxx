@@ -95,7 +95,8 @@ void SwView::SetZoom_( const Size &rEditSize, SvxZoomType eZoomType,
     tools::Long nFac = nFactor;
 
     const bool bWeb = dynamic_cast< const SwWebView *>( this ) !=  nullptr;
-    SwMasterUsrPref *pUsrPref = const_cast<SwMasterUsrPref*>(SW_MOD()->GetUsrPref(bWeb));
+    SwModule* mod = SwModule::get();
+    SwMasterUsrPref *pUsrPref = const_cast<SwMasterUsrPref*>(mod->GetUsrPref(bWeb));
 
     const SwPageDesc &rDesc = m_pWrtShell->GetPageDesc( m_pWrtShell->GetCurPageDesc() );
     const SvxLRSpaceItem &rLRSpace = rDesc.GetMaster().GetLRSpace();
@@ -167,7 +168,7 @@ void SwView::SetZoom_( const Size &rEditSize, SvxZoomType eZoomType,
         {
             pUsrPref->SetZoom(nZoomFac);
             pUsrPref->SetZoomType(eZoomType);
-            SW_MOD()->ApplyUsrPref(*pUsrPref, nullptr);
+            mod->ApplyUsrPref(*pUsrPref, nullptr);
             pUsrPref->SetModified();
         }
         if ( pOpt->GetZoom() != nZoomFac )
@@ -227,7 +228,8 @@ void SwView::SetViewLayout( sal_uInt16 nColumns, bool bBookMode, bool bViewOnly 
     if ( !GetViewFrame().GetFrame().IsInPlace() && !bViewOnly )
     {
         const bool bWeb = dynamic_cast< const SwWebView *>( this ) !=  nullptr;
-        SwMasterUsrPref *pUsrPref = const_cast<SwMasterUsrPref*>(SW_MOD()->GetUsrPref(bWeb));
+        SwModule* mod = SwModule::get();
+        SwMasterUsrPref *pUsrPref = const_cast<SwMasterUsrPref*>(mod->GetUsrPref(bWeb));
 
         // Update MasterUsrPrefs and after that update the ViewOptions of the current View.
         if ( nColumns  != pUsrPref->GetViewLayoutColumns() ||
@@ -235,7 +237,7 @@ void SwView::SetViewLayout( sal_uInt16 nColumns, bool bBookMode, bool bViewOnly 
         {
             pUsrPref->SetViewLayoutColumns(nColumns);
             pUsrPref->SetViewLayoutBookMode(bBookMode);
-            SW_MOD()->ApplyUsrPref(*pUsrPref, nullptr);
+            mod->ApplyUsrPref(*pUsrPref, nullptr);
             pUsrPref->SetModified();
         }
     }

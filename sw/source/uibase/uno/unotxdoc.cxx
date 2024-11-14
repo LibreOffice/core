@@ -1944,7 +1944,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
         {
             OUString sDelim;
             aValue >>= sDelim;
-            SW_MOD()->GetModuleConfig()->SetWordDelimiter(sDelim);
+            SwModule::get()->GetModuleConfig()->SetWordDelimiter(sDelim);
         }
         break;
         case WID_DOC_CHANGES_RECORD:
@@ -1991,7 +1991,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
         }
         break;
         case WID_DOC_HIDE_TIPS :
-            SW_MOD()->GetModuleConfig()->SetHideFieldTips(*o3tl::doAccess<bool>(aValue));
+            SwModule::get()->GetModuleConfig()->SetHideFieldTips(*o3tl::doAccess<bool>(aValue));
         break;
         case WID_DOC_REDLINE_DISPLAY:
         {
@@ -2167,9 +2167,7 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         }
         break;
         case  WID_DOC_WORD_SEPARATOR :
-        {
-            aAny <<= SW_MOD()->GetDocStatWordDelim();
-        }
+            aAny <<= SwModule::get()->GetDocStatWordDelim();
         break;
         case WID_DOC_CHANGES_RECORD:
         case WID_DOC_CHANGES_SHOW:
@@ -2194,7 +2192,7 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
             aAny <<= GetDocOrThrow().GetTOIAutoMarkURL();
         break;
         case WID_DOC_HIDE_TIPS :
-            aAny <<= SW_MOD()->GetModuleConfig()->IsHideFieldTips();
+            aAny <<= SwModule::get()->GetModuleConfig()->IsHideFieldTips();
         break;
         case WID_DOC_REDLINE_DISPLAY:
         {
@@ -3450,7 +3448,7 @@ void SwXTextDocument::getTrackedChanges(tools::JsonWriter& rJson)
 
 void SwXTextDocument::getTrackedChangeAuthors(tools::JsonWriter& rJsonWriter)
 {
-    SW_MOD()->GetRedlineAuthorInfo(rJsonWriter);
+    SwModule::get()->GetRedlineAuthorInfo(rJsonWriter);
 }
 
 void SwXTextDocument::getRulerState(tools::JsonWriter& rJsonWriter)
@@ -3777,7 +3775,7 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
 
     OUString sThemeName;
     OUString sBackgroundThemeName;
-    OUString sOrigAuthor = SW_MOD()->GetRedlineAuthor(SW_MOD()->GetRedlineAuthor());
+    OUString sOrigAuthor = SwModule::get()->GetRedlineAuthor(SwModule::get()->GetRedlineAuthor());
     OUString sAuthor;
 
     for (const beans::PropertyValue& rValue : rArguments)

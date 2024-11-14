@@ -336,7 +336,7 @@ ItemInfoPackage& getItemInfoPackageSwAttributes()
             { RES_TXTATR_METAFIELD, SwFormatMeta::CreatePoolDefault(RES_TXTATR_METAFIELD),  0, SFX_ITEMINFOFLAG_NONE },
             { RES_TXTATR_AUTOFMT, new SwFormatAutoFormat,  0, SFX_ITEMINFOFLAG_NONE },
 
-            // We cannot yet create the SwFormatINetFormat, that would crash since SW_MOD
+            // We cannot yet create the SwFormatINetFormat, that would crash since SwModule::get
             // is not initialized and the translated resource strings would not be available.
             // Luckily this mechanism allows to also flag this ItemInfo as 'incomplete' using
             // a nullptr as ItemPtr and implementing on-demand creation, see ::getItemInfo

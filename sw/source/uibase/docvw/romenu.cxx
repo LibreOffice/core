@@ -100,7 +100,7 @@ SwReadOnlyPopup::SwReadOnlyPopup(const Point &rDPos, SwView &rV)
     , m_rView(rV)
     , m_xBrushItem(std::make_unique<SvxBrushItem>(RES_BACKGROUND))
 {
-    m_bGrfToGalleryAsLnk = SW_MOD()->GetModuleConfig()->IsGrfToGalleryAsLnk();
+    m_bGrfToGalleryAsLnk = SwModule::get()->GetModuleConfig()->IsGrfToGalleryAsLnk();
     SwWrtShell &rSh = m_rView.GetWrtShell();
     OUString sDescription;
     rSh.IsURLGrfAtPos( rDPos, &m_sURL, &m_sTargetFrameName, &sDescription );
@@ -303,9 +303,9 @@ void SwReadOnlyPopup::Execute( vcl::Window* pWin, sal_uInt16 nId )
     else if (nId == m_nReadonlyGraphicoff)
         nExecId = FN_VIEW_GRAPHIC;
     else if (nId == m_nReadonlyTogallerylink || nId == m_nReadonlyBackgroundTogallerylink)
-        SW_MOD()->GetModuleConfig()->SetGrfToGalleryAsLnk(true);
+        SwModule::get()->GetModuleConfig()->SetGrfToGalleryAsLnk(true);
     else if (nId == m_nReadonlyTogallerycopy || nId == m_nReadonlyBackgroundTogallerycopy)
-        SW_MOD()->GetModuleConfig()->SetGrfToGalleryAsLnk(false);
+        SwModule::get()->GetModuleConfig()->SetGrfToGalleryAsLnk(false);
 
     if( USHRT_MAX != nExecId )
         rDis.GetBindings()->Execute( nExecId );

@@ -101,8 +101,8 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testFdo86857)
 CPPUNIT_TEST_FIXTURE(HtmlExportTest, testCharacterBorder)
 {
     // FIXME if padding-top gets exported as inches, not cms, we get rounding errors.
-    SwGlobals::ensure(); // make sure that SW_MOD() is not 0
-    SwMasterUsrPref* pPref = const_cast<SwMasterUsrPref*>(SW_MOD()->GetUsrPref(false));
+    SwGlobals::ensure(); // make sure that SwModule::get() is not 0
+    SwMasterUsrPref* pPref = const_cast<SwMasterUsrPref*>(SwModule::get()->GetUsrPref(false));
     FieldUnit eUnit = pPref->GetMetric();
     pPref->SetMetric(FieldUnit::CM);
     comphelper::ScopeGuard g([pPref, eUnit]() { pPref->SetMetric(eUnit); });

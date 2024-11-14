@@ -105,6 +105,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
         if ( GetCreateMode() ==  SfxObjectCreateMode::EMBEDDED )
             SwTransferable::InitOle( this );
 
+        SwModule* mod = SwModule::get();
         // set forbidden characters if necessary
         const bool bFuzzing = comphelper::IsFuzzing();
         if (!bFuzzing)
@@ -120,14 +121,14 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
             m_xDoc->getIDocumentSettingAccess().set(DocumentSettingId::KERN_ASIAN_PUNCTUATION,
                   !SvxAsianConfig::IsKerningWesternTextOnly());
             m_xDoc->getIDocumentSettingAccess().setCharacterCompressionType(SvxAsianConfig::GetCharDistanceCompression());
-            m_xDoc->getIDocumentDeviceAccess().setPrintData(*SW_MOD()->GetPrtOptions(bWeb));
+            m_xDoc->getIDocumentDeviceAccess().setPrintData(*mod->GetPrtOptions(bWeb));
         }
 
         SubInitNew();
 
         // for all
 
-        SwStdFontConfig* pStdFont = SW_MOD()->GetStdFontConfig();
+        SwStdFontConfig* pStdFont = mod->GetStdFontConfig();
         SfxPrinter* pPrt = m_xDoc->getIDocumentDeviceAccess().getPrinter( false );
 
         OUString sEntry;
@@ -287,7 +288,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
         // (old documents, where this property was not yet implemented, will get the
         // value 'false' in the SwDoc c-tor)
         m_xDoc->getIDocumentSettingAccess().set( DocumentSettingId::MATH_BASELINE_ALIGNMENT,
-                SW_MOD()->GetUsrPref( bWeb )->IsAlignMathObjectsToBaseline() );
+                mod->GetUsrPref( bWeb )->IsAlignMathObjectsToBaseline() );
         m_xDoc->getIDocumentSettingAccess().set( DocumentSettingId::FOOTNOTE_IN_COLUMN_TO_PAGEEND, true);
     }
 
@@ -381,7 +382,7 @@ SwDocShell::~SwDocShell()
 
 void  SwDocShell::Init_Impl()
 {
-    SetPool(&SW_MOD()->GetPool());
+    SetPool(&SwModule::get()->GetPool());
     SetBaseModel(new SwXTextDocument(this));
     // we, as BroadCaster also become our own Listener
     // (for DocInfo/FileNames/...)
@@ -497,6 +498,7 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
             m_nUpdateDocMode = pUpdateDocItem ? pUpdateDocItem->GetValue() : document::UpdateDocMode::NO_UPDATE;
         }
 
+        SwModule* mod = SwModule::get();
         SwWait aWait( *this, true );
         ErrCodeMsg nErr = ERR_SWG_READ_ERROR;
         switch( GetCreateMode() )
@@ -519,7 +521,7 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
                     SwTransferable::InitOle( this );
                 }
                 // suppress SfxProgress, when we are Embedded
-                SW_MOD()->SetEmbeddedLoadSave( true );
+                mod->SetEmbeddedLoadSave( true );
                 [[fallthrough]];
 
             case SfxObjectCreateMode::STANDARD:
@@ -568,7 +570,7 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
         }
 
         // suppress SfxProgress, when we are Embedded
-        SW_MOD()->SetEmbeddedLoadSave( false );
+        mod->SetEmbeddedLoadSave( false );
     }
 
     return bRet;
@@ -669,7 +671,7 @@ void SwDocShell::SubInitNew()
 
         aDfltSet.Put( aHyp );
 
-        sal_uInt16 nNewPos = o3tl::toTwips(SW_MOD()->GetUsrPref(false)->GetDefTabInMm100(), o3tl::Length::mm100);
+        sal_uInt16 nNewPos = o3tl::toTwips(SwModule::get()->GetUsrPref(false)->GetDefTabInMm100(), o3tl::Length::mm100);
         if( nNewPos )
             aDfltSet.Put( SvxTabStopItem( 1, nNewPos,
                                           SvxTabAdjust::Default, RES_PARATR_TABSTOP ) );
@@ -681,7 +683,7 @@ void SwDocShell::SubInitNew()
     //default page mode for text grid
     if(!bWeb)
     {
-        bool bSquaredPageMode = SW_MOD()->GetUsrPref(false)->IsSquaredPageMode();
+        bool bSquaredPageMode = SwModule::get()->GetUsrPref(false)->IsSquaredPageMode();
         m_xDoc->SetDefaultPageMode( bSquaredPageMode );
 
         // only set Widow/Orphan defaults on a new, non-web document - not an opened one

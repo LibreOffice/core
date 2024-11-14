@@ -47,8 +47,7 @@ void SwView::Activate(bool bMDIActivate)
     SwDocShell* pDocSh = GetDocShell();
     if(pDocSh)
         pDocSh->SetView(this);
-    SwModule* pSwMod = SW_MOD();
-    pSwMod->SetView(this);
+    SwModule::get()->SetView(this);
 
     // Document size has changed.
     if(!bDocSzUpdated)

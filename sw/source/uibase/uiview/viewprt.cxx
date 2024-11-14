@@ -79,7 +79,7 @@ SfxPrinter* SwView::GetPrinter( bool bCreate )
 
 void SetPrinter( IDocumentDeviceAccess* pIDDA, SfxPrinter const * pNew, bool bWeb )
 {
-    SwPrintOptions* pOpt = SW_MOD()->GetPrtOptions(bWeb);
+    SwPrintOptions* pOpt = SwModule::get()->GetPrtOptions(bWeb);
     if( !pOpt)
         return;
 
@@ -177,7 +177,7 @@ void SwView::ExecutePrint(SfxRequest& rReq)
     {
         case FN_FAX:
         {
-            SwPrintOptions* pPrintOptions = SW_MOD()->GetPrtOptions(bWeb);
+            SwPrintOptions* pPrintOptions = SwModule::get()->GetPrtOptions(bWeb);
             const OUString& sFaxName(pPrintOptions->GetFaxName());
             if (!sFaxName.isEmpty())
             {
@@ -214,7 +214,7 @@ void SwView::ExecutePrint(SfxRequest& rReq)
             bool bFromMerge = pPrintFromMergeItem && pPrintFromMergeItem->GetValue();
             bool bPrintSelection = false;
             if(!bSilent && !bFromMerge &&
-                    SW_MOD()->GetModuleConfig()->IsAskForMailMerge() && pSh->IsAnyDatabaseFieldInDoc())
+                    SwModule::get()->GetModuleConfig()->IsAskForMailMerge() && pSh->IsAnyDatabaseFieldInDoc())
             {
                 std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetEditWin().GetFrameWeld(), u"modules/swriter/ui/printmergedialog.ui"_ustr));
                 std::unique_ptr<weld::MessageDialog> xBox(xBuilder->weld_message_dialog(u"PrintMergeDialog"_ustr));

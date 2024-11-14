@@ -44,7 +44,7 @@ SwTableWidthDlg::SwTableWidthDlg(weld::Window *pParent, SwWrtShell *pShell)
     bool bIsWeb = m_xFnc->GetShell()
                   && (dynamic_cast< const SwWebDocShell* >(
                                      m_xFnc->GetShell()->GetView().GetDocShell()) != nullptr );
-    FieldUnit eFieldUnit = SW_MOD()->GetUsrPref( bIsWeb )->GetMetric();
+    FieldUnit eFieldUnit = SwModule::get()->GetUsrPref(bIsWeb)->GetMetric();
     ::SetFieldUnit(*m_xWidthMF, eFieldUnit);
 
     m_xColNF->set_max(m_xFnc->GetColCount() + 1);

@@ -1012,7 +1012,7 @@ Size SwSubFont::GetTextSize_( SwDrawTextInfo& rInf )
         ChgFnt( rInf.GetShell(), rInf.GetOut() );
 
     SwDigitModeModifier aDigitModeModifier(rInf.GetOut(), rInf.GetFont()->GetLanguage(),
-                                           SW_MOD()->GetCTLTextNumerals());
+                                           SwModule::get()->GetCTLTextNumerals());
 
     Size aTextSize;
     TextFrameIndex const nLn = rInf.GetLen() == TextFrameIndex(COMPLETE_STRING)
@@ -1142,7 +1142,7 @@ void SwSubFont::DrawText_( SwDrawTextInfo &rInf, const bool bGrey )
         ChgFnt( rInf.GetShell(), rInf.GetOut() );
 
     SwDigitModeModifier aDigitModeModifier(rInf.GetOut(), rInf.GetFont()->GetLanguage(),
-                                           SW_MOD()->GetCTLTextNumerals());
+                                           SwModule::get()->GetCTLTextNumerals());
 
     const Point aOldPos(rInf.GetPos());
     Point aPos( rInf.GetPos() );
@@ -1268,7 +1268,7 @@ void SwSubFont::DrawStretchText_( SwDrawTextInfo &rInf )
         ChgFnt( rInf.GetShell(), rInf.GetOut() );
 
     SwDigitModeModifier aDigitModeModifier(rInf.GetOut(), rInf.GetFont()->GetLanguage(),
-                                           SW_MOD()->GetCTLTextNumerals());
+                                           SwModule::get()->GetCTLTextNumerals());
 
     rInf.ApplyAutoColor();
 
@@ -1334,7 +1334,7 @@ TextFrameIndex SwSubFont::GetModelPositionForViewPoint_( SwDrawTextInfo& rInf )
         ChgFnt( rInf.GetShell(), rInf.GetOut() );
 
     SwDigitModeModifier aDigitModeModifier(rInf.GetOut(), rInf.GetFont()->GetLanguage(),
-                                           SW_MOD()->GetCTLTextNumerals());
+                                           SwModule::get()->GetCTLTextNumerals());
 
     TextFrameIndex const nLn = rInf.GetLen() == TextFrameIndex(COMPLETE_STRING)
             ? TextFrameIndex(rInf.GetText().getLength())

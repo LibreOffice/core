@@ -675,7 +675,7 @@ void DocxAttributeOutput::TableRowRedline(
         // use the same redline id in OOXML exported by MSO, but it seems, the recent solution
         // (different IDs for different ranges, also row changes) is also portable.
         OString aId(OString::number(m_nRedlineId++));
-        const OUString& rAuthor(SW_MOD()->GetRedlineAuthor(aRedlineData.GetAuthor()));
+        const OUString& rAuthor(SwModule::get()->GetRedlineAuthor(aRedlineData.GetAuthor()));
         OString aAuthor(OUStringToOString(
             bRemovePersonalInfo ? "Author" + OUString::number(GetExport().GetInfoID(rAuthor))
                                 : rAuthor,
@@ -746,7 +746,7 @@ void DocxAttributeOutput::TableCellRedline(
         // use the same redline id in OOXML exported by MSO, but it seems, the recent solution
         // (different IDs for different ranges, also row changes) is also portable.
         OString aId(OString::number(m_nRedlineId++));
-        const OUString& rAuthor(SW_MOD()->GetRedlineAuthor(aRedlineData.GetAuthor()));
+        const OUString& rAuthor(SwModule::get()->GetRedlineAuthor(aRedlineData.GetAuthor()));
         OString aAuthor(OUStringToOString(
             bRemovePersonalInfo ? "Author" + OUString::number(GetExport().GetInfoID(rAuthor))
                                 : rAuthor,

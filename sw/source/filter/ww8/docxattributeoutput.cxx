@@ -2214,7 +2214,7 @@ void DocxAttributeOutput::DoWriteMoveRangeTagStart(std::u16string_view bookmarkN
         SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo ) && !SvtSecurityOptions::IsOptionSet(
             SvtSecurityOptions::EOption::DocWarnKeepRedlineInfo);
 
-    const OUString &rAuthor( SW_MOD()->GetRedlineAuthor( pRedlineData->GetAuthor() ) );
+    const OUString& rAuthor(SwModule::get()->GetRedlineAuthor(pRedlineData->GetAuthor()));
     const DateTime& aDateTime = pRedlineData->GetTimeStamp();
     bool bNoDate = bRemovePersonalInfo ||
         ( aDateTime.GetYear() == 1970 && aDateTime.GetMonth() == 1 && aDateTime.GetDay() == 1 );
@@ -4106,7 +4106,7 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
             SvtSecurityOptions::EOption::DocWarnKeepRedlineInfo);
 
     OString aId( OString::number( pRedlineData->GetSeqNo() ) );
-    const OUString &rAuthor( SW_MOD()->GetRedlineAuthor( pRedlineData->GetAuthor() ) );
+    const OUString& rAuthor(SwModule::get()->GetRedlineAuthor(pRedlineData->GetAuthor()));
     const DateTime& aDateTime = pRedlineData->GetTimeStamp();
     bool bNoDate = bRemovePersonalInfo ||
         ( aDateTime.GetYear() == 1970 && aDateTime.GetMonth() == 1 && aDateTime.GetDay() == 1 );
@@ -4262,7 +4262,7 @@ void DocxAttributeOutput::StartRedline( const SwRedlineData * pRedlineData, bool
         SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo ) && !SvtSecurityOptions::IsOptionSet(
             SvtSecurityOptions::EOption::DocWarnKeepRedlineInfo);
 
-    const OUString &rAuthor( SW_MOD()->GetRedlineAuthor( pRedlineData->GetAuthor() ) );
+    const OUString& rAuthor(SwModule::get()->GetRedlineAuthor(pRedlineData->GetAuthor()));
     OString aAuthor( OUStringToOString( bRemovePersonalInfo
                         ? "Author" + OUString::number( GetExport().GetInfoID(rAuthor) )
                         : rAuthor, RTL_TEXTENCODING_UTF8 ) );

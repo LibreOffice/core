@@ -953,7 +953,7 @@ OUString SwStdFontTabPage::GetAllStrings()
 
 bool SwStdFontTabPage::FillItemSet( SfxItemSet* )
 {
-    SW_MOD()->GetModuleConfig()->SetDefaultFontInCurrDocOnly(false);
+    SwModule::get()->GetModuleConfig()->SetDefaultFontInCurrDocOnly(false);
 
     const OUString sStandard    = m_xStandardBox->get_active_text();
     const OUString sTitle       = m_xTitleBox->get_active_text();
@@ -1475,7 +1475,7 @@ OUString SwTableOptionsTabPage::GetAllStrings()
 bool SwTableOptionsTabPage::FillItemSet( SfxItemSet* )
 {
     bool bRet = false;
-    SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
+    SwModuleOptions* pModOpt = SwModule::get()->GetModuleConfig();
 
     if (m_xRowMoveMF->get_value_changed_from_saved())
         pModOpt->SetTableHMove( o3tl::narrowing<sal_uInt16>(m_xRowMoveMF->denormalize( m_xRowMoveMF->get_value(FieldUnit::TWIP))));
@@ -1566,7 +1566,7 @@ void SwTableOptionsTabPage::Reset( const SfxItemSet* rSet)
         m_bHTMLMode = 0 != (pItem->GetValue() & HTMLMODE_ON);
     }
 
-    const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
+    const SwModuleOptions* pModOpt = SwModule::get()->GetModuleConfig();
     if ( rSet->GetItemState( SID_ATTR_METRIC ) >= SfxItemState::DEFAULT )
     {
         const SfxUInt16Item& rItem = rSet->Get( SID_ATTR_METRIC );
@@ -2332,7 +2332,7 @@ OUString SwRedlineOptionsTabPage::GetAllStrings()
 bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet* )
 {
     CharAttr *pAttr;
-    SwModuleOptions *pOpt = SW_MOD()->GetModuleConfig();
+    SwModuleOptions* pOpt = SwModule::get()->GetModuleConfig();
 
     AuthorCharAttr aInsertedAttr;
     AuthorCharAttr aDeletedAttr;
@@ -2408,7 +2408,7 @@ bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet* )
 
 void SwRedlineOptionsTabPage::Reset( const SfxItemSet*  )
 {
-    const SwModuleOptions *pOpt = SW_MOD()->GetModuleConfig();
+    const SwModuleOptions* pOpt = SwModule::get()->GetModuleConfig();
 
     const AuthorCharAttr &rInsertAttr = pOpt->GetInsertAuthorAttr();
     const AuthorCharAttr &rDeletedAttr = pOpt->GetDeletedAuthorAttr();
@@ -2755,7 +2755,7 @@ OUString SwCompareOptionsTabPage::GetAllStrings()
 bool SwCompareOptionsTabPage::FillItemSet( SfxItemSet* )
 {
     bool bRet = false;
-    SwModuleOptions *pOpt = SW_MOD()->GetModuleConfig();
+    SwModuleOptions* pOpt = SwModule::get()->GetModuleConfig();
 
     if( m_xAutoRB->get_state_changed_from_saved() ||
         m_xWordRB->get_state_changed_from_saved() ||
@@ -2788,7 +2788,7 @@ bool SwCompareOptionsTabPage::FillItemSet( SfxItemSet* )
 
 void SwCompareOptionsTabPage::Reset( const SfxItemSet* )
 {
-    SwModuleOptions *pOpt = SW_MOD()->GetModuleConfig();
+    SwModuleOptions* pOpt = SwModule::get()->GetModuleConfig();
 
     SwCompareMode eCmpMode = pOpt->GetCompareMode();
     if( eCmpMode == SwCompareMode::Auto )

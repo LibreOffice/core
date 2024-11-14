@@ -132,7 +132,7 @@ SwLineNumberingDlg::SwLineNumberingDlg(const SwView& rVw)
     if (nOffset == USHRT_MAX)
         nOffset = 0;
 
-    FieldUnit eFieldUnit = SW_MOD()->GetUsrPref(dynamic_cast< const SwWebDocShell*>(
+    FieldUnit eFieldUnit = SwModule::get()->GetUsrPref(dynamic_cast< const SwWebDocShell*>(
                                 rVw.GetDocShell()) != nullptr)->GetMetric();
     ::SetFieldUnit(*m_xOffsetMF, eFieldUnit);
     m_xOffsetMF->set_value(m_xOffsetMF->normalize(nOffset), FieldUnit::TWIP);

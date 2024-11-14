@@ -191,7 +191,7 @@ ErrCode SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     }
 
     sal_uInt16 const eUnit = SvXMLUnitConverter::GetMeasureUnit(
-            SW_MOD()->GetMetric(pDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE)));
+            SwModule::get()->GetMetric(pDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE)));
     if (GetMM100UnitConverter().GetXMLMeasureUnit() != eUnit )
     {
         GetMM100UnitConverter().SetXMLMeasureUnit( eUnit );

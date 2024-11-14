@@ -1837,7 +1837,8 @@ tools::Long SwDoc::CompareDoc( const SwDoc& rDoc )
     tools::Long nRet = 0;
 
     // Get comparison options
-    CmpOptions.eCmpMode = SW_MOD()->GetCompareMode();
+    SwModule* mod = SwModule::get();
+    CmpOptions.eCmpMode = mod->GetCompareMode();
     if( CmpOptions.eCmpMode == SwCompareMode::Auto )
     {
         if( getRsidRoot() == rDoc.getRsidRoot() )
@@ -1855,8 +1856,8 @@ tools::Long SwDoc::CompareDoc( const SwDoc& rDoc )
     }
     else
     {
-        CmpOptions.bUseRsid = getRsidRoot() == rDoc.getRsidRoot() && SW_MOD()->IsUseRsid();
-        CmpOptions.nIgnoreLen = SW_MOD()->IsIgnorePieces() ? SW_MOD()->GetPieceLen() : 0;
+        CmpOptions.bUseRsid = getRsidRoot() == rDoc.getRsidRoot() && mod->IsUseRsid();
+        CmpOptions.nIgnoreLen = mod->IsIgnorePieces() ? mod->GetPieceLen() : 0;
     }
 
     GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);

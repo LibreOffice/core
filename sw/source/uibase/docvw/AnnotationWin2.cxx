@@ -383,7 +383,7 @@ void SwAnnotationWin::InitControls()
     }
     mpOutliner->SetControlWord(nCntrl);
 
-    std::size_t aIndex = SW_MOD()->InsertRedlineAuthor(GetAuthor());
+    std::size_t aIndex = SwModule::get()->InsertRedlineAuthor(GetAuthor());
     SetColor( SwPostItMgr::GetColorDark(aIndex),
               SwPostItMgr::GetColorLight(aIndex),
               SwPostItMgr::GetColorAnchor(aIndex));
@@ -457,7 +457,7 @@ void SwAnnotationWin::CheckMetaText()
 
 void SwAnnotationWin::UpdateColors()
 {
-    std::size_t aIndex = SW_MOD()->InsertRedlineAuthor(GetAuthor());
+    std::size_t aIndex = SwModule::get()->InsertRedlineAuthor(GetAuthor());
     SetColor( SwPostItMgr::GetColorDark(aIndex),
               SwPostItMgr::GetColorLight(aIndex),
               SwPostItMgr::GetColorAnchor(aIndex));

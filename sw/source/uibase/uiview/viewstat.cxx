@@ -301,7 +301,7 @@ void SwView::GetState(SfxItemSet &rSet)
             case SID_TWAIN_TRANSFER:
 #if defined(_WIN32) || defined UNX
             {
-                if(!SW_MOD()->GetScannerManager().is())
+                if (!SwModule::get()->GetScannerManager().is())
                     rSet.DisableItem(nWhich);
             }
 #endif

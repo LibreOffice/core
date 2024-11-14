@@ -380,7 +380,7 @@ SwPostItMgr::SwPostItMgr(SwView* pView)
         mpView->GetWrtShell().MakeDrawView();
 
     //make sure we get the colour yellow always, even if not the first one of comments or redlining
-    SW_MOD()->GetRedlineAuthor();
+    SwModule::get()->GetRedlineAuthor();
 
     // collect all PostIts and redline comments that exist after loading the document
     // don't check for existence for any of them, don't focus them

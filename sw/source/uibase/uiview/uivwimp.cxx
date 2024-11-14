@@ -104,7 +104,7 @@ void SwView_Impl::ExecuteScan( SfxRequest& rReq )
         case SID_TWAIN_SELECT:
         {
             bool bDone = false;
-            Reference< XScannerManager2 > xScanMgr = SW_MOD()->GetScannerManager();
+            Reference<XScannerManager2> xScanMgr = SwModule::get()->GetScannerManager();
 
             if( xScanMgr.is() )
             {
@@ -152,7 +152,7 @@ void SwView_Impl::ExecuteScan( SfxRequest& rReq )
         {
             bool bDone = false;
 
-            Reference< XScannerManager2 > xScanMgr = SW_MOD()->GetScannerManager();
+            Reference<XScannerManager2> xScanMgr = SwModule::get()->GetScannerManager();
             if( xScanMgr.is() )
             {
                 SwScannerEventListener& rListener = GetScannerEventListener();

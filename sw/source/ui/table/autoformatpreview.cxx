@@ -436,7 +436,8 @@ void AutoFormatPreview::Paint(vcl::RenderContext& rRenderContext, const tools::R
 {
     rRenderContext.Push(vcl::PushFlags::ALL);
 
-    const Color& rWinColor = SW_MOD()->GetColorConfig().GetColorValue(::svtools::DOCCOLOR).nColor;
+    const Color& rWinColor
+        = SwModule::get()->GetColorConfig().GetColorValue(::svtools::DOCCOLOR).nColor;
     rRenderContext.SetBackground(Wallpaper(rWinColor));
     rRenderContext.Erase();
 

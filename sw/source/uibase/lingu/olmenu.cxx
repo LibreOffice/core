@@ -292,7 +292,7 @@ SwSpellPopup::SwSpellPopup(
 
     m_xPopupMenu->EnableItem(m_nCorrectMenuId, bEnable);
 
-    uno::Reference< linguistic2::XLanguageGuessing > xLG = SW_MOD()->GetLanguageGuesser();
+    uno::Reference<linguistic2::XLanguageGuessing> xLG = SwModule::get()->GetLanguageGuesser();
     LanguageType nGuessLangWord = LANGUAGE_NONE;
     LanguageType nGuessLangPara = LANGUAGE_NONE;
     if (m_xSpellAlt.is() && xLG.is())
@@ -502,7 +502,7 @@ SwSpellPopup::SwSpellPopup(
     m_xPopupMenu->EnableItem(m_nCorrectMenuId, false);
     m_xPopupMenu->EnableItem(m_nCorrectDialogId, false);
 
-    uno::Reference< linguistic2::XLanguageGuessing > xLG = SW_MOD()->GetLanguageGuesser();
+    uno::Reference<linguistic2::XLanguageGuessing> xLG = SwModule::get()->GetLanguageGuesser();
     LanguageType nGuessLangWord = LANGUAGE_NONE;
     LanguageType nGuessLangPara = LANGUAGE_NONE;
     if (xLG.is())

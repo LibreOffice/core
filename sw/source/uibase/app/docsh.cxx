@@ -215,9 +215,9 @@ bool SwDocShell::ConvertFrom( SfxMedium& rMedium )
     }
     SwWait aWait( *this, true );
 
+    SwModule* mod = SwModule::get();
         // Suppress SfxProgress, when we are Embedded
-    SW_MOD()->SetEmbeddedLoadSave(
-                            SfxObjectCreateMode::EMBEDDED == GetCreateMode() );
+    mod->SetEmbeddedLoadSave(SfxObjectCreateMode::EMBEDDED == GetCreateMode());
 
     pRdr->GetDoc().getIDocumentSettingAccess().set(DocumentSettingId::HTML_MODE, dynamic_cast< const SwWebDocShell *>( this ) !=  nullptr);
 
@@ -243,7 +243,7 @@ bool SwDocShell::ConvertFrom( SfxMedium& rMedium )
 
     pRdr.reset();
 
-    SW_MOD()->SetEmbeddedLoadSave( false );
+    mod->SetEmbeddedLoadSave(false);
 
     SetError(nErr);
     bool bOk = !nErr.IsError();
@@ -280,6 +280,7 @@ bool SwDocShell::Save()
     ErrCode nVBWarning = ERRCODE_NONE;
     if( SfxObjectShell::Save() )
     {
+        SwModule* mod = SwModule::get();
         switch( GetCreateMode() )
         {
         case SfxObjectCreateMode::INTERNAL:
@@ -299,7 +300,7 @@ bool SwDocShell::Save()
 
         case SfxObjectCreateMode::EMBEDDED:
             // Suppress SfxProgress, if we are Embedded
-            SW_MOD()->SetEmbeddedLoadSave( true );
+            mod->SetEmbeddedLoadSave(true);
             [[fallthrough]];
 
         case SfxObjectCreateMode::STANDARD:
@@ -334,7 +335,7 @@ bool SwDocShell::Save()
             }
             break;
         }
-        SW_MOD()->SetEmbeddedLoadSave( false );
+        mod->SetEmbeddedLoadSave(false);
     }
     SetError(nErr ? nErr : nVBWarning);
 
@@ -527,9 +528,9 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
         Link<bool,void> aOldOLELnk( m_xDoc->GetOle2Link() );
         m_xDoc->SetOle2Link( Link<bool,void>() );
 
+        SwModule* mod = SwModule::get();
             // Suppress SfxProgress when we are Embedded
-        SW_MOD()->SetEmbeddedLoadSave(
-                            SfxObjectCreateMode::EMBEDDED == GetCreateMode() );
+        mod->SetEmbeddedLoadSave(SfxObjectCreateMode::EMBEDDED == GetCreateMode());
 
         WriterRef xWrt;
         ::GetXMLWriter(std::u16string_view(), rMedium.GetBaseURL(true), xWrt);
@@ -554,7 +555,7 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
         }
         m_xDoc->SetOle2Link( aOldOLELnk );
 
-        SW_MOD()->SetEmbeddedLoadSave( false );
+        mod->SetEmbeddedLoadSave(false);
 
         // Increase RSID
         m_xDoc->setRsid( m_xDoc->getRsid() );
@@ -752,9 +753,9 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
         xWriter->SetAsciiOptions( aOpt );
     }
 
+    SwModule* mod = SwModule::get();
         // Suppress SfxProgress when we are Embedded
-    SW_MOD()->SetEmbeddedLoadSave(
-                            SfxObjectCreateMode::EMBEDDED == GetCreateMode());
+    mod->SetEmbeddedLoadSave(SfxObjectCreateMode::EMBEDDED == GetCreateMode());
 
     // Span Context in order to suppress the Selection's View
     ErrCodeMsg nErrno;
@@ -804,7 +805,7 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
         }
     }
 
-    SW_MOD()->SetEmbeddedLoadSave( false );
+    mod->SetEmbeddedLoadSave(false);
     SetError(nErrno ? nErrno : nVBWarning);
     if( !rMedium.IsStorage() )
         rMedium.CloseOutStream();
@@ -879,7 +880,7 @@ void SwDocShell::Draw( OutputDevice* pDev, const JobSetup& rSetup,
     pDev->SetBackground();
     const bool bWeb = dynamic_cast< const SwWebDocShell *>( this ) !=  nullptr;
     SwPrintData aOpts;
-    SwViewShell::PrtOle2(m_xDoc.get(), SW_MOD()->GetUsrPref(bWeb), aOpts, *pDev, aRect, bOutputForScreen);
+    SwViewShell::PrtOle2(m_xDoc.get(), SwModule::get()->GetUsrPref(bWeb), aOpts, *pDev, aRect, bOutputForScreen);
     pDev->Pop();
 
     if( pOrig )
@@ -1180,7 +1181,7 @@ void SwDocShell::SetView(SwView* pVw)
         // Set view-specific redline author.
         const OUString& rRedlineAuthor = m_pView->GetRedlineAuthor();
         if (!rRedlineAuthor.isEmpty())
-            SW_MOD()->SetRedlineAuthor(m_pView->GetRedlineAuthor());
+            SwModule::get()->SetRedlineAuthor(m_pView->GetRedlineAuthor());
     }
     else
         m_pWrtShell = nullptr;

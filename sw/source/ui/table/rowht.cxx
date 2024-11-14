@@ -47,7 +47,7 @@ SwTableHeightDlg::SwTableHeightDlg(weld::Window *pParent, SwWrtShell &rS)
     , m_xHeightEdit(m_xBuilder->weld_metric_spin_button(u"heightmf"_ustr, FieldUnit::CM))
     , m_xAutoHeightCB(m_xBuilder->weld_check_button(u"fit"_ustr))
 {
-    FieldUnit eFieldUnit = SW_MOD()->GetUsrPref( dynamic_cast< const SwWebDocShell*>(
+    FieldUnit eFieldUnit = SwModule::get()->GetUsrPref( dynamic_cast< const SwWebDocShell*>(
                                 m_rSh.GetView().GetDocShell() ) != nullptr  )->GetMetric();
     ::SetFieldUnit(*m_xHeightEdit, eFieldUnit);
 

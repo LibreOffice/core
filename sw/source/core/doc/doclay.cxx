@@ -887,7 +887,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
     if( pNew )
     {
         // #i61007# order of captions
-        bool bOrderNumberingFirst = SW_MOD()->GetModuleConfig()->IsCaptionOrderNumberingFirst();
+        bool bOrderNumberingFirst = SwModule::get()->GetModuleConfig()->IsCaptionOrderNumberingFirst();
         // Work up OUString
         OUString aText;
         if( bOrderNumberingFirst )
@@ -1180,7 +1180,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable
     if( pNew )
     {
         //#i61007# order of captions
-        bool bOrderNumberingFirst = SW_MOD()->GetModuleConfig()->IsCaptionOrderNumberingFirst();
+        bool bOrderNumberingFirst = SwModule::get()->GetModuleConfig()->IsCaptionOrderNumberingFirst();
 
         // prepare string
         OUString aText;

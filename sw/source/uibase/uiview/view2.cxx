@@ -2952,7 +2952,7 @@ namespace
 
         return  (   !aNames.hasElements()
                 ||  (   ( 1 == aNames.getLength() )
-                    &&  aNames.getConstArray()[0] == SW_MOD()->GetDBConfig()->GetBibliographySource().sDataSource
+                    &&  aNames.getConstArray()[0] == SwModule::get()->GetDBConfig()->GetBibliographySource().sDataSource
                     )
                 );
     }

@@ -156,7 +156,7 @@ SwDLL::~SwDLL() COVERITY_NOEXCEPT_FALSE
     }
 
     // Pool has to be deleted before statics are
-    SW_MOD()->RemoveAttrPool();
+    SwModule::get()->RemoveAttrPool();
 
     ::FinitUI();
     m_pFilters.reset();

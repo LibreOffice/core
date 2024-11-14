@@ -1684,7 +1684,7 @@ sal_uInt16 WW8Export::AddRedlineAuthor( std::size_t nId )
     bool bRemovePersonalInfo
         = SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo)
           && !SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::DocWarnKeepRedlineInfo);
-    OUString sName(SW_MOD()->GetRedlineAuthor(nId));
+    OUString sName(SwModule::get()->GetRedlineAuthor(nId));
     return m_pRedlAuthors->AddName(
         bRemovePersonalInfo ? "Author" + OUString::number(mpAuthorIDs->GetInfoID(sName)) : sName);
 }

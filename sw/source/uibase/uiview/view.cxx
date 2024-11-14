@@ -326,7 +326,7 @@ void SwView::SelectShell()
     {
 
         SfxDispatcher &rDispatcher = GetDispatcher();
-        SwToolbarConfigItem *pBarCfg = SW_MOD()->GetToolbarConfig();
+        SwToolbarConfigItem* pBarCfg = SwModule::get()->GetToolbarConfig();
 
         if ( m_pShell )
         {
@@ -850,7 +850,7 @@ SwView::SwView(SfxViewFrame& _rFrame, SfxViewShell* pOldSh)
         rDocSh.UpdateFontList();
     bool bWebDShell = dynamic_cast<const SwWebDocShell*>(&rDocSh) !=  nullptr;
 
-    const SwMasterUsrPref *pUsrPref = SW_MOD()->GetUsrPref(bWebDShell);
+    const SwMasterUsrPref* pUsrPref = SwModule::get()->GetUsrPref(bWebDShell);
     SwViewOption aUsrPref( *pUsrPref);
 
     //! get lingu options without loading lingu DLL
@@ -1144,7 +1144,7 @@ SwViewGlueDocShell::SwViewGlueDocShell(SwView& rView, SwDocShell& rDocSh)
 {
     // Set DocShell
     rDocSh.SetView(&m_rView);
-    SW_MOD()->SetView(&m_rView);
+    SwModule::get()->SetView(&m_rView);
 }
 
 SwViewGlueDocShell::~SwViewGlueDocShell()
@@ -1152,8 +1152,8 @@ SwViewGlueDocShell::~SwViewGlueDocShell()
     SwDocShell* pDocSh = m_rView.GetDocShell();
     if (pDocSh && pDocSh->GetView() == &m_rView)
         pDocSh->SetView(nullptr);
-    if (SW_MOD()->GetView() == &m_rView)
-        SW_MOD()->SetView(nullptr);
+    if (SwModule* mod = SwModule::get(); mod->GetView() == &m_rView)
+        mod->SetView(nullptr);
 }
 
 SwView::~SwView()
@@ -1289,7 +1289,7 @@ static bool lcl_IsOwnDocument( SwView& rView )
         = xDPS->getDocumentProperties();
     OUString Created = xDocProps->getAuthor();
     OUString Changed = xDocProps->getModifiedBy();
-    OUString FullName = SW_MOD()->GetUserOptions().GetFullName();
+    OUString FullName = SwModule::get()->GetUserOptions().GetFullName();
     return !FullName.isEmpty()
            && (Changed == FullName || (Changed.isEmpty() && Created == FullName));
 }
@@ -1573,7 +1573,7 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
         // Got a custom value, then it makes sense to trigger notifications.
         SwViewOption aUsrPref(*pVOpt);
         aUsrPref.SetKeepRatio(bKeepRatio);
-        SW_MOD()->ApplyUsrPref(aUsrPref, this);
+        SwModule::get()->ApplyUsrPref(aUsrPref, this);
     }
 
     // Set ViewLayoutSettings
@@ -1582,7 +1582,7 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
 
     const bool bSetViewSettings = bGotZoomType && bGotZoomFactor &&
                                   ( pVOpt->GetZoom() != nZoomFactor || pVOpt->GetZoomType() != eZoom ) &&
-                                   SW_MOD()->GetUsrPref(pVOpt->getBrowseMode())->IsDefaultZoom();
+                                   SwModule::get()->GetUsrPref(pVOpt->getBrowseMode())->IsDefaultZoom();
 
     // In case we have a 'fixed' view layout of 2 or more columns,
     // we have to apply the view options *before* starting the action.
@@ -1852,8 +1852,7 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
 void SwView::ScannerEventHdl()
 {
-    uno::Reference< XScannerManager2 > xScanMgr = SW_MOD()->GetScannerManager();
-    if( xScanMgr.is() )
+    if (uno::Reference<XScannerManager2> xScanMgr = SwModule::get()->GetScannerManager())
     {
         const ScannerContext    aContext( xScanMgr->getAvailableScanners().getConstArray()[ 0 ] );
         const ScanError         eError = xScanMgr->getError( aContext );
@@ -2126,7 +2125,7 @@ namespace sw {
 
 void InitPrintOptionsFromApplication(SwPrintData & o_rData, bool const bWeb)
 {
-    o_rData = *SW_MOD()->GetPrtOptions(bWeb);
+    o_rData = *SwModule::get()->GetPrtOptions(bWeb);
 }
 
 } // namespace sw

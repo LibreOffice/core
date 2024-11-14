@@ -52,14 +52,15 @@ void SAL_CALL SwUnoModule::dispatchWithNotification( const util::URL& aURL, cons
 
     SolarMutexGuard aGuard;
     SwGlobals::ensure();
-    const SfxSlot* pSlot = SW_MOD()->GetInterface()->GetSlot( aURL.Complete );
+    SwModule* mod = SwModule::get();
+    const SfxSlot* pSlot = mod->GetInterface()->GetSlot(aURL.Complete);
 
     sal_Int16 aState = frame::DispatchResultState::DONTKNOW;
     if ( !pSlot )
         aState = frame::DispatchResultState::FAILURE;
     else
     {
-        SfxRequest aReq( pSlot, aArgs, SfxCallMode::SYNCHRON, SW_MOD()->GetPool() );
+        SfxRequest aReq(pSlot, aArgs, SfxCallMode::SYNCHRON, mod->GetPool());
         SfxAllItemSet aInternalSet( SfxGetpApp()->GetPool() );
 
         css::uno::Reference<css::frame::XDesktop2> xDesktop = css::frame::Desktop::create(::comphelper::getProcessComponentContext());
@@ -68,7 +69,7 @@ void SAL_CALL SwUnoModule::dispatchWithNotification( const util::URL& aURL, cons
             aInternalSet.Put(SfxUnoFrameItem(SID_FILLFRAME, xCurrentFrame));
 
         aReq.SetInternalArgs_Impl(aInternalSet);
-        const SfxPoolItemHolder& rResult(SW_MOD()->ExecuteSlot(aReq));
+        const SfxPoolItemHolder& rResult(mod->ExecuteSlot(aReq));
         if (rResult)
             aState = frame::DispatchResultState::SUCCESS;
         else
@@ -123,7 +124,7 @@ uno::Reference< frame::XDispatch > SAL_CALL SwUnoModule::queryDispatch(
 
     SolarMutexGuard aGuard;
     SwGlobals::ensure();
-    const SfxSlot* pSlot = SW_MOD()->GetInterface()->GetSlot( aURL.Complete );
+    const SfxSlot* pSlot = SwModule::get()->GetInterface()->GetSlot(aURL.Complete);
     if ( pSlot )
         xReturn = this;
 

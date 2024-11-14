@@ -411,7 +411,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
 /// Set the rsid of the next nLen symbols of rRg to the current session number
 void SwDoc::UpdateRsid( const SwPaM &rRg, const sal_Int32 nLen )
 {
-    if (!SW_MOD()->GetModuleConfig()->IsStoreRsid())
+    if (!SwModule::get()->GetModuleConfig()->IsStoreRsid())
         return;
 
     SwTextNode *pTextNode = rRg.GetPoint()->GetNode().GetTextNode();
@@ -442,7 +442,7 @@ void SwDoc::UpdateRsid( const SwPaM &rRg, const sal_Int32 nLen )
 
 bool SwDoc::UpdateParRsid( SwTextNode *pTextNode, sal_uInt32 nVal )
 {
-    if (!SW_MOD()->GetModuleConfig()->IsStoreRsid())
+    if (!SwModule::get()->GetModuleConfig()->IsStoreRsid())
         return false;
 
     if (!pTextNode)

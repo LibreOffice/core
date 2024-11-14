@@ -700,7 +700,7 @@ void SwSrcEditWindow::ImpDoHighlight( std::u16string_view aSource, sal_uInt16 nL
             r.eType != svtools::HTMLKEYWORD &&
             r.eType != svtools::HTMLUNKNOWN)
                 r.eType = svtools::HTMLUNKNOWN;
-        Color aColor(SW_MOD()->GetColorConfig().GetColorValue(r.eType).nColor);
+        Color aColor(SwModule::get()->GetColorConfig().GetColorValue(r.eType).nColor);
         m_pTextEngine->SetAttrib( TextAttribFontColor( aColor ), nLineOff, r.nStart, r.nEnd+1 );
     }
 }

@@ -270,7 +270,7 @@ void RtfExport::WriteRevTab()
 
     for (SwRangeRedline* pRedl : m_rDoc.getIDocumentRedlineAccess().GetRedlineTable())
     {
-        GetRedline(SW_MOD()->GetRedlineAuthor(pRedl->GetAuthor()));
+        GetRedline(SwModule::get()->GetRedlineAuthor(pRedl->GetAuthor()));
     }
 
     bool bRemoveChangesInfo

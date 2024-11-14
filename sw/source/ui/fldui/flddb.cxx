@@ -515,7 +515,7 @@ void SwFieldDBPage::ActivateMailMergeAddress()
 {
     m_xTypeLB->select_id(OUString::number(static_cast<sal_uInt16>(SwFieldTypesEnum::Database)));
     TypeListBoxHdl(*m_xTypeLB);
-    const SwDBData& rData = SW_MOD()->GetDBConfig()->GetAddressSource();
+    const SwDBData& rData = SwModule::get()->GetDBConfig()->GetAddressSource();
     m_xDatabaseTLB->Select(rData.sDataSource, rData.sCommand, u"");
 }
 

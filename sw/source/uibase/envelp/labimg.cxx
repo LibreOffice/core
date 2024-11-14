@@ -366,7 +366,7 @@ SwLabCfgItem::SwLabCfgItem(bool bLabel) :
     if(m_bIsLabel || !bNoConfigValues)
         return;
 
-    SvtUserOptions& rUserOpt = SW_MOD()->GetUserOptions();
+    SvtUserOptions& rUserOpt = SwModule::get()->GetUserOptions();
     m_aItem.m_aPrivFirstName = rUserOpt.GetFirstName();
     m_aItem.m_aPrivName = rUserOpt.GetLastName();
     m_aItem.m_aPrivShortCut = rUserOpt.GetID();

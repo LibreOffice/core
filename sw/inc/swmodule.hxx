@@ -251,11 +251,12 @@ public:
 
     SW_DLLPUBLIC void RegisterAutomationApplicationEventsCaller(css::uno::Reference< ooo::vba::XSinkCaller > const& xCaller);
     void CallAutomationApplicationEventSinks(const OUString& Method, css::uno::Sequence< css::uno::Any >& Arguments);
+
+//    Access to SwModule
+    static auto get() { return static_cast<SwModule*>(SfxApplication::GetModule(SfxToolsModule::Writer)); }
 };
 
-//    Access to SwModule, the View and the shell.
-
-#define SW_MOD() ( static_cast<SwModule*>(SfxApplication::GetModule(SfxToolsModule::Writer)))
+//    Access to the View and the shell.
 
 SAL_RET_MAYBENULL SW_DLLPUBLIC SwView*    GetActiveView();
 SAL_RET_MAYBENULL SW_DLLPUBLIC SwWrtShell* GetActiveWrtShell();

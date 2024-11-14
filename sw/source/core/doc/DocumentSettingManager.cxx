@@ -670,7 +670,7 @@ sal_uInt16 sw::DocumentSettingManager::getLinkUpdateMode( /*[in]*/bool bGlobalSe
 {
     sal_uInt16 nRet = mnLinkUpdMode;
     if( bGlobalSettings && GLOBALSETTING == nRet )
-        nRet = SW_MOD()->GetLinkUpdMode();
+        nRet = SwModule::get()->GetLinkUpdMode();
     return nRet;
 }
 
@@ -683,7 +683,7 @@ SwFieldUpdateFlags sw::DocumentSettingManager::getFieldUpdateFlags( /*[in]*/bool
 {
     SwFieldUpdateFlags eRet = meFieldUpdMode;
     if( bGlobalSettings && AUTOUPD_GLOBALSETTING == eRet )
-        eRet = SW_MOD()->GetFieldUpdateFlags();
+        eRet = SwModule::get()->GetFieldUpdateFlags();
     return eRet;
 }
 

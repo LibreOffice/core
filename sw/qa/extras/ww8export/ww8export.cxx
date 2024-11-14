@@ -1503,7 +1503,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf94386)
         SfxItemSet aSet(pWrtShell->GetView().GetCurShell()->GetPool(), svl::Items<FN_ENVELOP, FN_ENVELOP>);
         aSet.Put(SwEnvItem());
         SfxRequest aRequest(FN_ENVELOP, SfxCallMode::SYNCHRON, aSet);
-        SW_MOD()->ExecOther(aRequest);
+        SwModule::get()->ExecOther(aRequest);
     }
     saveAndReload(u"MS Word 97"_ustr);
 

@@ -252,7 +252,7 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
             case SfxEventHintId::OpenDoc:
             {
                 uno::Sequence< css::uno::Any > aArgs;
-                SW_MOD()->CallAutomationApplicationEventSinks( u"DocumentChange"_ustr, aArgs );
+                SwModule::get()->CallAutomationApplicationEventSinks(u"DocumentChange"_ustr, aArgs);
                 break;
             }
             default:
@@ -266,7 +266,7 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                     uno::Any aDocument;
                     aDocument <<= mxAutomationDocumentObject;
                     uno::Sequence< uno::Any > aArgs{ aDocument };
-                    SW_MOD()->CallAutomationApplicationEventSinks( u"NewDocument"_ustr, aArgs );
+                    SwModule::get()->CallAutomationApplicationEventSinks( u"NewDocument"_ustr, aArgs );
                 }
                 break;
             case SfxEventHintId::OpenDoc:
@@ -274,7 +274,7 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                     uno::Any aDocument;
                     aDocument <<= mxAutomationDocumentObject;
                     uno::Sequence< uno::Any > aArgs{ aDocument };
-                    SW_MOD()->CallAutomationApplicationEventSinks( u"DocumentOpen"_ustr, aArgs );
+                    SwModule::get()->CallAutomationApplicationEventSinks( u"DocumentOpen"_ustr, aArgs );
                 }
                 break;
             default:
@@ -365,7 +365,7 @@ bool SwDocShell::PrepareClose( bool bUI )
                                        uno::Any(false)
         };
 
-        SW_MOD()->CallAutomationApplicationEventSinks( u"DocumentBeforeClose"_ustr, aArgs );
+        SwModule::get()->CallAutomationApplicationEventSinks(u"DocumentBeforeClose"_ustr, aArgs);
 
         // If the Cancel argument was set to True by an event handler, return false.
         bool bCancel(false);

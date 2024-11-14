@@ -173,7 +173,7 @@ SwConvertTableDlg::SwConvertTableDlg(SwView& rView, bool bToTable)
     m_xOtherBtn->connect_toggled(aLk);
     m_xOtherEd->set_sensitive(m_xOtherBtn->get_active());
 
-    const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
+    const SwModuleOptions* pModOpt = SwModule::get()->GetModuleConfig();
 
     bool bHTMLMode = 0 != (::GetHtmlMode(rView.GetDocShell()) & HTMLMODE_ON);
 

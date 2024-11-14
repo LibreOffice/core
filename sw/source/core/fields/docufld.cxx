@@ -322,13 +322,14 @@ SwAuthorFieldType::SwAuthorFieldType()
 
 OUString SwAuthorFieldType::Expand(sal_uLong nFormat)
 {
-    SvtUserOptions&  rOpt = SW_MOD()->GetUserOptions();
+    SwModule* mod = SwModule::get();
+    SvtUserOptions&  rOpt = mod->GetUserOptions();
     if((nFormat & 0xff) == AF_NAME)
     {
         // Prefer the view's redline author name.
         // (set in SwXTextDocument::initializeForTiledRendering)
-        std::size_t nAuthor = SW_MOD()->GetRedlineAuthor();
-        OUString sAuthor = SW_MOD()->GetRedlineAuthor(nAuthor);
+        std::size_t nAuthor = mod->GetRedlineAuthor();
+        OUString sAuthor = mod->GetRedlineAuthor(nAuthor);
         if (sAuthor.isEmpty())
             return rOpt.GetFullName();
 
@@ -2074,7 +2075,7 @@ OUString SwExtUserFieldType::Expand(sal_uInt16 nSub )
     }
     if( static_cast<UserOptToken>(USHRT_MAX) != nRet )
     {
-        SvtUserOptions&  rUserOpt = SW_MOD()->GetUserOptions();
+        SvtUserOptions& rUserOpt = SwModule::get()->GetUserOptions();
         return rUserOpt.GetToken( nRet );
     }
     return OUString();

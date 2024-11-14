@@ -270,7 +270,7 @@ void SwXPrintSettings::_preSetValues ()
     switch (meType)
     {
         case SwXPrintSettingsType::Module:
-            mpPrtOpt = SW_MOD()->GetPrtOptions( false );
+            mpPrtOpt = SwModule::get()->GetPrtOptions(false);
         break;
         case SwXPrintSettingsType::Document:
         {
@@ -407,7 +407,7 @@ void SwXPrintSettings::_preGetValues()
     switch (meType)
     {
         case SwXPrintSettingsType::Module:
-            mpPrtOpt = SW_MOD()->GetPrtOptions( false );
+            mpPrtOpt = SwModule::get()->GetPrtOptions(false);
         break;
         case SwXPrintSettingsType::Document:
         {
@@ -543,7 +543,7 @@ void SwXViewSettings::_preSetValues ()
         pVOpt = m_pView->GetWrtShell().GetViewOptions();
     }
     else
-        pVOpt = SW_MOD()->GetViewOption(false);
+        pVOpt = SwModule::get()->GetViewOption(false);
 
     mpViewOption.reset( new SwViewOption (*pVOpt) );
     mbApplyZoom = false;
@@ -758,6 +758,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
 
 void SwXViewSettings::_postSetValues()
 {
+    SwModule* mod = SwModule::get();
     if( m_pView )
     {
         if(mbApplyZoom )
@@ -772,12 +773,12 @@ void SwXViewSettings::_postSetValues()
     else
     {
         if(mbApplyHRulerMetric)
-            SW_MOD()->ApplyRulerMetric( m_eHRulerUnit, true, false );
+            mod->ApplyRulerMetric(m_eHRulerUnit, true, false);
         if(mbApplyVRulerMetric)
-            SW_MOD()->ApplyRulerMetric( m_eVRulerUnit, false, false );
+            mod->ApplyRulerMetric(m_eVRulerUnit, false, false);
     }
 
-    SW_MOD()->ApplyUsrPref( *mpViewOption, m_pView, m_pView ? SvViewOpt::DestViewOnly
+    mod->ApplyUsrPref( *mpViewOption, m_pView, m_pView ? SvViewOpt::DestViewOnly
                                                   : SvViewOpt::DestText );
 
     mpViewOption.reset();
@@ -792,7 +793,7 @@ void SwXViewSettings::_preGetValues ()
         mpConstViewOption = m_pView->GetWrtShell().GetViewOptions();
     }
     else
-        mpConstViewOption = SW_MOD()->GetViewOption(false);
+        mpConstViewOption = SwModule::get()->GetViewOption(false);
 }
 
 void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, uno::Any & rValue )
@@ -909,7 +910,7 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
             }
             else
             {
-                const SwMasterUsrPref* pUsrPref = SW_MOD()->GetUsrPref( false );
+                const SwMasterUsrPref* pUsrPref = SwModule::get()->GetUsrPref(false);
                 rValue <<= static_cast<sal_Int32>(pUsrPref->GetHScrollMetric());
             }
             bBool = false;
@@ -925,7 +926,7 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
             }
             else
             {
-                const SwMasterUsrPref* pUsrPref = SW_MOD()->GetUsrPref( false );
+                const SwMasterUsrPref* pUsrPref = SwModule::get()->GetUsrPref(false);
                 rValue <<= static_cast<sal_Int32>(pUsrPref->GetVScrollMetric());
             }
             bBool = false;

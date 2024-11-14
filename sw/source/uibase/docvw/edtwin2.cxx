@@ -533,7 +533,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 
             default:
                 {
-                    SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
+                    SwModuleOptions* pModOpt = SwModule::get()->GetModuleConfig();
                     if(!pModOpt->IsHideFieldTips())
                     {
                         const SwField* pField = aContentAtPos.aFnd.pField;

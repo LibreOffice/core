@@ -432,15 +432,15 @@ static Color lcl_GetAuthorColor(std::size_t nPos)
     // same as SwPostItMgr::GetColorAnchor()
     switch (nPos % 9)
     {
-        case 0: return SW_MOD()->GetColorConfig().GetColorValue(svtools::AUTHOR1).nColor;
-        case 1: return SW_MOD()->GetColorConfig().GetColorValue(svtools::AUTHOR2).nColor;
-        case 2: return SW_MOD()->GetColorConfig().GetColorValue(svtools::AUTHOR3).nColor;
-        case 3: return SW_MOD()->GetColorConfig().GetColorValue(svtools::AUTHOR4).nColor;
-        case 4: return SW_MOD()->GetColorConfig().GetColorValue(svtools::AUTHOR5).nColor;
-        case 5: return SW_MOD()->GetColorConfig().GetColorValue(svtools::AUTHOR6).nColor;
-        case 6: return SW_MOD()->GetColorConfig().GetColorValue(svtools::AUTHOR7).nColor;
-        case 7: return SW_MOD()->GetColorConfig().GetColorValue(svtools::AUTHOR8).nColor;
-        case 8: return SW_MOD()->GetColorConfig().GetColorValue(svtools::AUTHOR9).nColor;
+        case 0: return SwModule::get()->GetColorConfig().GetColorValue(svtools::AUTHOR1).nColor;
+        case 1: return SwModule::get()->GetColorConfig().GetColorValue(svtools::AUTHOR2).nColor;
+        case 2: return SwModule::get()->GetColorConfig().GetColorValue(svtools::AUTHOR3).nColor;
+        case 3: return SwModule::get()->GetColorConfig().GetColorValue(svtools::AUTHOR4).nColor;
+        case 4: return SwModule::get()->GetColorConfig().GetColorValue(svtools::AUTHOR5).nColor;
+        case 5: return SwModule::get()->GetColorConfig().GetColorValue(svtools::AUTHOR6).nColor;
+        case 6: return SwModule::get()->GetColorConfig().GetColorValue(svtools::AUTHOR7).nColor;
+        case 7: return SwModule::get()->GetColorConfig().GetColorValue(svtools::AUTHOR8).nColor;
+        case 8: return SwModule::get()->GetColorConfig().GetColorValue(svtools::AUTHOR9).nColor;
         default: return COL_AUTO; // silence -Wreturn-type
     }
 }

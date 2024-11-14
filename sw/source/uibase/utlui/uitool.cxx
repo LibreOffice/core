@@ -758,14 +758,14 @@ void SwToSfxPageDescAttr( SfxItemSet& rCoreSet )
 
 FieldUnit   GetDfltMetric(bool bWeb)
 {
-    return SW_MOD()->GetUsrPref(bWeb)->GetMetric();
+    return SwModule::get()->GetUsrPref(bWeb)->GetMetric();
 }
 
 // Determine metric
 
 void    SetDfltMetric( FieldUnit eMetric, bool bWeb )
 {
-    SW_MOD()->ApplyUserMetric(eMetric, bWeb);
+    SwModule::get()->ApplyUserMetric(eMetric, bWeb);
 }
 
 void InsertStringSorted(const OUString& rId, const OUString& rEntry, weld::ComboBox& rToFill, int nOffset)
@@ -873,12 +873,12 @@ OUString GetAppLangDateTimeString( const DateTime& rDT )
 
 bool HasCharUnit( bool bWeb)
 {
-    return SW_MOD()->GetUsrPref(bWeb)->IsApplyCharUnit();
+    return SwModule::get()->GetUsrPref(bWeb)->IsApplyCharUnit();
 }
 
 void SetApplyCharUnit(bool bApplyChar, bool bWeb)
 {
-    SW_MOD()->ApplyUserCharUnit(bApplyChar, bWeb);
+    SwModule::get()->ApplyUserCharUnit(bApplyChar, bWeb);
 }
 
 bool ExecuteMenuCommand(const css::uno::Reference<css::awt::XPopupMenu>& rMenu, const SfxViewFrame& rViewFrame, sal_uInt16 nId)

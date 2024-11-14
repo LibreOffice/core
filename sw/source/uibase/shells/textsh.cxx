@@ -526,7 +526,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             auto xSet = CreateInsertFrameItemSet(aMgr);
 
             FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebDocShell*>( GetView().GetDocShell()) != nullptr );
-            SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
+            SwModule::get()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateFrameTabDialog(u"FrameDialog"_ustr,
                                                   GetView().GetViewFrame(),

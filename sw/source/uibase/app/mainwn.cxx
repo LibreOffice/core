@@ -52,7 +52,7 @@ static SwProgress *lcl_SwFindProgress( SwDocShell const *pDocShell )
 void StartProgress( TranslateId pMessResId, tools::Long nStartValue, tools::Long nEndValue,
                     SwDocShell *pDocShell )
 {
-    if( SW_MOD()->IsEmbeddedLoadSave() )
+    if (SwModule::get()->IsEmbeddedLoadSave())
         return;
 
     SwProgress *pProgress = nullptr;
@@ -81,7 +81,7 @@ void StartProgress( TranslateId pMessResId, tools::Long nStartValue, tools::Long
 
 void SetProgressState( tools::Long nPosition, SwDocShell const *pDocShell )
 {
-    if( pProgressContainer && !SW_MOD()->IsEmbeddedLoadSave() )
+    if (pProgressContainer && !SwModule::get()->IsEmbeddedLoadSave())
     {
         SwProgress *pProgress = lcl_SwFindProgress( pDocShell );
         if ( pProgress )
@@ -91,7 +91,7 @@ void SetProgressState( tools::Long nPosition, SwDocShell const *pDocShell )
 
 void EndProgress( SwDocShell const *pDocShell )
 {
-    if( !pProgressContainer || SW_MOD()->IsEmbeddedLoadSave() )
+    if (!pProgressContainer || SwModule::get()->IsEmbeddedLoadSave())
         return;
 
     SwProgress *pProgress = nullptr;
@@ -122,7 +122,7 @@ void EndProgress( SwDocShell const *pDocShell )
 
 void RescheduleProgress( SwDocShell const *pDocShell )
 {
-    if( pProgressContainer && !SW_MOD()->IsEmbeddedLoadSave() )
+    if (pProgressContainer && !SwModule::get()->IsEmbeddedLoadSave())
     {
         SwProgress *pProgress = lcl_SwFindProgress( pDocShell );
         if ( pProgress )

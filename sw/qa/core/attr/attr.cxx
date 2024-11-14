@@ -39,7 +39,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSwAttrSet)
     dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
     dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
     rtl::Reference<SwTransferable> xTransferable(new SwTransferable(*pWrtShell));
-    SwModule* pMod = SW_MOD();
+    SwModule* pMod = SwModule::get();
     SwTransferable* pOldTransferable = pMod->m_pXSelection;
     pMod->m_pXSelection = xTransferable.get();
 

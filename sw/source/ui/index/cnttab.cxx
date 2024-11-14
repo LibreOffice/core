@@ -282,14 +282,14 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(weld::Widget* pParent, const SfxItemSet
         SetCurPageId(u"index"_ustr);
 
     m_xShowExampleCB->connect_toggled(LINK(this, SwMultiTOXTabDialog, ShowPreviewHdl));
-    m_xShowExampleCB->set_active(SW_MOD()->GetModuleConfig()->IsShowIndexPreview());
+    m_xShowExampleCB->set_active(SwModule::get()->GetModuleConfig()->IsShowIndexPreview());
 
     ShowPreview();
 }
 
 SwMultiTOXTabDialog::~SwMultiTOXTabDialog()
 {
-    SW_MOD()->GetModuleConfig()->SetShowIndexPreview(m_xShowExampleCB->get_active());
+    SwModule::get()->GetModuleConfig()->SetShowIndexPreview(m_xShowExampleCB->get_active());
 }
 
 void SwMultiTOXTabDialog::PageCreated(const OUString& rId, SfxTabPage &rPage)

@@ -2413,7 +2413,7 @@ void SwBaseShell::ExecTextCtrl( SfxRequest& rReq )
                     if(nInputLang != LANGUAGE_DONTKNOW && nInputLang != LANGUAGE_SYSTEM)
                         nScripts = SvtLanguageOptions::GetScriptTypeOfLanguage( nInputLang );
                     sal_uInt32 nHeight = static_cast< const SvxFontHeightItem& >(pArgs->Get( nWhich )).GetHeight();
-                    SwStdFontConfig* pStdFont = SW_MOD()->GetStdFontConfig();
+                    SwStdFontConfig* pStdFont = SwModule::get()->GetStdFontConfig();
 
                     SfxItemSetFixed<RES_CHRATR_LANGUAGE, RES_CHRATR_LANGUAGE,
                                     RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CJK_LANGUAGE,
@@ -3083,7 +3083,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
     if( !pArgs && rSh.IsSelection() && !rSh.IsInClickToEdit() &&
         !rSh.IsTableMode() )
     {
-        const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
+        const SwModuleOptions* pModOpt = SwModule::get()->GetModuleConfig();
         SwInsertTableOptions aInsTableOpts = pModOpt->GetInsTableFlags(bHTMLMode);
 
         rSh.StartUndo(SwUndoId::INSTABLE);
@@ -3140,7 +3140,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                 aInsTableOptsIn.mnInsMode = static_cast<SwInsertTableFlags>(pFlags->GetValue());
             else
             {
-                const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
+                const SwModuleOptions* pModOpt = SwModule::get()->GetModuleConfig();
                 aInsTableOptsIn = pModOpt->GetInsTableFlags(bHTMLMode);
             }
         }

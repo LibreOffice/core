@@ -455,7 +455,7 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
                 // TODO/LATER: recording! Convert properties to items
                 case SID_INSERT_FLOATINGFRAME:
                 {
-                    SfxSlotPool* pSlotPool = SW_MOD()->GetSlotPool();
+                    SfxSlotPool* pSlotPool = SwModule::get()->GetSlotPool();
                     const SfxSlot* pSlot = pSlotPool->GetSlot(nSlotId);
                     OUString aCmd = pSlot->GetCommand();
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -2260,8 +2260,9 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq)
             sAuthor = pAuthorItem->GetValue();
         else
         {
-            std::size_t nAuthor = SW_MOD()->GetRedlineAuthor();
-            sAuthor = SW_MOD()->GetRedlineAuthor(nAuthor);
+            SwModule* mod = SwModule::get();
+            std::size_t nAuthor = mod->GetRedlineAuthor();
+            sAuthor = mod->GetRedlineAuthor(nAuthor);
         }
 
         const SvxPostItTextItem* pTextItem = rReq.GetArg<SvxPostItTextItem>(SID_ATTR_POSTIT_TEXT);

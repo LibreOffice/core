@@ -2222,7 +2222,7 @@ WW8_Annotation::WW8_Annotation(const SwRedlineData* pRedline)
         m_nRangeEnd(0),
         mpAuthorIDs(new SvtSecurityMapPersonalInfo)
 {
-    initPersonalInfo(SW_MOD()->GetRedlineAuthor(pRedline->GetAuthor()), u""_ustr,
+    initPersonalInfo(SwModule::get()->GetRedlineAuthor(pRedline->GetAuthor()), u""_ustr,
                      pRedline->GetTimeStamp());
 }
 

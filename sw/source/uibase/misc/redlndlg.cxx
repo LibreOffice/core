@@ -256,7 +256,7 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(std::shared_ptr<weld::Window> xParent, we
     m_aSelectTimer.SetInvokeHandler(LINK(this, SwRedlineAcceptDlg, GotoHdl));
 
     // we want to receive SfxHintId::SwRedlineContentAtPos
-    StartListening(*(SW_MOD()->GetView()->GetDocShell()));
+    StartListening(*(SwModule::get()->GetView()->GetDocShell()));
 }
 
 SwRedlineAcceptDlg::~SwRedlineAcceptDlg()
@@ -561,7 +561,7 @@ void SwRedlineAcceptDlg::Activate()
     }
 
     // check comment
-    bool bIsShowChangesInMargin = SW_MOD()->GetUsrPref(false)->IsShowChangesInMargin();
+    bool bIsShowChangesInMargin = SwModule::get()->GetUsrPref(false)->IsShowChangesInMargin();
     for (SwRedlineTable::size_type i = 0; i < nCount; i++)
     {
         const SwRangeRedline& rRedln = pSh->GetRedline(i);
@@ -919,7 +919,7 @@ void SwRedlineAcceptDlg::InsertParents(SwRedlineTable::size_type nStart, SwRedli
     if (m_pTable->IsSorted())
         rTreeView.make_unsorted();
 
-    bool bIsShowChangesInMargin = SW_MOD()->GetUsrPref(false)->IsShowChangesInMargin();
+    bool bIsShowChangesInMargin = SwModule::get()->GetUsrPref(false)->IsShowChangesInMargin();
 
     // collect redlines of tracked table/row/column insertion/deletions under a single tree list
     // item to accept/reject the table change with a single click on Accept/Reject
@@ -1653,7 +1653,7 @@ SwRedlineAcceptPanel::SwRedlineAcceptPanel(weld::Widget* pParent)
     mpImplDlg->Init();
 
     // we want to receive SfxHintId::DocChanged
-    StartListening(*(SW_MOD()->GetView()->GetDocShell()));
+    StartListening(*(SwModule::get()->GetView()->GetDocShell()));
 }
 
 SwRedlineAcceptPanel::~SwRedlineAcceptPanel()

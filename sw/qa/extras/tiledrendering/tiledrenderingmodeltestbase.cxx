@@ -84,7 +84,7 @@ void SwTiledRenderingTest::setUp()
     SwModelTestBase::setUp();
 
     SwGlobals::ensure();
-    SW_MOD()->ClearRedlineAuthors();
+    SwModule::get()->ClearRedlineAuthors();
 
     comphelper::LibreOfficeKit::setActive(true);
 }

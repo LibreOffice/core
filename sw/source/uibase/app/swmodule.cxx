@@ -168,12 +168,12 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
 
 OUString SwResId(TranslateId aId)
 {
-    return Translate::get(aId, SW_MOD()->GetResLocale());
+    return Translate::get(aId, SwModule::get()->GetResLocale());
 }
 
 OUString SwResId(TranslateNId aContextSingularPlural, int nCardinality)
 {
-    return Translate::nget(aContextSingularPlural, nCardinality, SW_MOD()->GetResLocale());
+    return Translate::nget(aContextSingularPlural, nCardinality, SwModule::get()->GetResLocale());
 }
 
 uno::Reference< scanner::XScannerManager2 > const &
@@ -229,7 +229,7 @@ void SwDLL::RegisterFactories()
 
 void SwDLL::RegisterInterfaces()
 {
-    SwModule* pMod = SW_MOD();
+    SwModule* pMod = SwModule::get();
     SwModule::RegisterInterface( pMod );
     SwDocShell::RegisterInterface( pMod );
     SwWebDocShell::RegisterInterface( pMod );
@@ -266,7 +266,7 @@ void SwDLL::RegisterInterfaces()
 
 void SwDLL::RegisterControls()
 {
-    SwModule* pMod = SW_MOD();
+    SwModule* pMod = SwModule::get();
 
     SvxTbxCtlDraw::RegisterControl(SID_INSERT_DRAW, pMod );
     SvxTbxCtlDraw::RegisterControl(SID_TRACK_CHANGES_BAR, pMod );

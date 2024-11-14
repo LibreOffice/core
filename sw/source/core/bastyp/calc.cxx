@@ -271,7 +271,7 @@ SwCalc::SwCalc( SwDoc& rD )
     for( n = 0; n < 4; ++n )
         lcl_GetCalcExp(m_aVarTable, sNTypeTab[n + 7]).nValue.PutLong( rDocStat.*aDocStat2[ n ]  );
 
-    SvtUserOptions& rUserOptions = SW_MOD()->GetUserOptions();
+    SvtUserOptions& rUserOptions = SwModule::get()->GetUserOptions();
 
     lcl_GetCalcExp(m_aVarTable, sNTypeTab[11]).nValue.PutString( rUserOptions.GetFirstName() );
     lcl_GetCalcExp(m_aVarTable, sNTypeTab[12]).nValue.PutString( rUserOptions.GetLastName() );

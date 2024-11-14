@@ -707,7 +707,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
     bool bWebView =  dynamic_cast<const SwWebView*>(this) !=  nullptr;
     SwWrtShell &rSh = GetWrtShell();
     rSh.StartAction();
-    SwModule* pModule = SW_MOD();
+    SwModule* pModule = SwModule::get();
     if( *rSh.GetViewOptions() != *pOpt )
     {
         rSh.ApplyViewOptions( *pOpt );

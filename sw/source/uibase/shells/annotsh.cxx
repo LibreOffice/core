@@ -497,7 +497,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 /* mod
                 SwView* pView = &GetView();
                 FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebView*>( pView) !=  nullptr );
-                SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, eMetric));
+                SwModule::get()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, eMetric));
                 */
                 SfxItemSetFixed<XATTR_FILLSTYLE, XATTR_FILLCOLOR, EE_ITEMS_START, EE_ITEMS_END> aDlgAttr(GetPool());
 
@@ -550,7 +550,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 /* mod todo ???
                 SwView* pView = &GetView();
                 FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebView*>( pView) !=  nullptr );
-                SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, eMetric));
+                SwModule::get()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, eMetric));
                 */
                 SfxItemSetFixed<
                         EE_ITEMS_START, EE_ITEMS_END,

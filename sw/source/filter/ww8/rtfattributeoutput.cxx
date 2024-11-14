@@ -637,7 +637,7 @@ void RtfAttributeOutput::Redline(const SwRedlineData* pRedline)
         m_aRun->append(OOO_STRING_SVTOOLS_RTF_REVISED);
         m_aRun->append(OOO_STRING_SVTOOLS_RTF_REVAUTH);
         m_aRun->append(static_cast<sal_Int32>(
-            m_rExport.GetRedline(SW_MOD()->GetRedlineAuthor(pRedline->GetAuthor()))));
+            m_rExport.GetRedline(SwModule::get()->GetRedlineAuthor(pRedline->GetAuthor()))));
         if (!bRemoveCommentAuthorDates)
             m_aRun->append(OOO_STRING_SVTOOLS_RTF_REVDTTM);
     }
@@ -646,7 +646,7 @@ void RtfAttributeOutput::Redline(const SwRedlineData* pRedline)
         m_aRun->append(OOO_STRING_SVTOOLS_RTF_DELETED);
         m_aRun->append(OOO_STRING_SVTOOLS_RTF_REVAUTHDEL);
         m_aRun->append(static_cast<sal_Int32>(
-            m_rExport.GetRedline(SW_MOD()->GetRedlineAuthor(pRedline->GetAuthor()))));
+            m_rExport.GetRedline(SwModule::get()->GetRedlineAuthor(pRedline->GetAuthor()))));
         if (!bRemoveCommentAuthorDates)
             m_aRun->append(OOO_STRING_SVTOOLS_RTF_REVDTTMDEL);
     }

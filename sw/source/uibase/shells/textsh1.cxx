@@ -164,7 +164,7 @@ static void sw_CharDialog(SwWrtShell& rWrtSh, bool bUseDialog, bool bApplyToPara
                           sal_uInt16 nSlot, const SfxItemSet* pArgs, SfxRequest* pReq)
 {
     FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebView*>( &rWrtSh.GetView()) != nullptr );
-    SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
+    SwModule::get()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast<sal_uInt16>(eMetric)));
     auto pCoreSet = std::make_shared<SfxItemSetFixed<
             RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
             RES_TXTATR_INETFMT, RES_TXTATR_INETFMT,
@@ -1653,10 +1653,11 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 pPaM = rWrtSh.GetCursor();
 
             FieldUnit eMetric = ::GetDfltMetric( dynamic_cast<SwWebView*>( &GetView()) != nullptr );
-            SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
+            SwModule* mod = SwModule::get();
+            mod->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast<sal_uInt16>(eMetric)));
 
             bool bApplyCharUnit = ::HasCharUnit( dynamic_cast<SwWebView*>( &GetView()) != nullptr  );
-            SW_MOD()->PutItem(SfxBoolItem(SID_ATTR_APPLYCHARUNIT, bApplyCharUnit));
+            mod->PutItem(SfxBoolItem(SID_ATTR_APPLYCHARUNIT, bApplyCharUnit));
 
             SfxItemSetFixed<
                     RES_PARATR_BEGIN, RES_FRMATR_END - 1,

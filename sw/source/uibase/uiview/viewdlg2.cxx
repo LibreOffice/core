@@ -195,7 +195,7 @@ bool SwView::isQRCodeSelected() const
 
 void SwView::AutoCaption(const sal_uInt16 nType, const SvGlobalName *pOleId)
 {
-    SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
+    SwModuleOptions* pModOpt = SwModule::get()->GetModuleConfig();
 
     bool bWeb = dynamic_cast<SwWebView*>( this ) !=  nullptr;
     if (pModOpt->IsInsWithCaption(bWeb))

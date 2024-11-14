@@ -175,7 +175,7 @@ void SwDrawTextShell::ExecFontWork(SfxRequest const & rReq)
 {
     SwWrtShell &rSh = GetShell();
     FieldUnit eMetric = ::GetDfltMetric( dynamic_cast<SwWebView*>( &rSh.GetView()) != nullptr );
-    SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)) );
+    SwModule::get()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast<sal_uInt16>(eMetric)));
     SfxViewFrame& rVFrame = GetView().GetViewFrame();
     if ( rReq.GetArgs() )
     {

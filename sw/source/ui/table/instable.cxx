@@ -96,7 +96,7 @@ SwInsTableDlg::SwInsTableDlg(SwView& rView)
     m_xInsertBtn->connect_clicked(LINK(this, SwInsTableDlg, OKHdl));
 
     bool bHTMLMode = 0 != (::GetHtmlMode(rView.GetDocShell())&HTMLMODE_ON);
-    const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
+    const SwModuleOptions* pModOpt = SwModule::get()->GetModuleConfig();
 
     SwInsertTableOptions aInsOpts = pModOpt->GetInsTableFlags(bHTMLMode);
     SwInsertTableFlags nInsTableFlags = aInsOpts.mnInsMode;

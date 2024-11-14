@@ -479,7 +479,7 @@ SwContentType::SwContentType(SwWrtShell* pShell, ContentTypeId nType, sal_uInt8 
     const int nShift = static_cast<int>(m_nContentType);
     assert(nShift > -1);
     const sal_Int32 nMask = 1 << nShift;
-    const sal_Int32 nBlock = SW_MOD()->GetNavigationConfig()->GetSortAlphabeticallyBlock();
+    const sal_Int32 nBlock = SwModule::get()->GetNavigationConfig()->GetSortAlphabeticallyBlock();
     m_bAlphabeticSort = nBlock & nMask;
 
     FillMemberList();
@@ -1143,7 +1143,7 @@ SwContentTree::SwContentTree(std::unique_ptr<weld::TreeView> xTreeView, SwNaviga
     , m_sInvisible(SwResId(STR_INVISIBLE))
     , m_pHiddenShell(nullptr)
     , m_pActiveShell(nullptr)
-    , m_pConfig(SW_MOD()->GetNavigationConfig())
+    , m_pConfig(SwModule::get()->GetNavigationConfig())
     , m_nActiveBlock(0)
     , m_nHiddenBlock(0)
     , m_nEntryCount(0)

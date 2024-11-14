@@ -90,7 +90,7 @@ SwVbaApplication::AddSink( const uno::Reference< XSink >& xSink )
         SwGlobals::ensure();
     }
     // No harm in potentially calling this several times
-    SW_MOD()->RegisterAutomationApplicationEventsCaller( uno::Reference< XSinkCaller >(this) );
+    SwModule::get()->RegisterAutomationApplicationEventsCaller(uno::Reference<XSinkCaller>(this));
     mvSinks.push_back(xSink);
     return mvSinks.size();
 }

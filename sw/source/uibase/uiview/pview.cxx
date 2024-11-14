@@ -178,7 +178,7 @@ SwPagePreviewWin::SwPagePreviewWin( vcl::Window *pParent, SwPagePreview& rPView 
     GetOutDev()->SetLineColor( GetBackground().GetColor());
     SetMapMode( MapMode(MapUnit::MapTwip) );
 
-    const SwMasterUsrPref *pUsrPref = SW_MOD()->GetUsrPref(false);
+    const SwMasterUsrPref* pUsrPref = SwModule::get()->GetUsrPref(false);
     mnRow = pUsrPref->GetPagePrevRow();     // 1 row
     mnCol = pUsrPref->GetPagePrevCol();     // 1 column
     mnSttPage = USHRT_MAX;
@@ -516,7 +516,7 @@ void SwPagePreviewWin::MouseButtonDown( const MouseEvent& rMEvt )
 
 void SwPagePreviewWin::SetPagePreview( sal_Int16 nRow, sal_Int16 nCol )
 {
-    SwMasterUsrPref *pOpt = const_cast<SwMasterUsrPref *>(SW_MOD()->GetUsrPref(false));
+    SwMasterUsrPref* pOpt = const_cast<SwMasterUsrPref*>(SwModule::get()->GetUsrPref(false));
 
     if (nRow != pOpt->GetPagePrevRow() || nCol != pOpt->GetPagePrevCol())
     {
@@ -1093,7 +1093,8 @@ void SwPagePreview::Init()
     // the handler, because the shell is unknown to the SFX management
     // within the CTOR phase.
 
-    const SwViewOption * pPrefs = SW_MOD()->GetUsrPref(false);
+    SwModule* mod = SwModule::get();
+    const SwViewOption* pPrefs = mod->GetUsrPref(false);
 
     mbHScrollbarEnabled = pPrefs->IsViewHScrollBar();
     mbVScrollbarEnabled = pPrefs->IsViewVScrollBar();
@@ -1135,7 +1136,7 @@ void SwPagePreview::Init()
 #endif
 
     // adjust view shell option to the same as for print
-    SwPrintData const aPrintOptions = *SW_MOD()->GetPrtOptions(false);
+    SwPrintData const aPrintOptions = *mod->GetPrtOptions(false);
     GetViewShell()->AdjustOptionsForPagePreview( aPrintOptions );
 
     GetViewShell()->CalcLayout();

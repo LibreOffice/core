@@ -124,7 +124,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testKeepRatio)
     comphelper::ScopeGuard g([pWrtShell, pViewOption] {
         SwViewOption aViewOption(*pViewOption);
         aViewOption.SetKeepRatio(false);
-        SW_MOD()->ApplyUsrPref(aViewOption, &pWrtShell->GetView());
+        SwModule::get()->ApplyUsrPref(aViewOption, &pWrtShell->GetView());
     });
     // Without the accompanying fix in place, this test would have failed, because KeepRatio was not
     // mapped to settings.xml

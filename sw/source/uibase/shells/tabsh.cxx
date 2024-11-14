@@ -278,7 +278,7 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
     {
         SwViewOption aUsrPref( *rSh.GetViewOptions() );
         aUsrPref.SetTableDest(static_cast<sal_uInt8>(pDestItem->GetValue()));
-        SW_MOD()->ApplyUsrPref(aUsrPref, &rSh.GetView());
+        SwModule::get()->ApplyUsrPref(aUsrPref, &rSh.GetView());
     }
     bool bBorder = ( SfxItemState::SET == rSet.GetItemState( RES_BOX ) ||
             SfxItemState::SET == rSet.GetItemState( SID_ATTR_BORDER_INNER ) );
@@ -606,7 +606,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             SfxItemSet aCoreSet( GetPool(), aUITableAttrRange);
 
             FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebView*>( &rSh.GetView()) != nullptr );
-            SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
+            SwModule::get()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
             std::shared_ptr<SwTableRep> xTableRep(::lcl_TableParamToItemSet(aCoreSet, rSh));
 
             aCoreSet.Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(GetView().GetDocShell())));
@@ -688,7 +688,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             if (SwView* pView = GetActiveView())
             {
                 FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebView*>( pView) !=  nullptr );
-                SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
+                SwModule::get()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
                 SvNumberFormatter* pFormatter = rSh.GetNumberFormatter();
                 auto pCoreSet = std::make_shared<SfxItemSetFixed<SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_INFO>>( GetPool() );
 

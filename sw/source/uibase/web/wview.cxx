@@ -117,7 +117,7 @@ void SwWebView::SelectShell()
     else
     {
         SfxDispatcher &rDispatcher = *GetViewFrame().GetDispatcher();
-        SwToolbarConfigItem *pBarCfg = SW_MOD()->GetWebToolbarConfig();
+        SwToolbarConfigItem* pBarCfg = SwModule::get()->GetWebToolbarConfig();
 
         if( GetCurShell() )
         {

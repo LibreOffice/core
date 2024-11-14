@@ -213,7 +213,7 @@ SwMailMergeDlg::SwMailMergeDlg(weld::Window* pParent, SwWrtShell& rShell,
         }
     }
 
-    m_pModOpt = SW_MOD()->GetModuleConfig();
+    m_pModOpt = SwModule::get()->GetModuleConfig();
 
     MailTextFormats nMailingMode(m_pModOpt->GetMailingFormats());
     m_xFormatSwCB->set_active(bool(nMailingMode & MailTextFormats::OFFICE));
