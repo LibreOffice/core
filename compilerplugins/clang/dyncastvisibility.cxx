@@ -66,7 +66,7 @@ bool isDerivedFrom(
             }
             derived = true;
         }
-        }
+    }
     return derived;
 }
 
