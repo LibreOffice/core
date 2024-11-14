@@ -2136,7 +2136,7 @@ bool SwFlyFrame::IsShowUnfloatButton(SwWrtShell* pWrtSh) const
         {
             pTable = static_cast<const SwTabFrame*>(pLower);
             ++nTableCount;
-            if (nTableCount > 1 || pTable == nullptr)
+            if (nTableCount > 1)
                 return false;
         }
 
