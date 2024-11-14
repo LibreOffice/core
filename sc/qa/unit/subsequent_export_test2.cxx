@@ -522,6 +522,19 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testAutofilterTop10XLSX)
     assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:top10", "val", u"4");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testAutofilterColButton)
+{
+    // Without fix it will fail
+    // - Expression: !xmlGetProp(pXmlNode, BAD_CAST(rAttribute.getStr()))
+    // - In <>, XPath '//x:autoFilter/x:filterColumn' unexpected 'hiddenButton' attribute
+    createScDoc("ods/autofilter-colbutton.ods");
+
+    save("Calc Office Open XML");
+    xmlDocUniquePtr pDoc = parseExport("xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pDoc);
+    assertXPathNoAttribute(pDoc, "//x:autoFilter/x:filterColumn", "hiddenButton");
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf88657ODS)
 {
     createScDoc("ods/tdf88657.ods");

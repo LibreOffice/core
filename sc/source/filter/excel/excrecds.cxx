@@ -995,10 +995,10 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab, const
             bContLoop = rEntry.bDoQuery;
             if( bContLoop )
             {
-                SCCOL nCol = static_cast<SCCOL>( rEntry.nField ) - aRange.aStart.Col();
+                SCCOL nCol = static_cast<SCCOL>(rEntry.nField);
+                XclExpAutofilter* pFilter = GetByCol( nCol - aRange.aStart.Col() );
                 auto nFlag = rDoc.GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG )->GetValue();
                 bool bIsButtonHidden = !( nFlag & ScMF::Auto );
-                XclExpAutofilter* pFilter = GetByCol( nCol );
                 pFilter->SetButtonHidden( bIsButtonHidden );
 
                 if( nEntry > 0 )
