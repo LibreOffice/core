@@ -3122,9 +3122,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering)
     // - background layer
     // - master slide layer
     // - main slide layer
-    // The doucment has nothing set for the background, so it should be application color = white
+    // The document has nothing set for the background, so it should be application color = white
     // On the master slide there is a (blue) rectangle on the right side - top-left should be transparent
-    // On the main slide there is a (green) rectanlge on the top-left size - right side should be transparent
+    // On the main slide there is a (green) rectangle on the top-left size - right side should be transparent
     // enable layer output to PNG files
     const bool bOutputPNG = false;
     SdXImpressDocument* pXImpressDocument = createDoc("SlideRenderingTest.odp");
