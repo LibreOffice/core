@@ -221,8 +221,12 @@ void SwDoc::SetRubyList(SwPaM& rPam, const SwRubyList& rList)
 
     // Expand selection to account for insertion
     rPam.Normalize();
-    // coverity[swapped_arguments : FALSE] - this is in the correct order
-    rPam = SwPaM{ *aOrigPam.GetPoint(), *rPam.GetMark() };
+
+    if( !rPam.HasMark() )
+        rPam.SetMark();
+    rPam.Exchange();
+    *rPam.GetMark() = *aOrigPam.GetPoint();
+
     if (*rPam.GetPoint() == *rPam.GetMark())
     {
         rPam.GetPoint()->AdjustContent(-nTotalContentGrowth);
