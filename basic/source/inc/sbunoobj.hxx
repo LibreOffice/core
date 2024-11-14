@@ -200,6 +200,7 @@ public:
     bool isInvocationBased() const
         { return mbInvocation; }
     SbxDataType getRealType() const { return mRealType; }
+    const OUString& getUnoName() const { return aUnoProp.Name; }
 };
 
 // factory class to create uno-structs per DIM AS NEW

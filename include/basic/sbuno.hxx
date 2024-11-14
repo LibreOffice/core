@@ -41,4 +41,8 @@ css::uno::Any sbxToUnoValue( const SbxValue* pVar, const css::uno::Type& rType, 
 
 BASIC_DLLPUBLIC void unoToSbxValue( SbxVariable* pVar, const css::uno::Any& aValue );
 
+/// Used by the BASIC debugger to detect very large UNO property values that should not be displayed
+/// because they will stall the program.
+BASIC_DLLPUBLIC bool isVeryLargeUnoProperty(const SbxVariable* pVar);
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

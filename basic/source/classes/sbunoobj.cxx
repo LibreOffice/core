@@ -40,6 +40,7 @@
 #include <com/sun/star/script/ArrayWrapper.hpp>
 #include <com/sun/star/script/CannotConvertException.hpp>
 #include <com/sun/star/script/NativeObjectWrapper.hpp>
+#include <com/sun/star/sheet/XSheetCellCursor.hpp>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/DeploymentException.hpp>
@@ -2585,6 +2586,27 @@ SbUnoProperty::SbUnoProperty
 SbUnoProperty::~SbUnoProperty()
 {}
 
+bool isVeryLargeUnoProperty(SbxVariable const * pVar)
+{
+    auto pUnoVar = dynamic_cast<const SbUnoProperty*>(pVar);
+    if (!pUnoVar)
+        return false;
+    // The ScCellRangeObj methods will attempt to generate massive strings,
+    // which will use up massive amounts of RAM and also lock of the program
+    // for some time.
+    const OUString & aUnoName = pUnoVar->getUnoName();
+    if (aUnoName == "DataArray" || aUnoName == "FormulaArray")
+    {
+        auto pParent = dynamic_cast<const SbUnoObject*>(pUnoVar->GetParent());
+        if (!pParent)
+            return false;
+        css::uno::Any aAny = const_cast<SbUnoObject*>(pParent)->getUnoAny();
+        css::uno::Reference<css::sheet::XSheetCellCursor> xCursor = aAny.query<css::sheet::XSheetCellCursor>();
+        if (xCursor)
+            return true;
+    }
+    return false;
+}
 
 SbxVariable* SbUnoObject::Find( const OUString& rName, SbxClassType t )
 {

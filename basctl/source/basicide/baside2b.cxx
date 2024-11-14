@@ -2314,7 +2314,13 @@ SbxBase* WatchWindow::ImplGetSBXForEntry(const weld::TreeIter& rEntry, bool& rbA
                 // Force getting value
                 SbxValues aRes;
                 aRes.eType = SbxVOID;
-                pVar->Get( aRes );
+                if (!isVeryLargeUnoProperty(pVar))
+                    pVar->Get( aRes );
+                else
+                {
+                    aRes.eType = SbxSTRING;
+                    aRes.pOUString = new OUString("<" + IDEResId(RID_VARIABLE_TOO_LARGE_TO_DISPLAY) + ">");
+                }
             }
         }
         // Array?
@@ -2495,7 +2501,11 @@ void WatchWindow::UpdateWatches(bool bBasicStopped)
             {
                 // extra treatment of arrays
                 SbxDataType eType = pVar->GetType();
-                if ( eType & SbxARRAY )
+                if (isVeryLargeUnoProperty(pVar))
+                {
+                    aWatchStr += "<" + IDEResId(RID_VARIABLE_TOO_LARGE_TO_DISPLAY) + ">";
+                }
+                else if ( eType & SbxARRAY )
                 {
                     // consider multidimensional arrays!
                     if (SbxDimArray* pNewArray = dynamic_cast<SbxDimArray*>(pVar->GetObject()))
