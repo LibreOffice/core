@@ -1064,7 +1064,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
     if ( ( !aActiveLayer.isEmpty() && pPV && ( pPV->IsLayerLocked(aActiveLayer) ||
           !pPV->IsLayerVisible(aActiveLayer) ) ) ||
-          SD_MOD()->GetWaterCan() )
+          SdModule::get()->GetWaterCan() )
     {
         rSet.DisableItem( SID_PASTE );
         rSet.DisableItem( SID_PASTE_SPECIAL );

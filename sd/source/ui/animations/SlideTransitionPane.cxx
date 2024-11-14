@@ -634,7 +634,7 @@ void SlideTransitionPane::updateControls()
     else
     {
         mxRepeatAutoFrame->hide();
-        SdOptions* pOptions = SD_MOD()->GetSdOptions(DocumentType::Impress);
+        SdOptions* pOptions = SdModule::get()->GetSdOptions(DocumentType::Impress);
         mxCB_AUTO_PREVIEW->set_active( pOptions->IsPreviewTransitions() );
     }
 
@@ -1115,7 +1115,7 @@ IMPL_LINK_NOARG(SlideTransitionPane, LoopSoundBoxChecked, weld::Toggleable&, voi
 
 IMPL_LINK_NOARG(SlideTransitionPane, AutoPreviewClicked, weld::Toggleable&, void)
 {
-    SdOptions* pOptions = SD_MOD()->GetSdOptions(DocumentType::Impress);
+    SdOptions* pOptions = SdModule::get()->GetSdOptions(DocumentType::Impress);
     pOptions->SetPreviewTransitions( mxCB_AUTO_PREVIEW->get_active() );
 }
 

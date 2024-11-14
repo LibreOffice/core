@@ -132,8 +132,9 @@ DrawViewShell::DrawViewShell( ViewShellBase& rViewShellBase, vcl::Window* pParen
     doShow();
 
     ConfigureAppBackgroundColor();
-    SD_MOD()->GetColorConfig().AddListener(this);
-    maViewOptions.mnDocBackgroundColor = SD_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
+    SdModule* mod = SdModule::get();
+    mod->GetColorConfig().AddListener(this);
+    maViewOptions.mnDocBackgroundColor = mod->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
 
     if (comphelper::LibreOfficeKit::isActive())
     {
@@ -162,7 +163,7 @@ void DrawViewShell::ImplDestroy()
 {
     destroyXSlideShowInstance();
 
-    SD_MOD()->GetColorConfig().RemoveListener(this);
+    SdModule::get()->GetColorConfig().RemoveListener(this);
 
     mpSelectionChangeHandler->Disconnect();
 

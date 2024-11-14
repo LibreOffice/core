@@ -127,6 +127,8 @@ public:
 
     svtools::ColorConfig& GetColorConfig();
 
+    static auto get() { return static_cast<SdModule*>(SfxApplication::GetModule(SfxToolsModule::Draw)); }
+
 private:
 
     SdOptions*              pImpressOptions;
@@ -172,7 +174,5 @@ private:
 
     std::unique_ptr<svtools::ColorConfig> mpColorConfig;
 };
-
-#define SD_MOD() ( static_cast<SdModule*>(SfxApplication::GetModule(SfxToolsModule::Draw)) )
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

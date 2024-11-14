@@ -307,7 +307,7 @@ uno::Sequence< uno::Type > SAL_CALL SdXShape::getTypes()
     {
         SdrObjKind nObjId = mpShape->getShapeKind();
         uno::Sequence< uno::Type > aTypes;
-        SdTypesCache& gImplTypesCache = SD_MOD()->gImplTypesCache;
+        SdTypesCache& gImplTypesCache = SdModule::get()->gImplTypesCache;
         SdTypesCache::iterator aIter( gImplTypesCache.find( nObjId ) );
         if( aIter == gImplTypesCache.end() )
         {
@@ -382,7 +382,7 @@ css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL SdXShape::getProper
     css::uno::Reference<css::beans::XPropertySetInfo> pInfo;
 
     SdExtPropertySetInfoCache& rCache = (mpModel && mpModel->IsImpressDocument()) ?
-        SD_MOD()->gImplImpressPropertySetInfoCache : SD_MOD()->gImplDrawPropertySetInfoCache;
+        SdModule::get()->gImplImpressPropertySetInfoCache : SdModule::get()->gImplDrawPropertySetInfoCache;
 
     SdExtPropertySetInfoCache::iterator aIter( rCache.find( nObjId ) );
     if( aIter == rCache.end() )

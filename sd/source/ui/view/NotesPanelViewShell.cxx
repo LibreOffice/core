@@ -1362,7 +1362,7 @@ void NotesPanelViewShell::Execute(SfxRequest& rReq)
                     {
                         const SvxSearchItem& rSearchItem = pReqArgs->Get(SID_SEARCH_ITEM);
 
-                        SD_MOD()->SetSearchItem(
+                        SdModule::get()->SetSearchItem(
                             std::unique_ptr<SvxSearchItem>(rSearchItem.Clone()));
                         xFuSearch->SearchAndReplace(&rSearchItem);
                     }

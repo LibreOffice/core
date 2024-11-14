@@ -246,7 +246,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULL *
             bInitDesignMode = false;
         SetDesignMode( bInitDesignMode );
 
-        Update( SD_MOD()->GetSdOptions(pDrawDoc->GetDocumentType()) );
+        Update(SdModule::get()->GetSdOptions(pDrawDoc->GetDocumentType()));
     }
 
 }

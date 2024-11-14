@@ -318,7 +318,7 @@ bool SlideSorterController::Command (
                 // indicator so that the user knows where a page insertion
                 // would take place.
                 mpInsertionIndicatorHandler->Start(false);
-                mpInsertionIndicatorHandler->UpdateIndicatorIcon(SD_MOD()->pTransferClip);
+                mpInsertionIndicatorHandler->UpdateIndicatorIcon(SdModule::get()->pTransferClip);
                 mpInsertionIndicatorHandler->UpdatePosition(
                     pWindow->PixelToLogic(rEvent.GetMousePosPixel()),
                     InsertionIndicatorHandler::MoveMode);

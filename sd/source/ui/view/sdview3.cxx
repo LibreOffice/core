@@ -300,15 +300,16 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
     // try to get own transfer data
     if( pImplementation )
     {
-        if( SD_MOD()->pTransferClip == pImplementation )
-            pOwnData = SD_MOD()->pTransferClip;
-        else if( SD_MOD()->pTransferDrag == pImplementation )
+        SdModule* mod = SdModule::get();
+        if (mod->pTransferClip == pImplementation)
+            pOwnData = mod->pTransferClip;
+        else if (mod->pTransferDrag == pImplementation)
         {
-            pOwnData = SD_MOD()->pTransferDrag;
+            pOwnData = mod->pTransferDrag;
             bSelfDND = true;
         }
-        else if( SD_MOD()->pTransferSelection == pImplementation )
-            pOwnData = SD_MOD()->pTransferSelection;
+        else if (mod->pTransferSelection == pImplementation)
+            pOwnData = mod->pTransferSelection;
     }
 
     const bool bGroupUndoFromDragWithDrop = bSelfDND && mpDragSrcMarkList && IsUndoEnabled();
@@ -467,7 +468,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                                 // calculate real position of current
                                 // source objects, if necessary (#103207)
-                                if( pOwnData == SD_MOD()->pTransferSelection )
+                                if (pOwnData == SdModule::get()->pTransferSelection)
                                 {
                                     ::tools::Rectangle aCurBoundRect;
 

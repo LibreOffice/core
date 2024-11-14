@@ -519,7 +519,7 @@ void SAL_CALL SlideShow::setPropertyValue( const OUString& aPropertyName, const 
         {
             bIllegalArgument = false;
 
-            SdOptions* pOptions = SD_MOD()->GetSdOptions(DocumentType::Impress);
+            SdOptions* pOptions = SdModule::get()->GetSdOptions(DocumentType::Impress);
             pOptions->SetDisplay( nDisplay );
 
             FullScreenWorkWindow *pWin = dynamic_cast<FullScreenWorkWindow *>(GetWorkWindow());
@@ -598,7 +598,7 @@ Any SAL_CALL SlideShow::getPropertyValue( const OUString& PropertyName )
         return Any( rPresSettings.mbShowPauseLogo );
     case ATTR_PRESENT_DISPLAY:
     {
-        SdOptions* pOptions = SD_MOD()->GetSdOptions(DocumentType::Impress);
+        SdOptions* pOptions = SdModule::get()->GetSdOptions(DocumentType::Impress);
         return Any(pOptions->GetDisplay());
     }
 
@@ -1216,7 +1216,7 @@ sal_Int32 SlideShow::GetDisplay()
 {
     sal_Int32 nDisplay = 0;
 
-    SdOptions* pOptions = SD_MOD()->GetSdOptions(DocumentType::Impress);
+    SdOptions* pOptions = SdModule::get()->GetSdOptions(DocumentType::Impress);
     if( pOptions )
         nDisplay = pOptions->GetDisplay();
 

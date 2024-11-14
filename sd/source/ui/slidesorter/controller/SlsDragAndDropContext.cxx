@@ -44,7 +44,7 @@ DragAndDropContext::DragAndDropContext (SlideSorter& rSlideSorter)
     // For properly handling transferables created by the navigator we
     // need additional information.  For this a user data object is
     // created that contains the necessary information.
-    SdTransferable* pTransferable = SD_MOD()->pTransferDrag;
+    SdTransferable* pTransferable = SdModule::get()->pTransferDrag;
     SdPageObjsTLV::SdPageObjsTransferable* pTreeListBoxTransferable
         = dynamic_cast<SdPageObjsTLV::SdPageObjsTransferable*>(pTransferable);
     if (pTreeListBoxTransferable!=nullptr && !TransferableData::GetFromTransferable(pTransferable))

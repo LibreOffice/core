@@ -1960,7 +1960,7 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderReferenceTextBody(
 
                 aDateTimeText = SvxDateTimeField::GetFormatted(
                     aDateTime, aDateTime, eDate,
-                    eTime, *(SD_MOD()->GetNumberFormatter()),
+                    eTime, *(SdModule::get()->GetNumberFormatter()),
                     rLanguageTag.getLanguageType());
             }
 

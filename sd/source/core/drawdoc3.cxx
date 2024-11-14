@@ -444,12 +444,13 @@ bool SdDrawDocument::InsertBookmarkAsPage(
 
     if( bNoDialogs )
     {
+        SdModule* mod = SdModule::get();
         // If this is clipboard, then no need to scale objects:
         // this will make copied masters to differ from the originals,
         // and thus InsertBookmarkAsPage_FindDuplicateLayouts will
         // duplicate masters on insert to same document
-        m_bTransportContainer = (SD_MOD()->pTransferClip &&
-                               SD_MOD()->pTransferClip->GetWorkDocument() == this);
+        m_bTransportContainer = (mod->pTransferClip &&
+                               mod->pTransferClip->GetWorkDocument() == this);
         if (!m_bTransportContainer)
         {
             if (rBookmarkList.empty())

@@ -618,7 +618,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         return;
 
     // get SdOptions
-    SdOptions* pOptions = SD_MOD()->GetSdOptions(GetDoc()->GetDocumentType());
+    SdOptions* pOptions = SdModule::get()->GetSdOptions(GetDoc()->GetDocumentType());
     sal_uInt32 nDefaultObjectSizeWidth(pOptions->GetDefaultObjectSizeWidth());
     sal_uInt32 nDefaultObjectSizeHeight(pOptions->GetDefaultObjectSizeHeight());
 

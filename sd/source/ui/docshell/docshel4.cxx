@@ -105,7 +105,7 @@ SfxPrinter* DrawDocShell::GetPrinter(bool bCreate)
                             SID_PRINTER_CHANGESTODOC,   SID_PRINTER_CHANGESTODOC,
                             ATTR_OPTIONS_PRINT,         ATTR_OPTIONS_PRINT>>( GetPool() );
         // set PrintOptionsSet
-        SdOptionsPrintItem aPrintItem( SD_MOD()->GetSdOptions(mpDoc->GetDocumentType()) );
+        SdOptionsPrintItem aPrintItem(SdModule::get()->GetSdOptions(mpDoc->GetDocumentType()));
         SfxFlagItem aFlagItem( SID_PRINTER_CHANGESTODOC );
         SfxPrinterChangeFlags nFlags =
                 (aPrintItem.GetOptionsPrint().IsWarningSize() ? SfxPrinterChangeFlags::CHG_SIZE : SfxPrinterChangeFlags::NONE) |
@@ -168,7 +168,7 @@ void DrawDocShell::UpdateFontList()
     if ( mpDoc->GetPrinterIndependentLayout() == css::document::PrinterIndependentLayout::DISABLED )
         pRefDevice = GetPrinter(true);
     else
-        pRefDevice = SD_MOD()->GetVirtualRefDevice();
+        pRefDevice = SdModule::get()->GetVirtualRefDevice();
     mpFontList.reset( new FontList(pRefDevice, nullptr) );
     SvxFontListItem aFontListItem( mpFontList.get(), SID_ATTR_CHAR_FONTLIST );
     PutItem( aFontListItem );
@@ -218,7 +218,7 @@ void DrawDocShell::UpdateRefDevice()
             break;
 
         case css::document::PrinterIndependentLayout::ENABLED:
-            pRefDevice = SD_MOD()->GetVirtualRefDevice();
+            pRefDevice = SdModule::get()->GetVirtualRefDevice();
             break;
 
         default:

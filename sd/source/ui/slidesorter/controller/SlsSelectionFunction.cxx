@@ -941,7 +941,7 @@ void SelectionFunction::ModeHandler::StartDrag (
     // modifier key can trigger a MouseMotion event in the originating
     // window (focus still in there).  Together with the mouse button pressed
     // (drag-and-drop is active) this triggers the start of drag-and-drop.)
-    if (SD_MOD()->pTransferDrag != nullptr)
+    if (SdModule::get()->pTransferDrag != nullptr)
         return;
 
     mrSelectionFunction.SwitchToDragAndDropMode(rMousePosition);
@@ -1389,14 +1389,15 @@ DragAndDropModeHandler::DragAndDropModeHandler (
     vcl::Window* pWindow)
     : ModeHandler(rSlideSorter, rSelectionFunction, false)
 {
-    SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
+    SdModule* mod = SdModule::get();
+    SdTransferable* pDragTransferable = mod->pTransferDrag;
     if (pDragTransferable==nullptr && mrSlideSorter.GetViewShell() != nullptr)
     {
         SlideSorterViewShell* pSlideSorterViewShell
             = dynamic_cast<SlideSorterViewShell*>(mrSlideSorter.GetViewShell());
         if (pSlideSorterViewShell != nullptr)
             pSlideSorterViewShell->StartDrag(rMousePosition, pWindow);
-        pDragTransferable = SD_MOD()->pTransferDrag;
+        pDragTransferable = mod->pTransferDrag;
     }
 
     mpDragAndDropContext.reset(new DragAndDropContext(mrSlideSorter));

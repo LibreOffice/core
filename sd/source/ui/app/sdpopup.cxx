@@ -69,7 +69,7 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
         m_xPopup->append_radio(OUString::number(nID++), SdResId(STR_STANDARD_SMALL));
         m_xPopup->append_radio(OUString::number(nID++), SdResId(STR_STANDARD_BIG));
 
-        SvNumberFormatter* pNumberFormatter = SD_MOD()->GetNumberFormatter();
+        SvNumberFormatter* pNumberFormatter = SdModule::get()->GetNumberFormatter();
         aDateField.SetFormat( SvxDateFormat::A );    // 13.02.96
         m_xPopup->append_radio(OUString::number(nID++), aDateField.GetFormatted(*pNumberFormatter, eLanguage));
         aDateField.SetFormat( SvxDateFormat::B );    // 13.02.1996
@@ -99,7 +99,7 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
         //SvxTimeFormat::System,         // is not used
         m_xPopup->append_radio(OUString::number(nID++), SdResId(STR_STANDARD_NORMAL));
 
-        SvNumberFormatter* pNumberFormatter = SD_MOD()->GetNumberFormatter();
+        SvNumberFormatter* pNumberFormatter = SdModule::get()->GetNumberFormatter();
         aTimeField.SetFormat( SvxTimeFormat::HH24_MM );    // 13:49
         m_xPopup->append_radio(OUString::number(nID++), aTimeField.GetFormatted(*pNumberFormatter, eLanguage));
         aTimeField.SetFormat( SvxTimeFormat::HH24_MM_SS );   // 13:49:38

@@ -743,7 +743,7 @@ void CustomAnimationPane::updateControls()
     mxPBMoveUp->set_sensitive(mxView.is() &&  bEnableUp);
     mxPBMoveDown->set_sensitive(mxView.is() && bEnableDown);
 
-    SdOptions* pOptions = SD_MOD()->GetSdOptions(DocumentType::Impress);
+    SdOptions* pOptions = SdModule::get()->GetSdOptions(DocumentType::Impress);
     mxCBAutoPreview->set_active(pOptions->IsPreviewChangedEffects());
 
     updateMotionPathTags();
@@ -2320,7 +2320,7 @@ void CustomAnimationPane::implControlHdl(const weld::Widget* pControl)
         onPreview( true );
     else if (pControl == mxCBAutoPreview.get())
     {
-        SdOptions* pOptions = SD_MOD()->GetSdOptions(DocumentType::Impress);
+        SdOptions* pOptions = SdModule::get()->GetSdOptions(DocumentType::Impress);
         pOptions->SetPreviewChangedEffects(mxCBAutoPreview->get_active());
     }
 }

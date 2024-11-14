@@ -431,7 +431,7 @@ void HeaderFooterTabPage::FillFormatList( sal_Int32 nSelectedPos )
         OUString aStr( SvxDateTimeField::GetFormatted(
                 aDateTime, aDateTime,
                 nDateTimeFormats[nFormat].meDateFormat, nDateTimeFormats[nFormat].meTimeFormat,
-                *(SD_MOD()->GetNumberFormatter()), eLanguage ) );
+                *(SdModule::get()->GetNumberFormatter()), eLanguage ) );
         mxCBDateTimeFormat->append_text(aStr);
         if (nFormat == nSelectedPos)
             mxCBDateTimeFormat->set_active(nFormat);

@@ -1914,7 +1914,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
                 vcl::Window* pWin = GetActiveWindow();
                 ScopedVclPtr<AbstractSdInsertLayerDlg> pDlg( pFact->CreateSdInsertLayerDlg(pWin ? pWin->GetFrameWeld() : nullptr, aNewAttr, true, SdResId(STR_INSERTLAYER)) );
-                pDlg->SetHelpId( SD_MOD()->GetSlotPool()->GetSlot( SID_INSERTLAYER )->GetCommand() );
+                pDlg->SetHelpId( SdModule::get()->GetSlotPool()->GetSlot( SID_INSERTLAYER )->GetCommand() );
 
                 // test for already existing names
                 bool bLoop = true;
@@ -2067,7 +2067,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
                 vcl::Window* pWin = GetActiveWindow();
                 ScopedVclPtr<AbstractSdInsertLayerDlg> pDlg( pFact->CreateSdInsertLayerDlg(pWin ? pWin->GetFrameWeld() : nullptr, aNewAttr, bDelete, SdResId(STR_MODIFYLAYER)) );
-                pDlg->SetHelpId( SD_MOD()->GetSlotPool()->GetSlot( SID_MODIFYLAYER )->GetCommand() );
+                pDlg->SetHelpId( SdModule::get()->GetSlotPool()->GetSlot( SID_MODIFYLAYER )->GetCommand() );
 
                 // test for already existing names
                 bool    bLoop = true;

@@ -164,7 +164,7 @@ void FuSummaryPage::DoExecute( SfxRequest& )
                     pOutl->EnableUndo(false);
 
                     if (mpDocSh)
-                        pOutl->SetRefDevice(SD_MOD()->GetVirtualRefDevice());
+                        pOutl->SetRefDevice(SdModule::get()->GetVirtualRefDevice());
 
                     pOutl->SetDefTab( mpDoc->GetDefaultTabulator() );
                     pOutl->SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(mpDoc->GetStyleSheetPool()));

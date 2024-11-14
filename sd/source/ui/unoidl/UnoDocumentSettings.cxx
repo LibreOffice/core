@@ -430,7 +430,7 @@ DocumentSettings::_setPropertyValues(const PropertyMapEntry** ppEntries,
     }
     else
     {
-        aOptionsPrintItem.SetOptions( SD_MOD()->GetSdOptions(pDoc->GetDocumentType()) );
+        aOptionsPrintItem.SetOptions(SdModule::get()->GetSdOptions(pDoc->GetDocumentType()));
     }
     SdOptionsPrint& aPrintOpts = aOptionsPrintItem.GetOptionsPrint();
 
@@ -1104,7 +1104,7 @@ DocumentSettings::_getPropertyValues(
     }
     else
     {
-        aOptionsPrintItem.SetOptions( SD_MOD()->GetSdOptions(pDoc->GetDocumentType()) );
+        aOptionsPrintItem.SetOptions(SdModule::get()->GetSdOptions(pDoc->GetDocumentType()));
     }
     SdOptionsPrint& aPrintOpts = aOptionsPrintItem.GetOptionsPrint();
 

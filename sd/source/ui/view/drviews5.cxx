@@ -136,7 +136,7 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
 
     // this option has to be adjust at the model
     GetDoc()->SetPickThroughTransparentTextFrames(
-             SD_MOD()->GetSdOptions(GetDoc()->GetDocumentType())->IsPickThrough());
+        SdModule::get()->GetSdOptions(GetDoc()->GetDocumentType())->IsPickThrough());
 
     // initialization of the Character-(Screen-) attribute
     if (HasRuler() != pView->HasRuler())

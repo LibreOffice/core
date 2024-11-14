@@ -425,7 +425,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
     SdOutliner aOutliner( mpDoc, OutlinerMode::TextObject );
 
     // set reference device
-    aOutliner.SetRefDevice( SD_MOD()->GetVirtualRefDevice() );
+    aOutliner.SetRefDevice(SdModule::get()->GetVirtualRefDevice());
 
     SdPage* pPage = static_cast<DrawViewShell*>(mpViewShell)->GetActualPage();
     aLayoutName = pPage->GetLayoutName();
@@ -577,7 +577,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
     aOutliner.SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(mpDoc->GetStyleSheetPool()));
 
     // set reference device
-    aOutliner.SetRefDevice(SD_MOD()->GetVirtualRefDevice());
+    aOutliner.SetRefDevice(SdModule::get()->GetVirtualRefDevice());
     aOutliner.SetPaperSize(Size(0x7fffffff, 0x7fffffff));
 
     SvStream* pStream = pMedium->GetInStream();

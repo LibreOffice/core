@@ -558,7 +558,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
         }
     }
     else if( rCEvt.GetCommand() == CommandEventId::ContextMenu && !bNativeShow &&
-             pWin != nullptr && !mpDrawView->IsAction() && !SD_MOD()->GetWaterCan() )
+             pWin != nullptr && !mpDrawView->IsAction() && !SdModule::get()->GetWaterCan() )
     {
         OUString aPopupId; // Resource name for popup menu
 

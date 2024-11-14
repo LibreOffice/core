@@ -368,7 +368,7 @@ void ViewShellBase::LateInit (const OUString& rsDefaultView)
             pFrameView->SetViewShellTypeOnLoad(pViewShell->GetShellType());
     }
     // Show/Hide the TabBar
-    SdOptions* pOptions = SD_MOD()->GetSdOptions(GetDocument()->GetDocumentType());
+    SdOptions* pOptions = SdModule::get()->GetSdOptions(GetDocument()->GetDocumentType());
     bool bIsTabBarVisible = pOptions->IsTabBarVisible();
     mpImpl->SetUserWantsTabBar( bIsTabBarVisible );
 }
@@ -648,7 +648,7 @@ void ViewShellBase::Execute (SfxRequest& rRequest)
 
         case SID_TOGGLE_TABBAR_VISIBILITY:
         {
-            SdOptions* pOptions = SD_MOD()->GetSdOptions(GetDocument()->GetDocumentType());
+            SdOptions* pOptions = SdModule::get()->GetSdOptions(GetDocument()->GetDocumentType());
             bool bIsTabBarVisible = pOptions->IsTabBarVisible();
             pOptions->SetTabBarVisible( !bIsTabBarVisible );
             mpImpl->SetUserWantsTabBar( !bIsTabBarVisible );

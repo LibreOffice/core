@@ -83,7 +83,7 @@ css::uno::Reference< css::datatransfer::XTransferable > View::CreateClipboardDat
     // dynamically created object is destroyed automatically
     rtl::Reference<SdTransferable> pTransferable = new SdTransferable( &mrDoc, nullptr, false );
 
-    SD_MOD()->pTransferClip = pTransferable.get();
+    SdModule::get()->pTransferClip = pTransferable.get();
 
     mrDoc.CreatingDataObj( pTransferable.get() );
     pTransferable->SetWorkDocument( static_cast<SdDrawDocument*>(CreateMarkedObjModel().release()) );
@@ -145,7 +145,7 @@ css::uno::Reference< css::datatransfer::XTransferable > View::CreateDragDataObje
 {
     rtl::Reference<SdTransferable> pTransferable = new SdTransferable( &mrDoc, pWorkView, false );
 
-    SD_MOD()->pTransferDrag = pTransferable.get();
+    SdModule::get()->pTransferDrag = pTransferable.get();
 
     std::unique_ptr<TransferableObjectDescriptor> pObjDesc(new TransferableObjectDescriptor);
     OUString                        aDisplayName;
@@ -196,7 +196,7 @@ css::uno::Reference< css::datatransfer::XTransferable > View::CreateSelectionDat
     std::unique_ptr<TransferableObjectDescriptor> pObjDesc(new TransferableObjectDescriptor);
     const ::tools::Rectangle                 aMarkRect( GetAllMarkedRect() );
 
-    SD_MOD()->pTransferSelection = pTransferable.get();
+    SdModule::get()->pTransferSelection = pTransferable.get();
 
     if( mpDocSh )
     {
@@ -232,10 +232,11 @@ void View::ClearSelectionClipboard() // true case
         return;
     if (!mpViewSh->GetActiveWindow())
         return;
-    if (SD_MOD()->pTransferSelection && SD_MOD()->pTransferSelection->GetView() == this)
+    SdModule* mod = SdModule::get();
+    if (mod->pTransferSelection && mod->pTransferSelection->GetView() == this)
     {
         TransferableHelper::ClearPrimarySelection();
-        SD_MOD()->pTransferSelection = nullptr;
+        mod->pTransferSelection = nullptr;
     }
 }
 
@@ -378,7 +379,7 @@ void View::DragFinished( sal_Int8 nDropAction )
         BegUndo(aStr + " " + mpDragSrcMarkList->GetMarkDescription());
     }
 
-    SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
+    SdTransferable* pDragTransferable = SdModule::get()->pTransferDrag;
 
     if( pDragTransferable )
         pDragTransferable->SetView( nullptr );
@@ -473,7 +474,7 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
 
         if( !bIsInsideOutlinerView )
         {
-            SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
+            SdTransferable* pDragTransferable = SdModule::get()->pTransferDrag;
 
             if(pDragTransferable && (nDropAction & DND_ACTION_LINK))
             {

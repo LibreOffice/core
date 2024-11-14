@@ -130,7 +130,7 @@ void TableObjectBar::Execute( SfxRequest& rReq )
             vcl::Window* pWin = mpView->GetViewShell()->GetParentWindow();
             VclPtr<SvxAbstractInsRowColDlg> pDlg( pFact->CreateSvxInsRowColDlg(pWin ? pWin->GetFrameWeld() : nullptr,
                                                                nSlotId == SID_TABLE_INSERT_COL_DLG,
-                                                               SD_MOD()->GetSlotPool()->GetSlot(nSlotId)->GetCommand()) );
+                                                               SdModule::get()->GetSlotPool()->GetSlot(nSlotId)->GetCommand()) );
             pDlg->StartExecuteAsync(
                 [pDlg, xRequest=std::move(xRequest), nSlotId, xController, pBindings] (sal_Int32 nResult) mutable ->void
                 {

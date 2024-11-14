@@ -3975,7 +3975,7 @@ void SdXImpressDocument::initializeForTiledRendering(const css::uno::Sequence<cs
         }
 
         // Disable comments if requested
-        SdOptions* pOptions = SD_MOD()->GetSdOptions(mpDoc->GetDocumentType());
+        SdOptions* pOptions = SdModule::get()->GetSdOptions(mpDoc->GetDocumentType());
         pOptions->SetShowComments(comphelper::LibreOfficeKit::isTiledAnnotations());
 
         pViewShell->SetRuler(false);

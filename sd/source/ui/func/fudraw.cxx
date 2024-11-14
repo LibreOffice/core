@@ -468,7 +468,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
 
     if (mpView->IsDragObj())
     {
-        if (SD_MOD()->GetWaterCan() && !mpView->PickHandle(aPnt))
+        if (SdModule::get()->GetWaterCan() && !mpView->PickHandle(aPnt))
         {
             // water can mode
             bDefPointer = false;
@@ -479,7 +479,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
     {
         SdrHdl* pHdl = mpView->PickHandle(aPnt);
 
-        if (SD_MOD()->GetWaterCan() && !pHdl)
+        if (SdModule::get()->GetWaterCan() && !pHdl)
         {
             // water can mode
             bDefPointer = false;
@@ -656,7 +656,7 @@ void FuDraw::DoubleClick(const MouseEvent& rMEvt)
                                               SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
             }
             else if ( ( DynCastSdrTextObj( pObj ) != nullptr || dynamic_cast< const SdrObjGroup *>( pObj ) !=  nullptr ) &&
-                      !SD_MOD()->GetWaterCan()                            &&
+                      !SdModule::get()->GetWaterCan() &&
                       mpViewShell->GetFrameView()->IsDoubleClickTextEdit() &&
                       !mpDocSh->IsReadOnly())
             {

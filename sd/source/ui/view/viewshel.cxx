@@ -383,7 +383,7 @@ void ViewShell::UIDeactivated( SfxInPlaceClient*  )
 void ViewShell::Deactivate(bool bIsMDIActivate)
 {
     // remove view from a still active drag'n'drop session
-    SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
+    SdTransferable* pDragTransferable = SdModule::get()->pTransferDrag;
 
     if (IsMainViewShell())
         GetDocSh()->Disconnect(this);

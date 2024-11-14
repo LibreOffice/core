@@ -227,7 +227,7 @@ void Clipboard::DoCopy ()
 
 void Clipboard::DoPaste ()
 {
-    SdTransferable* pClipTransferable = SD_MOD()->pTransferClip;
+    SdTransferable* pClipTransferable = SdModule::get()->pTransferClip;
 
     if (pClipTransferable==nullptr || !pClipTransferable->IsPageTransferable())
         return;
@@ -288,7 +288,7 @@ sal_Int32 Clipboard::GetInsertionPosition ()
 
 sal_Int32 Clipboard::PasteTransferable (sal_Int32 nInsertPosition)
 {
-    SdTransferable* pClipTransferable = SD_MOD()->pTransferClip;
+    SdTransferable* pClipTransferable = SdModule::get()->pTransferClip;
     model::SlideSorterModel& rModel (mrSlideSorter.GetModel());
     bool bMergeMasterPages = !pClipTransferable->HasSourceDoc (rModel.GetDocument());
     sal_uInt16 nInsertIndex (rModel.GetCoreIndex(nInsertPosition));
@@ -432,9 +432,9 @@ void Clipboard::CreateSlideTransferable (
         std::move(aRepresentatives));
 
     if (bDrag)
-        SD_MOD()->pTransferDrag = pTransferable.get();
+        SdModule::get()->pTransferDrag = pTransferable.get();
     else
-        SD_MOD()->pTransferClip = pTransferable.get();
+        SdModule::get()->pTransferClip = pTransferable.get();
 
     pDocument->CreatingDataObj (pTransferable.get());
     pTransferable->SetWorkDocument(pDocument->AllocSdDrawDocument());
@@ -631,7 +631,7 @@ sal_Int8 Clipboard::AcceptDrop (
             // Use the copy action when the drop action is the default, i.e. not
             // explicitly set to move or link, and when the source and
             // target models are not the same.
-            SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
+            SdTransferable* pDragTransferable = SdModule::get()->pTransferDrag;
             if (pDragTransferable != nullptr
                 && pDragTransferable->IsPageTransferable()
                 && ((rEvent.maDragEvent.DropAction
@@ -693,7 +693,7 @@ sal_Int8 Clipboard::ExecuteDrop (
         case DT_PAGE:
         case DT_PAGE_FROM_NAVIGATOR:
         {
-            SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
+            SdTransferable* pDragTransferable = SdModule::get()->pTransferDrag;
             const Point aEventModelPosition (
                 pTargetWindow->PixelToLogic (rEvent.maPosPixel));
             const sal_Int32 nXOffset (std::abs (pDragTransferable->GetStartPos().X()
@@ -829,7 +829,7 @@ sal_uInt16 Clipboard::DetermineInsertPosition ()
 
 Clipboard::DropType Clipboard::IsDropAccepted() const
 {
-    const SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
+    const SdTransferable* pDragTransferable = SdModule::get()->pTransferDrag;
     if (pDragTransferable == nullptr)
         return DT_NONE;
 

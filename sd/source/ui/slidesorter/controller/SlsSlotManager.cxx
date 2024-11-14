@@ -366,7 +366,7 @@ void SlotManager::FuSupport (SfxRequest& rRequest)
 
         case SID_PASTE:
         {
-            SdTransferable* pTransferClip = SD_MOD()->pTransferClip;
+            SdTransferable* pTransferClip = SdModule::get()->pTransferClip;
             if( pTransferClip )
             {
                 SfxObjectShell* pTransferDocShell = pTransferClip->GetDocShell().get();
@@ -697,7 +697,7 @@ void SlotManager::GetMenuState (SfxItemSet& rSet)
 
 void SlotManager::GetClipboardState ( SfxItemSet& rSet)
 {
-    SdTransferable* pTransferClip = SD_MOD()->pTransferClip;
+    SdTransferable* pTransferClip = SdModule::get()->pTransferClip;
 
     if (rSet.GetItemState(SID_PASTE)  == SfxItemState::DEFAULT
         || rSet.GetItemState(SID_PASTE_SPECIAL)  == SfxItemState::DEFAULT)

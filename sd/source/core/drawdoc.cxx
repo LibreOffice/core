@@ -159,7 +159,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 
     // Set measuring unit (of the application) and scale (of SdMod)
     sal_Int32 nX, nY;
-    SdOptions* pOptions = SD_MOD()->GetSdOptions(meDocType);
+    SdOptions* pOptions = SdModule::get()->GetSdOptions(meDocType);
     nX = officecfg::Office::Draw::Zoom::ScaleX::get();
     nY = officecfg::Office::Draw::Zoom::ScaleY::get();
     SvtSysLocale aSysLocale;
@@ -935,7 +935,7 @@ SdOutliner* SdDrawDocument::GetOutliner(bool bCreateOutliner)
         mpOutliner.reset(new SdOutliner( this, OutlinerMode::TextObject ));
 
         if (mpDocSh)
-            mpOutliner->SetRefDevice( SD_MOD()->GetVirtualRefDevice() );
+            mpOutliner->SetRefDevice(SdModule::get()->GetVirtualRefDevice());
 
         mpOutliner->SetDefTab( m_nDefaultTabulator );
         mpOutliner->SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(GetStyleSheetPool()));
@@ -959,7 +959,7 @@ SdOutliner* SdDrawDocument::GetInternalOutliner(bool bCreateOutliner)
         mpInternalOutliner->EnableUndo( false );
 
         if (mpDocSh)
-            mpInternalOutliner->SetRefDevice( SD_MOD()->GetVirtualRefDevice() );
+            mpInternalOutliner->SetRefDevice(SdModule::get()->GetVirtualRefDevice());
 
         mpInternalOutliner->SetDefTab( m_nDefaultTabulator );
         mpInternalOutliner->SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(GetStyleSheetPool()));
@@ -1097,7 +1097,7 @@ void SdDrawDocument::MasterPageListChanged()
 
 void SdDrawDocument::SetCalcFieldValueHdl(::Outliner* pOutliner)
 {
-    pOutliner->SetCalcFieldValueHdl(LINK(SD_MOD(), SdModule, CalcFieldValueHdl));
+    pOutliner->SetCalcFieldValueHdl(LINK(SdModule::get(), SdModule, CalcFieldValueHdl));
 }
 
 sal_uInt16 SdDrawDocument::GetAnnotationAuthorIndex( const OUString& rAuthor )

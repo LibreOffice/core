@@ -92,7 +92,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
     aOutliner.EnableUndo(false);
 
     if (mpDocSh)
-        aOutliner.SetRefDevice( SD_MOD()->GetVirtualRefDevice() );
+        aOutliner.SetRefDevice(SdModule::get()->GetVirtualRefDevice());
 
     aOutliner.SetDefTab( mpDoc->GetDefaultTabulator() );
     aOutliner.SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(mpDoc->GetStyleSheetPool()));

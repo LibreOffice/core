@@ -128,7 +128,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 {
     pHdl = nullptr;
     bool bReturn = FuDraw::MouseButtonDown(rMEvt);
-    bool bWaterCan = SD_MOD()->GetWaterCan();
+    bool bWaterCan = SdModule::get()->GetWaterCan();
     const bool bReadOnly = mpDocSh->IsReadOnly();
     // When the right mouse button is pressed then only select objects
     // (and deselect others) as a preparation for showing the context
@@ -801,7 +801,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
             mpView->EndAction();
         }
 
-        if( SD_MOD()->GetWaterCan() )
+        if (SdModule::get()->GetWaterCan())
         {
             if( rMEvt.IsRight() )
             {

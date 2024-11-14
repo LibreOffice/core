@@ -558,7 +558,7 @@ void LayoutMenu::Clear()
 
 void LayoutMenu::ShowContextMenu(const Point* pPos)
 {
-    if (SD_MOD()->GetWaterCan())
+    if (SdModule::get()->GetWaterCan())
         return;
 
     // Determine the position where to show the menu.

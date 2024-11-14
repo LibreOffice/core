@@ -545,7 +545,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                     rSet.Put(SfxBoolItem(nWhich,false));
                 else
                 {
-                    SfxBoolItem aItem(nWhich, SD_MOD()->GetWaterCan());
+                    SfxBoolItem aItem(nWhich, SdModule::get()->GetWaterCan());
                     aAllSet.Put( aItem );
                 }
             }

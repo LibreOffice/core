@@ -250,12 +250,12 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
         case SID_STYLE_WATERCAN:
         {
-            if( !SD_MOD()->GetWaterCan() )
+            if (SdModule* mod = SdModule::get(); !mod->GetWaterCan())
             {
                 if (pArgs && pArgs->GetItemState( nSId ) == SfxItemState::SET)
                 {
                     aStyleName = static_cast<const SfxStringItem &>( pArgs->Get( nSId ) ).GetValue();
-                    SD_MOD()->SetWaterCan( true );
+                    mod->SetWaterCan(true);
                     pStyleSheet = pSSPool->Find( aStyleName, nFamily);
                 }
                 // no presentation object templates, they are only allowed implicitly
@@ -269,11 +269,11 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
                 }
                 else
-                    SD_MOD()->SetWaterCan( false );
+                    mod->SetWaterCan(false);
             }
             else
             {
-                SD_MOD()->SetWaterCan( false );
+                mod->SetWaterCan(false);
                 // we have to re-enable to tools-bar
                 mpViewShell->Invalidate();
             }

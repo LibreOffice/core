@@ -492,7 +492,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                 {
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     ScopedVclPtr<SfxAbstractInsertObjectDialog> pDlg(
-                            pFact->CreateInsertObjectDialog( mpViewShell->GetFrameWeld(), SD_MOD()->GetSlotPool()->GetSlot(nSlotId)->GetCommand(),
+                            pFact->CreateInsertObjectDialog( mpViewShell->GetFrameWeld(), SdModule::get()->GetSlotPool()->GetSlot(nSlotId)->GetCommand(),
                             xStorage, &aServerLst ));
                     pDlg->Execute();
                     bCreateNew = pDlg->IsCreateNew();

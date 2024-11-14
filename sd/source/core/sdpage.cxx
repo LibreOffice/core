@@ -2365,7 +2365,7 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eO
     {
         SfxItemPool* pPool(static_cast< SdDrawDocument& >(getSdrModelFromSdrPage()).GetDrawOutliner().GetEmptyItemSet().GetPool());
         pOutl = new ::Outliner( pPool, OutlinerMode::OutlineObject );
-        pOutl->SetRefDevice( SD_MOD()->GetVirtualRefDevice() );
+        pOutl->SetRefDevice(SdModule::get()->GetVirtualRefDevice());
         pOutl->SetEditTextObjectPool(pPool);
         pOutl->SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(getSdrModelFromSdrPage().GetStyleSheetPool()));
         pOutl->EnableUndo(false);

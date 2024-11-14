@@ -465,7 +465,7 @@ bool SdPageObjsTLV::DoDrag()
         {
             AddShapeToTransferable(*m_xHelper, *pObject);
             m_xHelper->SetView(pView);
-            SD_MOD()->pTransferDrag = m_xHelper.get();
+            SdModule::get()->pTransferDrag = m_xHelper.get();
         }
 
         // Unnamed shapes have to be selected to be recognized by the
@@ -479,7 +479,7 @@ bool SdPageObjsTLV::DoDrag()
     else
     {
         m_xHelper->SetView(pView);
-        SD_MOD()->pTransferDrag = m_xHelper.get();
+        SdModule::get()->pTransferDrag = m_xHelper.get();
     }
 
     return false;

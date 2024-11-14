@@ -177,8 +177,7 @@ AnnotationManagerImpl::AnnotationManagerImpl( ViewShellBase& rViewShellBase )
 , mbShowAnnotations( true )
 , mnUpdateTagsEvent( nullptr )
 {
-    SdOptions* pOptions = SD_MOD()->GetSdOptions(mpDoc->GetDocumentType());
-    if( pOptions )
+    if (SdOptions* pOptions = SdModule::get()->GetSdOptions(mpDoc->GetDocumentType()))
         mbShowAnnotations = pOptions->IsShowComments();
 }
 
@@ -289,8 +288,7 @@ void AnnotationManagerImpl::ShowAnnotations( bool bShow )
     {
         mbShowAnnotations = bShow;
 
-        SdOptions* pOptions = SD_MOD()->GetSdOptions(mpDoc->GetDocumentType());
-        if( pOptions )
+        if (SdOptions* pOptions = SdModule::get()->GetSdOptions(mpDoc->GetDocumentType()))
             pOptions->SetShowComments( mbShowAnnotations );
 
         UpdateTags();

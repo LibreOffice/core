@@ -40,15 +40,16 @@ void SAL_CALL SdUnoModule::dispatchWithNotification( const util::URL& aURL, cons
 
     SolarMutexGuard aGuard;
     SdDLL::Init();
-    const SfxSlot* pSlot = SD_MOD()->GetInterface()->GetSlot( aURL.Complete );
+    SdModule* mod = SdModule::get();
+    const SfxSlot* pSlot = mod->GetInterface()->GetSlot( aURL.Complete );
 
     sal_Int16 aState = frame::DispatchResultState::DONTKNOW;
     if ( !pSlot )
         aState = frame::DispatchResultState::FAILURE;
     else
     {
-        SfxRequest aReq( pSlot, aArgs, SfxCallMode::SYNCHRON, SD_MOD()->GetPool() );
-        const SfxPoolItemHolder aResult(SD_MOD()->ExecuteSlot(aReq));
+        SfxRequest aReq( pSlot, aArgs, SfxCallMode::SYNCHRON, mod->GetPool() );
+        const SfxPoolItemHolder aResult(mod->ExecuteSlot(aReq));
         if (aResult)
             aState = frame::DispatchResultState::SUCCESS;
         else
@@ -93,7 +94,7 @@ uno::Reference< frame::XDispatch > SAL_CALL SdUnoModule::queryDispatch( const ut
 {
     SolarMutexGuard aGuard;
     SdDLL::Init();
-    const SfxSlot* pSlot = SD_MOD()->GetInterface()->GetSlot( aURL.Complete );
+    const SfxSlot* pSlot = SdModule::get()->GetInterface()->GetSlot(aURL.Complete);
 
     uno::Reference< frame::XDispatch > xSlot;
     if ( pSlot )

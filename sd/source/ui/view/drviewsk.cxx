@@ -53,7 +53,7 @@ void DrawViewShell::ConfigurationChanged( utl::ConfigurationBroadcaster* pCb, Co
 void DrawViewShell::ConfigureAppBackgroundColor( svtools::ColorConfig *pColorConfig )
 {
     if (!pColorConfig)
-        pColorConfig = &SD_MOD()->GetColorConfig();
+        pColorConfig = &SdModule::get()->GetColorConfig();
     Color aFillColor( pColorConfig->GetColorValue( svtools::APPBACKGROUND ).nColor );
     if (comphelper::LibreOfficeKit::isActive())
         aFillColor = COL_TRANSPARENT;

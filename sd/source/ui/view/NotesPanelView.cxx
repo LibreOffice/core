@@ -41,7 +41,7 @@ NotesPanelView::NotesPanelView(DrawDocShell& rDocSh, vcl::Window* pWindow,
     aModifyIdle.SetPriority(TaskPriority::LOWEST);
 
     maOutliner.Init(OutlinerMode::OutlineView);
-    maOutliner.SetRefDevice(SD_MOD()->GetVirtualRefDevice());
+    maOutliner.SetRefDevice(SdModule::get()->GetVirtualRefDevice());
     maOutliner.SetPaperSize(mrNotesPanelViewShell.GetActiveWindow()->GetViewSize());
 
     maOutlinerView.SetOutputArea(

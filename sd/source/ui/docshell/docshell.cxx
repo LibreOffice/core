@@ -223,7 +223,7 @@ void DrawDocShell::GetState(SfxItemSet &rSet)
 
             case SID_SEARCH_ITEM:
             {
-                rSet.Put( *SD_MOD()->GetSearchItem() );
+                rSet.Put(*SdModule::get()->GetSearchItem());
             }
             break;
 

@@ -436,7 +436,7 @@ void SdTransferable::AddSupportedFormats()
 
 bool SdTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDoc )
 {
-    if (SD_MOD()==nullptr)
+    if (SdModule::get() == nullptr)
         return false;
 
     SotClipboardFormatId nFormat = SotExchange::GetFormat( rFlavor );
@@ -636,7 +636,7 @@ void SdTransferable::DragFinished( sal_Int8 nDropAction )
 
 void SdTransferable::ObjectReleased()
 {
-    SdModule *pModule = SD_MOD();
+    SdModule* pModule = SdModule::get();
     if (!pModule)
         return;
 

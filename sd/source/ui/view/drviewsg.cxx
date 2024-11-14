@@ -105,7 +105,7 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
     bool   bDefault = false;
     sal_uInt16 nSlot = rReq.GetSlot();
 
-    SdOptions* pOptions = SD_MOD()->GetSdOptions(GetDoc()->GetDocumentType());
+    SdOptions* pOptions = SdModule::get()->GetSdOptions(GetDoc()->GetDocumentType());
     std::shared_ptr<comphelper::ConfigurationChanges> batch(
         comphelper::ConfigurationChanges::create());
 

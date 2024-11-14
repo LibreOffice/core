@@ -162,7 +162,7 @@ void SdModifyFieldDlg::FillFormatList()
         m_xLbFormat->append_text( SdResId( STR_STANDARD_SMALL ) );
         m_xLbFormat->append_text( SdResId( STR_STANDARD_BIG ) );
 
-        SvNumberFormatter* pNumberFormatter = SD_MOD()->GetNumberFormatter();
+        SvNumberFormatter* pNumberFormatter = SdModule::get()->GetNumberFormatter();
         aDateField.SetFormat( SvxDateFormat::A );    // 13.02.96
         m_xLbFormat->append_text( aDateField.GetFormatted( *pNumberFormatter, eLangType ) );
         aDateField.SetFormat( SvxDateFormat::B );    // 13.02.1996
@@ -186,7 +186,7 @@ void SdModifyFieldDlg::FillFormatList()
         //SvxTimeFormat::System,         // not used
         m_xLbFormat->append_text( SdResId( STR_STANDARD_NORMAL ) );
 
-        SvNumberFormatter* pNumberFormatter = SD_MOD()->GetNumberFormatter();
+        SvNumberFormatter* pNumberFormatter = SdModule::get()->GetNumberFormatter();
         aTimeField.SetFormat( SvxTimeFormat::HH24_MM );    // 13:49
         m_xLbFormat->append_text( aTimeField.GetFormatted( *pNumberFormatter, eLangType ) );
         aTimeField.SetFormat( SvxTimeFormat::HH24_MM_SS );   // 13:49:38

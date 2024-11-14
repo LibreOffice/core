@@ -601,7 +601,7 @@ SlideshowImpl::SlideshowImpl( const Reference< XPresentation2 >& xPresentation, 
 
     mbUsePen = maPresSettings.mbMouseAsPen;
 
-    SdOptions* pOptions = SD_MOD()->GetSdOptions(DocumentType::Impress);
+    SdOptions* pOptions = SdModule::get()->GetSdOptions(DocumentType::Impress);
     if( pOptions )
     {
         mnUserPaintColor = pOptions->GetPresentationPenColor();
@@ -620,7 +620,7 @@ SlideshowImpl::~SlideshowImpl()
     if (nullptr != mpDoc)
         EndListening(*mpDoc);
 
-    SdModule *pModule = SD_MOD();
+    SdModule* pModule = SdModule::get();
     //rhbz#806663 SlideshowImpl can outlive SdModule
     SdOptions* pOptions = pModule ?
         pModule->GetSdOptions(DocumentType::Impress) : nullptr;
@@ -1195,7 +1195,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx const * pPresSettings )
                     beans::PropertyState_DIRECT_VALUE );
 
             const bool bZOrderEnabled(
-                SD_MOD()->GetSdOptions( mpDoc->GetDocumentType() )->IsSlideshowRespectZOrder() );
+                SdModule::get()->GetSdOptions( mpDoc->GetDocumentType() )->IsSlideshowRespectZOrder() );
             aProperties.emplace_back( "DisableAnimationZOrder" ,
                     -1, Any( !bZOrderEnabled ),
                     beans::PropertyState_DIRECT_VALUE );

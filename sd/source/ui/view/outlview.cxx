@@ -87,7 +87,7 @@ OutlineView::OutlineView( DrawDocShell& rDocSh, vcl::Window* pWindow, OutlineVie
         // initialize Outliner: set Reference Device
         bInitOutliner = true;
         mrOutliner.Init( OutlinerMode::OutlineView );
-        mrOutliner.SetRefDevice( SD_MOD()->GetVirtualRefDevice() );
+        mrOutliner.SetRefDevice(SdModule::get()->GetVirtualRefDevice());
         //viewsize without the width of the image and number in front
         mnPaperWidth = (mrOutlineViewShell.GetActiveWindow()->GetViewSize().Width() - 4000);
         mrOutliner.SetPaperSize(Size(mnPaperWidth, 400000000));

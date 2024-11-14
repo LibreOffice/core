@@ -409,7 +409,7 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
             aDlgSet.Put(SfxBoolItem(ATTR_PRESENT_SHOW_PAUSELOGO, rPresentationSettings.mbShowPauseLogo));
             aDlgSet.Put(SfxBoolItem(ATTR_PRESENT_INTERACTIVE, rPresentationSettings.mbInteractive));
 
-            //SdOptions* pOptions = SD_MOD()->GetSdOptions(DocumentType::Impress);
+            //SdOptions* pOptions = SdModule::get()->GetSdOptions(DocumentType::Impress);
             aDlgSet.Put(SfxInt32Item(ATTR_PRESENT_DISPLAY, 0 /*pOptions->GetDisplay()*/));
             pRetval = getSdAbstractDialogFactory()->CreateSdStartPresentationDlg(
                 Application::GetDefDialogParent(),

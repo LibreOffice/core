@@ -185,7 +185,7 @@ SdOutliner::SdOutliner( SdDrawDocument* pDoc, OutlinerMode nMode )
 {
     SetStyleSheetPool(static_cast<SfxStyleSheetPool*>( mpDrawDocument->GetStyleSheetPool() ));
     SetEditTextObjectPool( &pDoc->GetItemPool() );
-    SetCalcFieldValueHdl(LINK(SD_MOD(), SdModule, CalcFieldValueHdl));
+    SetCalcFieldValueHdl(LINK(SdModule::get(), SdModule, CalcFieldValueHdl));
     SetForbiddenCharsTable( pDoc->GetForbiddenCharsTable() );
 
     EEControlBits nCntrl = GetControlWord();
@@ -272,7 +272,7 @@ void SdOutliner::PrepareSpelling()
     sd::ViewShellBase* pBase = getViewShellBase();
     if (pBase != nullptr)
         SetViewShell (pBase->GetMainViewShell());
-    SetRefDevice( SD_MOD()->GetVirtualRefDevice() );
+    SetRefDevice(SdModule::get()->GetVirtualRefDevice());
 
     std::shared_ptr<sd::ViewShell> pViewShell (mpWeakViewShell.lock());
     if (pViewShell)
@@ -1970,7 +1970,7 @@ void SdOutliner::PrepareConversion()
 
 void SdOutliner::BeginConversion()
 {
-    SetRefDevice( SD_MOD()->GetVirtualRefDevice() );
+    SetRefDevice(SdModule::get()->GetVirtualRefDevice());
 
     sd::ViewShellBase* pBase = getViewShellBase();
     if (pBase != nullptr)

@@ -86,12 +86,12 @@ SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
 
 OUString SdResId(TranslateId aId)
 {
-    return Translate::get(aId, SD_MOD()->GetResLocale());
+    return Translate::get(aId, SdModule::get()->GetResLocale());
 }
 
 OUString SdResId(TranslateNId aContextSingularPlural, int nCardinality)
 {
-    return Translate::nget(aContextSingularPlural, nCardinality, SD_MOD()->GetResLocale());
+    return Translate::nget(aContextSingularPlural, nCardinality, SdModule::get()->GetResLocale());
 }
 
 // Dtor

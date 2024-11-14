@@ -675,7 +675,7 @@ bool View::SdrBeginTextEdit(
     if( pOutl )
     {
         pOutl->SetStyleSheetPool(static_cast<SfxStyleSheetPool*>( mrDoc.GetStyleSheetPool() ));
-        pOutl->SetCalcFieldValueHdl(LINK(SD_MOD(), SdModule, CalcFieldValueHdl));
+        pOutl->SetCalcFieldValueHdl(LINK(SdModule::get(), SdModule, CalcFieldValueHdl));
         EEControlBits nCntrl = pOutl->GetControlWord();
         nCntrl |= EEControlBits::ALLOWBIGOBJS;
         nCntrl |= EEControlBits::MARKFIELDS;
