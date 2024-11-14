@@ -22,6 +22,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <config_version.h>
 #include <cppuhelper/findsofficepath.h>
 
 #if defined(_WIN32)
@@ -136,7 +137,8 @@ static char* platformSpecific(void)
     const int SEPARATOR = '/';
     const char* PATHSEPARATOR = ":";
     const char* PATHVARNAME = "PATH";
-    const char* APPENDIX = "/libreoffice";
+    const char* APPENDIX = "/libreoffice" LIBO_VERSION_DOTTED_2;
+        // must match the product's UNIXFILENAME.* in sysui/productlist.mk
 
     char* path = NULL;
     char* str = NULL;
