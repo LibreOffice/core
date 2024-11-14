@@ -256,7 +256,7 @@ void SdrMarkView::ModelHasChanged()
     mbMrkPntDirty=true;
     UndirtyMrkPnt();
     SdrView* pV=static_cast<SdrView*>(this);
-    if (pV!=nullptr && !pV->IsDragObj() && !pV->IsInsObjPoint()) {
+    if (!pV->IsDragObj() && !pV->IsInsObjPoint()) {
         AdjustMarkHdl();
     }
 
