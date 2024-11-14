@@ -295,19 +295,6 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
         if (ScTabViewShell* pLOKViewShell
             = comphelper::LibreOfficeKit::isActive() ? aViewData.GetViewShell() : nullptr)
         {
-            // autofill: collect the cell addresses that will be deleted
-            OUString sDeleteCellAddress
-                = OUString::Concat(OUString::number(aDelRange.aStart.Row()) + " "
-                                   + OUString::number(aDelRange.aStart.Col()) + " "
-                                   + OUString::number(aDelRange.aEnd.Row()) + " "
-                                   + OUString::number(aDelRange.aEnd.Col()));
-
-            tools::JsonWriter writer;
-            writer.put("type", "autofilldeletecells");
-            writer.put("delrange", sDeleteCellAddress);
-            OString sPayloadString = writer.finishAndGetAsOString();
-            pLOKViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TOOLTIP, sPayloadString);
-
             // set cell addresses for deletion by autofill
             tools::Long nX1 = aDelRange.aStart.Col();
             tools::Long nX2 = aDelRange.aEnd.Col();
