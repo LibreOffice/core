@@ -353,7 +353,7 @@ sal_Bool SAL_CALL SvxDrawPage::hasElements()
     if( (mpModel == nullptr) || (mpPage == nullptr) )
         throw lang::DisposedException();
 
-    return mpPage && mpPage->GetObjCount()>0;
+    return mpPage->GetObjCount()>0;
 }
 
 namespace
