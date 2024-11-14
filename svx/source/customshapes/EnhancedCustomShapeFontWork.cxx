@@ -424,7 +424,7 @@ static void GetTextAreaOutline(
                     pVirDev->GetTextArray( rText, &aDXArry);
                     aCharacterData.vOutlines.clear();
 
-                    if(aDXArry.size())
+                    if(!aDXArry.empty())
                     {
                         for(size_t a(0); a < aDXArry.size(); a++)
                         {
@@ -446,7 +446,7 @@ static void GetTextAreaOutline(
                             basegfx::B2DRange(
                                 0,
                                 0,
-                                aDXArry.empty() ? 10 : aDXArry.back(),
+                                10,
                                 aFont.GetFontHeight()
                             )));
                         aCharacterData.vOutlines.emplace_back(tools::Polygon(aPolygon));
