@@ -1371,7 +1371,7 @@ void SdrView::MarkAll()
         {
             const SdrObject* pObj(rMarkList.GetMark(0)->GetMarkedSdrObj());
             SdrView* pView = this;
-            if (pObj && pView && (pObj->GetObjInventor() == SdrInventor::Default)
+            if (pObj && (pObj->GetObjInventor() == SdrInventor::Default)
                 && (pObj->GetObjIdentifier() == SdrObjKind::Table))
             {
                 mxSelectionController.clear();
