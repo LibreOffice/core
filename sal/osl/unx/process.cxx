@@ -463,7 +463,7 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
         pszWorkDir = szWorkDir;
     }
 
-    if ( pArguments == nullptr && nArguments > 0 )
+    if ( nArguments > 0 )
     {
         pArguments = static_cast<char**>(malloc( ( nArguments + 2 ) * sizeof(char*) ));
     }
