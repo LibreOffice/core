@@ -53,18 +53,18 @@ static wchar_t* getPathFromRegistryKey( HKEY hroot, const wchar_t* subKeyName )
         return NULL;
     }
 
-    /* find the type and size of the default value */
-    if ( RegQueryValueExW( hkey, NULL, NULL, &type, NULL, &size) != ERROR_SUCCESS )
+    /* find the type and size of the relevant value */
+    if ( RegQueryValueExW( hkey, L"ZetaOffice " LIBO_VERSION_DOTTED_2, NULL, &type, NULL, &size) != ERROR_SUCCESS )
     {
         RegCloseKey( hkey );
         return NULL;
     }
 
-    /* get memory to hold the default value */
+    /* get memory to hold the value */
     data = (wchar_t*) malloc( size + sizeof(wchar_t) );
 
-    /* read the default value */
-    if ( RegQueryValueExW( hkey, NULL, NULL, &type, (LPBYTE) data, &size ) != ERROR_SUCCESS )
+    /* read the value */
+    if ( RegQueryValueExW( hkey, L"ZetaOffice " LIBO_VERSION_DOTTED_2, NULL, &type, (LPBYTE) data, &size ) != ERROR_SUCCESS )
     {
         RegCloseKey( hkey );
         free( data );
@@ -137,7 +137,7 @@ static char* platformSpecific(void)
     const int SEPARATOR = '/';
     const char* PATHSEPARATOR = ":";
     const char* PATHVARNAME = "PATH";
-    const char* APPENDIX = "/libreoffice" LIBO_VERSION_DOTTED_2;
+    const char* APPENDIX = "/zetaoffice" LIBO_VERSION_DOTTED_2;
         // must match the product's UNIXFILENAME.* in sysui/productlist.mk
 
     char* path = NULL;

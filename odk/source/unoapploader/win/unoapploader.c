@@ -56,9 +56,9 @@ static void closeErrorFile(void);
  * environment variable to the program directory of the UNO installation.
  * If no installation is specified by the user, the default installation on
  * the system will be taken. The default installation is read from the
- * default value of the key "Software\LibreOffice\UNO\InstallPath" from the
- * root key HKEY_CURRENT_USER in the Windows Registry. If this key is missing,
- * the key is read from the root key HKEY_LOCAL_MACHINE.</p>
+ * relevant value of the key "Software\ZetaOffice\UNO\InstallPath" from the
+ * root key HKEY_CURRENT_USER in the Windows Registry. If this value is missing,
+ * the value is read from the root key HKEY_LOCAL_MACHINE.</p>
  */
 int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
                     LPWSTR lpCmdLine, int nCmdShow )

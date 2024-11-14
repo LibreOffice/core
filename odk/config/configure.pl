@@ -599,8 +599,8 @@ sub searchprog
 
 sub searchMacOffice
 {
-    if (-d "/Applications/LibreOffice.app" ) {
-        return "/Applications/LibreOffice.app"
+    if (-d "/Applications/ZetaOffice.app" ) {
+        return "/Applications/ZetaOffice.app"
     }
     if (-d "/Applications/OpenOffice.org.app" ) {
         return "/Applications/OpenOffice.org.app"
@@ -620,9 +620,9 @@ sub searchMacOffice
 
 sub searchoffice
 {
-    my $offset = rindex($main::sdkpath, "/libreoffice");
+    my $offset = rindex($main::sdkpath, "/zetaoffice");
     my $tmpOffice = substr($main::sdkpath, 0, $offset);
-    my $officepath = "$tmpOffice/libreoffice";
+    my $officepath = "$tmpOffice/zetaoffice";
 
 #   if ( $main::OO_MINORVERSION > 0) {
 #       $officepath = "$officepath$main::OO_MINORVERSION";

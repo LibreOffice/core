@@ -60,7 +60,7 @@ final class WinRegKey {
             r = new BufferedReader(
                 new InputStreamReader(p.getInputStream(), Charset.defaultCharset()));
             String v = null;
-            Pattern pt = Pattern.compile("\\s+\\(Default\\)\\s+REG_SZ\\s+(.+)");
+            Pattern pt = Pattern.compile("\\s+ZetaOffice 24\\.2\\s+REG_SZ\\s+(.+)");
             for (;;) {
                 String s = r.readLine();
                 if (s == null) {

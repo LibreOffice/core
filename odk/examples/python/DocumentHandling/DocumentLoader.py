@@ -46,7 +46,7 @@ if __name__ == "__main__":
             "uno:socket,host=localhost,"
             "port=2083;urp;StarOffice.ComponentContext")
     except NoConnectException:
-        raise Exception("Error: cannot establish a connection to LibreOffice.")
+        raise Exception("Error: cannot establish a connection to ZetaOffice.")
 
     desktop = context.ServiceManager.createInstanceWithContext(
         "com.sun.star.frame.Desktop", context)
@@ -62,7 +62,7 @@ if __name__ == "__main__":
     else:
         url = "private:factory/swriter"
 
-    # Load a LibreOffice document, and automatically display it on the screen
+    # Load a ZetaOffice document, and automatically display it on the screen
     xComp = desktop.loadComponentFromURL(url, "_blank", 0, tuple([]))
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

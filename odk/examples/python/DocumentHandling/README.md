@@ -1,7 +1,7 @@
 # Document Handling Examples
 
 These examples are somehow similar to DocumentLoader in C++ and Java.
-To get started, first start LibreOffice listening on port 2083
+To get started, first start ZetaOffice listening on port 2083
 
     $OFFICE_PROGRAM_PATH/soffice "--accept=socket,port=2083;urp;"
 
@@ -10,7 +10,7 @@ Each example script accepts `-h` to show the usage, e.g.
     $OFFICE_PROGRAM_PATH/python DocumentLoader.py -h
 
 You should use `setsdkenv_unix` for Unix/Linux and `setsdkenv_windows.bat` for
-Windows. In this way, the LibreOffice internal Python interpreter will be used.
+Windows. In this way, the ZetaOffice internal Python interpreter will be used.
 
 ## Document Converter
 
@@ -18,7 +18,7 @@ Windows. In this way, the LibreOffice internal Python interpreter will be used.
 $OFFICE_PROGRAM_PATH/python DocumentConverter.py ./tests/ "MS Word 97" doc /tmp/
 ```
 
-This command searches LibreOffice documents recursively under directory
+This command searches ZetaOffice documents recursively under directory
 `./tests` and convert every found document to format Microsoft Word 97. The
 converted document can be found under directory `/tmp`.
 

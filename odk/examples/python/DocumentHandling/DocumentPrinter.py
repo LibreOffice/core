@@ -21,9 +21,9 @@ SOFFICE_CONNECTION_URI = "uno:socket,host=localhost,port=2083;urp;StarOffice.Com
 
 
 def connect_soffice():
-    """Connect to remote running LibreOffice
+    """Connect to remote running ZetaOffice
 
-    :return: an object representing the remote LibreOffice instance.
+    :return: an object representing the remote ZetaOffice instance.
     """
     local_context = uno.getComponentContext()
     resolver = local_context.ServiceManager.createInstanceWithContext(
@@ -32,7 +32,7 @@ def connect_soffice():
     try:
         remote_context = resolver.resolve(SOFFICE_CONNECTION_URI)
     except NoConnectException:
-        raise Exception("Cannot establish a connection to LibreOffice.")
+        raise Exception("Cannot establish a connection to ZetaOffice.")
 
     return remote_context.ServiceManager.createInstanceWithContext(
         "com.sun.star.frame.Desktop", remote_context

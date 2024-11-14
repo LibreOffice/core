@@ -210,8 +210,8 @@ void SAL_CALL BaseDispatch::dispatch( const URL& aURL, const Sequence < Property
     {
         if ( aURL.Path == "ImageButtonCmd" )
         {
-            // open the LibreOffice web page
-            ::rtl::OUString sURL("http://www.libreoffice.org");
+            // open the ZetaOffice web page
+            ::rtl::OUString sURL("https://zetaoffice.net");
             Reference< XSystemShellExecute > xSystemShellExecute(
                 SystemShellExecute::create(mxContext) );
             try

@@ -39,7 +39,7 @@ body {
 	width: 218px;
 	height: 45px;
 	padding: 18px 20px;
-	background: url(https://api.libreoffice.org/themes/libo/images/logo.png) no-repeat 18px 20px;
+	background: url(https://zetaoffice.net/assets/img/zeta.png) no-repeat center / contain;
 	*float:left;/* hack for IE7 that doesn't respect inline-block */
 }
 #TopHeader { height: 88px;/* needed for IE7 */}

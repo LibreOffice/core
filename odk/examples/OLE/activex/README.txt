@@ -10,8 +10,8 @@ uncomment or remove the line 'CL_NEW_LIB=atls.lib'.
 
 * Description.
 
-The LibreOffice ActiveX control shows an example of access to UNO through COM technology.
-It requires a properly installed LibreOffice version 4.0 or later
+The ZetaOffice ActiveX control shows an example of access to UNO through COM technology.
+It requires a properly installed ZetaOffice
 This is a Lite ActiveX control so it can be used only in containers that
 allows to use such controls. It can be activated with an <OBJECT> tag from
 a html-page to embed a document. Without any parameters a new writer document will be

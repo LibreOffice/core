@@ -106,7 +106,7 @@ Reference<XComponent> openDraw(Reference<XComponentContext> xContext)
 
     try
     {
-        // getting the remote LibreOffice service manager
+        // getting the remote ZetaOffice service manager
         Reference<XMultiComponentFactory> xMCF = xContext->getServiceManager();
 
         Reference<XInterface> oDesktop
