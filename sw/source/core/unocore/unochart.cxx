@@ -1303,7 +1303,6 @@ uno::Reference< chart2::data::XDataSequence > SwChartDataProvider::Impl_createDa
     if (aDesc.nTop != aDesc.nBottom  &&  aDesc.nLeft != aDesc.nRight)
         throw lang::IllegalArgumentException();
 
-    OSL_ENSURE( pTableFormat && pUnoCursor, "table format or cursor missing" );
     uno::Reference< chart2::data::XDataSequence > xDataSeq;
     if (!bTestOnly)
         xDataSeq = new SwChartDataSequence( *this, *pTableFormat, pUnoCursor );
