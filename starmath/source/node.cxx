@@ -2182,16 +2182,16 @@ void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell
 {
     SmNode::Prepare(rFormat, rDocShell, nDepth);
 
-    const SmSym   *pSym;
-    SmModule  *pp = SM_MOD();
+    const SmSym* pSym
+        = GetToken().aText.isEmpty()
+              ? nullptr
+              : SmModule::get()->GetSymbolManager().GetSymbolByName(GetToken().aText.subView(1));
 
     bool bIsGreekSymbol = false;
     bool bIsSpecialSymbol = false;
     bool bIsArabic = false;
 
-    if ((!GetToken().aText.isEmpty())
-        && (nullptr
-            != (pSym = pp->GetSymbolManager().GetSymbolByName(GetToken().aText.subView(1)))))
+    if (pSym)
     {
         sal_UCS4 cChar = pSym->GetCharacter();
         OUString aTmp( &cChar, 1 );

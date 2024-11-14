@@ -322,7 +322,8 @@ void SmGraphicWidget::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     OutputDevice& rDevice = GetOutputDevice();
 
     rDevice.EnableRTL(GetDoc()->GetFormat().IsRightToLeft());
-    rDevice.SetBackground(SM_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor);
+    rDevice.SetBackground(
+        SmModule::get()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor);
 
     if (comphelper::LibreOfficeKit::isActive())
     {
@@ -552,12 +553,10 @@ void SmGraphicWidget::SetCursor(const tools::Rectangle &rRect)
     if (SmViewShell::IsInlineEditEnabled())
         return;
 
-    SmModule *pp = SM_MOD();
-
     if (IsCursorVisible())
         ShowCursor(false);      // clean up remainings of old cursor
     aCursorRect = rRect;
-    if (pp->GetConfig()->IsShowFormulaCursor())
+    if (SmModule::get()->GetConfig()->IsShowFormulaCursor())
         ShowCursor(true);       // draw new cursor
 }
 
@@ -612,8 +611,7 @@ void SmGraphicWidget::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
             SmGetLeftSelectionPart(pEdit->GetSelection(), nRow, nCol);
             const SmNode *pFound = SetCursorPos(static_cast<sal_uInt16>(nRow), nCol);
 
-            SmModule *pp = SM_MOD();
-            if (pFound && pp->GetConfig()->IsShowFormulaCursor())
+            if (pFound && SmModule::get()->GetConfig()->IsShowFormulaCursor())
                 ShowCursor(true);
         }
     }
@@ -1236,8 +1234,7 @@ sal_uInt16 SmViewShell::SetPrinter(SfxPrinter *pNewPrinter, SfxPrinterChangeFlag
 
     if ((nDiffFlags & SfxPrinterChangeFlags::OPTIONS) == SfxPrinterChangeFlags::OPTIONS)
     {
-        SmModule *pp = SM_MOD();
-        pp->GetConfig()->ItemSetToConfig(pNewPrinter->GetOptions());
+        SmModule::get()->GetConfig()->ItemSetToConfig(pNewPrinter->GetOptions());
     }
     return 0;
 }
@@ -1381,7 +1378,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
     {
         case SID_FORMULACURSOR:
         {
-            SmModule *pp = SM_MOD();
+            auto* config = SmModule::get()->GetConfig();
 
             const SfxItemSet  *pArgs = rReq.GetArgs();
             const SfxPoolItem *pItem;
@@ -1391,9 +1388,9 @@ void SmViewShell::Execute(SfxRequest& rReq)
                  SfxItemState::SET == pArgs->GetItemState( SID_FORMULACURSOR, false, &pItem))
                 bVal = static_cast<const SfxBoolItem *>(pItem)->GetValue();
             else
-                bVal = !pp->GetConfig()->IsShowFormulaCursor();
+                bVal = !config->IsShowFormulaCursor();
 
-            pp->GetConfig()->SetShowFormulaCursor(bVal);
+            config->SetShowFormulaCursor(bVal);
             if (!IsInlineEditEnabled())
                 GetGraphicWidget().ShowCursor(bVal);
             break;
@@ -1790,15 +1787,15 @@ void SmViewShell::Execute(SfxRequest& rReq)
 
         case SID_SYMBOLS_CATALOGUE:
         {
+            SmModule* pp = SmModule::get();
 
             // get device used to retrieve the FontList
             SmDocShell *pDoc = GetDoc();
             OutputDevice *pDev = pDoc->GetPrinter();
             if (!pDev || pDev->GetFontFaceCollectionCount() == 0)
-                pDev = &SM_MOD()->GetDefaultVirtualDev();
+                pDev = &pp->GetDefaultVirtualDev();
             SAL_WARN_IF( !pDev, "starmath", "device for font list missing" );
 
-            SmModule *pp = SM_MOD();
             SmSymbolDialog aDialog(pWin ? pWin->GetFrameWeld() : nullptr, pDev, pp->GetSymbolManager(), *this);
             aDialog.run();
         }
@@ -1926,7 +1923,7 @@ void SmViewShell::GetState(SfxItemSet &rSet)
                 if (IsInlineEditEnabled())
                     rSet.DisableItem(nWh);
                 else
-                    rSet.Put(SfxBoolItem(nWh, SM_MOD()->GetConfig()->IsShowFormulaCursor()));
+                    rSet.Put(SfxBoolItem(nWh, SmModule::get()->GetConfig()->IsShowFormulaCursor()));
             }
             break;
         case SID_ELEMENTSDOCKINGWINDOW:
@@ -2130,7 +2127,7 @@ void SmViewShell::Notify( SfxBroadcaster& , const SfxHint& rHint )
 bool SmViewShell::IsInlineEditEnabled()
 {
     return comphelper::LibreOfficeKit::isActive()
-           || SM_MOD()->GetConfig()->IsInlineEditEnable();
+           || SmModule::get()->GetConfig()->IsInlineEditEnable();
 }
 
 void SmViewShell::StartMainHelp()

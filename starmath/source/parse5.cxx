@@ -357,7 +357,7 @@ static bool IsDelimiter(const OUString& rTxt, sal_Int32 nPos)
     }
 
     //special chars support
-    sal_Int16 nTypJp = SM_MOD()->GetSysLocale().GetCharClass().getType(rTxt, nPos);
+    sal_Int16 nTypJp = SmModule::get()->GetSysLocale().GetCharClass().getType(rTxt, nPos);
     return (nTypJp == css::i18n::UnicodeType::SPACE_SEPARATOR
             || nTypJp == css::i18n::UnicodeType::CONTROL);
 }
@@ -1595,7 +1595,7 @@ std::unique_ptr<SmBlankNode> SmParser5::DoBlank()
     // Ignore trailing spaces, if corresponding option is set
     if (m_aCurToken.eType == TNEWLINE
         || (m_aCurToken.eType == TEND && !comphelper::IsFuzzing()
-            && SM_MOD()->GetConfig()->IsIgnoreSpacesRight()))
+            && SmModule::get()->GetConfig()->IsIgnoreSpacesRight()))
     {
         pBlankNode->Clear();
     }
@@ -2665,7 +2665,7 @@ std::unique_ptr<SmSpecialNode> SmParser5::DoSpecial()
         if (IsImportSymbolNames())
         {
             const SmSym* pSym
-                = SM_MOD()->GetSymbolManager().GetSymbolByExportName(rName.subView(1));
+                = SmModule::get()->GetSymbolManager().GetSymbolByExportName(rName.subView(1));
             if (pSym)
             {
                 aNewName = pSym->GetUiName();
@@ -2674,7 +2674,8 @@ std::unique_ptr<SmSpecialNode> SmParser5::DoSpecial()
         }
         else if (IsExportSymbolNames())
         {
-            const SmSym* pSym = SM_MOD()->GetSymbolManager().GetSymbolByUiName(rName.subView(1));
+            const SmSym* pSym
+                = SmModule::get()->GetSymbolManager().GetSymbolByUiName(rName.subView(1));
             if (pSym)
             {
                 aNewName = pSym->GetExportName();
@@ -2745,7 +2746,7 @@ SmParser5::SmParser5()
     , m_bExportSymNames(false)
     , m_nParseDepth(0)
     , m_aNumCC(LanguageTag(LANGUAGE_ENGLISH_US))
-    , m_pSysCC(&SM_MOD()->GetSysLocale().GetCharClass())
+    , m_pSysCC(&SmModule::get()->GetSysLocale().GetCharClass())
 {
 }
 

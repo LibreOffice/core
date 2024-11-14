@@ -59,7 +59,7 @@ SmEditEngine::SmEditEngine(SfxItemPool* pItemPool)
 
 bool SmEditEngine::checkZoom()
 {
-    return m_nOldZoom != (m_nNewZoom = SM_MOD()->GetConfig()->GetSmEditWindowZoomFactor());
+    return m_nOldZoom != (m_nNewZoom = SmModule::get()->GetConfig()->GetSmEditWindowZoomFactor());
 }
 
 void SmEditEngine::executeZoom(EditView* pEditView)

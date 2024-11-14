@@ -391,7 +391,7 @@ SmXMLImport::SmXMLImport(const css::uno::Reference<css::uno::XComponentContext>&
     : SvXMLImport(rContext, implementationName, nImportFlags)
     , bSuccess(false)
     , nParseDepth(0)
-    , mnSmSyntaxVersion(SM_MOD()->GetConfig()->GetDefaultSmSyntaxVersion())
+    , mnSmSyntaxVersion(SmModule::get()->GetConfig()->GetDefaultSmSyntaxVersion())
 {
 }
 

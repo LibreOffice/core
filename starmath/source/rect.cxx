@@ -51,7 +51,7 @@ bool SmGetGlyphBoundRect(const vcl::RenderContext &rDev,
     {
         // since we format for the printer (where GetTextBoundRect will fail)
         // we need a virtual device here.
-        pGlyphDev = &SM_MOD()->GetDefaultVirtualDev();
+        pGlyphDev = &SmModule::get()->GetDefaultVirtualDev();
     }
 
     const FontMetric  aDevFM (rDev.GetFontMetric());

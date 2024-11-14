@@ -503,7 +503,7 @@ struct ElementData
 SmElementsControl::SmElementsControl(std::unique_ptr<weld::IconView> pIconView)
     : mpDocShell(new SmDocShell(SfxModelFlags::EMBEDDED_OBJECT))
     , mnCurrentSetIndex(-1)
-    , m_nSmSyntaxVersion(SM_MOD()->GetConfig()->GetDefaultSmSyntaxVersion())
+    , m_nSmSyntaxVersion(SmModule::get()->GetConfig()->GetDefaultSmSyntaxVersion())
     , mpIconView(std::move(pIconView))
 {
     maParser.reset(starmathdatabase::GetVersionSmParser(m_nSmSyntaxVersion));

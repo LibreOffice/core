@@ -314,7 +314,7 @@ bool SmEditTextWindow::KeyInput(const KeyEvent& rKEvt)
     OUString selected = pEditView->getEditEngine().GetText(aSelection);
 
     // Check is auto close brackets/braces is disabled
-    SmModule *pMod = SM_MOD();
+    SmModule* pMod = SmModule::get();
     if (pMod && !pMod->GetConfig()->IsAutoCloseBrackets())
         autoClose = false;
     else if (o3tl::trim(selected) == u"<?>")
@@ -715,12 +715,13 @@ bool SmEditWindow::IsSelected() const
 
 void SmEditTextWindow::UpdateStatus(bool bSetDocModified)
 {
-    SmModule *pMod = SM_MOD();
-    if (pMod && pMod->GetConfig()->IsAutoRedraw())
-        Flush();
+    if (SmModule* pMod = SmModule::get())
+        if (pMod->GetConfig()->IsAutoRedraw())
+            Flush();
 
-    if (SmDocShell *pModifyDoc = bSetDocModified ? mrEditWindow.GetDoc() : nullptr)
-        pModifyDoc->SetModified();
+    if (bSetDocModified)
+        if (SmDocShell* pModifyDoc = mrEditWindow.GetDoc())
+            pModifyDoc->SetModified();
 
     static_cast<SmEditEngine*>(GetEditEngine())->executeZoom(GetEditView());
 }

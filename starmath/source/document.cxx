@@ -122,8 +122,7 @@ void SmDocShell::Notify(SfxBroadcaster&, const SfxHint& rHint)
 
 void SmDocShell::LoadSymbols()
 {
-    SmModule *pp = SM_MOD();
-    pp->GetSymbolManager().Load();
+    SmModule::get()->GetSymbolManager().Load();
 }
 
 
@@ -253,7 +252,7 @@ void SmDocShell::ArrangeFormula()
             pOutDev = &pView->GetGraphicWidget().GetDrawingArea()->get_ref_device();
         else
         {
-            pOutDev = &SM_MOD()->GetDefaultVirtualDev();
+            pOutDev = &SmModule::get()->GetDefaultVirtualDev();
             pOutDev->SetMapMode( MapMode(SmMapUnit()) );
         }
     }
@@ -515,8 +514,7 @@ Printer* SmDocShell::GetPrt()
                 SID_NO_RIGHT_SPACES, SID_SAVE_ONLY_USED_SYMBOLS,
                 SID_AUTO_CLOSE_BRACKETS, SID_SMEDITWINDOWZOOM,
                 SID_INLINE_EDIT_ENABLE, SID_INLINE_EDIT_ENABLE>>(GetPool());
-        SmModule *pp = SM_MOD();
-        pp->GetConfig()->ConfigToItemSet(*pOptions);
+        SmModule::get()->GetConfig()->ConfigToItemSet(*pOptions);
         mpPrinter = VclPtr<SfxPrinter>::Create(std::move(pOptions));
         mpPrinter->SetMapMode(MapMode(SmMapUnit()));
     }
@@ -579,17 +577,17 @@ SmDocShell::SmDocShell( SfxModelFlags i_nSfxCreationFlags )
     , mpTmpPrinter(nullptr)
     , mnModifyCount(0)
     , mbFormulaArranged(false)
-    , mnSmSyntaxVersion(SM_MOD()->GetConfig()->GetDefaultSmSyntaxVersion())
 {
     SvtLinguConfig().GetOptions(maLinguOptions);
 
     SetPool(&SfxGetpApp()->GetPool());
 
-    SmModule *pp = SM_MOD();
-    maFormat = pp->GetConfig()->GetStandardFormat();
+    auto* config = SmModule::get()->GetConfig();
+    mnSmSyntaxVersion = config->GetDefaultSmSyntaxVersion();
+    maFormat = config->GetStandardFormat();
 
     StartListening(maFormat);
-    StartListening(*pp->GetConfig());
+    StartListening(*config);
 
     SetBaseModel(new SmModel(this));
     SetSmSyntaxVersion(mnSmSyntaxVersion);
@@ -599,10 +597,8 @@ SmDocShell::SmDocShell( SfxModelFlags i_nSfxCreationFlags )
 
 SmDocShell::~SmDocShell()
 {
-    SmModule *pp = SM_MOD();
-
     EndListening(maFormat);
-    EndListening(*pp->GetConfig());
+    EndListening(*SmModule::get()->GetConfig());
 
     mpCursor.reset();
     mpEditEngine.reset();
@@ -870,9 +866,8 @@ void SmDocShell::Execute(SfxRequest& rReq)
 
         case SID_AUTO_REDRAW :
         {
-            SmModule *pp = SM_MOD();
-            bool bRedraw = pp->GetConfig()->IsAutoRedraw();
-            pp->GetConfig()->SetAutoRedraw(!bRedraw);
+            auto* config = SmModule::get()->GetConfig();
+            config->SetAutoRedraw(!config->IsAutoRedraw());
         }
         break;
 
@@ -889,7 +884,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
             // get device used to retrieve the FontList
             OutputDevice *pDev = GetPrinter();
             if (!pDev || pDev->GetFontFaceCollectionCount() == 0)
-                pDev = &SM_MOD()->GetDefaultVirtualDev();
+                pDev = &SmModule::get()->GetDefaultVirtualDev();
             OSL_ENSURE (pDev, "device for font list missing" );
 
             SmFontTypeDialog aFontTypeDialog(rReq.GetFrameWeld(), pDev);
@@ -970,10 +965,10 @@ void SmDocShell::Execute(SfxRequest& rReq)
 
                 aAlignDialog.WriteTo(aNewFormat);
 
-                SmModule *pp = SM_MOD();
-                SmFormat aFmt( pp->GetConfig()->GetStandardFormat() );
+                auto* config = SmModule::get()->GetConfig();
+                SmFormat aFmt(config->GetStandardFormat());
                 aAlignDialog.WriteTo( aFmt );
-                pp->GetConfig()->SetStandardFormat( aFmt );
+                config->SetStandardFormat(aFmt);
 
                 SfxUndoManager *pTmpUndoMgr = GetUndoManager();
                 if (pTmpUndoMgr)
@@ -1067,12 +1062,7 @@ void SmDocShell::GetState(SfxItemSet &rSet)
             break;
 
         case SID_AUTO_REDRAW :
-            {
-                SmModule  *pp = SM_MOD();
-                bool       bRedraw = pp->GetConfig()->IsAutoRedraw();
-
-                rSet.Put(SfxBoolItem(SID_AUTO_REDRAW, bRedraw));
-            }
+            rSet.Put(SfxBoolItem(SID_AUTO_REDRAW, SmModule::get()->GetConfig()->IsAutoRedraw()));
             break;
 
         case SID_MODIFYSTATUS:
@@ -1159,8 +1149,7 @@ SfxUndoManager *SmDocShell::GetUndoManager()
 
 void SmDocShell::SaveSymbols()
 {
-    SmModule *pp = SM_MOD();
-    pp->GetSymbolManager().Save();
+    SmModule::get()->GetSymbolManager().Save();
 }
 
 

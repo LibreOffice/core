@@ -471,10 +471,10 @@ IMPL_LINK_NOARG( SmFontSizeDialog, DefaultButtonClickHdl, weld::Button&, void )
     SaveDefaultsQuery aQuery(m_xDialog.get());
     if (aQuery.run() == RET_YES)
     {
-        SmModule *pp = SM_MOD();
-        SmFormat aFmt( pp->GetConfig()->GetStandardFormat() );
+        auto* config = SmModule::get()->GetConfig();
+        SmFormat aFmt(config->GetStandardFormat());
         WriteTo( aFmt );
-        pp->GetConfig()->SetStandardFormat( aFmt );
+        config->SetStandardFormat(aFmt);
     }
 }
 
@@ -574,10 +574,10 @@ IMPL_LINK_NOARG(SmFontTypeDialog, DefaultButtonClickHdl, weld::Button&, void)
     SaveDefaultsQuery aQuery(m_xDialog.get());
     if (aQuery.run() == RET_YES)
     {
-        SmModule *pp = SM_MOD();
-        SmFormat aFmt( pp->GetConfig()->GetStandardFormat() );
+        auto* config = SmModule::get()->GetConfig();
+        SmFormat aFmt(config->GetStandardFormat());
         WriteTo( aFmt );
-        pp->GetConfig()->SetStandardFormat( aFmt, true );
+        config->SetStandardFormat(aFmt, true);
     }
 }
 
@@ -605,16 +605,16 @@ SmFontTypeDialog::~SmFontTypeDialog()
 
 void SmFontTypeDialog::ReadFrom(const SmFormat &rFormat)
 {
-    SmModule *pp = SM_MOD();
+    auto* config = SmModule::get()->GetConfig();
 
-    *m_xMathFont     = pp->GetConfig()->GetFontPickList(FNT_MATH);
-    *m_xVariableFont = pp->GetConfig()->GetFontPickList(FNT_VARIABLE);
-    *m_xFunctionFont = pp->GetConfig()->GetFontPickList(FNT_FUNCTION);
-    *m_xNumberFont   = pp->GetConfig()->GetFontPickList(FNT_NUMBER);
-    *m_xTextFont     = pp->GetConfig()->GetFontPickList(FNT_TEXT);
-    *m_xSerifFont    = pp->GetConfig()->GetFontPickList(FNT_SERIF);
-    *m_xSansFont     = pp->GetConfig()->GetFontPickList(FNT_SANS);
-    *m_xFixedFont    = pp->GetConfig()->GetFontPickList(FNT_FIXED);
+    *m_xMathFont     = config->GetFontPickList(FNT_MATH);
+    *m_xVariableFont = config->GetFontPickList(FNT_VARIABLE);
+    *m_xFunctionFont = config->GetFontPickList(FNT_FUNCTION);
+    *m_xNumberFont   = config->GetFontPickList(FNT_NUMBER);
+    *m_xTextFont     = config->GetFontPickList(FNT_TEXT);
+    *m_xSerifFont    = config->GetFontPickList(FNT_SERIF);
+    *m_xSansFont     = config->GetFontPickList(FNT_SANS);
+    *m_xFixedFont    = config->GetFontPickList(FNT_FIXED);
 
     m_xMathFont->Insert( rFormat.GetFont(FNT_MATH) );
     m_xVariableFont->Insert( rFormat.GetFont(FNT_VARIABLE) );
@@ -629,16 +629,16 @@ void SmFontTypeDialog::ReadFrom(const SmFormat &rFormat)
 
 void SmFontTypeDialog::WriteTo(SmFormat &rFormat) const
 {
-    SmModule *pp = SM_MOD();
+    auto* config = SmModule::get()->GetConfig();
 
-    pp->GetConfig()->GetFontPickList(FNT_MATH)     = *m_xMathFont;
-    pp->GetConfig()->GetFontPickList(FNT_VARIABLE) = *m_xVariableFont;
-    pp->GetConfig()->GetFontPickList(FNT_FUNCTION) = *m_xFunctionFont;
-    pp->GetConfig()->GetFontPickList(FNT_NUMBER)   = *m_xNumberFont;
-    pp->GetConfig()->GetFontPickList(FNT_TEXT)     = *m_xTextFont;
-    pp->GetConfig()->GetFontPickList(FNT_SERIF)    = *m_xSerifFont;
-    pp->GetConfig()->GetFontPickList(FNT_SANS)     = *m_xSansFont;
-    pp->GetConfig()->GetFontPickList(FNT_FIXED)    = *m_xFixedFont;
+    config->GetFontPickList(FNT_MATH)     = *m_xMathFont;
+    config->GetFontPickList(FNT_VARIABLE) = *m_xVariableFont;
+    config->GetFontPickList(FNT_FUNCTION) = *m_xFunctionFont;
+    config->GetFontPickList(FNT_NUMBER)   = *m_xNumberFont;
+    config->GetFontPickList(FNT_TEXT)     = *m_xTextFont;
+    config->GetFontPickList(FNT_SERIF)    = *m_xSerifFont;
+    config->GetFontPickList(FNT_SANS)     = *m_xSansFont;
+    config->GetFontPickList(FNT_FIXED)    = *m_xFixedFont;
 
     rFormat.SetFont( FNT_MATH,     SmFace(m_xMathFont->Get()) );
     rFormat.SetFont( FNT_VARIABLE, SmFace(m_xVariableFont->Get()) );
@@ -758,10 +758,10 @@ IMPL_LINK_NOARG( SmDistanceDialog, DefaultButtonClickHdl, weld::Button&, void )
     SaveDefaultsQuery aQuery(m_xDialog.get());
     if (aQuery.run() == RET_YES)
     {
-        SmModule *pp = SM_MOD();
-        SmFormat aFmt( pp->GetConfig()->GetStandardFormat() );
+        auto* config = SmModule::get()->GetConfig();
+        SmFormat aFmt(config->GetStandardFormat());
         WriteTo( aFmt );
-        pp->GetConfig()->SetStandardFormat( aFmt );
+        config->SetStandardFormat( aFmt );
     }
 }
 
@@ -1003,10 +1003,10 @@ IMPL_LINK_NOARG( SmAlignDialog, DefaultButtonClickHdl, weld::Button&, void )
     SaveDefaultsQuery aQuery(m_xDialog.get());
     if (aQuery.run() == RET_YES)
     {
-        SmModule *pp = SM_MOD();
-        SmFormat aFmt( pp->GetConfig()->GetStandardFormat() );
+        auto* config = SmModule::get()->GetConfig();
+        SmFormat aFmt(config->GetStandardFormat());
         WriteTo( aFmt );
-        pp->GetConfig()->SetStandardFormat( aFmt );
+        config->SetStandardFormat(aFmt);
     }
 }
 

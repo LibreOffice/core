@@ -39,10 +39,7 @@
 #define ShellClass_SmModule
 #include <smslots.hxx>
 
-OUString SmResId(TranslateId aId)
-{
-    return Translate::get(aId, SM_MOD()->GetResLocale());
-}
+OUString SmResId(TranslateId aId) { return Translate::get(aId, SmModule::get()->GetResLocale()); }
 
 OUString SmLocalizedSymbolData::GetUiSymbolName( std::u16string_view rExportName )
 {

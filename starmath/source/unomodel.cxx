@@ -66,8 +66,7 @@ using namespace ::com::sun::star::script;
 
 SmPrintUIOptions::SmPrintUIOptions()
 {
-    SmModule *pp = SM_MOD();
-    SmMathConfig *pConfig = pp->GetConfig();
+    SmMathConfig* pConfig = SmModule::get()->GetConfig();
     SAL_WARN_IF( !pConfig, "starmath", "SmConfig not found" );
     if (!pConfig)
         return;
@@ -610,8 +609,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                     SID_SAVE_ONLY_USED_SYMBOLS, SID_SAVE_ONLY_USED_SYMBOLS,
                     SID_AUTO_CLOSE_BRACKETS,    SID_SMEDITWINDOWZOOM,
                     SID_INLINE_EDIT_ENABLE, SID_INLINE_EDIT_ENABLE>> ( SmDocShell::GetPool() );
-                SmModule *pp = SM_MOD();
-                pp->GetConfig()->ConfigToItemSet(*pItemSet);
+                SmModule::get()->GetConfig()->ConfigToItemSet(*pItemSet);
                 VclPtr<SfxPrinter> pPrinter = SfxPrinter::Create ( aStream, std::move(pItemSet) );
 
                 pDocSh->SetPrinter( pPrinter );
@@ -624,8 +622,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                 if ( !(*pValues >>= aSequence) )
                     throw IllegalArgumentException();
 
-                SmModule *pp = SM_MOD();
-                SmSymbolManager &rManager = pp->GetSymbolManager();
+                SmSymbolManager& rManager = SmModule::get()->GetSymbolManager();
                 for (const SymbolDescriptor& rDescriptor : aSequence)
                 {
                     vcl::Font aFont;
@@ -860,8 +857,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
                 const std::set< OUString > &rUsedSymbols = pDocSh->GetUsedSymbols();
 
                 // this is get
-                SmModule *pp = SM_MOD();
-                const SmSymbolManager &rManager = pp->GetSymbolManager();
+                const SmSymbolManager& rManager = SmModule::get()->GetSymbolManager();
                 std::vector < const SmSym * > aVector;
 
                 const SymbolPtrVec_t aSymbols( rManager.GetSymbols() );

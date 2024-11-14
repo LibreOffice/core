@@ -24,7 +24,7 @@
 
 AbstractSmParser* starmathdatabase::GetDefaultSmParser()
 {
-    switch(SM_MOD()->GetConfig()->GetDefaultSmSyntaxVersion())
+    switch (SmModule::get()->GetConfig()->GetDefaultSmSyntaxVersion())
     {
     case 5:
     {

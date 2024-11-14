@@ -1391,7 +1391,7 @@ SmMLImport::SmMLImport(const css::uno::Reference<css::uno::XComponentContext>& r
     : SvXMLImport(rContext, implementationName, nImportFlags)
     , m_pElementTree(nullptr)
     , m_bSuccess(false)
-    , m_nSmSyntaxVersion(SM_MOD()->GetConfig()->GetDefaultSmSyntaxVersion())
+    , m_nSmSyntaxVersion(SmModule::get()->GetConfig()->GetDefaultSmSyntaxVersion())
 {
 }
 

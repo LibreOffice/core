@@ -447,8 +447,7 @@ void SmXMLExport::ExportContent_()
     if (aText.isEmpty())
         return;
 
-    SmModule* pMod = SM_MOD();
-    sal_Int16 nSmSyntaxVersion = pMod->GetConfig()->GetDefaultSmSyntaxVersion();
+    sal_Int16 nSmSyntaxVersion = SmModule::get()->GetConfig()->GetDefaultSmSyntaxVersion();
 
     // Convert symbol names
     if (pDocShell)
@@ -525,7 +524,7 @@ void SmXMLExport::GetConfigurationSettings(Sequence<PropertyValue>& rProps)
         return;
 
     rProps.realloc(nCount);
-    SmMathConfig* pConfig = SM_MOD()->GetConfig();
+    SmMathConfig* pConfig = SmModule::get()->GetConfig();
     const bool bUsedSymbolsOnly = pConfig && pConfig->IsSaveOnlyUsedSymbols();
 
     std::transform(aProps.begin(), aProps.end(), rProps.getArray(),
