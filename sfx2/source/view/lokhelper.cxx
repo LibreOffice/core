@@ -42,6 +42,7 @@
 #include <comphelper/base64.hxx>
 #include <tools/json_writer.hxx>
 #include <svl/cryptosign.hxx>
+#include <tools/urlobj.hxx>
 
 #include <boost/property_tree/json_parser.hpp>
 
@@ -998,6 +999,35 @@ bool SfxLokHelper::supportsCommand(std::u16string_view rCommand)
     return std::find(vSupport.begin(), vSupport.end(), rCommand) != vSupport.end();
 }
 
+std::map<OUString, OUString> SfxLokHelper::parseCommandParameters(std::u16string_view rCommand)
+{
+    std::map<OUString, OUString> aMap;
+
+    INetURLObject aParser(rCommand);
+    OUString aArguments = aParser.GetParam();
+    sal_Int32 nParamIndex = 0;
+    do
+    {
+        std::u16string_view aParam = o3tl::getToken(aArguments, 0, '&', nParamIndex);
+        sal_Int32 nIndex = 0;
+        OUString aKey;
+        OUString aValue;
+        do
+        {
+            std::u16string_view aToken = o3tl::getToken(aParam, 0, '=', nIndex);
+            if (aKey.isEmpty())
+                aKey = aToken;
+            else
+                aValue = aToken;
+        } while (nIndex >= 0);
+        OUString aDecodedValue
+            = INetURLObject::decode(aValue, INetURLObject::DecodeMechanism::WithCharset);
+        aMap[aKey] = aDecodedValue;
+    } while (nParamIndex >= 0);
+
+    return aMap;
+}
+
 void SfxLokHelper::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand)
 {
     static constexpr OStringLiteral aSignature(".uno:Signature");
@@ -1013,6 +1043,14 @@ void SfxLokHelper::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_
     }
 
     svl::crypto::SigningContext aSigningContext;
+    std::map<OUString, OUString> aMap
+        = SfxLokHelper::parseCommandParameters(OUString::fromUtf8(rCommand));
+    auto it = aMap.find("signatureTime");
+    if (it != aMap.end())
+    {
+        // Signature time is provided: prefer it over the system time.
+        aSigningContext.m_nSignatureTime = it->second.toInt64();
+    }
     pObjectShell->SignDocumentContentUsingCertificate(aSigningContext);
     rJsonWriter.put("signatureTime", aSigningContext.m_nSignatureTime);
 

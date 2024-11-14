@@ -253,6 +253,8 @@ public:
     static bool supportsCommand(std::u16string_view rCommand);
     /// Returns information about a given command in JSON format.
     static void getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand);
+    /// Parses key-value pamaters of rCommand.
+    static std::map<OUString, OUString> parseCommandParameters(std::u16string_view rCommand);
 
 private:
     static int createView(SfxViewFrame& rViewFrame, ViewShellDocId docId);
