@@ -1796,7 +1796,7 @@ void SwEditShell::SignParagraph()
 
     // 3. Sign it.
     svl::crypto::SigningContext aSigningContext;
-    aSigningContext.m_xCertificate = xCertificate;
+    aSigningContext.m_xCertificate = std::move(xCertificate);
     svl::crypto::Signing signing(aSigningContext);
     signing.AddDataRange(utf8Text.getStr(), utf8Text.getLength());
     OStringBuffer sigBuf;
