@@ -3066,8 +3066,7 @@ static void InsertTableImpl(SwWrtShell& rSh,
         {
             pTableNode->GetTable().SetTableStyleName( aAutoName );
             SwUndoTableAutoFormat* pUndo = new SwUndoTableAutoFormat( *pTableNode, *pTAFormat );
-            if ( pUndo )
-                rSh.GetIDocumentUndoRedo().AppendUndo( std::unique_ptr<SwUndo>(pUndo) );
+            rSh.GetIDocumentUndoRedo().AppendUndo( std::unique_ptr<SwUndo>(pUndo) );
         }
     }
 
