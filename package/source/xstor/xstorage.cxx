@@ -1582,8 +1582,7 @@ void OStorage_Impl::CreateRelStorage()
     {
         m_pRelStorElement = new SotElement_Impl( u"_rels"_ustr, true, true );
         m_pRelStorElement->m_xStorage = CreateNewStorageImpl(embed::ElementModes::WRITE);
-        if (m_pRelStorElement->m_xStorage)
-            m_pRelStorElement->m_xStorage->m_pParent = nullptr; // the relation storage is completely controlled by parent
+        m_pRelStorElement->m_xStorage->m_pParent = nullptr; // the relation storage is completely controlled by parent
     }
 
     if (!m_pRelStorElement->m_xStorage)
