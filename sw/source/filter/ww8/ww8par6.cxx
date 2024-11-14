@@ -1438,10 +1438,6 @@ static sal_uInt8 lcl_ReadBorders(bool bVer67, WW8_BRCVer9* brc, WW8PLCFx_Cp_FKP*
                 }
             }
         }
-        else {
-            OSL_ENSURE( pSty || pPap, "WW8PLCFx_Cp_FKP and WW8RStyle "
-                               "and WW8PLCFx_SEPX is 0" );
-        }
     }
 
     return nBorder;
