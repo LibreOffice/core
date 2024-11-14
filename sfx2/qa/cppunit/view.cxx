@@ -143,6 +143,38 @@ CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testLokHelperCommandValuesSignature)
     comphelper::Base64::decode(aBytes, aDigest);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(32), aBytes.getLength());
 }
+
+namespace
+{
+OUString GetSignatureHash()
+{
+    tools::JsonWriter aWriter;
+    // Provide the current time, so the system timer is not contacted:
+    SfxLokHelper::getCommandValues(aWriter, ".uno:Signature?signatureTime=1731329053152");
+    OString aJson = aWriter.finishAndGetAsOString();
+    std::stringstream aStream{ std::string(aJson) };
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    auto it = aTree.find("digest");
+    CPPUNIT_ASSERT(it != aTree.not_found());
+    return OUString::fromUtf8(it->second.get_value<std::string>());
+}
+}
+
+CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testLokHelperCommandValuesSignatureHash)
+{
+    // Given an unsigned PDF file:
+    loadFromFile(u"unsigned.pdf");
+
+    // When extracting hashes, two times:
+    OUString aHash1 = GetSignatureHash();
+    OUString aHash2 = GetSignatureHash();
+
+    // Then make sure that we get the same hash, since the same system time is provided:
+    // In case the test was slow enough that there was 1ms system time difference between the two
+    // calls, then this failed.
+    CPPUNIT_ASSERT_EQUAL(aHash1, aHash2);
+}
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

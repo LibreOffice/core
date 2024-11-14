@@ -30,6 +30,7 @@
 #include <tools/json_writer.hxx>
 #include <tools/urlobj.hxx>
 #include <xmloff/odffields.hxx>
+#include <sfx2/lokhelper.hxx>
 
 #include <IDocumentMarkAccess.hxx>
 #include <doc.hxx>
@@ -670,8 +671,6 @@ bool SwXTextDocument::supportsCommand(std::u16string_view rCommand)
 
 void SwXTextDocument::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand)
 {
-    std::map<OUString, OUString> aMap;
-
     static constexpr OStringLiteral aTextFormFields(".uno:TextFormFields");
     static constexpr OStringLiteral aTextFormField(".uno:TextFormField");
     static constexpr OStringLiteral aSetDocumentProperties(".uno:SetDocumentProperties");
@@ -682,25 +681,8 @@ void SwXTextDocument::getCommandValues(tools::JsonWriter& rJsonWriter, std::stri
     static constexpr OStringLiteral aField(".uno:Field");
     static constexpr OStringLiteral aExtractDocStructure(".uno:ExtractDocumentStructure");
 
-    INetURLObject aParser(OUString::fromUtf8(rCommand));
-    OUString aArguments = aParser.GetParam();
-    sal_Int32 nParamIndex = 0;
-    do
-    {
-        std::u16string_view aParam = o3tl::getToken(aArguments, 0, '&', nParamIndex);
-        sal_Int32 nIndex = 0;
-        OUString aKey;
-        OUString aValue;
-        do
-        {
-            std::u16string_view aToken = o3tl::getToken(aParam, 0, '=', nIndex);
-            if (aKey.isEmpty())
-                aKey = aToken;
-            else
-                aValue = aToken;
-        } while (nIndex >= 0);
-        aMap[aKey] = INetURLObject::decode(aValue, INetURLObject::DecodeMechanism::WithCharset);
-    } while (nParamIndex >= 0);
+    std::map<OUString, OUString> aMap
+        = SfxLokHelper::parseCommandParameters(OUString::fromUtf8(rCommand));
 
     if (o3tl::starts_with(rCommand, aTextFormFields))
     {
