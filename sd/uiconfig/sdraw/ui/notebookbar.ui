@@ -8253,13 +8253,13 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkBox" id="GroupB13">
+                          <object class="GtkBox" id="GroupB130">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="valign">center</property>
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="sfxlo-NotebookbarToolBox" id="LineA7">
+                              <object class="sfxlo-NotebookbarToolBox" id="LineA70">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="toolbar_style">both-horiz</property>
@@ -8282,7 +8282,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="sfxlo-NotebookbarToolBox" id="LineB8">
+                              <object class="sfxlo-NotebookbarToolBox" id="LineB80">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="toolbar_style">both-horiz</property>
@@ -12592,7 +12592,7 @@
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
                         <child>
-                          <object class="GtkSeparator" id="separator7">
+                          <object class="GtkSeparator" id="separator70">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="margin_top">5</property>
@@ -14386,7 +14386,7 @@
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
                         <child>
-                          <object class="GtkSeparator" id="separator70">
+                          <object class="GtkSeparator" id="separator700">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="margin_top">5</property>
