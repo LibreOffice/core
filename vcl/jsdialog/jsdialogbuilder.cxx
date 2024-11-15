@@ -193,8 +193,9 @@ JSDialogNotifyIdle::generateActionMessage(VclPtr<vcl::Window> pWindow,
     return aJsonWriter.finishAndGetAsOString();
 }
 
-OString JSDialogNotifyIdle::generatePopupMessage(VclPtr<vcl::Window> pWindow, OUString sParentId,
-                                                 OUString sCloseId) const
+OString JSDialogNotifyIdle::generatePopupMessage(VclPtr<vcl::Window> pWindow,
+                                                 const OUString& sParentId,
+                                                 const OUString& sCloseId) const
 {
     if (!pWindow || !m_aNotifierWindow)
         return OString();
@@ -242,7 +243,7 @@ OString JSDialogNotifyIdle::generatePopupMessage(VclPtr<vcl::Window> pWindow, OU
     return aJsonWriter.finishAndGetAsOString();
 }
 
-OString JSDialogNotifyIdle::generateClosePopupMessage(OUString sWindowId) const
+OString JSDialogNotifyIdle::generateClosePopupMessage(const OUString& sWindowId) const
 {
     if (!m_aNotifierWindow)
         return OString();

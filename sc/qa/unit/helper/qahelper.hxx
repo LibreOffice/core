@@ -149,7 +149,7 @@ protected:
 class SCQAHELPER_DLLPUBLIC ScModelTestBase : public UnoApiXmlTest
 {
 public:
-    ScModelTestBase(OUString path)
+    ScModelTestBase(const OUString& path)
         : UnoApiXmlTest(path)
     {
     }

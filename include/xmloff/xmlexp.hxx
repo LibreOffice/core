@@ -388,7 +388,7 @@ public:
     const SvXMLNamespaceMap& GetNamespaceMap() const { return *mpNamespaceMap; }
 
     // Get author id to remove personal info
-    size_t GetInfoID( const OUString sPersonalInfo ) const { return mpAuthorIDs->GetInfoID(sPersonalInfo); }
+    size_t GetInfoID( const OUString& sPersonalInfo ) const { return mpAuthorIDs->GetInfoID(sPersonalInfo); }
 
     // Get unit converter
     const SvXMLUnitConverter& GetMM100UnitConverter() const { return maUnitConv; }

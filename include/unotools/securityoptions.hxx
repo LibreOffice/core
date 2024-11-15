@@ -157,7 +157,7 @@ class UNOTOOLS_DLLPUBLIC SvtSecurityMapPersonalInfo
 {
     std::unordered_map< OUString, size_t > aInfoIDs;
 public:
-    size_t GetInfoID( const OUString sPersonalInfo );
+    size_t GetInfoID( const OUString& sPersonalInfo );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

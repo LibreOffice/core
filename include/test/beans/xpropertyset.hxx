@@ -27,8 +27,8 @@ class OOO_DLLPUBLIC_TEST XPropertySet
 public:
     XPropertySet() {}
 
-    XPropertySet(const std::set<OUString> rIgnoreValue)
-        : m_IgnoreValue(rIgnoreValue)
+    XPropertySet(std::set<OUString> rIgnoreValue)
+        : m_IgnoreValue(std::move(rIgnoreValue))
     {
     }
     virtual css::uno::Reference<css::uno::XInterface> init() = 0;

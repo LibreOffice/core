@@ -52,8 +52,8 @@ private:
         const css::uno::Reference<css::chart2::XScaling>& xScalingY,
         sal_Bool bMaySkipPointsInCalculation ) override;
 
-    void calculateValues(RegressionCalculationHelper::tDoubleVectorPair aValues, bool bUseXAvg);
-    void calculateValuesCentral(RegressionCalculationHelper::tDoubleVectorPair aValues);
+    void calculateValues(const RegressionCalculationHelper::tDoubleVectorPair& aValues, bool bUseXAvg);
+    void calculateValuesCentral(const RegressionCalculationHelper::tDoubleVectorPair& aValues);
     std::vector<double> aYList;
     std::vector<double> aXList;
 };

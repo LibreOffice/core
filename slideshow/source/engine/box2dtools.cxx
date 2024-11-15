@@ -267,7 +267,7 @@ void box2DWorld::createStaticFrameAroundSlide(const ::basegfx::B2DVector& rSlide
     pStaticBody->CreateFixture(&aFixtureDef);
 }
 
-void box2DWorld::setShapePosition(const css::uno::Reference<css::drawing::XShape> xShape,
+void box2DWorld::setShapePosition(const css::uno::Reference<css::drawing::XShape>& xShape,
                                   const basegfx::B2DPoint& rOutPos)
 {
     const auto iter = mpXShapeToBodyMap.find(xShape);
@@ -277,7 +277,7 @@ void box2DWorld::setShapePosition(const css::uno::Reference<css::drawing::XShape
 }
 
 void box2DWorld::setShapePositionByLinearVelocity(
-    const css::uno::Reference<css::drawing::XShape> xShape, const basegfx::B2DPoint& rOutPos,
+    const css::uno::Reference<css::drawing::XShape>& xShape, const basegfx::B2DPoint& rOutPos,
     const double fPassedTime)
 {
     assert(mpBox2DWorld);
@@ -290,7 +290,7 @@ void box2DWorld::setShapePositionByLinearVelocity(
     }
 }
 
-void box2DWorld::setShapeLinearVelocity(const css::uno::Reference<css::drawing::XShape> xShape,
+void box2DWorld::setShapeLinearVelocity(const css::uno::Reference<css::drawing::XShape>& xShape,
                                         const basegfx::B2DVector& rVelocity)
 {
     assert(mpBox2DWorld);
@@ -300,7 +300,7 @@ void box2DWorld::setShapeLinearVelocity(const css::uno::Reference<css::drawing::
     pBox2DBody->setLinearVelocity(rVelocity);
 }
 
-void box2DWorld::setShapeAngle(const css::uno::Reference<css::drawing::XShape> xShape,
+void box2DWorld::setShapeAngle(const css::uno::Reference<css::drawing::XShape>& xShape,
                                const double fAngle)
 {
     const auto iter = mpXShapeToBodyMap.find(xShape);
@@ -310,7 +310,7 @@ void box2DWorld::setShapeAngle(const css::uno::Reference<css::drawing::XShape> x
 }
 
 void box2DWorld::setShapeAngleByAngularVelocity(
-    const css::uno::Reference<css::drawing::XShape> xShape, const double fAngle,
+    const css::uno::Reference<css::drawing::XShape>& xShape, const double fAngle,
     const double fPassedTime)
 {
     assert(mpBox2DWorld);
@@ -323,7 +323,7 @@ void box2DWorld::setShapeAngleByAngularVelocity(
     }
 }
 
-void box2DWorld::setShapeAngularVelocity(const css::uno::Reference<css::drawing::XShape> xShape,
+void box2DWorld::setShapeAngularVelocity(const css::uno::Reference<css::drawing::XShape>& xShape,
                                          const double fAngularVelocity)
 {
     assert(mpBox2DWorld);
@@ -333,7 +333,7 @@ void box2DWorld::setShapeAngularVelocity(const css::uno::Reference<css::drawing:
     pBox2DBody->setAngularVelocity(fAngularVelocity);
 }
 
-void box2DWorld::setShapeCollision(const css::uno::Reference<css::drawing::XShape> xShape,
+void box2DWorld::setShapeCollision(const css::uno::Reference<css::drawing::XShape>& xShape,
                                    bool bCanCollide)
 {
     assert(mpBox2DWorld);

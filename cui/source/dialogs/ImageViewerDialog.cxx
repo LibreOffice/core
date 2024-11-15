@@ -10,7 +10,8 @@
 #include <vcl/virdev.hxx>
 #include <ImageViewerDialog.hxx>
 
-ImageViewerDialog::ImageViewerDialog(weld::Dialog* pParent, BitmapEx aBitmap, OUString atitle)
+ImageViewerDialog::ImageViewerDialog(weld::Dialog* pParent, BitmapEx aBitmap,
+                                     const OUString& atitle)
     : GenericDialogController(pParent, u"cui/ui/imageviewer.ui"_ustr, u"ImageViewerDialog"_ustr)
     , m_xDisplayImage(m_xBuilder->weld_image(u"ImgVW_mainImage"_ustr))
 {

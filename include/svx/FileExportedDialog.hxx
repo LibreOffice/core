@@ -19,5 +19,5 @@ private:
     DECL_DLLPRIVATE_LINK(OpenHdl, weld::Button&, void);
 
 public:
-    explicit FileExportedDialog(weld::Window* pParent, OUString atitle);
+    explicit FileExportedDialog(weld::Window* pParent, const OUString& atitle);
 };

@@ -252,7 +252,8 @@ void CustomNotebookbarGenerator::createCustomizedUIFile()
                  "Cannot copy the file or file was present :" << sCustomizedUIPath);
 }
 
-Sequence<OUString> CustomNotebookbarGenerator::getCustomizedUIItem(OUString sNotebookbarConfigType)
+Sequence<OUString>
+CustomNotebookbarGenerator::getCustomizedUIItem(const OUString& sNotebookbarConfigType)
 {
     OUString aPath = getAppNameRegistryPath();
     const utl::OConfigurationTreeRoot aAppNode(::comphelper::getProcessComponentContext(), aPath,

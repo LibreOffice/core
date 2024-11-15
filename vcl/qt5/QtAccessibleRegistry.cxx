@@ -14,7 +14,7 @@
 
 std::map<XAccessible*, QObject*> QtAccessibleRegistry::m_aMapping = {};
 
-QObject* QtAccessibleRegistry::getQObject(css::uno::Reference<XAccessible> xAcc)
+QObject* QtAccessibleRegistry::getQObject(const css::uno::Reference<XAccessible>& xAcc)
 {
     if (!xAcc.is())
         return nullptr;
@@ -30,13 +30,13 @@ QObject* QtAccessibleRegistry::getQObject(css::uno::Reference<XAccessible> xAcc)
     return pQtAcc;
 }
 
-void QtAccessibleRegistry::insert(css::uno::Reference<XAccessible> xAcc, QObject* pQObject)
+void QtAccessibleRegistry::insert(const css::uno::Reference<XAccessible>& xAcc, QObject* pQObject)
 {
     assert(pQObject);
     m_aMapping.emplace(xAcc.get(), pQObject);
 }
 
-void QtAccessibleRegistry::remove(css::uno::Reference<XAccessible> xAcc)
+void QtAccessibleRegistry::remove(const css::uno::Reference<XAccessible>& xAcc)
 {
     assert(xAcc.is());
     m_aMapping.erase(xAcc.get());

@@ -48,6 +48,8 @@ public:
     bool TraverseCXXCatchStmt( CXXCatchStmt* ) { return complain(); }
     bool TraverseCXXDestructorDecl( CXXDestructorDecl* ) { return complain(); }
     bool TraverseFunctionDecl( FunctionDecl* ) { return complain(); }
+    bool TraverseCXXMethodDecl( CXXMethodDecl* ) { return complain(); }
+    bool TraverseCXXConstructorDecl( CXXConstructorDecl* ) { return complain(); }
     bool TraverseSwitchStmt( SwitchStmt* ) { return complain(); }
     bool TraverseImplicitCastExpr( ImplicitCastExpr* ) { return complain(); }
     bool TraverseCStyleCastExpr( CStyleCastExpr* ) { return complain(); }

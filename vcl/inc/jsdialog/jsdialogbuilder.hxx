@@ -132,9 +132,9 @@ private:
     OString generateCloseMessage() const;
     OString generateActionMessage(VclPtr<vcl::Window> pWindow,
                                   std::unique_ptr<jsdialog::ActionDataMap> pData) const;
-    OString generatePopupMessage(VclPtr<vcl::Window> pWindow, OUString sParentId,
-                                 OUString sCloseId) const;
-    OString generateClosePopupMessage(OUString sWindowId) const;
+    OString generatePopupMessage(VclPtr<vcl::Window> pWindow, const OUString& sParentId,
+                                 const OUString& sCloseId) const;
+    OString generateClosePopupMessage(const OUString& sWindowId) const;
 };
 
 class JSDialogSender

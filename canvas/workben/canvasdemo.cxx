@@ -88,7 +88,7 @@ class DemoRenderer
         uno::Reference< rendering::XGraphicDevice > mxDevice;
 
         DemoRenderer( uno::Reference< rendering::XGraphicDevice > xDevice,
-                      uno::Reference< rendering::XCanvas > xCanvas,
+                      const uno::Reference< rendering::XCanvas > & xCanvas,
                       Size aSize ) :
             maSize(aSize),
             maColorBlack( vcl::unotools::colorToStdColorSpaceSequence( COL_BLACK) ),
@@ -139,7 +139,7 @@ class DemoRenderer
                                     maViewState, maRenderState );
         }
 
-        void drawStringAt( OString aString, double x, double y )
+        void drawStringAt( const OString & aString, double x, double y )
         {
             rendering::StringContext aText;
             aText.Text = OStringToOUString( aString, RTL_TEXTENCODING_UTF8 );
@@ -261,7 +261,7 @@ class DemoRenderer
             //mxCanvas->drawPolyPolygon( xPoly, maViewState, aRenderState );
         }
 
-        void drawTitle( OString aTitle )
+        void drawTitle( const OString & aTitle )
         {
             // FIXME: text anchoring to be done
             double nStringWidth = aTitle.getLength() * 8.0;

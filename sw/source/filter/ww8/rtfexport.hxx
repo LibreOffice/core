@@ -205,7 +205,7 @@ public:
     const SfxItemSet* GetFirstPageItemSet() const { return m_pFirstPageItemSet; }
 
     // Get author id to remove personal info
-    size_t GetInfoID(const OUString sPersonalInfo) const
+    size_t GetInfoID(const OUString& sPersonalInfo) const
     {
         return mpAuthorIDs->GetInfoID(sPersonalInfo);
     }

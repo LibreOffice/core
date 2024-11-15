@@ -317,7 +317,7 @@ public:
     void SetFloatingTableFrame(const ww8::Frame* pF) { m_pFloatingTableFrame = pF; }
 
     // Get author id to remove personal info
-    size_t GetInfoID( const OUString sPersonalInfo ) const { return m_pAuthorIDs->GetInfoID(sPersonalInfo); }
+    size_t GetInfoID( const OUString& sPersonalInfo ) const { return m_pAuthorIDs->GetInfoID(sPersonalInfo); }
 
     // needed in docxsdrexport.cxx and docxattributeoutput.cxx
     sal_Int32 getWordCompatibilityModeFromGrabBag() const;

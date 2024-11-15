@@ -81,7 +81,7 @@ void SAL_CALL MovingAverageRegressionCurveCalculator::recalculateRegression(
 }
 
 void MovingAverageRegressionCurveCalculator::calculateValuesCentral(
-    RegressionCalculationHelper::tDoubleVectorPair aValues)
+    const RegressionCalculationHelper::tDoubleVectorPair& aValues)
 {
     const size_t aSize = aValues.first.size();
     if (aSize == 0)
@@ -106,7 +106,7 @@ void MovingAverageRegressionCurveCalculator::calculateValuesCentral(
 }
 
 void MovingAverageRegressionCurveCalculator::calculateValues(
-    RegressionCalculationHelper::tDoubleVectorPair aValues, bool bUseXAvg)
+    const RegressionCalculationHelper::tDoubleVectorPair& aValues, bool bUseXAvg)
 {
     const size_t aSize = aValues.first.size();
     for (size_t i = mPeriod - 1; i < aSize; ++i)

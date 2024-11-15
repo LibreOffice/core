@@ -41,7 +41,7 @@ public:
 
     virtual const sal_Int32* GetEnd() const override;       // SwTextAttr
     virtual void SetEnd(sal_Int32) override;       // SwTextAttr
-    void UpdateFieldContent(SwDoc* pDoc, SwWrtShell& rWrtSh, OUString aContent);
+    void UpdateFieldContent(SwDoc* pDoc, SwWrtShell& rWrtSh, const OUString& aContent);
 
     // get and set TextNode pointer
     inline const SwTextNode& GetTextNode() const;

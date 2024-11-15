@@ -10837,7 +10837,7 @@ const char* PDFWriterImpl::getStructureTag( PDFWriter::StructElement eType )
     return it != aTagStrings.end() ? it->second : "Div";
 }
 
-void PDFWriterImpl::addRoleMap(OString aAlias, PDFWriter::StructElement eType)
+void PDFWriterImpl::addRoleMap(const OString& aAlias, PDFWriter::StructElement eType)
 {
     OString aTag = getStructureTag(eType);
     // For PDF/UA it's not allowed to map an alias with the same name.

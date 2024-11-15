@@ -171,7 +171,7 @@ void SwTextRefMark::SetEnd(sal_Int32 n)
     }
 }
 
-void SwTextRefMark::UpdateFieldContent(SwDoc* pDoc, SwWrtShell& rWrtSh, OUString aContent)
+void SwTextRefMark::UpdateFieldContent(SwDoc* pDoc, SwWrtShell& rWrtSh, const OUString& aContent)
 {
     if (!this->End())
     {

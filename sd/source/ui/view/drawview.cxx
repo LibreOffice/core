@@ -282,7 +282,7 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
     return bOk;
 }
 
-void DrawView::SetMasterAttributes( SdrObject* pObject, const SdPage& rPage, SfxItemSet rSet, SfxStyleSheetBasePool* pStShPool, bool& bOk, bool bMaster, bool bSlide )
+void DrawView::SetMasterAttributes( SdrObject* pObject, const SdPage& rPage, const SfxItemSet& rSet, SfxStyleSheetBasePool* pStShPool, bool& bOk, bool bMaster, bool bSlide )
 {
     SdrInventor nInv    = pObject->GetObjInventor();
 

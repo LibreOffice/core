@@ -34,7 +34,7 @@ public:
 
     virtual css::uno::Reference<css::uno::XInterface> init() = 0;
     virtual css::uno::Reference<css::uno::XInterface> getXSpreadsheet() = 0;
-    void setXCell(css::uno::Reference<css::table::XCell> xCell) { m_xCell = xCell; }
+    void setXCell(css::uno::Reference<css::table::XCell> xCell) { m_xCell = std::move(xCell); }
     css::uno::Reference<css::table::XCell> const& getXCell() const { return m_xCell; }
 
     void testQueryDependents();

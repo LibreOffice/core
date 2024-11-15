@@ -413,7 +413,7 @@ void SetOption( EOption eOption, bool bValue )
 
 
 // map personal info strings to 1, 2, ... to remove personal info
-size_t SvtSecurityMapPersonalInfo::GetInfoID( const OUString sPersonalInfo )
+size_t SvtSecurityMapPersonalInfo::GetInfoID( const OUString& sPersonalInfo )
 {
     auto aIter = aInfoIDs.find( sPersonalInfo );
     if ( aIter == aInfoIDs.end() )

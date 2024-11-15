@@ -24,7 +24,8 @@
 #include <ImageViewerDialog.hxx>
 
 GraphicTestEntry::GraphicTestEntry(weld::Container* pParent, weld::Dialog* pDialog,
-                                   OUString aTestName, OUString aTestStatus, Bitmap aTestBitmap)
+                                   const OUString& aTestName, const OUString& aTestStatus,
+                                   Bitmap aTestBitmap)
     : m_xBuilder(Application::CreateBuilder(pParent, u"cui/ui/graphictestentry.ui"_ustr))
     , m_xContainer(m_xBuilder->weld_container(u"gptestbox"_ustr))
     , m_xTestLabel(m_xBuilder->weld_label(u"gptestlabel"_ustr))

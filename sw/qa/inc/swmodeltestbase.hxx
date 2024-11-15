@@ -78,7 +78,7 @@ protected:
     OUString mpFilter;
 
     /// Copy&paste helper.
-    void paste(std::u16string_view aFilename, OUString aInstance, css::uno::Reference<css::text::XTextRange> const& xTextRange);
+    void paste(std::u16string_view aFilename, const OUString& aInstance, css::uno::Reference<css::text::XTextRange> const& xTextRange);
 
 public:
     SwModelTestBase(const OUString& pTestDocumentPath = OUString(), const OUString& pFilter = {});

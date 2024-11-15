@@ -83,14 +83,14 @@ XAccessibleEventBroadcasterTester::XAccessibleEventBroadcasterTester(
 }
 
 bool XAccessibleEventBroadcasterTester::isTransient(
-    const uno::Reference<accessibility::XAccessibleEventBroadcaster> xBroadcaster)
+    const uno::Reference<accessibility::XAccessibleEventBroadcaster>& xBroadcaster)
 {
     uno::Reference<accessibility::XAccessibleContext> xCtx(xBroadcaster, uno::UNO_QUERY_THROW);
     return isTransient(xCtx);
 }
 
 bool XAccessibleEventBroadcasterTester::isTransient(
-    const uno::Reference<accessibility::XAccessibleContext> xCtx)
+    const uno::Reference<accessibility::XAccessibleContext>& xCtx)
 {
     return ((xCtx->getAccessibleStateSet() & accessibility::AccessibleStateType::TRANSIENT)
             && (xCtx->getAccessibleParent()->getAccessibleContext()->getAccessibleStateSet()

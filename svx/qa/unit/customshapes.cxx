@@ -60,7 +60,8 @@ protected:
     sal_uInt8 countShapes();
     // fX and fY are positions relative to the size of the bitmap of the shape
     // Thus the position is independent from DPI
-    Color getColor(uno::Reference<drawing::XShape> xShape, const double& fX, const double& fY);
+    Color getColor(const uno::Reference<drawing::XShape>& xShape, const double& fX,
+                   const double& fY);
 };
 
 uno::Reference<drawing::XShape> CustomshapesTest::getShape(sal_uInt8 nShapeIndex)
@@ -87,7 +88,7 @@ sal_uInt8 CustomshapesTest::countShapes()
     return xDrawPage->getCount();
 }
 
-Color CustomshapesTest::getColor(uno::Reference<drawing::XShape> xShape, const double& fX,
+Color CustomshapesTest::getColor(const uno::Reference<drawing::XShape>& xShape, const double& fX,
                                  const double& fY)
 {
     GraphicHelper::SaveShapeAsGraphicToPath(mxComponent, xShape, u"image/png"_ustr,

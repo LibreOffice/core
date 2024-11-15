@@ -142,7 +142,7 @@ namespace sw
                 { return get(); }
             SwUnoCursor& operator*() const
                 { return *get(); }
-            UnoCursorPointer& operator=(UnoCursorPointer aOther)
+            UnoCursorPointer& operator=(const UnoCursorPointer& aOther)
             {
                 if (m_pCursor)
                 {

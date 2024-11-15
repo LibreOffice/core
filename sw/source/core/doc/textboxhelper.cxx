@@ -232,7 +232,7 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, SdrObject* pObject, bool bCo
 }
 
 void SwTextBoxHelper::set(SwFrameFormat* pShapeFormat, SdrObject* pObj,
-                          uno::Reference<text::XTextFrame> xNew)
+                          const uno::Reference<text::XTextFrame>& xNew)
 {
     // Do not set invalid data
     assert(pShapeFormat && pObj && xNew);

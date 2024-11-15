@@ -19,8 +19,36 @@ struct S {
     // make sure we ignore cases where the passed in parameter is std::move'd
     S(OUString v1, OUString v2)
       : mv1(std::move(v1)), mv2((std::move(v2))) {}
+
+    // expected-error-re@+1 {{passing '{{(rtl::)?}}OUString' by value, rather pass by const lvalue reference [loplugin:passparamsbyref]}}
+    S(OUString v1)
+        : mv1(v1) {}
+
+    // expected-error-re@+1 {{passing '{{(rtl::)?}}OUString' by value, rather pass by const lvalue reference [loplugin:passparamsbyref]}}
+    void foo(OUString v1) { (void) v1; }
+
+    // no warning expected
+    void foo2(OUString v1) { mv1 = std::move(v1); }
+
+    void takeByNonConstRef(OUString&);
+
+    // no warning expected
+    void foo3(OUString v)
+    {
+        takeByNonConstRef(v);
+    }
 };
 
+namespace test2
+{
+    struct TestObject { OUString s[64]; void nonConstMethod(); };
+
+    // no warning expected
+    void f1(TestObject to)
+    {
+        to.nonConstMethod();
+    }
+}
 
 void f()
 {
@@ -36,7 +64,5 @@ OUString trim_string(OUString aString)
     aString += "xxx";
     return aString;
 }
-
-// expected-no-diagnostics
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

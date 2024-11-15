@@ -87,7 +87,7 @@ public:
     bool mbResolved;
 
     void InitControls(const SwPostItField* pPostItField);
-    void SetCommentText(OUString sText) { msText = sText; }
+    void SetCommentText(OUString sText) { msText = std::move(sText); }
     const OUString& GetAuthor() { return msAuthor; }
     const Date& GetDate() { return maDate; }
 };

@@ -184,7 +184,7 @@ private:
 
     // Used to create or get a single constraint part
     bool ReadConstraintPart(ConstraintPart ePart, tools::Long nIndex, OUString& rValue);
-    void WriteConstraintPart(ConstraintPart ePart, tools::Long nIndex, OUString sValue);
+    void WriteConstraintPart(ConstraintPart ePart, tools::Long nIndex, const OUString& sValue);
 
     // Creates or reads all named ranges associated with solver engine options
     void ReadEngine();
@@ -289,7 +289,7 @@ public:
     SolverSettings(ScTable& pTable);
 
     SC_DLLPUBLIC OUString GetParameter(SolverParameter eParam);
-    SC_DLLPUBLIC void SetParameter(SolverParameter eParam, OUString sValue);
+    SC_DLLPUBLIC void SetParameter(SolverParameter eParam, const OUString& sValue);
     SC_DLLPUBLIC ObjectiveType GetObjectiveType() { return m_eObjType; }
     SC_DLLPUBLIC void SetObjectiveType(ObjectiveType eType);
     SC_DLLPUBLIC void GetEngineOptions(css::uno::Sequence<css::beans::PropertyValue>& aOptions);

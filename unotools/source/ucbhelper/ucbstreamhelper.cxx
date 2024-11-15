@@ -139,7 +139,7 @@ static std::unique_ptr<SvStream> lcl_CreateStream( const OUString& rFileName, St
 
 std::unique_ptr<SvStream>
 UcbStreamHelper::CreateStream(const OUString& rFileName, StreamMode eOpenMode,
-                              css::uno::Reference<css::awt::XWindow> xParentWin,
+                              const css::uno::Reference<css::awt::XWindow>& xParentWin,
                               bool bUseSimpleFileAccessInteraction)
 {
     // related tdf#99312
@@ -157,7 +157,7 @@ UcbStreamHelper::CreateStream(const OUString& rFileName, StreamMode eOpenMode,
 
 std::unique_ptr<SvStream>
 UcbStreamHelper::CreateStream(const OUString& rFileName, StreamMode eOpenMode, bool bFileExists,
-                              css::uno::Reference<css::awt::XWindow> xParentWin,
+                              const css::uno::Reference<css::awt::XWindow> & xParentWin,
                               bool bUseSimpleFileAccessInteraction)
 {
     // related tdf#99312

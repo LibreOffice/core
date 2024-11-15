@@ -1079,7 +1079,7 @@ static bool isAbsent(const std::vector<beans::PropertyValue>& propvals, const OU
 
 // table style has got bigger precedence than docDefault style,
 // but lower precedence than the paragraph styles and direct paragraph formatting
-void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParagraph rParaProp, std::vector< PropertyIds > aAllTableParaProperties, const css::beans::PropertyValues rCellProperties)
+void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParagraph rParaProp, std::vector< PropertyIds > aAllTableParaProperties, const css::beans::PropertyValues& rCellProperties)
 {
     // Setting paragraph or character properties using setPropertyValue may have unwanted
     // side effects; e.g., setting a paragraph's font size can reset font size in a runs

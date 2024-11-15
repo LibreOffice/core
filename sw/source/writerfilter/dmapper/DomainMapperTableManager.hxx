@@ -141,7 +141,7 @@ public:
     // setMoved() writes the first level from these two levels
     // i.e. second startLevel() hasn't been called, yet.)
     // TODO: check drag & drop of only a part of the tables.
-    void setMoved(OUString sMoved)
+    void setMoved(const OUString& sMoved)
     {
         if ( m_aMoved.empty() )
             return;

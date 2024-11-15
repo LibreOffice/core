@@ -1754,7 +1754,7 @@ SwPostItField::SwPostItField( SwPostItFieldType* pT,
         const sal_uInt32 nParentId,
         const sal_uInt32 nParaId,
         const sal_uInt32 nParentPostItId,
-        const OUString aParentName
+        OUString aParentName
 )
     : SwField( pT )
     , m_sText( std::move(aText) )
@@ -1766,7 +1766,7 @@ SwPostItField::SwPostItField( SwPostItFieldType* pT,
     , m_nParentId( nParentId )
     , m_nParaId( nParaId )
     , m_nParentPostItId ( nParentPostItId )
-    , m_sParentName( aParentName )
+    , m_sParentName( std::move(aParentName) )
 {
     m_nPostItId = nPostItId == 0 ? s_nLastPostItId++ : nPostItId;
 }

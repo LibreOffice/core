@@ -28,7 +28,7 @@ namespace comphelper
 
 OEnumerationByName::OEnumerationByName(css::uno::Reference<css::container::XNameAccess> _xAccess)
     :m_aNames(_xAccess->getElementNames())
-    ,m_xAccess(_xAccess)
+    ,m_xAccess(std::move(_xAccess))
     ,m_nPos(0)
     ,m_bListening(false)
 {

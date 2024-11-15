@@ -37,7 +37,7 @@
 
 using namespace css;
 
-void SwModelTestBase::paste(std::u16string_view aFilename, OUString aInstance,
+void SwModelTestBase::paste(std::u16string_view aFilename, const OUString& aInstance,
                             uno::Reference<text::XTextRange> const& xTextRange)
 {
     uno::Reference<document::XFilter> xFilter(m_xSFactory->createInstance(aInstance),

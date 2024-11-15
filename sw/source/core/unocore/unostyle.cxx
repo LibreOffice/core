@@ -182,7 +182,7 @@ constexpr ParagraphStyleCategoryEntry sParagraphStyleCategoryEntries[]
 class StyleFamilyEntry
 {
 public:
-    template <SfxStyleFamily f> static StyleFamilyEntry Create(sal_uInt16 nPropMapType, SwGetPoolIdFromName aPoolId, OUString sName, TranslateId pResId)
+    template <SfxStyleFamily f> static StyleFamilyEntry Create(sal_uInt16 nPropMapType, SwGetPoolIdFromName aPoolId, const OUString& sName, TranslateId pResId)
     {
         return StyleFamilyEntry(f, nPropMapType, aPoolId, sName, pResId, GetCountOrName<f>, TranslateIndex<f>);
     }

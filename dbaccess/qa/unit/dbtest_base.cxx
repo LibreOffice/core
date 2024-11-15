@@ -42,10 +42,10 @@ public:
             uno::Reference< XOfficeDatabaseDocument > const & xDocument);
 
     void createDBDocument(const OUString& rDriverURL);
-    void createTables(Reference< XConnection > xConnection);
-    void createQueries(Reference< XDataSource > xDataSource);
-    void createQuery(OUString sQuery, bool bEscapeProcessing,
-            OUString sQueryName, Reference<XDataSource> xDataSource);
+    void createTables(const Reference< XConnection >& xConnection);
+    void createQueries(const Reference< XDataSource >& xDataSource);
+    void createQuery(const OUString& sQuery, bool bEscapeProcessing,
+            const OUString& sQueryName, const Reference<XDataSource> & xDataSource);
 
     virtual void tearDown() override;
 };
@@ -84,7 +84,7 @@ void DBTestBase::createDBDocument(const OUString& rDriverURL)
     loadFromURL(maTempFile.GetURL());
 }
 
-void DBTestBase::createTables(Reference<XConnection> xConnection)
+void DBTestBase::createTables(const Reference<XConnection>& xConnection)
 {
     uno::Reference<XStatement> xStatement = xConnection->createStatement();
 
@@ -137,7 +137,7 @@ void DBTestBase::createTables(Reference<XConnection> xConnection)
     xConnection->commit();
 }
 
-void DBTestBase::createQueries(Reference<XDataSource> xDataSource)
+void DBTestBase::createQueries(const Reference<XDataSource>& xDataSource)
 {
     createQuery(
             u"SELECT \"ORDERS\".\"ID\" AS \"Order No.\", "
@@ -164,7 +164,7 @@ void DBTestBase::createQueries(Reference<XDataSource> xDataSource)
     createQuery(u"SELECT * FROM INFORMATION_SCHEMA.SYSTEM_VIEWS"_ustr, false, u"parseable native"_ustr, xDataSource);
 }
 
-void DBTestBase::createQuery(OUString sQuery, bool bEscapeProcessing, OUString sQueryName, Reference<XDataSource> xDataSource)
+void DBTestBase::createQuery(const OUString& sQuery, bool bEscapeProcessing, const OUString& sQueryName, const Reference<XDataSource> & xDataSource)
 {
     Reference<XQueryDefinitionsSupplier> xQuerySupplier(xDataSource, UNO_QUERY_THROW);
     Reference<container::XNameAccess> xQueryAccess = xQuerySupplier->getQueryDefinitions();

@@ -51,7 +51,7 @@ class QtAccessibleWidget final : public QAccessibleInterface,
                                  public QAccessibleValueInterface
 {
 public:
-    QtAccessibleWidget(const css::uno::Reference<css::accessibility::XAccessible> xAccessible,
+    QtAccessibleWidget(const css::uno::Reference<css::accessibility::XAccessible>& xAccessible,
                        QObject* pObject);
 
     void invalidate();

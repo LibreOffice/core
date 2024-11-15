@@ -113,7 +113,7 @@ private:
         @param rOutPos
         Position in LO user space coordinates
      */
-    void setShapePosition(const css::uno::Reference<css::drawing::XShape> xShape,
+    void setShapePosition(const css::uno::Reference<css::drawing::XShape>& xShape,
                           const ::basegfx::B2DPoint& rOutPos);
 
     /** Moves shape's corresponding Box2D body to specified position
@@ -130,7 +130,7 @@ private:
         @param fPassedTime
         Time frame which the Box2D body should move to the specified position.
      */
-    void setShapePositionByLinearVelocity(const css::uno::Reference<css::drawing::XShape> xShape,
+    void setShapePositionByLinearVelocity(const css::uno::Reference<css::drawing::XShape>& xShape,
                                           const ::basegfx::B2DPoint& rOutPos,
                                           const double fPassedTime);
 
@@ -145,7 +145,7 @@ private:
         @param rVelocity
         Velocity vector in LO user space coordinates.
      */
-    void setShapeLinearVelocity(const css::uno::Reference<css::drawing::XShape> xShape,
+    void setShapeLinearVelocity(const css::uno::Reference<css::drawing::XShape>& xShape,
                                 const basegfx::B2DVector& rVelocity);
 
     /** Sets rotation angle of the shape's corresponding Box2D body
@@ -156,7 +156,8 @@ private:
         @param fAngle
         Angle of rotation in degrees.
      */
-    void setShapeAngle(const css::uno::Reference<css::drawing::XShape> xShape, const double fAngle);
+    void setShapeAngle(const css::uno::Reference<css::drawing::XShape>& xShape,
+                       const double fAngle);
 
     /** Rotates shape's corresponding Box2D body to specified angle
 
@@ -173,7 +174,7 @@ private:
         @param fPassedTime
         Time frame which the Box2D body should rotate to the specified angle.
      */
-    void setShapeAngleByAngularVelocity(const css::uno::Reference<css::drawing::XShape> xShape,
+    void setShapeAngleByAngularVelocity(const css::uno::Reference<css::drawing::XShape>& xShape,
                                         const double fAngle, const double fPassedTime);
 
     /** Sets angular velocity of the shape's corresponding Box2D body.
@@ -184,7 +185,7 @@ private:
         @param fAngularVelocity
         Angular velocity in degrees per second.
      */
-    void setShapeAngularVelocity(const css::uno::Reference<css::drawing::XShape> xShape,
+    void setShapeAngularVelocity(const css::uno::Reference<css::drawing::XShape>& xShape,
                                  const double fAngularVelocity);
 
     /** Sets whether a shape's corresponding Box2D body has collision in the Box2D World or not
@@ -198,7 +199,7 @@ private:
         true if collisions should be enabled for the corresponding Box2D body of this shape
         and false if it should be disabled.
     */
-    void setShapeCollision(const css::uno::Reference<css::drawing::XShape> xShape,
+    void setShapeCollision(const css::uno::Reference<css::drawing::XShape>& xShape,
                            const bool bCanCollide);
 
     /** Process the updates queued in the maShapeParallelUpdateQueue

@@ -162,7 +162,7 @@ private:
      *
      * @return excel's name index.
      */
-    sal_uInt16          FindNamedExp( SCTAB nTab, OUString sName );
+    sal_uInt16          FindNamedExp( SCTAB nTab, const OUString& sName );
 
     /** Returns the index of an existing built-in NAME record with the passed definition, otherwise 0. */
     sal_uInt16          FindBuiltInNameIdx( const OUString& rName,
@@ -548,7 +548,7 @@ void XclExpNameManagerImpl::SaveXml( XclExpXmlStream& rStrm )
 
 // private --------------------------------------------------------------------
 
-sal_uInt16 XclExpNameManagerImpl::FindNamedExp( SCTAB nTab, OUString sName )
+sal_uInt16 XclExpNameManagerImpl::FindNamedExp( SCTAB nTab, const OUString& sName )
 {
     NamedExpMap::key_type key(nTab, sName);
     NamedExpMap::const_iterator itr = maNamedExpMap.find(key);

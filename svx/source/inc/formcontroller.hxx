@@ -203,7 +203,7 @@ namespace svxform
         FormController( const css::uno::Reference< css::uno::XComponentContext > & _rxORB );
 
         // returns the window which should be used as parent window for dialogs
-        static css::uno::Reference<css::awt::XWindow> getDialogParentWindow(css::uno::Reference<css::form::runtime::XFormController> xFormController);
+        static css::uno::Reference<css::awt::XWindow> getDialogParentWindow(const css::uno::Reference<css::form::runtime::XFormController> & xFormController);
 
     private:
         virtual ~FormController() override;

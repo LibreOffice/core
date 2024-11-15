@@ -46,11 +46,19 @@ public:
     bool PreTraverseFunctionDecl(FunctionDecl *);
     bool PostTraverseFunctionDecl(FunctionDecl *, bool);
     bool TraverseFunctionDecl(FunctionDecl *);
+    bool PreTraverseCXXMethodDecl(CXXMethodDecl *);
+    bool PostTraverseCXXMethodDecl(CXXMethodDecl *, bool);
+    bool TraverseCXXMethodDecl(CXXMethodDecl *);
+    bool PreTraverseCXXConstructorDecl(CXXConstructorDecl *);
+    bool PostTraverseCXXConstructorDecl(CXXConstructorDecl *, bool);
+    bool TraverseCXXConstructorDecl(CXXConstructorDecl *);
     bool PreTraverseImplicitCastExpr(ImplicitCastExpr *);
     bool TraverseImplicitCastExpr(ImplicitCastExpr *);
 
     bool VisitBinaryOperator(BinaryOperator const *);
     bool VisitCXXOperatorCallExpr(const CXXOperatorCallExpr *);
+    bool VisitCallExpr(const CallExpr *);
+    bool VisitCXXMemberCallExpr(const CXXMemberCallExpr *);
 
 private:
     bool isFat(QualType type);
@@ -68,10 +76,10 @@ bool PassParamsByRef::PreTraverseFunctionDecl(FunctionDecl* functionDecl)
     {
         return false;
     }
-    // only consider base declarations, not overridden ones, or we warn on methods that
-    // are overriding stuff from external libraries
+    // Ignore virtual methods, sometimes we want to pass by value, and we cannot tell from
+    // the limited info available at an individual site.
     const CXXMethodDecl * methodDecl = dyn_cast<CXXMethodDecl>(functionDecl);
-    if (methodDecl && methodDecl->size_overridden_methods() > 0)
+    if (methodDecl && methodDecl->isVirtual())
         return false;
 
     // Only warn on the definition of the function:
@@ -87,7 +95,6 @@ bool PassParamsByRef::PostTraverseFunctionDecl(FunctionDecl* functionDecl, bool)
 {
     mbInsideFunctionDecl = false;
 
-    auto cxxConstructorDecl = dyn_cast<CXXConstructorDecl>(functionDecl);
     unsigned n = functionDecl->getNumParams();
     for (unsigned i = 0; i != n; ++i) {
         const ParmVarDecl * pvDecl = functionDecl->getParamDecl(i);
@@ -95,29 +102,6 @@ bool PassParamsByRef::PostTraverseFunctionDecl(FunctionDecl* functionDecl, bool)
         if (!isFat(t))
             continue;
         if (mParamExclusions.find(pvDecl) != mParamExclusions.end())
-            continue;
-        // Ignore cases where the parameter is std::move'd.
-        // This is a fairly simple check, might need some more complexity if the parameter is std::move'd
-        // somewhere else in the constructor.
-        bool bFoundMove = false;
-        if (cxxConstructorDecl) {
-            for (CXXCtorInitializer const * cxxCtorInitializer : cxxConstructorDecl->inits()) {
-                if (cxxCtorInitializer->isMemberInitializer())
-                {
-                    auto cxxConstructExpr = dyn_cast<CXXConstructExpr>(cxxCtorInitializer->getInit()->IgnoreParenImpCasts());
-                    if (cxxConstructExpr && cxxConstructExpr->getNumArgs() == 1)
-                    {
-                        if (auto callExpr = dyn_cast<CallExpr>(cxxConstructExpr->getArg(0)->IgnoreParenImpCasts())) {
-                            if (loplugin::DeclCheck(callExpr->getCalleeDecl()).Function("move").StdNamespace()) {
-                                bFoundMove = true;
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        if (bFoundMove)
             continue;
         report(
             DiagnosticsEngine::Warning,
@@ -142,6 +126,48 @@ bool PassParamsByRef::TraverseFunctionDecl(FunctionDecl* functionDecl)
     {
         ret = RecursiveASTVisitor::TraverseFunctionDecl(functionDecl);
         PostTraverseFunctionDecl(functionDecl, ret);
+    }
+    return ret;
+}
+
+bool PassParamsByRef::PreTraverseCXXMethodDecl(CXXMethodDecl* functionDecl)
+{
+    return PreTraverseFunctionDecl(functionDecl);
+}
+
+bool PassParamsByRef::PostTraverseCXXMethodDecl(CXXMethodDecl* functionDecl, bool b)
+{
+    return PostTraverseFunctionDecl(functionDecl, b);
+}
+
+bool PassParamsByRef::TraverseCXXMethodDecl(CXXMethodDecl* functionDecl)
+{
+    bool ret = true;
+    if (PreTraverseCXXMethodDecl(functionDecl))
+    {
+        ret = RecursiveASTVisitor::TraverseCXXMethodDecl(functionDecl);
+        PostTraverseCXXMethodDecl(functionDecl, ret);
+    }
+    return ret;
+}
+
+bool PassParamsByRef::PreTraverseCXXConstructorDecl(CXXConstructorDecl* functionDecl)
+{
+    return PreTraverseFunctionDecl(functionDecl);
+}
+
+bool PassParamsByRef::PostTraverseCXXConstructorDecl(CXXConstructorDecl* functionDecl, bool b)
+{
+    return PostTraverseFunctionDecl(functionDecl, b);
+}
+
+bool PassParamsByRef::TraverseCXXConstructorDecl(CXXConstructorDecl* functionDecl)
+{
+    bool ret = true;
+    if (PreTraverseCXXConstructorDecl(functionDecl))
+    {
+        ret = RecursiveASTVisitor::TraverseCXXConstructorDecl(functionDecl);
+        PostTraverseCXXConstructorDecl(functionDecl, ret);
     }
     return ret;
 }
@@ -199,6 +225,50 @@ bool PassParamsByRef::VisitCXXOperatorCallExpr(const CXXOperatorCallExpr * cxxOp
         return true;
     if (auto parmVarDecl = dyn_cast<ParmVarDecl>(declRefExpr->getDecl()))
         mParamExclusions.emplace(parmVarDecl);
+    return true;
+}
+
+bool PassParamsByRef::VisitCallExpr(const CallExpr * callExpr )
+{
+    if (!mbInsideFunctionDecl)
+        return true;
+    if (loplugin::DeclCheck(callExpr->getCalleeDecl()).Function("move").StdNamespace())
+        if (auto declRefExpr = dyn_cast<DeclRefExpr>(callExpr->getArg(0)))
+        {
+            if (auto parmVarDecl = dyn_cast<ParmVarDecl>(declRefExpr->getDecl()))
+                mParamExclusions.emplace(parmVarDecl);
+        }
+    if (auto const fun = callExpr->getDirectCallee())
+    {
+        unsigned const n = std::min(fun->getNumParams(), callExpr->getNumArgs());
+        for (unsigned i = 0; i != n; ++i)
+        {
+            if (!loplugin::TypeCheck(fun->getParamDecl(i)->getType())
+                     .LvalueReference()
+                     .NonConstVolatile())
+                continue;
+            auto a = callExpr->getArg(i)->IgnoreParenImpCasts();
+            if (auto declRefExpr = dyn_cast<DeclRefExpr>(a))
+                if (auto parmVarDecl = dyn_cast<ParmVarDecl>(declRefExpr->getDecl()))
+                    mParamExclusions.emplace(parmVarDecl);
+        }
+    }
+    return true;
+}
+
+bool PassParamsByRef::VisitCXXMemberCallExpr(const CXXMemberCallExpr * callExpr )
+{
+    if (!mbInsideFunctionDecl)
+        return true;
+    // exclude cases where we call a non-const method on the parameter i.e. potentially mutating it
+    if (auto const e1 = callExpr->getMethodDecl())
+        if (!e1->isConst())
+        {
+            auto a = callExpr->getImplicitObjectArgument()->IgnoreParenImpCasts();
+            if (auto declRefExpr = dyn_cast<DeclRefExpr>(a))
+                if (auto parmVarDecl = dyn_cast<ParmVarDecl>(declRefExpr->getDecl()))
+                    mParamExclusions.emplace(parmVarDecl);
+        }
     return true;
 }
 

@@ -1267,7 +1267,7 @@ void XclExpXmlStream::restoreTabNames(const std::vector<OUString>& aOriginalTabN
     }
 }
 
-void XclExpXmlStream::renameTab(SCTAB aTab, OUString aNewName)
+void XclExpXmlStream::renameTab(SCTAB aTab, const OUString& aNewName)
 {
     ScDocShell* pShell = getDocShell();
     ScDocument& rDoc = pShell->GetDocument();

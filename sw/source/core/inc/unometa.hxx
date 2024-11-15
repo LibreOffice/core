@@ -93,7 +93,7 @@ public:
     static rtl::Reference<SwXMeta>
         CreateXMeta(
             ::sw::Meta & rMeta,
-            css::uno::Reference<SwXText> xParentText,
+            const css::uno::Reference<SwXText>& xParentText,
             std::unique_ptr<TextRangeList_t const> && pPortions);
 
     static rtl::Reference<SwXMeta>
@@ -194,7 +194,7 @@ private:
 
     friend rtl::Reference<SwXMeta>
         SwXMeta::CreateXMeta(::sw::Meta &,
-            css::uno::Reference<SwXText>,
+            const css::uno::Reference<SwXText>&,
             std::unique_ptr<TextRangeList_t const> && pPortions);
 
     SwXMetaField(SwDoc *const pDoc, ::sw::Meta *const pMeta,

@@ -295,7 +295,7 @@ private:
 protected:
     bool ImpCanConvTextToCurve() const;
     rtl::Reference<SdrPathObj> ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPolygon, bool bClosed, bool bBezier) const;
-    rtl::Reference<SdrObject> ImpConvertAddText(rtl::Reference<SdrObject> pObj, bool bBezier) const;
+    rtl::Reference<SdrObject> ImpConvertAddText(const rtl::Reference<SdrObject> & pObj, bool bBezier) const;
     void ImpSetTextStyleSheetListeners();
     static void ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextSize, const Size& rShapeSize, Fraction& rFitXCorrection);
     static void ImpJustifyRect(tools::Rectangle& rRect);

@@ -161,7 +161,7 @@ private:
     std::unordered_map< css::uno::Reference<css::drawing::XShape>, sal_Int32 > maPlaceholderShapeToIndexMap;
 
     // Get author id to remove personal info
-    size_t GetInfoID( const OUString sPersonalInfo ) const { return mpAuthorIDs->GetInfoID(sPersonalInfo); }
+    size_t GetInfoID( const OUString& sPersonalInfo ) const { return mpAuthorIDs->GetInfoID(sPersonalInfo); }
     struct AuthorComments {
         sal_Int32 nId;
         sal_Int32 nLastIndex;
@@ -175,7 +175,7 @@ private:
         AuthorComments(sal_Int32 nId_, sal_Int32 nLastIndex_, OUString sInitials_)
             : nId(nId_)
             , nLastIndex(nLastIndex_)
-            , sInitials(sInitials_)
+            , sInitials(std::move(sInitials_))
         {
         }
     };

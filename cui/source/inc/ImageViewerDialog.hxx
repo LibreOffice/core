@@ -16,5 +16,5 @@ class ImageViewerDialog : public weld::GenericDialogController
     std::unique_ptr<weld::Image> m_xDisplayImage;
 
 public:
-    ImageViewerDialog(weld::Dialog* pParent, BitmapEx aBitmap, OUString atitle);
+    ImageViewerDialog(weld::Dialog* pParent, BitmapEx aBitmap, const OUString& atitle);
 };

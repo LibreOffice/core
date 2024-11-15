@@ -190,7 +190,7 @@ private:
 public:
     SwNumberInputDlg(weld::Window* pParent, const OUString& rTitle,
         const OUString& rLabel1, const sal_Int64 nValue, const sal_Int64 min, const sal_Int64 max,
-        OUString rLabel2 = OUString())
+        const OUString& rLabel2 = OUString())
         : SfxDialogController(pParent, u"modules/swriter/ui/numberinput.ui"_ustr, u"NumberInputDialog"_ustr)
         , m_xLabel1(m_xBuilder->weld_label(u"label1"_ustr))
         , m_xSpinButton(m_xBuilder->weld_spin_button(u"spinbutton"_ustr))

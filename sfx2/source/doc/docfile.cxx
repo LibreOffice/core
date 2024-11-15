@@ -1745,7 +1745,7 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand(bool bLoading, bool bN
 
 // this either returns non-null or throws exception
 uno::Reference<embed::XStorage>
-SfxMedium::TryEncryptedInnerPackage(uno::Reference<embed::XStorage> const xStorage)
+SfxMedium::TryEncryptedInnerPackage(uno::Reference<embed::XStorage> const & xStorage)
 {
     uno::Reference<embed::XStorage> xRet;
     if (xStorage->hasByName(u"encrypted-package"_ustr))

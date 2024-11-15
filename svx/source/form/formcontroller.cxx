@@ -3436,7 +3436,7 @@ sal_Bool SAL_CALL FormController::supportsMode(const OUString& Mode)
     return comphelper::findValue(aModes, Mode) != -1;
 }
 
-css::uno::Reference<css::awt::XWindow> FormController::getDialogParentWindow(css::uno::Reference<css::form::runtime::XFormController> xFormController)
+css::uno::Reference<css::awt::XWindow> FormController::getDialogParentWindow(const css::uno::Reference<css::form::runtime::XFormController> & xFormController)
 {
     try
     {

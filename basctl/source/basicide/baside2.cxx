@@ -1609,7 +1609,7 @@ void ModulWindowLayout::SyntaxColors::ConfigurationChanged (utl::ConfigurationBr
 
 // Applies an entire new color scheme; when bFirst is true, then the checks to see if the color scheme
 // has changed are ignored to make sure the color scheme is applied
-void ModulWindowLayout::SyntaxColors::ApplyColorScheme(OUString aSchemeId, bool bFirst)
+void ModulWindowLayout::SyntaxColors::ApplyColorScheme(const OUString& aSchemeId, bool bFirst)
 {
     const TokenType vTokenTypes[] =
     {

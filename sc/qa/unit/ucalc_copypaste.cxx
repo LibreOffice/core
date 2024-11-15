@@ -107,7 +107,7 @@ protected:
     void printValuesAndFormulasInRange(ScDocument* pDoc, const ScRange& rRange,
                                        const OString& rCaption);
     OUString getRangeByName(const OUString& aRangeName);
-    ScAddress setNote(SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString noteText);
+    ScAddress setNote(SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString& noteText);
     OUString getNote(SCCOL nCol, SCROW nRow, SCTAB nTab);
 };
 
@@ -137,7 +137,7 @@ OUString TestCopyPaste::getRangeByName(const OUString& aRangeName)
     return ScUcalcTestBase::getRangeByName(m_pDoc, aRangeName);
 }
 
-ScAddress TestCopyPaste::setNote(SCCOL nCol, SCROW nRow, SCTAB nTab, OUString noteText)
+ScAddress TestCopyPaste::setNote(SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString& noteText)
 {
     ScAddress aAdr(nCol, nRow, nTab);
     ScPostIt* pNote = m_pDoc->GetOrCreateNote(aAdr);

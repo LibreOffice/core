@@ -21,13 +21,13 @@ public:
     {
     }
 
-    void testCopyPasteToNewSheet(uno::Reference<chart::XChartDocument> xChartDoc,
+    void testCopyPasteToNewSheet(const uno::Reference<chart::XChartDocument>& xChartDoc,
                                  OUString aObjectName, sal_Int32 nColumns, sal_Int32 nRows);
 };
 
-void Chart2UiChartTest::testCopyPasteToNewSheet(uno::Reference<chart::XChartDocument> xChartDoc,
-                                                OUString aObjectName, sal_Int32 nColumns,
-                                                sal_Int32 nRows)
+void Chart2UiChartTest::testCopyPasteToNewSheet(
+    const uno::Reference<chart::XChartDocument>& xChartDoc, OUString aObjectName,
+    sal_Int32 nColumns, sal_Int32 nRows)
 {
     CPPUNIT_ASSERT(xChartDoc.is());
     uno::Reference<chart::XChartDataArray> xChartData(xChartDoc->getData(), uno::UNO_QUERY_THROW);

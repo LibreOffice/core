@@ -342,7 +342,7 @@ private:
 
     void validateTabNames(std::vector<OUString>& aOriginalTabNames);
     void restoreTabNames(const std::vector<OUString>& aOriginalTabNames);
-    void renameTab(SCTAB aTab, OUString aNewName);
+    void renameTab(SCTAB aTab, const OUString& aNewName);
 
     typedef std::map< OUString,
         std::pair< OUString,

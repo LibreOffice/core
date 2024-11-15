@@ -672,7 +672,7 @@ SwXMeta::CreateXMeta(SwDoc & rDoc, bool const isField)
 
 rtl::Reference<SwXMeta>
 SwXMeta::CreateXMeta(::sw::Meta & rMeta,
-            css::uno::Reference<SwXText> i_xParent,
+            const css::uno::Reference<SwXText>& i_xParent,
             std::unique_ptr<TextRangeList_t const> && pPortions)
 {
     // re-use existing SwXMeta

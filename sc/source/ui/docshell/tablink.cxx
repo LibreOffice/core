@@ -489,7 +489,7 @@ SfxMedium* ScDocumentLoader::CreateMedium( const OUString& rFileName, std::share
 ScDocumentLoader::ScDocumentLoader(const OUString& rFileName,
                                    OUString& rFilterName, OUString& rOptions,
                                    sal_uInt32 nRekCnt, weld::Window* pInteractionParent,
-                                   css::uno::Reference<css::io::XInputStream> xInputStream)
+                                   const css::uno::Reference<css::io::XInputStream>& xInputStream)
     : pMedium(nullptr)
 {
     if ( rFilterName.isEmpty() )

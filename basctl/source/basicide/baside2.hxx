@@ -460,7 +460,7 @@ private:
         Color const & GetBackgroundColor () const { return m_aBackgroundColor; };
         Color const & GetFontColor () const { return m_aFontColor; }
         Color const & GetColor(TokenType eType) const { return aColors[eType]; }
-        void ApplyColorScheme(OUString aSchemeId, bool bFirst);
+        void ApplyColorScheme(const OUString& aSchemeId, bool bFirst);
 
     private:
         virtual void ConfigurationChanged (utl::ConfigurationBroadcaster*, ConfigurationHints) override;

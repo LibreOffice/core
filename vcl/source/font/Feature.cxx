@@ -41,7 +41,7 @@ Feature::Feature(uint32_t nCode, FeatureType eType)
 }
 
 // FeatureSetting
-FeatureSetting::FeatureSetting(OString feature)
+FeatureSetting::FeatureSetting(const OString& feature)
     : m_nTag(0)
     , m_nValue(0)
     , m_nStart(0)

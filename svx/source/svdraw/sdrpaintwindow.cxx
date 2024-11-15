@@ -175,7 +175,7 @@ void SdrPreRenderDevice::OutputPreRenderDevice(const vcl::Region& rExpandedRegio
     mpPreRenderDevice->EnableMapMode(bMapModeWasEnabledSource);
 }
 
-void SdrPaintView::InitOverlayManager(rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager)
+void SdrPaintView::InitOverlayManager(const rtl::Reference<sdr::overlay::OverlayManager> & xOverlayManager)
 {
     Color aColA(SvtOptionsDrawinglayer::GetStripeColorA());
     Color aColB(SvtOptionsDrawinglayer::GetStripeColorB());

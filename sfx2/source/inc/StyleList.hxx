@@ -63,7 +63,7 @@ class StyleList final : public SfxListener
 public:
     // Constructor
     StyleList(weld::Builder* pBuilder, SfxBindings* pBindings, SfxCommonTemplateDialog_Impl* Parent,
-              weld::Container* pC, OUString treeviewname, OUString flatviewname);
+              weld::Container* pC, const OUString& treeviewname, const OUString& flatviewname);
 
     // Destructor
     ~StyleList();

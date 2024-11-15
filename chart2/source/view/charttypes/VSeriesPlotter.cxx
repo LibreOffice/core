@@ -2308,7 +2308,7 @@ namespace {
 // charts).
 struct ROrderPair
 {
-    ROrderPair(OUString n, sal_Int32 r) : chartName(n), renderOrder(r) {}
+    ROrderPair(OUString n, sal_Int32 r) : chartName(std::move(n)), renderOrder(r) {}
 
     OUString chartName;
     sal_Int32 renderOrder;

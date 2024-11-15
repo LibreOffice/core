@@ -110,7 +110,7 @@ public:
         : EventPosterHelper()
     {
     }
-    AccessibleEventPosterHelper(const css::uno::Reference<css::accessibility::XAccessible> xAcc)
+    AccessibleEventPosterHelper(const css::uno::Reference<css::accessibility::XAccessible>& xAcc)
     {
         setWindow(xAcc);
     }

@@ -137,7 +137,7 @@ std::optional<OUString> sDefaultCharStyleUIName;
 
 StyleList::StyleList(weld::Builder* pBuilder, SfxBindings* pBindings,
                      SfxCommonTemplateDialog_Impl* Parent, weld::Container* pC,
-                     OUString treeviewname, OUString flatviewname)
+                     const OUString& treeviewname, const OUString& flatviewname)
     : m_bHierarchical(false)
     , m_bAllowReParentDrop(false)
     , m_bNewByExampleDisabled(false)

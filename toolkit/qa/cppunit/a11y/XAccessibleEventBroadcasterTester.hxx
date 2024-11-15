@@ -31,8 +31,9 @@ private:
     const css::uno::Reference<css::awt::XWindow> mxWindow;
 
     static bool isTransient(
-        const css::uno::Reference<css::accessibility::XAccessibleEventBroadcaster> xBroadcaster);
-    static bool isTransient(const css::uno::Reference<css::accessibility::XAccessibleContext> xCtx);
+        const css::uno::Reference<css::accessibility::XAccessibleEventBroadcaster>& xBroadcaster);
+    static bool
+    isTransient(const css::uno::Reference<css::accessibility::XAccessibleContext>& xCtx);
 
     void fireEvent();
 

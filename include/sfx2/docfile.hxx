@@ -229,7 +229,7 @@ public:
     SAL_DLLPRIVATE void SetStorage_Impl( const css::uno::Reference< css::embed::XStorage >& xNewStorage );
     SAL_DLLPRIVATE void SetInnerStorage_Impl(const css::uno::Reference<css::embed::XStorage>& xStorage);
     SAL_DLLPRIVATE css::uno::Reference<css::embed::XStorage>
-        TryEncryptedInnerPackage(css::uno::Reference<css::embed::XStorage> xStorage);
+        TryEncryptedInnerPackage(const css::uno::Reference<css::embed::XStorage> & xStorage);
 
     SAL_DLLPRIVATE void CloseAndReleaseStreams_Impl();
     SAL_DLLPRIVATE void AddVersion_Impl( css::util::RevisionTag& rVersion );

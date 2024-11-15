@@ -62,7 +62,7 @@ using namespace css::uno;
 class ChartTest : public UnoApiXmlTest
 {
 public:
-    ChartTest(OUString path)
+    ChartTest(const OUString& path)
         : UnoApiXmlTest(path)
     {
     }

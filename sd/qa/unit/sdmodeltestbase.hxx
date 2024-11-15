@@ -41,7 +41,7 @@ using namespace ::com::sun::star;
 class SdModelTestBase : public UnoApiXmlTest
 {
 public:
-    SdModelTestBase(OUString path)
+    SdModelTestBase(const OUString& path)
         : UnoApiXmlTest(path)
     {
     }

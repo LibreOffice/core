@@ -207,7 +207,7 @@ OUString SolverSettings::GetParameter(SolverParameter eParam)
 }
 
 // Sets the value of a single solver parameter in the object
-void SolverSettings::SetParameter(SolverParameter eParam, OUString sValue)
+void SolverSettings::SetParameter(SolverParameter eParam, const OUString& sValue)
 {
     switch (eParam)
     {
@@ -393,7 +393,8 @@ void SolverSettings::WriteConstraints()
 }
 
 // Write a single constraint part to the file
-void SolverSettings::WriteConstraintPart(ConstraintPart ePart, tools::Long nIndex, OUString sValue)
+void SolverSettings::WriteConstraintPart(ConstraintPart ePart, tools::Long nIndex,
+                                         const OUString& sValue)
 {
     // Empty named ranges cannot be written to the file (this corrupts MS files)
     if (sValue.isEmpty())

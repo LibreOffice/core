@@ -236,7 +236,7 @@ protected:
     // Interface to SdrPaintWindow
     void DeletePaintWindow(const SdrPaintWindow& rOld);
     void ConfigurationChanged( ::utl::ConfigurationBroadcaster*, ConfigurationHints ) override;
-    static void InitOverlayManager(rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager);
+    static void InitOverlayManager(const rtl::Reference<sdr::overlay::OverlayManager> & xOverlayManager);
 
 public:
     sal_uInt32 PaintWindowCount() const { return maPaintWindows.size(); }

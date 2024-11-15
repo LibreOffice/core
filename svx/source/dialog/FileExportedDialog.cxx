@@ -16,7 +16,7 @@
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
 
-FileExportedDialog::FileExportedDialog(weld::Window* pParent, OUString atitle)
+FileExportedDialog::FileExportedDialog(weld::Window* pParent, const OUString& atitle)
     : GenericDialogController(pParent, u"svx/ui/fileexporteddialog.ui"_ustr,
                               u"FileExportedDialog"_ustr)
     , m_xFileLabel(m_xBuilder->weld_label(u"Filelabel"_ustr))

@@ -457,7 +457,7 @@ rtl::Reference<SdrPathObj> SdrTextObj::ImpConvertMakeObj(const basegfx::B2DPolyP
     return pPathObj;
 }
 
-rtl::Reference<SdrObject> SdrTextObj::ImpConvertAddText(rtl::Reference<SdrObject> pObj, bool bBezier) const
+rtl::Reference<SdrObject> SdrTextObj::ImpConvertAddText(const rtl::Reference<SdrObject> & pObj, bool bBezier) const
 {
     if(!ImpCanConvTextToCurve())
     {

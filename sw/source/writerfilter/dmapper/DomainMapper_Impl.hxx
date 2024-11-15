@@ -761,7 +761,7 @@ public:
 
     void PushTextBoxContent();
     void PopTextBoxContent();
-    void AttachTextBoxContentToShape(css::uno::Reference<css::drawing::XShape> xShape);
+    void AttachTextBoxContentToShape(const css::uno::Reference<css::drawing::XShape> & xShape);
 
     void RemoveDummyParaForTableInSection();
     void AddDummyParaForTableInSection();
@@ -968,8 +968,8 @@ public:
     sal_Int32 GetEndnoteCount() const { return m_nEndnotes; }
     void IncrementEndnoteCount() { ++m_nEndnotes; }
     bool CopyTemporaryNotes(
-        rtl::Reference< SwXFootnote > xNoteSrc,
-        rtl::Reference< SwXFootnote > xNoteDest );
+        const rtl::Reference< SwXFootnote > & xNoteSrc,
+        const rtl::Reference< SwXFootnote > & xNoteDest );
     void RemoveTemporaryFootOrEndnotes();
 
     void PushAnnotation();
@@ -1032,8 +1032,8 @@ public:
     /// Returns title of the TOC placed in paragraph(s) before TOC field inside STD-frame
     OUString extractTocTitle();
     rtl::Reference<SwXSection> createSectionForRange(
-            css::uno::Reference< css::text::XTextRange > xStart,
-            css::uno::Reference< css::text::XTextRange > xEnd,
+            const css::uno::Reference< css::text::XTextRange > & xStart,
+            const css::uno::Reference< css::text::XTextRange > & xEnd,
             std::u16string_view sObjectType, bool stepLeft);
 
     void SetBookmarkName( const OUString& rBookmarkName );

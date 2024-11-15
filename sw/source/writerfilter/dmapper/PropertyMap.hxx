@@ -414,7 +414,7 @@ public:
 
     void SetPaperSource(sal_Int32 first, sal_Int32 other) { m_nPaperSourceFirst = first; m_nPaperSourceOther = other;}
 
-    void addRelativeWidthShape( css::uno::Reference<css::drawing::XShape> xShape ) { m_xRelativeWidthShapes.push_back( xShape ); }
+    void addRelativeWidthShape( const css::uno::Reference<css::drawing::XShape>& xShape ) { m_xRelativeWidthShapes.push_back( xShape ); }
 
     // determine which style gets the borders
     void ApplyBorderToPageStyles( DomainMapper_Impl &rDM_Impl,

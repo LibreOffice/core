@@ -28,8 +28,8 @@ private:
 
 public:
     DECL_LINK(HandleResultViewRequest, weld::Button&, void);
-    GraphicTestEntry(weld::Container* pParent, weld::Dialog* pDialog, OUString aTestName,
-                     OUString aTestStatus, Bitmap aTestBitmap);
+    GraphicTestEntry(weld::Container* pParent, weld::Dialog* pDialog, const OUString& aTestName,
+                     const OUString& aTestStatus, Bitmap aTestBitmap);
     weld::Widget* get_widget() const { return m_xContainer.get(); }
 };
 

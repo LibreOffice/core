@@ -4415,8 +4415,8 @@ static void lcl_PasteRedlines(
 }
 
 bool DomainMapper_Impl::CopyTemporaryNotes(
-        rtl::Reference< SwXFootnote > xNoteSrc,
-        rtl::Reference< SwXFootnote > xNoteDest )
+        const rtl::Reference< SwXFootnote > & xNoteSrc,
+        const rtl::Reference< SwXFootnote > & xNoteDest )
 {
     if (!m_bSaxError && xNoteSrc != xNoteDest)
     {
@@ -6000,7 +6000,7 @@ void DomainMapper_Impl::PopTextBoxContent()
     }
 }
 
-void DomainMapper_Impl::AttachTextBoxContentToShape(css::uno::Reference<css::drawing::XShape> xShape)
+void DomainMapper_Impl::AttachTextBoxContentToShape(const css::uno::Reference<css::drawing::XShape> & xShape)
 {
     // Without textbox or shape pointless to continue
     if (m_xPendingTextBoxFrames.empty() || !xShape)
@@ -7510,8 +7510,8 @@ void DomainMapper_Impl::handleToc
 }
 
 rtl::Reference<SwXSection> DomainMapper_Impl::createSectionForRange(
-    uno::Reference< css::text::XTextRange > xStart,
-    uno::Reference< css::text::XTextRange > xEnd,
+    const uno::Reference< css::text::XTextRange > & xStart,
+    const uno::Reference< css::text::XTextRange > & xEnd,
     std::u16string_view sObjectType,
     bool stepLeft)
 {
