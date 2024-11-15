@@ -243,7 +243,10 @@ std::size_t SvFileStream::PutData( const void* pData, std::size_t nSize )
             return -1;
         }
         else if( !nWrite )
+        {
             SetError( SVSTREAM_DISK_FULL );
+            return -1;
+        }
     }
     return static_cast<std::size_t>(nWrite);
 }
