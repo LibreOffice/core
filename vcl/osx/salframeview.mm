@@ -1166,7 +1166,7 @@ static bool isMouseScrollWheelEvent( NSEvent *pEvent )
         aEvent.mnY = static_cast<tools::Long>(aPt.y) - mpFrame->GetUnmirroredGeometry().y();
         // tdf#151423 Ignore all modifiers for swipe events
         // It appears that devices that generate swipe events can generate
-        // both veritical and horizontal swipe events. So, behave like most
+        // both vertical and horizontal swipe events. So, behave like most
         // macOS applications and ignore all modifiers if this a swipe event.
         aEvent.mnCode           = 0;
         aEvent.mbDeltaIsPixel   = true;
