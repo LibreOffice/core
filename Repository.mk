@@ -77,6 +77,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	vcldemo \
 	svdemo \
 	minvcl \
+	minweld \
 	svptest \
 	tiledrendering \
 	mtfdemo \

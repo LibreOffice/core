@@ -45,6 +45,7 @@ $(eval $(call gb_Module_add_targets,vcl,\
                 Executable_vcldemo \
                 Executable_svdemo \
                 Executable_minvcl \
+                Executable_minweld \
                 Executable_svptest \
                 Executable_icontest \
                 Executable_visualbackendtest \
