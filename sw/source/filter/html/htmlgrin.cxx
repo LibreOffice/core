@@ -678,7 +678,8 @@ IMAGE_SETEVENT:
     bool bNeedWidth = (!bPercentWidth && !nWidth) || bRelWidthScale;
     bool bRelHeightScale = bPercentHeight && nHeight == SwFormatFrameSize::SYNCED;
     bool bNeedHeight = (!bPercentHeight && !nHeight) || bRelHeightScale;
-    if ((bNeedWidth || bNeedHeight) && !m_bFuzzing && allowAccessLink(*m_xDoc))
+    if ((bNeedWidth || bNeedHeight) && !m_bFuzzing && allowAccessLink(*m_xDoc) &&
+        !aGraphicURL.IsExoticProtocol())
     {
         GraphicDescriptor aDescriptor(aGraphicURL);
         if (aDescriptor.Detect(/*bExtendedInfo=*/true))
