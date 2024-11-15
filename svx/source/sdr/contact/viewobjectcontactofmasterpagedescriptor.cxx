@@ -23,6 +23,8 @@
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/svdpagv.hxx>
+#include <svx/svdview.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -78,12 +80,13 @@ namespace sdr::contact
             aPreprocessedLayers &= rDescriptor.GetVisibleLayers();
             rDisplayInfo.SetProcessLayers(aPreprocessedLayers);
             rDisplayInfo.SetSubContentActive(true);
-
+            const SdrPageView* pSdrPageView = GetObjectContact().TryToGetSdrPageView();
+            bool bHideBackground = pSdrPageView ? pSdrPageView->GetView().getHideBackground() : false;
             // check layer visibility (traditionally was member of layer 1)
             if(aPreprocessedLayers.IsSet(SdrLayerID(1)))
             {
                 // hide PageBackground for special DrawModes; historical reasons
-                if(!GetObjectContact().isDrawModeGray() && !GetObjectContact().isDrawModeHighContrast())
+                if (!bHideBackground && !GetObjectContact().isDrawModeGray() && !GetObjectContact().isDrawModeHighContrast())
                 {
                     // if visible, create the default background primitive sequence
                     static_cast< ViewContactOfMasterPageDescriptor& >(GetViewContact()).getViewIndependentPrimitive2DContainer(rVisitor);

@@ -12,23 +12,36 @@
 #include <sddllapi.h>
 #include <tools/gen.hxx>
 #include <rtl/string.hxx>
+#include <deque>
 
 class SdrPage;
-class BitmapEx;
+class SdrModel;
+
 class Size;
 
 namespace sd
 {
+enum class SlideRenderStage
+{
+    Master,
+    Slide
+};
+
 class SD_DLLPUBLIC SlideshowLayerRenderer
 {
-    SdrPage* mpPage;
+    SdrPage& mrPage;
+    SdrModel& mrModel;
+
     Size maSlideSize;
-    bool bRenderDone = false;
+
+    std::deque<SlideRenderStage> maRenderStages;
 
 public:
-    SlideshowLayerRenderer(SdrPage* pPage);
+    SlideshowLayerRenderer(SdrPage& rPage);
     Size calculateAndSetSizePixel(Size const& rDesiredSizePixel);
     bool render(unsigned char* pBuffer, OString& rJsonMsg);
+    bool renderMaster(unsigned char* pBuffer, OString& rJsonMsg);
+    bool renderSlide(unsigned char* pBuffer, OString& rJsonMsg);
 };
 
 } // end of namespace sd

@@ -207,7 +207,8 @@ protected:
     bool mbHideChart : 1;
     bool mbHideDraw : 1; // hide draw objects other than form controls
     bool mbHideFormControl : 1; // hide form controls only
-    bool mbPaintTextEdit : 1;        // if should paint currently edited text
+    bool mbHideBackground : 1; // don't draw the (page's or matser page's) background
+    bool mbPaintTextEdit : 1; // if should paint currently edited text
 
 public:
     // Interface for BufferedOoutputAllowed flag
@@ -473,10 +474,13 @@ public:
     bool getHideChart() const { return mbHideChart; }
     bool getHideDraw() const { return mbHideDraw; }
     bool getHideFormControl() const { return mbHideFormControl; }
+    bool getHideBackground() const { return mbHideBackground; }
+
     void setHideOle(bool bNew) { if(bNew != mbHideOle) mbHideOle = bNew; }
     void setHideChart(bool bNew) { if(bNew != mbHideChart) mbHideChart = bNew; }
     void setHideDraw(bool bNew) { if(bNew != mbHideDraw) mbHideDraw = bNew; }
     void setHideFormControl(bool bNew) { if(bNew != mbHideFormControl) mbHideFormControl = bNew; }
+    void setHideBackground(bool bNew) { mbHideBackground = bNew; }
 
     void SetGridCoarse(const Size& rSiz) { maGridBig=rSiz; }
     void SetGridFine(const Size& rSiz) {
