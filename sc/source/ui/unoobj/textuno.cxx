@@ -825,7 +825,7 @@ SvxTextForwarder* ScCellTextData::GetTextForwarder()
             // Note: CppunitTest_sc_macros_test testTdf116127 will fail if
             // pEditEngine->SetTextNewDefaults() is passed an empty string
             // and pEditEngine->GetText() is empty string.
-            if (!aText.isEmpty() || !pEditEngine->GetText().isEmpty())
+            if (!aText.isEmpty() || pEditEngine->HasText())
                 pEditEngine->SetTextNewDefaults(aText, std::move(pDefaults));
             else
                 pEditEngine->SetDefaults(std::move(pDefaults));

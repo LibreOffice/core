@@ -194,7 +194,6 @@ private:
 
     SAL_DLLPRIVATE void HandleBeginPasteOrDrop(PasteOrDropInfos& rInfos);
     SAL_DLLPRIVATE void HandleEndPasteOrDrop(PasteOrDropInfos& rInfos);
-    SAL_DLLPRIVATE bool HasText() const;
     SAL_DLLPRIVATE const EditSelectionEngine& GetSelectionEngine() const;
     SAL_DLLPRIVATE void SetInSelectionMode(bool b);
 
@@ -278,6 +277,7 @@ public:
 
     SAL_DLLPRIVATE void SetMinColumnWrapHeight(tools::Long nVal);
 
+    bool            HasText() const;
     OUString        GetText( LineEnd eEnd = LINEEND_LF ) const;
     OUString        GetText( const ESelection& rSelection ) const;
     sal_Int32       GetTextLen() const;

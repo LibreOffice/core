@@ -441,7 +441,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
 
     ErrCode nErr = aOutliner.Read( *pStream, pMedium->GetBaseURL(), nFormat, mpDocSh->GetHeaderAttributes() );
 
-    if (nErr || aOutliner.GetEditEngine().GetText().isEmpty())
+    if (nErr || !aOutliner.GetEditEngine().HasText())
     {
         std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(mpWindow->GetFrameWeld(),
                                                        VclMessageType::Warning, VclButtonsType::Ok, SdResId(STR_READ_DATA_ERROR)));
@@ -586,7 +586,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
 
     ErrCode nErr = aOutliner.Read(*pStream, pMedium->GetBaseURL(), nFormat, mpDocSh->GetHeaderAttributes());
 
-    if (nErr || aOutliner.GetEditEngine().GetText().isEmpty())
+    if (nErr || !aOutliner.GetEditEngine().HasText())
     {
         std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(mpWindow->GetFrameWeld(),
                                                        VclMessageType::Warning, VclButtonsType::Ok, SdResId(STR_READ_DATA_ERROR)));

@@ -119,7 +119,7 @@ namespace
 void ODocumentInfoPreview::insertEntry(
     std::u16string_view title, OUString const & value)
 {
-    if (!m_xEditEngine->GetText().isEmpty()) {
+    if (m_xEditEngine->HasText()) {
         m_xEditEngine->QuickInsertText(u"\n\n"_ustr, InsertAtEnd(*m_xEditEngine));
     }
 

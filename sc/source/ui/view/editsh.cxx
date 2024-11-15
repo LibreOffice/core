@@ -347,10 +347,9 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 EditView* pActiveView = pHdl->GetActiveView();
                 if( pActiveView )
                 {
-                    OUString sInput = rEngine.GetText();
                     ESelection aSel( pActiveView->GetSelection() );
-                    if( aSel.HasRange() )
-                        sInput = pActiveView->GetSelected();
+                    OUString sInput(aSel.HasRange() ? pActiveView->GetSelected()
+                                                    : rEngine.GetText());
 
                     if( aSel.nStartPos > aSel.nEndPos )
                         aSel.nEndPos = aSel.nStartPos;

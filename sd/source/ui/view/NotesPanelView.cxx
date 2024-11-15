@@ -214,7 +214,7 @@ void NotesPanelView::onLoseFocus()
     SdrTextObj* pNotesTextObj = getNotesTextObj();
     if (pNotesTextObj)
     {
-        if (maOutliner.GetEditEngine().GetText().getLength() == 0)
+        if (!maOutliner.GetEditEngine().HasText())
         {
             // if the notes are empty restore the placeholder text and state.
             SdPage* pPage = dynamic_cast<SdPage*>(pNotesTextObj->getSdrPageFromSdrObject());
