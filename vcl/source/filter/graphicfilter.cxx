@@ -466,10 +466,16 @@ ErrCode GraphicFilter::CanImportGraphic( std::u16string_view rMainUrl, SvStream&
 ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const INetURLObject& rPath,
                                      sal_uInt16 nFormat, sal_uInt16 * pDeterminedFormat, GraphicFilterImportFlags nImportFlags )
 {
-    ErrCode nRetValue = ERRCODE_GRFILTER_FORMATERROR;
     SAL_WARN_IF( rPath.GetProtocol() == INetProtocol::NotValid, "vcl.filter", "GraphicFilter::ImportGraphic() : ProtType == INetProtocol::NotValid" );
 
     OUString    aMainUrl( rPath.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
+    if (rPath.IsExoticProtocol())
+    {
+        SAL_WARN("vcl.filter", "GraphicFilter::ImportGraphic(), ignore exotic protocol: " << aMainUrl);
+        return ERRCODE_GRFILTER_FORMATERROR;
+    }
+
+    ErrCode nRetValue = ERRCODE_GRFILTER_FORMATERROR;
     std::unique_ptr<SvStream> xStream(::utl::UcbStreamHelper::CreateStream( aMainUrl, StreamMode::READ | StreamMode::SHARE_DENYNONE ));
     if (xStream)
     {
