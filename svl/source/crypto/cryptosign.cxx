@@ -66,17 +66,6 @@
 using namespace com::sun::star;
 
 namespace {
-
-#if USE_CRYPTO_ANY
-void appendHex( sal_Int8 nInt, OStringBuffer& rBuffer )
-{
-    static const char pHexDigits[] = { '0', '1', '2', '3', '4', '5', '6', '7',
-                                           '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
-    rBuffer.append( pHexDigits[ (nInt >> 4) & 15 ] );
-    rBuffer.append( pHexDigits[ nInt & 15 ] );
-}
-#endif
-
 #if USE_CRYPTO_NSS
 char *PDFSigningPKCS7PasswordCallback(PK11SlotInfo * /*slot*/, PRBool /*retry*/, void *arg)
 {
@@ -2407,6 +2396,13 @@ bool Signing::Verify(SvStream& rStream,
 #endif
 }
 
+void Signing::appendHex(sal_Int8 nInt, OStringBuffer& rBuffer)
+{
+    static const char pHexDigits[] = { '0', '1', '2', '3', '4', '5', '6', '7',
+                                           '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
+    rBuffer.append( pHexDigits[ (nInt >> 4) & 15 ] );
+    rBuffer.append( pHexDigits[ nInt & 15 ] );
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

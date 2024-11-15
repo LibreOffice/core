@@ -82,6 +82,7 @@ public:
                        const bool bNonDetached,
                        const std::vector<unsigned char>& aSignature,
                        SignatureInformation& rInformation);
+    static void appendHex(sal_Int8 nInt, OStringBuffer& rBuffer);
 
 private:
     /// The certificate to use for signing.
@@ -95,6 +96,12 @@ private:
 
 /// Wrapper around a certificate: allows either an actual signing or extracting enough info, so a
 /// 3rd-party can sign our document.
+///
+/// The following states are supported:
+/// - actual signing: set m_xCertificate
+/// - hash extract before external signing: don't set anything, m_nSignatureTime and m_aDigest will
+///   be set
+/// - signature serialization after external signing: set m_nSignatureTime and m_aSignatureValue
 class SVL_DLLPUBLIC SigningContext
 {
 public:
@@ -103,8 +110,10 @@ public:
     /// If m_xCertificate is not set, the time that would be used, in milliseconds since the epoch
     /// (1970-01-01 UTC).
     sal_Int64 m_nSignatureTime = 0;
-    /// SHA-256 digest.
+    /// SHA-256 digest of the to-be signed document.
     std::vector<unsigned char> m_aDigest;
+    /// PKCS#7 data, produced externally.
+    std::vector<unsigned char> m_aSignatureValue;
 };
 
 }

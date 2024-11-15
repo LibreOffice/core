@@ -109,6 +109,7 @@
 #include <unotools/streamwrap.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <editeng/unoprnms.hxx>
+#include <comphelper/base64.hxx>
 
 #include <autoredactdialog.hxx>
 
@@ -621,6 +622,32 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 {
                     aSignatureKey = pSignatureKey->GetValue().toUtf8();
                 }
+
+                // See if an external signature time/value is provided: if so, sign with those
+                // instead of interactive signing via the dialog.
+                svl::crypto::SigningContext aSigningContext;
+                const SfxStringItem* pSignatureTime = rReq.GetArg<SfxStringItem>(FN_PARAM_3);
+                if (pSignatureTime)
+                {
+                    sal_Int64 nSignatureTime = pSignatureTime->GetValue().toInt64();
+                    aSigningContext.m_nSignatureTime = nSignatureTime;
+                }
+                const SfxStringItem* pSignatureValue = rReq.GetArg<SfxStringItem>(FN_PARAM_4);
+                if (pSignatureValue)
+                {
+                    OUString aSignatureValue = pSignatureValue->GetValue();
+                    uno::Sequence<sal_Int8> aBytes;
+                    comphelper::Base64::decode(aBytes, aSignatureValue);
+                    aSigningContext.m_aSignatureValue.assign(
+                        aBytes.getArray(), aBytes.getArray() + aBytes.getLength());
+                }
+                if (!aSigningContext.m_aSignatureValue.empty())
+                {
+                    SignDocumentContentUsingCertificate(aSigningContext);
+                    rReq.Done();
+                    return;
+                }
+
                 SfxViewFrame* pFrame = GetFrame();
                 SfxViewShell* pViewShell = pFrame ? pFrame->GetViewShell() : nullptr;
                 if (pViewShell)
