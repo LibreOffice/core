@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CODEMAKER_TYPEMANAGER_HXX
-#define INCLUDED_CODEMAKER_TYPEMANAGER_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -76,7 +75,5 @@ inline OString u2b(std::u16string_view s) {
 inline OUString b2u(std::string_view s) {
     return OStringToOUString(s, RTL_TEXTENCODING_UTF8);
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

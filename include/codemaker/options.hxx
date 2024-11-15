@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CODEMAKER_OPTIONS_HXX
-#define INCLUDED_CODEMAKER_OPTIONS_HXX
+#pragma once
 
 #include <codemaker/global.hxx>
 #include <unordered_map>
@@ -66,7 +65,5 @@ protected:
     StringVector    m_extra_input_files;
     OptionMap       m_options;
 };
-
-#endif // INCLUDED_CODEMAKER_OPTIONS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

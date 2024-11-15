@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CODEMAKER_EXCEPTIONTREE_HXX
-#define INCLUDED_CODEMAKER_EXCEPTIONTREE_HXX
+#pragma once
 
 #include <rtl/ref.hxx>
 #include <rtl/string.hxx>
@@ -113,7 +112,5 @@ private:
 };
 
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
