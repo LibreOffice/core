@@ -170,15 +170,16 @@ void MediaWindowImpl::dispose()
 
 uno::Reference<media::XPlayer> MediaWindowImpl::createPlayer(const OUString& rURL, const OUString& rReferer, const OUString*)
 {
-    uno::Reference<media::XPlayer> xPlayer;
-
     if( rURL.isEmpty() )
-        return xPlayer;
+        return nullptr;
 
     if (SvtSecurityOptions::isUntrustedReferer(rReferer))
-    {
-        return xPlayer;
-    }
+        return nullptr;
+
+    if (INetURLObject(rURL).IsExoticProtocol())
+        return nullptr;
+
+    uno::Reference<media::XPlayer> xPlayer;
 
     // currently there isn't anything else, throw any mime type to the media players
     //if (!pMimeType || *pMimeType == AVMEDIA_MIMETYPE_COMMON)
