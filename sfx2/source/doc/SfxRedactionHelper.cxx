@@ -428,7 +428,7 @@ void SfxRedactionHelper::searchInMetaFile(const RedactionTarget* pRedactionTarge
 
     OutputDevice* pOutputDevice
         = SfxObjectShell::GetShellFromComponent(xComponent)->GetDocumentRefDev();
-    pOutputDevice->Push(::vcl::PushFlags::FONT);
+    pOutputDevice->Push(PushFlags::FONT);
 
     MetaAction* pCurrAct;
 
