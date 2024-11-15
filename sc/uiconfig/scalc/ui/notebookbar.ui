@@ -3221,7 +3221,7 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="valign">center</property>
-                                        <property name="margi_start">5</property>
+                                        <property name="margin_start">5</property>
                                         <property name="margin_end">5</property>
                                         <child>
                                           <object class="GtkToolButton" id="Home-FontHeight">
@@ -4779,7 +4779,7 @@
                             <child>
                               <object class="GtkToolButton" id="Insert-DataDataPilotRun">
                                 <property name="visible">True</property>
-                                <property name="margi_start">5</property>
+                                <property name="margin_start">5</property>
                                 <property name="action_name">.uno:DataDataPilotRun</property>
                               </object>
                               <packing>
@@ -7270,7 +7270,7 @@
                             <property name="can_focus">False</property>
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="sfxlo-NotebookbarToolBox" id="LeftParaMargin8">
+                              <object class="sfxlo-NotebookbarToolBox" id="LeftParaMargin80">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="toolbar_style">both-horiz</property>
@@ -7540,7 +7540,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="sfxlo-NotebookbarToolBox" id="belowspacing8">
+                              <object class="sfxlo-NotebookbarToolBox" id="belowspacing80">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="valign">center</property>
@@ -10994,7 +10994,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
-                        <property name="margi_start">5</property>
+                        <property name="margin_start">5</property>
                         <property name="vexpand">True</property>
                         <child>
                           <object class="GtkSeparator" id="separator123">
