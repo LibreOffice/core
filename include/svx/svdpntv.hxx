@@ -207,7 +207,7 @@ protected:
     bool mbHideChart : 1;
     bool mbHideDraw : 1; // hide draw objects other than form controls
     bool mbHideFormControl : 1; // hide form controls only
-    bool mbHideBackground : 1; // don't draw the (page's or matser page's) background
+    bool mbHideBackground : 1; // don't draw the (page's or master page's) background
     bool mbPaintTextEdit : 1; // if should paint currently edited text
 
 public:
