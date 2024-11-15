@@ -298,7 +298,7 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
         pWidget->setParent(nullptr);
         // initially, add tab with empty label, QtBuilder::applyTabChildProperties will evaluate actual one
         pParentTabWidget->addTab(pWidget, QStringLiteral());
-        // unset pParentWidget to not not create a layout below
+        // unset pParentWidget to not create a layout below
         pParentWidget = nullptr;
     }
 
