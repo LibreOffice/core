@@ -55,6 +55,7 @@
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <tools/urlobj.hxx>
 
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
@@ -370,11 +371,19 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadLink_Impl()
     uno::Sequence< beans::PropertyValue > aArgs( m_aDocMediaDescriptor.getLength() + nLen );
     auto pArgs = aArgs.getArray();
 
-    pArgs[0].Name = "URL";
-    if(m_aLinkTempFile.is())
-        pArgs[0].Value <<= m_aLinkTempFile->getUri();
+    OUString sURL;
+    if (m_aLinkTempFile.is())
+        sURL = m_aLinkTempFile->getUri();
     else
-        pArgs[0].Value <<= m_aLinkURL;
+        sURL = m_aLinkURL;
+    if (INetURLObject(sURL).IsExoticProtocol())
+    {
+        SAL_WARN("embeddedobj.common", "Ignore exotic protocol: " << pArgs[0].Value);
+        return nullptr;
+    }
+
+    pArgs[0].Name = "URL";
+    pArgs[0].Value <<= sURL;
 
     pArgs[1].Name = "FilterName";
     pArgs[1].Value <<= m_aLinkFilterName;
