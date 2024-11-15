@@ -709,7 +709,7 @@ namespace frm
 
         // the SfxMedium is not allowed to be created with an invalid URL, so we have to check this first
         INetURLObject aUrl(rURL);
-        if (INetProtocol::NotValid == aUrl.GetProtocol())
+        if (INetProtocol::NotValid == aUrl.GetProtocol() || aUrl.IsExoticProtocol())
             // we treat an invalid URL like we would treat no URL
             return;
 

@@ -599,6 +599,9 @@ bool MediaDescriptor::impl_openStreamWithPostData( const css::uno::Reference< cs
 /*-----------------------------------------------*/
 bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, bool bLockFile )
 {
+    if (INetURLObject(sURL).IsExoticProtocol())
+        return false;
+
     OUString referer(getUnpackedValueOrDefault(PROP_REFERRER(), OUString()));
     if (SvtSecurityOptions().isUntrustedReferer(referer)) {
         return false;

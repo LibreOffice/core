@@ -55,6 +55,9 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/namedvaluecollection.hxx>
+#include <unotools/configmgr.hxx>
+#include <tools/urlobj.hxx>
+#include <unotools/securityoptions.hxx>
 
 #include <tools/diagnose_ex.h>
 #include "persistence.hxx"
@@ -375,6 +378,13 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadLink_Impl()
 
     sal_Int32 nLen = 2;
     uno::Sequence< beans::PropertyValue > aArgs( nLen );
+
+    if (INetURLObject(m_aLinkURL).IsExoticProtocol())
+    {
+        SAL_WARN("embeddedobj.common", "Ignore exotic protocol: " << m_aLinkURL);
+        return nullptr;
+    }
+
     aArgs[0].Name = "URL";
     aArgs[0].Value <<= m_aLinkURL;
     aArgs[1].Name = "FilterName";

@@ -4969,6 +4969,7 @@ bool INetURLObject::IsExoticProtocol() const
     return m_eScheme == INetProtocol::Slot ||
            m_eScheme == INetProtocol::Macro ||
            m_eScheme == INetProtocol::Uno ||
+           m_eScheme == INetProtocol::VndSunStarExpand ||
            isSchemeEqualTo(u"vnd.sun.star.script") ||
            isSchemeEqualTo(u"service");
 }

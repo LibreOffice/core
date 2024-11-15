@@ -497,6 +497,8 @@ bool LinkManager::GetGraphicFromAny( const OUString& rMimeType,
     css::uno::Sequence< sal_Int8 > aSeq;
     if( rValue.hasValue() && ( rValue >>= aSeq ) )
     {
+        auto aSeq = rValue.get<css::uno::Sequence<sal_Int8>>();
+
         SvMemoryStream aMemStm( const_cast<sal_Int8 *>(aSeq.getConstArray()), aSeq.getLength(),
                                 StreamMode::READ );
         aMemStm.Seek( 0 );

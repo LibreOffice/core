@@ -42,6 +42,7 @@
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
 #include <unotools/eventcfg.hxx>
+#include <unotools/securityoptions.hxx>
 
 #include <fmtornt.hxx>
 #include <fmturl.hxx>
@@ -292,7 +293,19 @@ void SwHTMLParser::GetDefaultScriptType( ScriptType& rType,
     rTypeStr = GetScriptTypeString( pHeaderAttrs );
 }
 
-/*  */
+namespace
+{
+    bool allowAccessLink(const SwDoc& rDoc)
+    {
+        OUString sReferer;
+        SfxObjectShell * sh = rDoc.GetPersist();
+        if (sh != nullptr && sh->HasName())
+        {
+            sReferer = sh->GetMedium()->GetName();
+        }
+        return !SvtSecurityOptions().isUntrustedReferer(sReferer);
+    }
+}
 
 void SwHTMLParser::InsertImage()
 {
@@ -585,6 +598,23 @@ IMAGE_SETEVENT:
     bool bRequestGrfNow = false;
     bool bSetScaleImageMap = false;
     sal_uInt8 nPrcWidth = 0, nPrcHeight = 0;
+
+    // bPrcWidth / bPrcHeight means we have a percent size.  If that's not the case and we have no
+    // size from nWidth / nHeight either, then inspect the image header.
+    if ((!bPrcWidth && !nWidth) && (!bPrcHeight && !nHeight) && allowAccessLink(*m_xDoc) &&
+        !aGraphicURL.IsExoticProtocol())
+    {
+        GraphicDescriptor aDescriptor(aGraphicURL);
+        if (aDescriptor.Detect(/*bExtendedInfo=*/true))
+        {
+            // Try to use size info from the image header before defaulting to
+            // HTML_DFLT_IMG_WIDTH/HEIGHT.
+            aTwipSz = Application::GetDefaultDevice()->PixelToLogic(aDescriptor.GetSizePixel(),
+                                                                    MapMode(MapUnit::MapTwip));
+            nWidth = aTwipSz.getWidth();
+            nHeight = aTwipSz.getHeight();
+        }
+    }
 
     if( !nWidth || !nHeight )
     {

@@ -186,16 +186,19 @@ void MediaWindowImpl::dispose()
 
 uno::Reference<media::XPlayer> MediaWindowImpl::createPlayer(const OUString& rURL, const OUString& rReferer, const OUString* pMimeType)
 {
-    uno::Reference<media::XPlayer> xPlayer;
-
     if( rURL.isEmpty() )
-        return xPlayer;
+        return nullptr;
 
     if (SvtSecurityOptions().isUntrustedReferer(rReferer))
     {
-        return xPlayer;
+        return nullptr;
     }
     uno::Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
+
+    if (INetURLObject(rURL).IsExoticProtocol())
+        return nullptr;
+
+    uno::Reference<media::XPlayer> xPlayer;
 
     if (!pMimeType || *pMimeType == AVMEDIA_MIMETYPE_COMMON)
     {

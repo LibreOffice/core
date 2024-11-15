@@ -58,7 +58,6 @@
 #include <ucbhelper/interceptedinteraction.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
-#include <officecfg/Office/Common.hxx>
 #include <comphelper/configuration.hxx>
 
 using namespace com::sun::star;
