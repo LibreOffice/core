@@ -401,7 +401,7 @@ bool OImageControlModel::impl_updateStreamForURL_lck( const OUString& _rURL, Val
 {
     OUString referer;
     getPropertyValue("Referer") >>= referer;
-    if (SvtSecurityOptions::isUntrustedReferer(referer)) {
+    if (SvtSecurityOptions::isUntrustedReferer(referer) || INetURLObject(_rURL).IsExoticProtocol()) {
         return false;
     }
 
