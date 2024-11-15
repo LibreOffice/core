@@ -26,6 +26,7 @@
 #include <tools/json_writer.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/base64.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 using namespace com::sun::star;
 
@@ -172,6 +173,41 @@ CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testLokHelperCommandValuesSignatureHash)
     // In case the test was slow enough that there was 1ms system time difference between the two
     // calls, then this failed.
     CPPUNIT_ASSERT_EQUAL(aHash1, aHash2);
+}
+
+CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testSignatureSerialize)
+{
+    // Given an unsigned PDF file:
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+        return;
+    createTempCopy(u"unsigned.pdf");
+    load(maTempFile.GetURL());
+
+    // When signing by serializing an externally provided signature based on an earlier extracted
+    // timestamp & document hash:
+    OUString aSigUrl = createFileURL(u"signature.pkcs7");
+    SvFileStream aSigStream(aSigUrl, StreamMode::READ);
+    auto aSigValue
+        = OUString::fromUtf8(read_uInt8s_ToOString(aSigStream, aSigStream.remainingSize()));
+    uno::Sequence<beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue(u"SignatureTime"_ustr, u"1643201995722"_ustr),
+        comphelper::makePropertyValue(u"SignatureValue"_ustr, aSigValue),
+    };
+    dispatchCommand(mxComponent, u".uno:Signature"_ustr, aArgs);
+
+    // Then make sure the document has a signature:
+    SvMemoryStream aStream;
+    aStream.WriteStream(*maTempFile.GetStream(StreamMode::READ));
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = pPDFium->openDocument(aStream.GetData(), aStream.GetSize(), OString());
+    CPPUNIT_ASSERT(pPdfDocument);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. no signature was added, since we tried to sign interactively instead of based on
+    // provided parameters.
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getSignatureCount());
 }
 #endif
 

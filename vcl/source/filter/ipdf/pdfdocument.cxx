@@ -945,16 +945,28 @@ bool PDFDocument::Sign(svl::crypto::SigningContext& rSigningContext, const OUStr
     m_aEditBuffer.ReadBytes(aBuffer2.get(), nBufferSize2);
 
     OStringBuffer aCMSHexBuffer;
-    svl::crypto::Signing aSigning(rSigningContext);
-    aSigning.AddDataRange(aBuffer1.get(), nBufferSize1);
-    aSigning.AddDataRange(aBuffer2.get(), nBufferSize2);
-    if (!aSigning.Sign(aCMSHexBuffer))
+    if (rSigningContext.m_aSignatureValue.empty())
     {
-        if (rSigningContext.m_xCertificate.is())
+        svl::crypto::Signing aSigning(rSigningContext);
+        aSigning.AddDataRange(aBuffer1.get(), nBufferSize1);
+        aSigning.AddDataRange(aBuffer2.get(), nBufferSize2);
+        if (!aSigning.Sign(aCMSHexBuffer))
         {
-            SAL_WARN("vcl.filter", "PDFDocument::Sign: PDFWriter::Sign() failed");
+            if (rSigningContext.m_xCertificate.is())
+            {
+                SAL_WARN("vcl.filter", "PDFDocument::Sign: PDFWriter::Sign() failed");
+            }
+            return false;
         }
-        return false;
+    }
+    else
+    {
+        // The signature value provided by the context: use that instead of building a new
+        // signature.
+        for (unsigned char ch : rSigningContext.m_aSignatureValue)
+        {
+            svl::crypto::Signing::appendHex(ch, aCMSHexBuffer);
+        }
     }
 
     assert(aCMSHexBuffer.getLength() <= MAX_SIGNATURE_CONTENT_LENGTH);

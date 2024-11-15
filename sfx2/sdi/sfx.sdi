@@ -4754,7 +4754,7 @@ SfxVoidItem VersionDialog SID_VERSION
 ]
 
 SfxUInt16Item Signature SID_SIGNATURE
-(SfxStringItem SignatureCert FN_PARAM_1, SfxStringItem SignatureKey FN_PARAM_2)
+(SfxStringItem SignatureCert FN_PARAM_1, SfxStringItem SignatureKey FN_PARAM_2, SfxStringItem SignatureTime FN_PARAM_3, SfxStringItem SignatureValue FN_PARAM_4)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
