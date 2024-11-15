@@ -3130,6 +3130,13 @@ const GraphicObject* SvxBrushItem::GetGraphicObject(OUString const & referer) co
             return nullptr;
         }
 
+        INetURLObject aGraphicURL( maStrLink );
+        if (aGraphicURL.IsExoticProtocol())
+        {
+            SAL_WARN("editeng", "Ignore exotic protocol: " << maStrLink);
+            return nullptr;
+        }
+
         // tdf#94088 prepare graphic and state
         Graphic aGraphic;
         bool bGraphicLoaded = false;
@@ -3150,8 +3157,6 @@ const GraphicObject* SvxBrushItem::GetGraphicObject(OUString const & referer) co
         // a 'data:' scheme url and try to load that (embedded graphics)
         if(!bGraphicLoaded)
         {
-            INetURLObject aGraphicURL( maStrLink );
-
             if( INetProtocol::Data == aGraphicURL.GetProtocol() )
             {
                 std::unique_ptr<SvMemoryStream> const xMemStream(aGraphicURL.getData());

@@ -394,6 +394,12 @@ void OImageControlModel::read(const Reference<XObjectInputStream>& _rxInStream)
 
 bool OImageControlModel::impl_updateStreamForURL_lck( const OUString& _rURL, ValueChangeInstigator _eInstigator )
 {
+    OUString referer;
+    getPropertyValue("Referer") >>= referer;
+    if (SvtSecurityOptions().isUntrustedReferer(referer) || INetURLObject(_rURL).IsExoticProtocol()) {
+        return false;
+    }
+
     // create a stream for the image specified by the URL
     std::unique_ptr< SvStream > pImageStream;
     Reference< XInputStream > xImageStream;

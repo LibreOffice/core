@@ -38,6 +38,7 @@
 #include <toolkit/controls/stdtabcontroller.hxx>
 #include <toolkit/helper/property.hxx>
 #include <toolkit/helper/servicenames.hxx>
+#include <tools/urlobj.hxx>
 #include <toolkit/helper/macros.hxx>
 
 // for introspection
@@ -82,7 +83,7 @@ css::uno::Reference< css::graphic::XGraphic >
 ImageHelper::getGraphicFromURL_nothrow( const OUString& _rURL )
 {
     uno::Reference< graphic::XGraphic > xGraphic;
-    if ( _rURL.isEmpty() )
+    if ( _rURL.isEmpty() || SvtSecurityOptions().isUntrustedReferer(referer) || INetURLObject(_rURL).IsExoticProtocol())
         return xGraphic;
 
     try

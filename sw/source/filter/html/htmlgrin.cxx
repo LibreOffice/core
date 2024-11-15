@@ -647,7 +647,8 @@ IMAGE_SETEVENT:
 
     // bPrcWidth / bPrcHeight means we have a percent size.  If that's not the case and we have no
     // size from nWidth / nHeight either, then inspect the image header.
-    if ((!bPrcWidth && !nWidth) && (!bPrcHeight && !nHeight) && allowAccessLink(*m_xDoc))
+    if ((!bPrcWidth && !nWidth) && (!bPrcHeight && !nHeight) && allowAccessLink(*m_xDoc) &&
+        !aGraphicURL.IsExoticProtocol())
     {
         GraphicDescriptor aDescriptor(aGraphicURL);
         if (aDescriptor.Detect(/*bExtendedInfo=*/true))
