@@ -298,7 +298,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
                 {
                     if( aVEvt.meEvent == SdrEventKind::ExecuteUrl )
                     {
-                        if (aVEvt.mpURLField)
+                        if (aVEvt.mpURLField && !aVEvt.mpURLField->GetURL().startsWith("#"))
                         {
                             aHelpText = SfxHelp::GetURLHelpText(aVEvt.mpURLField->GetURL());
                             aPixRect = LogicToPixel(aVEvt.mpObj->GetLogicRect());
