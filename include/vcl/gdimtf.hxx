@@ -163,7 +163,6 @@ public:
     void            AddAction(const rtl::Reference<MetaAction>& pAction, size_t nPos);
     SAL_DLLPRIVATE void push_back(const rtl::Reference<MetaAction>& pAction);
     /**
-     * @param pAction takes ownership
      * @param nAction the action to replace
      */
     SAL_DLLPRIVATE void ReplaceAction( rtl::Reference<MetaAction> pAction, size_t nAction );

@@ -205,9 +205,7 @@ void GDIMetaFile::ReplaceAction( rtl::Reference<MetaAction> pAction, size_t nAct
     {
         return;
     }
-    //fdo#39995 This doesn't increment the incoming action ref-count nor does it
-    //decrement the outgoing action ref-count
-    std::swap(pAction, m_aList[nAction]);
+    m_aList[nAction] = std::move(pAction);
 }
 
 GDIMetaFile& GDIMetaFile::operator=( const GDIMetaFile& rMtf )
