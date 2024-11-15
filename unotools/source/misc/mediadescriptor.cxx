@@ -337,6 +337,10 @@ bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, bool bLockFi
     if (sURL.matchIgnoreAsciiCase(".component:"))
         return false; // No UCB content for .component URLs
 
+
+    if (INetURLObject(sURL).IsExoticProtocol())
+        return false;
+
     OUString referer(getUnpackedValueOrDefault(PROP_REFERRER, OUString()));
     if (SvtSecurityOptions::isUntrustedReferer(referer)) {
         return false;
