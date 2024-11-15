@@ -1246,19 +1246,19 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, Transliteratio
 
                     // defaults from cell attributes must be set so right language is used
                     const ScPatternAttr* pPattern = GetPattern( nCol, nRow, nTab );
-                    SfxItemSet aDefaults( pEngine->GetEmptyItemSet() );
+                    auto pDefaults = std::make_unique<SfxItemSet>( pEngine->GetEmptyItemSet() );
                     if ( ScStyleSheet* pPreviewStyle = GetPreviewCellStyle( nCol, nRow, nTab ) )
                     {
                         ScPatternAttr aPreviewPattern( *pPattern );
                         aPreviewPattern.SetStyleSheet(pPreviewStyle);
-                        aPreviewPattern.FillEditItemSet( &aDefaults );
+                        aPreviewPattern.FillEditItemSet(pDefaults.get());
                     }
                     else
                     {
                         SfxItemSet* pFontSet = GetPreviewFont( nCol, nRow, nTab );
-                        pPattern->FillEditItemSet( &aDefaults, pFontSet );
+                        pPattern->FillEditItemSet(pDefaults.get(), pFontSet);
                     }
-                    pEngine->SetDefaults( std::move(aDefaults) );
+                    pEngine->SetDefaults(std::move(pDefaults));
                     if (aCell.getType() == CELLTYPE_STRING)
                         pEngine->SetTextCurrentDefaults(aCell.getSharedString()->getString());
                     else if (aCell.getEditText())
@@ -1280,7 +1280,7 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, Transliteratio
                         if ( aTester.NeedsObject() )
                         {
                             // remove defaults (paragraph attributes) before creating text object
-                            pEngine->SetDefaults( std::make_unique<SfxItemSet>( pEngine->GetEmptyItemSet() ) );
+                            pEngine->SetDefaults(pEngine->GetEmptyItemSet());
 
                             // The cell will take ownership of the text object instance.
                             SetEditText(ScAddress(nCol,nRow,nTab), pEngine->CreateTextObject());

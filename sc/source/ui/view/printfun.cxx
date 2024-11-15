@@ -782,7 +782,7 @@ tools::Long ScPrintFunc::TextHeight( const EditTextObject* pObject )
     if (!pObject)
         return 0;
 
-    pEditEngine->SetTextNewDefaults( *pObject, *pEditDefaults, false );
+    pEditEngine->SetTextTempDefaults(*pObject, *pEditDefaults);
 
     return static_cast<tools::Long>(pEditEngine->GetTextHeight());
 }
@@ -1877,7 +1877,7 @@ void ScPrintFunc::PrintHF( tools::Long nPageNo, bool bHeader, tools::Long nStart
         if (pObject)
         {
             pEditDefaults->Put( SvxAdjustItem( SvxAdjust::Left, EE_PARA_JUST ) );
-            pEditEngine->SetTextNewDefaults( *pObject, *pEditDefaults, false );
+            pEditEngine->SetTextTempDefaults(*pObject, *pEditDefaults);
             Point aDraw = aStart;
             tools::Long nDif = aPaperSize.Height() - static_cast<tools::Long>(pEditEngine->GetTextHeight());
             if (nDif > 0)
@@ -1891,7 +1891,7 @@ void ScPrintFunc::PrintHF( tools::Long nPageNo, bool bHeader, tools::Long nStart
         if (pObject)
         {
             pEditDefaults->Put( SvxAdjustItem( SvxAdjust::Center, EE_PARA_JUST ) );
-            pEditEngine->SetTextNewDefaults( *pObject, *pEditDefaults, false );
+            pEditEngine->SetTextTempDefaults(*pObject, *pEditDefaults);
             Point aDraw = aStart;
             tools::Long nDif = aPaperSize.Height() - static_cast<tools::Long>(pEditEngine->GetTextHeight());
             if (nDif > 0)
@@ -1905,7 +1905,7 @@ void ScPrintFunc::PrintHF( tools::Long nPageNo, bool bHeader, tools::Long nStart
         if (pObject)
         {
             pEditDefaults->Put( SvxAdjustItem( SvxAdjust::Right, EE_PARA_JUST ) );
-            pEditEngine->SetTextNewDefaults( *pObject, *pEditDefaults, false );
+            pEditEngine->SetTextTempDefaults(*pObject, *pEditDefaults);
             Point aDraw = aStart;
             tools::Long nDif = aPaperSize.Height() - static_cast<tools::Long>(pEditEngine->GetTextHeight());
             if (nDif > 0)

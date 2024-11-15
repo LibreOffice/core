@@ -130,8 +130,8 @@ public:
                     ScEditEngineDefaulter( const ScEditEngineDefaulter& rOrg );
     virtual         ~ScEditEngineDefaulter() override;
 
-                    /// Creates a copy of SfxItemSet if bRememberCopy set
-    void            SetDefaults( const SfxItemSet& rDefaults, bool bRememberCopy = true );
+                    /// Creates a copy of SfxItemSet
+    void            SetDefaults( const SfxItemSet& rDefaults );
 
                     /// Becomes the owner of the SfxItemSet
     void            SetDefaults( std::unique_ptr<SfxItemSet> pDefaults );
@@ -148,13 +148,15 @@ public:
     void            SetTextCurrentDefaults( const EditTextObject& rTextObject );
                     /// Current defaults are not applied, new defaults are applied
     void            SetTextNewDefaults( const EditTextObject& rTextObject,
-                        const SfxItemSet& rDefaults, bool bRememberCopy = true );
+                        std::unique_ptr<SfxItemSet> pDefaults );
+                    /// New defaults are applied, but not stored
+    void            SetTextTempDefaults( const EditTextObject& rTextObject,
+                        const SfxItemSet& rDefaults );
 
                     /// SetText and apply defaults already set
     void            SetTextCurrentDefaults( const OUString& rText );
                     /// Current defaults are not applied, new defaults are applied
-    void            SetTextNewDefaults( const OUString& rText,
-                        const SfxItemSet& rDefaults );
+    void            SetTextNewDefaults( const OUString& rText, std::unique_ptr<SfxItemSet> pDefaults );
 
                     /// Paragraph attributes that are not defaults are copied to
                     /// character attributes and all paragraph attributes reset
@@ -163,6 +165,10 @@ public:
                     /// Re-apply existing defaults if set, same as in SetText,
                     /// but without EnableUndo/SetUpdateMode.
     void            RepeatDefaults();
+
+private:
+    /// Apply the passed defaults, without storing them
+    void ApplyDefaults(const SfxItemSet& rNewSet);
 };
 
 // for field commands (or just fields?) in a table

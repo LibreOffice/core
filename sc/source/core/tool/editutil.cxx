@@ -562,13 +562,8 @@ ScEditEngineDefaulter::~ScEditEngineDefaulter()
 {
 }
 
-void ScEditEngineDefaulter::SetDefaults( const SfxItemSet& rSet, bool bRememberCopy )
+void ScEditEngineDefaulter::ApplyDefaults(const SfxItemSet& rNewSet)
 {
-    if ( bRememberCopy )
-    {
-        m_pDefaults = std::make_unique<SfxItemSet>( rSet );
-    }
-    const SfxItemSet& rNewSet = bRememberCopy ? *m_pDefaults : rSet;
     bool bUndo = IsUndoEnabled();
     EnableUndo( false );
     bool bUpdateMode = SetUpdateLayout( false );
@@ -583,11 +578,16 @@ void ScEditEngineDefaulter::SetDefaults( const SfxItemSet& rSet, bool bRememberC
         EnableUndo( true );
 }
 
+void ScEditEngineDefaulter::SetDefaults(const SfxItemSet& rSet)
+{
+    SetDefaults(std::make_unique<SfxItemSet>(rSet));
+}
+
 void ScEditEngineDefaulter::SetDefaults( std::unique_ptr<SfxItemSet> pSet )
 {
     m_pDefaults = std::move(pSet);
     if ( m_pDefaults )
-        SetDefaults( *m_pDefaults, false );
+        ApplyDefaults(*m_pDefaults);
 }
 
 void ScEditEngineDefaulter::SetDefaultItem( const SfxPoolItem& rItem )
@@ -597,7 +597,7 @@ void ScEditEngineDefaulter::SetDefaultItem( const SfxPoolItem& rItem )
         m_pDefaults = std::make_unique<SfxItemSet>( GetEmptyItemSet() );
     }
     m_pDefaults->Put( rItem );
-    SetDefaults( *m_pDefaults, false );
+    ApplyDefaults(*m_pDefaults);
 }
 
 const SfxItemSet& ScEditEngineDefaulter::GetDefaults()
@@ -614,17 +614,27 @@ void ScEditEngineDefaulter::SetTextCurrentDefaults( const EditTextObject& rTextO
     bool bUpdateMode = SetUpdateLayout( false );
     SetText( rTextObject );
     if ( m_pDefaults )
-        SetDefaults( *m_pDefaults, false );
+        ApplyDefaults(*m_pDefaults);
     if ( bUpdateMode )
         SetUpdateLayout( true );
 }
 
-void ScEditEngineDefaulter::SetTextNewDefaults( const EditTextObject& rTextObject,
-            const SfxItemSet& rSet, bool bRememberCopy )
+void ScEditEngineDefaulter::SetTextNewDefaults(const EditTextObject& rTextObject,
+                                               std::unique_ptr<SfxItemSet> pDefaults)
 {
     bool bUpdateMode = SetUpdateLayout( false );
     SetText( rTextObject );
-    SetDefaults( rSet, bRememberCopy );
+    SetDefaults(std::move(pDefaults));
+    if ( bUpdateMode )
+        SetUpdateLayout( true );
+}
+
+void ScEditEngineDefaulter::SetTextTempDefaults(const EditTextObject& rTextObject,
+                                                const SfxItemSet& rSet)
+{
+    bool bUpdateMode = SetUpdateLayout( false );
+    SetText( rTextObject );
+    ApplyDefaults(rSet);
     if ( bUpdateMode )
         SetUpdateLayout( true );
 }
@@ -634,17 +644,17 @@ void ScEditEngineDefaulter::SetTextCurrentDefaults( const OUString& rText )
     bool bUpdateMode = SetUpdateLayout( false );
     SetText( rText );
     if ( m_pDefaults )
-        SetDefaults( *m_pDefaults, false );
+        ApplyDefaults(*m_pDefaults);
     if ( bUpdateMode )
         SetUpdateLayout( true );
 }
 
 void ScEditEngineDefaulter::SetTextNewDefaults( const OUString& rText,
-            const SfxItemSet& rSet )
+                                                std::unique_ptr<SfxItemSet> pDefaults )
 {
     bool bUpdateMode = SetUpdateLayout( false );
     SetText( rText );
-    SetDefaults( rSet );
+    SetDefaults(std::move(pDefaults));
     if ( bUpdateMode )
         SetUpdateLayout( true );
 }

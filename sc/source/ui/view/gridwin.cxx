@@ -5792,10 +5792,10 @@ std::shared_ptr<ScFieldEditEngine> createEditEngine( ScDocShell* pDocSh, const S
     ScSizeDeviceProvider aProv(pDocSh);
     pEngine->SetRefDevice(aProv.GetDevice());
     pEngine->SetRefMapMode(MapMode(MapUnit::Map100thMM));
-    SfxItemSet aDefault = pEngine->GetEmptyItemSet();
-    rPat.FillEditItemSet(&aDefault);
-    aDefault.Put( SvxAdjustItem(toSvxAdjust(rPat), EE_PARA_JUST) );
-    pEngine->SetDefaults(aDefault);
+    auto pDefault = std::make_unique<SfxItemSet>(pEngine->GetEmptyItemSet());
+    rPat.FillEditItemSet(pDefault.get());
+    pDefault->Put(SvxAdjustItem(toSvxAdjust(rPat), EE_PARA_JUST));
+    pEngine->SetDefaults(std::move(pDefault));
 
     return pEngine;
 }
