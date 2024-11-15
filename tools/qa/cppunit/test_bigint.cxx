@@ -91,6 +91,24 @@ void BigIntTest::testConstructionFromLongLong()
         CPPUNIT_ASSERT(bi.IsNeg());
         CPPUNIT_ASSERT(bi.IsBig());
     }
+
+    // max possible sal_Int64 negative number
+    {
+        BigInt bi(static_cast<sal_Int64>(std::numeric_limits<sal_Int64>::min()));
+        CPPUNIT_ASSERT(!bi.IsZero());
+        CPPUNIT_ASSERT(bi.IsNeg());
+        CPPUNIT_ASSERT(bi.IsBig());
+        CPPUNIT_ASSERT_EQUAL(std::numeric_limits<sal_Int64>::min(), static_cast<sal_Int64>(bi));
+    }
+
+    // max possible sal_Int64 positive number
+    {
+        BigInt bi(static_cast<sal_Int64>(std::numeric_limits<sal_Int64>::max()));
+        CPPUNIT_ASSERT(!bi.IsZero());
+        CPPUNIT_ASSERT(!bi.IsNeg());
+        CPPUNIT_ASSERT(bi.IsBig());
+        CPPUNIT_ASSERT_EQUAL(std::numeric_limits<sal_Int64>::max(), static_cast<sal_Int64>(bi));
+    }
 }
 
 void BigIntTest::testLenB1()
