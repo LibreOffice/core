@@ -437,7 +437,7 @@ void ScTable::DeleteArea(
 
         if ( IsProtected() && (nDelFlag & InsertDeleteFlags::ATTRIB) )
         {
-            // Do not overwrite cell protection if we are in a Pivot table area and its not protected
+            // Do not overwrite cell protection if we are in a Pivot table area and it's not protected
             const ScDPObject* pDPObj = rDocument.GetDPAtArea(nTab, nCol1, nRow1, nCol2, nRow2);
             if (!pDPObj || (pDPObj && !GetProtection()->isOptionEnabled(ScTableProtection::PIVOT_TABLES)))
             {
@@ -479,7 +479,7 @@ void ScTable::DeleteSelection( InsertDeleteFlags nDelFlag, const ScMarkData& rMa
 
     if ( IsProtected() && (nDelFlag & InsertDeleteFlags::ATTRIB) )
     {
-        // Do not overwrite cell protection if we are in a Pivot table area and its not protected
+        // Do not overwrite cell protection if we are in a Pivot table area and it's not protected
         const ScRange& rRange = rMark.GetArea();
         const ScDPObject* pDPObj = rDocument.GetDPAtArea(nTab,
             rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row());
