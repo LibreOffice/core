@@ -2639,14 +2639,19 @@ bool DocumentRedlineManager::SplitRedline( const SwPaM& rRange )
                 pRedline = nullptr;
                 break;
             }
-            if (pRedline && !pRedline->HasValidRange())
+
+            if (pRedline)
             {
-                // re-insert
-                maRedlineTable.Remove( n );
-                maRedlineTable.Insert( pRedline, n );
+                if (!pRedline->HasValidRange())
+                {
+                    // re-insert
+                    maRedlineTable.Remove( n );
+                    maRedlineTable.Insert( pRedline, n );
+                }
+
+                if (pNew)
+                    maRedlineTable.Insert(pNew, n);
             }
-            if( pNew )
-                maRedlineTable.Insert( pNew, n );
         }
         else if (*pEnd < *pRedlineStart)
             break;
