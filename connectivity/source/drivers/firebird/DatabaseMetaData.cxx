@@ -830,9 +830,9 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getFunctions( const ::r
             "'UDF' as JB_FUNCTION_KIND,"
             "trim(trailing from RDB$MODULE_NAME) as JB_MODULE_NAME,"
             "trim(trailing from RDB$ENTRYPOINT) as JB_ENTRYPOINT,"
-            "cast(null as varchar(255)) as JB_ENGINE_NAME"
-            "FROM RDB$FUNCTIONS"
-            "WHERE RDB$FUNCTION_NAME = " + functionNamePattern);
+            "cast(null as varchar(255)) as JB_ENGINE_NAME "
+            "FROM RDB$FUNCTIONS "
+            "WHERE RDB$FUNCTION_NAME = '" + functionNamePattern + "'");
 
     uno::Reference< XStatement > statement = m_pConnection->createStatement();
     uno::Reference< XResultSet > rs = statement->executeQuery(strQuery);
