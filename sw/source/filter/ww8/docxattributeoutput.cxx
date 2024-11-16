@@ -3525,21 +3525,28 @@ void lclProcessRecursiveGrabBag(sal_Int32 aElementId, const css::uno::Sequence<c
             pAttributes->add(*aSubElementId, aValue);
     }
 
-    pSerializer->startElement(aElementId, pAttributes);
-
-    for (const auto& rElement : rElements)
+    if (rElements.size() == 0)
     {
-        css::uno::Sequence<css::beans::PropertyValue> aSumElements;
-
-        std::optional<sal_Int32> aSubElementId = lclGetElementIdForName(rElement.Name);
-        if(aSubElementId)
-        {
-            rElement.Value >>= aSumElements;
-            lclProcessRecursiveGrabBag(*aSubElementId, aSumElements, pSerializer);
-        }
+        pSerializer->singleElement(aElementId, pAttributes);
     }
+    else
+    {
+        pSerializer->startElement(aElementId, pAttributes);
 
-    pSerializer->endElement(aElementId);
+        for (const auto& rElement : rElements)
+        {
+            css::uno::Sequence<css::beans::PropertyValue> aSumElements;
+
+            std::optional<sal_Int32> aSubElementId = lclGetElementIdForName(rElement.Name);
+            if(aSubElementId)
+            {
+                rElement.Value >>= aSumElements;
+                lclProcessRecursiveGrabBag(*aSubElementId, aSumElements, pSerializer);
+            }
+        }
+
+        pSerializer->endElement(aElementId);
+    }
 }
 
 }
