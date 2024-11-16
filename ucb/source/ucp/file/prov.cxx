@@ -106,7 +106,6 @@ FileProvider::getSupportedServiceNames()
 
 // XContent
 
-
 Reference< XContent > SAL_CALL
 FileProvider::queryContent(
     const Reference< XContentIdentifier >& xIdentifier )
@@ -121,9 +120,8 @@ FileProvider::queryContent(
         throw IllegalIdentifierException( THROW_WHERE );
     }
 
-    return Reference< XContent >( new BaseContent( m_pMyShell.get(), xIdentifier, aUnc ) );
+    return Reference<XContent>(new BaseContent(m_pMyShell.get(), xIdentifier, aUnc));
 }
-
 
 sal_Int32 SAL_CALL
 FileProvider::compareContentIds(

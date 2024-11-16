@@ -125,12 +125,12 @@ BaseContent::BaseContent( TaskManager* pMyShell,
 
 BaseContent::BaseContent( TaskManager* pMyShell,
                           const Reference< XContentIdentifier >& xContentIdentifier,
-                          OUString aUncPath )
+                          OUString aUncPath, sal_uInt16 nState )
     : m_pMyShell( pMyShell ),
       m_xContentIdentifier( xContentIdentifier ),
       m_aUncPath(std::move( aUncPath )),
       m_bFolder( false ),
-      m_nState( FullFeatured )
+      m_nState( nState )
 {
     m_pMyShell->m_pProvider->acquire();
     m_pMyShell->registerNotifier( m_aUncPath,this );

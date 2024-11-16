@@ -72,10 +72,15 @@ namespace fileaccess {
                      bool bFolder );
 
     public:
+        enum state { NameForInsertionSet = 1,
+                     JustInserted = 2,
+                     Deleted = 4,
+                     FullFeatured = 8 };
+
         BaseContent(
             TaskManager* pMyShell,
             const css::uno::Reference< css::ucb::XContentIdentifier >& xContentIdentifier,
-            OUString aUnqPath );
+            OUString aUnqPath, sal_uInt16 nState = FullFeatured);
 
         virtual ~BaseContent() override;
 
@@ -195,11 +200,6 @@ namespace fileaccess {
         TaskManager*                                                m_pMyShell;
         css::uno::Reference< css::ucb::XContentIdentifier >   m_xContentIdentifier;
         OUString                                              m_aUncPath;
-
-        enum state { NameForInsertionSet = 1,
-                     JustInserted = 2,
-                     Deleted = 4,
-                     FullFeatured = 8 };
         bool                                                  m_bFolder;
         sal_uInt16                                            m_nState;
 
@@ -248,8 +248,6 @@ namespace fileaccess {
                 const css::ucb::InsertCommandArgument& aInsertArgument );
 
         void endTask( sal_Int32 CommandId );
-
-        friend class ContentEventNotifier;
     };
 
 }             // end namespace fileaccess
