@@ -1090,7 +1090,7 @@ void SvxRTFItemStackType::Compress( const SvxRTFParser& rParser )
             pTmp->Compress( rParser );
 
         if( !pTmp->nSttCnt
-            ? (aLastNd.GetIdx()+1 != pTmp->mxStartNodeIdx->GetIdx() ||
+            ? (aLastNd.GetIdx() != pTmp->mxStartNodeIdx->GetIdx() - 1 ||
                !rParser.IsEndPara( &aLastNd, nLastCnt ) )
             : ( pTmp->nSttCnt != nLastCnt ||
                 aLastNd.GetIdx() != pTmp->mxStartNodeIdx->GetIdx() ))
