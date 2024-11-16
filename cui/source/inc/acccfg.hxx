@@ -128,7 +128,6 @@ private:
     DECL_LINK(RadioHdl, weld::Toggleable&, void);
     DECL_LINK(ImplUpdateDataHdl, Timer*, void);
     DECL_LINK(FocusOut_Impl, weld::Widget&, void);
-    DECL_LINK(TimeOut_Impl, Timer*, void);
 
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
 
