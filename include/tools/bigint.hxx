@@ -164,10 +164,10 @@ inline BigInt::operator sal_Int64() const
         case 1:
             return bIsNeg ? -sal_Int64(nNum[0]) : nNum[0];
         case 2:
-            if (sal_uInt64 n = (sal_uInt64(nNum[1]) << 32) + nNum[0]; bIsNeg && n <= maxForNegInt64)
-                return -sal_Int64(n); // maxForNegInt64 will convert correctly
-            else if (!bIsNeg && n <= maxForPosInt64)
-                return n;
+            if (sal_uInt64 n = (sal_uInt64(nNum[1]) << 32) + nNum[0]; bIsNeg && n < maxForNegInt64)
+                return -sal_Int64(n);
+            else if ((bIsNeg && n == maxForNegInt64) || (!bIsNeg && n <= maxForPosInt64))
+                return n; // maxForNegInt64 will convert correctly
     }
     assert(false && "out of range");
     return 0;

@@ -25,6 +25,7 @@
 #include <algorithm>
 #include <cmath>
 #include <cstring>
+#include <limits>
 #include <span>
 
 /**
@@ -461,7 +462,9 @@ BigInt::BigInt( sal_Int64 nValue )
     }
     else
     {
-        for (sal_uInt64 n = static_cast<sal_uInt64>(bIsNeg ? -nValue : nValue); n != 0; n >>= 32)
+        for (sal_uInt64 n = static_cast<sal_uInt64>(
+                 (bIsNeg && nValue != std::numeric_limits<sal_Int64>::min()) ? -nValue : nValue);
+             n != 0; n >>= 32)
             nNum[nLen++] = static_cast<sal_uInt32>(n);
     }
 }
