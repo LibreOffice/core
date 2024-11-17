@@ -2887,13 +2887,16 @@ public:
 
     void checkTextFieldLayer(int nIndex, const std::string& rTextFieldType)
     {
+        const std::string sMsg
+            = "TextField Layer Type: " + rTextFieldType + " Index: " + std::to_string(nIndex);
+
         std::vector<sal_uInt8> pBuffer(mnViewWidth * mnViewHeight * 4);
         bool bIsBitmapLayer = false;
         double dScale = 1.0;
         OUString aJson;
-        CPPUNIT_ASSERT(
-            !mpXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, aJson));
-        CPPUNIT_ASSERT(bIsBitmapLayer);
+        CPPUNIT_ASSERT_MESSAGE(
+            sMsg, !mpXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, aJson));
+        CPPUNIT_ASSERT_MESSAGE(sMsg, bIsBitmapLayer);
 
         debugWriteImageToFile(mnImageFileStep++, pBuffer, mnViewWidth, mnViewHeight,
                               aJson.toUtf8().getStr());
@@ -2901,58 +2904,68 @@ public:
         boost::property_tree::ptree aTree;
         readJSON(aTree, aJson);
 
-        CPPUNIT_ASSERT_EQUAL(std::string("TextFields"),
-                             aTree.get_child("group").get_value<std::string>());
-        CPPUNIT_ASSERT_EQUAL(nIndex, aTree.get_child("index").get_value<int>());
-        CPPUNIT_ASSERT_EQUAL(true, has_child(aTree, "content"));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sMsg, std::string("TextFields"),
+                                     aTree.get_child("group").get_value<std::string>());
+
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sMsg, std::string("TextFields"),
+                                     aTree.get_child("group").get_value<std::string>());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sMsg, nIndex, aTree.get_child("index").get_value<int>());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sMsg, true, has_child(aTree, "content"));
         {
             auto aContentChild = aTree.get_child("content");
-            CPPUNIT_ASSERT_EQUAL(rTextFieldType,
-                                 aContentChild.get_child("type").get_value<std::string>());
-            CPPUNIT_ASSERT_EQUAL(true, has_child(aContentChild, "content"));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sMsg, rTextFieldType,
+                                         aContentChild.get_child("type").get_value<std::string>());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sMsg, true, has_child(aContentChild, "content"));
             auto aContentChildChild = aContentChild.get_child("content");
-            CPPUNIT_ASSERT_EQUAL(std::string("%IMAGETYPE%"),
-                                 aContentChildChild.get_child("type").get_value<std::string>());
-            CPPUNIT_ASSERT_EQUAL(std::string("%IMAGECHECKSUM%"),
-                                 aContentChildChild.get_child("checksum").get_value<std::string>());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                sMsg, std::string("%IMAGETYPE%"),
+                aContentChildChild.get_child("type").get_value<std::string>());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                sMsg, std::string("%IMAGECHECKSUM%"),
+                aContentChildChild.get_child("checksum").get_value<std::string>());
         }
     }
 
-    void checkPlaceholderLayer(int index, const std::string& rTextFieldType)
+    void checkPlaceholderLayer(int nIndex, const std::string& rTextFieldType)
     {
+        const std::string sMsg
+            = "Placeholder Layer Type: " + rTextFieldType + " Index: " + std::to_string(nIndex);
+
         std::vector<sal_uInt8> pBuffer(mnViewWidth * mnViewHeight * 4);
         bool bIsBitmapLayer = true;
         double dScale = 1.0;
         OUString aJson;
-        CPPUNIT_ASSERT(
-            !mpXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, aJson));
-        CPPUNIT_ASSERT(!bIsBitmapLayer);
+        CPPUNIT_ASSERT_MESSAGE(
+            sMsg, !mpXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, aJson));
+        CPPUNIT_ASSERT_MESSAGE(sMsg, !bIsBitmapLayer);
 
         boost::property_tree::ptree aTree;
         readJSON(aTree, aJson);
 
-        CPPUNIT_ASSERT_EQUAL(std::string("MasterPage"),
-                             aTree.get_child("group").get_value<std::string>());
-        CPPUNIT_ASSERT_EQUAL(index, aTree.get_child("index").get_value<int>());
-        CPPUNIT_ASSERT_EQUAL(std::string("placeholder"),
-                             aTree.get_child("type").get_value<std::string>());
-        CPPUNIT_ASSERT_EQUAL(true, has_child(aTree, "content"));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sMsg, std::string("MasterPage"),
+                                     aTree.get_child("group").get_value<std::string>());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sMsg, nIndex, aTree.get_child("index").get_value<int>());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sMsg, std::string("placeholder"),
+                                     aTree.get_child("type").get_value<std::string>());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sMsg, true, has_child(aTree, "content"));
         {
             auto aContentChild = aTree.get_child("content");
-            CPPUNIT_ASSERT_EQUAL(rTextFieldType,
-                                 aContentChild.get_child("type").get_value<std::string>());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sMsg, rTextFieldType,
+                                         aContentChild.get_child("type").get_value<std::string>());
         }
     }
 
     void checkPageLayer(int nIndex, const std::string& rGroup)
     {
+        const std::string sMsg = rGroup + " Layer Index: " + std::to_string(nIndex);
+
         std::vector<sal_uInt8> pBuffer(mnViewWidth * mnViewHeight * 4);
         bool bIsBitmapLayer = false;
         double dScale = 1.0;
         OUString aJson;
-        CPPUNIT_ASSERT(
-            !mpXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, aJson));
-        CPPUNIT_ASSERT(bIsBitmapLayer);
+        CPPUNIT_ASSERT_MESSAGE(
+            sMsg, !mpXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, aJson));
+        CPPUNIT_ASSERT_MESSAGE(sMsg, bIsBitmapLayer);
 
         debugWriteImageToFile(mnImageFileStep++, pBuffer, mnViewWidth, mnViewHeight,
                               aJson.toUtf8().getStr());
@@ -2960,11 +2973,12 @@ public:
         boost::property_tree::ptree aTree;
         readJSON(aTree, aJson);
 
-        CPPUNIT_ASSERT_EQUAL(rGroup, aTree.get_child("group").get_value<std::string>());
-        CPPUNIT_ASSERT_EQUAL(nIndex, aTree.get_child("index").get_value<int>());
-        CPPUNIT_ASSERT_EQUAL(std::string("bitmap"),
-                             aTree.get_child("type").get_value<std::string>());
-        CPPUNIT_ASSERT_EQUAL(true, has_child(aTree, "content"));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sMsg, rGroup,
+                                     aTree.get_child("group").get_value<std::string>());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sMsg, nIndex, aTree.get_child("index").get_value<int>());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sMsg, std::string("bitmap"),
+                                     aTree.get_child("type").get_value<std::string>());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sMsg, true, has_child(aTree, "content"));
     }
 
     void checkFinalEmptyLayer()
