@@ -1118,11 +1118,9 @@ void DAVResourceAccess::resetUri()
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
     if ( ! m_aRedirectURIs.empty() )
     {
-        auto const it = m_aRedirectURIs.begin();
-
-        CurlUri const& aUri( *it );
+        OUString sURI = m_aRedirectURIs.front().GetURI();
         m_aRedirectURIs.clear();
-        setURL ( aUri.GetURI() );
+        setURL(sURI);
         initialize();
     }
 }
