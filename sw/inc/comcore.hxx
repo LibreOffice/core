@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_INC_COMCORE_HXX
-#define INCLUDED_SW_INC_COMCORE_HXX
+#pragma once
 
 // defines for the Autoformat Redline Comments
 // see sw/inc/utlui.hrc
@@ -49,7 +48,5 @@
 #define STR_AUTOFMTREDL_STRIKETHROUGH           25
 // !!!!!!!!!!!!!!!!!!!!!!!!!!  always set the correct end !!!!!!!!!!!!
 #define STR_AUTOFMTREDL_END                     26
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
