@@ -122,6 +122,7 @@ sal_uInt16 SvxZoomSliderControl::Offset2Zoom( tools::Long nOffset ) const
 // returns the offset to the left control border
 tools::Long SvxZoomSliderControl::Zoom2Offset( sal_uInt16 nCurrentZoom ) const
 {
+    // coverity[ tainted_data_return : FALSE ] version 2023.12.2
     const tools::Long nControlWidth = getControlRect().GetWidth();
     tools::Long nRet = nSliderXOffset;
 

@@ -936,7 +936,10 @@ SwTwips SwPagePreviewLayout::GetWinPagesScrollAmount(
         nScrollAmount = (mnPreviewLayoutHeight - gnYFree) * _nWinPagesToScroll;
     }
     else
+    {
+        // coverity[ tainted_data_return : FALSE ] version 2023.12.2
         nScrollAmount = _nWinPagesToScroll * maPaintedPreviewDocRect.GetHeight();
+    }
 
     // check, if preview layout size values are valid.
     // If not, the checks for an adjustment of the scroll amount aren't useful.

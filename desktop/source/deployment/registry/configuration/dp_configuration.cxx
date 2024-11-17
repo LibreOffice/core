@@ -581,6 +581,7 @@ OUString replaceOrigin(
     size_t write_pos = 0;
     while (nBytes > 0)
     {
+        // coverity[ tainted_data_return : FALSE ] version 2023.12.2
         sal_Int32 index = rtl_str_indexOfChar_WithLength( pBytes, nBytes, '%' );
         if (index < 0) {
             if (! use_filtered) // opt

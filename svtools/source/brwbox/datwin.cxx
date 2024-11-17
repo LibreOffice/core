@@ -55,6 +55,7 @@ void ButtonFrame::Draw( OutputDevice& rDev )
 
     if ( !aText.isEmpty() )
     {
+        // coverity[ tainted_data_return : FALSE ] version 2023.12.2
         OUString aVal = rDev.GetEllipsisString(aText,aInnerRect.GetWidth() - 2*MIN_COLUMNWIDTH);
 
         vcl::Font aFont( rDev.GetFont() );

@@ -1773,6 +1773,7 @@ void ScTabView::DoHSplit(tools::Long nSplitPos)
     }
     else
     {
+        // coverity[ tainted_data_return : FALSE ] version 2023.12.2
         SCCOL nOldDelta = aViewData.GetPosX( SC_SPLIT_LEFT );
         tools::Long nLeftWidth = nSplitPos - pRowBar[SC_SPLIT_BOTTOM]->GetSizePixel().Width();
         if ( nLeftWidth < 0 ) nLeftWidth = 0;
@@ -1839,7 +1840,10 @@ void ScTabView::DoVSplit(tools::Long nSplitPos)
     else
     {
         if ( aOldMode == SC_SPLIT_NONE )
+        {
+            // coverity[ tainted_data_return : FALSE ] version 2023.12.2
             nOldDelta = aViewData.GetPosY( SC_SPLIT_BOTTOM );
+        }
         else
             nOldDelta = aViewData.GetPosY( SC_SPLIT_TOP );
 

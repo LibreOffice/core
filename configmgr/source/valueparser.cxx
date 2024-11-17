@@ -201,6 +201,7 @@ template< typename T > css::uno::Any parseListValue(
     }
     if (text.length != 0) {
         for (xmlreader::Span t(text);;) {
+            // coverity[ tainted_data_return : FALSE ] version 2023.12.2
             sal_Int32 i = rtl_str_indexOfStr_WithLength(
                 t.begin, t.length, sep.begin, sep.length);
             T val;
