@@ -254,16 +254,12 @@ OWeakObject::~OWeakObject() COVERITY_NOEXCEPT_FALSE
 // XWeak
 Reference< XAdapter > SAL_CALL OWeakObject::queryAdapter()
 {
-    if (!m_pWeakConnectionPoint)
+    std::scoped_lock aGuard( *gpWeakMutex );
+    if( !m_pWeakConnectionPoint )
     {
-        // only acquire mutex if member is not created
-        std::scoped_lock aGuard( *gpWeakMutex );
-        if( !m_pWeakConnectionPoint )
-        {
-            OWeakConnectionPoint * p = new OWeakConnectionPoint(this);
-            p->acquire();
-            m_pWeakConnectionPoint = p;
-        }
+        OWeakConnectionPoint * p = new OWeakConnectionPoint(this);
+        p->acquire();
+        m_pWeakConnectionPoint = p;
     }
 
     return m_pWeakConnectionPoint;
