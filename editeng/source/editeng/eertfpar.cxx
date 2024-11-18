@@ -28,6 +28,8 @@
 #include <editeng/fontitem.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/editeng.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/colritem.hxx>
 
 #include <svtools/rtftoken.h>
 #include <svtools/htmltokn.h>
@@ -517,12 +519,16 @@ void EditRTFParser::ReadField()
     int _nOpenBrackets = 1;      // the first was already detected earlier
     bool bFldInst = false;
     bool bFldRslt = false;
+    bool bUnderline = false;
+    Color aColor;
+    bool bColor = false;
     OUString aFldInst;
     OUString aFldRslt;
 
     while( _nOpenBrackets && IsParserWorking() )
     {
-        switch( GetNextToken() )
+        auto nNextToken = GetNextToken();
+        switch( nNextToken )
         {
             case '}':
             {
@@ -555,6 +561,21 @@ void EditRTFParser::ReadField()
                     aFldRslt += aToken;
             }
             break;
+            case RTF_CF:
+            {
+                if (bFldRslt)
+                {
+                    aColor = GetColor(sal_uInt16(nTokenValue));
+                    bColor = true;
+                }
+            }
+            break;
+            case RTF_UL:
+            {
+                if (bFldRslt)
+                    bUnderline = true;
+            }
+            break;
         }
     }
     if ( !aFldInst.isEmpty() )
@@ -572,6 +593,17 @@ void EditRTFParser::ReadField()
 
             SvxFieldItem aField( SvxURLField( aFldInst, aFldRslt, SvxURLFormat::Repr ), EE_FEATURE_FIELD  );
             aCurSel = mpEditEngine->InsertField(aCurSel, aField);
+            if (bUnderline || bColor )
+            {
+                SfxItemSet aAttribs( mpEditEngine->GetEmptyItemSet() );
+                if (bUnderline)
+                   aAttribs.Put(SvxUnderlineItem(LINESTYLE_SINGLE, EE_CHAR_UNDERLINE));
+                if (bColor)
+                   aAttribs.Put(SvxColorItem(aColor, EE_CHAR_COLOR));
+                EditSelection aAttribSelection(aCurSel.Min(), aCurSel.Max());
+                aAttribSelection.Min().SetIndex(aAttribSelection.Min().GetIndex() - 1);
+                mpEditEngine->SetAttribs(aAttribSelection, aAttribs, SetAttribsMode::Edge);
+            }
             mpEditEngine->UpdateFieldsOnly();
             bLastActionInsertParaBreak = false;
         }
