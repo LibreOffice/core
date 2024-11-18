@@ -27,7 +27,7 @@ $(call gb_ExternalProject_get_state_target,fontconfig,build) :
 		$(if $(filter -fsanitize=undefined,$(CC)),CC='$(CC) -fno-sanitize=function') \
 		CFLAGS="$(CFLAGS) \
 			$(call gb_ExternalProject_get_build_flags,fontconfig) \
-			$(gb_VISIBILITY_FLAGS) \
+			$(if $(filter-out MACOSX,$(OS)),$(gb_VISIBILITY_FLAGS)) \
 			$(if $(filter EMSCRIPTEN,$(OS)),-pthread)" \
 			$(if $(filter ANDROID,$(OS)),LIBS="-lm") \
 		$(if $(filter EMSCRIPTEN,$(OS)),LIBXML2_CFLAGS="$(LIBXML_CFLAGS)" LIBXML2_LIBS="$(LIBXML_LIBS)") \
@@ -60,6 +60,7 @@ $(call gb_ExternalProject_get_state_target,fontconfig,build) :
 					--with-cache-dir=/usr/lib/fontconfig/cache \
 				) \
 			) \
+			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 		&& $(MAKE) -C src && $(MAKE) fonts.conf \
 	)
 	$(call gb_Trace_EndRange,fontconfig,EXTERNAL)

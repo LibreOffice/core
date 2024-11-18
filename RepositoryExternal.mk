@@ -1371,7 +1371,7 @@ gb_ExternalProject__use_fontconfig :=
 
 else # SYSTEM_FONTCONFIG
 
-ifneq ($(filter-out MACOSX WNT,$(OS)),)
+ifeq ($(ENABLE_FONTCONFIG),TRUE)
 
 $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	fontconfig \

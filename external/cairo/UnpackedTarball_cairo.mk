@@ -20,7 +20,6 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,cairo,2))
 $(eval $(call gb_UnpackedTarball_add_patches,cairo,\
     external/cairo/cairo/cairo.RGB24_888.patch \
     external/cairo/cairo/san.patch.0 \
-    external/cairo/cairo/libcairo-bundled-soname.patch.1 \
     external/cairo/cairo/cairo-fd-hack.patch.0 \
     external/cairo/cairo/cairo.ofz57493-Timeout.patch.1 \
     external/cairo/cairo/shm-null-deref.patch.1 \
@@ -30,6 +29,12 @@ $(eval $(call gb_UnpackedTarball_add_patches,cairo,\
     external/cairo/cairo/Wincompatible-pointer-types.patch.0 \
     external/cairo/cairo/disable-cairo-utilities.patch.1 \
 ))
+
+ifneq ($(OS),MACOSX)
+$(eval $(call gb_UnpackedTarball_add_patches,cairo,\
+    external/cairo/cairo/libcairo-bundled-soname.patch.1 \
+))
+endif
 
 ifeq ($(ENABLE_CAIRO_RGBA),TRUE)
 $(eval $(call gb_UnpackedTarball_add_patches,cairo,\

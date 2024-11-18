@@ -1047,7 +1047,7 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 
 $(eval $(call gb_Helper_register_packages_for_install,ooo_fonts,\
 	extras_fonts \
-	$(if $(USING_X11)$(DISABLE_GUI)$(filter ANDROID EMSCRIPTEN,$(OS)), \
+	$(if $(USING_X11)$(DISABLE_GUI)$(ENABLE_FONTCONFIG)$(filter ANDROID EMSCRIPTEN,$(OS)), \
 		postprocess_fontconfig) \
 	$(call gb_Helper_optional,MORE_FONTS,\
 		fonts_alef \

@@ -54,9 +54,11 @@ $(call gb_ExternalProject_get_state_target,pixman,build) :
 			-Ddefault_library=$(if $(filter TRUE,$(DISABLE_DYNLOADING)),static,shared) \
 			$(if $(call gb_Module__symbols_enabled,pixman),-Dc_args="$$PIXMAP_CFLAGS") \
 			$(if $(filter ANDROID,$(OS)),-Darm-simd=disabled -Dneon=disabled -Da64-neon=disabled) \
+			$(if $(filter MACOSX,$(OS)),-Da64-neon=disabled) \
 			-Dbuildtype=$(if $(ENABLE_DBGUTIL),debug,$(if $(ENABLE_DEBUG),debugoptimized,release)) \
 			-Dauto_features=disabled \
 			-Dtests=disabled \
+			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 			$(if $(filter-out $(BUILD_PLATFORM),$(HOST_PLATFORM))$(WSL),--cross-file cross-file.txt) && \
 		$(MESON) compile -C builddir \
 			$(if $(verbose),--verbose) \

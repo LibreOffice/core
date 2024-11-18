@@ -12,7 +12,7 @@ $(eval $(call gb_Module_Module,fontconfig))
 $(eval $(call gb_Module_add_targets,fontconfig,\
 	ExternalProject_fontconfig \
 	$(if $(filter EMSCRIPTEN,$(OS)),ExternalPackage_fontconfig_data) \
-	$(if $(filter LINUX,$(OS)),ExternalPackage_fontconfig) \
+	$(if $(filter TRUE,$(ENABLE_FONTCONFIG)),ExternalPackage_fontconfig) \
 	UnpackedTarball_fontconfig \
 ))
 
