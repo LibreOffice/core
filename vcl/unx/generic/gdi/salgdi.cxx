@@ -90,13 +90,11 @@ X11SalGraphics::~X11SalGraphics() COVERITY_NOEXCEPT_FALSE
 {
     DeInit();
     ReleaseFonts();
-    freeResources();
+    FreeColorMap();
 }
 
-void X11SalGraphics::freeResources()
+void X11SalGraphics::FreeColorMap()
 {
-    mxImpl->freeResources();
-
     if( m_pDeleteColormap )
     {
         m_pDeleteColormap.reset();
@@ -126,7 +124,7 @@ void X11SalGraphics::SetDrawable(Drawable aDrawable, cairo_surface_t* pSurface, 
     // free screen specific resources if needed
     if( nXScreen != m_nXScreen )
     {
-        freeResources();
+        FreeColorMap();
         maX11Common.m_pColormap = &vcl_sal::getSalDisplay(GetGenericUnixSalData())->GetColormap( nXScreen );
         m_nXScreen = nXScreen;
     }

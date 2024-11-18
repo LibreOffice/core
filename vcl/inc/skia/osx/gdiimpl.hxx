@@ -26,8 +26,6 @@ public:
     AquaSkiaSalGraphicsImpl(AquaSalGraphics& rParent, AquaSharedAttributes& rShared);
     virtual ~AquaSkiaSalGraphicsImpl() override;
 
-    virtual void freeResources() override;
-
     virtual void UpdateGeometryProvider(SalGeometryProvider* provider) override
     {
         setProvider(provider);

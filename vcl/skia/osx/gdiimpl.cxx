@@ -67,8 +67,6 @@ AquaSkiaSalGraphicsImpl::~AquaSkiaSalGraphicsImpl()
     DeInit(); // mac code doesn't call DeInit()
 }
 
-void AquaSkiaSalGraphicsImpl::freeResources() {}
-
 void AquaSkiaSalGraphicsImpl::createWindowSurfaceInternal(bool forceRaster)
 {
     assert(!mWindowContext);

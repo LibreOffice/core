@@ -197,7 +197,6 @@ AquaGraphicsBackend::AquaGraphicsBackend(AquaSharedAttributes& rShared)
 AquaGraphicsBackend::~AquaGraphicsBackend() {}
 
 void AquaGraphicsBackend::Init() {}
-void AquaGraphicsBackend::freeResources() {}
 
 void AquaGraphicsBackend::setClipRegion(vcl::Region const& rRegion)
 {

@@ -142,8 +142,6 @@ bool X11SkiaSalGraphicsImpl::avoidRecreateByResize() const
     return mSurface->width() == int(w) && mSurface->height() == int(h);
 }
 
-void X11SkiaSalGraphicsImpl::freeResources() {}
-
 void X11SkiaSalGraphicsImpl::Flush() { performFlush(); }
 
 std::unique_ptr<skwindow::WindowContext> createVulkanWindowContext(bool temporary)

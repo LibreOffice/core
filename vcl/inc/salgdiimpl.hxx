@@ -76,8 +76,6 @@ public:
 
     virtual void DeInit() {}
 
-    virtual void freeResources() = 0;
-
     virtual OUString getRenderBackendName() const = 0;
 
     virtual void setClipRegion( const vcl::Region& ) = 0;

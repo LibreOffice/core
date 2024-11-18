@@ -271,8 +271,6 @@ public:
 
     void Init() override;
 
-    void freeResources() override;
-
     OUString getRenderBackendName() const override
     {
         return "aqua";

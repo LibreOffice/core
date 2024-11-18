@@ -68,8 +68,6 @@ public:
 
     virtual void Init() override;
 
-    virtual void freeResources() override;
-
     virtual OUString getRenderBackendName() const override { return "gdi"; }
 
     virtual void setClipRegion( const vcl::Region& ) override;

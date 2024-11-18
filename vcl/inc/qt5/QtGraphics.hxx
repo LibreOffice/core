@@ -65,8 +65,6 @@ public:
 
     void setQImage(QImage* pQImage) { m_pQImage = pQImage; }
 
-    void freeResources() override {}
-
     OUString getRenderBackendName() const override { return u"qt"_ustr; }
 
     void setClipRegion(vcl::Region const& rRegion) override;

@@ -279,8 +279,6 @@ void WinSkiaSalGraphicsImpl::createWindowSurfaceInternal(bool forceRaster)
     }
 }
 
-void WinSkiaSalGraphicsImpl::freeResources() {}
-
 void WinSkiaSalGraphicsImpl::Flush() { performFlush(); }
 
 bool WinSkiaSalGraphicsImpl::TryRenderCachedNativeControl(ControlCacheKey const& rControlCacheKey,
