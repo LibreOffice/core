@@ -181,23 +181,23 @@ SheetViewSettings::SheetViewSettings( const WorksheetHelper& rHelper ) :
 
 void SheetViewSettings::importSheetView( const AttributeList& rAttribs )
 {
-    SheetViewModel& rModel = *createSheetView();
-    rModel.maGridColor.setIndexed( rAttribs.getInteger( XML_colorId, OOX_COLOR_WINDOWTEXT ) );
-    rModel.maFirstPos        = getAddressConverter().createValidCellAddress( rAttribs.getString( XML_topLeftCell, OUString() ), getSheetIndex(), false );
-    rModel.mnWorkbookViewId  = rAttribs.getToken( XML_workbookViewId, 0 );
-    rModel.mnViewType        = rAttribs.getToken( XML_view, XML_normal );
-    rModel.mnCurrentZoom     = rAttribs.getInteger( XML_zoomScale, 100 );
-    rModel.mnNormalZoom      = rAttribs.getInteger( XML_zoomScaleNormal, 0 );
-    rModel.mnSheetLayoutZoom = rAttribs.getInteger( XML_zoomScaleSheetLayoutView, 0 );
-    rModel.mnPageLayoutZoom  = rAttribs.getInteger( XML_zoomScalePageLayoutView, 0 );
-    rModel.mbSelected        = rAttribs.getBool( XML_tabSelected, false );
-    rModel.mbRightToLeft     = rAttribs.getBool( XML_rightToLeft, false );
-    rModel.mbDefGridColor    = rAttribs.getBool( XML_defaultGridColor, true );
-    rModel.mbShowFormulas    = rAttribs.getBool( XML_showFormulas, false );
-    rModel.mbShowGrid        = rAttribs.getBool( XML_showGridLines, true );
-    rModel.mbShowHeadings    = rAttribs.getBool( XML_showRowColHeaders, true );
-    rModel.mbShowZeros       = rAttribs.getBool( XML_showZeros, true );
-    rModel.mbShowOutline     = rAttribs.getBool( XML_showOutlineSymbols, true );
+    SheetViewModelRef xModel = createSheetView();
+    xModel->maGridColor.setIndexed( rAttribs.getInteger( XML_colorId, OOX_COLOR_WINDOWTEXT ) );
+    xModel->maFirstPos        = getAddressConverter().createValidCellAddress( rAttribs.getString( XML_topLeftCell, OUString() ), getSheetIndex(), false );
+    xModel->mnWorkbookViewId  = rAttribs.getToken( XML_workbookViewId, 0 );
+    xModel->mnViewType        = rAttribs.getToken( XML_view, XML_normal );
+    xModel->mnCurrentZoom     = rAttribs.getInteger( XML_zoomScale, 100 );
+    xModel->mnNormalZoom      = rAttribs.getInteger( XML_zoomScaleNormal, 0 );
+    xModel->mnSheetLayoutZoom = rAttribs.getInteger( XML_zoomScaleSheetLayoutView, 0 );
+    xModel->mnPageLayoutZoom  = rAttribs.getInteger( XML_zoomScalePageLayoutView, 0 );
+    xModel->mbSelected        = rAttribs.getBool( XML_tabSelected, false );
+    xModel->mbRightToLeft     = rAttribs.getBool( XML_rightToLeft, false );
+    xModel->mbDefGridColor    = rAttribs.getBool( XML_defaultGridColor, true );
+    xModel->mbShowFormulas    = rAttribs.getBool( XML_showFormulas, false );
+    xModel->mbShowGrid        = rAttribs.getBool( XML_showGridLines, true );
+    xModel->mbShowHeadings    = rAttribs.getBool( XML_showRowColHeaders, true );
+    xModel->mbShowZeros       = rAttribs.getBool( XML_showZeros, true );
+    xModel->mbShowOutline     = rAttribs.getBool( XML_showOutlineSymbols, true );
 }
 
 void SheetViewSettings::importPane( const AttributeList& rAttribs )
@@ -233,40 +233,40 @@ void SheetViewSettings::importSelection( const AttributeList& rAttribs )
 
 void SheetViewSettings::importChartSheetView( const AttributeList& rAttribs )
 {
-    SheetViewModel& rModel = *createSheetView();
-    rModel.mnWorkbookViewId = rAttribs.getToken( XML_workbookViewId, 0 );
-    rModel.mnCurrentZoom    = rAttribs.getInteger( XML_zoomScale, 100 );
-    rModel.mbSelected       = rAttribs.getBool( XML_tabSelected, false );
-    rModel.mbZoomToFit      = rAttribs.getBool( XML_zoomToFit, false );
+    SheetViewModelRef xModel = createSheetView();
+    xModel->mnWorkbookViewId = rAttribs.getToken( XML_workbookViewId, 0 );
+    xModel->mnCurrentZoom    = rAttribs.getInteger( XML_zoomScale, 100 );
+    xModel->mbSelected       = rAttribs.getBool( XML_tabSelected, false );
+    xModel->mbZoomToFit      = rAttribs.getBool( XML_zoomToFit, false );
 }
 
 void SheetViewSettings::importSheetView( SequenceInputStream& rStrm )
 {
-    SheetViewModel& rModel = *createSheetView();
+    SheetViewModelRef xModel = createSheetView();
     sal_uInt16 nFlags;
     sal_Int32 nViewType;
     BinAddress aFirstPos;
     nFlags = rStrm.readuInt16();
     nViewType = rStrm.readInt32();
     rStrm >> aFirstPos;
-    rModel.maGridColor.importColorId( rStrm );
-    rModel.mnCurrentZoom = rStrm.readuInt16();
-    rModel.mnNormalZoom = rStrm.readuInt16();
-    rModel.mnSheetLayoutZoom = rStrm.readuInt16();
-    rModel.mnPageLayoutZoom = rStrm.readuInt16();
-    rModel.mnWorkbookViewId = rStrm.readInt32();
+    xModel->maGridColor.importColorId( rStrm );
+    xModel->mnCurrentZoom = rStrm.readuInt16();
+    xModel->mnNormalZoom = rStrm.readuInt16();
+    xModel->mnSheetLayoutZoom = rStrm.readuInt16();
+    xModel->mnPageLayoutZoom = rStrm.readuInt16();
+    xModel->mnWorkbookViewId = rStrm.readInt32();
 
-    rModel.maFirstPos = getAddressConverter().createValidCellAddress( aFirstPos, getSheetIndex(), false );
+    xModel->maFirstPos = getAddressConverter().createValidCellAddress( aFirstPos, getSheetIndex(), false );
     static const sal_Int32 spnViewTypes[] = { XML_normal, XML_pageBreakPreview, XML_pageLayout };
-    rModel.mnViewType = STATIC_ARRAY_SELECT( spnViewTypes, nViewType, XML_normal );
-    rModel.mbSelected     = getFlag( nFlags, BIFF12_SHEETVIEW_SELECTED );
-    rModel.mbRightToLeft  = getFlag( nFlags, BIFF12_SHEETVIEW_RIGHTTOLEFT );
-    rModel.mbDefGridColor = getFlag( nFlags, BIFF12_SHEETVIEW_DEFGRIDCOLOR );
-    rModel.mbShowFormulas = getFlag( nFlags, BIFF12_SHEETVIEW_SHOWFORMULAS );
-    rModel.mbShowGrid     = getFlag( nFlags, BIFF12_SHEETVIEW_SHOWGRID );
-    rModel.mbShowHeadings = getFlag( nFlags, BIFF12_SHEETVIEW_SHOWHEADINGS );
-    rModel.mbShowZeros    = getFlag( nFlags, BIFF12_SHEETVIEW_SHOWZEROS );
-    rModel.mbShowOutline  = getFlag( nFlags, BIFF12_SHEETVIEW_SHOWOUTLINE );
+    xModel->mnViewType = STATIC_ARRAY_SELECT( spnViewTypes, nViewType, XML_normal );
+    xModel->mbSelected     = getFlag( nFlags, BIFF12_SHEETVIEW_SELECTED );
+    xModel->mbRightToLeft  = getFlag( nFlags, BIFF12_SHEETVIEW_RIGHTTOLEFT );
+    xModel->mbDefGridColor = getFlag( nFlags, BIFF12_SHEETVIEW_DEFGRIDCOLOR );
+    xModel->mbShowFormulas = getFlag( nFlags, BIFF12_SHEETVIEW_SHOWFORMULAS );
+    xModel->mbShowGrid     = getFlag( nFlags, BIFF12_SHEETVIEW_SHOWGRID );
+    xModel->mbShowHeadings = getFlag( nFlags, BIFF12_SHEETVIEW_SHOWHEADINGS );
+    xModel->mbShowZeros    = getFlag( nFlags, BIFF12_SHEETVIEW_SHOWZEROS );
+    xModel->mbShowOutline  = getFlag( nFlags, BIFF12_SHEETVIEW_SHOWOUTLINE );
 }
 
 void SheetViewSettings::importPane( SequenceInputStream& rStrm )
@@ -314,14 +314,14 @@ void SheetViewSettings::importSelection( SequenceInputStream& rStrm )
 
 void SheetViewSettings::importChartSheetView( SequenceInputStream& rStrm )
 {
-    SheetViewModel& rModel = *createSheetView();
+    SheetViewModelRef xModel = createSheetView();
     sal_uInt16 nFlags;
     nFlags = rStrm.readuInt16();
-    rModel.mnCurrentZoom = rStrm.readInt32();
-    rModel.mnWorkbookViewId = rStrm.readInt32();
+    xModel->mnCurrentZoom = rStrm.readInt32();
+    xModel->mnWorkbookViewId = rStrm.readInt32();
 
-    rModel.mbSelected  = getFlag( nFlags, BIFF12_CHARTSHEETVIEW_SELECTED );
-    rModel.mbZoomToFit = getFlag( nFlags, BIFF12_CHARTSHEETVIEW_ZOOMTOFIT );
+    xModel->mbSelected  = getFlag( nFlags, BIFF12_CHARTSHEETVIEW_SELECTED );
+    xModel->mbZoomToFit = getFlag( nFlags, BIFF12_CHARTSHEETVIEW_ZOOMTOFIT );
 }
 
 void SheetViewSettings::finalizeImport()
