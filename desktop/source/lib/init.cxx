@@ -1350,6 +1350,8 @@ static void doc_postSlideshowCleanup(LibreOfficeKitDocument* pThis);
 static bool doc_renderNextSlideLayer(
     LibreOfficeKitDocument* pThis, unsigned char* pBuffer, bool* bIsBitmapLayer, char** pJsonMsg);
 
+static void doc_setViewOption(LibreOfficeKitDocument* pDoc, const char* pOption, const char* pValue);
+
 } // extern "C"
 
 namespace {
@@ -1551,6 +1553,7 @@ LibLODocument_Impl::LibLODocument_Impl(uno::Reference <css::lang::XComponent> xC
         m_pDocumentClass->createSlideRenderer = doc_createSlideRenderer;
         m_pDocumentClass->postSlideshowCleanup = doc_postSlideshowCleanup;
         m_pDocumentClass->renderNextSlideLayer = doc_renderNextSlideLayer;
+        m_pDocumentClass->setViewOption = doc_setViewOption;
 
         gDocumentClass = m_pDocumentClass;
     }
@@ -5823,6 +5826,11 @@ static bool doc_renderNextSlideLayer(
     *pIsBitmapLayer = bIsBitmapLayer;
 
     return bDone;
+}
+
+static void doc_setViewOption(LibreOfficeKitDocument* /*pDoc*/, const char* /*pOption*/, const char* /*pValue*/)
+{
+    // placeholder for now
 }
 
 static bool getFromTransferable(

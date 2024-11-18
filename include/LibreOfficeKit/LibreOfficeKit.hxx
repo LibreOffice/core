@@ -937,6 +937,12 @@ public:
         return mpDoc->pClass->renderNextSlideLayer(mpDoc, pBuffer, bIsBitmapLayer, pJsonMessage);
     }
 
+    /// Set named view options
+    void setViewOption(const char* pOption, const char* pValue)
+    {
+        mpDoc->pClass->setViewOption(mpDoc, pOption, pValue);
+    }
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 

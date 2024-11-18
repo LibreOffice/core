@@ -3754,9 +3754,10 @@ void DesktopLOKTest::testABI()
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(75), offsetof(struct _LibreOfficeKitDocumentClass, createSlideRenderer));
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(76), offsetof(struct _LibreOfficeKitDocumentClass, postSlideshowCleanup));
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(77), offsetof(struct _LibreOfficeKitDocumentClass, renderNextSlideLayer));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(78), offsetof(struct _LibreOfficeKitDocumentClass, setViewOption));
 
     // As above
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(78), sizeof(struct _LibreOfficeKitDocumentClass));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(79), sizeof(struct _LibreOfficeKitDocumentClass));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopLOKTest);
