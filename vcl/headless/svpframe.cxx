@@ -54,11 +54,7 @@ SvpSalFrame::SvpSalFrame( SvpSalInstance* pInstance,
     m_nMaxWidth( 0 ),
     m_nMaxHeight( 0 )
 {
-#ifdef IOS
-    // Nothing
-#elif defined ANDROID
-    // Nothing
-#else
+#if !defined(IOS) && !defined(MACOSX) && !defined(ANDROID)
     m_aSystemChildData.pSalFrame    = this;
 #endif
 
