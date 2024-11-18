@@ -27,14 +27,14 @@ public:
         if (a == nullptr || a->getVisibility() != VisibilityAttr::Hidden) {
             return true;
         }
-        if (compiler.getSourceManager().isMacroBodyExpansion(
-                decl->getLocation())
-            && (Lexer::getImmediateMacroName(
-                    decl->getLocation(), compiler.getSourceManager(),
-                    compiler.getLangOpts())
-                == "Q_OBJECT")) // from /usr/include/QtCore/qobjectdefs.h
+        if (compiler.getSourceManager().isMacroBodyExpansion(decl->getLocation()))
         {
-            return true;
+            StringRef macroName = Lexer::getImmediateMacroName(
+                    decl->getLocation(), compiler.getSourceManager(),
+                    compiler.getLangOpts());
+            // macros from Qt's qtbase module
+            if (macroName == "Q_OBJECT" || macroName == "QT_OBJECT_GADGET_COMMON")
+                return true;
         }
         auto p = dyn_cast<RecordDecl>(decl->getDeclContext());
         if (p == nullptr) {
