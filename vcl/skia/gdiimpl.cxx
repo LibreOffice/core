@@ -269,7 +269,16 @@ public:
     {
         mpGraphics->performFlush();
         Stop();
-        SetPriority(TaskPriority::HIGHEST);
+        // tdf#163945 Lower priority of Skia flush timer
+        // Commit f4c2c7c79cfe4464ac596afda37b8904d06969db fixed tdf#157312
+        // by lowering the timer priority to TaskPriority::POST_PAINT. But
+        // it caused tdf#163734 so it was reverted to TaskPriority::HIGHEST
+        // in commit 5a38e4f9798c5ff247aa57581adf2671485627fd.
+        // While reverting to TaskPriority::HIGHEST did not cause tdf#157312
+        // to reoccur, it did cause tdf#163945 so set the timer priority to
+        // TaskPriority::HIGH_IDLE. This priority appears to be low enough to
+        // fix tdf#16394 without causing tdf#163734 to reoccur.
+        SetPriority(TaskPriority::HIGH_IDLE);
     }
 };
 
