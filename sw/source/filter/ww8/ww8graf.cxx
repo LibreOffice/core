@@ -1992,7 +1992,7 @@ void SwWW8ImplReader::AdjustLRWrapForWordMargins(
     if (rRecord.nXAlign == 1)
     {
         if ((nXRelTo == 0) || (nXRelTo == 2))
-            rLR.SetLeft(sal_uInt16(0));
+            rLR.SetLeft(SvxIndentValue::zero());
     }
 
     // Right adjustments - if horizontally aligned to right of
@@ -2000,19 +2000,19 @@ void SwWW8ImplReader::AdjustLRWrapForWordMargins(
     if (rRecord.nXAlign == 3)
     {
         if ((nXRelTo == 0) || (nXRelTo == 2))
-            rLR.SetRight(sal_uInt16(0));
+            rLR.SetRight(SvxIndentValue::zero());
     }
 
     // Inside margin, remove left wrapping
     if ((rRecord.nXAlign == 4) && (nXRelTo == 0))
     {
-        rLR.SetLeft(sal_uInt16(0));
+        rLR.SetLeft(SvxIndentValue::zero());
     }
 
     // Outside margin, remove left wrapping
     if ((rRecord.nXAlign == 5) && (nXRelTo == 0))
     {
-        rLR.SetRight(sal_uInt16(0));
+        rLR.SetRight(SvxIndentValue::zero());
     }
 }
 
@@ -2051,8 +2051,8 @@ void SwWW8ImplReader::MapWrapIntoFlyFormat(const SvxMSDffImportRec& rRecord,
 {
     if (rRecord.nDxWrapDistLeft || rRecord.nDxWrapDistRight)
     {
-        SvxLRSpaceItem aLR(writer_cast<sal_uInt16>(rRecord.nDxWrapDistLeft),
-                           writer_cast<sal_uInt16>(rRecord.nDxWrapDistRight),
+        SvxLRSpaceItem aLR(SvxIndentValue::twips(writer_cast<sal_uInt16>(rRecord.nDxWrapDistLeft)),
+                           SvxIndentValue::twips(writer_cast<sal_uInt16>(rRecord.nDxWrapDistRight)),
                            SvxIndentValue::zero(), RES_LR_SPACE);
         AdjustLRWrapForWordMargins(rRecord, aLR);
         rFlyFormat.SetFormatAttr(aLR);

@@ -214,10 +214,10 @@ void lclPutMarginItem( SfxItemSet& rItemSet, sal_uInt16 nRecId, double fMarginIn
         case EXC_ID_RIGHTMARGIN:
         {
             SvxLRSpaceItem aItem( rItemSet.Get( ATTR_LRSPACE ) );
-            if( nRecId == EXC_ID_LEFTMARGIN )
-                aItem.SetLeftValue( nMarginTwips );
+            if (nRecId == EXC_ID_LEFTMARGIN)
+                aItem.SetLeft(SvxIndentValue::twips(nMarginTwips));
             else
-                aItem.SetRightValue( nMarginTwips );
+                aItem.SetRight(SvxIndentValue::twips(nMarginTwips));
             rItemSet.Put( aItem );
         }
         break;

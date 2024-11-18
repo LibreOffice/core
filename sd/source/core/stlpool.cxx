@@ -394,7 +394,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(std::u16string_view rLayoutName, 
         rSubtitleSet.Put( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
         // #i16874# enable kerning by default but only for new documents
         rSubtitleSet.Put( SvxAutoKernItem( true, EE_CHAR_PAIRKERNING ) );
-        aSvxLRSpaceItem.SetTextLeft(0);
+        aSvxLRSpaceItem.SetTextLeft(SvxIndentValue::zero());
         rSubtitleSet.Put(aSvxLRSpaceItem);
 
         vcl::Font aTmpFont( GetBulletFont() );
@@ -439,7 +439,8 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(std::u16string_view rLayoutName, 
         rNotesSet.Put( SvxCharReliefItem(FontRelief::NONE, EE_CHAR_RELIEF) );
         rNotesSet.Put( SvxColorItem( COL_AUTO, EE_CHAR_COLOR ) );
         rNotesSet.Put( SvxColorItem( COL_AUTO, EE_CHAR_BKGCOLOR ) );
-        rNotesSet.Put(SvxLRSpaceItem(0, 0, SvxIndentValue::twips(-600.0), EE_PARA_LRSPACE));
+        rNotesSet.Put(SvxLRSpaceItem(SvxIndentValue::zero(), SvxIndentValue::zero(),
+                                     SvxIndentValue::twips(-600.0), EE_PARA_LRSPACE));
         // #i16874# enable kerning by default but only for new documents
         rNotesSet.Put( SvxAutoKernItem( true, EE_CHAR_PAIRKERNING ) );
 

@@ -2143,7 +2143,8 @@ static void lcl_MergeListLevelIndentAsLRSpaceItem( const SwTextNode& rTextNode,
             }
             if (indents & ::sw::ListLevelIndents::LeftMargin)
             {
-                SvxTextLeftMarginItem const leftMargin(rFormat.GetIndentAt(), RES_MARGIN_TEXTLEFT);
+                SvxTextLeftMarginItem const leftMargin(SvxIndentValue::twips(rFormat.GetIndentAt()),
+                                                       RES_MARGIN_TEXTLEFT);
                 rSet.Put(leftMargin);
             }
         }

@@ -788,10 +788,10 @@ void RtfAttributeOutput::TablePositioning(SwFrameFormat* pFlyFormat)
     m_aRowDefs.append(static_cast<sal_Int32>(nTdfrmtxtBottom));
 
     // Similar to RtfAttributeOutput::FormatLRSpace(), but for tables.
-    sal_uInt16 nTdfrmtxtLeft = pFlyFormat->GetLRSpace().GetLeft();
+    sal_uInt16 nTdfrmtxtLeft = pFlyFormat->GetLRSpace().ResolveLeft({});
     m_aRowDefs.append(LO_STRING_SVTOOLS_RTF_TDFRMTXTLEFT);
     m_aRowDefs.append(static_cast<sal_Int32>(nTdfrmtxtLeft));
-    sal_uInt16 nTdfrmtxtRight = pFlyFormat->GetLRSpace().GetRight();
+    sal_uInt16 nTdfrmtxtRight = pFlyFormat->GetLRSpace().ResolveRight({});
     m_aRowDefs.append(LO_STRING_SVTOOLS_RTF_TDFRMTXTRIGHT);
     m_aRowDefs.append(static_cast<sal_Int32>(nTdfrmtxtRight));
 
@@ -868,7 +868,7 @@ void RtfAttributeOutput::TableDefinition(
         // value of nSz is needed.
         nSz += pCellFormat->GetFrameSize().GetWidth();
         m_aRowDefs.append(OOO_STRING_SVTOOLS_RTF_CELLX);
-        m_aRowDefs.append(static_cast<sal_Int32>(pFormat->GetLRSpace().GetLeft()
+        m_aRowDefs.append(static_cast<sal_Int32>(pFormat->GetLRSpace().ResolveLeft({})
                                                  + rtl::math::round(nSz * fWidthRatio)));
     }
 }
@@ -1093,7 +1093,7 @@ void RtfAttributeOutput::TableOrientation(
         case text::HoriOrientation::NONE:
         case text::HoriOrientation::LEFT_AND_WIDTH:
             aTableAdjust.append(OOO_STRING_SVTOOLS_RTF_TRLEFT);
-            aTableAdjust.append(static_cast<sal_Int32>(pFormat->GetLRSpace().GetLeft()));
+            aTableAdjust.append(pFormat->GetLRSpace().ResolveLeft({}));
             break;
         default:
             break;
@@ -3252,7 +3252,8 @@ void RtfAttributeOutput::ParaNumRule_Impl(const SwTextNode* pTextNd, sal_Int32 n
 
     SvxFirstLineIndentItem firstLine(rNdSet.Get(RES_MARGIN_FIRSTLINE));
     SvxTextLeftMarginItem leftMargin(rNdSet.Get(RES_MARGIN_TEXTLEFT));
-    leftMargin.SetTextLeft(leftMargin.GetTextLeft() + pFormat->GetIndentAt());
+    leftMargin.SetTextLeft(
+        SvxIndentValue::twips(leftMargin.ResolveTextLeft({}) + pFormat->GetIndentAt()));
 
     firstLine.SetTextFirstLineOffset(SvxIndentValue{
         static_cast<double>(pFormat->GetFirstLineOffset()), pFormat->GetFirstLineOffsetUnit() });
@@ -3388,9 +3389,9 @@ void RtfAttributeOutput::FormatFirstLineIndent(SvxFirstLineIndentItem const& rFi
 void RtfAttributeOutput::FormatTextLeftMargin(SvxTextLeftMarginItem const& rTextLeftMargin)
 {
     m_aStyles.append(OOO_STRING_SVTOOLS_RTF_LI);
-    m_aStyles.append(static_cast<sal_Int32>(rTextLeftMargin.GetTextLeft()));
+    m_aStyles.append(rTextLeftMargin.ResolveTextLeft({}));
     m_aStyles.append(OOO_STRING_SVTOOLS_RTF_LIN);
-    m_aStyles.append(static_cast<sal_Int32>(rTextLeftMargin.GetTextLeft()));
+    m_aStyles.append(rTextLeftMargin.ResolveTextLeft({}));
 }
 
 void RtfAttributeOutput::FormatRightMargin(SvxRightMarginItem const& rRightMargin)
@@ -3401,9 +3402,9 @@ void RtfAttributeOutput::FormatRightMargin(SvxRightMarginItem const& rRightMargi
 #endif
     {
         m_aStyles.append(OOO_STRING_SVTOOLS_RTF_RI);
-        m_aStyles.append(static_cast<sal_Int32>(rRightMargin.GetRight()));
+        m_aStyles.append(rRightMargin.ResolveRight({}));
         m_aStyles.append(OOO_STRING_SVTOOLS_RTF_RIN);
-        m_aStyles.append(static_cast<sal_Int32>(rRightMargin.GetRight()));
+        m_aStyles.append(rRightMargin.ResolveRight({}));
     }
 }
 
@@ -3424,15 +3425,15 @@ void RtfAttributeOutput::FormatLRSpace(const SvxLRSpaceItem& rLRSpace)
                     = pBoxItem->CalcLineSpace(SvxBoxItemLine::RIGHT, /*bEvenIfNoLine*/ true);
             }
 
-            m_aPageMargins.nLeft += sal::static_int_cast<sal_uInt16>(rLRSpace.GetLeft());
-            m_aPageMargins.nRight += sal::static_int_cast<sal_uInt16>(rLRSpace.GetRight());
+            m_aPageMargins.nLeft += sal::static_int_cast<sal_uInt16>(rLRSpace.ResolveLeft({}));
+            m_aPageMargins.nRight += sal::static_int_cast<sal_uInt16>(rLRSpace.ResolveRight({}));
 
-            if (rLRSpace.GetLeft())
+            if (rLRSpace.ResolveLeft({}))
             {
                 m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_MARGLSXN);
                 m_aSectionBreaks.append(static_cast<sal_Int32>(m_aPageMargins.nLeft));
             }
-            if (rLRSpace.GetRight())
+            if (rLRSpace.ResolveRight({}))
             {
                 m_aSectionBreaks.append(OOO_STRING_SVTOOLS_RTF_MARGRSXN);
                 m_aSectionBreaks.append(static_cast<sal_Int32>(m_aPageMargins.nRight));
@@ -3451,13 +3452,13 @@ void RtfAttributeOutput::FormatLRSpace(const SvxLRSpaceItem& rLRSpace)
         else
         {
             m_aStyles.append(OOO_STRING_SVTOOLS_RTF_LI);
-            m_aStyles.append(static_cast<sal_Int32>(rLRSpace.GetTextLeft()));
+            m_aStyles.append(rLRSpace.ResolveTextLeft({}));
             m_aStyles.append(OOO_STRING_SVTOOLS_RTF_RI);
-            m_aStyles.append(static_cast<sal_Int32>(rLRSpace.GetRight()));
+            m_aStyles.append(rLRSpace.ResolveRight({}));
             m_aStyles.append(OOO_STRING_SVTOOLS_RTF_LIN);
-            m_aStyles.append(static_cast<sal_Int32>(rLRSpace.GetTextLeft()));
+            m_aStyles.append(rLRSpace.ResolveTextLeft({}));
             m_aStyles.append(OOO_STRING_SVTOOLS_RTF_RIN);
-            m_aStyles.append(static_cast<sal_Int32>(rLRSpace.GetRight()));
+            m_aStyles.append(rLRSpace.ResolveRight({}));
             m_aStyles.append(OOO_STRING_SVTOOLS_RTF_FI);
             m_aStyles.append(rLRSpace.ResolveTextFirstLineOffset({}));
         }
@@ -3468,11 +3469,11 @@ void RtfAttributeOutput::FormatLRSpace(const SvxLRSpaceItem& rLRSpace)
         m_aFlyProperties.push_back(std::make_pair<OString, OString>(
             "dxWrapDistLeft"_ostr,
             OString::number(
-                o3tl::convert(rLRSpace.GetLeft(), o3tl::Length::twip, o3tl::Length::emu))));
+                o3tl::convert(rLRSpace.ResolveLeft({}), o3tl::Length::twip, o3tl::Length::emu))));
         m_aFlyProperties.push_back(std::make_pair<OString, OString>(
             "dxWrapDistRight"_ostr,
             OString::number(
-                o3tl::convert(rLRSpace.GetRight(), o3tl::Length::twip, o3tl::Length::emu))));
+                o3tl::convert(rLRSpace.ResolveRight({}), o3tl::Length::twip, o3tl::Length::emu))));
     }
 }
 

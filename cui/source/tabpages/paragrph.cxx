@@ -381,12 +381,12 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
             }
             else
             {
-                item.SetTextLeft(m_aLeftIndent.GetCoreValue(eUnit));
+                item.SetTextLeft(lcl_GetFontRelativeValue(m_aLeftIndent, eUnit));
             }
         }
         else
         {
-            item.SetTextLeft(m_aLeftIndent.GetCoreValue(eUnit));
+            item.SetTextLeft(lcl_GetFontRelativeValue(m_aLeftIndent, eUnit));
         }
         if (!pOld || *static_cast<const SvxTextLeftMarginItem*>(pOld) != item
             || SfxItemState::INVALID == GetItemSet().GetItemState(nWhich))
@@ -417,12 +417,12 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
             }
             else
             {
-                item.SetRight(m_aRightIndent.GetCoreValue(eUnit));
+                item.SetRight(lcl_GetFontRelativeValue(m_aRightIndent, eUnit));
             }
         }
         else
         {
-            item.SetRight(m_aRightIndent.GetCoreValue(eUnit));
+            item.SetRight(lcl_GetFontRelativeValue(m_aRightIndent, eUnit));
         }
         if (!pOld || *static_cast<const SvxRightMarginItem*>(pOld) != item
             || SfxItemState::INVALID == GetItemSet().GetItemState(nWhich))
@@ -463,7 +463,7 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
             item.SetTextFirstLineOffset(lcl_GetFontRelativeValue(m_aFLineIndent, eUnit));
         }
         item.SetAutoFirst(m_xAutoCB->get_active());
-        if (item.GetTextFirstLineOffsetValue() < 0)
+        if (item.GetTextFirstLineOffset().m_dValue < 0.0)
         {
             bNullTab = true;
         }
@@ -498,13 +498,13 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
                 aMargin.SetTextLeft( rOldItem.GetTextLeft(),
                                     static_cast<sal_uInt16>(m_aLeftIndent.get_value(FieldUnit::NONE)) );
             else
-                aMargin.SetTextLeft(m_aLeftIndent.GetCoreValue(eUnit));
+                aMargin.SetTextLeft(lcl_GetFontRelativeValue(m_aLeftIndent, eUnit));
 
             if ( m_aRightIndent.IsRelative() )
                 aMargin.SetRight( rOldItem.GetRight(),
                                   static_cast<sal_uInt16>(m_aRightIndent.get_value(FieldUnit::NONE)) );
             else
-                aMargin.SetRight(m_aRightIndent.GetCoreValue(eUnit));
+                aMargin.SetRight(lcl_GetFontRelativeValue(m_aRightIndent, eUnit));
 
             if ( m_aFLineIndent.IsRelative() )
                 aMargin.SetTextFirstLineOffset(
@@ -517,12 +517,12 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
         }
         else
         {
-            aMargin.SetTextLeft(m_aLeftIndent.GetCoreValue(eUnit));
-            aMargin.SetRight(m_aRightIndent.GetCoreValue(eUnit));
+            aMargin.SetTextLeft(lcl_GetFontRelativeValue(m_aLeftIndent, eUnit));
+            aMargin.SetRight(lcl_GetFontRelativeValue(m_aRightIndent, eUnit));
             aMargin.SetTextFirstLineOffset(lcl_GetFontRelativeValue(m_aFLineIndent, eUnit));
         }
         aMargin.SetAutoFirst(m_xAutoCB->get_active());
-        if ( aMargin.GetTextFirstLineOffsetValue() < 0.0 )
+        if (aMargin.GetTextFirstLineOffset().m_dValue < 0.0)
             bNullTab = true;
 
         if ( !pOld || *static_cast<const SvxLRSpaceItem*>(pOld) != aMargin ||
@@ -642,12 +642,12 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
             {
                 m_aLeftIndent.SetRelative(false);
                 m_aLeftIndent.SetFieldUnit(eFUnit);
-                m_aLeftIndent.SetMetricValue(rOldLeftMargin.GetTextLeft(), eUnit);
+                lcl_SetFontRelativeValue(m_aLeftIndent, rOldLeftMargin.GetTextLeft(), eUnit);
             }
         }
         else
         {
-            m_aLeftIndent.SetMetricValue(rOldLeftMargin.GetTextLeft(), eUnit);
+            lcl_SetFontRelativeValue(m_aLeftIndent, rOldLeftMargin.GetTextLeft(), eUnit);
         }
     }
     else if (m_bSplitLRSpace)
@@ -673,12 +673,12 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
             {
                 m_aRightIndent.SetRelative(false);
                 m_aRightIndent.SetFieldUnit(eFUnit);
-                m_aRightIndent.SetMetricValue(rOldRightMargin.GetRight(), eUnit);
+                lcl_SetFontRelativeValue(m_aRightIndent, rOldRightMargin.GetRight(), eUnit);
             }
         }
         else
         {
-            m_aRightIndent.SetMetricValue(rOldRightMargin.GetRight(), eUnit);
+            lcl_SetFontRelativeValue(m_aRightIndent, rOldRightMargin.GetRight(), eUnit);
         }
     }
     else if (m_bSplitLRSpace)
@@ -743,7 +743,7 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
             {
                 m_aLeftIndent.SetRelative(false);
                 m_aLeftIndent.SetFieldUnit(eFUnit);
-                m_aLeftIndent.SetMetricValue(rOldItem.GetTextLeft(), eUnit);
+                lcl_SetFontRelativeValue(m_aLeftIndent, rOldItem.GetTextLeft(), eUnit);
             }
 
             if ( rOldItem.GetPropRight() != 100 )
@@ -755,7 +755,7 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
             {
                 m_aRightIndent.SetRelative(false);
                 m_aRightIndent.SetFieldUnit(eFUnit);
-                m_aRightIndent.SetMetricValue(rOldItem.GetRight(), eUnit);
+                lcl_SetFontRelativeValue(m_aRightIndent, rOldItem.GetRight(), eUnit);
             }
 
             if ( rOldItem.GetPropTextFirstLineOffset() != 100 )
@@ -777,8 +777,8 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
             const SvxLRSpaceItem& rSpace =
                 static_cast<const SvxLRSpaceItem&>(rSet->Get( _nWhich ));
 
-            m_aLeftIndent.SetMetricValue(rSpace.GetTextLeft(), eUnit);
-            m_aRightIndent.SetMetricValue(rSpace.GetRight(), eUnit);
+            lcl_SetFontRelativeValue(m_aLeftIndent, rSpace.GetTextLeft(), eUnit);
+            lcl_SetFontRelativeValue(m_aRightIndent, rSpace.GetRight(), eUnit);
             lcl_SetFontRelativeValue(m_aFLineIndent, rSpace.GetTextFirstLineOffset(), eUnit);
             m_xAutoCB->set_active(rSpace.IsAutoFirst());
         }
@@ -979,6 +979,9 @@ SvxStdParagraphTabPage::SvxStdParagraphTabPage(weld::Container* pPage, weld::Dia
     Init_Impl();
     m_aFLineIndent.set_min(-9999, FieldUnit::NONE);    // is set to 0 on default
     m_aFLineIndent.EnableFontRelativeMode();
+
+    m_aLeftIndent.EnableFontRelativeMode();
+    m_aRightIndent.EnableFontRelativeMode();
 }
 
 SvxStdParagraphTabPage::~SvxStdParagraphTabPage()

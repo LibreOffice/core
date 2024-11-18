@@ -176,8 +176,8 @@ void SwPageDesc::Mirror()
     //Only the margins are mirrored, all other values are just copied.
     SvxLRSpaceItem aLR( RES_LR_SPACE );
     const SvxLRSpaceItem &rLR = m_Master.GetLRSpace();
-    aLR.SetLeft(  rLR.GetRight() );
-    aLR.SetRight( rLR.GetLeft() );
+    aLR.SetLeft(rLR.GetRight());
+    aLR.SetRight(rLR.GetLeft());
     aLR.SetRightGutterMargin(rLR.GetGutterMargin());
 
     SfxItemSet aSet( *m_Master.GetAttrSet().GetPool(),

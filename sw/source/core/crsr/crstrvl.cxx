@@ -2462,7 +2462,7 @@ bool SwCursorShell::SetShadowCursorPos( const Point& rPt, SwFillMode eFillMode )
             SvxFirstLineIndentItem firstLine(pCNd->GetAttr(RES_MARGIN_FIRSTLINE));
             SvxTextLeftMarginItem leftMargin(pCNd->GetAttr(RES_MARGIN_TEXTLEFT));
             firstLine.SetTextFirstLineOffset(SvxIndentValue::zero());
-            leftMargin.SetTextLeft(aFPos.nTabCnt);
+            leftMargin.SetTextLeft(SvxIndentValue::twips(aFPos.nTabCnt));
             aSet.Put(firstLine);
             aSet.Put(leftMargin);
 

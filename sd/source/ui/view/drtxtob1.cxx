@@ -158,7 +158,7 @@ void TextObjectBar::ExecuteImpl(ViewShell* mpViewShell, ::sd::View* mpView, SfxR
                         const SvxLRSpaceItem& rItem = aAttr.Get( EE_PARA_LRSPACE );
                         std::unique_ptr<SvxLRSpaceItem> pNewItem(rItem.Clone());
 
-                        ::tools::Long nLeft = pNewItem->GetLeft();
+                        ::tools::Long nLeft = pNewItem->ResolveLeft({});
                         if( nSlot == SID_INC_INDENT )
                             nLeft += nIndentDefaultDist;
                         else
@@ -166,7 +166,7 @@ void TextObjectBar::ExecuteImpl(ViewShell* mpViewShell, ::sd::View* mpView, SfxR
                             nLeft -= nIndentDefaultDist;
                             nLeft = std::max<::tools::Long>( nLeft, 0 );
                         }
-                        pNewItem->SetLeftValue( static_cast<sal_uInt16>(nLeft) );
+                        pNewItem->SetLeft(SvxIndentValue::twips(static_cast<sal_uInt16>(nLeft)));
 
                         aAttr.Put( std::move(pNewItem) );
                         pOLV->GetOutliner()->SetParaAttribs( nPara, aAttr );
@@ -352,7 +352,8 @@ void TextObjectBar::ExecuteImpl(ViewShell* mpViewShell, ::sd::View* mpView, SfxR
             if (nIndentDist == 0.0)
                 nIndentDist = nIndentDefaultDist;
 
-            aNewMargin.SetTextLeft(aParaMargin.GetTextLeft() + nIndentDist);
+            aNewMargin.SetTextLeft(
+                SvxIndentValue::twips(aParaMargin.ResolveTextLeft({}) + nIndentDist));
             aNewMargin.SetRight(aParaMargin.GetRight());
             aNewMargin.SetTextFirstLineOffset(SvxIndentValue::twips(nIndentDist * -1));
 

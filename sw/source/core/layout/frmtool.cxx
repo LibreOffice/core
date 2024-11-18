@@ -2351,17 +2351,19 @@ tools::Long SwBorderAttrs::CalcRight( const SwFrame* pCaller ) const
     // for paragraphs, "left" is "before text" and "right" is "after text"
     if (pCaller->IsTextFrame())
     {
+        // tdf#163913: Only apply the fixed-width part of the margin here.
+        // Font-relative margins will be applied as an adjustment later on.
         if (pCaller->IsRightToLeft())
         {
-            nRight += m_pTextLeftMargin->GetLeft(*m_pFirstLineIndent, /*metrics*/ {});
+            nRight += m_pTextLeftMargin->ResolveLeftFixedPart(*m_pFirstLineIndent);
         }
         else
         {
-            nRight += m_pRightMargin->GetRight();
+            nRight += m_pRightMargin->ResolveRightFixedPart();
         }
     }
     else
-        nRight += m_xLR->GetRight();
+        nRight += m_xLR->ResolveRight({});
 
     // correction: retrieve left margin for numbering in R2L-layout
     if ( pCaller->IsTextFrame() && pCaller->IsRightToLeft() )
@@ -2402,16 +2404,23 @@ tools::Long SwBorderAttrs::CalcLeft( const SwFrame *pCaller ) const
     }
 
     // for paragraphs, "left" is "before text" and "right" is "after text"
-    if ( pCaller->IsTextFrame() && pCaller->IsRightToLeft() )
-        nLeft += m_pRightMargin->GetRight();
+
+    // tdf#163913: Only apply the fixed-width part of the margin here.
+    // Font-relative margins will be applied as an adjustment later on.
+    if (pCaller->IsTextFrame() && pCaller->IsRightToLeft())
+    {
+        nLeft += m_pRightMargin->ResolveRightFixedPart();
+    }
     else
     {
         if (pCaller->IsTextFrame())
         {
-            nLeft += m_pTextLeftMargin->GetLeft(*m_pFirstLineIndent, /*metrics*/ {});
+            nLeft += m_pTextLeftMargin->ResolveLeftFixedPart(*m_pFirstLineIndent);
         }
         else
-            nLeft += m_xLR->GetLeft();
+        {
+            nLeft += m_xLR->ResolveLeft({});
+        }
     }
 
     // correction: do not retrieve left margin for numbering in R2L-layout
@@ -3249,8 +3258,8 @@ void Notify( SwFlyFrame *pFly, SwPageFrame *pOld, const SwRect &rOld,
     const SwRect aFrame( pFly->GetObjRectWithSpaces() );
     if ( rOld.Pos() != aFrame.Pos() )
     {   // changed position, invalidate old and new area
-        if ( rOld.HasArea() &&
-             rOld.Left()+pFly->GetFormat()->GetLRSpace().GetLeft() < FAR_AWAY )
+        if (rOld.HasArea()
+            && rOld.Left() + pFly->GetFormat()->GetLRSpace().ResolveLeft({}) < FAR_AWAY)
         {
             pFly->NotifyBackground( pOld, rOld, PrepareHint::FlyFrameLeave );
         }

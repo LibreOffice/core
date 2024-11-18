@@ -686,7 +686,8 @@ private:
     EditPaM             RemoveText();
 
     bool createLinesForEmptyParagraph(ParaPortion& rParaPortion);
-    tools::Long calculateMaxLineWidth(tools::Long nStartX, SvxLRSpaceItem const& rLRItem);
+    tools::Long calculateMaxLineWidth(tools::Long nStartX, SvxLRSpaceItem const& rLRItem,
+                                      const SvxFontUnitMetrics& rMetrics);
     bool CreateLines(sal_Int32 nPara, sal_uInt32 nStartPosY);
 
     void                CreateAndInsertEmptyLine(ParaPortion& rParaPortion);

@@ -230,8 +230,8 @@ static std::shared_ptr<SwTableRep> lcl_TableParamToItemSet( SfxItemSet& rSet, Sw
     const sal_uInt16 nAlign = pFormat->GetHoriOrient().GetHoriOrient();
     pRep->SetAlign(nAlign);
     SvxLRSpaceItem aLRSpace( pFormat->GetLRSpace() );
-    SwTwips nLeft = aLRSpace.GetLeft();
-    SwTwips nRight = aLRSpace.GetRight();
+    SwTwips nLeft = aLRSpace.ResolveLeft({});
+    SwTwips nRight = aLRSpace.ResolveRight({});
     if(nAlign != text::HoriOrientation::FULL)
     {
         SwTwips nLR = pRep->GetSpace() - nWidth;
@@ -375,8 +375,8 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
         }
 
         SvxLRSpaceItem aLRSpace( RES_LR_SPACE );
-        aLRSpace.SetLeft(pRep->GetLeftSpace());
-        aLRSpace.SetRight(pRep->GetRightSpace());
+        aLRSpace.SetLeft(SvxIndentValue::twips(pRep->GetLeftSpace()));
+        aLRSpace.SetRight(SvxIndentValue::twips(pRep->GetRightSpace()));
         aSet.Put( aLRSpace );
 
         sal_Int16 eOrient = pRep->GetAlign();
@@ -1296,8 +1296,8 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 SwFormatFrameSize aSz( SwFrameSize::Variable, nWidth );
                 aSet.Put(aSz);
 
-                aLRSpace.SetLeft(nLeft);
-                aLRSpace.SetRight(nRight);
+                aLRSpace.SetLeft(SvxIndentValue::twips(nLeft));
+                aLRSpace.SetRight(SvxIndentValue::twips(nRight));
                 aSet.Put( aLRSpace );
 
                 aSet.Put( aAttr );
@@ -1680,8 +1680,8 @@ void SwTableShell::GetState(SfxItemSet &rSet)
                 rSh.GetTabCols(aTabCols);
                 tools::Long nSpace = aTabCols.GetRightMax();
                 SvxLRSpaceItem aLRSpace(pFormat->GetLRSpace());
-                SwTwips nLeft = aLRSpace.GetLeft();
-                SwTwips nRight = aLRSpace.GetRight();
+                SwTwips nLeft = aLRSpace.ResolveLeft({});
+                SwTwips nRight = aLRSpace.ResolveRight({});
 
                 sal_uInt16 nPercent = 0;
                 auto nWidth = ::GetTableWidth(pFormat, aTabCols, &nPercent, &rSh );

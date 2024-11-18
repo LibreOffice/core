@@ -54,9 +54,9 @@ DefaultToxTabStopTokenHandler::HandleTabStopToken(
         SvxTextLeftMarginItem const& rTextLeftMargin(
             targetNode.SwContentNode::GetAttr(RES_MARGIN_TEXTLEFT));
         tools::Long nTabPosition = aToken.nTabStopPosition;
-        if (!mTabPositionIsRelativeToParagraphIndent && rTextLeftMargin.GetTextLeft() != 0)
+        if (!mTabPositionIsRelativeToParagraphIndent && rTextLeftMargin.ResolveTextLeft({}) != 0)
         {
-            nTabPosition -= rTextLeftMargin.GetTextLeft();
+            nTabPosition -= rTextLeftMargin.ResolveTextLeft({});
         }
         result.tabStop = SvxTabStop(nTabPosition, aToken.eTabAlign, cDfltDecimalChar, aToken.cTabFillChar);
         return result;
@@ -115,7 +115,7 @@ auto DefaultToxTabStopTokenHandler::CalcEndStop(SwTextNode const& rNode,
         SvxTextLeftMarginItem const& rTextLeftMargin(
             rNode.GetTextColl()->GetTextLeftMargin());
 
-        nRightMargin -= rTextLeftMargin.GetLeft(rFirstLine, /*metrics*/ {});
+        nRightMargin -= rTextLeftMargin.ResolveLeft(rFirstLine, /*metrics*/ {});
         nRightMargin -= rFirstLine.ResolveTextFirstLineOffset(/*metrics*/ {});
     }
     return nRightMargin - 1; // subtract 1 twip to avoid equal for TabOverMargin
@@ -132,8 +132,9 @@ DefaultToxTabStopTokenHandler::CalculatePageMarginFromPageDescription(const SwTe
         pPageDesc = &mDefaultPageDescription;
     }
     const SwFrameFormat& rPgDscFormat = pPageDesc->GetMaster();
-    tools::Long result = rPgDscFormat.GetFrameSize().GetWidth() - rPgDscFormat.GetLRSpace().GetLeft()
-            - rPgDscFormat.GetLRSpace().GetRight();
+    tools::Long result = rPgDscFormat.GetFrameSize().GetWidth()
+                         - rPgDscFormat.GetLRSpace().ResolveLeft({})
+                         - rPgDscFormat.GetLRSpace().ResolveRight({});
     // Also consider borders
     const SvxBoxItem& rBox = rPgDscFormat.GetBox();
     result -= rBox.CalcLineSpace(SvxBoxItemLine::LEFT) + rBox.CalcLineSpace(SvxBoxItemLine::RIGHT);

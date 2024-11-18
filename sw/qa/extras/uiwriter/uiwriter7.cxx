@@ -414,8 +414,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf69282)
     SwFrameFormat& rSourceMasterFormat = sPageDesc->GetMaster();
     //Setting horizontal spaces on master
     SvxLRSpaceItem horizontalSpace(RES_LR_SPACE);
-    horizontalSpace.SetLeft(11);
-    horizontalSpace.SetRight(12);
+    horizontalSpace.SetLeft(SvxIndentValue::twips(11));
+    horizontalSpace.SetRight(SvxIndentValue::twips(12));
     rSourceMasterFormat.SetFormatAttr(horizontalSpace);
     //Setting vertical spaces on master
     SvxULSpaceItem verticalSpace(RES_UL_SPACE);
@@ -432,17 +432,17 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf69282)
     SwFrameFormat& rTargetFirstLeftFormat = tPageDesc->GetFirstLeft();
     //Checking horizontal spaces
     const SvxLRSpaceItem MasterLRSpace = rTargetMasterFormat.GetLRSpace();
-    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetLeft(), MasterLRSpace.GetLeft());
-    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetRight(), MasterLRSpace.GetRight());
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.ResolveLeft({}), MasterLRSpace.ResolveLeft({}));
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.ResolveRight({}), MasterLRSpace.ResolveRight({}));
     const SvxLRSpaceItem LeftLRSpace = rTargetLeftFormat.GetLRSpace();
-    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetLeft(), LeftLRSpace.GetLeft());
-    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetRight(), LeftLRSpace.GetRight());
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.ResolveLeft({}), LeftLRSpace.ResolveLeft({}));
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.ResolveRight({}), LeftLRSpace.ResolveRight({}));
     const SvxLRSpaceItem FirstMasterLRSpace = rTargetFirstMasterFormat.GetLRSpace();
-    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetLeft(), FirstMasterLRSpace.GetLeft());
-    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetRight(), FirstMasterLRSpace.GetRight());
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.ResolveLeft({}), FirstMasterLRSpace.ResolveLeft({}));
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.ResolveRight({}), FirstMasterLRSpace.ResolveRight({}));
     const SvxLRSpaceItem FirstLeftLRSpace = rTargetFirstLeftFormat.GetLRSpace();
-    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetLeft(), FirstLeftLRSpace.GetLeft());
-    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetRight(), FirstLeftLRSpace.GetRight());
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.ResolveLeft({}), FirstLeftLRSpace.ResolveLeft({}));
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.ResolveRight({}), FirstLeftLRSpace.ResolveRight({}));
     //Checking vertical spaces
     const SvxULSpaceItem MasterULSpace = rTargetMasterFormat.GetULSpace();
     CPPUNIT_ASSERT_EQUAL(verticalSpace.GetUpper(), MasterULSpace.GetUpper());
@@ -474,8 +474,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf69282WithMirror)
     SwFrameFormat& rSourceMasterFormat = sPageDesc->GetMaster();
     //Setting horizontal spaces on master
     SvxLRSpaceItem horizontalSpace(RES_LR_SPACE);
-    horizontalSpace.SetLeft(11);
-    horizontalSpace.SetRight(12);
+    horizontalSpace.SetLeft(SvxIndentValue::twips(11));
+    horizontalSpace.SetRight(SvxIndentValue::twips(12));
     rSourceMasterFormat.SetFormatAttr(horizontalSpace);
     //Setting vertical spaces on master
     SvxULSpaceItem verticalSpace(RES_UL_SPACE);
@@ -492,19 +492,19 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf69282WithMirror)
     SwFrameFormat& rTargetFirstLeftFormat = tPageDesc->GetFirstLeft();
     //Checking horizontal spaces
     const SvxLRSpaceItem MasterLRSpace = rTargetMasterFormat.GetLRSpace();
-    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetLeft(), MasterLRSpace.GetLeft());
-    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetRight(), MasterLRSpace.GetRight());
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.ResolveLeft({}), MasterLRSpace.ResolveLeft({}));
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.ResolveRight({}), MasterLRSpace.ResolveRight({}));
     //mirror effect should be present
     const SvxLRSpaceItem LeftLRSpace = rTargetLeftFormat.GetLRSpace();
-    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetRight(), LeftLRSpace.GetLeft());
-    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetLeft(), LeftLRSpace.GetRight());
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.ResolveRight({}), LeftLRSpace.ResolveLeft({}));
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.ResolveLeft({}), LeftLRSpace.ResolveRight({}));
     const SvxLRSpaceItem FirstMasterLRSpace = rTargetFirstMasterFormat.GetLRSpace();
-    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetLeft(), FirstMasterLRSpace.GetLeft());
-    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetRight(), FirstMasterLRSpace.GetRight());
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.ResolveLeft({}), FirstMasterLRSpace.ResolveLeft({}));
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.ResolveRight({}), FirstMasterLRSpace.ResolveRight({}));
     //mirror effect should be present
     const SvxLRSpaceItem FirstLeftLRSpace = rTargetFirstLeftFormat.GetLRSpace();
-    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetRight(), FirstLeftLRSpace.GetLeft());
-    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetLeft(), FirstLeftLRSpace.GetRight());
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.ResolveRight({}), FirstLeftLRSpace.ResolveLeft({}));
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.ResolveLeft({}), FirstLeftLRSpace.ResolveRight({}));
     //Checking vertical spaces
     const SvxULSpaceItem MasterULSpace = rTargetMasterFormat.GetULSpace();
     CPPUNIT_ASSERT_EQUAL(verticalSpace.GetUpper(), MasterULSpace.GetUpper());

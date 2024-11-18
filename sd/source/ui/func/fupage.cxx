@@ -244,8 +244,8 @@ void FuPage::ExecuteAsyncDialog(weld::Window* pParent, const SfxRequest& rReq)
     SvxPaperBinItem aPaperBinItem( SID_ATTR_PAGE_PAPERBIN, static_cast<sal_uInt8>(mpPage->GetPaperBin()) );
     aNewAttr->Put( aPaperBinItem );
 
-    SvxLRSpaceItem aLRSpaceItem(static_cast<sal_uInt16>(mpPage->GetLeftBorder()),
-                                static_cast<sal_uInt16>(mpPage->GetRightBorder()),
+    SvxLRSpaceItem aLRSpaceItem(SvxIndentValue::twips(mpPage->GetLeftBorder()),
+                                SvxIndentValue::twips(mpPage->GetRightBorder()),
                                 SvxIndentValue::zero(),
                                 mpDoc->GetPool().GetWhichIDFromSlotID(SID_ATTR_LRSPACE));
     aNewAttr->Put( aLRSpaceItem );
@@ -526,8 +526,8 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
     if( pArgs->GetItemState(mpDoc->GetPool().GetWhichIDFromSlotID(SID_ATTR_LRSPACE),
                             true, &pPoolItem) == SfxItemState::SET )
     {
-        nLeft = static_cast<const SvxLRSpaceItem*>(pPoolItem)->GetLeft();
-        nRight = static_cast<const SvxLRSpaceItem*>(pPoolItem)->GetRight();
+        nLeft = static_cast<const SvxLRSpaceItem*>(pPoolItem)->ResolveLeft({});
+        nRight = static_cast<const SvxLRSpaceItem*>(pPoolItem)->ResolveRight({});
 
         if( mpPage->GetLeftBorder() != nLeft || mpPage->GetRightBorder() != nRight )
             bSetPageSizeAndBorder = true;

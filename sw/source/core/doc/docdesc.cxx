@@ -109,8 +109,8 @@ static void lcl_DefaultPageFormat( sal_uInt16 nPoolFormatId,
 
     aUL.SetUpper( o3tl::narrowing<sal_uInt16>(nMinTop) );
     aUL.SetLower( o3tl::narrowing<sal_uInt16>(nMinBottom) );
-    aLR.SetRight( nMinRight );
-    aLR.SetLeft( nMinLeft );
+    aLR.SetRight(SvxIndentValue::twips(nMinRight));
+    aLR.SetLeft(SvxIndentValue::twips(nMinLeft));
 
     rFormat1.SetFormatAttr( aFrameSize );
     rFormat1.SetFormatAttr( aLR );

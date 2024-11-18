@@ -894,8 +894,10 @@ ErrCode RtfExport::ExportDocument_Impl()
         {
             const SvxLRSpaceItem& rLR = rFormatPage.GetLRSpace();
             Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_MARGL);
-            Strm().WriteNumberAsString(rLR.GetLeft()).WriteOString(OOO_STRING_SVTOOLS_RTF_MARGR);
-            Strm().WriteNumberAsString(rLR.GetRight());
+            Strm()
+                .WriteNumberAsString(rLR.ResolveLeft({}))
+                .WriteOString(OOO_STRING_SVTOOLS_RTF_MARGR);
+            Strm().WriteNumberAsString(rLR.ResolveRight({}));
         }
 
         {

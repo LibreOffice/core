@@ -2091,9 +2091,11 @@ bool SwSectionIndentTabPage::FillItemSet(SfxItemSet* rSet)
 {
     if (m_xBeforeMF->get_value_changed_from_saved() || m_xAfterMF->get_value_changed_from_saved())
     {
-        SvxLRSpaceItem aLRSpace(m_xBeforeMF->denormalize(m_xBeforeMF->get_value(FieldUnit::TWIP)),
-                                m_xAfterMF->denormalize(m_xAfterMF->get_value(FieldUnit::TWIP)),
-                                SvxIndentValue::zero(), RES_LR_SPACE);
+        SvxLRSpaceItem aLRSpace(
+            SvxIndentValue::twips(
+                m_xBeforeMF->denormalize(m_xBeforeMF->get_value(FieldUnit::TWIP))),
+            SvxIndentValue::twips(m_xAfterMF->denormalize(m_xAfterMF->get_value(FieldUnit::TWIP))),
+            SvxIndentValue::zero(), RES_LR_SPACE);
         rSet->Put(aLRSpace);
     }
     return true;
@@ -2112,8 +2114,8 @@ void SwSectionIndentTabPage::Reset( const SfxItemSet* rSet)
         const SvxLRSpaceItem& rSpace =
             rSet->Get( RES_LR_SPACE );
 
-        m_xBeforeMF->set_value(m_xBeforeMF->normalize(rSpace.GetLeft()), FieldUnit::TWIP);
-        m_xAfterMF->set_value(m_xAfterMF->normalize(rSpace.GetRight()), FieldUnit::TWIP);
+        m_xBeforeMF->set_value(m_xBeforeMF->normalize(rSpace.ResolveLeft({})), FieldUnit::TWIP);
+        m_xAfterMF->set_value(m_xAfterMF->normalize(rSpace.ResolveRight({})), FieldUnit::TWIP);
     }
     else
     {

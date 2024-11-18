@@ -106,20 +106,20 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
             // convert the spacing values
             nLRSpaceLeft = rULSpace.GetUpper();
             nLRSpaceRight = rULSpace.GetLower();
-            nULSpaceUpper = rLRSpace.GetRight();
-            nULSpaceLower = rLRSpace.GetLeft();
+            nULSpaceUpper = rLRSpace.ResolveRight({});
+            nULSpaceLower = rLRSpace.ResolveLeft({});
         }
         else
         {
             if ( rAnchorFrame.IsRightToLeft() )
             {
-                nLRSpaceLeft = rLRSpace.GetRight();
-                nLRSpaceRight = rLRSpace.GetLeft();
+                nLRSpaceLeft = rLRSpace.ResolveRight({});
+                nLRSpaceRight = rLRSpace.ResolveLeft({});
             }
             else
             {
-                nLRSpaceLeft = rLRSpace.GetLeft();
-                nLRSpaceRight = rLRSpace.GetRight();
+                nLRSpaceLeft = rLRSpace.ResolveLeft({});
+                nLRSpaceRight = rLRSpace.ResolveRight({});
             }
 
             nULSpaceUpper = rULSpace.GetUpper();
@@ -308,8 +308,8 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
             {
                 // recalculate object bound rectangle, if object width has changed.
                 aObjBoundRect = GetAnchoredObj().GetObjRect();
-                aObjBoundRect.AddLeft( - rLRSpace.GetLeft() );
-                aObjBoundRect.AddWidth( rLRSpace.GetRight() );
+                aObjBoundRect.AddLeft(-rLRSpace.ResolveLeft({}));
+                aObjBoundRect.AddWidth(rLRSpace.ResolveRight({}));
                 aObjBoundRect.AddTop( - rULSpace.GetUpper() );
                 aObjBoundRect.AddHeight( rULSpace.GetLower() );
             }

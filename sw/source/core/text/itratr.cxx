@@ -1006,10 +1006,10 @@ static void lcl_MinMaxNode(SwFrameFormat* pNd, SwMinMaxNodeArgs& rIn)
     }
 
     const SvxLRSpaceItem &rLR = pNd->GetLRSpace();
-    nMin += rLR.GetLeft();
-    nMin += rLR.GetRight();
-    nMax += rLR.GetLeft();
-    nMax += rLR.GetRight();
+    nMin += rLR.ResolveLeft({});
+    nMin += rLR.ResolveRight({});
+    nMax += rLR.ResolveLeft({});
+    nMax += rLR.ResolveRight({});
 
     if( css::text::WrapTextMode_THROUGH == pNd->GetSurround().GetSurround() )
     {
@@ -1082,7 +1082,7 @@ void SwTextNode::GetMinMaxSize( SwNodeOffset nIndex, sal_uLong& rMin, sal_uLong 
 
     SvxTextLeftMarginItem const& rTextLeftMargin(GetSwAttrSet().GetTextLeftMargin());
     SvxRightMarginItem const& rRightMargin(GetSwAttrSet().GetRightMargin());
-    tools::Long nLROffset = rTextLeftMargin.GetTextLeft() + GetLeftMarginWithNum( true );
+    tools::Long nLROffset = rTextLeftMargin.ResolveTextLeft({}) + GetLeftMarginWithNum(true);
     short nFLOffs;
     // For enumerations a negative first line indentation is probably filled already
     if (!GetFirstLineOfsWithNum(nFLOffs, {}) || nFLOffs > nLROffset)
@@ -1092,7 +1092,7 @@ void SwTextNode::GetMinMaxSize( SwNodeOffset nIndex, sal_uLong& rMin, sal_uLong 
     aNodeArgs.m_nMinWidth = 0;
     aNodeArgs.m_nMaxWidth = 0;
     aNodeArgs.m_nLeftRest = nLROffset;
-    aNodeArgs.m_nRightRest = rRightMargin.GetRight();
+    aNodeArgs.m_nRightRest = rRightMargin.ResolveRight({});
     aNodeArgs.m_nLeftDiff = 0;
     aNodeArgs.m_nRightDiff = 0;
     if( nIndex )
@@ -1112,7 +1112,7 @@ void SwTextNode::GetMinMaxSize( SwNodeOffset nIndex, sal_uLong& rMin, sal_uLong 
         aNodeArgs.m_nMaxWidth -= aNodeArgs.m_nLeftRest;
 
     if (aNodeArgs.m_nRightRest < 0)
-        aNodeArgs.Minimum(rRightMargin.GetRight() - aNodeArgs.m_nRightRest);
+        aNodeArgs.Minimum(rRightMargin.ResolveRight({}) - aNodeArgs.m_nRightRest);
     aNodeArgs.m_nRightRest -= aNodeArgs.m_nRightDiff;
     if (aNodeArgs.m_nRightRest < 0)
         aNodeArgs.m_nMaxWidth -= aNodeArgs.m_nRightRest;
@@ -1234,8 +1234,8 @@ void SwTextNode::GetMinMaxSize( SwNodeOffset nIndex, sal_uLong& rMin, sal_uLong 
                             else
                                 nCurrentWidth = pFrameFormat->GetFrameSize().GetWidth();
                         }
-                        nCurrentWidth += rLR.GetLeft();
-                        nCurrentWidth += rLR.GetRight();
+                        nCurrentWidth += rLR.ResolveLeft({});
+                        nCurrentWidth += rLR.ResolveRight({});
                         aArg.m_nWordAdd = nOldWidth + nOldAdd;
                         aArg.m_nWordWidth = nCurrentWidth;
                         aArg.m_nRowWidth += nCurrentWidth;
@@ -1285,7 +1285,7 @@ void SwTextNode::GetMinMaxSize( SwNodeOffset nIndex, sal_uLong& rMin, sal_uLong 
     if (static_cast<tools::Long>(rMax) < aArg.m_nRowWidth)
         rMax = aArg.m_nRowWidth;
 
-    nLROffset += rRightMargin.GetRight();
+    nLROffset += rRightMargin.ResolveRight({});
 
     rAbsMin += nLROffset;
     rAbsMin += nAdd;

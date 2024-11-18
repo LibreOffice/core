@@ -313,9 +313,9 @@ static bool lcl_HFPresentation
                 sal_uInt16 nPropRightMargin = rLRItem.GetPropRight();
                 sal_uInt16 nLeftMargin, nRightMargin;
                 tools::Long nTmp;
-                nTmp = rLRItem.GetLeft();
+                nTmp = rLRItem.ResolveLeft({});
                 nLeftMargin = nTmp < 0 ? 0 : sal_uInt16(nTmp);
-                nTmp = rLRItem.GetRight();
+                nTmp = rLRItem.ResolveRight({});
                 nRightMargin = nTmp < 0 ? 0 : sal_uInt16(nTmp);
 
                 aText = EditResId(RID_SVXITEMS_LRSPACE_LEFT);

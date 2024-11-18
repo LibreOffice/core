@@ -389,23 +389,23 @@ void SwLayoutFrame::AdjustColumns( const SwFormatCol *pAttr, bool bAdjustAttribu
             const sal_uInt16 nLeft = pC->GetLeft();
             const sal_uInt16 nRight = pC->GetRight();
 
-            aLR.SetLeft ( nLeft );
-            aLR.SetRight( nRight );
+            aLR.SetLeft(SvxIndentValue::twips(nLeft));
+            aLR.SetRight(SvxIndentValue::twips(nRight));
 
             if ( bLine )
             {
                 if ( i == 0 )
                 {
-                    aLR.SetRight( std::max( nRight, nMin ) );
+                    aLR.SetRight(SvxIndentValue::twips(std::max(nRight, nMin)));
                 }
                 else if ( i == pAttr->GetNumCols() - 1 )
                 {
-                    aLR.SetLeft ( std::max( nLeft, nMin ) );
+                    aLR.SetLeft(SvxIndentValue::twips(std::max(nLeft, nMin)));
                 }
                 else
                 {
-                    aLR.SetLeft ( std::max( nLeft,  nMin ) );
-                    aLR.SetRight( std::max( nRight, nMin ) );
+                    aLR.SetLeft(SvxIndentValue::twips(std::max(nLeft, nMin)));
+                    aLR.SetRight(SvxIndentValue::twips(std::max(nRight, nMin)));
                 }
             }
 
@@ -419,7 +419,7 @@ void SwLayoutFrame::AdjustColumns( const SwFormatCol *pAttr, bool bAdjustAttribu
                 static_cast<SwLayoutFrame*>(pCol)->GetFormat()->SetFormatAttr( aUL );
             }
 
-            nGutter += aLR.GetLeft() + aLR.GetRight();
+            nGutter += aLR.ResolveLeft({}) + aLR.ResolveRight({});
         }
 
         pCol = bR2L ? pCol->GetPrev() : pCol->GetNext();
@@ -438,7 +438,7 @@ void SwLayoutFrame::AdjustColumns( const SwFormatCol *pAttr, bool bAdjustAttribu
         else
         {
             SvxLRSpaceItem aLR( pCol->GetAttrSet()->GetLRSpace() );
-            nWidth = nInnerWidth + aLR.GetLeft() + aLR.GetRight();
+            nWidth = nInnerWidth + aLR.ResolveLeft({}) + aLR.ResolveRight({});
         }
         if( nWidth < 0 )
             nWidth = 0;

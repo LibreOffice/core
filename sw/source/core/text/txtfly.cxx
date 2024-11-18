@@ -243,12 +243,12 @@ SwRect SwContourCache::ContourRect( const SwFormat* pFormat,
         }
         const SvxLRSpaceItem &rLRSpace = pFormat->GetLRSpace();
         const SvxULSpaceItem &rULSpace = pFormat->GetULSpace();
-        CacheItem item {
-            pObj, // due to #37347 the Object must be entered only after GetContour()
-            std::make_unique<TextRanger>( aPolyPolygon, pPolyPolygon ? &*pPolyPolygon : nullptr, 20,
-                o3tl::narrowing<sal_uInt16>(rLRSpace.GetLeft()), o3tl::narrowing<sal_uInt16>(rLRSpace.GetRight()),
-                pFormat->GetSurround().IsOutside(), false, pFrame->IsVertical() )
-        };
+        CacheItem item{ pObj, // due to #37347 the Object must be entered only after GetContour()
+                        std::make_unique<TextRanger>(
+                            aPolyPolygon, pPolyPolygon ? &*pPolyPolygon : nullptr, 20,
+                            o3tl::narrowing<sal_uInt16>(rLRSpace.ResolveLeft({})),
+                            o3tl::narrowing<sal_uInt16>(rLRSpace.ResolveRight({})),
+                            pFormat->GetSurround().IsOutside(), false, pFrame->IsVertical()) };
         mvItems.insert(mvItems.begin(), std::move(item));
         mvItems[0].mxTextRanger->SetUpper( rULSpace.GetUpper() );
         mvItems[0].mxTextRanger->SetLower( rULSpace.GetLower() );

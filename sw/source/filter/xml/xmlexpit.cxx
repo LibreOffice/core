@@ -387,10 +387,14 @@ bool SvXMLExportItemMapper::QueryXMLValue(
                         ::sax::Converter::convertPercent(
                                 aOut, rLRSpace.GetPropLeft() );
                     }
+                    else if (rLRSpace.GetLeft().m_nUnit != css::util::MeasureUnit::TWIP)
+                    {
+                        ::sax::Converter::convertMeasureUnit(aOut, rLRSpace.GetLeft().m_dValue,
+                                                             rLRSpace.GetLeft().m_nUnit);
+                    }
                     else
                     {
-                        rUnitConverter.convertMeasureToXML(
-                                aOut, rLRSpace.GetLeft() );
+                        rUnitConverter.convertMeasureToXML(aOut, rLRSpace.GetLeft().m_dValue);
                     }
                     break;
 
@@ -400,10 +404,14 @@ bool SvXMLExportItemMapper::QueryXMLValue(
                         ::sax::Converter::convertPercent(
                                 aOut, rLRSpace.GetPropRight() );
                     }
+                    else if (rLRSpace.GetRight().m_nUnit != css::util::MeasureUnit::TWIP)
+                    {
+                        ::sax::Converter::convertMeasureUnit(aOut, rLRSpace.GetRight().m_dValue,
+                                                             rLRSpace.GetRight().m_nUnit);
+                    }
                     else
                     {
-                        rUnitConverter.convertMeasureToXML(
-                                aOut, rLRSpace.GetRight() );
+                        rUnitConverter.convertMeasureToXML(aOut, rLRSpace.GetRight().m_dValue);
                     }
                     break;
 
@@ -425,17 +433,17 @@ bool SvXMLExportItemMapper::QueryXMLValue(
                             ::sax::Converter::convertPercent(
                                 aOut, rLRSpace.GetPropTextFirstLineOffset() );
                         }
-                        else if (rLRSpace.GetTextFirstLineOffsetUnit()
+                        else if (rLRSpace.GetTextFirstLineOffset().m_nUnit
                                  != css::util::MeasureUnit::TWIP)
                         {
                             ::sax::Converter::convertMeasureUnit(
-                                aOut, rLRSpace.GetTextFirstLineOffsetValue(),
-                                rLRSpace.GetTextFirstLineOffsetUnit());
+                                aOut, rLRSpace.GetTextFirstLineOffset().m_dValue,
+                                rLRSpace.GetTextFirstLineOffset().m_nUnit);
                         }
                         else
                         {
                             rUnitConverter.convertMeasureToXML(
-                                aOut, rLRSpace.GetTextFirstLineOffsetValue());
+                                aOut, rLRSpace.GetTextFirstLineOffset().m_dValue);
                         }
                     }
                     else

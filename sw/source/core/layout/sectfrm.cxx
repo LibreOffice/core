@@ -139,8 +139,8 @@ void SwSectionFrame::Init()
 
     {
         SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
-        aRectFnSet.SetLeft( aPrt, rLRSpace.GetLeft() );
-        aRectFnSet.SetWidth( aPrt, nWidth - rLRSpace.GetLeft() - rLRSpace.GetRight() );
+        aRectFnSet.SetLeft(aPrt, rLRSpace.ResolveLeft({}));
+        aRectFnSet.SetWidth(aPrt, nWidth - rLRSpace.ResolveLeft({}) - rLRSpace.ResolveRight({}));
         aRectFnSet.SetHeight( aPrt, 0 );
     }
 
@@ -1453,7 +1453,7 @@ void SwSectionFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderA
 
         // #109700# LRSpace for sections
         const SvxLRSpaceItem& rLRSpace = GetFormat()->GetLRSpace();
-        aRectFnSet.SetXMargins( *this, rLRSpace.GetLeft(), rLRSpace.GetRight() );
+        aRectFnSet.SetXMargins(*this, rLRSpace.ResolveLeft({}), rLRSpace.ResolveRight({}));
 
         if( nUpper != aRectFnSet.GetTopMargin(*this) )
         {
@@ -1515,7 +1515,8 @@ void SwSectionFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderA
         {
             const SvxLRSpaceItem& rLRSpace = GetFormat()->GetLRSpace();
             SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
-            aRectFnSet.SetWidth( aPrt, nWidth - rLRSpace.GetLeft() - rLRSpace.GetRight() );
+            aRectFnSet.SetWidth(aPrt,
+                                nWidth - rLRSpace.ResolveLeft({}) - rLRSpace.ResolveRight({}));
         }
 
         // OD 15.10.2002 #103517# - allow grow in online layout

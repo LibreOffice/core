@@ -579,12 +579,12 @@ void SdStyleSheet::AdjustToFontHeight(SfxItemSet& rSet, bool bOnlyMissingItems)
     if (rSet.GetItemState(EE_PARA_LRSPACE) != SfxItemState::SET || !bOnlyMissingItems)
     {
         const SvxLRSpaceItem& rLRItem = pCurSet->Get(EE_PARA_LRSPACE);
-        double fIndentFraction = double(rLRItem.GetTextLeft()) / nOldHeight;
+        double fIndentFraction = double(rLRItem.ResolveTextLeft({})) / nOldHeight;
         SvxLRSpaceItem aNewLRItem(rLRItem);
-        aNewLRItem.SetTextLeft(fIndentFraction * nNewHeight);
-        double fFirstIndentFraction = rLRItem.GetTextFirstLineOffsetValue() / nOldHeight;
+        aNewLRItem.SetTextLeft(SvxIndentValue::twips(fIndentFraction * nNewHeight));
+        double fFirstIndentFraction = rLRItem.GetTextFirstLineOffset().m_dValue / nOldHeight;
         aNewLRItem.SetTextFirstLineOffset(SvxIndentValue{ fFirstIndentFraction * nNewHeight,
-                                                          rLRItem.GetTextFirstLineOffsetUnit() });
+                                                          rLRItem.GetTextFirstLineOffset().m_nUnit });
         rSet.Put(aNewLRItem);
     }
 

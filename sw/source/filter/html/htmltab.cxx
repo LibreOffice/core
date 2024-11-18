@@ -2371,8 +2371,8 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
 
         // The right margin will be ignored anyway.
         SvxLRSpaceItem aLRItem( m_pSwTable->GetFrameFormat()->GetLRSpace() );
-        aLRItem.SetLeft( m_nLeftMargin );
-        aLRItem.SetRight( m_nRightMargin );
+        aLRItem.SetLeft(SvxIndentValue::twips(m_nLeftMargin));
+        aLRItem.SetRight(SvxIndentValue::twips(m_nRightMargin));
         pFrameFormat->SetFormatAttr( aLRItem );
     }
 
@@ -3458,9 +3458,10 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                     aFrameSet.Put( aFrameSize );
 
                     sal_uInt16 nSpace = pCurTable->GetHSpace();
-                    if( nSpace )
-                        aFrameSet.Put(
-                            SvxLRSpaceItem(nSpace, nSpace, SvxIndentValue::zero(), RES_LR_SPACE));
+                    if (nSpace)
+                        aFrameSet.Put(SvxLRSpaceItem(SvxIndentValue::twips(nSpace),
+                                                     SvxIndentValue::twips(nSpace),
+                                                     SvxIndentValue::zero(), RES_LR_SPACE));
                     nSpace = pCurTable->GetVSpace();
                     if( nSpace )
                         aFrameSet.Put( SvxULSpaceItem(nSpace,nSpace, RES_UL_SPACE) );

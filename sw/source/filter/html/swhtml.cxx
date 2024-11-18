@@ -4428,7 +4428,7 @@ void SwHTMLParser::NewDefList()
         SvxTextLeftMarginItem const& rTextLeftMargin =
             m_pCSS1Parser->GetTextFormatColl(RES_POOLCOLL_HTML_DD, OUString())
                        ->GetTextLeftMargin();
-        nLeft = nLeft + static_cast<sal_uInt16>(rTextLeftMargin.GetTextLeft());
+        nLeft = nLeft + static_cast<sal_uInt16>(rTextLeftMargin.ResolveTextLeft({}));
     }
 
     xCntxt->SetMargins( nLeft, nRight, nIndent );
@@ -4769,16 +4769,16 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
             || rItemSet.GetItemIfSet(RES_MARGIN_TEXTLEFT)
             || rItemSet.GetItemIfSet(RES_MARGIN_RIGHT))
         {
-            sal_Int32 nLeft = rItemSet.Get(RES_MARGIN_TEXTLEFT).GetTextLeft();
-            sal_Int32 nRight = rItemSet.Get(RES_MARGIN_RIGHT).GetRight();
+            sal_Int32 nLeft = rItemSet.Get(RES_MARGIN_TEXTLEFT).ResolveTextLeft({});
+            sal_Int32 nRight = rItemSet.Get(RES_MARGIN_RIGHT).ResolveRight({});
             nFirstLineIndent = rItemSet.Get(RES_MARGIN_FIRSTLINE).ResolveTextFirstLineOffset({});
 
             // In Definition lists the margins also contain the margins from the previous levels
             if( RES_POOLCOLL_HTML_DD == nTopColl )
             {
                 auto const*const pColl(m_pCSS1Parser->GetTextFormatColl(RES_POOLCOLL_HTML_DT, OUString()));
-                nLeft -= pColl->GetTextLeftMargin().GetTextLeft();
-                nRight -= pColl->GetRightMargin().GetRight();
+                nLeft -= pColl->GetTextLeftMargin().ResolveTextLeft({});
+                nRight -= pColl->GetRightMargin().ResolveRight({});
             }
             else if( RES_POOLCOLL_HTML_DT == nTopColl )
             {
@@ -4805,11 +4805,12 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
         pCollToSet = m_pCSS1Parser->GetTextCollFromPool( nDfltColl );
         if( !nLeftMargin )
         {
-            nLeftMargin = static_cast<sal_uInt16>(pCollToSet->GetTextLeftMargin().GetTextLeft());
+            nLeftMargin
+                = static_cast<sal_uInt16>(pCollToSet->GetTextLeftMargin().ResolveTextLeft({}));
         }
         if( !nRightMargin )
         {
-            nRightMargin = static_cast<sal_uInt16>(pCollToSet->GetRightMargin().GetRight());
+            nRightMargin = static_cast<sal_uInt16>(pCollToSet->GetRightMargin().ResolveRight({}));
         }
         if( !nFirstLineIndent )
         {
@@ -4836,9 +4837,9 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
     const SvxFirstLineIndentItem & rFirstLine = pCollToSet->GetFirstLineIndent();
     const SvxTextLeftMarginItem & rTextLeftMargin = pCollToSet->GetTextLeftMargin();
     const SvxRightMarginItem & rRightMargin = pCollToSet->GetRightMargin();
-    bool bSetLRSpace = nLeftMargin != rTextLeftMargin.GetTextLeft()
+    bool bSetLRSpace = nLeftMargin != rTextLeftMargin.ResolveTextLeft({})
                        || nFirstLineIndent != rFirstLine.ResolveTextFirstLineOffset({})
-                       || nRightMargin != rRightMargin.GetRight();
+                       || nRightMargin != rRightMargin.ResolveRight({});
 
     if( bSetLRSpace )
     {
@@ -4846,8 +4847,8 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
         SvxTextLeftMarginItem leftMargin(rTextLeftMargin);
         SvxRightMarginItem rightMargin(rRightMargin);
         firstLine.SetTextFirstLineOffset(SvxIndentValue::twips(nFirstLineIndent));
-        leftMargin.SetTextLeft(nLeftMargin);
-        rightMargin.SetRight(nRightMargin);
+        leftMargin.SetTextLeft(SvxIndentValue::twips(nLeftMargin));
+        rightMargin.SetRight(SvxIndentValue::twips(nRightMargin));
         if( pItemSet )
         {
             pItemSet->Put(firstLine);
@@ -5082,8 +5083,10 @@ void SwHTMLParser::InsertSpacer()
 
                 SvxFirstLineIndentItem const firstLine(SvxIndentValue::twips(nIndent),
                                                        RES_MARGIN_FIRSTLINE);
-                SvxTextLeftMarginItem const leftMargin(nLeft, RES_MARGIN_TEXTLEFT);
-                SvxRightMarginItem const rightMargin(nRight, RES_MARGIN_RIGHT);
+                SvxTextLeftMarginItem const leftMargin(SvxIndentValue::twips(nLeft),
+                                                       RES_MARGIN_TEXTLEFT);
+                SvxRightMarginItem const rightMargin(SvxIndentValue::twips(nRight),
+                                                     RES_MARGIN_RIGHT);
 
                 NewAttr(m_xAttrTab, &m_xAttrTab->pFirstLineIndent, firstLine);
                 EndAttr(m_xAttrTab->pFirstLineIndent, false);
@@ -5123,7 +5126,7 @@ SwTwips SwHTMLParser::GetCurrentBrowseWidth()
         const SvxULSpaceItem& rUL = rPgFormat.GetULSpace();
         const SwFormatCol& rCol = rPgFormat.GetCol();
 
-        m_aHTMLPageSize.setWidth( rSz.GetWidth() - rLR.GetLeft() - rLR.GetRight() );
+        m_aHTMLPageSize.setWidth(rSz.GetWidth() - rLR.ResolveLeft({}) - rLR.ResolveRight({}));
         m_aHTMLPageSize.setHeight( rSz.GetHeight() - rUL.GetUpper() - rUL.GetLower() );
 
         if( 1 < rCol.GetNumCols() )
@@ -5382,16 +5385,20 @@ void SwHTMLParser::InsertHorzRule()
                 switch( eAdjust )
                 {
                 case SvxAdjust::Right:
-                    oLeft.emplace(o3tl::narrowing<sal_uInt16>(nDist), RES_MARGIN_TEXTLEFT);
+                    oLeft.emplace(SvxIndentValue::twips(o3tl::narrowing<sal_uInt16>(nDist)),
+                                  RES_MARGIN_TEXTLEFT);
                     break;
                 case SvxAdjust::Left:
-                    oRight.emplace(o3tl::narrowing<sal_uInt16>(nDist), RES_MARGIN_RIGHT);
+                    oRight.emplace(SvxIndentValue::twips(o3tl::narrowing<sal_uInt16>(nDist)),
+                                   RES_MARGIN_RIGHT);
                     break;
                 case SvxAdjust::Center:
                 default:
                     nDist /= 2;
-                    oLeft.emplace(o3tl::narrowing<sal_uInt16>(nDist), RES_MARGIN_TEXTLEFT);
-                    oRight.emplace(o3tl::narrowing<sal_uInt16>(nDist), RES_MARGIN_RIGHT);
+                    oLeft.emplace(SvxIndentValue::twips(o3tl::narrowing<sal_uInt16>(nDist)),
+                                  RES_MARGIN_TEXTLEFT);
+                    oRight.emplace(SvxIndentValue::twips(o3tl::narrowing<sal_uInt16>(nDist)),
+                                   RES_MARGIN_RIGHT);
                     break;
                 }
 

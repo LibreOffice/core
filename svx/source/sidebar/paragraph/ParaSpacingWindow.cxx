@@ -213,9 +213,9 @@ void ParaLRSpacingWindow::SetValue(SfxItemState eState, const SfxPoolItem* pStat
         m_xFLSpacing->set_sensitive(true);
 
         const SvxLRSpaceItem* pSpace = static_cast<const SvxLRSpaceItem*>(pState);
-        tools::Long aTxtLeft = pSpace->GetTextLeft();
-        tools::Long aTxtRight = pSpace->GetRight();
         // tdf#36709: TODO: Handle font-relative units
+        tools::Long aTxtLeft = pSpace->ResolveTextLeft({});
+        tools::Long aTxtRight = pSpace->ResolveRight({});
         tools::Long aTxtFirstLineOfst = pSpace->ResolveTextFirstLineOffset({});
 
         aTxtLeft = m_xBeforeSpacing->normalize(aTxtLeft);
@@ -293,9 +293,9 @@ IMPL_LINK_NOARG(ParaLRSpacingWindow, ModifySpacingHdl, weld::MetricSpinButton&, 
     if(pDisp)
     {
         SvxLRSpaceItem aMargin(SID_ATTR_PARA_LRSPACE);
-        aMargin.SetTextLeft(m_xBeforeSpacing->GetCoreValue(m_eUnit));
-        aMargin.SetRight(m_xAfterSpacing->GetCoreValue(m_eUnit));
         // tdf#36709: TODO: Handle font-relative units from GUI
+        aMargin.SetTextLeft(SvxIndentValue::twips(m_xBeforeSpacing->GetCoreValue(m_eUnit)));
+        aMargin.SetRight(SvxIndentValue::twips(m_xAfterSpacing->GetCoreValue(m_eUnit)));
         aMargin.SetTextFirstLineOffset(SvxIndentValue::twips(m_xFLSpacing->GetCoreValue(m_eUnit)));
 
         pDisp->ExecuteList(SID_ATTR_PARA_LRSPACE, SfxCallMode::RECORD, {&aMargin});

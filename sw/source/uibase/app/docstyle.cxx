@@ -222,7 +222,8 @@ public:
             {
                 if (!oLRSpaceItem)
                     oLRSpaceItem.emplace(EE_PARA_LRSPACE);
-                (*oLRSpaceItem).SetTextLeft(static_cast<const SvxTextLeftMarginItem*>(pItem)->GetTextLeft());
+                (*oLRSpaceItem)
+                    .SetTextLeft(static_cast<const SvxTextLeftMarginItem*>(pItem)->GetTextLeft());
             }
             else if (nWhich == RES_MARGIN_RIGHT)
             {
@@ -1611,7 +1612,8 @@ void SwDocStyleSheet::MergeIndentAttrsOfListStyle( SfxItemSet& rSet )
             }
             if (indents & ::sw::ListLevelIndents::LeftMargin)
             {
-                SvxTextLeftMarginItem const leftMargin(rFormat.GetIndentAt(), RES_MARGIN_TEXTLEFT);
+                SvxTextLeftMarginItem const leftMargin(SvxIndentValue::twips(rFormat.GetIndentAt()),
+                                                       RES_MARGIN_TEXTLEFT);
                 rSet.Put(leftMargin);
             }
         }

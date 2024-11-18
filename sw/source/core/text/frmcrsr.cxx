@@ -1483,9 +1483,9 @@ void SwTextFrame::FillCursorPos( SwFillData& rFill ) const
                 rRect.Top( rRect.Top() + nFirst );
             rRect.Height( nLineHeight );
 
-            SwTwips nLeft = rFill.Left() + rTextLeftMargin.GetLeft(rFirstLine, /*metrics*/ {})
+            SwTwips nLeft = rFill.Left() + rTextLeftMargin.ResolveLeft(rFirstLine, /*metrics*/ {})
                             + GetTextNodeForParaProps()->GetLeftMarginWithNum();
-            SwTwips nRight = rFill.Right() - rRightMargin.GetRight();
+            SwTwips nRight = rFill.Right() - rRightMargin.ResolveRight({});
             SwTwips nCenter = ( nLeft + nRight ) / 2;
             rRect.Left( nLeft );
             if( SwFillMode::Margin == rFill.Mode() )
@@ -1555,8 +1555,8 @@ void SwTextFrame::FillCursorPos( SwFillData& rFill ) const
                 }
                 else if( rFill.X() > nLeft )
                 {
-                    SwTwips nTextLeft = rFill.Left() + rTextLeftMargin.GetTextLeft() +
-                        GetTextNodeForParaProps()->GetLeftMarginWithNum(true);
+                    SwTwips nTextLeft = rFill.Left() + rTextLeftMargin.ResolveTextLeft({})
+                                        + GetTextNodeForParaProps()->GetLeftMarginWithNum(true);
                     rFill.nLineWidth += rFill.bFirstLine ? nLeft : nTextLeft;
                     SwTwips nLeftTab;
                     SwTwips nRightTab = nLeft;

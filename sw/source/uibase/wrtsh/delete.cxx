@@ -81,12 +81,13 @@ bool SwWrtShell::TryRemoveIndent()
     {
         // this used to call SetLeft() but this should be the same result
         firstLine.SetTextFirstLineOffset(SvxIndentValue::zero());
-        leftMargin.SetTextLeft(leftMargin.GetTextLeft() + aOldFirstLineOfst);
+        leftMargin.SetTextLeft(
+            SvxIndentValue::twips(leftMargin.ResolveTextLeft({}) + aOldFirstLineOfst));
         bResult = true;
     }
-    else if (leftMargin.GetTextLeft() != 0)
+    else if (leftMargin.GetTextLeft().m_dValue != 0.0)
     {
-        leftMargin.SetTextLeft(0);
+        leftMargin.SetTextLeft(SvxIndentValue::zero());
         bResult = true;
     }
 

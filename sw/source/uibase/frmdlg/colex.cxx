@@ -67,8 +67,8 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
         // set left and right border
         const SvxLRSpaceItem& rLRSpace = static_cast<const SvxLRSpaceItem&>(rSet.Get( nWhich ));
 
-        SetLeft( rLRSpace.GetLeft() );
-        SetRight( rLRSpace.GetRight() );
+        SetLeft(rLRSpace.ResolveLeft({}));
+        SetRight(rLRSpace.ResolveRight({}));
     }
     else
     {
@@ -111,8 +111,8 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
 
             SetHdHeight( rSize.GetSize().Height() - rUL.GetLower());
             SetHdDist( rUL.GetLower() );
-            SetHdLeft( rLR.GetLeft() );
-            SetHdRight( rLR.GetRight() );
+            SetHdLeft(rLR.ResolveLeft({}));
+            SetHdRight(rLR.ResolveRight({}));
             SetHeader( true );
 
             if(SfxItemState::SET == rHeaderSet.GetItemState(RES_BACKGROUND))
@@ -147,8 +147,8 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
 
             SetFtHeight( rSize.GetSize().Height() - rUL.GetUpper());
             SetFtDist( rUL.GetUpper() );
-            SetFtLeft( rLR.GetLeft() );
-            SetFtRight( rLR.GetRight() );
+            SetFtLeft(rLR.ResolveLeft({}));
+            SetFtRight(rLR.ResolveRight({}));
             SetFooter( true );
 
             if( rFooterSet.GetItemState( RES_BACKGROUND ) == SfxItemState::SET )

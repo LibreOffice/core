@@ -155,7 +155,9 @@
         { UNO_NAME_PARA_GRAPHIC_FILTER,                 RES_BACKGROUND,                cppu::UnoType<OUString>::get(),      PropertyAttribute::MAYBEVOID, MID_GRAPHIC_FILTER                     }, \
         { UNO_NAME_PARA_GRAPHIC_LOCATION,               RES_BACKGROUND,                cppu::UnoType<css::style::GraphicLocation>::get(),    PropertyAttribute::MAYBEVOID, MID_GRAPHIC_POSITION                   }, \
         { UNO_NAME_PARA_LEFT_MARGIN,                    RES_MARGIN_TEXTLEFT,           cppu::UnoType<sal_Int32>::get(),     PropertyAttribute::MAYBEVOID, MID_TXT_LMARGIN        | CONVERT_TWIPS }, \
+        { UNO_NAME_PARA_LEFT_MARGIN_UNIT, RES_MARGIN_TEXTLEFT, cppu::UnoType<css::beans::Pair<double, sal_Int16>>::get(), PropertyAttribute::MAYBEVOID, MID_L_UNIT_MARGIN }, \
         { UNO_NAME_PARA_RIGHT_MARGIN,                   RES_MARGIN_RIGHT,              cppu::UnoType<sal_Int32>::get(),     PropertyAttribute::MAYBEVOID, MID_R_MARGIN           | CONVERT_TWIPS }, \
+        { UNO_NAME_PARA_RIGHT_MARGIN_UNIT, RES_MARGIN_RIGHT, cppu::UnoType<css::beans::Pair<double, sal_Int16>>::get(), PropertyAttribute::MAYBEVOID, MID_R_UNIT_MARGIN }, \
         { UNO_NAME_PARA_IS_AUTO_FIRST_LINE_INDENT,      RES_MARGIN_FIRSTLINE,          cppu::UnoType<bool>::get(),          PropertyAttribute::MAYBEVOID, MID_FIRST_AUTO                         }, \
         { UNO_NAME_PARA_FIRST_LINE_INDENT,              RES_MARGIN_FIRSTLINE,          cppu::UnoType<sal_Int32>::get(),     PropertyAttribute::MAYBEVOID, MID_FIRST_LINE_INDENT  | CONVERT_TWIPS }, \
         { UNO_NAME_PARA_FIRST_LINE_INDENT_UNIT,         RES_MARGIN_FIRSTLINE,          cppu::UnoType<css::beans::Pair<double, sal_Int16>>::get(), PropertyAttribute::MAYBEVOID, MID_FIRST_LINE_UNIT_INDENT }, \
@@ -418,7 +420,9 @@
                     { UNO_NAME_CHAR_OVERLINE_HAS_COLOR, RES_CHRATR_OVERLINE ,  cppu::UnoType<bool>::get(),              PROPERTY_NONE, MID_TL_HASCOLOR},\
                     { UNO_NAME_CHAR_OVERLINE_COMPLEX_COLOR, RES_CHRATR_OVERLINE, cppu::UnoType<css::util::XComplexColor>::get(), PropertyAttribute::MAYBEVOID, MID_TL_COMPLEX_COLOR }, \
                     { UNO_NAME_PARA_LEFT_MARGIN, RES_MARGIN_TEXTLEFT, cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, MID_TXT_LMARGIN|CONVERT_TWIPS},\
+                    { UNO_NAME_PARA_LEFT_MARGIN_UNIT, RES_MARGIN_TEXTLEFT, cppu::UnoType<css::beans::Pair<double, sal_Int16>>::get(), PROPERTY_NONE, MID_L_UNIT_MARGIN }, \
                     { UNO_NAME_PARA_RIGHT_MARGIN, RES_MARGIN_RIGHT, cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, MID_R_MARGIN|CONVERT_TWIPS},\
+                    { UNO_NAME_PARA_RIGHT_MARGIN_UNIT, RES_MARGIN_RIGHT, cppu::UnoType<css::beans::Pair<double, sal_Int16>>::get(), PROPERTY_NONE, MID_R_UNIT_MARGIN }, \
                     { UNO_NAME_PARA_LEFT_MARGIN_RELATIVE, RES_MARGIN_TEXTLEFT, cppu::UnoType<sal_Int16>::get(), PROPERTY_NONE,        MID_L_REL_MARGIN},\
                     { UNO_NAME_PARA_RIGHT_MARGIN_RELATIVE, RES_MARGIN_RIGHT, cppu::UnoType<sal_Int16>::get(), PROPERTY_NONE,        MID_R_REL_MARGIN},\
                     { UNO_NAME_PARA_IS_AUTO_FIRST_LINE_INDENT, RES_MARGIN_FIRSTLINE, cppu::UnoType<bool>::get(),      PROPERTY_NONE, MID_FIRST_AUTO},\
@@ -549,8 +553,10 @@
                     { UNO_NAME_PARA_FIRST_LINE_INDENT, RES_MARGIN_FIRSTLINE, cppu::UnoType<sal_Int32>::get(),      PropertyAttribute::MAYBEVOID, MID_FIRST_LINE_INDENT|CONVERT_TWIPS}, \
                     { UNO_NAME_PARA_FIRST_LINE_INDENT_UNIT, RES_MARGIN_FIRSTLINE, cppu::UnoType<css::beans::Pair<double, sal_Int16>>::get(), PropertyAttribute::MAYBEVOID, MID_FIRST_LINE_UNIT_INDENT}, \
                     { UNO_NAME_PARA_LEFT_MARGIN, RES_MARGIN_TEXTLEFT, cppu::UnoType<sal_Int32>::get(),           PropertyAttribute::MAYBEVOID, MID_TXT_LMARGIN|CONVERT_TWIPS},   \
+                    { UNO_NAME_PARA_LEFT_MARGIN_UNIT, RES_MARGIN_TEXTLEFT, cppu::UnoType<css::beans::Pair<double, sal_Int16>>::get(), PropertyAttribute::MAYBEVOID, MID_L_UNIT_MARGIN }, \
                     { UNO_NAME_PARA_LINE_SPACING, RES_PARATR_LINESPACING, cppu::UnoType<css::style::LineSpacing>::get(),       PropertyAttribute::MAYBEVOID,     CONVERT_TWIPS},   \
                     { UNO_NAME_PARA_RIGHT_MARGIN, RES_MARGIN_RIGHT, cppu::UnoType<sal_Int32>::get(),           PropertyAttribute::MAYBEVOID, MID_R_MARGIN|CONVERT_TWIPS},  \
+                    { UNO_NAME_PARA_RIGHT_MARGIN_UNIT, RES_MARGIN_RIGHT, cppu::UnoType<css::beans::Pair<double, sal_Int16>>::get(), PropertyAttribute::MAYBEVOID, MID_R_UNIT_MARGIN }, \
                     { UNO_NAME_TABSTOPS, RES_PARATR_TABSTOP,   cppu::UnoType< cppu::UnoSequenceType<css::style::TabStop> >::get(),   PropertyAttribute::MAYBEVOID, CONVERT_TWIPS}, \
                     { UNO_NAME_CHAR_NO_HYPHENATION, RES_CHRATR_NOHYPHEN,   cppu::UnoType<bool>::get(),       PROPERTY_NONE, 0}, \
 

@@ -833,16 +833,16 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                     // become negative - EditEngine really does not
                     // like that.
                     const auto nAbsLSpace=aFormat.GetAbsLSpace();
-                    const ::tools::Long  nTxtLeft=rItem.GetTextLeft();
+                    const ::tools::Long nTxtLeft = rItem.ResolveTextLeft({});
                     const ::tools::Long  nLeftIndent=std::max(::tools::Long(0),nTxtLeft - nAbsLSpace);
-                    aLRSpaceItem.SetTextLeft(nLeftIndent);
+                    aLRSpaceItem.SetTextLeft(SvxIndentValue::twips(nLeftIndent));
                     // control for clipped left indent - remainder
                     // reduces number format first line indent
                     aFormat.SetAbsLSpace(nTxtLeft - nLeftIndent);
 
                     // negative first line indent goes to the number
                     // format, positive to the lrSpace item
-                    if (rItem.GetTextFirstLineOffsetValue() < 0.0)
+                    if (rItem.GetTextFirstLineOffset().m_dValue < 0.0)
                     {
                         aFormat.SetFirstLineOffset(rItem.ResolveTextFirstLineOffset({})
                                                    - rOrigLRSpaceItem.ResolveTextFirstLineOffset({})
@@ -952,7 +952,8 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
                         rNumBulletItem.GetNumRule().GetLevelCount() > nOutlineLevel )
                     {
                         const SvxNumberFormat& rFormat = rNumBulletItem.GetNumRule().GetLevel(nOutlineLevel);
-                        aLRSpaceItem.SetTextLeft(rFormat.GetAbsLSpace() + rLRSpaceItem.GetTextLeft());
+                        aLRSpaceItem.SetTextLeft(SvxIndentValue::twips(
+                            rFormat.GetAbsLSpace() + rLRSpaceItem.ResolveTextLeft({})));
                         aLRSpaceItem.SetTextFirstLineOffset(SvxIndentValue::twips(
                             rLRSpaceItem.ResolveTextFirstLineOffset({})
                             + rFormat.GetFirstLineOffset() - rFormat.GetCharTextDistance()));

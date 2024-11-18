@@ -565,11 +565,11 @@ void SvxRuler::MouseMove( const MouseEvent& rMEvt )
 
             tools::Long nIndentValue = 0.0;
             if (nIndex == INDENT_LEFT_MARGIN)
-                nIndentValue = mxParaItem->GetTextLeft();
+                nIndentValue = mxParaItem->ResolveTextLeft({});
             else if (nIndex == INDENT_FIRST_LINE)
                 nIndentValue = mxParaItem->ResolveTextFirstLineOffset({});
             else if (nIndex == INDENT_RIGHT_MARGIN)
-                nIndentValue = mxParaItem->GetRight();
+                nIndentValue = mxParaItem->ResolveRight({});
 
             double fValue = OutputDevice::LogicToLogic(Size(nIndentValue, 0), pEditWin->GetMapMode(), GetCurrentMapMode()).Width();
             fValue = rtl::math::round(fValue / aUnitData.nTickUnit, aNoDecimalPlaces);
@@ -845,15 +845,15 @@ void SvxRuler::UpdatePara()
 
         if(bRTLText)
         {
-            leftMargin    = nRightFrameMargin - mxParaItem->GetTextLeft() + lAppNullOffset;
+            leftMargin = nRightFrameMargin - mxParaItem->ResolveTextLeft({}) + lAppNullOffset;
             leftFirstLine = leftMargin - mxParaItem->ResolveTextFirstLineOffset({});
-            rightMargin   = nLeftFrameMargin + mxParaItem->GetRight() + lAppNullOffset;
+            rightMargin = nLeftFrameMargin + mxParaItem->ResolveRight({}) + lAppNullOffset;
         }
         else
         {
-            leftMargin    = nLeftFrameMargin + mxParaItem->GetTextLeft() + lAppNullOffset;
+            leftMargin = nLeftFrameMargin + mxParaItem->ResolveTextLeft({}) + lAppNullOffset;
             leftFirstLine = leftMargin + mxParaItem->ResolveTextFirstLineOffset({});
-            rightMargin   = nRightFrameMargin - mxParaItem->GetRight() + lAppNullOffset;
+            rightMargin = nRightFrameMargin - mxParaItem->ResolveRight({}) + lAppNullOffset;
         }
 
         mpIndents[INDENT_LEFT_MARGIN].nPos  = ConvertHPosPixel(leftMargin);
@@ -1024,7 +1024,7 @@ void SvxRuler::UpdateTabs()
         const tools::Long nRightFrameMargin = GetRightFrameMargin();
 
         //#i24363# tab stops relative to indent
-        const tools::Long nParaItemTxtLeft = mxParaItem->GetTextLeft();
+        const tools::Long nParaItemTxtLeft = mxParaItem->ResolveTextLeft({});
 
         const tools::Long lParaIndent = nLeftFrameMargin + nParaItemTxtLeft;
         const tools::Long lRightMargin = nRightFrameMargin - nParaItemTxtLeft;
@@ -1033,7 +1033,8 @@ void SvxRuler::UpdateTabs()
                                 ? ConvertHPosPixel(mxTabStopItem->At(mxTabStopItem->Count() - 1).GetTabPos())
                                 : 0;
         const tools::Long lPosPixel = ConvertHPosPixel(lParaIndent) + lLastTab;
-        const tools::Long lRightIndent = ConvertHPosPixel(nRightFrameMargin - mxParaItem->GetRight());
+        const tools::Long lRightIndent
+            = ConvertHPosPixel(nRightFrameMargin - mxParaItem->ResolveRight({}));
 
         tools::Long lCurrentDefTabDist = lDefTabDist;
         if(mxTabStopItem->GetDefaultDistance())
@@ -1301,7 +1302,8 @@ tools::Long SvxRuler::GetRightIndent() const
 tools::Long SvxRuler::GetLogicRightIndent() const
 {
     /* Get Right paragraph margin in Logic */
-    return mxParaItem ? GetRightFrameMargin() - mxParaItem->GetRight() : GetRightFrameMargin();
+    return mxParaItem ? GetRightFrameMargin() - mxParaItem->ResolveRight({})
+                      : GetRightFrameMargin();
 }
 
 // Left margin in App values, is either the margin (= 0)  or the left edge of
@@ -1320,7 +1322,7 @@ tools::Long SvxRuler::GetLeftFrameMargin() const
     }
 
     if (mxBorderItem && (!mxColumnItem || mxColumnItem->IsTable()))
-        nLeft += mxBorderItem->GetLeft();
+        nLeft += mxBorderItem->ResolveLeft({});
 
     return nLeft;
 }
@@ -1374,7 +1376,7 @@ tools::Long SvxRuler::GetRightFrameMargin() const
         lResult += mxULSpaceItem->GetLower();
 
     if (bHorz && mxBorderItem && (!mxColumnItem || mxColumnItem->IsTable()))
-        lResult += mxBorderItem->GetRight();
+        lResult += mxBorderItem->ResolveRight({});
 
     if(bHorz)
         lResult = mxPagePosItem->GetWidth() - lResult;
@@ -2195,8 +2197,8 @@ void SvxRuler::ApplyIndents()
     }
 
     mxParaItem->SetTextFirstLineOffset(SvxIndentValue::twips(nNewFirstLineOffset));
-    mxParaItem->SetTextLeft(nNewTxtLeft);
-    mxParaItem->SetRight(nNewRight);
+    mxParaItem->SetTextLeft(SvxIndentValue::twips(nNewTxtLeft));
+    mxParaItem->SetRight(SvxIndentValue::twips(nNewRight));
 
     sal_uInt16 nParagraphId  = bHorz ? SID_ATTR_PARA_LRSPACE : SID_ATTR_PARA_LRSPACE_VERTICAL;
     pBindings->GetDispatcher()->ExecuteList(nParagraphId, SfxCallMode::RECORD,
@@ -2257,7 +2259,8 @@ void SvxRuler::ApplyTabs()
                 = lAppNullOffset + (bRTL ? GetRightFrameMargin() : GetLeftFrameMargin());
             if (mxRulerImpl->bIsTabsRelativeToIndent && mxParaItem)
             {
-                nTmpLeftIndentLogic += bRTL ? mxParaItem->GetRight() : mxParaItem->GetTextLeft();
+                nTmpLeftIndentLogic
+                    += bRTL ? mxParaItem->ResolveRight({}) : mxParaItem->ResolveTextLeft({});
             }
             aTabStop.GetTabPos()
                 = mxRulerImpl->lMaxRightLogic - lLogicNullOffset - nTmpLeftIndentLogic;

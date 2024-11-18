@@ -793,7 +793,7 @@ tools::Long MSWordExportBase::GetParaTabStopOffset() const
         // don't do it for editengine text, it doesn't implement this anyway
         if (!m_pISet || m_pISet->GetRanges()[0].first < RES_WHICHHINT_END)
         {
-            nOffset = GetItem(RES_MARGIN_TEXTLEFT).GetTextLeft();
+            nOffset = GetItem(RES_MARGIN_TEXTLEFT).ResolveTextLeft({});
         }
     }
     return nOffset;
@@ -926,7 +926,8 @@ void MSWordExportBase::OutputFormat( const SwFormat& rFormat, bool bPapFormat, b
                     SvxFirstLineIndentItem firstLine(aSet.Get(RES_MARGIN_FIRSTLINE));
                     SvxTextLeftMarginItem leftMargin(aSet.Get(RES_MARGIN_TEXTLEFT));
 
-                    leftMargin.SetTextLeft(leftMargin.GetTextLeft() + rNFormat.GetAbsLSpace());
+                    leftMargin.SetTextLeft(SvxIndentValue::twips(leftMargin.ResolveTextLeft({})
+                                                                 + rNFormat.GetAbsLSpace()));
                     firstLine.SetTextFirstLineOffset(
                         SvxIndentValue::twips(GetWordFirstLineOffset(rNFormat)));
 
@@ -4359,7 +4360,7 @@ void WW8AttributeOutput::FormatTextLeftMargin(SvxTextLeftMarginItem const& rText
 {                                          // normal paragraphs
     // sprmPDxaLeft
     m_rWW8Export.InsUInt16( 0x845E );        //asian version ?
-    m_rWW8Export.InsUInt16( o3tl::narrowing<sal_uInt16>(rTextLeftMargin.GetTextLeft()) );
+    m_rWW8Export.InsUInt16(o3tl::narrowing<sal_uInt16>(rTextLeftMargin.ResolveTextLeft({})));
 }
 
 void WW8AttributeOutput::FormatRightMargin(SvxRightMarginItem const& rRightMargin)
@@ -4371,7 +4372,7 @@ void WW8AttributeOutput::FormatRightMargin(SvxRightMarginItem const& rRightMargi
     {                                          // normal paragraphs
         // sprmPDxaRight
         m_rWW8Export.InsUInt16( 0x845D );        //asian version ?
-        m_rWW8Export.InsUInt16( o3tl::narrowing<sal_uInt16>(rRightMargin.GetRight()) );
+        m_rWW8Export.InsUInt16(o3tl::narrowing<sal_uInt16>(rRightMargin.ResolveRight({})));
     }
 }
 
@@ -4384,7 +4385,8 @@ void WW8AttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLR )
         // sprmPDxaFromText10
         m_rWW8Export.InsUInt16( NS_sprm::LN_PDxaFromText10 );
         // use average, since WW only knows one value
-        m_rWW8Export.InsUInt16( o3tl::narrowing<sal_uInt16>( ( rLR.GetLeft() + rLR.GetRight() ) / 2 ) );
+        m_rWW8Export.InsUInt16(
+            o3tl::narrowing<sal_uInt16>((rLR.ResolveLeft({}) + rLR.ResolveRight({})) / 2));
     }
     else if ( m_rWW8Export.m_bOutPageDescs )                // PageDescs
     {
@@ -4397,8 +4399,8 @@ void WW8AttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLR )
             m_pageMargins.nRight = pBoxItem->CalcLineSpace( SvxBoxItemLine::RIGHT, /*bEvenIfNoLine*/true );
         }
 
-        m_pageMargins.nLeft += sal::static_int_cast<sal_uInt16>(rLR.GetLeft());
-        m_pageMargins.nRight += sal::static_int_cast<sal_uInt16>(rLR.GetRight());
+        m_pageMargins.nLeft += sal::static_int_cast<sal_uInt16>(rLR.ResolveLeft({}));
+        m_pageMargins.nRight += sal::static_int_cast<sal_uInt16>(rLR.ResolveRight({}));
         sal_uInt16 nGutter = rLR.GetGutterMargin();
 
         // sprmSDxaLeft
@@ -4420,11 +4422,11 @@ void WW8AttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLR )
     {                                          // normal paragraphs
         // sprmPDxaLeft
         m_rWW8Export.InsUInt16( 0x845E );        //asian version ?
-        m_rWW8Export.InsUInt16( o3tl::narrowing<sal_uInt16>(rLR.GetTextLeft()) );
+        m_rWW8Export.InsUInt16(o3tl::narrowing<sal_uInt16>(rLR.ResolveTextLeft({})));
 
         // sprmPDxaRight
         m_rWW8Export.InsUInt16( 0x845D );        //asian version ?
-        m_rWW8Export.InsUInt16( o3tl::narrowing<sal_uInt16>(rLR.GetRight()) );
+        m_rWW8Export.InsUInt16(o3tl::narrowing<sal_uInt16>(rLR.ResolveRight({})));
 
         // sprmPDxaLeft1
         // tdf#80596: TODO export sprmPDxcLeft1 for first line indents in ICs
@@ -4976,8 +4978,8 @@ SwTwips WW8Export::CurrentPageWidth(SwTwips &rLeft, SwTwips &rRight) const
 
     const SvxLRSpaceItem& rLR = pFormat->GetLRSpace();
     SwTwips nPageSize = pFormat->GetFrameSize().GetWidth();
-    rLeft = rLR.GetLeft();
-    rRight = rLR.GetRight();
+    rLeft = rLR.ResolveLeft({});
+    rRight = rLR.ResolveRight({});
     return nPageSize;
 }
 
@@ -5066,7 +5068,7 @@ void AttributeOutputBase::FormatColumns( const SwFormatCol& rCol )
     {
         const SvxLRSpaceItem &rLR = pFormat->GetLRSpace();
         nPageSize = pFormat->GetFrameSize().GetWidth();
-        nPageSize -= rLR.GetLeft() + rLR.GetRight();
+        nPageSize -= rLR.ResolveLeft({}) + rLR.ResolveRight({});
         //i120133: The Section width should consider page indent value.
         nPageSize -= rCol.GetAdjustValue();
 
@@ -5567,7 +5569,7 @@ void WW8AttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStops )
         {
             if (const auto pLeft = pItem->DynamicWhichCast(RES_MARGIN_TEXTLEFT))
             {
-                nCurrentLeft = pLeft->GetTextLeft();
+                nCurrentLeft = pLeft->ResolveTextLeft({});
             }
             else
                 // FIXME: This fails in sw.ww8export/testCommentExport::Load_Verify_Reload_Verify
@@ -5594,7 +5596,7 @@ void WW8AttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStops )
         if ( bTabsRelativeToIndex )
         {
             SvxTextLeftMarginItem const& rLeftMargin(pParentStyle->GetAttrSet().Get(RES_MARGIN_TEXTLEFT));
-            nParentLeft = rLeftMargin.GetTextLeft();
+            nParentLeft = rLeftMargin.ResolveTextLeft({});
         }
 
         ParaTabStopDelAdd( m_rWW8Export, aParentTabs, nParentLeft, rTabStops, nCurrentLeft );
@@ -5617,7 +5619,7 @@ void WW8AttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStops )
         if ( bTabsRelativeToIndex )
         {
             SvxTextLeftMarginItem const& rLeftMargin(m_rWW8Export.m_pStyAttr->Get(RES_MARGIN_TEXTLEFT));
-            nStyleLeft = rLeftMargin.GetTextLeft();
+            nStyleLeft = rLeftMargin.ResolveTextLeft({});
         }
 
         ParaTabStopDelAdd( m_rWW8Export,

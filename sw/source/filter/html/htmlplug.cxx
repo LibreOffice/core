@@ -258,7 +258,7 @@ void SwHTMLParser::SetSpace( const Size& rPixSpace,
         if( rCSS1PropInfo.m_bLeftMargin )
         {
             // should be SvxLeftMarginItem... "cast" it
-            nLeftSpace = pLeft->GetTextLeft();
+            nLeftSpace = pLeft->ResolveTextLeft({});
             rCSS1PropInfo.m_bLeftMargin = false;
         }
         rCSS1ItemSet.ClearItem(RES_MARGIN_TEXTLEFT);
@@ -267,7 +267,7 @@ void SwHTMLParser::SetSpace( const Size& rPixSpace,
     {
         if( rCSS1PropInfo.m_bRightMargin )
         {
-            nRightSpace = pRight->GetRight();
+            nRightSpace = pRight->ResolveRight({});
             rCSS1PropInfo.m_bRightMargin = false;
         }
         rCSS1ItemSet.ClearItem(RES_MARGIN_RIGHT);
@@ -275,8 +275,8 @@ void SwHTMLParser::SetSpace( const Size& rPixSpace,
     if( nLeftSpace > 0 || nRightSpace > 0 )
     {
         SvxLRSpaceItem aLRItem( RES_LR_SPACE );
-        aLRItem.SetLeft( std::max<sal_Int32>(nLeftSpace, 0) );
-        aLRItem.SetRight( std::max<sal_Int32>(nRightSpace, 0) );
+        aLRItem.SetLeft(SvxIndentValue::twips(std::max<sal_Int32>(nLeftSpace, 0)));
+        aLRItem.SetRight(SvxIndentValue::twips(std::max<sal_Int32>(nRightSpace, 0)));
         rFlyItemSet.Put( aLRItem );
         if( nLeftSpace )
         {

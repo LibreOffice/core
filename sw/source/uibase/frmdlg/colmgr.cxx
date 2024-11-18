@@ -141,8 +141,8 @@ SwColMgr::SwColMgr(const SfxItemSet& rSet)
     if (m_nWidth < MINLAY)
         m_nWidth = USHRT_MAX;
     const SvxLRSpaceItem& rLR = rSet.Get(RES_LR_SPACE);
-    m_nWidth = m_nWidth - o3tl::narrowing<sal_uInt16>(rLR.GetLeft());
-    m_nWidth = m_nWidth - o3tl::narrowing<sal_uInt16>(rLR.GetRight());
+    m_nWidth = m_nWidth - o3tl::narrowing<sal_uInt16>(rLR.ResolveLeft({}));
+    m_nWidth = m_nWidth - o3tl::narrowing<sal_uInt16>(rLR.ResolveRight({}));
     ::FitToActualSize(m_aFormatCol, m_nWidth);
 }
 

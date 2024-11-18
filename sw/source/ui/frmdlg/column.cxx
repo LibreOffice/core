@@ -144,7 +144,8 @@ SwColumnDlg::SwColumnDlg(weld::Window* pParent, SwWrtShell& rSh)
 
         const SvxLRSpaceItem& rLRSpace = rFormat.GetLRSpace();
         const SvxBoxItem& rBox = rFormat.GetBox();
-        m_nPageWidth -= rLRSpace.GetLeft() + rLRSpace.GetRight() + rBox.GetSmallestDistance();
+        m_nPageWidth
+            -= rLRSpace.ResolveLeft({}) + rLRSpace.ResolveRight({}) + rBox.GetSmallestDistance();
 
         m_pPageSet->Put(rFormat.GetCol());
         m_pPageSet->Put(rFormat.GetLRSpace());
@@ -1171,8 +1172,8 @@ void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
             {
                 const SvxLRSpaceItem& rLRSpace = rSet.Get(RES_LR_SPACE);
                 const SvxBoxItem& rBox = rSet.Get(RES_BOX);
-                nActWidth = rSize.GetSize().Width()
-                                - rLRSpace.GetLeft() - rLRSpace.GetRight() - rBox.GetSmallestDistance();
+                nActWidth = rSize.GetSize().Width() - rLRSpace.ResolveLeft({})
+                            - rLRSpace.ResolveRight({}) - rBox.GetSmallestDistance();
             }
             else
             {

@@ -59,6 +59,8 @@ inline constexpr OUString UNO_NAME_PARA_LEFT_MARGIN = u"ParaLeftMargin"_ustr;
 inline constexpr OUString UNO_NAME_PARA_RIGHT_MARGIN = u"ParaRightMargin"_ustr;
 inline constexpr OUString UNO_NAME_PARA_LEFT_MARGIN_RELATIVE = u"ParaLeftMarginRelative"_ustr;
 inline constexpr OUString UNO_NAME_PARA_RIGHT_MARGIN_RELATIVE = u"ParaRightMarginRelative"_ustr;
+inline constexpr OUString UNO_NAME_PARA_LEFT_MARGIN_UNIT = u"ParaLeftMarginUnit"_ustr;
+inline constexpr OUString UNO_NAME_PARA_RIGHT_MARGIN_UNIT = u"ParaRightMarginUnit"_ustr;
 inline constexpr OUString UNO_NAME_PARA_IS_AUTO_FIRST_LINE_INDENT
     = u"ParaIsAutoFirstLineIndent"_ustr;
 inline constexpr OUString UNO_NAME_PARA_FIRST_LINE_INDENT = u"ParaFirstLineIndent"_ustr;

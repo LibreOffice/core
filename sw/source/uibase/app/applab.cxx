@@ -227,9 +227,9 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
         // Borders
         SvxLRSpaceItem aLRMargin( RES_LR_SPACE );
         SvxULSpaceItem aULMargin( RES_UL_SPACE );
-        aLRMargin.SetLeft (o3tl::narrowing<sal_uInt16>(rItem.m_lLeft) );
+        aLRMargin.SetLeft(SvxIndentValue::twips(o3tl::narrowing<sal_uInt16>(rItem.m_lLeft)));
         aULMargin.SetUpper(o3tl::narrowing<sal_uInt16>(rItem.m_lUpper));
-        aLRMargin.SetRight( 0 );
+        aLRMargin.SetRight(SvxIndentValue::zero());
         aULMargin.SetLower( 0 );
         rFormat.SetFormatAttr(aLRMargin);
         rFormat.SetFormatAttr(aULMargin);
@@ -282,7 +282,8 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
 
         //frame represents label itself, no border space
         SvxULSpaceItem aFrameNoULSpace( 0, 0, RES_UL_SPACE );
-        SvxLRSpaceItem aFrameNoLRSpace(0, 0, SvxIndentValue::zero(), RES_LR_SPACE);
+        SvxLRSpaceItem aFrameNoLRSpace(SvxIndentValue::zero(), SvxIndentValue::zero(),
+                                       SvxIndentValue::zero(), RES_LR_SPACE);
         pFormat->SetFormatAttr( aFrameNoULSpace );
         pFormat->SetFormatAttr( aFrameNoLRSpace );
 

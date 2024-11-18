@@ -116,11 +116,11 @@ void CollectFloatingTableAttributes(DocxExport& rExport, const ww8::Frame& rFram
     if (nValue != 0)
         pAttributes->add(FSNS(XML_w, XML_bottomFromText), OString::number(nValue));
 
-    nValue = rFrame.GetFrameFormat().GetLRSpace().GetLeft();
+    nValue = rFrame.GetFrameFormat().GetLRSpace().ResolveLeft({});
     if (nValue != 0)
         pAttributes->add(FSNS(XML_w, XML_leftFromText), OString::number(nValue));
 
-    nValue = rFrame.GetFrameFormat().GetLRSpace().GetRight();
+    nValue = rFrame.GetFrameFormat().GetLRSpace().ResolveRight({});
     if (nValue != 0)
         pAttributes->add(FSNS(XML_w, XML_rightFromText), OString::number(nValue));
 
@@ -459,7 +459,7 @@ void DocxAttributeOutput::TableDefinition(
                 pJcVal = "left";
             else
                 pJcVal = "start";
-            nIndent = sal_Int32(pTableFormat->GetLRSpace().GetLeft());
+            nIndent = pTableFormat->GetLRSpace().ResolveLeft({});
 
             // Table indentation has different meaning in Word, depending if the table is nested or not.
             // If nested, tblInd is added to parent table's left spacing and defines left edge position

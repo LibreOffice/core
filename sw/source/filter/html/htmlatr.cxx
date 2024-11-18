@@ -375,8 +375,8 @@ SwHTMLFormatInfo::SwHTMLFormatInfo( const SwFormat *pF, SwDoc *pDoc, SwDoc *pTem
         (pReferenceFormat ? pReferenceFormat : pFormat)->GetTextLeftMargin());
     SvxRightMarginItem const& rRightMargin(
         (pReferenceFormat ? pReferenceFormat : pFormat)->GetRightMargin());
-    nLeftMargin = rTextLeftMargin.GetTextLeft();
-    nRightMargin = rRightMargin.GetRight();
+    nLeftMargin = rTextLeftMargin.ResolveTextLeft({});
+    nRightMargin = rRightMargin.ResolveRight({});
     nFirstLineIndent = rFirstLine.ResolveTextFirstLineOffset({});
 
     const SvxULSpaceItem &rULSpace =
@@ -649,12 +649,12 @@ static void OutHTML_SwFormat( SwHTMLWriter& rWrt, const SwFormat& rFormat,
     if( (!rWrt.m_bCfgOutStyles || bForceDL) && !rInfo.bInNumberBulletList )
     {
         sal_Int32 nLeftMargin;
-        if( bForceDL )
-            nLeftMargin = rTextLeftMargin.GetTextLeft();
+        if (bForceDL)
+            nLeftMargin = rTextLeftMargin.ResolveTextLeft({});
         else
-            nLeftMargin = rTextLeftMargin.GetTextLeft() > pFormatInfo->nLeftMargin
-                ? rTextLeftMargin.GetTextLeft() - pFormatInfo->nLeftMargin
-                : 0;
+            nLeftMargin = rTextLeftMargin.ResolveTextLeft({}) > pFormatInfo->nLeftMargin
+                              ? rTextLeftMargin.ResolveTextLeft({}) - pFormatInfo->nLeftMargin
+                              : 0;
 
         if( nLeftMargin > 0 && rWrt.m_nDefListMargin > 0 )
         {
@@ -723,8 +723,8 @@ static void OutHTML_SwFormat( SwHTMLWriter& rWrt, const SwFormat& rFormat,
 
     if( rInfo.bInNumberBulletList )
     {
-        if( !rWrt.IsHTMLMode( HTMLMODE_LSPACE_IN_NUMBER_BULLET ) )
-            rWrt.m_nDfltLeftMargin = rTextLeftMargin.GetTextLeft();
+        if (!rWrt.IsHTMLMode(HTMLMODE_LSPACE_IN_NUMBER_BULLET))
+            rWrt.m_nDfltLeftMargin = rTextLeftMargin.ResolveTextLeft({});
 
         // In numbered lists, don't output a first line indent.
         rWrt.m_nFirstLineIndent = rFirstLine.ResolveTextFirstLineOffset({});
@@ -2102,8 +2102,8 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
             SvxFirstLineIndentItem const& rFirstLine(pItemSet->Get(RES_MARGIN_FIRSTLINE));
             SvxTextLeftMarginItem const& rTextLeftMargin(pItemSet->Get(RES_MARGIN_TEXTLEFT));
             SvxRightMarginItem const& rRightMargin(pItemSet->Get(RES_MARGIN_RIGHT));
-            sal_Int32 const nLeft(rTextLeftMargin.GetLeft(rFirstLine, /*metrics*/ {}));
-            sal_Int32 const nRight(rRightMargin.GetRight());
+            sal_Int32 const nLeft(rTextLeftMargin.ResolveLeft(rFirstLine, /*metrics*/ {}));
+            sal_Int32 const nRight(rRightMargin.ResolveRight({}));
             if( nLeft || nRight )
             {
                 const SwFrameFormat& rPgFormat =
@@ -2113,7 +2113,8 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
                 const SvxLRSpaceItem& rLR = rPgFormat.GetLRSpace();
                 const SwFormatCol& rCol = rPgFormat.GetCol();
 
-                tools::Long nPageWidth = rSz.GetWidth() - rLR.GetLeft() - rLR.GetRight();
+                tools::Long nPageWidth
+                    = rSz.GetWidth() - rLR.ResolveLeft({}) - rLR.ResolveRight({});
 
                 if( 1 < rCol.GetNumCols() )
                     nPageWidth /= rCol.GetNumCols();

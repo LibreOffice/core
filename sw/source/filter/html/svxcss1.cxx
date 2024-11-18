@@ -2046,7 +2046,8 @@ static void ParseCSS1_margin_left( const CSS1Expression *pExpr,
         nLeft = 0;
 
     // TODO: other things may need a SvxLeftMarginItem ? but they currently convert it anyway so they can convert that too.
-    SvxTextLeftMarginItem const leftMargin(o3tl::narrowing<sal_uInt16>(nLeft), RES_MARGIN_TEXTLEFT);
+    SvxTextLeftMarginItem const leftMargin(
+        SvxIndentValue::twips(o3tl::narrowing<sal_uInt16>(nLeft)), RES_MARGIN_TEXTLEFT);
     rItemSet.Put(leftMargin);
     rPropInfo.m_bLeftMargin = true;
 }
@@ -2100,7 +2101,8 @@ static void ParseCSS1_margin_right( const CSS1Expression *pExpr,
     if( nRight < 0 )
         nRight = 0;
 
-    SvxRightMarginItem rightMargin(o3tl::narrowing<sal_uInt16>(nRight), RES_MARGIN_RIGHT);
+    SvxRightMarginItem rightMargin(SvxIndentValue::twips(o3tl::narrowing<sal_uInt16>(nRight)),
+                                   RES_MARGIN_RIGHT);
     rItemSet.Put(rightMargin);
     rPropInfo.m_bRightMargin = true;
 }
@@ -2320,12 +2322,15 @@ static void ParseCSS1_margin( const CSS1Expression *pExpr,
 
         if (bSetMargins[3])
         {
-            SvxTextLeftMarginItem const leftMargin(o3tl::narrowing<sal_uInt16>(nMargins[3]), RES_MARGIN_TEXTLEFT);
+            SvxTextLeftMarginItem const leftMargin(
+                SvxIndentValue::twips(o3tl::narrowing<sal_uInt16>(nMargins[3])),
+                RES_MARGIN_TEXTLEFT);
             rItemSet.Put(leftMargin);
         }
         if (bSetMargins[1])
         {
-            SvxRightMarginItem const rightMargin(o3tl::narrowing<sal_uInt16>(nMargins[1]), RES_MARGIN_RIGHT);
+            SvxRightMarginItem const rightMargin(
+                SvxIndentValue::twips(o3tl::narrowing<sal_uInt16>(nMargins[1])), RES_MARGIN_RIGHT);
             rItemSet.Put(rightMargin);
         }
     }

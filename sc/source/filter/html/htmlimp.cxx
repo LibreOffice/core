@@ -72,8 +72,8 @@ ScHTMLImport::ScHTMLImport( ScDocument* pDocP, const OUString& rBaseURL, const S
     {
         const SfxItemSet& rSet = pStyleSheet->GetItemSet();
         const SvxLRSpaceItem* pLRItem = &rSet.Get( ATTR_LRSPACE );
-        tools::Long nLeftMargin   = pLRItem->GetLeft();
-        tools::Long nRightMargin  = pLRItem->GetRight();
+        tools::Long nLeftMargin = pLRItem->ResolveLeft({});
+        tools::Long nRightMargin = pLRItem->ResolveRight({});
         const SvxULSpaceItem* pULItem = &rSet.Get( ATTR_ULSPACE );
         tools::Long nTopMargin    = pULItem->GetUpper();
         tools::Long nBottomMargin = pULItem->GetLower();

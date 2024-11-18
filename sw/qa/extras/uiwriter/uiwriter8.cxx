@@ -989,13 +989,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testInsertAutoTextIntoListFromParaStyle)
         CPPUNIT_ASSERT_EQUAL(u"Default Paragraph Style"_ustr, rNode.GetTextColl()->GetName());
         CPPUNIT_ASSERT(rNode.GetText().startsWith("As more applicants applied"));
         CPPUNIT_ASSERT_EQUAL(pNumRule, rNode.GetNumRule());
-        CPPUNIT_ASSERT_EQUAL(pTextLeftMargin->GetTextLeft(),
-                             rNode.GetAttr(RES_MARGIN_TEXTLEFT).GetTextLeft());
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(
-            pFirstLineIndent->GetTextFirstLineOffsetValue(),
-            rNode.GetAttr(RES_MARGIN_FIRSTLINE).GetTextFirstLineOffsetValue(), 0.01);
-        CPPUNIT_ASSERT_EQUAL(pFirstLineIndent->GetTextFirstLineOffsetUnit(),
-                             rNode.GetAttr(RES_MARGIN_FIRSTLINE).GetTextFirstLineOffsetUnit());
+        CPPUNIT_ASSERT_EQUAL(pTextLeftMargin->ResolveTextLeft({}),
+                             rNode.GetAttr(RES_MARGIN_TEXTLEFT).ResolveTextLeft({}));
+        CPPUNIT_ASSERT_EQUAL(pFirstLineIndent->ResolveTextFirstLineOffset({}),
+                             rNode.GetAttr(RES_MARGIN_FIRSTLINE).ResolveTextFirstLineOffset({}));
     }
 
     pWrtShell->FwdPara();
@@ -1018,13 +1015,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testInsertAutoTextIntoListFromParaStyle)
         CPPUNIT_ASSERT_EQUAL(u"ListAndIndents"_ustr, rNode.GetTextColl()->GetName());
         CPPUNIT_ASSERT(rNode.GetText().endsWith("as soon as we have come to a decision."));
         CPPUNIT_ASSERT_EQUAL(pNumRule, rNode.GetNumRule());
-        CPPUNIT_ASSERT_EQUAL(pTextLeftMargin->GetTextLeft(),
-                             rNode.GetAttr(RES_MARGIN_TEXTLEFT).GetTextLeft());
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(
-            pFirstLineIndent->GetTextFirstLineOffsetValue(),
-            rNode.GetAttr(RES_MARGIN_FIRSTLINE).GetTextFirstLineOffsetValue(), 0.01);
-        CPPUNIT_ASSERT_EQUAL(pFirstLineIndent->GetTextFirstLineOffsetUnit(),
-                             rNode.GetAttr(RES_MARGIN_FIRSTLINE).GetTextFirstLineOffsetUnit());
+        CPPUNIT_ASSERT_EQUAL(pTextLeftMargin->ResolveTextLeft({}),
+                             rNode.GetAttr(RES_MARGIN_TEXTLEFT).ResolveTextLeft({}));
+        CPPUNIT_ASSERT_EQUAL(pFirstLineIndent->ResolveTextFirstLineOffset({}),
+                             rNode.GetAttr(RES_MARGIN_FIRSTLINE).ResolveTextFirstLineOffset({}));
     }
 
     pWrtShell->FwdPara();
@@ -1047,13 +1041,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testInsertAutoTextIntoListFromParaStyle)
         CPPUNIT_ASSERT_EQUAL(u"ListAndIndents"_ustr, rNode.GetTextColl()->GetName());
         CPPUNIT_ASSERT_EQUAL(u"more"_ustr, rNode.GetText()); // pre-existing list item
         CPPUNIT_ASSERT_EQUAL(pNumRule, rNode.GetNumRule());
-        CPPUNIT_ASSERT_EQUAL(pTextLeftMargin->GetTextLeft(),
-                             rNode.GetAttr(RES_MARGIN_TEXTLEFT).GetTextLeft());
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(
-            pFirstLineIndent->GetTextFirstLineOffsetValue(),
-            rNode.GetAttr(RES_MARGIN_FIRSTLINE).GetTextFirstLineOffsetValue(), 0.01);
-        CPPUNIT_ASSERT_EQUAL(pFirstLineIndent->GetTextFirstLineOffsetUnit(),
-                             rNode.GetAttr(RES_MARGIN_FIRSTLINE).GetTextFirstLineOffsetUnit());
+        CPPUNIT_ASSERT_EQUAL(pTextLeftMargin->ResolveTextLeft({}),
+                             rNode.GetAttr(RES_MARGIN_TEXTLEFT).ResolveTextLeft({}));
+        CPPUNIT_ASSERT_EQUAL(pFirstLineIndent->ResolveTextFirstLineOffset({}),
+                             rNode.GetAttr(RES_MARGIN_FIRSTLINE).ResolveTextFirstLineOffset({}));
     }
 }
 

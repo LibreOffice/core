@@ -219,9 +219,9 @@ void ParaPropertyPanel::initial()
 IMPL_LINK_NOARG( ParaPropertyPanel, ModifyIndentHdl_Impl, weld::MetricSpinButton&, void)
 {
     SvxLRSpaceItem aMargin( SID_ATTR_PARA_LRSPACE );
-    aMargin.SetTextLeft(mxLeftIndent->GetCoreValue(m_eLRSpaceUnit));
-    aMargin.SetRight(mxRightIndent->GetCoreValue(m_eLRSpaceUnit));
     // tdf#36709: TODO: Handle font-relative units from GUI
+    aMargin.SetTextLeft(SvxIndentValue::twips(mxLeftIndent->GetCoreValue(m_eLRSpaceUnit)));
+    aMargin.SetRight(SvxIndentValue::twips(mxRightIndent->GetCoreValue(m_eLRSpaceUnit)));
     aMargin.SetTextFirstLineOffset(
         SvxIndentValue::twips(mxFLineIndent->GetCoreValue(m_eLRSpaceUnit)));
 
@@ -396,14 +396,15 @@ void ParaPropertyPanel::StateChangedIndentImpl( SfxItemState eState, const SfxPo
 
     if (pState && eState >= SfxItemState::DEFAULT)
     {
+        // tdf#36709: TODO: Handle font-relative units
         const SvxLRSpaceItem* pSpace = static_cast<const SvxLRSpaceItem*>(pState);
-        maTxtLeft = pSpace->GetTextLeft();
+
+        maTxtLeft = pSpace->ResolveTextLeft({});
         maTxtLeft = OutputDevice::LogicToLogic(maTxtLeft, m_eLRSpaceUnit, MapUnit::MapTwip);
 
-        tools::Long aTxtRight = pSpace->GetRight();
+        tools::Long aTxtRight = pSpace->ResolveRight({});
         aTxtRight = OutputDevice::LogicToLogic(aTxtRight, m_eLRSpaceUnit, MapUnit::MapTwip);
 
-        // tdf#36709: TODO: Handle font-relative units
         tools::Long aTxtFirstLineOfst = pSpace->ResolveTextFirstLineOffset({});
         aTxtFirstLineOfst = OutputDevice::LogicToLogic( aTxtFirstLineOfst, m_eLRSpaceUnit, MapUnit::MapTwip );
 

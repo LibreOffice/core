@@ -559,7 +559,7 @@ bool SwTextFrame::PaintEmpty( const SwRect &rRect, bool bCheck ) const
                 const SvxFirstLineIndentItem& rFirstLine(
                     GetTextNodeForParaProps()->GetSwAttrSet().GetFirstLineIndent());
 
-                if (0.0 < rFirstLine.GetTextFirstLineOffsetValue())
+                if (0.0 < rFirstLine.GetTextFirstLineOffset().m_dValue)
                 {
                     aPos.AdjustX(rFirstLine.ResolveTextFirstLineOffset({}));
                 }

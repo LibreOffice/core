@@ -1492,7 +1492,7 @@ tools::Rectangle Outliner::ImpCalcBulletArea( sal_Int32 nPara, bool bAdjust, boo
         const auto nSpaceBefore = pFmt->GetAbsLSpace() + pFmt->GetFirstLineOffset();
 
         const SvxLRSpaceItem& rLR = pEditEngine->GetParaAttrib( nPara, bOutlineMode ? EE_PARA_OUTLLRSPACE : EE_PARA_LRSPACE );
-        aTopLeft.setX(rLR.GetTextLeft() + rLR.ResolveTextFirstLineOffset({}) + nSpaceBefore);
+        aTopLeft.setX(rLR.ResolveTextLeft({}) + rLR.ResolveTextFirstLineOffset({}) + nSpaceBefore);
 
         tools::Long nBulletWidth = std::max(
             static_cast<tools::Long>(-rLR.ResolveTextFirstLineOffset({})),

@@ -3051,7 +3051,8 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 if ( pFormat->GetPositionAndSpaceMode() ==
                                         SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
-                    leftMargin.SetTextLeft(leftMargin.GetTextLeft() + pFormat->GetAbsLSpace());
+                    leftMargin.SetTextLeft(SvxIndentValue::twips(leftMargin.ResolveTextLeft({})
+                                                                 + pFormat->GetAbsLSpace()));
                 }
 
                 if( rNode.IsNumbered() && rNode.IsCountedInList() )
@@ -3170,9 +3171,10 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 SvxFirstLineIndentItem firstLine(pFirstLineIndent
                         ? *pFirstLineIndent
                         : SvxFirstLineIndentItem(RES_MARGIN_FIRSTLINE));
-                SvxTextLeftMarginItem leftMargin(pTextLeftMargin
+                SvxTextLeftMarginItem leftMargin(
+                    pTextLeftMargin
                         ? *pTextLeftMargin
-                        : SvxTextLeftMarginItem(0, RES_MARGIN_TEXTLEFT));
+                        : SvxTextLeftMarginItem(SvxIndentValue::zero(), RES_MARGIN_TEXTLEFT));
 
                 // new left margin = old left + label space
                 const SwNumRule* pRule = rNode.GetNumRule();
@@ -3190,13 +3192,15 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 if ( rNumFormat.GetPositionAndSpaceMode() ==
                                         SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
-                    leftMargin.SetTextLeft(leftMargin.GetLeft(firstLine, /*metrics*/ {})
-                                           + rNumFormat.GetAbsLSpace());
+                    leftMargin.SetTextLeft(
+                        SvxIndentValue::twips(leftMargin.ResolveLeft(firstLine, /*metrics*/ {})
+                                              + rNumFormat.GetAbsLSpace()));
                 }
                 else
                 {
-                    leftMargin.SetTextLeft(leftMargin.GetLeft(firstLine, /*metrics*/ {})
-                                           + rNumFormat.GetIndentAt());
+                    leftMargin.SetTextLeft(
+                        SvxIndentValue::twips(leftMargin.ResolveLeft(firstLine, /*metrics*/ {})
+                                              + rNumFormat.GetIndentAt()));
                 }
 
                 // new first line indent = 0

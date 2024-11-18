@@ -139,6 +139,8 @@
 #define MID_TXT_LMARGIN             11
 #define MID_GUTTER_MARGIN 12
 #define MID_FIRST_LINE_UNIT_INDENT 13
+#define MID_R_UNIT_MARGIN 14
+#define MID_L_UNIT_MARGIN 15
 
 //ProtectItem
 #define MID_PROTECT_CONTENT     0

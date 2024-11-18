@@ -1819,6 +1819,50 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf36709)
     assertXPath(pXmlDoc, "//style:style[@style:name='P2']/style:paragraph-properties", "text-indent", u"6em");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf163913)
+{
+    // Verifies that loext:left-margin and loext:right-margin correctly round-trip
+    loadAndReload("tdf163913.fodt");
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+
+    // Style P1 should have been rewritten as fo:margin-left
+    assertXPath(pXmlDoc,
+                "//style:style[@style:name='P1']/style:paragraph-properties[@fo:margin-left]", 1);
+    assertXPath(pXmlDoc,
+                "//style:style[@style:name='P1']/style:paragraph-properties[@loext:margin-left]",
+                0);
+    assertXPath(pXmlDoc, "//style:style[@style:name='P1']/style:paragraph-properties",
+                "margin-left", u"3in");
+
+    // Style P2 should have round-tripped as loext:margin-left
+    assertXPath(pXmlDoc,
+                "//style:style[@style:name='P2']/style:paragraph-properties[@fo:margin-left]", 0);
+    assertXPath(pXmlDoc,
+                "//style:style[@style:name='P2']/style:paragraph-properties[@loext:margin-left]",
+                1);
+    assertXPath(pXmlDoc, "//style:style[@style:name='P2']/style:paragraph-properties",
+                "margin-left", u"6em");
+
+    // Style P3 should have been rewritten as fo:margin-right
+    assertXPath(pXmlDoc,
+                "//style:style[@style:name='P3']/style:paragraph-properties[@fo:margin-right]", 1);
+    assertXPath(pXmlDoc,
+                "//style:style[@style:name='P3']/style:paragraph-properties[@loext:margin-right]",
+                0);
+    assertXPath(pXmlDoc, "//style:style[@style:name='P3']/style:paragraph-properties",
+                "margin-right", u"3in");
+
+    // Style P4 should have round-tripped as loext:margin-right
+    assertXPath(pXmlDoc,
+                "//style:style[@style:name='P4']/style:paragraph-properties[@fo:margin-right]", 0);
+    assertXPath(pXmlDoc,
+                "//style:style[@style:name='P4']/style:paragraph-properties[@loext:margin-right]",
+                1);
+    assertXPath(pXmlDoc, "//style:style[@style:name='P4']/style:paragraph-properties",
+                "margin-right", u"6em");
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

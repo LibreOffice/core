@@ -1370,7 +1370,7 @@ bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape, SdrObject* pOb
             // tdf#152142: For RTL, positioning is relative to the right
             if (pShape->GetLayoutDir() == SwFrameFormat::HORI_R2L)
             {
-                auto nRightSpace = pShape->GetLRSpace().GetRight();
+                auto nRightSpace = pShape->GetLRSpace().ResolveRight({});
 
                 const bool bMSOLayout = pFormat->getIDocumentSettingAccess().get(
                     DocumentSettingId::DO_NOT_MIRROR_RTL_DRAW_OBJS);
@@ -1387,7 +1387,7 @@ bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape, SdrObject* pOb
             }
             else
             {
-                auto nLeftSpace = pShape->GetLRSpace().GetLeft();
+                auto nLeftSpace = pShape->GetLRSpace().ResolveLeft({});
                 aNewHOri.SetPos(aRect.Left() + nLeftSpace
                                 + (bIsGroupObj ? pObj->GetRelativePos().getX() : 0));
             }

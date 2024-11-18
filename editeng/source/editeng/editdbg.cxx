@@ -71,8 +71,8 @@ struct DebOutBuffer
     {
         str.append(OString::Concat(descr)
                    + "FI=" + OString::number(rItem.ResolveTextFirstLineOffset({}))
-                   + ", LI=" + OString::number(rItem.GetTextLeft())
-                   + ", RI=" + OString::number(rItem.GetRight()));
+                   + ", LI=" + OString::number(rItem.ResolveTextLeft({}))
+                   + ", RI=" + OString::number(rItem.ResolveRight({})));
     }
     void append(std::string_view descr, const SvxNumBulletItem& rItem)
     {

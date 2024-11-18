@@ -1692,8 +1692,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf124770)
 
     // Set left and right margin.
     SvxLRSpaceItem aLRSpace = rPageSet.GetLRSpace();
-    aLRSpace.SetLeft(1418);
-    aLRSpace.SetRight(1418);
+    aLRSpace.SetLeft(SvxIndentValue::twips(1418));
+    aLRSpace.SetRight(SvxIndentValue::twips(1418));
     rPageFormat.SetFormatAttr(aLRSpace);
     pDoc->ChgPageDesc(0, rPageDesc);
 

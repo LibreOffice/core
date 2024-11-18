@@ -492,8 +492,10 @@ ErrCode SwHTMLWriter::WriteStream()
     m_nLastLFPos = 0;
     m_nDefListLvl = 0;
     m_nDefListMargin = ((m_xTemplate.is() && !m_bCfgOutStyles) ? m_xTemplate.get() : m_pDoc)
-        ->getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_HTML_DD, false )
-        ->GetTextLeftMargin().GetTextLeft();
+                           ->getIDocumentStylePoolAccess()
+                           .GetTextCollFromPool(RES_POOLCOLL_HTML_DD, false)
+                           ->GetTextLeftMargin()
+                           .ResolveTextLeft({});
     m_nHeaderFooterSpace = 0;
     m_nTextAttrsToIgnore = 0;
     m_nCSS1OutMode = 0;

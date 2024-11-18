@@ -543,10 +543,10 @@ void SwFlyFrameAttrMgr::SetLRSpace( tools::Long nLeft, tools::Long nRight )
     OSL_ENSURE( LONG_MAX != nLeft && LONG_MAX != nRight, "Which border to set?" );
 
     SvxLRSpaceItem aTmp( m_aSet.Get( RES_LR_SPACE ) );
-    if( LONG_MAX != nLeft )
-        aTmp.SetLeft( sal_uInt16(nLeft) );
-    if( LONG_MAX != nRight )
-        aTmp.SetRight( sal_uInt16(nRight) );
+    if (LONG_MAX != nLeft)
+        aTmp.SetLeft(SvxIndentValue::twips(nLeft));
+    if (LONG_MAX != nRight)
+        aTmp.SetRight(SvxIndentValue::twips(nRight));
     m_aSet.Put( aTmp );
 }
 

@@ -336,13 +336,13 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
     if ( pItem )
     {
         const SvxLRSpaceItem& rLRSpace = static_cast<const SvxLRSpaceItem&>(*pItem);
-        SetMetricValue( *m_xLeftMarginEdit, rLRSpace.GetLeft(), eUnit );
+        SetMetricValue(*m_xLeftMarginEdit, rLRSpace.ResolveLeft({}), eUnit);
         SetMetricValue(*m_xGutterMarginEdit, rLRSpace.GetGutterMargin(), eUnit);
         m_aBspWin.SetLeft(
-            static_cast<sal_uInt16>(ConvertLong_Impl( rLRSpace.GetLeft(), eUnit )) );
-        SetMetricValue( *m_xRightMarginEdit, rLRSpace.GetRight(), eUnit );
+            static_cast<sal_uInt16>(ConvertLong_Impl(rLRSpace.ResolveLeft({}), eUnit)));
+        SetMetricValue(*m_xRightMarginEdit, rLRSpace.ResolveRight({}), eUnit);
         m_aBspWin.SetRight(
-            static_cast<sal_uInt16>(ConvertLong_Impl( rLRSpace.GetRight(), eUnit )) );
+            static_cast<sal_uInt16>(ConvertLong_Impl(rLRSpace.ResolveRight({}), eUnit)));
     }
 
     // adjust margins (top/bottom)
@@ -633,13 +633,15 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet* rSet )
 
     if (m_xLeftMarginEdit->get_value_changed_from_saved())
     {
-        aMargin.SetLeft( static_cast<sal_uInt16>(GetCoreValue( *m_xLeftMarginEdit, eUnit )) );
+        aMargin.SetLeft(SvxIndentValue::twips(
+            static_cast<sal_uInt16>(GetCoreValue(*m_xLeftMarginEdit, eUnit))));
         bModified = true;
     }
 
     if (m_xRightMarginEdit->get_value_changed_from_saved())
     {
-        aMargin.SetRight( static_cast<sal_uInt16>(GetCoreValue( *m_xRightMarginEdit, eUnit )) );
+        aMargin.SetRight(SvxIndentValue::twips(
+            static_cast<sal_uInt16>(GetCoreValue(*m_xRightMarginEdit, eUnit))));
         bModified = true;
     }
 
@@ -1254,8 +1256,8 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
             m_aBspWin.SetHdDist( nDist );
             const SvxLRSpaceItem& rLR =
                 rHeaderSet.Get( GetWhich( SID_ATTR_LRSPACE ) );
-            m_aBspWin.SetHdLeft( rLR.GetLeft() );
-            m_aBspWin.SetHdRight( rLR.GetRight() );
+            m_aBspWin.SetHdLeft(rLR.ResolveLeft({}));
+            m_aBspWin.SetHdRight(rLR.ResolveRight({}));
             m_aBspWin.SetHeader( true );
         }
         else
@@ -1309,8 +1311,8 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
         m_aBspWin.SetFtDist( nDist );
         const SvxLRSpaceItem& rLR =
             rFooterSet.Get( GetWhich( SID_ATTR_LRSPACE ) );
-        m_aBspWin.SetFtLeft( rLR.GetLeft() );
-        m_aBspWin.SetFtRight( rLR.GetRight() );
+        m_aBspWin.SetFtLeft(rLR.ResolveLeft({}));
+        m_aBspWin.SetFtRight(rLR.ResolveRight({}));
         m_aBspWin.SetFooter( true );
     }
     else

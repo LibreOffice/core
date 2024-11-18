@@ -388,10 +388,9 @@ SwTwips SwAnchoredObjectPosition::GetVertRelPos(
         break;
         case text::VertOrientation::TOP:
         {
-              nRelPosY +=   aRectFnSet.IsVert()
-                            ? ( aRectFnSet.IsVertL2R()
-                                ? _rLRSpacing.GetLeft()
-                                : _rLRSpacing.GetRight() )
+            nRelPosY += aRectFnSet.IsVert()
+                            ? (aRectFnSet.IsVertL2R() ? _rLRSpacing.ResolveLeft({})
+                                                      : _rLRSpacing.ResolveRight({}))
                             : _rULSpacing.GetUpper();
         }
         break;
@@ -402,12 +401,12 @@ SwTwips SwAnchoredObjectPosition::GetVertRelPos(
         break;
         case text::VertOrientation::BOTTOM:
         {
-            nRelPosY += nAlignAreaHeight -
-                        ( nObjHeight + ( aRectFnSet.IsVert()
-                                         ? ( aRectFnSet.IsVertL2R()
-                                             ? _rLRSpacing.GetRight()
-                                             : _rLRSpacing.GetLeft() )
-                                         : _rULSpacing.GetLower() ) );
+            nRelPosY += nAlignAreaHeight
+                        - (nObjHeight
+                           + (aRectFnSet.IsVert()
+                                  ? (aRectFnSet.IsVertL2R() ? _rLRSpacing.ResolveRight({})
+                                                            : _rLRSpacing.ResolveLeft({}))
+                                  : _rULSpacing.GetLower()));
         }
         break;
         default:
@@ -923,12 +922,13 @@ SwTwips SwAnchoredObjectPosition::CalcRelPosX(
     }
     else if ( text::HoriOrientation::CENTER == eHoriOrient )
         nRelPosX += (nWidth / 2) - (nObjWidth / 2);
-    else if ( text::HoriOrientation::RIGHT == eHoriOrient )
-        nRelPosX += nWidth -
-                    ( nObjWidth +
-                      ( aRectFnSet.IsVert() ? _rULSpacing.GetLower() : _rLRSpacing.GetRight() ) );
+    else if (text::HoriOrientation::RIGHT == eHoriOrient)
+        nRelPosX
+            += nWidth
+               - (nObjWidth
+                  + (aRectFnSet.IsVert() ? _rULSpacing.GetLower() : _rLRSpacing.ResolveRight({})));
     else
-        nRelPosX += aRectFnSet.IsVert() ? _rULSpacing.GetUpper() : _rLRSpacing.GetLeft();
+        nRelPosX += aRectFnSet.IsVert() ? _rULSpacing.GetUpper() : _rLRSpacing.ResolveLeft({});
 
     // adjust relative position by distance between anchor frame and
     // the frame, the object is oriented at.
@@ -1070,31 +1070,34 @@ SwTwips SwAnchoredObjectPosition::AdjustHoriRelPosForDrawAside(
             else
             {
                 const SvxLRSpaceItem& rOtherLR = pFly->GetFormat()->GetLRSpace();
-                const SwTwips nOtherLeft = pFly->getFrameArea().Left() - rOtherLR.GetLeft();
-                const SwTwips nOtherRight = pFly->getFrameArea().Right() + rOtherLR.GetRight();
-                if( nOtherLeft <= aTmpObjRect.Right() + _rLRSpacing.GetRight() &&
-                    nOtherRight >= aTmpObjRect.Left() - _rLRSpacing.GetLeft() )
+                const SwTwips nOtherLeft = pFly->getFrameArea().Left() - rOtherLR.ResolveLeft({});
+                const SwTwips nOtherRight
+                    = pFly->getFrameArea().Right() + rOtherLR.ResolveRight({});
+                if (nOtherLeft <= aTmpObjRect.Right() + _rLRSpacing.ResolveRight({})
+                    && nOtherRight >= aTmpObjRect.Left() - _rLRSpacing.ResolveLeft({}))
                 {
                     if ( _eHoriOrient == text::HoriOrientation::LEFT )
                     {
-                        SwTwips nTmp = nOtherRight + 1 + _rLRSpacing.GetLeft() -
-                                       rAnchorTextFrame.getFrameArea().Left();
-                        if ( nTmp > nAdjustedRelPosX &&
-                             rAnchorTextFrame.getFrameArea().Left() + nTmp +
-                             aObjBoundRect.Width() + _rLRSpacing.GetRight()
-                             <= pObjPage->getFrameArea().Width() + pObjPage->getFrameArea().Left() )
+                        SwTwips nTmp = nOtherRight + 1 + _rLRSpacing.ResolveLeft({})
+                                       - rAnchorTextFrame.getFrameArea().Left();
+                        if (nTmp > nAdjustedRelPosX
+                            && rAnchorTextFrame.getFrameArea().Left() + nTmp + aObjBoundRect.Width()
+                                       + _rLRSpacing.ResolveRight({})
+                                   <= pObjPage->getFrameArea().Width()
+                                          + pObjPage->getFrameArea().Left())
                         {
                             nAdjustedRelPosX = nTmp;
                         }
                     }
                     else if ( _eHoriOrient == text::HoriOrientation::RIGHT )
                     {
-                        SwTwips nTmp = nOtherLeft - 1 - _rLRSpacing.GetRight() -
-                                       aObjBoundRect.Width() -
-                                       rAnchorTextFrame.getFrameArea().Left();
-                        if ( nTmp < nAdjustedRelPosX &&
-                             rAnchorTextFrame.getFrameArea().Left() + nTmp - _rLRSpacing.GetLeft()
-                             >= pObjPage->getFrameArea().Left() )
+                        SwTwips nTmp = nOtherLeft - 1 - _rLRSpacing.ResolveRight({})
+                                       - aObjBoundRect.Width()
+                                       - rAnchorTextFrame.getFrameArea().Left();
+                        if (nTmp < nAdjustedRelPosX
+                            && rAnchorTextFrame.getFrameArea().Left() + nTmp
+                                       - _rLRSpacing.ResolveLeft({})
+                                   >= pObjPage->getFrameArea().Left())
                         {
                             nAdjustedRelPosX = nTmp;
                         }

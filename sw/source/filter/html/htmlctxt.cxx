@@ -615,10 +615,10 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
                 // the item (with value 0) will be added
                 if( rPropInfo.m_bLeftMargin )
                 {
-                    OSL_ENSURE( rPropInfo.m_nLeftMargin < 0 ||
-                            !pTextLeftMargin ||
-                            rPropInfo.m_nLeftMargin == pTextLeftMargin->GetTextLeft(),
-                            "left margin does not match with item" );
+                    OSL_ENSURE(rPropInfo.m_nLeftMargin < 0 || !pTextLeftMargin
+                                   || rPropInfo.m_nLeftMargin
+                                          == pTextLeftMargin->ResolveTextLeft({}),
+                               "left margin does not match with item");
                     if( rPropInfo.m_nLeftMargin < 0 &&
                         -rPropInfo.m_nLeftMargin > nOldLeft )
                         nLeft = 0;
@@ -627,10 +627,9 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
                 }
                 if( rPropInfo.m_bRightMargin )
                 {
-                    OSL_ENSURE( rPropInfo.m_nRightMargin < 0 ||
-                            !pRightMargin ||
-                            rPropInfo.m_nRightMargin == pRightMargin->GetRight(),
-                            "right margin does not match with item" );
+                    OSL_ENSURE(rPropInfo.m_nRightMargin < 0 || !pRightMargin
+                                   || rPropInfo.m_nRightMargin == pRightMargin->ResolveRight({}),
+                               "right margin does not match with item");
                     if( rPropInfo.m_nRightMargin < 0 &&
                         -rPropInfo.m_nRightMargin > nOldRight )
                         nRight = 0;
@@ -648,10 +647,12 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
                                                  RES_MARGIN_FIRSTLINE);
                 NewAttr(m_xAttrTab, &m_xAttrTab->pFirstLineIndent, firstLine);
                 EndAttr(m_xAttrTab->pFirstLineIndent, false);
-                SvxTextLeftMarginItem const leftMargin(nLeft, RES_MARGIN_TEXTLEFT);
+                SvxTextLeftMarginItem const leftMargin(SvxIndentValue::twips(nLeft),
+                                                       RES_MARGIN_TEXTLEFT);
                 NewAttr(m_xAttrTab, &m_xAttrTab->pTextLeftMargin, leftMargin);
                 EndAttr(m_xAttrTab->pTextLeftMargin, false);
-                SvxRightMarginItem const rightMargin(nRight, RES_MARGIN_RIGHT);
+                SvxRightMarginItem const rightMargin(SvxIndentValue::twips(nRight),
+                                                     RES_MARGIN_RIGHT);
                 NewAttr(m_xAttrTab, &m_xAttrTab->pRightMargin, rightMargin);
                 EndAttr(m_xAttrTab->pRightMargin, false);
             }

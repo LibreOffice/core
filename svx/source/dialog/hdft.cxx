@@ -255,8 +255,8 @@ bool SvxHFPage::FillItemSet( SfxItemSet* rSet )
 
     // Margins
     SvxLRSpaceItem aLR( nWLRSpace );
-    aLR.SetLeft( static_cast<sal_uInt16>(GetCoreValue( *m_xLMEdit, eUnit )) );
-    aLR.SetRight( static_cast<sal_uInt16>(GetCoreValue( *m_xRMEdit, eUnit )) );
+    aLR.SetLeft(SvxIndentValue::twips(GetCoreValue(*m_xLMEdit, eUnit)));
+    aLR.SetRight(SvxIndentValue::twips(GetCoreValue(*m_xRMEdit, eUnit)));
     aSet.Put( aLR );
 
     SvxULSpaceItem aUL( nWULSpace );
@@ -372,8 +372,8 @@ void SvxHFPage::Reset( const SfxItemSet* rSet )
             }
 
             m_xHeightDynBtn->set_active(rDynamic.GetValue());
-            SetMetricValue( *m_xLMEdit, rLR.GetLeft(), eUnit );
-            SetMetricValue( *m_xRMEdit, rLR.GetRight(), eUnit );
+            SetMetricValue(*m_xLMEdit, rLR.ResolveLeft({}), eUnit);
+            SetMetricValue(*m_xRMEdit, rLR.ResolveRight({}), eUnit);
             m_xCntSharedBox->set_active(rShared.GetValue());
             if (pSharedFirst)
                 m_xCntSharedFirstBox->set_active(pSharedFirst->GetValue());
@@ -794,8 +794,8 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
         // Set left and right margins
         const SvxLRSpaceItem& rLRSpace = static_cast<const SvxLRSpaceItem&>(*pItem);
 
-        m_aBspWin.SetLeft( rLRSpace.GetLeft() );
-        m_aBspWin.SetRight( rLRSpace.GetRight() );
+        m_aBspWin.SetLeft(rLRSpace.ResolveLeft({}));
+        m_aBspWin.SetRight(rLRSpace.ResolveRight({}));
     }
     else
     {
@@ -865,8 +865,8 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
 
             m_aBspWin.SetHdHeight( rSize.GetSize().Height() - nDist );
             m_aBspWin.SetHdDist( nDist );
-            m_aBspWin.SetHdLeft( rLR.GetLeft() );
-            m_aBspWin.SetHdRight( rLR.GetRight() );
+            m_aBspWin.SetHdLeft(rLR.ResolveLeft({}));
+            m_aBspWin.SetHdRight(rLR.ResolveRight({}));
             m_aBspWin.SetHeader( true );
         }
         else
@@ -903,8 +903,8 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
 
             m_aBspWin.SetFtHeight( rSize.GetSize().Height() - nDist );
             m_aBspWin.SetFtDist( nDist );
-            m_aBspWin.SetFtLeft( rLR.GetLeft() );
-            m_aBspWin.SetFtRight( rLR.GetRight() );
+            m_aBspWin.SetFtLeft(rLR.ResolveLeft({}));
+            m_aBspWin.SetFtRight(rLR.ResolveRight({}));
             m_aBspWin.SetFooter( true );
         }
         else

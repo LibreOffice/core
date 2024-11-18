@@ -876,7 +876,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             if( rCSS1PropInfo.m_bLeftMargin )
             {
                 // should be SvxLeftMarginItem... "cast" it
-                nLeftSpace = convertTwipToMm100(pLeft->GetTextLeft());
+                nLeftSpace = convertTwipToMm100(pLeft->ResolveTextLeft({}));
                 rCSS1PropInfo.m_bLeftMargin = false;
             }
             rCSS1ItemSet.ClearItem(RES_MARGIN_TEXTLEFT);
@@ -885,7 +885,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
         {
             if( rCSS1PropInfo.m_bRightMargin )
             {
-                nRightSpace = convertTwipToMm100(pRight->GetRight());
+                nRightSpace = convertTwipToMm100(pRight->ResolveRight({}));
                 rCSS1PropInfo.m_bRightMargin = false;
             }
             rCSS1ItemSet.ClearItem(RES_MARGIN_RIGHT);

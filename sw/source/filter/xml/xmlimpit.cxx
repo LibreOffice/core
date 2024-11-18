@@ -345,10 +345,12 @@ bool SvXMLImportItemMapper::PutXMLValue(
                         switch( nMemberId )
                         {
                             case MID_L_MARGIN:
-                                rLRSpace.SetTextLeft( nAbs, o3tl::narrowing<sal_uInt16>(nProp) );
+                                rLRSpace.SetTextLeft(SvxIndentValue::twips(nAbs),
+                                                     o3tl::narrowing<sal_uInt16>(nProp));
                                 break;
                             case MID_R_MARGIN:
-                                rLRSpace.SetRight( nAbs, o3tl::narrowing<sal_uInt16>(nProp) );
+                                rLRSpace.SetRight(SvxIndentValue::twips(nAbs),
+                                                  o3tl::narrowing<sal_uInt16>(nProp));
                                 break;
                         }
                     }

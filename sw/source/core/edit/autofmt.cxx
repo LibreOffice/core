@@ -1486,10 +1486,10 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
         nLeftTextPos -= m_pCurTextFrame->GetTextNodeForParaProps()
                             ->GetSwAttrSet()
                             .GetTextLeftMargin()
-                            .GetLeft(m_pCurTextFrame->GetTextNodeForParaProps()
-                                         ->GetSwAttrSet()
-                                         .GetFirstLineIndent(),
-                                     /*metrics*/ {});
+                            .ResolveLeft(m_pCurTextFrame->GetTextNodeForParaProps()
+                                             ->GetSwAttrSet()
+                                             .GetFirstLineIndent(),
+                                         /*metrics*/ {});
     }
 
     if( m_bMoreLines )
@@ -2516,10 +2516,10 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags aFlags,
                     // Unit conversion is not needed here: check the sign only
                     double dIndentValue = 0.0;
                     if (pFirstLineIndent)
-                        dIndentValue = pFirstLineIndent->GetTextFirstLineOffsetValue();
+                        dIndentValue = pFirstLineIndent->GetTextFirstLineOffset().m_dValue;
 
                     if (0.0 != dIndentValue
-                        || (pTextLeftMargin && 0 != pTextLeftMargin->GetTextLeft()))
+                        || (pTextLeftMargin && (0.0 != pTextLeftMargin->GetTextLeft().m_dValue)))
                     {
                         // exception: numbering/enumeration can have an indentation
                         if (IsEnumericChar(*m_pCurTextFrame))
@@ -2542,7 +2542,9 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags aFlags,
                                 BuildIndent();
                             else if (0.0 > dIndentValue) // negative 1st line indentation
                                 BuildNegIndent( aFInfo.GetLineStart() );
-                            else if (pTextLeftMargin && pTextLeftMargin->GetTextLeft() != 0)   // is indentation
+                            else if (pTextLeftMargin
+                                     && (pTextLeftMargin->GetTextLeft().m_dValue
+                                         != 0.0)) // is indentation
                                 BuildTextIndent();
                         }
                         eStat = READ_NEXT_PARA;
@@ -2760,11 +2762,12 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags aFlags,
                     // Unit conversion is not needed here: check the sign only
                     double dIndentValue = 0.0;
                     if (pFirstLineIndent)
-                        dIndentValue = pFirstLineIndent->GetTextFirstLineOffsetValue();
+                        dIndentValue = pFirstLineIndent->GetTextFirstLineOffset().m_dValue;
 
                     if (bReplaceStyles
                         && (0.0 != dIndentValue
-                            || (pTextLeftMargin && 0 != pTextLeftMargin->GetTextLeft())))
+                            || (pTextLeftMargin
+                                && (0.0 != pTextLeftMargin->GetTextLeft().m_dValue))))
                     {
                         // then use one of our templates
                         if (0.0 < dIndentValue) // positive 1st line indentation
@@ -2773,7 +2776,9 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags aFlags,
                         {
                             BuildNegIndent( aFInfo.GetLineStart() );
                         }
-                        else if (pTextLeftMargin && pTextLeftMargin->GetTextLeft()) // is indentation
+                        else if (pTextLeftMargin
+                                 && (0.0
+                                     != pTextLeftMargin->GetTextLeft().m_dValue)) // is indentation
                             BuildTextIndent();
                         else
                             BuildText();

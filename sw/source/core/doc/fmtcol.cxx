@@ -251,10 +251,10 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
             // We had a relative value -> recalculate
             if (100 != pOldFirstLineIndent->GetPropTextFirstLineOffset())
             {
-                const double dOld = pOldFirstLineIndent->GetTextFirstLineOffsetValue();
+                const auto stOld = pOldFirstLineIndent->GetTextFirstLineOffset();
                 aNew.SetTextFirstLineOffset(pNewFirstLineIndent->GetTextFirstLineOffset(),
                                             pOldFirstLineIndent->GetPropTextFirstLineOffset());
-                bChg = dOld != aNew.GetTextFirstLineOffsetValue();
+                bChg = (stOld != aNew.GetTextFirstLineOffset());
             }
             if( bChg )
             {
@@ -274,10 +274,10 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
             if (100 != pOldTextLeftMargin->GetPropLeft())
             {
                 // note: changing from Left to TextLeft - looked wrong with Left
-                const tools::Long nOld = pOldTextLeftMargin->GetTextLeft();
+                const auto stOld = pOldTextLeftMargin->GetTextLeft();
                 aNew.SetTextLeft(pNewTextLeftMargin->GetTextLeft(),
                                  pOldTextLeftMargin->GetPropLeft());
-                bChg = nOld != aNew.GetTextLeft();
+                bChg = (stOld != aNew.GetTextLeft());
             }
             if( bChg )
             {
@@ -296,9 +296,9 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
             // We had a relative value -> recalculate
             if (100 != pOldRightMargin->GetPropRight())
             {
-                const tools::Long nOld = pOldRightMargin->GetRight();
+                const auto stOld = pOldRightMargin->GetRight();
                 aNew.SetRight(pNewRightMargin->GetRight(), pOldRightMargin->GetPropRight());
-                bChg = nOld != aNew.GetRight();
+                bChg = (stOld != aNew.GetRight());
             }
             if( bChg )
             {

@@ -223,7 +223,7 @@ void SwEnvFormatPage::Edit(std::u16string_view rIdent, bool bSender)
         aTmpSet.Put( aTabPos );
 
         // left border as offset
-        const tools::Long nOff = aTmpSet.Get(RES_MARGIN_TEXTLEFT).GetTextLeft();
+        const tools::Long nOff = aTmpSet.Get(RES_MARGIN_TEXTLEFT).ResolveTextLeft({});
         SfxInt32Item aOff( SID_ATTR_TABSTOP_OFFSET, nOff );
         aTmpSet.Put( aOff );
 

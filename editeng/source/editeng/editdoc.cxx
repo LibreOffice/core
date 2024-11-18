@@ -574,14 +574,19 @@ void ConvertItem( std::unique_ptr<SfxPoolItem>& rPoolItem, MapUnit eSourceUnit, 
         {
             assert(dynamic_cast<const SvxLRSpaceItem *>(rPoolItem.get()) != nullptr);
             SvxLRSpaceItem& rItem = static_cast<SvxLRSpaceItem&>(*rPoolItem);
-            if (rItem.GetTextFirstLineOffsetUnit() == css::util::MeasureUnit::TWIP)
+            if (rItem.GetTextFirstLineOffset().m_nUnit == css::util::MeasureUnit::TWIP)
             {
                 rItem.SetTextFirstLineOffset(
                     SvxIndentValue::twips(sal::static_int_cast<short>(OutputDevice::LogicToLogic(
                         rItem.ResolveTextFirstLineOffset({}), eSourceUnit, eDestUnit))));
             }
-            rItem.SetTextLeft( OutputDevice::LogicToLogic( rItem.GetTextLeft(), eSourceUnit, eDestUnit ) );
-            rItem.SetRight( OutputDevice::LogicToLogic( rItem.GetRight(), eSourceUnit, eDestUnit ) );
+            rItem.SetTextLeft(SvxIndentValue::twips(
+                OutputDevice::LogicToLogic(rItem.ResolveTextLeft({}), eSourceUnit, eDestUnit)));
+            if (rItem.GetRight().m_nUnit == css::util::MeasureUnit::TWIP)
+            {
+                rItem.SetRight(SvxIndentValue::twips(
+                    OutputDevice::LogicToLogic(rItem.ResolveRight({}), eSourceUnit, eDestUnit)));
+            }
         }
         break;
         case EE_PARA_ULSPACE:

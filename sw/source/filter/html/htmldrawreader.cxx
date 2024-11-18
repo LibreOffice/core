@@ -100,7 +100,7 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
         if( rCSS1PropInfo.m_bLeftMargin )
         {
             // should be SvxLeftMarginItem... "cast" it
-            nLeftSpace = static_cast<sal_uInt16>(pLeft->GetTextLeft());
+            nLeftSpace = static_cast<sal_uInt16>(pLeft->ResolveTextLeft({}));
             rCSS1PropInfo.m_bLeftMargin = false;
         }
         rCSS1ItemSet.ClearItem(RES_MARGIN_TEXTLEFT);
@@ -109,7 +109,7 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
     {
         if( rCSS1PropInfo.m_bRightMargin )
         {
-            nRightSpace = static_cast< sal_uInt16 >(pRight->GetRight());
+            nRightSpace = static_cast<sal_uInt16>(pRight->ResolveRight({}));
             rCSS1PropInfo.m_bRightMargin = false;
         }
         rCSS1ItemSet.ClearItem(RES_MARGIN_RIGHT);
@@ -117,8 +117,8 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
     if( nLeftSpace || nRightSpace )
     {
         SvxLRSpaceItem aLRItem( RES_LR_SPACE );
-        aLRItem.SetLeft( nLeftSpace );
-        aLRItem.SetRight( nRightSpace );
+        aLRItem.SetLeft(SvxIndentValue::twips(nLeftSpace));
+        aLRItem.SetRight(SvxIndentValue::twips(nRightSpace));
         aFrameSet.Put( aLRItem );
     }
 

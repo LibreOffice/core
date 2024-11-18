@@ -674,7 +674,8 @@ void SwFormat::DelDiffs( const SfxItemSet& rSet )
 void SwFormat::SetPageFormatToDefault()
 {
     const sal_Int32 nSize = o3tl::convert(2, o3tl::Length::cm, o3tl::Length::twip);
-    SetFormatAttr(SvxLRSpaceItem(nSize, nSize, SvxIndentValue::zero(), RES_LR_SPACE));
+    SetFormatAttr(SvxLRSpaceItem(SvxIndentValue::twips(nSize), SvxIndentValue::twips(nSize),
+                                 SvxIndentValue::zero(), RES_LR_SPACE));
     SetFormatAttr(SvxULSpaceItem(nSize, nSize, RES_UL_SPACE));
 }
 

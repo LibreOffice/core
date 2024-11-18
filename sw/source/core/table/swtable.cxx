@@ -854,8 +854,8 @@ void SwTable::SetTabCols( const SwTabCols &rNew, const SwTabCols &rOld,
             SwTwips nShRight = aSh.CalcShadowSpace( SvxShadowItemSide::RIGHT );
             SwTwips nShLeft = aSh.CalcShadowSpace( SvxShadowItemSide::LEFT );
 
-            aLR.SetLeft ( rNew.GetLeft() - nShLeft );
-            aLR.SetRight( rNew.GetRightMax() - rNew.GetRight() - nShRight );
+            aLR.SetLeft(SvxIndentValue::twips(rNew.GetLeft() - nShLeft));
+            aLR.SetRight(SvxIndentValue::twips(rNew.GetRightMax() - rNew.GetRight() - nShRight));
             pFormat->SetFormatAttr( aLR );
 
             // The alignment of the table needs to be adjusted accordingly.

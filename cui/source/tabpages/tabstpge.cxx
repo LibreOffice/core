@@ -177,7 +177,8 @@ bool SvxTabulatorTabPage::FillItemSet(SfxItemSet* rSet)
             pLRSpace = GetOldItem(*rSet, SID_ATTR_LRSPACE);
 
         if (pLRSpace
-            && static_cast<const SvxLRSpaceItem*>(pLRSpace)->GetTextFirstLineOffsetValue() < 0.0)
+            && static_cast<const SvxLRSpaceItem*>(pLRSpace)->GetTextFirstLineOffset().m_dValue
+                   < 0.0)
         {
             SvxTabStop aNull(0, SvxTabAdjust::Default);
             aNewTabs->Insert(aNull);

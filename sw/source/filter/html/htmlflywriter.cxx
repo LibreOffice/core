@@ -323,7 +323,7 @@ void SwHTMLWriter::CollectFlyFrames()
                     pACNd->GetAttr(RES_MARGIN_TEXTLEFT);
                 const SvxRightMarginItem& rRightMargin =
                     pACNd->GetAttr(RES_MARGIN_RIGHT);
-                if (rTextLeftMargin.GetTextLeft() || rRightMargin.GetRight())
+                if (rTextLeftMargin.ResolveTextLeft({}) || rRightMargin.ResolveRight({}))
                 {
                     nMode = getHTMLOutFrameParaFrameTable(eType, m_nExportMode);
                     break;
@@ -612,8 +612,7 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
     if( (nFrameOpts & (HtmlFrmOpts::Space|HtmlFrmOpts::MarginSize)) &&
         (pLRSpaceItem = rItemSet.GetItemIfSet( RES_LR_SPACE )) )
     {
-        aTwipSpc.setWidth(
-            ( pLRSpaceItem->GetLeft() + pLRSpaceItem->GetRight() ) / 2 );
+        aTwipSpc.setWidth((pLRSpaceItem->ResolveLeft({}) + pLRSpaceItem->ResolveRight({})) / 2);
         m_nDfltLeftMargin = m_nDfltRightMargin = aTwipSpc.Width();
     }
     const SvxULSpaceItem* pULSpaceItem;
@@ -865,8 +864,7 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
     if( (nFrameOptions & (HtmlFrmOpts::Space | HtmlFrmOpts::MarginSize)) &&
         (pLRSpaceItem = rItemSet.GetItemIfSet( RES_LR_SPACE )) )
     {
-        aTwipSpc.setWidth(
-            ( pLRSpaceItem->GetLeft() + pLRSpaceItem->GetRight() ) / 2 );
+        aTwipSpc.setWidth((pLRSpaceItem->ResolveLeft({}) + pLRSpaceItem->ResolveRight({})) / 2);
         m_nDfltLeftMargin = m_nDfltRightMargin = aTwipSpc.Width();
     }
     const SvxULSpaceItem* pULSpaceItem;

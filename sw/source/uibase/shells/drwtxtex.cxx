@@ -250,7 +250,8 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                         nIndentDist = ::GetTabDist(rDefTabItem);
                     }
 
-                    aParaMargin.SetTextLeft(aParaMargin.GetTextLeft() + nIndentDist);
+                    aParaMargin.SetTextLeft(
+                        SvxIndentValue::twips(aParaMargin.ResolveTextLeft({}) + nIndentDist));
                     aParaMargin.SetRight(aParaMargin.GetRight());
                     aParaMargin.SetTextFirstLineOffset(SvxIndentValue::twips(nIndentDist * -1));
 

@@ -120,7 +120,8 @@ IMPL_LINK(WrapPropertyPanel, SpacingLBHdl, weld::ComboBox&, rBox, void)
 {
     sal_uInt16 nVal = rBox.get_active_id().toUInt32();
 
-    SvxLRSpaceItem aLRItem(nVal, nVal, SvxIndentValue::zero(), RES_LR_SPACE);
+    SvxLRSpaceItem aLRItem(SvxIndentValue::twips(nVal), SvxIndentValue::twips(nVal),
+                           SvxIndentValue::zero(), RES_LR_SPACE);
     SvxULSpaceItem aULItem(nVal, nVal, RES_UL_SPACE);
 
     m_nTop = m_nBottom = m_nLeft = m_nRight = nVal;
@@ -144,8 +145,8 @@ void WrapPropertyPanel::NotifyItemUpdate(
                 const SvxLRSpaceItem* pItem = dynamic_cast< const SvxLRSpaceItem* >(pState);
                 if(pItem)
                 {
-                    m_nLeft = pItem->GetLeft();
-                    m_nRight = pItem->GetRight();
+                    m_nLeft = pItem->ResolveLeft({});
+                    m_nRight = pItem->ResolveRight({});
 
                     UpdateSpacingLB();
                 }

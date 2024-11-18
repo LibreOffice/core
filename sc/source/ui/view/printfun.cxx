@@ -669,9 +669,9 @@ static void lcl_FillHFParam( ScPrintHFParam& rParam, const SfxItemSet* pHFSet )
         rParam.nHeight  = pHFSet->Get(ATTR_PAGE_SIZE).GetSize().Height();
         const SvxLRSpaceItem* pHFLR = &pHFSet->Get(ATTR_LRSPACE);
         tools::Long nTmp;
-        nTmp = pHFLR->GetLeft();
+        nTmp = pHFLR->ResolveLeft({});
         rParam.nLeft = nTmp < 0 ? 0 : sal_uInt16(nTmp);
-        nTmp = pHFLR->GetRight();
+        nTmp = pHFLR->ResolveRight({});
         rParam.nRight = nTmp < 0 ? 0 : sal_uInt16(nTmp);
         rParam.pBorder  = &pHFSet->Get(ATTR_BORDER);
         rParam.pBack    = &pHFSet->Get(ATTR_BACKGROUND);
@@ -862,9 +862,9 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
                                 // TabPage "Page"
     const SvxLRSpaceItem* pLRItem = &pParamSet->Get( ATTR_LRSPACE );
     tools::Long nTmp;
-    nTmp = pLRItem->GetLeft();
+    nTmp = pLRItem->ResolveLeft({});
     nLeftMargin = nTmp < 0 ? 0 : sal_uInt16(nTmp);
-    nTmp = pLRItem->GetRight();
+    nTmp = pLRItem->ResolveRight({});
     nRightMargin = nTmp < 0 ? 0 : sal_uInt16(nTmp);
     const SvxULSpaceItem* pULItem = &pParamSet->Get( ATTR_ULSPACE );
     nTopMargin    = pULItem->GetUpper();

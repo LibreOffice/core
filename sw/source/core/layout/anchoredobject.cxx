@@ -581,9 +581,9 @@ const SwRect& SwAnchoredObject::GetObjRectWithSpaces() const
                 maObjRectWithSpaces.Top(std::max(
                     maObjRectWithSpaces.Top() - tools::Long(rUL.GetUpper()), tools::Long(0)));
                 maObjRectWithSpaces.Left(
-                    std::max(maObjRectWithSpaces.Left() - rLR.GetLeft(), tools::Long(0)));
+                    std::max(maObjRectWithSpaces.Left() - rLR.ResolveLeft({}), tools::Long(0)));
                 maObjRectWithSpaces.AddHeight(rUL.GetLower());
-                maObjRectWithSpaces.AddWidth(rLR.GetRight());
+                maObjRectWithSpaces.AddWidth(rLR.ResolveRight({}));
             }
 
             mbObjRectWithSpacesValid = true;

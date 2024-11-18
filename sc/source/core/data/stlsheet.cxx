@@ -175,8 +175,8 @@ SfxItemSet& ScStyleSheet::GetItemSet()
                                                       HFDIST_CM,// nLow
                                                       ATTR_ULSPACE );
 
-                        SvxLRSpaceItem aLRSpaceItem(TWO_CM, // nLeft
-                                                    TWO_CM, // nRight
+                        SvxLRSpaceItem aLRSpaceItem(SvxIndentValue::twips(TWO_CM), // nLeft
+                                                    SvxIndentValue::twips(TWO_CM), // nRight
                                                     SvxIndentValue::zero(), // nFirstLineOffset
                                                     ATTR_LRSPACE);
                         SvxULSpaceItem  aULSpaceItem( TWO_CM,   // nUp
@@ -193,7 +193,8 @@ SfxItemSet& ScStyleSheet::GetItemSet()
                         rHFSet.Put( aBoxInfoItem );
                         rHFSet.Put( aHFSizeItem );
                         rHFSet.Put( aHFDistItem );
-                        rHFSet.Put(SvxLRSpaceItem(0, 0, SvxIndentValue::zero(),
+                        rHFSet.Put(SvxLRSpaceItem(SvxIndentValue::zero(), SvxIndentValue::zero(),
+                                                  SvxIndentValue::zero(),
                                                   ATTR_LRSPACE)); // Set border to Null
 
                         aHFSetItem.SetWhich(ATTR_PAGE_HEADERSET);

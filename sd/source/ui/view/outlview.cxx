@@ -70,15 +70,17 @@ namespace sd {
 // PROCESS_WITH_PROGRESS_THRESHOLD pages are concerned
 #define PROCESS_WITH_PROGRESS_THRESHOLD  5
 
-OutlineView::OutlineView( DrawDocShell& rDocSh, vcl::Window* pWindow, OutlineViewShell& rOutlineViewShell)
-: ::sd::SimpleOutlinerView(*rDocSh.GetDoc(), pWindow->GetOutDev(), &rOutlineViewShell)
-, mrOutlineViewShell(rOutlineViewShell)
-, mrOutliner(*mrDoc.GetOutliner())
-, mnPagesToProcess(0)
-, mnPagesProcessed(0)
-, mbFirstPaint(true)
-, maDocColor( COL_WHITE )
-, maLRSpaceItem(2000, 0, SvxIndentValue::zero(), EE_PARA_OUTLLRSPACE)
+OutlineView::OutlineView(DrawDocShell& rDocSh, vcl::Window* pWindow,
+                         OutlineViewShell& rOutlineViewShell)
+    : ::sd::SimpleOutlinerView(*rDocSh.GetDoc(), pWindow->GetOutDev(), &rOutlineViewShell)
+    , mrOutlineViewShell(rOutlineViewShell)
+    , mrOutliner(*mrDoc.GetOutliner())
+    , mnPagesToProcess(0)
+    , mnPagesProcessed(0)
+    , mbFirstPaint(true)
+    , maDocColor(COL_WHITE)
+    , maLRSpaceItem(SvxIndentValue::twips(2000), SvxIndentValue::zero(), SvxIndentValue::zero(),
+                    EE_PARA_OUTLLRSPACE)
 {
     bool bInitOutliner = false;
 

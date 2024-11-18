@@ -307,17 +307,15 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
             // determine relative vertical position
             SwTwips nRelPosY = nAlignAreaOffset;
             const SwTwips nObjHeight = aRectFnSet.GetHeight(aObjBoundRect);
-            const SwTwips nUpperSpace = aRectFnSet.IsVert()
-                                        ? ( aRectFnSet.IsVertL2R()
-                                            ? rLR.GetLeft()
-                                            : rLR.GetRight() )
-                                        : rUL.GetUpper();
+            const SwTwips nUpperSpace
+                = aRectFnSet.IsVert()
+                      ? (aRectFnSet.IsVertL2R() ? rLR.ResolveLeft({}) : rLR.ResolveRight({}))
+                      : rUL.GetUpper();
             // --> OD 2009-08-31 #monglianlayout#
-            const SwTwips nLowerSpace = aRectFnSet.IsVert()
-                                        ? ( aRectFnSet.IsVertL2R()
-                                            ? rLR.GetLeft()
-                                            : rLR.GetRight() )
-                                        : rUL.GetLower();
+            const SwTwips nLowerSpace
+                = aRectFnSet.IsVert()
+                      ? (aRectFnSet.IsVertL2R() ? rLR.ResolveLeft({}) : rLR.ResolveRight({}))
+                      : rUL.GetLower();
             switch ( aVert.GetVertOrient() )
             {
                 case text::VertOrientation::CHAR_BOTTOM:

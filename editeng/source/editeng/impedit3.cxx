@@ -605,18 +605,20 @@ bool ImpEditEngine::createLinesForEmptyParagraph(ParaPortion& rParaPortion)
     return FinishCreateLines(rParaPortion);
 }
 
-tools::Long ImpEditEngine::calculateMaxLineWidth(tools::Long nStartX, SvxLRSpaceItem const& rLRItem)
+tools::Long ImpEditEngine::calculateMaxLineWidth(tools::Long nStartX, SvxLRSpaceItem const& rLRItem,
+                                                 const SvxFontUnitMetrics& rMetrics)
 {
     const bool bAutoSize = IsEffectivelyVertical() ? maStatus.AutoPageHeight() : maStatus.AutoPageWidth();
     tools::Long nMaxLineWidth = GetColumnWidth(bAutoSize ? maMaxAutoPaperSize : maPaperSize);
 
-    nMaxLineWidth -= scaleXSpacingValue(rLRItem.GetRight());
+    nMaxLineWidth -= scaleXSpacingValue(rLRItem.ResolveRight(rMetrics));
     nMaxLineWidth -= nStartX;
 
     // If PaperSize == long_max, one cannot take away any negative
     // first line indent. (Overflow)
     if (nMaxLineWidth < 0 && nStartX < 0)
-        nMaxLineWidth = GetColumnWidth(maPaperSize) - scaleXSpacingValue(rLRItem.GetRight());
+        nMaxLineWidth
+            = GetColumnWidth(maPaperSize) - scaleXSpacingValue(rLRItem.ResolveRight(rMetrics));
 
     // If still less than 0, it may be just the right edge.
     if (nMaxLineWidth <= 0)
@@ -810,12 +812,13 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
         sal_Int32 nPortionStart = 0;
         sal_Int32 nPortionEnd = 0;
 
-        tools::Long nStartX = scaleXSpacingValue(rLRItem.GetTextLeft() + nSpaceBeforeAndMinLabelWidth);
+        auto stMetrics = GetFontUnitMetrics(pNode);
+        tools::Long nStartX
+            = scaleXSpacingValue(rLRItem.ResolveTextLeft(stMetrics) + nSpaceBeforeAndMinLabelWidth);
         // Multiline hyperlink may need to know if the next line is bigger.
         tools::Long nStartXNextLine = nStartX;
         if ( nIndex == 0 )
         {
-            auto stMetrics = GetFontUnitMetrics(pNode);
             tools::Long nFI = scaleXSpacingValue(rLRItem.ResolveTextFirstLineOffset(stMetrics));
             nStartX += nFI;
 
@@ -827,7 +830,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
 
         nStartX += nStartNextLineAfterMultiLineField;
         nStartNextLineAfterMultiLineField = 0;
-        tools::Long nMaxLineWidth = calculateMaxLineWidth(nStartX, rLRItem);
+        tools::Long nMaxLineWidth = calculateMaxLineWidth(nStartX, rLRItem, stMetrics);
 
         // Problem:
         // Since formatting starts a line _before_ the invalid position,
@@ -905,8 +908,9 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                     }
                 }
                 nXWidth = nMaxRangeWidth;
-                if ( nXWidth )
-                    nMaxLineWidth = nXWidth - nStartX - scaleXSpacingValue(rLRItem.GetRight());
+                if (nXWidth)
+                    nMaxLineWidth
+                        = nXWidth - nStartX - scaleXSpacingValue(rLRItem.ResolveRight(stMetrics));
                 else
                 {
                     // Try further down in the polygon.
@@ -1002,7 +1006,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                         if (maStatus.DoStretch() && (fFontScalingX != 1.0))
                             nCurPos = basegfx::fround<tools::Long>(double(nCurPos) / std::max(fFontScalingX, 0.01));
 
-                        short nAllSpaceBeforeText = short(rLRItem.GetTextLeft());
+                        short nAllSpaceBeforeText = short(rLRItem.ResolveTextLeft({}));
                         aCurrentTab.aTabStop = pNode->GetContentAttribs().FindTabStop( nCurPos - nAllSpaceBeforeText , maEditDoc.GetDefTab() );
                         aCurrentTab.nTabPos = tools::Long(aCurrentTab.aTabStop.GetTabPos() + nAllSpaceBeforeText);
                         aCurrentTab.bValid = false;
@@ -1575,7 +1579,9 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             // has to be used for the Alignment. If it does not fit or if it
             // will change the paper width, it will be formatted again for
             // Justification! = LEFT anyway.
-            tools::Long nMaxLineWidthFix = GetColumnWidth(maPaperSize) - scaleXSpacingValue(rLRItem.GetRight()) - nStartX;
+            tools::Long nMaxLineWidthFix = GetColumnWidth(maPaperSize)
+                                           - scaleXSpacingValue(rLRItem.ResolveRight(stMetrics))
+                                           - nStartX;
             if ( aTextSize.Width() < nMaxLineWidthFix )
                 nMaxLineWidth = nMaxLineWidthFix;
         }
@@ -1799,13 +1805,14 @@ void ImpEditEngine::CreateAndInsertEmptyLine(ParaPortion& rParaPortion)
     sal_Int32 nSpaceBeforeAndMinLabelWidth = GetSpaceBeforeAndMinLabelWidth(rParaPortion.GetNode(), &nSpaceBefore);
     const SvxLRSpaceItem& rLRItem = GetLRSpaceItem(rParaPortion.GetNode());
     const SvxLineSpacingItem& rLSItem = rParaPortion.GetNode()->GetContentAttribs().GetItem( EE_PARA_SBL );
-    tools::Long nStartX = scaleXSpacingValue(
-        rLRItem.GetTextLeft() + rLRItem.ResolveTextFirstLineOffset(stMetrics) + nSpaceBefore);
+    tools::Long nStartX
+        = scaleXSpacingValue(rLRItem.ResolveTextLeft(stMetrics)
+                             + rLRItem.ResolveTextFirstLineOffset(stMetrics) + nSpaceBefore);
 
     tools::Rectangle aBulletArea { Point(), Point() };
     if ( bLineBreak )
     {
-        nStartX = scaleXSpacingValue(rLRItem.GetTextLeft()
+        nStartX = scaleXSpacingValue(rLRItem.ResolveTextLeft(stMetrics)
                                      + rLRItem.ResolveTextFirstLineOffset(stMetrics)
                                      + nSpaceBeforeAndMinLabelWidth);
     }
@@ -1818,7 +1825,7 @@ void ImpEditEngine::CreateAndInsertEmptyLine(ParaPortion& rParaPortion)
             rParaPortion.SetBulletX( 0 ); // If Bullet set incorrectly.
         if (rParaPortion.GetBulletX() > nStartX)
         {
-            nStartX = scaleXSpacingValue(rLRItem.GetTextLeft()
+            nStartX = scaleXSpacingValue(rLRItem.ResolveTextLeft(stMetrics)
                                          + rLRItem.ResolveTextFirstLineOffset(stMetrics)
                                          + nSpaceBeforeAndMinLabelWidth);
             if (rParaPortion.GetBulletX() > nStartX)
@@ -1848,7 +1855,7 @@ void ImpEditEngine::CreateAndInsertEmptyLine(ParaPortion& rParaPortion)
         sal_Int32 nPara = GetParaPortions().GetPos(&rParaPortion);
         SvxAdjust eJustification = GetJustification( nPara );
         tools::Long nMaxLineWidth = GetColumnWidth(maPaperSize);
-        nMaxLineWidth -= scaleXSpacingValue(rLRItem.GetRight());
+        nMaxLineWidth -= scaleXSpacingValue(rLRItem.ResolveRight(stMetrics));
         if ( nMaxLineWidth < 0 )
             nMaxLineWidth = 1;
         if ( eJustification ==  SvxAdjust::Center )

@@ -511,7 +511,7 @@ bool SwEditShell::IsMoveLeftMargin( bool bRight, bool bModulus ) const
                 const SvxLRSpaceItem& rLS = pCNd->GetAttr( RES_LR_SPACE );
                 if( bRight )
                 {
-                    tools::Long nNext = rLS.GetTextLeft() + nDefDist;
+                    tools::Long nNext = rLS.ResolveTextLeft({}) + nDefDist;
                     if( bModulus )
                         nNext = ( nNext / nDefDist ) * nDefDist;
                     SwFrame* pFrame = pCNd->getLayoutFrame( GetLayout() );

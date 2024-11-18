@@ -2423,10 +2423,10 @@ void WW8AttributeOutput::TablePositioning(SwFrameFormat* pFlyFormat)
     m_rWW8Export.InsUInt16(nDyaFromTextBottom);
 
     // Similar to WW8AttributeOutput::FormatLRSpace(), but for tables.
-    sal_uInt16 nDxaFromText = pFlyFormat->GetLRSpace().GetLeft();
+    sal_uInt16 nDxaFromText = pFlyFormat->GetLRSpace().ResolveLeft({});
     m_rWW8Export.InsUInt16(NS_sprm::TDxaFromText::val);
     m_rWW8Export.InsUInt16(nDxaFromText);
-    sal_uInt16 nDxaFromTextRight = pFlyFormat->GetLRSpace().GetRight();
+    sal_uInt16 nDxaFromTextRight = pFlyFormat->GetLRSpace().ResolveRight({});
     m_rWW8Export.InsUInt16(NS_sprm::TDxaFromTextRight::val);
     m_rWW8Export.InsUInt16(nDxaFromTextRight);
 
@@ -2500,7 +2500,7 @@ void WW8AttributeOutput::TableDefinition(const ww8::WW8TableNodeInfoInner::Point
             default:
                 nTableOffset = rHori.GetPos();
                 const SvxLRSpaceItem& rLRSp = pFormat->GetLRSpace();
-                nTableOffset += rLRSp.GetLeft();
+                nTableOffset += rLRSp.ResolveLeft({});
 
                 // convert offset to be measured from right margin in right-to-left tables
                 if ( nTableOffset && m_rWW8Export.TrueFrameDirection(*pFormat) == SvxFrameDirection::Horizontal_RL_TB )
@@ -2626,8 +2626,8 @@ void AttributeOutputBase::GetTablePageSize( ww8::WW8TableNodeInfoInner const * p
             if ( 0 == nPageSize )
             {
                 const SvxLRSpaceItem& rLR = pParentFormat->GetLRSpace();
-                nPageSize = pParentFormat->GetFrameSize().GetWidth() - rLR.GetLeft()
-                - rLR.GetRight();
+                nPageSize = pParentFormat->GetFrameSize().GetWidth() - rLR.ResolveLeft({})
+                            - rLR.ResolveRight({});
             }
         }
         else
@@ -2637,7 +2637,7 @@ void AttributeOutputBase::GetTablePageSize( ww8::WW8TableNodeInfoInner const * p
             {
                 // #i37571# For manually aligned tables
                 const SvxLRSpaceItem &rLR = pFormat->GetLRSpace();
-                nPageSize -= (rLR.GetLeft() + rLR.GetRight());
+                nPageSize -= (rLR.ResolveLeft({}) + rLR.ResolveRight({}));
             }
 
         }

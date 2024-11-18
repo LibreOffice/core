@@ -276,7 +276,7 @@ void SwTextGridPage::UpdatePageSize(const SfxItemSet& rSet)
     const SvxLRSpaceItem& rLRSpace = rSet.Get( RES_LR_SPACE );
     const SvxULSpaceItem& rULSpace = rSet.Get( RES_UL_SPACE );
     const SvxBoxItem& rBox = rSet.Get(RES_BOX);
-    sal_Int32 nDistanceLR = rLRSpace.GetLeft() + rLRSpace.GetRight();
+    sal_Int32 nDistanceLR = rLRSpace.ResolveLeft({}) + rLRSpace.ResolveRight({});
     sal_Int32 nDistanceUL = rULSpace.GetUpper() + rULSpace.GetLower();
 
     for( const TypedWhichId<SvxSetItem> & nId : { SID_ATTR_PAGE_HEADERSET, SID_ATTR_PAGE_FOOTERSET })

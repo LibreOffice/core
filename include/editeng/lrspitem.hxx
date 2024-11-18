@@ -79,6 +79,16 @@ struct SvxIndentValue
     static SvxIndentValue twips(double dValue) { return { dValue, css::util::MeasureUnit::TWIP }; }
 
     static SvxIndentValue zero() { return twips(0.0); }
+
+    double ResolveDouble(const SvxFontUnitMetrics& rMetrics) const;
+    sal_Int32 Resolve(const SvxFontUnitMetrics& rMetrics) const;
+    sal_Int32 ResolveFixedPart() const;
+    sal_Int32 ResolveVariablePart(const SvxFontUnitMetrics& rMetrics) const;
+
+    void ScaleMetrics(tools::Long nMult, tools::Long nDiv);
+
+    size_t hashCode() const;
+    bool operator==(SvxIndentValue const&) const = default;
 };
 
 /// GetLeft() - for everything that's not applied to a paragraph
@@ -127,22 +137,24 @@ class EDITENG_DLLPUBLIC SvxTextLeftMarginItem final : public SfxPoolItem
 private:
     friend class SvxFirstLineIndentItem;
     /// left margin including negative first-line indent
-    tools::Long m_nTextLeftMargin = 0;
+    SvxIndentValue m_stTextLeftMargin = SvxIndentValue::zero();
     sal_uInt16 m_nPropLeftMargin = 100;
 
 public:
-    //TODO: need this?
-    //void SetLeft(SvxFirstLineIndentItem const& rFirstLine, const tools::Long nL, const sal_uInt16 nProp = 100);
     /// get left margin without negative first-line indent
-    tools::Long GetLeft(const SvxFirstLineIndentItem& rFirstLine,
-                        const SvxFontUnitMetrics& rMetrics) const;
-    sal_uInt16 GetPropLeft() const { return m_nPropLeftMargin; }
+    sal_Int32 ResolveLeft(const SvxFirstLineIndentItem& rFirstLine,
+                          const SvxFontUnitMetrics& rMetrics) const;
+    sal_Int32 ResolveLeftFixedPart(const SvxFirstLineIndentItem& rFirstLine) const;
+    sal_Int32 ResolveLeftVariablePart(const SvxFirstLineIndentItem& rFirstLine,
+                                      const SvxFontUnitMetrics& rMetrics) const;
+    sal_uInt16 GetPropLeft() const;
 
-    void SetTextLeft(const tools::Long nL, const sal_uInt16 nProp = 100);
-    tools::Long GetTextLeft() const;
+    void SetTextLeft(SvxIndentValue stL, const sal_uInt16 nProp = 100);
+    sal_Int32 ResolveTextLeft(const SvxFontUnitMetrics& rMetrics) const;
+    SvxIndentValue GetTextLeft() const;
 
     explicit SvxTextLeftMarginItem(const sal_uInt16 nId);
-    SvxTextLeftMarginItem(const tools::Long nLeft, const sal_uInt16 nId);
+    SvxTextLeftMarginItem(SvxIndentValue stLeft, const sal_uInt16 nId);
     SvxTextLeftMarginItem(SvxTextLeftMarginItem const &) = default; // SfxPoolItem copy function dichotomy
 
     // "pure virtual Methods" from SfxPoolItem
@@ -171,8 +183,7 @@ class EDITENG_DLLPUBLIC SvxFirstLineIndentItem final : public SfxPoolItem
 {
 private:
     /// First-line indent always relative to GetTextLeft()
-    double m_dFirstLineOffset = 0.0;
-    sal_Int16 m_nUnit = css::util::MeasureUnit::TWIP;
+    SvxIndentValue m_stFirstLineOffset = SvxIndentValue::zero();
     sal_uInt16 m_nPropFirstLineOffset = 100;
     /// Automatic calculation of the first line indent
     bool m_bAutoFirst = false;
@@ -186,9 +197,6 @@ public:
 
     void SetTextFirstLineOffset(SvxIndentValue stValue, sal_uInt16 nProp = 100);
     SvxIndentValue GetTextFirstLineOffset() const;
-    double GetTextFirstLineOffsetValue() const;
-    sal_Int16 GetTextFirstLineOffsetUnit() const;
-    double ResolveTextFirstLineOffsetDouble(const SvxFontUnitMetrics& rMetrics) const;
     sal_Int32 ResolveTextFirstLineOffset(const SvxFontUnitMetrics& rMetrics) const;
 
     explicit SvxFirstLineIndentItem(const sal_uInt16 nId);
@@ -220,20 +228,23 @@ class EDITENG_DLLPUBLIC SvxRightMarginItem final : public SfxPoolItem
 {
 private:
     /// right margin: nothing special
-    tools::Long m_nRightMargin = 0;
+    SvxIndentValue m_stRightMargin = SvxIndentValue::zero();
     sal_uInt16 m_nPropRightMargin = 100;
 
 public:
     // The "layout interface":
-    void SetRight(const tools::Long nR, const sal_uInt16 nProp = 100);
+    void SetRight(SvxIndentValue stR, const sal_uInt16 nProp = 100);
 
     // Query/direct setting of the absolute values
-    tools::Long GetRight() const { return m_nRightMargin;}
+    SvxIndentValue GetRight() const;
+    sal_Int32 ResolveRight(const SvxFontUnitMetrics& rMetrics) const;
+    sal_Int32 ResolveRightFixedPart() const;
+    sal_Int32 ResolveRightVariablePart(const SvxFontUnitMetrics& rMetrics) const;
 
-    sal_uInt16 GetPropRight() const { return m_nPropRightMargin; }
+    sal_uInt16 GetPropRight() const;
 
     explicit SvxRightMarginItem(const sal_uInt16 nId);
-    SvxRightMarginItem(const tools::Long nRight, const sal_uInt16 nId);
+    SvxRightMarginItem(SvxIndentValue stRight, const sal_uInt16 nId);
     SvxRightMarginItem(SvxRightMarginItem const &) = default; // SfxPoolItem copy function dichotomy
 
     // "pure virtual Methods" from SfxPoolItem
@@ -325,10 +336,10 @@ public:
 class EDITENG_DLLPUBLIC SvxLRSpaceItem final : public SfxPoolItem
 {
     /// First-line indent always relative to GetTextLeft()
-    double m_dFirstLineOffset = 0.0;
-    sal_Int16 m_nFirstLineUnit = css::util::MeasureUnit::TWIP;
-    tools::Long    nLeftMargin;        // nLeft or the negative first-line indent
-    tools::Long    nRightMargin;       // The unproblematic right edge
+    SvxIndentValue m_stFirstLineOffset = SvxIndentValue::zero();
+    SvxIndentValue m_stLeftMargin
+        = SvxIndentValue::zero(); // nLeft or the negative first-line indent
+    SvxIndentValue m_stRightMargin = SvxIndentValue::zero();
     /// The amount of extra space added to the left margin.
     tools::Long    m_nGutterMargin;
     /// The amount of extra space added to the right margin, on mirrored pages.
@@ -344,7 +355,7 @@ public:
     static SfxPoolItem* CreateDefault();
 
     explicit SvxLRSpaceItem( const sal_uInt16 nId  );
-    SvxLRSpaceItem(const tools::Long nLeft, const tools::Long nRight, SvxIndentValue stValue,
+    SvxLRSpaceItem(SvxIndentValue stLeft, SvxIndentValue stRight, SvxIndentValue stValue,
                    const sal_uInt16 nId);
     SvxLRSpaceItem(SvxLRSpaceItem const &) = default; // SfxPoolItem copy function dichotomy
 
@@ -364,18 +375,14 @@ public:
     virtual bool                 HasMetrics() const override;
 
     // The "layout interface":
-    void   SetLeft (const tools::Long nL, const sal_uInt16 nProp = 100);
-    void   SetRight(const tools::Long nR, const sal_uInt16 nProp = 100);
+    void SetLeft(SvxIndentValue stL, const sal_uInt16 nProp = 100);
+    void SetRight(SvxIndentValue stR, const sal_uInt16 nProp = 100);
 
     // Query/direct setting of the absolute values
-    tools::Long GetLeft()  const { return nLeftMargin; }
-    tools::Long GetRight() const { return nRightMargin;}
-    void SetLeftValue(const tools::Long nL)
-    {
-        assert(m_dFirstLineOffset == 0.0);
-        nLeftMargin = nL;
-    }
-    void SetRightValue( const tools::Long nR ) { nRightMargin = nR; }
+    SvxIndentValue GetLeft() const;
+    sal_Int32 ResolveLeft(const SvxFontUnitMetrics& rMetrics) const;
+    SvxIndentValue GetRight() const;
+    sal_Int32 ResolveRight(const SvxFontUnitMetrics& rMetrics) const;
     bool IsAutoFirst()  const { return bAutoFirst; }
     void SetAutoFirst( const bool bNew ) { bAutoFirst = bNew; }
 
@@ -387,14 +394,12 @@ public:
     sal_uInt16 GetPropRight() const { return nPropRightMargin;}
 
     // The UI/text interface:
-    void SetTextLeft(const tools::Long nL, const sal_uInt16 nProp = 100);
-    tools::Long GetTextLeft() const;
+    void SetTextLeft(SvxIndentValue stL, const sal_uInt16 nProp = 100);
+    SvxIndentValue GetTextLeft() const;
+    sal_Int32 ResolveTextLeft(const SvxFontUnitMetrics& rMetrics) const;
 
     void SetTextFirstLineOffset(SvxIndentValue stValue, sal_uInt16 nProp = 100);
     SvxIndentValue GetTextFirstLineOffset() const;
-    double GetTextFirstLineOffsetValue() const;
-    sal_Int16 GetTextFirstLineOffsetUnit() const;
-    double ResolveTextFirstLineOffsetDouble(const SvxFontUnitMetrics& rMetrics) const;
     sal_Int32 ResolveTextFirstLineOffset(const SvxFontUnitMetrics& rMetrics) const;
 
     void SetPropTextFirstLineOffset( const sal_uInt16 nProp )

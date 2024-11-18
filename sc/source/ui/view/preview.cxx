@@ -1064,12 +1064,20 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                     bMoveRulerAction = false;
                     Invalidate(tools::Rectangle(0, 0, 10000, 10000));
                 }
-                else if( bLeftRulerChange && ( o3tl::convert(aButtonUpPt.X(), o3tl::Length::mm100, o3tl::Length::twip) > nWidth - aLRItem.GetRight() - o3tl::convert(aOffset.X(), o3tl::Length::mm100, o3tl::Length::twip) ) )
+                else if (bLeftRulerChange
+                         && (o3tl::convert(aButtonUpPt.X(), o3tl::Length::mm100, o3tl::Length::twip)
+                             > nWidth - aLRItem.ResolveRight({})
+                                   - o3tl::convert(aOffset.X(), o3tl::Length::mm100,
+                                                   o3tl::Length::twip)))
                 {
                     bMoveRulerAction = false;
                     Invalidate(tools::Rectangle(0, 0, 10000, 10000));
                 }
-                else if( bRightRulerChange && ( o3tl::convert(aButtonUpPt.X(), o3tl::Length::mm100, o3tl::Length::twip) < aLRItem.GetLeft() - o3tl::convert(aOffset.X(), o3tl::Length::mm100, o3tl::Length::twip) ) )
+                else if (bRightRulerChange
+                         && (o3tl::convert(aButtonUpPt.X(), o3tl::Length::mm100, o3tl::Length::twip)
+                             < aLRItem.ResolveLeft({})
+                                   - o3tl::convert(aOffset.X(), o3tl::Length::mm100,
+                                                   o3tl::Length::twip)))
                 {
                     bMoveRulerAction = false;
                     Invalidate(tools::Rectangle(0, 0, 10000, 10000));
@@ -1084,13 +1092,19 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                     ScDocShellModificator aModificator( *pDocShell );
                     if( bLeftRulerChange && bLeftRulerMove )
                     {
-                       aLRItem.SetLeft(o3tl::convert( aButtonUpPt.X(), o3tl::Length::mm100, o3tl::Length::twip) + o3tl::convert(aOffset.X(), o3tl::Length::mm100, o3tl::Length::twip));
-                       rStyleSet.Put( aLRItem );
-                       pDocShell->SetModified();
+                        aLRItem.SetLeft(SvxIndentValue::twips(
+                            o3tl::convert(aButtonUpPt.X(), o3tl::Length::mm100, o3tl::Length::twip)
+                            + o3tl::convert(aOffset.X(), o3tl::Length::mm100, o3tl::Length::twip)));
+                        rStyleSet.Put(aLRItem);
+                        pDocShell->SetModified();
                     }
                     else if( bRightRulerChange && bRightRulerMove )
                     {
-                        aLRItem.SetRight(nWidth - o3tl::convert(aButtonUpPt.X(), o3tl::Length::mm100, o3tl::Length::twip) - o3tl::convert(aOffset.X(), o3tl::Length::mm100, o3tl::Length::twip));
+                        aLRItem.SetRight(SvxIndentValue::twips(
+                            nWidth
+                            - o3tl::convert(aButtonUpPt.X(), o3tl::Length::mm100,
+                                            o3tl::Length::twip)
+                            - o3tl::convert(aOffset.X(), o3tl::Length::mm100, o3tl::Length::twip)));
                         rStyleSet.Put( aLRItem );
                         pDocShell->SetModified();
                     }

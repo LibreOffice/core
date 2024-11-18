@@ -2526,7 +2526,7 @@ void WW8TabDesc::CreateSwTable()
                 nLeft += m_pIo->m_aSectionManager.GetTextAreaWidth();
                 nLeft = nLeft - nTableWidth - GetMinLeft();
             }
-            aL.SetLeft(nLeft);
+            aL.SetLeft(SvxIndentValue::twips(nLeft));
 
             m_aItemSet.Put(aL);
         }

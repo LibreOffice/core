@@ -1225,7 +1225,7 @@ static tools::Long lcl_GetTrueMargin(SvxFirstLineIndentItem const& rFirstLine,
     OSL_ENSURE( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION,
             "<lcl_GetTrueMargin> - misusage: position-and-space-mode does not equal LABEL_WIDTH_AND_POSITION" );
 
-    const tools::Long nBodyIndent = rLeftMargin.GetTextLeft();
+    const tools::Long nBodyIndent = rLeftMargin.ResolveTextLeft({});
     const tools::Long nFirstLineDiff = rFirstLine.ResolveTextFirstLineOffset({});
     rFirstLinePos = nBodyIndent + nFirstLineDiff;
 
@@ -1248,7 +1248,7 @@ void SyncIndentWithList( SvxFirstLineIndentItem & rFirstLine,
     {
         tools::Long nWantedFirstLinePos;
         tools::Long nExtraListIndent = lcl_GetTrueMargin(rFirstLine, rLeftMargin, rFormat, nWantedFirstLinePos);
-        rLeftMargin.SetTextLeft(nWantedFirstLinePos - nExtraListIndent);
+        rLeftMargin.SetTextLeft(SvxIndentValue::twips(nWantedFirstLinePos - nExtraListIndent));
         rFirstLine.SetTextFirstLineOffset(SvxIndentValue::zero());
     }
     else if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
@@ -1263,7 +1263,7 @@ void SyncIndentWithList( SvxFirstLineIndentItem & rFirstLine,
         else if ( bFirstLineOfstSet && !bLeftIndentSet &&
                   rFormat.GetIndentAt() != 0 )
         {
-            rLeftMargin.SetTextLeft(rFormat.GetIndentAt());
+            rLeftMargin.SetTextLeft(SvxIndentValue::twips(rFormat.GetIndentAt()));
         }
         else if (!bFirstLineOfstSet && !bLeftIndentSet )
         {
@@ -1275,7 +1275,7 @@ void SyncIndentWithList( SvxFirstLineIndentItem & rFirstLine,
             }
             if ( rFormat.GetIndentAt() != 0 )
             {
-                rLeftMargin.SetTextLeft(rFormat.GetIndentAt());
+                rLeftMargin.SetTextLeft(SvxIndentValue::twips(rFormat.GetIndentAt()));
             }
         }
     }

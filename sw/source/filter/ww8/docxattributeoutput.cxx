@@ -1082,8 +1082,8 @@ void DocxAttributeOutput::PopulateFrameProperties(const SwFrameFormat* pFrameFor
     else if (aPos.Y)
         attrList->add( FSNS( XML_w, XML_y), OString::number(aPos.Y));
 
-    sal_Int16 nLeft = pFrameFormat->GetLRSpace().GetLeft();
-    sal_Int16 nRight = pFrameFormat->GetLRSpace().GetRight();
+    sal_Int16 nLeft = pFrameFormat->GetLRSpace().ResolveLeft({});
+    sal_Int16 nRight = pFrameFormat->GetLRSpace().ResolveRight({});
     sal_Int16 nUpper = pFrameFormat->GetULSpace().GetUpper();
     sal_Int16 nLower = pFrameFormat->GetULSpace().GetLower();
 
@@ -6216,10 +6216,12 @@ OString DocxAttributeOutput::GetOLEStyle(const SwFlyFrameFormat& rFormat, const 
                         "pt"; //from VMLExport::AddRectangleDimensions(), it does: value/20
 
     const SvxLRSpaceItem& rLRSpace = rFormat.GetLRSpace();
-    if (rLRSpace.IsExplicitZeroMarginValLeft() || rLRSpace.GetLeft())
-        sShapeStyle += ";mso-wrap-distance-left:" + OString::number(double(rLRSpace.GetLeft()) / 20) + "pt";
-    if (rLRSpace.IsExplicitZeroMarginValRight() || rLRSpace.GetRight())
-        sShapeStyle += ";mso-wrap-distance-right:" + OString::number(double(rLRSpace.GetRight()) / 20) + "pt";
+    if (rLRSpace.IsExplicitZeroMarginValLeft() || rLRSpace.ResolveLeft({}))
+        sShapeStyle += ";mso-wrap-distance-left:"
+                       + OString::number(double(rLRSpace.ResolveLeft({})) / 20) + "pt";
+    if (rLRSpace.IsExplicitZeroMarginValRight() || rLRSpace.ResolveRight({}))
+        sShapeStyle += ";mso-wrap-distance-right:"
+                       + OString::number(double(rLRSpace.ResolveRight({})) / 20) + "pt";
     const SvxULSpaceItem& rULSpace = rFormat.GetULSpace();
     if (rULSpace.GetUpper())
         sShapeStyle += ";mso-wrap-distance-top:" + OString::number(double(rULSpace.GetUpper()) / 20) + "pt";
@@ -9321,9 +9323,8 @@ void DocxAttributeOutput::FormatTextLeftMargin(SvxTextLeftMarginItem const& rTex
         }
     }
     bool const bEcma1st(m_rExport.GetFilter().getVersion() == oox::core::ECMA_376_1ST_EDITION);
-    AddToAttrList(m_pLRSpaceAttrList,
-        FSNS(XML_w, (bEcma1st ? XML_left : XML_start)),
-        OString::number(pTextLeftMargin->GetTextLeft()));
+    AddToAttrList(m_pLRSpaceAttrList, FSNS(XML_w, (bEcma1st ? XML_left : XML_start)),
+                  OString::number(pTextLeftMargin->ResolveTextLeft({})));
 }
 
 void DocxAttributeOutput::FormatRightMargin(SvxRightMarginItem const& rRightMargin)
@@ -9334,9 +9335,8 @@ void DocxAttributeOutput::FormatRightMargin(SvxRightMarginItem const& rRightMarg
 #endif
     {
         bool const bEcma1st(m_rExport.GetFilter().getVersion() == oox::core::ECMA_376_1ST_EDITION);
-        AddToAttrList(m_pLRSpaceAttrList,
-            FSNS(XML_w, (bEcma1st ? XML_right : XML_end)),
-            OString::number(rRightMargin.GetRight()));
+        AddToAttrList(m_pLRSpaceAttrList, FSNS(XML_w, (bEcma1st ? XML_right : XML_end)),
+                      OString::number(rRightMargin.ResolveRight({})));
     }
 }
 
@@ -9345,17 +9345,20 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
     bool const bEcma = m_rExport.GetFilter().getVersion() == oox::core::ECMA_376_1ST_EDITION;
     if (m_rExport.SdrExporter().getTextFrameSyntax())
     {
-        m_rExport.SdrExporter().getTextFrameStyle().append(";mso-wrap-distance-left:" + OString::number(double(rLRSpace.GetLeft()) / 20) + "pt");
-        m_rExport.SdrExporter().getTextFrameStyle().append(";mso-wrap-distance-right:" + OString::number(double(rLRSpace.GetRight()) / 20) + "pt");
+        m_rExport.SdrExporter().getTextFrameStyle().append(
+            ";mso-wrap-distance-left:" + OString::number(double(rLRSpace.ResolveLeft({})) / 20)
+            + "pt");
+        m_rExport.SdrExporter().getTextFrameStyle().append(
+            ";mso-wrap-distance-right:" + OString::number(double(rLRSpace.ResolveRight({})) / 20)
+            + "pt");
     }
     else if (m_rExport.SdrExporter().getDMLTextFrameSyntax())
     {
     }
     else if ( m_rExport.m_bOutFlyFrameAttrs )
     {
-        AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), FSNS( XML_w, XML_hSpace ),
-                OString::number(
-                    ( rLRSpace.GetLeft() + rLRSpace.GetRight() ) / 2 ) );
+        AddToAttrList(m_rExport.SdrExporter().getFlyAttrList(), FSNS(XML_w, XML_hSpace),
+                      OString::number((rLRSpace.ResolveLeft({}) + rLRSpace.ResolveRight({})) / 2));
     }
     else if ( m_rExport.m_bOutPageDescs )
     {
@@ -9369,8 +9372,8 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
             m_pageMargins.nRight = pBoxItem->CalcLineSpace( SvxBoxItemLine::RIGHT, /*bEvenIfNoLine*/true );
         }
 
-        m_pageMargins.nLeft += sal::static_int_cast<sal_uInt16>(rLRSpace.GetLeft());
-        m_pageMargins.nRight += sal::static_int_cast<sal_uInt16>(rLRSpace.GetRight());
+        m_pageMargins.nLeft += sal::static_int_cast<sal_uInt16>(rLRSpace.ResolveLeft({}));
+        m_pageMargins.nRight += sal::static_int_cast<sal_uInt16>(rLRSpace.ResolveRight({}));
         // if page layout is 'left' then left/right margin need to be exchanged
         // as it is exported as mirrored layout starting with even page
         const WW8_SepInfo *pSectionInfo = m_rExport.Sections().CurrentSectionInfo();
@@ -9396,13 +9399,15 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
         ::std::optional<SvxLRSpaceItem> oLRSpace;
         assert(dynamic_cast<SwContentNode const*>(GetExport().m_pOutFormatNode) == nullptr);
         rtl::Reference<FastAttributeList> pLRSpaceAttrList = FastSerializerHelper::createAttrList();
-        if ((0 != pLRSpace->GetTextLeft()) || (pLRSpace->IsExplicitZeroMarginValLeft()))
+        if ((0 != pLRSpace->ResolveTextLeft({})) || (pLRSpace->IsExplicitZeroMarginValLeft()))
         {
-            pLRSpaceAttrList->add( FSNS(XML_w, (bEcma ? XML_left : XML_start)), OString::number(pLRSpace->GetTextLeft()) );
+            pLRSpaceAttrList->add(FSNS(XML_w, (bEcma ? XML_left : XML_start)),
+                                  OString::number(pLRSpace->ResolveTextLeft({})));
         }
-        if ((0 != pLRSpace->GetRight()) || (pLRSpace->IsExplicitZeroMarginValRight()))
+        if ((0 != pLRSpace->ResolveRight({})) || (pLRSpace->IsExplicitZeroMarginValRight()))
         {
-            pLRSpaceAttrList->add( FSNS(XML_w, (bEcma ? XML_right : XML_end)), OString::number(pLRSpace->GetRight()) );
+            pLRSpaceAttrList->add(FSNS(XML_w, (bEcma ? XML_right : XML_end)),
+                                  OString::number(pLRSpace->ResolveRight({})));
         }
         // tdf#83844: TODO: export FONT_CJK_ADVANCE first line indent as HangingChars/FirstLineChars
         sal_Int32 const nFirstLineAdjustment = pLRSpace->ResolveTextFirstLineOffset({});

@@ -3313,7 +3313,8 @@ tools::Long SwTextNode::GetLeftMarginWithNum( bool bTextLeft ) const
             if( pRule->IsAbsSpaces() )
             {
                 SvxFirstLineIndentItem const& rFirst(GetSwAttrSet().GetFirstLineIndent());
-                nRet = nRet - GetSwAttrSet().GetTextLeftMargin().GetLeft(rFirst, /*metrics*/ {});
+                nRet
+                    = nRet - GetSwAttrSet().GetTextLeftMargin().ResolveLeft(rFirst, /*metrics*/ {});
             }
         }
         else if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
@@ -3326,11 +3327,11 @@ tools::Long SwTextNode::GetLeftMarginWithNum( bool bTextLeft ) const
             // list/paragraph items. (this is rather inelegant)
             SvxFirstLineIndentItem firstLine(GetSwAttrSet().GetFirstLineIndent());
             SvxTextLeftMarginItem leftMargin(GetSwAttrSet().GetTextLeftMargin());
-            nRet = bTextLeft ? -leftMargin.GetTextLeft()
-                             : -leftMargin.GetLeft(firstLine, /*metrics*/ {});
+            nRet = bTextLeft ? -leftMargin.ResolveTextLeft(/*metrics*/ {})
+                             : -leftMargin.ResolveLeft(firstLine, /*metrics*/ {});
             if (indents & ::sw::ListLevelIndents::LeftMargin)
             {
-                leftMargin.SetTextLeft(rFormat.GetIndentAt());
+                leftMargin.SetTextLeft(SvxIndentValue::twips(rFormat.GetIndentAt()));
             }
             if (indents & ::sw::ListLevelIndents::FirstLine)
             {
@@ -3338,8 +3339,8 @@ tools::Long SwTextNode::GetLeftMarginWithNum( bool bTextLeft ) const
                     SvxIndentValue{ static_cast<double>(rFormat.GetFirstLineIndent()),
                                     rFormat.GetFirstLineIndentUnit() });
             }
-            nRet += bTextLeft ? leftMargin.GetTextLeft()
-                              : leftMargin.GetLeft(firstLine, /*metrics*/ {});
+            nRet += bTextLeft ? leftMargin.ResolveTextLeft(/*metrics*/ {})
+                              : leftMargin.ResolveLeft(firstLine, /*metrics*/ {});
         }
     }
 
@@ -3402,7 +3403,8 @@ SwTwips SwTextNode::GetAdditionalIndentForStartingNewList() const
         {
             SvxFirstLineIndentItem const& rFirst(GetSwAttrSet().GetFirstLineIndent());
 
-            nAdditionalIndent = GetSwAttrSet().GetTextLeftMargin().GetLeft(rFirst, /*metrics*/ {});
+            nAdditionalIndent
+                = GetSwAttrSet().GetTextLeftMargin().ResolveLeft(rFirst, /*metrics*/ {});
 
             if (getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
             {
@@ -3425,10 +3427,11 @@ SwTwips SwTextNode::GetAdditionalIndentForStartingNewList() const
                           RES_MARGIN_FIRSTLINE)
                     : GetSwAttrSet().GetFirstLineIndent());
             SvxTextLeftMarginItem const aLeft(
-                    indents & ::sw::ListLevelIndents::LeftMargin
-                    ? SvxTextLeftMarginItem(rFormat.GetIndentAt(), RES_MARGIN_TEXTLEFT)
+                indents & ::sw::ListLevelIndents::LeftMargin
+                    ? SvxTextLeftMarginItem(SvxIndentValue::twips(rFormat.GetIndentAt()),
+                                            RES_MARGIN_TEXTLEFT)
                     : GetSwAttrSet().GetTextLeftMargin());
-            nAdditionalIndent = aLeft.GetLeft(aFirst, /*metrics*/ {});
+            nAdditionalIndent = aLeft.ResolveLeft(aFirst, /*metrics*/ {});
             if (!(indents & ::sw::ListLevelIndents::FirstLine))
             {
                 if (getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
@@ -3441,7 +3444,7 @@ SwTwips SwTextNode::GetAdditionalIndentForStartingNewList() const
     else
     {
         SvxFirstLineIndentItem const& rFirst(GetSwAttrSet().GetFirstLineIndent());
-        nAdditionalIndent = GetSwAttrSet().GetTextLeftMargin().GetLeft(rFirst, /*metrics*/ {});
+        nAdditionalIndent = GetSwAttrSet().GetTextLeftMargin().ResolveLeft(rFirst, /*metrics*/ {});
     }
 
     return nAdditionalIndent;
@@ -3468,7 +3471,7 @@ tools::Long SwTextNode::GetLeftMarginForTabCalculation() const
     }
     if ( !bLeftMarginForTabCalcSetToListLevelIndent )
     {
-        nLeftMarginForTabCalc = GetSwAttrSet().GetTextLeftMargin().GetTextLeft();
+        nLeftMarginForTabCalc = GetSwAttrSet().GetTextLeftMargin().ResolveTextLeft({});
     }
 
     return nLeftMarginForTabCalc;
@@ -4784,7 +4787,7 @@ bool SwTextNode::GetListTabStopPosition( tools::Long& nListTabStopPosition ) con
                 else if (!getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
                 {
                     SvxTextLeftMarginItem const aItem(GetSwAttrSet().GetTextLeftMargin());
-                    nListTabStopPosition -= aItem.GetTextLeft();
+                    nListTabStopPosition -= aItem.ResolveTextLeft({});
                 }
             }
         }

@@ -1703,7 +1703,8 @@ void SwDoc::MoveLeftMargin(const SwPaM& rPam, bool bRight, bool bModulus,
                         {
                             if (indents & ::sw::ListLevelIndents::LeftMargin)
                             {
-                                leftMargin.SetTextLeft(rFormat.GetIndentAt());
+                                leftMargin.SetTextLeft(
+                                    SvxIndentValue::twips(rFormat.GetIndentAt()));
                             }
                             if (indents & ::sw::ListLevelIndents::FirstLine)
                             {
@@ -1716,7 +1717,7 @@ void SwDoc::MoveLeftMargin(const SwPaM& rPam, bool bRight, bool bModulus,
                 }
             }
 
-            tools::Long nNext = leftMargin.GetTextLeft();
+            tools::Long nNext = leftMargin.ResolveTextLeft({});
             if( bModulus )
                 nNext = ( nNext / nDefDist ) * nDefDist;
 
@@ -1726,7 +1727,7 @@ void SwDoc::MoveLeftMargin(const SwPaM& rPam, bool bRight, bool bModulus,
                 if(nNext >0) // fdo#75936 set limit for decreasing indent
                     nNext -= nDefDist;
 
-            leftMargin.SetTextLeft( nNext );
+            leftMargin.SetTextLeft(SvxIndentValue::twips(nNext));
 
             SwRegHistory aRegH( pTNd, *pTNd, pHistory );
             pTNd->SetAttr(firstLine);

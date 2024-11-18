@@ -6187,7 +6187,7 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  std::optional< sal_Int16 >& rS
         auto const nAbsLSpace = convertMasterUnitToMm100(_nTextOfs);
         auto const nFirstLineOffset = nAbsLSpace - convertMasterUnitToMm100(_nBulletOfs);
         aLRSpaceItem.SetTextFirstLineOffset(SvxIndentValue::twips(-nFirstLineOffset));
-        aLRSpaceItem.SetTextLeft( nAbsLSpace );
+        aLRSpaceItem.SetTextLeft(SvxIndentValue::twips(nAbsLSpace));
     }
     rSet.Put( aLRSpaceItem );
 

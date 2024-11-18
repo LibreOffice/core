@@ -241,8 +241,8 @@ void SwWrapTabPage::Reset(const SfxItemSet *rSet)
     const SvxLRSpaceItem& rLR = rSet->Get(RES_LR_SPACE);
 
     // gap to text
-    m_xLeftMarginED->set_value(m_xLeftMarginED->normalize(rLR.GetLeft()), FieldUnit::TWIP);
-    m_xRightMarginED->set_value(m_xRightMarginED->normalize(rLR.GetRight()), FieldUnit::TWIP);
+    m_xLeftMarginED->set_value(m_xLeftMarginED->normalize(rLR.ResolveLeft({})), FieldUnit::TWIP);
+    m_xRightMarginED->set_value(m_xRightMarginED->normalize(rLR.ResolveRight({})), FieldUnit::TWIP);
     m_xTopMarginED->set_value(m_xTopMarginED->normalize(rUL.GetUpper()), FieldUnit::TWIP);
     m_xBottomMarginED->set_value(m_xBottomMarginED->normalize(rUL.GetLower()), FieldUnit::TWIP);
 
@@ -337,8 +337,10 @@ bool SwWrapTabPage::FillItemSet(SfxItemSet *rSet)
     bool bRightMod = m_xRightMarginED->get_value_changed_from_saved();
 
     SvxLRSpaceItem aLR( RES_LR_SPACE );
-    aLR.SetLeft(o3tl::narrowing<sal_uInt16>(m_xLeftMarginED->denormalize(m_xLeftMarginED->get_value(FieldUnit::TWIP))));
-    aLR.SetRight(o3tl::narrowing<sal_uInt16>(m_xRightMarginED->denormalize(m_xRightMarginED->get_value(FieldUnit::TWIP))));
+    aLR.SetLeft(SvxIndentValue::twips(o3tl::narrowing<sal_uInt16>(
+        m_xLeftMarginED->denormalize(m_xLeftMarginED->get_value(FieldUnit::TWIP)))));
+    aLR.SetRight(SvxIndentValue::twips(o3tl::narrowing<sal_uInt16>(
+        m_xRightMarginED->denormalize(m_xRightMarginED->get_value(FieldUnit::TWIP)))));
 
     if ( bLeftMod || bRightMod )
     {

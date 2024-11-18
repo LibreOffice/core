@@ -2430,7 +2430,7 @@ void SwView::InsFrameMode(sal_uInt16 nCols)
                 m_pWrtShell->GetPageDesc(m_pWrtShell->GetCurPageDesc()).GetMaster();
         SwTwips lWidth = rPageFormat.GetFrameSize().GetWidth();
         const SvxLRSpaceItem &rLR = rPageFormat.GetLRSpace();
-        lWidth -= rLR.GetLeft() + rLR.GetRight();
+        lWidth -= rLR.ResolveLeft({}) + rLR.ResolveRight({});
         aMgr.SetSize(Size(lWidth, aMgr.GetSize().Height()));
         if(nCols > 1)
         {

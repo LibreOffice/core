@@ -431,8 +431,9 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
         {
             sal_uInt16 nFrameWidth = nLastPos;
             nLastPos = (*pColArr)[ pColArr->size()-2 ];
-            pTableFormat->SetFormatAttr(SvxLRSpaceItem(nSttPos, nFrameWidth - nLastPos,
-                                                       SvxIndentValue::zero(), RES_LR_SPACE));
+            pTableFormat->SetFormatAttr(SvxLRSpaceItem(
+                SvxIndentValue::twips(nSttPos), SvxIndentValue::twips(nFrameWidth - nLastPos),
+                SvxIndentValue::zero(), RES_LR_SPACE));
         }
         nWidth = nLastPos - nSttPos;
     }

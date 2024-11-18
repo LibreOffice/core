@@ -1928,10 +1928,11 @@ void SwHTMLWriter::OutCSS1_FrameFormatOptions( const SwFrameFormat& rFrameFormat
                     // left
                     if( IsHTMLMode( HTMLMODE_FLY_MARGINS) )
                     {
-                        nXPos -= aLRItem.GetLeft();
+                        nXPos -= aLRItem.ResolveLeft({});
                         if( nXPos < 0 )
                         {
-                            aLRItem.SetLeft( o3tl::narrowing<sal_uInt16>(aLRItem.GetLeft() + nXPos) );
+                            aLRItem.SetLeft(SvxIndentValue::twips(
+                                o3tl::narrowing<sal_uInt16>(aLRItem.ResolveLeft({}) + nXPos)));
                             nXPos = 0;
                         }
                     }
@@ -2813,7 +2814,7 @@ static SwHTMLWriter& OutCSS1_SvxTextLeftMargin(SwHTMLWriter & rWrt, SfxPoolItem 
     // match that of the current template
 
     // A left margin can exist because of a list nearby
-    tools::Long nLeftMargin = rLeftMargin.GetTextLeft() - rWrt.m_nLeftMargin;
+    tools::Long nLeftMargin = rLeftMargin.ResolveTextLeft({}) - rWrt.m_nLeftMargin;
     if (rWrt.m_nDfltLeftMargin != nLeftMargin)
     {
         rWrt.OutCSS1_UnitProperty(sCSS1_P_margin_left, nLeftMargin);
@@ -2834,9 +2835,9 @@ static SwHTMLWriter& OutCSS1_SvxRightMargin(SwHTMLWriter & rWrt, SfxPoolItem con
     // No Export of a firm attribute is needed if the new values
     // match that of the current template
 
-    if (rWrt.m_nDfltRightMargin != rRightMargin.GetRight())
+    if (rWrt.m_nDfltRightMargin != rRightMargin.ResolveRight({}))
     {
-        rWrt.OutCSS1_UnitProperty(sCSS1_P_margin_right, rRightMargin.GetRight());
+        rWrt.OutCSS1_UnitProperty(sCSS1_P_margin_right, rRightMargin.ResolveRight({}));
     }
 
     return rWrt;
@@ -2850,7 +2851,7 @@ static SwHTMLWriter& OutCSS1_SvxLRSpace( SwHTMLWriter& rWrt, const SfxPoolItem& 
     // match that of the current template
 
     // A left margin can exist because of a list nearby
-    tools::Long nLeftMargin = rLRItem.GetTextLeft() - rWrt.m_nLeftMargin;
+    tools::Long nLeftMargin = rLRItem.ResolveTextLeft({}) - rWrt.m_nLeftMargin;
     if( rWrt.m_nDfltLeftMargin != nLeftMargin )
     {
         rWrt.OutCSS1_UnitProperty( sCSS1_P_margin_left, nLeftMargin );
@@ -2861,9 +2862,9 @@ static SwHTMLWriter& OutCSS1_SvxLRSpace( SwHTMLWriter& rWrt, const SfxPoolItem& 
 
     }
 
-    if( rWrt.m_nDfltRightMargin != rLRItem.GetRight() )
+    if (rWrt.m_nDfltRightMargin != rLRItem.ResolveRight({}))
     {
-        rWrt.OutCSS1_UnitProperty( sCSS1_P_margin_right, rLRItem.GetRight() );
+        rWrt.OutCSS1_UnitProperty(sCSS1_P_margin_right, rLRItem.ResolveRight({}));
     }
 
     // The LineIndent of the first line might contain the room for numbering
@@ -2901,16 +2902,15 @@ static SwHTMLWriter& OutCSS1_SvxULSpace_SvxLRSpace( SwHTMLWriter& rWrt,
                                         const SvxULSpaceItem *pULItem,
                                         const SvxLRSpaceItem *pLRItem )
 {
-    if( pLRItem && pULItem &&
-        pLRItem->GetLeft() == pLRItem->GetRight() &&
-        pLRItem->GetLeft() == pULItem->GetUpper() &&
-        pLRItem->GetLeft() == pULItem->GetLower() &&
-        pLRItem->GetLeft() != rWrt.m_nDfltLeftMargin &&
-        pLRItem->GetRight() != rWrt.m_nDfltRightMargin &&
-        pULItem->GetUpper() != rWrt.m_nDfltTopMargin &&
-        pULItem->GetLower() != rWrt.m_nDfltBottomMargin )
+    if (pLRItem && pULItem && pLRItem->GetLeft() == pLRItem->GetRight()
+        && pLRItem->GetLeft() == SvxIndentValue::twips(pULItem->GetUpper())
+        && pLRItem->GetLeft() == SvxIndentValue::twips(pULItem->GetLower())
+        && pLRItem->GetLeft() != SvxIndentValue::twips(rWrt.m_nDfltLeftMargin)
+        && pLRItem->GetRight() != SvxIndentValue::twips(rWrt.m_nDfltRightMargin)
+        && pULItem->GetUpper() != rWrt.m_nDfltTopMargin
+        && pULItem->GetLower() != rWrt.m_nDfltBottomMargin)
     {
-        rWrt.OutCSS1_UnitProperty( sCSS1_P_margin, pLRItem->GetLeft() );
+        rWrt.OutCSS1_UnitProperty(sCSS1_P_margin, pLRItem->ResolveLeft({}));
     }
     else
     {

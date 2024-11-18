@@ -342,7 +342,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                             CalcValue();
                         nSz = sal_uInt16(nTokenValue);
                     }
-                    aLR.SetTextLeft( nSz );
+                    aLR.SetTextLeft(SvxIndentValue::twips(nSz));
                     pSet->Put( aLR );
                 }
                 break;
@@ -359,7 +359,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                             CalcValue();
                         nSz = sal_uInt16(nTokenValue);
                     }
-                    aLR.SetRight( nSz );
+                    aLR.SetRight(SvxIndentValue::twips(nSz));
                     pSet->Put( aLR );
                 }
                 break;

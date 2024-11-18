@@ -294,9 +294,9 @@ bool SdTransformOOo2xDocument::transformItemSet( SfxItemSet& rSet, bool bNumberi
     if (pItem)
     {
         SvxLRSpaceItem aItem(*pItem);
-        if ((aItem.GetLeft() != 0) || (aItem.GetTextFirstLineOffsetValue() != 0.0))
+        if ((aItem.GetLeft().m_dValue != 0.0) || (aItem.GetTextFirstLineOffset().m_dValue != 0.0))
         {
-            aItem.SetLeftValue( 0 );
+            aItem.SetLeft(SvxIndentValue::zero());
             aItem.SetTextFirstLineOffset(SvxIndentValue::zero());
             rSet.Put( aItem );
             bRet = true;

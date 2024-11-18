@@ -172,11 +172,12 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
         }
         else if ( text::HoriOrientation::CENTER == eHoriOrient )
             nRelPosX = (nWidth / 2) - (nObjWidth / 2);
-        else if ( text::HoriOrientation::RIGHT == eHoriOrient )
-            nRelPosX = nWidth - ( nObjWidth +
-                             ( aRectFnSet.IsVert() ? rUL.GetLower() : rLR.GetRight() ) );
+        else if (text::HoriOrientation::RIGHT == eHoriOrient)
+            nRelPosX
+                = nWidth
+                  - (nObjWidth + (aRectFnSet.IsVert() ? rUL.GetLower() : rLR.ResolveRight({})));
         else
-            nRelPosX = aRectFnSet.IsVert() ? rUL.GetUpper() : rLR.GetLeft();
+            nRelPosX = aRectFnSet.IsVert() ? rUL.GetUpper() : rLR.ResolveLeft({});
         nRelPosX += nOffset;
 
         // no 'negative' relative horizontal position

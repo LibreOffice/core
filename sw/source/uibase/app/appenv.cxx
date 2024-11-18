@@ -355,9 +355,9 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         }
         SvxLRSpaceItem aLRMargin( RES_LR_SPACE );
         SvxULSpaceItem aULMargin( RES_UL_SPACE );
-        aLRMargin.SetLeft (o3tl::narrowing<sal_uInt16>(lLeft) );
+        aLRMargin.SetLeft(SvxIndentValue::twips(o3tl::narrowing<sal_uInt16>(lLeft)));
         aULMargin.SetUpper(o3tl::narrowing<sal_uInt16>(lUpper));
-        aLRMargin.SetRight(0);
+        aLRMargin.SetRight(SvxIndentValue::zero());
         aULMargin.SetLower(0);
         rFormat.SetFormatAttr(aLRMargin);
         rFormat.SetFormatAttr(aULMargin);

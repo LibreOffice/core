@@ -1489,7 +1489,7 @@ void SwCSS1Parser::FillDropCap( SwFormatDrop& rDrop,
     // a right border becomes the spacing to text!
     if (const SvxRightMarginItem *const pRightMargin = rItemSet.GetItemIfSet(RES_MARGIN_RIGHT, false))
     {
-        rDrop.SetDistance(static_cast<sal_uInt16>(pRightMargin->GetRight()));
+        rDrop.SetDistance(static_cast<sal_uInt16>(pRightMargin->ResolveRight({})));
         rItemSet.ClearItem(RES_MARGIN_RIGHT);
     }
     rItemSet.ClearItem(RES_MARGIN_FIRSTLINE);

@@ -227,8 +227,8 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrameFormat &rFormat, const wwSection &r
 
     SwTwips nTextareaWidth = rFormat.GetFrameSize().GetWidth();
     const SvxLRSpaceItem &rLR = rFormat.GetFormatAttr(RES_LR_SPACE);
-    nTextareaWidth -= rLR.GetLeft();
-    nTextareaWidth -= rLR.GetRight();
+    nTextareaWidth -= rLR.ResolveLeft({});
+    nTextareaWidth -= rLR.ResolveRight({});
 
     if (rSection.IsVertical())
         std::swap(nTextareaHeight, nTextareaWidth);
@@ -523,7 +523,8 @@ void wwSectionManager::SetPage(SwPageDesc &rInPageDesc, SwFrameFormat &rFormat,
     aSz.SetHeight(SvxPaperInfo::GetSloppyPaperDimension(rSection.GetPageHeight()));
     rFormat.SetFormatAttr(aSz);
 
-    SvxLRSpaceItem aLR(rSection.GetPageLeft(), rSection.GetPageRight(), SvxIndentValue::zero(),
+    SvxLRSpaceItem aLR(SvxIndentValue::twips(rSection.GetPageLeft()),
+                       SvxIndentValue::twips(rSection.GetPageRight()), SvxIndentValue::zero(),
                        RES_LR_SPACE);
     aLR.SetGutterMargin(rSection.m_nPgGutter);
     rFormat.SetFormatAttr(aLR);
@@ -566,8 +567,10 @@ void SwWW8ImplReader::SetPageBorder(SwFrameFormat &rFormat, const wwSection &rSe
     SvxBoxItem aBox(aSet.Get(RES_BOX));
     bool bFromEdge = rSection.maSep.pgbOffsetFrom == 1;
 
-    aLR.SetLeft(SetBorderDistance(bFromEdge, aBox, SvxBoxItemLine::LEFT, aLR.GetLeft()));
-    aLR.SetRight(SetBorderDistance(bFromEdge, aBox, SvxBoxItemLine::RIGHT, aLR.GetRight()));
+    aLR.SetLeft(SvxIndentValue::twips(
+        SetBorderDistance(bFromEdge, aBox, SvxBoxItemLine::LEFT, aLR.ResolveLeft({}))));
+    aLR.SetRight(SvxIndentValue::twips(
+        SetBorderDistance(bFromEdge, aBox, SvxBoxItemLine::RIGHT, aLR.ResolveRight({}))));
     aUL.SetUpper(SetBorderDistance(bFromEdge, aBox, SvxBoxItemLine::TOP, aUL.GetUpper()));
     aUL.SetLower(SetBorderDistance(bFromEdge, aBox, SvxBoxItemLine::BOTTOM, aUL.GetLower()));
 
@@ -756,13 +759,15 @@ SwSectionFormat *wwSectionManager::InsertSection(
 
     SwFrameFormat& rFormat = pPage->GetMaster();
     const SvxLRSpaceItem& rLR = rFormat.GetLRSpace();
-    tools::Long nPageLeft  = rLR.GetLeft();
-    tools::Long nPageRight = rLR.GetRight();
+    tools::Long nPageLeft = rLR.ResolveLeft({});
+    tools::Long nPageRight = rLR.ResolveRight({});
     tools::Long nSectionLeft = rSection.GetPageLeft() - nPageLeft;
     tools::Long nSectionRight = rSection.GetPageRight() - nPageRight;
     if ((nSectionLeft != 0) || (nSectionRight != 0))
     {
-        SvxLRSpaceItem aLR(nSectionLeft, nSectionRight, SvxIndentValue::zero(), RES_LR_SPACE);
+        SvxLRSpaceItem aLR(SvxIndentValue::twips(nSectionLeft),
+                           SvxIndentValue::twips(nSectionRight), SvxIndentValue::zero(),
+                           RES_LR_SPACE);
         pFormat->SetFormatAttr(aLR);
     }
 
@@ -2192,8 +2197,9 @@ WW8FlySet::WW8FlySet(SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
     Put( SwFormatHoriOrient(nXPos, pFS->eHAlign, pFS->eHRel, pFS->bTogglePos ));
     Put( SwFormatVertOrient( pFS->nYPos, pFS->eVAlign, pFS->eVRel ) );
 
-    if (pFS->nLeftMargin || pFS->nRightMargin)     // set borders
-        Put(SvxLRSpaceItem(pFS->nLeftMargin, pFS->nRightMargin, SvxIndentValue::zero(),
+    if (pFS->nLeftMargin || pFS->nRightMargin) // set borders
+        Put(SvxLRSpaceItem(SvxIndentValue::twips(pFS->nLeftMargin),
+                           SvxIndentValue::twips(pFS->nRightMargin), SvxIndentValue::zero(),
                            RES_LR_SPACE));
 
     if (pFS->nUpperMargin || pFS->nLowerMargin)
@@ -2255,7 +2261,8 @@ WW8FlySet::WW8FlySet( SwWW8ImplReader& rReader, const SwPaM* pPaM,
         brcVer9[i] = WW8_BRCVer9(rPic.rgbrc[i]);
     if (SwWW8ImplReader::SetFlyBordersShadow( *this, brcVer9, &aSizeArray[0]))
     {
-        Put(SvxLRSpaceItem(aSizeArray[WW8_LEFT], 0, SvxIndentValue::zero(), RES_LR_SPACE));
+        Put(SvxLRSpaceItem(SvxIndentValue::twips(aSizeArray[WW8_LEFT]), SvxIndentValue::zero(),
+                           SvxIndentValue::zero(), RES_LR_SPACE));
         Put(SvxULSpaceItem( aSizeArray[WW8_TOP], 0, RES_UL_SPACE ));
         aSizeArray[WW8_RIGHT]*=2;
         aSizeArray[WW8_BOT]*=2;
@@ -2656,10 +2663,10 @@ void SwWW8ImplReader::StripNegativeAfterIndent(SwFrameFormat const *pFlyFormat)
         if (pNd)
         {
             const SvxRightMarginItem & rRightMargin(pNd->GetAttr(RES_MARGIN_RIGHT));
-            if (rRightMargin.GetRight() < 0)
+            if (rRightMargin.GetRight().m_dValue < 0.0)
             {
                 SvxRightMarginItem rightMargin(rRightMargin);
-                rightMargin.SetRight(0);
+                rightMargin.SetRight(SvxIndentValue::zero());
                 pNd->SetAttr(rightMargin);
             }
         }
@@ -4301,7 +4308,7 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
             const SwNumFormat* pFormat = pNumRule->GetNumFormat( nLvl );
             if ( pFormat && pFormat->GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
             {
-                pLeftMargin->SetTextLeft(pFormat->GetIndentAt());
+                pLeftMargin->SetTextLeft(SvxIndentValue::twips(pFormat->GetIndentAt()));
                 pFirstLine->SetTextFirstLineOffset(
                     SvxIndentValue{ static_cast<double>(pFormat->GetFirstLineIndent()),
                                     pFormat->GetFirstLineIndentUnit() });
@@ -4347,7 +4354,7 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
         case NS_sprm::v6::sprmPDxaLeft:
         case NS_sprm::PDxaLeft80::val:
         case NS_sprm::PDxaLeft::val:
-            pLeftMargin->SetTextLeft(nPara);
+            pLeftMargin->SetTextLeft(SvxIndentValue::twips(nPara));
             if (m_pCurrentColl && m_nCurrentColl < m_vColl.size())
             {
                 m_vColl[m_nCurrentColl].m_bListRelevantIndentSet = true;
@@ -4392,7 +4399,8 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
                     {
                         if (!lcl_HasExplicitLeft(m_xPlcxMan.get(), m_bVer67))
                         {
-                            pLeftMargin->SetTextLeft(pNumFormat->GetIndentAt());
+                            pLeftMargin->SetTextLeft(
+                                SvxIndentValue::twips(pNumFormat->GetIndentAt()));
 
                             // If have not explicit left, set number format list tab position is doc default tab
                             const SvxTabStopItem *pDefaultStopItem = m_rDoc.GetAttrPool().GetUserDefaultItem(RES_PARATR_TABSTOP);
@@ -4412,7 +4420,7 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
         case NS_sprm::v6::sprmPDxaRight:
         case NS_sprm::PDxaRight80::val:
         case NS_sprm::PDxaRight::val:
-            pRightMargin->SetRight(nPara);
+            pRightMargin->SetRight(SvxIndentValue::twips(nPara));
             break;
         default:
             return;

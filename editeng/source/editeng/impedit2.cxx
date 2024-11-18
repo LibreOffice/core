@@ -3473,7 +3473,8 @@ sal_uInt32 ImpEditEngine::CalcParaWidth( sal_Int32 nPara, bool bIgnoreExtraSpace
             // width, here not preferred. I general, it is best not leave it
             // to StartPosX, also the right indents have to be taken into
             // account!
-            tools::Long nCurWidth = scaleXSpacingValue(rLRItem.GetTextLeft() + nSpaceBeforeAndMinLabelWidth);
+            tools::Long nCurWidth
+                = scaleXSpacingValue(rLRItem.ResolveTextLeft({}) + nSpaceBeforeAndMinLabelWidth);
             if ( nLine == 0 )
             {
                 tools::Long nFI = scaleXSpacingValue(rLRItem.ResolveTextFirstLineOffset(stMetrics));
@@ -3485,7 +3486,7 @@ sal_uInt32 ImpEditEngine::CalcParaWidth( sal_Int32 nPara, bool bIgnoreExtraSpace
                         nCurWidth = pPortion->GetBulletX();
                 }
             }
-            nCurWidth += scaleXSpacingValue(rLRItem.GetRight());
+            nCurWidth += scaleXSpacingValue(rLRItem.ResolveRight({}));
             nCurWidth += CalcLineWidth(*pPortion, rLine, bIgnoreExtraSpace);
             if ( nCurWidth > nMaxWidth )
             {
@@ -3800,7 +3801,7 @@ Point ImpEditEngine::GetDocPosTopLeft( sal_Int32 nParagraph )
             const SvxLRSpaceItem& rLRItem = GetLRSpaceItem(pPPortion->GetNode());
             sal_Int32 nSpaceBefore = 0;
             GetSpaceBeforeAndMinLabelWidth(pPPortion->GetNode(), &nSpaceBefore);
-            short nX = static_cast<short>(rLRItem.GetTextLeft()
+            short nX = static_cast<short>(rLRItem.ResolveTextLeft(stMetrics)
                                           + rLRItem.ResolveTextFirstLineOffset(stMetrics)
                                           + nSpaceBefore);
 

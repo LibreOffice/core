@@ -853,7 +853,7 @@ awt::Point SwXTextViewCursor::getPosition()
     aRet.Y = convertTwipToMm100(nY);
 
     const SvxLRSpaceItem& rLR = rMaster.GetLRSpace();
-    const tools::Long nX = aCharRect.Left() - (rLR.GetLeft() + DOCUMENTBORDER);
+    const tools::Long nX = aCharRect.Left() - (rLR.ResolveLeft({}) + DOCUMENTBORDER);
     aRet.X = convertTwipToMm100(nX);
 
     return aRet;

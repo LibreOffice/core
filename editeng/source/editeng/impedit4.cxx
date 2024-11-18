@@ -780,11 +780,11 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
             nTxtFirst = LogicToTwips( nTxtFirst );
             rOutput.WriteNumberAsString( nTxtFirst );
             rOutput.WriteOString( OOO_STRING_SVTOOLS_RTF_LI );
-            sal_uInt32 nTxtLeft = static_cast< sal_uInt32 >(static_cast<const SvxLRSpaceItem&>(rItem).GetTextLeft());
+            sal_uInt32 nTxtLeft = static_cast<const SvxLRSpaceItem&>(rItem).ResolveTextLeft({});
             nTxtLeft = static_cast<sal_uInt32>(LogicToTwips( nTxtLeft ));
             rOutput.WriteNumberAsString( nTxtLeft );
             rOutput.WriteOString( OOO_STRING_SVTOOLS_RTF_RI );
-            sal_uInt32 nTxtRight = static_cast<const SvxLRSpaceItem&>(rItem).GetRight();
+            sal_uInt32 nTxtRight = static_cast<const SvxLRSpaceItem&>(rItem).ResolveRight({});
             nTxtRight = LogicToTwips( nTxtRight);
             rOutput.WriteNumberAsString( nTxtRight );
         }

@@ -165,6 +165,8 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
 
     SvxFirstLineIndentItem const& rFirstLine(pNode->GetSwAttrSet().GetFirstLineIndent());
     SvxTextLeftMarginItem const& rTextLeftMargin(pNode->GetSwAttrSet().GetTextLeftMargin());
+    SvxRightMarginItem const& rRightMargin(pNode->GetSwAttrSet().GetRightMargin());
+
     // #i95907#
     // #i111284#
     const SwTextNode *pTextNode = m_pFrame->GetTextNodeForParaProps();
@@ -187,14 +189,13 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
     if ( m_pFrame->IsRightToLeft() )
     {
         // this calculation is identical this the calculation for L2R layout - see below
-        mnLeft = m_pFrame->getFrameArea().Left() +
-                m_pFrame->getFramePrintArea().Left() +
-                nLMWithNum -
-                pNode->GetLeftMarginWithNum() -
-                // #i95907#
-                // #i111284#
-                // rSpace.GetLeft() + rSpace.GetTextLeft();
-                (rTextLeftMargin.GetLeft(rFirstLine, stMetrics) - rTextLeftMargin.GetTextLeft());
+        mnLeft = m_pFrame->getFrameArea().Left() + m_pFrame->getFramePrintArea().Left() + nLMWithNum
+                 - pNode->GetLeftMarginWithNum() -
+                 // #i95907#
+                 // #i111284#
+                 // rSpace.GetLeft() + rSpace.GetTextLeft();
+                 (rTextLeftMargin.ResolveLeft(rFirstLine, stMetrics)
+                  - rTextLeftMargin.ResolveTextLeft(stMetrics));
     }
     else
     {
@@ -204,31 +205,37 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
              !pNode->getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) )
         {
             // this calculation is identical this the calculation for R2L layout - see above
-            mnLeft = m_pFrame->getFrameArea().Left() +
-                    m_pFrame->getFramePrintArea().Left() +
-                    nLMWithNum -
-                    pNode->GetLeftMarginWithNum() -
-                    // #i95907#
-                    // #i111284#
-                    (rTextLeftMargin.GetLeft(rFirstLine, stMetrics) - rTextLeftMargin.GetTextLeft());
+            mnLeft = m_pFrame->getFrameArea().Left() + m_pFrame->getFramePrintArea().Left()
+                     + nLMWithNum - pNode->GetLeftMarginWithNum() -
+                     // #i95907#
+                     // #i111284#
+                     (rTextLeftMargin.ResolveLeft(rFirstLine, stMetrics)
+                      - rTextLeftMargin.ResolveTextLeft(stMetrics));
         }
         else
         {
-            mnLeft = m_pFrame->getFrameArea().Left() +
-                std::max(tools::Long(rTextLeftMargin.GetTextLeft() + nLMWithNum),
-                         m_pFrame->getFramePrintArea().Left() );
+            mnLeft
+                = m_pFrame->getFrameArea().Left()
+                  + std::max(tools::Long(rTextLeftMargin.ResolveTextLeft(stMetrics) + nLMWithNum),
+                             m_pFrame->getFramePrintArea().Left());
         }
     }
 
     mnRight = m_pFrame->getFrameArea().Left() + m_pFrame->getFramePrintArea().Left() + m_pFrame->getFramePrintArea().Width();
 
-    if( mnLeft >= mnRight &&
-         // #i53066# Omit adjustment of nLeft for numbered
-         // paras inside cells inside new documents:
-        ( pNode->getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) ||
-          !m_pFrame->IsInTab() ||
-          (bListLevelIndentsApplicable && nLMWithNum == rTextLeftMargin.GetTextLeft())
-          || (!bLabelAlignmentActive && nLMWithNum == 0)))
+    // tdf#163913: Apply font-relative adjustment to the margins
+    mnLeft += rTextLeftMargin.ResolveLeftVariablePart(rFirstLine, stMetrics);
+    mnRight -= rRightMargin.ResolveRightVariablePart(stMetrics);
+
+    if (mnLeft >= mnRight &&
+        // #i53066# Omit adjustment of nLeft for numbered
+        // paras inside cells inside new documents:
+        (pNode->getIDocumentSettingAccess()->get(
+             DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING)
+         || !m_pFrame->IsInTab()
+         || (bListLevelIndentsApplicable
+             && nLMWithNum == rTextLeftMargin.ResolveTextLeft(stMetrics))
+         || (!bLabelAlignmentActive && nLMWithNum == 0)))
     {
         mnLeft = m_pFrame->getFramePrintArea().Left() + m_pFrame->getFrameArea().Left();
         if( mnLeft >= mnRight )   // e.g. with large paragraph indentations in slim table columns
@@ -323,9 +330,10 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
         }
         else
         {
-              mnFirst = m_pFrame->getFrameArea().Left() +
-                 std::max(rTextLeftMargin.GetTextLeft() + nLMWithNum + nFirstLineOfs,
-                          m_pFrame->getFramePrintArea().Left() );
+            mnFirst = m_pFrame->getFrameArea().Left()
+                      + std::max(rTextLeftMargin.ResolveTextLeft(stMetrics) + nLMWithNum
+                                     + nFirstLineOfs,
+                                 m_pFrame->getFramePrintArea().Left());
         }
 
         // Note: <SwTextFrame::GetAdditionalFirstLineOffset()> returns a negative
