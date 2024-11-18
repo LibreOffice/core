@@ -84,7 +84,6 @@ public:
     void                            Init(X11SalVirtualDevice *pVirtualDevice, SalColormap* pColormap = nullptr,
                                          bool bDeleteColormap = false);
     void                            Init( X11SkiaSalVirtualDevice *pVirtualDevice );
-    void                            DeInit();
 
     virtual SalGraphicsImpl*        GetImpl() const override;
     SalGeometryProvider*            GetGeometryProvider() const;

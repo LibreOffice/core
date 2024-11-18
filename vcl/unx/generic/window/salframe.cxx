@@ -815,17 +815,8 @@ X11SalFrame::~X11SalFrame()
         doReparentPresentationDialogues( GetDisplay() );
     }
 
-    if( pGraphics_ )
-    {
-        pGraphics_->DeInit();
-        pGraphics_.reset();
-    }
-
-    if( pFreeGraphics_ )
-    {
-        pFreeGraphics_->DeInit();
-        pFreeGraphics_.reset();
-    }
+    pGraphics_.reset();
+    pFreeGraphics_.reset();
 
     // reset all OpenGL contexts using this window
     rtl::Reference<OpenGLContext> pContext = ImplGetSVData()->maGDIData.mpLastContext;

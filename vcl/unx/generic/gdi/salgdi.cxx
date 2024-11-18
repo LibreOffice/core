@@ -88,7 +88,8 @@ X11SalGraphics::X11SalGraphics():
 
 X11SalGraphics::~X11SalGraphics() COVERITY_NOEXCEPT_FALSE
 {
-    DeInit();
+    mxImpl->DeInit();
+    SetDrawable(None, nullptr, m_nXScreen);
     ReleaseFonts();
     FreeColorMap();
 }
@@ -143,12 +144,6 @@ void X11SalGraphics::Init( X11SalFrame& rFrame, Drawable aTarget,
 
     SetDrawable(aTarget, rFrame.GetSurface(), nXScreen);
     mxImpl->Init();
-}
-
-void X11SalGraphics::DeInit()
-{
-    mxImpl->DeInit();
-    SetDrawable(None, nullptr, m_nXScreen);
 }
 
 void X11SalGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY ) // const
