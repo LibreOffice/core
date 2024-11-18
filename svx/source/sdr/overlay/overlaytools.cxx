@@ -328,7 +328,7 @@ sal_uInt32 OverlayStaticRectanglePrimitive::getPrimitive2DID() const
                 aPolyPolygon.append(aInnerPolygon);
 
                 // create fill primitive
-                if (basegfx::fTools::lessOrEqual(getTransparence(), 0.0))
+                if (getTransparence() <= 0.0)
                 {
                     // no transparence
                     aRetval = new PolyPolygonColorPrimitive2D(
