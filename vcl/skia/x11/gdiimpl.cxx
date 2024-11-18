@@ -35,11 +35,10 @@ X11SkiaSalGraphicsImpl::X11SkiaSalGraphicsImpl(X11SalGraphics& rParent)
 {
 }
 
-void X11SkiaSalGraphicsImpl::Init()
+void X11SkiaSalGraphicsImpl::UpdateX11GeometryProvider()
 {
     // The m_pFrame and m_pVDev pointers are updated late in X11
     setProvider(mX11Parent.GetGeometryProvider());
-    SkiaSalGraphicsImpl::Init();
 }
 
 void X11SkiaSalGraphicsImpl::createWindowSurfaceInternal(bool forceRaster)

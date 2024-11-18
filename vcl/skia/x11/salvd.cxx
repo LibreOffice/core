@@ -26,7 +26,7 @@ void X11SalGraphics::Init(X11SkiaSalVirtualDevice* pDevice)
     m_pVDev = pDevice;
     m_pFrame = nullptr;
 
-    mxImpl->Init();
+    mxImpl->UpdateX11GeometryProvider();
 }
 
 X11SkiaSalVirtualDevice::X11SkiaSalVirtualDevice(const SalGraphics& rGraphics, tools::Long nDX,

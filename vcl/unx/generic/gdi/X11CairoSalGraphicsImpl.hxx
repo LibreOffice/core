@@ -33,8 +33,6 @@ private:
 public:
     X11CairoSalGraphicsImpl(X11SalGraphics& rParent, CairoCommon& rCairoCommon);
 
-    void Init() override;
-
     OUString getRenderBackendName() const override { return u"gen"_ustr; }
 
     // get the depth of the device

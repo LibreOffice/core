@@ -72,7 +72,8 @@ public:
     // so see the SalGraphics class for documentation (both uppercase and lowercase
     // function variants).
 
-    virtual void Init() = 0;
+    /// Only used by the X11SkiaSalGraphicsImpl backend
+    virtual void UpdateX11GeometryProvider() {}
 
     virtual void DeInit() {}
 

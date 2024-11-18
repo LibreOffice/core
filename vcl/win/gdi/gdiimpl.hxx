@@ -66,8 +66,6 @@ public:
 
     virtual ~WinSalGraphicsImpl() override;
 
-    virtual void Init() override;
-
     virtual OUString getRenderBackendName() const override { return "gdi"; }
 
     virtual void setClipRegion( const vcl::Region& ) override;

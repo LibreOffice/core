@@ -196,8 +196,6 @@ AquaGraphicsBackend::AquaGraphicsBackend(AquaSharedAttributes& rShared)
 
 AquaGraphicsBackend::~AquaGraphicsBackend() {}
 
-void AquaGraphicsBackend::Init() {}
-
 void AquaGraphicsBackend::setClipRegion(vcl::Region const& rRegion)
 {
     // release old clip path

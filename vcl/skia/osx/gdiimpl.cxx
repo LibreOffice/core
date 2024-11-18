@@ -59,7 +59,6 @@ AquaSkiaSalGraphicsImpl::AquaSkiaSalGraphicsImpl(AquaSalGraphics& rParent,
     : SkiaSalGraphicsImpl(rParent, rShared.mpFrame)
     , AquaGraphicsBackendBase(rShared, this)
 {
-    Init(); // mac code doesn't call Init()
 }
 
 AquaSkiaSalGraphicsImpl::~AquaSkiaSalGraphicsImpl()

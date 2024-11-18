@@ -34,8 +34,6 @@ class SAL_DLLPUBLIC_RTTI SvpGraphicsBackend final : public SalGraphicsImpl
 public:
     SvpGraphicsBackend(CairoCommon& rCairoCommon);
 
-    void Init() override;
-
     OUString getRenderBackendName() const override { return u"svp"_ustr; }
 
     void setClipRegion(vcl::Region const& rRegion) override;

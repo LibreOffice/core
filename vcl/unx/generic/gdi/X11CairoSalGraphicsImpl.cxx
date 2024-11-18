@@ -196,8 +196,6 @@ std::shared_ptr<SalBitmap> X11CairoSalGraphicsImpl::getBitmap(tools::Long nX, to
     return mrCairoCommon.getBitmap(nX, nY, nWidth, nHeight);
 }
 
-void X11CairoSalGraphicsImpl::Init() {}
-
 bool X11CairoSalGraphicsImpl::drawPolyLineBezier(sal_uInt32, const Point*, const PolyFlags*)
 {
     return false;

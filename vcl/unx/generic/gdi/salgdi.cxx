@@ -143,7 +143,7 @@ void X11SalGraphics::Init( X11SalFrame& rFrame, Drawable aTarget,
     m_pVDev     = nullptr;
 
     SetDrawable(aTarget, rFrame.GetSurface(), nXScreen);
-    mxImpl->Init();
+    mxImpl->UpdateX11GeometryProvider();
 }
 
 void X11SalGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY ) // const

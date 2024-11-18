@@ -24,7 +24,7 @@ private:
 public:
     X11SkiaSalGraphicsImpl(X11SalGraphics& rParent);
 
-    virtual void Init() override;
+    virtual void UpdateX11GeometryProvider() override;
     virtual void Flush() override;
 
     static void prepareSkia();

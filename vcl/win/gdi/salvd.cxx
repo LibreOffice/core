@@ -214,9 +214,6 @@ bool WinSalVirtualDevice::SetSize( tools::Long nDX, tools::Long nDY )
     SelectBitmap(getHDC(), hNewBmp);
     mhBmp.reset(hNewBmp);
 
-    if (mpGraphics)
-        mpGraphics->GetImpl()->Init();
-
     return true;
 }
 

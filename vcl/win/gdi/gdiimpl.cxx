@@ -235,10 +235,6 @@ WinSalGraphicsImpl::~WinSalGraphicsImpl()
     }
 }
 
-void WinSalGraphicsImpl::Init()
-{
-}
-
 bool WinSalGraphicsImpl::drawEPS(tools::Long, tools::Long, tools::Long, tools::Long, void*, sal_uInt32)
 {
     return false;

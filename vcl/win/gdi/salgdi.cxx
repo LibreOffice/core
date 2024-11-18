@@ -464,8 +464,6 @@ void WinSalGraphics::InitGraphics()
     ::SetTextAlign( getHDC(), TA_BASELINE | TA_LEFT | TA_NOUPDATECP );
     ::SetBkMode( getHDC(), TRANSPARENT );
     ::SetROP2( getHDC(), R2_COPYPEN );
-
-    mpImpl->Init();
 }
 
 void WinSalGraphics::DeInitGraphics()

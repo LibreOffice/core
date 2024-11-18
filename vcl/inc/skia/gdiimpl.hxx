@@ -41,8 +41,6 @@ public:
     SkiaSalGraphicsImpl(SalGraphics& pParent, SalGeometryProvider* pProvider);
     virtual ~SkiaSalGraphicsImpl() override;
 
-    virtual void Init() override;
-
     virtual void DeInit() override;
 
     virtual OUString getRenderBackendName() const override { return u"skia"_ustr; }

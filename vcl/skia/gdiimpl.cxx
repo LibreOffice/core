@@ -301,8 +301,6 @@ SkiaSalGraphicsImpl::~SkiaSalGraphicsImpl()
     assert(!mWindowContext);
 }
 
-void SkiaSalGraphicsImpl::Init() {}
-
 void SkiaSalGraphicsImpl::createSurface()
 {
     SkiaZone zone;

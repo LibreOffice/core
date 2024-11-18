@@ -24,8 +24,6 @@ SvpGraphicsBackend::SvpGraphicsBackend(CairoCommon& rCairoCommon)
 {
 }
 
-void SvpGraphicsBackend::Init() {}
-
 void SvpGraphicsBackend::setClipRegion(const vcl::Region& i_rClip)
 {
     m_rCairoCommon.m_aClipRegion = i_rClip;

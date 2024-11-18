@@ -269,8 +269,6 @@ public:
     AquaGraphicsBackend(AquaSharedAttributes & rShared);
     ~AquaGraphicsBackend() override;
 
-    void Init() override;
-
     OUString getRenderBackendName() const override
     {
         return "aqua";
