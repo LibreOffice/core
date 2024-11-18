@@ -1639,7 +1639,7 @@ void DrawingML::WriteMediaNonVisualProperties(const css::uno::Reference<css::dra
     const OUString& rURL(pMediaObj->getURL());
     int nLastDot = rURL.lastIndexOf('.');
     if (nLastDot >= 0)
-        aExtension = rURL.copy(nLastDot);
+        aExtension = rURL.copy(nLastDot).replace(':', '_'); // Colons are not allowed in Zip entry file names, see OStorageHelper::IsValidZipEntryFileName
 
     bool bEmbed = rURL.startsWith("vnd.sun.star.Package:");
     Relationship eMediaType = Relationship::VIDEO;
