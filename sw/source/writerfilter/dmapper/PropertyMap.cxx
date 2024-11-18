@@ -1209,18 +1209,25 @@ void SectionPropertyMap::HandleMarginsHeaderFooter(DomainMapper_Impl& rDM_Impl)
     {
         uno::Reference<beans::XPropertySet> xDefaultPageStyle(
                     rDM_Impl.GetPageStyles()->getByName(u"Standard"_ustr), uno::UNO_QUERY_THROW);
-        for (const beans::Property& rProp : m_aPageStyle->getPropertySetInfo()->getProperties())
+        if (!m_aPageStyle)
         {
-            if (!rProp.Name.startsWith("Fill")) // only copy XATTR_FILL properties
-                continue;
-            try
+            SAL_WARN( "writerfilter", "No Page Style!" );
+        }
+        else
+        {
+            for (const beans::Property& rProp : m_aPageStyle->getPropertySetInfo()->getProperties())
             {
-                const uno::Any aFillValue = xDefaultPageStyle->getPropertyValue(rProp.Name);
-                m_aPageStyle->setPropertyValue(rProp.Name, aFillValue);
-            }
-            catch (uno::Exception&)
-            {
-                DBG_UNHANDLED_EXCEPTION("writerfilter", "Exception setting page background fill");
+                if (!rProp.Name.startsWith("Fill")) // only copy XATTR_FILL properties
+                    continue;
+                try
+                {
+                    const uno::Any aFillValue = xDefaultPageStyle->getPropertyValue(rProp.Name);
+                    m_aPageStyle->setPropertyValue(rProp.Name, aFillValue);
+                }
+                catch (uno::Exception&)
+                {
+                    DBG_UNHANDLED_EXCEPTION("writerfilter", "Exception setting page background fill");
+                }
             }
         }
     }
