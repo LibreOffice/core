@@ -818,6 +818,10 @@ void SwSectionFrame::MakeAll(vcl::RenderContext* pRenderContext)
         // appropriately; then drop the temporary, if needed.
         if (SwLayoutFrame* moveBackPos = GetPrevSctLeaf())
         {
+            if (moveBackPos->IsColBodyFrame())
+            {
+                moveBackPos = moveBackPos->GetUpper()->GetUpper();
+            }
             SwLayoutFrame* newUpper = moveBackPos;
             SwFrame* newSibling = nullptr;
             const bool temporaryMasterCreated = IsFollow();
