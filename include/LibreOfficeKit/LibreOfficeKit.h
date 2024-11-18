@@ -551,6 +551,9 @@ struct _LibreOfficeKitDocumentClass
     bool (*renderNextSlideLayer)(
         LibreOfficeKitDocument* pThis, unsigned char* pBuffer, bool* bIsBitmapLayer, char** pJsonMessage);
 
+    /// @see lok::Document::setViewOption
+    void (*setViewOption)(LibreOfficeKitDocument* pThis, const char* pOption, const char* pValue);
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
