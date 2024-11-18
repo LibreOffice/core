@@ -21395,8 +21395,10 @@ private:
                 GdkSurface* pParentSurface = pParent ? widget_get_surface(pParent) : nullptr;
                 void* pParentIsPopover = pParentSurface ? g_object_get_data(G_OBJECT(pParentSurface), "g-lo-InstancePopup") : nullptr;
                 if (pParentIsPopover)
+                {
                     do_grab(m_pToggleButton);
-                gtk_widget_grab_focus(m_pToggleButton);
+                    gtk_widget_grab_focus(m_pToggleButton);
+                }
             }
         }
         else
@@ -21442,11 +21444,18 @@ private:
         ComboBox::signal_popup_toggled();
         if (!m_bPopupActive && m_pEntry)
         {
-            disable_notify_events();
-            //restore focus to the GtkEntry when the popup is gone, which
-            //is what the vcl case does, to ease the transition a little
-            gtk_widget_grab_focus(m_pEntry);
-            enable_notify_events();
+            if (has_child_focus())
+            {
+                // restore focus to the GtkEntry when the popup is gone, which
+                // is what the vcl case does, to ease the transition a little,
+                // but don't do it if the focus was moved out of togglebutton
+                // by something else already (e.g. font combobox in toolbar
+                // on a "direct pick" from the menu which moves focus into
+                // the main document
+                disable_notify_events();
+                gtk_widget_grab_focus(m_pEntry);
+                enable_notify_events();
+            }
 
             // tdf#160971: For some reason, the tree view in the no longer visible
             // popup still incorrectly assumes it has focus in addition to the now
