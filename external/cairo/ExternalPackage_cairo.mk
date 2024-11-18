@@ -12,7 +12,11 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,cairo,cairo))
 $(eval $(call gb_ExternalPackage_use_external_project,cairo,cairo))
 
 ifneq ($(DISABLE_DYNLOADING),TRUE)
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_ExternalPackage_add_file,cairo,$(LIBO_LIB_FOLDER)/libcairo.2.dylib,src/.libs/libcairo.2.dylib))
+else
 $(eval $(call gb_ExternalPackage_add_file,cairo,$(LIBO_LIB_FOLDER)/libcairo-lo.so.2,src/.libs/libcairo-lo.so.2.1170$(CAIRO_VERSION_MICRO).0))
+endif
 endif
 
 # vim: set noet sw=4 ts=4:

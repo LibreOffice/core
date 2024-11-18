@@ -67,10 +67,10 @@ $(call gb_ExternalProject_get_state_target,cairo,build) :
 		png_REQUIRES="trick_configure_into_using_png_CFLAGS_and_LIBS" \
 		png_CFLAGS="$(LIBPNG_CFLAGS)" png_LIBS="$(LIBPNG_LIBS)" \
 		$(if $(SYSTEM_FREETYPE),,FREETYPE_CFLAGS="-I$(gb_UnpackedTarball_workdir)/freetype/include") \
-		$(if $(SYSTEM_FONTCONFIG),,FONTCONFIG_CFLAGS="-I$(gb_UnpackedTarball_workdir)/fontconfig") \
+		$(if $(SYSTEM_FONTCONFIG),,FONTCONFIG_CFLAGS="-I$(gb_UnpackedTarball_workdir)/fontconfig" FONTCONFIG_LIBS="-L$(gb_UnpackedTarball_workdir)/fontconfig/src/.libs -lfontconfig") \
 		$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 		$(if $(filter TRUE,$(DISABLE_DYNLOADING)),--disable-shared,--disable-static) \
-		$(if $(filter EMSCRIPTEN ANDROID iOS,$(OS)),--disable-xlib --disable-xcb,$(if $(filter TRUE,$(DISABLE_GUI)),--disable-xlib --disable-xcb,--enable-xlib --enable-xcb)) \
+		$(if $(filter EMSCRIPTEN ANDROID iOS MACOSX,$(OS)),--disable-xlib --disable-xcb,$(if $(filter TRUE,$(DISABLE_GUI)),--disable-xlib --disable-xcb,--enable-xlib --enable-xcb)) \
 		$(if $(filter iOS,$(OS)),--enable-quartz --enable-quartz-font) \
 		--disable-valgrind \
 		$(if $(filter iOS,$(OS)),--disable-ft,--enable-ft --enable-fc) \
