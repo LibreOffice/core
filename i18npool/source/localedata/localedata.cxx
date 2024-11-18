@@ -146,6 +146,7 @@ constexpr struct {
     { "fr_BJ",  DataLocaleLibrary::EURO },
     { "fr_NE",  DataLocaleLibrary::EURO },
     { "fr_TG",  DataLocaleLibrary::EURO },
+    { "fr_GN",  DataLocaleLibrary::EURO },
     { "it_IT",  DataLocaleLibrary::EURO },
     { "it_CH",  DataLocaleLibrary::EURO },
     { "sl_SI",  DataLocaleLibrary::EURO },
