@@ -1280,7 +1280,7 @@ endef
 
 else # !SYSTEM_CAIRO
 
-ifneq ($(filter-out MACOSX WNT,$(OS)),)
+ifneq ($(filter-out MACOSX$(ENABLE_HEADLESS) WNT,$(OS)),)
 
 $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	cairo \

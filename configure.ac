@@ -1077,7 +1077,11 @@ cygwin*|wsl*)
     ;;
 
 darwin*) # macOS
-    using_freetype_fontconfig=no
+    if test "$enable_headless" != "yes"; then
+        using_freetype_fontconfig=no
+    else
+        using_freetype_fontconfig=yes
+    fi
     using_x11=no
     build_skia=yes
     enable_pagein=no
@@ -1933,6 +1937,11 @@ AC_ARG_ENABLE(gen,
         [To select the gen backend in case of --disable-dynamic-loading.
          Per default auto-enabled when X11 is used.]),
 ,test "${test_gen}" = no -o "${enable_gen+set}" = set || enable_gen=yes)
+
+AC_ARG_ENABLE(headless,
+    AS_HELP_STRING([--enable-headless],
+        [Enable headless plugin (svp) even on macOS.]),
+,using_headless_plugin=yes)
 
 AC_ARG_ENABLE(gui,
     AS_HELP_STRING([--disable-gui],
