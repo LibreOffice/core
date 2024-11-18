@@ -303,16 +303,17 @@ Reference< XLabeledDataSequence > TypeGroupConverter::createCategorySequence()
     if( !xLabeledSeq.is() && !mrModel.maSeries.empty() ) {
         if( nMaxValues < 0 )
             nMaxValues = 2;
-        SeriesModel &aModel = *mrModel.maSeries.get(0);
-        if (!aModel.maSources.has(SeriesModel::CATEGORIES))
+        typedef RefVector<SeriesModel> SeriesModelVector;
+        SeriesModelVector::value_type aModel = mrModel.maSeries.get(0);
+        if (!aModel->maSources.has(SeriesModel::CATEGORIES))
         {
-            DataSourceModel &aSrc = aModel.maSources.create( SeriesModel::CATEGORIES );
+            DataSourceModel &aSrc = aModel->maSources.create( SeriesModel::CATEGORIES );
             DataSequenceModel &aSeq = aSrc.mxDataSeq.create();
             aSeq.mnPointCount = nMaxValues;
             for( sal_Int32 i = 0; i < nMaxValues; i++ )
                 aSeq.maData[ i ] <<= OUString::number( i + 1 );
         }
-        SeriesConverter aSeriesConv( *this,  aModel );
+        SeriesConverter aSeriesConv( *this,  *aModel );
         xLabeledSeq = aSeriesConv.createCategorySequence( u"categories"_ustr );
     }
     return xLabeledSeq;
