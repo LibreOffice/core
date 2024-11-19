@@ -99,13 +99,12 @@ void lclAppendToParentEntry(const std::unique_ptr<weld::TreeView>& rTree,
 }
 
 // append a root entry to a input TreeView
-OUString lclAppend(const std::unique_ptr<weld::TreeView>& rTree, DocumentModelTreeEntry* pEntry)
+void lclAppend(const std::unique_ptr<weld::TreeView>& rTree, DocumentModelTreeEntry* pEntry)
 {
     OUString sId(weld::toId(pEntry));
     OUString const& rString = pEntry->getString();
     rTree->insert(nullptr, -1, &rString, &sId, nullptr, nullptr, pEntry->shouldShowExpander(),
                   nullptr);
-    return sId;
 }
 
 /** Entry that represents a object, which implements a XNameAccess */

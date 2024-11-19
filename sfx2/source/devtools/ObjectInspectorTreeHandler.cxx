@@ -349,8 +349,8 @@ public:
 };
 
 // appends the node to the root of the tree view
-OUString lclAppendNode(const std::unique_ptr<weld::TreeView>& pTree,
-                       ObjectInspectorNodeInterface* pEntry)
+void lclAppendNode(const std::unique_ptr<weld::TreeView>& pTree,
+                   ObjectInspectorNodeInterface* pEntry)
 {
     OUString sName = pEntry->getObjectName();
     OUString sId(weld::toId(pEntry));
@@ -363,13 +363,11 @@ OUString lclAppendNode(const std::unique_ptr<weld::TreeView>& pTree,
     {
         pTree->set_text(*pCurrent, rPair.second, rPair.first);
     }
-
-    return sId;
 }
 
 // appends the node to the parent
-OUString lclAppendNodeToParent(const std::unique_ptr<weld::TreeView>& pTree,
-                               const weld::TreeIter* pParent, ObjectInspectorNodeInterface* pEntry)
+void lclAppendNodeToParent(const std::unique_ptr<weld::TreeView>& pTree,
+                           const weld::TreeIter* pParent, ObjectInspectorNodeInterface* pEntry)
 {
     OUString sName = pEntry->getObjectName();
     OUString sId(weld::toId(pEntry));
@@ -382,8 +380,6 @@ OUString lclAppendNodeToParent(const std::unique_ptr<weld::TreeView>& pTree,
     {
         pTree->set_text(*pCurrent, rPair.second, rPair.first);
     }
-
-    return sId;
 }
 
 /** Node that represent just a simple string with no children or columns */
