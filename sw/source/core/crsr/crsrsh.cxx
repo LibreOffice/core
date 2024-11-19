@@ -1852,11 +1852,6 @@ void SwCursorShell::UpdateCursorPos()
 
     if (isInHiddenFrame(pShellCursor) && !ExtendedSelectedAll())
     {
-        SwCursorMoveState aTmpState(CursorMoveState::SetOnlyText);
-        aTmpState.m_bSetInReadOnly = IsReadOnlyAvailable();
-        GetLayout()->GetModelPositionForViewPoint( pShellCursor->GetPoint(), pShellCursor->GetPtPos(),
-                                     &aTmpState );
-        pShellCursor->DeleteMark();
         // kde45196-1.html: try to get to a non-hidden paragraph, there must
         // be one in the document body
         while (isInHiddenFrame(pShellCursor))
@@ -1872,6 +1867,14 @@ void SwCursorShell::UpdateCursorPos()
             {
                 break;
             }
+        }
+        if (isInHiddenFrame(pShellCursor))
+        {
+            SwCursorMoveState aTmpState(CursorMoveState::SetOnlyText);
+            aTmpState.m_bSetInReadOnly = IsReadOnlyAvailable();
+            GetLayout()->GetModelPositionForViewPoint(pShellCursor->GetPoint(),
+                                                      pShellCursor->GetPtPos(), &aTmpState);
+            pShellCursor->DeleteMark();
         }
     }
     auto* pDoc = GetDoc();
