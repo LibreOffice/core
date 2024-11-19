@@ -1372,6 +1372,10 @@ rtl::Reference<LOKClipboard> forceSetClipboardForCurrentView(LibreOfficeKitDocum
 {
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     rtl::Reference<LOKClipboard> xClip(LOKClipboardFactory::getClipboardForCurView());
+    if (!pDoc)
+    {
+        return xClip;
+    }
 
     SAL_INFO("lok", "Set to clipboard for view " << xClip.get());
     // FIXME: using a hammer here - should not be necessary if all tests used createView.
