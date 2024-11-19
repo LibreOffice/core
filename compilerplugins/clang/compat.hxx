@@ -89,6 +89,17 @@ inline std::pair<clang::SourceLocation, clang::SourceLocation> getImmediateExpan
     return {csr.getBegin(), csr.getEnd()};
 }
 
+inline bool isAtLeastAsQualifiedAs(
+    clang::QualType type1, clang::QualType type2, clang::ASTContext const & context)
+{
+#if CLANG_VERSION >= 200000
+    return type1.isAtLeastAsQualifiedAs(type2, context);
+#else
+    (void) context;
+    return type1.isAtLeastAsQualifiedAs(type2);
+#endif
+}
+
 /// Utility method
 inline clang::Expr const * IgnoreParenImplicit(clang::Expr const * expr) {
     return expr->IgnoreImplicit()->IgnoreParens()->IgnoreImplicit();
