@@ -66,7 +66,7 @@ namespace
 
         virtual bool exists(const OUString& _sName ) override
         {
-            return m_aNameMap.find(_sName) != m_aNameMap.end();
+            return m_aNameMap.contains(_sName);
         }
 
         virtual bool empty() override
