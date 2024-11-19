@@ -1,4 +1,0 @@
-Files to run through tilebench --join to detect problems.
-
-bin/run tilebench instdir/program libreofficekit/qa/join/<filename> --join
-
