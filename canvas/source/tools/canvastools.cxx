@@ -810,10 +810,10 @@ namespace canvas::tools
         // rSpriteSize is mapped with its left,top corner to (0,0)
         // again. This is required to properly render sprite
         // animations to buffer bitmaps.
-        ::basegfx::B2DHomMatrix& calcRectToOriginTransform( ::basegfx::B2DHomMatrix&            o_transform,
-                                                            const ::basegfx::B2DRange&          i_srcRect,
-                                                            const ::basegfx::B2DHomMatrix&      i_transformation )
+        ::basegfx::B2DHomMatrix calcRectToOriginTransform( const ::basegfx::B2DRange&          i_srcRect,
+                                                           const ::basegfx::B2DHomMatrix&      i_transformation )
         {
+            ::basegfx::B2DHomMatrix o_transform;
             if( i_srcRect.isEmpty() )
             {
                 o_transform = i_transformation;

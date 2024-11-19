@@ -237,8 +237,7 @@ namespace vclcanvas::tools
             // aligned with (0,0). The method takes the given
             // rectangle, and calculates a transformation that maps
             // this rectangle unscaled to the origin.
-            ::basegfx::B2DHomMatrix aLocalTransform;
-            ::canvas::tools::calcRectToOriginTransform( aLocalTransform,
+            ::basegfx::B2DHomMatrix aLocalTransform = ::canvas::tools::calcRectToOriginTransform(
                                                         aSrcRect,
                                                         rTransform );
 

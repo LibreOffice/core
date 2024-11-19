@@ -199,10 +199,6 @@ namespace canvas
             the upper, left corner to the origin, and leaving the size
             untouched.
 
-            @param o_transform
-            Output parameter, to receive the resulting transformation
-            matrix.
-
             @param i_srcRect
             Input parameter, specifies the original source
             rectangle. The resulting transformation will exactly map
@@ -213,12 +209,12 @@ namespace canvas
             translations (if necessary), to exactly map the source
             rectangle to the origin.
 
-            @return a reference to the resulting transformation matrix
+            @return the resulting transformation matrix
 
             @see calcRectToRectTransform()
             @see calcTransformedRectBounds()
         */
-        CANVASTOOLS_DLLPUBLIC ::basegfx::B2DHomMatrix& calcRectToOriginTransform( ::basegfx::B2DHomMatrix&      o_transform,
+        CANVASTOOLS_DLLPUBLIC ::basegfx::B2DHomMatrix calcRectToOriginTransform(
                                                             const ::basegfx::B2DRange&      i_srcRect,
                                                             const ::basegfx::B2DHomMatrix&  i_transformation );
 
