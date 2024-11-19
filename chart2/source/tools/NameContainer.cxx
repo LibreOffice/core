@@ -103,7 +103,7 @@ Sequence< OUString > SAL_CALL NameContainer::getElementNames()
 
 sal_Bool SAL_CALL NameContainer::hasByName( const OUString& rName )
 {
-    return ( m_aMap.find( rName ) != m_aMap.end() );
+    return m_aMap.contains( rName );
 }
 
 // XElementAccess
