@@ -2980,9 +2980,7 @@ namespace cppcanvas::internal
                 // render subset of actions
                 // ========================
 
-                ::basegfx::B2DHomMatrix aMatrix;
-                ::canvas::tools::getRenderStateTransform( aMatrix,
-                                                          getRenderState() );
+                ::basegfx::B2DHomMatrix aMatrix = ::canvas::tools::getRenderStateTransform( getRenderState() );
 
                 ActionRenderer aRenderer( aMatrix );
 
@@ -3024,8 +3022,7 @@ namespace cppcanvas::internal
             // query bounds for subset of actions
             // ==================================
 
-            ::basegfx::B2DHomMatrix aMatrix;
-            ::canvas::tools::getRenderStateTransform( aMatrix,
+            ::basegfx::B2DHomMatrix aMatrix = ::canvas::tools::getRenderStateTransform(
                                                       getRenderState() );
 
             AreaQuery aQuery( aMatrix );
@@ -3043,8 +3040,7 @@ namespace cppcanvas::internal
         {
             SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::ImplRenderer::draw()" );
 
-            ::basegfx::B2DHomMatrix aMatrix;
-            ::canvas::tools::getRenderStateTransform( aMatrix,
+            ::basegfx::B2DHomMatrix aMatrix = ::canvas::tools::getRenderStateTransform(
                                                       getRenderState() );
 
             try

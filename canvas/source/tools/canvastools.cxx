@@ -91,10 +91,10 @@ namespace canvas::tools
             return viewState;
         }
 
-        ::basegfx::B2DHomMatrix& getViewStateTransform( ::basegfx::B2DHomMatrix&    transform,
-                                                        const rendering::ViewState& viewState )
+        ::basegfx::B2DHomMatrix getViewStateTransform( const rendering::ViewState& viewState )
         {
-            return ::basegfx::unotools::homMatrixFromAffineMatrix( transform, viewState.AffineTransform );
+            ::basegfx::B2DHomMatrix aTransform;
+            return ::basegfx::unotools::homMatrixFromAffineMatrix( aTransform, viewState.AffineTransform );
         }
 
         rendering::ViewState& setViewStateTransform( rendering::ViewState&          viewState,
@@ -105,10 +105,10 @@ namespace canvas::tools
             return viewState;
         }
 
-        ::basegfx::B2DHomMatrix& getRenderStateTransform( ::basegfx::B2DHomMatrix&      transform,
-                                                          const rendering::RenderState& renderState )
+        ::basegfx::B2DHomMatrix getRenderStateTransform( const rendering::RenderState& renderState )
         {
-            return ::basegfx::unotools::homMatrixFromAffineMatrix( transform, renderState.AffineTransform );
+            ::basegfx::B2DHomMatrix aTransform;
+            return ::basegfx::unotools::homMatrixFromAffineMatrix( aTransform, renderState.AffineTransform );
         }
 
         rendering::RenderState& setRenderStateTransform( rendering::RenderState&        renderState,
@@ -122,18 +122,14 @@ namespace canvas::tools
         rendering::RenderState& appendToRenderState( rendering::RenderState&        renderState,
                                                    const ::basegfx::B2DHomMatrix&   rTransform )
         {
-            ::basegfx::B2DHomMatrix transform;
-
-            getRenderStateTransform( transform, renderState );
+            ::basegfx::B2DHomMatrix transform = getRenderStateTransform( renderState );
             return setRenderStateTransform( renderState, transform * rTransform );
         }
 
         rendering::RenderState& prependToRenderState( rendering::RenderState&           renderState,
                                                       const ::basegfx::B2DHomMatrix&    rTransform )
         {
-            ::basegfx::B2DHomMatrix transform;
-
-            getRenderStateTransform( transform, renderState );
+            ::basegfx::B2DHomMatrix transform = getRenderStateTransform( renderState );
             return setRenderStateTransform( renderState, rTransform * transform );
         }
 

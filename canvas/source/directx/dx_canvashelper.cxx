@@ -728,8 +728,7 @@ namespace dxcanvas
                           "CanvasHelper::setupGraphicsState: reference device invalid" );
 
         // setup view transform first. Clipping e.g. depends on it
-        ::basegfx::B2DHomMatrix aTransform;
-        ::canvas::tools::getViewStateTransform(aTransform, viewState);
+        ::basegfx::B2DHomMatrix aTransform = ::canvas::tools::getViewStateTransform(viewState);
 
         // add output offset
         if( !maOutputOffset.equalZero() )

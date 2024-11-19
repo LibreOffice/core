@@ -47,9 +47,7 @@ namespace cppcanvas::internal
             SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::CachedPrimitiveBase: 0x" << std::hex << this );
 
             const rendering::ViewState  aViewState( mpCanvas->getViewState() );
-            ::basegfx::B2DHomMatrix     aTotalTransform;
-
-            ::canvas::tools::getViewStateTransform( aTotalTransform,
+            ::basegfx::B2DHomMatrix     aTotalTransform = ::canvas::tools::getViewStateTransform(
                                                     aViewState );
             aTotalTransform *= rTransformation;
 

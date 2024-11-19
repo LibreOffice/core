@@ -129,17 +129,15 @@ namespace canvas
         CANVASTOOLS_DLLPUBLIC css::rendering::ViewState&
             initViewState( css::rendering::ViewState&                          viewState );
 
-        CANVASTOOLS_DLLPUBLIC ::basegfx::B2DHomMatrix&
-            getViewStateTransform( ::basegfx::B2DHomMatrix&                    transform,
-                                   const css::rendering::ViewState&            viewState );
+        CANVASTOOLS_DLLPUBLIC ::basegfx::B2DHomMatrix
+            getViewStateTransform( const css::rendering::ViewState&            viewState );
 
         CANVASTOOLS_DLLPUBLIC css::rendering::ViewState&
             setViewStateTransform( css::rendering::ViewState&                  viewState,
                                    const ::basegfx::B2DHomMatrix&              transform );
 
-        CANVASTOOLS_DLLPUBLIC ::basegfx::B2DHomMatrix&
-            getRenderStateTransform( ::basegfx::B2DHomMatrix&                  transform,
-                                     const css::rendering::RenderState&        renderState );
+        CANVASTOOLS_DLLPUBLIC ::basegfx::B2DHomMatrix
+            getRenderStateTransform( const css::rendering::RenderState&        renderState );
 
         CANVASTOOLS_DLLPUBLIC css::rendering::RenderState&
             setRenderStateTransform( css::rendering::RenderState&              renderState,

@@ -176,12 +176,10 @@ namespace cppcanvas::internal
 
                 // determine overall transformation matrix (render, view,
                 // and passed transformation)
-                ::basegfx::B2DHomMatrix aTransform;
-                ::canvas::tools::getRenderStateTransform( aTransform, maState );
+                ::basegfx::B2DHomMatrix aTransform = ::canvas::tools::getRenderStateTransform( maState );
                 aTransform = rTransformation * aTransform;
 
-                ::basegfx::B2DHomMatrix aTotalTransform;
-                ::canvas::tools::getViewStateTransform( aTotalTransform, mpCanvas->getViewState() );
+                ::basegfx::B2DHomMatrix aTotalTransform = ::canvas::tools::getViewStateTransform( mpCanvas->getViewState() );
                 aTotalTransform = aTotalTransform * aTransform;
 
                 // since pure translational changes to the transformation

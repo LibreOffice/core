@@ -55,9 +55,7 @@ namespace cppcanvas::internal
 
         ::basegfx::B2DHomMatrix ImplCanvas::getTransformation() const
         {
-            ::basegfx::B2DHomMatrix aMatrix;
-            return ::canvas::tools::getViewStateTransform( aMatrix,
-                                                           maViewState );
+            return ::canvas::tools::getViewStateTransform( maViewState );
         }
 
         void ImplCanvas::setClip( const ::basegfx::B2DPolyPolygon& rClipPoly )
