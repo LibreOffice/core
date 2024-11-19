@@ -444,17 +444,6 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel, bool bCl
     // StyleSheets...
     if ( GetStyleSheetPool() )
     {
-        std::shared_ptr<SfxStyleSheetIterator> aSSSIterator = std::make_shared<SfxStyleSheetIterator>(GetStyleSheetPool(),
-                SfxStyleFamily::All);
-        // fill aStyleSheetToIdMap
-        sal_uInt32 nId = 1;
-        for ( SfxStyleSheetBase* pStyle = aSSSIterator->First(); pStyle;
-                                 pStyle = aSSSIterator->Next() )
-        {
-            aStyleSheetToIdMap[pStyle] = nId;
-            nId++;
-        }
-
         // Collect used paragraph styles when copying to the clipboard.
         std::set<SfxStyleSheetBase*> aUsedParagraphStyles;
         if (bClipboard)
@@ -497,6 +486,22 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel, bool bCl
                     }
                 }
             }
+        }
+
+        std::shared_ptr<SfxStyleSheetIterator> aSSSIterator = std::make_shared<SfxStyleSheetIterator>(GetStyleSheetPool(),
+                SfxStyleFamily::All);
+        // fill aStyleSheetToIdMap
+        sal_uInt32 nId = 1;
+        for ( SfxStyleSheetBase* pStyle = aSSSIterator->First(); pStyle;
+                                 pStyle = aSSSIterator->Next() )
+        {
+            if (bClipboard && !aUsedParagraphStyles.contains(pStyle))
+            {
+                // Don't include unused paragraph styles in the clipboard case.
+                continue;
+            }
+            aStyleSheetToIdMap[pStyle] = nId;
+            nId++;
         }
 
         if ( aSSSIterator->Count() )
