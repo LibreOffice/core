@@ -706,7 +706,7 @@ void handleNegativeScale(basegfx::B2DTuple & scale, double * rotate) {
 
     // #i75086# Old DrawingLayer (GeoStat and geometry) does not support holding negative scalings
     // in X and Y which equal a 180 degree rotation. Recognize it and react accordingly
-    if(basegfx::fTools::less(scale.getX(), 0.0) && basegfx::fTools::less(scale.getY(), 0.0))
+    if(scale.getX() < 0.0 && scale.getY() < 0.0)
     {
         scale.setX(fabs(scale.getX()));
         scale.setY(fabs(scale.getY()));

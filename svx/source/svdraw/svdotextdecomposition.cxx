@@ -901,8 +901,8 @@ void SdrTextObj::impDecomposeContourTextPrimitive(
 
     // mirroring. We are now in the polygon sizes. When mirroring in X and Y,
     // move the null point which was top left to bottom right.
-    const bool bMirrorX(basegfx::fTools::less(aScale.getX(), 0.0));
-    const bool bMirrorY(basegfx::fTools::less(aScale.getY(), 0.0));
+    const bool bMirrorX(aScale.getX() < 0.0);
+    const bool bMirrorY(aScale.getY() < 0.0);
 
     // in-between the translations of the single primitives will take place. Afterwards,
     // the object's transformations need to be applied
@@ -1050,8 +1050,8 @@ void SdrTextObj::impDecomposeAutoFitTextPrimitive(
 
     // mirroring. We are now in aAnchorTextRange sizes. When mirroring in X and Y,
     // move the null point which was top left to bottom right.
-    const bool bMirrorX(basegfx::fTools::less(aScale.getX(), 0.0));
-    const bool bMirrorY(basegfx::fTools::less(aScale.getY(), 0.0));
+    const bool bMirrorX(aScale.getX() < 0.0);
+    const bool bMirrorY(aScale.getY() < 0.0);
     aNewTransformB.scale(bMirrorX ? -1.0 : 1.0, bMirrorY ? -1.0 : 1.0);
 
     // in-between the translations of the single primitives will take place. Afterwards,
@@ -1350,8 +1350,8 @@ void SdrTextObj::impDecomposeBlockTextPrimitive(
 
     // mirroring. We are now in aAnchorTextRange sizes. When mirroring in X and Y,
     // move the null point which was top left to bottom right.
-    const bool bMirrorX(basegfx::fTools::less(aScale.getX(), 0.0));
-    const bool bMirrorY(basegfx::fTools::less(aScale.getY(), 0.0));
+    const bool bMirrorX(aScale.getX() < 0.0);
+    const bool bMirrorY(aScale.getY() < 0.0);
 
     // in-between the translations of the single primitives will take place. Afterwards,
     // the object's transformations need to be applied
@@ -1437,8 +1437,8 @@ void SdrTextObj::impDecomposeStretchTextPrimitive(
 
     // When mirroring in X and Y,
     // move the null point which was top left to bottom right.
-    const bool bMirrorX(basegfx::fTools::less(aScale.getX(), 0.0));
-    const bool bMirrorY(basegfx::fTools::less(aScale.getY(), 0.0));
+    const bool bMirrorX(aScale.getX() < 0.0);
+    const bool bMirrorY(aScale.getY() < 0.0);
 
     // in-between the translations of the single primitives will take place. Afterwards,
     // the object's transformations need to be applied
@@ -1863,8 +1863,8 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
 
     // mirroring. We are now in aAnchorTextRange sizes. When mirroring in X and Y,
     // move the null point which was top left to bottom right.
-    const bool bMirrorX(basegfx::fTools::less(aScale.getX(), 0.0));
-    const bool bMirrorY(basegfx::fTools::less(aScale.getY(), 0.0));
+    const bool bMirrorX(aScale.getX() < 0.0);
+    const bool bMirrorY(aScale.getY() < 0.0);
     aNewTransformB.scale(bMirrorX ? -1.0 : 1.0, bMirrorY ? -1.0 : 1.0);
 
     // in-between the translations of the single primitives will take place. Afterwards,

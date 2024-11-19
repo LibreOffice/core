@@ -634,8 +634,8 @@ sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
                 rObjectTransform.decompose(aScale, aTranslate, fRotate, fShearX);
 
                 // extract mirroring
-                const bool bMirrorX(basegfx::fTools::less(aScale.getX(), 0.0));
-                const bool bMirrorY(basegfx::fTools::less(aScale.getY(), 0.0));
+                const bool bMirrorX(aScale.getX() < 0.0);
+                const bool bMirrorY(aScale.getY() < 0.0);
                 aScale = basegfx::absolute(aScale);
 
                 // Get the real size, since polygon outline and scale
