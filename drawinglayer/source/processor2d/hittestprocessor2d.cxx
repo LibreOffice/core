@@ -320,7 +320,7 @@ namespace drawinglayer::processor2d
                         const primitive2d::PolygonStrokePrimitive2D& rPolygonCandidate(static_cast< const primitive2d::PolygonStrokePrimitive2D& >(rCandidate));
                         const attribute::LineAttribute& rLineAttribute = rPolygonCandidate.getLineAttribute();
 
-                        if(basegfx::fTools::more(rLineAttribute.getWidth(), 0.0))
+                        if(rLineAttribute.getWidth() > 0.0)
                         {
                             if(basegfx::B2DLineJoin::Miter == rLineAttribute.getLineJoin())
                             {
@@ -357,13 +357,13 @@ namespace drawinglayer::processor2d
                         double fLogicHitTolerance(0.0);
 
                         // if WaveHeight, grow by it
-                        if(basegfx::fTools::more(rPolygonCandidate.getWaveHeight(), 0.0))
+                        if(rPolygonCandidate.getWaveHeight() > 0.0)
                         {
                             fLogicHitTolerance += rPolygonCandidate.getWaveHeight();
                         }
 
                         // if line width, grow by it
-                        if(basegfx::fTools::more(rPolygonCandidate.getLineAttribute().getWidth(), 0.0))
+                        if(rPolygonCandidate.getLineAttribute().getWidth() > 0.0)
                         {
                             fLogicHitTolerance += rPolygonCandidate.getLineAttribute().getWidth() * 0.5;
                         }
