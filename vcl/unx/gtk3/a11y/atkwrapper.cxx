@@ -674,6 +674,9 @@ atk_object_wrapper_finalize (GObject *obj)
 
     atk_object_wrapper_dispose( pWrap );
 
+    if (pWrap->mpOrig)
+        g_object_unref(pWrap->mpOrig);
+
     parent_class->finalize( obj );
 }
 
@@ -969,6 +972,8 @@ atk_object_wrapper_new( const css::uno::Reference< css::accessibility::XAccessib
 
         pWrap->mpContext = xContext;
         pWrap->mpOrig = orig;
+        if (pWrap->mpOrig)
+            g_object_ref(pWrap->mpOrig);
 
         AtkObject* atk_obj = ATK_OBJECT(pWrap);
         atk_obj->role = mapToAtkRole(xContext->getAccessibleRole(), xContext->getAccessibleStateSet());
