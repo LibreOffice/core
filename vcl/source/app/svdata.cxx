@@ -140,13 +140,26 @@ namespace
 
         void endUsage(basegfx::SystemDependentData_SharedPtr& rData) override
         {
-            std::unique_lock aGuard(m_aMutex);
-            EntryMap::iterator aFound(maEntries.find(rData));
+            // tdf#163428 prepare space for entry to hold to avoid early deletion
+            basegfx::SystemDependentData_SharedPtr aToBeDeletedEntry;
 
-            if(aFound != maEntries.end())
             {
-                maEntries.erase(aFound);
+                // lock m_aMutex in own scope
+                std::unique_lock aGuard(m_aMutex);
+                EntryMap::iterator aFound(maEntries.find(rData));
+
+                if(aFound != maEntries.end())
+                {
+                    // tdf#163428 ensure to hold/not delete entry while m_aMutex is locked
+                    aToBeDeletedEntry = aFound->first;
+
+                    // remove from list
+                    maEntries.erase(aFound);
+                }
             }
+
+            // tdf#163428  aToBeDeletedEntry will be destucted, thus the
+            // entry referenmced by SharedPtr may be deleted now
         }
 
         void touchUsage(basegfx::SystemDependentData_SharedPtr& rData) override
@@ -176,24 +189,55 @@ namespace
 
     IMPL_LINK_NOARG(SystemDependentDataBuffer, implTimeoutHdl, Timer *, void)
     {
-        std::unique_lock aGuard(m_aMutex);
-        EntryMap::iterator aIter(maEntries.begin());
+        // tdf#163428 prepare a temporary list for SystemDependentData_SharedPtr
+        // entries that need to be removed from the unordered_map, but do not need
+        // locking m_aMutex
+        ::std::vector<basegfx::SystemDependentData_SharedPtr> aToBeDeletedEntries;
 
-        while(aIter != maEntries.end())
         {
-            if(aIter->second)
+            // lock m_aMutex in own scope
+            std::unique_lock aGuard(m_aMutex);
+            EntryMap::iterator aIter(maEntries.begin());
+
+            while(aIter != maEntries.end())
             {
-                aIter->second--;
-                ++aIter;
+                if(aIter->second)
+                {
+                    aIter->second--;
+                    ++aIter;
+                }
+                else
+                {
+                    // tdf#163428 Do not potentially directly delete SystemDependentData_SharedPtr
+                    // entries in the unordered_map (maEntries). That can/would happen when the shared_ptr
+                    // has only one reference left. This can cause problems, e.g. we have
+                    // BufferedData_ModifiedBitmapEx which can contain a Bitmap with added
+                    // DataBuffers itself, thus deleting this here *directly* would trigger e.g.
+                    // endUsage above. That would then block when we would still hold m_aMutex.
+                    // This can potentially be the case with other derivations of
+                    // basegfx::SystemDependentData, too.
+                    // To avoid this, protect the part that needs protection by the m_aMutex, that
+                    // is the modification of the unordered_map itself. Cleaning up the list entries can be
+                    // done after this, without holding the lock.
+                    // Thus, remember the SystemDependentData_SharedPtr in a temporary list by adding
+                    // a reference/shared_ptr to it to guarantee it gets not deleted when it gets removed
+                    // from the unordered_map.
+                    // Anyways, only locking while manipulating the list is better, destruction of
+                    // objects may be expensive and hold m_aMutex longer than necessary.
+                    aToBeDeletedEntries.push_back(aIter->first);
+
+                    // remove from list. This decrements the shared_ptr, but delete is avoided
+                    aIter = maEntries.erase(aIter);
+                }
             }
-            else
-            {
-                aIter = maEntries.erase(aIter);
-            }
+
+            if (maEntries.empty())
+                maTimer->Stop();
         }
 
-        if (maEntries.empty())
-            maTimer->Stop();
+        // tdf#163428 here aToBeDeletedEntries will be destroyed, the entries will be
+        // decremented and potentially deleted. These are of type SystemDependentData_SharedPtr,
+        // so we do not need to do anything explicitely here
     }
 }
 
