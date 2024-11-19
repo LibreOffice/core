@@ -88,6 +88,11 @@
                 <property name="can-focus">False</property>
                 <property name="valign">center</property>
                 <property name="hexpand">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="nextstyle-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="managestylepage|extended_tip|nextstyle">Select an existing style that you want to follow the current style in your document. For paragraph styles, the next style is applied to an empty paragraph that is created when you press Enter at the end of an existing paragraph. For page styles, the next style is applied when a new page is created.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -100,6 +105,11 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="editstyle-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="managestylepage|extended_tip|editstyle">Edit the properties of the next style.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">2</property>
@@ -112,6 +122,11 @@
                 <property name="can-focus">False</property>
                 <property name="valign">center</property>
                 <property name="hexpand">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="linkedwith-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="managestylepage|extended_tip|linkedwith">Select an existing style (or - None -) to provide its definitions to the current style. Use the other tabs to modify the inherited style.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -124,6 +139,11 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="editlinkstyle-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="managestylepage|extended_tip|editlinkstyle">Edit the properties of the parent style.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">2</property>
@@ -136,6 +156,11 @@
                 <property name="can-focus">False</property>
                 <property name="valign">center</property>
                 <property name="hexpand">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="category-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="managestylepage|extended_tip|category">Displays the category for the current style. If you are creating or modifying a new style, select 'Custom Style' from the list.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -148,9 +173,14 @@
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
                 <property name="no-show-all">True</property>
+                <property name="tooltip-text" translatable="yes" context="managestylepage|autoupdate|tooltip_text">Any paragraph formatting changes in the document to a paragraph with this style are applied automatically to modify the paragraph style.</property>
                 <property name="use-underline">True</property>
                 <property name="draw-indicator">True</property>
-                <property name="tooltip-text" translatable="yes" context="managestylepage|autoupdate|tooltip_text">Any paragraph formatting changes in the document to a paragraph with this style are applied automatically to modify the paragraph style.</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="autoupdate-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="managestylepage|extended_tip|autoupdate">Updates the style when you apply direct formatting to a paragraph using this style in your document. The formatting of all paragraphs using this style is automatically updated.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -166,6 +196,11 @@
                 <property name="editable">False</property>
                 <property name="width-chars">52</property>
                 <property name="truncate-multiline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="name-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="managestylepage|extended_tip|name">Enter a name for the style.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">1</property>
