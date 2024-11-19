@@ -5683,35 +5683,35 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
             break;
 
         case RES_CHRATR_CJK_FONT:
-            CharFontCJK( static_cast< const SvxFontItem& >( rHt ) );
+            CharFontCJK(rHt.StaticWhichCast(RES_CHRATR_CJK_FONT));
             break;
         case RES_CHRATR_CJK_FONTSIZE:
-            CharFontSizeCJK( static_cast< const SvxFontHeightItem& >( rHt ) );
+            CharFontSizeCJK(rHt.StaticWhichCast(RES_CHRATR_CJK_FONTSIZE));
             break;
         case RES_CHRATR_CJK_LANGUAGE:
-            CharLanguageCJK( static_cast< const SvxLanguageItem& >( rHt ) );
+            CharLanguageCJK(rHt.StaticWhichCast(RES_CHRATR_CJK_LANGUAGE));
             break;
         case RES_CHRATR_CJK_POSTURE:
-            CharPostureCJK( static_cast< const SvxPostureItem& >( rHt ) );
+            CharPostureCJK(rHt.StaticWhichCast(RES_CHRATR_CJK_POSTURE));
             break;
         case RES_CHRATR_CJK_WEIGHT:
-            CharWeightCJK( static_cast< const SvxWeightItem& >( rHt ) );
+            CharWeightCJK( rHt.StaticWhichCast(RES_CHRATR_CJK_WEIGHT));
             break;
 
         case RES_CHRATR_CTL_FONT:
-            CharFontCTL( static_cast< const SvxFontItem& >( rHt ) );
+            CharFontCTL(rHt.StaticWhichCast(RES_CHRATR_CTL_FONT));
             break;
         case RES_CHRATR_CTL_FONTSIZE:
-            CharFontSizeCTL( static_cast< const SvxFontHeightItem& >( rHt ) );
+            CharFontSizeCTL(rHt.StaticWhichCast(RES_CHRATR_CTL_FONTSIZE));
             break;
         case RES_CHRATR_CTL_LANGUAGE:
-            CharLanguageCTL( static_cast< const SvxLanguageItem& >( rHt ) );
+            CharLanguageCTL(rHt.StaticWhichCast(RES_CHRATR_CTL_LANGUAGE));
             break;
         case RES_CHRATR_CTL_POSTURE:
-            CharPostureCTL( static_cast< const SvxPostureItem& >( rHt ) );
+            CharPostureCTL(rHt.StaticWhichCast(RES_CHRATR_CTL_POSTURE));
             break;
         case RES_CHRATR_CTL_WEIGHT:
-            CharWeightCTL( static_cast< const SvxWeightItem& >( rHt ) );
+            CharWeightCTL(rHt.StaticWhichCast(RES_CHRATR_CTL_WEIGHT));
             break;
 
         case RES_CHRATR_ROTATE:

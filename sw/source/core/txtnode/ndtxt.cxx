@@ -4893,8 +4893,7 @@ namespace {
             {
                 mrTextNode.RemoveFromList();
 
-                const SwNumRuleItem& rNumRuleItem =
-                                dynamic_cast<const SwNumRuleItem&>(pItem);
+                const SwNumRuleItem& rNumRuleItem = pItem.StaticWhichCast(RES_PARATR_NUMRULE);
                 if ( !rNumRuleItem.GetValue().isEmpty() )
                 {
                     mbAddTextNodeToList = true;
@@ -4908,8 +4907,7 @@ namespace {
             // handle RES_PARATR_LIST_ID
             case RES_PARATR_LIST_ID:
             {
-                const SfxStringItem& rListIdItem =
-                                        dynamic_cast<const SfxStringItem&>(pItem);
+                const SfxStringItem& rListIdItem = pItem.StaticWhichCast(RES_PARATR_LIST_ID);
                 OSL_ENSURE( rListIdItem.GetValue().getLength() > 0,
                         "<HandleSetAttrAtTextNode(..)> - empty list id attribute not expected. Serious defect." );
                 const OUString sListIdOfTextNode = rTextNode.GetListId();
@@ -4927,8 +4925,7 @@ namespace {
             // handle RES_PARATR_LIST_LEVEL
             case RES_PARATR_LIST_LEVEL:
             {
-                const SfxInt16Item& aListLevelItem =
-                                    dynamic_cast<const SfxInt16Item&>(pItem);
+                const SfxInt16Item& aListLevelItem = pItem.StaticWhichCast(RES_PARATR_LIST_LEVEL);
                 if ( aListLevelItem.GetValue() != mrTextNode.GetAttrListLevel() )
                 {
                     mbUpdateListLevel = true;
@@ -4939,8 +4936,7 @@ namespace {
             // handle RES_PARATR_LIST_ISRESTART
             case RES_PARATR_LIST_ISRESTART:
             {
-                const SfxBoolItem& aListIsRestartItem =
-                                    dynamic_cast<const SfxBoolItem&>(pItem);
+                const SfxBoolItem& aListIsRestartItem = pItem.StaticWhichCast(RES_PARATR_LIST_ISRESTART);
                 if ( aListIsRestartItem.GetValue() !=
                                     mrTextNode.IsListRestart() )
                 {
@@ -4952,8 +4948,7 @@ namespace {
             // handle RES_PARATR_LIST_RESTARTVALUE
             case RES_PARATR_LIST_RESTARTVALUE:
             {
-                const SfxInt16Item& aListRestartValueItem =
-                                    dynamic_cast<const SfxInt16Item&>(pItem);
+                const SfxInt16Item& aListRestartValueItem = pItem.StaticWhichCast(RES_PARATR_LIST_RESTARTVALUE);
                 if ( !mrTextNode.HasAttrListRestartValue() ||
                      aListRestartValueItem.GetValue() != mrTextNode.GetAttrListRestartValue() )
                 {
@@ -4965,8 +4960,7 @@ namespace {
             // handle RES_PARATR_LIST_ISCOUNTED
             case RES_PARATR_LIST_ISCOUNTED:
             {
-                const SfxBoolItem& aIsCountedInListItem =
-                                    dynamic_cast<const SfxBoolItem&>(pItem);
+                const SfxBoolItem& aIsCountedInListItem = pItem.StaticWhichCast(RES_PARATR_LIST_ISCOUNTED);
                 if ( aIsCountedInListItem.GetValue() !=
                                     mrTextNode.IsCountedInList() )
                 {
@@ -4979,8 +4973,7 @@ namespace {
             // handle RES_PARATR_OUTLINELEVEL
             case RES_PARATR_OUTLINELEVEL:
             {
-                const SfxUInt16Item& aOutlineLevelItem =
-                                    dynamic_cast<const SfxUInt16Item&>(pItem);
+                const SfxUInt16Item& aOutlineLevelItem = pItem.StaticWhichCast(RES_PARATR_OUTLINELEVEL);
                 if ( aOutlineLevelItem.GetValue() != mrTextNode.GetAttrOutlineLevel() )
                 {
                     mbOutlineLevelSet = true;
