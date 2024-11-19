@@ -14,9 +14,9 @@
 
 std::map<css::accessibility::XAccessible*, LoAccessible*> GtkAccessibleRegistry::m_aMapping = {};
 
-LoAccessible*
-GtkAccessibleRegistry::getLOAccessible(css::uno::Reference<css::accessibility::XAccessible> xAcc,
-                                       GdkDisplay* pDisplay, GtkAccessible* pParent)
+LoAccessible* GtkAccessibleRegistry::getLOAccessible(
+    css::uno::Reference<css::accessibility::XAccessible> const& xAcc, GdkDisplay* pDisplay,
+    GtkAccessible* pParent)
 {
     if (!xAcc.is())
         return nullptr;
@@ -48,7 +48,7 @@ GtkAccessibleRegistry::getLOAccessible(css::uno::Reference<css::accessibility::X
     return pLoAccessible;
 }
 
-void GtkAccessibleRegistry::remove(css::uno::Reference<css::accessibility::XAccessible> xAcc)
+void GtkAccessibleRegistry::remove(css::uno::Reference<css::accessibility::XAccessible> const& xAcc)
 {
     assert(xAcc.is());
     m_aMapping.erase(xAcc.get());
