@@ -12,6 +12,7 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 
+#include <comphelper/propertysequence.hxx>
 #include <editeng/ulspitem.hxx>
 
 #include <wrtsh.hxx>
@@ -451,6 +452,28 @@ CPPUNIT_TEST_FIXTURE(Test, testDoNotMirrorRtlDrawObjsLayout)
     // - Actual  : 643
     // i.e. the graphic was on the left margin, not on the right margin.
     CPPUNIT_ASSERT_GREATER(nBodyRight, aAnchoredCenter.getX());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testInsertShapeOnAsCharImg_tdf16890)
+{
+    // Given a document with an image anchored as character
+    createSwDoc("as_char_image.docx");
+    SwDoc* pDoc = getSwDoc();
+
+    // Insert a shape over it
+    uno::Sequence<beans::PropertyValue> aArgs(
+        comphelper::InitPropertySequence({ { "KeyModifier", uno::Any(KEY_MOD1) } }));
+    dispatchCommand(mxComponent, ".uno:BasicShapes.rectangle", aArgs);
+
+    // Check that hte new shape is anchored at para (i.e. has an anchor node)
+    const auto& rFrmFormats = *pDoc->GetSpzFrameFormats();
+    CPPUNIT_ASSERT_EQUAL(size_t(o3tl::make_unsigned(2)), rFrmFormats.size());
+    auto pShape = rFrmFormats[1];
+    CPPUNIT_ASSERT(pShape);
+    // Without the accompanying fix in place, this test would have failed with:
+    // assertion failed
+    // - Expression: pShape->GetAnchor().GetAnchorNode()
+    CPPUNIT_ASSERT(pShape->GetAnchor().GetAnchorNode());
 }
 }
 

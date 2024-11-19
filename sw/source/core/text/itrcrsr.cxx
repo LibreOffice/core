@@ -1874,8 +1874,11 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
                 SwFrame* pLower = pTmp->GetLower();
                 // Allow non-text-frames to get SwGrfNode for as-char anchored images into pPos
                 // instead of the closest SwTextNode, to be consistent with at-char behavior.
-                bool bChgNodeInner = pLower
-                    && (pLower->IsTextFrame() || pLower->IsLayoutFrame() || pLower->IsNoTextFrame());
+                bool bChgNodeInner
+                    = pLower
+                      && (pLower->IsTextFrame() || pLower->IsLayoutFrame()
+                          || (pLower->IsNoTextFrame()
+                              && (!pCMS || pCMS->m_eState != CursorMoveState::SetOnlyText)));
                 Point aTmpPoint( rPoint );
 
                 if ( m_pFrame->IsRightToLeft() )
