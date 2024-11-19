@@ -18839,11 +18839,9 @@ public:
 
     virtual AbsoluteScreenPixelPoint get_accessible_location_on_screen() override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        AtkObject* pAtkObject = default_drawing_area_get_accessible(m_pWidget);
-#endif
         gint x(0), y(0);
 #if !GTK_CHECK_VERSION(4, 0, 0)
+        AtkObject* pAtkObject = default_drawing_area_get_accessible(m_pWidget);
         if (pAtkObject && ATK_IS_COMPONENT(pAtkObject))
             atk_component_get_extents(ATK_COMPONENT(pAtkObject), &x, &y, nullptr, nullptr, ATK_XY_SCREEN);
 #endif
