@@ -228,8 +228,7 @@ namespace slideshow::internal
                 maWindowOffset.Y = aRect.Y;
             }
 
-            ::basegfx::B2DRange aTmpRange;
-            ::canvas::tools::calcTransformedRectBounds( aTmpRange,
+            ::basegfx::B2DRange aTmpRange = ::canvas::tools::calcTransformedRectBounds(
                                                         rNewBounds,
                                                         mpViewLayer->getTransformation() );
             const ::basegfx::B2IRange aRangePix(
@@ -422,9 +421,7 @@ namespace slideshow::internal
 
                 if( pWindow )
                 {
-                    ::basegfx::B2DRange aTmpRange;
-                    ::canvas::tools::calcTransformedRectBounds( aTmpRange,
-                                                                rBounds,
+                    ::basegfx::B2DRange aTmpRange = ::canvas::tools::calcTransformedRectBounds( rBounds,
                                                                 mpViewLayer->getTransformation() );
                     const ::basegfx::B2IRange aRangePix(
                         ::basegfx::unotools::b2ISurroundingRangeFromB2DRange( aTmpRange ));

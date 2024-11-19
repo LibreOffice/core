@@ -72,8 +72,7 @@ basegfx::B2IVector getSlideSizePixel(const basegfx::B2DVector& rSlideSize,
 {
     const basegfx::B2DRange aRect(0, 0, rSlideSize.getX(), rSlideSize.getY());
 
-    basegfx::B2DRange aTmpRect;
-    canvas::tools::calcTransformedRectBounds(aTmpRect, aRect, rTransformation);
+    basegfx::B2DRange aTmpRect = canvas::tools::calcTransformedRectBounds(aRect, rTransformation);
 
     // #i42440# Returned slide size is one pixel too small, as
     // rendering happens one pixel to the right and below the

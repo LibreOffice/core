@@ -61,8 +61,7 @@ namespace slideshow::internal
                 // buffered bitmap is invalid, re-create
 
                 // determine transformed page bounds
-                ::basegfx::B2DRectangle aTmpRect;
-                ::canvas::tools::calcTransformedRectBounds( aTmpRect,
+                ::basegfx::B2DRectangle aTmpRect = ::canvas::tools::calcTransformedRectBounds(
                                                             maBounds,
                                                             aCanvasTransform );
 

@@ -176,18 +176,15 @@ namespace canvas
             specified input rectangle, and returns the bounding box of
             the resulting output area.
 
-            @param o_Rect
-            Output rectangle
-
             @param i_Rect
             Input rectangle
 
             @param i_Transformation
             Transformation to apply to the input rectangle
 
-            @return a reference to the resulting rectangle
+            @return the resulting rectangle
          */
-        CANVASTOOLS_DLLPUBLIC ::basegfx::B2DRange& calcTransformedRectBounds( ::basegfx::B2DRange&          o_Rect,
+        CANVASTOOLS_DLLPUBLIC ::basegfx::B2DRange calcTransformedRectBounds(
                                                         const ::basegfx::B2DRange&      i_Rect,
                                                         const ::basegfx::B2DHomMatrix&  i_Transformation );
 

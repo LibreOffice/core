@@ -821,9 +821,7 @@ namespace canvas::tools
             }
 
             // transform by given transformation
-            ::basegfx::B2DRectangle aTransformedRect;
-
-            calcTransformedRectBounds( aTransformedRect,
+            ::basegfx::B2DRectangle aTransformedRect = calcTransformedRectBounds(
                                        i_srcRect,
                                        i_transformation );
 
@@ -837,11 +835,10 @@ namespace canvas::tools
             return o_transform;
         }
 
-        ::basegfx::B2DRange& calcTransformedRectBounds( ::basegfx::B2DRange&            outRect,
-                                                        const ::basegfx::B2DRange&      inRect,
+        ::basegfx::B2DRange calcTransformedRectBounds( const ::basegfx::B2DRange&      inRect,
                                                         const ::basegfx::B2DHomMatrix&  transformation )
         {
-            outRect.reset();
+            ::basegfx::B2DRange outRect;
 
             if( inRect.isEmpty() )
                 return outRect;

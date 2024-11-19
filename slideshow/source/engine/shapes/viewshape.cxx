@@ -248,8 +248,7 @@ namespace slideshow::internal
                 // transformation might result in smaller
                 // overall bounds.
 
-                ::basegfx::B2DRectangle aBoundsPixel;
-                ::canvas::tools::calcTransformedRectBounds( aBoundsPixel,
+                ::basegfx::B2DRectangle aBoundsPixel = ::canvas::tools::calcTransformedRectBounds(
                                                             rUntransformedArea,
                                                             rCanvasTransformation );
 
@@ -339,11 +338,9 @@ namespace slideshow::internal
             // char scaling). NOTE: to cancel the shape translation,
             // contained in rSpriteBoundsPixel, this is _without_ any
             // translational component.
-            ::basegfx::B2DRectangle        aLogShapeBounds;
             const ::basegfx::B2DRectangle aNominalShapeBoundsPixel(
                 shapeArea2AreaPixel( aCanvasTransform,
                                      ::canvas::tools::calcTransformedRectBounds(
-                                         aLogShapeBounds,
                                          ::basegfx::B2DRectangle(0.0,0.0,1.0,1.0),
                                          aNonTranslationalShapeTransformation ) ) );
 
@@ -582,8 +579,7 @@ namespace slideshow::internal
                         // area_ in device pixel
                         const ::basegfx::B2DHomMatrix aCanvasTransform(
                             rDestinationCanvas->getTransformation() );
-                        ::basegfx::B2DRectangle aTmpRect;
-                        ::canvas::tools::calcTransformedRectBounds( aTmpRect,
+                        ::basegfx::B2DRectangle aTmpRect = ::canvas::tools::calcTransformedRectBounds(
                                                                     rUpdateBounds,
                                                                     aCanvasTransform );
 

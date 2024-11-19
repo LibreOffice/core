@@ -574,9 +574,8 @@ namespace vclcanvas
             // extra-verbosity
             {
                 ::basegfx::B2DRectangle aRect(0.0, 0.0, 1.0, 1.0);
-                ::basegfx::B2DRectangle aTextureDeviceRect;
                 ::basegfx::B2DHomMatrix aTextureTransform;
-                ::canvas::tools::calcTransformedRectBounds( aTextureDeviceRect,
+                ::basegfx::B2DRectangle aTextureDeviceRect = ::canvas::tools::calcTransformedRectBounds(
                                                             aRect,
                                                             aTextureTransform );
                 rOutDev.SetLineColor( COL_RED );
@@ -699,8 +698,7 @@ namespace vclcanvas
                 aTotalTransform *= aTextureTransform;
 
                 const ::basegfx::B2DRectangle aRect(0.0, 0.0, 1.0, 1.0);
-                ::basegfx::B2DRectangle aTextureDeviceRect;
-                ::canvas::tools::calcTransformedRectBounds( aTextureDeviceRect,
+                ::basegfx::B2DRectangle aTextureDeviceRect = ::canvas::tools::calcTransformedRectBounds(
                                                             aRect,
                                                             aTotalTransform );
 
@@ -806,8 +804,7 @@ namespace vclcanvas
                         // modify output position, to account for the fact
                         // that transformBitmap() always normalizes its output
                         // bitmap into the smallest enclosing box.
-                        ::basegfx::B2DRectangle aDestRect;
-                        ::canvas::tools::calcTransformedRectBounds( aDestRect,
+                        ::basegfx::B2DRectangle aDestRect = ::canvas::tools::calcTransformedRectBounds(
                                                                     ::basegfx::B2DRectangle(0,
                                                                                             0,
                                                                                             aBmpSize.Width,
@@ -867,8 +864,7 @@ namespace vclcanvas
                     // Finally, the bound rect is transformed back to
                     // device coordinate space, were we determine the
                     // start point from it.
-                    ::basegfx::B2DRectangle aTextureSpacePolygonRect;
-                    ::canvas::tools::calcTransformedRectBounds( aTextureSpacePolygonRect,
+                    ::basegfx::B2DRectangle aTextureSpacePolygonRect = ::canvas::tools::calcTransformedRectBounds(
                                                                 vcl::unotools::b2DRectangleFromRectangle(aPolygonDeviceRect),
                                                                 aInverseTextureTransform );
 
@@ -891,8 +887,7 @@ namespace vclcanvas
                         nY1 + 1.0 );
 
                     // and convert back to device space
-                    ::basegfx::B2DRectangle aSingleDeviceTextureRect;
-                    ::canvas::tools::calcTransformedRectBounds( aSingleDeviceTextureRect,
+                    ::basegfx::B2DRectangle aSingleDeviceTextureRect = ::canvas::tools::calcTransformedRectBounds(
                                                                 aSingleTextureRect,
                                                                 aPureTotalTransform );
 

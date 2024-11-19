@@ -634,9 +634,7 @@ namespace cppcanvas::tools
                                                           viewState,
                                                           renderState );
 
-            ::basegfx::B2DRange aTransformedBounds;
-            return ::canvas::tools::calcTransformedRectBounds( aTransformedBounds,
-                                                               rBounds,
+            return  ::canvas::tools::calcTransformedRectBounds(rBounds,
                                                                aTransform );
         }
 

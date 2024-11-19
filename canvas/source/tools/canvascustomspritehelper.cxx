@@ -70,8 +70,7 @@ namespace canvas
 
             // rectangular area which is actually covered by the sprite.
             // coordinates are relative to the sprite origin.
-            ::basegfx::B2DRectangle aSpriteRectPixel;
-            ::canvas::tools::calcTransformedRectBounds( aSpriteRectPixel,
+            ::basegfx::B2DRectangle aSpriteRectPixel = ::canvas::tools::calcTransformedRectBounds(
                                                         aBounds,
                                                         maTransform );
 
@@ -413,8 +412,7 @@ namespace canvas
 
         // transform bounds at origin, as the sprite transformation is
         // formulated that way
-        ::basegfx::B2DRectangle aTransformedBounds;
-        return ::canvas::tools::calcTransformedRectBounds( aTransformedBounds,
+        return ::canvas::tools::calcTransformedRectBounds(
                                                            rBounds,
                                                            aTransform );
     }

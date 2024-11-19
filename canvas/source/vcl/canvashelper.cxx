@@ -795,8 +795,7 @@ namespace vclcanvas
                     // modify output position, to account for the fact
                     // that transformBitmap() always normalizes its output
                     // bitmap into the smallest enclosing box.
-                    ::basegfx::B2DRectangle aDestRect;
-                    ::canvas::tools::calcTransformedRectBounds( aDestRect,
+                    ::basegfx::B2DRectangle aDestRect = ::canvas::tools::calcTransformedRectBounds(
                                                                 ::basegfx::B2DRectangle(0,
                                                                                         0,
                                                                                         aBmpSize.Width(),

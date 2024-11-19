@@ -223,13 +223,12 @@ namespace vclcanvas::tools
             // deleted from the transformation; this can be handled by
             // an offset when painting the bitmap
             const Size                  aBmpSize( rBitmap.GetSizePixel() );
-            ::basegfx::B2DRectangle     aDestRect;
 
             // calc effective transformation for bitmap
             const ::basegfx::B2DRectangle aSrcRect( 0, 0,
                                                     aBmpSize.Width(),
                                                     aBmpSize.Height() );
-            ::canvas::tools::calcTransformedRectBounds( aDestRect,
+            ::basegfx::B2DRectangle     aDestRect = ::canvas::tools::calcTransformedRectBounds(
                                                         aSrcRect,
                                                         rTransform );
 

@@ -213,8 +213,7 @@ void clearRect( ::cppcanvas::CanvasSharedPtr const& pCanvas,
 basegfx::B2IRange getLayerBoundsPixel( basegfx::B2DRange const&     rLayerBounds,
                                        basegfx::B2DHomMatrix const& rTransformation )
 {
-    ::basegfx::B2DRange aTmpRect;
-    ::canvas::tools::calcTransformedRectBounds( aTmpRect,
+    ::basegfx::B2DRange aTmpRect = ::canvas::tools::calcTransformedRectBounds(
                                                 rLayerBounds,
                                                 rTransformation );
 
@@ -464,8 +463,7 @@ public:
 
     virtual css::geometry::IntegerSize2D getTranslationOffset() const override
     {
-        basegfx::B2DRectangle aTmpRect;
-        canvas::tools::calcTransformedRectBounds( aTmpRect,
+        basegfx::B2DRectangle aTmpRect = canvas::tools::calcTransformedRectBounds(
                                                   maLayerBounds,
                                                   maTransformation );
         geometry::IntegerSize2D offset(0, 0);
@@ -514,8 +512,7 @@ private:
     {
         // Offset given transformation by left, top border of given
         // range (after transformation through given transformation)
-        basegfx::B2DRectangle aTmpRect;
-        canvas::tools::calcTransformedRectBounds( aTmpRect,
+        basegfx::B2DRectangle aTmpRect = canvas::tools::calcTransformedRectBounds(
                                                   maLayerBounds,
                                                   maTransformation );
 
