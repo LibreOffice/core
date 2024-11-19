@@ -301,7 +301,7 @@
 			buildConfigurationList = BEC3D9211710B11E0030AD56 /* Build configuration list for PBXLegacyTarget "soffice" */;
 			buildPhases = (
 			);
-			buildToolPath = /usr/local/bin/make;
+			buildToolPath = /opt/homebrew/bin/gmake;
 			buildWorkingDirectory = ..;
 			dependencies = (
 			);
