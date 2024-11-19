@@ -206,7 +206,8 @@ public:
                 const SalBitmap* pAlphaBitmap,
                 double fAlpha) = 0;
 
-    virtual bool hasFastDrawTransformedBitmap() const = 0;
+    /// Only currently true for SkiaSalGraphicsImpl
+    virtual bool hasFastDrawTransformedBitmap() const { return false; }
 
     virtual bool drawAlphaRect(
                     tools::Long nX, tools::Long nY,

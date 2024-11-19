@@ -229,7 +229,6 @@ struct VCL_DLLPUBLIC CairoCommon
     static cairo_surface_t* createCairoSurface(const BitmapBuffer* pBuffer);
 
     static bool supportsOperation(OutDevSupportType eType);
-    static bool hasFastDrawTransformedBitmap();
 
 private:
     void doXorOnRelease(sal_Int32 nExtentsLeft, sal_Int32 nExtentsTop, sal_Int32 nExtentsRight,

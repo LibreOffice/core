@@ -128,11 +128,6 @@ void X11CairoSalGraphicsImpl::invert(sal_uInt32 nPoints, const Point* pPtAry, Sa
     mrCairoCommon.invert(nPoints, pPtAry, nFlags, getAntiAlias());
 }
 
-bool X11CairoSalGraphicsImpl::hasFastDrawTransformedBitmap() const
-{
-    return CairoCommon::hasFastDrawTransformedBitmap();
-}
-
 bool X11CairoSalGraphicsImpl::supportsOperation(OutDevSupportType eType) const
 {
     return CairoCommon::supportsOperation(eType);

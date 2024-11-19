@@ -164,8 +164,6 @@ public:
     bool drawEPS(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,
                  void* pPtr, sal_uInt32 nSize) override;
 
-    bool hasFastDrawTransformedBitmap() const override;
-
     /** draw transformed bitmap (maybe with alpha) where Null, X, Y define the coordinate system */
     bool drawTransformedBitmap(const basegfx::B2DPoint& rNull, const basegfx::B2DPoint& rX,
                                const basegfx::B2DPoint& rY, const SalBitmap& rSourceBitmap,

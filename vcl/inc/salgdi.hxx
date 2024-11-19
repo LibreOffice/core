@@ -571,7 +571,8 @@ protected:
     /// (for example, some OutputDevice optimizations could try access the pixels, which
     /// would make performance worse for GPU-backed backends).
     /// See also tdf#138068.
-    virtual bool hasFastDrawTransformedBitmap() const = 0;
+    /// Only currently true for SkiaSalGraphicsImpl
+    virtual bool hasFastDrawTransformedBitmap() const { return false; }
 
     /** Render solid rectangle with given transparency
      *
