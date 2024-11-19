@@ -2759,16 +2759,19 @@ void SwSectionFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
                     }
                     else
                     {
-                        if (GetNext())
+                        if (pFollow->GetNext())
                         {
-                            assert(GetNext()->IsFlowFrame());
-                            SwFlowFrame::CastFlowFrame(GetNext())->MoveSubTree(pLay, nullptr);
+                            assert(pFollow->GetNext()->IsFlowFrame());
+                            SwFlowFrame::CastFlowFrame(pFollow->GetNext())->MoveSubTree(pLay, nullptr);
                         }
                         pFollow = new SwSectionFrame(*pFollow, false);
                         SimpleFormat();
                         pFollow->InsertBehind(pLay, nullptr);
                         pFollow->Init();
-                        SwFlowFrame::CastFlowFrame(pLowerFrame)->MoveSubTree(pFollow, nullptr);
+                        SwLayoutFrame *const pTarget{pColumn
+                            ? static_cast<SwLayoutFrame*>(static_cast<SwLayoutFrame*>(pFollow->Lower())->Lower())
+                            : pFollow};
+                        SwFlowFrame::CastFlowFrame(pLowerFrame)->MoveSubTree(pTarget, nullptr);
                     }
                 }
             }
