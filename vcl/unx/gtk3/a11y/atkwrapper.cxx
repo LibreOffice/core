@@ -814,61 +814,61 @@ static bool isTableCell(uno::XInterface* pInterface)
 extern "C" {
 typedef  GType (* GetGIfaceType ) ();
 }
-const struct {
-        const char          *name;
+constexpr struct {
+        OString sName;
         GInterfaceInitFunc const   aInit;
         GetGIfaceType const        aGetGIfaceType;
         const uno::Type &  (*aGetUnoType) ();
 } aTypeTable[] = {
 // re-location heaven:
     {
-        "Comp", componentIfaceInit,
+        "Comp"_ostr, componentIfaceInit,
         atk_component_get_type,
         cppu::UnoType<accessibility::XAccessibleComponent>::get
     },
     {
-        "Act",  actionIfaceInit,
+        "Act"_ostr,  actionIfaceInit,
         atk_action_get_type,
         cppu::UnoType<accessibility::XAccessibleAction>::get
     },
     {
-        "Txt",  textIfaceInit,
+        "Txt"_ostr,  textIfaceInit,
         atk_text_get_type,
         cppu::UnoType<accessibility::XAccessibleText>::get
     },
     {
-        "Val",  valueIfaceInit,
+        "Val"_ostr,  valueIfaceInit,
         atk_value_get_type,
         cppu::UnoType<accessibility::XAccessibleValue>::get
     },
     {
-        "Tab",  tableIfaceInit,
+        "Tab"_ostr,  tableIfaceInit,
         atk_table_get_type,
         cppu::UnoType<accessibility::XAccessibleTable>::get
     },
     {
-        "Cell",  tablecellIfaceInit,
+        "Cell"_ostr,  tablecellIfaceInit,
         atk_table_cell_get_type,
         // there is no UNO a11y interface for table cells, so this case is handled separately below
         nullptr
     },
     {
-        "Edt",  editableTextIfaceInit,
+        "Edt"_ostr,  editableTextIfaceInit,
         atk_editable_text_get_type,
         cppu::UnoType<accessibility::XAccessibleEditableText>::get
     },
     {
-        "Img",  imageIfaceInit,
+        "Img"_ostr,  imageIfaceInit,
         atk_image_get_type,
         cppu::UnoType<accessibility::XAccessibleImage>::get
     },
     {
-        "Hyp",  hypertextIfaceInit,
+        "Hyp"_ostr,  hypertextIfaceInit,
         atk_hypertext_get_type,
         cppu::UnoType<accessibility::XAccessibleHypertext>::get
     },
     {
-        "Sel",  selectionIfaceInit,
+        "Sel"_ostr,  selectionIfaceInit,
         atk_selection_get_type,
         cppu::UnoType<accessibility::XAccessibleSelection>::get
     }
@@ -887,19 +887,19 @@ ensureTypeFor( uno::XInterface *pAccessible )
 
     for( i = 0; i < aTypeTableSize; i++ )
     {
-        if(!g_strcmp0(aTypeTable[i].name, "Cell"))
+        if (aTypeTable[i].sName == "Cell")
         {
             // there is no UNO interface for table cells, but AtkTableCell can be supported
             // for table cells via the methods of the parent that is a table
             if (isTableCell(pAccessible))
             {
-                aTypeNameBuf.append(aTypeTable[i].name);
+                aTypeNameBuf.append(aTypeTable[i].sName);
                 bTypes[i] = true;
             }
         }
         else if (isOfType( pAccessible, aTypeTable[i].aGetUnoType() ) )
         {
-            aTypeNameBuf.append(aTypeTable[i].name);
+            aTypeNameBuf.append(aTypeTable[i].sName);
             bTypes[i] = true;
         }
     }
