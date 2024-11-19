@@ -160,7 +160,7 @@ void Style::Set( const SvxBorderLine* pBorder, double fScale, sal_uInt16 nMaxWid
     }
 }
 
-Style& Style::MirrorSelf()
+void Style::MirrorSelf()
 {
     if (mfSecn)
     {
@@ -173,8 +173,6 @@ Style& Style::MirrorSelf()
     {
         meRefMode = (meRefMode == RefMode::Begin) ? RefMode::End : RefMode::Begin;
     }
-
-    return *this;
 }
 
 bool Style::operator==( const Style& rOther) const

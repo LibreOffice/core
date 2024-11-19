@@ -156,7 +156,7 @@ public:
     void SetType( SvxBorderLineStyle nType ) { mnType = nType; }
 
     /** Mirrors this style (exchanges primary and secondary), if it is a double frame style. */
-    Style& MirrorSelf();
+    void MirrorSelf();
 
     /** Enables the Word-compatible Style comparison code. */
     void SetWordTableCell(bool bWordTableCell) { mbWordTableCell = bWordTableCell; }

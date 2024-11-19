@@ -152,8 +152,6 @@ include/svx/autoformathelper.hxx:216
     _Bool AutoFormatBase::SaveBlockB(SvStream &,unsigned short) const
 include/svx/dlgctrl.hxx:99
     Point SvxRectCtl::SetActualRPWithoutInvalidate(enum RectPoint)
-include/svx/framelink.hxx:159
-    svx::frame::Style & svx::frame::Style::MirrorSelf()
 include/svx/PaletteManager.hxx:87
     _Bool PaletteManager::GetLumModOff(unsigned short,unsigned short,short &,short &)
 include/test/a11y/AccessibilityTools.hxx:119
