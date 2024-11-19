@@ -167,7 +167,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testBiblioLocalCopy)
     comphelper::SequenceAsHashMap aMap(xField->getPropertyValue(u"Fields"_ustr));
     // Without the accompanying fix in place, this test would have failed, there was no LocalURL key
     // in the map.
-    CPPUNIT_ASSERT(aMap.find(u"LocalURL"_ustr) != aMap.end());
+    CPPUNIT_ASSERT(aMap.contains(u"LocalURL"_ustr));
     auto aActual = aMap[u"LocalURL"_ustr].get<OUString>();
     CPPUNIT_ASSERT_EQUAL(u"file:///home/me/test.pdf"_ustr, aActual);
 }
