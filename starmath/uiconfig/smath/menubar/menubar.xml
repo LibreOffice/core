@@ -125,6 +125,7 @@
       <menu:menuitem menu:id=".uno:InsertSymbol"/>
       <menu:menuitem menu:id=".uno:ImportFormula"/>
       <menu:menuitem menu:id=".uno:ImportMathMLClipboard"/>
+      <menu:menuitem menu:id=".uno:SaveFormula"/>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:MacrosMenu">
         <menu:menupopup>

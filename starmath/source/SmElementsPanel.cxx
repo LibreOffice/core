@@ -24,6 +24,7 @@
 #include <sfx2/lokcomponenthelpers.hxx>
 #include <svl/stritem.hxx>
 #include <svl/itemset.hxx>
+#include <svl/hint.hxx>
 
 #include "SmElementsPanel.hxx"
 #include <starmath.hrc>
@@ -45,8 +46,8 @@ SmElementsPanel::SmElementsPanel(weld::Widget& rParent, const SfxBindings& rBind
                   u"modules/smath/ui/sidebarelements_math.ui"_ustr)
     , mrBindings(rBindings)
     , mxCategoryList(m_xBuilder->weld_combo_box(u"categorylist"_ustr))
-    , mxElementsControl(
-          std::make_unique<SmElementsControl>(m_xBuilder->weld_icon_view(u"elements"_ustr)))
+    , mxElementsControl(std::make_unique<SmElementsControl>(
+          m_xBuilder->weld_icon_view(u"elements"_ustr), m_xBuilder->weld_menu("deletemenu")))
 {
     for (const auto& rCategoryId : SmElementsControl::categories())
         mxCategoryList->append_text(SmResId(rCategoryId));
@@ -58,12 +59,23 @@ SmElementsPanel::SmElementsPanel(weld::Widget& rParent, const SfxBindings& rBind
 
     mxElementsControl->setElementSetIndex(0);
     mxElementsControl->SetSelectHdl(LINK(this, SmElementsPanel, ElementClickHandler));
+
+    StartListening(*GetView());
 }
 
 SmElementsPanel::~SmElementsPanel()
 {
     mxElementsControl.reset();
     mxCategoryList.reset();
+}
+
+void SmElementsPanel::Notify(SfxBroadcaster&, const SfxHint& rHint)
+{
+    if (rHint.GetId() == SfxHintId::SmNewUserFormula)
+    {
+        mxCategoryList->set_active_text(SmResId(RID_CATEGORY_USERDEFINED));
+        mxElementsControl->setElementSetIndex(mxCategoryList->get_active(), true);
+    }
 }
 
 IMPL_LINK(SmElementsPanel, CategorySelectedHandle, weld::ComboBox&, rList, void)
@@ -74,6 +86,12 @@ IMPL_LINK(SmElementsPanel, CategorySelectedHandle, weld::ComboBox&, rList, void)
     mxElementsControl->setElementSetIndex(nActive);
     if (SmViewShell* pViewSh = GetView())
         mxElementsControl->setSmSyntaxVersion(pViewSh->GetDoc()->GetSmSyntaxVersion());
+
+    // If the "User-defined" category is selected, allow deletion
+    if (mxCategoryList->get_active_text() == SmResId(RID_CATEGORY_USERDEFINED))
+        mxElementsControl->SetAllowDelete(true);
+    else
+        mxElementsControl->SetAllowDelete(false);
 }
 
 IMPL_LINK(SmElementsPanel, ElementClickHandler, const OUString&, ElementSource, void)

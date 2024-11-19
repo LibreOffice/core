@@ -216,6 +216,16 @@
         </info>
       </prop>
     </group>
+    <group oor:name="Formula">
+      <info>
+        <desc>Contains user-defined formulas.</desc>
+      </info>
+      <prop oor:name="FormulaText" oor:type="xs:string">
+        <info>
+          <desc>Specifies the formula.</desc>
+        </info>
+      </prop>
+    </group>
   </templates>
   <component>
     <group oor:name="Print">
@@ -1034,6 +1044,11 @@
     <set oor:name="SymbolList" oor:node-type="Symbol">
       <info>
         <desc>Lists the defined symbols.</desc>
+      </info>
+    </set>
+    <set oor:name="User-Defined" oor:node-type="Formula">
+      <info>
+        <desc>List of user-defined formulas.</desc>
       </info>
     </set>
   </component>

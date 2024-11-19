@@ -100,6 +100,7 @@ class SmMathConfig final : public utl::ConfigItem, public SfxBroadcaster
     std::unique_ptr<SmCfgOther> pOther;
     std::unique_ptr<SmFontFormatList> pFontFormatList;
     std::unique_ptr<SmSymbolManager> pSymbolMgr;
+    css::uno::Sequence<OUString> m_sUserDefinedNames;
     bool bIsOtherModified;
     bool bIsFormatModified;
     SmFontPickList vFontPickList[8];
@@ -168,6 +169,12 @@ public:
 
     const SmFormat& GetStandardFormat() const;
     void SetStandardFormat(const SmFormat& rFormat, bool bSaveFontFormatList = false);
+
+    css::uno::Sequence<OUString> LoadUserDefinedNames();
+    void GetUserDefinedFormula(std::u16string_view sName, OUString& sFormula);
+    bool HasUserDefinedFormula(std::u16string_view sName);
+    void SaveUserDefinedFormula(std::u16string_view sName, const OUString& sElement);
+    void DeleteUserDefinedFormula(std::u16string_view sName);
 
     bool IsPrintTitle() const;
     void SetPrintTitle(bool bVal);

@@ -42,9 +42,12 @@ class SmElementsControl
     SmFormat      maFormat;
     int           mnCurrentSetIndex;
     sal_Int16     m_nSmSyntaxVersion;
+    bool          m_bAllowDelete;
+    OUString      m_sHoveredItem;
 
     std::vector<std::unique_ptr<ElementData>> maItemDatas;
     std::unique_ptr<weld::IconView> mpIconView;
+    std::unique_ptr<weld::Menu> mxPopup;
 
     Link<const OUString&, void> maSelectHdlLink;
 
@@ -55,21 +58,26 @@ class SmElementsControl
 
     DECL_LINK(QueryTooltipHandler, const weld::TreeIter&, OUString);
     DECL_LINK(ElementActivatedHandler, weld::IconView&, bool);
+    DECL_LINK(MousePressHdl, const MouseEvent&, bool);
 
     static OUString GetElementSource(const OUString& itemId);
     static OUString GetElementHelpText(const OUString& itemId);
+    static int GetElementPos(const OUString& itemId);
 
 public:
 
-    explicit SmElementsControl(std::unique_ptr<weld::IconView> pIconView);
+    explicit SmElementsControl(std::unique_ptr<weld::IconView> pIconView,
+                               std::unique_ptr<weld::Menu> pMenu);
     ~SmElementsControl();
 
     static const std::vector<TranslateId>& categories();
-    void setElementSetIndex(int nSetIndex);
+    void setElementSetIndex(int nSetIndex, bool bForceBuild = false);
 
     void setSmSyntaxVersion(sal_Int16 nSmSyntaxVersion);
 
     void SetSelectHdl(const Link<const OUString&, void>& rLink) { maSelectHdlLink = rLink; }
+
+    void SetAllowDelete(bool bAllow) { m_bAllowDelete = bAllow; }
 
     static Color GetTextColor();
     static Color GetControlBackground();

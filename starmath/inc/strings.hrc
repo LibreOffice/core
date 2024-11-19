@@ -324,6 +324,7 @@
 #define RID_CATEGORY_FORMATS                NC_("RID_CATEGORY_FORMATS", "Formats" )
 #define RID_CATEGORY_OTHERS                 NC_("RID_CATEGORY_OTHERS", "Others" )
 #define RID_CATEGORY_EXAMPLES               NC_("RID_CATEGORY_EXAMPLES", "Examples" )
+#define RID_CATEGORY_USERDEFINED            NC_("RID_CATEGORY_USERDEFINED", "User-defined" )
 
 #define RID_EXAMPLE_CIRCUMFERENCE_HELP      NC_("RID_EXAMPLE_CIRCUMFERENCE_HELP", "Circumference" )
 #define RID_EXAMPLE_MASS_ENERGY_EQUIV_HELP  NC_("RID_EXAMPLE_MASS_ENERGY_EQUIV_HELP", "Mass–energy equivalence" )
@@ -406,6 +407,8 @@
 #define RID_PRINTUIOPT_ORIGSIZE             NC_("RID_PRINTUIOPT_ORIGSIZE", "O~riginal size" )
 #define RID_PRINTUIOPT_FITTOPAGE            NC_("RID_PRINTUIOPT_FITTOPAGE", "Fit to ~page" )
 #define RID_PRINTUIOPT_SCALING              NC_("RID_PRINTUIOPT_SCALING", "~Scaling" )
+#define STR_USER_DEFINED_FORMULA            NC_("STR_USER_DEFINED_FORMULA", "Save formula as:" )
+#define STR_USER_DEFINED_FORMULA_EXISTS     NC_("STR_USER_DEFINED_FORMULA_EXISTS", "The Formula %1 exists.\nDo you want to overwrite?" )
 // clang-format on
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

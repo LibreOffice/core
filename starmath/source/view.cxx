@@ -89,6 +89,7 @@
 #include <mathmlimport.hxx>
 #include <cursor.hxx>
 #include "accessibility.hxx"
+#include <svl/hint.hxx>
 #include <ElementsDockingWindow.hxx>
 #include <helpids.h>
 
@@ -1840,6 +1841,39 @@ void SmViewShell::Execute(SfxRequest& rReq)
             GetViewFrame().GetBindings().Invalidate(bRTL ? SID_ATTR_PARA_LEFT_TO_RIGHT : SID_ATTR_PARA_RIGHT_TO_LEFT);
         }
         break;
+        case SID_SAVE_FORMULA:
+        {
+            OUString aName = "My Formula 1";
+            OUString aDesc(SmResId(STR_USER_DEFINED_FORMULA));
+            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            ScopedVclPtr<AbstractSvxNameDialog> pDlg(
+                pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
+
+            if (pDlg->Execute() == RET_OK)
+            {
+                aName = pDlg->GetName();
+                if (SmModule::get()->GetConfig()->HasUserDefinedFormula(aName))
+                {
+                    std::unique_ptr<weld::MessageDialog> xQuery(Application::CreateMessageDialog(
+                        GetFrameWeld(), VclMessageType::Question, VclButtonsType::YesNo,
+                        SmResId(STR_USER_DEFINED_FORMULA_EXISTS).replaceAll("%1", aName)));
+                    if (xQuery->run() == RET_NO)
+                        break;
+                }
+                SmEditWindow* pEditWin = GetEditWindow();
+                SmModule::get()->GetConfig()->SaveUserDefinedFormula(aName, pEditWin->GetText());
+
+                // Show the Elements sidebar with the "User-defined" entry selected
+                GetViewFrame().ShowChildWindow(SID_SIDEBAR);
+                sfx2::sidebar::Sidebar::ShowPanel(u"MathElementsPanel",
+                                                  GetViewFrame().GetFrame().GetFrameInterface());
+                GetViewFrame().GetBindings().Invalidate( SID_ELEMENTSDOCKINGWINDOW );
+                Broadcast(SfxHint(SfxHintId::SmNewUserFormula));
+                rReq.Ignore ();
+            }
+            pDlg.disposeAndClear();
+        }
+        break;
     }
     rReq.Done();
 }
@@ -1948,6 +1982,10 @@ void SmViewShell::GetState(SfxItemSet &rSet)
 
         case SID_ATTR_PARA_RIGHT_TO_LEFT:
             rSet.Put(SfxBoolItem(nWh, GetDoc()->GetFormat().IsRightToLeft()));
+            break;
+        case SID_SAVE_FORMULA:
+            if (!pEditWin || pEditWin->IsEmpty())
+                rSet.DisableItem(nWh);
             break;
         }
     }

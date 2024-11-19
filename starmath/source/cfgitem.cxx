@@ -44,6 +44,7 @@ using namespace com::sun::star::beans;
 
 constexpr OUString SYMBOL_LIST = u"SymbolList"_ustr;
 constexpr OUString FONT_FORMAT_LIST = u"FontFormatList"_ustr;
+constexpr OUString USER_DEFINED_LIST = u"User-Defined"_ustr;
 
 static Sequence< OUString > lcl_GetFontPropertyNames()
 {
@@ -575,7 +576,6 @@ void SmMathConfig::SetSymbols( const std::vector< SmSym > &rNewSymbols )
     StripFontFormatList( rNewSymbols );
 }
 
-
 SmFontFormatList & SmMathConfig::GetFontFormatList()
 {
     if (!pFontFormatList)
@@ -584,7 +584,6 @@ SmFontFormatList & SmMathConfig::GetFontFormatList()
     }
     return *pFontFormatList;
 }
-
 
 void SmMathConfig::LoadFontFormatList()
 {
@@ -661,6 +660,47 @@ void SmMathConfig::ReadFontFormat( SmFontFormat &rFontFormat,
     OSL_ENSURE( bOK, "read FontFormat failed" );
 }
 
+css::uno::Sequence<OUString> SmMathConfig::LoadUserDefinedNames()
+{
+    m_sUserDefinedNames = GetNodeNames(USER_DEFINED_LIST);
+    return m_sUserDefinedNames;
+}
+
+void SmMathConfig::GetUserDefinedFormula(std::u16string_view sName, OUString &sFormula)
+{
+    css::uno::Sequence<OUString> aNames(1);
+    OUString* pName = aNames.getArray();
+    pName[0] = USER_DEFINED_LIST + "/" + sName + "/FormulaText";
+    const Sequence<Any> aValues(GetProperties(aNames));
+    const Any* pValues = aValues.getConstArray();
+    const Any* pVal = pValues;
+    *pVal >>= sFormula;
+}
+
+bool SmMathConfig::HasUserDefinedFormula(std::u16string_view sName)
+{
+    for (int i = 0; i < m_sUserDefinedNames.getLength(); i++)
+        if (m_sUserDefinedNames[i] == sName)
+            return true;
+    return false;
+}
+
+void SmMathConfig::SaveUserDefinedFormula(std::u16string_view sName, const OUString& sElement)
+{
+    Sequence<PropertyValue> pValues(1);
+    auto pArgs = pValues.getArray();
+
+    pArgs[0].Name = USER_DEFINED_LIST + "/" + sName + "/FormulaText";
+    pArgs[0].Value <<= sElement;
+
+    SetSetProperties( USER_DEFINED_LIST, pValues );
+}
+
+void SmMathConfig::DeleteUserDefinedFormula(std::u16string_view sName)
+{
+    Sequence<OUString> aElements { OUString(sName) };
+    ClearNodeElements(USER_DEFINED_LIST, aElements);
+}
 
 void SmMathConfig::SaveFontFormatList()
 {

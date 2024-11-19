@@ -156,6 +156,7 @@ enum class SfxHintId {
 
 // STARMATH
     MathFormatChanged,
+    SmNewUserFormula,
 
 // Sw
     SwDrawViewsCreated,

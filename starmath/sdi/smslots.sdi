@@ -297,6 +297,11 @@ interface FormulaView
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
+    SID_SAVE_FORMULA
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
 }
 
 shell SmViewShell

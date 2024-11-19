@@ -15,6 +15,7 @@
   <menu:menuitem menu:id=".uno:Cut"/>
   <menu:menuitem menu:id=".uno:Copy"/>
   <menu:menuitem menu:id=".uno:Paste"/>
+  <menu:menuitem menu:id=".uno:SaveFormula"/>
   <menu:menuseparator/>
   <menu:menu menu:id=".uno:UnaryBinaryMenu">
     <menu:menupopup>
