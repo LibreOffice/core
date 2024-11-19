@@ -57,7 +57,7 @@
 // this are the defines for the position of the settings in the
 // TableViewSettingsSequence
 
-#define SC_TABLE_VIEWSETTINGS_COUNT         16
+#define SC_TABLE_VIEWSETTINGS_COUNT         15
 
 #define SC_CURSOR_X                         0
 #define SC_CURSOR_Y                         1
@@ -73,8 +73,7 @@
 #define SC_TABLE_ZOOM_TYPE                  11
 #define SC_TABLE_ZOOM_VALUE                 12
 #define SC_TABLE_PAGE_VIEW_ZOOM_VALUE       13
-#define SC_FORMULA_BAR_HEIGHT_VALUE         14
-#define SC_TABLE_SHOWGRID                   15
+#define SC_TABLE_SHOWGRID                   14
 
 inline constexpr OUString SC_CURSORPOSITIONX = u"CursorPositionX"_ustr;
 inline constexpr OUString SC_CURSORPOSITIONY = u"CursorPositionY"_ustr;

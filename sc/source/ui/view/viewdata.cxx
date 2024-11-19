@@ -3813,8 +3813,8 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
     pSettings[SC_OUTLSYMB].Value <<= maOptions.GetOption(VOPT_OUTLINER);
     pSettings[SC_VALUE_HIGHLIGHTING].Name = SC_UNO_VALUEHIGH;
     pSettings[SC_VALUE_HIGHLIGHTING].Value <<= maOptions.GetOption(VOPT_SYNTAX);
-    pSettings[SC_FORMULA_BAR_HEIGHT_VALUE].Name = SC_FORMULABARHEIGHT;
-    pSettings[SC_FORMULA_BAR_HEIGHT_VALUE].Value <<= GetFormulaBarLines();;
+    pSettings[SC_FORMULA_BAR_HEIGHT].Name = SC_FORMULABARHEIGHT;
+    pSettings[SC_FORMULA_BAR_HEIGHT].Value <<= GetFormulaBarLines();;
 
     const ScGridOptions& aGridOpt = maOptions.GetGridOptions();
     pSettings[SC_SNAPTORASTER].Name = SC_UNO_SNAPTORASTER;
