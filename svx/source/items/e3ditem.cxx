@@ -32,21 +32,21 @@ SvxB3DVectorItem::~SvxB3DVectorItem()
 
 SvxB3DVectorItem::SvxB3DVectorItem( TypedWhichId<SvxB3DVectorItem> _nWhich, const basegfx::B3DVector& rVal ) :
     SfxPoolItem( _nWhich, SfxItemType::SvxB3DVectorItemType ),
-    aVal( rVal )
+    m_aVal( rVal )
 {
 }
 
 
 SvxB3DVectorItem::SvxB3DVectorItem( const SvxB3DVectorItem& rItem ) :
     SfxPoolItem( rItem ),
-    aVal( rItem.aVal )
+    m_aVal( rItem.m_aVal )
 {
 }
 
 bool SvxB3DVectorItem::operator==( const SfxPoolItem &rItem ) const
 {
     assert(SfxPoolItem::operator==(rItem));
-    return static_cast<const SvxB3DVectorItem&>(rItem).aVal == aVal;
+    return static_cast<const SvxB3DVectorItem&>(rItem).m_aVal == m_aVal;
 }
 
 SvxB3DVectorItem* SvxB3DVectorItem::Clone( SfxItemPool* /*pPool*/ ) const
@@ -56,14 +56,14 @@ SvxB3DVectorItem* SvxB3DVectorItem::Clone( SfxItemPool* /*pPool*/ ) const
 
 bool SvxB3DVectorItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
-    assert(!std::isnan(aVal.getX()) && !std::isnan(aVal.getY()) && !std::isnan(aVal.getZ()));
+    assert(!std::isnan(m_aVal.getX()) && !std::isnan(m_aVal.getY()) && !std::isnan(m_aVal.getZ()));
 
     drawing::Direction3D aDirection;
 
     // enter values
-    aDirection.DirectionX = aVal.getX();
-    aDirection.DirectionY = aVal.getY();
-    aDirection.DirectionZ = aVal.getZ();
+    aDirection.DirectionX = m_aVal.getX();
+    aDirection.DirectionY = m_aVal.getY();
+    aDirection.DirectionZ = m_aVal.getZ();
 
     rVal <<= aDirection;
     return true;
@@ -77,11 +77,11 @@ bool SvxB3DVectorItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
     if(!(rVal >>= aDirection))
         return false;
 
-    aVal.setX(aDirection.DirectionX);
-    aVal.setY(aDirection.DirectionY);
-    aVal.setZ(aDirection.DirectionZ);
+    m_aVal.setX(aDirection.DirectionX);
+    m_aVal.setY(aDirection.DirectionY);
+    m_aVal.setZ(aDirection.DirectionZ);
 
-    assert(!std::isnan(aVal.getX()) && !std::isnan(aVal.getY()) && !std::isnan(aVal.getZ()));
+    assert(!std::isnan(m_aVal.getX()) && !std::isnan(m_aVal.getY()) && !std::isnan(m_aVal.getZ()));
 
     return true;
 }
@@ -91,9 +91,9 @@ void SvxB3DVectorItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SvxB3DVectorItem"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("x"), BAD_CAST(OString::number(aVal.getX()).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("y"), BAD_CAST(OString::number(aVal.getY()).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("z"), BAD_CAST(OString::number(aVal.getZ()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("x"), BAD_CAST(OString::number(m_aVal.getX()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("y"), BAD_CAST(OString::number(m_aVal.getY()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("z"), BAD_CAST(OString::number(m_aVal.getZ()).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
 }
 

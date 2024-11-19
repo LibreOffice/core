@@ -27,7 +27,7 @@
 
 class SAL_WARN_UNUSED UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SvxB3DVectorItem final : public SfxPoolItem
 {
-    basegfx::B3DVector  aVal;
+    basegfx::B3DVector  m_aVal;
 
 public:
                             SvxB3DVectorItem( TypedWhichId<SvxB3DVectorItem> nWhich, const basegfx::B3DVector& rVal );
@@ -40,7 +40,7 @@ public:
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    const basegfx::B3DVector&           GetValue() const { return aVal; }
+    const basegfx::B3DVector&           GetValue() const { return m_aVal; }
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
