@@ -94,7 +94,7 @@ void SwTableBox::setDummyFlag( bool bDummy )
 }
 
 //JP 15.09.98: Bug 55741 - Keep tabs (front and rear)
-static OUString& lcl_TabToBlankAtSttEnd( OUString& rText )
+static void lcl_TabToBlankAtSttEnd( OUString& rText )
 {
     sal_Unicode c;
     sal_Int32 n;
@@ -105,10 +105,9 @@ static OUString& lcl_TabToBlankAtSttEnd( OUString& rText )
     for( n = rText.getLength(); n && ' ' >= ( c = rText[--n] ); )
         if( '\x9' == c )
             rText = rText.replaceAt( n, 1, u" " );
-    return rText;
 }
 
-static OUString& lcl_DelTabsAtSttEnd( OUString& rText )
+static void lcl_DelTabsAtSttEnd( OUString& rText )
 {
     sal_Unicode c;
     sal_Int32 n;
@@ -125,7 +124,6 @@ static OUString& lcl_DelTabsAtSttEnd( OUString& rText )
             sBuff.remove( n, 1 );
     }
     rText = sBuff.makeStringAndClear();
-    return rText;
 }
 
 void InsTableBox( SwDoc& rDoc, SwTableNode* pTableNd,
