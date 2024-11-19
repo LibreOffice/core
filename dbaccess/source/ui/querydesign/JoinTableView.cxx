@@ -324,7 +324,7 @@ void OJoinTableView::AddTabWin(const OUString& _rComposedName, const OUString& r
     {
         m_pView->getController().getTableWindowData().push_back( pNewTabWinData);
         // when we already have a table with this name insert the full qualified one instead
-        if(m_aTableMap.find(rWinName) != m_aTableMap.end())
+        if(m_aTableMap.contains(rWinName))
             m_aTableMap[_rComposedName] = pNewTabWin;
         else
             m_aTableMap[rWinName] = pNewTabWin;

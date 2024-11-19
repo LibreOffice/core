@@ -670,7 +670,7 @@ void ODefinitionContainer::removeObjectListener(const Reference< XContent >& _xN
 
 bool ODefinitionContainer::checkExistence(const OUString& _rName)
 {
-    return m_aDocumentMap.find(_rName) != m_aDocumentMap.end();
+    return m_aDocumentMap.contains(_rName);
 }
 
 }

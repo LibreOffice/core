@@ -266,7 +266,7 @@ void SAL_CALL OQueryContainer::elementRemoved( const css::container::ContainerEv
     _rEvent.Accessor >>= sAccessor;
     {
         OSL_ENSURE(!sAccessor.isEmpty(), "OQueryContainer::elementRemoved : invalid name !");
-        OSL_ENSURE(m_aDocumentMap.find(sAccessor) != m_aDocumentMap.end(), "OQueryContainer::elementRemoved : oops... we're inconsistent with our master container !");
+        OSL_ENSURE(m_aDocumentMap.contains(sAccessor), "OQueryContainer::elementRemoved : oops... we're inconsistent with our master container !");
         if ( sAccessor.isEmpty() || !hasByName(sAccessor) )
             return;
     }
@@ -282,7 +282,7 @@ void SAL_CALL OQueryContainer::elementReplaced( const css::container::ContainerE
     {
         MutexGuard aGuard(m_aMutex);
         OSL_ENSURE(!sAccessor.isEmpty(), "OQueryContainer::elementReplaced : invalid name !");
-        OSL_ENSURE(m_aDocumentMap.find(sAccessor) != m_aDocumentMap.end(), "OQueryContainer::elementReplaced         : oops... we're inconsistent with our master container !");
+        OSL_ENSURE(m_aDocumentMap.contains(sAccessor), "OQueryContainer::elementReplaced         : oops... we're inconsistent with our master container !");
         if (sAccessor.isEmpty() || !hasByName(sAccessor))
             return;
 
