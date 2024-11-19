@@ -475,6 +475,24 @@ bool ScTable::SetOptimalHeight(
         return false;
     }
 
+    if (!rCxt.isForceAutoSize())
+    {
+        // Optimize - exit early if all rows have defined height - super expensive GetOptimalHeight
+        bool bAllRowsAreManualHeight = true;
+        for (SCROW nRow = nStartRow; nRow <= nEndRow; ++nRow)
+        {
+            size_t nDummy;
+            CRFlags nRowFlags = pRowFlags->GetValue(nRow, nDummy, nRow); // NOTE: nRow might change
+            if (!(nRowFlags & CRFlags::ManualSize))
+            {
+                bAllRowsAreManualHeight = false;
+                break;
+            }
+        }
+        if (bAllRowsAreManualHeight)
+            return false;
+    }
+
     SCSIZE  nCount = static_cast<SCSIZE>(nEndRow-nStartRow+1);
 
     ScProgress* pProgress = GetProgressBar(nCount, GetWeightedCount(), pOuterProgress, &rDocument);
