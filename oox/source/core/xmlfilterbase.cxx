@@ -54,6 +54,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XOOXMLDocumentPropertiesImporter.hpp>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
+#include <comphelper/diagnose_ex.hxx>
 #include <comphelper/processfactory.hxx>
 #include <oox/core/filterdetect.hxx>
 #include <comphelper/stl_types.hxx>
@@ -420,8 +421,7 @@ bool XmlFilterBase::importFragment( const rtl::Reference<FragmentHandler>& rxHan
         }
         catch( Exception& )
         {
-            OSL_FAIL( OStringBuffer( "XmlFilterBase::importFragment - XML parser failed in fragment '"  +
-                     OUStringToOString( aFragmentPath, RTL_TEXTENCODING_ASCII_US ) + "'" ).getStr() );
+            TOOLS_WARN_EXCEPTION("oox", "XmlFilterBase::importFragment - XML parser failed in fragment '" << aFragmentPath << "'" );
         }
     }
     catch( Exception& )
