@@ -244,6 +244,19 @@ CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testPermsEncryption)
     CPPUNIT_ASSERT_EQUAL(std::string("fcffffffffffffff54616462"),
                          comphelper::hashToString(aPermsWithoutRandomBytes));
 }
+
+CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testPadding)
+{
+    constexpr size_t constBlockSize = 16;
+    std::vector<sal_uInt8> aVector{ 'T', 'e', 's', 't', '!' };
+    CPPUNIT_ASSERT_EQUAL(size_t(5), aVector.size());
+    size_t nPaddedSize = vcl::pdf::addPaddingToVector(aVector, constBlockSize);
+    CPPUNIT_ASSERT_EQUAL(size_t(constBlockSize), aVector.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(constBlockSize), nPaddedSize);
+    for (size_t i = 6; i < constBlockSize; i++)
+        CPPUNIT_ASSERT_EQUAL(sal_uInt8(0x0B), aVector[i]);
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
