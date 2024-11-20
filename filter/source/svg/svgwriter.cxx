@@ -91,6 +91,7 @@ constexpr OUString aXMLAttrOffset = u"offset"_ustr;
 constexpr OUString aXMLAttrStopColor = u"stop-color"_ustr;
 constexpr OUString aXMLAttrStrokeLinejoin = u"stroke-linejoin"_ustr;
 constexpr OUString aXMLAttrStrokeLinecap = u"stroke-linecap"_ustr;
+constexpr OUString aXMLAttrTextDirection = u"direction"_ustr;
 
 
 vcl::PushFlags SVGContextHandler::getPushFlags() const
@@ -1330,6 +1331,15 @@ void SVGTextWriter::startTextShape()
                 OUString::number( aRot.X() ) + " " +
                 OUString::number( aRot.Y() ) + ")";
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrTransform, aTransform );
+        }
+
+        // tdf#91315: Set text direction
+        auto nLayoutMode = mpVDev->GetLayoutMode();
+        if (nLayoutMode
+            & (vcl::text::ComplexTextLayoutFlags::BiDiRtl
+               | vcl::text::ComplexTextLayoutFlags::BiDiStrong))
+        {
+            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrTextDirection, "rtl");
         }
 
         mpTextShapeElem.reset(new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemText, true, mbIWS ));
