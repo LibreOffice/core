@@ -100,8 +100,7 @@ void SmEditTextWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
     weld::CustomWidgetController::SetDrawingArea(pDrawingArea);
 
-    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    Color aBgColor = rStyleSettings.GetWindowColor();
+    Color aBgColor = Application::GetSettings().GetStyleSettings().GetFieldColor();
 
     OutputDevice& rDevice = pDrawingArea->get_ref_device();
     rDevice.SetBackground(aBgColor);
