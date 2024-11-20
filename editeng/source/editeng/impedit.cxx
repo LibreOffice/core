@@ -519,7 +519,7 @@ void ImpEditView::DrawSelectionXOR( EditSelection aTmpSel, vcl::Region* pRegion,
     ContentNode* pEndNode = aTmpSel.Max().GetNode();
     const sal_Int32 nStartPara = getEditEngine().GetEditDoc().GetPos(pStartNode);
     const sal_Int32 nEndPara = getEditEngine().GetEditDoc().GetPos(pEndNode);
-    if (nStartPara == EE_PARA_NOT_FOUND || nEndPara == EE_PARA_NOT_FOUND)
+    if (nStartPara == EE_PARA_MAX || nEndPara == EE_PARA_MAX)
         return;
 
     bool bStartHandleVisible = false;
@@ -1146,7 +1146,7 @@ tools::Rectangle ImpEditView::GetEditCursor() const
 
     sal_Int32 nTextPortionStart = 0;
     sal_Int32 nPara = getEditEngine().GetEditDoc().GetPos( aPaM.GetNode() );
-    if (nPara == EE_PARA_NOT_FOUND) // #i94322
+    if (nPara == EE_PARA_MAX) // #i94322
         return tools::Rectangle();
 
     ParaPortion const& rParaPortion = getEditEngine().GetParaPortions().getRef(nPara);
@@ -1192,7 +1192,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
 
     sal_Int32 nTextPortionStart = 0;
     sal_Int32 nPara = getEditEngine().GetEditDoc().GetPos( aPaM.GetNode() );
-    if (nPara == EE_PARA_NOT_FOUND) // #i94322
+    if (nPara == EE_PARA_MAX) // #i94322
         return;
 
     ParaPortion const& rParaPortion = getEditEngine().GetParaPortions().getRef(nPara);
@@ -1876,7 +1876,7 @@ const SvxFieldItem* ImpEditView::GetField( const Point& rPos, sal_Int32* pPara, 
 bool ImpEditView::IsBulletArea( const Point& rPos, sal_Int32* pPara )
 {
     if ( pPara )
-        *pPara = EE_PARA_NOT_FOUND;
+        *pPara = EE_PARA_MAX;
 
     if( !GetOutputArea().Contains( rPos ) )
         return false;
@@ -2304,7 +2304,7 @@ void ImpEditView::dragGestureRecognized(const css::datatransfer::dnd::DragGestur
     aSz = GetOutputDevice().PixelToLogic( aSz );
     mpDragAndDropInfo->nSensibleRange = static_cast<sal_uInt16>(aSz.Width());
     mpDragAndDropInfo->nCursorWidth = static_cast<sal_uInt16>(aSz.Width()) / 2;
-    mpDragAndDropInfo->aBeginDragSel = getImpEditEngine().CreateESel( aCopySel );
+    mpDragAndDropInfo->aBeginDragSel = getEditEngine().CreateESelection( aCopySel );
 
     uno::Reference<datatransfer::XTransferable> xData = getEditEngine().CreateTransferable(aCopySel);
 
@@ -2330,62 +2330,61 @@ void ImpEditView::dragDropEnd( const css::datatransfer::dnd::DragSourceDropEvent
         if (mpDragAndDropInfo->bStarterOfDD && mpDragAndDropInfo->bDroppedInMe )
         {
             // DropPos: Where was it dropped, irrespective of length.
-            ESelection aDropPos(mpDragAndDropInfo->aDropSel.nStartPara, mpDragAndDropInfo->aDropSel.nStartPos, mpDragAndDropInfo->aDropSel.nStartPara, mpDragAndDropInfo->aDropSel.nStartPos );
+            ESelection aDropPos(mpDragAndDropInfo->aDropSel.start);
             ESelection aToBeDelSel = mpDragAndDropInfo->aBeginDragSel;
-            ESelection aNewSel( mpDragAndDropInfo->aDropSel.nEndPara, mpDragAndDropInfo->aDropSel.nEndPos,
-                                mpDragAndDropInfo->aDropSel.nEndPara, mpDragAndDropInfo->aDropSel.nEndPos );
+            ESelection aNewSel(mpDragAndDropInfo->aDropSel.end);
             bool bBeforeSelection = aDropPos < mpDragAndDropInfo->aBeginDragSel;
-            sal_Int32 nParaDiff = mpDragAndDropInfo->aBeginDragSel.nEndPara - mpDragAndDropInfo->aBeginDragSel.nStartPara;
+            sal_Int32 nParaDiff = mpDragAndDropInfo->aBeginDragSel.end.nPara - mpDragAndDropInfo->aBeginDragSel.start.nPara;
             if ( bBeforeSelection )
             {
                 // Adjust aToBeDelSel.
-                DBG_ASSERT(mpDragAndDropInfo->aBeginDragSel.nStartPara >= mpDragAndDropInfo->aDropSel.nStartPara, "But not before? ");
-                aToBeDelSel.nStartPara = aToBeDelSel.nStartPara + nParaDiff;
-                aToBeDelSel.nEndPara = aToBeDelSel.nEndPara + nParaDiff;
+                DBG_ASSERT(mpDragAndDropInfo->aBeginDragSel.start.nPara >= mpDragAndDropInfo->aDropSel.start.nPara, "But not before? ");
+                aToBeDelSel.start.nPara = aToBeDelSel.start.nPara + nParaDiff;
+                aToBeDelSel.end.nPara = aToBeDelSel.end.nPara + nParaDiff;
                 // To correct the character?
-                if ( aToBeDelSel.nStartPara == mpDragAndDropInfo->aDropSel.nEndPara )
+                if ( aToBeDelSel.start.nPara == mpDragAndDropInfo->aDropSel.end.nPara )
                 {
                     sal_uInt16 nMoreChars;
-                    if (mpDragAndDropInfo->aDropSel.nStartPara == mpDragAndDropInfo->aDropSel.nEndPara )
-                        nMoreChars = mpDragAndDropInfo->aDropSel.nEndPos - mpDragAndDropInfo->aDropSel.nStartPos;
+                    if (mpDragAndDropInfo->aDropSel.start.nPara == mpDragAndDropInfo->aDropSel.end.nPara )
+                        nMoreChars = mpDragAndDropInfo->aDropSel.end.nIndex - mpDragAndDropInfo->aDropSel.start.nIndex;
                     else
-                        nMoreChars = mpDragAndDropInfo->aDropSel.nEndPos;
-                    aToBeDelSel.nStartPos =
-                        aToBeDelSel.nStartPos + nMoreChars;
-                    if ( aToBeDelSel.nStartPara == aToBeDelSel.nEndPara )
-                        aToBeDelSel.nEndPos =
-                            aToBeDelSel.nEndPos + nMoreChars;
+                        nMoreChars = mpDragAndDropInfo->aDropSel.end.nIndex;
+                    aToBeDelSel.start.nIndex =
+                        aToBeDelSel.start.nIndex + nMoreChars;
+                    if ( aToBeDelSel.start.nPara == aToBeDelSel.end.nPara )
+                        aToBeDelSel.end.nIndex =
+                            aToBeDelSel.end.nIndex + nMoreChars;
                 }
             }
             else
             {
                 // aToBeDelSel is ok, but the selection of the  View
                 // has to be adapted, if it was deleted before!
-                DBG_ASSERT(mpDragAndDropInfo->aBeginDragSel.nStartPara <= mpDragAndDropInfo->aDropSel.nStartPara, "But not before? ");
-                aNewSel.nStartPara = aNewSel.nStartPara - nParaDiff;
-                aNewSel.nEndPara = aNewSel.nEndPara - nParaDiff;
+                DBG_ASSERT(mpDragAndDropInfo->aBeginDragSel.start.nPara <= mpDragAndDropInfo->aDropSel.start.nPara, "But not before? ");
+                aNewSel.start.nPara = aNewSel.start.nPara - nParaDiff;
+                aNewSel.end.nPara = aNewSel.end.nPara - nParaDiff;
                 // To correct the character?
-                if (mpDragAndDropInfo->aBeginDragSel.nEndPara == mpDragAndDropInfo->aDropSel.nStartPara )
+                if (mpDragAndDropInfo->aBeginDragSel.end.nPara == mpDragAndDropInfo->aDropSel.start.nPara )
                 {
                     sal_uInt16 nLessChars;
-                    if (mpDragAndDropInfo->aBeginDragSel.nStartPara == mpDragAndDropInfo->aBeginDragSel.nEndPara )
-                        nLessChars = mpDragAndDropInfo->aBeginDragSel.nEndPos - mpDragAndDropInfo->aBeginDragSel.nStartPos;
+                    if (mpDragAndDropInfo->aBeginDragSel.start.nPara == mpDragAndDropInfo->aBeginDragSel.end.nPara )
+                        nLessChars = mpDragAndDropInfo->aBeginDragSel.end.nIndex - mpDragAndDropInfo->aBeginDragSel.start.nIndex;
                     else
-                        nLessChars = mpDragAndDropInfo->aBeginDragSel.nEndPos;
-                    aNewSel.nStartPos = aNewSel.nStartPos - nLessChars;
-                    if ( aNewSel.nStartPara == aNewSel.nEndPara )
-                        aNewSel.nEndPos = aNewSel.nEndPos - nLessChars;
+                        nLessChars = mpDragAndDropInfo->aBeginDragSel.end.nIndex;
+                    aNewSel.start.nIndex = aNewSel.start.nIndex - nLessChars;
+                    if ( aNewSel.start.nPara == aNewSel.end.nPara )
+                        aNewSel.end.nIndex = aNewSel.end.nIndex - nLessChars;
                 }
             }
 
             DrawSelectionXOR();
-            EditSelection aDelSel(getImpEditEngine().CreateSel(aToBeDelSel));
+            EditSelection aDelSel(getEditEngine().CreateSelection(aToBeDelSel));
             DBG_ASSERT( !aDelSel.DbgIsBuggy(getEditEngine().GetEditDoc()), "ToBeDel is buggy!");
             getEditEngine().DeleteSelection(aDelSel);
             if ( !bBeforeSelection )
             {
-                DBG_ASSERT(!getImpEditEngine().CreateSel(aNewSel).DbgIsBuggy(getEditEngine().GetEditDoc()), "Bad");
-                SetEditSelection(getImpEditEngine().CreateSel(aNewSel));
+                DBG_ASSERT(!getEditEngine().CreateSelection(aNewSel).DbgIsBuggy(getEditEngine().GetEditDoc()), "Bad");
+                SetEditSelection(getEditEngine().CreateSelection(aNewSel));
             }
             getImpEditEngine().FormatAndLayout(getImpEditEngine().GetActiveView());
             DrawSelectionXOR();
@@ -2430,7 +2429,7 @@ void ImpEditView::drop( const css::datatransfer::dnd::DropTargetDropEvent& rDTDE
     if (mpDragAndDropInfo->bOutlinerMode)
     {
         bChanges = true;
-        GetEditViewPtr()->MoveParagraphs(Range(mpDragAndDropInfo->aBeginDragSel.nStartPara, mpDragAndDropInfo->aBeginDragSel.nEndPara ), mpDragAndDropInfo->nOutlinerDropDest);
+        GetEditViewPtr()->MoveParagraphs(Range(mpDragAndDropInfo->aBeginDragSel.start.nPara, mpDragAndDropInfo->aBeginDragSel.end.nPara ), mpDragAndDropInfo->nOutlinerDropDest);
     }
     else
     {
@@ -2457,10 +2456,8 @@ void ImpEditView::drop( const css::datatransfer::dnd::DropTargetDropEvent& rDTDE
             if (mpDragAndDropInfo->bStarterOfDD)
             {
                 // Only set if the same engine!
-                mpDragAndDropInfo->aDropSel.nStartPara = getEditEngine().GetEditDoc().GetPos( aPaM.GetNode() );
-                mpDragAndDropInfo->aDropSel.nStartPos = aPaM.GetIndex();
-                mpDragAndDropInfo->aDropSel.nEndPara = getEditEngine().GetEditDoc().GetPos( aNewSel.Max().GetNode() );
-                mpDragAndDropInfo->aDropSel.nEndPos = aNewSel.Max().GetIndex();
+                mpDragAndDropInfo->aDropSel.start = getImpEditEngine().CreateEPaM(aPaM);
+                mpDragAndDropInfo->aDropSel.end = getImpEditEngine().CreateEPaM(aNewSel.Max());
                 mpDragAndDropInfo->bDroppedInMe = true;
             }
         }
@@ -2578,8 +2575,8 @@ void ImpEditView::dragOver(const css::datatransfer::dnd::DropTargetDragEvent& rD
                         mpDragAndDropInfo->nOutlinerDropDest = nPara+1;
                     }
 
-                    if ((mpDragAndDropInfo->nOutlinerDropDest >= mpDragAndDropInfo->aBeginDragSel.nStartPara) &&
-                            (mpDragAndDropInfo->nOutlinerDropDest <= (mpDragAndDropInfo->aBeginDragSel.nEndPara + 1)))
+                    if ((mpDragAndDropInfo->nOutlinerDropDest >= mpDragAndDropInfo->aBeginDragSel.start.nPara) &&
+                            (mpDragAndDropInfo->nOutlinerDropDest <= (mpDragAndDropInfo->aBeginDragSel.end.nPara + 1)))
                     {
                         bAccept = false;
                     }
@@ -2589,8 +2586,8 @@ void ImpEditView::dragOver(const css::datatransfer::dnd::DropTargetDragEvent& rD
             {
                 // it must not be dropped into a selection
                 EPaM aP = getImpEditEngine().CreateEPaM( aPaM );
-                ESelection aDestSel( aP.nPara, aP.nIndex, aP.nPara, aP.nIndex);
-                ESelection aCurSel = getImpEditEngine().CreateESel( GetEditSelection() );
+                ESelection aDestSel(aP);
+                ESelection aCurSel = getEditEngine().CreateESelection(GetEditSelection());
                 aCurSel.Adjust();
                 if ( !(aDestSel < aCurSel) && !(aDestSel > aCurSel) )
                 {

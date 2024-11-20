@@ -248,7 +248,7 @@ void ImpEditEngine::InitDoc(bool bKeepParaAttribs)
 
     if ( IsCallParaInsertedOrDeleted() )
     {
-        GetEditEnginePtr()->ParagraphDeleted( EE_PARA_ALL );
+        GetEditEnginePtr()->ParagraphDeleted(EE_PARA_MAX);
         GetEditEnginePtr()->ParagraphInserted( 0 );
     }
 
@@ -264,8 +264,7 @@ EditPaM ImpEditEngine::DeleteSelected(const EditSelection& rSel)
 
 OUString ImpEditEngine::GetText( const ESelection& rESelection )
 {
-    EditSelection aSel = CreateSel(rESelection);
-    return GetSelected(aSel);
+    return GetSelected(CreateSel(rESelection));
 }
 
 OUString ImpEditEngine::GetSelected( const EditSelection& rSel  ) const
@@ -526,14 +525,14 @@ bool ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
 
         if( pView->HasSelection() )
         {
-            aSelection.nEndPos = aSelection.nStartPos;
-            aSelection.nStartPos += pData->GetStart();
-            aSelection.nEndPos += pData->GetEnd();
+            aSelection.end.nIndex = aSelection.start.nIndex;
+            aSelection.start.nIndex += pData->GetStart();
+            aSelection.end.nIndex += pData->GetEnd();
         }
         else
         {
-            aSelection.nStartPos = pData->GetStart();
-            aSelection.nEndPos = pData->GetEnd();
+            aSelection.start.nIndex = pData->GetStart();
+            aSelection.end.nIndex = pData->GetEnd();
         }
         pView->SetSelection( aSelection );
     }
@@ -544,11 +543,11 @@ bool ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
             ESelection aSelection = pView->GetSelection();
             aSelection.Adjust();
 
-            if ( aSelection.nStartPara != aSelection.nEndPara )
+            if ( aSelection.start.nPara != aSelection.end.nPara )
             {
-                sal_Int32 aParaLen = mpEditEngine->GetTextLen( aSelection.nStartPara );
-                aSelection.nEndPara = aSelection.nStartPara;
-                aSelection.nEndPos = aParaLen;
+                sal_Int32 aParaLen = mpEditEngine->GetTextLen( aSelection.start.nPara );
+                aSelection.end.nPara = aSelection.start.nPara;
+                aSelection.end.nIndex = aParaLen;
                 pView->SetSelection( aSelection );
             }
         }
@@ -790,7 +789,7 @@ void ImpEditEngine::ParaAttribsChanged( ContentNode const * pNode, bool bIgnoreU
     pPortion->MarkSelectionInvalid( 0 );
 
     sal_Int32 nPara = maEditDoc.GetPos( pNode );
-    assert( nPara != EE_PARA_NOT_FOUND );
+    assert(nPara != EE_PARA_MAX);
     if (bIgnoreUndoCheck || mpEditEngine->IsInUndo())
         mpEditEngine->ParaAttribsChanged( nPara );
 
@@ -1858,12 +1857,6 @@ sal_uInt16 ImpEditEngine::GetI18NScriptType( const EditPaM& rPaM, sal_Int32* pEn
     return nScriptType ? nScriptType : SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetDefaultLanguage() );
 }
 
-SvtScriptType ImpEditEngine::GetScriptType( const ESelection& rSel )
-{
-    EditSelection aSel(CreateSel(rSel));
-    return GetItemScriptType( aSel );
-}
-
 SvtScriptType ImpEditEngine::GetItemScriptType( const EditSelection& rSel ) const
 {
     EditSelection aSel( rSel );
@@ -2257,7 +2250,7 @@ EditSelection ImpEditEngine::ImpMoveParagraphs( Range aOldPositions, sal_Int32 n
 
     // Determine the new location for paragraphs
     sal_Int32 nRealNewPos = pDestPortion ? GetParaPortions().GetPos( pDestPortion ) : GetParaPortions().Count();
-    assert( nRealNewPos != EE_PARA_NOT_FOUND && "ImpMoveParagraphs: Invalid Position!" );
+    assert(nRealNewPos != EE_PARA_MAX && "ImpMoveParagraphs: Invalid Position!");
 
     // Add the paragraph portions and content nodes to a new position
     sal_Int32 i = 0;
@@ -2307,8 +2300,8 @@ EditSelection ImpEditEngine::ImpMoveParagraphs( Range aOldPositions, sal_Int32 n
 EditPaM ImpEditEngine::ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pRight, bool bBackward )
 {
     OSL_ENSURE( pLeft != pRight, "Join together the same paragraph ?" );
-    OSL_ENSURE( maEditDoc.GetPos( pLeft ) != EE_PARA_NOT_FOUND, "Inserted node not found (1)" );
-    OSL_ENSURE( maEditDoc.GetPos( pRight ) != EE_PARA_NOT_FOUND, "Inserted node not found (2)" );
+    OSL_ENSURE(maEditDoc.GetPos(pLeft) != EE_PARA_MAX, "Inserted node not found (1)");
+    OSL_ENSURE(maEditDoc.GetPos(pRight) != EE_PARA_MAX, "Inserted node not found (2)");
 
     // #i120020# it is possible that left and right are *not* in the desired order (left/right)
     // so correct it. This correction is needed, else an invalid SfxLinkUndoAction will be
@@ -2506,7 +2499,7 @@ EditPaM ImpEditEngine::ImpDeleteSelection(const EditSelection& rCurSel)
     sal_Int32 nStartNode = maEditDoc.GetPos( aStartPaM.GetNode() );
     sal_Int32 nEndNode = maEditDoc.GetPos( aEndPaM.GetNode() );
 
-    assert( nEndNode != EE_PARA_NOT_FOUND && "Start > End ?!" );
+    assert(nEndNode != EE_PARA_MAX && "Start > End ?!");
     assert( nStartNode <= nEndNode && "Start > End ?!" );
 
     // Remove all nodes in between...
@@ -2630,7 +2623,7 @@ EditPaM ImpEditEngine::AutoCorrect( const EditSelection& rCurSel, sal_Unicode c,
             ESelection aESel( CreateESel(aSel) );
             EditSelection aFirstWordSel;
             EditSelection aSecondWordSel;
-            if (aESel.nEndPara == 0)    // is this the first para?
+            if (aESel.end.nPara == 0)    // is this the first para?
             {
                 // select first word...
                 // start by checking if para starts with word.
@@ -2650,7 +2643,7 @@ EditPaM ImpEditEngine::AutoCorrect( const EditSelection& rCurSel, sal_Unicode c,
                 EditPaM aRight2Word( WordRight( aFirstWordSel.Max() ) );
                 aSecondWordSel = SelectWord( EditSelection( aRight2Word ) );
             }
-            bool bIsFirstWordInFirstPara = aESel.nEndPara == 0 &&
+            bool bIsFirstWordInFirstPara = aESel.end.nPara == 0 &&
                     aFirstWordSel.Max().GetIndex() <= aSel.Max().GetIndex() &&
                     aSel.Max().GetIndex() <= aSecondWordSel.Min().GetIndex();
 
@@ -2986,10 +2979,10 @@ EditPaM ImpEditEngine::ImpInsertParaBreak( const EditSelection& rCurSel )
 
 EditPaM ImpEditEngine::ImpInsertParaBreak( EditPaM& rPaM, bool bKeepEndingAttribs )
 {
-    if ( maEditDoc.Count() >= EE_PARA_MAX_COUNT )
+    if (maEditDoc.Count() >= EE_PARA_MAX)
     {
         SAL_WARN( "editeng", "ImpEditEngine::ImpInsertParaBreak - can't process more than "
-                << EE_PARA_MAX_COUNT << " paragraphs!");
+                << EE_PARA_MAX << " paragraphs!");
         return rPaM;
     }
 
@@ -3037,7 +3030,7 @@ EditPaM ImpEditEngine::ImpInsertParaBreak( EditPaM& rPaM, bool bKeepEndingAttrib
     // Optimization: Do not place unnecessarily many getPos to Listen!
     // Here, as in undo, but also in all other methods.
     sal_Int32 nPos = GetParaPortions().GetPos( pPortion );
-    assert(nPos != EE_PARA_NOT_FOUND);
+    assert(nPos != EE_PARA_MAX);
     ParaPortion* pNewPortion = new ParaPortion( aPaM.GetNode() );
     GetParaPortions().Insert(nPos+1, std::unique_ptr<ParaPortion>(pNewPortion));
     ParaAttribsChanged( pNewPortion->GetNode() );

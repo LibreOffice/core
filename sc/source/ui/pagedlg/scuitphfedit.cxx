@@ -445,11 +445,11 @@ bool ScHFEditPage::IsPageEntry(EditEngine*pEngine, const EditTextObject* pTextOb
         {
             OUString aPageEntry(m_xFtPage->get_label() + " ");
             ESelection aSel;
-            aSel.nEndPos = aPageEntry.getLength();
+            aSel.end.nIndex = aPageEntry.getLength();
             if(aPageEntry == pEngine->GetText(aSel))
             {
-                aSel.nStartPos = aSel.nEndPos;
-                aSel.nEndPos++;
+                aSel.start.nIndex = aSel.end.nIndex;
+                aSel.end.nIndex++;
                 std::unique_ptr< EditTextObject > pPageObj = pEngine->CreateTextObject(aSel);
                 if(pPageObj && pPageObj->IsFieldObject() )
                 {
@@ -534,14 +534,14 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             ESelection aSel;
             OUString aPageEntry( m_xFtPage->get_label() + " ");
             m_xWndCenter->GetEditEngine()->SetTextCurrentDefaults(aPageEntry);
-            aSel.nEndPos = aPageEntry.getLength();
-            m_xWndCenter->GetEditEngine()->QuickInsertField(SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
-            ++aSel.nEndPos;
+            aSel.end.nIndex = aPageEntry.getLength();
+            m_xWndCenter->GetEditEngine()->QuickInsertField(SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), ESelection(aSel.end));
+            ++aSel.end.nIndex;
 
             OUString aPageOfEntry(" " + m_xFtOf->get_label() + " ");
-            m_xWndCenter->GetEditEngine()->QuickInsertText(aPageOfEntry,ESelection(aSel.nEndPara,aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
-            aSel.nEndPos = aSel.nEndPos + aPageOfEntry.getLength();
-            m_xWndCenter->GetEditEngine()->QuickInsertField(SvxFieldItem(SvxPagesField(), EE_FEATURE_FIELD), ESelection(aSel.nEndPara,aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
+            m_xWndCenter->GetEditEngine()->QuickInsertText(aPageOfEntry,ESelection(aSel.end));
+            aSel.end.nIndex += aPageOfEntry.getLength();
+            m_xWndCenter->GetEditEngine()->QuickInsertField(SvxFieldItem(SvxPagesField(), EE_FEATURE_FIELD), ESelection(aSel.end));
             pTextObj = m_xWndCenter->GetEditEngine()->CreateTextObject();
             m_xWndCenter->SetText(*pTextObj);
             if(!bTravelling)
@@ -576,12 +576,12 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             ClearTextAreas();
             ESelection aSel;
             m_xWndCenter->GetEditEngine()->QuickInsertField(SvxFieldItem( SvxFileField(), EE_FEATURE_FIELD ), aSel );
-            ++aSel.nEndPos;
+            ++aSel.end.nIndex;
             OUString aPageEntry(", " + m_xFtPage->get_label() + " ");
-            m_xWndCenter->GetEditEngine()->QuickInsertText(aPageEntry, ESelection(aSel.nEndPara,aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
-            aSel.nStartPos = aSel.nEndPos;
-            aSel.nEndPos = aSel.nEndPos + aPageEntry.getLength();
-            m_xWndCenter->GetEditEngine()->QuickInsertField(SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), ESelection(aSel.nEndPara,aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
+            m_xWndCenter->GetEditEngine()->QuickInsertText(aPageEntry, ESelection(aSel.end));
+            aSel.start.nIndex = aSel.end.nIndex;
+            aSel.end.nIndex += aPageEntry.getLength();
+            m_xWndCenter->GetEditEngine()->QuickInsertField(SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), ESelection(aSel.end));
             pTextObj = m_xWndCenter->GetEditEngine()->CreateTextObject();
             m_xWndCenter->SetText(*pTextObj);
             if(!bTravelling)
@@ -603,14 +603,14 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             ESelection aSel;
             OUString aPageEntry( m_xFtPage->get_label() + " " );
             m_xWndCenter->GetEditEngine()->SetTextCurrentDefaults(aPageEntry);
-            aSel.nEndPos = aPageEntry.getLength();
-            m_xWndCenter->GetEditEngine()->QuickInsertField(SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
-            ++aSel.nEndPos;
+            aSel.end.nIndex = aPageEntry.getLength();
+            m_xWndCenter->GetEditEngine()->QuickInsertField(SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), ESelection(aSel.end));
+            ++aSel.end.nIndex;
 
             OUString aCommaSpace(u", "_ustr);
-            m_xWndCenter->GetEditEngine()->QuickInsertText(aCommaSpace,ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
-            aSel.nEndPos = aSel.nEndPos + aCommaSpace.getLength();
-            m_xWndCenter->GetEditEngine()->QuickInsertField( SvxFieldItem(SvxTableField(), EE_FEATURE_FIELD), ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
+            m_xWndCenter->GetEditEngine()->QuickInsertText(aCommaSpace,ESelection(aSel.end));
+            aSel.end.nIndex += aCommaSpace.getLength();
+            m_xWndCenter->GetEditEngine()->QuickInsertField( SvxFieldItem(SvxTableField(), EE_FEATURE_FIELD), ESelection(aSel.end));
             pTextObj = m_xWndCenter->GetEditEngine()->CreateTextObject();
             m_xWndCenter->SetText(*pTextObj);
             if(!bTravelling)
@@ -624,13 +624,13 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             ESelection aSel;
             OUString aPageEntry( m_xFtPage->get_label() + " " );
             m_xWndCenter->GetEditEngine()->SetTextCurrentDefaults(aPageEntry);
-            aSel.nEndPos = aPageEntry.getLength();
-            m_xWndCenter->GetEditEngine()->QuickInsertField(SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
-            ++aSel.nEndPos;
+            aSel.end.nIndex = aPageEntry.getLength();
+            m_xWndCenter->GetEditEngine()->QuickInsertField(SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), ESelection(aSel.end));
+            ++aSel.end.nIndex;
             OUString aCommaSpace(u", "_ustr);
-            m_xWndCenter->GetEditEngine()->QuickInsertText(aCommaSpace,ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
-            aSel.nEndPos = aSel.nEndPos + aCommaSpace.getLength();
-            m_xWndCenter->GetEditEngine()->QuickInsertField( SvxFieldItem(SvxFileField(), EE_FEATURE_FIELD), ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
+            m_xWndCenter->GetEditEngine()->QuickInsertText(aCommaSpace,ESelection(aSel.end));
+            aSel.end.nIndex += aCommaSpace.getLength();
+            m_xWndCenter->GetEditEngine()->QuickInsertField( SvxFieldItem(SvxFileField(), EE_FEATURE_FIELD), ESelection(aSel.end));
             pTextObj = m_xWndCenter->GetEditEngine()->CreateTextObject();
             m_xWndCenter->SetText(*pTextObj);
             if(!bTravelling)

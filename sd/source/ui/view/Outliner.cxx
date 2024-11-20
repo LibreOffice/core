@@ -560,13 +560,11 @@ void SdOutliner::Initialize (bool bDirectionIsForward)
             ESelection aSelection = getOutlinerView()->GetSelection ();
             if (mbDirectionIsForward)
             {
-                aSelection.nEndPara = aSelection.nStartPara;
-                aSelection.nEndPos = aSelection.nStartPos;
+                aSelection.CollapseToStart();
             }
             else
             {
-                aSelection.nStartPara = aSelection.nEndPara;
-                aSelection.nStartPos = aSelection.nEndPos;
+                aSelection.CollapseToEnd();
             }
             getOutlinerView()->SetSelection (aSelection);
         }
@@ -1776,20 +1774,14 @@ void SdOutliner::EnterEditMode (bool bGrabFocus)
 
 ESelection SdOutliner::GetSearchStartPosition() const
 {
+    // The default constructor uses the beginning of the text as default.
     ESelection aPosition;
-    if (mbDirectionIsForward)
-    {
-        // The default constructor uses the beginning of the text as default.
-        aPosition = ESelection ();
-    }
-    else
+    if (!mbDirectionIsForward)
     {
         // Retrieve the position after the last character in the last
         // paragraph.
         sal_Int32 nParagraphCount = GetParagraphCount();
-        if (nParagraphCount == 0)
-            aPosition = ESelection();
-        else
+        if (nParagraphCount != 0)
         {
             sal_Int32 nLastParagraphLength = GetEditEngine().GetTextLen (
                 nParagraphCount-1);

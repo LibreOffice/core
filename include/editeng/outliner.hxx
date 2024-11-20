@@ -553,7 +553,7 @@ public:
     sal_uInt16        nType;          // see SvxNumberType
     bool              bVisible;
 
-    EBulletInfo() : nParagraph( EE_PARA_NOT_FOUND ), nType( 0 ), bVisible( false ) {}
+    EBulletInfo() : nParagraph( EE_PARA_MAX ), nType( 0 ), bVisible( false ) {}
 };
 
 enum class OutlinerMode {
@@ -692,7 +692,7 @@ public:
     OutlinerView*   GetView( size_t nIndex ) const;
     size_t          GetViewCount() const;
 
-    Paragraph*      Insert( const OUString& rText, sal_Int32 nAbsPos = EE_PARA_APPEND, sal_Int16 nDepth = 0 );
+    Paragraph*      Insert( const OUString& rText, sal_Int32 nAbsPos = EE_PARA_MAX, sal_Int16 nDepth = 0 );
     void            SetText( const OutlinerParaObject& );
     void            AddText( const OutlinerParaObject&, bool bAppend = false );
     void            SetText( const OUString& rText, Paragraph* pParagraph );
@@ -700,7 +700,7 @@ public:
 
     void            SetToEmptyText();
 
-    std::optional<OutlinerParaObject> CreateParaObject( sal_Int32 nStartPara = 0, sal_Int32 nParaCount = EE_PARA_ALL ) const;
+    std::optional<OutlinerParaObject> CreateParaObject( sal_Int32 nStartPara = 0, sal_Int32 nParaCount = EE_PARA_MAX ) const;
 
     const SfxItemSet& GetEmptyItemSet() const;
 
@@ -818,7 +818,7 @@ public:
 
     void            SetWordDelimiters( const OUString& rDelimiters );
     OUString const & GetWordDelimiters() const;
-    OUString        GetWord( sal_Int32 nPara, sal_Int32 nIndex );
+    OUString        GetWord( const EPaM& rPos );
 
     void            StripPortions();
 

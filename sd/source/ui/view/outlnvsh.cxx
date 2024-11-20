@@ -355,7 +355,7 @@ void OutlineViewShell::GetCtrlState(SfxItemSet &rSet)
             if (pFieldItem)
             {
                 ESelection aSel = pOLV->GetSelection();
-                if ( abs( aSel.nEndPos - aSel.nStartPos ) == 1 )
+                if (abs(aSel.end.nIndex - aSel.start.nIndex) == 1)
                 {
                     const SvxFieldData* pField = pFieldItem->GetField();
                     if ( auto pUrlField = dynamic_cast< const SvxURLField *>( pField ) )
@@ -1484,8 +1484,7 @@ void OutlineViewShell::GetAttrState( SfxItemSet& rSet )
                 OutlinerView* pOV = pOlView->GetViewByWindow(pActWin);
                 ESelection aESel(pOV->GetSelection());
 
-                if (aESel.nStartPara != aESel.nEndPara ||
-                    aESel.nStartPos  != aESel.nEndPos)
+                if (aESel.HasRange())
                     // spanned selection, i.e. StyleSheet and/or
                     // attribution not necessarily unique
                     rSet.DisableItem(nWhich);

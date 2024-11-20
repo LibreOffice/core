@@ -197,18 +197,17 @@ std::unique_ptr<EditTextObject> lclCreateTextObject( const XclImpRoot& rRoot,
                     aNextRun.mnChar = 0xFFFF;
 
                 // reset selection start to current position
-                aSelection.nStartPara = aSelection.nEndPara;
-                aSelection.nStartPos = aSelection.nEndPos;
+                aSelection.CollapseToEnd();
             }
 
             // set end of selection to current position
             if( rString.GetText()[ nChar ] == '\n' )
             {
-                ++aSelection.nEndPara;
-                aSelection.nEndPos = 0;
+                ++aSelection.end.nPara;
+                aSelection.end.nIndex = 0;
             }
             else
-                ++aSelection.nEndPos;
+                ++aSelection.end.nIndex;
         }
 
         // send items of last text portion to edit engine
@@ -271,8 +270,6 @@ XclImpHFConverter::XclImpHFPortionInfo::XclImpHFPortionInfo() :
     mnHeight( 0 ),
     mnMaxLineHt( 0 )
 {
-    maSel.nStartPara = maSel.nEndPara = 0;
-    maSel.nStartPos = maSel.nEndPos = 0;
 }
 
 XclImpHFConverter::XclImpHFConverter( const XclImpRoot& rRoot ) :
@@ -524,14 +521,13 @@ void XclImpHFConverter::UpdateCurrMaxLineHeight()
 void XclImpHFConverter::SetAttribs()
 {
     ESelection& rSel = GetCurrSel();
-    if( (rSel.nStartPara != rSel.nEndPara) || (rSel.nStartPos != rSel.nEndPos) )
+    if (rSel.HasRange())
     {
         SfxItemSet aItemSet( mrEE.GetEmptyItemSet() );
         XclImpFont aFont( GetRoot(), *mxFontData );
         aFont.FillToItemSet( aItemSet, XclFontItemType::HeaderFooter );
         mrEE.QuickSetAttribs( aItemSet, rSel );
-        rSel.nStartPara = rSel.nEndPara;
-        rSel.nStartPos = rSel.nEndPos;
+        rSel.CollapseToEnd();
     }
 }
 
@@ -552,8 +548,8 @@ void XclImpHFConverter::InsertText()
     {
         ESelection& rSel = GetCurrSel();
         OUString sString(maCurrText.makeStringAndClear());
-        mrEE.QuickInsertText( sString, ESelection( rSel.nEndPara, rSel.nEndPos, rSel.nEndPara, rSel.nEndPos ) );
-        rSel.nEndPos = rSel.nEndPos + sString.getLength();
+        mrEE.QuickInsertText(sString, ESelection(rSel.end));
+        rSel.end.nIndex += sString.getLength();
         UpdateCurrMaxLineHeight();
     }
 }
@@ -561,17 +557,17 @@ void XclImpHFConverter::InsertText()
 void XclImpHFConverter::InsertField( const SvxFieldItem& rFieldItem )
 {
     ESelection& rSel = GetCurrSel();
-    mrEE.QuickInsertField( rFieldItem, ESelection( rSel.nEndPara, rSel.nEndPos, rSel.nEndPara, rSel.nEndPos ) );
-    ++rSel.nEndPos;
+    mrEE.QuickInsertField(rFieldItem, ESelection(rSel.end));
+    ++rSel.end.nIndex;
     UpdateCurrMaxLineHeight();
 }
 
 void XclImpHFConverter::InsertLineBreak()
 {
     ESelection& rSel = GetCurrSel();
-    mrEE.QuickInsertText( OUString('\n'), ESelection( rSel.nEndPara, rSel.nEndPos, rSel.nEndPara, rSel.nEndPos ) );
-    ++rSel.nEndPara;
-    rSel.nEndPos = 0;
+    mrEE.QuickInsertText(OUString('\n'), ESelection(rSel.end));
+    ++rSel.end.nPara;
+    rSel.end.nIndex = 0;
     GetCurrInfo().mnHeight += GetMaxLineHeight( meCurrObj );
     GetCurrInfo().mnMaxLineHt = 0;
 }

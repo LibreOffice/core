@@ -524,9 +524,9 @@ void EditUndoSetAttribs::Undo()
     DBG_ASSERT( GetEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
     EditEngine* pEE = GetEditEngine();
     bool bFields = false;
-    for ( sal_Int32 nPara = aESel.nStartPara; nPara <= aESel.nEndPara; nPara++ )
+    for ( sal_Int32 nPara = aESel.start.nPara; nPara <= aESel.end.nPara; nPara++ )
     {
-        const ContentAttribsInfo& rInf = *aPrevAttribs[nPara-aESel.nStartPara];
+        const ContentAttribsInfo& rInf = *aPrevAttribs[nPara-aESel.start.nPara];
 
         // first the paragraph attributes ...
         pEE->SetParaAttribsOnly(nPara, rInf.GetPrevParaAttribs());

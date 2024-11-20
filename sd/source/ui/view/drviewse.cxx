@@ -899,18 +899,18 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                 {
                     OUString sInput = pOLV->GetSurroundingText();
                     ESelection aSel( pOLV->GetSelection() );
-                    if( aSel.nStartPos > aSel.nEndPos )
-                        aSel.nEndPos = aSel.nStartPos;
+                    if (aSel.start.nIndex > aSel.end.nIndex)
+                        aSel.end.nIndex = aSel.start.nIndex;
 
                     //calculate a valid end-position by reading logical characters
                     sal_Int32 nUtf16Pos=0;
-                    while( (nUtf16Pos < sInput.getLength()) && (nUtf16Pos < aSel.nEndPos) )
+                    while ((nUtf16Pos < sInput.getLength()) && (nUtf16Pos < aSel.end.nIndex))
                     {
                         sInput.iterateCodePoints(&nUtf16Pos);
                         //The mouse can set the cursor in the middle of a multi-unit character,
                         //    so reset to the proper end of the logical characters
-                        if( nUtf16Pos > aSel.nEndPos )
-                            aSel.nEndPos = nUtf16Pos;
+                        if (nUtf16Pos > aSel.end.nIndex)
+                            aSel.end.nIndex = nUtf16Pos;
                     }
 
                     ToggleUnicodeCodepoint aToggle;
@@ -921,7 +921,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                     {
                         OUString sStringToReplace = aToggle.StringToReplace();
                         mpDrawView->BegUndo(sStringToReplace +"->"+ sReplacement);
-                        aSel.nStartPos = aSel.nEndPos - sStringToReplace.getLength();
+                        aSel.start.nIndex = aSel.end.nIndex - sStringToReplace.getLength();
                         pOLV->SetSelection( aSel );
                         pOLV->InsertText(sReplacement, true);
                         mpDrawView->EndUndo();
@@ -1496,10 +1496,10 @@ void DrawViewShell::InsertURLField(const OUString& rURL, const OUString& rText,
         ESelection aSel( pOLV->GetSelection() );
         SvxFieldItem aURLItem( SvxURLField( rURL, rText, SvxURLFormat::Repr ), EE_FEATURE_FIELD );
         pOLV->InsertField( aURLItem );
-        if ( aSel.nStartPos <= aSel.nEndPos )
-            aSel.nEndPos = aSel.nStartPos + 1;
+        if (aSel.start.nIndex <= aSel.end.nIndex)
+            aSel.end.nIndex = aSel.start.nIndex + 1;
         else
-            aSel.nStartPos = aSel.nEndPos + 1;
+            aSel.start.nIndex = aSel.end.nIndex + 1;
         pOLV->SetSelection( aSel );
     }
     else

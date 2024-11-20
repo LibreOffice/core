@@ -151,11 +151,11 @@ void ScTabViewShell::InsertURL( const OUString& rName, const OUString& rURL, con
 static void lcl_SelectFieldAfterInsert( EditView& rView )
 {
     ESelection aSel = rView.GetSelection();
-    if ( aSel.nStartPos == aSel.nEndPos && aSel.nStartPos > 0 )
+    if (aSel.start.nIndex == aSel.end.nIndex && aSel.start.nIndex > 0)
     {
         //  Cursor is behind the inserted field -> extend selection to the left
 
-        --aSel.nStartPos;
+        --aSel.start.nIndex;
         rView.SetSelection( aSel );
     }
 }

@@ -1755,16 +1755,16 @@ void SmViewShell::Execute(SfxRequest& rReq)
                 const OUString sInput = pEditView->GetSurroundingText();
                 ESelection aSel(  pWin->GetSelection() );
 
-                if ( aSel.nStartPos > aSel.nEndPos )
-                    aSel.nEndPos = aSel.nStartPos;
+                if (aSel.start.nIndex > aSel.end.nIndex)
+                    aSel.end.nIndex = aSel.start.nIndex;
 
                 //calculate a valid end-position by reading logical characters
                 sal_Int32 nUtf16Pos=0;
-                while( (nUtf16Pos < sInput.getLength()) && (nUtf16Pos < aSel.nEndPos) )
+                while ((nUtf16Pos < sInput.getLength()) && (nUtf16Pos < aSel.end.nIndex))
                 {
                     sInput.iterateCodePoints(&nUtf16Pos);
-                    if( nUtf16Pos > aSel.nEndPos )
-                        aSel.nEndPos = nUtf16Pos;
+                    if (nUtf16Pos > aSel.end.nIndex)
+                        aSel.end.nIndex = nUtf16Pos;
                 }
 
                 ToggleUnicodeCodepoint aToggle;
@@ -1775,7 +1775,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
                 {
                     pEditView->SetSelection( aSel );
                     pEditEngine->UndoActionStart(EDITUNDO_REPLACEALL);
-                    aSel.nStartPos = aSel.nEndPos - aToggle.StringToReplace().getLength();
+                    aSel.start.nIndex = aSel.end.nIndex - aToggle.StringToReplace().getLength();
                     pWin->SetSelection( aSel );
                     pEditView->InsertText( sReplacement, true );
                     pEditEngine->UndoActionEnd();

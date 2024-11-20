@@ -1388,13 +1388,12 @@ void ScOrcusSharedStrings::set_segment_font_color(
 
 void ScOrcusSharedStrings::append_segment(std::string_view s)
 {
-    sal_Int32 nPos = mrEditEngine.GetText().getLength();
-    ESelection aSel{0, nPos, 0, nPos}; // end of current text
+    ESelection aSel{ mrEditEngine.GetEnd() }; // end of current text
 
     OUString aStr = toOUString(s);
     mrEditEngine.QuickInsertText(aStr, aSel);
 
-    aSel.nEndPos += aStr.getLength(); // expand the selection over the current segment
+    aSel.end = mrEditEngine.GetEnd(); // expand the selection over the current segment
     maFormatSegments.emplace_back(aSel, maCurFormat);
     maCurFormat.ClearItem();
 }

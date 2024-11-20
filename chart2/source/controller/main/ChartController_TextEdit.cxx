@@ -271,8 +271,7 @@ void ChartController::executeDispatch_InsertSpecialCharacter()
                     pOutlinerView->InsertText(aString, true);
 
                     ESelection aSel = pOutlinerView->GetSelection();
-                    aSel.nStartPara = aSel.nEndPara;
-                    aSel.nStartPos = aSel.nEndPos;
+                    aSel.CollapseToEnd();
                     pOutlinerView->SetSelection(aSel);
 
                     // show changes

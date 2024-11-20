@@ -224,7 +224,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf111522)
                                                               { &aInputString });
     CPPUNIT_ASSERT(pView2->GetTextEditObject());
     EditView& rEditView = pView2->GetTextEditOutlinerView()->GetEditView();
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), rEditView.GetSelection().nStartPos);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), rEditView.GetSelection().start.nIndex);
     pView2->SdrEndTextEdit();
     // Without the accompanying fix in place, this test would have failed with an assertion failure
     // in SdrObjEditView::SdrEndTextEdit() as mpOldTextEditUndoManager was not nullptr.

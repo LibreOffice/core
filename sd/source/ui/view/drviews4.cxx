@@ -603,7 +603,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
             if( pOLV->GetOutliner() )
             {
                 ESelection aSelection( pOLV->GetSelection() );
-                eLanguage = pOLV->GetOutliner()->GetLanguage( aSelection.nStartPara, aSelection.nStartPos );
+                eLanguage = pOLV->GetOutliner()->GetLanguage( aSelection.start.nPara, aSelection.start.nIndex );
             }
 
             //fdo#44998 if the outliner has captured the mouse events release the lock
@@ -627,10 +627,10 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                 // select field, so that it will be deleted on insert
                 ESelection aSel = pOLV->GetSelection();
                 bool bSel = true;
-                if( aSel.nStartPos == aSel.nEndPos )
+                if (aSel.start.nIndex == aSel.end.nIndex)
                 {
                     bSel = false;
-                    aSel.nEndPos++;
+                    aSel.end.nIndex++;
                 }
                 pOLV->SetSelection( aSel );
 
@@ -638,7 +638,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
 
                 // reset selection back to original state
                 if( !bSel )
-                    aSel.nEndPos--;
+                    aSel.end.nIndex--;
                 pOLV->SetSelection( aSel );
             }
         }

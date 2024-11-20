@@ -1098,9 +1098,8 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, bool bQuickDrag)
                         else
                         {
                             // Move cursor to end of text
-                            ESelection aNewSelection = ESelection::NotFound();
                             if (pOLV != nullptr)
-                                pOLV->SetSelection(aNewSelection);
+                                pOLV->SetSelection(ESelection::AtEnd());
                         }
                     }
                     else
@@ -1376,11 +1375,7 @@ void FuText::ChangeFontSize( bool bGrow, OutlinerView* pOLV, const FontList* pFo
                     pOLV = pView->GetTextEditOutlinerView();
                     if( pOLV )
                     {
-                        EditEngine& rEditEngine = pOLV->GetEditView().getEditEngine();
-                        ESelection aSel;
-                        aSel.nEndPara = rEditEngine.GetParagraphCount() - 1;
-                        aSel.nEndPos = rEditEngine.GetTextLen(aSel.nEndPara);
-                        pOLV->SetSelection(aSel);
+                        pOLV->SetSelection(ESelection::All());
 
                         ChangeFontSize( bGrow, pOLV, pFontList, pView );
                     }

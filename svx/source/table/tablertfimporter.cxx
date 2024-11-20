@@ -189,11 +189,11 @@ IMPL_LINK( SdrTableRTFParser, RTFImportHdl, RtfImportInfo&, rInfo, void )
         }
             break;
         case RtfImportState::End:
-            if ( rInfo.aSelection.nEndPos )
+            if ( rInfo.aSelection.end.nIndex )
             {
                 mpActDefault = nullptr;
                 rInfo.nToken = RTF_PAR;
-                rInfo.aSelection.nEndPara++;
+                rInfo.aSelection.end.nPara++;
                 ProcToken( &rInfo );
             }
             break;
@@ -219,7 +219,7 @@ void SdrTableRTFParser::InsertCell( RtfImportInfo const * pInfo )
     RTFCellInfoPtr xCellInfo = std::make_shared<RTFCellInfo>(mrItemPool);
 
     xCellInfo->mnStartPara = mnStartPara;
-    xCellInfo->mnParaCount = pInfo->aSelection.nEndPara - 1 - mnStartPara;
+    xCellInfo->mnParaCount = pInfo->aSelection.end.nPara - 1 - mnStartPara;
     xCellInfo->mnCellX = mpActDefault->mnCellX;
     xCellInfo->mnRowSpan = mpActDefault->mnRowSpan;
 
@@ -254,7 +254,7 @@ void SdrTableRTFParser::InsertCell( RtfImportInfo const * pInfo )
         xColumn->push_back( xCellInfo );
     }
 
-    mnStartPara = pInfo->aSelection.nEndPara - 1;
+    mnStartPara = pInfo->aSelection.end.nPara - 1;
 }
 
 void SdrTableRTFParser::InsertColumnEdge( sal_Int32 nEdge )

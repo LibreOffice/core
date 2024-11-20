@@ -30,12 +30,7 @@ bool URLFieldHelper::IsCursorAtURLField(const EditView& pEditView, bool bAlsoChe
 {
     // tdf#128666 Make sure only URL field (or nothing) is selected
     ESelection aSel = pEditView.GetSelection();
-    auto nSelectedParas = aSel.nEndPara - aSel.nStartPara;
-    auto nSelectedChars = aSel.nEndPos - aSel.nStartPos;
-    bool bIsValidSelection
-        = nSelectedParas == 0
-          && (nSelectedChars == 0 || nSelectedChars == 1 || nSelectedChars == -1);
-    if (!bIsValidSelection)
+    if (aSel.start.nPara != aSel.end.nPara || std::abs(aSel.end.nIndex - aSel.start.nIndex) > 1)
         return false;
 
     const SvxFieldData* pField

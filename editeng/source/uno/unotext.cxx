@@ -60,10 +60,10 @@ namespace {
 ESelection toESelection(const text::TextRangeSelection& rSel)
 {
     ESelection aESel;
-    aESel.nStartPara = rSel.Start.Paragraph;
-    aESel.nStartPos = rSel.Start.PositionInParagraph;
-    aESel.nEndPara = rSel.End.Paragraph;
-    aESel.nEndPos = rSel.End.PositionInParagraph;
+    aESel.start.nPara = rSel.Start.Paragraph;
+    aESel.start.nIndex = rSel.Start.PositionInParagraph;
+    aESel.end.nPara = rSel.End.Paragraph;
+    aESel.end.nIndex = rSel.End.PositionInParagraph;
     return aESel;
 }
 
@@ -151,7 +151,7 @@ void CheckSelection( struct ESelection& rSel, SvxTextForwarder const * pForwarde
     if( !pForwarder )
         return;
 
-    if( rSel.nStartPara == EE_PARA_MAX_COUNT )
+    if (rSel.start.nPara == EE_PARA_MAX)
     {
         ::GetSelection( rSel, pForwarder );
     }
@@ -161,35 +161,31 @@ void CheckSelection( struct ESelection& rSel, SvxTextForwarder const * pForwarde
         GetSelection( aMaxSelection, pForwarder );
 
         // check start position
-        if( rSel.nStartPara < aMaxSelection.nStartPara )
+        if (rSel.start.nPara < aMaxSelection.start.nPara)
         {
-            rSel.nStartPara = aMaxSelection.nStartPara;
-            rSel.nStartPos = aMaxSelection.nStartPos;
+            rSel.start = aMaxSelection.start;
         }
-        else if( rSel.nStartPara > aMaxSelection.nEndPara )
+        else if (rSel.start.nPara > aMaxSelection.end.nPara)
         {
-            rSel.nStartPara = aMaxSelection.nEndPara;
-            rSel.nStartPos = aMaxSelection.nEndPos;
+            rSel.start = aMaxSelection.end;
         }
-        else if( rSel.nStartPos  > pForwarder->GetTextLen( rSel.nStartPara ) )
+        else if (rSel.start.nIndex > pForwarder->GetTextLen(rSel.start.nPara))
         {
-            rSel.nStartPos = pForwarder->GetTextLen( rSel.nStartPara );
+            rSel.start.nIndex = pForwarder->GetTextLen(rSel.start.nPara);
         }
 
         // check end position
-        if( rSel.nEndPara < aMaxSelection.nStartPara )
+        if (rSel.end.nPara < aMaxSelection.start.nPara)
         {
-            rSel.nEndPara = aMaxSelection.nStartPara;
-            rSel.nEndPos = aMaxSelection.nStartPos;
+            rSel.end = aMaxSelection.start;
         }
-        else if( rSel.nEndPara > aMaxSelection.nEndPara )
+        else if (rSel.end.nPara > aMaxSelection.end.nPara)
         {
-            rSel.nEndPara = aMaxSelection.nEndPara;
-            rSel.nEndPos = aMaxSelection.nEndPos;
+            rSel.end = aMaxSelection.end;
         }
-        else if( rSel.nEndPos > pForwarder->GetTextLen( rSel.nEndPara ) )
+        else if (rSel.end.nIndex > pForwarder->GetTextLen(rSel.end.nPara))
         {
-            rSel.nEndPos = pForwarder->GetTextLen( rSel.nEndPara );
+            rSel.end.nIndex = pForwarder->GetTextLen(rSel.end.nPara);
         }
     }
 }
@@ -270,7 +266,7 @@ void SvxUnoTextRangeBase::SetEditSource( SvxEditSource* pSource ) noexcept
 
     mpEditSource.reset( pSource );
 
-    maSelection.nStartPara = EE_PARA_MAX_COUNT;
+    maSelection.start.nPara = EE_PARA_MAX;
 
     if( mpEditSource )
         mpEditSource->addRange( this );
@@ -320,8 +316,7 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextRangeBase::getStart()
         xRange = pRange;
 
         ESelection aNewSel = maSelection;
-        aNewSel.nEndPara = aNewSel.nStartPara;
-        aNewSel.nEndPos  = aNewSel.nStartPos;
+        aNewSel.CollapseToStart();
         pRange->SetSelection( aNewSel );
     }
 
@@ -348,8 +343,7 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextRangeBase::getEnd()
         xRet = pNew;
 
         ESelection aNewSel = maSelection;
-        aNewSel.nStartPara = aNewSel.nEndPara;
-        aNewSel.nStartPos  = aNewSel.nEndPos;
+        aNewSel.CollapseToEnd();
         pNew->SetSelection( aNewSel );
     }
     return xRet;
@@ -439,8 +433,8 @@ void SvxUnoTextRangeBase::_setPropertyValue( const OUString& PropertyName, const
 
                 if( nPara == -1 )
                 {
-                    nPara = aSel.nStartPara;
-                    nEndPara = aSel.nEndPara;
+                    nPara = aSel.start.nPara;
+                    nEndPara = aSel.end.nPara;
                 }
                 else
                 {
@@ -471,8 +465,8 @@ void SvxUnoTextRangeBase::_setPropertyValue( const OUString& PropertyName, const
 
                 if( nPara == -1 )
                 {
-                    nPara = aSel.nStartPara;
-                    nEndPara = aSel.nEndPara;
+                    nPara = aSel.start.nPara;
+                    nEndPara = aSel.end.nPara;
                 }
                 else
                 {
@@ -542,7 +536,7 @@ bool SvxUnoTextRangeBase::SetPropertyValueHelper( const SfxItemPropertyMapEntry*
                 if( aValue >>= nLevel )
                 {
                     // #101004# Call interface method instead of unsafe cast
-                    if(! pForwarder->SetDepth( pSelection->nStartPara, nLevel ) )
+                    if (!pForwarder->SetDepth(pSelection->start.nPara, nLevel))
                         throw lang::IllegalArgumentException();
 
                     // If valid, then not yet finished. Also needs to be added to paragraph props.
@@ -559,7 +553,7 @@ bool SvxUnoTextRangeBase::SetPropertyValueHelper( const SfxItemPropertyMapEntry*
                 sal_Int16 nStartValue = -1;
                 if( aValue >>= nStartValue )
                 {
-                    pForwarder->SetNumberingStartValue( pSelection->nStartPara, nStartValue );
+                    pForwarder->SetNumberingStartValue(pSelection->start.nPara, nStartValue);
                     return true;
                 }
             }
@@ -573,7 +567,7 @@ bool SvxUnoTextRangeBase::SetPropertyValueHelper( const SfxItemPropertyMapEntry*
                 bool bParaIsNumberingRestart = false;
                 if( aValue >>= bParaIsNumberingRestart )
                 {
-                    pForwarder->SetParaIsNumberingRestart( pSelection->nStartPara, bParaIsNumberingRestart );
+                    pForwarder->SetParaIsNumberingRestart( pSelection->start.nPara, bParaIsNumberingRestart );
                     return true;
                 }
             }
@@ -604,10 +598,10 @@ uno::Any SAL_CALL SvxUnoTextRangeBase::getPropertyValue(const OUString& Property
     {
         const ESelection& rSel = GetSelection();
         text::TextRangeSelection aSel;
-        aSel.Start.Paragraph = rSel.nStartPara;
-        aSel.Start.PositionInParagraph = rSel.nStartPos;
-        aSel.End.Paragraph = rSel.nEndPara;
-        aSel.End.PositionInParagraph = rSel.nEndPos;
+        aSel.Start.Paragraph = rSel.start.nPara;
+        aSel.Start.PositionInParagraph = rSel.start.nIndex;
+        aSel.End.Paragraph = rSel.end.nPara;
+        aSel.End.PositionInParagraph = rSel.end.nIndex;
         return uno::Any(aSel);
     }
 
@@ -662,7 +656,7 @@ void SvxUnoTextRangeBase::getPropertyValue( const SfxItemPropertyMapEntry* pMap,
             std::optional<FontLineStyle> pFldLineStyle;
 
             SvxTextForwarder* pForwarder = mpEditSource->GetTextForwarder();
-            OUString aPresentation( pForwarder->CalcFieldValue( SvxFieldItem(*pData, EE_FEATURE_FIELD), maSelection.nStartPara, maSelection.nStartPos, pTColor, pFColor, pFldLineStyle ) );
+            OUString aPresentation( pForwarder->CalcFieldValue( SvxFieldItem(*pData, EE_FEATURE_FIELD), maSelection.start.nPara, maSelection.start.nIndex, pTColor, pFColor, pFldLineStyle ) );
 
             uno::Reference< text::XTextField > xField( new SvxUnoTextField( xAnchor, aPresentation, pData ) );
             rAny <<= xField;
@@ -682,7 +676,7 @@ void SvxUnoTextRangeBase::getPropertyValue( const SfxItemPropertyMapEntry* pMap,
 
     case WID_PARASTYLENAME:
         {
-            rAny <<= GetEditSource()->GetTextForwarder()->GetStyleSheet(maSelection.nStartPara);
+            rAny <<= GetEditSource()->GetTextForwarder()->GetStyleSheet(maSelection.start.nPara);
         }
         break;
 
@@ -727,7 +721,7 @@ bool SvxUnoTextRangeBase::GetPropertyValueHelper(  SfxItemSet const & rSet, cons
                 if (!pForwarder->SupportsOutlineDepth())
                     return false;
 
-                sal_Int16 nLevel = pForwarder->GetDepth( pSelection->nStartPara );
+                sal_Int16 nLevel = pForwarder->GetDepth(pSelection->start.nPara);
                 if( nLevel >= 0 )
                     aAny <<= nLevel;
             }
@@ -737,14 +731,14 @@ bool SvxUnoTextRangeBase::GetPropertyValueHelper(  SfxItemSet const & rSet, cons
         {
             SvxTextForwarder* pForwarder = pEditSource? pEditSource->GetTextForwarder() : nullptr;
             if(pForwarder && pSelection)
-                aAny <<= pForwarder->GetNumberingStartValue( pSelection->nStartPara );
+                aAny <<= pForwarder->GetNumberingStartValue(pSelection->start.nPara);
         }
         break;
     case WID_PARAISNUMBERINGRESTART:
         {
             SvxTextForwarder* pForwarder = pEditSource? pEditSource->GetTextForwarder() : nullptr;
             if(pForwarder && pSelection)
-                aAny <<= pForwarder->IsParaIsNumberingRestart( pSelection->nStartPara );
+                aAny <<= pForwarder->IsParaIsNumberingRestart(pSelection->start.nPara);
         }
         break;
 
@@ -806,8 +800,8 @@ void SvxUnoTextRangeBase::_setPropertyValues( const uno::Sequence< OUString >& a
 
     if( nTempPara == -1 )
     {
-        nTempPara = aSel.nStartPara;
-        nEndPara = aSel.nEndPara;
+        nTempPara = aSel.start.nPara;
+        nEndPara = aSel.end.nPara;
     }
 
     std::optional<SfxItemSet> pOldAttrSet;
@@ -1293,11 +1287,11 @@ void SvxUnoTextRangeBase::_setPropertyToDefault(SvxTextForwarder* pForwarder, co
         }
         else if( pMap->nWID == WID_NUMBERINGSTARTVALUE )
         {
-            pForwarder->SetNumberingStartValue( maSelection.nStartPara, -1 );
+            pForwarder->SetNumberingStartValue(maSelection.start.nPara, -1);
         }
         else if( pMap->nWID == WID_PARAISNUMBERINGRESTART )
         {
-            pForwarder->SetParaIsNumberingRestart( maSelection.nStartPara, false );
+            pForwarder->SetParaIsNumberingRestart(maSelection.start.nPara, false);
         }
         else
         {
@@ -1403,24 +1397,21 @@ void SvxUnoTextRangeBase::CollapseToStart() noexcept
 {
     CheckSelection( maSelection, mpEditSource.get() );
 
-    maSelection.nEndPara = maSelection.nStartPara;
-    maSelection.nEndPos  = maSelection.nStartPos;
+    maSelection.CollapseToStart();
 }
 
 void SvxUnoTextRangeBase::CollapseToEnd() noexcept
 {
     CheckSelection( maSelection, mpEditSource.get() );
 
-    maSelection.nStartPara = maSelection.nEndPara;
-    maSelection.nStartPos  = maSelection.nEndPos;
+    maSelection.CollapseToEnd();
 }
 
 bool SvxUnoTextRangeBase::IsCollapsed() noexcept
 {
     CheckSelection( maSelection, mpEditSource.get() );
 
-    return ( maSelection.nStartPara == maSelection.nEndPara &&
-             maSelection.nStartPos  == maSelection.nEndPos );
+    return !maSelection.HasRange();
 }
 
 bool SvxUnoTextRangeBase::GoLeft(sal_Int32 nCount, bool Expand) noexcept
@@ -1428,8 +1419,8 @@ bool SvxUnoTextRangeBase::GoLeft(sal_Int32 nCount, bool Expand) noexcept
     CheckSelection( maSelection, mpEditSource.get() );
 
     //  #75098# use end position, as in Writer (start is anchor, end is cursor)
-    sal_Int32 nNewPos = maSelection.nEndPos;
-    sal_Int32 nNewPar = maSelection.nEndPara;
+    sal_Int32 nNewPos = maSelection.end.nIndex;
+    sal_Int32 nNewPar = maSelection.end.nPara;
 
     bool bOk = true;
     SvxTextForwarder* pForwarder = nullptr;
@@ -1451,8 +1442,8 @@ bool SvxUnoTextRangeBase::GoLeft(sal_Int32 nCount, bool Expand) noexcept
     if ( bOk )
     {
         nNewPos = nNewPos - nCount;
-        maSelection.nStartPara = nNewPar;
-        maSelection.nStartPos  = nNewPos;
+        maSelection.start.nPara = nNewPar;
+        maSelection.start.nIndex  = nNewPos;
     }
 
     if (!Expand)
@@ -1471,8 +1462,8 @@ bool SvxUnoTextRangeBase::GoRight(sal_Int32 nCount, bool Expand)  noexcept
 
     CheckSelection( maSelection, pForwarder );
 
-    sal_Int32 nNewPos = maSelection.nEndPos + nCount;
-    sal_Int32 nNewPar = maSelection.nEndPara;
+    sal_Int32 nNewPos = maSelection.end.nIndex + nCount;
+    sal_Int32 nNewPar = maSelection.end.nPara;
 
     bool bOk = true;
     sal_Int32 nParCount = pForwarder->GetParagraphCount();
@@ -1491,8 +1482,8 @@ bool SvxUnoTextRangeBase::GoRight(sal_Int32 nCount, bool Expand)  noexcept
 
     if (bOk)
     {
-        maSelection.nEndPara = nNewPar;
-        maSelection.nEndPos  = nNewPos;
+        maSelection.end.nPara = nNewPar;
+        maSelection.end.nIndex  = nNewPos;
     }
 
     if (!Expand)
@@ -1503,8 +1494,8 @@ bool SvxUnoTextRangeBase::GoRight(sal_Int32 nCount, bool Expand)  noexcept
 
 void SvxUnoTextRangeBase::GotoStart(bool Expand) noexcept
 {
-    maSelection.nStartPara = 0;
-    maSelection.nStartPos  = 0;
+    maSelection.start.nPara = 0;
+    maSelection.start.nIndex  = 0;
 
     if (!Expand)
         CollapseToStart();
@@ -1522,8 +1513,8 @@ void SvxUnoTextRangeBase::GotoEnd(bool Expand) noexcept
     if (nPar)
         --nPar;
 
-    maSelection.nEndPara = nPar;
-    maSelection.nEndPos  = pForwarder->GetTextLen( nPar );
+    maSelection.end.nPara = nPar;
+    maSelection.end.nIndex = pForwarder->GetTextLen(nPar);
 
     if (!Expand)
         CollapseToEnd();
@@ -1559,17 +1550,7 @@ sal_Int16 SAL_CALL SvxUnoTextRangeBase::compareRegionStarts( const uno::Referenc
     const ESelection& r1 = pR1->maSelection;
     const ESelection& r2 = pR2->maSelection;
 
-    if( r1.nStartPara == r2.nStartPara )
-    {
-        if( r1.nStartPos == r2.nStartPos )
-            return 0;
-        else
-            return r1.nStartPos < r2.nStartPos ? 1 : -1;
-    }
-    else
-    {
-        return r1.nStartPara < r2.nStartPara ? 1 : -1;
-    }
+    return r1.start == r2.start ? 0 : r1.start < r2.start ? 1 : -1;
 }
 
 sal_Int16 SAL_CALL SvxUnoTextRangeBase::compareRegionEnds( const uno::Reference< text::XTextRange >& xR1, const uno::Reference< text::XTextRange >& xR2 )
@@ -1583,17 +1564,7 @@ sal_Int16 SAL_CALL SvxUnoTextRangeBase::compareRegionEnds( const uno::Reference<
     const ESelection& r1 = pR1->maSelection;
     const ESelection& r2 = pR2->maSelection;
 
-    if( r1.nEndPara == r2.nEndPara )
-    {
-        if( r1.nEndPos == r2.nEndPos )
-            return 0;
-        else
-            return r1.nEndPos < r2.nEndPos ? 1 : -1;
-    }
-    else
-    {
-        return r1.nEndPara < r2.nEndPara ? 1 : -1;
-    }
+    return r1.end == r2.end ? 0 : r1.end < r2.end ? 1 : -1;
 }
 
 SvxUnoTextRange::SvxUnoTextRange(const SvxUnoTextBase& rParent, bool bPortion /* = false */)
@@ -1856,21 +1827,19 @@ void SAL_CALL SvxUnoTextBase::insertControlCharacter( const uno::Reference< text
             {
                 pForwarder->QuickInsertText( u""_ustr, aRange );
 
-                aRange.nEndPos = aRange.nStartPos;
-                aRange.nEndPara = aRange.nStartPara;
+                aRange.CollapseToStart();
             }
             else
             {
-                aRange.nStartPara = aRange.nEndPara;
-                aRange.nStartPos = aRange.nEndPos;
+                aRange.CollapseToEnd();
             }
 
             pForwarder->QuickInsertLineBreak( aRange );
             GetEditSource()->UpdateData();
 
-            aRange.nEndPos += 1;
+            aRange.end.nIndex += 1;
             if( !bAbsorb )
-                aRange.nStartPos += 1;
+                aRange.start.nIndex += 1;
 
             pRange->SetSelection( aRange );
         }
@@ -1884,19 +1853,18 @@ void SAL_CALL SvxUnoTextBase::insertControlCharacter( const uno::Reference< text
             ESelection aRange = pRange->GetSelection();
 //              ESelection aOldSelection = aRange;
 
-            aRange.nStartPos  = pForwarder->GetTextLen( aRange.nStartPara );
+            aRange.start.nIndex  = pForwarder->GetTextLen( aRange.start.nPara );
 
-            aRange.nEndPara = aRange.nStartPara;
-            aRange.nEndPos  = aRange.nStartPos;
+            aRange.CollapseToStart();
 
             pRange->SetSelection( aRange );
             static constexpr OUStringLiteral CR = u"\x0D";
             pRange->setString( CR );
 
-            aRange.nStartPos = 0;
-            aRange.nStartPara += 1;
-            aRange.nEndPos = 0;
-            aRange.nEndPara += 1;
+            aRange.start.nIndex = 0;
+            aRange.start.nPara += 1;
+            aRange.end.nIndex = 0;
+            aRange.end.nPara += 1;
 
             pRange->SetSelection( aRange );
 
@@ -1995,7 +1963,7 @@ uno::Reference< container::XEnumeration > SAL_CALL SvxUnoTextBase::createEnumera
     if (!GetEditSource())
         return uno::Reference< container::XEnumeration >();
 
-    if( maSelection == ESelection(0,0,0,0) || maSelection == ESelection(EE_PARA_MAX_COUNT,0,0,0) )
+    if (maSelection == ESelection(0, 0, 0, 0) || maSelection == ESelection(EE_PARA_MAX, 0, 0, 0))
     {
         ESelection aSelection;
         ::GetSelection( aSelection, GetEditSource()->GetTextForwarder() );
@@ -2114,7 +2082,7 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::finishParagraph(
 
         // set properties for the previously last paragraph
         sal_Int32 nPara = nParaCount - 1;
-        ESelection aSel( nPara, 0, nPara, 0 );
+        ESelection aSel(nPara, 0);
         SfxItemSet aItemSet( *pTextForwarder->GetEmptyItemSetPtr() );
         SvxPropertyValuesToItemSet( aItemSet, rCharAndParaProps,
                 ImplGetSvxUnoOutlinerTextCursorSfxPropertySet(), pTextForwarder, nPara );
@@ -2157,7 +2125,7 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::insertTextPortion(
 
         SfxItemSet aItemSet( *pTextForwarder->GetEmptyItemSetPtr() );
         SvxPropertyValuesToItemSet( aItemSet, rCharAndParaProps,
-                ImplGetSvxTextPortionSfxPropertySet(), pTextForwarder, aSelection.nStartPara );
+                ImplGetSvxTextPortionSfxPropertySet(), pTextForwarder, aSelection.start.nPara );
         pTextForwarder->QuickSetAttribs( aItemSet, aSelection);
         rtl::Reference<SvxUnoTextRange> pNewRange = new SvxUnoTextRange( *this );
         xRet = pNewRange;

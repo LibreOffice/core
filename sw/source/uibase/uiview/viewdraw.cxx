@@ -585,7 +585,7 @@ bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin,
         }
 
         // editing should start at the end of text, spell checking at the beginning ...
-        ESelection aNewSelection(EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND, EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND);
+        ESelection aNewSelection(ESelection::AtEnd());
         if (bSetSelectionToStart)
             aNewSelection = ESelection();
         if (pView)

@@ -348,9 +348,9 @@ bool DocumentDrawModelManager::Search(const SwPaM& rPaM, const SvxSearchItem& rS
             return false;
         OutlinerView* pOutlinerView = pSdrView->GetTextEditOutlinerView();
         if (!rSearchItem.GetBackward())
-            pOutlinerView->SetSelection(ESelection(0, 0, 0, 0));
+            pOutlinerView->SetSelection(ESelection(0, 0));
         else
-            pOutlinerView->SetSelection(ESelection(EE_PARA_MAX_COUNT, EE_TEXTPOS_MAX_COUNT, EE_PARA_MAX_COUNT, EE_TEXTPOS_MAX_COUNT));
+            pOutlinerView->SetSelection(ESelection::AtEnd());
         pOutlinerView->StartSearchAndReplace(rSearchItem);
         return true;
     }

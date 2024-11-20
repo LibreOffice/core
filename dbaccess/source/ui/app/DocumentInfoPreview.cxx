@@ -103,28 +103,18 @@ void ODocumentInfoPreview::fill(
         }
     }
 
-    m_xEditView->SetSelection(ESelection(0, 0, 0, 0));
-}
-
-namespace
-{
-    ESelection InsertAtEnd(const EditEngine& rEditEngine)
-    {
-        const sal_uInt32 nPara = rEditEngine.GetParagraphCount() -1;
-        sal_Int32 nLastLen = rEditEngine.GetText(nPara).getLength();
-        return ESelection(nPara, nLastLen, nPara, nLastLen);
-    }
+    m_xEditView->SetSelection(ESelection(0, 0));
 }
 
 void ODocumentInfoPreview::insertEntry(
     std::u16string_view title, OUString const & value)
 {
     if (m_xEditEngine->HasText()) {
-        m_xEditEngine->QuickInsertText(u"\n\n"_ustr, InsertAtEnd(*m_xEditEngine));
+        m_xEditEngine->QuickInsertText(u"\n\n"_ustr, ESelection::AtEnd());
     }
 
     OUString caption(OUString::Concat(title) + ":\n");
-    m_xEditEngine->QuickInsertText(caption, InsertAtEnd(*m_xEditEngine));
+    m_xEditEngine->QuickInsertText(caption, ESelection::AtEnd());
 
     SfxItemSet aSet(m_xEditEngine->GetEmptyItemSet());
     aSet.Put(SvxWeightItem(WEIGHT_BOLD, EE_CHAR_WEIGHT));
@@ -133,7 +123,7 @@ void ODocumentInfoPreview::insertEntry(
     int nCaptionPara = m_xEditEngine->GetParagraphCount() - 2;
     m_xEditEngine->QuickSetAttribs(aSet, ESelection(nCaptionPara, 0, nCaptionPara, caption.getLength() - 1));
 
-    m_xEditEngine->QuickInsertText(value, InsertAtEnd(*m_xEditEngine));
+    m_xEditEngine->QuickInsertText(value, ESelection::AtEnd());
 }
 
 void ODocumentInfoPreview::insertNonempty(tools::Long id, OUString const & value)

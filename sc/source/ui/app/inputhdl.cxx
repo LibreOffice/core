@@ -347,12 +347,12 @@ static inline void incPos( const sal_Unicode c, sal_Int32& rPos, ESelection& rSe
     ++rPos;
     if (c == '\n')
     {
-        ++rSel.nEndPara;
-        rSel.nEndPos = 0;
+        ++rSel.end.nPara;
+        rSel.end.nIndex = 0;
     }
     else
     {
-        ++rSel.nEndPos;
+        ++rSel.end.nIndex;
     }
 }
 
@@ -399,8 +399,7 @@ void ScInputHandler::InitRangeFinder( const OUString& rFormula )
         }
 
         // Text between separators. We only consider within one line/paragraph.
-        aSel.nStartPara = aSel.nEndPara;
-        aSel.nStartPos = aSel.nEndPos;
+        aSel.CollapseToEnd();
         nStart = nPos;
 handle_r1c1:
         {
@@ -632,8 +631,7 @@ static void lcl_Replace( EditView* pView, const OUString& rNewStr, const ESelect
 
     ESelection aOldSel = pView->GetSelection();
     if (aOldSel.HasRange())
-        pView->SetSelection( ESelection( aOldSel.nEndPara, aOldSel.nEndPos,
-                                         aOldSel.nEndPara, aOldSel.nEndPos ) );
+        pView->SetSelection(ESelection(aOldSel.end));
 
     EditEngine& rEngine = pView->getEditEngine();
     rEngine.QuickInsertText( rNewStr, rOldSel );
@@ -642,10 +640,7 @@ static void lcl_Replace( EditView* pView, const OUString& rNewStr, const ESelect
     // To do that we need to cancel the selection from above (before QuickInsertText)
     pView->InsertText( OUString() );
 
-    const sal_Int32 nPara = rEngine.GetParagraphCount() - 1;
-    const sal_Int32 nLen = rEngine.GetTextLen(nPara);
-    ESelection aSel( nPara, nLen, nPara, nLen );
-    pView->SetSelection( aSel ); // Set cursor to the end
+    pView->SetSelection(ESelection::AtEnd()); // Set cursor to the end
 }
 
 void ScInputHandler::UpdateRange( sal_uInt16 nIndex, const ScRange& rNew )
@@ -669,8 +664,8 @@ void ScInputHandler::UpdateRange( sal_uInt16 nIndex, const ScRange& rNew )
         lcl_Replace( pTableView, aNewStr, rData.maSel );
 
         // We are within one paragraph.
-        const sal_Int32 nDiff = aNewStr.getLength() - (rData.maSel.nEndPos - rData.maSel.nStartPos);
-        rData.maSel.nEndPos += nDiff;
+        const sal_Int32 nDiff = aNewStr.getLength() - (rData.maSel.end.nIndex - rData.maSel.start.nIndex);
+        rData.maSel.end.nIndex += nDiff;
 
         aSet.Put( SvxColorItem( nNewColor, EE_CHAR_COLOR ) );
         mpEditEngine->QuickSetAttribs( aSet, rData.maSel );
@@ -688,11 +683,11 @@ void ScInputHandler::UpdateRange( sal_uInt16 nIndex, const ScRange& rNew )
             for (size_t i = nIndex + 1; i < nCount; ++i)
             {
                 ScRangeFindData& rNext = pRangeFindList->GetObject( i );
-                if (rNext.maSel.nStartPara != rData.maSel.nStartPara)
+                if (rNext.maSel.start.nPara != rData.maSel.start.nPara)
                     break;
 
-                rNext.maSel.nStartPos += nDiff;
-                rNext.maSel.nEndPos   += nDiff;
+                rNext.maSel.start.nIndex += nDiff;
+                rNext.maSel.end.nIndex   += nDiff;
             }
         }
 
@@ -1309,12 +1304,12 @@ void ScInputHandler::ShowTipCursor()
     ESelection aSel = pActiveView->GetSelection();
     aSel.Adjust();
 
-    if ( aParagraph.getLength() < aSel.nEndPos )
+    if (aParagraph.getLength() < aSel.end.nIndex)
         return;
 
-    if ( aSel.nEndPos > 0 )
+    if (aSel.end.nIndex > 0)
     {
-        OUString aSelText( aParagraph.copy( 0, aSel.nEndPos ));
+        OUString aSelText(aParagraph.copy(0, aSel.end.nIndex));
 
         ShowArgumentsTip( aSelText );
     }
@@ -1578,21 +1573,21 @@ void ScInputHandler::UseFormulaData()
     // Due to differences between table and input cell (e.g clipboard with line breaks),
     // the selection may not be in line with the EditEngine anymore.
     // Just return without any indication as to why.
-    if ( aSel.nEndPos > aParagraph.getLength() )
+    if (aSel.end.nIndex > aParagraph.getLength())
         return;
 
-    if ( aParagraph.getLength() > aSel.nEndPos &&
-         ( ScGlobal::getCharClass().isLetterNumeric( aParagraph, aSel.nEndPos ) ||
-           aParagraph[ aSel.nEndPos ] == '_' ||
-           aParagraph[ aSel.nEndPos ] == '.' ||
-           aParagraph[ aSel.nEndPos ] == '$'   ) )
+    if ( aParagraph.getLength() > aSel.end.nIndex &&
+         ( ScGlobal::getCharClass().isLetterNumeric( aParagraph, aSel.end.nIndex ) ||
+           aParagraph[ aSel.end.nIndex ] == '_' ||
+           aParagraph[ aSel.end.nIndex ] == '.' ||
+           aParagraph[ aSel.end.nIndex ] == '$'   ) )
         return;
 
     //  Is the cursor at the end of a word?
-    if ( aSel.nEndPos <= 0 )
+    if (aSel.end.nIndex <= 0)
         return;
 
-    OUString aSelText( aParagraph.copy( 0, aSel.nEndPos ));
+    OUString aSelText(aParagraph.copy(0, aSel.end.nIndex));
 
     OUString aText;
     if ( GetFuncName( aSelText, aText ) )
@@ -1666,38 +1661,38 @@ void completeFunction( EditView* pView, const OUString& rInsert, bool& rParInser
     if ( comphelper::LibreOfficeKit::isActive() )
     {
         ESelection aSelRange = aSel;
-        --aSelRange.nStartPos;
-        --aSelRange.nEndPos;
+        --aSelRange.start.nIndex;
+        --aSelRange.end.nIndex;
         pView->SetSelection(aSelRange);
         pView->SelectCurrentWord();
 
         if ( aOld == "=" )
         {
             bNoInitialLetter = true;
-            aSelRange.nStartPos = 1;
-            aSelRange.nEndPos = 1;
+            aSelRange.start.nIndex = 1;
+            aSelRange.end.nIndex = 1;
             pView->SetSelection(aSelRange);
         }
         else if ( pView->GetSelected().startsWith("()") )
         {
             bNoInitialLetter = true;
-            ++aSelRange.nStartPos;
-            ++aSelRange.nEndPos;
+            ++aSelRange.start.nIndex;
+            ++aSelRange.end.nIndex;
             pView->SetSelection(aSelRange);
         }
     }
 
     if(!bNoInitialLetter)
     {
-        const sal_Int32 nMinLen = std::max(aSel.nEndPos - aSel.nStartPos, sal_Int32(1));
+        const sal_Int32 nMinLen = std::max(aSel.end.nIndex - aSel.start.nIndex, sal_Int32(1));
         // Since transliteration service is used to test for match, the replaced string could be
         // longer than rInsert, so in order to find longest match before the cursor, test whole
         // string from start to current cursor position (don't limit to length of rInsert)
         // Disclaimer: I really don't know if a match longer than rInsert is actually possible,
         // so the above is based on assumptions how "transliteration" might possibly work. If
-        // it's in fact impossible, an optimization would be useful to limit aSel.nStartPos to
-        // std::max(sal_Int32(0), aSel.nEndPos - rInsert.getLength()).
-        aSel.nStartPos = 0;
+        // it's in fact impossible, an optimization would be useful to limit aSel.start.nPos to
+        // std::max(sal_Int32(0), aSel.end.nIndex - rInsert.getLength()).
+        aSel.start.nIndex = 0;
         pView->SetSelection(aSel);
         const OUString aAll = pView->GetSelected();
         OUString aMatch;
@@ -1708,7 +1703,7 @@ void completeFunction( EditView* pView, const OUString& rInsert, bool& rParInser
                 aMatch = aTest; // Found => break the loop
         }
 
-        aSel.nStartPos = aSel.nEndPos - aMatch.getLength();
+        aSel.start.nIndex = aSel.end.nIndex - aMatch.getLength();
         pView->SetSelection(aSel);
     }
 
@@ -1723,9 +1718,9 @@ void completeFunction( EditView* pView, const OUString& rInsert, bool& rParInser
         ESelection aWordSel = pView->GetSelection();
 
         // aWordSel.EndPos points one behind string if word at end
-        if (aWordSel.nEndPos < aOld.getLength())
+        if (aWordSel.end.nIndex < aOld.getLength())
         {
-            sal_Unicode cNext = aOld[aWordSel.nEndPos];
+            sal_Unicode cNext = aOld[aWordSel.end.nIndex];
             if ( cNext == '(' )
             {
                 bDoParen = false;
@@ -1739,8 +1734,8 @@ void completeFunction( EditView* pView, const OUString& rInsert, bool& rParInser
     if ( bDoParen ) // Put cursor between parentheses
     {
         aSel = pView->GetSelection();
-        --aSel.nStartPos;
-        --aSel.nEndPos;
+        --aSel.start.nIndex;
+        --aSel.end.nIndex;
         pView->SetSelection(aSel);
 
         rParInserted = true;
@@ -1834,14 +1829,14 @@ void ScTabViewShell::LOKSendFormulabarUpdate(EditView* pActiveView,
     OUString aSelection;
     if (pActiveView)
     {
-        aSelection = OUString::number(pActiveView->GetPosWithField(0, rSelection.nStartPos)) + ";" +
-            OUString::number(pActiveView->GetPosWithField(0, rSelection.nEndPos)) + ";" +
-            OUString::number(rSelection.nStartPara) + ";" + OUString::number(rSelection.nEndPara);
+        aSelection = OUString::number(pActiveView->GetPosWithField(0, rSelection.start.nIndex)) + ";" +
+            OUString::number(pActiveView->GetPosWithField(0, rSelection.end.nIndex)) + ";" +
+            OUString::number(rSelection.start.nPara) + ";" + OUString::number(rSelection.end.nPara);
     }
     else
     {
-        aSelection = OUString::number(rSelection.nStartPos) + ";" + OUString::number(rSelection.nEndPos) + ";" +
-            OUString::number(rSelection.nStartPara) + ";" + OUString::number(rSelection.nEndPara);
+        aSelection = OUString::number(rSelection.start.nIndex) + ";" + OUString::number(rSelection.end.nIndex) + ";" +
+            OUString::number(rSelection.start.nPara) + ";" + OUString::number(rSelection.end.nPara);
     }
 
     sal_uInt64 nCurrentShellId = reinterpret_cast<sal_uInt64>(this);
@@ -1988,10 +1983,10 @@ void ScInputHandler::PasteManualTip()
 
         ESelection aSel = pActiveView->GetSelection();
         aSel.Adjust();
-        OSL_ENSURE( !aSel.nStartPara && !aSel.nEndPara, "Too many paragraphs in Formula" );
-        if ( !aSel.nStartPos )  // Selection from the start?
+        OSL_ENSURE( !aSel.start.nPara && !aSel.end.nPara, "Too many paragraphs in Formula" );
+        if ( !aSel.start.nIndex )  // Selection from the start?
         {
-            if ( aSel.nEndPos == mpEditEngine->GetTextLen(0) )
+            if ( aSel.end.nIndex == mpEditEngine->GetTextLen(0) )
             {
                 //  Everything selected -> skip quotation marks
                 if ( aInsert[0] == '"' )
@@ -2000,11 +1995,11 @@ void ScInputHandler::PasteManualTip()
                 if ( aInsert.endsWith("\"") )
                     aInsert = aInsert.copy( 0, nInsLen-1 );
             }
-            else if ( aSel.nEndPos )
+            else if ( aSel.end.nIndex )
             {
                 //  Not everything selected -> do not overwrite equality sign
                 //FIXME: Even double equality signs??
-                aSel.nStartPos = 1;
+                aSel.start.nIndex = 1;
                 if ( pTopView )
                     pTopView->SetSelection( aSel );
                 if ( pTableView )
@@ -2040,7 +2035,7 @@ bool ScInputHandler::CursorAtClosingPar()
     if ( pActiveView && !pActiveView->HasSelection() && bFormulaMode )
     {
         ESelection aSel = pActiveView->GetSelection();
-        sal_Int32 nPos = aSel.nStartPos;
+        sal_Int32 nPos = aSel.start.nIndex;
         OUString aFormula = mpEditEngine->GetText(0);
         if ( nPos < aFormula.getLength() && aFormula[nPos] == ')' )
             return true;
@@ -2057,8 +2052,8 @@ void ScInputHandler::SkipClosingPar()
     if (pActiveView)
     {
         ESelection aSel = pActiveView->GetSelection();
-        ++aSel.nStartPos;
-        ++aSel.nEndPos;
+        ++aSel.start.nIndex;
+        ++aSel.end.nIndex;
 
         //  this is in a formula (only one paragraph), so the selection
         //  can be used directly for the TopView
@@ -2107,11 +2102,11 @@ void ScInputHandler::UseColData() // When typing
     aSel.Adjust();
 
     sal_Int32 nParCnt = mpEditEngine->GetParagraphCount();
-    if ( aSel.nEndPara+1 != nParCnt )
+    if (aSel.end.nPara + 1 != nParCnt)
         return;
 
-    sal_Int32 nParLen = mpEditEngine->GetTextLen( aSel.nEndPara );
-    if ( aSel.nEndPos != nParLen )
+    sal_Int32 nParLen = mpEditEngine->GetTextLen(aSel.end.nPara);
+    if (aSel.end.nIndex != nParLen)
         return;
 
     OUString aText = GetEditText(mpEditEngine.get());
@@ -2155,8 +2150,8 @@ void ScInputHandler::UseColData() // When typing
 
     // Selection must be "backwards", so the cursor stays behind the last
     // typed character
-    ESelection aSelection( aSel.nEndPara, aSel.nEndPos + aIns.getLength(),
-                           aSel.nEndPara, aSel.nEndPos );
+    ESelection aSelection( aSel.end.nPara, aSel.end.nIndex + aIns.getLength(),
+                           aSel.end.nPara, aSel.end.nIndex );
 
     // When editing in input line, apply to both edit views
     if ( pTableView )
@@ -2184,12 +2179,12 @@ void ScInputHandler::NextAutoEntry( bool bBack )
             ESelection aSel = pActiveView->GetSelection();
             aSel.Adjust();
             sal_Int32 nParCnt = mpEditEngine->GetParagraphCount();
-            if ( aSel.nEndPara+1 == nParCnt && aSel.nStartPara == aSel.nEndPara )
+            if ( aSel.end.nPara+1 == nParCnt && aSel.start.nPara == aSel.end.nPara )
             {
                 OUString aText = GetEditText(mpEditEngine.get());
-                sal_Int32 nSelLen = aSel.nEndPos - aSel.nStartPos;
-                sal_Int32 nParLen = mpEditEngine->GetTextLen( aSel.nEndPara );
-                if ( aSel.nEndPos == nParLen && aText.getLength() == aAutoSearch.getLength() + nSelLen )
+                sal_Int32 nSelLen = aSel.end.nIndex - aSel.start.nIndex;
+                sal_Int32 nParLen = mpEditEngine->GetTextLen( aSel.end.nPara );
+                if ( aSel.end.nIndex == nParLen && aText.getLength() == aAutoSearch.getLength() + nSelLen )
                 {
                     OUString aNew;
                     ScTypedCaseStrSet::const_iterator itNew =
@@ -2211,16 +2206,16 @@ void ScInputHandler::NextAutoEntry( bool bBack )
                             pTableView->DeleteSelected();
                             pTableView->InsertText( aIns );
                             pTableView->SetSelection( ESelection(
-                                                        aSel.nEndPara, aSel.nStartPos + aIns.getLength(),
-                                                        aSel.nEndPara, aSel.nStartPos ) );
+                                                        aSel.end.nPara, aSel.start.nIndex + aIns.getLength(),
+                                                        aSel.end.nPara, aSel.start.nIndex ) );
                         }
                         if ( pTopView )
                         {
                             pTopView->DeleteSelected();
                             pTopView->InsertText( aIns );
                             pTopView->SetSelection( ESelection(
-                                                        aSel.nEndPara, aSel.nStartPos + aIns.getLength(),
-                                                        aSel.nEndPara, aSel.nStartPos ) );
+                                                        aSel.end.nPara, aSel.start.nIndex + aIns.getLength(),
+                                                        aSel.end.nPara, aSel.start.nIndex ) );
                         }
 
                         bInOwnChange = false;
@@ -2246,11 +2241,11 @@ void ScInputHandler::UpdateParenthesis()
         if ( pTableView && !pTableView->HasSelection() ) // Selection is always at the bottom
         {
             ESelection aSel = pTableView->GetSelection();
-            if (aSel.nStartPos)
+            if (aSel.start.nIndex)
             {
                 // Examine character left to the cursor
-                sal_Int32 nPos = aSel.nStartPos - 1;
-                OUString aFormula = mpEditEngine->GetText(aSel.nStartPara);
+                sal_Int32 nPos = aSel.start.nIndex - 1;
+                OUString aFormula = mpEditEngine->GetText(aSel.start.nPara);
                 sal_Unicode c = aFormula[nPos];
                 if ( c == '(' || c == ')' )
                 {
@@ -2270,9 +2265,9 @@ void ScInputHandler::UpdateParenthesis()
                                 mpEditEngine->RemoveCharAttribs( i, EE_CHAR_WEIGHT );
                         }
 
-                        ESelection aSelThis( aSel.nStartPara, nPos, aSel.nStartPara, nPos+1);
+                        ESelection aSelThis(aSel.start.nPara, nPos, aSel.start.nPara, nPos + 1);
                         mpEditEngine->QuickSetAttribs( aSet, aSelThis );
-                        ESelection aSelOther( aSel.nStartPara, nOther, aSel.nStartPara, nOther+1);
+                        ESelection aSelOther(aSel.start.nPara, nOther, aSel.start.nPara, nOther + 1);
                         mpEditEngine->QuickSetAttribs( aSet, aSelOther );
 
                         // Dummy InsertText for Update and Paint (selection is empty)
@@ -2680,31 +2675,30 @@ void ScInputHandler::MergeLanguageAttributes( ScEditEngineDefaulter& rDestEngine
 
 static void lcl_SetTopSelection( EditView* pEditView, ESelection& rSel )
 {
-    OSL_ENSURE( rSel.nStartPara==0 && rSel.nEndPara==0, "SetTopSelection: Para != 0" );
+    OSL_ENSURE( rSel.start.nPara==0 && rSel.end.nPara==0, "SetTopSelection: Para != 0" );
 
     EditEngine& rEngine = pEditView->getEditEngine();
     sal_Int32 nCount = rEngine.GetParagraphCount();
     if (nCount > 1)
     {
-        sal_Int32 nParLen = rEngine.GetTextLen(rSel.nStartPara);
-        while (rSel.nStartPos > nParLen && rSel.nStartPara+1 < nCount)
+        sal_Int32 nParLen = rEngine.GetTextLen(rSel.start.nPara);
+        while (rSel.start.nIndex > nParLen && rSel.start.nPara + 1 < nCount)
         {
-            rSel.nStartPos -= nParLen + 1; // Including space from line break
-            nParLen = rEngine.GetTextLen(++rSel.nStartPara);
+            rSel.start.nIndex -= nParLen + 1; // Including space from line break
+            nParLen = rEngine.GetTextLen(++rSel.start.nPara);
         }
 
-        nParLen = rEngine.GetTextLen(rSel.nEndPara);
-        while (rSel.nEndPos > nParLen && rSel.nEndPara+1 < nCount)
+        nParLen = rEngine.GetTextLen(rSel.end.nPara);
+        while (rSel.end.nIndex > nParLen && rSel.end.nPara + 1 < nCount)
         {
-            rSel.nEndPos -= nParLen + 1; // Including space from line break
-            nParLen = rEngine.GetTextLen(++rSel.nEndPara);
+            rSel.end.nIndex -= nParLen + 1; // Including space from line break
+            nParLen = rEngine.GetTextLen(++rSel.end.nPara);
         }
     }
 
     ESelection aSel = pEditView->GetSelection();
 
-    if (   rSel.nStartPara != aSel.nStartPara || rSel.nEndPara != aSel.nEndPara
-        || rSel.nStartPos  != aSel.nStartPos  || rSel.nEndPos  != aSel.nEndPos )
+    if (rSel != aSel)
         pEditView->SetSelection( rSel );
 }
 
@@ -2829,7 +2823,7 @@ void ScInputHandler::DataChanged( bool bFromTopNotify, bool bSetModified )
             // Cursor before the end?
             aSel = pActiveView->GetSelection();
             aSel.Adjust();
-            bNeedGrow = ( aSel.nEndPos != mpEditEngine->GetTextLen(aSel.nEndPara) );
+            bNeedGrow = (aSel.end.nIndex != mpEditEngine->GetTextLen(aSel.end.nPara));
         }
         if (!bNeedGrow)
         {
@@ -2958,8 +2952,7 @@ void ScInputHandler::RemoveSelection()
         return;
 
     ESelection aSel = pActiveView->GetSelection();
-    aSel.nStartPara = aSel.nEndPara;
-    aSel.nStartPos  = aSel.nEndPos;
+    aSel.CollapseToEnd();
     if (pTableView)
         pTableView->SetSelection( aSel );
     if (pTopView)
@@ -3057,8 +3050,7 @@ void ScInputHandler::SetMode( ScInputMode eNewMode, const OUString* pInitText, S
             }
             else
             {
-                mpEditEngine->GetView(i)->
-                    SetSelection( ESelection( nPara, nLen, nPara, nLen ) );
+                mpEditEngine->GetView(i)->SetSelection(ESelection(nPara, nLen));
             }
             mpEditEngine->GetView(i)->ShowCursor(false);
         }
@@ -3101,14 +3093,7 @@ static bool lcl_IsNumber(std::u16string_view aString)
 static void lcl_SelectionToEnd( EditView* pView )
 {
     if ( pView )
-    {
-        EditEngine& rEngine = pView->getEditEngine();
-        sal_Int32 nParCnt = rEngine.GetParagraphCount();
-        if ( nParCnt == 0 )
-            nParCnt = 1;
-        ESelection aSel( nParCnt-1, rEngine.GetTextLen(nParCnt-1) ); // empty selection, cursor at the end
-        pView->SetSelection( aSel );
-    }
+        pView->SetSelection(ESelection::AtEnd());
 }
 
 void ScInputHandler::EnterHandler( ScEnterMode nBlockMode, bool bBeforeSavingInLOK )
@@ -3274,8 +3259,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode, bool bBeforeSavingInL
             }
         }
 
-        ESelection aSel( 0, 0, nParCnt-1, mpEditEngine->GetTextLen(nParCnt-1) );
-        SfxItemSet aOldAttribs = mpEditEngine->GetAttribs( aSel );
+        SfxItemSet aOldAttribs = mpEditEngine->GetAttribs(ESelection::All());
         const SfxPoolItem* pItem = nullptr;
 
         // Find common (cell) attributes before RemoveAdjust
@@ -3626,7 +3610,7 @@ void ScInputHandler::SetReference( const ScRange& rRef, const ScDocument& rDoc )
     EditView* pActiveView = pTopView ? pTopView : pTableView;
     ESelection aSel = pActiveView->GetSelection();
     aSel.Adjust();
-    if ( aSel.nStartPara == 0 && aSel.nStartPos == 0 )
+    if (aSel.start.nPara == 0 && aSel.start.nIndex == 0)
         return;
 
     DataChanging();                         // Cannot be new
@@ -3635,7 +3619,7 @@ void ScInputHandler::SetReference( const ScRange& rRef, const ScDocument& rDoc )
     if (pTableView)
     {
         ESelection aTabSel = pTableView->GetSelection();
-        if (aTabSel.nStartPos > aTabSel.nEndPos && aTabSel.nStartPara == aTabSel.nEndPara)
+        if (aTabSel.start.nIndex > aTabSel.end.nIndex && aTabSel.start.nPara == aTabSel.end.nPara)
         {
             aTabSel.Adjust();
             pTableView->SetSelection(aTabSel);
@@ -3644,7 +3628,7 @@ void ScInputHandler::SetReference( const ScRange& rRef, const ScDocument& rDoc )
     if (pTopView)
     {
         ESelection aTopSel = pTopView->GetSelection();
-        if (aTopSel.nStartPos > aTopSel.nEndPos && aTopSel.nStartPara == aTopSel.nEndPara)
+        if (aTopSel.start.nIndex > aTopSel.end.nIndex && aTopSel.start.nPara == aTopSel.end.nPara)
         {
             aTopSel.Adjust();
             pTopView->SetSelection(aTopSel);
@@ -3730,8 +3714,8 @@ void ScInputHandler::InsertFunction( const OUString& rFuncName, bool bAddPar )
         if (bAddPar)
         {
             ESelection aSel = pTableView->GetSelection();
-            --aSel.nStartPos;
-            --aSel.nEndPos;
+            --aSel.start.nIndex;
+            --aSel.end.nIndex;
             pTableView->SetSelection(aSel);
         }
     }
@@ -3741,8 +3725,8 @@ void ScInputHandler::InsertFunction( const OUString& rFuncName, bool bAddPar )
         if (bAddPar)
         {
             ESelection aSel = pTopView->GetSelection();
-            --aSel.nStartPos;
-            --aSel.nEndPos;
+            --aSel.start.nIndex;
+            --aSel.end.nIndex;
             pTopView->SetSelection(aSel);
         }
     }
@@ -3770,12 +3754,12 @@ void ScInputHandler::ClearText()
     if (pTableView)
     {
         pTableView->getEditEngine().SetText( u""_ustr );
-        pTableView->SetSelection( ESelection(0,0, 0,0) );
+        pTableView->SetSelection(ESelection());
     }
     if (pTopView)
     {
         pTopView->getEditEngine().SetText( u""_ustr );
-        pTopView->SetSelection( ESelection(0,0, 0,0) );
+        pTopView->SetSelection(ESelection());
     }
 
     DataChanged();
@@ -4355,11 +4339,11 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                         ESelection aSel = pActiveView ? pActiveView->GetSelection() : ESelection();
 
                         // if we switched content completely - don't send huge numbers
-                        if (aSel.nStartPara == EE_PARA_NOT_FOUND)
-                            aSel.nStartPara = 0;
+                        if (aSel.start.nPara == EE_PARA_MAX)
+                            aSel.start.nPara = 0;
 
-                        if (aSel.nEndPara == EE_PARA_NOT_FOUND)
-                            aSel.nEndPara = 0;
+                        if (aSel.end.nPara == EE_PARA_MAX)
+                            aSel.end.nPara = 0;
 
                         pActiveViewSh->LOKSendFormulabarUpdate(pActiveView, aString, aSel);
                         pActiveViewSh->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_FORMULA, aString.toUtf8());
@@ -4585,8 +4569,7 @@ bool ScInputHandler::GetTextAndFields( ScEditEngineDefaulter& rDestEngine )
     if (mpEditEngine)
     {
         // Contains field?
-        sal_Int32 nParCnt = mpEditEngine->GetParagraphCount();
-        SfxItemSet aSet = mpEditEngine->GetAttribs( ESelection(0,0,nParCnt,0) );
+        SfxItemSet aSet = mpEditEngine->GetAttribs(ESelection::All());
         SfxItemState eFieldState = aSet.GetItemState( EE_FEATURE_FIELD, false );
         if ( eFieldState == SfxItemState::INVALID || eFieldState == SfxItemState::SET )
         {
@@ -4595,6 +4578,7 @@ bool ScInputHandler::GetTextAndFields( ScEditEngineDefaulter& rDestEngine )
             rDestEngine.SetTextCurrentDefaults(*pObj);
             pObj.reset();
 
+            sal_Int32 nParCnt = mpEditEngine->GetParagraphCount();
             // Delete attributes
             for (sal_Int32 i=0; i<nParCnt; i++)
                 rDestEngine.RemoveCharAttribs( i );

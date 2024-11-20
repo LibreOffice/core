@@ -2279,16 +2279,17 @@ bool SdrObjEditView::ImpIsTextEditAllSelected() const
                 = mpTextEditOutliner->GetParagraph(nParaCnt > 1 ? nParaCnt - 1 : 0);
 
             ESelection aESel(mpTextEditOutlinerView->GetSelection());
-            if (aESel.nStartPara == 0 && aESel.nStartPos == 0 && aESel.nEndPara == (nParaCnt - 1))
+            if (aESel.start.nPara == 0 && aESel.start.nIndex == 0
+                && aESel.end.nPara == (nParaCnt - 1))
             {
-                if (mpTextEditOutliner->GetText(pLastPara).getLength() == aESel.nEndPos)
+                if (mpTextEditOutliner->GetText(pLastPara).getLength() == aESel.end.nIndex)
                     bRet = true;
             }
             // in case the selection was done backwards
-            if (!bRet && aESel.nEndPara == 0 && aESel.nEndPos == 0
-                && aESel.nStartPara == (nParaCnt - 1))
+            if (!bRet && aESel.end.nPara == 0 && aESel.end.nIndex == 0
+                && aESel.start.nPara == (nParaCnt - 1))
             {
-                if (mpTextEditOutliner->GetText(pLastPara).getLength() == aESel.nStartPos)
+                if (mpTextEditOutliner->GetText(pLastPara).getLength() == aESel.start.nIndex)
                     bRet = true;
             }
         }
@@ -2822,11 +2823,11 @@ sal_uInt16 SdrObjEditView::GetSelectionLevel() const
         return 0xFFFF;
     //start and end position
     ESelection aSelect = mpTextEditOutlinerView->GetSelection();
-    sal_uInt16 nStartPara = ::std::min(aSelect.nStartPara, aSelect.nEndPara);
-    sal_uInt16 nEndPara = ::std::max(aSelect.nStartPara, aSelect.nEndPara);
+    sal_Int32 nStartPara = ::std::min(aSelect.start.nPara, aSelect.end.nPara);
+    sal_Int32 nEndPara = ::std::max(aSelect.start.nPara, aSelect.end.nPara);
     //get level from each paragraph
     sal_uInt16 nLevel = 0;
-    for (sal_uInt16 nPara = nStartPara; nPara <= nEndPara; nPara++)
+    for (sal_Int32 nPara = nStartPara; nPara <= nEndPara; nPara++)
     {
         sal_Int16 nDepth = mpTextEditOutliner->GetDepth(nPara);
         assert(nDepth >= 0 && nDepth <= 15);
@@ -3095,7 +3096,7 @@ void SdrObjEditView::ApplyFormatPaintBrush(SfxItemSet& rFormatSet, sal_Int16 nDe
 
             ESelection aSel(pOLV->GetSelection());
             bool fullParaSelection
-                = aSel.nEndPara != aSel.nStartPara || pOLV->GetEditView().IsSelectionFullPara();
+                = aSel.end.nPara != aSel.start.nPara || pOLV->GetEditView().IsSelectionFullPara();
             if (!aSel.HasRange())
                 pOLV->SetSelection(rEditEngine.GetWord(aSel, css::i18n::WordType::DICTIONARY_WORD));
             const bool bRemoveParaAttribs = !bNoParagraphFormats && !fullParaSelection;
@@ -3107,7 +3108,7 @@ void SdrObjEditView::ApplyFormatPaintBrush(SfxItemSet& rFormatSet, sal_Int16 nDe
             pOLV->SetAttribs(aPaintSet);
             if (!bNoParagraphFormats && nDepth > -2)
             {
-                for (sal_Int32 nPara = aSel.nStartPara; nPara <= aSel.nEndPara; ++nPara)
+                for (sal_Int32 nPara = aSel.start.nPara; nPara <= aSel.end.nPara; ++nPara)
                     pOLV->SetDepth(nPara, nDepth);
             }
         }

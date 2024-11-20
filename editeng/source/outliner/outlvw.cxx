@@ -123,12 +123,12 @@ bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window const * pFra
             {
                 if( !bReadOnly && !bSelection && ( pOwner->GetOutlinerMode() != OutlinerMode::TextObject ) )
                 {
-                    if( aSel.nEndPos == pOwner->pEditEngine->GetTextLen( aSel.nEndPara ) )
+                    if (aSel.end.nIndex == pOwner->pEditEngine->GetTextLen(aSel.end.nPara))
                     {
-                        Paragraph* pNext = pOwner->pParaList->GetParagraph( aSel.nEndPara+1 );
+                        Paragraph* pNext = pOwner->pParaList->GetParagraph(aSel.end.nPara + 1);
                         if( pNext && pNext->HasFlag(ParaFlag::ISPAGE) )
                         {
-                            if( !pOwner->ImpCanDeleteSelectedPages( this, aSel.nEndPara, 1 ) )
+                            if (!pOwner->ImpCanDeleteSelectedPages(this, aSel.end.nPara, 1))
                                 return false;
                         }
                     }
@@ -149,13 +149,13 @@ bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window const * pFra
                 {
                     if ( ( pOwner->GetOutlinerMode() != OutlinerMode::TextObject ) &&
                          ( pOwner->GetOutlinerMode() != OutlinerMode::TitleObject ) &&
-                         ( bSelection || !aSel.nStartPos ) )
+                         ( bSelection || !aSel.start.nIndex ) )
                     {
                         Indent( aKeyCode.IsShift() ? -1 : +1 );
                         bKeyProcessed = true;
                     }
                     else if ( ( pOwner->GetOutlinerMode() == OutlinerMode::TextObject ) &&
-                              !bSelection && !aSel.nEndPos && pOwner->ImplHasNumberFormat( aSel.nEndPara ) )
+                              !bSelection && !aSel.end.nIndex && pOwner->ImplHasNumberFormat( aSel.end.nPara ) )
                     {
                         Indent( aKeyCode.IsShift() ? -1 : +1 );
                         bKeyProcessed = true;
@@ -165,15 +165,15 @@ bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window const * pFra
             break;
             case KEY_BACKSPACE:
             {
-                if( !bReadOnly && !bSelection && aSel.nEndPara && !aSel.nEndPos )
+                if (!bReadOnly && !bSelection && aSel.end.nPara && !aSel.end.nIndex)
                 {
-                    Paragraph* pPara = pOwner->pParaList->GetParagraph( aSel.nEndPara );
-                    Paragraph* pPrev = pOwner->pParaList->GetParagraph( aSel.nEndPara-1 );
+                    Paragraph* pPara = pOwner->pParaList->GetParagraph(aSel.end.nPara);
+                    Paragraph* pPrev = pOwner->pParaList->GetParagraph(aSel.end.nPara - 1);
                     if( !pPrev->IsVisible()  )
                         return true;
                     if( !pPara->GetDepth() )
                     {
-                        if(!pOwner->ImpCanDeleteSelectedPages(this, aSel.nEndPara , 1 ) )
+                        if (!pOwner->ImpCanDeleteSelectedPages(this, aSel.end.nPara, 1))
                             return true;
                     }
                 }
@@ -185,26 +185,26 @@ bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window const * pFra
                 {
                     // Special treatment: hard return at the end of a paragraph,
                     // which has collapsed subparagraphs.
-                    Paragraph* pPara = pOwner->pParaList->GetParagraph( aSel.nEndPara );
+                    Paragraph* pPara = pOwner->pParaList->GetParagraph(aSel.end.nPara);
 
                     if( !aKeyCode.IsShift() )
                     {
                         // Don't let insert empty paragraph with numbering. Instead end numbering.
                         if (pPara->GetDepth() > -1 &&
-                            pOwner->pEditEngine->GetTextLen( aSel.nEndPara ) == 0)
+                            pOwner->pEditEngine->GetTextLen( aSel.end.nPara ) == 0)
                         {
                             ToggleBullets();
                             return true;
                         }
                         // ImpGetCursor again???
                         if( !bSelection &&
-                                aSel.nEndPos == pOwner->pEditEngine->GetTextLen( aSel.nEndPara ) )
+                                aSel.end.nIndex == pOwner->pEditEngine->GetTextLen( aSel.end.nPara ) )
                         {
                             sal_Int32 nChildren = pOwner->pParaList->GetChildCount(pPara);
                             if( nChildren && !pOwner->pParaList->HasVisibleChildren(pPara))
                             {
                                 pOwner->UndoActionStart( OLUNDO_INSERT );
-                                sal_Int32 nTemp = aSel.nEndPara;
+                                sal_Int32 nTemp = aSel.end.nPara;
                                 nTemp += nChildren;
                                 nTemp++; // insert above next Non-Child
                                 SAL_WARN_IF( nTemp < 0, "editeng", "OutlinerView::PostKeyEvent - overflow");
@@ -212,7 +212,7 @@ bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window const * pFra
                                 {
                                     pOwner->Insert( OUString(),nTemp,pPara->GetDepth());
                                     // Position the cursor
-                                    ESelection aTmpSel(nTemp,0,nTemp,0);
+                                    ESelection aTmpSel(nTemp, 0);
                                     pEditView->SetSelection( aTmpSel );
                                 }
                                 pEditView->ShowCursor();
@@ -223,15 +223,15 @@ bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window const * pFra
                     }
                     if( !bKeyProcessed && !bSelection &&
                                 !aKeyCode.IsShift() && aKeyCode.IsMod1() &&
-                            ( aSel.nEndPos == pOwner->pEditEngine->GetTextLen(aSel.nEndPara) ) )
+                            ( aSel.end.nIndex == pOwner->pEditEngine->GetTextLen(aSel.end.nPara) ) )
                     {
                         pOwner->UndoActionStart( OLUNDO_INSERT );
-                        sal_Int32 nTemp = aSel.nEndPara;
+                        sal_Int32 nTemp = aSel.end.nPara;
                         nTemp++;
                         pOwner->Insert( OUString(), nTemp, pPara->GetDepth()+1 );
 
                         // Position the cursor
-                        ESelection aTmpSel(nTemp,0,nTemp,0);
+                        ESelection aTmpSel(nTemp, 0);
                         pEditView->SetSelection( aTmpSel );
                         pEditView->ShowCursor();
                         pOwner->UndoActionEnd();
@@ -248,7 +248,7 @@ bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window const * pFra
 
 sal_Int32 OutlinerView::ImpCheckMousePos(const Point& rPosPix, MouseTarget& reTarget)
 {
-    sal_Int32 nPara = EE_PARA_NOT_FOUND;
+    sal_Int32 nPara = EE_PARA_MAX;
 
     Point aMousePosWin = pEditView->GetOutputDevice().PixelToLogic( rPosPix );
     if( !pEditView->GetOutputArea().Contains( aMousePosWin ) )
@@ -328,7 +328,7 @@ bool OutlinerView::MouseButtonDown( const MouseEvent& rMEvt )
             if ( bHasChildren && pOwner->pParaList->HasVisibleChildren(pPara) )
                 nEndPara += pOwner->pParaList->GetChildCount( pPara );
             // The selection is inverted, so that EditEngine does not scroll
-            ESelection aSel(nEndPara, EE_TEXTPOS_ALL, nPara, 0 );
+            ESelection aSel(nEndPara, EE_TEXTPOS_MAX, nPara, 0);
             pEditView->SetSelection( aSel );
         }
         else if( rMEvt.GetClicks() == 2 && bHasChildren )
@@ -338,10 +338,10 @@ bool OutlinerView::MouseButtonDown( const MouseEvent& rMEvt )
     }
 
     // special case for outliner view in impress, check if double click hits the page icon for toggle
-    if( (nPara == EE_PARA_NOT_FOUND) && (pOwner->GetOutlinerMode() == OutlinerMode::OutlineView) && (eTarget == MouseTarget::Text) && (rMEvt.GetClicks() == 2) )
+    if( (nPara == EE_PARA_MAX) && (pOwner->GetOutlinerMode() == OutlinerMode::OutlineView) && (eTarget == MouseTarget::Text) && (rMEvt.GetClicks() == 2) )
     {
         ESelection aSel( pEditView->GetSelection() );
-        nPara = aSel.nStartPara;
+        nPara = aSel.start.nPara;
         Paragraph* pPara = pOwner->pParaList->GetParagraph( nPara );
         if( (pPara && pOwner->pParaList->HasChildren(pPara)) && pPara->HasFlag(ParaFlag::ISPAGE) )
         {
@@ -375,7 +375,7 @@ void OutlinerView::ReleaseMouse()
 void OutlinerView::ImpToggleExpand( Paragraph const * pPara )
 {
     sal_Int32 nPara = pOwner->pParaList->GetAbsPos( pPara );
-    pEditView->SetSelection( ESelection( nPara, 0, nPara, 0 ) );
+    pEditView->SetSelection(ESelection(nPara, 0));
     ImplExpandOrCollaps( nPara, nPara, !pOwner->pParaList->HasVisibleChildren( pPara ) );
     pEditView->ShowCursor();
 }
@@ -401,8 +401,8 @@ sal_Int16 OutlinerView::GetDepth() const
 {
     ESelection aESelection = GetSelection();
     aESelection.Adjust();
-    sal_Int16 nDepth = pOwner->GetDepth(aESelection.nStartPara);
-    for (sal_Int32 nPara = aESelection.nStartPara + 1; nPara <= aESelection.nEndPara; ++nPara)
+    sal_Int16 nDepth = pOwner->GetDepth(aESelection.start.nPara);
+    for (sal_Int32 nPara = aESelection.start.nPara + 1; nPara <= aESelection.end.nPara; ++nPara)
     {
         if (nDepth != pOwner->GetDepth(nPara))
             return -2;
@@ -440,7 +440,7 @@ void OutlinerView::SetAttribs( const SfxItemSet& rAttrs )
 ParaRange OutlinerView::ImpGetSelectedParagraphs( bool bIncludeHiddenChildren )
 {
     ESelection aSel = pEditView->GetSelection();
-    ParaRange aParas( aSel.nStartPara, aSel.nEndPara );
+    ParaRange aParas(aSel.start.nPara, aSel.end.nPara);
     aParas.Adjust();
 
     // Record the  invisible Children of the last Parents in the selection
@@ -497,7 +497,7 @@ void OutlinerView::Indent( short nDiff )
                     pPara->SetFlag( ParaFlag::ISPAGE );
 
                 pOwner->DepthChangedHdl(pPara, nPrevFlags);
-                pOwner->pEditEngine->QuickMarkInvalid( ESelection( nPara, 0, nPara, 0 ) );
+                pOwner->pEditEngine->QuickMarkInvalid(ESelection(nPara, 0));
 
                 if( bUndo )
                     pOwner->InsertUndo( std::make_unique<OutlinerUndoChangeParaFlags>( pOwner, nPara, nPrevFlags, pPara->nFlags ) );
@@ -566,7 +566,7 @@ void OutlinerView::Indent( short nDiff )
         else
         {
             // Needs at least a repaint...
-            pOwner->pEditEngine->QuickMarkInvalid( ESelection( nPara, 0, nPara, 0 ) );
+            pOwner->pEditEngine->QuickMarkInvalid(ESelection(nPara, 0));
         }
     }
 
@@ -790,8 +790,8 @@ sal_Int32 OutlinerView::ImpInitPaste( sal_Int32& rStart )
     pOwner->bPasting = true;
     ESelection aSelection( pEditView->GetSelection() );
     aSelection.Adjust();
-    rStart = aSelection.nStartPara;
-    sal_Int32 nSize = aSelection.nEndPara - aSelection.nStartPara + 1;
+    rStart = aSelection.start.nPara;
+    sal_Int32 nSize = aSelection.end.nPara - aSelection.start.nPara + 1;
     return nSize;
 }
 
@@ -814,11 +814,7 @@ bool OutlinerView::Command(const CommandEvent& rCEvt)
 
 void OutlinerView::SelectRange( sal_Int32 nFirst, sal_Int32 nCount )
 {
-    sal_Int32 nLast = nFirst+nCount;
-    nCount = pOwner->pParaList->GetParagraphCount();
-    if( nLast <= nCount )
-        nLast = nCount - 1;
-    ESelection aSel( nFirst, 0, nLast, EE_TEXTPOS_ALL );
+    ESelection aSel(nFirst, 0, nFirst + nCount, EE_TEXTPOS_MAX);
     pEditView->SetSelection( aSel );
 }
 
@@ -829,18 +825,18 @@ sal_Int32 OutlinerView::ImpCalcSelectedPages( bool bIncludeFirstSelected )
     aSel.Adjust();
 
     sal_Int32 nPages = 0;
-    sal_Int32 nFirstPage = EE_PARA_MAX_COUNT;
-    sal_Int32 nStartPara = aSel.nStartPara;
+    sal_Int32 nFirstPage = EE_PARA_MAX;
+    sal_Int32 nStartPara = aSel.start.nPara;
     if ( !bIncludeFirstSelected )
         nStartPara++;   // All paragraphs after StartPara will be deleted
-    for ( sal_Int32 nPara = nStartPara; nPara <= aSel.nEndPara; nPara++ )
+    for (sal_Int32 nPara = nStartPara; nPara <= aSel.end.nPara; nPara++)
     {
         Paragraph* pPara = pOwner->pParaList->GetParagraph( nPara );
         assert(pPara && "ImpCalcSelectedPages: invalid Selection?");
         if( pPara->HasFlag(ParaFlag::ISPAGE) )
         {
             nPages++;
-            if( nFirstPage == EE_PARA_MAX_COUNT )
+            if (nFirstPage == EE_PARA_MAX)
                 nFirstPage = nPara;
         }
     }
@@ -867,7 +863,7 @@ void OutlinerView::ToggleBullets()
     sal_Int16 nNewDepth = -2;
     const SvxNumRule* pDefaultBulletNumRule = nullptr;
 
-    for ( sal_Int32 nPara = aSel.nStartPara; nPara <= aSel.nEndPara; nPara++ )
+    for (sal_Int32 nPara = aSel.start.nPara; nPara <= aSel.end.nPara; nPara++)
     {
         Paragraph* pPara = pOwner->pParaList->GetParagraph( nPara );
         DBG_ASSERT(pPara, "OutlinerView::ToggleBullets(), illegal selection?");
@@ -920,10 +916,10 @@ void OutlinerView::ToggleBullets()
     }
 
     const sal_Int32 nParaCount = pOwner->pParaList->GetParagraphCount();
-    pOwner->ImplCheckParagraphs( aSel.nStartPara, nParaCount );
+    pOwner->ImplCheckParagraphs(aSel.start.nPara, nParaCount);
 
     sal_Int32 nEndPara = (nParaCount > 0) ? nParaCount-1 : nParaCount;
-    pOwner->pEditEngine->QuickMarkInvalid( ESelection( aSel.nStartPara, 0, nEndPara, 0 ) );
+    pOwner->pEditEngine->QuickMarkInvalid(ESelection(aSel.start.nPara, 0, nEndPara, 0));
 
     pOwner->pEditEngine->SetUpdateLayout( bUpdate );
 
@@ -943,7 +939,7 @@ void OutlinerView::ToggleBulletsNumbering(
     if ( bToggle )
     {
         bToggleOn = false;
-        const sal_Int16 nBulletNumberingStatus( pOwner->GetBulletsNumberingStatus( aSel.nStartPara, aSel.nEndPara ) );
+        const sal_Int16 nBulletNumberingStatus( pOwner->GetBulletsNumberingStatus( aSel.start.nPara, aSel.end.nPara ) );
         if ( nBulletNumberingStatus != 0 && bHandleBullets )
         {
             // not all paragraphs have bullets and method called to toggle bullets --> bullets on
@@ -977,7 +973,7 @@ void OutlinerView::EnsureNumberingIsOn()
     const bool bUpdate = pOwner->pEditEngine->IsUpdateLayout();
     pOwner->pEditEngine->SetUpdateLayout(false);
 
-    for (sal_Int32 nPara = aSel.nStartPara; nPara <= aSel.nEndPara; nPara++)
+    for (sal_Int32 nPara = aSel.start.nPara; nPara <= aSel.end.nPara; nPara++)
     {
         Paragraph* pPara = pOwner->pParaList->GetParagraph(nPara);
         DBG_ASSERT(pPara, "OutlinerView::EnableBullets(), illegal selection?");
@@ -987,10 +983,10 @@ void OutlinerView::EnsureNumberingIsOn()
     }
 
     sal_Int32 nParaCount = pOwner->pParaList->GetParagraphCount();
-    pOwner->ImplCheckParagraphs(aSel.nStartPara, nParaCount);
+    pOwner->ImplCheckParagraphs(aSel.start.nPara, nParaCount);
 
     const sal_Int32 nEndPara = (nParaCount > 0) ? nParaCount-1 : nParaCount;
-    pOwner->pEditEngine->QuickMarkInvalid(ESelection(aSel.nStartPara, 0, nEndPara, 0));
+    pOwner->pEditEngine->QuickMarkInvalid(ESelection(aSel.start.nPara, 0, nEndPara, 0));
 
     pOwner->pEditEngine->SetUpdateLayout(bUpdate);
 
@@ -1017,8 +1013,8 @@ void OutlinerView::ApplyBulletsNumbering(
     {
         ESelection aSel( pEditView->GetSelection() );
         aSel.Adjust();
-        nStartPara = aSel.nStartPara;
-        nEndPara = aSel.nEndPara;
+        nStartPara = aSel.start.nPara;
+        nEndPara = aSel.end.nPara;
     }
     else
     {
@@ -1135,8 +1131,8 @@ void OutlinerView::SwitchOffBulletsNumbering(
     {
         ESelection aSel( pEditView->GetSelection() );
         aSel.Adjust();
-        nStartPara = aSel.nStartPara;
-        nEndPara = aSel.nEndPara;
+        nStartPara = aSel.start.nPara;
+        nEndPara = aSel.end.nPara;
     }
     else
     {
@@ -1193,7 +1189,7 @@ void OutlinerView::RemoveAttribs( bool bRemoveParaAttribs, bool bKeepLanguages )
         // Loop through all paragraphs and set indentation and level
         ESelection aSel = pEditView->GetSelection();
         aSel.Adjust();
-        for ( sal_Int32 nPara = aSel.nStartPara; nPara <= aSel.nEndPara; nPara++ )
+        for (sal_Int32 nPara = aSel.start.nPara; nPara <= aSel.end.nPara; nPara++)
         {
             Paragraph* pPara = pOwner->pParaList->GetParagraph( nPara );
             pOwner->ImplInitDepth( nPara, pPara->GetDepth(), false );
@@ -1414,8 +1410,8 @@ void OutlinerView::Read( SvStream& rInput, EETextFormat eFormat, SvKeyValueItera
     pEditView->Read( rInput, eFormat, pHTTPHeaderAttrs );
 
     tools::Long nParaDiff = pEditView->getEditEngine().GetParagraphCount() - nOldParaCount;
-    sal_Int32 nChangesStart = aOldSel.nStartPara;
-    sal_Int32 nChangesEnd = nChangesStart + nParaDiff + (aOldSel.nEndPara-aOldSel.nStartPara);
+    sal_Int32 nChangesStart = aOldSel.start.nPara;
+    sal_Int32 nChangesEnd = nChangesStart + nParaDiff + (aOldSel.end.nPara-aOldSel.start.nPara);
 
     for ( sal_Int32 n = nChangesStart; n <= nChangesEnd; n++ )
     {
@@ -1505,7 +1501,7 @@ bool GetStatusValueForThesaurusFromContext(
     if (!isSingleScriptType(rEditEngine.GetScriptType(aTextSel)))
         return false;
 
-    LanguageType nLang = rEditEngine.GetLanguage( aTextSel.nStartPara, aTextSel.nStartPos ).nLang;
+    LanguageType nLang = rEditEngine.GetLanguage(aTextSel.start.nPara, aTextSel.start.nIndex).nLang;
     OUString aLangText( LanguageTag::convertToBcp47( nLang ) );
 
     // set word and locale to look up as status value

@@ -1628,7 +1628,7 @@ void ImpEditEngine::CreateSpellInfo( bool bMultipleDocs )
     // (spelling in only a selection or not starting with the top requires
     // further changes elsewhere to work properly)
     mpSpellInfo->aSpellStart = EPaM();
-    mpSpellInfo->aSpellTo    = EPaM( EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND );
+    mpSpellInfo->aSpellTo = EPaM(EE_PARA_MAX, EE_TEXTPOS_MAX);
 }
 
 
@@ -1852,7 +1852,7 @@ void ImpEditEngine::ImpConvert( OUString &rConvTxt, LanguageType &rConvTxtLang,
             mpEditEngine->GetText(mpConvInfo->aConvContinue.nPara).isEmpty())
         {
             sal_Int32 nPara = mpConvInfo->aConvContinue.nPara;
-            ESelection aESel( nPara, 0, nPara, 0 );
+            ESelection aESel(nPara, 0);
             // see comment for below same function call
             SetLanguageAndFont( aESel,
                     nTargetLang, EE_CHAR_LANGUAGE_CJK,

@@ -126,9 +126,9 @@ bool NonOverflowingText::IsLastParaInterrupted() const
 std::optional<OutlinerParaObject> NonOverflowingText::RemoveOverflowingText(Outliner *pOutliner) const
 {
     pOutliner->QuickDelete(maContentSel);
-    SAL_INFO("editeng.chaining", "Deleting selection from (Para: " << maContentSel.nStartPara
-             << ", Pos: " << maContentSel.nStartPos << ") to (Para: " << maContentSel.nEndPara
-             << ", Pos: " << maContentSel.nEndPos << ")");
+    SAL_INFO("editeng.chaining", "Deleting selection from (Para: " << maContentSel.start.nPara
+             << ", Pos: " << maContentSel.start.nIndex << ") to (Para: " << maContentSel.end.nPara
+             << ", Pos: " << maContentSel.end.nIndex << ")");
     return pOutliner->CreateParaObject();
 }
 
@@ -137,7 +137,7 @@ ESelection NonOverflowingText::GetOverflowPointSel() const
     //return getLastPositionSel(mpContentTextObj);
 
     // return the starting point of the selection we are removing
-    return ESelection(maContentSel.nStartPara, maContentSel.nStartPos); //XXX
+    return ESelection(maContentSel.start); //XXX
 }
 
 // The equivalent of ToParaObject for OverflowingText. Here we are prepending the overflowing text to the old dest box's text

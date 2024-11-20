@@ -3744,7 +3744,7 @@ void SvxMSDffManager::ReadObjText( const OUString& rText, SdrObject* pObj )
             else
                 ++nParaSize;
         }
-        ESelection aSelection( nParaIndex, 0, nParaIndex, 0 );
+        ESelection aSelection(nParaIndex, 0);
         OUString aParagraph( pCurrent, nParaSize );
         if ( !nParaIndex && aParagraph.isEmpty() )              // SJ: we are crashing if the first paragraph is empty ?
             aParagraph += " ";                   // otherwise these two lines can be removed.
@@ -3752,9 +3752,9 @@ void SvxMSDffManager::ReadObjText( const OUString& rText, SdrObject* pObj )
         rOutliner.SetParaAttribs( nParaIndex, rOutliner.GetEmptyItemSet() );
 
         SfxItemSet aParagraphAttribs( rOutliner.GetEmptyItemSet() );
-        if ( !aSelection.nStartPos )
+        if (!aSelection.start.nIndex)
             aParagraphAttribs.Put( SfxBoolItem( EE_PARA_BULLETSTATE, false ) );
-        aSelection.nStartPos = 0;
+        aSelection.start.nIndex = 0;
         rOutliner.QuickSetAttribs( aParagraphAttribs, aSelection );
         nParaIndex++;
     }

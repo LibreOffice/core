@@ -138,8 +138,7 @@ void FuBullet::InsertFormattingMark( sal_Unicode cMark )
     pOV->InsertText( aStr, true);
 
     ESelection aSel = pOV->GetSelection();
-    aSel.nStartPara = aSel.nEndPara;
-    aSel.nStartPos = aSel.nEndPos;
+    aSel.CollapseToEnd();
     pOV->SetSelection(aSel);
 
     rUndoMgr.LeaveListAction();
@@ -270,8 +269,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest const & rReq )
     pOV->SetAttribs(aSet);
 
     ESelection aSel = pOV->GetSelection();
-    aSel.nStartPara = aSel.nEndPara;
-    aSel.nStartPos = aSel.nEndPos;
+    aSel.CollapseToEnd();
     pOV->SetSelection(aSel);
 
     // do not go ahead with setting attributes of special characters

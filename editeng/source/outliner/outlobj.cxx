@@ -166,10 +166,10 @@ TextRotation OutlinerParaObject::GetRotation() const
 sal_Int32 OutlinerParaObject::Count() const
 {
     size_t nSize = mpImpl->maParagraphDataVector.size();
-    if (nSize > EE_PARA_MAX_COUNT)
+    if (nSize > o3tl::make_unsigned(EE_PARA_MAX))
     {
         SAL_WARN( "editeng", "OutlinerParaObject::Count - overflow " << nSize);
-        return EE_PARA_MAX_COUNT;
+        return EE_PARA_MAX;
     }
     return static_cast<sal_Int32>(nSize);
 }

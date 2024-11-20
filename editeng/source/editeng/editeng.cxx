@@ -321,7 +321,7 @@ EEHorizontalTextDirection EditEngine::GetDefaultHorizontalTextDirection() const
 
 SvtScriptType EditEngine::GetScriptType( const ESelection& rSelection ) const
 {
-    return getImpl().GetScriptType( rSelection );
+    return getImpl().GetItemScriptType(getImpl().CreateSel(rSelection));
 }
 
 editeng::LanguageSpan EditEngine::GetLanguage(const EditPaM& rPaM) const
@@ -336,7 +336,7 @@ editeng::LanguageSpan EditEngine::GetLanguage( sal_Int32 nPara, sal_Int32 nPos )
 
 void EditEngine::TransliterateText( const ESelection& rSelection, TransliterationFlags nTransliterationMode )
 {
-    getImpl().TransliterateText(getImpl().CreateSel( rSelection ), nTransliterationMode);
+    TransliterateText(CreateSelection(rSelection), nTransliterationMode);
 }
 
 EditSelection EditEngine::TransliterateText(const EditSelection& rSelection, TransliterationFlags nTransliterationMode)
@@ -457,22 +457,19 @@ sal_uInt32 EditEngine::GetTextHeight( sal_Int32 nParagraph ) const
     return nHeight;
 }
 
-OUString EditEngine::GetWord( sal_Int32 nPara, sal_Int32 nIndex )
+OUString EditEngine::GetWord(const EPaM& rPos)
 {
-    ESelection aESel( nPara, nIndex, nPara, nIndex );
-    EditSelection aSel(getImpl().CreateSel(aESel));
-    aSel = getImpl().SelectWord(aSel);
-    return getImpl().GetSelected(aSel);
+    EditSelection aSel(CreateSelection(ESelection(rPos)));
+    aSel = SelectWord(aSel);
+    return GetSelected(aSel);
 }
 
 ESelection EditEngine::GetWord( const ESelection& rSelection, sal_uInt16 nWordType  ) const
 {
     // ImpEditEngine-Iteration-Methods should be const!
-    EditEngine* pNonConstEditEngine = const_cast<EditEngine*>(this);
-
-    EditSelection aSel(pNonConstEditEngine->getImpl().CreateSel( rSelection ) );
-    aSel = pNonConstEditEngine->getImpl().SelectWord( aSel, nWordType );
-    return pNonConstEditEngine->getImpl().CreateESel( aSel );
+    EditSelection aSel(getImpl().CreateSel(rSelection));
+    aSel = getImpl().SelectWord(aSel, nWordType);
+    return CreateESelection(aSel);
 }
 
 void EditEngine::CheckIdleFormatter()
@@ -737,6 +734,19 @@ EditSelection EditEngine::CreateSelection(const ESelection& rSel)
     return getImpl().CreateSel(rSel);
 }
 
+ESelection EditEngine::NormalizeESelection(const ESelection& rSel) const
+{
+    return CreateESelection(getImpl().CreateNormalizedSel(rSel));
+}
+
+EPaM EditEngine::GetEnd() const
+{
+    auto para = GetEditDoc().Count();
+    if (para)
+        --para;
+    return { para, GetTextLen(para) };
+}
+
 const SfxItemSet& EditEngine::GetBaseParaAttribs(sal_Int32 nPara) const
 {
     return getImpl().GetParaAttribs(nPara);
@@ -851,8 +861,7 @@ std::unique_ptr<EditTextObject> EditEngine::CreateTextObject()
 
 std::unique_ptr<EditTextObject> EditEngine::CreateTextObject( const ESelection& rESelection )
 {
-    EditSelection aSel(getImpl().CreateSel(rESelection));
-    return getImpl().CreateTextObject(aSel);
+    return getImpl().CreateTextObject(CreateSelection(rESelection));
 }
 
 std::unique_ptr<EditTextObject> EditEngine::GetEmptyTextObject()
@@ -1038,8 +1047,7 @@ void EditEngine::GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttrib>& rLi
 
 SfxItemSet EditEngine::GetAttribs( const ESelection& rSel, EditEngineAttribs nOnlyHardAttrib )
 {
-    EditSelection aSel(getImpl().ConvertSelection(rSel.nStartPara, rSel.nStartPos, rSel.nEndPara, rSel.nEndPos));
-    return getImpl().GetAttribs(aSel, nOnlyHardAttrib);
+    return getImpl().GetAttribs(getImpl().CreateNormalizedSel(rSel), nOnlyHardAttrib);
 }
 
 SfxItemSet EditEngine::GetAttribs( sal_Int32 nPara, sal_Int32 nStart, sal_Int32 nEnd, GetAttribsFlags nFlags ) const
@@ -1207,15 +1215,14 @@ SfxItemPool* EditEngine::GetEditTextObjectPool() const
 
 void EditEngine::QuickSetAttribs( const SfxItemSet& rSet, const ESelection& rSel )
 {
-    EditSelection aSel(getImpl().ConvertSelection(rSel.nStartPara, rSel.nStartPos, rSel.nEndPara, rSel.nEndPos));
-    getImpl().SetAttribs(aSel, rSet);
+    getImpl().SetAttribs(getImpl().CreateNormalizedSel(rSel), rSet);
 }
 
 void EditEngine::QuickMarkInvalid( const ESelection& rSel )
 {
-    DBG_ASSERT(rSel.nStartPara < getImpl().GetEditDoc().Count(), "MarkInvalid: Start out of Range!");
-    DBG_ASSERT(rSel.nEndPara < getImpl().GetEditDoc().Count(), "MarkInvalid: End out of Range!");
-    for (sal_Int32 nPara = rSel.nStartPara; nPara <= rSel.nEndPara; nPara++)
+    DBG_ASSERT(rSel.start.nPara < getImpl().GetEditDoc().Count(), "MarkInvalid: Start out of Range!");
+    DBG_ASSERT(rSel.end.nPara < getImpl().GetEditDoc().Count(), "MarkInvalid: End out of Range!");
+    for (sal_Int32 nPara = rSel.start.nPara; nPara <= rSel.end.nPara; nPara++)
     {
         ParaPortion* pPortion = getImpl().GetParaPortions().SafeGetObject(nPara);
         if ( pPortion )
@@ -1225,14 +1232,12 @@ void EditEngine::QuickMarkInvalid( const ESelection& rSel )
 
 void EditEngine::QuickInsertText(const OUString& rText, const ESelection& rSel)
 {
-    EditSelection aSel(getImpl().ConvertSelection(rSel.nStartPara, rSel.nStartPos, rSel.nEndPara, rSel.nEndPos));
-    getImpl().ImpInsertText(aSel, rText);
+    getImpl().ImpInsertText(getImpl().CreateNormalizedSel(rSel), rText);
 }
 
 void EditEngine::QuickDelete( const ESelection& rSel )
 {
-    EditSelection aSel(getImpl().ConvertSelection(rSel.nStartPara, rSel.nStartPos, rSel.nEndPara, rSel.nEndPos));
-    getImpl().ImpDeleteSelection( aSel );
+    getImpl().ImpDeleteSelection(getImpl().CreateNormalizedSel(rSel));
 }
 
 void EditEngine::QuickMarkToBeRepainted( sal_Int32 nPara )
@@ -1244,15 +1249,12 @@ void EditEngine::QuickMarkToBeRepainted( sal_Int32 nPara )
 
 void EditEngine::QuickInsertLineBreak( const ESelection& rSel )
 {
-    EditSelection aSel(getImpl().ConvertSelection(rSel.nStartPara, rSel.nStartPos, rSel.nEndPara, rSel.nEndPos));
-    getImpl().InsertLineBreak( aSel );
+    getImpl().InsertLineBreak(getImpl().CreateNormalizedSel(rSel));
 }
 
 void EditEngine::QuickInsertField( const SvxFieldItem& rFld, const ESelection& rSel )
 {
-
-    EditSelection aSel(getImpl().ConvertSelection(rSel.nStartPara, rSel.nStartPos, rSel.nEndPara, rSel.nEndPos));
-    getImpl().ImpInsertFeature(aSel, rFld);
+    getImpl().ImpInsertFeature(getImpl().CreateNormalizedSel(rSel), rFld);
 }
 
 void EditEngine::QuickFormatDoc( bool bFull )
@@ -1519,20 +1521,16 @@ sal_Int32 EditEngine::FindParagraph( tools::Long nDocPosY )
     return getImpl().GetParaPortions().FindParagraph(nDocPosY);
 }
 
-EPosition EditEngine::FindDocPosition( const Point& rDocPos ) const
+EPaM EditEngine::FindDocPosition(const Point& rDocPos) const
 {
-    EPosition aPos;
     // From the point of the API, this is const...
     EditPaM aPaM = getImpl().GetPaM(rDocPos, false);
     if ( aPaM.GetNode() )
-    {
-        aPos.nPara = getImpl().maEditDoc.GetPos(aPaM.GetNode());
-        aPos.nIndex = aPaM.GetIndex();
-    }
-    return aPos;
+        return getImpl().CreateEPaM(aPaM);
+    return EPaM::NotFound();
 }
 
-tools::Rectangle EditEngine::GetCharacterBounds( const EPosition& rPos ) const
+tools::Rectangle EditEngine::GetCharacterBounds(const EPaM& rPos) const
 {
     tools::Rectangle aBounds;
     ContentNode* pNode = getImpl().GetEditDoc().GetObject(rPos.nPara);
@@ -1574,8 +1572,7 @@ ParagraphInfos EditEngine::GetParagraphInfos( sal_Int32 nPara )
 uno::Reference<datatransfer::XTransferable>
 EditEngine::CreateTransferable(const ESelection& rSelection)
 {
-    EditSelection aSel(getImpl().CreateSel(rSelection));
-    return getImpl().CreateTransferable(aSel);
+    return getImpl().CreateTransferable(CreateSelection(rSelection));
 }
 
 

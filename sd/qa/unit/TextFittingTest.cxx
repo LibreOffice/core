@@ -90,17 +90,17 @@ CPPUNIT_TEST_FIXTURE(TextFittingTest, testTest)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6), rEditEngine.GetParagraphCount());
 
     // Delete paragraph 6
-    rEditView.SetSelection(ESelection(4, EE_TEXTPOS_MAX_COUNT, 5, EE_TEXTPOS_MAX_COUNT));
+    rEditView.SetSelection(ESelection(4, EE_TEXTPOS_MAX, 5, EE_TEXTPOS_MAX));
     rEditView.DeleteSelected();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), rEditEngine.GetParagraphCount());
 
     // Delete paragraph 5
-    rEditView.SetSelection(ESelection(3, EE_TEXTPOS_MAX_COUNT, 4, EE_TEXTPOS_MAX_COUNT));
+    rEditView.SetSelection(ESelection(3, EE_TEXTPOS_MAX, 4, EE_TEXTPOS_MAX));
     rEditView.DeleteSelected();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), rEditEngine.GetParagraphCount());
 
     // Delete paragraph 4
-    rEditView.SetSelection(ESelection(2, EE_TEXTPOS_MAX_COUNT, 3, EE_TEXTPOS_MAX_COUNT));
+    rEditView.SetSelection(ESelection(2, EE_TEXTPOS_MAX, 3, EE_TEXTPOS_MAX));
     rEditView.DeleteSelected();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), rEditEngine.GetParagraphCount());
 

@@ -799,7 +799,7 @@ OUString DrawViewShell::GetSelectionText(bool bCompleteWords)
             OUString aStrCurrentDelimiters = pOl->GetWordDelimiters();
 
             pOl->SetWordDelimiters(u" .,;\"'"_ustr);
-            aStrSelection = pOl->GetWord( aSel.nEndPara, aSel.nEndPos );
+            aStrSelection = pOl->GetWord(aSel.end);
             pOl->SetWordDelimiters( aStrCurrentDelimiters );
         }
         else

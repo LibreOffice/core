@@ -451,7 +451,7 @@ sal_Int32 FastGetPos(const Array& rArray, const Val* p, sal_Int32& rLastPos)
         }
 
     // XXX "not found" condition for sal_Int32 indexes
-    return EE_PARA_NOT_FOUND;
+    return EE_PARA_MAX;
 }
 
 }
@@ -537,7 +537,7 @@ sal_Int32 ParaPortionList::FindParagraph(tools::Long nYOffset) const
         if ( nY > nYOffset )
             return i <= SAL_MAX_INT32 ? static_cast<sal_Int32>(i) : SAL_MAX_INT32;
     }
-    return EE_PARA_NOT_FOUND;
+    return EE_PARA_MAX;
 }
 
 #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
@@ -1043,7 +1043,7 @@ EditPaM EditDoc::InsertParaBreak( EditPaM aPaM, bool bKeepEndingAttribs )
     assert(aPaM.GetNode());
     ContentNode* pCurNode = aPaM.GetNode();
     sal_Int32 nPos = GetPos( pCurNode );
-    assert(nPos != EE_PARA_NOT_FOUND);
+    assert(nPos != EE_PARA_MAX);
     OUString aStr = aPaM.GetNode()->Copy( aPaM.GetIndex() );
     aPaM.GetNode()->Erase( aPaM.GetIndex() );
 

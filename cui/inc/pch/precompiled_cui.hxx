@@ -298,7 +298,6 @@
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/primitive2d/Primitive2DVisitor.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
-#include <editeng/EPosition.hxx>
 #include <editeng/ESelection.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/editengdllapi.h>

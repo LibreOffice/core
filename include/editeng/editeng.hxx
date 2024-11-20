@@ -298,10 +298,10 @@ public:
     SAL_DLLPRIVATE tools::Rectangle GetParaBounds( sal_Int32 nPara );
     SAL_DLLPRIVATE ParagraphInfos  GetParagraphInfos( sal_Int32 nPara );
     SAL_DLLPRIVATE sal_Int32       FindParagraph( tools::Long nDocPosY );
-    EPosition       FindDocPosition( const Point& rDocPos ) const;
-    tools::Rectangle       GetCharacterBounds( const EPosition& rPos ) const;
+    EPaM            FindDocPosition( const Point& rDocPos ) const;
+    tools::Rectangle GetCharacterBounds( const EPaM& rPos ) const;
 
-    OUString        GetWord(sal_Int32 nPara, sal_Int32 nIndex);
+    OUString        GetWord(const EPaM& rPos);
 
     ESelection      GetWord( const ESelection& rSelection, sal_uInt16 nWordType ) const;
 
@@ -586,6 +586,8 @@ public:
 
     SAL_DLLPRIVATE ESelection CreateESelection(const EditSelection& rSel) const;
     SAL_DLLPRIVATE EditSelection CreateSelection(const ESelection& rSel);
+    ESelection NormalizeESelection(const ESelection& rSel) const;
+    EPaM GetEnd() const;
 
     SAL_DLLPRIVATE const SfxItemSet& GetBaseParaAttribs(sal_Int32 nPara) const;
     SAL_DLLPRIVATE void SetParaAttribsOnly(sal_Int32 nPara, const SfxItemSet& rSet);

@@ -2290,7 +2290,7 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                 sal_Int32  nParaIndex = pTextObj->GetCurrentIndex();
                 SfxStyleSheet* pS = ppStyleSheetAry ? ppStyleSheetAry[ pPara->mxParaSet->mnDepth ] : pSheet;
 
-                ESelection aSelection( nParaIndex, 0, nParaIndex, 0 );
+                ESelection aSelection(nParaIndex, 0);
                 rOutliner.Insert( OUString(), nParaIndex, pPara->mxParaSet->mnDepth );
                 rOutliner.QuickInsertText( OUString(pParaText.get(), nCurrentIndex), aSelection );
                 rOutliner.SetParaAttribs( nParaIndex, rOutliner.GetEmptyItemSet() );
@@ -2303,8 +2303,8 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                     std::unique_ptr<SvxFieldItem> pFieldItem(pPortion->GetTextField());
                     if ( pFieldItem )
                     {
-                        rOutliner.QuickInsertField( *pFieldItem, ESelection( nParaIndex, aSelection.nEndPos, nParaIndex, aSelection.nEndPos + 1 ) );
-                        aSelection.nEndPos++;
+                        rOutliner.QuickInsertField( *pFieldItem, ESelection( nParaIndex, aSelection.end.nIndex, nParaIndex, aSelection.end.nIndex + 1 ) );
+                        aSelection.end.nIndex++;
                     }
                     else
                     {
@@ -2317,22 +2317,19 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                             {
                                 nLen = pPtr - pF;
                                 if ( nLen )
-                                    aSelection.nEndPos =
-                                        sal::static_int_cast< sal_uInt16 >(
-                                            aSelection.nEndPos + nLen );
+                                    aSelection.end.nIndex += nLen;
                                 pF = pPtr + 1;
-                                rOutliner.QuickInsertLineBreak( ESelection( nParaIndex, aSelection.nEndPos, nParaIndex, aSelection.nEndPos + 1 ) );
-                                aSelection.nEndPos++;
+                                rOutliner.QuickInsertLineBreak( ESelection( nParaIndex, aSelection.end.nIndex, nParaIndex, aSelection.end.nIndex + 1 ) );
+                                aSelection.end.nIndex++;
                             }
                         }
                         nLen = pPtr - pF;
                         if ( nLen )
-                            aSelection.nEndPos = sal::static_int_cast< sal_uInt16 >(
-                                aSelection.nEndPos + nLen );
+                            aSelection.end.nIndex += nLen;
                     }
                     pPortion->ApplyTo( aPortionAttribs, const_cast<SdrPowerPointImport&>(*this), nDestinationInstance, pTextObj );
                     rOutliner.QuickSetAttribs( aPortionAttribs, aSelection );
-                    aSelection.nStartPos = aSelection.nEndPos;
+                    aSelection.start.nIndex = aSelection.end.nIndex;
                 }
                 std::optional< sal_Int16 > oStartNumbering;
                 SfxItemSet aParagraphAttribs( rOutliner.GetEmptyItemSet() );
@@ -2345,11 +2342,11 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                 else
                     aParagraphAttribs.Put( SfxInt16Item(EE_PARA_OUTLLEVEL, pPara->mxParaSet->mnDepth));
 
-                if ( !aSelection.nStartPos )    // in PPT empty paragraphs never gets a bullet
+                if (!aSelection.start.nIndex) // in PPT empty paragraphs never gets a bullet
                 {
                     aParagraphAttribs.Put( SfxBoolItem( EE_PARA_BULLETSTATE, false ) );
                 }
-                aSelection.nStartPos = 0;
+                aSelection.start.nIndex = 0;
                 rOutliner.QuickSetAttribs( aParagraphAttribs, aSelection );
             }
         }

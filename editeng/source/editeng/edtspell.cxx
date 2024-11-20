@@ -715,7 +715,7 @@ LanguageType EdtAutoCorrDoc::GetLanguage( sal_Int32 nPos ) const
 void EdtAutoCorrDoc::ImplStartUndoAction()
 {
     sal_Int32 nPara = mpEditEngine->GetEditDoc().GetPos( pCurNode );
-    ESelection aSel( nPara, nCursor, nPara, nCursor );
+    ESelection aSel(nPara, nCursor);
     mpEditEngine->UndoActionStart( EDITUNDO_INSERT, aSel );
     bUndoAction = true;
     bAllowUndoAction = false;

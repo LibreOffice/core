@@ -136,8 +136,8 @@ void TextObjectBar::ExecuteImpl(ViewShell* mpViewShell, ::sd::View* mpView, SfxR
             {
                 ESelection aSel = pOLV->GetSelection();
                 aSel.Adjust();
-                sal_Int32 nStartPara = aSel.nStartPara;
-                sal_Int32 nEndPara = aSel.nEndPara;
+                sal_Int32 nStartPara = aSel.start.nPara;
+                sal_Int32 nEndPara = aSel.end.nPara;
                 if( !aSel.HasRange() )
                 {
                     nStartPara = 0;
@@ -192,8 +192,8 @@ void TextObjectBar::ExecuteImpl(ViewShell* mpViewShell, ::sd::View* mpView, SfxR
             {
                 ESelection aSel = pOLV->GetSelection();
                 aSel.Adjust();
-                sal_Int32 nStartPara = aSel.nStartPara;
-                sal_Int32 nEndPara = aSel.nEndPara;
+                sal_Int32 nStartPara = aSel.start.nPara;
+                sal_Int32 nEndPara = aSel.end.nPara;
                 if( !aSel.HasRange() )
                 {
                     nStartPara = 0;
@@ -447,8 +447,8 @@ void TextObjectBar::ExecuteImpl(ViewShell* mpViewShell, ::sd::View* mpView, SfxR
                             SvxNumRule aNewRule(pItem->GetNumRule());
                             ESelection aSel = pOLV->GetSelection();
                             aSel.Adjust();
-                            sal_Int32 nStartPara = aSel.nStartPara;
-                            sal_Int32 nEndPara = aSel.nEndPara;
+                            sal_Int32 nStartPara = aSel.start.nPara;
+                            sal_Int32 nEndPara = aSel.end.nPara;
                             for (sal_Int32 nPara = nStartPara; nPara <= nEndPara; ++nPara)
                             {
                                 sal_uInt16 nLevel = pOL->GetDepth(nPara);
@@ -614,7 +614,7 @@ SET_ADJUST:
                         // set anchor
                         ESelection aSel = pOLV->GetSelection();
                         aSel.Adjust();
-                        sal_Int32 nStartPara = aSel.nStartPara;
+                        sal_Int32 nStartPara = aSel.start.nPara;
                         if (!aSel.HasRange())
                             nStartPara = 0;
 
@@ -776,7 +776,7 @@ SET_ADJUST:
                 // set anchor
                 ESelection aSel = pOLV->GetSelection();
                 aSel.Adjust();
-                sal_Int32 nStartPara = aSel.nStartPara;
+                sal_Int32 nStartPara = aSel.start.nPara;
                 if (!aSel.HasRange())
                     nStartPara = 0;
 

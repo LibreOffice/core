@@ -599,8 +599,7 @@ void ImpEditEngine::RemoveAttribs( const ESelection& rSelection, bool bRemovePar
         EERemoveParaAttribsMode::RemoveCharItems;
 
     UndoActionStart(EDITUNDO_RESETATTRIBS);
-    EditSelection aSel(ConvertSelection(rSelection.nStartPara, rSelection.nStartPos, rSelection.nEndPara, rSelection.nEndPos));
-    RemoveCharAttribs(aSel, eMode, nWhich);
+    RemoveCharAttribs(CreateNormalizedSel(rSelection), eMode, nWhich);
     UndoActionEnd();
     if (IsUpdateLayout())
         FormatAndLayout();

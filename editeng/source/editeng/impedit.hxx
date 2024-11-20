@@ -748,7 +748,6 @@ private:
 
     void                InitScriptTypes( sal_Int32 nPara );
     sal_uInt16          GetI18NScriptType( const EditPaM& rPaM, sal_Int32* pEndPos = nullptr ) const;
-    SvtScriptType       GetScriptType( const ESelection& rSel );
     SvtScriptType       GetItemScriptType( const EditSelection& rSel ) const;
     bool                IsScriptChange( const EditPaM& rPaM ) const;
     bool                HasScriptType( sal_Int32 nPara, sal_uInt16 nType ) const;
@@ -1117,8 +1116,7 @@ public:
 
     EPaM CreateEPaM( const EditPaM& rPaM ) const
     {
-        const ContentNode* pNode = rPaM.GetNode();
-        return EPaM(maEditDoc.GetPos(pNode), rPaM.GetIndex());
+        return EPaM(maEditDoc.GetPos(rPaM.GetNode()), rPaM.GetIndex());
     }
 
     EditPaM CreateEditPaM( const EPaM& rEPaM )
@@ -1130,28 +1128,24 @@ public:
 
     ESelection CreateESel(const EditSelection& rSel) const
     {
-        const ContentNode* pStartNode = rSel.Min().GetNode();
-        const ContentNode* pEndNode = rSel.Max().GetNode();
         ESelection aESel;
-        aESel.nStartPara = maEditDoc.GetPos( pStartNode );
-        aESel.nStartPos = rSel.Min().GetIndex();
-        aESel.nEndPara = maEditDoc.GetPos( pEndNode );
-        aESel.nEndPos = rSel.Max().GetIndex();
+        aESel.start = CreateEPaM(rSel.Min());
+        aESel.end = CreateEPaM(rSel.Max());
         return aESel;
     }
 
     EditSelection CreateSel(const ESelection& rSel)
     {
-        DBG_ASSERT( rSel.nStartPara < maEditDoc.Count(), "CreateSel: invalid start paragraph" );
-        DBG_ASSERT( rSel.nEndPara < maEditDoc.Count(), "CreateSel: invalid end paragraph" );
-        EditSelection aSel;
-        aSel.Min().SetNode(maEditDoc.GetObject(rSel.nStartPara));
-        aSel.Min().SetIndex( rSel.nStartPos );
-        aSel.Max().SetNode(maEditDoc.GetObject(rSel.nEndPara));
-        aSel.Max().SetIndex( rSel.nEndPos );
+        DBG_ASSERT( rSel.start.nPara < maEditDoc.Count(), "CreateSel: invalid start paragraph" );
+        DBG_ASSERT( rSel.end.nPara < maEditDoc.Count(), "CreateSel: invalid end paragraph" );
+        EditSelection aSel(CreateEditPaM(rSel.start), CreateEditPaM(rSel.end));
         DBG_ASSERT( !aSel.DbgIsBuggy( maEditDoc ), "CreateSel: incorrect selection!" );
         return aSel;
+    }
 
+    EditSelection CreateNormalizedSel(const ESelection& rSel)
+    {
+        return ConvertSelection(rSel.start.nPara, rSel.start.nIndex, rSel.end.nPara, rSel.end.nIndex);
     }
 
     void                SetStyleSheetPool( SfxStyleSheetPool* pSPool );

@@ -167,7 +167,7 @@ void TextApiObject::SetText(OutlinerParaObject const& rText)
         pModel->AddUndo(std::make_unique<UndoTextAPIChanged>(*pModel, this));
 
     mpSource->SetText(rText);
-    maSelection.nStartPara = EE_PARA_MAX_COUNT;
+    maSelection.start.nPara = EE_PARA_MAX;
 }
 
 OUString TextApiObject::GetText() const { return mpSource->GetText(); }

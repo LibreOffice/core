@@ -404,22 +404,19 @@ void ScHTMLLayoutParser::NewActEntry( const ScEEParseEntry* pE )
     {
         if ( !pE->aSel.HasRange() )
         {   // Completely empty, following text ends up in the same paragraph!
-            mxActEntry->aSel.nStartPara = pE->aSel.nEndPara;
-            mxActEntry->aSel.nStartPos = pE->aSel.nEndPos;
+            mxActEntry->aSel.start = pE->aSel.end;
         }
     }
-    mxActEntry->aSel.nEndPara = mxActEntry->aSel.nStartPara;
-    mxActEntry->aSel.nEndPos = mxActEntry->aSel.nStartPos;
+    mxActEntry->aSel.CollapseToStart();
 }
 
 void ScHTMLLayoutParser::EntryEnd( ScEEParseEntry* pE, const ESelection& rSel )
 {
-    if ( rSel.nEndPara >= pE->aSel.nStartPara )
+    if (rSel.end.nPara >= pE->aSel.start.nPara)
     {
-        pE->aSel.nEndPara = rSel.nEndPara;
-        pE->aSel.nEndPos = rSel.nEndPos;
+        pE->aSel.end = rSel.end;
     }
-    else if ( rSel.nStartPara == pE->aSel.nStartPara - 1 && !pE->aSel.HasRange() )
+    else if (rSel.start.nPara == pE->aSel.start.nPara - 1 && !pE->aSel.HasRange())
     {   // Did not attach a paragraph, but empty, do nothing
     }
     else
@@ -961,20 +958,20 @@ void ScHTMLLayoutParser::CloseEntry( const HtmlImportInfo* pInfo )
         nColMax = nColCnt;      // Global MaxCol for ScEEParser GetDimensions!
     EntryEnd(mxActEntry.get(), pInfo->aSelection);
     ESelection& rSel = mxActEntry->aSel;
-    while ( rSel.nStartPara < rSel.nEndPara
-            && pEdit->GetTextLen( rSel.nStartPara ) == 0 )
+    while ( rSel.start.nPara < rSel.end.nPara
+            && pEdit->GetTextLen( rSel.start.nPara ) == 0 )
     {   // Strip preceding empty paragraphs
-        rSel.nStartPara++;
+        rSel.start.nPara++;
     }
-    while ( rSel.nEndPos == 0 && rSel.nEndPara > rSel.nStartPara )
+    while ( rSel.end.nIndex == 0 && rSel.end.nPara > rSel.start.nPara )
     {   // Strip successive empty paragraphs
-        rSel.nEndPara--;
-        rSel.nEndPos = pEdit->GetTextLen( rSel.nEndPara );
+        rSel.end.nPara--;
+        rSel.end.nIndex = pEdit->GetTextLen( rSel.end.nPara );
     }
-    if ( rSel.nStartPara > rSel.nEndPara )
+    if ( rSel.start.nPara > rSel.end.nPara )
     {   // Gives GPF in CreateTextObject
         OSL_FAIL( "CloseEntry: EditEngine ESelection Start > End" );
-        rSel.nEndPara = rSel.nStartPara;
+        rSel.end.nPara = rSel.start.nPara;
     }
     if ( rSel.HasRange() )
         mxActEntry->aItemSet.Put( ScLineBreakCell(true) );
@@ -992,7 +989,7 @@ IMPL_LINK( ScHTMLLayoutParser, HTMLImportHdl, HtmlImportInfo&, rInfo, void )
         case HtmlImportState::Start:
             break;
         case HtmlImportState::End:
-            if ( rInfo.aSelection.nEndPos )
+            if (rInfo.aSelection.end.nIndex)
             {
                 // If text remains: create paragraph, without calling CloseEntry().
                 if( bInCell )   // ...but only in opened table cells.
@@ -1582,9 +1579,9 @@ void ScHTMLLayoutParser::AnchorOn( HtmlImportInfo* pInfo )
 bool ScHTMLLayoutParser::IsAtBeginningOfText( const HtmlImportInfo* pInfo )
 {
     ESelection& rSel = mxActEntry->aSel;
-    return rSel.nStartPara == rSel.nEndPara &&
-        rSel.nStartPara <= pInfo->aSelection.nEndPara &&
-        pEdit->GetTextLen( rSel.nStartPara ) == 0;
+    return rSel.start.nPara == rSel.end.nPara &&
+        rSel.start.nPara <= pInfo->aSelection.end.nPara &&
+        pEdit->GetTextLen( rSel.start.nPara ) == 0;
 }
 
 void ScHTMLLayoutParser::FontOn( HtmlImportInfo* pInfo )
@@ -1836,39 +1833,35 @@ bool ScHTMLEntry::HasContents() const
 void ScHTMLEntry::AdjustStart( const HtmlImportInfo& rInfo )
 {
     // set start position
-    aSel.nStartPara = rInfo.aSelection.nStartPara;
-    aSel.nStartPos = rInfo.aSelection.nStartPos;
+    aSel.start = rInfo.aSelection.start;
     // adjust end position
-    if( (aSel.nEndPara < aSel.nStartPara) || ((aSel.nEndPara == aSel.nStartPara) && (aSel.nEndPos < aSel.nStartPos)) )
+    if (!aSel.IsAdjusted())
     {
-        aSel.nEndPara = aSel.nStartPara;
-        aSel.nEndPos = aSel.nStartPos;
+        aSel.CollapseToStart();
     }
 }
 
 void ScHTMLEntry::AdjustEnd( const HtmlImportInfo& rInfo )
 {
-    OSL_ENSURE( (aSel.nEndPara < rInfo.aSelection.nEndPara) ||
-                ((aSel.nEndPara == rInfo.aSelection.nEndPara) && (aSel.nEndPos <= rInfo.aSelection.nEndPos)),
+    OSL_ENSURE( !(rInfo.aSelection.end < aSel.end),
                 "ScHTMLQueryParser::AdjustEntryEnd - invalid end position" );
     // set end position
-    aSel.nEndPara = rInfo.aSelection.nEndPara;
-    aSel.nEndPos = rInfo.aSelection.nEndPos;
+    aSel.end = rInfo.aSelection.end;
 }
 
 void ScHTMLEntry::Strip( const EditEngine& rEditEngine )
 {
     // strip leading empty paragraphs
-    while( (aSel.nStartPara < aSel.nEndPara) && (rEditEngine.GetTextLen( aSel.nStartPara ) <= aSel.nStartPos) )
+    while( (aSel.start.nPara < aSel.end.nPara) && (rEditEngine.GetTextLen( aSel.start.nPara ) <= aSel.start.nIndex) )
     {
-        ++aSel.nStartPara;
-        aSel.nStartPos = 0;
+        ++aSel.start.nPara;
+        aSel.start.nIndex = 0;
     }
     // strip trailing empty paragraphs
-    while( (aSel.nStartPara < aSel.nEndPara) && (aSel.nEndPos == 0) )
+    while( (aSel.start.nPara < aSel.end.nPara) && (aSel.end.nIndex == 0) )
     {
-        --aSel.nEndPara;
-        aSel.nEndPos = rEditEngine.GetTextLen( aSel.nEndPara );
+        --aSel.end.nPara;
+        aSel.end.nIndex = rEditEngine.GetTextLen( aSel.end.nPara );
     }
 }
 

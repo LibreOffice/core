@@ -63,12 +63,9 @@ namespace frm
         if ( !pEngine )
             return;
 
-        sal_Int32 nParagraphs = pEngine->GetParagraphCount();
-        if ( nParagraphs )
+        if (pEngine->GetParagraphCount())
         {
-            sal_Int32 nLastParaNumber = nParagraphs - 1;
-            sal_Int32 nParaLen = pEngine->GetTextLen( nLastParaNumber );
-            getEditView()->SetSelection( ESelection( 0, 0, nLastParaNumber, nParaLen ) );
+            getEditView()->SetSelection(ESelection::All());
         }
     }
 

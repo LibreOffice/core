@@ -570,7 +570,7 @@ bool HeaderFooterTabPage::GetOrSetDateTimeLanguage(LanguageType& rLanguage, bool
     if( pOPO )
         pOutl->SetText( *pOPO );
 
-    EPosition aDateFieldPosition;
+    EPaM aDateFieldPosition;
     bool bHasDateFieldItem = false;
 
     sal_Int32 nParaCount = pEdit->GetParagraphCount();

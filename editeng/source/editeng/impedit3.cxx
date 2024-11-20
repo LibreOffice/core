@@ -4385,7 +4385,7 @@ const ParaPortion* ImpEditEngine::GetPrevVisPortion( const ParaPortion* pCurPort
 const ParaPortion* ImpEditEngine::GetNextVisPortion( const ParaPortion* pCurPortion ) const
 {
     sal_Int32 nPara = GetParaPortions().GetPos( pCurPortion );
-    if (nPara == EE_PARA_NOT_FOUND)
+    if (nPara == EE_PARA_MAX)
     {
         SAL_WARN("editeng", "Portion not found: GetPrevVisNode" );
         return nullptr;
@@ -4449,7 +4449,7 @@ void ImpEditEngine::InsertParagraph( sal_Int32 nPara, const EditTextObject& rTxt
 {
     if ( nPara > maEditDoc.Count() )
     {
-        SAL_WARN_IF( nPara != EE_PARA_APPEND, "editeng", "Paragraph number too large, but not EE_PARA_APPEND!" );
+        SAL_WARN_IF( nPara != EE_PARA_MAX, "editeng", "Paragraph number too large, but not EE_PARA_MAX!" );
         nPara = maEditDoc.Count();
     }
 
@@ -4475,7 +4475,7 @@ void ImpEditEngine::InsertParagraph(sal_Int32 nPara, const OUString& rTxt)
 {
     if ( nPara > maEditDoc.Count() )
     {
-        SAL_WARN_IF( nPara != EE_PARA_APPEND, "editeng", "Paragraph number too large, but not EE_PARA_APPEND!" );
+        SAL_WARN_IF( nPara != EE_PARA_MAX, "editeng", "Paragraph number too large, but not EE_PARA_MAX!" );
         nPara = maEditDoc.Count();
     }
 
@@ -4605,8 +4605,8 @@ const SvxNumberFormat* ImpEditEngine::GetNumberFormat( const ContentNode *pNode 
     {
         // get index of paragraph
         sal_Int32 nPara = GetEditDoc().GetPos( pNode );
-        DBG_ASSERT( nPara < EE_PARA_NOT_FOUND, "node not found in array" );
-        if (nPara < EE_PARA_NOT_FOUND)
+        DBG_ASSERT( nPara < EE_PARA_MAX, "node not found in array" );
+        if (nPara < EE_PARA_MAX)
         {
             // the called function may be overridden by an OutlinerEditEng
             // object to provide

@@ -204,7 +204,6 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
-#include <editeng/EPosition.hxx>
 #include <editeng/ESelection.hxx>
 #include <editeng/editengdllapi.h>
 #include <font/FontSelectPattern.hxx>

@@ -612,8 +612,7 @@ void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
     }
     else if ( bCursorToEnd )
     {
-        ESelection aNewSelection(EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND, EE_PARA_NOT_FOUND, EE_INDEX_NOT_FOUND);
-        pOLV->SetSelection(aNewSelection);
+        pOLV->SetSelection(ESelection::AtEnd());
     }
 
     if ( pInitialKey )

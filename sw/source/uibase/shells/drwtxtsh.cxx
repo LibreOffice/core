@@ -780,8 +780,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
 
     // Remove selection
     ESelection aSel(pOLV->GetSelection());
-    aSel.nStartPara = aSel.nEndPara;
-    aSel.nStartPos = aSel.nEndPos;
+    aSel.CollapseToEnd();
     pOLV->SetSelection(aSel);
 
     // Restore old font

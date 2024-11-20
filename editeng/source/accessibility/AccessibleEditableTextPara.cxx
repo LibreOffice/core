@@ -374,35 +374,35 @@ namespace accessibility
         if( !GetEditViewForwarder().GetSelection( aSelection ) )
             return false;
 
-        if( aSelection.nStartPara < aSelection.nEndPara )
+        if( aSelection.start.nPara < aSelection.end.nPara )
         {
-            if( aSelection.nStartPara > nPara ||
-                aSelection.nEndPara < nPara )
+            if( aSelection.start.nPara > nPara ||
+                aSelection.end.nPara < nPara )
                 return false;
 
-            if( nPara == aSelection.nStartPara )
-                nStartPos = aSelection.nStartPos;
+            if( nPara == aSelection.start.nPara )
+                nStartPos = aSelection.start.nIndex;
             else
                 nStartPos = 0;
 
-            if( nPara == aSelection.nEndPara )
-                nEndPos = aSelection.nEndPos;
+            if( nPara == aSelection.end.nPara )
+                nEndPos = aSelection.end.nIndex;
             else
                 nEndPos = GetTextLen();
         }
         else
         {
-            if( aSelection.nStartPara < nPara ||
-                aSelection.nEndPara > nPara )
+            if( aSelection.start.nPara < nPara ||
+                aSelection.end.nPara > nPara )
                 return false;
 
-            if( nPara == aSelection.nStartPara )
-                nStartPos = aSelection.nStartPos;
+            if( nPara == aSelection.start.nPara )
+                nStartPos = aSelection.start.nIndex;
             else
                 nStartPos = GetTextLen();
 
-            if( nPara == aSelection.nEndPara )
-                nEndPos = aSelection.nEndPos;
+            if( nPara == aSelection.end.nPara )
+                nEndPos = aSelection.end.nIndex;
             else
                 nEndPos = 0;
         }
@@ -983,7 +983,7 @@ namespace accessibility
 
             EBulletInfo aBulletInfo = rCacheTF.GetBulletInfo(GetParagraphIndex());
 
-            if( aBulletInfo.nParagraph != EE_PARA_NOT_FOUND &&
+            if( aBulletInfo.nParagraph != EE_PARA_MAX &&
                 aBulletInfo.bVisible &&
                 aBulletInfo.nType == SVX_NUM_BITMAP )
             {
@@ -1119,19 +1119,19 @@ namespace accessibility
 
         ESelection aSelection;
         if( GetEditViewForwarder().GetSelection( aSelection ) &&
-            GetParagraphIndex() == aSelection.nEndPara )
+            GetParagraphIndex() == aSelection.end.nPara )
         {
             // caret is always nEndPara,nEndPos
             EBulletInfo aBulletInfo = GetTextForwarder().GetBulletInfo(GetParagraphIndex());
-            if( aBulletInfo.nParagraph != EE_PARA_NOT_FOUND &&
+            if( aBulletInfo.nParagraph != EE_PARA_MAX &&
                 aBulletInfo.bVisible &&
                 aBulletInfo.nType != SVX_NUM_BITMAP )
             {
                 sal_Int32 nBulletLen = aBulletInfo.aText.getLength();
-                if( aSelection.nEndPos - nBulletLen >= 0 )
-                    return aSelection.nEndPos - nBulletLen;
+                if( aSelection.end.nIndex - nBulletLen >= 0 )
+                    return aSelection.end.nIndex - nBulletLen;
             }
-            return aSelection.nEndPos;
+            return aSelection.end.nIndex;
         }
 
         // not within this paragraph
@@ -2048,7 +2048,7 @@ namespace accessibility
             //Because bullet may occupy one or more characters, the TextAdapter will include bullet to calculate the selection. Add offset to handle bullet
             sal_Int32 nBulletLen = 0;
             EBulletInfo aBulletInfo = GetTextForwarder().GetBulletInfo(GetParagraphIndex());
-            if( aBulletInfo.nParagraph != EE_PARA_NOT_FOUND && aBulletInfo.bVisible )
+            if( aBulletInfo.nParagraph != EE_PARA_MAX && aBulletInfo.bVisible )
                         nBulletLen = aBulletInfo.aText.getLength();
             // save current selection
             ESelection aOldSelection;
@@ -2091,7 +2091,7 @@ namespace accessibility
             // Because bullet may occupy one or more characters, the TextAdapter will include bullet to calculate the selection. Add offset to handle bullet
             sal_Int32 nBulletLen = 0;
             EBulletInfo aBulletInfo = GetTextForwarder().GetBulletInfo(GetParagraphIndex());
-            if( aBulletInfo.nParagraph != EE_PARA_NOT_FOUND && aBulletInfo.bVisible )
+            if( aBulletInfo.nParagraph != EE_PARA_MAX && aBulletInfo.bVisible )
                         nBulletLen = aBulletInfo.aText.getLength();
             ESelection aSelection = MakeSelection (nStartIndex + nBulletLen, nEndIndex + nBulletLen);
             //if( !rCacheTF.IsEditable( MakeSelection(nStartIndex, nEndIndex) ) )
@@ -2128,7 +2128,7 @@ namespace accessibility
             // Because bullet may occupy one or more characters, the TextAdapter will include bullet to calculate the selection. Add offset to handle bullet
             sal_Int32 nBulletLen = 0;
             EBulletInfo aBulletInfo = GetTextForwarder().GetBulletInfo(GetParagraphIndex());
-            if( aBulletInfo.nParagraph != EE_PARA_NOT_FOUND && aBulletInfo.bVisible )
+            if( aBulletInfo.nParagraph != EE_PARA_MAX && aBulletInfo.bVisible )
                         nBulletLen = aBulletInfo.aText.getLength();
             if( !rCacheTF.IsEditable( MakeSelection(nIndex + nBulletLen) ) )
                 return false; // non-editable area selected
@@ -2165,7 +2165,7 @@ namespace accessibility
             // Because bullet may occupy one or more characters, the TextAdapter will include bullet to calculate the selection. Add offset to handle bullet
             sal_Int32 nBulletLen = 0;
             EBulletInfo aBulletInfo = GetTextForwarder().GetBulletInfo(GetParagraphIndex());
-            if( aBulletInfo.nParagraph != EE_PARA_NOT_FOUND && aBulletInfo.bVisible )
+            if( aBulletInfo.nParagraph != EE_PARA_MAX && aBulletInfo.bVisible )
                 nBulletLen = aBulletInfo.aText.getLength();
             ESelection aSelection = MakeSelection (nStartIndex + nBulletLen, nEndIndex + nBulletLen);
 
@@ -2206,7 +2206,7 @@ namespace accessibility
             // Because bullet may occupy one or more characters, the TextAdapter will include bullet to calculate the selection. Add offset to handle bullet
             sal_Int32 nBulletLen = 0;
             EBulletInfo aBulletInfo = GetTextForwarder().GetBulletInfo(GetParagraphIndex());
-            if( aBulletInfo.nParagraph != EE_PARA_NOT_FOUND && aBulletInfo.bVisible )
+            if( aBulletInfo.nParagraph != EE_PARA_MAX && aBulletInfo.bVisible )
                         nBulletLen = aBulletInfo.aText.getLength();
 
             if( !rCacheTF.IsEditable( MakeSelection(nIndex + nBulletLen) ) )
@@ -2246,7 +2246,7 @@ namespace accessibility
             // Because bullet may occupy one or more characters, the TextAdapter will include bullet to calculate the selection. Add offset to handle bullet
             sal_Int32 nBulletLen = 0;
             EBulletInfo aBulletInfo = GetTextForwarder().GetBulletInfo(GetParagraphIndex());
-            if( aBulletInfo.nParagraph != EE_PARA_NOT_FOUND && aBulletInfo.bVisible )
+            if( aBulletInfo.nParagraph != EE_PARA_MAX && aBulletInfo.bVisible )
                         nBulletLen = aBulletInfo.aText.getLength();
             ESelection aSelection = MakeSelection (nStartIndex + nBulletLen, nEndIndex + nBulletLen);
 

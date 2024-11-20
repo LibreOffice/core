@@ -411,7 +411,7 @@ private:
         for (svx::ClassificationResult const & rResult : rResults)
         {
 
-            ESelection aPosition(nParagraph, EE_TEXTPOS_MAX_COUNT);
+            ESelection aPosition(nParagraph, EE_TEXTPOS_MAX);
 
             switch (rResult.meType)
             {
@@ -2330,13 +2330,13 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             {
                 //we are on the last paragraph
                 aSel.Adjust();
-                if (aSel.nEndPara == pOL->GetParagraphCount() - 1)
+                if (aSel.end.nPara == pOL->GetParagraphCount() - 1)
                 {
-                    sal_uInt16 nDepth = pOL->GetDepth(aSel.nEndPara);
+                    sal_uInt16 nDepth = pOL->GetDepth(aSel.end.nPara);
                     //there exists a previous numbering level
                     if (nDepth != sal_uInt16(-1) && nDepth > 0)
                     {
-                        Paragraph* pPara = pOL->GetParagraph(aSel.nEndPara);
+                        Paragraph* pPara = pOL->GetParagraph(aSel.end.nPara);
                         pOL->Remove(pPara, 1);
                     }
                 }
@@ -2369,14 +2369,14 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             {
                 //we are on the last paragraph
                 aSel.Adjust();
-                if (aSel.nEndPara == pOL->GetParagraphCount() - 1)
+                if (aSel.end.nPara == pOL->GetParagraphCount() - 1)
                 {
-                    sal_uInt16 nDepth = pOL->GetDepth(aSel.nEndPara);
+                    sal_uInt16 nDepth = pOL->GetDepth(aSel.end.nPara);
                     //there exists a previous numbering level
                     if (nDepth < 8)
                     {
                         sal_uInt16 nNewDepth = nDepth+1;
-                        pOL->Insert(SdResId(STR_PRESOBJ_MPOUTLINE_ARY[nNewDepth]), EE_PARA_APPEND, nNewDepth);
+                        pOL->Insert(SdResId(STR_PRESOBJ_MPOUTLINE_ARY[nNewDepth]), EE_PARA_MAX, nNewDepth);
                     }
                 }
             }
@@ -2474,8 +2474,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 {
                     // select field, then it will be deleted when inserting
                     ESelection aSel = pOLV->GetSelection();
-                    if( aSel.nStartPos == aSel.nEndPos )
-                        aSel.nEndPos++;
+                    if (aSel.start.nIndex == aSel.end.nIndex)
+                        aSel.end.nIndex++;
                     pOLV->SetSelection( aSel );
                 }
 
@@ -2552,10 +2552,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         {
                             SvxFieldItem aFieldItem( *pField, EE_FEATURE_FIELD );
 
-                            if( aSel.nStartPos == aSel.nEndPos )
+                            if (aSel.start.nIndex == aSel.end.nIndex)
                             {
                                 bSelectionWasModified = true;
-                                aSel.nEndPos++;
+                                aSel.end.nIndex++;
                                 pOLV->SetSelection( aSel );
                             }
 
@@ -2581,7 +2581,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                             // restore selection to original
                             if(bSelectionWasModified)
                             {
-                                aSel.nEndPos--;
+                                aSel.end.nIndex--;
                                 pOLV->SetSelection( aSel );
                             }
                         }

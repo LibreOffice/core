@@ -6002,8 +6002,7 @@ void SAL_CALL ScCellObj::insertTextContent( const uno::Reference<text::XTextRang
             {
                 //  do not replace -> append
                 aSelection.Adjust();
-                aSelection.nStartPara = aSelection.nEndPara;
-                aSelection.nStartPos  = aSelection.nEndPos;
+                aSelection.CollapseToEnd();
             }
 
             if (pCellField->GetFieldType() == text::textfield::Type::TABLE)
@@ -6016,8 +6015,8 @@ void SAL_CALL ScCellObj::insertTextContent( const uno::Reference<text::XTextRang
 
             //  new selection: a digit
             aSelection.Adjust();
-            aSelection.nEndPara = aSelection.nStartPara;
-            aSelection.nEndPos = aSelection.nStartPos + 1;
+            aSelection.end.nPara = aSelection.start.nPara;
+            aSelection.end.nIndex = aSelection.start.nIndex + 1;
             uno::Reference<text::XTextRange> xParent(this);
             pCellField->InitDoc(
                 xParent, std::make_unique<ScCellEditSource>(pDocSh, aCellPos), aSelection);
@@ -6025,7 +6024,7 @@ void SAL_CALL ScCellObj::insertTextContent( const uno::Reference<text::XTextRang
             //  for bAbsorb=FALSE, the new selection must be behind the inserted content
             //  (the xml filter relies on this)
             if (!bAbsorb)
-                aSelection.nStartPos = aSelection.nEndPos;
+                aSelection.start.nIndex = aSelection.end.nIndex;
 
             pTextRange->SetSelection( aSelection );
 

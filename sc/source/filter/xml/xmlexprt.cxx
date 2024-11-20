@@ -2417,7 +2417,7 @@ void ScXMLExport::collectAutoStyles()
                         SdrCaptionObj* pDrawObj = pNote->GetOrCreateCaption( aPos );
                         uno::Reference<container::XEnumerationAccess> xCellText(pDrawObj->getUnoShape(), uno::UNO_QUERY);
                         uno::Reference<beans::XPropertySet> xParaProp(
-                            lcl_GetEnumerated( xCellText, rNoteParaEntry.maSelection.nStartPara ), uno::UNO_QUERY );
+                            lcl_GetEnumerated( xCellText, rNoteParaEntry.maSelection.start.nPara ), uno::UNO_QUERY );
                         if ( xParaProp.is() )
                         {
                             std::vector<XMLPropertyState> aPropStates(xParaPropMapper->Filter(*this, xParaProp));

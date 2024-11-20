@@ -2094,7 +2094,7 @@ void SvxTableController::EditCell(const CellPos& rPos, vcl::Window* pWindow, Tbl
                              ((nAction == TblAction::GotoRightCell) && (eMode == WritingMode_RL_TB));
 
         if( bLast )
-            aNewSelection = ESelection::NotFound();
+            aNewSelection = ESelection::AtEnd();
     }
     pOLV->SetSelection(aNewSelection);
 }

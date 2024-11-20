@@ -518,7 +518,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 {
                     // Select field so that it will be deleted during insert
                     ESelection aSel = pOLV->GetSelection();
-                    aSel.nEndPos++;
+                    aSel.end.nIndex++;
                     pOLV->SetSelection(aSel);
                 }
                 pOLV->InsertField(SvxFieldItem(aField, EE_FEATURE_FIELD));
@@ -1113,7 +1113,7 @@ void SwDrawTextShell::ExecClpbrd(SfxRequest const &rReq)
     OutlinerView* pOLV = m_pSdrView->GetTextEditOutlinerView();
 
     ESelection aSel(pOLV->GetSelection());
-    const bool bCopy = (aSel.nStartPara != aSel.nEndPara) || (aSel.nStartPos != aSel.nEndPos);
+    const bool bCopy = aSel.HasRange();
     sal_uInt16 nId = rReq.GetSlot();
     switch( nId )
     {
@@ -1193,8 +1193,7 @@ void SwDrawTextShell::StateClpbrd(SfxItemSet &rSet)
 
     OutlinerView* pOLV = m_pSdrView->GetTextEditOutlinerView();
     ESelection aSel(pOLV->GetSelection());
-    const bool bCopy = (aSel.nStartPara != aSel.nEndPara) ||
-        (aSel.nStartPos != aSel.nEndPos);
+    const bool bCopy = aSel.HasRange();
 
     TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( &GetView().GetEditWin() ) );
     const bool bPaste = aDataHelper.HasFormat( SotClipboardFormatId::STRING ) ||

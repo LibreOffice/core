@@ -224,7 +224,7 @@ namespace accessibility
     };
 
     AccessibleTextHelper_Impl::AccessibleTextHelper_Impl() :
-        maLastSelection( EE_PARA_NOT_FOUND,EE_INDEX_NOT_FOUND,EE_PARA_NOT_FOUND,EE_INDEX_NOT_FOUND ),
+        maLastSelection( ESelection::AtEnd() ),
         mnFirstVisibleChild( -1 ),
         mnLastVisibleChild( -2 ),
         mnStartIndex( 0 ),
@@ -447,7 +447,7 @@ namespace accessibility
                 // find the one with the cursor and get/set focus accordingly
                 ESelection aSelection;
                 if( GetEditViewForwarder().GetSelection( aSelection ) )
-                    SetChildFocus( aSelection.nEndPara, bHaveFocus );
+                    SetChildFocus(aSelection.end.nPara, bHaveFocus);
             }
             catch( const uno::Exception& ) {}
         }
@@ -495,7 +495,7 @@ namespace accessibility
             if( GetEditViewForwarder().GetSelection( aSelection ) )
             {
                 if( maLastSelection != aSelection &&
-                    aSelection.nEndPara < maParaManager.GetNum() )
+                    aSelection.end.nPara < maParaManager.GetNum() )
                 {
                     // #103998# Not that important, changed from assertion to trace
                     if( mbThisHasFocus )
@@ -507,30 +507,30 @@ namespace accessibility
 
                     // notify all affected paragraphs (TODO: may be suboptimal,
                     // since some paragraphs might stay selected)
-                    if( maLastSelection.nStartPara != EE_PARA_NOT_FOUND )
+                    if (maLastSelection.start.nPara != EE_PARA_MAX)
                     {
                         // Did the caret move from one paragraph to another?
                         // #100530# no caret events if not focused.
                         if( mbGroupHasFocus &&
-                            maLastSelection.nEndPara != aSelection.nEndPara )
+                            maLastSelection.end.nPara != aSelection.end.nPara )
                         {
-                            if( maLastSelection.nEndPara < maParaManager.GetNum() )
+                            if (maLastSelection.end.nPara < maParaManager.GetNum())
                             {
-                                maParaManager.FireEvent( ::std::min( maLastSelection.nEndPara, nMaxValidParaIndex ),
-                                                         ::std::min( maLastSelection.nEndPara, nMaxValidParaIndex )+1,
+                                maParaManager.FireEvent( ::std::min( maLastSelection.end.nPara, nMaxValidParaIndex ),
+                                                         ::std::min( maLastSelection.end.nPara, nMaxValidParaIndex )+1,
                                                          AccessibleEventId::CARET_CHANGED,
                                                          uno::Any(static_cast<sal_Int32>(-1)),
-                                                         uno::Any(maLastSelection.nEndPos) );
+                                                         uno::Any(maLastSelection.end.nIndex) );
                             }
 
-                            ChangeChildFocus( aSelection.nEndPara );
+                            ChangeChildFocus(aSelection.end.nPara);
 
                             SAL_INFO(
                                 "svx",
                                 "focus changed, Object: " << this
-                                    << ", Paragraph: " << aSelection.nEndPara
+                                    << ", Paragraph: " << aSelection.end.nPara
                                     << ", Last paragraph: "
-                                    << maLastSelection.nEndPara);
+                                    << maLastSelection.end.nPara);
                         }
                     }
 
@@ -541,46 +541,46 @@ namespace accessibility
 
                         // #i13705# The old cursor can only contain valid
                         // values if it's the same paragraph!
-                        if( maLastSelection.nStartPara != EE_PARA_NOT_FOUND &&
-                            maLastSelection.nEndPara == aSelection.nEndPara )
+                        if( maLastSelection.start.nPara != EE_PARA_MAX &&
+                            maLastSelection.end.nPara == aSelection.end.nPara )
                         {
-                            aOldCursor <<= maLastSelection.nEndPos;
+                            aOldCursor <<= maLastSelection.end.nIndex;
                         }
                         else
                         {
                             aOldCursor <<= static_cast<sal_Int32>(-1);
                         }
 
-                        maParaManager.FireEvent( aSelection.nEndPara,
-                                                 aSelection.nEndPara+1,
+                        maParaManager.FireEvent( aSelection.end.nPara,
+                                                 aSelection.end.nPara+1,
                                                  AccessibleEventId::CARET_CHANGED,
-                                                 uno::Any(aSelection.nEndPos),
+                                                 uno::Any(aSelection.end.nIndex),
                                                  aOldCursor );
                     }
 
                     SAL_INFO(
                         "svx",
                         "caret changed, Object: " << this << ", New pos: "
-                            << aSelection.nEndPos << ", Old pos: "
-                            << maLastSelection.nEndPos << ", New para: "
-                            << aSelection.nEndPara << ", Old para: "
-                            << maLastSelection.nEndPara);
+                            << aSelection.end.nIndex << ", Old pos: "
+                            << maLastSelection.end.nIndex << ", New para: "
+                            << aSelection.end.nPara << ", Old para: "
+                            << maLastSelection.end.nPara);
 
                     // #108947# Sort new range before calling FireEvent
                     ::std::pair<sal_Int32, sal_Int32> sortedSelection(
-                        makeSortedPair(::std::min( aSelection.nStartPara, nMaxValidParaIndex ),
-                                       ::std::min( aSelection.nEndPara, nMaxValidParaIndex ) ) );
+                        makeSortedPair(::std::min( aSelection.start.nPara, nMaxValidParaIndex ),
+                                       ::std::min( aSelection.end.nPara, nMaxValidParaIndex ) ) );
 
                     // #108947# Sort last range before calling FireEvent
                     ::std::pair<sal_Int32, sal_Int32> sortedLastSelection(
-                        makeSortedPair(::std::min( maLastSelection.nStartPara, nMaxValidParaIndex ),
-                                       ::std::min( maLastSelection.nEndPara, nMaxValidParaIndex ) ) );
+                        makeSortedPair(::std::min( maLastSelection.start.nPara, nMaxValidParaIndex ),
+                                       ::std::min( maLastSelection.end.nPara, nMaxValidParaIndex ) ) );
 
                     // event TEXT_SELECTION_CHANGED has to be submitted. (#i27299#)
                     const sal_Int16 nTextSelChgEventId =
                                     AccessibleEventId::TEXT_SELECTION_CHANGED;
                     // #107037# notify selection change
-                    if( maLastSelection.nStartPara == EE_PARA_NOT_FOUND )
+                    if (maLastSelection.start.nPara == EE_PARA_MAX)
                     {
                         // last selection is undefined
                         // use method <ESelection::HasRange()> (#i27299#)
@@ -624,11 +624,11 @@ namespace accessibility
                             ESelection aTmpSel( aSelection );
                             aTmpSel.Adjust();
                             // first submit event for new and changed selection
-                            sal_Int32 nPara = aTmpSel.nStartPara;
-                            for ( ; nPara <= aTmpSel.nEndPara; ++nPara )
+                            sal_Int32 nPara = aTmpSel.start.nPara;
+                            for ( ; nPara <= aTmpSel.end.nPara; ++nPara )
                             {
-                                if ( nPara < aTmpLastSel.nStartPara ||
-                                     nPara > aTmpLastSel.nEndPara )
+                                if ( nPara < aTmpLastSel.start.nPara ||
+                                     nPara > aTmpLastSel.end.nPara )
                                 {
                                     // new selection on paragraph <nPara>
                                     maParaManager.FireEvent( nPara,
@@ -638,17 +638,17 @@ namespace accessibility
                                 {
                                     // check for changed selection on paragraph <nPara>
                                     const sal_Int32 nParaStartPos =
-                                            nPara == aTmpSel.nStartPara
-                                            ? aTmpSel.nStartPos : 0;
+                                            nPara == aTmpSel.start.nPara
+                                            ? aTmpSel.start.nIndex : 0;
                                     const sal_Int32 nParaEndPos =
-                                            nPara == aTmpSel.nEndPara
-                                            ? aTmpSel.nEndPos : -1;
+                                            nPara == aTmpSel.end.nPara
+                                            ? aTmpSel.end.nIndex : -1;
                                     const sal_Int32 nLastParaStartPos =
-                                            nPara == aTmpLastSel.nStartPara
-                                            ? aTmpLastSel.nStartPos : 0;
+                                            nPara == aTmpLastSel.start.nPara
+                                            ? aTmpLastSel.start.nIndex : 0;
                                     const sal_Int32 nLastParaEndPos =
-                                            nPara == aTmpLastSel.nEndPara
-                                            ? aTmpLastSel.nEndPos : -1;
+                                            nPara == aTmpLastSel.end.nPara
+                                            ? aTmpLastSel.end.nIndex : -1;
                                     if ( nParaStartPos != nLastParaStartPos ||
                                          nParaEndPos != nLastParaEndPos )
                                     {
@@ -658,11 +658,11 @@ namespace accessibility
                                 }
                             }
                             // second submit event for 'old' selections
-                            nPara = aTmpLastSel.nStartPara;
-                            for ( ; nPara <= aTmpLastSel.nEndPara; ++nPara )
+                            nPara = aTmpLastSel.start.nPara;
+                            for ( ; nPara <= aTmpLastSel.end.nPara; ++nPara )
                             {
-                                if ( nPara < aTmpSel.nStartPara ||
-                                     nPara > aTmpSel.nEndPara )
+                                if ( nPara < aTmpSel.start.nPara ||
+                                     nPara > aTmpSel.end.nPara )
                                 {
                                     maParaManager.FireEvent( nPara,
                                                              nTextSelChgEventId );
@@ -964,7 +964,7 @@ namespace accessibility
                  pTextHint->GetId() == SfxHintId::TextParaRemoved )) )
                 return;
 
-            if( pTextHint->GetValue() == EE_PARA_ALL )
+            if (pTextHint->GetValue() == EE_PARA_MAX)
             {
                 mnParasChanged = -1;
             }
@@ -1152,12 +1152,12 @@ namespace accessibility
                                 // focused child now loses focus
                                 ESelection aSelection;
                                 if( GetEditViewForwarder().GetSelection( aSelection ) )
-                                    SetChildFocus( aSelection.nEndPara, false );
+                                    SetChildFocus(aSelection.end.nPara, false);
 
                                 // change children state
                                 maParaManager.SetActive( false );
 
-                                maLastSelection = ESelection::NotFound();
+                                maLastSelection = ESelection::AtEnd();
                                 break;
                             }
                             default:
@@ -1212,7 +1212,7 @@ namespace accessibility
                                 // #108900# Delegate change event to children
                                 AccessibleTextHelper_ChildrenTextChanged aNotifyChildrenFunctor;
 
-                                if( nPara == EE_PARA_ALL )
+                                if (nPara == EE_PARA_MAX)
                                 {
                                     // #108900# Call every child
                                     ::std::for_each( maParaManager.begin(), maParaManager.end(),

@@ -203,7 +203,7 @@ void SQLEditView::UpdateData()
     {
         OUString aLine( rEditEngine.GetText( nLine ) );
 
-        ESelection aAllLine(nLine, 0, nLine, EE_TEXTPOS_ALL);
+        ESelection aAllLine(nLine, 0, nLine, EE_TEXTPOS_MAX);
         rEditEngine.RemoveAttribs(aAllLine, false, EE_CHAR_COLOR);
         rEditEngine.RemoveAttribs(aAllLine, false, EE_CHAR_WEIGHT);
         rEditEngine.RemoveAttribs(aAllLine, false, EE_CHAR_WEIGHT_CJK);
@@ -234,8 +234,8 @@ void SQLEditView::UpdateData()
 void SQLEditView::DoBracketHilight(sal_uInt16 nKey)
 {
     ESelection aCurrentPos = m_xEditView->GetSelection();
-    sal_Int32 nStartPos = aCurrentPos.nStartPos;
-    const sal_uInt32 nStartPara = aCurrentPos.nStartPara;
+    sal_Int32 nStartPos = aCurrentPos.start.nIndex;
+    const sal_uInt32 nStartPara = aCurrentPos.start.nPara;
     sal_uInt16 nCount = 0;
     int nChar = -1;
 
@@ -294,7 +294,7 @@ void SQLEditView::DoBracketHilight(sal_uInt16 nKey)
                     aSet.Put(SvxWeightItem(WEIGHT_ULTRABOLD, EE_CHAR_WEIGHT_CTL));
 
                     m_xEditEngine->QuickSetAttribs(aSet, ESelection(nPara, i, nPara, i + 1));
-                    m_xEditEngine->QuickSetAttribs(aSet, ESelection(nStartPara, nStartPos, nStartPara, nStartPos));
+                    m_xEditEngine->QuickSetAttribs(aSet, ESelection(nStartPara, nStartPos));
                     return;
                 }
                 else
@@ -415,11 +415,9 @@ bool SQLEditView::Command(const CommandEvent& rCEvt)
             pEditView->DeleteSelected();
         else if (sCommand == "selectall")
         {
-            sal_Int32 nPar = m_xEditEngine->GetParagraphCount();
-            if (nPar)
+            if (m_xEditEngine->GetParagraphCount())
             {
-                sal_Int32 nLen = m_xEditEngine->GetTextLen(nPar - 1);
-                pEditView->SetSelection(ESelection(0, 0, nPar - 1, nLen));
+                pEditView->SetSelection(ESelection::All());
             }
         }
         else if (sCommand == "specialchar")

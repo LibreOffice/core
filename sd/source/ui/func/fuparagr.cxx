@@ -82,8 +82,8 @@ void FuParagraph::DoExecute( SfxRequest& rReq )
         if( pOutlView && pOutliner )
         {
             ESelection eSelection = pOutlView->GetSelection();
-            aNewAttr.Put( SfxInt16Item( ATTR_NUMBER_NEWSTART_AT, pOutliner->GetNumberingStartValue( eSelection.nStartPara ) ) );
-            aNewAttr.Put( SfxBoolItem( ATTR_NUMBER_NEWSTART, pOutliner->IsParaIsNumberingRestart( eSelection.nStartPara ) ) );
+            aNewAttr.Put( SfxInt16Item( ATTR_NUMBER_NEWSTART_AT, pOutliner->GetNumberingStartValue( eSelection.start.nPara ) ) );
+            aNewAttr.Put( SfxBoolItem( ATTR_NUMBER_NEWSTART, pOutliner->IsParaIsNumberingRestart( eSelection.start.nPara ) ) );
         }
 
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
@@ -114,13 +114,13 @@ void FuParagraph::DoExecute( SfxRequest& rReq )
         if( const SfxBoolItem* pItem = pArgs->GetItemIfSet( ATTR_NUMBER_NEWSTART, false ) )
         {
             const bool bNewStart = pItem->GetValue();
-            pOutliner->SetParaIsNumberingRestart( eSelection.nStartPara, bNewStart );
+            pOutliner->SetParaIsNumberingRestart( eSelection.start.nPara, bNewStart );
         }
 
         if( const SfxInt16Item* pItem = pArgs->GetItemIfSet( ATTR_NUMBER_NEWSTART_AT, false ) )
         {
             const sal_Int16 nStartAt = pItem->GetValue();
-            pOutliner->SetNumberingStartValue( eSelection.nStartPara, nStartAt );
+            pOutliner->SetNumberingStartValue( eSelection.start.nPara, nStartAt );
         }
     }
 

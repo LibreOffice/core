@@ -805,9 +805,7 @@ bool SwSpellDialogChildWindow::SpellDrawText_Impl(SwWrtShell& rSh, svx::SpellPor
         {
             OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
             ESelection aCurrentSelection = pOLV->GetSelection();
-            if(m_pSpellState->m_aStartDrawingSelection.nEndPara < aCurrentSelection.nEndPara ||
-               (m_pSpellState->m_aStartDrawingSelection.nEndPara ==  aCurrentSelection.nEndPara &&
-                    m_pSpellState->m_aStartDrawingSelection.nEndPos <  aCurrentSelection.nEndPos))
+            if (m_pSpellState->m_aStartDrawingSelection.end < aCurrentSelection.end)
             {
                 bRet = false;
                 rPortions.clear();

@@ -351,16 +351,16 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     OUString sInput(aSel.HasRange() ? pActiveView->GetSelected()
                                                     : rEngine.GetText());
 
-                    if( aSel.nStartPos > aSel.nEndPos )
-                        aSel.nEndPos = aSel.nStartPos;
+                    if (aSel.start.nIndex > aSel.end.nIndex)
+                        aSel.end.nIndex = aSel.start.nIndex;
 
                     //calculate a valid end-position by reading logical characters
                     sal_Int32 nUtf16Pos=0;
-                    while( (nUtf16Pos < sInput.getLength()) && (nUtf16Pos < aSel.nEndPos) )
+                    while ((nUtf16Pos < sInput.getLength()) && (nUtf16Pos < aSel.end.nIndex))
                     {
                         sInput.iterateCodePoints(&nUtf16Pos);
-                        if( nUtf16Pos > aSel.nEndPos )
-                            aSel.nEndPos = nUtf16Pos;
+                        if (nUtf16Pos > aSel.end.nIndex)
+                            aSel.end.nIndex = nUtf16Pos;
                     }
 
                     ToggleUnicodeCodepoint aToggle;
@@ -369,7 +369,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     OUString sReplacement = aToggle.ReplacementString();
                     if( !sReplacement.isEmpty() )
                     {
-                        aSel.nStartPos = aSel.nEndPos - aToggle.StringToReplace().getLength();
+                        aSel.start.nIndex = aSel.end.nIndex - aToggle.StringToReplace().getLength();
                         pTableView->SetSelection( aSel );
                         pTableView->InsertText(sReplacement, true);
                         if( pTopView )
@@ -540,7 +540,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
 
                     ScDocument& rDoc = rViewData.GetDocument();
                     ScRefFinder aFinder(aText, rViewData.GetCurPos(), rDoc, rDoc.GetAddressConvention());
-                    aFinder.ToggleRel( aSel.nStartPos, aSel.nEndPos );
+                    aFinder.ToggleRel(aSel.start.nIndex, aSel.end.nIndex);
                     if (aFinder.GetFound())
                     {
                         const OUString& aNew = aFinder.GetText();
@@ -588,8 +588,8 @@ void ScEditShell::Execute( SfxRequest& rReq )
 
                             ESelection aSel = pTableView->GetSelection();
                             aSel.Adjust();
-                            aSel.nEndPara = aSel.nStartPara;
-                            aSel.nEndPos = aSel.nStartPos + 1;
+                            aSel.end.nPara = aSel.start.nPara;
+                            aSel.end.nIndex = aSel.start.nIndex + 1;
                             pTableView->SetSelection( aSel );
 
                             // insert new field
@@ -605,8 +605,8 @@ void ScEditShell::Execute( SfxRequest& rReq )
                             if ( pTopView )
                             {
                                 aSel = pTopView->GetSelection();
-                                aSel.nEndPara = aSel.nStartPara;
-                                aSel.nEndPos = aSel.nStartPos + 1;
+                                aSel.end.nPara = aSel.start.nPara;
+                                aSel.end.nIndex = aSel.start.nIndex + 1;
                                 pTopView->SetSelection( aSel );
                                 pTopView->InsertField( aURLItem );
                                 pTopView->SetSelection( aSel );     // select inserted field
@@ -899,10 +899,10 @@ std::unique_ptr<const SvxFieldData> ScEditShell::GetFirstURLFieldFromCell()
         rEditEngine.GetPortions(nPara, aPosList);
         for (const auto& rPos : aPosList)
         {
-            aSel.nEndPos = rPos;
+            aSel.end.nIndex = rPos;
 
             SfxItemSet aEditSet(rEditEngine.GetAttribs(aSel));
-            if (aSel.nStartPos + 1 == aSel.nEndPos)
+            if (aSel.start.nIndex + 1 == aSel.end.nIndex)
             {
                 // test if the character is a text field
                 if (const SvxFieldItem* pItem = aEditSet.GetItemIfSet(EE_FEATURE_FIELD, false))
@@ -914,7 +914,7 @@ std::unique_ptr<const SvxFieldData> ScEditShell::GetFirstURLFieldFromCell()
                     }
                 }
             }
-            aSel.nStartPos = aSel.nEndPos;
+            aSel.start.nIndex = aSel.end.nIndex;
         }
     }
 
@@ -1312,7 +1312,7 @@ OUString ScEditShell::GetSelectionText( bool bWholeWord )
             OUString    aStrCurrentDelimiters = rEngine.GetWordDelimiters();
 
             rEngine.SetWordDelimiters(u" .,;\"'"_ustr);
-            aStrSelection = rEngine.GetWord( aSel.nEndPara, aSel.nEndPos );
+            aStrSelection = rEngine.GetWord(aSel.end);
             rEngine.SetWordDelimiters( aStrCurrentDelimiters );
         }
         else

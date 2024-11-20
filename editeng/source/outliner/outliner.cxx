@@ -150,7 +150,7 @@ void Outliner::ParagraphInserted( sal_Int32 nPara )
 void Outliner::ParagraphDeleted( sal_Int32 nPara )
 {
 
-    if ( nBlockInsCallback || ( nPara == EE_PARA_ALL ) )
+    if (nBlockInsCallback || (nPara == EE_PARA_MAX))
         return;
 
     Paragraph* pPara = pParaList->GetParagraph( nPara );
@@ -606,7 +606,7 @@ void Outliner::AddText( const OutlinerParaObject& rPObj, bool bAppend )
     else
     {
         nPara = pParaList->GetParagraphCount();
-        pEditEngine->InsertParagraph( EE_PARA_APPEND, rPObj.GetTextObject(), bAppend );
+        pEditEngine->InsertParagraph(EE_PARA_MAX, rPObj.GetTextObject(), bAppend);
     }
     bFirstParaIsEmpty = false;
 
@@ -816,7 +816,7 @@ vcl::Font Outliner::ImpCalcBulletFont( sal_Int32 nPara ) const
     vcl::Font aStdFont;
     if ( !pEditEngine->IsFlatMode() )
     {
-        ESelection aSel( nPara, 0, nPara, 0 );
+        ESelection aSel(nPara, 0);
         aStdFont = EditEngine::CreateFontFromItemSet( pEditEngine->GetAttribs( aSel ), pEditEngine->GetScriptType( aSel ) );
     }
     else
@@ -1470,7 +1470,7 @@ void Outliner::StyleSheetChanged( SfxStyleSheet const * pStyle )
             ImplCalcBulletText( nPara, false, false );
             // EditEngine formats changed paragraphs before calling this method,
             // so they are not reformatted now and use wrong bullet indent
-            pEditEngine->QuickMarkInvalid( ESelection( nPara, 0, nPara, 0 ) );
+            pEditEngine->QuickMarkInvalid(ESelection(nPara, 0));
         }
     }
 }
@@ -2029,7 +2029,7 @@ std::optional<NonOverflowingText> Outliner::GetNonOverflowingText() const
     bool bItAllOverflew = nCount == 0 && nOverflowLine == 0;
     if ( bItAllOverflew )
     {
-        ESelection aEmptySel(0,0,0,0);
+        ESelection aEmptySel;
         //EditTextObject *pTObj = pEditEngine->CreateTextObject(aEmptySel);
         bool const bLastParaInterrupted = true; // Last Para was interrupted since everything overflew
         return NonOverflowingText(aEmptySel, bLastParaInterrupted);

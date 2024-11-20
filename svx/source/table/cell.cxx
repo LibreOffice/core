@@ -760,7 +760,7 @@ void Cell::SetOutlinerParaObject( std::optional<OutlinerParaObject> pTextObject 
 {
     bool bNullTextObject = !pTextObject;
     SdrText::SetOutlinerParaObject( std::move(pTextObject) );
-    maSelection.nStartPara = EE_PARA_MAX_COUNT;
+    maSelection.start.nPara = EE_PARA_MAX;
 
     if( bNullTextObject )
         ForceOutlinerParaObject( OutlinerMode::TextObject );
@@ -1682,7 +1682,7 @@ void SAL_CALL Cell::insertControlCharacter( const Reference< XTextRange >& xRang
 
 OUString SAL_CALL Cell::getString(  )
 {
-    maSelection.nStartPara = EE_PARA_MAX_COUNT;
+    maSelection.start.nPara = EE_PARA_MAX;
     return SvxUnoTextBase::getString();
 }
 

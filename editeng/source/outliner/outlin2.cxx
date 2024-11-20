@@ -158,9 +158,9 @@ OUString const & Outliner::GetWordDelimiters() const
     return pEditEngine->GetWordDelimiters();
 }
 
-OUString Outliner::GetWord( sal_Int32 nPara, sal_Int32 nIndex )
+OUString Outliner::GetWord(const EPaM& rPos)
 {
-    return pEditEngine->GetWord( nPara, nIndex );
+    return pEditEngine->GetWord(rPos);
 }
 
 void Outliner::Draw( OutputDevice& rOutDev, const tools::Rectangle& rOutRect )
@@ -423,7 +423,7 @@ bool Outliner::IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder, bool* pbBu
     {
         Point aDocPos = GetDocPos( rPaperPos );
         sal_Int32 nPara = pEditEngine->FindParagraph( aDocPos.Y() );
-        if ( ( nPara != EE_PARA_NOT_FOUND ) && ImplHasNumberFormat( nPara ) )
+        if ((nPara != EE_PARA_MAX) && ImplHasNumberFormat(nPara))
         {
             tools::Rectangle aBulArea = ImpCalcBulletArea( nPara, true, true );
             if ( aBulArea.Contains( rPaperPos ) )

@@ -1006,8 +1006,7 @@ void SwAnnotationWin::DeactivatePostIt()
     if (GetOutlinerView()->GetEditView().HasSelection())
     {
         ESelection aSelection = GetOutlinerView()->GetEditView().GetSelection();
-        aSelection.nEndPara = aSelection.nStartPara;
-        aSelection.nEndPos = aSelection.nStartPos;
+        aSelection.CollapseToStart();
         GetOutlinerView()->GetEditView().SetSelection(aSelection);
     }
 
