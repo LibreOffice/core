@@ -47,4 +47,13 @@ $(eval $(call gb_CppunitTest_use_custom_headers,sfx2_view,\
 
 $(eval $(call gb_CppunitTest_use_configuration,sfx2_view))
 
+$(eval $(call gb_CppunitTest_use_executable,sfx2_view,xpdfimport))
+
+$(eval $(call gb_CppunitTest_use_uiconfigs,sfx2_view, \
+    modules/simpress \
+    sfx \
+    svt \
+    svx \
+))
+
 # vim: set noet sw=4 ts=4:
