@@ -51,7 +51,6 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/certdialog \
 	cui/uiconfig/ui/chapterfragment \
 	cui/uiconfig/ui/charnamepage \
-	cui/uiconfig/ui/colorconfigwin \
 	cui/uiconfig/ui/colorfragment \
 	cui/uiconfig/ui/colorpage \
 	cui/uiconfig/ui/colorpickerdialog \
@@ -134,7 +133,6 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/objecttitledescdialog \
 	cui/uiconfig/ui/optaccessibilitypage \
 	cui/uiconfig/ui/optadvancedpage \
-	cui/uiconfig/ui/optappearancepage \
 	cui/uiconfig/ui/optasianpage \
 	cui/uiconfig/ui/optbasicidepage \
 	cui/uiconfig/ui/optctlpage \
@@ -170,7 +168,6 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/pastespecial \
 	cui/uiconfig/ui/patterntabpage \
 	cui/uiconfig/ui/percentdialog \
-	cui/uiconfig/ui/personalization_tab \
 	cui/uiconfig/ui/pickbulletpage \
 	cui/uiconfig/ui/pickgraphicpage \
 	cui/uiconfig/ui/picknumberingpage \

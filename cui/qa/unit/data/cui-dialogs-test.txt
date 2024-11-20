@@ -76,7 +76,6 @@ cui/ui/calloutpage.ui
 cui/ui/cellalignment.ui
 cui/ui/certdialog.ui
 cui/ui/charnamepage.ui
-cui/ui/colorconfigwin.ui
 cui/ui/colorpage.ui
 cui/ui/colorpickerdialog.ui
 cui/ui/comment.ui

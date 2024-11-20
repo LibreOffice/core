@@ -5528,40 +5528,6 @@
         </info>
         <value>auto</value>
       </prop>
-      <prop oor:name="Persona" oor:type="xs:string" oor:nillable="false">
-        <!-- UIHints: Tools  Options General Personalization -->
-        <info>
-          <desc>Specifies whether we should use a Firefox Persona, ie. a
-            picture under the menu, toolbar, and status bar.</desc>
-        </info>
-        <constraints>
-          <enumeration oor:value="no">
-            <info>
-              <desc>No - the user wants just the themed look, no Persona.</desc>
-            </info>
-          </enumeration>
-          <enumeration oor:value="default">
-            <info>
-              <desc>Default - the LibreOffice default Persona.</desc>
-            </info>
-          </enumeration>
-          <enumeration oor:value="own">
-            <info>
-              <desc>The user installed an own Persona, and wants to use that.</desc>
-            </info>
-          </enumeration>
-        </constraints>
-        <value>default</value>
-      </prop>
-      <prop oor:name="PersonaSettings" oor:type="xs:string" oor:nillable="false">
-        <!-- UIHints: Tools  Options General Personalization -->
-        <info>
-          <desc>Names of the header and footer images, and colors for text and
-            accent.  When set, the value has form
-            "header.jpg;footer.jpg;#RGBTXT;#RGBACC".</desc>
-        </info>
-        <value/>
-      </prop>
       <prop oor:name="FormControlPilotsEnabled" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Enables/Disables the usage of AutoPilots for form

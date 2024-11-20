@@ -2852,13 +2852,6 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
         aStyleSettings.SetInactiveTabColor( aStyleSettings.GetFaceColor() );
     }
 
-    if ( std::optional<Color> aColor = aStyleSettings.GetPersonaMenuBarTextColor() )
-    {
-        aMenuBarTextColor = *aColor;
-        if (!aStyleSettings.GetHighContrastMode())
-            aMenuBarRolloverTextColor = *aColor;
-    }
-
     aStyleSettings.SetMenuBarTextColor( aMenuBarTextColor );
     aStyleSettings.SetMenuBarRolloverTextColor( aMenuBarRolloverTextColor );
 

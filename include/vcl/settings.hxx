@@ -609,12 +609,6 @@ public:
 
     const DialogStyle&              GetDialogStyle() const;
 
-    BitmapEx const &                GetPersonaHeader() const;
-
-    SAL_DLLPRIVATE BitmapEx const & GetPersonaFooter() const;
-
-    const std::optional<Color>&   GetPersonaMenuBarTextColor() const;
-
     // global switch to allow EdgeBlenging; currently possible for ValueSet and ListBox
     // when activated there using Get/SetEdgeBlending; default is true
     void                            SetEdgeBlending(sal_uInt16 nCount);

@@ -506,9 +506,7 @@ void ToolBox::ImplDrawBackground(vcl::RenderContext& rRenderContext, const tools
         if (!bNativeOk)
         {
             const StyleSettings rSetting = Application::GetSettings().GetStyleSettings();
-            const bool isHeader = GetAlign() == WindowAlign::Top && !rSetting.GetPersonaHeader().IsEmpty();
-            const bool isFooter = GetAlign() == WindowAlign::Bottom && !rSetting.GetPersonaFooter().IsEmpty();
-            if (!IsBackground() || isHeader || isFooter)
+            if (!IsBackground())
             {
                 if (!IsInPaint())
                     ImplDrawTransparentBackground(aPaintRegion);
@@ -1200,9 +1198,7 @@ void ToolBox::ApplyBackgroundSettings(vcl::RenderContext& rRenderContext, const 
     }
     else
     {
-        if (rRenderContext.IsNativeControlSupported(ControlType::Toolbar, ControlPart::Entire)
-            || (GetAlign() == WindowAlign::Top && !Application::GetSettings().GetStyleSettings().GetPersonaHeader().IsEmpty())
-            || (GetAlign() == WindowAlign::Bottom && !Application::GetSettings().GetStyleSettings().GetPersonaFooter().IsEmpty()))
+        if (rRenderContext.IsNativeControlSupported(ControlType::Toolbar, ControlPart::Entire))
         {
             rRenderContext.SetBackground();
             rRenderContext.SetTextColor(rStyleSettings.GetToolTextColor());

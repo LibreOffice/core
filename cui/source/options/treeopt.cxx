@@ -45,7 +45,6 @@
 #include "optaccessibility.hxx"
 #include <optasian.hxx>
 #include "optchart.hxx"
-#include "optcolor.hxx"
 #include "optctl.hxx"
 #include "optfltr.hxx"
 #include "optgdlg.hxx"
@@ -60,7 +59,6 @@
 #include <optpath.hxx>
 #include "optsave.hxx"
 #include "optupdt.hxx"
-#include "personalization.hxx"
 #include <treeopt.hxx>
 #include "optbasic.hxx"
 #include "optlanguagetool.hxx"
@@ -261,10 +259,6 @@ static std::unique_ptr<SfxTabPage> CreateGeneralTabPage(sal_uInt16 nId, weld::Co
         case RID_SVXPAGE_INET_PROXY:                fnCreate = &SvxProxyTabPage::Create; break;
         case RID_SVXPAGE_INET_SECURITY:             fnCreate = &SvxSecurityTabPage::Create; break;
         case RID_SVXPAGE_INET_MAIL:                 fnCreate = &SvxEMailTabPage::Create; break;
-#if HAVE_FEATURE_DESKTOP
-        case RID_SVXPAGE_PERSONALIZATION:           fnCreate = &SvxPersonalizationTabPage::Create; break;
-#endif
-        case RID_SVXPAGE_COLORCONFIG:               fnCreate = &SvxColorOptionsTabPage::Create; break;
         case RID_OFAPAGE_HTMLOPT:                   fnCreate = &OfaHtmlTabPage::Create; break;
         case SID_OPTFILTER_MSOFFICE:                fnCreate = &OfaMSFilterTabPage::Create; break;
         case RID_OFAPAGE_MSFILTEROPT2:              fnCreate = &OfaMSFilterTabPage2::Create; break;
@@ -311,8 +305,6 @@ constexpr OptionsMapping_Impl OptionsMap_Impl[]
     { u"ProductName"_ustr,        u"Paths"_ustr,                RID_SFXPAGE_PATH },
     { u"ProductName"_ustr,        u"Fonts"_ustr,                RID_SVX_FONT_SUBSTITUTION },
     { u"ProductName"_ustr,        u"Security"_ustr,             RID_SVXPAGE_INET_SECURITY },
-    { u"ProductName"_ustr,        u"Personalization"_ustr,      RID_SVXPAGE_PERSONALIZATION },
-    { u"ProductName"_ustr,        u"Appearance"_ustr,           RID_SVXPAGE_COLORCONFIG },
     { u"ProductName"_ustr,        u"Accessibility"_ustr,        RID_SVXPAGE_ACCESSIBILITYCONFIG },
     { u"ProductName"_ustr,        u"Java"_ustr,                 RID_SVXPAGE_OPTIONS_JAVA },
     { u"ProductName"_ustr,        u"BasicIDEOptions"_ustr,      RID_SVXPAGE_BASICIDE_OPTIONS },

@@ -315,21 +315,9 @@ void NotebookBar::StateChanged(const  StateChangedType nStateChange )
 void NotebookBar::UpdateBackground()
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    const BitmapEx& aPersona = rStyleSettings.GetPersonaHeader();
-    Wallpaper aWallpaper(aPersona);
-    aWallpaper.SetStyle(WallpaperStyle::TopRight);
-    if (!aPersona.IsEmpty())
-    {
-        SetBackground(aWallpaper);
-        UpdatePersonaSettings();
-        GetOutDev()->SetSettings( PersonaSettings );
-    }
-    else
-    {
-        SetBackground(rStyleSettings.GetDialogColor());
-        UpdateDefaultSettings();
-        GetOutDev()->SetSettings( DefaultSettings );
-    }
+    SetBackground(rStyleSettings.GetDialogColor());
+    UpdateDefaultSettings();
+    GetOutDev()->SetSettings( DefaultSettings );
 
     Invalidate(tools::Rectangle(Point(0,0), GetSizePixel()));
 }
@@ -351,25 +339,6 @@ void NotebookBar::UpdateDefaultSettings()
 
     aAllSettings.SetStyleSettings(aStyleSet);
     DefaultSettings = std::move(aAllSettings);
-}
-
-void NotebookBar::UpdatePersonaSettings()
-{
-    AllSettings aAllSettings( GetSettings() );
-    StyleSettings aStyleSet( aAllSettings.GetStyleSettings() );
-
-    ::Color aTextColor = aStyleSet.GetPersonaMenuBarTextColor().value_or(COL_BLACK );
-    aStyleSet.SetDialogTextColor( aTextColor );
-    aStyleSet.SetButtonTextColor( aTextColor );
-    aStyleSet.SetRadioCheckTextColor( aTextColor );
-    aStyleSet.SetGroupTextColor( aTextColor );
-    aStyleSet.SetLabelTextColor( aTextColor );
-    aStyleSet.SetWindowTextColor( aTextColor );
-    aStyleSet.SetTabTextColor(aTextColor);
-    aStyleSet.SetToolTextColor(aTextColor);
-
-    aAllSettings.SetStyleSettings(aStyleSet);
-    PersonaSettings = std::move(aAllSettings);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
