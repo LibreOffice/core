@@ -204,6 +204,26 @@ public:
     template <typename FuncT>
     inline void forEach(std::unique_lock<std::mutex>& rGuard, FuncT const& func) const;
 
+    /** Executes a functor for each contained listener of specified type, e.g.
+        <code>forEach<awt::XPaintListener>(...</code>.
+
+        If a css::lang::DisposedException occurs which relates to
+        the called listener, then that listener is removed from the container.
+
+        If any other UNO exception occurs, the exceptionFunc is called.
+
+        @tparam FuncT unary functor type, let your compiler deduce this for you
+        @tparam ExceptionFuncT nullary functor type, let your compiler deduce this for you
+        @param func unary functor object expecting an argument of type
+                    css::uno::Reference<ListenerT>
+        @param exceptionFunc nullary functor object
+        @param rGuard
+            this parameter only here to make that this container is accessed while locked
+    */
+    template <typename FuncT, typename ExceptionFuncT>
+    inline void forEach(std::unique_lock<std::mutex>& rGuard, FuncT const& func,
+                        ExceptionFuncT const& exceptionFunc) const;
+
     /** Calls a UNO listener method for each contained listener.
 
         The listener method must take a single argument of type EventT,
@@ -230,6 +250,31 @@ public:
     inline void notifyEach(std::unique_lock<std::mutex>& rGuard,
                            void (SAL_CALL ListenerT::*NotificationMethod)(const EventT&),
                            const EventT& Event) const;
+
+    /** Calls a UNO listener method for each contained listener.
+
+        The listener method must take a single argument of type EventT,
+        and return <code>void</code>.
+
+        If a css::lang::DisposedException occurs which relates to
+        the called listener, then that listener is removed from the container.
+
+        If any other UNO exception occurs, the exceptionFunc is called.
+
+        @tparam EventT event type, let your compiler deduce this for you
+        @tparam ExceptionFuncT nullary functor type, let your compiler deduce this for you
+        @param NotificationMethod
+            Pointer to a method of a ListenerT interface.
+        @param Event
+            Event to notify to all contained listeners
+        @param exceptionFunc nullary functor object
+        @param rGuard
+            this parameter only here to make that this container is accessed while locked
+    */
+    template <typename EventT, typename ExceptionFuncT>
+    inline void notifyEach(std::unique_lock<std::mutex>& rGuard,
+                           void (SAL_CALL ListenerT::*NotificationMethod)(const EventT&),
+                           const EventT& Event, const ExceptionFuncT& exceptionFunc) const;
 
     // this is moveable, but not copyable
     OInterfaceContainerHelper4(OInterfaceContainerHelper4&&) = default;
@@ -316,6 +361,45 @@ inline void OInterfaceContainerHelper4<T>::forEach(std::unique_lock<std::mutex>&
     rGuard.lock();
 }
 
+template <class T>
+template <typename FuncT, typename ExceptionFuncT>
+inline void OInterfaceContainerHelper4<T>::forEach(std::unique_lock<std::mutex>& rGuard,
+                                                   FuncT const& func,
+                                                   ExceptionFuncT const& exceptionFunc) const
+{
+    assert(rGuard.owns_lock());
+    if (std::as_const(maData)->empty())
+    {
+        return;
+    }
+    const_cast<OInterfaceContainerHelper4&>(*this)
+        .maData.make_unique(); // so we can iterate over the data without holding the lock
+    OInterfaceIteratorHelper4<T> iter(rGuard, const_cast<OInterfaceContainerHelper4&>(*this));
+    rGuard.unlock();
+    while (iter.hasMoreElements())
+    {
+        auto xListener = iter.next();
+        try
+        {
+            func(xListener);
+        }
+        catch (css::lang::DisposedException const& exc)
+        {
+            if (exc.Context == xListener)
+            {
+                rGuard.lock();
+                iter.remove(rGuard);
+                rGuard.unlock();
+            }
+        }
+        catch (css::uno::Exception)
+        {
+            exceptionFunc();
+        }
+    }
+    rGuard.lock();
+}
+
 template <class ListenerT>
 template <typename EventT>
 inline void OInterfaceContainerHelper4<ListenerT>::notifyEach(
@@ -324,6 +408,17 @@ inline void OInterfaceContainerHelper4<ListenerT>::notifyEach(
 {
     forEach<NotifySingleListener<EventT>>(rGuard,
                                           NotifySingleListener<EventT>(NotificationMethod, Event));
+}
+
+template <class ListenerT>
+template <typename EventT, typename ExceptionFuncT>
+inline void OInterfaceContainerHelper4<ListenerT>::notifyEach(
+    std::unique_lock<std::mutex>& rGuard,
+    void (SAL_CALL ListenerT::*NotificationMethod)(const EventT&), const EventT& Event,
+    const ExceptionFuncT& exceptionFunc) const
+{
+    forEach<NotifySingleListener<EventT>>(
+        rGuard, NotifySingleListener<EventT>(NotificationMethod, Event), exceptionFunc);
 }
 
 template <class ListenerT>

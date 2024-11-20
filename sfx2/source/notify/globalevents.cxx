@@ -482,9 +482,11 @@ void SfxGlobalEvents_Impl::implts_notifyListener(const document::DocumentEvent& 
 
     document::EventObject aLegacyEvent(aEvent.Source, aEvent.EventName);
     m_aLegacyListeners.notifyEach(g,
-        &document::XEventListener::notifyEvent, aLegacyEvent);
+        &document::XEventListener::notifyEvent, aLegacyEvent,
+        [] { TOOLS_WARN_EXCEPTION("sfx.notify", "ignoring"); });
     m_aDocumentListeners.notifyEach(g,
-        &document::XDocumentEventListener::documentEventOccured, aEvent);
+        &document::XDocumentEventListener::documentEventOccured, aEvent,
+        [] { TOOLS_WARN_EXCEPTION("sfx.notify", "ignoring"); });
 }
 
 
