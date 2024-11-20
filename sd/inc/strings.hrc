@@ -80,6 +80,7 @@
 #define STR_POPUP_DELETE_SNAPPOINT                      NC_("STR_POPUP_DELETE_SNAPPOINT", "Delete Snap Point")
 #define STR_IMPRESS                                     NC_("STR_IMPRESS", "StarImpress 4.0")
 #define STR_LAYER                                       NC_("STR_LAYER", "Layer")
+#define STR_LAYER_HIGHLIGHTING_DISABLED                 NC_("STR_LAYER_HIGHLIGHTING_DISABLED", "Layer highlighting is disabled for this layer. The number of layer objects exceeds the number set for DisableLayerHighlighting (%1).")
 #define STR_UNDO_DELETEPAGES                            NC_("STR_UNDO_DELETEPAGES", "Delete slides")
 #define STR_UNDO_DELETEPAGES_DRAW                       NC_("STR_UNDO_DELETEPAGES_DRAW", "Delete pages")
 #define STR_UNDO_INSERTPAGES                            NC_("STR_UNDO_INSERTPAGES", "Insert slides")

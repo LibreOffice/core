@@ -45,6 +45,8 @@
 #include <sdpage.hxx>
 #include <svx/sdrpaintwindow.hxx>
 
+#include <officecfg/Office/Draw.hxx>
+
 namespace sd {
 
 /**
@@ -167,14 +169,20 @@ void LayerTabBar::BringLayerObjectsToAttention(const sal_uInt16 nPageId)
 
     m_aBringLayerObjectsToAttentionDelayTimer.Stop();
 
+    if (m_xOverlayObject && m_xOverlayObject->getOverlayManager())
+        m_xOverlayObject->getOverlayManager()->remove(*m_xOverlayObject);
+
     m_nBringLayerObjectsToAttentionLastPageId = nPageId;
 
     std::vector<basegfx::B2DRange> aRanges;
 
     if (nPageId != 0)
     {
+        sal_uInt16 nDisableLayerObjectsOverlay
+            = officecfg::Office::Draw::Misc::DisableLayerHighlighting::get();
         OUString aLayerName(GetLayerName(nPageId));
-        if (pDrViewSh->GetView()->GetSdrPageView()->IsLayerVisible(aLayerName))
+        if (nDisableLayerObjectsOverlay > 0 // don't show tooltip message when 0 - meaning feature is turned off
+            && pDrViewSh->GetView()->GetSdrPageView()->IsLayerVisible(aLayerName))
         {
             SdrLayerAdmin& rLayerAdmin = pDrViewSh->GetDoc()->GetLayerAdmin();
             SdrObjListIter aIter(pDrViewSh->GetActualPage(), SdrIterMode::DeepWithGroups);
@@ -191,7 +199,18 @@ void LayerTabBar::BringLayerObjectsToAttention(const sal_uInt16 nPageId)
                 {
                     ::tools::Rectangle aRect(pObj->GetLogicRect());
                     if (!aRect.IsEmpty())
+                    {
                         aRanges.emplace_back(aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom());
+                        if (aRanges.size() > nDisableLayerObjectsOverlay)
+                        {
+                            OUString sHelpText = SdResId(STR_LAYER_HIGHLIGHTING_DISABLED);
+                            sHelpText = sHelpText.replaceFirst(
+                                "%1", OUString::number(nDisableLayerObjectsOverlay));
+                            SetQuickHelpText(sHelpText);
+                            m_xOverlayObject.reset();
+                            return;
+                        }
+                    }
                     // skip over objects in groups
                     if (pObj->IsGroupObject())
                     {
@@ -207,8 +226,8 @@ void LayerTabBar::BringLayerObjectsToAttention(const sal_uInt16 nPageId)
         }
     }
 
-    if (m_xOverlayObject && m_xOverlayObject->getOverlayManager())
-        m_xOverlayObject->getOverlayManager()->remove(*m_xOverlayObject);
+    SetQuickHelpText(u""_ustr);
+
     if (aRanges.empty())
         m_xOverlayObject.reset();
     else

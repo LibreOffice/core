@@ -417,6 +417,13 @@
           <value>2</value>
         </prop>
       </group>
+      <prop oor:name="DisableLayerHighlighting" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>Defines the maximum number of objects in a layer (0 - 65535) before hovering the mouse pointer over a layer tab of the layer bar does not cause the layer objects in the view to be highlighted.</desc>
+          <label/>
+        </info>
+        <value>65535</value>
+      </prop>
     </group>
     <group oor:name="Snap">
       <info>
