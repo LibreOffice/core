@@ -180,7 +180,7 @@ void lclInsertUrl( XclImpRoot& rRoot, const OUString& rUrl, SCCOL nScCol, SCROW 
             {
                 const EditTextObject* pEditObj = aCell.getEditText();
                 rEE.SetTextCurrentDefaults( *pEditObj );
-                rEE.QuickInsertField( SvxFieldItem( aUrlField, EE_FEATURE_FIELD ), ESelection( 0, 0, EE_PARA_ALL, 0 ) );
+                rEE.QuickInsertField(SvxFieldItem(aUrlField, EE_FEATURE_FIELD), ESelection::All());
             }
             else
             {
@@ -190,7 +190,7 @@ void lclInsertUrl( XclImpRoot& rRoot, const OUString& rUrl, SCCOL nScCol, SCROW 
                 {
                     SfxItemSet aItemSet( rEE.GetEmptyItemSet() );
                     pPattern->FillEditItemSet( &aItemSet );
-                    rEE.QuickSetAttribs( aItemSet, ESelection( 0, 0, EE_PARA_ALL, 0 ) );
+                    rEE.QuickSetAttribs(aItemSet, ESelection::All());
                 }
             }
 

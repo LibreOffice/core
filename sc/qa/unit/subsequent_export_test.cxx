@@ -1155,10 +1155,7 @@ namespace
 void setAttribute(ScFieldEditEngine& rEE, sal_Int32 nPara, sal_Int32 nStart, sal_Int32 nEnd,
                   sal_uInt16 nType, Color nColor = COL_BLACK)
 {
-    ESelection aSel;
-    aSel.nStartPara = aSel.nEndPara = nPara;
-    aSel.nStartPos = nStart;
-    aSel.nEndPos = nEnd;
+    ESelection aSel(nPara, nStart, nPara, nEnd);
 
     SfxItemSet aItemSet = rEE.GetEmptyItemSet();
     switch (nType)
@@ -1212,30 +1209,20 @@ void setAttribute(ScFieldEditEngine& rEE, sal_Int32 nPara, sal_Int32 nStart, sal
 void setFont(ScFieldEditEngine& rEE, sal_Int32 nPara, sal_Int32 nStart, sal_Int32 nEnd,
              const OUString& rFontName)
 {
-    ESelection aSel;
-    aSel.nStartPara = aSel.nEndPara = nPara;
-    aSel.nStartPos = nStart;
-    aSel.nEndPos = nEnd;
-
     SfxItemSet aItemSet = rEE.GetEmptyItemSet();
     SvxFontItem aItem(FAMILY_MODERN, rFontName, u""_ustr, PITCH_VARIABLE, RTL_TEXTENCODING_UTF8,
                       EE_CHAR_FONTINFO);
     aItemSet.Put(aItem);
-    rEE.QuickSetAttribs(aItemSet, aSel);
+    rEE.QuickSetAttribs(aItemSet, ESelection(nPara, nStart, nPara, nEnd));
 }
 
 void setEscapement(ScFieldEditEngine& rEE, sal_Int32 nPara, sal_Int32 nStart, sal_Int32 nEnd,
                    short nEsc, sal_uInt8 nRelSize)
 {
-    ESelection aSel;
-    aSel.nStartPara = aSel.nEndPara = nPara;
-    aSel.nStartPos = nStart;
-    aSel.nEndPos = nEnd;
-
     SfxItemSet aItemSet = rEE.GetEmptyItemSet();
     SvxEscapementItem aItem(nEsc, nRelSize, EE_CHAR_ESCAPEMENT);
     aItemSet.Put(aItem);
-    rEE.QuickSetAttribs(aItemSet, aSel);
+    rEE.QuickSetAttribs(aItemSet, ESelection(nPara, nStart, nPara, nEnd));
 }
 }
 
@@ -1662,8 +1649,6 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testRichTextExportODS)
         setAttribute(*pEE, 0, 0, 4, EE_CHAR_WEIGHT);
         // Set the 'Italic' part italic.
         setAttribute(*pEE, 0, 9, 15, EE_CHAR_ITALIC);
-        ESelection aSel;
-        aSel.nStartPara = aSel.nEndPara = 0;
 
         // Set this edit text to cell B2.
         pDoc->SetEditText(ScAddress(1, 1, 0), pEE->CreateTextObject());

@@ -482,7 +482,7 @@ void EditEngine::DumpData(const EditEngine* pEE, bool bInfoBox)
         fprintf( fp, "\n  VisArea: nX=%" SAL_PRIdINT64 ", nY=%" SAL_PRIdINT64 ", dX=%" SAL_PRIdINT64 ", dY=%" SAL_PRIdINT64,
             sal_Int64(aR.Left()), sal_Int64(aR.Top()), sal_Int64(aR.GetSize().Width()), sal_Int64(aR.GetSize().Height()) );
         ESelection aSel = pV->GetSelection();
-        fprintf( fp, "\n  Selection: Start=%" SAL_PRIdINT32 ",%" SAL_PRIdINT32 ", End=%" SAL_PRIdINT32 ",%" SAL_PRIdINT32, aSel.nStartPara, aSel.nStartPos, aSel.nEndPara, aSel.nEndPos );
+        fprintf( fp, "\n  Selection: Start=%" SAL_PRIdINT32 ",%" SAL_PRIdINT32 ", End=%" SAL_PRIdINT32 ",%" SAL_PRIdINT32, aSel.start.nPara, aSel.start.nIndex, aSel.end.nPara, aSel.end.nIndex );
     }
     if ( pEE->GetActiveView() )
     {

@@ -58,7 +58,7 @@ void ClassificationEditView::InvertSelectionWeight()
 {
     ESelection aSelection = m_xEditView->GetSelection();
 
-    for (sal_Int32 nParagraph = aSelection.nStartPara; nParagraph <= aSelection.nEndPara; ++nParagraph)
+    for (sal_Int32 nParagraph = aSelection.start.nPara; nParagraph <= aSelection.end.nPara; ++nParagraph)
     {
         FontWeight eFontWeight = WEIGHT_BOLD;
 

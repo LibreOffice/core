@@ -426,7 +426,7 @@ void NotesPanelViewShell::GetCtrlState(SfxItemSet& rSet)
             if (pFieldItem)
             {
                 ESelection aSel = pOLV->GetSelection();
-                if (abs(aSel.nEndPos - aSel.nStartPos) == 1)
+                if (abs(aSel.end.nIndex - aSel.start.nIndex) == 1)
                 {
                     const SvxFieldData* pField = pFieldItem->GetField();
                     if (auto pUrlField = dynamic_cast<const SvxURLField*>(pField))
@@ -531,7 +531,7 @@ void NotesPanelViewShell::GetAttrState(SfxItemSet& rSet)
                 OutlinerView* pOV = mpNotesPanelView->GetOutlinerView();
                 ESelection aESel(pOV->GetSelection());
 
-                if (aESel.nStartPara != aESel.nEndPara || aESel.nStartPos != aESel.nEndPos)
+                if (aESel.HasRange())
                     // spanned selection, i.e. StyleSheet and/or
                     // attribution not necessarily unique
                     rSet.DisableItem(nWhich);
@@ -845,10 +845,10 @@ void NotesPanelViewShell::FuTemporaryModify(SfxRequest& rReq)
                     EE_FEATURE_FIELD);
                 ESelection aSel(pOutlinerView->GetSelection());
                 pOutlinerView->InsertField(aURLItem);
-                if (aSel.nStartPos <= aSel.nEndPos)
-                    aSel.nEndPos = aSel.nStartPos + 1;
+                if (aSel.start.nIndex <= aSel.end.nIndex)
+                    aSel.end.nIndex = aSel.start.nIndex + 1;
                 else
-                    aSel.nStartPos = aSel.nEndPos + 1;
+                    aSel.start.nIndex = aSel.end.nIndex + 1;
                 pOutlinerView->SetSelection(aSel);
             }
 
@@ -1020,8 +1020,8 @@ void NotesPanelViewShell::FuTemporaryModify(SfxRequest& rReq)
             {
                 // select field, so it gets deleted on Insert
                 ESelection aSel = pOutlinerView->GetSelection();
-                if (aSel.nStartPos == aSel.nEndPos)
-                    aSel.nEndPos++;
+                if (aSel.start.nIndex == aSel.end.nIndex)
+                    aSel.end.nIndex++;
                 pOutlinerView->SetSelection(aSel);
             }
 
@@ -1061,10 +1061,10 @@ void NotesPanelViewShell::FuTemporaryModify(SfxRequest& rReq)
                         // select field, so it gets deleted on Insert
                         ESelection aSel = pOutlinerView->GetSelection();
                         bool bSel = true;
-                        if (aSel.nStartPos == aSel.nEndPos)
+                        if (aSel.start.nIndex == aSel.end.nIndex)
                         {
                             bSel = false;
-                            aSel.nEndPos++;
+                            aSel.end.nIndex++;
                         }
                         pOutlinerView->SetSelection(aSel);
 
@@ -1072,7 +1072,7 @@ void NotesPanelViewShell::FuTemporaryModify(SfxRequest& rReq)
 
                         // reset selection to original state
                         if (!bSel)
-                            aSel.nEndPos--;
+                            aSel.end.nIndex--;
                         pOutlinerView->SetSelection(aSel);
 
                         pField.reset();

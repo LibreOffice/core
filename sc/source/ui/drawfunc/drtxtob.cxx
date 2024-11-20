@@ -591,7 +591,7 @@ static void lcl_RemoveFields( OutlinerView& rOutView )
     ESelection aOldSel = rOutView.GetSelection();
     ESelection aSel = aOldSel;
     aSel.Adjust();
-    sal_Int32 nNewEnd = aSel.nEndPos;
+    sal_Int32 nNewEnd = aSel.end.nIndex;
 
     bool bUpdate = pOutliner->IsUpdateLayout();
     bool bChanged = false;
@@ -601,7 +601,7 @@ static void lcl_RemoveFields( OutlinerView& rOutView )
 
     sal_Int32 nParCount = pOutliner->GetParagraphCount();
     for (sal_Int32 nPar=0; nPar<nParCount; nPar++)
-        if ( nPar >= aSel.nStartPara && nPar <= aSel.nEndPara )
+        if (nPar >= aSel.start.nPara && nPar <= aSel.end.nPara)
         {
             std::vector<sal_Int32> aPortions;
             rEditEng.GetPortions( nPar, aPortions );
@@ -613,8 +613,8 @@ static void lcl_RemoveFields( OutlinerView& rOutView )
                 sal_Int32 nStart = nPos ? aPortions[ nPos - 1 ] : 0;
                 // fields are single characters
                 if ( nEnd == nStart+1 &&
-                     ( nPar > aSel.nStartPara || nStart >= aSel.nStartPos ) &&
-                     ( nPar < aSel.nEndPara   || nEnd   <= aSel.nEndPos ) )
+                     ( nPar > aSel.start.nPara || nStart >= aSel.start.nIndex ) &&
+                     ( nPar < aSel.end.nPara   || nEnd   <= aSel.end.nIndex ) )
                 {
                     ESelection aFieldSel( nPar, nStart, nPar, nEnd );
                     SfxItemSet aSet = rEditEng.GetAttribs( aFieldSel );
@@ -634,7 +634,7 @@ static void lcl_RemoveFields( OutlinerView& rOutView )
 
                         OUString aFieldText = rEditEng.GetText( aFieldSel );
                         pOutliner->QuickInsertText( aFieldText, aFieldSel );
-                        if ( nPar == aSel.nEndPara )
+                        if (nPar == aSel.end.nPara)
                         {
                             nNewEnd = nNewEnd + aFieldText.getLength();
                             --nNewEnd;
@@ -651,9 +651,9 @@ static void lcl_RemoveFields( OutlinerView& rOutView )
     }
 
     if ( aOldSel == aSel )          // aSel is adjusted
-        aOldSel.nEndPos = nNewEnd;
+        aOldSel.end.nIndex = nNewEnd;
     else
-        aOldSel.nStartPos = nNewEnd;        // if aOldSel is backwards
+        aOldSel.start.nIndex = nNewEnd;        // if aOldSel is backwards
     rOutView.SetSelection( aOldSel );
 }
 

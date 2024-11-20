@@ -461,14 +461,14 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( const uno::
                             ESelection aEndSel( GetSelection( xPortion->getEnd() ) );
 
                             // special case for empty portions with content or length one portions with content (fields)
-                            if( (aStartSel.nStartPos == aEndSel.nStartPos) || ( (aStartSel.nStartPos == (aEndSel.nStartPos - 1)) && (nLen > 1) ) )
+                            if( (aStartSel.start.nIndex == aEndSel.start.nIndex) || ( (aStartSel.start.nIndex == (aEndSel.start.nIndex - 1)) && (nLen > 1) ) )
                             {
                                 for( sal_Int32 i = 0; i < nLen; i++ )
                                 {
                                     if( ndbg < (nTextLen+2) )
                                     {
-                                        *pPos++ = aStartSel.nStartPos;
-                                        *pPara++ = aStartSel.nStartPara;
+                                        *pPos++ = aStartSel.start.nIndex;
+                                        *pPara++ = aStartSel.start.nPara;
 
                                         ndbg += 1;
                                     }
@@ -478,7 +478,7 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( const uno::
                                     }
                                 }
 
-                                nLastPos = aStartSel.nStartPos;
+                                nLastPos = aStartSel.start.nIndex;
                             }
                             // normal case
                             else
@@ -487,8 +487,8 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( const uno::
                                 {
                                     if( ndbg < (nTextLen+2) )
                                     {
-                                        *pPos++ = aStartSel.nStartPos++;
-                                        *pPara++ = aStartSel.nStartPara;
+                                        *pPos++ = aStartSel.start.nIndex++;
+                                        *pPara++ = aStartSel.start.nPara;
 
                                         ndbg += 1;
                                     }
@@ -498,10 +498,10 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( const uno::
                                     }
                                 }
 
-                                nLastPos = aStartSel.nStartPos - 1;
-                                DBG_ASSERT( aEndSel.nStartPos == aStartSel.nStartPos, "Search is not working" );
+                                nLastPos = aStartSel.start.nIndex - 1;
+                                DBG_ASSERT( aEndSel.start.nIndex == aStartSel.start.nIndex, "Search is not working" );
                             }
-                            nLastPara = aStartSel.nStartPara;
+                            nLastPara = aStartSel.start.nPara;
                         }
                     }
                 }
@@ -529,7 +529,7 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( const uno::
     sal_Int32 nEndPos   = 0;
     for( nStartPos = 0; nStartPos < nTextLen; nStartPos++ )
     {
-        if( pConvertPara[nStartPos] == aSel.nStartPara && pConvertPos[nStartPos] == aSel.nStartPos )
+        if( pConvertPara[nStartPos] == aSel.start.nPara && pConvertPos[nStartPos] == aSel.start.nIndex )
             break;
     }
 

@@ -328,10 +328,9 @@ void ScXMLTableRowCellContext::PushParagraphField(std::unique_ptr<SvxFieldData> 
 
     sal_Int32 nPos = maParagraph.getLength();
     maParagraph.append('\1'); // Placeholder text for inserted field item.
-    rField.maSelection.nStartPara = mnCurParagraph;
-    rField.maSelection.nEndPara = mnCurParagraph;
-    rField.maSelection.nStartPos = nPos;
-    rField.maSelection.nEndPos = nPos+1;
+    rField.maSelection.start.nPara = rField.maSelection.end.nPara = mnCurParagraph;
+    rField.maSelection.start.nIndex = nPos;
+    rField.maSelection.end.nIndex = nPos+1;
 
     PushFormat(nPos, nPos+1, rStyleName);
 }
@@ -370,9 +369,9 @@ void ScXMLTableRowCellContext::PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, cons
     mbHasFormatRuns = true;
     maFormats.push_back(std::make_unique<ParaFormat>(*mpEditEngine));
     ParaFormat& rFmt = *maFormats.back();
-    rFmt.maSelection.nStartPara = rFmt.maSelection.nEndPara = mnCurParagraph;
-    rFmt.maSelection.nStartPos = nBegin;
-    rFmt.maSelection.nEndPos = nEnd;
+    rFmt.maSelection.start.nPara = rFmt.maSelection.end.nPara = mnCurParagraph;
+    rFmt.maSelection.start.nIndex = nBegin;
+    rFmt.maSelection.end.nIndex = nEnd;
 
     // Store the used text styles for export.
     ScSheetSaveData* pSheetData = rXMLImport.GetScModel()->GetSheetSaveData();

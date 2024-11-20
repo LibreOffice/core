@@ -460,8 +460,8 @@ XclExpStringRef lclCreateFormattedString(
         // process all portions in the paragraph
         for( const auto& rPos : aPosList )
         {
-            aSel.nEndPos = rPos;
-            OUString aXclPortionText = aParaText.copy( aSel.nStartPos, aSel.nEndPos - aSel.nStartPos );
+            aSel.end.nIndex = rPos;
+            OUString aXclPortionText = aParaText.copy( aSel.start.nIndex, aSel.end.nIndex - aSel.start.nIndex );
 
             aItemSet.ClearItem();
             SfxItemSet aEditSet( rEE.GetAttribs( aSel ) );
@@ -472,7 +472,7 @@ XclExpStringRef lclCreateFormattedString(
 
             // process text fields
             bool bIsHyperlink = false;
-            if( aSel.nStartPos + 1 == aSel.nEndPos )
+            if (aSel.start.nIndex + 1 == aSel.end.nIndex)
             {
                 // test if the character is a text field
                 if( const SvxFieldItem* pItem = aEditSet.GetItemIfSet( EE_FEATURE_FIELD, false ) )
@@ -523,7 +523,7 @@ XclExpStringRef lclCreateFormattedString(
                 xString->AppendFormat( nXclPortionStart, nFontIdx );
             }
 
-            aSel.nStartPos = aSel.nEndPos;
+            aSel.start.nIndex = aSel.end.nIndex;
         }
 
         // add trailing newline (important for correct character index calculation)
@@ -729,8 +729,8 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
 
         for( const auto& rPos : aPosList )
         {
-            aSel.nEndPos = rPos;
-            if( aSel.nStartPos < aSel.nEndPos )
+            aSel.end.nIndex = rPos;
+            if (aSel.start.nIndex < aSel.end.nIndex)
             {
 
 // --- font attributes ---
@@ -827,7 +827,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
 // --- text content or text fields ---
 
                 const SvxFieldItem* pItem;
-                if( (aSel.nStartPos + 1 == aSel.nEndPos) &&     // fields are single characters
+                if( (aSel.start.nIndex + 1 == aSel.end.nIndex) &&     // fields are single characters
                     (pItem = aEditSet.GetItemIfSet( EE_FEATURE_FIELD, false )) )
                 {
                     if( const SvxFieldData* pFieldData = pItem->GetField() )
@@ -880,7 +880,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
                 }
             }
 
-            aSel.nStartPos = aSel.nEndPos;
+            aSel.start.nIndex = aSel.end.nIndex;
         }
 
         aText = ScGlobal::addToken( aText, aParaText, '\n' );

@@ -322,7 +322,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPostKeyEvent)
     CPPUNIT_ASSERT(pView->GetTextEditObject());
     EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
     // Did we manage to enter a second character?
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), rEditView.GetSelection().nStartPos);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), rEditView.GetSelection().start.nIndex);
     ESelection aWordSelection(0, 0, 0, 2); // start para, start char, end para, end char.
     rEditView.SetSelection(aWordSelection);
     // Did we enter the expected character?
@@ -345,7 +345,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPostMouseEvent)
     CPPUNIT_ASSERT(pView->GetTextEditObject());
     EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
     // Did we manage to go after the first character?
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), rEditView.GetSelection().nStartPos);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), rEditView.GetSelection().start.nIndex);
 
     vcl::Cursor* pCursor = rEditView.GetCursor();
     Point aPosition(pCursor->GetPos().getX(), pCursor->GetPos().getY() + pCursor->GetSize().Height() / 2);
@@ -359,7 +359,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPostMouseEvent)
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(pView->GetTextEditObject());
     // The new cursor position must be before the first word.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), rEditView.GetSelection().nStartPos);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), rEditView.GetSelection().start.nIndex);
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSetTextSelection)
@@ -2199,7 +2199,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testIMESupport)
 
     // the cursor should be at position 3rd
     EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), rEditView.GetSelection().nStartPos);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), rEditView.GetSelection().start.nIndex);
 
     ESelection aWordSelection(0, 0, 0, 3); // start para, start char, end para, end char.
     rEditView.SetSelection(aWordSelection);
@@ -2723,7 +2723,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPasteUndo)
     // - Actual  : 4
     // i.e. the cursor position after undo was at the end of the line, not at the start, as
     // expected.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aSelection.nStartPos);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aSelection.start.nIndex);
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeEditInMultipleViews)

@@ -231,7 +231,7 @@ namespace accessibility
         EBulletInfo aBulletInfo = rCacheTF.GetBulletInfo( GetParagraphIndex() );
         tools::Rectangle aParentRect = rCacheTF.GetParaBounds( GetParagraphIndex() );
 
-        if( aBulletInfo.nParagraph != EE_PARA_NOT_FOUND &&
+        if( aBulletInfo.nParagraph != EE_PARA_MAX &&
             aBulletInfo.bVisible &&
             aBulletInfo.nType == SVX_NUM_BITMAP )
         {

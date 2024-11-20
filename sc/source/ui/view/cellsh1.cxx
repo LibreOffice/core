@@ -3052,8 +3052,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         if ( pEditView )
                         {
                             ESelection aTextSel = pEditView->GetSelection();
-                            aTextSel.nStartPos = 0;
-                            aTextSel.nEndPos = EE_TEXTPOS_ALL;
+                            aTextSel.start.nIndex = 0;
+                            aTextSel.end.nIndex = EE_TEXTPOS_MAX;
                             pHdl->DataChanging();
                             pEditView->SetSelection(aTextSel);
                             pEditView->InsertText(aFormula);

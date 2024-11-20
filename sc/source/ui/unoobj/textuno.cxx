@@ -388,8 +388,7 @@ void SAL_CALL ScHeaderFooterTextObj::insertTextContent(
             {
                 //  don't replace -> append at end
                 aSelection.Adjust();
-                aSelection.nStartPara = aSelection.nEndPara;
-                aSelection.nStartPos  = aSelection.nEndPos;
+                aSelection.CollapseToEnd();
             }
 
             SvxFieldItem aItem(pHeaderField->CreateFieldItem());
@@ -400,8 +399,8 @@ void SAL_CALL ScHeaderFooterTextObj::insertTextContent(
 
             //  new selection: a digit
             aSelection.Adjust();
-            aSelection.nEndPara = aSelection.nStartPara;
-            aSelection.nEndPos = aSelection.nStartPos + 1;
+            aSelection.end.nPara = aSelection.start.nPara;
+            aSelection.end.nIndex = aSelection.start.nIndex + 1;
 
             uno::Reference<text::XTextRange> xTextRange;
             switch ( aTextData.GetPart() )
@@ -422,7 +421,7 @@ void SAL_CALL ScHeaderFooterTextObj::insertTextContent(
             //  for bAbsorb=FALSE, the new selection must be behind the inserted content
             //  (the xml filter relies on this)
             if (!bAbsorb)
-                aSelection.nStartPos = aSelection.nEndPos;
+                aSelection.start.nIndex = aSelection.end.nIndex;
 
             pTextRange->SetSelection( aSelection );
 
@@ -559,8 +558,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScCellTextCursor::getStart()
     rtl::Reference<ScCellTextCursor> pNew = new ScCellTextCursor( *this );
 
     ESelection aNewSel(GetSelection());
-    aNewSel.nEndPara = aNewSel.nStartPara;
-    aNewSel.nEndPos  = aNewSel.nStartPos;
+    aNewSel.CollapseToStart();
     pNew->SetSelection( aNewSel );
 
     return static_cast<SvxUnoTextRangeBase*>(pNew.get());
@@ -575,8 +573,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScCellTextCursor::getEnd()
     rtl::Reference<ScCellTextCursor> pNew = new ScCellTextCursor( *this );
 
     ESelection aNewSel(GetSelection());
-    aNewSel.nStartPara = aNewSel.nEndPara;
-    aNewSel.nStartPos  = aNewSel.nEndPos;
+    aNewSel.CollapseToEnd();
     pNew->SetSelection( aNewSel );
 
     return static_cast<SvxUnoTextRangeBase*>(pNew.get());
@@ -610,8 +607,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScHeaderFooterTextCursor::getStart()
     rtl::Reference<ScHeaderFooterTextCursor> pNew = new ScHeaderFooterTextCursor( *this );
 
     ESelection aNewSel(GetSelection());
-    aNewSel.nEndPara = aNewSel.nStartPara;
-    aNewSel.nEndPos  = aNewSel.nStartPos;
+    aNewSel.CollapseToStart();
     pNew->SetSelection( aNewSel );
 
     return static_cast<SvxUnoTextRangeBase*>(pNew.get());
@@ -626,8 +622,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScHeaderFooterTextCursor::getEnd()
     rtl::Reference<ScHeaderFooterTextCursor> pNew = new ScHeaderFooterTextCursor( *this );
 
     ESelection aNewSel(GetSelection());
-    aNewSel.nStartPara = aNewSel.nEndPara;
-    aNewSel.nStartPos  = aNewSel.nEndPos;
+    aNewSel.CollapseToEnd();
     pNew->SetSelection( aNewSel );
 
     return static_cast<SvxUnoTextRangeBase*>(pNew.get());
@@ -666,8 +661,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScDrawTextCursor::getStart()
     rtl::Reference<ScDrawTextCursor> pNew = new ScDrawTextCursor( *this );
 
     ESelection aNewSel(GetSelection());
-    aNewSel.nEndPara = aNewSel.nStartPara;
-    aNewSel.nEndPos  = aNewSel.nStartPos;
+    aNewSel.CollapseToStart();
     pNew->SetSelection( aNewSel );
 
     return static_cast<SvxUnoTextRangeBase*>(pNew.get());
@@ -682,8 +676,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScDrawTextCursor::getEnd()
     rtl::Reference<ScDrawTextCursor> pNew = new ScDrawTextCursor( *this );
 
     ESelection aNewSel(GetSelection());
-    aNewSel.nStartPara = aNewSel.nEndPara;
-    aNewSel.nStartPos  = aNewSel.nEndPos;
+    aNewSel.CollapseToEnd();
     pNew->SetSelection( aNewSel );
 
     return static_cast<SvxUnoTextRangeBase*>(pNew.get());

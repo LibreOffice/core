@@ -201,16 +201,11 @@ void ScPDFExportTest::exportToPDFWithUnoCommands(const OUString& rRange)
 void ScPDFExportTest::setFont(ScFieldEditEngine& rEE, sal_Int32 nStart, sal_Int32 nEnd,
                               const OUString& rFontName)
 {
-    ESelection aSel;
-    aSel.nStartPara = aSel.nEndPara = 0;
-    aSel.nStartPos = nStart;
-    aSel.nEndPos = nEnd;
-
     SfxItemSet aItemSet = rEE.GetEmptyItemSet();
     SvxFontItem aItem(FAMILY_MODERN, rFontName, u""_ustr, PITCH_VARIABLE, RTL_TEXTENCODING_UTF8,
                       EE_CHAR_FONTINFO);
     aItemSet.Put(aItem);
-    rEE.QuickSetAttribs(aItemSet, aSel);
+    rEE.QuickSetAttribs(aItemSet, ESelection(0, nStart, 0, nEnd));
 }
 
 void ScPDFExportTest::testMediaShapeScreen_Tdf159094()

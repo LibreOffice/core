@@ -382,7 +382,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 {
                     // Select the field so that it will be deleted during insert
                     ESelection aSel = pOLV->GetSelection();
-                    aSel.nEndPos++;
+                    aSel.end.nIndex++;
                     pOLV->SetSelection(aSel);
                 }
                 if (pPostItMgr->GetActiveSidebarWin()->GetLayoutStatus()!=SwPostItHelper::DELETED)
@@ -1854,8 +1854,7 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
 
     // Erase selection
     ESelection aSel(pOLV->GetSelection());
-    aSel.nStartPara = aSel.nEndPara;
-    aSel.nStartPos = aSel.nEndPos;
+    aSel.CollapseToEnd();
     pOLV->SetSelection(aSel);
 
     // Restore old font

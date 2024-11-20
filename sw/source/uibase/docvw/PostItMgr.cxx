@@ -2431,10 +2431,9 @@ sal_uInt16 SwPostItMgr::SearchReplace(const SwFormatField &pField, const i18nuti
     {
         ESelection aOldSelection = pWin->GetOutlinerView()->GetSelection();
         if (bSrchForward)
-            pWin->GetOutlinerView()->SetSelection(ESelection(0,0,0,0));
+            pWin->GetOutlinerView()->SetSelection(ESelection(0, 0));
         else
-            pWin->GetOutlinerView()->SetSelection(
-                    ESelection(EE_PARA_MAX_COUNT,EE_TEXTPOS_MAX_COUNT,EE_PARA_MAX_COUNT,EE_TEXTPOS_MAX_COUNT));
+            pWin->GetOutlinerView()->SetSelection(ESelection::AtEnd());
         SvxSearchItem aItem(SID_SEARCH_ITEM );
         aItem.SetSearchOptions(rSearchOptions);
         aItem.SetBackward(!bSrchForward);

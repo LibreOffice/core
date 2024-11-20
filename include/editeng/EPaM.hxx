@@ -19,25 +19,29 @@
 
 #pragma once
 
+#include <sal/config.h>
+
+#include <sal/types.h>
+
+inline constexpr sal_Int32 EE_PARA_MAX = SAL_MAX_INT32;
+inline constexpr sal_Int32 EE_TEXTPOS_MAX = SAL_MAX_INT32;
+
 struct EPaM
 {
+    static constexpr EPaM NotFound() { return { EE_PARA_MAX, EE_TEXTPOS_MAX }; }
+
     sal_Int32 nPara = 0;
     sal_Int32 nIndex = 0;
 
-    EPaM() = default;
+    constexpr EPaM() = default;
 
-    EPaM(sal_Int32 _nParagraph, sal_Int32 _nIndex)
+    constexpr EPaM(sal_Int32 _nParagraph, sal_Int32 _nIndex)
         : nPara(_nParagraph)
         , nIndex(_nIndex)
     {
     }
 
-    bool operator==(const EPaM& rInstance) const
-    {
-        return nPara == rInstance.nPara && nIndex == rInstance.nIndex;
-    }
-
-    bool operator!=(const EPaM& rSelection) const = default;
+    bool operator==(const EPaM&) const = default;
 
     bool operator<(const EPaM& rInstance) const
     {

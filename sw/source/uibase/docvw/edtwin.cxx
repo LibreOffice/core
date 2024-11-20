@@ -6093,7 +6093,7 @@ void SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
         {
             OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
             ESelection aSelection = pOLV->GetSelection();
-            if(!aSelection.IsZero())
+            if(aSelection != ESelection())
             {
                 SdrOutliner* pOutliner = pSdrView->GetTextEditOutliner();
                 bool bVertical = pOutliner->IsVertical();
@@ -6112,8 +6112,7 @@ void SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
                 else
                     aEEPos -= rOutputArea.TopLeft();
 
-                EPosition aDocPosition = rEditEng.FindDocPosition(aEEPos);
-                ESelection aCompare(aDocPosition.nPara, aDocPosition.nIndex);
+                ESelection aCompare(rEditEng.FindDocPosition(aEEPos));
                 // make it a forward selection - otherwise the IsLess/IsGreater do not work :-(
                 aSelection.Adjust();
                 if(!(aCompare < aSelection) && !(aCompare > aSelection))

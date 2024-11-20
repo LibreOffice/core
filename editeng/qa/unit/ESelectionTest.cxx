@@ -20,42 +20,42 @@ CPPUNIT_TEST_FIXTURE(ESelectionTest, testConstruction)
 {
     {
         ESelection aNewSelection;
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aNewSelection.nStartPara);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aNewSelection.nStartPos);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aNewSelection.nEndPara);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aNewSelection.nEndPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aNewSelection.start.nPara);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aNewSelection.start.nIndex);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aNewSelection.end.nPara);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aNewSelection.end.nIndex);
     }
 
     {
         ESelection aNewSelection(1, 2, 3, 4);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aNewSelection.nStartPara);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aNewSelection.nStartPos);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aNewSelection.nEndPara);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aNewSelection.nEndPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aNewSelection.start.nPara);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aNewSelection.start.nIndex);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aNewSelection.end.nPara);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aNewSelection.end.nIndex);
     }
 
     {
         ESelection aNewSelection = { 1, 2, 3, 4 };
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aNewSelection.nStartPara);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aNewSelection.nStartPos);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aNewSelection.nEndPara);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aNewSelection.nEndPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aNewSelection.start.nPara);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aNewSelection.start.nIndex);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aNewSelection.end.nPara);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aNewSelection.end.nIndex);
     }
 
     {
         ESelection aNewSelection{ 1, 2, 3, 4 };
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aNewSelection.nStartPara);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aNewSelection.nStartPos);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aNewSelection.nEndPara);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aNewSelection.nEndPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aNewSelection.start.nPara);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aNewSelection.start.nIndex);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aNewSelection.end.nPara);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aNewSelection.end.nIndex);
     }
 
     {
         ESelection aNewSelection(1, 2);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aNewSelection.nStartPara);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aNewSelection.nStartPos);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aNewSelection.nEndPara);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aNewSelection.nEndPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aNewSelection.start.nPara);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aNewSelection.start.nIndex);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aNewSelection.end.nPara);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aNewSelection.end.nIndex);
     }
 }
 
@@ -96,15 +96,6 @@ CPPUNIT_TEST_FIXTURE(ESelectionTest, testEquals)
 
     // equal again
     CPPUNIT_ASSERT_EQUAL(aSelection1, aSelection2);
-}
-
-CPPUNIT_TEST_FIXTURE(ESelectionTest, testIsZero)
-{
-    ESelection aEmpty;
-    CPPUNIT_ASSERT_EQUAL(true, aEmpty.IsZero());
-
-    CPPUNIT_ASSERT_EQUAL(false, ESelection(1, 2, 1, 2).IsZero());
-    CPPUNIT_ASSERT_EQUAL(true, ESelection(0, 0, 0, 0).IsZero());
 }
 
 CPPUNIT_TEST_FIXTURE(ESelectionTest, testLess)

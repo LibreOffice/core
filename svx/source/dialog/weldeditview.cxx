@@ -287,12 +287,9 @@ bool WeldEditView::KeyInput(const KeyEvent& rKEvt)
         {
             if (nKey == KEY_A)
             {
-                EditEngine* pEditEngine = GetEditEngine();
-                sal_Int32 nPar = pEditEngine->GetParagraphCount();
-                if (nPar)
+                if (GetEditEngine()->GetParagraphCount())
                 {
-                    sal_Int32 nLen = pEditEngine->GetTextLen(nPar - 1);
-                    pEditView->SetSelection(ESelection(0, 0, nPar - 1, nLen));
+                    pEditView->SetSelection(ESelection::All());
                 }
                 return true;
             }
@@ -955,7 +952,7 @@ SfxItemSet WeldTextForwarder::GetAttribs(const ESelection& rSel,
 {
     EditEngine* pEditEngine = m_rEditAcc.GetEditEngine();
     assert(pEditEngine && "EditEngine missing");
-    if (rSel.nStartPara == rSel.nEndPara)
+    if (rSel.start.nPara == rSel.end.nPara)
     {
         GetAttribsFlags nFlags = GetAttribsFlags::NONE;
         switch (nOnlyHardAttrib)
@@ -970,7 +967,8 @@ SfxItemSet WeldTextForwarder::GetAttribs(const ESelection& rSel,
                 SAL_WARN("svx", "unknown flags for WeldTextForwarder::GetAttribs");
         }
 
-        return pEditEngine->GetAttribs(rSel.nStartPara, rSel.nStartPos, rSel.nEndPos, nFlags);
+        return pEditEngine->GetAttribs(rSel.start.nPara, rSel.start.nIndex, rSel.end.nIndex,
+                                       nFlags);
     }
     else
     {
@@ -1102,17 +1100,17 @@ static SfxItemState GetSvxEditEngineItemState(EditEngine const& rEditEngine, con
     SfxItemState eState = SfxItemState::DEFAULT;
 
     // check all paragraphs inside the selection
-    for (sal_Int32 nPara = rSel.nStartPara; nPara <= rSel.nEndPara; nPara++)
+    for (sal_Int32 nPara = rSel.start.nPara; nPara <= rSel.end.nPara; nPara++)
     {
         SfxItemState eParaState = SfxItemState::DEFAULT;
 
         // calculate start and endpos for this paragraph
         sal_Int32 nPos = 0;
-        if (rSel.nStartPara == nPara)
-            nPos = rSel.nStartPos;
+        if (rSel.start.nPara == nPara)
+            nPos = rSel.start.nIndex;
 
-        sal_Int32 nEndPos = rSel.nEndPos;
-        if (rSel.nEndPara != nPara)
+        sal_Int32 nEndPos = rSel.end.nIndex;
+        if (rSel.end.nPara != nPara)
             nEndPos = rEditEngine.GetTextLen(nPara);
 
         // get list of char attribs
@@ -1238,14 +1236,14 @@ tools::Rectangle WeldTextForwarder::GetCharBounds(sal_Int32 nPara, sal_Int32 nIn
         if (nIndex >= pEditEngine->GetTextLen(nPara))
         {
             if (nIndex)
-                aRect = pEditEngine->GetCharacterBounds(EPosition(nPara, nIndex - 1));
+                aRect = pEditEngine->GetCharacterBounds(EPaM(nPara, nIndex - 1));
 
             aRect.Move(aRect.Right() - aRect.Left(), 0);
             aRect.SetSize(Size(1, pEditEngine->GetTextHeight()));
         }
         else
         {
-            aRect = pEditEngine->GetCharacterBounds(EPosition(nPara, nIndex));
+            aRect = pEditEngine->GetCharacterBounds(EPaM(nPara, nIndex));
         }
     }
     return aRect;
@@ -1286,7 +1284,7 @@ bool WeldTextForwarder::GetIndexAtPoint(const Point& rPos, sal_Int32& nPara,
     EditEngine* pEditEngine = m_rEditAcc.GetEditEngine();
     if (pEditEngine)
     {
-        EPosition aDocPos = pEditEngine->FindDocPosition(rPos);
+        EPaM aDocPos = pEditEngine->FindDocPosition(rPos);
         nPara = aDocPos.nPara;
         nIndex = aDocPos.nIndex;
         bRes = true;
@@ -1301,13 +1299,13 @@ bool WeldTextForwarder::GetWordIndices(sal_Int32 nPara, sal_Int32 nIndex, sal_In
     EditEngine* pEditEngine = m_rEditAcc.GetEditEngine();
     if (pEditEngine)
     {
-        ESelection aRes = pEditEngine->GetWord(ESelection(nPara, nIndex, nPara, nIndex),
-                                               css::i18n::WordType::DICTIONARY_WORD);
+        ESelection aRes
+            = pEditEngine->GetWord(ESelection(nPara, nIndex), css::i18n::WordType::DICTIONARY_WORD);
 
-        if (aRes.nStartPara == nPara && aRes.nStartPara == aRes.nEndPara)
+        if (aRes.start.nPara == nPara && aRes.start.nPara == aRes.end.nPara)
         {
-            nStart = aRes.nStartPos;
-            nEnd = aRes.nEndPos;
+            nStart = aRes.start.nIndex;
+            nEnd = aRes.end.nIndex;
 
             bRes = true;
         }
@@ -1439,7 +1437,7 @@ sal_Int32 WeldTextForwarder::AppendTextPortion(sal_Int32 nPara, const OUString& 
         pEditEngine->QuickInsertText(rText, aSel);
 
         // set attributes for new appended text
-        nRes = aSel.nEndPos = pEditEngine->GetTextLen(nPara);
+        nRes = aSel.end.nIndex = pEditEngine->GetTextLen(nPara);
         pEditEngine->QuickSetAttribs(rSet, aSel);
     }
     return nRes;

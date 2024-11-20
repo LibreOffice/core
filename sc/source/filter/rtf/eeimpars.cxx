@@ -109,7 +109,7 @@ namespace
     bool IsValidSel(const ScTabEditEngine& rEngine, const ESelection& rSel)
     {
         const auto nParaCount = rEngine.GetParagraphCount();
-        return rSel.nStartPara < nParaCount && rSel.nEndPara < nParaCount;
+        return rSel.start.nPara < nParaCount && rSel.end.nPara < nParaCount;
     }
 }
 
@@ -178,7 +178,7 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
                 aSet.ClearItem( EE_PARA_JUST );
 
             // Test whether simple String without mixed attributes
-            bool bSimple = ( pE->aSel.nStartPara == pE->aSel.nEndPara );
+            bool bSimple = (pE->aSel.start.nPara == pE->aSel.end.nPara);
             for (sal_uInt16 nId = EE_CHAR_START; nId <= EE_CHAR_END && bSimple; nId++)
             {
                 const SfxPoolItem* pItem = nullptr;
@@ -356,7 +356,7 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
                     OUString aStr;
                     if( pE->bEntirePara )
                     {
-                        aStr = mpEngine->GetText( pE->aSel.nStartPara );
+                        aStr = mpEngine->GetText(pE->aSel.start.nPara);
                     }
                     else
                     {
@@ -661,8 +661,8 @@ ScEEParser::~ScEEParser()
 void ScEEParser::NewActEntry( const ScEEParseEntry* pE )
 {   // New free-flying mxActEntry
     mxActEntry = std::make_shared<ScEEParseEntry>(pPool.get());
-    mxActEntry->aSel.nStartPara = (pE ? pE->aSel.nEndPara + 1 : 0);
-    mxActEntry->aSel.nStartPos = 0;
+    mxActEntry->aSel.start.nPara = (pE ? pE->aSel.end.nPara + 1 : 0);
+    mxActEntry->aSel.start.nIndex = 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

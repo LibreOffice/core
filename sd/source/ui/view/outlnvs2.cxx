@@ -359,10 +359,10 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
                                                   SvxURLFormat::Repr), EE_FEATURE_FIELD);
                 ESelection aSel( pOutlinerView->GetSelection() );
                 pOutlinerView->InsertField(aURLItem);
-                if ( aSel.nStartPos <= aSel.nEndPos )
-                    aSel.nEndPos = aSel.nStartPos + 1;
+                if (aSel.start.nIndex <= aSel.end.nIndex)
+                    aSel.end.nIndex = aSel.start.nIndex + 1;
                 else
-                    aSel.nStartPos = aSel.nEndPos + 1;
+                    aSel.start.nIndex = aSel.end.nIndex + 1;
                 pOutlinerView->SetSelection( aSel );
             }
 
@@ -534,8 +534,8 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
             {
                 // select field, so it gets deleted on Insert
                 ESelection aSel = pOutlinerView->GetSelection();
-                if( aSel.nStartPos == aSel.nEndPos )
-                    aSel.nEndPos++;
+                if (aSel.start.nIndex == aSel.end.nIndex)
+                    aSel.end.nIndex++;
                 pOutlinerView->SetSelection( aSel );
             }
 
@@ -572,10 +572,10 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
                         // select field, so it gets deleted on Insert
                         ESelection aSel = pOutlinerView->GetSelection();
                         bool bSel = true;
-                        if( aSel.nStartPos == aSel.nEndPos )
+                        if (aSel.start.nIndex == aSel.end.nIndex)
                         {
                             bSel = false;
-                            aSel.nEndPos++;
+                            aSel.end.nIndex++;
                         }
                         pOutlinerView->SetSelection( aSel );
 
@@ -583,7 +583,7 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
 
                         // reset selection to original state
                         if( !bSel )
-                            aSel.nEndPos--;
+                            aSel.end.nIndex--;
                         pOutlinerView->SetSelection( aSel );
 
                         pField.reset();

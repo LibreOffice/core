@@ -349,7 +349,7 @@ void AnnotationWindow::FillMenuButton()
 
 void AnnotationWindow::StartEdit()
 {
-    GetOutlinerView()->SetSelection(ESelection(EE_PARA_MAX_COUNT,EE_TEXTPOS_MAX_COUNT,EE_PARA_MAX_COUNT,EE_TEXTPOS_MAX_COUNT));
+    GetOutlinerView()->SetSelection(ESelection::AtEnd());
     GetOutlinerView()->ShowCursor();
 }
 
@@ -450,8 +450,7 @@ void AnnotationWindow::SetLanguage(const SvxLanguageItem &aNewItem)
     mpOutliner->SetModifyHdl( Link<LinkParamNone*,void>() );
     ESelection aOld = GetOutlinerView()->GetSelection();
 
-    ESelection aNewSelection( 0, 0, mpOutliner->GetParagraphCount()-1, EE_TEXTPOS_ALL );
-    GetOutlinerView()->SetSelection( aNewSelection );
+    GetOutlinerView()->SetSelection(ESelection::All());
     SfxItemSet aEditAttr(GetOutlinerView()->GetAttribs());
     aEditAttr.Put(aNewItem);
     GetOutlinerView()->SetAttribs( aEditAttr );

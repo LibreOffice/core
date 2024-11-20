@@ -1354,7 +1354,7 @@ bool SentenceEditWindow_Impl::KeyInput(const KeyEvent& rKeyEvt)
         std::vector<EECharAttrib> aAttribList;
         m_xEditEngine->GetCharAttribs(0, aAttribList);
 
-        auto nCursor = aCurrentSelection.nStartPos;
+        auto nCursor = aCurrentSelection.start.nIndex;
         const EECharAttrib* pBackAttr = FindCharAttrib(nCursor, EE_CHAR_BKGCOLOR, aAttribList);
         const EECharAttrib* pErrorAttr = FindCharAttrib(nCursor, EE_CHAR_GRABBAG, aAttribList);
         const EECharAttrib* pBackAttrLeft = nullptr;
@@ -1365,21 +1365,21 @@ bool SentenceEditWindow_Impl::KeyInput(const KeyEvent& rKeyEvt)
         if (bHasRange)
         {
             if (pBackAttr &&
-                    pBackAttr->nStart == aCurrentSelection.nStartPos &&
-                    pBackAttr->nEnd == aCurrentSelection.nEndPos)
+                    pBackAttr->nStart == aCurrentSelection.start.nIndex &&
+                    pBackAttr->nEnd == aCurrentSelection.end.nIndex)
             {
                 nSelectionType = FULL;
             }
             else if (pErrorAttr &&
-                     pErrorAttr->nStart <= aCurrentSelection.nStartPos &&
-                     pErrorAttr->nEnd >= aCurrentSelection.nEndPos)
+                     pErrorAttr->nStart <= aCurrentSelection.start.nIndex &&
+                     pErrorAttr->nEnd >= aCurrentSelection.end.nIndex)
             {
                 nSelectionType = INSIDE_YES;
             }
             else
             {
                 nSelectionType = bHasField||bHasError ? BRACE : OUTSIDE_NO;
-                while (nCursor < aCurrentSelection.nEndPos)
+                while (nCursor < aCurrentSelection.end.nIndex)
                 {
                     ++nCursor;
                     const EECharAttrib* pIntBackAttr = FindCharAttrib(nCursor, EE_CHAR_BKGCOLOR, aAttribList);
@@ -1400,8 +1400,8 @@ bool SentenceEditWindow_Impl::KeyInput(const KeyEvent& rKeyEvt)
             const EECharAttrib* pCurAttr = pBackAttr ? pBackAttr : pErrorAttr;
             if (pCurAttr)
             {
-                nSelectionType = pCurAttr->nStart == aCurrentSelection.nStartPos ?
-                        LEFT_NO : pCurAttr->nEnd == aCurrentSelection.nEndPos ? RIGHT_NO : INSIDE_NO;
+                nSelectionType = pCurAttr->nStart == aCurrentSelection.start.nIndex ?
+                        LEFT_NO : pCurAttr->nEnd == aCurrentSelection.end.nIndex ? RIGHT_NO : INSIDE_NO;
             }
             else
                 nSelectionType = OUTSIDE_NO;
@@ -1751,7 +1751,7 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, const css
 
 void SentenceEditWindow_Impl::MoveErrorMarkTo(sal_Int32 nStart, sal_Int32 nEnd, bool bGrammarError)
 {
-    ESelection aAll(0, 0, 0, EE_TEXTPOS_ALL);
+    ESelection aAll(m_xEditEngine->NormalizeESelection(ESelection::All()));
     m_xEditEngine->RemoveAttribs(aAll, false, EE_CHAR_COLOR);
     m_xEditEngine->RemoveAttribs(aAll, false, EE_CHAR_WEIGHT);
     m_xEditEngine->RemoveAttribs(aAll, false, EE_CHAR_WEIGHT_CJK);
@@ -1773,7 +1773,7 @@ void SentenceEditWindow_Impl::MoveErrorMarkTo(sal_Int32 nStart, sal_Int32 nEnd, 
     // unless (tdf#133958) the selection already overlaps this range
     ESelection aCurrentSelection = m_xEditView->GetSelection();
     aCurrentSelection.Adjust();
-    bool bCurrentSelectionInRange = nStart <= aCurrentSelection.nEndPos && aCurrentSelection.nStartPos <= nEnd;
+    bool bCurrentSelectionInRange = nStart <= aCurrentSelection.end.nIndex && aCurrentSelection.start.nIndex <= nEnd;
     if (!bCurrentSelectionInRange)
     {
         m_xEditView->SetSelection(ESelection(0, nStart));
@@ -2164,7 +2164,7 @@ void SentenceEditWindow_Impl::SetUndoEditMode(bool bSet)
         pWidget->set_sensitive(false);
 
     //remove error marks
-    ESelection aAll(0, 0, 0, EE_TEXTPOS_ALL);
+    ESelection aAll(m_xEditEngine->NormalizeESelection(ESelection::All()));
     m_xEditEngine->RemoveAttribs(aAll, false, EE_CHAR_COLOR);
     m_xEditEngine->RemoveAttribs(aAll, false, EE_CHAR_WEIGHT);
     m_xEditEngine->RemoveAttribs(aAll, false, EE_CHAR_WEIGHT_CJK);

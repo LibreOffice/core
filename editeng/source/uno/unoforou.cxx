@@ -69,7 +69,7 @@ OUString SvxOutlinerForwarder::GetText( const ESelection& rSel ) const
 
 static SfxItemSet ImplOutlinerForwarderGetAttribs( const ESelection& rSel, EditEngineAttribs nOnlyHardAttrib, EditEngine& rEditEngine )
 {
-    if( rSel.nStartPara == rSel.nEndPara )
+    if (rSel.start.nPara == rSel.end.nPara)
     {
         GetAttribsFlags nFlags = GetAttribsFlags::NONE;
 
@@ -84,7 +84,7 @@ static SfxItemSet ImplOutlinerForwarderGetAttribs( const ESelection& rSel, EditE
         default:
             OSL_FAIL("unknown flags for SvxOutlinerForwarder::GetAttribs");
         }
-        return rEditEngine.GetAttribs( rSel.nStartPara, rSel.nStartPos, rSel.nEndPos, nFlags );
+        return rEditEngine.GetAttribs( rSel.start.nPara, rSel.start.nIndex, rSel.end.nIndex, nFlags );
     }
     else
     {
@@ -121,7 +121,7 @@ SfxItemSet SvxOutlinerForwarder::GetAttribs( const ESelection& rSel, EditEngineA
         maAttribCacheSelection = rSel;
     }
 
-    SfxStyleSheet* pStyle = rEditEngine.GetStyleSheet( rSel.nStartPara );
+    SfxStyleSheet* pStyle = rEditEngine.GetStyleSheet(rSel.start.nPara);
     if( pStyle )
         aSet.SetParent( &(pStyle->GetItemSet() ) );
 
@@ -304,7 +304,7 @@ tools::Rectangle SvxOutlinerForwarder::GetCharBounds( sal_Int32 nPara, sal_Int32
         if( nIndex )
         {
             // use last character, if possible
-            aLast = rOutliner.GetEditEngine().GetCharacterBounds( EPosition(nPara, nIndex-1) );
+            aLast = rOutliner.GetEditEngine().GetCharacterBounds(EPaM(nPara, nIndex - 1));
 
             // move at end of this last character, make one pixel wide
             aLast.Move( aLast.Right() - aLast.Left(), 0 );
@@ -330,7 +330,7 @@ tools::Rectangle SvxOutlinerForwarder::GetCharBounds( sal_Int32 nPara, sal_Int32
     }
     else
     {
-        return SvxEditSourceHelper::EEToUserSpace( rOutliner.GetEditEngine().GetCharacterBounds( EPosition(nPara, nIndex) ),
+        return SvxEditSourceHelper::EEToUserSpace( rOutliner.GetEditEngine().GetCharacterBounds( EPaM(nPara, nIndex) ),
                                                    aSize, bIsVertical );
     }
 }
@@ -361,7 +361,7 @@ bool SvxOutlinerForwarder::GetIndexAtPoint( const Point& rPos, sal_Int32& nPara,
                                                       aSize,
                                                       rOutliner.IsVertical() ));
 
-    EPosition aDocPos = rOutliner.GetEditEngine().FindDocPosition( aEEPos );
+    EPaM aDocPos = rOutliner.GetEditEngine().FindDocPosition(aEEPos);
 
     nPara = aDocPos.nPara;
     nIndex = aDocPos.nIndex;
@@ -371,13 +371,13 @@ bool SvxOutlinerForwarder::GetIndexAtPoint( const Point& rPos, sal_Int32& nPara,
 
 bool SvxOutlinerForwarder::GetWordIndices( sal_Int32 nPara, sal_Int32 nIndex, sal_Int32& nStart, sal_Int32& nEnd ) const
 {
-    ESelection aRes = rOutliner.GetEditEngine().GetWord( ESelection(nPara, nIndex, nPara, nIndex), css::i18n::WordType::DICTIONARY_WORD );
+    ESelection aRes = rOutliner.GetEditEngine().GetWord( ESelection(nPara, nIndex), css::i18n::WordType::DICTIONARY_WORD );
 
-    if( aRes.nStartPara == nPara &&
-        aRes.nStartPara == aRes.nEndPara )
+    if( aRes.start.nPara == nPara &&
+        aRes.start.nPara == aRes.end.nPara )
     {
-        nStart = aRes.nStartPos;
-        nEnd = aRes.nEndPos;
+        nStart = aRes.start.nIndex;
+        nEnd = aRes.end.nIndex;
 
         return true;
     }
@@ -544,7 +544,7 @@ sal_Int32 SvxOutlinerForwarder::AppendTextPortion( sal_Int32 nPara, const OUStri
     if (0 <= nPara && nPara < nParaCount)
     {
         nLen = rEditEngine.GetTextLen( nPara );
-        rEditEngine.QuickInsertText( rText, ESelection( nPara, nLen, nPara, nLen ) );
+        rEditEngine.QuickInsertText(rText, ESelection(nPara, nLen));
     }
 
     return nLen;

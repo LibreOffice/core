@@ -482,8 +482,8 @@ void TextObjectBar::GetAttrStateImpl(ViewShell* mpViewShell, ::sd::View* mpView,
         {
             ESelection aSel = pOLV->GetSelection();
             aSel.Adjust();
-            sal_Int32 nStartPara = aSel.nStartPara;
-            sal_Int32 nEndPara = aSel.nEndPara;
+            sal_Int32 nStartPara = aSel.start.nPara;
+            sal_Int32 nEndPara = aSel.end.nPara;
             if( !aSel.HasRange() )
             {
                 nStartPara = 0;

@@ -1237,9 +1237,9 @@ OUString SdrView::GetStatusText()
     else if (IsTextEdit() && mpTextEditOutlinerView != nullptr) {
         aStr=SvxResId(STR_ViewTextEdit); // "TextEdit - Row y, Column x";
         ESelection aSel(mpTextEditOutlinerView->GetSelection());
-        tools::Long nPar = aSel.nEndPara,nLin=0,nCol=aSel.nEndPos;
-        if (aSel.nEndPara>0) {
-            for (sal_Int32 nParaNum=0; nParaNum<aSel.nEndPara; nParaNum++) {
+        tools::Long nPar = aSel.end.nPara, nLin = 0, nCol = aSel.end.nIndex;
+        if (aSel.end.nPara>0) {
+            for (sal_Int32 nParaNum=0; nParaNum<aSel.end.nPara; nParaNum++) {
                 nLin += mpTextEditOutliner->GetLineCount(nParaNum);
             }
         }
@@ -1247,11 +1247,11 @@ OUString SdrView::GetStatusText()
         // At the end of a line of any multi-line paragraph, we display the
         // position of the next line of the same paragraph, if there is one.
         sal_uInt16 nParaLine = 0;
-        sal_uInt32 nParaLineCount = mpTextEditOutliner->GetLineCount(aSel.nEndPara);
+        sal_uInt32 nParaLineCount = mpTextEditOutliner->GetLineCount(aSel.end.nPara);
         bool bBrk = false;
         while (!bBrk)
         {
-            sal_uInt16 nLen = mpTextEditOutliner->GetLineLen(aSel.nEndPara, nParaLine);
+            sal_uInt16 nLen = mpTextEditOutliner->GetLineLen(aSel.end.nPara, nParaLine);
             bool bLastLine = (nParaLine == nParaLineCount - 1);
             if (nCol>nLen || (!bLastLine && nCol == nLen))
             {
@@ -1271,7 +1271,7 @@ OUString SdrView::GetStatusText()
         aStr = aStr.replaceFirst("%3", OUString::number(nCol + 1));
 
 #ifdef DBG_UTIL
-        aStr +=  ", Level " + OUString::number(mpTextEditOutliner->GetDepth( aSel.nEndPara ));
+        aStr +=  ", Level " + OUString::number(mpTextEditOutliner->GetDepth( aSel.end.nPara ));
 #endif
     }
 
@@ -1397,8 +1397,7 @@ void SdrView::UnmarkAll()
 {
     if (IsTextEdit()) {
         ESelection eSel=GetTextEditOutlinerView()->GetSelection();
-        eSel.nStartPara=eSel.nEndPara;
-        eSel.nStartPos=eSel.nEndPos;
+        eSel.CollapseToEnd();
         GetTextEditOutlinerView()->SetSelection(eSel);
     } else if (HasMarkedGluePoints()) UnmarkAllGluePoints();
     else if (HasMarkedPoints()) UnmarkAllPoints(); // Marked, not Markable!

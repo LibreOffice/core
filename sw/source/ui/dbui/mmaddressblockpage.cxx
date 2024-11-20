@@ -1138,7 +1138,7 @@ void AddressMultiLineEdit::SetText( const OUString& rStr )
         const OUString sPara = m_xEditEngine->GetText( nPara );
         if (!sPara.isEmpty() && !sPara.endsWith(" "))
         {
-            ESelection aPaM(nPara, sPara.getLength(), nPara, sPara.getLength());
+            ESelection aPaM(nPara, sPara.getLength());
             m_xEditEngine->QuickInsertText(u" "_ustr, aPaM);
         }
         for(;;)
@@ -1166,8 +1166,7 @@ void AddressMultiLineEdit::SetText( const OUString& rStr )
         sal_Int32 nLastLen = m_xEditEngine->GetText(nParaCount - 1).getLength();
         if(nLastLen)
         {
-            int nPara = nParaCount ? nParaCount - 1 : 0;
-            ESelection aPaM(nPara, nLastLen, nPara, nLastLen);
+            ESelection aPaM(nParaCount - 1, nLastLen);
             m_xEditEngine->QuickInsertText(u"\n \n "_ustr, aPaM);
         }
     }
@@ -1180,13 +1179,13 @@ void AddressMultiLineEdit::InsertNewEntry( const OUString& rStr )
 {
     // insert new entry after current selected one.
     ESelection aSelection = m_xEditView->GetSelection();
-    const sal_uInt32 nPara = aSelection.nStartPara;
+    const sal_uInt32 nPara = aSelection.start.nPara;
 
     std::vector<EECharAttrib> aAttribList;
     m_xEditEngine->GetCharAttribs(nPara, aAttribList);
 
-    sal_Int32 nIndex = aSelection.nEndPara;
-    const EECharAttrib* pAttrib = FindCharAttrib(aSelection.nStartPos, aAttribList);
+    sal_Int32 nIndex = aSelection.end.nPara;
+    const EECharAttrib* pAttrib = FindCharAttrib(aSelection.start.nIndex, aAttribList);
     if(nullptr != pAttrib)
         nIndex = pAttrib->nEnd;
     InsertNewEntryAtPosition( rStr, nPara, nIndex );
@@ -1203,7 +1202,7 @@ void AddressMultiLineEdit::InsertNewEntry( const OUString& rStr )
 
 void AddressMultiLineEdit::InsertNewEntryAtPosition( const OUString& rStr, sal_uLong nPara, sal_uInt16 nIndex )
 {
-    ESelection aInsertPos(nPara, nIndex, nPara, nIndex);
+    ESelection aInsertPos(nPara, nIndex);
     m_xEditEngine->QuickInsertText(rStr, aInsertPos);
 
     //restore the attributes
@@ -1219,14 +1218,14 @@ void AddressMultiLineEdit::RemoveCurrentEntry()
     ESelection aSelection = m_xEditView->GetSelection();
 
     std::vector<EECharAttrib> aAttribList;
-    m_xEditEngine->GetCharAttribs(aSelection.nStartPara, aAttribList);
+    m_xEditEngine->GetCharAttribs(aSelection.start.nPara, aAttribList);
 
-    const EECharAttrib* pBeginAttrib = FindCharAttrib(aSelection.nStartPos, aAttribList);
+    const EECharAttrib* pBeginAttrib = FindCharAttrib(aSelection.start.nIndex, aAttribList);
     if(pBeginAttrib &&
-            (pBeginAttrib->nStart <= aSelection.nStartPos
-                            && pBeginAttrib->nEnd >= aSelection.nEndPos))
+            (pBeginAttrib->nStart <= aSelection.start.nIndex
+                            && pBeginAttrib->nEnd >= aSelection.end.nIndex))
     {
-        const sal_uInt32 nPara = aSelection.nStartPara;
+        const sal_uInt32 nPara = aSelection.start.nPara;
         ESelection aEntrySel(nPara, pBeginAttrib->nStart, nPara, pBeginAttrib->nEnd);
         m_xEditEngine->QuickInsertText(OUString(), aEntrySel);
         //restore the attributes
@@ -1240,16 +1239,16 @@ void AddressMultiLineEdit::MoveCurrentItem(MoveItemFlags nMove)
     ESelection aSelection = m_xEditView->GetSelection();
 
     std::vector<EECharAttrib> aAttribList;
-    m_xEditEngine->GetCharAttribs(aSelection.nStartPara, aAttribList);
+    m_xEditEngine->GetCharAttribs(aSelection.start.nPara, aAttribList);
 
-    const EECharAttrib* pBeginAttrib = FindCharAttrib(aSelection.nStartPos, aAttribList);
+    const EECharAttrib* pBeginAttrib = FindCharAttrib(aSelection.start.nIndex, aAttribList);
     if(!pBeginAttrib ||
-         pBeginAttrib->nStart > aSelection.nStartPos ||
-         pBeginAttrib->nEnd < aSelection.nEndPos)
+         pBeginAttrib->nStart > aSelection.start.nIndex ||
+         pBeginAttrib->nEnd < aSelection.end.nIndex)
         return;
 
     //current item has been found
-    sal_Int32 nPara = aSelection.nStartPara;
+    sal_Int32 nPara = aSelection.start.nPara;
     sal_Int32 nIndex = pBeginAttrib->nStart;
     ESelection aEntrySel(nPara, pBeginAttrib->nStart, nPara, pBeginAttrib->nEnd);
     const OUString sCurrentItem = m_xEditEngine->GetText(aEntrySel);
@@ -1277,7 +1276,7 @@ void AddressMultiLineEdit::MoveCurrentItem(MoveItemFlags nMove)
         {
             //go right to find a successor or simple text
             ++nIndex;
-            const EECharAttrib* pEndAttrib = FindCharAttrib(aSelection.nStartPos, aAttribList);
+            const EECharAttrib* pEndAttrib = FindCharAttrib(aSelection.start.nIndex, aAttribList);
             if(pEndAttrib && pEndAttrib->nEnd >= nIndex)
             {
                 nIndex = pEndAttrib->nEnd;
@@ -1299,7 +1298,7 @@ void AddressMultiLineEdit::MoveCurrentItem(MoveItemFlags nMove)
     {
         auto nInsPara = nPara - 1;
         auto nInsPos = m_xEditEngine->GetTextLen( nPara - 1 );
-        ESelection aTemp(nInsPara, nInsPos, nInsPara, nInsPos);
+        ESelection aTemp(nInsPara, nInsPos);
         m_xEditEngine->QuickInsertText(u"\n"_ustr, aTemp);
     }
     InsertNewEntryAtPosition( sCurrentItem, nPara, nIndex );
@@ -1320,18 +1319,18 @@ MoveItemFlags AddressMultiLineEdit::IsCurrentItemMoveable() const
     ESelection aSelection = m_xEditView->GetSelection();
 
     std::vector<EECharAttrib> aAttribList;
-    m_xEditEngine->GetCharAttribs(aSelection.nStartPara, aAttribList);
+    m_xEditEngine->GetCharAttribs(aSelection.start.nPara, aAttribList);
 
-    const EECharAttrib* pBeginAttrib = FindCharAttrib(aSelection.nStartPos, aAttribList);
+    const EECharAttrib* pBeginAttrib = FindCharAttrib(aSelection.start.nIndex, aAttribList);
     if (pBeginAttrib &&
-            (pBeginAttrib->nStart <= aSelection.nStartPos
-                            && pBeginAttrib->nEnd >= aSelection.nEndPos))
+            (pBeginAttrib->nStart <= aSelection.start.nIndex
+                            && pBeginAttrib->nEnd >= aSelection.end.nIndex))
     {
         if (pBeginAttrib->nStart)
             nRet |= MoveItemFlags::Left;
         //if there is an entry it can always be move to the right and down
         nRet |= MoveItemFlags::Right | MoveItemFlags::Down;
-        if (aSelection.nStartPara > 0)
+        if (aSelection.start.nPara > 0)
             nRet |= MoveItemFlags::Up;
     }
     return nRet;
@@ -1342,12 +1341,12 @@ bool AddressMultiLineEdit::HasCurrentItem() const
     ESelection aSelection = m_xEditView->GetSelection();
 
     std::vector<EECharAttrib> aAttribList;
-    m_xEditEngine->GetCharAttribs(aSelection.nStartPara, aAttribList);
+    m_xEditEngine->GetCharAttribs(aSelection.start.nPara, aAttribList);
 
-    const EECharAttrib* pBeginAttrib = FindCharAttrib(aSelection.nStartPos, aAttribList);
+    const EECharAttrib* pBeginAttrib = FindCharAttrib(aSelection.start.nIndex, aAttribList);
     return (pBeginAttrib &&
-            (pBeginAttrib->nStart <= aSelection.nStartPos
-                            && pBeginAttrib->nEnd >= aSelection.nEndPos));
+            (pBeginAttrib->nStart <= aSelection.start.nIndex
+                            && pBeginAttrib->nEnd >= aSelection.end.nIndex));
 }
 
 OUString AddressMultiLineEdit::GetCurrentItem() const
@@ -1355,14 +1354,14 @@ OUString AddressMultiLineEdit::GetCurrentItem() const
     ESelection aSelection = m_xEditView->GetSelection();
 
     std::vector<EECharAttrib> aAttribList;
-    m_xEditEngine->GetCharAttribs(aSelection.nStartPara, aAttribList);
+    m_xEditEngine->GetCharAttribs(aSelection.start.nPara, aAttribList);
 
-    const EECharAttrib* pBeginAttrib = FindCharAttrib(aSelection.nStartPos, aAttribList);
+    const EECharAttrib* pBeginAttrib = FindCharAttrib(aSelection.start.nIndex, aAttribList);
     if (pBeginAttrib &&
-            (pBeginAttrib->nStart <= aSelection.nStartPos
-                            && pBeginAttrib->nEnd >= aSelection.nEndPos))
+            (pBeginAttrib->nStart <= aSelection.start.nIndex
+                            && pBeginAttrib->nEnd >= aSelection.end.nIndex))
     {
-        const sal_uInt32 nPara = aSelection.nStartPara;
+        const sal_uInt32 nPara = aSelection.start.nPara;
         ESelection aEntrySel(nPara, pBeginAttrib->nStart, nPara, pBeginAttrib->nEnd);
         return m_xEditEngine->GetText( aEntrySel );
     }
@@ -1374,14 +1373,14 @@ void AddressMultiLineEdit::SelectCurrentItem()
     ESelection aSelection = m_xEditView->GetSelection();
 
     std::vector<EECharAttrib> aAttribList;
-    m_xEditEngine->GetCharAttribs(aSelection.nStartPara, aAttribList);
+    m_xEditEngine->GetCharAttribs(aSelection.start.nPara, aAttribList);
 
-    const EECharAttrib* pBeginAttrib = FindCharAttrib(aSelection.nStartPos, aAttribList);
+    const EECharAttrib* pBeginAttrib = FindCharAttrib(aSelection.start.nIndex, aAttribList);
     if (pBeginAttrib &&
-            (pBeginAttrib->nStart <= aSelection.nStartPos
-                            && pBeginAttrib->nEnd >= aSelection.nEndPos))
+            (pBeginAttrib->nStart <= aSelection.start.nIndex
+                            && pBeginAttrib->nEnd >= aSelection.end.nIndex))
     {
-        const sal_uInt32 nPara = aSelection.nStartPara;
+        const sal_uInt32 nPara = aSelection.start.nPara;
         ESelection aEntrySel(nPara, pBeginAttrib->nStart, nPara, pBeginAttrib->nEnd);
         m_xEditView->SetSelection(aEntrySel);
         Invalidate();
@@ -1575,8 +1574,8 @@ bool AddressMultiLineEdit::SetCursorLogicPosition(const Point& rPosition)
 
     ESelection aSelection = m_xEditView->GetSelection();
     std::vector<EECharAttrib> aAttribList;
-    m_xEditEngine->GetCharAttribs(aSelection.nStartPara, aAttribList);
-    return FindCharAttrib(aSelection.nStartPos, aAttribList) == nullptr;
+    m_xEditEngine->GetCharAttribs(aSelection.start.nPara, aAttribList);
+    return FindCharAttrib(aSelection.start.nIndex, aAttribList) == nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

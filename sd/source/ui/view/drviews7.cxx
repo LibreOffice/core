@@ -1530,9 +1530,9 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         {
             //and are on the last paragraph
             aSel.Adjust();
-            if (aSel.nEndPara == pOL->GetParagraphCount() - 1)
+            if (aSel.end.nPara == pOL->GetParagraphCount() - 1)
             {
-                sal_uInt16 nDepth = pOL->GetDepth(aSel.nEndPara);
+                sal_uInt16 nDepth = pOL->GetDepth(aSel.end.nPara);
                 if (nDepth != sal_uInt16(-1))
                 {
                     //there exists another numbering level that

@@ -607,8 +607,8 @@ public:
     bool IsValidSel(const EditEngine& rEngine, const ESelection& rSel)
     {
         const auto nParaCount = rEngine.GetParagraphCount();
-        if (rSel.nStartPara < nParaCount && rSel.nEndPara < nParaCount)
-            return rSel.nStartPos >= 0 && rSel.nEndPos >= 0;
+        if (rSel.start.nPara < nParaCount && rSel.end.nPara < nParaCount)
+            return rSel.start.nIndex >= 0 && rSel.end.nIndex >= 0;
         return false;
     }
 }
@@ -690,7 +690,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(WW8_CP nStartCp, WW8_CP nEndCp,
                             nTextStart - nStartCp));
 
                         sal_Int32 nParaCount = m_pDrawEditEngine->GetParagraphCount();
-                        bool bBadSelection = aReplaceSel.nStartPara >= nParaCount || aReplaceSel.nEndPara >= nParaCount;
+                        bool bBadSelection = aReplaceSel.start.nPara >= nParaCount || aReplaceSel.end.nPara >= nParaCount;
 
                         SAL_WARN_IF(bBadSelection, "sw.ww8", "editengine has different amount of text than expected");
 

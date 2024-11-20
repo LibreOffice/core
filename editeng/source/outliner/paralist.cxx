@@ -97,15 +97,15 @@ void ParagraphList::Clear()
 
 void ParagraphList::Append( std::unique_ptr<Paragraph> pPara)
 {
-    SAL_WARN_IF( maEntries.size() >= EE_PARA_MAX_COUNT, "editeng", "ParagraphList::Append - overflow");
+    SAL_WARN_IF( maEntries.size() >= EE_PARA_MAX, "editeng", "ParagraphList::Append - overflow");
     maEntries.push_back(std::move(pPara));
 }
 
 void ParagraphList::Insert( std::unique_ptr<Paragraph> pPara, sal_Int32 nAbsPos)
 {
-    SAL_WARN_IF( nAbsPos < 0 || (maEntries.size() < o3tl::make_unsigned(nAbsPos) && nAbsPos != EE_PARA_APPEND),
+    SAL_WARN_IF( nAbsPos < 0 || (maEntries.size() < o3tl::make_unsigned(nAbsPos) && nAbsPos != EE_PARA_MAX),
             "editeng", "ParagraphList::Insert - bad insert position " << nAbsPos);
-    SAL_WARN_IF( maEntries.size() >= EE_PARA_MAX_COUNT, "editeng", "ParagraphList::Insert - overflow");
+    SAL_WARN_IF( maEntries.size() >= EE_PARA_MAX, "editeng", "ParagraphList::Insert - overflow");
 
     if (nAbsPos < 0 || maEntries.size() <= o3tl::make_unsigned(nAbsPos))
         Append( std::move(pPara) );
@@ -242,7 +242,7 @@ sal_Int32 ParagraphList::GetAbsPos( Paragraph const * pParent ) const
         ++pos;
     }
 
-    return EE_PARA_NOT_FOUND;
+    return EE_PARA_MAX;
 }
 
 void ParagraphList::dumpAsXml(xmlTextWriterPtr pWriter) const

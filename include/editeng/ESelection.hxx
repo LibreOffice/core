@@ -19,80 +19,74 @@
 
 #pragma once
 
+#include <sal/config.h>
+
+#include <editeng/EPaM.hxx>
+
+#include <cassert>
+#include <utility>
+
 struct ESelection
 {
-    sal_Int32 nStartPara = 0;
-    sal_Int32 nStartPos = 0;
-    sal_Int32 nEndPara = 0;
-    sal_Int32 nEndPos = 0;
+    // Select all text
+    static constexpr ESelection All() { return { 0, 0, EE_PARA_MAX, EE_TEXTPOS_MAX }; }
 
-    ESelection() = default;
+    // Set to end without selection
+    static constexpr ESelection AtEnd() { return { EE_PARA_MAX, EE_TEXTPOS_MAX }; }
 
-    ESelection(sal_Int32 _nStartPara, sal_Int32 _nStartPos, sal_Int32 _nEndPara, sal_Int32 _nEndPos)
-        : nStartPara(_nStartPara)
-        , nStartPos(_nStartPos)
-        , nEndPara(_nEndPara)
-        , nEndPos(_nEndPos)
+    EPaM start;
+    EPaM end;
+
+    constexpr ESelection() = default;
+
+    constexpr ESelection(sal_Int32 _nStartPara, sal_Int32 _nStartPos, sal_Int32 _nEndPara,
+                         sal_Int32 _nEndPos)
+        : start(_nStartPara, _nStartPos)
+        , end(_nEndPara, _nEndPos)
     {
     }
 
-    ESelection(sal_Int32 nPara, sal_Int32 nPos)
-        : nStartPara(nPara)
-        , nStartPos(nPos)
-        , nEndPara(nPara)
-        , nEndPos(nPos)
+    constexpr ESelection(sal_Int32 nPara, sal_Int32 nPos)
+        : ESelection(nPara, nPos, nPara, nPos)
     {
     }
+
+    constexpr explicit ESelection(const EPaM& rPos)
+        : ESelection(rPos.nPara, rPos.nIndex)
+    {
+    }
+
+    bool IsAdjusted() const { return !(end < start); }
 
     void Adjust()
     {
-        if (nStartPara > nEndPara || (nStartPara == nEndPara && nStartPos > nEndPos))
-        {
-            std::swap(nStartPara, nEndPara);
-            std::swap(nStartPos, nEndPos);
-        }
+        if (!IsAdjusted())
+            std::swap(start, end);
     }
 
-    bool operator==(const ESelection& rSelection) const
-    {
-        return nStartPara == rSelection.nStartPara && nStartPos == rSelection.nStartPos
-               && nEndPara == rSelection.nEndPara && nEndPos == rSelection.nEndPos;
-    }
+    void CollapseToStart() { end = start; }
+    void CollapseToEnd() { start = end; }
 
-    bool operator!=(const ESelection& rSelection) const = default;
+    bool operator==(const ESelection&) const = default;
 
     bool operator<(const ESelection& rSelection) const
     {
         // The selection must be adjusted.
+        assert(IsAdjusted() && rSelection.IsAdjusted());
         // => Only check if end of 'this' < Start of rS
-        return nEndPara < rSelection.nStartPara
-               || (nEndPara == rSelection.nStartPara && nEndPos < rSelection.nStartPos
-                   && operator!=(rSelection));
+        return end < rSelection.start;
     }
+    bool operator>(const ESelection& rSelection) const { return rSelection < *this; }
 
-    bool operator>(const ESelection& rSelection) const
-    {
-        // The selection must be adjusted.
-        // => Only check if end of 'this' < Start of rS
-        return nStartPara > rSelection.nEndPara
-               || (nStartPara == rSelection.nEndPara && nStartPos > rSelection.nEndPos
-                   && operator!=(rSelection));
-    }
-
-    bool IsZero() const
-    {
-        return nStartPara == 0 && nStartPos == 0 && nEndPara == 0 && nEndPos == 0;
-    }
-
-    bool HasRange() const { return nStartPara != nEndPara || nStartPos != nEndPos; }
+    bool HasRange() const { return start != end; }
 };
 
 template <typename charT, typename traits>
 inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& stream,
                                                      ESelection const& rSelection)
 {
-    return stream << "ESelection(" << rSelection.nStartPara << ',' << rSelection.nStartPos << ","
-                  << rSelection.nEndPara << "," << rSelection.nEndPos << ")";
+    return stream << "ESelection(" << rSelection.start.nPara << ',' << rSelection.start.nIndex
+                  << "," << rSelection.end.nPara << "," << rSelection.end.nIndex << ")";
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

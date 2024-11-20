@@ -211,6 +211,8 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <editeng/ESelection.hxx>
+#include <editeng/editengdllapi.h>
 #include <font/FontSelectPattern.hxx>
 #include <font/PhysicalFontCollection.hxx>
 #include <font/PhysicalFontFace.hxx>

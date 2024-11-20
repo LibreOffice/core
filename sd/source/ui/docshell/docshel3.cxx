@@ -346,8 +346,8 @@ void DrawDocShell::Execute( SfxRequest& rReq )
                             {
                                 ESelection aSel = rEditView.GetSelection();
                                 aOldSel = aSel;
-                                aSel.nStartPos = 0;
-                                aSel.nEndPos = EE_TEXTPOS_ALL;
+                                aSel.start.nIndex = 0;
+                                aSel.end.nIndex = EE_TEXTPOS_MAX;
                                 rEditView.SetSelection( aSel );
                             }
 

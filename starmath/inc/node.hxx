@@ -346,14 +346,14 @@ public:
      * It is used to do the visual <-> text correspondence.
      * @return line
      */
-    sal_uInt16 GetRow() const { return sal::static_int_cast<sal_uInt16>(m_aESelection.nStartPara); }
+    sal_Int32 GetRow() const { return m_aESelection.start.nPara; }
 
     /**
      * Gets the column of the line in the text where the node is located.
      * It is used to do the visual <-> text correspondence.
      * @return column
      */
-    sal_uInt16 GetColumn() const { return sal::static_int_cast<sal_uInt16>(m_aESelection.nStartPos); }
+    sal_Int32 GetColumn() const { return m_aESelection.start.nIndex; }
 
     /**
      * Gets the scale mode.

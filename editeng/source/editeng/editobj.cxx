@@ -382,10 +382,10 @@ ContentInfo* EditTextObjectImpl::CreateAndInsertContent()
 sal_Int32 EditTextObjectImpl::GetParagraphCount() const
 {
     size_t nSize = maContents.size();
-    if (nSize > EE_PARA_MAX_COUNT)
+    if (nSize > EE_PARA_MAX)
     {
         SAL_WARN( "editeng", "EditTextObjectImpl::GetParagraphCount - overflow " << nSize);
-        return EE_PARA_MAX_COUNT;
+        return EE_PARA_MAX;
     }
     return static_cast<sal_Int32>(nSize);
 }

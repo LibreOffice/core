@@ -3561,8 +3561,7 @@ void ScGridWindow::SelectForContextMenu( const Point& rPosPixel, SCCOL nCellX, S
                 aTextPos -= aOutputArea.TopLeft();
             aTextPos += aVisArea.TopLeft();             // position in the edit document
 
-            EPosition aDocPosition = rEditEngine.FindDocPosition(aTextPos);
-            ESelection aCompare(aDocPosition.nPara, aDocPosition.nIndex);
+            ESelection aCompare(rEditEngine.FindDocPosition(aTextPos));
             ESelection aSelection = pEditView->GetSelection();
             aSelection.Adjust();    // needed for IsLess/IsGreater
             if ( aCompare < aSelection || aCompare > aSelection )
@@ -3610,8 +3609,7 @@ void ScGridWindow::SelectForContextMenu( const Point& rPosPixel, SCCOL nCellX, S
                 aTextPos -= aOutputArea.TopLeft();
             aTextPos += aVisArea.TopLeft();             // position in the edit document
 
-            EPosition aDocPosition = rEditEngine.FindDocPosition(aTextPos);
-            ESelection aCompare(aDocPosition.nPara, aDocPosition.nIndex);
+            ESelection aCompare(rEditEngine.FindDocPosition(aTextPos));
             ESelection aSelection = pOlView->GetSelection();
             aSelection.Adjust();    // needed for IsLess/IsGreater
             if ( aCompare < aSelection || aCompare > aSelection )

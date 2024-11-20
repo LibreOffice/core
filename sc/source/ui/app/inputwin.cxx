@@ -547,7 +547,7 @@ void ScInputWindow::SetFuncString( const OUString& rString, bool bDoEdit )
     if ( nLen > 0 )
     {
         nLen--;
-        pView->SetSelection( ESelection( 0, nLen, 0, nLen ) );
+        pView->SetSelection(ESelection(0, nLen));
     }
 
     pScMod->InputChanged(pView);
@@ -675,10 +675,7 @@ void ScInputWindow::SwitchToTextWin()
         EditView* pView = mxTextWindow->GetEditView();
         if (pView)
         {
-            sal_Int32 nPara =  pView->getEditEngine().GetParagraphCount() ? ( pView->getEditEngine().GetParagraphCount() - 1 ) : 0;
-            sal_Int32 nLen = pView->getEditEngine().GetTextLen( nPara );
-            ESelection aSel( nPara, nLen, nPara, nLen );
-            pView->SetSelection( aSel ); // set cursor to end of text
+            pView->SetSelection(ESelection::AtEnd()); // set cursor to end of text
         }
     }
 }

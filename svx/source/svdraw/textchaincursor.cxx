@@ -78,7 +78,7 @@ void TextChainCursorManager::impDetectEvent(const KeyEvent& rKEvt,
     sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
     ESelection aCurSel = pOLV->GetSelection();
 
-    ESelection aEndSelPrevBox(100000, 100000);
+    ESelection aEndSelPrevBox(ESelection::AtEnd());
 
     sal_Int32 nLastPara = pOutl->GetParagraphCount()-1;
     OUString aLastParaText = pOutl->GetText(pOutl->GetParagraph(nLastPara));
@@ -144,8 +144,7 @@ void TextChainCursorManager::HandleCursorEventAfterChaining(
 
         // Move to end of prev box
         SdrTextObj *pPrevLink = mpTextObj->GetPrevLinkInChain();
-        ESelection aEndSel(100000, 100000);
-        impChangeEditingTextObj(pPrevLink, aEndSel);
+        impChangeEditingTextObj(pPrevLink, ESelection::AtEnd());
         return;
     }
 

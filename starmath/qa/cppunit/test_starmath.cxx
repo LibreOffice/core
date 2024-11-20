@@ -200,10 +200,10 @@ void Test::editMarker()
         // should be safe i.e. do nothing
         rEditWindow.SelNextMark();
         aSelection = rEditWindow.GetSelection();
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aSelection.nStartPara);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(19), aSelection.nStartPos);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aSelection.nEndPara);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(19), aSelection.nEndPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aSelection.start.nPara);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(19), aSelection.start.nIndex);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aSelection.end.nPara);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(19), aSelection.end.nIndex);
 
         rEditWindow.SelPrevMark();
         rEditWindow.Delete();
@@ -212,10 +212,10 @@ void Test::editMarker()
         // tdf#106116: should be safe i.e. do nothing
         rEditWindow.SelPrevMark();
         aSelection = rEditWindow.GetSelection();
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aSelection.nStartPara);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(9), aSelection.nStartPos);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aSelection.nEndPara);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(9), aSelection.nEndPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aSelection.start.nPara);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(9), aSelection.start.nIndex);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aSelection.end.nPara);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(9), aSelection.end.nIndex);
 
         rEditWindow.Flush();
         OUString sFinalText = rEditWindow.GetText();

@@ -179,17 +179,12 @@ CPPUNIT_TEST_FIXTURE(Test, testSharedStringPool)
     ScFieldEditEngine& rEE = m_pDoc->GetEditEngine();
     rEE.SetTextCurrentDefaults(u"Andy and Bruce"_ustr);
 
-    ESelection aSel;
-    aSel.nStartPara = aSel.nEndPara = 0;
-
     {
         // Set 'Andy' bold.
         SfxItemSet aItemSet = rEE.GetEmptyItemSet();
-        aSel.nStartPos = 0;
-        aSel.nEndPos = 4;
         SvxWeightItem aWeight(WEIGHT_BOLD, EE_CHAR_WEIGHT);
         aItemSet.Put(aWeight);
-        rEE.QuickSetAttribs(aItemSet, aSel);
+        rEE.QuickSetAttribs(aItemSet, ESelection(0, 0, 0, 4));
     }
 
     {
@@ -197,9 +192,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSharedStringPool)
         SfxItemSet aItemSet = rEE.GetEmptyItemSet();
         SvxPostureItem aItalic(ITALIC_NORMAL, EE_CHAR_ITALIC);
         aItemSet.Put(aItalic);
-        aSel.nStartPos = 9;
-        aSel.nEndPos = 14;
-        rEE.QuickSetAttribs(aItemSet, aSel);
+        rEE.QuickSetAttribs(aItemSet, ESelection(0, 9, 0, 14));
     }
 
     m_pDoc->SetEditText(ScAddress(1,0,0), rEE.CreateTextObject()); // B1

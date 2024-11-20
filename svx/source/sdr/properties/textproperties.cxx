@@ -496,18 +496,18 @@ namespace sdr::properties
                                     {
                                         if(EE_FEATURE_FIELD == rAttrib.pAttr->Which())
                                         {
-                                            aSel.nEndPos = rAttrib.nStart;
+                                            aSel.end.nIndex = rAttrib.nStart;
 
-                                            if(aSel.nStartPos != aSel.nEndPos)
+                                            if (aSel.start.nIndex != aSel.end.nIndex)
                                                 pEditEngine->QuickSetAttribs(aColorSet, aSel);
 
-                                            aSel.nStartPos = rAttrib.nEnd;
+                                            aSel.start.nIndex = rAttrib.nEnd;
                                         }
                                     }
 
-                                    aSel.nEndPos = pEditEngine->GetTextLen(nPara);
+                                    aSel.end.nIndex = pEditEngine->GetTextLen(nPara);
 
-                                    if(aSel.nStartPos != aSel.nEndPos)
+                                    if (aSel.start.nIndex != aSel.end.nIndex)
                                     {
                                         pEditEngine->QuickSetAttribs( aColorSet, aSel );
                                     }

@@ -25,7 +25,6 @@
 #include <editeng/editengdllapi.h>
 #include <i18nlangtag/lang.h>
 #include <editeng/ESelection.hxx>
-#include <editeng/EPosition.hxx>
 #include <memory>
 #include <ostream>
 
@@ -89,7 +88,7 @@ struct EDITENG_DLLPUBLIC EFieldInfo
 {
     std::unique_ptr<SvxFieldItem>   pFieldItem;
     OUString                        aCurrentText;
-    EPosition                       aPosition;
+    EPaM                            aPosition = EPaM::NotFound();
 
     EFieldInfo();
     EFieldInfo( const SvxFieldItem& rFieldItem, sal_Int32 nPara, sal_Int32 nPos );
@@ -235,13 +234,12 @@ struct EENotify
 {
     EENotifyType    eNotificationType;
 
-    sal_Int32       nParagraph; // only valid in PARAGRAPHINSERTED/EE_NOTIFY_PARAGRAPHREMOVED
+    sal_Int32 nParagraph = EE_PARA_MAX; // only valid in PARAGRAPHINSERTED/EE_NOTIFY_PARAGRAPHREMOVED
 
-    sal_Int32       nParam1;
-    sal_Int32       nParam2;
+    sal_Int32 nParam1 = 0;
+    sal_Int32 nParam2 = 0;
 
-    EENotify( EENotifyType eType )
-        { eNotificationType = eType; nParagraph = EE_PARA_NOT_FOUND; nParam1 = 0; nParam2 = 0; }
+    EENotify(EENotifyType eType) { eNotificationType = eType; }
 };
 
 namespace editeng

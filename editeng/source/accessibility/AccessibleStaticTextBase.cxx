@@ -131,19 +131,19 @@ namespace accessibility
         AccessibleEditableTextPara& GetParagraph( sal_Int32 nPara ) const;
         sal_Int32                   GetParagraphCount() const;
 
-        EPosition                   Index2Internal( sal_Int32 nFlatIndex ) const
+        EPaM                        Index2Internal( sal_Int32 nFlatIndex ) const
         {
 
             return ImpCalcInternal( nFlatIndex, false );
         }
 
-        EPosition                   Range2Internal( sal_Int32 nFlatIndex ) const
+        EPaM                        Range2Internal( sal_Int32 nFlatIndex ) const
         {
 
             return ImpCalcInternal( nFlatIndex, true );
         }
 
-        sal_Int32                   Internal2Index( EPosition nEEIndex ) const;
+        sal_Int32                   Internal2Index( EPaM nEEIndex ) const;
 
         void                        CorrectTextSegment( TextSegment&    aTextSegment,
                                                         int             nPara   ) const;
@@ -158,7 +158,7 @@ namespace accessibility
 
     private:
 
-        EPosition                   ImpCalcInternal( sal_Int32 nFlatIndex, bool bExclusive ) const;
+        EPaM                        ImpCalcInternal( sal_Int32 nFlatIndex, bool bExclusive ) const;
 
         // our frontend class (the one implementing the actual
         // interface). That's not necessarily the one containing the impl
@@ -233,7 +233,7 @@ namespace accessibility
             return mxTextParagraph->GetTextForwarder().GetParagraphCount();
     }
 
-    sal_Int32 AccessibleStaticTextBase_Impl::Internal2Index( EPosition nEEIndex ) const
+    sal_Int32 AccessibleStaticTextBase_Impl::Internal2Index(EPaM nEEIndex) const
     {
         // XXX checks for overflow and returns maximum if so
         sal_Int32 aRes(0);
@@ -268,7 +268,7 @@ namespace accessibility
         }
     }
 
-    EPosition AccessibleStaticTextBase_Impl::ImpCalcInternal( sal_Int32 nFlatIndex, bool bExclusive ) const
+    EPaM AccessibleStaticTextBase_Impl::ImpCalcInternal(sal_Int32 nFlatIndex, bool bExclusive) const
     {
 
         if( nFlatIndex < 0 )
@@ -288,7 +288,7 @@ namespace accessibility
                            nFlatIndex - nCurrIndex + nCurrCount >= 0,
                            "AccessibleStaticTextBase_Impl::Index2Internal: index value overflow");
 
-                return EPosition(nCurrPara, nFlatIndex - nCurrIndex + nCurrCount);
+                return EPaM(nCurrPara, nFlatIndex - nCurrIndex + nCurrCount);
             }
         }
 
@@ -300,7 +300,7 @@ namespace accessibility
                        nFlatIndex - nCurrIndex + nCurrCount >= 0,
                        "AccessibleStaticTextBase_Impl::Index2Internal: index value overflow");
 
-            return EPosition(nCurrPara-1, nFlatIndex - nCurrIndex + nCurrCount);
+            return EPaM(nCurrPara - 1, nFlatIndex - nCurrIndex + nCurrCount);
         }
 
         // not found? Out of bounds
@@ -507,7 +507,7 @@ namespace accessibility
     {
         SolarMutexGuard aGuard;
 
-        EPosition aPos( mpImpl->Index2Internal(nIndex) );
+        EPaM aPos(mpImpl->Index2Internal(nIndex));
 
         return mpImpl->GetParagraph( aPos.nPara ).getCharacter( aPos.nIndex );
     }
@@ -519,7 +519,7 @@ namespace accessibility
         //get the actual index without "\n"
         mpImpl->RemoveLineBreakCount( nIndex );
 
-        EPosition aPos( mpImpl->Index2Internal(nIndex) );
+        EPaM aPos(mpImpl->Index2Internal(nIndex));
 
         return mpImpl->GetParagraph( aPos.nPara ).getCharacterAttributes( aPos.nIndex, aRequestedAttributes );
     }
@@ -530,7 +530,7 @@ namespace accessibility
 
         // #108900# Allow ranges for nIndex, as one-past-the-end
         // values are now legal, too.
-        EPosition aPos( mpImpl->Range2Internal(nIndex) );
+        EPaM aPos(mpImpl->Range2Internal(nIndex));
 
         // #i70916# Text in spread sheet cells return the wrong extents
         AccessibleEditableTextPara& rPara = mpImpl->GetParagraph( aPos.nPara );
@@ -575,7 +575,7 @@ namespace accessibility
 
             // #112814# Use correct index offset
             if ( ( nIndex = rPara.getIndexAtPoint( aPoint ) ) != -1 )
-                return mpImpl->Internal2Index(EPosition(i, nIndex));
+                return mpImpl->Internal2Index(EPaM(i, nIndex));
         }
 
         return -1;
@@ -627,8 +627,8 @@ namespace accessibility
     {
         SolarMutexGuard aGuard;
 
-        EPosition aStartIndex( mpImpl->Range2Internal(nStartIndex) );
-        EPosition aEndIndex( mpImpl->Range2Internal(nEndIndex) );
+        EPaM aStartIndex(mpImpl->Range2Internal(nStartIndex));
+        EPaM aEndIndex(mpImpl->Range2Internal(nEndIndex));
 
         return mpImpl->SetSelection( aStartIndex.nPara, aStartIndex.nIndex,
                                      aEndIndex.nPara, aEndIndex.nIndex );
@@ -682,8 +682,8 @@ namespace accessibility
             nEndIndex++;
         }
         OUStringBuffer aRes;
-        EPosition aStartIndex( mpImpl->Range2Internal(nStartIndex) );
-        EPosition aEndIndex( mpImpl->Range2Internal(nEndIndex) );
+        EPaM aStartIndex(mpImpl->Range2Internal(nStartIndex));
+        EPaM aEndIndex(mpImpl->Range2Internal(nEndIndex));
 
         // #102170# Special case: start and end paragraph are identical
         if( aStartIndex.nPara == aEndIndex.nPara )
@@ -733,7 +733,7 @@ namespace accessibility
         SolarMutexGuard aGuard;
 
         bool bLineBreak = mpImpl->RemoveLineBreakCount( nIndex );
-        EPosition aPos( mpImpl->Range2Internal(nIndex) );
+        EPaM aPos(mpImpl->Range2Internal(nIndex));
 
         css::accessibility::TextSegment aResult;
 
@@ -749,7 +749,7 @@ namespace accessibility
             aResult.SegmentText = mpImpl->GetParagraph( aPos.nPara ).getText();
 
             // #112814# Adapt the start index with the paragraph offset
-            aResult.SegmentStart = mpImpl->Internal2Index( EPosition( aPos.nPara, 0 ) );
+            aResult.SegmentStart = mpImpl->Internal2Index(EPaM(aPos.nPara, 0));
             aResult.SegmentEnd = aResult.SegmentStart + aResult.SegmentText.getLength();
         }
         else if ( AccessibleTextType::ATTRIBUTE_RUN == aTextType )
@@ -785,7 +785,7 @@ namespace accessibility
 
         sal_Int32 nOldIdx = nIndex;
         bool bLineBreak =  mpImpl->RemoveLineBreakCount( nIndex );
-        EPosition aPos( mpImpl->Range2Internal(nIndex) );
+        EPaM aPos(mpImpl->Range2Internal(nIndex));
 
         css::accessibility::TextSegment aResult;
 
@@ -797,14 +797,14 @@ namespace accessibility
                 aResult.SegmentText = mpImpl->GetParagraph( aPos.nPara ).getText();
 
                 // #112814# Adapt the start index with the paragraph offset
-                aResult.SegmentStart = mpImpl->Internal2Index( EPosition( aPos.nPara, 0 ) );
+                aResult.SegmentStart = mpImpl->Internal2Index(EPaM(aPos.nPara, 0));
             }
             else if( aPos.nPara > 0 )
             {
                 aResult.SegmentText = mpImpl->GetParagraph( aPos.nPara - 1 ).getText();
 
                 // #112814# Adapt the start index with the paragraph offset
-                aResult.SegmentStart = mpImpl->Internal2Index( EPosition( aPos.nPara - 1, 0 ) );
+                aResult.SegmentStart = mpImpl->Internal2Index(EPaM(aPos.nPara - 1, 0));
             }
 
             aResult.SegmentEnd = aResult.SegmentStart + aResult.SegmentText.getLength();
@@ -832,7 +832,7 @@ namespace accessibility
         sal_Int32 nTemp = nIndex+1;
         bool bLineBreak = mpImpl->RemoveLineBreakCount( nTemp );
         mpImpl->RemoveLineBreakCount( nIndex );
-        EPosition aPos( mpImpl->Range2Internal(nIndex) );
+        EPaM aPos(mpImpl->Range2Internal(nIndex));
 
         css::accessibility::TextSegment aResult;
 
@@ -846,7 +846,7 @@ namespace accessibility
                 aResult.SegmentText = mpImpl->GetParagraph( aPos.nPara + 1 ).getText();
 
                 // #112814# Adapt the start index with the paragraph offset
-                aResult.SegmentStart = mpImpl->Internal2Index( EPosition( aPos.nPara + 1, 0 ) );
+                aResult.SegmentStart = mpImpl->Internal2Index(EPaM(aPos.nPara + 1, 0));
                 aResult.SegmentEnd = aResult.SegmentStart + aResult.SegmentText.getLength();
             }
         }
@@ -873,8 +873,8 @@ namespace accessibility
         if( nStartIndex > nEndIndex )
             std::swap(nStartIndex, nEndIndex);
 
-        EPosition aStartIndex( mpImpl->Range2Internal(nStartIndex) );
-        EPosition aEndIndex( mpImpl->Range2Internal(nEndIndex) );
+        EPaM aStartIndex(mpImpl->Range2Internal(nStartIndex));
+        EPaM aEndIndex(mpImpl->Range2Internal(nEndIndex));
 
         return mpImpl->CopyText( aStartIndex.nPara, aStartIndex.nIndex,
                                  aEndIndex.nPara, aEndIndex.nIndex );
@@ -926,7 +926,7 @@ namespace accessibility
 
         SolarMutexGuard aGuard;
 
-        EPosition aPos( mpImpl->Index2Internal( nIndex ) );
+        EPaM aPos(mpImpl->Index2Internal(nIndex));
         AccessibleEditableTextPara& rPara = mpImpl->GetParagraph( aPos.nPara );
         uno::Sequence< beans::PropertyValue > aDefAttrSeq = rPara.getDefaultAttributes( RequestedAttributes );
         uno::Sequence< beans::PropertyValue > aRunAttrSeq = rPara.getRunAttributes( aPos.nIndex, RequestedAttributes );

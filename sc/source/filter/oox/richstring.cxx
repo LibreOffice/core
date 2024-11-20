@@ -108,8 +108,7 @@ void RichStringPortion::convert( const Reference< XText >& rxText, bool bReplace
 
 void RichStringPortion::convert( ScEditEngineDefaulter& rEE, ESelection& rSelection, const oox::xls::Font* pFont )
 {
-    rSelection.nStartPos = rSelection.nEndPos;
-    rSelection.nStartPara = rSelection.nEndPara;
+    rSelection.CollapseToEnd();
     SfxItemSet aItemSet( rEE.GetEmptyItemSet() );
 
     const Font* pFontToUse = mxFont ? mxFont.get() : lclNeedsRichTextFormat( pFont ) ? pFont : nullptr;
@@ -125,18 +124,18 @@ void RichStringPortion::convert( ScEditEngineDefaulter& rEE, ESelection& rSelect
     {
         nLastParaLoc = nSearchIndex;
         ++nParaOccurrence;
-        rSelection.nEndPos = 0;
+        rSelection.end.nIndex = 0;
         nSearchIndex = maText.indexOf( '\n', nSearchIndex + 1);
     }
 
-    rSelection.nEndPara += nParaOccurrence;
+    rSelection.end.nPara += nParaOccurrence;
     if ( nLastParaLoc != -1 )
     {
-        rSelection.nEndPos = maText.getLength() - 1 - nLastParaLoc;
+        rSelection.end.nIndex = maText.getLength() - 1 - nLastParaLoc;
     }
     else
     {
-        rSelection.nEndPos = rSelection.nStartPos + maText.getLength();
+        rSelection.end.nIndex = rSelection.start.nIndex + maText.getLength();
     }
     rEE.QuickSetAttribs( aItemSet, rSelection );
 }

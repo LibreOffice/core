@@ -198,12 +198,12 @@ IMPL_LINK(SdrTableHTMLParser, HTMLImportHdl, HtmlImportInfo&, rInfo, void)
             ProcToken(&rInfo);
             break;
         case HtmlImportState::End:
-            if (rInfo.aSelection.nEndPos)
+            if (rInfo.aSelection.end.nIndex)
             {
                 mpActDefault = nullptr;
                 //TODO: ??
                 //                rInfo.nToken = RTF_PAR;
-                rInfo.aSelection.nEndPara++;
+                rInfo.aSelection.end.nPara++;
                 ProcToken(&rInfo);
             }
             break;
@@ -445,7 +445,7 @@ void SdrTableHTMLParser::ProcToken(HtmlImportInfo* pInfo)
             RowColSpan aRowColSpan = lcl_GetRowColSpan(options);
             mpActDefault->mnColSpan = aRowColSpan.mnColSpan;
             mpActDefault->mnRowSpan = aRowColSpan.mnRowSpan;
-            mnCellStartPara = pInfo->aSelection.nStartPara;
+            mnCellStartPara = pInfo->aSelection.start.nPara;
         }
         break;
         case HtmlTokenId::TABLEDATA_OFF:
@@ -459,7 +459,7 @@ void SdrTableHTMLParser::ProcToken(HtmlImportInfo* pInfo)
             if (mpActDefault->mnColSpan > 0)
             {
                 mpActDefault->mnCellX = maColumnEdges[mnCellInRow + mpActDefault->mnColSpan - 1];
-                InsertCell(mnCellStartPara, pInfo->aSelection.nEndPara);
+                InsertCell(mnCellStartPara, pInfo->aSelection.end.nPara);
             }
             NextColumn();
             mnLastToken = pInfo->nToken;

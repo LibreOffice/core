@@ -302,8 +302,7 @@ void View::DoPaste (::sd::Window* pWindow)
                     for( sal_Int32 nPara = nParaCount - 2; nPara >= 0; nPara-- )
                     {
                         const sal_Int32 nParaLen = rEdit.GetTextLen( nPara );
-                        pOutliner->QuickDelete( ESelection( nPara, nParaLen, nPara+1, 0 ) );
-                        pOutliner->QuickInsertLineBreak( ESelection( nPara, nParaLen, nPara, nParaLen ) );
+                        pOutliner->QuickInsertLineBreak(ESelection(nPara, nParaLen, nPara + 1, 0));
                     }
 
                     DBG_ASSERT( rEdit.GetParagraphCount() <= 1, "Titleobject contains hard line breaks" );

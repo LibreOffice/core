@@ -50,14 +50,13 @@ void SmGetLeftSelectionPart(const ESelection &rSel,
     // returns paragraph number and position of the selections left part
 {
     // compare start and end of selection and use the one that comes first
-    if (    rSel.nStartPara <  rSel.nEndPara
-        ||  (rSel.nStartPara == rSel.nEndPara  &&  rSel.nStartPos < rSel.nEndPos) )
-    {   nPara = rSel.nStartPara;
-        nPos  = rSel.nStartPos;
+    if (rSel.start < rSel.end)
+    {   nPara = rSel.start.nPara;
+        nPos  = rSel.start.nIndex;
     }
     else
-    {   nPara = rSel.nEndPara;
-        nPos  = rSel.nEndPos;
+    {   nPara = rSel.end.nPara;
+        nPos  = rSel.end.nIndex;
     }
 }
 
@@ -321,24 +320,24 @@ bool SmEditTextWindow::KeyInput(const KeyEvent& rKEvt)
         autoClose = true;
     else if (selected.isEmpty() && !aSelection.HasRange())
     {
-        selected = pEditView->getEditEngine().GetText(aSelection.nEndPara);
+        selected = pEditView->getEditEngine().GetText(aSelection.end.nPara);
         if (!selected.isEmpty())
         {
-            sal_Int32 index = selected.indexOf("\n", aSelection.nEndPos);
+            sal_Int32 index = selected.indexOf("\n", aSelection.end.nIndex);
             if (index != -1)
             {
-                selected = selected.copy(index, sal_Int32(aSelection.nEndPos-index));
+                selected = selected.copy(index, sal_Int32(aSelection.end.nIndex-index));
                 if (o3tl::trim(selected).empty())
                     autoClose = true;
             }
             else
             {
                 sal_Int32 length = selected.getLength();
-                if (aSelection.nEndPos == length)
+                if (aSelection.end.nIndex == length)
                     autoClose = true;
                 else
                 {
-                    selected = selected.copy(aSelection.nEndPos);
+                    selected = selected.copy(aSelection.end.nIndex);
                     if (o3tl::trim(selected).empty())
                         autoClose = true;
                 }
@@ -393,8 +392,8 @@ bool SmEditTextWindow::KeyInput(const KeyEvent& rKEvt)
     {
         pEditView->InsertText(sClose);
         // position it at center of brackets
-        aSelection.nStartPos += 2;
-        aSelection.nEndPos = aSelection.nStartPos;
+        aSelection.start.nIndex += 2;
+        aSelection.end.nIndex = aSelection.start.nIndex;
         pEditView->SetSelection(aSelection);
     }
 
@@ -578,11 +577,11 @@ bool SmEditWindow::IsAllSelected() const
     if (!(nParaCnt - 1))
     {
         sal_Int32 nTextLen = pEditEngine->GetText().getLength();
-        bRes = !eSelection.nStartPos && (eSelection.nEndPos == nTextLen - 1);
+        bRes = !eSelection.start.nIndex && (eSelection.end.nIndex == nTextLen - 1);
     }
     else
     {
-        bRes = !eSelection.nStartPara && (eSelection.nEndPara == nParaCnt - 1);
+        bRes = !eSelection.start.nPara && (eSelection.end.nPara == nParaCnt - 1);
     }
     return bRes;
 }
@@ -591,8 +590,7 @@ void SmEditWindow::SelectAll()
 {
     if (EditView* pEditView = GetEditView())
     {
-        // ALL as last two parameters refers to the end of the text
-        pEditView->SetSelection( ESelection( 0, 0, EE_PARA_ALL, EE_TEXTPOS_ALL ) );
+        pEditView->SetSelection(ESelection::All());
     }
 }
 
@@ -600,8 +598,8 @@ void SmEditWindow::MarkError(const Point &rPos)
 {
     if (EditView* pEditView = GetEditView())
     {
-        const sal_uInt16        nCol = sal::static_int_cast< sal_uInt16 >(rPos.X());
-        const sal_uInt16        nRow = sal::static_int_cast< sal_uInt16 >(rPos.Y() - 1);
+        const sal_Int32 nCol = rPos.X();
+        const sal_Int32 nRow = rPos.Y() - 1;
 
         pEditView->SetSelection(ESelection(nRow, nCol - 1, nRow, nCol));
         GrabFocus();
@@ -626,22 +624,22 @@ void SmEditTextWindow::SelNextMark()
         return;
 
     ESelection eSelection = pEditView->GetSelection();
-    sal_Int32 nPos = eSelection.nEndPos;
+    sal_Int32 nPos = eSelection.end.nIndex;
     sal_Int32 nCounts = pEditEngine->GetParagraphCount();
 
-    while (eSelection.nEndPara < nCounts)
+    while (eSelection.end.nPara < nCounts)
     {
-        OUString aText = pEditEngine->GetText(eSelection.nEndPara);
+        OUString aText = pEditEngine->GetText(eSelection.end.nPara);
         nPos = aText.indexOf("<?>", nPos);
         if (nPos != -1)
         {
             pEditView->SetSelection(ESelection(
-                eSelection.nEndPara, nPos, eSelection.nEndPara, nPos + 3));
+                eSelection.end.nPara, nPos, eSelection.end.nPara, nPos + 3));
             break;
         }
 
         nPos = 0;
-        eSelection.nEndPara++;
+        eSelection.end.nPara++;
     }
 }
 
@@ -655,8 +653,8 @@ void SmEditWindow::SelPrevMark()
         return;
 
     ESelection eSelection = pEditView->GetSelection();
-    sal_Int32 nPara = eSelection.nStartPara;
-    sal_Int32 nMax = eSelection.nStartPos;
+    sal_Int32 nPara = eSelection.start.nPara;
+    sal_Int32 nMax = eSelection.start.nIndex;
     OUString aText(pEditEngine->GetText(nPara));
     static constexpr OUStringLiteral aMark(u"<?>");
     sal_Int32 nPos;
@@ -783,10 +781,10 @@ void SmEditTextWindow::InsertText(const OUString& rText)
     sal_Int32 nStartIndex = 0;
 
     // get the start position (when we get a multi line formula)
-    for (sal_Int32 nParaPos = 0; nParaPos < aSelection.nStartPara; nParaPos++)
+    for (sal_Int32 nParaPos = 0; nParaPos < aSelection.start.nPara; nParaPos++)
          nStartIndex = aCurrentFormula.indexOf("\n", nStartIndex) + 1;
 
-    nStartIndex += aSelection.nStartPos;
+    nStartIndex += aSelection.start.nIndex;
 
     // TODO: unify this function with the InsertCommand: The do the same thing for different
     // callers
@@ -798,23 +796,23 @@ void SmEditTextWindow::InsertText(const OUString& rText)
         string = string.replaceFirst("<?>", selected);
 
     // put a space before a new command if not in the beginning of a line
-    if (aSelection.nStartPos > 0 && aCurrentFormula[nStartIndex - 1] != ' ')
+    if (aSelection.start.nIndex > 0 && aCurrentFormula[nStartIndex - 1] != ' ')
         string = " " + string;
 
     pEditView->InsertText(string);
 
     // Remember start of the selection and move the cursor there afterwards.
-    aSelection.nEndPara = aSelection.nStartPara;
+    aSelection.end.nPara = aSelection.start.nPara;
     if (HasMark(string))
     {
-        aSelection.nEndPos = aSelection.nStartPos;
+        aSelection.end.nIndex = aSelection.start.nIndex;
         pEditView->SetSelection(aSelection);
         SelNextMark();
     }
     else
     {   // set selection after inserted text
-        aSelection.nEndPos = aSelection.nStartPos + string.getLength();
-        aSelection.nStartPos = aSelection.nEndPos;
+        aSelection.end.nIndex = aSelection.start.nIndex + string.getLength();
+        aSelection.start.nIndex = aSelection.end.nIndex;
         pEditView->SetSelection(aSelection);
     }
 

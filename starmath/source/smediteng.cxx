@@ -101,9 +101,9 @@ void SmEditEngine::updateZoom()
 void SmEditEngine::updateAllESelection()
 {
     sal_Int32 paracount = GetParagraphCount();
-    m_aAllSelection.nEndPara = paracount > 0 ? paracount - 1 : 0;
-    sal_Int32 textlength = GetTextLen(m_aAllSelection.nEndPara);
-    m_aAllSelection.nEndPos = textlength > 0 ? textlength : 0;
+    m_aAllSelection.end.nPara = paracount > 0 ? paracount - 1 : 0;
+    sal_Int32 textlength = GetTextLen(m_aAllSelection.end.nPara);
+    m_aAllSelection.end.nIndex = textlength > 0 ? textlength : 0;
 }
 
 void SmEditEngine::setSmItemPool(SfxItemPool* mpItemPool, const SvtLinguOptions& maLangOptions)

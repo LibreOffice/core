@@ -1275,8 +1275,8 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     {
                         ESelection aSel = pEditView->GetSelection();
                         aOldSel = aSel;
-                        aSel.nStartPos = 0;
-                        aSel.nEndPos = EE_TEXTPOS_ALL;
+                        aSel.start.nIndex = 0;
+                        aSel.end.nIndex = EE_TEXTPOS_MAX;
                         pEditView->SetSelection( aSel );
                     }
 

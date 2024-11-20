@@ -365,7 +365,7 @@ void ScFunctionWin::DoEnter()
                     pHdl->InsertFunction(aString);
                     pEdView->InsertText(aArgStr.makeStringAndClear(),true);
                     ESelection  aESel=pEdView->GetSelection();
-                    aESel.nEndPos = aESel.nStartPos + aFirstArgStr.getLength();
+                    aESel.end.nIndex = aESel.start.nIndex + aFirstArgStr.getLength();
                     pEdView->SetSelection(aESel);
                     pHdl->DataChanged();
                 }

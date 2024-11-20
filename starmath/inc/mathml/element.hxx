@@ -129,14 +129,14 @@ public: // location in the source
       * It is used to do the visual <-> text correspondence.
       * @return line
       */
-    sal_Int32 GetSourceCodeRow() const { return m_aESelection.nStartPara; }
+    sal_Int32 GetSourceCodeRow() const { return m_aESelection.start.nPara; }
 
     /**
       * Gets the column of the line in the text where the node is located.
       * It is used to do the visual <-> text correspondence.
       * @return column
       */
-    sal_Int32 GetSourceCodeColumn() const { return m_aESelection.nStartPos; }
+    sal_Int32 GetSourceCodeColumn() const { return m_aESelection.start.nIndex; }
 
 public: // attributes
     /**

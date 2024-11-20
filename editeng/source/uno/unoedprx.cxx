@@ -187,7 +187,7 @@ void SvxAccessibleTextIndex::SetEEIndex( sal_Int32 nEEIndex, const SvxTextForwar
     EBulletInfo aBulletInfo = rTF.GetBulletInfo( GetParagraph() );
 
     // any text bullets?
-    if( aBulletInfo.nParagraph != EE_PARA_NOT_FOUND &&
+    if( aBulletInfo.nParagraph != EE_PARA_MAX &&
         aBulletInfo.bVisible &&
         aBulletInfo.nType != SVX_NUM_BITMAP )
     {
@@ -235,7 +235,7 @@ void SvxAccessibleTextIndex::SetIndex( sal_Int32 nIndex, const SvxTextForwarder&
     EBulletInfo aBulletInfo = rTF.GetBulletInfo( GetParagraph() );
 
     // any text bullets?
-    if( aBulletInfo.nParagraph != EE_PARA_NOT_FOUND &&
+    if( aBulletInfo.nParagraph != EE_PARA_MAX &&
         aBulletInfo.bVisible &&
         aBulletInfo.nType != SVX_NUM_BITMAP )
     {
@@ -435,12 +435,11 @@ OUString SvxAccessibleTextAdapter::GetText( const ESelection& rSel ) const
     SvxAccessibleTextIndex aStartIndex;
     SvxAccessibleTextIndex aEndIndex;
 
-    aStartIndex.SetIndex( rSel.nStartPara, rSel.nStartPos, *this );
-    aEndIndex.SetIndex( rSel.nEndPara, rSel.nEndPos, *this );
+    aStartIndex.SetIndex( rSel.start.nPara, rSel.start.nIndex, *this );
+    aEndIndex.SetIndex( rSel.end.nPara, rSel.end.nIndex, *this );
 
     // normalize selection
-    if( rSel.nStartPara > rSel.nEndPara ||
-        (rSel.nStartPara == rSel.nEndPara && rSel.nStartPos > rSel.nEndPos) )
+    if (!rSel.IsAdjusted())
     {
         std::swap( aStartIndex, aEndIndex );
     }
@@ -499,8 +498,8 @@ SfxItemSet SvxAccessibleTextAdapter::GetAttribs( const ESelection& rSel, EditEng
     SvxAccessibleTextIndex aStartIndex;
     SvxAccessibleTextIndex aEndIndex;
 
-    aStartIndex.SetIndex( rSel.nStartPara, rSel.nStartPos, *this );
-    aEndIndex.SetIndex( rSel.nEndPara, rSel.nEndPos, *this );
+    aStartIndex.SetIndex( rSel.start.nPara, rSel.start.nIndex, *this );
+    aEndIndex.SetIndex( rSel.end.nPara, rSel.end.nIndex, *this );
 
     return mpTextForwarder->GetAttribs( MakeEESelection(aStartIndex, aEndIndex), nOnlyHardAttrib );
 }
@@ -551,8 +550,8 @@ SfxItemState SvxAccessibleTextAdapter::GetItemState( const ESelection& rSel, sal
     SvxAccessibleTextIndex aStartIndex;
     SvxAccessibleTextIndex aEndIndex;
 
-    aStartIndex.SetIndex( rSel.nStartPara, rSel.nStartPos, *this );
-    aEndIndex.SetIndex( rSel.nEndPara, rSel.nEndPos, *this );
+    aStartIndex.SetIndex( rSel.start.nPara, rSel.start.nIndex, *this );
+    aEndIndex.SetIndex( rSel.end.nPara, rSel.end.nIndex, *this );
 
     return mpTextForwarder->GetItemState( MakeEESelection(aStartIndex, aEndIndex),
                                           nWhich );
@@ -572,8 +571,8 @@ void SvxAccessibleTextAdapter::QuickInsertText( const OUString& rText, const ESe
     SvxAccessibleTextIndex aStartIndex;
     SvxAccessibleTextIndex aEndIndex;
 
-    aStartIndex.SetIndex( rSel.nStartPara, rSel.nStartPos, *this );
-    aEndIndex.SetIndex( rSel.nEndPara, rSel.nEndPos, *this );
+    aStartIndex.SetIndex( rSel.start.nPara, rSel.start.nIndex, *this );
+    aEndIndex.SetIndex( rSel.end.nPara, rSel.end.nIndex, *this );
 
     mpTextForwarder->QuickInsertText( rText,
                                       MakeEESelection(aStartIndex, aEndIndex) );
@@ -586,8 +585,8 @@ void SvxAccessibleTextAdapter::QuickInsertField( const SvxFieldItem& rFld, const
     SvxAccessibleTextIndex aStartIndex;
     SvxAccessibleTextIndex aEndIndex;
 
-    aStartIndex.SetIndex( rSel.nStartPara, rSel.nStartPos, *this );
-    aEndIndex.SetIndex( rSel.nEndPara, rSel.nEndPos, *this );
+    aStartIndex.SetIndex( rSel.start.nPara, rSel.start.nIndex, *this );
+    aEndIndex.SetIndex( rSel.end.nPara, rSel.end.nIndex, *this );
 
     mpTextForwarder->QuickInsertField( rFld,
                                        MakeEESelection(aStartIndex, aEndIndex) );
@@ -600,8 +599,8 @@ void SvxAccessibleTextAdapter::QuickSetAttribs( const SfxItemSet& rSet, const ES
     SvxAccessibleTextIndex aStartIndex;
     SvxAccessibleTextIndex aEndIndex;
 
-    aStartIndex.SetIndex( rSel.nStartPara, rSel.nStartPos, *this );
-    aEndIndex.SetIndex( rSel.nEndPara, rSel.nEndPos, *this );
+    aStartIndex.SetIndex( rSel.start.nPara, rSel.start.nIndex, *this );
+    aEndIndex.SetIndex( rSel.end.nPara, rSel.end.nIndex, *this );
 
     mpTextForwarder->QuickSetAttribs( rSet,
                                       MakeEESelection(aStartIndex, aEndIndex) );
@@ -614,8 +613,8 @@ void SvxAccessibleTextAdapter::QuickInsertLineBreak( const ESelection& rSel )
     SvxAccessibleTextIndex aStartIndex;
     SvxAccessibleTextIndex aEndIndex;
 
-    aStartIndex.SetIndex( rSel.nStartPara, rSel.nStartPos, *this );
-    aEndIndex.SetIndex( rSel.nEndPara, rSel.nEndPos, *this );
+    aStartIndex.SetIndex( rSel.start.nPara, rSel.start.nIndex, *this );
+    aEndIndex.SetIndex( rSel.end.nPara, rSel.end.nIndex, *this );
 
     mpTextForwarder->QuickInsertLineBreak( MakeEESelection(aStartIndex, aEndIndex) );
 }
@@ -756,7 +755,7 @@ tools::Rectangle SvxAccessibleTextAdapter::GetParaBounds( sal_Int32 nPara ) cons
 
     EBulletInfo aBulletInfo = GetBulletInfo( nPara );
 
-    if( aBulletInfo.nParagraph != EE_PARA_NOT_FOUND &&
+    if( aBulletInfo.nParagraph != EE_PARA_MAX &&
         aBulletInfo.bVisible &&
         aBulletInfo.nType != SVX_NUM_BITMAP )
     {
@@ -803,7 +802,7 @@ bool SvxAccessibleTextAdapter::GetIndexAtPoint( const Point& rPoint, sal_Int32& 
     EBulletInfo aBulletInfo = GetBulletInfo( nPara );
 
     // any text bullets?
-    if( aBulletInfo.nParagraph != EE_PARA_NOT_FOUND &&
+    if( aBulletInfo.nParagraph != EE_PARA_MAX &&
         aBulletInfo.bVisible &&
         aBulletInfo.nType != SVX_NUM_BITMAP )
     {
@@ -1004,8 +1003,8 @@ bool SvxAccessibleTextAdapter::Delete( const ESelection& rSel )
     SvxAccessibleTextIndex aStartIndex;
     SvxAccessibleTextIndex aEndIndex;
 
-    aStartIndex.SetIndex( rSel.nStartPara, rSel.nStartPos, *this );
-    aEndIndex.SetIndex( rSel.nEndPara, rSel.nEndPos, *this );
+    aStartIndex.SetIndex( rSel.start.nPara, rSel.start.nIndex, *this );
+    aEndIndex.SetIndex( rSel.end.nPara, rSel.end.nIndex, *this );
 
     return mpTextForwarder->Delete( MakeEESelection(aStartIndex, aEndIndex ) );
 }
@@ -1017,8 +1016,8 @@ bool SvxAccessibleTextAdapter::InsertText( const OUString& rStr, const ESelectio
     SvxAccessibleTextIndex aStartIndex;
     SvxAccessibleTextIndex aEndIndex;
 
-    aStartIndex.SetIndex( rSel.nStartPara, rSel.nStartPos, *this );
-    aEndIndex.SetIndex( rSel.nEndPara, rSel.nEndPos, *this );
+    aStartIndex.SetIndex( rSel.start.nPara, rSel.start.nIndex, *this );
+    aEndIndex.SetIndex( rSel.end.nPara, rSel.end.nIndex, *this );
 
     return mpTextForwarder->InsertText( rStr, MakeEESelection(aStartIndex, aEndIndex) );
 }
@@ -1053,7 +1052,7 @@ bool SvxAccessibleTextAdapter::HaveImageBullet( sal_Int32 nPara ) const
 {
     EBulletInfo aBulletInfo = GetBulletInfo( nPara );
 
-    return ( aBulletInfo.nParagraph != EE_PARA_NOT_FOUND &&
+    return ( aBulletInfo.nParagraph != EE_PARA_MAX &&
             aBulletInfo.bVisible &&
             aBulletInfo.nType == SVX_NUM_BITMAP );
 }
@@ -1062,7 +1061,7 @@ bool SvxAccessibleTextAdapter::HaveTextBullet( sal_Int32 nPara ) const
 {
     EBulletInfo aBulletInfo = GetBulletInfo( nPara );
 
-    return ( aBulletInfo.nParagraph != EE_PARA_NOT_FOUND &&
+    return ( aBulletInfo.nParagraph != EE_PARA_MAX &&
             aBulletInfo.bVisible &&
             aBulletInfo.nType != SVX_NUM_BITMAP );
 }
@@ -1072,12 +1071,11 @@ bool SvxAccessibleTextAdapter::IsEditable( const ESelection& rSel ) const
     SvxAccessibleTextIndex aStartIndex;
     SvxAccessibleTextIndex aEndIndex;
 
-    aStartIndex.SetIndex( rSel.nStartPara, rSel.nStartPos, *this );
-    aEndIndex.SetIndex( rSel.nEndPara, rSel.nEndPos, *this );
+    aStartIndex.SetIndex( rSel.start.nPara, rSel.start.nIndex, *this );
+    aEndIndex.SetIndex( rSel.end.nPara, rSel.end.nIndex, *this );
 
     // normalize selection
-    if( rSel.nStartPara > rSel.nEndPara ||
-        (rSel.nStartPara == rSel.nEndPara && rSel.nStartPos > rSel.nEndPos) )
+    if (!rSel.IsAdjusted())
     {
         std::swap( aStartIndex, aEndIndex );
     }
@@ -1152,8 +1150,8 @@ bool SvxAccessibleTextEditViewAdapter::GetSelection( ESelection& rSel ) const
     SvxAccessibleTextIndex aStartIndex;
     SvxAccessibleTextIndex aEndIndex;
 
-    aStartIndex.SetEEIndex( aSelection.nStartPara, aSelection.nStartPos, *mpTextForwarder );
-    aEndIndex.SetEEIndex( aSelection.nEndPara, aSelection.nEndPos, *mpTextForwarder );
+    aStartIndex.SetEEIndex( aSelection.start.nPara, aSelection.start.nIndex, *mpTextForwarder );
+    aEndIndex.SetEEIndex( aSelection.end.nPara, aSelection.end.nIndex, *mpTextForwarder );
 
     DBG_ASSERT(aStartIndex.GetIndex() >= 0 &&
                aEndIndex.GetIndex() >= 0,
@@ -1172,8 +1170,8 @@ bool SvxAccessibleTextEditViewAdapter::SetSelection( const ESelection& rSel )
     SvxAccessibleTextIndex aStartIndex;
     SvxAccessibleTextIndex aEndIndex;
 
-    aStartIndex.SetIndex( rSel.nStartPara, rSel.nStartPos, *mpTextForwarder );
-    aEndIndex.SetIndex( rSel.nEndPara, rSel.nEndPos, *mpTextForwarder );
+    aStartIndex.SetIndex( rSel.start.nPara, rSel.start.nIndex, *mpTextForwarder );
+    aEndIndex.SetIndex( rSel.end.nPara, rSel.end.nIndex, *mpTextForwarder );
 
     return mpViewForwarder->SetSelection( MakeEESelection(aStartIndex, aEndIndex) );
 }

@@ -124,8 +124,8 @@ void TextChainFlow::impUpdateCursorInfo()
         ESelection aSelAtUFTime = GetTextChain()->GetPreChainingSel(GetLinkTarget());
         // Might be an invalid selection if the cursor at UF time was before
         //   the (possibly UF-induced) Overflowing point but we don't use it in that case
-        maPostChainingSel = ESelection(aSelAtUFTime.nStartPara-maOverflowPosSel.nStartPara,
-                                       aSelAtUFTime.nStartPos-maOverflowPosSel.nStartPos );
+        maPostChainingSel = ESelection(aSelAtUFTime.start.nPara-maOverflowPosSel.start.nPara,
+                                       aSelAtUFTime.start.nIndex-maOverflowPosSel.start.nIndex );
     }
 
     // XXX: It may not be necessary anymore to keep this method separated from EditingTextChainFlow::impBroadcastCursorInfo

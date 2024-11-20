@@ -51,18 +51,18 @@ SvxUnoTextContentEnumeration::SvxUnoTextContentEnumeration( const SvxUnoTextBase
         return;
 
     const SvxTextForwarder* pTextForwarder = rText.GetEditSource()->GetTextForwarder();
-    const sal_Int32 maxParaIndex = std::min( rSel.nEndPara + 1, pTextForwarder->GetParagraphCount() );
+    const sal_Int32 maxParaIndex = std::min( rSel.end.nPara + 1, pTextForwarder->GetParagraphCount() );
 
-    for( sal_Int32 currentPara = rSel.nStartPara; currentPara < maxParaIndex; currentPara++ )
+    for (sal_Int32 currentPara = rSel.start.nPara; currentPara < maxParaIndex; currentPara++)
     {
         const SvxUnoTextRangeBaseVec& rRanges( mpEditSource->getRanges() );
         rtl::Reference<SvxUnoTextContent> pContent;
         sal_Int32 nStartPos = 0;
         sal_Int32 nEndPos = pTextForwarder->GetTextLen( currentPara );
-        if( currentPara == rSel.nStartPara )
-            nStartPos = std::max(nStartPos, rSel.nStartPos);
-        if( currentPara == rSel.nEndPara )
-            nEndPos = std::min(nEndPos, rSel.nEndPos);
+        if (currentPara == rSel.start.nPara)
+            nStartPos = std::max(nStartPos, rSel.start.nIndex);
+        if (currentPara == rSel.end.nPara)
+            nEndPos = std::min(nEndPos, rSel.end.nIndex);
         ESelection aCurrentParaSel( currentPara, nStartPos, currentPara, nEndPos );
         for (auto const& elemRange : rRanges)
         {
@@ -374,24 +374,24 @@ SvxUnoTextRangeEnumeration::SvxUnoTextRangeEnumeration(const SvxUnoTextBase& rPa
     if (rParentText.GetEditSource())
         mpEditSource = rParentText.GetEditSource()->Clone();
 
-    if( !(mpEditSource && mpEditSource->GetTextForwarder() && (nParagraph == rSel.nStartPara && nParagraph == rSel.nEndPara)) )
+    if( !(mpEditSource && mpEditSource->GetTextForwarder() && (nParagraph == rSel.start.nPara && nParagraph == rSel.end.nPara)) )
         return;
 
     std::vector<sal_Int32> aPortions;
     mpEditSource->GetTextForwarder()->GetPortions( nParagraph, aPortions );
     for( size_t aPortionIndex = 0; aPortionIndex < aPortions.size(); aPortionIndex++ )
     {
-        sal_uInt16 nStartPos = 0;
+        sal_Int32 nStartPos = 0;
         if ( aPortionIndex > 0 )
             nStartPos = aPortions.at( aPortionIndex - 1 );
-        if( nStartPos > rSel.nEndPos )
+        if (nStartPos > rSel.end.nIndex)
             continue;
-        sal_uInt16 nEndPos = aPortions.at( aPortionIndex );
-        if( nEndPos < rSel.nStartPos )
+        sal_Int32 nEndPos = aPortions.at(aPortionIndex);
+        if (nEndPos < rSel.start.nIndex)
             continue;
 
-        nStartPos = std::max<int>(nStartPos, rSel.nStartPos);
-        nEndPos = std::min<sal_uInt16>(nEndPos, rSel.nEndPos);
+        nStartPos = std::max(nStartPos, rSel.start.nIndex);
+        nEndPos = std::min(nEndPos, rSel.end.nIndex);
         ESelection aSel( nParagraph, nStartPos, nParagraph, nEndPos );
 
         const SvxUnoTextRangeBaseVec& rRanges( mpEditSource->getRanges() );
@@ -572,8 +572,7 @@ void SAL_CALL SvxUnoTextCursor::gotoRange( const uno::Reference< text::XTextRang
     if( bExpand )
     {
         const ESelection& rOldSel = GetSelection();
-        aNewSel.nStartPara = rOldSel.nStartPara;
-        aNewSel.nStartPos  = rOldSel.nStartPos;
+        aNewSel.start = rOldSel.start;
     }
 
     SetSelection( aNewSel );

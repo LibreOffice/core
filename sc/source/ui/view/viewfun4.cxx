@@ -728,11 +728,7 @@ void ScViewFunc::InsertBookmark( const OUString& rDescription, const OUString& r
             aEngine.SetText(aOld);
     }
 
-    sal_Int32 nPara = aEngine.GetParagraphCount();
-    if (nPara)
-        --nPara;
-    sal_Int32 nTxtLen = aEngine.GetTextLen(nPara);
-    ESelection aInsSel( nPara, nTxtLen, nPara, nTxtLen );
+    ESelection aInsSel(ESelection::AtEnd());
 
     if ( bTryReplace && HasBookmarkAtCursor( nullptr ) )
     {

@@ -66,13 +66,11 @@ ErrCode ScRTFParser::Read( SvStream& rStream, const OUString& rBaseURL )
         {
             auto& pE = maList.back();
             if (    // Completely empty
-                (  pE->aSel.nStartPara == pE->aSel.nEndPara
-                   && pE->aSel.nStartPos  == pE->aSel.nEndPos
-                )
+                (  !pE->aSel.HasRange()  )
                 ||  // Empty paragraph
-                (  pE->aSel.nStartPara + 1 == pE->aSel.nEndPara
-                   && pE->aSel.nStartPos      == pEdit->GetTextLen( pE->aSel.nStartPara )
-                   && pE->aSel.nEndPos        == 0
+                (  pE->aSel.start.nPara + 1 == pE->aSel.end.nPara
+                   && pE->aSel.start.nIndex      == pEdit->GetTextLen( pE->aSel.start.nPara )
+                   && pE->aSel.end.nIndex        == 0
                 )
                )
             {   // Don't take over the last paragraph
@@ -88,9 +86,9 @@ ErrCode ScRTFParser::Read( SvStream& rStream, const OUString& rBaseURL )
 void ScRTFParser::EntryEnd( ScEEParseEntry* pE, const ESelection& aSel )
 {
     // Paragraph -2 strips the attached empty paragraph
-    pE->aSel.nEndPara = aSel.nEndPara - 2;
+    pE->aSel.end.nPara = aSel.end.nPara - 2;
     // Although it's called nEndPos, the last one is position + 1
-    pE->aSel.nEndPos = pEdit->GetTextLen( aSel.nEndPara - 1 );
+    pE->aSel.end.nIndex = pEdit->GetTextLen(aSel.end.nPara - 1);
 }
 
 inline void ScRTFParser::NextRow()
@@ -171,13 +169,13 @@ IMPL_LINK( ScRTFParser, RTFImportHdl, RtfImportInfo&, rInfo, void )
         }
             break;
         case RtfImportState::End:
-            if ( rInfo.aSelection.nEndPos )
+            if ( rInfo.aSelection.end.nIndex )
             {   // If still text: create last paragraph
                 pActDefault = nullptr;
                 rInfo.nToken = RTF_PAR;
                 // EditEngine did not attach an empty paragraph anymore
                 // which EntryEnd could strip
-                rInfo.aSelection.nEndPara++;
+                rInfo.aSelection.end.nPara++;
                 ProcToken( &rInfo );
             }
             break;
@@ -352,7 +350,7 @@ void ScRTFParser::ProcToken( RtfImportInfo* pInfo )
                 }
                 // Adjust selection of free-flying mxActEntry
                 // Paragraph -1 due to separated text in EditEngine during parsing
-                mxActEntry->aSel.nStartPara = pInfo->aSelection.nEndPara - 1;
+                mxActEntry->aSel.start.nPara = pInfo->aSelection.end.nPara - 1;
             }
 
             pActDefault = nullptr;

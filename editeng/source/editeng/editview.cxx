@@ -274,7 +274,7 @@ void EditView::SetSelection( const ESelection& rESel )
         if (nullptr != pNode)
             pNode->checkAndDeleteEmptyAttribs();
     }
-    EditSelection aNewSelection(getImpEditEngine().ConvertSelection(rESel.nStartPara, rESel.nStartPos, rESel.nEndPara, rESel.nEndPos));
+    EditSelection aNewSelection(getImpEditEngine().CreateNormalizedSel(rESel));
 
     // If the selection is manipulated after a KeyInput:
     getEditEngine().CheckIdleFormatter();
@@ -309,15 +309,7 @@ void EditView::SetSelection( const ESelection& rESel )
 
 ESelection EditView::GetSelection() const
 {
-    ESelection aSelection;
-
-    aSelection.nStartPara = getEditEngine().GetEditDoc().GetPos( getImpl().GetEditSelection().Min().GetNode() );
-    aSelection.nEndPara = getEditEngine().GetEditDoc().GetPos( getImpl().GetEditSelection().Max().GetNode() );
-
-    aSelection.nStartPos = getImpl().GetEditSelection().Min().GetIndex();
-    aSelection.nEndPos = getImpl().GetEditSelection().Max().GetIndex();
-
-    return aSelection;
+    return getEditEngine().CreateESelection(getImpl().GetEditSelection());
 }
 
 bool EditView::HasSelection() const
@@ -727,7 +719,7 @@ void EditView::MoveParagraphs( Range aParagraphs, sal_Int32 nNewPos )
 void EditView::MoveParagraphs( tools::Long nDiff )
 {
     ESelection aSel = GetSelection();
-    Range aRange( aSel.nStartPara, aSel.nEndPara );
+    Range aRange( aSel.start.nPara, aSel.end.nPara );
     aRange.Normalize();
     tools::Long nDest = ( nDiff > 0  ? aRange.Max() : aRange.Min() ) + nDiff;
     if ( nDiff > 0 )
@@ -1219,8 +1211,8 @@ bool EditView::ExecuteSpellPopup(const Point& rPosPixel, const Link<SpellCallbac
         if (sId == "paralanguage")
         {
             ESelection aSel = GetSelection();
-            aSel.nStartPos = 0;
-            aSel.nEndPos = EE_TEXTPOS_ALL;
+            aSel.start.nIndex = 0;
+            aSel.end.nIndex = EE_TEXTPOS_MAX;
             SetSelection( aSel );
         }
         SetAttribs( aAttrs );
@@ -1420,19 +1412,19 @@ void EditView::SelectFieldAtCursor()
     // Make sure the whole field is selected
     // A field is represented by a dummy character - so it cannot be a selection larger than 1
     ESelection aSel = GetSelection();
-    if (aSel.nStartPos == aSel.nEndPos) // not yet selected
+    if (!aSel.HasRange()) // not yet selected
     {
         if (bIsBeforeCursor)
         {
-            assert (aSel.nStartPos);
-            --aSel.nStartPos;
+            assert (aSel.start.nIndex);
+            --aSel.start.nIndex;
         }
         else
-            aSel.nEndPos++;
+            aSel.end.nIndex++;
         SetSelection(aSel);
     }
     else
-        assert(std::abs(aSel.nStartPos - aSel.nEndPos) == 1);
+        assert(std::abs(aSel.start.nIndex - aSel.end.nIndex) == 1);
 }
 
 const SvxFieldData* EditView::GetFieldUnderMouseOrInSelectionOrAtCursor(bool bAlsoCheckBeforeCursor) const
@@ -1528,7 +1520,7 @@ void EditView::ChangeFontSize( bool bGrow, const FontList* pFontList )
 
     if( aSel.HasRange() )
     {
-        for( sal_Int32 nPara = aSel.nStartPara; nPara <= aSel.nEndPara; nPara++ )
+        for( sal_Int32 nPara = aSel.start.nPara; nPara <= aSel.end.nPara; nPara++ )
         {
             std::vector<sal_Int32> aPortions;
             rEditEngine.GetPortions( nPara, aPortions );
@@ -1536,8 +1528,8 @@ void EditView::ChangeFontSize( bool bGrow, const FontList* pFontList )
             if( aPortions.empty() )
                 aPortions.push_back( rEditEngine.GetTextLen(nPara) );
 
-            const sal_Int32 nBeginPos = (nPara == aSel.nStartPara) ? aSel.nStartPos : 0;
-            const sal_Int32 nEndPos = (nPara == aSel.nEndPara) ? aSel.nEndPos : EE_TEXTPOS_ALL;
+            const sal_Int32 nBeginPos = (nPara == aSel.start.nPara) ? aSel.start.nIndex : 0;
+            const sal_Int32 nEndPos = (nPara == aSel.end.nPara) ? aSel.end.nIndex : EE_TEXTPOS_MAX;
 
             for ( size_t nPos = 0; nPos < aPortions.size(); ++nPos )
             {
@@ -1684,22 +1676,22 @@ Selection EditView::GetSurroundingTextSelection() const
 
         // Stop reconversion if the selected text includes a line break.
         if ( aStr.indexOf( 0x0A ) == -1 )
-            return Selection( 0, aSelection.nEndPos - aSelection.nStartPos );
+            return Selection(0, aSelection.end.nIndex - aSelection.start.nIndex);
         else
             return Selection( 0, 0 );
     }
     else
     {
-        return Selection( aSelection.nStartPos, aSelection.nEndPos );
+        return Selection(aSelection.start.nIndex, aSelection.end.nIndex);
     }
 }
 
 bool EditView::DeleteSurroundingText(const Selection& rRange)
 {
     ESelection aSel(GetSelection());
-    aSel.nEndPara = aSel.nStartPara;
-    aSel.nStartPos = rRange.Min();
-    aSel.nEndPos = rRange.Max();
+    aSel.end.nPara = aSel.start.nPara;
+    aSel.start.nIndex = rRange.Min();
+    aSel.end.nIndex = rRange.Max();
     SetSelection(aSel);
     DeleteSelected();
     return true;

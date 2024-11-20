@@ -512,11 +512,11 @@ namespace SwLangHelper
         // string for guessing language
 
         // get the full text of the paragraph that the end of selection is in
-        OUString aText = rEditEngine->GetText(rDocSelection.nEndPos);
+        OUString aText = rEditEngine->GetText(rDocSelection.end.nIndex);
         if (!aText.isEmpty())
         {
             sal_Int32 nStt = 0;
-            sal_Int32 nEnd = rDocSelection.nEndPos;
+            sal_Int32 nEnd = rDocSelection.end.nIndex;
             // at most 100 chars to the left...
             nStt = nEnd > 100 ? nEnd - 100 : 0;
             // ... and 100 to the right of the cursor position
@@ -529,7 +529,7 @@ namespace SwLangHelper
 
     void SelectPara( EditView &rEditView, const ESelection &rCurSel )
     {
-        ESelection aParaSel( rCurSel.nStartPara, 0, rCurSel.nStartPara, EE_TEXTPOS_ALL );
+        ESelection aParaSel(rCurSel.start.nPara, 0, rCurSel.start.nPara, EE_TEXTPOS_MAX);
         rEditView.SetSelection( aParaSel );
     }
 
