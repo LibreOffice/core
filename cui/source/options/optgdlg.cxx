@@ -225,7 +225,7 @@ OUString OfaMiscTabPage::GetAllStrings()
 {
     OUString sAllStrings;
     OUString labels[] = { u"label1"_ustr, u"label2"_ustr, u"label4"_ustr, u"label5"_ustr, u"yearslabel"_ustr,
-                          u"toyear"_ustr, u"label7"_ustr, u"label8"_ustr, u"label9"_ustr };
+                          u"toyear"_ustr, u"label8"_ustr, u"label9"_ustr };
 
     for (const auto& label : labels)
     {
@@ -587,10 +587,6 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
     , m_xNotebookbarIconSizeLabel(m_xBuilder->weld_label(u"label8"_ustr))
     , m_xNotebookbarIconSizeLB(m_xBuilder->weld_combo_box(u"notebookbariconsize"_ustr))
     , m_xNotebookbarIconSizeImg(m_xBuilder->weld_widget(u"locknotebookbariconsize"_ustr))
-    , m_xDarkModeFrame(m_xBuilder->weld_widget(u"darkmode"_ustr))
-    , m_xAppearanceStyleLabel(m_xBuilder->weld_label(u"label7"_ustr))
-    , m_xAppearanceStyleLB(m_xBuilder->weld_combo_box(u"appearance"_ustr))
-    , m_xAppearanceStyleImg(m_xBuilder->weld_widget(u"lockappearance"_ustr))
     , m_xIconStyleLabel(m_xBuilder->weld_label(u"label6"_ustr))
     , m_xIconStyleLB(m_xBuilder->weld_combo_box(u"iconstyle"_ustr))
     , m_xIconStyleImg(m_xBuilder->weld_widget(u"lockiconstyle"_ustr))
@@ -619,11 +615,6 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
     , m_xRunGPTests(m_xBuilder->weld_button(u"btn_rungptest"_ustr))
     , m_sAutoStr(m_xIconStyleLB->get_text(0))
 {
-    OUString sToolKitName(Application::GetToolkitName());
-    const bool bHasDarkMode = sToolKitName.startsWith("gtk") || sToolKitName == "osx" || sToolKitName == "win";
-    if (!bHasDarkMode)
-        m_xDarkModeFrame->hide();
-
     m_xFontAntiAliasing->connect_toggled( LINK( this, OfaViewTabPage, OnAntialiasingToggled ) );
 
     m_xUseSkia->connect_toggled(LINK(this, OfaViewTabPage, OnUseSkiaToggled));
@@ -762,7 +753,7 @@ std::unique_ptr<SfxTabPage> OfaViewTabPage::Create( weld::Container* pPage, weld
 OUString OfaViewTabPage::GetAllStrings()
 {
     OUString sAllStrings;
-    OUString labels[] = { u"label16"_ustr, u"label7"_ustr,      u"label1"_ustr,       u"label6"_ustr, u"label15"_ustr,
+    OUString labels[] = { u"label16"_ustr, u"label1"_ustr,      u"label6"_ustr,       u"label15"_ustr,
                           u"label14"_ustr, u"label8"_ustr,      u"label9"_ustr,       u"label4"_ustr, u"label12"_ustr,
                           u"label2"_ustr,  u"skiaenabled"_ustr, u"skiadisabled"_ustr, u"label5"_ustr, u"aafrom"_ustr };
 
@@ -789,7 +780,6 @@ OUString OfaViewTabPage::GetAllStrings()
 bool OfaViewTabPage::FillItemSet( SfxItemSet* )
 {
     bool bModified = false;
-    bool bDarkModeOptModified = false;
     bool bRepaintWindows(false);
     std::shared_ptr<comphelper::ConfigurationChanges> xChanges(comphelper::ConfigurationChanges::create());
 
@@ -885,12 +875,6 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
         bModified = true;
     }
 
-    if (m_xAppearanceStyleLB->get_value_changed_from_saved())
-    {
-        bDarkModeOptModified = true;
-        bModified = true;
-    }
-
     // #i95644#  if disabled, do not use value, see in ::Reset()
     if (m_xUseHardwareAccell->get_sensitive())
     {
@@ -921,9 +905,6 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
     }
 
     xChanges->commit();
-
-    if (bDarkModeOptModified)
-        MiscSettings::SetDarkMode(m_xAppearanceStyleLB->get_active());
 
     if ( bAppearanceChanged )
     {
@@ -1026,13 +1007,6 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
     m_xIconStyleLB->set_sensitive(bEnable);
     m_xIconStyleImg->set_visible(!bEnable);
     m_xIconStyleLB->save_value();
-
-    bEnable = !officecfg::Office::Common::Misc::Appearance::isReadOnly();
-    m_xAppearanceStyleLB->set_active(officecfg::Office::Common::Misc::Appearance::get());
-    m_xAppearanceStyleLabel->set_sensitive(bEnable);
-    m_xAppearanceStyleLB->set_sensitive(bEnable);
-    m_xAppearanceStyleImg->set_visible(!bEnable);
-    m_xAppearanceStyleLB->save_value();
 
     // Middle Mouse Button
     bEnable = !officecfg::Office::Common::View::Dialog::MiddleMouseButton::isReadOnly();

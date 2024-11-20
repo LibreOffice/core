@@ -19,13 +19,7 @@ NotebookbarPopup::NotebookbarPopup(const VclPtr<VclHBox>& pParent)
 {
     m_pBox = m_pUIBuilder->get<VclHBox>(u"box");
     m_pBox->SetSizePixel(Size(100, 75));
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    const BitmapEx& aPersona = rStyleSettings.GetPersonaHeader();
-
-    if (!aPersona.IsEmpty())
-        m_pBox->SetBackground(Wallpaper(aPersona));
-    else
-        m_pBox->SetBackground(rStyleSettings.GetDialogColor());
+    m_pBox->SetBackground(GetSettings().GetStyleSettings().GetDialogColor());
 }
 
 NotebookbarPopup::~NotebookbarPopup() { disposeOnce(); }
@@ -121,13 +115,7 @@ void NotebookbarPopup::dispose()
 
 void NotebookbarPopup::ApplyBackground(vcl::Window* pWindow)
 {
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    const BitmapEx& aPersona = rStyleSettings.GetPersonaHeader();
-
-    if (!aPersona.IsEmpty())
-        pWindow->SetBackground(Wallpaper(aPersona));
-    else
-        pWindow->SetBackground(rStyleSettings.GetDialogColor());
+    pWindow->SetBackground(GetSettings().GetStyleSettings().GetDialogColor());
 
     sal_Int32 nNext = 0;
     VclPtr<vcl::Window> pChild = pWindow->GetChild(nNext);

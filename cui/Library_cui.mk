@@ -182,7 +182,6 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     $(call gb_Helper_optional,SCRIPTING, \
         cui/source/options/optbasic) \
     cui/source/options/optchart \
-    cui/source/options/optcolor \
     cui/source/options/optctl \
     cui/source/options/optdict \
     cui/source/options/optfltr \
@@ -200,8 +199,6 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/options/optpath \
     cui/source/options/optsave \
     cui/source/options/optupdt \
-    $(call gb_Helper_optional,DESKTOP,\
-        cui/source/options/personalization) \
     cui/source/options/sdbcdriverenum \
     cui/source/options/securityoptions \
     cui/source/options/treeopt \

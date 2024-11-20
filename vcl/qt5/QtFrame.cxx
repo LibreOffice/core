@@ -1165,7 +1165,7 @@ void QtFrame::UpdateSettings(AllSettings& rSettings)
     Color aMenuBack = toColor(qMenuCG.color(QPalette::Window));
 
     style.SetMenuTextColor(aMenuFore);
-    style.SetMenuBarTextColor(style.GetPersonaMenuBarTextColor().value_or(aMenuFore));
+    style.SetMenuBarTextColor(aMenuFore);
     style.SetMenuColor(aMenuBack);
     style.SetMenuBarColor(aMenuBack);
     style.SetMenuHighlightColor(toColor(qMenuCG.color(QPalette::Highlight)));

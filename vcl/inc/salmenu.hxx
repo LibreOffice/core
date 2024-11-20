@@ -92,8 +92,6 @@ public:
     virtual tools::Rectangle GetMenuBarButtonRectPixel( sal_uInt16 i_nItemId, SalFrame* i_pReferenceFrame );
 
     virtual int GetMenuBarHeight() const;
-
-    virtual void ApplyPersona();
 };
 
 #endif // INCLUDED_VCL_INC_SALMENU_HXX

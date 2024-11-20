@@ -649,14 +649,9 @@ void MenuBarWindow::HighlightItem(vcl::RenderContext& rRenderContext, sal_uInt16
                     MenubarValue aControlValue;
                     aControlValue.maTopDockingAreaHeight = ImplGetTopDockingAreaHeight( this );
 
-                    if (!Application::GetSettings().GetStyleSettings().GetPersonaHeader().IsEmpty() )
-                         Erase(rRenderContext);
-                    else
-                    {
-                        tools::Rectangle aBgRegion(Point(), aOutputSize);
-                        rRenderContext.DrawNativeControl(ControlType::Menubar, ControlPart::Entire, aBgRegion,
-                                                         ControlState::ENABLED, aControlValue, OUString());
-                    }
+                    tools::Rectangle aBgRegion(Point(), aOutputSize);
+                    rRenderContext.DrawNativeControl(ControlType::Menubar, ControlPart::Entire, aBgRegion,
+                                                     ControlState::ENABLED, aControlValue, OUString());
 
                     ImplAddNWFSeparator(rRenderContext, aOutputSize, aControlValue);
 
@@ -897,15 +892,10 @@ void MenuBarWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Recta
         MenubarValue aMenubarValue;
         aMenubarValue.maTopDockingAreaHeight = ImplGetTopDockingAreaHeight(this);
 
-        if (!rStyleSettings.GetPersonaHeader().IsEmpty())
-            Erase(*pBuffer);
-        else
-        {
-            tools::Rectangle aCtrlRegion( Point(), aOutputSize );
+        tools::Rectangle aCtrlRegion( Point(), aOutputSize );
 
-            pBuffer->DrawNativeControl(ControlType::Menubar, ControlPart::Entire, aCtrlRegion,
-                                       ControlState::ENABLED, aMenubarValue, OUString());
-        }
+        pBuffer->DrawNativeControl(ControlType::Menubar, ControlPart::Entire, aCtrlRegion,
+                                   ControlState::ENABLED, aMenubarValue, OUString());
 
         ImplAddNWFSeparator(*pBuffer, aOutputSize, aMenubarValue);
     }
@@ -1053,21 +1043,7 @@ void MenuBarWindow::ApplySettings(vcl::RenderContext& rRenderContext)
 
     SetPointFont(rRenderContext, rStyleSettings.GetMenuFont());
 
-    const BitmapEx& rPersonaBitmap = Application::GetSettings().GetStyleSettings().GetPersonaHeader();
-    SalMenu *pNativeMenu = m_pMenu ? m_pMenu->ImplGetSalMenu() : nullptr;
-    if (pNativeMenu)
-        pNativeMenu->ApplyPersona();
-    if (!rPersonaBitmap.IsEmpty())
-    {
-        Wallpaper aWallpaper(rPersonaBitmap);
-        aWallpaper.SetStyle(WallpaperStyle::TopRight);
-        aWallpaper.SetColor(Application::GetSettings().GetStyleSettings().GetWorkspaceColor());
-
-        rRenderContext.SetBackground(aWallpaper);
-        SetPaintTransparent(false);
-        SetParentClipMode();
-    }
-    else if (rRenderContext.IsNativeControlSupported(ControlType::Menubar, ControlPart::Entire))
+    if (rRenderContext.IsNativeControlSupported(ControlType::Menubar, ControlPart::Entire))
     {
         rRenderContext.SetBackground(); // background will be drawn by NWF
     }

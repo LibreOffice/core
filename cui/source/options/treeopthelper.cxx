@@ -53,8 +53,6 @@ static PageIdToFileNameMap_Impl FileMap_Impl[] = {
 
     { RID_SVXPAGE_INET_SECURITY, u""_ustr }, // Security
 
-    { RID_SVXPAGE_PERSONALIZATION, u""_ustr }, // Personalization
-    { RID_SVXPAGE_COLORCONFIG, u""_ustr }, // ApplicationColors
     { RID_SVXPAGE_ACCESSIBILITYCONFIG, u""_ustr }, // Accessibility
     { RID_SVXPAGE_OPTIONS_JAVA, u""_ustr }, // Java
     { RID_SVXPAGE_BASICIDE_OPTIONS, u""_ustr }, // BasicIDEOptions

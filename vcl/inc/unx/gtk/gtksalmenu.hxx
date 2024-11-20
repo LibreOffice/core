@@ -43,13 +43,9 @@ private:
     /// Even setting  null icon on a menuitem can be expensive, so cache state to avoid that call
     bool                            mbHasNullItemIcon = true;
     GtkWidget*                      mpMenuBarContainerWidget;
-    std::unique_ptr<utl::TempFileNamed> mxPersonaImage;
-    BitmapEx                        maPersonaBitmap;
     GtkWidget*                      mpMenuAllowShrinkWidget;
     GtkWidget*                      mpMenuBarWidget;
     GtkWidget*                      mpMenuWidget;
-    GtkCssProvider*                 mpMenuBarContainerProvider;
-    GtkCssProvider*                 mpMenuBarProvider;
     GtkWidget*                      mpCloseButton;
     VclPtr<Menu>                    mpVCLMenu;
     GtkSalMenu*                     mpParentSalMenu;
@@ -138,7 +134,6 @@ public:
     virtual bool CanGetFocus() const override;
     virtual bool TakeFocus() override;
     virtual int GetMenuBarHeight() const override;
-    virtual void ApplyPersona() override;
 };
 
 class GtkSalMenuItem final : public SalMenuItem

@@ -251,12 +251,6 @@ struct ImplStyleData
     // on-demand calculated in GetListBoxPreviewDefaultPixelSize()
     Size                    mutable maListBoxPreviewDefaultPixelSize;
 
-    OUString                mutable maPersonaHeaderFooter; ///< Cache the settings to detect changes.
-
-    BitmapEx                mutable maPersonaHeaderBitmap; ///< Cache the header bitmap.
-    BitmapEx                mutable maPersonaFooterBitmap; ///< Cache the footer bitmap.
-    std::optional<Color>    mutable maPersonaMenuBarTextColor; ///< Cache the menubar color.
-
     bool operator==(const ImplStyleData& rSet) const;
 };
 
@@ -2122,120 +2116,6 @@ bool StyleSettings::GetUseImagesInMenus() const
     default: // TRISTATE_INDET:
         return GetPreferredUseImagesInMenus();
     }
-}
-
-static BitmapEx readBitmapEx( const OUString& rPath )
-{
-    OUString aPath( rPath );
-    rtl::Bootstrap::expandMacros( aPath );
-
-    // import the image
-    Graphic aGraphic;
-    if ( GraphicFilter::LoadGraphic( aPath, OUString(), aGraphic ) != ERRCODE_NONE )
-        return BitmapEx();
-    return aGraphic.GetBitmapEx();
-}
-
-namespace {
-
-enum WhichPersona { PERSONA_HEADER, PERSONA_FOOTER };
-
-}
-
-/** Update the setting of the Persona header / footer in ImplStyleData */
-static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFooter, BitmapEx& rHeaderFooterBitmap, std::optional<Color>& rMenuBarTextColor )
-{
-    // don't burn time loading images we don't need.
-    if ( Application::IsHeadlessModeEnabled() )
-        return;
-
-    // read from the configuration
-    OUString aPersona( officecfg::Office::Common::Misc::Persona::get() );
-    OUString aPersonaSettings( officecfg::Office::Common::Misc::PersonaSettings::get() );
-
-    // have the settings changed? marks if header /footer prepared before
-    //should maybe extended to a flag that marks if header /footer /both are loaded
-    OUString  aOldValue= eWhich==PERSONA_HEADER?OUString(aPersona + ";" + aPersonaSettings+";h" ):OUString(aPersona + ";" + aPersonaSettings+";f" );
-    if ( rHeaderFooter == aOldValue )
-        return;
-
-    rHeaderFooter = aOldValue;
-    rHeaderFooterBitmap = BitmapEx();
-    rMenuBarTextColor.reset();
-
-    // now read the new values and setup bitmaps
-    OUString aHeader, aFooter;
-    if ( aPersona == "own" || aPersona == "default" )
-    {
-        sal_Int32 nIndex = 0;
-
-        // Skip the persona slug, name, and preview
-        aHeader = aPersonaSettings.getToken( 3, ';', nIndex );
-
-        if ( nIndex > 0 )
-            aFooter = aPersonaSettings.getToken( 0, ';', nIndex );
-
-        // change menu text color, advance nIndex to skip the '#'
-        if ( nIndex > 0 )
-        {
-            OUString aColor = aPersonaSettings.getToken( 0, ';', ++nIndex );
-            rMenuBarTextColor = Color( ColorTransparency, aColor.toUInt32( 16 ) );
-        }
-    }
-
-    OUString aName;
-    switch ( eWhich ) {
-        case PERSONA_HEADER: aName = aHeader; break;
-        case PERSONA_FOOTER: aName = aFooter; break;
-    }
-
-    if ( !aName.isEmpty() )
-    {
-        OUString gallery(u""_ustr);
-        // try the gallery first, then the program path:
-        if ( aPersona == "own" && !aPersonaSettings.startsWith( "vnd.sun.star.expand" ) )
-        {
-            gallery = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
-            rtl::Bootstrap::expandMacros( gallery );
-            gallery += "/user/gallery/personas/";
-        }
-        else if ( aPersona == "default" )
-        {
-            gallery = "$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/gallery/personas/";
-        }
-        rHeaderFooterBitmap = readBitmapEx( gallery + aName );
-
-        if ( rHeaderFooterBitmap.IsEmpty() )
-            rHeaderFooterBitmap = readBitmapEx( "$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" + aName );
-    }
-
-    // Something went wrong. Probably, the images are missing. Clear the persona properties in the registry.
-
-    if( rHeaderFooterBitmap.IsEmpty() )
-    {
-        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Misc::Persona::set( u"no"_ustr, batch );
-        officecfg::Office::Common::Misc::PersonaSettings::set( u""_ustr, batch );
-        batch->commit();
-    }
-}
-
-BitmapEx const & StyleSettings::GetPersonaHeader() const
-{
-    setupPersonaHeaderFooter( PERSONA_HEADER, mxData->maPersonaHeaderFooter, mxData->maPersonaHeaderBitmap, mxData->maPersonaMenuBarTextColor );
-    return mxData->maPersonaHeaderBitmap;
-}
-
-BitmapEx const & StyleSettings::GetPersonaFooter() const
-{
-    setupPersonaHeaderFooter( PERSONA_FOOTER, mxData->maPersonaHeaderFooter, mxData->maPersonaFooterBitmap, mxData->maPersonaMenuBarTextColor );
-    return mxData->maPersonaFooterBitmap;
-}
-
-const std::optional<Color>& StyleSettings::GetPersonaMenuBarTextColor() const
-{
-    GetPersonaHeader();
-    return mxData->maPersonaMenuBarTextColor;
 }
 
 void StyleSettings::SetStandardStyles()

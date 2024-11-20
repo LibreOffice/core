@@ -104,10 +104,6 @@ private:
     std::unique_ptr<weld::Label> m_xNotebookbarIconSizeLabel;
     std::unique_ptr<weld::ComboBox> m_xNotebookbarIconSizeLB;
     std::unique_ptr<weld::Widget> m_xNotebookbarIconSizeImg;
-    std::unique_ptr<weld::Widget> m_xDarkModeFrame;
-    std::unique_ptr<weld::Label> m_xAppearanceStyleLabel;
-    std::unique_ptr<weld::ComboBox> m_xAppearanceStyleLB;
-    std::unique_ptr<weld::Widget> m_xAppearanceStyleImg;
     std::unique_ptr<weld::Label> m_xIconStyleLabel;
     std::unique_ptr<weld::ComboBox> m_xIconStyleLB;
     std::unique_ptr<weld::Widget> m_xIconStyleImg;

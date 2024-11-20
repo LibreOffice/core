@@ -15,7 +15,6 @@ cui/ui/objectnamedialog.ui
 cui/ui/objecttitledescdialog.ui
 cui/ui/optaccessibilitypage.ui
 cui/ui/optadvancedpage.ui
-cui/ui/optappearancepage.ui
 cui/ui/optasianpage.ui
 cui/ui/optbasicidepage.ui
 cui/ui/optchartcolorspage.ui

@@ -119,29 +119,8 @@ WindowAlign DockingAreaWindow::GetAlign() const
 void DockingAreaWindow::ApplySettings(vcl::RenderContext& rRenderContext)
 {
     const StyleSettings rSetting = rRenderContext.GetSettings().GetStyleSettings();
-    const BitmapEx& rPersonaBitmap = (GetAlign() == WindowAlign::Top) ? rSetting.GetPersonaHeader() : rSetting.GetPersonaFooter();
 
-    if (!rPersonaBitmap.IsEmpty() && (GetAlign() == WindowAlign::Top || GetAlign()==WindowAlign::Bottom))
-    {
-        Wallpaper aWallpaper(rPersonaBitmap);
-        if (GetAlign() == WindowAlign::Top)
-            aWallpaper.SetStyle(WallpaperStyle::TopRight);
-        else
-            aWallpaper.SetStyle(WallpaperStyle::BottomRight);
-        aWallpaper.SetColor(rSetting.GetWorkspaceColor());
-
-        // we need to shift the bitmap vertically so that it spans over the
-        // menubar conveniently
-        SystemWindow* pSysWin = GetSystemWindow();
-        MenuBar* pMenuBar = pSysWin ? pSysWin->GetMenuBar() : nullptr;
-        int nMenubarHeight = pMenuBar ? pMenuBar->GetMenuBarHeight() : 0;
-        aWallpaper.SetRect(tools::Rectangle(Point(0, -nMenubarHeight),
-                           Size(rRenderContext.GetOutputWidthPixel(),
-                                rRenderContext.GetOutputHeightPixel() + nMenubarHeight)));
-
-        rRenderContext.SetBackground(aWallpaper);
-    }
-    else if (!rRenderContext.IsNativeControlSupported(ControlType::Toolbar, ControlPart::Entire))
+    if (!rRenderContext.IsNativeControlSupported(ControlType::Toolbar, ControlPart::Entire))
     {
         Wallpaper aWallpaper;
         aWallpaper.SetStyle(WallpaperStyle::ApplicationGradient);
@@ -170,11 +149,7 @@ void DockingAreaWindow::Paint(vcl::RenderContext& rRenderContext, const tools::R
     }
 
     ControlState nState = ControlState::ENABLED;
-    const bool isFooter = GetAlign() == WindowAlign::Bottom && !rSetting.GetPersonaFooter().IsEmpty();
-
-    if ((GetAlign() == WindowAlign::Top && !rSetting.GetPersonaHeader().IsEmpty() ) || isFooter)
-        Erase(rRenderContext);
-    else if (!ImplGetSVData()->maNWFData.mbDockingAreaSeparateTB)
+    if (!ImplGetSVData()->maNWFData.mbDockingAreaSeparateTB)
     {
         // draw a single toolbar background covering the whole docking area
         tools::Rectangle aCtrlRegion(Point(), GetOutputSizePixel());

@@ -1721,21 +1721,6 @@ void ImplBorderWindow::Resize()
     if (mpNotebookBar)
     {
         tools::Long nNotebookBarHeight = mpNotebookBar->GetSizePixel().Height();
-
-        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-        const BitmapEx& aPersona = rStyleSettings.GetPersonaHeader();
-        // since size of notebookbar changes, to make common persona for menubar
-        // and notebookbar persona should be set again with changed coordinates
-        if (!aPersona.IsEmpty())
-        {
-            Wallpaper aWallpaper(aPersona);
-            aWallpaper.SetStyle(WallpaperStyle::TopRight);
-            aWallpaper.SetRect(tools::Rectangle(Point(0, -nTopBorder),
-                   Size(aSize.Width() - nLeftBorder - nRightBorder,
-                        nNotebookBarHeight + nTopBorder)));
-            mpNotebookBar->SetBackground(aWallpaper);
-        }
-
         mpNotebookBar->setPosSizePixel(
                 nLeftBorder, nTopBorder,
                 aSize.Width() - nLeftBorder - nRightBorder,
