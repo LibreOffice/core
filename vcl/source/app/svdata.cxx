@@ -158,7 +158,7 @@ namespace
                 }
             }
 
-            // tdf#163428  aToBeDeletedEntry will be destucted, thus the
+            // tdf#163428  aToBeDeletedEntry will be destructed, thus the
             // entry referenmced by SharedPtr may be deleted now
         }
 
