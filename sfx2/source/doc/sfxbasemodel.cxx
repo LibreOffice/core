@@ -3324,6 +3324,7 @@ public:
         catch( RuntimeException& )
         {
             // this exception is ignored to avoid problems with invalid listeners, the listener should be probably thrown away in future
+            TOOLS_WARN_EXCEPTION("sfx.appl", "ignoring");
         }
     }
 };
