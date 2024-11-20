@@ -159,7 +159,7 @@ namespace
             }
 
             // tdf#163428  aToBeDeletedEntry will be destructed, thus the
-            // entry referenmced by SharedPtr may be deleted now
+            // entry referenced by SharedPtr may be deleted now
         }
 
         void touchUsage(basegfx::SystemDependentData_SharedPtr& rData) override
