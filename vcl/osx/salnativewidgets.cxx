@@ -25,6 +25,7 @@
 #include <vcl/threadex.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/themecolors.hxx>
 
 #include <quartz/salgdi.h>
 #include <osx/salnativewidgets.h>
@@ -254,6 +255,14 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
     return mpBackend->drawNativeControl(nType, nPart, rControlRegion, nState, aValue);
 }
 
+static NSColor* colorFromRGB(const Color& rColor)
+{
+    return [NSColor colorWithSRGBRed:(rColor.GetRed() / 255.0f)
+                               green:(rColor.GetGreen() / 255.0f)
+                                blue:(rColor.GetBlue() / 255.0f)
+                               alpha:(rColor.GetAlpha() / 255.0f)];
+}
+
 static void paintCell(NSCell* pBtn, const NSRect& bounds, bool bShowsFirstResponder, CGContextRef context, NSView* pView)
 {
     //translate and scale because up side down otherwise
@@ -424,7 +433,10 @@ static void drawBox(CGContextRef context, const NSRect& rc, NSColor* pColor)
 static void drawEditableBackground(CGContextRef context, const NSRect& rc)
 {
     CGContextSaveGState(context);
-    CGContextSetFillColorWithColor(context, [NSColor controlBackgroundColor].CGColor);
+    if (ThemeColors::IsThemeLoaded())
+        CGContextSetFillColorWithColor(context, colorFromRGB(ThemeColors::GetThemeColors().GetBaseColor()).CGColor);
+    else
+        CGContextSetFillColorWithColor(context, [NSColor controlBackgroundColor].CGColor);
     CGContextFillRect(context, rc);
     CGContextRestoreGState(context);
 }
@@ -441,19 +453,26 @@ bool AquaGraphicsBackendBase::performDrawNativeControl(ControlType nType,
                                 AquaSalFrame* mpFrame)
 {
     bool bOK = false;
+    bool bThemeLoaded(ThemeColors::IsThemeLoaded());
     AquaSalInstance* pInst = GetSalData()->mpInstance;
     HIRect rc = ImplGetHIRectFromRectangle(rControlRegion);
     switch (nType)
     {
         case ControlType::Toolbar:
             {
-                drawBox(context, rc, NSColor.windowBackgroundColor);
+                if (bThemeLoaded)
+                    drawBox(context, rc, colorFromRGB(ThemeColors::GetThemeColors().GetWindowColor()));
+                else
+                    drawBox(context, rc, NSColor.windowBackgroundColor);
                 bOK = true;
             }
             break;
         case ControlType::WindowBackground:
             {
-                drawBox(context, rc, NSColor.windowBackgroundColor);
+                if (bThemeLoaded)
+                    drawBox(context, rc, colorFromRGB(ThemeColors::GetThemeColors().GetWindowColor()));
+                else
+                    drawBox(context, rc, NSColor.windowBackgroundColor);
                 bOK = true;
             }
             break;
@@ -461,7 +480,10 @@ bool AquaGraphicsBackendBase::performDrawNativeControl(ControlType nType,
             {
                 rc.size.width += 2;
                 rc.size.height += 2;
-                drawBox(context, rc, NSColor.controlBackgroundColor);
+                if (bThemeLoaded)
+                    drawBox(context, rc, colorFromRGB(ThemeColors::GetThemeColors().GetBaseColor()));
+                else
+                    drawBox(context, rc, NSColor.controlBackgroundColor);
                 bOK = true;
             }
             break;
@@ -720,7 +742,10 @@ bool AquaGraphicsBackendBase::performDrawNativeControl(ControlType nType,
                                                     ? static_cast<const ScrollbarValue *>(&aValue) : nullptr;
                 if (nPart == ControlPart::DrawBackgroundVert || nPart == ControlPart::DrawBackgroundHorz)
                 {
-                    drawBox(context, rc, NSColor.controlBackgroundColor);
+                    if (bThemeLoaded)
+                        drawBox(context, rc, colorFromRGB(ThemeColors::GetThemeColors().GetBaseColor()));
+                    else
+                        drawBox(context, rc, NSColor.controlBackgroundColor);
 
                     NSRect rect = { NSZeroPoint, NSMakeSize(rc.size.width, rc.size.height) };
                     NSScroller* pBar = [[NSScroller alloc] initWithFrame: rect];
