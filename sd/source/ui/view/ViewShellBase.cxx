@@ -113,6 +113,8 @@ namespace sd {
 class ViewShellBase::Implementation
 {
 public:
+    SdViewOptions maViewOptions;
+
     /** Main controller of the view shell.  During the switching from one
         stacked shell to another this pointer may be NULL.
     */
@@ -913,6 +915,16 @@ OUString ViewShellBase::GetInitialViewShellType() const
     return sRequestedView;
 }
 
+const SdViewOptions& ViewShellBase::GetViewOptions() const
+{
+    return mpImpl->maViewOptions;
+}
+
+void ViewShellBase::SetViewOptions(const SdViewOptions& rOptions) const
+{
+    mpImpl->maViewOptions = rOptions;
+}
+
 std::shared_ptr<tools::EventMultiplexer> const & ViewShellBase::GetEventMultiplexer() const
 {
     OSL_ASSERT(mpImpl != nullptr);
@@ -1129,28 +1141,24 @@ void ViewShellBase::NotifyCursor(SfxViewShell* pOtherShell) const
 
 ::Color ViewShellBase::GetColorConfigColor(svtools::ColorConfigEntry nColorType) const
 {
-    if (DrawViewShell* pCurrentDrawShell = dynamic_cast<DrawViewShell*>(GetMainViewShell().get()))
+    Color aColor;
+
+    const SdViewOptions& rViewOptions = GetViewOptions();
+    switch (nColorType)
     {
-        const SdViewOptions& rViewOptions = pCurrentDrawShell->GetViewOptions();
-        switch (nColorType)
+        case svtools::ColorConfigEntry::DOCCOLOR:
         {
-            case svtools::ColorConfigEntry::DOCCOLOR:
-            {
-                return rViewOptions.mnDocBackgroundColor;
-            }
-            // Should never be called for an unimplemented color type
-            default:
-            {
-                O3TL_UNREACHABLE;
-            }
+            aColor = rViewOptions.mnDocBackgroundColor;
+            break;
+        }
+        // Should never be called for an unimplemented color type
+        default:
+        {
+            O3TL_UNREACHABLE;
         }
     }
-    else
-    {
-        SAL_WARN("sd", "dynamic_cast to DrawViewShell failed");
-    }
 
-    return {};
+    return aColor;
 }
 
 //===== ViewShellBase::Implementation =========================================
@@ -1526,6 +1534,14 @@ void CurrentPageSetter::operator() (bool)
 }
 
 } // end of anonymous namespace
+
+SdViewOptions::SdViewOptions()
+    : msColorSchemeName("Default")
+{
+    const svtools::ColorConfig& rColorConfig = SD_MOD()->GetColorConfig();
+    mnAppBackgroundColor = rColorConfig.GetColorValue(svtools::APPBACKGROUND).nColor;
+    mnDocBackgroundColor = rColorConfig.GetColorValue(svtools::DOCCOLOR).nColor;
+}
 
 //===== FocusForwardingWindow =================================================
 

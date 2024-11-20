@@ -133,7 +133,6 @@ DrawViewShell::DrawViewShell( ViewShellBase& rViewShellBase, vcl::Window* pParen
 
     ConfigureAppBackgroundColor();
     SD_MOD()->GetColorConfig().AddListener(this);
-    maViewOptions.mnDocBackgroundColor = SD_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
 
     if (comphelper::LibreOfficeKit::isActive())
     {

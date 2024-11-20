@@ -23,12 +23,14 @@
 /// View options for the current view
 struct SdViewOptions
 {
+    SdViewOptions();
+
     // The color of the area behind the slide (used to be called "Wiese")
     Color mnAppBackgroundColor;
     // The color of the document background
     Color mnDocBackgroundColor;
     // The name of the color scheme
-    OUString msColorSchemeName = "Default";
+    OUString msColorSchemeName;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

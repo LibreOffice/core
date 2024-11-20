@@ -38,6 +38,7 @@
 #include <anminfo.hxx>
 #include <drawdoc.hxx>
 #include <drawview.hxx>
+#include <ViewShellBase.hxx>
 
 using namespace com::sun::star;
 
@@ -560,6 +561,16 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
     {
         rSet.DisableItem(SID_GRAPHIC_SIZE_CHECK);
     }
+}
+
+const SdViewOptions& DrawViewShell::GetViewOptions() const
+{
+    return GetViewShellBase().GetViewOptions();
+}
+
+void DrawViewShell::SetViewOptions(const SdViewOptions& rOptions)
+{
+    GetViewShellBase().SetViewOptions(rOptions);
 }
 
 } // end of namespace sd

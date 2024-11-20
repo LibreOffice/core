@@ -30,18 +30,21 @@ void DrawViewShell::ConfigurationChanged( utl::ConfigurationBroadcaster* pCb, Co
     svtools::ColorConfig *pColorConfig = dynamic_cast<svtools::ColorConfig*>(pCb);
     ConfigureAppBackgroundColor(pColorConfig);
     if (!comphelper::LibreOfficeKit::isActive())
-        maViewOptions.mnDocBackgroundColor = pColorConfig->GetColorValue(svtools::DOCCOLOR).nColor;
+    {
+        SdViewOptions aViewOptions = GetViewOptions();
+        aViewOptions.mnDocBackgroundColor = pColorConfig->GetColorValue(svtools::DOCCOLOR).nColor;
+        SetViewOptions(aViewOptions);
+    }
     else
     {
         SfxViewShell* pCurrentShell = SfxViewShell::Current();
         ViewShellBase* pShellBase = dynamic_cast<ViewShellBase*>(pCurrentShell);
         if (!pShellBase)
             return;
-        if (DrawViewShell* pCurrentDrawShell = dynamic_cast<DrawViewShell*>(pShellBase->GetMainViewShell().get()))
-        {
-            pCurrentDrawShell->maViewOptions.mnDocBackgroundColor = pColorConfig->GetColorValue(svtools::DOCCOLOR).nColor;
-            pCurrentDrawShell->maViewOptions.msColorSchemeName = svtools::ColorConfig::GetCurrentSchemeName();
-        }
+        SdViewOptions aViewOptions = pShellBase->GetViewOptions();
+        aViewOptions.mnDocBackgroundColor = pColorConfig->GetColorValue(svtools::DOCCOLOR).nColor;
+        aViewOptions.msColorSchemeName = svtools::ColorConfig::GetCurrentSchemeName();
+        pShellBase->SetViewOptions(aViewOptions);
         SdXImpressDocument* pDoc = comphelper::getFromUnoTunnel<SdXImpressDocument>(pCurrentShell->GetCurrentDocument());
         SfxLokHelper::notifyViewRenderState(pCurrentShell, pDoc);
         Color aFillColor(pColorConfig->GetColorValue(svtools::APPBACKGROUND).nColor);
@@ -60,7 +63,9 @@ void DrawViewShell::ConfigureAppBackgroundColor( svtools::ColorConfig *pColorCon
     // tdf#87905 Use darker background color for master view
     if (meEditMode == EditMode::MasterPage)
         aFillColor.DecreaseLuminance( 64 );
-    maViewOptions.mnAppBackgroundColor = aFillColor;
+    SdViewOptions aViewOptions = GetViewOptions();
+    aViewOptions.mnAppBackgroundColor = aFillColor;
+    SetViewOptions(aViewOptions);
 }
 
 void DrawViewShell::destroyXSlideShowInstance()
