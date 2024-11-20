@@ -110,6 +110,22 @@ struct PDFEncryptionProperties
         UValue.clear();
         EncryptionKey.clear();
     }
+
+    sal_Int32 getAccessPermissions() const
+    {
+        sal_Int32 nAccessPermissions = 0xfffff0c0;
+
+        nAccessPermissions |= CanPrintTheDocument ? 1 << 2 : 0;
+        nAccessPermissions |= CanModifyTheContent ? 1 << 3 : 0;
+        nAccessPermissions |= CanCopyOrExtract ? 1 << 4 : 0;
+        nAccessPermissions |= CanAddOrModify ? 1 << 5 : 0;
+        nAccessPermissions |= CanFillInteractive ? 1 << 8 : 0;
+        nAccessPermissions |= CanExtractForAccessibility ? 1 << 9 : 0;
+        nAccessPermissions |= CanAssemble ? 1 << 10 : 0;
+        nAccessPermissions |= CanPrintFull ? 1 << 11 : 0;
+
+        return nAccessPermissions;
+    }
 };
 
 class PDFWriter

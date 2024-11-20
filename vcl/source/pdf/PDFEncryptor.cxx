@@ -289,28 +289,13 @@ bool computeUDictionaryValue(EncryptionHashTransporter* i_pTransporter,
 sal_Int32 computeAccessPermissions(const vcl::PDFEncryptionProperties& i_rProperties,
                                    sal_Int32& o_rKeyLength, sal_Int32& o_rRC4KeyLength)
 {
-    /*
-    2) compute the access permissions, in numerical form
-
-    the default value depends on the revision 2 (40 bit) or 3 (128 bit security):
-    - for 40 bit security the unused bit must be set to 1, since they are not used
-    - for 128 bit security the same bit must be preset to 0 and set later if needed
-    according to the table 3.15, pdf v 1.4 */
-    sal_Int32 nAccessPermissions = 0xfffff0c0;
-
     o_rKeyLength = SECUR_128BIT_KEY;
-    o_rRC4KeyLength = 16; // for this value see PDF spec v 1.4, algorithm 3.1 step 4, where n is 16,
-        // thus maximum permitted value is 16
 
-    nAccessPermissions |= (i_rProperties.CanPrintTheDocument) ? 1 << 2 : 0;
-    nAccessPermissions |= (i_rProperties.CanModifyTheContent) ? 1 << 3 : 0;
-    nAccessPermissions |= (i_rProperties.CanCopyOrExtract) ? 1 << 4 : 0;
-    nAccessPermissions |= (i_rProperties.CanAddOrModify) ? 1 << 5 : 0;
-    nAccessPermissions |= (i_rProperties.CanFillInteractive) ? 1 << 8 : 0;
-    nAccessPermissions |= (i_rProperties.CanExtractForAccessibility) ? 1 << 9 : 0;
-    nAccessPermissions |= (i_rProperties.CanAssemble) ? 1 << 10 : 0;
-    nAccessPermissions |= (i_rProperties.CanPrintFull) ? 1 << 11 : 0;
-    return nAccessPermissions;
+    // for this value see PDF spec v 1.4, algorithm 3.1 step 4, where n is 16,
+    // thus maximum permitted value is 16
+    o_rRC4KeyLength = 16;
+
+    return i_rProperties.getAccessPermissions();
 }
 
 } // end anonymous namespace
