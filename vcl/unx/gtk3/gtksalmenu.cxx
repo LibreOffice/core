@@ -28,15 +28,15 @@ static bool bUnityMode = false;
 /*
  * This function generates a unique command name for each menu item
  */
-static gchar* GetCommandForItem(GtkSalMenu* pParentMenu, sal_uInt16 nItemId)
+static OString GetCommandForItem(GtkSalMenu* pParentMenu, sal_uInt16 nItemId)
 {
     OString aCommand = "window-" +
         OString::number(reinterpret_cast<sal_uIntPtr>(pParentMenu)) +
         "-" + OString::number(nItemId);
-    return g_strdup(aCommand.getStr());
+    return aCommand;
 }
 
-static gchar* GetCommandForItem(GtkSalMenuItem* pSalMenuItem)
+static OString GetCommandForItem(GtkSalMenuItem* pSalMenuItem)
 {
     return GetCommandForItem(pSalMenuItem->mpParentMenu,
                              pSalMenuItem->mnId);
@@ -297,20 +297,20 @@ void GtkSalMenu::ImplUpdate(bool bRecurse, bool bRemoveDisabledEntries)
             pOldCommandList = g_list_append( pOldCommandList, aCurrentCommand );
 
         // Get the new command for the item.
-        gchar* aNativeCommand = GetCommandForItem(pSalMenuItem);
+        OString sNativeCommand = GetCommandForItem(pSalMenuItem);
 
         // Force updating of native menu labels.
 
-        if ( g_strcmp0( aNativeCommand, "" ) != 0 && pSalMenuItem->mpSubMenu == nullptr )
+        if (!sNativeCommand.isEmpty() && pSalMenuItem->mpSubMenu == nullptr)
         {
             NativeSetItemText( nSection, nItemPos, aText, false );
             NativeSetItemIcon( nSection, nItemPos, aImage );
             NativeSetAccelerator(nSection, nItemPos, nAccelKey, nAccelKey.GetName());
-            NativeSetItemCommand( nSection, nItemPos, nId, aNativeCommand, itemBits, bChecked, false );
+            NativeSetItemCommand(nSection, nItemPos, nId, sNativeCommand.getStr(), itemBits, bChecked, false);
             NativeCheckItem( nSection, nItemPos, itemBits, bChecked );
-            NativeSetEnableItem( aNativeCommand, bEnabled );
+            NativeSetEnableItem(sNativeCommand.getStr(), bEnabled);
 
-            pNewCommandList = g_list_append( pNewCommandList, g_strdup( aNativeCommand ) );
+            pNewCommandList = g_list_append(pNewCommandList, g_strdup(sNativeCommand.getStr()));
         }
         else
         {
@@ -323,8 +323,8 @@ void GtkSalMenu::ImplUpdate(bool bRecurse, bool bRemoveDisabledEntries)
 
         if ( pSubmenu && pSubmenu->GetMenu() )
         {
-            bool bNonMenuChangedToMenu = NativeSetItemCommand( nSection, nItemPos, nId, aNativeCommand, itemBits, false, true );
-            pNewCommandList = g_list_append( pNewCommandList, g_strdup( aNativeCommand ) );
+            bool bNonMenuChangedToMenu = NativeSetItemCommand(nSection, nItemPos, nId, sNativeCommand.getStr(), itemBits, false, true);
+            pNewCommandList = g_list_append(pNewCommandList, g_strdup(sNativeCommand.getStr()));
 
             GLOMenu* pSubMenuModel = g_lo_menu_get_submenu_from_item_in_section( pLOMenu, nSection, nItemPos );
 
@@ -346,8 +346,6 @@ void GtkSalMenu::ImplUpdate(bool bRecurse, bool bRemoveDisabledEntries)
 
             g_object_unref( pSubMenuModel );
         }
-
-        g_free( aNativeCommand );
 
         ++nItemPos;
         ++validItems;
@@ -380,13 +378,12 @@ void GtkSalMenu::ImplUpdate(bool bRecurse, bool bRemoveDisabledEntries)
     }
     if (!nItemsCount)
     {
-        gchar* aNativeCommand = GetCommandForItem(this, 0xFFFF);
+        OString sNativeCommand = GetCommandForItem(this, 0xFFFF);
         OUString aPlaceholderText(VclResId(SV_RESID_STRING_NOSELECTIONPOSSIBLE));
         g_lo_menu_insert_in_section(pLOMenu, nSection-1, 0,
                                     OUStringToOString(aPlaceholderText, RTL_TEXTENCODING_UTF8).getStr());
-        NativeSetItemCommand(nSection-1, 0, 0xFFFF, aNativeCommand, MenuItemBits::NONE, false, false);
-        NativeSetEnableItem(aNativeCommand, false);
-        g_free(aNativeCommand);
+        NativeSetItemCommand(nSection - 1, 0, 0xFFFF, sNativeCommand.getStr(), MenuItemBits::NONE, false, false);
+        NativeSetEnableItem(sNativeCommand.getStr(), false);
     }
 }
 
@@ -689,9 +686,8 @@ void GtkSalMenu::RemoveItem( unsigned nPos )
     if (mpActionGroup)
     {
         GLOActionGroup* pActionGroup = G_LO_ACTION_GROUP(mpActionGroup);
-        gchar* pCommand = GetCommandForItem(maItems[nPos]);
-        g_lo_action_group_remove(pActionGroup, pCommand);
-        g_free(pCommand);
+        OString sCommand = GetCommandForItem(maItems[nPos]);
+        g_lo_action_group_remove(pActionGroup, sCommand.getStr());
     }
 
     maItems.erase( maItems.begin() + nPos );
@@ -1574,9 +1570,8 @@ void GtkSalMenu::EnableItem( unsigned nPos, bool bEnable )
     SolarMutexGuard aGuard;
     if ( bUnityMode && !mbInActivateCallback && !mbNeedsUpdate && GetTopLevel()->mbMenuBar && ( nPos < maItems.size() ) )
     {
-        gchar* pCommand = GetCommandForItem( GetItemAtPos( nPos ) );
-        NativeSetEnableItem( pCommand, bEnable );
-        g_free( pCommand );
+        OString sCommand = GetCommandForItem(GetItemAtPos(nPos));
+        NativeSetEnableItem(sCommand.getStr(), bEnable);
     }
 }
 
@@ -1597,7 +1592,7 @@ void GtkSalMenu::SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const OU
     if ( !bUnityMode || mbInActivateCallback || mbNeedsUpdate || !GetTopLevel()->mbMenuBar || ( nPos >= maItems.size() ) )
         return;
 
-    gchar* pCommand = GetCommandForItem( static_cast< GtkSalMenuItem* >( pSalMenuItem ) );
+    OString sCommand = GetCommandForItem(static_cast<GtkSalMenuItem*>(pSalMenuItem));
 
     gint nSectionsCount = g_menu_model_get_n_items( mpMenuModel );
     for ( gint nSection = 0; nSection < nSectionsCount; ++nSection )
@@ -1607,19 +1602,16 @@ void GtkSalMenu::SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const OU
         {
             gchar* pCommandFromModel = g_lo_menu_get_command_from_item_in_section( G_LO_MENU( mpMenuModel ), nSection, nItem );
 
-            if ( !g_strcmp0( pCommandFromModel, pCommand ) )
+            if (pCommandFromModel == sCommand)
             {
                 NativeSetItemText( nSection, nItem, rText );
                 g_free( pCommandFromModel );
-                g_free( pCommand );
                 return;
             }
 
             g_free( pCommandFromModel );
         }
     }
-
-    g_free( pCommand );
 }
 
 void GtkSalMenu::SetItemImage( unsigned, SalMenuItem*, const Image& )
