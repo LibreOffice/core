@@ -41,9 +41,6 @@ public:
 
     SalSystem* CreateSalSystem() override;
 
-    css::uno::Reference<css::uno::XInterface>
-    CreateClipboard(const css::uno::Sequence<css::uno::Any>& i_rArguments) override;
-
     void GetWorkArea(AbsoluteScreenPixelRectangle& rRect);
     SalFrame* CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle) override;
     SalFrame* CreateChildFrame(SystemParentData* pParent, SalFrameStyleFlags nStyle) override;
