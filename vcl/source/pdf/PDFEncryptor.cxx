@@ -393,11 +393,7 @@ void PDFEncryptor::setupKeysAndCheck(vcl::PDFEncryptionProperties& rProperties)
     }
 }
 
-void PDFEncryptor::enableStreamEncryption() { m_bEncryptThisStream = true; }
-
-void PDFEncryptor::disableStreamEncryption() { m_bEncryptThisStream = false; }
-
-void PDFEncryptor::setupEncryption(std::vector<sal_uInt8> const& rEncryptionKey, sal_Int32 nObject)
+void PDFEncryptor::setupEncryption(std::vector<sal_uInt8>& rEncryptionKey, sal_Int32 nObject)
 {
     std::vector<sal_uInt8> aKey(rEncryptionKey.begin(), rEncryptionKey.begin() + m_nKeyLength);
     std::vector<sal_uInt8> aObjectArray{
@@ -418,10 +414,10 @@ void PDFEncryptor::setupEncryption(std::vector<sal_uInt8> const& rEncryptionKey,
 }
 
 /* implement the encryption part of the PDF spec encryption algorithm 3.1 */
-void PDFEncryptor::encrypt(const void* pInput, sal_uInt64 nInputSize, sal_uInt8* pOutput,
-                           sal_uInt64 nOutputsSize)
+void PDFEncryptor::encrypt(const void* pInput, sal_uInt64 nInputSize,
+                           std::vector<sal_uInt8>& rOutput, sal_uInt64 nOutputsSize)
 {
-    rtl_cipher_encodeARCFOUR(m_aCipher, pInput, sal_Size(nInputSize), pOutput,
+    rtl_cipher_encodeARCFOUR(m_aCipher, pInput, sal_Size(nInputSize), rOutput.data(),
                              sal_Size(nOutputsSize));
 }
 
