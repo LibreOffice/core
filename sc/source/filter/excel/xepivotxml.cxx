@@ -1241,25 +1241,28 @@ void XclExpXmlPivotTables::savePivotTableFormats(XclExpXmlStream& rStream, ScDPO
                         pAttributeList->add(XML_fieldPosition, OString::number(*rFormat.oFieldPosition));
                     pPivotStream->startElement(XML_pivotArea, pAttributeList);
                 }
-                pPivotStream->startElement(XML_references, XML_count, OString::number(rFormat.aSelections.size()));
-                for (sc::Selection const& rSelection : rFormat.getSelections())
+                if (rFormat.aSelections.size())
                 {
+                    pPivotStream->startElement(XML_references, XML_count, OString::number(rFormat.aSelections.size()));
+                    for (sc::Selection const& rSelection : rFormat.getSelections())
                     {
-                        auto pRefAttributeList = sax_fastparser::FastSerializerHelper::createAttrList();
-                        pRefAttributeList->add(XML_field, OString::number(sal_uInt32(rSelection.nField)));
-                        pRefAttributeList->add(XML_count, "1");
-                        if (!rSelection.bSelected) // default is true
-                            pRefAttributeList->add(XML_selected, "0");
-                        pPivotStream->startElement(XML_reference, pRefAttributeList);
-                    }
+                        {
+                            auto pRefAttributeList = sax_fastparser::FastSerializerHelper::createAttrList();
+                            pRefAttributeList->add(XML_field, OString::number(sal_uInt32(rSelection.nField)));
+                            pRefAttributeList->add(XML_count, "1");
+                            if (!rSelection.bSelected) // default is true
+                                pRefAttributeList->add(XML_selected, "0");
+                            pPivotStream->startElement(XML_reference, pRefAttributeList);
+                        }
 
-                    for (sal_uInt32 nIndex : rSelection.nIndices)
-                    {
-                        pPivotStream->singleElement(XML_x, XML_v, OString::number(nIndex));
+                        for (sal_uInt32 nIndex : rSelection.nIndices)
+                        {
+                            pPivotStream->singleElement(XML_x, XML_v, OString::number(nIndex));
+                        }
+                        pPivotStream->endElement(XML_reference);
                     }
-                    pPivotStream->endElement(XML_reference);
+                    pPivotStream->endElement(XML_references);
                 }
-                pPivotStream->endElement(XML_references);
                 pPivotStream->endElement(XML_pivotArea);
 
                 pPivotStream->endElement(XML_format);

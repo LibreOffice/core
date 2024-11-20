@@ -183,6 +183,8 @@ const sal_uInt16 BIFF12_DXF_FONT_HEIGHT     = 36;
 const sal_uInt16 BIFF12_DXF_FONT_SCHEME     = 37;
 const sal_uInt16 BIFF12_DXF_NUMFMT_CODE     = 38;
 const sal_uInt16 BIFF12_DXF_NUMFMT_ID       = 41;
+const sal_uInt16 BIFF12_DXF_CELL_LOCKED     = 43;
+const sal_uInt16 BIFF12_DXF_CELL_HIDDEN     = 44;
 
 // BIFF12 CELLSTYLE flags
 const sal_uInt16 BIFF12_CELLSTYLE_BUILTIN   = 0x0001;
@@ -1368,8 +1370,9 @@ bool operator==( const ApiProtectionData& rLeft, const ApiProtectionData& rRight
         (rLeft.maCellProt.IsPrintHidden   == rRight.maCellProt.IsPrintHidden);
 }
 
-Protection::Protection( const WorkbookHelper& rHelper ) :
-    WorkbookHelper( rHelper )
+Protection::Protection( const WorkbookHelper& rHelper, bool bDxf ) :
+    WorkbookHelper( rHelper ),
+    mbDxf( bDxf )
 {
 }
 
@@ -1377,6 +1380,23 @@ void Protection::importProtection( const AttributeList& rAttribs )
 {
     maModel.mbLocked = rAttribs.getBool( XML_locked, true );
     maModel.mbHidden = rAttribs.getBool( XML_hidden, false );
+}
+
+void Protection::importDxfProtection( sal_Int32 nElement, SequenceInputStream& rStrm )
+{
+    SAL_WARN_IF( !mbDxf, "sc", "Protection::importDxfProtection - missing protection flag" );
+    bool bFlag = rStrm.readuInt8() != 0;
+    switch( nElement )
+    {
+        case XML_locked:
+            maModel.mbLocked = bFlag;
+        break;
+        case XML_hidden:
+            maModel.mbHidden = bFlag;
+        break;
+        default:
+            OSL_FAIL( "Protection::importDxfProtection - unexpected element identifier" );
+    }
 }
 
 void Protection::setBiff12Data( sal_uInt32 nFlags )
@@ -2005,7 +2025,7 @@ Xf::Xf( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
     mnScNumFmt(0),
     maAlignment( rHelper ),
-    maProtection( rHelper ),
+    maProtection( rHelper, false ),
     meRotationRef( css::table::CellVertJustify2::STANDARD ),
     mpStyleSheet( nullptr )
 {
@@ -2341,6 +2361,13 @@ FillRef const & Dxf::createFill( bool bAlwaysNew )
     return mxFill;
 }
 
+ProtectionRef const & Dxf::createProtection( bool bAlwaysNew )
+{
+    if ( bAlwaysNew || !mxProtection )
+        mxProtection = std::make_shared<Protection>( *this, true );
+    return mxProtection;
+}
+
 void Dxf::importNumFmt( const AttributeList& rAttribs )
 {
     // don't propagate number formats defined in Dxf entries
@@ -2391,6 +2418,8 @@ void Dxf::importDxf( SequenceInputStream& rStrm )
             case BIFF12_DXF_FONT_SCHEME:        createFont( false )->importDxfScheme( rStrm );                          break;
             case BIFF12_DXF_NUMFMT_CODE:        aFmtCode = BiffHelper::readString( rStrm, false );                      break;
             case BIFF12_DXF_NUMFMT_ID:          nNumFmtId = rStrm.readuInt16();                                         break;
+            case BIFF12_DXF_CELL_LOCKED:        createProtection( false )->importDxfProtection( XML_locked, rStrm );    break;
+            case BIFF12_DXF_CELL_HIDDEN:        createProtection( false )->importDxfProtection( XML_hidden, rStrm );    break;
         }
         rStrm.seek( nRecEnd );
     }

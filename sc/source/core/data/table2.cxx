@@ -433,20 +433,6 @@ void ScTable::DeleteArea(
                 aCol[i].DeleteArea(nRow1, nRow2, nDelFlag, bBroadcast, pBroadcastSpans);
         }
 
-            // Do not set protected cell in a protected table
-
-        if ( IsProtected() && (nDelFlag & InsertDeleteFlags::ATTRIB) )
-        {
-            // Do not overwrite cell protection if we are in a Pivot table area and it's not protected
-            const ScDPObject* pDPObj = rDocument.GetDPAtArea(nTab, nCol1, nRow1, nCol2, nRow2);
-            if (!pDPObj || (pDPObj && !GetProtection()->isOptionEnabled(ScTableProtection::PIVOT_TABLES)))
-            {
-                ScPatternAttr aPattern(rDocument.getCellAttributeHelper());
-                aPattern.GetItemSet().Put(ScProtectionAttr(false));
-                ApplyPatternArea(nCol1, nRow1, nCol2, nRow2, aPattern);
-            }
-        }
-
         if( nDelFlag & InsertDeleteFlags::ATTRIB )
             mpCondFormatList->DeleteArea( nCol1, nRow1, nCol2, nRow2 );
     }
@@ -474,29 +460,6 @@ void ScTable::DeleteSelection( InsertDeleteFlags nDelFlag, const ScMarkData& rMa
         if((nDelFlag & InsertDeleteFlags::ATTRIB) && rRange.aStart.Tab() == nTab)
             mpCondFormatList->DeleteArea( rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row() );
     }
-
-        // Do not set protected cell in a protected sheet
-
-    if ( IsProtected() && (nDelFlag & InsertDeleteFlags::ATTRIB) )
-    {
-        // Do not overwrite cell protection if we are in a Pivot table area and it's not protected
-        const ScRange& rRange = rMark.GetArea();
-        const ScDPObject* pDPObj = rDocument.GetDPAtArea(nTab,
-            rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row());
-        if (!pDPObj || (pDPObj && !GetProtection()->isOptionEnabled(ScTableProtection::PIVOT_TABLES)))
-        {
-            SfxItemSetFixed<ATTR_PATTERN_START, ATTR_PATTERN_END> aSet(*rDocument.GetPool());
-            aSet.Put(ScProtectionAttr(false));
-            ScItemPoolCache aCache(rDocument.getCellAttributeHelper(), aSet);
-            ApplySelectionCache(aCache, rMark);
-        }
-
-        SfxItemSetFixed<ATTR_PATTERN_START, ATTR_PATTERN_END> aSet(*rDocument.GetPool());
-        aSet.Put( ScProtectionAttr( false ) );
-        ScItemPoolCache aCache(rDocument.getCellAttributeHelper(), aSet );
-        ApplySelectionCache( aCache, rMark );
-    }
-
     // TODO: In the future we may want to check if the table has been
     // really modified before setting the stream invalid.
     SetStreamValid(false);
@@ -787,20 +750,6 @@ void ScTable::CopyFromClip(
                 pRowFlags->AndValue( j, ~CRFlags::ManualSize);
         }
     }
-
-    // Do not set protected cell in a protected sheet
-    if (IsProtected() && (rCxt.getInsertFlag() & InsertDeleteFlags::ATTRIB))
-    {
-        // Do not overwrite cell protection if we are in a Pivot table area and its not protected
-        const ScDPObject* pDPObj = rDocument.GetDPAtArea(nTab, nCol1, nRow1, nCol2, nRow2);
-        if (!pDPObj || (pDPObj && !GetProtection()->isOptionEnabled(ScTableProtection::PIVOT_TABLES)))
-        {
-            ScPatternAttr aPattern(rDocument.getCellAttributeHelper());
-            aPattern.GetItemSet().Put(ScProtectionAttr(false));
-            ApplyPatternArea(nCol1, nRow1, nCol2, nRow2, aPattern);
-        }
-    }
-
     // create deep copies for conditional formatting
     CopyConditionalFormat( nCol1, nRow1, nCol2, nRow2, nDx, nDy, pTable);
 }

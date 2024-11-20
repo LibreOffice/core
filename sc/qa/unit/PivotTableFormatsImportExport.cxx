@@ -57,6 +57,13 @@ Color getFontColor(ScDocument& rDoc, OUString const& rAddressString)
     return rItem.getColor();
 }
 
+bool getCellProtection(ScDocument& rDoc, OUString const& rAddressString)
+{
+    const ScPatternAttr* pPattern = rDoc.GetPattern(parseAddress(rDoc, rAddressString));
+    const ScProtectionAttr& rItem = pPattern->GetItem(ATTR_PROTECTION);
+    return rItem.GetProtection();
+}
+
 template <typename T> OUString checkNonEmptyAddresses(ScDocument& rDoc, T const& rArrayOfAddresses)
 {
     OUString aString;
@@ -66,7 +73,8 @@ template <typename T> OUString checkNonEmptyAddresses(ScDocument& rDoc, T const&
         aAddress.Parse(rAddressString, rDoc);
         const ScPatternAttr* pPattern = rDoc.GetPattern(aAddress);
         if (pPattern->GetItem(ATTR_FONT_COLOR).getColor() != COL_BLACK
-            || pPattern->GetItem(ATTR_BACKGROUND).GetColor() != COL_TRANSPARENT)
+            || pPattern->GetItem(ATTR_BACKGROUND).GetColor() != COL_TRANSPARENT
+            || !pPattern->GetItem(ATTR_PROTECTION).GetProtection())
         {
             aString += rAddressString + " ";
         }
@@ -414,6 +422,31 @@ CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport,
     assertTwoDataFieldColumns_WholeDataColumnSelected(*getScDoc());
     saveAndReload(u"Calc Office Open XML"_ustr);
     assertTwoDataFieldColumns_WholeDataColumnSelected(*getScDoc());
+}
+
+static void assertFields_WithCellProtection(ScDocument& rDoc)
+{
+    CPPUNIT_ASSERT_EQUAL(false, getCellProtection(rDoc, u"F18"_ustr));
+    CPPUNIT_ASSERT_EQUAL(false, getCellProtection(rDoc, u"F19"_ustr));
+    CPPUNIT_ASSERT_EQUAL(false, getCellProtection(rDoc, u"F20"_ustr));
+    CPPUNIT_ASSERT_EQUAL(false, getCellProtection(rDoc, u"G18"_ustr));
+    CPPUNIT_ASSERT_EQUAL(false, getCellProtection(rDoc, u"G19"_ustr));
+    CPPUNIT_ASSERT_EQUAL(false, getCellProtection(rDoc, u"G20"_ustr));
+
+    // Make sure the other cells have the font color or background set to default
+    std::vector<OUString> aEmptyAddresses{
+        u"F15"_ustr, u"G15"_ustr, u"F16"_ustr, u"G16"_ustr,
+        u"F17"_ustr, u"G17"_ustr, u"G21"_ustr, u"F21"_ustr,
+    };
+    CPPUNIT_ASSERT_EQUAL(OUString(), checkNonEmptyAddresses(rDoc, aEmptyAddresses));
+}
+
+CPPUNIT_TEST_FIXTURE(ScPivotTableFormatsImportExport, Pivot_Table_with_Cell_Protection)
+{
+    createScDoc("xlsx/pivot-table/Pivot_Table_with_Cell_Protection.xlsx");
+    assertFields_WithCellProtection(*getScDoc());
+    saveAndReload(u"Calc Office Open XML"_ustr);
+    assertFields_WithCellProtection(*getScDoc());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

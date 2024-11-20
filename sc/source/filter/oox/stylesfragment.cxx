@@ -151,8 +151,8 @@ ContextHandlerRef DxfContext::onCreateContext( sal_Int32 nElement, const Attribu
                 case XLS_TOKEN( numFmt ):       mxDxf->importNumFmt( rAttribs );        break;
 #if 0
                 case XLS_TOKEN( alignment ):    mxDxf->importAlignment( rAttribs );     break;
-                case XLS_TOKEN( protection ):   mxDxf->importProtection( rAttribs );    break;
 #endif
+                case XLS_TOKEN( protection ):   mxDxf->createProtection()->importProtection( rAttribs ); break;
             }
         break;
 
@@ -163,6 +163,7 @@ ContextHandlerRef DxfContext::onCreateContext( sal_Int32 nElement, const Attribu
                 case XLS_TOKEN( border ):       return new BorderContext( *this, mxDxf->createBorder() );
                 case XLS_TOKEN( fill ):         return new FillContext( *this, mxDxf->createFill() );
                 case XLS_TOKEN( numFmt ):       mxDxf->importNumFmt( rAttribs );     break;
+                case XLS_TOKEN( protection ):   mxDxf->createProtection()->importProtection( rAttribs ); break;
             }
         break;
     }

@@ -357,10 +357,13 @@ bool operator==( const ApiProtectionData& rLeft, const ApiProtectionData& rRight
 class Protection : public WorkbookHelper
 {
 public:
-    explicit            Protection( const WorkbookHelper& rHelper );
+    explicit            Protection( const WorkbookHelper& rHelper, bool bDxf );
 
     /** Sets all attributes from the protection element. */
     void                importProtection( const AttributeList& rAttribs );
+
+    /** Sets the protection attributes from the passed BIFF12 DXF record data. */
+    void                importDxfProtection( sal_Int32 nElement, SequenceInputStream& rStrm );
 
     /** Sets the protection attributes from the passed BIFF12 XF record data. */
     void                setBiff12Data( sal_uInt32 nFlags );
@@ -375,7 +378,10 @@ public:
 private:
     ProtectionModel     maModel;            /// Protection model data.
     ApiProtectionData   maApiData;          /// Protection data converted to API constants.
+    bool                mbDxf;
 };
+
+typedef std::shared_ptr< Protection > ProtectionRef;
 
 /** Contains XML attributes of a single border line. */
 struct BorderLineModel
@@ -667,6 +673,8 @@ public:
     BorderRef const &   createBorder( bool bAlwaysNew = true );
     /** Creates a new empty fill object. */
     FillRef const &     createFill( bool bAlwaysNew = true );
+    /** Creates a new empty protection object. */
+    ProtectionRef const & createProtection( bool bAlwaysNew = true );
 
     /** Inserts a new number format code. */
     void                importNumFmt( const AttributeList& rAttribs );
