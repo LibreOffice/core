@@ -2707,19 +2707,9 @@ bool WinSalGraphicsImpl::implDrawGradient(basegfx::B2DPolyPolygon const & /*rPol
     return false;
 }
 
-bool WinSalGraphicsImpl::supportsOperation(OutDevSupportType eType) const
+bool WinSalGraphicsImpl::supportsOperation(OutDevSupportType /*eType*/) const
 {
-    bool bRet = false;
-
-    switch (eType)
-    {
-        case OutDevSupportType::TransparentRect:
-            bRet = mrParent.mbVirDev || mrParent.mbWindow;
-            break;
-        default:
-            break;
-    }
-    return bRet;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

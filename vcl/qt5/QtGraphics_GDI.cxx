@@ -674,15 +674,6 @@ void QtGraphicsBackend::SetROPLineColor(SalROPColor /*nROPColor*/) {}
 
 void QtGraphicsBackend::SetROPFillColor(SalROPColor /*nROPColor*/) {}
 
-bool QtGraphicsBackend::supportsOperation(OutDevSupportType eType) const
-{
-    switch (eType)
-    {
-        case OutDevSupportType::TransparentRect:
-            return true;
-        default:
-            return false;
-    }
-}
+bool QtGraphicsBackend::supportsOperation(OutDevSupportType /*eType*/) const { return false; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

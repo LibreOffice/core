@@ -46,23 +46,9 @@ Color GetStripeColorB()
 static bool gbPixelSnapHairlineForwardInitial(false);
 static bool gbPixelSnapHairlineForwardLast(true);
 
-bool IsAAPossibleOnThisSystem()
-{
-    static const bool gbAllowAA
-        = Application::GetDefaultDevice()->SupportsOperation(OutDevSupportType::TransparentRect);
-    return gbAllowAA;
-}
-
-
 bool IsAntiAliasing()
 {
-    bool bAntiAliasing = drawinglayer::geometry::ViewInformation2D::getGlobalAntiAliasing();
-    if (bAntiAliasing && !IsAAPossibleOnThisSystem())
-    {
-        drawinglayer::geometry::ViewInformation2D::setGlobalAntiAliasing(false, true);
-        bAntiAliasing = false;
-    }
-    return bAntiAliasing;
+    return drawinglayer::geometry::ViewInformation2D::getGlobalAntiAliasing();
 }
 
 /**

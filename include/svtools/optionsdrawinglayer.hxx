@@ -42,11 +42,6 @@ namespace SvtOptionsDrawinglayer
 SVT_DLLPUBLIC Color       GetStripeColorA();
 SVT_DLLPUBLIC Color       GetStripeColorB();
 
-// #i95644# helper to check if AA is allowed on this system. Currently, for WIN it's disabled
-// and OutDevSupportType::TransparentRect is checked (this  hits XRenderExtension, e.g.
-// currently for SunRay as long as not supported there)
-SVT_DLLPUBLIC bool       IsAAPossibleOnThisSystem();
-
 // primitives
 SVT_DLLPUBLIC bool        IsAntiAliasing();
 SVT_DLLPUBLIC bool        IsSnapHorVerLinesToDiscrete();

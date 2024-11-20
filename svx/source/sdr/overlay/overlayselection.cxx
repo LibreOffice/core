@@ -106,12 +106,6 @@ namespace sdr::overlay
                         // not possible when in high contrast mode
                         return  OverlayType::Invert;
                     }
-
-                    if(!pOut->SupportsOperation(OutDevSupportType::TransparentRect))
-                    {
-                        // not possible when no fast transparence paint is supported on the system
-                        return OverlayType::Invert;
-                    }
                 }
             }
 

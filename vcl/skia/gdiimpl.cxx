@@ -2267,16 +2267,7 @@ void SkiaSalGraphicsImpl::drawGenericLayout(const GenericSalLayout& layout, Colo
     postDraw();
 }
 
-bool SkiaSalGraphicsImpl::supportsOperation(OutDevSupportType eType) const
-{
-    switch (eType)
-    {
-        case OutDevSupportType::TransparentRect:
-            return true;
-        default:
-            return false;
-    }
-}
+bool SkiaSalGraphicsImpl::supportsOperation(OutDevSupportType /*eType*/) const { return false; }
 
 static int getScaling()
 {

@@ -1326,16 +1326,6 @@ bool AquaGraphicsBackend::implDrawGradient(basegfx::B2DPolyPolygon const& /*rPol
     return false;
 }
 
-bool AquaGraphicsBackend::supportsOperation(OutDevSupportType eType) const
-{
-    switch (eType)
-    {
-        case OutDevSupportType::TransparentRect:
-            return true;
-        default:
-            break;
-    }
-    return false;
-}
+bool AquaGraphicsBackend::supportsOperation(OutDevSupportType /*eType*/) const { return false; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

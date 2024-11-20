@@ -1065,17 +1065,7 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
     m_xUseHardwareAccell->save_state();
 
     { // #i95644# AntiAliasing
-        if(SvtOptionsDrawinglayer::IsAAPossibleOnThisSystem())
-        {
-            m_xUseAntiAliase->set_active(SvtOptionsDrawinglayer::IsAntiAliasing());
-        }
-        else
-        {
-            m_xUseAntiAliase->set_active(false);
-            m_xUseAntiAliase->set_sensitive(false);
-            m_xUseAntiAliaseImg->set_visible(true);
-        }
-
+        m_xUseAntiAliase->set_active(SvtOptionsDrawinglayer::IsAntiAliasing());
         bEnable = !officecfg::Office::Common::Drawinglayer::AntiAliasing::isReadOnly();
         m_xUseAntiAliase->set_sensitive(bEnable);
         m_xUseAntiAliaseImg->set_visible(!bEnable);

@@ -1992,7 +1992,6 @@ bool CairoCommon::supportsOperation(OutDevSupportType eType)
 {
     switch (eType)
     {
-        case OutDevSupportType::TransparentRect:
         case OutDevSupportType::TransparentText:
             return true;
     }
