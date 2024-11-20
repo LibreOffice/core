@@ -115,6 +115,8 @@ namespace sd {
 class ViewShellBase::Implementation
 {
 public:
+    SdViewOptions maViewOptions;
+
     /** Main controller of the view shell.  During the switching from one
         stacked shell to another this pointer may be NULL.
     */
@@ -922,6 +924,16 @@ OUString ViewShellBase::GetInitialViewShellType() const
     return sRequestedView;
 }
 
+const SdViewOptions& ViewShellBase::GetViewOptions() const
+{
+    return mpImpl->maViewOptions;
+}
+
+void ViewShellBase::SetViewOptions(const SdViewOptions& rOptions) const
+{
+    mpImpl->maViewOptions = rOptions;
+}
+
 std::shared_ptr<tools::EventMultiplexer> const & ViewShellBase::GetEventMultiplexer() const
 {
     OSL_ASSERT(mpImpl != nullptr);
@@ -1138,48 +1150,24 @@ void ViewShellBase::NotifyCursor(SfxViewShell* pOtherShell) const
 
 ::Color ViewShellBase::GetColorConfigColor(svtools::ColorConfigEntry nColorType) const
 {
-    auto pViewShell = GetMainViewShell().get();
-    if (DrawViewShell* pCurrentDrawShell = dynamic_cast<DrawViewShell*>(pViewShell))
+    Color aColor;
+
+    const SdViewOptions& rViewOptions = GetViewOptions();
+    switch (nColorType)
     {
-        const SdViewOptions& rViewOptions = pCurrentDrawShell->GetViewOptions();
-        switch (nColorType)
+        case svtools::ColorConfigEntry::DOCCOLOR:
         {
-            case svtools::ColorConfigEntry::DOCCOLOR:
-            {
-                return rViewOptions.mnDocBackgroundColor;
-            }
-            // Should never be called for an unimplemented color type
-            default:
-            {
-                O3TL_UNREACHABLE;
-            }
+            aColor = rViewOptions.mnDocBackgroundColor;
+            break;
         }
-    }
-    // IASS: also need to handle OutlineViewShell
-    else if (nullptr != dynamic_cast<OutlineViewShell*>(pViewShell))
-    {
-        switch (nColorType)
+        // Should never be called for an unimplemented color type
+        default:
         {
-            case svtools::ColorConfigEntry::DOCCOLOR:
-            {
-                // IASS: OutlineViewShell does not have any SdViewOptions and no access
-                // to the (currently not shown) DrawViewShell. If that should be
-                // needed it may be added. For now, assume that DOCCOLOR is COL_WHITE
-                return COL_WHITE;
-            }
-            // Should never be called for an unimplemented color type
-            default:
-            {
-                O3TL_UNREACHABLE;
-            }
+            O3TL_UNREACHABLE;
         }
     }
 
-    SAL_WARN("sd", "Unknown ViewShell used: Consider adding a case for this to get correct colors, COL_WHITE is used as fallback.");
-    // NOTE: This returned COL_BLACK. For unknown ViewShells I would assume that
-    //       returning COL_WHITE would be safer - a better default for an office
-    //       application dealing with Paper as target
-    return COL_WHITE;
+    return aColor;
 }
 
 //===== ViewShellBase::Implementation =========================================
@@ -1565,6 +1553,14 @@ void CurrentPageSetter::operator() (bool)
 }
 
 } // end of anonymous namespace
+
+SdViewOptions::SdViewOptions()
+    : msColorSchemeName(u"Default"_ustr)
+{
+    const svtools::ColorConfig& rColorConfig = SdModule::get()->GetColorConfig();
+    mnAppBackgroundColor = rColorConfig.GetColorValue(svtools::APPBACKGROUND).nColor;
+    mnDocBackgroundColor = rColorConfig.GetColorValue(svtools::DOCCOLOR).nColor;
+}
 
 //===== FocusForwardingWindow =================================================
 

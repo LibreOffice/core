@@ -24,6 +24,7 @@
 #include <memory>
 
 class SdDrawDocument;
+struct SdViewOptions;
 class SfxRequest;
 
 namespace sd::tools {
@@ -226,6 +227,9 @@ public:
 
     void setLOKVisibleArea(const ::tools::Rectangle& rArea) { maLOKVisibleArea = rArea; }
     virtual ::tools::Rectangle getLOKVisibleArea() const override { return maLOKVisibleArea; }
+
+    const SdViewOptions& GetViewOptions() const;
+    void SetViewOptions(const SdViewOptions& rOptions) const;
 
 protected:
 

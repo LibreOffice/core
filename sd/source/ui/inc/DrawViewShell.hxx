@@ -383,7 +383,8 @@ public:
 
     bool IsInSwitchPage() const { return mbIsInSwitchPage; }
 
-    const SdViewOptions& GetViewOptions() const { return maViewOptions; }
+    const SdViewOptions& GetViewOptions() const;
+    void SetViewOptions(const SdViewOptions& rOptions);
     //move this method to ViewShell.
     //void  NotifyAccUpdate();
 
@@ -508,7 +509,6 @@ private:
     std::unique_ptr<AnnotationManager> mpAnnotationManager;
     std::unique_ptr<ViewOverlayManager> mpViewOverlayManager;
     std::vector<std::unique_ptr<SdrExternalToolEdit>> m_ExternalEdits;
-    SdViewOptions maViewOptions;
 
     css::uno::Reference<css::presentation::XSlideShow> mxSlideShow;
 };
