@@ -39,7 +39,7 @@ public:
 };
 
 Test::Test()
-    : UnoApiXmlTest(u"/sc/qa/unit/tiledrendering2/data/"_ustr)
+    : UnoApiXmlTest(u"/sc/qa/unit/tiledrendering/data/"_ustr)
 {
 }
 
