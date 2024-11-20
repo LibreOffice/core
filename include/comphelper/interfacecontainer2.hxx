@@ -191,6 +191,24 @@ public:
     template <typename ListenerT, typename FuncT>
     inline void forEach( FuncT const& func );
 
+    /** Executes a functor for each contained listener of specified type, e.g.
+        <code>forEach<awt::XPaintListener>(...</code>.
+
+        If a css::lang::DisposedException occurs which relates to
+        the called listener, then that listener is removed from the container.
+
+        If any other UNO exception occurs, the exceptionFunc is called.
+
+        @tparam ListenerT listener type
+        @tparam FuncT unary functor type, let your compiler deduce this for you
+        @tparam ExceptionFuncT nullary functor type, let your compiler deduce this for you
+        @param func unary functor object expecting an argument of type
+                    css::uno::Reference<ListenerT>
+        @param exceptionFunc nullary functor object
+    */
+    template <typename ListenerT, typename FuncT, typename ExceptionFuncT>
+    inline void forEach( FuncT const& func, ExceptionFuncT const& exceptionFunc );
+
     /** Calls a UNO listener method for each contained listener.
 
         The listener method must take a single argument of type EventT,
@@ -214,6 +232,28 @@ public:
     */
     template< typename ListenerT, typename EventT >
     inline void notifyEach( void ( SAL_CALL ListenerT::*NotificationMethod )( const EventT& ), const EventT& Event );
+
+    /** Calls a UNO listener method for each contained listener.
+
+        The listener method must take a single argument of type EventT,
+        and return <code>void</code>.
+
+        If a css::lang::DisposedException occurs which relates to
+        the called listener, then that listener is removed from the container.
+
+        If any other UNO exception occurs, the exceptionFunc is called.
+
+        @tparam ListenerT UNO event listener type, let your compiler deduce this for you
+        @tparam EventT event type, let your compiler deduce this for you
+        @tparam ExceptionFuncT nullary functor type, let your compiler deduce this for you
+        @param NotificationMethod
+            Pointer to a method of a ListenerT interface.
+        @param Event
+            Event to notify to all contained listeners
+        @param exceptionFunc nullary functor object
+    */
+    template< typename ListenerT, typename EventT, typename ExceptionFuncT >
+    inline void notifyEach( void ( SAL_CALL ListenerT::*NotificationMethod )( const EventT& ), const EventT& Event, const ExceptionFuncT& exceptionFunc );
 
 private:
 friend class OInterfaceIteratorHelper2;
@@ -273,10 +313,38 @@ inline void OInterfaceContainerHelper2::forEach( FuncT const& func )
     }
 }
 
+template <typename ListenerT, typename FuncT, typename ExceptionFuncT>
+inline void OInterfaceContainerHelper2::forEach(
+    FuncT const& func, ExceptionFuncT const& exceptionFunc )
+{
+    OInterfaceIteratorHelper2 iter( *this );
+    while (iter.hasMoreElements()) {
+        css::uno::Reference<ListenerT> const xListener( iter.next(), css::uno::UNO_QUERY );
+        if (xListener.is()) {
+            try {
+                func( xListener );
+            }
+            catch (css::lang::DisposedException const& exc) {
+                if (exc.Context == xListener)
+                    iter.remove();
+            }
+            catch (css::uno::Exception) {
+                exceptionFunc();
+            }
+        }
+    }
+}
+
 template< typename ListenerT, typename EventT >
 inline void OInterfaceContainerHelper2::notifyEach( void ( SAL_CALL ListenerT::*NotificationMethod )( const EventT& ), const EventT& Event )
 {
     forEach< ListenerT, NotifySingleListener< ListenerT, EventT > >( NotifySingleListener< ListenerT, EventT >( NotificationMethod, Event ) );
+}
+
+template< typename ListenerT, typename EventT, typename ExceptionFuncT >
+inline void OInterfaceContainerHelper2::notifyEach( void ( SAL_CALL ListenerT::*NotificationMethod )( const EventT& ), const EventT& Event, const ExceptionFuncT& exceptionFunc )
+{
+    forEach< ListenerT, NotifySingleListener< ListenerT, EventT > >( NotifySingleListener< ListenerT, EventT >( NotificationMethod, Event ), exceptionFunc );
 }
 
 }

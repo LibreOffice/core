@@ -384,9 +384,11 @@ void SfxGlobalEvents_Impl::implts_notifyListener(const document::DocumentEvent& 
 {
     // containers are threadsafe
     document::EventObject aLegacyEvent(aEvent.Source, aEvent.EventName);
-    m_aLegacyListeners.notifyEach( &document::XEventListener::notifyEvent, aLegacyEvent );
+    m_aLegacyListeners.notifyEach(
+        &document::XEventListener::notifyEvent, aLegacyEvent,
+        [] { TOOLS_WARN_EXCEPTION("sfx.notify", "ignoring"); } );
 
-    m_aDocumentListeners.notifyEach( &document::XDocumentEventListener::documentEventOccured, aEvent );
+    m_aDocumentListeners.notifyEach( &document::XDocumentEventListener::documentEventOccured, aEvent, [] { TOOLS_WARN_EXCEPTION("sfx.notify", "ignoring"); } );
 }
 
 
