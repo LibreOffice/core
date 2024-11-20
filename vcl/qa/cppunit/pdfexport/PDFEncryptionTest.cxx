@@ -180,6 +180,70 @@ CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testGenerateOandOE)
     CPPUNIT_ASSERT_EQUAL(
         true, vcl::pdf::validateOwnerPassword(aOwnerPass.data(), aOwnerPass.size(), U, O));
 }
+
+CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testPermsEncryption)
+{
+    // Encrypts file permissions for /Perms entry
+
+    // We use a existing encrypted /Perm to validate the decryption and re-encryption
+    // algorithm works correctly.
+
+    const sal_uInt8 pUserPass[] = { 'T', 'e', 's', 't' };
+
+    // U and UE taken from an PDF that was encrypted with "Test" as password
+    std::vector<sal_uInt8> U = parseHex("7BD210807A0277FECC52C261C442F02E1AD62C1A23553348B8F8AF7320"
+                                        "DC9978FAB7E65E1BF4CA76F4BE5E6D2AA8C7D5");
+    std::vector<sal_uInt8> UE
+        = parseHex("67022D91A6BDF3179F488DC9658E54B78A0AD05C6A9C419DCD17A6941C151197");
+
+    // We decrypt the key, which is needed to decrypt and encrypt the /Perms content
+    std::vector<sal_uInt8> aKey = vcl::pdf::decryptKey(pUserPass, 4, U, UE);
+
+    // Known encrypted /Perms content taken from the PDF
+    std::vector<sal_uInt8> aPermEncrypted = parseHex("6a2306c6e5e71a5bbd8404b07abec38f");
+
+    // Decrypt
+    std::vector<sal_uInt8> aPermsDecrpyted = vcl::pdf::decryptPerms(aPermEncrypted, aKey);
+
+    // Encrypt again
+    std::vector<sal_uInt8> aPermsReencrypted = vcl::pdf::encryptPerms(aPermsDecrpyted, aKey);
+
+    // Original encrypted /Perm content should be equal to decrypted and encrypted again
+    CPPUNIT_ASSERT_EQUAL(std::string("6a2306c6e5e71a5bbd8404b07abec38f"),
+                         comphelper::hashToString(aPermsReencrypted));
+
+    // Always should be a,b,d
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8('a'), aPermsDecrpyted[9]);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8('d'), aPermsDecrpyted[10]);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8('b'), aPermsDecrpyted[11]);
+
+    // Metadata encrypted? - T or F
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8('T'), aPermsDecrpyted[8]);
+
+    // Decrypting the access permissions
+    sal_Int32 aAccessPermissions
+        = sal_Int32(aPermsDecrpyted[0]) + sal_Int32(aPermsDecrpyted[1] << 8)
+          + sal_Int32(aPermsDecrpyted[2] << 16) + sal_Int32(aPermsDecrpyted[3] << 24);
+
+    // Taken from the PDF (/P entry)
+    sal_Int32 nExpectedAccessPermisssions = -4;
+    CPPUNIT_ASSERT_EQUAL(nExpectedAccessPermisssions, aAccessPermissions);
+
+    // the whole decrypted /Perms content
+    CPPUNIT_ASSERT_EQUAL(std::string("fcffffffffffffff54616462bb609a8a"),
+                         comphelper::hashToString(aPermsDecrpyted));
+
+    // Check the creating /Perm content from access permissions works correctly
+    std::vector<sal_uInt8> aPermsCreated = vcl::pdf::createPerms(nExpectedAccessPermisssions, true);
+
+    // Last 12 bytes are random, so we shouldn't check those
+    std::vector<sal_uInt8> aPermsWithoutRandomBytes(aPermsCreated.begin(),
+                                                    aPermsCreated.begin() + 12);
+
+    // Should match the decrypted content
+    CPPUNIT_ASSERT_EQUAL(std::string("fcffffffffffffff54616462"),
+                         comphelper::hashToString(aPermsWithoutRandomBytes));
+}
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();

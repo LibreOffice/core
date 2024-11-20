@@ -129,6 +129,48 @@ std::vector<sal_uInt8> decryptKey(const sal_uInt8* pPass, size_t nLength, std::v
     return aFileEncryptionKey;
 }
 
+/** Algorithm 13: Validating the permissions */
+std::vector<sal_uInt8> decryptPerms(std::vector<sal_uInt8>& rPermsEncrypted,
+                                    std::vector<sal_uInt8>& rFileEncryptionKey)
+{
+    std::vector<sal_uInt8> aPermsDecrpyted(rPermsEncrypted.size());
+    std::vector<sal_uInt8> iv(IV_SIZE, 0);
+    comphelper::Decrypt aDecryptor(rFileEncryptionKey, iv, comphelper::CryptoType::AES_256_ECB);
+    aDecryptor.update(aPermsDecrpyted, rPermsEncrypted);
+    return aPermsDecrpyted;
+}
+
+/** Algorithm 10 step f) */
+std::vector<sal_uInt8> encryptPerms(std::vector<sal_uInt8>& rPerms,
+                                    std::vector<sal_uInt8>& rFileEncryptionKey)
+{
+    std::vector<sal_uInt8> aPermsEncrypted(rPerms.size());
+    std::vector<sal_uInt8> iv(IV_SIZE, 0);
+    comphelper::Encrypt aEncryptor(rFileEncryptionKey, iv, comphelper::CryptoType::AES_256_ECB);
+    aEncryptor.update(aPermsEncrypted, rPerms);
+    return aPermsEncrypted;
+}
+
+/** Algorithm 10 steps a) - e) */
+std::vector<sal_uInt8> createPerms(sal_Int32 nAccessPermissions, bool bEncryptMetadata)
+{
+    std::vector<sal_uInt8> aPermsCreated;
+    generateBytes(aPermsCreated, 16);
+    aPermsCreated[0] = sal_uInt8(nAccessPermissions);
+    aPermsCreated[1] = sal_uInt8(nAccessPermissions >> 8);
+    aPermsCreated[2] = sal_uInt8(nAccessPermissions >> 16);
+    aPermsCreated[3] = sal_uInt8(nAccessPermissions >> 24);
+    aPermsCreated[4] = sal_uInt8(0xff);
+    aPermsCreated[5] = sal_uInt8(0xff);
+    aPermsCreated[6] = sal_uInt8(0xff);
+    aPermsCreated[7] = sal_uInt8(0xff);
+    aPermsCreated[8] = bEncryptMetadata ? 'T' : 'F'; // Encrypt metadata
+    aPermsCreated[9] = 'a';
+    aPermsCreated[10] = 'd';
+    aPermsCreated[11] = 'b';
+    return aPermsCreated;
+}
+
 /** Algorithm 2.B: Computing a hash (revision 6 and later) */
 std::vector<sal_uInt8> computeHashR6(const sal_uInt8* pPassword, size_t nPasswordLength,
                                      std::vector<sal_uInt8> const& rValidationSalt,
