@@ -5765,25 +5765,25 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
             break;
 
         case RES_PARATR_LINESPACING:
-            ParaLineSpacing( static_cast< const SvxLineSpacingItem& >( rHt ) );
+            ParaLineSpacing(rHt.StaticWhichCast(RES_PARATR_LINESPACING));
             break;
         case RES_PARATR_ADJUST:
-            ParaAdjust( static_cast< const SvxAdjustItem& >( rHt ) );
+            ParaAdjust(rHt.StaticWhichCast(RES_PARATR_ADJUST));
             break;
         case RES_PARATR_SPLIT:
-            ParaSplit( static_cast< const SvxFormatSplitItem& >( rHt ) );
+            ParaSplit(rHt.StaticWhichCast(RES_PARATR_SPLIT));
             break;
         case RES_PARATR_WIDOWS:
-            ParaWidows( static_cast< const SvxWidowsItem& >( rHt ) );
+            ParaWidows(rHt.StaticWhichCast(RES_PARATR_WIDOWS));
             break;
         case RES_PARATR_TABSTOP:
-            ParaTabStop( static_cast< const SvxTabStopItem& >( rHt ) );
+            ParaTabStop(rHt.StaticWhichCast(RES_PARATR_TABSTOP));
             break;
         case RES_PARATR_HYPHENZONE:
-            ParaHyphenZone( static_cast< const SvxHyphenZoneItem& >( rHt ) );
+            ParaHyphenZone(rHt.StaticWhichCast(RES_PARATR_HYPHENZONE));
             break;
         case RES_PARATR_NUMRULE:
-            ParaNumRule( static_cast< const SwNumRuleItem& >( rHt ) );
+            ParaNumRule(rHt.StaticWhichCast(RES_PARATR_NUMRULE));
             break;
         case RES_PARATR_SCRIPTSPACE:
             ParaScriptSpace( static_cast< const SfxBoolItem& >( rHt ) );
@@ -5795,38 +5795,38 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
             ParaForbiddenRules( static_cast< const SfxBoolItem& >( rHt ) );
             break;
         case RES_PARATR_VERTALIGN:
-            ParaVerticalAlign( static_cast< const SvxParaVertAlignItem& >( rHt ) );
+            ParaVerticalAlign(rHt.StaticWhichCast(RES_PARATR_VERTALIGN));
             break;
         case RES_PARATR_SNAPTOGRID:
-            ParaSnapToGrid( static_cast< const SvxParaGridItem& >( rHt ) );
+            ParaSnapToGrid(rHt.StaticWhichCast(RES_PARATR_SNAPTOGRID));
             break;
 
         case RES_FRM_SIZE:
             FormatFrameSize( static_cast< const SwFormatFrameSize& >( rHt ) );
             break;
         case RES_PAPER_BIN:
-            FormatPaperBin( static_cast< const SvxPaperBinItem& >( rHt ) );
+            FormatPaperBin(rHt.StaticWhichCast(RES_PAPER_BIN));
             break;
         case RES_MARGIN_FIRSTLINE:
-            FormatFirstLineIndent(static_cast<const SvxFirstLineIndentItem &>(rHt));
+            FormatFirstLineIndent(rHt.StaticWhichCast(RES_MARGIN_FIRSTLINE));
             break;
         case RES_MARGIN_TEXTLEFT:
-            FormatTextLeftMargin(static_cast<const SvxTextLeftMarginItem &>(rHt));
+            FormatTextLeftMargin(rHt.StaticWhichCast(RES_MARGIN_TEXTLEFT));
             break;
         case RES_MARGIN_RIGHT:
-            FormatRightMargin(static_cast<const SvxRightMarginItem &>(rHt));
+            FormatRightMargin(rHt.StaticWhichCast(RES_MARGIN_RIGHT));
             break;
         case RES_LR_SPACE:
-            FormatLRSpace( static_cast< const SvxLRSpaceItem& >( rHt ) );
+            FormatLRSpace(rHt.StaticWhichCast(RES_LR_SPACE));
             break;
         case RES_UL_SPACE:
-            FormatULSpace( static_cast< const SvxULSpaceItem& >( rHt ) );
+            FormatULSpace(rHt.StaticWhichCast(RES_UL_SPACE));
             break;
         case RES_PAGEDESC:
             FormatPageDescription( static_cast< const SwFormatPageDesc& >( rHt ) );
             break;
         case RES_BREAK:
-            FormatBreak( static_cast< const SvxFormatBreakItem& >( rHt ) );
+            FormatBreak(rHt.StaticWhichCast(RES_BREAK));
             break;
         case RES_SURROUND:
             FormatSurround( static_cast< const SwFormatSurround& >( rHt ) );
@@ -5841,7 +5841,7 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
             FormatAnchor( static_cast< const SwFormatAnchor& >( rHt ) );
             break;
         case RES_BACKGROUND:
-            FormatBackground( static_cast< const SvxBrushItem& >( rHt ) );
+            FormatBackground(rHt.StaticWhichCast(RES_BACKGROUND));
             break;
         case XATTR_FILLSTYLE:
             FormatFillStyle( static_cast< const XFillStyleItem& >( rHt ) );
@@ -5850,34 +5850,34 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
             FormatFillGradient( static_cast< const XFillGradientItem& >( rHt ) );
             break;
         case RES_BOX:
-            FormatBox( static_cast< const SvxBoxItem& >( rHt ) );
+            FormatBox(rHt.StaticWhichCast(RES_BOX));
             break;
         case RES_COL:
             FormatColumns( static_cast< const SwFormatCol& >( rHt ) );
             break;
         case RES_KEEP:
-            FormatKeep( static_cast< const SvxFormatKeepItem& >( rHt ) );
+            FormatKeep(rHt.StaticWhichCast(RES_KEEP));
             break;
         case RES_TEXTGRID:
-            FormatTextGrid( static_cast< const SwTextGridItem& >( rHt ) );
+            FormatTextGrid(rHt.StaticWhichCast(RES_TEXTGRID));
             break;
         case RES_LINENUMBER:
             FormatLineNumberingBase(static_cast<const SwFormatLineNumber&>(rHt));
             break;
         case RES_FRAMEDIR:
-            FormatFrameDirection( static_cast< const SvxFrameDirectionItem& >( rHt ) );
+            FormatFrameDirection(rHt.StaticWhichCast(RES_FRAMEDIR));
             break;
         case RES_PARATR_GRABBAG:
-            ParaGrabBag(static_cast<const SfxGrabBagItem&>(rHt));
+            ParaGrabBag(rHt.StaticWhichCast(RES_PARATR_GRABBAG));
             break;
         case RES_PARATR_OUTLINELEVEL:
-            ParaOutlineLevelBase(static_cast<const SfxUInt16Item&>(rHt));
+            ParaOutlineLevelBase(rHt.StaticWhichCast(RES_PARATR_OUTLINELEVEL));
             break;
         case RES_CHRATR_GRABBAG:
-            CharGrabBag(static_cast<const SfxGrabBagItem&>(rHt));
+            CharGrabBag(rHt.StaticWhichCast(RES_CHRATR_GRABBAG));
             break;
         case RES_RTL_GUTTER:
-            SectionRtlGutter(static_cast<const SfxBoolItem&>(rHt));
+            SectionRtlGutter(rHt.StaticWhichCast(RES_RTL_GUTTER));
             break;
         case RES_TXTATR_LINEBREAK:
             TextLineBreak(static_cast<const SwFormatLineBreak&>(rHt));
