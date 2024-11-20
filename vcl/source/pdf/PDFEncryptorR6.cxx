@@ -238,6 +238,17 @@ std::vector<sal_uInt8> computeHashR6(const sal_uInt8* pPassword, size_t nPasswor
     return std::vector<sal_uInt8>(K.begin(), K.begin() + 32);
 }
 
+size_t addPaddingToVector(std::vector<sal_uInt8>& rVector, size_t nBlockSize)
+{
+    size_t nPaddedSize = comphelper::roundUp(rVector.size(), size_t(nBlockSize));
+    if (nPaddedSize > rVector.size())
+    {
+        sal_uInt8 nPaddedValue = sal_uInt8(nPaddedSize - rVector.size());
+        rVector.resize(nPaddedSize, nPaddedValue);
+    }
+    return nPaddedSize;
+}
+
 } // end vcl::pdf
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

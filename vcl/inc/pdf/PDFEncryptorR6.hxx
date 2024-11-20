@@ -101,6 +101,12 @@ VCL_DLLPUBLIC std::vector<sal_uInt8> encryptPerms(std::vector<sal_uInt8>& rPerms
 VCL_DLLPUBLIC std::vector<sal_uInt8> createPerms(sal_Int32 nAccessPermissions,
                                                  bool bEncryptMetadata);
 
+/** Padding as described in Internet RFC 8018
+ *
+ * Described in ISO 32000-2:2020(E) - 7.6.3.1
+ */
+VCL_DLLPUBLIC size_t addPaddingToVector(std::vector<sal_uInt8>& rVector, size_t nBlockSize);
+
 } // end vcl::pdf
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
