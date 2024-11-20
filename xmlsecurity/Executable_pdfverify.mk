@@ -23,6 +23,7 @@ $(eval $(call gb_Executable_use_libraries,pdfverify,\
     cppu \
     cppuhelper \
     sal \
+    svl \
     tl \
     vcl \
     xmlsecurity \
