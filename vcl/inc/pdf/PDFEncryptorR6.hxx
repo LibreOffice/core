@@ -76,6 +76,31 @@ VCL_DLLPUBLIC std::vector<sal_uInt8> decryptKey(const sal_uInt8* pUserPass, size
                                                 std::vector<sal_uInt8>& U,
                                                 std::vector<sal_uInt8>& UE);
 
+/** Algorithm 13: Validating the permissions (Security handlers of revision 6)
+ *
+ * Described in ISO 32000-2:2020(E) - 7.6.4.4.12
+ */
+VCL_DLLPUBLIC std::vector<sal_uInt8> decryptPerms(std::vector<sal_uInt8>& rPermsEncrypted,
+                                                  std::vector<sal_uInt8>& rFileEncryptionKey);
+
+/** Algorithm 10 step f)
+ *
+ * Computing the encryption dictionary’s Perms (permissions) value (Security handlers of revision 6)
+ *
+ * Described in ISO 32000-2:2020(E) - 7.6.4.4.9
+ */
+VCL_DLLPUBLIC std::vector<sal_uInt8> encryptPerms(std::vector<sal_uInt8>& rPerms,
+                                                  std::vector<sal_uInt8>& rFileEncryptionKey);
+
+/** Algorithm 10 steps a) - e)
+ *
+ * Computing the encryption dictionary’s Perms (permissions) value (Security handlers of revision 6)
+ *
+ * Described in ISO 32000-2:2020(E) - 7.6.4.4.9
+ */
+VCL_DLLPUBLIC std::vector<sal_uInt8> createPerms(sal_Int32 nAccessPermissions,
+                                                 bool bEncryptMetadata);
+
 } // end vcl::pdf
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
