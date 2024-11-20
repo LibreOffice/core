@@ -149,9 +149,6 @@ public:
 
     virtual void invert(sal_uInt32 nPoints, const Point* pPtAry, SalInvert nFlags) override;
 
-    virtual bool drawEPS(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,
-                         void* pPtr, sal_uInt32 nSize) override;
-
     /** Render bitmap with alpha channel
 
         @param rSourceBitmap

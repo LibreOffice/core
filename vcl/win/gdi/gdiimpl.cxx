@@ -235,11 +235,6 @@ WinSalGraphicsImpl::~WinSalGraphicsImpl()
     }
 }
 
-bool WinSalGraphicsImpl::drawEPS(tools::Long, tools::Long, tools::Long, tools::Long, void*, sal_uInt32)
-{
-    return false;
-}
-
 void WinSalGraphicsImpl::copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics )
 {
     HDC     hSrcDC;

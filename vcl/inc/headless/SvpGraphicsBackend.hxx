@@ -102,9 +102,6 @@ public:
 
     void invert(sal_uInt32 nPoints, const Point* pPtAry, SalInvert nFlags) override;
 
-    bool drawEPS(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,
-                 void* pPtr, sal_uInt32 nSize) override;
-
     bool blendBitmap(const SalTwoRect&, const SalBitmap& rBitmap) override;
 
     bool blendAlphaBitmap(const SalTwoRect&, const SalBitmap& rSrcBitmap,

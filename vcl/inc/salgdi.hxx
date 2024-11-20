@@ -517,11 +517,12 @@ protected:
 
     virtual void                invert( sal_uInt32 nPoints, const Point* pPtAry, SalInvert nFlags ) = 0;
 
+    /// Only implemented by the macOS Quartz backend and the MS-Windows GDI backend.
     virtual bool                drawEPS(
-                                    tools::Long nX, tools::Long nY,
-                                    tools::Long nWidth, tools::Long nHeight,
-                                    void* pPtr,
-                                    sal_uInt32 nSize ) = 0;
+                                    tools::Long /*nX*/, tools::Long /*nY*/,
+                                    tools::Long /*nWidth*/, tools::Long /*nHeight*/,
+                                    void* /*pPtr*/,
+                                    sal_uInt32 /*nSize*/ ) { return false; }
 
     /** Blend the bitmap with the current buffer */
     virtual bool                blendBitmap(

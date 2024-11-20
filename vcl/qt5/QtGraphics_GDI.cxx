@@ -570,12 +570,6 @@ void QtGraphicsBackend::invert(sal_uInt32 /*nPoints*/, const Point* /*pPtAry*/,
 {
 }
 
-bool QtGraphicsBackend::drawEPS(tools::Long /*nX*/, tools::Long /*nY*/, tools::Long /*nWidth*/,
-                                tools::Long /*nHeight*/, void* /*pPtr*/, sal_uInt32 /*nSize*/)
-{
-    return false;
-}
-
 bool QtGraphicsBackend::blendBitmap(const SalTwoRect&, const SalBitmap& /*rBitmap*/)
 {
     return false;

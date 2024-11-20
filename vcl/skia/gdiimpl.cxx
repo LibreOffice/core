@@ -1595,12 +1595,6 @@ void SkiaSalGraphicsImpl::invert(sal_uInt32 nPoints, const Point* pPointArray, S
     invert(aPolygon, eFlags);
 }
 
-bool SkiaSalGraphicsImpl::drawEPS(tools::Long, tools::Long, tools::Long, tools::Long, void*,
-                                  sal_uInt32)
-{
-    return false;
-}
-
 // Create SkImage from a bitmap and possibly an alpha mask (the usual VCL one-minus-alpha),
 // with the given target size. Result will be possibly cached, unless disabled.
 // Especially in raster mode scaling and alpha blending may be expensive if done repeatedly.
