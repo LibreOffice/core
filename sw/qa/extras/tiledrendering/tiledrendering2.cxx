@@ -52,7 +52,7 @@ protected:
 };
 
 SwTiledRenderingTest::SwTiledRenderingTest()
-    : SwModelTestBase(u"/sw/qa/extras/tiledrendering2/data/"_ustr)
+    : SwModelTestBase(u"/sw/qa/extras/tiledrendering/data/"_ustr)
 {
 }
 
