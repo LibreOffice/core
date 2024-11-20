@@ -127,6 +127,59 @@ CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testComputeHashForR6)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testGenerateUandUE)
+{
+    // Checks we calculate U and UE correctly
+    const sal_uInt8 pUserPass[] = { 'T', 'e', 's', 't' };
+
+    std::vector<sal_uInt8> aInputKey = vcl::pdf::generateKey();
+
+    std::vector<sal_uInt8> U;
+    std::vector<sal_uInt8> UE;
+
+    // Generate the U and UE from the user password and encrypt the
+    // encryption key into UE
+    vcl::pdf::generateUandUE(pUserPass, 4, aInputKey, U, UE);
+
+    // Checks that the U validates the password (would fail if the U
+    // would be calculated wrongly).
+    CPPUNIT_ASSERT_EQUAL(true, vcl::pdf::validateUserPassword(pUserPass, 4, U));
+
+    // Decrypt the key - this would fail if U and UE would be calculated
+    // wrongly
+    auto aDecryptedKey = vcl::pdf::decryptKey(pUserPass, 4, U, UE);
+
+    // Decrypted key and input key need to match
+    CPPUNIT_ASSERT_EQUAL(comphelper::hashToString(aInputKey),
+                         comphelper::hashToString(aDecryptedKey));
+}
+
+CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testGenerateOandOE)
+{
+    // Checks we calculate O and OE correctly
+
+    const auto aUserPass = std::to_array<sal_uInt8>({ 'T', 'e', 's', 't' });
+    const auto aOwnerPass = std::to_array<sal_uInt8>({ 'T', 'e', 's', 't', '2' });
+
+    std::vector<sal_uInt8> aInputKey = vcl::pdf::generateKey();
+
+    std::vector<sal_uInt8> U;
+    std::vector<sal_uInt8> UE;
+    std::vector<sal_uInt8> O;
+    std::vector<sal_uInt8> OE;
+
+    // Generates U and UE - we need U in generateOandOE
+    vcl::pdf::generateUandUE(aUserPass.data(), aUserPass.size(), aInputKey, U, UE);
+    vcl::pdf::generateOandOE(aOwnerPass.data(), aOwnerPass.size(), aInputKey, U, O, OE);
+
+    // Checks the user password is valid
+    CPPUNIT_ASSERT_EQUAL(true,
+                         vcl::pdf::validateUserPassword(aUserPass.data(), aUserPass.size(), U));
+
+    // Checks the owner password is valid
+    CPPUNIT_ASSERT_EQUAL(
+        true, vcl::pdf::validateOwnerPassword(aOwnerPass.data(), aOwnerPass.size(), U, O));
+}
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
