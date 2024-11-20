@@ -481,18 +481,10 @@ void SfxGlobalEvents_Impl::implts_notifyListener(const document::DocumentEvent& 
     std::unique_lock g(m_aLock);
 
     document::EventObject aLegacyEvent(aEvent.Source, aEvent.EventName);
-    m_aLegacyListeners.forEach(g,
-        [&aLegacyEvent](const css::uno::Reference<document::XEventListener>& xListener)
-        {
-            xListener->notifyEvent(aLegacyEvent);
-        }
-    );
-    m_aDocumentListeners.forEach(g,
-        [&aEvent](const css::uno::Reference<document::XDocumentEventListener>& xListener)
-        {
-            xListener->documentEventOccured(aEvent);
-        }
-    );
+    m_aLegacyListeners.notifyEach(g,
+        &document::XEventListener::notifyEvent, aLegacyEvent);
+    m_aDocumentListeners.notifyEach(g,
+        &document::XDocumentEventListener::documentEventOccured, aEvent);
 }
 
 
