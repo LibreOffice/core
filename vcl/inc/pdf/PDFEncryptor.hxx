@@ -15,11 +15,6 @@
 #include <vector>
 #include <pdf/IPDFEncryptor.hxx>
 
-namespace vcl
-{
-struct PDFEncryptionProperties;
-}
-
 namespace com::sun::star::uno
 {
 template <typename> class Reference;
@@ -40,9 +35,6 @@ private:
 
     sal_Int32 m_nKeyLength = 0; // key length, 16 or 5
     sal_Int32 m_nRC4KeyLength = 0; // key length, 16 or 10, to be input to the algorithm 3.1
-
-    /* set to true if the following stream must be encrypted, used inside writeBuffer() */
-    bool m_bEncryptThisStream = false;
 
     /* used to cipher the stream data and for password management */
     rtlCipher m_aCipher = nullptr;
@@ -67,14 +59,10 @@ public:
 
     void setupKeysAndCheck(PDFEncryptionProperties& rProperties) override;
 
-    void setupEncryption(std::vector<sal_uInt8> const& rEncryptionKey, sal_Int32 nObject) override;
-    void enableStreamEncryption() override;
-    void disableStreamEncryption() override;
+    void setupEncryption(std::vector<sal_uInt8>& rEncryptionKey, sal_Int32 nObject) override;
 
-    bool isStreamEncryptionEnabled() override { return m_bEncryptThisStream; }
-
-    void encrypt(const void* pInput, sal_uInt64 nInputSize, sal_uInt8* pOutput,
-                 sal_uInt64 nOutputsSize) override;
+    void encrypt(const void* pInput, sal_uInt64 nInputSize, std::vector<sal_uInt8>& rOutput,
+                 sal_uInt64 nOutputSize) override;
 };
 }
 

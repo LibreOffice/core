@@ -39,6 +39,10 @@ namespace vcl::pdf
  */
 class IPDFEncryptor
 {
+private:
+    /* set to true if the following stream must be encrypted, used inside writeBuffer() */
+    bool m_bEncryptThisStream = false;
+
 public:
     virtual ~IPDFEncryptor() {}
 
@@ -73,17 +77,16 @@ public:
     virtual void setupKeysAndCheck(PDFEncryptionProperties& rProperties) = 0;
 
     /** Setup before we start encrypting - remembers the key */
-    virtual void setupEncryption(std::vector<sal_uInt8> const& rEncryptionKey, sal_Int32 nObject)
-        = 0;
-
-    virtual void enableStreamEncryption() = 0;
-    virtual void disableStreamEncryption() = 0;
-    virtual bool isStreamEncryptionEnabled() = 0;
+    virtual void setupEncryption(std::vector<sal_uInt8>& rEncryptionKey, sal_Int32 nObject) = 0;
 
     /** Encrypts the input and stores into the output */
-    virtual void encrypt(const void* pInput, sal_uInt64 nInputSize, sal_uInt8* pOutput,
-                         sal_uInt64 nOutputsSize)
+    virtual void encrypt(const void* pInput, sal_uInt64 nInputSize, std::vector<sal_uInt8>& rOutput,
+                         sal_uInt64 nOutputSize)
         = 0;
+
+    void enableStreamEncryption() { m_bEncryptThisStream = true; }
+    void disableStreamEncryption() { m_bEncryptThisStream = false; }
+    bool isStreamEncryptionEnabled() { return m_bEncryptThisStream; }
 };
 }
 

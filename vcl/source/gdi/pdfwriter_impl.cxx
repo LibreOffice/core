@@ -1618,7 +1618,7 @@ inline void PDFWriterImpl::appendUnicodeTextStringEncrypt( const OUString& rInSt
             *pCopy++ = static_cast<sal_uInt8>( aUnChar & 255 );
         }
         //encrypt in place
-        m_pPDFEncryptor->encrypt(m_vEncryptionBuffer.data(), nChars, m_vEncryptionBuffer.data(), nChars);
+        m_pPDFEncryptor->encrypt(m_vEncryptionBuffer.data(), nChars, m_vEncryptionBuffer, nChars);
         //now append, hexadecimal (appendHex), the encrypted result
         for(int i = 0; i < nChars; i++)
             appendHex( m_vEncryptionBuffer[i], rOutBuffer );
@@ -1638,7 +1638,7 @@ inline void PDFWriterImpl::appendLiteralStringEncrypt( std::string_view rInStrin
         m_vEncryptionBuffer.resize(nChars);
         //encrypt the string in a buffer, then append it
         enableStringEncryption(nInObjectNumber);
-        m_pPDFEncryptor->encrypt(rInString.data(), nChars, m_vEncryptionBuffer.data(), nChars);
+        m_pPDFEncryptor->encrypt(rInString.data(), nChars, m_vEncryptionBuffer, nChars);
         appendLiteralString( reinterpret_cast<char*>(m_vEncryptionBuffer.data()), nChars, rOutBuffer );
     }
     else
@@ -1749,7 +1749,7 @@ bool PDFWriterImpl::writeBufferBytes( const void* pBuffer, sal_uInt64 nBytes )
         if (bStreamEncryption)
         {
             m_vEncryptionBuffer.resize(nBytes);
-            m_pPDFEncryptor->encrypt(pBuffer, nBytes, m_vEncryptionBuffer.data(), nBytes);
+            m_pPDFEncryptor->encrypt(pBuffer, nBytes, m_vEncryptionBuffer, nBytes);
         }
 
         const void* pWriteBuffer = bStreamEncryption ? m_vEncryptionBuffer.data() : pBuffer;
@@ -9825,7 +9825,7 @@ bool PDFWriterImpl::writeBitmapObject( const BitmapEmit& rObject, bool bMask )
                     m_vEncryptionBuffer[nChar++] = rColor.GetBlue();
                 }
                 //encrypt the colorspace lookup table
-                m_pPDFEncryptor->encrypt(m_vEncryptionBuffer.data(), nChar, m_vEncryptionBuffer.data(), nChar);
+                m_pPDFEncryptor->encrypt(m_vEncryptionBuffer.data(), nChar, m_vEncryptionBuffer, nChar);
                 //now queue the data for output
                 nChar = 0;
                 for( sal_uInt16 i = 0; i < pAccess->GetPaletteEntryCount(); i++ )
