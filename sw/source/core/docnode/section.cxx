@@ -254,12 +254,14 @@ SwSection::~SwSection()
 void SwSection::SetSectionData(SwSectionData const& rData)
 {
     bool const bOldHidden( m_Data.IsHidden() );
+    bool const bOldCondHidden{m_Data.IsCondHidden()};
     m_Data = rData;
     // The next two may actually overwrite the m_Data.m_bProtect or EditInReadonly Flag
     // in Modify, which should result in same flag value as the old code!
     SetProtect(m_Data.IsProtectFlag());
     SetEditInReadonly(m_Data.IsEditInReadonlyFlag());
-    if (bOldHidden != m_Data.IsHidden()) // check if changed...
+    if (bOldHidden != m_Data.IsHidden()
+        || bOldCondHidden != m_Data.IsCondHidden()) // check if changed...
     {
         ImplSetHiddenFlag(m_Data.IsHidden(), m_Data.IsCondHidden());
     }
