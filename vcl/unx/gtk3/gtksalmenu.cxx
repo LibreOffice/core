@@ -308,7 +308,7 @@ void GtkSalMenu::ImplUpdate(bool bRecurse, bool bRemoveDisabledEntries)
             NativeSetAccelerator(nSection, nItemPos, nAccelKey, nAccelKey.GetName());
             NativeSetItemCommand(nSection, nItemPos, nId, sNativeCommand.getStr(), itemBits, bChecked, false);
             NativeCheckItem( nSection, nItemPos, itemBits, bChecked );
-            NativeSetEnableItem(sNativeCommand.getStr(), bEnabled);
+            NativeSetEnableItem(sNativeCommand, bEnabled);
 
             pNewCommandList = g_list_append(pNewCommandList, g_strdup(sNativeCommand.getStr()));
         }
@@ -383,7 +383,7 @@ void GtkSalMenu::ImplUpdate(bool bRecurse, bool bRemoveDisabledEntries)
         g_lo_menu_insert_in_section(pLOMenu, nSection-1, 0,
                                     OUStringToOString(aPlaceholderText, RTL_TEXTENCODING_UTF8).getStr());
         NativeSetItemCommand(nSection - 1, 0, 0xFFFF, sNativeCommand.getStr(), MenuItemBits::NONE, false, false);
-        NativeSetEnableItem(sNativeCommand.getStr(), false);
+        NativeSetEnableItem(sNativeCommand, false);
     }
 }
 
@@ -1227,13 +1227,13 @@ void GtkSalMenu::NativeCheckItem( unsigned nSection, unsigned nItemPos, MenuItem
         g_free( aCommand );
 }
 
-void GtkSalMenu::NativeSetEnableItem( gchar const * aCommand, gboolean bEnable )
+void GtkSalMenu::NativeSetEnableItem(const OString& sCommand, gboolean bEnable)
 {
     SolarMutexGuard aGuard;
     GLOActionGroup* pActionGroup = G_LO_ACTION_GROUP( mpActionGroup );
 
-    if ( g_action_group_get_action_enabled( G_ACTION_GROUP( pActionGroup ), aCommand ) != bEnable )
-        g_lo_action_group_set_action_enabled( pActionGroup, aCommand, bEnable );
+    if (g_action_group_get_action_enabled(G_ACTION_GROUP(pActionGroup), sCommand.getStr()) != bEnable)
+        g_lo_action_group_set_action_enabled(pActionGroup, sCommand.getStr(), bEnable);
 }
 
 void GtkSalMenu::NativeSetItemText( unsigned nSection, unsigned nItemPos, const OUString& rText, bool bFireEvent )
@@ -1571,7 +1571,7 @@ void GtkSalMenu::EnableItem( unsigned nPos, bool bEnable )
     if ( bUnityMode && !mbInActivateCallback && !mbNeedsUpdate && GetTopLevel()->mbMenuBar && ( nPos < maItems.size() ) )
     {
         OString sCommand = GetCommandForItem(GetItemAtPos(nPos));
-        NativeSetEnableItem(sCommand.getStr(), bEnable);
+        NativeSetEnableItem(sCommand, bEnable);
     }
 }
 
