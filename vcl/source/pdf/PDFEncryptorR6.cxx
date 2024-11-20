@@ -18,6 +18,10 @@ namespace vcl::pdf
 {
 namespace
 {
+constexpr size_t IV_SIZE = 16;
+constexpr size_t KEY_SIZE = 32;
+constexpr size_t SALT_SIZE = 8;
+
 /** Calculates modulo 3 of the 128-bit integer, using the first 16 bytes of the vector */
 sal_Int32 calculateModulo3(std::vector<sal_uInt8> const& rInput)
 {
@@ -26,12 +30,106 @@ sal_Int32 calculateModulo3(std::vector<sal_uInt8> const& rInput)
         nSum += rInput[i];
     return nSum % 3;
 }
+
+void generateBytes(std::vector<sal_uInt8>& rBytes, size_t nSize)
+{
+    rBytes.resize(nSize);
+
+    for (size_t i = 0; i < rBytes.size(); ++i)
+        rBytes[i] = sal_uInt8(comphelper::rng::uniform_uint_distribution(0, 0xFF));
 }
 
-/** Algorithm 2.B: Computing a hash (revision 6 and later)
- *
- * Described in ISO 32000-2:2020(E) - 7.6.4.3.4
- */
+} // end anonymous
+
+std::vector<sal_uInt8> generateKey()
+{
+    std::vector<sal_uInt8> aKey;
+    generateBytes(aKey, KEY_SIZE);
+    return aKey;
+}
+
+bool validateUserPassword(const sal_uInt8* pPass, size_t nLength, std::vector<sal_uInt8>& U)
+{
+    std::vector<sal_uInt8> aHash(U.begin(), U.begin() + KEY_SIZE);
+    std::vector<sal_uInt8> aValidationSalt(U.begin() + KEY_SIZE, U.begin() + KEY_SIZE + SALT_SIZE);
+    std::vector<sal_uInt8> aCalculatedHash
+        = vcl::pdf::computeHashR6(pPass, nLength, aValidationSalt);
+    return aHash == aCalculatedHash;
+}
+
+bool validateOwnerPassword(const sal_uInt8* pPass, size_t nLength, std::vector<sal_uInt8>& U,
+                           std::vector<sal_uInt8>& O)
+{
+    std::vector<sal_uInt8> aHash(O.begin(), O.begin() + KEY_SIZE);
+    std::vector<sal_uInt8> aValidationSalt(O.begin() + KEY_SIZE, O.begin() + KEY_SIZE + SALT_SIZE);
+    std::vector<sal_uInt8> aCalculatedHash
+        = vcl::pdf::computeHashR6(pPass, nLength, aValidationSalt, U);
+    return aHash == aCalculatedHash;
+}
+
+/** Algorithm 8 */
+void generateUandUE(const sal_uInt8* pPass, size_t nLength,
+                    std::vector<sal_uInt8>& rFileEncryptionKey, std::vector<sal_uInt8>& U,
+                    std::vector<sal_uInt8>& UE)
+{
+    std::vector<sal_uInt8> aValidationSalt;
+    generateBytes(aValidationSalt, SALT_SIZE);
+    std::vector<sal_uInt8> aKeySalt;
+    generateBytes(aKeySalt, SALT_SIZE);
+
+    U = vcl::pdf::computeHashR6(pPass, nLength, aValidationSalt);
+    U.insert(U.end(), aValidationSalt.begin(), aValidationSalt.end());
+    U.insert(U.end(), aKeySalt.begin(), aKeySalt.end());
+
+    std::vector<sal_uInt8> aKeyHash = vcl::pdf::computeHashR6(pPass, nLength, aKeySalt);
+    std::vector<sal_uInt8> iv(IV_SIZE, 0); // zero IV
+    UE = std::vector<sal_uInt8>(rFileEncryptionKey.size(), 0);
+    comphelper::Encrypt aEncrypt(aKeyHash, iv, comphelper::CryptoType::AES_256_CBC);
+    aEncrypt.update(UE, rFileEncryptionKey);
+}
+
+/** Algorithm 9 */
+void generateOandOE(const sal_uInt8* pPass, size_t nLength,
+                    std::vector<sal_uInt8>& rFileEncryptionKey, std::vector<sal_uInt8>& U,
+                    std::vector<sal_uInt8>& O, std::vector<sal_uInt8>& OE)
+{
+    std::vector<sal_uInt8> aValidationSalt;
+    generateBytes(aValidationSalt, SALT_SIZE);
+    std::vector<sal_uInt8> aKeySalt;
+    generateBytes(aKeySalt, SALT_SIZE);
+
+    O = vcl::pdf::computeHashR6(pPass, nLength, aValidationSalt, U);
+    O.insert(O.end(), aValidationSalt.begin(), aValidationSalt.end());
+    O.insert(O.end(), aKeySalt.begin(), aKeySalt.end());
+
+    std::vector<sal_uInt8> aKeyHash = vcl::pdf::computeHashR6(pPass, nLength, aKeySalt, U);
+    std::vector<sal_uInt8> iv(IV_SIZE, 0); // zero IV
+    OE = std::vector<sal_uInt8>(rFileEncryptionKey.size(), 0);
+    comphelper::Encrypt aEncrypt(aKeyHash, iv, comphelper::CryptoType::AES_256_CBC);
+    aEncrypt.update(OE, rFileEncryptionKey);
+}
+
+/** Algorithm 8 step b) */
+std::vector<sal_uInt8> decryptKey(const sal_uInt8* pPass, size_t nLength, std::vector<sal_uInt8>& U,
+                                  std::vector<sal_uInt8>& UE)
+{
+    std::vector<sal_uInt8> aKeySalt(U.begin() + KEY_SIZE + SALT_SIZE,
+                                    U.begin() + KEY_SIZE + SALT_SIZE + SALT_SIZE);
+
+    auto aKeyHash = vcl::pdf::computeHashR6(pPass, nLength, aKeySalt);
+
+    std::vector<sal_uInt8> aEncryptedKey(UE.begin(), UE.begin() + KEY_SIZE);
+    std::vector<sal_uInt8> iv(IV_SIZE, 0);
+
+    comphelper::Decrypt aDecryptCBC(aKeyHash, iv, comphelper::CryptoType::AES_256_CBC);
+    std::vector<sal_uInt8> aFileEncryptionKey(aEncryptedKey.size());
+    sal_uInt32 nDecrypted = aDecryptCBC.update(aFileEncryptionKey, aEncryptedKey);
+    if (nDecrypted == 0)
+        return std::vector<sal_uInt8>();
+    return aFileEncryptionKey;
+}
+
+/** Algorithm 2.B: Computing a hash (revision 6 and later) */
 std::vector<sal_uInt8> computeHashR6(const sal_uInt8* pPassword, size_t nPasswordLength,
                                      std::vector<sal_uInt8> const& rValidationSalt,
                                      std::vector<sal_uInt8> const& rUserKey)
@@ -47,7 +145,7 @@ std::vector<sal_uInt8> computeHashR6(const sal_uInt8* pPassword, size_t nPasswor
 
     std::vector<sal_uInt8> E;
 
-    sal_Int32 nRound = 1;
+    sal_Int32 nRound = 1; // round 0 is done already
     do
     {
         // Step a)
