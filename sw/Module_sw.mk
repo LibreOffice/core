@@ -73,6 +73,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
     CppunitTest_sw_docbookexport \
     CppunitTest_sw_fodfexport \
     CppunitTest_sw_htmlexport \
+    CppunitTest_sw_htmlexport2 \
     CppunitTest_sw_xhtmlexport \
     CppunitTest_sw_htmlimport \
     CppunitTest_sw_indexingexport \
