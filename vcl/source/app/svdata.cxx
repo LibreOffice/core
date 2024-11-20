@@ -237,7 +237,7 @@ namespace
 
         // tdf#163428 here aToBeDeletedEntries will be destroyed, the entries will be
         // decremented and potentially deleted. These are of type SystemDependentData_SharedPtr,
-        // so we do not need to do anything explicitely here
+        // so we do not need to do anything explicitly here
     }
 }
 
