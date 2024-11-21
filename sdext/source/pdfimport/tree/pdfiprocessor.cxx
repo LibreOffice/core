@@ -452,7 +452,14 @@ void PDFIProcessor::tilingPatternFill(int nX0, int nY0, int nX1, int nY1,
 void PDFIProcessor::strokePath( const uno::Reference< rendering::XPolyPolygon2D >& rPath )
 {
     basegfx::B2DPolyPolygon aPoly=basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(rPath);
+    basegfx::B2DPolyPolygon aCurClip = getCurrentContext().Clip;
     aPoly.transform(getCurrentContext().Transformation);
+
+    if( aCurClip.count() ) {
+        aPoly = basegfx::utils::clipPolyPolygonOnPolyPolygon( aPoly, aCurClip,
+                    true, /* bInside, keep parts inside the clip */
+                    true /* bStroke, stroked */ );
+    }
 
     PolyPolyElement* pPoly = ElementFactory::createPolyPolyElement(
         m_pCurElement,
