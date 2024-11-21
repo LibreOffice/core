@@ -197,6 +197,7 @@ SfxChildWindow* TestLokCallbackWrapper::InitializeSidebar()
     assert(pViewShell);
 
     SfxViewFrame& rViewFrame = pViewShell->GetViewFrame();
+    rViewFrame.ShowChildWindow(SID_SIDEBAR);
     SfxChildWindow* pSideBar = rViewFrame.GetChildWindow(SID_SIDEBAR);
     assert(pSideBar);
 

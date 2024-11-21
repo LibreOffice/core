@@ -29,6 +29,7 @@
 
 #include <sfx2/chalign.hxx>
 #include <sfx2/basedlgs.hxx>
+#include <comphelper/lok.hxx>
 
 namespace com::sun::star::frame { class XFrame; }
 
@@ -184,6 +185,8 @@ const int nCloseResponseToJustHide = -42;
                 {   \
                     SfxChildWinFactory aFact( \
                         Class::CreateImpl, MyID, Pos );   \
+                    if (comphelper::LibreOfficeKit::isActive() && nFlags == SfxChildWindowFlags::NONE) \
+                        nFlags |= SfxChildWindowFlags::NEVERCLONE; \
                     aFact.aInfo.nFlags |= nFlags;  \
                     aFact.aInfo.bVisible = bVis;         \
                     SfxChildWindow::RegisterChildWindow(pMod, aFact); \

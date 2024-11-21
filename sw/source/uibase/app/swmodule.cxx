@@ -312,9 +312,7 @@ void SwDLL::RegisterControls()
     SwInsertAuthMarkWrapper::RegisterChildWindow( false, pMod );
     SwWordCountWrapper::RegisterChildWindow( false, pMod );
     SvxRubyChildWindow::RegisterChildWindow( false, pMod);
-    SwSpellDialogChildWindow::RegisterChildWindow(
-        false, pMod, comphelper::LibreOfficeKit::isActive() ? SfxChildWindowFlags::NEVERCLONE
-                                                            : SfxChildWindowFlags::NONE);
+    SwSpellDialogChildWindow::RegisterChildWindow(false, pMod);
     DevelopmentToolChildWindow::RegisterChildWindow(false, pMod);
 
     SvxGrafRedToolBoxControl::RegisterControl( SID_ATTR_GRAF_RED, pMod );
