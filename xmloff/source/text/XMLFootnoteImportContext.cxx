@@ -19,6 +19,7 @@
 
 #include "XMLFootnoteImportContext.hxx"
 
+#include <comphelper/diagnose_ex.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <xmloff/xmlimp.hxx>
@@ -102,7 +103,16 @@ void XMLFootnoteImportContext::startFastElement(
     // save old cursor and install new one
     xOldCursor = rHelper.GetCursor();
     Reference<XText> xText(xTextContent, UNO_QUERY);
-    rHelper.SetCursor(xText->createTextCursor());
+    try
+    {
+        // May fail e.g. for a nested footnote, which is formally a valid ODF, but is not supported
+        rHelper.SetCursor(xText->createTextCursor());
+    }
+    catch (css::uno::RuntimeException&)
+    {
+        TOOLS_WARN_EXCEPTION("xmloff.text", "skipping the footnote: caught");
+        mbIsValid = false;
+    }
 
     // remember old list item and block (#89891#) and reset them
     // for the footnote
@@ -132,6 +142,8 @@ void XMLFootnoteImportContext::endFastElement(sal_Int32 )
 css::uno::Reference< css::xml::sax::XFastContextHandler > XMLFootnoteImportContext::createFastChildContext(
     sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
+    if (!mbIsValid)
+        return {};
     SvXMLImportContextRef xContext;
 
     switch(nElement)
