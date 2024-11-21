@@ -317,9 +317,8 @@ SwXTextPortionEnumeration::SwXTextPortionEnumeration(
         const sal_Int32 nStart,
         const sal_Int32 nEnd,
         bool bOnlyTextFields)
+    : m_pUnoCursor(rParaCursor.GetDoc().CreateUnoCursor(*rParaCursor.GetPoint()))
 {
-    m_pUnoCursor = rParaCursor.GetDoc().CreateUnoCursor(*rParaCursor.GetPoint());
-
     OSL_ENSURE(nEnd == -1 || (nStart <= nEnd &&
         nEnd <= m_pUnoCursor->Start()->GetNode().GetTextNode()->GetText().getLength()),
             "start or end value invalid!");
@@ -333,9 +332,9 @@ SwXTextPortionEnumeration::SwXTextPortionEnumeration(
 SwXTextPortionEnumeration::SwXTextPortionEnumeration(
         SwPaM& rParaCursor,
         TextRangeList_t && rPortions )
-    : m_Portions( std::move(rPortions) )
+    : m_Portions(std::move(rPortions))
+    , m_pUnoCursor(rParaCursor.GetDoc().CreateUnoCursor(*rParaCursor.GetPoint()))
 {
-    m_pUnoCursor = rParaCursor.GetDoc().CreateUnoCursor(*rParaCursor.GetPoint());
 }
 
 SwXTextPortionEnumeration::~SwXTextPortionEnumeration()
