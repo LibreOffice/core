@@ -7,151 +7,16 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/unoapixml_test.hxx>
-
-#include <boost/property_tree/json_parser.hpp>
+#include "tiledrenderingmodeltestbase.cxx"
 
 #include <com/sun/star/datatransfer/XTransferable2.hpp>
 
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
-#include <comphelper/lok.hxx>
-#include <comphelper/servicehelper.hxx>
-#include <sfx2/lokhelper.hxx>
-#include <test/lokcallback.hxx>
 #include <vcl/scheduler.hxx>
 #include <comphelper/propertyvalue.hxx>
-#include <comphelper/string.hxx>
-
-#include <docuno.hxx>
 
 using namespace com::sun::star;
 
-namespace
-{
-class Test : public UnoApiXmlTest
-{
-public:
-    Test();
-    void setUp() override;
-    void tearDown() override;
-
-    ScModelObj* createDoc(const char* pName);
-};
-
-Test::Test()
-    : UnoApiXmlTest(u"/sc/qa/unit/tiledrendering/data/"_ustr)
-{
-}
-
-void Test::setUp()
-{
-    UnoApiXmlTest::setUp();
-
-    comphelper::LibreOfficeKit::setActive(true);
-}
-
-void Test::tearDown()
-{
-    if (mxComponent.is())
-    {
-        mxComponent->dispose();
-        mxComponent.clear();
-    }
-
-    comphelper::LibreOfficeKit::resetCompatFlag();
-
-    comphelper::LibreOfficeKit::setActive(false);
-
-    UnoApiXmlTest::tearDown();
-}
-
-ScModelObj* Test::createDoc(const char* pName)
-{
-    loadFromFile(OUString::createFromAscii(pName));
-
-    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
-    CPPUNIT_ASSERT(pModelObj);
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-    return pModelObj;
-}
-
-/// A view callback tracks callbacks invoked on one specific view.
-class ViewCallback final
-{
-    SfxViewShell* mpViewShell;
-    int mnView;
-
-public:
-    std::map<std::string, boost::property_tree::ptree> m_aStateChanges;
-    tools::Rectangle m_aCellCursorBounds;
-    TestLokCallbackWrapper m_callbackWrapper;
-
-    ViewCallback()
-        : m_callbackWrapper(&callback, this)
-    {
-        mpViewShell = SfxViewShell::Current();
-        mpViewShell->setLibreOfficeKitViewCallback(&m_callbackWrapper);
-        mnView = SfxLokHelper::getView();
-        m_callbackWrapper.setLOKViewId(mnView);
-    }
-
-    ~ViewCallback()
-    {
-        if (mpViewShell)
-        {
-            SfxLokHelper::setView(mnView);
-            mpViewShell->setLibreOfficeKitViewCallback(nullptr);
-        }
-    }
-
-    static void callback(int nType, const char* pPayload, void* pData)
-    {
-        static_cast<ViewCallback*>(pData)->callbackImpl(nType, pPayload);
-    }
-
-    void callbackImpl(int nType, const char* pPayload)
-    {
-        switch (nType)
-        {
-            case LOK_CALLBACK_CELL_CURSOR:
-            {
-                uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(
-                    OUString::createFromAscii(pPayload));
-                m_aCellCursorBounds = tools::Rectangle();
-                if (aSeq.getLength() >= 4)
-                {
-                    m_aCellCursorBounds.SetLeft(aSeq[0].toInt32());
-                    m_aCellCursorBounds.SetTop(aSeq[1].toInt32());
-                    m_aCellCursorBounds.setWidth(aSeq[2].toInt32());
-                    m_aCellCursorBounds.setHeight(aSeq[3].toInt32());
-                }
-            }
-            break;
-            case LOK_CALLBACK_STATE_CHANGED:
-            {
-                std::stringstream aStream(pPayload);
-                if (!aStream.str().starts_with("{"))
-                {
-                    break;
-                }
-
-                boost::property_tree::ptree aTree;
-                boost::property_tree::read_json(aStream, aTree);
-                auto it = aTree.find("commandName");
-                if (it == aTree.not_found())
-                {
-                    break;
-                }
-
-                std::string aCommandName = it->second.get_value<std::string>();
-                m_aStateChanges[aCommandName] = aTree;
-            }
-            break;
-        }
-    }
-};
-
-CPPUNIT_TEST_FIXTURE(Test, testSidebarLocale)
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSidebarLocale)
 {
     ScModelObj* pModelObj = createDoc("chart.ods");
     int nView1 = SfxLokHelper::getView();
@@ -179,7 +44,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSidebarLocale)
     CPPUNIT_ASSERT_EQUAL(std::string("de-DE"), aLocale);
 }
 
-CPPUNIT_TEST_FIXTURE(Test, testCopyMultiSelection)
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCopyMultiSelection)
 {
     // Given a document with A1 and A3 as selected cells:
     ScModelObj* pModelObj = createDoc("multi-selection.ods");
@@ -211,7 +76,6 @@ CPPUNIT_TEST_FIXTURE(Test, testCopyMultiSelection)
     CPPUNIT_ASSERT(xTransferable2.is());
     // Without the fix, the text selection was complex.
     CPPUNIT_ASSERT(!xTransferable2->isComplex());
-}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
