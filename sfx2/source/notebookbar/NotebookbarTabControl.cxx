@@ -245,7 +245,7 @@ void NotebookbarTabControl::StateChanged(StateChangedType nStateChange)
         VclPtr<ShortcutsToolBox> pShortcuts = VclPtr<ShortcutsToolBox>::Create( this );
         pShortcuts->Show();
 
-        SetToolBox( static_cast<ToolBox*>( pShortcuts.get() ) );
+        SetToolBox(pShortcuts.get());
         SetIconClickHdl( LINK( this, NotebookbarTabControl, OpenNotebookbarPopupMenu ) );
 
         m_pListener = new ChangedUIEventListener( this );
