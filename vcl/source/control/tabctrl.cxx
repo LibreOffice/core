@@ -2275,11 +2275,9 @@ void NotebookbarTabControlBase::SetIconClickHdl( Link<NotebookBar*, void> aHdl )
     m_aIconClickHdl = aHdl;
 }
 
-static bool lcl_isValidPage(const ImplTabItem& rItem, bool& bFound)
+static bool lcl_isValidPage(const ImplTabItem& rItem)
 {
-    if (rItem.m_bVisible && rItem.m_bEnabled)
-        bFound = true;
-    return bFound;
+    return rItem.m_bVisible && rItem.m_bEnabled;
 }
 
 void NotebookbarTabControlBase::ImplActivateTabPage( bool bNext )
@@ -2291,14 +2289,20 @@ void NotebookbarTabControlBase::ImplActivateTabPage( bool bNext )
     if (bNext)
     {
         for (nCurPos++; nCurPos < GetPageCount(); nCurPos++)
-            if (lcl_isValidPage(mpTabCtrlData->maItemList[nCurPos], bFound))
+            if (lcl_isValidPage(mpTabCtrlData->maItemList[nCurPos]))
+            {
+                bFound = true;
                 break;
+            }
     }
     else
     {
         for (nCurPos--; nCurPos >= 0; nCurPos--)
-            if (lcl_isValidPage(mpTabCtrlData->maItemList[nCurPos], bFound))
+            if (lcl_isValidPage(mpTabCtrlData->maItemList[nCurPos]))
+            {
+                bFound = true;
                 break;
+            }
     }
 
     if (!bFound)
