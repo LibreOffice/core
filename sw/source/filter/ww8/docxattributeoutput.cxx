@@ -3495,12 +3495,17 @@ void lclProcessRecursiveGrabBag(sal_Int32 aElementId, const css::uno::Sequence<c
 {
     css::uno::Sequence<css::beans::PropertyValue> aAttributes;
     rtl::Reference<FastAttributeList> pAttributes = FastSerializerHelper::createAttrList();
+    sal_Int32 nElements = 0;
 
     for (const auto& rElement : rElements)
     {
         if (rElement.Name == "attributes")
         {
             rElement.Value >>= aAttributes;
+        }
+        else
+        {
+            ++nElements;
         }
     }
 
@@ -3523,7 +3528,7 @@ void lclProcessRecursiveGrabBag(sal_Int32 aElementId, const css::uno::Sequence<c
             pAttributes->add(*aSubElementId, aValue);
     }
 
-    if (rElements.size() == 0)
+    if (nElements == 0)
     {
         pSerializer->singleElement(aElementId, pAttributes);
     }
