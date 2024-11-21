@@ -410,6 +410,7 @@ public:
     virtual bool InsertText(const OUString&, const ESelection&) override;
     virtual bool QuickFormatDoc(bool bFull = false) override;
 
+    virtual bool SupportsOutlineDepth() const override { return false; };
     virtual sal_Int16 GetDepth(sal_Int32 nPara) const override;
     virtual bool SetDepth(sal_Int32 nPara, sal_Int16 nNewDepth) override;
 

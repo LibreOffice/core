@@ -99,6 +99,7 @@ public:
     virtual bool            Delete( const ESelection& ) override final;
     virtual bool            InsertText( const OUString&, const ESelection& ) override final;
     virtual bool            QuickFormatDoc( bool bFull = false ) override final;
+    virtual bool SupportsOutlineDepth() const override final;
     virtual sal_Int16       GetDepth( sal_Int32 nPara ) const override final;
     virtual bool            SetDepth( sal_Int32 nPara, sal_Int16 nNewDepth ) override final;
     virtual sal_Int32       GetNumberingStartValue( sal_Int32 nPara ) override final;

@@ -470,6 +470,12 @@ bool SvxEditEngineForwarder::InsertText( const OUString& rStr, const ESelection&
     return true;
 }
 
+bool SvxEditEngineForwarder::SupportsOutlineDepth() const
+{
+    // EditEngine does not support outline depth indirectly - directly supports EE_PARA_OUTLLEVEL
+    return false;
+}
+
 sal_Int16 SvxEditEngineForwarder::GetDepth( sal_Int32 ) const
 {
     // EditEngine does not support outline depth

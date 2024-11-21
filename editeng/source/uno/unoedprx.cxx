@@ -1029,6 +1029,13 @@ bool SvxAccessibleTextAdapter::QuickFormatDoc( bool bFull )
     return mpTextForwarder->QuickFormatDoc( bFull );
 }
 
+bool SvxAccessibleTextAdapter::SupportsOutlineDepth() const
+{
+    assert(mpTextForwarder && "SvxAccessibleTextAdapter: no forwarder");
+
+    return mpTextForwarder->SupportsOutlineDepth();
+}
+
 sal_Int16 SvxAccessibleTextAdapter::GetDepth( sal_Int32 nPara ) const
 {
     assert(mpTextForwarder && "SvxAccessibleTextAdapter: no forwarder");

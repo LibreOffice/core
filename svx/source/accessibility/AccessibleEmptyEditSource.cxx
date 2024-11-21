@@ -159,6 +159,7 @@ namespace accessibility
         bool            Delete( const ESelection& ) override { return false; }
         bool            InsertText( const OUString&, const ESelection& ) override { return false; }
         bool            QuickFormatDoc( bool ) override { return true; }
+        bool SupportsOutlineDepth() const override { return false; }
         sal_Int16       GetDepth( sal_Int32 ) const override { return -1; }
         bool            SetDepth( sal_Int32, sal_Int16 ) override { return true; }
 

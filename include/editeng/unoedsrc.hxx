@@ -410,6 +410,9 @@ public:
       */
     virtual bool            QuickFormatDoc( bool bFull = false ) = 0;
 
+    // Is able to use Outline depth functions (GetDepth and SetDepth) meaningfully
+    virtual bool SupportsOutlineDepth() const = 0;
+
     /** Get the outline depth of given paragraph
 
         @param nPara
