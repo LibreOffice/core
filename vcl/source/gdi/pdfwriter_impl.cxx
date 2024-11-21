@@ -11874,7 +11874,6 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
     if( nPageNr < 0 || o3tl::make_unsigned(nPageNr) >= m_aPages.size() )
         return -1;
 
-    bool sigHidden(true);
     sal_Int32 nNewWidget = m_aWidgets.size();
     m_aWidgets.emplace_back( );
 
@@ -12047,8 +12046,6 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
 #if HAVE_FEATURE_NSS
     else if( rControl.getType() == PDFWriter::Signature)
     {
-        sigHidden = true;
-
         rNewWidget.m_aRect = tools::Rectangle(0, 0, 0, 0);
 
         m_nSignatureObject = createObject();
@@ -12059,9 +12056,9 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
     }
 #endif
 
-    // if control is a hidden signature, do not convert coordinates since we
+    // if control is a signature, do not convert coordinates since we
     // need /Rect [ 0 0 0 0 ]
-    if ( ! ( ( rControl.getType() == PDFWriter::Signature ) && sigHidden ) )
+    if ( rControl.getType() != PDFWriter::Signature )
     {
         // convert to default user space now, since the mapmode may change
         // note: create default appearances before m_aRect gets transformed
