@@ -37,6 +37,32 @@ public:
 
     void run() override
     {
+        std::string fn(handler.getMainFileName());
+        loplugin::normalizeDotDotInFilePath(fn);
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/chart2/qa/")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/embeddedobj/qa/")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/emfio/qa/")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/extensions/qa/")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/filter/qa/")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/oox/qa/")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/package/qa/")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/sc/qa/")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/sd/qa/")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/sdext/qa/")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/sfx2/qa/")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/starmath/qa/")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/svgio/qa/")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/svx/qa/")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/sw/qa/")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/vcl/qa/")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/writerperfect/qa/")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/xmloff/qa/")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/xmlscript/qa/")
+            || loplugin::hasPathnamePrefix(fn, SRCDIR "/xmlsecurity/qa/"))
+        {
+            return; // ignore unit tests in release branch
+        }
+
         if (compiler.getLangOpts().CPlusPlus
             && TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()))
         {
