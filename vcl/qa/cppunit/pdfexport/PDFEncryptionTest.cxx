@@ -356,8 +356,8 @@ CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testFileEncryption)
     std::vector<sal_uInt8> aEncryptedBuffer;
 
     vcl::pdf::PDFEncryptorR6 aEncryptor;
-    aEncryptor.setupEncryptionWithIV(aKey, aIV);
-    aEncryptor.encrypt(aData.data(), aData.size(), aEncryptedBuffer, aData.size());
+    aEncryptor.setupEncryption(aKey, 0);
+    aEncryptor.encryptWithIV(aData.data(), aData.size(), aEncryptedBuffer, aIV);
 
     CPPUNIT_ASSERT_EQUAL(
         std::string("d07efca5cce3c18fd8e344d45d826886d1774c5e1e310c971f8578924f848fc6"),
@@ -373,6 +373,68 @@ CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testFileEncryption)
     CPPUNIT_ASSERT_EQUAL(
         std::string("656e2d47420b0b0b0b0b0b0b0b0b0b0b"), // 'en-GB' + padding 0x0B = 11 chars
         comphelper::hashToString(aOutputString));
+}
+
+std::vector<sal_uInt8> decrypt_AES_256_CBC(std::vector<sal_uInt8>& rKey,
+                                           std::vector<sal_uInt8>& rIV,
+                                           std::vector<sal_uInt8>& rEncryptedBuffer)
+{
+    std::vector<sal_uInt8> aDecryptedBuffer(rEncryptedBuffer.size());
+    comphelper::Decrypt aDecryptor(rKey, rIV, comphelper::CryptoType::AES_256_CBC);
+    aDecryptor.update(aDecryptedBuffer, rEncryptedBuffer);
+    return aDecryptedBuffer;
+}
+
+CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testFileEncryption_checkDifferentIV)
+{
+    // Check each call to encrypt is usign a different IV (initialization vector)
+
+    std::vector<sal_uInt8> aKey
+        = parseHex("90e657b78c0315610f3f421bd396ff635fa8fe3cf2ea399e7e1ae23e6185b4fc");
+
+    static constexpr const auto aData = std::to_array<sal_uInt8>({ 'a', 'b', 'c' });
+
+    vcl::pdf::PDFEncryptorR6 aEncryptor;
+    aEncryptor.setupEncryption(aKey, 0);
+
+    std::vector<sal_uInt8> aEncrypted_1;
+    aEncryptor.encrypt(aData.data(), aData.size(), aEncrypted_1, aData.size());
+    std::vector<sal_uInt8> aIV_1(aEncrypted_1.begin(), aEncrypted_1.begin() + 16);
+
+    std::vector<sal_uInt8> aEncrypted_2;
+    aEncryptor.encrypt(aData.data(), aData.size(), aEncrypted_2, aData.size());
+    std::vector<sal_uInt8> aIV_2(aEncrypted_2.begin(), aEncrypted_2.begin() + 16);
+
+    std::vector<sal_uInt8> aEncrypted_3;
+    aEncryptor.encrypt(aData.data(), aData.size(), aEncrypted_3, aData.size());
+    std::vector<sal_uInt8> aIV_3(aEncrypted_3.begin(), aEncrypted_3.begin() + 16);
+
+    // All IV should be different
+    CPPUNIT_ASSERT(!std::equal(aIV_1.begin(), aIV_1.end(), aIV_2.begin()));
+    CPPUNIT_ASSERT(!std::equal(aIV_1.begin(), aIV_1.end(), aIV_3.begin()));
+    CPPUNIT_ASSERT(!std::equal(aIV_2.begin(), aIV_2.end(), aIV_3.begin()));
+
+    {
+        std::vector<sal_uInt8> aEncrypted(aEncrypted_1.begin() + 16, aEncrypted_1.end());
+        // expected 'a', 'b', 'c' + padding
+        CPPUNIT_ASSERT_EQUAL(
+            std::string("6162630d0d0d0d0d0d0d0d0d0d0d0d0d"),
+            comphelper::hashToString(decrypt_AES_256_CBC(aKey, aIV_1, aEncrypted)));
+    }
+
+    {
+        std::vector<sal_uInt8> aEncrypted(aEncrypted_2.begin() + 16, aEncrypted_2.end());
+        CPPUNIT_ASSERT_EQUAL(
+            std::string("6162630d0d0d0d0d0d0d0d0d0d0d0d0d"),
+            comphelper::hashToString(decrypt_AES_256_CBC(aKey, aIV_2, aEncrypted)));
+    }
+
+    {
+        std::vector<sal_uInt8> aEncrypted(aEncrypted_3.begin() + 16, aEncrypted_3.end());
+        CPPUNIT_ASSERT_EQUAL(
+            std::string("6162630d0d0d0d0d0d0d0d0d0d0d0d0d"),
+            comphelper::hashToString(decrypt_AES_256_CBC(aKey, aIV_3, aEncrypted)));
+    }
 }
 
 } // end anonymous namespace
