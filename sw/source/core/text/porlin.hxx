@@ -206,6 +206,7 @@ inline SwLinePortion::SwLinePortion(const SwLinePortion &rPortion) :
     mnWhichPor( rPortion.mnWhichPor ),
     m_bJoinBorderWithPrev( rPortion.m_bJoinBorderWithPrev ),
     m_bJoinBorderWithNext( rPortion.m_bJoinBorderWithNext ),
+    m_bIsFieldmarkText( rPortion.m_bIsFieldmarkText ),
     m_nExtraBlankWidth(rPortion.m_nExtraBlankWidth),
     m_nExtraShrunkWidth(rPortion.m_nExtraShrunkWidth),
     m_nLayoutContext(rPortion.m_nLayoutContext)
