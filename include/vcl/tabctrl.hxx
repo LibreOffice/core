@@ -190,7 +190,6 @@ public:
     Control* GetOpenMenu();
 
     virtual Size        calculateRequisition() const override;
-    static sal_uInt16   GetHeaderHeight();
 
 protected:
     virtual bool ImplPlaceTabs( tools::Long nWidth ) override;

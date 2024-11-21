@@ -349,8 +349,10 @@ IMPL_LINK(NotebookbarTabControl, OpenNotebookbarPopupMenu, NotebookBar*, pNotebo
         return;
 
     xPopupController->setPopupMenu(xPopupMenu);
-    Point aPos(pNotebookbar->GetSizePixel().getWidth(), NotebookbarTabControl::GetHeaderHeight() - ICON_SIZE + 10);
-    xPopupMenu->execute(pNotebookbar->GetComponentInterface(),
+    Control* pOpenMenuButton = GetOpenMenu();
+    assert(pOpenMenuButton);
+    Point aPos(pOpenMenuButton->GetSizePixel().getWidth(), pOpenMenuButton->GetSizePixel().getHeight());
+    xPopupMenu->execute(pOpenMenuButton->GetComponentInterface(),
                         css::awt::Rectangle(aPos.X(), aPos.Y(), 1, 1),
                         css::awt::PopupMenuDirection::EXECUTE_DOWN);
 

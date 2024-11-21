@@ -2306,11 +2306,6 @@ void NotebookbarTabControlBase::ImplActivateTabPage( bool bNext )
     SelectTabPage( TabControl::GetPageId( nCurPos ) );
 }
 
-sal_uInt16 NotebookbarTabControlBase::GetHeaderHeight()
-{
-    return m_nHeaderHeight;
-}
-
 bool NotebookbarTabControlBase::ImplPlaceTabs( tools::Long nWidth )
 {
     if ( nWidth <= 0 )
