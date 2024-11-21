@@ -13,9 +13,12 @@
 #include <string_view>
 #include <vector>
 #include <vcl/dllapi.h>
+#include <pdf/IPDFEncryptor.hxx>
 
 namespace vcl::pdf
 {
+class EncryptionHashTransporter;
+
 /** Algorithm 2.B: Computing a hash (revision 6 and later)
  *
  * Described in ISO 32000-2:2020(E) - 7.6.4.3.4
@@ -106,6 +109,52 @@ VCL_DLLPUBLIC std::vector<sal_uInt8> createPerms(sal_Int32 nAccessPermissions,
  * Described in ISO 32000-2:2020(E) - 7.6.3.1
  */
 VCL_DLLPUBLIC size_t addPaddingToVector(std::vector<sal_uInt8>& rVector, size_t nBlockSize);
+
+class EncryptionContext;
+
+/** IPDFEncryptor implementation of PDF encryption version 5 revision 6 added in PDF 2.0
+ *
+ * The complete algorithm is defined in PDF 2.0 specification ISO 32000-2:2020(E)
+ */
+class VCL_DLLPUBLIC PDFEncryptorR6 : public IPDFEncryptor
+{
+    std::unique_ptr<EncryptionContext> m_pEncryptionContext;
+    sal_Int32 m_nAccessPermissions = 0;
+
+public:
+    PDFEncryptorR6();
+    ~PDFEncryptorR6();
+
+    sal_Int32 getVersion() override { return 5; }
+    sal_Int32 getRevision() override { return 6; }
+    sal_Int32 getAccessPermissions() override { return m_nAccessPermissions; }
+    /** Key length - AES 256 bit */
+    sal_Int32 getKeyLength() override { return 256 / 8; }
+
+    std::vector<sal_uInt8> getEncryptedAccessPermissions(std::vector<sal_uInt8>& rKey) override;
+
+    static void initEncryption(EncryptionHashTransporter& rEncryptionHashTransporter,
+                               const OUString& i_rOwnerPassword, const OUString& i_rUserPassword);
+
+    bool prepareEncryption(
+        const css::uno::Reference<css::beans::XMaterialHolder>& xEncryptionMaterialHolder,
+        PDFEncryptionProperties& rProperties) override;
+
+    void setupKeysAndCheck(PDFEncryptionProperties& rProperties) override;
+
+    sal_uInt64 calculateSizeIncludingHeader(sal_uInt64 nSize) override;
+
+    void setupEncryption(std::vector<sal_uInt8>& rEncryptionKey, sal_Int32 nObject) override;
+
+    void setupEncryptionWithIV(std::vector<sal_uInt8>& rInitvector, std::vector<sal_uInt8>& rIV);
+
+    /** Encrypts using Algorithm 1.A: Encryption of data using the AES algorithms
+     *
+     * Described in ISO 32000-2:2020(E) - 7.6.3.3
+     */
+    void encrypt(const void* pInput, sal_uInt64 nInputSize, std::vector<sal_uInt8>& rOutput,
+                 sal_uInt64 nOutputsSize) override;
+};
 
 } // end vcl::pdf
 
