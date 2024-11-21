@@ -24,7 +24,7 @@ struct StringWithHash
     sal_Int32 hashCode;
     StringWithHash(OUString s)
         : str(std::move(s))
-        , hashCode(s.hashCode())
+        , hashCode(str.hashCode())
     {
     }
 
