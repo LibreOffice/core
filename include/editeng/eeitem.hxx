@@ -68,79 +68,79 @@ class SfxVoidItem;
  *        as well.
 */
 
-constexpr sal_uInt16 EE_ITEMS_START(OWN_ATTR_VALUE_END + 1);
+inline constexpr sal_uInt16 EE_ITEMS_START(OWN_ATTR_VALUE_END + 1);
 
 // Paragraph attributes:
-constexpr sal_uInt16                              EE_PARA_START              (EE_ITEMS_START + 0);
-constexpr TypedWhichId<SvxFrameDirectionItem>     EE_PARA_WRITINGDIR         (EE_PARA_START+0);
-constexpr TypedWhichId<SvXMLAttrContainerItem>    EE_PARA_XMLATTRIBS         (EE_PARA_START+1);
-constexpr TypedWhichId<SvxHangingPunctuationItem> EE_PARA_HANGINGPUNCTUATION (EE_PARA_START+2);
-constexpr TypedWhichId<SvxForbiddenRuleItem>      EE_PARA_FORBIDDENRULES     (EE_PARA_START+3);
-constexpr TypedWhichId<SvxScriptSpaceItem>        EE_PARA_ASIANCJKSPACING    (EE_PARA_START+4);
-constexpr TypedWhichId<SvxNumBulletItem>          EE_PARA_NUMBULLET          (EE_PARA_START+5);
-constexpr TypedWhichId<SfxBoolItem>               EE_PARA_HYPHENATE          (EE_PARA_START+6);
-constexpr TypedWhichId<SfxBoolItem>               EE_PARA_HYPHENATE_NO_CAPS  (EE_PARA_START+7);
-constexpr TypedWhichId<SfxBoolItem>               EE_PARA_HYPHENATE_NO_LAST_WORD  (EE_PARA_START+8);
-constexpr TypedWhichId<SfxBoolItem>               EE_PARA_BULLETSTATE        (EE_PARA_START+9);
-constexpr TypedWhichId<SvxLRSpaceItem>            EE_PARA_OUTLLRSPACE        (EE_PARA_START+10);
-constexpr TypedWhichId<SfxInt16Item>              EE_PARA_OUTLLEVEL          (EE_PARA_START+11);
-constexpr TypedWhichId<SvxBulletItem>             EE_PARA_BULLET             (EE_PARA_START+12);
-constexpr TypedWhichId<SvxLRSpaceItem>            EE_PARA_LRSPACE            (EE_PARA_START+13);
-constexpr TypedWhichId<SvxULSpaceItem>            EE_PARA_ULSPACE            (EE_PARA_START+14);
-constexpr TypedWhichId<SvxLineSpacingItem>        EE_PARA_SBL                (EE_PARA_START+15);
-constexpr TypedWhichId<SvxAdjustItem>             EE_PARA_JUST               (EE_PARA_START+16);
-constexpr TypedWhichId<SvxTabStopItem>            EE_PARA_TABS               (EE_PARA_START+17);
-constexpr TypedWhichId<SvxJustifyMethodItem>      EE_PARA_JUST_METHOD        (EE_PARA_START+18);
-constexpr TypedWhichId<SvxVerJustifyItem>         EE_PARA_VER_JUST           (EE_PARA_START+19);
-constexpr sal_uInt16                              EE_PARA_END                (EE_PARA_START + 19);
+inline constexpr sal_uInt16                              EE_PARA_START              (EE_ITEMS_START + 0);
+inline constexpr TypedWhichId<SvxFrameDirectionItem>     EE_PARA_WRITINGDIR         (EE_PARA_START+0);
+inline constexpr TypedWhichId<SvXMLAttrContainerItem>    EE_PARA_XMLATTRIBS         (EE_PARA_START+1);
+inline constexpr TypedWhichId<SvxHangingPunctuationItem> EE_PARA_HANGINGPUNCTUATION (EE_PARA_START+2);
+inline constexpr TypedWhichId<SvxForbiddenRuleItem>      EE_PARA_FORBIDDENRULES     (EE_PARA_START+3);
+inline constexpr TypedWhichId<SvxScriptSpaceItem>        EE_PARA_ASIANCJKSPACING    (EE_PARA_START+4);
+inline constexpr TypedWhichId<SvxNumBulletItem>          EE_PARA_NUMBULLET          (EE_PARA_START+5);
+inline constexpr TypedWhichId<SfxBoolItem>               EE_PARA_HYPHENATE          (EE_PARA_START+6);
+inline constexpr TypedWhichId<SfxBoolItem>               EE_PARA_HYPHENATE_NO_CAPS  (EE_PARA_START+7);
+inline constexpr TypedWhichId<SfxBoolItem>               EE_PARA_HYPHENATE_NO_LAST_WORD  (EE_PARA_START+8);
+inline constexpr TypedWhichId<SfxBoolItem>               EE_PARA_BULLETSTATE        (EE_PARA_START+9);
+inline constexpr TypedWhichId<SvxLRSpaceItem>            EE_PARA_OUTLLRSPACE        (EE_PARA_START+10);
+inline constexpr TypedWhichId<SfxInt16Item>              EE_PARA_OUTLLEVEL          (EE_PARA_START+11);
+inline constexpr TypedWhichId<SvxBulletItem>             EE_PARA_BULLET             (EE_PARA_START+12);
+inline constexpr TypedWhichId<SvxLRSpaceItem>            EE_PARA_LRSPACE            (EE_PARA_START+13);
+inline constexpr TypedWhichId<SvxULSpaceItem>            EE_PARA_ULSPACE            (EE_PARA_START+14);
+inline constexpr TypedWhichId<SvxLineSpacingItem>        EE_PARA_SBL                (EE_PARA_START+15);
+inline constexpr TypedWhichId<SvxAdjustItem>             EE_PARA_JUST               (EE_PARA_START+16);
+inline constexpr TypedWhichId<SvxTabStopItem>            EE_PARA_TABS               (EE_PARA_START+17);
+inline constexpr TypedWhichId<SvxJustifyMethodItem>      EE_PARA_JUST_METHOD        (EE_PARA_START+18);
+inline constexpr TypedWhichId<SvxVerJustifyItem>         EE_PARA_VER_JUST           (EE_PARA_START+19);
+inline constexpr sal_uInt16                              EE_PARA_END                (EE_PARA_START + 19);
 
 // Character attributes:
-constexpr sal_uInt16                           EE_CHAR_START          (EE_PARA_END + 1);
-constexpr TypedWhichId<SvxColorItem>           EE_CHAR_COLOR          (EE_CHAR_START+0);
-constexpr TypedWhichId<SvxFontItem>            EE_CHAR_FONTINFO       (EE_CHAR_START+1);
-constexpr TypedWhichId<SvxFontHeightItem>      EE_CHAR_FONTHEIGHT     (EE_CHAR_START+2);
-constexpr TypedWhichId<SvxCharScaleWidthItem>  EE_CHAR_FONTWIDTH      (EE_CHAR_START+3);
-constexpr TypedWhichId<SvxWeightItem>          EE_CHAR_WEIGHT         (EE_CHAR_START+4);
-constexpr TypedWhichId<SvxUnderlineItem>       EE_CHAR_UNDERLINE      (EE_CHAR_START+5);
-constexpr TypedWhichId<SvxCrossedOutItem>      EE_CHAR_STRIKEOUT      (EE_CHAR_START+6);
-constexpr TypedWhichId<SvxPostureItem>         EE_CHAR_ITALIC         (EE_CHAR_START+7);
-constexpr TypedWhichId<SvxContourItem>         EE_CHAR_OUTLINE        (EE_CHAR_START+8);
-constexpr TypedWhichId<SvxShadowedItem>        EE_CHAR_SHADOW         (EE_CHAR_START+9);
-constexpr TypedWhichId<SvxEscapementItem>      EE_CHAR_ESCAPEMENT     (EE_CHAR_START+10);
-constexpr TypedWhichId<SvxAutoKernItem>        EE_CHAR_PAIRKERNING    (EE_CHAR_START+11);
-constexpr TypedWhichId<SvxKerningItem>         EE_CHAR_KERNING        (EE_CHAR_START+12);
-constexpr TypedWhichId<SvxWordLineModeItem>    EE_CHAR_WLM            (EE_CHAR_START+13);
-constexpr TypedWhichId<SvxLanguageItem>        EE_CHAR_LANGUAGE       (EE_CHAR_START+14);
-constexpr TypedWhichId<SvxLanguageItem>        EE_CHAR_LANGUAGE_CJK   (EE_CHAR_START+15);
-constexpr TypedWhichId<SvxLanguageItem>        EE_CHAR_LANGUAGE_CTL   (EE_CHAR_START+16);
-constexpr TypedWhichId<SvxFontItem>            EE_CHAR_FONTINFO_CJK   (EE_CHAR_START+17);
-constexpr TypedWhichId<SvxFontItem>            EE_CHAR_FONTINFO_CTL   (EE_CHAR_START+18);
-constexpr TypedWhichId<SvxFontHeightItem>      EE_CHAR_FONTHEIGHT_CJK (EE_CHAR_START+19);
-constexpr TypedWhichId<SvxFontHeightItem>      EE_CHAR_FONTHEIGHT_CTL (EE_CHAR_START+20);
-constexpr TypedWhichId<SvxWeightItem>          EE_CHAR_WEIGHT_CJK     (EE_CHAR_START+21);
-constexpr TypedWhichId<SvxWeightItem>          EE_CHAR_WEIGHT_CTL     (EE_CHAR_START+22);
-constexpr TypedWhichId<SvxPostureItem>         EE_CHAR_ITALIC_CJK     (EE_CHAR_START+23);
-constexpr TypedWhichId<SvxPostureItem>         EE_CHAR_ITALIC_CTL     (EE_CHAR_START+24);
-constexpr TypedWhichId<SvxEmphasisMarkItem>    EE_CHAR_EMPHASISMARK   (EE_CHAR_START+25);
-constexpr TypedWhichId<SvxCharReliefItem>      EE_CHAR_RELIEF         (EE_CHAR_START+26);
-constexpr TypedWhichId<SvXMLAttrContainerItem> EE_CHAR_XMLATTRIBS     (EE_CHAR_START+27);
-constexpr TypedWhichId<SvxOverlineItem>        EE_CHAR_OVERLINE       (EE_CHAR_START+28);
-constexpr TypedWhichId<SvxCaseMapItem>         EE_CHAR_CASEMAP        (EE_CHAR_START+29);
-constexpr TypedWhichId<SfxGrabBagItem>         EE_CHAR_GRABBAG        (EE_CHAR_START+30);
-constexpr TypedWhichId<SvxColorItem>           EE_CHAR_BKGCOLOR       (EE_CHAR_START+31);
+inline constexpr sal_uInt16                           EE_CHAR_START          (EE_PARA_END + 1);
+inline constexpr TypedWhichId<SvxColorItem>           EE_CHAR_COLOR          (EE_CHAR_START+0);
+inline constexpr TypedWhichId<SvxFontItem>            EE_CHAR_FONTINFO       (EE_CHAR_START+1);
+inline constexpr TypedWhichId<SvxFontHeightItem>      EE_CHAR_FONTHEIGHT     (EE_CHAR_START+2);
+inline constexpr TypedWhichId<SvxCharScaleWidthItem>  EE_CHAR_FONTWIDTH      (EE_CHAR_START+3);
+inline constexpr TypedWhichId<SvxWeightItem>          EE_CHAR_WEIGHT         (EE_CHAR_START+4);
+inline constexpr TypedWhichId<SvxUnderlineItem>       EE_CHAR_UNDERLINE      (EE_CHAR_START+5);
+inline constexpr TypedWhichId<SvxCrossedOutItem>      EE_CHAR_STRIKEOUT      (EE_CHAR_START+6);
+inline constexpr TypedWhichId<SvxPostureItem>         EE_CHAR_ITALIC         (EE_CHAR_START+7);
+inline constexpr TypedWhichId<SvxContourItem>         EE_CHAR_OUTLINE        (EE_CHAR_START+8);
+inline constexpr TypedWhichId<SvxShadowedItem>        EE_CHAR_SHADOW         (EE_CHAR_START+9);
+inline constexpr TypedWhichId<SvxEscapementItem>      EE_CHAR_ESCAPEMENT     (EE_CHAR_START+10);
+inline constexpr TypedWhichId<SvxAutoKernItem>        EE_CHAR_PAIRKERNING    (EE_CHAR_START+11);
+inline constexpr TypedWhichId<SvxKerningItem>         EE_CHAR_KERNING        (EE_CHAR_START+12);
+inline constexpr TypedWhichId<SvxWordLineModeItem>    EE_CHAR_WLM            (EE_CHAR_START+13);
+inline constexpr TypedWhichId<SvxLanguageItem>        EE_CHAR_LANGUAGE       (EE_CHAR_START+14);
+inline constexpr TypedWhichId<SvxLanguageItem>        EE_CHAR_LANGUAGE_CJK   (EE_CHAR_START+15);
+inline constexpr TypedWhichId<SvxLanguageItem>        EE_CHAR_LANGUAGE_CTL   (EE_CHAR_START+16);
+inline constexpr TypedWhichId<SvxFontItem>            EE_CHAR_FONTINFO_CJK   (EE_CHAR_START+17);
+inline constexpr TypedWhichId<SvxFontItem>            EE_CHAR_FONTINFO_CTL   (EE_CHAR_START+18);
+inline constexpr TypedWhichId<SvxFontHeightItem>      EE_CHAR_FONTHEIGHT_CJK (EE_CHAR_START+19);
+inline constexpr TypedWhichId<SvxFontHeightItem>      EE_CHAR_FONTHEIGHT_CTL (EE_CHAR_START+20);
+inline constexpr TypedWhichId<SvxWeightItem>          EE_CHAR_WEIGHT_CJK     (EE_CHAR_START+21);
+inline constexpr TypedWhichId<SvxWeightItem>          EE_CHAR_WEIGHT_CTL     (EE_CHAR_START+22);
+inline constexpr TypedWhichId<SvxPostureItem>         EE_CHAR_ITALIC_CJK     (EE_CHAR_START+23);
+inline constexpr TypedWhichId<SvxPostureItem>         EE_CHAR_ITALIC_CTL     (EE_CHAR_START+24);
+inline constexpr TypedWhichId<SvxEmphasisMarkItem>    EE_CHAR_EMPHASISMARK   (EE_CHAR_START+25);
+inline constexpr TypedWhichId<SvxCharReliefItem>      EE_CHAR_RELIEF         (EE_CHAR_START+26);
+inline constexpr TypedWhichId<SvXMLAttrContainerItem> EE_CHAR_XMLATTRIBS     (EE_CHAR_START+27);
+inline constexpr TypedWhichId<SvxOverlineItem>        EE_CHAR_OVERLINE       (EE_CHAR_START+28);
+inline constexpr TypedWhichId<SvxCaseMapItem>         EE_CHAR_CASEMAP        (EE_CHAR_START+29);
+inline constexpr TypedWhichId<SfxGrabBagItem>         EE_CHAR_GRABBAG        (EE_CHAR_START+30);
+inline constexpr TypedWhichId<SvxColorItem>           EE_CHAR_BKGCOLOR       (EE_CHAR_START+31);
 
-constexpr sal_uInt16                           EE_CHAR_END            (EE_CHAR_START + 31);
+inline constexpr sal_uInt16                           EE_CHAR_END            (EE_CHAR_START + 31);
 
-constexpr sal_uInt16 EE_FEATURE_START   (EE_CHAR_END + 1);
-constexpr sal_uInt16 EE_FEATURE_TAB     (EE_FEATURE_START + 0);
-constexpr sal_uInt16 EE_FEATURE_LINEBR  (EE_FEATURE_TAB + 1);
-constexpr sal_uInt16 EE_FEATURE_NOTCONV (EE_FEATURE_LINEBR + 1);
-constexpr TypedWhichId<SvxFieldItem> EE_FEATURE_FIELD   (EE_FEATURE_NOTCONV + 1);
-constexpr sal_uInt16 EE_FEATURE_END     (EE_FEATURE_FIELD + 0);
+inline constexpr sal_uInt16 EE_FEATURE_START   (EE_CHAR_END + 1);
+inline constexpr sal_uInt16 EE_FEATURE_TAB     (EE_FEATURE_START + 0);
+inline constexpr sal_uInt16 EE_FEATURE_LINEBR  (EE_FEATURE_TAB + 1);
+inline constexpr sal_uInt16 EE_FEATURE_NOTCONV (EE_FEATURE_LINEBR + 1);
+inline constexpr TypedWhichId<SvxFieldItem> EE_FEATURE_FIELD   (EE_FEATURE_NOTCONV + 1);
+inline constexpr sal_uInt16 EE_FEATURE_END     (EE_FEATURE_FIELD + 0);
 
-constexpr sal_uInt16 EE_ITEMS_END       (EE_FEATURE_END);
+inline constexpr sal_uInt16 EE_ITEMS_END       (EE_FEATURE_END);
 
-constexpr sal_uInt16 EDITITEMCOUNT (EE_ITEMS_END - EE_ITEMS_START + 1);
+inline constexpr sal_uInt16 EDITITEMCOUNT (EE_ITEMS_END - EE_ITEMS_START + 1);
 
 #endif // _ INCLUDED_EDITENG_EEITEM_HXX
 
