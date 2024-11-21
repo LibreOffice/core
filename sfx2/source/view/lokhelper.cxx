@@ -1030,7 +1030,7 @@ std::map<OUString, OUString> SfxLokHelper::parseCommandParameters(std::u16string
 
 void SfxLokHelper::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand)
 {
-    static constexpr OStringLiteral aSignature(".uno:Signature");
+    static constexpr OString aSignature(".uno:Signature"_ostr);
     if (!o3tl::starts_with(rCommand, aSignature))
     {
         return;
@@ -1052,6 +1052,9 @@ void SfxLokHelper::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_
         aSigningContext.m_nSignatureTime = it->second.toInt64();
     }
     pObjectShell->SignDocumentContentUsingCertificate(aSigningContext);
+    // Set commandName, this is a reply to a request.
+    rJsonWriter.put("commandName", aSignature);
+    auto aCommandValues = rJsonWriter.startNode("commandValues");
     rJsonWriter.put("signatureTime", aSigningContext.m_nSignatureTime);
 
     uno::Sequence<sal_Int8> aDigest(reinterpret_cast<sal_Int8*>(aSigningContext.m_aDigest.data()),
