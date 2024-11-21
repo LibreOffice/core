@@ -24,6 +24,7 @@ css::uno::Reference<css::beans::XMaterialHolder> initEncryption(const OUString& 
 {
     rtl::Reference<EncryptionHashTransporter> pTransporter = new EncryptionHashTransporter;
     PDFEncryptor::initEncryption(*pTransporter, i_rOwnerPassword, i_rUserPassword);
+    PDFEncryptorR6::initEncryption(*pTransporter, i_rOwnerPassword, i_rUserPassword);
     return pTransporter;
 }
 

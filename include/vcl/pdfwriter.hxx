@@ -95,7 +95,11 @@ struct PDFEncryptionProperties
     // PDFDocInfo, Owner password and User password used the InitEncryption method which
     // implements the algorithms described in the PDF reference chapter 3.5: Encryption
     std::vector<sal_uInt8> OValue;
+    std::vector<sal_uInt8> OE; // needed by R6 algorithm
+
     std::vector<sal_uInt8> UValue;
+    std::vector<sal_uInt8> UE; // needed by R6 algorithm
+
     std::vector<sal_uInt8> EncryptionKey;
     std::vector<sal_uInt8> DocumentIdentifier;
 
@@ -107,7 +111,9 @@ struct PDFEncryptionProperties
     void clear()
     {
         OValue.clear();
+        OE.clear();
         UValue.clear();
+        UE.clear();
         EncryptionKey.clear();
     }
 

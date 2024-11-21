@@ -10,21 +10,25 @@
 #include <sal/config.h>
 #include <config_oox.h>
 
-#include <algorithm>
-#include <memory>
-#include <string_view>
-
 #include <test/unoapi_test.hxx>
 #include <o3tl/string_view.hxx>
 
-#include <vcl/filter/PDFiumLibrary.hxx>
-#include <vcl/pdfread.hxx>
-#include <comphelper/propertyvalue.hxx>
-#include <cmath>
-
+#include <unotools/mediadescriptor.hxx>
 #include <comphelper/crypto/Crypto.hxx>
 #include <comphelper/hash.hxx>
 #include <comphelper/random.hxx>
+#include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
+
+#include <vcl/filter/PDFiumLibrary.hxx>
+#include <vcl/pdfread.hxx>
+
+#include <com/sun/star/frame/XStorable.hpp>
+
+#include <algorithm>
+#include <memory>
+#include <string_view>
+#include <cmath>
 
 #include <pdf/PDFEncryptorR6.hxx>
 
@@ -38,6 +42,9 @@ namespace
 {
 class PDFEncryptionTest : public UnoApiTest
 {
+protected:
+    utl::MediaDescriptor maMediaDescriptor;
+
 public:
     PDFEncryptionTest()
         : UnoApiTest("/vcl/qa/cppunit/pdfexport/data/")
@@ -77,6 +84,48 @@ std::vector<sal_uInt8> parseHex(std::string_view rString)
         aResult.push_back(convertHexChar(rString[i], rString[i + 1]));
     }
     return aResult;
+}
+
+CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testEncryptionRoundtrip_PDF_1_7)
+{
+    loadFromFile(u"BrownFoxLazyDog.odt");
+
+    // Save PDF
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    maMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    uno::Sequence<beans::PropertyValue> aFilterData = comphelper::InitPropertySequence(
+        { { "SelectPdfVersion", uno::Any(sal_Int32(17)) },
+          { "EncryptFile", uno::Any(true) },
+          { "DocumentOpenPassword", uno::Any(u"secret"_ustr) } });
+    maMediaDescriptor["FilterData"] <<= aFilterData;
+    xStorable->storeToURL(maTempFile.GetURL(), maMediaDescriptor.getAsConstPropertyValueList());
+
+    // Load the exported result in PDFium
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport("secret"_ostr);
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+    int nFileVersion = pPdfDocument->getFileVersion();
+    CPPUNIT_ASSERT_EQUAL(17, nFileVersion);
+}
+
+CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testEncryptionRoundtrip_PDF_2_0)
+{
+    loadFromFile(u"BrownFoxLazyDog.odt");
+
+    // Save PDF
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    maMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    uno::Sequence<beans::PropertyValue> aFilterData = comphelper::InitPropertySequence(
+        { { "SelectPdfVersion", uno::Any(sal_Int32(20)) },
+          { "EncryptFile", uno::Any(true) },
+          { "DocumentOpenPassword", uno::Any(u"secret"_ustr) } });
+    maMediaDescriptor["FilterData"] <<= aFilterData;
+    xStorable->storeToURL(maTempFile.GetURL(), maMediaDescriptor.getAsConstPropertyValueList());
+
+    // Load the exported result in PDFium
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport("secret"_ostr);
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+    int nFileVersion = pPdfDocument->getFileVersion();
+    CPPUNIT_ASSERT_EQUAL(20, nFileVersion);
 }
 
 CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testComputeHashForR6)
@@ -255,6 +304,75 @@ CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testPadding)
     CPPUNIT_ASSERT_EQUAL(size_t(constBlockSize), nPaddedSize);
     for (size_t i = 6; i < constBlockSize; i++)
         CPPUNIT_ASSERT_EQUAL(sal_uInt8(0x0B), aVector[i]);
+}
+
+CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testFileDecryption)
+{
+    std::vector<sal_uInt8> aData
+        = parseHex("d07efca5cce3c18fd8e344d45d826886d1774c5e1e310c971f8578924f848fc6");
+
+    std::vector<sal_uInt8> iv(aData.begin(), aData.begin() + 16);
+
+    CPPUNIT_ASSERT_EQUAL(std::string("d07efca5cce3c18fd8e344d45d826886"),
+                         comphelper::hashToString(iv));
+
+    std::vector<sal_uInt8> aEncryptedString(aData.begin() + 16, aData.end());
+
+    std::vector<sal_uInt8> U = parseHex("7BD210807A0277FECC52C261C442F02E1AD62C1A23553348B8F8AF7320"
+                                        "DC9978FAB7E65E1BF4CA76F4BE5E6D2AA8C7D5");
+
+    std::vector<sal_uInt8> UE
+        = parseHex("67022D91A6BDF3179F488DC9658E54B78A0AD05C6A9C419DCD17A6941C151197");
+
+    const sal_uInt8 pUserPass[] = { 'T', 'e', 's', 't' };
+
+    CPPUNIT_ASSERT_EQUAL(true, vcl::pdf::validateUserPassword(pUserPass, 4, U));
+
+    std::vector<sal_uInt8> aDecryptedKey = vcl::pdf::decryptKey(pUserPass, 4, U, UE);
+
+    CPPUNIT_ASSERT_EQUAL(
+        std::string("90e657b78c0315610f3f421bd396ff635fa8fe3cf2ea399e7e1ae23e6185b4fc"),
+        comphelper::hashToString(aDecryptedKey));
+
+    comphelper::Decrypt aDecrypt(aDecryptedKey, iv, comphelper::CryptoType::AES_256_CBC);
+
+    std::vector<sal_uInt8> aOutput(aEncryptedString.size(), 0);
+
+    aDecrypt.update(aOutput, aEncryptedString);
+
+    CPPUNIT_ASSERT_EQUAL(
+        std::string("656e2d47420b0b0b0b0b0b0b0b0b0b0b"), // 'en-GB' + padding 0x0B = 11 chars
+        comphelper::hashToString(aOutput));
+}
+
+CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testFileEncryption)
+{
+    std::vector<sal_uInt8> aKey
+        = parseHex("90e657b78c0315610f3f421bd396ff635fa8fe3cf2ea399e7e1ae23e6185b4fc");
+    std::vector<sal_uInt8> aIV = parseHex("d07efca5cce3c18fd8e344d45d826886");
+
+    static constexpr const auto aData = std::to_array<sal_uInt8>({ 'e', 'n', '-', 'G', 'B' });
+
+    std::vector<sal_uInt8> aEncryptedBuffer;
+
+    vcl::pdf::PDFEncryptorR6 aEncryptor;
+    aEncryptor.setupEncryptionWithIV(aKey, aIV);
+    aEncryptor.encrypt(aData.data(), aData.size(), aEncryptedBuffer, aData.size());
+
+    CPPUNIT_ASSERT_EQUAL(
+        std::string("d07efca5cce3c18fd8e344d45d826886d1774c5e1e310c971f8578924f848fc6"),
+        comphelper::hashToString(aEncryptedBuffer));
+
+    // Decrypt
+    std::vector<sal_uInt8> aEncryptedIV(aEncryptedBuffer.begin(), aEncryptedBuffer.begin() + 16);
+    std::vector<sal_uInt8> aEncryptedString(aEncryptedBuffer.begin() + 16, aEncryptedBuffer.end());
+    comphelper::Decrypt aDecrypt(aKey, aEncryptedIV, comphelper::CryptoType::AES_256_CBC);
+    std::vector<sal_uInt8> aOutputString(aEncryptedString.size(), 0);
+    aDecrypt.update(aOutputString, aEncryptedString);
+
+    CPPUNIT_ASSERT_EQUAL(
+        std::string("656e2d47420b0b0b0b0b0b0b0b0b0b0b"), // 'en-GB' + padding 0x0B = 11 chars
+        comphelper::hashToString(aOutputString));
 }
 
 } // end anonymous namespace

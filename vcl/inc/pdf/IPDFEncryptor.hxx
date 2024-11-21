@@ -5,7 +5,6 @@
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
- *
  */
 
 #pragma once
@@ -59,7 +58,7 @@ public:
      * Depending on the encryption revision this may not be available. In that
      * case we can expect empty content.
      */
-    virtual std::vector<sal_uInt8> getEncryptedAccessPermissions()
+    virtual std::vector<sal_uInt8> getEncryptedAccessPermissions(std::vector<sal_uInt8>& /*rKey*/)
     {
         return std::vector<sal_uInt8>();
     }
@@ -78,6 +77,9 @@ public:
 
     /** Setup before we start encrypting - remembers the key */
     virtual void setupEncryption(std::vector<sal_uInt8>& rEncryptionKey, sal_Int32 nObject) = 0;
+
+    /** Calculate the size of the output (by default the same as input) */
+    virtual sal_uInt64 calculateSizeIncludingHeader(sal_uInt64 nSize) { return nSize; }
 
     /** Encrypts the input and stores into the output */
     virtual void encrypt(const void* pInput, sal_uInt64 nInputSize, std::vector<sal_uInt8>& rOutput,
