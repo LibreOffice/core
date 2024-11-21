@@ -128,7 +128,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
 
     if ( nCurRefDlgId != nSlotId )
     {
-        if (!(comphelper::LibreOfficeKit::isActive() && nSlotId == SID_OPENDLG_FUNCTION))
+        if (!comphelper::LibreOfficeKit::isActive())
         {
             //  the dialog has been opened in a different view
             //  -> lock the dispatcher for this view (modal mode)

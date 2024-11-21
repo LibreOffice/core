@@ -223,9 +223,7 @@ void ScDLL::Init()
     SvxHlinkDlgWrapper          ::RegisterChildWindow(false, pMod);
     SvxFontWorkChildWindow      ::RegisterChildWindow(false, pMod);
     SvxIMapDlgChildWindow       ::RegisterChildWindow(false, pMod);
-    ScSpellDialogChildWindow::RegisterChildWindow(
-        false, pMod, comphelper::LibreOfficeKit::isActive() ? SfxChildWindowFlags::NEVERCLONE
-                                                            : SfxChildWindowFlags::NONE);
+    ScSpellDialogChildWindow    ::RegisterChildWindow(false, pMod);
 
     ScValidityRefChildWin::RegisterChildWindow(false, pMod);
     sc::SearchResultsDlgWrapper::RegisterChildWindow(false, pMod);

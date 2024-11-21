@@ -172,9 +172,7 @@ void SdDLL::RegisterControllers(SdModule* pMod)
     SvxBmpMaskChildWindow::RegisterChildWindow(false, pMod);
     SvxIMapDlgChildWindow::RegisterChildWindow(false, pMod);
     SvxHlinkDlgWrapper::RegisterChildWindow(false, pMod);
-    ::sd::SpellDialogChildWindow::RegisterChildWindow(
-        false, pMod, comphelper::LibreOfficeKit::isActive() ? SfxChildWindowFlags::NEVERCLONE
-                                                            : SfxChildWindowFlags::NONE);
+    ::sd::SpellDialogChildWindow::RegisterChildWindow(false, pMod);
 #if HAVE_FEATURE_AVMEDIA
     ::avmedia::MediaPlayer::RegisterChildWindow(false, pMod);
 #endif
