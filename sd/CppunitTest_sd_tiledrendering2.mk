@@ -14,7 +14,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,sd_tiledrendering2))
 $(eval $(call gb_CppunitTest_use_common_precompiled_header,sd_tiledrendering2))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sd_tiledrendering2, \
-    sd/qa/unit/tiledrendering2/tiledrendering2 \
+    sd/qa/unit/tiledrendering/tiledrendering2 \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sd_tiledrendering2, \
