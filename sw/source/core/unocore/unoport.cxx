@@ -52,7 +52,7 @@ using namespace ::com::sun::star;
 
 void SwXTextPortion::init(const SwUnoCursor* pPortionCursor)
 {
-    m_pUnoCursor = pPortionCursor->GetDoc().CreateUnoCursor(*pPortionCursor->GetPoint());
+    m_pUnoCursor.reset(pPortionCursor->GetDoc().CreateUnoCursor(*pPortionCursor->GetPoint()));
     if (pPortionCursor->HasMark())
     {
         m_pUnoCursor->SetMark();

@@ -1454,7 +1454,7 @@ SwXTextTableCursor::SwXTextTableCursor(SwFrameFormat* pFrameFormat, SwTableBox c
     SwDoc* pDoc = m_pFrameFormat->GetDoc();
     const SwStartNode* pSttNd = pBox->GetSttNd();
     SwPosition aPos(*pSttNd);
-    m_pUnoCursor = pDoc->CreateUnoCursor(aPos, true);
+    m_pUnoCursor.reset(pDoc->CreateUnoCursor(aPos, true));
     m_pUnoCursor->Move( fnMoveForward, GoInNode );
     SwUnoTableCursor& rTableCursor = dynamic_cast<SwUnoTableCursor&>(*m_pUnoCursor);
     rTableCursor.MakeBoxSels();
@@ -1465,7 +1465,7 @@ SwXTextTableCursor::SwXTextTableCursor(SwFrameFormat& rTableFormat, const SwTabl
     , m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_TABLE_CURSOR))
 {
     StartListening(m_pFrameFormat->GetNotifier());
-    m_pUnoCursor = pTableSelection->GetDoc().CreateUnoCursor(*pTableSelection->GetPoint(), true);
+    m_pUnoCursor.reset(pTableSelection->GetDoc().CreateUnoCursor(*pTableSelection->GetPoint(), true));
     if(pTableSelection->HasMark())
     {
         m_pUnoCursor->SetMark();
