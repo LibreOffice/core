@@ -52,7 +52,6 @@ class OutputDevice;
 class SvxCaseMapItem;
 class SfxGrabBagItem;
 
-#define CH_FEATURE_OLD  (sal_uInt8)         0xFF
 #define CH_FEATURE      u'\x0001'
 #define CH_SOFTHYPHEN   u'\x00AD'
 
@@ -60,8 +59,6 @@ class SfxGrabBagItem;
 // GetMetric (nWhich)!
 // => To determine the DefMetric simply use GetMetric(0)
 #define DEF_METRIC  0
-
-
 
 // bFeature: Attribute must not expand/shrink, length is always 1
 // bEdge: Attribute will not expand, if you want to expand just on the edge
