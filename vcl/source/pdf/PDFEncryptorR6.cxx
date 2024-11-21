@@ -14,11 +14,14 @@
 #include <comphelper/hash.hxx>
 #include <comphelper/random.hxx>
 
+using namespace css;
+
 namespace vcl::pdf
 {
 namespace
 {
 constexpr size_t IV_SIZE = 16;
+constexpr size_t BLOCK_SIZE = 16;
 constexpr size_t KEY_SIZE = 32;
 constexpr size_t SALT_SIZE = 8;
 
@@ -155,7 +158,7 @@ std::vector<sal_uInt8> encryptPerms(std::vector<sal_uInt8>& rPerms,
 std::vector<sal_uInt8> createPerms(sal_Int32 nAccessPermissions, bool bEncryptMetadata)
 {
     std::vector<sal_uInt8> aPermsCreated;
-    generateBytes(aPermsCreated, 16);
+    generateBytes(aPermsCreated, 16); // fill with random data - mainly for last 4 bytes
     aPermsCreated[0] = sal_uInt8(nAccessPermissions);
     aPermsCreated[1] = sal_uInt8(nAccessPermissions >> 8);
     aPermsCreated[2] = sal_uInt8(nAccessPermissions >> 16);
@@ -247,6 +250,128 @@ size_t addPaddingToVector(std::vector<sal_uInt8>& rVector, size_t nBlockSize)
         rVector.resize(nPaddedSize, nPaddedValue);
     }
     return nPaddedSize;
+}
+
+class VCL_DLLPUBLIC EncryptionContext
+{
+private:
+    std::vector<sal_uInt8> maKey;
+    std::vector<sal_uInt8> maInitVector;
+
+public:
+    EncryptionContext(std::vector<sal_uInt8> const& rKey, std::vector<sal_uInt8> const& rIV)
+        : maKey(rKey)
+        , maInitVector(rIV)
+    {
+    }
+
+    /** Algorithm 1.A: Encryption of data using the AES algorithms
+     *
+     **/
+    void encrypt(const void* pInput, sal_uInt64 nInputSize, std::vector<sal_uInt8>& rOutput)
+    {
+        comphelper::Encrypt aEncrypt(maKey, maInitVector, comphelper::CryptoType::AES_256_CBC);
+        const sal_uInt8* pInputBytes = static_cast<const sal_uInt8*>(pInput);
+        std::vector<sal_uInt8> aInput(pInputBytes, pInputBytes + nInputSize);
+        size_t nPaddedSize = addPaddingToVector(aInput, BLOCK_SIZE);
+        std::vector<sal_uInt8> aOutput(nPaddedSize);
+        aEncrypt.update(aOutput, aInput);
+        rOutput.resize(nPaddedSize + IV_SIZE);
+        std::copy(maInitVector.begin(), maInitVector.end(), rOutput.begin());
+        std::copy(aOutput.begin(), aOutput.end(), rOutput.begin() + IV_SIZE);
+    }
+};
+
+PDFEncryptorR6::PDFEncryptorR6() = default;
+PDFEncryptorR6::~PDFEncryptorR6() = default;
+
+std::vector<sal_uInt8> PDFEncryptorR6::getEncryptedAccessPermissions(std::vector<sal_uInt8>& rKey)
+{
+    std::vector<sal_uInt8> aPerms = createPerms(m_nAccessPermissions, false);
+    return encryptPerms(aPerms, rKey);
+}
+
+void PDFEncryptorR6::initEncryption(EncryptionHashTransporter& rEncryptionHashTransporter,
+                                    const OUString& rOwnerPassword, const OUString& rUserPassword)
+{
+    if (rUserPassword.isEmpty())
+        return;
+
+    std::vector<sal_uInt8> aEncryptionKey = vcl::pdf::generateKey();
+    rEncryptionHashTransporter.setEncryptionKey(aEncryptionKey);
+
+    std::vector<sal_uInt8> U;
+    std::vector<sal_uInt8> UE;
+
+    OString pUserPasswordUtf8 = OUStringToOString(rUserPassword, RTL_TEXTENCODING_UTF8);
+    vcl::pdf::generateUandUE(reinterpret_cast<const sal_uInt8*>(pUserPasswordUtf8.getStr()),
+                             pUserPasswordUtf8.getLength(), aEncryptionKey, U, UE);
+
+    rEncryptionHashTransporter.setU(U);
+    rEncryptionHashTransporter.setUE(UE);
+
+    OUString aOwnerPasswordToUse = rOwnerPassword.isEmpty() ? rUserPassword : rOwnerPassword;
+
+    std::vector<sal_uInt8> O;
+    std::vector<sal_uInt8> OE;
+
+    OString pOwnerPasswordUtf8 = OUStringToOString(aOwnerPasswordToUse, RTL_TEXTENCODING_UTF8);
+    vcl::pdf::generateOandOE(reinterpret_cast<const sal_uInt8*>(pOwnerPasswordUtf8.getStr()),
+                             pOwnerPasswordUtf8.getLength(), aEncryptionKey, U, O, OE);
+
+    rEncryptionHashTransporter.setO(O);
+    rEncryptionHashTransporter.setOE(OE);
+}
+
+bool PDFEncryptorR6::prepareEncryption(
+    const uno::Reference<beans::XMaterialHolder>& xEncryptionMaterialHolder,
+    vcl::PDFEncryptionProperties& rProperties)
+{
+    auto* pTransporter
+        = EncryptionHashTransporter::getEncHashTransporter(xEncryptionMaterialHolder);
+
+    if (!pTransporter)
+    {
+        rProperties.clear();
+        return false;
+    }
+
+    rProperties.UValue = pTransporter->getU();
+    rProperties.UE = pTransporter->getUE();
+    rProperties.OValue = pTransporter->getO();
+    rProperties.OE = pTransporter->getOE();
+    rProperties.EncryptionKey = pTransporter->getEncryptionKey();
+
+    return true;
+}
+
+void PDFEncryptorR6::setupKeysAndCheck(vcl::PDFEncryptionProperties& rProperties)
+{
+    m_nAccessPermissions = rProperties.getAccessPermissions();
+}
+
+sal_uInt64 PDFEncryptorR6::calculateSizeIncludingHeader(sal_uInt64 nSize)
+{
+    return IV_SIZE + comphelper::roundUp<sal_uInt64>(nSize, BLOCK_SIZE);
+}
+
+void PDFEncryptorR6::setupEncryption(std::vector<sal_uInt8>& rEncryptionKey, sal_Int32 /*nObject*/)
+{
+    std::vector<sal_uInt8> aInitVector;
+    generateBytes(aInitVector, IV_SIZE);
+    m_pEncryptionContext = std::make_unique<EncryptionContext>(rEncryptionKey, aInitVector);
+}
+
+void PDFEncryptorR6::setupEncryptionWithIV(std::vector<sal_uInt8>& rEncryptionKey,
+                                           std::vector<sal_uInt8>& rInitvector)
+{
+    m_pEncryptionContext = std::make_unique<EncryptionContext>(rEncryptionKey, rInitvector);
+}
+
+void PDFEncryptorR6::encrypt(const void* pInput, sal_uInt64 nInputSize,
+                             std::vector<sal_uInt8>& rOutput, sal_uInt64 /*nOutputSize*/)
+{
+    m_pEncryptionContext->encrypt(pInput, nInputSize, rOutput);
 }
 
 } // end vcl::pdf

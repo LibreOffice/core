@@ -5,7 +5,6 @@
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
- *
  */
 
 #pragma once
@@ -28,8 +27,18 @@ namespace vcl::pdf
 */
 class EncryptionHashTransporter : public cppu::WeakImplHelper<css::beans::XMaterialHolder>
 {
+    // V2R3
     std::unique_ptr<comphelper::Hash> m_pDigest;
     std::vector<sal_uInt8> maOValue;
+
+    // V5R6
+    std::vector<sal_uInt8> mU;
+    std::vector<sal_uInt8> mUE;
+    std::vector<sal_uInt8> mO;
+    std::vector<sal_uInt8> mOE;
+    std::vector<sal_uInt8> maEncryptionKey;
+
+    // ID
     sal_IntPtr maID;
 
 public:
@@ -42,6 +51,24 @@ public:
     std::vector<sal_uInt8>& getOValue() { return maOValue; }
 
     void invalidate() { m_pDigest.reset(); }
+
+    std::vector<sal_uInt8> getU() { return mU; }
+    void setU(std::vector<sal_uInt8> const& rU) { mU = rU; }
+
+    std::vector<sal_uInt8> getUE() { return mUE; }
+    void setUE(std::vector<sal_uInt8> const& rUE) { mUE = rUE; }
+
+    std::vector<sal_uInt8> getO() { return mO; }
+    void setO(std::vector<sal_uInt8> const& rO) { mO = rO; }
+
+    std::vector<sal_uInt8> getOE() { return mOE; }
+    void setOE(std::vector<sal_uInt8> const& rOE) { mOE = rOE; }
+
+    std::vector<sal_uInt8> getEncryptionKey() { return maEncryptionKey; }
+    void setEncryptionKey(std::vector<sal_uInt8> const& rEncryptionKey)
+    {
+        maEncryptionKey = rEncryptionKey;
+    }
 
     // XMaterialHolder
     virtual css::uno::Any SAL_CALL getMaterial() override { return css::uno::Any(sal_Int64(maID)); }

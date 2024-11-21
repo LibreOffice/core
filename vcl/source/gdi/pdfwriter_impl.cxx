@@ -96,7 +96,7 @@
 #include <pdf/objectcopier.hxx>
 #include <pdf/pdfwriter_impl.hxx>
 #include <pdf/PdfConfig.hxx>
-#include <pdf/IPDFEncryptor.hxx>
+#include <pdf/PDFEncryptorR6.hxx>
 #include <pdf/PDFEncryptor.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <frozen/bits/defines.h>
@@ -141,6 +141,12 @@ void appendHex(sal_Int8 nInt, OStringBuffer& rBuffer)
                                            '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
     rBuffer.append( pHexDigits[ (nInt >> 4) & 15 ] );
     rBuffer.append( pHexDigits[ nInt & 15 ] );
+}
+
+void appendHexArray(sal_uInt8* pArray, size_t nSize, OStringBuffer& rBuffer)
+{
+    for (size_t i = 0; i < nSize; i++)
+        appendHex(pArray[i], rBuffer);
 }
 
 void appendName( std::u16string_view rStr, OStringBuffer& rBuffer )
@@ -1459,7 +1465,10 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext,
 
     if (xEncryptionMaterialHolder.is())
     {
-        m_pPDFEncryptor.reset(new PDFEncryptor);
+        if (m_aContext.Version == PDFWriter::PDFVersion::PDF_2_0 || m_aContext.Version == PDFWriter::PDFVersion::PDF_A_4)
+            m_pPDFEncryptor.reset(new PDFEncryptorR6);
+        else
+            m_pPDFEncryptor.reset(new PDFEncryptor);
         m_pPDFEncryptor->prepareEncryption(xEncryptionMaterialHolder, m_aContext.Encryption);
     }
 
@@ -1618,10 +1627,10 @@ inline void PDFWriterImpl::appendUnicodeTextStringEncrypt( const OUString& rInSt
             *pCopy++ = static_cast<sal_uInt8>( aUnChar & 255 );
         }
         //encrypt in place
-        m_pPDFEncryptor->encrypt(m_vEncryptionBuffer.data(), nChars, m_vEncryptionBuffer, nChars);
+        std::vector<sal_uInt8> aNewBuffer(nChars);
+        m_pPDFEncryptor->encrypt(m_vEncryptionBuffer.data(), nChars, aNewBuffer, nChars);
         //now append, hexadecimal (appendHex), the encrypted result
-        for(int i = 0; i < nChars; i++)
-            appendHex( m_vEncryptionBuffer[i], rOutBuffer );
+        appendHexArray(aNewBuffer.data(), aNewBuffer.size(), rOutBuffer);
     }
     else
         PDFWriter::AppendUnicodeTextString(rInString, rOutBuffer);
@@ -1639,7 +1648,7 @@ inline void PDFWriterImpl::appendLiteralStringEncrypt( std::string_view rInStrin
         //encrypt the string in a buffer, then append it
         enableStringEncryption(nInObjectNumber);
         m_pPDFEncryptor->encrypt(rInString.data(), nChars, m_vEncryptionBuffer, nChars);
-        appendLiteralString( reinterpret_cast<char*>(m_vEncryptionBuffer.data()), nChars, rOutBuffer );
+        appendLiteralString(reinterpret_cast<char*>(m_vEncryptionBuffer.data()), m_vEncryptionBuffer.size(), rOutBuffer);
     }
     else
         appendLiteralString( rInString.data(), nChars , rOutBuffer );
@@ -1738,34 +1747,41 @@ bool PDFWriterImpl::writeBufferBytes( const void* pBuffer, sal_uInt64 nBytes )
     }
 
     sal_uInt64 nWritten;
-    if( m_pCodec )
+    sal_uInt64 nActualSize = nBytes;
+
+    // we are compressing the stream
+    if (m_pCodec)
     {
         m_pCodec->Write( *m_pMemStream, static_cast<const sal_uInt8*>(pBuffer), static_cast<sal_uLong>(nBytes) );
         nWritten = nBytes;
     }
     else
     {
+        // is it encrypted?
         bool bStreamEncryption = m_pPDFEncryptor && m_pPDFEncryptor->isStreamEncryptionEnabled();
         if (bStreamEncryption)
         {
-            m_vEncryptionBuffer.resize(nBytes);
-            m_pPDFEncryptor->encrypt(pBuffer, nBytes, m_vEncryptionBuffer, nBytes);
+            nActualSize = m_pPDFEncryptor->calculateSizeIncludingHeader(nActualSize);
+            m_vEncryptionBuffer.resize(nActualSize);
+            m_pPDFEncryptor->encrypt(pBuffer, nBytes, m_vEncryptionBuffer, nActualSize);
         }
 
         const void* pWriteBuffer = bStreamEncryption ? m_vEncryptionBuffer.data() : pBuffer;
-        m_DocDigest.update(static_cast<unsigned char const*>(pWriteBuffer), static_cast<sal_uInt32>(nBytes));
+        m_DocDigest.update(static_cast<unsigned char const*>(pWriteBuffer), sal_uInt32(nActualSize));
 
-        if (m_aFile.write(pWriteBuffer, nBytes, nWritten) != osl::File::E_None)
+        if (m_aFile.write(pWriteBuffer, nActualSize, nWritten) != osl::File::E_None)
             nWritten = 0;
 
-        if( nWritten != nBytes )
+        if (nWritten != nActualSize)
         {
             m_aFile.close();
             m_bOpen = false;
+            return false;
         }
+        return true;
     }
 
-    return nWritten == nBytes;
+    return nWritten == nActualSize;
 }
 
 void PDFWriterImpl::newPage( double nPageWidth, double nPageHeight, PDFWriter::Orientation eOrientation )
@@ -6160,12 +6176,34 @@ sal_Int32 PDFWriterImpl::emitEncrypt()
         aWriter.startObject(nObject);
         aWriter.startDict();
         aWriter.write("/Filter", "/Standard");
-        aWriter.write("/V", 2);
-        aWriter.write("/Length", 128);
-        aWriter.write("/R", 3);
-        // emit the owner password, must not be encrypted
-        aWriter.writeHexArray("/O", rProperties.OValue.data(), rProperties.OValue.size());
-        aWriter.writeHexArray("/U", rProperties.UValue.data(), rProperties.UValue.size());
+        aWriter.write("/V", m_pPDFEncryptor->getVersion());
+        aWriter.write("/Length", m_pPDFEncryptor->getKeyLength() * 8);
+        aWriter.write("/R", m_pPDFEncryptor->getRevision());
+
+        if (m_pPDFEncryptor->getVersion() == 5 && m_pPDFEncryptor->getRevision() == 6)
+        {
+            // emit the owner password, must not be encrypted
+            aWriter.writeHexArray("/U", rProperties.UValue.data(), rProperties.UValue.size());
+            aWriter.writeHexArray("/UE", rProperties.UE.data(), rProperties.UE.size());
+            aWriter.writeHexArray("/O", rProperties.OValue.data(), rProperties.OValue.size());
+            aWriter.writeHexArray("/OE", rProperties.OE.data(), rProperties.OE.size());
+
+            // Encrypted perms
+            std::vector<sal_uInt8> aEncryptedPermissions = m_pPDFEncryptor->getEncryptedAccessPermissions(rProperties.EncryptionKey);
+            aWriter.writeHexArray("/Perms", aEncryptedPermissions.data(), aEncryptedPermissions.size());
+
+            // Write content filter stuff - to select we want AESv3 256bit
+            aWriter.write("/CF", "<</StdCF <</CFM /AESV3 /Length 256>>>>");
+            aWriter.write("/StmF", "/StdCF");
+            aWriter.write("/StrF", "/StdCF");
+            aWriter.write("/EncryptMetadata", " false ");
+        }
+        else
+        {
+            // emit the owner password, must not be encrypted
+            aWriter.writeHexArray("/U", rProperties.UValue.data(), rProperties.UValue.size());
+            aWriter.writeHexArray("/O", rProperties.OValue.data(), rProperties.OValue.size());
+        }
         aWriter.write("/P", m_pPDFEncryptor->getAccessPermissions());
         aWriter.endDict();
         aWriter.endObject();
@@ -9825,15 +9863,10 @@ bool PDFWriterImpl::writeBitmapObject( const BitmapEmit& rObject, bool bMask )
                     m_vEncryptionBuffer[nChar++] = rColor.GetBlue();
                 }
                 //encrypt the colorspace lookup table
-                m_pPDFEncryptor->encrypt(m_vEncryptionBuffer.data(), nChar, m_vEncryptionBuffer, nChar);
+                std::vector<sal_uInt8> aOutputBuffer(nChar);
+                m_pPDFEncryptor->encrypt(m_vEncryptionBuffer.data(), nChar, aOutputBuffer, nChar);
                 //now queue the data for output
-                nChar = 0;
-                for( sal_uInt16 i = 0; i < pAccess->GetPaletteEntryCount(); i++ )
-                {
-                    appendHex(m_vEncryptionBuffer[nChar++], aLine );
-                    appendHex(m_vEncryptionBuffer[nChar++], aLine );
-                    appendHex(m_vEncryptionBuffer[nChar++], aLine );
-                }
+                appendHexArray(aOutputBuffer.data(), aOutputBuffer.size(), aLine);
             }
             else //no encryption requested (PDF/A-1a program flow drops here)
             {
