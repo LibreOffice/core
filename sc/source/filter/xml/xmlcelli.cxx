@@ -842,10 +842,11 @@ void ScXMLTableRowCellContext::SetAnnotation(const ScAddress& rPos)
 
         /*  Don't attempt to get the style from the SdrObject,
             as it might be a default assigned one. */
-        auto pStyle = rXMLImport.GetShapeImport()->GetAutoStylesContext()->FindStyleChildContext(
-            XmlStyleFamily::SD_GRAPHICS_ID, mxAnnotationData->maStyleName);
+        const SvXMLStylesContext* pStylesCtxt = rXMLImport.GetShapeImport()->GetAutoStylesContext();
+        const SvXMLStyleContext* pStyle = pStylesCtxt ? pStylesCtxt->FindStyleChildContext(
+            XmlStyleFamily::SD_GRAPHICS_ID, mxAnnotationData->maStyleName) : nullptr;
         OUString aStyleName = pStyle ? pStyle->GetParentName() : mxAnnotationData->maStyleName;
-        assert(!rXMLImport.GetShapeImport()->GetAutoStylesContext()->FindStyleChildContext(
+        assert(!pStylesCtxt || !pStylesCtxt->FindStyleChildContext(
             XmlStyleFamily::SD_GRAPHICS_ID, aStyleName));
         aStyleName = rXMLImport.GetStyleDisplayName(XmlStyleFamily::SD_GRAPHICS_ID, aStyleName);
 
