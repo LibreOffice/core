@@ -118,7 +118,7 @@ public:
 
     /** Calculate and set the slide size depending on input desired size (in pixels)
      *
-     * Input the desired size in pixels, and the actual size pixels will be caluclated
+     * Input the desired size in pixels, and the actual size pixels will be calculated
      * depending on the size of the slide and the desired size. The size can differ,
      * because the it must match the slide aspect ratio.
      **/
@@ -127,7 +127,7 @@ public:
     /** Renders one layer
      *
      * The slide layer is rendered into the input buffer, which must be the byte size
-     * of the calcualted size in pixels * 4 (RGBA).
+     * of the calculated size in pixels * 4 (RGBA).
      * The properties of the layer are written to the input string in JSON format.
      *
      * @returns false, if nothing was rendered and rendering is done */
