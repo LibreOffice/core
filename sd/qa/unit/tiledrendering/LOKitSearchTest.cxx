@@ -7,13 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "CallbackRecorder.hxx"
-#include <test/unoapi_test.hxx>
+#include "tiledrenderingmodeltestbase.cxx"
 
 #include <test/helper/transferable.hxx>
 
 #include <comphelper/propertysequence.hxx>
-#include <comphelper/lok.hxx>
 #include <svl/srchitem.hxx>
 #include <vcl/scheduler.hxx>
 #include <ViewShellBase.hxx>
@@ -28,60 +26,18 @@
 
 using namespace css;
 
-class LOKitSearchTest : public UnoApiTest
+class LOKitSearchTest : public SdTiledRenderingTest
 {
 public:
     LOKitSearchTest()
-        : UnoApiTest(u"/sd/qa/unit/tiledrendering/data/"_ustr)
+        : SdTiledRenderingTest()
     {
     }
-
-    virtual void setUp() override;
-    virtual void tearDown() override;
 
 protected:
-    SdXImpressDocument* createDoc(const char* pName,
-                                  const uno::Sequence<beans::PropertyValue>& rArguments
-                                  = uno::Sequence<beans::PropertyValue>());
     void lcl_search(const OUString& rKey, bool bFindAll = false, bool bBackwards = false);
     void lcl_replace(const OUString& rKey, const OUString& rReplace, bool bAll = false);
-
-    std::unique_ptr<CallbackRecorder> mpCallbackRecorder;
 };
-
-void LOKitSearchTest::setUp()
-{
-    UnoApiTest::setUp();
-
-    // prevent showing warning message box
-    setenv("OOX_NO_SMARTART_WARNING", "1", 1);
-    comphelper::LibreOfficeKit::setActive(true);
-
-    mpCallbackRecorder = std::make_unique<CallbackRecorder>();
-}
-
-void LOKitSearchTest::tearDown()
-{
-    if (mxComponent.is())
-    {
-        mxComponent->dispose();
-        mxComponent.clear();
-    }
-
-    comphelper::LibreOfficeKit::setActive(false);
-
-    UnoApiTest::tearDown();
-}
-
-SdXImpressDocument*
-LOKitSearchTest::createDoc(const char* pName, const uno::Sequence<beans::PropertyValue>& rArguments)
-{
-    loadFromFile(OUString::createFromAscii(pName));
-    SdXImpressDocument* pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pImpressDocument);
-    pImpressDocument->initializeForTiledRendering(rArguments);
-    return pImpressDocument;
-}
 
 void LOKitSearchTest::lcl_search(const OUString& rKey, bool bFindAll, bool bBackwards)
 {
@@ -129,7 +85,7 @@ CPPUNIT_TEST_FIXTURE(LOKitSearchTest, Search)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
-    mpCallbackRecorder->registerCallbacksFor(pViewShell->GetViewShellBase());
+    setupLibreOfficeKitViewCallback(pViewShell->GetViewShellBase());
     uno::Reference<container::XIndexAccess> xDrawPage(
         pXImpressDocument->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -143,28 +99,27 @@ CPPUNIT_TEST_FIXTURE(LOKitSearchTest, Search)
     CPPUNIT_ASSERT_EQUAL(u"bbb"_ustr, rEditView.GetSelected());
 
     // Did the selection callback fire?
-    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), mpCallbackRecorder->m_aSelection.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), m_aSelection.size());
 
     // Search for something on the second slide, and make sure that the set-part callback fired.
     lcl_search(u"bbb"_ustr);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), mpCallbackRecorder->m_nPart);
-    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), m_nPart);
+    CPPUNIT_ASSERT_EQUAL(true, m_bFound);
     // This was 0; should be 1 match for "find".
-    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1),
-                         mpCallbackRecorder->m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), m_aSearchResultSelection.size());
     // Result is on the second slide.
-    CPPUNIT_ASSERT_EQUAL(1, mpCallbackRecorder->m_aSearchResultPart[0]);
+    CPPUNIT_ASSERT_EQUAL(1, m_aSearchResultPart[0]);
 
     // This should trigger the not-found callback.
     lcl_search(u"ccc"_ustr);
-    CPPUNIT_ASSERT_EQUAL(false, mpCallbackRecorder->m_bFound);
+    CPPUNIT_ASSERT_EQUAL(false, m_bFound);
 }
 
 CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchAll)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("search-all.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
-    mpCallbackRecorder->registerCallbacksFor(pViewShell->GetViewShellBase());
+    setupLibreOfficeKitViewCallback(pViewShell->GetViewShellBase());
 
     lcl_search(u"match"_ustr, /*bFindAll=*/true);
 
@@ -174,43 +129,43 @@ CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchAll)
                              pXImpressDocument->getSelection(), "text/plain;charset=utf-8"_ostr));
 
     // We're on the first slide, search for something on the second slide and make sure we get a SET_PART.
-    mpCallbackRecorder->m_nPart = 0;
+    m_nPart = 0;
     lcl_search(u"second"_ustr, /*bFindAll=*/true);
     // This was 0: no SET_PART was emitted.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), mpCallbackRecorder->m_nPart);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), m_nPart);
 }
 
 CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchAllSelections)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("search-all.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
-    mpCallbackRecorder->registerCallbacksFor(pViewShell->GetViewShellBase());
+    setupLibreOfficeKitViewCallback(pViewShell->GetViewShellBase());
 
     lcl_search(u"third"_ustr, /*bFindAll=*/true);
     // Make sure this is found on the 3rd slide.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), mpCallbackRecorder->m_nPart);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), m_nPart);
     // This was 1: only the first match was highlighted.
-    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(2), mpCallbackRecorder->m_aSelection.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(2), m_aSelection.size());
 }
 
 CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchAllNotifications)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("search-all.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
-    mpCallbackRecorder->registerCallbacksFor(pViewShell->GetViewShellBase());
+    setupLibreOfficeKitViewCallback(pViewShell->GetViewShellBase());
 
     lcl_search(u"third"_ustr, /*bFindAll=*/true);
     // Make sure that we get no notifications about selection changes during search.
-    CPPUNIT_ASSERT_EQUAL(0, mpCallbackRecorder->m_nSelectionBeforeSearchResult);
+    CPPUNIT_ASSERT_EQUAL(0, m_nSelectionBeforeSearchResult);
     // But we do get the selection of the first hit.
-    CPPUNIT_ASSERT(mpCallbackRecorder->m_nSelectionAfterSearchResult > 0);
+    CPPUNIT_ASSERT(m_nSelectionAfterSearchResult > 0);
 }
 
 CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchAllFollowedBySearch)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("search-all.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
-    mpCallbackRecorder->registerCallbacksFor(pViewShell->GetViewShellBase());
+    setupLibreOfficeKitViewCallback(pViewShell->GetViewShellBase());
 
     lcl_search(u"third"_ustr, /*bFindAll=*/true);
     lcl_search(u"match"_ustr /*,bFindAll=false*/);
@@ -226,12 +181,12 @@ CPPUNIT_TEST_FIXTURE(LOKitSearchTest, DontSearchInMasterPages)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
-    mpCallbackRecorder->registerCallbacksFor(pViewShell->GetViewShellBase());
+    setupLibreOfficeKitViewCallback(pViewShell->GetViewShellBase());
 
     // This should trigger the not-found callback ("date" is present only on
     // the master page)
     lcl_search(u"date"_ustr);
-    CPPUNIT_ASSERT_EQUAL(false, mpCallbackRecorder->m_bFound);
+    CPPUNIT_ASSERT_EQUAL(false, m_bFound);
 }
 
 CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchInPDFNonExisting)
@@ -245,7 +200,7 @@ CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchInPDFNonExisting)
     SdXImpressDocument* pXImpressDocument = createDoc("PDFSearch.pdf");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     CPPUNIT_ASSERT(pViewShell);
-    mpCallbackRecorder->registerCallbacksFor(pViewShell->GetViewShellBase());
+    setupLibreOfficeKitViewCallback(pViewShell->GetViewShellBase());
 
     SdPage* pPage = pViewShell->GetActualPage();
     CPPUNIT_ASSERT(pPage);
@@ -263,7 +218,7 @@ CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchInPDFNonExisting)
 
     lcl_search(u"NonExisting"_ustr);
 
-    CPPUNIT_ASSERT_EQUAL(false, mpCallbackRecorder->m_bFound);
+    CPPUNIT_ASSERT_EQUAL(false, m_bFound);
 }
 
 CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchInPDF)
@@ -277,7 +232,7 @@ CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchInPDF)
     SdXImpressDocument* pXImpressDocument = createDoc("PDFSearch.pdf");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     CPPUNIT_ASSERT(pViewShell);
-    mpCallbackRecorder->registerCallbacksFor(pViewShell->GetViewShellBase());
+    setupLibreOfficeKitViewCallback(pViewShell->GetViewShellBase());
 
     SdPage* pPage = pViewShell->GetActualPage();
     CPPUNIT_ASSERT(pPage);
@@ -296,26 +251,22 @@ CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchInPDF)
     // Search
     lcl_search(u"ABC"_ustr);
 
-    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
-    CPPUNIT_ASSERT_EQUAL(1, mpCallbackRecorder->m_nSearchResultCount);
+    CPPUNIT_ASSERT_EQUAL(true, m_bFound);
+    CPPUNIT_ASSERT_EQUAL(1, m_nSearchResultCount);
 
-    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
-    CPPUNIT_ASSERT_EQUAL("3763, 1331, 1432, 483"_ostr,
-                         mpCallbackRecorder->m_aSearchResultSelection[0]);
-    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(3763, 1331), Size(1433, 484)),
-                         mpCallbackRecorder->m_aSelection[0]);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL("3763, 1331, 1432, 483"_ostr, m_aSearchResultSelection[0]);
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(3763, 1331), Size(1433, 484)), m_aSelection[0]);
 
     // Search again - same result
     lcl_search(u"ABC"_ustr);
 
-    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
-    CPPUNIT_ASSERT_EQUAL(2, mpCallbackRecorder->m_nSearchResultCount);
+    CPPUNIT_ASSERT_EQUAL(true, m_bFound);
+    CPPUNIT_ASSERT_EQUAL(2, m_nSearchResultCount);
 
-    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
-    CPPUNIT_ASSERT_EQUAL("3763, 1331, 1432, 483"_ostr,
-                         mpCallbackRecorder->m_aSearchResultSelection[0]);
-    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(3763, 1331), Size(1433, 484)),
-                         mpCallbackRecorder->m_aSelection[0]);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL("3763, 1331, 1432, 483"_ostr, m_aSearchResultSelection[0]);
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(3763, 1331), Size(1433, 484)), m_aSelection[0]);
 }
 
 CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchInPDFOnePDFObject)
@@ -329,7 +280,7 @@ CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchInPDFOnePDFObject)
     SdXImpressDocument* pXImpressDocument = createDoc("OnePDFObject.odg");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     CPPUNIT_ASSERT(pViewShell);
-    mpCallbackRecorder->registerCallbacksFor(pViewShell->GetViewShellBase());
+    setupLibreOfficeKitViewCallback(pViewShell->GetViewShellBase());
 
     SdPage* pPage = pViewShell->GetActualPage();
     CPPUNIT_ASSERT(pPage);
@@ -348,14 +299,14 @@ CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchInPDFOnePDFObject)
     // Search down
     lcl_search(u"ABC"_ustr, false, false);
 
-    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
-    CPPUNIT_ASSERT_EQUAL(1, mpCallbackRecorder->m_nSearchResultCount);
+    CPPUNIT_ASSERT_EQUAL(true, m_bFound);
+    CPPUNIT_ASSERT_EQUAL(1, m_nSearchResultCount);
 
     // Search up
     lcl_search(u"ABC"_ustr, false, true); // This caused a crash
 
-    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
-    CPPUNIT_ASSERT_EQUAL(2, mpCallbackRecorder->m_nSearchResultCount);
+    CPPUNIT_ASSERT_EQUAL(true, m_bFound);
+    CPPUNIT_ASSERT_EQUAL(2, m_nSearchResultCount);
 }
 
 CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchInPDFInMultiplePages)
@@ -369,7 +320,7 @@ CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchInPDFInMultiplePages)
     SdXImpressDocument* pXImpressDocument = createDoc("PDFSearch.pdf");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     CPPUNIT_ASSERT(pViewShell);
-    mpCallbackRecorder->registerCallbacksFor(pViewShell->GetViewShellBase());
+    setupLibreOfficeKitViewCallback(pViewShell->GetViewShellBase());
 
     SdPage* pPage = pViewShell->GetActualPage();
     CPPUNIT_ASSERT(pPage);
@@ -390,67 +341,62 @@ CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchInPDFInMultiplePages)
     // Search for "him"
     lcl_search(u"him"_ustr);
 
-    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
-    CPPUNIT_ASSERT_EQUAL(1, mpCallbackRecorder->m_nSearchResultCount);
+    CPPUNIT_ASSERT_EQUAL(true, m_bFound);
+    CPPUNIT_ASSERT_EQUAL(1, m_nSearchResultCount);
 
-    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
-    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultPart.size());
 
-    CPPUNIT_ASSERT_EQUAL(0, mpCallbackRecorder->m_aSearchResultPart[0]);
-    CPPUNIT_ASSERT_EQUAL("9463, 3382, 1099, 499"_ostr,
-                         mpCallbackRecorder->m_aSearchResultSelection[0]);
-
-    // Search for "him"
-    lcl_search(u"him"_ustr);
-
-    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
-    CPPUNIT_ASSERT_EQUAL(2, mpCallbackRecorder->m_nSearchResultCount);
-
-    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
-    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
-
-    CPPUNIT_ASSERT_EQUAL(0, mpCallbackRecorder->m_aSearchResultPart[0]);
-    CPPUNIT_ASSERT_EQUAL("5592, 5038, 1100, 499"_ostr,
-                         mpCallbackRecorder->m_aSearchResultSelection[0]);
+    CPPUNIT_ASSERT_EQUAL(0, m_aSearchResultPart[0]);
+    CPPUNIT_ASSERT_EQUAL("9463, 3382, 1099, 499"_ostr, m_aSearchResultSelection[0]);
 
     // Search for "him"
     lcl_search(u"him"_ustr);
 
-    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
-    CPPUNIT_ASSERT_EQUAL(3, mpCallbackRecorder->m_nSearchResultCount);
+    CPPUNIT_ASSERT_EQUAL(true, m_bFound);
+    CPPUNIT_ASSERT_EQUAL(2, m_nSearchResultCount);
 
-    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
-    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultPart.size());
 
-    CPPUNIT_ASSERT_EQUAL(1, mpCallbackRecorder->m_aSearchResultPart[0]);
-    CPPUNIT_ASSERT_EQUAL("9463, 1308, 1099, 499"_ostr,
-                         mpCallbackRecorder->m_aSearchResultSelection[0]);
+    CPPUNIT_ASSERT_EQUAL(0, m_aSearchResultPart[0]);
+    CPPUNIT_ASSERT_EQUAL("5592, 5038, 1100, 499"_ostr, m_aSearchResultSelection[0]);
 
     // Search for "him"
     lcl_search(u"him"_ustr);
 
-    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
-    CPPUNIT_ASSERT_EQUAL(4, mpCallbackRecorder->m_nSearchResultCount);
+    CPPUNIT_ASSERT_EQUAL(true, m_bFound);
+    CPPUNIT_ASSERT_EQUAL(3, m_nSearchResultCount);
 
-    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
-    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultPart.size());
 
-    CPPUNIT_ASSERT_EQUAL(1, mpCallbackRecorder->m_aSearchResultPart[0]);
-    CPPUNIT_ASSERT_EQUAL("5592, 2964, 1100, 499"_ostr,
-                         mpCallbackRecorder->m_aSearchResultSelection[0]);
+    CPPUNIT_ASSERT_EQUAL(1, m_aSearchResultPart[0]);
+    CPPUNIT_ASSERT_EQUAL("9463, 1308, 1099, 499"_ostr, m_aSearchResultSelection[0]);
+
+    // Search for "him"
+    lcl_search(u"him"_ustr);
+
+    CPPUNIT_ASSERT_EQUAL(true, m_bFound);
+    CPPUNIT_ASSERT_EQUAL(4, m_nSearchResultCount);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultPart.size());
+
+    CPPUNIT_ASSERT_EQUAL(1, m_aSearchResultPart[0]);
+    CPPUNIT_ASSERT_EQUAL("5592, 2964, 1100, 499"_ostr, m_aSearchResultSelection[0]);
 
     // Search for "him" - back to start
     lcl_search(u"him"_ustr);
 
-    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
-    CPPUNIT_ASSERT_EQUAL(5, mpCallbackRecorder->m_nSearchResultCount);
+    CPPUNIT_ASSERT_EQUAL(true, m_bFound);
+    CPPUNIT_ASSERT_EQUAL(5, m_nSearchResultCount);
 
-    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
-    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultPart.size());
 
-    CPPUNIT_ASSERT_EQUAL(0, mpCallbackRecorder->m_aSearchResultPart[0]);
-    CPPUNIT_ASSERT_EQUAL("9463, 3382, 1099, 499"_ostr,
-                         mpCallbackRecorder->m_aSearchResultSelection[0]);
+    CPPUNIT_ASSERT_EQUAL(0, m_aSearchResultPart[0]);
+    CPPUNIT_ASSERT_EQUAL("9463, 3382, 1099, 499"_ostr, m_aSearchResultSelection[0]);
 }
 
 CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchInPDFInMultiplePagesBackwards)
@@ -464,7 +410,7 @@ CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchInPDFInMultiplePagesBackwards)
     SdXImpressDocument* pXImpressDocument = createDoc("PDFSearch.pdf");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     CPPUNIT_ASSERT(pViewShell);
-    mpCallbackRecorder->registerCallbacksFor(pViewShell->GetViewShellBase());
+    setupLibreOfficeKitViewCallback(pViewShell->GetViewShellBase());
 
     SdPage* pPage = pViewShell->GetActualPage();
     CPPUNIT_ASSERT(pPage);
@@ -493,67 +439,62 @@ CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchInPDFInMultiplePagesBackwards)
     // Search for "him"
     lcl_search(u"him"_ustr, /*FindAll*/ false, /*Backwards*/ true);
 
-    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
-    CPPUNIT_ASSERT_EQUAL(1, mpCallbackRecorder->m_nSearchResultCount);
+    CPPUNIT_ASSERT_EQUAL(true, m_bFound);
+    CPPUNIT_ASSERT_EQUAL(1, m_nSearchResultCount);
 
-    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
-    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultPart.size());
 
-    CPPUNIT_ASSERT_EQUAL(0, mpCallbackRecorder->m_aSearchResultPart[0]);
-    CPPUNIT_ASSERT_EQUAL("5592, 5038, 1100, 499"_ostr,
-                         mpCallbackRecorder->m_aSearchResultSelection[0]);
-
-    // Search for "him"
-    lcl_search(u"him"_ustr, /*FindAll*/ false, /*Backwards*/ true);
-
-    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
-    CPPUNIT_ASSERT_EQUAL(2, mpCallbackRecorder->m_nSearchResultCount);
-
-    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
-    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
-
-    CPPUNIT_ASSERT_EQUAL(0, mpCallbackRecorder->m_aSearchResultPart[0]);
-    CPPUNIT_ASSERT_EQUAL("9463, 3382, 1099, 499"_ostr,
-                         mpCallbackRecorder->m_aSearchResultSelection[0]);
+    CPPUNIT_ASSERT_EQUAL(0, m_aSearchResultPart[0]);
+    CPPUNIT_ASSERT_EQUAL("5592, 5038, 1100, 499"_ostr, m_aSearchResultSelection[0]);
 
     // Search for "him"
     lcl_search(u"him"_ustr, /*FindAll*/ false, /*Backwards*/ true);
 
-    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
-    CPPUNIT_ASSERT_EQUAL(3, mpCallbackRecorder->m_nSearchResultCount);
+    CPPUNIT_ASSERT_EQUAL(true, m_bFound);
+    CPPUNIT_ASSERT_EQUAL(2, m_nSearchResultCount);
 
-    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
-    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultPart.size());
 
-    CPPUNIT_ASSERT_EQUAL(1, mpCallbackRecorder->m_aSearchResultPart[0]);
-    CPPUNIT_ASSERT_EQUAL("5592, 2964, 1100, 499"_ostr,
-                         mpCallbackRecorder->m_aSearchResultSelection[0]);
+    CPPUNIT_ASSERT_EQUAL(0, m_aSearchResultPart[0]);
+    CPPUNIT_ASSERT_EQUAL("9463, 3382, 1099, 499"_ostr, m_aSearchResultSelection[0]);
 
     // Search for "him"
     lcl_search(u"him"_ustr, /*FindAll*/ false, /*Backwards*/ true);
 
-    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
-    CPPUNIT_ASSERT_EQUAL(4, mpCallbackRecorder->m_nSearchResultCount);
+    CPPUNIT_ASSERT_EQUAL(true, m_bFound);
+    CPPUNIT_ASSERT_EQUAL(3, m_nSearchResultCount);
 
-    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
-    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultPart.size());
 
-    CPPUNIT_ASSERT_EQUAL(1, mpCallbackRecorder->m_aSearchResultPart[0]);
-    CPPUNIT_ASSERT_EQUAL("9463, 1308, 1099, 499"_ostr,
-                         mpCallbackRecorder->m_aSearchResultSelection[0]);
+    CPPUNIT_ASSERT_EQUAL(1, m_aSearchResultPart[0]);
+    CPPUNIT_ASSERT_EQUAL("5592, 2964, 1100, 499"_ostr, m_aSearchResultSelection[0]);
+
+    // Search for "him"
+    lcl_search(u"him"_ustr, /*FindAll*/ false, /*Backwards*/ true);
+
+    CPPUNIT_ASSERT_EQUAL(true, m_bFound);
+    CPPUNIT_ASSERT_EQUAL(4, m_nSearchResultCount);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultPart.size());
+
+    CPPUNIT_ASSERT_EQUAL(1, m_aSearchResultPart[0]);
+    CPPUNIT_ASSERT_EQUAL("9463, 1308, 1099, 499"_ostr, m_aSearchResultSelection[0]);
 
     // Search for "him" - back to start
     lcl_search(u"him"_ustr, /*FindAll*/ false, /*Backwards*/ true);
 
-    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
-    CPPUNIT_ASSERT_EQUAL(5, mpCallbackRecorder->m_nSearchResultCount);
+    CPPUNIT_ASSERT_EQUAL(true, m_bFound);
+    CPPUNIT_ASSERT_EQUAL(5, m_nSearchResultCount);
 
-    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
-    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultPart.size());
 
-    CPPUNIT_ASSERT_EQUAL(0, mpCallbackRecorder->m_aSearchResultPart[0]);
-    CPPUNIT_ASSERT_EQUAL("5592, 5038, 1100, 499"_ostr,
-                         mpCallbackRecorder->m_aSearchResultSelection[0]);
+    CPPUNIT_ASSERT_EQUAL(0, m_aSearchResultPart[0]);
+    CPPUNIT_ASSERT_EQUAL("5592, 5038, 1100, 499"_ostr, m_aSearchResultSelection[0]);
 }
 
 // Test searching in document with mixed objects.
@@ -571,7 +512,7 @@ CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchIn2MixedObjects)
     CPPUNIT_ASSERT(pViewShell);
     SdDrawDocument* pDocument = pXImpressDocument->GetDocShell()->GetDoc();
     CPPUNIT_ASSERT(pDocument);
-    mpCallbackRecorder->registerCallbacksFor(pViewShell->GetViewShellBase());
+    setupLibreOfficeKitViewCallback(pViewShell->GetViewShellBase());
 
     // Check we have one page
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pDocument->GetSdPageCount(PageKind::Standard));
@@ -611,40 +552,37 @@ CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchIn2MixedObjects)
 
     lcl_search(u"ABC"_ustr);
 
-    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
-    CPPUNIT_ASSERT_EQUAL(1, mpCallbackRecorder->m_nSearchResultCount);
+    CPPUNIT_ASSERT_EQUAL(true, m_bFound);
+    CPPUNIT_ASSERT_EQUAL(1, m_nSearchResultCount);
 
-    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
-    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultPart.size());
 
-    CPPUNIT_ASSERT_EQUAL("3545, 3174, 740, 402"_ostr,
-                         mpCallbackRecorder->m_aSearchResultSelection[0]);
+    CPPUNIT_ASSERT_EQUAL("3545, 3174, 740, 402"_ostr, m_aSearchResultSelection[0]);
 
     // Search next
 
     lcl_search(u"ABC"_ustr);
 
-    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
-    CPPUNIT_ASSERT_EQUAL(2, mpCallbackRecorder->m_nSearchResultCount);
+    CPPUNIT_ASSERT_EQUAL(true, m_bFound);
+    CPPUNIT_ASSERT_EQUAL(2, m_nSearchResultCount);
 
-    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
-    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultPart.size());
 
-    CPPUNIT_ASSERT_EQUAL("8412, 6385, 519, 174"_ostr,
-                         mpCallbackRecorder->m_aSearchResultSelection[0]);
+    CPPUNIT_ASSERT_EQUAL("8412, 6385, 519, 174"_ostr, m_aSearchResultSelection[0]);
 
     // Search next again - we should get the first object again
 
     lcl_search(u"ABC"_ustr);
 
-    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
-    CPPUNIT_ASSERT_EQUAL(3, mpCallbackRecorder->m_nSearchResultCount);
+    CPPUNIT_ASSERT_EQUAL(true, m_bFound);
+    CPPUNIT_ASSERT_EQUAL(3, m_nSearchResultCount);
 
-    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
-    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultPart.size());
 
-    CPPUNIT_ASSERT_EQUAL("3545, 3174, 740, 402"_ostr,
-                         mpCallbackRecorder->m_aSearchResultSelection[0]);
+    CPPUNIT_ASSERT_EQUAL("3545, 3174, 740, 402"_ostr, m_aSearchResultSelection[0]);
 }
 
 // Test searching in document with mixed objects. We have 6 objects.
@@ -661,7 +599,7 @@ CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchIn6MixedObjects)
     CPPUNIT_ASSERT(pViewShell);
     SdDrawDocument* pDocument = pXImpressDocument->GetDocShell()->GetDoc();
     CPPUNIT_ASSERT(pDocument);
-    mpCallbackRecorder->registerCallbacksFor(pViewShell->GetViewShellBase());
+    setupLibreOfficeKitViewCallback(pViewShell->GetViewShellBase());
 
     // Check we have one page
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pDocument->GetSdPageCount(PageKind::Standard));
@@ -736,81 +674,81 @@ CPPUNIT_TEST_FIXTURE(LOKitSearchTest, SearchIn6MixedObjects)
     // Object 1
     lcl_search(u"ABC"_ustr);
 
-    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
-    CPPUNIT_ASSERT_EQUAL(1, mpCallbackRecorder->m_nSearchResultCount);
+    CPPUNIT_ASSERT_EQUAL(true, m_bFound);
+    CPPUNIT_ASSERT_EQUAL(1, m_nSearchResultCount);
 
-    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
-    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultPart.size());
     CPPUNIT_ASSERT_EQUAL(pPage->GetObj(0), lclGetSelectedObject(pViewShell));
 
     // Object 2
     lcl_search(u"ABC"_ustr);
 
-    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
-    CPPUNIT_ASSERT_EQUAL(2, mpCallbackRecorder->m_nSearchResultCount);
+    CPPUNIT_ASSERT_EQUAL(true, m_bFound);
+    CPPUNIT_ASSERT_EQUAL(2, m_nSearchResultCount);
 
-    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
-    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultPart.size());
     CPPUNIT_ASSERT_EQUAL(pPage->GetObj(1), lclGetSelectedObject(pViewShell));
 
     // Object 3
     lcl_search(u"ABC"_ustr);
 
-    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
-    CPPUNIT_ASSERT_EQUAL(3, mpCallbackRecorder->m_nSearchResultCount);
+    CPPUNIT_ASSERT_EQUAL(true, m_bFound);
+    CPPUNIT_ASSERT_EQUAL(3, m_nSearchResultCount);
 
-    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
-    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultPart.size());
     CPPUNIT_ASSERT_EQUAL(pPage->GetObj(2), lclGetSelectedObject(pViewShell));
 
     // Object 3 again
     lcl_search(u"ABC"_ustr);
 
-    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
-    CPPUNIT_ASSERT_EQUAL(4, mpCallbackRecorder->m_nSearchResultCount);
+    CPPUNIT_ASSERT_EQUAL(true, m_bFound);
+    CPPUNIT_ASSERT_EQUAL(4, m_nSearchResultCount);
 
-    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
-    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultPart.size());
     CPPUNIT_ASSERT_EQUAL(pPage->GetObj(2), lclGetSelectedObject(pViewShell));
 
     // Object 4
     lcl_search(u"ABC"_ustr);
 
-    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
-    CPPUNIT_ASSERT_EQUAL(5, mpCallbackRecorder->m_nSearchResultCount);
+    CPPUNIT_ASSERT_EQUAL(true, m_bFound);
+    CPPUNIT_ASSERT_EQUAL(5, m_nSearchResultCount);
 
-    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
-    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultPart.size());
     CPPUNIT_ASSERT_EQUAL(pPage->GetObj(3), lclGetSelectedObject(pViewShell));
 
     // Object 5
     lcl_search(u"ABC"_ustr);
 
-    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
-    CPPUNIT_ASSERT_EQUAL(6, mpCallbackRecorder->m_nSearchResultCount);
+    CPPUNIT_ASSERT_EQUAL(true, m_bFound);
+    CPPUNIT_ASSERT_EQUAL(6, m_nSearchResultCount);
 
-    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
-    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultPart.size());
     CPPUNIT_ASSERT_EQUAL(pPage->GetObj(4), lclGetSelectedObject(pViewShell));
 
     // Object 6
     lcl_search(u"ABC"_ustr);
 
-    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
-    CPPUNIT_ASSERT_EQUAL(7, mpCallbackRecorder->m_nSearchResultCount);
+    CPPUNIT_ASSERT_EQUAL(true, m_bFound);
+    CPPUNIT_ASSERT_EQUAL(7, m_nSearchResultCount);
 
-    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
-    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultPart.size());
     CPPUNIT_ASSERT_EQUAL(pPage->GetObj(5), lclGetSelectedObject(pViewShell));
 
     // Loop to Object 1 again
     lcl_search(u"ABC"_ustr);
 
-    CPPUNIT_ASSERT_EQUAL(true, mpCallbackRecorder->m_bFound);
-    CPPUNIT_ASSERT_EQUAL(8, mpCallbackRecorder->m_nSearchResultCount);
+    CPPUNIT_ASSERT_EQUAL(true, m_bFound);
+    CPPUNIT_ASSERT_EQUAL(8, m_nSearchResultCount);
 
-    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultSelection.size());
-    CPPUNIT_ASSERT_EQUAL(size_t(1), mpCallbackRecorder->m_aSearchResultPart.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), m_aSearchResultPart.size());
     CPPUNIT_ASSERT_EQUAL(pPage->GetObj(0), lclGetSelectedObject(pViewShell));
 }
 namespace
@@ -829,7 +767,7 @@ CPPUNIT_TEST_FIXTURE(LOKitSearchTest, Replace)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("ReplaceTest.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
-    mpCallbackRecorder->registerCallbacksFor(pViewShell->GetViewShellBase());
+    setupLibreOfficeKitViewCallback(pViewShell->GetViewShellBase());
 
     CPPUNIT_ASSERT_EQUAL(u"bbb"_ustr, getShapeText(pXImpressDocument, 0, 0));
     CPPUNIT_ASSERT_EQUAL(u"Bbb bbb bbb bbb"_ustr, getShapeText(pXImpressDocument, 1, 0));
@@ -858,7 +796,7 @@ CPPUNIT_TEST_FIXTURE(LOKitSearchTest, ReplaceAll)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("ReplaceTest.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
-    mpCallbackRecorder->registerCallbacksFor(pViewShell->GetViewShellBase());
+    setupLibreOfficeKitViewCallback(pViewShell->GetViewShellBase());
 
     CPPUNIT_ASSERT_EQUAL(u"bbb"_ustr, getShapeText(pXImpressDocument, 0, 0));
     CPPUNIT_ASSERT_EQUAL(u"Bbb bbb bbb bbb"_ustr, getShapeText(pXImpressDocument, 1, 0));
@@ -887,7 +825,7 @@ CPPUNIT_TEST_FIXTURE(LOKitSearchTest, ReplaceCombined)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("ReplaceTest.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
-    mpCallbackRecorder->registerCallbacksFor(pViewShell->GetViewShellBase());
+    setupLibreOfficeKitViewCallback(pViewShell->GetViewShellBase());
 
     lcl_replace(u"bbb"_ustr, u"aaa"_ustr, false); // select
     lcl_replace(u"bbb"_ustr, u"aaa"_ustr, false); // replace
