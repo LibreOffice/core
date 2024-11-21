@@ -906,5 +906,6 @@ CPPUNIT_TEST_FIXTURE(LOKitSearchTest, ReplaceCombined)
     CPPUNIT_ASSERT_EQUAL(u"ccc"_ustr, getShapeText(pXImpressDocument, 3, 0));
     CPPUNIT_ASSERT_EQUAL(u"ccc"_ustr, getShapeText(pXImpressDocument, 4, 0));
 }
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

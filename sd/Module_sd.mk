@@ -62,6 +62,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sd,\
     CppunitTest_sd_svg_export_tests \
     CppunitTest_sd_tiledrendering \
     CppunitTest_sd_tiledrendering2 \
+    CppunitTest_sd_lokit_search \
 ))
 endif
 endif
