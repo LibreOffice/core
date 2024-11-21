@@ -1443,7 +1443,10 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 weld::WaitObject aWait( GetViewData().GetDialogParent() );
                 pTabViewShell->CopyToClip( nullptr, false, false, true );
                 rReq.Done();
-                GetViewData().SetPasteMode( ScPasteFlags::Mode | ScPasteFlags::Border );
+
+                if (!comphelper::LibreOfficeKit::isActive() || !pTabViewShell->GetViewShell() || !pTabViewShell->GetViewShell()->IsLokReadOnlyView())
+                    GetViewData().SetPasteMode( ScPasteFlags::Mode | ScPasteFlags::Border );
+
                 pTabViewShell->ShowCursor();
                 pTabViewShell->UpdateCopySourceOverlay();
             }
@@ -1454,7 +1457,10 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 weld::WaitObject aWait( GetViewData().GetDialogParent() );
                 pTabViewShell->CutToClip();
                 rReq.Done();
-                GetViewData().SetPasteMode( ScPasteFlags::Mode | ScPasteFlags::Border );
+
+                if (!comphelper::LibreOfficeKit::isActive() || !pTabViewShell->GetViewShell() || !pTabViewShell->GetViewShell()->IsLokReadOnlyView())
+                    GetViewData().SetPasteMode( ScPasteFlags::Mode | ScPasteFlags::Border );
+
                 pTabViewShell->ShowCursor();
                 pTabViewShell->UpdateCopySourceOverlay();
             }
