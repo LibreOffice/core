@@ -32,7 +32,7 @@
         </info>
         <value>2147483647</value>
       </prop>
-      <prop oor:name="DefaultHandler" oor:type="xs:string" oor:nillable="true">
+      <prop oor:name="DefaultHandler" oor:type="xs:string">
         <info>
           <desc>Specifies the UNO service name of the default handler for the logger.</desc>
         </info>
@@ -65,7 +65,7 @@
           <value>$(userurl)/$(loggername).log</value>
         </prop>
       </group>
-      <prop oor:name="DefaultFormatter" oor:type="xs:string" oor:nillable="true">
+      <prop oor:name="DefaultFormatter" oor:type="xs:string">
         <info>
           <desc>Specifies the UNO service name of the default formatter for the logger.</desc>
         </info>

@@ -585,7 +585,7 @@
         <desc>specifies, on a per-application-type basis, certain defaults for
         layouting form controls</desc>
       </info>
-      <prop oor:name="VisualEffect" oor:type="xs:string" oor:nillable="true">
+      <prop oor:name="VisualEffect" oor:type="xs:string">
         <info>
           <desc>specifies the default visual effect for form controls</desc>
         </info>

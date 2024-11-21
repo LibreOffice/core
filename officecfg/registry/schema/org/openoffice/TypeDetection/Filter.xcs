@@ -87,7 +87,7 @@
           UI.</desc>
         </info>
       </prop>
-      <prop oor:name="ExportExtension" oor:type="xs:string" oor:nillable="true">
+      <prop oor:name="ExportExtension" oor:type="xs:string">
         <info>
           <desc>Extension to use when exporting content using this filter. When
           this value is not given, it is inferred from the Type associated with
