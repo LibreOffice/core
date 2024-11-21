@@ -516,6 +516,7 @@ static ProgressStatus read_percent(ChildInfo const *info, int *pPercent)
     memmove(pBuffer, pNext, nNotProcessed);
 
     /* read data */
+    // coverity[ tainted_data_return : FALSE ] version 2023.12.2
     ssize_t nThisRead = read(child_info_get_status_fd(info),
                              pBuffer + nNotProcessed, BUFFER_LEN - nNotProcessed);
 
