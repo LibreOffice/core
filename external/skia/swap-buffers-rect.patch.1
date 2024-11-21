@@ -11,9 +11,9 @@ diff -ur skia.org/tools/window/MetalWindowContext.h skia/tools/window/MetalWindo
      bool                        fValid;
 
 diff -ur skia.org/tools/window/MetalWindowContext.mm skia/tools/window/MetalWindowContext.mm
---- skia.org/tools/window/MetalWindowContext.mm	2024-10-05 18:16:04.521814026 +0200
-+++ skia/tools/window/MetalWindowContext.mm	2024-10-05 18:17:31.670443188 +0200
-@@ -193,7 +193,7 @@
+--- skia.org/tools/window/MetalWindowContext.mm	2024-11-15 19:32:58
++++ skia/tools/window/MetalWindowContext.mm	2024-11-20 19:02:09
+@@ -153,13 +153,21 @@
      return surface;
  }
 
@@ -22,6 +22,21 @@ diff -ur skia.org/tools/window/MetalWindowContext.mm skia/tools/window/MetalWind
      id<CAMetalDrawable> currentDrawable = (id<CAMetalDrawable>)fDrawableHandle;
 
      id<MTLCommandBuffer> commandBuffer([*fShared->fQueue commandBuffer]);
+     commandBuffer.label = @"Present";
+
+-    [commandBuffer presentDrawable:currentDrawable];
++    // tdf#163945 present drawable immediately
++    // It seems that -[MTLCommandBuffer presentDrawable:] doesn't
++    // immediately replace the previous drawable on screen so I
++    // assume that there is some default minimum display time for
++    // drawables.
++    // LibreOffice only invokes this method in a timer so let
++    // LibreOffice control the rate of window updates by presenting
++    // the drawable right now.
++    [commandBuffer presentDrawable:currentDrawable atTime:CACurrentMediaTime()];
+     [commandBuffer commit];
+     // ARC is off in sk_app, so we need to release the CF ref manually
+     CFRelease(fDrawableHandle);
 diff -ur skia.org/tools/window/unix/RasterWindowContext_unix.cpp skia/tools/window/unix/RasterWindowContext_unix.cpp
 --- skia.org/tools/window/unix/RasterWindowContext_unix.cpp	2024-10-05 18:16:04.521814026 +0200
 +++ skia/tools/window/unix/RasterWindowContext_unix.cpp	2024-10-05 18:18:49.554847490 +0200
