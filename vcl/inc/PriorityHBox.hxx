@@ -37,8 +37,6 @@ protected:
 
     std::vector<vcl::IPrioritable*> m_aSortedChildren;
 
-    virtual int GetHiddenCount() const;
-
     virtual void GetChildrenWithPriorities();
 
 public:

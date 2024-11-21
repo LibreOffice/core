@@ -38,7 +38,7 @@ public:
 
     virtual void dispose() override;
 
-    int GetHiddenCount() const override;
+    int GetHiddenCount() const;
 
     Size calculateRequisition() const override;
 

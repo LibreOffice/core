@@ -45,17 +45,6 @@ void PriorityHBox::Initialize()
     SetSizeFromParent();
 }
 
-int PriorityHBox::GetHiddenCount() const
-{
-    int nCount = 0;
-
-    for (auto pWindow : m_aSortedChildren)
-        if (pWindow->IsHidden())
-            nCount++;
-
-    return nCount;
-}
-
 void PriorityHBox::SetSizeFromParent()
 {
     vcl::Window* pParent = GetParent();
