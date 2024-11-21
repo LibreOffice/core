@@ -1043,20 +1043,18 @@ void Document::retrieveRunAttributesImpl(
     tPropValMap aRunAttrSeq;
     if ( pColor )
     {
-        css::beans::PropertyValue aPropVal;
-        aPropVal.Name = "CharColor";
-        aPropVal.Handle = -1;
-        aPropVal.Value = mapFontColor( pColor->GetColor() );
-        aPropVal.State = css::beans::PropertyState_DIRECT_VALUE;
+        css::beans::PropertyValue aPropVal{
+            "CharColor", -1,
+            mapFontColor(pColor->GetColor()),
+            css::beans::PropertyState_DIRECT_VALUE};
         aRunAttrSeq[ aPropVal.Name ] = aPropVal;
     }
     if ( pWeight )
     {
-        css::beans::PropertyValue aPropVal;
-        aPropVal.Name = "CharWeight";
-        aPropVal.Handle = -1;
-        aPropVal.Value = mapFontWeight( pWeight->getFontWeight() );
-        aPropVal.State = css::beans::PropertyState_DIRECT_VALUE;
+        css::beans::PropertyValue aPropVal{
+            "CharWeight", -1,
+            mapFontWeight(pWeight->getFontWeight()),
+            css::beans::PropertyState_DIRECT_VALUE};
         aRunAttrSeq[ aPropVal.Name ] = aPropVal;
     }
     if ( !RequestedAttributes.hasElements() )
