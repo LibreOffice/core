@@ -256,28 +256,25 @@ class VCL_DLLPUBLIC EncryptionContext
 {
 private:
     std::vector<sal_uInt8> maKey;
-    std::vector<sal_uInt8> maInitVector;
 
 public:
-    EncryptionContext(std::vector<sal_uInt8> const& rKey, std::vector<sal_uInt8> const& rIV)
+    EncryptionContext(std::vector<sal_uInt8> const& rKey)
         : maKey(rKey)
-        , maInitVector(rIV)
     {
     }
 
-    /** Algorithm 1.A: Encryption of data using the AES algorithms
-     *
-     **/
-    void encrypt(const void* pInput, sal_uInt64 nInputSize, std::vector<sal_uInt8>& rOutput)
+    /** Algorithm 1.A: Encryption of data using the AES algorithms */
+    void encrypt(const void* pInput, sal_uInt64 nInputSize, std::vector<sal_uInt8>& rOutput,
+                 std::vector<sal_uInt8>& rIV)
     {
-        comphelper::Encrypt aEncrypt(maKey, maInitVector, comphelper::CryptoType::AES_256_CBC);
+        comphelper::Encrypt aEncrypt(maKey, rIV, comphelper::CryptoType::AES_256_CBC);
         const sal_uInt8* pInputBytes = static_cast<const sal_uInt8*>(pInput);
         std::vector<sal_uInt8> aInput(pInputBytes, pInputBytes + nInputSize);
         size_t nPaddedSize = addPaddingToVector(aInput, BLOCK_SIZE);
         std::vector<sal_uInt8> aOutput(nPaddedSize);
         aEncrypt.update(aOutput, aInput);
         rOutput.resize(nPaddedSize + IV_SIZE);
-        std::copy(maInitVector.begin(), maInitVector.end(), rOutput.begin());
+        std::copy(rIV.begin(), rIV.end(), rOutput.begin());
         std::copy(aOutput.begin(), aOutput.end(), rOutput.begin() + IV_SIZE);
     }
 };
@@ -357,21 +354,21 @@ sal_uInt64 PDFEncryptorR6::calculateSizeIncludingHeader(sal_uInt64 nSize)
 
 void PDFEncryptorR6::setupEncryption(std::vector<sal_uInt8>& rEncryptionKey, sal_Int32 /*nObject*/)
 {
-    std::vector<sal_uInt8> aInitVector;
-    generateBytes(aInitVector, IV_SIZE);
-    m_pEncryptionContext = std::make_unique<EncryptionContext>(rEncryptionKey, aInitVector);
-}
-
-void PDFEncryptorR6::setupEncryptionWithIV(std::vector<sal_uInt8>& rEncryptionKey,
-                                           std::vector<sal_uInt8>& rInitvector)
-{
-    m_pEncryptionContext = std::make_unique<EncryptionContext>(rEncryptionKey, rInitvector);
+    m_pEncryptionContext = std::make_unique<EncryptionContext>(rEncryptionKey);
 }
 
 void PDFEncryptorR6::encrypt(const void* pInput, sal_uInt64 nInputSize,
                              std::vector<sal_uInt8>& rOutput, sal_uInt64 /*nOutputSize*/)
 {
-    m_pEncryptionContext->encrypt(pInput, nInputSize, rOutput);
+    std::vector<sal_uInt8> aIV;
+    generateBytes(aIV, IV_SIZE);
+    m_pEncryptionContext->encrypt(pInput, nInputSize, rOutput, aIV);
+}
+
+void PDFEncryptorR6::encryptWithIV(const void* pInput, sal_uInt64 nInputSize,
+                                   std::vector<sal_uInt8>& rOutput, std::vector<sal_uInt8>& rIV)
+{
+    m_pEncryptionContext->encrypt(pInput, nInputSize, rOutput, rIV);
 }
 
 } // end vcl::pdf

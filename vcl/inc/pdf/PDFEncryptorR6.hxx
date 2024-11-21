@@ -146,14 +146,15 @@ public:
 
     void setupEncryption(std::vector<sal_uInt8>& rEncryptionKey, sal_Int32 nObject) override;
 
-    void setupEncryptionWithIV(std::vector<sal_uInt8>& rInitvector, std::vector<sal_uInt8>& rIV);
-
     /** Encrypts using Algorithm 1.A: Encryption of data using the AES algorithms
      *
      * Described in ISO 32000-2:2020(E) - 7.6.3.3
      */
     void encrypt(const void* pInput, sal_uInt64 nInputSize, std::vector<sal_uInt8>& rOutput,
                  sal_uInt64 nOutputsSize) override;
+
+    void encryptWithIV(const void* pInput, sal_uInt64 nInputSize, std::vector<sal_uInt8>& rOutput,
+                       std::vector<sal_uInt8>& rIV);
 };
 
 } // end vcl::pdf
