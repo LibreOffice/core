@@ -88,9 +88,6 @@ namespace editeng {
 #define MAXCHARSINPARA              0x3FFF-CHARPOSGROW  // Max 16K, because WYSIWYG array
 #define LINE_SEP    '\x0A'
 
-#define ATTRSPECIAL_WHOLEWORD   1
-#define ATTRSPECIAL_EDGE        2
-
 struct CursorFlags
 {
     bool bTextOnly : 1 = false;
