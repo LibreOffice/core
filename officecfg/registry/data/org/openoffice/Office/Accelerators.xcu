@@ -340,24 +340,6 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
           <value xml:lang="en-US">.uno:SidebarDeck.PropertyDeck</value>
         </prop>
       </node>
-      <node oor:name="2_MOD2" oor:op="replace">
-        <prop oor:name="Command">
-          <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-          <value xml:lang="en-US">.uno:SidebarDeck.StyleListDeck</value>
-        </prop>
-      </node>
-      <node oor:name="3_MOD2" oor:op="replace">
-        <prop oor:name="Command">
-          <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-          <value xml:lang="en-US">.uno:SidebarDeck.GalleryDeck</value>
-        </prop>
-      </node>
-      <node oor:name="4_MOD2" oor:op="replace">
-        <prop oor:name="Command">
-          <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-          <value xml:lang="en-US">.uno:SidebarDeck.NavigatorDeck</value>
-        </prop>
-      </node>
     </node>
     <node oor:name="Modules">
       <node oor:name="com.sun.star.script.BasicIDE" oor:op="replace">
@@ -601,6 +583,24 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
         </node>
       </node>
       <node oor:name="com.sun.star.sheet.SpreadsheetDocument" oor:op="replace">
+        <node oor:name="2_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:SidebarDeck.StyleListDeck</value>
+          </prop>
+        </node>
+        <node oor:name="3_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:SidebarDeck.GalleryDeck</value>
+          </prop>
+        </node>
+        <node oor:name="4_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:SidebarDeck.NavigatorDeck</value>
+          </prop>
+        </node>
         <node oor:name="5_MOD2" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
@@ -1631,6 +1631,24 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
         </node>
       </node>
       <node oor:name="com.sun.star.drawing.DrawingDocument" oor:op="replace">
+        <node oor:name="2_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:SidebarDeck.StyleListDeck</value>
+          </prop>
+        </node>
+        <node oor:name="3_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:SidebarDeck.GalleryDeck</value>
+          </prop>
+        </node>
+        <node oor:name="4_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:SidebarDeck.NavigatorDeck</value>
+          </prop>
+        </node>
         <node oor:name="5_MOD2" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
@@ -2910,6 +2928,24 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
         </node>
       </node>
       <node oor:name="com.sun.star.presentation.PresentationDocument" oor:op="replace">
+        <node oor:name="2_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:SidebarDeck.StyleListDeck</value>
+          </prop>
+        </node>
+        <node oor:name="3_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:SidebarDeck.GalleryDeck</value>
+          </prop>
+        </node>
+        <node oor:name="4_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:SidebarDeck.NavigatorDeck</value>
+          </prop>
+        </node>
         <node oor:name="5_MOD2" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
@@ -3510,6 +3546,12 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
         </node>
       </node>
       <node oor:name="com.sun.star.formula.FormulaProperties" oor:op="replace">
+        <node oor:name="2_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:SidebarDeck.ElementsDeck</value>
+          </prop>
+        </node>
         <node oor:name="A_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
@@ -6016,6 +6058,24 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="sv">.uno:Grow</value>
             <value xml:lang="de">.uno:Grow</value>
+          </prop>
+        </node>
+        <node oor:name="2_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:SidebarDeck.StyleListDeck</value>
+          </prop>
+        </node>
+        <node oor:name="3_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:SidebarDeck.GalleryDeck</value>
+          </prop>
+        </node>
+        <node oor:name="4_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:SidebarDeck.NavigatorDeck</value>
           </prop>
         </node>
         <node oor:name="5_MOD2" oor:op="replace">
