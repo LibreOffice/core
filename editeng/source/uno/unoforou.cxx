@@ -431,6 +431,11 @@ bool SvxOutlinerForwarder::InsertText( const OUString& rStr, const ESelection& r
     return true;
 }
 
+bool SvxOutlinerForwarder::SupportsOutlineDepth() const
+{
+    return true;
+}
+
 sal_Int16 SvxOutlinerForwarder::GetDepth( sal_Int32 nPara ) const
 {
     DBG_ASSERT( 0 <= nPara && nPara < GetParagraphCount(), "SvxOutlinerForwarder::GetDepth: Invalid paragraph index");

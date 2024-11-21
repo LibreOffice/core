@@ -535,6 +535,9 @@ bool SvxUnoTextRangeBase::SetPropertyValueHelper( const SfxItemPropertyMapEntry*
             SvxTextForwarder* pForwarder = pEditSource? pEditSource->GetTextForwarder() : nullptr;
             if(pForwarder && pSelection)
             {
+                if (!pForwarder->SupportsOutlineDepth())
+                    return false;
+
                 sal_Int16 nLevel = sal_Int16();
                 if( aValue >>= nLevel )
                 {
@@ -721,6 +724,9 @@ bool SvxUnoTextRangeBase::GetPropertyValueHelper(  SfxItemSet const & rSet, cons
             SvxTextForwarder* pForwarder = pEditSource? pEditSource->GetTextForwarder() : nullptr;
             if(pForwarder && pSelection)
             {
+                if (!pForwarder->SupportsOutlineDepth())
+                    return false;
+
                 sal_Int16 nLevel = pForwarder->GetDepth( pSelection->nStartPara );
                 if( nLevel >= 0 )
                     aAny <<= nLevel;
@@ -2512,6 +2518,11 @@ sal_Int32 SvxDummyTextSource::GetLineNumberAtIndex( sal_Int32 /*nPara*/, sal_Int
 }
 
 bool SvxDummyTextSource::QuickFormatDoc( bool )
+{
+    return false;
+}
+
+bool SvxDummyTextSource::SupportsOutlineDepth() const
 {
     return false;
 }
