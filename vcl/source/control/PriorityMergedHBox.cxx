@@ -106,7 +106,7 @@ void PriorityMergedHBox::Resize()
 
     VclHBox::Resize();
 
-    if (GetHiddenCount())
+    if (HasHiddenChildren())
         m_pButton->Show();
     else
         m_pButton->Hide();
@@ -120,18 +120,16 @@ void PriorityMergedHBox::dispose()
     PriorityHBox::dispose();
 }
 
-int PriorityMergedHBox::GetHiddenCount() const
+bool PriorityMergedHBox::HasHiddenChildren() const
 {
-    int nCount = 0;
-
     for (int i = GetChildCount() - 1; i >= 0; i--)
     {
         vcl::Window* pWindow = GetChild(i);
         if (pWindow && pWindow->GetParent() == this && !pWindow->IsVisible())
-            nCount++;
+            return true;
     }
 
-    return nCount;
+    return false;
 }
 
 Size PriorityMergedHBox::calculateRequisition() const
