@@ -19,8 +19,6 @@
 
 #pragma once
 
-#define MN_WORDLANGUAGE 998
-#define MN_PARALANGUAGE 999
 #define MN_ALTSTART 1000
 #define MN_AUTOSTART 2000
 #define MN_DICTSTART 3000
