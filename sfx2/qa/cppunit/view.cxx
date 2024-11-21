@@ -129,8 +129,14 @@ CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testLokHelperCommandValuesSignature)
     std::stringstream aStream{ std::string(aJson) };
     boost::property_tree::ptree aTree;
     boost::property_tree::read_json(aStream, aTree);
+    auto it = aTree.find("commandName");
+    CPPUNIT_ASSERT(it != aTree.not_found());
+    CPPUNIT_ASSERT_EQUAL(std::string(".uno:Signature"), it->second.get_value<std::string>());
+    it = aTree.find("commandValues");
+    CPPUNIT_ASSERT(it != aTree.not_found());
+    aTree = it->second;
     // Non-zero timestamp:
-    auto it = aTree.find("signatureTime");
+    it = aTree.find("signatureTime");
     CPPUNIT_ASSERT(it != aTree.not_found());
     auto nSignatureTime = it->second.get_value<sal_Int64>();
     CPPUNIT_ASSERT(nSignatureTime != 0);
@@ -154,7 +160,10 @@ OUString GetSignatureHash()
     std::stringstream aStream{ std::string(aJson) };
     boost::property_tree::ptree aTree;
     boost::property_tree::read_json(aStream, aTree);
-    auto it = aTree.find("digest");
+    auto it = aTree.find("commandValues");
+    CPPUNIT_ASSERT(it != aTree.not_found());
+    aTree = it->second;
+    it = aTree.find("digest");
     CPPUNIT_ASSERT(it != aTree.not_found());
     return OUString::fromUtf8(it->second.get_value<std::string>());
 }
