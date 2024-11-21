@@ -82,12 +82,10 @@ static oslPipeError osl_PipeErrorFromNative(int nativeType)
 
 static oslPipe createPipeImpl()
 {
-    oslPipe pPipeImpl;
+    oslPipe pPipeImpl = new oslPipeImpl;
 
-    pPipeImpl = static_cast< oslPipe >(calloc(1, sizeof(struct oslPipeImpl)));
-    if (!pPipeImpl)
-        return nullptr;
-
+    pPipeImpl->m_Socket = 0;
+    pPipeImpl->m_Name[0] = 0;
     pPipeImpl->m_nRefCount = 1;
     pPipeImpl->m_bClosed = false;
 #if defined(CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT)
@@ -100,8 +98,7 @@ static oslPipe createPipeImpl()
 
 static void destroyPipeImpl(oslPipe pImpl)
 {
-    if (pImpl)
-        free(pImpl);
+    delete pImpl;
 }
 
 oslPipe SAL_CALL osl_createPipe(rtl_uString *ustrPipeName, oslPipeOptions Options, oslSecurity Security)
@@ -296,8 +293,7 @@ void SAL_CALL osl_releasePipe(oslPipe pPipe)
 
     if (osl_atomic_decrement(&(pPipe->m_nRefCount)) == 0)
     {
-        if (!pPipe->m_bClosed)
-            osl_closePipe(pPipe);
+        osl_closePipe(pPipe);
 
         destroyPipeImpl(pPipe);
     }
@@ -310,6 +306,8 @@ void SAL_CALL osl_closePipe(oslPipe pPipe)
 
     if (!pPipe)
         return;
+
+    std::unique_lock aGuard(pPipe->m_Mutex);
 
     if (pPipe->m_bClosed)
         return;
@@ -373,13 +371,23 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
     if (!pPipe)
         return nullptr;
 
-    assert(pPipe->m_Name[0] != '\0');  // you cannot have an empty pipe name
+    int socket;
+    {
+        // dont hold lock while accepting, so it is possible to close a socket blocked in accept
+        std::unique_lock aGuard(pPipe->m_Mutex);
 
+        assert(pPipe->m_Name[0] != '\0');  // you cannot have an empty pipe name
 #if defined(CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT)
-    pPipe->m_bIsAccepting = true;
+        pPipe->m_bIsAccepting = true;
 #endif
 
-    s = accept(pPipe->m_Socket, nullptr, nullptr);
+        socket = pPipe->m_Socket;
+    }
+
+
+    s = accept(socket, nullptr, nullptr);
+
+    std::unique_lock aGuard(pPipe->m_Mutex);
 
 #if defined(CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT)
     pPipe->m_bIsAccepting = false;
@@ -435,7 +443,14 @@ sal_Int32 SAL_CALL osl_receivePipe(oslPipe pPipe,
         return -1;
     }
 
-    sal_Int32 nRet = recv(pPipe->m_Socket, pBuffer, BytesToRead, 0);
+    int socket;
+    {
+        // dont hold lock while receiving, so it is possible to close a socket blocked in recv
+        std::unique_lock aGuard(pPipe->m_Mutex);
+        socket = pPipe->m_Socket;
+    }
+
+    sal_Int32 nRet = recv(socket, pBuffer, BytesToRead, 0);
 
     SAL_WARN_IF(nRet < 0, "sal.osl.pipe", "recv() failed: " << UnixErrnoString(errno));
 
@@ -456,7 +471,14 @@ sal_Int32 SAL_CALL osl_sendPipe(oslPipe pPipe,
         return -1;
     }
 
-    nRet = send(pPipe->m_Socket, pBuffer, BytesToSend, 0);
+    int socket;
+    {
+        // dont hold lock while sending, so it is possible to close a socket blocked in send
+        std::unique_lock aGuard(pPipe->m_Mutex);
+        socket = pPipe->m_Socket;
+    }
+
+    nRet = send(socket, pBuffer, BytesToSend, 0);
 
     if (nRet <= 0)
         SAL_WARN("sal.osl.pipe", "send() failed: " << UnixErrnoString(errno));

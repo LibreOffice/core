@@ -24,6 +24,7 @@
 
 #include <sys/socket.h>
 #include <sys/un.h>
+#include <mutex>
 
 #if defined(LINUX) || defined(FREEBSD) || defined(NETBSD)
 #define CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT 1
@@ -45,6 +46,7 @@ struct oslSocketAddrImpl
 };
 
 struct oslPipeImpl {
+    std::mutex m_Mutex;
     int  m_Socket;
     char m_Name[sizeof sockaddr_un::sun_path];
     oslInterlockedCount m_nRefCount;
