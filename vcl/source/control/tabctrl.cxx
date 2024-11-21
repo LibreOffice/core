@@ -2282,31 +2282,27 @@ static bool lcl_isValidPage(const ImplTabItem& rItem)
 
 void NotebookbarTabControlBase::ImplActivateTabPage( bool bNext )
 {
-    const sal_uInt16 nOldPos = GetPagePos(GetCurPageId());
-    bool bFound = false;
-    sal_Int32 nCurPos = nOldPos;
+    sal_Int32 nCurPos = GetPagePos(GetCurPageId());
 
     if (bNext)
     {
-        for (nCurPos++; nCurPos < GetPageCount(); nCurPos++)
-            if (lcl_isValidPage(mpTabCtrlData->maItemList[nCurPos]))
+        for (sal_Int32 nPos = nCurPos + 1; nPos < GetPageCount(); nPos++)
+            if (lcl_isValidPage(mpTabCtrlData->maItemList[nPos]))
             {
-                bFound = true;
+                nCurPos = nPos;
                 break;
             }
     }
     else
     {
-        for (nCurPos--; nCurPos >= 0; nCurPos--)
-            if (lcl_isValidPage(mpTabCtrlData->maItemList[nCurPos]))
+        for (sal_Int32 nPos = nCurPos - 1; nPos >= 0; nPos--)
+            if (lcl_isValidPage(mpTabCtrlData->maItemList[nPos]))
             {
-                bFound = true;
+                nCurPos = nPos;
                 break;
             }
     }
 
-    if (!bFound)
-        nCurPos = nOldPos;
     SelectTabPage( TabControl::GetPageId( nCurPos ) );
 }
 
