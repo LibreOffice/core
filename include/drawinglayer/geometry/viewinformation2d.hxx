@@ -173,7 +173,6 @@ public:
 
     static void setGlobalAntiAliasing(bool bAntiAliasing, bool bTemporary);
     static bool getGlobalAntiAliasing();
-    static void forwardPixelSnapHairline(bool bPixelSnapHairline);
 };
 
 DRAWINGLAYERCORE_DLLPUBLIC ViewInformation2D

@@ -48,12 +48,6 @@ constexpr OUStringLiteral g_PropertyName_UseAntiAliasing = u"UseAntiAliasing";
 constexpr OUStringLiteral g_PropertyName_PixelSnapHairline = u"PixelSnapHairline";
 }
 
-namespace
-{
-bool bForwardsAreInitialized(false);
-bool bForwardPixelSnapHairline(true);
-}
-
 class ImpViewInformation2D
 {
 private:
@@ -123,8 +117,13 @@ public:
         , mbEditViewActive(false)
         , mbReducedDisplayQuality(false)
         , mbUseAntiAliasing(ViewInformation2D::getGlobalAntiAliasing())
-        , mbPixelSnapHairline(mbUseAntiAliasing && bForwardPixelSnapHairline)
     {
+        if (comphelper::IsFuzzing())
+            mbPixelSnapHairline = false;
+        else
+            mbPixelSnapHairline
+                = mbUseAntiAliasing
+                  && officecfg::Office::Common::Drawinglayer::SnapHorVerLinesToDiscrete::get();
     }
 
     const basegfx::B2DHomMatrix& getObjectTransformation() const { return maObjectTransformation; }
@@ -250,18 +249,11 @@ ViewInformation2D::ImplType& theGlobalDefault()
 ViewInformation2D::ViewInformation2D()
     : mpViewInformation2D(theGlobalDefault())
 {
-    if (!bForwardsAreInitialized)
-    {
-        bForwardsAreInitialized = true;
-        if (!comphelper::IsFuzzing())
-        {
-            bForwardPixelSnapHairline
-                = officecfg::Office::Common::Drawinglayer::SnapHorVerLinesToDiscrete::get();
-        }
-    }
-
     setUseAntiAliasing(ViewInformation2D::getGlobalAntiAliasing());
-    setPixelSnapHairline(bForwardPixelSnapHairline);
+    if (!comphelper::IsFuzzing())
+        setPixelSnapHairline(
+            getUseAntiAliasing()
+            && officecfg::Office::Common::Drawinglayer::SnapHorVerLinesToDiscrete::get());
 }
 
 ViewInformation2D::ViewInformation2D(const ViewInformation2D&) = default;
@@ -426,11 +418,6 @@ void ViewInformation2D::setGlobalAntiAliasing(bool bAntiAliasing, bool bTemporar
     }
 }
 bool ViewInformation2D::getGlobalAntiAliasing() { return globalAntiAliasing(); }
-
-void ViewInformation2D::forwardPixelSnapHairline(bool bPixelSnapHairline)
-{
-    bForwardPixelSnapHairline = bPixelSnapHairline;
-}
 
 ViewInformation2D
 createViewInformation2D(const css::uno::Sequence<css::beans::PropertyValue>& rViewParameters)

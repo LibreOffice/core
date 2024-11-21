@@ -43,9 +43,6 @@ Color GetStripeColorB()
     return Color(ColorTransparency, officecfg::Office::Common::Drawinglayer::StripeColorB::get());
 }
 
-static bool gbPixelSnapHairlineForwardInitial(false);
-static bool gbPixelSnapHairlineForwardLast(true);
-
 bool IsAntiAliasing()
 {
     return drawinglayer::geometry::ViewInformation2D::getGlobalAntiAliasing();
@@ -64,16 +61,7 @@ void SetAntiAliasing( bool bOn, bool bTemporary )
 
 bool IsSnapHorVerLinesToDiscrete()
 {
-    const bool bRetval(IsAntiAliasing() && officecfg::Office::Common::Drawinglayer::SnapHorVerLinesToDiscrete::get());
-
-    if (!gbPixelSnapHairlineForwardInitial || gbPixelSnapHairlineForwardLast != bRetval)
-    {
-        gbPixelSnapHairlineForwardInitial = true;
-        gbPixelSnapHairlineForwardLast = bRetval;
-        drawinglayer::geometry::ViewInformation2D::forwardPixelSnapHairline(bRetval);
-    }
-
-    return bRetval;
+    return IsAntiAliasing() && officecfg::Office::Common::Drawinglayer::SnapHorVerLinesToDiscrete::get();
 }
 
 sal_uInt16 GetTransparentSelectionPercent()
