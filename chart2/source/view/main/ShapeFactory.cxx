@@ -1098,7 +1098,7 @@ rtl::Reference<Svx3DExtrudeObject>
         //so we need to translate the object via transformation matrix
 
         //Matrix for position
-        if (!rPolyPolygon.empty() && !rPolyPolygon[0].empty())
+        if (!rPolyPolygon[0].empty())
         {
             basegfx::B3DHomMatrix aM;
             aM.translate(0, 0, rPolyPolygon[0][0].PositionZ);
