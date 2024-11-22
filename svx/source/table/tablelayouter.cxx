@@ -1048,10 +1048,10 @@ void TableLayouter::ResizeBorderLayout( BorderLineMap& rMap )
     if( sal::static_int_cast<sal_Int32>(rMap.size()) != nColCount )
         rMap.resize( nColCount );
 
-    for( sal_Int32 nCol = 0; nCol < nColCount; nCol++ )
+    for( auto& nCol : rMap )
     {
-        if( sal::static_int_cast<sal_Int32>(rMap[nCol].size()) != nRowCount )
-            rMap[nCol].resize( nRowCount );
+        if( sal::static_int_cast<sal_Int32>(nCol.size()) != nRowCount )
+            nCol.resize( nRowCount );
     }
 }
 
