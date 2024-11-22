@@ -3413,6 +3413,20 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_162282)
     CPPUNIT_ASSERT_EQUAL(correctData, emfData);
 }
 
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifNoTypeInUL)
+{
+    // Given a document with an unordered list:
+    createSwDoc("ul_with_disc.fodt");
+
+    // When exporting to XHTML:
+    ExportToReqif();
+
+    // Check that 'ul' element has no 'type' attribute
+    xmlDocUniquePtr pXmlDoc = WrapReqifFromTempFile();
+    // Without the accompanying fix in place, this test would have failed
+    assertXPathNoAttribute(pXmlDoc, "//reqif-xhtml:ul/reqif-xhtml:li/reqif-xhtml:ul", "type");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
