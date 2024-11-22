@@ -59,6 +59,29 @@ enum class AccessibilityCheckGroups : size_t
     LAST = Other
 };
 
+class AccessibilityCheckLevel
+{
+private:
+    std::unique_ptr<weld::Builder> m_xBuilder;
+    std::unique_ptr<weld::Box> m_xContainer;
+    std::array<std::vector<std::unique_ptr<AccessibilityCheckEntry>>, 11> m_aEntries;
+    std::array<std::unique_ptr<weld::Expander>, 11> m_xExpanders;
+    std::array<std::unique_ptr<weld::Box>, 11> m_xBoxes;
+
+public:
+    AccessibilityCheckLevel(weld::Box* pParent);
+
+    void removeAllEntries();
+    void reset();
+
+    void addEntryForGroup(AccessibilityCheckGroups eGroup, std::vector<sal_Int32>& rIndices,
+                          std::shared_ptr<sfx::AccessibilityIssue> const& pIssue);
+    size_t getEntrySize(AccessibilityCheckGroups eGroup) const;
+
+    void show(size_t nGroupIndex);
+    void hide(size_t nGroupIndex);
+};
+
 class A11yCheckIssuesPanel : public PanelLayout,
                              public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
@@ -76,13 +99,13 @@ public:
     virtual ~A11yCheckIssuesPanel() override;
 
 private:
-    std::array<std::vector<std::unique_ptr<AccessibilityCheckEntry>>, 11> m_aEntries;
-    std::array<std::unique_ptr<weld::Expander>, 11> m_xExpanders;
-    std::array<std::unique_ptr<weld::Box>, 11> m_xBoxes;
     std::unique_ptr<weld::Button> m_xOptionsButton;
-    std::unique_ptr<weld::Box> mxAccessibilityBox;
+    std::array<std::unique_ptr<weld::Expander>, 2> m_xLevelExpanders;
+    std::array<std::unique_ptr<weld::Box>, 2> mxAccessibilityBox;
+    std::array<std::unique_ptr<AccessibilityCheckLevel>, 2> m_aLevelEntries;
     std::unique_ptr<weld::Box> mxUpdateBox;
     std::unique_ptr<weld::LinkButton> mxUpdateLinkButton;
+    std::unique_ptr<weld::Widget> m_xListSep;
 
     sfx::AccessibilityIssueCollection m_aIssueCollection;
     void removeAllEntries();
@@ -92,7 +115,8 @@ private:
     DECL_LINK(UpdateLinkButtonClicked, weld::LinkButton&, bool);
     DECL_LINK(PopulateIssuesHdl, void*, void);
 
-    void addEntryForGroup(AccessibilityCheckGroups eGroup, std::vector<sal_Int32>& rIndices,
+    void addEntryForGroup(AccessibilityCheckGroups eGroup,
+                          std::vector<std::vector<sal_Int32>>& rIndices,
                           std::shared_ptr<sfx::AccessibilityIssue> const& pIssue);
 
     SfxBindings* GetBindings() { return mpBindings; }

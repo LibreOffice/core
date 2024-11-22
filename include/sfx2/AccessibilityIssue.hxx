@@ -54,10 +54,17 @@ enum class AccessibilityIssueID
     FONTWORKS,
 };
 
+enum class AccessibilityIssueLevel : size_t
+{
+    ERRORLEV = 0,
+    WARNLEV = 1,
+    LAST = WARNLEV
+};
+
 class SFX2_DLLPUBLIC AccessibilityIssue
 {
 public:
-    AccessibilityIssue(AccessibilityIssueID eIssueID);
+    AccessibilityIssue(AccessibilityIssueID eIssueID, AccessibilityIssueLevel eIssueLvl);
     AccessibilityIssue(AccessibilityIssue const&) = default;
     virtual ~AccessibilityIssue();
 
@@ -75,6 +82,7 @@ public:
     AccessibilityIssue& operator=(const AccessibilityIssue&) = default;
 
     AccessibilityIssueID m_eIssueID;
+    AccessibilityIssueLevel m_eIssueLvl;
     OUString m_aIssueText;
     bool m_bHidden;
 

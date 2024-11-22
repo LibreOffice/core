@@ -279,7 +279,8 @@ IMPL_LINK_NOARG(ImpPDFTabDialog, OkHdl, weld::Button&, void)
             const int nIssueCount = std::count_if(aIssues.begin(), aIssues.end(),
                 [](const std::shared_ptr<sfx::AccessibilityIssue >& pIssues)
                 {
-                    return !pIssues->getHidden();
+                    return !pIssues->getHidden() &&
+                        pIssues->m_eIssueLvl == sfx::AccessibilityIssueLevel::ERRORLEV;
                 });
 
             if (nIssueCount)

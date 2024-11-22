@@ -49,7 +49,7 @@ private:
     sal_Int32 m_nEnd;
 
 public:
-    AccessibilityIssue(sfx::AccessibilityIssueID eIssueID);
+    AccessibilityIssue(sfx::AccessibilityIssueID eIssueID, sfx::AccessibilityIssueLevel eIssueLvl);
     AccessibilityIssue(AccessibilityIssue const&) = default;
 
     void setIssueObject(IssueObject eIssueObject);

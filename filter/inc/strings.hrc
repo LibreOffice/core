@@ -76,9 +76,9 @@
 #define STR_WARN_TRANSP_CONVERTED_SHORT         NC_("STR_WARN_TRANSP_CONVERTED_SHORT", "Transparencies removed")
 #define STR_ERR_SIGNATURE_FAILED                NC_("STR_ERR_SIGNATURE_FAILED", "Signature generation failed")
 #define STR_ERR_PDF_EXPORT_ABORTED              NC_("STR_ERR_PDF_EXPORT_ABORTED", "PDF export aborted")
-#define STR_WARN_PDFUA_ISSUES                   NNC_("STR_WARN_PDFUA_ISSUES", "One accessibility issue detected. Do you want to continue?", "%1 accessibility issues detected. Do you want to continue?")
+#define STR_WARN_PDFUA_ISSUES                   NNC_("STR_WARN_PDFUA_ISSUES", "One accessibility error detected. Do you want to continue?", "%1 accessibility errors detected. Do you want to continue?")
 #define STR_PDFUA_IGNORE                        NC_("STR_PDFUA_IGNORE", "Continue")
-#define STR_PDFUA_INVESTIGATE                   NNC_("STR_PDFUA_INVESTIGATE", "Investigate issue", "Investigate issues")
+#define STR_PDFUA_INVESTIGATE                   NNC_("STR_PDFUA_INVESTIGATE", "Investigate error", "Investigate errors")
 
 // Progress bar status indicator when importing or exporting
 #define STR_FILTER_DOC_LOADING                  NC_("STR_FILTER_DOC_LOADING", "Loading: ")

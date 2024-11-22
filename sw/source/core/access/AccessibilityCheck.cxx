@@ -271,9 +271,9 @@ void lcl_SetHiddenIssues(std::shared_ptr<sw::AccessibilityIssue>& pIssue)
 
 std::shared_ptr<sw::AccessibilityIssue>
 lclAddIssue(sfx::AccessibilityIssueCollection& rIssueCollection, OUString const& rText,
-            sfx::AccessibilityIssueID eIssue)
+            sfx::AccessibilityIssueID eIssueId, sfx::AccessibilityIssueLevel eIssueLvl)
 {
-    auto pIssue = std::make_shared<sw::AccessibilityIssue>(eIssue);
+    auto pIssue = std::make_shared<sw::AccessibilityIssue>(eIssueId, eIssueLvl);
     pIssue->m_aIssueText = rText;
 
     // check which a11y issue should be visible
@@ -330,7 +330,8 @@ class NoTextNodeAltTextCheck : public NodeCheck
                                           .replaceFirst("%LINK%", sURL);
 
                 auto pIssue = lclAddIssue(m_rIssueCollection, sIssueText,
-                                          sfx::AccessibilityIssueID::LINKED_GRAPHIC);
+                                          sfx::AccessibilityIssueID::LINKED_GRAPHIC,
+                                          sfx::AccessibilityIssueLevel::WARNLEV);
                 pIssue->setDoc(pNoTextNode->GetDoc());
                 pIssue->setIssueObject(IssueObject::LINKED);
                 pIssue->setObjectID(pFrameFormat->GetName());
@@ -347,8 +348,9 @@ class NoTextNodeAltTextCheck : public NodeCheck
 
         if (pNoTextNode->IsOLENode())
         {
-            auto pIssue = lclAddIssue(m_rIssueCollection, sIssueText,
-                                      sfx::AccessibilityIssueID::NO_ALT_OLE);
+            auto pIssue
+                = lclAddIssue(m_rIssueCollection, sIssueText, sfx::AccessibilityIssueID::NO_ALT_OLE,
+                              sfx::AccessibilityIssueLevel::ERRORLEV);
             pIssue->setDoc(pNoTextNode->GetDoc());
             pIssue->setIssueObject(IssueObject::OLE);
             pIssue->setObjectID(pFrameFormat->GetName());
@@ -359,7 +361,8 @@ class NoTextNodeAltTextCheck : public NodeCheck
             if (!(pIsDecorItem && pIsDecorItem->GetValue()))
             {
                 auto pIssue = lclAddIssue(m_rIssueCollection, sIssueText,
-                                          sfx::AccessibilityIssueID::NO_ALT_GRAPHIC);
+                                          sfx::AccessibilityIssueID::NO_ALT_GRAPHIC,
+                                          sfx::AccessibilityIssueLevel::ERRORLEV);
                 pIssue->setDoc(pNoTextNode->GetDoc());
                 pIssue->setIssueObject(IssueObject::GRAPHIC);
                 pIssue->setObjectID(pFrameFormat->GetName());
@@ -395,7 +398,8 @@ private:
         OUString sName = pFormat->GetName();
         OUString sIssueText = SwResId(STR_TABLE_MERGE_SPLIT).replaceAll("%OBJECT_NAME%", sName);
         auto pIssue = lclAddIssue(m_rIssueCollection, sIssueText,
-                                  sfx::AccessibilityIssueID::TABLE_MERGE_SPLIT);
+                                  sfx::AccessibilityIssueID::TABLE_MERGE_SPLIT,
+                                  sfx::AccessibilityIssueLevel::WARNLEV);
         pIssue->setDoc(rDoc);
         pIssue->setIssueObject(IssueObject::TABLE);
         pIssue->setObjectID(sName);
@@ -493,7 +497,8 @@ private:
             if (nEmptyBoxes > nBoxCount / 2)
             {
                 auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_TABLE_FORMATTING),
-                                          sfx::AccessibilityIssueID::TABLE_FORMATTING);
+                                          sfx::AccessibilityIssueID::TABLE_FORMATTING,
+                                          sfx::AccessibilityIssueLevel::WARNLEV);
 
                 pIssue->setDoc(pTableNode->GetDoc());
                 pIssue->setIssueObject(IssueObject::TABLE);
@@ -558,7 +563,8 @@ public:
                 OUString sIssueText
                     = SwResId(STR_FAKE_NUMBERING).replaceAll("%NUMBERING%", sNumbering);
                 auto pIssue = lclAddIssue(m_rIssueCollection, sIssueText,
-                                          sfx::AccessibilityIssueID::MANUAL_NUMBERING);
+                                          sfx::AccessibilityIssueID::MANUAL_NUMBERING,
+                                          sfx::AccessibilityIssueLevel::WARNLEV);
                 pIssue->setIssueObject(IssueObject::TEXT);
                 pIssue->setDoc(pCurrent->GetDoc());
                 pIssue->setNode(pCurrent);
@@ -593,13 +599,15 @@ private:
                         OUString sIssueText = SwResId(STR_HYPERLINK_TEXT_IS_LINK)
                                                   .replaceFirst("%LINK%", sHyperlink);
                         pIssue = lclAddIssue(m_rIssueCollection, sIssueText,
-                                             sfx::AccessibilityIssueID::HYPERLINK_IS_TEXT);
+                                             sfx::AccessibilityIssueID::HYPERLINK_IS_TEXT,
+                                             sfx::AccessibilityIssueLevel::WARNLEV);
                     }
                     else if (sRunText.getLength() <= 5)
                     {
                         pIssue
                             = lclAddIssue(m_rIssueCollection, SwResId(STR_HYPERLINK_TEXT_IS_SHORT),
-                                          sfx::AccessibilityIssueID::HYPERLINK_SHORT);
+                                          sfx::AccessibilityIssueID::HYPERLINK_SHORT,
+                                          sfx::AccessibilityIssueLevel::WARNLEV);
                     }
 
                     if (pIssue)
@@ -619,7 +627,8 @@ private:
                         {
                             std::shared_ptr<sw::AccessibilityIssue> pNameIssue
                                 = lclAddIssue(m_rIssueCollection, SwResId(STR_HYPERLINK_NO_NAME),
-                                              sfx::AccessibilityIssueID::HYPERLINK_NO_NAME);
+                                              sfx::AccessibilityIssueID::HYPERLINK_NO_NAME,
+                                              sfx::AccessibilityIssueLevel::WARNLEV);
 
                             if (pNameIssue)
                             {
@@ -785,7 +794,8 @@ private:
             {
                 auto pIssue
                     = lclAddIssue(m_rIssueCollection, SwResId(STR_TEXT_FORMATTING_CONVEYS_MEANING),
-                                  sfx::AccessibilityIssueID::DIRECT_FORMATTING);
+                                  sfx::AccessibilityIssueID::DIRECT_FORMATTING,
+                                  sfx::AccessibilityIssueLevel::WARNLEV);
                 pIssue->setIssueObject(IssueObject::TEXT);
                 pIssue->setNode(pTextNode);
                 SwDoc& rDocument = pTextNode->GetDoc();
@@ -811,7 +821,8 @@ private:
         if (fContrastRatio < 4.5)
         {
             auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_TEXT_CONTRAST),
-                                      sfx::AccessibilityIssueID::TEXT_CONTRAST);
+                                      sfx::AccessibilityIssueID::TEXT_CONTRAST,
+                                      sfx::AccessibilityIssueLevel::WARNLEV);
             pIssue->setIssueObject(IssueObject::TEXT);
             pIssue->setNode(pTextNode);
             pIssue->setDoc(pTextNode->GetDoc());
@@ -1257,7 +1268,8 @@ public:
 
         o3tl::remove_duplicates(aFormattings);
         auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_TEXT_FORMATTING_CONVEYS_MEANING),
-                                  sfx::AccessibilityIssueID::DIRECT_FORMATTING);
+                                  sfx::AccessibilityIssueID::DIRECT_FORMATTING,
+                                  sfx::AccessibilityIssueLevel::WARNLEV);
         pIssue->setIssueObject(IssueObject::TEXT);
         pIssue->setNode(pTextNode);
         SwDoc& rDocument = pTextNode->GetDoc();
@@ -1597,7 +1609,8 @@ public:
             {
                 auto pIssue
                     = lclAddIssue(m_rIssueCollection, SwResId(STR_TEXT_FORMATTING_CONVEYS_MEANING),
-                                  sfx::AccessibilityIssueID::DIRECT_FORMATTING);
+                                  sfx::AccessibilityIssueID::DIRECT_FORMATTING,
+                                  sfx::AccessibilityIssueLevel::WARNLEV);
                 pIssue->setIssueObject(IssueObject::TEXT);
                 pIssue->setNode(pTextNode);
                 SwDoc& rDocument = pTextNode->GetDoc();
@@ -1616,7 +1629,8 @@ public:
             {
                 auto pIssue
                     = lclAddIssue(m_rIssueCollection, SwResId(STR_TEXT_FORMATTING_CONVEYS_MEANING),
-                                  sfx::AccessibilityIssueID::DIRECT_FORMATTING);
+                                  sfx::AccessibilityIssueID::DIRECT_FORMATTING,
+                                  sfx::AccessibilityIssueLevel::WARNLEV);
                 pIssue->setIssueObject(IssueObject::TEXT);
                 pIssue->setNode(pTextNode);
                 SwDoc& rDocument = pTextNode->GetDoc();
@@ -1685,7 +1699,8 @@ public:
                 if (pPrevTextNode->GetText().getLength() == 0)
                 {
                     auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_AVOID_NEWLINES_SPACE),
-                                              sfx::AccessibilityIssueID::TEXT_FORMATTING);
+                                              sfx::AccessibilityIssueID::TEXT_FORMATTING,
+                                              sfx::AccessibilityIssueLevel::WARNLEV);
                     pIssue->setIssueObject(IssueObject::TEXT);
                     pIssue->setNode(pTextNode);
                     pIssue->setDoc(rDocument);
@@ -1711,7 +1726,8 @@ public:
                         {
                             auto pIssue
                                 = lclAddIssue(m_rIssueCollection, SwResId(STR_AVOID_NEWLINES_SPACE),
-                                              sfx::AccessibilityIssueID::TEXT_FORMATTING);
+                                              sfx::AccessibilityIssueID::TEXT_FORMATTING,
+                                              sfx::AccessibilityIssueLevel::WARNLEV);
                             pIssue->setIssueObject(IssueObject::TEXT);
                             pIssue->setNode(pTextNode);
                             pIssue->setDoc(rDocument);
@@ -1784,7 +1800,8 @@ public:
                         {
                             auto pIssue = lclAddIssue(m_rIssueCollection,
                                                       SwResId(STR_AVOID_TABS_FORMATTING),
-                                                      sfx::AccessibilityIssueID::TEXT_FORMATTING);
+                                                      sfx::AccessibilityIssueID::TEXT_FORMATTING,
+                                                      sfx::AccessibilityIssueLevel::WARNLEV);
                             pIssue->setIssueObject(IssueObject::TEXT);
                             pIssue->setNode(pTextNode);
                             SwDoc& rDocument = pTextNode->GetDoc();
@@ -1801,7 +1818,8 @@ public:
                     {
                         auto pIssue
                             = lclAddIssue(m_rIssueCollection, SwResId(STR_AVOID_SPACES_SPACE),
-                                          sfx::AccessibilityIssueID::TEXT_FORMATTING);
+                                          sfx::AccessibilityIssueID::TEXT_FORMATTING,
+                                          sfx::AccessibilityIssueLevel::WARNLEV);
                         pIssue->setIssueObject(IssueObject::TEXT);
                         pIssue->setNode(pTextNode);
                         SwDoc& rDocument = pTextNode->GetDoc();
@@ -1837,7 +1855,8 @@ private:
                     && pTextAttr->GetStart() == 0 && pTextAttr->GetAnyEnd() == 1)
                 {
                     auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_AVOID_FAKE_FOOTNOTES),
-                                              sfx::AccessibilityIssueID::FAKE_FOOTNOTE);
+                                              sfx::AccessibilityIssueID::FAKE_FOOTNOTE,
+                                              sfx::AccessibilityIssueLevel::WARNLEV);
                     pIssue->setIssueObject(IssueObject::TEXT);
                     pIssue->setNode(pTextNode);
                     SwDoc& rDocument = pTextNode->GetDoc();
@@ -1867,7 +1886,8 @@ public:
         if (pTextNode->GetText()[0] == '*')
         {
             auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_AVOID_FAKE_FOOTNOTES),
-                                      sfx::AccessibilityIssueID::FAKE_FOOTNOTE);
+                                      sfx::AccessibilityIssueID::FAKE_FOOTNOTE,
+                                      sfx::AccessibilityIssueLevel::WARNLEV);
             pIssue->setIssueObject(IssueObject::TEXT);
             pIssue->setNode(pTextNode);
             SwDoc& rDocument = pTextNode->GetDoc();
@@ -1941,7 +1961,8 @@ public:
                 || sText.startsWith(SwResId(STR_POOLCOLL_LABEL_FIGURE)))
             {
                 auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_AVOID_FAKE_CAPTIONS),
-                                          sfx::AccessibilityIssueID::FAKE_CAPTION);
+                                          sfx::AccessibilityIssueID::FAKE_CAPTION,
+                                          sfx::AccessibilityIssueLevel::WARNLEV);
                 pIssue->setIssueObject(IssueObject::TEXT);
                 pIssue->setNode(pTextNode);
                 SwDoc& rDocument = pTextNode->GetDoc();
@@ -1969,7 +1990,8 @@ private:
             if (bBlinking)
             {
                 auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_TEXT_BLINKING),
-                                          sfx::AccessibilityIssueID::TEXT_BLINKING);
+                                          sfx::AccessibilityIssueID::TEXT_BLINKING,
+                                          sfx::AccessibilityIssueLevel::WARNLEV);
                 pIssue->setIssueObject(IssueObject::TEXT);
                 pIssue->setNode(pTextNode);
                 pIssue->setDoc(pTextNode->GetDoc());
@@ -2037,7 +2059,8 @@ public:
         if (nLevel > m_nPreviousLevel && std::abs(nLevel - m_nPreviousLevel) > 1)
         {
             auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_HEADINGS_NOT_IN_ORDER),
-                                      sfx::AccessibilityIssueID::HEADINGS_NOT_IN_ORDER);
+                                      sfx::AccessibilityIssueID::HEADINGS_NOT_IN_ORDER,
+                                      sfx::AccessibilityIssueLevel::ERRORLEV);
             pIssue->setIssueObject(IssueObject::TEXT);
             pIssue->setDoc(pCurrent->GetDoc());
             pIssue->setNode(pCurrent);
@@ -2083,7 +2106,8 @@ public:
         {
             sal_Int32 nStart = 0;
             auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_NON_INTERACTIVE_FORMS),
-                                      sfx::AccessibilityIssueID::NON_INTERACTIVE_FORMS);
+                                      sfx::AccessibilityIssueID::NON_INTERACTIVE_FORMS,
+                                      sfx::AccessibilityIssueLevel::WARNLEV);
             pIssue->setIssueObject(IssueObject::TEXT);
             pIssue->setNode(pTextNode);
             pIssue->setDoc(pTextNode->GetDoc());
@@ -2131,7 +2155,8 @@ public:
                     if (aIdx == aCurrentIdx)
                     {
                         auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_FLOATING_TEXT),
-                                                  sfx::AccessibilityIssueID::FLOATING_TEXT);
+                                                  sfx::AccessibilityIssueID::FLOATING_TEXT,
+                                                  sfx::AccessibilityIssueLevel::WARNLEV);
                         pIssue->setIssueObject(IssueObject::TEXTFRAME);
                         pIssue->setObjectID(pFormat->GetName());
                         pIssue->setDoc(pCurrent->GetDoc());
@@ -2175,7 +2200,8 @@ public:
             {
                 m_bPrevPassed = false;
                 auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_HEADING_IN_TABLE),
-                                          sfx::AccessibilityIssueID::HEADING_IN_TABLE);
+                                          sfx::AccessibilityIssueID::HEADING_IN_TABLE,
+                                          sfx::AccessibilityIssueLevel::WARNLEV);
                 pIssue->setIssueObject(IssueObject::TEXT);
                 pIssue->setDoc(pCurrent->GetDoc());
                 pIssue->setNode(pCurrent);
@@ -2224,7 +2250,8 @@ public:
             }
             resultString
                 = resultString.replaceAll("%LEVEL_CURRENT%", OUString::number(currentLevel));
-            auto pIssue = lclAddIssue(m_rIssueCollection, resultString, eIssueID);
+            auto pIssue = lclAddIssue(m_rIssueCollection, resultString, eIssueID,
+                                      sfx::AccessibilityIssueLevel::ERRORLEV);
             pIssue->setIssueObject(IssueObject::TEXT);
             pIssue->setDoc(pCurrent->GetDoc());
             pIssue->setNode(pCurrent);
@@ -2269,7 +2296,8 @@ public:
                             auto pIssue
                                 = lclAddIssue(m_rIssueCollection,
                                               SwResId(STR_CONTENT_CONTROL_IN_HEADER_OR_FOOTER),
-                                              sfx::AccessibilityIssueID::CONTENT_CONTROL);
+                                              sfx::AccessibilityIssueID::CONTENT_CONTROL,
+                                              sfx::AccessibilityIssueLevel::WARNLEV);
                             pIssue->setIssueObject(IssueObject::TEXT);
                             pIssue->setDoc(pCurrent->GetDoc());
                             pIssue->setNode(pCurrent);
@@ -2310,7 +2338,8 @@ public:
         if (eLanguage == LANGUAGE_NONE)
         {
             auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_DOCUMENT_DEFAULT_LANGUAGE),
-                                      sfx::AccessibilityIssueID::DOCUMENT_LANGUAGE);
+                                      sfx::AccessibilityIssueID::DOCUMENT_LANGUAGE,
+                                      sfx::AccessibilityIssueLevel::WARNLEV);
             pIssue->setIssueObject(IssueObject::LANGUAGE_NOT_SET);
             pIssue->setObjectID(OUString());
             pIssue->setDoc(*pDoc);
@@ -2327,7 +2356,8 @@ public:
                         = SwResId(STR_STYLE_NO_LANGUAGE).replaceAll("%STYLE_NAME%", sName);
 
                     auto pIssue = lclAddIssue(m_rIssueCollection, sIssueText,
-                                              sfx::AccessibilityIssueID::STYLE_LANGUAGE);
+                                              sfx::AccessibilityIssueID::STYLE_LANGUAGE,
+                                              sfx::AccessibilityIssueLevel::WARNLEV);
                     pIssue->setIssueObject(IssueObject::LANGUAGE_NOT_SET);
                     pIssue->setObjectID(sName);
                     pIssue->setDoc(*pDoc);
@@ -2359,7 +2389,8 @@ public:
         if (o3tl::trim(sTitle).empty())
         {
             auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_DOCUMENT_TITLE),
-                                      sfx::AccessibilityIssueID::DOCUMENT_TITLE);
+                                      sfx::AccessibilityIssueID::DOCUMENT_TITLE,
+                                      sfx::AccessibilityIssueLevel::ERRORLEV);
             pIssue->setDoc(*pDoc);
             pIssue->setIssueObject(IssueObject::DOCUMENT_TITLE);
         }
@@ -2384,7 +2415,8 @@ public:
             sfx::AccessibilityIssueID eIssueID = rFootnote.IsEndNote()
                                                      ? sfx::AccessibilityIssueID::AVOID_FOOTNOTES
                                                      : sfx::AccessibilityIssueID::AVOID_ENDNOTES;
-            auto pIssue = lclAddIssue(m_rIssueCollection, sError, eIssueID);
+            auto pIssue = lclAddIssue(m_rIssueCollection, sError, eIssueID,
+                                      sfx::AccessibilityIssueLevel::WARNLEV);
             pIssue->setDoc(*pDoc);
             pIssue->setIssueObject(IssueObject::FOOTENDNOTE);
             pIssue->setTextFootnote(pTextFootnote);
@@ -2427,7 +2459,8 @@ public:
                 {
                     auto pIssue
                         = lclAddIssue(m_rIssueCollection, SwResId(STR_AVOID_BACKGROUND_IMAGES),
-                                      sfx::AccessibilityIssueID::DOCUMENT_BACKGROUND);
+                                      sfx::AccessibilityIssueID::DOCUMENT_BACKGROUND,
+                                      sfx::AccessibilityIssueLevel::WARNLEV);
 
                     pIssue->setDoc(*pDoc);
                     pIssue->setIssueObject(IssueObject::DOCUMENT_BACKGROUND);
@@ -2454,7 +2487,8 @@ void AccessibilityCheck::checkObject(SwNode* pCurrent, SdrObject* pObject)
         if (const uno::Any* pAny = rGeometryItem.GetPropertyValueByName(u"Type"_ustr))
             if (pAny->get<OUString>().startsWith("fontwork-"))
                 lclAddIssue(m_aIssueCollection, SwResId(STR_FONTWORKS),
-                            sfx::AccessibilityIssueID::FONTWORKS);
+                            sfx::AccessibilityIssueID::FONTWORKS,
+                            sfx::AccessibilityIssueLevel::WARNLEV);
     }
 
     // Checking if there is floating Writer text draw object and if so, throwing a warning.
@@ -2463,7 +2497,8 @@ void AccessibilityCheck::checkObject(SwNode* pCurrent, SdrObject* pObject)
         && FindFrameFormat(pObject)->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
     {
         auto pIssue = lclAddIssue(m_aIssueCollection, SwResId(STR_FLOATING_TEXT),
-                                  sfx::AccessibilityIssueID::FLOATING_TEXT);
+                                  sfx::AccessibilityIssueID::FLOATING_TEXT,
+                                  sfx::AccessibilityIssueLevel::WARNLEV);
         pIssue->setIssueObject(IssueObject::TEXTFRAME);
         pIssue->setObjectID(pObject->GetName());
         pIssue->setDoc(*m_pDoc);
@@ -2483,7 +2518,8 @@ void AccessibilityCheck::checkObject(SwNode* pCurrent, SdrObject* pObject)
             const OUString& sName = pObject->GetName();
             OUString sIssueText = SwResId(STR_NO_ALT).replaceAll("%OBJECT_NAME%", sName);
             auto pIssue = lclAddIssue(m_aIssueCollection, sIssueText,
-                                      sfx::AccessibilityIssueID::NO_ALT_SHAPE);
+                                      sfx::AccessibilityIssueID::NO_ALT_SHAPE,
+                                      sfx::AccessibilityIssueLevel::ERRORLEV);
             // Set FORM Issue for Form objects because of the design mode
             if (nInv == SdrInventor::FmForm)
                 pIssue->setIssueObject(IssueObject::FORM);
