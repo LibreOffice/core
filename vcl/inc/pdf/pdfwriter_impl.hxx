@@ -818,7 +818,7 @@ private:
 
     ExternalPDFStreams m_aExternalPDFStreams;
 
-    std::unique_ptr<IPDFEncryptor> m_pPDFEncryptor;
+    std::shared_ptr<IPDFEncryptor> m_pPDFEncryptor;
 
     /* output redirection; e.g. to accumulate content streams for
        XObjects
