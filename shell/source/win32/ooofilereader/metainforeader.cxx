@@ -121,7 +121,7 @@ CMetaInfoReader::~CMetaInfoReader()
 */
 bool CMetaInfoReader::hasTag(const std::wstring& TagName) const
 {
-    return ( m_AllMetaInfo.find(TagName) != m_AllMetaInfo.end());
+    return ( m_AllMetaInfo.contains(TagName) );
 }
 
 /** Get a specific tag content, compound tags will be returned as comma separated list.
@@ -146,7 +146,7 @@ std::wstring CMetaInfoReader::getTagData( const std::wstring& TagName)
 */
 bool CMetaInfoReader::hasTagAttribute(const std::wstring& TagName,  const std::wstring& AttributeName)
 {
-    return ( m_AllMetaInfo[TagName].second.find( AttributeName) != m_AllMetaInfo[TagName].second.end() );
+    return ( m_AllMetaInfo[TagName].second.contains( AttributeName) );
 }
 
 /** Get a specific attribute content.
