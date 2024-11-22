@@ -84,15 +84,15 @@ const sal_uInt16 MAXZOOM = 400;
 const SCSIZE MAXSUBTOTAL        = 3;
 
 // ~105.88 twip, i.e. about 2 times narrower than o3tl::Length::ch, which is 210 twip
-constexpr auto TWIPS_PER_CHAR = o3tl::toTwips(1 / 13.6, o3tl::Length::in);
+inline constexpr auto TWIPS_PER_CHAR = o3tl::toTwips(1 / 13.6, o3tl::Length::in);
 
-constexpr sal_Int32 STD_COL_WIDTH = o3tl::convert(64, o3tl::Length::pt, o3tl::Length::twip);
-constexpr sal_Int32 STD_EXTRA_WIDTH = o3tl::convert(2, o3tl::Length::mm, o3tl::Length::twip);
+inline constexpr sal_Int32 STD_COL_WIDTH = o3tl::convert(64, o3tl::Length::pt, o3tl::Length::twip);
+inline constexpr sal_Int32 STD_EXTRA_WIDTH = o3tl::convert(2, o3tl::Length::mm, o3tl::Length::twip);
 
-constexpr sal_Int32 MAX_EXTRA_WIDTH = o3tl::convert(42, o3tl::Length::cm, o3tl::Length::twip);
-constexpr sal_Int32 MAX_EXTRA_HEIGHT = o3tl::convert(42, o3tl::Length::cm, o3tl::Length::twip);
-constexpr sal_Int32 MAX_COL_WIDTH = o3tl::convert(1, o3tl::Length::m, o3tl::Length::twip);
-constexpr sal_Int32 MAX_ROW_HEIGHT = o3tl::convert(1, o3tl::Length::m, o3tl::Length::twip);
+inline constexpr sal_Int32 MAX_EXTRA_WIDTH = o3tl::convert(42, o3tl::Length::cm, o3tl::Length::twip);
+inline constexpr sal_Int32 MAX_EXTRA_HEIGHT = o3tl::convert(42, o3tl::Length::cm, o3tl::Length::twip);
+inline constexpr sal_Int32 MAX_COL_WIDTH = o3tl::convert(1, o3tl::Length::m, o3tl::Length::twip);
+inline constexpr sal_Int32 MAX_ROW_HEIGHT = o3tl::convert(1, o3tl::Length::m, o3tl::Length::twip);
 
                                     /* standard row height: text + margin - STD_ROWHEIGHT_DIFF */
 #define STD_ROWHEIGHT_DIFF  23
@@ -207,11 +207,11 @@ namespace o3tl {
 
 // Layer id's for drawing.
 // These are both id's and positions.
-constexpr SdrLayerID SC_LAYER_FRONT   (0);
-constexpr SdrLayerID SC_LAYER_BACK    (1);
-constexpr SdrLayerID SC_LAYER_INTERN  (2);
-constexpr SdrLayerID SC_LAYER_CONTROLS(3);
-constexpr SdrLayerID SC_LAYER_HIDDEN  (4);
+inline constexpr SdrLayerID SC_LAYER_FRONT   (0);
+inline constexpr SdrLayerID SC_LAYER_BACK    (1);
+inline constexpr SdrLayerID SC_LAYER_INTERN  (2);
+inline constexpr SdrLayerID SC_LAYER_CONTROLS(3);
+inline constexpr SdrLayerID SC_LAYER_HIDDEN  (4);
 
 //  link tables
 enum class ScLinkMode {
@@ -463,7 +463,7 @@ struct ScImportParam
 // Formula data replacement character for a pair of parentheses at end of
 // function name, to force sorting parentheses before all other characters.
 // Collation may treat parentheses differently.
-constexpr sal_Unicode cParenthesesReplacement = 0x0001;
+inline constexpr sal_Unicode cParenthesesReplacement = 0x0001;
 struct InputHandlerFunctionNames
 {
     ScTypedCaseStrSet       maFunctionData;
