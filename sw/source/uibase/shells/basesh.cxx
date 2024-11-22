@@ -221,16 +221,12 @@ void SwBaseShell::ExecDelete(SfxRequest &rReq)
                     SwNodeIndex aIdx(rSh.GetCursor()->GetPointNode());
                     if (aIdx.GetNode().IsTextNode())
                     {
-                        bool bVisible = true;
-                        aIdx.GetNode().GetTextNode()->GetAttrOutlineContentVisible(bVisible);
-                        if (!bVisible)
+                        if (!aIdx.GetNode().GetTextNode()->GetAttrOutlineContentVisible())
                             break;
                         ++aIdx;
                         if (aIdx.GetNode().IsTextNode())
                         {
-                            bVisible = true;
-                            aIdx.GetNode().GetTextNode()->GetAttrOutlineContentVisible(bVisible);
-                            if (!bVisible)
+                            if (!aIdx.GetNode().GetTextNode()->GetAttrOutlineContentVisible())
                                 break;
                         }
                     }
@@ -250,9 +246,7 @@ void SwBaseShell::ExecDelete(SfxRequest &rReq)
                     SwNodeIndex aIdx(rSh.GetCursor()->GetPointNode());
                     if (aIdx.GetNode().IsTextNode())
                     {
-                        bool bVisible = true;
-                        aIdx.GetNode().GetTextNode()->GetAttrOutlineContentVisible(bVisible);
-                        if (!bVisible)
+                        if (!aIdx.GetNode().GetTextNode()->GetAttrOutlineContentVisible())
                             break;
                         --aIdx;
                         if (aIdx.GetNode().IsContentNode() &&

@@ -655,10 +655,9 @@ public:
 
     /**
      * @brief GetAttrOutlineContentVisible
-     * @param bOutlineContentVisibleAttr    the value stored in RES_PARATR_GRABBAG for 'OutlineContentVisibleAttr'
      * @return true if 'OutlineContentVisibleAttr' is found in RES_PARATR_GRABBAG
      */
-    void GetAttrOutlineContentVisible(bool& bOutlineContentVisibleAttr);
+    bool GetAttrOutlineContentVisible();
     void SetAttrOutlineContentVisible(bool bVisible);
 
     bool IsEmptyListStyleDueToSetOutlineLevelAttr() const { return mbEmptyListStyleSetDueToSetOutlineLevelAttr;}

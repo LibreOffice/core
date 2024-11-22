@@ -153,9 +153,7 @@ static bool lcl_IsAllowed(const SwWrtShell* rSh)
         if (pTextNode && pTextNode->IsOutline())
         {
             // disallow if this is an outline node having folded content
-            bool bVisible = true;
-            pTextNode->GetAttrOutlineContentVisible(bVisible);
-            if (!bVisible)
+            if (!pTextNode->GetAttrOutlineContentVisible())
                 return false;
         }
     }
@@ -1262,9 +1260,7 @@ static bool lcl_FoldedOutlineNodeEndOfParaSplit(SwWrtShell *pThis)
     SwTextNode* pTextNode = pThis->GetCursor()->GetPointNode().GetTextNode();
     if (pTextNode && pTextNode->IsOutline())
     {
-        bool bVisible = true;
-        pTextNode->GetAttrOutlineContentVisible(bVisible);
-        if (!bVisible)
+        if (!pTextNode->GetAttrOutlineContentVisible())
         {
             const SwNodes& rNodes = pThis->GetNodes();
             const SwOutlineNodes& rOutlineNodes = rNodes.GetOutLineNds();
@@ -2568,9 +2564,7 @@ void SwWrtShell::MakeOutlineContentVisible(const size_t nPos, bool bMakeVisible,
                 if (pNd->IsTextNode() && pNd->GetTextNode()->IsOutline())
                 {
                     SwTextNode* pTextNd = pNd->GetTextNode();
-                    bool bOutlineContentVisibleAttr = true;
-                    pTextNd->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr);
-                    if (!bOutlineContentVisibleAttr)
+                    if (!pTextNd->GetAttrOutlineContentVisible())
                     {
                         SwOutlineNodes::size_type iPos;
                         if (rOutlineNodes.Seek_Entry(pTextNd, &iPos))
@@ -2597,8 +2591,7 @@ void SwWrtShell::InvalidateOutlineContentVisibility()
     for (SwOutlineNodes::size_type nPos = 0; nPos < rOutlineNds.size(); ++nPos)
     {
         bool bIsOutlineContentVisible = IsOutlineContentVisible(nPos);
-        bool bOutlineContentVisibleAttr = true;
-        rOutlineNds[nPos]->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr);
+        bool bOutlineContentVisibleAttr = rOutlineNds[nPos]->GetTextNode()->GetAttrOutlineContentVisible();
         if (!bIsOutlineContentVisible && bOutlineContentVisibleAttr)
             MakeOutlineContentVisible(nPos);
         else if (bIsOutlineContentVisible && !bOutlineContentVisibleAttr)
@@ -2622,9 +2615,7 @@ void SwWrtShell::MakeAllFoldedOutlineContentVisible(bool bMakeVisible)
         std::vector<SwNode*> aFoldedOutlineNodeArray;
         for (SwNode* pNd: GetNodes().GetOutLineNds())
         {
-            bool bOutlineContentVisibleAttr = true;
-            pNd->GetTextNode()->GetAttrOutlineContentVisible(bOutlineContentVisibleAttr);
-            if (!bOutlineContentVisibleAttr)
+            if (!pNd->GetTextNode()->GetAttrOutlineContentVisible())
             {
                 aFoldedOutlineNodeArray.push_back(pNd);
                 pNd->GetTextNode()->SetAttrOutlineContentVisible(true);
@@ -2666,9 +2657,7 @@ void SwWrtShell::MakeAllFoldedOutlineContentVisible(bool bMakeVisible)
 
 bool SwWrtShell::GetAttrOutlineContentVisible(const size_t nPos) const
 {
-    bool bVisibleAttr = true;
-    GetNodes().GetOutLineNds()[nPos]->GetTextNode()->GetAttrOutlineContentVisible(bVisibleAttr);
-    return bVisibleAttr;
+    return GetNodes().GetOutLineNds()[nPos]->GetTextNode()->GetAttrOutlineContentVisible();
 }
 
 bool SwWrtShell::HasFoldedOutlineContentSelected() const

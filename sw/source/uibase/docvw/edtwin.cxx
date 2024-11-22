@@ -7072,8 +7072,7 @@ void SwEditWin::ToggleOutlineContentVisibility(const size_t nOutlinePos, const b
     if (!bSubs || rSh.GetViewOptions()->IsTreatSubOutlineLevelsAsContent())
     {
         SwNode* pNode = rSh.GetNodes().GetOutLineNds()[nOutlinePos];
-        bool bVisible = true;
-        pNode->GetTextNode()->GetAttrOutlineContentVisible(bVisible);
+        bool bVisible = pNode->GetTextNode()->GetAttrOutlineContentVisible();
         pNode->GetTextNode()->SetAttrOutlineContentVisible(!bVisible);
     }
     else if (bSubs)
