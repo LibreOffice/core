@@ -401,6 +401,21 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf95640_xlsx_to_xlsx)
                 u"Low,Medium,High");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testSortConditionRef)
+{
+    // Ascending sortCondition reference detected wrong without fix.
+    // - Expected: B3:B2
+    // - Actual  : A3:A2
+    // - In <>, attribute 'ref' of '//x:worksheet/x:autoFilter/x:sortState/x:sortCondition' incorrect value.
+    createScDoc("xlsx/sortconditionref.xlsx");
+
+    save(u"Calc Office Open XML"_ustr);
+    xmlDocUniquePtr pDoc = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+
+    assertXPath(pDoc, "//x:worksheet/x:autoFilter", "ref", u"B2");
+    assertXPath(pDoc, "//x:worksheet/x:autoFilter/x:sortState/x:sortCondition", "ref", u"B3:B2");
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testDateAutofilterXLSX)
 {
     // XLSX Roundtripping autofilter with date list
