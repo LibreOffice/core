@@ -5621,9 +5621,9 @@ bool PDFWriterImpl::emitCatalog()
 
     if( nMetadataObject )
     {
-        aLine.append("/Metadata ");
-        aLine.append( nMetadataObject );
-        aLine.append( " 0 R" );
+        COSWriter aWriter;
+        aWriter.writeReference("/Metadata", nMetadataObject);
+        aLine.append(aWriter.getLine());
     }
 
     aLine.append( ">>\n"
@@ -6024,52 +6024,64 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
     //get the object number for all the destinations
     sal_Int32 nObject = createObject();
 
-    if( updateObject( nObject ) )
+    if (!updateObject(nObject))
+        return 0;
+
+    pdf::XmpMetadata aMetadata;
+
+    if (m_nPDFA_Version > 0)
+        aMetadata.mnPDF_A = m_nPDFA_Version;
+
+    aMetadata.mbPDF_UA = m_bIsPDF_UA;
+
+    lcl_assignMeta(m_aContext.DocumentInfo.Title, aMetadata.msTitle);
+    lcl_assignMeta(m_aContext.DocumentInfo.Author, aMetadata.msAuthor);
+    lcl_assignMeta(m_aContext.DocumentInfo.Subject, aMetadata.msSubject);
+    lcl_assignMeta(m_aContext.DocumentInfo.Producer, aMetadata.msProducer);
+    aMetadata.msPDFVersion = getPDFVersionStr(m_aContext.Version);
+    lcl_assignMeta(m_aContext.DocumentInfo.Keywords, aMetadata.msKeywords);
+    lcl_assignMeta(m_aContext.DocumentInfo.Contributor, aMetadata.maContributor);
+    lcl_assignMeta(m_aContext.DocumentInfo.Coverage, aMetadata.msCoverage);
+    lcl_assignMeta(m_aContext.DocumentInfo.Identifier, aMetadata.msIdentifier);
+    lcl_assignMeta(m_aContext.DocumentInfo.Publisher, aMetadata.maPublisher);
+    lcl_assignMeta(m_aContext.DocumentInfo.Relation, aMetadata.maRelation);
+    lcl_assignMeta(m_aContext.DocumentInfo.Rights, aMetadata.msRights);
+    lcl_assignMeta(m_aContext.DocumentInfo.Source, aMetadata.msSource);
+    lcl_assignMeta(m_aContext.DocumentInfo.Type, aMetadata.msType);
+    lcl_assignMeta(m_aContext.DocumentInfo.Creator, aMetadata.m_sCreatorTool);
+    aMetadata.m_sCreateDate = m_aCreationMetaDateString;
+
     {
-        pdf::XmpMetadata aMetadata;
-
-        if (m_nPDFA_Version > 0)
-            aMetadata.mnPDF_A = m_nPDFA_Version;
-
-        aMetadata.mbPDF_UA = m_bIsPDF_UA;
-
-        lcl_assignMeta(m_aContext.DocumentInfo.Title, aMetadata.msTitle);
-        lcl_assignMeta(m_aContext.DocumentInfo.Author, aMetadata.msAuthor);
-        lcl_assignMeta(m_aContext.DocumentInfo.Subject, aMetadata.msSubject);
-        lcl_assignMeta(m_aContext.DocumentInfo.Producer, aMetadata.msProducer);
-        aMetadata.msPDFVersion = getPDFVersionStr(m_aContext.Version);
-        lcl_assignMeta(m_aContext.DocumentInfo.Keywords, aMetadata.msKeywords);
-        lcl_assignMeta(m_aContext.DocumentInfo.Contributor, aMetadata.maContributor);
-        lcl_assignMeta(m_aContext.DocumentInfo.Coverage, aMetadata.msCoverage);
-        lcl_assignMeta(m_aContext.DocumentInfo.Identifier, aMetadata.msIdentifier);
-        lcl_assignMeta(m_aContext.DocumentInfo.Publisher, aMetadata.maPublisher);
-        lcl_assignMeta(m_aContext.DocumentInfo.Relation, aMetadata.maRelation);
-        lcl_assignMeta(m_aContext.DocumentInfo.Rights, aMetadata.msRights);
-        lcl_assignMeta(m_aContext.DocumentInfo.Source, aMetadata.msSource);
-        lcl_assignMeta(m_aContext.DocumentInfo.Type, aMetadata.msType);
-        lcl_assignMeta(m_aContext.DocumentInfo.Creator, aMetadata.m_sCreatorTool);
-        aMetadata.m_sCreateDate = m_aCreationMetaDateString;
-
-        OStringBuffer aMetadataObj( 1024 );
-
-        aMetadataObj.append( nObject );
-        aMetadataObj.append( " 0 obj\n" );
-
-        aMetadataObj.append( "<</Type/Metadata/Subtype/XML/Length " );
-
-        aMetadataObj.append( sal_Int32(aMetadata.getSize()) );
-        aMetadataObj.append( ">>\nstream\n" );
-        if ( !writeBuffer( aMetadataObj ) )
+        COSWriter aWriter;
+        aWriter.startObject(nObject);
+        aWriter.startDict();
+        aWriter.write("/Type", "/Metadata");
+        aWriter.write("/Subtype", "/XML");
+        aWriter.write("/Length", sal_Int32(aMetadata.getSize()));
+        aWriter.endDict();
+        aWriter.startStream();
+        if (!writeBuffer(aWriter.getLine()))
             return 0;
-        //emit the stream
-        if ( !writeBufferBytes( aMetadata.getData(), aMetadata.getSize() ) )
-            return 0;
-
-        if( ! writeBuffer( "\nendstream\nendobj\n\n" ) )
-            nObject = 0;
     }
-    else
-        nObject = 0;
+
+    //emit the stream
+    bool bEncryptMetadata = m_pPDFEncryptor && m_pPDFEncryptor->isMetadataEncrypted();
+    if (bEncryptMetadata)
+        checkAndEnableStreamEncryption(nObject);
+
+    if (!writeBufferBytes(aMetadata.getData(), aMetadata.getSize()))
+        return 0;
+
+    if (bEncryptMetadata)
+        disableStreamEncryption();
+
+    {
+        COSWriter aWriter;
+        aWriter.endStream();
+        aWriter.endObject();
+        if (!writeBuffer(aWriter.getLine()))
+            return 0;
+    }
 
     return nObject;
 }
@@ -6109,7 +6121,9 @@ sal_Int32 PDFWriterImpl::emitEncrypt()
             aWriter.write("/CF", "<</StdCF <</CFM /AESV3 /Length 256>>>>");
             aWriter.write("/StmF", "/StdCF");
             aWriter.write("/StrF", "/StdCF");
-            aWriter.write("/EncryptMetadata", " false ");
+            // Encrypt metadata. Default is true. Relevant for Revision 6+
+            if (!m_pPDFEncryptor->isMetadataEncrypted())
+                aWriter.write("/EncryptMetadata", " false ");
         }
         else
         {

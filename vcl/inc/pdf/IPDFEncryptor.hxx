@@ -52,6 +52,7 @@ public:
 
     /** the numerical value of the access permissions, according to PDF spec, must be signed */
     virtual sal_Int32 getAccessPermissions() = 0;
+    virtual bool isMetadataEncrypted() = 0;
 
     /** Encrypted access permission
      *
