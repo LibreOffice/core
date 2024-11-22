@@ -1549,14 +1549,12 @@ bool SwWW8ImplReader::SetShadow(SvxShadowItem& rShadow, const short *pSizeArray,
     if (bRet)
     {
         rShadow.SetColor(COL_BLACK);
-    //i120718
+        //i120718
         short nVal = aRightBrc.DetermineBorderProperties();
-    //End
         if (nVal < 0x10)
             nVal = 0x10;
         rShadow.SetWidth(nVal);
         rShadow.SetLocation(SvxShadowLocation::BottomRight);
-        bRet = true;
     }
     return bRet;
 }
