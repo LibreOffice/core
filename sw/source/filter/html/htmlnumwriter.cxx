@@ -187,24 +187,27 @@ SwHTMLWriter& OutHTML_NumberBulletListStart( SwHTMLWriter& rWrt,
             // unordered list: <UL>
             sOut += OOO_STRING_SVTOOLS_HTML_unorderlist;
 
-            // determine the type by the bullet character
-            const char *pStr = nullptr;
-            switch( rNumFormat.GetBulletChar() )
+            if (!rWrt.mbReqIF) // No 'type' attribute in ReqIF
             {
-            case HTML_BULLETCHAR_DISC:
-                pStr = OOO_STRING_SVTOOLS_HTML_ULTYPE_disc;
-                break;
-            case HTML_BULLETCHAR_CIRCLE:
-                pStr = OOO_STRING_SVTOOLS_HTML_ULTYPE_circle;
-                break;
-            case HTML_BULLETCHAR_SQUARE:
-                pStr = OOO_STRING_SVTOOLS_HTML_ULTYPE_square;
-                break;
-            }
+                // determine the type by the bullet character
+                const char* pStr = nullptr;
+                switch (rNumFormat.GetBulletChar())
+                {
+                    case HTML_BULLETCHAR_DISC:
+                        pStr = OOO_STRING_SVTOOLS_HTML_ULTYPE_disc;
+                        break;
+                    case HTML_BULLETCHAR_CIRCLE:
+                        pStr = OOO_STRING_SVTOOLS_HTML_ULTYPE_circle;
+                        break;
+                    case HTML_BULLETCHAR_SQUARE:
+                        pStr = OOO_STRING_SVTOOLS_HTML_ULTYPE_square;
+                        break;
+                }
 
-            if( pStr )
-            {
-                sOut += OString::Concat(" " OOO_STRING_SVTOOLS_HTML_O_type "=\"") + pStr + "\"";
+                if (pStr)
+                {
+                    sOut += OString::Concat(" " OOO_STRING_SVTOOLS_HTML_O_type "=\"") + pStr + "\"";
+                }
             }
         }
         else if( SVX_NUM_BITMAP == eType )
