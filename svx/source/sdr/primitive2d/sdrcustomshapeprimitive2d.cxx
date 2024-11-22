@@ -67,7 +67,7 @@ namespace drawinglayer::primitive2d
                         getWordWrap()));
 
                 // put text glow before, shape glow and shadow
-                if (!aTempContentText.empty() && !getSdrSTAttribute().getGlowText().isDefault())
+                if (!getSdrSTAttribute().getGlowText().isDefault())
                 {
                     // add text glow
                     aTempContentText = createEmbeddedTextGlowPrimitive(std::move(aTempContentText), getSdrSTAttribute().getGlowText());
