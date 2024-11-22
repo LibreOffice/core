@@ -31,8 +31,8 @@ namespace
     constexpr std::pair<OUString, std::pair<sfx::AccessibilityIssueID, TranslateId>> options_list[] {
         { u"DocumentTitle"_ustr, { sfx::AccessibilityIssueID::DOCUMENT_TITLE, STR_DOCUMENT_TITLE } },
         { u"DocumentLanguage"_ustr, { sfx::AccessibilityIssueID::DOCUMENT_LANGUAGE, STR_DOCUMENT_DEFAULT_LANGUAGE } },
-        { u"DocumentBackground"_ustr, { sfx::AccessibilityIssueID::DOCUMENT_LANGUAGE, STR_AVOID_BACKGROUND_IMAGES } },
-        { u"DocumentStyleLanguage"_ustr, { sfx::AccessibilityIssueID::DOCUMENT_BACKGROUND, STR_STYLE_NO_LANGUAGE } },
+        { u"DocumentBackground"_ustr, { sfx::AccessibilityIssueID::DOCUMENT_BACKGROUND, STR_AVOID_BACKGROUND_IMAGES } },
+        { u"DocumentStyleLanguage"_ustr, { sfx::AccessibilityIssueID::STYLE_LANGUAGE, STR_STYLE_NO_LANGUAGE } },
         { u"LinkedGraphic"_ustr, { sfx::AccessibilityIssueID::LINKED_GRAPHIC, STR_LINKED_GRAPHIC } },
         { u"NoAltOleObj"_ustr, { sfx::AccessibilityIssueID::NO_ALT_OLE, STR_NO_ALT_OLE } },
         { u"NoAltGraphicObj"_ustr, { sfx::AccessibilityIssueID::NO_ALT_GRAPHIC, STR_NO_ALT_GRAPHIC } },
