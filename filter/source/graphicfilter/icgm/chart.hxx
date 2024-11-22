@@ -24,14 +24,6 @@
 #include <memory>
 #include <vector>
 
-/* FILE TYPE CONSTANTS: */
-#define BULCHART        32      /* Bullet chart file.       */
-/* the following were added although SPC doesn't have a #define */
-/* for them...                                                  */
-#define AUTOTTLCHT      95      /* Autobuild TTL CHT        */
-#define AUTOBULCHT      96      /* Autobuild BUL CHT        */
-#define AUTOTABCHT      97      /* Autobuild TAB CHT        */
-
 typedef struct TextEntry
 {
     sal_uInt16          nTypeOfText;
