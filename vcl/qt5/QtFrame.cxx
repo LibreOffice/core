@@ -626,8 +626,6 @@ void QtFrame::SetModal(bool bModal)
     });
 }
 
-bool QtFrame::GetModal() const { return isWindow() && windowHandle()->isModal(); }
-
 void QtFrame::SetWindowState(const vcl::WindowData* pState)
 {
     QtInstance& rQtInstance = GetQtInstance();

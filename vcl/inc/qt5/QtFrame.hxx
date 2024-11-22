@@ -184,7 +184,6 @@ public:
     virtual void GetWorkArea(AbsoluteScreenPixelRectangle& rRect) override;
     virtual SalFrame* GetParent() const override;
     virtual void SetModal(bool bModal) override;
-    virtual bool GetModal() const override;
     virtual void SetWindowState(const vcl::WindowData*) override;
     virtual bool GetWindowState(vcl::WindowData*) override;
     virtual void ShowFullScreen(bool bFullScreen, sal_Int32 nDisplay) override;

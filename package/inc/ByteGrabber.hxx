@@ -44,7 +44,6 @@ public:
     /// @throws css::io::BufferSizeExceededException
     /// @throws css::io::IOException
     /// @throws css::uno::RuntimeException
-    sal_Int32 readBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead );
     sal_Int32 readBytes( sal_Int8* aData, sal_Int32 nBytesToRead );
     // XSeekable
     /// @throws css::lang::IllegalArgumentException

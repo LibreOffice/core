@@ -56,13 +56,6 @@ void ByteGrabber::setInputStream (const uno::Reference < io::XInputStream >& xNe
     assert(mpByteReader);
 }
 
-// XInputStream chained
-sal_Int32 ByteGrabber::readBytes( uno::Sequence< sal_Int8 >& aData,
-                                        sal_Int32 nBytesToRead )
-{
-    return xStream->readBytes(aData, nBytesToRead );
-}
-
 sal_Int32 ByteGrabber::readBytes( sal_Int8* aData,
                                         sal_Int32 nBytesToRead )
 {

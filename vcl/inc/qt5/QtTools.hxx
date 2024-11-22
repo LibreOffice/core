@@ -155,7 +155,6 @@ QImage toQImage(const Image& rImage);
 
 QMessageBox::Icon vclMessageTypeToQtIcon(VclMessageType eType);
 QString vclMessageTypeToQtTitle(VclMessageType eType);
-int qtResponseTypeToVclResponseType(int ret);
 
 /** Converts a string potentially containing a '~' character to indicate an accelerator
  *  to the Qt variant using '&' for the accelerator.

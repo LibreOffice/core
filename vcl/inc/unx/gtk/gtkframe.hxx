@@ -606,7 +606,6 @@ public:
 
     virtual void                PositionByToolkit(const tools::Rectangle& rRect, FloatWinPopupFlags nFlags) override;
     virtual void                SetModal(bool bModal) override;
-    virtual bool                GetModal() const override;
     void                        HideTooltip();
     void                        BlockTooltip();
     void                        UnblockTooltip();

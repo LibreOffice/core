@@ -3132,13 +3132,6 @@ void GtkSalFrame::SetModal(bool bModal)
     gtk_window_set_modal(GTK_WINDOW(m_pWindow), bModal);
 }
 
-bool GtkSalFrame::GetModal() const
-{
-    if (!m_pWindow)
-        return false;
-    return gtk_window_get_modal(GTK_WINDOW(m_pWindow));
-}
-
 gboolean GtkSalFrame::signalTooltipQuery(GtkWidget*, gint /*x*/, gint /*y*/,
                                      gboolean /*keyboard_mode*/, GtkTooltip *tooltip,
                                      gpointer frame)

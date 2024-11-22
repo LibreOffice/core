@@ -46,7 +46,6 @@ namespace sd
 {
 
 rtl::Reference<sdr::annotation::Annotation> createAnnotation(SdPage* pPage);
-rtl::Reference<sdr::annotation::Annotation> createAnnotationAndAddToPage(SdPage* pPage);
 
 std::unique_ptr<SdrUndoAction> CreateUndoInsertOrRemoveAnnotation(rtl::Reference<sdr::annotation::Annotation>& xAnnotation, bool bInsert);
 

@@ -44,11 +44,6 @@ public:
         const Color** ppColor, ScInterpreterContext* pContext, bool bNullVals = true,
         bool bFormula  = false );
 
-    static svl::SharedString GetInputSharedString(
-        const ScRefCellValue& rCell, sal_uInt32 nFormat, ScInterpreterContext* pContext,
-        const ScDocument& rDoc, svl::SharedStringPool& rStrPool,
-        bool bFiltering = false, bool bForceSystemLocale = false );
-
     // Similar to GetInputSharedString, but can be used to visit the source of the
     // svl::SharedString to avoid reference counting overhead
     template <typename TFunctor>

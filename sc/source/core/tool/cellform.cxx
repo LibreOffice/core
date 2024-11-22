@@ -168,18 +168,6 @@ OUString ScCellFormat::GetInputString(
     }
 }
 
-svl::SharedString ScCellFormat::GetInputSharedString(
-    const ScRefCellValue& rCell, sal_uInt32 nFormat, ScInterpreterContext* pContext, const ScDocument& rDoc,
-    svl::SharedStringPool& rStrPool,
-    bool bFiltering, bool bForceSystemLocale )
-{
-    return visitInputSharedString(rCell, nFormat, pContext, rDoc, rStrPool,
-                                  bFiltering, bForceSystemLocale,
-            [](const svl::SharedString& arg) {
-                return arg;
-           });
-}
-
 OUString ScCellFormat::GetOutputString( ScDocument& rDoc, const ScAddress& rPos, const ScRefCellValue& rCell )
 {
     if (rCell.isEmpty())

@@ -96,8 +96,6 @@ public:
     virtual void ShowEasyConditionalDialog(bool isEdit = false) = 0;
 
     virtual void SetModified() = 0;
-
-    virtual ScConditionalFormat* GetCondFormatSelected() = 0;
 };
 
 class AbstractScDataPilotDatabaseDlg  :public VclAbstractDialog

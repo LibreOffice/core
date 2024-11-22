@@ -70,14 +70,6 @@ rtl::Reference<sdr::annotation::Annotation> createAnnotation(SdPage* pPage)
     return rtl::Reference<Annotation>(new Annotation(comphelper::getProcessComponentContext(), pPage));
 }
 
-/** Creates an annotation and adds it to the page */
-rtl::Reference<sdr::annotation::Annotation> createAnnotationAndAddToPage(SdPage* pPage)
-{
-    rtl::Reference<sdr::annotation::Annotation> xAnnotation = createAnnotation(pPage);
-    pPage->addAnnotation(xAnnotation, -1);
-    return xAnnotation;
-}
-
 Annotation::Annotation(const uno::Reference<uno::XComponentContext>& context, SdrPage* pPage)
     : sdr::annotation::Annotation(context, pPage)
 {

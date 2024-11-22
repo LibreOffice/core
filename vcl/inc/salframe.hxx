@@ -265,11 +265,6 @@ public:
     {
     }
 
-    virtual bool            GetModal() const
-    {
-        return false;
-    }
-
     // return true to indicate tooltips are shown natively, false otherwise
     virtual bool            ShowTooltip(const OUString& /*rHelpText*/, const tools::Rectangle& /*rHelpArea*/)
     {

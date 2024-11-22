@@ -233,13 +233,6 @@ struct ScConditionEasyDialogData
     sal_Int32 EntryIndex = -1;
     OUString Formula;
 
-    ScConditionEasyDialogData(ScConditionMode* mode, bool isManaged, const OUString& formula = "")
-        : Mode(mode)
-        , IsManaged(isManaged)
-        , Formula(formula)
-    {
-    }
-
     ScConditionEasyDialogData(ScConditionMode* mode, bool isManaged, sal_Int32 formatKey,
                               sal_Int32 entryIndex, const OUString& formula = "")
         : Mode(mode)
