@@ -14,8 +14,12 @@
 #include <QtCore/QObject>
 #include <QtWidgets/QCheckBox>
 
-class QtInstanceCheckButton : public QtInstanceWidget, public virtual weld::CheckButton
+class QtInstanceCheckButton : public QObject,
+                              public QtInstanceWidget,
+                              public virtual weld::CheckButton
 {
+    Q_OBJECT
+
     QCheckBox* m_pCheckBox;
 
 public:

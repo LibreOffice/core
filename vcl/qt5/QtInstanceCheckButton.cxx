@@ -8,6 +8,7 @@
  */
 
 #include <QtInstanceCheckButton.hxx>
+#include <QtInstanceCheckButton.moc>
 
 #include <vcl/qt/QtUtils.hxx>
 
@@ -16,6 +17,7 @@ QtInstanceCheckButton::QtInstanceCheckButton(QCheckBox* pCheckBox)
     , m_pCheckBox(pCheckBox)
 {
     assert(m_pCheckBox);
+    connect(m_pCheckBox, &QCheckBox::toggled, this, [&] { signal_toggled(); });
 }
 
 void QtInstanceCheckButton::set_active(bool bActive)
