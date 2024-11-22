@@ -433,6 +433,7 @@ void ExtensionBox_Impl::DrawRow(vcl::RenderContext& rRenderContext, const tools:
     auto aTextHeight = rRenderContext.GetTextHeight();
 
     // Get max title width
+    // coverity[ tainted_data_return : FALSE ] version 2023.12.2
     auto nMaxTitleWidth = rRect.GetWidth() - ICON_OFFSET;
     nMaxTitleWidth -= (2 * SMALL_ICON_SIZE) + (4 * SPACE_BETWEEN);
     rRenderContext.SetFont(aStdFont);
