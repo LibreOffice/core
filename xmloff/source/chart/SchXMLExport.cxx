@@ -3158,10 +3158,7 @@ void SchXMLExportHelper_Impl::exportRegressionCurve(
             if( bExportContent )
             {
                 // add style name attribute
-                if( !aPropertyStates.empty())
-                {
-                    AddAutoStyleAttribute( aPropertyStates );
-                }
+                AddAutoStyleAttribute( aPropertyStates );
 
                 SvXMLElementExport aRegressionExport( mrExport, XML_NAMESPACE_CHART, XML_REGRESSION_CURVE, true, true );
                 if( bExportEquation )
@@ -3191,10 +3188,7 @@ void SchXMLExportHelper_Impl::exportRegressionCurve(
             }
             else    // autostyles
             {
-                if( !aPropertyStates.empty())
-                {
-                    CollectAutoStyle( std::move(aPropertyStates) );
-                }
+                CollectAutoStyle( std::move(aPropertyStates) );
                 if( bExportEquation && !aEquationPropertyStates.empty())
                 {
                     CollectAutoStyle( std::move(aEquationPropertyStates) );
