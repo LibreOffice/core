@@ -35,8 +35,6 @@ namespace framework{
     a real visible component.
  */
 
-// indicates a loadable content in general!
-#define SPECIALPROTOCOL_PRIVATE           "private:"
 // indicates loading of components using a model directly
 #define SPECIALPROTOCOL_PRIVATE_OBJECT    u"private:object"
 // indicates loading of components using a stream only
