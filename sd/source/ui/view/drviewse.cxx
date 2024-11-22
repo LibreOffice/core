@@ -468,6 +468,10 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         case SID_DRAW_BEZIER_FILL:          // BASIC
         case SID_DRAW_BEZIER_NOFILL:        // BASIC
         {
+            // Direct mode means no interactive drawing, just insert the shape with reasonable
+            // defaults -- to be consistent with the line insert case above.
+            bCreateDirectly = comphelper::LibreOfficeKit::isActive();
+
             SetCurrentFunction( FuConstructBezierPolygon::Create(this, GetActiveWindow(), mpDrawView.get(), GetDoc(), rReq, bPermanent) );
             rReq.Done();
         }
