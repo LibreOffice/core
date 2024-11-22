@@ -19,6 +19,7 @@ const char* const QtInstanceDialog::PROPERTY_VCL_RESPONSE_CODE = "response-code"
 QtInstanceDialog::QtInstanceDialog(QDialog* pDialog)
     : QtInstanceWindow(pDialog)
     , m_pDialog(pDialog)
+    , m_pContentArea(nullptr)
     , m_aRunAsyncFunc(nullptr)
 {
 }
@@ -148,8 +149,22 @@ void QtInstanceDialog::set_default_response(int) { assert(false && "Not implemen
 
 std::unique_ptr<weld::Container> QtInstanceDialog::weld_content_area()
 {
-    assert(false && "Not implemented yet");
-    return nullptr;
+    if (!m_pContentArea)
+    {
+        if (QBoxLayout* pBoxLayout = qobject_cast<QBoxLayout*>(m_pDialog->layout()))
+        {
+            // insert an extra widget and layout at beginning of the dialog's layout
+            m_pContentArea = new QWidget;
+            m_pContentArea->setLayout(new QVBoxLayout);
+            pBoxLayout->insertWidget(0, m_pContentArea);
+        }
+        else
+        {
+            assert(false && "Dialog has layout that's not supported (yet)");
+        }
+    }
+
+    return std::make_unique<QtInstanceContainer>(m_pContentArea);
 }
 
 void QtInstanceDialog::dialogFinished(int nResult)
