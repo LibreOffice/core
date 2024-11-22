@@ -79,6 +79,7 @@ public:
     void testTdf95640_ods_to_xlsx();
     void testTdf95640_ods_to_xlsx_with_standard_list();
     void testTdf95640_xlsx_to_xlsx();
+    void testSortConditionRef();
     void testDateAutofilterXLSX();
     void testDateAutofilterODS();
     void testAutofilterColorsODF();
@@ -213,6 +214,7 @@ public:
     CPPUNIT_TEST(testTdf95640_ods_to_xlsx);
     CPPUNIT_TEST(testTdf95640_ods_to_xlsx_with_standard_list);
     CPPUNIT_TEST(testTdf95640_xlsx_to_xlsx);
+    CPPUNIT_TEST(testSortConditionRef);
     CPPUNIT_TEST(testDateAutofilterXLSX);
     CPPUNIT_TEST(testDateAutofilterODS);
     CPPUNIT_TEST(testAutofilterColorsODF);
@@ -676,6 +678,21 @@ void ScExportTest2::testTdf95640_xlsx_to_xlsx()
 
     assertXPath(pDoc, "//x:worksheet/x:autoFilter/x:sortState/x:sortCondition", "customList",
                 "Low,Medium,High");
+}
+
+void ScExportTest2::testSortConditionRef()
+{
+    // Ascending sortCondition reference detected wrong without fix.
+    // - Expected: B3:B2
+    // - Actual  : A3:A2
+    // - In <>, attribute 'ref' of '//x:worksheet/x:autoFilter/x:sortState/x:sortCondition' incorrect value.
+    createScDoc("xlsx/sortconditionref.xlsx");
+
+    save("Calc Office Open XML");
+    xmlDocUniquePtr pDoc = parseExport("xl/worksheets/sheet1.xml");
+
+    assertXPath(pDoc, "//x:worksheet/x:autoFilter", "ref", "B2");
+    assertXPath(pDoc, "//x:worksheet/x:autoFilter/x:sortState/x:sortCondition", "ref", "B3:B2");
 }
 
 void ScExportTest2::testDateAutofilterXLSX()
