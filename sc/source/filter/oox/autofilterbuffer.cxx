@@ -847,15 +847,13 @@ void AutoFilter::finalizeImport( const Reference< XDatabaseRange >& rxDatabaseRa
         return;
 
     SCCOLROW nStartPos = aParam.bByRow ? maRange.aStart.Col() : maRange.aStart.Row();
+    // descending sort - need to enable 1st SortParam slot
     if (rSorConditionLoaded.mbDescending)
-    {
-        // descending sort - need to enable 1st SortParam slot
         assert(aParam.GetSortKeyCount() == DEFSORT);
 
-        aParam.maKeyState[0].bDoSort = true;
-        aParam.maKeyState[0].bAscending = false;
-        aParam.maKeyState[0].nField += nStartPos;
-    }
+    aParam.maKeyState[0].bDoSort = true;
+    aParam.maKeyState[0].bAscending = !rSorConditionLoaded.mbDescending;
+    aParam.maKeyState[0].nField += nStartPos;
 
     ScDBData* pDBData = rDoc.GetDBAtArea(
         nSheet,
