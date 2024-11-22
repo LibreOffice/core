@@ -31,6 +31,7 @@
 #include <o3tl/safeint.hxx>
 
 #include <pdf/objectcopier.hxx>
+#include <pdf/COSWriter.hxx>
 
 using namespace com::sun::star;
 
@@ -133,6 +134,7 @@ sal_Int32 PDFDocument::WriteSignatureObject(svl::crypto::SigningContext& rSignin
     aSignatureEntry.SetOffset(m_aEditBuffer.Tell());
     aSignatureEntry.SetDirty(true);
     m_aXRef[nSignatureId] = aSignatureEntry;
+
     OStringBuffer aSigBuffer(OString::number(nSignatureId)
                              + " 0 obj\n"
                                "<</Contents <");
@@ -167,9 +169,9 @@ sal_Int32 PDFDocument::WriteSignatureObject(svl::crypto::SigningContext& rSignin
 
     if (!rDescription.isEmpty())
     {
-        aSigBuffer.append("/Reason<");
-        vcl::PDFWriter::AppendUnicodeTextString(rDescription, aSigBuffer);
-        aSigBuffer.append(">");
+        pdf::COSWriter aWriter(nullptr);
+        aWriter.writeKeyAndUnicode("/Reason", rDescription);
+        aSigBuffer.append(aWriter.getLine());
     }
 
     aSigBuffer.append(" >>\nendobj\n\n");

@@ -1275,9 +1275,6 @@ public:
     */
     void AddAttachedFile(OUString const& rFileName, OUString const& rMimeType, OUString const& rDescription, std::unique_ptr<PDFOutputStream> pStream);
 
-    /// Write rString as a PDF hex string into rBuffer.
-    static void AppendUnicodeTextString(const OUString& rString, OStringBuffer& rBuffer);
-
     /// Get current date/time in PDF D:YYYYMMDDHHMMSS form.
     static OString GetDateTime(svl::crypto::SigningContext* pSigningContext = nullptr);
 };
