@@ -1120,8 +1120,6 @@ bool ODatabaseForm::executeRowSet(::osl::ResettableMutexGuard& _rClearForNotifie
     // we can't be updatable!
     if (m_bSubForm && !hasValidParent())
     {
-        nConcurrency = ResultSetConcurrency::READ_ONLY;
-
         // don't use any parameters if we don't have a valid parent
         m_aParameterManager.setAllParametersNull();
 
@@ -1131,8 +1129,6 @@ bool ODatabaseForm::executeRowSet(::osl::ResettableMutexGuard& _rClearForNotifie
     }
     else if (m_bAllowInsert || m_bAllowUpdate || m_bAllowDelete)
         nConcurrency = ResultSetConcurrency::UPDATABLE;
-    else
-        nConcurrency = ResultSetConcurrency::READ_ONLY;
 
     m_xAggregateSet->setPropertyValue( PROPERTY_RESULTSET_CONCURRENCY, Any( nConcurrency ) );
     m_xAggregateSet->setPropertyValue( PROPERTY_RESULTSET_TYPE, Any( sal_Int32(ResultSetType::SCROLL_SENSITIVE) ) );
