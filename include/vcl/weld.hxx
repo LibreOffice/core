@@ -989,6 +989,8 @@ protected:
         return m_aEditingDoneHdl.Call(rIterText);
     }
 
+    void signal_popup_menu(const CommandEvent& rCommand) { m_aPopupMenuHdl.Call(rCommand); }
+
     Link<const TreeIter&, OUString> m_aQueryTooltipHdl;
     OUString signal_query_tooltip(const TreeIter& rIter) { return m_aQueryTooltipHdl.Call(rIter); }
 
@@ -2429,6 +2431,8 @@ enum class Placement
 
 class VCL_DLLPUBLIC Menu
 {
+    friend class ::LOKTrigger;
+
     Link<const OUString&, void> m_aActivateHdl;
 
 protected:

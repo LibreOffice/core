@@ -44,6 +44,16 @@ public:
         rTreeView.signal_row_activated();
     }
 
+    static void trigger_popup_menu(weld::TreeView& rTreeView, const CommandEvent& rCommand)
+    {
+        rTreeView.signal_popup_menu(rCommand);
+    }
+
+    static void trigger_activated(weld::Menu& rMenu, const OUString& rIdent)
+    {
+        rMenu.signal_activate(rIdent);
+    }
+
     static void trigger_item_activated(weld::IconView& rIconView)
     {
         rIconView.signal_item_activated();

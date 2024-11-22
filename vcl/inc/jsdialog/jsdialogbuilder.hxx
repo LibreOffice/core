@@ -314,6 +314,7 @@ public:
     virtual std::unique_ptr<weld::RadioButton> weld_radio_button(const OUString& id) override;
     virtual std::unique_ptr<weld::Frame> weld_frame(const OUString& id) override;
     virtual std::unique_ptr<weld::MenuButton> weld_menu_button(const OUString& id) override;
+    virtual std::unique_ptr<weld::Menu> weld_menu(const OUString& id) override;
     virtual std::unique_ptr<weld::Popover> weld_popover(const OUString& id) override;
     virtual std::unique_ptr<weld::Box> weld_box(const OUString& id) override;
     virtual std::unique_ptr<weld::Widget> weld_widget(const OUString& id) override;
@@ -334,6 +335,11 @@ public:
     static void RememberPopup(const OUString& nWindowId, const VclPtr<vcl::Window>& pWidget);
     static void ForgetPopup(const OUString& nWindowId);
     static vcl::Window* FindPopup(const OUString& nWindowId);
+
+    // menus in separate container as they don't share base class with weld::Widget
+    static void RememberMenu(const OUString& nWindowId, weld::Menu* pMenu);
+    static void ForgetMenu(const OUString& nWindowId);
+    static weld::Menu* FindMenu(const OUString& nWindowId);
 
 private:
     const OUString& GetTypeOfJSON() const;
@@ -874,6 +880,16 @@ public:
     virtual void set_image(VirtualDevice* pDevice) override;
     virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) override;
     virtual void set_active(bool active) override;
+};
+
+class JSMenu final : public SalInstanceMenu
+{
+public:
+    JSMenu(JSDialogSender* pSender, PopupMenu* pMenu, SalInstanceBuilder* pBuilder,
+           bool bTakeOwnership);
+
+    virtual OUString popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect,
+                                   weld::Placement ePlace = weld::Placement::Under) override;
 };
 
 class JSPopover : public JSWidget<SalInstancePopover, DockingWindow>
