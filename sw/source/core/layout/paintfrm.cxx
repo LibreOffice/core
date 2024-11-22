@@ -5546,6 +5546,11 @@ void SwFrame::PaintSwFrameShadowAndBorder(
             return;
     }
 
+    if (!getFramePrintArea().HasArea())
+    { // hidden text frame, may be called by upper from PaintSwFrameBackground()
+        return;
+    }
+
     const bool bLine = rAttrs.IsLine();
     const bool bShadow = rAttrs.GetShadow().GetLocation() != SvxShadowLocation::NONE;
 
