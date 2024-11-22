@@ -86,7 +86,6 @@ inline constexpr OUString CFGSET_CONTENTHANDLERS = u"ContentHandlers"_ustr;
  */
 inline constexpr OUString CFGDIRECTKEY_OFFICELOCALE = u"/org.openoffice.Setup/L10N/ooLocale"_ustr;
 inline constexpr OUString CFGDIRECTKEY_DEFAULTFRAMELOADER = u"/org.openoffice.TypeDetection.Misc/Defaults/DefaultFrameLoader"_ustr;
-#define  CFGDIRECTKEY_PRODUCTNAME           "/org.openoffice.Setup/Product/ooName"
 
 // Note that these flag bits have parallel names in
 // comphelper/inc/comphelper/documentconstants.hxx . See that file for
