@@ -57,7 +57,7 @@ typedef o3tl::strong_int<sal_Int16, struct SdrLayerIDTag> SdrLayerID;
 
 // If there is no layer when it should be identified, then
 // SdrLayerAdmin::GetLayerID(const String&) returns a value.
-constexpr SdrLayerID SDRLAYER_NOTFOUND(-1);
+inline constexpr SdrLayerID SDRLAYER_NOTFOUND(-1);
 
 /*
  * Repeat

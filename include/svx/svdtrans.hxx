@@ -30,7 +30,7 @@
 #include <tools/poly.hxx>
 
 // That maximum shear angle
-constexpr Degree100 SDRMAXSHEAR(8900);
+inline constexpr Degree100 SDRMAXSHEAR(8900);
 
 class XPolygon;
 class XPolyPolygon;
