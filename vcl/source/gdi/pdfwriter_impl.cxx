@@ -311,19 +311,6 @@ void removePlaceholderSE(std::vector<PDFStructureElement> & rStructure, PDFStruc
 
 } // end anonymous namespace
 
-void PDFWriter::AppendUnicodeTextString(const OUString& rString, OStringBuffer& rBuffer)
-{
-    rBuffer.append( "FEFF" );
-    const sal_Unicode* pStr = rString.getStr();
-    sal_Int32 nLen = rString.getLength();
-    for( int i = 0; i < nLen; i++ )
-    {
-        sal_Unicode aChar = pStr[i];
-        appendHex( static_cast<sal_Int8>(aChar >> 8), rBuffer );
-        appendHex( static_cast<sal_Int8>(aChar & 255 ), rBuffer );
-    }
-}
-
 void PDFWriterImpl::createWidgetFieldName( sal_Int32 i_nWidgetIndex, const PDFWriter::AnyWidget& i_rControl )
 {
     /* #i80258# previously we use appendName here
@@ -663,17 +650,17 @@ void computeDocumentIdentifier(std::vector<sal_uInt8>& o_rIdentifier,
     OString aInfoValuesOut;
     OStringBuffer aID(1024);
     if (!i_rDocInfo.Title.isEmpty())
-        PDFWriter::AppendUnicodeTextString(i_rDocInfo.Title, aID);
+        COSWriter::appendUnicodeTextString(i_rDocInfo.Title, aID);
     if (!i_rDocInfo.Author.isEmpty())
-        PDFWriter::AppendUnicodeTextString(i_rDocInfo.Author, aID);
+        COSWriter::appendUnicodeTextString(i_rDocInfo.Author, aID);
     if (!i_rDocInfo.Subject.isEmpty())
-        PDFWriter::AppendUnicodeTextString(i_rDocInfo.Subject, aID);
+        COSWriter::appendUnicodeTextString(i_rDocInfo.Subject, aID);
     if (!i_rDocInfo.Keywords.isEmpty())
-        PDFWriter::AppendUnicodeTextString(i_rDocInfo.Keywords, aID);
+        COSWriter::appendUnicodeTextString(i_rDocInfo.Keywords, aID);
     if (!i_rDocInfo.Creator.isEmpty())
-        PDFWriter::AppendUnicodeTextString(i_rDocInfo.Creator, aID);
+        COSWriter::appendUnicodeTextString(i_rDocInfo.Creator, aID);
     if (!i_rDocInfo.Producer.isEmpty())
-        PDFWriter::AppendUnicodeTextString(i_rDocInfo.Producer, aID);
+        COSWriter::appendUnicodeTextString(i_rDocInfo.Producer, aID);
 
     TimeValue aTVal, aGMT;
     oslDateTime aDT;
@@ -1557,7 +1544,7 @@ inline void PDFWriterImpl::appendUnicodeTextStringEncrypt( const OUString& rInSt
         appendHexArray(aNewBuffer.data(), aNewBuffer.size(), rOutBuffer);
     }
     else
-        PDFWriter::AppendUnicodeTextString(rInString, rOutBuffer);
+        COSWriter::appendUnicodeTextString(rInString, rOutBuffer);
     rOutBuffer.append( ">" );
 }
 
@@ -5372,18 +5359,18 @@ bool PDFWriterImpl::emitCatalog()
         appendObjectID(rAttachedFile.mnObjectId, aLine);
         aLine.append("<</Type /Filespec");
         aLine.append("/F<");
-        PDFWriter::AppendUnicodeTextString(rAttachedFile.maFilename, aLine);
+        COSWriter::appendUnicodeTextString(rAttachedFile.maFilename, aLine);
         aLine.append("> ");
         if (PDFWriter::PDFVersion::PDF_1_7 <= m_aContext.Version)
         {
             aLine.append("/UF<");
-            PDFWriter::AppendUnicodeTextString(rAttachedFile.maFilename, aLine);
+            COSWriter::appendUnicodeTextString(rAttachedFile.maFilename, aLine);
             aLine.append("> ");
         }
         if (!rAttachedFile.maDescription.isEmpty())
         {
             aLine.append("/Desc <");
-            PDFWriter::AppendUnicodeTextString(rAttachedFile.maDescription, aLine);
+            COSWriter::appendUnicodeTextString(rAttachedFile.maDescription, aLine);
             aLine.append("> ");
         }
         aLine.append("/EF <</F ");
@@ -5419,7 +5406,7 @@ bool PDFWriterImpl::emitCatalog()
         for (auto & rAttachedFile : m_aDocumentAttachedFiles)
         {
             aLine.append('<');
-            PDFWriter::AppendUnicodeTextString(rAttachedFile.maFilename, aLine);
+            COSWriter::appendUnicodeTextString(rAttachedFile.maFilename, aLine);
             aLine.append('>');
             aLine.append(' ');
             appendObjectReference(rAttachedFile.mnObjectId, aLine);
@@ -5815,31 +5802,31 @@ sal_Int32 PDFWriterImpl::emitInfoDict( )
     {
         if (!m_aContext.DocumentInfo.Title.isEmpty())
         {
-            aWriter.writeUnicodeEncrypt("/Title", m_aContext.DocumentInfo.Title, nObject, bEncrypt, rKey);
+            aWriter.writeKeyAndUnicodeEncrypt("/Title", m_aContext.DocumentInfo.Title, nObject, bEncrypt, rKey);
         }
         if (!m_aContext.DocumentInfo.Author.isEmpty())
         {
-            aWriter.writeUnicodeEncrypt("/Author", m_aContext.DocumentInfo.Author, nObject, bEncrypt, rKey);
+            aWriter.writeKeyAndUnicodeEncrypt("/Author", m_aContext.DocumentInfo.Author, nObject, bEncrypt, rKey);
         }
         if (!m_aContext.DocumentInfo.Subject.isEmpty())
         {
-            aWriter.writeUnicodeEncrypt("/Subject", m_aContext.DocumentInfo.Subject, nObject, bEncrypt, rKey);
+            aWriter.writeKeyAndUnicodeEncrypt("/Subject", m_aContext.DocumentInfo.Subject, nObject, bEncrypt, rKey);
         }
         if (!m_aContext.DocumentInfo.Keywords.isEmpty())
         {
-            aWriter.writeUnicodeEncrypt("/Keywords", m_aContext.DocumentInfo.Keywords, nObject, bEncrypt, rKey);
+            aWriter.writeKeyAndUnicodeEncrypt("/Keywords", m_aContext.DocumentInfo.Keywords, nObject, bEncrypt, rKey);
         }
         if (!m_aContext.DocumentInfo.Creator.isEmpty())
         {
-            aWriter.writeUnicodeEncrypt("/Creator", m_aContext.DocumentInfo.Creator, nObject, bEncrypt, rKey);
+            aWriter.writeKeyAndUnicodeEncrypt("/Creator", m_aContext.DocumentInfo.Creator, nObject, bEncrypt, rKey);
         }
         if (!m_aContext.DocumentInfo.Producer.isEmpty())
         {
-            aWriter.writeUnicodeEncrypt("/Producer", m_aContext.DocumentInfo.Producer, nObject, bEncrypt, rKey);
+            aWriter.writeKeyAndUnicodeEncrypt("/Producer", m_aContext.DocumentInfo.Producer, nObject, bEncrypt, rKey);
         }
     }
     // Allowed in PDF 2.0
-    aWriter.writeLiteralEncrypt("/CreationDate", m_aCreationDateString, nObject, bEncrypt, rKey);
+    aWriter.writeKeyAndLiteralEncrypt("/CreationDate", m_aCreationDateString, nObject, bEncrypt, rKey);
     aWriter.endDict();
     aWriter.endObject();
 
