@@ -75,7 +75,7 @@ class COSWriter
     }
 
 public:
-    COSWriter(std::shared_ptr<IPDFEncryptor> const& pPDFEncryptor)
+    COSWriter(std::shared_ptr<IPDFEncryptor> const& pPDFEncryptor = nullptr)
         : mpPDFEncryptor(pPDFEncryptor)
         , maLine(1024)
     {
@@ -92,8 +92,10 @@ public:
     OStringBuffer& getLine() { return maLine; }
 
     void startDict() { maLine.append("<<"); }
-
     void endDict() { maLine.append(">>\n"); }
+
+    void startStream() { maLine.append("stream\n"); }
+    void endStream() { maLine.append("\nendstream\n"); }
 
     void write(std::string_view key, std::string_view value)
     {
@@ -106,6 +108,14 @@ public:
         maLine.append(key);
         maLine.append(" ");
         maLine.append(value);
+    }
+
+    void writeReference(std::string_view key, sal_Int32 nObjectID)
+    {
+        maLine.append(key);
+        maLine.append(" ");
+        maLine.append(nObjectID);
+        maLine.append(" 0 R");
     }
 
     void writeKeyAndUnicode(std::string_view key, OUString const& rString)

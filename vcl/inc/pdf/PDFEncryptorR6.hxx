@@ -128,6 +128,7 @@ public:
     sal_Int32 getVersion() override { return 5; }
     sal_Int32 getRevision() override { return 6; }
     sal_Int32 getAccessPermissions() override { return m_nAccessPermissions; }
+    bool isMetadataEncrypted() override { return true; }
     /** Key length - AES 256 bit */
     sal_Int32 getKeyLength() override { return 256 / 8; }
 
