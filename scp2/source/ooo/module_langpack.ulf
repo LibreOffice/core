@@ -718,6 +718,12 @@ en-US = "Santali"
 [STR_DESC_MODULE_LANGPACK_SAT]
 en-US = "Installs the Santali user interface"
 
+[STR_NAME_MODULE_LANGPACK_SAT_OLCK]
+en-US = "Santali (Ol-Chiki)"
+
+[STR_DESC_MODULE_LANGPACK_SAT_OLCK]
+en-US = "Installs the Santali (Ol-Chiki) user interface"
+
 [STR_NAME_MODULE_LANGPACK_SD]
 en-US = "Sindhi"
 

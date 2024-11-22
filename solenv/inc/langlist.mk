@@ -106,6 +106,7 @@ ru \
 rw \
 sa-IN \
 sat \
+sat-Olck \
 sd \
 sr-Latn \
 si \
