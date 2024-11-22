@@ -2155,10 +2155,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                         aHandlePropVec.push_back( aProp );
                     }
                 }
-                if ( !aHandlePropVec.empty() )
-                {
-                    aHandlesRange[ i ] = comphelper::containerToSequence(aHandlePropVec);
-                }
+                aHandlesRange[ i ] = comphelper::containerToSequence(aHandlePropVec);
             }
             // pushing the whole Handles element
             aProp.Name = "Handles";
