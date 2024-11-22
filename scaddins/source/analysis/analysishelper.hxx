@@ -580,7 +580,6 @@ inline sal_Int32 GetDiffDate360( const css::uno::Reference< css::beans::XPropert
 
 inline sal_Int16 GetDayOfWeek( sal_Int32 n )
 {   // monday = 0, ..., sunday = 6
-    assert(n >= 0);
     return static_cast< sal_Int16 >( ( n - 1 ) % 7 );
 }
 

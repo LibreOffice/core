@@ -744,6 +744,7 @@ namespace sw
 
             if ( rDT.GetDate() == 0 )
                 return 0;
+            // coverity[ tainted_data_return : FALSE ] version 2023.12.2
             sal_uInt32 nDT = ( rDT.GetDayOfWeek() + 1 ) % 7;
             nDT <<= 9;
             nDT += ( rDT.GetYear() - 1900 ) & 0x1ff;
