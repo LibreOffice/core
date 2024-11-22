@@ -145,7 +145,6 @@ protected:
 public:
 
     FmEntryData( FmEntryData* pParentData, const css::uno::Reference< css::uno::XInterface >& _rIFace );
-    FmEntryData( const FmEntryData& rEntryData );
     virtual ~FmEntryData();
 
     void    SetText( const OUString& rText ){ aText = rText; }
@@ -158,7 +157,6 @@ public:
     FmEntryDataList* GetChildList() const { return pChildList.get(); }
 
     virtual bool IsEqualWithoutChildren( FmEntryData* pEntryData );
-    virtual std::unique_ptr<FmEntryData> Clone() = 0;
 
     // note that the interface returned is normalized, i.e. querying the given XInterface of the object
     // for XInterface must return the interface itself.
@@ -227,13 +225,11 @@ class FmFormData final : public FmEntryData
 
 public:
     FmFormData(const css::uno::Reference< css::form::XForm >& _rxForm, FmFormData* _pParent);
-    FmFormData( const FmFormData& rFormData );
     virtual ~FmFormData() override;
 
     const css::uno::Reference< css::form::XForm >& GetFormIface() const { return m_xForm; }
 
     virtual bool IsEqualWithoutChildren( FmEntryData* pEntryData ) override;
-    virtual std::unique_ptr<FmEntryData> Clone() override;
 };
 
 
@@ -249,12 +245,10 @@ public:
         const css::uno::Reference< css::form::XFormComponent >& _rxComponent,
         FmFormData* _pParent
     );
-    FmControlData( const FmControlData& rControlData );
     virtual ~FmControlData() override;
 
     const css::uno::Reference< css::form::XFormComponent >& GetFormComponent() const { return m_xFormComponent; }
     virtual bool IsEqualWithoutChildren( FmEntryData* pEntryData ) override;
-    virtual std::unique_ptr<FmEntryData> Clone() override;
 
     void ModelReplaced(const css::uno::Reference< css::form::XFormComponent >& _rxNew);
 };
