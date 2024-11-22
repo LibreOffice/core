@@ -28,8 +28,6 @@
 #include <vcl/vclptr.hxx>
 #include <avmedia/avmediadllapi.h>
 
-#define AVMEDIA_FRAMEGRABBER_DEFAULTFRAME -1.0
-
 namespace com::sun::star::frame { class XDispatchProvider; }
 namespace com::sun::star::graphic { class XGraphic; }
 namespace com::sun::star::media {
