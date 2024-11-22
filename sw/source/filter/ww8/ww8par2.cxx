@@ -470,10 +470,7 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
         //in tables)
         if (nCellLevel == m_nInTable)
         {
-
-            if (!m_nInTable)
-                bTestAllowed = true;
-            else
+            if (m_nInTable)
             {
                 if (!m_xTableDesc)
                 {
