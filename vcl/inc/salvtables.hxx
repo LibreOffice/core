@@ -146,11 +146,12 @@ public:
     virtual ~SalInstanceBuilder() override;
 };
 
-class SAL_DLLPUBLIC_RTTI SalInstanceMenu final : public weld::Menu
+class SAL_DLLPUBLIC_RTTI SalInstanceMenu : public weld::Menu
 {
-private:
+protected:
     VclPtr<PopupMenu> m_xMenu;
 
+private:
     bool m_bTakeOwnership;
     sal_uInt16 m_nLastId;
 
