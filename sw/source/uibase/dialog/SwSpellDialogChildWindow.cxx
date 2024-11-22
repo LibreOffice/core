@@ -401,7 +401,7 @@ The code below would only be part of the solution.
         if( aRet.empty() && bCloseMessage && !bNoDictionaryAvailable )
         {
             LockFocusNotification( true );
-            OUString sInfo( SwResId( bNoDictionaryAvailable ? STR_DICTIONARY_UNAVAILABLE : STR_SPELLING_COMPLETED ) );
+            OUString sInfo( SwResId( STR_SPELLING_COMPLETED ) );
             auto xSpellController = GetController();
             // #i84610#
             std::unique_ptr<weld::MessageDialog> xBox(
