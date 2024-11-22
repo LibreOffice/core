@@ -51,8 +51,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::xml::sax;
 
-#define SVG_EXPORT_ALLPAGES ((sal_Int32)-1)
-
 namespace com::sun::star::frame { class XController; }
 
 // Placeholder tag used into the ImplWriteActions method to filter text placeholder fields
