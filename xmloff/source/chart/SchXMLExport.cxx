@@ -3152,47 +3152,44 @@ void SchXMLExportHelper_Impl::exportRegressionCurve(
             }
         }
 
-        if( !aPropertyStates.empty() || bExportEquation )
+        // write element
+        if( bExportContent )
         {
-            // write element
-            if( bExportContent )
+            // add style name attribute
+            AddAutoStyleAttribute( aPropertyStates );
+
+            SvXMLElementExport aRegressionExport( mrExport, XML_NAMESPACE_CHART, XML_REGRESSION_CURVE, true, true );
+            if( bExportEquation )
             {
-                // add style name attribute
-                AddAutoStyleAttribute( aPropertyStates );
+                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_DISPLAY_EQUATION, (bShowEquation ? XML_TRUE : XML_FALSE) );
+                mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_DISPLAY_R_SQUARE, (bShowRSquared ? XML_TRUE : XML_FALSE) );
 
-                SvXMLElementExport aRegressionExport( mrExport, XML_NAMESPACE_CHART, XML_REGRESSION_CURVE, true, true );
-                if( bExportEquation )
+                // export position
+                chart2::RelativePosition aRelativePosition;
+                if( xEquationProperties->getPropertyValue( u"RelativePosition"_ustr ) >>= aRelativePosition )
                 {
-                    mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_DISPLAY_EQUATION, (bShowEquation ? XML_TRUE : XML_FALSE) );
-                    mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_DISPLAY_R_SQUARE, (bShowRSquared ? XML_TRUE : XML_FALSE) );
-
-                    // export position
-                    chart2::RelativePosition aRelativePosition;
-                    if( xEquationProperties->getPropertyValue( u"RelativePosition"_ustr ) >>= aRelativePosition )
-                    {
-                        double fX = aRelativePosition.Primary * rPageSize.Width;
-                        double fY = aRelativePosition.Secondary * rPageSize.Height;
-                        awt::Point aPos;
-                        aPos.X = static_cast< sal_Int32 >( ::rtl::math::round( fX ));
-                        aPos.Y = static_cast< sal_Int32 >( ::rtl::math::round( fY ));
-                        addPosition( aPos );
-                    }
-
-                    if( !aEquationPropertyStates.empty())
-                    {
-                        AddAutoStyleAttribute( aEquationPropertyStates );
-                    }
-
-                    SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_EQUATION, true, true );
+                    double fX = aRelativePosition.Primary * rPageSize.Width;
+                    double fY = aRelativePosition.Secondary * rPageSize.Height;
+                    awt::Point aPos;
+                    aPos.X = static_cast< sal_Int32 >( ::rtl::math::round( fX ));
+                    aPos.Y = static_cast< sal_Int32 >( ::rtl::math::round( fY ));
+                    addPosition( aPos );
                 }
+
+                if( !aEquationPropertyStates.empty())
+                {
+                    AddAutoStyleAttribute( aEquationPropertyStates );
+                }
+
+                SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_EQUATION, true, true );
             }
-            else    // autostyles
+        }
+        else    // autostyles
+        {
+            CollectAutoStyle( std::move(aPropertyStates) );
+            if( bExportEquation && !aEquationPropertyStates.empty())
             {
-                CollectAutoStyle( std::move(aPropertyStates) );
-                if( bExportEquation && !aEquationPropertyStates.empty())
-                {
-                    CollectAutoStyle( std::move(aEquationPropertyStates) );
-                }
+                CollectAutoStyle( std::move(aEquationPropertyStates) );
             }
         }
     }
