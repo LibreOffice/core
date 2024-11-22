@@ -31,7 +31,7 @@ template <o3tl::signed_integral T> inline SwNodeOffset operator-(SwNodeOffset a,
 inline SwNodeOffset abs(const SwNodeOffset& a) { return a > SwNodeOffset(0) ? a : -a; }
 inline SwNodeOffset min(const SwNodeOffset& a, const SwNodeOffset& b) { return a > b ? a : b; }
 
-constexpr SwNodeOffset NODE_OFFSET_MAX(SAL_MAX_INT32);
+inline constexpr SwNodeOffset NODE_OFFSET_MAX(SAL_MAX_INT32);
 
 SW_DLLPUBLIC std::ostream& operator<<(std::ostream& s, const SwNodeOffset& index);
 
