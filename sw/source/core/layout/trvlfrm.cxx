@@ -293,11 +293,11 @@ bool SwPageFrame::GetModelPositionForViewPoint( SwPosition *pPos, Point &rPoint,
 
         if (bConsiderBackground && bTestBackground && bBackRet)
         {
-            (*pPos) = aBackPos;
+            (*pPos) = std::move(aBackPos);
         }
         else if (!bBackRet)
         {
-            (*pPos) = aTextPos;
+            (*pPos) = std::move(aTextPos);
         }
         else // bBackRet && !(bConsiderBackground && bTestBackground)
         {
@@ -328,7 +328,7 @@ bool SwPageFrame::GetModelPositionForViewPoint( SwPosition *pPos, Point &rPoint,
                         // previous character; to get a better measure from
                         // lcl_getDistance, extend that to a rectangle over
                         // the entire character.
-                        SwPosition nextTextPos(prevTextPos);
+                        SwPosition nextTextPos(std::move(prevTextPos));
                         nextTextPos.AdjustContent(+1);
                         SwRect nextTextRect;
                         pTextFrame->GetCharRect(nextTextRect, nextTextPos);
@@ -375,11 +375,11 @@ bool SwPageFrame::GetModelPositionForViewPoint( SwPosition *pPos, Point &rPoint,
 
             if ( bValidTextDistance && bValidBackDistance && basegfx::fTools::more( nTextDistance, nBackDistance ) )
             {
-                (*pPos) = aBackPos;
+                (*pPos) = std::move(aBackPos);
             }
             else
             {
-                (*pPos) = aTextPos;
+                (*pPos) = std::move(aTextPos);
             }
         }
     }

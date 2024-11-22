@@ -428,7 +428,7 @@ bool sw_JoinText( SwPaM& rPam, bool bJoinPrev )
                 if( pOldTextNd == rPam.GetBound().GetContentNode() )
                     rPam.GetBound() = aAlphaPos;
                 if( pOldTextNd == rPam.GetBound( false ).GetContentNode() )
-                    rPam.GetBound( false ) = aAlphaPos;
+                    rPam.GetBound( false ) = std::move(aAlphaPos);
             }
             // delete the Node, at last!
             SwNode::Merge const eOldMergeFlag(pOldTextNd->GetRedlineMergeFlag());

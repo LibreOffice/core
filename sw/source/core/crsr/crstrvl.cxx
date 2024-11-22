@@ -2015,7 +2015,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                     {
                         SwCallLink aLk( *this ); // watch Cursor-Moves
                         SwCursorSaveState aSaveState( *m_pCurrentCursor );
-                        *m_pCurrentCursor->GetPoint() = aPos;
+                        *m_pCurrentCursor->GetPoint() = std::move(aPos);
                         if( m_pCurrentCursor->IsSelOvr( SwCursorSelOverFlags::CheckNodeSection |
                             SwCursorSelOverFlags::Toggle) )
                             bRet = false;

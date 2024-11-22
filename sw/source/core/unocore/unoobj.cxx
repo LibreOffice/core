@@ -814,12 +814,12 @@ lcl_ForceIntoMeta(SwPaM & rCursor,
         case META_CHECK_BOTH:
             if (*rCursor.Start() < start)
             {
-                *rCursor.Start() = start;
+                *rCursor.Start() = std::move(start);
                 bRet = false;
             }
             if (*rCursor.End() > end)
             {
-                *rCursor.End() = end;
+                *rCursor.End() = std::move(end);
                 bRet = false;
             }
             break;
@@ -866,13 +866,13 @@ bool lcl_ForceIntoContentControl(SwPaM& rCursor, const uno::Reference<text::XTex
         case CONTENT_CONTROL_CHECK_BOTH:
             if (*rCursor.Start() < aStart)
             {
-                *rCursor.Start() = aStart;
+                *rCursor.Start() = std::move(aStart);
                 bRet = false;
             }
 
             if (*rCursor.End() > aEnd)
             {
-                *rCursor.End() = aEnd;
+                *rCursor.End() = std::move(aEnd);
                 bRet = false;
             }
             break;

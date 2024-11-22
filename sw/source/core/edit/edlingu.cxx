@@ -837,7 +837,7 @@ void SwEditShell::HandleCorrectionError(const OUString& aText, SwPosition aPos, 
 
     aPos.SetContent( nBegin + nLeft );
     SwPaM* pCursor = GetCursor();
-    *pCursor->GetPoint() = aPos;
+    *pCursor->GetPoint() = std::move(aPos);
     pCursor->SetMark();
     ExtendSelection( true, nLen - nLeft - nRight );
     // don't determine the rectangle in the current line
@@ -1667,7 +1667,7 @@ void    SwSpellIter::AddPortion(uno::Reference< XSpellAlternatives > const & xAl
             *pCursor->GetMark() = *pCursor->GetPoint();
         }
         pCursor->SetMark();
-        *pCursor->GetMark() = aStart;
+        *pCursor->GetMark() = std::move(aStart);
         CreatePortion(xAlt, pGrammarResult, false, false);
     }
 }

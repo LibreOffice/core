@@ -1054,12 +1054,12 @@ void SwXTextViewCursor::gotoRange(
         auto [pParamLeft, pParamRight] = rDestPam.StartEnd(); // SwPosition*
         // Now four SwPositions are there, two of them are needed, but which?
         if(aOwnRight > *pParamRight)
-            *aOwnPaM.GetPoint() = aOwnRight;
+            *aOwnPaM.GetPoint() = std::move(aOwnRight);
         else
             *aOwnPaM.GetPoint() = *pParamRight;
         aOwnPaM.SetMark();
         if(aOwnLeft < *pParamLeft)
-            *aOwnPaM.GetMark() = aOwnLeft;
+            *aOwnPaM.GetMark() = std::move(aOwnLeft);
         else
             *aOwnPaM.GetMark() = *pParamLeft;
     }

@@ -460,7 +460,7 @@ void SwEditShell::DoSpecialInsert()
 
     // insert a new text node, and set the cursor
     GetDoc()->getIDocumentContentOperations().AppendTextNode( aInsertPos );
-    *pCursorPos = aInsertPos;
+    *pCursorPos = std::move(aInsertPos);
 
     // call AttrChangeNotify for the UI
     CallChgLnk();
