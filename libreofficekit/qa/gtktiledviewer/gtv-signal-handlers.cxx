@@ -212,7 +212,7 @@ void recentUnoChanged( GtkWidget* pSelector, gpointer /* pItem */ )
     if (aUnoArgs.empty())
         return;
 
-    lok_doc_view_post_command(LOK_DOC_VIEW(pWindow->lokdocview), pUnoCmd, (aUnoArgs.empty() ? nullptr : aUnoArgs.c_str()), false);
+    lok_doc_view_post_command(LOK_DOC_VIEW(pWindow->lokdocview), pUnoCmd, aUnoArgs.c_str(), false);
     g_free(pUnoCmd);
 }
 
