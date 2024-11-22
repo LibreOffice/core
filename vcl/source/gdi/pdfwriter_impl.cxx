@@ -85,6 +85,7 @@
 
 #include <svdata.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
+#include <pdf/COSWriter.hxx>
 #include <fontsubset.hxx>
 #include <font/EmphasisMark.hxx>
 #include <font/PhysicalFontFace.hxx>
@@ -307,83 +308,6 @@ GEOMETRY lcl_convert( const MapMode& _rSource, const MapMode& _rDest, OutputDevi
 }
 
 void removePlaceholderSE(std::vector<PDFStructureElement> & rStructure, PDFStructureElement& rEle);
-
-/** Writes the PDF structure to the string buffer.
- *
- * Structure elements like: objects, IDs, dictionaries, key/values, ...
- */
-class PDFStructureWriter
-{
-    OStringBuffer maLine;
-    PDFWriterImpl& mrWriterImpl;
-public:
-    PDFStructureWriter(PDFWriterImpl& rWriterImpl)
-        : maLine(1024)
-        , mrWriterImpl(rWriterImpl)
-    {
-    }
-
-    void startObject(sal_Int32 nID)
-    {
-        appendObjectID(nID, maLine);
-    }
-
-    void endObject()
-    {
-        maLine.append("endobj\n\n");
-    }
-
-    OStringBuffer& getLine()
-    {
-        return maLine;
-    }
-
-    void startDict()
-    {
-        maLine.append("<<");
-    }
-
-    void endDict()
-    {
-        maLine.append(">>\n");
-    }
-
-    void write(std::string_view key, std::string_view value)
-    {
-        maLine.append(key);
-        maLine.append(value);
-    }
-
-    void write(std::string_view key, sal_Int32 value)
-    {
-        maLine.append(key);
-        maLine.append(" ");
-        maLine.append(value);
-    }
-
-    void writeUnicodeEncrypt(std::string_view key, OUString const& rString, sal_Int32 nObject)
-    {
-        maLine.append(key);
-        mrWriterImpl.appendUnicodeTextStringEncrypt(rString, nObject, maLine);
-    }
-
-    void writeLiteralEncrypt(std::string_view key, std::string_view value, sal_Int32 nObject)
-    {
-        maLine.append(key);
-        mrWriterImpl.appendLiteralStringEncrypt(value, nObject, maLine);
-    }
-
-    void writeHexArray(std::string_view key, sal_uInt8* pData, size_t nSize)
-    {
-        maLine.append(key);
-        maLine.append(" <");
-        for (size_t i = 0; i < nSize; i++)
-        {
-            appendHex(sal_Int8(pData[i]), maLine);
-        }
-        maLine.append(">");
-    }
-};
 
 } // end anonymous namespace
 
@@ -5879,7 +5803,9 @@ sal_Int32 PDFWriterImpl::emitInfoDict( )
     if (!updateObject(nObject))
         return 0;
 
-    PDFStructureWriter aWriter(*this);
+    COSWriter aWriter(m_pPDFEncryptor);
+    bool bEncrypt = m_aContext.Encryption.canEncrypt();
+    auto& rKey = m_aContext.Encryption.EncryptionKey;
     aWriter.startObject(nObject);
     aWriter.startDict();
 
@@ -5889,31 +5815,31 @@ sal_Int32 PDFWriterImpl::emitInfoDict( )
     {
         if (!m_aContext.DocumentInfo.Title.isEmpty())
         {
-            aWriter.writeUnicodeEncrypt("/Title", m_aContext.DocumentInfo.Title, nObject);
+            aWriter.writeUnicodeEncrypt("/Title", m_aContext.DocumentInfo.Title, nObject, bEncrypt, rKey);
         }
         if (!m_aContext.DocumentInfo.Author.isEmpty())
         {
-            aWriter.writeUnicodeEncrypt("/Author", m_aContext.DocumentInfo.Author, nObject);
+            aWriter.writeUnicodeEncrypt("/Author", m_aContext.DocumentInfo.Author, nObject, bEncrypt, rKey);
         }
         if (!m_aContext.DocumentInfo.Subject.isEmpty())
         {
-            aWriter.writeUnicodeEncrypt("/Subject", m_aContext.DocumentInfo.Subject, nObject);
+            aWriter.writeUnicodeEncrypt("/Subject", m_aContext.DocumentInfo.Subject, nObject, bEncrypt, rKey);
         }
         if (!m_aContext.DocumentInfo.Keywords.isEmpty())
         {
-            aWriter.writeUnicodeEncrypt("/Keywords", m_aContext.DocumentInfo.Keywords, nObject);
+            aWriter.writeUnicodeEncrypt("/Keywords", m_aContext.DocumentInfo.Keywords, nObject, bEncrypt, rKey);
         }
         if (!m_aContext.DocumentInfo.Creator.isEmpty())
         {
-            aWriter.writeUnicodeEncrypt("/Creator", m_aContext.DocumentInfo.Creator, nObject);
+            aWriter.writeUnicodeEncrypt("/Creator", m_aContext.DocumentInfo.Creator, nObject, bEncrypt, rKey);
         }
         if (!m_aContext.DocumentInfo.Producer.isEmpty())
         {
-            aWriter.writeUnicodeEncrypt("/Producer", m_aContext.DocumentInfo.Producer, nObject);
+            aWriter.writeUnicodeEncrypt("/Producer", m_aContext.DocumentInfo.Producer, nObject, bEncrypt, rKey);
         }
     }
     // Allowed in PDF 2.0
-    aWriter.writeLiteralEncrypt("/CreationDate", m_aCreationDateString, nObject);
+    aWriter.writeLiteralEncrypt("/CreationDate", m_aCreationDateString, nObject, bEncrypt, rKey);
     aWriter.endDict();
     aWriter.endObject();
 
@@ -6172,7 +6098,7 @@ sal_Int32 PDFWriterImpl::emitEncrypt()
     if (updateObject(nObject))
     {
         PDFEncryptionProperties& rProperties = m_aContext.Encryption;
-        PDFStructureWriter aWriter(*this);
+        COSWriter aWriter(m_pPDFEncryptor);
         aWriter.startObject(nObject);
         aWriter.startDict();
         aWriter.write("/Filter", "/Standard");
