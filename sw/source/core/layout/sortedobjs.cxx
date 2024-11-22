@@ -275,8 +275,10 @@ void SwSortedObjs::Update( SwAnchoredObject& _rAnchoredObj )
         return;
     }
 
-    Remove( _rAnchoredObj );
-    Insert( _rAnchoredObj );
+    if (is_sorted())
+        return;
+
+    UpdateAll();
 }
 
 void SwSortedObjs::UpdateAll()
