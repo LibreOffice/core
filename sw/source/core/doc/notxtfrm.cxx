@@ -772,8 +772,6 @@ void SwNoTextFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint
 
     SwContentFrame::SwClientNotify(rModify, rHint);
 
-    bool bComplete = true;
-
     switch( nWhich )
     {
     case RES_OBJECTDYING:
@@ -840,11 +838,8 @@ void SwNoTextFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint
             return;
     }
 
-    if( bComplete )
-    {
-        InvalidatePrt();
-        SetCompletePaint();
-    }
+    InvalidatePrt();
+    SetCompletePaint();
 }
 
 static void lcl_correctlyAlignRect( SwRect& rAlignedGrfArea, const SwRect& rInArea, vcl::RenderContext const * pOut )
