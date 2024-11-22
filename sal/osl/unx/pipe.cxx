@@ -373,7 +373,7 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
 
     int socket;
     {
-        // dont hold lock while accepting, so it is possible to close a socket blocked in accept
+        // don't hold lock while accepting, so it is possible to close a socket blocked in accept
         std::unique_lock aGuard(pPipe->m_Mutex);
 
         assert(pPipe->m_Name[0] != '\0');  // you cannot have an empty pipe name
@@ -445,7 +445,7 @@ sal_Int32 SAL_CALL osl_receivePipe(oslPipe pPipe,
 
     int socket;
     {
-        // dont hold lock while receiving, so it is possible to close a socket blocked in recv
+        // don't hold lock while receiving, so it is possible to close a socket blocked in recv
         std::unique_lock aGuard(pPipe->m_Mutex);
         socket = pPipe->m_Socket;
     }
@@ -473,7 +473,7 @@ sal_Int32 SAL_CALL osl_sendPipe(oslPipe pPipe,
 
     int socket;
     {
-        // dont hold lock while sending, so it is possible to close a socket blocked in send
+        // don't hold lock while sending, so it is possible to close a socket blocked in send
         std::unique_lock aGuard(pPipe->m_Mutex);
         socket = pPipe->m_Socket;
     }
