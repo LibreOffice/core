@@ -155,6 +155,9 @@ weld::Container* QtInstanceNotebook::get_page(const OUString& rIdent) const
         pWidget = m_pTabWidget->widget(nIndex);
     });
 
+    if (!pWidget)
+        return nullptr;
+
     if (!m_aPageContainerInstances.contains(pWidget))
         m_aPageContainerInstances.emplace(pWidget, std::make_unique<QtInstanceContainer>(pWidget));
 
