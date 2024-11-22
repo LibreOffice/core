@@ -355,7 +355,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
 
         // If the ColumnArray has a wrong count, ignore it!
         if( pColArr &&
-            static_cast<size_t>(nCols + ( text::HoriOrientation::NONE == eAdjust ? 2 : 1 )) != pColArr->size() )
+            static_cast<size_t>(nCols) + ( text::HoriOrientation::NONE == eAdjust ? 2 : 1 ) != pColArr->size() )
             pColArr = nullptr;
     }
 
