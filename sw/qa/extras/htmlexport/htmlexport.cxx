@@ -3470,6 +3470,19 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_162426)
     assertXPath(pDoc, "/html/body/p/img"_ostr, "border"_ostr, u"0"_ustr);
 }
 
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifNoTypeInUL)
+{
+    // Given a document with an unordered list:
+    createSwDoc("ul_with_disc.fodt");
+
+    // When exporting to XHTML:
+    ExportToReqif();
+
+    // Check that 'ul' element has no 'type' attribute
+    xmlDocUniquePtr pXmlDoc = WrapReqifFromTempFile();
+    // Without the accompanying fix in place, this test would have failed
+    assertXPathNoAttribute(pXmlDoc, "//reqif-xhtml:ul/reqif-xhtml:li/reqif-xhtml:ul", "type");
+}
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
