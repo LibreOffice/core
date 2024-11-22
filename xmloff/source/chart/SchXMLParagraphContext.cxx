@@ -104,49 +104,12 @@ void SchXMLParagraphContext::characters( const OUString& rChars )
 SchXMLTitleParaContext::SchXMLTitleParaContext( SvXMLImport& rImport,
                                                 std::vector<std::pair<OUString, OUString>>& rParaText) :
     SvXMLImportContext( rImport ),
-    mrParaText( rParaText ),
-    mpId( nullptr )
+    mrParaText( rParaText )
 {
 }
 
 SchXMLTitleParaContext::~SchXMLTitleParaContext()
 {}
-
-void SchXMLTitleParaContext::startFastElement(
-   sal_Int32 /*nElement*/,
-   const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
-{
-    // remember the id. It is used for storing the original cell range string in
-    // a local table (cached data)
-    if( !mpId )
-        return;
-
-    bool bHaveXmlId( false );
-
-    for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
-    {
-        switch(aIter.getToken())
-        {
-            case XML_ELEMENT(TEXT, XML_STYLE_NAME):
-                maStyleName = aIter.toString();
-                break;
-            case XML_ELEMENT(XML, XML_ID):
-                (*mpId) = aIter.toString();
-                bHaveXmlId = true;
-                break;
-            case XML_ELEMENT(TEXT, XML_ID):
-            {   // text:id shall be ignored if xml:id exists
-                if (!bHaveXmlId)
-                {
-                    (*mpId) = aIter.toString();
-                }
-                break;
-            }
-            default:
-                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
-        }
-    }
-}
 
 void SchXMLTitleParaContext::endFastElement(sal_Int32 )
 {
