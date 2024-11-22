@@ -53,7 +53,6 @@ enum
 };
 
 class HWPPara;
-#define FIXED_SPACING_BIT (0x8000)
 
 struct LineInfo
 {
