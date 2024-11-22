@@ -39,14 +39,12 @@ namespace sd
 struct RenderContext
 {
     SdrModel& mrModel;
-    SdrPage& mrPage;
 
     EEControlBits mnSavedControlBits;
     ScopedVclPtrInstance<VirtualDevice> maVirtualDevice;
 
     RenderContext(unsigned char* pBuffer, SdrModel& rModel, SdrPage& rPage, Size const& rSlideSize)
         : mrModel(rModel)
-        , mrPage(rPage)
         , maVirtualDevice(DeviceFormat::WITHOUT_ALPHA)
     {
         // Turn off spelling
@@ -58,7 +56,7 @@ struct RenderContext
 
         maVirtualDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(rSlideSize, Fraction(1.0),
                                                                    Point(), pBuffer);
-        Size aPageSize(mrPage.GetSize());
+        Size aPageSize(rPage.GetSize());
 
         MapMode aMapMode(MapUnit::Map100thMM);
         const Fraction aFracX(rSlideSize.Width(),

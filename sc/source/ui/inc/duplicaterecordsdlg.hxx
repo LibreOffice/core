@@ -63,7 +63,6 @@ private:
     std::unique_ptr<weld::Label> m_xRecordsLabel;
 
     std::unique_ptr<weld::Button> m_xOkBtn;
-    std::unique_ptr<weld::Button> m_xHelpBtn;
 
     uno::Sequence<uno::Sequence<uno::Any>>& mrCellData;
     ScRange& mrRange;

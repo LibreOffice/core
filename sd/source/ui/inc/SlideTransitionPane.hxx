@@ -138,9 +138,6 @@ private:
     std::vector<OUString>  maSoundList;
     mutable OUString maCurrentSoundFile;
 
-    // How many variants each transition set has
-    std::map< OUString, int > m_aNumVariants;
-
     Timer maLateInitTimer;
 };
 

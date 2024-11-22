@@ -208,7 +208,6 @@ private:
     std::shared_ptr<ShapeImporter> mpMPShapesFunctor;
     std::shared_ptr<ShapeImporter> mpShapesFunctor;
     std::unordered_map< BitmapChecksum, BitmapEx > maBitmapMap;
-    std::vector<OString> maJsonMsgList;
     std::unordered_map<std::string, bool> maAnimatedShapeVisibilityMap;
 
     sal_uInt32 mnMPLayerIndex;
@@ -385,7 +384,6 @@ void LOKSlideRenderer::renderBackgroundImpl(VirtualDevice& rDevice)
     appendImageInfoPlaceholder(aJsonWriter);
 
     msLastJsonMessage = aJsonWriter.finishAndGetAsOString();
-    maJsonMsgList.push_back(msLastJsonMessage);
 
     // clean up
     rDevice.Erase();
@@ -411,7 +409,6 @@ void LOKSlideRenderer::renderMasterPageImpl(VirtualDevice& rDevice)
 
         msLastPlaceholder = "";
         msLastJsonMessage = aJsonWriter.finishAndGetAsOString();
-        maJsonMsgList.push_back(msLastJsonMessage);
         ++mnMPLayerIndex;
         return;
     }
@@ -461,7 +458,6 @@ void LOKSlideRenderer::renderMasterPageImpl(VirtualDevice& rDevice)
                 }
                 bDoRendering = false;
                 msLastJsonMessage = aJsonWriter.finishAndGetAsOString();
-                maJsonMsgList.push_back(msLastJsonMessage);
                 ++mnMPLayerIndex;
                 return;
             }
@@ -472,7 +468,6 @@ void LOKSlideRenderer::renderMasterPageImpl(VirtualDevice& rDevice)
         renderLayerImpl(rDevice, aJsonWriter);
     }
     msLastJsonMessage = aJsonWriter.finishAndGetAsOString();
-    maJsonMsgList.push_back(msLastJsonMessage);
 
     mbMasterPageRenderingDone = true;
 }
@@ -516,7 +511,6 @@ void LOKSlideRenderer::renderTextFieldsImpl(VirtualDevice& rDevice)
                     appendImageInfoPlaceholder(aJsonWriter);
                 }
                 msLastJsonMessage = aJsonWriter.finishAndGetAsOString();
-                maJsonMsgList.push_back(msLastJsonMessage);
 
                 // clean up
                 rDevice.Erase();
@@ -558,7 +552,6 @@ void LOKSlideRenderer::renderDrawPageImpl(VirtualDevice& rDevice)
         renderAnimatedShapeImpl(rDevice, mpDPLastAnimatedShape, aJsonWriter);
         mpDPLastAnimatedShape.reset();
         msLastJsonMessage = aJsonWriter.finishAndGetAsOString();
-        maJsonMsgList.push_back(msLastJsonMessage);
         ++mnDPLayerIndex;
         return;
     }
@@ -630,7 +623,6 @@ void LOKSlideRenderer::renderDrawPageImpl(VirtualDevice& rDevice)
                     renderAnimatedShapeImpl(rDevice, pShape, aJsonWriter);
                 }
                 msLastJsonMessage = aJsonWriter.finishAndGetAsOString();
-                maJsonMsgList.push_back(msLastJsonMessage);
                 ++mnDPLayerIndex;
                 return;
             }
@@ -641,7 +633,6 @@ void LOKSlideRenderer::renderDrawPageImpl(VirtualDevice& rDevice)
         renderLayerImpl(rDevice, aJsonWriter);
     }
     msLastJsonMessage = aJsonWriter.finishAndGetAsOString();
-    maJsonMsgList.push_back(msLastJsonMessage);
 
     mbDrawPageRenderingDone = true;
 }

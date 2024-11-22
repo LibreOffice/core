@@ -129,7 +129,6 @@ protected:
     std::unique_ptr<SfxTabPage> m_xSfxPage;
     std::unique_ptr<weld::Container> m_xContainer;
     std::unique_ptr<weld::Button> m_xOKBtn;
-    std::unique_ptr<weld::Button> m_xHelpBtn;
 
     void                CreateOutputItemSet(const SfxItemSet& rInput);
     void                SetInputSet(const SfxItemSet* pInSet) { m_pInputSet = pInSet; }
