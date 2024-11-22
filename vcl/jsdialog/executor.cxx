@@ -74,7 +74,21 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, StringMap
         }
     }
 
-    if (pWidget != nullptr)
+    if (pWidget == nullptr)
+    {
+        // weld::Menu doesn't have base of weld::Widget
+        if (sControlType == "menu")
+        {
+            weld::Menu* pMenu = JSInstanceBuilder::FindMenu(nWindowId);
+            if (pMenu && sAction == "activated")
+            {
+                LOKTrigger::trigger_activated(*pMenu, rData["data"]);
+                return true;
+            }
+        }
+        return false;
+    }
+    else
     {
         // shared actions
 
@@ -557,6 +571,18 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, StringMap
                 {
                     pTreeView->drag_end();
                     return true;
+                }
+                else if (sAction == "contextmenu")
+                {
+                    sal_Int32 nEntryAbsPos = o3tl::toInt32(rData["data"]);
+
+                    std::unique_ptr<weld::TreeIter> itEntry(pTreeView->make_iterator());
+                    pTreeView->get_iter_abs_pos(*itEntry, nEntryAbsPos);
+
+                    tools::Rectangle aRect = pTreeView->get_row_area(*itEntry);
+                    CommandEvent aCommand(aRect.Center(), CommandEventId::ContextMenu);
+
+                    LOKTrigger::trigger_popup_menu(*pTreeView, aCommand);
                 }
             }
         }

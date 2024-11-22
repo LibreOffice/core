@@ -13,6 +13,7 @@
 #include <comphelper/lok.hxx>
 #include <iconview.hxx>
 #include <utility>
+#include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/toolbox.hxx>
@@ -43,6 +44,14 @@ static std::map<OUString, vcl::Window*>& GetLOKPopupsMap()
     static std::map<OUString, vcl::Window*> s_aLOKPopupsMap;
 
     return s_aLOKPopupsMap;
+}
+
+static std::map<OUString, weld::Menu*>& GetLOKMenusMap()
+{
+    // Map to remember the LOKWindowId <-> weld menu binding.
+    static std::map<OUString, weld::Menu*> s_aLOKMenusMap;
+
+    return s_aLOKMenusMap;
 }
 
 namespace
@@ -322,7 +331,10 @@ JSDialogSender::~JSDialogSender() COVERITY_NOEXCEPT_FALSE
 void JSDialogSender::sendFullUpdate(bool bForce)
 {
     if (!mpIdleNotify)
+    {
+        assert(false);
         return;
+    }
 
     if (bForce)
         mpIdleNotify->forceUpdate();
@@ -813,6 +825,28 @@ void JSInstanceBuilder::ForgetPopup(const OUString& nWindowId)
         GetLOKPopupsMap().erase(it);
 }
 
+void JSInstanceBuilder::RememberMenu(const OUString& nWindowId, weld::Menu* pMenu)
+{
+    GetLOKMenusMap()[nWindowId] = pMenu;
+}
+
+void JSInstanceBuilder::ForgetMenu(const OUString& nWindowId)
+{
+    auto it = GetLOKMenusMap().find(nWindowId);
+    if (it != GetLOKMenusMap().end())
+        GetLOKMenusMap().erase(it);
+}
+
+weld::Menu* JSInstanceBuilder::FindMenu(const OUString& nWindowId)
+{
+    const auto it = GetLOKMenusMap().find(nWindowId);
+
+    if (it != GetLOKMenusMap().end())
+        return it->second;
+
+    return nullptr;
+}
+
 vcl::Window* JSInstanceBuilder::FindPopup(const OUString& nWindowId)
 {
     const auto it = GetLOKPopupsMap().find(nWindowId);
@@ -1212,6 +1246,20 @@ std::unique_ptr<weld::MenuButton> JSInstanceBuilder::weld_menu_button(const OUSt
 
     if (pWeldWidget)
         RememberWidget(id, pWeldWidget.get());
+
+    return pWeldWidget;
+}
+
+std::unique_ptr<weld::Menu> JSInstanceBuilder::weld_menu(const OUString& id)
+{
+    PopupMenu* pPopupMenu = m_xBuilder->get_menu(id);
+
+    JSMenu* pMenu = pPopupMenu ? new JSMenu(this, pPopupMenu, this, false) : nullptr;
+
+    std::unique_ptr<weld::Menu> pWeldWidget(pMenu);
+
+    if (pWeldWidget)
+        RememberMenu(getMapIdFromWindowId(), pWeldWidget.get());
 
     return pWeldWidget;
 }
@@ -2360,6 +2408,22 @@ void JSMenuButton::set_active(bool bActive)
         else
             sendClosePopup(pPopup->GetChild(0)->GetLOKWindowId());
     }
+}
+
+JSMenu::JSMenu(JSDialogSender* /*pSender*/, PopupMenu* pPopupMenu, SalInstanceBuilder* /*pBuilder*/,
+               bool bTakeOwnership)
+    : SalInstanceMenu(pPopupMenu, bTakeOwnership)
+{
+}
+
+OUString JSMenu::popup_at_rect(weld::Widget* /*pParent*/, const tools::Rectangle& /*rRect*/,
+                               weld::Placement /*ePlace*/)
+{
+    // TODO: send message
+
+    // first only send menu and cancel menu
+    // no return SalInstanceMenu::popup_at_rect(pParent, rRect, ePlace);
+    return "";
 }
 
 JSPopover::JSPopover(JSDialogSender* pSender, DockingWindow* pDockingWindow,
