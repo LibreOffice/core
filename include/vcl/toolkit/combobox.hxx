@@ -28,7 +28,6 @@
 #include <vcl/toolkit/edit.hxx>
 
 #define COMBOBOX_APPEND             (SAL_MAX_INT32)
-#define COMBOBOX_ENTRY_NOTFOUND     (SAL_MAX_INT32)
 #define COMBOBOX_MAX_ENTRIES        (SAL_MAX_INT32 - 1)
 
 class ImplBtn;
