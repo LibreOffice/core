@@ -84,6 +84,7 @@ public:
     virtual void set_response(std::u16string_view sID, short nResponse) override;
 
 private:
+    static void deleteObject(QObject* pObject);
     void setProperties(QObject* obj, stringmap& rProps);
     static void setLabelProperties(QLabel& rLabel, stringmap& rProps);
     void setSpinButtonProperties(QDoubleSpinBox& rSpinBox, stringmap& rProps);

@@ -348,7 +348,7 @@ void QtBuilder::tweakInsertedChild(QObject* pParent, QObject* pCurrentChild, std
         // an editable GtkComboBox has an internal GtkEntry child,
         // but QComboBox doesn't need a separate widget for it, so
         // delete it
-        pCurrentChild->deleteLater();
+        deleteObject(pCurrentChild);
     }
 
     if (sType == "label")
@@ -362,8 +362,7 @@ void QtBuilder::tweakInsertedChild(QObject* pParent, QObject* pCurrentChild, std
                 // For QGroupBox, the title can be set directly. Therefore, take over the
                 // title from the label and delete the separate label widget again
                 pGroupBox->setTitle(pLabel->text());
-                pLabel->setParent(nullptr);
-                pLabel->deleteLater();
+                deleteObject(pLabel);
             }
         }
     }
@@ -526,6 +525,13 @@ void QtBuilder::set_response(std::u16string_view sID, short nResponse)
     pPushButton->setProperty(QtInstanceMessageDialog::PROPERTY_VCL_RESPONSE_CODE, int(nResponse));
 }
 
+void QtBuilder::deleteObject(QObject* pObject)
+{
+    if (pObject->isWidgetType())
+        static_cast<QWidget*>(pObject)->hide();
+    pObject->deleteLater();
+}
+
 void QtBuilder::setProperties(QObject* pObject, stringmap& rProps)
 {
     if (QMessageBox* pMessageBox = qobject_cast<QMessageBox*>(pObject))
@@ -604,7 +610,7 @@ void QtBuilder::setProperties(QObject* pObject, stringmap& rProps)
                 // parentless GtkImage in .ui file is only used for setting button
                 // image, so the object is no longer needed after doing so
                 if (!pImageLabel->parent())
-                    pImageLabel->deleteLater();
+                    deleteObject(pImageLabel);
             }
             else if (rKey == u"label")
             {
