@@ -46,8 +46,6 @@ struct ConvertData;
 #define ERRCODE_GRFILTER_FILTERERROR  ErrCode(ErrCodeArea::Vcl, ErrCodeClass::General, 5)
 #define ERRCODE_GRFILTER_TOOBIG       ErrCode(ErrCodeArea::Vcl, ErrCodeClass::General, 7)
 
-#define GRFILTER_OUTHINT_GREY       1
-
 #define GRFILTER_FORMAT_NOTFOUND    (sal_uInt16(0xFFFF))
 #define GRFILTER_FORMAT_DONTKNOW    (sal_uInt16(0xFFFF))
 
