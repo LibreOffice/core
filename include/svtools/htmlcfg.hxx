@@ -20,8 +20,6 @@
 
 #include <svtools/svtdllapi.h>
 
-#define HTML_FONT_COUNT 7
-
 // !!!be aware!!!: the following defines are _not_ used as values in the configuration file
 //                  this is because of compatibility reasons
 #define HTML_CFG_MSIE 0 // Internet Explorer
