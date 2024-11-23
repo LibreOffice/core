@@ -38,7 +38,6 @@ class SwAnchoredObject;
 class SwFlowFrame;
 class SwLayoutFrame;
 
-#define LOOP_PAGE 1
 
 class SwLayouter
 {
