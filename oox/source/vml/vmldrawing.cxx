@@ -235,7 +235,6 @@ sal_Int32 Drawing::getLocalShapeIndex( std::u16string_view rShapeId ) const
     sal_Int32 nBlockId = (nShapeId - 1) / 1024;
     BlockIdVector::iterator aIt = ::std::lower_bound( maBlockIds.begin(), maBlockIds.end(), nBlockId );
     sal_Int32 nIndex = static_cast< sal_Int32 >( aIt - maBlockIds.begin() );
-    assert(nIndex < std::numeric_limits<sal_Int32>::max() / 1024 -1 && "possible overflow");
 
     // block id not found in set -> register it now (value of nIndex remains valid)
     if( (aIt == maBlockIds.end()) || (*aIt != nBlockId) )
@@ -245,7 +244,13 @@ sal_Int32 Drawing::getLocalShapeIndex( std::u16string_view rShapeId ) const
     sal_Int32 nBlockOffset = (nShapeId - 1) % 1024 + 1;
 
     // calculate the local shape index
-    return 1024 * nIndex + nBlockOffset;
+    sal_Int32 nRet;
+    if (o3tl::checked_add(1024 * nIndex, nBlockOffset, nRet))
+    {
+        SAL_WARN("oox", "getLocalShapeIndex: overflow on " << 1024 * nIndex << " + " << nBlockOffset);
+        nRet = -1;
+    }
+    return nRet;
 }
 
 const OleObjectInfo* Drawing::getOleObjectInfo( const OUString& rShapeId ) const
