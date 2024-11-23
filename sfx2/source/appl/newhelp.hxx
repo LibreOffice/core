@@ -32,11 +32,6 @@
 
 #include <srchdlg.hxx>
 
-// context menu ids
-#define MID_OPEN                                1
-#define MID_RENAME                              2
-#define MID_DELETE                              3
-
 namespace com::sun::star::awt { class XWindow; }
 namespace com::sun::star::i18n { class XBreakIterator; }
 namespace com::sun::star::text { class XTextRange; }
