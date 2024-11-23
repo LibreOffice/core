@@ -39,6 +39,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/themecolors.hxx>
 #include <salinst.hxx>
 #include <toolbarvalue.hxx>
 #include <menubarvalue.hxx>
@@ -434,6 +435,211 @@ bool UseDarkMode()
     return bRet;
 }
 
+static bool drawThemedControl(HDC hDC, ControlType nType, int iPart, int iState, RECT rc)
+{
+    if (nType == ControlType::Scrollbar)
+    {
+        if (iPart == SBP_ARROWBTN)
+        {
+            const Color& rBackColor = ThemeColors::GetThemeColors().GetWindowColor();
+            const Color& rArrowFillColor = ThemeColors::GetThemeColors().GetBaseColor();
+
+            ScopedHBRUSH hbrush(CreateSolidBrush(RGB(rBackColor.GetRed(),
+                                                     rBackColor.GetGreen(),
+                                                     rBackColor.GetBlue())));
+            FillRect(hDC, &rc, hbrush.get());
+
+            bool bDrawArrow = false;
+            POINT aArrowPoints[3];
+
+            if (iState == ABS_UPHOT || iState == ABS_UPPRESSED)
+            {
+                aArrowPoints[0] = { rc.left + (rc.right - rc.left) / 4, rc.bottom - (rc.bottom - rc.top) / 4 };
+                aArrowPoints[1] = { rc.right - (rc.right - rc.left) / 4, rc.bottom - (rc.bottom - rc.top) / 4 };
+                aArrowPoints[2] = { rc.left + (rc.right - rc.left) / 2, rc.top + (rc.bottom - rc.top) / 4 };
+                bDrawArrow = true;
+            }
+            else if (iState == ABS_DOWNHOT || iState == ABS_DOWNPRESSED)
+            {
+                aArrowPoints[0] = { rc.left + (rc.right - rc.left) / 4, rc.top + (rc.bottom - rc.top) / 4 };
+                aArrowPoints[1] = { rc.right - (rc.right - rc.left) / 4, rc.top + (rc.bottom - rc.top) / 4 };
+                aArrowPoints[2] = { rc.left + (rc.right - rc.left) / 2, rc.bottom - (rc.bottom - rc.top) / 4 };
+                bDrawArrow = true;
+            }
+            else if (iState == ABS_RIGHTHOT || iState == ABS_RIGHTPRESSED)
+            {
+                aArrowPoints[0] = { rc.left + (rc.right - rc.left) / 4, rc.top + (rc.bottom - rc.top) / 4 };
+                aArrowPoints[1] = { rc.right - (rc.right - rc.left) / 4, rc.top + (rc.bottom - rc.top) / 2 };
+                aArrowPoints[2] = { rc.left + (rc.right - rc.left) / 4, rc.bottom - (rc.bottom - rc.top) / 4 };
+                bDrawArrow = true;
+            }
+            else if (iState == ABS_LEFTHOT || iState == ABS_LEFTPRESSED)
+            {
+                aArrowPoints[0] = { rc.right - (rc.right - rc.left) / 4, rc.top + (rc.bottom - rc.top) / 4 };
+                aArrowPoints[1] = { rc.right - (rc.right - rc.left) / 4, rc.bottom - (rc.bottom - rc.top) / 4 };
+                aArrowPoints[2] = { rc.left + (rc.right - rc.left) / 4, rc.top + (rc.bottom - rc.top) / 2 };
+                bDrawArrow = true;
+            }
+
+            if (bDrawArrow)
+            {
+                ScopedHPEN hpen(CreatePen(PS_SOLID, 1, RGB(0, 0, 0)));
+                ScopedHBRUSH hbrushArrow(CreateSolidBrush(RGB(rArrowFillColor.GetRed(),
+                                                              rArrowFillColor.GetGreen(),
+                                                              rArrowFillColor.GetBlue())));
+                SelectObject(hDC, hpen.get());
+                SelectObject(hDC, hbrushArrow.get());
+                Polygon(hDC, aArrowPoints, ARRAYSIZE(aArrowPoints));
+            }
+            return true;
+        }
+        else if (iPart == SBP_THUMBBTNHORZ || iPart == SBP_THUMBBTNVERT)
+        {
+            Color aScrollBarThumbColor = ThemeColors::GetThemeColors().GetBaseColor();
+            const Color& rBackgroundColor = ThemeColors::GetThemeColors().GetWindowColor();
+
+            if (iState == SCRBS_PRESSED)
+                aScrollBarThumbColor.IncreaseLuminance(60);
+            else if (iState = SCRBS_HOT)
+                aScrollBarThumbColor.IncreaseLuminance(30);
+
+            ScopedHBRUSH hbrush(CreateSolidBrush(RGB(rBackgroundColor.GetRed(),
+                                                     rBackgroundColor.GetGreen(),
+                                                     rBackgroundColor.GetBlue())));
+            FillRect(hDC, &rc, hbrush.get());
+
+            RECT thumb = rc;
+            if (iPart == SBP_THUMBBTNHORZ)
+            {
+                thumb.top += 3;
+                thumb.bottom -= 3;
+            }
+            else
+            {
+                thumb.left += 3;
+                thumb.right -= 3;
+            }
+
+            hbrush = ScopedHBRUSH(CreateSolidBrush(RGB(aScrollBarThumbColor.GetRed(),
+                                                       aScrollBarThumbColor.GetGreen(),
+                                                       aScrollBarThumbColor.GetBlue())));
+            FillRect(hDC, &thumb, hbrush.get());
+            return true;
+        }
+        else if (iPart == SBP_UPPERTRACKHORZ || iPart == SBP_LOWERTRACKHORZ
+                || iPart == SBP_UPPERTRACKVERT || iPart == SBP_LOWERTRACKVERT)
+        {
+            const Color& rWindowColor = ThemeColors::GetThemeColors().GetWindowColor();
+            ScopedHBRUSH hbrush(CreateSolidBrush(RGB(rWindowColor.GetRed(),
+                                                     rWindowColor.GetGreen(),
+                                                     rWindowColor.GetBlue())));
+            FillRect(hDC, &rc, hbrush.get());
+            FrameRect(hDC, &rc, hbrush.get());
+            return true;
+        }
+    }
+    else if (nType == ControlType::Pushbutton)
+    {
+        if (iPart == BP_PUSHBUTTON)
+        {
+            Color aButtonColor = ThemeColors::GetThemeColors().GetButtonColor();
+            const Color& rButtonRectColor = ThemeColors::GetThemeColors().GetDisabledColor();
+
+            if (iState == PBS_PRESSED)
+                aButtonColor.Merge(rButtonRectColor, 230);
+            else if (iState == PBS_DISABLED)
+                aButtonColor = ThemeColors::GetThemeColors().GetDisabledColor();
+            else if (iState == PBS_HOT)
+                aButtonColor.Merge(rButtonRectColor, 170);
+            else if (iState == PBS_DEFAULTED)
+                aButtonColor.Merge(rButtonRectColor, 150);
+
+            ScopedHBRUSH hbrush(CreateSolidBrush(RGB(aButtonColor.GetRed(),
+                                                     aButtonColor.GetGreen(),
+                                                     aButtonColor.GetBlue())));
+            FillRect(hDC, &rc, hbrush.get());
+
+            hbrush = ScopedHBRUSH(CreateSolidBrush(RGB(rButtonRectColor.GetRed(),
+                                                       rButtonRectColor.GetGreen(),
+                                                       rButtonRectColor.GetBlue())));
+            FrameRect(hDC, &rc, hbrush.get());
+            return true;
+        }
+    }
+    else if (nType == ControlType::Editbox)
+    {
+        if (iPart == EP_EDITBORDER_NOSCROLL)
+        {
+            const Color& rColor = ThemeColors::GetThemeColors().GetSeparatorColor();
+            ScopedHBRUSH hbrush(CreateSolidBrush(RGB(rColor.GetRed(),
+                                                     rColor.GetGreen(),
+                                                     rColor.GetBlue())));
+            FrameRect(hDC, &rc, hbrush.get());
+            return true;
+        }
+    }
+    else if (nType == ControlType::Toolbar)
+    {
+        if (iPart == TP_BUTTON)
+        {
+            Color aButtonColor = ThemeColors::GetThemeColors().GetAccentColor();
+            const Color& rWindowColor = ThemeColors::GetThemeColors().GetWindowColor();
+            Color aFrameOutline = aButtonColor;
+
+            if (iState == TS_PRESSED)
+                aButtonColor.Merge(rWindowColor, 100);
+            else if (iState == TS_HOTCHECKED || iState == TS_HOT)
+                aButtonColor.Merge(rWindowColor, 60);
+            else if (iState == TS_CHECKED || iState == TS_NORMAL)
+                aButtonColor.Merge(rWindowColor, 100);
+
+            ScopedHBRUSH hbrush(CreateSolidBrush(RGB(aButtonColor.GetRed(),
+                                                     aButtonColor.GetGreen(),
+                                                     aButtonColor.GetBlue())));
+            FillRect(hDC, &rc, hbrush.get());
+
+            hbrush = ScopedHBRUSH(CreateSolidBrush(RGB(aFrameOutline.GetRed(),
+                                                       aFrameOutline.GetGreen(),
+                                                       aFrameOutline.GetBlue())));
+            FrameRect(hDC, &rc, hbrush.get());
+            return true;
+        }
+    }
+    else if (nType == ControlType::MenuPopup)
+    {
+        if (iPart == MENU_POPUPBACKGROUND)
+        {
+            Color aColor(ThemeColors::GetThemeColors().GetMenuColor());
+            ScopedHBRUSH hbrush(CreateSolidBrush(RGB(aColor.GetRed(),
+                                                     aColor.GetGreen(),
+                                                     aColor.GetBlue())));
+            FillRect(hDC, &rc, hbrush.get());
+
+            aColor = ThemeColors::GetThemeColors().GetMenuBorderColor();
+            hbrush = ScopedHBRUSH(CreateSolidBrush( RGB(aColor.GetRed(),
+                                                        aColor.GetGreen(),
+                                                        aColor.GetBlue())));
+            FrameRect(hDC, &rc, hbrush.get());
+            return true;
+        }
+        else if (iPart == MENU_POPUPITEM)
+        {
+            Color aBackgroundColor;
+            if (iState == MPI_HOT || iState == MPI_NORMAL)
+                aBackgroundColor = ThemeColors::GetThemeColors().GetMenuHighlightColor();
+            else if (iState == MPI_DISABLEDHOT || MPI_DISABLED)
+                aBackgroundColor = ThemeColors::GetThemeColors().GetDisabledColor();
+
+            ScopedHBRUSH hbrush(CreateSolidBrush(RGB(aBackgroundColor.GetRed(),
+                                                     aBackgroundColor.GetGreen(),
+                                                     aBackgroundColor.GetBlue())));
+            FillRect(hDC, &rc, hbrush.get());
+            return true;
+        }
+    }
+    return false;
+}
+
 static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                             ControlType nType,
                             ControlPart nPart,
@@ -457,6 +663,7 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         if( nPart == ControlPart::Entire )
             nType = ControlType::Editbox;
 
+    bool bThemeLoaded = ThemeColors::IsThemeLoaded();
     int iPart(0), iState(0);
     if( nType == ControlType::Scrollbar )
     {
@@ -472,6 +679,10 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                 iState = ABS_UPHOT;
             else
                 iState = ABS_UPNORMAL;
+
+            if (bThemeLoaded)
+                return drawThemedControl(hDC, nType, iPart, iState, rc);
+
             hr = DrawThemeBackground( hTheme, hDC, iPart, iState, &rc, nullptr);
             return (hr == S_OK);
         }
@@ -486,6 +697,10 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                 iState = ABS_DOWNHOT;
             else
                 iState = ABS_DOWNNORMAL;
+
+            if (bThemeLoaded)
+                return drawThemedControl(hDC, nType, iPart, iState, rc);
+
             hr = DrawThemeBackground( hTheme, hDC, iPart, iState, &rc, nullptr);
             return (hr == S_OK);
         }
@@ -500,6 +715,10 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                 iState = ABS_LEFTHOT;
             else
                 iState = ABS_LEFTNORMAL;
+
+            if (bThemeLoaded)
+                return drawThemedControl(hDC, nType, iPart, iState, rc);
+
             hr = DrawThemeBackground( hTheme, hDC, iPart, iState, &rc, nullptr);
             return (hr == S_OK);
         }
@@ -514,6 +733,10 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                 iState = ABS_RIGHTHOT;
             else
                 iState = ABS_RIGHTNORMAL;
+
+            if (bThemeLoaded)
+                return drawThemedControl(hDC, nType, iPart, iState, rc);
+
             hr = DrawThemeBackground( hTheme, hDC, iPart, iState, &rc, nullptr);
             return (hr == S_OK);
         }
@@ -533,6 +756,9 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             GetThemePartSize(hTheme, hDC, iPart, iState, nullptr, TS_MIN, &sz);
             GetThemePartSize(hTheme, hDC, iPart, iState, nullptr, TS_TRUE, &sz);
             GetThemePartSize(hTheme, hDC, iPart, iState, nullptr, TS_DRAW, &sz);
+
+            if (bThemeLoaded)
+                return drawThemedControl(hDC, nType, iPart, iState, rc);
 
             hr = DrawThemeBackground( hTheme, hDC, iPart, iState, &rc, nullptr);
             // paint gripper on thumb if enough space
@@ -564,6 +790,10 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                 iState = SCRBS_HOT;
             else
                 iState = SCRBS_NORMAL;
+
+            if (bThemeLoaded)
+                return drawThemedControl(hDC, nType, iPart, iState, rc);
+
             hr = DrawThemeBackground( hTheme, hDC, iPart, iState, &rc, nullptr);
             return (hr == S_OK);
         }
@@ -692,6 +922,9 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         else
             iState = PBS_NORMAL;
 
+        if (bThemeLoaded)
+            return drawThemedControl(hDC, nType, iPart, iState, rc);
+
         return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
     }
 
@@ -755,6 +988,9 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         else
             iState = EPSN_NORMAL;
 
+        if (bThemeLoaded)
+            return drawThemedControl(hDC, nType, iPart, iState, rc);
+
         return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
     }
 
@@ -786,7 +1022,7 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
     {
         // tabpane in tabcontrols gets drawn in "darkmode" as if it was a
         // a "light" theme, so bodge this by drawing a frame directly
-        if (bUseDarkMode)
+        if (bThemeLoaded || bUseDarkMode)
         {
             Color aColor(Application::GetSettings().GetStyleSettings().GetDisableColor());
             ScopedHBRUSH hbrush(CreateSolidBrush(RGB(aColor.GetRed(),
@@ -802,7 +1038,7 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
     if( nType == ControlType::TabBody )
     {
         // tabbody in main window gets drawn in white in "darkmode", so bodge this here
-        if (bUseDarkMode)
+        if (bThemeLoaded || bUseDarkMode)
         {
             Color aColor(Application::GetSettings().GetStyleSettings().GetWindowColor());
             ScopedHBRUSH hbrush(CreateSolidBrush(RGB(aColor.GetRed(),
@@ -862,7 +1098,7 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
 
         // tabitem in tabcontrols gets drawn in "darkmode" as if it was a
         // a "light" theme, so bodge this by drawing with a button instead
-        if (bUseDarkMode)
+        if (bThemeLoaded || bUseDarkMode)
         {
             Color aColor;
             if (iState == TILES_SELECTED)
@@ -912,6 +1148,9 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             else
                 iState = bChecked ? TS_CHECKED : TS_NORMAL;
 
+            if (bThemeLoaded)
+                return drawThemedControl(hDC, nType, iPart, iState, rc);
+
             if (bUseDarkMode && (bChecked || (nState & (ControlState::PRESSED) || (nState & ControlState::ROLLOVER))))
             {
                 const WinOSVersionInfo aVersion = WinSalInstance::getWinOSVersionInfo();
@@ -954,7 +1193,7 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             }
 
             // toolbar in main window gets drawn in white in "darkmode", so bodge this here
-            if (bUseDarkMode)
+            if (bThemeLoaded || bUseDarkMode)
             {
                 Color aColor(Application::GetSettings().GetStyleSettings().GetWindowColor());
                 ScopedHBRUSH hbrush(CreateSolidBrush(RGB(aColor.GetRed(),
@@ -986,9 +1225,12 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                 rc.bottom += pValue->maTopDockingAreaHeight;    // extend potential gradient to cover docking area as well
 
                 // menubar in main window gets drawn in white in "darkmode", so bodge this here
-                if (bUseDarkMode)
+                if (bThemeLoaded || bUseDarkMode)
                 {
-                    Color aColor(Application::GetSettings().GetStyleSettings().GetWindowColor());
+                    Color aColor
+                        = bThemeLoaded
+                              ? ThemeColors::GetThemeColors().GetMenuBarColor()
+                              : Application::GetSettings().GetStyleSettings().GetWindowColor();
                     ScopedHBRUSH hbrush(CreateSolidBrush(RGB(aColor.GetRed(),
                                                              aColor.GetGreen(),
                                                              aColor.GetBlue())));
@@ -1017,13 +1259,18 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                 else
                     iState = MBI_NORMAL;
 
-                if(GetSalData()->mbThemeMenuSupport && Application::GetSettings().GetStyleSettings().GetHighContrastMode()
-                    && ( nState & (ControlState::SELECTED | nState & ControlState::ROLLOVER )))
+                if (bThemeLoaded
+                    || (GetSalData()->mbThemeMenuSupport
+                        && Application::GetSettings().GetStyleSettings().GetHighContrastMode()
+                        && (nState & (ControlState::SELECTED | nState & ControlState::ROLLOVER))))
                 {
-                    Color aColor(Application::GetSettings().GetStyleSettings().GetHighlightColor());
+                    Color aColor = bThemeLoaded
+                              ? ThemeColors::GetThemeColors().GetMenuBarHighlightColor()
+                              : Application::GetSettings().GetStyleSettings().GetHighlightColor();
+
                     ScopedHBRUSH hbrush(CreateSolidBrush(RGB(aColor.GetRed(),
-                        aColor.GetGreen(),
-                        aColor.GetBlue())));
+                                                             aColor.GetGreen(),
+                                                             aColor.GetBlue())));
                     FillRect(hDC, &rc, hbrush.get());
                     return true;
                 }
@@ -1161,6 +1408,10 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                     aGutterRC.left += aValue.getNumericVal();
                     aGutterRC.right = aGutterRC.left+3;
                 }
+
+                if (bThemeLoaded)
+                    return drawThemedControl(hDC, nType, MENU_POPUPBACKGROUND, iState, rc);
+
                 return
                 ImplDrawTheme( hTheme, hDC, MENU_POPUPBACKGROUND, 0, rc, aCaption ) &&
                 ImplDrawTheme( hTheme, hDC, MENU_POPUPGUTTER, 0, aGutterRC, aCaption )
@@ -1172,6 +1423,10 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                     iState = (nState & ControlState::SELECTED) ? MPI_HOT : MPI_NORMAL;
                 else
                     iState = (nState & ControlState::SELECTED) ? MPI_DISABLEDHOT : MPI_DISABLED;
+
+                if (bThemeLoaded)
+                    return drawThemedControl(hDC, nType, MENU_POPUPITEM, iState, rc);
+
                 return ImplDrawTheme( hTheme, hDC, MENU_POPUPITEM, iState, rc, aCaption );
             }
             else if( nPart == ControlPart::MenuItemCheckMark || nPart == ControlPart::MenuItemRadioMark )
@@ -1642,11 +1897,17 @@ void WinSalGraphics::updateSettingsNative( AllSettings& rSettings )
     Color aMenuBarTextColor = aStyleSettings.GetPersonaMenuBarTextColor().value_or( aStyleSettings.GetMenuTextColor() );
     // in aero menuitem highlight text is drawn in the same color as normal
     // high contrast highlight color is not related to persona and not apply blur or transparency
-    if( !aStyleSettings.GetHighContrastMode() )
+    bool bThemeLoaded = ThemeColors::IsThemeLoaded();
+    if( bThemeLoaded || !aStyleSettings.GetHighContrastMode() )
     {
-        aStyleSettings.SetMenuHighlightTextColor( aStyleSettings.GetMenuTextColor() );
-        aStyleSettings.SetMenuBarRolloverTextColor( aMenuBarTextColor );
-        aStyleSettings.SetMenuBarHighlightTextColor( aMenuBarTextColor );
+        const ThemeColors& rThemeColors = ThemeColors::GetThemeColors();
+        aStyleSettings.SetMenuHighlightTextColor(bThemeLoaded
+                                                     ? rThemeColors.GetMenuHighlightTextColor()
+                                                     : aStyleSettings.GetMenuTextColor());
+        aStyleSettings.SetMenuBarRolloverTextColor(
+            bThemeLoaded ? rThemeColors.GetMenuBarHighlightTextColor() : aMenuBarTextColor);
+        aStyleSettings.SetMenuBarHighlightTextColor(
+            bThemeLoaded ? rThemeColors.GetMenuBarHighlightTextColor() : aMenuBarTextColor);
     }
 
     pSVData->maNWFData.mnMenuFormatBorderX = 2;

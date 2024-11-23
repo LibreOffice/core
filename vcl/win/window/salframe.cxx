@@ -23,6 +23,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/uno/DeploymentException.hpp>
+#include <IconThemeSelector.hxx>
 
 #include <officecfg/Office/Common.hxx>
 
@@ -51,6 +52,7 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/themecolors.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
@@ -2610,6 +2612,72 @@ static tools::Long ImplW2I( const wchar_t* pStr )
     return n;
 }
 
+static void lcl_LoadColorsFromTheme(StyleSettings& rStyleSet)
+{
+    const ThemeColors& rThemeColors = ThemeColors::GetThemeColors();
+
+    rStyleSet.SetWindowColor(rThemeColors.GetWindowColor());
+    rStyleSet.BatchSetBackgrounds(rThemeColors.GetWindowColor());
+
+    rStyleSet.SetActiveTabColor(rThemeColors.GetWindowColor());
+    rStyleSet.SetInactiveTabColor(rThemeColors.GetBaseColor());
+    rStyleSet.SetDisableColor(rThemeColors.GetDisabledColor()); // tab outline
+
+    // Highlight related colors
+    rStyleSet.SetAccentColor(rThemeColors.GetAccentColor());
+    rStyleSet.SetHighlightColor(rThemeColors.GetAccentColor());
+
+    rStyleSet.SetListBoxWindowHighlightColor(rThemeColors.GetAccentColor());
+    rStyleSet.SetListBoxWindowTextColor(rThemeColors.GetWindowTextColor());
+    rStyleSet.SetListBoxWindowBackgroundColor(rThemeColors.GetBaseColor());
+    rStyleSet.SetListBoxWindowHighlightTextColor(rThemeColors.GetMenuHighlightTextColor());
+    rStyleSet.SetWindowTextColor(rThemeColors.GetWindowTextColor()); // Treeview Lists
+
+    rStyleSet.SetRadioCheckTextColor(rThemeColors.GetWindowTextColor());
+    rStyleSet.SetLabelTextColor(rThemeColors.GetWindowTextColor());
+    rStyleSet.SetFieldTextColor(rThemeColors.GetWindowTextColor());
+    rStyleSet.SetTabTextColor(rThemeColors.GetWindowTextColor());
+    rStyleSet.SetFieldColor(rThemeColors.GetBaseColor());
+    rStyleSet.SetMenuBarTextColor(rThemeColors.GetMenuBarTextColor());
+    rStyleSet.SetMenuTextColor(rThemeColors.GetMenuTextColor());
+
+    rStyleSet.SetDefaultActionButtonTextColor(rThemeColors.GetButtonTextColor());
+    rStyleSet.SetActionButtonTextColor(rThemeColors.GetButtonTextColor());
+    rStyleSet.SetShadowColor(rThemeColors.GetShadeColor());
+
+    rStyleSet.SetDefaultButtonTextColor(rThemeColors.GetButtonTextColor());
+    rStyleSet.SetDefaultButtonRolloverTextColor(rThemeColors.GetButtonTextColor());
+    rStyleSet.SetDefaultButtonPressedRolloverTextColor(rThemeColors.GetButtonTextColor());
+
+    rStyleSet.SetFlatButtonTextColor(rThemeColors.GetButtonTextColor());
+    rStyleSet.SetFlatButtonPressedRolloverTextColor(rThemeColors.GetButtonTextColor());
+    rStyleSet.SetFlatButtonRolloverTextColor(rThemeColors.GetButtonTextColor());
+
+    rStyleSet.SetButtonRolloverTextColor(rThemeColors.GetButtonTextColor());
+    rStyleSet.SetDefaultActionButtonRolloverTextColor(rThemeColors.GetButtonTextColor());
+    rStyleSet.SetDefaultActionButtonPressedRolloverTextColor(rThemeColors.GetButtonTextColor());
+    rStyleSet.SetActionButtonRolloverTextColor(rThemeColors.GetButtonTextColor());
+    rStyleSet.SetActionButtonPressedRolloverTextColor(rThemeColors.GetButtonTextColor());
+    rStyleSet.SetFieldRolloverTextColor(rThemeColors.GetButtonTextColor());
+
+    rStyleSet.SetButtonRolloverTextColor(rThemeColors.GetButtonTextColor());
+    rStyleSet.SetButtonPressedRolloverTextColor(rThemeColors.GetButtonTextColor());
+    rStyleSet.SetHelpColor(rThemeColors.GetWindowColor());
+    rStyleSet.SetHelpTextColor(rThemeColors.GetWindowTextColor());
+
+    // rStyleSet.SetHighlightTextColor(aThemeColors.GetActiveTextColor());
+    // rStyleSet.SetActiveColor(aThemeColors.GetActiveColor());
+    rStyleSet.SetActiveTextColor(rThemeColors.GetWindowTextColor());
+
+    // rStyleSet.SetLinkColor(aThemeColors.GetAccentColor());
+    // Color aVisitedLinkColor = aThemeColors.GetActiveColor();
+    // aVisitedLinkColor.Merge(aThemeColors.GetWindowColor(), 100);
+    // rStyleSet.SetVisitedLinkColor(aVisitedLinkColor);
+    // rStyleSet.SetToolTextColor(Color(255, 0, 0));
+
+    rStyleSet.SetTabRolloverTextColor(rThemeColors.GetMenuBarHighlightTextColor());
+}
+
 void WinSalFrame::UpdateSettings( AllSettings& rSettings )
 {
     MouseSettings aMouseSettings = rSettings.GetMouseSettings();
@@ -2690,9 +2758,16 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     }
 
     const bool bUseDarkMode(UseDarkMode());
-
-    OUString sThemeName(!bUseDarkMode ? u"colibre" : u"colibre_dark");
-    aStyleSettings.SetPreferredIconTheme(sThemeName, bUseDarkMode);
+    if (!ThemeColors::IsThemeLoaded())
+    {
+        OUString sThemeName(!bUseDarkMode ? u"colibre" : u"colibre_dark");
+        aStyleSettings.SetPreferredIconTheme(sThemeName, bUseDarkMode);
+    }
+    else
+    {
+        aStyleSettings.SetPreferredIconTheme(vcl::IconThemeSelector::GetIconThemeForDesktopEnvironment(
+            Application::GetDesktopEnvironment(), ThemeColors::GetThemeColors().GetWindowColor().IsDark()));
+    }
 
     if (bUseDarkMode)
     {
@@ -2929,6 +3004,11 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
             }
         }
     }
+
+    // otherwise, menu shows up as white in dark mode
+    aStyleSettings.SetMenuColor(aStyleSettings.GetWindowColor());
+    if (ThemeColors::IsThemeLoaded())
+        lcl_LoadColorsFromTheme(aStyleSettings);
 
     rSettings.SetMouseSettings( aMouseSettings );
     rSettings.SetStyleSettings( aStyleSettings );
