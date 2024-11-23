@@ -119,6 +119,8 @@ private:
         static OUString makeLowerCase(const OUString&, CharClass const *);
         static OUString makeUpperCase(const OUString&, CharClass const *);
         static OUString makeInitCap(const OUString&, CharClass const *);
+
+    void ensureLocales();
 };
 
 #endif
