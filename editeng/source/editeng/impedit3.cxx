@@ -1106,7 +1106,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY, bool bI
 
                         short nAllSpaceBeforeText = short(rLRItem.ResolveTextLeft({}));
                         aCurrentTab.aTabStop = pNode->GetContentAttribs().FindTabStop( nCurPos - nAllSpaceBeforeText , maEditDoc.GetDefTab() );
-                        aCurrentTab.nTabPos = tools::Long(aCurrentTab.aTabStop.GetTabPos() + nAllSpaceBeforeText);
+                        aCurrentTab.nTabPos = tools::Long(aCurrentTab.aTabStop.GetTabPos()) + nAllSpaceBeforeText;
                         aCurrentTab.bValid = false;
 
                         // Switch direction in R2L para...
