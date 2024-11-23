@@ -260,8 +260,6 @@ class Window;
 
 #define SC_DOC_NEW          0xFFFF
 
-#define SC_MACROCALL_ALLOWED        0
-
 #define SC_ASIANKERNING_INVALID         0xff
 
 enum ScDocumentMode
