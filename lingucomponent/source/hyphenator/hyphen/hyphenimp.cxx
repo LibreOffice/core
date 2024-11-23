@@ -273,6 +273,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
 
     Reference< XHyphenatedWord > xRes;
 
+    ensureLocales();
     int k = -1;
     for (size_t j = 0; j < mvDicts.size(); ++j)
     {
@@ -660,7 +661,6 @@ Reference < XHyphenatedWord > SAL_CALL Hyphenator::queryAlternativeSpelling(
         sal_Int16 nIndex,
         const css::uno::Sequence< css::beans::PropertyValue >& aProperties )
 {
-    ensureLocales();
     // Firstly we allow only one plus character before the hyphen to avoid to miss the right break point:
     for (int extrachar = 1; extrachar <= 2; extrachar++)
     {
