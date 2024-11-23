@@ -23,9 +23,6 @@
 #include <svl/poolitem.hxx>
 #include <svx/svxdllapi.h>
 
-#define GRFCROP_VERSION_SWDEFAULT       0
-#define GRFCROP_VERSION_MOVETOSVX       1
-
 class SVXCORE_DLLPUBLIC SvxGrfCrop : public SfxPoolItem
 {
     sal_Int32   m_nLeft, m_nRight, m_nTop, m_nBottom;
