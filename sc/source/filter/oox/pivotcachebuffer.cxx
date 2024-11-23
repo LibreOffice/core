@@ -1062,7 +1062,7 @@ sal_Int32 PivotCache::getCacheDatabaseIndex( sal_Int32 nFieldIdx ) const
 
 void PivotCache::writeSourceHeaderCells( const WorksheetHelper& rSheetHelper ) const
 {
-    OSL_ENSURE( static_cast< size_t >( maSheetSrcModel.maRange.aEnd.Col() - maSheetSrcModel.maRange.aStart.Col() + 1 ) == maDatabaseFields.size(),
+    OSL_ENSURE( static_cast< size_t >( maSheetSrcModel.maRange.aEnd.Col()) - maSheetSrcModel.maRange.aStart.Col() + 1 == maDatabaseFields.size(),
         "PivotCache::writeSourceHeaderCells - source cell range width does not match number of source fields" );
     SCCOL nCol = maSheetSrcModel.maRange.aStart.Col();
     SCCOL nMaxCol = getAddressConverter().getMaxApiAddress().Col();
