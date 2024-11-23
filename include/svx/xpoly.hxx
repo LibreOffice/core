@@ -34,9 +34,7 @@ namespace tools {
 }
 class OutputDevice;
 
-#define XPOLYPOLY_APPEND     0xFFFF
 #define XPOLY_APPEND         0xFFFF
-
 
 // Class XPolygon has a point-array and a flag-array, which contains information about a particular point
 
