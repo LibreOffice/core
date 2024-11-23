@@ -43,7 +43,6 @@ public:
     sal_Int32  GetLen() const { return mnLen; }
 };
 
-#define MULTITEXTLINEINFO_RESIZE    16
 
 class ImplMultiTextLineInfo
 {
