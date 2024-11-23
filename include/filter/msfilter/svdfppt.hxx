@@ -175,9 +175,6 @@ enum class TSS_Type : unsigned {
 
 const int nMaxPPTLevels = 10;
 
-// Object IDs for StarDraw UserData
-#define PPT_OBJECTINFO_ID       (1)
-
 struct MSFILTER_DLLPUBLIC PptDocumentAtom
 {
     Size            aSlidesPageSize;                    // page size of the slides in 576DPI
