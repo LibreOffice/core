@@ -1627,18 +1627,6 @@ AbsoluteScreenPixelRectangle SalInstanceWindow::get_monitor_workarea() const
     return m_xWindow->GetDesktopRectPixel();
 }
 
-void SalInstanceWindow::set_centered_on_parent(bool /*bTrackGeometryRequests*/)
-{
-    if (vcl::Window* pParent = m_xWidget->GetParent())
-    {
-        Size aParentGeometry(pParent->GetSizePixel());
-        Size aGeometry(m_xWidget->get_preferred_size());
-        auto nX = (aParentGeometry.Width() - aGeometry.Width()) / 2;
-        auto nY = (aParentGeometry.Height() - aGeometry.Height()) / 2;
-        m_xWidget->SetPosPixel(Point(nX, nY));
-    }
-}
-
 bool SalInstanceWindow::get_resizable() const { return m_xWindow->GetStyle() & WB_SIZEABLE; }
 
 bool SalInstanceWindow::has_toplevel_focus() const { return m_xWindow->HasChildPathFocus(); }
@@ -1935,6 +1923,18 @@ void SalInstanceDialog::set_modal(bool bModal)
 }
 
 bool SalInstanceDialog::get_modal() const { return m_xDialog->IsModalInputMode(); }
+
+void SalInstanceDialog::set_centered_on_parent(bool /*bTrackGeometryRequests*/)
+{
+    if (vcl::Window* pParent = m_xWidget->GetParent())
+    {
+        Size aParentGeometry(pParent->GetSizePixel());
+        Size aGeometry(m_xWidget->get_preferred_size());
+        auto nX = (aParentGeometry.Width() - aGeometry.Width()) / 2;
+        auto nY = (aParentGeometry.Height() - aGeometry.Height()) / 2;
+        m_xWidget->SetPosPixel(Point(nX, nY));
+    }
+}
 
 void SalInstanceDialog::set_default_response(int nResponse)
 {

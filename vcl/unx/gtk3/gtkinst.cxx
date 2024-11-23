@@ -6421,18 +6421,6 @@ public:
         return ::get_monitor_workarea(GTK_WIDGET(m_pWindow));
     }
 
-    virtual void set_centered_on_parent(bool bTrackGeometryRequests) override
-    {
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        if (bTrackGeometryRequests)
-            gtk_window_set_position(m_pWindow, GTK_WIN_POS_CENTER_ALWAYS);
-        else
-            gtk_window_set_position(m_pWindow, GTK_WIN_POS_CENTER_ON_PARENT);
-#else
-        (void)bTrackGeometryRequests;
-#endif
-    }
-
     virtual bool get_resizable() const override
     {
         return gtk_window_get_resizable(m_pWindow);
@@ -7161,6 +7149,18 @@ public:
     virtual bool get_modal() const override
     {
         return gtk_window_get_modal(m_pDialog);
+    }
+
+    virtual void set_centered_on_parent(bool bTrackGeometryRequests) override
+    {
+#if !GTK_CHECK_VERSION(4, 0, 0)
+        if (bTrackGeometryRequests)
+            gtk_window_set_position(m_pDialog, GTK_WIN_POS_CENTER_ALWAYS);
+        else
+            gtk_window_set_position(m_pDialog, GTK_WIN_POS_CENTER_ON_PARENT);
+#else
+        (void)bTrackGeometryRequests;
+#endif
     }
 
     virtual void response(int nResponse) override;

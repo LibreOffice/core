@@ -80,8 +80,6 @@ AbsoluteScreenPixelRectangle QtInstanceWindow::get_monitor_workarea() const
     return AbsoluteScreenPixelRectangle();
 }
 
-void QtInstanceWindow::set_centered_on_parent(bool) { assert(false && "Not implemented yet"); }
-
 bool QtInstanceWindow::has_toplevel_focus() const
 {
     SolarMutexGuard g;

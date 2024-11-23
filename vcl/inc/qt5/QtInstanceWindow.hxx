@@ -25,7 +25,6 @@ public:
     virtual Size get_size() const override;
     virtual Point get_position() const override;
     virtual AbsoluteScreenPixelRectangle get_monitor_workarea() const override;
-    virtual void set_centered_on_parent(bool) override;
 
     virtual bool has_toplevel_focus() const override;
     virtual void present() override;

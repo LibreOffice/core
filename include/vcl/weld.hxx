@@ -543,17 +543,7 @@ public:
     virtual Size get_size() const = 0;
     virtual Point get_position() const = 0;
     virtual AbsoluteScreenPixelRectangle get_monitor_workarea() const = 0;
-    // center window on is parent
-    //
-    // bTrackGeometryRequests set to true tries to ensure the window will end
-    // up still centered on its parent windows final size, taking into account
-    // that there may currently be pending geometry requests for the parent not
-    // yet processed by the underlying toolkit
-    //
-    // for e.g gtk this will means the window is always centered even when
-    // resized, calling set_centered_on_parent with false will turn this
-    // off again.
-    virtual void set_centered_on_parent(bool bTrackGeometryRequests) = 0;
+
     // returns whether the widget that has focus is within this Window
     // (its very possible to move this to weld::Container if that becomes
     // desirable)
@@ -617,6 +607,19 @@ private:
 public:
     virtual void set_modal(bool bModal) = 0;
     virtual bool get_modal() const = 0;
+
+    // center dialog on its parent
+    //
+    // bTrackGeometryRequests set to true tries to ensure the dialog will end
+    // up still centered on its parent windows final size, taking into account
+    // that there may currently be pending geometry requests for the parent not
+    // yet processed by the underlying toolkit
+    //
+    // for e.g gtk this will means the dialog is always centered even when
+    // resized, calling set_centered_on_parent with false will turn this
+    // off again.
+    virtual void set_centered_on_parent(bool bTrackGeometryRequests) = 0;
+
     virtual int run() = 0;
     // Run async without a controller
     // @param self - must point to this, to enforce that the dialog was created/held by a shared_ptr

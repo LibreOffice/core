@@ -483,8 +483,6 @@ public:
 
     virtual AbsoluteScreenPixelRectangle get_monitor_workarea() const override;
 
-    virtual void set_centered_on_parent(bool /*bTrackGeometryRequests*/) override;
-
     virtual bool get_resizable() const override;
 
     virtual bool has_toplevel_focus() const override;
@@ -550,6 +548,8 @@ public:
     virtual void set_modal(bool bModal) override;
 
     virtual bool get_modal() const override;
+
+    virtual void set_centered_on_parent(bool /*bTrackGeometryRequests*/) override;
 
     virtual weld::Button* weld_widget_for_response(int nResponse) override;
 

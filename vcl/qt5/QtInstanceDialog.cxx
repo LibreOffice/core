@@ -139,6 +139,11 @@ bool QtInstanceDialog::get_modal() const
     return m_pDialog->isModal();
 }
 
+void QtInstanceDialog::set_centered_on_parent(bool)
+{
+    // QDialog is centered on parent toplevel by default
+}
+
 weld::Button* QtInstanceDialog::weld_widget_for_response(int)
 {
     assert(false && "Not implemented yet");
