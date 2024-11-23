@@ -35,8 +35,6 @@
 using namespace ::com::sun::star;
 class SubsetMap;
 
-#define CHARMAP_MAXLEN 32
-
 namespace svx
 {
 struct SvxShowCharSetItem;
