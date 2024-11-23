@@ -36,11 +36,6 @@
 #define RTL_MEMORY_ALIGNMENT_8 sizeof(void*)
 #endif /* SAL_TYPES_ALIGNMENT8 */
 
-#if 0  /* @@@ */
-#define RTL_MEMORY_ALIGNMENT_1 8
-#define RTL_MEMORY_ALIGNMENT_2 (sizeof(void*) * 2)
-#endif /* @@@ */
-
 #define RTL_MEMORY_ALIGN(value, align) (((value) + ((align) - 1)) & ~((align) - 1))
 
 #define RTL_MEMORY_ISP2(value) (((value) & ((value) - 1)) == 0)
@@ -207,11 +202,6 @@ typedef CRITICAL_SECTION rtl_memory_lock_type;
 #else
 #error Unknown platform
 #endif /* SAL_UNX | _WIN32 */
-
-/** Cache creation flags.
-    @internal
-*/
-#define RTL_CACHE_FLAG_NOMAGAZINE   (1 << 13) /* w/o magazine layer */
 
 #endif // INCLUDED_SAL_RTL_ALLOC_IMPL_HXX
 
