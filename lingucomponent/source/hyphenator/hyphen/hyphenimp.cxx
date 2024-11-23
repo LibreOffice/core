@@ -785,7 +785,8 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
 
         sal_Int32 nHyphCount = 0;
 
-        for ( sal_Int32 i = 0; i < encWord.getLength(); i++)
+        // FIXME: shouldn't we iterate code points instead?
+        for (sal_Int32 i = 0; i < nWord.getLength(); i++)
         {
             if (hyphens[i]&1)
                 nHyphCount++;
