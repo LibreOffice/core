@@ -1375,6 +1375,48 @@ void SwTOXBaseSection::UpdateMarks(const SwTOXInternational& rIntl,
     }
 }
 
+static SwContentFrame* useContentNodeForIndex(const SwContentNode* node, bool fromChapter,
+                                              const SwTextNode* chapter, const SwRootFrame* layout)
+{
+    if (!node)
+        return nullptr;
+    if (!node->HasWriterListeners())
+        return nullptr;
+    if (!node->GetNodes().IsDocNodes())
+        return nullptr;
+    if (layout && layout->HasMergedParas() && node->GetRedlineMergeFlag() == SwNode::Merge::Hidden)
+        return nullptr;
+    auto pFrame = node->getLayoutFrame(layout);
+    if (!pFrame)
+        return nullptr;
+    if (fromChapter && !IsHeadingContained(chapter, *node))
+        return nullptr;
+    if (pFrame->IsHiddenNow())
+        return nullptr;
+
+    return pFrame;
+}
+
+static bool useTextNodeForIndex(const SwTextNode* node, int maxLevel, bool fromChapter,
+                                const SwTextNode* chapter, const SwRootFrame* layout)
+{
+    auto pTextFrame = static_cast<const SwTextFrame*>(useContentNodeForIndex(node, fromChapter, chapter, layout));
+    if (!pTextFrame)
+        return false;
+    if (node->Len() == 0)
+        return false;
+    if (maxLevel >= 0 && node->GetAttrOutlineLevel() > maxLevel)
+        return false;
+    if (node->IsHiddenByParaField())
+        return false;
+    if (node->HasHiddenCharAttribute(true))
+        return false;
+    if (layout && layout->HasMergedParas() && pTextFrame->GetTextNodeForParaProps() != node)
+        return false;
+
+    return true;
+}
+
 /// Generate table of contents from outline
 void SwTOXBaseSection::UpdateOutline( const SwTextNode* pOwnChapterNode,
         SwRootFrame const*const pLayout)
@@ -1387,14 +1429,7 @@ void SwTOXBaseSection::UpdateOutline( const SwTextNode* pOwnChapterNode,
     {
         ::SetProgressState( 0, pDoc->GetDocShell() );
         SwTextNode* pTextNd = pOutlineNode->GetTextNode();
-        if( pTextNd && pTextNd->Len() && pTextNd->HasWriterListeners() &&
-            o3tl::make_unsigned( pTextNd->GetAttrOutlineLevel()) <= GetLevel() &&
-            pTextNd->getLayoutFrame(pLayout) &&
-           !pTextNd->IsHiddenByParaField() &&
-           !pTextNd->HasHiddenCharAttribute( true ) &&
-           (!pLayout || !pLayout->HasMergedParas()
-                || static_cast<SwTextFrame*>(pTextNd->getLayoutFrame(pLayout))->GetTextNodeForParaProps() == pTextNd) &&
-            ( !IsFromChapter() || IsHeadingContained(pOwnChapterNode, *pTextNd) ))
+        if (useTextNodeForIndex(pTextNd, GetLevel(), IsFromChapter(), pOwnChapterNode, pLayout))
         {
             InsertSorted(MakeSwTOXSortTabBase<SwTOXPara>(pLayout, *pTextNd, SwTOXElement::OutlineLevel));
         }
@@ -1405,6 +1440,7 @@ void SwTOXBaseSection::UpdateOutline( const SwTextNode* pOwnChapterNode,
 void SwTOXBaseSection::UpdateTemplate(const SwTextNode* pOwnChapterNode,
         SwRootFrame const*const pLayout)
 {
+    int nMaxLevel = SwTOXBase::GetType() == TOX_CONTENT ? GetLevel() : -1;
     SwDoc* pDoc = GetFormat()->GetDoc();
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
     {
@@ -1429,15 +1465,7 @@ void SwTOXBaseSection::UpdateTemplate(const SwTextNode* pOwnChapterNode,
             {
                 ::SetProgressState( 0, pDoc->GetDocShell() );
 
-                if (pTextNd->GetText().getLength() &&
-                    pTextNd->getLayoutFrame(pLayout) &&
-                    pTextNd->GetNodes().IsDocNodes() &&
-                    // tdf#40142 - consider level settings of the various text nodes
-                    (TOX_CONTENT != SwTOXBase::GetType() ||
-                     o3tl::make_unsigned(pTextNd->GetAttrOutlineLevel()) <= GetLevel()) &&
-                    (!pLayout || !pLayout->HasMergedParas()
-                        || static_cast<SwTextFrame*>(pTextNd->getLayoutFrame(pLayout))->GetTextNodeForParaProps() == pTextNd) &&
-                    (!IsFromChapter() || IsHeadingContained(pOwnChapterNode, *pTextNd)))
+                if (useTextNodeForIndex(pTextNd, nMaxLevel, IsFromChapter(), pOwnChapterNode, pLayout))
                 {
                     InsertSorted(MakeSwTOXSortTabBase<SwTOXPara>(pLayout, *pTextNd, SwTOXElement::Template, i + 1));
                 }
@@ -1463,9 +1491,7 @@ void SwTOXBaseSection::UpdateSequence(const SwTextNode* pOwnChapterNode,
         SwTextNode& rTextNode = pTextField->GetTextNode();
         ::SetProgressState( 0, pDoc->GetDocShell() );
 
-        if (rTextNode.GetText().getLength() &&
-            rTextNode.getLayoutFrame(pLayout) &&
-            ( !IsFromChapter() || IsHeadingContained(pOwnChapterNode, rTextNode))
+        if (useTextNodeForIndex(&rTextNode, -1, IsFromChapter(), pOwnChapterNode, pLayout)
             && (!pLayout || !pLayout->IsHideRedlines()
                 || !sw::IsFieldDeletedInModel(pDoc->getIDocumentRedlineAccess(), *pTextField)))
         {
@@ -1506,8 +1532,7 @@ void SwTOXBaseSection::UpdateAuthorities(const SwTOXInternational& rIntl,
         const SwTextNode& rTextNode = pFormatField->GetTextField()->GetTextNode();
         ::SetProgressState( 0, pDoc->GetDocShell() );
 
-        if (rTextNode.GetText().getLength() &&
-            rTextNode.getLayoutFrame(pLayout) &&
+        if (useTextNodeForIndex(&rTextNode, -1, false, nullptr, pLayout) &&
             (!pLayout || !pLayout->IsHideRedlines()
                 || !sw::IsFieldDeletedInModel(pDoc->getIDocumentRedlineAccess(), *pTextField)))
         {
@@ -1655,10 +1680,7 @@ void SwTOXBaseSection::UpdateContent( SwTOXElement eMyType,
                 }
             }
 
-            if (pCNd->getLayoutFrame(pLayout)
-                && (!pLayout || !pLayout->HasMergedParas()
-                    || pCNd->GetRedlineMergeFlag() != SwNode::Merge::Hidden)
-                && ( !IsFromChapter() || IsHeadingContained(pOwnChapterNode, *pCNd)))
+            if (useContentNodeForIndex(pCNd, IsFromChapter(), pOwnChapterNode, pLayout))
             {
                 std::unique_ptr<SwTOXPara> pNew( MakeSwTOXSortTabBase<SwTOXPara>(
                         pLayout, *pCNd, eMyType,
@@ -1695,10 +1717,7 @@ void SwTOXBaseSection::UpdateTable(const SwTextNode* pOwnChapterNode,
             while( nullptr != ( pCNd = SwNodes::GoNext( &aContentIdx ) ) &&
                 aContentIdx.GetIndex() < pTableNd->EndOfSectionIndex() )
             {
-                if (pCNd->getLayoutFrame(pLayout)
-                    && (!pLayout || !pLayout->HasMergedParas()
-                        || pCNd->GetRedlineMergeFlag() != SwNode::Merge::Hidden)
-                    && (!IsFromChapter() || IsHeadingContained(pOwnChapterNode, *pCNd)))
+                if (useContentNodeForIndex(pCNd, IsFromChapter(), pOwnChapterNode, pLayout))
                 {
                     std::unique_ptr<SwTOXTable> pNew(new SwTOXTable( *pCNd ));
                     if( IsLevelFromChapter() && TOX_TABLES != SwTOXBase::GetType())

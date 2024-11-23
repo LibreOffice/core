@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:styles>
+  <style:style style:name="CustomTOCStyle" style:family="paragraph" style:class="text"/>
+ </office:styles>
+ <office:body>
+  <office:text>
+   <text:table-of-content>
+    <text:table-of-content-source text:outline-level="1" text:use-index-source-styles="true">
+     <text:index-title-template text:style-name="Contents_20_Heading">Table of Contents</text:index-title-template>
+     <text:table-of-content-entry-template text:outline-level="1" text:style-name="Contents_20_1">
+      <text:index-entry-link-start text:style-name="Index_20_Link"/>
+      <text:index-entry-chapter/>
+      <text:index-entry-text/>
+      <text:index-entry-tab-stop style:type="right" style:leader-char="."/>
+      <text:index-entry-page-number/>
+      <text:index-entry-link-end/>
+     </text:table-of-content-entry-template>
+     <text:index-source-styles text:outline-level="1">
+      <text:index-source-style text:style-name="CustomTOCStyle"/>
+     </text:index-source-styles>
+    </text:table-of-content-source>
+   </text:table-of-content>
+   <text:section text:name="Section Visible">
+    <text:h text:outline-level="1">Section Visible</text:h>
+    <text:p>foo</text:p>
+    <table:table table:name="Table1">
+     <table:table-column/>
+     <table:table-row>
+      <table:table-cell/>
+     </table:table-row>
+    </table:table>
+   </text:section>
+   <text:section text:name="Section Hidden" text:display="none">
+    <text:h text:outline-level="1">Section Hidden</text:h>
+    <text:p>bar</text:p>
+    <text:p/>
+    <text:p>A level-1 <text:toc-mark-start text:id="IMark1" text:outline-level="1"/>entry<text:toc-mark-end text:id="IMark1"/></text:p>
+    <text:p/>
+    <text:p text:style-name="CustomTOCStyle">CustomTOCStyle paragraph</text:p>
+    <table:table table:name="Table2">
+     <table:table-column/>
+     <table:table-row>
+      <table:table-cell/>
+     </table:table-row>
+    </table:table>
+   </text:section>
+   <text:table-index>
+    <text:table-index-source text:use-caption="false" text:caption-sequence-name="Table" text:caption-sequence-format="text">
+     <text:index-title-template text:style-name="Table_20_index_20_heading">Index of Tables</text:index-title-template>
+     <text:table-index-entry-template text:style-name="Table_20_index_20_1">
+      <text:index-entry-link-start text:style-name="Index_20_Link"/>
+      <text:index-entry-text/>
+      <text:index-entry-tab-stop style:type="right" style:leader-char="."/>
+      <text:index-entry-page-number/>
+      <text:index-entry-link-end/>
+     </text:table-index-entry-template>
+    </text:table-index-source>
+   </text:table-index>
+  </office:text>
+ </office:body>
+</office:document>
