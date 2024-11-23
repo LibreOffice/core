@@ -408,12 +408,14 @@ public final class urp implements IProtocol {
     {
         boolean internal = PROPERTIES_OID.equals(inL1Oid);
             // inL1Oid may be null in XInstanceProvider.getInstance("")
-        XCurrentContext cc =
-            (currentContext && !internal
-             && functionId != MethodDescription.ID_RELEASE)
-            ? (XCurrentContext) unmarshal.readInterface(
-                new Type(XCurrentContext.class))
-            : null;
+        XCurrentContext cc;
+        synchronized (monitor) {
+            cc = (currentContext && !internal
+                  && functionId != MethodDescription.ID_RELEASE)
+                ? (XCurrentContext) unmarshal.readInterface(
+                    new Type(XCurrentContext.class))
+                : null;
+        }
         MethodDescription desc = inL1Type.getMethodDescription(functionId);
         if (desc == null) {
             throw new IOException(
