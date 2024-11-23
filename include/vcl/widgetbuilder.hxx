@@ -124,8 +124,8 @@ protected:
             {
                 if (name == "object" || name == "placeholder")
                 {
-                    pCurrentChild
-                        = handleObject(pParent, pAtkProps, reader, sInternalChild, bToolbarItem);
+                    pCurrentChild = handleObject(pParent, pAtkProps, reader, sType, sInternalChild,
+                                                 bToolbarItem);
 
                     bool bObjectInserted = pCurrentChild && pParent != pCurrentChild;
                     if (bObjectInserted)
@@ -161,7 +161,8 @@ protected:
     }
 
     WidgetPtr handleObject(Widget* pParent, stringmap* pAtkProps, xmlreader::XmlReader& reader,
-                           std::string_view sInternalChild, bool bToolbarItem)
+                           std::string_view sType, std::string_view sInternalChild,
+                           bool bToolbarItem)
     {
         OUString sClass;
         OUString sID;
@@ -226,7 +227,7 @@ protected:
                 {
                     if (!pCurrentChild)
                     {
-                        pCurrentChild = insertObject(pParent, sClass, sID, aProperties,
+                        pCurrentChild = insertObject(pParent, sClass, sType, sID, aProperties,
                                                      aPangoAttributes, aAtkAttributes);
                     }
                     handleChild(pCurrentChild, nullptr, reader, isToolbarItemClass(sClass));
@@ -281,8 +282,8 @@ protected:
 
         if (!pCurrentChild)
         {
-            pCurrentChild
-                = insertObject(pParent, sClass, sID, aProperties, aPangoAttributes, aAtkAttributes);
+            pCurrentChild = insertObject(pParent, sClass, sType, sID, aProperties, aPangoAttributes,
+                                         aAtkAttributes);
         }
 
         if (!aItems.empty())
@@ -535,9 +536,9 @@ protected:
                                               const std::vector<ComboBoxTextItem>& rItems)
         = 0;
 
-    virtual WidgetPtr insertObject(Widget* pParent, const OUString& rClass, const OUString& rID,
-                                   stringmap& rProps, stringmap& rPangoAttributes,
-                                   stringmap& rAtkProps)
+    virtual WidgetPtr insertObject(Widget* pParent, const OUString& rClass, std::string_view sType,
+                                   const OUString& rID, stringmap& rProps,
+                                   stringmap& rPangoAttributes, stringmap& rAtkProps)
         = 0;
 
     virtual void tweakInsertedChild(Widget* pParent, Widget* pCurrentChild, std::string_view sType,

@@ -83,8 +83,8 @@ void QtBuilder::insertComboBoxOrListBoxItems(QObject* pObject, stringmap& rMap,
     assert(false && "list boxes are not supported yet");
 }
 
-QObject* QtBuilder::insertObject(QObject* pParent, const OUString& rClass, const OUString& rID,
-                                 stringmap& rProps, stringmap&, stringmap&)
+QObject* QtBuilder::insertObject(QObject* pParent, const OUString& rClass, std::string_view,
+                                 const OUString& rID, stringmap& rProps, stringmap&, stringmap&)
 {
     QObject* pCurrentChild = nullptr;
 

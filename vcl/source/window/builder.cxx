@@ -2411,8 +2411,9 @@ namespace BuilderUtils
     }
 }
 
-VclPtr<vcl::Window> VclBuilder::insertObject(vcl::Window *pParent, const OUString &rClass,
-    const OUString &rID, stringmap &rProps, stringmap &rPango, stringmap &rAtk)
+VclPtr<vcl::Window> VclBuilder::insertObject(vcl::Window* pParent, const OUString& rClass,
+                                             std::string_view, const OUString& rID,
+                                             stringmap& rProps, stringmap& rPango, stringmap& rAtk)
 {
     VclPtr<vcl::Window> pCurrentChild;
 

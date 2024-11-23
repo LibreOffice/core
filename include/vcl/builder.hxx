@@ -242,7 +242,7 @@ private:
                             std::string_view sType, std::string_view sInternalChild) override;
 
     VclPtr<vcl::Window> insertObject(vcl::Window* pParent, const OUString& rClass,
-                                     const OUString& rID, stringmap& rProps,
+                                     std::string_view sType, const OUString& rID, stringmap& rProps,
                                      stringmap& rPangoAttributes, stringmap& rAtkProps) override;
 
     VclPtr<vcl::Window> makeObject(vcl::Window *pParent,

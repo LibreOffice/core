@@ -61,9 +61,9 @@ public:
     virtual void insertComboBoxOrListBoxItems(QObject* pObject, stringmap& rMap,
                                               const std::vector<ComboBoxTextItem>& rItems) override;
 
-    virtual QObject* insertObject(QObject* pParent, const OUString& rClass, const OUString& rID,
-                                  stringmap& rProps, stringmap& rPangoAttributes,
-                                  stringmap& rAtkProps) override;
+    virtual QObject* insertObject(QObject* pParent, const OUString& rClass, std::string_view sType,
+                                  const OUString& rID, stringmap& rProps,
+                                  stringmap& rPangoAttributes, stringmap& rAtkProps) override;
 
     void tweakInsertedChild(QObject* pParent, QObject* pCurrentChild, std::string_view sType,
                             std::string_view sInternalChild) override;
