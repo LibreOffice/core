@@ -35,7 +35,6 @@
 #pragma once
 
 #define CERT_NewTempCertificate __CERT_NewTempCertificate
-#define PK11_GetKeyData __PK11_GetKeyData
 #define CERT_DecodeDERCertificate __CERT_DecodeDERCertificate
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
