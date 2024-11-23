@@ -11,6 +11,7 @@ $(eval $(call gb_CustomTarget_CustomTarget,vcl/qt5))
 
 $(call gb_CustomTarget_get_target,vcl/qt5) : \
 	$(gb_CustomTarget_workdir)/vcl/qt5/QtClipboard.moc \
+	$(gb_CustomTarget_workdir)/vcl/qt5/QtExpander.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt5/QtFilePicker.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt5/QtFrame.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt5/QtInstance.moc \

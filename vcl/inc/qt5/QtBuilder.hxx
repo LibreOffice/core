@@ -47,8 +47,8 @@ public:
 
     template <typename T = QObject> T* get(std::u16string_view sID);
 
-    QObject* makeObject(QObject* pParent, std::u16string_view sName, const OUString& sID,
-                        stringmap& rMap);
+    QObject* makeObject(QObject* pParent, std::u16string_view sName, std::string_view sType,
+                        const OUString& sID, stringmap& rMap);
 
     virtual void applyAtkProperties(QObject* pObject, const stringmap& rProperties,
                                     bool bToolbarItem) override;

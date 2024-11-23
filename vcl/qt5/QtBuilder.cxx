@@ -9,6 +9,7 @@
 
 #include <QtBuilder.hxx>
 
+#include <QtExpander.hxx>
 #include <QtInstanceLinkButton.hxx>
 #include <QtInstanceMessageDialog.hxx>
 #include <QtInstanceNotebook.hxx>
@@ -83,12 +84,12 @@ void QtBuilder::insertComboBoxOrListBoxItems(QObject* pObject, stringmap& rMap,
     assert(false && "list boxes are not supported yet");
 }
 
-QObject* QtBuilder::insertObject(QObject* pParent, const OUString& rClass, std::string_view,
+QObject* QtBuilder::insertObject(QObject* pParent, const OUString& rClass, std::string_view sType,
                                  const OUString& rID, stringmap& rProps, stringmap&, stringmap&)
 {
     QObject* pCurrentChild = nullptr;
 
-    pCurrentChild = makeObject(pParent, rClass, rID, rProps);
+    pCurrentChild = makeObject(pParent, rClass, sType, rID, rProps);
 
     setProperties(pCurrentChild, rProps);
 
@@ -97,8 +98,8 @@ QObject* QtBuilder::insertObject(QObject* pParent, const OUString& rClass, std::
     return pCurrentChild;
 }
 
-QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, const OUString& sID,
-                               stringmap& rMap)
+QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std::string_view sType,
+                               const OUString& sID, stringmap& rMap)
 {
     // ignore placeholders
     if (sName.empty())
@@ -202,6 +203,10 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
 
         pObject = pLineEdit;
     }
+    else if (sName == u"GtkExpander")
+    {
+        pObject = new QtExpander(pParentWidget);
+    }
     else if (sName == u"GtkFrame")
     {
         pObject = new QGroupBox(pParentWidget);
@@ -301,6 +306,16 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
         // unset pParentWidget to not create a layout below
         pParentWidget = nullptr;
     }
+    else if (QtExpander* pExpander = qobject_cast<QtExpander*>(pParentWidget))
+    {
+        // set the content (not the label) child as the expander's widget
+        if (sType != "label")
+        {
+            pExpander->setContentWidget(pWidget);
+            // erase "visible" property, QtExpander shows/hides the widget as needed
+            rMap.erase("visible");
+        }
+    }
 
     if (pWidget)
     {
@@ -362,6 +377,15 @@ void QtBuilder::tweakInsertedChild(QObject* pParent, QObject* pCurrentChild, std
                 // For QGroupBox, the title can be set directly. Therefore, take over the
                 // title from the label and delete the separate label widget again
                 pGroupBox->setTitle(pLabel->text());
+                deleteObject(pLabel);
+            }
+            else if (QtExpander* pExpander = qobject_cast<QtExpander*>(pParent))
+            {
+                // GtkExpander has a `child-type="label"` child for the expander label
+                // in the GtkBuilder .ui file, s. https://docs.gtk.org/gtk3/class.Expander.html
+                // For QtExpander, the (button) text can be set directly. Therefore, take over
+                // text from the label and delete the separate label widget again
+                pExpander->setText(pLabel->text());
                 deleteObject(pLabel);
             }
         }
