@@ -76,9 +76,6 @@ class ScPageHFItem;
 class ScPageScaleToItem;
 class SvxSetItem;
 
-//  EditEngine is not allowed to define its own ITEMID's
-#define INCLUDED_EDITENG_EEITEMID_HXX
-
 // Item-IDs for UI-MsgPool:
 
 //! shall be moved to the below-1000 range!
