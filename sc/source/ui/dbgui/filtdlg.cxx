@@ -670,7 +670,7 @@ void ScFilterDlg::UpdateColorList(size_t nList)
 size_t ScFilterDlg::GetFieldSelPos( SCCOL nField )
 {
     if ( nField >= theQueryData.nCol1 && nField <= theQueryData.nCol2 )
-        return static_cast<size_t>(nField - theQueryData.nCol1 + 1);
+        return static_cast<size_t>(nField) - theQueryData.nCol1 + 1;
     else
         return 0;
 }
