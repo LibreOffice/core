@@ -205,9 +205,6 @@ public:
     virtual ~ConcreteXShapeGeometryAttributes() override;
 };
 
-#define VBA_LEFT "PositionX"
-#define VBA_TOP "PositionY"
-
 class VBAHELPER_DLLPUBLIC UserFormGeometryHelper final : public AbstractGeometryAttributes
 {
 public:
