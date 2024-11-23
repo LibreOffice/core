@@ -68,8 +68,6 @@ extern void setup_kwtab(void);
 
 #define EOB     0xFE                    /* sentinel for end of input buffer */
 #define EOFC    0xFD                    /* sentinel for end of input file */
-#define XPWS    1                       /* token flag: white space to assure token sep. */
-#define XTWS    2
 
 typedef struct token
 {
