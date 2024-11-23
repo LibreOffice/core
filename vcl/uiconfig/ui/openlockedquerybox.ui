@@ -134,73 +134,6 @@ receive a notification if ready.</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="OpenCopyMessage">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="openlockedquerybox|OpenCopyMessage">You can open a copy on your
-local system.</property>
-                    <property name="xalign">0</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="OpenCopyMessage-atkobject">
-                        <property name="AtkObject::accessible-role">static</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkExpander" id="moredetailsexpander">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="resize-toplevel">True</property>
-                    <child>
-                      <object class="GtkLabel" id="hiddentext">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="margin-top">10</property>
-                        <property name="xalign">0</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="hiddentext-atkobject">
-                            <property name="AtkObject::accessible-role">static</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child type="label">
-                      <object class="GtkLabel" id="expandertext">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="label" translatable="yes" context="openlockedquerybox|expandertext">_More Details</property>
-                        <property name="use-underline">True</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">3</property>
-                    <property name="width">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="opencopy">
-                    <property name="label" translatable="yes" context="openlockedquerybox|opencopy">Open Co_py</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="use-underline">True</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">2</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkBox">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
@@ -239,6 +172,73 @@ local system.</property>
                   <packing>
                     <property name="left-attach">1</property>
                     <property name="top-attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="OpenCopyMessage">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="openlockedquerybox|OpenCopyMessage">You can open a copy on your
+local system.</property>
+                    <property name="xalign">0</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="OpenCopyMessage-atkobject">
+                        <property name="AtkObject::accessible-role">static</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="opencopy">
+                    <property name="label" translatable="yes" context="openlockedquerybox|opencopy">Open Co_py</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="use-underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkExpander" id="moredetailsexpander">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="resize-toplevel">True</property>
+                    <child>
+                      <object class="GtkLabel" id="hiddentext">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="margin-top">10</property>
+                        <property name="xalign">0</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="hiddentext-atkobject">
+                            <property name="AtkObject::accessible-role">static</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child type="label">
+                      <object class="GtkLabel" id="expandertext">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="label" translatable="yes" context="openlockedquerybox|expandertext">_More Details</property>
+                        <property name="use-underline">True</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">3</property>
+                    <property name="width">2</property>
                   </packing>
                 </child>
               </object>
