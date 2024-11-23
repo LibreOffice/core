@@ -65,6 +65,20 @@ CPPUNIT_TEST_FIXTURE(Test, testFlySplitFootnoteLayout)
     CPPUNIT_ASSERT(pPage->FindFootnoteCont());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf158713_footnoteInHeadline)
+{
+    // Given a file with table-with-headline split across multiple pages,
+    // and a footnote in the table's repeated heading row:
+    createSwDoc("tdf158713_footnoteInHeadline.odt");
+
+    // delete first paragraph, so table now fits all on the first page - no more "follow table"...
+    dispatchCommand(mxComponent, u".uno:Delete"_ustr, {});
+
+    // ensure the footnote text has not been removed from the layout
+    xmlDocUniquePtr pLayout = parseLayoutDump();
+    assertXPath(pLayout, "/root/page/ftncont/ftn", 1);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testInlineEndnoteAndFootnote)
 {
     // Given a DOC file with an endnote and then a footnote:
