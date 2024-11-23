@@ -24,7 +24,6 @@
 #define GUESS_SEPARATOR_SEP      '-'
 #define DEFAULT_LANGUAGE         ""
 #define DEFAULT_COUNTRY          ""
-#define DEFAULT_ENCODING         ""
 
 #include <string>
 
