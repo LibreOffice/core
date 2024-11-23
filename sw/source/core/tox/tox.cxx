@@ -197,6 +197,9 @@ void SwTOXMark::Notify(const SfxHint& rHint)
         // Check for being hidden by hidden redlines
         if (pLayout && pLayout->HasMergedParas() && sw::IsMarkHintHidden(*pLayout, rNode, rTextMark))
             return;
+        // Check for being hidden by hidden sections
+        if (auto pFrame(rNode.getLayoutFrame(pLayout)); !pFrame || pFrame->IsHiddenNow())
+            return;
         pCollectLayoutHint->m_rMarks.push_back(rTextMark);
     }
 }
