@@ -79,10 +79,6 @@ typedef _W64 int   ssize_t;
 #include <stdarg.h>
 #include <stdlib.h>
 
-#ifdef MINIX
-#define USE_CHMOD   1
-#endif
-
 #if OSL_DEBUG_LEVEL >= 2
 int _debugmask;
 #endif
