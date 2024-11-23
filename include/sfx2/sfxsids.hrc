@@ -190,9 +190,6 @@ class SvxZoomItem;
 
 #define SID_FILTER_DATA                     TypedWhichId<SfxUnoAnyItem>(SID_SFX_START + 1375)
 
-#define SID_EXPLORER_FILEPROPS_START        (SID_SFX_START + 1390)
-//      SID_EXPLORER_FILEPROPS_END          (SID_SFX_START + 1399)
-
 #define SID_ATTR_ZOOM                       TypedWhichId<SvxZoomItem>(SID_SVX_START + 0)
 
 #define SID_EXPLORER_PROPS_START            TypedWhichId<SfxStringItem>(SID_SFX_START + 1410)
