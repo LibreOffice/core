@@ -115,7 +115,7 @@ void SwOutlineContentVisibilityWin::Set()
     (void)rOutlineNodes.Seek_Entry(pTextNode, &m_nOutlinePos);
 
     // set symbol displayed on button
-    bool bVisible = const_cast<SwTextNode*>(pTextNode)->GetAttrOutlineContentVisible();
+    bool bVisible = pTextNode->GetAttrOutlineContentVisible();
     SetSymbol(bVisible ? ButtonSymbol::HIDE : ButtonSymbol::SHOW);
 
     // set quick help

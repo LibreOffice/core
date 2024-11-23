@@ -4201,7 +4201,7 @@ void SwTextNode::SetAttrOutlineLevel(int nLevel)
     }
 }
 
-bool SwTextNode::GetAttrOutlineContentVisible()
+bool SwTextNode::GetAttrOutlineContentVisible() const
 {
     bool bOutlineContentVisibleAttr = true;
     const SfxGrabBagItem & rGrabBagItem = GetAttr(RES_PARATR_GRABBAG);
