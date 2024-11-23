@@ -108,7 +108,7 @@ PropertyHelper_Hyphenation& Hyphenator::GetPropHelper_Impl()
     return *pPropHelper;
 }
 
-Sequence< Locale > SAL_CALL Hyphenator::getLocales()
+void Hyphenator::ensureLocales()
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -212,17 +212,19 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
             aSuppLocales.realloc(0);
         }
     }
+}
 
+Sequence< Locale > SAL_CALL Hyphenator::getLocales()
+{
+    MutexGuard aGuard(GetLinguMutex());
+    ensureLocales();
     return aSuppLocales;
 }
 
 sal_Bool SAL_CALL Hyphenator::hasLocale(const Locale& rLocale)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-
-    if (!aSuppLocales.hasElements())
-        getLocales();
-
+    ensureLocales();
     return comphelper::findValue(aSuppLocales, rLocale) != -1;
 }
 
@@ -658,6 +660,7 @@ Reference < XHyphenatedWord > SAL_CALL Hyphenator::queryAlternativeSpelling(
         sal_Int16 nIndex,
         const css::uno::Sequence< css::beans::PropertyValue >& aProperties )
 {
+    ensureLocales();
     // Firstly we allow only one plus character before the hyphen to avoid to miss the right break point:
     for (int extrachar = 1; extrachar <= 2; extrachar++)
     {
@@ -686,6 +689,7 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
                       aWord, Sequence< sal_Int16 >() );
     }
 
+    ensureLocales();
     int k = -1;
     for (size_t j = 0; j < mvDicts.size(); ++j)
     {
