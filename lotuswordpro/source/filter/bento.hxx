@@ -63,7 +63,6 @@
 #include <vector>
 #include <lwpsvstream.hxx>
 
-#define BEN_CC __stdcall
 #ifdef COMP_BENTO
 #define BEN_EXPORT __declspec(dllexport)
 #else
@@ -78,7 +77,6 @@ namespace OpenStormBento
 {
 
 #define BEN_CURR_MAJOR_VERSION 2
-#define BEN_CURR_MINOR_VERSION 0
 #define BEN_MAGIC_BYTES_SIZE 8
 #define BEN_LABEL_SIZE 24
 
