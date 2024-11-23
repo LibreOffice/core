@@ -128,7 +128,7 @@ void ScQProStyle::SetFormat( ScDocument *pDoc, sal_uInt8 nCol, sal_uInt16 nRow, 
         rItemSet.Put( SvxUnderlineItem( LINESTYLE_SINGLE, ATTR_FONT_UNDERLINE ) );
 
     if (maFontHeight[ maFont [ nStyle ] ])
-        rItemSet.Put( SvxFontHeightItem( static_cast<sal_uLong>(20 * maFontHeight[ maFont[ nStyle ] ] ), 100, ATTR_FONT_HEIGHT ) );
+        rItemSet.Put( SvxFontHeightItem( static_cast<sal_uLong>(maFontHeight[ maFont[ nStyle ] ] ) * 20, 100, ATTR_FONT_HEIGHT ) );
 
     OUString fntName = maFontType[ maFont[ nStyle ] ];
     rItemSet.Put( SvxFontItem( FAMILY_SYSTEM, fntName, OUString(), PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, ATTR_FONT ) );
