@@ -1007,7 +1007,7 @@ void SfxOleSection::ImplSave( SvStream& rStrm )
 
     // write placeholders for property ID/position pairs
     sal_uInt64 nPropPosPos = rStrm.Tell();
-    rStrm.SeekRel( static_cast< sal_sSize >( 8 * nPropCount ) );
+    rStrm.SeekRel( static_cast< sal_sSize >(nPropCount) * 8 );
 
     // write dictionary property
     if( maDictProp.HasPropertyNames() )
@@ -1201,7 +1201,7 @@ void SfxOlePropertySet::ImplSave( SvStream& rStrm )
 
     // write placeholders for section guid/position pairs
     sal_uInt64 nSectPosPos = rStrm.Tell();
-    rStrm.SeekRel( static_cast< sal_sSize >( 20 * nSectCount ) );
+    rStrm.SeekRel( static_cast< sal_sSize >(nSectCount) * 20 );
 
     // write sections
     for (auto const& section : maSectionMap)
