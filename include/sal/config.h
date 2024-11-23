@@ -29,7 +29,6 @@
 #endif
 
 #ifdef _WIN32
-#define SAL_W32
 #define SAL_DLLEXTENSION ".dll"
 #define SAL_EXEEXTENSION ".exe"
 #define SAL_PATHSEPARATOR ';'
