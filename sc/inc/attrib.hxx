@@ -166,10 +166,6 @@ public:
 
 // page format item: contents of header and footer
 
-#define SC_HF_LEFTAREA   1
-#define SC_HF_CENTERAREA 2
-#define SC_HF_RIGHTAREA  3
-
 class SC_DLLPUBLIC ScPageHFItem final : public SfxPoolItem
 {
     std::unique_ptr<EditTextObject> pLeftArea;
