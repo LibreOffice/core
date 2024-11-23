@@ -741,7 +741,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, ColRowToggleHdl, weld::Toggleable&, void)
             m_xEdAssign->SetText( aStr );
         }
         ScRange aRange( theCurData );
-        aRange.aStart.SetRow( std::min( static_cast<tools::Long>(theCurArea.aEnd.Row() + 1), static_cast<tools::Long>(rDoc.MaxRow()) ) );
+        aRange.aStart.SetRow( std::min( static_cast<tools::Long>(theCurArea.aEnd.Row()) + 1, static_cast<tools::Long>(rDoc.MaxRow()) ) );
         aRange.aEnd.SetRow( rDoc.MaxRow() );
         AdjustColRowData( aRange );
     }
@@ -755,7 +755,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, ColRowToggleHdl, weld::Toggleable&, void)
             m_xEdAssign->SetText( aStr );
         }
         ScRange aRange( theCurData );
-        aRange.aStart.SetCol( static_cast<SCCOL>(std::min( static_cast<tools::Long>(theCurArea.aEnd.Col() + 1), static_cast<tools::Long>(rDoc.MaxCol()) )) );
+        aRange.aStart.SetCol( static_cast<SCCOL>(std::min( static_cast<tools::Long>(theCurArea.aEnd.Col()) + 1, static_cast<tools::Long>(rDoc.MaxCol()) )) );
         aRange.aEnd.SetCol( rDoc.MaxCol() );
         AdjustColRowData( aRange );
     }
