@@ -24,7 +24,6 @@
 #include <memory>
 #include <rtl/string.hxx>
 
-#define ZCODEC_NO_COMPRESSION       0
 #define ZCODEC_DEFAULT_COMPRESSION  6
 
 class SvStream;
