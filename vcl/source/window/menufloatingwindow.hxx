@@ -24,7 +24,6 @@
 #include <vcl/toolkit/floatwin.hxx>
 #include <vcl/menu.hxx>
 
-#define EXTRASPACEY         2
 #define GUTTERBORDER        8
 
 /** Class that implements the actual window of the floating menu.
