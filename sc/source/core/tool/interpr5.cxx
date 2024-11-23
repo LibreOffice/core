@@ -327,8 +327,8 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
         }
     }
 
-    SCSIZE nMatCols = static_cast<SCSIZE>(nCol2 - nCol1 + 1);
-    SCSIZE nMatRows = static_cast<SCSIZE>(nRow2 - nRow1 + 1);
+    SCSIZE nMatCols = static_cast<SCSIZE>(nCol2) - nCol1 + 1;
+    SCSIZE nMatRows = static_cast<SCSIZE>(nRow2) - nRow1 + 1;
 
     if (!ScMatrix::IsSizeAllocatable( nMatCols, nMatRows))
     {
