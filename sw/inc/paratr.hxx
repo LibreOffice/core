@@ -42,9 +42,6 @@
 
 class SwTextNode;
 class IntlWrapper;
-
-#define DROP_WHOLEWORD ((sal_uInt16)0x0001)
-
 class SwFormatDrop;
 
 namespace sw {
