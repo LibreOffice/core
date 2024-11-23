@@ -900,7 +900,7 @@ void Test::testHyperlinkSearch()
                         { 21, 25, /* -> */ 21, 23 }, // the field is really just one char
                         { 25, 27, /* -> */ 22, 23 },
                         { 50, 56, /* -> */ 40, 46 } };
-    for (size_t n = 0; n < SAL_N_ELEMENTS(aTrickyOnes); n++)
+    for (size_t n = 0; n < std::size(aTrickyOnes); n++)
     {
         sal_Int32 nStart = aTrickyOnes[n].mnStart;
         sal_Int32 nEnd = aTrickyOnes[n].mnEnd;
