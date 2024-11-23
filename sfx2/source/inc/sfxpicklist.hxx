@@ -22,8 +22,6 @@
 
 #include <memory>
 
-#define PICKLIST_MAXSIZE 100
-
 class SfxApplication;
 class SfxPickListImpl;
 
