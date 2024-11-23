@@ -45,7 +45,6 @@ struct TabDlg_Impl;
 namespace com::sun::star::frame { class XFrame; }
 
 #define RET_USER        100
-#define RET_USER_CANCEL 101
 
 class SFX2_DLLPUBLIC SfxTabDialogItem final : public SfxSetItem
 {
