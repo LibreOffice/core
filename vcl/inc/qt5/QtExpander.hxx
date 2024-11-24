@@ -32,6 +32,9 @@ public:
     void setExpanded(bool bExpand);
     bool isExpanded() const;
 
+Q_SIGNALS:
+    void expandedChanged(bool bExpanded);
+
 private:
     void update();
 

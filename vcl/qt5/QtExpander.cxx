@@ -45,8 +45,13 @@ QString QtExpander::text() const { return m_pButton->text(); }
 
 void QtExpander::setExpanded(bool bExpand)
 {
+    if (m_bExpanded == bExpand)
+        return;
+
     m_bExpanded = bExpand;
     update();
+
+    emit expandedChanged(isExpanded());
 }
 
 bool QtExpander::isExpanded() const { return m_bExpanded; }

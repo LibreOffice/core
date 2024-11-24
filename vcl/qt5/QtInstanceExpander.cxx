@@ -17,6 +17,8 @@ QtInstanceExpander::QtInstanceExpander(QtExpander* pExpander)
     , m_pExpander(pExpander)
 {
     assert(m_pExpander);
+
+    connect(m_pExpander, &QtExpander::expandedChanged, this, [&] { signal_expanded(); });
 }
 
 void QtInstanceExpander::set_label(const OUString& rText)
