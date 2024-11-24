@@ -241,8 +241,8 @@ bool LoadDictionary(HDInfo& rDict)
 #else
     OString sTmp(OU2ENC(dictpath, osl_getThreadTextEncoding()));
 #endif
-    HyphenDict *dict = nullptr;
-    if ((dict = hnj_hyphen_load(sTmp.getStr())) == nullptr)
+    HyphenDict* dict = hnj_hyphen_load(sTmp.getStr());
+    if (!dict)
     {
         SAL_WARN(
             "lingucomponent",
