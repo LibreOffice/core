@@ -79,7 +79,7 @@ ScCornerButton::ScCornerButton( vcl::Window* pParent, ScViewData* pData ) :
     Window( pParent, WinBits( 0 ) ),
     pViewData( pData )
 {
-    EnableRTL( false );
+    ScCornerButton::EnableRTL( false );
 }
 
 ScCornerButton::~ScCornerButton()
@@ -393,10 +393,7 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
                 nBarY += nScrollBarSize;
 
             nSizeY -= nBarY;
-        }
 
-        if (bHScroll) // Scrollbars horizontal
-        {
             tools::Long nSizeLt = 0;       // left scroll bar
             tools::Long nSizeRt = 0;       // right scroll bar
             tools::Long nSizeSp = 0;       // splitter
@@ -2213,8 +2210,7 @@ void ScTabView::FreezeSplitters( bool bFreeze, SplitMethod eSplitMethod, SCCOLRO
             if (eOldV != SC_SPLIT_NONE)
             {
                 nTopPos = aViewData.GetPosY(SC_SPLIT_TOP);
-                if (aViewData.GetPosY(SC_SPLIT_BOTTOM) > nBottomPos)
-                    nBottomPos = aViewData.GetPosY(SC_SPLIT_BOTTOM);
+                nBottomPos = std::max(aViewData.GetPosY(SC_SPLIT_BOTTOM), nBottomPos);
             }
             aSplit = aViewData.GetScrPos(nPosX, nPosY, ePos, true);
             if (aSplit.Y() > 0)
@@ -3062,7 +3058,7 @@ void ScTabView::getRowColumnHeaders(const tools::Rectangle& rRectangle, tools::J
         if (nStartCol != nEndCol)
         {
             auto node = rJsonWriter.startStruct();
-            rJsonWriter.put("text", static_cast<sal_Int64>(nStartCol + 1));
+            rJsonWriter.put("text", static_cast<sal_Int64>(nStartCol) + 1);
             rJsonWriter.put("size", nTotalPixels);
             rJsonWriter.put("groupLevels", static_cast<sal_Int64>(nColGroupDepth));
         }
