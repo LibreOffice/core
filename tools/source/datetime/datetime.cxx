@@ -20,6 +20,7 @@
 #include <tools/duration.hxx>
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
+#include <compare>
 
 #include <systemdatetime.hxx>
 
@@ -56,33 +57,9 @@ bool DateTime::IsBetween( const DateTime& rFrom, const DateTime& rTo ) const
     return (*this >= rFrom) && (*this <= rTo);
 }
 
-bool DateTime::operator >( const DateTime& rDateTime ) const
-{
-    return (Date::operator>( rDateTime )) ||
-         (Date::operator==( rDateTime ) && tools::Time::operator>( rDateTime ));
-}
-
-bool DateTime::operator <( const DateTime& rDateTime ) const
-{
-    return (Date::operator<( rDateTime )) ||
-         (Date::operator==( rDateTime ) && tools::Time::operator<( rDateTime ));
-}
-
-bool DateTime::operator >=( const DateTime& rDateTime ) const
-{
-    return (Date::operator>( rDateTime )) ||
-         (Date::operator==( rDateTime ) && tools::Time::operator>=( rDateTime ));
-}
-
-bool DateTime::operator <=( const DateTime& rDateTime ) const
-{
-    return (Date::operator<( rDateTime )) ||
-         (Date::operator==( rDateTime ) && tools::Time::operator<=( rDateTime ));
-}
-
 sal_Int64 DateTime::GetSecFromDateTime( const Date& rDate ) const
 {
-    if ( Date::operator<( rDate ) )
+    if (*this < rDate)
         return 0;
     else
     {

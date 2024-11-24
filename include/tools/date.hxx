@@ -25,6 +25,8 @@
 
 #include <com/sun/star/util/Date.hpp>
 
+#include <compare>
+
 namespace com::sun::star::util { struct DateTime; }
 
 enum DayOfWeek { MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY,
@@ -207,18 +209,7 @@ public:
                         { return ((mnDate >= rFrom.mnDate) &&
                                  (mnDate <= rTo.mnDate)); }
 
-    bool            operator ==( const Date& rDate ) const
-                        { return (mnDate == rDate.mnDate); }
-    bool            operator !=( const Date& rDate ) const
-                        { return (mnDate != rDate.mnDate); }
-    bool            operator  >( const Date& rDate ) const
-                        { return (mnDate > rDate.mnDate); }
-    bool            operator  <( const Date& rDate ) const
-                        { return (mnDate < rDate.mnDate); }
-    bool            operator >=( const Date& rDate ) const
-                        { return (mnDate >= rDate.mnDate); }
-    bool            operator <=( const Date& rDate ) const
-                        { return (mnDate <= rDate.mnDate); }
+    auto            operator <=> ( const Date& rDate ) const = default;
 
     Date&           operator =( const Date& rDate )
                         { mnDate = rDate.mnDate; return *this; }

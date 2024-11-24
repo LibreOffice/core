@@ -26,6 +26,8 @@
 #include <tools/toolsdllapi.h>
 #include <com/sun/star/util/Time.hpp>
 
+#include <compare>
+
 namespace com::sun::star::util { struct DateTime; }
 
 /**
@@ -131,18 +133,9 @@ public:
 
     bool            IsEqualIgnoreNanoSec( const tools::Time& rTime ) const;
 
-    bool            operator ==( const tools::Time& rTime ) const
-                    { return (nTime == rTime.nTime); }
-    bool            operator !=( const tools::Time& rTime ) const
-                    { return (nTime != rTime.nTime); }
-    bool            operator  >( const tools::Time& rTime ) const
-                    { return (nTime > rTime.nTime); }
-    bool            operator  <( const tools::Time& rTime ) const
-                    { return (nTime < rTime.nTime); }
-    bool            operator >=( const tools::Time& rTime ) const
-                    { return (nTime >= rTime.nTime); }
-    bool            operator <=( const tools::Time& rTime ) const
-                    { return (nTime <= rTime.nTime); }
+    bool            operator==(const Time& rTime) const = default;
+
+    auto            operator <=> ( const Time& rTime ) const = default;
 
     static Time     GetUTCOffset();
 

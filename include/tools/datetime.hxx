@@ -64,21 +64,21 @@ public:
 
     bool            IsEqualIgnoreNanoSec( const DateTime& rDateTime ) const
                     {
-                        if ( Date::operator!=( rDateTime ) )
+                        if ( GetDate() != rDateTime.GetDate() )
                             return false;
                         return Time::IsEqualIgnoreNanoSec( rDateTime );
                     }
 
-    bool            operator ==( const DateTime& rDateTime ) const
-                        { return (Date::operator==( rDateTime ) &&
-                                  Time::operator==( rDateTime )); }
-    bool            operator !=( const DateTime& rDateTime ) const
-                        { return (Date::operator!=( rDateTime ) ||
-                                  Time::operator!=( rDateTime )); }
-    bool            operator  >( const DateTime& rDateTime ) const;
-    bool            operator  <( const DateTime& rDateTime ) const;
-    bool            operator >=( const DateTime& rDateTime ) const;
-    bool            operator <=( const DateTime& rDateTime ) const;
+    auto            operator <=>( const DateTime& rDateTime ) const
+                    {
+                        if (auto cmp = Date::operator<=>(rDateTime); cmp != 0)
+                            return cmp;
+                        return tools::Time::operator<=>(rDateTime);
+                    }
+    bool            operator==(const DateTime& rDateTime) const
+                    {
+                        return (Date::operator==(rDateTime) && tools::Time::operator==(rDateTime));
+                    }
 
     sal_Int64       GetSecFromDateTime( const Date& rDate ) const;
 
