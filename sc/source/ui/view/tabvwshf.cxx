@@ -227,8 +227,6 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
                     if( pScSh )
                     {
-                        pScSh->GetTitle();
-
                         if (aDocName == pScSh->GetTitle(SFX_TITLE_FULLNAME))
                         {
                             nDoc = i;
@@ -540,12 +538,6 @@ void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
                 break;
 
             case FID_TAB_MOVE:
-                if (   !rDoc.IsDocEditable()
-                    || rDoc.GetChangeTrack() != nullptr
-                    || nTabCount > MAXTAB)
-                    rSet.DisableItem( nWhich );
-                break;
-
             case FID_TAB_DUPLICATE:
                 if (   !rDoc.IsDocEditable()
                     || rDoc.GetChangeTrack() != nullptr
@@ -763,8 +755,6 @@ void ScTabViewShell::ExecuteMoveTable( SfxRequest& rReq )
 
                     if( pScSh )
                     {
-                        pScSh->GetTitle();
-
                         if (aDocName == pScSh->GetTitle())
                         {
                             nDoc = i;
