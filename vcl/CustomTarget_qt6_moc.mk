@@ -21,6 +21,7 @@ $(call gb_CustomTarget_get_target,vcl/qt6) : \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceDialog.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceDrawingArea.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceEntry.moc \
+	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceExpander.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceLevelBar.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceLinkButton.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceMessageDialog.moc \

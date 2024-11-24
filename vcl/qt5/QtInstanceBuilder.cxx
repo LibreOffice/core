@@ -16,6 +16,7 @@
 #include <QtInstanceComboBox.hxx>
 #include <QtInstanceDrawingArea.hxx>
 #include <QtInstanceEntry.hxx>
+#include <QtInstanceExpander.hxx>
 #include <QtInstanceFrame.hxx>
 #include <QtInstanceImage.hxx>
 #include <QtInstanceLabel.hxx>
@@ -329,10 +330,12 @@ std::unique_ptr<weld::TextView> QtInstanceBuilder::weld_text_view(const OUString
     return xRet;
 }
 
-std::unique_ptr<weld::Expander> QtInstanceBuilder::weld_expander(const OUString&)
+std::unique_ptr<weld::Expander> QtInstanceBuilder::weld_expander(const OUString& rId)
 {
-    assert(false && "Not implemented yet");
-    return nullptr;
+    QtExpander* pExpander = m_xBuilder->get<QtExpander>(rId);
+    std::unique_ptr<weld::Expander> xRet(pExpander ? std::make_unique<QtInstanceExpander>(pExpander)
+                                                   : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::DrawingArea>

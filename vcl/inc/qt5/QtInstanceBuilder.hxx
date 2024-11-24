@@ -68,7 +68,7 @@ public:
     virtual std::unique_ptr<weld::IconView> weld_icon_view(const OUString&) override;
     virtual std::unique_ptr<weld::Label> weld_label(const OUString&) override;
     virtual std::unique_ptr<weld::TextView> weld_text_view(const OUString& rId) override;
-    virtual std::unique_ptr<weld::Expander> weld_expander(const OUString&) override;
+    virtual std::unique_ptr<weld::Expander> weld_expander(const OUString& rId) override;
     virtual std::unique_ptr<weld::DrawingArea>
     weld_drawing_area(const OUString&, const a11yref& rA11yImpl = nullptr,
                       FactoryFunction pUITestFactoryFunction = nullptr,

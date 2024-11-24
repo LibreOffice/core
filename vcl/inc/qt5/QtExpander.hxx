@@ -25,7 +25,12 @@ class QtExpander : public QWidget
 public:
     QtExpander(QWidget* pParent);
     void setContentWidget(QWidget* pWidget);
+
     void setText(const QString& rText);
+    QString text() const;
+
+    void setExpanded(bool bExpand);
+    bool isExpanded() const;
 
 private:
     void update();

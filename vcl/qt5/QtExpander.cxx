@@ -41,6 +41,16 @@ void QtExpander::setContentWidget(QWidget* pWidget)
 
 void QtExpander::setText(const QString& rText) { m_pButton->setText(rText); }
 
+QString QtExpander::text() const { return m_pButton->text(); }
+
+void QtExpander::setExpanded(bool bExpand)
+{
+    m_bExpanded = bExpand;
+    update();
+}
+
+bool QtExpander::isExpanded() const { return m_bExpanded; }
+
 void QtExpander::update()
 {
     const QString sIcon = m_bExpanded ? "go-down" : "go-next";
@@ -53,8 +63,7 @@ void QtExpander::update()
 void QtExpander::handleButtonClick()
 {
     // toggle
-    m_bExpanded = !m_bExpanded;
-    update();
+    setExpanded(!isExpanded());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
