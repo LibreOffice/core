@@ -382,7 +382,7 @@ void SvResizeHelper::ValidateRect( tools::Rectangle & rValidate ) const
             break;
     }
 
-    // Mindestgr"osse 5 x 5
+    // Minimum size 5 x 5
     if( rValidate.Left() + 5 > rValidate.Right() )
         rValidate.SetRight( rValidate.Left() + 5 );
     if( rValidate.Top() + 5 > rValidate.Bottom() )
