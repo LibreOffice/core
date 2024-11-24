@@ -253,6 +253,100 @@ bool LoadDictionary(HDInfo& rDict)
     rDict.eEnc = getTextEncodingFromCharset(dict->cset);
     return true;
 }
+
+OUString makeLowerCase(const OUString& aTerm, CharClass const* pCC)
+{
+    if (pCC)
+        return pCC->lowercase(aTerm);
+    return aTerm;
+}
+
+OUString makeUpperCase(const OUString& aTerm, CharClass const* pCC)
+{
+    if (pCC)
+        return pCC->uppercase(aTerm);
+    return aTerm;
+}
+
+OUString makeInitCap(const OUString& aTerm, CharClass const* pCC)
+{
+    sal_Int32 tlen = aTerm.getLength();
+    if (pCC && tlen)
+    {
+        OUString bTemp = aTerm.copy(0, 1);
+        if (tlen > 1)
+            return (pCC->uppercase(bTemp, 0, 1) + pCC->lowercase(aTerm, 1, (tlen - 1)));
+
+        return pCC->uppercase(bTemp, 0, 1);
+    }
+    return aTerm;
+}
+
+struct hyphenation_result
+{
+    int n = 0;
+    bool failed = true;
+    char** rep = nullptr; // replacements of discretionary hyphenation
+    int* pos = nullptr; // array of [hyphenation point] minus [deletion position]
+    int* cut = nullptr; // length of deletions in original word
+    std::unique_ptr<char[]> hyphens;
+
+    ~hyphenation_result()
+    {
+        if (rep)
+        {
+            for (int i = 0; i < n; i++)
+            {
+                if (rep[i])
+                    free(rep[i]);
+            }
+            free(rep);
+        }
+        if (pos)
+            free(pos);
+        if (cut)
+            free(cut);
+    }
+};
+
+hyphenation_result getHyphens(std::u16string_view word, const HDInfo& hdInfo, sal_Int16 minLead,
+                              sal_Int16 minTrail)
+{
+    // first convert any smart quotes or apostrophes to normal ones
+    OUStringBuffer aBuf(word);
+    for (sal_Int32 ix = 0; ix < aBuf.getLength(); ix++)
+    {
+        sal_Unicode ch = aBuf[ix];
+        if ((ch == 0x201C) || (ch == 0x201D))
+            aBuf[ix] = u'"';
+        if ((ch == 0x2018) || (ch == 0x2019))
+            aBuf[ix] = u'\'';
+    }
+
+    // now convert word to all lowercase for pattern recognition
+    OUString nTerm(makeLowerCase(OUString::unacquired(aBuf), hdInfo.apCC.get()));
+
+    // now convert word to needed encoding
+    OString encWord(OU2ENC(nTerm, hdInfo.eEnc));
+
+    // now strip off any ending periods
+    auto lastValidPos = std::string_view(encWord).find_last_not_of('.');
+    if (lastValidPos == std::string_view::npos)
+        return {};
+
+    int n = lastValidPos + 1;
+    std::unique_ptr<char[]> hyphens(new char[n + 5]);
+    char** rep = nullptr; // replacements of discretionary hyphenation
+    int* pos = nullptr; // array of [hyphenation point] minus [deletion position]
+    int* cut = nullptr; // length of deletions in original word
+
+    HyphenDict* dict = hdInfo.aPtr;
+    const bool failed = 0 != hnj_hyphen_hyphenate3( dict, encWord.getStr(), n, hyphens.get(), nullptr,
+                &rep, &pos, &cut, minLead, minTrail,
+                std::max<sal_Int16>(dict->clhmin, 2) + std::max(0, minLead  - std::max<sal_Int16>(dict->lhmin, 2)),
+                std::max<sal_Int16>(dict->crhmin, 2) + std::max(0, minTrail - std::max<sal_Int16>(dict->rhmin, 2)) );
+    return { n, failed, rep, pos, cut, std::move(hyphens) }; // buffers will free in dtor
+}
 }
 
 const HDInfo* Hyphenator::getMatchingDict(const css::lang::Locale& aLocale)
@@ -304,7 +398,6 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
         int nHyphenationPosAltHyph = -1;
 
         // hyphenate the word with that dictionary
-        HyphenDict* dict = pHDInfo->aPtr;
         rtl_TextEncoding eEnc = pHDInfo->eEnc;
         CharClass* pCC = pHDInfo->apCC.get();
 
@@ -316,68 +409,9 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
 
         CapType ct = capitalType(aWord, pCC);
 
-        // first convert any smart quotes or apostrophes to normal ones
-        OUStringBuffer rBuf(aWord);
-        sal_Int32 nc = rBuf.getLength();
-        sal_Unicode ch;
-        for (sal_Int32 ix=0; ix < nc; ix++)
-        {
-            ch = rBuf[ix];
-            if ((ch == 0x201C) || (ch == 0x201D))
-                rBuf[ix] = u'"';
-            if ((ch == 0x2018) || (ch == 0x2019))
-                rBuf[ix] = u'\'';
-        }
-        OUString nWord(rBuf.makeStringAndClear());
-
-        // now convert word to all lowercase for pattern recognition
-        OUString nTerm(makeLowerCase(nWord, pCC));
-
-        // now convert word to needed encoding
-        OString encWord(OU2ENC(nTerm,eEnc));
-
-        int wordlen = encWord.getLength();
-        std::unique_ptr<char[]> lcword(new char[wordlen + 1]);
-        std::unique_ptr<char[]> hyphens(new char[wordlen + 5]);
-
-        char ** rep = nullptr; // replacements of discretionary hyphenation
-        int * pos = nullptr; // array of [hyphenation point] minus [deletion position]
-        int * cut = nullptr; // length of deletions in original word
-
-        // copy converted word into simple char buffer
-        strcpy(lcword.get(),encWord.getStr());
-
-        // now strip off any ending periods
-        int n = wordlen-1;
-        while((n >=0) && (lcword[n] == '.'))
-            n--;
-        n++;
-        if (n > 0)
-        {
-            const bool bFailed = 0 != hnj_hyphen_hyphenate3( dict, lcword.get(), n, hyphens.get(), nullptr,
-                    &rep, &pos, &cut, minLead, minTrail,
-                    std::max<sal_Int16>(dict->clhmin, std::max<sal_Int16>(dict->clhmin, 2) + std::max(0, minLead  - std::max<sal_Int16>(dict->lhmin, 2))),
-                    std::max<sal_Int16>(dict->crhmin, std::max<sal_Int16>(dict->crhmin, 2) + std::max(0, minTrail - std::max<sal_Int16>(dict->rhmin, 2))) );
-            if (bFailed)
-            {
-                // whoops something did not work
-                if (rep)
-                {
-                    for(int j = 0; j < n; j++)
-                    {
-                        if (rep[j]) free(rep[j]);
-                    }
-                    free(rep);
-                }
-                if (pos) free(pos);
-                if (cut) free(cut);
-                return nullptr;
-            }
-        }
-
-        // now backfill hyphens[] for any removed trailing periods
-        for (int c = n; c < wordlen; c++) hyphens[c] = '0';
-        hyphens[wordlen] = '\0';
+        auto result = getHyphens(aWord, *pHDInfo, minLead, minTrail);
+        if (result.failed)
+            return nullptr;
 
         sal_Int32 Leading =  GetPosInWordToCheck( aWord, nMaxLeading );
 
@@ -391,20 +425,20 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
         OUString sStems; // processed result of the compound word analysis, e.g. com|pound|word
         sal_Int32 nSuffixLen = 0; // do not remove break points in suffixes
 
-        for (sal_Int32 i = 0; i < n; i++)
+        for (sal_Int32 i = 0; i < result.n; i++)
         {
             int leftrep = 0;
-            bool hit = (n >= minLen);
-            if (!rep || !rep[i])
+            bool hit = (result.n >= minLen);
+            if (!result.rep || !result.rep[i])
             {
-                hit = hit && (hyphens[i]&1) && (i < Leading);
+                hit = hit && (result.hyphens[i] & 1) && (i < Leading);
                 hit = hit && (i >= (minLead-1) );
-                hit = hit && ((n - i - 1) >= minTrail);
+                hit = hit && ((result.n - i - 1) >= minTrail);
             }
             else
             {
                 // calculate change character length before hyphenation point signed with '='
-                for (char * c = rep[i]; *c && (*c != '='); c++)
+                for (char * c = result.rep[i]; *c && (*c != '='); c++)
                 {
                     if (eEnc == RTL_TEXTENCODING_UTF8)
                     {
@@ -414,9 +448,9 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
                     else
                         leftrep++;
                 }
-                hit = hit && (hyphens[i]&1) && ((i + leftrep - pos[i]) < Leading);
-                hit = hit && ((i + leftrep - pos[i]) >= (minLead-1) );
-                hit = hit && ((n - i - 1 + sal::static_int_cast< sal_sSize >(strlen(rep[i])) - leftrep - 1) >= minTrail);
+                hit = hit && (result.hyphens[i] & 1) && ((i + leftrep - result.pos[i]) < Leading);
+                hit = hit && ((i + leftrep - result.pos[i]) >= (minLead-1) );
+                hit = hit && ((result.n - i - 1 + sal::static_int_cast< sal_sSize >(strlen(result.rep[i])) - leftrep - 1) >= minTrail);
             }
             if (hit)
             {
@@ -577,10 +611,10 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
                 }
 
                 nHyphenationPos = i;
-                if (rep && rep[i])
+                if (result.rep && result.rep[i])
                 {
-                    nHyphenationPosAlt = i - pos[i];
-                    nHyphenationPosAltHyph = i + leftrep - pos[i];
+                    nHyphenationPosAlt = i - result.pos[i];
+                    nHyphenationPosAltHyph = i + leftrep - result.pos[i];
                 }
             }
         }
@@ -588,17 +622,17 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
         Reference<XHyphenatedWord> xRes;
         if (nHyphenationPos != -1)
         {
-            if (rep && rep[nHyphenationPos])
+            if (result.rep && result.rep[nHyphenationPos])
             {
                 // remove equal sign
-                char * s = rep[nHyphenationPos];
+                char * s = result.rep[nHyphenationPos];
                 int eq = 0;
                 for (; *s; s++)
                 {
                     if (*s == '=') eq = 1;
                     if (eq) *s = *(s + 1);
                 }
-                OUString repHyphlow(rep[nHyphenationPos], strlen(rep[nHyphenationPos]), eEnc);
+                OUString repHyphlow(result.rep[nHyphenationPos], strlen(result.rep[nHyphenationPos]), eEnc);
                 OUString repHyph;
                 switch (ct)
                 {
@@ -627,7 +661,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
                 nHyphenationPosAltHyph : nHyphenationPos);
                 // discretionary hyphenation
                 xRes = HyphenatedWord::CreateHyphenatedWord( aWord, LinguLocaleToLanguage( aLocale ), nPos,
-                    aWord.replaceAt(nHyphenationPosAlt + 1, cut[nHyphenationPos], repHyph),
+                    aWord.replaceAt(nHyphenationPosAlt + 1, result.cut[nHyphenationPos], repHyph),
                     static_cast<sal_Int16>(nHyphenationPosAltHyph));
             }
             else
@@ -636,17 +670,6 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
                     static_cast<sal_Int16>(nHyphenationPos), aWord, static_cast<sal_Int16>(nHyphenationPos));
             }
         }
-
-        if (rep)
-        {
-            for(int j = 0; j < n; j++)
-            {
-                if (rep[j]) free(rep[j]);
-            }
-            free(rep);
-        }
-        if (pos) free(pos);
-        if (cut) free(cut);
         return xRes;
     }
     return nullptr;
@@ -690,78 +713,16 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
     if (auto pHDInfo = getMatchingDict(aLocale))
     {
         // hyphenate the word with that dictionary
-        HyphenDict* dict = pHDInfo->aPtr;
-        rtl_TextEncoding eEnc = pHDInfo->eEnc;
-        CharClass* pCC = pHDInfo->apCC.get();
-
-        // first handle smart quotes both single and double
-        OUStringBuffer rBuf(aWord);
-        sal_Int32 nc = rBuf.getLength();
-        sal_Unicode ch;
-        for (sal_Int32 ix=0; ix < nc; ix++)
-        {
-            ch = rBuf[ix];
-            if ((ch == 0x201C) || (ch == 0x201D))
-                rBuf[ix] = u'"';
-            if ((ch == 0x2018) || (ch == 0x2019))
-                rBuf[ix] = u'\'';
-        }
-        OUString nWord(rBuf.makeStringAndClear());
-
-        // now convert word to all lowercase for pattern recognition
-        OUString nTerm(makeLowerCase(nWord, pCC));
-
-        // now convert word to needed encoding
-        OString encWord(OU2ENC(nTerm,eEnc));
-
-        sal_Int32 wordlen = encWord.getLength();
-        std::unique_ptr<char[]> lcword(new char[wordlen+1]);
-        std::unique_ptr<char[]> hyphens(new char[wordlen+5]);
-        char ** rep = nullptr; // replacements of discretionary hyphenation
-        int * pos = nullptr; // array of [hyphenation point] minus [deletion position]
-        int * cut = nullptr; // length of deletions in original word
-
-        // copy converted word into simple char buffer
-        strcpy(lcword.get(),encWord.getStr());
-
-        // first remove any trailing periods
-        sal_Int32 n = wordlen-1;
-        while((n >=0) && (lcword[n] == '.'))
-            n--;
-        n++;
-        if (n > 0)
-        {
-            const bool bFailed = 0 != hnj_hyphen_hyphenate3(dict, lcword.get(), n, hyphens.get(), nullptr,
-                    &rep, &pos, &cut, minLead, minTrail,
-                    std::max<sal_Int16>(dict->clhmin, std::max<sal_Int16>(dict->clhmin, 2) + std::max(0, minLead - std::max<sal_Int16>(dict->lhmin, 2))),
-                    std::max<sal_Int16>(dict->crhmin, std::max<sal_Int16>(dict->crhmin, 2) + std::max(0, minTrail - std::max<sal_Int16>(dict->rhmin, 2))) );
-            if (bFailed)
-            {
-                if (rep)
-                {
-                    for(int j = 0; j < n; j++)
-                    {
-                        if (rep[j]) free(rep[j]);
-                    }
-                    free(rep);
-                }
-                if (pos) free(pos);
-                if (cut) free(cut);
-
-                return nullptr;
-            }
-        }
-        // now backfill hyphens[] for any removed periods
-        for (sal_Int32 c = n; c < wordlen; c++)
-            hyphens[c] = '0';
-        hyphens[wordlen] = '\0';
+        auto result = getHyphens(aWord, *pHDInfo, minLead, minTrail);
+        if (result.failed)
+            return nullptr;
 
         sal_Int32 nHyphCount = 0;
 
         // FIXME: shouldn't we iterate code points instead?
-        for (sal_Int32 i = 0; i < nWord.getLength(); i++)
+        for (sal_Int32 i = 0; i < aWord.getLength(); i++)
         {
-            if (hyphens[i]&1)
+            if (result.hyphens[i] & 1)
                 nHyphCount++;
         }
 
@@ -770,11 +731,11 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
         OUStringBuffer hyphenatedWordBuffer;
         nHyphCount = 0;
 
-        for (sal_Int32 i = 0; i < nWord.getLength(); i++)
+        for (sal_Int32 i = 0; i < aWord.getLength(); i++)
         {
             hyphenatedWordBuffer.append(aWord[i]);
             // hyphenation position
-            if (hyphens[i]&1)
+            if (result.hyphens[i] & 1)
             {
                 // linguistic::PossibleHyphens is stuck with
                 // css::uno::Sequence<sal_Int16> because of
@@ -797,52 +758,11 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
 
         OUString hyphenatedWord = hyphenatedWordBuffer.makeStringAndClear();
 
-        Reference< XPossibleHyphens > xRes = PossibleHyphens::CreatePossibleHyphens(
+        return PossibleHyphens::CreatePossibleHyphens(
             aWord, LinguLocaleToLanguage( aLocale ), hyphenatedWord, aHyphPos);
-
-        if (rep)
-        {
-            for(int j = 0; j < n; j++)
-            {
-                if (rep[j]) free(rep[j]);
-            }
-            free(rep);
-        }
-        if (pos) free(pos);
-        if (cut) free(cut);
-
-        return xRes;
     }
 
     return nullptr;
-}
-
-OUString Hyphenator::makeLowerCase(const OUString& aTerm, CharClass const * pCC)
-{
-    if (pCC)
-        return pCC->lowercase(aTerm);
-    return aTerm;
-}
-
-OUString Hyphenator::makeUpperCase(const OUString& aTerm, CharClass const * pCC)
-{
-    if (pCC)
-        return pCC->uppercase(aTerm);
-    return aTerm;
-}
-
-OUString Hyphenator::makeInitCap(const OUString& aTerm, CharClass const * pCC)
-{
-    sal_Int32 tlen = aTerm.getLength();
-    if (pCC && tlen)
-    {
-        OUString bTemp = aTerm.copy(0,1);
-        if (tlen > 1)
-            return ( pCC->uppercase(bTemp, 0, 1) + pCC->lowercase(aTerm,1,(tlen-1)) );
-
-        return pCC->uppercase(bTemp, 0, 1);
-    }
-    return aTerm;
 }
 
 sal_Bool SAL_CALL Hyphenator::addLinguServiceEventListener(
