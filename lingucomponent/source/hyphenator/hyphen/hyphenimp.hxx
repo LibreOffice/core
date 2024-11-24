@@ -121,6 +121,7 @@ private:
         static OUString makeInitCap(const OUString&, CharClass const *);
 
     void ensureLocales();
+    const HDInfo* getMatchingDict(const css::lang::Locale& aLocale);
 };
 
 #endif

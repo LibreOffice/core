@@ -108,10 +108,9 @@ PropertyHelper_Hyphenation& Hyphenator::GetPropHelper_Impl()
     return *pPropHelper;
 }
 
+// Requires GetLinguMutex locked
 void Hyphenator::ensureLocales()
 {
-    MutexGuard  aGuard( GetLinguMutex() );
-
     // this routine should return the locales supported by the installed
     // dictionaries.
     if (mvDicts.empty())
@@ -256,6 +255,34 @@ bool LoadDictionary(HDInfo& rDict)
 }
 }
 
+const HDInfo* Hyphenator::getMatchingDict(const css::lang::Locale& aLocale)
+{
+    MutexGuard aGuard(GetLinguMutex());
+    ensureLocales();
+    auto it = std::find_if(mvDicts.rbegin(), mvDicts.rend(),
+                           [&aLocale](auto& el) { return el.aLoc == aLocale; });
+    if (it == mvDicts.rend())
+        return nullptr;
+
+    // if this dictionary has not been loaded yet do that
+    if (!it->aPtr)
+    {
+        if (!LoadDictionary(*it))
+            return nullptr;
+    }
+
+    // we don't want to work with a default text encoding since following incorrect
+    // results may occur only for specific text and thus may be hard to notice.
+    // Thus better always make a clean exit here if the text encoding is in question.
+    // Hopefully something not working at all will raise proper attention quickly. ;-)
+    DBG_ASSERT(it->eEnc != RTL_TEXTENCODING_DONTKNOW,
+               "failed to get text encoding! (maybe incorrect encoding string in file)");
+    if (it->eEnc == RTL_TEXTENCODING_DONTKNOW)
+        return nullptr;
+
+    return &*it;
+}
+
 Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWord,
        const css::lang::Locale& aLocale,
        sal_Int16 nMaxLeading,
@@ -269,50 +296,23 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
     sal_Int16 minLen = rHelper.GetMinWordLength();
     bool bNoHyphenateCaps = rHelper.IsNoHyphenateCaps();
 
-    rtl_TextEncoding eEnc = RTL_TEXTENCODING_DONTKNOW;
-
-    Reference< XHyphenatedWord > xRes;
-
-    ensureLocales();
-    int k = -1;
-    for (size_t j = 0; j < mvDicts.size(); ++j)
-    {
-        if (aLocale == mvDicts[j].aLoc)
-            k = j;
-    }
-
     // if we have a hyphenation dictionary matching this locale
-    if (k != -1)
+    if (auto pHDInfo = getMatchingDict(aLocale))
     {
         int nHyphenationPos = -1;
         int nHyphenationPosAlt = -1;
         int nHyphenationPosAltHyph = -1;
 
-        // if this dictionary has not been loaded yet do that
-        if (!mvDicts[k].aPtr)
-        {
-            if (!LoadDictionary(mvDicts[k]))
-                return nullptr;
-        }
-
-        // otherwise hyphenate the word with that dictionary
-        HyphenDict *dict = mvDicts[k].aPtr;
-        eEnc = mvDicts[k].eEnc;
-        CharClass * pCC =  mvDicts[k].apCC.get();
+        // hyphenate the word with that dictionary
+        HyphenDict* dict = pHDInfo->aPtr;
+        rtl_TextEncoding eEnc = pHDInfo->eEnc;
+        CharClass* pCC = pHDInfo->apCC.get();
 
         // Don't hyphenate uppercase words if requested
         if (bNoHyphenateCaps && aWord == makeUpperCase(aWord, pCC))
         {
             return nullptr;
         }
-
-        // we don't want to work with a default text encoding since following incorrect
-        // results may occur only for specific text and thus may be hard to notice.
-        // Thus better always make a clean exit here if the text encoding is in question.
-        // Hopefully something not working at all will raise proper attention quickly. ;-)
-        DBG_ASSERT( eEnc != RTL_TEXTENCODING_DONTKNOW, "failed to get text encoding! (maybe incorrect encoding string in file)" );
-        if (eEnc == RTL_TEXTENCODING_DONTKNOW)
-            return nullptr;
 
         CapType ct = capitalType(aWord, pCC);
 
@@ -585,11 +585,8 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
             }
         }
 
-        if (nHyphenationPos  == -1)
-        {
-            xRes = nullptr;
-        }
-        else
+        Reference<XHyphenatedWord> xRes;
+        if (nHyphenationPos != -1)
         {
             if (rep && rep[nHyphenationPos])
             {
@@ -689,37 +686,13 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
                       aWord, Sequence< sal_Int16 >() );
     }
 
-    ensureLocales();
-    int k = -1;
-    for (size_t j = 0; j < mvDicts.size(); ++j)
-    {
-        if (aLocale == mvDicts[j].aLoc)
-            k = j;
-    }
-
     // if we have a hyphenation dictionary matching this locale
-    if (k != -1)
+    if (auto pHDInfo = getMatchingDict(aLocale))
     {
-        HyphenDict *dict = nullptr;
-        // if this dictionary has not been loaded yet do that
-        if (!mvDicts[k].aPtr)
-        {
-            if (!LoadDictionary(mvDicts[k]))
-                return nullptr;
-        }
-
-        // otherwise hyphenate the word with that dictionary
-        dict = mvDicts[k].aPtr;
-        rtl_TextEncoding eEnc = mvDicts[k].eEnc;
-        CharClass* pCC = mvDicts[k].apCC.get();
-
-        // we don't want to work with a default text encoding since following incorrect
-        // results may occur only for specific text and thus may be hard to notice.
-        // Thus better always make a clean exit here if the text encoding is in question.
-        // Hopefully something not working at all will raise proper attention quickly. ;-)
-        DBG_ASSERT( eEnc != RTL_TEXTENCODING_DONTKNOW, "failed to get text encoding! (maybe incorrect encoding string in file)" );
-        if (eEnc == RTL_TEXTENCODING_DONTKNOW)
-            return nullptr;
+        // hyphenate the word with that dictionary
+        HyphenDict* dict = pHDInfo->aPtr;
+        rtl_TextEncoding eEnc = pHDInfo->eEnc;
+        CharClass* pCC = pHDInfo->apCC.get();
 
         // first handle smart quotes both single and double
         OUStringBuffer rBuf(aWord);
