@@ -704,10 +704,7 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
     // Resolves: fdo#41083 honour MinWordLength in "createPossibleHyphens" as
     // well as "hyphenate"
     if (aWord.getLength() < minLen)
-    {
-        return PossibleHyphens::CreatePossibleHyphens( aWord, LinguLocaleToLanguage( aLocale ),
-                      aWord, Sequence< sal_Int16 >() );
-    }
+        return nullptr;
 
     // if we have a hyphenation dictionary matching this locale
     if (auto pHDInfo = getMatchingDict(aLocale))
