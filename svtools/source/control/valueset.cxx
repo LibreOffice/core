@@ -96,6 +96,7 @@ ValueSet::ValueSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow)
     mnUserCols          = 0;
     mnUserVisLines      = 0;
     mnSpacing           = 0;
+    mnMargin            = 0;
     mnFrameStyle        = DrawFrameStyle::NONE;
     mbNoSelection       = true;
     mbDoubleSel         = false;
@@ -861,6 +862,12 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
     else
         nOff = 0;
 
+    if ( mnMargin )
+    {
+        aWinSize.AdjustWidth(-mnMargin * 2);
+        aWinSize.AdjustHeight(-mnMargin * 2);
+    }
+
     // consider size, if NameField does exist
     if (nStyle & WB_NAMEFIELD)
     {
@@ -875,6 +882,8 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
     }
     else
         mnTextOffset = 0;
+
+    mnTextOffset += mnMargin;
 
     // consider offset and size, if NoneField does exist
     if (nStyle & WB_NONEFIELD)
@@ -1037,6 +1046,9 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
             nStartX = 0;
             nStartY = 0;
         }
+
+        nStartX += mnMargin;
+        nStartY += mnMargin;
 
         // calculate and draw items
         maVirDev->SetLineColor();
@@ -1648,6 +1660,12 @@ Size ValueSet::CalcWindowSizePixel( const Size& rItemSize, sal_uInt16 nDesireCol
         aSize.AdjustHeight(nTxtHeight + n + mnSpacing );
     }
 
+    if ( mnMargin )
+    {
+        aSize.AdjustWidth(mnMargin * 2);
+        aSize.AdjustHeight(mnMargin * 2);
+    }
+
     return aSize;
 }
 
@@ -1818,6 +1836,12 @@ void ValueSet::SetExtraSpacing( sal_uInt16 nNewSpacing )
         mnSpacing = nNewSpacing;
         QueueReformat();
     }
+}
+
+void ValueSet::SetMargin( sal_uInt16 nNewMargin )
+{
+    mnMargin = nNewMargin;
+    QueueReformat();
 }
 
 void ValueSet::SetFormat()

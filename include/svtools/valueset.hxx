@@ -209,6 +209,7 @@ private:
     sal_uInt16      mnUserVisLines;
     sal_uInt16      mnFirstLine;
     sal_uInt16      mnSpacing;
+    sal_uInt16      mnMargin;
     DrawFrameStyle  mnFrameStyle;
     Color           maColor;
     OUString        maText;
@@ -369,6 +370,7 @@ public:
     }
 
     void            SetExtraSpacing( sal_uInt16 nNewSpacing );
+    void            SetMargin( sal_uInt16 nNewMargin );
 
     void            Format(vcl::RenderContext const & rRenderContext);
     void            SetFormat();

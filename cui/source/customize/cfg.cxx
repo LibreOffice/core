@@ -2739,6 +2739,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog(weld::Window *pWindow,
     m_xTbSymbol->SetItemWidth(m_nExpectedSize);
     m_xTbSymbol->SetItemHeight(m_nExpectedSize);
     m_xTbSymbol->SetExtraSpacing(6);
+    m_xTbSymbol->SetMargin(4);
     Size aSize(m_xTbSymbol->CalcWindowSizePixel(Size(m_nExpectedSize, m_nExpectedSize), 11, 5));
     m_xTbSymbol->set_size_request(aSize.Width(), aSize.Height());
 
