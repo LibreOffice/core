@@ -22,7 +22,10 @@
 #include <map>
 #include <memory>
 #include "MasterPageContainer.hxx"
-#include "PreviewValueSet.hxx"
+#include <vcl/image.hxx>
+#include <vcl/vclptr.hxx>
+#include <vcl/virdev.hxx>
+#include <vcl/weld.hxx>
 #include <sfx2/sidebar/ILayoutableWindow.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
 
@@ -46,14 +49,10 @@ class MasterPagesSelector : public PanelLayout
                           , public sfx2::sidebar::ILayoutableWindow
 {
 public:
-    MasterPagesSelector (
-        weld::Widget* pParent,
-        SdDrawDocument& rDocument,
-        ViewShellBase& rBase,
-        std::shared_ptr<MasterPageContainer> pContainer,
-        css::uno::Reference<css::ui::XSidebar> xSidebar,
-        const OUString& rUIFileName,
-        const OUString& rValueSetName);
+    MasterPagesSelector(weld::Widget* pParent, SdDrawDocument& rDocument, ViewShellBase& rBase,
+                        std::shared_ptr<MasterPageContainer> pContainer,
+                        css::uno::Reference<css::ui::XSidebar> xSidebar,
+                        const OUString& rUIFileName, const OUString& rIconViewId);
     virtual ~MasterPagesSelector() override;
 
     virtual void LateInit();
@@ -80,7 +79,7 @@ public:
 
     void UpdateAllPreviews();
 
-    void ShowContextMenu(const Point* pPos);
+    void ShowContextMenu(const Point& pPos);
 
     // ILayoutableWindow
     virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth) override;
@@ -89,8 +88,7 @@ protected:
     mutable ::osl::Mutex maMutex;
     std::shared_ptr<MasterPageContainer> mpContainer;
 
-    std::unique_ptr<PreviewValueSet> mxPreviewValueSet;
-    std::unique_ptr<weld::CustomWeld> mxPreviewValueSetWin;
+    std::unique_ptr<weld::IconView> mxPreviewIconView;
 
     SdDrawDocument& mrDocument;
     ViewShellBase& mrBase;
@@ -117,8 +115,7 @@ protected:
     virtual void NotifyContainerChangeEvent (const MasterPageContainerChangeEvent& rEvent);
 
     typedef ::std::pair<int, MasterPageContainer::Token> UserData;
-    UserData* GetUserData (int nIndex) const;
-    void SetUserData (int nIndex, std::unique_ptr<UserData> pData);
+    std::unique_ptr<MasterPagesSelector::UserData> GetUserData(int nIndex) const;
 
     sal_Int32 GetIndexForToken (MasterPageContainer::Token aToken) const;
     typedef ::std::vector<MasterPageContainer::Token> ItemList;
@@ -155,14 +152,16 @@ protected:
 
 private:
     css::uno::Reference<css::ui::XSidebar> mxSidebar;
+    OUString maIconViewId;
 
     /** The offset between ValueSet index and MasterPageContainer::Token
         last seen.  This value is used heuristically to speed up the lookup
         of an index for a token.
     */
-    DECL_LINK(ClickHandler, ValueSet*, void);
-    DECL_LINK(ContextMenuHandler, const Point*, void);
+    DECL_LINK(MasterPageSelected, weld::IconView&, bool);
+    DECL_LINK(MousePressHdl, const MouseEvent&, bool);
     DECL_LINK(ContainerChangeListener, MasterPageContainerChangeEvent&, void);
+    DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
 
     void SetItem (
         sal_uInt16 nIndex,
@@ -173,6 +172,8 @@ private:
     void RemoveTokenToIndexEntry (
         sal_uInt16 nIndex,
         MasterPageContainer::Token aToken);
+
+    static VclPtr<VirtualDevice> GetVirtualDevice(Image pPreview);
 };
 
 } // end of namespace sd::sidebar

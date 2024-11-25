@@ -1470,8 +1470,14 @@ public:
     virtual OUString get_selected_text() const = 0;
 
     //by index. Don't select when frozen, select after thaw. Note selection doesn't survive a freeze.
+    virtual OUString get_id(int pos) const = 0;
     virtual void select(int pos) = 0;
     virtual void unselect(int pos) = 0;
+    virtual void set_image(int pos, VirtualDevice* pDevice) = 0;
+    virtual void set_text(int pos, const OUString& rText) = 0;
+    virtual void set_id(int pos, const OUString& rId) = 0;
+    virtual void remove(int pos) = 0;
+    virtual tools::Rectangle get_rect(int pos) const = 0;
 
     //via iter
     virtual std::unique_ptr<TreeIter> make_iterator(const TreeIter* pOrig = nullptr) const = 0;
@@ -1481,6 +1487,7 @@ public:
     virtual bool get_iter_first(TreeIter& rIter) const = 0;
     virtual OUString get_id(const TreeIter& rIter) const = 0;
     virtual OUString get_text(const TreeIter& rIter) const = 0;
+    virtual bool iter_next_sibling(TreeIter& rIter) const = 0;
     virtual void scroll_to_item(const TreeIter& rIter) = 0;
 
     // call func on each selected element until func returns true or we run out of elements

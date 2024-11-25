@@ -2271,6 +2271,17 @@ namespace
         {
             rOutRect = GdkRectangle{static_cast<int>(rInRect.Left()), static_cast<int>(rInRect.Top()),
                                  static_cast<int>(rInRect.GetWidth()), static_cast<int>(rInRect.GetHeight())};
+
+            if (GTK_IS_ICON_VIEW(pWidget))
+            {
+                // GtkIconView is a little weird in its positioning with scrolling, so adjust here to match what
+                // it expects
+                gint nOffsetX(0), nOffsetY(0);
+                gtk_icon_view_convert_widget_to_bin_window_coords(GTK_ICON_VIEW(pWidget), 0, 0, &nOffsetX, &nOffsetY);
+                rOutRect.x -= nOffsetX;
+                rOutRect.y -= nOffsetY;
+            }
+
             if (SwapForRTL(pWidget))
                 rOutRect.x = gtk_widget_get_allocated_width(pWidget) - rOutRect.width - 1 - rOutRect.x;
         }
@@ -17069,6 +17080,87 @@ private:
         return sRet;
     }
 
+    OUString get(int pos, int col) const
+    {
+        GtkTreeModel* pModel = GTK_TREE_MODEL(m_pTreeStore);
+        OUString sRet;
+        GtkTreeIter iter;
+        if (gtk_tree_model_iter_nth_child(pModel, &iter, nullptr, pos))
+            sRet = get(iter, col);
+        return sRet;
+    }
+
+    tools::Rectangle get_rect(int pos) const override
+    {
+        GtkTreeModel* pModel = GTK_TREE_MODEL(m_pTreeStore);
+        GtkTreeIter rIter;
+        if (!gtk_tree_model_iter_nth_child(pModel, &rIter, nullptr, pos))
+            return tools::Rectangle();
+
+        const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
+        GtkTreePath* path
+            = gtk_tree_model_get_path(pModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));
+
+        GdkRectangle aRect;
+        gtk_icon_view_get_cell_rect(m_pIconView, path, nullptr, &aRect);
+        gtk_tree_path_free(path);
+
+        // GtkIconView is a little weird in its positioning with scrolling
+        gtk_icon_view_convert_widget_to_bin_window_coords(m_pIconView, aRect.x, aRect.y, &aRect.x,
+                                                          &aRect.y);
+
+        return tools::Rectangle(aRect.x, aRect.y, aRect.x + aRect.width, aRect.y + aRect.height);
+    }
+
+    void set_image(int pos, VirtualDevice* pIcon) override
+    {
+        GtkTreeModel* pModel = GTK_TREE_MODEL(m_pTreeStore);
+        GtkTreeIter iter;
+        if (gtk_tree_model_iter_nth_child(pModel, &iter, nullptr, pos))
+        {
+            if (pIcon)
+            {
+                GdkPixbuf* pixbuf = getPixbuf(*pIcon);
+                gtk_tree_store_set(m_pTreeStore, &iter, m_nImageCol, pixbuf, -1);
+                if (pixbuf)
+                    g_object_unref(pixbuf);
+            }
+        }
+    }
+
+    virtual void set_text(int pos, const OUString& rText) override
+    {
+        GtkTreeModel* pModel = GTK_TREE_MODEL(m_pTreeStore);
+        GtkTreeIter iter;
+        if (gtk_tree_model_iter_nth_child(pModel, &iter, nullptr, pos))
+        {
+            OString aStr(OUStringToOString(rText, RTL_TEXTENCODING_UTF8));
+            gtk_tree_store_set(m_pTreeStore, &iter, m_nTextCol, aStr.getStr(), -1);
+        }
+    }
+
+    virtual void set_id(int pos, const OUString& rId) override
+    {
+        GtkTreeModel* pModel = GTK_TREE_MODEL(m_pTreeStore);
+        GtkTreeIter iter;
+
+        if (gtk_tree_model_iter_nth_child(pModel, &iter, nullptr, pos))
+        {
+            OString aStr(OUStringToOString(rId, RTL_TEXTENCODING_UTF8));
+            gtk_tree_store_set(m_pTreeStore, &iter, m_nIdCol, aStr.getStr(), -1);
+        }
+    }
+
+    virtual void remove(int pos) override
+    {
+        disable_notify_events();
+        GtkTreeModel* pModel = GTK_TREE_MODEL(m_pTreeStore);
+        GtkTreeIter iter;
+        if (gtk_tree_model_iter_nth_child(pModel, &iter, nullptr, pos))
+            tree_store_remove(pModel, &iter);
+        enable_notify_events();
+    }
+
     bool get_selected_iterator(GtkTreeIter* pIter) const
     {
         assert(gtk_icon_view_get_model(m_pIconView) && "don't request selection when frozen");
@@ -17334,6 +17426,13 @@ public:
         return gtk_tree_model_get_iter_first(pModel, &rGtkIter.iter);
     }
 
+    virtual bool iter_next_sibling(weld::TreeIter& rIter) const override
+    {
+        GtkInstanceTreeIter& rGtkIter = static_cast<GtkInstanceTreeIter&>(rIter);
+        GtkTreeModel* pModel = GTK_TREE_MODEL(m_pTreeStore);
+        return gtk_tree_model_iter_next(pModel, &rGtkIter.iter);
+    }
+
     virtual void scroll_to_item(const weld::TreeIter& rIter) override
     {
         assert(gtk_icon_view_get_model(m_pIconView) && "don't select when frozen, select after thaw. Note selection doesn't survive a freeze");
@@ -17377,6 +17476,8 @@ public:
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
         return get(rGtkIter.iter, m_nIdCol);
     }
+
+    virtual OUString get_id(int pos) const override { return get(pos, m_nIdCol); }
 
     virtual OUString get_text(const weld::TreeIter& rIter) const override
     {

@@ -49,20 +49,6 @@ private:
 
     using sd::sidebar::MasterPagesSelector::Fill;
 
-    /** Forward this call to the base class but save and restore the
-        currently selected item.
-        Assign the given master page to the list of pages.
-        @param pMasterPage
-            This master page will usually be a member of the list of all
-            available master pages as provided by the MasterPageContainer.
-        @param rPageList
-            The pages to which to assign the master page.  These pages may
-            be slides or master pages themselves.
-    */
-    virtual void AssignMasterPageToPageList (
-        SdPage* pMasterPage,
-        const std::shared_ptr<std::vector<SdPage*> >& rpPageList) override;
-
     virtual void LateInit() override;
 };
 

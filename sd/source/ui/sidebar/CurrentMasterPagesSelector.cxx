@@ -18,7 +18,6 @@
  */
 
 #include "CurrentMasterPagesSelector.hxx"
-#include "PreviewValueSet.hxx"
 #include <ViewShellBase.hxx>
 #include <DrawViewShell.hxx>
 #include <drawdoc.hxx>
@@ -61,13 +60,12 @@ std::unique_ptr<PanelLayout> CurrentMasterPagesSelector::Create (
     return xSelector;
 }
 
-CurrentMasterPagesSelector::CurrentMasterPagesSelector (
-    weld::Widget* pParent,
-    SdDrawDocument& rDocument,
-    ViewShellBase& rBase,
+CurrentMasterPagesSelector::CurrentMasterPagesSelector(
+    weld::Widget* pParent, SdDrawDocument& rDocument, ViewShellBase& rBase,
     const std::shared_ptr<MasterPageContainer>& rpContainer,
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
-    : MasterPagesSelector (pParent, rDocument, rBase, rpContainer, rxSidebar, "modules/simpress/ui/masterpagepanel.ui", "usedvalueset")
+    : MasterPagesSelector(pParent, rDocument, rBase, rpContainer, rxSidebar,
+                          "modules/simpress/ui/masterpagepanel.ui", "masterpagecurrent_icons")
 {
     Link<sd::tools::EventMultiplexerEvent&,void> aLink (LINK(this,CurrentMasterPagesSelector,EventMultiplexerListener));
     rBase.GetEventMultiplexer()->AddEventListener(aLink);
@@ -174,17 +172,6 @@ void CurrentMasterPagesSelector::UpdateSelection()
                 assert(dynamic_cast<SdPage*>(&rMasterPage));
                 aNames.insert(static_cast<SdPage&>(rMasterPage).GetName());
             }
-        }
-    }
-
-    // Find the items for the master pages in the set.
-    sal_uInt16 nItemCount (mxPreviewValueSet->GetItemCount());
-    for (nIndex=1; nIndex<=nItemCount && bLoop; nIndex++)
-    {
-        OUString sName (mxPreviewValueSet->GetItemText (nIndex));
-        if (aNames.find(sName) != aNames.end())
-        {
-            mxPreviewValueSet->SelectItem (nIndex);
         }
     }
 }
