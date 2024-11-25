@@ -53,13 +53,11 @@ namespace {
 class SortableGridDataModel;
 
 typedef ::comphelper::WeakComponentImplHelper    <   css::awt::grid::XSortableMutableGridDataModel
+                                            ,   css::awt::grid::XGridDataListener
                                             ,   css::lang::XServiceInfo
                                             ,   css::lang::XInitialization
                                             >   SortableGridDataModel_Base;
-typedef ::cppu::ImplHelper1 <   css::awt::grid::XGridDataListener
-                            >   SortableGridDataModel_PrivateBase;
 class SortableGridDataModel :public SortableGridDataModel_Base
-                            ,public SortableGridDataModel_PrivateBase
 {
 public:
     explicit SortableGridDataModel( const css::uno::Reference< css::uno::XComponentContext > & rxContext );
@@ -121,15 +119,6 @@ public:
 
     // XEventListener
     virtual void SAL_CALL disposing( const css::lang::EventObject& i_event ) override;
-
-    // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-    virtual void SAL_CALL acquire(  ) noexcept final override;
-    virtual void SAL_CALL release(  ) noexcept override;
-
-    // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
-    virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
 private:
     /** translates the given public index into one to be passed to our delegator
@@ -221,7 +210,6 @@ void lcl_clear( STLCONTAINER& i_container )
     {
     }
 
-
     SortableGridDataModel::SortableGridDataModel( SortableGridDataModel const & i_copySource )
         :m_xContext( i_copySource.m_xContext )
         ,m_isInitialized( true )
@@ -242,40 +230,6 @@ void lcl_clear( STLCONTAINER& i_container )
     {
         acquire();
         dispose();
-    }
-
-
-    Any SAL_CALL SortableGridDataModel::queryInterface( const Type& aType )
-    {
-        Any aReturn( SortableGridDataModel_Base::queryInterface( aType ) );
-        if ( !aReturn.hasValue() )
-            aReturn = SortableGridDataModel_PrivateBase::queryInterface( aType );
-        return aReturn;
-    }
-
-
-    void SAL_CALL SortableGridDataModel::acquire(  ) noexcept
-    {
-        SortableGridDataModel_Base::acquire();
-    }
-
-
-    void SAL_CALL SortableGridDataModel::release(  ) noexcept
-    {
-        SortableGridDataModel_Base::release();
-    }
-
-
-    Sequence< Type > SAL_CALL SortableGridDataModel::getTypes(  )
-    {
-        return SortableGridDataModel_Base::getTypes();
-        // don't expose the types got via SortableGridDataModel_PrivateBase - they're private, after all
-    }
-
-
-    Sequence< ::sal_Int8 > SAL_CALL SortableGridDataModel::getImplementationId(  )
-    {
-        return css::uno::Sequence<sal_Int8>();
     }
 
     Reference< XCollator > lcl_loadDefaultCollator_throw( const Reference<XComponentContext> & rxContext )
