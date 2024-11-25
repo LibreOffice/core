@@ -22,19 +22,7 @@
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/viewoptions.hxx>
-#include <o3tl/string_view.hxx>
-
-namespace
-{
-OUString generateEntryId(sal_uInt32 key, sal_uInt32 index)
-{
-    return OUString::number(key) + "_" + OUString::number(index);
-}
-
-sal_Int32 getKeyFromId(std::u16string_view id) { return o3tl::toInt32(o3tl::getToken(id, 0, '_')); }
-
-sal_Int32 getEntryIndexFromId(std::u16string_view id) { return o3tl::toInt32(o3tl::getToken(id, 1, '_')); }
-}
+#include <iostream>
 
 ScCondFormatManagerWindow::ScCondFormatManagerWindow(weld::TreeView& rTreeView,
     ScDocument& rDoc, ScConditionalFormatList* pFormatList)
@@ -63,14 +51,9 @@ void ScCondFormatManagerWindow::Init()
         {
             const ScRangeList& aRange = rItem->GetRange();
             aRange.Format(sRangeStr, ScRefFlags::VALID, mrDoc, mrDoc.GetAddressConvention());
-            for (size_t i = 0; i < rItem->size(); i++)
-            {
-                mrTreeView.append(generateEntryId(rItem->GetKey(), i), sRangeStr);
-                mrTreeView.set_text(nRow++,
-                                    ScCondFormatHelper::GetExpression(rItem->GetEntry(i),
-                                                                      aRange.GetTopLeftCorner()),
-                                    1);
-            }
+            mrTreeView.append(OUString::number(rItem->GetKey()), sRangeStr);
+            mrTreeView.set_text(nRow, ScCondFormatHelper::GetExpression(*rItem, aRange.GetTopLeftCorner()), 1);
+            ++nRow;
         }
     }
 
@@ -98,19 +81,8 @@ ScConditionalFormat* ScCondFormatManagerWindow::GetSelection()
     if (nEntry == -1)
         return nullptr;
 
-    sal_Int32 nKey = getKeyFromId(mrTreeView.get_id(nEntry));
-    return mpFormatList->GetFormat(nKey);
-}
-
-const ScFormatEntry* ScCondFormatManagerWindow::GetSelectedEntry()
-{
-    OUString id = mrTreeView.get_selected_id();
-    if (id.isEmpty())
-        return nullptr;
-
-    sal_Int32 nKey = getKeyFromId(id);
-    sal_Int32 nEntryIndex = getEntryIndexFromId(id);
-    return mpFormatList->GetFormat(nKey)->GetEntry(nEntryIndex);
+    sal_Int32 nIndex = mrTreeView.get_id(nEntry).toInt32();
+    return mpFormatList->GetFormat(nIndex);
 }
 
 void ScCondFormatManagerWindow::setColSizes()
@@ -278,7 +250,12 @@ IMPL_LINK_NOARG(ScCondFormatManagerDlg, ComboHdl, weld::ComboBox&, void)
 
 IMPL_LINK_NOARG(ScCondFormatManagerDlg, EntryFocus, weld::TreeView&, void)
 {
-    const ScFormatEntry* entry = m_xCtrlManager->GetSelectedEntry();
+    ScConditionalFormat* conditionFrmt = m_xCtrlManager->GetSelection();
+
+    if (!conditionFrmt)
+        return;
+
+    const ScFormatEntry* entry = conditionFrmt->GetEntry(0);
     if (!entry)
         return;
     auto type = entry->GetType();
