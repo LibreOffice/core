@@ -11,7 +11,6 @@
 
 #include <rtl/ustring.hxx>
 #include <address.hxx>
-#include <svx/fntctrl.hxx>
 
 class ScConditionalFormat;
 
@@ -30,12 +29,9 @@ class ScCondFormatHelper
 public:
     static SC_DLLPUBLIC OUString GetExpression(const ScConditionalFormat& rFormat, const ScAddress& rPos);
 
-    static SC_DLLPUBLIC OUString GetExpression( ScCondFormatEntryType eType, sal_Int32 nIndex,
-            std::u16string_view aStr1 = std::u16string_view(), std::u16string_view aStr2 = std::u16string_view() );
-    static SC_DLLPUBLIC void StyleSelect(weld::Window* pDialogParent, weld::ComboBox& rLbStyle,
-                                         const ScDocument& rDoc, SvxFontPrevWindow& rWdPreview);
-    static SC_DLLPUBLIC void FillStyleListBox(const ScDocument& rDocument, weld::ComboBox& rCombo);
-    static SC_DLLPUBLIC void UpdateStyleList(weld::ComboBox& rLbStyle, const ScDocument& rDoc);
+    static SC_DLLPUBLIC OUString GetExpression(ScCondFormatEntryType eType, sal_Int32 nIndex,
+                                               std::u16string_view aStr1 = std::u16string_view(),
+                                               std::u16string_view aStr2 = std::u16string_view());
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
