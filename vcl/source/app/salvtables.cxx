@@ -6951,9 +6951,12 @@ IMPL_LINK(SalInstanceEntryTreeView, KeyPressListener, VclWindowEvent&, rEvent, v
     if (rEvent.GetId() != VclEventId::WindowKeyInput)
         return;
     const KeyEvent& rKeyEvent = *static_cast<KeyEvent*>(rEvent.GetData());
+    if (rKeyEvent.GetKeyCode().GetModifier()) // tdf#163777 ignore when modifier held
+        return;
     sal_uInt16 nKeyCode = rKeyEvent.GetKeyCode().GetCode();
-    if (!(nKeyCode == KEY_UP || nKeyCode == KEY_DOWN || nKeyCode == KEY_PAGEUP
-          || nKeyCode == KEY_PAGEDOWN))
+    const bool bNavigation = nKeyCode == KEY_UP || nKeyCode == KEY_DOWN || nKeyCode == KEY_PAGEUP
+                             || nKeyCode == KEY_PAGEDOWN;
+    if (!bNavigation)
         return;
 
     m_pTreeView->disable_notify_events();
