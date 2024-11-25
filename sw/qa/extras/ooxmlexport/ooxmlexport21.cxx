@@ -857,6 +857,24 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf162746)
     assertXPath(pDump, "//page[1]/body/tab/infos/prtBounds"_ostr, "width"_ostr, u"9360"_ustr);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf146269)
+{
+    // Given a focument with a field in a redline:
+    createSwDoc("deleted_pageref.docx");
+    // It must open unmodified:
+    {
+        auto xModifiable = mxComponent.queryThrow<util::XModifiable>();
+        CPPUNIT_ASSERT(!xModifiable->isModified());
+    }
+
+    // Test also after save-and-reload:
+    saveAndReload(u"Office Open XML Text"_ustr);
+    {
+        auto xModifiable = mxComponent.queryThrow<util::XModifiable>();
+        CPPUNIT_ASSERT(!xModifiable->isModified());
+    }
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
