@@ -1114,7 +1114,7 @@ void SfxDispatcher::Update_Impl( bool bForce )
 
     bool bIsActive = false;
     SfxDispatcher *pActDispat = pWorkWin->GetBindings().GetDispatcher_Impl();
-    if ( !bIsActive && this == pActDispat )
+    if ( this == pActDispat )
         bIsActive = true;
 
     Update_Impl_( bUIActive, !bIsIPActive, bIsIPActive, pWorkWin );
@@ -1140,7 +1140,7 @@ void SfxDispatcher::Update_Impl_( bool bUIActive, bool bIsMDIApp, bool bIsIPOwne
     SfxWorkWindow *pWorkWin = xImp->pFrame->GetFrame().GetWorkWindow_Impl();
     bool bIsActive = false;
     SfxDispatcher *pActDispat = pWorkWin->GetBindings().GetDispatcher_Impl();
-    if ( pActDispat && !bIsActive )
+    if ( pActDispat )
     {
         if ( this == pActDispat )
             bIsActive = true;
@@ -1276,7 +1276,7 @@ void SfxDispatcher::Update_Impl_( bool bUIActive, bool bIsMDIApp, bool bIsIPOwne
     bool bIsTaskActive = false;
 
     SfxDispatcher *pActDispatcher = pTaskWin->GetBindings().GetDispatcher_Impl();
-    if ( pActDispatcher && !bIsTaskActive )
+    if ( pActDispatcher )
     {
         if ( this == pActDispatcher )
             bIsTaskActive = true;
