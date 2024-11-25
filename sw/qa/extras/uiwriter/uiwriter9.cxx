@@ -744,7 +744,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf144752)
     CPPUNIT_ASSERT_EQUAL(u"Word"_ustr, pWrtShell->GetSelText());
 }
 
-CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf162326_Pargraph)
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf162326_Paragraph)
 {
     createSwDoc("tdf162326.odt");
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
@@ -800,6 +800,32 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf162326_Character)
     CPPUNIT_ASSERT_EQUAL(short(1),
                          getProperty<short>(getRun(getParagraph(3), 2), u"CharUnderline"_ustr));
 }
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf162326_List)
+{
+    createSwDoc("tdf162326_list.odt");
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XParagraphCursor> xParaCursor(xTextDocument->getText()->createTextCursor(),
+                                                       uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT_EQUAL(u"A)"_ustr, getProperty<OUString>(xParaCursor, u"ListLabelString"_ustr));
+
+    dispatchCommand(mxComponent, u".uno:StyleApply"_ustr,
+                    { comphelper::makePropertyValue(u"FamilyName"_ustr, u"ParagraphStyles"_ustr),
+                      comphelper::makePropertyValue(u"Style"_ustr, u"Footnote"_ustr) });
+
+    //hard list attribute unchanged
+    CPPUNIT_ASSERT_EQUAL(u"A)"_ustr, getProperty<OUString>(xParaCursor, u"ListLabelString"_ustr));
+
+    dispatchCommand(mxComponent, u".uno:StyleApply"_ustr,
+                    { comphelper::makePropertyValue(u"FamilyName"_ustr, u"ParagraphStyles"_ustr),
+                      comphelper::makePropertyValue(u"Style"_ustr, u"Footnote"_ustr),
+                      comphelper::makePropertyValue(u"KeyModifier"_ustr, uno::Any(KEY_MOD1)) });
+
+    //list replaced by para style list setting
+    CPPUNIT_ASSERT_EQUAL(u"1."_ustr, getProperty<OUString>(xParaCursor, u"ListLabelString"_ustr));
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf163340)
 {
     createSwDoc("tdf163340.odt");

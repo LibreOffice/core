@@ -1018,7 +1018,7 @@ static bool lcl_SetTextFormatColl( SwNode* pNode, void* pArgs )
 
         // #i62675# check, if paragraph style has changed
         if ( pPara->bResetListAttrs &&
-             pFormat != pCNd->GetFormatColl()
+             (pPara->bResetAllCharAttrs || pFormat != pCNd->GetFormatColl())
             && pCNd->GetTextNode()->IsInList() )
         {
             // Check, if the list style of the paragraph will change.
