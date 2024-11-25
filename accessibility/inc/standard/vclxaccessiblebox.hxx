@@ -107,7 +107,7 @@ protected:
 
     /** Returns true when the object is valid.
     */
-    virtual bool IsValid() const = 0;
+    bool IsValid() const;
 
     virtual void ProcessWindowChildEvent (const VclWindowEvent& rVclWindowEvent) override;
     virtual void ProcessWindowEvent (const VclWindowEvent& rVclWindowEvent) override;

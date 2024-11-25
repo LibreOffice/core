@@ -33,12 +33,6 @@ VCLXAccessibleDropDownComboBox::VCLXAccessibleDropDownComboBox (VCLXWindow* pVCL
 {
 }
 
-
-bool VCLXAccessibleDropDownComboBox::IsValid() const
-{
-    return GetWindow();
-}
-
 void VCLXAccessibleDropDownComboBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEvent)
 {
     switch ( rVclWindowEvent.GetId() )

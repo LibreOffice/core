@@ -41,7 +41,6 @@ public:
 private:
     virtual ~VCLXAccessibleDropDownComboBox() override = default;
 
-    virtual bool IsValid() const override;
     virtual void ProcessWindowEvent(const VclWindowEvent& rVclWindowEvent) override;
 };
 

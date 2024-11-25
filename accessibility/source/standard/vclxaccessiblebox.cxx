@@ -54,6 +54,11 @@ VCLXAccessibleBox::VCLXAccessibleBox (VCLXWindow* pVCLWindow, BoxType aType, boo
 
 VCLXAccessibleBox::~VCLXAccessibleBox() {}
 
+bool VCLXAccessibleBox::IsValid() const
+{
+    return GetWindow();
+}
+
 void VCLXAccessibleBox::ProcessWindowChildEvent( const VclWindowEvent& rVclWindowEvent )
 {
     uno::Any aOldValue, aNewValue;

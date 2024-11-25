@@ -38,8 +38,6 @@ public:
 
 private:
     virtual ~VCLXAccessibleListBox() override = default;
-
-    virtual bool IsValid() const override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

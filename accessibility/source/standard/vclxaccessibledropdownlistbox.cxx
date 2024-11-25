@@ -30,11 +30,6 @@ VCLXAccessibleDropDownListBox::VCLXAccessibleDropDownListBox (VCLXWindow* pVCLWi
 {
 }
 
-bool VCLXAccessibleDropDownListBox::IsValid() const
-{
-    return GetWindow();
-}
-
 // XServiceInfo
 OUString VCLXAccessibleDropDownListBox::getImplementationName()
 {

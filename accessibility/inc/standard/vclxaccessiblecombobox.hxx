@@ -39,8 +39,6 @@ public:
 
 private:
     virtual ~VCLXAccessibleComboBox() override = default;
-
-    virtual bool IsValid() const override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -29,12 +29,6 @@ VCLXAccessibleListBox::VCLXAccessibleListBox (VCLXWindow* pVCLWindow)
 {
 }
 
-
-bool VCLXAccessibleListBox::IsValid() const
-{
-    return GetWindow();
-}
-
 // XServiceInfo
 
 OUString VCLXAccessibleListBox::getImplementationName()

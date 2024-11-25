@@ -30,12 +30,6 @@ VCLXAccessibleComboBox::VCLXAccessibleComboBox (VCLXWindow* pVCLWindow)
 {
 }
 
-
-bool VCLXAccessibleComboBox::IsValid() const
-{
-    return GetWindow();
-}
-
 // XServiceInfo
 
 OUString VCLXAccessibleComboBox::getImplementationName()
