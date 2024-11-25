@@ -23,8 +23,9 @@
 
 vcl::Window* ImplGetChildWindow( vcl::Window* pParent, sal_uInt16 n, sal_uInt16& nIndex, bool bTestEnable );
 
-vcl::Window* ImplFindDlgCtrlWindow( vcl::Window* pParent, vcl::Window* pWindow, sal_uInt16& rIndex,
-                               sal_uInt16& rFormStart, sal_uInt16& rFormEnd );
+vcl::Window* ImplFindDlgCtrlWindow(vcl::Window* pParent, const vcl::Window* pWindow,
+                                   sal_uInt16& rIndex, sal_uInt16& rFormStart,
+                                   sal_uInt16& rFormEnd);
 
 vcl::Window* ImplFindAccelWindow( vcl::Window* pParent, sal_uInt16& rIndex, sal_Unicode cCharCode,
                              sal_uInt16 nFormStart, sal_uInt16 nFormEnd, bool bCheckEnable = true );

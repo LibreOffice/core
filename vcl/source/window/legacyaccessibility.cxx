@@ -200,11 +200,8 @@ Window* Window::getLegacyNonLayoutAccessibleRelationMemberOf() const
         // is directly before the control
         // get form start and form end and index of this control
         sal_uInt16 nIndex, nFormStart, nFormEnd;
-        Window* pSWindow = ::ImplFindDlgCtrlWindow( pFrameWindow,
-            const_cast<Window*>(this),
-            nIndex,
-            nFormStart,
-            nFormEnd );
+        Window* pSWindow
+            = ::ImplFindDlgCtrlWindow(pFrameWindow, this, nIndex, nFormStart, nFormEnd);
         if( pSWindow && nIndex != nFormStart )
         {
             if( GetType() == WindowType::PUSHBUTTON      ||

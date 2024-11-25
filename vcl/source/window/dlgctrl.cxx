@@ -324,8 +324,8 @@ vcl::Window* Window::ImplGetDlgWindow( sal_uInt16 nIndex, GetDlgWindowType nType
 
 } /* namespace vcl */
 
-vcl::Window* ImplFindDlgCtrlWindow( vcl::Window* pParent, vcl::Window* pWindow, sal_uInt16& rIndex,
-                               sal_uInt16& rFormStart, sal_uInt16& rFormEnd )
+vcl::Window* ImplFindDlgCtrlWindow(vcl::Window* pParent, const vcl::Window* pWindow,
+                                   sal_uInt16& rIndex, sal_uInt16& rFormStart, sal_uInt16& rFormEnd)
 {
     vcl::Window* pSWindow;
     vcl::Window* pSecondWindow = nullptr;
