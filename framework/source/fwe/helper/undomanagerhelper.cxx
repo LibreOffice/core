@@ -205,7 +205,7 @@ namespace framework
         std::mutex                          m_aListenerMutex;
         std::mutex                          m_aQueueMutex;
         bool                                m_bAPIActionRunning;
-        bool                                m_bProcessingEvents;
+        std::atomic<bool>                   m_bProcessingEvents;
         sal_Int32                           m_nLockCount;
         ::comphelper::OInterfaceContainerHelper4<XUndoManagerListener>   m_aUndoListeners;
         ::comphelper::OInterfaceContainerHelper4<XModifyListener>   m_aModifyListeners;
