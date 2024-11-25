@@ -38,19 +38,20 @@ private:
     bool mbFrozen;
     bool mbNewEntry;
 
-    ScDocument* mpDoc;
+    ScDocument& mrDoc;
     ScAddress maPos;
     ScRangeList maRanges;
     ScCondFormatDlg* mpDialogParent;
 
 public:
     ScCondFormatList(ScCondFormatDlg* pParent,
+                     ScDocument& rDoc,
                      std::unique_ptr<weld::ScrolledWindow> xWindow,
                      std::unique_ptr<weld::Container> xGrid);
     weld::Container* GetContainer() { return mxGrid.get(); }
     ~ScCondFormatList();
 
-    void init(ScDocument& rDoc, const ScConditionalFormat* pFormat,
+    void init(const ScConditionalFormat* pFormat,
         const ScRangeList& rRanges, const ScAddress& rPos,
         condformat::dialog::ScCondFormatDialogType eType);
 

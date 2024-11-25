@@ -23,7 +23,7 @@ private:
     OUString maStrWarnSameValue;
     SvNumberFormatter* mpNumberFormatter;
 
-    ScDocument* mpDoc;
+    ScDocument& mrDoc;
     ScAddress maPos;
 
     std::unique_ptr<weld::Button> mxBtnOk;
@@ -53,7 +53,7 @@ private:
     void Init();
 
 public:
-    ScDataBarSettingsDlg(weld::Window* pParent, const ScDataBarFormatData& rData, ScDocument* pDoc,
+    ScDataBarSettingsDlg(weld::Window* pParent, const ScDataBarFormatData& rData, ScDocument& rDoc,
                          const ScAddress& rPos);
     virtual ~ScDataBarSettingsDlg() override;
 

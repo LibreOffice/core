@@ -41,7 +41,7 @@ private:
 
     weld::Window* mpParent;
     ScViewData* mpViewData;
-    ScDocument* mpDocument;
+    ScDocument& mrDocument;
     ScConditionMode meMode;
     bool mbIsManaged;
     OUString msFormula;

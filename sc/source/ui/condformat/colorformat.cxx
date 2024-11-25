@@ -25,7 +25,7 @@ void SetType(const ScColorScaleEntry* pEntry, weld::ComboBox& rLstBox)
 }
 
 void GetType(const weld::ComboBox& rLstBox, const weld::Entry& rEd, ScColorScaleEntry* pEntry, SvNumberFormatter* pNumberFormatter,
-        ScDocument* pDoc, const ScAddress& rPos )
+        ScDocument& rDoc, const ScAddress& rPos )
 {
     double nVal = 0;
     sal_uInt32 nIndex = 0;
@@ -43,33 +43,33 @@ void GetType(const weld::ComboBox& rLstBox, const weld::Entry& rEd, ScColorScale
             pEntry->SetValue(nVal);
             break;
         case COLORSCALE_FORMULA:
-            pEntry->SetFormula(rEd.get_text(), *pDoc, rPos);
+            pEntry->SetFormula(rEd.get_text(), rDoc, rPos);
             break;
     }
 }
 
-OUString convertNumberToString(double nVal, const ScDocument* pDoc)
+OUString convertNumberToString(double nVal, const ScDocument& rDoc)
 {
-    SvNumberFormatter* pNumberFormatter = pDoc->GetFormatTable();
+    SvNumberFormatter* pNumberFormatter = rDoc.GetFormatTable();
     return pNumberFormatter->GetInputLineString(nVal, 0);
 }
 
-void SetValue( const ScDocument* pDoc, const ScColorScaleEntry* pEntry, weld::Entry& rEdit)
+void SetValue( const ScDocument& rDoc, const ScColorScaleEntry* pEntry, weld::Entry& rEdit)
 {
     if(pEntry->GetType() == COLORSCALE_FORMULA)
         rEdit.set_text(pEntry->GetFormula(formula::FormulaGrammar::GRAM_DEFAULT));
     else if(pEntry->GetType() != COLORSCALE_MIN && pEntry->GetType() != COLORSCALE_MAX)
-        rEdit.set_text(convertNumberToString(pEntry->GetValue(), pDoc));
+        rEdit.set_text(convertNumberToString(pEntry->GetValue(), rDoc));
     else
         rEdit.set_sensitive(false);
 }
 
 }
 
-ScDataBarSettingsDlg::ScDataBarSettingsDlg(weld::Window* pParent, const ScDataBarFormatData& rData, ScDocument* pDoc, const ScAddress& rPos)
+ScDataBarSettingsDlg::ScDataBarSettingsDlg(weld::Window* pParent, const ScDataBarFormatData& rData, ScDocument& rDoc, const ScAddress& rPos)
     : GenericDialogController(pParent, u"modules/scalc/ui/databaroptions.ui"_ustr, u"DataBarOptions"_ustr)
-    , mpNumberFormatter(pDoc->GetFormatTable())
-    , mpDoc(pDoc)
+    , mpNumberFormatter(rDoc.GetFormatTable())
+    , mrDoc(rDoc)
     , maPos(rPos)
     , mxBtnOk(m_xBuilder->weld_button(u"ok"_ustr))
     , mxLbPos(new ColorListBox(m_xBuilder->weld_menu_button(u"positive_colour"_ustr), [this]{ return m_xDialog.get(); }))
@@ -109,10 +109,10 @@ ScDataBarSettingsDlg::ScDataBarSettingsDlg(weld::Window* pParent, const ScDataBa
     }
     ::SetType(rData.mpLowerLimit.get(), *mxLbTypeMin);
     ::SetType(rData.mpUpperLimit.get(), *mxLbTypeMax);
-    SetValue(mpDoc, rData.mpLowerLimit.get(), *mxEdMin);
-    SetValue(mpDoc, rData.mpUpperLimit.get(), *mxEdMax);
-    mxLenMin->set_text(convertNumberToString(rData.mnMinLength, mpDoc));
-    mxLenMax->set_text(convertNumberToString(rData.mnMaxLength, mpDoc));
+    SetValue(mrDoc, rData.mpLowerLimit.get(), *mxEdMin);
+    SetValue(mrDoc, rData.mpUpperLimit.get(), *mxEdMax);
+    mxLenMin->set_text(convertNumberToString(rData.mnMinLength, mrDoc));
+    mxLenMax->set_text(convertNumberToString(rData.mnMaxLength, mrDoc));
     mxLbAxisCol->SelectEntry(rData.maAxisColor);
     mxCbOnlyBar->set_active(rData.mbOnlyBar);
 
@@ -180,8 +180,8 @@ ScDataBarFormatData* ScDataBarSettingsDlg::GetData()
     pData->maAxisColor = mxLbAxisCol->GetSelectEntryColor();
     pData->mbOnlyBar = mxCbOnlyBar->get_active();
 
-    ::GetType(*mxLbTypeMin, *mxEdMin, pData->mpLowerLimit.get(), mpNumberFormatter, mpDoc, maPos);
-    ::GetType(*mxLbTypeMax, *mxEdMax, pData->mpUpperLimit.get(), mpNumberFormatter, mpDoc, maPos);
+    ::GetType(*mxLbTypeMin, *mxEdMin, pData->mpLowerLimit.get(), mpNumberFormatter, mrDoc, maPos);
+    ::GetType(*mxLbTypeMax, *mxEdMax, pData->mpUpperLimit.get(), mpNumberFormatter, mrDoc, maPos);
     GetAxesPosition(pData, *mxLbAxisPos);
     SetBarLength(pData, mxLenMin->get_text(), mxLenMax->get_text(), mpNumberFormatter);
 

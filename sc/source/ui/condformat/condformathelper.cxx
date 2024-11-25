@@ -231,7 +231,7 @@ OUString ScCondFormatHelper::GetExpression( ScCondFormatEntryType eType, sal_Int
 }
 
 void ScCondFormatHelper::StyleSelect(weld::Window* pDialogParent, weld::ComboBox& rLbStyle,
-                                     const ScDocument* pDoc, SvxFontPrevWindow& rWdPreview)
+                                     const ScDocument& rDoc, SvxFontPrevWindow& rWdPreview)
 {
     if (rLbStyle.get_active() == 0)
     {
@@ -260,7 +260,7 @@ void ScCondFormatHelper::StyleSelect(weld::Window* pDialogParent, weld::ComboBox
                     pDisp->Lock(true);
 
                 // Find the new style and add it into the style list boxes
-                SfxStyleSheetIterator aStyleIter(pDoc->GetStyleSheetPool(), SfxStyleFamily::Para);
+                SfxStyleSheetIterator aStyleIter(rDoc.GetStyleSheetPool(), SfxStyleFamily::Para);
                 bool bFound = false;
                 for (SfxStyleSheetBase* pStyle = aStyleIter.First(); pStyle && !bFound;
                      pStyle = aStyleIter.Next())
@@ -293,7 +293,7 @@ void ScCondFormatHelper::StyleSelect(weld::Window* pDialogParent, weld::ComboBox
 
     OUString aStyleName = rLbStyle.get_active_text();
     SfxStyleSheetBase* pStyleSheet
-        = pDoc->GetStyleSheetPool()->Find(aStyleName, SfxStyleFamily::Para);
+        = rDoc.GetStyleSheetPool()->Find(aStyleName, SfxStyleFamily::Para);
     if (pStyleSheet)
     {
         const SfxItemSet& rSet = pStyleSheet->GetItemSet();
@@ -301,10 +301,10 @@ void ScCondFormatHelper::StyleSelect(weld::Window* pDialogParent, weld::ComboBox
     }
 }
 
-void ScCondFormatHelper::FillStyleListBox(const ScDocument* pDocument, weld::ComboBox& rCombo)
+void ScCondFormatHelper::FillStyleListBox(const ScDocument& rDocument, weld::ComboBox& rCombo)
 {
     std::set<OUString> aStyleNames;
-    SfxStyleSheetIterator aStyleIter(pDocument->GetStyleSheetPool(), SfxStyleFamily::Para);
+    SfxStyleSheetIterator aStyleIter(rDocument.GetStyleSheetPool(), SfxStyleFamily::Para);
     for (SfxStyleSheetBase* pStyle = aStyleIter.First(); pStyle; pStyle = aStyleIter.Next())
     {
         aStyleNames.insert(pStyle->GetName());
@@ -315,16 +315,16 @@ void ScCondFormatHelper::FillStyleListBox(const ScDocument* pDocument, weld::Com
     }
 }
 
-void ScCondFormatHelper::UpdateStyleList(weld::ComboBox& rLbStyle, const ScDocument* pDoc)
+void ScCondFormatHelper::UpdateStyleList(weld::ComboBox& rLbStyle, const ScDocument& rDoc)
 {
     OUString aSelectedStyle = rLbStyle.get_active_text();
     for (sal_Int32 i = rLbStyle.get_count(); i > 1; --i)
         rLbStyle.remove(i - 1);
-    ScCondFormatHelper::FillStyleListBox(pDoc, rLbStyle);
+    ScCondFormatHelper::FillStyleListBox(rDoc, rLbStyle);
     rLbStyle.set_active_text(aSelectedStyle);
 }
 
-void ScCondFormatHelper::ValidateInputField(weld::Entry& rEntry, weld::Label& rLabel, ScDocument* pDoc, ScAddress& rPos)
+void ScCondFormatHelper::ValidateInputField(weld::Entry& rEntry, weld::Label& rLabel, ScDocument& rDoc, ScAddress& rPos)
 {
     OUString aFormula = rEntry.get_text();
 
@@ -334,7 +334,7 @@ void ScCondFormatHelper::ValidateInputField(weld::Entry& rEntry, weld::Label& rL
         return;
     }
 
-    ScCompiler aComp( *pDoc, rPos, pDoc->GetGrammar() );
+    ScCompiler aComp( rDoc, rPos, rDoc.GetGrammar() );
     aComp.SetExtendedErrorDetection( ScCompiler::ExtendedErrorDetection::EXTENDED_ERROR_DETECTION_NAME_BREAK);
     std::unique_ptr<ScTokenArray> ta(aComp.CompileString(aFormula));
 
