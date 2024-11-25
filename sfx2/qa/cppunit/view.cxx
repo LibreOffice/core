@@ -119,7 +119,8 @@ CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testLokHelperAddCertifices)
 CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testLokHelperCommandValuesSignature)
 {
     // Given an unsigned PDF file:
-    loadFromFile(u"unsigned.pdf");
+    createTempCopy(u"unsigned.pdf");
+    loadFromURL(maTempFile.GetURL());
 
     // When extracting hashes:
     tools::JsonWriter aWriter;
