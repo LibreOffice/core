@@ -556,6 +556,37 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSectionAnchorCopyTable)
         xCursor->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSectionAnchorProperties)
+{
+    createSwDoc("section-table.fodt");
+
+    uno::Reference<text::XTextSectionsSupplier> const xTextSectionsSupplier(mxComponent,
+                                                                            uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> const xSections(
+        xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
+
+    uno::Reference<text::XTextContent> const xSection(xSections->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> const xAnchor(xSection->getAnchor());
+    uno::Reference<beans::XPropertySet> const xAnchorProp(xAnchor, uno::UNO_QUERY);
+
+    // the problem was that the property set didn't work
+    auto xSecFromProp = getProperty<uno::Reference<text::XTextContent>>(xAnchorProp, "TextSection");
+    CPPUNIT_ASSERT_EQUAL(xSection, xSecFromProp);
+
+    xAnchorProp->setPropertyValue("CharHeight", uno::Any(float(64)));
+    CPPUNIT_ASSERT_EQUAL(float(64), getProperty<float>(xAnchorProp, "CharHeight"));
+    uno::Reference<beans::XPropertyState> const xAnchorState(xAnchor, uno::UNO_QUERY);
+    // TODO: why does this return DEFAULT_VALUE instead of DIRECT_VALUE?
+    CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DEFAULT_VALUE,
+                         xAnchorState->getPropertyState("CharHeight"));
+    CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DEFAULT_VALUE,
+                         xAnchorState->getPropertyStates({ "CharHeight" })[0]);
+    CPPUNIT_ASSERT_EQUAL(float(12), xAnchorState->getPropertyDefault("CharHeight").get<float>());
+    xAnchorState->setPropertyToDefault("CharHeight");
+    CPPUNIT_ASSERT_EQUAL(float(12), getProperty<float>(xAnchorProp, "CharHeight"));
+}
+
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTextRangeInTable)
 {
     createSwDoc("bookmarkintable.fodt");
