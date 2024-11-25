@@ -440,6 +440,7 @@ protected:
     virtual bool            drawNativeControl( ControlType nType, ControlPart nPart, const tools::Rectangle& rControlRegion,
                                                ControlState nState, const ImplControlValue& aValue,
                                                const OUString& aCaption, const Color& rBackgroundColor ) override;
+public:
     virtual bool            getNativeControlRegion( ControlType nType, ControlPart nPart, const tools::Rectangle& rControlRegion, ControlState nState,
                                                     const ImplControlValue& aValue, const OUString& aCaption,
                                                     tools::Rectangle &rNativeBoundingRegion, tools::Rectangle &rNativeContentRegion ) override;

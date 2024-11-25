@@ -27,6 +27,7 @@
 
 #include <quartz/CoreTextFont.hxx>
 #include <quartz/SystemFontList.hxx>
+#include <osx/salnativewidgets.h>
 #include <skia/quartz/cgutils.h>
 #include <tools/window/mac/MacWindowInfo.h>
 #include <tools/window/mac/GaneshMetalWindowContext_mac.h>
@@ -249,28 +250,51 @@ bool AquaSkiaSalGraphicsImpl::drawNativeControl(ControlType nType, ControlPart n
         return false;
 
     // rControlRegion is not the whole area that the control should be painted to (e.g. highlight
-    // around focused lineedit is outside of it). Since we draw to a temporary bitmap, we need tofind out
-    // the real size. Using getNativeControlRegion() might seem like the function to call, but we need
-    // the other direction - what is called rControlRegion here is rNativeContentRegion in that function
-    // what's called rControlRegion there is what we need here. Moreover getNativeControlRegion()
-    // in some cases returns a fixed size that does not depend on its input, so we have no way to
-    // actually find out what the original size was (or maybe the function is kind of broken, I don't know).
-    // So, add a generous margin and hope it's enough.
+    // around focused lineedit is outside of it). Since we draw to a temporary bitmap, we need to find out
+    // the real size.
+    // Related tdf#163945 Reduce the size of the temporary bitmap
+    // Previously, the temporary bitmap was set to the control region
+    // expanded by 50 * mScaling (e.g. both width and height were
+    // increased by 200 pixels when running on a Retina display). This
+    // caused temporary bitmaps to be up to several times larger than
+    // needed. Also, drawing NSBox objects to a CGBitmapContext is
+    // noticeably slow so filling all that unneeded temporary bitmap
+    // area can slow down performance when a large number of NSBox
+    // objects like the status bar are redrawn in quick succession.
+    // Using getNativeControlRegion() isn't perfect, but it does try to
+    // account for the focus ring as well as the minimum width and/or
+    // height of the native control so union the two regions set by
+    // getNativeControlRegion() and add double the focus ring width on
+    // each side just to be safe. In most cases, this should ensure
+    // that the temporary bitmap is large enough to draw the entire
+    // native control and a focus ring.
     tools::Rectangle boundingRegion(rControlRegion);
-    boundingRegion.expand(50 * mScaling);
+    tools::Rectangle rNativeBoundingRegion;
+    tools::Rectangle rNativeContentRegion;
+    AquaSalGraphics* pGraphics = mrShared.mpFrame->mpGraphics;
+    if (pGraphics
+        && pGraphics->getNativeControlRegion(nType, nPart, rControlRegion, nState, aValue,
+                                             OUString(), rNativeBoundingRegion,
+                                             rNativeContentRegion))
+    {
+        boundingRegion.Union(rNativeBoundingRegion);
+        boundingRegion.Union(rNativeContentRegion);
+    }
+    boundingRegion.expand(2 * FOCUS_RING_WIDTH * mScaling);
+
     // Do a scaled bitmap in HiDPI in order not to lose precision.
     const tools::Long width = boundingRegion.GetWidth() * mScaling;
     const tools::Long height = boundingRegion.GetHeight() * mScaling;
     const size_t bytes = width * height * 4;
-    sal_uInt8* data = new sal_uInt8[bytes];
-    memset(data, 0, bytes);
+    // Let Skia own the CGBitmapContext's buffer so that an SkImage
+    // can be created without Skia making a copy of the buffer
+    sk_sp<SkData> data = SkData::MakeZeroInitialized(bytes);
     CGContextRef context = CGBitmapContextCreate(
-        data, width, height, 8, width * 4, GetSalData()->mxRGBSpace,
+        data->writable_data(), width, height, 8, width * 4, GetSalData()->mxRGBSpace,
         SkiaToCGBitmapType(mSurface->imageInfo().colorType(), kPremul_SkAlphaType));
     if (!context)
     {
         SAL_WARN("vcl.skia", "drawNativeControl(): Failed to allocate bitmap context");
-        delete[] data;
         return false;
     }
     // Setup context state for drawing (performDrawNativeControl() e.g. fills background in some cases).
@@ -302,14 +326,6 @@ bool AquaSkiaSalGraphicsImpl::drawNativeControl(ControlType nType, ControlPart n
     CGContextRelease(context);
     if (bOK)
     {
-        // Let SkBitmap determine when it is safe to delete the pixel buffer
-        SkBitmap bitmap;
-        if (!bitmap.installPixels(SkImageInfo::Make(width, height,
-                                                    mSurface->imageInfo().colorType(),
-                                                    kPremul_SkAlphaType),
-                                  data, width * 4, nullptr, nullptr))
-            abort();
-
         preDraw();
         SAL_INFO("vcl.skia.trace", "drawnativecontrol(" << this << "): " << rControlRegion << ":"
                                                         << int(nType) << "/" << int(nPart));
@@ -322,23 +338,19 @@ bool AquaSkiaSalGraphicsImpl::drawNativeControl(ControlType nType, ControlPart n
                                          updateRect.GetWidth(), updateRect.GetHeight()));
         SkRect drawRect = SkRect::MakeXYWH(boundingRegion.getX(), boundingRegion.getY(),
                                            boundingRegion.GetWidth(), boundingRegion.GetHeight());
-        assert(drawRect.width() * mScaling == bitmap.width()); // no scaling should be needed
-        getDrawCanvas()->drawImageRect(bitmap.asImage(), drawRect, SkSamplingOptions());
+        sk_sp<SkImage> image = SkImages::RasterFromData(
+            SkImageInfo::Make(width, height, mSurface->imageInfo().colorType(),
+                              kPremul_SkAlphaType),
+            data, width * 4);
+        assert(image
+               && drawRect.width() * mScaling == image->width()); // no scaling should be needed
+        getDrawCanvas()->drawImageRect(image, drawRect, SkSamplingOptions());
         // Related: tdf#156881 flush the canvas after drawing the pixel buffer
         if (auto dContext = GrAsDirectContext(getDrawCanvas()->recordingContext()))
             dContext->flushAndSubmit();
         ++pendingOperationsToFlush; // tdf#136369
         postDraw();
     }
-    // Related: tdf#159529 eliminate possible memory leak
-    // Despite confirming that the release function passed to
-    // SkBitmap.bitmap.installPixels() does get called for every
-    // data array that has been allocated, Apple's Instruments
-    //  indicates that the data is leaking. While it is likely a
-    // false positive, it makes leak analysis difficult so leave
-    // the bitmap mutable. That causes SkBitmap.asImage() to make
-    // a copy of the data and the data can be safely deleted here.
-    delete[] data;
     return bOK;
 }
 
