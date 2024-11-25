@@ -617,8 +617,8 @@ public:
 //  complete conditional formatting
 class ScConditionalFormat
 {
-    ScDocument*         pDoc;
-    sal_uInt32          nKey;               // Index in attributes
+    ScDocument*         mpDoc;
+    sal_uInt32          mnKey;               // Index in attributes
 
     std::vector<std::unique_ptr<ScFormatEntry>> maEntries;
     ScRangeList maRanges;            // Ranges for conditional format
@@ -669,13 +669,13 @@ public:
 
     void            DoRepaint();
 
-    sal_uInt32      GetKey() const          { return nKey; }
-    void            SetKey(sal_uInt32 nNew) { nKey = nNew; }    // only if not inserted!
+    sal_uInt32      GetKey() const          { return mnKey; }
+    void            SetKey(sal_uInt32 nNew) { mnKey = nNew; }    // only if not inserted!
 
     bool            MarkUsedExternalReferences() const;
 
     //  sorted (via std::set) by Index
-    bool operator < ( const ScConditionalFormat& r ) const  { return nKey <  r.nKey; }
+    bool operator < ( const ScConditionalFormat& r ) const  { return mnKey <  r.mnKey; }
 
     void startRendering();
     void endRendering();

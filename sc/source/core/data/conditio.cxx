@@ -1786,8 +1786,8 @@ void ScColorFormatCache::Notify(const SfxHint& rHint)
 
 
 ScConditionalFormat::ScConditionalFormat(sal_uInt32 nNewKey, ScDocument* pDocument) :
-    pDoc( pDocument ),
-    nKey( nNewKey )
+    mpDoc( pDocument ),
+    mnKey( nNewKey )
 {
 }
 
@@ -1795,9 +1795,9 @@ std::unique_ptr<ScConditionalFormat> ScConditionalFormat::Clone(ScDocument* pNew
 {
     // Real copy of the formula (for Ref Undo/between documents)
     if (!pNewDoc)
-        pNewDoc = pDoc;
+        pNewDoc = mpDoc;
 
-    std::unique_ptr<ScConditionalFormat> pNew(new ScConditionalFormat(nKey, pNewDoc));
+    std::unique_ptr<ScConditionalFormat> pNew(new ScConditionalFormat(mnKey, pNewDoc));
     pNew->SetRange( maRanges );     // prerequisite for listeners
 
     for (const auto& rxEntry : maEntries)
@@ -1863,7 +1863,7 @@ size_t ScConditionalFormat::size() const
 
 ScDocument* ScConditionalFormat::GetDocument()
 {
-    return pDoc;
+    return mpDoc;
 }
 
 ScConditionalFormat::~ScConditionalFormat()
@@ -1941,7 +1941,7 @@ ScCondFormatData ScConditionalFormat::GetData( ScRefCellValue& rCell, const ScAd
 void ScConditionalFormat::DoRepaint()
 {
     // all conditional format cells
-    pDoc->RepaintRange( maRanges );
+    mpDoc->RepaintRange( maRanges );
 }
 
 void ScConditionalFormat::CompileAll()
@@ -1967,7 +1967,7 @@ void ScConditionalFormat::UpdateReference( sc::RefUpdateContext& rCxt, bool bCop
         // ScConditionEntry::UpdateReference() obtains its aSrcPos from
         // maRanges and does not update it on URM_COPY, but it's needed later
         // for the moved position, so update maRanges beforehand.
-        maRanges.UpdateReference(URM_MOVE, pDoc, rCxt.maRange, rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
+        maRanges.UpdateReference(URM_MOVE, mpDoc, rCxt.maRange, rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
         for (auto& rxEntry : maEntries)
             rxEntry->UpdateReference(rCxt);
     }
@@ -1975,7 +1975,7 @@ void ScConditionalFormat::UpdateReference( sc::RefUpdateContext& rCxt, bool bCop
     {
         for (auto& rxEntry : maEntries)
             rxEntry->UpdateReference(rCxt);
-        maRanges.UpdateReference(rCxt.meMode, pDoc, rCxt.maRange, rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
+        maRanges.UpdateReference(rCxt.meMode, mpDoc, rCxt.maRange, rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
     }
 
     ResetCache();
@@ -2162,8 +2162,8 @@ void ScConditionalFormat::CalcAll()
 
 void ScConditionalFormat::ResetCache() const
 {
-    if (!maRanges.empty() && pDoc)
-        mpCache = std::make_unique<ScColorFormatCache>(*pDoc, maRanges);
+    if (!maRanges.empty() && mpDoc)
+        mpCache = std::make_unique<ScColorFormatCache>(*mpDoc, maRanges);
     else
         mpCache.reset();
 }
