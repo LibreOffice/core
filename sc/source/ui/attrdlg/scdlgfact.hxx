@@ -115,7 +115,8 @@ public:
     virtual std::unique_ptr<ScConditionalFormatList> GetConditionalFormatList() override;
     virtual bool CondFormatsChanged() const override;
     virtual void SetModified() override;
-    virtual void ShowEasyConditionalDialog(bool isEdit = false) override;
+    virtual ScConditionalFormat* GetCondFormatSelected() override;
+    virtual void ShowEasyConditionalDialog() override;
 };
 
 class AbstractScDataPilotDatabaseDlg_Impl  :public AbstractScDataPilotDatabaseDlg

@@ -734,9 +734,14 @@ void AbstractScCondFormatManagerDlg_Impl::SetModified()
     return m_xDlg->SetModified();
 }
 
-void AbstractScCondFormatManagerDlg_Impl::ShowEasyConditionalDialog(bool isEdit)
+ScConditionalFormat* AbstractScCondFormatManagerDlg_Impl::GetCondFormatSelected()
 {
-    m_xDlg->ShowEasyConditionalDialog(isEdit);
+    return m_xDlg->GetCondFormatSelected();
+}
+
+void AbstractScCondFormatManagerDlg_Impl::ShowEasyConditionalDialog()
+{
+    m_xDlg->ShowEasyConditionalDialog();
 }
 
 int AbstractScMetricInputDlg_Impl::GetInputValue() const

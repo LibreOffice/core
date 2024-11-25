@@ -102,30 +102,15 @@ ScConditionalFormat* ScCondFormatManagerWindow::GetSelection()
     return mpFormatList->GetFormat(nKey);
 }
 
-const ScFormatEntry* ScCondFormatManagerWindow::GetSelectedEntry() const
+const ScFormatEntry* ScCondFormatManagerWindow::GetSelectedEntry()
 {
-    sal_Int32 nKey = GetSelectedFormatKey();
-    sal_Int32 nEntryIndex = GetSelectedEntryIndex();
-
-    if (nKey == -1 || nEntryIndex == -1)
+    OUString id = mrTreeView.get_selected_id();
+    if (id.isEmpty())
         return nullptr;
+
+    sal_Int32 nKey = getKeyFromId(id);
+    sal_Int32 nEntryIndex = getEntryIndexFromId(id);
     return mpFormatList->GetFormat(nKey)->GetEntry(nEntryIndex);
-}
-
-sal_Int32 ScCondFormatManagerWindow::GetSelectedFormatKey() const
-{
-    OUString id = mrTreeView.get_selected_id();
-    if (id.isEmpty())
-        return -1;
-    return getKeyFromId(id);
-}
-
-sal_Int32 ScCondFormatManagerWindow::GetSelectedEntryIndex() const
-{
-    OUString id = mrTreeView.get_selected_id();
-    if (id.isEmpty())
-        return -1;
-    return getEntryIndexFromId(id);
 }
 
 void ScCondFormatManagerWindow::setColSizes()
@@ -163,7 +148,6 @@ ScCondFormatManagerDlg::ScCondFormatManagerDlg(weld::Window* pParent, ScDocument
         m_xDialog->set_window_state(aDlgOpt.GetWindowState());
 
     UpdateButtonSensitivity();
-    EntryFocus(*m_xTreeView);
 }
 
 ScCondFormatManagerDlg::~ScCondFormatManagerDlg()
@@ -185,7 +169,14 @@ void ScCondFormatManagerDlg::UpdateButtonSensitivity()
     m_xBtnEdit->set_sensitive(bNewSensitivity);
 }
 
-void ScCondFormatManagerDlg::ShowEasyConditionalDialog(bool isEdit)
+// Get the current conditional format selected.
+//
+ScConditionalFormat* ScCondFormatManagerDlg::GetCondFormatSelected()
+{
+    return m_xCtrlManager->GetSelection();
+}
+
+void ScCondFormatManagerDlg::ShowEasyConditionalDialog()
 {
     SfxViewShell* pViewShell = SfxViewShell::Current();
     if (!pViewShell)
@@ -193,34 +184,32 @@ void ScCondFormatManagerDlg::ShowEasyConditionalDialog(bool isEdit)
 
     auto id = m_xConditionalType->get_active();
     SfxBoolItem IsManaged(FN_PARAM_2, true);
-    SfxInt32Item FormatKey(FN_PARAM_3, isEdit ? m_xCtrlManager->GetSelectedFormatKey() : -1);
-    SfxInt32Item EntryIndex(FN_PARAM_4, isEdit ? m_xCtrlManager->GetSelectedEntryIndex() : -1);
     switch (id)
     {
         case 0: // Cell value
         {
             SfxInt16Item FormatRule(FN_PARAM_1,
                                     m_xConditionalCellValue->get_active_id().toUInt32());
-            pViewShell->GetDispatcher()->ExecuteList(
-                SID_EASY_CONDITIONAL_FORMAT_DIALOG, SfxCallMode::ASYNCHRON,
-                { &FormatRule, &IsManaged, &FormatKey, &EntryIndex });
+            pViewShell->GetDispatcher()->ExecuteList(SID_EASY_CONDITIONAL_FORMAT_DIALOG,
+                                                     SfxCallMode::ASYNCHRON,
+                                                     { &FormatRule, &IsManaged });
         }
         break;
         case 1: // Formula
         {
             SfxInt16Item FormatRule(FN_PARAM_1, static_cast<sal_Int16>(ScConditionMode::Formula));
-            SfxStringItem Formula(FN_PARAM_5, m_xConditionalFormula->GetText());
-            pViewShell->GetDispatcher()->ExecuteList(
+            SfxStringItem Formula(FN_PARAM_3, m_xConditionalFormula->GetText());
+            SfxViewShell::Current()->GetDispatcher()->ExecuteList(
                 SID_EASY_CONDITIONAL_FORMAT_DIALOG, SfxCallMode::ASYNCHRON,
-                { &FormatRule, &IsManaged, &FormatKey, &EntryIndex, &Formula });
+                { &FormatRule, &IsManaged, &Formula });
         }
         break;
         case 2: // Date
         {
             SfxInt16Item FormatRule(FN_PARAM_1, m_xConditionalDate->get_active_id().toUInt32());
-            pViewShell->GetDispatcher()->ExecuteList(
-                SID_EASY_CONDITIONAL_FORMAT_DIALOG, SfxCallMode::ASYNCHRON,
-                { &FormatRule, &IsManaged, &FormatKey, &EntryIndex });
+            pViewShell->GetDispatcher()->ExecuteList(SID_EASY_CONDITIONAL_FORMAT_DIALOG,
+                                                     SfxCallMode::ASYNCHRON,
+                                                     { &FormatRule, &IsManaged });
         }
         break;
         default:

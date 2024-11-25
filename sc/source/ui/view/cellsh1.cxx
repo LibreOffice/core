@@ -2933,7 +2933,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     pDlg->SetModified();
 
                 pDlg->StartExecuteAsync(
-                    [pDlg, &rData, pTabViewShell, rDlgItem, aPos](sal_Int32 nRet)
+                    [this, pDlg, &rData, pTabViewShell, rDlgItem, aPos](sal_Int32 nRet)
                     {
                         std::unique_ptr<ScConditionalFormatList> pCondFormatList
                             = pDlg->GetConditionalFormatList();
@@ -2948,7 +2948,19 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         }
                         else if (nRet == DLG_RET_EDIT)
                         {
-                            pDlg->ShowEasyConditionalDialog(true);
+                            ScConditionalFormat* pFormat = pDlg->GetCondFormatSelected();
+                            sal_Int32 nIndex = pFormat ? pFormat->GetKey() : -1;
+                            // Put the xml string parameter to initialize the
+                            // Conditional Format Dialog. ( edit selected conditional format )
+                            pTabViewShell->setScCondFormatDlgItem(
+                                std::make_shared<ScCondFormatDlgData>(
+                                    std::shared_ptr<ScConditionalFormatList>(
+                                        pCondFormatList.release()),
+                                    nIndex, true));
+
+                            // Queue message to open Conditional Format Dialog
+                            GetViewData().GetDispatcher().Execute(SID_OPENDLG_CONDFRMT,
+                                                                  SfxCallMode::ASYNCHRON);
                         }
                         else
                             pCondFormatList.reset();
