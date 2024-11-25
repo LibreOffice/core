@@ -66,7 +66,6 @@ ConditionalFormatEasyDialog::ConditionalFormatEasyDialog(SfxBindings* pBindings,
     , mxNumberEntry(m_xBuilder->weld_entry("entryNumber"))
     , mxNumberEntry2(m_xBuilder->weld_entry("entryNumber2"))
     , mxAllInputs(m_xBuilder->weld_container("allInputs"))
-    , mxWarningLabel(m_xBuilder->weld_label("warning"))
     , mxRangeEntry(new formula::RefEdit(m_xBuilder->weld_entry("entryRange")))
     , mxButtonRangeEdit(new formula::RefButton(m_xBuilder->weld_button("rbassign")))
     , mxStyles(m_xBuilder->weld_combo_box("themeCombo"))
@@ -244,8 +243,6 @@ ConditionalFormatEasyDialog::ConditionalFormatEasyDialog(SfxBindings* pBindings,
     mxButtonOk->connect_clicked(LINK(this, ConditionalFormatEasyDialog, ButtonPressed));
     mxButtonCancel->connect_clicked(LINK(this, ConditionalFormatEasyDialog, ButtonPressed));
     mxStyles->connect_changed(LINK(this, ConditionalFormatEasyDialog, StyleSelectHdl));
-    mxNumberEntry->connect_changed(LINK(this, ConditionalFormatEasyDialog, OnEdChanged));
-    mxNumberEntry2->connect_changed(LINK(this, ConditionalFormatEasyDialog, OnEdChanged));
 
     ScRangeList aRange;
     mpViewData->GetMarkData().FillRangeListWithMarks(&aRange, false);
@@ -378,16 +375,6 @@ IMPL_LINK(ConditionalFormatEasyDialog, ButtonPressed, weld::Button&, rButton, vo
 IMPL_LINK_NOARG(ConditionalFormatEasyDialog, StyleSelectHdl, weld::ComboBox&, void)
 {
     ScCondFormatHelper::StyleSelect(mpParent, *mxStyles, &(mpViewData->GetDocument()), maWdPreview);
-}
-
-IMPL_LINK(ConditionalFormatEasyDialog, OnEdChanged, weld::Entry&, rEntry, void)
-{
-    ScCondFormatHelper::ValidateInputField(rEntry, *mxWarningLabel, mpDocument, maPosition);
-
-    if (!mxWarningLabel->get_label().isEmpty())
-        mxWarningLabel->show();
-    else
-        mxWarningLabel->hide();
 }
 
 } // namespace sc

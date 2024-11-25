@@ -242,7 +242,48 @@ ScFormatEntry* ScConditionFrmtEntry::createConditionEntry() const
 IMPL_LINK(ScConditionFrmtEntry, OnEdChanged, formula::RefEdit&, rRefEdit, void)
 {
     weld::Entry& rEdit = *rRefEdit.GetWidget();
-    ScCondFormatHelper::ValidateInputField(rEdit, *mxFtVal, mpDoc, maPos);
+    OUString aFormula = rEdit.get_text();
+
+    if( aFormula.isEmpty() )
+    {
+        mxFtVal->set_label(ScResId(STR_ENTER_VALUE));
+        return;
+    }
+
+    ScCompiler aComp( *mpDoc, maPos, mpDoc->GetGrammar() );
+    aComp.SetExtendedErrorDetection( ScCompiler::ExtendedErrorDetection::EXTENDED_ERROR_DETECTION_NAME_BREAK);
+    std::unique_ptr<ScTokenArray> ta(aComp.CompileString(aFormula));
+
+    // Error, warn the user if it is not an unknown name.
+    if (ta->GetCodeError() != FormulaError::NoName && (ta->GetCodeError() != FormulaError::NONE || ta->GetLen() == 0))
+    {
+        rEdit.set_message_type(weld::EntryMessageType::Error);
+        mxFtVal->set_label(ScResId(STR_VALID_DEFERROR));
+        return;
+    }
+
+    // Unrecognized name, warn the user; i.e. happens when starting to type and
+    // will go away once a valid name is completed.
+    if (ta->GetCodeError() == FormulaError::NoName)
+    {
+        rEdit.set_message_type(weld::EntryMessageType::Warning);
+        mxFtVal->set_label(ScResId(STR_UNQUOTED_STRING));
+        return;
+    }
+
+    // Generate RPN to detect further errors.
+    if (ta->GetLen() > 0)
+        aComp.CompileTokenArray();
+    // Error, warn the user.
+    if (ta->GetCodeError() != FormulaError::NONE || (ta->GetCodeLen() == 0))
+    {
+        rEdit.set_message_type(weld::EntryMessageType::Error);
+        mxFtVal->set_label(ScResId(STR_VALID_DEFERROR));
+        return;
+    }
+
+    rEdit.set_message_type(weld::EntryMessageType::Normal);
+    mxFtVal->set_label("");
 }
 
 void ScConditionFrmtEntry::Select()
