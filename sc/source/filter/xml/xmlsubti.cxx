@@ -219,9 +219,12 @@ void ScMyTables::AddColStyle(const sal_Int32 nRepeat, const OUString& rCellStyle
 {
     rImport.GetStylesImportHelper()->AddColumnStyle(rCellStyleName, nCurrentColCount, nRepeat);
     nCurrentColCount += nRepeat;
-    SAL_WARN_IF(nCurrentColCount > rImport.GetDocument()->GetSheetLimits().GetMaxColCount(),
-        "sc", "more columns than fit into SCCOL");
-    nCurrentColCount = std::min<sal_Int32>( nCurrentColCount, rImport.GetDocument()->GetSheetLimits().GetMaxColCount() );
+    if (ScDocument* pDoc = rImport.GetDocument())
+    {
+        SAL_WARN_IF(nCurrentColCount > pDoc->GetSheetLimits().GetMaxColCount(),
+            "sc", "more columns than fit into SCCOL");
+        nCurrentColCount = std::min<sal_Int32>( nCurrentColCount, pDoc->GetSheetLimits().GetMaxColCount() );
+    }
 }
 
 uno::Reference< drawing::XDrawPage > const & ScMyTables::GetCurrentXDrawPage()
@@ -294,7 +297,10 @@ bool ScMyTables::IsPartOfMatrix(const ScAddress& rScAddress) const
 
 SCCOL ScMyTables::GetCurrentColCount() const
 {
-    return std::min<sal_Int32>(nCurrentColCount, rImport.GetDocument()->MaxCol());
+    ScDocument* pDoc = rImport.GetDocument();
+    if (!pDoc)
+        return nCurrentColCount;
+    return std::min<sal_Int32>(nCurrentColCount, pDoc->MaxCol());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

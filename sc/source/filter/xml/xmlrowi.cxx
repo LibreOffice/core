@@ -72,10 +72,13 @@ ScXMLTableRowContext::ScXMLTableRowContext( ScXMLImport& rImport,
                 break;
                 case XML_ELEMENT( TABLE, XML_NUMBER_ROWS_REPEATED ):
                 {
-                    nRepeatedRows = std::max( it.toInt32(), sal_Int32(1) );
-                    nRepeatedRows = std::min( nRepeatedRows, rImport.GetDocument()->GetSheetLimits().GetMaxRowCount() );
-                    if (comphelper::IsFuzzing())
-                        nRepeatedRows = std::min(nRepeatedRows, sal_Int32(1024));
+                    if (ScDocument* pDoc = rImport.GetDocument())
+                    {
+                        nRepeatedRows = std::max( it.toInt32(), sal_Int32(1) );
+                        nRepeatedRows = std::min( nRepeatedRows, pDoc->GetSheetLimits().GetMaxRowCount() );
+                        if (comphelper::IsFuzzing())
+                            nRepeatedRows = std::min(nRepeatedRows, sal_Int32(1024));
+                    }
                 }
                 break;
                 case XML_ELEMENT( TABLE, XML_DEFAULT_CELL_STYLE_NAME ):
@@ -139,6 +142,9 @@ void SAL_CALL ScXMLTableRowContext::endFastElement(sal_Int32 /*nElement*/)
 {
     ScXMLImport& rXMLImport(GetScImport());
     ScDocument* pDoc(rXMLImport.GetDocument());
+    if (!pDoc)
+        return;
+
     if (!bHasCell && nRepeatedRows > 1)
     {
         for (sal_Int32 i = 0; i < nRepeatedRows - 1; ++i) //one row is always added

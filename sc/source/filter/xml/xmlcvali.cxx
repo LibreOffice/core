@@ -374,7 +374,8 @@ void SAL_CALL ScXMLContentValidationContext::endFastElement( sal_Int32 /*nElemen
     }
 
     ScMyImportValidation aValidation;
-    aValidation.eGrammar1 = aValidation.eGrammar2 = GetScImport().GetDocument()->GetStorageGrammar();
+    if (ScDocument* pDoc = GetScImport().GetDocument())
+        aValidation.eGrammar1 = aValidation.eGrammar2 = pDoc->GetStorageGrammar();
     aValidation.sName = sName;
     aValidation.sBaseCellAddress = sBaseCellAddress;
     aValidation.sInputTitle = sHelpTitle;

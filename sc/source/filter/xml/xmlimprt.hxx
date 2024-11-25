@@ -121,7 +121,7 @@ class ScXMLImport: public SvXMLImport
 
     typedef ::std::map<SCTAB, ScMyNamedExpressions> SheetNamedExpMap;
 
-    ScDocument*             pDoc;
+    ScDocument*             mpDoc;
     std::unique_ptr<ScDocumentImport> mpDocImport;
     std::unique_ptr<ScCompiler> mpComp; // For error-checking of cached string cell values.
     std::unique_ptr<ScEditEngineDefaulter> mpEditEngine;
@@ -205,8 +205,8 @@ public:
 
     ScDocumentImport& GetDoc();
 
-    ScDocument*          GetDocument()           { return pDoc; }
-    const ScDocument*    GetDocument() const     { return pDoc; }
+    SAL_RET_MAYBENULL ScDocument*          GetDocument()           { return mpDoc; }
+    SAL_RET_MAYBENULL const ScDocument*    GetDocument() const     { return mpDoc; }
 
     ScModelObj* GetScModel() const;
 

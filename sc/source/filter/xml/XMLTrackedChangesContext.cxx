@@ -824,11 +824,12 @@ uno::Reference< xml::sax::XFastContextHandler > ScXMLChangeCellContext::createFa
 
 void ScXMLChangeCellContext::CreateTextPContext(bool bIsNewParagraph)
 {
-    if (!GetScImport().GetDocument())
+    ScDocument* pDoc = GetScImport().GetDocument();
+    if (!pDoc)
         return;
 
     mpEditTextObj = new ScEditEngineTextObj();
-    mpEditTextObj->GetEditEngine()->SetEditTextObjectPool(GetScImport().GetDocument()->GetEditPool());
+    mpEditTextObj->GetEditEngine()->SetEditTextObjectPool(pDoc->GetEditPool());
     uno::Reference <text::XText> xText(mpEditTextObj);
     if (xText.is())
     {
@@ -847,7 +848,6 @@ void SAL_CALL ScXMLChangeCellContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     if (!bEmpty)
     {
-        ScDocument* pDoc = GetScImport().GetDocument();
         if (mpEditTextObj.is())
         {
             if (GetImport().GetTextImport()->GetCursor().is())
@@ -872,7 +872,8 @@ void SAL_CALL ScXMLChangeCellContext::endFastElement( sal_Int32 /*nElement*/ )
             {
                 if (!sText.isEmpty() && bString)
                 {
-                    mrOldCell.set(pDoc->GetSharedStringPool().intern(sText));
+                    if (ScDocument* pDoc = GetScImport().GetDocument())
+                        mrOldCell.set(pDoc->GetSharedStringPool().intern(sText));
                 }
                 else
                 {

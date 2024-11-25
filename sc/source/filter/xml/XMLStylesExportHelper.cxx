@@ -252,9 +252,12 @@ OUString ScMyValidationsContainer::GetCondition(ScXMLExport& rExport, const ScMy
     }
     if (!sCondition.isEmpty())
     {
-        const formula::FormulaGrammar::Grammar eGrammar = rExport.GetDocument()->GetStorageGrammar();
-        sal_uInt16 nNamespacePrefix = (eGrammar == formula::FormulaGrammar::GRAM_ODFF ? XML_NAMESPACE_OF : XML_NAMESPACE_OOOC);
-        sCondition = rExport.GetNamespaceMap().GetQNameByKey( nNamespacePrefix, sCondition, false );
+        if (ScDocument* pDoc = rExport.GetDocument())
+        {
+            const formula::FormulaGrammar::Grammar eGrammar = pDoc->GetStorageGrammar();
+            sal_uInt16 nNamespacePrefix = (eGrammar == formula::FormulaGrammar::GRAM_ODFF ? XML_NAMESPACE_OF : XML_NAMESPACE_OOOC);
+            sCondition = rExport.GetNamespaceMap().GetQNameByKey( nNamespacePrefix, sCondition, false );
+        }
     }
 
     return sCondition;

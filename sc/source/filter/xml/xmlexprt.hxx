@@ -72,7 +72,7 @@ class CompileFormulaContext;
 
 class ScXMLExport : public SvXMLExport
 {
-    ScDocument*                 pDoc;
+    ScDocument*                 mpDoc;
     css::uno::Reference <css::sheet::XSpreadsheet> xCurrentTable;
 
     css::uno::Reference<css::io::XInputStream> xSourceStream;
@@ -239,8 +239,8 @@ public:
     void collectAutoStyles() override;
 
     static sal_Int16 GetMeasureUnit();
-    ScDocument*          GetDocument()           { return pDoc; }
-    const ScDocument*    GetDocument() const     { return pDoc; }
+    SAL_RET_MAYBENULL ScDocument*          GetDocument()           { return mpDoc; }
+    SAL_RET_MAYBENULL const ScDocument*    GetDocument() const     { return mpDoc; }
     bool IsMatrix (const ScAddress& aCell,
         ScRange& aCellAddress, bool& bIsFirst) const;
 

@@ -238,6 +238,8 @@ void SparklineGroupsImportContext::fillSparklineAttributes(
     SparklineImportData& rImportData, uno::Reference<xml::sax::XFastAttributeList> const& xAttrList)
 {
     ScDocument* pDocument = GetScImport().GetDocument();
+    if (!pDocument)
+        return;
 
     for (auto& rIter : sax_fastparser::castToFastAttributeList(xAttrList))
     {
@@ -348,6 +350,9 @@ uno::Reference<xml::sax::XFastContextHandler>
 void SparklineGroupsImportContext::insertSparklines()
 {
     ScDocument* pDocument = GetScImport().GetDocument();
+    if (!pDocument)
+        return;
+
     for (auto const& rSparklineImportData : m_aCurrentSparklineDataList)
     {
         auto* pSparkline

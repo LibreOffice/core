@@ -74,6 +74,10 @@ void ScXMLFontAutoStylePool_Impl::AddFontItems(const sal_uInt16* pWhichIds, sal_
 ScXMLFontAutoStylePool_Impl::ScXMLFontAutoStylePool_Impl(ScXMLExport& rExportP, bool bEmbedFonts)
     : XMLFontAutoStylePool(rExportP, bEmbedFonts)
 {
+    ScDocument* pDoc = rExportP.GetDocument();
+    if (!pDoc)
+        return;
+
     sal_uInt16 const aWhichIds[]     { ATTR_FONT, ATTR_CJK_FONT,
                                        ATTR_CTL_FONT };
     sal_uInt16 const aEditWhichIds[] { EE_CHAR_FONTINFO, EE_CHAR_FONTINFO_CJK,
@@ -82,17 +86,17 @@ ScXMLFontAutoStylePool_Impl::ScXMLFontAutoStylePool_Impl(ScXMLExport& rExportP, 
                                        ATTR_PAGE_HEADERRIGHT, ATTR_PAGE_FOOTERRIGHT,
                                        ATTR_PAGE_HEADERFIRST, ATTR_PAGE_FOOTERFIRST };
 
-    const SfxItemPool* pItemPool(rExportP.GetDocument()->GetPool());
+    const SfxItemPool* pItemPool(pDoc->GetPool());
     AddFontItems(aWhichIds, 3, pItemPool, true);
-    const SfxItemPool* pEditPool(rExportP.GetDocument()->GetEditPool());
+    const SfxItemPool* pEditPool(pDoc->GetEditPool());
     AddFontItems(aEditWhichIds, 3, pEditPool, false);
 
-    std::unique_ptr<SfxStyleSheetIterator> pItr = rExportP.GetDocument()->GetStyleSheetPool()->CreateIterator(SfxStyleFamily::Page);
+    std::unique_ptr<SfxStyleSheetIterator> pItr = pDoc->GetStyleSheetPool()->CreateIterator(SfxStyleFamily::Page);
 
-    m_bEmbedUsedOnly = rExportP.GetDocument()->IsEmbedUsedFontsOnly();
-    m_bEmbedLatinScript = rExportP.GetDocument()->IsEmbedFontScriptLatin();
-    m_bEmbedAsianScript = rExportP.GetDocument()->IsEmbedFontScriptAsian();
-    m_bEmbedComplexScript = rExportP.GetDocument()->IsEmbedFontScriptComplex();
+    m_bEmbedUsedOnly = pDoc->IsEmbedUsedFontsOnly();
+    m_bEmbedLatinScript = pDoc->IsEmbedFontScriptLatin();
+    m_bEmbedAsianScript = pDoc->IsEmbedFontScriptAsian();
+    m_bEmbedComplexScript = pDoc->IsEmbedFontScriptComplex();
 
     if(!pItr)
         return;
@@ -152,7 +156,7 @@ XMLFontAutoStylePool* ScXMLExport::CreateFontAutoStylePool()
     // the embedding only in one of them.
     if(!( getExportFlags() & SvXMLExportFlags::CONTENT ))
         blockFontEmbedding = true;
-    if (!GetDocument()->IsEmbedFonts())
+    if (mpDoc && !mpDoc->IsEmbedFonts())
         blockFontEmbedding = true;
     return new ScXMLFontAutoStylePool_Impl( *this, !blockFontEmbedding );
 }

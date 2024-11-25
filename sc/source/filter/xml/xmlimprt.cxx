@@ -354,7 +354,7 @@ ScXMLImport::ScXMLImport(
     OUString const & implementationName, SvXMLImportFlags nImportFlag,
     const css::uno::Sequence< OUString > & sSupportedServiceNames)
 :   SvXMLImport( rContext, implementationName, nImportFlag, sSupportedServiceNames ),
-    pDoc( nullptr ),
+    mpDoc( nullptr ),
     mpPostProcessData(nullptr),
     aTables(*this),
     nSolarMutexLocked(0),
@@ -602,20 +602,20 @@ void ScXMLImport::InsertStyles()
 
 void ScXMLImport::ExamineDefaultStyle()
 {
-    if (pDoc)
+    if (mpDoc)
     {
         // #i62435# after inserting the styles, check if the default style has a latin-script-only
         // number format (then, value cells can be pre-initialized with western script type)
 
-        const ScPatternAttr& rDefPattern(pDoc->getCellAttributeHelper().getDefaultCellAttribute());
-        if (sc::NumFmtUtil::isLatinScript(rDefPattern, *pDoc))
+        const ScPatternAttr& rDefPattern(mpDoc->getCellAttributeHelper().getDefaultCellAttribute());
+        if (sc::NumFmtUtil::isLatinScript(rDefPattern, *mpDoc))
             mpDocImport->setDefaultNumericScript(SvtScriptType::LATIN);
     }
 }
 
 void ScXMLImport::SetChangeTrackingViewSettings(const css::uno::Sequence<css::beans::PropertyValue>& rChangeProps)
 {
-    if (!pDoc)
+    if (!mpDoc)
         return;
 
     if (!rChangeProps.hasElements())
@@ -685,12 +685,12 @@ void ScXMLImport::SetChangeTrackingViewSettings(const css::uno::Sequence<css::be
             {
                 ScRangeList aRangeList;
                 ScRangeStringConverter::GetRangeListFromString(
-                    aRangeList, sRanges, *pDoc, FormulaGrammar::CONV_OOO);
+                    aRangeList, sRanges, *mpDoc, FormulaGrammar::CONV_OOO);
                 aViewSettings.SetTheRangeList(aRangeList);
             }
         }
     }
-    pDoc->SetChangeViewSettings(aViewSettings);
+    mpDoc->SetChangeViewSettings(aViewSettings);
 }
 
 void ScXMLImport::SetViewSettings(const uno::Sequence<beans::PropertyValue>& aViewProps)
@@ -755,14 +755,14 @@ void ScXMLImport::SetConfigurationSettings(const uno::Sequence<beans::PropertyVa
                 ::comphelper::Base64::decode(aPass, sKey);
                 if (aPass.hasElements())
                 {
-                    if (pDoc->GetChangeTrack())
-                        pDoc->GetChangeTrack()->SetProtection(aPass);
+                    if (mpDoc->GetChangeTrack())
+                        mpDoc->GetChangeTrack()->SetProtection(aPass);
                     else
                     {
                         std::set<OUString> aUsers;
-                        std::unique_ptr<ScChangeTrack> pTrack( new ScChangeTrack(*pDoc, std::move(aUsers)) );
+                        std::unique_ptr<ScChangeTrack> pTrack( new ScChangeTrack(*mpDoc, std::move(aUsers)) );
                         pTrack->SetProtection(aPass);
-                        pDoc->SetChangeTrack(std::move(pTrack));
+                        mpDoc->SetChangeTrack(std::move(pTrack));
                     }
                 }
             }
@@ -805,7 +805,7 @@ sal_Int32 ScXMLImport::SetCurrencySymbol(const sal_Int32 nKey, std::u16string_vi
                 if (xProperties.is())
                 {
                     lang::Locale aLocale;
-                    if (GetDocument() && (xProperties->getPropertyValue(SC_LOCALE) >>= aLocale))
+                    if (mpDoc && (xProperties->getPropertyValue(SC_LOCALE) >>= aLocale))
                     {
                         {
                             ScXMLImport::MutexGuard aGuard(*this);
@@ -1112,16 +1112,16 @@ void SAL_CALL ScXMLImport::setTargetDocument( const css::uno::Reference< css::la
     SvXMLImport::setTargetDocument( xDoc );
 
     uno::Reference<frame::XModel> xModel(xDoc, uno::UNO_QUERY);
-    pDoc = ScXMLConverter::GetScDocument( xModel );
-    OSL_ENSURE( pDoc, "ScXMLImport::setTargetDocument - no ScDocument!" );
-    if (!pDoc)
+    mpDoc = ScXMLConverter::GetScDocument( xModel );
+    OSL_ENSURE( mpDoc, "ScXMLImport::setTargetDocument - no ScDocument!" );
+    if (!mpDoc)
         throw lang::IllegalArgumentException();
 
-    if (ScDocShell* pDocSh = pDoc->GetDocumentShell())
-        pDocSh->SetInitialLinkUpdate( pDocSh->GetMedium());
+    if (ScDocShell* mpDocSh = mpDoc->GetDocumentShell())
+        mpDocSh->SetInitialLinkUpdate( mpDocSh->GetMedium());
 
-    mpDocImport.reset(new ScDocumentImport(*pDoc));
-    mpComp.reset(new ScCompiler(*pDoc, ScAddress(), formula::FormulaGrammar::GRAM_ODFF));
+    mpDocImport.reset(new ScDocumentImport(*mpDoc));
+    mpComp.reset(new ScCompiler(*mpDoc, ScAddress(), formula::FormulaGrammar::GRAM_ODFF));
 
     uno::Reference<document::XActionLockable> xActionLockable(xDoc, uno::UNO_QUERY);
     if (xActionLockable.is())
@@ -1133,7 +1133,7 @@ void SAL_CALL ScXMLImport::startDocument()
 {
     ScXMLImport::MutexGuard aGuard(*this);
     SvXMLImport::startDocument();
-    if (pDoc && !pDoc->IsImportingXML())
+    if (mpDoc && !mpDoc->IsImportingXML())
     {
         GetScModel()->BeforeXMLLoading();
         bSelfImportingXMLSet = true;
@@ -1230,9 +1230,9 @@ void ScXMLImport::SetLabelRanges()
         sal_Int32 nOffset2(0);
         FormulaGrammar::AddressConvention eConv = FormulaGrammar::CONV_OOO;
 
-        assert(pDoc);
-        if (ScRangeStringConverter::GetRangeFromString( aLabelRange, rLabelRange.sLabelRangeStr, *pDoc, eConv, nOffset1 ) &&
-            ScRangeStringConverter::GetRangeFromString( aDataRange, rLabelRange.sDataRangeStr, *pDoc, eConv, nOffset2 ))
+        assert(mpDoc);
+        if (ScRangeStringConverter::GetRangeFromString( aLabelRange, rLabelRange.sLabelRangeStr, *mpDoc, eConv, nOffset1 ) &&
+            ScRangeStringConverter::GetRangeFromString( aDataRange, rLabelRange.sDataRangeStr, *mpDoc, eConv, nOffset2 ))
         {
             if ( rLabelRange.bColumnOrientation )
                 xColRanges->addNew( aLabelRange, aDataRange );
@@ -1307,45 +1307,45 @@ void ScXMLImport::SetNamedRanges()
     if (m_aMyNamedExpressions.empty())
         return;
 
-    if (!pDoc)
+    if (!mpDoc)
         return;
 
     // Insert the namedRanges
-    ScRangeName* pRangeNames = pDoc->GetRangeName();
+    ScRangeName* pRangeNames = mpDoc->GetRangeName();
     ::std::for_each(m_aMyNamedExpressions.begin(), m_aMyNamedExpressions.end(),
-            RangeNameInserter(*pDoc, *pRangeNames, -1));
+            RangeNameInserter(*mpDoc, *pRangeNames, -1));
 }
 
 void ScXMLImport::SetSheetNamedRanges()
 {
-    if (!pDoc)
+    if (!mpDoc)
         return;
 
     for (auto const& itr : m_SheetNamedExpressions)
     {
         const SCTAB nTab = itr.first;
-        ScRangeName* pRangeNames = pDoc->GetRangeName(nTab);
+        ScRangeName* pRangeNames = mpDoc->GetRangeName(nTab);
         if (!pRangeNames)
             continue;
 
         const ScMyNamedExpressions& rNames = itr.second;
-        ::std::for_each(rNames.begin(), rNames.end(), RangeNameInserter(*pDoc, *pRangeNames, nTab));
+        ::std::for_each(rNames.begin(), rNames.end(), RangeNameInserter(*mpDoc, *pRangeNames, nTab));
     }
 }
 
 void ScXMLImport::SetStringRefSyntaxIfMissing()
 {
-    if (!pDoc)
+    if (!mpDoc)
         return;
 
-    ScCalcConfig aCalcConfig = pDoc->GetCalcConfig();
+    ScCalcConfig aCalcConfig = mpDoc->GetCalcConfig();
 
     // Has any string ref syntax been imported?
     // If not, we need to take action
     if ( !aCalcConfig.mbHasStringRefSyntax )
     {
         aCalcConfig.meStringRefAddressSyntax = formula::FormulaGrammar::CONV_A1_XL_A1;
-        pDoc->SetCalcConfig(aCalcConfig);
+        mpDoc->SetCalcConfig(aCalcConfig);
     }
 }
 
@@ -1374,9 +1374,9 @@ void SAL_CALL ScXMLImport::endDocument()
                             if(rProp.Value >>= sTabName)
                             {
                                 SCTAB nTab(0);
-                                if (pDoc->GetTable(sTabName, nTab))
+                                if (mpDoc->GetTable(sTabName, nTab))
                                 {
-                                    pDoc->SetVisibleTab(nTab);
+                                    mpDoc->SetVisibleTab(nTab);
                                     break;
                                 }
                             }
@@ -1393,65 +1393,65 @@ void SAL_CALL ScXMLImport::endDocument()
                 mpPivotSources->process();
         }
         GetProgressBarHelper()->End();  // make room for subsequent SfxProgressBars
-        if (pDoc)
+        if (mpDoc)
         {
-            pDoc->CompileXML();
+            mpDoc->CompileXML();
 
             // After CompileXML, links must be completely changed to the new URLs.
             // Otherwise, hasExternalFile for API wouldn't work (#i116940#),
             // and typing a new formula would create a second link with the same "real" file name.
-            if (pDoc->HasExternalRefManager())
-                pDoc->GetExternalRefManager()->updateAbsAfterLoad();
+            if (mpDoc->HasExternalRefManager())
+                mpDoc->GetExternalRefManager()->updateAbsAfterLoad();
         }
 
         // If the stream contains cells outside of the current limits, the styles can't be re-created,
         // so stream copying is disabled then.
-        if (pDoc && GetModel().is() && !pDoc->HasRangeOverflow())
+        if (mpDoc && GetModel().is() && !mpDoc->HasRangeOverflow())
         {
             // set "valid stream" flags after loading (before UpdateRowHeights, so changed formula results
             // in UpdateRowHeights can already clear the flags again)
             ScSheetSaveData* pSheetData = GetScModel()->GetSheetSaveData();
 
-            SCTAB nTabCount = pDoc->GetTableCount();
+            SCTAB nTabCount = mpDoc->GetTableCount();
             for (SCTAB nTab=0; nTab<nTabCount; ++nTab)
             {
-                pDoc->SetDrawPageSize(nTab);
+                mpDoc->SetDrawPageSize(nTab);
                 if (!pSheetData->IsSheetBlocked( nTab ))
-                    pDoc->SetStreamValid( nTab, true );
+                    mpDoc->SetStreamValid( nTab, true );
             }
         }
 
         // There are rows with optimal height which need to be updated
-        if (pDoc && !maRecalcRowRanges.empty() && pDoc->GetDocumentShell()
-            && pDoc->GetDocumentShell()->GetRecalcRowHeightsMode())
+        if (mpDoc && !maRecalcRowRanges.empty() && mpDoc->GetDocumentShell()
+            && mpDoc->GetDocumentShell()->GetRecalcRowHeightsMode())
         {
-            bool bLockHeight = pDoc->IsAdjustHeightLocked();
+            bool bLockHeight = mpDoc->IsAdjustHeightLocked();
             if (bLockHeight)
             {
-                pDoc->UnlockAdjustHeight();
+                mpDoc->UnlockAdjustHeight();
             }
 
-            ScSizeDeviceProvider aProv(pDoc->GetDocumentShell());
-            ScDocRowHeightUpdater aUpdater(*pDoc, aProv.GetDevice(), aProv.GetPPTX(), aProv.GetPPTY(), &maRecalcRowRanges);
+            ScSizeDeviceProvider aProv(mpDoc->GetDocumentShell());
+            ScDocRowHeightUpdater aUpdater(*mpDoc, aProv.GetDevice(), aProv.GetPPTX(), aProv.GetPPTY(), &maRecalcRowRanges);
             aUpdater.update();
 
             if (bLockHeight)
             {
-                pDoc->LockAdjustHeight();
+                mpDoc->LockAdjustHeight();
             }
         }
 
         // Initialize and set position and size of objects
-        if (pDoc && pDoc->GetDrawLayer())
+        if (mpDoc && mpDoc->GetDrawLayer())
         {
-            ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
-            SCTAB nTabCount = pDoc->GetTableCount();
+            ScDrawLayer* pDrawLayer = mpDoc->GetDrawLayer();
+            SCTAB nTabCount = mpDoc->GetTableCount();
             for (SCTAB nTab = 0; nTab < nTabCount; ++nTab)
             {
                 const SdrPage* pPage = pDrawLayer->GetPage(nTab);
                 if (!pPage)
                     continue;
-                bool bNegativePage = pDoc->IsNegativePage(nTab);
+                bool bNegativePage = mpDoc->IsNegativePage(nTab);
                 for (const rtl::Reference<SdrObject>& pObj : *pPage)
                 {
                     ScDrawObjData* pData
@@ -1477,12 +1477,12 @@ void SAL_CALL ScXMLImport::endDocument()
     }
     SvXMLImport::endDocument();
 
-    if (pDoc)
+    if (mpDoc)
     {
-        pDoc->BroadcastUno(SfxHint(SfxHintId::ScClearCache));
+        mpDoc->BroadcastUno(SfxHint(SfxHintId::ScClearCache));
     }
 
-    if(pDoc && bSelfImportingXMLSet)
+    if(mpDoc && bSelfImportingXMLSet)
         GetScModel()->AfterXMLLoading();
 }
 
@@ -1490,7 +1490,7 @@ void SAL_CALL ScXMLImport::endDocument()
 void ScXMLImport::DisposingModel()
 {
     SvXMLImport::DisposingModel();
-    pDoc = nullptr;
+    mpDoc = nullptr;
 }
 
 ScXMLImport::MutexGuard::MutexGuard(ScXMLImport& rImport) :
@@ -1551,8 +1551,8 @@ void ScXMLImport::SetRangeOverflowType(ErrCode nType)
     //  isn't available in ScXMLImportWrapper::ImportFromComponent when using the
     //  OOo->Oasis transformation.
 
-    if ( pDoc )
-        pDoc->SetRangeOverflowType( nType );
+    if ( mpDoc )
+        mpDoc->SetRangeOverflowType( nType );
 }
 
 void ScXMLImport::ProgressBarIncrement()
@@ -1586,12 +1586,15 @@ void ScXMLImport::ExtractFormulaNamespaceGrammar(
             return;
     }
 
+    if (!mpDoc)
+        return;
+
     /*  Find default grammar for formulas without namespace. There may be
         documents in the wild that stored no namespace in ODF 1.0/1.1. Use
         GRAM_PODF then (old style ODF 1.0/1.1 formulas). The default for ODF
         1.2 and later without namespace is GRAM_ODFF (OpenFormula). */
     FormulaGrammar::Grammar eDefaultGrammar =
-        (GetDocument()->GetStorageGrammar() == FormulaGrammar::GRAM_PODF) ?
+        (mpDoc->GetStorageGrammar() == FormulaGrammar::GRAM_PODF) ?
             FormulaGrammar::GRAM_PODF : FormulaGrammar::GRAM_ODFF;
 
     /*  Check if we have no namespace at all. The value XML_NAMESPACE_NONE
@@ -1611,7 +1614,7 @@ void ScXMLImport::ExtractFormulaNamespaceGrammar(
         conjunction with defined names is confused as namespaces prefix, e.g.
         in the expression 'table:A1' where 'table' is a named reference. */
     if( ((nNsId & XML_NAMESPACE_UNKNOWN_FLAG) != 0) && !rFormulaNmsp.isEmpty() &&
-        GetDocument()->GetFormulaParserPool().hasFormulaParser( rFormulaNmsp ) )
+        mpDoc->GetFormulaParserPool().hasFormulaParser( rFormulaNmsp ) )
     {
         reGrammar = FormulaGrammar::GRAM_EXTERNAL;
         return;
@@ -1636,9 +1639,9 @@ ScEditEngineDefaulter* ScXMLImport::GetEditEngine()
 {
     if (!mpEditEngine)
     {
-        mpEditEngine.reset(new ScEditEngineDefaulter(pDoc->GetEnginePool()));
+        mpEditEngine.reset(new ScEditEngineDefaulter(mpDoc->GetEnginePool()));
         mpEditEngine->SetRefMapMode(MapMode(MapUnit::Map100thMM));
-        mpEditEngine->SetEditTextObjectPool(pDoc->GetEditPool());
+        mpEditEngine->SetEditTextObjectPool(mpDoc->GetEditPool());
         mpEditEngine->SetUpdateLayout(false);
         mpEditEngine->EnableUndo(false);
         mpEditEngine->SetControlWord(mpEditEngine->GetControlWord() & ~EEControlBits::ALLOWBIGOBJS);
@@ -1655,8 +1658,8 @@ const ScXMLEditAttributeMap& ScXMLImport::GetEditAttributeMap() const
 
 void ScXMLImport::NotifyContainsEmbeddedFont()
 {
-    if (pDoc)
-        pDoc->SetEmbedFonts(true);
+    if (mpDoc)
+        mpDoc->SetEmbedFonts(true);
 }
 
 ScMyImpDetectiveOpArray* ScXMLImport::GetDetectiveOpArray()

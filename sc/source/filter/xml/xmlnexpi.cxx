@@ -87,11 +87,14 @@ ScXMLNamedRangeContext::ScXMLNamedRangeContext(
     if (!pInserter)
         return;
 
+    ScDocument* pDoc = GetScImport().GetDocument();
+    if (!pDoc)
+        return;
     ScMyNamedExpression aNamedExpression;
     // A simple table:cell-range-address is not a formula expression, stored
     // without [] brackets but with dot, .A1
     aNamedExpression.eGrammar = formula::FormulaGrammar::mergeToGrammar(
-            GetScImport().GetDocument()->GetStorageGrammar(),
+            pDoc->GetStorageGrammar(),
             formula::FormulaGrammar::CONV_OOO);
 
     if ( rAttrList.is() )

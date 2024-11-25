@@ -400,6 +400,7 @@ ScCondFormatEntry* ScXMLMapContext::CreateConditionEntry()
 
     ScConditionMode eMode = ScConditionEntry::GetModeFromApi(aParseResult.meOperator);
     ScDocument* pDoc = GetScImport().GetDocument();
+    assert(pDoc);
 
     ScCondFormatEntry* pEntry =  new ScCondFormatEntry(eMode, aParseResult.maOperand1, aParseResult.maOperand2, *pDoc, ScAddress(), msApplyStyle,
                                                     OUString(), OUString(), eGrammar, eGrammar);
@@ -488,6 +489,9 @@ void XMLTableStyleContext::ApplyCondFormat( const uno::Sequence<table::CellRange
     }
 
     ScDocument* pDoc = GetScImport().GetDocument();
+    if (!pDoc)
+        return;
+
     SCTAB nTab = GetScImport().GetTables().GetCurrentSheet();
     ScConditionalFormatList* pFormatList = pDoc->GetCondFormList(nTab);
     auto itr = std::find_if(pFormatList->begin(), pFormatList->end(),

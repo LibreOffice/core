@@ -136,8 +136,8 @@ void ScXMLExportDDELinks::WriteDDELinks(const uno::Reference<sheet::XSpreadsheet
                 rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_DDE_ITEM, xDDELink->getItem());
                 rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_AUTOMATIC_UPDATE, XML_TRUE);
                 sal_uInt8 nMode;
-                if (rExport.GetDocument() &&
-                    rExport.GetDocument()->GetDdeLinkMode(nDDELink, nMode))
+                ScDocument* pDoc = rExport.GetDocument();
+                if (pDoc && pDoc->GetDdeLinkMode(nDDELink, nMode))
                 {
                     switch (nMode)
                     {

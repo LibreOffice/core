@@ -46,7 +46,8 @@ ScChangeTrackingExportHelper::ScChangeTrackingExportHelper(ScXMLExport& rTempExp
     : rExport(rTempExport),
     pChangeTrack(nullptr)
 {
-    pChangeTrack = rExport.GetDocument() ? rExport.GetDocument()->GetChangeTrack() : nullptr;
+    ScDocument* pDoc = rExport.GetDocument();
+    pChangeTrack = pDoc ? pDoc->GetChangeTrack() : nullptr;
 }
 
 ScChangeTrackingExportHelper::~ScChangeTrackingExportHelper()
@@ -216,9 +217,10 @@ void ScChangeTrackingExportHelper::SetValueAttributes(const double& fValue, cons
     {
         sal_uInt32 nIndex = 0;
         double fTempValue = 0.0;
-        if (rExport.GetDocument() && rExport.GetDocument()->GetFormatTable()->IsNumberFormat(sValue, nIndex, fTempValue))
+        ScDocument* pDoc = rExport.GetDocument();
+        if (pDoc && pDoc->GetFormatTable()->IsNumberFormat(sValue, nIndex, fTempValue))
         {
-            SvNumFormatType nType = rExport.GetDocument()->GetFormatTable()->GetType(nIndex);
+            SvNumFormatType nType = pDoc->GetFormatTable()->GetType(nIndex);
             if (nType & SvNumFormatType::DEFINED)
                 nType &= ~SvNumFormatType::DEFINED;
             switch(nType)
@@ -303,10 +305,12 @@ void ScChangeTrackingExportHelper::WriteEditCell(const ScCellValue& rCell)
 void ScChangeTrackingExportHelper::WriteFormulaCell(const ScCellValue& rCell, const OUString& sValue)
 {
     assert(rCell.getType() == CELLTYPE_FORMULA);
+    const ScDocument* pDoc = rExport.GetDocument();
+    if (!pDoc)
+        return;
 
     ScFormulaCell* pFormulaCell = rCell.getFormula();
     OUString sAddress;
-    const ScDocument* pDoc = rExport.GetDocument();
     ScRangeStringConverter::GetStringFromAddress(sAddress, pFormulaCell->aPos, pDoc, ::formula::FormulaGrammar::CONV_OOO);
     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CELL_ADDRESS, sAddress);
     const formula::FormulaGrammar::Grammar eGrammar = pDoc->GetStorageGrammar();

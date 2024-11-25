@@ -126,10 +126,10 @@ void SAL_CALL ScXMLCalculationSettingsContext::endFastElement( sal_Int32 /*nElem
     xPropertySet->setPropertyValue( SC_UNO_ITERCOUNT, uno::Any(nIterationCount) );
     xPropertySet->setPropertyValue( SC_UNO_ITEREPSILON, uno::Any(fIterationEpsilon) );
     xPropertySet->setPropertyValue( SC_UNO_NULLDATE, uno::Any(aNullDate) );
-    if (GetScImport().GetDocument())
+    if (ScDocument* pDoc = GetScImport().GetDocument())
     {
         ScXMLImport::MutexGuard aGuard(GetScImport());
-        ScDocOptions aDocOptions (GetScImport().GetDocument()->GetDocOptions());
+        ScDocOptions aDocOptions (pDoc->GetDocOptions());
         aDocOptions.SetYear2000(nYear2000);
         GetScImport().GetDocument()->SetDocOptions(aDocOptions);
     }

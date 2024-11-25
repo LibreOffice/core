@@ -60,6 +60,7 @@ IMPL_LINK(ScXMLConditionalFormatsContext, FormatDeletedHdl, ScConditionalFormat*
 void SAL_CALL ScXMLConditionalFormatsContext::endFastElement( sal_Int32 /*nElement*/ )
 {
     ScDocument* pDoc = GetScImport().GetDocument();
+    assert(pDoc);
 
     SCTAB nTab = GetScImport().GetTables().GetCurrentSheet();
     ScConditionalFormatList* pCondFormatList = pDoc->GetCondFormList(nTab);

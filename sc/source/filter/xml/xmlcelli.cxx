@@ -180,9 +180,14 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                     nMatrixRows = static_cast<SCROW>(it.toInt32());
                 break;
                 case XML_ELEMENT( TABLE, XML_NUMBER_COLUMNS_REPEATED ):
-                    nColsRepeated = static_cast<SCCOL>(
-                        std::min<sal_Int32>( rImport.GetDocument()->GetSheetLimits().GetMaxColCount(),
-                        std::max( it.toInt32(), static_cast<sal_Int32>(1) ) ));
+                {
+                    if (ScDocument* pDoc = rImport.GetDocument())
+                    {
+                        nColsRepeated = static_cast<SCCOL>(
+                            std::min<sal_Int32>( pDoc->GetSheetLimits().GetMaxColCount(),
+                            std::max( it.toInt32(), static_cast<sal_Int32>(1) ) ));
+                    }
+                }
                 break;
                 case XML_ELEMENT( OFFICE, XML_VALUE_TYPE ):
                     nCellType = ScXMLImport::GetCellType(it.toCString(), it.getLength());
@@ -688,21 +693,23 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLTableRowCellContex
         uno::Reference<drawing::XShapes> xShapes (rXMLImport.GetTables().GetCurrentXShapes());
         if (xShapes.is())
         {
-            ScDocument* pDoc = rXMLImport.GetDocument();
-            if (aCellPos.Col() > pDoc->MaxCol())
-                aCellPos.SetCol(pDoc->MaxCol());
-            if (aCellPos.Row() > pDoc->MaxRow())
-                aCellPos.SetRow(pDoc->MaxRow());
-            XMLTableShapeImportHelper* pTableShapeImport =
-                    static_cast< XMLTableShapeImportHelper* >( rXMLImport.GetShapeImport().get() );
-            pTableShapeImport->SetOnTable(false);
-            pTableShapeImport->SetCell(aCellPos);
-            pContext = XMLShapeImportHelper::CreateGroupChildContext(
-                rXMLImport, nElement, xAttrList, xShapes);
-            if (pContext)
+            if (ScDocument* pDoc = rXMLImport.GetDocument())
             {
-                bIsEmpty = false;
-                rXMLImport.ProgressBarIncrement();
+                if (aCellPos.Col() > pDoc->MaxCol())
+                    aCellPos.SetCol(pDoc->MaxCol());
+                if (aCellPos.Row() > pDoc->MaxRow())
+                    aCellPos.SetRow(pDoc->MaxRow());
+                XMLTableShapeImportHelper* pTableShapeImport =
+                        static_cast< XMLTableShapeImportHelper* >( rXMLImport.GetShapeImport().get() );
+                pTableShapeImport->SetOnTable(false);
+                pTableShapeImport->SetCell(aCellPos);
+                pContext = XMLShapeImportHelper::CreateGroupChildContext(
+                    rXMLImport, nElement, xAttrList, xShapes);
+                if (pContext)
+                {
+                    bIsEmpty = false;
+                    rXMLImport.ProgressBarIncrement();
+                }
             }
         }
     }
@@ -714,13 +721,15 @@ void ScXMLTableRowCellContext::DoMerge( const ScAddress& rScAddress, const SCCOL
 {
     SCCOL mergeToCol = rScAddress.Col() + nCols;
     SCROW mergeToRow = rScAddress.Row() + nRows;
-    ScDocument* pDoc = rXMLImport.GetDocument();
-    bool bInBounds = rScAddress.Col() <= pDoc->MaxCol() && rScAddress.Row() <= pDoc->MaxRow() &&
-                       mergeToCol <= pDoc->MaxCol() && mergeToRow <= pDoc->MaxRow();
-    if( bInBounds )
+    if (ScDocument* pDoc = rXMLImport.GetDocument())
     {
-        pDoc->DoMerge( rScAddress.Col(), rScAddress.Row(),
-                       mergeToCol, mergeToRow, rScAddress.Tab() );
+        bool bInBounds = rScAddress.Col() <= pDoc->MaxCol() && rScAddress.Row() <= pDoc->MaxRow() &&
+                           mergeToCol <= pDoc->MaxCol() && mergeToRow <= pDoc->MaxRow();
+        if( bInBounds )
+        {
+            pDoc->DoMerge( rScAddress.Col(), rScAddress.Row(),
+                           mergeToCol, mergeToRow, rScAddress.Tab() );
+        }
     }
 }
 
@@ -765,6 +774,9 @@ void ScXMLTableRowCellContext::SetContentValidation( const ScRange& rScRange )
         return;
 
     ScDocument* pDoc = rXMLImport.GetDocument();
+    if (!pDoc)
+        return;
+
     ScMyImportValidation aValidation;
     aValidation.eGrammar1 = aValidation.eGrammar2 = pDoc->GetStorageGrammar();
     if( !rXMLImport.GetValidation(*maContentValidationName, aValidation) )
@@ -1358,6 +1370,9 @@ void ScXMLTableRowCellContext::AddNonFormulaCell( const ScAddress& rCellPos )
 void ScXMLTableRowCellContext::PutFormulaCell( const ScAddress& rCellPos )
 {
     ScDocument* pDoc = rXMLImport.GetDocument();
+    if (!pDoc)
+        return;
+
     ScDocumentImport& rDocImport = rXMLImport.GetDoc();
 
     const OUString & aText = maFormula->first;

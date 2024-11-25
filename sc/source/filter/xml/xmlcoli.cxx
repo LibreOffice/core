@@ -52,8 +52,11 @@ ScXMLTableColContext::ScXMLTableColContext( ScXMLImport& rImport,
         {
         case XML_ELEMENT( TABLE, XML_NUMBER_COLUMNS_REPEATED ):
             {
-                nColCount = std::max<sal_Int32>(aIter.toInt32(), 1);
-                nColCount = std::min<sal_Int32>(nColCount, rImport.GetDocument()->GetSheetLimits().GetMaxColCount() );
+                if (ScDocument* pDoc = rImport.GetDocument())
+                {
+                    nColCount = std::max<sal_Int32>(aIter.toInt32(), 1);
+                    nColCount = std::min<sal_Int32>(nColCount, pDoc->GetSheetLimits().GetMaxColCount() );
+                }
             }
             break;
         case XML_ELEMENT( TABLE, XML_STYLE_NAME ):
@@ -86,7 +89,7 @@ void SAL_CALL ScXMLTableColContext::endFastElement( sal_Int32 /*nElement*/ )
     SCTAB nSheet = rXMLImport.GetTables().GetCurrentSheet();
     sal_Int32 nCurrentColumn = rXMLImport.GetTables().GetCurrentColCount();
     uno::Reference<sheet::XSpreadsheet> xSheet(rXMLImport.GetTables().GetCurrentXSheet());
-    if(xSheet.is())
+    if(pDoc && xSheet.is())
     {
         sal_Int32 nLastColumn(nCurrentColumn + nColCount - 1);
         if (nLastColumn > pDoc->MaxCol())
