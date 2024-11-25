@@ -364,7 +364,8 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
 
         ++aTmpStt;
     }
-    if( pEnd->GetContentIndex() == pEnd->GetNode().GetContentNode()->Len() )
+    if (!pEnd->GetNode().IsContentNode()
+        || pEnd->GetContentIndex() == pEnd->GetNode().GetContentNode()->Len())
     {
          // set up a later, and all CharFormatAttr -> TextFormatAttr
         ++aTmpEnd;
