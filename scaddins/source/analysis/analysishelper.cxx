@@ -44,6 +44,8 @@ using namespace sca::analysis;
 #define STDPAR              false   // all parameters are described
 #define INTPAR              true    // first parameter is internal
 
+#define INV_MATCHLEV 1764 // guess, what this is... :-) - I doubt this kind of comment looks fun :-(
+
 #define FUNCDATA( FUNCNAME, DBL, OPT, NUMOFPAR, CAT ) \
     { "get" #FUNCNAME, ANALYSIS_FUNCNAME_##FUNCNAME, ANALYSIS_##FUNCNAME, DBL, OPT, ANALYSIS_DEFFUNCNAME_##FUNCNAME, NUMOFPAR, CAT, nullptr }
 
@@ -2032,39 +2034,30 @@ void ComplexList::Append( const uno::Sequence< uno::Any >& aMultPars )
     }
 }
 
-ConvertData::ConvertData(const char p[], double fC, ConvertDataClass e, bool bPrefSupport)
+ConvertData::ConvertData(std::u16string_view sUnitName, double fC, ConvertDataClass e, bool bPrefSupport)
     : fConst(fC)
-    , aName(p, strlen(p), RTL_TEXTENCODING_MS_1252)
+    , aName(sUnitName)
     , eClass(e)
     , bPrefixSupport(bPrefSupport)
 {
+    assert(!aName.empty());
 }
 
-ConvertData::~ConvertData()
-{
-}
+ConvertData::~ConvertData() = default;
 
 sal_Int16 ConvertData::GetMatchingLevel( const OUString& rRef ) const
 {
     OUString aStr = rRef;
-    sal_Int32 nLen = rRef.getLength();
-    sal_Int32 nIndex = rRef.lastIndexOf( '^' );
-    if( nIndex > 0 && nIndex  == ( nLen - 2 ) )
-        aStr = aStr.subView( 0, nLen - 2 ) + OUStringChar( aStr[ nLen - 1 ] );
+    if (sal_Int32 nIndex = rRef.lastIndexOf('^'); nIndex > 0 && nIndex == (rRef.getLength() - 2))
+        aStr = aStr.replaceAt(nIndex, 1, "");
     if( aName == aStr )
         return 0;
-    else
+    if (std::u16string_view prefix; bPrefixSupport && aStr.endsWith(aName, &prefix))
     {
-        const sal_Unicode*  p = aStr.getStr();
-
-        nLen = aStr.getLength();
-        bool bPref = bPrefixSupport;
-        bool bOneChar = (bPref && nLen > 1 && (aName == p + 1));
-        if (bOneChar || (bPref && nLen > 2 && (aName == p + 2) &&
-                    *p == 'd' && *(p+1) == 'a'))
+        if (prefix.size() == 1 || prefix == u"da")
         {
             sal_Int16       n;
-            switch( *p )
+            switch (prefix[0])
             {
                 case 'y':   n = -24;    break;      // yocto
                 case 'z':   n = -21;    break;      // zepto
@@ -2076,12 +2069,10 @@ sal_Int16 ConvertData::GetMatchingLevel( const OUString& rRef ) const
                 case 'm':   n = -3;     break;
                 case 'c':   n = -2;     break;
                 case 'd':
-                    {
-                        if ( bOneChar )
-                            n = -1;                 // deci
-                        else
-                            n = 1;                  // deca
-                    }
+                    if (prefix.size() == 1)
+                        n = -1;                     // deci
+                    else
+                        n = 1;                      // deca
                     break;
                 case 'e':   n = 1;      break;
                 case 'h':   n = 2;      break;
@@ -2093,85 +2084,72 @@ sal_Int16 ConvertData::GetMatchingLevel( const OUString& rRef ) const
                 case 'E':   n = 18;     break;
                 case 'Z':   n = 21;     break;      // zetta
                 case 'Y':   n = 24;     break;      // yotta
-                default:
-                            n = INV_MATCHLEV;
+                default: return INV_MATCHLEV;
             }
 
 // We could weed some nonsense out, ODFF doesn't say so though.
 #if 0
             if (n < 0 && Class() == CDC_Information)
-                n = INV_MATCHLEV;   // milli-bits doesn't make sense
+                return INV_MATCHLEV;   // milli-bits doesn't make sense
 #endif
 
 //! <HACK> "cm3" is not 10^-2 m^3 but 10^-6 m^3 !!! ------------------
-            if( n != INV_MATCHLEV )
-            {
-                sal_Unicode cLast = p[ aStr.getLength() - 1 ];
-                if( cLast == '2' )
-                    n *= 2;
-                else if( cLast == '3' )
-                    n *= 3;
-            }
+            if (aStr.endsWith("2"))
+                n *= 2;
+            else if (aStr.endsWith("3"))
+                n *= 3;
 //! </HACK> -------------------------------------------------------------------
 
             return n;
         }
-        else if ( nLen > 2 && ( aName == p + 2 ) && ( Class() == CDC_Information ) )
+        else if (prefix.size() == 2 && prefix[1] == 'i' && Class() == CDC_Information)
         {
-            const sal_Unicode*  pStr = aStr.getStr();
-            if ( *(pStr + 1) != 'i')
-                return INV_MATCHLEV;
-            sal_Int16 n;
-            switch( *pStr )
+            switch (prefix[0])
             {
-                case 'k':   n = 10;      break;
-                case 'M':   n = 20;      break;
-                case 'G':   n = 30;      break;
-                case 'T':   n = 40;      break;
-                case 'P':   n = 50;      break;
-                case 'E':   n = 60;      break;
-                case 'Z':   n = 70;      break;
-                case 'Y':   n = 80;      break;
-                default:
-                            n = INV_MATCHLEV;
+                case 'k': return 10;
+                case 'M': return 20;
+                case 'G': return 30;
+                case 'T': return 40;
+                case 'P': return 50;
+                case 'E': return 60;
+                case 'Z': return 70;
+                case 'Y': return 80;
+                default:  return INV_MATCHLEV;
             }
-            return n;
         }
-        else
-            return INV_MATCHLEV;
     }
+    return INV_MATCHLEV;
 }
 
 
 double ConvertData::Convert(
     double f, const ConvertData& r, sal_Int16 nLevFrom, sal_Int16 nLevTo ) const
 {
-    if( Class() != r.Class() )
-        throw lang::IllegalArgumentException();
-
-    bool bBinFromLev = ( nLevFrom > 0 && ( nLevFrom % 10 ) == 0 );
-    bool bBinToLev   = ( nLevTo > 0 && ( nLevTo % 10 ) == 0 );
-
-    if ( Class() == CDC_Information && ( bBinFromLev || bBinToLev ) )
-    {
-        if ( bBinFromLev && bBinToLev )
-        {
-            nLevFrom = sal::static_int_cast<sal_Int16>( nLevFrom - nLevTo );
-            f *= r.fConst / fConst;
-            if( nLevFrom )
-                f *= pow( 2.0, nLevFrom );
-        }
-        else if ( bBinFromLev )
-            f *= ( r.fConst / fConst ) * ( pow( 2.0, nLevFrom ) / pow( 10.0, nLevTo ) );
-        else
-            f *= ( r.fConst / fConst ) * ( pow( 10.0, nLevFrom ) / pow( 2.0, nLevTo ) );
-        return f;
-    }
-
-    nLevFrom = sal::static_int_cast<sal_Int16>( nLevFrom - nLevTo );    // effective level
+    assert(Class() == r.Class());
 
     f *= r.fConst / fConst;
 
+    if (Class() == CDC_Information)
+    {
+        bool bBinFromLev = (nLevFrom > 0 && (nLevFrom % 10) == 0);
+        bool bBinToLev = (nLevTo > 0 && (nLevTo % 10) == 0);
+        if (bBinFromLev || bBinToLev)
+        {
+            if (bBinFromLev && bBinToLev)
+            {
+                nLevFrom -= nLevTo;
+                if (nLevFrom)
+                    f *= pow(2.0, nLevFrom);
+            }
+            else if (bBinFromLev)
+                f *= pow(2.0, nLevFrom) / pow(10.0, nLevTo);
+            else
+                f *= pow(10.0, nLevFrom) / pow(2.0, nLevTo);
+            return f;
+        }
+    }
+
+    nLevFrom -= nLevTo; // effective level
     if( nLevFrom )
         f = ::rtl::math::pow10Exp( f, nLevFrom );
 
@@ -2179,21 +2157,14 @@ double ConvertData::Convert(
 }
 
 
-double ConvertData::ConvertFromBase( double f, sal_Int16 n ) const
-{
-    return ::rtl::math::pow10Exp( f * fConst, -n );
-}
-
-ConvertDataLinear::~ConvertDataLinear()
-{
-}
+ConvertDataLinear::~ConvertDataLinear() = default;
 
 double ConvertDataLinear::Convert(
     double f, const ConvertData& r, sal_Int16 nLevFrom, sal_Int16 nLevTo ) const
 {
-    if( Class() != r.Class() )
-        throw lang::IllegalArgumentException();
-    return r.ConvertFromBase( ConvertToBase( f, nLevFrom ), nLevTo );
+    assert(Class() == r.Class());
+    assert(dynamic_cast<const ConvertDataLinear*>(&r));
+    return static_cast<const ConvertDataLinear&>(r).ConvertFromBase( ConvertToBase( f, nLevFrom ), nLevTo );
 }
 
 
@@ -2223,10 +2194,13 @@ double ConvertDataLinear::ConvertFromBase( double f, sal_Int16 n ) const
 
 ConvertDataList::ConvertDataList()
 {
-#define NEWD(str,unit,cl)   maVector.push_back(std::make_unique<ConvertData>(str,unit,cl))
-#define NEWDP(str,unit,cl)  maVector.push_back(std::make_unique<ConvertData>(str,unit,cl,true))
-#define NEWL(str,unit,offs,cl)  maVector.push_back(std::make_unique<ConvertDataLinear>(str,unit,offs,cl))
-#define NEWLP(str,unit,offs,cl) maVector.push_back(std::make_unique<ConvertDataLinear>(str,unit,offs,cl,true))
+#define NEWD(str,unit,cl)   maVector.push_back(std::make_unique<ConvertData>(u"" str,unit,cl))
+#define NEWDP(str,unit,cl)  maVector.push_back(std::make_unique<ConvertData>(u"" str,unit,cl,true))
+#define NEWL(str,unit,offs,cl)  maVector.push_back(std::make_unique<ConvertDataLinear>(u"" str,unit,offs,cl))
+#define NEWLP(str,unit,offs,cl) maVector.push_back(std::make_unique<ConvertDataLinear>(u"" str,unit,offs,cl,true))
+
+    const size_t expected_size = 146;
+    maVector.reserve(expected_size);
 
     // *** are extra and not standard Excel Analysis Addin!
 
@@ -2401,12 +2375,12 @@ ConvertDataList::ConvertDataList()
     // INFORMATION: 1 Bit is...
     NEWDP( "bit",   1.00E00,  CDC_Information); // *** Bit
     NEWDP( "byte",  1.25E-01, CDC_Information); // *** Byte
+
+    assert(maVector.size() == expected_size);
 }
 
 
-ConvertDataList::~ConvertDataList()
-{
-}
+ConvertDataList::~ConvertDataList() = default;
 
 
 double ConvertDataList::Convert( double fVal, const OUString& rFrom, const OUString& rTo )
@@ -2420,41 +2394,32 @@ double ConvertDataList::Convert( double fVal, const OUString& rFrom, const OUStr
 
     for( const auto& rItem : maVector )
     {
-        ConvertData*    p = rItem.get();
         if( bSearchFrom )
         {
-            sal_Int16   n = p->GetMatchingLevel( rFrom );
+            sal_Int16 n = rItem->GetMatchingLevel(rFrom);
             if( n != INV_MATCHLEV )
             {
-                if( n )
+                pFrom = rItem.get();
+                nLevelFrom = n;
+                if (!n)
                 {   // only first match for partial equality rulz a little bit more
-                    pFrom = p;
-                    nLevelFrom = n;
-                }
-                else
-                {   // ... but exact match rulz most
-                    pFrom = p;
+                    // ... but exact match rulz most
                     bSearchFrom = false;
-                    nLevelFrom = n;
                 }
             }
         }
 
         if( bSearchTo )
         {
-            sal_Int16   n = p->GetMatchingLevel( rTo );
+            sal_Int16 n = rItem->GetMatchingLevel(rTo);
             if( n != INV_MATCHLEV )
             {
-                if( n )
+                pTo = rItem.get();
+                nLevelTo = n;
+                if (!n)
                 {   // only first match for partial equality rulz a little bit more
-                    pTo = p;
-                    nLevelTo = n;
-                }
-                else
-                {   // ... but exact match rulz most
-                    pTo = p;
+                    // ... but exact match rulz most
                     bSearchTo = false;
-                    nLevelTo = n;
                 }
             }
         }
@@ -2464,6 +2429,9 @@ double ConvertDataList::Convert( double fVal, const OUString& rFrom, const OUStr
     }
 
     if( !pFrom || !pTo )
+        throw lang::IllegalArgumentException();
+
+    if (pFrom->Class() != pTo->Class())
         throw lang::IllegalArgumentException();
 
     return pFrom->Convert( fVal, *pTo, nLevelFrom, nLevelTo );

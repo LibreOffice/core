@@ -492,20 +492,17 @@ enum ConvertDataClass
 };
 
 
-#define INV_MATCHLEV        1764                    // guess, what this is... :-)
-
-
 class ConvertData
 {
 protected:
     friend class ConvertDataList;
     double                  fConst;
-    OUString                  aName;
+    std::u16string_view     aName;
     ConvertDataClass        eClass;
     bool                bPrefixSupport;
 public:
                             ConvertData(
-                                const char      pUnitName[],
+                                std::u16string_view sUnitName,
                                 double              fConvertConstant,
                                 ConvertDataClass    eClass,
                                 bool                bPrefSupport = false );
@@ -522,9 +519,8 @@ public:
     /// @throws css::lang::IllegalArgumentException
     virtual double          Convert( double fVal, const ConvertData& rTo,
                                 sal_Int16 nMatchLevelFrom, sal_Int16 nMatchLevelTo ) const;
-    virtual double          ConvertFromBase( double fVal, sal_Int16 nMatchLevel ) const;
 
-    inline ConvertDataClass Class() const;
+    ConvertDataClass Class() const { return eClass; }
 };
 
 class ConvertDataLinear final : public ConvertData
@@ -532,7 +528,7 @@ class ConvertDataLinear final : public ConvertData
     double                  fOffs;
 public:
     inline                  ConvertDataLinear(
-                                const char      pUnitName[],
+                                std::u16string_view sUnitName,
                                 double              fConvertConstant,
                                 double              fConvertOffset,
                                 ConvertDataClass    eClass,
@@ -548,7 +544,7 @@ public:
                             // throws exception if not from same class
                            // this implementation is for proportional cases only
     double                  ConvertToBase( double fVal, sal_Int16 nMatchLevel ) const;
-    virtual double          ConvertFromBase( double fVal, sal_Int16 nMatchLevel ) const override;
+    double                  ConvertFromBase( double fVal, sal_Int16 nMatchLevel ) const;
 };
 
 
@@ -709,14 +705,9 @@ inline void ComplexList::Append( Complex&& p )
 }
 
 
-inline ConvertDataClass ConvertData::Class() const
-{
-    return eClass;
-}
-
-inline ConvertDataLinear::ConvertDataLinear( const char p[], double fC, double fO, ConvertDataClass e,
+inline ConvertDataLinear::ConvertDataLinear( std::u16string_view sUnitName, double fC, double fO, ConvertDataClass e,
         bool bPrefSupport ) :
-    ConvertData( p, fC, e, bPrefSupport ),
+    ConvertData( sUnitName, fC, e, bPrefSupport ),
     fOffs( fO )
 {
 }
