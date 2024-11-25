@@ -1470,10 +1470,10 @@ void SdrDragMove::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
 
 SdrDragMove::SdrDragMove(SdrDragView& rNewView)
     : SdrDragMethod(rNewView)
-    , nBestXSnap(0)
-    , nBestYSnap(0)
-    , bXSnapped(false)
-    , bYSnapped(false)
+    , m_nBestXSnap(0)
+    , m_nBestYSnap(0)
+    , m_bXSnapped(false)
+    , m_bYSnapped(false)
 {
     setMoveOnly(true);
 }
@@ -1518,43 +1518,43 @@ void SdrDragMove::ImpCheckSnap(const Point& rPt)
 
     if (nRet & SdrSnap::XSNAPPED)
     {
-        if (bXSnapped)
+        if (m_bXSnapped)
         {
-            if (std::abs(aPt.X())<std::abs(nBestXSnap))
+            if (std::abs(aPt.X())<std::abs(m_nBestXSnap))
             {
-                nBestXSnap=aPt.X();
+                m_nBestXSnap=aPt.X();
             }
         }
         else
         {
-            nBestXSnap=aPt.X();
-            bXSnapped=true;
+            m_nBestXSnap=aPt.X();
+            m_bXSnapped=true;
         }
     }
 
     if (!(nRet & SdrSnap::YSNAPPED))
         return;
 
-    if (bYSnapped)
+    if (m_bYSnapped)
     {
-        if (std::abs(aPt.Y())<std::abs(nBestYSnap))
+        if (std::abs(aPt.Y())<std::abs(m_nBestYSnap))
         {
-            nBestYSnap=aPt.Y();
+            m_nBestYSnap=aPt.Y();
         }
     }
     else
     {
-        nBestYSnap=aPt.Y();
-        bYSnapped=true;
+        m_nBestYSnap=aPt.Y();
+        m_bYSnapped=true;
     }
 }
 
 void SdrDragMove::MoveSdrDrag(const Point& rNoSnapPnt_)
 {
-    nBestXSnap=0;
-    nBestYSnap=0;
-    bXSnapped=false;
-    bYSnapped=false;
+    m_nBestXSnap=0;
+    m_nBestYSnap=0;
+    m_bXSnapped=false;
+    m_bYSnapped=false;
     Point aNoSnapPnt(rNoSnapPnt_);
     const tools::Rectangle& aSR=GetMarkedRect();
     tools::Long nMovedx=aNoSnapPnt.X()-DragStat().GetStart().X();
@@ -1572,7 +1572,7 @@ void SdrDragMove::MoveSdrDrag(const Point& rNoSnapPnt_)
         ImpCheckSnap(aRU);
     }
 
-    Point aPnt(aNoSnapPnt.X()+nBestXSnap,aNoSnapPnt.Y()+nBestYSnap);
+    Point aPnt(aNoSnapPnt.X()+m_nBestXSnap,aNoSnapPnt.Y()+m_nBestYSnap);
     bool bOrtho=getSdrDragView().IsOrtho();
 
     if (bOrtho)
