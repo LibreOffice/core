@@ -1470,12 +1470,12 @@ SwXTextRange::setPropertyValue(
 {
     SolarMutexGuard aGuard;
 
-    if (!m_pMark)
+    if (!m_pMark && (m_eRangePosition != RANGE_IS_SECTION || !m_pTableOrSectionFormat))
     {
         throw uno::RuntimeException(u"range has no mark (table?)"_ustr);
     }
     SwPaM aPaM(GetDoc().GetNodes());
-    GetPositions(aPaM);
+    GetPositions(aPaM, ::sw::TextRangeMode::AllowNonTextNode);
     SwUnoCursorHelper::SetPropertyValue(aPaM, m_rPropSet,
             rPropertyName, rValue);
 }
@@ -1485,12 +1485,12 @@ SwXTextRange::getPropertyValue(const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
 
-    if (!m_pMark)
+    if (!m_pMark && (m_eRangePosition != RANGE_IS_SECTION || !m_pTableOrSectionFormat))
     {
         throw uno::RuntimeException(u"range has no mark (table?)"_ustr);
     }
     SwPaM aPaM(GetDoc().GetNodes());
-    GetPositions(aPaM);
+    GetPositions(aPaM, ::sw::TextRangeMode::AllowNonTextNode);
     return SwUnoCursorHelper::GetPropertyValue(aPaM, m_rPropSet,
             rPropertyName);
 }
@@ -1532,12 +1532,12 @@ SwXTextRange::getPropertyState(const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
 
-    if (!m_pMark)
+    if (!m_pMark && (m_eRangePosition != RANGE_IS_SECTION || !m_pTableOrSectionFormat))
     {
         throw uno::RuntimeException(u"range has no mark (table?)"_ustr);
     }
     SwPaM aPaM(GetDoc().GetNodes());
-    GetPositions(aPaM);
+    GetPositions(aPaM, ::sw::TextRangeMode::AllowNonTextNode);
     return SwUnoCursorHelper::GetPropertyState(aPaM, m_rPropSet,
             rPropertyName);
 }
@@ -1547,12 +1547,12 @@ SwXTextRange::getPropertyStates(const uno::Sequence< OUString >& rPropertyName)
 {
     SolarMutexGuard g;
 
-    if (!m_pMark)
+    if (!m_pMark && (m_eRangePosition != RANGE_IS_SECTION || !m_pTableOrSectionFormat))
     {
         throw uno::RuntimeException(u"range has no mark (table?)"_ustr);
     }
     SwPaM aPaM(GetDoc().GetNodes());
-    GetPositions(aPaM);
+    GetPositions(aPaM, ::sw::TextRangeMode::AllowNonTextNode);
     return SwUnoCursorHelper::GetPropertyStates(aPaM, m_rPropSet,
             rPropertyName);
 }
@@ -1561,12 +1561,12 @@ void SAL_CALL SwXTextRange::setPropertyToDefault(const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
 
-    if (!m_pMark)
+    if (!m_pMark && (m_eRangePosition != RANGE_IS_SECTION || !m_pTableOrSectionFormat))
     {
         throw uno::RuntimeException(u"range has no mark (table?)"_ustr);
     }
     SwPaM aPaM(GetDoc().GetNodes());
-    GetPositions(aPaM);
+    GetPositions(aPaM, ::sw::TextRangeMode::AllowNonTextNode);
     SwUnoCursorHelper::SetPropertyToDefault(aPaM, m_rPropSet,
             rPropertyName);
 }
@@ -1576,12 +1576,12 @@ SwXTextRange::getPropertyDefault(const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
 
-    if (!m_pMark)
+    if (!m_pMark && (m_eRangePosition != RANGE_IS_SECTION || !m_pTableOrSectionFormat))
     {
         throw uno::RuntimeException(u"range has no mark (table?)"_ustr);
     }
     SwPaM aPaM(GetDoc().GetNodes());
-    GetPositions(aPaM);
+    GetPositions(aPaM, ::sw::TextRangeMode::AllowNonTextNode);
     return SwUnoCursorHelper::GetPropertyDefault(aPaM, m_rPropSet,
             rPropertyName);
 }
