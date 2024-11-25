@@ -212,19 +212,6 @@ struct ScSheetLimits;
 struct ScDataAreaExtras;
 enum class ScConditionMode;
 
-struct ScConditionEasyDialogData
-{
-    ScConditionMode* Mode = nullptr;
-    bool IsManaged : 1 = false;
-
-    ScConditionEasyDialogData(ScConditionMode* mode, bool isManaged)
-        : Mode(mode)
-        , IsManaged(isManaged)
-    {
-    }
-
-    ScConditionEasyDialogData() {}
-};
 
 namespace sc {
 
@@ -439,7 +426,7 @@ private:
     std::unique_ptr<ScExtDocOptions> pExtDocOptions;    // for import etc.
     std::unique_ptr<ScClipOptions> mpClipOptions;       // clipboard options
     std::unique_ptr<ScConsolidateParam> pConsolidateDlgData;
-    ScConditionEasyDialogData pConditionalFormatDialogData;
+    std::unique_ptr<ScConditionMode> pConditionalFormatDialogMode;
 
     std::unique_ptr<ScAutoNameCache> pAutoNameCache;    // for automatic name lookup during CompileXML
 
@@ -667,11 +654,8 @@ public:
 
     void                        SetConsolidateDlgData( std::unique_ptr<ScConsolidateParam> pData );
     const ScConsolidateParam*   GetConsolidateDlgData() const { return pConsolidateDlgData.get(); }
-    void SetEasyConditionalFormatDialogData(const ScConditionEasyDialogData& data);
-    ScConditionEasyDialogData GetEasyConditionalFormatDialogData() const
-    {
-        return pConditionalFormatDialogData;
-    }
+    void                        SetEasyConditionalFormatDialogData(std::unique_ptr<ScConditionMode> pMode);
+    const ScConditionMode*      GetEasyConditionalFormatDialogData() const { return pConditionalFormatDialogMode.get(); }
 
     void                        Clear( bool bFromDestructor = false );
 

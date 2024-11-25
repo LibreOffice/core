@@ -456,20 +456,11 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     const SfxPoolItem* pFormat;
                     if (pReqArgs->HasItem( FN_PARAM_1, &pFormat))
                     {
-                        ScConditionMode nFormat = static_cast<ScConditionMode>(
-                            static_cast<const SfxInt16Item*>(pFormat)->GetValue());
+                        sal_Int16 nFormat = static_cast<const SfxInt16Item*>(pFormat)->GetValue();
                         sal_uInt16 nId = sc::ConditionalFormatEasyDialogWrapper::GetChildWindowId();
                         SfxViewFrame& rViewFrame = pTabViewShell->GetViewFrame();
                         SfxChildWindow* pWindow = rViewFrame.GetChildWindow( nId );
-                        const SfxPoolItem* pManaged;
-                        bool bManaged = false;
-                        if (pReqArgs->HasItem(FN_PARAM_2, &pManaged))
-                        {
-                            bManaged = static_cast<const SfxBoolItem*>(pManaged)->GetValue();
-                        }
-
-                        GetViewData().GetDocument().SetEasyConditionalFormatDialogData(
-                            ScConditionEasyDialogData(&nFormat, bManaged));
+                        GetViewData().GetDocument().SetEasyConditionalFormatDialogData(std::make_unique<ScConditionMode>(static_cast<ScConditionMode>(nFormat)));
 
                         pScMod->SetRefDialog( nId, pWindow == nullptr );
                     }
