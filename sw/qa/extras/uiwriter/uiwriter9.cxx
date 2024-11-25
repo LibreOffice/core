@@ -679,6 +679,88 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf144752)
     CPPUNIT_ASSERT_EQUAL(u"Word"_ustr, pWrtShell->GetSelText());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf162326_Paragraph)
+{
+    createSwDoc("tdf162326.odt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD,
+                         getProperty<float>(getRun(getParagraph(1), 1), u"CharWeight"_ustr));
+    CPPUNIT_ASSERT_EQUAL(
+        awt::FontSlant_ITALIC,
+        getProperty<awt::FontSlant>(getRun(getParagraph(2), 2), u"CharPosture"_ustr));
+    CPPUNIT_ASSERT_EQUAL(short(1),
+                         getProperty<short>(getRun(getParagraph(3), 2), u"CharUnderline"_ustr));
+
+    pWrtShell->Down(/*bSelect=*/true, 3);
+
+    dispatchCommand(mxComponent, u".uno:StyleApply"_ustr,
+                    { comphelper::makePropertyValue(u"FamilyName"_ustr, u"ParagraphStyles"_ustr),
+                      comphelper::makePropertyValue(u"Style"_ustr, u"Footnote"_ustr),
+                      comphelper::makePropertyValue(u"KeyModifier"_ustr, uno::Any(KEY_MOD1)) });
+
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL,
+                         getProperty<float>(getRun(getParagraph(1), 1), u"CharWeight"_ustr));
+    CPPUNIT_ASSERT_THROW(getRun(getParagraph(2), 2), css::container::NoSuchElementException);
+    CPPUNIT_ASSERT_THROW(getRun(getParagraph(3), 2), css::container::NoSuchElementException);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf162326_Character)
+{
+    createSwDoc("tdf162326.odt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD,
+                         getProperty<float>(getRun(getParagraph(1), 1), u"CharWeight"_ustr));
+    CPPUNIT_ASSERT_EQUAL(
+        awt::FontSlant_ITALIC,
+        getProperty<awt::FontSlant>(getRun(getParagraph(2), 2), u"CharPosture"_ustr));
+    CPPUNIT_ASSERT_EQUAL(short(1),
+                         getProperty<short>(getRun(getParagraph(3), 2), u"CharUnderline"_ustr));
+
+    pWrtShell->Down(/*bSelect=*/true, 3);
+
+    //add Ctrl/MOD_1
+    dispatchCommand(mxComponent, u".uno:StyleApply"_ustr,
+                    { comphelper::makePropertyValue(u"FamilyName"_ustr, u"CharacterStyles"_ustr),
+                      comphelper::makePropertyValue(u"Style"_ustr, u"Definition"_ustr),
+                      comphelper::makePropertyValue(u"KeyModifier"_ustr, uno::Any(KEY_MOD1)) });
+
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL,
+                         getProperty<float>(getRun(getParagraph(1), 1), u"CharWeight"_ustr));
+    CPPUNIT_ASSERT_THROW(getRun(getParagraph(2), 2), css::container::NoSuchElementException);
+    //last runs are not changed because the selection ends at the beginning of that paragraph
+    CPPUNIT_ASSERT_EQUAL(short(1),
+                         getProperty<short>(getRun(getParagraph(3), 2), u"CharUnderline"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf162326_List)
+{
+    createSwDoc("tdf162326_list.odt");
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XParagraphCursor> xParaCursor(xTextDocument->getText()->createTextCursor(),
+                                                       uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT_EQUAL(u"A)"_ustr, getProperty<OUString>(xParaCursor, u"ListLabelString"_ustr));
+
+    dispatchCommand(mxComponent, u".uno:StyleApply"_ustr,
+                    { comphelper::makePropertyValue(u"FamilyName"_ustr, u"ParagraphStyles"_ustr),
+                      comphelper::makePropertyValue(u"Style"_ustr, u"Footnote"_ustr) });
+
+    //hard list attribute unchanged
+    CPPUNIT_ASSERT_EQUAL(u"A)"_ustr, getProperty<OUString>(xParaCursor, u"ListLabelString"_ustr));
+
+    dispatchCommand(mxComponent, u".uno:StyleApply"_ustr,
+                    { comphelper::makePropertyValue(u"FamilyName"_ustr, u"ParagraphStyles"_ustr),
+                      comphelper::makePropertyValue(u"Style"_ustr, u"Footnote"_ustr),
+                      comphelper::makePropertyValue(u"KeyModifier"_ustr, uno::Any(KEY_MOD1)) });
+
+    //list replaced by para style list setting
+    CPPUNIT_ASSERT_EQUAL(u"1."_ustr, getProperty<OUString>(xParaCursor, u"ListLabelString"_ustr));
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf163340)
 {
     createSwDoc("tdf163340.odt");
@@ -735,38 +817,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf162326_Pargraph)
                          getProperty<float>(getRun(getParagraph(1), 1), u"CharWeight"_ustr));
     CPPUNIT_ASSERT_THROW(getRun(getParagraph(2), 2), css::container::NoSuchElementException);
     CPPUNIT_ASSERT_THROW(getRun(getParagraph(3), 2), css::container::NoSuchElementException);
-}
-
-CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf162326_Character)
-{
-    createSwDoc("tdf162326.odt");
-    SwXTextDocument* pDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pDoc);
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    CPPUNIT_ASSERT(pWrtShell);
-
-    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD,
-                         getProperty<float>(getRun(getParagraph(1), 1), u"CharWeight"_ustr));
-    CPPUNIT_ASSERT_EQUAL(
-        awt::FontSlant_ITALIC,
-        getProperty<awt::FontSlant>(getRun(getParagraph(2), 2), u"CharPosture"_ustr));
-    CPPUNIT_ASSERT_EQUAL(short(1),
-                         getProperty<short>(getRun(getParagraph(3), 2), u"CharUnderline"_ustr));
-
-    pWrtShell->Down(/*bSelect=*/true, 3);
-
-    //add Ctrl/MOD_1
-    dispatchCommand(mxComponent, u".uno:StyleApply"_ustr,
-                    { comphelper::makePropertyValue(u"FamilyName"_ustr, u"CharacterStyles"_ustr),
-                      comphelper::makePropertyValue(u"Style"_ustr, u"Definition"_ustr),
-                      comphelper::makePropertyValue(u"KeyModifier"_ustr, uno::Any(KEY_MOD1)) });
-
-    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL,
-                         getProperty<float>(getRun(getParagraph(1), 1), u"CharWeight"_ustr));
-    CPPUNIT_ASSERT_THROW(getRun(getParagraph(2), 2), css::container::NoSuchElementException);
-    //last runs are not changed because the selection ends at the beginning of that paragraph
-    CPPUNIT_ASSERT_EQUAL(short(1),
-                         getProperty<short>(getRun(getParagraph(3), 2), u"CharUnderline"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf162195)
