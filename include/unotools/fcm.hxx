@@ -23,6 +23,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/util/XModifiable2.hpp>
 
 namespace utl
 {
@@ -40,12 +41,22 @@ ConnectFrameControllerModel(const css::uno::Reference<css::frame::XFrame>& xFram
                             const css::uno::Reference<css::frame::XController2>& xController,
                             const css::uno::Reference<css::frame::XModel>& xModel)
 {
+    auto xModifiable = xModel.query<css::util::XModifiable2>();
+    bool bOldModifiable = false;
+    if (xModifiable)
+    {
+        bOldModifiable = xModifiable->isSetModifiedEnabled();
+        if (bOldModifiable)
+            xModifiable->disableSetModified();
+    }
     ConnectModelController(xModel, xController);
     if (xFrame)
         xFrame->setComponent(xController->getComponentWindow(), xController);
     // creates the view and menu
     // for correct menu creation the initialized component must be already set into the frame
     xController->attachFrame(xFrame);
+    if (xModifiable && bOldModifiable)
+        xModifiable->enableSetModified();
 }
 }
 
