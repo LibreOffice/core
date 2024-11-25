@@ -229,12 +229,10 @@ struct ScConditionEasyDialogData
 {
     ScConditionMode* Mode = nullptr;
     bool IsManaged : 1 = false;
-    OUString Formula;
 
-    ScConditionEasyDialogData(ScConditionMode* mode, bool isManaged, const OUString& formula = "")
+    ScConditionEasyDialogData(ScConditionMode* mode, bool isManaged)
         : Mode(mode)
         , IsManaged(isManaged)
-        , Formula(formula)
     {
     }
 

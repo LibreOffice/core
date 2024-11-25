@@ -20,7 +20,6 @@
 #include <sfx2/viewsh.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
-#include <svl/stritem.hxx>
 #include <unotools/viewoptions.hxx>
 #include <iostream>
 
@@ -95,13 +94,15 @@ void ScCondFormatManagerWindow::setColSizes()
     mrTreeView.set_column_fixed_widths(aWidths);
 }
 
-ScCondFormatManagerDlg::ScCondFormatManagerDlg(weld::Window* pParent, ScDocument& rDoc, const ScConditionalFormatList* pFormatList)
-    : GenericDialogController(pParent, u"modules/scalc/ui/condformatmanager.ui"_ustr, u"CondFormatManager"_ustr)
+ScCondFormatManagerDlg::ScCondFormatManagerDlg(weld::Window* pParent, ScDocument& rDoc,
+                                               const ScConditionalFormatList* pFormatList)
+    : GenericDialogController(pParent, u"modules/scalc/ui/condformatmanager.ui"_ustr,
+                              u"CondFormatManager"_ustr)
     , m_bModified(false)
-    , m_xFormatList( pFormatList ? new ScConditionalFormatList(*pFormatList) : nullptr)
+    , m_xFormatList(pFormatList ? new ScConditionalFormatList(*pFormatList) : nullptr)
     , m_xConditionalType(m_xBuilder->weld_combo_box("type"))
     , m_xConditionalCellValue(m_xBuilder->weld_combo_box("typeis"))
-    , m_xConditionalFormula(new formula::RefEdit(m_xBuilder->weld_entry("formula")))
+    , m_xConditionalFormula(m_xBuilder->weld_entry("formula"))
     , m_xConditionalDate(m_xBuilder->weld_combo_box("datetype"))
     , m_xBtnAdd(m_xBuilder->weld_button(u"add"_ustr))
     , m_xBtnRemove(m_xBuilder->weld_button(u"remove"_ustr))
@@ -171,10 +172,9 @@ void ScCondFormatManagerDlg::ShowEasyConditionalDialog()
         case 1: // Formula
         {
             SfxInt16Item FormatRule(FN_PARAM_1, static_cast<sal_Int16>(ScConditionMode::Formula));
-            SfxStringItem Formula(FN_PARAM_3, m_xConditionalFormula->GetText());
             SfxViewShell::Current()->GetDispatcher()->ExecuteList(
                 SID_EASY_CONDITIONAL_FORMAT_DIALOG, SfxCallMode::ASYNCHRON,
-                { &FormatRule, &IsManaged, &Formula });
+                { &FormatRule, &IsManaged });
         }
         break;
         case 2: // Date
@@ -229,21 +229,21 @@ IMPL_LINK_NOARG(ScCondFormatManagerDlg, ComboHdl, weld::ComboBox&, void)
         case 0:
         {
             m_xConditionalCellValue->set_visible(true);
-            m_xConditionalFormula->GetWidget()->set_visible(false);
+            m_xConditionalFormula->set_visible(false);
             m_xConditionalDate->set_visible(false);
         }
         break;
         case 1:
         {
             m_xConditionalCellValue->set_visible(false);
-            m_xConditionalFormula->GetWidget()->set_visible(true);
+            m_xConditionalFormula->set_visible(true);
             m_xConditionalDate->set_visible(false);
         }
         break;
         case 2:
         {
             m_xConditionalCellValue->set_visible(false);
-            m_xConditionalFormula->GetWidget()->set_visible(false);
+            m_xConditionalFormula->set_visible(false);
             m_xConditionalDate->set_visible(true);
         }
         break;
@@ -268,20 +268,9 @@ IMPL_LINK_NOARG(ScCondFormatManagerDlg, EntryFocus, weld::TreeView&, void)
     {
         const ScCondFormatEntry* conditionEntry = dynamic_cast<const ScCondFormatEntry*>(entry);
         auto conditionType = conditionEntry->GetOperation();
-
-        if (conditionType == ScConditionMode::Direct) // Formula conditions
-        {
-            m_xConditionalType->set_active(1);
-            ComboHdl(*m_xConditionalType);
-            m_xConditionalFormula->SetText(
-                conditionEntry->GetExpression(conditionEntry->GetSrcPos(), 0));
-        }
-        else
-        {
-            m_xConditionalType->set_active(0);
-            ComboHdl(*m_xConditionalType);
-            m_xConditionalCellValue->set_active(static_cast<int>(conditionType));
-        }
+        m_xConditionalType->set_active(0);
+        ComboHdl(*m_xConditionalType);
+        m_xConditionalCellValue->set_active(static_cast<int>(conditionType));
     }
     else if (type == ScFormatEntry::Type::Date)
     {

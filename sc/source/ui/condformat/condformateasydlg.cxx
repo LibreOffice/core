@@ -118,7 +118,6 @@ ConditionalFormatEasyDialog::ConditionalFormatEasyDialog(SfxBindings* pBindings,
     {
         meMode = *CurrentData.Mode;
         mbIsManaged = CurrentData.IsManaged;
-        msFormula = CurrentData.Formula;
     }
     mxNumberEntry2->hide();
     switch (meMode)
@@ -373,9 +372,8 @@ IMPL_LINK(ConditionalFormatEasyDialog, ButtonPressed, weld::Button&, rButton, vo
         }
         else if (meMode == ScConditionMode::Formula)
         {
-            xEntry.reset(new ScCondFormatEntry(ScConditionMode::Direct, msFormula, OUString(),
-                                               mrDocument, maPosition,
-                                               mxStyles->get_active_text()));
+            xEntry.reset(new ScCondFormatEntry(ScConditionMode::Direct, "", OUString(), mrDocument,
+                                               maPosition, mxStyles->get_active_text()));
         }
         else
         {
