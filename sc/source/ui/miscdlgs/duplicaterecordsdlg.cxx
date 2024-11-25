@@ -144,13 +144,27 @@ void ScDuplicateRecordsDlg::Init()
     m_xOkBtn->connect_clicked(LINK(this, ScDuplicateRecordsDlg, OkHdl));
     m_xAllChkBtn->connect_toggled(LINK(this, ScDuplicateRecordsDlg, AllCheckBtnHdl));
 
+    const ScDocument& rDoc = mrViewData.GetDocument();
+    bool bIncludeHeaders
+        = officecfg::Office::Calc::Misc::HandleDuplicateRecords::DataIncludesHeaders::get();
+
+    ScDBCollection* pDBColl = rDoc.GetDBCollection();
+    const SCTAB nCurTab = mrViewData.GetTabNo();
+    if (pDBColl)
+    {
+        ScDBData* pDBData
+            = pDBColl->GetDBAtArea(nCurTab, mrRange.aStart.Col(), mrRange.aStart.Row(),
+                                   mrRange.aEnd.Col(), mrRange.aEnd.Row());
+        if (pDBData)
+            bIncludeHeaders = pDBData->HasHeader();
+    }
+
     // defaults (find duplicate rows | data doesn't include headers)
+    m_xIncludesHeaders->set_active(bIncludeHeaders);
     m_xRadioRow->set_active(
         officecfg::Office::Calc::Misc::HandleDuplicateRecords::RemoveDuplicateRows::get());
     m_xRadioColumn->set_active(
         !officecfg::Office::Calc::Misc::HandleDuplicateRecords::RemoveDuplicateRows::get());
-    m_xIncludesHeaders->set_active(
-        officecfg::Office::Calc::Misc::HandleDuplicateRecords::DataIncludesHeaders::get());
     m_xRadioRemove->set_active(
         officecfg::Office::Calc::Misc::HandleDuplicateRecords::RemoveRecords::get());
     m_xRadioSelect->set_active(
