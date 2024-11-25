@@ -220,9 +220,7 @@ interface CellSelection
     (
         SfxInt16Item FormatRule FN_PARAM_1,
         SfxBoolItem  Managed FN_PARAM_2,
-        SfxInt32Item FormatKey FN_PARAM_3,
-        SfxInt32Item EntryIndex FN_PARAM_4,
-        SfxStringItem Formula FN_PARAM_5
+        SfxStringItem Formula FN_PARAM_3
     )
     [
         ExecMethod = Execute;
