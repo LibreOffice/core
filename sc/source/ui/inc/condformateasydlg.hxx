@@ -40,7 +40,6 @@ private:
     ScDocument* mpDocument;
     ScConditionMode meMode;
     bool mbIsManaged;
-    OUString msFormula;
     ScAddress maPosition;
 
     std::unique_ptr<weld::Entry> mxNumberEntry;

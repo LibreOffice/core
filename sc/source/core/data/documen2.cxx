@@ -1174,7 +1174,6 @@ void ScDocument::SetEasyConditionalFormatDialogData(const ScConditionEasyDialogD
 {
     pConditionalFormatDialogData.Mode = data.Mode;
     pConditionalFormatDialogData.IsManaged = data.IsManaged;
-    pConditionalFormatDialogData.Formula = data.Formula;
 }
 
 void ScDocument::SetChangeViewSettings(const ScChangeViewSettings& rNew)

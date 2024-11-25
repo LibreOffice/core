@@ -468,15 +468,8 @@ void ScCellShell::Execute( SfxRequest& rReq )
                             bManaged = static_cast<const SfxBoolItem*>(pManaged)->GetValue();
                         }
 
-                        const SfxPoolItem* pFormula;
-                        OUString formula;
-                        if (pReqArgs->HasItem(FN_PARAM_3, &pFormula))
-                        {
-                            formula = static_cast<const SfxStringItem*>(pFormula)->GetValue();
-                        }
-
                         GetViewData().GetDocument().SetEasyConditionalFormatDialogData(
-                            ScConditionEasyDialogData(&nFormat, bManaged, formula));
+                            ScConditionEasyDialogData(&nFormat, bManaged));
 
                         pScMod->SetRefDialog( nId, pWindow == nullptr );
                     }
