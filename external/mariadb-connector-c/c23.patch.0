@@ -1,0 +1,11 @@
+--- include/ma_global.h
++++ include/ma_global.h
+@@ -683,7 +683,7 @@
+ typedef int		myf;	/* Type of MyFlags in my_funcs */
+ typedef char		my_bool; /* Small bool */
+ typedef unsigned long long my_ulonglong;
+-#if !defined(bool) && !defined(bool_defined) && (!defined(HAVE_BOOL) || !defined(__cplusplus))
++#if !defined(bool) && !defined(bool_defined) && !(defined(__cplusplus) || __STDC_VERSION__ >= 202311L)
+ typedef char		bool;	/* Ordinary boolean values 0 1 */
+ #endif
+ 	/* Macros for converting *constants* to the right type */

@@ -27,6 +27,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,mariadb-connector-c,1))
 
 $(eval $(call gb_UnpackedTarball_add_patches,mariadb-connector-c,\
     external/mariadb-connector-c/clang-cl.patch.0 \
+    external/mariadb-connector-c/c23.patch.0 \
 ))
 
 # TODO are any "plugins" needed?
