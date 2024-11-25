@@ -5667,6 +5667,13 @@ bool SalInstanceIconView::get_iter_first(weld::TreeIter& rIter) const
     return rVclIter.iter != nullptr;
 }
 
+bool SalInstanceIconView::iter_next_sibling(weld::TreeIter& rIter) const
+{
+    SalInstanceTreeIter& rVclIter = static_cast<SalInstanceTreeIter&>(rIter);
+    rVclIter.iter = rVclIter.iter->NextSibling();
+    return rVclIter.iter != nullptr;
+}
+
 void SalInstanceIconView::scroll_to_item(const weld::TreeIter& rIter)
 {
     assert(m_xIconView->IsUpdateMode()
@@ -5698,10 +5705,97 @@ OUString SalInstanceIconView::get_id(const weld::TreeIter& rIter) const
     return OUString();
 }
 
+OUString SalInstanceIconView::get_id(int pos) const
+{
+    const OUString* pRet = getEntryData(pos);
+    if (!pRet)
+        return OUString();
+    return *pRet;
+}
+
+void SalInstanceIconView::set_image(int pos, VirtualDevice* pIcon)
+{
+    SvTreeListEntry* aEntry = m_xIconView->GetEntry(nullptr, pos);
+    if (aEntry == nullptr)
+        return;
+    SvLBoxContextBmp* aItem
+        = static_cast<SvLBoxContextBmp*>(aEntry->GetFirstItem(SvLBoxItemType::ContextBmp));
+
+    Image aImage;
+    if (pIcon)
+    {
+        const Point aNull(0, 0);
+        const Size aSize = pIcon->GetOutputSize();
+        aImage = Image(pIcon->GetBitmapEx(aNull, aSize));
+    }
+    if (aItem == nullptr)
+    {
+        aEntry->AddItem(std::make_unique<SvLBoxContextBmp>(aImage, aImage, false));
+    }
+    else
+    {
+        aItem->SetBitmap1(aImage);
+        aItem->SetBitmap2(aImage);
+    }
+
+    if (!m_xIconView->GetModel()->IsEnableInvalidate())
+        m_xIconView->ModelHasEntryInvalidated(aEntry);
+}
+
+void SalInstanceIconView::remove(int pos)
+{
+    disable_notify_events();
+    SvTreeListEntry* pEntry = m_xIconView->GetEntry(nullptr, pos);
+    m_xIconView->RemoveEntry(pEntry);
+    enable_notify_events();
+}
+
+const OUString* SalInstanceIconView::getEntryData(int index) const
+{
+    SvTreeListEntry* pEntry = m_xIconView->GetEntry(nullptr, index);
+    return pEntry ? static_cast<const OUString*>(pEntry->GetUserData()) : nullptr;
+}
+
 OUString SalInstanceIconView::get_text(const weld::TreeIter& rIter) const
 {
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
     return SvTabListBox::GetEntryText(rVclIter.iter, 0);
+}
+
+void SalInstanceIconView::set_text(int pos, const OUString& rText)
+{
+    SvTreeListEntry* aEntry = m_xIconView->GetEntry(nullptr, pos);
+    if (aEntry == nullptr)
+        return;
+
+    SvLBoxString* aItem = static_cast<SvLBoxString*>(aEntry->GetFirstItem(SvLBoxItemType::String));
+    if (aItem == nullptr)
+    {
+        aEntry->AddItem(std::make_unique<SvLBoxString>(rText));
+    }
+    else
+    {
+        aItem->SetText(rText);
+    }
+
+    if (!m_xIconView->GetModel()->IsEnableInvalidate())
+        m_xIconView->ModelHasEntryInvalidated(aEntry);
+}
+
+void SalInstanceIconView::set_id(int pos, const OUString& rId)
+{
+    SvTreeListEntry* pEntry = m_xIconView->GetEntry(nullptr, pos);
+    m_aUserData.emplace_back(std::make_unique<OUString>(rId));
+    pEntry->SetUserData(m_aUserData.back().get());
+}
+
+tools::Rectangle SalInstanceIconView::get_rect(int pos) const
+{
+    SvTreeListEntry* aEntry = m_xIconView->GetEntry(nullptr, pos);
+    if (aEntry == nullptr)
+        return tools::Rectangle();
+
+    return m_xIconView->GetBoundingRect(aEntry);
 }
 
 void SalInstanceIconView::clear()

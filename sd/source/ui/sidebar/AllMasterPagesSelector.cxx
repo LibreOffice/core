@@ -97,14 +97,14 @@ std::unique_ptr<PanelLayout> AllMasterPagesSelector::Create (
     return xSelector;
 }
 
-AllMasterPagesSelector::AllMasterPagesSelector (
-    weld::Widget* pParent,
-    SdDrawDocument& rDocument,
-    ViewShellBase& rBase,
+AllMasterPagesSelector::AllMasterPagesSelector(
+    weld::Widget* pParent, SdDrawDocument& rDocument, ViewShellBase& rBase,
     const std::shared_ptr<MasterPageContainer>& rpContainer,
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
-    : MasterPagesSelector(pParent, rDocument, rBase, rpContainer, rxSidebar, u"modules/simpress/ui/masterpagepanelall.ui"_ustr, u"allvalueset"_ustr),
-      mpSortedMasterPages(new SortedMasterPageDescriptorList())
+    : MasterPagesSelector(pParent, rDocument, rBase, rpContainer, rxSidebar,
+                          u"modules/simpress/ui/masterpagepanelall.ui"_ustr,
+                          u"masterpageall_icons"_ustr)
+    , mpSortedMasterPages(new SortedMasterPageDescriptorList())
 {
     MasterPagesSelector::Fill();
 }

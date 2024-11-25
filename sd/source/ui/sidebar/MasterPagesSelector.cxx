@@ -32,7 +32,7 @@
 
 #include <DrawController.hxx>
 #include <SlideSorterViewShell.hxx>
-#include "PreviewValueSet.hxx"
+#include <vcl/vclptr.hxx>
 #include <ViewShellBase.hxx>
 #include <o3tl/safeint.hxx>
 #include <vcl/image.hxx>
@@ -40,6 +40,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include <memory>
+#include <vcl/virdev.hxx>
 
 namespace sd::sidebar {
 
@@ -48,35 +49,22 @@ namespace sd::sidebar {
     */
 constexpr OUStringLiteral gsDefaultClickAction = u"applyselect";
 
-MasterPagesSelector::MasterPagesSelector (
-    weld::Widget* pParent,
-    SdDrawDocument& rDocument,
-    ViewShellBase& rBase,
-    std::shared_ptr<MasterPageContainer> pContainer,
-    css::uno::Reference<css::ui::XSidebar> xSidebar,
-    const OUString& rUIFileName,
-    const OUString& rValueSetName)
-    : PanelLayout( pParent, u"MasterPagePanel"_ustr, rUIFileName ),
-      mpContainer(std::move(pContainer)),
-      mxPreviewValueSet(new PreviewValueSet),
-      mxPreviewValueSetWin(new weld::CustomWeld(*m_xBuilder, rValueSetName, *mxPreviewValueSet)),
-      mrDocument(rDocument),
-      mrBase(rBase),
-      mxSidebar(std::move(xSidebar))
+MasterPagesSelector::MasterPagesSelector(weld::Widget* pParent, SdDrawDocument& rDocument,
+                                         ViewShellBase& rBase,
+                                         std::shared_ptr<MasterPageContainer> pContainer,
+                                         css::uno::Reference<css::ui::XSidebar> xSidebar,
+                                         const OUString& rUIFileName, const OUString& rIconViewId)
+    : PanelLayout(pParent, u"MasterPagePanel"_ustr, rUIFileName)
+    , mpContainer(std::move(pContainer))
+    , mxPreviewIconView(m_xBuilder->weld_icon_view(rIconViewId))
+    , mrDocument(rDocument)
+    , mrBase(rBase)
+    , mxSidebar(std::move(xSidebar))
+    , maIconViewId(rIconViewId)
 {
-    mxPreviewValueSet->SetSelectHdl (
-        LINK(this, MasterPagesSelector, ClickHandler));
-    mxPreviewValueSet->SetContextMenuHandler (
-        LINK(this, MasterPagesSelector, ContextMenuHandler));
-    mxPreviewValueSet->SetStyle(mxPreviewValueSet->GetStyle() | WB_NO_DIRECTSELECT);
-
-    if (mxPreviewValueSet->GetDrawingArea()->get_ref_device().GetDPIScaleFactor() > 1)
-        mpContainer->SetPreviewSize(MasterPageContainer::LARGE);
-
-    mxPreviewValueSet->SetPreviewSize(mpContainer->GetPreviewSizePixel());
-    mxPreviewValueSet->Show();
-
-    mxPreviewValueSet->SetColor(sfx2::sidebar::Theme::GetColor(sfx2::sidebar::Theme::Color_PanelBackground));
+    mxPreviewIconView->connect_item_activated(LINK(this, MasterPagesSelector, MasterPageSelected));
+    mxPreviewIconView->connect_mouse_press(LINK(this, MasterPagesSelector, MousePressHdl));
+    mxPreviewIconView->connect_query_tooltip(LINK(this, MasterPagesSelector, QueryTooltipHdl));
 
     Link<MasterPageContainerChangeEvent&,void> aChangeListener (LINK(this,MasterPagesSelector,ContainerChangeListener));
     mpContainer->AddChangeListener(aChangeListener);
@@ -90,19 +78,11 @@ MasterPagesSelector::~MasterPagesSelector()
     Link<MasterPageContainerChangeEvent&,void> aChangeListener (LINK(this,MasterPagesSelector,ContainerChangeListener));
     mpContainer->RemoveChangeListener(aChangeListener);
     mpContainer.reset();
-    mxPreviewValueSetWin.reset();
-    mxPreviewValueSet.reset();
+    mxPreviewIconView.reset();
 }
 
 void MasterPagesSelector::LateInit()
 {
-}
-
-sal_Int32 MasterPagesSelector::GetPreferredHeight (sal_Int32 nWidth)
-{
-    const ::osl::MutexGuard aGuard (maMutex);
-
-    return mxPreviewValueSet->GetPreferredHeight (nWidth);
 }
 
 void MasterPagesSelector::UpdateLocks (const ItemList& rItemList)
@@ -144,61 +124,50 @@ OUString MasterPagesSelector::GetContextMenuUIFile() const
     return u"modules/simpress/ui/mastermenu.ui"_ustr;
 }
 
-IMPL_LINK_NOARG(MasterPagesSelector, ClickHandler, ValueSet*, void)
+IMPL_LINK_NOARG(MasterPagesSelector, MasterPageSelected, weld::IconView&, bool)
 {
-    // We use the framework to assign the clicked-on master page because we
-    // so use the same mechanism as the context menu does (where we do not
-    // have the option to call the assignment method directly.)
     ExecuteCommand(gsDefaultClickAction);
+    return true;
 }
 
-IMPL_LINK(MasterPagesSelector, ContextMenuHandler, const Point*, pPos, void)
+IMPL_LINK(MasterPagesSelector, MousePressHdl, const MouseEvent&, rMEvet, bool)
 {
-    if (pPos)
+    if (!rMEvet.IsRight())
+        return false;
+
+    const Point& pPos = rMEvet.GetPosPixel();
+    for (int i = 0; i < mxPreviewIconView->n_children(); i++)
     {
-        // Here we only prepare the display of the context menu: on right
-        // click the item under the mouse is selected.
-        mxPreviewValueSet->GrabFocus();
-        mxPreviewValueSet->ReleaseMouse();
-
-        sal_uInt16 nIndex = mxPreviewValueSet->GetItemId(*pPos);
-        if (nIndex > 0)
-            mxPreviewValueSet->SelectItem(nIndex);
+        const ::tools::Rectangle aRect = mxPreviewIconView->get_rect(i);
+        if (aRect.Contains(pPos))
+        {
+            mxPreviewIconView->select(i);
+            ShowContextMenu(pPos);
+            break;
+        }
     }
-
-    // Now do the actual display of the context menu
-    ShowContextMenu(pPos);
+    return false;
 }
 
-void MasterPagesSelector::ShowContextMenu(const Point* pPos)
+IMPL_LINK(MasterPagesSelector, QueryTooltipHdl, const weld::TreeIter&, iter, OUString)
 {
-    // Use the currently selected item and show the popup menu in its
-    // center.
-    const sal_uInt16 nIndex = mxPreviewValueSet->GetSelectedItemId();
-    if (nIndex <= 0)
-        return;
+    const OUString sId = mxPreviewIconView->get_id(iter);
+    if (!sId.isEmpty())
+        return mpContainer->GetPageNameForToken(sId.toUInt32());
 
-    // The position of the upper left corner of the context menu is
-    // taken either from the mouse position (when the command was sent
-    // as reaction to a right click) or in the center of the selected
-    // item (when the command was sent as reaction to Shift+F10.)
-    Point aPosition;
-    if (!pPos)
-    {
-        ::tools::Rectangle aBBox (mxPreviewValueSet->GetItemRect(nIndex));
-        aPosition = aBBox.Center();
-    }
-    else
-        aPosition = *pPos;
+    return OUString();
+}
 
+void MasterPagesSelector::ShowContextMenu(const Point& pPos)
+{
     // Setup the menu.
-    weld::Widget* pParent = mxPreviewValueSet->GetDrawingArea();
-    std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pParent, GetContextMenuUIFile()));
+    ::tools::Rectangle aRect(pPos, Size(1, 1));
+    std::unique_ptr<weld::Builder> xBuilder(
+        Application::CreateBuilder(mxPreviewIconView.get(), GetContextMenuUIFile()));
     std::unique_ptr<weld::Menu> xMenu(xBuilder->weld_menu(u"menu"_ustr));
     ProcessPopupMenu(*xMenu);
-    ::tools::Rectangle aRect(aPosition, Size(1,1));
     // Show the menu.
-    ExecuteCommand(xMenu->popup_at_rect(pParent, aRect));
+    ExecuteCommand(xMenu->popup_at_rect(mxPreviewIconView.get(), aRect));
 }
 
 void MasterPagesSelector::ProcessPopupMenu(weld::Menu& rMenu)
@@ -254,13 +223,12 @@ void MasterPagesSelector::ExecuteCommand(const OUString &rIdent)
             SfxDispatcher* pDispatcher = rViewFrame.GetDispatcher();
             if (pDispatcher != nullptr)
             {
-                sal_uInt16 nIndex = mxPreviewValueSet->GetSelectedItemId();
                 pDispatcher->Execute(SID_MASTERPAGE, SfxCallMode::SYNCHRON);
-                mxPreviewValueSet->SelectItem (nIndex);
                 mrBase.GetDrawController()->setCurrentPage(xSelectedMaster);
             }
         }
     }
+    mxPreviewIconView->unselect_all();
 }
 
 IMPL_LINK(MasterPagesSelector, ContainerChangeListener, MasterPageContainerChangeEvent&, rEvent, void)
@@ -273,11 +241,13 @@ SdPage* MasterPagesSelector::GetSelectedMasterPage()
     const ::osl::MutexGuard aGuard (maMutex);
 
     SdPage* pMasterPage = nullptr;
-    sal_uInt16 nIndex = mxPreviewValueSet->GetSelectedItemId();
-    UserData* pData = GetUserData(nIndex);
-    if (pData != nullptr)
+    OUString sSelectedId = mxPreviewIconView->get_selected_id();
+
+    if (!sSelectedId.isEmpty())
     {
-        pMasterPage = mpContainer->GetPageObjectForToken(pData->second, true);
+        const MasterPageContainer::Token aToken
+            = static_cast<MasterPageContainer::Token>(sSelectedId.toInt32());
+        pMasterPage = mpContainer->GetPageObjectForToken(aToken, true);
     }
     return pMasterPage;
 }
@@ -354,7 +324,6 @@ void MasterPagesSelector::NotifyContainerChangeEvent (const MasterPageContainerC
     switch (rEvent.meEventType)
     {
         case MasterPageContainerChangeEvent::EventType::SIZE_CHANGED:
-            mxPreviewValueSet->SetPreviewSize(mpContainer->GetPreviewSizePixel());
             UpdateAllPreviews();
             break;
 
@@ -363,10 +332,12 @@ void MasterPagesSelector::NotifyContainerChangeEvent (const MasterPageContainerC
             int nIndex (GetIndexForToken(rEvent.maChildToken));
             if (nIndex >= 0)
             {
-                mxPreviewValueSet->SetItemImage (
-                    static_cast<sal_uInt16>(nIndex),
-                    mpContainer->GetPreviewForToken(rEvent.maChildToken));
-                mxPreviewValueSet->Invalidate(mxPreviewValueSet->GetItemRect(static_cast<sal_uInt16>(nIndex)));
+                Image aPreview(mpContainer->GetPreviewForToken(rEvent.maChildToken));
+                if (aPreview.GetSizePixel().Width() > 0)
+                {
+                    VclPtr<VirtualDevice> aDev = GetVirtualDevice(aPreview);
+                    mxPreviewIconView->set_image(nIndex, aDev);
+                }
             }
         }
         break;
@@ -390,22 +361,18 @@ void MasterPagesSelector::NotifyContainerChangeEvent (const MasterPageContainerC
    }
 }
 
-MasterPagesSelector::UserData* MasterPagesSelector::GetUserData (int nIndex) const
+std::unique_ptr<MasterPagesSelector::UserData> MasterPagesSelector::GetUserData(int nIndex) const
 {
-    const ::osl::MutexGuard aGuard (maMutex);
+    const ::osl::MutexGuard aGuard(maMutex);
 
-    if (nIndex>0 && o3tl::make_unsigned(nIndex)<=mxPreviewValueSet->GetItemCount())
-        return static_cast<UserData*>(mxPreviewValueSet->GetItemData(static_cast<sal_uInt16>(nIndex)));
+    if (nIndex >= 0 && nIndex < mxPreviewIconView->n_children())
+    {
+        const MasterPageContainer::Token aToken
+            = static_cast<MasterPageContainer::Token>(mxPreviewIconView->get_id(nIndex).toInt32());
+        return std::make_unique<UserData>(std::make_pair(nIndex, aToken));
+    }
     else
         return nullptr;
-}
-
-void MasterPagesSelector::SetUserData (int nIndex, std::unique_ptr<UserData> pData)
-{
-    const ::osl::MutexGuard aGuard (maMutex);
-
-    delete GetUserData(nIndex);
-    mxPreviewValueSet->SetItemData(static_cast<sal_uInt16>(nIndex), pData.release());
 }
 
 void MasterPagesSelector::SetItem (
@@ -414,34 +381,30 @@ void MasterPagesSelector::SetItem (
 {
     const ::osl::MutexGuard aGuard (maMutex);
 
-    RemoveTokenToIndexEntry(nIndex,aToken);
+    RemoveTokenToIndexEntry(nIndex, aToken);
 
-    if (nIndex <= 0)
-        return;
+    mxPreviewIconView->freeze();
 
     if (aToken != MasterPageContainer::NIL_TOKEN)
     {
         Image aPreview (mpContainer->GetPreviewForToken(aToken));
         MasterPageContainer::PreviewState eState (mpContainer->GetPreviewState(aToken));
 
-        if (aPreview.GetSizePixel().Width()>0)
+        if (aPreview.GetSizePixel().Width() > 0)
         {
-            if (mxPreviewValueSet->GetItemPos(nIndex) != VALUESET_ITEM_NOTFOUND)
+            VclPtr<VirtualDevice> aVDev = GetVirtualDevice(aPreview);
+            if (!mxPreviewIconView->get_id(nIndex).isEmpty())
             {
-                mxPreviewValueSet->SetItemImage(nIndex,aPreview);
-                mxPreviewValueSet->SetItemText(nIndex, mpContainer->GetPageNameForToken(aToken));
+                mxPreviewIconView->set_image(nIndex, aVDev);
+                mxPreviewIconView->set_id(nIndex, OUString::number(aToken));
             }
             else
             {
-                mxPreviewValueSet->InsertItem (
-                    nIndex,
-                    aPreview,
-                    mpContainer->GetPageNameForToken(aToken),
-                    nIndex);
+                OUString sId = OUString::number(aToken);
+                mxPreviewIconView->insert(nIndex, nullptr, &sId, aVDev, nullptr);
             }
-            SetUserData(nIndex, std::make_unique<UserData>(nIndex,aToken));
 
-            AddTokenToIndexEntry(nIndex,aToken);
+            AddTokenToIndexEntry(nIndex, aToken);
         }
 
         if (eState == MasterPageContainer::PS_CREATABLE)
@@ -449,9 +412,9 @@ void MasterPagesSelector::SetItem (
     }
     else
     {
-        mxPreviewValueSet->RemoveItem(nIndex);
+        mxPreviewIconView->remove(nIndex);
     }
-
+    mxPreviewIconView->thaw();
 }
 
 void MasterPagesSelector::AddTokenToIndexEntry (
@@ -469,7 +432,7 @@ void MasterPagesSelector::RemoveTokenToIndexEntry (
 {
     const ::osl::MutexGuard aGuard (maMutex);
 
-    UserData* pData = GetUserData(nIndex);
+    std::unique_ptr<UserData> pData = GetUserData(nIndex);
     if (pData != nullptr)
     {
         // Get the token that the index pointed to previously.
@@ -478,7 +441,7 @@ void MasterPagesSelector::RemoveTokenToIndexEntry (
         if (aNewToken != aOldToken
             && nIndex == GetIndexForToken(aOldToken))
         {
-            maTokenToValueSetIndex[aOldToken] = 0;
+            maTokenToValueSetIndex[aOldToken] = -1;
         }
     }
 }
@@ -487,9 +450,9 @@ void MasterPagesSelector::InvalidatePreview (const SdPage* pPage)
 {
     const ::osl::MutexGuard aGuard (maMutex);
 
-    for (size_t nIndex=1; nIndex<=mxPreviewValueSet->GetItemCount(); nIndex++)
+    for (int nIndex = 0; nIndex < mxPreviewIconView->n_children(); nIndex++)
     {
-        UserData* pData = GetUserData(nIndex);
+        std::unique_ptr<UserData> pData = GetUserData(nIndex);
         if (pData != nullptr)
         {
             MasterPageContainer::Token aToken (pData->second);
@@ -503,43 +466,54 @@ void MasterPagesSelector::InvalidatePreview (const SdPage* pPage)
     }
 }
 
+VclPtr<VirtualDevice> MasterPagesSelector::GetVirtualDevice(Image pImage)
+{
+    BitmapEx aPreviewBitmap = pImage.GetBitmapEx();
+    VclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
+    const Point aNull(0, 0);
+    if (pVDev->GetDPIScaleFactor() > 1)
+        aPreviewBitmap.Scale(pVDev->GetDPIScaleFactor(), pVDev->GetDPIScaleFactor());
+    const Size aSize(aPreviewBitmap.GetSizePixel());
+    pVDev->SetOutputSizePixel(aSize);
+    pVDev->DrawBitmapEx(aNull, aPreviewBitmap);
+
+    return pVDev;
+}
+
 void MasterPagesSelector::UpdateAllPreviews()
 {
     const ::osl::MutexGuard aGuard (maMutex);
 
-    for (size_t nIndex=1; nIndex<=mxPreviewValueSet->GetItemCount(); nIndex++)
+    mxPreviewIconView->freeze();
+    for (int aIndex = 0; aIndex < mxPreviewIconView->n_children(); aIndex++)
     {
-        UserData* pData = GetUserData(nIndex);
-        if (pData != nullptr)
+        const MasterPageContainer::Token aToken
+            = static_cast<MasterPageContainer::Token>(mxPreviewIconView->get_id(aIndex).toInt32());
+
+        Image aPreview(mpContainer->GetPreviewForToken(aToken));
+        if (aPreview.GetSizePixel().Width() > 0)
         {
-            MasterPageContainer::Token aToken (pData->second);
-            mxPreviewValueSet->SetItemImage(
-                nIndex,
-                mpContainer->GetPreviewForToken(aToken));
-            if (mpContainer->GetPreviewState(aToken) == MasterPageContainer::PS_CREATABLE)
-                mpContainer->RequestPreview(aToken);
+            VclPtr<VirtualDevice> pVDev = GetVirtualDevice(aPreview);
+            mxPreviewIconView->set_image(aIndex, pVDev);
+        }
+        else if (mpContainer->GetPreviewState(aToken) == MasterPageContainer::PS_CREATABLE)
+        {
+            mpContainer->RequestPreview(aToken);
         }
     }
-    mxPreviewValueSet->Rearrange();
+    mxPreviewIconView->thaw();
 }
 
 void MasterPagesSelector::ClearPageSet()
 {
     const ::osl::MutexGuard aGuard (maMutex);
-
-    for (size_t nIndex=1; nIndex<=mxPreviewValueSet->GetItemCount(); nIndex++)
-    {
-        UserData* pData = GetUserData(nIndex);
-        delete pData;
-    }
-    mxPreviewValueSet->Clear();
+    mxPreviewIconView->clear();
 }
 
 void MasterPagesSelector::SetHelpId( const OUString& aId )
 {
     const ::osl::MutexGuard aGuard (maMutex);
-
-    mxPreviewValueSet->SetHelpId( aId );
+    mxPreviewIconView->set_help_id(aId);
 }
 
 sal_Int32 MasterPagesSelector::GetIndexForToken (MasterPageContainer::Token aToken) const
@@ -577,7 +551,7 @@ void MasterPagesSelector::UpdateItemList (::std::unique_ptr<ItemList> && pNewIte
     ItemList::const_iterator iCurrentItem (maCurrentItemList.begin());
     ItemList::const_iterator iNewEnd (pNewItemList->end());
     ItemList::const_iterator iCurrentEnd (maCurrentItemList.end());
-    sal_uInt16 nIndex (1);
+    sal_uInt16 nIndex(0);
 
     // Update existing items.
     for ( ; iNewItem!=iNewEnd && iCurrentItem!=iCurrentEnd; ++iNewItem, ++iCurrentItem,++nIndex)
@@ -602,15 +576,22 @@ void MasterPagesSelector::UpdateItemList (::std::unique_ptr<ItemList> && pNewIte
 
     maCurrentItemList.swap(*pNewItemList);
 
-    mxPreviewValueSet->Rearrange();
     if (mxSidebar.is())
         mxSidebar->requestLayout();
 }
 
-css::ui::LayoutSize MasterPagesSelector::GetHeightForWidth (const sal_Int32 nWidth)
+css::ui::LayoutSize MasterPagesSelector::GetHeightForWidth(const sal_Int32 nWidth)
 {
-    const sal_Int32 nHeight (GetPreferredHeight(nWidth));
-    return css::ui::LayoutSize(nHeight,nHeight,nHeight);
+    if (maIconViewId == "masterpageall_icons")
+        return css::ui::LayoutSize(-1, -1, -1);
+
+    const sal_uInt32 nItemWidth = mxPreviewIconView->get_item_width();
+    sal_Int32 nMinimumHeight = mxPreviewIconView->get_preferred_size().getHeight();
+    const sal_Int32 itemsInRows = floor(nWidth / nItemWidth);
+    sal_Int32 totalItems = mxPreviewIconView->n_children();
+    if (itemsInRows > 0)
+        nMinimumHeight = ((totalItems / itemsInRows) + 1) * nMinimumHeight;
+    return css::ui::LayoutSize(nMinimumHeight, nMinimumHeight, nMinimumHeight);
 }
 
 } // end of namespace sd::sidebar

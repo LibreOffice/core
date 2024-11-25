@@ -1979,13 +1979,29 @@ public:
 
     virtual bool get_iter_first(weld::TreeIter& rIter) const override;
 
+    virtual bool iter_next_sibling(weld::TreeIter& rIter) const override;
+
     virtual void scroll_to_item(const weld::TreeIter& rIter) override;
 
     virtual void selected_foreach(const std::function<bool(weld::TreeIter&)>& func) override;
 
     virtual OUString get_id(const weld::TreeIter& rIter) const override;
 
+    virtual OUString get_id(int pos) const override;
+
+    virtual void remove(int pos) override;
+
+    const OUString* getEntryData(int index) const;
+
+    virtual void set_image(int pos, VirtualDevice* rImage) override;
+
+    virtual void set_text(int pos, const OUString& rText) override;
+
+    virtual void set_id(int pos, const OUString& rId) override;
+
     virtual OUString get_text(const weld::TreeIter& rIter) const override;
+
+    virtual tools::Rectangle get_rect(int pos) const override;
 
     virtual void clear() override;
 

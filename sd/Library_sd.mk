@@ -362,7 +362,6 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/sidebar/MasterPagesSelector \
 	sd/source/ui/sidebar/NavigatorWrapper \
 	sd/source/ui/sidebar/PanelFactory \
-	sd/source/ui/sidebar/PreviewValueSet \
 	sd/source/ui/sidebar/RecentlyUsedMasterPages \
 	sd/source/ui/sidebar/RecentMasterPagesSelector \
 	sd/source/ui/sidebar/SlideBackground \

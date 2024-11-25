@@ -51,13 +51,13 @@ std::unique_ptr<PanelLayout> RecentMasterPagesSelector::Create (
     return xSelector;
 }
 
-RecentMasterPagesSelector::RecentMasterPagesSelector (
-    weld::Widget* pParent,
-    SdDrawDocument& rDocument,
-    ViewShellBase& rBase,
+RecentMasterPagesSelector::RecentMasterPagesSelector(
+    weld::Widget* pParent, SdDrawDocument& rDocument, ViewShellBase& rBase,
     const std::shared_ptr<MasterPageContainer>& rpContainer,
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
-    : MasterPagesSelector (pParent, rDocument, rBase, rpContainer, rxSidebar, u"modules/simpress/ui/masterpagepanelrecent.ui"_ustr, u"recentvalueset"_ustr)
+    : MasterPagesSelector(pParent, rDocument, rBase, rpContainer, rxSidebar,
+                          u"modules/simpress/ui/masterpagepanelrecent.ui"_ustr,
+                          u"masterpagerecent_icons"_ustr)
 {
 }
 
@@ -112,24 +112,6 @@ void RecentMasterPagesSelector::Fill (ItemList& rItemList)
                 rItemList.push_back(aToken);
             }
         }
-    }
-}
-
-void RecentMasterPagesSelector::AssignMasterPageToPageList (
-    SdPage* pMasterPage,
-    const std::shared_ptr<std::vector<SdPage*> >& rpPageList)
-{
-    sal_uInt16 nSelectedItemId = mxPreviewValueSet->GetSelectedItemId();
-
-    MasterPagesSelector::AssignMasterPageToPageList(pMasterPage, rpPageList);
-
-    // Restore the selection.
-    if (mxPreviewValueSet->GetItemCount() > 0)
-    {
-        if (mxPreviewValueSet->GetItemCount() >= nSelectedItemId)
-            mxPreviewValueSet->SelectItem(nSelectedItemId);
-        else
-            mxPreviewValueSet->SelectItem(mxPreviewValueSet->GetItemCount());
     }
 }
 
