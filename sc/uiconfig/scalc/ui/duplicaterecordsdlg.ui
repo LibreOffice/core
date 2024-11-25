@@ -93,8 +93,9 @@
               <object class="GtkLabel" id="compare">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
+                <property name="halign">start</property>
                 <property name="valign">start</property>
-                <property name="label" translatable="yes" context="duplicaterecordsdialog|compare">Compare by:</property>
+                <property name="label" translatable="yes" context="duplicaterecordsdialog|compare">Compare:</property>
                 <property name="mnemonic-widget">row</property>
               </object>
               <packing>
@@ -296,12 +297,12 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="records">
+              <object class="GtkLabel" id="compareby">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="halign">start</property>
                 <property name="valign">start</property>
-                <property name="label" translatable="no" context="duplicaterecordsdialog|records">Records:</property>
+                <property name="label" translatable="no" context="duplicaterecordsdialog|compareby">Compare by:</property>
                 <property name="mnemonic-widget">allcheckbtn</property>
               </object>
               <packing>

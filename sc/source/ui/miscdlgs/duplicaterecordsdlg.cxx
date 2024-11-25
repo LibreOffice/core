@@ -40,7 +40,6 @@ ScDuplicateRecordsDlg::ScDuplicateRecordsDlg(weld::Window* pParent,
     , m_xRadioRemove(m_xBuilder->weld_radio_button("remove"))
     , m_xCheckList(m_xBuilder->weld_tree_view("checklist"))
     , m_xAllChkBtn(m_xBuilder->weld_check_button("allcheckbtn"))
-    , m_xRecordsLabel(m_xBuilder->weld_label("records"))
     , m_xOkBtn(m_xBuilder->weld_button("okbtn"))
     , mrCellData(rData)
     , mrRange(rRange)
@@ -123,15 +122,9 @@ void ScDuplicateRecordsDlg::SetDialogData(bool bToggle)
 void ScDuplicateRecordsDlg::SetDialogLabels()
 {
     if (m_xRadioRow->get_active())
-    {
-        m_xIncludesHeaders->set_label(ScResId(STR_DUPLICATERECORDS_DATACONATINSROWHEADERS));
-        m_xRecordsLabel->set_label(ScResId(STR_DUPLICATERECORDS_RECORDSCOLUMNS));
-    }
-    else
-    {
         m_xIncludesHeaders->set_label(ScResId(STR_DUPLICATERECORDS_DATACONATINSCOLUMNHEADERS));
-        m_xRecordsLabel->set_label(ScResId(STR_DUPLICATERECORDS_RECORDSROWS));
-    }
+    else
+        m_xIncludesHeaders->set_label(ScResId(STR_DUPLICATERECORDS_DATACONATINSROWHEADERS));
 }
 
 void ScDuplicateRecordsDlg::InsertEntry(const OUString& rTxt, bool bToggle)
