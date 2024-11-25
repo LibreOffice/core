@@ -1423,7 +1423,8 @@ namespace accessibility
             if (rRes.Name == "CharColor")
             {
                 uno::Any &anyChar = rRes.Value;
-                Color crChar(ColorTransparency, static_cast<sal_uInt32>( reinterpret_cast<sal_uIntPtr>(anyChar.pReserved)));
+                Color crChar;
+                anyChar >>= crChar;
                 if (COL_AUTO == crChar )
                 {
                     uno::Reference< css::accessibility::XAccessibleComponent > xComponent(mxParent,uno::UNO_QUERY);
@@ -1454,7 +1455,8 @@ namespace accessibility
             if (rRes.Name == "CharUnderlineColor")
             {
                 uno::Any &anyCharUnderLine = rRes.Value;
-                Color crCharUnderLine(ColorTransparency, static_cast<sal_uInt32>( reinterpret_cast<sal_uIntPtr>( anyCharUnderLine.pReserved)));
+                Color crCharUnderLine;
+                anyCharUnderLine >>= crCharUnderLine;
                 if (COL_AUTO == crCharUnderLine )
                 {
                     uno::Reference< css::accessibility::XAccessibleComponent > xComponent(mxParent,uno::UNO_QUERY);

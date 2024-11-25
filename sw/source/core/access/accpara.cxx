@@ -1847,15 +1847,16 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
         if (rValue.Name == UNO_NAME_CHAR_BACK_COLOR)
         {
             uno::Any &anyChar = rValue.Value;
-            sal_uInt32 crBack = static_cast<sal_uInt32>( reinterpret_cast<sal_uIntPtr>(anyChar.pReserved));
-            if (COL_AUTO == Color(ColorTransparency, crBack))
+            Color backColor;
+            anyChar >>= backColor;
+            if (COL_AUTO == backColor)
             {
                 uno::Reference<XAccessibleComponent> xComponent(this);
                 if (xComponent.is())
                 {
-                    crBack = static_cast<sal_uInt32>(xComponent->getBackground());
+                    sal_uInt32 crBack = static_cast<sal_uInt32>(xComponent->getBackground());
+                    rValue.Value <<= crBack;
                 }
-                rValue.Value <<= crBack;
             }
             continue;
         }
@@ -1866,15 +1867,16 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
             if( GetPortionData().IsInGrayPortion( nIndex ) )
                 rValue.Value <<= GetCursorShell()->GetViewOptions()->GetFieldShadingsColor();
             uno::Any &anyChar = rValue.Value;
-            sal_uInt32 crChar = static_cast<sal_uInt32>( reinterpret_cast<sal_uIntPtr>(anyChar.pReserved));
+            Color charColor;
+            anyChar >>= charColor;
 
-            if( COL_AUTO == Color(ColorTransparency, crChar) )
+            if( COL_AUTO == charColor )
             {
                 uno::Reference<XAccessibleComponent> xComponent(this);
                 if (xComponent.is())
                 {
                     Color cr(ColorTransparency, xComponent->getBackground());
-                    crChar = sal_uInt32(cr.IsDark() ? COL_WHITE : COL_BLACK);
+                    sal_uInt32 crChar = sal_uInt32(cr.IsDark() ? COL_WHITE : COL_BLACK);
                     rValue.Value <<= crChar;
                 }
             }
@@ -1885,14 +1887,15 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
         if (rValue.Name == UNO_NAME_CHAR_UNDERLINE_COLOR)
         {
             uno::Any &anyChar = rValue.Value;
-            sal_uInt32 crUnderline = static_cast<sal_uInt32>( reinterpret_cast<sal_uIntPtr>(anyChar.pReserved));
-            if ( COL_AUTO == Color(ColorTransparency, crUnderline) )
+            Color underlineColor;
+            anyChar >>= underlineColor;
+            if ( COL_AUTO == underlineColor )
             {
                 uno::Reference<XAccessibleComponent> xComponent(this);
                 if (xComponent.is())
                 {
                     Color cr(ColorTransparency, xComponent->getBackground());
-                    crUnderline = sal_uInt32(cr.IsDark() ? COL_WHITE : COL_BLACK);
+                    sal_uInt32 crUnderline = sal_uInt32(cr.IsDark() ? COL_WHITE : COL_BLACK);
                     rValue.Value <<= crUnderline;
                 }
             }
