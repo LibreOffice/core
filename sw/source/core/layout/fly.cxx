@@ -506,13 +506,10 @@ void SwFlyFrame::FinitDrawObj()
                         if (SwFEShell *const pFEShell = dynamic_cast<SwFEShell*>(&rCurrentShell))
                         {   // tdf#131679 move any cursor out of fly
                             rCurrentShell.Imp()->GetDrawView()->UnmarkAll();
-                            if (pOldSelFly)
-                            {
-                                SwPaM const temp(ResolveFlyAnchor(*pOldSelFly->GetFormat()));
-                                pFEShell->SetSelection(temp);
-                                // could also call SetCursor() like SwFEShell::SelectObj()
-                                // does, but that would access layout a bit much...
-                            }
+                            SwPaM const temp(ResolveFlyAnchor(*pOldSelFly->GetFormat()));
+                            pFEShell->SetSelection(temp);
+                            // could also call SetCursor() like SwFEShell::SelectObj()
+                            // does, but that would access layout a bit much...
                         }
                         else
                         {
