@@ -11,7 +11,6 @@ from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 from libreoffice.calc.document import get_sheet_from_doc
 from libreoffice.calc.conditional_format import get_conditional_format_from_sheet
-import sys
 
 class ConditionalFormatDlgTest(UITestCase):
 
@@ -54,9 +53,9 @@ class ConditionalFormatDlgTest(UITestCase):
                 # and still only 2 conditional formats in the document
                 xList = xCondFormatMgr.getChild("CONTAINER")
                 list_state = get_state_as_dict(xList)
-                self.assertEqual(list_state['Children'], '3')
+                self.assertEqual(list_state['Children'], '2')
 
-                self.assertEqual(conditional_format_list.getLength(), 3)
+                self.assertEqual(conditional_format_list.getLength(), 2)
 
                 # close the conditional format manager
                 xCancelBtn = xCondFormatMgr.getChild("cancel")

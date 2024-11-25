@@ -39,7 +39,6 @@ private:
     ScViewData* mpViewData;
     ScDocument& mrDocument;
     ScConditionMode meMode;
-    bool mbIsManaged;
     ScAddress maPosition;
 
     std::unique_ptr<weld::Entry> mxNumberEntry;

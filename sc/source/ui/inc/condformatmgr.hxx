@@ -44,14 +44,11 @@ public:
     void SetModified();
 
     ScConditionalFormat* GetCondFormatSelected();
-    void ShowEasyConditionalDialog();
 
 private:
     bool m_bModified;
     std::unique_ptr<ScConditionalFormatList> m_xFormatList;
 
-    std::unique_ptr<weld::ComboBox> m_xConditionalType;
-    std::unique_ptr<weld::ComboBox> m_xConditionalCellValue;
     std::unique_ptr<weld::Button> m_xBtnAdd;
     std::unique_ptr<weld::Button> m_xBtnRemove;
     std::unique_ptr<weld::Button> m_xBtnEdit;
