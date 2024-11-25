@@ -283,35 +283,10 @@ ConditionalFormatEasyDialog::ConditionalFormatEasyDialog(SfxBindings* pBindings,
     aRange.Format(sRangeString, ScRefFlags::VALID, mrDocument, mrDocument.GetAddressConvention());
     mxRangeEntry->SetText(sRangeString);
 
-    OUString sStyleName;
-    if (format)
-    {
-        const ScFormatEntry* entry = format->GetEntry(mnEntryIndex);
-        if (!entry)
-            return;
-        ScFormatEntry::Type type = entry->GetType();
-        if (type == ScFormatEntry::Type::Condition)
-        {
-            const ScCondFormatEntry* condEntry = static_cast<const ScCondFormatEntry*>(entry);
-            sStyleName = condEntry->GetStyle();
-            if (mxNumberEntry->get_visible())
-                mxNumberEntry->set_text(condEntry->GetExpression(aRange.GetTopLeftCorner(), 0));
-            if (mxNumberEntry2->get_visible())
-                mxNumberEntry2->set_text(condEntry->GetExpression(aRange.GetTopLeftCorner(), 1));
-        }
-        else if (type == ScFormatEntry::Type::Date)
-        {
-            const ScCondDateFormatEntry* dateEntry
-                = static_cast<const ScCondDateFormatEntry*>(entry);
-            sStyleName = dateEntry->GetStyleName();
-        }
-    }
-
-    StartListening(*mrDocument.GetStyleSheetPool(), DuplicateHandling::Prevent);
+    StartListening(*(mrDocument.GetStyleSheetPool()), DuplicateHandling::Prevent);
     ScCondFormatHelper::FillStyleListBox(mrDocument, *mxStyles);
 
-    mxStyles->set_active_text(sStyleName);
-    StyleSelectHdl(*mxStyles);
+    mxStyles->set_active(1);
     mxWdPreviewWin->show();
 }
 
