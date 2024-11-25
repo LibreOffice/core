@@ -25,7 +25,7 @@
 using namespace ::com::sun::star;
 
 
-static vcl::Window* ImplGetLabelFor( vcl::Window* pFrameWindow, WindowType nMyType, vcl::Window* pLabel, sal_Unicode nAccel )
+static vcl::Window* ImplGetLabelFor(vcl::Window* pFrameWindow, WindowType nMyType, const vcl::Window* pLabel, sal_Unicode nAccel)
 {
     vcl::Window* pWindow = nullptr;
 
@@ -100,9 +100,9 @@ Window* Window::getLegacyNonLayoutAccessibleRelationLabelFor() const
 
     sal_Unicode nAccel = getAccel( GetText() );
 
-    Window* pWindow = ImplGetLabelFor( pFrameWindow, GetType(), const_cast<Window*>(this), nAccel );
+    Window* pWindow = ImplGetLabelFor(pFrameWindow, GetType(), this, nAccel);
     if( ! pWindow && mpWindowImpl->mpRealParent )
-        pWindow = ImplGetLabelFor( mpWindowImpl->mpRealParent, GetType(), const_cast<Window*>(this), nAccel );
+        pWindow = ImplGetLabelFor(mpWindowImpl->mpRealParent, GetType(), this, nAccel);
     return pWindow;
 }
 
