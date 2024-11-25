@@ -106,7 +106,7 @@ Window* Window::getLegacyNonLayoutAccessibleRelationLabelFor() const
     return pWindow;
 }
 
-static Window* ImplGetLabeledBy( Window* pFrameWindow, WindowType nMyType, Window* pLabeled )
+static Window* ImplGetLabeledBy(Window* pFrameWindow, WindowType nMyType, const Window* pLabeled)
 {
     Window* pWindow = nullptr;
     if (pFrameWindow && nMyType != WindowType::GROUPBOX && nMyType != WindowType::FIXEDLINE)
@@ -175,9 +175,9 @@ Window* Window::getLegacyNonLayoutAccessibleRelationLabeledBy() const
     // #i100833# MT 2010/02: Group box and fixed lines can also label a fixed text.
     // See tools/options/print for example.
 
-    Window* pWindow = ImplGetLabeledBy( pFrameWindow, GetType(), const_cast<Window*>(this) );
+    Window* pWindow = ImplGetLabeledBy(pFrameWindow, GetType(), this);
     if( ! pWindow && mpWindowImpl->mpRealParent )
-        pWindow = ImplGetLabeledBy( mpWindowImpl->mpRealParent, GetType(), const_cast<Window*>(this) );
+        pWindow = ImplGetLabeledBy(mpWindowImpl->mpRealParent, GetType(), this);
 
     return pWindow;
 }
