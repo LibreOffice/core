@@ -23,7 +23,6 @@
 #include <sfx2/frame.hxx>
 #include <tabvwsh.hxx>
 #include <svx/fntctrl.hxx>
-#include <compiler.hxx>
 
 namespace {
 
@@ -319,52 +318,6 @@ void ScCondFormatHelper::UpdateStyleList(weld::ComboBox& rLbStyle, const ScDocum
         rLbStyle.remove(i - 1);
     ScCondFormatHelper::FillStyleListBox(rDoc, rLbStyle);
     rLbStyle.set_active_text(aSelectedStyle);
-}
-
-void ScCondFormatHelper::ValidateInputField(weld::Entry& rEntry, weld::Label& rLabel, ScDocument& rDoc, ScAddress& rPos)
-{
-    OUString aFormula = rEntry.get_text();
-
-    if( aFormula.isEmpty() )
-    {
-        rLabel.set_label(ScResId(STR_ENTER_VALUE));
-        return;
-    }
-
-    ScCompiler aComp( rDoc, rPos, rDoc.GetGrammar() );
-    aComp.SetExtendedErrorDetection( ScCompiler::ExtendedErrorDetection::EXTENDED_ERROR_DETECTION_NAME_BREAK);
-    std::unique_ptr<ScTokenArray> ta(aComp.CompileString(aFormula));
-
-    // Error, warn the user if it is not an unknown name.
-    if (ta->GetCodeError() != FormulaError::NoName && (ta->GetCodeError() != FormulaError::NONE || ta->GetLen() == 0))
-    {
-        rEntry.set_message_type(weld::EntryMessageType::Error);
-        rLabel.set_label(ScResId(STR_VALID_DEFERROR));
-        return;
-    }
-
-    // Unrecognized name, warn the user; i.e. happens when starting to type and
-    // will go away once a valid name is completed.
-    if (ta->GetCodeError() == FormulaError::NoName)
-    {
-        rEntry.set_message_type(weld::EntryMessageType::Warning);
-        rLabel.set_label(ScResId(STR_UNQUOTED_STRING));
-        return;
-    }
-
-    // Generate RPN to detect further errors.
-    if (ta->GetLen() > 0)
-        aComp.CompileTokenArray();
-    // Error, warn the user.
-    if (ta->GetCodeError() != FormulaError::NONE || (ta->GetCodeLen() == 0))
-    {
-        rEntry.set_message_type(weld::EntryMessageType::Error);
-        rLabel.set_label(ScResId(STR_VALID_DEFERROR));
-        return;
-    }
-
-    rEntry.set_message_type(weld::EntryMessageType::Normal);
-    rLabel.set_label(u""_ustr);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

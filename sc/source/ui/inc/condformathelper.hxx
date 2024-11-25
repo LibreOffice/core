@@ -36,7 +36,6 @@ public:
                                          const ScDocument& rDoc, SvxFontPrevWindow& rWdPreview);
     static SC_DLLPUBLIC void FillStyleListBox(const ScDocument& rDocument, weld::ComboBox& rCombo);
     static SC_DLLPUBLIC void UpdateStyleList(weld::ComboBox& rLbStyle, const ScDocument& rDoc);
-    static SC_DLLPUBLIC void ValidateInputField(weld::Entry& rEntry, weld::Label& label, ScDocument& rDoc, ScAddress& rPos);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
