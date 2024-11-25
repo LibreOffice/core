@@ -243,6 +243,10 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf120168)
     // - Actual  : general
     assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[2]/x:alignment", "horizontal", u"left");
     assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[3]/x:alignment", "horizontal", u"right");
+
+    // tdf#124741: without round-tripping customHeight, Excel wasn't applying defaultRowHeight
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    assertXPath(pSheet, "//x:sheetFormatPr", "customHeight", u"true");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf117266)

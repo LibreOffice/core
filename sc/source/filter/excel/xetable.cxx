@@ -2828,10 +2828,10 @@ void XclExpCellTable::SaveXml( XclExpXmlStream& rStrm )
     rWorksheet->startElement( XML_sheetFormatPr,
         // OOXTODO: XML_baseColWidth
         XML_defaultColWidth, OString::number(maColInfoBfr.GetDefColWidth()),
-        // OOXTODO: XML_customHeight
         // OOXTODO: XML_thickTop
         // OOXTODO: XML_thickBottom
         XML_defaultRowHeight, OString::number(static_cast<double> (rDefData.mnHeight) / 20.0),
+        XML_customHeight, ToPsz(true),
         XML_zeroHeight, ToPsz( rDefData.IsHidden() ),
         XML_outlineLevelRow, OString::number(maRowBfr.GetHighestOutlineLevel()),
         XML_outlineLevelCol, OString::number(maColInfoBfr.GetHighestOutlineLevel()) );
