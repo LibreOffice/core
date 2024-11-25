@@ -2223,10 +2223,10 @@ double ConvertDataLinear::ConvertFromBase( double f, sal_Int16 n ) const
 
 ConvertDataList::ConvertDataList()
 {
-#define NEWD(str,unit,cl)   maVector.emplace_back(new ConvertData(str,unit,cl))
-#define NEWDP(str,unit,cl)  maVector.emplace_back(new ConvertData(str,unit,cl,true))
-#define NEWL(str,unit,offs,cl)  maVector.emplace_back(new ConvertDataLinear(str,unit,offs,cl))
-#define NEWLP(str,unit,offs,cl) maVector.emplace_back(new ConvertDataLinear(str,unit,offs,cl,true))
+#define NEWD(str,unit,cl)   maVector.push_back(std::make_unique<ConvertData>(str,unit,cl))
+#define NEWDP(str,unit,cl)  maVector.push_back(std::make_unique<ConvertData>(str,unit,cl,true))
+#define NEWL(str,unit,offs,cl)  maVector.push_back(std::make_unique<ConvertDataLinear>(str,unit,offs,cl))
+#define NEWLP(str,unit,offs,cl) maVector.push_back(std::make_unique<ConvertDataLinear>(str,unit,offs,cl,true))
 
     // *** are extra and not standard Excel Analysis Addin!
 
