@@ -2751,7 +2751,8 @@ void SwSectionFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         }
 
         InvalidateFramesInSection(Lower());
-        Lower()->HideAndShowObjects(); // recursive
+        if (Lower())
+            Lower()->HideAndShowObjects(); // recursive
         // Check if any page-breaks have been unhidden, create the new pages.
         // Call IsHiddenNow() because a parent section could still hide.
         if (!IsFollow() && IsInDocBody() && !IsInTab() && !IsHiddenNow())
@@ -2780,8 +2781,9 @@ void SwSectionFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
                 pFirstOnPage = pFirstOnPage->GetUpper();
             }
             assert(pFirstOnPage->IsContentFrame() || pFirstOnPage->IsTabFrame());
-            SwColumnFrame * pColumn{Lower()->IsColumnFrame()
-                    ? static_cast<SwColumnFrame*>(Lower()) : nullptr};
+            SwColumnFrame* pColumn{ Lower() && Lower()->IsColumnFrame()
+                                        ? static_cast<SwColumnFrame*>(Lower())
+                                        : nullptr };
             auto IterateLower = [&pColumn](SwFrame *const pLowerFrame) -> SwFrame*
             {
                 if (pLowerFrame->GetNext())
