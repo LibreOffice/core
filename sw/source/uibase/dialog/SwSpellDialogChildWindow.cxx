@@ -400,7 +400,7 @@ The code below would only be part of the solution.
                     bCloseMessage = false; // no closing message if a wrap around has been denied
             }
         }
-        if( aRet.empty() && bCloseMessage && !bNoDictionaryAvailable )
+        if( aRet.empty() && bCloseMessage )
         {
             LockFocusNotification( true );
             OUString sInfo( SwResId( bNoDictionaryAvailable ? STR_DICTIONARY_UNAVAILABLE : STR_SPELLING_COMPLETED ) );
