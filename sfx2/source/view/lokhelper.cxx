@@ -823,7 +823,7 @@ void SfxLokHelper::notifyLog(const std::ostringstream& stream)
 
 void SfxLokHelper::notifyUpdate(SfxViewShell const* pThisView, int nType)
 {
-    if (DisableCallbacks::disabled())
+    if (DisableCallbacks::disabled() || !pThisView)
         return;
 
     pThisView->libreOfficeKitViewUpdatedCallback(nType);
