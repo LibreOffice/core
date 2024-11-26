@@ -403,7 +403,7 @@ static void drawBox(CGContextRef context, const NSRect& rc, NSColor* pColor)
 
     // Related tdf#163945: Set fill color to NSColorTypeComponentBased color type
     // Many system colors have the NSColorTypeCatalog color type. For
-    // some unkown reason, setting the NSBox's fill color to a color set
+    // some unknown reason, setting the NSBox's fill color to a color set
     // to NSColorTypeCatalog causes drawing to take at least twice as long
     // as when the fill color is set to NSColorTypeComponentBased. So,
     // only draw with a fill color set to NSColorTypeComponentBased.
