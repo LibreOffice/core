@@ -67,8 +67,7 @@ public:
     */
     css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
         getAccessibleChild (sal_Int64 i) override;
-    /** The role is always AccessibleRole::COMBO_BOX.
-    */
+
     sal_Int16 SAL_CALL getAccessibleRole() override;
 
     // XAccessibleAction
