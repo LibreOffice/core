@@ -62,7 +62,7 @@
           <object class="GtkComboBoxText" id="documents">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="tooltip-text" translatable="yes" context="navigatorpanel|documents|tooltip_text">Document</property>
+            <property name="tooltip-text" translatable="yes" context="navigatorpanel|documents|tooltip_text">Open Documents</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="documents-atkobject">
                 <property name="AtkObject::accessible-name" translatable="yes" context="navigatorpanel|documents-atkobject">Active Window</property>
