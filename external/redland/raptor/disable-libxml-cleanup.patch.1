@@ -1,0 +1,14 @@
+diff -ur raptor.org/src/raptor_libxml.c raptor/src/raptor_libxml.c
+--- raptor.org/src/raptor_libxml.c	2024-11-26 10:21:41.759955398 +0200
++++ raptor/src/raptor_libxml.c	2024-11-26 10:23:43.891720421 +0200
+@@ -657,7 +657,10 @@
+     xmlSetGenericErrorFunc(world->libxml_saved_generic_error_context,
+                            world->libxml_saved_generic_error_handler);
+ 
++// I have logged a feature request to have a flag to turn this off, at https://github.com/dajobe/raptor/issues/69
++#if 0
+   xmlCleanupParser();
++#endif
+ }
+ 
+ 
