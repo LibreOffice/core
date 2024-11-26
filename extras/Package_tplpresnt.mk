@@ -9,6 +9,8 @@
 
 $(eval $(call gb_Package_Package,extras_tplpresnt,$(gb_CustomTarget_workdir)/extras/source/templates/presnt))
 
+ifneq ($(WITH_TEMPLATES),)
+
 $(eval $(call gb_Package_add_files,extras_tplpresnt,$(LIBO_SHARE_FOLDER)/template/common/presnt,\
 	Candy.otp \
 	DNA.otp \
@@ -34,5 +36,12 @@ $(eval $(call gb_Package_add_files,extras_tplpresnt,$(LIBO_SHARE_FOLDER)/templat
 	Sunset.otp \
 	Yellow_Idea.otp \
 ))
+
+else
+
+# For without-templates, still include the empty directory
+$(eval $(call gb_Package_add_empty_directory,extras_tplpresnt,$(LIBO_SHARE_FOLDER)/template/common/presnt))
+
+endif
 
 # vim: set noet sw=4 ts=4:
