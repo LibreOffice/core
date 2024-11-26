@@ -168,15 +168,7 @@ bool VCLXAccessibleEdit::PreferFullTextInTextChangedEvent()
     // for a combobox subedit, the Orca screen reader announces the new/added text
     // so always send the whole old and new text and not just
     // the changed characters, so the whole entry text gets announced
-    Reference<XAccessible> xParent = getAccessibleParent();
-    if (xParent.is())
-    {
-        Reference<XAccessibleContext> xParentContext = xParent->getAccessibleContext();
-        if (xParentContext.is() && xParentContext->getAccessibleRole() == AccessibleRole::COMBO_BOX)
-            return true;
-    }
-
-    return false;
+    return isComboBoxChild();
 }
 
 // XServiceInfo
@@ -614,6 +606,18 @@ sal_Bool VCLXAccessibleEdit::setText( const OUString& sText )
     }
 
     return bReturn;
+}
+
+bool VCLXAccessibleEdit::isComboBoxChild()
+{
+    Reference<XAccessible> xParent = getAccessibleParent();
+    if (xParent.is())
+    {
+        Reference<XAccessibleContext> xParentContext = xParent->getAccessibleContext();
+        if (xParentContext.is() && xParentContext->getAccessibleRole() == AccessibleRole::COMBO_BOX)
+            return true;
+    }
+    return false;
 }
 
 bool VCLXAccessibleEdit::isEditable()

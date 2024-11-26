@@ -101,6 +101,7 @@ public:
     virtual sal_Bool SAL_CALL setText( const OUString& sText ) override;
 
 private:
+    bool isComboBoxChild();
     bool isEditable();
 };
 
