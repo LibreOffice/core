@@ -25,7 +25,6 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <comphelper/accessiblecontexthelper.hxx>
 #include <vcl/toolkit/ivctrl.hxx>
-#include <cppuhelper/supportsservice.hxx>
 
 
 namespace accessibility
@@ -128,11 +127,6 @@ namespace accessibility
         return {u"com.sun.star.accessibility.AccessibleContext"_ustr,
                 u"com.sun.star.accessibility.AccessibleComponent"_ustr,
                 u"com.sun.star.awt.AccessibleIconChoiceControl"_ustr};
-    }
-
-    sal_Bool SAL_CALL AccessibleIconChoiceCtrl::supportsService( const OUString& _rServiceName )
-    {
-        return cppu::supportsService(this, _rServiceName);
     }
 
     // XAccessible
