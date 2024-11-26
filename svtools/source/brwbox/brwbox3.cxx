@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <osl/diagnose.h>
 #include <svtools/brwbox.hxx>
 #include <vcl/AccessibleBrowseBoxObjType.hxx>
 #include <vcl/accessiblefactory.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <tools/multisel.hxx>
-#include "brwimpl.hxx"
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 
 // Accessibility ==============================================================
@@ -35,7 +35,7 @@ using namespace ::com::sun::star::accessibility;
 
 namespace svt
 {
-    static Reference< XAccessible > getHeaderCell( BrowseBoxImpl::THeaderCellMap& _raHeaderCells,
+    static Reference< XAccessible > getHeaderCell(BrowseBox::THeaderCellMap& _raHeaderCells,
                                             sal_Int32 _nPos,
                                             AccessibleBrowseBoxObjType _eType,
                                             const Reference< XAccessible >& _rParent,
@@ -44,7 +44,7 @@ namespace svt
                                           )
     {
         Reference< XAccessible > xRet;
-        BrowseBoxImpl::THeaderCellMap::iterator aFind = _raHeaderCells.find( _nPos );
+        BrowseBox::THeaderCellMap::iterator aFind = _raHeaderCells.find(_nPos);
         if ( aFind == _raHeaderCells.end() )
         {
             Reference< XAccessible > xAccessible = rFactory.createAccessibleBrowseBoxHeaderCell(
@@ -60,42 +60,39 @@ namespace svt
             xRet = aFind->second;
         return xRet;
     }
-
-
-    Reference< XAccessible > BrowseBoxImpl::getAccessibleHeaderBar( AccessibleBrowseBoxObjType _eObjType )
-    {
-        if ( m_pAccessible && m_pAccessible->isAlive() )
-            return m_pAccessible->getHeaderBar( _eObjType );
-        return nullptr;
-    }
-
-
-    Reference< XAccessible > BrowseBoxImpl::getAccessibleTable( )
-    {
-        if ( m_pAccessible && m_pAccessible->isAlive() )
-            return m_pAccessible->getTable( );
-        return nullptr;
-    }
 }
 
+Reference<XAccessible> BrowseBox::getAccessibleHeaderBar(AccessibleBrowseBoxObjType _eObjType)
+{
+    if (m_pAccessible && m_pAccessible->isAlive())
+        return m_pAccessible->getHeaderBar(_eObjType);
+    return nullptr;
+}
+
+Reference<XAccessible> BrowseBox::getAccessibleTable()
+{
+    if (m_pAccessible && m_pAccessible->isAlive())
+        return m_pAccessible->getTable();
+    return nullptr;
+}
 
 Reference< XAccessible > BrowseBox::CreateAccessible()
 {
     vcl::Window* pParent = GetAccessibleParentWindow();
     DBG_ASSERT( pParent, "BrowseBox::CreateAccessible - parent not found" );
 
-    if( pParent && !m_pImpl->m_pAccessible)
+    if (pParent && !m_pAccessible)
     {
         Reference< XAccessible > xAccParent = pParent->GetAccessible();
         if( xAccParent.is() )
         {
-            m_pImpl->m_pAccessible = getAccessibleFactory().createAccessibleBrowseBox(
+            m_pAccessible = getAccessibleFactory().createAccessibleBrowseBox(
                 xAccParent, *this
             );
         }
     }
 
-    return m_pImpl->m_pAccessible;
+    return m_pAccessible;
 }
 
 
@@ -104,10 +101,10 @@ Reference< XAccessible > BrowseBox::CreateAccessible()
 Reference< XAccessible > BrowseBox::CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumnPos )
 {
     // BBINDEX_TABLE must be the table
-    OSL_ENSURE(m_pImpl->m_pAccessible,"Invalid call: Accessible is null");
+    OSL_ENSURE(m_pAccessible,"Invalid call: Accessible is null");
 
-    return m_pImpl->m_aFactoryAccess.getFactory().createAccessibleBrowseBoxTableCell(
-        m_pImpl->getAccessibleTable(),
+    return m_aFactoryAccess.getFactory().createAccessibleBrowseBoxTableCell(
+        getAccessibleTable(),
         *this,
         nullptr,
         _nRow,
@@ -120,12 +117,12 @@ Reference< XAccessible > BrowseBox::CreateAccessibleCell( sal_Int32 _nRow, sal_u
 Reference< XAccessible > BrowseBox::CreateAccessibleRowHeader( sal_Int32 _nRow )
 {
     return svt::getHeaderCell(
-        m_pImpl->m_aRowHeaderCellMap,
+        m_aRowHeaderCellMap,
         _nRow,
         AccessibleBrowseBoxObjType::RowHeaderCell,
-        m_pImpl->getAccessibleHeaderBar(AccessibleBrowseBoxObjType::RowHeaderBar),
+        getAccessibleHeaderBar(AccessibleBrowseBoxObjType::RowHeaderBar),
         *this,
-        m_pImpl->m_aFactoryAccess.getFactory()
+        m_aFactoryAccess.getFactory()
     );
 }
 
@@ -133,12 +130,12 @@ Reference< XAccessible > BrowseBox::CreateAccessibleRowHeader( sal_Int32 _nRow )
 Reference< XAccessible > BrowseBox::CreateAccessibleColumnHeader( sal_uInt16 _nColumnPos )
 {
     return svt::getHeaderCell(
-            m_pImpl->m_aColHeaderCellMap,
+            m_aColHeaderCellMap,
             _nColumnPos,
             AccessibleBrowseBoxObjType::ColumnHeaderCell,
-            m_pImpl->getAccessibleHeaderBar(AccessibleBrowseBoxObjType::ColumnHeaderBar),
+            getAccessibleHeaderBar(AccessibleBrowseBoxObjType::ColumnHeaderBar),
             *this,
-            m_pImpl->m_aFactoryAccess.getFactory()
+            m_aFactoryAccess.getFactory()
     );
 }
 
@@ -398,30 +395,30 @@ void BrowseBox::commitHeaderBarEvent(sal_Int16 nEventId,
         const Any& rNewValue, const Any& rOldValue, bool _bColumnHeaderBar )
 {
     if ( isAccessibleAlive() )
-        m_pImpl->m_pAccessible->commitHeaderBarEvent( nEventId,
+        m_pAccessible->commitHeaderBarEvent( nEventId,
             rNewValue, rOldValue, _bColumnHeaderBar );
 }
 
 void BrowseBox::commitTableEvent( sal_Int16 _nEventId, const Any& _rNewValue, const Any& _rOldValue )
 {
     if ( isAccessibleAlive() )
-        m_pImpl->m_pAccessible->commitTableEvent( _nEventId, _rNewValue, _rOldValue );
+        m_pAccessible->commitTableEvent(_nEventId, _rNewValue, _rOldValue);
 }
 
 void BrowseBox::commitBrowseBoxEvent( sal_Int16 _nEventId, const Any& _rNewValue, const Any& _rOldValue )
 {
     if ( isAccessibleAlive() )
-        m_pImpl->m_pAccessible->commitEvent( _nEventId, _rNewValue, _rOldValue);
+        m_pAccessible->commitEvent( _nEventId, _rNewValue, _rOldValue);
 }
 
 ::vcl::IAccessibleFactory& BrowseBox::getAccessibleFactory()
 {
-    return m_pImpl->m_aFactoryAccess.getFactory();
+    return m_aFactoryAccess.getFactory();
 }
 
 bool BrowseBox::isAccessibleAlive( ) const
 {
-    return m_pImpl->m_pAccessible && m_pImpl->m_pAccessible->isAlive();
+    return m_pAccessible && m_pAccessible->isAlive();
 }
 
 // IAccessibleTableProvider

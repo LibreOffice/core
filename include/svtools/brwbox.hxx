@@ -28,10 +28,12 @@
 #include <vcl/timer.hxx>
 #include <vcl/AccessibleBrowseBoxObjType.hxx>
 #include <vcl/accessibletableprovider.hxx>
+#include <vcl/svtaccessiblefactory.hxx>
 #include <vector>
 #include <stack>
 
 #include <limits.h>
+#include <map>
 #include <memory>
 #include <o3tl/typed_flags_set.hxx>
 
@@ -261,9 +263,10 @@ class SVT_DLLPUBLIC BrowseBox
         ,public vcl::IAccessibleTableProvider
 {
     friend class BrowserDataWin;
-    friend class ::svt::BrowseBoxImpl;
 
 public:
+    typedef ::std::map<sal_Int32, css::uno::Reference<css::accessibility::XAccessible>> THeaderCellMap;
+
     static const sal_uInt16 HandleColumnId = 0;
 
 private:
@@ -342,11 +345,15 @@ private:
     std::stack<CursorMoveAttempt>
                     m_aGotoStack;
 
-    ::std::unique_ptr< ::svt::BrowseBoxImpl >  m_pImpl;       // impl structure of the BrowseBox object
-
     bool            m_bFocusOnlyCursor; // hide cursor if we don't have the focus
     Color           m_aCursorColor;     // special color for cursor, COL_TRANSPARENT for usual (VCL-painted) "inverted" cursor
     BrowserMode     m_nCurrentMode;     // last argument of SetMode (redundant, as our other members represent the current settings, too)
+
+    vcl::AccessibleFactoryAccess m_aFactoryAccess;
+    rtl::Reference<vcl::IAccessibleBrowseBox> m_pAccessible;
+
+    THeaderCellMap m_aColHeaderCellMap;
+    THeaderCellMap m_aRowHeaderCellMap;
 
 private:
     SVT_DLLPRIVATE void            ExpandRowSelection( const BrowserMouseEvent& rEvt );
@@ -380,6 +387,14 @@ private:
 
     SAL_DLLPRIVATE sal_uInt16 ToggleSelectedColumn();
     SAL_DLLPRIVATE void SetToggledSelectedColumn(sal_uInt16 _nSelectedColumnId);
+
+    /// @see AccessibleBrowseBox::getHeaderBar
+    css::uno::Reference<css::accessibility::XAccessible>
+    getAccessibleHeaderBar(AccessibleBrowseBoxObjType _eObjType);
+
+    /// @see AccessibleBrowseBox::getTable
+    css::uno::Reference<css::accessibility::XAccessible>
+    getAccessibleTable();
 
 protected:
     /// retrieves the XAccessible implementation associated with the BrowseBox instance

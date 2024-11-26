@@ -17,12 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/diagnose_ex.hxx>
 #include <svtools/brwbox.hxx>
 #include <svtools/brwhead.hxx>
 #include <svtools/scrolladaptor.hxx>
 #include <o3tl/numeric.hxx>
 #include <o3tl/safeint.hxx>
 #include "datwin.hxx"
+#include <osl/diagnose.h>
 #include <tools/debug.hxx>
 #include <tools/fract.hxx>
 #include <sal/log.hxx>
@@ -34,8 +36,8 @@
 #include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>
 #include <com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
 #include <tools/multisel.hxx>
-#include "brwimpl.hxx"
 
 
 #define SCROLL_FLAGS (ScrollFlags::Clip | ScrollFlags::NoChildren)
@@ -50,7 +52,7 @@ namespace
 {
     struct THeaderCellMapFunctorDispose
     {
-        void operator()(const svt::BrowseBoxImpl::THeaderCellMap::value_type& _aType)
+        void operator()(const BrowseBox::THeaderCellMap::value_type& _aType)
         {
             css::uno::Reference<css::lang::XComponent> xComp(_aType.second, css::uno::UNO_QUERY);
             OSL_ENSURE(xComp.is() || !_aType.second.is(), "THeaderCellMapFunctorDispose: invalid accessible cell (no XComponent)!");
@@ -66,7 +68,7 @@ namespace
         }
     };
 
-    void disposeAndClearHeaderCell(::svt::BrowseBoxImpl::THeaderCellMap& _rHeaderCell)
+    void disposeAndClearHeaderCell(BrowseBox::THeaderCellMap& _rHeaderCell)
     {
         ::std::for_each(
                         _rHeaderCell.begin(),
@@ -142,7 +144,6 @@ BrowseBox::BrowseBox( vcl::Window* pParent, WinBits nBits, BrowserMode nMode )
     pColSel = nullptr;
     pVScroll = nullptr;
     pDataWin = VclPtr<BrowserDataWin>::Create( this ).get();
-    m_pImpl.reset( new ::svt::BrowseBoxImpl() );
 
     InitSettings_Impl( this );
     InitSettings_Impl( pDataWin );
@@ -194,12 +195,12 @@ BrowseBox::~BrowseBox()
 
 void BrowseBox::DisposeAccessible()
 {
-    if (m_pImpl->m_pAccessible )
+    if (m_pAccessible )
     {
-        disposeAndClearHeaderCell(m_pImpl->m_aColHeaderCellMap);
-        disposeAndClearHeaderCell(m_pImpl->m_aRowHeaderCellMap);
-        m_pImpl->m_pAccessible->dispose();
-        m_pImpl->m_pAccessible = nullptr;
+        disposeAndClearHeaderCell(m_aColHeaderCellMap);
+        disposeAndClearHeaderCell(m_aRowHeaderCellMap);
+        m_pAccessible->dispose();
+        m_pAccessible = nullptr;
     }
 }
 
@@ -819,13 +820,13 @@ void BrowseBox::RemoveColumns()
     commitBrowseBoxEvent(
         AccessibleEventId::CHILD,
         Any(),
-        Any(m_pImpl->getAccessibleHeaderBar(AccessibleBrowseBoxObjType::ColumnHeaderBar))
+        Any(getAccessibleHeaderBar(AccessibleBrowseBoxObjType::ColumnHeaderBar))
     );
 
     // and now append it again
     commitBrowseBoxEvent(
         AccessibleEventId::CHILD,
-        Any(m_pImpl->getAccessibleHeaderBar(AccessibleBrowseBoxObjType::ColumnHeaderBar)),
+        Any(getAccessibleHeaderBar(AccessibleBrowseBoxObjType::ColumnHeaderBar)),
         Any()
     );
 
@@ -1139,13 +1140,13 @@ void BrowseBox::Clear()
     commitBrowseBoxEvent(
         AccessibleEventId::CHILD,
         Any(),
-        Any( m_pImpl->getAccessibleHeaderBar( AccessibleBrowseBoxObjType::RowHeaderBar ) )
+        Any(getAccessibleHeaderBar( AccessibleBrowseBoxObjType::RowHeaderBar))
     );
 
     // and now append it again
     commitBrowseBoxEvent(
         AccessibleEventId::CHILD,
-        Any( m_pImpl->getAccessibleHeaderBar( AccessibleBrowseBoxObjType::RowHeaderBar ) ),
+        Any(getAccessibleHeaderBar(AccessibleBrowseBoxObjType::RowHeaderBar)),
         Any()
     );
 
@@ -1382,25 +1383,25 @@ void BrowseBox::RowRemoved( sal_Int32 nRow, sal_Int32 nNumRows, bool bDoPaint )
             commitBrowseBoxEvent(
                 AccessibleEventId::CHILD,
                 Any(),
-                Any( m_pImpl->getAccessibleHeaderBar( AccessibleBrowseBoxObjType::RowHeaderBar ) )
+                Any(getAccessibleHeaderBar(AccessibleBrowseBoxObjType::RowHeaderBar))
             );
 
             // and now append it again
             commitBrowseBoxEvent(
                 AccessibleEventId::CHILD,
-                Any(m_pImpl->getAccessibleHeaderBar(AccessibleBrowseBoxObjType::RowHeaderBar)),
+                Any(getAccessibleHeaderBar(AccessibleBrowseBoxObjType::RowHeaderBar)),
                 Any()
             );
             commitBrowseBoxEvent(
                 AccessibleEventId::CHILD,
                 Any(),
-                Any( m_pImpl->getAccessibleTable() )
+                Any(getAccessibleTable())
             );
 
             // and now append it again
             commitBrowseBoxEvent(
                 AccessibleEventId::CHILD,
-                Any( m_pImpl->getAccessibleTable() ),
+                Any(getAccessibleTable()),
                 Any()
             );
         }
