@@ -752,7 +752,7 @@ void SchXMLChartContext::endFastElement(sal_Int32 )
     // cleanup: remove empty chart type groups
     lcl_removeEmptyChartTypeGroups( xNewDoc );
 
-    // Handle of-pie paramters. Is this the right place to do this?
+    // Handle of-pie parameters. Is this the right place to do this?
     if (maChartTypeServiceName == "com.sun.star.chart2.PieChartType") {
         Reference< chart2::XDiagram> xDia(xNewDoc->getFirstDiagram());
         uno::Reference< beans::XPropertySet > xDiaProp( xDia, uno::UNO_QUERY );
