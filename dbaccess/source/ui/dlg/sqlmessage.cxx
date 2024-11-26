@@ -507,7 +507,7 @@ void OSQLMessageBox::impl_addDetailsButton()
     if ( bMoreDetailsAvailable )
     {
         m_xDialog->add_button(GetStandardText(StandardButtonType::More), RET_MORE);
-        m_xMoreButton.reset(m_xDialog->weld_widget_for_response(RET_MORE));
+        m_xMoreButton = m_xDialog->weld_widget_for_response(RET_MORE);
         m_xMoreButton->connect_clicked(LINK(this, OSQLMessageBox, ButtonClickHdl));
     }
 }

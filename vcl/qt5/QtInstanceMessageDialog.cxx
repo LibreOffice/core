@@ -120,19 +120,19 @@ void QtInstanceMessageDialog::set_default_response(int nResponse)
         m_pMessageDialog->setDefaultButton(pButton);
 }
 
-QtInstanceButton* QtInstanceMessageDialog::weld_widget_for_response(int nResponse)
+std::unique_ptr<weld::Button> QtInstanceMessageDialog::weld_widget_for_response(int nResponse)
 {
     SolarMutexGuard g;
     QtInstance& rQtInstance = GetQtInstance();
     if (!rQtInstance.IsMainThread())
     {
-        QtInstanceButton* pButton;
-        rQtInstance.RunInMainThread([&] { pButton = weld_widget_for_response(nResponse); });
-        return pButton;
+        std::unique_ptr<weld::Button> xButton;
+        rQtInstance.RunInMainThread([&] { xButton = weld_widget_for_response(nResponse); });
+        return xButton;
     }
 
     if (QPushButton* pButton = buttonForResponseCode(nResponse))
-        return new QtInstanceButton(pButton);
+        return std::make_unique<QtInstanceButton>(pButton);
 
     return nullptr;
 }

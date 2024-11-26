@@ -144,7 +144,7 @@ void QtInstanceDialog::set_centered_on_parent(bool)
     // QDialog is centered on parent toplevel by default
 }
 
-weld::Button* QtInstanceDialog::weld_widget_for_response(int)
+std::unique_ptr<weld::Button> QtInstanceDialog::weld_widget_for_response(int)
 {
     assert(false && "Not implemented yet");
     return nullptr;

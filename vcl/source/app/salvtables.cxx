@@ -2945,13 +2945,13 @@ IMPL_LINK(SalInstanceButton, ClickHdl, ::Button*, pButton, void)
     signal_clicked();
 }
 
-weld::Button* SalInstanceDialog::weld_widget_for_response(int nResponse)
+std::unique_ptr<weld::Button> SalInstanceDialog::weld_widget_for_response(int nResponse)
 {
     PushButton* pButton = dynamic_cast<PushButton*>(m_xDialog->get_widget_for_response(nResponse));
-    return pButton ? new SalInstanceButton(pButton, nullptr, false) : nullptr;
+    return pButton ? std::make_unique<SalInstanceButton>(pButton, nullptr, false) : nullptr;
 }
 
-weld::Button* SalInstanceAssistant::weld_widget_for_response(int nResponse)
+std::unique_ptr<weld::Button> SalInstanceAssistant::weld_widget_for_response(int nResponse)
 {
     PushButton* pButton = nullptr;
     if (nResponse == RET_YES)
@@ -2965,7 +2965,7 @@ weld::Button* SalInstanceAssistant::weld_widget_for_response(int nResponse)
     else if (nResponse == RET_HELP)
         pButton = m_xWizard->m_pHelp;
     if (pButton)
-        return new SalInstanceButton(pButton, nullptr, false);
+        return std::make_unique<SalInstanceButton>(pButton, nullptr, false);
     return nullptr;
 }
 

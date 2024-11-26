@@ -520,7 +520,7 @@ public:
     virtual void collapse(weld::Widget* pEdit, weld::Widget* pButton) override;
     virtual void undo_collapse() override;
     virtual void response(int response) override;
-    virtual weld::Button* weld_widget_for_response(int response) override;
+    virtual std::unique_ptr<weld::Button> weld_widget_for_response(int response) override;
     virtual int run() override;
     virtual bool runAsync(std::shared_ptr<weld::DialogController> const& rxOwner,
                           const std::function<void(sal_Int32)>& rEndDialogFn) override;
@@ -537,7 +537,7 @@ public:
     virtual void set_current_page(int nPage) override;
     virtual void set_current_page(const OUString& rIdent) override;
     virtual void response(int response) override;
-    virtual weld::Button* weld_widget_for_response(int response) override;
+    virtual std::unique_ptr<weld::Button> weld_widget_for_response(int response) override;
     virtual int run() override;
     virtual bool runAsync(std::shared_ptr<weld::DialogController> const& rxOwner,
                           const std::function<void(sal_Int32)>& rEndDialogFn) override;

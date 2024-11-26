@@ -1413,27 +1413,28 @@ bool JSAssistant::runAsync(std::shared_ptr<Dialog> const& rxSelf,
     return ret;
 }
 
-weld::Button* JSDialog::weld_widget_for_response(int nResponse)
+std::unique_ptr<weld::Button> JSDialog::weld_widget_for_response(int nResponse)
 {
     PushButton* pButton
         = dynamic_cast<::PushButton*>(m_xDialog->get_widget_for_response(nResponse));
-    auto pWeldWidget = pButton ? new JSButton(m_pSender, pButton, nullptr, false) : nullptr;
+    std::unique_ptr<weld::Button> xWeldWidget
+        = pButton ? std::make_unique<JSButton>(m_pSender, pButton, nullptr, false) : nullptr;
 
-    if (pWeldWidget)
+    if (xWeldWidget)
     {
         auto pParentDialog = m_xDialog->GetParentWithLOKNotifier();
         if (pParentDialog)
             JSInstanceBuilder::RememberWidget(OUString::number(pParentDialog->GetLOKWindowId()),
-                                              pButton->get_id(), pWeldWidget);
+                                              pButton->get_id(), xWeldWidget.get());
     }
 
-    return pWeldWidget;
+    return xWeldWidget;
 }
 
-weld::Button* JSAssistant::weld_widget_for_response(int nResponse)
+std::unique_ptr<weld::Button> JSAssistant::weld_widget_for_response(int nResponse)
 {
     ::PushButton* pButton = nullptr;
-    JSButton* pWeldWidget = nullptr;
+    std::unique_ptr<JSButton> xWeldWidget;
     if (nResponse == RET_YES)
         pButton = m_xWizard->m_pNextPage;
     else if (nResponse == RET_NO)
@@ -1445,17 +1446,17 @@ weld::Button* JSAssistant::weld_widget_for_response(int nResponse)
     else if (nResponse == RET_HELP)
         pButton = m_xWizard->m_pHelp;
     if (pButton)
-        pWeldWidget = new JSButton(m_pSender, pButton, nullptr, false);
+        xWeldWidget = std::make_unique<JSButton>(m_pSender, pButton, nullptr, false);
 
-    if (pWeldWidget)
+    if (xWeldWidget)
     {
         auto pParentDialog = m_xWizard->GetParentWithLOKNotifier();
         if (pParentDialog)
             JSInstanceBuilder::RememberWidget(OUString::number(pParentDialog->GetLOKWindowId()),
-                                              pButton->get_id(), pWeldWidget);
+                                              pButton->get_id(), xWeldWidget.get());
     }
 
-    return pWeldWidget;
+    return xWeldWidget;
 }
 
 JSAssistant::JSAssistant(JSDialogSender* pSender, vcl::RoadmapWizard* pDialog,

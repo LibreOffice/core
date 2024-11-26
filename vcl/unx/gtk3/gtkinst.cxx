@@ -7182,7 +7182,7 @@ public:
         return GTK_BUTTON(gtk_dialog_get_widget_for_response(GTK_DIALOG(m_pDialog), nGtkResponse));
     }
 
-    virtual weld::Button* weld_widget_for_response(int nVclResponse) override;
+    virtual std::unique_ptr<weld::Button> weld_widget_for_response(int nVclResponse) override;
 
     virtual std::unique_ptr<weld::Container> weld_content_area() override
     {
@@ -10083,12 +10083,12 @@ int GtkInstanceDialog::run()
     return GtkToVcl(ret);
 }
 
-weld::Button* GtkInstanceDialog::weld_widget_for_response(int nVclResponse)
+std::unique_ptr<weld::Button> GtkInstanceDialog::weld_widget_for_response(int nVclResponse)
 {
     GtkButton* pButton = get_widget_for_response(VclToGtk(nVclResponse));
     if (!pButton)
         return nullptr;
-    return new GtkInstanceButton(pButton, m_pBuilder, false);
+    return std::make_unique<GtkInstanceButton>(pButton, m_pBuilder, false);
 }
 
 void GtkInstanceDialog::response(int nResponse)
