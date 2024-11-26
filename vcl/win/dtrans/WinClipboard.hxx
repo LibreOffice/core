@@ -52,7 +52,7 @@ class CWinClipboard final
                                                  css::datatransfer::clipboard::XFlushableClipboard,
                                                  css::lang::XServiceInfo>
 {
-    friend STDMETHODIMP_(ULONG) CXNotifyingDataObject::Release();
+    friend CXNotifyingDataObject::~CXNotifyingDataObject();
 
     css::uno::Reference<css::uno::XComponentContext> m_xContext;
     const OUString m_itsName;
