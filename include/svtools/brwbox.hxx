@@ -349,7 +349,6 @@ private:
     BrowserMode     m_nCurrentMode;     // last argument of SetMode (redundant, as our other members represent the current settings, too)
 
 private:
-    SVT_DLLPRIVATE void            ConstructImpl(BrowserMode nMode);
     SVT_DLLPRIVATE void            ExpandRowSelection( const BrowserMouseEvent& rEvt );
     SVT_DLLPRIVATE void            ToggleSelection();
 

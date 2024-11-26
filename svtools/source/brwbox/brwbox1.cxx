@@ -59,58 +59,6 @@ namespace
     }
 }
 
-void BrowseBox::ConstructImpl( BrowserMode nMode )
-{
-    SAL_INFO("svtools", "BrowseBox:ConstructImpl " << this );
-    bMultiSelection = false;
-    pColSel = nullptr;
-    pVScroll = nullptr;
-    pDataWin = VclPtr<BrowserDataWin>::Create( this ).get();
-    m_pImpl.reset( new ::svt::BrowseBoxImpl() );
-
-    InitSettings_Impl( this );
-    InitSettings_Impl( pDataWin );
-
-    bBootstrapped = false;
-    m_nDataRowHeight = 0;
-    nTitleLines = 1;
-    nFirstCol = 0;
-    nTopRow = 0;
-    nCurRow = BROWSER_ENDOFSELECTION;
-    nCurColId = 0;
-    nResizeX = 0;
-    nMinResizeX = 0;
-    nDragX = 0;
-    nResizeCol = 0;
-    bResizing = false;
-    bSelect = false;
-    bSelecting = false;
-    bScrolling = false;
-    bSelectionIsVisible = false;
-    bNotToggleSel = false;
-    bRowDividerDrag = false;
-    bHit = false;
-    mbInteractiveRowHeight = false;
-    bHideSelect = false;
-    bHideCursor = TRISTATE_FALSE;
-    nRowCount = 0;
-    m_bFocusOnlyCursor = true;
-    m_aCursorColor = COL_TRANSPARENT;
-    m_nCurrentMode = BrowserMode::NONE;
-    nControlAreaWidth = USHRT_MAX;
-    uRow.nSel = BROWSER_ENDOFSELECTION;
-
-    aHScroll->SetLineSize(1);
-    aHScroll->SetScrollHdl( LINK( this, BrowseBox, HorzScrollHdl ) );
-    pDataWin->Show();
-
-    SetMode( nMode );
-    bSelectionIsVisible = bKeepHighlight;
-    bHasFocus = HasChildPathFocus();
-    pDataWin->nCursorHidden =
-                ( bHasFocus ? 0 : 1 ) + ( GetUpdateMode() ? 0 : 1 );
-}
-
 // we're just measuring the "real" NavigationBar
 class MeasureStatusBar final : public InterimItemWindow
 {
@@ -172,7 +120,53 @@ BrowseBox::BrowseBox( vcl::Window* pParent, WinBits nBits, BrowserMode nMode )
     ,m_nActualCornerWidth(0)
     ,m_bNavigationBar(false)
 {
-    ConstructImpl( nMode );
+    bMultiSelection = false;
+    pColSel = nullptr;
+    pVScroll = nullptr;
+    pDataWin = VclPtr<BrowserDataWin>::Create( this ).get();
+    m_pImpl.reset( new ::svt::BrowseBoxImpl() );
+
+    InitSettings_Impl( this );
+    InitSettings_Impl( pDataWin );
+
+    bBootstrapped = false;
+    m_nDataRowHeight = 0;
+    nTitleLines = 1;
+    nFirstCol = 0;
+    nTopRow = 0;
+    nCurRow = BROWSER_ENDOFSELECTION;
+    nCurColId = 0;
+    nResizeX = 0;
+    nMinResizeX = 0;
+    nDragX = 0;
+    nResizeCol = 0;
+    bResizing = false;
+    bSelect = false;
+    bSelecting = false;
+    bScrolling = false;
+    bSelectionIsVisible = false;
+    bNotToggleSel = false;
+    bRowDividerDrag = false;
+    bHit = false;
+    mbInteractiveRowHeight = false;
+    bHideSelect = false;
+    bHideCursor = TRISTATE_FALSE;
+    nRowCount = 0;
+    m_bFocusOnlyCursor = true;
+    m_aCursorColor = COL_TRANSPARENT;
+    m_nCurrentMode = BrowserMode::NONE;
+    nControlAreaWidth = USHRT_MAX;
+    uRow.nSel = BROWSER_ENDOFSELECTION;
+
+    aHScroll->SetLineSize(1);
+    aHScroll->SetScrollHdl( LINK( this, BrowseBox, HorzScrollHdl ) );
+    pDataWin->Show();
+
+    SetMode( nMode );
+    bSelectionIsVisible = bKeepHighlight;
+    bHasFocus = HasChildPathFocus();
+    pDataWin->nCursorHidden =
+        ( bHasFocus ? 0 : 1 ) + ( GetUpdateMode() ? 0 : 1 );
 }
 
 BrowseBox::~BrowseBox()
