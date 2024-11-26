@@ -67,7 +67,6 @@ SwMasterUsrPref::SwMasterUsrPref(bool bWeb) :
     m_eUserMetric = MeasurementSystem::Metric == eSystem ? FieldUnit::CM : FieldUnit::INCH;
     m_eHScrollMetric = m_eVScrollMetric = m_eUserMetric;
 
-    m_aContentConfig.Load();
     m_aLayoutConfig.Load();
     m_aGridConfig.Load();
     m_aCursorConfig.Load();
