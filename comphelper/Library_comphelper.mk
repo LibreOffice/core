@@ -70,12 +70,15 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/container/NamedPropertyValuesContainer \
     comphelper/source/container/container \
     comphelper/source/container/containermultiplexer \
-	comphelper/source/container/interfacecontainer2 \
+    comphelper/source/container/interfacecontainer2 \
     comphelper/source/container/embeddedobjectcontainer \
     comphelper/source/container/enumerablemap \
     comphelper/source/container/enumhelper \
     comphelper/source/container/namecontainer \
     comphelper/source/crypto/Crypto \
+    $(if $(filter NSS,$(TLS)), comphelper/source/crypto/Crypto_NSS) \
+    $(if $(filter OPENSSL,$(TLS)), comphelper/source/crypto/Crypto_OpenSSL) \
+    $(if $(filter NSS OPENSSL,$(TLS)),,comphelper/source/crypto/Crypto_None) \
     comphelper/source/eventattachermgr/eventattachermgr \
     comphelper/source/misc/accessiblecomponenthelper \
     comphelper/source/misc/accessibleeventnotifier \
