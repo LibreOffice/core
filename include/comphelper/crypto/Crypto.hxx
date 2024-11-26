@@ -50,20 +50,41 @@ enum class CryptoType
     AES_256_CBC,
 };
 
-struct CryptoImpl;
+class ICryptoImplementation
+{
+public:
+    static std::shared_ptr<ICryptoImplementation> createInstance();
+
+    virtual void setupDecryptContext(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv,
+                                     CryptoType eType)
+        = 0;
+    virtual void setupEncryptContext(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv,
+                                     CryptoType type)
+        = 0;
+    virtual void setupCryptoHashContext(std::vector<sal_uInt8>& rKey, CryptoHashType eType) = 0;
+
+    virtual sal_uInt32 decryptUpdate(std::vector<sal_uInt8>& output, std::vector<sal_uInt8>& input,
+                                     sal_uInt32 inputLength)
+        = 0;
+    virtual sal_uInt32 encryptUpdate(std::vector<sal_uInt8>& output, std::vector<sal_uInt8>& input,
+                                     sal_uInt32 inputLength)
+        = 0;
+    virtual bool cryptoHashUpdate(std::vector<sal_uInt8>& rInput, sal_uInt32 nInputLength) = 0;
+    virtual bool cryptoHashFinalize(std::vector<sal_uInt8>& rHash) = 0;
+};
 
 class COMPHELPER_DLLPUBLIC Crypto
 {
 protected:
-    std::unique_ptr<CryptoImpl> mpImpl;
+    std::shared_ptr<ICryptoImplementation> mpImpl;
 
-protected:
     Crypto();
 
 public:
     virtual ~Crypto();
 };
 
+/** Decrypt vector of bytes with AES encryption */
 class COMPHELPER_DLLPUBLIC Decrypt final : public Crypto
 {
 public:
