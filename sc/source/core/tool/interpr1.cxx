@@ -7825,7 +7825,7 @@ void ScInterpreter::CalculateLookup(bool bHLookup)
         else
         {
             ScAddress aResultPos( nCol1, nRow1, nTab1);
-            bFound = LookupQueryWithCache( aResultPos, aParam, refData, 0, SC_OPCODE_V_LOOKUP );
+            bFound = LookupQueryWithCache( aResultPos, aParam, refData, 1 /*searchfwd*/, SC_OPCODE_V_LOOKUP );
             nRow = aResultPos.Row();
             nCol = nSpIndex;
         }
@@ -12149,7 +12149,7 @@ bool ScInterpreter::LookupQueryWithCache( ScAddress & o_rResultPos,
         ScRange aLookupRange( rParam.nCol1, rParam.nRow1, rParam.nTab,
                 rParam.nCol2, rParam.nRow2, rParam.nTab);
         ScLookupCache& rCache = mrDoc.GetLookupCache( aLookupRange, &mrContext );
-        ScLookupCache::QueryCriteria aCriteria( rEntry );
+        ScLookupCache::QueryCriteria aCriteria( rEntry, nSearchMode);
         ScLookupCache::Result eCacheResult = rCache.lookup( o_rResultPos,
                 aCriteria, aPos);
 

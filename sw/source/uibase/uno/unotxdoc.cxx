@@ -3511,6 +3511,9 @@ SwXTextDocument::getSearchResultRectangles(const char* pPayload)
 
 OString SwXTextDocument::getViewRenderState(SfxViewShell* pViewShell)
 {
+    if (!m_pDocShell)
+        return OString();
+
     OStringBuffer aState;
     SwView* pView = pViewShell ? dynamic_cast<SwView*>(pViewShell) : m_pDocShell->GetView();
     if (pView && pView->GetWrtShellPtr())

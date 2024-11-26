@@ -53,6 +53,23 @@ namespace
 {
 CWinClipboard* s_pCWinClipbImpl = nullptr;
 std::mutex s_aClipboardSingletonMutex;
+
+unsigned __stdcall releaseAsyncProc(void* p)
+{
+    static_cast<css::datatransfer::XTransferable*>(p)->release();
+    return 0;
+}
+
+void releaseAsync(css::uno::Reference<css::datatransfer::XTransferable>& ref)
+{
+    if (!ref)
+        return;
+    auto pInterface = ref.get();
+    pInterface->acquire();
+    ref.clear(); // before starting the thread, to avoid race
+    if (auto handle = _beginthreadex(nullptr, 0, releaseAsyncProc, pInterface, 0, nullptr))
+        CloseHandle(reinterpret_cast<HANDLE>(handle));
+}
 }
 
 /*XEventListener,*/
@@ -180,7 +197,11 @@ void SAL_CALL CWinClipboard::setContents(
 
     IDataObjectPtr pIDataObj;
 
-    m_foreignContent.clear();
+    // The object must be destroyed only outside of the mutex lock, and in a different thread,
+    // because it may call CWinClipboard::onReleaseDataObject, or try to lock solar mutex, in
+    // another thread of this process synchronously
+    releaseAsync(m_foreignContent); // clear m_foreignContent
+    assert(!m_foreignContent.is());
     m_pCurrentOwnClipContent = nullptr;
 
     if (xTransferable.is())
@@ -287,7 +308,11 @@ void CWinClipboard::handleClipboardContentChanged()
     if (m_bDisposed)
         return;
 
-    m_foreignContent.clear();
+    // The object must be destroyed only outside of the mutex lock, and in a different thread,
+    // because it may call CWinClipboard::onReleaseDataObject, or try to lock solar mutex, in
+    // another thread of this process synchronously
+    releaseAsync(m_foreignContent); // clear m_foreignContent
+    assert(!m_foreignContent.is());
     // If new own content assignment is pending, do it; otherwise, clear it.
     // This makes sure that there will be no stuck clipboard content.
     m_pCurrentOwnClipContent = std::exchange(m_pNewOwnClipContent, nullptr);

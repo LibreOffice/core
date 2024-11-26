@@ -37,7 +37,6 @@
 #include <strings.hrc>
 #include <dialmgr.hxx>
 #include <bitmaps.hlst>
-#include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
 
 namespace {
 
@@ -438,7 +437,7 @@ void SvxHyperlinkTabPageBase::GetDataFromCommonFields( OUString& aStrName,
 }
 
 // reset dialog-fields
-void SvxHyperlinkTabPageBase::Reset( const SfxItemSet& rItemSet)
+void SvxHyperlinkTabPageBase::Reset( const SfxItemSet& rItemSet )
 {
 
     // Set dialog-fields from create-itemset
@@ -449,47 +448,14 @@ void SvxHyperlinkTabPageBase::Reset( const SfxItemSet& rItemSet)
 
     if ( pHyperlinkItem )
     {
-        // tdf#146576 - propose clipboard content when inserting a hyperlink
-        OUString aStrURL(pHyperlinkItem->GetURL());
-        // Store initial URL
-        maStrInitURL = aStrURL;
-        if (aStrURL.isEmpty())
-        {
-            if (auto xClipboard = GetSystemClipboard())
-            {
-                if (auto xTransferable = xClipboard->getContents())
-                {
-                    css::datatransfer::DataFlavor aFlavor;
-                    SotExchange::GetFormatDataFlavor(SotClipboardFormatId::STRING, aFlavor);
-                    if (xTransferable->isDataFlavorSupported(aFlavor))
-                    {
-                        OUString aClipBoardContent;
-                        try
-                        {
-                            if (xTransferable->getTransferData(aFlavor) >>= aClipBoardContent)
-                            {
-                                INetURLObject aURL;
-                                aURL.SetSmartURL(aClipBoardContent);
-                                if (!aURL.HasError())
-                                    aStrURL
-                                        = aURL.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous);
-                            }
-                        }
-                        // tdf#158345: Opening Hyperlink dialog leads to crash
-                        // MimeType = "text/plain;charset=utf-16"
-                        catch(const css::datatransfer::UnsupportedFlavorException&)
-                        {
-                        }
-                    }
-                }
-            }
-        }
-
         // set dialog-fields
         FillStandardDlgFields (pHyperlinkItem);
 
         // set all other fields
-        FillDlgFields(aStrURL);
+        FillDlgFields(pHyperlinkItem->GetURL());
+
+        // Store initial URL
+        maStrInitURL = pHyperlinkItem->GetURL();
     }
 }
 

@@ -210,6 +210,8 @@ void CellAttributeHelper::CellStyleCreated(ScDocument& rDoc, const OUString& rNa
         const ScPatternAttr* pCheck = *it;
         if (CompareStringPtr(pCheck->GetStyleName(), &rName) != 0)
             break;
+        // tdf#163831 Invalidate cache if the style is modified/created
+        const_cast<ScPatternAttr*>(pCheck)->InvalidateCaches();
         if (nullptr == pCheck->GetStyleSheet())
             if (const_cast<ScPatternAttr*>(pCheck)->UpdateStyleSheet(rDoc)) // find and store style pointer
             {

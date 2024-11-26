@@ -108,7 +108,7 @@ PropertyHelper_Hyphenation& Hyphenator::GetPropHelper_Impl()
     return *pPropHelper;
 }
 
-Sequence< Locale > SAL_CALL Hyphenator::getLocales()
+void Hyphenator::ensureLocales()
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -212,17 +212,19 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
             aSuppLocales.realloc(0);
         }
     }
+}
 
+Sequence< Locale > SAL_CALL Hyphenator::getLocales()
+{
+    MutexGuard aGuard(GetLinguMutex());
+    ensureLocales();
     return aSuppLocales;
 }
 
 sal_Bool SAL_CALL Hyphenator::hasLocale(const Locale& rLocale)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-
-    if (!aSuppLocales.hasElements())
-        getLocales();
-
+    ensureLocales();
     return comphelper::findValue(aSuppLocales, rLocale) != -1;
 }
 
@@ -271,6 +273,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
 
     Reference< XHyphenatedWord > xRes;
 
+    ensureLocales();
     int k = -1;
     for (size_t j = 0; j < mvDicts.size(); ++j)
     {
@@ -686,6 +689,7 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
                       aWord, Sequence< sal_Int16 >() );
     }
 
+    ensureLocales();
     int k = -1;
     for (size_t j = 0; j < mvDicts.size(); ++j)
     {
@@ -781,7 +785,8 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
 
         sal_Int32 nHyphCount = 0;
 
-        for ( sal_Int32 i = 0; i < encWord.getLength(); i++)
+        // FIXME: shouldn't we iterate code points instead?
+        for (sal_Int32 i = 0; i < nWord.getLength(); i++)
         {
             if (hyphens[i]&1)
                 nHyphCount++;

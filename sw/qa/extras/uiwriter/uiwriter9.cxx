@@ -769,6 +769,49 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf162326_Character)
                          getProperty<short>(getRun(getParagraph(3), 2), u"CharUnderline"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf162195)
+{
+    // Given a document, which has some index entries in a hidden section
+    createSwDoc("IndexElementsInHiddenSections.fodt");
+
+    auto xIndexSupplier(mxComponent.queryThrow<css::text::XDocumentIndexesSupplier>());
+    auto xIndexes = xIndexSupplier->getDocumentIndexes();
+    CPPUNIT_ASSERT(xIndexes);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexes->getCount()); // A ToC and a table index
+
+    auto xToC(xIndexes->getByIndex(0).queryThrow<css::text::XDocumentIndex>());
+    xToC->update();
+    // Without the fix, all the elements from the hidden section appeared in the index
+    CPPUNIT_ASSERT_EQUAL(u"Table of Contents" SAL_NEWLINE_STRING "Section Visible\t1"_ustr,
+                         xToC->getAnchor()->getString());
+
+    auto xTables(xIndexes->getByIndex(1).queryThrow<css::text::XDocumentIndex>());
+    xTables->update();
+    // Without the fix, all the elements from the hidden section appeared in the index
+    CPPUNIT_ASSERT_EQUAL(u"Index of Tables" SAL_NEWLINE_STRING "Table1\t1"_ustr,
+                         xTables->getAnchor()->getString());
+
+    // Show the hidden section
+    auto xTextSectionsSupplier = mxComponent.queryThrow<css::text::XTextSectionsSupplier>();
+    auto xSections = xTextSectionsSupplier->getTextSections();
+    CPPUNIT_ASSERT(xSections);
+    auto xSection
+        = xSections->getByName(u"Section Hidden"_ustr).queryThrow<css::beans::XPropertySet>();
+    xSection->setPropertyValue(u"IsVisible"_ustr, css::uno::Any(true));
+
+    xToC->update();
+    CPPUNIT_ASSERT_EQUAL(u"Table of Contents" SAL_NEWLINE_STRING
+                         "Section Visible\t1" SAL_NEWLINE_STRING
+                         "Section Hidden\t1" SAL_NEWLINE_STRING "entry\t1" SAL_NEWLINE_STRING
+                         "CustomTOCStyle paragraph\t1"_ustr,
+                         xToC->getAnchor()->getString());
+
+    xTables->update();
+    CPPUNIT_ASSERT_EQUAL(u"Index of Tables" SAL_NEWLINE_STRING "Table1\t1" SAL_NEWLINE_STRING
+                         "Table2\t1"_ustr,
+                         xTables->getAnchor()->getString());
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

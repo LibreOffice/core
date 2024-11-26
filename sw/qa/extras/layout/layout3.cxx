@@ -122,6 +122,178 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf119875)
     CPPUNIT_ASSERT_LESS(S14Top.toInt32(), S11Top.toInt32());
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testSectionPageBreaksWithNestedSectionWithColumns)
+{
+    createSwDoc("section-nested-with-pagebreaks.fodt");
+
+    auto xTextSectionsSupplier = mxComponent.queryThrow<css::text::XTextSectionsSupplier>();
+    auto xSections = xTextSectionsSupplier->getTextSections();
+    CPPUNIT_ASSERT(xSections);
+    auto xSection1 = xSections->getByName(u"Section1"_ustr).queryThrow<css::beans::XPropertySet>();
+    auto xSection2 = xSections->getByName(u"Section2"_ustr).queryThrow<css::beans::XPropertySet>();
+    CPPUNIT_ASSERT(getProperty<bool>(xSection1, "IsVisible"));
+    CPPUNIT_ASSERT(getProperty<bool>(xSection2, "IsVisible"));
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page[1]/body/section", 1);
+        assertXPath(pXmlDoc, "/root/page[1]/body/section[1]/txt", 2);
+        assertXPath(pXmlDoc, "/root/page[2]/body/section", 1);
+        assertXPath(pXmlDoc, "/root/page[2]/body/section[1]/txt", 1);
+        assertXPath(pXmlDoc, "/root/page[2]/body/section[1]/txt/SwParaPortion/SwLineLayout",
+                    "portion", u"3"_ustr);
+        assertXPath(pXmlDoc, "/root/page[3]/body/section", 2);
+        assertXPath(pXmlDoc, "/root/page[3]/body/section[1]/txt", 1);
+        assertXPath(pXmlDoc, "/root/page[3]/body/section[1]/txt/SwParaPortion/SwLineLayout",
+                    "portion", u"4"_ustr);
+        assertXPath(pXmlDoc, "/root/page[3]/body/section[2]/column", 2);
+        assertXPath(pXmlDoc, "/root/page[3]/body/section[2]/column/body/txt", 2);
+        assertXPath(pXmlDoc,
+                    "/root/page[3]/body/section[2]/column/body/txt[2]/SwParaPortion/SwLineLayout",
+                    "portion", u"6"_ustr);
+        assertXPath(pXmlDoc, "/root/page[4]/body/section", 2);
+        assertXPath(pXmlDoc, "/root/page[4]/body/section[1]/column/body/txt", 2);
+        assertXPath(pXmlDoc, "/root/page[4]/body/section[1]/column/body/txt", 2);
+        assertXPath(
+            pXmlDoc,
+            "/root/page[4]/body/section[1]/column[1]/body/txt[1]/SwParaPortion/SwLineLayout",
+            "portion", u"7"_ustr);
+        assertXPath(
+            pXmlDoc,
+            "/root/page[4]/body/section[1]/column[2]/body/txt[1]/SwParaPortion/SwLineLayout",
+            "portion", u"8"_ustr);
+        assertXPath(pXmlDoc, "/root/page[4]/body/section[2]/txt", 1);
+        assertXPath(pXmlDoc, "/root/page[4]/body/section[2]/txt/SwParaPortion/SwLineLayout",
+                    "portion", u"Text following inner section"_ustr);
+        assertXPath(pXmlDoc, "/root/page[4]/body/txt[1]/SwParaPortion/SwLineLayout", "portion",
+                    u"Text following outer section"_ustr);
+        discardDumpedLayout();
+    }
+
+    xSection1->setPropertyValue(u"IsVisible"_ustr, css::uno::Any(false));
+    Scheduler::ProcessEventsToIdle();
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt", 2);
+        assertXPath(pXmlDoc, "/root/page[1]/body/section", 3);
+        assertXPath(pXmlDoc, "/root/page[1]/body/section[1]/txt", 4);
+        assertXPath(pXmlDoc, "/root/page[1]/body/section[2]/column", 2);
+        assertXPath(pXmlDoc, "/root/page[1]/body/section[2]/column/body/txt", 4);
+        assertXPath(pXmlDoc, "/root/page[1]/body/section[3]/txt", 1);
+        assertXPath(pXmlDoc, "/root/page[1]/body/section[1]/infos/bounds", "height", u"0"_ustr);
+        assertXPath(pXmlDoc, "/root/page[1]/body/section[2]/infos/bounds", "height", u"0"_ustr);
+        assertXPath(pXmlDoc, "/root/page[1]/body/section[3]/infos/bounds", "height", u"0"_ustr);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout", "portion",
+                    u"Text following outer section"_ustr);
+        discardDumpedLayout();
+    }
+
+    xSection1->setPropertyValue(u"IsVisible"_ustr, css::uno::Any(true));
+    Scheduler::ProcessEventsToIdle();
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page[1]/body/section", 1);
+        assertXPath(pXmlDoc, "/root/page[1]/body/section[1]/txt", 2);
+        assertXPath(pXmlDoc, "/root/page[2]/body/section", 1);
+        assertXPath(pXmlDoc, "/root/page[2]/body/section[1]/txt", 1);
+        assertXPath(pXmlDoc, "/root/page[2]/body/section[1]/txt/SwParaPortion/SwLineLayout",
+                    "portion", u"3"_ustr);
+        assertXPath(pXmlDoc, "/root/page[3]/body/section", 2);
+        assertXPath(pXmlDoc, "/root/page[3]/body/section[1]/txt", 1);
+        assertXPath(pXmlDoc, "/root/page[3]/body/section[1]/txt/SwParaPortion/SwLineLayout",
+                    "portion", u"4"_ustr);
+        assertXPath(pXmlDoc, "/root/page[3]/body/section[2]/column", 2);
+        assertXPath(pXmlDoc, "/root/page[3]/body/section[2]/column/body/txt", 2);
+        assertXPath(pXmlDoc,
+                    "/root/page[3]/body/section[2]/column/body/txt[2]/SwParaPortion/SwLineLayout",
+                    "portion", u"6"_ustr);
+        assertXPath(pXmlDoc, "/root/page[4]/body/section", 2);
+        assertXPath(pXmlDoc, "/root/page[4]/body/section[1]/column/body/txt", 2);
+        assertXPath(pXmlDoc, "/root/page[4]/body/section[1]/column/body/txt", 2);
+        assertXPath(
+            pXmlDoc,
+            "/root/page[4]/body/section[1]/column[1]/body/txt[1]/SwParaPortion/SwLineLayout",
+            "portion", u"7"_ustr);
+        assertXPath(
+            pXmlDoc,
+            "/root/page[4]/body/section[1]/column[2]/body/txt[1]/SwParaPortion/SwLineLayout",
+            "portion", u"8"_ustr);
+        assertXPath(pXmlDoc, "/root/page[4]/body/section[2]/txt", 1);
+        assertXPath(pXmlDoc, "/root/page[4]/body/section[2]/txt/SwParaPortion/SwLineLayout",
+                    "portion", u"Text following inner section"_ustr);
+        assertXPath(pXmlDoc, "/root/page[4]/body/txt[1]/SwParaPortion/SwLineLayout", "portion",
+                    u"Text following outer section"_ustr);
+        discardDumpedLayout();
+    }
+
+    xSection2->setPropertyValue(u"IsVisible"_ustr, css::uno::Any(false));
+    Scheduler::ProcessEventsToIdle();
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page[1]/body/section", 1);
+        assertXPath(pXmlDoc, "/root/page[1]/body/section[1]/txt", 2);
+        assertXPath(pXmlDoc, "/root/page[2]/body/section", 1);
+        assertXPath(pXmlDoc, "/root/page[2]/body/section[1]/txt", 1);
+        assertXPath(pXmlDoc, "/root/page[2]/body/section[1]/txt/SwParaPortion/SwLineLayout",
+                    "portion", u"3"_ustr);
+        assertXPath(pXmlDoc, "/root/page[3]/body/section", 3);
+        assertXPath(pXmlDoc, "/root/page[3]/body/section[1]/txt", 1);
+        assertXPath(pXmlDoc, "/root/page[3]/body/section[1]/txt/SwParaPortion/SwLineLayout",
+                    "portion", u"4"_ustr);
+        assertXPath(pXmlDoc, "/root/page[3]/body/section[2]/column", 2);
+        assertXPath(pXmlDoc, "/root/page[3]/body/section[2]/column/body/txt", 4);
+        assertXPath(pXmlDoc, "/root/page[3]/body/section[2]/infos/bounds", "height", u"0"_ustr);
+        assertXPath(pXmlDoc, "/root/page[3]/body/section[3]/txt", 1);
+        assertXPath(pXmlDoc, "/root/page[3]/body/section[3]/txt/SwParaPortion/SwLineLayout",
+                    "portion", u"Text following inner section"_ustr);
+        assertXPath(pXmlDoc, "/root/page[3]/body/txt[1]/SwParaPortion/SwLineLayout", "portion",
+                    u"Text following outer section"_ustr);
+        discardDumpedLayout();
+    }
+
+    xSection2->setPropertyValue(u"IsVisible"_ustr, css::uno::Any(true));
+    Scheduler::ProcessEventsToIdle();
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page[1]/body/section", 1);
+        assertXPath(pXmlDoc, "/root/page[1]/body/section[1]/txt", 2);
+        assertXPath(pXmlDoc, "/root/page[2]/body/section", 1);
+        assertXPath(pXmlDoc, "/root/page[2]/body/section[1]/txt", 1);
+        assertXPath(pXmlDoc, "/root/page[2]/body/section[1]/txt/SwParaPortion/SwLineLayout",
+                    "portion", u"3"_ustr);
+        assertXPath(pXmlDoc, "/root/page[3]/body/section", 2);
+        assertXPath(pXmlDoc, "/root/page[3]/body/section[1]/txt", 1);
+        assertXPath(pXmlDoc, "/root/page[3]/body/section[1]/txt/SwParaPortion/SwLineLayout",
+                    "portion", u"4"_ustr);
+        assertXPath(pXmlDoc, "/root/page[3]/body/section[2]/column", 2);
+        assertXPath(pXmlDoc, "/root/page[3]/body/section[2]/column/body/txt", 2);
+        assertXPath(pXmlDoc,
+                    "/root/page[3]/body/section[2]/column/body/txt[2]/SwParaPortion/SwLineLayout",
+                    "portion", u"6"_ustr);
+        assertXPath(pXmlDoc, "/root/page[4]/body/section", 2);
+        assertXPath(pXmlDoc, "/root/page[4]/body/section[1]/column/body/txt", 2);
+        assertXPath(pXmlDoc, "/root/page[4]/body/section[1]/column/body/txt", 2);
+        assertXPath(
+            pXmlDoc,
+            "/root/page[4]/body/section[1]/column[1]/body/txt[1]/SwParaPortion/SwLineLayout",
+            "portion", u"7"_ustr);
+        assertXPath(
+            pXmlDoc,
+            "/root/page[4]/body/section[1]/column[2]/body/txt[1]/SwParaPortion/SwLineLayout",
+            "portion", u"8"_ustr);
+        assertXPath(pXmlDoc, "/root/page[4]/body/section[2]/txt", 1);
+        assertXPath(pXmlDoc, "/root/page[4]/body/section[2]/txt/SwParaPortion/SwLineLayout",
+                    "portion", u"Text following inner section"_ustr);
+        assertXPath(pXmlDoc, "/root/page[4]/body/txt[1]/SwParaPortion/SwLineLayout", "portion",
+                    u"Text following outer section"_ustr);
+        discardDumpedLayout();
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf137523)
 {
     createSwDoc("tdf137523-1-min.fodt");
@@ -444,6 +616,44 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf162220)
     // There was no SwGluePortion, because of missing justification of the last paragraph line,
     // despite it is a full line with shrunk spaces
     assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout[1]/SwGluePortion"_ostr);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf163720)
+{
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale(u"en"_ustr, u"US"_ustr, OUString())))
+        return;
+
+    createSwDoc("tdf163720.fodt");
+    // Ensure that all text portions are calculated before testing.
+    SwDocShell* pShell = getSwDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Find the first text array action
+    for (size_t nAction = 0; nAction < xMetaFile->GetActionSize(); nAction++)
+    {
+        auto pAction = xMetaFile->GetAction(nAction);
+        if (pAction->GetType() == MetaActionType::TEXTARRAY)
+        {
+            auto pTextArrayAction = static_cast<MetaTextArrayAction*>(pAction);
+            auto pDXArray = pTextArrayAction->GetDXArray();
+
+            // There should be 101 chars on the first line
+            CPPUNIT_ASSERT_EQUAL(size_t(101), pDXArray.size());
+
+            // Assert we are using the expected position for the last char
+            // This was 10093, now 10003, according to the less shrinking,
+            // than needed for the extra hyphen glyph at hyphenation
+            CPPUNIT_ASSERT_LESS(sal_Int32(10010), pDXArray[100]);
+            break;
+        }
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf162725)

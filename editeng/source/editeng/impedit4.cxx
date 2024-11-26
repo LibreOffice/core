@@ -274,6 +274,15 @@ void ImpEditEngine::WriteXML(SvStream& rOutput, const EditSelection& rSel)
     SvxWriteXML( *GetEditEnginePtr(), rOutput, aESel );
 }
 
+static size_t GetFontIndex(const SfxPoolItem& rItem,
+                           const std::vector<std::unique_ptr<SvxFontItem>>& rFontTable)
+{
+    for (size_t i = 0; i < rFontTable.size(); ++i)
+        if (*rFontTable[i] == rItem)
+            return i;
+    return 0;
+}
+
 ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel, bool bClipboard )
 {
     assert( IsUpdateLayout() && "WriteRTF for UpdateMode = sal_False!" );
@@ -364,10 +373,6 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel, bool bCl
 
         rtl_TextEncoding eChrSet = pFontItem->GetCharSet();
         // tdf#47679 OpenSymbol is not encoded in Symbol Encoding
-        // and anyway we always attempt to write as eDestEnc
-        // of RTL_TEXTENCODING_MS_1252 and pay no attention
-        // on export what encoding we claim to use for these
-        // fonts.
         if (IsOpenSymbol(pFontItem->GetFamilyName()))
         {
             SAL_WARN_IF(eChrSet == RTL_TEXTENCODING_SYMBOL, "editeng", "OpenSymbol should not have charset of RTL_TEXTENCODING_SYMBOL in new documents");
@@ -428,17 +433,6 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel, bool bCl
     // StyleSheets...
     if ( GetStyleSheetPool() )
     {
-        std::shared_ptr<SfxStyleSheetIterator> aSSSIterator = std::make_shared<SfxStyleSheetIterator>(GetStyleSheetPool(),
-                SfxStyleFamily::All);
-        // fill aStyleSheetToIdMap
-        sal_uInt32 nId = 1;
-        for ( SfxStyleSheetBase* pStyle = aSSSIterator->First(); pStyle;
-                                 pStyle = aSSSIterator->Next() )
-        {
-            aStyleSheetToIdMap[pStyle] = nId;
-            nId++;
-        }
-
         // Collect used paragraph styles when copying to the clipboard.
         std::set<SfxStyleSheetBase*> aUsedParagraphStyles;
         if (bClipboard)
@@ -481,6 +475,22 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel, bool bCl
                     }
                 }
             }
+        }
+
+        std::shared_ptr<SfxStyleSheetIterator> aSSSIterator = std::make_shared<SfxStyleSheetIterator>(GetStyleSheetPool(),
+                SfxStyleFamily::All);
+        // fill aStyleSheetToIdMap
+        sal_uInt32 nId = 1;
+        for ( SfxStyleSheetBase* pStyle = aSSSIterator->First(); pStyle;
+                                 pStyle = aSSSIterator->Next() )
+        {
+            if (bClipboard && !aUsedParagraphStyles.contains(pStyle))
+            {
+                // Don't include unused paragraph styles in the clipboard case.
+                continue;
+            }
+            aStyleSheetToIdMap[pStyle] = nId;
+            nId++;
         }
 
         if ( aSSSIterator->Count() )
@@ -670,10 +680,17 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel, bool bCl
                 aAttribItems.Clear();
                 sal_uInt16 nScriptTypeI18N = GetI18NScriptType( EditPaM( pNode, nIndex+1 ) );
                 SvtScriptType nScriptType = SvtLanguageOptions::FromI18NToSvtScriptType(nScriptTypeI18N);
+                rtl_TextEncoding actEncoding = eDestEnc;
                 if ( !n || IsScriptChange( EditPaM( pNode, nIndex ) ) )
                 {
                     SfxItemSet aAttribs = GetAttribs( nNode, nIndex+1, nIndex+1 );
-                    aAttribItems.Insert( &aAttribs.Get( GetScriptItemId( EE_CHAR_FONTINFO, nScriptType ) ) );
+                    auto& item = aAttribs.Get(GetScriptItemId(EE_CHAR_FONTINFO, nScriptType));
+                    aAttribItems.Insert(&item);
+                    // The actual encoding that RTF uses for the portion is defined by the font
+                    if (auto i = GetFontIndex(item, aFontTable);
+                        i < aFontTable.size()
+                        && aFontTable[i]->GetCharSet() != RTL_TEXTENCODING_DONTKNOW)
+                        actEncoding = aFontTable[i]->GetCharSet();
                     aAttribItems.Insert( &aAttribs.Get( GetScriptItemId( EE_CHAR_FONTHEIGHT, nScriptType ) ) );
                     aAttribItems.Insert( &aAttribs.Get( GetScriptItemId( EE_CHAR_WEIGHT, nScriptType ) ) );
                     aAttribItems.Insert( &aAttribs.Get( GetScriptItemId( EE_CHAR_ITALIC, nScriptType ) ) );
@@ -694,7 +711,7 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel, bool bCl
                     nE = nEndPos;
 
                 OUString aRTFStr = EditDoc::GetParaAsString( pNode, nS, nE);
-                RTFOutFuncs::Out_String( rOutput, aRTFStr, eDestEnc );
+                RTFOutFuncs::Out_String(rOutput, aRTFStr, actEncoding);
                 rOutput.WriteChar( '}' );
             }
             if ( bFinishPortion )
@@ -830,18 +847,8 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         case EE_CHAR_FONTINFO_CJK:
         case EE_CHAR_FONTINFO_CTL:
         {
-            sal_uInt32 n = 0;
-            for (size_t i = 0; i < rFontTable.size(); ++i)
-            {
-                if (*rFontTable[i] == rItem)
-                {
-                    n = i;
-                    break;
-                }
-            }
-
             rOutput.WriteOString( OOO_STRING_SVTOOLS_RTF_F );
-            rOutput.WriteNumberAsString( n );
+            rOutput.WriteNumberAsString(GetFontIndex(rItem, rFontTable));
         }
         break;
         case EE_CHAR_FONTHEIGHT:

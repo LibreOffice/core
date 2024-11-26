@@ -212,6 +212,37 @@ static void updateWinDataInLiveResize(bool bInLiveResize)
     }
 }
 
+static void freezeWindowSizeAndReschedule( NSWindow *pWindow )
+{
+    if ( pWindow )
+    {
+        // Application::Reschedule() can potentially display a modal
+        // dialog which will cause a hang so temporarily disable any
+        // resizing by clamping the window's minimum and maximum sizes
+        // to the current frame size which in Application::Reschedule().
+        bool bIsLiveResize = ImplGetSVData()->mpWinData->mbIsLiveResize;
+        NSSize aMinSize = [pWindow minSize];
+        NSSize aMaxSize = [pWindow maxSize];
+        if ( bIsLiveResize )
+        {
+            NSRect aFrame = [pWindow frame];
+            [pWindow setMinSize:aFrame.size];
+            [pWindow setMaxSize:aFrame.size];
+        }
+        Application::Reschedule( true );
+        if ( bIsLiveResize )
+        {
+            [pWindow setMinSize:aMinSize];
+            [pWindow setMaxSize:aMaxSize];
+        }
+    }
+}
+
+static bool isMouseScrollWheelEvent( NSEvent *pEvent )
+{
+    return ( pEvent && [pEvent type] == NSEventTypeScrollWheel && [pEvent phase] == NSEventPhaseNone && [pEvent momentumPhase] == NSEventPhaseNone );
+}
+
 @interface NSResponder (SalFrameWindow)
 -(BOOL)accessibilityIsIgnored;
 @end
@@ -453,18 +484,7 @@ static void updateWinDataInLiveResize(bool bInLiveResize)
             // not trigger redrawing with the new size.
             // Instead, force relayout by dispatching all pending internal
             // events and firing any pending timers.
-            // Also, Application::Reschedule() can potentially display a
-            // modal dialog which will cause a hang so temporarily disable
-            // live resize by clamping the window's minimum and maximum sizes
-            // to the current frame size which in Application::Reschedule().
-            NSRect aFrame = [self frame];
-            NSSize aMinSize = [self minSize];
-            NSSize aMaxSize = [self maxSize];
-            [self setMinSize:aFrame.size];
-            [self setMaxSize:aFrame.size];
-            Application::Reschedule( true );
-            [self setMinSize:aMinSize];
-            [self setMaxSize:aMaxSize];
+            freezeWindowSizeAndReschedule( self );
 
             if ( ImplGetSVData()->mpWinData->mbIsLiveResize )
             {
@@ -773,6 +793,7 @@ static void updateWinDataInLiveResize(bool bInLiveResize)
         mbInCommitMarkedText = NO;
         mpLastMarkedText = nil;
         mbTextInputWantsNonRepeatKeyDown = NO;
+        mpLastTrackingArea = nil;
     }
 
     return self;
@@ -782,6 +803,7 @@ static void updateWinDataInLiveResize(bool bInLiveResize)
 {
     [self clearLastEvent];
     [self clearLastMarkedText];
+    [self clearLastTrackingArea];
     [self revokeWrapper];
 
     [super dealloc];
@@ -1127,7 +1149,7 @@ static void updateWinDataInLiveResize(bool bInLiveResize)
         {
             dX += [pEvent deltaX];
             dY += [pEvent deltaY];
-            NSEvent* pNextEvent = [NSApp nextEventMatchingMask: NSEventMaskScrollWheel
+            NSEvent* pNextEvent = [NSApp nextEventMatchingMask: NSEventMaskSwipe
             untilDate: nil inMode: NSDefaultRunLoopMode dequeue: YES ];
             if( !pNextEvent )
                 break;
@@ -1141,7 +1163,11 @@ static void updateWinDataInLiveResize(bool bInLiveResize)
         aEvent.mnTime           = mpFrame->mnLastEventTime;
         aEvent.mnX = static_cast<tools::Long>(aPt.x) - mpFrame->maGeometry.x();
         aEvent.mnY = static_cast<tools::Long>(aPt.y) - mpFrame->maGeometry.y();
-        aEvent.mnCode           = ImplGetModifierMask( mpFrame->mnLastModifierFlags );
+        // tdf#151423 Ignore all modifiers for swipe events
+        // It appears that devices that generate swipe events can generate
+        // both veritical and horizontal swipe events. So, behave like most
+        // macOS applications and ignore all modifiers if this a swipe event.
+        aEvent.mnCode           = 0;
         aEvent.mbDeltaIsPixel   = true;
 
         if( AllSettings::GetLayoutRTL() )
@@ -1167,6 +1193,9 @@ static void updateWinDataInLiveResize(bool bInLiveResize)
             aEvent.mnScrollLines = SAL_WHEELMOUSE_EVENT_PAGESCROLL;
             mpFrame->CallCallback( SalEvent::WheelMouse, &aEvent );
         }
+
+        // tdf#155266 force flush after scrolling
+        mpFrame->mbForceFlush = true;
     }
 }
 
@@ -1182,13 +1211,14 @@ static void updateWinDataInLiveResize(bool bInLiveResize)
         // merge pending scroll wheel events
         CGFloat dX = 0.0;
         CGFloat dY = 0.0;
+        bool bAllowModifiers = isMouseScrollWheelEvent( pEvent );
         for(;;)
         {
             dX += [pEvent deltaX];
             dY += [pEvent deltaY];
             NSEvent* pNextEvent = [NSApp nextEventMatchingMask: NSEventMaskScrollWheel
                 untilDate: nil inMode: NSDefaultRunLoopMode dequeue: YES ];
-            if( !pNextEvent )
+            if( !pNextEvent || ( isMouseScrollWheelEvent( pNextEvent ) != bAllowModifiers ) )
                 break;
             pEvent = pNextEvent;
         }
@@ -1200,7 +1230,16 @@ static void updateWinDataInLiveResize(bool bInLiveResize)
         aEvent.mnTime         = mpFrame->mnLastEventTime;
         aEvent.mnX = static_cast<tools::Long>(aPt.x) - mpFrame->maGeometry.x();
         aEvent.mnY = static_cast<tools::Long>(aPt.y) - mpFrame->maGeometry.y();
-        aEvent.mnCode         = ImplGetModifierMask( mpFrame->mnLastModifierFlags );
+        // tdf#151423 Only allow modifiers for mouse scrollwheel events
+        // The Command modifier converts scrollwheel events into
+        // magnification events and the Shift modifier converts vertical
+        // scrollwheel events into horizontal scrollwheel events. This
+        // behavior is reasonable for mouse scrollwheel events since many
+        // mice only have a single, vertical scrollwheel but trackpads
+        // already have specific gestures for magnification and horizontal
+        // scrolling. So, behave like most macOS applications and ignore
+        // all modifiers if this a trackpad scrollwheel event.
+        aEvent.mnCode         = bAllowModifiers ? ImplGetModifierMask( mpFrame->mnLastModifierFlags ) : 0;
         aEvent.mbDeltaIsPixel = false;
 
         if( AllSettings::GetLayoutRTL() )
@@ -1928,36 +1967,11 @@ static void updateWinDataInLiveResize(bool bInLiveResize)
         mbNeedSpecialKeyHandle = true;
     }
 
-    // FIXME:
-    // #i106901#
-    // if we come here outside of mbInKeyInput, this is likely to be because
-    // of the keyboard viewer. For unknown reasons having no marked range
-    // in this case causes a crash. So we say we have a marked range anyway
-    // This is a hack, since it is not understood what a) causes that crash
-    // and b) why we should have a marked range at this point.
-    if( ! mbInKeyInput )
-        bHasMarkedText = true;
-
     return bHasMarkedText;
 }
 
 - (NSRange)markedRange
 {
-    // FIXME:
-    // #i106901#
-    // if we come here outside of mbInKeyInput, this is likely to be because
-    // of the keyboard viewer. For unknown reasons having no marked range
-    // in this case causes a crash. So we say we have a marked range anyway
-    // This is a hack, since it is not understood what a) causes that crash
-    // and b) why we should have a marked range at this point. Stop the native
-    // input method popup from appearing in the bottom left corner of the
-    // screen by returning the marked range if is valid when called outside of
-    // mbInKeyInput. If a zero length range is returned, macOS won't call
-    // [self firstRectForCharacterRange:actualRange:] for any newly appended
-    // uncommitted text.
-    if( ! mbInKeyInput )
-        return mMarkedRange.location != NSNotFound ? mMarkedRange : NSMakeRange( 0, 0 );
-
     return [self hasMarkedText] ? mMarkedRange : NSMakeRange( NSNotFound, 0 );
 }
 
@@ -1986,6 +2000,7 @@ static void updateWinDataInLiveResize(bool bInLiveResize)
     [self unmarkText];
 
     int len = [aString length];
+    bool bReschedule = false;
     SalExtTextInputEvent aInputEvent;
     if( len > 0 ) {
         // Set the marked and selected ranges to the marked text and selected
@@ -2050,16 +2065,35 @@ static void updateWinDataInLiveResize(bool bInLiveResize)
         aInputEvent.mnCursorPos = nSelectionStart;
         aInputEvent.mnCursorFlags = 0;
         aInputEvent.mpTextAttr = aInputFlags.data();
-        mpFrame->CallCallback( SalEvent::ExtTextInput, static_cast<void *>(&aInputEvent) );
+        if( AquaSalFrame::isAlive( mpFrame ) )
+        {
+            bReschedule = true;
+            mpFrame->CallCallback( SalEvent::ExtTextInput, static_cast<void *>(&aInputEvent) );
+        }
     } else {
         aInputEvent.maText.clear();
         aInputEvent.mnCursorPos = 0;
         aInputEvent.mnCursorFlags = 0;
         aInputEvent.mpTextAttr = nullptr;
-        mpFrame->CallCallback( SalEvent::ExtTextInput, static_cast<void *>(&aInputEvent) );
-        mpFrame->CallCallback( SalEvent::EndExtTextInput, nullptr );
+        if( AquaSalFrame::isAlive( mpFrame ) )
+        {
+            bReschedule = true;
+            mpFrame->CallCallback( SalEvent::ExtTextInput, static_cast<void *>(&aInputEvent) );
+            if( AquaSalFrame::isAlive( mpFrame ) )
+                mpFrame->CallCallback( SalEvent::EndExtTextInput, nullptr );
+        }
     }
-    mbKeyHandled= true;
+
+    // tdf#163764 force pending timers to run after marked text changes
+    // During native dictation, waiting for the next native event is
+    // blocked while dictation runs in a loop within a native callback.
+    // Because of this, LibreOffice's painting timers won't fire until
+    // dictation is cancelled or the user pauses speaking. So, force
+    // any pending timers to fire after the marked text changes.
+    if( bReschedule && ImplGetSVData()->mpWinData->mbIsWaitingForNativeEvent )
+        freezeWindowSizeAndReschedule( [self window] );
+
+    mbKeyHandled = true;
 }
 
 - (void)unmarkText
@@ -2126,6 +2160,38 @@ static void updateWinDataInLiveResize(bool bInLiveResize)
     }
 
     mbTextInputWantsNonRepeatKeyDown = NO;
+}
+
+-(void)clearLastTrackingArea
+{
+    if (mpLastTrackingArea)
+    {
+        [self removeTrackingArea: mpLastTrackingArea];
+        [mpLastTrackingArea release];
+        mpLastTrackingArea = nil;
+    }
+}
+
+-(void)updateTrackingAreas
+{
+    [super updateTrackingAreas];
+
+    // tdf#155092 use tracking areas instead of tracking rectangles
+    // Apparently, the older, tracking rectangles selectors cause
+    // unexpected window resizing upon the first mouse down after the
+    // window has been manually resized so switch to the newer,
+    // tracking areas selectors. Also, the NSTrackingInVisibleRect
+    // option allows us to create one single tracking area that
+    // resizes itself automatically over the lifetime of the view.
+    // Note: for some unknown reason, both NSTrackingMouseMoved and
+    // NSTrackingAssumeInside are necessary options for this fix
+    // to work.
+    // Note: for some unknown reason, [mpLastTrackingArea rect]
+    // returns an empty NSRect (at least on macOS Sequoia) so always
+    // remove the old tracking area and add a new one.
+    [self clearLastTrackingArea];
+    mpLastTrackingArea = [[NSTrackingArea alloc] initWithRect: [self bounds] options: ( NSTrackingMouseEnteredAndExited | NSTrackingMouseMoved | NSTrackingActiveAlways | NSTrackingAssumeInside | NSTrackingInVisibleRect ) owner: self userInfo: nil];
+    [self addTrackingArea: mpLastTrackingArea];
 }
 
 - (NSRect)firstRectForCharacterRange:(NSRange)aRange actualRange:(NSRangePointer)actualRange

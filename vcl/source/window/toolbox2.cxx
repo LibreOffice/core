@@ -1482,7 +1482,7 @@ bool ToolBox::IsMenuEnabled() const
 
 PopupMenu* ToolBox::GetMenu() const
 {
-    return mpData == nullptr ? nullptr : mpData->mpMenu;
+    return mpData ? mpData->mpMenu : nullptr;
 }
 
 void ToolBox::SetMenuExecuteHdl( const Link<ToolBox *, void>& rLink )
@@ -1512,10 +1512,9 @@ namespace
     }
 }
 
-void ToolBox::UpdateCustomMenu()
+void ToolBox::UpdateCustomMenu(PopupMenu* pMenu)
 {
     // fill clipped items into menu
-    PopupMenu *pMenu = GetMenu();
     pMenu->Clear();
 
     // add menu items: first the overflow items, then hidden items, both in the
@@ -1560,9 +1559,10 @@ void ToolBox::UpdateCustomMenu()
 
 IMPL_LINK( ToolBox, ImplCustomMenuListener, VclMenuEvent&, rEvent, void )
 {
-    if( rEvent.GetMenu() == GetMenu() && rEvent.GetId() == VclEventId::MenuSelect )
+    PopupMenu *pMenu = GetMenu();
+    if( pMenu && rEvent.GetMenu() == pMenu && rEvent.GetId() == VclEventId::MenuSelect )
     {
-        sal_uInt16 id = GetMenu()->GetItemId( rEvent.GetItemPos() );
+        sal_uInt16 id = pMenu->GetItemId( rEvent.GetItemPos() );
         if( id >= TOOLBOX_MENUITEM_START )
             TriggerItem( ToolBoxItemId(id - TOOLBOX_MENUITEM_START) );
     }
@@ -1573,17 +1573,20 @@ void ToolBox::ExecuteCustomMenu( const tools::Rectangle& rRect )
     if ( !IsMenuEnabled() || ImplIsInPopupMode() )
         return;
 
-    UpdateCustomMenu();
+    PopupMenu *pMenu = GetMenu();
+    if (!pMenu)
+        return;
+    UpdateCustomMenu(pMenu);
 
     if( GetMenuType() & ToolBoxMenuType::Customize )
         // call button handler to allow for menu customization
         mpData->maMenuButtonHdl.Call( this );
 
-    GetMenu()->AddEventListener( LINK( this, ToolBox, ImplCustomMenuListener ) );
+    pMenu->AddEventListener( LINK( this, ToolBox, ImplCustomMenuListener ) );
 
     // make sure all disabled entries will be shown
-    GetMenu()->SetMenuFlags(
-        GetMenu()->GetMenuFlags() | MenuFlags::AlwaysShowDisabledEntries );
+    pMenu->SetMenuFlags(
+        pMenu->GetMenuFlags() | MenuFlags::AlwaysShowDisabledEntries );
 
     // toolbox might be destroyed during execute
     bool bBorderDel = false;
@@ -1603,14 +1606,13 @@ void ToolBox::ExecuteCustomMenu( const tools::Rectangle& rRect )
         }
     }
 
-    sal_uInt16 uId = GetMenu()->Execute( pWin, tools::Rectangle( ImplGetPopupPosition( aMenuRect ), Size() ),
+    sal_uInt16 uId = pMenu->Execute( pWin, tools::Rectangle( ImplGetPopupPosition( aMenuRect ), Size() ),
                             PopupMenuFlags::ExecuteDown | PopupMenuFlags::NoMouseUpClose );
 
     if ( pWin->isDisposed() )
         return;
 
-    if( GetMenu() )
-        GetMenu()->RemoveEventListener( LINK( this, ToolBox, ImplCustomMenuListener ) );
+    pMenu->RemoveEventListener( LINK( this, ToolBox, ImplCustomMenuListener ) );
     if( bBorderDel )
     {
         if( pBorderWin->isDisposed() )

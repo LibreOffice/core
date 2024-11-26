@@ -636,6 +636,8 @@ bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
         // Some events and timers call Application::Reschedule() or
         // Application::Yield() so don't block and wait for events when a
         // window is in live resize
+        bool bOldIsWaitingForNativeEvent = ImplGetSVData()->mpWinData->mbIsWaitingForNativeEvent;
+        ImplGetSVData()->mpWinData->mbIsWaitingForNativeEvent = !SalInstance::IsRunningUnitTest();
         if( bWait && ! bHadEvent && !ImplGetSVData()->mpWinData->mbIsLiveResize )
         {
             SolarMutexReleaser aReleaser;
@@ -658,6 +660,8 @@ bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
             }
             [NSApp updateWindows];
         }
+
+        ImplGetSVData()->mpWinData->mbIsWaitingForNativeEvent = bOldIsWaitingForNativeEvent;
 
         // collect update rectangles
         for( auto pSalFrame : GetSalData()->mpInstance->getFrames() )

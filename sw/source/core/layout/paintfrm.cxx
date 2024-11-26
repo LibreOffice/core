@@ -5567,6 +5567,11 @@ void SwFrame::PaintSwFrameShadowAndBorder(
             return;
     }
 
+    if (!getFramePrintArea().HasArea())
+    { // hidden text frame, may be called by upper from PaintSwFrameBackground()
+        return;
+    }
+
     const bool bLine = rAttrs.IsLine();
     const bool bShadow = rAttrs.GetShadow().GetLocation() != SvxShadowLocation::NONE;
 
@@ -7573,28 +7578,6 @@ void SwLayoutFrame::PaintSubsidiaryLines( const SwPageFrame *pPage,
     const bool bFlys = pPage->GetSortedObjs() != nullptr;
 
     const bool bCell = IsCellFrame();
-
-    if (!bCell && IsFlyFrame())
-    {
-        // particularly with images (but also plausible for any kind of frame),
-        // it is very disconcerting to see a fake border,
-        // so (just like the page boundary) only show fly "text boundaries"
-        // when "Show Formatting Marks" is turned on
-        if (!gProp.pSGlobalShell->GetViewOptions()->IsViewMetaChars())
-            return;
-
-        // if the frame is wrap none or wrap through, then text boundary lines have no meaning
-        // (unless the frame itself contains text)
-        const text::WrapTextMode aSurround = GetFormat()->GetSurround().GetSurround();
-        if (GetFormat()->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR
-            && (!Lower() || !Lower()->IsTextFrame())
-            && (aSurround == text::WrapTextMode::WrapTextMode_THROUGH
-                || aSurround == text::WrapTextMode::WrapTextMode_NONE))
-        {
-            return;
-        }
-    }
-
     //  #i3662# - use frame area for cells for section use also frame area
     const bool bUseFrameArea = bCell || IsSctFrame();
     SwRect aOriginal( bUseFrameArea ? getFrameArea() : getFramePrintArea() );

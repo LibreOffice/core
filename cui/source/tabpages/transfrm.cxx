@@ -392,6 +392,7 @@ SvxSlantTabPage::SvxSlantTabPage(weld::Container* pPage, weld::DialogController*
         m_aControlX[i] = m_xBuilder->weld_metric_spin_button("controlx" + OUString::number(i+1), FieldUnit::CM);
         m_aControlGroupY[i] = m_xBuilder->weld_widget("controlgroupy" + OUString::number(i+1));
         m_aControlY[i] = m_xBuilder->weld_metric_spin_button("controly" + OUString::number(i+1), FieldUnit::CM);
+        m_aControlGroups[i]->set_sensitive(false);
     }
 
     // this page needs ExchangeSupport

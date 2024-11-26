@@ -2918,7 +2918,36 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf151462)
                 "portion"_ostr, u"another sub three"_ustr);
 }
 
-CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf151801)
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf153636)
+{
+    createSwDoc("tdf153636.odt");
+    dispatchCommand(mxComponent, u".uno:UpdateAllIndexes"_ustr, {});
+    saveAndReload(u"writer8"_ustr);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    for (int i = 1; i <= 3; i += 2)
+    {
+        const OUString frameStyleName
+            = getXPath(pXmlDoc,
+                       "/office:document-content/office:body/office:text/"
+                       "text:user-index[@text:name='User-Defined1']/text:index-body/text:p["
+                           + OString::number(i) + "]"_ostr,
+                       "style-name"_ostr);
+        const OUString tableStyleName
+            = getXPath(pXmlDoc,
+                       "/office:document-content/office:body/office:text/"
+                       "text:user-index[@text:name='User-Defined1']/text:index-body/text:p["
+                           + OString::number(i + 1) + "]"_ostr,
+                       "style-name"_ostr);
+
+        // Without the fix in place, the frame and table indentation would differ
+        CPPUNIT_ASSERT_EQUAL(frameStyleName, tableStyleName);
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf157129)
 {
     Resetter resetter([]() {
         std::shared_ptr<comphelper::ConfigurationChanges> pBatch(

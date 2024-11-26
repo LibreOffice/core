@@ -9626,37 +9626,6 @@ bool PDFWriterImpl::writeBitmapObject( const BitmapEmit& rObject, bool bMask )
         aLine.append( "/ColorSpace" );
         if( bTrueColor )
             aLine.append( "/DeviceRGB\n" );
-        else if( aBitmap.HasGreyPaletteAny() )
-        {
-            aLine.append( "/DeviceGray\n" );
-            if (aBitmap.getPixelFormat() == vcl::PixelFormat::N8_BPP)
-            {
-                // #i47395# 1 bit bitmaps occasionally have an inverted grey palette
-                sal_uInt16 nBlackIndex = pAccess->GetBestPaletteIndex( BitmapColor( COL_BLACK ) );
-                assert( nBlackIndex == 0 || nBlackIndex == 1);
-                sal_uInt16 nWhiteIndex = pAccess->GetBestPaletteIndex( BitmapColor( COL_WHITE ) );
-                if( pAccess->GetPalette()[nBlackIndex] == BitmapColor( COL_BLACK ) &&
-                    pAccess->GetPalette()[nWhiteIndex] == BitmapColor( COL_WHITE ) )
-                {
-                    // It is black and white
-                    if( nBlackIndex == 1 )
-                        aLine.append( "/Decode[1 0]\n" );
-                }
-                else
-                {
-                    // It is two levels of grey
-                    aLine.append( "/Decode[" );
-                    assert( pAccess->GetPalette()[0].GetRed() == pAccess->GetPalette()[0].GetGreen() &&
-                            pAccess->GetPalette()[0].GetRed() == pAccess->GetPalette()[0].GetBlue() &&
-                            pAccess->GetPalette()[1].GetRed() == pAccess->GetPalette()[1].GetGreen() &&
-                            pAccess->GetPalette()[1].GetRed() == pAccess->GetPalette()[1].GetBlue() );
-                    aLine.append( pAccess->GetPalette()[0].GetRed() / 255.0 );
-                    aLine.append( " " );
-                    aLine.append( pAccess->GetPalette()[1].GetRed() / 255.0 );
-                    aLine.append( "]\n" );
-                }
-            }
-        }
         else
         {
             aLine.append( "[ /Indexed/DeviceRGB " );

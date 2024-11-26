@@ -2717,35 +2717,48 @@ void ScColumn::GetFilterEntries(
 
 void ScColumn::GetBackColorFilterEntries(SCROW nRow1, SCROW nRow2, ScFilterEntries& rFilterEntries)
 {
-    Color aBackColor;
-    bool bCondBackColor = false;
-    ScAddress aCell(GetCol(), 0, GetTab());
-    ScConditionalFormat* pCondFormat = nullptr;
-
-    const SfxItemSet* pCondSet = nullptr;
-    const SvxBrushItem* pBrush = nullptr;
-    const ScPatternAttr* pPattern = nullptr;
-    const ScColorScaleFormat* pColFormat = nullptr;
-
     if (!GetDoc().ValidRow(nRow1) || !GetDoc().ValidRow(nRow2))
         return;
 
+    ScAddress aCell(GetCol(), 0, GetTab());
+    ScDocument& rDoc = GetDoc();
+    const ScPatternAttr* pPrevPattern = nullptr;
+    ScRefCellValue aPrevCellValue;
     while (nRow1 <= nRow2)
     {
         aCell.SetRow(nRow1);
-        pPattern = GetDoc().GetPattern(aCell.Col(), aCell.Row(), aCell.Tab());
+
+        Color aBackColor;
+        bool bCondBackColor = false;
+        const ScPatternAttr* pPattern = rDoc.GetPattern(aCell.Col(), aCell.Row(), aCell.Tab());
+        ScConditionalFormat* pCondFormat = rDoc.GetCondFormat(aCell.Col(), aCell.Row(), aCell.Tab());
+
         if (pPattern)
         {
+            // Speed up processing when dealing with runs of identical cells. We only
+            // care about collecting unique colors, so no need to process a cell if the result
+            // will be the same as the previous cell.
+            // Which we can only do if there is no conditional format to override the color on this cell.
+            if (!pCondFormat)
+            {
+                ScRefCellValue aCellValue = GetCellValue(nRow1);
+                if (pPrevPattern == pPattern && aCellValue == aPrevCellValue)
+                {
+                    nRow1++;
+                    continue;
+                }
+                aPrevCellValue = aCellValue;
+                pPrevPattern = pPattern;
+            }
             if (!pPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData().empty())
             {
-                pCondSet = GetDoc().GetCondResult(GetCol(), nRow1, GetTab());
-                pBrush = &pPattern->GetItem(ATTR_BACKGROUND, pCondSet);
+                const SfxItemSet* pCondSet = rDoc.GetCondResult(GetCol(), nRow1, GetTab());
+                const SvxBrushItem* pBrush = &pPattern->GetItem(ATTR_BACKGROUND, pCondSet);
                 aBackColor = pBrush->GetColor();
                 bCondBackColor = true;
             }
         }
 
-        pCondFormat = GetDoc().GetCondFormat(aCell.Col(), aCell.Row(), aCell.Tab());
         if (pCondFormat)
         {
             for (size_t nFormat = 0; nFormat < pCondFormat->size(); nFormat++)
@@ -2753,12 +2766,14 @@ void ScColumn::GetBackColorFilterEntries(SCROW nRow1, SCROW nRow2, ScFilterEntri
                 auto aEntry = pCondFormat->GetEntry(nFormat);
                 if (aEntry->GetType() == ScFormatEntry::Type::Colorscale)
                 {
-                    pColFormat = static_cast<const ScColorScaleFormat*>(aEntry);
+                    const ScColorScaleFormat* pColFormat = static_cast<const ScColorScaleFormat*>(aEntry);
                     std::optional<Color> oColor = pColFormat->GetColor(aCell);
                     if (oColor)
                     {
                         aBackColor = *oColor;
                         bCondBackColor = true;
+                        // we are overriding the color, so we need to clear the one-item cache.
+                        pPrevPattern = nullptr;
                     }
                 }
             }
@@ -2766,7 +2781,7 @@ void ScColumn::GetBackColorFilterEntries(SCROW nRow1, SCROW nRow2, ScFilterEntri
 
         if (!bCondBackColor)
         {
-            pBrush = GetDoc().GetAttr(aCell, ATTR_BACKGROUND);
+            const SvxBrushItem* pBrush = rDoc.GetAttr(aCell, ATTR_BACKGROUND);
             aBackColor = pBrush->GetColor();
         }
 

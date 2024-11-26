@@ -369,6 +369,21 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testMapModeText)
     // ahead to get the rotation.
 }
 
+CPPUNIT_TEST_FIXTURE(SvgFilterTest, testTdf91315)
+{
+    // Load a presentation containing RTL text
+    loadFromFile(u"tdf91315.fodp");
+
+    save(u"impress_svg_Export"_ustr);
+
+    xmlDocUniquePtr pXmlDoc = parseExportedFile();
+
+    assertXPath(pXmlDoc, "//svg:text[@direction='rtl']"_ostr, 1);
+    // Without the accompanying fix, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

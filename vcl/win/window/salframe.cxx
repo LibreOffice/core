@@ -3349,7 +3349,7 @@ static bool ImplHandleWheelMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
     WinSalFrame*   pFrame = GetWindowPtr( hWnd );
     if ( pFrame )
     {
-        WORD    nWinModCode = LOWORD( wParam );
+        WORD    nWinModCode = GET_KEYSTATE_WPARAM( wParam );     // Key modifiers
         POINT   aWinPt;
         aWinPt.x    = static_cast<short>(LOWORD( lParam ));
         aWinPt.y    = static_cast<short>(HIWORD( lParam ));
@@ -3360,32 +3360,63 @@ static bool ImplHandleWheelMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
         aWheelEvt.mnX           = aWinPt.x;
         aWheelEvt.mnY           = aWinPt.y;
         aWheelEvt.mnCode        = 0;
-        aWheelEvt.mnDelta       = static_cast<short>(HIWORD( wParam ));
-        aWheelEvt.mnNotchDelta  = aWheelEvt.mnDelta/WHEEL_DELTA;
+        aWheelEvt.mnDelta       = GET_WHEEL_DELTA_WPARAM( wParam );     // Distance scrolled passed in message param
+        aWheelEvt.mnNotchDelta  = aWheelEvt.mnDelta/WHEEL_DELTA;        // Number of mouse notches/detents scrolled
         if( aWheelEvt.mnNotchDelta == 0 )
         {
+            // Keep mnNotchDelta nonzero unless distance scrolled was exactly zero.
+            // Many places use its sign to indicate direction scrolled.
             if( aWheelEvt.mnDelta > 0 )
                 aWheelEvt.mnNotchDelta = 1;
             else if( aWheelEvt.mnDelta < 0 )
                 aWheelEvt.mnNotchDelta = -1;
         }
 
-        if( nMsg == WM_MOUSEWHEEL )
+        if( nMsg == WM_MOUSEWHEEL )     // Vertical scroll
         {
-            if ( aSalShlData.mnWheelScrollLines == WHEEL_PAGESCROLL )
-                aWheelEvt.mnScrollLines = SAL_WHEELMOUSE_EVENT_PAGESCROLL;
-            else
-                aWheelEvt.mnScrollLines = aSalShlData.mnWheelScrollLines;
+            if ( aSalShlData.mnWheelScrollLines == WHEEL_PAGESCROLL )  // Mouse wheel set to "One screen at a time"
+            {
+                // Note: mnDelta may hit a multiple of WHEEL_DELTA via touchpad scrolling. That's the tradeoff to keep
+                //  smooth touchpad scrolling with mouse wheel set to screen.
+
+                if ( (aWheelEvt.mnDelta % WHEEL_DELTA) == 0 )   // Mouse wheel sends WHEEL_DELTA (or multiple of it)
+                    aWheelEvt.mnScrollLines = SAL_WHEELMOUSE_EVENT_PAGESCROLL;          // "Magic" page scroll value
+                else    // Touchpad can send smaller values. Use default 3 lines to scroll at a time.
+                    aWheelEvt.mnScrollLines = aWheelEvt.mnDelta / double(WHEEL_DELTA) * 3.0;  // Calculate actual lines using distance
+            }
+            else    // Mouse wheel set to "Multiple lines at a time"
+            {
+                // Windows legacy touchpad support sends touchpad scroll gesture as multiple mouse wheel messages.
+                // Calculate number of mouse notches scrolled using distance from Windows.
+                aWheelEvt.mnScrollLines = aWheelEvt.mnDelta / double(WHEEL_DELTA);
+                // Multiply by user setting for number of lines to scroll at a time.
+                aWheelEvt.mnScrollLines *= aSalShlData.mnWheelScrollLines;
+            }
             aWheelEvt.mbHorz        = false;
         }
-        else
+        else    // Horizontal scroll
         {
-            aWheelEvt.mnScrollLines = aSalShlData.mnWheelScrollChars;
+            // Windows legacy touchpad support sends touchpad scroll gesture as multiple mouse wheel messages.
+            // Calculate number of mouse notches scrolled using distance from Windows.
+            aWheelEvt.mnScrollLines = aWheelEvt.mnDelta / double(WHEEL_DELTA);
+            // Multiply by user setting for number of characters to scroll at a time.
+            aWheelEvt.mnScrollLines *= aSalShlData.mnWheelScrollChars;
             aWheelEvt.mbHorz        = true;
 
             // fdo#36380 - seems horiz scrolling has swapped direction
             aWheelEvt.mnDelta *= -1;
             aWheelEvt.mnNotchDelta *= -1;
+            aWheelEvt.mnScrollLines *= -1.0;
+        }
+
+        // Do not change magic value for page scrolling
+        if (aWheelEvt.mnScrollLines != SAL_WHEELMOUSE_EVENT_PAGESCROLL)
+        {
+            // Scrolling code multiplies (scroll lines * number of notches), so pull # notches out to prevent double multiply.
+            if (aWheelEvt.mnNotchDelta != 0)    // No divide by zero!
+                aWheelEvt.mnScrollLines /= aWheelEvt.mnNotchDelta;
+            else
+                aWheelEvt.mnScrollLines = abs(aWheelEvt.mnScrollLines);     // Just ensure (+) value
         }
 
         if ( nWinModCode & MK_SHIFT )

@@ -2220,6 +2220,61 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf137819)
     CPPUNIT_ASSERT(sTextRightSidePosition.toInt32() < sShapeRightSidePosition.toInt32());
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testParagraphMarkInCell)
+{
+    createSwDoc("572-min.rtf");
+
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<view::XViewSettingsSupplier> xViewSettingsSupplier(
+        xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xViewSettings(xViewSettingsSupplier->getViewSettings());
+    uno::Any aOldHidden{ xViewSettings->getPropertyValue(u"ShowHiddenCharacters"_ustr) };
+    uno::Any aOldNon{ xViewSettings->getPropertyValue(u"ShowNonprintingCharacters"_ustr) };
+    comphelper::ScopeGuard g([&] {
+        xViewSettings->setPropertyValue(u"ShowHiddenCharacters"_ustr, aOldHidden);
+        xViewSettings->setPropertyValue(u"ShowNonprintingCharacters"_ustr, aOldNon);
+    });
+
+    xViewSettings->setPropertyValue(u"ShowHiddenCharacters"_ustr, uno::Any(true));
+    xViewSettings->setPropertyValue(u"ShowNonprintingCharacters"_ustr, uno::Any(true));
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page/body/txt[1]/infos/bounds"_ostr, "height"_ostr, "230");
+        assertXPath(pXmlDoc, "/root/page/body/tab[1]/row[1]/infos/bounds"_ostr, "height"_ostr,
+                    "690");
+        assertXPath(pXmlDoc, "/root/page/body/tab[1]/row[2]/infos/bounds"_ostr, "height"_ostr,
+                    "230");
+        assertXPath(pXmlDoc, "/root/page/body/txt[2]/infos/bounds"_ostr, "height"_ostr, "230");
+        discardDumpedLayout();
+    }
+
+    xViewSettings->setPropertyValue(u"ShowNonprintingCharacters"_ustr, uno::Any(false));
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page/body/txt[1]/infos/bounds"_ostr, "height"_ostr, "230");
+        // the problem was that the table rows were not hidden
+        assertXPath(pXmlDoc, "/root/page/body/tab[1]/row[1]/infos/bounds"_ostr, "height"_ostr, "0");
+        assertXPath(pXmlDoc, "/root/page/body/tab[1]/row[2]/infos/bounds"_ostr, "height"_ostr, "0");
+        assertXPath(pXmlDoc, "/root/page/body/txt[2]/infos/bounds"_ostr, "height"_ostr, "230");
+        discardDumpedLayout();
+    }
+
+    xViewSettings->setPropertyValue(u"ShowNonprintingCharacters"_ustr, uno::Any(true));
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page/body/txt[1]/infos/bounds"_ostr, "height"_ostr, "230");
+        assertXPath(pXmlDoc, "/root/page/body/tab[1]/row[1]/infos/bounds"_ostr, "height"_ostr,
+                    "690");
+        assertXPath(pXmlDoc, "/root/page/body/tab[1]/row[2]/infos/bounds"_ostr, "height"_ostr,
+                    "230");
+        assertXPath(pXmlDoc, "/root/page/body/txt[2]/infos/bounds"_ostr, "height"_ostr, "230");
+        discardDumpedLayout();
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testParagraphMarkLineHeight)
 {
     createSwDoc("A020-min.rtf");

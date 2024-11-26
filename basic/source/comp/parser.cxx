@@ -551,6 +551,10 @@ void SbiParser::Symbol( const KeywordSymbolInfo* pKeywordSymbolInfo )
                     return;
                 }
             }
+            else if (auto nLen = pDef->GetLen()) // Dim s As String * 123 ' 123 -> nLen
+            {
+                aGen.Gen(SbiOpcode::PAD_, nLen);
+            }
         }
         aGen.Gen( eOp );
     }
@@ -564,15 +568,15 @@ void SbiParser::Assign()
     SbiExpression aExpr( this );
     aLvalue.Gen();
     aExpr.Gen();
-    sal_uInt16 nLen = 0;
-    SbiSymDef* pDef = aLvalue.GetRealVar();
+    if (SbiSymDef* pDef = aLvalue.GetRealVar())
     {
         if( pDef->GetConstDef() )
             Error( ERRCODE_BASIC_DUPLICATE_DEF, pDef->GetName() );
-        nLen = aLvalue.GetRealVar()->GetLen();
+        if (auto nLen = pDef->GetLen()) // Dim s As String * 123 ' 123 -> nLen
+        {
+            aGen.Gen( SbiOpcode::PAD_, nLen );
+        }
     }
-    if( nLen )
-        aGen.Gen( SbiOpcode::PAD_, nLen );
     aGen.Gen( SbiOpcode::PUT_ );
 }
 

@@ -59,6 +59,7 @@
 #include <docsh.hxx>
 #include <unotxdoc.hxx>
 #include <frmatr.hxx>
+#include <expfld.hxx>
 
 #if defined(_WIN32)
 #include <officecfg/Office/Common.hxx>
@@ -1637,6 +1638,20 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf162398)
 
     // Pasting as HTML must not crash
     SwTransferable::PasteFormat(*pWrtShell, aDataHelper, SotClipboardFormatId::HTML);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf163974)
+{
+    // A document with a footnote inside a footnote must load normally, ignoring unsupported markup.
+    // Without the fix, this would fail to load.
+    createSwDoc("nested_footnote.fodt");
+
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell->HasFootnotes());
+    SwSeqFieldList footnotes;
+    pWrtShell->GetSeqFootnoteList(footnotes);
+    // If we ever support the nested footnotes, this would naturally change
+    CPPUNIT_ASSERT_EQUAL(size_t(1), footnotes.Count());
 }
 
 } // end of anonymous namespace

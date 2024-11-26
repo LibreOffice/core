@@ -80,8 +80,8 @@ CPPUNIT_TARBALL := cppunit-1.15.1.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-CURL_SHA256SUM := 73a4b0e99596a09fa5924a4fb7e4b995a85fda0d18a2c02ab9cf134bebce04ee
-CURL_TARBALL := curl-8.10.1.tar.xz
+CURL_SHA256SUM := db59cf0d671ca6e7f5c2c5ec177084a33a79e04c97e71cf183a5cdea235054eb
+CURL_TARBALL := curl-8.11.0.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
@@ -111,8 +111,8 @@ ETONYEK_TARBALL := libetonyek-0.1.$(ETONYEK_VERSION_MICRO).tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-EXPAT_SHA256SUM := 274db254a6979bde5aad404763a704956940e465843f2a9bd9ed7af22e2c0efc
-EXPAT_TARBALL := expat-2.6.3.tar.xz
+EXPAT_SHA256SUM := a695629dae047055b37d50a0ff4776d1d45d0a4c842cf4ccee158441f55ff7ee
+EXPAT_TARBALL := expat-2.6.4.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
@@ -282,8 +282,8 @@ GLM_TARBALL := glm-1.0.1.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-GPGME_SHA256SUM := 9499e8b1f33cccb6815527a1bc16049d35a6198a6c5fae0185f2bd561bce5224
-GPGME_TARBALL := gpgme-1.23.2.tar.bz2
+GPGME_SHA256SUM := 61e3a6ad89323fecfaff176bc1728fb8c3312f2faa83424d9d5077ba20f5f7da
+GPGME_TARBALL := gpgme-1.24.0.tar.bz2
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
@@ -359,8 +359,8 @@ LIBJPEG_TURBO_TARBALL := libjpeg-turbo-2.1.5.1.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-LANGTAGREG_SHA256SUM := 75bc394dd83ddfd62b172a462db1b66bdb5950f40823ed63b8c7db6b71e37e75
-LANGTAGREG_TARBALL := language-subtag-registry-2024-06-14.tar.bz2
+LANGTAGREG_SHA256SUM := 121f27bd1fabac9a74fb042cf68396b6df74cdf5d1ccc30f4c9b78584cc13864
+LANGTAGREG_TARBALL := language-subtag-registry-2024-11-19.tar.bz2
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
@@ -394,8 +394,8 @@ LIBFFI_TARBALL := libffi-3.4.4.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-LIBGPGERROR_SHA256SUM := 69405349e0a633e444a28c5b35ce8f14484684518a508dc48a089992fe93e20a
-LIBGPGERROR_TARBALL := libgpg-error-1.50.tar.bz2
+LIBGPGERROR_SHA256SUM := be0f1b2db6b93eed55369cdf79f19f72750c8c7c39fc20b577e724545427e6b2
+LIBGPGERROR_TARBALL := libgpg-error-1.51.tar.bz2
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
@@ -446,8 +446,8 @@ LXML_TARBALL := lxml-5.2.2.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-MARIADB_CONNECTOR_C_SHA256SUM := f7ba02f70aa2ae2b13e9ee5acc78423f6bede38998afb91326a62be46cf5956a
-MARIADB_CONNECTOR_C_TARBALL := mariadb-connector-c-3.3.11-src.tar.gz
+MARIADB_CONNECTOR_C_SHA256SUM := 1c03c30b394871ab354dbdb47574beae19e2657da21a911ecc9e33e9388a3bef
+MARIADB_CONNECTOR_C_TARBALL := mariadb-connector-c-3.3.13-src.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
@@ -550,8 +550,8 @@ POPPLER_DATA_TARBALL := poppler-data-0.4.12.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-POSTGRESQL_SHA256SUM := c9cbbb6129f02328204828066bb3785c00a85c8ca8fd329c2a8a53c1f5cd8865
-POSTGRESQL_TARBALL := postgresql-13.16.tar.bz2
+POSTGRESQL_SHA256SUM := ceea92abee2a8c19408d278b68de6a78b6bd3dbb4fa2d653fa7ca745d666aab1
+POSTGRESQL_TARBALL := postgresql-13.18.tar.bz2
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts

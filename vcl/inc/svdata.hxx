@@ -275,6 +275,7 @@ struct ImplSVWinData
     bool                    mbNoDeactivate = false;         // true: do not execute Deactivate
     bool                    mbNoSaveFocus = false;          // true: menus must not save/restore focus
     bool                    mbIsLiveResize = false;         // true: skip waiting for events and low priority timers
+    bool                    mbIsWaitingForNativeEvent = false; // true: code is executing via a native callback while waiting for the next native event
 };
 
 typedef std::vector< std::pair< OUString, FieldUnit > > FieldUnitStringList;

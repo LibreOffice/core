@@ -737,7 +737,8 @@ void DocxAttributeOutput::TableCellRedline(
         const SwRedlineData& aRedlineData
             = bIsInExtra &&
                       // still the same type (an inserted cell could become a tracked deleted one)
-                      pRedline->GetRedlineData().GetType() == pRedline->GetRedlineData().GetType()
+                      pTableCellRedline->GetRedlineData().GetType()
+                          == pRedline->GetRedlineData().GetType()
                   ? pTableCellRedline->GetRedlineData()
                   : pRedline->GetRedlineData();
 

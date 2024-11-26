@@ -56,6 +56,14 @@ public:
         GREATER_EQUAL
     };
 
+    enum SearchMode
+    {
+        SEARCHFWD = 1,
+        SEARCHREV = -1,
+        SEARCHBASC = 2,
+        SEARCHDESC = -2
+    };
+
     class QueryCriteria
     {
         union
@@ -66,6 +74,7 @@ public:
         bool                mbAlloc;
         bool                mbString;
         QueryOp             meOp;
+        SearchMode          meSearchMode;
 
         void deleteString()
         {
@@ -77,11 +86,12 @@ public:
 
     public:
 
-        explicit QueryCriteria( const ScQueryEntry & rEntry );
+        explicit QueryCriteria( const ScQueryEntry & rEntry, sal_Int8 nSearchMode );
         QueryCriteria( const QueryCriteria & r );
         ~QueryCriteria();
 
         QueryOp getQueryOp() const { return meOp; }
+        SearchMode getSearchMode() const { return meSearchMode; }
 
         void setDouble( double fVal )
         {
@@ -99,7 +109,7 @@ public:
 
         bool operator==( const QueryCriteria & r ) const
         {
-            return meOp == r.meOp && mbString == r.mbString &&
+            return meOp == r.meOp && meSearchMode == r.meSearchMode && mbString == r.mbString &&
                 (mbString ? (*mpStr == *r.mpStr) : (mfVal == r.mfVal));
         }
 
@@ -153,17 +163,20 @@ private:
         SCROW           mnRow;
         SCTAB           mnTab;
         QueryOp         meOp;
+        SearchMode      meSearchMode;
 
-        QueryKey( const ScAddress & rAddress, const QueryOp eOp ) :
+        QueryKey( const ScAddress & rAddress, const QueryOp eOp, SearchMode eSearchMode ) :
             mnRow( rAddress.Row()),
             mnTab( rAddress.Tab()),
-            meOp( eOp)
+            meOp( eOp),
+            meSearchMode( eSearchMode)
         {
         }
 
         bool operator==( const QueryKey & r ) const
         {
-            return mnRow == r.mnRow && mnTab == r.mnTab && meOp == r.meOp && meOp != UNKNOWN;
+            return mnRow == r.mnRow && mnTab == r.mnTab && meOp == r.meOp && meOp != UNKNOWN &&
+                meSearchMode == r.meSearchMode;
         }
 
         struct Hash
@@ -172,6 +185,7 @@ private:
             {
                 return (static_cast<size_t>(r.mnTab) << 24) ^
                     (static_cast<size_t>(r.meOp) << 22) ^
+                    (static_cast<size_t>(r.meSearchMode) << 20) ^
                     static_cast<size_t>(r.mnRow);
             }
         };

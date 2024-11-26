@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:body>
+  <office:text>
+   <text:p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.<text:note text:note-class="footnote"><text:note-citation>1</text:note-citation><text:note-body>
+       <text:p>Vestibulum consequat mi quis pretium semper.<text:note text:note-class="footnote"><text:note-citation>2</text:note-citation><text:note-body>
+           <text:p>Proin luctus orci ac neque venenatis, quis commodo dolor posuere.</text:p></text:note-body></text:note></text:p></text:note-body></text:note></text:p>
+  </office:text>
+ </office:body>
+</office:document>

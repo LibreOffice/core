@@ -47,6 +47,7 @@
 #include <comphelper/types.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <svtools/imageresourceaccess.hxx>
+#include <unotools/securityoptions.hxx>
 #define LOCAL_URL_PREFIX    '#'
 
 
@@ -735,7 +736,7 @@ namespace frm
 
         // the SfxMedium is not allowed to be created with an invalid URL, so we have to check this first
         INetURLObject aUrl(rURL);
-        if (INetProtocol::NotValid == aUrl.GetProtocol())
+        if (INetProtocol::NotValid == aUrl.GetProtocol() || aUrl.IsExoticProtocol())
             // we treat an invalid URL like we would treat no URL
             return;
 
@@ -756,8 +757,12 @@ namespace frm
 
             m_bProdStarted = false;
 
-            // Kick off download (caution: can be synchronous).
-            m_pMedium->Download(LINK(this, OClickableImageBaseModel, DownloadDoneLink));
+            OUString referer;
+            getPropertyValue("Referer") >>= referer;
+            if (!SvtSecurityOptions::isUntrustedReferer(referer)) {
+                // Kick off download (caution: can be synchronous).
+                m_pMedium->Download(LINK(this, OClickableImageBaseModel, DownloadDoneLink));
+            }
         }
         else
         {
