@@ -111,6 +111,7 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
+#include <com/sun/star/configuration/Update.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
 #include <com/sun/star/datatransfer/XTransferable2.hpp>
@@ -5237,6 +5238,36 @@ static void lo_sendDialogEvent(LibreOfficeKit* /*pThis*/, unsigned long long int
     lcl_sendDialogEvent(nWindowId, pArguments);
 }
 
+static void updateConfig(const OUString& rConfigPath)
+{
+    osl::Directory aScanRootDir(rConfigPath);
+    osl::FileBase::RC nRetCode = aScanRootDir.open();
+    if (nRetCode != osl::Directory::E_None)
+    {
+        SAL_WARN("lok", "Failed to open config URL: " << rConfigPath);
+        return;
+    }
+    osl::DirectoryItem item;
+    osl::File::RC errorNext = osl::File::E_None;
+    while ((errorNext = aScanRootDir.getNextItem(item)) == ::osl::File::E_None)
+    {
+        osl::FileStatus stat(osl_FileStatus_Mask_FileName | osl_FileStatus_Mask_FileURL);
+        if (item.getFileStatus(stat) != osl::FileBase::E_None)
+        {
+            SAL_WARN("lok", "Failed to get directory item info");
+            continue;
+        }
+
+        OUString sFileName = stat.getFileName();
+        if (sFileName == "xcu")
+        {
+            OUString aXcuPath(stat.getFileURL() + "/config.xcu");
+            auto xUpdate(css::configuration::Update::get(comphelper::getProcessComponentContext()));
+            xUpdate->insertModificationXcuFile(aXcuPath, { u"/"_ustr }, {});
+        }
+    }
+}
+
 static void lo_setOption(LibreOfficeKit* /*pThis*/, const char *pOption, const char* pValue)
 {
     static char* pCurrentSalLogOverride = nullptr;
@@ -5266,6 +5297,10 @@ static void lo_setOption(LibreOfficeKit* /*pThis*/, const char *pOption, const c
             sal_detail_set_log_selector(nullptr);
         else
             sal_detail_set_log_selector(pCurrentSalLogOverride);
+    }
+    else if (strcmp(pOption, "addconfig") == 0)
+    {
+        updateConfig(OUString(pValue, strlen(pValue), RTL_TEXTENCODING_UTF8));
     }
 #ifdef LINUX
     else if (strcmp(pOption, "addfont") == 0)
