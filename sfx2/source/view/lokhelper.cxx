@@ -1066,7 +1066,7 @@ void SfxLokHelper::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_
 
 void SfxLokHelper::notifyUpdate(SfxViewShell const* pThisView, int nType)
 {
-    if (DisableCallbacks::disabled())
+    if (DisableCallbacks::disabled() || !pThisView)
         return;
 
     pThisView->libreOfficeKitViewUpdatedCallback(nType);
