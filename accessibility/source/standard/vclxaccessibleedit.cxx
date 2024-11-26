@@ -202,6 +202,16 @@ Reference< XAccessible > VCLXAccessibleEdit::getAccessibleChild( sal_Int64 )
     throw IndexOutOfBoundsException();
 }
 
+OUString VCLXAccessibleEdit::getAccessibleName()
+{
+    OExternalLockGuard aGuard(this);
+
+    // for combobox edit, return name of the parent
+    if (isComboBoxChild())
+        return getAccessibleParent()->getAccessibleContext()->getAccessibleName();
+
+    return VCLXAccessibleTextComponent::getAccessibleName();
+}
 
 sal_Int16 VCLXAccessibleEdit::getAccessibleRole(  )
 {

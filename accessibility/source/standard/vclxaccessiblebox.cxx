@@ -313,12 +313,8 @@ Reference<XAccessible> SAL_CALL VCLXAccessibleBox::getAccessibleChild (sal_Int64
                 if (m_aBoxType==COMBOBOX)
                 {
                     VclPtr< ComboBox > pComboBox = GetAs< ComboBox >();
-                    if (pComboBox!=nullptr && pComboBox->GetSubEdit()!=nullptr)
-                    //Set the edit's acc name the same as parent
-                    {
-                        pComboBox->GetSubEdit()->SetAccessibleName(getAccessibleName());
+                    if (pComboBox && pComboBox->GetSubEdit())
                         m_xText = pComboBox->GetSubEdit()->GetAccessible();
-                    }
                 }
                 else if (m_bIsDropDownBox)
                     m_xText = new VCLXAccessibleTextField (GetVCLXWindow(),this);
