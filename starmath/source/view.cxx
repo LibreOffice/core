@@ -1860,8 +1860,8 @@ void SmViewShell::Execute(SfxRequest& rReq)
                     if (xQuery->run() == RET_NO)
                         break;
                 }
-                SmEditWindow* pEditWin = GetEditWindow();
-                SmModule::get()->GetConfig()->SaveUserDefinedFormula(aName, pEditWin->GetText());
+                if (SmEditWindow* pEditWin = GetEditWindow())
+                    SmModule::get()->GetConfig()->SaveUserDefinedFormula(aName, pEditWin->GetText());
 
                 // Show the Elements sidebar with the "User-defined" entry selected
                 GetViewFrame().ShowChildWindow(SID_SIDEBAR);
