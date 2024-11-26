@@ -35,24 +35,6 @@ namespace svt
     public:
         typedef ::std::map< sal_Int32, css::uno::Reference< css::accessibility::XAccessible > >  THeaderCellMap;
 
-        struct  THeaderCellMapFunctorDispose
-        {
-            void operator()(const THeaderCellMap::value_type& _aType)
-            {
-                css::uno::Reference< css::lang::XComponent > xComp( _aType.second, css::uno::UNO_QUERY );
-                OSL_ENSURE( xComp.is() || !_aType.second.is(), "THeaderCellMapFunctorDispose: invalid accessible cell (no XComponent)!" );
-                if ( xComp.is() )
-                    try
-                    {
-                        xComp->dispose();
-                    }
-                    catch( const css::uno::Exception& )
-                    {
-                        TOOLS_WARN_EXCEPTION( "svtools", "THeaderCellMapFunctorDispose" );
-                    }
-            }
-        };
-
     public:
         vcl::AccessibleFactoryAccess m_aFactoryAccess;
         rtl::Reference<vcl::IAccessibleBrowseBox> m_pAccessible;

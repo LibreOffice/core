@@ -48,12 +48,30 @@ using namespace svt;
 
 namespace
 {
+    struct THeaderCellMapFunctorDispose
+    {
+        void operator()(const svt::BrowseBoxImpl::THeaderCellMap::value_type& _aType)
+        {
+            css::uno::Reference<css::lang::XComponent> xComp(_aType.second, css::uno::UNO_QUERY);
+            OSL_ENSURE(xComp.is() || !_aType.second.is(), "THeaderCellMapFunctorDispose: invalid accessible cell (no XComponent)!");
+            if (xComp.is())
+                try
+                {
+                    xComp->dispose();
+                }
+                catch(const css::uno::Exception&)
+                {
+                    TOOLS_WARN_EXCEPTION("svtools", "THeaderCellMapFunctorDispose");
+                }
+        }
+    };
+
     void disposeAndClearHeaderCell(::svt::BrowseBoxImpl::THeaderCellMap& _rHeaderCell)
     {
         ::std::for_each(
                         _rHeaderCell.begin(),
                         _rHeaderCell.end(),
-                        ::svt::BrowseBoxImpl::THeaderCellMapFunctorDispose()
+                        THeaderCellMapFunctorDispose()
                             );
         _rHeaderCell.clear();
     }
