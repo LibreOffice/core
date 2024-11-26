@@ -76,7 +76,6 @@ SwMasterUsrPref::SwMasterUsrPref(bool bWeb) :
     m_eHScrollMetric = m_eVScrollMetric = m_eUserMetric;
 
     m_aLayoutConfig.Load();
-    m_aGridConfig.Load();
     m_aCursorConfig.Load();
     if(m_pWebColorConfig)
         m_pWebColorConfig->Load();
@@ -473,10 +472,11 @@ Sequence<OUString> SwGridConfig::GetPropertyNames()
 }
 
 SwGridConfig::SwGridConfig(bool bIsWeb, SwMasterUsrPref& rPar) :
-    ConfigItem(bIsWeb ? u"Office.WriterWeb/Grid"_ustr :  u"Office.Writer/Grid"_ustr,
-        ConfigItemMode::ReleaseTree),
+    ConfigItem(bIsWeb ? u"Office.WriterWeb/Grid"_ustr :  u"Office.Writer/Grid"_ustr),
     m_rParent(rPar)
 {
+    Load();
+    EnableNotification(GetPropertyNames());
 }
 
 SwGridConfig::~SwGridConfig()
@@ -539,7 +539,10 @@ void SwGridConfig::Load()
     m_rParent.SetSnapSize(aSnap);
 }
 
-void SwGridConfig::Notify( const css::uno::Sequence< OUString >& ) {}
+void SwGridConfig::Notify( const css::uno::Sequence< OUString >& )
+{
+    Load();
+}
 
 Sequence<OUString> SwCursorConfig::GetPropertyNames()
 {
