@@ -2633,7 +2633,7 @@ bit 3 (0x8): #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON 8
       </node>
       <node oor:name=".uno:AlignMiddle" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">C~enter</value>
+          <value xml:lang="en-US">~Middle</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>

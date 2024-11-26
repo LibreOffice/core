@@ -3139,6 +3139,14 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         }
         break;
 
+        case SID_ALIGN_PAGE:
+        {
+            mpDrawView->AlignMarkedObjects(SdrHorAlign::Center, SdrVertAlign::Center);
+            Cancel();
+            rReq.Done ();
+        }
+        break;
+
         case SID_OBJECT_ALIGN_DOWN:  // BASIC
         {
             mpDrawView->AlignMarkedObjects(SdrHorAlign::NONE, SdrVertAlign::Bottom);

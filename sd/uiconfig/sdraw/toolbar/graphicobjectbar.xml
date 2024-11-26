@@ -29,6 +29,7 @@
  <toolbar:toolbaritem xlink:href=".uno:AlignUp" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:AlignMiddle" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:AlignDown" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignOnPage" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ObjectPosition" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>

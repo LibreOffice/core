@@ -4720,3 +4720,19 @@ SfxBoolItem UnderlineDotted SID_ULINE_VAL_DOTTED
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Format;
 ]
+
+SfxVoidItem AlignOnPage SID_ALIGN_PAGE
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Modify;
+]

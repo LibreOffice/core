@@ -25,4 +25,5 @@
  <toolbar:toolbaritem xlink:href=".uno:AlignUp"/>
  <toolbar:toolbaritem xlink:href=".uno:AlignMiddle"/>
  <toolbar:toolbaritem xlink:href=".uno:AlignDown"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignOnPage"/>
 </toolbar:toolbar>

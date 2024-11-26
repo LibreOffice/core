@@ -1337,6 +1337,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
             rSet.ClearItem(SID_3D_WIN);
 
             rSet.DisableItem(SID_OBJECT_ALIGN);
+            rSet.DisableItem(SID_ALIGN_PAGE);
             rSet.DisableItem(SID_ZOOM_TOOLBOX);
             rSet.DisableItem(SID_OBJECT_CHOOSE_MODE);
             rSet.DisableItem(SID_DRAWTBX_TEXT);

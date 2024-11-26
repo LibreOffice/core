@@ -15,4 +15,6 @@
   <menu:menuitem menu:id=".uno:AlignUp"/>
   <menu:menuitem menu:id=".uno:AlignMiddle"/>
   <menu:menuitem menu:id=".uno:AlignDown"/>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:AlignOnPage"/>
 </menu:menupopup>
