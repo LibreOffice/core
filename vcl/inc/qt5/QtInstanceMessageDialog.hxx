@@ -39,7 +39,7 @@ public:
     virtual void add_button(const OUString& rText, int nResponse,
                             const OUString& rHelpId = {}) override;
     virtual void set_default_response(int nResponse) override;
-    std::unique_ptr<weld::Button> weld_widget_for_response(int nResponse) override;
+    std::unique_ptr<weld::Button> weld_button_for_response(int nResponse) override;
     virtual int run() override;
 
 private:

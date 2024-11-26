@@ -1413,7 +1413,7 @@ bool JSAssistant::runAsync(std::shared_ptr<Dialog> const& rxSelf,
     return ret;
 }
 
-std::unique_ptr<weld::Button> JSDialog::weld_widget_for_response(int nResponse)
+std::unique_ptr<weld::Button> JSDialog::weld_button_for_response(int nResponse)
 {
     PushButton* pButton
         = dynamic_cast<::PushButton*>(m_xDialog->get_widget_for_response(nResponse));
@@ -1431,7 +1431,7 @@ std::unique_ptr<weld::Button> JSDialog::weld_widget_for_response(int nResponse)
     return xWeldWidget;
 }
 
-std::unique_ptr<weld::Button> JSAssistant::weld_widget_for_response(int nResponse)
+std::unique_ptr<weld::Button> JSAssistant::weld_button_for_response(int nResponse)
 {
     ::PushButton* pButton = nullptr;
     std::unique_ptr<JSButton> xWeldWidget;

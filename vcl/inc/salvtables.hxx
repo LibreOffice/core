@@ -551,7 +551,7 @@ public:
 
     virtual void set_centered_on_parent(bool /*bTrackGeometryRequests*/) override;
 
-    virtual std::unique_ptr<weld::Button> weld_widget_for_response(int nResponse) override;
+    virtual std::unique_ptr<weld::Button> weld_button_for_response(int nResponse) override;
 
     virtual void set_default_response(int nResponse) override;
 
@@ -592,7 +592,7 @@ public:
     virtual void set_page_sensitive(const OUString& rIdent, bool bSensitive) override;
     virtual void set_page_side_help_id(const OUString& rHelpId) override;
     virtual void set_page_side_image(const OUString& rImage) override;
-    std::unique_ptr<weld::Button> weld_widget_for_response(int nResponse) override;
+    std::unique_ptr<weld::Button> weld_button_for_response(int nResponse) override;
 
     virtual ~SalInstanceAssistant() override;
 };

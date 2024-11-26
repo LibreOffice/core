@@ -806,11 +806,11 @@ namespace vcl
         , m_pCurTabPage(nullptr)
         , m_nCurState(0)
         , m_pFirstPage(nullptr)
-        , m_xFinish(m_xAssistant->weld_widget_for_response(RET_OK))
-        , m_xCancel(m_xAssistant->weld_widget_for_response(RET_CANCEL))
-        , m_xNextPage(m_xAssistant->weld_widget_for_response(RET_YES))
-        , m_xPrevPage(m_xAssistant->weld_widget_for_response(RET_NO))
-        , m_xHelp(m_xAssistant->weld_widget_for_response(RET_HELP))
+        , m_xFinish(m_xAssistant->weld_button_for_response(RET_OK))
+        , m_xCancel(m_xAssistant->weld_button_for_response(RET_CANCEL))
+        , m_xNextPage(m_xAssistant->weld_button_for_response(RET_YES))
+        , m_xPrevPage(m_xAssistant->weld_button_for_response(RET_NO))
+        , m_xHelp(m_xAssistant->weld_button_for_response(RET_HELP))
         , m_pImpl(new WizardMachineImplData)
     {
         implConstruct(nButtonFlags);
