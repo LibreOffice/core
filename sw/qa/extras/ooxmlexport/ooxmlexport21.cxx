@@ -1167,7 +1167,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCommentWithChildrenTdf163092)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf146269)
 {
-    // Given a focument with a field in a redline:
+    // Given a document with a field in a redline:
     createSwDoc("deleted_pageref.docx");
     // It must open unmodified:
     {
