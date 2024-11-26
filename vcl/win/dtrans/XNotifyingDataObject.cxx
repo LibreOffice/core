@@ -40,6 +40,12 @@ CXNotifyingDataObject::CXNotifyingDataObject(
 {
 }
 
+CXNotifyingDataObject::~CXNotifyingDataObject()
+{
+    if (m_pWinClipImpl)
+        m_pWinClipImpl->onReleaseDataObject(this);
+}
+
 STDMETHODIMP CXNotifyingDataObject::QueryInterface( REFIID iid, void** ppvObject )
 {
     if ( nullptr == ppvObject )
@@ -64,6 +70,17 @@ STDMETHODIMP_(ULONG) CXNotifyingDataObject::AddRef( )
     return static_cast< ULONG >( InterlockedIncrement( &m_nRefCnt ) );
 }
 
+namespace
+{
+// delete CXNotifyingDataObject is a dedicated thread. It calls CWinClipboard::onReleaseDataObject,
+// which may lock solar mutex, and if called in CMtaOleClipboard::run() thread, may deadlock.
+unsigned __stdcall releaseAsyncProc(void* p)
+{
+    delete static_cast<CXNotifyingDataObject*>(p);
+    return 0;
+}
+}
+
 STDMETHODIMP_(ULONG) CXNotifyingDataObject::Release( )
 {
     ULONG nRefCnt =
@@ -71,10 +88,9 @@ STDMETHODIMP_(ULONG) CXNotifyingDataObject::Release( )
 
     if ( 0 == nRefCnt )
     {
-        if ( m_pWinClipImpl )
-            m_pWinClipImpl->onReleaseDataObject( this );
-
-        delete this;
+        auto handle = _beginthreadex(nullptr, 0, releaseAsyncProc, this, 0, nullptr);
+        assert(handle);
+        CloseHandle(reinterpret_cast<HANDLE>(handle));
     }
 
     return nRefCnt;

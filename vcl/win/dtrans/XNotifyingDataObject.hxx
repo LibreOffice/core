@@ -47,7 +47,7 @@ public:
         const css::uno::Reference< css::datatransfer::clipboard::XClipboardOwner >& aXClipOwner,
         CWinClipboard* const theWinClipoard);
 
-    virtual ~CXNotifyingDataObject() {}
+    virtual ~CXNotifyingDataObject();
 
     // ole interface implementation
 
