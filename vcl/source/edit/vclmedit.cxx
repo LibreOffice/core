@@ -1159,7 +1159,7 @@ Size VclMultiLineEdit::CalcMinimumSize() const
     Size aSz = pImpVclMEdit->CalcMinimumSize();
 
     sal_Int32 nLeft, nTop, nRight, nBottom;
-    static_cast<vcl::Window*>(const_cast<VclMultiLineEdit *>(this))->GetBorder( nLeft, nTop, nRight, nBottom );
+    GetBorder(nLeft, nTop, nRight, nBottom);
     aSz.AdjustWidth(nLeft+nRight );
     aSz.AdjustHeight(nTop+nBottom );
 
@@ -1170,7 +1170,7 @@ Size VclMultiLineEdit::CalcAdjustedSize( const Size& rPrefSize ) const
 {
     Size aSz = rPrefSize;
     sal_Int32 nLeft, nTop, nRight, nBottom;
-    static_cast<vcl::Window*>(const_cast<VclMultiLineEdit *>(this))->GetBorder( nLeft, nTop, nRight, nBottom );
+    GetBorder(nLeft, nTop, nRight, nBottom);
 
     // center vertically for whole lines
 
@@ -1191,7 +1191,7 @@ Size VclMultiLineEdit::CalcBlockSize( sal_uInt16 nColumns, sal_uInt16 nLines ) c
     Size aSz = pImpVclMEdit->CalcBlockSize( nColumns, nLines );
 
     sal_Int32 nLeft, nTop, nRight, nBottom;
-    static_cast<vcl::Window*>(const_cast<VclMultiLineEdit *>(this))->GetBorder( nLeft, nTop, nRight, nBottom );
+    GetBorder(nLeft, nTop, nRight, nBottom);
     aSz.AdjustWidth(nLeft+nRight );
     aSz.AdjustHeight(nTop+nBottom );
     return aSz;
