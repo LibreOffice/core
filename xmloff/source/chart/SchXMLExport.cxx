@@ -1329,8 +1329,10 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument > 
                         OUString::number(fSplitPos));
             }
 
+            // The attribute table:cell-range-address was removed from the standard in ODF 1.4.
+            // The associated attributes chart:column-mapping and chart:row-mapping are deprecated.
             //column-mapping or row-mapping
-            if( maSequenceMapping.hasElements() )
+            if( maSequenceMapping.hasElements() && nCurrentODFVersion < SvtSaveOptions::ODFSVER_014)
             {
                 enum XMLTokenEnum eTransToken = ::xmloff::token::XML_ROW_MAPPING;
                 if( mbRowSourceColumns )
@@ -1981,7 +1983,10 @@ void SchXMLExportHelper_Impl::exportPlotArea(
         // write style name
         AddAutoStyleAttribute( aPropertyStates );
 
-        if( !msChartAddress.isEmpty() )
+        // The attribute table:cell-range-address was removed from the standard in ODF 1.4.
+        // The associated attribute chart:data-source-has-labels is deprecated.
+        const SvtSaveOptions::ODFSaneDefaultVersion nCurrentODFVersion(mrExport.getSaneDefaultVersion());
+        if( !msChartAddress.isEmpty() && nCurrentODFVersion < SvtSaveOptions::ODFSVER_014)
         {
             if( !bIncludeTable )
                 mrExport.AddAttribute( XML_NAMESPACE_TABLE, XML_CELL_RANGE_ADDRESS, msChartAddress );

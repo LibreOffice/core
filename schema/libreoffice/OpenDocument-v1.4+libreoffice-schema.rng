@@ -3589,15 +3589,6 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:optional>
   </rng:define>
 
-  <!-- FIXME: tdf#131862 -->
-  <rng:define name="chart-plot-area-attlist" combine="interleave">
-      <rng:optional>
-        <rng:attribute name="table:cell-range-address">
-          <rng:ref name="cellRangeAddressList"/>
-        </rng:attribute>
-      </rng:optional>
-  </rng:define>
-
   <!-- TODO no proposal -->
   <rng:define name="style-style-attlist" combine="interleave">
     <rng:optional>
