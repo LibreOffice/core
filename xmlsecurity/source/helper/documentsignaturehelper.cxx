@@ -371,7 +371,7 @@ SignatureStreamHelper DocumentSignatureHelper::OpenSignatureStream(
                     sal_Int64 nSize = 0;
                     uno::Reference<beans::XPropertySet> xPropertySet(xInputStream, uno::UNO_QUERY);
                     xPropertySet->getPropertyValue(u"Size"_ustr) >>= nSize;
-                    if (nSize >= 0 || nSize < SAL_MAX_INT32)
+                    if (nSize >= 0 && nSize < SAL_MAX_INT32)
                     {
                         uno::Sequence<sal_Int8> aData;
                         xInputStream->readBytes(aData, nSize);
