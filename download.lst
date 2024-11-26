@@ -45,8 +45,8 @@ CAIRO_TARBALL := cairo-1.17.$(CAIRO_VERSION_MICRO).tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-CDR_SHA256SUM := 5666249d613466b9aa1e987ea4109c04365866e9277d80f6cd9663e86b8ecdd4
-CDR_TARBALL := libcdr-0.1.7.tar.xz
+CDR_SHA256SUM := ced677c8300b29c91d3004bb1dddf0b99761bf5544991c26c2ee8f427e87193c
+CDR_TARBALL := libcdr-0.1.8.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
