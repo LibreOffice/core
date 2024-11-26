@@ -2278,13 +2278,15 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
         {
             OpenContainer( ESCHER_SpContainer );
 
-            AddShape( ESCHER_ShpInst_Rectangle,
-                      ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty | ShapeFlag::Background,
-                      nSecondShapeId );
+            const SwFrameFormat &rDefaultPageStyle = mrWrt.m_rDoc.GetPageDesc(0).GetMaster();
+            const SvxBrushItem* pBrush = rDefaultPageStyle.GetItemIfSet(RES_BACKGROUND);
+            ShapeFlag nFlags = ShapeFlag::HaveAnchor | ShapeFlag::HaveShapeProperty;
+            if (pBrush) // document has background
+                nFlags |= ShapeFlag::Background;
+            AddShape(ESCHER_ShpInst_Rectangle, nFlags, nSecondShapeId);
 
             EscherPropertyContainer aPropOpt;
-            const SwFrameFormat &rFormat = mrWrt.m_rDoc.GetPageDesc(0).GetMaster();
-            if (const SvxBrushItem* pBrush = rFormat.GetItemIfSet(RES_BACKGROUND))
+            if (pBrush)
             {
                 WriteBrushAttr(*pBrush, aPropOpt);
 

@@ -41,6 +41,7 @@
 #include <com/sun/star/text/XPageCursor.hpp>
 
 #include <config_fonts.h>
+#include <editeng/brushitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
@@ -995,6 +996,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf41542_imagePadding)
     CPPUNIT_ASSERT_EQUAL( crop.Left, crop.Top );
     CPPUNIT_ASSERT_EQUAL( crop.Right, crop.Bottom );
     CPPUNIT_ASSERT_EQUAL( crop.Left, crop.Right );
+
+    // tdf#147819 - page background should not be forced to white color
+    const SwFrameFormat &rFormat = getSwDoc()->GetPageDesc(0).GetMaster();
+    CPPUNIT_ASSERT(!rFormat.GetItemIfSet(RES_BACKGROUND));
 }
 
 DECLARE_WW8EXPORT_TEST(testFdo77454, "fdo77454.doc")
