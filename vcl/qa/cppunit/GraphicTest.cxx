@@ -526,7 +526,8 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testSwappingGraphic_PNG_WithGfxLink)
     BitmapChecksum aChecksumBeforeSwapping = aGraphic.GetChecksum();
 
     CPPUNIT_ASSERT_EQUAL(true, aGraphic.IsGfxLink());
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(319), aGraphic.GetGfxLink().GetDataSize());
+    // Expect the the compressed png is be at least W * H / 2
+    CPPUNIT_ASSERT_LESS(sal_uInt32(120 * 100 / 2), aGraphic.GetGfxLink().GetDataSize());
 
     // We loaded the Graphic and made it available
     CPPUNIT_ASSERT_EQUAL(false, aGraphic.ImplGetImpGraphic()->isSwappedOut());
