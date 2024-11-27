@@ -262,9 +262,10 @@ void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
     tools::Rectangle aRectangle = svx::polygonToRectangle(aPol, maGeo);
     setRectangle(aRectangle);
 
-    if (bRotate90) {
+    if (bRotate90)
+    {
         bool bRota90=maGeo.m_nRotationAngle.get() % 9000 ==0;
-        if (bRotate90 && !bRota90) { // there's seems to be a rounding error occurring: correct it
+        if (!bRota90) { // there's seems to be a rounding error occurring: correct it
             Degree100 a=NormAngle36000(maGeo.m_nRotationAngle);
             if (a<4500_deg100) a=0_deg100;
             else if (a<13500_deg100) a=9000_deg100;
