@@ -316,7 +316,7 @@ OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue >& rF
     oslFileHandle aFileHandle = nullptr;
 
     // check for hybrid PDF
-    if (bSuccess && (aURL.isEmpty() || !comphelper::isFileUrl(aURL)))
+    if (aURL.isEmpty() || !comphelper::isFileUrl(aURL))
     {
         if (osl_createTempFile(nullptr, &aFileHandle, &aURL.pData) != osl_File_E_None)
         {
