@@ -753,7 +753,7 @@ void ScXMLImport::SetConfigurationSettings(const uno::Sequence<beans::PropertyVa
             {
                 uno::Sequence<sal_Int8> aPass;
                 ::comphelper::Base64::decode(aPass, sKey);
-                if (aPass.hasElements())
+                if (mpDoc && aPass.hasElements())
                 {
                     if (mpDoc->GetChangeTrack())
                         mpDoc->GetChangeTrack()->SetProtection(aPass);
@@ -805,7 +805,7 @@ sal_Int32 ScXMLImport::SetCurrencySymbol(const sal_Int32 nKey, std::u16string_vi
                 if (xProperties.is())
                 {
                     lang::Locale aLocale;
-                    if (mpDoc && (xProperties->getPropertyValue(SC_LOCALE) >>= aLocale))
+                    if (xProperties->getPropertyValue(SC_LOCALE) >>= aLocale)
                     {
                         {
                             ScXMLImport::MutexGuard aGuard(*this);
@@ -1208,6 +1208,9 @@ void ScXMLImport::SetLabelRanges()
     if (maMyLabelRanges.empty())
         return;
 
+    if (!mpDoc)
+        return;
+
     rtl::Reference<ScModelObj> xPropertySet (GetScModel());
     if (!xPropertySet.is())
         return;
@@ -1230,7 +1233,6 @@ void ScXMLImport::SetLabelRanges()
         sal_Int32 nOffset2(0);
         FormulaGrammar::AddressConvention eConv = FormulaGrammar::CONV_OOO;
 
-        assert(mpDoc);
         if (ScRangeStringConverter::GetRangeFromString( aLabelRange, rLabelRange.sLabelRangeStr, *mpDoc, eConv, nOffset1 ) &&
             ScRangeStringConverter::GetRangeFromString( aDataRange, rLabelRange.sDataRangeStr, *mpDoc, eConv, nOffset2 ))
         {
@@ -1374,7 +1376,7 @@ void SAL_CALL ScXMLImport::endDocument()
                             if(rProp.Value >>= sTabName)
                             {
                                 SCTAB nTab(0);
-                                if (mpDoc->GetTable(sTabName, nTab))
+                                if (mpDoc && mpDoc->GetTable(sTabName, nTab))
                                 {
                                     mpDoc->SetVisibleTab(nTab);
                                     break;
@@ -1637,7 +1639,7 @@ FormulaError ScXMLImport::GetFormulaErrorConstant( const OUString& rStr ) const
 
 ScEditEngineDefaulter* ScXMLImport::GetEditEngine()
 {
-    if (!mpEditEngine)
+    if (!mpEditEngine && mpDoc)
     {
         mpEditEngine.reset(new ScEditEngineDefaulter(mpDoc->GetEnginePool()));
         mpEditEngine->SetRefMapMode(MapMode(MapUnit::Map100thMM));

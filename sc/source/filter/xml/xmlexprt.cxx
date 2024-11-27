@@ -678,7 +678,7 @@ table::CellRangeAddress ScXMLExport::GetEndAddress(const uno::Reference<sheet::X
 
 void ScXMLExport::GetAreaLinks( ScMyAreaLinksContainer& rAreaLinks )
 {
-    if (mpDoc->GetLinkManager())
+    if (mpDoc && mpDoc->GetLinkManager())
     {
         const sfx2::SvBaseLinks& rLinks = mpDoc->GetLinkManager()->GetLinks();
         for (const auto & rLink : rLinks)
@@ -881,6 +881,9 @@ void ScXMLExport::ExportExternalRefCacheStyles()
 
     if (nEntryIndex < 0)
         // No entry index for the number format is found.
+        return;
+
+    if (!mpDoc)
         return;
 
     ScExternalRefManager* pRefMgr = mpDoc->GetExternalRefManager();
@@ -1253,6 +1256,9 @@ void ScXMLExport::ExportCellTextAutoStyles(sal_Int32 nTable)
     if (!ValidTab(nTable))
         return;
 
+    if (!mpDoc)
+        return;
+
     rtl::Reference<XMLPropertySetMapper> xMapper = GetTextParagraphExport()->GetTextPropMapper()->getPropertySetMapper();
     rtl::Reference<SvXMLAutoStylePoolP> xStylePool = GetAutoStylePool();
     const ScXMLEditAttributeMap& rAttrMap = GetEditAttributeMap();
@@ -1448,31 +1454,25 @@ void ScXMLExport::OpenRow(const sal_Int32 nTable, const sal_Int32 nStartRow, con
             if (nRow == nStartRow)
             {
                 nPrevIndex = pRowStyles->GetStyleNameIndex(nTable, nRow);
-                if (mpDoc)
+                if (nRow > nEndRowHidden)
                 {
-                    if (nRow > nEndRowHidden)
-                    {
-                        bPrevHidden = rRowAttr.rowHidden(nTable, nRow, nEndRowHidden);
-                        bHidden = bPrevHidden;
-                    }
-                    if (nRow > nEndRowFiltered)
-                    {
-                        bPrevFiltered = rRowAttr.rowFiltered(nTable, nRow, nEndRowFiltered);
-                        bFiltered = bPrevFiltered;
-                    }
+                    bPrevHidden = rRowAttr.rowHidden(nTable, nRow, nEndRowHidden);
+                    bHidden = bPrevHidden;
+                }
+                if (nRow > nEndRowFiltered)
+                {
+                    bPrevFiltered = rRowAttr.rowFiltered(nTable, nRow, nEndRowFiltered);
+                    bFiltered = bPrevFiltered;
                 }
 
             }
             else
             {
                 nIndex = pRowStyles->GetStyleNameIndex(nTable, nRow);
-                if (mpDoc)
-                {
-                    if (nRow > nEndRowHidden)
-                        bHidden = rRowAttr.rowHidden(nTable, nRow, nEndRowHidden);
-                    if (nRow > nEndRowFiltered)
-                        bFiltered = rRowAttr.rowFiltered(nTable, nRow, nEndRowFiltered);
-                }
+                if (nRow > nEndRowHidden)
+                    bHidden = rRowAttr.rowHidden(nTable, nRow, nEndRowHidden);
+                if (nRow > nEndRowFiltered)
+                    bFiltered = rRowAttr.rowFiltered(nTable, nRow, nEndRowFiltered);
                 if (nIndex == nPrevIndex && bHidden == bPrevHidden && bFiltered == bPrevFiltered &&
                     !(bHasRowHeader && ((nRow == aRowHeaderRange.aStart.Row()) || (nRow - 1 == aRowHeaderRange.aEnd.Row()))) &&
                     !(pGroupRows->IsGroupStart(nRow)) &&
@@ -1499,13 +1499,10 @@ void ScXMLExport::OpenRow(const sal_Int32 nTable, const sal_Int32 nStartRow, con
         sal_Int32 nIndex = pRowStyles->GetStyleNameIndex(nTable, nStartRow);
         bool bHidden = false;
         bool bFiltered = false;
-        if (mpDoc)
-        {
-            sal_Int32 nEndRowHidden;
-            sal_Int32 nEndRowFiltered;
-            bHidden = rRowAttr.rowHidden(nTable, nStartRow, nEndRowHidden);
-            bFiltered = rRowAttr.rowFiltered(nTable, nStartRow, nEndRowFiltered);
-        }
+        sal_Int32 nEndRowHidden;
+        sal_Int32 nEndRowFiltered;
+        bHidden = rRowAttr.rowHidden(nTable, nStartRow, nEndRowHidden);
+        bFiltered = rRowAttr.rowFiltered(nTable, nStartRow, nEndRowFiltered);
         assert(nIndex >= 0 && "coverity#1438402");
         OpenNewRow(nIndex, nStartRow, 1, bHidden, bFiltered);
     }
@@ -2701,6 +2698,9 @@ void ScXMLExport::CollectInternalShape( uno::Reference< drawing::XShape > const 
     if( !pObject )
         return;
 
+    if (!mpDoc)
+        return;
+
     // collect note caption objects from all layers (internal or hidden)
     if( ScDrawObjData* pCaptData = ScDrawLayer::GetNoteCaptionData( pObject, static_cast< SCTAB >( nCurrentTable ) ) )
     {
@@ -3227,7 +3227,7 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
                     ScFormulaCell* pFormulaCell = aCell.maBaseCell.getFormula();
                     if (!bIsMatrix || bIsFirstMatrixCell)
                     {
-                        if (!mpCompileFormulaCxt)
+                        if (!mpCompileFormulaCxt && mpDoc)
                         {
                             const formula::FormulaGrammar::Grammar eGrammar = mpDoc->GetStorageGrammar();
                             mpCompileFormulaCxt.reset(new sc::CompileFormulaContext(*mpDoc, eGrammar));
@@ -3321,11 +3321,9 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
         {
             WriteMultiLineFormulaResult(aCell.maBaseCell.getFormula());
         }
-        else
+        else if (mpDoc)
         {
             SvXMLElementExport aElemP(*this, sElemP, true, false);
-
-            assert(mpDoc);
 
             OUString aParaStr =
                 ScCellFormat::GetOutputString(*mpDoc, aCell.maCellAddress, aCell.maBaseCell);
@@ -3687,7 +3685,7 @@ void ScXMLExport::WriteTableShapes()
     {
         if (rxShape.is())
         {
-            if (mpDoc->IsNegativePage(static_cast<SCTAB>(nCurrentTable)))
+            if (mpDoc && mpDoc->IsNegativePage(static_cast<SCTAB>(nCurrentTable)))
             {
                 // RTL-mirroring refers to snap rectangle, not to logic rectangle, therefore cannot use
                 // getPosition() and getSize(), but need property "FrameRect" from rxShape or
@@ -3802,6 +3800,9 @@ void ScXMLExport::exportAnnotationMeta( const uno::Reference < drawing::XShape >
 
 void ScXMLExport::WriteAnnotation(const ScMyCell& rMyCell)
 {
+    if (!mpDoc)
+        return;
+
     ScPostIt* pNote = mpDoc->GetNote(rMyCell.maCellAddress);
     if (!pNote)
         return;
@@ -4259,6 +4260,9 @@ void ScXMLExport::WriteExternalDataTransformations(const std::vector<std::shared
             break;
             case sc::TransformationType::SORT_TRANSFORMATION:
             {
+                if (!mpDoc)
+                    return;
+
                 // Sort Transformation
                 std::shared_ptr<sc::SortTransformation> aSortTransformation = std::dynamic_pointer_cast<sc::SortTransformation>(itr);
                 ScSortParam aSortParam = aSortTransformation->getSortParam();
@@ -4550,6 +4554,9 @@ void ScXMLExport::WriteDataStream()
 
 void ScXMLExport::WriteNamedRange(ScRangeName* pRangeName)
 {
+    if (!mpDoc)
+        return;
+
     //write a global or local ScRangeName
     SvXMLElementExport aElemNEs(*this, XML_NAMESPACE_TABLE, XML_NAMED_EXPRESSIONS, true, true);
     for (const auto& rxEntry : *pRangeName)
@@ -4690,6 +4697,9 @@ OUString getDateStringForType(condformat::ScCondFormatDateType eType)
 
 void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
 {
+    if (!mpDoc)
+        return;
+
     ScConditionalFormatList* pCondFormatList = mpDoc->GetCondFormList(nTab);
     if(!pCondFormatList)
         return;
