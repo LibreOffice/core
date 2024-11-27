@@ -378,59 +378,43 @@ void SwTextFrame::PaintExtraData( const SwRect &rRect ) const
 
         tools::Long nBottom = rRect.Bottom();
 
-        bool bNoPrtLine = 0 == GetMinPrtLine();
-        if( !bNoPrtLine )
-        {
-            while ( aLine.Y() < GetMinPrtLine() )
-            {
-                if( ( rLineInf.IsCountBlankLines() || aLine.GetCurr()->HasContent() )
-                    && !aLine.GetCurr()->IsDummy() )
-                    aExtra.IncLineNr();
-                if( !aLine.Next() )
-                    break;
-            }
-            bNoPrtLine = aLine.Y() >= GetMinPrtLine();
-        }
         const bool bIsShowChangesInMargin = pSh->GetViewOptions()->IsShowChangesInMargin();
-        if( bNoPrtLine )
+        do
         {
-            do
+            if( bNoDummy || !aLine.GetCurr()->IsDummy() )
             {
-                if( bNoDummy || !aLine.GetCurr()->IsDummy() )
+                bool bRed = bRedLine && aLine.GetCurr()->HasRedline();
+                if( rLineInf.IsCountBlankLines() || aLine.GetCurr()->HasContent() )
                 {
-                    bool bRed = bRedLine && aLine.GetCurr()->HasRedline();
-                    if( rLineInf.IsCountBlankLines() || aLine.GetCurr()->HasContent() )
+                    bool bRedInMargin = bIsShowChangesInMargin && bRed;
+                    bool bNum = bLineNum && ( aExtra.HasNumber() || aExtra.HasDivider() );
+                    if( bRedInMargin || bNum )
                     {
-                        bool bRedInMargin = bIsShowChangesInMargin && bRed;
-                        bool bNum = bLineNum && ( aExtra.HasNumber() || aExtra.HasDivider() );
-                        if( bRedInMargin || bNum )
+                        SwTwips nTmpHeight, nTmpAscent;
+                        aLine.CalcAscentAndHeight( nTmpAscent, nTmpHeight );
+                        if ( bRedInMargin )
                         {
-                            SwTwips nTmpHeight, nTmpAscent;
-                            aLine.CalcAscentAndHeight( nTmpAscent, nTmpHeight );
-                            if ( bRedInMargin )
+                            const OUString* pRedlineText = aLine.GetCurr()->GetRedlineText();
+                            if( !pRedlineText->isEmpty() )
                             {
-                                const OUString* pRedlineText = aLine.GetCurr()->GetRedlineText();
-                                if( !pRedlineText->isEmpty() )
-                                {
-                                    aExtra.PaintExtra( aLine.Y(), nTmpAscent,
-                                        nTmpHeight, bRed, pRedlineText );
-                                    bRed = false;
-                                    bNum = false;
-                                }
-                            }
-                            if ( bNum )
-                            {
-                                aExtra.PaintExtra( aLine.Y(), nTmpAscent, nTmpHeight, bRed );
+                                aExtra.PaintExtra( aLine.Y(), nTmpAscent,
+                                    nTmpHeight, bRed, pRedlineText );
                                 bRed = false;
+                                bNum = false;
                             }
                         }
-                        aExtra.IncLineNr();
+                        if ( bNum )
+                        {
+                            aExtra.PaintExtra( aLine.Y(), nTmpAscent, nTmpHeight, bRed );
+                            bRed = false;
+                        }
                     }
-                    if( bRed )
-                        aExtra.PaintRedline( aLine.Y(), aLine.GetLineHeight() );
+                    aExtra.IncLineNr();
                 }
-            } while( aLine.Next() && aLine.Y() <= nBottom );
-        }
+                if( bRed )
+                    aExtra.PaintRedline( aLine.Y(), aLine.GetLineHeight() );
+            }
+        } while( aLine.Next() && aLine.Y() <= nBottom );
     }
     else
     {
@@ -773,21 +757,11 @@ void SwTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
         aLine.TwipsToLine( rRect.Top() + 1 );
         tools::Long nBottom = rRect.Bottom();
 
-        bool bNoPrtLine = 0 == GetMinPrtLine();
-        if( !bNoPrtLine )
+        do
         {
-            while ( aLine.Y() < GetMinPrtLine() && aLine.Next() )
-                ;
-            bNoPrtLine = aLine.Y() >= GetMinPrtLine();
-        }
-        if( bNoPrtLine )
-        {
-            do
-            {
-                aLine.DrawTextLine(rRect, aClip, IsUndersized(), oTaggedLabel, oTaggedParagraph, isPDFTaggingEnabled);
+            aLine.DrawTextLine(rRect, aClip, IsUndersized(), oTaggedLabel, oTaggedParagraph, isPDFTaggingEnabled);
 
-            } while( aLine.Next() && aLine.Y() <= nBottom );
-        }
+        } while( aLine.Next() && aLine.Y() <= nBottom );
 
         // Once is enough:
         if( aLine.IsPaintDrop() )
