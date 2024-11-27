@@ -954,7 +954,6 @@ void Calendar::ImplTracking( const Point& rPos, bool bRepeat )
 
 void Calendar::ImplEndTracking( bool bCancel )
 {
-    bool bSelection = false;
     bool bSpinDown = mbSpinDown;
 
     mbDrag              = false;
@@ -1003,7 +1002,7 @@ void Calendar::ImplEndTracking( bool bCancel )
     if ( !bCancel && ((maCurDate != maOldCurDate) || (*mpOldSelectTable != *mpSelectTable)) )
         Select();
 
-    if ( !bSelection && (mnWinStyle & WB_TABSTOP) && !bCancel )
+    if ( (mnWinStyle & WB_TABSTOP) && !bCancel )
         GrabFocus();
 
     mpOldSelectTable.reset();
