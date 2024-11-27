@@ -9,16 +9,17 @@
 
 #pragma once
 
+#include "QtDoubleSpinBox.hxx"
 #include "QtInstanceWidget.hxx"
 
 #include <QtWidgets/QSpinBox>
 
 class QtInstanceSpinButton : public QtInstanceWidget, public virtual weld::SpinButton
 {
-    QDoubleSpinBox* m_pSpinBox;
+    QtDoubleSpinBox* m_pSpinBox;
 
 public:
-    QtInstanceSpinButton(QDoubleSpinBox* pSpinBox);
+    QtInstanceSpinButton(QtDoubleSpinBox* pSpinBox);
 
     virtual void set_text(const OUString& rText) override;
     virtual OUString get_text() const override;

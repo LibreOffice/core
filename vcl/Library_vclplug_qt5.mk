@@ -84,6 +84,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_qt5,\
     vcl/qt5/QtClipboard \
     vcl/qt5/QtCustomStyle \
     vcl/qt5/QtData \
+    vcl/qt5/QtDoubleSpinBox \
     vcl/qt5/QtDragAndDrop \
     vcl/qt5/QtExpander \
     vcl/qt5/QtFilePicker \

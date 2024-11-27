@@ -9,6 +9,7 @@
 
 #include <QtBuilder.hxx>
 
+#include <QtDoubleSpinBox.hxx>
 #include <QtExpander.hxx>
 #include <QtInstanceLinkButton.hxx>
 #include <QtInstanceMessageDialog.hxx>
@@ -272,7 +273,7 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
     }
     else if (sName == u"GtkSpinButton")
     {
-        QDoubleSpinBox* pSpinBox = new QDoubleSpinBox(pParentWidget);
+        QtDoubleSpinBox* pSpinBox = new QtDoubleSpinBox(pParentWidget);
         setSpinButtonProperties(*pSpinBox, rMap);
         pObject = pSpinBox;
     }

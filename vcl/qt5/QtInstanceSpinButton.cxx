@@ -11,7 +11,7 @@
 
 #include <vcl/qt/QtUtils.hxx>
 
-QtInstanceSpinButton::QtInstanceSpinButton(QDoubleSpinBox* pSpinBox)
+QtInstanceSpinButton::QtInstanceSpinButton(QtDoubleSpinBox* pSpinBox)
     : QtInstanceWidget(pSpinBox)
     , m_pSpinBox(pSpinBox)
 {

@@ -267,7 +267,7 @@ std::unique_ptr<weld::Entry> QtInstanceBuilder::weld_entry(const OUString& rId)
 
 std::unique_ptr<weld::SpinButton> QtInstanceBuilder::weld_spin_button(const OUString& rId)
 {
-    QDoubleSpinBox* pSpinBox = m_xBuilder->get<QDoubleSpinBox>(rId);
+    QtDoubleSpinBox* pSpinBox = m_xBuilder->get<QtDoubleSpinBox>(rId);
     std::unique_ptr<weld::SpinButton> xRet(
         pSpinBox ? std::make_unique<QtInstanceSpinButton>(pSpinBox) : nullptr);
     return xRet;
