@@ -5692,6 +5692,13 @@ static void ImplHandleIMENotify( HWND hWnd, WPARAM wParam )
 static bool
 ImplHandleGetObject(HWND hWnd, LPARAM lParam, WPARAM wParam, LRESULT & nRet)
 {
+    static const bool disable = []
+    {
+        const char* pEnv = getenv("SAL_ACCESSIBILITY_ENABLED");
+        return pEnv && pEnv[0] == '0';
+    }();
+    if (disable)
+        return false;
     uno::Reference<accessibility::XMSAAService> xMSAA;
     if (ImplSalYieldMutexTryToAcquire())
     {
