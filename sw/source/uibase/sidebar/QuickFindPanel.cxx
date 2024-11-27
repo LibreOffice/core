@@ -9,8 +9,8 @@
  */
 
 #include "QuickFindPanel.hxx"
+#include <svtools/colorcfg.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-
 #include <comphelper/scopeguard.hxx>
 #include <svl/srchitem.hxx>
 #include <view.hxx>
@@ -332,7 +332,8 @@ IMPL_LINK(QuickFindPanel, SearchFindsListRender, weld::TreeView::render_args, aP
         tools::Long aTextHeight = rRenderContext.GetTextHeight();
 
         rRenderContext.Push();
-        rRenderContext.SetLineColor(COL_BLACK);
+        svtools::ColorConfig aColorConfig;
+        rRenderContext.SetLineColor(aColorConfig.GetColorValue(svtools::BUTTONTEXTCOLOR).nColor);
         rRenderContext.DrawLine(
             aRect.LeftCenter(),
             Point(aRect.Center().AdjustX(-(aTextWidth / 2)) - 4, aRect.Center().getY()));
