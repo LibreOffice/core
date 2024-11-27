@@ -361,7 +361,6 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
     ScBreakType nBreak    = ScBreakType::NONE;
     ScBreakType nBreakOld = ScBreakType::NONE;
 
-    bool bSingle;
     bool bDashed = false;
     Color aPageColor;
     Color aManualColor;
@@ -469,8 +468,8 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
             bool bDraw = bGrid || nBreakOld != ScBreakType::NONE || bMergeCover; // simple grid only if set that way
 
             sal_uInt16 nWidthXplus1 = pRowInfo[0].basicCellInfo(nX+1).nWidth;
-            bSingle = false; //! get into Fillinfo !!!!!
-            if ( nX<mpDoc->MaxCol() && !bSingle )
+            bool bSingle = false; //! get into Fillinfo !!!!!
+            if ( nX<mpDoc->MaxCol() )
             {
                 bSingle = ( nWidthXplus1 == 0 );
                 for (nArrY=1; nArrY+1<nArrCount && !bSingle; nArrY++)
@@ -586,7 +585,7 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
             bool bDraw = bGrid || nBreakOld != ScBreakType::NONE || bMergeCover;    // simple grid only if set so
 
             bool bNextYisNextRow = (pRowInfo[nArrYplus1].nRowNo == nYplus1);
-            bSingle = !bNextYisNextRow;             // Hidden
+            bool bSingle = !bNextYisNextRow;             // Hidden
             for (SCCOL i=nX1; i<=nX2 && !bSingle; i++)
             {
                 if (pRowInfo[nArrYplus1].cellInfo(i).bVOverlapped)
