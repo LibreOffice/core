@@ -364,7 +364,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
     // when a CHECK_FORMAT_TRANS(*format*) detected format does not work. This is
     // e.g. necessary for SotClipboardFormatId::BITMAP
 
-    if (!bReturn && pOwnData)
+    if (pOwnData)
     {
         // Paste only if SfxClassificationHelper recommends so.
         const SfxObjectShellRef& pSource = pOwnData->GetDocShell();
