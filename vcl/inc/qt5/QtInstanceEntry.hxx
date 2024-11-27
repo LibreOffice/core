@@ -48,6 +48,9 @@ public:
     virtual void paste_clipboard() override;
 
     virtual void set_alignment(TxtAlign eXAlign) override;
+
+protected Q_SLOTS:
+    void handleTextChanged();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

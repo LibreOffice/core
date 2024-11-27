@@ -22,7 +22,8 @@ QtInstanceEntry::QtInstanceEntry(QLineEdit* pLineEdit)
 
     QObject::connect(m_pLineEdit, &QLineEdit::cursorPositionChanged, this,
                      [&] { signal_cursor_position(); });
-    QObject::connect(m_pLineEdit, &QLineEdit::textChanged, this, [&] { signal_changed(); });
+    QObject::connect(m_pLineEdit, &QLineEdit::textChanged, this,
+                     &QtInstanceEntry::handleTextChanged);
 }
 
 void QtInstanceEntry::set_text(const OUString& rText)
@@ -172,5 +173,11 @@ void QtInstanceEntry::copy_clipboard() { assert(false && "Not implemented yet");
 void QtInstanceEntry::paste_clipboard() { assert(false && "Not implemented yet"); }
 
 void QtInstanceEntry::set_alignment(TxtAlign) { assert(false && "Not implemented yet"); }
+
+void QtInstanceEntry::handleTextChanged()
+{
+    SolarMutexGuard aGuard;
+    signal_changed();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

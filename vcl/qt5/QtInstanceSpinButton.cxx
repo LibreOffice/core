@@ -20,6 +20,19 @@ QtInstanceSpinButton::QtInstanceSpinButton(QtDoubleSpinBox* pSpinBox)
 
     connect(m_pSpinBox, QOverload<double>::of(&QtDoubleSpinBox::valueChanged), this,
             &QtInstanceSpinButton::handleValueChanged);
+
+    // While QtInstanceEntry generally takes care of handling signals
+    // for the spinbox's QLineEdit, this doesn't work when the value
+    // is changed as a result of setting a new spinbox value (e.g.
+    // by using the spinbox buttons), as the QLineEdit signals are blocked
+    // then, see QAbstractSpinBoxPrivate::updateEdit in qtbase:
+    // https://code.qt.io/cgit/qt/qtbase.git/tree/src/widgets/widgets/qabstractspinbox.cpp?id=ced47a590aeb85953a16eaf362887f14c2815c45#n1790
+    // Therefore, connect the QDoubleSpinBox::textChanged signal
+    // to the slot that calls signal_changed() instead to ensure
+    // it gets called nonetheless, and disconnect from the other signal.
+    disconnect(pSpinBox->lineEdit(), &QLineEdit::textChanged, this, nullptr);
+    connect(m_pSpinBox, &QDoubleSpinBox::textChanged, this,
+            &QtInstanceSpinButton::handleTextChanged);
 }
 
 QWidget* QtInstanceSpinButton::getQWidget() const { return m_pSpinBox; }
