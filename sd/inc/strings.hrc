@@ -446,6 +446,8 @@
 #define STR_IMPRESS_PRINT_UI_QUALITY                    NC_("STR_IMPRESS_PRINT_UI_QUALITY", "Color")
 #define STR_IMPRESS_PRINT_UI_PAGE_OPTIONS               NC_("STR_IMPRESS_PRINT_UI_PAGE_OPTIONS", "~Size")
 #define STR_IMPRESS_PRINT_UI_BROCHURE                   NC_("STR_IMPRESS_PRINT_UI_BROCHURE", "Brochure")
+#define STR_IMPRESS_PRINT_UI_LEFT_SCRIPT                NC_("STR_IMPRESS_PRINT_UI_LEFT_SCRIPT", "Left-to-right script")
+#define STR_IMPRESS_PRINT_UI_RIGHT_SCRIPT               NC_("STR_IMPRESS_PRINT_UI_RIGHT_SCRIPT", "Right-to-left script")
 #define STR_IMPRESS_PRINT_UI_PAGE_SIDES                 NC_("STR_IMPRESS_PRINT_UI_PAGE_SIDES", "Page sides")
 #define STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE           NC_("STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE", "Include")
 #define STR_IMPRESS_PRINT_UI_PAPER_TRAY                 NC_("STR_IMPRESS_PRINT_UI_PAPER_TRAY", "~Use only paper tray from printer preferences")

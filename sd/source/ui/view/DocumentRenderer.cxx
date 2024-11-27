@@ -65,6 +65,9 @@
 #include <xmloff/autolayout.hxx>
 #include <sfx2/objsh.hxx>
 
+#include <svl/cjkoptions.hxx>
+#include <svl/ctloptions.hxx>
+
 #include <officecfg/Office/Draw.hxx>
 #include <officecfg/Office/Impress.hxx>
 
@@ -192,6 +195,11 @@ namespace {
         bool IsBooklet() const
         {
             return GetBoolValue("PrintProspect", false);
+        }
+
+        bool IsProspectRTL() const
+        {
+            return mrProperties.getIntValue( "PrintProspectRTL",  0 ) != 0;
         }
 
         bool IsPrinterPreferred(DocumentType eDocType) const
@@ -390,7 +398,7 @@ namespace {
 
         void ProcessResource()
         {
-            // load the writer PrinterOptions into the custom tab
+            // load the impress or draw PrinterOptions into the custom tab
             beans::PropertyValue aOptionsUIFile;
             aOptionsUIFile.Name = "OptionsUIFile";
             if( mbImpress )
@@ -565,22 +573,29 @@ namespace {
                                 )
                             );
 
-            vcl::PrinterOptionsHelper::UIControlOptions
-                aIncludeOpt( u"PrintProspect"_ustr , -1, false );
-            aIncludeOpt.maGroupHint =  "LayoutPage" ;
-            aHelpIds = { u".HelpID:vcl:PrintDialog:PrintProspectInclude:ListBox"_ustr };
-            AddDialogControl( vcl::PrinterOptionsHelper::setChoiceListControlOpt(
-                                u"brochureinclude"_ustr,
+            // check if either CJK or CTL is enabled
+            bool bRTL = SvtCJKOptions::IsCJKFontEnabled() || SvtCTLOptions::IsCTLFontEnabled();
+
+            if(bRTL)
+            {
+                uno::Sequence< OUString > aBRTLChoices{ SdResId(STR_IMPRESS_PRINT_UI_LEFT_SCRIPT),
+                                                        SdResId(STR_IMPRESS_PRINT_UI_RIGHT_SCRIPT) };
+                vcl::PrinterOptionsHelper::UIControlOptions
+                    aIncludeOpt( u"PrintProspect"_ustr , -1, true );
+                aIncludeOpt.maGroupHint =  "LayoutPage" ;
+                aHelpIds = { u".HelpID:vcl:PrintDialog:PrintProspectRTL:ListBox"_ustr };
+                AddDialogControl( vcl::PrinterOptionsHelper::setChoiceListControlOpt(
+                                u"scriptdirection"_ustr,
                                 SdResId(STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE),
                                 aHelpIds,
-                                u"PrintProspectInclude"_ustr ,
-                                CreateChoice(STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE_LIST, SAL_N_ELEMENTS(STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE_LIST)),
+                                u"PrintProspectRTL"_ustr ,
+                                aBRTLChoices,
                                 0,
                                 Sequence< sal_Bool >(),
                                 aIncludeOpt
                                 )
                             );
-
+            }
             // paper tray (on options page)
             vcl::PrinterOptionsHelper::UIControlOptions aPaperTrayOpt;
             aPaperTrayOpt.maGroupHint = "OptionsPageOptGroup" ;
@@ -2368,6 +2383,8 @@ private:
             }
         }
 
+        bool bPrintBookletRTL = mpOptions->IsProspectRTL();
+
         for (sal_uInt32
                  nIndex=0,
                  nCount=aPairVector.size();
@@ -2376,7 +2393,9 @@ private:
         {
             if ( CheckForFrontBackPages( nIndex ) )
             {
-                const std::pair<sal_uInt16, sal_uInt16> aPair (aPairVector[nIndex]);
+                std::pair<sal_uInt16, sal_uInt16> aPair (aPairVector[nIndex]);
+                if( bPrintBookletRTL )
+                    std::swap(aPair.first, aPair.second);
                 Point aSecondOffset (aOffset);
                 if (rInfo.meOrientation == Orientation::Landscape)
                     aSecondOffset.AdjustX( aAdjustedPrintSize.Width() / 2 );
