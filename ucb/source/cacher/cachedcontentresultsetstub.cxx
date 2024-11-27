@@ -366,16 +366,12 @@ void CachedContentResultSetStub
     if( !m_bNeedToPropagateFetchSize )
         return;
 
-    bool bNeedAction;
     sal_Int32 nLastSize;
     bool bLastDirection;
     bool bFirstPropagationDone;
-    bNeedAction             = m_bNeedToPropagateFetchSize;
     nLastSize               = m_nLastFetchSize;
     bLastDirection          = m_bLastFetchDirection;
     bFirstPropagationDone   = m_bFirstFetchSizePropagationDone;
-    if( !bNeedAction )
-        return;
 
     if( nLastSize == nFetchSize
         && bLastDirection == bFetchDirection
