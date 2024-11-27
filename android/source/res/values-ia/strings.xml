@@ -40,7 +40,7 @@
     <string name="calc_delete">Deler</string>
     <string name="action_undo">Disfacer</string>
     <string name="app_vendor">Iste version es fornite per $VENDOR.</string>
-    <string name="action_pwd_dialog_title">Inserta contrasigno</string>
+    <string name="action_pwd_dialog_title">Entra contrasigno</string>
     <string name="calc_optimal_length_confirm">De accordo</string>
     <string name="action_parts">Partes</string>
     <string name="pref_category_general">General</string>
