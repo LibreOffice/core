@@ -183,12 +183,14 @@ OUString OTextInputStream::implReadString( const Sequence< sal_Unicode >& Delimi
         if( nBufferReadPos == mnCharsInBuffer )
         {
             // Already reached EOF? Then we can't read any more
-            if( mbReachedEOF )
+            // Or no, so read new characters
+            if( mbReachedEOF || !implReadNext() ) {
+                if( bFoundFirstLineEndChar ) {
+                    bFound = true;
+                    nCopyLen = nBufferReadPos - 1;
+                }
                 break;
-
-            // No, so read new characters
-            if( !implReadNext() )
-                break;
+            }
         }
 
         // Now there should be characters available

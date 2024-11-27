@@ -32,7 +32,11 @@ namespace {
 
 class Input: public cppu::WeakImplHelper<css::io::XInputStream> {
 public:
-    Input(): open_(true), index_(0) {}
+    Input(char* inputData, sal_Int32 inputSize):
+        open_(true),
+        index_(0),
+        size(inputSize),
+        data(inputData) {}
 
 private:
     virtual ~Input() override {}
@@ -47,14 +51,14 @@ private:
         assert(nMaxBytesToRead >= 0);
         osl::MutexGuard g(mutex_);
         checkClosed();
-        assert(index_ >= 0 && index_ <= SIZE);
+        assert(index_ >= 0 && index_ <= size);
         sal_Int32 n = std::min<sal_Int32>(
-            std::min<sal_Int32>(nMaxBytesToRead, 2), SIZE - index_);
-        assert(n >= 0 && n <= SIZE - index_);
+            std::min<sal_Int32>(nMaxBytesToRead, 2), size - index_);
+        assert(n >= 0 && n <= size - index_);
         aData.realloc(n);
         std::memcpy(aData.getArray(), data + index_, n);
         index_ += n;
-        assert(index_ >= 0 && index_ <= SIZE);
+        assert(index_ >= 0 && index_ <= size);
         return n;
     }
 
@@ -63,17 +67,17 @@ private:
         assert(nBytesToSkip >= 0);
         osl::MutexGuard g(mutex_);
         checkClosed();
-        assert(index_ >= 0 && index_ <= SIZE);
-        index_ += std::min<sal_Int32>(nBytesToSkip, SIZE - index_);
-        assert(index_ >= 0 && index_ <= SIZE);
+        assert(index_ >= 0 && index_ <= size);
+        index_ += std::min<sal_Int32>(nBytesToSkip, size - index_);
+        assert(index_ >= 0 && index_ <= size);
     }
 
     sal_Int32 SAL_CALL available() override
     {
         osl::MutexGuard g(mutex_);
         checkClosed();
-        assert(index_ >= 0 && index_ <= SIZE);
-        return SIZE - index_;
+        assert(index_ >= 0 && index_ <= size);
+        return size - index_;
     }
 
     void SAL_CALL closeInput() override
@@ -90,32 +94,72 @@ private:
         }
     }
 
-    static sal_Int32 const SIZE = 9;
-    static char const data[SIZE];
-
     osl::Mutex mutex_;
     bool open_;
     sal_Int32 index_;
-};
 
-char const Input::data[] = { '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+    sal_Int32 size;
+    char* data;
+
+};
 
 class Test: public test::BootstrapFixtureBase {
 private:
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testReadLine);
+    CPPUNIT_TEST(testReadLineEndChars);
     CPPUNIT_TEST_SUITE_END();
 
     void testReadLine();
+    void testReadLineEndChars();
+
+    OUString readFirstLine(char data1[], int size);
 };
 
-void Test::testReadLine() {
+OUString Test::readFirstLine(char *inputData, int inputSize) {
     css::uno::Reference<css::io::XTextInputStream2> s(
         css::io::TextInputStream::create(getComponentContext()));
-    s->setInputStream(new Input);
-    OUString l(s->readLine());
+    s->setInputStream(new Input(inputData, inputSize));
+    return s->readLine();
+}
+
+void Test::testReadLine() {
+    char inputData[] = {'1', '2', '3', '4', '5', '6', '7', '8', '9'};
+    OUString l(readFirstLine(inputData, sizeof(inputData)));
     CPPUNIT_ASSERT_EQUAL(u"123456789"_ustr, l);
 }
+
+void Test::testReadLineEndChars() {
+    std::vector<char> inputData = {'a', 'b', 'c', '\r'};
+    OUString l(readFirstLine(inputData.data(), inputData.size()));
+    CPPUNIT_ASSERT_EQUAL(u"abc"_ustr, l);
+
+    inputData = {'a', 'b', 'c', '\n'};
+    l = readFirstLine(inputData.data(), inputData.size());
+    CPPUNIT_ASSERT_EQUAL(u"abc"_ustr, l);
+
+    inputData = {'a', 'b', 'c', '\r', '\n'};
+    l = readFirstLine(inputData.data(), inputData.size());
+    CPPUNIT_ASSERT_EQUAL(u"abc"_ustr, l);
+
+    inputData = {'a', 'b', 'c', '\r', 'd', 'e', 'f'};
+    l = readFirstLine(inputData.data(), inputData.size());
+    CPPUNIT_ASSERT_EQUAL(u"abc"_ustr, l);
+
+    inputData = {'a', 'b', 'c', '\n', 'd', 'e', 'f'};
+    l = readFirstLine(inputData.data(), inputData.size());
+    CPPUNIT_ASSERT_EQUAL(u"abc"_ustr, l);
+
+    css::uno::Reference<css::io::XTextInputStream2> s(
+        css::io::TextInputStream::create(getComponentContext()));
+    inputData = {'a', 'b', 'c', '\r', '\n', 'd', 'e', 'f'};
+    s->setInputStream(new Input(inputData.data(), inputData.size()));
+    l = s->readLine();
+    CPPUNIT_ASSERT_EQUAL(u"abc"_ustr, l);
+    l = s->readLine();
+    CPPUNIT_ASSERT_EQUAL(u"def"_ustr, l);
+}
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
