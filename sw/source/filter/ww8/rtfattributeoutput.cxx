@@ -4429,8 +4429,6 @@ bool RtfAttributeOutput::FlyFrameOLEMath(const SwFlyFrameFormat* pFlyFrameFormat
 
     m_aRunText->append("{" LO_STRING_SVTOOLS_RTF_MMATH " ");
     uno::Reference<util::XCloseable> xClosable = xObj->getComponent();
-    if (!xClosable.is())
-        return false;
     auto pBase = dynamic_cast<oox::FormulaImExportBase*>(xClosable.get());
     SAL_WARN_IF(!pBase, "sw.rtf", "Math OLE object cannot write out RTF");
     if (pBase)
