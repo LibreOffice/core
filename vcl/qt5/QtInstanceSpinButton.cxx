@@ -8,6 +8,7 @@
  */
 
 #include <QtInstanceSpinButton.hxx>
+#include <QtInstanceSpinButton.moc>
 
 #include <vcl/qt/QtUtils.hxx>
 
@@ -16,6 +17,9 @@ QtInstanceSpinButton::QtInstanceSpinButton(QtDoubleSpinBox* pSpinBox)
     , m_pSpinBox(pSpinBox)
 {
     assert(pSpinBox);
+
+    connect(m_pSpinBox, QOverload<double>::of(&QtDoubleSpinBox::valueChanged), this,
+            &QtInstanceSpinButton::handleValueChanged);
 }
 
 void QtInstanceSpinButton::set_text(const OUString&) { assert(false && "Not implemented yet"); }
@@ -185,6 +189,12 @@ unsigned int QtInstanceSpinButton::get_digits() const
     unsigned int nDigits = 0;
     GetQtInstance().RunInMainThread([&] { nDigits = o3tl::make_unsigned(m_pSpinBox->decimals()); });
     return nDigits;
+}
+
+void QtInstanceSpinButton::handleValueChanged()
+{
+    SolarMutexGuard aGuard;
+    signal_value_changed();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

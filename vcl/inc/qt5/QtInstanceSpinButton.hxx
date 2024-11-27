@@ -14,8 +14,12 @@
 
 #include <QtWidgets/QSpinBox>
 
-class QtInstanceSpinButton : public QtInstanceWidget, public virtual weld::SpinButton
+class QtInstanceSpinButton : public QObject,
+                             public QtInstanceWidget,
+                             public virtual weld::SpinButton
 {
+    Q_OBJECT
+
     QtDoubleSpinBox* m_pSpinBox;
 
 public:
@@ -57,6 +61,9 @@ public:
     virtual void get_increments(sal_Int64& rStep, sal_Int64& rPage) const override;
     virtual void set_digits(unsigned int nDigits) override;
     virtual unsigned int get_digits() const override;
+
+private Q_SLOTS:
+    void handleValueChanged();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
