@@ -101,7 +101,8 @@ D2DWriteTextOutRenderer::MODE D2DWriteTextOutRenderer::GetMode(bool bRenderingMo
 {
     D2D1_TEXT_ANTIALIAS_MODE eTextMode;
     if (!Application::GetSettings().GetStyleSettings().GetUseFontAAFromSystem())
-        eTextMode = bAntiAlias ? lclGetSystemTextAntiAliasType() : D2D1_TEXT_ANTIALIAS_MODE_ALIASED;
+        // Currently only for file output - see GraphicExporter::filter
+        eTextMode = bAntiAlias ? D2D1_TEXT_ANTIALIAS_MODE_GRAYSCALE : D2D1_TEXT_ANTIALIAS_MODE_ALIASED;
     else if (BOOL bSmoothing; SystemParametersInfoW(SPI_GETFONTSMOOTHING, 0, &bSmoothing, 0))
         eTextMode = bSmoothing ? lclGetSystemTextAntiAliasType() : D2D1_TEXT_ANTIALIAS_MODE_ALIASED;
     else
