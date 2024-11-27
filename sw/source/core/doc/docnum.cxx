@@ -53,6 +53,7 @@
 #include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <tools/datetimeutils.hxx>
+//#include <fmtanchr.hxx>
 
 #include <map>
 #include <stdlib.h>
@@ -445,7 +446,8 @@ bool SwDoc::OutlineUpDown(const SwPaM& rPam, short nOffset,
 }
 
 // Move up/down
-bool SwDoc::MoveOutlinePara( const SwPaM& rPam, SwOutlineNodes::difference_type nOffset )
+bool SwDoc::MoveOutlinePara( const SwPaM& rPam,
+                SwOutlineNodes::difference_type nOffset, SwOutlineNodesInline* pOutlineNodesInline )
 {
     // Do not move to special sections in the nodes array
     const SwPosition& rStt = *rPam.Start(),
@@ -458,15 +460,20 @@ bool SwDoc::MoveOutlinePara( const SwPaM& rPam, SwOutlineNodes::difference_type 
     }
 
     SwOutlineNodes::size_type nCurrentPos = 0;
+    SwOutlineNodesInline::size_type nCurrentPosInline = 0;
     SwNodeIndex aSttRg( rStt.GetNode() ), aEndRg( rEnd.GetNode() );
 
     int nOutLineLevel = MAXLEVEL;
     SwNode* pSrch = &aSttRg.GetNode();
 
     if( pSrch->IsTextNode())
-        nOutLineLevel = static_cast<sal_uInt8>(pSrch->GetTextNode()->GetAttrOutlineLevel()-1);
+        nOutLineLevel = static_cast<sal_uInt8>(
+                        pSrch->GetTextNode()->GetAttrOutlineLevel(/*bInlineHeading=*/true)-1);
+
     SwNode* pEndSrch = &aEndRg.GetNode();
-    if( !GetNodes().GetOutLineNds().Seek_Entry( pSrch, &nCurrentPos ) )
+
+    auto aOutlineNodes = GetNodes().GetOutLineNds();
+    if( !pOutlineNodesInline && !GetNodes().GetOutLineNds().Seek_Entry( pSrch, &nCurrentPos ) )
     {
         if( !nCurrentPos )
             return false; // Promoting or demoting before the first outline => no.
@@ -477,24 +484,63 @@ bool SwDoc::MoveOutlinePara( const SwPaM& rPam, SwOutlineNodes::difference_type 
         else
             aSttRg = *GetNodes().GetEndOfContent().StartOfSectionNode();
     }
+    else if ( pOutlineNodesInline )
+    {
+        if ( !pOutlineNodesInline->Seek_Entry_By_Anchor(pSrch, &nCurrentPosInline) )
+        {
+            if( !nCurrentPosInline )
+                return false; // Promoting or demoting before the first outline => no.
+            if( --nCurrentPosInline )
+            {
+                aSttRg = *SwOutlineNodes::GetRootNode((*pOutlineNodesInline)[ nCurrentPosInline ]);
+            }
+            else if( 0 > nOffset )
+                return false; // Promoting at the top of document?!
+            else
+                aSttRg = *GetNodes().GetEndOfContent().StartOfSectionNode();
+        }
+    }
     SwOutlineNodes::size_type nTmpPos = 0;
+    SwOutlineNodesInline::size_type nTmpPosInline = 0;
     // If the given range ends at an outlined text node we have to decide if it has to be a part of
     // the moving range or not. Normally it will be a sub outline of our chapter
     // and has to be moved, too. But if the chapter ends with a table(or a section end),
     // the next text node will be chosen and this could be the next outline of the same level.
     // The criteria has to be the outline level: sub level => incorporate, same/higher level => no.
-    if( GetNodes().GetOutLineNds().Seek_Entry( pEndSrch, &nTmpPos ) )
+    if( !pOutlineNodesInline && GetNodes().GetOutLineNds().Seek_Entry( pEndSrch, &nTmpPos ) )
     {
         if( !pEndSrch->IsTextNode() || pEndSrch == pSrch ||
             nOutLineLevel < pEndSrch->GetTextNode()->GetAttrOutlineLevel()-1 )
             ++nTmpPos; // For sub outlines only!
     }
+    else if ( pOutlineNodesInline )
+    {
+        if ( pOutlineNodesInline->Seek_Entry_By_Anchor(pEndSrch, &nTmpPosInline) && (
+            !pEndSrch->IsTextNode() || pEndSrch == pSrch || nOutLineLevel <
+                pEndSrch->GetTextNode()->GetAttrOutlineLevel(/*bInlineHeading=*/true)-1 ) )
+        {
+            ++nTmpPosInline;
+        }
+    }
 
-    aEndRg = nTmpPos < GetNodes().GetOutLineNds().size()
+    if ( !pOutlineNodesInline )
+    {
+        aEndRg = nTmpPos < GetNodes().GetOutLineNds().size()
                     ? *GetNodes().GetOutLineNds()[ nTmpPos ]
                     : GetNodes().GetEndOfContent();
+    }
+    else
+    {
+        aEndRg = nTmpPosInline < pOutlineNodesInline->size()
+                    ? *SwOutlineNodes::GetRootNode((*pOutlineNodesInline)[ nTmpPosInline ])
+                    : GetNodes().GetEndOfContent();
+    }
+
     if( nOffset >= 0 )
+    {
         nCurrentPos = nTmpPos;
+        nCurrentPosInline = nTmpPosInline;
+    }
     if( aEndRg == aSttRg )
     {
         OSL_FAIL( "Moving outlines: Surprising selection" );
@@ -531,7 +577,13 @@ bool SwDoc::MoveOutlinePara( const SwPaM& rPam, SwOutlineNodes::difference_type 
     ++aEndRg;
 
     // calculation of the new position
-    if( nOffset < 0 && nCurrentPos < o3tl::make_unsigned(-nOffset) )
+    if( pOutlineNodesInline && nOffset < 0 && nCurrentPosInline < o3tl::make_unsigned(-nOffset) )
+        pNd = GetNodes().GetEndOfContent().StartOfSectionNode();
+    else if( pOutlineNodesInline && nCurrentPosInline + nOffset >= pOutlineNodesInline->size() )
+        pNd = &GetNodes().GetEndOfContent();
+    else if ( pOutlineNodesInline )
+        pNd = SwOutlineNodes::GetRootNode((*pOutlineNodesInline)[ nCurrentPosInline + nOffset ]);
+    else if( nOffset < 0 && nCurrentPos < o3tl::make_unsigned(-nOffset) )
         pNd = GetNodes().GetEndOfContent().StartOfSectionNode();
     else if( nCurrentPos + nOffset >= GetNodes().GetOutLineNds().size() )
         pNd = &GetNodes().GetEndOfContent();

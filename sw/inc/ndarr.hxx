@@ -81,6 +81,21 @@ public:
     static constexpr auto npos = std::numeric_limits<size_type>::max();
 
     bool Seek_Entry(const SwNode* rP, size_type* pnPos) const;
+    static const SwNode* GetRootNode(const SwNode* pNode);
+};
+
+struct CompareSwOutlineNodesInline
+{
+    bool operator()(const SwNode* lhs, const SwNode* rhs) const;
+};
+
+class SwOutlineNodesInline : public o3tl::sorted_vector<SwNode*, CompareSwOutlineNodesInline>
+{
+public:
+    static constexpr auto npos = std::numeric_limits<size_type>::max();
+
+    bool Seek_Entry(const SwNode* rP, size_type* pnPos) const;
+    bool Seek_Entry_By_Anchor(const SwNode* rAnchor, size_type* pnPos) const;
 };
 
 struct SwTableToTextSave;

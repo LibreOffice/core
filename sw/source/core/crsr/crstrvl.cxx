@@ -1364,8 +1364,9 @@ SwOutlineNodes::size_type SwCursorShell::GetOutlinePos(sal_uInt8 nLevel, SwPaM* 
 }
 
 void SwCursorShell::MakeOutlineSel(SwOutlineNodes::size_type nSttPos, SwOutlineNodes::size_type nEndPos,
-                                  bool bWithChildren , bool bKillPams)
+                                  bool bWithChildren , bool bKillPams, SwOutlineNodesInline* pOutlNdsInline)
 {
+    SwOutlineNodesInline::size_type nEndPosInline = SwOutlineNodesInline::npos;
     const SwNodes& rNds = GetDoc()->GetNodes();
     const SwOutlineNodes& rOutlNds = rNds.GetOutLineNds();
     if( rOutlNds.empty() )
@@ -1383,7 +1384,7 @@ void SwCursorShell::MakeOutlineSel(SwOutlineNodes::size_type nSttPos, SwOutlineN
     SwNode* pSttNd = rOutlNds[ nSttPos ];
     SwNode* pEndNd = rOutlNds[ nEndPos ];
 
-    if( bWithChildren )
+    if( bWithChildren && !pOutlNdsInline )
     {
         const int nLevel = pEndNd->GetTextNode()->GetAttrOutlineLevel()-1;
         for( ++nEndPos; nEndPos < rOutlNds.size(); ++nEndPos )
@@ -1394,11 +1395,33 @@ void SwCursorShell::MakeOutlineSel(SwOutlineNodes::size_type nSttPos, SwOutlineN
                 break; // EndPos is now on the next one
         }
     }
-    // if without children then set onto next one
-    else if( ++nEndPos < rOutlNds.size() )
-        pEndNd = rOutlNds[ nEndPos ];
+    // headings in flys
+    else if( bWithChildren && pOutlNdsInline )
+    {
+        const int nLevel = pEndNd->GetTextNode()->GetAttrOutlineLevel() - 1;
+        pSttNd = const_cast<SwNode*>(SwOutlineNodes::GetRootNode(pSttNd));
 
-    if( nEndPos == rOutlNds.size() ) // no end found
+        pOutlNdsInline->Seek_Entry( pEndNd, &nEndPosInline );
+
+        for( ++nEndPosInline; nEndPosInline < pOutlNdsInline->size(); ++nEndPosInline )
+        {
+            pEndNd = (*pOutlNdsInline)[ nEndPosInline ];
+            const int nNxtLevel = pEndNd->GetTextNode()->GetAttrOutlineLevel()-1;
+            if( nNxtLevel <= nLevel )
+                break; // EndPos is now on the next one
+        }
+        // set anchor node of the fly node
+        if ( nEndPosInline < pOutlNdsInline->size() )
+            pEndNd = const_cast<SwNode*>(SwOutlineNodes::GetRootNode(pEndNd));
+    }
+    // if without children then set onto next one
+    else if( !pOutlNdsInline && ++nEndPos < rOutlNds.size() )
+        pEndNd = rOutlNds[ nEndPos ];
+    else if( pOutlNdsInline && ++nEndPosInline < pOutlNdsInline->size() )
+        pEndNd = const_cast<SwNode*>(SwOutlineNodes::GetRootNode((*pOutlNdsInline)[nEndPosInline]));
+
+    if( ( pOutlNdsInline && nEndPosInline == pOutlNdsInline->size() ) ||
+        ( !pOutlNdsInline && nEndPos == rOutlNds.size() ) ) // no end found
         pEndNd = &rNds.GetEndOfContent();
 
     if( bKillPams )

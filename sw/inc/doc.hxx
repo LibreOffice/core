@@ -1050,7 +1050,9 @@ public:
     bool OutlineUpDown(const SwPaM& rPam, short nOffset, SwRootFrame const* pLayout = nullptr);
 
     /// Outline - move up / move down.
-    bool MoveOutlinePara( const SwPaM& rPam, SwOutlineNodes::difference_type nOffset);
+    bool MoveOutlinePara( const SwPaM& rPam,
+                    SwOutlineNodes::difference_type nOffset,
+                    SwOutlineNodesInline* pOutlNdsInline = nullptr);
 
     SW_DLLPUBLIC bool GotoOutline(SwPosition& rPos, const OUString& rName, SwRootFrame const* = nullptr) const;
 

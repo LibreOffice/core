@@ -619,6 +619,8 @@ public:
     /**
        Returns outline level of this text node.
 
+       @param bInlineHeading     it can return the outline level of the inline heading
+
        If a text node has an outline number (i.e. it has an SwNodeNum
        and an outline numbering rule) the outline level is the level of
        this SwNodeNum.
@@ -627,7 +629,10 @@ public:
        attached the outline level is the outline level of the
        paragraph style.
 
-       Otherwise the text node has no outline level (NO_NUMBERING).
+       Otherwise the text node has no outline level (NO_NUMBERING),
+       except if bInlineHeading is true, and there is an inline heading
+       at the beginning of the paragraph anchored as character and
+       with a different outline level.
 
        NOTE: The outline level of text nodes is subject to change. The
        plan is to have an SwTextNode::nOutlineLevel member that is
@@ -636,7 +641,7 @@ public:
 
        @return outline level or NO_NUMBERING if there is no outline level
      */
-    int GetAttrOutlineLevel() const;
+    int GetAttrOutlineLevel(bool bInlineHeading = false) const;
 
     /**
        Sets the out line level *at* a text node.

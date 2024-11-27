@@ -3958,6 +3958,7 @@ void SwContentTree::ExecCommand(std::u16string_view rCmd, bool bOutlineWithChild
     // get first regular document content node outline node position in outline nodes array
     SwOutlineNodes::size_type nFirstRegularDocContentOutlineNodePos = SwOutlineNodes::npos;
     SwNodeOffset nEndOfExtrasIndex = rNodes.GetEndOfExtras().GetIndex();
+    sal_Int32 nHasInlineHeading = 0;
     for (SwOutlineNodes::size_type nPos = 0; nPos < nOutlineNdsSize; nPos++)
     {
         if (rOutlineNodes[nPos]->GetIndex() > nEndOfExtrasIndex)
@@ -3965,6 +3966,8 @@ void SwContentTree::ExecCommand(std::u16string_view rCmd, bool bOutlineWithChild
             nFirstRegularDocContentOutlineNodePos = nPos;
             break;
         }
+        if ( bUpDown && rOutlineNodes[nPos] != SwOutlineNodes::GetRootNode(rOutlineNodes[nPos]) )
+            ++nHasInlineHeading;
     }
 
     for (auto const& pCurrentEntry : selected)
@@ -3977,7 +3980,20 @@ void SwContentTree::ExecCommand(std::u16string_view rCmd, bool bOutlineWithChild
                 (bUpDown && (!pShell->IsOutlineMovable(nActPos) ||
                  nFirstRegularDocContentOutlineNodePos == SwOutlineNodes::npos)))
         {
-            continue;
+            // except inline headings, i.e. Inline Heading frames with
+            // single outlines, and achored as characters, which headings
+            // are movable with their anchor node, if they are
+            // 1) not in other frames or 2) not in tables and 3) not protected
+            const SwNode* pRootNode = nHasInlineHeading > 0
+                    ? SwOutlineNodes::GetRootNode(rOutlineNodes[nActPos])
+                    : nullptr;
+            if ( !pRootNode || pRootNode == rOutlineNodes[nActPos] ||
+                 pRootNode != SwOutlineNodes::GetRootNode(pRootNode) || // frame in frame
+                 pRootNode->FindTableNode() || // frame in table
+                 pRootNode->IsProtect() ) // write protection
+            {
+               continue;
+            }
         }
 
         if (!bStartedAction)
@@ -3990,7 +4006,91 @@ void SwContentTree::ExecCommand(std::u16string_view rCmd, bool bOutlineWithChild
         pShell->GotoOutline( nActPos); // If text selection != box selection
         pShell->Push();
 
-        if (bUpDown)
+        if (nHasInlineHeading && bUpDown)
+        {
+            SwOutlineNodesInline aOutlineNodesInline;
+            // sort inline headings correctly
+            for (SwNode* pNode : rOutlineNodes)
+                aOutlineNodesInline.insert(pNode);
+            const SwOutlineNodes::size_type nOutlineNdsSizeInline = aOutlineNodesInline.size();
+
+            // move outline position up/down (outline position promote/demote)
+            SwOutlineNodes::difference_type nDir = bUp ? -1 : 1;
+            SwOutlineNodesInline::size_type nActPosInline;
+            aOutlineNodesInline.Seek_Entry(rOutlineNodes[nActPos], &nActPosInline);
+            if ( (nDir == -1 && nActPosInline > 0) ||
+                            (nDir == 1 && nActPosInline < nOutlineNdsSizeInline - 1) )
+            {
+                // make outline selection for use by MoveOutlinePara
+                pShell->MakeOutlineSel(nActPos, nActPos, bOutlineWithChildren, true, &aOutlineNodesInline);
+
+                int nActPosOutlineLevel =
+                        rOutlineNodes[nActPos]->GetTextNode()->GetAttrOutlineLevel();
+                // search for sorted position
+                SwOutlineNodesInline::size_type nPos;
+                aOutlineNodesInline.Seek_Entry_By_Anchor(SwOutlineNodes::GetRootNode(rOutlineNodes[nActPos]), &nPos);
+                if (!bUp)
+                {
+                    // move down
+                    int nPosOutlineLevel = -1;
+                    while (++nPos < nOutlineNdsSizeInline)
+                    {
+                        nPosOutlineLevel = aOutlineNodesInline[nPos]->GetTextNode()->GetAttrOutlineLevel();
+
+                        // discontinue if moving out of parent or equal level is found
+                        if (nPosOutlineLevel <= nActPosOutlineLevel)
+                        {
+                            break;
+                        }
+                        // count the children of the node when they are not included in the move
+                        if (!bOutlineWithChildren)
+                            nDir++;
+                    }
+                    if (nPosOutlineLevel >= nActPosOutlineLevel)
+                    {
+                        // move past children
+                        while (++nPos < nOutlineNdsSizeInline)
+                        {
+                            nPosOutlineLevel = aOutlineNodesInline[nPos]->GetTextNode()->GetAttrOutlineLevel();
+                            // discontinue if moving out of parent or equal level is found
+                            if (nPosOutlineLevel <= nActPosOutlineLevel)
+                                break;
+                            nDir++;
+                        }
+                    }
+                }
+                else
+                {
+                    // move up
+                    while (nPos && --nPos >= nFirstRegularDocContentOutlineNodePos - nHasInlineHeading)
+                    {
+                        int nPosOutlineLevel =
+                                aOutlineNodesInline[nPos]->GetTextNode()->GetAttrOutlineLevel();
+                        // discontinue if equal level is found
+                        if (nPosOutlineLevel == nActPosOutlineLevel)
+                        {
+                            break;
+                        }
+                        // discontinue if moving out of parent
+                        if (nPosOutlineLevel < nActPosOutlineLevel)
+                        {
+                            // Required for expected chapter placement when the chapter being moved
+                            // up has an outline level less than the outline level of chapters it
+                            // is being moved above and then encounters a chapter with an outline
+                            // level that is greater before reaching a chapter with the same
+                            // outline level as itself.
+                            if (nDir < -1)
+                                nDir++;
+                            break;
+                        }
+                        nDir--;
+                    }
+                }
+                pShell->MoveOutlinePara(nDir, &aOutlineNodesInline);
+            }
+            pShell->ClearMark();
+        }
+        else if (bUpDown)
         {
             // move outline position up/down (outline position promote/demote)
             SwOutlineNodes::difference_type nDir = bUp ? -1 : 1;

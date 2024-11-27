@@ -540,10 +540,11 @@ bool SwEditShell::OutlineUpDown( short nOffset )
     return bRet;
 }
 
-bool SwEditShell::MoveOutlinePara( SwOutlineNodes::difference_type nOffset )
+bool SwEditShell::MoveOutlinePara( SwOutlineNodes::difference_type nOffset,
+                SwOutlineNodesInline* pOutlineNodesInline )
 {
     StartAllAction();
-    bool bRet = GetDoc()->MoveOutlinePara( *GetCursor(), nOffset );
+    bool bRet = GetDoc()->MoveOutlinePara( *GetCursor(), nOffset, pOutlineNodesInline );
     EndAllAction();
     return bRet;
 }

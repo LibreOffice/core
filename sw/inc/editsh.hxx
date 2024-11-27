@@ -498,7 +498,8 @@ public:
 
     bool OutlineUpDown( short nOffset = 1 );
 
-    bool MoveOutlinePara( SwOutlineNodes::difference_type nOffset );
+    bool MoveOutlinePara( SwOutlineNodes::difference_type nOffset,
+                        SwOutlineNodesInline* pOutlineNodesInline = nullptr );
 
     bool IsProtectedOutlinePara() const;
 

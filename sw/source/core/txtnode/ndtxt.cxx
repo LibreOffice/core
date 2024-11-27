@@ -86,6 +86,8 @@
 #include <svl/itemiter.hxx>
 #include <undobj.hxx>
 #include <formatflysplit.hxx>
+#include <fmtcntnt.hxx>
+#include <poolfmt.hxx>
 
 using namespace ::com::sun::star;
 
@@ -4186,9 +4188,41 @@ void SwTextNode::UpdateOutlineState()
     m_bLastOutlineState = IsOutline();
 }
 
-int SwTextNode::GetAttrOutlineLevel() const
+int SwTextNode::GetAttrOutlineLevel(bool bInlineHeading) const
 {
-    return GetAttr(RES_PARATR_OUTLINELEVEL).GetValue();
+    sal_uInt16 nLevel = GetAttr(RES_PARATR_OUTLINELEVEL).GetValue();
+    // not outline node, so if bIblineHeading = true, look for the
+    // outline level of the inline heading (i.e the outline node in
+    // an Inline Heading frame, which frame anchored as character to this node)
+    if ( !nLevel && bInlineHeading && HasHints() )
+    {
+        // are we in a fly
+        for ( size_t j = m_pSwpHints->Count(); j; )
+        {
+            SwTextAttr* const pHt = m_pSwpHints->Get( --j );
+            if ( RES_TXTATR_FLYCNT == pHt->Which() )
+            {
+                SwFrameFormat* pFrameFormat = pHt->GetFlyCnt().GetFrameFormat();
+                const SwFormat* pParent = pFrameFormat->DerivedFrom();
+                SwFormatAnchor const& rAnchor(pFrameFormat->GetAnchor());
+                bool bInlineHeadingFrame = pParent &&
+                        pParent->GetPoolFormatId() == RES_POOLFRM_INLINE_HEADING &&
+                        RndStdIds::FLY_AS_CHAR == rAnchor.GetAnchorId();
+                const SwNodeIndex* pNdIdx = bInlineHeadingFrame
+                                             ? pFrameFormat->GetContent().GetContentIdx()
+                                             : nullptr;
+                const SwNodes* pNodesArray = (pNdIdx != nullptr)
+                                             ? &(pNdIdx->GetNodes())
+                                             : nullptr;
+                const SwTextNode *pTextNode = (pNodesArray != nullptr)
+                                        ? (*pNodesArray)[pNdIdx->GetIndex() + 1]->GetTextNode()
+                                        : nullptr;
+                if ( pTextNode )
+                    return pTextNode->GetAttrOutlineLevel();
+            }
+        }
+    }
+    return nLevel;
 }
 
 void SwTextNode::SetAttrOutlineLevel(int nLevel)

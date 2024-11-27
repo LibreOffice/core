@@ -501,4 +501,309 @@ class movechapterupdown(UITestCase):
 
             self.xUITest.executeCommand('.uno:Sidebar')
 
+    def test_tdf164074(self):
+
+        with self.ui_test.load_file(get_url_for_data_file('tdf164074.fodt')):
+            xWriterDoc = self.xUITest.getTopFocusWindow()
+            xWriterEdit = xWriterDoc.getChild('writer_edit')
+
+            self.xUITest.executeCommand('.uno:Sidebar')
+            xWriterEdit.executeAction('SIDEBAR', mkPropertyValues({'PANEL': 'SwNavigatorPanel'}))
+
+            # wait until the navigator panel is available
+            xNavigatorPanel = self.ui_test.wait_until_child_is_available('NavigatorPanel')
+
+            # See the `m_aUpdateTimer.SetTimeout(200)` (to "avoid flickering of buttons")
+            # in the SwChildWinWrapper ctor in sw/source/uibase/fldui/fldwrap.cxx, where that
+            # m_aUpdateTimer is started by SwChildWinWrapper::ReInitDlg triggered from the
+            # xInsert click above.
+            xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+            xToolkit.waitUntilAllIdlesDispatched()
+
+            # Given the document chapter structure:
+                # 1. One H1
+                #   1.1. one_A (H2)
+                #   1.2. one_B (H2)
+                # 2. Two (H1)
+                #     A heading of level 3
+                #   2.1. Two_A (H2)
+                #   2.1. Two_B (H2)
+                # 3. Three (H1)
+                #   3.1. Three_A (H2)
+                #   3.2. Three_B (H2)
+
+            xNavigatorPanelContentTree = xNavigatorPanel.getChild("contenttree")
+
+            xNavigatorPanelContentTreeHeadings = xNavigatorPanelContentTree.getChild('0')
+            xNavigatorPanelContentTreeHeadings.executeAction("EXPAND", tuple())
+
+            #
+            # test a level 1 chapter move up then move down
+            #
+
+            # Double click on the "2. Two (H1)" entry to select and set focus
+            xHeadingsChild1 = xNavigatorPanelContentTreeHeadings.getChild('1')
+            self.assertEqual(get_state_as_dict(xHeadingsChild1)["Text"], "2. H1")
+            xHeadingsChild1.executeAction("DOUBLECLICK", tuple())
+
+            self.ui_test.wait_until_property_is_updated(xNavigatorPanelContentTree, "SelectEntryText", "2. H1")
+
+            # Click on the 'Move chapter up' button in the Navigator tool box
+            xNavigatorPanel = xWriterEdit.getChild("NavigatorPanel")
+            xToolBar = xNavigatorPanel.getChild("HeadingsContentFunctionButtonsToolbar")
+            xToolBar.executeAction("CLICK", mkPropertyValues({"POS": "2"}))
+
+            # Expected chapter order:
+                # 2. H1
+                #   2.1. H2
+                #     2.1.1. H3
+                #       2.1.1.1. Lorem
+                #         2.1.1.1.1. Vestibulum
+                #         2.1.1.1.2. Integer
+                #       2.1.1.2. Aliquam
+
+            xNavigatorPanelContentTreeHeadings = xNavigatorPanelContentTree.getChild('0')
+
+            xHeadingsChild0 = xNavigatorPanelContentTreeHeadings.getChild('0')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0)["Text"], "2. H1")
+            xHeadingsChild0Child0 = xHeadingsChild0.getChild('0')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0)["Text"], "2.1. H2")
+            xHeadingsChild0Child0Child0 = xHeadingsChild0Child0.getChild('0')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0Child0)["Text"], "2.1.1. H3")
+            xHeadingsChild0Child0Child0Child0 = xHeadingsChild0Child0Child0.getChild('0')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0Child0Child0)["Text"], "2.1.1.1. Lorem")
+            xHeadingsChild0Child0Child0Child0Child0 = xHeadingsChild0Child0Child0Child0.getChild('0')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0Child0Child0Child0)["Text"], "2.1.1.1.1. Vestibulum")
+            xHeadingsChild0Child0Child0Child0Child1 = xHeadingsChild0Child0Child0Child0.getChild('1')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0Child0Child0Child1)["Text"], "2.1.1.1.2. Integer")
+            xHeadingsChild0Child0Child0Child1 = xHeadingsChild0Child0Child0.getChild('1')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0Child0Child1)["Text"], "2.1.1.2. Aliquam")
+
+            # Click on the 'Move chapter down' button in the Navigator tool box
+            xNavigatorPanel = xWriterEdit.getChild("NavigatorPanel")
+            xToolBar = xNavigatorPanel.getChild("HeadingsContentFunctionButtonsToolbar")
+            xToolBar.executeAction("CLICK", mkPropertyValues({"POS": "3"}))
+
+            # Expected chapter order is the original order
+            xNavigatorPanelContentTreeHeadings = xNavigatorPanelContentTree.getChild('0')
+
+            xHeadingsChild0 = xNavigatorPanelContentTreeHeadings.getChild('0')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0)["Text"], "1. H1")
+            xHeadingsChild0Child0 = xHeadingsChild0.getChild('0')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0)["Text"], "1.1. H2")
+            xHeadingsChild0Child0Child0 = xHeadingsChild0Child0.getChild('0')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0Child0)["Text"], "1.1.1. H3")
+            xHeadingsChild0Child0Child0Child0 = xHeadingsChild0Child0Child0.getChild('0')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0Child0Child0)["Text"], "1.1.1.1. Lorem")
+            xHeadingsChild0Child0Child0Child0Child0 = xHeadingsChild0Child0Child0Child0.getChild('0')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0Child0Child0Child0)["Text"], "1.1.1.1.1. Vestibulum")
+            xHeadingsChild0Child0Child0Child0Child1 = xHeadingsChild0Child0Child0Child0.getChild('1')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0Child0Child0Child1)["Text"], "1.1.1.1.2. Integer")
+            xHeadingsChild0Child0Child0Child1 = xHeadingsChild0Child0Child0.getChild('1')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0Child0Child1)["Text"], "1.1.1.2. Aliquam")
+
+            #
+            # test moving a sub chapter out of and then back into its parent
+            #
+
+            # Double click on the "1.1.2. (H3)" entry to select and set focus
+            xHeadingsChild0 = xNavigatorPanelContentTreeHeadings.getChild('0')
+            xHeadingsChild0Child0 = xHeadingsChild0.getChild('0')
+            xHeadingsChild0Child0Child1 = xHeadingsChild0Child0.getChild('1')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0Child1)["Text"], "1.1.2. H3")
+            xHeadingsChild0Child0Child1.executeAction("DOUBLECLICK", tuple())
+
+            self.ui_test.wait_until_property_is_updated(xNavigatorPanelContentTree, "SelectEntryText", "1.1.2. H3")
+
+            # Click on the 'Move chapter up' button in the Navigator tool box
+            xNavigatorPanel = xWriterEdit.getChild("NavigatorPanel")
+            xToolBar = xNavigatorPanel.getChild("HeadingsContentFunctionButtonsToolbar")
+            xToolBar.executeAction("CLICK", mkPropertyValues({"POS": "2"}))
+
+            # Expected chapter order:
+                # 1. H1
+                #   1.1. H2
+                #     1.1.2. H3 <----
+                #       1.1.2.1. Lorem
+                #         1.1.2.1.1. Vestibulum
+                #         1.1.2.1.2. Integer
+                #       1.1.2.2. Aliquam
+                #       1.1.2.2.1. Donec
+                #       1.1.2.2.2. Praesent
+                #     1.1.1. H3
+
+            xNavigatorPanelContentTreeHeadings = xNavigatorPanelContentTree.getChild('0')
+
+            xHeadingsChild0 = xNavigatorPanelContentTreeHeadings.getChild('0')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0)["Text"], "1. H1")
+            xHeadingsChild0Child0 = xHeadingsChild0.getChild('0')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0)["Text"], "1.1. H2")
+            xHeadingsChild0Child0Child0 = xHeadingsChild0Child0.getChild('0')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0Child0)["Text"], "1.1.2. H3")
+            xHeadingsChild0Child0Child0Child0 = xHeadingsChild0Child0Child0.getChild('0')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0Child0Child0)["Text"], "1.1.2.1. Lorem")
+            xHeadingsChild0Child0Child0Child0Child0 = xHeadingsChild0Child0Child0Child0.getChild('0')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0Child0Child0Child0)["Text"], "1.1.2.1.1. Vestibulum")
+            xHeadingsChild0Child0Child0Child0Child1 = xHeadingsChild0Child0Child0Child0.getChild('1')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0Child0Child0Child1)["Text"], "1.1.2.1.2. Integer")
+            xHeadingsChild0Child0Child0Child1 = xHeadingsChild0Child0Child0.getChild('1')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0Child0Child1)["Text"], "1.1.2.2. Aliquam")
+            xHeadingsChild0Child0Child0Child1Child0 = xHeadingsChild0Child0Child0Child1.getChild('0')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0Child0Child1Child0)["Text"], "1.1.2.2.1. Donec")
+            xHeadingsChild0Child0Child0Child1Child1 = xHeadingsChild0Child0Child0Child1.getChild('1')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0Child0Child1Child1)["Text"], "1.1.2.2.2. Praesent")
+            xHeadingsChild0Child0Child1 = xHeadingsChild0Child0.getChild('1')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0Child1)["Text"], "1.1.1. H3")
+
+            # Click on the 'Move chapter down' button in the Navigator tool box
+            xNavigatorPanel = xWriterEdit.getChild("NavigatorPanel")
+            xToolBar = xNavigatorPanel.getChild("HeadingsContentFunctionButtonsToolbar")
+            xToolBar.executeAction("CLICK", mkPropertyValues({"POS": "3"}))
+
+            # Expected chapter order is the original order
+                # 1. H1
+                #   1.1. H2
+                #     1.1.1. H3
+                #       1.1.1.1. Lorem
+                #         1.1.1.1.1. Vestibulum
+                #         1.1.1.1.2. Integer
+                #       1.1.1.2. Aliquam
+                #       1.1.1.2.1. Donec
+                #       1.1.1.2.2. Praesent
+                #     1.1.2. H3
+
+            xNavigatorPanelContentTreeHeadings = xNavigatorPanelContentTree.getChild('0')
+
+            xHeadingsChild0 = xNavigatorPanelContentTreeHeadings.getChild('0')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0)["Text"], "1. H1")
+            xHeadingsChild0Child0 = xHeadingsChild0.getChild('0')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0)["Text"], "1.1. H2")
+            xHeadingsChild0Child0Child0 = xHeadingsChild0Child0.getChild('0')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0Child0)["Text"], "1.1.1. H3")
+            xHeadingsChild0Child0Child0Child0 = xHeadingsChild0Child0Child0.getChild('0')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0Child0Child0)["Text"], "1.1.1.1. Lorem")
+            xHeadingsChild0Child0Child0Child0Child0 = xHeadingsChild0Child0Child0Child0.getChild('0')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0Child0Child0Child0)["Text"], "1.1.1.1.1. Vestibulum")
+            xHeadingsChild0Child0Child0Child0Child1 = xHeadingsChild0Child0Child0Child0.getChild('1')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0Child0Child0Child1)["Text"], "1.1.1.1.2. Integer")
+            xHeadingsChild0Child0Child0Child1 = xHeadingsChild0Child0Child0.getChild('1')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0Child0Child1)["Text"], "1.1.1.2. Aliquam")
+            xHeadingsChild0Child0Child0Child1Child0 = xHeadingsChild0Child0Child0Child1.getChild('0')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0Child0Child1Child0)["Text"], "1.1.1.2.1. Donec")
+            xHeadingsChild0Child0Child0Child1Child1 = xHeadingsChild0Child0Child0Child1.getChild('1')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0Child0Child1Child1)["Text"], "1.1.1.2.2. Praesent")
+            xHeadingsChild0Child0Child1 = xHeadingsChild0Child0.getChild('1')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0Child1)["Text"], "1.1.2. H3")
+
+            #
+            # test moving a sub chapter out of and then back into its parent
+            #
+
+            # Double click on the "1.1.2. (H3)" entry to select and set focus
+            xHeadingsChild0 = xNavigatorPanelContentTreeHeadings.getChild('0')
+            xHeadingsChild0Child0 = xHeadingsChild0.getChild('0')
+            xHeadingsChild0Child0Child0 = xHeadingsChild0Child0.getChild('0')
+            xHeadingsChild0Child0Child0Child1 = xHeadingsChild0Child0Child0.getChild('1')
+
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0Child0Child1)["Text"], "1.1.1.2. Aliquam")
+            xHeadingsChild0Child0Child0Child1.executeAction("DOUBLECLICK", tuple())
+
+            self.ui_test.wait_until_property_is_updated(xNavigatorPanelContentTree, "SelectEntryText", "1.1.1.2. Aliquam")
+
+            # Click on the 'Move chapter up' button in the Navigator tool box
+            xNavigatorPanel = xWriterEdit.getChild("NavigatorPanel")
+            xToolBar = xNavigatorPanel.getChild("HeadingsContentFunctionButtonsToolbar")
+            xToolBar.executeAction("CLICK", mkPropertyValues({"POS": "2"}))
+
+            # Expected chapter order:
+                # 1. H1
+                #   1.1. H2
+                #     1.1.1. H3
+                #       1.1.1.2. Aliquam <---
+                #       1.1.1.2.1. Donec
+                #       1.1.1.2.2. Praesent
+                #       1.1.1.1. Lorem
+                #         1.1.1.1.1. Vestibulum
+                #         1.1.1.1.2. Integer
+                #     1.1.2. H3
+
+            xNavigatorPanelContentTreeHeadings = xNavigatorPanelContentTree.getChild('0')
+
+            xHeadingsChild0 = xNavigatorPanelContentTreeHeadings.getChild('0')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0)["Text"], "1. H1")
+            xHeadingsChild0Child0 = xHeadingsChild0.getChild('0')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0)["Text"], "1.1. H2")
+            xHeadingsChild0Child0Child0 = xHeadingsChild0Child0.getChild('0')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0Child0)["Text"], "1.1.1. H3")
+            xHeadingsChild0Child0Child0Child0 = xHeadingsChild0Child0Child0.getChild('0')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0Child0Child0)["Text"], "1.1.1.2. Aliquam")
+            xHeadingsChild0Child0Child0Child0Child0 = xHeadingsChild0Child0Child0Child0.getChild('0')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0Child0Child0Child0)["Text"], "1.1.1.2.1. Donec")
+            xHeadingsChild0Child0Child0Child0Child1 = xHeadingsChild0Child0Child0Child0.getChild('1')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0Child0Child0Child1)["Text"], "1.1.1.2.2. Praesent")
+            xHeadingsChild0Child0Child0Child1 = xHeadingsChild0Child0Child0.getChild('1')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0Child0Child1)["Text"], "1.1.1.1. Lorem")
+            xHeadingsChild0Child0Child0Child1Child0 = xHeadingsChild0Child0Child0Child1.getChild('0')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0Child0Child1Child0)["Text"], "1.1.1.1.1. Vestibulum")
+            xHeadingsChild0Child0Child0Child1Child1 = xHeadingsChild0Child0Child0Child1.getChild('1')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0Child0Child1Child1)["Text"], "1.1.1.1.2. Integer")
+            xHeadingsChild0Child0Child1 = xHeadingsChild0Child0.getChild('1')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0Child1)["Text"], "1.1.2. H3")
+
+            # Double click on the "1.1.1.2. Aliquam" entry to select and set focus
+            # FIXME: restore focus to avoid this
+            xHeadingsChild0 = xNavigatorPanelContentTreeHeadings.getChild('0')
+            xHeadingsChild0Child0 = xHeadingsChild0.getChild('0')
+            xHeadingsChild0Child0Child0 = xHeadingsChild0Child0.getChild('0')
+            xHeadingsChild0Child0Child0Child0 = xHeadingsChild0Child0Child0.getChild('0')
+
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0Child0Child0)["Text"], "1.1.1.2. Aliquam")
+            xHeadingsChild0Child0Child0Child0.executeAction("DOUBLECLICK", tuple())
+
+            self.ui_test.wait_until_property_is_updated(xNavigatorPanelContentTree, "SelectEntryText", "1.1.1.2. Aliquam")
+
+            # Click on the 'Move chapter down' button in the Navigator tool box
+            xNavigatorPanel = xWriterEdit.getChild("NavigatorPanel")
+            xToolBar = xNavigatorPanel.getChild("HeadingsContentFunctionButtonsToolbar")
+            xToolBar.executeAction("CLICK", mkPropertyValues({"POS": "3"}))
+
+            # Expected chapter order is the original order
+                # 1. H1
+                #   1.1. H2
+                #     1.1.1. H3
+                #       1.1.1.1. Lorem
+                #         1.1.1.1.1. Vestibulum
+                #         1.1.1.1.2. Integer
+                #       1.1.1.2. Aliquam
+                #       1.1.1.2.1. Donec
+                #       1.1.1.2.2. Praesent
+                #     1.1.2. H3
+
+            xNavigatorPanelContentTreeHeadings = xNavigatorPanelContentTree.getChild('0')
+
+            xHeadingsChild0 = xNavigatorPanelContentTreeHeadings.getChild('0')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0)["Text"], "1. H1")
+            xHeadingsChild0Child0 = xHeadingsChild0.getChild('0')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0)["Text"], "1.1. H2")
+            xHeadingsChild0Child0Child0 = xHeadingsChild0Child0.getChild('0')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0Child0)["Text"], "1.1.1. H3")
+            xHeadingsChild0Child0Child0Child0 = xHeadingsChild0Child0Child0.getChild('0')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0Child0Child0)["Text"], "1.1.1.1. Lorem")
+            xHeadingsChild0Child0Child0Child0Child0 = xHeadingsChild0Child0Child0Child0.getChild('0')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0Child0Child0Child0)["Text"], "1.1.1.1.1. Vestibulum")
+            xHeadingsChild0Child0Child0Child0Child1 = xHeadingsChild0Child0Child0Child0.getChild('1')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0Child0Child0Child1)["Text"], "1.1.1.1.2. Integer")
+            xHeadingsChild0Child0Child0Child1 = xHeadingsChild0Child0Child0.getChild('1')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0Child0Child1)["Text"], "1.1.1.2. Aliquam")
+            xHeadingsChild0Child0Child0Child1Child0 = xHeadingsChild0Child0Child0Child1.getChild('0')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0Child0Child1Child0)["Text"], "1.1.1.2.1. Donec")
+            xHeadingsChild0Child0Child0Child1Child1 = xHeadingsChild0Child0Child0Child1.getChild('1')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0Child0Child1Child1)["Text"], "1.1.1.2.2. Praesent")
+            xHeadingsChild0Child0Child1 = xHeadingsChild0Child0.getChild('1')
+            self.assertEqual(get_state_as_dict(xHeadingsChild0Child0Child1)["Text"], "1.1.2. H3")
+
+            self.xUITest.executeCommand('.uno:Sidebar')
+
+
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

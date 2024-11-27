@@ -23,6 +23,28 @@
 #include <ndtxt.hxx>
 #include <fldbas.hxx>
 #include <osl/diagnose.h>
+#include <flyfrm.hxx>
+#include <fmtanchr.hxx>
+#include <poolfmt.hxx>
+
+static const SwNode* getNodeOrAnchorNode(const SwNode* pNode)
+{
+    // if pNode is an inline heading in an Inline Heading
+    // text frame, return its anchor node instead of pNode
+    if (const auto pFlyFormat = pNode->GetFlyFormat())
+    {
+        SwFormatAnchor const*const pAnchor = &pFlyFormat->GetAnchor();
+        SwNode const*const pAnchorNode = pAnchor->GetAnchorNode();
+        const SwFormat* pParent = pFlyFormat->DerivedFrom();
+        if ( pAnchorNode && pParent &&
+                RndStdIds::FLY_AS_CHAR == pAnchor->GetAnchorId() &&
+                pParent->GetPoolFormatId() == RES_POOLFRM_INLINE_HEADING )
+        {
+            return pAnchorNode;
+        }
+    }
+    return pNode;
+}
 
 bool CompareSwOutlineNodes::operator()(const SwNode* lhs, const SwNode* rhs) const
 {
@@ -34,6 +56,37 @@ bool SwOutlineNodes::Seek_Entry(const SwNode* rP, size_type* pnPos) const
     const_iterator it = lower_bound(rP);
     *pnPos = it - begin();
     return it != end() && rP->GetIndex() == (*it)->GetIndex();
+}
+
+const SwNode* SwOutlineNodes::GetRootNode(const SwNode* pNode)
+{
+    return getNodeOrAnchorNode(pNode);
+}
+
+bool CompareSwOutlineNodesInline::operator()(const SwNode* lhs, const SwNode* rhs) const
+{
+    return getNodeOrAnchorNode(lhs)->GetIndex() < getNodeOrAnchorNode(rhs)->GetIndex();
+}
+
+bool SwOutlineNodesInline::Seek_Entry(const SwNode* rP, size_type* pnPos) const
+{
+    const_iterator it = lower_bound(rP);
+    *pnPos = it - begin();
+    return it != end() && getNodeOrAnchorNode(rP)->GetIndex() == getNodeOrAnchorNode(*it)->GetIndex();
+}
+
+bool SwOutlineNodesInline::Seek_Entry_By_Anchor(const SwNode* rAnchor, SwOutlineNodesInline::size_type* pnPos) const
+{
+    SwOutlineNodes::size_type nPos;
+    for( nPos = 0; nPos < size(); ++nPos )
+    {
+       if (getNodeOrAnchorNode(operator[](nPos))->GetIndex() >= rAnchor->GetIndex())
+       {
+           break;
+       }
+    }
+    *pnPos = nPos;
+    return nPos < size() && getNodeOrAnchorNode(operator[](nPos)) == rAnchor;
 }
 
 void SwNodes::UpdateOutlineNode(SwNode & rNd)
