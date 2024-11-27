@@ -1911,7 +1911,6 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
                     ->createSecurityContext({}),
             };
 
-            bool bFoundCert = false;
             for (const auto& xSecurityContext : xSecurityContexts)
             {
                 if (xSecurityContext.is())
@@ -1921,7 +1920,6 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
 
                     if (xCert.is() && SfxViewShell::Current())
                     {
-                        bFoundCert = true;
                         SfxObjectShell* pDocShell = SfxViewShell::Current()->GetObjectShell();
                         svl::crypto::SigningContext aSigningContext;
                         aSigningContext.m_xCertificate = std::move(xCert);
@@ -1939,16 +1937,14 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
                     }
                 }
             }
-            if (!bFoundCert)
-            {
-                // couldn't find the specified default signing certificate!
-                // alert the user the document won't be signed
-                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
-                    SfxStoringHelper::GetModelWindow(aModelData.GetModel()),
-                    VclMessageType::Error, VclButtonsType::Ok,
-                    SfxResId(STR_ERROR_NOMATCHINGDEFUALTCERT)));
-                xBox->run();
-            }
+
+            // couldn't find the specified default signing certificate!
+            // alert the user the document won't be signed
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
+                SfxStoringHelper::GetModelWindow(aModelData.GetModel()),
+                VclMessageType::Error, VclButtonsType::Ok,
+                SfxResId(STR_ERROR_NOMATCHINGDEFUALTCERT)));
+            xBox->run();
             return;
 #endif
         };
