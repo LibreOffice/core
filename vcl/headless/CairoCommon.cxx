@@ -1143,27 +1143,10 @@ bool CairoCommon::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevice,
     const bool bStrokeUsed(0.0 != fDotDashLength);
     assert(!bStrokeUsed || (bStrokeUsed && pStroke));
 
-    // MM01 decide if to stroke directly
-    static const bool bDoDirectCairoStroke(true);
-
     // MM01 activate to stroke directly
-    if (bDoDirectCairoStroke && bStrokeUsed)
+    if (bStrokeUsed)
     {
         cairo_set_dash(cr, pStroke->data(), pStroke->size(), 0.0);
-    }
-
-    if (!bDoDirectCairoStroke && pSystemDependentData_CairoPath)
-    {
-        // MM01 - check on stroke change. Used against not used, or if both used,
-        // equal or different?
-        const bool bStrokeWasUsed(!pSystemDependentData_CairoPath->getStroke().empty());
-
-        if (bStrokeWasUsed != bStrokeUsed
-            || (bStrokeUsed && *pStroke != pSystemDependentData_CairoPath->getStroke()))
-        {
-            // data invalid, forget
-            pSystemDependentData_CairoPath.reset();
-        }
     }
 
     // check for basegfx::B2DLineJoin::NONE to react accordingly
@@ -1196,20 +1179,8 @@ bool CairoCommon::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevice,
         // MM01 need to do line dashing as fallback stuff here now
         basegfx::B2DPolyPolygon aPolyPolygonLine;
 
-        if (!bDoDirectCairoStroke && bStrokeUsed)
-        {
-            // apply LineStyle
-            basegfx::utils::applyLineDashing(rPolyLine, // source
-                                             *pStroke, // pattern
-                                             &aPolyPolygonLine, // target for lines
-                                             nullptr, // target for gaps
-                                             fDotDashLength); // full length if available
-        }
-        else
-        {
-            // no line dashing or direct stroke, just copy
-            aPolyPolygonLine.append(rPolyLine);
-        }
+        // no line dashing or direct stroke, just copy
+        aPolyPolygonLine.append(rPolyLine);
 
         // MM01 checked/verified for Cairo
         for (sal_uInt32 a(0); a < aPolyPolygonLine.count(); a++)
