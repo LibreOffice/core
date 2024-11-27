@@ -15,4 +15,22 @@ QtDoubleSpinBox::QtDoubleSpinBox(QWidget* pParent)
 {
 }
 
+int QtDoubleSpinBox::cursorPosition() const { return lineEdit()->cursorPosition(); }
+
+void QtDoubleSpinBox::setCursorPosition(int nCursorPos)
+{
+    lineEdit()->setCursorPosition(nCursorPos);
+}
+
+void QtDoubleSpinBox::setSelection(int nStart, int nLength)
+{
+    lineEdit()->setSelection(nStart, nLength);
+}
+
+bool QtDoubleSpinBox::hasSelectedText() const { return lineEdit()->hasSelectedText(); }
+
+int QtDoubleSpinBox::selectionStart() const { return lineEdit()->selectionStart(); }
+
+int QtDoubleSpinBox::selectionEnd() const { return lineEdit()->selectionEnd(); }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

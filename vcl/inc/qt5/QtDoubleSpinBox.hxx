@@ -9,8 +9,9 @@
 
 #pragma once
 
-#include <QtWidgets/QWidget>
 #include <QtWidgets/QDoubleSpinBox>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QWidget>
 
 class QtDoubleSpinBox : public QDoubleSpinBox
 {
@@ -18,6 +19,14 @@ class QtDoubleSpinBox : public QDoubleSpinBox
 
 public:
     QtDoubleSpinBox(QWidget* pParent);
+
+    int cursorPosition() const;
+    void setCursorPosition(int nCursorPos);
+
+    void setSelection(int nStart, int nLength);
+    bool hasSelectedText() const;
+    int selectionStart() const;
+    int selectionEnd() const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -38,12 +38,29 @@ int QtInstanceSpinButton::get_width_chars() const
 
 void QtInstanceSpinButton::set_max_length(int) { assert(false && "Not implemented yet"); }
 
-void QtInstanceSpinButton::select_region(int, int) { assert(false && "Not implemented yet"); }
-
-bool QtInstanceSpinButton::get_selection_bounds(int&, int&)
+void QtInstanceSpinButton::select_region(int nStartPos, int nEndPos)
 {
-    assert(false && "Not implemented yet");
-    return false;
+    GetQtInstance().RunInMainThread([&] {
+        if (nEndPos == -1)
+            nEndPos = m_pSpinBox->text().length();
+
+        const int nLength = nEndPos - nStartPos;
+        m_pSpinBox->setSelection(nStartPos, nLength);
+    });
+}
+
+bool QtInstanceSpinButton::get_selection_bounds(int& rStartPos, int& rEndPos)
+{
+    SolarMutexGuard g;
+
+    bool bHasSelection = false;
+    GetQtInstance().RunInMainThread([&] {
+        bHasSelection = m_pSpinBox->hasSelectedText();
+        rStartPos = m_pSpinBox->selectionStart();
+        rEndPos = m_pSpinBox->selectionEnd();
+    });
+
+    return bHasSelection;
 }
 
 void QtInstanceSpinButton::replace_selection(const OUString&)
@@ -51,12 +68,21 @@ void QtInstanceSpinButton::replace_selection(const OUString&)
     assert(false && "Not implemented yet");
 }
 
-void QtInstanceSpinButton::set_position(int) { assert(false && "Not implemented yet"); }
+void QtInstanceSpinButton::set_position(int nCursorPos)
+{
+    SolarMutexGuard g;
+    if (nCursorPos == -1)
+        nCursorPos = m_pSpinBox->text().length();
+
+    GetQtInstance().RunInMainThread([&] { m_pSpinBox->setCursorPosition(nCursorPos); });
+}
 
 int QtInstanceSpinButton::get_position() const
 {
-    assert(false && "Not implemented yet");
-    return -1;
+    SolarMutexGuard g;
+    int nCursorPos = 0;
+    GetQtInstance().RunInMainThread([&] { nCursorPos = m_pSpinBox->cursorPosition(); });
+    return nCursorPos;
 }
 
 void QtInstanceSpinButton::set_editable(bool) { assert(false && "Not implemented yet"); }
