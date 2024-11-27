@@ -646,8 +646,7 @@ bool AnnotationTextWindow::Command(const CommandEvent& rCEvt)
 {
     if (rCEvt.GetCommand() == CommandEventId::ContextMenu)
     {
-        const bool bReadOnly = mrContents.DocShell()->IsReadOnly();
-        if (bReadOnly)
+        if (mrContents.DocShell()->IsReadOnly())
             return true;
 
         SfxDispatcher* pDispatcher = mrContents.DocShell()->GetViewShell()->GetViewFrame()->GetDispatcher();
@@ -679,19 +678,19 @@ bool AnnotationTextWindow::Command(const CommandEvent& rCEvt)
         aStr = aStr.replaceFirst("%1", aReplace);
         xMenu->set_label(u".uno:DeleteAllAnnotationByAuthor"_ustr, aStr);
 
-        bool bShowReply = sAuthor != sCurrentAuthor && !bReadOnly;
+        bool bShowReply = sAuthor != sCurrentAuthor;
         xMenu->set_visible(u".uno:ReplyToAnnotation"_ustr, bShowReply);
         xMenu->set_visible(u"separator"_ustr, bShowReply);
-        xMenu->set_visible(u".uno:DeleteAnnotation"_ustr, xAnnotation.is() && !bReadOnly);
-        xMenu->set_visible(u".uno:DeleteAllAnnotationByAuthor"_ustr, !bReadOnly);
-        xMenu->set_visible(u".uno:DeleteAllAnnotation"_ustr, !bReadOnly);
+        xMenu->set_visible(u".uno:DeleteAnnotation"_ustr, xAnnotation.is());
+        xMenu->set_visible(u".uno:DeleteAllAnnotationByAuthor"_ustr, true);
+        xMenu->set_visible(u".uno:DeleteAllAnnotation"_ustr, true);
 
         int nInsertPos = 2;
 
         auto xFrame = mrContents.DocShell()->GetViewShell()->GetViewFrame()->GetFrame().GetFrameInterface();
         OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(xFrame));
 
-        bool bEditable = !mrContents.IsProtected() && !bReadOnly;
+        bool bEditable = !mrContents.IsProtected();
         if (bEditable)
         {
             SfxItemSet aSet(mrContents.GetOutlinerView()->GetAttribs());
