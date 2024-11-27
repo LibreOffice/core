@@ -317,13 +317,13 @@ bool ChartTypeTemplate::matchesTemplate2(
             for( std::size_t nCooSysIdx=0; bResult && (nCooSysIdx < aCooSysSeq.size()); ++nCooSysIdx )
             {
                 // match dimension
-                bResult = bResult && (aCooSysSeq[nCooSysIdx]->getDimension() == nDimensionToMatch);
+                bResult = aCooSysSeq[nCooSysIdx]->getDimension() == nDimensionToMatch;
 
                 const std::vector< rtl::Reference< ChartType > > & aChartTypeSeq( aCooSysSeq[nCooSysIdx]->getChartTypes2());
                 for( std::size_t nCTIdx=0; bResult && (nCTIdx < aChartTypeSeq.size()); ++nCTIdx )
                 {
                     // match chart type
-                    bResult = bResult && aChartTypeSeq[nCTIdx]->getChartType() == aChartTypeToMatch;
+                    bResult = aChartTypeSeq[nCTIdx]->getChartType() == aChartTypeToMatch;
                     bool bFound=false;
                     bool bAmbiguous=false;
                     // match stacking mode
@@ -508,7 +508,7 @@ void ChartTypeTemplate::createCoordinateSystems(
     {
         bool bOk = true;
         for( std::size_t i=0; bOk && i<aCoordinateSystems.size(); ++i )
-            bOk = bOk && ( xCooSys->getCoordinateSystemType() == aCoordinateSystems[i]->getCoordinateSystemType() &&
+            bOk = ( xCooSys->getCoordinateSystemType() == aCoordinateSystems[i]->getCoordinateSystemType() &&
                            (xCooSys->getDimension() == aCoordinateSystems[i]->getDimension()) );
         // coordinate systems are ok
         if( bOk )
