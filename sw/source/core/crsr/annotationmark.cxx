@@ -59,14 +59,18 @@ namespace sw::mark
         auto pPostItField
             = dynamic_cast<const SwPostItField*>(pTextField->GetFormatField().GetField());
         assert(pPostItField);
+
         // use the annotation mark's name as the annotation name, if
         // - the annotation field has an empty annotation name or
         // - the annotation mark's name differs (on mark creation a name clash had been detected)
-        if ( pPostItField->GetName().isEmpty()
-            || pPostItField->GetName() != GetName() )
-        {
+
+        // For parent-child relation of comments, we rely on the name of parent comments.
+        // Changing the name here breaks the relation which established while copying them.
+        // Instead of changing the name of the field, now we change the name of the annotation mark - hoping to prevent name clashes still (see above comment).
+        if (!pPostItField->GetName().isEmpty())
+            SetName( pPostItField->GetName() );
+        else if (pPostItField->GetName() != GetName() || pPostItField->GetName().isEmpty())
             const_cast<SwPostItField*>(pPostItField)->SetName( GetName() );
-        }
 
         if (io_rDoc.GetIDocumentUndoRedo().DoesUndo())
         {
