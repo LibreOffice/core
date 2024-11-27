@@ -853,7 +853,7 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
             const SfxBoolItem* pAsTempItem = rSet.GetItem(SID_TEMPLATE, false);
             const SfxBoolItem* pPreviewItem = rSet.GetItem(SID_PREVIEW, false);
             const SfxBoolItem* pHiddenItem = rSet.GetItem(SID_HIDDEN, false);
-            if( bOk && !pMedium->GetOrigURL().isEmpty()
+            if( !pMedium->GetOrigURL().isEmpty()
             && !( pAsTempItem && pAsTempItem->GetValue() )
             && !( pPreviewItem && pPreviewItem->GetValue() )
             && !( pHiddenItem && pHiddenItem->GetValue() ) )
