@@ -9714,8 +9714,7 @@ void DocxAttributeOutput::FormatFillGradient( const XFillGradientItem& rFillGrad
 
         // LO does linear gradients top to bottom, while MSO does bottom to top.
         // LO does axial gradients inner to outer, while MSO does outer to inner.
-        // Conclusion: swap start and end colors.
-        const OString sColor1 = sEndColor; // LO end color is MSO start color
+        OString sColor1 = sEndColor; // LO end color is MSO start color
         OString sColor2 = sStartColor; // LO start color is MSO end color
 
         switch (rGradient.GetGradientStyle())
@@ -9755,6 +9754,10 @@ void DocxAttributeOutput::FormatFillGradient( const XFillGradientItem& rFillGrad
             case css::awt::GradientStyle_RECT:
                 AddToAttrList(m_rExport.SdrExporter().getFlyFillAttrList(), XML_type,
                               "gradientRadial");
+                // Since "focus" is not being written here, it defaults to 0.
+                // A zero focus triggers a swap at LO import time, so a reverse swap is needed here.
+                sColor1 = sStartColor;
+                sColor2 = sEndColor;
                 break;
             default:
                 break;
