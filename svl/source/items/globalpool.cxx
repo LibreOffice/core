@@ -316,46 +316,44 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
     // The Item itself is shareable when it is used/added at an instance
     // that RefCounts the Item, SfxItemPool or SfxPoolItemHolder. Try
     // to share items that are already shared
-    while (pSource->GetRefCount() > 0)
+    if (pSource->GetRefCount() > 0)
     {
-        if (!pSource->isShareable())
-            // not shareable, done
-            break;
-
-        // SfxSetItems cannot be shared if they are in/use another pool
-        if (pSource->isSetItem()
-            && static_cast<const SfxSetItem*>(pSource)->GetItemSet().GetPool() != pMasterPool)
-            break;
-
-        // If we get here we can share the Item
-        pSource->AddRef();
-        return pSource;
+        if (pSource->isShareable())
+        {
+            // SfxSetItems cannot be shared if they are in/use another pool
+            if (!pSource->isSetItem()
+                || static_cast<const SfxSetItem*>(pSource)->GetItemSet().GetPool() == pMasterPool)
+            {
+                // If we get here we can share the Item
+                pSource->AddRef();
+                return pSource;
+            }
+        }
     }
 
     // try to get an ItemInstanceManager for global Item instance sharing
     ItemInstanceManager* pManager(aInstanceManagerHelper.getOrCreateItemInstanceManager(*pSource));
 
     // check if we can globally share the Item using an ItemInstanceManager
-    while (nullptr != pManager)
+    if (pManager)
     {
         const SfxPoolItem* pAlternative(pManager->find(*pSource));
-        if (nullptr == pAlternative)
-            // no already globally shared one found, done
-            break;
+        if (pAlternative)
+        {
+            // Here we do *not* need to check if it is an SfxSetItem
+            // and cannot be shared if they are in/use another pool:
+            // The SfxItemSet::operator== will check for SfxItemPools
+            // being equal, thus when found in global share the Pool
+            // cannot be equal
 
-        // Here we do *not* need to check if it is an SfxSetItem
-        // and cannot be shared if they are in/use another pool:
-        // The SfxItemSet::operator== will check for SfxItemPools
-        // being equal, thus when found in global share the Pool
-        // cannot be equal
+            // need to delete evtl. handed over ownership change Item
+            if (bPassingOwnership)
+                delete pSource;
 
-        // need to delete evtl. handed over ownership change Item
-        if (bPassingOwnership)
-            delete pSource;
-
-        // If we get here we can share the Item
-        pAlternative->AddRef();
-        return pAlternative;
+            // If we get here we can share the Item
+            pAlternative->AddRef();
+            return pAlternative;
+        }
     }
 
     // check if the handed over and to be directly used item is a
