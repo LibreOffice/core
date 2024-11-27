@@ -945,8 +945,8 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf162259)
         }
     }
 
-    CPPUNIT_ASSERT_GREATER(350, topNonWhites); // 399 in my testing
-    CPPUNIT_ASSERT_GREATER(350, bottomNonWhites); // 362 in my testing
+    CPPUNIT_ASSERT_GREATER(310, topNonWhites); // Win: 399 with Skia, 325 with DWriteTextRenderer
+    CPPUNIT_ASSERT_GREATER(350, bottomNonWhites); // Win: 362 with Skia, 371 with DWriteTextRenderer
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
