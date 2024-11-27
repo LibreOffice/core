@@ -1953,6 +1953,8 @@ bool SwPostItField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
             rAny <<= OUString(OUString::number(m_nPostItId, 16).toAsciiUpperCase());
         }
         break;
+    case FIELD_PROP_TITLE:
+        break;
     default:
         assert(false);
     }
