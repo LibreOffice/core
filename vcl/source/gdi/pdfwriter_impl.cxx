@@ -1461,7 +1461,7 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext,
         m_pPDFEncryptor->prepareEncryption(xEncryptionMaterialHolder, m_aContext.Encryption);
     }
 
-    if (m_aContext.Encryption.Encrypt())
+    if (m_pPDFEncryptor && m_aContext.Encryption.Encrypt())
     {
         m_pPDFEncryptor->setupKeysAndCheck(m_aContext.Encryption);
     }
