@@ -313,7 +313,7 @@ bool ScDBDocFunc::RepeatDB( const OUString& rDBName, bool bApi, bool bIsUnnamed,
 
         ScSubTotalParam aSubTotalParam;
         pDBData->GetSubTotalParam( aSubTotalParam );
-        bool bSubTotal = aSubTotalParam.bGroupActive[0] && !aSubTotalParam.bRemoveOnly;
+        bool bSubTotal = aSubTotalParam.aGroups[0].bActive && !aSubTotalParam.bRemoveOnly;
 
         if ( bQuery || bSort || bSubTotal )
         {
@@ -796,7 +796,7 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
         ScSubTotalParam aSubTotalParam;
         pDBData->GetSubTotalParam( aSubTotalParam );    // partial results exist?
 
-        if ( aSubTotalParam.bGroupActive[0] && !aSubTotalParam.bRemoveOnly )
+        if (aSubTotalParam.aGroups[0].bActive && !aSubTotalParam.bRemoveOnly)
             bKeepSub = true;
     }
 

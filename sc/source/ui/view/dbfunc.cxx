@@ -198,7 +198,7 @@ void ScDBFunc::UISort( const ScSortParam& rSortParam )
 
     ScSubTotalParam aSubTotalParam;
     pDBData->GetSubTotalParam( aSubTotalParam );
-    if (aSubTotalParam.bGroupActive[0] && !aSubTotalParam.bRemoveOnly)
+    if (aSubTotalParam.aGroups[0].bActive && !aSubTotalParam.bRemoveOnly)
     {
         //  repeat subtotals, with new sortorder
 

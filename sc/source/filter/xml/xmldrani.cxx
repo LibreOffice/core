@@ -343,32 +343,14 @@ std::unique_ptr<ScDBData> ScXMLDatabaseRangeContext::ConvertToDBData(const OUStr
         {
             if (nPos >= MAXSUBTOTAL)
                 break;
+            auto& group = aParam.aGroups[nPos];
 
             const uno::Sequence<sheet::SubTotalColumn>& rColumns = rSubTotalRule.aSubTotalColumns;
-            sal_Int32 nColCount = rColumns.getLength();
             sal_Int16 nGroupColumn = rSubTotalRule.nSubTotalRuleGroupFieldNumber;
-            aParam.bGroupActive[nPos] = true;
-            aParam.nField[nPos] = static_cast<SCCOL>(nGroupColumn);
+            group.bActive = true;
+            group.nField = static_cast<SCCOL>(nGroupColumn);
 
-            SCCOL nCount = static_cast<SCCOL>(nColCount);
-            aParam.nSubTotals[nPos] = nCount;
-            if (nCount != 0)
-            {
-                aParam.pSubTotals[nPos].reset(new SCCOL[nCount]);
-                aParam.pFunctions[nPos].reset(new ScSubTotalFunc[nCount]);
-
-                const sheet::SubTotalColumn* pAry = rColumns.getConstArray();
-                for (SCCOL i = 0; i < nCount; ++i)
-                {
-                    aParam.pSubTotals[nPos][i] = static_cast<SCCOL>(pAry[i].Column);
-                    aParam.pFunctions[nPos][i] = ScDPUtil::toSubTotalFunc(static_cast<ScGeneralFunction>(pAry[i].Function));
-                }
-            }
-            else
-            {
-                aParam.pSubTotals[nPos].reset();
-                aParam.pFunctions[nPos].reset();
-            }
+            group.SetSubtotals(rColumns);
             ++nPos;
         }
 

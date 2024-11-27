@@ -130,22 +130,19 @@ bool ScTpSubTotalGroup::DoReset( sal_uInt16             nGroupNo,
 
     const ScSubTotalParam & theSubTotalData( rArgSet.Get( nWhichSubTotals ).GetSubTotalData() );
 
-    if ( theSubTotalData.bGroupActive[nGroupIdx] )
+    if (theSubTotalData.aGroups[nGroupIdx].bActive)
     {
-        SCCOL           nField      = theSubTotalData.nField[nGroupIdx];
-        SCCOL           nSubTotals  = theSubTotalData.nSubTotals[nGroupIdx];
-        SCCOL*          pSubTotals  = theSubTotalData.pSubTotals[nGroupIdx].get();
-        ScSubTotalFunc* pFunctions  = theSubTotalData.pFunctions[nGroupIdx].get();
+        const auto& group = theSubTotalData.aGroups[nGroupIdx];
 
-        mxLbGroup->set_active( GetFieldSelPos( nField )+1 );
+        mxLbGroup->set_active(GetFieldSelPos(group.nField) + 1);
 
         sal_uInt16 nFirstChecked = 0;
-        for ( sal_uInt16 i=0; i<nSubTotals; i++ )
+        for (sal_uInt16 i = 0; i < group.nSubTotals; i++)
         {
-            sal_uInt16  nCheckPos = GetFieldSelPos( pSubTotals[i] );
+            sal_uInt16 nCheckPos = GetFieldSelPos(group.col(i));
 
             mxLbColumns->set_toggle(nCheckPos, TRISTATE_TRUE);
-            mxLbColumns->set_id(nCheckPos, OUString::number(FuncToLbPos(pFunctions[i])));
+            mxLbColumns->set_id(nCheckPos, OUString::number(FuncToLbPos(group.func(i))));
 
             if (i == 0 || nCheckPos < nFirstChecked)
                 nFirstChecked = nCheckPos;
@@ -206,8 +203,8 @@ bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
     theSubTotalData.nRow1                   = rSubTotalData.nRow1;
     theSubTotalData.nCol2                   = rSubTotalData.nCol2;
     theSubTotalData.nRow2                   = rSubTotalData.nRow2;
-    theSubTotalData.bGroupActive[nGroupIdx] = (nGroup != 0);
-    theSubTotalData.nField[nGroupIdx]       = (nGroup != 0)
+    theSubTotalData.aGroups[nGroupIdx].bActive = (nGroup != 0);
+    theSubTotalData.aGroups[nGroupIdx].nField  = (nGroup != 0)
                                                 ? mnFieldArr[nGroup-1]
                                                 : static_cast<SCCOL>(0);
 

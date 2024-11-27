@@ -2123,7 +2123,7 @@ void ScDBFunc::RepeatDB( bool bRecord )
 
     ScSubTotalParam aSubTotalParam;
     pDBData->GetSubTotalParam( aSubTotalParam );
-    bool bSubTotal = aSubTotalParam.bGroupActive[0] && !aSubTotalParam.bRemoveOnly;
+    bool bSubTotal = aSubTotalParam.aGroups[0].bActive && !aSubTotalParam.bRemoveOnly;
 
     if ( bQuery || bSort || bSubTotal )
     {

@@ -1947,7 +1947,7 @@ struct RowEntry
 
 }
 
-static TranslateId lcl_GetSubTotalStrId(int id)
+static TranslateId lcl_GetSubTotalStrId(ScSubTotalFunc id)
 {
     switch ( id )
     {
@@ -1971,7 +1971,7 @@ static TranslateId lcl_GetSubTotalStrId(int id)
 }
 
 // Gets the string used for "Grand" results
-static TranslateId lcl_GetGrandSubTotalStrId(int id)
+static TranslateId lcl_GetGrandSubTotalStrId(ScSubTotalFunc id)
 {
     switch ( id )
     {
@@ -2011,19 +2011,15 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
     nEndRow -= nEmpty;
 
     sal_uInt16 nLevelCount = 0;             // Number of levels
-    bool bDoThis = true;
-    for (sal_uInt16 i = 0; i < MAXSUBTOTAL && bDoThis; ++i)
+    for (const auto& group : rParam.aGroups)
     {
-        if (rParam.bGroupActive[i])
-            nLevelCount = o3tl::sanitizing_inc(i);
-        else
-            bDoThis = false;
+        if (!group.bActive)
+            break;
+        ++nLevelCount;
     }
 
     if (nLevelCount==0)                 // do nothing
         return true;
-
-    SCCOL*          nGroupCol = rParam.nField;  // columns which will be used when grouping
 
     //  With (blank) as a separate category, subtotal rows from
     //  the other columns must always be tested
@@ -2053,17 +2049,16 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
     {
         aRowEntry.nGroupNo = nLevelCount - nLevel - 1;
 
+        const auto& group = rParam.aGroups[aRowEntry.nGroupNo];
         // how many results per level
-        SCCOL nResCount         = rParam.nSubTotals[aRowEntry.nGroupNo];
-        // result functions
-        ScSubTotalFunc* pResFunc = rParam.pFunctions[aRowEntry.nGroupNo].get();
+        SCCOL nResCount = group.nSubTotals;
 
         if (nResCount > 0)                                      // otherwise only sort
         {
             SCROW nAboveRows = rParam.bSummaryBelow ? nStartRow : nStartRow + nLevel;
             for (sal_uInt16 i = 0; i <= aRowEntry.nGroupNo; ++i)
             {
-                aSubString = GetString( nGroupCol[i], nAboveRows );
+                aSubString = GetString(rParam.aGroups[i].nField, nAboveRows);
                 if ( bIgnoreCase )
                     aCompString[i] = ScGlobal::getCharClass().uppercase( aSubString );
                 else
@@ -2083,7 +2078,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                     OUString aString;
                     for (sal_uInt16 i = 0; i <= aRowEntry.nGroupNo && !bChanged; ++i)
                     {
-                        aString = GetString( nGroupCol[i], nRow );
+                        aString = GetString(rParam.aGroups[i].nField, nRow);
                         if (bIgnoreCase)
                             aString = ScGlobal::getCharClass().uppercase(aString);
                         //  when sorting, blanks are separate group
@@ -2145,17 +2140,17 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                         aOutString += " ";
                         TranslateId pStrId = STR_TABLE_ERGEBNIS;
                         if ( nResCount == 1 )
-                            pStrId = lcl_GetSubTotalStrId(pResFunc[0]);
+                            pStrId = lcl_GetSubTotalStrId(group.func(0));
                         aOutString += ScResId(pStrId);
-                        SetString( nGroupCol[aRowEntry.nGroupNo], aRowEntry.nDestRow, nTab, aOutString );
-                        ApplyStyle( nGroupCol[aRowEntry.nGroupNo], aRowEntry.nDestRow, pStyle );
+                        SetString(group.nField, aRowEntry.nDestRow, nTab, aOutString);
+                        ApplyStyle(group.nField, aRowEntry.nDestRow, pStyle);
 
                         ++nRow;
                         ++nEndRow;
                         aRowEntry.nSubStartRow = nRow;
                         for (sal_uInt16 i = 0; i <= aRowEntry.nGroupNo; ++i)
                         {
-                            aSubString = GetString( nGroupCol[i], nRow );
+                            aSubString = GetString(rParam.aGroups[i].nField, nRow);
                             if ( bIgnoreCase )
                                 aCompString[i] = ScGlobal::getCharClass().uppercase( aSubString );
                             else
@@ -2194,21 +2189,21 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
         for (sal_uInt16 nLevel = 0; nLevel<nLevelCount; nLevel++)
         {
             const sal_uInt16 nGroupNo = nLevelCount - nLevel - 1;
-            const ScSubTotalFunc* pResFunc = rParam.pFunctions[nGroupNo].get();
-            if (!pResFunc)
+            const auto& group = rParam.aGroups[nGroupNo];
+            if (!group.nSubTotals)
             {
                 // No subtotal function given for this group => no formula or
                 // label and do not insert a row.
                 continue;
             }
 
+            aRowEntry.nGroupNo = nGroupNo;
             if (rParam.bSummaryBelow)
             {
                 // increment end row
                 nGlobalEndRow++;
 
                 // add row entry for formula
-                aRowEntry.nGroupNo = nGroupNo;
                 aRowEntry.nSubStartRow = nGlobalStartRow;
                 aRowEntry.nFuncStart = nGlobalStartFunc;
                 aRowEntry.nDestRow = nGlobalEndRow;
@@ -2220,7 +2215,6 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
             else
             {
                 // if we have Global summary we need to shift summary rows down
-                aRowEntry.nGroupNo = nGroupNo;
                 aRowEntry.nSubStartRow = nGlobalStartRow - nGroupNo - 1;
                 aRowEntry.nFuncStart = nGlobalStartFunc - nGroupNo - 1;
                 aRowEntry.nDestRow = nGlobalStartRow - nGroupNo - 1;
@@ -2236,9 +2230,9 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                 DBShowRow(aRowEntry.nDestRow, true);
 
                 // insert label
-                OUString label = ScResId(lcl_GetGrandSubTotalStrId(pResFunc[0]));
-                SetString(nGroupCol[aRowEntry.nGroupNo], aRowEntry.nDestRow, nTab, label);
-                ApplyStyle(nGroupCol[aRowEntry.nGroupNo], aRowEntry.nDestRow, pStyle);
+                OUString label = ScResId(lcl_GetGrandSubTotalStrId(group.func(0)));
+                SetString(group.nField, aRowEntry.nDestRow, nTab, label);
+                ApplyStyle(group.nField, aRowEntry.nDestRow, pStyle);
             }
         }
     }
@@ -2250,35 +2244,34 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
     aRef.Ref2.SetAbsTab(nTab);
     for (const auto& rRowEntry : aRowVector)
     {
-        SCCOL nResCount         = rParam.nSubTotals[rRowEntry.nGroupNo];
-        SCCOL* nResCols         = rParam.pSubTotals[rRowEntry.nGroupNo].get();
-        ScSubTotalFunc* pResFunc = rParam.pFunctions[rRowEntry.nGroupNo].get();
+        const auto& group = rParam.aGroups[rRowEntry.nGroupNo];
+        SCCOL nResCount = group.nSubTotals;
         for ( SCCOL nResult=0; nResult < nResCount; ++nResult )
         {
-            aRef.Ref1.SetAbsCol(nResCols[nResult]);
+            aRef.Ref1.SetAbsCol(group.col(nResult));
             aRef.Ref1.SetAbsRow(rRowEntry.nFuncStart);
-            aRef.Ref2.SetAbsCol(nResCols[nResult]);
+            aRef.Ref2.SetAbsCol(group.col(nResult));
             aRef.Ref2.SetAbsRow(rRowEntry.nFuncEnd);
 
             ScTokenArray aArr(rDocument);
             aArr.AddOpCode( ocSubTotal );
             aArr.AddOpCode( ocOpen );
-            aArr.AddDouble( static_cast<double>(pResFunc[nResult]) );
+            aArr.AddDouble( static_cast<double>(group.func(nResult)) );
             aArr.AddOpCode( ocSep );
             aArr.AddDoubleReference( aRef );
             aArr.AddOpCode( ocClose );
             aArr.AddOpCode( ocStop );
             ScFormulaCell* pCell = new ScFormulaCell(
-                rDocument, ScAddress(nResCols[nResult], rRowEntry.nDestRow, nTab), aArr);
+                rDocument, ScAddress(group.col(nResult), rRowEntry.nDestRow, nTab), aArr);
             if ( rParam.bIncludePattern )
                 pCell->SetNeedNumberFormat(true);
 
-            SetFormulaCell(nResCols[nResult], rRowEntry.nDestRow, pCell);
-            if ( nResCols[nResult] != nGroupCol[rRowEntry.nGroupNo] )
+            SetFormulaCell(group.col(nResult), rRowEntry.nDestRow, pCell);
+            if (group.col(nResult) != group.nField)
             {
-                ApplyStyle( nResCols[nResult], rRowEntry.nDestRow, pStyle );
+                ApplyStyle(group.col(nResult), rRowEntry.nDestRow, pStyle);
 
-                lcl_RemoveNumberFormat( this, nResCols[nResult], rRowEntry.nDestRow );
+                lcl_RemoveNumberFormat(this, group.col(nResult), rRowEntry.nDestRow);
             }
         }
 

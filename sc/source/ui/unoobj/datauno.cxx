@@ -459,7 +459,7 @@ sal_Int32 SAL_CALL ScSubTotalFieldObj::getGroupColumn()
     ScSubTotalParam aParam;
     xParent->GetData(aParam);
 
-    return aParam.nField[nPos];
+    return aParam.aGroups[nPos].nField;
 }
 
 void SAL_CALL ScSubTotalFieldObj::setGroupColumn( sal_Int32 nGroupColumn )
@@ -468,7 +468,7 @@ void SAL_CALL ScSubTotalFieldObj::setGroupColumn( sal_Int32 nGroupColumn )
     ScSubTotalParam aParam;
     xParent->GetData(aParam);
 
-    aParam.nField[nPos] = static_cast<SCCOL>(nGroupColumn);
+    aParam.aGroups[nPos].nField = static_cast<SCCOL>(nGroupColumn);
 
     xParent->PutData(aParam);
 }
@@ -479,14 +479,13 @@ uno::Sequence<sheet::SubTotalColumn> SAL_CALL ScSubTotalFieldObj::getSubTotalCol
     ScSubTotalParam aParam;
     xParent->GetData(aParam);
 
-    SCCOL nCount = aParam.nSubTotals[nPos];
+    SCCOL nCount = aParam.aGroups[nPos].nSubTotals;
     uno::Sequence<sheet::SubTotalColumn> aSeq(nCount);
     sheet::SubTotalColumn* pAry = aSeq.getArray();
     for (SCCOL i=0; i<nCount; i++)
     {
-        pAry[i].Column = aParam.pSubTotals[nPos][i];
-        pAry[i].Function = ScDataUnoConversion::SubTotalToGeneral(
-                                        aParam.pFunctions[nPos][i] );
+        pAry[i].Column = aParam.aGroups[nPos].col(i);
+        pAry[i].Function = ScDataUnoConversion::SubTotalToGeneral(aParam.aGroups[nPos].func(i));
     }
     return aSeq;
 }
@@ -498,29 +497,8 @@ void SAL_CALL ScSubTotalFieldObj::setSubTotalColumns(
     ScSubTotalParam aParam;
     xParent->GetData(aParam);
 
-    sal_uInt32 nColCount = aSubTotalColumns.getLength();
-    if ( nColCount <= sal::static_int_cast<sal_uInt32>(SCCOL_MAX) )
-    {
-        SCCOL nCount = static_cast<SCCOL>(nColCount);
-        aParam.nSubTotals[nPos] = nCount;
-        if (nCount != 0)
-        {
-            aParam.pSubTotals[nPos].reset(new SCCOL[nCount]);
-            aParam.pFunctions[nPos].reset(new ScSubTotalFunc[nCount]);
-
-            const sheet::SubTotalColumn* pAry = aSubTotalColumns.getConstArray();
-            for (SCCOL i=0; i<nCount; i++)
-            {
-                aParam.pSubTotals[nPos][i] = static_cast<SCCOL>(pAry[i].Column);
-                aParam.pFunctions[nPos][i] = ScDPUtil::toSubTotalFunc(static_cast<ScGeneralFunction>(pAry[i].Function));
-            }
-        }
-        else
-        {
-            aParam.pSubTotals[nPos].reset();
-            aParam.pFunctions[nPos].reset();
-        }
-    }
+    if (aSubTotalColumns.getLength() <= SCCOL_MAX)
+        aParam.aGroups[nPos].SetSubtotals(aSubTotalColumns);
     //! otherwise exception or so? (too many columns)
 
     xParent->PutData(aParam);
@@ -550,8 +528,8 @@ void SAL_CALL ScSubTotalDescriptorBase::clear()
     ScSubTotalParam aParam;
     GetData(aParam);
 
-    for (bool & rn : aParam.bGroupActive)
-        rn = false;
+    for (auto& group : aParam.aGroups)
+        group.bActive = false;
 
     //! notify the field objects???
 
@@ -567,40 +545,17 @@ void SAL_CALL ScSubTotalDescriptorBase::addNew(
     GetData(aParam);
 
     sal_uInt16 nPos = 0;
-    while ( nPos < MAXSUBTOTAL && aParam.bGroupActive[nPos] )
+    while (nPos < MAXSUBTOTAL && aParam.aGroups[nPos].bActive)
         ++nPos;
 
-    sal_uInt32 nColCount = aSubTotalColumns.getLength();
-
-    if ( nPos >= MAXSUBTOTAL || nColCount > sal::static_int_cast<sal_uInt32>(SCCOL_MAX) )
+    if (nPos >= MAXSUBTOTAL || aSubTotalColumns.getLength() > SCCOL_MAX)
         // too many fields / columns
         throw uno::RuntimeException();      // no other exceptions specified
+    auto& group = aParam.aGroups[nPos];
 
-    aParam.bGroupActive[nPos] = true;
-    aParam.nField[nPos] = static_cast<SCCOL>(nGroupColumn);
-
-    aParam.pSubTotals[nPos].reset();
-    aParam.pFunctions[nPos].reset();
-
-    SCCOL nCount = static_cast<SCCOL>(nColCount);
-    aParam.nSubTotals[nPos] = nCount;
-    if (nCount != 0)
-    {
-        aParam.pSubTotals[nPos].reset(new SCCOL[nCount]);
-        aParam.pFunctions[nPos].reset(new ScSubTotalFunc[nCount]);
-
-        const sheet::SubTotalColumn* pAry = aSubTotalColumns.getConstArray();
-        for (SCCOL i=0; i<nCount; i++)
-        {
-            aParam.pSubTotals[nPos][i] = static_cast<SCCOL>(pAry[i].Column);
-            aParam.pFunctions[nPos][i] = ScDPUtil::toSubTotalFunc(static_cast<ScGeneralFunction>(pAry[i].Function));
-        }
-    }
-    else
-    {
-        aParam.pSubTotals[nPos].reset();
-        aParam.pFunctions[nPos].reset();
-    }
+    group.bActive = true;
+    group.nField = static_cast<SCCOL>(nGroupColumn);
+    group.SetSubtotals(aSubTotalColumns);
 
     PutData(aParam);
 }
@@ -624,7 +579,7 @@ sal_Int32 SAL_CALL ScSubTotalDescriptorBase::getCount()
     GetData(aParam);
 
     sal_uInt16 nCount = 0;
-    while ( nCount < MAXSUBTOTAL && aParam.bGroupActive[nCount] )
+    while ( nCount < MAXSUBTOTAL && aParam.aGroups[nCount].bActive )
         ++nCount;
     return nCount;
 }
@@ -1770,16 +1725,15 @@ void ScDatabaseRangeObj::GetSubTotalParam(ScSubTotalParam& rSubTotalParam) const
     ScRange aDBRange;
     pData->GetArea(aDBRange);
     SCCOL nFieldStart = aDBRange.aStart.Col();
-    for (sal_uInt16 i=0; i<MAXSUBTOTAL; i++)
+    for (auto& group : rSubTotalParam.aGroups)
     {
-        if ( rSubTotalParam.bGroupActive[i] )
+        if (group.bActive)
         {
-            if ( rSubTotalParam.nField[i] >= nFieldStart )
-                rSubTotalParam.nField[i] = sal::static_int_cast<SCCOL>( rSubTotalParam.nField[i] - nFieldStart );
-            for (SCCOL j=0; j<rSubTotalParam.nSubTotals[i]; j++)
-                if ( rSubTotalParam.pSubTotals[i][j] >= nFieldStart )
-                    rSubTotalParam.pSubTotals[i][j] =
-                        sal::static_int_cast<SCCOL>( rSubTotalParam.pSubTotals[i][j] - nFieldStart );
+            if (group.nField >= nFieldStart)
+                group.nField -= nFieldStart;
+            for (SCCOL j = 0; j < group.nSubTotals; j++)
+                if (group.col(j) >= nFieldStart)
+                    group.col(j) -= nFieldStart;
         }
     }
 }
@@ -1795,13 +1749,13 @@ void ScDatabaseRangeObj::SetSubTotalParam(const ScSubTotalParam& rSubTotalParam)
     ScRange aDBRange;
     pData->GetArea(aDBRange);
     SCCOL nFieldStart = aDBRange.aStart.Col();
-    for (sal_uInt16 i=0; i<MAXSUBTOTAL; i++)
+    for (auto& group : aParam.aGroups)
     {
-        if ( aParam.bGroupActive[i] )
+        if (group.bActive)
         {
-            aParam.nField[i] = sal::static_int_cast<SCCOL>( aParam.nField[i] + nFieldStart );
-            for (SCCOL j=0; j<aParam.nSubTotals[i]; j++)
-                aParam.pSubTotals[i][j] = sal::static_int_cast<SCCOL>( aParam.pSubTotals[i][j] + nFieldStart );
+            group.nField += nFieldStart;
+            for (SCCOL j = 0; j < group.nSubTotals; j++)
+                group.col(j) += nFieldStart;
         }
     }
 

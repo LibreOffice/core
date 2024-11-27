@@ -860,7 +860,7 @@ enum ScQueryConnect
         SC_OR
     };
 
-enum ScSubTotalFunc
+enum ScSubTotalFunc : sal_Int16
     {
         SUBTOTAL_FUNC_NONE  = 0,
         SUBTOTAL_FUNC_AVE   = 1,

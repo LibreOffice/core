@@ -7,162 +7,65 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <dputil.hxx>
 #include <subtotalparam.hxx>
 
 #include <osl/diagnose.h>
 
-ScSubTotalParam::ScSubTotalParam()
+#include <com/sun/star/sheet/SubTotalColumn.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+
+ScSubTotalParam::SubtotalGroup::SubtotalGroup(const SubtotalGroup& r)
+    : bActive(r.bActive)
+    , nField(r.nField)
 {
-    for ( sal_uInt16 i=0; i<MAXSUBTOTAL; i++ )
+    if (r.nSubTotals > 0)
     {
-        nSubTotals[i] = 0;
-        pSubTotals[i] = nullptr;
-        pFunctions[i] = nullptr;
-    }
-
-    Clear();
-}
-
-ScSubTotalParam::ScSubTotalParam( const ScSubTotalParam& r ) :
-        nCol1(r.nCol1),nRow1(r.nRow1),nCol2(r.nCol2),nRow2(r.nRow2),nUserIndex(r.nUserIndex),
-        bRemoveOnly(r.bRemoveOnly),bReplace(r.bReplace),bPagebreak(r.bPagebreak),bCaseSens(r.bCaseSens),
-        bDoSort(r.bDoSort), bSummaryBelow(r.bSummaryBelow), bAscending(r.bAscending), bUserDef(r.bUserDef),
-        bIncludePattern(r.bIncludePattern)
-{
-    for (sal_uInt16 i=0; i<MAXSUBTOTAL; i++)
-    {
-        bGroupActive[i] = r.bGroupActive[i];
-        nField[i]       = r.nField[i];
-
-        if ( (r.nSubTotals[i] > 0) && r.pSubTotals[i] && r.pFunctions[i] )
-        {
-            nSubTotals[i] = r.nSubTotals[i];
-            pSubTotals[i].reset(new SCCOL   [r.nSubTotals[i]]);
-            pFunctions[i].reset(new ScSubTotalFunc  [r.nSubTotals[i]]);
-
-            for (SCCOL j=0; j<r.nSubTotals[i]; j++)
-            {
-                pSubTotals[i][j] = r.pSubTotals[i][j];
-                pFunctions[i][j] = r.pFunctions[i][j];
-            }
-        }
-        else
-        {
-            nSubTotals[i] = 0;
-        }
+        assert(r.pSubTotals);
+        AllocSubTotals(r.nSubTotals);
+        std::copy_n(r.pSubTotals.get(), r.nSubTotals, pSubTotals.get());
     }
 }
 
-void ScSubTotalParam::Clear()
+ScSubTotalParam::SubtotalGroup& ScSubTotalParam::SubtotalGroup::operator=(const SubtotalGroup& r)
 {
-    nCol1=nCol2= 0;
-    nRow1=nRow2 = 0;
-    nUserIndex = 0;
-    bPagebreak=bCaseSens=bUserDef=bIncludePattern=bRemoveOnly = false;
-    bAscending=bReplace=bDoSort=bSummaryBelow = true;
+    bActive = r.bActive;
+    nField = r.nField;
 
-    for (sal_uInt16 i=0; i<MAXSUBTOTAL; i++)
+    AllocSubTotals(r.nSubTotals);
+    if (r.nSubTotals > 0)
     {
-        bGroupActive[i] = false;
-        nField[i]       = 0;
-
-        if ( (nSubTotals[i] > 0) && pSubTotals[i] && pFunctions[i] )
-        {
-            for ( SCCOL j=0; j<nSubTotals[i]; j++ ) {
-                pSubTotals[i][j] = 0;
-                pFunctions[i][j] = SUBTOTAL_FUNC_NONE;
-            }
-        }
-    }
-}
-
-ScSubTotalParam& ScSubTotalParam::operator=( const ScSubTotalParam& r )
-{
-    if(this == &r)
-        return *this;
-
-    nCol1           = r.nCol1;
-    nRow1           = r.nRow1;
-    nCol2           = r.nCol2;
-    nRow2           = r.nRow2;
-    bRemoveOnly     = r.bRemoveOnly;
-    bReplace        = r.bReplace;
-    bPagebreak      = r.bPagebreak;
-    bCaseSens       = r.bCaseSens;
-    bDoSort         = r.bDoSort;
-    bSummaryBelow   = r.bSummaryBelow;
-    bAscending      = r.bAscending;
-    bUserDef        = r.bUserDef;
-    nUserIndex      = r.nUserIndex;
-    bIncludePattern = r.bIncludePattern;
-
-    for (sal_uInt16 i=0; i<MAXSUBTOTAL; i++)
-    {
-        bGroupActive[i] = r.bGroupActive[i];
-        nField[i]       = r.nField[i];
-        nSubTotals[i]   = r.nSubTotals[i];
-
-        pSubTotals[i].reset();
-        pFunctions[i].reset();
-
-        if ( r.nSubTotals[i] > 0 )
-        {
-            pSubTotals[i].reset(new SCCOL   [r.nSubTotals[i]]);
-            pFunctions[i].reset(new ScSubTotalFunc  [r.nSubTotals[i]]);
-
-            for (SCCOL j=0; j<r.nSubTotals[i]; j++)
-            {
-                pSubTotals[i][j] = r.pSubTotals[i][j];
-                pFunctions[i][j] = r.pFunctions[i][j];
-            }
-        }
-        else
-        {
-            nSubTotals[i] = 0;
-        }
+        assert(r.pSubTotals);
+        std::copy_n(r.pSubTotals.get(), r.nSubTotals, pSubTotals.get());
     }
 
     return *this;
 }
 
-bool ScSubTotalParam::operator==( const ScSubTotalParam& rOther ) const
+bool ScSubTotalParam::SubtotalGroup::operator==(const SubtotalGroup& r) const
 {
-    bool bEqual =   (nCol1          == rOther.nCol1)
-                 && (nRow1          == rOther.nRow1)
-                 && (nCol2          == rOther.nCol2)
-                 && (nRow2          == rOther.nRow2)
-                 && (nUserIndex     == rOther.nUserIndex)
-                 && (bRemoveOnly    == rOther.bRemoveOnly)
-                 && (bReplace       == rOther.bReplace)
-                 && (bPagebreak     == rOther.bPagebreak)
-                 && (bDoSort        == rOther.bDoSort)
-                 && (bSummaryBelow  == rOther.bSummaryBelow)
-                 && (bCaseSens      == rOther.bCaseSens)
-                 && (bAscending     == rOther.bAscending)
-                 && (bUserDef       == rOther.bUserDef)
-                 && (bIncludePattern== rOther.bIncludePattern);
+    return bActive == r.bActive && nField == r.nField && nSubTotals == r.nSubTotals
+           && (!nSubTotals
+               || std::equal(pSubTotals.get(), pSubTotals.get() + nSubTotals, r.pSubTotals.get()));
+}
 
-    if ( bEqual )
+void ScSubTotalParam::SubtotalGroup::AllocSubTotals(SCCOL n)
+{
+    if (nSubTotals != n)
     {
-        bEqual = true;
-        for ( sal_uInt16 i=0; i<MAXSUBTOTAL && bEqual; i++ )
-        {
-            bEqual =   (bGroupActive[i] == rOther.bGroupActive[i])
-                    && (nField[i]       == rOther.nField[i])
-                    && (nSubTotals[i]   == rOther.nSubTotals[i]);
-
-            if ( bEqual && (nSubTotals[i] > 0) )
-            {
-                for (SCCOL j=0; (j<nSubTotals[i]) && bEqual; j++)
-                {
-                    bEqual = pSubTotals[i][j] == rOther.pSubTotals[i][j]
-                            && pFunctions[i][j] == rOther.pFunctions[i][j];
-                }
-            }
-        }
+        nSubTotals = std::max(n, SCCOL(0));
+        pSubTotals.reset(nSubTotals ? new std::pair<SCCOL, ScSubTotalFunc>[nSubTotals] : nullptr);
     }
+}
 
-    return bEqual;
+void ScSubTotalParam::SubtotalGroup::SetSubtotals(const css::uno::Sequence<css::sheet::SubTotalColumn>& seq)
+{
+    AllocSubTotals(seq.getLength());
+    for (SCCOL i = 0; i < nSubTotals; ++i)
+        pSubTotals[i] = { seq[i].Column,
+                          ScDPUtil::toSubTotalFunc(static_cast<ScGeneralFunction>(seq[i].Function)) };
 }
 
 void ScSubTotalParam::SetSubTotals( sal_uInt16 nGroup,
@@ -177,7 +80,7 @@ void ScSubTotalParam::SetSubTotals( sal_uInt16 nGroup,
     OSL_ENSURE( ptrFunctions,
                 "ScSubTotalParam::SetSubTotals(): ptrFunctions == NULL!" );
     OSL_ENSURE( (nCount > 0),
-                "ScSubTotalParam::SetSubTotals(): nCount <= 0!" );
+                "ScSubTotalParam::SetSubTotals(): nCount == 0!" );
 
     if ( !(ptrSubTotals && ptrFunctions && (nCount > 0) && (nGroup <= MAXSUBTOTAL)) )
         return;
@@ -186,15 +89,9 @@ void ScSubTotalParam::SetSubTotals( sal_uInt16 nGroup,
     if (nGroup != 0)
         nGroup--;
 
-    pSubTotals[nGroup].reset(new SCCOL[nCount]);
-    pFunctions[nGroup].reset(new ScSubTotalFunc[nCount]);
-    nSubTotals[nGroup] = static_cast<SCCOL>(nCount);
-
+    aGroups[nGroup].AllocSubTotals(nCount);
     for ( sal_uInt16 i=0; i<nCount; i++ )
-    {
-        pSubTotals[nGroup][i] = ptrSubTotals[i];
-        pFunctions[nGroup][i] = ptrFunctions[i];
-    }
+        aGroups[nGroup].pSubTotals[i] = { ptrSubTotals[i], ptrFunctions[i] };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

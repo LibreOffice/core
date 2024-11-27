@@ -5470,15 +5470,15 @@ uno::Reference<sheet::XSubTotalDescriptor> SAL_CALL ScCellRangeObj::createSubTot
             ScRange aDBRange;
             pData->GetArea(aDBRange);
             SCCOL nFieldStart = aDBRange.aStart.Col();
-            for (sal_uInt16 i=0; i<MAXSUBTOTAL; i++)
+            for (auto& group : aParam.aGroups)
             {
-                if ( aParam.bGroupActive[i] )
+                if (group.bActive)
                 {
-                    if ( aParam.nField[i] >= nFieldStart )
-                        aParam.nField[i] = sal::static_int_cast<SCCOL>( aParam.nField[i] - nFieldStart );
-                    for (SCCOL j=0; j<aParam.nSubTotals[i]; j++)
-                        if ( aParam.pSubTotals[i][j] >= nFieldStart )
-                            aParam.pSubTotals[i][j] = sal::static_int_cast<SCCOL>( aParam.pSubTotals[i][j] - nFieldStart );
+                    if (group.nField >= nFieldStart)
+                        group.nField -= nFieldStart;
+                    for (SCCOL j = 0; j < group.nSubTotals; j++)
+                        if (group.col(j) >= nFieldStart)
+                            group.col(j) -= nFieldStart;
                 }
             }
             pNew->SetParam(aParam);
@@ -5507,13 +5507,13 @@ void SAL_CALL ScCellRangeObj::applySubTotals(
 
     //  SubTotalDescriptor contains the counted fields inside the area
     SCCOL nFieldStart = aRange.aStart.Col();
-    for (sal_uInt16 i=0; i<MAXSUBTOTAL; i++)
+    for (auto& group : aParam.aGroups)
     {
-        if ( aParam.bGroupActive[i] )
+        if (group.bActive)
         {
-            aParam.nField[i] = sal::static_int_cast<SCCOL>( aParam.nField[i] + nFieldStart );
-            for (SCCOL j=0; j<aParam.nSubTotals[i]; j++)
-                aParam.pSubTotals[i][j] = sal::static_int_cast<SCCOL>( aParam.pSubTotals[i][j] + nFieldStart );
+            group.nField += nFieldStart;
+            for (SCCOL j = 0; j < group.nSubTotals; j++)
+                group.col(j) += nFieldStart;
         }
     }
 

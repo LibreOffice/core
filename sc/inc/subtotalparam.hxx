@@ -11,35 +11,60 @@
 
 #include "global.hxx"
 #include <memory>
+#include <span>
+
+namespace com::sun::star::sheet { struct SubTotalColumn; }
+namespace com::sun::star::uno { template <class E> class Sequence; }
 
 struct SC_DLLPUBLIC ScSubTotalParam
 {
-    SCCOL           nCol1;                      ///< selected area
-    SCROW           nRow1;
-    SCCOL           nCol2;
-    SCROW           nRow2;
-    sal_uInt16      nUserIndex;                 ///< index into list
-    bool            bRemoveOnly:1;
-    bool            bReplace:1;                 ///< replace existing results
-    bool            bPagebreak:1;               ///< page break at change of group
-    bool            bCaseSens:1;
-    bool            bDoSort:1;                  ///< presort
-    bool            bSummaryBelow:1;            ///< Summary below or above (default: below)
-    bool            bAscending:1;               ///< sort ascending
-    bool            bUserDef:1;                 ///< sort user defined
-    bool            bIncludePattern:1;          ///< sort formats
-    bool            bGroupActive[MAXSUBTOTAL];  ///< active groups
-    SCCOL           nField[MAXSUBTOTAL];        ///< associated field
-    SCCOL           nSubTotals[MAXSUBTOTAL];    ///< number of SubTotals
-    std::unique_ptr<SCCOL[]> pSubTotals[MAXSUBTOTAL];    ///< array of columns to be calculated
-    std::unique_ptr<ScSubTotalFunc[]> pFunctions[MAXSUBTOTAL];    ///< array of associated functions
+    SCCOL           nCol1 = 0;                  ///< selected area
+    SCROW           nRow1 = 0;
+    SCCOL           nCol2 = 0;
+    SCROW           nRow2 = 0;
+    sal_uInt16      nUserIndex = 0;             ///< index into list
+    bool            bRemoveOnly:1     = false;
+    bool            bReplace:1        = true;   ///< replace existing results
+    bool            bPagebreak:1      = false;  ///< page break at change of group
+    bool            bCaseSens:1       = false;
+    bool            bDoSort:1         = true;   ///< presort
+    bool            bSummaryBelow:1   = true;   ///< Summary below or above (default: below)
+    bool            bAscending:1      = true;   ///< sort ascending
+    bool            bUserDef:1        = false;  ///< sort user defined
+    bool            bIncludePattern:1 = false;  ///< sort formats
 
-    ScSubTotalParam();
-    ScSubTotalParam( const ScSubTotalParam& r );
+    struct SubtotalGroup
+    {
+        bool  bActive    = false; ///< active groups
+        SCCOL nField     = 0;     ///< associated field
+        SCCOL nSubTotals = 0;     ///< number of SubTotals
 
-    ScSubTotalParam& operator= ( const ScSubTotalParam& r );
-    bool operator== ( const ScSubTotalParam& r ) const;
-    void Clear();
+        using Pair = std::pair<SCCOL, ScSubTotalFunc>;
+        // array of columns to be calculated, and associated functions
+        std::unique_ptr<Pair[]> pSubTotals;
+
+        SubtotalGroup() = default;
+        SubtotalGroup(const SubtotalGroup& r);
+
+        SubtotalGroup& operator=(const SubtotalGroup& r);
+        bool operator==(const SubtotalGroup& r) const;
+
+        void AllocSubTotals(SCCOL n);
+        void SetSubtotals(const css::uno::Sequence<css::sheet::SubTotalColumn>& seq);
+
+        std::span<Pair> subtotals() { return std::span(pSubTotals.get(), nSubTotals); }
+        std::span<const Pair> subtotals() const { return std::span(pSubTotals.get(), nSubTotals); }
+        SCCOL& col(SCCOL n) { return subtotals()[n].first; }
+        SCCOL col(SCCOL n) const { return subtotals()[n].first; }
+        ScSubTotalFunc func(SCCOL n) const { return subtotals()[n].second; }
+    };
+    SubtotalGroup aGroups[MAXSUBTOTAL];
+
+    ScSubTotalParam() = default;
+    ScSubTotalParam(const ScSubTotalParam&) = default;
+
+    ScSubTotalParam& operator=(const ScSubTotalParam&) = default;
+    inline bool operator==(const ScSubTotalParam&) const = default;
     void SetSubTotals( sal_uInt16 nGroup,
                        const SCCOL* ptrSubTotals,
                        const ScSubTotalFunc* ptrFunctions,

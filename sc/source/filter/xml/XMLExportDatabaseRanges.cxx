@@ -642,7 +642,7 @@ private:
         size_t nCount = 0;
         for (; nCount < MAXSUBTOTAL; ++nCount)
         {
-            if (!aParam.bGroupActive[nCount])
+            if (!aParam.aGroups[nCount].bActive)
                 break;
         }
 
@@ -676,20 +676,20 @@ private:
             SvXMLElementExport aElemSGs(mrExport, XML_NAMESPACE_TABLE, XML_SORT_GROUPS, true, true);
         }
 
-        for (size_t i = 0; i < MAXSUBTOTAL; ++i)
+        for (auto& group : aParam.aGroups)
         {
-            if (!aParam.bGroupActive[i])
+            if (!group.bActive)
                 // We're done!
                 break;
 
-            sal_Int32 nFieldCol = static_cast<sal_Int32>(aParam.nField[i]);
+            sal_Int32 nFieldCol = static_cast<sal_Int32>(group.nField);
             mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_GROUP_BY_FIELD_NUMBER, OUString::number(nFieldCol));
             SvXMLElementExport aElemSTR(mrExport, XML_NAMESPACE_TABLE, XML_SUBTOTAL_RULE, true, true);
 
-            for (SCCOL j = 0, n = aParam.nSubTotals[i]; j < n; ++j)
+            for (SCCOL j = 0, n = group.nSubTotals; j < n; ++j)
             {
-                sal_Int32 nCol = static_cast<sal_Int32>(aParam.pSubTotals[i][j]);
-                ScSubTotalFunc eFunc = aParam.pFunctions[i][j];
+                sal_Int32 nCol = static_cast<sal_Int32>(group.col(j));
+                ScSubTotalFunc eFunc = group.func(j);
 
                 mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, OUString::number(nCol));
                 OUString aFuncStr = ScXMLConverter::GetStringFromFunction(eFunc);

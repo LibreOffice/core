@@ -276,7 +276,7 @@ OUString ScDBData::GetOperations() const
         aBuf.append(ScResId(STR_OPERATION_SORT));
     }
 
-    if (mpSubTotal->bGroupActive[0] && !mpSubTotal->bRemoveOnly)
+    if (mpSubTotal->aGroups[0].bActive && !mpSubTotal->bRemoveOnly)
     {
         if (!aBuf.isEmpty())
             aBuf.append(", ");
@@ -377,13 +377,13 @@ void ScDBData::MoveTo(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
             rEntry.bDoQuery = false;
         }
     }
-    for (sal_uInt16 i=0; i<MAXSUBTOTAL; i++)
+    for (auto& group : mpSubTotal->aGroups)
     {
-        mpSubTotal->nField[i] = sal::static_int_cast<SCCOL>( mpSubTotal->nField[i] + nDifX );
-        if (mpSubTotal->nField[i] > nCol2)
+        group.nField += nDifX;
+        if (group.nField > nCol2)
         {
-            mpSubTotal->nField[i] = 0;
-            mpSubTotal->bGroupActive[i] = false;
+            group.nField = 0;
+            group.bActive = false;
         }
     }
 
@@ -533,7 +533,7 @@ bool ScDBData::HasSortParam() const
 
 bool ScDBData::HasSubTotalParam() const
 {
-    return mpSubTotal && mpSubTotal->bGroupActive[0];
+    return mpSubTotal && mpSubTotal->aGroups[0].bActive;
 }
 
 void ScDBData::UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos)
