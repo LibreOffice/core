@@ -896,6 +896,7 @@ void ScPreview::StaticInvalidate()
 
     SfxBindings& rBindings = pViewFrm->GetBindings();
     rBindings.Invalidate(SID_STATUS_DOCPOS);
+    rBindings.Invalidate(FID_AUTO_CALC);
     rBindings.Invalidate(SID_ROWCOL_SELCOUNT);
     rBindings.Invalidate(SID_STATUS_PAGESTYLE);
     rBindings.Invalidate(SID_PREVIEW_PREVIOUS);

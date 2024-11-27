@@ -447,5 +447,6 @@
 
 #define STR_CONTENT_WITH_UNKNOWN_ENCRYPTION NC_("STR_CONTENT_WITH_UNKNOWN_ENCRYPTION", "Document contains DRM content that is encrypted with an unknown encryption method. Only the un-encrypted content will be shown.")
 
+#define STR_AUTOCALC_OFF                            NC_("STR_AUTOCALC_OFF", "AutoCalculate: Off\nClick to enable.")
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

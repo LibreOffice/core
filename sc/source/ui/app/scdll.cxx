@@ -86,6 +86,7 @@
 
 #include <filter.hxx>
 #include <scabstdlg.hxx>
+#include <acctrl.hxx>
 
 OUString ScResId(TranslateId aId)
 {
@@ -173,6 +174,7 @@ void ScDLL::Init()
     SvxZoomSliderControl            ::RegisterControl(SID_ATTR_ZOOMSLIDER,  pMod);
     SvxModifyControl                ::RegisterControl(SID_DOC_MODIFIED,     pMod);
     XmlSecStatusBarControl          ::RegisterControl( SID_SIGNATURE,       pMod );
+    ScAutoCalculateControl          ::RegisterControl(FID_AUTO_CALC,        pMod);
 
     SvxPosSizeStatusBarControl      ::RegisterControl(SID_ATTR_SIZE,        pMod);
 

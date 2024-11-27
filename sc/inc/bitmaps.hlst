@@ -124,4 +124,6 @@ inline constexpr OUString RID_SVXBMP_SLIDERBUTTON = u"svx/res/slidezoombutton_10
 inline constexpr OUString RID_SVXBMP_SLIDERDECREASE = u"svx/res/slidezoomout_10.png"_ustr;
 inline constexpr OUString RID_SVXBMP_SLIDERINCREASE = u"svx/res/slidezoomin_10.png"_ustr;
 
+inline constexpr OUString RID_BMP_CALCULATOR_RED = u"sc/res/calculator_red.png"_ustr;
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

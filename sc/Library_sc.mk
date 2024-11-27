@@ -378,6 +378,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/Accessibility/AccessibleTableBase \
     sc/source/ui/Accessibility/AccessibleText \
     sc/source/ui/Accessibility/DrawModelBroadcaster \
+    sc/source/ui/app/acctrl \
     sc/source/ui/app/client \
     sc/source/ui/app/drwtrans \
     sc/source/ui/app/inputhdl \
