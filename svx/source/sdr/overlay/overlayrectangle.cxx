@@ -73,11 +73,8 @@ namespace sdr::overlay
             mnBlinkTime(impCheckBlinkTimeValueRange(500)),
             mbOverlayState(false)
         {
-            if(Application::GetSettings().GetStyleSettings().GetHighContrastMode())
-            {
-                // no animation in high contrast mode
+            if (!MiscSettings::IsAnimatedOthersAllowed())
                 bAnimate = false;
-            }
 
             // set AllowsAnimation flag to mark this object as animation capable
             mbAllowsAnimation = bAnimate;
