@@ -20,13 +20,8 @@ class QtDoubleSpinBox : public QDoubleSpinBox
 public:
     QtDoubleSpinBox(QWidget* pParent);
 
-    int cursorPosition() const;
-    void setCursorPosition(int nCursorPos);
-
-    void setSelection(int nStart, int nLength);
-    bool hasSelectedText() const;
-    int selectionStart() const;
-    int selectionEnd() const;
+    // public override of the protected base class method
+    QLineEdit* lineEdit() const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

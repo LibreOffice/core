@@ -10,13 +10,11 @@
 #pragma once
 
 #include "QtDoubleSpinBox.hxx"
-#include "QtInstanceWidget.hxx"
+#include "QtInstanceEntry.hxx"
 
 #include <QtWidgets/QSpinBox>
 
-class QtInstanceSpinButton : public QObject,
-                             public QtInstanceWidget,
-                             public virtual weld::SpinButton
+class QtInstanceSpinButton : public QtInstanceEntry, public virtual weld::SpinButton
 {
     Q_OBJECT
 
@@ -25,32 +23,7 @@ class QtInstanceSpinButton : public QObject,
 public:
     QtInstanceSpinButton(QtDoubleSpinBox* pSpinBox);
 
-    virtual void set_text(const OUString& rText) override;
-    virtual OUString get_text() const override;
-    virtual void set_width_chars(int nChars) override;
-    virtual int get_width_chars() const override;
-    virtual void set_max_length(int nChars) override;
-    virtual void select_region(int nStartPos, int nEndPos) override;
-    virtual bool get_selection_bounds(int& rStartPos, int& rEndPos) override;
-    virtual void replace_selection(const OUString& rText) override;
-    virtual void set_position(int nCursorPos) override;
-    virtual int get_position() const override;
-    virtual void set_editable(bool bEditable) override;
-    virtual bool get_editable() const override;
-    virtual void set_message_type(weld::EntryMessageType eType) override;
-    virtual void set_placeholder_text(const OUString& rText) override;
-
-    virtual void set_overwrite_mode(bool bOn) override;
-    virtual bool get_overwrite_mode() const override;
-
-    virtual void set_font(const vcl::Font& rFont) override;
-    virtual void set_font_color(const Color& rColor) override;
-
-    virtual void cut_clipboard() override;
-    virtual void copy_clipboard() override;
-    virtual void paste_clipboard() override;
-
-    virtual void set_alignment(TxtAlign eXAlign) override;
+    virtual QWidget* getQWidget() const override;
 
     virtual void set_value(sal_Int64 nValue) override;
     virtual sal_Int64 get_value() const override;
