@@ -2510,8 +2510,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
     // double click (only left button)
 
     bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
-    bool bDouble = ( rMEvt.GetClicks() == 2 && rMEvt.IsLeft() );
-    if ( bDouble
+    if ( (rMEvt.GetClicks() == 2 && rMEvt.IsLeft())
             && !bRefMode
             && (nMouseStatus == SC_GM_DBLDOWN || (bIsTiledRendering && nMouseStatus != SC_GM_URLDOWN))
             && !pScMod->IsRefDialogOpen())
@@ -2591,14 +2590,13 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
             mrViewData.GetView()->SelectionChanged();
         }
 
-        if ( bDouble )
-            return;
+        return;
     }
 
             //      Links in edit cells
 
     bool bAlt = rMEvt.IsMod2();
-    if ( !bAlt && !bRefMode && !bDouble && nMouseStatus == SC_GM_URLDOWN )
+    if ( !bAlt && !bRefMode && nMouseStatus == SC_GM_URLDOWN )
     {
         //  Only execute on ButtonUp, if ButtonDown also was done on a URL
 
@@ -2748,7 +2746,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
     }
     mrViewData.GetViewShell()->SelectionChanged();
 
-    if (bIsTiledRendering && !bRefMode && !bDouble)
+    if (bIsTiledRendering && !bRefMode)
     {
         OUString aName, aUrl, aTarget;
         ScTabViewShell* pViewShell = mrViewData.GetViewShell();
