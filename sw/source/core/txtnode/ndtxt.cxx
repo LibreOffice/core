@@ -53,6 +53,7 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <docary.hxx>
+#include <docufld.hxx>
 #include <pam.hxx>
 #include <fldbas.hxx>
 #include <paratr.hxx>
@@ -2096,6 +2097,35 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
     CopyText( pDest, rDestStart, rStart.nContent, nLen, bForceCopyOfAllAttrs );
 }
 
+void SwTextNode::EstablishParentChildRelationsOfComments(
+    const SwTextNode* pDest,
+    std::map<sal_Int32, sal_Int32>& idMapForComments,
+    std::map<sal_Int32, OUString>& nameMapForComments
+)
+{
+    if (idMapForComments.size() > 0)
+    {
+        const SwpHints &rDestHints = pDest->GetSwpHints();
+        size_t hintCount = rDestHints.Count();
+        for (size_t inDest = 0; inDest < hintCount; inDest++)
+        {
+            if (rDestHints.Get(inDest)->Which() == RES_TXTATR_ANNOTATION)
+            {
+                SwPostItField* copiedField = const_cast<SwPostItField*>(static_cast<const SwPostItField*>(rDestHints.Get(inDest)->GetFormatField().GetField()));
+                if (copiedField && copiedField->GetParentPostItId() != 0)
+                {
+                    const auto correspondingParentItem = idMapForComments.find(copiedField->GetParentPostItId());
+                    if (correspondingParentItem != idMapForComments.end())
+                    {
+                        copiedField->SetParentName(nameMapForComments[copiedField->GetParentPostItId()]); // Set name first, parent id will change.
+                        copiedField->SetParentPostItId(correspondingParentItem->second);
+                    }
+                }
+            }
+        }
+    }
+}
+
 void SwTextNode::CopyText( SwTextNode *const pDest,
                       const SwContentIndex &rDestStart,
                       const SwContentIndex &rStart,
@@ -2211,6 +2241,16 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
     SwpHts aRefMrkArr;
 
     std::vector<std::pair<sal_Int32, sal_Int32>> metaFieldRanges;
+
+    /*
+        Annotations are also copied along with other fields.
+        Annotations have parentPostItId field, used for parent-child relation.
+        So we also need to set parent ids of comments when applicable.
+        Below map variable is for memorizing the new ids and names of parent postits in the source node, then we will use them in target node.
+    */
+    std::map<sal_Int32, sal_Int32> idMapForComments;
+    std::map<sal_Int32, OUString> nameMapForComments;
+
     sal_Int32 nDeletedDummyChars(0);
     for (size_t n = 0; n < nSize; ++n)
     {
@@ -2319,6 +2359,13 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
             if (pNewHt)
             {
                 lcl_CopyHint( nWhich, pHt, pNewHt, pOtherDoc, pDest );
+                if (nWhich == RES_TXTATR_ANNOTATION)
+                {
+                    const SwPostItField* annotationField = static_cast<const SwPostItField*>(pHt->GetFormatField().GetField());
+                    // Preparation for EstablishParentChildRelationsOfComments.
+                    idMapForComments[annotationField->GetPostItId()] = static_cast<const SwPostItField*>(pNewHt->GetFormatField().GetField())->GetPostItId();
+                    nameMapForComments[annotationField->GetPostItId()] = static_cast<const SwPostItField*>(pNewHt->GetFormatField().GetField())->GetName();
+                }
             }
             else if (pHt->HasDummyChar())
             {
@@ -2347,6 +2394,8 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
             pDest->EraseText(aIdx, pair.second - pair.first);
         }
     }
+
+    EstablishParentChildRelationsOfComments(pDest, idMapForComments, nameMapForComments);
 
     // this can only happen when copying into self
     for (SwTextAttr* i : aArr)

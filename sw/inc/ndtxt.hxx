@@ -37,6 +37,7 @@
 #include <memory>
 #include <vector>
 #include <functional>
+#include <map>
 
 class SfxHint;
 class SwNumRule;
@@ -380,6 +381,16 @@ public:
                const SwPosition &rStart,
                sal_Int32 nLen,
                const bool bForceCopyOfAllAttrs = false );
+    /*
+        After copying a text portion with its comments, the replies will still reference to their original parent.
+        We need to set their reference to their copied-parent.
+        idMapForComments and nameMapForComments variables hold the original ids of comments as keys.
+        And they hold the new ids and names of comments as values.
+        So we can find a reply's (child comment) new parent (value) by looking up its original parent (key).
+    */
+    static void EstablishParentChildRelationsOfComments(const SwTextNode* pDest,
+                std::map<sal_Int32, sal_Int32>& idMapForComments,
+                std::map<sal_Int32, OUString>& nameMapForComments);
 
     void        CutText(SwTextNode * const pDest,
                     const SwContentIndex & rStart, const sal_Int32 nLen);
