@@ -529,10 +529,10 @@ Components::Components(
             sal_uInt32 nStartTime = osl_getGlobalTimer();
             parseXcsXcuLayer(layer, url);
             SAL_INFO("configmgr", "parseXcsXcuLayer() took " << (osl_getGlobalTimer() - nStartTime) << " ms");
-            layer += 2; //TODO: overflow
+            layer += 2;
         } else if (type == "bundledext") {
             parseXcsXcuIniLayer(layer, url, false);
-            layer += 2; //TODO: overflow
+            layer += 2;
         } else if (type == "sharedext") {
             if (sharedExtensionLayer_ != -1) {
                 throw css::uno::RuntimeException(
@@ -540,7 +540,7 @@ Components::Components(
             }
             sharedExtensionLayer_ = layer;
             parseXcsXcuIniLayer(layer, url, true);
-            layer += 2; //TODO: overflow
+            layer += 2;
         } else if (type == "userext") {
             if (userExtensionLayer_ != -1) {
                 throw css::uno::RuntimeException(
@@ -548,12 +548,12 @@ Components::Components(
             }
             userExtensionLayer_ = layer;
             parseXcsXcuIniLayer(layer, url, true);
-            layer += 2; //TODO: overflow
+            layer += 2;
         } else if (type == "res") {
             sal_uInt32 nStartTime = osl_getGlobalTimer();
             parseResLayer(layer, url);
             SAL_INFO("configmgr", "parseResLayer() took " << (osl_getGlobalTimer() - nStartTime) << " ms");
-            ++layer; //TODO: overflow
+            ++layer;
 #if ENABLE_DCONF
         } else if (type == "dconf") {
             if (url == "!") {
@@ -566,7 +566,7 @@ Components::Components(
                     "CONFIGURATION_LAYERS: unknown \"dconf\" kind \"" + url
                     + "\"");
             }
-            ++layer; //TODO: overflow
+            ++layer;
 #endif
 #if defined(_WIN32)
         } else if (type == "winreg") {
@@ -586,7 +586,7 @@ Components::Components(
                 if (!getenv("SAL_CONFIG_WINREG_RETAIN_TMP"))
                     osl::File::remove(aTempFileURL);
             }
-            ++layer; //TODO: overflow
+            ++layer;
 #endif
         } else if (type == "user") {
             bool write;
@@ -625,7 +625,7 @@ Components::Components(
                 }
                 parseModificationLayer(write ? Data::NO_LAYER : layer, url);
             }
-            ++layer; //TODO: overflow
+            ++layer;
         } else {
             throw css::uno::RuntimeException(
                 "CONFIGURATION_LAYERS: unknown layer type \"" + type + "\"");
