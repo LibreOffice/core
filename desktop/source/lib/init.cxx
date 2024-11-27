@@ -7960,10 +7960,6 @@ static void preloadData()
     static SvtSysLocaleOptions aSvtSysLocaleOptions;
     static SvtUserOptions aSvtUserOptions;
     //static SvtViewOptions aSvtViewOptions;
-    static MouseSettings aMouseSettings;
-    static StyleSettings aStyleSettings;
-    static MiscSettings aMiscSettings;
-    static HelpSettings aHelpSettings;
     static AllSettings aAllSettings;
 #if defined __GNUC__ || defined __clang__
 #pragma GCC diagnostic pop
