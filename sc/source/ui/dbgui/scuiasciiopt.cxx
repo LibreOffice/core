@@ -43,6 +43,7 @@
 #include <unicode/ucsdet.h>
 #include <sfx2/objsh.hxx>
 #include <svx/txenctab.hxx>
+#include <unotools/viewoptions.hxx>
 
 //! TODO make dynamic
 const SCSIZE ASCIIDLG_MAXROWS                = MAXROWCOUNT;
@@ -373,6 +374,10 @@ ScImportAsciiDlg::ScImportAsciiDlg(weld::Window* pParent, std::u16string_view aD
     , mxAltTitle(m_xBuilder->weld_label(u"textalttitle"_ustr))
     , mxTableBox(new ScCsvTableBox(*m_xBuilder))
 {
+    SvtViewOptions aDlgOpt(EViewType::Dialog, "TextImportCsvDialog");
+    if (aDlgOpt.Exists())
+        m_xDialog->set_window_state(aDlgOpt.GetWindowState());
+
     OUString aName = m_xDialog->get_title();
     switch (meCall)
     {
@@ -591,6 +596,8 @@ IMPL_STATIC_LINK_NOARG(ScImportAsciiDlg, InstallLOKNotifierHdl, void*, vcl::ILib
 
 ScImportAsciiDlg::~ScImportAsciiDlg()
 {
+    SvtViewOptions aDlgOpt(EViewType::Dialog, "TextImportCsvDialog");
+    aDlgOpt.SetWindowState(m_xDialog->get_window_state(vcl::WindowDataMask::PosSize));
 }
 
 bool ScImportAsciiDlg::GetLine( sal_uLong nLine, OUString &rText, sal_Unicode& rcDetectSep )

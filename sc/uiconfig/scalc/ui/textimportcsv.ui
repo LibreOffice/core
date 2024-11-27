@@ -238,7 +238,7 @@
               <object class="GtkFrame" id="frame2">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="hexpand">True</property>
+                <property name="hexpand">False</property>
                 <property name="label-xalign">0</property>
                 <property name="shadow-type">none</property>
                 <child>
@@ -247,15 +247,16 @@
                     <property name="can-focus">False</property>
                     <property name="margin-start">12</property>
                     <property name="margin-top">6</property>
-                    <property name="hexpand">True</property>
+                    <property name="hexpand">False</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkBox" id="box6">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="homogeneous">True</property>
+                        <property name="hexpand">False</property>
+                        <property name="homogeneous">False</property>
+                        <property name="spacing">12</property>
                         <child>
                           <object class="GtkRadioButton" id="tofixedwidth">
                             <property name="label" translatable="yes" context="textimportcsv|tofixedwidth">_Fixed width</property>
@@ -332,7 +333,7 @@
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="margin-start">12</property>
-                        <property name="hexpand">True</property>
+                        <property name="hexpand">False</property>
                         <property name="row-spacing">6</property>
                         <property name="column-spacing">12</property>
                         <child>
@@ -341,7 +342,7 @@
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="receives-default">False</property>
-                            <property name="hexpand">True</property>
+                            <property name="hexpand">False</property>
                             <property name="use-underline">True</property>
                             <property name="draw-indicator">True</property>
                             <child internal-child="accessible">
@@ -362,7 +363,7 @@
                             <property name="can-focus">True</property>
                             <property name="receives-default">False</property>
                             <property name="halign">start</property>
-                            <property name="hexpand">True</property>
+                            <property name="hexpand">False</property>
                             <property name="use-underline">True</property>
                             <property name="draw-indicator">True</property>
                             <child internal-child="accessible">
@@ -384,7 +385,7 @@
                             <property name="can-focus">True</property>
                             <property name="receives-default">False</property>
                             <property name="halign">start</property>
-                            <property name="hexpand">True</property>
+                            <property name="hexpand">False</property>
                             <property name="use-underline">True</property>
                             <property name="draw-indicator">True</property>
                             <child internal-child="accessible">
@@ -405,7 +406,7 @@
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="receives-default">False</property>
-                            <property name="hexpand">True</property>
+                            <property name="hexpand">False</property>
                             <property name="use-underline">True</property>
                             <property name="draw-indicator">True</property>
                             <child internal-child="accessible">
@@ -425,7 +426,7 @@
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="receives-default">False</property>
-                            <property name="hexpand">True</property>
+                            <property name="hexpand">False</property>
                             <property name="use-underline">True</property>
                             <property name="draw-indicator">True</property>
                             <child internal-child="accessible">
@@ -445,7 +446,7 @@
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="receives-default">False</property>
-                            <property name="hexpand">True</property>
+                            <property name="hexpand">False</property>
                             <property name="use-underline">True</property>
                             <property name="draw-indicator">True</property>
                             <child internal-child="accessible">
@@ -464,7 +465,7 @@
                           <object class="GtkGrid" id="grid3">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="hexpand">True</property>
+                            <property name="hexpand">False</property>
                             <property name="column-spacing">12</property>
                             <child>
                               <object class="GtkCheckButton" id="other">
@@ -492,7 +493,7 @@
                               <object class="GtkEntry" id="inputother">
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
-                                <property name="hexpand">True</property>
+                                <property name="hexpand">False</property>
                                 <property name="max-length">10</property>
                                 <property name="activates-default">True</property>
                                 <property name="width-chars">3</property>
@@ -523,7 +524,7 @@
                           <object class="GtkGrid" id="grid4">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="hexpand">True</property>
+                            <property name="hexpand">False</property>
                             <property name="column-spacing">12</property>
                             <child>
                               <object class="GtkLabel" id="texttextdelimiter">
@@ -543,7 +544,7 @@
                               <object class="GtkComboBoxText" id="textdelimiter">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="hexpand">True</property>
+                                <property name="hexpand">False</property>
                                 <property name="has-entry">True</property>
                                 <child internal-child="entry">
                                   <object class="GtkEntry" id="comboboxtext-entry">
