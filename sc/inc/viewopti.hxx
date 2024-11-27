@@ -162,6 +162,9 @@ class ScViewCfg : public ScViewOptions
     DECL_LINK( LayoutCommitHdl, ScLinkConfigItem&, void );
     DECL_LINK( DisplayCommitHdl, ScLinkConfigItem&, void );
     DECL_LINK( GridCommitHdl, ScLinkConfigItem&, void );
+    DECL_LINK( GridNotifyHdl, ScLinkConfigItem&, void );
+
+    void ReadGridCfg();
 
     static css::uno::Sequence<OUString> GetLayoutPropertyNames();
     static css::uno::Sequence<OUString> GetDisplayPropertyNames();
