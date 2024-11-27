@@ -89,6 +89,9 @@ void QtInstanceEntry::replace_selection(const OUString& rText)
 void QtInstanceEntry::set_position(int nCursorPos)
 {
     SolarMutexGuard g;
+    if (nCursorPos == -1)
+        nCursorPos = m_pLineEdit->text().length();
+
     GetQtInstance().RunInMainThread([&] { m_pLineEdit->setCursorPosition(nCursorPos); });
 }
 
