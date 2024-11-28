@@ -16014,7 +16014,7 @@ public:
         {
             GtkTreeModel* pModel;
             GList* pList = gtk_tree_selection_get_selected_rows(gtk_tree_view_get_selection(m_pTreeView), &pModel);
-            for (GList* pItem = g_list_first(pList); pItem; pItem = g_list_next(pItem))
+            if (GList* pItem = g_list_first(pList))
             {
                 if (pIter)
                 {
@@ -16022,7 +16022,6 @@ public:
                     gtk_tree_model_get_iter(pModel, pIter, path);
                 }
                 bRet = true;
-                break;
             }
             g_list_free_full(pList, reinterpret_cast<GDestroyNotify>(gtk_tree_path_free));
         }
@@ -17131,7 +17130,7 @@ private:
         {
             GtkTreeModel* pModel = GTK_TREE_MODEL(m_pTreeStore);
             GList* pList = gtk_icon_view_get_selected_items(m_pIconView);
-            for (GList* pItem = g_list_first(pList); pItem; pItem = g_list_next(pItem))
+            if (GList* pItem = g_list_first(pList))
             {
                 if (pIter)
                 {
@@ -17139,7 +17138,6 @@ private:
                     gtk_tree_model_get_iter(pModel, pIter, path);
                 }
                 bRet = true;
-                break;
             }
             g_list_free_full(pList, reinterpret_cast<GDestroyNotify>(gtk_tree_path_free));
         }
