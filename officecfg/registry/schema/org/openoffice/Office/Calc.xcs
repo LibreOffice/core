@@ -49,19 +49,19 @@
       <prop oor:name="YY" oor:type="xs:int">
         <info>
           <desc>Specifies the year.</desc>
-          <label>12/30/1899 (Standard) 01/01/1900 (StarCalc 1.0) 01/01/1904</label>
+          <label>1899-12-30 (Standard) 1900-01-01 (StarCalc 1.0) 1904-01-01</label>
         </info>
       </prop>
       <prop oor:name="MM" oor:type="xs:int">
         <info>
           <desc>Specifies the month.</desc>
-          <label>12/30/1899 (Standard) 01/01/1900 (StarCalc 1.0) 01/01/1904</label>
+          <label>1899-12-30 (Standard) 1900-01-01 (StarCalc 1.0) 1904-01-01</label>
         </info>
       </prop>
       <prop oor:name="DD" oor:type="xs:int">
         <info>
           <desc>Specifies the day.</desc>
-          <label>12/30/1899 (Standard) 01/01/1900 (StarCalc 1.0) 01/01/1904</label>
+          <label>1899-12-30 (Standard) 1900-01-01 (StarCalc 1.0) 1904-01-01</label>
         </info>
       </prop>
     </group>

@@ -536,17 +536,17 @@
             <property name="margin-top">6</property>
             <child>
               <object class="GtkRadioButton" id="datestd">
-                <property name="label" translatable="yes" context="optcalculatepage|datestd">12/30/1899 (defa_ult)</property>
+                <property name="label" translatable="yes" context="optcalculatepage|datestd">1899-12-30 (defa_ult)</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
-                <property name="tooltip-text" translatable="yes" context="optcalculatepage|datestd|tooltip_text">Value 0 corresponds to 12/30/1899</property>
+                <property name="tooltip-text" translatable="yes" context="optcalculatepage|datestd|tooltip_text">Value 0 corresponds to 1899-12-30</property>
                 <property name="use-underline">True</property>
                 <property name="active">True</property>
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="datestd-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|datestd">Sets 12/30/1899 as day zero.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|datestd">Sets 1899-12-30 as day zero.</property>
                   </object>
                 </child>
               </object>
@@ -557,17 +557,17 @@
             </child>
             <child>
               <object class="GtkRadioButton" id="datesc10">
-                <property name="label" translatable="yes" context="optcalculatepage|datesc10">01/01/1900 (Star_Calc 1.0)</property>
+                <property name="label" translatable="yes" context="optcalculatepage|datesc10">1900-01-01 (Star_Calc 1.0)</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
-                <property name="tooltip-text" translatable="yes" context="optcalculatepage|datesc10|tooltip_text">Value 0 corresponds to 01/01/1900</property>
+                <property name="tooltip-text" translatable="yes" context="optcalculatepage|datesc10|tooltip_text">Value 0 corresponds to 1900-01-01</property>
                 <property name="use-underline">True</property>
                 <property name="draw-indicator">True</property>
                 <property name="group">datestd</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="datesc10-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|datesc10">Sets 1/1/1900 as day zero. Use this setting for StarCalc 1.0 spreadsheets containing date entries.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|datesc10">Sets 1900-01-01 as day zero. Use this setting for StarCalc 1.0 spreadsheets containing date entries.</property>
                   </object>
                 </child>
               </object>
@@ -578,17 +578,17 @@
             </child>
             <child>
               <object class="GtkRadioButton" id="date1904">
-                <property name="label" translatable="yes" context="optcalculatepage|date1904">_01/01/1904</property>
+                <property name="label" translatable="yes" context="optcalculatepage|date1904">_1904-01-01</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
-                <property name="tooltip-text" translatable="yes" context="optcalculatepage|date1904|tooltip_text">0 corresponds to 01/01/1904</property>
+                <property name="tooltip-text" translatable="yes" context="optcalculatepage|date1904|tooltip_text">0 corresponds to 1904-01-01</property>
                 <property name="use-underline">True</property>
                 <property name="draw-indicator">True</property>
                 <property name="group">datestd</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="date1904-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|date1904">Sets 1/1/1904 as day zero. Use this setting for spreadsheets that are imported in a foreign format.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|date1904">Sets 1904-01-01 as day zero. Use this setting for spreadsheets that are imported in a foreign format.</property>
                   </object>
                 </child>
               </object>
