@@ -30,16 +30,12 @@ public:
     GotoPageDlg(weld::Window* pParent, const OUString& title, const OUString& label,
                 sal_uInt16 curPagePos, sal_uInt16 pageCnt);
 
-    sal_uInt16 GetPageSelection() const { return mxMtrPageCtrl->get_text().toUInt32(); }
+    sal_uInt16 GetPageSelection() const { return mxMtrPageCtrl->get_value(); }
 
 private:
-    sal_uInt16 mnMaxPageCnt;
-
     std::unique_ptr<weld::SpinButton> mxMtrPageCtrl;
     std::unique_ptr<weld::Label> mxPageNumberLbl;
     std::unique_ptr<weld::Label> mxPageLbl;
-
-    DECL_LINK(PageModifiedHdl, weld::Entry&, void);
 };
 }
 

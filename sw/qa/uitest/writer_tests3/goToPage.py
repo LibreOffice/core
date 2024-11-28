@@ -26,7 +26,7 @@ class GoToPage_dialog(UITestCase):
 
         with self.ui_test.execute_dialog_through_command(".uno:GotoPage") as xDialog:
             xPageText = xDialog.getChild("page")
-            xPageText.executeAction("TYPE", mkPropertyValues({"TEXT":"3a"}))
+            xPageText.executeAction("TYPE", mkPropertyValues({"TEXT":"3"}))
 
         self.assertEqual(get_state_as_dict(xWriterEdit)["CurrentPage"], "3")
 
