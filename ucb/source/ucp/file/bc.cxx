@@ -473,7 +473,6 @@ BaseContent::addProperty(
 void SAL_CALL
 BaseContent::removeProperty( const OUString& Name )
 {
-
     if( m_nState & Deleted )
         throw beans::UnknownPropertyException( Name );
 
@@ -894,12 +893,8 @@ BaseContent::deleteContent( sal_Int32 nMyCommandIdentifier )
         return;
 
     if( m_pMyShell->remove( nMyCommandIdentifier,m_aUncPath ) )
-    {
-        std::unique_lock aGuard( m_aMutex );
         m_nState |= Deleted;
-    }
 }
-
 
 void
 BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
@@ -1072,7 +1067,6 @@ void BaseContent::insert( sal_Int32 nMyCommandIdentifier,
     m_pMyShell->registerNotifier( m_aUncPath,this );
     m_pMyShell->insertDefaultProperties( m_aUncPath );
 
-    std::unique_lock aGuard( m_aMutex );
     m_nState = FullFeatured;
 }
 
@@ -1087,10 +1081,9 @@ void BaseContent::endTask( sal_Int32 CommandId )
 std::optional<ContentEventNotifier>
 BaseContent::cDEL()
 {
-    std::unique_lock aGuard( m_aMutex );
-
     m_nState |= Deleted;
 
+    std::unique_lock aGuard( m_aMutex );
     if( m_aContentEventListeners.getLength(aGuard) == 0 )
         return {};
 
