@@ -255,7 +255,7 @@ static bool isMouseScrollWheelEvent( NSEvent *pEvent )
     mpLiveResizeTimer = nil;
     mpResetParentWindowTimer = nil;
     mpFrame = pFrame;
-    const SalFrameGeometry& rFrameGeometry = pFrame->GetUnmirroredGeometry();
+    const SalFrameGeometry rFrameGeometry = pFrame->GetUnmirroredGeometry();
     NSRect aRect = { { static_cast<CGFloat>(rFrameGeometry.x()), static_cast<CGFloat>(rFrameGeometry.y()) },
                      { static_cast<CGFloat>(rFrameGeometry.width()), static_cast<CGFloat>(rFrameGeometry.height()) } };
     pFrame->VCLToCocoa( aRect );
