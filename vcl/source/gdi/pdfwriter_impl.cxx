@@ -1843,11 +1843,12 @@ sal_Int32 PDFWriterImpl::emitStructIDTree(sal_Int32 const nObject)
         ids.emplace(GenerateID(n), n);
     }
     OStringBuffer buf;
+    COSWriter aWriter(buf, m_aContext.Encryption.getParams(), m_pPDFEncryptor);
     appendObjectID(nObject, buf);
     buf.append("<</Names [\n");
     for (auto const& it : ids)
     {
-        appendLiteralStringEncrypt(it.first, nObject, buf);
+        aWriter.writeLiteralEncrypt(it.first, nObject);
         buf.append(" ");
         appendObjectReference(it.second, buf);
         buf.append("\n");
@@ -2148,6 +2149,7 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
     }
 
     OStringBuffer aLine( 512 );
+    COSWriter aWriter(aLine, m_aContext.Encryption.getParams(), m_pPDFEncryptor);
     aLine.append(
         OString::number(rEle.m_nObject)
         + " 0 obj\n"
@@ -2191,7 +2193,7 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
         if (m_StructElemObjsWithID.find(rEle.m_nObject) != m_StructElemObjsWithID.end())
         {
             aLine.append("\n/ID ");
-            appendLiteralStringEncrypt(GenerateID(rEle.m_nObject), rEle.m_nObject, aLine);
+            aWriter.writeLiteralEncrypt(GenerateID(rEle.m_nObject), rEle.m_nObject);
         }
         aLine.append(
             "\n"
@@ -2242,7 +2244,7 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
                 aLocBuf.append( "-" + aCountry );
             }
             aLine.append( "/Lang" );
-            appendLiteralStringEncrypt( aLocBuf, rEle.m_nObject, aLine );
+            aWriter.writeLiteralEncrypt(aLocBuf.makeStringAndClear(), rEle.m_nObject);
             aLine.append( "\n" );
         }
     }
@@ -3595,6 +3597,7 @@ bool PDFWriterImpl::emitScreenAnnotations()
         const PDFScreen& rScreen = m_aScreens[i];
 
         OStringBuffer aLine;
+        COSWriter aWriter(aLine, m_aContext.Encryption.getParams(), m_pPDFEncryptor);
         bool bEmbed = false;
         if (!rScreen.m_aTempFileURL.isEmpty())
         {
@@ -3666,7 +3669,7 @@ bool PDFWriterImpl::emitScreenAnnotations()
         {
             // Linked.
             aLine.append("\n/D << /Type /Filespec /FS /URL /F ");
-            appendLiteralStringEncrypt(rScreen.m_aURL, rScreen.m_nObject, aLine, osl_getThreadTextEncoding());
+            aWriter.writeLiteralEncrypt(rScreen.m_aURL, rScreen.m_nObject, osl_getThreadTextEncoding());
             if (PDFWriter::PDFVersion::PDF_1_7 <= m_aContext.Version)
             {   // ISO 14289-1:2014, Clause: 7.11
                 aLine.append("/UF ");
@@ -3684,7 +3687,7 @@ bool PDFWriterImpl::emitScreenAnnotations()
         aLine.append("/P <</TF (TEMPACCESS)>>");
         // ISO 14289-1:2014, Clause: 7.18.6.2
         aLine.append("/CT ");
-        appendLiteralStringEncrypt(rScreen.m_MimeType, rScreen.m_nObject, aLine);
+        aWriter.writeLiteralEncrypt(rScreen.m_MimeType, rScreen.m_nObject);
         // ISO 14289-1:2014, Clause: 7.18.6.2
         // Alt text is a "Multi-language Text Array"
         aLine.append(" /Alt [ () ");
@@ -3728,6 +3731,7 @@ bool PDFWriterImpl::emitLinkAnnotations()
             continue;
 
         OStringBuffer aLine( 1024 );
+        COSWriter aWriter(aLine, m_aContext.Encryption.getParams(), m_pPDFEncryptor);
         aLine.append( rLink.m_nObject );
         aLine.append( " 0 obj\n" );
 // i59651: key /F set bits Print to 1 rest to 0. We don't set NoZoom NoRotate to 1, since it's a 'should'
@@ -3854,7 +3858,7 @@ we check in the following sequence:
             {
                 aLine.append( "/Launch/Win<</F" );
                 // INetURLObject is not good with UNC paths, use original path
-                appendLiteralStringEncrypt( url, rLink.m_nObject, aLine, osl_getThreadTextEncoding() );
+                aWriter.writeLiteralEncrypt(url, rLink.m_nObject, osl_getThreadTextEncoding());
                 aLine.append( ">>" );
             }
             else
@@ -3904,10 +3908,10 @@ we check in the following sequence:
                     OUString aURLNoMark = aTargetURL.GetURLNoMark( INetURLObject::DecodeMechanism::WithCharset );
                     aLine.append("/GoToR");
                     aLine.append("/F");
-                    appendLiteralStringEncrypt( bSetRelative ? INetURLObject::GetRelURL( m_aContext.BaseURL, aURLNoMark,
+                    aWriter.writeLiteralEncrypt(bSetRelative ? INetURLObject::GetRelURL( m_aContext.BaseURL, aURLNoMark,
                                                                                          INetURLObject::EncodeMechanism::WasEncoded,
                                                                                          INetURLObject::DecodeMechanism::WithCharset ) :
-                                                                   aURLNoMark, rLink.m_nObject, aLine, osl_getThreadTextEncoding() );
+                                                                   aURLNoMark, rLink.m_nObject, osl_getThreadTextEncoding());
                     if( !aFragment.isEmpty() )
                     {
                         aLine.append("/D/");
@@ -3929,11 +3933,11 @@ we check in the following sequence:
                     OUString aURL = bUnparsedURI ? url :
                                                    aTargetURL.GetMainURL( bFileSpec ? INetURLObject::DecodeMechanism::WithCharset :
                                                                                       INetURLObject::DecodeMechanism::NONE );
-                    appendLiteralStringEncrypt(bSetRelative ? INetURLObject::GetRelURL( m_aContext.BaseURL, aURL,
+                    aWriter.writeLiteralEncrypt(bSetRelative ? INetURLObject::GetRelURL( m_aContext.BaseURL, aURL,
                                                                                         INetURLObject::EncodeMechanism::WasEncoded,
                                                                                             bFileSpec ? INetURLObject::DecodeMechanism::WithCharset : INetURLObject::DecodeMechanism::NONE
                                                                                             ) :
-                                                                               aURL , rLink.m_nObject, aLine, osl_getThreadTextEncoding() );
+                                                                               aURL , rLink.m_nObject, osl_getThreadTextEncoding() );
                 }
             }
             aLine.append( ">>\n" );
@@ -4819,6 +4823,7 @@ bool PDFWriterImpl::emitWidgetAnnotations()
         }
 
         OStringBuffer aLine( 1024 );
+        COSWriter aWriter(aLine, m_aContext.Encryption.getParams(), m_pPDFEncryptor);
         OStringBuffer aValue( 256 );
         aLine.append( rWidget.m_nObject );
         aLine.append( " 0 obj\n"
@@ -4946,7 +4951,7 @@ bool PDFWriterImpl::emitWidgetAnnotations()
         if( !rWidget.m_aName.isEmpty() )
         {
             aLine.append( "/T" );
-            appendLiteralStringEncrypt( rWidget.m_aName, rWidget.m_nObject, aLine );
+            aWriter.writeLiteralEncrypt(rWidget.m_aName, rWidget.m_nObject);
             aLine.append( "\n" );
         }
         if (!rWidget.m_aDescription.isEmpty())
@@ -4954,7 +4959,7 @@ bool PDFWriterImpl::emitWidgetAnnotations()
             // the alternate field name should be unicode able since it is
             // supposed to be used in UI
             aLine.append( "/TU" );
-            appendUnicodeTextStringEncrypt( rWidget.m_aDescription, rWidget.m_nObject, aLine );
+            aWriter.writeUnicodeEncrypt(rWidget.m_aDescription, rWidget.m_nObject);
             aLine.append( "\n" );
         }
 
@@ -4981,7 +4986,7 @@ bool PDFWriterImpl::emitWidgetAnnotations()
             sal_Int32 i = 0;
             for (auto const& entry : rWidget.m_aListEntries)
             {
-                appendUnicodeTextStringEncrypt( entry, rWidget.m_nObject, aLine );
+                aWriter.writeUnicodeEncrypt(entry, rWidget.m_nObject);
                 aLine.append( "\n" );
                 if( entry == rWidget.m_aValue )
                     nTI = i;
@@ -5090,7 +5095,7 @@ bool PDFWriterImpl::emitWidgetAnnotations()
                 {
                     // create a submit form action
                     aLine.append( "/AA<</D<</Type/Action/S/SubmitForm/F" );
-                    appendLiteralStringEncrypt( rWidget.m_aListEntries.front(), rWidget.m_nObject, aLine, osl_getThreadTextEncoding() );
+                    aWriter.writeLiteralEncrypt(rWidget.m_aListEntries.front(), rWidget.m_nObject, osl_getThreadTextEncoding());
                     aLine.append( "/Flags " );
 
                     sal_Int32 nFlags = 0;
@@ -5140,7 +5145,7 @@ bool PDFWriterImpl::emitWidgetAnnotations()
                 aLine.append( ">>>>\n" );
             }
             aLine.append( "/DA" );
-            appendLiteralStringEncrypt( rWidget.m_aDAString, rWidget.m_nObject, aLine );
+            aWriter.writeLiteralEncrypt(rWidget.m_aDAString, rWidget.m_nObject);
             aLine.append( "\n" );
             if( rWidget.m_nTextStyle & DrawTextFlags::Center )
                 aLine.append( "/Q 1\n" );
@@ -5155,7 +5160,7 @@ bool PDFWriterImpl::emitWidgetAnnotations()
             aLine.append( "/MK<<" );
             aLine.append( rWidget.m_aMKDict );
             //add the CA string, encrypting it
-            appendLiteralStringEncrypt(rWidget.m_aMKDictCAString, rWidget.m_nObject, aLine);
+            aWriter.writeLiteralEncrypt(rWidget.m_aMKDictCAString, rWidget.m_nObject);
             aLine.append( ">>\n" );
         }
 
@@ -5320,6 +5325,7 @@ bool PDFWriterImpl::emitCatalog()
 
     // emit tree node
     OStringBuffer aLine( 2048 );
+    COSWriter aWriter(aLine, m_aContext.Encryption.getParams(), m_pPDFEncryptor);
     aLine.append( nTreeNode );
     aLine.append( " 0 obj\n" );
     aLine.append( "<</Type/Pages\n" );
@@ -5562,7 +5568,7 @@ bool PDFWriterImpl::emitCatalog()
                 aLocBuf.append( aCountry );
             }
             aLine.append( "/Lang" );
-            appendLiteralStringEncrypt( aLocBuf, m_nCatalogObject, aLine );
+            aWriter.writeLiteralEncrypt(aLocBuf, m_nCatalogObject);
             aLine.append( "\n" );
         }
     }
@@ -5622,9 +5628,7 @@ bool PDFWriterImpl::emitCatalog()
 
     if( nMetadataObject )
     {
-        COSWriter aWriter;
-        aWriter.writeReference("/Metadata", nMetadataObject);
-        aLine.append(aWriter.getLine());
+        aWriter.writeKeyAndReference("/Metadata", nMetadataObject);
     }
 
     aLine.append( ">>\n"
@@ -5640,6 +5644,7 @@ bool PDFWriterImpl::emitSignature()
         return false;
 
     OStringBuffer aLine( 0x5000 );
+    COSWriter aWriter(aLine, m_aContext.Encryption.getParams(), m_pPDFEncryptor);
     aLine.append( m_nSignatureObject );
     aLine.append( " 0 obj\n" );
     aLine.append("<</Contents <" );
@@ -5659,11 +5664,11 @@ bool PDFWriterImpl::emitSignature()
     if( !m_aContext.DocumentInfo.Author.isEmpty() )
     {
         aLine.append( "/Name" );
-        appendUnicodeTextStringEncrypt( m_aContext.DocumentInfo.Author, m_nSignatureObject, aLine );
+        aWriter.writeUnicodeEncrypt(m_aContext.DocumentInfo.Author, m_nSignatureObject);
     }
 
     aLine.append( " /M ");
-    appendLiteralStringEncrypt( m_aCreationDateString, m_nSignatureObject, aLine );
+    aWriter.writeLiteralEncrypt(m_aCreationDateString, m_nSignatureObject);
 
     aLine.append( " /ByteRange [ 0 ");
     aLine.append( m_nSignatureContentOffset - 1 );
@@ -5685,19 +5690,19 @@ bool PDFWriterImpl::emitSignature()
     if ( !m_aContext.SignReason.isEmpty() )
     {
         aLine.append("/Reason");
-        appendUnicodeTextStringEncrypt( m_aContext.SignReason, m_nSignatureObject, aLine );
+        aWriter.writeUnicodeEncrypt(m_aContext.SignReason, m_nSignatureObject);
     }
 
     if ( !m_aContext.SignLocation.isEmpty() )
     {
         aLine.append("/Location");
-        appendUnicodeTextStringEncrypt( m_aContext.SignLocation, m_nSignatureObject, aLine );
+        aWriter.writeUnicodeEncrypt(m_aContext.SignLocation, m_nSignatureObject);
     }
 
     if ( !m_aContext.SignContact.isEmpty() )
     {
         aLine.append("/ContactInfo");
-        appendUnicodeTextStringEncrypt( m_aContext.SignContact, m_nSignatureObject, aLine );
+        aWriter.writeUnicodeEncrypt(m_aContext.SignContact, m_nSignatureObject);
     }
 
     aLine.append(" >>\nendobj\n\n" );
@@ -5791,9 +5796,7 @@ sal_Int32 PDFWriterImpl::emitInfoDict( )
     if (!updateObject(nObject))
         return 0;
 
-    COSWriter aWriter(m_pPDFEncryptor);
-    bool bEncrypt = m_aContext.Encryption.canEncrypt();
-    auto& rKey = m_aContext.Encryption.EncryptionKey;
+    COSWriter aWriter(m_aContext.Encryption.getParams(), m_pPDFEncryptor);
     aWriter.startObject(nObject);
     aWriter.startDict();
 
@@ -5803,31 +5806,31 @@ sal_Int32 PDFWriterImpl::emitInfoDict( )
     {
         if (!m_aContext.DocumentInfo.Title.isEmpty())
         {
-            aWriter.writeKeyAndUnicodeEncrypt("/Title", m_aContext.DocumentInfo.Title, nObject, bEncrypt, rKey);
+            aWriter.writeKeyAndUnicodeEncrypt("/Title", m_aContext.DocumentInfo.Title, nObject);
         }
         if (!m_aContext.DocumentInfo.Author.isEmpty())
         {
-            aWriter.writeKeyAndUnicodeEncrypt("/Author", m_aContext.DocumentInfo.Author, nObject, bEncrypt, rKey);
+            aWriter.writeKeyAndUnicodeEncrypt("/Author", m_aContext.DocumentInfo.Author, nObject);
         }
         if (!m_aContext.DocumentInfo.Subject.isEmpty())
         {
-            aWriter.writeKeyAndUnicodeEncrypt("/Subject", m_aContext.DocumentInfo.Subject, nObject, bEncrypt, rKey);
+            aWriter.writeKeyAndUnicodeEncrypt("/Subject", m_aContext.DocumentInfo.Subject, nObject);
         }
         if (!m_aContext.DocumentInfo.Keywords.isEmpty())
         {
-            aWriter.writeKeyAndUnicodeEncrypt("/Keywords", m_aContext.DocumentInfo.Keywords, nObject, bEncrypt, rKey);
+            aWriter.writeKeyAndUnicodeEncrypt("/Keywords", m_aContext.DocumentInfo.Keywords, nObject);
         }
         if (!m_aContext.DocumentInfo.Creator.isEmpty())
         {
-            aWriter.writeKeyAndUnicodeEncrypt("/Creator", m_aContext.DocumentInfo.Creator, nObject, bEncrypt, rKey);
+            aWriter.writeKeyAndUnicodeEncrypt("/Creator", m_aContext.DocumentInfo.Creator, nObject);
         }
         if (!m_aContext.DocumentInfo.Producer.isEmpty())
         {
-            aWriter.writeKeyAndUnicodeEncrypt("/Producer", m_aContext.DocumentInfo.Producer, nObject, bEncrypt, rKey);
+            aWriter.writeKeyAndUnicodeEncrypt("/Producer", m_aContext.DocumentInfo.Producer, nObject);
         }
     }
     // Allowed in PDF 2.0
-    aWriter.writeKeyAndLiteralEncrypt("/CreationDate", m_aCreationDateString, nObject, bEncrypt, rKey);
+    aWriter.writeKeyAndLiteralEncrypt("/CreationDate", m_aCreationDateString, nObject);
     aWriter.endDict();
     aWriter.endObject();
 
@@ -5921,6 +5924,7 @@ sal_Int32 PDFWriterImpl::emitOutputIntent()
     //emit the sRGB standard profile, in ICC format, in a stream, per IEC61966-2.1
 
     OStringBuffer aLine( 1024 );
+    COSWriter aWriter(aLine, m_aContext.Encryption.getParams(), m_pPDFEncryptor);
     sal_Int32 nICCObject = createObject();
     sal_Int32 nStreamLengthObject = createObject();
 
@@ -5981,7 +5985,7 @@ sal_Int32 PDFWriterImpl::emitOutputIntent()
     aLine.append( " 0 obj\n"
                   "<</Type/OutputIntent/S/GTS_PDFA1/OutputConditionIdentifier");
 
-    appendLiteralStringEncrypt( std::string_view("sRGB IEC61966-2.1") ,nOIObject, aLine );
+    aWriter.writeLiteralEncrypt(std::string_view("sRGB IEC61966-2.1"), nOIObject);
     aLine.append("/DestOutputProfile ");
     aLine.append( nICCObject );
     aLine.append( " 0 R>>\nendobj\n\n" );
@@ -6098,7 +6102,7 @@ sal_Int32 PDFWriterImpl::emitEncrypt()
     if (updateObject(nObject))
     {
         PDFEncryptionProperties& rProperties = m_aContext.Encryption;
-        COSWriter aWriter(m_pPDFEncryptor);
+        COSWriter aWriter(m_aContext.Encryption.getParams(), m_pPDFEncryptor);
         aWriter.startObject(nObject);
         aWriter.startDict();
         aWriter.write("/Filter", "/Standard");
