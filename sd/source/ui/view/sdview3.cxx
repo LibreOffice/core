@@ -260,7 +260,6 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
     mbIsDropAllowed = false;
 
     TransferableDataHelper  aDataHelper( rDataHelper );
-    SdrObject*              pPickObj = nullptr;
     SdPage*                 pPage = nullptr;
     std::unique_ptr<ImageMap> pImageMap;
     bool bReturn = false;
@@ -277,6 +276,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             nPasteOptions |= SdrInsertFlags::DONTMARK;
     }
 
+    SdrObject* pPickObj = nullptr;
     if( bDrag )
     {
         SdrPageView* pPV = nullptr;
@@ -724,7 +724,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             {
                 bool bChanged = false;
 
-                if( bReturn )
+                if (bReturn && (mnAction & (DND_ACTION_MOVE | DND_ACTION_LINK)))
                 {
                     if( pModel->GetSdPage( 0, PageKind::Standard )->GetObjCount() == 1 )
                     {
@@ -772,9 +772,9 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                             bChanged = true;
                             mnAction = DND_ACTION_COPY;
                         }
-                        else if( ( mnAction & DND_ACTION_LINK ) && pPickObj && pObj &&
-                            dynamic_cast< const SdrGrafObj *>( pPickObj ) ==  nullptr &&
-                                dynamic_cast< const SdrOle2Obj *>( pPickObj ) ==  nullptr )
+                        else if( ( mnAction & DND_ACTION_LINK ) && pPickObj2 && pObj &&
+                            dynamic_cast< const SdrGrafObj *>( pPickObj2 ) ==  nullptr &&
+                                dynamic_cast< const SdrOle2Obj *>( pPickObj2 ) ==  nullptr )
                         {
                             SfxItemSet aSet( mrDoc.GetPool() );
 
@@ -783,7 +783,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                             if( bUndo )
                             {
                                 BegUndo( SdResId(STR_UNDO_DRAGDROP) );
-                                AddUndo( mrDoc.GetSdrUndoFactory().CreateUndoAttrObject( *pPickObj ) );
+                                AddUndo( mrDoc.GetSdrUndoFactory().CreateUndoAttrObject( *pPickObj2 ) );
                             }
 
                             aSet.Put( pObj->GetMergedItemSet() );
@@ -804,24 +804,24 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                 aSet.Put(XFillBitmapItem(pSdrGrafObj->GetGraphic()));
                             }
 
-                            pPickObj->SetMergedItemSetAndBroadcast( aSet );
+                            pPickObj2->SetMergedItemSetAndBroadcast( aSet );
 
-                            if( DynCastE3dObject( pPickObj ) && DynCastE3dObject( pObj ) )
+                            if( DynCastE3dObject( pPickObj2 ) && DynCastE3dObject( pObj ) )
                             {
                                 // handle 3D attribute in addition
                                 SfxItemSetFixed<SID_ATTR_3D_START, SID_ATTR_3D_END> aNewSet( mrDoc.GetPool() );
                                 SfxItemSetFixed<SID_ATTR_3D_START, SID_ATTR_3D_END> aOldSet( mrDoc.GetPool() );
 
-                                aOldSet.Put(pPickObj->GetMergedItemSet());
+                                aOldSet.Put(pPickObj2->GetMergedItemSet());
                                 aNewSet.Put( pObj->GetMergedItemSet() );
 
                                 if( bUndo )
                                     AddUndo(
                                         std::make_unique<E3dAttributesUndoAction>(
-                                            *static_cast< E3dObject* >(pPickObj),
+                                            *static_cast< E3dObject* >(pPickObj2),
                                             aNewSet,
                                             aOldSet));
-                                pPickObj->SetMergedItemSetAndBroadcast( aNewSet );
+                                pPickObj2->SetMergedItemSetAndBroadcast( aNewSet );
                             }
 
                             if( bUndo )
