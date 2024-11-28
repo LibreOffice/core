@@ -367,6 +367,13 @@
   </LC_CURRENCY>
   <LC_TRANSLITERATION ref="en_US"/>
   <LC_MISC>
+    <BreakIteratorRules>
+      <EditMode/>
+      <DictionaryMode>dict_word_prepostdash</DictionaryMode>
+      <WordCountMode/>
+      <CharacterMode/>
+      <LineMode/>
+    </BreakIteratorRules>
     <ReservedWords>
       <trueWord>sand</trueWord>
       <falseWord>falsk</falseWord>
