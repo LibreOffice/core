@@ -678,26 +678,27 @@ table::CellRangeAddress ScXMLExport::GetEndAddress(const uno::Reference<sheet::X
 
 void ScXMLExport::GetAreaLinks( ScMyAreaLinksContainer& rAreaLinks )
 {
-    if (mpDoc && mpDoc->GetLinkManager())
+    if (!mpDoc)
+        return;
+    sfx2::LinkManager* pManager = mpDoc->GetLinkManager();
+    if (!pManager)
+        return;
+
+    for (const auto& rLink : pManager->GetLinks())
     {
-        const sfx2::SvBaseLinks& rLinks = mpDoc->GetLinkManager()->GetLinks();
-        for (const auto & rLink : rLinks)
+        if (ScAreaLink* pLink = dynamic_cast<ScAreaLink*>(rLink.get()))
         {
-            ScAreaLink *pLink = dynamic_cast<ScAreaLink*>(rLink.get());
-            if (pLink)
-            {
-                ScMyAreaLink aAreaLink;
-                aAreaLink.aDestRange = pLink->GetDestArea();
-                aAreaLink.sSourceStr = pLink->GetSource();
-                aAreaLink.sFilter = pLink->GetFilter();
-                aAreaLink.sFilterOptions = pLink->GetOptions();
-                aAreaLink.sURL = pLink->GetFile();
-                aAreaLink.nRefreshDelaySeconds = pLink->GetRefreshDelaySeconds();
-                rAreaLinks.AddNewAreaLink( aAreaLink );
-            }
+            ScMyAreaLink aAreaLink;
+            aAreaLink.aDestRange = pLink->GetDestArea();
+            aAreaLink.sSourceStr = pLink->GetSource();
+            aAreaLink.sFilter = pLink->GetFilter();
+            aAreaLink.sFilterOptions = pLink->GetOptions();
+            aAreaLink.sURL = pLink->GetFile();
+            aAreaLink.nRefreshDelaySeconds = pLink->GetRefreshDelaySeconds();
+            rAreaLinks.AddNewAreaLink( aAreaLink );
         }
-        rAreaLinks.Sort();
     }
+    rAreaLinks.Sort();
 }
 
 // core implementation
