@@ -105,6 +105,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gtk3_kde5,\
 	vcl/unx/gtk3_kde5/gtk3_kde5_customcellrenderer \
 	vcl/unx/gtk3_kde5/gtk3_kde5_gtkdata \
 	vcl/unx/gtk3_kde5/gtk3_kde5_gtkinst \
+	vcl/unx/gtk3_kde5/gtk3_kde5_custom-theme \
 	vcl/unx/gtk3_kde5/gtk3_kde5_gtksys \
 	vcl/unx/gtk3_kde5/gtk3_kde5_filepicker \
 	vcl/unx/gtk3_kde5/gtk3_kde5_filepicker_ipc \

@@ -105,6 +105,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gtk3,\
     vcl/unx/gtk3/gtkinst \
     vcl/unx/gtk3/gtksys \
     vcl/unx/gtk3/gtkcairo \
+    vcl/unx/gtk3/custom-theme \
     vcl/unx/gtk3/salnativewidgets-gtk \
     vcl/unx/gtk3/gtkframe \
     vcl/unx/gtk3/gtkobject \

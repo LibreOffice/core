@@ -24,9 +24,13 @@
 #include <unx/fontmanager.hxx>
 #include <o3tl/string_view.hxx>
 
+#include <IconThemeSelector.hxx>
+#include "custom-theme.hxx"
+#include <vcl/themecolors.hxx>
 #include "gtkcairo.hxx"
 #include <optional>
 
+GtkCssProvider*  GtkSalGraphics::mpCustomThemeProvider = nullptr;
 GtkStyleContext* GtkSalGraphics::mpWindowStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpButtonStyle = nullptr;
 GtkStyleContext* GtkSalGraphics::mpLinkButtonStyle = nullptr;
@@ -2308,6 +2312,12 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
     GtkSettings* pSettings = gtk_widget_get_settings(pTopLevel);
     StyleSettings aStyleSet = rSettings.GetStyleSettings();
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+    CustomTheme::ApplyCustomTheme(gtk_widget_get_display(pTopLevel), &mpCustomThemeProvider);
+#else
+    CustomTheme::ApplyCustomTheme(gtk_widget_get_screen(pTopLevel), &mpCustomThemeProvider);
+#endif
+
     // text colors
     GdkRGBA text_color;
     style_context_set_state(pStyle, GTK_STATE_FLAG_NORMAL);
@@ -2660,14 +2670,22 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
     aStyleSet.SetMinThumbSize(min_slider_length);
 
     // preferred icon style
-    gchar* pIconThemeName = nullptr;
-    gboolean bDarkIconTheme = false;
-    g_object_get(pSettings, "gtk-icon-theme-name", &pIconThemeName,
-                            "gtk-application-prefer-dark-theme", &bDarkIconTheme,
-                            nullptr );
-    OUString sIconThemeName(OUString::createFromAscii(pIconThemeName));
-    aStyleSet.SetPreferredIconTheme(sIconThemeName, bDarkIconTheme);
-    g_free( pIconThemeName );
+    if (!ThemeColors::IsThemeLoaded())
+    {
+        gchar* pIconThemeName = nullptr;
+        gboolean bDarkIconTheme = false;
+        g_object_get(pSettings, "gtk-icon-theme-name", &pIconThemeName,
+                "gtk-application-prefer-dark-theme", &bDarkIconTheme,
+                nullptr );
+        OUString sIconThemeName(OUString::createFromAscii(pIconThemeName));
+        aStyleSet.SetPreferredIconTheme(sIconThemeName, bDarkIconTheme);
+        g_free( pIconThemeName );
+    }
+    else
+    {
+        aStyleSet.SetPreferredIconTheme(vcl::IconThemeSelector::GetIconThemeForDesktopEnvironment(
+            Application::GetDesktopEnvironment(), ThemeColors::GetThemeColors().GetWindowColor().IsDark()));
+    }
 
     aStyleSet.SetToolbarIconSize( ToolbarIconSize::Large );
 

@@ -135,6 +135,7 @@ public:
 #endif
 private:
     GtkWidget              *mpWindow;
+    static GtkCssProvider  *mpCustomThemeProvider;
     static GtkStyleContext *mpWindowStyle;
     static GtkStyleContext *mpButtonStyle;
     static GtkStyleContext *mpLinkButtonStyle;
