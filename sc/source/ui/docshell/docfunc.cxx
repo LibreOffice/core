@@ -555,9 +555,8 @@ static void lcl_collectAllPredOrSuccRanges(
         return;
     ScRange const & rFrontRange = rSrcRanges.front();
     ScDetectiveFunc aDetFunc(rDoc, rFrontRange.aStart.Tab());
-    for (size_t i = 0, n = rSrcRanges.size(); i < n; ++i)
+    for (ScRange const & r : rSrcRanges)
     {
-        ScRange const & r = rSrcRanges[i];
         if (bPred)
         {
             aDetFunc.GetAllPreds(
