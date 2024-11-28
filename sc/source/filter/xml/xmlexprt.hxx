@@ -23,6 +23,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 
 #include <address.hxx>
+#include "XMLExportIterator.hxx"
 
 #include <memory>
 #include <unordered_map>
@@ -49,8 +50,6 @@ class ScRowStyles;
 class ScFormatRangeStyles;
 class ScRowFormatRanges;
 class ScMyOpenCloseColumnRowGroup;
-class ScMyAreaLinksContainer;
-class ScMyDetectiveOpContainer;
 struct ScMyCell;
 class ScDocument;
 class ScMySharedData;
@@ -142,8 +141,8 @@ class ScXMLExport : public SvXMLExport
     void CollectInternalShape( css::uno::Reference< css::drawing::XShape > const & xShape );
 
     static css::table::CellRangeAddress GetEndAddress(const css::uno::Reference<css::sheet::XSpreadsheet>& xTable);
-    void GetAreaLinks( ScMyAreaLinksContainer& rAreaLinks );
-    void GetDetectiveOpList( ScMyDetectiveOpContainer& rDetOp );
+    ScMyAreaLinksContainer GetAreaLinks();
+    ScMyDetectiveOpContainer GetDetectiveOpList();
     void WriteSingleColumn(const sal_Int32 nRepeatColumns, const sal_Int32 nStyleIndex,
         const sal_Int32 nIndex, const bool bIsAutoStyle, const bool bIsVisible);
     void WriteColumn(const sal_Int32 nColumn, const sal_Int32 nRepeatColumns,

@@ -172,11 +172,9 @@ private:
 protected:
     virtual bool                GetFirstAddress( ScAddress& rCellAddress ) override;
 public:
-                                ScMyAreaLinksContainer();
+                                ScMyAreaLinksContainer() = default;
+    explicit                    ScMyAreaLinksContainer(ScMyAreaLinkList&& list);
     virtual                     ~ScMyAreaLinksContainer() override;
-
-    void                 AddNewAreaLink( const ScMyAreaLink& rAreaLink )
-                                    { aAreaLinkList.push_back( rAreaLink ); }
 
                                 using ScMyIteratorBase::UpdateAddress;
     virtual void                SetCellData( ScMyCell& rMyCell ) override;
@@ -262,10 +260,9 @@ private:
 protected:
     virtual bool                GetFirstAddress( ScAddress& rCellAddress ) override;
 public:
-                                ScMyDetectiveOpContainer();
+                                ScMyDetectiveOpContainer() = default;
+    explicit                    ScMyDetectiveOpContainer(ScMyDetectiveOpList&& list);
     virtual                     ~ScMyDetectiveOpContainer() override;
-
-    void                        AddOperation( ScDetOpType eOpType, const ScAddress& rPosition, sal_uInt32 nIndex );
 
                                 using ScMyIteratorBase::UpdateAddress;
     virtual void                SetCellData( ScMyCell& rMyCell ) override;

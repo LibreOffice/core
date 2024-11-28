@@ -33,7 +33,6 @@
 #include "XMLExportDataPilot.hxx"
 #include "XMLExportDatabaseRanges.hxx"
 #include "XMLExportDDELinks.hxx"
-#include "XMLExportIterator.hxx"
 #include "XMLColumnRowGroupExport.hxx"
 #include "XMLStylesExportHelper.hxx"
 #include "XMLChangeTrackingExportHelper.hxx"
@@ -676,14 +675,15 @@ table::CellRangeAddress ScXMLExport::GetEndAddress(const uno::Reference<sheet::X
     return aCellAddress;
 }
 
-void ScXMLExport::GetAreaLinks( ScMyAreaLinksContainer& rAreaLinks )
+ScMyAreaLinksContainer ScXMLExport::GetAreaLinks()
 {
     if (!mpDoc)
-        return;
+        return {};
     sfx2::LinkManager* pManager = mpDoc->GetLinkManager();
     if (!pManager)
-        return;
+        return {};
 
+    ScMyAreaLinkList aAreaLinks;
     for (const auto& rLink : pManager->GetLinks())
     {
         if (ScAreaLink* pLink = dynamic_cast<ScAreaLink*>(rLink.get()))
@@ -695,22 +695,23 @@ void ScXMLExport::GetAreaLinks( ScMyAreaLinksContainer& rAreaLinks )
             aAreaLink.sFilterOptions = pLink->GetOptions();
             aAreaLink.sURL = pLink->GetFile();
             aAreaLink.nRefreshDelaySeconds = pLink->GetRefreshDelaySeconds();
-            rAreaLinks.AddNewAreaLink( aAreaLink );
+            aAreaLinks.push_back(aAreaLink);
         }
     }
-    rAreaLinks.Sort();
+    return ScMyAreaLinksContainer(std::move(aAreaLinks));
 }
 
 // core implementation
-void ScXMLExport::GetDetectiveOpList( ScMyDetectiveOpContainer& rDetOp )
+ScMyDetectiveOpContainer ScXMLExport::GetDetectiveOpList()
 {
     if (!mpDoc)
-        return;
+        return {};
 
     ScDetOpList* pOpList(mpDoc->GetDetOpList());
     if( !pOpList )
-        return;
+        return {};
 
+    ScMyDetectiveOpList aDetOp;
     size_t nCount = pOpList->Count();
     for (size_t nIndex = 0; nIndex < nCount; ++nIndex )
     {
@@ -719,14 +720,14 @@ void ScXMLExport::GetDetectiveOpList( ScMyDetectiveOpContainer& rDetOp )
         SCTAB nTab = rDetPos.Tab();
         if ( nTab < mpDoc->GetTableCount() )
         {
-            rDetOp.AddOperation( rDetData.GetOperation(), rDetPos, static_cast<sal_uInt32>( nIndex) );
+            aDetOp.push_back({ rDetPos, rDetData.GetOperation(), static_cast<sal_Int32>(nIndex) });
 
             // cells with detective operations are written even if empty
             pSharedData->SetLastColumn( nTab, rDetPos.Col() );
             pSharedData->SetLastRow( nTab, rDetPos.Row() );
         }
     }
-    rDetOp.Sort();
+    return ScMyDetectiveOpContainer(std::move(aDetOp));
 }
 
 void ScXMLExport::WriteSingleColumn(const sal_Int32 nRepeatColumns, const sal_Int32 nStyleIndex,
@@ -1898,11 +1899,9 @@ void ScXMLExport::ExportContent_()
         pChangeTrackingExportHelper->CollectAndWriteChanges();
         WriteCalculationSettings(xSpreadDoc);
         sal_Int32 nTableCount(xIndex->getCount());
-        ScMyAreaLinksContainer aAreaLinks;
-        GetAreaLinks( aAreaLinks );
+        ScMyAreaLinksContainer aAreaLinks = GetAreaLinks();
         ScMyEmptyDatabaseRangesContainer aEmptyRanges(aExportDatabaseRanges.GetEmptyDatabaseRanges());
-        ScMyDetectiveOpContainer aDetectiveOpContainer;
-        GetDetectiveOpList( aDetectiveOpContainer );
+        ScMyDetectiveOpContainer aDetectiveOpContainer = GetDetectiveOpList();
 
         pMergedRangesContainer->Sort();
         pSharedData->GetDetectiveObjContainer()->Sort();

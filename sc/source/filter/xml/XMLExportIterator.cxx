@@ -253,8 +253,10 @@ inline bool ScMyAreaLink::operator<(const ScMyAreaLink& rAreaLink ) const
     return aDestRange.aStart.lessThanByRow( rAreaLink.aDestRange.aStart );
 }
 
-ScMyAreaLinksContainer::ScMyAreaLinksContainer()
+ScMyAreaLinksContainer::ScMyAreaLinksContainer(ScMyAreaLinkList&& list)
+    : aAreaLinkList(std::move(list))
 {
+    Sort();
 }
 
 ScMyAreaLinksContainer::~ScMyAreaLinksContainer()
@@ -458,21 +460,14 @@ inline bool ScMyDetectiveOp::operator<( const ScMyDetectiveOp& rDetOp) const
     return aPosition.lessThanByRow( rDetOp.aPosition );
 }
 
-ScMyDetectiveOpContainer::ScMyDetectiveOpContainer()
+ScMyDetectiveOpContainer::ScMyDetectiveOpContainer(ScMyDetectiveOpList&& list)
+    : aDetectiveOpList(std::move(list))
 {
+    Sort();
 }
 
 ScMyDetectiveOpContainer::~ScMyDetectiveOpContainer()
 {
-}
-
-void ScMyDetectiveOpContainer::AddOperation( ScDetOpType eOpType, const ScAddress& rPosition, sal_uInt32 nIndex )
-{
-    ScMyDetectiveOp aDetOp;
-    aDetOp.eOpType = eOpType;
-    aDetOp.aPosition = rPosition;
-    aDetOp.nIndex = nIndex;
-    aDetectiveOpList.push_back( aDetOp );
 }
 
 bool ScMyDetectiveOpContainer::GetFirstAddress( ScAddress& rCellAddress )
