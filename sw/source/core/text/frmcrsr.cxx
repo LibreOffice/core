@@ -1562,8 +1562,8 @@ void SwTextFrame::FillCursorPos( SwFillData& rFill ) const
                     SwTwips nRightTab = nLeft;
                     sal_uInt16 nSpaceCnt = 0;
                     sal_uInt16 nSpaceOnlyCnt = 0;
-                    sal_uInt16 nTabCnt = 0;
                     sal_uInt16 nIdx = 0;
+                    int nTabCnt = 0;
                     do
                     {
                         nLeftTab = nRightTab;
