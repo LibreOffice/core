@@ -559,7 +559,8 @@ public:
 #endif
 
     /// Hidden
-    virtual bool IsHiddenNow() const override; // bHidden && pOut == pPrt
+    virtual bool IsHiddenNow() const override;
+    bool IsHiddenNowImpl() const;
     void HideHidden();              // Remove appendage if Hidden
     void HideFootnotes(TextFrameIndex nStart, TextFrameIndex nEnd);
 
