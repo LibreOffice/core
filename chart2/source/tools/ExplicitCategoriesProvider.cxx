@@ -32,6 +32,7 @@
 #include <DataSeries.hxx>
 
 #include <com/sun/star/chart2/AxisType.hpp>
+#include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <o3tl/compare.hxx>
 #include <o3tl/safeint.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -108,11 +109,18 @@ ExplicitCategoriesProvider::ExplicitCategoriesProvider( const rtl::Reference< Ba
                         if( !aSeries.empty() )
                         {
                             const rtl::Reference< DataSeries >& xSeriesSource = aSeries.front();
-                            OUString aStringDummy;
-                            bool bDummy;
-                            uno::Sequence< sal_Int32 > aSeqDummy;
-                            DataSourceHelper::readArguments( xDataProvider->detectArguments( xSeriesSource),
-                                    aStringDummy, aSeqDummy, bSeriesUsesColumns, bDummy, bDummy );
+                            for(const auto& rArgument : xDataProvider->detectArguments( xSeriesSource))
+                            {
+                                if ( rArgument.Name == "DataRowSource" )
+                                {
+                                    css::chart::ChartDataRowSource eRowSource;
+                                    if( rArgument.Value >>= eRowSource )
+                                    {
+                                        bSeriesUsesColumns = (eRowSource == css::chart::ChartDataRowSource_COLUMNS);
+                                        break;
+                                    }
+                                }
+                            }
                         }
                         if( bSeriesUsesColumns )
                             m_aSplitCategoriesList = comphelper::sequenceToContainer<std::vector<Reference<data::XLabeledDataSequence>>>(aColumns);
