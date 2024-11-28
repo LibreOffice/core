@@ -3981,7 +3981,7 @@ void SwContentTree::ExecCommand(std::u16string_view rCmd, bool bOutlineWithChild
                  nFirstRegularDocContentOutlineNodePos == SwOutlineNodes::npos)))
         {
             // except inline headings, i.e. Inline Heading frames with
-            // single outlines, and achored as characters, which headings
+            // single outlines, and anchored as characters, which headings
             // are movable with their anchor node, if they are
             // 1) not in other frames or 2) not in tables and 3) not protected
             const SwNode* pRootNode = nHasInlineHeading > 0
