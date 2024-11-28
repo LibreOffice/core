@@ -929,42 +929,42 @@ sal_Int32 SwFieldRefPage::FillFormatLB(sal_uInt16 nTypeId)
     {
         for (sal_uInt16 i = 0; i < nSize; i++)
         {
-            OUString sId(OUString::number(GetFieldMgr().GetFormatId( nFieldType, i + SAL_N_ELEMENTS(FMT_REF_ARY))));
+            OUString sId(OUString::number(GetFieldMgr().GetFormatId( nFieldType, i + std::size(FMT_REF_ARY))));
             m_xFormatLB->append(sId, SwResId(FMT_REF_WITH_LOWERCASE_HU_ARTICLE) + GetFieldMgr().GetFormatStr( nFieldType, i ));
         }
         nExtraSize += nSize;
 
         if ( bAddCrossRefFormats )
         {
-            sal_uInt16 nFormat = FMT_REF_NUMBER_IDX + SAL_N_ELEMENTS(FMT_REF_ARY);
+            sal_uInt16 nFormat = FMT_REF_NUMBER_IDX + std::size(FMT_REF_ARY);
             OUString sId(OUString::number(GetFieldMgr().GetFormatId(nFieldType, nFormat)));
-            m_xFormatLB->append(sId, SwResId(FMT_REF_WITH_LOWERCASE_HU_ARTICLE) + GetFieldMgr().GetFormatStr( nFieldType, nFormat % SAL_N_ELEMENTS(FMT_REF_ARY)));
-            nFormat = FMT_REF_NUMBER_NO_CONTEXT_IDX + SAL_N_ELEMENTS(FMT_REF_ARY);
+            m_xFormatLB->append(sId, SwResId(FMT_REF_WITH_LOWERCASE_HU_ARTICLE) + GetFieldMgr().GetFormatStr( nFieldType, nFormat % std::size(FMT_REF_ARY)));
+            nFormat = FMT_REF_NUMBER_NO_CONTEXT_IDX + std::size(FMT_REF_ARY);
             sId = OUString::number(GetFieldMgr().GetFormatId(nFieldType, nFormat));
-            m_xFormatLB->append(sId, SwResId(FMT_REF_WITH_LOWERCASE_HU_ARTICLE) + GetFieldMgr().GetFormatStr( nFieldType, nFormat % SAL_N_ELEMENTS(FMT_REF_ARY)));
-            nFormat = FMT_REF_NUMBER_FULL_CONTEXT_IDX + SAL_N_ELEMENTS(FMT_REF_ARY);
+            m_xFormatLB->append(sId, SwResId(FMT_REF_WITH_LOWERCASE_HU_ARTICLE) + GetFieldMgr().GetFormatStr( nFieldType, nFormat % std::size(FMT_REF_ARY)));
+            nFormat = FMT_REF_NUMBER_FULL_CONTEXT_IDX + std::size(FMT_REF_ARY);
             sId = OUString::number(GetFieldMgr().GetFormatId(nFieldType, nFormat));
-            m_xFormatLB->append(sId, SwResId(FMT_REF_WITH_LOWERCASE_HU_ARTICLE) + GetFieldMgr().GetFormatStr( nFieldType, nFormat % SAL_N_ELEMENTS(FMT_REF_ARY)));
+            m_xFormatLB->append(sId, SwResId(FMT_REF_WITH_LOWERCASE_HU_ARTICLE) + GetFieldMgr().GetFormatStr( nFieldType, nFormat % std::size(FMT_REF_ARY)));
             nExtraSize += 3;
         }
         // uppercase article
         for (sal_uInt16 i = 0; i < nSize; i++)
         {
-            OUString sId(OUString::number(GetFieldMgr().GetFormatId( nFieldType, i + 2 * SAL_N_ELEMENTS(FMT_REF_ARY))));
+            OUString sId(OUString::number(GetFieldMgr().GetFormatId( nFieldType, i + 2 * std::size(FMT_REF_ARY))));
             m_xFormatLB->append(sId, SwResId(FMT_REF_WITH_UPPERCASE_HU_ARTICLE) + GetFieldMgr().GetFormatStr( nFieldType, i ));
         }
         nExtraSize += nSize;
         if ( bAddCrossRefFormats )
         {
-            sal_uInt16 nFormat = FMT_REF_NUMBER_IDX + 2 * SAL_N_ELEMENTS(FMT_REF_ARY);
+            sal_uInt16 nFormat = FMT_REF_NUMBER_IDX + 2 * std::size(FMT_REF_ARY);
             OUString sId(OUString::number(GetFieldMgr().GetFormatId(nFieldType, nFormat)));
-            m_xFormatLB->append(sId, SwResId(FMT_REF_WITH_UPPERCASE_HU_ARTICLE) + GetFieldMgr().GetFormatStr( nFieldType, nFormat % SAL_N_ELEMENTS(FMT_REF_ARY)));
-            nFormat = FMT_REF_NUMBER_NO_CONTEXT_IDX + 2 * SAL_N_ELEMENTS(FMT_REF_ARY);
+            m_xFormatLB->append(sId, SwResId(FMT_REF_WITH_UPPERCASE_HU_ARTICLE) + GetFieldMgr().GetFormatStr( nFieldType, nFormat % std::size(FMT_REF_ARY)));
+            nFormat = FMT_REF_NUMBER_NO_CONTEXT_IDX + 2 * std::size(FMT_REF_ARY);
             sId = OUString::number(GetFieldMgr().GetFormatId(nFieldType, nFormat));
-            m_xFormatLB->append(sId, SwResId(FMT_REF_WITH_UPPERCASE_HU_ARTICLE) + GetFieldMgr().GetFormatStr( nFieldType, nFormat % SAL_N_ELEMENTS(FMT_REF_ARY)));
-            nFormat = FMT_REF_NUMBER_FULL_CONTEXT_IDX + 2 * SAL_N_ELEMENTS(FMT_REF_ARY);
+            m_xFormatLB->append(sId, SwResId(FMT_REF_WITH_UPPERCASE_HU_ARTICLE) + GetFieldMgr().GetFormatStr( nFieldType, nFormat % std::size(FMT_REF_ARY)));
+            nFormat = FMT_REF_NUMBER_FULL_CONTEXT_IDX + 2 * std::size(FMT_REF_ARY);
             sId = OUString::number(GetFieldMgr().GetFormatId(nFieldType, nFormat));
-            m_xFormatLB->append(sId, SwResId(FMT_REF_WITH_UPPERCASE_HU_ARTICLE) + GetFieldMgr().GetFormatStr( nFieldType, nFormat % SAL_N_ELEMENTS(FMT_REF_ARY)));
+            m_xFormatLB->append(sId, SwResId(FMT_REF_WITH_UPPERCASE_HU_ARTICLE) + GetFieldMgr().GetFormatStr( nFieldType, nFormat % std::size(FMT_REF_ARY)));
             nExtraSize += 3;
         }
     }
@@ -977,7 +977,7 @@ sal_Int32 SwFieldRefPage::FillFormatLB(sal_uInt16 nTypeId)
         if (!IsFieldEdit())
             m_xFormatLB->select_text(sOldSel);
         else
-            m_xFormatLB->select_text(SwResId(FMT_REF_ARY[GetCurField()->GetFormat() % SAL_N_ELEMENTS(FMT_REF_ARY)]));
+            m_xFormatLB->select_text(SwResId(FMT_REF_ARY[GetCurField()->GetFormat() % std::size(FMT_REF_ARY)]));
 
         if (m_xFormatLB->get_selected_index() == -1)
         {
