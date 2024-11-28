@@ -693,8 +693,8 @@ OUString SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
             if ( rNm.startsWith(aName) )
             {
                 // Calculate number and set the Flag
-                SwSectionFormats::size_type nNum = o3tl::toInt32(rNm.subView(nNmLen));
-                if( nNum-- && nNum < mpSectionFormatTable->size() )
+                sal_Int32 nNum = o3tl::toInt32(rNm.subView(nNmLen)) - 1;
+                if (nNum >= 0 && o3tl::make_unsigned(nNum) < mpSectionFormatTable->size())
                     pSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
             }
             if ( bUseChkStr && sChkStr==rNm )
