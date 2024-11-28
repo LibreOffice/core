@@ -5661,11 +5661,6 @@ void DocxAttributeOutput::WritePostponedMath(const SwOLENode* pPostponedMath, sa
         }
     }
     uno::Reference< uno::XInterface > xInterface( xObj->getComponent(), uno::UNO_QUERY );
-    if (!xInterface.is())
-    {
-        SAL_WARN("sw.ww8", "Broken math object");
-        return;
-    }
     if( oox::FormulaImExportBase* formulaexport = dynamic_cast< oox::FormulaImExportBase* >( xInterface.get()))
         formulaexport->writeFormulaOoxml( m_pSerializer, GetExport().GetFilter().getVersion(),
                 oox::drawingml::DOCUMENT_DOCX, nAlign);
