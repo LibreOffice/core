@@ -90,9 +90,9 @@ struct ScAccessibleShapeData
     ScAccessibleShapeData(css::uno::Reference< css::drawing::XShape > xShape_);
     ~ScAccessibleShapeData();
     mutable rtl::Reference< ::accessibility::AccessibleShape > pAccShape;
-    mutable std::optional<ScAddress> xRelationCell; // if it is NULL this shape is anchored on the table
+    std::optional<ScAddress> xRelationCell; // if it is NULL this shape is anchored on the table
     css::uno::Reference< css::drawing::XShape > xShape;
-    mutable bool            bSelected;
+    bool                    bSelected;
     bool                    bSelectable;
     // cache these to make the sorting cheaper
     std::optional<sal_Int16> mxLayerID;
@@ -720,7 +720,7 @@ void ScChildrenShapes::DeselectAll()
     }
 
     if (bSomethingSelected)
-        for (const ScAccessibleShapeData* pAccShapeData : maZOrderedShapes)
+        for (ScAccessibleShapeData* pAccShapeData : maZOrderedShapes)
             if (pAccShapeData)
             {
                 pAccShapeData->bSelected = false;
@@ -746,7 +746,7 @@ void ScChildrenShapes::SelectAll()
 
     try
     {
-        for (const ScAccessibleShapeData* pAccShapeData : maZOrderedShapes)
+        for (ScAccessibleShapeData* pAccShapeData : maZOrderedShapes)
         {
             if (pAccShapeData && pAccShapeData->bSelectable)
             {
