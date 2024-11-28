@@ -718,6 +718,99 @@ bool isValidNode(const Reference<XAnimationNode>& xNode)
     return false;
 }
 
+SdrObject* getObjectForShape(uno::Reference<drawing::XShape> const& xShape)
+{
+    if (!xShape.is())
+        return nullptr;
+    SvxShape* pShape = comphelper::getFromUnoTunnel<SvxShape>(xShape);
+    if (pShape)
+        return pShape->GetSdrObject();
+    return nullptr;
+}
+
+SdrObject* getTargetObject(const uno::Any& aTargetAny)
+{
+    SdrObject* pObject = nullptr;
+    uno::Reference<drawing::XShape> xShape;
+
+    if ((aTargetAny >>= xShape) && xShape.is())
+    {
+        pObject = getObjectForShape(xShape);
+    }
+    else // if target is not a shape - could be paragraph target containing a shape
+    {
+        presentation::ParagraphTarget aParagraphTarget;
+        if ((aTargetAny >>= aParagraphTarget) && aParagraphTarget.Shape.is())
+        {
+            pObject = getObjectForShape(aParagraphTarget.Shape);
+        }
+    }
+
+    return pObject;
+}
+
+bool isNodeTargetInShapeGroup(const Reference<XAnimationNode>& xNode)
+{
+    Reference<XAnimate> xAnimate(xNode, UNO_QUERY);
+    if (xAnimate.is())
+    {
+        SdrObject* pObject = getTargetObject(xAnimate->getTarget());
+        if (pObject)
+            return pObject->getParentSdrObjectFromSdrObject() != nullptr;
+    }
+    return false;
+}
+
+bool isNodeTargetAGroup(const Reference<XAnimationNode>& xNode)
+{
+    Reference<XAnimate> xAnimate(xNode, UNO_QUERY);
+    if (xAnimate.is())
+    {
+        SdrObject* pObject = getTargetObject(xAnimate->getTarget());
+        if (pObject)
+            return pObject->getChildrenOfSdrObject() != nullptr;
+    }
+    return false;
+}
+
+bool isEffectValidForTarget(const Reference<XAnimationNode>& xNode)
+{
+    const Sequence<NamedValue> aUserData(xNode->getUserData());
+    for (const auto& rValue : aUserData)
+    {
+        if (!IsXMLToken(rValue.Name, XML_PRESET_ID))
+            continue;
+
+        OUString aPresetId;
+        if (rValue.Value >>= aPresetId)
+        {
+            if (constNonValidEffectsForGroupSet.find(aPresetId.toUtf8())
+                != constNonValidEffectsForGroupSet.end())
+            {
+                // it's in the list, so we need to check if the effect target is a group or not
+                Reference<XTimeContainer> xContainer(xNode, UNO_QUERY);
+                if (xContainer.is())
+                {
+                    Reference<XEnumerationAccess> xEnumerationAccess(xContainer, UNO_QUERY);
+                    Reference<XEnumeration> xEnumeration = xEnumerationAccess->createEnumeration();
+
+                    // target is the same for all children, check the first one
+                    if (xEnumeration.is() && xEnumeration->hasMoreElements())
+                    {
+                        Reference<XAnimationNode> xChildNode(xEnumeration->nextElement(),
+                                                             UNO_QUERY);
+                        if (isNodeTargetAGroup(xChildNode))
+                            return false;
+                    }
+                }
+            }
+        }
+        // preset id found and checked, we can exit
+        break;
+    }
+    return true;
+}
+
 void AnimationsExporter::exportAnimations()
 {
     if (!mxDrawPage.is() || !mxPageProps.is() || !mxRootNode.is() || !hasEffects())
@@ -729,12 +822,16 @@ void AnimationsExporter::exportAnimations()
         exportNodeImpl(mxRootNode);
     }
 }
+
 void AnimationsExporter::exportNode(const Reference<XAnimationNode>& xNode)
 {
-     if (!isValidNode(xNode))
-         return;
-     auto aStruct = mrWriter.startStruct();
-     exportNodeImpl(xNode);
+    // afaics, when a shape is part of a group any applied effect is ignored
+    // moreover, some kind of effect, like the ones based on color animations,
+    // is ignored when applied to a group
+    if (!isValidNode(xNode) || isNodeTargetInShapeGroup(xNode) || !isEffectValidForTarget(xNode))
+        return;
+    auto aStruct = mrWriter.startStruct();
+    exportNodeImpl(xNode);
 }
 
 void AnimationsExporter::exportNodeImpl(const Reference<XAnimationNode>& xNode)

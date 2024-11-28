@@ -40,6 +40,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sd_tiledrendering, \
 
 $(eval $(call gb_CppunitTest_use_externals,sd_tiledrendering,\
     boost_headers \
+    frozen \
     libxml2 \
 ))
 
