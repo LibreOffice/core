@@ -696,8 +696,8 @@ void ScXMLExport::GetAreaLinks( ScMyAreaLinksContainer& rAreaLinks )
                 rAreaLinks.AddNewAreaLink( aAreaLink );
             }
         }
+        rAreaLinks.Sort();
     }
-    rAreaLinks.Sort();
 }
 
 // core implementation
