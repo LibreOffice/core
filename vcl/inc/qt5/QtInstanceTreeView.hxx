@@ -180,6 +180,9 @@ public:
 
     using QtInstanceWidget::set_sensitive;
     using QtInstanceWidget::get_sensitive;
+
+private:
+    static QAbstractItemView::SelectionMode mapSelectionMode(SelectionMode eMode);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

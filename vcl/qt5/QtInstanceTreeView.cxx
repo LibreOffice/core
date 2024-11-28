@@ -515,9 +515,11 @@ void QtInstanceTreeView::set_column_title(int, const OUString&)
     assert(false && "Not implemented yet");
 }
 
-void QtInstanceTreeView::set_selection_mode(SelectionMode)
+void QtInstanceTreeView::set_selection_mode(SelectionMode eMode)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+    GetQtInstance().RunInMainThread(
+        [&] { m_pTreeView->setSelectionMode(mapSelectionMode(eMode)); });
 }
 
 int QtInstanceTreeView::count_selected_rows() const
@@ -567,6 +569,24 @@ weld::TreeView* QtInstanceTreeView::get_drag_source() const
 {
     assert(false && "Not implemented yet");
     return nullptr;
+}
+
+QAbstractItemView::SelectionMode QtInstanceTreeView::mapSelectionMode(SelectionMode eMode)
+{
+    switch (eMode)
+    {
+        case SelectionMode::NONE:
+            return QAbstractItemView::NoSelection;
+        case SelectionMode::Single:
+            return QAbstractItemView::SingleSelection;
+        case SelectionMode::Range:
+            return QAbstractItemView::ContiguousSelection;
+        case SelectionMode::Multiple:
+            return QAbstractItemView::ExtendedSelection;
+        default:
+            assert(false && "unhandled selection mode");
+            return QAbstractItemView::SingleSelection;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
