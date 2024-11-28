@@ -70,6 +70,9 @@ $ExcludedML         = [[:name = COLON:]
                        [:name = SMALL COLON:]
                        [:name = FULLWIDTH COLON:]];
 
+### tdf#162514: For spell checking, abbreviations may end with a period.
+$PostPeriod         = [:name = FULL STOP:];
+
 # $MidLetter          = [\p{Word_Break = MidLetter}];
 $MidLetter          = [[\p{Word_Break = MidLetter}]-$ExcludedML $IncludedML];
 
@@ -140,10 +143,24 @@ $Ideographic $ExFm* {400};          #
 # rule 5
 #    Do not break between most letters.
 #
-($ALetterPlus | $Hebrew_Letter) $ExFm* ($ALetterPlus | $Hebrew_Letter);
+
+### BEGIN CUSTOMIZATION
+### tdf#162514: For spell checking, abbreviations may end with a period.
+
+# ($ALetterPlus | $Hebrew_Letter) $ExFm* ($ALetterPlus | $Hebrew_Letter);
+($ALetterPlus | $Hebrew_Letter) $ExFm* ($ALetterPlus | $Hebrew_Letter) ($PostPeriod)?;
+
+### END CUSTOMIZATION
 
 # rule 6 and 7
-($ALetterPlus | $Hebrew_Letter)  $ExFm* ($MidLetter | $MidNumLet | $Single_Quote) $ExFm* ($ALetterPlus | $Hebrew_Letter) {200};
+
+### BEGIN CUSTOMIZATION
+### tdf#162514: For spell checking, abbreviations may end with a period.
+
+# ($ALetterPlus | $Hebrew_Letter)  $ExFm* ($MidLetter | $MidNumLet | $Single_Quote) $ExFm* ($ALetterPlus | $Hebrew_Letter) {200};
+($ALetterPlus | $Hebrew_Letter)  $ExFm* ($MidLetter | $MidNumLet | $Single_Quote) $ExFm* ($ALetterPlus | $Hebrew_Letter) ($PostPeriod)? {200};
+
+### END CUSTOMIZATION
 
 # rule 7a
 $Hebrew_Letter $ExFm* $Single_Quote {200};
