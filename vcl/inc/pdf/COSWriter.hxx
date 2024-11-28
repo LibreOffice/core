@@ -10,6 +10,7 @@
 #pragma once
 
 #include <pdf/IPDFEncryptor.hxx>
+#include <vcl/pdfwriter.hxx>
 
 namespace vcl::pdf
 {
@@ -22,7 +23,9 @@ namespace vcl::pdf
 class COSWriter
 {
     std::shared_ptr<IPDFEncryptor> mpPDFEncryptor;
+    EncryptionParams maParams;
     OStringBuffer maLine;
+    OStringBuffer& mrBuffer;
 
     void appendLiteralString(const char* pStr, sal_Int32 nLength)
     {
@@ -31,28 +34,28 @@ class COSWriter
             switch (*pStr)
             {
                 case '\n':
-                    maLine.append("\\n");
+                    mrBuffer.append("\\n");
                     break;
                 case '\r':
-                    maLine.append("\\r");
+                    mrBuffer.append("\\r");
                     break;
                 case '\t':
-                    maLine.append("\\t");
+                    mrBuffer.append("\\t");
                     break;
                 case '\b':
-                    maLine.append("\\b");
+                    mrBuffer.append("\\b");
                     break;
                 case '\f':
-                    maLine.append("\\f");
+                    mrBuffer.append("\\f");
                     break;
                 case '(':
                 case ')':
                 case '\\':
-                    maLine.append("\\");
-                    maLine.append(static_cast<char>(*pStr));
+                    mrBuffer.append("\\");
+                    mrBuffer.append(static_cast<char>(*pStr));
                     break;
                 default:
-                    maLine.append(static_cast<char>(*pStr));
+                    mrBuffer.append(static_cast<char>(*pStr));
                     break;
             }
             pStr++;
@@ -71,72 +74,107 @@ class COSWriter
     void appendHexArray(sal_uInt8* pArray, size_t nSize)
     {
         for (size_t i = 0; i < nSize; i++)
-            appendHex(pArray[i], maLine);
+            appendHex(pArray[i], mrBuffer);
     }
 
 public:
-    COSWriter(std::shared_ptr<IPDFEncryptor> const& pPDFEncryptor = nullptr)
+    COSWriter(EncryptionParams aParams = EncryptionParams(),
+              std::shared_ptr<IPDFEncryptor> const& pPDFEncryptor = nullptr)
         : mpPDFEncryptor(pPDFEncryptor)
+        , maParams(aParams)
         , maLine(1024)
+        , mrBuffer(maLine)
+    {
+    }
+
+    COSWriter(OStringBuffer& rBuffer, EncryptionParams aParams = EncryptionParams(),
+              std::shared_ptr<IPDFEncryptor> const& pPDFEncryptor = nullptr)
+        : mpPDFEncryptor(pPDFEncryptor)
+        , maParams(aParams)
+        , mrBuffer(rBuffer)
     {
     }
 
     void startObject(sal_Int32 nObjectID)
     {
-        maLine.append(nObjectID);
-        maLine.append(" 0 obj\n");
+        mrBuffer.append(nObjectID);
+        mrBuffer.append(" 0 obj\n");
     }
 
-    void endObject() { maLine.append("endobj\n\n"); }
+    void endObject() { mrBuffer.append("endobj\n\n"); }
 
-    OStringBuffer& getLine() { return maLine; }
+    OStringBuffer& getLine() { return mrBuffer; }
 
-    void startDict() { maLine.append("<<"); }
-    void endDict() { maLine.append(">>\n"); }
+    void startDict() { mrBuffer.append("<<"); }
+    void endDict() { mrBuffer.append(">>\n"); }
 
-    void startStream() { maLine.append("stream\n"); }
-    void endStream() { maLine.append("\nendstream\n"); }
+    void startStream() { mrBuffer.append("stream\n"); }
+    void endStream() { mrBuffer.append("\nendstream\n"); }
 
     void write(std::string_view key, std::string_view value)
     {
-        maLine.append(key);
-        maLine.append(value);
+        mrBuffer.append(key);
+        mrBuffer.append(value);
     }
 
     void write(std::string_view key, sal_Int32 value)
     {
-        maLine.append(key);
-        maLine.append(" ");
-        maLine.append(value);
+        mrBuffer.append(key);
+        mrBuffer.append(" ");
+        mrBuffer.append(value);
     }
 
-    void writeReference(std::string_view key, sal_Int32 nObjectID)
+    void writeReference(sal_Int32 nObjectID)
     {
-        maLine.append(key);
-        maLine.append(" ");
-        maLine.append(nObjectID);
-        maLine.append(" 0 R");
+        mrBuffer.append(nObjectID);
+        mrBuffer.append(" 0 R");
+    }
+
+    void writeKeyAndReference(std::string_view key, sal_Int32 nObjectID)
+    {
+        mrBuffer.append(key);
+        mrBuffer.append(" ");
+        writeReference(nObjectID);
     }
 
     void writeKeyAndUnicode(std::string_view key, OUString const& rString)
     {
-        maLine.append(key);
-        maLine.append("<");
-        appendUnicodeTextString(rString, maLine);
-        maLine.append(">");
+        mrBuffer.append(key);
+        writeUnicode(rString);
     }
 
-    void writeKeyAndUnicodeEncrypt(std::string_view key, OUString const& rString, sal_Int32 nObject,
-                                   bool bEncrypt, std::vector<sal_uInt8>& rKey)
+    void writeUnicode(OUString const& rString)
     {
-        if (bEncrypt && mpPDFEncryptor)
+        mrBuffer.append("<");
+
+        mrBuffer.append("FEFF");
+        const sal_Unicode* pString = rString.getStr();
+        size_t nLength = rString.getLength();
+        for (size_t i = 0; i < nLength; i++)
         {
-            maLine.append(key);
-            maLine.append("<");
+            sal_Unicode aChar = pString[i];
+            appendHex(sal_Int8(aChar >> 8), mrBuffer);
+            appendHex(sal_Int8(aChar & 255), mrBuffer);
+        }
+
+        mrBuffer.append(">");
+    }
+
+    void writeKeyAndUnicodeEncrypt(std::string_view key, OUString const& rString, sal_Int32 nObject)
+    {
+        mrBuffer.append(key);
+        writeUnicodeEncrypt(rString, nObject);
+    }
+
+    void writeUnicodeEncrypt(OUString const& rString, sal_Int32 nObject)
+    {
+        if (maParams.mbCanEncrypt && mpPDFEncryptor)
+        {
+            mrBuffer.append("<");
             const sal_Unicode* pString = rString.getStr();
             size_t nLength = rString.getLength();
             //prepare a unicode string, encrypt it
-            mpPDFEncryptor->setupEncryption(rKey, nObject);
+            mpPDFEncryptor->setupEncryption(maParams.maKey, nObject);
             sal_Int32 nChars = 2 + (nLength * 2);
             std::vector<sal_uInt8> aEncryptionBuffer(nChars);
             sal_uInt8* pCopy = aEncryptionBuffer.data();
@@ -153,49 +191,75 @@ public:
             mpPDFEncryptor->encrypt(aEncryptionBuffer.data(), nChars, aNewBuffer, nChars);
             //now append, hexadecimal (appendHex), the encrypted result
             appendHexArray(aNewBuffer.data(), aNewBuffer.size());
-            maLine.append(">");
+            mrBuffer.append(">");
         }
         else
         {
-            writeKeyAndUnicode(key, rString);
+            writeUnicode(rString);
         }
     }
 
-    void writeKeyAndLiteral(std::string_view key, std::string_view value)
+    void writeLiteral(std::string_view value)
     {
-        maLine.append(key);
-        maLine.append("(");
+        mrBuffer.append("(");
         appendLiteralString(value.data(), value.size());
-        maLine.append(")");
+        mrBuffer.append(")");
     }
 
-    void writeKeyAndLiteralEncrypt(std::string_view key, std::string_view value, sal_Int32 nObject,
-                                   bool bEncrypt, std::vector<sal_uInt8>& rKey)
+    void writeLiteralEncrypt(std::u16string_view value, sal_Int32 nObject,
+                             rtl_TextEncoding nEncoding = RTL_TEXTENCODING_ASCII_US)
     {
-        if (bEncrypt && mpPDFEncryptor)
+        OString aBufferString(OUStringToOString(value, nEncoding));
+        sal_Int32 nLength = aBufferString.getLength();
+        OStringBuffer aBuffer(nLength);
+        const char* pT = aBufferString.getStr();
+
+        for (sal_Int32 i = 0; i < nLength; i++, pT++)
         {
-            maLine.append(key);
-            maLine.append("(");
+            if ((*pT & 0x80) == 0)
+                aBuffer.append(*pT);
+            else
+            {
+                aBuffer.append('<');
+                appendHex(*pT, aBuffer);
+                aBuffer.append('>');
+            }
+        }
+        writeLiteralEncrypt(aBuffer.makeStringAndClear(), nObject);
+    }
+
+    void writeLiteralEncrypt(std::string_view value, sal_Int32 nObject)
+    {
+        if (maParams.mbCanEncrypt && mpPDFEncryptor)
+        {
+            mrBuffer.append("(");
             size_t nChars = value.size();
             std::vector<sal_uInt8> aEncryptionBuffer(nChars);
-            mpPDFEncryptor->setupEncryption(rKey, nObject);
+            mpPDFEncryptor->setupEncryption(maParams.maKey, nObject);
             mpPDFEncryptor->encrypt(value.data(), nChars, aEncryptionBuffer, nChars);
             appendLiteralString(reinterpret_cast<char*>(aEncryptionBuffer.data()),
                                 aEncryptionBuffer.size());
-            maLine.append(")");
+            mrBuffer.append(")");
         }
         else
         {
-            writeKeyAndLiteral(key, value);
+            writeLiteral(value);
         }
+    }
+
+    void writeKeyAndLiteralEncrypt(std::string_view key, std::string_view value, sal_Int32 nObject)
+    {
+        mrBuffer.append(key);
+        mrBuffer.append(" ");
+        writeLiteralEncrypt(value, nObject);
     }
 
     void writeHexArray(std::string_view key, sal_uInt8* pData, size_t nSize)
     {
-        maLine.append(key);
-        maLine.append(" <");
+        mrBuffer.append(key);
+        mrBuffer.append(" <");
         appendHexArray(pData, nSize);
-        maLine.append(">");
+        mrBuffer.append(">");
     }
 
     static void appendUnicodeTextString(const OUString& rString, OStringBuffer& rBuffer)
