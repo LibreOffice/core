@@ -11,7 +11,7 @@
 
 $(eval $(call sc_ucalc_test,_nanpayload))
 
-# some testes related to NaN payload may fail on some arch(e.g. riscv64)
+# some tests related to NaN payload may fail on some arch(e.g. riscv64)
 # that does not support part of IEEE 754 voluntary standards
 ifeq ($(DISABLE_NAN_TESTS),TRUE)
 $(eval $(call gb_CppunitTest_add_defs,sc_ucalc_nanpayload,\
