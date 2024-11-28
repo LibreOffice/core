@@ -1243,6 +1243,10 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     bool const isHiddenNow(static_cast<SwTextFrame*>(this)->IsHiddenNowImpl());
     if (isHiddenNow)
     {
+        while (HasFollow())
+        {
+            static_cast<SwTextFrame&>(*this).JoinFrame();
+        }
         MakeValidZeroHeight();
         HideAndShowObjects();
     }

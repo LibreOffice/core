@@ -1094,6 +1094,55 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf128399)
     CPPUNIT_ASSERT_EQUAL(nExpected, aPosition.nNode.GetIndex());
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testHiddenParagraphFollowFrame)
+{
+    createDoc("hidden-para-follow-frame.fodt");
+
+    uno::Any aOldValue{ queryDispatchStatus(mxComponent, m_xContext, ".uno:ShowHiddenParagraphs") };
+
+    Resetter g([this, aOldValue] {
+        uno::Sequence<beans::PropertyValue> argsSH(
+            comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", aOldValue } }));
+        lcl_dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", argsSH);
+    });
+
+    uno::Sequence<beans::PropertyValue> argsSH(
+        comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", uno::Any(true) } }));
+    lcl_dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", argsSH);
+    uno::Sequence<beans::PropertyValue> args(
+        comphelper::InitPropertySequence({ { "Fieldnames", uno::Any(false) } }));
+    lcl_dispatchCommand(mxComponent, ".uno:Fieldnames", args);
+    Scheduler::ProcessEventsToIdle();
+
+    {
+        xmlDocPtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page", 2);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt", 2);
+        assertXPath(pXmlDoc, "/root/page[2]/body/txt", 2);
+        discardDumpedLayout();
+    }
+
+    lcl_dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", {});
+
+    {
+        xmlDocPtr pXmlDoc = parseLayoutDump();
+        // the problem was that the 3rd paragraph didn't move to page 1
+        assertXPath(pXmlDoc, "/root/page", 1);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt", 3);
+        discardDumpedLayout();
+    }
+
+    lcl_dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", {});
+
+    {
+        xmlDocPtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page", 2);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt", 2);
+        assertXPath(pXmlDoc, "/root/page[2]/body/txt", 2);
+        discardDumpedLayout();
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testSectionUnhide)
 {
     createDoc("hiddensection.fodt");
