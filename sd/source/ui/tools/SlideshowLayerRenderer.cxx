@@ -149,6 +149,8 @@ OUString getMasterTextFieldType(SdrObject* pObject)
     return aType;
 }
 
+bool isGroup(SdrObject* pObject) { return pObject->getChildrenOfSdrObject() != nullptr; }
+
 /// Sets visible for all kinds of polypolys in the container
 void changePolyPolys(drawinglayer::primitive2d::Primitive2DContainer& rContainer,
                      bool bRenderObject)
@@ -295,6 +297,18 @@ private:
         return (mrRenderState.mbSlideNumberEnabled && svType == u"SlideNumber")
                || (mrRenderState.mbFooterEnabled && svType == u"Footer")
                || (mrRenderState.mbDateTimeEnabled && svType == u"DateTime");
+    }
+
+    SdrObject* getAnimatedAncestor(SdrObject* pObject) const
+    {
+        SdrObject* pAncestor = pObject;
+        while ((pAncestor = pAncestor->getParentSdrObjectFromSdrObject()))
+        {
+            auto aIterator = mrRenderState.maAnimationRenderInfoList.find(pAncestor);
+            if (aIterator != mrRenderState.maAnimationRenderInfoList.end())
+                return pAncestor;
+        }
+        return pAncestor;
     }
 
 public:
@@ -455,9 +469,26 @@ public:
                 closeRenderPass();
             }
         }
-        // No specal handling is needed, just add the object to the current rendering pass
+        // check if object is part of an animated group
+        else if (SdrObject* pAncestor = getAnimatedAncestor(pObject))
+        {
+            // a new animated group is started ?
+            if (mpCurrentRenderPass->mpObject && mpCurrentRenderPass->mpObject != pAncestor)
+                closeRenderPass();
+
+            // Add the animated object
+            mpCurrentRenderPass->maObjectsAndParagraphs.emplace(pObject, std::deque<sal_Int32>());
+            mpCurrentRenderPass->meStage = eCurrentStage;
+            mpCurrentRenderPass->mbAnimation = true;
+            mpCurrentRenderPass->mpObject = pAncestor;
+        }
+        // No special handling is needed, just add the object to the current rendering pass
         else
         {
+            // an animated group is complete ?
+            if (mpCurrentRenderPass->mpObject)
+                closeRenderPass();
+
             mpCurrentRenderPass->maObjectsAndParagraphs.emplace(pObject, std::deque<sal_Int32>());
             mpCurrentRenderPass->meStage = eCurrentStage;
         }
@@ -562,6 +593,20 @@ void SlideshowLayerRenderer::resolveEffect(CustomAnimationEffectPtr const& rEffe
 
     if (!pObject)
         return;
+
+    // afaics, when a shape is part of a group any applied effect is ignored,
+    // so no layer should be created
+    if (pObject->getParentSdrObjectFromSdrObject())
+        return;
+
+    // some kind of effect, like the ones based on color animations,
+    // is ignored when applied to a group
+    if (isGroup(pObject))
+    {
+        if (constNonValidEffectsForGroupSet.find(rEffect->getPresetId().toUtf8())
+            != constNonValidEffectsForGroupSet.end())
+            return;
+    }
 
     AnimationRenderInfo aAnimationInfo;
     auto aIterator = maRenderState.maAnimationRenderInfoList.find(pObject);
@@ -777,26 +822,32 @@ void writeAnimated(::tools::JsonWriter& aJsonWriter, AnimationLayerInfo const& r
         writeContentNode(aJsonWriter);
         writeBoundingBox(aJsonWriter, pObject);
 
-        if (nParagraph < 0)
+        // a group of object has no such property
+        if (!isGroup(pObject))
         {
-            drawing::FillStyle aFillStyle
-                = pObject->GetProperties().GetItem(XATTR_FILLSTYLE).GetValue();
-            if (aFillStyle == drawing::FillStyle::FillStyle_SOLID)
+            if (nParagraph < 0)
             {
-                auto aFillColor = pObject->GetProperties().GetItem(XATTR_FILLCOLOR).GetColorValue();
-                aJsonWriter.put("fillColor", "#" + aFillColor.AsRGBHEXString());
+                drawing::FillStyle aFillStyle
+                    = pObject->GetProperties().GetItem(XATTR_FILLSTYLE).GetValue();
+                if (aFillStyle == drawing::FillStyle::FillStyle_SOLID)
+                {
+                    auto aFillColor
+                        = pObject->GetProperties().GetItem(XATTR_FILLCOLOR).GetColorValue();
+                    aJsonWriter.put("fillColor", "#" + aFillColor.AsRGBHEXString());
+                }
+                drawing::LineStyle aLineStyle
+                    = pObject->GetProperties().GetItem(XATTR_LINESTYLE).GetValue();
+                if (aLineStyle == drawing::LineStyle::LineStyle_SOLID)
+                {
+                    auto aLineColor
+                        = pObject->GetProperties().GetItem(XATTR_LINECOLOR).GetColorValue();
+                    aJsonWriter.put("lineColor", "#" + aLineColor.AsRGBHEXString());
+                }
             }
-            drawing::LineStyle aLineStyle
-                = pObject->GetProperties().GetItem(XATTR_LINESTYLE).GetValue();
-            if (aLineStyle == drawing::LineStyle::LineStyle_SOLID)
+            else
             {
-                auto aLineColor = pObject->GetProperties().GetItem(XATTR_LINECOLOR).GetColorValue();
-                aJsonWriter.put("lineColor", "#" + aLineColor.AsRGBHEXString());
+                writeFontColor(aJsonWriter, pObject, nParagraph);
             }
-        }
-        else
-        {
-            writeFontColor(aJsonWriter, pObject, nParagraph);
         }
     }
 }

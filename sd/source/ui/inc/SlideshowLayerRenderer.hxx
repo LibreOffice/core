@@ -24,6 +24,10 @@
 #include <unordered_map>
 #include <unordered_set>
 
+#include <frozen/bits/defines.h>
+#include <frozen/bits/elsa_std.h>
+#include <frozen/unordered_set.h>
+
 class SdrPage;
 class SdrModel;
 class SdrObject;
@@ -41,6 +45,21 @@ class ViewObjectContactRedirector;
 
 namespace sd
 {
+constexpr auto constNonValidEffectsForGroupSet = frozen::make_unordered_set<std::string_view>({
+    "ooo-emphasis-fill-color",
+    "ooo-emphasis-font-color",
+    "ooo-emphasis-line-color",
+    "ooo-emphasis-color-blend",
+    "ooo-emphasis-complementary-color",
+    "ooo-emphasis-complementary-color-2",
+    "ooo-emphasis-contrasting-color",
+    "ooo-emphasis-darken",
+    "ooo-emphasis-desaturate",
+    "ooo-emphasis-flash-bulb",
+    "ooo-emphasis-lighten",
+    "ooo-emphasis-grow-with-color",
+});
+
 class RenderContext;
 
 enum class RenderStage

@@ -46,6 +46,7 @@ $(eval $(call gb_CppunitTest_set_include,sd_tiledrendering,\
     -I$(SRCDIR)/sd/inc \
     -I$(SRCDIR)/sd/source/ui/inc \
     -I$(SRCDIR)/sd/qa/unit \
+    -I$(WORKDIR)/UnpackedTarball/frozen/include \
     $$(INCLUDE) \
 ))
 

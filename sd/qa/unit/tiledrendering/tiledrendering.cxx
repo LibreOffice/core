@@ -2949,7 +2949,7 @@ public:
         }
     }
 
-    void checkPageLayer(int nIndex, const std::string& rGroup)
+    void checkPageLayer(int nIndex, const std::string& rGroup, bool bIsAnimated = false)
     {
         const std::string sMsg = rGroup + " Layer Index: " + std::to_string(nIndex);
 
@@ -2969,9 +2969,34 @@ public:
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sMsg, rGroup,
                                      aTree.get_child("group").get_value<std::string>());
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sMsg, nIndex, aTree.get_child("index").get_value<int>());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(sMsg, std::string("bitmap"),
-                                     aTree.get_child("type").get_value<std::string>());
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(sMsg, true, has_child(aTree, "content"));
+
+        if (!bIsAnimated)
+        {
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sMsg, std::string("bitmap"),
+                                         aTree.get_child("type").get_value<std::string>());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sMsg, true, has_child(aTree, "content"));
+        }
+        else
+        {
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sMsg, std::string("animated"),
+                                         aTree.get_child("type").get_value<std::string>());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sMsg, true, has_child(aTree, "content"));
+
+            auto aContentChild = aTree.get_child("content");
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sMsg, true, has_child(aContentChild, "hash"));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sMsg, true, has_child(aContentChild, "initVisible"));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sMsg, std::string("bitmap"),
+                                         aContentChild.get_child("type").get_value<std::string>());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sMsg, true, has_child(aContentChild, "content"));
+
+            auto aContentChildChild = aContentChild.get_child("content");
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                sMsg, std::string("%IMAGETYPE%"),
+                aContentChildChild.get_child("type").get_value<std::string>());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                sMsg, std::string("%IMAGECHECKSUM%"),
+                aContentChildChild.get_child("checksum").get_value<std::string>());
+        }
     }
 
     void checkFinalEmptyLayer()
@@ -3383,6 +3408,91 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Skip_Ba
     aSlideRendererChecker.checkTextFieldLayer(2, "DateTime");
 
     aSlideRendererChecker.checkPageLayer(0, "DrawPage");
+
+    aSlideRendererChecker.checkFinalEmptyLayer();
+
+    pXImpressDocument->postSlideshowCleanup();
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animated_Shape_Inside_A_Group)
+{
+    // 1 not animated groups made up by 2 shapes
+    // one of the 2 shapes is animated
+
+    SdXImpressDocument* pXImpressDocument
+        = createDoc("SlideRenderingTest_Animated_Shape_Inside_A_Group.odp");
+    pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    SlideRendererChecker aSlideRendererChecker(pXImpressDocument, 0, 2000, 2000, false, false);
+    aSlideRendererChecker.checkSlideSize(2000, 1125);
+
+    // not animated group, no layer should be created for the animated shape
+    aSlideRendererChecker.checkPageLayer(0, "DrawPage", /*bIsAnimated=*/ false);
+
+    aSlideRendererChecker.checkFinalEmptyLayer();
+
+    pXImpressDocument->postSlideshowCleanup();
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animated_Group)
+{
+    // 1 animated groups made up by 2 not animated shapes
+    // a single not animated shape
+
+    SdXImpressDocument* pXImpressDocument = createDoc("SlideRenderingTest_Animated_Group.odp");
+    pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    SlideRendererChecker aSlideRendererChecker(pXImpressDocument, 0, 2000, 2000, false, false);
+    aSlideRendererChecker.checkSlideSize(2000, 1125);
+
+    // animated group
+    aSlideRendererChecker.checkPageLayer(0, "DrawPage", /*bIsAnimated=*/ true);
+
+    // not animated shape
+    aSlideRendererChecker.checkPageLayer(1, "DrawPage", /*bIsAnimated=*/ false);
+
+    aSlideRendererChecker.checkFinalEmptyLayer();
+
+    pXImpressDocument->postSlideshowCleanup();
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animated_Groups)
+{
+    // 2 animated groups made up by 2 shapes each
+
+    SdXImpressDocument* pXImpressDocument = createDoc("SlideRenderingTest_Animated_Groups.odp");
+    pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    SlideRendererChecker aSlideRendererChecker(pXImpressDocument, 0, 2000, 2000, false, false);
+    aSlideRendererChecker.checkSlideSize(2000, 1125);
+
+    // 1st group
+    aSlideRendererChecker.checkPageLayer(0, "DrawPage", /*bIsAnimated=*/ true);
+
+    // 2nd group
+    aSlideRendererChecker.checkPageLayer(1, "DrawPage", /*bIsAnimated=*/ true);
+
+    aSlideRendererChecker.checkFinalEmptyLayer();
+
+    pXImpressDocument->postSlideshowCleanup();
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animated_MultiLevel_Group)
+{
+    // 3 1st level groups made up by 2 shapes each
+    // the 1st group is not animated but one of its shape is
+    // the 2nd group is animated, none of its shapes is
+    // the 3rd group is animated with a color based effect
+    // 1st and 2nd group are grouped together and the 2nd level group is animated
+
+    SdXImpressDocument* pXImpressDocument = createDoc("SlideRenderingTest_Animated_MultiLevel_Group.odp");
+    pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    SlideRendererChecker aSlideRendererChecker(pXImpressDocument, 0, 2000, 2000, false, false);
+    aSlideRendererChecker.checkSlideSize(2000, 1125);
+
+    // a single layer should be created for the highest level group,
+    // embedded animated groups or animated shapes should be ignored
+    aSlideRendererChecker.checkPageLayer(0, "DrawPage", /*bIsAnimated=*/ true);
+
+    // a group with applied an effect based on color animations should not be animated
+    aSlideRendererChecker.checkPageLayer(1, "DrawPage", /*bIsAnimated=*/ false);
 
     aSlideRendererChecker.checkFinalEmptyLayer();
 
