@@ -706,24 +706,21 @@ OUString SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
     if (bUseChkStr)
         return sChkStr;
 
-    if( !bUseChkStr )
+    // All Numbers have been flagged accordingly, so get the right Number
+    nNum = mpSectionFormatTable->size();
+    for( SwSectionFormats::size_type n = 0; n < nFlagSize; ++n )
     {
-        // All Numbers have been flagged accordingly, so get the right Number
-        nNum = mpSectionFormatTable->size();
-        for( SwSectionFormats::size_type n = 0; n < nFlagSize; ++n )
+        sal_uInt8 nTmp = pSetFlags[ n ];
+        if( nTmp != 0xff )
         {
-            sal_uInt8 nTmp = pSetFlags[ n ];
-            if( nTmp != 0xff )
+            // so get the Number
+            nNum = n * 8;
+            while( nTmp & 1 )
             {
-                // so get the Number
-                nNum = n * 8;
-                while( nTmp & 1 )
-                {
-                    ++nNum;
-                    nTmp >>= 1;
-                }
-                break;
+                ++nNum;
+                nTmp >>= 1;
             }
+            break;
         }
     }
     return aName + OUString::number( ++nNum );
