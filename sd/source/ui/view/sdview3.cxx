@@ -755,7 +755,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                             if( bUndo )
                                 BegUndo(SdResId(STR_UNDO_DRAGDROP));
-                            pNewObj->NbcSetLayer( pPickObj->GetLayer() );
+                            pNewObj->NbcSetLayer( pPickObj2->GetLayer() );
                             pWorkPage->InsertObject( pNewObj.get() );
                             if( bUndo )
                             {
