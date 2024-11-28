@@ -676,7 +676,6 @@ OUString SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
     const OUString& aName( rType.GetTypeName() );
     const sal_Int32 nNmLen = aName.getLength();
 
-    SwSectionFormats::size_type nNum = 0;
     const SwSectionFormats::size_type nFlagSize = ( mpSectionFormatTable->size() / 8 ) +2;
     std::unique_ptr<sal_uInt8[]> pSetFlags(new sal_uInt8[ nFlagSize ]);
     memset( pSetFlags.get(), 0, nFlagSize );
@@ -694,7 +693,7 @@ OUString SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
             if ( rNm.startsWith(aName) )
             {
                 // Calculate number and set the Flag
-                nNum = o3tl::toInt32(rNm.subView( nNmLen ));
+                SwSectionFormats::size_type nNum = o3tl::toInt32(rNm.subView(nNmLen));
                 if( nNum-- && nNum < mpSectionFormatTable->size() )
                     pSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
             }
@@ -707,7 +706,7 @@ OUString SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
         return sChkStr;
 
     // All Numbers have been flagged accordingly, so get the right Number
-    nNum = mpSectionFormatTable->size();
+    SwSectionFormats::size_type nNum = mpSectionFormatTable->size();
     for( SwSectionFormats::size_type n = 0; n < nFlagSize; ++n )
     {
         sal_uInt8 nTmp = pSetFlags[ n ];
