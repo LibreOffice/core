@@ -80,7 +80,7 @@ using namespace ::com::sun::star::datatransfer;
 
 namespace sd {
 
-#define CHECK_FORMAT_TRANS( _def_Type ) ( ( nFormat == (_def_Type) || nFormat == SotClipboardFormatId::NONE ) && aDataHelper.HasFormat( _def_Type ) )
+#define CHECK_FORMAT_TRANS( _def_Type ) ( ( nFormat == (_def_Type) || nFormat == SotClipboardFormatId::NONE ) && rDataHelper.HasFormat( _def_Type ) )
 
 /*************************************************************************
 |*
@@ -259,10 +259,6 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
     mnAction = rDnDAction;
     mbIsDropAllowed = false;
 
-    TransferableDataHelper  aDataHelper( rDataHelper );
-    SdPage*                 pPage = nullptr;
-    std::unique_ptr<ImageMap> pImageMap;
-    bool bReturn = false;
     bool                    bLink = ( ( mnAction & DND_ACTION_LINK ) != 0 );
     bool                    bCopy = ( ( ( mnAction & DND_ACTION_COPY ) != 0 ) || bLink );
     SdrInsertFlags          nPasteOptions = SdrInsertFlags::SETDEFLAYER;
@@ -283,11 +279,12 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
         pPickObj = PickObj(rPos, getHitTolLog(), pPV);
     }
 
+    SdPage* pPage = nullptr;
     if( nPage != SDRPAGE_NOTFOUND )
         pPage = static_cast<SdPage*>( mrDoc.GetPage( nPage ) );
 
     SdTransferable* pOwnData = nullptr;
-    SdTransferable* pImplementation = SdTransferable::getImplementation( aDataHelper.GetTransferable() );
+    SdTransferable* pImplementation = SdTransferable::getImplementation( rDataHelper.GetTransferable() );
 
     if(pImplementation && (rDnDAction & DND_ACTION_LINK))
     {
@@ -320,9 +317,10 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
     }
 
     // ImageMap?
-    if( !pOwnData && aDataHelper.HasFormat( SotClipboardFormatId::SVIM ) )
+    std::unique_ptr<ImageMap> pImageMap;
+    if (!pOwnData && rDataHelper.HasFormat(SotClipboardFormatId::SVIM))
     {
-        if (std::unique_ptr<SvStream> xStm = aDataHelper.GetSotStorageStream( SotClipboardFormatId::SVIM ) )
+        if (std::unique_ptr<SvStream> xStm = rDataHelper.GetSotStorageStream( SotClipboardFormatId::SVIM ) )
         {
             pImageMap.reset(new ImageMap);
             // mba: clipboard always must contain absolute URLs (could be from alien source)
@@ -335,12 +333,12 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
     if( !bLink && (nFormat == SotClipboardFormatId::NONE || (nFormat == SotClipboardFormatId::RTF) || (nFormat == SotClipboardFormatId::RICHTEXT)) )
     {
         // if the object supports rtf and there is a table involved, default is to create a table
-        bool bIsRTF = aDataHelper.HasFormat( SotClipboardFormatId::RTF );
-        if( ( bIsRTF || aDataHelper.HasFormat( SotClipboardFormatId::RICHTEXT ) )
-            && ! aDataHelper.HasFormat( SotClipboardFormatId::DRAWING ) )
+        bool bIsRTF = rDataHelper.HasFormat(SotClipboardFormatId::RTF);
+        if( ( bIsRTF || rDataHelper.HasFormat( SotClipboardFormatId::RICHTEXT ) )
+            && ! rDataHelper.HasFormat( SotClipboardFormatId::DRAWING ) )
         {
             auto nFormatId = bIsRTF ? SotClipboardFormatId::RTF : SotClipboardFormatId::RICHTEXT;
-            if (std::unique_ptr<SvStream> xStm = aDataHelper.GetSotStorageStream( nFormatId ))
+            if (std::unique_ptr<SvStream> xStm = rDataHelper.GetSotStorageStream(nFormatId))
             {
                 xStm->Seek( 0 );
 
@@ -364,6 +362,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
     // when a CHECK_FORMAT_TRANS(*format*) detected format does not work. This is
     // e.g. necessary for SotClipboardFormatId::BITMAP
 
+    bool bReturn = false;
     if (pOwnData)
     {
         // Paste only if SfxClassificationHelper recommends so.
@@ -683,7 +682,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
     if(!bReturn && CHECK_FORMAT_TRANS( SotClipboardFormatId::PDF ))
     {
-        if (std::unique_ptr<SvStream> xStm = aDataHelper.GetSotStorageStream( SotClipboardFormatId::PDF ))
+        if (std::unique_ptr<SvStream> xStm = rDataHelper.GetSotStorageStream( SotClipboardFormatId::PDF ))
         {
             Point aInsertPos(rPos);
             Graphic aGraphic;
@@ -702,7 +701,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
     if(!bReturn && CHECK_FORMAT_TRANS( SotClipboardFormatId::DRAWING ))
     {
-        if (std::unique_ptr<SvStream> xStm = aDataHelper.GetSotStorageStream( SotClipboardFormatId::DRAWING ))
+        if (std::unique_ptr<SvStream> xStm = rDataHelper.GetSotStorageStream( SotClipboardFormatId::DRAWING ))
         {
             DrawDocShellRef xShell = new DrawDocShell(SfxObjectCreateMode::INTERNAL, false, DocumentType::Impress);
             xShell->DoInitNew();
@@ -858,7 +857,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
     {
         OUString aOUString;
 
-        if( aDataHelper.GetString( SotClipboardFormatId::SBA_FIELDDATAEXCHANGE, aOUString ) )
+        if (rDataHelper.GetString(SotClipboardFormatId::SBA_FIELDDATAEXCHANGE, aOUString))
         {
             rtl::Reference<SdrObject> pObj = CreateFieldControl( aOUString );
 
@@ -881,18 +880,18 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
     if(!bReturn &&
         !bLink &&
         (CHECK_FORMAT_TRANS(SotClipboardFormatId::EMBED_SOURCE) || CHECK_FORMAT_TRANS(SotClipboardFormatId::EMBEDDED_OBJ))  &&
-        aDataHelper.HasFormat(SotClipboardFormatId::OBJECTDESCRIPTOR))
+        rDataHelper.HasFormat(SotClipboardFormatId::OBJECTDESCRIPTOR))
     {
         //TODO/LATER: is it possible that this format is binary?! (from old versions of SO)
         uno::Reference < io::XInputStream > xStm;
         TransferableObjectDescriptor    aObjDesc;
 
-        if (aDataHelper.GetTransferableObjectDescriptor(SotClipboardFormatId::OBJECTDESCRIPTOR, aObjDesc))
+        if (rDataHelper.GetTransferableObjectDescriptor(SotClipboardFormatId::OBJECTDESCRIPTOR, aObjDesc))
         {
             OUString aDocShellID = SfxObjectShell::CreateShellID(mrDoc.GetDocSh());
-            xStm = aDataHelper.GetInputStream(nFormat != SotClipboardFormatId::NONE ? nFormat : SotClipboardFormatId::EMBED_SOURCE, aDocShellID);
+            xStm = rDataHelper.GetInputStream(nFormat != SotClipboardFormatId::NONE ? nFormat : SotClipboardFormatId::EMBED_SOURCE, aDocShellID);
             if (!xStm.is())
-                xStm = aDataHelper.GetInputStream(SotClipboardFormatId::EMBEDDED_OBJ, aDocShellID);
+                xStm = rDataHelper.GetInputStream(SotClipboardFormatId::EMBEDDED_OBJ, aDocShellID);
         }
 
         if (xStm.is())
@@ -1057,22 +1056,22 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
     if(!bReturn &&
         !bLink &&
         (CHECK_FORMAT_TRANS(SotClipboardFormatId::EMBEDDED_OBJ_OLE) || CHECK_FORMAT_TRANS(SotClipboardFormatId::EMBED_SOURCE_OLE)) &&
-        aDataHelper.HasFormat(SotClipboardFormatId::OBJECTDESCRIPTOR_OLE))
+        rDataHelper.HasFormat(SotClipboardFormatId::OBJECTDESCRIPTOR_OLE))
     {
         // online insert ole if format is forced or no gdi metafile is available
-        if( (nFormat != SotClipboardFormatId::NONE) || !aDataHelper.HasFormat( SotClipboardFormatId::GDIMETAFILE ) )
+        if( (nFormat != SotClipboardFormatId::NONE) || !rDataHelper.HasFormat( SotClipboardFormatId::GDIMETAFILE ) )
         {
             uno::Reference < io::XInputStream > xStm;
             TransferableObjectDescriptor    aObjDesc;
 
-            if ( aDataHelper.GetTransferableObjectDescriptor( SotClipboardFormatId::OBJECTDESCRIPTOR_OLE, aObjDesc ) )
+            if ( rDataHelper.GetTransferableObjectDescriptor( SotClipboardFormatId::OBJECTDESCRIPTOR_OLE, aObjDesc ) )
             {
                 uno::Reference < embed::XEmbeddedObject > xObj;
                 OUString aName;
 
-                xStm = aDataHelper.GetInputStream(nFormat != SotClipboardFormatId::NONE ? nFormat : SotClipboardFormatId::EMBED_SOURCE_OLE, OUString());
+                xStm = rDataHelper.GetInputStream(nFormat != SotClipboardFormatId::NONE ? nFormat : SotClipboardFormatId::EMBED_SOURCE_OLE, OUString());
                 if (!xStm.is())
-                    xStm = aDataHelper.GetInputStream(SotClipboardFormatId::EMBEDDED_OBJ_OLE, OUString());
+                    xStm = rDataHelper.GetInputStream(SotClipboardFormatId::EMBEDDED_OBJ_OLE, OUString());
 
                 if (xStm.is())
                 {
@@ -1111,11 +1110,11 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
 // (for Selection Manager in Trusted Solaris)
 #ifndef __sun
-                    if( aDataHelper.GetGraphic( SotClipboardFormatId::SVXB, aGraphic ) )
+                    if (rDataHelper.GetGraphic(SotClipboardFormatId::SVXB, aGraphic))
                         nGrFormat = SotClipboardFormatId::SVXB;
-                    else if( aDataHelper.GetGraphic( SotClipboardFormatId::GDIMETAFILE, aGraphic ) )
+                    else if (rDataHelper.GetGraphic(SotClipboardFormatId::GDIMETAFILE, aGraphic))
                         nGrFormat = SotClipboardFormatId::GDIMETAFILE;
-                    else if( aDataHelper.GetGraphic( SotClipboardFormatId::BITMAP, aGraphic ) )
+                    else if (rDataHelper.GetGraphic(SotClipboardFormatId::BITMAP, aGraphic))
                         nGrFormat = SotClipboardFormatId::BITMAP;
 #endif
 
@@ -1212,17 +1211,17 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             }
         }
 
-        if( !bReturn && aDataHelper.HasFormat( SotClipboardFormatId::GDIMETAFILE ) )
+        if (!bReturn && rDataHelper.HasFormat(SotClipboardFormatId::GDIMETAFILE))
         {
             // if no object was inserted, insert a picture
-            InsertMetaFile( aDataHelper, rPos, pImageMap.get(), true );
+            InsertMetaFile(rDataHelper, rPos, pImageMap.get(), true);
             bReturn = true;
         }
     }
 
     if(!bReturn && (!bLink || pPickObj) && CHECK_FORMAT_TRANS(SotClipboardFormatId::SVXB))
     {
-        if (std::unique_ptr<SvStream> xStm = aDataHelper.GetSotStorageStream( SotClipboardFormatId::SVXB ))
+        if (std::unique_ptr<SvStream> xStm = rDataHelper.GetSotStorageStream( SotClipboardFormatId::SVXB ))
         {
             Point   aInsertPos( rPos );
             Graphic aGraphic;
@@ -1278,7 +1277,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             aInsertPos.setY( pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 ) );
         }
 
-        bReturn = InsertMetaFile( aDataHelper, aInsertPos, pImageMap.get(), nFormat == SotClipboardFormatId::NONE );
+        bReturn = InsertMetaFile( rDataHelper, aInsertPos, pImageMap.get(), nFormat == SotClipboardFormatId::NONE );
     }
 
     if(!bReturn && (!bLink || pPickObj) && CHECK_FORMAT_TRANS(SotClipboardFormatId::BITMAP))
@@ -1286,22 +1285,22 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
         BitmapEx aBmpEx;
 
         // get basic Bitmap data
-        aDataHelper.GetBitmapEx(SotClipboardFormatId::BITMAP, aBmpEx);
+        rDataHelper.GetBitmapEx(SotClipboardFormatId::BITMAP, aBmpEx);
 
         if(aBmpEx.IsEmpty())
         {
             // if this did not work, try to get graphic formats and convert these to bitmap
             Graphic aGraphic;
 
-            if(aDataHelper.GetGraphic(SotClipboardFormatId::GDIMETAFILE, aGraphic))
+            if (rDataHelper.GetGraphic(SotClipboardFormatId::GDIMETAFILE, aGraphic))
             {
                 aBmpEx = aGraphic.GetBitmapEx();
             }
-            else if(aDataHelper.GetGraphic(SotClipboardFormatId::SVXB, aGraphic))
+            else if (rDataHelper.GetGraphic(SotClipboardFormatId::SVXB, aGraphic))
             {
                 aBmpEx = aGraphic.GetBitmapEx();
             }
-            else if(aDataHelper.GetGraphic(SotClipboardFormatId::BITMAP, aGraphic))
+            else if (rDataHelper.GetGraphic(SotClipboardFormatId::BITMAP, aGraphic))
             {
                 aBmpEx = aGraphic.GetBitmapEx();
             }
@@ -1338,7 +1337,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
     if(!bReturn && pPickObj && CHECK_FORMAT_TRANS( SotClipboardFormatId::XFA ) )
     {
-        uno::Any const data(aDataHelper.GetAny(SotClipboardFormatId::XFA, u""_ustr));
+        uno::Any const data(rDataHelper.GetAny(SotClipboardFormatId::XFA, u""_ustr));
         uno::Sequence<beans::NamedValue> props;
         if (data >>= props)
         {
@@ -1409,7 +1408,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
     if(!bReturn && !bLink && CHECK_FORMAT_TRANS(SotClipboardFormatId::HTML))
     {
-        if (std::unique_ptr<SvStream> xStm = aDataHelper.GetSotStorageStream( SotClipboardFormatId::HTML ))
+        if (std::unique_ptr<SvStream> xStm = rDataHelper.GetSotStorageStream( SotClipboardFormatId::HTML ))
         {
             xStm->Seek( 0 );
 
@@ -1439,7 +1438,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
     if(!bReturn && !bLink && CHECK_FORMAT_TRANS(SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT))
     {
-        if (std::unique_ptr<SvStream> xStm = aDataHelper.GetSotStorageStream( SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT ))
+        if (std::unique_ptr<SvStream> xStm = rDataHelper.GetSotStorageStream( SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT ))
         {
             OutlinerView* pOLV = GetTextEditOutlinerView();
 
@@ -1469,7 +1468,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
         bool bIsHtmlSimple = CHECK_FORMAT_TRANS(SotClipboardFormatId::HTML_SIMPLE);
         if (bIsHtmlSimple)
         {
-            if (std::unique_ptr<SvStream> xStm = aDataHelper.GetSotStorageStream(SotClipboardFormatId::HTML_SIMPLE))
+            if (std::unique_ptr<SvStream> xStm = rDataHelper.GetSotStorageStream(SotClipboardFormatId::HTML_SIMPLE))
             {
                 xStm->Seek(0);
 
@@ -1500,7 +1499,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
         if (!bReturn && (bIsRTF || CHECK_FORMAT_TRANS(SotClipboardFormatId::RICHTEXT)))
         {
             auto nFormatId = bIsRTF ? SotClipboardFormatId::RTF : SotClipboardFormatId::RICHTEXT;
-            if (std::unique_ptr<SvStream> xStm = aDataHelper.GetSotStorageStream( nFormatId ))
+            if (std::unique_ptr<SvStream> xStm = rDataHelper.GetSotStorageStream(nFormatId))
             {
                 xStm->Seek( 0 );
 
@@ -1538,7 +1537,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
     {
         FileList aDropFileList;
 
-        if( aDataHelper.GetFileList( SotClipboardFormatId::FILE_LIST, aDropFileList ) )
+        if (rDataHelper.GetFileList(SotClipboardFormatId::FILE_LIST, aDropFileList))
         {
             maDropFileVector.clear();
 
@@ -1555,7 +1554,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
     {
         OUString aDropFile;
 
-        if( aDataHelper.GetString( SotClipboardFormatId::SIMPLE_FILE, aDropFile ) )
+        if (rDataHelper.GetString(SotClipboardFormatId::SIMPLE_FILE, aDropFile))
         {
             maDropFileVector.clear();
             maDropFileVector.push_back( aDropFile );
@@ -1568,13 +1567,13 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
     if(!bReturn && !bLink && CHECK_FORMAT_TRANS(SotClipboardFormatId::STRING))
     {
         if( ( SotClipboardFormatId::STRING == nFormat ) ||
-            ( !aDataHelper.HasFormat( SotClipboardFormatId::SOLK ) &&
-              !aDataHelper.HasFormat( SotClipboardFormatId::NETSCAPE_BOOKMARK ) &&
-              !aDataHelper.HasFormat( SotClipboardFormatId::FILENAME ) ) )
+            ( !rDataHelper.HasFormat( SotClipboardFormatId::SOLK ) &&
+              !rDataHelper.HasFormat( SotClipboardFormatId::NETSCAPE_BOOKMARK ) &&
+              !rDataHelper.HasFormat( SotClipboardFormatId::FILENAME ) ) )
         {
             OUString aOUString;
 
-            if( aDataHelper.GetString( SotClipboardFormatId::STRING, aOUString ) )
+            if (rDataHelper.GetString(SotClipboardFormatId::STRING, aOUString))
             {
                 OutlinerView* pOLV = GetTextEditOutlinerView();
 
