@@ -2017,7 +2017,7 @@ static bool isMouseScrollWheelEvent( NSEvent *pEvent )
         aString = [[[NSAttributedString alloc] initWithString:aString] autorelease];
 
     // Reset cached state
-    BOOL bOldHasMarkedText = [self hasMarkedText];
+    bool bOldHasMarkedText = [self hasMarkedText];
     [self unmarkText];
 
     // tdf#163876 ignore marked text generated from Command-` events
