@@ -3040,6 +3040,10 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                                             bCalcNxt = false;
                                         }
                                     }
+                                    if (pNxt->IsHiddenNow())
+                                    {   // e.g. "testThemeCrash"
+                                        bCalcNxt = false;
+                                    }
                                     if ( bCalcNxt )
                                     {
                                         // tdf#119109 follow was just formatted,
