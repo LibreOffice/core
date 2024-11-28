@@ -703,6 +703,9 @@ OUString SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
         }
     }
 
+    if (bUseChkStr)
+        return sChkStr;
+
     if( !bUseChkStr )
     {
         // All Numbers have been flagged accordingly, so get the right Number
@@ -723,8 +726,6 @@ OUString SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
             }
         }
     }
-    if ( bUseChkStr )
-        return sChkStr;
     return aName + OUString::number( ++nNum );
 }
 
