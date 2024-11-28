@@ -3711,14 +3711,9 @@ void SbRtl_TypeName(StarBASIC *, SbxArray & rPar, bool)
 void SbRtl_Len(StarBASIC *, SbxArray & rPar, bool)
 {
     if (rPar.Count() != 2)
-    {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-    }
-    else
-    {
-        const OUString aStr = rPar.Get(1)->GetOUString();
-        rPar.Get(0)->PutLong(aStr.getLength());
-    }
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+    const OUString aStr = rPar.Get(1)->GetOUString();
+    rPar.Get(0)->PutLong(aStr.getLength());
 }
 
 void SbRtl_DDEInitiate(StarBASIC *, SbxArray & rPar, bool)
