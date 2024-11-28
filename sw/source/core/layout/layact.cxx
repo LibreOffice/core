@@ -1105,7 +1105,7 @@ bool SwLayAction::IsShortCut( SwPageFrame *&prPage )
                 if ( pLst->IsInTab() )
                     pLst = pContent->FindTabFrame();
                 if ( pLst->IsInSct() )
-                    pLst = pContent->FindSctFrame();
+                    pLst = pLst->FindSctFrame();
                 pLst = pLst->FindPrev();
                 if ( pLst &&
                      (pLst->getFrameArea().Top() >= rVis.Bottom() ||

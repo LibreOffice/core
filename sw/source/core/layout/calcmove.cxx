@@ -1297,8 +1297,12 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         return;
     }
 
-    if (IsHiddenNow())
+    bool const isHiddenNow(static_cast<SwTextFrame*>(this)->IsHiddenNowImpl());
+    if (isHiddenNow)
+    {
         MakeValidZeroHeight();
+        HideAndShowObjects();
+    }
 
     std::optional<SwFrameDeleteGuard> oDeleteGuard(std::in_place, this);
     LockJoin();
@@ -1469,11 +1473,18 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         aOldPrtPos = aRectFnSet.GetPos(getFramePrintArea());
 
         if ( !isFrameAreaPositionValid() )
+        {
             MakePos();
+            if (isHiddenNow && !isFrameAreaSizeValid())
+            {   // in a table cell, might be invalidated by ~SwLayNotify
+                MakeValidZeroHeight();
+            }
+        }
 
         //Set FixSize. VarSize is being adjusted by Format().
         if ( !isFrameAreaSizeValid() )
         {
+            assert(!isHiddenNow); // hidden frame must not be formatted
             // invalidate printing area flag, if the following conditions are hold:
             // - current frame width is 0.
             // - current printing area width is 0.
@@ -1510,6 +1521,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         }
         if ( !isFramePrintAreaValid() )
         {
+            assert(!isHiddenNow); // hidden frame must not be formatted
             const tools::Long nOldW = aRectFnSet.GetWidth(getFramePrintArea());
             // #i34730# - keep current frame height
             const SwTwips nOldH = aRectFnSet.GetHeight(getFrameArea());
@@ -1546,7 +1558,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         // Criteria:
         // - It needs to be movable (otherwise, splitting doesn't make sense)
         // - It needs to overlap with the lower edge of the PrtArea of the Upper
-        if ( !bMustFit )
+        if (!bMustFit && !isHiddenNow)
         {
             bool bWidow = true;
             const SwTwips nDeadLine = aRectFnSet.GetPrtBottom(*GetUpper());
@@ -1572,6 +1584,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         }
         if ( !isFrameAreaSizeValid() )
         {
+            assert(!isHiddenNow); // hidden frame must not be formatted
             setFrameAreaSizeValid(true);
             bFormatted = true;
             ++nFormatCount;
@@ -1610,8 +1623,15 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
             pMoveBwdPre = pTemp;
             isMoveBwdPreValid = bTemp;
             bMovedBwd = true;
-            bFormatted = false;
-            if ( bKeep && bMoveable )
+            if (isHiddenNow)
+            {   // MoveBwd invalidated the size! Validate to prevent Format!
+                MakeValidZeroHeight();
+            }
+            else
+            {
+                bFormatted = false;
+            }
+            if (bKeep && bMoveable && !isHiddenNow)
             {
                 if( CheckMoveFwd( bMakePage, false, bMovedBwd ) )
                 {
