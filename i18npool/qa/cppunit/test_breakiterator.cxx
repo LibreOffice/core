@@ -48,6 +48,7 @@ public:
     void testLegacyDictWordPrepostDash_nds_DE();
     void testLegacyDictWordPrepostDash_nl_NL();
     void testLegacyDictWordPrepostDash_sv_SE();
+    void testDictWordAbbreviation();
     void testHebrewGereshGershaim();
     void testLegacySurrogatePairs();
     void testWordCount();
@@ -71,6 +72,7 @@ public:
     CPPUNIT_TEST(testLegacyDictWordPrepostDash_nds_DE);
     CPPUNIT_TEST(testLegacyDictWordPrepostDash_nl_NL);
     CPPUNIT_TEST(testLegacyDictWordPrepostDash_sv_SE);
+    CPPUNIT_TEST(testDictWordAbbreviation);
     CPPUNIT_TEST(testHebrewGereshGershaim);
     CPPUNIT_TEST(testLegacySurrogatePairs);
     CPPUNIT_TEST(testWordCount);
@@ -1663,6 +1665,49 @@ void TestBreakIterator::testLegacyDictWordPrepostDash_de_DE()
             = m_xBreak->getWordBoundary(aTest, 13, aLocale, i18n::WordType::DICTIONARY_WORD, false);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(9), aBounds.startPos);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(16), aBounds.endPos);
+    }
+}
+
+void TestBreakIterator::testDictWordAbbreviation()
+{
+    std::vector<lang::Locale> aLocale{
+        { "en", "US", "" }, // dict_word locale
+        { "de", "DE", "" } // dict_word_prepostdash locale
+    };
+
+    for (const auto& rLocale : aLocale)
+    {
+        auto aTest = u"Examples: e.g. i.e. etc. and such"_ustr;
+
+        i18n::Boundary aBounds
+            = m_xBreak->getWordBoundary(aTest, 3, rLocale, i18n::WordType::DICTIONARY_WORD, false);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(8), aBounds.endPos);
+
+        aBounds
+            = m_xBreak->getWordBoundary(aTest, 10, rLocale, i18n::WordType::DICTIONARY_WORD, false);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(10), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(14), aBounds.endPos);
+
+        aBounds
+            = m_xBreak->getWordBoundary(aTest, 15, rLocale, i18n::WordType::DICTIONARY_WORD, false);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(15), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(19), aBounds.endPos);
+
+        aBounds
+            = m_xBreak->getWordBoundary(aTest, 20, rLocale, i18n::WordType::DICTIONARY_WORD, false);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(20), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(24), aBounds.endPos);
+
+        aBounds
+            = m_xBreak->getWordBoundary(aTest, 26, rLocale, i18n::WordType::DICTIONARY_WORD, false);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(25), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(28), aBounds.endPos);
+
+        aBounds
+            = m_xBreak->getWordBoundary(aTest, 30, rLocale, i18n::WordType::DICTIONARY_WORD, false);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(29), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(33), aBounds.endPos);
     }
 }
 
