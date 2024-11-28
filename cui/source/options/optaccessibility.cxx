@@ -37,10 +37,13 @@ namespace
         { u"NoAltOleObj"_ustr, { sfx::AccessibilityIssueID::NO_ALT_OLE, STR_NO_ALT_OLE } },
         { u"NoAltGraphicObj"_ustr, { sfx::AccessibilityIssueID::NO_ALT_GRAPHIC, STR_NO_ALT_GRAPHIC } },
         { u"NoAltShapeObj"_ustr, { sfx::AccessibilityIssueID::NO_ALT_SHAPE, STR_NO_ALT_SHAPE } },
-        { u"TextFormattings"_ustr, { sfx::AccessibilityIssueID::TEXT_FORMATTING, STR_AVOID_NEWLINES_SPACE } },
+        { u"TableMergeSplit"_ustr, { sfx::AccessibilityIssueID::TABLE_MERGE_SPLIT, STR_TABLE_MERGE_SPLIT } },
+        { u"TextNewLines"_ustr, { sfx::AccessibilityIssueID::TEXT_NEW_LINES, STR_AVOID_NEWLINES_SPACE } },
+        { u"TextSpaces"_ustr, { sfx::AccessibilityIssueID::TEXT_SPACES, STR_AVOID_SPACES_SPACE } },
+        { u"TextTabs"_ustr, { sfx::AccessibilityIssueID::TEXT_TABS, STR_AVOID_TABS_FORMATTING } },
+        { u"TextEmptyNums"_ustr, { sfx::AccessibilityIssueID::TEXT_EMPTY_NUM_PARA, STR_AVOID_EMPTY_NUM_PARA } },
         { u"DirectFormattings"_ustr, { sfx::AccessibilityIssueID::DIRECT_FORMATTING, STR_TEXT_FORMATTING_CONVEYS_MEAN } },
         { u"TableFormattings"_ustr, { sfx::AccessibilityIssueID::TABLE_FORMATTING, STR_TABLE_FORMATTING } },
-        { u"TableMergeSplit"_ustr, { sfx::AccessibilityIssueID::TABLE_MERGE_SPLIT, STR_TABLE_MERGE_SPLIT } },
         { u"HyperlinkText"_ustr, { sfx::AccessibilityIssueID::HYPERLINK_IS_TEXT, STR_HYPERLINK_TEXT_IS_LINK } },
         { u"HyperlinkShort"_ustr, { sfx::AccessibilityIssueID::HYPERLINK_SHORT, STR_HYPERLINK_TEXT_IS_SHORT } },
         { u"HyperlinkNoName"_ustr, { sfx::AccessibilityIssueID::HYPERLINK_NO_NAME, STR_HYPERLINK_NO_NAME } },
@@ -198,8 +201,20 @@ bool SvxAccessibilityOptionsTabPage::FillItemSet( SfxItemSet* )
                     officecfg::Office::Common::AccessibilityIssues::NoAltShapeObj::set(bChecked, batch);
                     break;
 
-                case sfx::AccessibilityIssueID::TEXT_FORMATTING:
-                    officecfg::Office::Common::AccessibilityIssues::TextFormattings::set(bChecked, batch);
+                case sfx::AccessibilityIssueID::TEXT_NEW_LINES:
+                    officecfg::Office::Common::AccessibilityIssues::TextNewLines::set(bChecked, batch);
+                    break;
+
+                case sfx::AccessibilityIssueID::TEXT_SPACES:
+                    officecfg::Office::Common::AccessibilityIssues::TextSpaces::set(bChecked, batch);
+                    break;
+
+                case sfx::AccessibilityIssueID::TEXT_TABS:
+                    officecfg::Office::Common::AccessibilityIssues::TextTabs::set(bChecked, batch);
+                    break;
+
+                case sfx::AccessibilityIssueID::TEXT_EMPTY_NUM_PARA:
+                    officecfg::Office::Common::AccessibilityIssues::TextEmptyNums::set(bChecked, batch);
                     break;
 
                 case sfx::AccessibilityIssueID::DIRECT_FORMATTING:
@@ -394,8 +409,20 @@ void SvxAccessibilityOptionsTabPage::Reset( const SfxItemSet* )
                 bChecked = officecfg::Office::Common::AccessibilityIssues::NoAltShapeObj::get();
                 break;
 
-            case sfx::AccessibilityIssueID::TEXT_FORMATTING:
-                bChecked = officecfg::Office::Common::AccessibilityIssues::TextFormattings::get();
+            case sfx::AccessibilityIssueID::TEXT_NEW_LINES:
+                bChecked = officecfg::Office::Common::AccessibilityIssues::TextNewLines::get();
+                break;
+
+            case sfx::AccessibilityIssueID::TEXT_SPACES:
+                bChecked = officecfg::Office::Common::AccessibilityIssues::TextSpaces::get();
+                break;
+
+            case sfx::AccessibilityIssueID::TEXT_TABS:
+                bChecked = officecfg::Office::Common::AccessibilityIssues::TextTabs::get();
+                break;
+
+            case sfx::AccessibilityIssueID::TEXT_EMPTY_NUM_PARA:
+                bChecked = officecfg::Office::Common::AccessibilityIssues::TextEmptyNums::get();
                 break;
 
             case sfx::AccessibilityIssueID::DIRECT_FORMATTING:

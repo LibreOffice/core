@@ -6340,13 +6340,43 @@
          </info>
          <value>true</value>
        </prop>
-       <prop oor:name="TextFormattings" oor:type="xs:boolean" oor:nillable="false">
+       <prop oor:name="TextNewLines" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>
-            Enables accessibility check of Text formattings, inside the document structure
-            while the user edits the document.
+            Enables accessibility check of empty new line text formattings, inside the document
+            structure while the user edits the document.
           </desc>
-          <label>Enable/Disable Text formattings accessibility check.</label>
+          <label>Enable/Disable empty new line Text formattings accessibility check.</label>
+         </info>
+         <value>true</value>
+       </prop>
+	   <prop oor:name="TextSpaces" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>
+            Enables accessibility check of extra spaces for formattings, inside the document
+            structure while the user edits the document.
+          </desc>
+          <label>Enable/Disable extra spaces for Text formattings accessibility check.</label>
+         </info>
+         <value>true</value>
+       </prop>
+	   <prop oor:name="TextTabs" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>
+            Enables accessibility check of extra tabs for formattings, inside the document
+            structure while the user edits the document.
+          </desc>
+          <label>Enable/Disable extra tabs for Text formattings accessibility check.</label>
+         </info>
+         <value>true</value>
+       </prop>
+	   <prop oor:name="TextEmptyNums" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>
+            Enables accessibility check of empty new line between numberings, inside the document
+            structure while the user edits the document.
+          </desc>
+          <label>Enable/Disable empty new line between numberings accessibility check.</label>
          </info>
          <value>true</value>
        </prop>

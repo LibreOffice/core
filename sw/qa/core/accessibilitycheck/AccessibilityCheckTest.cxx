@@ -106,10 +106,22 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckNewlineSpace)
     auto& aIssues = aCheck.getIssueCollection().getIssues();
     CPPUNIT_ASSERT_EQUAL(size_t(4), aIssues.size());
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[0]->m_eIssueID);
-    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[1]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_NEW_LINES, aIssues[1]->m_eIssueID);
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[2]->m_eIssueID);
-    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[3]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_NEW_LINES, aIssues[3]->m_eIssueID);
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueLevel::WARNLEV, aIssues[3]->m_eIssueLvl);
+}
+
+CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testEmptyLineBetweenNumberings)
+{
+    createSwDoc("EmptyNumSpace.odt");
+    SwDoc* pDoc = getSwDoc();
+    sw::AccessibilityCheck aCheck(pDoc);
+    aCheck.check();
+    auto& aIssues = aCheck.getIssueCollection().getIssues();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aIssues.size());
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_EMPTY_NUM_PARA, aIssues[0]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueLevel::WARNLEV, aIssues[0]->m_eIssueLvl);
 }
 
 CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckSpacebarSpace)
@@ -121,7 +133,7 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckSpacebarSpace)
     auto& aIssues = aCheck.getIssueCollection().getIssues();
     CPPUNIT_ASSERT_EQUAL(size_t(3), aIssues.size());
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[0]->m_eIssueID);
-    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[1]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_SPACES, aIssues[1]->m_eIssueID);
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[2]->m_eIssueID);
 }
 
@@ -223,15 +235,15 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckTabsFormatting)
     aCheck.check();
     auto& aIssues = aCheck.getIssueCollection().getIssues();
     CPPUNIT_ASSERT_EQUAL(size_t(10), aIssues.size());
-    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[0]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_TABS, aIssues[0]->m_eIssueID);
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[1]->m_eIssueID);
-    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[2]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_TABS, aIssues[2]->m_eIssueID);
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[3]->m_eIssueID);
-    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[4]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_TABS, aIssues[4]->m_eIssueID);
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[5]->m_eIssueID);
-    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[6]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_TABS, aIssues[6]->m_eIssueID);
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[7]->m_eIssueID);
-    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[8]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_TABS, aIssues[8]->m_eIssueID);
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[9]->m_eIssueID);
 }
 
@@ -261,13 +273,13 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testDeleteHeader)
     CPPUNIT_ASSERT_EQUAL(size_t(8), aIssues.size());
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DOCUMENT_TITLE, aIssues[0]->m_eIssueID);
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueLevel::ERRORLEV, aIssues[0]->m_eIssueLvl);
-    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[1]->m_eIssueID);
-    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[2]->m_eIssueID);
-    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[3]->m_eIssueID);
-    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[4]->m_eIssueID);
-    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[5]->m_eIssueID);
-    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[6]->m_eIssueID);
-    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[7]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_NEW_LINES, aIssues[1]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_NEW_LINES, aIssues[2]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_NEW_LINES, aIssues[3]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_NEW_LINES, aIssues[4]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_NEW_LINES, aIssues[5]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_NEW_LINES, aIssues[6]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_NEW_LINES, aIssues[7]->m_eIssueID);
 
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
@@ -285,8 +297,8 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testDeleteHeader)
     aResultIssues = aReCheck.getIssueCollection().getIssues();
     CPPUNIT_ASSERT_EQUAL(size_t(3), aResultIssues.size());
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DOCUMENT_TITLE, aResultIssues[0]->m_eIssueID);
-    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aResultIssues[1]->m_eIssueID);
-    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aResultIssues[2]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_NEW_LINES, aResultIssues[1]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_NEW_LINES, aResultIssues[2]->m_eIssueID);
 }
 
 CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testStylesWithHeader)

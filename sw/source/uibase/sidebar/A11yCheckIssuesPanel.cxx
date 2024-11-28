@@ -363,7 +363,10 @@ void A11yCheckIssuesPanel::populateIssues()
                     addEntryForGroup(AccessibilityCheckGroups::Table, nIndices, pIssue);
             }
             break;
-            case sfx::AccessibilityIssueID::TEXT_FORMATTING:
+            case sfx::AccessibilityIssueID::TEXT_NEW_LINES:
+            case sfx::AccessibilityIssueID::TEXT_SPACES:
+            case sfx::AccessibilityIssueID::TEXT_TABS:
+            case sfx::AccessibilityIssueID::TEXT_EMPTY_NUM_PARA:
             case sfx::AccessibilityIssueID::TABLE_FORMATTING:
             {
                 if (!pIssue->getHidden())

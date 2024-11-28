@@ -134,9 +134,27 @@ void lcl_SetHiddenIssues(std::shared_ptr<sw::AccessibilityIssue>& pIssue)
                 pIssue->setHidden(true);
         }
         break;
-        case sfx::AccessibilityIssueID::TEXT_FORMATTING:
+        case sfx::AccessibilityIssueID::TEXT_NEW_LINES:
         {
-            if (!officecfg::Office::Common::AccessibilityIssues::TextFormattings::get())
+            if (!officecfg::Office::Common::AccessibilityIssues::TextNewLines::get())
+                pIssue->setHidden(true);
+        }
+        break;
+        case sfx::AccessibilityIssueID::TEXT_SPACES:
+        {
+            if (!officecfg::Office::Common::AccessibilityIssues::TextSpaces::get())
+                pIssue->setHidden(true);
+        }
+        break;
+        case sfx::AccessibilityIssueID::TEXT_TABS:
+        {
+            if (!officecfg::Office::Common::AccessibilityIssues::TextTabs::get())
+                pIssue->setHidden(true);
+        }
+        break;
+        case sfx::AccessibilityIssueID::TEXT_EMPTY_NUM_PARA:
+        {
+            if (!officecfg::Office::Common::AccessibilityIssues::TextEmptyNums::get())
                 pIssue->setHidden(true);
         }
         break;
@@ -1699,7 +1717,7 @@ public:
                 if (pPrevTextNode->GetText().getLength() == 0)
                 {
                     auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_AVOID_NEWLINES_SPACE),
-                                              sfx::AccessibilityIssueID::TEXT_FORMATTING,
+                                              sfx::AccessibilityIssueID::TEXT_NEW_LINES,
                                               sfx::AccessibilityIssueLevel::WARNLEV);
                     pIssue->setIssueObject(IssueObject::TEXT);
                     pIssue->setNode(pTextNode);
@@ -1726,7 +1744,7 @@ public:
                         {
                             auto pIssue
                                 = lclAddIssue(m_rIssueCollection, SwResId(STR_AVOID_NEWLINES_SPACE),
-                                              sfx::AccessibilityIssueID::TEXT_FORMATTING,
+                                              sfx::AccessibilityIssueID::TEXT_NEW_LINES,
                                               sfx::AccessibilityIssueLevel::WARNLEV);
                             pIssue->setIssueObject(IssueObject::TEXT);
                             pIssue->setNode(pTextNode);
@@ -1800,7 +1818,7 @@ public:
                         {
                             auto pIssue = lclAddIssue(m_rIssueCollection,
                                                       SwResId(STR_AVOID_TABS_FORMATTING),
-                                                      sfx::AccessibilityIssueID::TEXT_FORMATTING,
+                                                      sfx::AccessibilityIssueID::TEXT_TABS,
                                                       sfx::AccessibilityIssueLevel::WARNLEV);
                             pIssue->setIssueObject(IssueObject::TEXT);
                             pIssue->setNode(pTextNode);
@@ -1818,7 +1836,7 @@ public:
                     {
                         auto pIssue
                             = lclAddIssue(m_rIssueCollection, SwResId(STR_AVOID_SPACES_SPACE),
-                                          sfx::AccessibilityIssueID::TEXT_FORMATTING,
+                                          sfx::AccessibilityIssueID::TEXT_SPACES,
                                           sfx::AccessibilityIssueLevel::WARNLEV);
                         pIssue->setIssueObject(IssueObject::TEXT);
                         pIssue->setNode(pTextNode);
@@ -2310,6 +2328,101 @@ public:
     }
 };
 
+class EmptyLineBetweenNumberingCheck : public NodeCheck
+{
+private:
+    static SwTextNode* getPrevTextNode(SwNode* pCurrent)
+    {
+        SwTextNode* pTextNode = nullptr;
+
+        auto nIndex = pCurrent->GetIndex();
+
+        nIndex--; // go to previous node
+
+        while (pTextNode == nullptr && nIndex >= SwNodeOffset(0))
+        {
+            auto pNode = pCurrent->GetNodes()[nIndex];
+            if (pNode->IsTextNode())
+                pTextNode = pNode->GetTextNode();
+            nIndex--;
+        }
+
+        return pTextNode;
+    }
+
+    static SwTextNode* getNextTextNode(SwNode* pCurrent)
+    {
+        SwTextNode* pTextNode = nullptr;
+
+        auto nIndex = pCurrent->GetIndex();
+
+        nIndex++; // go to next node
+
+        while (pTextNode == nullptr && nIndex < pCurrent->GetNodes().Count())
+        {
+            auto pNode = pCurrent->GetNodes()[nIndex];
+            if (pNode->IsTextNode())
+                pTextNode = pNode->GetTextNode();
+            nIndex++;
+        }
+
+        return pTextNode;
+    }
+
+public:
+    EmptyLineBetweenNumberingCheck(sfx::AccessibilityIssueCollection& rIssueCollection)
+        : NodeCheck(rIssueCollection)
+    {
+    }
+    void check(SwNode* pCurrent) override
+    {
+        if (!pCurrent->IsTextNode())
+            return;
+
+        // Don't count empty table box text nodes
+        if (pCurrent->GetTableBox())
+            return;
+
+        SwTextNode* pTextNode = pCurrent->GetTextNode();
+        SwDoc& rDocument = pTextNode->GetDoc();
+        SwDocShell* pDocShell = rDocument.GetDocShell();
+        if (!pDocShell)
+            return;
+
+        SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+        if (!pWrtShell)
+            return;
+
+        auto nParagraphLength = pTextNode->GetText().getLength();
+        if (nParagraphLength == 0 && !pTextNode->GetNumRule())
+        {
+            SwTextNode* pPrevTextNode = getPrevTextNode(pCurrent);
+            if (!pPrevTextNode)
+                return;
+
+            SwTextNode* pNextTextNode = getNextTextNode(pCurrent);
+            if (!pNextTextNode)
+                return;
+
+            if (pPrevTextNode->getLayoutFrame(pWrtShell->GetLayout())
+                && pNextTextNode->getLayoutFrame(pWrtShell->GetLayout()))
+            {
+                const SwNumRule* pPrevRule = pPrevTextNode->GetNumRule();
+                const SwNumRule* pNextRule = pNextTextNode->GetNumRule();
+                if (pPrevRule && pNextRule)
+                {
+                    auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_AVOID_EMPTY_NUM_PARA),
+                                              sfx::AccessibilityIssueID::TEXT_EMPTY_NUM_PARA,
+                                              sfx::AccessibilityIssueLevel::WARNLEV);
+                    pIssue->setIssueObject(IssueObject::TEXT);
+                    pIssue->setNode(pTextNode);
+                    pIssue->setDoc(rDocument);
+                }
+            }
+        }
+    }
+};
+
 class DocumentCheck : public BaseCheck
 {
 public:
@@ -2564,6 +2677,7 @@ void AccessibilityCheck::init()
         m_aNodeChecks.emplace_back(new FakeFootnoteCheck(m_aIssueCollection));
         m_aNodeChecks.emplace_back(new FakeCaptionCheck(m_aIssueCollection));
         m_aNodeChecks.emplace_back(new ContentControlCheck(m_aIssueCollection));
+        m_aNodeChecks.emplace_back(new EmptyLineBetweenNumberingCheck(m_aIssueCollection));
     }
 }
 
