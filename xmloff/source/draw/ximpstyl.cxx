@@ -1235,7 +1235,7 @@ void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAc
     sal_Int32 nPrefLen(rPrefix.getLength());
 
     // set defaults
-    auto [itStart1, itEnd1] = FindStyleChildContextByPrefix(nFamily, u""_ustr);
+    auto [itStart1, itEnd1] = FindStyleChildContextByDisplayNamePrefix(nFamily, u""_ustr);
     for (auto it = itStart1; it != itEnd1; ++it)
     {
         const SvXMLStyleContext* pStyle = *it;
@@ -1246,7 +1246,7 @@ void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAc
     }
 
     // create all styles and set properties
-    auto [itStart, itEnd] = FindStyleChildContextByPrefix(nFamily, rPrefix);
+    auto [itStart, itEnd] = FindStyleChildContextByDisplayNamePrefix(nFamily, rPrefix);
     for (auto it = itStart; it != itEnd; ++it)
     {
         const SvXMLStyleContext* pStyle = *it;

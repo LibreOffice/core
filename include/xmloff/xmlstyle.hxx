@@ -184,7 +184,7 @@ public:
                                       const OUString& rName,
                                       bool bCreateIndex = false ) const;
     std::pair<StyleIndex::const_iterator, StyleIndex::const_iterator>
-                             FindStyleChildContextByPrefix(
+                             FindStyleChildContextByDisplayNamePrefix(
                                       XmlStyleFamily nFamily,
                                       const OUString& rNamePrefix) const;
     static XmlStyleFamily GetFamily( std::u16string_view rFamily );
