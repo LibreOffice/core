@@ -73,6 +73,13 @@ class VCL_DLLPUBLIC PDFOutputStream
     virtual void write( const css::uno::Reference< css::io::XOutputStream >& xStream ) = 0;
 };
 
+/** Parameters that are needed when encrypting */
+struct EncryptionParams
+{
+    bool mbCanEncrypt = false;
+    std::vector<sal_uInt8> maKey;
+};
+
 /* The following structure describes the permissions used in PDF security */
 struct PDFEncryptionProperties
 {
@@ -103,6 +110,8 @@ struct PDFEncryptionProperties
     std::vector<sal_uInt8> EncryptionKey;
     std::vector<sal_uInt8> DocumentIdentifier;
 
+    std::optional<EncryptionParams> moParameters;
+
     bool canEncrypt() const
     {
         return !OValue.empty() && !UValue.empty() && !DocumentIdentifier.empty();
@@ -131,6 +140,15 @@ struct PDFEncryptionProperties
         nAccessPermissions |= CanPrintFull ? 1 << 11 : 0;
 
         return nAccessPermissions;
+    }
+
+    EncryptionParams const& getParams()
+    {
+        if (!moParameters)
+        {
+            moParameters = EncryptionParams{ canEncrypt(), EncryptionKey };
+        }
+        return *moParameters;
     }
 };
 

@@ -169,7 +169,7 @@ sal_Int32 PDFDocument::WriteSignatureObject(svl::crypto::SigningContext& rSignin
 
     if (!rDescription.isEmpty())
     {
-        pdf::COSWriter aWriter(nullptr);
+        pdf::COSWriter aWriter;
         aWriter.writeKeyAndUnicode("/Reason", rDescription);
         aSigBuffer.append(aWriter.getLine());
     }
