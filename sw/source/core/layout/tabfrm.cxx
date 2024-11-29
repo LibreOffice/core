@@ -2362,9 +2362,6 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
         }
     }
 
-    if (isHiddenNow)
-        MakeValidZeroHeight();
-
     int nUnSplitted = 5; // Just another loop control :-(
     int nThrowAwayValidLayoutLimit = 5; // And another one :-(
     PosSizeOscillationControl posSizeOscillationControl; // And yet another one.
@@ -2386,6 +2383,11 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
 
         Point aOldPos( aRectFnSet.GetPos(getFrameArea()) );
         MakePos();
+
+        if (isHiddenNow)
+        {   // after MakePos()
+            MakeValidZeroHeight();
+        }
 
         if ( aOldPos != aRectFnSet.GetPos(getFrameArea()) )
         {
