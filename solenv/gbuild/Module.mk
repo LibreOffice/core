@@ -501,6 +501,7 @@ screenshot : $$(firstword $$(gb_Module_SCREENSHOTTARGETSTACK))
 ifeq ($(WINDOWS_BUILD_SIGNING),TRUE)
 screenshot : $(gb_CustomTarget_workdir)/postprocess/signing/signing.done
 endif
+screenshot: AllLangMoTarget
 subsequentcheck : $$(firstword $$(gb_Module_SUBSEQUENTCHECKTARGETSTACK))
 perfcheck : $$(firstword $$(gb_Module_PERFCHECKTARGETSTACK))
 uicheck : build $$(firstword $$(gb_Module_UICHECKTARGETSTACK))
