@@ -1143,6 +1143,53 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testHiddenParagraphFollowFrame)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testHiddenParagraphFlys)
+{
+    createDoc("hidden-para-as-char-fly.fodt");
+
+    uno::Any aOldValue{ queryDispatchStatus(mxComponent, m_xContext, ".uno:ShowHiddenParagraphs") };
+
+    Resetter g([this, aOldValue] {
+        uno::Sequence<beans::PropertyValue> argsSH(
+            comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", aOldValue } }));
+        lcl_dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", argsSH);
+    });
+
+    uno::Sequence<beans::PropertyValue> argsSH(
+        comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", uno::Any(true) } }));
+    lcl_dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", argsSH);
+    uno::Sequence<beans::PropertyValue> args(
+        comphelper::InitPropertySequence({ { "Fieldnames", uno::Any(false) } }));
+    lcl_dispatchCommand(mxComponent, ".uno:Fieldnames", args);
+    Scheduler::ProcessEventsToIdle();
+
+    {
+        xmlDocPtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page/body/txt[3]/anchored/fly/infos/bounds", "height",
+                    u"724");
+        discardDumpedLayout();
+    }
+
+    lcl_dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", {});
+
+    {
+        xmlDocPtr pXmlDoc = parseLayoutDump();
+        // the problem was that this did not shrink
+        assertXPath(pXmlDoc, "/root/page/body/txt[3]/anchored/fly/infos/bounds", "height",
+                    u"448");
+        discardDumpedLayout();
+    }
+
+    lcl_dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", {});
+
+    {
+        xmlDocPtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page/body/txt[3]/anchored/fly/infos/bounds", "height",
+                    u"724");
+        discardDumpedLayout();
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testSectionUnhide)
 {
     createDoc("hiddensection.fodt");

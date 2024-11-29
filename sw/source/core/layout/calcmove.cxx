@@ -960,9 +960,6 @@ void SwLayoutFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     const SwLayNotify aNotify( this );
     bool bVert = IsVertical();
 
-    if (IsHiddenNow())
-        MakeValidZeroHeight();
-
     SwRectFn fnRect = ( IsNeighbourFrame() == bVert )? fnRectHori : ( IsVertLR() ? (IsVertLRBT() ? fnRectVertL2RB2T : fnRectVertL2R) : fnRectVert );
 
     std::unique_ptr<SwBorderAttrAccess> pAccess;
@@ -971,7 +968,14 @@ void SwLayoutFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     while ( !isFrameAreaPositionValid() || !isFrameAreaSizeValid() || !isFramePrintAreaValid() )
     {
         if ( !isFrameAreaPositionValid() )
+        {
             MakePos();
+        }
+
+        if (IsHiddenNow())
+        {
+            MakeValidZeroHeight();
+        }
 
         if ( GetUpper() )
         {
@@ -1247,7 +1251,6 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         {
             static_cast<SwTextFrame&>(*this).JoinFrame();
         }
-        MakeValidZeroHeight();
         HideAndShowObjects();
     }
 
@@ -1424,10 +1427,11 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         if ( !isFrameAreaPositionValid() )
         {
             MakePos();
-            if (isHiddenNow && !isFrameAreaSizeValid())
-            {   // in a table cell, might be invalidated by ~SwLayNotify
-                MakeValidZeroHeight();
-            }
+        }
+
+        if (isHiddenNow)
+        {   // call this after MakePos() otherwise Shrink may not work
+            MakeValidZeroHeight();
         }
 
         //Set FixSize. VarSize is being adjusted by Format().

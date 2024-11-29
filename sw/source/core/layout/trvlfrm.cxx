@@ -1708,7 +1708,6 @@ void SwFrame::MakeValidZeroHeight()
     }
     setFrameAreaSizeValid(true);
     setFramePrintAreaValid(true);
-    setFrameAreaPositionValid(false);
 }
 
 /** @return the physical page number */
