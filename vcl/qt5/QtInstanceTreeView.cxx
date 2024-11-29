@@ -17,12 +17,42 @@ QtInstanceTreeView::QtInstanceTreeView(QTreeView* pTreeView)
     , m_pTreeView(pTreeView)
 {
     assert(m_pTreeView);
+
+    m_pModel = qobject_cast<QStandardItemModel*>(m_pTreeView->model());
+    assert(m_pModel && "tree view doesn't have expected item model set");
 }
 
-void QtInstanceTreeView::insert(const weld::TreeIter*, int, const OUString*, const OUString*,
-                                const OUString*, VirtualDevice*, bool, weld::TreeIter*)
+void QtInstanceTreeView::insert(const weld::TreeIter* pParent, int pos, const OUString* pStr,
+                                const OUString* pId, const OUString* pIconName,
+                                VirtualDevice* pImageSurface, bool bChildrenOnDemand,
+                                weld::TreeIter* pRet)
 {
-    assert(false && "Not implemented yet");
+    // Only specific subset of parameters handled so far;
+    // assert only these are used at the moment and implement remaining cases
+    // when needed to support more dialogs, then adjust/remove asserts below
+    assert(!pParent && "Not implemented yet");
+    assert(pos == -1 && "Not implemented yet");
+    assert(!pId && "Not implemented yet");
+    assert(!pIconName && "Not implemented yet");
+    assert(!pImageSurface && "Not implemented yet");
+    assert(!bChildrenOnDemand && "Not implemented yet");
+    assert(!pRet && "Not implemented yet");
+    // avoid -Werror=unused-parameter for release build
+    (void)pParent;
+    (void)pos;
+    (void)pId;
+    (void)pIconName;
+    (void)pImageSurface;
+    (void)bChildrenOnDemand;
+    (void)pRet;
+
+    assert(pStr && "No string passed, which is currently the only supported/implemented case");
+
+    SolarMutexGuard g;
+    GetQtInstance().RunInMainThread([&] {
+        QStandardItem* pItem = new QStandardItem(toQString(*pStr));
+        m_pModel->appendRow(pItem);
+    });
 }
 
 void QtInstanceTreeView::insert_separator(int, const OUString&)
@@ -55,16 +85,36 @@ int QtInstanceTreeView::get_selected_index() const
     return -1;
 }
 
-void QtInstanceTreeView::select(int) { assert(false && "Not implemented yet"); }
+void QtInstanceTreeView::select(int nPos)
+{
+    SolarMutexGuard g;
+    GetQtInstance().RunInMainThread([&] {
+        QItemSelectionModel* pSelectionModel = m_pTreeView->selectionModel();
+        assert(pSelectionModel);
+        pSelectionModel->select(m_pModel->index(nPos, 0), QItemSelectionModel::Select);
+    });
+}
 
 void QtInstanceTreeView::unselect(int) { assert(false && "Not implemented yet"); }
 
 void QtInstanceTreeView::remove(int) { assert(false && "Not implemented yet"); }
 
-OUString QtInstanceTreeView::get_text(int, int) const
+OUString QtInstanceTreeView::get_text(int nRow, int nCol) const
 {
-    assert(false && "Not implemented yet");
-    return OUString();
+    assert(nCol == -1 && "Column support not implemented yet");
+    (void)nCol; // for release build
+
+    SolarMutexGuard g;
+
+    OUString sText;
+    GetQtInstance().RunInMainThread([&] {
+        const QModelIndex aIndex = m_pModel->index(nRow, 0);
+        const QVariant aData = m_pModel->data(aIndex);
+        assert(aData.canConvert<QString>() && "model data not a string");
+        sText = toOUString(aData.toString());
+    });
+
+    return sText;
 }
 
 void QtInstanceTreeView::set_text(int, const OUString&, int)
@@ -125,8 +175,19 @@ void QtInstanceTreeView::swap(int, int) { assert(false && "Not implemented yet")
 
 std::vector<int> QtInstanceTreeView::get_selected_rows() const
 {
-    assert(false && "Not implemented yet");
-    return std::vector<int>();
+    SolarMutexGuard g;
+
+    std::vector<int> aSelectedRows;
+
+    GetQtInstance().RunInMainThread([&] {
+        QItemSelectionModel* pSelectionModel = m_pTreeView->selectionModel();
+        assert(pSelectionModel);
+        const QModelIndexList aSelectionIndexes = pSelectionModel->selection().indexes();
+        for (const QModelIndex& aIndex : aSelectionIndexes)
+            aSelectedRows.push_back(aIndex.row());
+    });
+
+    return aSelectedRows;
 }
 
 void QtInstanceTreeView::set_font_color(int, const Color&)
@@ -441,8 +502,12 @@ void QtInstanceTreeView::enable_drag_source(rtl::Reference<TransferDataContainer
 
 int QtInstanceTreeView::n_children() const
 {
-    assert(false && "Not implemented yet");
-    return 0;
+    SolarMutexGuard g;
+
+    int nChildCount;
+    GetQtInstance().RunInMainThread(
+        [&] { nChildCount = m_pModel->rowCount(m_pModel->invisibleRootItem()->index()); });
+    return nChildCount;
 }
 
 void QtInstanceTreeView::make_sorted() { assert(false && "Not implemented yet"); }
@@ -480,7 +545,7 @@ void QtInstanceTreeView::clear() { assert(false && "Not implemented yet"); }
 
 int QtInstanceTreeView::get_height_rows(int) const
 {
-    assert(false && "Not implemented yet");
+    SAL_WARN("vcl.qt", "QtInstanceTreeView::get_height_rows just returns 0 for now");
     return 0;
 }
 

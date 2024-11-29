@@ -11,6 +11,7 @@
 
 #include "QtInstanceWidget.hxx"
 
+#include <QtGui/QStandardItemModel>
 #include <QtWidgets/QTreeView>
 
 class QtInstanceTreeView : public QObject, public QtInstanceWidget, public virtual weld::TreeView
@@ -18,6 +19,7 @@ class QtInstanceTreeView : public QObject, public QtInstanceWidget, public virtu
     Q_OBJECT
 
     QTreeView* m_pTreeView;
+    QStandardItemModel* m_pModel;
 
 public:
     QtInstanceTreeView(QTreeView* pTreeView);
@@ -37,10 +39,10 @@ public:
     virtual void set_clicks_to_toggle(int nToggleBehavior) override;
 
     virtual int get_selected_index() const override;
-    virtual void select(int pos) override;
+    virtual void select(int nPos) override;
     virtual void unselect(int pos) override;
     virtual void remove(int pos) override;
-    virtual OUString get_text(int row, int col = -1) const override;
+    virtual OUString get_text(int nRow, int nCol = -1) const override;
     virtual void set_text(int row, const OUString& rText, int col = -1) override;
     virtual void set_sensitive(int row, bool bSensitive, int col = -1) override;
     virtual bool get_sensitive(int row, int col) const override;

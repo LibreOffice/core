@@ -19,6 +19,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <vcl/qt/QtUtils.hxx>
 
+#include <QtGui/QStandardItemModel>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QDialog>
@@ -104,6 +105,10 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
 {
     // ignore placeholders
     if (sName.empty())
+        return nullptr;
+
+    // nothing to do for these
+    if (sName == u"GtkCellRendererText" || sName == u"GtkTreeSelection")
         return nullptr;
 
     QWidget* pParentWidget = qobject_cast<QWidget*>(pParent);
@@ -283,7 +288,13 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
     }
     else if (sName == u"GtkTreeView")
     {
-        pObject = new QTreeView(pParentWidget);
+        QTreeView* pTreeView = new QTreeView(pParentWidget);
+        pTreeView->setModel(new QStandardItemModel(pTreeView));
+        pObject = pTreeView;
+    }
+    else if (sName == u"GtkTreeViewColumn")
+    {
+        SAL_WARN("vcl.qt", "GtkTreeViewColumn properties not evaluated yet");
     }
     else
     {
