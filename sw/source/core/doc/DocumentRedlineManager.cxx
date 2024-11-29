@@ -413,7 +413,7 @@ namespace
     }
 
     // copy style or return with SwRedlineExtra_FormatColl with reject data of the upcoming copy
-    SwRedlineExtraData_FormatColl* lcl_CopyStyle( const SwPosition & rFrom, const SwPosition & rTo, bool bCopy = true )
+    std::unique_ptr<SwRedlineExtraData_FormatColl> lcl_CopyStyle( const SwPosition & rFrom, const SwPosition & rTo, bool bCopy = true )
     {
         SwTextNode* pToNode = rTo.GetNode().GetTextNode();
         SwTextNode* pFromNode = rFrom.GetNode().GetTextNode();
@@ -455,7 +455,7 @@ namespace
             if (bCopy && !bSameSet)
                 rDoc.getIDocumentContentOperations().InsertItemSet(aPam, aTmp2);
             else if (!bCopy && (!bSameSet || pFromColl != pToColl))
-                return new SwRedlineExtraData_FormatColl( pFromColl->GetName(), USHRT_MAX, &aTmp2 );
+                return std::make_unique<SwRedlineExtraData_FormatColl>( pFromColl->GetName(), USHRT_MAX, &aTmp2 );
         }
         return nullptr;
     }
@@ -2348,14 +2348,12 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                                 pNewRedl->SetEnd( aPos );
 
                                 // get extradata for reset formatting of the modified paragraph
-                                SwRedlineExtraData_FormatColl* pExtraData = lcl_CopyStyle(aPos, *pStt, false);
+                                std::unique_ptr<SwRedlineExtraData_FormatColl> pExtraData = lcl_CopyStyle(aPos, *pStt, false);
                                 if (pExtraData)
                                 {
-                                    std::unique_ptr<SwRedlineExtraData_FormatColl> xRedlineExtraData;
                                     if (!bFirst)
                                         pExtraData->SetFormatAll(false);
-                                    xRedlineExtraData.reset(pExtraData);
-                                    pPar->SetExtraData( xRedlineExtraData.get() );
+                                    pPar->SetExtraData( pExtraData.get() );
                                 }
 
                                 // skip empty redlines without ExtraData
