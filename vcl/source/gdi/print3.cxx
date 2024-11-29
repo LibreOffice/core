@@ -1688,6 +1688,11 @@ bool PrinterController::isUIOptionEnabled( const OUString& i_rProperty ) const
     return bEnabled;
 }
 
+void PrinterController::setUIChoicesDisabled(const OUString& rPropName, css::uno::Sequence<sal_Bool>& rChoicesDisabled)
+{
+    mpImplData->maChoiceDisableMap[rPropName] = std::move(rChoicesDisabled);
+}
+
 bool PrinterController::isUIChoiceEnabled( const OUString& i_rProperty, sal_Int32 i_nValue ) const
 {
     bool bEnabled = true;

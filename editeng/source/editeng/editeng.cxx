@@ -618,11 +618,11 @@ sal_Int32 EditEngine::GetLineNumberAtIndex( sal_Int32 nPara, sal_Int32 nIndex ) 
     return getImpl().GetLineNumberAtIndex(nPara, nIndex);
 }
 
-sal_uInt32 EditEngine::GetLineHeight( sal_Int32 nParagraph )
+sal_uInt32 EditEngine::GetLineHeight( sal_Int32 nParagraph, sal_Int32 nLine )
 {
     // If someone calls GetLineHeight() with an empty Engine.
     ensureDocumentFormatted();
-    return getImpl().GetLineHeight( nParagraph, 0 );
+    return getImpl().GetLineHeight( nParagraph, nLine );
 }
 
 tools::Rectangle EditEngine::GetParaBounds( sal_Int32 nPara )
