@@ -214,10 +214,18 @@ int QtInstanceTreeView::get_cursor_index() const
 
 void QtInstanceTreeView::set_cursor(int) { assert(false && "Not implemented yet"); }
 
-int QtInstanceTreeView::find_text(const OUString&) const
+int QtInstanceTreeView::find_text(const OUString& rText) const
 {
-    assert(false && "Not implemented yet");
-    return -1;
+    SolarMutexGuard g;
+
+    int nIndex = -1;
+    GetQtInstance().RunInMainThread([&] {
+        const QList<QStandardItem*> aItems = m_pModel->findItems(toQString(rText));
+        if (!aItems.empty())
+            nIndex = aItems.at(0)->index().row();
+    });
+
+    return nIndex;
 }
 
 OUString QtInstanceTreeView::get_id(int nPos) const
@@ -234,10 +242,23 @@ OUString QtInstanceTreeView::get_id(int nPos) const
     return sId;
 }
 
-int QtInstanceTreeView::find_id(const OUString&) const
+int QtInstanceTreeView::find_id(const OUString& rId) const
 {
-    assert(false && "Not implemented yet");
-    return -1;
+    SolarMutexGuard g;
+
+    int nIndex = -1;
+    GetQtInstance().RunInMainThread([&] {
+        for (int i = 0; i < m_pModel->rowCount(); i++)
+        {
+            if (get_id(i) == rId)
+            {
+                nIndex = i;
+                return;
+            }
+        }
+    });
+
+    return nIndex;
 }
 
 std::unique_ptr<weld::TreeIter> QtInstanceTreeView::make_iterator(const weld::TreeIter*) const
