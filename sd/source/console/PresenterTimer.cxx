@@ -260,11 +260,14 @@ void TimerScheduler::CancelTask (const sal_Int32 nTaskId)
 
 void TimerScheduler::NotifyTermination()
 {
-    std::shared_ptr<TimerScheduler> const pInstance(TimerScheduler::mpInstance);
-    if (!pInstance)
+    std::shared_ptr<TimerScheduler> pInstance;
     {
-        return;
+        std::scoped_lock aGuard (maInstanceMutex);
+        pInstance = TimerScheduler::mpInstance;
     }
+
+    if (!pInstance)
+        return;
 
     {
         std::scoped_lock aGuard(pInstance->maTaskContainerMutex);
@@ -274,9 +277,7 @@ void TimerScheduler::NotifyTermination()
     {
         std::scoped_lock aGuard(pInstance->maCurrentTaskMutex);
         if (pInstance->mpCurrentTask)
-        {
             pInstance->mpCurrentTask->mbIsCanceled = true;
-        }
     }
 
     pInstance->m_Shutdown.set();
