@@ -477,20 +477,25 @@ bool ScTable::SetOptimalHeight(
 
     if (!rCxt.isForceAutoSize())
     {
-        // Optimize - exit early if all rows have defined height - super expensive GetOptimalHeight
-        bool bAllRowsAreManualHeight = true;
-        for (SCROW nRow = nStartRow; nRow <= nEndRow; ++nRow)
+        // Optimize - exit early if all rows have defined height: super expensive GetOptimalHeight
+        size_t nIndex;
+        SCROW nRow;
+        CRFlags nRowFlags = pRowFlags->GetValue(nStartRow, nIndex, nRow); // changes nIndex, nRow
+        if (nRowFlags & CRFlags::ManualSize) // first block of rows is manual - are all the rest?
         {
-            size_t nDummy;
-            CRFlags nRowFlags = pRowFlags->GetValue(nRow, nDummy, nRow); // NOTE: nRow might change
-            if (!(nRowFlags & CRFlags::ManualSize))
+            bool bAllRowsAreManualHeight = true;
+            while (nRow < nEndRow)
             {
-                bAllRowsAreManualHeight = false;
-                break;
+                nRowFlags = pRowFlags->GetNextValue(nIndex, nRow);
+                if (!(nRowFlags & CRFlags::ManualSize))
+                {
+                    bAllRowsAreManualHeight = false;
+                    break;
+                }
             }
+            if (bAllRowsAreManualHeight)
+                return false;
         }
-        if (bAllRowsAreManualHeight)
-            return false;
     }
 
     SCSIZE  nCount = static_cast<SCSIZE>(nEndRow-nStartRow+1);
