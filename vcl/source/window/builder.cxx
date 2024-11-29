@@ -1078,18 +1078,6 @@ namespace
         return sTitle;
     }
 
-    bool extractHeadersVisible(VclBuilder::stringmap &rMap)
-    {
-        bool bHeadersVisible = true;
-        VclBuilder::stringmap::iterator aFind = rMap.find(u"headers-visible"_ustr);
-        if (aFind != rMap.end())
-        {
-            bHeadersVisible = toBool(aFind->second);
-            rMap.erase(aFind);
-        }
-        return bHeadersVisible;
-    }
-
     bool extractSortIndicator(VclBuilder::stringmap &rMap)
     {
         bool bSortIndicator = false;
@@ -3497,6 +3485,17 @@ bool BuilderBase::extractEntry(VclBuilder::stringmap &rMap)
     return bHasEntry;
 }
 
+bool BuilderBase::extractHeadersVisible(VclBuilder::stringmap& rMap)
+{
+    bool bHeadersVisible = true;
+    VclBuilder::stringmap::iterator aFind = rMap.find(u"headers-visible"_ustr);
+    if (aFind != rMap.end())
+    {
+        bHeadersVisible = toBool(aFind->second);
+        rMap.erase(aFind);
+    }
+    return bHeadersVisible;
+}
 
 OUString BuilderBase::extractIconName(VclBuilder::stringmap &rMap)
 {
