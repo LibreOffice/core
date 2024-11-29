@@ -153,6 +153,13 @@ public:
 
     virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
 
+    virtual void StateChanged(StateChangedType nStateChange) override
+    {
+        if (nStateChange == StateChangedType::Enable)
+            m_xWidget->set_sensitive(IsEnabled());
+        InterimItemWindow::StateChanged(nStateChange);
+    }
+
     virtual void set_sensitive(bool bSensitive) override
     {
         m_xWidget->set_sensitive(bSensitive);
