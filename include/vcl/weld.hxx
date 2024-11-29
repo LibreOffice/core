@@ -794,7 +794,7 @@ public:
     virtual void make_sorted() = 0;
     virtual void clear() = 0;
 
-    //by index
+    //by index, returns -1 if nothing is selected
     virtual int get_active() const = 0;
     virtual void set_active(int pos) = 0;
     virtual void remove(int pos) = 0;
