@@ -285,6 +285,8 @@ gotfunc:
         logCallToRootMethods(calleeFunctionDecl, usedReturnSet);
         return true;
     }
+    if (auto attributedStmt = dyn_cast<AttributedStmt>(parent))
+        parent = attributedStmt->getSubStmt();
     if (isa<Expr>(parent) || isa<ReturnStmt>(parent) || isa<DeclStmt>(parent)
         || isa<IfStmt>(parent) || isa<SwitchStmt>(parent) || isa<ForStmt>(parent)
         || isa<WhileStmt>(parent) || isa<DoStmt>(parent)
@@ -298,6 +300,10 @@ gotfunc:
     {
         return true;
     }
+    report(
+         DiagnosticsEngine::Warning,
+         "unknown parent?",
+          parent->getBeginLoc());
     parent->dump();
     return true;
 }
