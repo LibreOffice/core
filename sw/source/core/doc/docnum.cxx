@@ -472,7 +472,6 @@ bool SwDoc::MoveOutlinePara( const SwPaM& rPam,
 
     SwNode* pEndSrch = &aEndRg.GetNode();
 
-    auto aOutlineNodes = GetNodes().GetOutLineNds();
     if( !pOutlineNodesInline && !GetNodes().GetOutLineNds().Seek_Entry( pSrch, &nCurrentPos ) )
     {
         if( !nCurrentPos )
