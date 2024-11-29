@@ -65,7 +65,7 @@ public:
     virtual void set_cursor(int pos) override;
 
     virtual int find_text(const OUString& rText) const override;
-    virtual OUString get_id(int pos) const override;
+    virtual OUString get_id(int nPos) const override;
     virtual int find_id(const OUString& rId) const override;
 
     virtual std::unique_ptr<weld::TreeIter> make_iterator(const weld::TreeIter* pOrig

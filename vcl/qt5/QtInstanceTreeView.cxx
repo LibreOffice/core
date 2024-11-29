@@ -12,6 +12,9 @@
 
 #include <vcl/qt/QtUtils.hxx>
 
+// role used for the ID in the QStandardItem
+constexpr int ROLE_ID = Qt::UserRole + 1000;
+
 QtInstanceTreeView::QtInstanceTreeView(QTreeView* pTreeView)
     : QtInstanceWidget(pTreeView)
     , m_pTreeView(pTreeView)
@@ -32,7 +35,6 @@ void QtInstanceTreeView::insert(const weld::TreeIter* pParent, int pos, const OU
     // when needed to support more dialogs, then adjust/remove asserts below
     assert(!pParent && "Not implemented yet");
     assert(pos == -1 && "Not implemented yet");
-    assert(!pId && "Not implemented yet");
     assert(!pIconName && "Not implemented yet");
     assert(!pImageSurface && "Not implemented yet");
     assert(!bChildrenOnDemand && "Not implemented yet");
@@ -40,17 +42,18 @@ void QtInstanceTreeView::insert(const weld::TreeIter* pParent, int pos, const OU
     // avoid -Werror=unused-parameter for release build
     (void)pParent;
     (void)pos;
-    (void)pId;
     (void)pIconName;
     (void)pImageSurface;
     (void)bChildrenOnDemand;
     (void)pRet;
 
-    assert(pStr && "No string passed, which is currently the only supported/implemented case");
-
     SolarMutexGuard g;
     GetQtInstance().RunInMainThread([&] {
-        QStandardItem* pItem = new QStandardItem(toQString(*pStr));
+        QStandardItem* pItem = new QStandardItem;
+        if (pStr)
+            pItem->setText(toQString(*pStr));
+        if (pId)
+            pItem->setData(toQString(*pId), ROLE_ID);
         m_pModel->appendRow(pItem);
     });
 }
@@ -217,10 +220,18 @@ int QtInstanceTreeView::find_text(const OUString&) const
     return -1;
 }
 
-OUString QtInstanceTreeView::get_id(int) const
+OUString QtInstanceTreeView::get_id(int nPos) const
 {
-    assert(false && "Not implemented yet");
-    return OUString();
+    SolarMutexGuard g;
+
+    OUString sId;
+    GetQtInstance().RunInMainThread([&] {
+        QVariant aRoleData = m_pModel->data(m_pModel->index(0, nPos), ROLE_ID);
+        if (aRoleData.canConvert<QString>())
+            sId = toOUString(aRoleData.toString());
+    });
+
+    return sId;
 }
 
 int QtInstanceTreeView::find_id(const OUString&) const
