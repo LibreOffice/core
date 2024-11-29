@@ -41,6 +41,9 @@
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <txtfrm.hxx>
+#include <PostItMgr.hxx>
+#include <AnnotationWin.hxx>
+#include <docufld.hxx>
 
 /// Covers sw/source/core/txtnode/ fixes.
 class SwCoreTxtnodeTest : public SwModelTestBase
@@ -547,6 +550,39 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testPlainContentControlCopy)
     // still had clients by the time it was deleted.
     xFrame->close(false);
     mxComponent.clear();
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testCopyCommentsWithReplies)
+{
+    createSwDoc("comment-reply-copy.odt");
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDocShell* pShell = pTextDoc->GetDocShell();
+    SwWrtShell* pWrtShell = pShell->GetWrtShell();
+    SwDoc aClipboard;
+    pWrtShell->SelAll();
+    pWrtShell->Copy(aClipboard);
+    pWrtShell->SttEndDoc(/*bStart=*/false); // Send the cursor to the end of the document.
+    pWrtShell->Paste(aClipboard);
+
+    // Now we have selected all text (which is one line) and pasted it to the end.
+    // A comment and its reply should also be copied to the end of the document.
+    // We will check if our reply is referencing its copied parent instead of the source parent.
+
+    SwPostItMgr* postItManager = pWrtShell->GetPostItMgr();
+
+    std::vector<const SwPostItField*> comments;
+
+    Scheduler::ProcessEventsToIdle();
+
+    for (const auto& pItem : *postItManager) // There should be 4.
+    {
+        comments.push_back(pItem->mpPostIt->GetPostItField());
+    }
+
+    //                   parents (original-copied), replies (original-copied)
+    CPPUNIT_ASSERT_EQUAL(comments[0]->GetName(), comments[1]->GetParentName());
+    CPPUNIT_ASSERT_EQUAL(comments[2]->GetName(), comments[3]->GetParentName());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
