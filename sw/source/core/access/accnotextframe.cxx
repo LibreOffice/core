@@ -40,10 +40,11 @@ const SwNoTextNode *SwAccessibleNoTextFrame::GetNoTextNode() const
 {
     const SwNoTextNode *pNd  = nullptr;
     const SwFlyFrame *pFlyFrame = static_cast< const SwFlyFrame *>( GetFrame() );
-    if( pFlyFrame->Lower() && pFlyFrame->Lower()->IsNoTextFrame() )
+    const SwFrame *pLower = pFlyFrame->Lower();
+    if( pLower && pLower->IsNoTextFrame() )
     {
         const SwNoTextFrame *pContentFrame =
-            static_cast<const SwNoTextFrame *>(pFlyFrame->Lower());
+            static_cast<const SwNoTextFrame *>(pLower);
         const SwContentNode* pSwContentNode = pContentFrame->GetNode();
         if(pSwContentNode != nullptr)
         {

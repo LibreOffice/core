@@ -90,12 +90,13 @@ void SwAccessibleFrameBase::GetStates( sal_Int64& rStateSet )
 SwNodeType SwAccessibleFrameBase::GetNodeType( const SwFlyFrame *pFlyFrame )
 {
     SwNodeType nType = SwNodeType::Text;
-    if( pFlyFrame->Lower() )
+    const SwFrame* pLower = pFlyFrame->Lower();
+    if( pLower )
     {
-        if( pFlyFrame->Lower()->IsNoTextFrame() )
+        if( pLower->IsNoTextFrame() )
         {
             const SwNoTextFrame *const pContentFrame =
-                static_cast<const SwNoTextFrame *>(pFlyFrame->Lower());
+                static_cast<const SwNoTextFrame *>(pLower);
             nType = pContentFrame->GetNode()->GetNodeType();
         }
     }

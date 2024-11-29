@@ -924,8 +924,8 @@ void SwFrame::InsertBehind( SwLayoutFrame *pParent, SwFrame *pBefore )
         assert(pParent && "No Parent for Insert.");
         //Insert at the beginning of the chain
         mpNext = pParent->Lower();
-        if ( pParent->Lower() )
-            pParent->Lower()->mpPrev = this;
+        if ( mpNext )
+            mpNext->mpPrev = this;
         pParent->m_pLower = this;
     }
 }
@@ -987,10 +987,11 @@ bool SwFrame::InsertGroupBefore( SwFrame* pParent, SwFrame* pBehind, SwFrame* pS
                 pBehind->GetUpper()->m_pLower = nullptr;
             pBehind->mpPrev = nullptr;
             SwLayoutFrame* pTmp = static_cast<SwLayoutFrame*>(pSct);
-            if( pTmp->Lower() )
+            SwFrame* pLower = pTmp->Lower();
+            if( pLower )
             {
-                OSL_ENSURE( pTmp->Lower()->IsColumnFrame(), "InsertGrp: Used SectionFrame" );
-                pTmp = static_cast<SwLayoutFrame*>(static_cast<SwLayoutFrame*>(pTmp->Lower())->Lower());
+                OSL_ENSURE( pLower->IsColumnFrame(), "InsertGrp: Used SectionFrame" );
+                pTmp = static_cast<SwLayoutFrame*>(static_cast<SwLayoutFrame*>(pLower)->Lower());
                 OSL_ENSURE( pTmp, "InsertGrp: Missing ColBody" );
             }
             pBehind->mpUpper = pTmp;
@@ -2784,11 +2785,13 @@ SwTwips SwLayoutFrame::GrowFrame(SwTwips nDist, SwResizeLimitReason& reason, boo
                 {
                     //Footnotes can replace their successor.
                     SwTwips nSpace = bTst ? 0 : -nDist;
-                    const SwFrame *pFrame = GetUpper()->Lower();
-                    do
-                    {   nSpace += aRectFnSet.GetHeight(pFrame->getFrameArea());
-                        pFrame = pFrame->GetNext();
-                    } while ( pFrame != GetNext() );
+                    if (const SwFrame *pFrame = GetUpper()->Lower())
+                    {
+                        do
+                        {   nSpace += aRectFnSet.GetHeight(pFrame->getFrameArea());
+                            pFrame = pFrame->GetNext();
+                        } while ( pFrame != GetNext() );
+                    }
                     nSpace = aRectFnSet.GetHeight(GetUpper()->getFramePrintArea()) -nSpace;
                     if ( nSpace < 0 )
                         nSpace = 0;
@@ -2927,10 +2930,10 @@ SwTwips SwLayoutFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
 
     SwTwips nMin = 0;
     bool bChgPos = IsVertical();
-    if ( Lower() )
+    if (const SwFrame *pFrame = Lower())
     {
-        if( !Lower()->IsNeighbourFrame() )
-        {   const SwFrame *pFrame = Lower();
+        if( !pFrame->IsNeighbourFrame() )
+        {
             const tools::Long nTmp = aRectFnSet.GetHeight(getFramePrintArea());
             while( pFrame && nMin < nTmp )
             {   nMin += aRectFnSet.GetHeight(pFrame->getFrameArea());

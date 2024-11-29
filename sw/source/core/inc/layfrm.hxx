@@ -98,8 +98,8 @@ public:
     SwLayoutFrame( SwFrameFormat*, SwFrame* );
 
     virtual void PaintSwFrame( vcl::RenderContext& rRenderContext, SwRect const&, PaintFrameMode mode = PAINT_ALL ) const override;
-    const SwFrame *Lower() const { return m_pLower; }
-          SwFrame *Lower()       { return m_pLower; }
+    SAL_RET_MAYBENULL const SwFrame *Lower() const { return m_pLower; }
+    SAL_RET_MAYBENULL       SwFrame *Lower()       { return m_pLower; }
     bool ContainsDeleteForbiddenLayFrame() const;
     SW_DLLPUBLIC const SwContentFrame *ContainsContent() const;
     inline SwContentFrame *ContainsContent();

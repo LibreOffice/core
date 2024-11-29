@@ -290,7 +290,8 @@ void SwFlyFrame::InsertCnt()
                   GetFormat()->GetDoc(), nIndex );
 
     // NoText always have a fixed height.
-    if ( Lower() && Lower()->IsNoTextFrame() )
+    SwFrame* pLower = Lower();
+    if ( pLower && pLower->IsNoTextFrame() )
     {
         mbFixSize = true;
         m_bMinHeight = false;
@@ -612,7 +613,8 @@ void SwFlyFrame::UnchainFrames( SwFlyFrame *pMaster, SwFlyFrame *pFollow )
     OSL_ENSURE( rContent.GetContentIdx(), ":-( No content prepared." );
     SwNodeOffset nIndex = rContent.GetContentIdx()->GetIndex();
     // Lower() means SwColumnFrame: this one contains another SwBodyFrame
-    ::InsertCnt_( pFollow->Lower() ? const_cast<SwLayoutFrame*>(static_cast<const SwLayoutFrame*>(static_cast<const SwLayoutFrame*>(pFollow->Lower())->Lower()))
+    SwFrame* pLower = pFollow->Lower();
+    ::InsertCnt_( pLower ? const_cast<SwLayoutFrame*>(static_cast<const SwLayoutFrame*>(static_cast<const SwLayoutFrame*>(pLower)->Lower()))
                                    : static_cast<SwLayoutFrame*>(pFollow),
                   pFollow->GetFormat()->GetDoc(), ++nIndex );
 
@@ -759,9 +761,9 @@ bool SwFlyFrame::FrameSizeChg( const SwFormatFrameSize &rFrameSize )
     }
     // If the Fly contains columns, we already need to set the Fly
     // and the Columns to the required value or else we run into problems.
-    if ( Lower() )
+    if (SwFrame* pLower = Lower())
     {
-        if ( Lower()->IsColumnFrame() )
+        if ( pLower->IsColumnFrame() )
         {
             const SwRect aOld( GetObjRectWithSpaces() );
             const Size   aOldSz( getFramePrintArea().SSize() );
@@ -787,7 +789,7 @@ bool SwFlyFrame::FrameSizeChg( const SwFormatFrameSize &rFrameSize )
             setFrameAreaPositionValid(false);
             bRet = true;
         }
-        else if ( Lower()->IsNoTextFrame() )
+        else if ( pLower->IsNoTextFrame() )
         {
             mbFixSize = true;
             m_bMinHeight = false;
@@ -844,7 +846,9 @@ void SwFlyFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
             SetNotifyBack();
         if(eInvFlags & SwFlyFrameInvFlags::SetCompletePaint)
             SetCompletePaint();
-        if((eInvFlags & SwFlyFrameInvFlags::ClearContourCache) && Lower() && Lower()->IsNoTextFrame())
+
+        SwFrame* pLower = Lower();
+        if((eInvFlags & SwFlyFrameInvFlags::ClearContourCache) && pLower && pLower->IsNoTextFrame())
             ClrContourCache( GetVirtDrawObj() );
         SwRootFrame *pRoot;
         if(eInvFlags & SwFlyFrameInvFlags::InvalidateBrowseWidth && nullptr != (pRoot = getRootFrame()))
@@ -921,10 +925,11 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 rInvFlags |= SwFlyFrameInvFlags::InvalidatePos | SwFlyFrameInvFlags::SetNotifyBack;
 
             // Delete contour in the Node if necessary
-            if ( Lower() && Lower()->IsNoTextFrame() &&
+            SwFrame* pLower = Lower();
+            if ( pLower && pLower->IsNoTextFrame() &&
                  !GetFormat()->GetSurround().IsContour() )
             {
-                SwNoTextNode *pNd = static_cast<SwNoTextNode*>(static_cast<SwNoTextFrame*>(Lower())->GetNode());
+                SwNoTextNode *pNd = static_cast<SwNoTextNode*>(static_cast<SwNoTextFrame*>(pLower)->GetNode());
                 if ( pNd->HasContour() )
                     pNd->SetContour( nullptr );
             }
@@ -1063,17 +1068,17 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 nId = rIDDMA.GetHeavenId();
             GetVirtDrawObj()->SetLayer( nId );
 
-            if ( Lower() )
+            if ( SwFrame* pLower = Lower() )
             {
                 // Delete contour in the Node if necessary
-                if( Lower()->IsNoTextFrame() &&
+                if( pLower->IsNoTextFrame() &&
                      !GetFormat()->GetSurround().IsContour() )
                 {
-                    SwNoTextNode *pNd = static_cast<SwNoTextNode*>(static_cast<SwNoTextFrame*>(Lower())->GetNode());
+                    SwNoTextNode *pNd = static_cast<SwNoTextNode*>(static_cast<SwNoTextFrame*>(pLower)->GetNode());
                     if ( pNd->HasContour() )
                         pNd->SetContour( nullptr );
                 }
-                else if( !Lower()->IsColumnFrame() )
+                else if( !pLower->IsColumnFrame() )
                 {
                     SwFrame* pFrame = GetLastLower();
                     if( pFrame->IsTextFrame() && static_cast<SwTextFrame*>(pFrame)->IsUndersized() )
@@ -1163,9 +1168,11 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             break;
 
         case RES_URL:
+        {
             // The interface changes the frame size when interacting with text frames,
             // the Map, however, needs to be relative to FrameSize().
-            if ( (!Lower() || !Lower()->IsNoTextFrame()) && pNew && pOld &&
+            SwFrame* pLower = Lower();
+            if ( (!pLower || !pLower->IsNoTextFrame()) && pNew && pOld &&
                  static_cast<const SwFormatURL*>(pNew)->GetMap() && static_cast<const SwFormatURL*>(pOld)->GetMap() )
             {
                 const SwFormatFrameSize &rSz = GetFormat()->GetFrameSize();
@@ -1182,8 +1189,9 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                     pFormat->UnlockModify();
                 }
             }
-            // No invalidation necessary
-            break;
+        }
+        // No invalidation necessary
+        break;
 
         case RES_CHAIN:
             if (pNew)
@@ -1255,8 +1263,9 @@ void SwFlyFrame::Invalidate_( SwPageFrame const *pPage )
     {
         // Very bad case: If the Fly is bound within another Fly which
         // contains columns, the Format should be from that one.
+        SwFrame* pLower = pFrame->Lower();
         if ( !pFrame->IsLocked() && !pFrame->IsColLocked() &&
-             pFrame->Lower() && pFrame->Lower()->IsColumnFrame() )
+             pLower && pLower->IsColumnFrame() )
             pFrame->InvalidateSize();
     }
 
@@ -1419,7 +1428,8 @@ void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
         }
 
         // Check column width and set it if needed
-        if ( Lower() && Lower()->IsColumnFrame() )
+        SwFrame* pLower = Lower();
+        if ( pLower && pLower->IsColumnFrame() )
             AdjustColumns( nullptr, false );
 
         setFrameAreaSizeValid(true);
@@ -2346,7 +2356,8 @@ SwTwips SwFlyFrame::Grow_(SwTwips nDist, SwResizeLimitReason& reason, bool bTst)
 
 SwTwips SwFlyFrame::Shrink_( SwTwips nDist, bool bTst )
 {
-    if( Lower() && !IsColLocked() && !HasFixSize() )
+    SwFrame* pLower = Lower();
+    if( pLower && !IsColLocked() && !HasFixSize() )
     {
         SwRectFnSet aRectFnSet(this);
         SwTwips nHeight = aRectFnSet.GetHeight(getFrameArea());
@@ -2365,7 +2376,7 @@ SwTwips SwFlyFrame::Shrink_( SwTwips nDist, bool bTst )
         if ( nVal <= 0 )
             return 0;
 
-        if ( Lower()->IsColumnFrame() )
+        if ( pLower->IsColumnFrame() )
         {   // If it's a Column Frame, the Format takes control of the
             // resizing (due to the adjustment).
             if ( !bTst )
@@ -3053,11 +3064,21 @@ static SwTwips lcl_CalcAutoWidth( const SwLayoutFrame& rFrame )
     // or 1 paragraph wider than its parent area.
     if (rFrame.GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::FRAME_AUTOWIDTH_WITH_MORE_PARA))
     {
-        const SwFrame* pFrameRect = rFrame.IsFlyFrame() ? static_cast<const SwFlyFrame*>(&rFrame)->GetAnchorFrame() : rFrame.Lower()->FindPageFrame();
-        SwTwips nParentWidth = rFrame.IsVertical() ? pFrameRect->getFramePrintArea().Height() : pFrameRect->getFramePrintArea().Width();
-        if (nParagraphCount > 1 || nRet > nParentWidth)
+        const SwFrame* pFrameRect = nullptr;
+        if (rFrame.IsFlyFrame())
+            pFrameRect = static_cast<const SwFlyFrame*>(&rFrame)->GetAnchorFrame();
+        else
         {
-            return nParentWidth;
+            if (const SwFrame* pLower = rFrame.Lower())
+                pFrameRect = pLower->FindPageFrame();
+        }
+        if (pFrameRect)
+        {
+            SwTwips nParentWidth = rFrame.IsVertical() ? pFrameRect->getFramePrintArea().Height() : pFrameRect->getFramePrintArea().Width();
+            if (nParagraphCount > 1 || nRet > nParentWidth)
+            {
+                return nParentWidth;
+            }
         }
     }
 
@@ -3071,13 +3092,14 @@ bool SwFlyFrame::GetContour( tools::PolyPolygon&   rContour,
 {
     vcl::RenderContext* pRenderContext = getRootFrame()->GetCurrShell()->GetOut();
     bool bRet = false;
-    const bool bIsCandidate(Lower() && Lower()->IsNoTextFrame());
+    const SwFrame* pLower = Lower();
+    const bool bIsCandidate(pLower && pLower->IsNoTextFrame());
 
     if(bIsCandidate)
     {
         if(GetFormat()->GetSurround().IsContour())
         {
-            SwNoTextNode *pNd = const_cast<SwNoTextNode*>(static_cast<const SwNoTextNode*>(static_cast<const SwNoTextFrame*>(Lower())->GetNode()));
+            SwNoTextNode *pNd = const_cast<SwNoTextNode*>(static_cast<const SwNoTextNode*>(static_cast<const SwNoTextFrame*>(pLower)->GetNode()));
             // #i13147# - determine <GraphicObject> instead of <Graphic>
             // in order to avoid load of graphic, if <SwNoTextNode> contains a graphic
             // node and method is called for paint.

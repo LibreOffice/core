@@ -1316,8 +1316,11 @@ bool SwFEShell::CheckHeadline( bool bRepeat ) const
             }
             else
             {
-                bRet = static_cast<SwLayoutFrame*>(pTab->Lower())->IsAnLower( pFrame ) ||
-                        pTab->IsInHeadline( *pFrame );
+                if (SwFrame* pLower = pTab->Lower())
+                {
+                    bRet = static_cast<SwLayoutFrame*>(pLower)->IsAnLower( pFrame ) ||
+                            pTab->IsInHeadline( *pFrame );
+                }
             }
         }
     }
@@ -2034,8 +2037,12 @@ bool SwFEShell::SelTableRowCol( const Point& rPt, const Point* pEnd, bool bRowDr
 
         if( pFrame )
         {
-            while( pFrame && pFrame->Lower() && pFrame->Lower()->IsRowFrame() )
-                pFrame = static_cast<const SwCellFrame*>( static_cast<const SwLayoutFrame*>( pFrame->Lower() )->Lower() );
+            const SwFrame* pLower = pFrame->Lower();
+            while( pLower && pLower->IsRowFrame() )
+            {
+                pFrame = static_cast<const SwCellFrame*>( static_cast<const SwLayoutFrame*>( pLower )->Lower() );
+                pLower = pFrame ? pFrame->Lower() : nullptr;
+            }
             if( pFrame && pFrame->GetTabBox()->GetSttNd() &&
                 pFrame->GetTabBox()->GetSttNd()->IsInProtectSect() )
                 pFrame = nullptr;
@@ -2150,8 +2157,12 @@ SwTab SwFEShell::WhichMouseTabCol( const Point &rPt ) const
 
     if( pFrame )
     {
-        while( pFrame && pFrame->Lower() && pFrame->Lower()->IsRowFrame() )
-            pFrame = static_cast<const SwCellFrame*>(static_cast<const SwLayoutFrame*>(pFrame->Lower())->Lower());
+        const SwFrame* pLower = pFrame->Lower();
+        while( pLower && pLower->IsRowFrame() )
+        {
+            pFrame = static_cast<const SwCellFrame*>(static_cast<const SwLayoutFrame*>(pLower)->Lower());
+            pLower = pFrame ? pFrame->Lower() : nullptr;
+        }
         if( pFrame && ((pFrame->GetTabBox()->GetSttNd() &&
             pFrame->GetTabBox()->GetSttNd()->IsInProtectSect()) || (pFrame->GetTabBox()->getRowSpan() < 0)))
             pFrame = nullptr;

@@ -3695,9 +3695,10 @@ IMapObject* SwFrameFormat::GetIMapObject( const Point& rPoint,
     const SwFrame *pRef;
     const SwNoTextNode *pNd = nullptr;
     Size aOrigSz;
-    if( pFly->Lower() && pFly->Lower()->IsNoTextFrame() )
+    const SwFrame* pLower = pFly->Lower();
+    if( pLower && pLower->IsNoTextFrame() )
     {
-        pRef = pFly->Lower();
+        pRef = pLower;
         pNd = static_cast<const SwNoTextFrame*>(pRef)->GetNode()->GetNoTextNode();
         aOrigSz = pNd->GetTwipSize();
     }
@@ -3786,7 +3787,7 @@ bool IsFlyFrameFormatInHeader(const SwFrameFormat& rFormat)
     }
     SwPageFrame* pPageFrame = pFlyFrame->FindPageFrameOfAnchor();
     SwFrame* pHeader = pPageFrame->Lower();
-    if (pHeader->GetType() == SwFrameType::Header)
+    if (pHeader && pHeader->GetType() == SwFrameType::Header)
     {
         const SwFrame* pFrame = pFlyFrame->GetAnchorFrame();
         while (pFrame)

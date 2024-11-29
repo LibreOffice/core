@@ -38,9 +38,10 @@ using namespace com::sun::star;
 SwFlyFrame *SwFEShell::FindFlyFrame( const uno::Reference < embed::XEmbeddedObject >& xObj ) const
 {
     SwFlyFrame *pFly = GetSelectedFlyFrame();
-    if ( pFly && pFly->Lower() && pFly->Lower()->IsNoTextFrame() )
+    SwFrame* pLower = pFly ? pFly->Lower() : nullptr;
+    if ( pLower && pLower->IsNoTextFrame() )
     {
-        SwOLENode *pNd = static_cast<SwNoTextFrame*>(pFly->Lower())->GetNode()->GetOLENode();
+        SwOLENode *pNd = static_cast<SwNoTextFrame*>(pLower)->GetNode()->GetOLENode();
         if ( !pNd || pNd->GetOLEObj().GetOleRef() != xObj )
             pFly = nullptr;
     }

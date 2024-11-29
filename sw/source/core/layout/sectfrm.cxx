@@ -570,8 +570,12 @@ SwSectionFrame* SwSectionFrame::SplitSect( SwFrame* pFrameStartAfter, SwFrame* p
     {
         SwLayoutFrame* pLay = pNew;
         // Search for last layout frame, e.g. for columned sections.
-        while( pLay->Lower() && pLay->Lower()->IsLayoutFrame() )
-            pLay = static_cast<SwLayoutFrame*>(pLay->Lower());
+        SwFrame* pLower = pLay->Lower();
+        while( pLower && pLower->IsLayoutFrame() )
+        {
+            pLay = static_cast<SwLayoutFrame*>(pLower);
+            pLower = pLay->Lower();
+        }
         ::RestoreContent( pSav, pLay, nullptr );
     }
     InvalidateSize_();
@@ -667,7 +671,8 @@ namespace
 {
     SwLayoutFrame* FirstLeaf(SwSectionFrame* pLayFrame)
     {
-        if (pLayFrame->Lower() && pLayFrame->Lower()->IsColumnFrame())
+        SwFrame* pLower = pLayFrame->Lower();
+        if (pLower && pLower->IsColumnFrame())
             return pLayFrame->GetNextLayoutLeaf();
         return pLayFrame;
     }
@@ -755,7 +760,8 @@ void SwSectionFrame::MoveContentAndDelete( SwSectionFrame* pDel, bool bSave )
         else if( pPrvSct && pPrvSct->GetFormat() == pParent )
         {   // Wonderful, here we can insert ourselves at the end
             pUp = pPrvSct;
-            if( pUp->Lower() && pUp->Lower()->IsColumnFrame() )
+            SwFrame* pLower = pUp->Lower();
+            if( pLower && pLower->IsColumnFrame() )
             {
                 pUp = static_cast<SwLayoutFrame*>(pUp->GetLastLower());
                 // The body of the last column
@@ -1054,13 +1060,14 @@ static SwFootnoteFrame* lcl_FindEndnote( SwSectionFrame* &rpSect, bool &rbEmpty,
     SwSectionFrame* pSect = rbEmpty ? rpSect->GetFollow() : rpSect;
     while( pSect )
     {
-        OSL_ENSURE( (pSect->Lower() && pSect->Lower()->IsColumnFrame()) || pSect->GetUpper()->IsFootnoteFrame(),
+        SwFrame* pLower = pSect->Lower();
+        OSL_ENSURE( (pLower && pLower->IsColumnFrame()) || pSect->GetUpper()->IsFootnoteFrame(),
                 "InsertEndnotes: Where's my column?" );
 
         // i73332: Columned section in endnote
         SwColumnFrame* pCol = nullptr;
-        if(pSect->Lower() && pSect->Lower()->IsColumnFrame())
-            pCol = static_cast<SwColumnFrame*>(pSect->Lower());
+        if(pLower && pLower->IsColumnFrame())
+            pCol = static_cast<SwColumnFrame*>(pLower);
 
         while( pCol ) // check all columns
         {
@@ -1105,15 +1112,19 @@ static void lcl_ColumnRefresh( SwSectionFrame* pSect, bool bFollow )
     {
         bool bOldLock = pSect->IsColLocked();
         pSect->ColLock();
-        if( pSect->Lower() && pSect->Lower()->IsColumnFrame() )
+        SwFrame* pLower = pSect->Lower();
+        if( pLower && pLower->IsColumnFrame() )
         {
-            SwColumnFrame *pCol = static_cast<SwColumnFrame*>(pSect->Lower());
+            SwColumnFrame *pCol = static_cast<SwColumnFrame*>(pLower);
             do
             {   pCol->InvalidateSize_();
                 pCol->InvalidatePos_();
-                static_cast<SwLayoutFrame*>(pCol)->Lower()->InvalidateSize_();
-                pCol->Calc(pRenderContext);   // calculation of column and
-                static_cast<SwLayoutFrame*>(pCol)->Lower()->Calc(pRenderContext);  // body
+                if (SwFrame* pColLower = static_cast<SwLayoutFrame*>(pCol)->Lower())
+                {
+                    pColLower->InvalidateSize_();
+                    pCol->Calc(pRenderContext);   // calculation of column and
+                    pColLower->Calc(pRenderContext);  // body
+                }
                 pCol = static_cast<SwColumnFrame*>(pCol->GetNext());
             } while ( pCol );
         }
@@ -1130,7 +1141,8 @@ void SwSectionFrame::CollectEndnotes( SwLayouter* pLayouter )
 {
     OSL_ENSURE( IsColLocked(), "CollectEndnotes: You love the risk?" );
     // i73332: Section in footnode does not have columns!
-    OSL_ENSURE( (Lower() && Lower()->IsColumnFrame()) || GetUpper()->IsFootnoteFrame(), "Where's my column?" );
+    SwFrame* pLower = Lower();
+    OSL_ENSURE( (pLower && pLower->IsColumnFrame()) || GetUpper()->IsFootnoteFrame(), "Where's my column?" );
 
     SwSectionFrame* pSect = this;
     SwFootnoteFrame* pFootnote;
@@ -1234,7 +1246,8 @@ void SwSectionFrame::CheckClipping( bool bGrow, bool bMaximize )
     if ( !(( bHeightChanged || bExtraCalc ) && Lower()) )
         return;
 
-    if( Lower()->IsColumnFrame() )
+    SwFrame* pLower = Lower();
+    if( pLower && pLower->IsColumnFrame() )
     {
         lcl_ColumnRefresh( this, false );
         ::CalcContent( this );
@@ -1344,8 +1357,8 @@ class ExtraFormatToPositionObjs
         {
             vcl::RenderContext* pRenderContext = mpSectFrame->getRootFrame()->GetCurrShell()->GetOut();
             // perform extra format for multi-columned section.
-            if ( !(mpSectFrame->Lower() && mpSectFrame->Lower()->IsColumnFrame() &&
-                 mpSectFrame->Lower()->GetNext()) )
+            SwFrame* pLower = mpSectFrame->Lower();
+            if ( !(pLower && pLower->IsColumnFrame() && pLower->GetNext()) )
                 return;
 
             // grow section till bottom of printing area of upper frame
@@ -1373,10 +1386,13 @@ class ExtraFormatToPositionObjs
             while ( pColFrame )
             {
                 pColFrame->Calc(pRenderContext);
-                pColFrame->Lower()->Calc(pRenderContext);
-                if ( pColFrame->Lower()->GetNext() )
+                if (SwFrame* pColLower = pColFrame->Lower())
                 {
-                    pColFrame->Lower()->GetNext()->Calc(pRenderContext);
+                    pColLower->Calc(pRenderContext);
+                    if ( pColLower->GetNext() )
+                    {
+                        pColLower->GetNext()->Calc(pRenderContext);
+                    }
                 }
 
                 pColFrame = static_cast<SwColumnFrame*>(pColFrame->GetNext());
@@ -2363,9 +2379,10 @@ SwTwips SwSectionFrame::Grow_(SwTwips nDist, SwResizeLimitReason& reason, bool b
             aRectFnSet.SetHeight( aPrt, nPrtHeight );
         }
 
-        if( Lower() && Lower()->IsColumnFrame() && Lower()->GetNext() )
+        SwFrame* pLower = Lower();
+        if( pLower && pLower->IsColumnFrame() && pLower->GetNext() )
         {
-            SwFrame* pTmp = Lower();
+            SwFrame* pTmp = pLower;
             do
             {
                 pTmp->InvalidateSize_();
@@ -2466,9 +2483,10 @@ SwTwips SwSectionFrame::Shrink_( SwTwips nDist, bool bTst )
                 if( GetUpper() && !GetUpper()->IsFooterFrame() )
                     GetUpper()->Shrink( nDist, bTst );
 
-                if( Lower() && Lower()->IsColumnFrame() && Lower()->GetNext() )
+                SwFrame* pLower = Lower();
+                if( pLower && pLower->IsColumnFrame() && pLower->GetNext() )
                 {
-                    SwFrame* pTmp = Lower();
+                    SwFrame* pTmp = pLower;
                     do
                     {
                         pTmp->InvalidateSize_();
@@ -2589,8 +2607,9 @@ SwFrame* SwFrame::GetIndPrev_() const
         while( pCol )
         {
             assert(pCol->IsColumnFrame());
-            assert(pCol->GetLower() && pCol->GetLower()->IsBodyFrame());
-            if( static_cast<const SwLayoutFrame*>(static_cast<const SwLayoutFrame*>(pCol)->Lower())->Lower() )
+            const SwFrame* pLower = pCol->GetLower();
+            assert(pLower && pLower->IsBodyFrame());
+            if( static_cast<const SwLayoutFrame*>(pLower)->Lower() )
                 return nullptr;
             pCol = pCol->GetPrev();
         }
@@ -2875,10 +2894,11 @@ void SwSectionFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pN
                 // on the old column attribute. We're left with creating a
                 // temporary attribute here.
                 SwFormatCol aCol;
-                if ( Lower() && Lower()->IsColumnFrame() )
+                SwFrame* pLower = Lower();
+                if ( pLower && pLower->IsColumnFrame() )
                 {
                     sal_uInt16 nCol = 0;
-                    SwFrame *pTmp = Lower();
+                    SwFrame *pTmp = pLower;
                     do
                     {   ++nCol;
                         pTmp = pTmp->GetNext();
@@ -3020,17 +3040,23 @@ SwFootnoteContFrame* SwSectionFrame::ContainsFootnoteCont( const SwFootnoteContF
         OSL_ENSURE( IsAnLower( pLay ), "ContainsFootnoteCont: Wrong FootnoteContainer" );
         pLay = static_cast<const SwLayoutFrame*>(pLay->GetNext());
     }
-    else if( Lower() && Lower()->IsColumnFrame() )
-        pLay = static_cast<const SwLayoutFrame*>(Lower());
     else
-        pLay = nullptr;
+    {
+        const SwFrame* pLower = Lower();
+        if( pLower && pLower->IsColumnFrame() )
+            pLay = static_cast<const SwLayoutFrame*>(pLower);
+        else
+            pLay = nullptr;
+    }
+
     while ( !pRet && pLay )
     {
-        if( pLay->Lower() && pLay->Lower()->GetNext() )
+        const SwFrame* pLower = pLay->Lower();
+        if( pLower && pLower->GetNext() )
         {
-            OSL_ENSURE( pLay->Lower()->GetNext()->IsFootnoteContFrame(),
+            OSL_ENSURE( pLower->GetNext()->IsFootnoteContFrame(),
                     "ToMaximize: Unexpected Frame" );
-            pRet = const_cast<SwFootnoteContFrame*>(static_cast<const SwFootnoteContFrame*>(pLay->Lower()->GetNext()));
+            pRet = const_cast<SwFootnoteContFrame*>(static_cast<const SwFootnoteContFrame*>(pLower->GetNext()));
         }
         OSL_ENSURE( !pLay->GetNext() || pLay->GetNext()->IsLayoutFrame(),
                 "ToMaximize: ColFrame expected" );
@@ -3160,7 +3186,8 @@ bool SwRootFrame::IsInDelList( SwSectionFrame* pSct ) const
 bool SwSectionFrame::IsBalancedSection() const
 {
     bool bRet = false;
-    if ( GetSection() && Lower() && Lower()->IsColumnFrame() && Lower()->GetNext() )
+    const SwFrame* pLower = Lower();
+    if ( GetSection() && pLower && pLower->IsColumnFrame() && pLower->GetNext() )
     {
         bRet = !GetSection()->GetFormat()->GetBalancedColumns().GetValue();
     }

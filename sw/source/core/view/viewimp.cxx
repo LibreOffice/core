@@ -220,7 +220,7 @@ void SwViewShellImp::SetFirstVisPage(OutputDevice const * pRenderContext)
         const bool bBookMode = pSwViewOption->IsViewLayoutBookMode();
 
         SwPageFrame *pPage = static_cast<SwPageFrame*>(m_pShell->GetLayout()->Lower());
-        SwRect aPageRect = pPage->GetBoundRect(pRenderContext);
+        SwRect aPageRect = pPage ? pPage->GetBoundRect(pRenderContext) : SwRect();
         while ( pPage && !aPageRect.Overlaps( m_pShell->VisArea() ) )
         {
             pPage = static_cast<SwPageFrame*>(pPage->GetNext());

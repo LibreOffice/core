@@ -451,7 +451,8 @@ bool SwRootFrame::GetModelPositionForViewPoint( SwPosition *pPos, Point &rPoint,
 {
     const bool bOldAction = IsCallbackActionEnabled();
     const_cast<SwRootFrame*>(this)->SetCallbackActionEnabled( false );
-    OSL_ENSURE( (Lower() && Lower()->IsPageFrame()), "No PageFrame found." );
+    const SwFrame* pLower = Lower();
+    OSL_ENSURE( (pLower && pLower->IsPageFrame()), "No PageFrame found." );
     if( pCMS && pCMS->m_pFill )
         pCMS->m_bFillRet = false;
     Point aOldPoint = rPoint;
@@ -465,7 +466,7 @@ bool SwRootFrame::GetModelPositionForViewPoint( SwPosition *pPos, Point &rPoint,
          rPoint.X() > getFrameArea().Right() &&
          rPoint.Y() > getFrameArea().Bottom() )
     {
-        pPage = dynamic_cast<const SwPageFrame*>(Lower());
+        pPage = dynamic_cast<const SwPageFrame*>(pLower);
         while ( pPage && pPage->GetNext() )
         {
             pPage = dynamic_cast<const SwPageFrame*>(pPage->GetNext());
@@ -515,13 +516,13 @@ bool SwCellFrame::GetModelPositionForViewPoint( SwPosition *pPos, Point &rPoint,
         }
     }
 
-    if (Lower()->IsLayoutFrame())
+    const SwFrame *pFrame = Lower();
+    if (pFrame && pFrame->IsLayoutFrame())
         return SwLayoutFrame::GetModelPositionForViewPoint(pPos, rPoint, pCMS);
 
     Calc(pRenderContext);
     bool bRet = false;
 
-    const SwFrame *pFrame = Lower();
     while (pFrame && !bRet)
     {
         pFrame->Calc(pRenderContext);
@@ -569,9 +570,12 @@ bool SwFlyFrame::GetModelPositionForViewPoint( SwPosition *pPos, Point &rPoint,
 
     //If a Frame contains a graphic, but only text was requested, it basically
     //won't accept the Cursor.
-    if ( bInside && pCMS && pCMS->m_eState == CursorMoveState::SetOnlyText &&
-         (!Lower() || Lower()->IsNoTextFrame()) )
-        bInside = false;
+    if ( bInside && pCMS && pCMS->m_eState == CursorMoveState::SetOnlyText)
+    {
+        const SwFrame* pLower = Lower();
+        if (!pLower || pLower->IsNoTextFrame())
+            bInside = false;
+    }
 
     const SwPageFrame *pPage = FindPageFrame();
     if ( bInside && pPage && pPage->GetSortedObjs() )
@@ -1008,12 +1012,14 @@ sal_uInt16 SwRootFrame::GetCurrPage( const SwPaM *pActualCursor ) const
 sal_uInt16 SwRootFrame::SetCurrPage( SwCursor* pToSet, sal_uInt16 nPageNum )
 {
     vcl::RenderContext* pRenderContext = GetCurrShell() ? GetCurrShell()->GetOut() : nullptr;
-    OSL_ENSURE( Lower() && Lower()->IsPageFrame(), "No page available." );
+    SwFrame* pLower = Lower();
+    assert( (pLower && pLower->IsPageFrame()) && "No page available." );
 
-    SwPageFrame *pPage = static_cast<SwPageFrame*>(Lower());
+    SwPageFrame *pPage = static_cast<SwPageFrame*>(pLower);
     bool bEnd =false;
     while ( !bEnd && pPage->GetPhyPageNum() != nPageNum )
-    {   if ( pPage->GetNext() )
+    {
+        if ( pPage->GetNext() )
             pPage = static_cast<SwPageFrame*>(pPage->GetNext());
         else
         {   //Search the first ContentFrame and format until a new page is started
@@ -1603,9 +1609,10 @@ Point SwRootFrame::GetNextPrevContentPos( const Point& rPoint, bool bNext ) cons
  */
 Point SwRootFrame::GetPagePos( sal_uInt16 nPageNum ) const
 {
-    OSL_ENSURE( Lower() && Lower()->IsPageFrame(), "No page available." );
+    const SwFrame* pLower = Lower();
+    assert( (pLower && pLower->IsPageFrame()) && "No page available." );
 
-    const SwPageFrame *pPage = static_cast<const SwPageFrame*>(Lower());
+    const SwPageFrame *pPage = static_cast<const SwPageFrame*>(pLower);
     while ( true )
     {
         if ( pPage->GetPhyPageNum() >= nPageNum || !pPage->GetNext() )
@@ -1989,7 +1996,8 @@ bool SwRootFrame::MakeTableCursors( SwTableCursor& rTableCursor )
                         if ( pCell->GetNext() )
                         {
                             pCell = static_cast<const SwLayoutFrame*>(pCell->GetNext());
-                            if ( pCell->Lower() && pCell->Lower()->IsRowFrame() )
+                            const SwFrame* pLower = pCell->Lower();
+                            if ( pLower && pLower->IsRowFrame() )
                                 pCell = pCell->FirstCell();
                         }
                         else

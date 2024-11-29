@@ -69,7 +69,8 @@ SwTextFrameBreak::SwTextFrameBreak( SwTextFrame *pNewFrame, const SwTwips nRst )
     if( !m_bKeep && m_pFrame->IsInSct() )
     {
         const SwSectionFrame* const pSct = m_pFrame->FindSctFrame();
-        m_bKeep = pSct->Lower()->IsColumnFrame() && !pSct->MoveAllowed( m_pFrame );
+        if (const SwFrame* pLower = pSct->Lower())
+            m_bKeep = pLower->IsColumnFrame() && !pSct->MoveAllowed( m_pFrame );
     }
     m_bKeep = m_bKeep || !m_pFrame->GetTextNodeForParaProps()->GetSwAttrSet().GetSplit().GetValue() ||
         m_pFrame->GetTextNodeForParaProps()->GetSwAttrSet().GetKeep().GetValue();

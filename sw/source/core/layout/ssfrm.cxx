@@ -238,7 +238,8 @@ void SwFrame::CheckDirChange()
                 // If we're a page frame and we change our layout direction,
                 // we have to look for columns and rearrange them.
                 pBody = static_cast<SwPageFrame*>(this)->FindBodyCont();
-                if(pBody && pBody->Lower() && pBody->Lower()->IsColumnFrame())
+                SwFrame* pLower = pBody ? pBody->Lower() : nullptr;
+                if(pLower && pLower->IsColumnFrame())
                     pCol = &static_cast<SwPageFrame*>(this)->GetFormat()->GetCol();
             }
             else if( pFrame->IsColumnFrame() )

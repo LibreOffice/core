@@ -93,8 +93,11 @@ void SwEndnoter::CollectEndnote( SwFootnoteFrame* pFootnote )
             }
             else
             {
-                OSL_ENSURE( pNxt->Lower() && pNxt->Lower()->IsSctFrame(),
+#ifdef DBG_UTIL
+                SwFrame* pLower = pNxt->Lower();
+                OSL_ENSURE( pLower && pLower->IsSctFrame(),
                         "Endnote without content?" );
+#endif
                 pNxt->Cut();
                 SwFrame::DestroyFrame(pNxt);
             }
@@ -129,11 +132,12 @@ void SwEndnoter::InsertEndnotes()
         m_pSect = nullptr;
         return;
     }
-    OSL_ENSURE( m_pSect->Lower() && m_pSect->Lower()->IsFootnoteBossFrame(),
+    SwFrame* pLower = m_pSect->Lower();
+    OSL_ENSURE( pLower && pLower->IsFootnoteBossFrame(),
             "InsertEndnotes: Where's my column?" );
     SwFrame* pRef = m_pSect->FindLastContent( SwFindMode::MyLast );
     SwFootnoteBossFrame *pBoss = pRef ? pRef->FindFootnoteBossFrame()
-                               : static_cast<SwFootnoteBossFrame*>(m_pSect->Lower());
+                               : static_cast<SwFootnoteBossFrame*>(pLower);
     pBoss->MoveFootnotes_( *m_pEndArr );
     m_pEndArr.reset();
     m_pSect = nullptr;

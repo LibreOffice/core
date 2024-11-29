@@ -145,9 +145,15 @@ void SwTextFrame::ValidateBodyFrame()
     SwSwapIfSwapped swap( this );
 
      // See comment in ValidateFrame()
-    if ( !IsInFly() && !IsInTab() &&
-         !( IsInSct() && FindSctFrame()->Lower()->IsColumnFrame() ) )
-        ValidateBodyFrame_( GetUpper() );
+    if ( !IsInFly() && !IsInTab())
+    {
+        if (SwSectionFrame* pSctFrame = FindSctFrame())
+        {
+            SwFrame* pLower = pSctFrame->Lower();
+            if (pLower && !pLower->IsColumnFrame())
+                ValidateBodyFrame_( GetUpper() );
+        }
+    }
 }
 
 bool SwTextFrame::GetDropRect_( SwRect &rRect ) const
@@ -512,14 +518,16 @@ void SwTextFrame::AdjustFrame( const SwTwips nChgHght, bool bHasToFit )
         // We can get a bit of space in table cells, because there could be some
         // left through a vertical alignment to the top.
         // Assure that first lower in upper is the current one or is valid.
-        if ( IsInTab() &&
-             ( GetUpper()->Lower() == this ||
-               GetUpper()->Lower()->isFrameAreaDefinitionValid() ) )
+        if (IsInTab())
         {
-            tools::Long nAdd = aRectFnSet.YDiff( aRectFnSet.GetTop(GetUpper()->Lower()->getFrameArea()),
-                                            aRectFnSet.GetPrtTop(*GetUpper()) );
-            OSL_ENSURE( nAdd >= 0, "Ey" );
-            nRstHeight += nAdd;
+            SwFrame* pLower = GetUpper()->Lower();
+            if ( pLower == this || (pLower && pLower->isFrameAreaDefinitionValid()) )
+            {
+                tools::Long nAdd = aRectFnSet.YDiff( aRectFnSet.GetTop(pLower->getFrameArea()),
+                                                aRectFnSet.GetPrtTop(*GetUpper()) );
+                OSL_ENSURE( nAdd >= 0, "Ey" );
+                nRstHeight += nAdd;
+            }
         }
 
         // nRstHeight < 0 means that the TextFrame is located completely outside of its Upper.

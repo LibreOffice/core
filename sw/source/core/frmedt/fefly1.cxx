@@ -1500,8 +1500,9 @@ Size SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference <
         aResult = pFly->ChgSize( aSz );
 
         // if the object changes, the contour is outside the object
-        assert(pFly->Lower()->IsNoTextFrame());
-        SwNoTextNode *pNd = static_cast<SwNoTextFrame*>(pFly->Lower())->GetNode()->GetNoTextNode();
+        SwFrame* pLower = pFly->Lower();
+        assert(pLower && pLower->IsNoTextFrame());
+        SwNoTextNode *pNd = static_cast<SwNoTextFrame*>(pLower)->GetNode()->GetNoTextNode();
         assert(pNd);
         pNd->SetContour( nullptr );
         ClrContourCache();
@@ -1598,9 +1599,10 @@ uno::Reference < embed::XEmbeddedObject > SwFEShell::GetOleRef() const
 {
     uno::Reference < embed::XEmbeddedObject > xObj;
     SwFlyFrame * pFly = GetSelectedFlyFrame();
-    if (pFly && pFly->Lower() && pFly->Lower()->IsNoTextFrame())
+    SwFrame* pLower = pFly ? pFly->Lower() : nullptr;
+    if (pLower && pLower->IsNoTextFrame())
     {
-        SwOLENode *pNd = static_cast<SwNoTextFrame*>(pFly->Lower())->GetNode()->GetOLENode();
+        SwOLENode *pNd = static_cast<SwNoTextFrame*>(pLower)->GetNode()->GetOLENode();
         if (pNd)
             xObj = pNd->GetOLEObj().GetOleRef();
     }
@@ -1699,9 +1701,10 @@ const Graphic *SwFEShell::GetGrfAtPos( const Point &rPt,
     if (pFlyObj)
     {
         SwFlyFrame *pFly = pFlyObj->GetFlyFrame();
-        if ( pFly->Lower() && pFly->Lower()->IsNoTextFrame() )
+        SwFrame* pLower = pFly->Lower();
+        if ( pLower && pLower->IsNoTextFrame() )
         {
-            SwGrfNode *const pNd = static_cast<SwNoTextFrame*>(pFly->Lower())->GetNode()->GetGrfNode();
+            SwGrfNode *const pNd = static_cast<SwNoTextFrame*>(pLower)->GetNode()->GetGrfNode();
             if ( pNd )
             {
                 if ( pNd->IsGrfLink() )
@@ -1809,9 +1812,10 @@ ObjCntType SwFEShell::GetObjCntType( const SdrObject& rObj )
     else if (const SwVirtFlyDrawObj *pFlyObj = dynamic_cast<const SwVirtFlyDrawObj*>(pInvestigatedObj))
     {
         const SwFlyFrame *pFly = pFlyObj->GetFlyFrame();
-        if ( pFly->Lower() && pFly->Lower()->IsNoTextFrame() )
+        const SwFrame* pLower = pFly->Lower();
+        if ( pLower && pLower->IsNoTextFrame() )
         {
-            if (static_cast<const SwNoTextFrame*>(pFly->Lower())->GetNode()->GetGrfNode())
+            if (static_cast<const SwNoTextFrame*>(pLower)->GetNode()->GetGrfNode())
                 eType = OBJCNT_GRF;
             else
                 eType = OBJCNT_OLE;

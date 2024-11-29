@@ -3747,14 +3747,14 @@ bool SwCursorShell::IsCursorReadonly() const
          GetViewOptions()->IsFormView() /* Formula view */ )
     {
         SwFrame *pFrame = GetCurrFrame( false );
-        const SwFlyFrame* pFly;
-        const SwSection* pSection;
+        const SwFlyFrame* pFly = pFrame ? pFrame->FindFlyFrame() : nullptr;
+        const SwFrame* pLower = nullptr;
+        if( pFly && pFly->GetFormat()->GetEditInReadonly().GetValue())
+            pLower = pFly->Lower();
 
-        if( pFrame && pFrame->IsInFly() &&
-            (pFly = pFrame->FindFlyFrame())->GetFormat()->GetEditInReadonly().GetValue() &&
-            pFly->Lower() &&
-            !pFly->Lower()->IsNoTextFrame() &&
-            !GetDrawView()->GetMarkedObjectList().GetMarkCount() )
+        const SwSection* pSection;
+        if (pLower && !pLower->IsNoTextFrame() &&
+            !GetDrawView()->GetMarkedObjectList().GetMarkCount())
         {
             return false;
         }

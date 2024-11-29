@@ -104,9 +104,13 @@ const SwContentFrame *SwLayoutFrame::ContainsContent() const
     const SwLayoutFrame *pLayLeaf = this;
     do
     {
+        const SwFrame* pLower = pLayLeaf->Lower();
         while ( (!pLayLeaf->IsSctFrame() || pLayLeaf == this ) &&
-                pLayLeaf->Lower() && pLayLeaf->Lower()->IsLayoutFrame() )
-            pLayLeaf = static_cast<const SwLayoutFrame*>(pLayLeaf->Lower());
+                pLower && pLower->IsLayoutFrame() )
+        {
+            pLayLeaf = static_cast<const SwLayoutFrame*>(pLower);
+            pLower = pLayLeaf->Lower();
+        }
 
         if( pLayLeaf->IsSctFrame() && pLayLeaf != this )
         {
@@ -124,8 +128,8 @@ const SwContentFrame *SwLayoutFrame::ContainsContent() const
                     return static_cast<const SwContentFrame*>(pLayLeaf->GetNext());
             }
         }
-        else if ( pLayLeaf->Lower() )
-            return static_cast<const SwContentFrame*>(pLayLeaf->Lower());
+        else if ( pLower )
+            return static_cast<const SwContentFrame*>(pLower);
 
         pLayLeaf = pLayLeaf->GetNextLayoutLeaf();
         if( !IsAnLower( pLayLeaf) )
@@ -162,10 +166,14 @@ const SwFrame *SwLayoutFrame::ContainsAny( const bool _bInvestigateFootnoteForSe
     const bool bNoFootnote = IsSctFrame() && !_bInvestigateFootnoteForSections;
     do
     {
+        const SwFrame* pLower = pLayLeaf->Lower();
         while ( ( (!pLayLeaf->IsSctFrame() && !pLayLeaf->IsTabFrame())
                  || pLayLeaf == this ) &&
-                pLayLeaf->Lower() && pLayLeaf->Lower()->IsLayoutFrame() )
-            pLayLeaf = static_cast<const SwLayoutFrame*>(pLayLeaf->Lower());
+                pLower && pLower->IsLayoutFrame() )
+        {
+            pLayLeaf = static_cast<const SwLayoutFrame*>(pLower);
+            pLower = pLayLeaf->Lower();
+        }
 
         if( ( pLayLeaf->IsTabFrame() || pLayLeaf->IsSctFrame() )
             && pLayLeaf != this )
@@ -174,8 +182,8 @@ const SwFrame *SwLayoutFrame::ContainsAny( const bool _bInvestigateFootnoteForSe
             // maintained on SaveContent and RestoreContent
             return pLayLeaf;
         }
-        else if ( pLayLeaf->Lower() )
-            return static_cast<const SwContentFrame*>(pLayLeaf->Lower());
+        else if ( pLower )
+            return static_cast<const SwContentFrame*>(pLower);
 
         pLayLeaf = pLayLeaf->GetNextLayoutLeaf();
         if( bNoFootnote && pLayLeaf && pLayLeaf->IsInFootnote() )
@@ -1694,6 +1702,7 @@ static SwCellFrame* lcl_FindCorrespondingCellFrame( const SwRowFrame& rOrigRow,
     SwCellFrame* pRet = nullptr;
     const SwCellFrame* pCell = static_cast<const SwCellFrame*>(rOrigRow.Lower());
     SwCellFrame* pCorrCell = const_cast<SwCellFrame*>(static_cast<const SwCellFrame*>(rCorrRow.Lower()));
+    assert(pCell && pCorrCell && "lcl_FindCorrespondingCellFrame does not work");
 
     while ( pCell != &rOrigCell && !pCell->IsAnLower( &rOrigCell ) )
     {
@@ -1706,10 +1715,11 @@ static SwCellFrame* lcl_FindCorrespondingCellFrame( const SwRowFrame& rOrigRow,
     if ( pCell != &rOrigCell )
     {
         // rOrigCell must be a lower of pCell. We need to recurse into the rows:
-        assert(pCell->Lower() && pCell->Lower()->IsRowFrame() &&
+        const SwFrame* pLower = pCell->Lower();
+        assert(pLower && pLower->IsRowFrame() &&
                "lcl_FindCorrespondingCellFrame does not work");
 
-        const SwRowFrame* pRow = static_cast<const SwRowFrame*>(pCell->Lower());
+        const SwRowFrame* pRow = static_cast<const SwRowFrame*>(pLower);
         while ( !pRow->IsAnLower( &rOrigCell ) )
             pRow = static_cast<const SwRowFrame*>(pRow->GetNext());
 

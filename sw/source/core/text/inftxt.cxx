@@ -621,12 +621,17 @@ static bool lcl_IsFrameReadonly(SwTextFrame* pFrame)
     const SwFlyFrame* pFly;
     const SwSection* pSection;
 
-    if( pFrame && pFrame->IsInFly() &&
-        (pFly = pFrame->FindFlyFrame())->GetFormat()->GetEditInReadonly().GetValue() &&
-        pFly->Lower() &&
-        !pFly->Lower()->IsNoTextFrame() )
+    if( pFrame && pFrame->IsInFly())
     {
-        return false;
+        pFly = pFrame->FindFlyFrame();
+        if (pFly->GetFormat()->GetEditInReadonly().GetValue())
+        {
+            const SwFrame* pLower = pFly->Lower();
+            if (pLower && !pLower->IsNoTextFrame())
+            {
+                return false;
+            }
+        }
     }
     // edit in readonly sections
     else if ( pFrame && pFrame->IsInSct() &&

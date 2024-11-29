@@ -365,7 +365,8 @@ void GetTableSel( const SwLayoutFrame* pStart, const SwLayoutFrame* pEnd,
                         if ( pCell->GetNext() )
                         {
                             pCell = static_cast<const SwLayoutFrame*>(pCell->GetNext());
-                            if ( pCell->Lower() && pCell->Lower()->IsRowFrame() )
+                            const SwFrame* pLower = pCell->Lower();
+                            if ( pLower && pLower->IsRowFrame() )
                                 pCell = pCell->FirstCell();
                         }
                         else
@@ -830,7 +831,8 @@ bool GetAutoSumSel( const SwCursorShell& rShell, SwCellFrames& rBoxes )
                         if( pCell->GetNext() )
                         {
                             pCell = static_cast<const SwLayoutFrame*>(pCell->GetNext());
-                            if ( pCell->Lower() && pCell->Lower()->IsRowFrame() )
+                            const SwFrame* pLower = pCell->Lower();
+                            if ( pLower && pLower->IsRowFrame() )
                                 pCell = pCell->FirstCell();
                         }
                         else
@@ -1921,7 +1923,8 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrame *pStart,
                 if ( pFirst->GetNext() )
                 {
                     pFirst = static_cast<const SwLayoutFrame*>(pFirst->GetNext());
-                    if ( pFirst->Lower() && pFirst->Lower()->IsRowFrame() )
+                    const SwFrame* pLower = pFirst->Lower();
+                    if ( pLower && pLower->IsRowFrame() )
                         pFirst = pFirst->FirstCell();
                 }
                 else
@@ -2027,7 +2030,8 @@ bool CheckSplitCells( const SwCursor& rCursor, sal_uInt16 nDiv,
                     if ( pCell->GetNext() )
                     {
                         pCell = static_cast<const SwLayoutFrame*>(pCell->GetNext());
-                        if ( pCell->Lower() && pCell->Lower()->IsRowFrame() )
+                        const SwFrame* pLower = pCell->Lower();
+                        if ( pLower && pLower->IsRowFrame() )
                             pCell = pCell->FirstCell();
                     }
                     else
@@ -2543,7 +2547,8 @@ void FndBox_::MakeNewFrames( SwTable &rTable, const sal_uInt16 nNumber,
                 lcl_UpdateRepeatedHeadlines( *pTable, true );
             }
 
-            OSL_ENSURE( static_cast<SwRowFrame*>(pTable->Lower())->GetTabLine() ==
+            SwFrame* pLower = pTable->Lower();
+            OSL_ENSURE( pLower && static_cast<SwRowFrame*>(pLower)->GetTabLine() ==
                     rTable.GetTabLines()[0], "MakeNewFrames: Table corruption!" );
         }
     }

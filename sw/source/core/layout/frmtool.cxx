@@ -427,7 +427,8 @@ void SwFrameNotify::ImplDestroy()
     // #i61999#
     // no invalidation of columned Writer fly frames, because automatic
     // width doesn't make sense for such Writer fly frames.
-    if ( !pFly->Lower() || pFly->Lower()->IsColumnFrame() )
+    SwFrame* pLower = pFly->Lower();
+    if ( !pLower || pLower->IsColumnFrame() )
         return;
 
     const SwFormatFrameSize &rFrameSz = pFly->GetFormat()->GetFrameSize();
@@ -617,9 +618,11 @@ void SwLayNotify::ImplDestroy()
         else if( pLay->IsSctFrame() )
             pLay->InvalidateNextPos();
     }
+
+    SwFrame* pLower = pLay->Lower();
     if ( !IsLowersComplete() &&
          !(pLay->GetType()&(SwFrameType::Fly|SwFrameType::Section) &&
-            pLay->Lower() && pLay->Lower()->IsColumnFrame()) &&
+            pLower && pLower->IsColumnFrame()) &&
          (bPos || bNotify) &&
          !(pLay->GetType() & (SwFrameType::Row|SwFrameType::Tab|SwFrameType::FtnCont|SwFrameType::Page|SwFrameType::Root)))
     {
@@ -3548,7 +3551,8 @@ void Notify_Background( const SdrObject* pObj,
                 }
                 if( pFly->IsFlyLayFrame() )
                 {
-                    if( pFly->Lower() && pFly->Lower()->IsColumnFrame() &&
+                    SwFrame* pLower = pFly->Lower();
+                    if( pLower && pLower->IsColumnFrame() &&
                         pFly->getFrameArea().Bottom() >= rRect.Top() &&
                         pFly->getFrameArea().Top() <= rRect.Bottom() &&
                         pFly->getFrameArea().Right() >= rRect.Left() &&

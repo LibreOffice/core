@@ -1450,17 +1450,19 @@ static void lcl_SubtractFlys( const SwFrame *pFrame, const SwPageFrame *pPage,
         //contained in the hell layer.
         const IDocumentDrawModelAccess& rIDDMA = pFly->GetFormat()->getIDocumentDrawModelAccess();
         bool bHell = pSdrObj->GetLayer() == rIDDMA.GetHellId();
-        if ( (bStopOnHell && bHell) ||
-             /// Change internal order of condition
-             ///    first check "!bHell", then "..->Lower()" and "..->IsNoTextFrame()"
-             ///    have not to be performed, if frame is in "Hell"
-             ( !bHell && pFly->Lower() && pFly->Lower()->IsNoTextFrame() &&
-               (static_cast<SwNoTextFrame const*>(pFly->Lower())->IsTransparent() ||
-                static_cast<SwNoTextFrame const*>(pFly->Lower())->HasAnimation() ||
+        if (bStopOnHell && bHell)
+            continue;
+
+        /// Change internal order of condition
+        ///    first check "!bHell", then "..->Lower()" and "..->IsNoTextFrame()"
+        ///    have not to be performed, if frame is in "Hell"
+        const SwFrame* pLower = pFly->Lower();
+        if (!bHell && pLower && pLower->IsNoTextFrame() &&
+               (static_cast<SwNoTextFrame const*>(pLower)->IsTransparent() ||
+                static_cast<SwNoTextFrame const*>(pLower)->HasAnimation() ||
                  pFly->GetFormat()->GetSurround().IsContour()
                )
              )
-           )
             continue;
 
         // Own if-statements for transparent background/shadow of fly frames
@@ -4008,7 +4010,7 @@ void SwPageFrame::PaintDecorators( ) const
     if ( gProp.pSGlobalShell->IsShowHeaderFooterSeparator( FrameControlType::Header ) )
     {
         const SwFrame* pHeaderFrame = Lower();
-        if ( !pHeaderFrame->IsHeaderFrame() )
+        if ( pHeaderFrame && !pHeaderFrame->IsHeaderFrame() )
             pHeaderFrame = nullptr;
 
         tools::Long nHeaderYOff = aBodyRect.Top();
@@ -7069,8 +7071,9 @@ void SwLayoutFrame::RefreshLaySubsidiary( const SwPageFrame *pPage,
                         {
                             if ( pFly->IsFlyInContentFrame() && pFly->getFrameArea().Overlaps( rRect ) )
                             {
-                                if ( !pFly->Lower() || !pFly->Lower()->IsNoTextFrame() ||
-                                     !static_cast<const SwNoTextFrame*>(pFly->Lower())->HasAnimation())
+                                SwFrame* pLower = pFly->Lower();
+                                if ( !pLower || !pLower->IsNoTextFrame() ||
+                                     !static_cast<const SwNoTextFrame*>(pLower)->HasAnimation())
                                     pFly->RefreshLaySubsidiary( pPage, rRect );
                             }
                         }

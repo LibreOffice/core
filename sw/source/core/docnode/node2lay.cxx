@@ -349,16 +349,15 @@ SwLayoutFrame* SwNode2LayImpl::UpperFrame( SwFrame* &rpFrame, const SwNode &rNod
                     // #i22922# - consider columned sections
                     // 'Go down' the section frame as long as the layout frame
                     // is found, which would contain content.
-                    while ( pFrame->IsLayoutFrame() &&
-                            static_cast<SwLayoutFrame*>(pFrame)->Lower() &&
-                            !static_cast<SwLayoutFrame*>(pFrame)->Lower()->IsFlowFrame() &&
-                            static_cast<SwLayoutFrame*>(pFrame)->Lower()->IsLayoutFrame() )
+                    SwFrame* pLower = static_cast<SwLayoutFrame*>(pFrame)->Lower();
+                    while ( pFrame->IsLayoutFrame() && pLower &&
+                            !pLower->IsFlowFrame() && pLower->IsLayoutFrame() )
                     {
-                        pFrame = static_cast<SwLayoutFrame*>(pFrame)->Lower();
+                        pFrame = pLower;
+                        pLower = static_cast<SwLayoutFrame*>(pFrame)->Lower();
                     }
                     assert(pFrame->IsLayoutFrame());
-                    rpFrame = mbMaster ? nullptr
-                                    : static_cast<SwLayoutFrame*>(pFrame)->Lower();
+                    rpFrame = mbMaster ? nullptr : pLower;
                     assert((!rpFrame || rpFrame->IsFlowFrame()) &&
                             "<SwNode2LayImpl::UpperFrame(..)> - expected sibling isn't a flow frame." );
                     return static_cast<SwLayoutFrame*>(pFrame);
@@ -372,11 +371,12 @@ SwLayoutFrame* SwNode2LayImpl::UpperFrame( SwFrame* &rpFrame, const SwNode &rNod
                 rpFrame = nullptr;
                 // 'Go down' the section frame as long as the layout frame
                 // is found, which would contain content.
-                while ( pUpper->Lower() &&
-                        !pUpper->Lower()->IsFlowFrame() &&
-                        pUpper->Lower()->IsLayoutFrame() )
+                SwFrame* pLower = pUpper->Lower();
+                while ( pLower && !pLower->IsFlowFrame() &&
+                        pLower->IsLayoutFrame() )
                 {
-                    pUpper = static_cast<SwLayoutFrame*>(pUpper->Lower());
+                    pUpper = static_cast<SwLayoutFrame*>(pLower);
+                    pLower = pUpper->Lower();
                 }
                 return pUpper;
             }

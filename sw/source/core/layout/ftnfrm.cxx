@@ -128,9 +128,10 @@ static bool lcl_NextFootnoteBoss( SwFootnoteBossFrame* &rpBoss, SwPageFrame* &rp
             SwSectionFrame* pSct = rpBoss->FindSctFrame()->GetFollow();
             if( pSct )
             {
-                OSL_ENSURE( pSct->Lower() && pSct->Lower()->IsColumnFrame(),
+                SwFrame* pLower = pSct->Lower();
+                OSL_ENSURE( pLower && pLower->IsColumnFrame(),
                         "Where's the column?" );
-                rpBoss = static_cast<SwColumnFrame*>(pSct->Lower());
+                rpBoss = static_cast<SwColumnFrame*>(pLower);
                 SwPageFrame* pOld = rpPage;
                 rpPage = pSct->FindPageFrame();
                 return pOld != rpPage;
@@ -148,8 +149,9 @@ static bool lcl_NextFootnoteBoss( SwFootnoteBossFrame* &rpBoss, SwPageFrame* &rp
     if( rpPage )
     {
         SwLayoutFrame* pBody = rpPage->FindBodyCont();
-        if( pBody && pBody->Lower() && pBody->Lower()->IsColumnFrame() )
-            rpBoss = static_cast<SwFootnoteBossFrame*>(pBody->Lower()); // first column
+        SwFrame* pLower = pBody ? pBody->Lower() : nullptr;
+        if (pLower && pLower->IsColumnFrame() )
+            rpBoss = static_cast<SwFootnoteBossFrame*>(pLower); // first column
     }
     return true;
 }
@@ -801,8 +803,9 @@ SwLayoutFrame *SwFrame::GetNextFootnoteLeaf( MakePageType eMakePage )
     {
         // If this page has columns, then go to the first one
         SwLayoutFrame* pLay = pBoss->FindBodyCont();
-        if( pLay && pLay->Lower() && pLay->Lower()->IsColumnFrame() )
-            pBoss = static_cast<SwFootnoteBossFrame*>(pLay->Lower());
+        SwFrame* pLower = pLay ? pLay->Lower() : nullptr;
+        if( pLower && pLower->IsColumnFrame() )
+            pBoss = static_cast<SwFootnoteBossFrame*>(pLower);
     }
     // found column/page - add myself
     SwFootnoteContFrame *pCont = pBoss->FindFootnoteCont();
@@ -898,7 +901,8 @@ SwLayoutFrame *SwFrame::GetPrevFootnoteLeaf( MakePageType eMakeFootnote )
                 // We have the previous page, we might need to find the last column of it
                 if( pBody )
                 {
-                    if ( pBody->Lower() && pBody->Lower()->IsColumnFrame() )
+                    SwFrame* pLower = pBody->Lower();
+                    if ( pLower && pLower->IsColumnFrame() )
                     {
                         pNxtBoss = static_cast<SwFootnoteBossFrame*>(pBody->GetLastLower());
                     }
@@ -1026,17 +1030,19 @@ void sw_RemoveFootnotes( SwFootnoteBossFrame* pBoss, bool bPageOnly, bool bEndNo
             // foot/endnotes. If the last lower frame of the bodyframe is
             // a multicolumned sectionframe, it may contain footnotes, too.
             SwLayoutFrame* pBody = pBoss->FindBodyCont();
-            if( pBody && pBody->Lower() )
+            if( pBody )
             {
                 SwFrame* pLow = pBody->Lower();
                 while (pLow)
                 {
                     if( pLow->IsSctFrame() && ( !pLow->GetNext() ||
-                        static_cast<SwSectionFrame*>(pLow)->IsAnyNoteAtEnd() ) &&
-                        static_cast<SwSectionFrame*>(pLow)->Lower() &&
-                        static_cast<SwSectionFrame*>(pLow)->Lower()->IsColumnFrame() )
-                        sw_RemoveFootnotes( static_cast<SwColumnFrame*>(static_cast<SwSectionFrame*>(pLow)->Lower()),
-                            bPageOnly, bEndNotes );
+                        static_cast<SwSectionFrame*>(pLow)->IsAnyNoteAtEnd() ) )
+                    {
+                        SwFrame* pLowerLower = static_cast<SwSectionFrame*>(pLow)->Lower();
+                        if (pLowerLower && pLowerLower->IsColumnFrame() )
+                            sw_RemoveFootnotes( static_cast<SwColumnFrame*>(pLowerLower),
+                                bPageOnly, bEndNotes );
+                    }
                     pLow = pLow->GetNext();
                 }
             }
@@ -1051,12 +1057,13 @@ void SwRootFrame::RemoveFootnotes( SwPageFrame *pPage, bool bPageOnly, bool bEnd
     if ( !pPage )
         pPage = static_cast<SwPageFrame*>(Lower());
 
-    do
+    while (pPage)
     {   // On columned pages we have to clean up in all columns
         SwFootnoteBossFrame* pBoss;
         SwLayoutFrame* pBody = pPage->FindBodyCont();
-        if( pBody && pBody->Lower() && pBody->Lower()->IsColumnFrame() )
-            pBoss = static_cast<SwFootnoteBossFrame*>(pBody->Lower()); // the first column
+        SwFrame* pLower = pBody ? pBody->Lower() : nullptr;
+        if( pLower && pLower->IsColumnFrame() )
+            pBoss = static_cast<SwFootnoteBossFrame*>(pLower); // the first column
         else
             pBoss = pPage; // no columns
         sw_RemoveFootnotes( pBoss, bPageOnly, bEndNotes );
@@ -1075,8 +1082,8 @@ void SwRootFrame::RemoveFootnotes( SwPageFrame *pPage, bool bPageOnly, bool bEnd
         }
         else
             break;
+    }
 
-    } while ( pPage );
 }
 
 /// Change the page template of the footnote pages
@@ -1586,11 +1593,12 @@ static SwPageFrame* lcl_GetApproximateFootnotePage(const bool bEnd, const SwPage
     while (pNxt && (bEnd ? pNxt->IsEndNotePage() : pNxt->IsFootnotePage() && !pNxt->IsEndNotePage()))
     {
         const SwFootnoteContFrame *pCont = pNxt->FindFootnoteCont();
-        if (pCont && pCont->Lower())
+        const SwFrame* pLower = pCont ? pCont->Lower() : nullptr;
+        if (pLower)
         {
-            OSL_ENSURE( pCont->Lower()->IsFootnoteFrame(), "no footnote in the container" );
+            OSL_ENSURE( pLower->IsFootnoteFrame(), "no footnote in the container" );
             if (nStPos > ::lcl_FindFootnotePos(pDoc,
-                                static_cast<const SwFootnoteFrame*>(pCont->Lower())->GetAttr()))
+                                static_cast<const SwFootnoteFrame*>(pLower)->GetAttr()))
             {
                 pPage = pNxt;
                 pNxt = static_cast<const SwPageFrame*>(pPage->GetNext());
@@ -1934,7 +1942,8 @@ void SwFootnoteBossFrame::CollectFootnotes( const SwContentFrame* _pRef,
                 return;
 
             SwLayoutFrame* pBody = pPg->FindBodyCont();
-            if( pBody->Lower() && pBody->Lower()->IsColumnFrame() )
+            const SwFrame* pLower = pBody->Lower();
+            if( pLower && pLower->IsColumnFrame() )
             {
                 // multiple columns on one page => search last column
                 _pOld = static_cast<SwFootnoteBossFrame*>(pBody->GetLastLower());
@@ -2682,10 +2691,11 @@ SwTwips SwFootnoteBossFrame::GetVarSpace() const
             // the bottom of the last contentfrm
             if( pSect->IsEndnAtEnd() ) // endnotes allowed?
             {
-                OSL_ENSURE( !Lower() || !Lower()->GetNext() || Lower()->GetNext()->
+                const SwFrame* pLower = Lower();
+                OSL_ENSURE( !pLower || !pLower->GetNext() || pLower->GetNext()->
                         IsFootnoteContFrame(), "FootnoteContainer expected" );
-                const SwFootnoteContFrame* pCont = Lower() ?
-                    static_cast<const SwFootnoteContFrame*>(Lower()->GetNext()) : nullptr;
+                const SwFootnoteContFrame* pCont = pLower ?
+                    static_cast<const SwFootnoteContFrame*>(pLower->GetNext()) : nullptr;
                 if( pCont )
                 {
                     const SwFootnoteFrame* pFootnote = static_cast<const SwFootnoteFrame*>(pCont->Lower());
@@ -2693,7 +2703,7 @@ SwTwips SwFootnoteBossFrame::GetVarSpace() const
                     {
                         if( pFootnote->GetAttr()->GetFootnote().IsEndNote() )
                         { // endnote found
-                            const SwFrame* pFrame = static_cast<const SwLayoutFrame*>(Lower())->Lower();
+                            const SwFrame* pFrame = static_cast<const SwLayoutFrame*>(pLower)->Lower();
                             if( pFrame )
                             {
                                 while( pFrame->GetNext() )
@@ -2774,9 +2784,10 @@ SwNeighbourAdjust SwFootnoteBossFrame::NeighbourhoodAdjustment_() const
 void SwPageFrame::SetColMaxFootnoteHeight()
 {
     SwLayoutFrame *pBody = FindBodyCont();
-    if( pBody && pBody->Lower() && pBody->Lower()->IsColumnFrame() )
+    SwFrame* pLower = pBody ? pBody->Lower() : nullptr;
+    if( pLower && pLower->IsColumnFrame() )
     {
-        SwColumnFrame* pCol = static_cast<SwColumnFrame*>(pBody->Lower());
+        SwColumnFrame* pCol = static_cast<SwColumnFrame*>(pLower);
         do
         {
             pCol->SetMaxFootnoteHeight( GetMaxFootnoteHeight() );
@@ -2959,13 +2970,14 @@ bool SwContentFrame::MoveFootnoteCntFwd( bool bMakePage, SwFootnoteBossFrame *pO
             // area inside of a footnote (or only footnote in an area)?
             if( pSect->IsInFootnote() )
             {
-                if( pTmpFootnote->Lower() && pTmpFootnote->Lower()->IsSctFrame() &&
-                    pSect->GetFollow() == static_cast<SwSectionFrame*>(pTmpFootnote->Lower()) )
-                    pNewUp = static_cast<SwSectionFrame*>(pTmpFootnote->Lower());
+                SwFrame* pLower = pTmpFootnote->Lower();
+                if( pLower && pLower->IsSctFrame() &&
+                    pSect->GetFollow() == static_cast<SwSectionFrame*>(pLower) )
+                    pNewUp = static_cast<SwSectionFrame*>(pLower);
                 else
                 {
                     pNewUp = new SwSectionFrame( *pSect, false );
-                    pNewUp->InsertBefore( pTmpFootnote, pTmpFootnote->Lower() );
+                    pNewUp->InsertBefore( pTmpFootnote, pLower );
                     static_cast<SwSectionFrame*>(pNewUp)->Init();
 
                     {

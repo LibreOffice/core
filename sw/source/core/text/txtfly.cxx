@@ -178,10 +178,10 @@ SwRect SwContourCache::CalcBoundRect( const SwAnchoredObject* pAnchoredObj,
         }
     }
 
+    const SwFrame* pLower = static_cast<const SwFlyFrame*>(pAnchoredObj)->Lower();
     if( bHandleContour &&
         ( pAnchoredObj->DynCastFlyFrame() ==  nullptr ||
-          ( static_cast<const SwFlyFrame*>(pAnchoredObj)->Lower() &&
-            static_cast<const SwFlyFrame*>(pAnchoredObj)->Lower()->IsNoTextFrame() ) ) )
+          ( pLower && pLower->IsNoTextFrame() ) ) )
     {
         aRet = pAnchoredObj->GetObjRectWithSpaces();
         if( aRet.Overlaps( rLine ) )
@@ -601,15 +601,16 @@ void SwTextFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect )
                 // and <SwAlignRect(..)> fly frame area
                 // #i47804# - consider transparent graphics
                 // and OLE objects.
+                const SwFrame* pLower = pFly->Lower();
                 bool bClipFlyArea =
                         ( ( css::text::WrapTextMode_THROUGH == rSur.GetSurround() )
                           // #i68520#
                           ? (pAnchoredObjTmp->GetDrawObj()->GetLayer() != nHellId)
                           : !rSur.IsContour() ) &&
                         !pFly->IsBackgroundTransparent() &&
-                        ( !pFly->Lower() ||
-                          !pFly->Lower()->IsNoTextFrame() ||
-                          !static_cast<const SwNoTextFrame*>(pFly->Lower())->IsTransparent() );
+                        ( !pLower ||
+                          !pLower->IsNoTextFrame() ||
+                          !static_cast<const SwNoTextFrame*>(pLower)->IsTransparent() );
                 if ( bClipFlyArea )
                 {
                     // #i68520#

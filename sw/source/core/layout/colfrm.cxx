@@ -83,10 +83,11 @@ void SwColumnFrame::dumpAsXml(xmlTextWriterPtr writer) const
 
 static void lcl_RemoveColumns( SwLayoutFrame &rCont, sal_uInt16 nCnt )
 {
-    OSL_ENSURE( rCont.Lower() && rCont.Lower()->IsColumnFrame(),
+    SwFrame* pLower = rCont.Lower();
+    assert( pLower && pLower->IsColumnFrame() &&
             "no columns to remove." );
 
-    SwColumnFrame *pColumn = static_cast<SwColumnFrame*>(rCont.Lower());
+    SwColumnFrame *pColumn = static_cast<SwColumnFrame*>(pLower);
     sw_RemoveFootnotes( pColumn, true, true );
     while ( pColumn->GetNext() )
     {
@@ -106,6 +107,7 @@ static void lcl_RemoveColumns( SwLayoutFrame &rCont, sal_uInt16 nCnt )
 static SwLayoutFrame * lcl_FindColumns( SwLayoutFrame *pLay, sal_uInt16 nCount )
 {
     SwFrame *pCol = pLay->Lower();
+
     if ( pLay->IsPageFrame() )
         pCol = static_cast<SwPageFrame*>(pLay)->FindBodyCont()->Lower();
 
@@ -302,11 +304,11 @@ void SwLayoutFrame::ChgColumns( const SwFormatCol &rOld, const SwFormatCol &rNew
     //actions during setup.
     if ( pSave )
     {
-        OSL_ENSURE( Lower() && Lower()->IsLayoutFrame() &&
-                static_cast<SwLayoutFrame*>(Lower())->Lower() &&
-                static_cast<SwLayoutFrame*>(Lower())->Lower()->IsLayoutFrame(),
-                "no column body." );   // ColumnFrames contain BodyFrames
-        ::RestoreContent( pSave, static_cast<SwLayoutFrame*>(static_cast<SwLayoutFrame*>(Lower())->Lower()), nullptr );
+        SwFrame* pLower = Lower();
+        assert(pLower && pLower->IsLayoutFrame());
+        SwFrame* pLowerLower = static_cast<SwLayoutFrame*>(pLower)->Lower();
+        assert(pLowerLower && pLowerLower->IsLayoutFrame() && "no column body.");   // ColumnFrames contain BodyFrames
+        ::RestoreContent( pSave, static_cast<SwLayoutFrame*>(pLowerLower), nullptr );
     }
 }
 

@@ -351,8 +351,9 @@ SwTwips SwTextFrame::GetFootnoteFrameHeight_() const
             const SwLayoutFrame* pTmp = GetUpper();
             while( !bInvalidPos && pTmp )
             {
+                const SwFrame* pLower = pTmp->Lower();
                 bInvalidPos = !pTmp->isFrameAreaPositionValid() ||
-                               !pTmp->Lower()->isFrameAreaPositionValid();
+                                !pLower || !pLower->isFrameAreaPositionValid();
                 if( pTmp == pCont )
                     break;
                 pTmp = pTmp->GetUpper();

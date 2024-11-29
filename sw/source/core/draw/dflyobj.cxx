@@ -370,10 +370,11 @@ bool SwVirtFlyDrawObj::ContainsSwGrfNode() const
 {
     // RotGrfFlyFrame: Check if this is a SwGrfNode
     const SwFlyFrame* pFlyFrame(GetFlyFrame());
+    const SwFrame* pLower = pFlyFrame ? pFlyFrame->Lower() : nullptr;
 
-    if(nullptr != pFlyFrame && pFlyFrame->Lower() && pFlyFrame->Lower()->IsNoTextFrame())
+    if(pLower && pLower->IsNoTextFrame())
     {
-        const SwNoTextFrame *const pNTF(static_cast<const SwNoTextFrame*>(pFlyFrame->Lower()));
+        const SwNoTextFrame *const pNTF(static_cast<const SwNoTextFrame*>(pLower));
 
         const SwGrfNode *const pGrfNd(pNTF->GetNode()->GetGrfNode());
 
@@ -1054,7 +1055,8 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef, const Fraction& xFact, const
     if( aSz != GetFlyFrame()->getFrameArea().SSize() )
     {
         //The width of the columns should not be too narrow
-        if ( GetFlyFrame()->Lower() && GetFlyFrame()->Lower()->IsColumnFrame() )
+        SwFrame* pLower = GetFlyFrame()->Lower();
+        if ( pLower && pLower->IsColumnFrame() )
         {
             SwBorderAttrAccess aAccess( SwFrame::GetCache(), GetFlyFrame() );
             const SwBorderAttrs &rAttrs = *aAccess.Get();
@@ -1286,7 +1288,8 @@ SdrObject* SwVirtFlyDrawObj::CheckMacroHit( const SdrObjMacroHitRec& rRec ) cons
     if( rURL.GetMap() || !rURL.GetURL().isEmpty() )
     {
         SwRect aRect;
-        if ( m_pFlyFrame->Lower() && m_pFlyFrame->Lower()->IsNoTextFrame() )
+        SwFrame* pLower = m_pFlyFrame->Lower();
+        if ( pLower && pLower->IsNoTextFrame() )
         {
             aRect = m_pFlyFrame->getFramePrintArea();
             aRect += m_pFlyFrame->getFrameArea().Pos();

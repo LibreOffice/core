@@ -722,13 +722,13 @@ static const SwFrame* lcl_FindEditInReadonlyFrame( const SwFrame& rFrame )
 {
     const SwFrame* pRet = nullptr;
 
-    const SwFlyFrame* pFly;
-    const SwSectionFrame* pSectionFrame;
+    const SwFlyFrame* pFly = rFrame.FindFlyFrame();
+    const SwFrame* pLower = nullptr;
+    if(pFly && pFly->GetFormat()->GetEditInReadonly().GetValue())
+        pLower = pFly->Lower();
 
-    if( rFrame.IsInFly() &&
-       (pFly = rFrame.FindFlyFrame())->GetFormat()->GetEditInReadonly().GetValue() &&
-        pFly->Lower() &&
-       !pFly->Lower()->IsNoTextFrame() )
+    const SwSectionFrame* pSectionFrame;
+    if (pLower && !pLower->IsNoTextFrame())
     {
        pRet = pFly;
     }

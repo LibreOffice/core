@@ -88,7 +88,7 @@ void SwBodyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
         SwTwips nHeight = GetUpper()->getFramePrintArea().Height();
         SwTwips nWidth = GetUpper()->getFramePrintArea().Width();
         const SwFrame *pFrame = GetUpper()->Lower();
-        do
+        while (pFrame)
         {
             if ( pFrame != this )
             {
@@ -98,7 +98,7 @@ void SwBodyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
                     nHeight -= pFrame->getFrameArea().Height();
             }
             pFrame = pFrame->GetNext();
-        } while ( pFrame );
+        }
 
         if ( nHeight < 0 )
         {
@@ -1044,11 +1044,16 @@ bool IsPageFrameEmpty(SwPageFrame const& rPage)
     }
 
     // optimization: check first if essential objects exist.
-    const SwLayoutFrame* pBody = nullptr;
-    if ( bExistEssentialObjs ||
-         rPage.FindFootnoteCont() ||
-         (nullptr != (pBody = rPage.FindBodyCont()) &&
-            ( pBody->ContainsContent() ||
+    if (bExistEssentialObjs)
+        return false;
+    else if (rPage.FindFootnoteCont())
+        return false;
+    else
+    {
+        if (const SwLayoutFrame* pBody = rPage.FindBodyCont())
+        {
+            const SwFrame* pLower = pBody->Lower();
+            if ( pBody->ContainsContent() ||
               // check for section frames that are being formatted on the stack
               rPage.ContainsDeleteForbiddenLayFrame() ||
                 // #i47580#
@@ -1057,14 +1062,12 @@ bool IsPageFrameEmpty(SwPageFrame const& rPage)
                 // instead of ContainsContent() to cover the empty-table-case,
                 // but I'm not fully sure, since ContainsAny() also returns
                 // SectionFrames. Therefore I prefer to do it the safe way:
-              ( pBody->Lower() && pBody->Lower()->IsTabFrame() ) ) ) )
-    {
-        return false;
+              ( pLower && pLower->IsTabFrame() ) )
+                return false;
+        }
     }
-    else
-    {
-        return true;
-    }
+
+    return true;
 }
 
 } // namespace sw

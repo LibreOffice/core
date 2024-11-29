@@ -2801,13 +2801,14 @@ Size SwViewShell::GetPageSize( sal_uInt16 nPageNum, bool bSkipEmptyPages ) const
         const SwPageFrame* pPage = static_cast<const SwPageFrame*>
                                  (pTmpRoot->Lower());
 
-        while( --nPageNum && pPage->GetNext() )
+        while( --nPageNum && pPage && pPage->GetNext() )
             pPage = static_cast<const SwPageFrame*>( pPage->GetNext() );
 
-        if( !bSkipEmptyPages && pPage->IsEmptyPage() && pPage->GetNext() )
+        if( !bSkipEmptyPages && pPage && pPage->IsEmptyPage() && pPage->GetNext() )
             pPage = static_cast<const SwPageFrame*>( pPage->GetNext() );
 
-        aSize = pPage->getFrameArea().SSize();
+        if (pPage)
+            aSize = pPage->getFrameArea().SSize();
     }
     return aSize;
 }

@@ -937,7 +937,8 @@ bool SwLayHelper::CheckInsert( SwNodeOffset nNodeIndex )
                     }
 
                     mrpLay = pSct;
-                    if ( mrpLay->Lower() && mrpLay->Lower()->IsLayoutFrame() )
+                    SwFrame* pLower = mrpLay->Lower();
+                    if ( pLower && pLower->IsLayoutFrame() )
                         mrpLay = mrpLay->GetNextLayoutLeaf();
                 }
             }

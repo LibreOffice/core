@@ -160,9 +160,9 @@ bool SwLayAction::PaintWithoutFlys( const SwRect &rRect, const SwContentFrame *p
         //     Fly frame without a lower have to be subtracted from paint region.
         //     For checking, if fly frame contains transparent graphic or
         //     has surrounded contour, assure that fly frame has a lower
-        if ( pFly->Lower() &&
-             pFly->Lower()->IsNoTextFrame() &&
-             ( static_cast<SwNoTextFrame*>(pFly->Lower())->IsTransparent() ||
+        SwFrame* pLower = pFly->Lower();
+        if ( pLower && pLower->IsNoTextFrame() &&
+             ( static_cast<SwNoTextFrame*>(pLower)->IsTransparent() ||
                pFly->GetFormat()->GetSurround().IsContour() )
            )
         {

@@ -661,7 +661,8 @@ void SwFlyFreeFrame::CheckClip( const SwFormatFrameSize &rSz )
                 aFrm.Width ( std::max( tools::Long(MINLAY), aFrameRect.Width() ) );
             }
 
-            if ( Lower() && Lower()->IsColumnFrame() )
+            SwFrame* pLower = Lower();
+            if ( pLower && pLower->IsColumnFrame() )
             {
                 ColLock();  //lock grow/shrink
                 const Size aTmpOldSize( getFramePrintArea().SSize() );
@@ -673,14 +674,14 @@ void SwFlyFreeFrame::CheckClip( const SwFormatFrameSize &rSz )
                 }
 
                 ChgLowersProp( aTmpOldSize );
-                SwFrame *pLow = Lower();
                 do
                 {
-                    pLow->Calc(getRootFrame()->GetCurrShell()->GetOut());
+                    pLower->Calc(getRootFrame()->GetCurrShell()->GetOut());
                     // also calculate the (Column)BodyFrame
-                    static_cast<SwLayoutFrame*>(pLow)->Lower()->Calc(getRootFrame()->GetCurrShell()->GetOut());
-                    pLow = pLow->GetNext();
-                } while ( pLow );
+                    if (SwFrame* pLowerLower = static_cast<SwLayoutFrame*>(pLower)->Lower())
+                        pLowerLower->Calc(getRootFrame()->GetCurrShell()->GetOut());
+                    pLower = pLower->GetNext();
+                } while ( pLower );
                 ::CalcContent( this );
                 ColUnlock();
 

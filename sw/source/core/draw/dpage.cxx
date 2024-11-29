@@ -123,11 +123,11 @@ const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
             //The drawing demands all pages which overlap with the rest.
             const SwRect aRect( *pRect );
             const SwFrame *pPg = pSh->GetLayout()->Lower();
-            do
+            while (pPg)
             {   if ( pPg->getFrameArea().Overlaps( aRect ) )
                     ::InsertGridFrame( const_cast<SwDPage*>(this)->m_pGridLst.get(), pPg );
                 pPg = pPg->GetNext();
-            } while ( pPg );
+            }
         }
         else
         {

@@ -153,7 +153,8 @@ static SdrObject* impLocalHitCorrection(SdrObject* pRetval, const Point& rPnt, s
 
         if(pSwVirtFlyDrawObj)
         {
-            if(pSwVirtFlyDrawObj->GetFlyFrame()->Lower() && pSwVirtFlyDrawObj->GetFlyFrame()->Lower()->IsNoTextFrame())
+            SwFrame* pLower = pSwVirtFlyDrawObj->GetFlyFrame()->Lower();
+            if(pLower && pLower->IsNoTextFrame())
             {
                 // the old method used IsNoTextFrame (should be for SW's own OLE and
                 // graphic's) to accept hit only based on outer bounds; nothing to do
@@ -867,9 +868,10 @@ void SwDrawView::CheckPossibilities()
             if ( pFly  )
             {
                 pFrame = pFly->GetAnchorFrame();
-                if ( pFly->Lower() && pFly->Lower()->IsNoTextFrame() )
+                const SwFrame* pLower = pFly->Lower();
+                if ( pLower && pLower->IsNoTextFrame() )
                 {
-                    const SwNoTextFrame *const pNTF(static_cast<const SwNoTextFrame*>(pFly->Lower()));
+                    const SwNoTextFrame *const pNTF(static_cast<const SwNoTextFrame*>(pLower));
                     const SwOLENode *const pOLENd = pNTF->GetNode()->GetOLENode();
                     const SwGrfNode *const pGrfNd = pNTF->GetNode()->GetGrfNode();
 
