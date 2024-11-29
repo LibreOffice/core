@@ -659,6 +659,8 @@ PrintDialog::PrintDialog(weld::Window* i_pWindow, std::shared_ptr<PrinterControl
 
     initFromMultiPageSetup( maPController->getMultipage() );
 
+    updatePageSize(mxOrientationBox->get_active());
+
     // setup optional UI options set by application
     setupOptionalUI();
 
@@ -1205,9 +1207,22 @@ void PrintDialog::updateNup( bool i_bMayUseCache )
         aMPS.aPaperSize = maNupPortraitSize;
     else // automatic mode
     {
+        updatePageSize(mxOrientationBox->get_active());
+        Size aPrintPageSize = maPController->getPrinter()->GetPrintPageSize();
+
         // get size of first real page to see if it is portrait or landscape
         // we assume same page sizes for all the pages for this
         Size aPageSize = getJobPageSize();
+
+        if ((aPageSize.Width() < aPageSize.Height()
+             && aPrintPageSize.Width() > aPrintPageSize.Height())
+            || (aPageSize.Width() > aPageSize.Height()
+                && aPrintPageSize.Width() < aPrintPageSize.Height()))
+        {
+            tools::Long nTmp = aPageSize.Width();
+            aPageSize.setWidth(aPageSize.Height());
+            aPageSize.setHeight(nTmp);
+        }
 
         Size aMultiSize( aPageSize.Width() * nCols, aPageSize.Height() * nRows );
         if( aMultiSize.Width() > aMultiSize.Height() ) // fits better on landscape
@@ -2069,6 +2084,10 @@ IMPL_LINK( PrintDialog, SelectHdl, weld::ComboBox&, rBox, void )
 
         updatePageSize(mxOrientationBox->get_active());
 
+        int nOrientation = mxOrientationBox->get_active();
+        if (nOrientation != ORIENTATION_AUTOMATIC)
+            setPaperOrientation(static_cast<Orientation>(nOrientation - 1), true);
+
         maUpdatePreviewNoCacheIdle.Start();
     }
 }
@@ -2186,7 +2205,17 @@ IMPL_LINK( PrintDialog, UIOption_SelectHdl, weld::ComboBox&, i_rBox, void )
     //n-up print, we will assume notes are in landscape unless we throw
     //away maFirstPageSize when we change page content type
     if (pVal->Name == "PageContentType")
+    {
         maFirstPageSize = Size();
+
+        css::uno::Sequence<sal_Bool> aChoicesDisabled{
+            false, // Original size
+            false, // Fit to printable page
+            (nVal == 2) /*Notes*/ ? true : false, // disable/enable Multiple sheets of paper
+            (nVal == 2) /*Notes*/ ? true : false  // disable/enable Tile sheet of paper
+        };
+        maPController->setUIChoicesDisabled(u"PageOptions"_ustr, aChoicesDisabled);
+    }
 
     checkOptionalControlDependencies();
 

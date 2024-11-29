@@ -868,7 +868,7 @@ public:
 
     sal_uInt32           GetLineCount( sal_Int32 nParagraph ) const;
     sal_Int32           GetLineLen( sal_Int32 nParagraph, sal_Int32 nLine ) const;
-    sal_uInt32           GetLineHeight( sal_Int32 nParagraph );
+    sal_uInt32           GetLineHeight( sal_Int32 nParagraph, sal_Int32 nLine = 0 );
 
     ErrCode             Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat, SvKeyValueIterator* pHTTPHeaderAttrs = nullptr );
 

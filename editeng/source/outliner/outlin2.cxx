@@ -318,9 +318,9 @@ sal_Int32 Outliner::GetLineLen( sal_Int32 nParagraph, sal_Int32 nLine ) const
     return pEditEngine->GetLineLen( nParagraph, nLine );
 }
 
-sal_uInt32 Outliner::GetLineHeight( sal_Int32 nParagraph )
+sal_uInt32 Outliner::GetLineHeight( sal_Int32 nParagraph, sal_Int32 nLine )
 {
-    return pEditEngine->GetLineHeight( nParagraph );
+    return pEditEngine->GetLineHeight( nParagraph, nLine );
 }
 
 void Outliner::RemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich )

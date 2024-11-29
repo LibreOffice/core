@@ -44,6 +44,8 @@
 #include <rtl/ustrbuf.hxx>
 #include <editeng/editstat.hxx>
 #include <editeng/outlobj.hxx>
+#include <svx/sdtfsitm.hxx>
+#include <svx/sdooitm.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdopage.hxx>
@@ -74,6 +76,20 @@ using namespace ::com::sun::star::uno;
 namespace sd {
 
 namespace {
+
+    void lcl_AdjustPageSize(Size& rPageSize, const Size& rPrintPageSize)
+    {
+        bool bOrientationDiff = (rPageSize.Width() < rPageSize.Height()
+                                 && rPrintPageSize.Width() > rPrintPageSize.Height())
+                                || (rPageSize.Width() > rPageSize.Height()
+                                    && rPrintPageSize.Width() < rPrintPageSize.Height());
+        if (bOrientationDiff)
+        {
+            ::tools::Long nTmp = rPageSize.Width();
+            rPageSize.setWidth(rPageSize.Height());
+            rPageSize.setHeight(nTmp);
+        }
+    }
 
     /** Convenience class to extract values from the sequence of properties
         given to one of the XRenderable methods.
@@ -781,6 +797,279 @@ namespace {
         const sal_uInt16 mnPageIndex;
     };
 
+    /** The NotesPrinterPage is used for printing notes pages onto one or more printer pages
+    */
+    class NotesPrinterPage : public PrinterPage
+    {
+    public:
+        NotesPrinterPage(
+            const sal_uInt16 nPageIndex,
+            const sal_Int32 nPageNumb,
+            const sal_Int32 nPageCount,
+            const bool bScaled,
+            const PageKind ePageKind,
+            const MapMode& rMapMode,
+            const bool bPrintMarkedOnly,
+            const OUString& rsPageString,
+            const Point& rPageStringOffset,
+            const DrawModeFlags nDrawMode,
+            const Orientation eOrientation,
+            const sal_uInt16 nPaperTray)
+            : PrinterPage(ePageKind, rMapMode, bPrintMarkedOnly, rsPageString, rPageStringOffset,
+                          nDrawMode, eOrientation, nPaperTray),
+              mnPageIndex(nPageIndex),
+              mnPageNumb(nPageNumb),
+              mnPageCount(nPageCount),
+              mbScaled(bScaled)
+        {
+        }
+
+        virtual void Print(
+            Printer& rPrinter,
+            SdDrawDocument& rDocument,
+            ViewShell&,
+            View* pView,
+            DrawView& rPrintView,
+            const SdrLayerIDSet& rVisibleLayers,
+            const SdrLayerIDSet& rPrintableLayers) const override
+        {
+            SdPage* pPageToPrint = rDocument.GetSdPage(mnPageIndex, mePageKind);
+            rPrinter.SetMapMode(maMap);
+
+            // Clone the current page to create an independent instance for modifications.
+            // This ensures that changes made to pNotesPage do not affect the original page.
+            rtl::Reference<SdPage> pNotesPage
+                = static_cast<SdPage*>(pPageToPrint->CloneSdrPage(rDocument).get());
+
+            Size aPageSize;
+            if (mbScaled)
+            {
+                aPageSize = pNotesPage->GetSize();
+                lcl_AdjustPageSize(aPageSize, rPrinter.GetPrintPageSize());
+            }
+            else
+                aPageSize = rPrinter.GetPrintPageSize();
+
+            // Adjusts the objects on the notes page to fit the new page size.
+            ::tools::Rectangle aNewBorderRect(-1, -1, -1, -1);
+            pNotesPage->ScaleObjects(aPageSize, aNewBorderRect, true);
+
+            SdrObject* pNotesObj = pNotesPage->GetPresObj(PresObjKind::Notes);
+            if (pNotesObj)
+            {
+                // new page(s) margins
+                sal_Int32 nLeft = 2000;
+                sal_Int32 nRight = 2000;
+                sal_Int32 nTop = 2250;
+                sal_Int32 nBottom = 2250;
+
+                double nRatioX = aPageSize.Width() / 21000.0;
+                double nRatioY = aPageSize.Height() / 29700.0;
+
+                nLeft *= nRatioX;
+                nRight *= nRatioX;
+                nTop *= nRatioY;
+                nBottom *= nRatioY;
+
+                Point aNotesPt = pNotesObj->GetRelativePos();
+                Size aNotesSize = pNotesObj->GetLogicRect().GetSize();
+
+                Outliner* pOut = rDocument.GetInternalOutliner();
+                const OutlinerMode nSaveOutlMode(pOut->GetOutlinerMode());
+                const bool bSavedUpdateMode(pOut->IsUpdateLayout());
+                pOut->SetPaperSize(aNotesSize);
+                pOut->SetUpdateLayout(true);
+                pOut->Clear();
+                pOut->SetText(*pNotesObj->GetOutlinerParaObject());
+
+                bool bAutoGrow = pNotesObj->GetMergedItem(SDRATTR_TEXT_AUTOGROWHEIGHT).GetValue();
+
+                // If AutoGrowHeight property is enabled and the notes page has a lower border,
+                // use the lower border but if there is no lower border, use the bottom margin
+                // to determine the first page break position.
+                // If AutoGrow is not enabled, the notes object defines the first page break.
+                ::tools::Long nNotesPageBottom
+                    = bAutoGrow ? (pNotesPage->GetLowerBorder() != 0)
+                                      ? aPageSize.Height() - pNotesPage->GetLowerBorder()
+                                      : aPageSize.Height() - nBottom
+                                : aNotesPt.Y() + aNotesSize.Height();
+                if (mbScaled)
+                {
+                    sal_Int32 nTextHeight = aNotesPt.Y() + pOut->GetTextHeight();
+                    if (bAutoGrow && (nTextHeight > nNotesPageBottom))
+                    {
+                        pNotesObj->SetMergedItem(SdrOnOffItem(SDRATTR_TEXT_AUTOGROWHEIGHT, false));
+
+                        ::tools::Long nObjW = aNotesSize.Width();
+                        ::tools::Long nObjH = aPageSize.Height() - aNotesPt.Y() - nBottom;
+
+                        pNotesObj->SetLogicRect(::tools::Rectangle(aNotesPt, Size(nObjW, nObjH)));
+                    }
+                    SdrTextFitToSizeTypeItem eFitToSize = drawing::TextFitToSizeType_AUTOFIT;
+                    pNotesObj->SetMergedItem(eFitToSize);
+                }
+                else // original size
+                {
+                    bool bExit = false;
+                    sal_Int32 nPrevLineLen = 0;
+                    sal_Int32 nPrevParaIdx = 0;
+                    sal_uInt16 nActualPageNumb = 1;
+                    ::tools::Long nCurrentPosY = aNotesPt.Y();
+                    sal_Int32 nParaCount = pOut->GetParagraphCount();
+                    std::vector<std::pair<sal_Int32, sal_Int32>> aPageBreaks;
+
+                    for (sal_Int32 i = 0; i < nParaCount && !bExit; ++i)
+                    {
+                        sal_Int32 nActualLineLen = 0;
+                        sal_uInt32 nLineCount = pOut->GetLineCount(i);
+                        for (sal_uInt32 j = 0; j < nLineCount; ++j)
+                        {
+                            nActualLineLen += pOut->GetLineLen(i, j);
+                            sal_Int32 nLineHeight = pOut->GetLineHeight(i, j);
+                            sal_Int32 nNextPosY = nCurrentPosY + nLineHeight;
+
+                            if (nNextPosY > nNotesPageBottom)
+                            {
+                                // If the current or the next page matches the print page
+                                // calculate and add a page break, since we only want to add
+                                // a page break if the page is relevant.
+                                if (mnPageNumb == nActualPageNumb
+                                    || mnPageNumb == nActualPageNumb + 1)
+                                {
+                                    if (!aPageBreaks.empty())
+                                    {
+                                        // determine the page break at the bottom of the page
+                                        // for pages that have both a previous and a following page
+                                        aPageBreaks.emplace_back(
+                                            nPrevParaIdx - aPageBreaks[0].first, nPrevLineLen);
+                                    }
+                                    else
+                                    {
+                                        if (mnPageNumb == 1 || (nLineCount > 1 && j != 0))
+                                        {
+                                            // first page or multi-line paragraphs
+                                            aPageBreaks.emplace_back(nPrevParaIdx, nPrevLineLen);
+                                        }
+                                        else
+                                        {   // single-line paragraphs
+                                            aPageBreaks.emplace_back(nPrevParaIdx + 1, 0);
+                                        }
+                                    }
+
+                                    if (mnPageNumb == nActualPageNumb || mnPageNumb == mnPageCount)
+                                    {
+                                        bExit = true;
+                                        break;
+                                    }
+                                }
+                                nNotesPageBottom = aPageSize.Height() - nBottom;
+                                nCurrentPosY = nTop;
+                                nActualPageNumb++;
+                                nActualLineLen = 0;
+                            }
+                            nPrevParaIdx = i;
+                            nPrevLineLen = nActualLineLen;
+                            nCurrentPosY += nLineHeight;
+                        }
+                    }
+
+                    if (!aPageBreaks.empty())
+                    {
+                        ESelection aE;
+                        if (mnPageNumb == 1)
+                        {
+                            aE.start.nPara = aPageBreaks[0].first;
+                            aE.start.nIndex = aPageBreaks[0].second;
+                            aE.end.nPara = pOut->GetParagraphCount() - 1;
+                            aE.end.nIndex = pOut->GetText(pOut->GetParagraph(aE.end.nPara)).getLength();
+                            pOut->QuickDelete(aE);
+                        }
+                        else
+                        {
+                            sal_Int16 nDepth = pOut->GetDepth(aPageBreaks[0].first);
+                            SfxItemSet aItemSet = pOut->GetParaAttribs(aPageBreaks[0].first);
+
+                            aE.start.nPara = 0;
+                            aE.start.nIndex = 0;
+                            aE.end.nPara = aPageBreaks[0].first;
+                            aE.end.nIndex = aPageBreaks[0].second;
+
+                            if (aPageBreaks[0].second != 0) // Multi-line
+                            {
+                                pOut->QuickInsertLineBreak(ESelection(aE.end.nPara, aE.end.nIndex,
+                                                                      aE.end.nPara, aE.end.nIndex));
+                                nTop -= pOut->GetLineHeight(0,0);
+                            }
+                            pOut->QuickDelete(aE);
+
+                            Paragraph* pFirstPara = pOut->GetParagraph(0);
+                            pOut->SetDepth(pFirstPara, nDepth);
+                            pOut->SetParaAttribs(0, aItemSet);
+
+                            if (aPageBreaks.size() > 1)
+                            {
+                                aE.start.nPara = aPageBreaks[1].first;
+                                aE.start.nIndex = aPageBreaks[1].second;
+                                aE.end.nPara = pOut->GetParagraphCount() - 1;
+                                aE.end.nIndex = pOut->GetText(pOut->GetParagraph(aE.end.nPara)).getLength();
+                                pOut->QuickDelete(aE);
+                            }
+                        }
+                    }
+                    pNotesObj->SetOutlinerParaObject(pOut->CreateParaObject());
+
+                    Size aObjSize;
+                    if (mnPageNumb != 1) // new page(s)
+                    {
+                        SdrObjListIter aShapeIter(pNotesPage.get());
+                        while (aShapeIter.IsMore())
+                        {
+                            SdrObject* pObj = aShapeIter.Next();
+                            if (pObj && pObj->GetObjIdentifier() != SdrObjKind::Text)
+                                pNotesPage->RemoveObject(pObj->GetOrdNum());
+                        }
+
+                        aNotesPt.setX(nLeft);
+                        aNotesPt.setY(nTop);
+                        ::tools::Long nWidth = aPageSize.Width() - nLeft - nRight;
+                        aObjSize = Size(nWidth, pOut->GetTextHeight());
+                    }
+                    else // first page
+                    {
+                        if (!bAutoGrow)
+                            aObjSize = aNotesSize;
+                        else
+                            aObjSize = Size(aNotesSize.Width(), pOut->GetTextHeight());
+                    }
+                    pNotesObj->SetLogicRect(::tools::Rectangle(aNotesPt, aObjSize));
+                }
+                pOut->Clear();
+                pOut->SetUpdateLayout(bSavedUpdateMode);
+                pOut->Init(nSaveOutlMode);
+            }
+            pNotesPage->SetSize(aPageSize);
+
+            PrintPage(
+                rPrinter,
+                rPrintView,
+                *pNotesPage,
+                pView,
+                mbPrintMarkedOnly,
+                rVisibleLayers,
+                rPrintableLayers);
+            PrintMessage(
+                rPrinter,
+                msPageString,
+                maPageStringOffset);
+        }
+
+    private:
+        const sal_uInt16 mnPageIndex;
+        const sal_Int32 mnPageNumb;
+        const sal_Int32 mnPageCount;
+        const bool mbScaled;
+    };
+
     /** Print one slide multiple times on a printer page so that the whole
         printer page is covered.
     */
@@ -1198,7 +1487,11 @@ public:
                                                   : VclPtr< OutputDevice >();
             mpPrinter = dynamic_cast<Printer*>(pOut.get());
             Size aPageSizePixel = mpPrinter ? mpPrinter->GetPaperSizePixel() : Size();
-            if( aPageSizePixel != maPrinterPageSizePixel )
+            Size aPrintPageSize = mpPrinter ? mpPrinter->GetPrintPageSize() : Size();
+
+            lcl_AdjustPageSize(aPageSizePixel, aPrintPageSize);
+
+            if (aPageSizePixel != maPrinterPageSizePixel)
             {
                 bIsPaperChanged = true;
                 maPrinterPageSizePixel = aPageSizePixel;
@@ -1361,11 +1654,15 @@ private:
         {
             aPaperSize.setWidth(rInfo.mpPrinter->GetPaperSize().Width());
             aPaperSize.setHeight(rInfo.mpPrinter->GetPaperSize().Height());
+
+            if (!mpOptions->IsBooklet())
+                lcl_AdjustPageSize(aPaperSize, rInfo.mpPrinter->GetPrintPageSize());
         }
 
         maPrintSize = awt::Size(aPaperSize.Width(), aPaperSize.Height());
 
-        if (mpOptions->IsPrinterPreferred(pDocument->GetDocumentType()))
+        if (mpOptions->IsPrinterPreferred(pDocument->GetDocumentType())
+            && ePageKind == PageKind::Standard && !mpOptions->IsBooklet())
         {
             if( (rInfo.meOrientation == Orientation::Landscape &&
                   (aPaperSize.Width() < aPaperSize.Height()))
@@ -1863,7 +2160,11 @@ private:
         if (pDocument->GetSdPageCount(ePageKind) == 0)
             return;
         SdPage* pRefPage = pDocument->GetSdPage(0, ePageKind);
-        rInfo.maPageSize = pRefPage->GetSize();
+
+        if (!mpOptions->IsPrinterPreferred(pDocument->GetDocumentType()) && mpOptions->IsNotes())
+            rInfo.maPageSize = mpPrinter->GetPrintPageSize();
+        else
+            rInfo.maPageSize = pRefPage->GetSize();
 
         SetupPaperOrientation(ePageKind, rInfo);
 
@@ -1898,19 +2199,22 @@ private:
                 continue;
 
             MapMode aMap (rInfo.maMap);
-            // is it possible that the page size changed?
-            const Size aPageSize = pPage->GetSize();
+
+            Size aPageSize = pPage->GetSize();
 
             if (mpOptions->IsPageSize())
             {
-                const double fHorz (static_cast<double>(rInfo.maPrintSize.Width())  / aPageSize.Width());
-                const double fVert (static_cast<double>(rInfo.maPrintSize.Height()) / aPageSize.Height());
+                Size aPrintSize = rInfo.maPrintSize;
+                lcl_AdjustPageSize(aPageSize, aPrintSize);
+
+                const double fHorz(static_cast<double>(aPrintSize.Width()) / aPageSize.Width());
+                const double fVert(static_cast<double>(aPrintSize.Height()) / aPageSize.Height());
 
                 Fraction aFract;
                 if (fHorz < fVert)
-                    aFract = Fraction(rInfo.maPrintSize.Width(), aPageSize.Width());
+                    aFract = Fraction(aPrintSize.Width(), aPageSize.Width());
                 else
-                    aFract = Fraction(rInfo.maPrintSize.Height(), aPageSize.Height());
+                    aFract = Fraction(aPrintSize.Height(), aPageSize.Height());
 
                 aMap.SetScaleX(aFract);
                 aMap.SetScaleY(aFract);
@@ -2136,17 +2440,138 @@ private:
 
             // if CutPage is set then do not move it, otherwise move the
             // scaled page to printable area
-            maPrinterPages.push_back(
-                std::make_shared<RegularPrinterPage>(
-                        sal::static_int_cast<sal_uInt16>(nPageIndex),
-                        ePageKind,
-                        aMap,
-                        rInfo.mbPrintMarkedOnly,
-                        rInfo.msPageString,
-                        aPageOffset,
-                        rInfo.mnDrawMode,
-                        rInfo.meOrientation,
-                        nPaperBin));
+            if (ePageKind == PageKind::Standard)
+            {
+                maPrinterPages.push_back(
+                    std::make_shared<RegularPrinterPage>(
+                            sal::static_int_cast<sal_uInt16>(nPageIndex),
+                            ePageKind,
+                            aMap,
+                            rInfo.mbPrintMarkedOnly,
+                            rInfo.msPageString,
+                            aPageOffset,
+                            rInfo.mnDrawMode,
+                            rInfo.meOrientation,
+                            nPaperBin));
+            }
+            else // Notes
+            {
+                SdPage* pPage = GetFilteredPage(nPageIndex, PageKind::Notes);
+                SdDrawDocument* pDocument = mrBase.GetMainViewShell()->GetDoc();
+
+                // Clone the current page to create an independent instance.
+                // This ensures that changes made to pNotesPage do not affect the original page.
+                rtl::Reference<SdPage> pNotesPage
+                    = static_cast<SdPage*>(pPage->CloneSdrPage(*pDocument).get());
+
+                Size aPageSize = bScalePage ? pNotesPage->GetSize() : rInfo.mpPrinter->GetPrintPageSize();
+                // Adjusts the objects on the notes page to fit the new page size.
+                ::tools::Rectangle aNewBorderRect(-1, -1, -1, -1);
+                pNotesPage->ScaleObjects(aPageSize, aNewBorderRect, true);
+
+                SdrObject* pNotesObj = pNotesPage->GetPresObj(PresObjKind::Notes);
+                if (pNotesObj && bCutPage)
+                {
+                    // default margins
+                    sal_Int32 nTopMargin = 2250, nBottomMargin = 2250;
+                    double nRatioY = aPageSize.Height() / 29700.0;
+                    nTopMargin *= nRatioY;
+                    nBottomMargin *= nRatioY;
+
+                    Size nNotesObjSize = pNotesObj->GetLogicRect().GetSize();
+
+                    Outliner* pOut = pDocument->GetInternalOutliner();
+                    const OutlinerMode nSaveOutlMode(pOut->GetOutlinerMode());
+                    const bool bSavedUpdateMode(pOut->IsUpdateLayout());
+                    pOut->Init(OutlinerMode::OutlineView);
+                    pOut->SetPaperSize(nNotesObjSize);
+                    pOut->SetUpdateLayout(true);
+                    pOut->Clear();
+                    pOut->SetText(*pNotesObj->GetOutlinerParaObject());
+
+                    sal_Int32 nFirstPageBottomMargin = 0;
+                    ::tools::Long nNotesHeight = nNotesObjSize.Height();
+                    bool bAutoGrow = pNotesObj->GetMergedItem(SDRATTR_TEXT_AUTOGROWHEIGHT).GetValue();
+                    if (bAutoGrow)
+                    {
+                        nNotesHeight += pNotesObj->GetRelativePos().Y();
+                        nFirstPageBottomMargin = (pNotesPage->GetLowerBorder() != 0)
+                                                     ? pNotesPage->GetLowerBorder()
+                                                     : nBottomMargin;
+                    }
+                    double nOverflowedTextHeight = 0;
+                    ::tools::Long nFirstPageBottom = aPageSize.Height() - nFirstPageBottomMargin;
+                    if (nNotesHeight > nFirstPageBottom)
+                    {
+                        // Calculate the height of the overflow text
+                        // when the AutoGrowHeight property of the notes object is enabled
+                        // and the height of the object exceeds the page height.
+                        nOverflowedTextHeight = pNotesObj->GetRelativePos().Y()
+                                                + pOut->GetTextHeight() - nFirstPageBottom;
+                    }
+                    else
+                        nOverflowedTextHeight = pOut->GetTextHeight() - nNotesObjSize.Height();
+
+                    sal_Int32 nNotePageCount = 1;
+                    double nNewPageHeight = aPageSize.Height() - nTopMargin - nBottomMargin;
+                    if (nOverflowedTextHeight > 0)
+                    {
+                        nNotePageCount += std::ceil(nOverflowedTextHeight / nNewPageHeight);
+                    }
+
+                    for (sal_Int32 i = 1; i <= nNotePageCount; i++)
+                    {
+                        // set page numbers
+                        sal_Int32 nPageNumb = i;
+                        OUString sPageNumb = rInfo.msPageString;
+                        if (!sPageNumb.isEmpty() && nNotePageCount > 1)
+                        {
+                            OUString sTmp;
+                            if (!rInfo.msTimeDate.isEmpty())
+                            {
+                                sTmp += " ";
+                            }
+                            sTmp += SdResId(STR_PAGE_NAME) + " " + OUString::number(i);
+                            sPageNumb += sTmp;
+                        }
+
+                        maPrinterPages.push_back(
+                            std::make_shared<NotesPrinterPage>(
+                                    sal::static_int_cast<sal_uInt16>(nPageIndex),
+                                    nPageNumb,
+                                    nNotePageCount,
+                                    bScalePage,
+                                    PageKind::Notes,
+                                    aMap,
+                                    rInfo.mbPrintMarkedOnly,
+                                    sPageNumb,
+                                    aPageOffset,
+                                    rInfo.mnDrawMode,
+                                    rInfo.meOrientation,
+                                    nPaperBin));
+                    }
+                    pOut->Clear();
+                    pOut->SetUpdateLayout(bSavedUpdateMode);
+                    pOut->Init(nSaveOutlMode);
+                }
+                else // scaled page
+                {
+                    maPrinterPages.push_back(
+                        std::make_shared<NotesPrinterPage>(
+                                sal::static_int_cast<sal_uInt16>(nPageIndex),
+                                sal_Int32(0),
+                                sal_Int32(0),
+                                bScalePage,
+                                PageKind::Notes,
+                                aMap,
+                                rInfo.mbPrintMarkedOnly,
+                                rInfo.msPageString,
+                                aPageOffset,
+                                rInfo.mnDrawMode,
+                                rInfo.meOrientation,
+                                nPaperBin));
+                }
+            }
         }
         else
         {

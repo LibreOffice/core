@@ -1316,6 +1316,15 @@ bool Printer::SetPaperSizeUser( const Size& rSize )
 
         bNeedToChange = maJobSetup.ImplGetConstData().GetPaperFormat() != PAPER_USER &&
             maJobSetup.ImplGetConstData().GetPaperFormat() != aPaper;
+
+        if (!bNeedToChange)
+        {
+            Size aPaperSize = GetPaperSizePixel();
+            bNeedToChange = (aPageSize.Width() < aPageSize.Height()
+                             && aPaperSize.Width() > aPaperSize.Height())
+                            || (aPageSize.Width() > aPageSize.Height()
+                                && aPaperSize.Width() < aPaperSize.Height());
+        }
     }
 
     if(bNeedToChange)

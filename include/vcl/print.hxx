@@ -417,6 +417,9 @@ public:
     bool                                isUIOptionEnabled( const OUString& rPropName ) const;
     SAL_DLLPRIVATE bool                 isUIChoiceEnabled( const OUString& rPropName, sal_Int32 nChoice ) const;
 
+    /// Defines which options in a UI element should be disabled or enabled.
+    void                                setUIChoicesDisabled(const OUString& rPropName, css::uno::Sequence<sal_Bool>& rChoicesDisabled);
+
     /** MakeEnabled will change the property rPropName depends on to the value
 
         that makes rPropName enabled. If the dependency itself is also disabled,

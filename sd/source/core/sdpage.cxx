@@ -460,6 +460,9 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
             else
                 aTempAttr.Put( makeSdrTextMinFrameHeightItem( rRect.GetSize().Height() ) );
 
+            if (eObjKind == PresObjKind::Notes)
+                aTempAttr.Put(makeSdrTextAutoGrowHeightItem(false));
+
             if (mbMaster)
             {
                 // The size of presentation objects on the master page have to
