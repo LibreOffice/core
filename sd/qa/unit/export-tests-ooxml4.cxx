@@ -24,6 +24,7 @@
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
@@ -599,7 +600,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf119223)
 
     assertXPath(pXmlDocRels, "//p:cNvPr[@name='SomePicture']"_ostr);
 
-    assertXPath(pXmlDocRels, "//p:cNvPr[@name='SomeFormula']"_ostr);
+    assertXPath(pXmlDocRels, "//mc:Choice/p:sp/p:nvSpPr/p:cNvPr[@name='SomeFormula']"_ostr);
 
     assertXPath(pXmlDocRels, "//p:cNvPr[@name='SomeLine']"_ostr);
 
@@ -1202,6 +1203,50 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf159931_slideLayouts)
                          bool(xNameAccess->hasByName("ppt/slideLayouts/" + sSlideLayoutName1)));
     CPPUNIT_ASSERT_EQUAL(true,
                          bool(xNameAccess->hasByName("ppt/slideLayouts/" + sSlideLayoutName2)));
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf163483_export_math_fallback)
+{
+    createSdImpressDoc("odp/formula.fodp");
+
+    // Before export-and-reload, there is a formula on page.
+    {
+        auto xProps = getShapeFromPage(0, 0);
+        auto xInfo = xProps->getPropertyValue(u"Model"_ustr).queryThrow<css::lang::XServiceInfo>();
+        CPPUNIT_ASSERT(xInfo->supportsService(u"com.sun.star.formula.FormulaProperties"_ustr));
+        CPPUNIT_ASSERT_THROW(getShapeFromPage(0, 1),
+                             css::lang::IndexOutOfBoundsException); // Only one shape on page
+    }
+
+    saveAndReload(u"Impress Office Open XML"_ustr);
+
+    // After save-and-reload, there must still be a single shape; now it's a fallback image.
+    // When we start to import formulas from PPTX, that will be formula.
+    {
+        // Without the fix, this threw IndexOutOfBoundsException, because there was no fallback,
+        // and no shape got imported.
+        auto xInfo = getShapeFromPage(0, 0).queryThrow<css::lang::XServiceInfo>();
+        CPPUNIT_ASSERT(xInfo->supportsService(u"com.sun.star.drawing.CustomShape"_ustr));
+        CPPUNIT_ASSERT_THROW(getShapeFromPage(0, 1),
+                             css::lang::IndexOutOfBoundsException); // Only one shape on page
+    }
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+
+    const OUString cNvPr_id = getXPath(
+        pXmlDoc, "/p:sld/p:cSld/p:spTree/mc:AlternateContent/mc:Choice/p:sp/p:nvSpPr/p:cNvPr"_ostr,
+        "id"_ostr);
+
+    // Check that the alternate content is exported
+    assertXPath(
+        pXmlDoc,
+        "/p:sld/p:cSld/p:spTree/mc:AlternateContent/mc:Fallback/p:sp/p:spPr/a:blipFill/a:blip"_ostr,
+        "embed"_ostr, u"rId1"_ustr);
+
+    // Its cNvPr_id must be the same
+    assertXPath(pXmlDoc,
+                "/p:sld/p:cSld/p:spTree/mc:AlternateContent/mc:Fallback/p:sp/p:nvSpPr/p:cNvPr"_ostr,
+                "id"_ostr, cNvPr_id);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

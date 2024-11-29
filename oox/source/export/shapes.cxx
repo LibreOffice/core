@@ -77,6 +77,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/outdev.hxx>
 #include <filter/msfilter/escherex.hxx>
+#include <svtools/embedhlp.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svdoole2.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -2573,6 +2574,8 @@ void ShapeExport::WriteMathShape(Reference<XShape> const& xShape)
     assert(xMathModel.is());
     assert(GetDocumentType() != DOCUMENT_DOCX); // should be written in DocxAttributeOutput
     SAL_WARN_IF(GetDocumentType() == DOCUMENT_XLSX, "oox.shape", "Math export to XLSX isn't tested, should it happen here?");
+    const OString cNvPr_id = OString::number(GetNewShapeID(xShape));
+    const OUString shapeName = GetShapeName(xShape);
 
     // ECMA standard does not actually allow oMath outside of
     // WordProcessingML so write a MCE like PPT 2010 does
@@ -2582,9 +2585,7 @@ void ShapeExport::WriteMathShape(Reference<XShape> const& xShape)
         XML_Requires, "a14");
     mpFS->startElementNS(mnXmlNamespace, XML_sp);
     mpFS->startElementNS(mnXmlNamespace, XML_nvSpPr);
-    mpFS->startElementNS(mnXmlNamespace, XML_cNvPr,
-         XML_id, OString::number(GetNewShapeID(xShape)),
-         XML_name, GetShapeName(xShape));
+    mpFS->startElementNS(mnXmlNamespace, XML_cNvPr, XML_id, cNvPr_id, XML_name, shapeName);
     AddExtLst(mpFS, xPropSet);
     mpFS->endElementNS(mnXmlNamespace, XML_cNvPr);
     mpFS->singleElementNS(mnXmlNamespace, XML_cNvSpPr, XML_txBox, "1");
@@ -2612,7 +2613,36 @@ void ShapeExport::WriteMathShape(Reference<XShape> const& xShape)
     mpFS->endElementNS(mnXmlNamespace, XML_sp);
     mpFS->endElementNS(XML_mc, XML_Choice);
     mpFS->startElementNS(XML_mc, XML_Fallback);
-    // TODO: export bitmap shape as fallback
+
+    svt::EmbeddedObjectRef ref(
+        xPropSet->getPropertyValue(u"EmbeddedObject"_ustr).query<css::embed::XEmbeddedObject>(),
+        embed::Aspects::MSOLE_CONTENT);
+    if (auto* graphic = ref.GetGraphic(); graphic && graphic->GetType() != GraphicType::NONE)
+    {
+        if (OUString r_id = writeGraphicToStorage(*graphic); !r_id.isEmpty())
+        {
+            mpFS->startElementNS(mnXmlNamespace, XML_sp);
+            mpFS->startElementNS(mnXmlNamespace, XML_nvSpPr);
+            mpFS->startElementNS(mnXmlNamespace, XML_cNvPr, XML_id, cNvPr_id, XML_name, shapeName);
+            AddExtLst(mpFS, xPropSet);
+            mpFS->endElementNS(mnXmlNamespace, XML_cNvPr);
+            mpFS->singleElementNS(mnXmlNamespace, XML_cNvSpPr, XML_txBox, "1");
+            mpFS->singleElementNS(mnXmlNamespace, XML_nvPr);
+            mpFS->endElementNS(mnXmlNamespace, XML_nvSpPr);
+            mpFS->startElementNS(mnXmlNamespace, XML_spPr);
+            WriteShapeTransformation(xShape, XML_a);
+            WritePresetShape("rect"_ostr);
+            mpFS->startElementNS(XML_a, XML_blipFill);
+            mpFS->singleElementNS(XML_a, XML_blip, FSNS(XML_r, XML_embed), r_id);
+            mpFS->startElementNS(XML_a, XML_stretch);
+            mpFS->singleElementNS(XML_a, XML_fillRect);
+            mpFS->endElementNS(XML_a, XML_stretch);
+            mpFS->endElementNS(XML_a, XML_blipFill);
+            mpFS->endElementNS(mnXmlNamespace, XML_spPr);
+            mpFS->endElementNS(mnXmlNamespace, XML_sp);
+        }
+    }
+
     mpFS->endElementNS(XML_mc, XML_Fallback);
     mpFS->endElementNS(XML_mc, XML_AlternateContent);
 }
