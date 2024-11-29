@@ -483,8 +483,8 @@ private:
 BitmapEx VCL_DLLPUBLIC createAlphaBlendFrame(
     const Size& rSize,
     sal_uInt8 nAlpha,
-    Color aColorTopLeft,
-    Color aColorBottomRight);
+    const Color& rColorTopLeft,
+    const Color& rColorBottomRight);
 
 /** Create a blend frame as BitmapEx using an alpha value
 
@@ -501,10 +501,10 @@ BitmapEx VCL_DLLPUBLIC createAlphaBlendFrame(
 BitmapEx createAlphaBlendFrame(
     const Size& rSize,
     sal_uInt8 nAlpha,
-    Color aColorTopLeft,
-    Color aColorTopRight,
-    Color aColorBottomRight,
-    Color aColorBottomLeft);
+    const Color& rColorTopLeft,
+    const Color& rColorTopRight,
+    const Color& rColorBottomRight,
+    const Color& rColorBottomLeft);
 
 #endif // INCLUDED_VCL_BITMAPEX_HXX
 

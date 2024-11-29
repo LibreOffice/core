@@ -1027,22 +1027,22 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
 BitmapEx createAlphaBlendFrame(
     const Size& rSize,
     sal_uInt8 nAlpha,
-    Color aColorTopLeft,
-    Color aColorBottomRight)
+    const Color& rColorTopLeft,
+    const Color& rColorBottomRight)
 {
     const sal_uInt32 nW(rSize.Width());
     const sal_uInt32 nH(rSize.Height());
 
     if(nW || nH)
     {
-        Color aColTopRight(aColorTopLeft);
-        Color aColBottomLeft(aColorTopLeft);
+        Color aColTopRight(rColorTopLeft);
+        Color aColBottomLeft(rColorTopLeft);
         const sal_uInt32 nDE(nW + nH);
 
-        aColTopRight.Merge(aColorBottomRight, 255 - sal_uInt8((nW * 255) / nDE));
-        aColBottomLeft.Merge(aColorBottomRight, 255 - sal_uInt8((nH * 255) / nDE));
+        aColTopRight.Merge(rColorBottomRight, 255 - sal_uInt8((nW * 255) / nDE));
+        aColBottomLeft.Merge(rColorBottomRight, 255 - sal_uInt8((nH * 255) / nDE));
 
-        return createAlphaBlendFrame(rSize, nAlpha, aColorTopLeft, aColTopRight, aColorBottomRight, aColBottomLeft);
+        return createAlphaBlendFrame(rSize, nAlpha, rColorTopLeft, aColTopRight, rColorBottomRight, aColBottomLeft);
     }
 
     return BitmapEx();
@@ -1051,29 +1051,29 @@ BitmapEx createAlphaBlendFrame(
 BitmapEx createAlphaBlendFrame(
     const Size& rSize,
     sal_uInt8 nAlpha,
-    Color aColorTopLeft,
-    Color aColorTopRight,
-    Color aColorBottomRight,
-    Color aColorBottomLeft)
+    const Color& rColorTopLeft,
+    const Color& rColorTopRight,
+    const Color& rColorBottomRight,
+    const Color& rColorBottomLeft)
 {
     BlendFrameCache* pBlendFrameCache = ImplGetBlendFrameCache();
 
     if(pBlendFrameCache->m_aLastSize == rSize
         && pBlendFrameCache->m_nLastAlpha == nAlpha
-        && pBlendFrameCache->m_aLastColorTopLeft == aColorTopLeft
-        && pBlendFrameCache->m_aLastColorTopRight == aColorTopRight
-        && pBlendFrameCache->m_aLastColorBottomRight == aColorBottomRight
-        && pBlendFrameCache->m_aLastColorBottomLeft == aColorBottomLeft)
+        && pBlendFrameCache->m_aLastColorTopLeft == rColorTopLeft
+        && pBlendFrameCache->m_aLastColorTopRight == rColorTopRight
+        && pBlendFrameCache->m_aLastColorBottomRight == rColorBottomRight
+        && pBlendFrameCache->m_aLastColorBottomLeft == rColorBottomLeft)
     {
         return pBlendFrameCache->m_aLastResult;
     }
 
     pBlendFrameCache->m_aLastSize = rSize;
     pBlendFrameCache->m_nLastAlpha = nAlpha;
-    pBlendFrameCache->m_aLastColorTopLeft = aColorTopLeft;
-    pBlendFrameCache->m_aLastColorTopRight = aColorTopRight;
-    pBlendFrameCache->m_aLastColorBottomRight = aColorBottomRight;
-    pBlendFrameCache->m_aLastColorBottomLeft = aColorBottomLeft;
+    pBlendFrameCache->m_aLastColorTopLeft = rColorTopLeft;
+    pBlendFrameCache->m_aLastColorTopRight = rColorTopRight;
+    pBlendFrameCache->m_aLastColorBottomRight = rColorBottomRight;
+    pBlendFrameCache->m_aLastColorBottomLeft = rColorBottomLeft;
     pBlendFrameCache->m_aLastResult.Clear();
 
     const tools::Long nW(rSize.Width());
@@ -1098,15 +1098,15 @@ BitmapEx createAlphaBlendFrame(
             Scanline pScanAlpha = pContent->GetScanline( 0 );
 
             // x == 0, y == 0, top-left corner
-            pContent->SetPixelOnData(pScanContent, 0, aColorTopLeft);
+            pContent->SetPixelOnData(pScanContent, 0, rColorTopLeft);
             pAlpha->SetPixelOnData(pScanAlpha, 0, BitmapColor(nAlpha));
 
             // y == 0, top line left to right
             for(x = 1; x < nW - 1; x++)
             {
-                Color aMix(aColorTopLeft);
+                Color aMix(rColorTopLeft);
 
-                aMix.Merge(aColorTopRight, 255 - sal_uInt8((x * 255) / nW));
+                aMix.Merge(rColorTopRight, 255 - sal_uInt8((x * 255) / nW));
                 pContent->SetPixelOnData(pScanContent, x, aMix);
                 pAlpha->SetPixelOnData(pScanAlpha, x, BitmapColor(nAlpha));
             }
@@ -1115,7 +1115,7 @@ BitmapEx createAlphaBlendFrame(
             // #i123690# Caution! When nW is 1, x == nW is possible (!)
             if(x < nW)
             {
-                pContent->SetPixelOnData(pScanContent, x, aColorTopRight);
+                pContent->SetPixelOnData(pScanContent, x, rColorTopRight);
                 pAlpha->SetPixelOnData(pScanAlpha, x, BitmapColor(nAlpha));
             }
 
@@ -1124,18 +1124,18 @@ BitmapEx createAlphaBlendFrame(
             {
                 pScanContent = pContent->GetScanline( y );
                 pScanAlpha = pContent->GetScanline( y );
-                Color aMixA(aColorTopLeft);
+                Color aMixA(rColorTopLeft);
 
-                aMixA.Merge(aColorBottomLeft, 255 - sal_uInt8((y * 255) / nH));
+                aMixA.Merge(rColorBottomLeft, 255 - sal_uInt8((y * 255) / nH));
                 pContent->SetPixelOnData(pScanContent, 0, aMixA);
                 pAlpha->SetPixelOnData(pScanAlpha, 0, BitmapColor(nAlpha));
 
                 // #i123690# Caution! When nW is 1, x == nW is possible (!)
                 if(x < nW)
                 {
-                    Color aMixB(aColorTopRight);
+                    Color aMixB(rColorTopRight);
 
-                    aMixB.Merge(aColorBottomRight, 255 - sal_uInt8((y * 255) / nH));
+                    aMixB.Merge(rColorBottomRight, 255 - sal_uInt8((y * 255) / nH));
                     pContent->SetPixelOnData(pScanContent, x, aMixB);
                     pAlpha->SetPixelOnData(pScanAlpha, x, BitmapColor(nAlpha));
                 }
@@ -1145,15 +1145,15 @@ BitmapEx createAlphaBlendFrame(
             if(y < nH)
             {
                 // x == 0, y == nH - 1, bottom-left corner
-                pContent->SetPixelOnData(pScanContent, 0, aColorBottomLeft);
+                pContent->SetPixelOnData(pScanContent, 0, rColorBottomLeft);
                 pAlpha->SetPixelOnData(pScanAlpha, 0, BitmapColor(nAlpha));
 
                 // y == nH - 1, bottom line left to right
                 for(x = 1; x < nW - 1; x++)
                 {
-                    Color aMix(aColorBottomLeft);
+                    Color aMix(rColorBottomLeft);
 
-                    aMix.Merge(aColorBottomRight, 255 - sal_uInt8(((x - 0)* 255) / nW));
+                    aMix.Merge(rColorBottomRight, 255 - sal_uInt8(((x - 0)* 255) / nW));
                     pContent->SetPixelOnData(pScanContent, x, aMix);
                     pAlpha->SetPixelOnData(pScanAlpha, x, BitmapColor(nAlpha));
                 }
@@ -1162,7 +1162,7 @@ BitmapEx createAlphaBlendFrame(
                 // #i123690# Caution! When nW is 1, x == nW is possible (!)
                 if(x < nW)
                 {
-                    pContent->SetPixelOnData(pScanContent, x, aColorBottomRight);
+                    pContent->SetPixelOnData(pScanContent, x, rColorBottomRight);
                     pAlpha->SetPixelOnData(pScanAlpha, x, BitmapColor(nAlpha));
                 }
             }
