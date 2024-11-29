@@ -847,8 +847,7 @@ void SfxLokHelper::notifyUpdatePerViewId(SfxViewShell const* pTargetShell, SfxVi
 
 void SfxLokHelper::notifyOtherViewsUpdatePerViewId(SfxViewShell const* pThisView, int nType)
 {
-    assert(pThisView != nullptr && "pThisView must be valid");
-    if (DisableCallbacks::disabled())
+    if (DisableCallbacks::disabled() || !pThisView)
         return;
 
     int viewId = SfxLokHelper::getView(pThisView);
