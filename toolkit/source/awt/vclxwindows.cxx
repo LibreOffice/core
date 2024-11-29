@@ -1573,9 +1573,11 @@ sal_Int16 VCLXListBox::getSelectedItemPos()
     SolarMutexGuard aGuard;
     VclPtr< ListBox > pBox = GetAs< ListBox >();
     if (!pBox)
-        return 0;
+        return -1; // nothing selected
     sal_Int32 nPos = pBox->GetSelectedEntryPos();
-    assert(nPos <= SAL_MAX_INT16);
+    if (nPos == LISTBOX_ENTRY_NOTFOUND)
+        return -1; // nothing selected
+    assert(nPos <= SAL_MAX_INT16 && "nPos is out of the range we can represent");
     return nPos;
 }
 

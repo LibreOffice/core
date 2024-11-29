@@ -2097,7 +2097,7 @@ namespace frm
     {
         if ( m_xAggregateListBox.is() )
             return m_xAggregateListBox->getSelectedItemPos();
-        return 0;
+        return -1;
     }
 
 

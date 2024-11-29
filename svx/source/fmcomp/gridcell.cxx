@@ -4138,12 +4138,14 @@ sal_Int16 SAL_CALL FmXListBoxCell::getSelectedItemPos()
     {
         UpdateFromColumn();
         weld::ComboBox& rBox = m_pBox->get_widget();
-        sal_Int32 nPos = rBox.get_active();
+        int nPos = rBox.get_active();
+        if (nPos == -1)
+            return -1; // nothing selected
         if (nPos > SHRT_MAX || nPos < SHRT_MIN)
             throw std::out_of_range("awt::XListBox::getSelectedItemPos can only return a short");
         return nPos;
     }
-    return 0;
+    return -1; // nothing selected
 }
 
 Sequence< sal_Int16 > SAL_CALL FmXListBoxCell::getSelectedItemsPos()
