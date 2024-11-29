@@ -3535,6 +3535,18 @@ bool BuilderBase::extractResizable(stringmap& rMap)
     return bResizable;
 }
 
+bool BuilderBase::extractShowExpanders(VclBuilder::stringmap& rMap)
+{
+    bool bShowExpanders = true;
+    VclBuilder::stringmap::iterator aFind = rMap.find(u"show-expanders"_ustr);
+    if (aFind != rMap.end())
+    {
+        bShowExpanders = toBool(aFind->second);
+        rMap.erase(aFind);
+    }
+    return bShowExpanders;
+}
+
 OUString BuilderBase::extractTooltipText(stringmap& rMap)
 {
     OUString sTooltipText;

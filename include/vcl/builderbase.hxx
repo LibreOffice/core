@@ -87,6 +87,7 @@ protected:
     static bool extractHeadersVisible(stringmap& rMap);
     static bool extractEntry(stringmap& rMap);
     static OUString extractIconName(stringmap& rMap);
+    static bool extractShowExpanders(stringmap& rMap);
     static OUString extractTooltipText(stringmap& rMap);
     static bool extractVisible(stringmap& rMap);
     void extractClassAndIdAndCustomProperty(xmlreader::XmlReader& reader, OUString& rClass,

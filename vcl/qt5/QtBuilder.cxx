@@ -291,6 +291,7 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
         QTreeView* pTreeView = new QTreeView(pParentWidget);
         pTreeView->setModel(new QStandardItemModel(pTreeView));
         pTreeView->setHeaderHidden(!extractHeadersVisible(rMap));
+        pTreeView->setRootIsDecorated(extractShowExpanders(rMap));
         pObject = pTreeView;
     }
     else if (sName == u"GtkTreeViewColumn")
