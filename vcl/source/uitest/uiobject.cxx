@@ -243,7 +243,7 @@ std::vector<KeyEvent> generate_key_events_from_keycode(std::u16string_view rStr)
         vcl::KeyCode aCode(nFunctionKey, bShift, bMod1, bMod2, false);
         aEvents.emplace_back(0, aCode);
     }
-    else if (aKeyMap.find(aRemainingText) != aKeyMap.end())
+    else if (aKeyMap.contains(aRemainingText))
     {
         sal_uInt16 nKey = aKeyMap[aRemainingText];
         vcl::KeyCode aCode(nKey, bShift, bMod1, bMod2, false);
@@ -356,7 +356,7 @@ void WindowUIObject::execute(const OUString& rAction,
                 mxWindow->KeyInput(keyEvent);
             }
         }
-        else if (rParameters.find(u"KEYCODE"_ustr) != rParameters.end())
+        else if (rParameters.contains(u"KEYCODE"_ustr))
         {
             auto itr = rParameters.find(u"KEYCODE"_ustr);
             const OUString rText = itr->second;
@@ -771,8 +771,8 @@ void EditUIObject::execute(const OUString& rAction,
     }
     else if (rAction == "SELECT")
     {
-        if (rParameters.find(u"FROM"_ustr) != rParameters.end() &&
-                rParameters.find(u"TO"_ustr) != rParameters.end())
+        if (rParameters.contains(u"FROM"_ustr) &&
+                rParameters.contains(u"TO"_ustr))
         {
             tools::Long nMin = rParameters.find(u"FROM"_ustr)->second.toInt32();
             tools::Long nMax = rParameters.find(u"TO"_ustr)->second.toInt32();
@@ -1199,14 +1199,14 @@ void ComboBoxUIObject::execute(const OUString& rAction,
 {
     if (rAction == "SELECT")
     {
-        if (rParameters.find(u"POS"_ustr) != rParameters.end())
+        if (rParameters.contains(u"POS"_ustr))
         {
             auto itr = rParameters.find(u"POS"_ustr);
             OUString aVal = itr->second;
             sal_Int32 nPos = aVal.toInt32();
             mxComboBox->SelectEntryPos(nPos);
         }
-        else if(rParameters.find(u"TEXT"_ustr) != rParameters.end()){
+        else if(rParameters.contains(u"TEXT"_ustr)){
             auto itr = rParameters.find(u"TEXT"_ustr);
             OUString aVal = itr->second;
             sal_Int32 nPos = mxComboBox->GetEntryPos(aVal);
