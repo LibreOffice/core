@@ -13,7 +13,9 @@
 
 QtInstanceFrame::QtInstanceFrame(QGroupBox* pGroupBox)
     : QtInstanceContainer(pGroupBox)
+    , m_pGroupBox(pGroupBox)
 {
+    assert(m_pGroupBox);
 }
 
 void QtInstanceFrame::set_label(const OUString& rText)
