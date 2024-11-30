@@ -65,14 +65,40 @@ void QtInstanceTreeView::insert_separator(int, const OUString&)
 
 OUString QtInstanceTreeView::get_selected_text() const
 {
-    assert(false && "Not implemented yet");
-    return OUString();
+    SolarMutexGuard g;
+
+    OUString sText;
+    GetQtInstance().RunInMainThread([&] {
+        QItemSelectionModel* pSelectionModel = m_pTreeView->selectionModel();
+        assert(pSelectionModel);
+        const QModelIndexList aSelectedIndexes = pSelectionModel->selectedIndexes();
+        if (aSelectedIndexes.empty())
+            return;
+
+        sText = toOUString(m_pModel->itemFromIndex(aSelectedIndexes.first())->text());
+    });
+
+    return sText;
 }
 
 OUString QtInstanceTreeView::get_selected_id() const
 {
-    assert(false && "Not implemented yet");
-    return OUString();
+    SolarMutexGuard g;
+
+    OUString sId;
+    GetQtInstance().RunInMainThread([&] {
+        QItemSelectionModel* pSelectionModel = m_pTreeView->selectionModel();
+        assert(pSelectionModel);
+        const QModelIndexList aSelectedIndexes = pSelectionModel->selectedIndexes();
+        if (aSelectedIndexes.empty())
+            return;
+
+        QVariant aIdData = aSelectedIndexes.first().data(ROLE_ID);
+        if (aIdData.canConvert<QString>())
+            sId = toOUString(aIdData.toString());
+    });
+
+    return sId;
 }
 
 void QtInstanceTreeView::enable_toggle_buttons(weld::ColumnToggleType)
