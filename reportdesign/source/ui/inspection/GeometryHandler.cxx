@@ -371,7 +371,7 @@ uno::Any SAL_CALL GeometryHandler::getPropertyValue(const OUString & PropertyNam
                         break;
                     case USER_DEF_FUNCTION:
                         if ( !sDataField.isEmpty() && PROPERTY_ID_FORMULALIST == nId )
-                            aPropertyValue = aDataField;
+                            aPropertyValue = std::move(aDataField);
                         break;
                     case COUNTER:
                         if ( PROPERTY_ID_SCOPE == nId && impl_isCounterFunction_throw(sDataField,m_sScope) )

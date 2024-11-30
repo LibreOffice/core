@@ -759,8 +759,7 @@ void transferProperties(
         {
             rCurrValue.Name   = rCurrProp.Name;
             rCurrValue.Handle = rCurrProp.Handle;
-            rCurrValue.Value  = aValue;
-//          rCurrValue.State  =
+            rCurrValue.Value  = std::move(aValue);
 
             nWritePos++;
         }

@@ -1783,13 +1783,11 @@ SfxDocumentMetaData::getDocumentStatistics()
         css::beans::NamedValue stat;
         stat.Name = OUString::createFromAscii(s_stdStats[i]);
         sal_Int32 val;
-        css::uno::Any any;
         if (!::sax::Converter::convertNumber(val, text, 0) || (val < 0)) {
             val = 0;
             SAL_WARN("sfx.doc", "Invalid number: " << text);
         }
-        any <<= val;
-        stat.Value = any;
+        stat.Value <<= val;
         stats.push_back(stat);
     }
 

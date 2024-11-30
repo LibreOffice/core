@@ -45,7 +45,7 @@ void DatabaseImportDescriptor::testDatabaseImportDescriptorProperties()
             CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsgGet.getStr(), u""_ustr, aValue);
 
             aNewValue <<= u"New"_ustr;
-            rPropValue.Value = aNewValue;
+            rPropValue.Value = std::move(aNewValue);
 
             aOldValue = rPropValue.Value;
             aOldValue >>= aValue;
@@ -63,7 +63,7 @@ void DatabaseImportDescriptor::testDatabaseImportDescriptorProperties()
             CPPUNIT_ASSERT_MESSAGE(aMsgGet.getStr(), !aValue);
 
             aNewValue <<= true;
-            rPropValue.Value = aNewValue;
+            rPropValue.Value = std::move(aNewValue);
 
             aOldValue = rPropValue.Value;
             aOldValue >>= aValue;

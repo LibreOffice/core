@@ -1495,7 +1495,7 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr, bool bCursor
                         aProperties.realloc( nCount + 1 );
                         auto pProperties = aProperties.getArray();
                         pProperties[ nCount ].Name = pEntry->aName;
-                        pProperties[ nCount ].Value = aVal;
+                        pProperties[ nCount ].Value = std::move(aVal);
                         ++nCount;
                     }
                 }

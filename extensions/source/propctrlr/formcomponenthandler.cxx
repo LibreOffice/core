@@ -358,7 +358,7 @@ namespace pcr
                             OUString aValueStr;
                             _rValue >>= aValueStr;
                             xStringResourceManager->setString( aPureIdStr, aValueStr );
-                            aValue = aPropertyValue;    // set value to force modified
+                            aValue = std::move(aPropertyValue);    // set value to force modified
                         }
                     }
                     // StringItemList?

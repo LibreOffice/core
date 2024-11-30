@@ -2905,12 +2905,10 @@ void SAL_CALL SlideshowImpl::setUsePen( sal_Bool bMouseAsPen )
     try
     {
         // For Pencolor;
-        Any aValue;
-        if( mbUsePen )
-            aValue <<= mnUserPaintColor;
         beans::PropertyValue aPenProp;
         aPenProp.Name = "UserPaintColor";
-        aPenProp.Value = aValue;
+        if( mbUsePen )
+            aPenProp.Value <<= mnUserPaintColor;
         mxShow->setProperty( aPenProp );
 
         //for StrokeWidth :

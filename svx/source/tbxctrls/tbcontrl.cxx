@@ -2001,7 +2001,7 @@ void SvxFontNameBox_Base::Select(bool bNonTravelSelect)
 
         Any a;
         pFontItem->QueryValue( a );
-        pArgs[0].Value  = a;
+        pArgs[0].Value  = std::move(a);
     }
 
     const Reference<XDispatchProvider> xProvider(m_xFrame, UNO_QUERY);

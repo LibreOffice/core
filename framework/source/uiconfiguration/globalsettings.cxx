@@ -175,7 +175,7 @@ bool GlobalSettings_Access::GetToolbarStateInfo( GlobalSettings::StateInfo eStat
             else if ( eStateInfo == GlobalSettings::STATEINFO_DOCKED )
                 a = xNameAccess->getByName( m_aPropDocked );
 
-            aValue = a;
+            aValue = std::move(a);
             return true;
         }
     }

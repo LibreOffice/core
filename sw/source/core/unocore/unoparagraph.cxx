@@ -758,7 +758,7 @@ SwXParagraph::GetPropertyValuesTolerant_Impl(
                         }
                     }
 
-                    rResult.Value  = aValue;
+                    rResult.Value  = std::move(aValue);
                     rResult.Result = beans::TolerantPropertySetResultType::SUCCESS;
 
                     nIdx++;

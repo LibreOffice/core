@@ -442,14 +442,14 @@ void FilePolicy::refresh()
                 Sequence< Any > perms( userPermissions[ userId ] );
                 sal_Int32 len = perms.getLength();
                 perms.realloc( len +1 );
-                perms.getArray()[ len ] = perm;
+                perms.getArray()[ len ] = std::move(perm);
                 userPermissions[ userId ] = std::move(perms);
             }
             else
             {
                 sal_Int32 len = defaultPermissions.getLength();
                 defaultPermissions.realloc( len +1 );
-                defaultPermissions.getArray()[ len ] = perm;
+                defaultPermissions.getArray()[ len ] = std::move(perm);
             }
 
             token = reader.assureToken(); // next permissions token

@@ -458,7 +458,7 @@ Reference< XEnumeration > SAL_CALL RandomAnimationNode::createEnumeration()
         Any aTarget( mxFirstNode->getTarget() );
         if( aTarget.hasValue() )
         {
-            maTarget = aTarget;
+            maTarget = std::move(aTarget);
             mxFirstNode.clear();
         }
     }
@@ -523,7 +523,7 @@ Reference< XAnimationNode > SAL_CALL RandomAnimationNode::appendChild( const Ref
     {
         Any aTarget( xAnimate->getTarget() );
         if( aTarget.hasValue() )
-            maTarget = aTarget;
+            maTarget = std::move(aTarget);
     }
 
     if( !maTarget.hasValue() && !mxFirstNode.is() )

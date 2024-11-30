@@ -141,7 +141,6 @@ namespace oox::ppt {
             if( maShapeTarget.mnType == XML_dgm )
                 sShapeName = maShapeTarget.msSubShapeId;
 
-            Any rTarget;
             ::oox::drawingml::ShapePtr pShape = pSlide->getShape( sShapeName );
             SAL_WARN_IF( !pShape, "oox.ppt", "failed to locate Shape" );
 
@@ -156,9 +155,10 @@ namespace oox::ppt {
                 SAL_WARN_IF( !xShape.is(), "oox.ppt", "fail to get XShape from shape" );
                 if( xShape.is() )
                 {
-                    rTarget <<= xShape;
-                    maShapeTarget.convert(rTarget, nSubType);
-                    aTarget = rTarget;
+                    Any aTmpTarget;
+                    aTmpTarget <<= xShape;
+                    maShapeTarget.convert(aTmpTarget, nSubType);
+                    aTarget = std::move(aTmpTarget);
                 }
             }
             break;

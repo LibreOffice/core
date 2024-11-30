@@ -1944,7 +1944,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                                                         rName, rValue.Value );
 
                                 aEvent.PropertyName = rName;
-                                aEvent.OldValue     = aOldValue;
+                                aEvent.OldValue     = std::move(aOldValue);
                                 aEvent.NewValue     = rValue.Value;
 
                                 aChanges.getArray()[ nChanged ] = aEvent;

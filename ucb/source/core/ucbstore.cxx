@@ -1105,7 +1105,7 @@ Reference< XPropertySetInfo > SAL_CALL PersistentPropertySet::getPropertySetInfo
 
 // virtual
 void SAL_CALL PersistentPropertySet::setPropertyValue( const OUString& aPropertyName,
-                                                       const Any& aValue )
+                                                       const Any& rValue )
 {
     std::unique_lock aCGuard(m_aMutex);
 
@@ -1136,13 +1136,13 @@ void SAL_CALL PersistentPropertySet::setPropertyValue( const OUString& aProperty
                         = xRootHierNameAccess->getByHierarchicalName(
                                                                 aValueName );
                     // Check value type.
-                    if ( aOldValue.getValueType() != aValue.getValueType() )
+                    if ( aOldValue.getValueType() != rValue.getValueType() )
                     {
                         throw IllegalArgumentException();
                     }
 
                     // Write value
-                    xNameReplace->replaceByName( u"Value"_ustr, aValue );
+                    xNameReplace->replaceByName( u"Value"_ustr, rValue );
 
                     // Write state ( Now it is a directly set value )
                     xNameReplace->replaceByName(
@@ -1167,8 +1167,8 @@ void SAL_CALL PersistentPropertySet::setPropertyValue( const OUString& aProperty
                         aEvt.PropertyName   = aPropertyName;
                         aEvt.PropertyHandle = nHandle;
                         aEvt.Further        = false;
-                        aEvt.OldValue       = aOldValue;
-                        aEvt.NewValue       = aValue;
+                        aEvt.OldValue       = std::move(aOldValue);
+                        aEvt.NewValue       = rValue;
 
                         notifyPropertyChangeEvent( aCGuard, aEvt );
                     }

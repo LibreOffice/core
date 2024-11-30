@@ -229,10 +229,10 @@ void SQLExceptionInfo::append( TYPE _eType, const OUString& _rErrorMessage, cons
 
     // append
     if (pLastException)
-        pLastException->NextException = aAppend;
+        pLastException->NextException = std::move(aAppend);
     else
     {
-        m_aContent = aAppend;
+        m_aContent = std::move(aAppend);
         m_eType = _eType;
     }
 }

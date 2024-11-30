@@ -812,7 +812,7 @@ void SvXMLUnitConverter::convertPropertySet(uno::Sequence<beans::PropertyValue>&
 
             beans::PropertyValue aValue;
             aValue.Name = rProp.Name;
-            aValue.Value = aPropertyValue;
+            aValue.Value = std::move(aPropertyValue);
             aPropsVec.push_back(aValue);
         }
         rProps = comphelper::containerToSequence(aPropsVec);

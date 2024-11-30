@@ -2162,7 +2162,7 @@ void AnimationImporter::importAnimateKeyPoints( const Atom* pAtom, const Referen
                         if (importAttributeValue(pValue, aValue2) && aFormula.isEmpty())
                             aValue2 >>= aFormula;
                     }
-                    aValuesRange[nKeyTime] = aValue1;
+                    aValuesRange[nKeyTime] = std::move(aValue1);
                 }
             }
         }
@@ -2599,7 +2599,7 @@ void AnimationImporter::importPropertySetContainer( const Atom* pAtom, PropertyS
         {
             Any aAny;
             (void)importAttributeValue( pChildAtom, aAny );
-            rSet.maProperties[ pChildAtom->getInstance() ] = aAny;
+            rSet.maProperties[ pChildAtom->getInstance() ] = std::move(aAny);
         }
         else
         {

@@ -4176,7 +4176,7 @@ uno::Sequence< uno::Any > SwXAutoStyle::GetPropertyValues_Impl(
         }
 
         // add value
-        pValues[i] = aTarget;
+        pValues[i] = std::move(aTarget);
     }
 
     return aRet;

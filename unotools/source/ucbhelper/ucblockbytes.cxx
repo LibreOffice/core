@@ -605,7 +605,7 @@ void SAL_CALL Moderator::run()
     {
         salhelper::ConditionModifier aMod(m_aRes);
         m_aResultType = aResultType;
-        m_aResult = aResult;
+        m_aResult = std::move(aResult);
         m_nIOErrorCode = nIOErrorCode;
     }
 }

@@ -825,7 +825,7 @@ void SfxDispatchController_Impl::addStatusListener(const css::uno::Reference< cs
     if ( bVisible )
     {
         aEvent.IsEnabled  = eState != SfxItemState::DISABLED;
-        aEvent.State      = aState;
+        aEvent.State      = std::move(aState);
     }
     else
     {
@@ -915,7 +915,7 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     aEvent.Source = static_cast<css::frame::XDispatch*>(pDispatch);
     aEvent.IsEnabled = eState != SfxItemState::DISABLED;
     aEvent.Requery = false;
-    aEvent.State = aState;
+    aEvent.State = std::move(aState);
 
     if (pDispatcher && pDispatcher->GetFrame())
     {

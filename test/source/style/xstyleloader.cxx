@@ -73,9 +73,7 @@ void XStyleLoader::testLoadStylesFromStream()
     aOptions.realloc(nLength + 1);
     beans::PropertyValue aInputStream;
     aInputStream.Name = "InputStream";
-    uno::Any aTmp;
-    aTmp <<= xInputStream;
-    aInputStream.Value = aTmp;
+    aInputStream.Value <<= xInputStream;
     aOptions.getArray()[nLength] = std::move(aInputStream);
 
     xStyleLoader->loadStylesFromURL(u"private:stream"_ustr, aOptions);

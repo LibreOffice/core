@@ -1617,7 +1617,7 @@ bool LngSvcMgr::SaveCfgSvcs( std::u16string_view rServiceName )
             DBG_ASSERT( aCfgAny.hasValue(), "missing value for 'Any' type" );
 
             OUString aCfgLocaleStr( LanguageTag::convertToBcp47( rLocale));
-            pValue->Value = aCfgAny;
+            pValue->Value = std::move(aCfgAny);
             pValue->Name  = aNodeName + "/" + aCfgLocaleStr;
             pValue++;
         }

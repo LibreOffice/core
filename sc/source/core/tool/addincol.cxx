@@ -1497,7 +1497,7 @@ void ScUnoAddInCall::ExecuteCall()
         uno::Any* pDest = aRealArgs.getArray();
 
         pDest = std::copy_n(std::cbegin(aArgs), nCallPos, pDest);
-        *pDest = aCallerAny;
+        *pDest = std::move(aCallerAny);
         std::copy(std::next(std::cbegin(aArgs), nCallPos), std::cend(aArgs), std::next(pDest));
 
         ExecuteCallWithArgs( aRealArgs );

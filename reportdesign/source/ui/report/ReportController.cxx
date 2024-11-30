@@ -4072,7 +4072,7 @@ void OReportController::impl_fillState_nothrow(const OUString& _sProperty,dbaui:
             uno::Any aTemp2 = xProp->getPropertyValue(_sProperty);
             if ( aIter == aSelection.begin() )
             {
-                aTemp = aTemp2;
+                aTemp = std::move(aTemp2);
             }
             else if ( aTemp != aTemp2 )
                 break;
@@ -4083,7 +4083,7 @@ void OReportController::impl_fillState_nothrow(const OUString& _sProperty,dbaui:
         }
     }
     if ( aIter == aSelection.end() )
-        _rState.aValue = aTemp;
+        _rState.aValue = std::move(aTemp);
 }
 
 void OReportController::impl_zoom_nothrow()

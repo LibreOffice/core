@@ -146,7 +146,7 @@ bool ONumericModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
                 return false;
             }
         }
-        m_aSaveValue = aControlValue;
+        m_aSaveValue = std::move(aControlValue);
     }
     return true;
 }

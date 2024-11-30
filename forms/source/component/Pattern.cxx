@@ -152,7 +152,7 @@ bool OPatternModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
             return false;
     }
 
-    m_aLastKnownValue = aNewValue;
+    m_aLastKnownValue = std::move(aNewValue);
 
     return true;
 }

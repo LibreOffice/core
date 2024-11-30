@@ -2044,7 +2044,7 @@ SfxItemState SfxDispatcher::QueryState( sal_uInt16 nSID, css::uno::Any& rAny )
                     nSubId |= CONVERT_TWIPS;
                 aItem.getItem()->QueryValue( aState, static_cast<sal_uInt8>(nSubId) );
             }
-            rAny = aState;
+            rAny = std::move(aState);
 
             return SfxItemState::DEFAULT;
         }

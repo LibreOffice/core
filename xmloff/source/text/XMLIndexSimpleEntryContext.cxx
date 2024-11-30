@@ -100,7 +100,6 @@ void XMLIndexSimpleEntryContext::FillPropertyValues(
     // directly into the slots. Subclasses will have to know they can
     // only use slot so-and-so.
 
-    Any aAny;
     auto pValues = rValues.getArray();
 
     // token type
@@ -111,10 +110,9 @@ void XMLIndexSimpleEntryContext::FillPropertyValues(
     if (m_bCharStyleNameOK)
     {
         pValues[1].Name = "CharacterStyleName";
-        aAny <<= GetImport().GetStyleDisplayName(
+        pValues[1].Value <<= GetImport().GetStyleDisplayName(
                                     XmlStyleFamily::TEXT_TEXT,
                                     m_sCharStyleName );
-        pValues[1].Value = aAny;
     }
 
 }

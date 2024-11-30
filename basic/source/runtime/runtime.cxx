@@ -4062,7 +4062,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                                         Any aUnoAny = pUnoObj->getUnoAny();
 
                                         if( aUnoAny.getValueTypeClass() == TypeClass_INTERFACE )
-                                            x = aUnoAny;
+                                            x = std::move(aUnoAny);
                                         pElem = pDflt;
                                     }
                                 }

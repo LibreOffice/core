@@ -746,7 +746,7 @@ bool OComboBoxModel::commitControlValueToDbColumn( bool _bPostReset )
             }
         }
 
-        m_aLastKnownValue = aNewValue;
+        m_aLastKnownValue = std::move(aNewValue);
     }
 
     // add the new value to the list

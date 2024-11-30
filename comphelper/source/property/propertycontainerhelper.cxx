@@ -251,7 +251,7 @@ bool OPropertyContainerHelper::convertFastPropertyValue(
                 {
                     // we were able to query the given XInterface-derivee for the interface
                     // which is required for this property
-                    aNewRequestedValue = aProperlyTyped;
+                    aNewRequestedValue = std::move(aProperlyTyped);
                 }
             }
 
@@ -292,7 +292,7 @@ bool OPropertyContainerHelper::convertFastPropertyValue(
             if (bModified)
             {
                 _rOldValue = *pPropContainer;
-                _rConvertedValue = aNewRequestedValue;
+                _rConvertedValue = std::move(aNewRequestedValue);
             }
         }
         break;

@@ -1221,7 +1221,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                                                 rValue.Name, rValue.Value );
 
                         aEvent.PropertyName = rValue.Name;
-                        aEvent.OldValue     = aOldValue;
+                        aEvent.OldValue     = std::move(aOldValue);
                         aEvent.NewValue     = rValue.Value;
 
                         aChanges.getArray()[ nChanged ] = aEvent;

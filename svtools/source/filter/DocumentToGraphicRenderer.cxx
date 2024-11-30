@@ -90,7 +90,7 @@ DocumentToGraphicRenderer::DocumentToGraphicRenderer( const Reference<XComponent
                  * So disable the selection already here. The current page
                  * the cursor is on is rendered. */
                 if (!isWriter())
-                    maSelection = aViewSelection;
+                    maSelection = std::move(aViewSelection);
             }
         }
     }

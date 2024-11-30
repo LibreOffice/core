@@ -749,7 +749,7 @@ void OInterfaceContainer::approveNewElement( const Reference< XPropertySet >& _r
     {
         _pElement->xPropertySet = _rxObject;
         _pElement->xChild = std::move(xChild);
-        _pElement->aElementTypeInterface = aCorrectType;
+        _pElement->aElementTypeInterface = std::move(aCorrectType);
         _pElement->xInterface = Reference< XInterface >( _rxObject, UNO_QUERY );    // normalized XInterface
     }
 }

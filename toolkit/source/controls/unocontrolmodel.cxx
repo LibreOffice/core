@@ -967,7 +967,7 @@ void UnoControlModel::read( const css::uno::Reference< css::io::XObjectInputStre
         if ( maData.find( nPropId ) != maData.end() )
         {
             aProps.getArray()[i] = GetPropertyName( nPropId );
-            aValues.getArray()[i] = aValue;
+            aValues.getArray()[i] = std::move(aValue);
         }
         else
         {

@@ -89,7 +89,7 @@ void XMLFontStyleContextFontFace::SetAttribute( sal_Int32 nElement,
     case XML_ELEMENT(STYLE, XML_FONT_CHARSET):
         if( GetStyles()->GetEncodingHdl().importXML( rValue, aAny,
                                                       rUnitConv ) )
-            aEnc = aAny;
+            aEnc = std::move(aAny);
         break;
     default:
         SvXMLStyleContext::SetAttribute( nElement, rValue );

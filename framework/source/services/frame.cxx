@@ -1864,7 +1864,7 @@ css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL XFrameImpl::getProp
 }
 
 void SAL_CALL XFrameImpl::setPropertyValue(const OUString& sProperty,
-                                                  const css::uno::Any&   aValue   )
+                                           const css::uno::Any& rValue)
 {
     // TODO look for e.g. readonly props and reject setProp() call!
 
@@ -1881,7 +1881,7 @@ void SAL_CALL XFrameImpl::setPropertyValue(const OUString& sProperty,
 
     css::uno::Any aCurrentValue = impl_getPropertyValue(aPropInfo.Handle);
 
-    bool bWillBeChanged = (aCurrentValue != aValue);
+    bool bWillBeChanged = (aCurrentValue != rValue);
     if (! bWillBeChanged)
         return;
 
@@ -1889,14 +1889,14 @@ void SAL_CALL XFrameImpl::setPropertyValue(const OUString& sProperty,
     aEvent.PropertyName   = aPropInfo.Name;
     aEvent.Further        = false;
     aEvent.PropertyHandle = aPropInfo.Handle;
-    aEvent.OldValue       = aCurrentValue;
-    aEvent.NewValue       = aValue;
+    aEvent.OldValue       = std::move(aCurrentValue);
+    aEvent.NewValue       = rValue;
     aEvent.Source = m_xBroadcaster;
 
     if (impl_existsVeto(aEvent))
         throw css::beans::PropertyVetoException();
 
-    impl_setPropertyValue(aPropInfo.Handle, aValue);
+    impl_setPropertyValue(aPropInfo.Handle, rValue);
 
     impl_notifyChangeListener(aEvent);
 }

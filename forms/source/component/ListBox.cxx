@@ -428,10 +428,10 @@ namespace frm
         case PROPERTY_ID_SELECT_VALUE :
         {
             // Any from connectivity::ORowSetValue
-            Any _rCurrentValue = getCurrentSingleValue();
-            if (_rCurrentValue != _rValue)
+            Any aCurrentValue = getCurrentSingleValue();
+            if (aCurrentValue != _rValue)
             {
-                _rOldValue = _rCurrentValue;
+                _rOldValue = std::move(aCurrentValue);
                 _rConvertedValue = _rValue;
                 bModified = true;
             }
@@ -1943,7 +1943,7 @@ namespace frm
 
                     if (bModified)
                     {
-                        m_aCurrentSelection = aValue;
+                        m_aCurrentSelection = std::move(aValue);
                         m_aChangeIdle.Start();
                     }
                 }

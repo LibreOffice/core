@@ -264,7 +264,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
     css::frame::DispatchResultEvent aEvent;
 
     aEvent.Source = getXWeak();
-    aEvent.Result = invokeResult;
+    aEvent.Result = std::move(invokeResult);
     aEvent.State = aState;
 
     try

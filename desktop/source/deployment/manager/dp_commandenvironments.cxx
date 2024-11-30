@@ -224,11 +224,11 @@ void SilentCheckPrerequisitesCommandEnv::handle(
     else if ((request >>= platformExc)
              || (request >>= depExc))
     {
-        m_Exception = request;
+        m_Exception = std::move(request);
     }
     else
     {
-        m_UnknownException = request;
+        m_UnknownException = std::move(request);
     }
 }
 

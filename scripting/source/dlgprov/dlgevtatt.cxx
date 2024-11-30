@@ -584,7 +584,7 @@ namespace dlgprov
                         Reference< XWindow > xWindow( m_xControl, UNO_QUERY );
                         pArgs[0] <<= xWindow;
                     }
-                    pArgs[1] = aEventObject;
+                    pArgs[1] = std::move(aEventObject);
                     aRet = xMethod->invoke( aHandlerObject, Args );
                     bHandled = true;
                 }
@@ -598,7 +598,7 @@ namespace dlgprov
         if( bHandled )
         {
             if( pRet )
-                *pRet = aRet;
+                *pRet = std::move(aRet);
         }
         else
         {

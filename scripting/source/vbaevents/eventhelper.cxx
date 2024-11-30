@@ -475,7 +475,7 @@ ReadOnlyEventsNameContainer::ReadOnlyEventsNameContainer( const Sequence< OUStri
         if (  eventMethodToDescriptor( rSrc, evtDesc, sCodeName ) )
         {
             aDesc <<= evtDesc;
-            m_hEvents[ rSrc ] = aDesc;
+            m_hEvents[ rSrc ] = std::move(aDesc);
         }
     }
 }

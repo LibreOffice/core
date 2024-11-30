@@ -740,7 +740,7 @@ Any ConfigurationAccess_WindowState::impl_insertCacheAndReturnSequence( const OU
                 // put value into the return sequence
                 PropertyValue pv;
                 pv.Name  = m_aPropArray[i];
-                pv.Value = a;
+                pv.Value = std::move(a);
                 aPropVec.push_back(pv);
             }
         }

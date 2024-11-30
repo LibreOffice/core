@@ -113,7 +113,7 @@ void PropertyMapper::setMappedProperties(
             {
                 //do not set empty anys because of performance (otherwise SdrAttrObj::ItemChange will take much longer)
                 pNames[nN]  = rTarget;
-                pValues[nN] = aAny;
+                pValues[nN] = std::move(aAny);
                 ++nN;
             }
         }

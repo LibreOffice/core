@@ -366,7 +366,7 @@ void SchXMLPlotAreaContext::startFastElement (sal_Int32 /*nElement*/,
                     }
                 }
             }
-            mrSeriesDefaultsAndStyles.maDeepDefault = aDeepProperty;
+            mrSeriesDefaultsAndStyles.maDeepDefault = std::move(aDeepProperty);
 
             xProp->getPropertyValue(u"NumberOfLines"_ustr) >>= mnNumOfLinesProp;
             xProp->getPropertyValue(u"Volume"_ustr) >>= mbStockHasVolume;

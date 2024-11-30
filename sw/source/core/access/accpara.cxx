@@ -1513,7 +1513,7 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
 
                 PropertyValue rPropVal;
                 rPropVal.Name = pEntry->aName;
-                rPropVal.Value = aVal;
+                rPropVal.Value = std::move(aVal);
                 rPropVal.Handle = -1;
                 rPropVal.State = beans::PropertyState_DEFAULT_VALUE;
 
@@ -1705,7 +1705,7 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
 
                     PropertyValue rPropVal;
                     rPropVal.Name = pEntry->aName;
-                    rPropVal.Value = aVal;
+                    rPropVal.Value = std::move(aVal);
                     rPropVal.Handle = -1;
                     rPropVal.State = PropertyState_DIRECT_VALUE;
 
@@ -1809,7 +1809,7 @@ void SwAccessibleParagraph::_getSupplementalAttributesImpl(
 
                 PropertyValue rPropVal;
                 rPropVal.Name = rEntry.aName;
-                rPropVal.Value = aVal;
+                rPropVal.Value = std::move(aVal);
                 rPropVal.Handle = -1;
                 rPropVal.State = beans::PropertyState_DEFAULT_VALUE;
 

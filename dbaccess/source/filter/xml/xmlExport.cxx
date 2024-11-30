@@ -1223,7 +1223,7 @@ void ODBExport::GetConfigurationSettings(Sequence<PropertyValue>& aProps)
             aProps.realloc(nLength + 1);
             auto pProps = aProps.getArray();
             pProps[nLength].Name = "layout-settings";
-            pProps[nLength].Value = aValue;
+            pProps[nLength].Value = std::move(aValue);
         }
     }
     catch(const Exception&)

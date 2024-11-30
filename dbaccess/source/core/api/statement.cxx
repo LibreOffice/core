@@ -230,7 +230,7 @@ sal_Bool OStatementBase::convertFastPropertyValue(Any & rConvertedValue, Any & r
                 Any aCurrentValue = m_xAggregateAsSet->getPropertyValue( sPropName );
                 if ( aCurrentValue != rValue )
                 {
-                    rOldValue = aCurrentValue;
+                    rOldValue = std::move(aCurrentValue);
                     rConvertedValue = rValue;
                     bModified = true;
                 }

@@ -235,14 +235,12 @@ namespace toolkit
         }
     }
 
-
     void UnoControlFormattedFieldModel::impl_updateCachedFormatKey_nothrow(std::unique_lock<std::mutex>& rGuard)
     {
         Any aFormatKey;
         getFastPropertyValue( rGuard, aFormatKey, BASEPROPERTY_FORMATKEY );
-        m_aCachedFormat = aFormatKey;
+        m_aCachedFormat = std::move(aFormatKey);
     }
-
 
     void UnoControlFormattedFieldModel::dispose(  )
     {

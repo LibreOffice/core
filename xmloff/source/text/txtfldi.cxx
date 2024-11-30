@@ -2967,7 +2967,6 @@ void XMLBibliographyFieldImportContext::startFastElement(
             auto nToken = aIter.getToken() & TOKEN_MASK;
             PropertyValue aValue;
             aValue.Name = MapBibliographyFieldName(nToken);
-            Any aAny;
 
             // special treatment for bibliography type
             // biblio vs bibilio: #96658#; also read old documents
@@ -2979,8 +2978,7 @@ void XMLBibliographyFieldImportContext::startFastElement(
                     nTmp, aIter.toView(),
                     aBibliographyDataTypeMap))
                 {
-                    aAny <<= static_cast<sal_Int16>(nTmp);
-                    aValue.Value = aAny;
+                    aValue.Value <<= static_cast<sal_Int16>(nTmp);
 
                     aValues.push_back(aValue);
                 }
@@ -2992,8 +2990,7 @@ void XMLBibliographyFieldImportContext::startFastElement(
                 {
                     aStringValue = GetImport().GetAbsoluteReference(aStringValue);
                 }
-                aAny <<= aStringValue;
-                aValue.Value = aAny;
+                aValue.Value <<= aStringValue;
 
                 aValues.push_back(aValue);
             }

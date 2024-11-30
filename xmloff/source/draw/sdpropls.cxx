@@ -994,7 +994,7 @@ public:
         if (!rValue.hasValue() ||
             rValue.get<drawing::TextFitToSizeType>() < any.get<drawing::TextFitToSizeType>())
         {
-            rValue = any;
+            rValue = std::move(any);
         }
         return true;
     }
