@@ -403,9 +403,6 @@ PageCache_createInstance (
     sal_uInt16                           nPageSize)
 {
     rxCache = new PageCache (nPageSize);
-    if (!rxCache.is())
-        return store_E_OutOfMemory;
-
     return store_E_None;
 }
 

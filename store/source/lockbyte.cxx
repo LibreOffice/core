@@ -852,8 +852,6 @@ FileLockBytes_createInstance (
         if (xMapping.get().initialize (xFile.get().m_handle) == osl_File_E_None)
         {
             rxLockBytes = new MappedLockBytes (xMapping.get());
-            if (!rxLockBytes.is())
-                return store_E_OutOfMemory;
             (void) xFile.release();
             (void) xMapping.release();
         }
@@ -861,8 +859,6 @@ FileLockBytes_createInstance (
     if (!rxLockBytes.is())
     {
         rxLockBytes = new FileLockBytes (xFile.get());
-        if (!rxLockBytes.is())
-            return store_E_OutOfMemory;
         (void) xFile.release();
     }
 
@@ -875,9 +871,6 @@ MemoryLockBytes_createInstance (
 )
 {
     rxLockBytes = new MemoryLockBytes();
-    if (!rxLockBytes.is())
-        return store_E_OutOfMemory;
-
     return store_E_None;
 }
 

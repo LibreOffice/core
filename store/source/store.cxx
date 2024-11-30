@@ -103,8 +103,6 @@ storeError store_createMemoryFile (
     OSL_ASSERT(xLockBytes.is());
 
     Reference<OStorePageManager> xManager (new OStorePageManager());
-    if (!xManager.is())
-        return store_E_OutOfMemory;
 
     eErrCode = xManager->initialize (
         &*xLockBytes, storeAccessMode::Create, nPageSize);
@@ -138,9 +136,6 @@ storeError store_openFile (
     OSL_ASSERT(xLockBytes.is());
 
     Reference<OStorePageManager> xManager (new OStorePageManager());
-    if (!xManager.is())
-        return store_E_OutOfMemory;
-
     eErrCode = xManager->initialize (
         &*xLockBytes, eAccessMode, nPageSize);
     if (eErrCode != store_E_None)
@@ -202,8 +197,6 @@ storeError store_openDirectory (
         return store_E_InvalidParameter;
 
     Reference<OStoreDirectory_Impl> xDirectory (new OStoreDirectory_Impl());
-    if (!xDirectory.is())
-        return store_E_OutOfMemory;
 
     OString aPath (pPath->buffer, pPath->length, RTL_TEXTENCODING_UTF8);
     OString aName (pName->buffer, pName->length, RTL_TEXTENCODING_UTF8);
@@ -282,8 +275,6 @@ storeError store_openStream (
         return store_E_InvalidParameter;
 
     Reference<OStoreLockBytes> xLockBytes (new OStoreLockBytes());
-    if (!xLockBytes.is())
-        return store_E_OutOfMemory;
 
     OString aPath (pPath->buffer, pPath->length, RTL_TEXTENCODING_UTF8);
     OString aName (pName->buffer, pName->length, RTL_TEXTENCODING_UTF8);

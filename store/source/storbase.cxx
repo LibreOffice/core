@@ -110,9 +110,6 @@ storeError
 PageData::Allocator::createInstance (rtl::Reference< PageData::Allocator > & rxAllocator, sal_uInt16 nPageSize)
 {
     rtl::Reference< PageData::Allocator_Impl > xAllocator (new PageData::Allocator_Impl());
-    if (!xAllocator.is())
-        return store_E_OutOfMemory;
-
     rxAllocator = &*xAllocator;
     return xAllocator->initialize (nPageSize);
 }
