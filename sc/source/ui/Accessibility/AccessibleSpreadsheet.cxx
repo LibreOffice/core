@@ -685,13 +685,11 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                         OUString valStr(pScDoc->GetString(aNewCell.Col(),aNewCell.Row(),aNewCell.Tab()));
                         if(mpAccCell.is() && m_strCurCellValue != valStr)
                         {
-                            uno::Any aOldValue;
-                            uno::Any aNewValue;
-                            (void)comphelper::OCommonAccessibleText::implInitTextChangedEvent(m_strCurCellValue, valStr, aOldValue, aNewValue);
                             AccessibleEventObject aTextChangedEvent;
+                            (void)comphelper::OCommonAccessibleText::implInitTextChangedEvent(m_strCurCellValue, valStr,
+                                                                                              aTextChangedEvent.OldValue,
+                                                                                              aTextChangedEvent.NewValue);
                             aTextChangedEvent.EventId = AccessibleEventId::TEXT_CHANGED;
-                            aTextChangedEvent.OldValue = aOldValue;
-                            aTextChangedEvent.NewValue = aNewValue;
                             mpAccCell->CommitChange(aTextChangedEvent);
 
                             if (pScDoc->HasValueData(maActiveCell))
@@ -788,13 +786,11 @@ void ScAccessibleSpreadsheet::CommitFocusCell(const ScAddress &aNewCell)
         OUString valStr(pScDoc->GetString(aOldActiveCell.Col(),aOldActiveCell.Row(),aOldActiveCell.Tab()));
         if(m_strCurCellValue != valStr)
         {
-            uno::Any aOldValue;
-            uno::Any aNewValue;
-            (void)comphelper::OCommonAccessibleText::implInitTextChangedEvent(m_strCurCellValue, valStr, aOldValue, aNewValue);
             AccessibleEventObject aTextChangedEvent;
+            (void)comphelper::OCommonAccessibleText::implInitTextChangedEvent(m_strCurCellValue, valStr,
+                                                                              aTextChangedEvent.OldValue,
+                                                                              aTextChangedEvent.NewValue);
             aTextChangedEvent.EventId = AccessibleEventId::TEXT_CHANGED;
-            aTextChangedEvent.OldValue = aOldValue;
-            aTextChangedEvent.NewValue = aNewValue;
             mpAccCell->CommitChange(aTextChangedEvent);
 
             if (pScDoc->HasValueData(maActiveCell))
