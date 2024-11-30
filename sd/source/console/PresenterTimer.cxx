@@ -27,6 +27,7 @@
 #include <osl/conditn.hxx>
 
 #include <algorithm>
+#include <atomic>
 #include <memory>
 #include <mutex>
 #include <set>
@@ -51,7 +52,7 @@ public:
     TimeValue maDueTime;
     const sal_Int64 mnRepeatInterval;
     const sal_Int32 mnTaskId;
-    bool mbIsCanceled;
+    std::atomic<bool> mbIsCanceled;
 };
 
 typedef std::shared_ptr<TimerTask> SharedTimerTask;
