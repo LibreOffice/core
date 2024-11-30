@@ -67,6 +67,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile)
         u"modules/swriter/ui/footendnotedialog.ui"_ustr,
         u"modules/swriter/ui/footnotepage.ui"_ustr,
         u"modules/swriter/ui/inforeadonlydialog.ui"_ustr,
+        u"modules/swriter/ui/insertbreak.ui"_ustr,
         u"modules/swriter/ui/renameobjectdialog.ui"_ustr,
         u"modules/swriter/ui/splittable.ui"_ustr,
         u"modules/swriter/ui/wordcount.ui"_ustr,
