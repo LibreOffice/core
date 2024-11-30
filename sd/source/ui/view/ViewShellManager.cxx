@@ -126,7 +126,7 @@ public:
     /** Remove all shells from the SFX stack above and including the given
         shell.
     */
-    void TakeShellsFromStack (const SfxShell* pShell);
+    void TakeShellsFromStack (const SfxShell& rShell);
 
     class UpdateLock
     {
@@ -466,12 +466,14 @@ void ViewShellManager::Implementation::DeactivateViewShell (const ViewShell& rSh
     if (iShell == maActiveViewShells.end())
         return;
 
+    // iShell points to a ShellDescriptor with mpShell pointing to rShell
+
     UpdateLock aLocker (*this);
 
     ShellDescriptor aDescriptor(*iShell);
-    mrBase.GetDocShell()->Disconnect(dynamic_cast<ViewShell*>(aDescriptor.mpShell));
+    mrBase.GetDocShell()->Disconnect(&rShell);
     maActiveViewShells.erase(iShell);
-    TakeShellsFromStack(aDescriptor.mpShell);
+    TakeShellsFromStack(rShell);
 
     // Deactivate sub shells.
     SubShellList::iterator iList (maActiveSubShells.find(&rShell));
@@ -516,12 +518,14 @@ void ViewShellManager::Implementation::DeactivateShell (const SfxShell& rShell)
     if (iShell == maActiveViewShells.end())
         return;
 
+    // iShell points to a ShellDescriptor with mpShell pointing to rShell
+
     UpdateLock aLocker (*this);
 
     ShellDescriptor aDescriptor(*iShell);
-    mrBase.GetDocShell()->Disconnect(dynamic_cast<ViewShell*>(aDescriptor.mpShell));
+    mrBase.GetDocShell()->Disconnect(dynamic_cast<const ViewShell*>(&rShell));
     maActiveViewShells.erase(iShell);
-    TakeShellsFromStack(aDescriptor.mpShell);
+    TakeShellsFromStack(rShell);
 
     // Deactivate sub shells.
     SubShellList::iterator iList (maActiveSubShells.find(&rShell));
@@ -589,7 +593,7 @@ void ViewShellManager::Implementation::DeactivateSubShell (
     // Remove the sub shell from both the internal structure as well as the
     // SFX shell stack above and including the sub shell.
     rList.erase(iShell);
-    TakeShellsFromStack(pShell);
+    TakeShellsFromStack(*pShell);
 
     DestroySubShell(aDescriptor);
 }
@@ -656,7 +660,7 @@ void ViewShellManager::Implementation::MoveToTop (const SfxShell& rShell)
 
         ShellDescriptor aDescriptor(*iShell);
 
-        TakeShellsFromStack(&rShell);
+        TakeShellsFromStack(rShell);
         maActiveViewShells.erase(iShell);
 
         maActiveViewShells.insert(maActiveViewShells.begin(), aDescriptor);
@@ -834,7 +838,7 @@ void ViewShellManager::Implementation::UpdateShellStack()
 #endif
 }
 
-void ViewShellManager::Implementation::TakeShellsFromStack (const SfxShell* pShell)
+void ViewShellManager::Implementation::TakeShellsFromStack (const SfxShell& rShell)
 {
     ::osl::MutexGuard aGuard (maMutex);
 
@@ -856,17 +860,12 @@ void ViewShellManager::Implementation::TakeShellsFromStack (const SfxShell* pShe
         SfxShell* pShellOnStack = mrBase.GetSubShell(nIndex);
         if (pShellOnStack == nullptr)
         {
-            // Set pShell to NULL to indicate the following code that the
-            // shell is not on the stack.
-            pShell = nullptr;
-            break;
+            // the shell is not on the stack.
+            return;
         }
-        else if (pShellOnStack == pShell)
+        else if (pShellOnStack == &rShell)
             break;
     }
-
-    if (pShell == nullptr)
-        return;
 
     // 1. Deactivate our shells on the stack before they are removed so
     // that during the Deactivation() calls the stack is still intact.
@@ -874,7 +873,7 @@ void ViewShellManager::Implementation::TakeShellsFromStack (const SfxShell* pShe
     {
         SfxShell* pShellOnStack = mrBase.GetSubShell(nIndex);
         Deactivate(pShellOnStack);
-        if (pShellOnStack == pShell)
+        if (pShellOnStack == &rShell)
             break;
     }
 
@@ -884,7 +883,7 @@ void ViewShellManager::Implementation::TakeShellsFromStack (const SfxShell* pShe
         SfxShell* pShellOnStack = mrBase.GetSubShell(0);
         SAL_INFO("sd.view", __func__ << "removing shell " << pShellOnStack << " from stack");
         mrBase.RemoveSubShell(pShellOnStack);
-        if (pShellOnStack == pShell)
+        if (pShellOnStack == &rShell)
             break;
     }
 
