@@ -185,6 +185,8 @@ public:
     virtual rtl::Reference<SdrObject> DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
     virtual bool IsSdrOle2Obj() const final { return true; }
+
+    void SetIgnoreOLEObjectScale(bool val);
 };
 
 class SVXCORE_DLLPUBLIC SdrEmbedObjectLink final : public sfx2::SvBaseLink

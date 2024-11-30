@@ -1216,6 +1216,12 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf163483_export_math_fallback)
         auto xProps = getShapeFromPage(0, 0);
         auto xInfo = xProps->getPropertyValue(u"Model"_ustr).queryThrow<css::lang::XServiceInfo>();
         CPPUNIT_ASSERT(xInfo->supportsService(u"com.sun.star.formula.FormulaProperties"_ustr));
+
+        // tdf#164101: check that the size is imported correctly
+        css::awt::Size formulaSize = xProps.queryThrow<css::drawing::XShape>()->getSize();
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1553), formulaSize.Width);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(528), formulaSize.Height);
+
         CPPUNIT_ASSERT_THROW(getShapeFromPage(0, 1),
                              css::lang::IndexOutOfBoundsException); // Only one shape on page
     }
@@ -1229,6 +1235,12 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf163483_export_math_fallback)
         // and no shape got imported.
         auto xInfo = getShapeFromPage(0, 0).queryThrow<css::lang::XServiceInfo>();
         CPPUNIT_ASSERT(xInfo->supportsService(u"com.sun.star.drawing.CustomShape"_ustr));
+
+        css::awt::Size formulaSize = xInfo.queryThrow<css::drawing::XShape>()->getSize();
+        // The fallback image size after the roundtrip may be a bit different - allow some tolerance
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(1553), formulaSize.Width, 1);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(528), formulaSize.Height, 1);
+
         CPPUNIT_ASSERT_THROW(getShapeFromPage(0, 1),
                              css::lang::IndexOutOfBoundsException); // Only one shape on page
     }

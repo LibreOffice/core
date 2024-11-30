@@ -1504,6 +1504,16 @@ void SvxShape::_setPropertyValue( const OUString& rPropertyName, const uno::Any&
         return;
     }
 
+    // A hack to avoid taking incomplete OLE object's size into account when loading
+    // see SdXMLObjectShapeContext::createFastChildContext
+    if (rPropertyName == "IgnoreOLEObjectScale")
+    {
+        if (auto pOleObj = DynCastSdrOle2Obj(GetSdrObject()))
+            if (bool bVal; rVal >>= bVal)
+                pOleObj->SetIgnoreOLEObjectScale(bVal);
+        return;
+    }
+
     if (!pMap)
         throw beans::UnknownPropertyException( rPropertyName, getXWeak());
 

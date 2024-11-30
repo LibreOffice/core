@@ -638,6 +638,7 @@ public:
     mutable bool mbIsChart:1;
     bool mbLoadingOLEObjectFailed:1; // New local var to avoid repeated loading if load of OLE2 fails
     bool mbConnected:1;
+    bool mbIgnoreOLEObjectScale : 1 = false; // See SdXMLObjectShapeContext::createFastChildContext
 
     sfx2::SvBaseLink* mpObjectLink;
     OUString maLinkURL;
@@ -1948,6 +1949,8 @@ bool SdrOle2Obj::CalculateNewScaling( Fraction& aScaleWidth, Fraction& aScaleHei
     return true;
 }
 
+void SdrOle2Obj::SetIgnoreOLEObjectScale(bool val) { mpImpl->mbIgnoreOLEObjectScale = val; }
+
 bool SdrOle2Obj::AddOwnLightClient()
 {
     // The Own Light Client must be registered in object only using this method!
@@ -1956,7 +1959,7 @@ bool SdrOle2Obj::AddOwnLightClient()
     {
         Connect();
 
-        if ( mpImpl->mxObjRef.is() && mpImpl->mxLightClient.is() )
+        if (!mpImpl->mbIgnoreOLEObjectScale && mpImpl->mxObjRef.is() && mpImpl->mxLightClient.is())
         {
             Fraction aScaleWidth;
             Fraction aScaleHeight;

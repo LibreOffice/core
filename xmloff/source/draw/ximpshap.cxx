@@ -2789,8 +2789,16 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLObjectShapeContex
             {
                 xPropSet->setPropertyValue(u"CLSID"_ustr, uno::Any( maCLSID ) );
 
+                // A hack: getting the model of newly created OLE object will eventually call
+                // SdrOle2Obj::AddOwnLightClient, which will try to update scaling, using the
+                // incomplete object data. Avoid that by setting the special property.
+                xPropSet->setPropertyValue(u"IgnoreOLEObjectScale"_ustr, uno::Any(true));
+
                 uno::Reference< lang::XComponent > xComp;
                 xPropSet->getPropertyValue(u"Model"_ustr) >>= xComp;
+
+                xPropSet->setPropertyValue(u"IgnoreOLEObjectScale"_ustr, uno::Any(false));
+
                 SAL_WARN_IF( !xComp.is(), "xmloff", "no xModel for own OLE format" );
                 xEContext->SetComponent(xComp);
             }
