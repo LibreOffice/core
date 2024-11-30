@@ -52,7 +52,7 @@ void SwListShell::InitInterface_Impl()
 static void lcl_OutlineUpDownWithSubPoints( SwWrtShell& rSh, bool bMove, bool bUp )
 {
     const SwOutlineNodes::size_type nActPos = rSh.GetOutlinePos();
-    if ( !(nActPos < SwOutlineNodes::npos && rSh.IsOutlineMovable( nActPos )) )
+    if (nActPos == SwOutlineNodes::npos || !rSh.IsOutlineMovable(nActPos))
         return;
 
     rSh.Push();
