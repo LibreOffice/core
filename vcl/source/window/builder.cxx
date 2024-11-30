@@ -850,6 +850,19 @@ void VclBuilder::disposeBuilder()
 
 namespace
 {
+    inline OUString extractStringEntry(BuilderBase::stringmap& rMap, const OUString& rKey,
+                                       const OUString& rDefaultValue = OUString())
+    {
+        BuilderBase::stringmap::iterator aFind = rMap.find(rKey);
+        if (aFind != rMap.end())
+        {
+            const OUString sValue = aFind->second;
+            rMap.erase(aFind);
+            return sValue;
+        }
+        return rDefaultValue;
+    }
+
     inline bool extractBoolEntry(BuilderBase::stringmap& rMap, const OUString& rKey, bool bDefaultValue)
     {
         BuilderBase::stringmap::iterator aFind = rMap.find(rKey);
@@ -874,50 +887,22 @@ namespace
 
     OUString extractPopupMenu(VclBuilder::stringmap& rMap)
     {
-        OUString sRet;
-        VclBuilder::stringmap::iterator aFind = rMap.find(u"popup"_ustr);
-        if (aFind != rMap.end())
-        {
-            sRet = aFind->second;
-            rMap.erase(aFind);
-        }
-        return sRet;
+        return extractStringEntry(rMap, u"popup"_ustr);
     }
 
     OUString extractWidgetName(VclBuilder::stringmap& rMap)
     {
-        OUString sRet;
-        VclBuilder::stringmap::iterator aFind = rMap.find(u"name"_ustr);
-        if (aFind != rMap.end())
-        {
-            sRet = aFind->second;
-            rMap.erase(aFind);
-        }
-        return sRet;
+        return extractStringEntry(rMap, u"name"_ustr);
     }
 
     OUString extractValuePos(VclBuilder::stringmap& rMap)
     {
-        OUString sRet(u"top"_ustr);
-        VclBuilder::stringmap::iterator aFind = rMap.find(u"value-pos"_ustr);
-        if (aFind != rMap.end())
-        {
-            sRet = aFind->second;
-            rMap.erase(aFind);
-        }
-        return sRet;
+        return extractStringEntry(rMap,u"value-pos"_ustr, u"top"_ustr);
     }
 
     OUString extractTypeHint(VclBuilder::stringmap &rMap)
     {
-        OUString sRet(u"normal"_ustr);
-        VclBuilder::stringmap::iterator aFind = rMap.find(u"type-hint"_ustr);
-        if (aFind != rMap.end())
-        {
-            sRet = aFind->second;
-            rMap.erase(aFind);
-        }
-        return sRet;
+        return extractStringEntry(rMap, u"type-hint"_ustr, u"normal"_ustr);
     }
 
 #if HAVE_FEATURE_DESKTOP
@@ -983,26 +968,12 @@ namespace
 
     OUString extractLabel(VclBuilder::stringmap &rMap)
     {
-        OUString sType;
-        VclBuilder::stringmap::iterator aFind = rMap.find(u"label"_ustr);
-        if (aFind != rMap.end())
-        {
-            sType = aFind->second;
-            rMap.erase(aFind);
-        }
-        return sType;
+        return extractStringEntry(rMap, u"label"_ustr);
     }
 
     OUString extractActionName(VclBuilder::stringmap &rMap)
     {
-        OUString sActionName;
-        VclBuilder::stringmap::iterator aFind = rMap.find(u"action-name"_ustr);
-        if (aFind != rMap.end())
-        {
-            sActionName = aFind->second;
-            rMap.erase(aFind);
-        }
-        return sActionName;
+        return extractStringEntry(rMap, u"action-name"_ustr);
     }
 
     Size extractSizeRequest(VclBuilder::stringmap &rMap)
@@ -1038,14 +1009,7 @@ namespace
 
     OUString extractTitle(VclBuilder::stringmap &rMap)
     {
-        OUString sTitle;
-        VclBuilder::stringmap::iterator aFind = rMap.find(u"title"_ustr);
-        if (aFind != rMap.end())
-        {
-            sTitle = aFind->second;
-            rMap.erase(aFind);
-        }
-        return sTitle;
+        return extractStringEntry(rMap, u"title"_ustr);
     }
 
     bool extractSortIndicator(VclBuilder::stringmap &rMap)
@@ -2141,14 +2105,7 @@ namespace BuilderUtils
 
     OUString extractCustomProperty(VclBuilder::stringmap &rMap)
     {
-        OUString sCustomProperty;
-        VclBuilder::stringmap::iterator aFind = rMap.find(u"customproperty"_ustr);
-        if (aFind != rMap.end())
-        {
-            sCustomProperty = aFind->second;
-            rMap.erase(aFind);
-        }
-        return sCustomProperty;
+        return extractStringEntry(rMap, u"customproperty"_ustr);
     }
 
     void ensureDefaultWidthChars(VclBuilder::stringmap &rMap)
