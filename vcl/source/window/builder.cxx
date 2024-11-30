@@ -850,28 +850,26 @@ void VclBuilder::disposeBuilder()
 
 namespace
 {
-    bool extractHasFrame(VclBuilder::stringmap& rMap)
+    inline bool extractBoolEntry(BuilderBase::stringmap& rMap, const OUString& rKey, bool bDefaultValue)
     {
-        bool bHasFrame = true;
-        VclBuilder::stringmap::iterator aFind = rMap.find(u"has-frame"_ustr);
+        BuilderBase::stringmap::iterator aFind = rMap.find(rKey);
         if (aFind != rMap.end())
         {
-            bHasFrame = toBool(aFind->second);
+            const bool bValue = toBool(aFind->second);
             rMap.erase(aFind);
+            return bValue;
         }
-        return bHasFrame;
+        return bDefaultValue;
+    }
+
+    bool extractHasFrame(VclBuilder::stringmap& rMap)
+    {
+        return extractBoolEntry(rMap, u"has-frame"_ustr, true);
     }
 
     bool extractDrawValue(VclBuilder::stringmap& rMap)
     {
-        bool bDrawValue = true;
-        VclBuilder::stringmap::iterator aFind = rMap.find(u"draw-value"_ustr);
-        if (aFind != rMap.end())
-        {
-            bDrawValue = toBool(aFind->second);
-            rMap.erase(aFind);
-        }
-        return bDrawValue;
+        return extractBoolEntry(rMap, u"draw-value"_ustr, true);
     }
 
     OUString extractPopupMenu(VclBuilder::stringmap& rMap)
@@ -925,39 +923,18 @@ namespace
 #if HAVE_FEATURE_DESKTOP
     bool extractModal(VclBuilder::stringmap &rMap)
     {
-        bool bModal = false;
-        VclBuilder::stringmap::iterator aFind = rMap.find(u"modal"_ustr);
-        if (aFind != rMap.end())
-        {
-            bModal = toBool(aFind->second);
-            rMap.erase(aFind);
-        }
-        return bModal;
+        return extractBoolEntry(rMap, u"modal"_ustr, false);
     }
 #endif
 
     bool extractDecorated(VclBuilder::stringmap &rMap)
     {
-        bool bDecorated = true;
-        VclBuilder::stringmap::iterator aFind = rMap.find(u"decorated"_ustr);
-        if (aFind != rMap.end())
-        {
-            bDecorated = toBool(aFind->second);
-            rMap.erase(aFind);
-        }
-        return bDecorated;
+        return extractBoolEntry(rMap, u"decorated"_ustr, true);
     }
 
     bool extractCloseable(VclBuilder::stringmap &rMap)
     {
-        bool bCloseable = true;
-        VclBuilder::stringmap::iterator aFind = rMap.find(u"deletable"_ustr);
-        if (aFind != rMap.end())
-        {
-            bCloseable = toBool(aFind->second);
-            rMap.erase(aFind);
-        }
-        return bCloseable;
+        return extractBoolEntry(rMap, u"deletable"_ustr, true);
     }
 
     bool extractVerticalTabPos(VclBuilder::stringmap &rMap)
@@ -987,14 +964,7 @@ namespace
 
     bool extractInconsistent(VclBuilder::stringmap &rMap)
     {
-        bool bInconsistent = false;
-        VclBuilder::stringmap::iterator aFind = rMap.find(u"inconsistent"_ustr);
-        if (aFind != rMap.end())
-        {
-            bInconsistent = toBool(aFind->second);
-            rMap.erase(aFind);
-        }
-        return bInconsistent;
+        return extractBoolEntry(rMap, u"inconsistent"_ustr, false);
     }
 
     WinBits extractRelief(VclBuilder::stringmap &rMap)
@@ -1080,26 +1050,12 @@ namespace
 
     bool extractSortIndicator(VclBuilder::stringmap &rMap)
     {
-        bool bSortIndicator = false;
-        VclBuilder::stringmap::iterator aFind = rMap.find(u"sort-indicator"_ustr);
-        if (aFind != rMap.end())
-        {
-            bSortIndicator = toBool(aFind->second);
-            rMap.erase(aFind);
-        }
-        return bSortIndicator;
+        return extractBoolEntry(rMap, u"sort-indicator"_ustr, false);
     }
 
     bool extractClickable(VclBuilder::stringmap &rMap)
     {
-        bool bClickable = false;
-        VclBuilder::stringmap::iterator aFind = rMap.find(u"clickable"_ustr);
-        if (aFind != rMap.end())
-        {
-            bClickable = toBool(aFind->second);
-            rMap.erase(aFind);
-        }
-        return bClickable;
+        return extractBoolEntry(rMap, u"clickable"_ustr, false);
     }
 
     void setupFromActionName(Button *pButton, VclBuilder::stringmap &rMap, const css::uno::Reference<css::frame::XFrame>& rFrame)
@@ -1223,14 +1179,7 @@ namespace
 {
     bool extractSelectable(VclBuilder::stringmap &rMap)
     {
-        bool bSelectable = false;
-        VclBuilder::stringmap::iterator aFind = rMap.find(u"selectable"_ustr);
-        if (aFind != rMap.end())
-        {
-            bSelectable = toBool(aFind->second);
-            rMap.erase(aFind);
-        }
-        return bSelectable;
+        return extractBoolEntry(rMap, u"selectable"_ustr, false);
     }
 
     OUString extractAdjustment(VclBuilder::stringmap &rMap)
@@ -1248,14 +1197,7 @@ namespace
 
     bool extractDrawIndicator(VclBuilder::stringmap &rMap)
     {
-        bool bDrawIndicator = false;
-        VclBuilder::stringmap::iterator aFind = rMap.find(u"draw-indicator"_ustr);
-        if (aFind != rMap.end())
-        {
-            bDrawIndicator = toBool(aFind->second);
-            rMap.erase(aFind);
-        }
-        return bDrawIndicator;
+        return extractBoolEntry(rMap, u"draw-indicator"_ustr, false);
     }
 }
 
@@ -2219,14 +2161,7 @@ namespace BuilderUtils
 
     bool extractDropdown(VclBuilder::stringmap &rMap)
     {
-        bool bDropdown = true;
-        VclBuilder::stringmap::iterator aFind = rMap.find(u"dropdown"_ustr);
-        if (aFind != rMap.end())
-        {
-            bDropdown = toBool(aFind->second);
-            rMap.erase(aFind);
-        }
-        return bDropdown;
+        return extractBoolEntry(rMap, u"dropdown"_ustr, true);
     }
 
     void reorderWithinParent(vcl::Window &rWindow, sal_uInt16 nNewPosition)
@@ -3475,26 +3410,12 @@ sal_Int32 BuilderBase::extractActive(VclBuilder::stringmap& rMap)
 
 bool BuilderBase::extractEntry(VclBuilder::stringmap &rMap)
 {
-    bool bHasEntry = false;
-    VclBuilder::stringmap::iterator aFind = rMap.find(u"has-entry"_ustr);
-    if (aFind != rMap.end())
-    {
-        bHasEntry = toBool(aFind->second);
-        rMap.erase(aFind);
-    }
-    return bHasEntry;
+    return extractBoolEntry(rMap, u"has-entry"_ustr, false);
 }
 
 bool BuilderBase::extractHeadersVisible(VclBuilder::stringmap& rMap)
 {
-    bool bHeadersVisible = true;
-    VclBuilder::stringmap::iterator aFind = rMap.find(u"headers-visible"_ustr);
-    if (aFind != rMap.end())
-    {
-        bHeadersVisible = toBool(aFind->second);
-        rMap.erase(aFind);
-    }
-    return bHeadersVisible;
+    return extractBoolEntry(rMap, u"headers-visible"_ustr, true);
 }
 
 OUString BuilderBase::extractIconName(VclBuilder::stringmap &rMap)
@@ -3525,26 +3446,12 @@ OUString BuilderBase::extractIconName(VclBuilder::stringmap &rMap)
 
 bool BuilderBase::extractResizable(stringmap& rMap)
 {
-    bool bResizable = true;
-    VclBuilder::stringmap::iterator aFind = rMap.find(u"resizable"_ustr);
-    if (aFind != rMap.end())
-    {
-        bResizable = toBool(aFind->second);
-        rMap.erase(aFind);
-    }
-    return bResizable;
+    return extractBoolEntry(rMap, u"resizable"_ustr, true);
 }
 
 bool BuilderBase::extractShowExpanders(VclBuilder::stringmap& rMap)
 {
-    bool bShowExpanders = true;
-    VclBuilder::stringmap::iterator aFind = rMap.find(u"show-expanders"_ustr);
-    if (aFind != rMap.end())
-    {
-        bShowExpanders = toBool(aFind->second);
-        rMap.erase(aFind);
-    }
-    return bShowExpanders;
+    return extractBoolEntry(rMap, u"show-expanders"_ustr, true);
 }
 
 OUString BuilderBase::extractTooltipText(stringmap& rMap)
@@ -3563,14 +3470,7 @@ OUString BuilderBase::extractTooltipText(stringmap& rMap)
 
 bool BuilderBase::extractVisible(VclBuilder::stringmap& rMap)
 {
-    bool bRet = false;
-    VclBuilder::stringmap::iterator aFind = rMap.find(u"visible"_ustr);
-    if (aFind != rMap.end())
-    {
-        bRet = toBool(aFind->second);
-        rMap.erase(aFind);
-    }
-    return bRet;
+    return extractBoolEntry(rMap, u"visible"_ustr, false);
 }
 
 void BuilderBase::collectProperty(xmlreader::XmlReader& reader, stringmap& rMap) const
