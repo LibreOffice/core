@@ -213,7 +213,7 @@ public:
 
     bool            GetTitleFromURL( const OUString& rURL, OUString& aTitle );
     bool            InsertRegion( std::unique_ptr<RegionData_Impl> pData, size_t nPos );
-    const OUString& GetRootURL() const { return maRootURL; }
+    INetURLObject   GetRootURL() const { return INetURLObject(maRootURL); }
 
     const uno::Reference< XDocumentTemplates >& getDocTemplates() const { return mxTemplates; }
 };
