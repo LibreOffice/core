@@ -20,6 +20,7 @@ class QtInstanceTreeView : public QObject, public QtInstanceWidget, public virtu
 
     QTreeView* m_pTreeView;
     QStandardItemModel* m_pModel;
+    QItemSelectionModel* m_pSelectionModel;
 
 public:
     QtInstanceTreeView(QTreeView* pTreeView);

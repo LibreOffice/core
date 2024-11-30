@@ -24,11 +24,11 @@ QtInstanceTreeView::QtInstanceTreeView(QTreeView* pTreeView)
     m_pModel = qobject_cast<QStandardItemModel*>(m_pTreeView->model());
     assert(m_pModel && "tree view doesn't have expected item model set");
 
-    connect(m_pTreeView, &QTreeView::activated, this, &QtInstanceTreeView::handleActivated);
+    m_pSelectionModel = m_pTreeView->selectionModel();
+    assert(m_pSelectionModel);
 
-    QItemSelectionModel* pSelectionModel = m_pTreeView->selectionModel();
-    assert(pSelectionModel);
-    connect(pSelectionModel, &QItemSelectionModel::currentChanged, this,
+    connect(m_pTreeView, &QTreeView::activated, this, &QtInstanceTreeView::handleActivated);
+    connect(m_pSelectionModel, &QItemSelectionModel::currentChanged, this,
             &QtInstanceTreeView::handleCurrentChanged);
 }
 
@@ -76,9 +76,7 @@ OUString QtInstanceTreeView::get_selected_text() const
 
     OUString sText;
     GetQtInstance().RunInMainThread([&] {
-        QItemSelectionModel* pSelectionModel = m_pTreeView->selectionModel();
-        assert(pSelectionModel);
-        const QModelIndexList aSelectedIndexes = pSelectionModel->selectedIndexes();
+        const QModelIndexList aSelectedIndexes = m_pSelectionModel->selectedIndexes();
         if (aSelectedIndexes.empty())
             return;
 
@@ -94,9 +92,7 @@ OUString QtInstanceTreeView::get_selected_id() const
 
     OUString sId;
     GetQtInstance().RunInMainThread([&] {
-        QItemSelectionModel* pSelectionModel = m_pTreeView->selectionModel();
-        assert(pSelectionModel);
-        const QModelIndexList aSelectedIndexes = pSelectionModel->selectedIndexes();
+        const QModelIndexList aSelectedIndexes = m_pSelectionModel->selectedIndexes();
         if (aSelectedIndexes.empty())
             return;
 
@@ -124,11 +120,8 @@ int QtInstanceTreeView::get_selected_index() const
 void QtInstanceTreeView::select(int nPos)
 {
     SolarMutexGuard g;
-    GetQtInstance().RunInMainThread([&] {
-        QItemSelectionModel* pSelectionModel = m_pTreeView->selectionModel();
-        assert(pSelectionModel);
-        pSelectionModel->select(m_pModel->index(nPos, 0), QItemSelectionModel::Select);
-    });
+    GetQtInstance().RunInMainThread(
+        [&] { m_pSelectionModel->select(m_pModel->index(nPos, 0), QItemSelectionModel::Select); });
 }
 
 void QtInstanceTreeView::unselect(int) { assert(false && "Not implemented yet"); }
@@ -216,9 +209,7 @@ std::vector<int> QtInstanceTreeView::get_selected_rows() const
     std::vector<int> aSelectedRows;
 
     GetQtInstance().RunInMainThread([&] {
-        QItemSelectionModel* pSelectionModel = m_pTreeView->selectionModel();
-        assert(pSelectionModel);
-        const QModelIndexList aSelectionIndexes = pSelectionModel->selection().indexes();
+        const QModelIndexList aSelectionIndexes = m_pSelectionModel->selection().indexes();
         for (const QModelIndex& aIndex : aSelectionIndexes)
             aSelectedRows.push_back(aIndex.row());
     });
