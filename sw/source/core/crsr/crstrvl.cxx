@@ -1384,6 +1384,12 @@ void SwCursorShell::MakeOutlineSel(SwOutlineNodes::size_type nSttPos, SwOutlineN
     SwNode* pSttNd = rOutlNds[ nSttPos ];
     SwNode* pEndNd = rOutlNds[ nEndPos ];
 
+    if( pOutlNdsInline )
+    {
+        pSttNd = const_cast<SwNode*>(SwOutlineNodes::GetRootNode(pSttNd));
+        pOutlNdsInline->Seek_Entry( pEndNd, &nEndPosInline );
+    }
+
     if( bWithChildren && !pOutlNdsInline )
     {
         const int nLevel = pEndNd->GetTextNode()->GetAttrOutlineLevel()-1;
@@ -1399,10 +1405,6 @@ void SwCursorShell::MakeOutlineSel(SwOutlineNodes::size_type nSttPos, SwOutlineN
     else if( bWithChildren && pOutlNdsInline )
     {
         const int nLevel = pEndNd->GetTextNode()->GetAttrOutlineLevel() - 1;
-        pSttNd = const_cast<SwNode*>(SwOutlineNodes::GetRootNode(pSttNd));
-
-        pOutlNdsInline->Seek_Entry( pEndNd, &nEndPosInline );
-
         for( ++nEndPosInline; nEndPosInline < pOutlNdsInline->size(); ++nEndPosInline )
         {
             pEndNd = (*pOutlNdsInline)[ nEndPosInline ];
