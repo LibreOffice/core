@@ -31,6 +31,8 @@ class SvResizeHelper
     tools::Rectangle   aOuter;
     short       nGrab; // -1 no Grab,  0 - 7, 8 = Move, see FillHandle...
     Point       aSelPos;
+    /// Initial width/height ratio when starting drag
+    std::optional<double>      mofStartingRatio;
 public:
     SvResizeHelper();
 
@@ -52,12 +54,12 @@ public:
     std::array<tools::Rectangle,4> FillMoveRectsPixel() const;
     void        Draw(vcl::RenderContext& rRenderContext);
     void        InvalidateBorder( vcl::Window * );
-    bool        SelectBegin( vcl::Window *, const Point & rPos );
-    short       SelectMove( vcl::Window * pWin, const Point & rPos );
+    bool        SelectBegin( vcl::Window *, const Point & rPos, const bool bShiftPressed );
+    short       SelectMove( vcl::Window * pWin, const Point & rPos, const bool bShiftPressed );
     Point       GetTrackPosPixel( const tools::Rectangle & rRect ) const;
-    tools::Rectangle   GetTrackRectPixel( const Point & rTrackPos ) const;
+    tools::Rectangle   GetTrackRectPixel( const Point & rTrackPos, const bool bShiftPressed ) const;
     void        ValidateRect( tools::Rectangle & rValidate ) const;
-    bool        SelectRelease( vcl::Window *, const Point & rPos, tools::Rectangle & rOutPosSize );
+    bool        SelectRelease( vcl::Window *, const Point & rPos, tools::Rectangle & rOutPosSize, const bool bShiftPressed );
     void        Release( vcl::Window * pWin );
 };
 
@@ -77,7 +79,7 @@ public:
 
     void    SetHatchBorderPixel( const Size & rSize );
 
-    void    SelectMouse( const Point & rPos );
+    void    SelectMouse( const Point & rPos, const bool bShiftPressed );
     virtual void    MouseButtonUp( const MouseEvent & rEvt ) override;
     virtual void    MouseMove( const MouseEvent & rEvt ) override;
     virtual void    MouseButtonDown( const MouseEvent & rEvt ) override;

@@ -36,6 +36,7 @@
 SvResizeHelper::SvResizeHelper()
     : aBorder( 5, 5 )
     , nGrab( -1 )
+    , mofStartingRatio( std::nullopt )
 {
 }
 
@@ -153,14 +154,18 @@ void SvResizeHelper::InvalidateBorder( vcl::Window * pWin )
 |*
 |*    Description
 *************************************************************************/
-bool SvResizeHelper::SelectBegin( vcl::Window * pWin, const Point & rPos )
+bool SvResizeHelper::SelectBegin( vcl::Window * pWin, const Point & rPos, const bool bShiftPressed )
 {
-    if( -1 == nGrab )
+    if( -1 == nGrab && pWin )
     {
-        nGrab = SelectMove( pWin, rPos );
+        nGrab = SelectMove( pWin, rPos, bShiftPressed );
         if( -1 != nGrab )
         {
             aSelPos = rPos; // store start position
+            mofStartingRatio = std::nullopt;
+            const auto aWinSize = pWin->GetSizePixel();
+            if( aWinSize.Height() )
+                mofStartingRatio  = aWinSize.Width() / static_cast<double>( aWinSize.Height() );
             pWin->CaptureMouse();
             return true;
         }
@@ -173,7 +178,7 @@ bool SvResizeHelper::SelectBegin( vcl::Window * pWin, const Point & rPos )
 |*
 |*    Description
 *************************************************************************/
-short SvResizeHelper::SelectMove( vcl::Window * pWin, const Point & rPos )
+short SvResizeHelper::SelectMove( vcl::Window * pWin, const Point & rPos, const bool bShiftPressed )
 {
     if( -1 == nGrab )
     {
@@ -189,7 +194,7 @@ short SvResizeHelper::SelectMove( vcl::Window * pWin, const Point & rPos )
     }
     else
     {
-        tools::Rectangle aRect = pWin->PixelToLogic(GetTrackRectPixel( rPos ));
+        tools::Rectangle aRect = pWin->PixelToLogic(GetTrackRectPixel( rPos, bShiftPressed ));
         pWin->ShowTracking( aRect );
     }
     return nGrab;
@@ -263,74 +268,131 @@ Point SvResizeHelper::GetTrackPosPixel( const tools::Rectangle & rRect ) const
 |*
 |*    Description
 *************************************************************************/
-tools::Rectangle SvResizeHelper::GetTrackRectPixel( const Point & rTrackPos ) const
+tools::Rectangle SvResizeHelper::GetTrackRectPixel( const Point & rTrackPos, const bool bShiftPressed ) const
 {
     tools::Rectangle aTrackRect;
-    if( -1 != nGrab )
+    if( -1 == nGrab )
+        return aTrackRect;
+    Point aDiff = rTrackPos - aSelPos;
+    aTrackRect = aOuter;
+    Point aBR = aOuter.BottomRight();
+    bool bRTL = AllSettings::GetLayoutRTL();
+    switch( nGrab )
     {
-        Point aDiff = rTrackPos - aSelPos;
-        aTrackRect = aOuter;
-        Point aBR = aOuter.BottomRight();
-        bool bRTL = AllSettings::GetLayoutRTL();
-        switch( nGrab )
+        case 0:
+            aTrackRect.AdjustTop(aDiff.Y() );
+            // ugly solution for resizing OLE objects in RTL
+            if( bRTL )
+                aTrackRect.SetRight( aBR.X() - aDiff.X() );
+            else
+                aTrackRect.AdjustLeft(aDiff.X() );
+            break;
+        case 1:
+            aTrackRect.AdjustTop(aDiff.Y() );
+            break;
+        case 2:
+            aTrackRect.AdjustTop(aDiff.Y() );
+            // ugly solution for resizing OLE objects in RTL
+            if( bRTL )
+                aTrackRect.AdjustLeft( -(aDiff.X()) );
+            else
+                aTrackRect.SetRight( aBR.X() + aDiff.X() );
+            break;
+        case 3:
+            // ugly solution for resizing OLE objects in RTL
+            if( bRTL )
+                aTrackRect.AdjustLeft( -(aDiff.X()) );
+            else
+                aTrackRect.SetRight( aBR.X() + aDiff.X() );
+            break;
+        case 4:
+            aTrackRect.SetBottom( aBR.Y() + aDiff.Y() );
+            // ugly solution for resizing OLE objects in RTL
+            if( bRTL )
+                aTrackRect.AdjustLeft( -(aDiff.X()) );
+            else
+                aTrackRect.SetRight( aBR.X() + aDiff.X() );
+            break;
+        case 5:
+            aTrackRect.SetBottom( aBR.Y() + aDiff.Y() );
+            break;
+        case 6:
+            aTrackRect.SetBottom( aBR.Y() + aDiff.Y() );
+            // ugly solution for resizing OLE objects in RTL
+            if( bRTL )
+                aTrackRect.SetRight( aBR.X() - aDiff.X() );
+            else
+                aTrackRect.AdjustLeft(aDiff.X() );
+            break;
+        case 7:
+            // ugly solution for resizing OLE objects in RTL
+            if( bRTL )
+                aTrackRect.SetRight( aBR.X() - aDiff.X() );
+            else
+                aTrackRect.AdjustLeft(aDiff.X() );
+            break;
+        case 8:
+            if( bRTL )
+                aDiff.setX( -aDiff.X() ); // workaround for move in RTL mode
+            if( bShiftPressed )
+            {
+                const Point aDiffAbs( std::abs( aDiff.X() ), std::abs( aDiff.Y() ) );
+                if( 2 * aDiffAbs.X() < aDiffAbs.Y() ) // vertical move
+                    aDiff.setX( 0L );
+                else if( aDiffAbs.X() > 2 * aDiffAbs.Y() ) // horizontal move
+                    aDiff.setY( 0L );
+                else if( aDiffAbs.X() != aDiffAbs.Y() ) // 45° move
+                {
+                    if( aDiffAbs.X() > aDiffAbs.Y() )
+                        aDiff.setY( aDiff.Y() / aDiffAbs.Y() * aDiffAbs.X() );
+                    else
+                        aDiff.setX( aDiff.X() / aDiffAbs.X() * aDiffAbs.Y() );
+                }
+            }
+            aTrackRect.SetPos( aTrackRect.TopLeft() + aDiff );
+            break;
+    }
+    // TODO: should use same code as other objects. See SdrTextObj::ImpDragCalcRect() and SdrObject::ImpDragCalcRect()
+    // uneven values are for edges
+    const bool bIsEdge = ( nGrab != (( nGrab / 2 ) * 2) );
+    // tdf#163816: Resizing OLE object in edited mode should behave like in not-edited mode
+    // Corner handles are proportional by default, whereas edge handles are not proportional
+    // pressed Shift toggles behavior
+    const bool bProportional = ( bIsEdge == bShiftPressed );
+    if( bProportional && nGrab != 8 && mofStartingRatio )
+    {
+        bool bChangeWidth = false;
+        if( nGrab == 1 ||  nGrab == 5 ) // top and bottom handles
         {
-            case 0:
-                aTrackRect.AdjustTop(aDiff.Y() );
-                // ugly solution for resizing OLE objects in RTL
-                if( bRTL )
-                    aTrackRect.SetRight( aBR.X() - aDiff.X() );
-                else
-                    aTrackRect.AdjustLeft(aDiff.X() );
-                break;
-            case 1:
-                aTrackRect.AdjustTop(aDiff.Y() );
-                break;
-            case 2:
-                aTrackRect.AdjustTop(aDiff.Y() );
-                // ugly solution for resizing OLE objects in RTL
-                if( bRTL )
-                    aTrackRect.AdjustLeft( -(aDiff.X()) );
-                else
-                    aTrackRect.SetRight( aBR.X() + aDiff.X() );
-                break;
-            case 3:
-                // ugly solution for resizing OLE objects in RTL
-                if( bRTL )
-                    aTrackRect.AdjustLeft( -(aDiff.X()) );
-                else
-                    aTrackRect.SetRight( aBR.X() + aDiff.X() );
-                break;
-            case 4:
-                aTrackRect.SetBottom( aBR.Y() + aDiff.Y() );
-                // ugly solution for resizing OLE objects in RTL
-                if( bRTL )
-                    aTrackRect.AdjustLeft( -(aDiff.X()) );
-                else
-                    aTrackRect.SetRight( aBR.X() + aDiff.X() );
-                break;
-            case 5:
-                aTrackRect.SetBottom( aBR.Y() + aDiff.Y() );
-                break;
-            case 6:
-                aTrackRect.SetBottom( aBR.Y() + aDiff.Y() );
-                // ugly solution for resizing OLE objects in RTL
-                if( bRTL )
-                    aTrackRect.SetRight( aBR.X() - aDiff.X() );
-                else
-                    aTrackRect.AdjustLeft(aDiff.X() );
-                break;
-            case 7:
-                // ugly solution for resizing OLE objects in RTL
-                if( bRTL )
-                    aTrackRect.SetRight( aBR.X() - aDiff.X() );
-                else
-                    aTrackRect.AdjustLeft(aDiff.X() );
-                break;
-            case 8:
-                if( bRTL )
-                    aDiff.setX( -aDiff.X() ); // workaround for move in RTL mode
-                aTrackRect.SetPos( aTrackRect.TopLeft() + aDiff );
-                break;
+            bChangeWidth = true;
+        }
+        else if ( nGrab != 3 &&  nGrab != 7 )
+        {   // handles in corners: keep the largest size
+            bChangeWidth = aTrackRect.GetWidth() < aTrackRect.GetHeight() * mofStartingRatio.value();
+        }
+        if( bChangeWidth )
+        {
+            const tools::Long nNewWidth =  aTrackRect.GetHeight() * mofStartingRatio.value();
+            if ( nGrab == 6 ||  nGrab == 0 ) // corners on left side
+                // move left with right as reference
+                aTrackRect.SetLeft( aTrackRect.Right() - nNewWidth );
+            else if ( nGrab == 1 ||  nGrab == 5 ) // top and bottom handles
+                // move left half of the change of width to keep the handle in the middle
+                aTrackRect.SetLeft( aTrackRect.Left() + ( aTrackRect.GetWidth() - nNewWidth ) / 2 );
+                // other handles use left as reference, then no change needed
+            aTrackRect.SetWidth( nNewWidth );
+        }
+        else
+        {
+            const tools::Long nNewHeight =  aTrackRect.GetWidth() / mofStartingRatio.value();
+            if ( nGrab == 2 ||  nGrab == 0 )  // corners on top
+                // move top with bottom as reference
+                aTrackRect.SetTop( aTrackRect.Bottom() - nNewHeight );
+            else if ( nGrab == 3 ||  nGrab == 7 )  // right and left handles
+                // move top half of the change of height to keep the handle in the middle
+                aTrackRect.SetTop( aTrackRect.Top() + ( aTrackRect.GetHeight() - nNewHeight ) / 2 );
+                // other handles use top as reference, then no change needed
+            aTrackRect.SetHeight( nNewHeight );
         }
     }
     return aTrackRect;
@@ -395,11 +457,11 @@ void SvResizeHelper::ValidateRect( tools::Rectangle & rValidate ) const
 |*    Description
 *************************************************************************/
 bool SvResizeHelper::SelectRelease( vcl::Window * pWin, const Point & rPos,
-                                    tools::Rectangle & rOutPosSize )
+                                    tools::Rectangle & rOutPosSize, const bool bShiftPressed )
 {
     if( -1 != nGrab )
     {
-        rOutPosSize = GetTrackRectPixel( rPos );
+        rOutPosSize = GetTrackRectPixel( rPos, bShiftPressed );
         rOutPosSize.Normalize();
         nGrab = -1;
         pWin->ReleaseMouse();
@@ -461,9 +523,9 @@ void SvResizeWindow::SetHatchBorderPixel( const Size & rSize )
 |*
 |*    Description
 *************************************************************************/
-void SvResizeWindow::SelectMouse( const Point & rPos )
+void SvResizeWindow::SelectMouse( const Point & rPos, const bool bShiftPressed )
 {
-    short nGrab = m_aResizer.SelectMove( this, rPos );
+    short nGrab = m_aResizer.SelectMove( this, rPos, bShiftPressed );
     if( nGrab >= 4 )
         nGrab -= 4;
     if( m_nMoveGrab == nGrab )
@@ -501,8 +563,8 @@ void SvResizeWindow::SelectMouse( const Point & rPos )
 *************************************************************************/
 void SvResizeWindow::MouseButtonDown( const MouseEvent & rEvt )
 {
-    if( m_aResizer.SelectBegin( this, rEvt.GetPosPixel() ) )
-        SelectMouse( rEvt.GetPosPixel() );
+    if( m_aResizer.SelectBegin( this, rEvt.GetPosPixel(), rEvt.IsShift() ) )
+        SelectMouse( rEvt.GetPosPixel(), rEvt.IsShift() );
 }
 
 /*************************************************************************
@@ -513,10 +575,10 @@ void SvResizeWindow::MouseButtonDown( const MouseEvent & rEvt )
 void SvResizeWindow::MouseMove( const MouseEvent & rEvt )
 {
     if( m_aResizer.GetGrab() == -1 )
-        SelectMouse( rEvt.GetPosPixel() );
+        SelectMouse( rEvt.GetPosPixel(), rEvt.IsShift() );
     else
     {
-        tools::Rectangle aRect( m_aResizer.GetTrackRectPixel( rEvt.GetPosPixel() ) );
+        tools::Rectangle aRect( m_aResizer.GetTrackRectPixel( rEvt.GetPosPixel(), rEvt.IsShift() ) );
         Point aDiff = GetPosPixel();
         aRect.SetPos( aRect.TopLeft() + aDiff );
         m_aResizer.ValidateRect( aRect );
@@ -525,7 +587,7 @@ void SvResizeWindow::MouseMove( const MouseEvent & rEvt )
         aRect.SetPos( aRect.TopLeft() - aDiff );
         Point aPos = m_aResizer.GetTrackPosPixel( aRect );
 
-        SelectMouse( aPos );
+        SelectMouse( aPos, rEvt.IsShift() );
     }
 }
 
@@ -539,7 +601,7 @@ void SvResizeWindow::MouseButtonUp( const MouseEvent & rEvt )
     if( m_aResizer.GetGrab() == -1 )
         return;
 
-    tools::Rectangle aRect( m_aResizer.GetTrackRectPixel( rEvt.GetPosPixel() ) );
+    tools::Rectangle aRect( m_aResizer.GetTrackRectPixel( rEvt.GetPosPixel(), rEvt.IsShift() ) );
     Point aDiff = GetPosPixel();
     aRect.SetPos( aRect.TopLeft() + aDiff );
     // aRect -= GetAllBorderPixel();
@@ -548,7 +610,7 @@ void SvResizeWindow::MouseButtonUp( const MouseEvent & rEvt )
     m_pWrapper->QueryObjAreaPixel( aRect );
 
     tools::Rectangle aOutRect;
-    if( m_aResizer.SelectRelease( this, rEvt.GetPosPixel(), aOutRect ) )
+    if( m_aResizer.SelectRelease( this, rEvt.GetPosPixel(), aOutRect, rEvt.IsShift() ) )
     {
         m_nMoveGrab = -1;
         SetPointer( m_aOldPointer );
