@@ -122,17 +122,17 @@ namespace dxcanvas
 
     OUString SAL_CALL Canvas::getServiceName(  )
     {
-        return "com.sun.star.rendering.Canvas.GDI+";
+        return u"com.sun.star.rendering.Canvas.GDI+"_ustr;
     }
 
     // XServiceInfo
     css::uno::Sequence<OUString> Canvas::getSupportedServiceNames(  )
     {
-        return { "com.sun.star.rendering.Canvas.GDI+" };
+        return { u"com.sun.star.rendering.Canvas.GDI+"_ustr };
     }
     OUString Canvas::getImplementationName(  )
     {
-        return "com.sun.star.comp.rendering.Canvas.GDI+";
+        return u"com.sun.star.comp.rendering.Canvas.GDI+"_ustr;
     }
     sal_Bool Canvas::supportsService( const OUString& sServiceName )
     {
@@ -212,17 +212,17 @@ namespace dxcanvas
 
     OUString SAL_CALL BitmapCanvas::getServiceName(  )
     {
-        return "com.sun.star.rendering.BitmapCanvas.GDI+";
+        return u"com.sun.star.rendering.BitmapCanvas.GDI+"_ustr;
     }
 
     // XServiceInfo
     css::uno::Sequence<OUString> BitmapCanvas::getSupportedServiceNames(  )
     {
-        return { "com.sun.star.rendering.BitmapCanvas.GDI+" };
+        return { u"com.sun.star.rendering.BitmapCanvas.GDI+"_ustr };
     }
     OUString BitmapCanvas::getImplementationName(  )
     {
-        return "com.sun.star.comp.rendering.BitmapCanvas.GDI+";
+        return u"com.sun.star.comp.rendering.BitmapCanvas.GDI+"_ustr;
     }
     sal_Bool BitmapCanvas::supportsService( const OUString& sServiceName )
     {
