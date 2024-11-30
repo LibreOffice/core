@@ -113,8 +113,18 @@ void QtInstanceTreeView::set_clicks_to_toggle(int) { assert(false && "Not implem
 
 int QtInstanceTreeView::get_selected_index() const
 {
-    assert(false && "Not implemented yet");
-    return -1;
+    SolarMutexGuard g;
+
+    int nIndex = -1;
+    GetQtInstance().RunInMainThread([&] {
+        const QModelIndexList aSelectedIndexes = m_pSelectionModel->selectedIndexes();
+        if (aSelectedIndexes.empty())
+            return;
+
+        nIndex = aSelectedIndexes.first().row();
+    });
+
+    return nIndex;
 }
 
 void QtInstanceTreeView::select(int nPos)
@@ -124,7 +134,13 @@ void QtInstanceTreeView::select(int nPos)
         [&] { m_pSelectionModel->select(m_pModel->index(nPos, 0), QItemSelectionModel::Select); });
 }
 
-void QtInstanceTreeView::unselect(int) { assert(false && "Not implemented yet"); }
+void QtInstanceTreeView::unselect(int nPos)
+{
+    SolarMutexGuard g;
+    GetQtInstance().RunInMainThread([&] {
+        m_pSelectionModel->select(m_pModel->index(nPos, 0), QItemSelectionModel::Deselect);
+    });
+}
 
 void QtInstanceTreeView::remove(int) { assert(false && "Not implemented yet"); }
 

@@ -41,7 +41,7 @@ public:
 
     virtual int get_selected_index() const override;
     virtual void select(int nPos) override;
-    virtual void unselect(int pos) override;
+    virtual void unselect(int nPos) override;
     virtual void remove(int pos) override;
     virtual OUString get_text(int nRow, int nCol = -1) const override;
     virtual void set_text(int row, const OUString& rText, int col = -1) override;
