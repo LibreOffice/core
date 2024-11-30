@@ -185,6 +185,9 @@ public:
 
 private:
     static QAbstractItemView::SelectionMode mapSelectionMode(SelectionMode eMode);
+
+private Q_SLOTS:
+    void handleActivated();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

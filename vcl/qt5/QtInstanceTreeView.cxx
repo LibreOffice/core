@@ -23,6 +23,8 @@ QtInstanceTreeView::QtInstanceTreeView(QTreeView* pTreeView)
 
     m_pModel = qobject_cast<QStandardItemModel*>(m_pTreeView->model());
     assert(m_pModel && "tree view doesn't have expected item model set");
+
+    connect(m_pTreeView, &QTreeView::activated, this, &QtInstanceTreeView::handleActivated);
 }
 
 void QtInstanceTreeView::insert(const weld::TreeIter* pParent, int pos, const OUString* pStr,
@@ -710,6 +712,12 @@ QAbstractItemView::SelectionMode QtInstanceTreeView::mapSelectionMode(SelectionM
             assert(false && "unhandled selection mode");
             return QAbstractItemView::SingleSelection;
     }
+}
+
+void QtInstanceTreeView::handleActivated()
+{
+    SolarMutexGuard g;
+    signal_row_activated();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
