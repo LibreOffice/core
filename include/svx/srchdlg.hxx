@@ -187,7 +187,7 @@ private:
     std::unique_ptr<weld::Label> m_xSearchAttrText;
     std::unique_ptr<weld::Label> m_xSearchLabel;
     std::unique_ptr<weld::Image> m_xSearchIcon;
-    std::unique_ptr<weld::Box> m_xSearchBox;
+    std::unique_ptr<weld::Container> m_xSearchBox;
 
     std::unique_ptr<weld::Frame> m_xReplaceFrame;
     std::unique_ptr<weld::ComboBox> m_xReplaceLB;

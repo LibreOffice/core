@@ -261,7 +261,7 @@ SvxSearchDialog::SvxSearchDialog(weld::Window* pParent, SfxChildWindow* pChildWi
     , m_xSearchAttrText(m_xBuilder->weld_label(u"searchdesc"_ustr))
     , m_xSearchLabel(m_xBuilder->weld_label(u"searchlabel"_ustr))
     , m_xSearchIcon(m_xBuilder->weld_image(u"searchicon"_ustr))
-    , m_xSearchBox(m_xBuilder->weld_box(u"searchbox"_ustr))
+    , m_xSearchBox(m_xBuilder->weld_container(u"searchbox"_ustr))
     , m_xReplaceFrame(m_xBuilder->weld_frame(u"replaceframe"_ustr))
     , m_xReplaceLB(m_xBuilder->weld_combo_box(u"replaceterm"_ustr))
     , m_xReplaceTmplLB(m_xBuilder->weld_combo_box(u"replacelist"_ustr))
