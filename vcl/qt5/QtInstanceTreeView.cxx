@@ -25,6 +25,11 @@ QtInstanceTreeView::QtInstanceTreeView(QTreeView* pTreeView)
     assert(m_pModel && "tree view doesn't have expected item model set");
 
     connect(m_pTreeView, &QTreeView::activated, this, &QtInstanceTreeView::handleActivated);
+
+    QItemSelectionModel* pSelectionModel = m_pTreeView->selectionModel();
+    assert(pSelectionModel);
+    connect(pSelectionModel, &QItemSelectionModel::currentChanged, this,
+            &QtInstanceTreeView::handleCurrentChanged);
 }
 
 void QtInstanceTreeView::insert(const weld::TreeIter* pParent, int pos, const OUString* pStr,
@@ -718,6 +723,12 @@ void QtInstanceTreeView::handleActivated()
 {
     SolarMutexGuard g;
     signal_row_activated();
+}
+
+void QtInstanceTreeView::handleCurrentChanged()
+{
+    SolarMutexGuard g;
+    signal_changed();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
