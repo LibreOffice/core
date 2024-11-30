@@ -24,24 +24,29 @@ void SvxShowCharSetUIObject::execute(const OUString& rAction,
 {
     if (rAction == "SELECT")
     {
-        if (rParameters.find(u"INDEX"_ustr) != rParameters.end())
+        auto itIndex = rParameters.find(u"INDEX"_ustr);
+        if (itIndex != rParameters.end())
         {
-            OUString aIndexStr = rParameters.find(u"INDEX"_ustr)->second;
+            OUString aIndexStr = itIndex->second;
 
             sal_Int32 nIndex = aIndexStr.toInt32();
             mpCharSet->OutputIndex(nIndex);
         }
-        else if (rParameters.find(u"COLUMN"_ustr) != rParameters.end() &&
-                rParameters.find(u"ROW"_ustr) != rParameters.end())
+        else
         {
-            OUString aColStr = rParameters.find(u"COLUMN"_ustr)->second;
-            OUString aRowStr = rParameters.find(u"ROW"_ustr)->second;
+            auto itColumn = rParameters.find(u"COLUMN"_ustr);
+            auto itRow = rParameters.find(u"ROW"_ustr);
+            if (itColumn != rParameters.end() && itRow != rParameters.end())
+            {
+                OUString aColStr = itColumn->second;
+                OUString aRowStr = itRow->second;
 
-            sal_Int32 nColumn = aColStr.toInt32();
-            sal_Int32 nRow = aRowStr.toInt32();
+                sal_Int32 nColumn = aColStr.toInt32();
+                sal_Int32 nRow = aRowStr.toInt32();
 
-            sal_Int32 nIndex = nColumn * COLUMN_COUNT + nRow;
-            mpCharSet->OutputIndex(nIndex);
+                sal_Int32 nIndex = nColumn * COLUMN_COUNT + nRow;
+                mpCharSet->OutputIndex(nIndex);
+            }
         }
     }
     else
@@ -70,9 +75,10 @@ void SvxNumValueSetUIObject::execute(const OUString& rAction,
 {
     if (rAction == "CHOOSE")
     {
-        if (rParameters.find(u"POS"_ustr) != rParameters.end())
+        auto itPos = rParameters.find(u"POS"_ustr);
+        if (itPos != rParameters.end())
         {
-            OUString aIndexStr = rParameters.find(u"POS"_ustr)->second;
+            OUString aIndexStr = itPos->second;
             sal_Int32 nIndex = aIndexStr.toInt32();
             mpNumValueSet->SelectItem(nIndex);
             mpNumValueSet->Select();
