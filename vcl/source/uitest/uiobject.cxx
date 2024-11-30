@@ -359,6 +359,7 @@ void WindowUIObject::execute(const OUString& rAction,
         else if (rParameters.contains(u"KEYCODE"_ustr))
         {
             auto itr = rParameters.find(u"KEYCODE"_ustr);
+            assert(itr != rParameters.end());
             const OUString rText = itr->second;
             auto aKeyEvents = generate_key_events_from_keycode(rText);
             for (auto const& keyEvent : aKeyEvents)
@@ -774,8 +775,12 @@ void EditUIObject::execute(const OUString& rAction,
         if (rParameters.contains(u"FROM"_ustr) &&
                 rParameters.contains(u"TO"_ustr))
         {
-            tools::Long nMin = rParameters.find(u"FROM"_ustr)->second.toInt32();
-            tools::Long nMax = rParameters.find(u"TO"_ustr)->second.toInt32();
+            auto itrMin = rParameters.find(u"FROM"_ustr);
+            assert(itrMin != rParameters.end());
+            tools::Long nMin = itrMin->second.toInt32();
+            auto itrMax = rParameters.find(u"TO"_ustr);
+            assert(itrMax != rParameters.end());
+            tools::Long nMax = itrMax->second.toInt32();
             Selection aSelection(nMin, nMax);
             mxEdit->SetSelection(aSelection);
         }
@@ -1202,12 +1207,14 @@ void ComboBoxUIObject::execute(const OUString& rAction,
         if (rParameters.contains(u"POS"_ustr))
         {
             auto itr = rParameters.find(u"POS"_ustr);
+            assert(itr != rParameters.end());
             OUString aVal = itr->second;
             sal_Int32 nPos = aVal.toInt32();
             mxComboBox->SelectEntryPos(nPos);
         }
         else if(rParameters.contains(u"TEXT"_ustr)){
             auto itr = rParameters.find(u"TEXT"_ustr);
+            assert(itr != rParameters.end());
             OUString aVal = itr->second;
             sal_Int32 nPos = mxComboBox->GetEntryPos(aVal);
             mxComboBox->SelectEntryPos(nPos);
