@@ -400,62 +400,61 @@ const Size& SystemWindow::GetMaxOutputSizePixel() const
 
 vcl::WindowData::WindowData(std::u16string_view rStr)
 {
-    vcl::WindowData& rData = *this;
     vcl::WindowDataMask nValidMask = vcl::WindowDataMask::NONE;
     sal_Int32 nIndex      = 0;
 
     std::u16string_view aTokenStr = o3tl::getToken(rStr, 0, ',', nIndex);
     if (!aTokenStr.empty())
     {
-        rData.setX(o3tl::toInt32(aTokenStr));
-        if (rData.x() > -16384 && rData.x() < 16384)
+        setX(o3tl::toInt32(aTokenStr));
+        if (x() > -16384 && x() < 16384)
             nValidMask |= vcl::WindowDataMask::X;
         else
-            rData.setX(0);
+            setX(0);
     }
     else
-        rData.setX(0);
+        setX(0);
     aTokenStr = o3tl::getToken(rStr, 0, ',', nIndex);
     if (!aTokenStr.empty())
     {
-        rData.setY(o3tl::toInt32(aTokenStr));
-        if (rData.y() > -16384 && rData.y() < 16384)
+        setY(o3tl::toInt32(aTokenStr));
+        if (y() > -16384 && y() < 16384)
             nValidMask |= vcl::WindowDataMask::Y;
         else
-            rData.setY(0);
+            setY(0);
     }
     else
-        rData.setY(0);
+        setY(0);
     aTokenStr = o3tl::getToken(rStr, 0, ',', nIndex);
     if (!aTokenStr.empty())
     {
         sal_Int32 nWidth = o3tl::toInt32(aTokenStr);
         if (nWidth >= 0)
         {
-            rData.setWidth(nWidth);
+            setWidth(nWidth);
         }
-        if (rData.width() > 0 && rData.width() < 16384)
+        if (width() > 0 && width() < 16384)
             nValidMask |= vcl::WindowDataMask::Width;
         else
-            rData.setWidth(0);
+            setWidth(0);
     }
     else
-        rData.setWidth(0);
+        setWidth(0);
     aTokenStr = o3tl::getToken(rStr, 0, ';', nIndex);
     if (!aTokenStr.empty())
     {
         sal_Int32 nHeight = o3tl::toInt32(aTokenStr);
         if (nHeight >= 0)
         {
-            rData.setHeight(nHeight);
+            setHeight(nHeight);
         }
-        if (rData.height() > 0 && rData.height() < 16384)
+        if (height() > 0 && height() < 16384)
             nValidMask |= vcl::WindowDataMask::Height;
         else
-            rData.setHeight(0);
+            setHeight(0);
     }
     else
-        rData.setHeight(0);
+        setHeight(0);
     aTokenStr = o3tl::getToken(rStr, 0, ';', nIndex);
     if (!aTokenStr.empty())
     {
@@ -463,60 +462,60 @@ vcl::WindowData::WindowData(std::u16string_view rStr)
         // 91625 - ignore Minimize
         vcl::WindowState nState = static_cast<vcl::WindowState>(o3tl::toInt32(aTokenStr));
         //nState &= ~vcl::WindowState::Minimized;
-        rData.setState(nState);
+        setState(nState);
         nValidMask |= vcl::WindowDataMask::State;
     }
     else
-        rData.setState(vcl::WindowState::NONE);
+        setState(vcl::WindowState::NONE);
 
     // read maximized pos/size
     aTokenStr = o3tl::getToken(rStr, 0, ',', nIndex);
     if (!aTokenStr.empty())
     {
-        rData.SetMaximizedX(o3tl::toInt32(aTokenStr));
-        if (rData.GetMaximizedX() > -16384 && rData.GetMaximizedX() < 16384)
+        SetMaximizedX(o3tl::toInt32(aTokenStr));
+        if (GetMaximizedX() > -16384 && GetMaximizedX() < 16384)
             nValidMask |= vcl::WindowDataMask::MaximizedX;
         else
-            rData.SetMaximizedX(0);
+            SetMaximizedX(0);
     }
     else
-        rData.SetMaximizedX(0);
+        SetMaximizedX(0);
     aTokenStr = o3tl::getToken(rStr, 0, ',', nIndex);
     if (!aTokenStr.empty())
     {
-        rData.SetMaximizedY(o3tl::toInt32(aTokenStr));
-        if (rData.GetMaximizedY() > -16384 && rData.GetMaximizedY() < 16384)
+        SetMaximizedY(o3tl::toInt32(aTokenStr));
+        if (GetMaximizedY() > -16384 && GetMaximizedY() < 16384)
             nValidMask |= vcl::WindowDataMask::MaximizedY;
         else
-            rData.SetMaximizedY(0);
+            SetMaximizedY(0);
     }
     else
-        rData.SetMaximizedY(0);
+        SetMaximizedY(0);
     aTokenStr = o3tl::getToken(rStr, 0, ',', nIndex);
     if (!aTokenStr.empty())
     {
-        rData.SetMaximizedWidth(o3tl::toInt32(aTokenStr));
-        if (rData.GetMaximizedWidth() > 0 && rData.GetMaximizedWidth() < 16384)
+        SetMaximizedWidth(o3tl::toInt32(aTokenStr));
+        if (GetMaximizedWidth() > 0 && GetMaximizedWidth() < 16384)
             nValidMask |= vcl::WindowDataMask::MaximizedWidth;
         else
-            rData.SetMaximizedWidth(0);
+            SetMaximizedWidth(0);
     }
     else
-        rData.SetMaximizedWidth(0);
+        SetMaximizedWidth(0);
     aTokenStr = o3tl::getToken(rStr, 0, ';', nIndex);
     if (!aTokenStr.empty())
     {
-        rData.SetMaximizedHeight(o3tl::toInt32(aTokenStr));
-        if (rData.GetMaximizedHeight() > 0 && rData.GetMaximizedHeight() < 16384)
+        SetMaximizedHeight(o3tl::toInt32(aTokenStr));
+        if (GetMaximizedHeight() > 0 && GetMaximizedHeight() < 16384)
             nValidMask |= vcl::WindowDataMask::MaximizedHeight;
         else
-            rData.SetMaximizedHeight(0);
+            SetMaximizedHeight(0);
     }
     else
-        rData.SetMaximizedHeight(0);
+        SetMaximizedHeight(0);
 
     // mark valid fields
-    rData.setMask(nValidMask);
+    setMask(nValidMask);
 }
 
 OUString vcl::WindowData::toStr() const
