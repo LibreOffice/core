@@ -33,7 +33,6 @@ $(eval $(call gb_Pagein_add_objects,common,\
     stocservices \
     bootstrap \
     reg \
-    store \
     reflection \
     cppuhelper \
     cppu \
