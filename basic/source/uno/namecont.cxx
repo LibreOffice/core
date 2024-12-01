@@ -433,13 +433,8 @@ sal_Bool SfxLibraryContainer::isModified()
         return true;
     }
     // the library container is not modified, go through the libraries and check whether they are modified
-    Sequence< OUString > aNames = maNameContainer->getElementNames();
-    const OUString* pNames = aNames.getConstArray();
-    sal_Int32 nNameCount = aNames.getLength();
-
-    for( sal_Int32 i = 0 ; i < nNameCount ; i++ )
+    for (auto& aName : maNameContainer->getElementNames())
     {
-        OUString aName = pNames[ i ];
         try
         {
             SfxLibrary* pImplLib = getImplLib( aName );
@@ -939,12 +934,8 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
 
     // Preload?
     {
-        Sequence< OUString > aNames = maNameContainer->getElementNames();
-        const OUString* pNames = aNames.getConstArray();
-        sal_Int32 nNameCount = aNames.getLength();
-        for( sal_Int32 i = 0 ; i < nNameCount ; i++ )
+        for (auto& aName : maNameContainer->getElementNames())
         {
-            OUString aName = pNames[ i ];
             SfxLibrary* pImplLib = getImplLib( aName );
             if( pImplLib->mbPreload )
             {
@@ -1066,13 +1057,8 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
             mxSFI->move( aFolderUserBasic, aPrevFolder );
             mxSFI->move( aFolderTmp, aFolderUserBasic );
 
-            Sequence< OUString > aNames = pPrevCont->getElementNames();
-            const OUString* pNames = aNames.getConstArray();
-            sal_Int32 nNameCount = aNames.getLength();
-
-            for( sal_Int32 i = 0 ; i < nNameCount ; i++ )
+            for (auto& aLibName : pPrevCont->getElementNames())
             {
-                OUString aLibName = pNames[ i ];
                 if( hasByName( aLibName ) )
                 {
                     if( aLibName == aStandardStr )
@@ -1276,11 +1262,8 @@ void SfxLibraryContainer::checkStorageURL( const OUString& aSourceURL,
 
 SfxLibrary* SfxLibraryContainer::getImplLib( const OUString& rLibraryName )
 {
-    Any aLibAny = maNameContainer->getByName( rLibraryName ) ;
-    Reference< XNameAccess > xNameAccess;
-    aLibAny >>= xNameAccess;
-    SfxLibrary* pImplLib = static_cast< SfxLibrary* >( xNameAccess.get() );
-    return pImplLib;
+    auto xNameAccess = maNameContainer->getByName(rLibraryName).query<XNameAccess>();
+    return static_cast<SfxLibrary*>(xNameAccess.get());
 }
 
 
@@ -1360,15 +1343,10 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
     bool bLink = pLib->mbLink;
     bool bStorage = xStorage.is() && !bLink;
 
-    Sequence< OUString > aElementNames = pLib->getElementNames();
-    sal_Int32 nNameCount = aElementNames.getLength();
-    const OUString* pNames = aElementNames.getConstArray();
-
     if( bStorage )
     {
-        for( sal_Int32 i = 0 ; i < nNameCount ; i++ )
+        for (auto& aElementName : pLib->getElementNames())
         {
-            OUString aElementName = pNames[ i ];
             OUString aStreamName = aElementName + ".xml";
 
             if( !isLibraryElementValid( pLib->getByName( aElementName ) ) )
@@ -1441,10 +1419,8 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
                 pLib->storeResources();
             }
 
-            for( sal_Int32 i = 0 ; i < nNameCount ; i++ )
+            for (auto& aElementName : pLib->getElementNames())
             {
-                OUString aElementName = pNames[ i ];
-
                 INetURLObject aElementInetObj( aLibDirPath );
                 aElementInetObj.insertName( aElementName, false,
                                             INetURLObject::LAST_SEGMENT,
@@ -1703,12 +1679,10 @@ void SfxLibraryContainer::implImportLibDescriptor( SfxLibrary* pLib,
     if( pLib->mbInitialised )
         return;
 
-    sal_Int32 nElementCount = rLib.aElementNames.getLength();
-    const OUString* pElementNames = rLib.aElementNames.getConstArray();
     Any aDummyElement = createEmptyLibraryElement();
-    for( sal_Int32 i = 0 ; i < nElementCount ; i++ )
+    for (auto& name : rLib.aElementNames)
     {
-        pLib->maNameContainer->insertByName( pElementNames[i], aDummyElement );
+        pLib->maNameContainer->insertByName(name, aDummyElement);
     }
     pLib->mbPasswordProtected = rLib.bPasswordProtected;
     pLib->mbReadOnly = rLib.bReadOnly;
@@ -1723,20 +1697,14 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
                                                bool bComplete )
 {
     const Sequence< OUString > aNames = maNameContainer->getElementNames();
-    const sal_Int32 nNameCount = aNames.getLength();
-    const OUString* pName = aNames.getConstArray();
-    const OUString* pNamesEnd = aNames.getConstArray() + nNameCount;
 
     // Don't count libs from shared index file
-    sal_Int32 nLibsToSave = nNameCount;
-    for( ; pName != pNamesEnd; ++pName )
-    {
-        SfxLibrary* pImplLib = getImplLib( *pName );
-        if( pImplLib->mbSharedIndexFile || pImplLib->mbExtension )
-        {
-            nLibsToSave--;
-        }
-    }
+    sal_Int32 nLibsToSave
+        = std::count_if(aNames.begin(), aNames.end(),
+                        [this](const OUString& name) {
+                            SfxLibrary* pImplLib = getImplLib(name);
+                            return !pImplLib->mbSharedIndexFile && !pImplLib->mbExtension;
+                        });
     // Write to storage?
     bool bStorage = i_rStorage.is();
     uno::Reference< embed::XStorage > xSourceLibrariesStor;
@@ -1758,10 +1726,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
         // Don't write if only empty standard lib exists
         if ( ( nLibsToSave == 1 ) && ( aNames[0] == "Standard" ) )
         {
-            Any aLibAny = maNameContainer->getByName( aNames[0] );
-            Reference< XNameAccess > xNameAccess;
-            aLibAny >>= xNameAccess;
-            if ( ! xNameAccess->hasElements() )
+            if (!getImplLib(aNames[0])->hasElements())
             {
                 if ( bInplaceStorage && mxStorage->hasByName(maLibrariesDir) )
                 {
@@ -1825,12 +1790,11 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
     }
 
     int iArray = 0;
-    pName = aNames.getConstArray();
     ::xmlscript::LibDescriptor aLibDescriptorForExtensionLibs;
     ::xmlscript::LibDescriptorArray aLibArray( nLibsToSave );
-    for( ; pName != pNamesEnd; ++pName )
+    for (auto& name : aNames)
     {
-        SfxLibrary* pImplLib = getImplLib( *pName );
+        SfxLibrary* pImplLib = getImplLib(name);
         if( pImplLib->mbSharedIndexFile )
         {
             continue;
@@ -1842,7 +1806,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
         {
             iArray++;
         }
-        rLib.aName = *pName;
+        rLib.aName = name;
 
         rLib.bLink = pImplLib->mbLink;
         if( !bStorage || pImplLib->mbLink )
@@ -2105,16 +2069,14 @@ Type SAL_CALL SfxLibraryContainer::getElementType()
 sal_Bool SfxLibraryContainer::hasElements()
 {
     LibraryContainerMethodGuard aGuard( *this );
-    bool bRet = maNameContainer->hasElements();
-    return bRet;
+    return maNameContainer->hasElements();
 }
 
 // Methods XNameAccess
 Any SfxLibraryContainer::getByName( const OUString& aName )
 {
     LibraryContainerMethodGuard aGuard( *this );
-    Any aRetAny = maNameContainer->getByName( aName ) ;
-    return aRetAny;
+    return maNameContainer->getByName(aName);
 }
 
 Sequence< OUString > SfxLibraryContainer::getElementNames()
@@ -2146,8 +2108,7 @@ Reference< XNameContainer > SAL_CALL SfxLibraryContainer::createLibrary( const O
     aElement <<= xNameAccess;
     maNameContainer->insertByName( Name, aElement );
     maModifiable.setModified( true );
-    Reference< XNameContainer > xRet( xNameAccess, UNO_QUERY );
-    return xRet;
+    return pNewLib;
 }
 
 Reference< XNameAccess > SAL_CALL SfxLibraryContainer::createLibraryLink
@@ -2199,10 +2160,7 @@ void SAL_CALL SfxLibraryContainer::removeLibrary( const OUString& Name )
 {
     LibraryContainerMethodGuard aGuard( *this );
     // Get and hold library before removing
-    Any aLibAny = maNameContainer->getByName( Name ) ;
-    Reference< XNameAccess > xNameAccess;
-    aLibAny >>= xNameAccess;
-    SfxLibrary* pImplLib = static_cast< SfxLibrary* >( xNameAccess.get() );
+    rtl::Reference pImplLib(getImplLib(Name));
     if( pImplLib->mbReadOnly && !pImplLib->mbLink )
     {
         throw IllegalArgumentException(u"readonly && !link"_ustr, getXWeak(), 1);
@@ -2219,14 +2177,14 @@ void SAL_CALL SfxLibraryContainer::removeLibrary( const OUString& Name )
     {
         return;
     }
-    if( xNameAccess->hasElements() )
+    if (pImplLib->hasElements())
     {
         for (auto& name : pImplLib->getElementNames())
             pImplLib->impl_removeWithoutChecks(name);
     }
 
     // Delete index file
-    createAppLibraryFolder( pImplLib, Name );
+    createAppLibraryFolder(pImplLib.get(), Name);
     OUString aLibInfoPath = pImplLib->maLibInfoFileURL;
     try
     {
@@ -2272,14 +2230,11 @@ sal_Bool SAL_CALL SfxLibraryContainer::isLibraryLoaded( const OUString& Name )
 void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
 {
     LibraryContainerMethodGuard aGuard( *this );
-    Any aLibAny = maNameContainer->getByName( Name ) ;
-    Reference< XNameAccess > xNameAccess;
-    aLibAny >>= xNameAccess;
-    SfxLibrary* pImplLib = static_cast< SfxLibrary* >( xNameAccess.get() );
+    SfxLibrary* pImplLib = getImplLib(Name);
 
     bool bLoaded = pImplLib->mbLoaded;
     pImplLib->mbLoaded = true;
-    if( bLoaded || !xNameAccess->hasElements() )
+    if (bLoaded || !pImplLib->hasElements())
         return;
 
     if( pImplLib->mbPasswordProtected )
@@ -2330,13 +2285,8 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
 #endif
     }
 
-    Sequence< OUString > aNames = pImplLib->getElementNames();
-    sal_Int32 nNameCount = aNames.getLength();
-    const OUString* pNames = aNames.getConstArray();
-    for( sal_Int32 i = 0 ; i < nNameCount ; i++ )
+    for (auto& aElementName : pImplLib->getElementNames())
     {
-        OUString aElementName = pNames[ i ];
-
         OUString aFile;
         uno::Reference< io::XInputStream > xInStream;
 
@@ -2468,12 +2418,9 @@ void SAL_CALL SfxLibraryContainer::renameLibrary( const OUString& Name, const OU
         throw ElementExistException();
     }
     // Get and hold library before removing
-    Any aLibAny = maNameContainer->getByName( Name ) ;
+    rtl::Reference pImplLib(getImplLib(Name));
 
     // #i24094 Maybe lib is not loaded!
-    Reference< XNameAccess > xNameAccess;
-    aLibAny >>= xNameAccess;
-    SfxLibrary* pImplLib = static_cast< SfxLibrary* >( xNameAccess.get() );
     if( pImplLib->mbPasswordProtected && !pImplLib->mbPasswordVerified )
     {
         return;     // Lib with unverified password cannot be renamed
@@ -2530,13 +2477,8 @@ void SAL_CALL SfxLibraryContainer::renameLibrary( const OUString& Name, const OU
                 {
                 }
 
-                Sequence< OUString > aElementNames = xNameAccess->getElementNames();
-                sal_Int32 nNameCount = aElementNames.getLength();
-                const OUString* pNames = aElementNames.getConstArray();
-                for( sal_Int32 i = 0 ; i < nNameCount ; i++ )
+                for (auto& aElementName : pImplLib->getElementNames())
                 {
-                    OUString aElementName = pNames[ i ];
-
                     INetURLObject aElementInetObj( aLibDirPath );
                     aElementInetObj.insertName( aElementName, false,
                         INetURLObject::LAST_SEGMENT, INetURLObject::EncodeMechanism::All );
@@ -2589,7 +2531,7 @@ void SAL_CALL SfxLibraryContainer::renameLibrary( const OUString& Name, const OU
     {
         // Remove the old library from the container and insert it back with the new name
         maNameContainer->removeByName(Name);
-        maNameContainer->insertByName(NewName, aLibAny);
+        maNameContainer->insertByName(NewName, Any(Reference<XNameAccess>(pImplLib)));
         maModifiable.setModified(true);
     }
 }
@@ -3009,8 +2951,7 @@ Type SfxLibrary::getElementType()
 
 sal_Bool SfxLibrary::hasElements()
 {
-    bool bRet = maNameContainer->hasElements();
-    return bRet;
+    return maNameContainer->hasElements();
 }
 
 // Methods XNameAccess
@@ -3018,8 +2959,7 @@ Any SfxLibrary::getByName( const OUString& aName )
 {
     impl_checkLoaded();
 
-    Any aRetAny = maNameContainer->getByName( aName ) ;
-    return aRetAny;
+    return maNameContainer->getByName(aName);
 }
 
 Sequence< OUString > SfxLibrary::getElementNames()
@@ -3286,11 +3226,10 @@ Reference< deployment::XPackage > ScriptSubPackageIterator::getNextScriptSubPack
     }
     if( m_bIsBundle )
     {
-        const Reference< deployment::XPackage >* pSeq = m_aSubPkgSeq.getConstArray();
         sal_Int32 iPkg;
         for( iPkg = m_iNextSubPkg ; iPkg < m_nSubPkgCount ; ++iPkg )
         {
-            const Reference< deployment::XPackage > xSubPkg = pSeq[ iPkg ];
+            const Reference<deployment::XPackage> xSubPkg = m_aSubPkgSeq[iPkg];
             xScriptPackage = implDetectScriptPackage( xSubPkg, rbPureDialogLib );
             if( xScriptPackage.is() )
             {
@@ -3362,8 +3301,7 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextUserScript
     {
         if( m_pScriptSubPackageIterator == nullptr )
         {
-            const Reference< deployment::XPackage >* pUserPackages = m_aUserPackagesSeq.getConstArray();
-            Reference< deployment::XPackage > xPackage = pUserPackages[ m_iUserPackage ];
+            Reference<deployment::XPackage> xPackage = m_aUserPackagesSeq[m_iUserPackage];
             SAL_WARN_IF(
                 !xPackage.is(), "basic",
                 ("ScriptExtensionIterator::implGetNextUserScriptPackage():"
@@ -3413,8 +3351,7 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextSharedScri
     {
         if( m_pScriptSubPackageIterator == nullptr )
         {
-            const Reference< deployment::XPackage >* pSharedPackages = m_aSharedPackagesSeq.getConstArray();
-            Reference< deployment::XPackage > xPackage = pSharedPackages[ m_iSharedPackage ];
+            Reference<deployment::XPackage> xPackage = m_aSharedPackagesSeq[m_iSharedPackage];
             SAL_WARN_IF(
                 !xPackage.is(), "basic",
                 ("ScriptExtensionIterator::implGetNextSharedScriptPackage():"
@@ -3464,8 +3401,7 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextBundledScr
     {
         if( m_pScriptSubPackageIterator == nullptr )
         {
-            const Reference< deployment::XPackage >* pBundledPackages = m_aBundledPackagesSeq.getConstArray();
-            Reference< deployment::XPackage > xPackage = pBundledPackages[ m_iBundledPackage ];
+            Reference<deployment::XPackage> xPackage = m_aBundledPackagesSeq[m_iBundledPackage];
             SAL_WARN_IF(
                 !xPackage.is(), "basic",
                 ("ScriptExtensionIterator::implGetNextBundledScriptPackage():"
