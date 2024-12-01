@@ -147,7 +147,6 @@ sal_Int32 SAL_CALL SvxShapeCollection::getCount()
     return maShapeContainer.size();
 }
 
-
 uno::Any SAL_CALL SvxShapeCollection::getByIndex( sal_Int32 Index )
 {
     if( Index < 0 || Index >= getCount() )
@@ -156,6 +155,12 @@ uno::Any SAL_CALL SvxShapeCollection::getByIndex( sal_Int32 Index )
     std::unique_lock g(m_aMutex);
     Reference<drawing::XShape> xShape = maShapeContainer[Index];
     return uno::Any( xShape );
+}
+
+std::vector<css::uno::Reference<css::drawing::XShape>> SvxShapeCollection::getAllShapes() const
+{
+    std::unique_lock g(m_aMutex);
+    return maShapeContainer;
 }
 
 // XElementAccess
@@ -183,11 +188,6 @@ sal_Bool SAL_CALL SvxShapeCollection::supportsService( const OUString& ServiceNa
 uno::Sequence< OUString > SAL_CALL SvxShapeCollection::getSupportedServiceNames()
 {
     return { u"com.sun.star.drawing.Shapes"_ustr, u"com.sun.star.drawing.ShapeCollection"_ustr };
-}
-
-void SvxShapeCollection::getAllShapes(std::vector<css::uno::Reference<css::drawing::XShape>>& rShapes) const
-{
-    rShapes = maShapeContainer;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *

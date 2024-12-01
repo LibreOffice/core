@@ -31,7 +31,7 @@ class SvxShapeCollection final
                                       css::lang::XComponent>
 {
 private:
-    std::mutex m_aMutex;
+    mutable std::mutex m_aMutex;
     std::vector<css::uno::Reference<css::drawing::XShape>> maShapeContainer;
     comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> maEventListeners;
     bool bDisposed = false;
@@ -67,7 +67,7 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
-    void getAllShapes(std::vector<css::uno::Reference<css::drawing::XShape>>& rShapes) const;
+    std::vector<css::uno::Reference<css::drawing::XShape>> getAllShapes() const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

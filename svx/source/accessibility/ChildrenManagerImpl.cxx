@@ -871,17 +871,19 @@ void ChildrenManagerImpl::UpdateSelection()
         if (!xSelectedShape.is() && xSelectedShapeAccess.is())
         {
             sal_Int32 nCount = xSelectedShapeAccess->getCount();
-            aSortedSelectedShapes.reserve(nCount);
             if (auto pSvxShape = dynamic_cast<SvxShapeCollection*>(xSelectedShapeAccess.get()))
             {
-                pSvxShape->getAllShapes(aSortedSelectedShapes);
+                aSortedSelectedShapes = pSvxShape->getAllShapes();
             }
             else
+            {
+                aSortedSelectedShapes.reserve(nCount);
                 for (sal_Int32 i = 0; i < nCount; ++i)
                 {
                     css::uno::Reference<css::drawing::XShape> xShape(xSelectedShapeAccess->getByIndex(i), uno::UNO_QUERY);
                     aSortedSelectedShapes.push_back(xShape);
                 }
+            }
             std::sort(aSortedSelectedShapes.begin(), aSortedSelectedShapes.end());
         }
 
