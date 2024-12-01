@@ -5158,37 +5158,17 @@
         </group>
       </group>
     </group>
-    <group oor:name="Misc">
+    <group oor:name="Appearance">
       <info>
-        <desc>Determines the miscellaneous entries for the common group.</desc>
+        <desc>Specifies appearance settings for the application.</desc>
       </info>
-      <prop oor:name="Appearance" oor:type="xs:short" oor:nillable="false">
-        <!-- UIHints: Tools  Options - General  View  [Section] Appearance -->
+      <prop oor:name="LibreOfficeTheme" oor:type="xs:boolean" oor:nillable="false">
         <info>
-          <desc>Specifies the appearance of the user interface.</desc>
-          <label>Appearance</label>
+          <desc>Enable UI Themeing in LibreOffice.</desc>
         </info>
-        <constraints>
-          <enumeration oor:value="0">
-            <info>
-              <desc>Automatic, from system settings</desc>
-            </info>
-          </enumeration>
-          <enumeration oor:value="1">
-            <info>
-              <desc>Light</desc>
-            </info>
-          </enumeration>
-          <enumeration oor:value="2">
-            <info>
-              <desc>Dark</desc>
-            </info>
-          </enumeration>
-        </constraints>
-        <value>0</value>
+        <value>false</value>
       </prop>
       <prop oor:name="ApplicationAppearance" oor:type="xs:short" oor:nillable="false">
-        <!-- UIHints: Tools  Options - General  View  [Section] Appearance -->
         <info>
           <desc>Specifies the application colors.</desc>
           <label>Application Colors</label>
@@ -5210,8 +5190,13 @@
             </info>
           </enumeration>
         </constraints>
-        <value>1</value>
+        <value>0</value>
       </prop>
+    </group>
+    <group oor:name="Misc">
+      <info>
+        <desc>Determines the miscellaneous entries for the common group.</desc>
+      </info>
       <prop oor:name="MaxOpenDocuments" oor:type="xs:int">
         <info>
           <desc>Determines the maximum count of documents, which are allowed to
@@ -5331,12 +5316,6 @@
       <prop oor:name="DisableUICustomization" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Disables the customization of the UI elements.</desc>
-        </info>
-        <value>false</value>
-      </prop>
-      <prop oor:name="LibreOfficeTheme" oor:type="xs:boolean" oor:nillable="false">
-        <info>
-          <desc>Enable LibreOffice Theme.</desc>
         </info>
         <value>false</value>
       </prop>

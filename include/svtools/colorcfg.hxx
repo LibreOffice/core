@@ -130,16 +130,153 @@ enum ColorConfigEntry : int
 constexpr OUString AUTOMATIC_COLOR_SCHEME = u"COLOR_SCHEME_LIBREOFFICE_AUTOMATIC"_ustr;
 constexpr size_t THEME_APPLICATION_COLORS_COUNT = ColorConfigEntryCount - WINDOWCOLOR;
 
+namespace {
+    struct ColorConfigEntryData_Impl
+    {
+        std::u16string_view cName;
+        bool            bCanBeVisible;
+        bool            bCanHaveBitmap;
+    };
+    const ColorConfigEntryData_Impl cNames[] =
+    {
+        { std::u16string_view(u"DocColor"), false, false },
+        { std::u16string_view(u"DocBoundaries"), false, false },
+        { std::u16string_view(u"AppBackground"), false, true },
+        { std::u16string_view(u"TableBoundaries"), false, false },
+        { std::u16string_view(u"FontColor"), false, false },
+        { std::u16string_view(u"Links"), true, false },
+        { std::u16string_view(u"LinksVisited"), true, false },
+        { std::u16string_view(u"Spell"), false, false },
+        { std::u16string_view(u"Grammar"), false, false },
+        { std::u16string_view(u"SmartTags"), false, false },
+        { std::u16string_view(u"Shadow"), true, false },
+        { std::u16string_view(u"WriterTextGrid"), false, false },
+        { std::u16string_view(u"WriterFieldShadings"), true, false },
+        { std::u16string_view(u"WriterIdxShadings"), true, false },
+        { std::u16string_view(u"WriterDirectCursor"), true, false },
+        { std::u16string_view(u"WriterScriptIndicator"), false, false },
+        { std::u16string_view(u"WriterSectionBoundaries"), false, false },
+        { std::u16string_view(u"WriterHeaderFooterMark"), false, false },
+        { std::u16string_view(u"WriterPageBreaks"), false, false },
+        { std::u16string_view(u"WriterNonPrintChars"), false, false },
+        { std::u16string_view(u"HTMLSGML"), false, false },
+        { std::u16string_view(u"HTMLComment"), false, false },
+        { std::u16string_view(u"HTMLKeyword"), false, false },
+        { std::u16string_view(u"HTMLUnknown"), false, false },
+        { std::u16string_view(u"CalcGrid"), false, false },
+        { std::u16string_view(u"CalcCellFocus"), false, false },
+        { std::u16string_view(u"CalcPageBreak"), false, false },
+        { std::u16string_view(u"CalcPageBreakManual"), false, false },
+        { std::u16string_view(u"CalcPageBreakAutomatic"), false, false },
+        { std::u16string_view(u"CalcHiddenColRow"), true, false },
+        { std::u16string_view(u"CalcTextOverflow"), true, false },
+        { std::u16string_view(u"CalcComments"), false, false },
+        { std::u16string_view(u"CalcDetective"), false, false },
+        { std::u16string_view(u"CalcDetectiveError"), false, false },
+        { std::u16string_view(u"CalcReference"), false, false },
+        { std::u16string_view(u"CalcNotesBackground"), false, false },
+        { std::u16string_view(u"CalcValue"), false, false },
+        { std::u16string_view(u"CalcFormula"), false, false },
+        { std::u16string_view(u"CalcText"), false, false },
+        { std::u16string_view(u"CalcProtectedBackground"), false, false },
+        { std::u16string_view(u"DrawGrid"), true, false },
+        { std::u16string_view(u"Author1"), false, false },
+        { std::u16string_view(u"Author2"), false, false },
+        { std::u16string_view(u"Author3"), false, false },
+        { std::u16string_view(u"Author4"), false, false },
+        { std::u16string_view(u"Author5"), false, false },
+        { std::u16string_view(u"Author6"), false, false },
+        { std::u16string_view(u"Author7"), false, false },
+        { std::u16string_view(u"Author8"), false, false },
+        { std::u16string_view(u"Author9"), false, false },
+        { std::u16string_view(u"BASICEditor"), false, false },
+        { std::u16string_view(u"BASICIdentifier"), false, false },
+        { std::u16string_view(u"BASICComment"), false, false },
+        { std::u16string_view(u"BASICNumber"), false, false },
+        { std::u16string_view(u"BASICString"), false, false },
+        { std::u16string_view(u"BASICOperator"), false, false },
+        { std::u16string_view(u"BASICKeyword"), false, false },
+        { std::u16string_view(u"BASICError"), false, false },
+        { std::u16string_view(u"SQLIdentifier"), false, false },
+        { std::u16string_view(u"SQLNumber"), false, false },
+        { std::u16string_view(u"SQLString"), false, false },
+        { std::u16string_view(u"SQLOperator"), false, false },
+        { std::u16string_view(u"SQLKeyword"), false, false },
+        { std::u16string_view(u"SQLParameter"), false, false },
+        { std::u16string_view(u"SQLComment"), false, false },
+
+        { std::u16string_view(u"WindowColor"), false, false },
+        { std::u16string_view(u"WindowTextColor"), false, false },
+        { std::u16string_view(u"BaseColor"), false, false },
+        { std::u16string_view(u"ButtonColor"), false, false },
+        { std::u16string_view(u"ButtonTextColor"), false, false },
+        { std::u16string_view(u"AccentColor"), false, false },
+        { std::u16string_view(u"DisabledColor"), false, false },
+        { std::u16string_view(u"DisabledTextColor"), false, false },
+        { std::u16string_view(u"ShadowColor"), false, false },
+        { std::u16string_view(u"SeparatorColor"), false, false },
+        { std::u16string_view(u"FaceColor"), false, false },
+        { std::u16string_view(u"ActiveColor"), false, false },
+        { std::u16string_view(u"ActiveTextColor"), false, false },
+        { std::u16string_view(u"ActiveBorderColor"), false, false },
+        { std::u16string_view(u"FieldColor"), false, false },
+        { std::u16string_view(u"MenuBarColor"), false, false },
+        { std::u16string_view(u"MenuBarTextColor"), false, false },
+        { std::u16string_view(u"MenuBarHighlightColor"), false, false },
+        { std::u16string_view(u"MenuBarHighlightTextColor"), false, false },
+        { std::u16string_view(u"MenuColor"), false, false },
+        { std::u16string_view(u"MenuTextColor"), false, false },
+        { std::u16string_view(u"MenuHighlightColor"), false, false },
+        { std::u16string_view(u"MenuHighlightTextColor"), false, false },
+        { std::u16string_view(u"MenuBorderColor"), false, false },
+        { std::u16string_view(u"InactiveColor"), false, false },
+        { std::u16string_view(u"InactiveTextColor"), false, false },
+        { std::u16string_view(u"InactiveBorderColor"), false, false }
+    };
+}
+
 class ColorConfig_Impl;
 struct ColorConfigValue
 {
 
-    bool        bIsVisible; //validity depends on the element type
-    ::Color     nColor;
-    ColorConfigValue() : bIsVisible(false), nColor(0) {}
-    ColorConfigValue(const Color& rColor, bool bVisible) : bIsVisible(bVisible), nColor(rColor) {}
-    bool operator !=(const ColorConfigValue& rCmp) const
-        { return nColor != rCmp.nColor || bIsVisible != rCmp.bIsVisible;}
+    bool        bIsVisible; // validity depends on the element type
+    ::Color     nColor; // used as a cache for the current color
+    Color       nLightColor;
+    Color       nDarkColor;
+
+    bool        bUseBitmapBackground;
+    bool        bIsBitmapStretched;
+    OUString    sBitmapFileName;
+
+    ColorConfigValue()
+        : bIsVisible(false)
+        , nColor(0)
+        , nLightColor(0)
+        , nDarkColor(0)
+        , bUseBitmapBackground(false)
+        , bIsBitmapStretched(false)
+    {
+    }
+
+    ColorConfigValue(const Color& rColor, bool bVisible)
+        : bIsVisible(bVisible)
+        , nColor(rColor)
+        , nLightColor(rColor)
+        , nDarkColor(rColor)
+    {
+    }
+
+    bool operator!=(const ColorConfigValue& rCmp) const
+    {
+        return
+            nColor != rCmp.nColor
+            || nLightColor != rCmp.nLightColor
+            || nDarkColor != rCmp.nDarkColor
+            || bIsVisible != rCmp.bIsVisible
+            || bUseBitmapBackground != rCmp.bUseBitmapBackground
+            || bIsBitmapStretched != rCmp.bIsBitmapStretched
+            || sBitmapFileName != rCmp.sBitmapFileName;
+    }
 };
 
 class SAL_WARN_UNUSED SVT_DLLPUBLIC ColorConfig final :
@@ -161,8 +298,8 @@ public:
     static Color            GetDefaultColor(ColorConfigEntry eEntry, int nMod = -1);
     static const OUString& GetCurrentSchemeName();
 
-    static void             LoadThemeColorsFromRegistry();
-    static void             SetupTheme();
+    void                    LoadThemeColorsFromRegistry();
+    void                    SetupTheme();
 };
 
 class SVT_DLLPUBLIC EditableColorConfig

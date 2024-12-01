@@ -181,6 +181,7 @@ gb_emscripten_fs_image_files := \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/cui/ui/pastespecial.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/cui/ui/patterntabpage.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/cui/ui/percentdialog.ui \
+    $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/cui/ui/appearance.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/cui/ui/pickbulletpage.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/cui/ui/pickgraphicpage.ui \
     $(INSTROOT)/$(LIBO_SHARE_FOLDER)/config/soffice.cfg/cui/ui/picknumberingpage.ui \

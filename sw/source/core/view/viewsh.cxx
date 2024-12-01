@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/themecolors.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <config_wasm_strip.h>
 
@@ -1747,9 +1748,30 @@ void SwViewShell::PaintDesktop(const vcl::RenderContext& rRenderContext, const S
         PaintDesktop_(aRegion);
 }
 
+bool SwViewShell::DrawAppBackgroundBitmap(vcl::RenderContext* rRenderContext, const SwRect& rRect)
+{
+    if (Application::IsHeadlessModeEnabled()
+        || !ThemeColors::GetThemeColors().GetAppBackUseBitmap())
+        return false;
+
+    const BitmapEx& aAppBackImg
+        = Application::GetSettings().GetStyleSettings().GetAppBackgroundBitmap();
+    if (aAppBackImg.IsEmpty())
+        return false;
+
+    Wallpaper aWallpaper(aAppBackImg);
+    aWallpaper.SetStyle(WallpaperStyle::Tile);
+
+    rRenderContext->DrawWallpaper(rRect.SVRect(), aWallpaper);
+    return true;
+}
+
 // PaintDesktop is split in two, this part is also used by PreviewPage
 void SwViewShell::PaintDesktop_(const SwRegionRects &rRegion)
 {
+    if (DrawAppBackgroundBitmap(GetOut(), rRegion.GetOrigin()))
+        return;
+
     // OD 2004-04-23 #116347#
     GetOut()->Push( vcl::PushFlags::FILLCOLOR|vcl::PushFlags::LINECOLOR );
     GetOut()->SetLineColor();

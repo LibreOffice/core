@@ -21,7 +21,7 @@ class tdf131581(UITestCase):
                 xPages = xDialogOpt.getChild("pages")
                 xLOEntry = xPages.getChild('0')
                 xLOEntry.executeAction("EXPAND", tuple())
-                xAdvancedEntry = xLOEntry.getChild('8')
+                xAdvancedEntry = xLOEntry.getChild('9')
                 xAdvancedEntry.executeAction("SELECT", tuple())
 
                 xExpertBtn = xDialogOpt.getChild("expertconfig")

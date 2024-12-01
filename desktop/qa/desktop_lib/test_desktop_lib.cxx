@@ -2270,7 +2270,9 @@ void DesktopLOKTest::testPaintPartTileDifferentSchemes()
         svtools::EditableColorConfig aColorConfig;
         svtools::ColorConfigValue aValue;
         aValue.bIsVisible = true;
-        aValue.nColor = aDarkColor;
+        // aValue.nColor is just used for cache. please see Change: I1a7f70dfe44b81f863814f87e8d46e146c0e3d5a
+        aValue.nLightColor = aDarkColor;
+        aValue.nDarkColor = aDarkColor;
         aColorConfig.SetColorValue(svtools::DOCCOLOR, aValue);
         aColorConfig.AddScheme(u"Dark"_ustr);
     }
@@ -2280,7 +2282,8 @@ void DesktopLOKTest::testPaintPartTileDifferentSchemes()
         svtools::EditableColorConfig aColorConfig;
         svtools::ColorConfigValue aValue;
         aValue.bIsVisible = true;
-        aValue.nColor = COL_WHITE;
+        aValue.nLightColor = COL_WHITE;
+        aValue.nDarkColor = COL_WHITE;
         aColorConfig.SetColorValue(svtools::DOCCOLOR, aValue);
         aColorConfig.AddScheme(u"Light"_ustr);
     }

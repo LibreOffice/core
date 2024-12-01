@@ -49,6 +49,7 @@ using namespace utl;
 using namespace com::sun::star;
 
 const char g_sIsVisible[] = "/IsVisible";
+const char g_sBackgroundType[] = "/BackgroundType";
 
 
 namespace svtools
@@ -105,121 +106,32 @@ namespace {
 
 uno::Sequence< OUString> GetPropertyNames(std::u16string_view rScheme)
 {
-    struct ColorConfigEntryData_Impl
-    {
-        std::u16string_view cName;
-        bool            bCanBeVisible;
-    };
-    static const ColorConfigEntryData_Impl cNames[] =
-    {
-        { std::u16string_view(u"/DocColor")        ,false },
-        { std::u16string_view(u"/DocBoundaries")   ,false },
-        { std::u16string_view(u"/AppBackground")   ,false },
-        { std::u16string_view(u"/TableBoundaries") ,false },
-        { std::u16string_view(u"/FontColor")     ,false },
-        { std::u16string_view(u"/Links")           ,true },
-        { std::u16string_view(u"/LinksVisited")    ,true },
-        { std::u16string_view(u"/Spell")     ,false },
-        { std::u16string_view(u"/Grammar")     ,false },
-        { std::u16string_view(u"/SmartTags")     ,false },
-        { std::u16string_view(u"/Shadow")        , true },
-        { std::u16string_view(u"/WriterTextGrid")  ,false },
-        { std::u16string_view(u"/WriterFieldShadings"),true },
-        { std::u16string_view(u"/WriterIdxShadings")     ,true },
-        { std::u16string_view(u"/WriterDirectCursor")    ,true },
-        { std::u16string_view(u"/WriterScriptIndicator")    ,false },
-        { std::u16string_view(u"/WriterSectionBoundaries")    ,false },
-        { std::u16string_view(u"/WriterHeaderFooterMark")    ,false },
-        { std::u16string_view(u"/WriterPageBreaks")    ,false },
-        { std::u16string_view(u"/WriterNonPrintChars")    ,false },
-        { std::u16string_view(u"/HTMLSGML")        ,false },
-        { std::u16string_view(u"/HTMLComment")     ,false },
-        { std::u16string_view(u"/HTMLKeyword")     ,false },
-        { std::u16string_view(u"/HTMLUnknown")     ,false },
-        { std::u16string_view(u"/CalcGrid")        ,false },
-        { std::u16string_view(u"/CalcCellFocus")        ,false },
-        { std::u16string_view(u"/CalcPageBreak"), false },
-        { std::u16string_view(u"/CalcPageBreakManual"), false },
-        { std::u16string_view(u"/CalcPageBreakAutomatic"), false },
-        { std::u16string_view(u"/CalcHiddenColRow"), true },
-        { std::u16string_view(u"/CalcTextOverflow"), true },
-        { std::u16string_view(u"/CalcComments"), false },
-        { std::u16string_view(u"/CalcDetective")   ,false },
-        { std::u16string_view(u"/CalcDetectiveError")   ,false },
-        { std::u16string_view(u"/CalcReference")   ,false },
-        { std::u16string_view(u"/CalcNotesBackground") ,false },
-        { std::u16string_view(u"/CalcValue") ,false },
-        { std::u16string_view(u"/CalcFormula") ,false },
-        { std::u16string_view(u"/CalcText") ,false },
-        { std::u16string_view(u"/CalcProtectedBackground") ,false },
-        { std::u16string_view(u"/DrawGrid")        ,true },
-        { std::u16string_view(u"/Author1"), false },
-        { std::u16string_view(u"/Author2"), false },
-        { std::u16string_view(u"/Author3"), false },
-        { std::u16string_view(u"/Author4"), false },
-        { std::u16string_view(u"/Author5"), false },
-        { std::u16string_view(u"/Author6"), false },
-        { std::u16string_view(u"/Author7"), false },
-        { std::u16string_view(u"/Author8"), false },
-        { std::u16string_view(u"/Author9"), false },
-        { std::u16string_view(u"/BASICEditor"),  false },
-        { std::u16string_view(u"/BASICIdentifier"),  false },
-        { std::u16string_view(u"/BASICComment")   ,  false },
-        { std::u16string_view(u"/BASICNumber")    ,  false },
-        { std::u16string_view(u"/BASICString")    ,  false },
-        { std::u16string_view(u"/BASICOperator")  ,  false },
-        { std::u16string_view(u"/BASICKeyword")   ,  false },
-        { std::u16string_view(u"/BASICError"),  false },
-        { std::u16string_view(u"/SQLIdentifier"),  false },
-        { std::u16string_view(u"/SQLNumber"),  false },
-        { std::u16string_view(u"/SQLString"),  false },
-        { std::u16string_view(u"/SQLOperator"),  false },
-        { std::u16string_view(u"/SQLKeyword"),  false },
-        { std::u16string_view(u"/SQLParameter"),  false },
-        { std::u16string_view(u"/SQLComment"),  false },
-
-        { std::u16string_view(u"/WindowColor")     ,false },
-        { std::u16string_view(u"/WindowTextColor") ,false },
-        { std::u16string_view(u"/BaseColor")     ,false },
-        { std::u16string_view(u"/ButtonColor")     ,false },
-        { std::u16string_view(u"/ButtonTextColor")     ,false },
-        { std::u16string_view(u"/AccentColor")     ,false },
-        { std::u16string_view(u"/DisabledColor")     ,false },
-        { std::u16string_view(u"/DisabledTextColor")     ,false },
-        { std::u16string_view(u"/ShadowColor")     ,false },
-        { std::u16string_view(u"/SeparatorColor")     ,false },
-        { std::u16string_view(u"/FaceColor")     ,false },
-        { std::u16string_view(u"/ActiveColor")     ,false },
-        { std::u16string_view(u"/ActiveTextColor")     ,false },
-        { std::u16string_view(u"/ActiveBorderColor")     ,false },
-        { std::u16string_view(u"/FieldColor")     ,false },
-        { std::u16string_view(u"/MenuBarColor")     ,false },
-        { std::u16string_view(u"/MenuBarTextColor")     ,false },
-        { std::u16string_view(u"/MenuBarHighlightColor")     ,false },
-        { std::u16string_view(u"/MenuBarHighlightTextColor")     ,false },
-        { std::u16string_view(u"/MenuColor")     ,false },
-        { std::u16string_view(u"/MenuTextColor")     ,false },
-        { std::u16string_view(u"/MenuHighlightColor")     ,false },
-        { std::u16string_view(u"/MenuHighlightTextColor")     ,false },
-        { std::u16string_view(u"/MenuBorderColor")     ,false },
-        { std::u16string_view(u"/InactiveColor")     ,false },
-        { std::u16string_view(u"/InactiveTextColor")     ,false },
-        { std::u16string_view(u"/InactiveBorderColor")     ,false }
-    };
-
-    uno::Sequence<OUString> aNames(2 * ColorConfigEntryCount);
+    // this assums that all the entries will have at max 3 properties. this
+    // might not be the case as more and more UI elements support the bitmap
+    // background property. If that happens we might want to increase it to
+    // 5 * ColorConfigEntryCount; shouldn't be a problem now
+    uno::Sequence<OUString> aNames(3 * ColorConfigEntryCount);
     OUString* pNames = aNames.getArray();
     int nIndex = 0;
     OUString sBase = "ColorSchemes/"
                    + utl::wrapConfigurationElementName(rScheme);
     for(sal_Int32 i = 0; i < ColorConfigEntryCount; ++i)
     {
-        OUString sBaseName = sBase + cNames[i].cName;
-        pNames[nIndex++] = sBaseName + "/Color";
-        if(cNames[i].bCanBeVisible)
+        // every property has two entries, one for light color and one
+        // for dark color. and an optional visibility entry based on
+        // cNames[nIndex].bCanBeVisible
+        OUString sBaseName = sBase + "/" + cNames[i].cName;
+        pNames[nIndex++] = sBaseName + "/Light";
+        pNames[nIndex++] = sBaseName + "/Dark";
+
+        if (cNames[i].bCanHaveBitmap)
         {
-            pNames[nIndex++] = sBaseName + g_sIsVisible;
+            pNames[nIndex++] = sBaseName + "/BackgroundType";
+            pNames[nIndex++] = sBaseName + "/Bitmap";
         }
+
+        if(cNames[i].bCanBeVisible)
+            pNames[nIndex++] = sBaseName + g_sIsVisible;
     }
     aNames.realloc(nIndex);
     return aNames;
@@ -258,7 +170,7 @@ void ColorConfig_Impl::Load(const OUString& rScheme)
     }
     m_sLoadedScheme = sScheme;
 
-    // in cases like theme change/extension removal, use AUTOMATIC_COLOR_SCHEME as fallback.
+    // in cases like theme not found or extension removal, use AUTOMATIC_COLOR_SCHEME as fallback.
     if (!ThemeColors::IsAutomaticTheme(sScheme))
     {
         uno::Sequence<OUString> aSchemes = GetSchemeNames();
@@ -283,18 +195,67 @@ void ColorConfig_Impl::Load(const OUString& rScheme)
     sal_Int32 nIndex = 0;
     for(int i = 0; i < ColorConfigEntryCount && aColors.getLength() > nIndex; ++i)
     {
-        if(pColors[nIndex].hasValue())
-        {
-            Color nTmp;
-            pColors[nIndex] >>= nTmp;
-            m_aConfigValues[i].nColor = nTmp;
-        }
+        // light color value
+        Color nTmp;
+        pColors[nIndex] >>= nTmp;
+        m_aConfigValues[i].nLightColor = nTmp;
+
+        if (!pColors[nIndex].hasValue())
+            m_aConfigValues[i].nLightColor = COL_AUTO;
+        ++nIndex;
+
+        // dark color value
+        pColors[nIndex] >>= nTmp;
+        m_aConfigValues[i].nDarkColor = nTmp;
+
+        if (!pColors[nIndex].hasValue())
+            m_aConfigValues[i].nDarkColor = COL_AUTO;
+        ++nIndex;
+
+        bool bIsDarkMode
+            = MiscSettings::GetAppColorMode() == 2
+              || (MiscSettings::GetAppColorMode() == 0 && MiscSettings::GetUseDarkMode());
+
+        // based on the appearance (light/dark) cache the value of the appropriate color in nColor.
+        // this way we don't have to add hunderds of function calls in the codebase and it will be fast.
+        if (bIsDarkMode)
+            m_aConfigValues[i].nColor = m_aConfigValues[i].nDarkColor;
         else
-            m_aConfigValues[i].nColor = COL_AUTO;
-        nIndex++;
+            m_aConfigValues[i].nColor = m_aConfigValues[i].nLightColor;
+
         if(nIndex >= aColors.getLength())
             break;
-        //test for visibility property
+
+        m_aConfigValues[i].bUseBitmapBackground = false;
+
+        // for entries that support bitmap background customization
+        if (pColorNames[nIndex].endsWith(g_sBackgroundType))
+        {
+            // use bitmap for background
+            bool bUseBitmapBackground = false;
+            pColors[nIndex++] >>= bUseBitmapBackground;
+            m_aConfigValues[i].bUseBitmapBackground = bUseBitmapBackground;
+
+            OUString aBitmapStr = "";
+            pColors[nIndex++] >>= aBitmapStr;
+
+            // stretched or tiled
+            bool bIsBitmapStretched = aBitmapStr.endsWith("stretched");
+            m_aConfigValues[i].bIsBitmapStretched = bIsBitmapStretched;
+
+            // bitmap file name
+            int nNameEnding = aBitmapStr.indexOf(";");
+            std::u16string_view aBitmapFileName;
+            if (aBitmapStr.isEmpty())
+                aBitmapFileName = u"";
+            else
+                aBitmapFileName = aBitmapStr.subView(0, nNameEnding);
+
+            m_aConfigValues[i].sBitmapFileName = aBitmapFileName;
+        }
+
+        // we check if the property ends with "/IsVisible" because not all entries are visible
+        // see cNames[nIndex].bCanBeVisible
         if(pColorNames[nIndex].endsWith(g_sIsVisible))
              m_aConfigValues[i].bIsVisible = Any2Bool(pColors[nIndex++]);
     }
@@ -364,17 +325,40 @@ void ColorConfig_Impl::ImplCommit()
     beans::PropertyValue* pPropValues = aPropValues.getArray();
     const OUString* pColorNames = aColorNames.getConstArray();
     sal_Int32 nIndex = 0;
-    for(int i = 0; i < ColorConfigEntryCount && aColorNames.getLength() > nIndex; ++i)
+    for(int i = 0; i < ColorConfigEntryCount && nIndex < aColorNames.getLength(); ++i)
     {
+        // light color value
         pPropValues[nIndex].Name = pColorNames[nIndex];
-        //save automatic colors as void value
-        if(m_aConfigValues[i].nColor != COL_AUTO)
-            pPropValues[nIndex].Value <<= m_aConfigValues[i].nColor;
-
+        if(m_aConfigValues[i].nLightColor != COL_AUTO) //save automatic colors as void value
+            pPropValues[nIndex].Value <<= m_aConfigValues[i].nLightColor;
         nIndex++;
+
+        // dark color value
+        pPropValues[nIndex].Name = pColorNames[nIndex];
+        if(m_aConfigValues[i].nDarkColor != COL_AUTO) //save automatic colors as void value
+            pPropValues[nIndex].Value <<= m_aConfigValues[i].nDarkColor;
+        nIndex++;
+
         if(nIndex >= aColorNames.getLength())
             break;
-        //test for visibility property
+
+        if (pColorNames[nIndex].endsWith(g_sBackgroundType))
+        {
+            pPropValues[nIndex].Name = pColorNames[nIndex];
+            pPropValues[nIndex].Value <<= m_aConfigValues[i].bUseBitmapBackground;
+
+            ++nIndex; // Bitmap
+            OUString aBitmapStr = m_aConfigValues[i].sBitmapFileName + ";";
+            aBitmapStr += m_aConfigValues[i].bIsBitmapStretched ? std::u16string_view(u"stretched")
+                                                                : std::u16string_view(u"tiled");
+
+            pPropValues[nIndex].Name = pColorNames[nIndex];
+            pPropValues[nIndex].Value <<= aBitmapStr;
+            ++nIndex;
+        }
+
+        // we check if the property ends with "/IsVisible" because not all entries are visible
+        // see cNames[nIndex].bCanBeVisible
         if(pColorNames[nIndex].endsWith(g_sIsVisible))
         {
              pPropValues[nIndex].Name = pColorNames[nIndex];
@@ -451,41 +435,47 @@ void ColorConfig::LoadThemeColorsFromRegistry()
 {
     ThemeColors& rThemeColors = ThemeColors::GetThemeColors();
 
-    rThemeColors.SetWindowColor(m_pImpl->GetColorConfigValue(svtools::WINDOWCOLOR).nColor);
-    rThemeColors.SetWindowTextColor(m_pImpl->GetColorConfigValue(svtools::WINDOWTEXTCOLOR).nColor);
-    rThemeColors.SetBaseColor(m_pImpl->GetColorConfigValue(svtools::BASECOLOR).nColor);
-    rThemeColors.SetButtonColor(m_pImpl->GetColorConfigValue(svtools::BUTTONCOLOR).nColor);
-    rThemeColors.SetButtonTextColor(m_pImpl->GetColorConfigValue(svtools::BUTTONTEXTCOLOR).nColor);
-    rThemeColors.SetAccentColor(m_pImpl->GetColorConfigValue(svtools::ACCENTCOLOR).nColor);
-    rThemeColors.SetDisabledColor(m_pImpl->GetColorConfigValue(svtools::DISABLEDCOLOR).nColor);
-    rThemeColors.SetDisabledTextColor(m_pImpl->GetColorConfigValue(svtools::DISABLEDTEXTCOLOR).nColor);
-    rThemeColors.SetShadeColor(m_pImpl->GetColorConfigValue(svtools::SHADECOLOR).nColor);
-    rThemeColors.SetSeparatorColor(m_pImpl->GetColorConfigValue(svtools::SEPARATORCOLOR).nColor);
-    rThemeColors.SetFaceColor(m_pImpl->GetColorConfigValue(svtools::FACECOLOR).nColor);
-    rThemeColors.SetActiveColor(m_pImpl->GetColorConfigValue(svtools::ACTIVECOLOR).nColor);
-    rThemeColors.SetActiveTextColor(m_pImpl->GetColorConfigValue(svtools::ACTIVETEXTCOLOR).nColor);
-    rThemeColors.SetActiveBorderColor(m_pImpl->GetColorConfigValue(svtools::ACTIVEBORDERCOLOR).nColor);
-    rThemeColors.SetFieldColor(m_pImpl->GetColorConfigValue(svtools::FIELDCOLOR).nColor);
-    rThemeColors.SetMenuBarColor(m_pImpl->GetColorConfigValue(svtools::MENUBARCOLOR).nColor);
-    rThemeColors.SetMenuBarTextColor(m_pImpl->GetColorConfigValue(svtools::MENUBARTEXTCOLOR).nColor);
-    rThemeColors.SetMenuBarHighlightColor(m_pImpl->GetColorConfigValue(svtools::MENUBARHIGHLIGHTCOLOR).nColor);
-    rThemeColors.SetMenuBarHighlightTextColor(m_pImpl->GetColorConfigValue(svtools::MENUBARHIGHLIGHTTEXTCOLOR).nColor);
-    rThemeColors.SetMenuColor(m_pImpl->GetColorConfigValue(svtools::MENUCOLOR).nColor);
-    rThemeColors.SetMenuTextColor(m_pImpl->GetColorConfigValue(svtools::MENUTEXTCOLOR).nColor);
-    rThemeColors.SetMenuHighlightColor(m_pImpl->GetColorConfigValue(svtools::MENUHIGHLIGHTCOLOR).nColor);
-    rThemeColors.SetMenuHighlightTextColor(m_pImpl->GetColorConfigValue(svtools::MENUHIGHLIGHTTEXTCOLOR).nColor);
-    rThemeColors.SetMenuBorderColor(m_pImpl->GetColorConfigValue(svtools::MENUBORDERCOLOR).nColor);
-    rThemeColors.SetInactiveColor(m_pImpl->GetColorConfigValue(svtools::INACTIVECOLOR).nColor);
-    rThemeColors.SetInactiveTextColor(m_pImpl->GetColorConfigValue(svtools::INACTIVETEXTCOLOR).nColor);
-    rThemeColors.SetInactiveBorderColor(m_pImpl->GetColorConfigValue(svtools::INACTIVEBORDERCOLOR).nColor);
+    rThemeColors.SetWindowColor(GetColorValue(svtools::WINDOWCOLOR).nColor);
+    rThemeColors.SetWindowTextColor(GetColorValue(svtools::WINDOWTEXTCOLOR).nColor);
+    rThemeColors.SetBaseColor(GetColorValue(svtools::BASECOLOR).nColor);
+    rThemeColors.SetButtonColor(GetColorValue(svtools::BUTTONCOLOR).nColor);
+    rThemeColors.SetButtonTextColor(GetColorValue(svtools::BUTTONTEXTCOLOR).nColor);
+    rThemeColors.SetAccentColor(GetColorValue(svtools::ACCENTCOLOR).nColor);
+    rThemeColors.SetDisabledColor(GetColorValue(svtools::DISABLEDCOLOR).nColor);
+    rThemeColors.SetDisabledTextColor(GetColorValue(svtools::DISABLEDTEXTCOLOR).nColor);
+    rThemeColors.SetShadeColor(GetColorValue(svtools::SHADECOLOR).nColor);
+    rThemeColors.SetSeparatorColor(GetColorValue(svtools::SEPARATORCOLOR).nColor);
+    rThemeColors.SetFaceColor(GetColorValue(svtools::FACECOLOR).nColor);
+    rThemeColors.SetActiveColor(GetColorValue(svtools::ACTIVECOLOR).nColor);
+    rThemeColors.SetActiveTextColor(GetColorValue(svtools::ACTIVETEXTCOLOR).nColor);
+    rThemeColors.SetActiveBorderColor(GetColorValue(svtools::ACTIVEBORDERCOLOR).nColor);
+    rThemeColors.SetFieldColor(GetColorValue(svtools::FIELDCOLOR).nColor);
+    rThemeColors.SetMenuBarColor(GetColorValue(svtools::MENUBARCOLOR).nColor);
+    rThemeColors.SetMenuBarTextColor(GetColorValue(svtools::MENUBARTEXTCOLOR).nColor);
+    rThemeColors.SetMenuBarHighlightColor(GetColorValue(svtools::MENUBARHIGHLIGHTCOLOR).nColor);
+    rThemeColors.SetMenuBarHighlightTextColor(GetColorValue(svtools::MENUBARHIGHLIGHTTEXTCOLOR).nColor);
+    rThemeColors.SetMenuColor(GetColorValue(svtools::MENUCOLOR).nColor);
+    rThemeColors.SetMenuTextColor(GetColorValue(svtools::MENUTEXTCOLOR).nColor);
+    rThemeColors.SetMenuHighlightColor(GetColorValue(svtools::MENUHIGHLIGHTCOLOR).nColor);
+    rThemeColors.SetMenuHighlightTextColor(GetColorValue(svtools::MENUHIGHLIGHTTEXTCOLOR).nColor);
+    rThemeColors.SetMenuBorderColor(GetColorValue(svtools::MENUBORDERCOLOR).nColor);
+    rThemeColors.SetInactiveColor(GetColorValue(svtools::INACTIVECOLOR).nColor);
+    rThemeColors.SetInactiveTextColor(GetColorValue(svtools::INACTIVETEXTCOLOR).nColor);
+    rThemeColors.SetInactiveBorderColor(GetColorValue(svtools::INACTIVEBORDERCOLOR).nColor);
     rThemeColors.SetThemeName(GetCurrentSchemeName());
+
+    // as more controls support it, we might want to have ColorConfigValue entries in ThemeColors
+    // instead of just colors. for now that seems overkill for just one control.
+    rThemeColors.SetAppBackBitmapFileName(m_pImpl->GetColorConfigValue(svtools::APPBACKGROUND).sBitmapFileName);
+    rThemeColors.SetAppBackUseBitmap(m_pImpl->GetColorConfigValue(svtools::APPBACKGROUND).bUseBitmapBackground);
+    rThemeColors.SetAppBackBitmapStretched(m_pImpl->GetColorConfigValue(svtools::APPBACKGROUND).bIsBitmapStretched);
 
     ThemeColors::SetThemeLoaded(true);
 }
 
 void ColorConfig::SetupTheme()
 {
-    if (!officecfg::Office::Common::Misc::LibreOfficeTheme::get()
+    if (!officecfg::Office::Common::Appearance::LibreOfficeTheme::get()
         || ThemeColors::IsAutomaticTheme(GetCurrentSchemeName()))
     {
         ThemeColors::SetThemeLoaded(false);
@@ -532,12 +522,73 @@ ColorConfig::~ColorConfig()
     }
 }
 
+static Color lcl_GetDefaultUIColor(ColorConfigEntry eEntry)
+{
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    switch (eEntry)
+    {
+        case WINDOWCOLOR:
+            return rStyleSettings.GetWindowColor();
+        case WINDOWTEXTCOLOR:
+            return rStyleSettings.GetWindowTextColor();
+        case BASECOLOR:
+            return rStyleSettings.GetFieldColor();
+        case BUTTONCOLOR:
+            return rStyleSettings.GetDialogColor();
+        case BUTTONTEXTCOLOR:
+            return rStyleSettings.GetButtonTextColor();
+        case ACCENTCOLOR:
+            return rStyleSettings.GetAccentColor();
+        case DISABLEDCOLOR:
+            return rStyleSettings.GetDisableColor();
+        case DISABLEDTEXTCOLOR:
+        case SHADECOLOR:
+            return rStyleSettings.GetShadowColor();
+        case SEPARATORCOLOR:
+            return rStyleSettings.GetSeparatorColor();
+        case FACECOLOR:
+            return rStyleSettings.GetFaceColor();
+        case ACTIVECOLOR:
+            return rStyleSettings.GetActiveColor();
+        case ACTIVETEXTCOLOR:
+            return rStyleSettings.GetActiveTextColor();
+        case ACTIVEBORDERCOLOR:
+            return rStyleSettings.GetActiveBorderColor();
+        case FIELDCOLOR:
+            return rStyleSettings.GetFieldColor();
+        case MENUBARCOLOR:
+            return rStyleSettings.GetMenuBarColor();
+        case MENUBARTEXTCOLOR:
+            return rStyleSettings.GetMenuBarTextColor();
+        case MENUBARHIGHLIGHTCOLOR:
+            return rStyleSettings.GetAccentColor();
+        case MENUBARHIGHLIGHTTEXTCOLOR:
+            return rStyleSettings.GetMenuBarHighlightTextColor();
+        case MENUCOLOR:
+            return rStyleSettings.GetMenuColor();
+        case MENUTEXTCOLOR:
+            return rStyleSettings.GetMenuTextColor();
+        case MENUHIGHLIGHTCOLOR:
+            return rStyleSettings.GetMenuHighlightColor();
+        case MENUHIGHLIGHTTEXTCOLOR:
+            return rStyleSettings.GetMenuHighlightTextColor();
+        case MENUBORDERCOLOR:
+            return rStyleSettings.GetMenuBorderColor();
+        case INACTIVECOLOR:
+        case INACTIVETEXTCOLOR:
+        case INACTIVEBORDERCOLOR:
+            return rStyleSettings.GetShadowColor();
+        default:
+            return COL_AUTO;
+    }
+}
+
 Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry, int nMod)
 {
     // the actual value of default color doesn't matter for colors in Group_Application
     // and this is just to prevent index out of bound error.
     if (eEntry >= WINDOWCOLOR)
-        return COL_GRAY;
+        return lcl_GetDefaultUIColor(eEntry);
 
     enum ColorType { clLight = 0,
                      clDark,

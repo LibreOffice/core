@@ -168,6 +168,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/pastespecial \
 	cui/uiconfig/ui/patterntabpage \
 	cui/uiconfig/ui/percentdialog \
+	cui/uiconfig/ui/appearance \
 	cui/uiconfig/ui/pickbulletpage \
 	cui/uiconfig/ui/pickgraphicpage \
 	cui/uiconfig/ui/picknumberingpage \

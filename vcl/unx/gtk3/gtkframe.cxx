@@ -1367,7 +1367,7 @@ void GtkSalFrame::SetColorScheme(GVariant* variant)
 
     guint32 color_scheme;
 
-    switch (officecfg::Office::Common::Misc::Appearance::get())
+    switch (MiscSettings::GetAppColorMode())
     {
         default:
         case 0: // Auto
