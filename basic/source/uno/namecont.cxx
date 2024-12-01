@@ -138,7 +138,7 @@ void NameContainer::replaceByName( const OUString& aName, const Any& aElement )
     const Type& aAnyType = aElement.getValueType();
     if( mType != aAnyType )
     {
-        throw IllegalArgumentException(u"types do not match"_ustr, getXWeak(), 2);
+        throw IllegalArgumentException(u"types do not match"_ustr, rOwner, 2);
     }
     auto aIt = maMap.find(aName);
     if (aIt == maMap.end())
@@ -179,7 +179,7 @@ void NameContainer::insertNoCheck(const OUString& aName, const Any& aElement)
     const Type& aAnyType = aElement.getValueType();
     if( mType != aAnyType )
     {
-        throw IllegalArgumentException(u"types do not match"_ustr, getXWeak(), 2);
+        throw IllegalArgumentException(u"types do not match"_ustr, rOwner, 2);
     }
 
     maMap[aName] = aElement;
@@ -257,42 +257,42 @@ void NameContainer::removeByName( const OUString& aName )
 
 
 // Methods XContainer
-void SAL_CALL NameContainer::addContainerListener( const Reference< XContainerListener >& xListener )
+void NameContainer::addContainerListener(const Reference<XContainerListener>& xListener)
 {
     if( !xListener.is() )
     {
-        throw RuntimeException(u"addContainerListener called with null xListener"_ustr,getXWeak());
+        throw RuntimeException(u"addContainerListener called with null xListener"_ustr,rOwner);
     }
     std::unique_lock aGuard(m_aMutex);
     maContainerListeners.addInterface( aGuard, xListener );
 }
 
-void SAL_CALL NameContainer::removeContainerListener( const Reference< XContainerListener >& xListener )
+void NameContainer::removeContainerListener(const Reference<XContainerListener>& xListener)
 {
     if( !xListener.is() )
     {
-        throw RuntimeException(u"removeContainerListener called with null xListener"_ustr,getXWeak());
+        throw RuntimeException(u"removeContainerListener called with null xListener"_ustr,rOwner);
     }
     std::unique_lock aGuard(m_aMutex);
     maContainerListeners.removeInterface( aGuard, xListener );
 }
 
 // Methods XChangesNotifier
-void SAL_CALL NameContainer::addChangesListener( const Reference< XChangesListener >& xListener )
+void NameContainer::addChangesListener(const Reference<XChangesListener>& xListener)
 {
     if( !xListener.is() )
     {
-        throw RuntimeException(u"addChangesListener called with null xListener"_ustr,getXWeak());
+        throw RuntimeException(u"addChangesListener called with null xListener"_ustr,rOwner);
     }
     std::unique_lock aGuard(m_aMutex);
     maChangesListeners.addInterface( aGuard, xListener );
 }
 
-void SAL_CALL NameContainer::removeChangesListener( const Reference< XChangesListener >& xListener )
+void NameContainer::removeChangesListener(const Reference<XChangesListener>& xListener)
 {
     if( !xListener.is() )
     {
-        throw RuntimeException(u"removeChangesListener called with null xListener"_ustr,getXWeak());
+        throw RuntimeException(u"removeChangesListener called with null xListener"_ustr,rOwner);
     }
     std::unique_lock aGuard(m_aMutex);
     maChangesListeners.removeInterface( aGuard, xListener );
@@ -326,7 +326,7 @@ SfxLibraryContainer::SfxLibraryContainer()
     , mbVBACompat( false )
     , meVBATextEncoding( RTL_TEXTENCODING_DONTKNOW )
     , maModifiable( *this, m_aMutex )
-    , maNameContainer( new NameContainer(cppu::UnoType<XNameAccess>::get()) )
+    , maNameContainer( cppu::UnoType<XNameAccess>::get(), *this )
     , mpBasMgr( nullptr )
     , mbOwnBasMgr( false )
     , mbOldInfoFormat( false )
@@ -433,7 +433,7 @@ sal_Bool SfxLibraryContainer::isModified()
         return true;
     }
     // the library container is not modified, go through the libraries and check whether they are modified
-    for (auto& aName : maNameContainer->getElementNames())
+    for (auto& aName : maNameContainer.getElementNames())
     {
         try
         {
@@ -934,7 +934,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
 
     // Preload?
     {
-        for (auto& aName : maNameContainer->getElementNames())
+        for (auto& aName : maNameContainer.getElementNames())
         {
             SfxLibrary* pImplLib = getImplLib( aName );
             if( pImplLib->mbPreload )
@@ -1108,7 +1108,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
 
                     if( aLibName == aStandardStr )
                     {
-                        maNameContainer->removeByName( aLibName );
+                        maNameContainer.removeByName( aLibName );
                     }
 
                     // Create library
@@ -1262,7 +1262,7 @@ void SfxLibraryContainer::checkStorageURL( const OUString& aSourceURL,
 
 SfxLibrary* SfxLibraryContainer::getImplLib( const OUString& rLibraryName )
 {
-    auto xNameAccess = maNameContainer->getByName(rLibraryName).query<XNameAccess>();
+    auto xNameAccess = maNameContainer.getByName(rLibraryName).query<XNameAccess>();
     return static_cast<SfxLibrary*>(xNameAccess.get());
 }
 
@@ -1682,7 +1682,7 @@ void SfxLibraryContainer::implImportLibDescriptor( SfxLibrary* pLib,
     Any aDummyElement = createEmptyLibraryElement();
     for (auto& name : rLib.aElementNames)
     {
-        pLib->maNameContainer->insertByName(name, aDummyElement);
+        pLib->maNameContainer.insertByName(name, aDummyElement);
     }
     pLib->mbPasswordProtected = rLib.bPasswordProtected;
     pLib->mbReadOnly = rLib.bReadOnly;
@@ -1696,7 +1696,7 @@ void SfxLibraryContainer::implImportLibDescriptor( SfxLibrary* pLib,
 void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XStorage >& i_rStorage,
                                                bool bComplete )
 {
-    const Sequence< OUString > aNames = maNameContainer->getElementNames();
+    const Sequence< OUString > aNames = maNameContainer.getElementNames();
 
     // Don't count libs from shared index file
     sal_Int32 nLibsToSave
@@ -2063,32 +2063,32 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
 Type SAL_CALL SfxLibraryContainer::getElementType()
 {
     LibraryContainerMethodGuard aGuard( *this );
-    return maNameContainer->getElementType();
+    return maNameContainer.getElementType();
 }
 
 sal_Bool SfxLibraryContainer::hasElements()
 {
     LibraryContainerMethodGuard aGuard( *this );
-    return maNameContainer->hasElements();
+    return maNameContainer.hasElements();
 }
 
 // Methods XNameAccess
 Any SfxLibraryContainer::getByName( const OUString& aName )
 {
     LibraryContainerMethodGuard aGuard( *this );
-    return maNameContainer->getByName(aName);
+    return maNameContainer.getByName(aName);
 }
 
 Sequence< OUString > SfxLibraryContainer::getElementNames()
 {
     LibraryContainerMethodGuard aGuard( *this );
-    return maNameContainer->getElementNames();
+    return maNameContainer.getElementNames();
 }
 
 sal_Bool SfxLibraryContainer::hasByName( const OUString& aName )
 {
     LibraryContainerMethodGuard aGuard( *this );
-    return maNameContainer->hasByName( aName ) ;
+    return maNameContainer.hasByName( aName ) ;
 }
 
 // Methods XLibraryContainer
@@ -2106,7 +2106,7 @@ Reference< XNameContainer > SAL_CALL SfxLibraryContainer::createLibrary( const O
     Reference< XNameAccess > xNameAccess( pNewLib );
     Any aElement;
     aElement <<= xNameAccess;
-    maNameContainer->insertByName( Name, aElement );
+    maNameContainer.insertByName( Name, aElement );
     maModifiable.setModified( true );
     return pNewLib;
 }
@@ -2139,7 +2139,7 @@ Reference< XNameAccess > SAL_CALL SfxLibraryContainer::createLibraryLink
     Reference< XNameAccess > xRet( pNewLib );
     Any aElement;
     aElement <<= xRet;
-    maNameContainer->insertByName( Name, aElement );
+    maNameContainer.insertByName( Name, aElement );
     maModifiable.setModified( true );
 
     if( StorageURL.indexOf( "vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE" ) != -1 )
@@ -2166,7 +2166,7 @@ void SAL_CALL SfxLibraryContainer::removeLibrary( const OUString& Name )
         throw IllegalArgumentException(u"readonly && !link"_ustr, getXWeak(), 1);
     }
     // Remove from container
-    maNameContainer->removeByName( Name );
+    maNameContainer.removeByName( Name );
     maModifiable.setModified( true );
 
     // Delete library files, but not for linked libraries
@@ -2346,12 +2346,12 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
         {
             if( aAny.hasValue() )
             {
-                pImplLib->maNameContainer->replaceByName( aElementName, aAny );
+                pImplLib->maNameContainer.replaceByName( aElementName, aAny );
             }
         }
         else
         {
-            pImplLib->maNameContainer->insertNoCheck(aElementName, aAny);
+            pImplLib->maNameContainer.insertNoCheck(aElementName, aAny);
         }
     }
     pImplLib->implSetModified( false );
@@ -2413,7 +2413,7 @@ void SAL_CALL SfxLibraryContainer::setLibraryReadOnly( const OUString& Name, sal
 void SAL_CALL SfxLibraryContainer::renameLibrary( const OUString& Name, const OUString& NewName )
 {
     LibraryContainerMethodGuard aGuard( *this );
-    if( maNameContainer->hasByName( NewName ) )
+    if( maNameContainer.hasByName( NewName ) )
     {
         throw ElementExistException();
     }
@@ -2530,8 +2530,8 @@ void SAL_CALL SfxLibraryContainer::renameLibrary( const OUString& Name, const OU
     if( bMovedSuccessful )
     {
         // Remove the old library from the container and insert it back with the new name
-        maNameContainer->removeByName(Name);
-        maNameContainer->insertByName(NewName, Any(Reference<XNameAccess>(pImplLib)));
+        maNameContainer.removeByName(Name);
+        maNameContainer.insertByName(NewName, Any(Reference<XNameAccess>(pImplLib)));
         maModifiable.setModified(true);
     }
 }
@@ -2637,14 +2637,14 @@ void SAL_CALL SfxLibraryContainer::changeLibraryPassword(const OUString&, const 
 void SAL_CALL SfxLibraryContainer::addContainerListener( const Reference< XContainerListener >& xListener )
 {
     LibraryContainerMethodGuard aGuard( *this );
-    maNameContainer->setEventSource( getXWeak() );
-    maNameContainer->addContainerListener( xListener );
+    maNameContainer.setEventSource( getXWeak() );
+    maNameContainer.addContainerListener( xListener );
 }
 
 void SAL_CALL SfxLibraryContainer::removeContainerListener( const Reference< XContainerListener >& xListener )
 {
     LibraryContainerMethodGuard aGuard( *this );
-    maNameContainer->removeContainerListener( xListener );
+    maNameContainer.removeContainerListener( xListener );
 }
 
 // Methods XLibraryContainerExport
@@ -2868,7 +2868,7 @@ SfxLibrary::SfxLibrary( ModifiableHelper& _rModifiable, const Type& aType,
     const Reference< XSimpleFileAccess3 >& xSFI )
         : mxSFI( xSFI )
         , mrModifiable( _rModifiable )
-        , maNameContainer( new NameContainer(aType) )
+        , maNameContainer( aType, *this )
         , mbLoaded( true )
         , mbIsModified( true )
         , mbInitialised( false )
@@ -2889,7 +2889,7 @@ SfxLibrary::SfxLibrary( ModifiableHelper& _rModifiable, const Type& aType,
     OUString aLibInfoFileURL, OUString aStorageURL, bool ReadOnly )
         : mxSFI( xSFI )
         , mrModifiable( _rModifiable )
-        , maNameContainer( new NameContainer(aType) )
+        , maNameContainer( aType, *this )
         , mbLoaded( false )
         , mbIsModified( true )
         , mbInitialised( false )
@@ -2928,12 +2928,12 @@ void SfxLibrary::implSetModified( bool _bIsModified )
 // Methods XElementAccess
 Type SfxLibrary::getElementType()
 {
-    return maNameContainer->getElementType();
+    return maNameContainer.getElementType();
 }
 
 sal_Bool SfxLibrary::hasElements()
 {
-    return maNameContainer->hasElements();
+    return maNameContainer.hasElements();
 }
 
 // Methods XNameAccess
@@ -2941,17 +2941,17 @@ Any SfxLibrary::getByName( const OUString& aName )
 {
     impl_checkLoaded();
 
-    return maNameContainer->getByName(aName);
+    return maNameContainer.getByName(aName);
 }
 
 Sequence< OUString > SfxLibrary::getElementNames()
 {
-    return maNameContainer->getElementNames();
+    return maNameContainer.getElementNames();
 }
 
 sal_Bool SfxLibrary::hasByName( const OUString& aName )
 {
-    bool bRet = maNameContainer->hasByName( aName );
+    bool bRet = maNameContainer.hasByName( aName );
     return bRet;
 }
 
@@ -2992,7 +2992,7 @@ void SfxLibrary::replaceByName( const OUString& aName, const Any& aElement )
         !isLibraryElementValid(aElement), "basic",
         "SfxLibrary::replaceByName: replacing element is invalid!");
 
-    maNameContainer->replaceByName( aName, aElement );
+    maNameContainer.replaceByName( aName, aElement );
     implSetModified( true );
 }
 
@@ -3007,13 +3007,13 @@ void SfxLibrary::insertByName( const OUString& aName, const Any& aElement )
         !isLibraryElementValid(aElement), "basic",
         "SfxLibrary::insertByName: to-be-inserted element is invalid!");
 
-    maNameContainer->insertByName( aName, aElement );
+    maNameContainer.insertByName( aName, aElement );
     implSetModified( true );
 }
 
 void SfxLibrary::impl_removeWithoutChecks( const OUString& _rElementName )
 {
-    maNameContainer->removeByName( _rElementName );
+    maNameContainer.removeByName( _rElementName );
     implSetModified( true );
 
     // Remove element file
@@ -3050,25 +3050,25 @@ void SfxLibrary::removeByName( const OUString& Name )
 // Methods XContainer
 void SAL_CALL SfxLibrary::addContainerListener( const Reference< XContainerListener >& xListener )
 {
-    maNameContainer->setEventSource( getXWeak() );
-    maNameContainer->addContainerListener( xListener );
+    maNameContainer.setEventSource( getXWeak() );
+    maNameContainer.addContainerListener( xListener );
 }
 
 void SAL_CALL SfxLibrary::removeContainerListener( const Reference< XContainerListener >& xListener )
 {
-    maNameContainer->removeContainerListener( xListener );
+    maNameContainer.removeContainerListener( xListener );
 }
 
 // Methods XChangesNotifier
 void SAL_CALL SfxLibrary::addChangesListener( const Reference< XChangesListener >& xListener )
 {
-    maNameContainer->setEventSource( getXWeak() );
-    maNameContainer->addChangesListener( xListener );
+    maNameContainer.setEventSource( getXWeak() );
+    maNameContainer.addChangesListener( xListener );
 }
 
 void SAL_CALL SfxLibrary::removeChangesListener( const Reference< XChangesListener >& xListener )
 {
-    maNameContainer->removeChangesListener( xListener );
+    maNameContainer.removeChangesListener( xListener );
 }
 
 

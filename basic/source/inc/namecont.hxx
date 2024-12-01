@@ -58,14 +58,11 @@ class BasicManager;
 
 namespace basic
 {
-typedef ::comphelper::WeakImplHelper<
-    css::container::XNameContainer,
-    css::container::XContainer,
-    css::util::XChangesNotifier > NameContainer_BASE;
-
-
-class NameContainer final : public NameContainer_BASE
+class NameContainer final
 {
+    std::mutex m_aMutex;
+    cppu::OWeakObject& rOwner;
+
     std::unordered_map<OUString, css::uno::Any> maMap;
 
     css::uno::Type mType;
@@ -75,8 +72,9 @@ class NameContainer final : public NameContainer_BASE
     ::comphelper::OInterfaceContainerHelper4<css::util::XChangesListener> maChangesListeners;
 
 public:
-    NameContainer( const css::uno::Type& rType )
-        : mType( rType )
+    NameContainer(const css::uno::Type& rType, cppu::OWeakObject& owner)
+        : rOwner(owner)
+        , mType( rType )
         , mpxEventSource( nullptr )
     {}
 
@@ -89,28 +87,28 @@ public:
     void insertNoCheck(const OUString& aName, const css::uno::Any& aElement);
 
     // Methods XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType(  ) override;
-    virtual sal_Bool SAL_CALL hasElements(  ) override;
+    css::uno::Type getElementType();
+    sal_Bool hasElements();
 
     // Methods XNameAccess
-    virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
+    css::uno::Any getByName(const OUString& aName);
+    css::uno::Sequence<OUString> getElementNames();
+    sal_Bool hasByName(const OUString& aName);
 
     // Methods XNameReplace
-    virtual void SAL_CALL replaceByName( const OUString& aName, const css::uno::Any& aElement ) override;
+    void replaceByName(const OUString& aName, const css::uno::Any& aElement);
 
     // Methods XNameContainer
-    virtual void SAL_CALL insertByName( const OUString& aName, const css::uno::Any& aElement ) override;
-    virtual void SAL_CALL removeByName( const OUString& Name ) override;
+    void insertByName(const OUString& aName, const css::uno::Any& aElement);
+    void removeByName(const OUString& Name);
 
     // Methods XContainer
-    virtual void SAL_CALL addContainerListener( const css::uno::Reference<css::container::XContainerListener >& xListener ) override;
-    virtual void SAL_CALL removeContainerListener( const css::uno::Reference<css::container::XContainerListener >& xListener ) override;
+    void addContainerListener(const css::uno::Reference<css::container::XContainerListener >& xListener);
+    void removeContainerListener(const css::uno::Reference<css::container::XContainerListener >& xListener);
 
     // Methods XChangesNotifier
-    virtual void SAL_CALL addChangesListener( const css::uno::Reference<css::util::XChangesListener >& xListener ) override;
-    virtual void SAL_CALL removeChangesListener( const css::uno::Reference<css::util::XChangesListener >& xListener ) override;
+    void addChangesListener(const css::uno::Reference<css::util::XChangesListener>& xListener);
+    void removeChangesListener(const css::uno::Reference<css::util::XChangesListener>& xListener);
 };
 
 
@@ -179,7 +177,7 @@ protected:
 
     ModifiableHelper    maModifiable;
 
-    rtl::Reference<NameContainer> maNameContainer;
+    NameContainer maNameContainer;
 
     OUString maInitialDocumentURL;
     OUString maInfoFileName;
@@ -464,7 +462,7 @@ class SfxLibrary
     css::uno::Reference< css::ucb::XSimpleFileAccess3 >   mxSFI;
 
     ModifiableHelper&                                     mrModifiable;
-    rtl::Reference<NameContainer>                         maNameContainer;
+    NameContainer maNameContainer;
 
     bool mbLoaded;
     bool mbIsModified;
