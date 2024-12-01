@@ -5270,9 +5270,9 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
     else
     {
         // no chars, but potentially char/para props?
-        sal_uInt32  nCharCount;
+        sal_uInt32  nParaCharCount;
         bool        bTextPropAtom = false;
-        ReadParaProps( rIn, rTextHeader, aString, rRuler, nCharCount, bTextPropAtom );
+        ReadParaProps( rIn, rTextHeader, aString, rRuler, nParaCharCount, bTextPropAtom );
 
         if ( bTextPropAtom )
         {
@@ -5283,9 +5283,9 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
 
             sal_uInt32 nExtParaFlags = 0, nAnmScheme = 0;
             sal_uInt16 nBuBlip = 0xffff, nHasAnm = 0;
-            nCharCount = ReadCharProps( rIn, aCharPropSet, aString, 0/*nCharReadCnt*/,
-                           bTextPropAtom, nExtParaPos, aStyleTextProp9, nExtParaFlags,
-                           nBuBlip, nHasAnm, nAnmScheme );
+            ReadCharProps(rIn, aCharPropSet, aString, 0/*nCharReadCnt*/,
+                          bTextPropAtom, nExtParaPos, aStyleTextProp9, nExtParaFlags,
+                          nBuBlip, nHasAnm, nAnmScheme);
 
             aCharPropList.push_back(std::make_unique<PPTCharPropSet>(aCharPropSet, 0));
         }
@@ -5294,10 +5294,10 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
     const sal_uInt32 nStringLen = aString.getLength();
     if (nStringLen)
     {
-        sal_uInt32  nCharCount;
+        sal_uInt32  nParaCharCount;
         bool        bTextPropAtom = false;
 
-        ReadParaProps( rIn, rTextHeader, aString, rRuler, nCharCount, bTextPropAtom );
+        ReadParaProps( rIn, rTextHeader, aString, rRuler, nParaCharCount, bTextPropAtom );
 
         bool bEmptyParaPossible = true;
         sal_uInt32 nCharReadCnt = 0;
@@ -5309,6 +5309,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
         {
             sal_uInt32 nExtParaFlags = 0, nLatestParaUpdate = 0xffffffff, nAnmScheme = 0;
             sal_uInt16 nBuBlip = 0xffff, nHasAnm = 0;
+            sal_uInt32 nCharCount;
 
             PPTCharPropSet aCharPropSet( nCurrentPara );
             if ( bTextPropAtom )
