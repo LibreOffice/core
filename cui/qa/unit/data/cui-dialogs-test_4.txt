@@ -18,6 +18,7 @@ cui/ui/paratabspage.ui
 cui/ui/password.ui
 cui/ui/pastespecial.ui
 cui/ui/percentdialog.ui
+cui/ui/appearance.ui
 cui/ui/pickbulletpage.ui
 cui/ui/pickgraphicpage.ui
 cui/ui/picknumberingpage.ui

@@ -34,6 +34,7 @@
 #include <treeopt.hrc>
 #include <helpids.h>
 
+#include "appearance.hxx"
 #include "cfgchart.hxx"
 #include "connpoolconfig.hxx"
 #include "connpooloptions.hxx"
@@ -259,6 +260,9 @@ static std::unique_ptr<SfxTabPage> CreateGeneralTabPage(sal_uInt16 nId, weld::Co
         case RID_SVXPAGE_INET_PROXY:                fnCreate = &SvxProxyTabPage::Create; break;
         case RID_SVXPAGE_INET_SECURITY:             fnCreate = &SvxSecurityTabPage::Create; break;
         case RID_SVXPAGE_INET_MAIL:                 fnCreate = &SvxEMailTabPage::Create; break;
+#if HAVE_FEATURE_DESKTOP
+        case RID_SVXPAGE_APPEARANCE:                fnCreate = &SvxAppearanceTabPage::Create; break;
+#endif
         case RID_OFAPAGE_HTMLOPT:                   fnCreate = &OfaHtmlTabPage::Create; break;
         case SID_OPTFILTER_MSOFFICE:                fnCreate = &OfaMSFilterTabPage::Create; break;
         case RID_OFAPAGE_MSFILTEROPT2:              fnCreate = &OfaMSFilterTabPage2::Create; break;
@@ -305,6 +309,7 @@ constexpr OptionsMapping_Impl OptionsMap_Impl[]
     { u"ProductName"_ustr,        u"Paths"_ustr,                RID_SFXPAGE_PATH },
     { u"ProductName"_ustr,        u"Fonts"_ustr,                RID_SVX_FONT_SUBSTITUTION },
     { u"ProductName"_ustr,        u"Security"_ustr,             RID_SVXPAGE_INET_SECURITY },
+    { u"ProductName"_ustr,        u"Appearance"_ustr,           RID_SVXPAGE_APPEARANCE },
     { u"ProductName"_ustr,        u"Accessibility"_ustr,        RID_SVXPAGE_ACCESSIBILITYCONFIG },
     { u"ProductName"_ustr,        u"Java"_ustr,                 RID_SVXPAGE_OPTIONS_JAVA },
     { u"ProductName"_ustr,        u"BasicIDEOptions"_ustr,      RID_SVXPAGE_BASICIDE_OPTIONS },

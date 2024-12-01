@@ -199,6 +199,8 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/options/optpath \
     cui/source/options/optsave \
     cui/source/options/optupdt \
+    $(call gb_Helper_optional,DESKTOP,\
+        cui/source/options/appearance) \
     cui/source/options/sdbcdriverenum \
     cui/source/options/securityoptions \
     cui/source/options/treeopt \

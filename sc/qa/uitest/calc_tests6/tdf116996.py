@@ -18,7 +18,7 @@ class tdf116996(UITestCase):
             xPages = xDialogOpt.getChild("pages")
             xLOEntry = xPages.getChild('0')                 # Libreoffice
             xLOEntry.executeAction("EXPAND", tuple())
-            xAdvancedEntry = xLOEntry.getChild('8')
+            xAdvancedEntry = xLOEntry.getChild('9')
             xAdvancedEntry.executeAction("SELECT", tuple())          #Libreoffice / Advanced
             xexperimental = xDialogOpt.getChild("experimental")
             if get_state_as_dict(xexperimental)['Selected'] != enabled:

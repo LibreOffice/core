@@ -399,7 +399,7 @@ public:
     SAL_DLLPRIVATE const Color&     GetMenuBarRolloverTextColor() const;
 
     void                            SetMenuBarHighlightTextColor( const Color& rColor );
-    SAL_DLLPRIVATE const Color&     GetMenuBarHighlightTextColor() const;
+    const Color&                    GetMenuBarHighlightTextColor() const;
 
     void                            SetMenuHighlightColor( const Color& rColor );
     const Color&                    GetMenuHighlightColor() const;
@@ -606,6 +606,7 @@ public:
     void                            SetPreferredIconTheme(const OUString&, bool bDarkIconTheme = false);
 
     const DialogStyle&              GetDialogStyle() const;
+    const BitmapEx&                 GetAppBackgroundBitmap() const;
 
     // global switch to allow EdgeBlenging; currently possible for ValueSet and ListBox
     // when activated there using Get/SetEdgeBlending; default is true

@@ -1230,7 +1230,11 @@ static void addDarkLightThemes(const Color& rDarkColor, const Color& rLightColor
         svtools::EditableColorConfig aColorConfig;
         svtools::ColorConfigValue aValue;
         aValue.bIsVisible = true;
-        aValue.nColor = rDarkColor;
+        // aValue.nColor is just used for caching, so we need to set nDarkColor or nLightColor to specify the light/dark
+        // color values for an element. which one to use is decided based on the application's appearance setting.
+        // see commit message of Change: I1a7f70dfe44b81f863814f87e8d46e146c0e3d5a
+        aValue.nLightColor = rDarkColor;
+        aValue.nDarkColor = rDarkColor;
         aColorConfig.SetColorValue(svtools::DOCCOLOR, aValue);
         aColorConfig.AddScheme(u"Dark"_ustr);
     }
@@ -1239,7 +1243,8 @@ static void addDarkLightThemes(const Color& rDarkColor, const Color& rLightColor
         svtools::EditableColorConfig aColorConfig;
         svtools::ColorConfigValue aValue;
         aValue.bIsVisible = true;
-        aValue.nColor = rLightColor;
+        aValue.nLightColor = rLightColor;
+        aValue.nDarkColor = rLightColor;
         aColorConfig.SetColorValue(svtools::DOCCOLOR, aValue);
         aColorConfig.AddScheme(u"Light"_ustr);
     }
