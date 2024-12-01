@@ -4857,7 +4857,14 @@ void PPTStyleTextPropReader::ReadParaProps(SvStream& rIn, const DffRecordHeader&
                 std::min(sal_uInt16(8),
                     aParaPropSet.mxParaSet->mnDepth);
 
-            nCharCount--;
+            if (nCharCount > 0)
+                --nCharCount;
+            else
+            {
+                SAL_WARN("filter.ms", "Suspicious 0 CharCount");
+                // will clip to legal length in later check in this loop
+                nCharCount = std::numeric_limits<sal_uInt32>::max();
+            }
 
             rIn.ReadUInt32( nMask );
             aSet.mnAttrSet = nMask & 0x207df7;
