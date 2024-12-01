@@ -327,10 +327,10 @@ SfxLibraryContainer::SfxLibraryContainer()
     , meVBATextEncoding( RTL_TEXTENCODING_DONTKNOW )
     , maModifiable( *this, m_aMutex )
     , maNameContainer( new NameContainer(cppu::UnoType<XNameAccess>::get()) )
-    , mbOldInfoFormat( false )
-    , mbOasis2OOoFormat( false )
     , mpBasMgr( nullptr )
     , mbOwnBasMgr( false )
+    , mbOldInfoFormat( false )
+    , mbOasis2OOoFormat( false )
     , meInitMode(DEFAULT)
 {
     mxContext = comphelper::getProcessComponentContext();
@@ -2893,8 +2893,6 @@ SfxLibrary::SfxLibrary( ModifiableHelper& _rModifiable, const Type& aType,
         , mbLoaded( false )
         , mbIsModified( true )
         , mbInitialised( false )
-        , maLibInfoFileURL(std::move( aLibInfoFileURL ))
-        , maStorageURL(std::move( aStorageURL ))
         , mbLink( true )
         , mbReadOnly( false )
         , mbReadOnlyLink( ReadOnly )
@@ -2904,6 +2902,8 @@ SfxLibrary::SfxLibrary( ModifiableHelper& _rModifiable, const Type& aType,
         , mbDoc50Password( false )
         , mbSharedIndexFile( false )
         , mbExtension( false )
+        , maLibInfoFileURL(std::move( aLibInfoFileURL ))
+        , maStorageURL(std::move( aStorageURL ))
 {
 }
 

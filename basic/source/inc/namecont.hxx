@@ -169,8 +169,8 @@ class SfxLibraryContainer
     VBAScriptListenerContainer maVBAScriptListeners;
     sal_Int32 mnRunningVBAScripts;
     bool mbVBACompat;
-    OUString msProjectName;
     rtl_TextEncoding meVBATextEncoding;
+    OUString msProjectName;
 protected:
     css::uno::Reference< css::uno::XComponentContext >       mxContext;
     css::uno::Reference< css::ucb::XSimpleFileAccess3 >      mxSFI;
@@ -180,8 +180,6 @@ protected:
     ModifiableHelper    maModifiable;
 
     rtl::Reference<NameContainer> maNameContainer;
-    bool    mbOldInfoFormat;
-    bool    mbOasis2OOoFormat;
 
     OUString maInitialDocumentURL;
     OUString maInfoFileName;
@@ -193,6 +191,9 @@ protected:
     css::uno::Reference< css::embed::XStorage > mxStorage;
     BasicManager*   mpBasMgr;
     bool        mbOwnBasMgr;
+
+    bool    mbOldInfoFormat;
+    bool    mbOasis2OOoFormat;
 
     enum InitMode
     {
@@ -468,6 +469,15 @@ class SfxLibrary
     bool mbLoaded;
     bool mbIsModified;
     bool mbInitialised;
+    bool mbLink;
+    bool mbReadOnly;
+    bool mbReadOnlyLink;
+    bool mbPreload;
+    bool mbPasswordProtected;
+    bool mbPasswordVerified;
+    bool mbDoc50Password;
+    bool mbSharedIndexFile;
+    bool mbExtension;
 
 private:
 
@@ -476,21 +486,7 @@ private:
     OUString maStorageURL;
     OUString maUnexpandedStorageURL;
     OUString maOriginalStorageURL;
-
-    bool mbLink;
-    bool mbReadOnly;
-    bool mbReadOnlyLink;
-    bool mbPreload;
-
-protected:
-    bool mbPasswordProtected;
-private:
-    bool mbPasswordVerified;
-    bool mbDoc50Password;
     OUString maPassword;
-
-    bool mbSharedIndexFile;
-    bool mbExtension;
 
     // Additional functionality for localisation
     // Provide modify state including resources
@@ -504,6 +500,7 @@ private:
 protected:
     bool    implIsModified() const  { return mbIsModified; }
             void    implSetModified( bool _bIsModified );
+    bool isPasswordProtected() const { return mbPasswordProtected; }
 
 private:
     /** checks whether the lib is readonly, or a readonly link, throws an IllegalArgumentException if so
