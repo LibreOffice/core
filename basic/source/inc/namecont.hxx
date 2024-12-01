@@ -66,12 +66,7 @@ typedef ::comphelper::WeakImplHelper<
 
 class NameContainer final : public NameContainer_BASE
 {
-    typedef std::unordered_map < OUString, sal_Int32 > NameContainerNameMap;
-
-    NameContainerNameMap mHashMap;
-    std::vector< OUString > mNames;
-    std::vector< css::uno::Any > mValues;
-    sal_Int32 mnElementCount;
+    std::unordered_map<OUString, css::uno::Any> maMap;
 
     css::uno::Type mType;
     css::uno::XInterface* mpxEventSource;
@@ -81,19 +76,12 @@ class NameContainer final : public NameContainer_BASE
 
 public:
     NameContainer( const css::uno::Type& rType )
-        : mnElementCount( 0 )
-        , mType( rType )
+        : mType( rType )
         , mpxEventSource( nullptr )
     {}
 
     void setEventSource( css::uno::XInterface* pxEventSource )
         { mpxEventSource = pxEventSource; }
-
-    /// @throws css::lang::IllegalArgumentException
-    /// @throws css::container::ElementExistException
-    /// @throws css::lang::WrappedTargetException
-    /// @throws css::uno::RuntimeException
-    void insertCheck(const OUString& aName, const css::uno::Any& aElement);
 
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::lang::WrappedTargetException

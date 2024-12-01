@@ -107,33 +107,28 @@ Type NameContainer::getElementType()
 
 sal_Bool NameContainer::hasElements()
 {
-    bool bRet = (mnElementCount > 0);
-    return bRet;
+    return !maMap.empty();
 }
 
 // Methods XNameAccess
 Any NameContainer::getByName( const OUString& aName )
 {
-    NameContainerNameMap::iterator aIt = mHashMap.find( aName );
-    if( aIt == mHashMap.end() )
+    auto aIt = maMap.find(aName);
+    if (aIt == maMap.end())
     {
-        throw NoSuchElementException();
+        throw NoSuchElementException(aName);
     }
-    sal_Int32 iHashResult = (*aIt).second;
-    Any aRetAny = mValues[ iHashResult ];
-    return aRetAny;
+    return aIt->second;
 }
 
 Sequence< OUString > NameContainer::getElementNames()
 {
-    return comphelper::containerToSequence(mNames);
+    return comphelper::mapKeysToSequence(maMap);
 }
 
 sal_Bool NameContainer::hasByName( const OUString& aName )
 {
-    NameContainerNameMap::iterator aIt = mHashMap.find( aName );
-    bool bRet = ( aIt != mHashMap.end() );
-    return bRet;
+    return maMap.contains(aName);
 }
 
 
@@ -145,15 +140,13 @@ void NameContainer::replaceByName( const OUString& aName, const Any& aElement )
     {
         throw IllegalArgumentException(u"types do not match"_ustr, getXWeak(), 2);
     }
-    NameContainerNameMap::iterator aIt = mHashMap.find( aName );
-    if( aIt == mHashMap.end() )
+    auto aIt = maMap.find(aName);
+    if (aIt == maMap.end())
     {
-        throw NoSuchElementException();
+        throw NoSuchElementException(aName);
     }
-    sal_Int32 iHashResult = (*aIt).second;
-    Any aOldElement = mValues[ iHashResult ];
-    mValues[ iHashResult ] = aElement;
-
+    Any aOldElement = aIt->second;
+    aIt->second = aElement;
 
     std::unique_lock aGuard(m_aMutex);
 
@@ -181,16 +174,6 @@ void NameContainer::replaceByName( const OUString& aName, const Any& aElement )
     }
 }
 
-void NameContainer::insertCheck(const OUString& aName, const Any& aElement)
-{
-    NameContainerNameMap::iterator aIt = mHashMap.find(aName);
-    if( aIt != mHashMap.end() )
-    {
-        throw ElementExistException();
-    }
-    insertNoCheck(aName, aElement);
-}
-
 void NameContainer::insertNoCheck(const OUString& aName, const Any& aElement)
 {
     const Type& aAnyType = aElement.getValueType();
@@ -199,12 +182,7 @@ void NameContainer::insertNoCheck(const OUString& aName, const Any& aElement)
         throw IllegalArgumentException(u"types do not match"_ustr, getXWeak(), 2);
     }
 
-    sal_Int32 nCount = mNames.size();
-    mNames.push_back( aName );
-    mValues.push_back( aElement );
-
-    mHashMap[ aName ] = nCount;
-    mnElementCount++;
+    maMap[aName] = aElement;
 
     std::unique_lock aGuard(m_aMutex);
 
@@ -234,31 +212,21 @@ void NameContainer::insertNoCheck(const OUString& aName, const Any& aElement)
 // Methods XNameContainer
 void NameContainer::insertByName( const OUString& aName, const Any& aElement )
 {
-    insertCheck(aName, aElement);
+    if (hasByName(aName))
+        throw ElementExistException(aName);
+    insertNoCheck(aName, aElement);
 }
 
 void NameContainer::removeByName( const OUString& aName )
 {
-    NameContainerNameMap::iterator aIt = mHashMap.find( aName );
-    if( aIt == mHashMap.end() )
+    auto aIt = maMap.find(aName);
+    if (aIt == maMap.end())
     {
-        OUString sMessage = "\"" + aName + "\" not found";
-        throw NoSuchElementException(sMessage);
+        throw NoSuchElementException("\"" + aName + "\" not found");
     }
 
-    sal_Int32 iHashResult = (*aIt).second;
-    Any aOldElement = mValues[ iHashResult ];
-    mHashMap.erase( aIt );
-    sal_Int32 iLast = mNames.size() - 1;
-    if( iLast != iHashResult )
-    {
-        mNames[ iHashResult ] = mNames[ iLast ];
-        mValues[ iHashResult ] = mValues[ iLast ];
-        mHashMap[ mNames[ iHashResult ] ] = iHashResult;
-    }
-    mNames.resize( iLast );
-    mValues.resize( iLast );
-    mnElementCount--;
+    Any aOldElement = aIt->second;
+    maMap.erase(aIt);
 
     std::unique_lock aGuard(m_aMutex);
 
