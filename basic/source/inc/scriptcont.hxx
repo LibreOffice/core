@@ -70,7 +70,8 @@ class SfxScriptLibraryContainer final : public SfxLibraryContainer
                         const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& rToUseSFI, const css::uno::Reference< css::task::XInteractionHandler >& Handler ) override;
 
     virtual bool implLoadPasswordLibrary( SfxLibrary* pLib, const OUString& Name,
-                                          bool bVerifyPasswordOnly=false ) override;
+                                          bool bVerifyPasswordOnly,
+                                          std::unique_lock<std::mutex>& guard ) override;
 
     virtual void onNewRootStorage() override;
 

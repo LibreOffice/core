@@ -38,7 +38,7 @@
 // For password functionality
 #include <tools/urlobj.hxx>
 
-
+#include <o3tl/temporary.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 #include <basic/basmgr.hxx>
@@ -114,7 +114,7 @@ SfxScriptLibraryContainer::SfxScriptLibraryContainer()
 
 SfxScriptLibraryContainer::SfxScriptLibraryContainer( const uno::Reference< embed::XStorage >& xStorage )
 {
-    init( OUString(), xStorage );
+    init(OUString(), xStorage, o3tl::temporary(std::unique_lock(m_aMutex)));
 }
 
 // Methods to get library instances of the correct type
@@ -371,6 +371,7 @@ sal_Bool SAL_CALL SfxScriptLibraryContainer::verifyLibraryPassword
     ( const OUString& Name, const OUString& Password )
 {
     LibraryContainerMethodGuard aGuard( *this );
+    std::unique_lock guard(m_aMutex);
     SfxLibrary* pImplLib = getImplLib( Name );
     if( !pImplLib->mbPasswordProtected || pImplLib->mbPasswordVerified )
     {
@@ -389,19 +390,19 @@ sal_Bool SAL_CALL SfxScriptLibraryContainer::verifyLibraryPassword
     else
     {
         pImplLib->maPassword = Password;
-        bSuccess = implLoadPasswordLibrary( pImplLib, Name, true );
+        bSuccess = implLoadPasswordLibrary( pImplLib, Name, true, guard);
         if( bSuccess )
         {
             // The library gets modified by verifying the password, because other-
             // wise for saving the storage would be copied and that doesn't work
             // with mtg's storages when the password is verified
-            pImplLib->implSetModified( true );
+            pImplLib->implSetModified(true, guard);
             pImplLib->mbPasswordVerified = true;
 
             // Reload library to get source
             if( pImplLib->mbLoaded )
             {
-                implLoadPasswordLibrary( pImplLib, Name );
+                implLoadPasswordLibrary( pImplLib, Name, false, guard);
             }
         }
     }
@@ -458,14 +459,15 @@ void SAL_CALL SfxScriptLibraryContainer::changeLibraryPassword( const OUString& 
             pImplLib->mbPasswordVerified = false;
             pImplLib->maPassword.clear();
 
-            maModifiable.setModified( true );
-            pImplLib->implSetModified( true );
+            std::unique_lock guard(m_aMutex);
+            maModifiable.setModified(true, guard);
+            pImplLib->implSetModified(true, guard);
 
             if( !bStorage && !pImplLib->mbDoc50Password )
             {
                 // Store application basic unencrypted
                 uno::Reference< embed::XStorage > xStorage;
-                storeLibraries_Impl( xStorage, false );
+                storeLibraries_Impl(xStorage, false, guard);
                 bKillCryptedFiles = true;
             }
         }
@@ -483,14 +485,15 @@ void SAL_CALL SfxScriptLibraryContainer::changeLibraryPassword( const OUString& 
             pSL->mbLoadedSource = true; // must store source code now!
         }
 
-        maModifiable.setModified( true );
-        pImplLib->implSetModified( true );
+        std::unique_lock guard(m_aMutex);
+        maModifiable.setModified(true, guard);
+        pImplLib->implSetModified(true, guard);
 
         if( !bStorage && !pImplLib->mbDoc50Password )
         {
             // Store application basic crypted
             uno::Reference< embed::XStorage > xStorage;
-            storeLibraries_Impl( xStorage, false );
+            storeLibraries_Impl(xStorage, false, guard);
             bKillUnencryptedFiles = true;
         }
     }
@@ -806,7 +809,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
 }
 
 bool SfxScriptLibraryContainer::implLoadPasswordLibrary
-    ( SfxLibrary* pLib, const OUString& Name, bool bVerifyPasswordOnly )
+    ( SfxLibrary* pLib, const OUString& Name, bool bVerifyPasswordOnly, std::unique_lock<std::mutex>& guard )
 {
     bool bRet = true;
 
@@ -950,12 +953,12 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                         {
                             if( aAny.hasValue() )
                             {
-                                pLib->maNameContainer.replaceByName( aElementName, aAny );
+                                pLib->maNameContainer.replaceByName(aElementName, aAny, guard);
                             }
                         }
                         else
                         {
-                            pLib->maNameContainer.insertByName( aElementName, aAny );
+                            pLib->maNameContainer.insertByName(aElementName, aAny, guard);
                         }
                     }
                 }
@@ -1063,12 +1066,13 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                                 {
                                     if( aAny.hasValue() )
                                     {
-                                        pLib->maNameContainer.replaceByName( aElementName, aAny );
+                                        pLib->maNameContainer.replaceByName(aElementName, aAny,
+                                                                            guard);
                                     }
                                 }
                                 else
                                 {
-                                    pLib->maNameContainer.insertByName( aElementName, aAny );
+                                    pLib->maNameContainer.insertByName(aElementName, aAny, guard);
                                 }
                             }
                         }

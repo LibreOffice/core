@@ -34,6 +34,7 @@
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <o3tl/temporary.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -92,7 +93,7 @@ SfxDialogLibraryContainer::SfxDialogLibraryContainer()
 
 SfxDialogLibraryContainer::SfxDialogLibraryContainer( const uno::Reference< embed::XStorage >& xStorage )
 {
-    init( OUString(), xStorage );
+    init(OUString(), xStorage, o3tl::temporary(std::unique_lock(m_aMutex)));
 }
 
 // Methods to get library instances of the correct type

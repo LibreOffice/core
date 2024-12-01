@@ -33,6 +33,7 @@
 #include <utility>
 #include <vcl/svapp.hxx>
 #include <o3tl/string_view.hxx>
+#include <o3tl/temporary.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/errinf.hxx>
 #include <rtl/ustring.hxx>
@@ -133,7 +134,8 @@ sal_Bool NameContainer::hasByName( const OUString& aName )
 
 
 // Methods XNameReplace
-void NameContainer::replaceByName( const OUString& aName, const Any& aElement )
+void NameContainer::replaceByName(const OUString& aName, const Any& aElement,
+                                  std::unique_lock<std::mutex>& guard)
 {
     const Type& aAnyType = aElement.getValueType();
     if( mType != aAnyType )
@@ -148,33 +150,32 @@ void NameContainer::replaceByName( const OUString& aName, const Any& aElement )
     Any aOldElement = aIt->second;
     aIt->second = aElement;
 
-    std::unique_lock aGuard(m_aMutex);
-
     // Fire event
-    if( maContainerListeners.getLength(aGuard) > 0 )
+    if (maContainerListeners.getLength(guard) > 0)
     {
         ContainerEvent aEvent;
         aEvent.Source = mpxEventSource;
         aEvent.Accessor <<= aName;
         aEvent.Element = aElement;
         aEvent.ReplacedElement = aOldElement;
-        maContainerListeners.notifyEach( aGuard, &XContainerListener::elementReplaced, aEvent );
+        maContainerListeners.notifyEach(guard, &XContainerListener::elementReplaced, aEvent);
     }
 
     /*  After the container event has been fired (one listener will update the
         core Basic manager), fire change event. Listeners can rely on that the
         Basic source code of the core Basic manager is up-to-date. */
-    if( maChangesListeners.getLength(aGuard) > 0 )
+    if (maChangesListeners.getLength(guard) > 0)
     {
         ChangesEvent aEvent;
         aEvent.Source = mpxEventSource;
         aEvent.Base <<= aEvent.Source;
         aEvent.Changes = { { Any(aName), aElement, aOldElement } };
-        maChangesListeners.notifyEach( aGuard, &XChangesListener::changesOccurred, aEvent );
+        maChangesListeners.notifyEach(guard, &XChangesListener::changesOccurred, aEvent);
     }
 }
 
-void NameContainer::insertNoCheck(const OUString& aName, const Any& aElement)
+void NameContainer::insertNoCheck(const OUString& aName, const Any& aElement,
+                                  std::unique_lock<std::mutex>& guard)
 {
     const Type& aAnyType = aElement.getValueType();
     if( mType != aAnyType )
@@ -184,40 +185,39 @@ void NameContainer::insertNoCheck(const OUString& aName, const Any& aElement)
 
     maMap[aName] = aElement;
 
-    std::unique_lock aGuard(m_aMutex);
-
     // Fire event
-    if( maContainerListeners.getLength(aGuard) > 0 )
+    if (maContainerListeners.getLength(guard) > 0)
     {
         ContainerEvent aEvent;
         aEvent.Source = mpxEventSource;
         aEvent.Accessor <<= aName;
         aEvent.Element = aElement;
-        maContainerListeners.notifyEach( aGuard, &XContainerListener::elementInserted, aEvent );
+        maContainerListeners.notifyEach(guard, &XContainerListener::elementInserted, aEvent);
     }
 
     /*  After the container event has been fired (one listener will update the
         core Basic manager), fire change event. Listeners can rely on that the
         Basic source code of the core Basic manager is up-to-date. */
-    if( maChangesListeners.getLength(aGuard) > 0 )
+    if (maChangesListeners.getLength(guard) > 0)
     {
         ChangesEvent aEvent;
         aEvent.Source = mpxEventSource;
         aEvent.Base <<= aEvent.Source;
         aEvent.Changes = { { Any(aName), aElement, {} } };
-        maChangesListeners.notifyEach( aGuard, &XChangesListener::changesOccurred, aEvent );
+        maChangesListeners.notifyEach(guard, &XChangesListener::changesOccurred, aEvent);
     }
 }
 
 // Methods XNameContainer
-void NameContainer::insertByName( const OUString& aName, const Any& aElement )
+void NameContainer::insertByName(const OUString& aName, const Any& aElement,
+                                 std::unique_lock<std::mutex>& guard)
 {
     if (hasByName(aName))
         throw ElementExistException(aName);
-    insertNoCheck(aName, aElement);
+    insertNoCheck(aName, aElement, guard);
 }
 
-void NameContainer::removeByName( const OUString& aName )
+void NameContainer::removeByName(const OUString& aName, std::unique_lock<std::mutex>& guard)
 {
     auto aIt = maMap.find(aName);
     if (aIt == maMap.end())
@@ -228,22 +228,20 @@ void NameContainer::removeByName( const OUString& aName )
     Any aOldElement = aIt->second;
     maMap.erase(aIt);
 
-    std::unique_lock aGuard(m_aMutex);
-
     // Fire event
-    if( maContainerListeners.getLength(aGuard) > 0 )
+    if (maContainerListeners.getLength(guard) > 0)
     {
         ContainerEvent aEvent;
         aEvent.Source = mpxEventSource;
         aEvent.Accessor <<= aName;
         aEvent.Element = aOldElement;
-        maContainerListeners.notifyEach( aGuard, &XContainerListener::elementRemoved, aEvent );
+        maContainerListeners.notifyEach(guard, &XContainerListener::elementRemoved, aEvent);
     }
 
     /*  After the container event has been fired (one listener will update the
         core Basic manager), fire change event. Listeners can rely on that the
         Basic source code of the core Basic manager is up-to-date. */
-    if( maChangesListeners.getLength(aGuard) > 0 )
+    if (maChangesListeners.getLength(guard) > 0)
     {
         ChangesEvent aEvent;
         aEvent.Source = mpxEventSource;
@@ -251,57 +249,57 @@ void NameContainer::removeByName( const OUString& aName )
         aEvent.Changes = { { Any(aName),
                              {}, // Element remains empty (meaning "replaced with nothing")
                              aOldElement } };
-        maChangesListeners.notifyEach( aGuard, &XChangesListener::changesOccurred, aEvent );
+        maChangesListeners.notifyEach(guard, &XChangesListener::changesOccurred, aEvent);
     }
 }
 
 
 // Methods XContainer
-void NameContainer::addContainerListener(const Reference<XContainerListener>& xListener)
+void NameContainer::addContainerListener(const Reference<XContainerListener>& xListener,
+                                         std::unique_lock<std::mutex>& guard)
 {
     if( !xListener.is() )
     {
         throw RuntimeException(u"addContainerListener called with null xListener"_ustr,rOwner);
     }
-    std::unique_lock aGuard(m_aMutex);
-    maContainerListeners.addInterface( aGuard, xListener );
+    maContainerListeners.addInterface(guard, xListener);
 }
 
-void NameContainer::removeContainerListener(const Reference<XContainerListener>& xListener)
+void NameContainer::removeContainerListener(const Reference<XContainerListener>& xListener,
+                                            std::unique_lock<std::mutex>& guard)
 {
     if( !xListener.is() )
     {
         throw RuntimeException(u"removeContainerListener called with null xListener"_ustr,rOwner);
     }
-    std::unique_lock aGuard(m_aMutex);
-    maContainerListeners.removeInterface( aGuard, xListener );
+    maContainerListeners.removeInterface(guard, xListener);
 }
 
 // Methods XChangesNotifier
-void NameContainer::addChangesListener(const Reference<XChangesListener>& xListener)
+void NameContainer::addChangesListener(const Reference<XChangesListener>& xListener,
+                                       std::unique_lock<std::mutex>& guard)
 {
     if( !xListener.is() )
     {
         throw RuntimeException(u"addChangesListener called with null xListener"_ustr,rOwner);
     }
-    std::unique_lock aGuard(m_aMutex);
-    maChangesListeners.addInterface( aGuard, xListener );
+    maChangesListeners.addInterface(guard, xListener);
 }
 
-void NameContainer::removeChangesListener(const Reference<XChangesListener>& xListener)
+void NameContainer::removeChangesListener(const Reference<XChangesListener>& xListener,
+                                          std::unique_lock<std::mutex>& guard)
 {
     if( !xListener.is() )
     {
         throw RuntimeException(u"removeChangesListener called with null xListener"_ustr,rOwner);
     }
-    std::unique_lock aGuard(m_aMutex);
-    maChangesListeners.removeInterface( aGuard, xListener );
+    maChangesListeners.removeInterface(guard, xListener);
 }
 
 
 // ModifiableHelper
 
-void ModifiableHelper::setModified( bool _bModified )
+void ModifiableHelper::setModified(bool _bModified, std::unique_lock<std::mutex>& guard)
 {
     if ( _bModified == mbModified )
     {
@@ -309,23 +307,21 @@ void ModifiableHelper::setModified( bool _bModified )
     }
     mbModified = _bModified;
 
-    if ( m_aModifyListeners.getLength() == 0 )
+    if (m_aModifyListeners.getLength(guard) == 0)
     {
         return;
     }
     EventObject aModifyEvent( m_rEventSource );
-    m_aModifyListeners.notifyEach( &XModifyListener::modified, aModifyEvent );
+    m_aModifyListeners.notifyEach(guard, &XModifyListener::modified, aModifyEvent);
 }
 
 
 // Ctor
 SfxLibraryContainer::SfxLibraryContainer()
-    : SfxLibraryContainer_BASE( m_aMutex )
-    , maVBAScriptListeners( m_aMutex )
-    , mnRunningVBAScripts( 0 )
+    : mnRunningVBAScripts( 0 )
     , mbVBACompat( false )
     , meVBATextEncoding( RTL_TEXTENCODING_DONTKNOW )
-    , maModifiable( *this, m_aMutex )
+    , maModifiable( *this )
     , maNameContainer( cppu::UnoType<XNameAccess>::get(), *this )
     , mpBasMgr( nullptr )
     , mbOwnBasMgr( false )
@@ -351,7 +347,7 @@ SfxLibraryContainer::~SfxLibraryContainer()
 void SfxLibraryContainer::enterMethod()
 {
     Application::GetSolarMutex().acquire();
-    if ( rBHelper.bInDispose || rBHelper.bDisposed )
+    if (m_bDisposed)
     {
         throw DisposedException( OUString(), *this );
     }
@@ -414,7 +410,7 @@ void SAL_CALL SfxLibraryContainer::storeLibrariesToStorage( const Reference< XSt
     }
     try
     {
-        storeLibraries_Impl( _rxRootStorage, true );
+        storeLibraries_Impl(_rxRootStorage, true, o3tl::temporary(std::unique_lock(m_aMutex)));
     }
     catch( const Exception& )
     {
@@ -465,19 +461,19 @@ sal_Bool SfxLibraryContainer::isModified()
 void SAL_CALL SfxLibraryContainer::setModified( sal_Bool _bModified )
 {
     LibraryContainerMethodGuard aGuard( *this );
-    maModifiable.setModified( _bModified );
+    maModifiable.setModified(_bModified, o3tl::temporary(std::unique_lock(m_aMutex)));
 }
 
 void SAL_CALL SfxLibraryContainer::addModifyListener( const Reference< XModifyListener >& _rxListener )
 {
     LibraryContainerMethodGuard aGuard( *this );
-    maModifiable.addModifyListener( _rxListener );
+    maModifiable.addModifyListener(_rxListener, o3tl::temporary(std::unique_lock(m_aMutex)));
 }
 
 void SAL_CALL SfxLibraryContainer::removeModifyListener( const Reference< XModifyListener >& _rxListener )
 {
     LibraryContainerMethodGuard aGuard( *this );
-    maModifiable.removeModifyListener( _rxListener );
+    maModifiable.removeModifyListener(_rxListener, o3tl::temporary(std::unique_lock(m_aMutex)));
 }
 
 // Methods XPersistentLibraryContainer
@@ -498,7 +494,7 @@ void SAL_CALL SfxLibraryContainer::storeLibraries(  )
     LibraryContainerMethodGuard aGuard( *this );
     try
     {
-        storeLibraries_Impl( mxStorage, mxStorage.is()  );
+        storeLibraries_Impl(mxStorage, mxStorage.is(), o3tl::temporary(std::unique_lock(m_aMutex)));
         // we need to store *all* libraries if and only if we are based on a storage:
         // in this case, storeLibraries_Impl will remove the source storage, after loading
         // all libraries, so we need to force them to be stored, again
@@ -551,18 +547,21 @@ void createVariableURL( OUString& rStr, std::u16string_view rLibName,
 }
 }
 
-void SfxLibraryContainer::init( const OUString& rInitialDocumentURL, const uno::Reference< embed::XStorage >& rxInitialStorage )
+void SfxLibraryContainer::init(const OUString& rInitialDocumentURL,
+                               const uno::Reference<embed::XStorage>& rxInitialStorage,
+                               std::unique_lock<std::mutex>& guard)
 {
     // this might be called from within the ctor, and the impl_init might (indirectly) create
     // a UNO reference to ourself.
     // Ensure that we're not destroyed while we're in here
     osl_atomic_increment( &m_refCount );
-    init_Impl( rInitialDocumentURL, rxInitialStorage );
+    init_Impl(rInitialDocumentURL, rxInitialStorage, guard);
     osl_atomic_decrement( &m_refCount );
 }
 
 void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
-                                     const uno::Reference< embed::XStorage >& rxInitialStorage )
+                                     const uno::Reference< embed::XStorage >& rxInitialStorage,
+                                     std::unique_lock<std::mutex>& guard )
 {
     uno::Reference< embed::XStorage > xStorage = rxInitialStorage;
 
@@ -595,7 +594,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
             meInitMode = LIBRARY_INIT_FILE;
             uno::Reference< embed::XStorage > xDummyStor;
             ::xmlscript::LibDescriptor aLibDesc;
-            implLoadLibraryIndexFile( nullptr, aLibDesc, xDummyStor, aInitFileName );
+            implLoadLibraryIndexFile(nullptr, aLibDesc, xDummyStor, aInitFileName, guard);
             return;
         }
         else
@@ -804,7 +803,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                     if( mxSFI->isFolder( aLibDirPath ) )
                     {
                         createVariableURL( rLib.aStorageURL, rLib.aName, maInfoFileName, true );
-                        maModifiable.setModified( true );
+                        maModifiable.setModified(true, guard);
                     }
                     else if( rLib.bLink )
                     {
@@ -816,7 +815,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                         if( mxSFI->isFolder( aShareLibDirPath ) )
                         {
                             createVariableURL( rLib.aStorageURL, rLib.aName, maInfoFileName, false );
-                            maModifiable.setModified( true );
+                            maModifiable.setModified(true, guard);
                         }
                         else
                         {
@@ -838,12 +837,12 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                 if( rLib.bLink )
                 {
                     Reference< XNameAccess > xLib =
-                        createLibraryLink( aLibName, rLib.aStorageURL, rLib.bReadOnly );
+                        createLibraryLink_Impl(aLibName, rLib.aStorageURL, rLib.bReadOnly, guard);
                     pImplLib = static_cast< SfxLibrary* >( xLib.get() );
                 }
                 else
                 {
-                    Reference< XNameContainer > xLib = createLibrary( aLibName );
+                    Reference<XNameContainer> xLib = createLibrary_Impl(aLibName, guard);
                     pImplLib = static_cast< SfxLibrary* >( xLib.get() );
                     pImplLib->mbLoaded = false;
                     pImplLib->mbReadOnly = rLib.bReadOnly;
@@ -853,7 +852,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                                          pImplLib->maStorageURL, pImplLib->maUnexpandedStorageURL );
                     }
                 }
-                maModifiable.setModified( false );
+                maModifiable.setModified(false, guard);
 
                 // Read library info files
                 if( !mbOldInfoFormat )
@@ -876,10 +875,10 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                         }
                     }
 
-                    // Link is already initialised in createLibraryLink()
+                    // Link is already initialised in createLibraryLink_Impl()
                     if( !pImplLib->mbInitialised && (!bStorage || xLibraryStor.is()) )
                     {
-                        bool bLoaded = implLoadLibraryIndexFile( pImplLib, rLib, xLibraryStor, OUString() );
+                        bool bLoaded = implLoadLibraryIndexFile( pImplLib, rLib, xLibraryStor, OUString(), guard );
                         SAL_WARN_IF(
                             bLoaded && aLibName != rLib.aName, "basic",
                             ("Different library names in library container and"
@@ -899,7 +898,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                     implStoreLibraryIndexFile( pImplLib, rLib, xTmpStorage );
                 }
 
-                implImportLibDescriptor( pImplLib, rLib );
+                implImportLibDescriptor(pImplLib, rLib, guard);
 
                 if( nPass == 1 )
                 {
@@ -923,7 +922,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
     {
         try
         {
-            implScanExtensions();
+            implScanExtensions(guard);
         }
         catch(const uno::Exception& )
         {
@@ -939,7 +938,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
             SfxLibrary* pImplLib = getImplLib( aName );
             if( pImplLib->mbPreload )
             {
-                loadLibrary( aName );
+                loadLibrary_Impl(aName, guard);
             }
         }
     }
@@ -1087,7 +1086,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                     }
                     if( bCreateLink )
                     {
-                        createLibraryLink( aLibName, pImplLib->maStorageURL, pImplLib->mbReadOnly );
+                        createLibraryLink_Impl( aLibName, pImplLib->maStorageURL, pImplLib->mbReadOnly, guard );
                     }
                 }
                 else
@@ -1108,21 +1107,21 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
 
                     if( aLibName == aStandardStr )
                     {
-                        maNameContainer.removeByName( aLibName );
+                        maNameContainer.removeByName(aLibName, guard);
                     }
 
                     // Create library
-                    Reference< XNameContainer > xLib = createLibrary( aLibName );
+                    Reference<XNameContainer> xLib = createLibrary_Impl(aLibName, guard);
                     SfxLibrary* pNewLib = static_cast< SfxLibrary* >( xLib.get() );
                     pNewLib->mbLoaded = false;
-                    pNewLib->implSetModified( false );
+                    pNewLib->implSetModified(false, guard);
                     checkStorageURL( aLibFolder, pNewLib->maLibInfoFileURL,
                                      pNewLib->maStorageURL, pNewLib->maUnexpandedStorageURL );
 
                     uno::Reference< embed::XStorage > xDummyStor;
                     ::xmlscript::LibDescriptor aLibDesc;
-                    implLoadLibraryIndexFile( pNewLib, aLibDesc, xDummyStor, pNewLib->maLibInfoFileURL );
-                    implImportLibDescriptor( pNewLib, aLibDesc );
+                    implLoadLibraryIndexFile( pNewLib, aLibDesc, xDummyStor, pNewLib->maLibInfoFileURL, guard );
+                    implImportLibDescriptor(pNewLib, aLibDesc, guard);
                 }
             }
             mxSFI->kill( aPrevFolder );
@@ -1171,7 +1170,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
     {}
 }
 
-void SfxLibraryContainer::implScanExtensions()
+void SfxLibraryContainer::implScanExtensions(std::unique_lock<std::mutex>& guard)
 {
 #if HAVE_FEATURE_EXTENSIONS
     ScriptExtensionIterator aScriptIt;
@@ -1213,10 +1212,10 @@ void SfxLibraryContainer::implScanExtensions()
 
         // Create link
         const bool bReadOnly = false;
-        createLibraryLink( aLibName, aIndexFileURL, bReadOnly );
+        createLibraryLink_Impl(aLibName, aIndexFileURL, bReadOnly, guard);
     }
 #else
-    (void) this;
+    (void)guard;
 #endif
 }
 
@@ -1292,7 +1291,8 @@ bool SfxLibraryContainer::implStorePasswordLibrary(
 bool SfxLibraryContainer::implLoadPasswordLibrary(
     SfxLibrary* /*pLib*/,
     const OUString& /*Name*/,
-    bool /*bVerifyPasswordOnly*/ )
+    bool /*bVerifyPasswordOnly*/,
+    std::unique_lock<std::mutex>& /*guard*/ )
 {
     return true;
 }
@@ -1580,7 +1580,8 @@ void SfxLibraryContainer::implStoreLibraryIndexFile( SfxLibrary* pLib,
 bool SfxLibraryContainer::implLoadLibraryIndexFile(  SfxLibrary* pLib,
                                                      ::xmlscript::LibDescriptor& rLib,
                                                      const uno::Reference< embed::XStorage >& xStorage,
-                                                     const OUString& aIndexFileName )
+                                                     const OUString& aIndexFileName,
+                                                     std::unique_lock<std::mutex>& guard )
 {
     Reference< XParser > xParser = xml::sax::Parser::create(mxContext);
 
@@ -1660,41 +1661,41 @@ bool SfxLibraryContainer::implLoadLibraryIndexFile(  SfxLibrary* pLib,
 
     if( !pLib )
     {
-        Reference< XNameContainer > xLib = createLibrary( rLib.aName );
+        Reference<XNameContainer> xLib = createLibrary_Impl(rLib.aName, guard);
         pLib = static_cast< SfxLibrary* >( xLib.get() );
         pLib->mbLoaded = false;
         rLib.aStorageURL = aIndexFileName;
         checkStorageURL( rLib.aStorageURL, pLib->maLibInfoFileURL, pLib->maStorageURL,
                          pLib->maUnexpandedStorageURL );
 
-        implImportLibDescriptor( pLib, rLib );
+        implImportLibDescriptor(pLib, rLib, guard);
     }
 
     return true;
 }
 
 void SfxLibraryContainer::implImportLibDescriptor( SfxLibrary* pLib,
-                                                   ::xmlscript::LibDescriptor const & rLib )
+                                                  ::xmlscript::LibDescriptor const& rLib,
+                                                  std::unique_lock<std::mutex>& guard)
 {
     if( pLib->mbInitialised )
         return;
-
     Any aDummyElement = createEmptyLibraryElement();
     for (auto& name : rLib.aElementNames)
     {
-        pLib->maNameContainer.insertByName(name, aDummyElement);
+        pLib->maNameContainer.insertByName(name, aDummyElement, guard);
     }
     pLib->mbPasswordProtected = rLib.bPasswordProtected;
     pLib->mbReadOnly = rLib.bReadOnly;
     pLib->mbPreload  = rLib.bPreload;
-    pLib->implSetModified( false );
+    pLib->implSetModified(false, guard);
     pLib->mbInitialised = true;
 }
 
 
 // Methods of new XLibraryStorage interface?
 void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XStorage >& i_rStorage,
-                                               bool bComplete )
+                                               bool bComplete, std::unique_lock<std::mutex>& guard )
 {
     const Sequence< OUString > aNames = maNameContainer.getElementNames();
 
@@ -1890,7 +1891,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
                 // Maybe lib is not loaded?!
                 if( bComplete )
                 {
-                    loadLibrary( rLib.aName );
+                    loadLibrary_Impl(rLib.aName, guard);
                 }
                 if( pImplLib->mbPasswordProtected )
                 {
@@ -1917,8 +1918,8 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
                     }
                 }
             }
-            maModifiable.setModified( true );
-            pImplLib->implSetModified( false );
+            maModifiable.setModified(true, guard);
+            pImplLib->implSetModified(false, guard);
         }
 
         // For container info ReadOnly refers to mbReadOnlyLink
@@ -1980,7 +1981,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
     {
         return;
     }
-    maModifiable.setModified( false );
+    maModifiable.setModified(false, guard);
     mbOldInfoFormat = false;
 
     // Write library container info
@@ -2095,6 +2096,12 @@ sal_Bool SfxLibraryContainer::hasByName( const OUString& aName )
 Reference< XNameContainer > SAL_CALL SfxLibraryContainer::createLibrary( const OUString& Name )
 {
     LibraryContainerMethodGuard aGuard( *this );
+    return createLibrary_Impl(Name, o3tl::temporary(std::unique_lock(m_aMutex)));
+}
+
+css::uno::Reference<css::container::XNameContainer>
+SfxLibraryContainer::createLibrary_Impl(const OUString& Name, std::unique_lock<std::mutex>& guard)
+{
     rtl::Reference<SfxLibrary> pNewLib = implCreateLibrary( Name );
     pNewLib->maLibElementFileExtension = maLibElementFileExtension;
 
@@ -2106,8 +2113,8 @@ Reference< XNameContainer > SAL_CALL SfxLibraryContainer::createLibrary( const O
     Reference< XNameAccess > xNameAccess( pNewLib );
     Any aElement;
     aElement <<= xNameAccess;
-    maNameContainer.insertByName( Name, aElement );
-    maModifiable.setModified( true );
+    maNameContainer.insertByName(Name, aElement, guard);
+    maModifiable.setModified(true, guard);
     return pNewLib;
 }
 
@@ -2115,6 +2122,13 @@ Reference< XNameAccess > SAL_CALL SfxLibraryContainer::createLibraryLink
     ( const OUString& Name, const OUString& StorageURL, sal_Bool ReadOnly )
 {
     LibraryContainerMethodGuard aGuard( *this );
+    return createLibraryLink_Impl(Name, StorageURL, ReadOnly, o3tl::temporary(std::unique_lock(m_aMutex)));
+}
+
+css::uno::Reference<css::container::XNameAccess>
+SfxLibraryContainer::createLibraryLink_Impl(const OUString& Name, const OUString& StorageURL,
+                                            sal_Bool ReadOnly, std::unique_lock<std::mutex>& guard)
+{
     // TODO: Check other reasons to force ReadOnly status
     //if( !ReadOnly )
     //{
@@ -2133,14 +2147,14 @@ Reference< XNameAccess > SAL_CALL SfxLibraryContainer::createLibraryLink
 
     uno::Reference< embed::XStorage > xDummyStor;
     ::xmlscript::LibDescriptor aLibDesc;
-    implLoadLibraryIndexFile( pNewLib.get(), aLibDesc, xDummyStor, OUString() );
-    implImportLibDescriptor( pNewLib.get(), aLibDesc );
+    implLoadLibraryIndexFile(pNewLib.get(), aLibDesc, xDummyStor, OUString(), guard);
+    implImportLibDescriptor(pNewLib.get(), aLibDesc, guard);
 
     Reference< XNameAccess > xRet( pNewLib );
     Any aElement;
     aElement <<= xRet;
-    maNameContainer.insertByName( Name, aElement );
-    maModifiable.setModified( true );
+    maNameContainer.insertByName(Name, aElement, guard);
+    maModifiable.setModified(true, guard);
 
     if( StorageURL.indexOf( "vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE" ) != -1 )
     {
@@ -2159,6 +2173,7 @@ Reference< XNameAccess > SAL_CALL SfxLibraryContainer::createLibraryLink
 void SAL_CALL SfxLibraryContainer::removeLibrary( const OUString& Name )
 {
     LibraryContainerMethodGuard aGuard( *this );
+    std::unique_lock guard(m_aMutex);
     // Get and hold library before removing
     rtl::Reference pImplLib(getImplLib(Name));
     if( pImplLib->mbReadOnly && !pImplLib->mbLink )
@@ -2166,8 +2181,8 @@ void SAL_CALL SfxLibraryContainer::removeLibrary( const OUString& Name )
         throw IllegalArgumentException(u"readonly && !link"_ustr, getXWeak(), 1);
     }
     // Remove from container
-    maNameContainer.removeByName( Name );
-    maModifiable.setModified( true );
+    maNameContainer.removeByName(Name, guard);
+    maModifiable.setModified(true, guard);
 
     // Delete library files, but not for linked libraries
     if( pImplLib->mbLink )
@@ -2180,7 +2195,7 @@ void SAL_CALL SfxLibraryContainer::removeLibrary( const OUString& Name )
     if (pImplLib->hasElements())
     {
         for (auto& name : pImplLib->getElementNames())
-            pImplLib->impl_removeWithoutChecks(name);
+            pImplLib->impl_removeWithoutChecks(name, guard);
     }
 
     // Delete index file
@@ -2230,6 +2245,12 @@ sal_Bool SAL_CALL SfxLibraryContainer::isLibraryLoaded( const OUString& Name )
 void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
 {
     LibraryContainerMethodGuard aGuard( *this );
+    return loadLibrary_Impl(Name, o3tl::temporary(std::unique_lock(m_aMutex)));
+}
+
+void SfxLibraryContainer::loadLibrary_Impl(const OUString& Name,
+                                           std::unique_lock<std::mutex>& guard)
+{
     SfxLibrary* pImplLib = getImplLib(Name);
 
     bool bLoaded = pImplLib->mbLoaded;
@@ -2239,7 +2260,7 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
 
     if( pImplLib->mbPasswordProtected )
     {
-        implLoadPasswordLibrary( pImplLib, Name );
+        implLoadPasswordLibrary(pImplLib, Name, false, guard);
         return;
     }
 
@@ -2346,15 +2367,15 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
         {
             if( aAny.hasValue() )
             {
-                pImplLib->maNameContainer.replaceByName( aElementName, aAny );
+                pImplLib->maNameContainer.replaceByName(aElementName, aAny, guard);
             }
         }
         else
         {
-            pImplLib->maNameContainer.insertNoCheck(aElementName, aAny);
+            pImplLib->maNameContainer.insertNoCheck(aElementName, aAny, guard);
         }
     }
-    pImplLib->implSetModified( false );
+    pImplLib->implSetModified(false, guard);
 }
 
 // Methods XLibraryContainer2
@@ -2390,14 +2411,15 @@ sal_Bool SAL_CALL SfxLibraryContainer::isLibraryReadOnly( const OUString& Name )
 void SAL_CALL SfxLibraryContainer::setLibraryReadOnly( const OUString& Name, sal_Bool bReadOnly )
 {
     LibraryContainerMethodGuard aGuard( *this );
+    std::unique_lock guard(m_aMutex);
     SfxLibrary* pImplLib = getImplLib( Name );
     if( pImplLib->mbLink )
     {
         if( pImplLib->mbReadOnlyLink != bool(bReadOnly) )
         {
             pImplLib->mbReadOnlyLink = bReadOnly;
-            pImplLib->implSetModified( true );
-            maModifiable.setModified( true );
+            pImplLib->implSetModified(true, guard);
+            maModifiable.setModified(true, guard);
         }
     }
     else
@@ -2405,7 +2427,7 @@ void SAL_CALL SfxLibraryContainer::setLibraryReadOnly( const OUString& Name, sal
         if( pImplLib->mbReadOnly != bool(bReadOnly) )
         {
             pImplLib->mbReadOnly = bReadOnly;
-            pImplLib->implSetModified( true );
+            pImplLib->implSetModified(true, guard);
         }
     }
 }
@@ -2413,6 +2435,7 @@ void SAL_CALL SfxLibraryContainer::setLibraryReadOnly( const OUString& Name, sal
 void SAL_CALL SfxLibraryContainer::renameLibrary( const OUString& Name, const OUString& NewName )
 {
     LibraryContainerMethodGuard aGuard( *this );
+    std::unique_lock guard(m_aMutex);
     if( maNameContainer.hasByName( NewName ) )
     {
         throw ElementExistException();
@@ -2425,7 +2448,7 @@ void SAL_CALL SfxLibraryContainer::renameLibrary( const OUString& Name, const OU
     {
         return;     // Lib with unverified password cannot be renamed
     }
-    loadLibrary( Name );
+    loadLibrary_Impl(Name, guard);
 
     // Rename library folder, but not for linked libraries
     bool bMovedSuccessful = true;
@@ -2439,7 +2462,7 @@ void SAL_CALL SfxLibraryContainer::renameLibrary( const OUString& Name, const OU
         OUString aLibDirPath = pImplLib->maStorageURL;
         // tdf#151741 - fill various storage URLs for the library
         // These URLs should not be empty for newly created libraries after
-        // the change in SfxLibraryContainer::createLibrary.
+        // the change in SfxLibraryContainer::createLibrary_Impl.
         if (aLibDirPath.isEmpty())
         {
             checkStorageURL(pImplLib->maUnexpandedStorageURL, pImplLib->maLibInfoFileURL,
@@ -2515,7 +2538,7 @@ void SAL_CALL SfxLibraryContainer::renameLibrary( const OUString& Name, const OU
                 }
 
                 bMovedSuccessful = true;
-                pImplLib->implSetModified( true );
+                pImplLib->implSetModified(true, guard);
             }
         }
         catch(const Exception& )
@@ -2525,14 +2548,14 @@ void SAL_CALL SfxLibraryContainer::renameLibrary( const OUString& Name, const OU
 
     if( bStorage && !pImplLib->mbLink )
     {
-        pImplLib->implSetModified( true );
+        pImplLib->implSetModified(true, guard);
     }
     if( bMovedSuccessful )
     {
         // Remove the old library from the container and insert it back with the new name
-        maNameContainer.removeByName(Name);
-        maNameContainer.insertByName(NewName, Any(Reference<XNameAccess>(pImplLib)));
-        maModifiable.setModified(true);
+        maNameContainer.removeByName(Name, guard);
+        maNameContainer.insertByName(NewName, Any(Reference<XNameAccess>(pImplLib)), guard);
+        maModifiable.setModified(true, guard);
     }
 }
 
@@ -2541,6 +2564,7 @@ void SAL_CALL SfxLibraryContainer::renameLibrary( const OUString& Name, const OU
 void SAL_CALL SfxLibraryContainer::initialize( const Sequence< Any >& _rArguments )
 {
     LibraryContainerMethodGuard aGuard( *this );
+    std::unique_lock guard(m_aMutex);
     sal_Int32 nArgCount = _rArguments.getLength();
     if ( nArgCount != 1 )
         throw IllegalArgumentException(u"too many args"_ustr, getXWeak(), -1);
@@ -2549,20 +2573,21 @@ void SAL_CALL SfxLibraryContainer::initialize( const Sequence< Any >& _rArgument
     Reference< XStorageBasedDocument > xDocument;
     if ( _rArguments[0] >>= sInitialDocumentURL )
     {
-        init( sInitialDocumentURL, nullptr );
+        init(sInitialDocumentURL, nullptr, guard);
         return;
     }
 
     if ( _rArguments[0] >>= xDocument )
     {
-        initializeFromDocument( xDocument );
+        initializeFromDocument(xDocument, guard);
         return;
     }
     throw IllegalArgumentException(u"arg1 unknown type"_ustr, getXWeak(), 1);
 
 }
 
-void SfxLibraryContainer::initializeFromDocument( const Reference< XStorageBasedDocument >& _rxDocument )
+void SfxLibraryContainer::initializeFromDocument( const Reference< XStorageBasedDocument >& _rxDocument,
+                                                  std::unique_lock<std::mutex>& guard )
 {
     // check whether this is a valid OfficeDocument, and obtain the document's root storage
     Reference< XStorage > xDocStorage;
@@ -2585,7 +2610,7 @@ void SfxLibraryContainer::initializeFromDocument( const Reference< XStorageBased
     {
         throw IllegalArgumentException(u"no doc storage"_ustr, getXWeak(), 1);
     }
-    init( OUString(), xDocStorage );
+    init(OUString(), xDocStorage, guard);
 }
 
 // OEventListenerAdapter
@@ -2603,11 +2628,11 @@ void SfxLibraryContainer::_disposing( const EventObject& _rSource )
 }
 
 // OComponentHelper
-void SAL_CALL SfxLibraryContainer::disposing()
+void SfxLibraryContainer::disposing(std::unique_lock<std::mutex>& guard)
 {
     Reference< XModel > xModel = mxOwnerDocument;
     EventObject aEvent( xModel );
-    maVBAScriptListeners.disposeAndClear( aEvent );
+    maVBAScriptListeners.disposeAndClear(guard, aEvent);
     stopAllComponentListening();
     mxOwnerDocument.clear();
 }
@@ -2637,14 +2662,16 @@ void SAL_CALL SfxLibraryContainer::changeLibraryPassword(const OUString&, const 
 void SAL_CALL SfxLibraryContainer::addContainerListener( const Reference< XContainerListener >& xListener )
 {
     LibraryContainerMethodGuard aGuard( *this );
+    std::unique_lock guard(m_aMutex);
     maNameContainer.setEventSource( getXWeak() );
-    maNameContainer.addContainerListener( xListener );
+    maNameContainer.addContainerListener(xListener, guard);
 }
 
 void SAL_CALL SfxLibraryContainer::removeContainerListener( const Reference< XContainerListener >& xListener )
 {
     LibraryContainerMethodGuard aGuard( *this );
-    maNameContainer.removeContainerListener( xListener );
+    std::unique_lock guard(m_aMutex);
+    maNameContainer.removeContainerListener(xListener, guard);
 }
 
 // Methods XLibraryContainerExport
@@ -2652,6 +2679,7 @@ void SAL_CALL SfxLibraryContainer::exportLibrary( const OUString& Name, const OU
     const Reference< XInteractionHandler >& Handler )
 {
     LibraryContainerMethodGuard aGuard( *this );
+    std::unique_lock guard(m_aMutex);
     SfxLibrary* pImplLib = getImplLib( Name );
 
     Reference< XSimpleFileAccess3 > xToUseSFI;
@@ -2662,7 +2690,7 @@ void SAL_CALL SfxLibraryContainer::exportLibrary( const OUString& Name, const OU
     }
 
     // Maybe lib is not loaded?!
-    loadLibrary( Name );
+    loadLibrary_Impl(Name, guard);
 
     uno::Reference< css::embed::XStorage > xDummyStor;
     if( pImplLib->mbPasswordProtected )
@@ -2782,12 +2810,12 @@ sal_Int32 SAL_CALL SfxLibraryContainer::getRunningVBAScripts()
 
 void SAL_CALL SfxLibraryContainer::addVBAScriptListener( const Reference< vba::XVBAScriptListener >& rxListener )
 {
-    maVBAScriptListeners.addInterface( rxListener );
+    maVBAScriptListeners.addInterface(o3tl::temporary(std::unique_lock(m_aMutex)), rxListener);
 }
 
 void SAL_CALL SfxLibraryContainer::removeVBAScriptListener( const Reference< vba::XVBAScriptListener >& rxListener )
 {
-    maVBAScriptListeners.removeInterface( rxListener );
+    maVBAScriptListeners.removeInterface(o3tl::temporary(std::unique_lock(m_aMutex)), rxListener);
 }
 
 void SAL_CALL SfxLibraryContainer::broadcastVBAScriptEvent( sal_Int32 nIdentifier, const OUString& rModuleName )
@@ -2807,7 +2835,9 @@ void SAL_CALL SfxLibraryContainer::broadcastVBAScriptEvent( sal_Int32 nIdentifie
 
     Reference< XModel > xModel = mxOwnerDocument;  // weak-ref -> ref
     vba::VBAScriptEvent aEvent( Reference<XInterface>(xModel, UNO_QUERY), nIdentifier, rModuleName );
-    maVBAScriptListeners.notifyEach( &css::script::vba::XVBAScriptListener::notifyVBAScriptEvent, aEvent );
+    maVBAScriptListeners.notifyEach(o3tl::temporary(std::unique_lock(m_aMutex)),
+                                    &css::script::vba::XVBAScriptListener::notifyVBAScriptEvent,
+                                    aEvent);
 }
 
 // Methods XPropertySet
@@ -2912,7 +2942,7 @@ bool SfxLibrary::isLoadedStorable()
     return mbLoaded && (!mbPasswordProtected || mbPasswordVerified);
 }
 
-void SfxLibrary::implSetModified( bool _bIsModified )
+void SfxLibrary::implSetModified(bool _bIsModified, std::unique_lock<std::mutex>& guard)
 {
     if ( mbIsModified == _bIsModified )
     {
@@ -2921,7 +2951,7 @@ void SfxLibrary::implSetModified( bool _bIsModified )
     mbIsModified = _bIsModified;
     if ( mbIsModified )
     {
-        mrModifiable.setModified( true );
+        mrModifiable.setModified(true, guard);
     }
 }
 
@@ -2992,8 +3022,9 @@ void SfxLibrary::replaceByName( const OUString& aName, const Any& aElement )
         !isLibraryElementValid(aElement), "basic",
         "SfxLibrary::replaceByName: replacing element is invalid!");
 
-    maNameContainer.replaceByName( aName, aElement );
-    implSetModified( true );
+    std::unique_lock guard(m_aMutex);
+    maNameContainer.replaceByName(aName, aElement, guard);
+    implSetModified(true, guard);
 }
 
 
@@ -3007,14 +3038,16 @@ void SfxLibrary::insertByName( const OUString& aName, const Any& aElement )
         !isLibraryElementValid(aElement), "basic",
         "SfxLibrary::insertByName: to-be-inserted element is invalid!");
 
-    maNameContainer.insertByName( aName, aElement );
-    implSetModified( true );
+    std::unique_lock guard(m_aMutex);
+    maNameContainer.insertByName(aName, aElement, guard);
+    implSetModified(true, guard);
 }
 
-void SfxLibrary::impl_removeWithoutChecks( const OUString& _rElementName )
+void SfxLibrary::impl_removeWithoutChecks(const OUString& _rElementName,
+                                          std::unique_lock<std::mutex>& guard)
 {
-    maNameContainer.removeByName( _rElementName );
-    implSetModified( true );
+    maNameContainer.removeByName(_rElementName, guard);
+    implSetModified(true, guard);
 
     // Remove element file
     if( maStorageURL.isEmpty() )
@@ -3044,31 +3077,31 @@ void SfxLibrary::removeByName( const OUString& Name )
 {
     impl_checkReadOnly();
     impl_checkLoaded();
-    impl_removeWithoutChecks( Name );
+    impl_removeWithoutChecks(Name, o3tl::temporary(std::unique_lock(m_aMutex)));
 }
 
 // Methods XContainer
 void SAL_CALL SfxLibrary::addContainerListener( const Reference< XContainerListener >& xListener )
 {
     maNameContainer.setEventSource( getXWeak() );
-    maNameContainer.addContainerListener( xListener );
+    maNameContainer.addContainerListener(xListener, o3tl::temporary(std::unique_lock(m_aMutex)));
 }
 
 void SAL_CALL SfxLibrary::removeContainerListener( const Reference< XContainerListener >& xListener )
 {
-    maNameContainer.removeContainerListener( xListener );
+    maNameContainer.removeContainerListener(xListener, o3tl::temporary(std::unique_lock(m_aMutex)));
 }
 
 // Methods XChangesNotifier
 void SAL_CALL SfxLibrary::addChangesListener( const Reference< XChangesListener >& xListener )
 {
     maNameContainer.setEventSource( getXWeak() );
-    maNameContainer.addChangesListener( xListener );
+    maNameContainer.addChangesListener(xListener, o3tl::temporary(std::unique_lock(m_aMutex)));
 }
 
 void SAL_CALL SfxLibrary::removeChangesListener( const Reference< XChangesListener >& xListener )
 {
-    maNameContainer.removeChangesListener( xListener );
+    maNameContainer.removeChangesListener(xListener, o3tl::temporary(std::unique_lock(m_aMutex)));
 }
 
 
