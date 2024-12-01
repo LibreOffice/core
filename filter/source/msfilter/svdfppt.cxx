@@ -5058,11 +5058,7 @@ void PPTStyleTextPropReader::ReadParaProps(SvStream& rIn, const DffRecordHeader&
         {
             bTextPropAtom = false;
             nCharCount = nStringLen - nCharReadCnt;
-            // please fix the right hand side of
-            // PPTParaPropSet& PPTParaPropSet::operator=(PPTParaPropSet&),
-            // it should be a const reference
-            PPTParaPropSet aTmpPPTParaPropSet;
-            aParaPropSet = aTmpPPTParaPropSet;
+            aParaPropSet = PPTParaPropSet();
             OSL_FAIL( "SJ:PPTStyleTextPropReader::could not get this PPT_PST_StyleTextPropAtom by reading the paragraph attributes" );
         }
         PPTParaPropSet* pPara = new PPTParaPropSet( aParaPropSet );
