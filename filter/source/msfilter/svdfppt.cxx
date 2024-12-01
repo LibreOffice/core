@@ -4829,9 +4829,9 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, const DffRecordHe
     Init(rIn, rTextHeader, rRuler, rExtParaHd, nInstance);
 }
 
-void PPTStyleTextPropReader::ReadParaProps( SvStream& rIn, const DffRecordHeader& rTextHeader,
-                                            const OUString& aString, PPTTextRulerInterpreter const & rRuler,
-                                            sal_uInt32& nCharCount, bool& bTextPropAtom )
+void PPTStyleTextPropReader::ReadParaProps(SvStream& rIn, const DffRecordHeader& rTextHeader,
+                                           const OUString& aString, PPTTextRulerInterpreter const & rRuler,
+                                           bool& bTextPropAtom)
 {
     sal_uInt32  nMask = 0; //TODO: nMask initialized here to suppress warning for now, see corresponding TODO below
     sal_uInt32  nCharReadCnt = 0;
@@ -4846,6 +4846,7 @@ void PPTStyleTextPropReader::ReadParaProps( SvStream& rIn, const DffRecordHeader
     while ( nCharReadCnt <= nStringLen )
     {
         PPTParaPropSet aParaPropSet;
+        sal_uInt32 nCharCount(0);
         ImplPPTParaPropSet& aSet = *aParaPropSet.mxParaSet;
         if ( bTextPropAtom )
         {
@@ -5069,9 +5070,8 @@ void PPTStyleTextPropReader::ReadParaProps( SvStream& rIn, const DffRecordHeader
         aParaPropList.emplace_back( pPara );
         if ( nCharCount )
         {
-            sal_uInt32   nCount;
             const sal_Unicode* pDat = aString.getStr() + nCharReadCnt;
-            for ( nCount = 0; nCount < nCharCount; nCount++ )
+            for (sal_uInt32 nCount = 0; nCount < nCharCount; ++nCount)
             {
                 if ( pDat[ nCount ] == 0xd )
                 {
@@ -5270,9 +5270,8 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
     else
     {
         // no chars, but potentially char/para props?
-        sal_uInt32  nParaCharCount;
         bool        bTextPropAtom = false;
-        ReadParaProps( rIn, rTextHeader, aString, rRuler, nParaCharCount, bTextPropAtom );
+        ReadParaProps(rIn, rTextHeader, aString, rRuler, bTextPropAtom);
 
         if ( bTextPropAtom )
         {
@@ -5294,10 +5293,8 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
     const sal_uInt32 nStringLen = aString.getLength();
     if (nStringLen)
     {
-        sal_uInt32  nParaCharCount;
         bool        bTextPropAtom = false;
-
-        ReadParaProps( rIn, rTextHeader, aString, rRuler, nParaCharCount, bTextPropAtom );
+        ReadParaProps(rIn, rTextHeader, aString, rRuler, bTextPropAtom);
 
         bool bEmptyParaPossible = true;
         sal_uInt32 nCharReadCnt = 0;

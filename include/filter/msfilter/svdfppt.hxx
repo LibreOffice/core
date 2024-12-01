@@ -1082,7 +1082,6 @@ struct PPTStyleTextPropReader
                 const DffRecordHeader& rTextHeader,
                 const OUString& aString,
                 PPTTextRulerInterpreter const & rRuler,
-                sal_uInt32& nCharCount,
                 bool& bTextPropAtom
             );
     // returns CharCount
