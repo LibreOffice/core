@@ -2253,13 +2253,8 @@ void SAL_CALL SfxLibraryContainer::removeLibrary( const OUString& Name )
     }
     if( xNameAccess->hasElements() )
     {
-        Sequence< OUString > aNames = pImplLib->getElementNames();
-        sal_Int32 nNameCount = aNames.getLength();
-        const OUString* pNames = aNames.getConstArray();
-        for( sal_Int32 i = 0 ; i < nNameCount ; ++i, ++pNames )
-        {
-            pImplLib->removeElementWithoutChecks( *pNames, SfxLibrary::LibraryContainerAccess() );
-        }
+        for (auto& name : pImplLib->getElementNames())
+            pImplLib->impl_removeWithoutChecks(name);
     }
 
     // Delete index file

@@ -583,13 +583,6 @@ public:
     virtual void SAL_CALL removeChangesListener( const css::uno::Reference<
         css::util::XChangesListener >& xListener ) override;
 
-public:
-    struct LibraryContainerAccess { friend class SfxLibraryContainer; private: LibraryContainerAccess() { } };
-    void    removeElementWithoutChecks( const OUString& _rElementName, LibraryContainerAccess )
-    {
-        impl_removeWithoutChecks( _rElementName );
-    }
-
 protected:
     virtual bool isLoadedStorable();
 
