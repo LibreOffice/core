@@ -1085,11 +1085,11 @@ struct PPTStyleTextPropReader
                 sal_uInt32& nCharCount,
                 bool& bTextPropAtom
             );
-    static void ReadCharProps(
+    // returns CharCount
+    static sal_uInt32 ReadCharProps(
                 SvStream& rIn,
                 PPTCharPropSet& aCharPropSet,
                 std::u16string_view aString,
-                sal_uInt32& nCharCount,
                 sal_uInt32 nCharReadCnt,
                 bool& bTextPropAtom,
                 sal_uInt32 nExtParaPos,

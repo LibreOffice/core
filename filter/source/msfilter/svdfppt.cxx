@@ -5085,8 +5085,8 @@ void PPTStyleTextPropReader::ReadParaProps( SvStream& rIn, const DffRecordHeader
     }
 }
 
-void PPTStyleTextPropReader::ReadCharProps( SvStream& rIn, PPTCharPropSet& aCharPropSet, std::u16string_view aString,
-                                            sal_uInt32& nCharCount, sal_uInt32 nCharReadCnt,
+sal_uInt32 PPTStyleTextPropReader::ReadCharProps( SvStream& rIn, PPTCharPropSet& aCharPropSet, std::u16string_view aString,
+                                            sal_uInt32 nCharReadCnt,
                                             bool& bTextPropAtom, sal_uInt32 nExtParaPos,
                                             const std::vector< StyleTextProp9 >& aStyleTextProp9,
                                             sal_uInt32& nExtParaFlags, sal_uInt16& nBuBlip,
@@ -5096,7 +5096,7 @@ void PPTStyleTextPropReader::ReadCharProps( SvStream& rIn, PPTCharPropSet& aChar
 
     sal_uInt16 nDummy16;
     rIn.ReadUInt16( nDummy16 );
-    nCharCount = (rIn.good()) ? nDummy16 : 0;
+    sal_uInt32 nCharCount = (rIn.good()) ? nDummy16 : 0;
     rIn.ReadUInt16( nDummy16 );
 
     sal_Int32 nCharsToRead = nStringLen - ( nCharReadCnt + nCharCount );
@@ -5159,7 +5159,7 @@ void PPTStyleTextPropReader::ReadCharProps( SvStream& rIn, PPTCharPropSet& aChar
         aSet.mnAttrSet |= 1 << PPT_CharAttr_Escapement;
     }
     if ( !nExtParaPos )
-        return;
+        return nCharCount;
 
     sal_uInt32 nExtBuInd = nMask & 0x3c00;
     if ( nExtBuInd )
@@ -5171,6 +5171,8 @@ void PPTStyleTextPropReader::ReadCharProps( SvStream& rIn, PPTCharPropSet& aChar
         nHasAnm = aStyleTextProp9[ nExtBuInd ].mnHasAnm;
         nAnmScheme = aStyleTextProp9[ nExtBuInd ].mnAnmScheme;
     }
+
+    return nCharCount;
 }
 
 void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHeader,
@@ -5281,7 +5283,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
 
             sal_uInt32 nExtParaFlags = 0, nAnmScheme = 0;
             sal_uInt16 nBuBlip = 0xffff, nHasAnm = 0;
-            ReadCharProps( rIn, aCharPropSet, aString, nCharCount, 0/*nCharReadCnt*/,
+            nCharCount = ReadCharProps( rIn, aCharPropSet, aString, 0/*nCharReadCnt*/,
                            bTextPropAtom, nExtParaPos, aStyleTextProp9, nExtParaFlags,
                            nBuBlip, nHasAnm, nAnmScheme );
 
@@ -5311,7 +5313,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
             PPTCharPropSet aCharPropSet( nCurrentPara );
             if ( bTextPropAtom )
             {
-                ReadCharProps( rIn, aCharPropSet, aString, nCharCount, nCharReadCnt,
+                nCharCount = ReadCharProps( rIn, aCharPropSet, aString, nCharReadCnt,
                                bTextPropAtom, nExtParaPos, aStyleTextProp9, nExtParaFlags,
                                nBuBlip, nHasAnm, nAnmScheme );
                 if (!rIn.good())
