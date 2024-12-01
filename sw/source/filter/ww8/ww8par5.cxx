@@ -3131,7 +3131,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
                                         {
                                             --aIt;
 
-                                            if(0x09 == sDelimiter[0])
+                                            if (!sDelimiter.isEmpty() && sDelimiter[0] == 0x09)
                                                 aIt->eTabAlign = SvxTabAdjust::End;
                                             else
                                             {
