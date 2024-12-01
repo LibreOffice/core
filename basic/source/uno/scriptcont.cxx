@@ -1125,7 +1125,7 @@ Sequence< OUString > SAL_CALL SfxScriptLibraryContainer::getSupportedServiceName
 // Ctor
 SfxScriptLibrary::SfxScriptLibrary( ModifiableHelper& _rModifiable,
                                     const Reference< XSimpleFileAccess3 >& xSFI )
-    : SfxLibrary( _rModifiable, cppu::UnoType<OUString>::get(), xSFI )
+    : SfxScriptLibrary_BASE(_rModifiable, cppu::UnoType<OUString>::get(), xSFI)
     , mbLoadedSource( false )
     , mbLoadedBinary( false )
 {
@@ -1136,7 +1136,7 @@ SfxScriptLibrary::SfxScriptLibrary( ModifiableHelper& _rModifiable,
                                     const OUString& aLibInfoFileURL,
                                     const OUString& aStorageURL,
                                     bool ReadOnly )
-    : SfxLibrary( _rModifiable, cppu::UnoType<OUString>::get(), xSFI,
+    : SfxScriptLibrary_BASE(_rModifiable, cppu::UnoType<OUString>::get(), xSFI,
                         aLibInfoFileURL, aStorageURL, ReadOnly)
     , mbLoadedSource( false )
     , mbLoadedBinary( false )
@@ -1185,9 +1185,6 @@ bool SfxScriptLibrary::isLibraryElementValid(const css::uno::Any& rElement) cons
 {
     return SfxScriptLibrary::containsValidModule(rElement);
 }
-
-IMPLEMENT_FORWARD_XINTERFACE2( SfxScriptLibrary, SfxLibrary, SfxScriptLibrary_BASE );
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( SfxScriptLibrary, SfxLibrary, SfxScriptLibrary_BASE );
 
 script::ModuleInfo SAL_CALL SfxScriptLibrary::getModuleInfo( const OUString& ModuleName )
 {

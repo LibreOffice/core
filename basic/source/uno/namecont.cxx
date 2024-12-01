@@ -2925,24 +2925,6 @@ void SfxLibrary::implSetModified( bool _bIsModified )
     }
 }
 
-// Methods XInterface
-Any SAL_CALL SfxLibrary::queryInterface( const Type& rType )
-{
-    Any aRet =
-        ::cppu::queryInterface(
-            rType,
-            static_cast< XContainer * >( this ),
-            static_cast< XNameContainer * >( this ),
-            static_cast< XNameAccess * >( this ),
-            static_cast< XElementAccess * >( this ),
-            static_cast< XChangesNotifier * >( this ) );
-    if( !aRet.hasValue() )
-    {
-        aRet = WeakComponentImplHelper::queryInterface( rType );
-    }
-    return aRet;
-}
-
 // Methods XElementAccess
 Type SfxLibrary::getElementType()
 {
@@ -3063,24 +3045,6 @@ void SfxLibrary::removeByName( const OUString& Name )
     impl_checkReadOnly();
     impl_checkLoaded();
     impl_removeWithoutChecks( Name );
-}
-
-// XTypeProvider
-Sequence< Type > SfxLibrary::getTypes()
-{
-    static OTypeCollection ourTypes_NameContainer(
-                cppu::UnoType<XNameContainer>::get(),
-                cppu::UnoType<XContainer>::get(),
-                cppu::UnoType<XChangesNotifier>::get(),
-                WeakComponentImplHelper::getTypes() );
-
-    return ourTypes_NameContainer.getTypes();
-}
-
-
-Sequence< sal_Int8 > SfxLibrary::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
 }
 
 // Methods XContainer

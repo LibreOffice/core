@@ -486,7 +486,7 @@ SfxDialogLibrary::SfxDialogLibrary( ModifiableHelper& _rModifiable,
                                     OUString aName,
                                     const Reference< XSimpleFileAccess3 >& xSFI,
                                     SfxDialogLibraryContainer* pParent )
-    : SfxLibrary( _rModifiable, cppu::UnoType<XInputStreamProvider>::get(), xSFI )
+    : SfxDialogLibrary_BASE(_rModifiable, cppu::UnoType<XInputStreamProvider>::get(), xSFI)
     , m_pParent( pParent )
     , m_aName(std::move( aName ))
 {
@@ -499,15 +499,12 @@ SfxDialogLibrary::SfxDialogLibrary( ModifiableHelper& _rModifiable,
                                     const OUString& aStorageURL,
                                     bool ReadOnly,
                                     SfxDialogLibraryContainer* pParent )
-    : SfxLibrary( _rModifiable, cppu::UnoType<XInputStreamProvider>::get(),
+    : SfxDialogLibrary_BASE(_rModifiable, cppu::UnoType<XInputStreamProvider>::get(),
                        xSFI, aLibInfoFileURL, aStorageURL, ReadOnly)
     , m_pParent( pParent )
     , m_aName(std::move( aName ))
 {
 }
-
-IMPLEMENT_FORWARD_XINTERFACE2( SfxDialogLibrary, SfxLibrary, SfxDialogLibrary_BASE );
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( SfxDialogLibrary, SfxLibrary, SfxDialogLibrary_BASE );
 
 // Provide modify state including resources
 bool SfxDialogLibrary::isModified()

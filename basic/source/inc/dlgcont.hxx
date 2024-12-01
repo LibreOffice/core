@@ -85,11 +85,10 @@ public:
 };
 
 
-typedef ::cppu::ImplHelper1 <   css::resource::XStringResourceSupplier
+typedef cppu::ImplInheritanceHelper<SfxLibrary, css::resource::XStringResourceSupplier
                             >   SfxDialogLibrary_BASE;
 
-class SfxDialogLibrary final : public SfxLibrary
-                        ,public SfxDialogLibrary_BASE
+class SfxDialogLibrary final : public SfxDialogLibrary_BASE
 {
     SfxDialogLibraryContainer*                                        m_pParent;
     css::uno::Reference< css::resource::XStringResourcePersistence>   m_xStringResourcePersistence;
@@ -121,9 +120,6 @@ public:
         const OUString& aLibInfoFileURL, const OUString& aStorageURL, bool ReadOnly,
         SfxDialogLibraryContainer* pParent
     );
-
-    DECLARE_XINTERFACE()
-    DECLARE_XTYPEPROVIDER()
 
     // XStringResourceSupplier
     virtual css::uno::Reference< css::resource::XStringResourceResolver >

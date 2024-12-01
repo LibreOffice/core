@@ -453,10 +453,8 @@ public:
 
 
 class SfxLibrary
-    : public css::container::XNameContainer
-    , public css::container::XContainer
-    , public css::util::XChangesNotifier
-    , public ::comphelper::WeakComponentImplHelper<>
+    : public comphelper::WeakComponentImplHelper<
+          css::container::XNameContainer, css::container::XContainer, css::util::XChangesNotifier>
 {
     friend class SfxLibraryContainer;
     friend class SfxDialogLibraryContainer;
@@ -534,11 +532,6 @@ public:
         bool ReadOnly
     );
 
-    // Methods XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType ) override;
-    virtual void SAL_CALL acquire() noexcept override { WeakComponentImplHelper::acquire(); }
-    virtual void SAL_CALL release() noexcept override { WeakComponentImplHelper::release(); }
-
     // Methods XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
     virtual sal_Bool SAL_CALL hasElements(  ) override;
@@ -554,10 +547,6 @@ public:
     // Methods XNameContainer
     virtual void SAL_CALL insertByName( const OUString& aName, const css::uno::Any& aElement ) override;
     virtual void SAL_CALL removeByName( const OUString& Name ) override;
-
-    // XTypeProvider
-    css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
-    css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) override;
 
     // Methods XContainer
     virtual void SAL_CALL addContainerListener( const css::uno::Reference<
