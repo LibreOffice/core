@@ -5054,7 +5054,7 @@ void PPTStyleTextPropReader::ReadParaProps(SvStream& rIn, const DffRecordHeader&
         if ( rRuler.GetDefaultTab( aSet.mpArry[ PPT_ParaAttr_DefaultTab ] ) )
             aSet.mnAttrSet |= 1 << PPT_ParaAttr_DefaultTab;
 
-        if ( ( nCharCount > nStringLen ) || ( nStringLen < nCharReadCnt + nCharCount ) )
+        if (nCharCount > nStringLen || nCharCount > nStringLen - nCharReadCnt)
         {
             bTextPropAtom = false;
             nCharCount = nStringLen - nCharReadCnt;
