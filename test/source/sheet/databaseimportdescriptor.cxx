@@ -33,7 +33,6 @@ void DatabaseImportDescriptor::testDatabaseImportDescriptorProperties()
     for (auto& rPropValue : asNonConstRange(aPropValues))
     {
         uno::Any aOldValue;
-        uno::Any aNewValue;
         if (rPropValue.Name == "DatabaseName" || rPropValue.Name == "SourceObject"
             || rPropValue.Name == "ConnectionResource")
         {
@@ -44,8 +43,7 @@ void DatabaseImportDescriptor::testDatabaseImportDescriptorProperties()
                               + OUStringToOString(rPropValue.Name, RTL_TEXTENCODING_UTF8);
             CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsgGet.getStr(), u""_ustr, aValue);
 
-            aNewValue <<= u"New"_ustr;
-            rPropValue.Value = std::move(aNewValue);
+            rPropValue.Value <<= u"New"_ustr;
 
             aOldValue = rPropValue.Value;
             aOldValue >>= aValue;
@@ -62,8 +60,7 @@ void DatabaseImportDescriptor::testDatabaseImportDescriptorProperties()
                               + OUStringToOString(rPropValue.Name, RTL_TEXTENCODING_UTF8);
             CPPUNIT_ASSERT_MESSAGE(aMsgGet.getStr(), !aValue);
 
-            aNewValue <<= true;
-            rPropValue.Value = std::move(aNewValue);
+            rPropValue.Value <<= true;
 
             aOldValue = rPropValue.Value;
             aOldValue >>= aValue;
@@ -80,8 +77,7 @@ void DatabaseImportDescriptor::testDatabaseImportDescriptorProperties()
                               + OUStringToOString(rPropValue.Name, RTL_TEXTENCODING_UTF8);
             CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsgGet.getStr(), sheet::DataImportMode_NONE, aValue);
 
-            aNewValue <<= sheet::DataImportMode_SQL;
-            rPropValue.Value = aNewValue;
+            rPropValue.Value <<= sheet::DataImportMode_SQL;
 
             aOldValue = rPropValue.Value;
             aOldValue >>= aValue;

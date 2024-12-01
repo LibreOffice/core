@@ -138,7 +138,7 @@ void OXMLDataSourceSetting::addValue(const OUString& _sValue)
         aValue = convertString(m_aPropType, _sValue);
 
     if ( !m_bIsList )
-        m_aSetting.Value = aValue;
+        m_aSetting.Value = std::move(aValue);
     else
     {
         sal_Int32 nPos = m_aInfoSequence.getLength();

@@ -340,7 +340,7 @@ void ScDPFilteredCache::filterTable(const vector<Criterion>& rCriteria, Sequence
                   OUString string (pData->GetString() );
                   any <<= string;
             }
-            pRow[nCol] = any;
+            pRow[nCol] = std::move(any);
         }
         tableData.push_back(row);
     }

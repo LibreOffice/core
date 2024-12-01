@@ -1507,8 +1507,7 @@ void FilterCache::impl_readPatchUINames(const css::uno::Reference< css::containe
         lUINames[locale] <<= sValue;
     }
 
-    aVal <<= lUINames.getAsConstPropertyValueList();
-    rItem[PROPNAME_UINAMES] = aVal;
+    rItem[PROPNAME_UINAMES] <<= lUINames.getAsConstPropertyValueList();
 
     // find right UIName for current office locale
     // Use fallbacks too!
