@@ -1748,7 +1748,7 @@ Try:
 	vDataArray = oAddress.XCellRange.getFormulaArray()
 
 	&apos;	Convert the data array to scalar, vector or array
-	vGet = _ConvertFromDataArray(vDataArray)
+	vGet = ScriptForge.SF_Array.ConvertFromDataArray(vDataArray)
 
 Finally:
 	GetFormula = vGet
@@ -1833,7 +1833,7 @@ Try:
 	vDataArray = oAddress.XCellRange.getDataArray()
 
 	&apos;	Convert the data array to scalar, vector or array
-	vGet = _ConvertFromDataArray(vDataArray)
+	vGet = ScriptForge.SF_Array.ConvertFromDataArray(vDataArray)
 
 Finally:
 	GetValue = vGet
@@ -2830,7 +2830,7 @@ Check:
 
 Try:
 	&apos;	Convert argument to data array and derive new range from its size
-	vDataArray = _ConvertToDataArray(Value)
+	vDataArray = ScriptForge.SF_Array.ConvertToDataArray(Value, IsRange := True)
 	If UBound(vDataArray) &lt; LBound(vDataArray) Then GoTo Finally
 	Set oSet = _Offset(TargetCell, 0, 0, plHeight := UBound(vDataArray) + 1, plWidth := UBound(vDataArray(0)) + 1)	&apos;	+1 : vDataArray is zero-based
 	With oSet
@@ -2971,7 +2971,7 @@ Try:
 	With oAddress
 		If IsArray(Formula) Then
 			&apos;	Convert to data array and limit its size to the size of the initial range
-			vDataArray = _ConvertToDataArray(Formula, .Height - 1, .Width - 1)
+			vDataArray = ScriptForge.SF_Array.ConvertToDataArray(Formula, Rows := .Height, Columns := .Width)
 			If UBound(vDataArray) &lt; LBound(vDataArray) Then GoTo Finally
 			.XCellRange.setFormulaArray(vDataArray)
 		Else
@@ -3054,7 +3054,7 @@ Public Function SetValue(Optional ByVal TargetRange As Variant _
 &apos;&apos;&apos;	Vectors are always expanded vertically, except if the range has a height of exactly 1 row
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		TargetRange : the range as a string that should receive a new value
-&apos;&apos;&apos;		Value: a scalar, a vector or an array with the new values for each cell o.XSpreadsheet.Name)f the range.
+&apos;&apos;&apos;		Value: a scalar, a vector or an array with the new values for each cell of the range.
 &apos;&apos;&apos;			The new values should be strings, numeric values or dates. Other types empty the corresponding cell
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		A string representing the updated range
@@ -3087,7 +3087,7 @@ Try:
 	Set oAddress = _ParseAddress(TargetRange)
 	With oAddress
 		&apos;	Convert to data array and limit its size to the size of the initial range
-		vDataArray = _ConvertToDataArray(Value, .Height - 1, .Width - 1)
+		vDataArray = ScriptForge.SF_Array.ConvertToDataArray(Value, IsRange := True, Rows := .Height, Columns := .Width)
 		If UBound(vDataArray) &lt; LBound(vDataArray) Then GoTo Finally
 		.XCellRange.setDataArray(vDataArray)
 		sSet = .RangeName
@@ -3986,7 +3986,7 @@ Try:
 		&apos;	Apply the formula and get the result as an array of Boolean values. Clean up
 		SetFormula(oFormulaRange, psFilterFormula)
 		vDataArray = oFormulaRange.XCellRange.getDataArray()
-		vFilter = _ConvertFromDataArray(vDataArray)
+		vFilter = ScriptForge.SF_Array.ConvertFromDataArray(vDataArray)
 		iDims = ScriptForge.SF_Array.CountDims(vFilter)
 		ClearAll(oFormulaRange)
 
@@ -4039,202 +4039,6 @@ Finally:
 	_ComputeFilter = vRanges()
 	Exit Function
 End Function    &apos;   SFDocuments.SF_Calc._ComputeFilter
-
-REM -----------------------------------------------------------------------------
-Public Function _ConvertFromDataArray(ByRef pvDataArray As Variant) As Variant
-&apos;&apos;&apos;	Convert a data array to a scalar, a vector or a 2D array
-&apos;&apos;&apos;	Args:
-&apos;&apos;&apos;		pvDataArray: an array as returned by the XCellRange.getDataArray or .getFormulaArray methods
-&apos;&apos;&apos;	Returns:
-&apos;&apos;&apos;		A scalar, a zero-based 1D array or a zero-based 2D array of strings and/or doubles
-&apos;&apos;&apos;		To convert doubles to dates, use the CDate builtin function
-
-Dim vArray As Variant				&apos;	Return value
-Dim lMax1 As Long					&apos;	UBound of pvDataArray
-Dim lMax2 As Long					&apos;	UBound of pvDataArray items
-Dim i As Long
-Dim j As Long
-
-	vArray = Empty
-
-Try:
-	&apos;	Convert the data array to scalar, vector or array
-	lMax1 = UBound(pvDataArray)
-	If lMax1 &gt;= 0 Then
-		lMax2 = UBound(pvDataArray(0))
-		If lMax2 &gt;= 0 Then
-			If lMax1 + lMax2 &gt; 0 Then vArray = Array()
-			Select Case True
-				Case lMax1 = 0 And lMax2 = 0			&apos;	Scalar
-					vArray = pvDataArray(0)(0)
-				Case lMax1 &gt; 0 And lMax2 = 0			&apos;	Vertical vector
-					ReDim vArray(0 To lMax1)
-					For i = 0 To lMax1
-						vArray(i) = pvDataArray(i)(0)
-					Next i
-				Case lMax1 = 0 And lMax2 &gt; 0			&apos;	Horizontal vector
-					ReDim vArray(0 To lMax2)
-					For j = 0 To lMax2
-						vArray(j) = pvDataArray(0)(j)
-					Next j
-				Case Else								&apos;	Array
-					ReDim vArray(0 To lMax1, 0 To lMax2)
-					For i = 0 To lMax1
-						For j = 0 To lMax2
-							vArray(i, j) = pvDataArray(i)(j)
-						Next j
-					Next i
-			End Select
-		End If
-	End If
-
-Finally:
-	_ConvertFromDataArray = vArray
-End Function	&apos;	SFDocuments.SF_Calc._ConvertFromDataArray
-
-REM -----------------------------------------------------------------------------
-Private Function _ConvertToCellValue(ByVal pvItem As Variant) As Variant
-&apos;&apos;&apos;	Convert the argument to a valid Calc cell content
-
-Dim vCell As Variant		&apos;	Return value
-
-Try:
-	Select Case ScriptForge.SF_Utils._VarTypeExt(pvItem)
-		Case V_STRING					:		vCell = pvItem
-		Case V_DATE						:		vCell = CDbl(pvItem)
-		Case ScriptForge.V_NUMERIC		:		vCell = CDbl(pvItem)
-		Case ScriptForge.V_BOOLEAN		:		vCell = CDbl(Iif(pvItem, 1, 0))
-		Case Else						:		vCell = &quot;&quot;
-	End Select
-
-Finally:
-	_ConvertToCellValue = vCell
-	Exit Function
-End Function	&apos;	SFDocuments.SF_Calc._ConvertToCellValue
-
-REM -----------------------------------------------------------------------------
-Private Function _ConvertToDataArray(ByRef pvArray As Variant _
-								, Optional ByVal plRows As Long _
-								, Optional ByVal plColumns As Long _
-								) As Variant
-&apos;&apos;&apos;	Create a 2-dimensions nested array (compatible with the ranges .DataArray property)
-&apos;&apos;&apos;	from a scalar, a 1D array or a 2D array
-&apos;&apos;&apos;	Input may be a 1D array of arrays, typically when call issued by a Python script
-&apos;&apos;&apos;	Array items are converted to (possibly empty) strings or doubles
-&apos;&apos;&apos;	Args:
-&apos;&apos;&apos;		pvArray: the input scalar or array. If array, must be 1 or 2D otherwise it is ignored.
-&apos;&apos;&apos;		plRows, plColumns: the upper bounds of the data array
-&apos;&apos;&apos;			If bigger than input array, fill with zero-length strings
-&apos;&apos;&apos;			If smaller than input array, truncate
-&apos;&apos;&apos;			If plRows = 0 and the input array is a vector, the data array is aligned horizontally
-&apos;&apos;&apos;			They are either both present or both absent
-&apos;&apos;&apos;				When absent
-&apos;&apos;&apos;					The size of the output is fully determined by the input array
-&apos;&apos;&apos;					Vectors are aligned vertically
-&apos;&apos;&apos;	Returns:
-&apos;&apos;&apos;		A data array compatible with ranges .DataArray property
-&apos;&apos;&apos;		The output is always an array of nested arrays
-
-Dim vDataArray() As Variant			&apos;	Return value
-Dim vVector() As Variant			&apos;	A temporary 1D array
-Dim vItem As Variant				&apos;	A single input item
-Dim iDims As Integer				&apos;	Number of dimensions of the input argument
-Dim lMin1 As Long					&apos;	Lower bound (1) of input array
-Dim lMax1 As Long					&apos;	Upper bound (1)
-Dim lMin2 As Long					&apos;	Lower bound (2)
-Dim lMax2 As Long					&apos;	Upper bound (2)
-Dim lRows As Long					&apos;	Upper bound of vDataArray
-Dim lCols As Long					&apos;	Upper bound of vVector
-Dim bHorizontal As Boolean			&apos;	Horizontal vector
-Dim bDataArray As Boolean			&apos;	Input array is already an array of arrays
-Dim i As Long
-Dim j As Long
-
-Const cstEmpty = &quot;&quot;		&apos;	Empty cell
-
-	If IsMissing(plRows) Or IsEmpty(plRows) Then plRows = -1
-	If IsMissing(plColumns) Or IsEmpty(plColumns) Then plColumns = -1
-
-	vDataArray = Array()
-
-Try:
-	&apos;	Check the input argument and know its boundaries
-	iDims = ScriptForge.SF_Array.CountDims(pvArray)
-	If iDims = 0 Or iDims &gt; 2 Then Exit Function
-	lMin1 = 0		:	lMax1 = 0	&apos;	Default values
-	lMin2 = 0		:	lMax2 = 0
-	Select Case iDims
-		Case -1													&apos;	Scalar value
-		Case 1
-			bHorizontal = ( plRows = 0 And plColumns &gt; 0 )
-			bDataArray = IsArray(pvArray(0))
-			If Not bDataArray Then
-				If Not bHorizontal Then
-					lMin1 = LBound(pvArray)	:	lMax1 = UBound(pvArray)
-				Else
-					lMin2 = LBound(pvArray)	:	lMax2 = UBound(pvArray)
-				End If
-			Else
-				iDims = 2
-				lMin1 = LBound(pvArray)	:	lMax1 = UBound(pvArray)
-				lMin2 = LBound(pvArray(0))	:	lMax2 = UBound(pvArray(0))
-			End If
-		Case 2
-			lMin1 = LBound(pvArray, 1)	:	lMax1 = UBound(pvArray, 1)
-			lMin2 = LBound(pvArray, 2)	:	lMax2 = UBound(pvArray, 2)
-	End Select
-
-	&apos;	Set the output dimensions accordingly
-	If plRows &gt;= 0 Then		&apos;	Dimensions of output are imposed
-		lRows = plRows
-		lCols = plColumns
-	Else					&apos;	Dimensions of output determined by input argument
-		lRows = 0		:	lCols = 0	&apos;	Default values
-		Select Case iDims
-			Case -1													&apos;	Scalar value
-			Case 1													&apos;	Vectors are aligned vertically
-				lRows = lMax1 - lMin1
-			Case 2
-				lRows = lMax1 - lMin1
-				lCols = lMax2 - lMin2
-		End Select
-	End If
-	ReDim vDataArray(0 To lRows)
-
-	&apos;	Feed the output array row by row, each row being a vector
-	For i = 0 To lRows
-		ReDim vVector(0 To lCols)
-		For j = 0 To lCols
-			If i &gt; lMax1 - lMin1 Then
-				vVector(j) = cstEmpty
-			ElseIf j &gt; lMax2 - lMin2 Then
-				vVector(j) = cstEmpty
-			Else
-				Select Case iDims
-					Case -1		:	vItem = _ConvertToCellValue(pvArray)
-					Case 1
-						If bHorizontal Then
-							vItem = _ConvertToCellValue(pvArray(j + lMin2))
-						Else
-							vItem = _ConvertToCellValue(pvArray(i + lMin1))
-						End If
-					Case 2
-						If bDataArray Then
-							vItem = _ConvertToCellValue(pvArray(i + lMin1)(j + lMin2))
-						Else
-							vItem = _ConvertToCellValue(pvArray(i + lMin1, j + lMin2))
-						End If
-				End Select
-				vVector(j) = vItem
-			End If
-			vDataArray(i) = vVector
-		Next j
-	Next i
-
-Finally:
-	_ConvertToDataArray = vDataArray
-	Exit Function
-End Function	&apos;	SFDocuments.SF_Calc._ConvertToDataArray
 
 REM -----------------------------------------------------------------------------
 Private Function _DFunction(ByVal psFunction As String _

@@ -791,7 +791,7 @@ Try:
 	&apos;	Location header common to all error messages
 	If Len(_SF_.MainFunction) &gt; 0 Then	&apos;	MainFunction = [Library.]Module.Method
 		vLocation = Split(_SF_.MainFunction, &quot;.&quot;)
-			If UBound(vLocation) &lt; 2 Then vLocation = Split(&quot;ScriptForge.&quot; &amp; _SF_.MainFunction, &quot;.&quot;)
+		If UBound(vLocation) &lt; 2 Then vLocation = Split(&quot;ScriptForge.&quot; &amp; _SF_.MainFunction, &quot;.&quot;)
 		sService = vLocation(1)
 		sMethod = vLocation(2)
 		sLocation = L10N.GetText(&quot;VALIDATESOURCE&quot;, vLocation(0), sService, sMethod) _

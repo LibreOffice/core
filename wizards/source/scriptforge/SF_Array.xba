@@ -335,6 +335,235 @@ Catch:
 End Function	&apos;	ScriptForge.SF_Array.Contains
 
 REM -----------------------------------------------------------------------------
+Public Function ConvertFromDataArray(Optional ByRef DataArray As Variant _
+										, Optional ByVal IsRange As Variant _
+										, Optional ByVal FillValue As Variant _
+										) As Variant
+&apos;&apos;&apos;	Convert a data array to a scalar, a vector or a 2D array
+&apos;&apos;&apos;	A &quot;data array&quot; is an array of subarrays. The array and the subarrays must be zero-based.
+&apos;&apos;&apos;		The individual items may be of any type.
+&apos;&apos;&apos;	On request, the individual items are reduced to strings or doubles only.
+&apos;&apos;&apos;		Typically it represents
+&apos;&apos;&apos;			- the content of a range of Calc cells returned by the UNO XCellRange.getDataArray()
+&apos;&apos;&apos;			  or XCellRange.getFormulaArray() methods
+&apos;&apos;&apos;			- the output of the SF_Session.ExecuteCalcFunction() method
+&apos;&apos;&apos;			- a tuple of (sub)tuples returned by a Python script.
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		DataArray: an array of subarrays. Array and subarrays must be zero-based.
+&apos;&apos;&apos;		IsRange: When True (default = False), the items are converted to strings or doubles.
+&apos;&apos;&apos;		FillValue: Default value of missing items. Default = the empty string
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		A scalar, a zero-based 1D array or a zero-based 2D array.
+&apos;&apos;&apos;		The number of columns in the resulting 2D array = the number of items in the 1st subarray.
+&apos;&apos;&apos;		If next subarrays have a different size, next rows can be complemented with FillValue or truncated.
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		vDataArray = Array(Array(&quot;Col1&quot;, &quot;Col2&quot;, &quot;Col3&quot;), Array(10, 20, 30))
+&apos;&apos;&apos;		Array2D = SF_Array.ConvertFromDataArray(vDataArray)
+&apos;&apos;&apos;		MsgBox Array2D(1, 2)	&apos;	30
+
+Dim vArray As Variant				&apos;	Return value
+Dim lMax1 As Long					&apos;	UBound of DataArray
+Dim lMax2 As Long					&apos;	UBound of the 1st row of DataArray
+Dim lMax As Long					&apos;	UBound of a subarray
+Dim i As Long
+Dim j As Long
+
+Const cstThisSub = &quot;Array.ConvertFromDataArray&quot;
+Const cstSubArgs = &quot;DataArray, [IsRange=False], [FillValue=&quot;&quot;&quot;&quot;]&quot;
+
+	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	vArray = Array()
+
+Check:
+	If IsMissing(IsRange) Or IsEmpty(IsRange) Then IsRange = False
+	If IsMissing(FillValue) Or IsEmpty(FillValue) Then FillValue = &quot;&quot;
+	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not SF_Utils._ValidateArray(DataArray, &quot;DataArray&quot;, 1) Then GoTo Finally
+		For i = 0 To UBound(DataArray)
+			If Not SF_Utils._ValidateArray(DataArray(i), &quot;DataArray(&quot; &amp; i &amp; &quot;)&quot;, 1) Then GoTo Finally
+		Next i
+	End If
+
+Try:
+	&apos;	Convert the data array to scalar, vector or array
+	lMax1 = UBound(DataArray)
+	If lMax1 &gt;= 0 Then
+		lMax2 = UBound(DataArray(0))
+		If lMax2 &gt;= 0 Then
+			If lMax1 + lMax2 &gt; 0 Then vArray = Array()
+			Select Case True
+				Case lMax1 = 0 And lMax2 = 0			&apos;	Scalar
+					vArray = _ConvertToCellValue(DataArray(0)(0), pbIsCell := IsRange)
+				Case lMax1 &gt; 0 And lMax2 = 0			&apos;	Vertical vector
+					ReDim vArray(0 To lMax1)
+					For i = 0 To lMax1
+						vArray(i) = _ConvertToCellValue(DataArray(i)(0), pbIsCell := IsRange)
+					Next i
+				Case lMax1 = 0 And lMax2 &gt; 0			&apos;	Horizontal vector
+					ReDim vArray(0 To lMax2)
+					For j = 0 To lMax2
+						vArray(j) = _ConvertToCellValue(DataArray(0)(j), pbIsCell := IsRange)
+					Next j
+				Case Else								&apos;	Array
+					ReDim vArray(0 To lMax1, 0 To lMax2)
+					For i = 0 To lMax1
+						lMax = UBound(DataArray(i))
+						For j = 0 To lMax2
+							If j &lt;= lMax Then vArray(i, j) = _ConvertToCellValue(DataArray(i)(j), pbIsCell := IsRange) Else vArray(i, j) = FillValue
+						Next j
+					Next i
+			End Select
+		End If
+	End If
+
+Finally:
+	ConvertFromDataArray = vArray
+	SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	ScriptForge.SF_Array.ConvertFromDataArray
+
+REM -----------------------------------------------------------------------------
+Public Function ConvertToDataArray(Optional ByRef Data As Variant _
+								, Optional ByVal IsRange As Variant _
+								, Optional ByVal Rows As Variant _
+								, Optional ByVal Columns As Variant _
+								) As Variant
+&apos;&apos;&apos;	Create a data array from a scalar, a 1D array or a 2D array
+&apos;&apos;&apos;	The returned &quot;data array&quot; is an array of subarrays.
+&apos;&apos;&apos;	On request, the individual items are reduced to strings or doubles only.
+&apos;&apos;&apos;	Typically it represents
+&apos;&apos;&apos;		- the content of a range of Calc cells used to apply the UNO XCellRange.setDataArray()
+&apos;&apos;&apos;		  or XCellRange.setFormulaArray() methods
+&apos;&apos;&apos;		- a tuple of (sub)tuples passed to a Python script.
+&apos;&apos;&apos;	Input argument may already be a data array, typically when call is issued by a Python script.
+&apos;&apos;&apos;	When IsRange = True then the individual items are converted to (possibly empty) strings or doubles.
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		Data: the input scalar or array. If array, must be 1D or 2D otherwise it is ignored.
+&apos;&apos;&apos;		IsRange: When True (default = False), the items are converted to strings or doubles.
+&apos;&apos;&apos;		Rows, Columns: the number of rows or columns of the returned data array.
+&apos;&apos;&apos;			If bigger than Data, fill with zero-length strings
+&apos;&apos;&apos;			If smaller than Data, truncate
+&apos;&apos;&apos;			If Rows = 1 and the input array is a vector, the data array is aligned horizontally
+&apos;&apos;&apos;				By defauly, vectors are aligned vertically.
+&apos;&apos;&apos;			When absent, the size of the output is determined by the input array.
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		The output is always an array of nested arrays. Array and nested arrays are zero-based.
+&apos;&apos;&apos;		It is compatible with the XCellRange.DataArray property when IsRange = True.
+
+Dim vDataArray() As Variant			&apos;	Return value
+Dim vVector() As Variant			&apos;	A temporary 1D array
+Dim vItem As Variant				&apos;	A single input item
+Dim iDims As Integer				&apos;	Number of dimensions of the input argument
+Dim lMin1 As Long					&apos;	Lower bound (1) of input array
+Dim lMax1 As Long					&apos;	Upper bound (1)
+Dim lMin2 As Long					&apos;	Lower bound (2)
+Dim lMax2 As Long					&apos;	Upper bound (2)
+Dim lRows As Long					&apos;	Upper bound of vDataArray
+Dim lCols As Long					&apos;	Upper bound of vVector
+Dim bHorizontal As Boolean			&apos;	Horizontal vectoriDims &lt;&gt; 0 =&gt; Data has at least 1 item
+Dim bDataArray As Boolean			&apos;	Input array is already an array of arrays
+Dim i As Long
+Dim j As Long
+Const cstEmpty = &quot;&quot;		&apos;	Empty cell
+
+Const cstThisSub = &quot;Array.ConvertToDataArray&quot;
+Const cstSubArgs = &quot;Data, [IsRange=False], [Rows=0], [Columns=0]&quot;
+
+	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	vDataArray = Array()
+
+Check:
+	If IsMissing(IsRange) Or IsEmpty(IsRange) Then IsRange = False
+	If IsMissing(Rows) Or IsEmpty(Rows) Then Rows = 0
+	If IsMissing(Columns) Or IsEmpty(Columns) Then Columns = 0
+	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not SF_Utils._Validate(IsRange, &quot;IsRange&quot;, V_BOOLEAN) Then GoTo Finally
+		If Not SF_Utils._Validate(Rows, &quot;Rows&quot;, V_NUMERIC) Then GoTo Finally
+		If Not SF_Utils._Validate(Columns, &quot;Columns&quot;, V_NUMERIC) Then GoTo Finally
+	End If
+
+Try:
+	&apos;	Examine the input argument and determine its boundaries
+	&apos;	Set the output dimensions accordingly
+	iDims = SF_Array.CountDims(Data)
+	If iDims = 0 Or iDims &gt; 2 Then Exit Function
+	lMin1 = 0		:	lMax1 = 0	&apos;	Default values
+	lMin2 = 0		:	lMax2 = 0
+	lRows = 0		:	lCols = 0
+	Select Case iDims
+		Case -1													&apos;	Scalar value
+		Case 1													&apos;	1D Array
+			bHorizontal = ( Rows = 1 )
+			bDataArray = IsArray(Data(LBound(Data)))
+			If Not bDataArray Then
+				If Not bHorizontal Then
+					lMin1 = LBound(Data)	:	lMax1 = UBound(Data)
+					lRows = lMax1 - lMin1
+				Else
+					lMin2 = LBound(Data)	:	lMax2 = UBound(Data)
+					lCols = lMax2 - lMin2
+				End If
+			Else
+				iDims = 2
+				lMin1 = LBound(Data)	:	lMax1 = UBound(Data)
+				lMin2 = LBound(Data(0))	:	lMax2 = UBound(Data(0))
+				lRows = lMax1 - lMin1
+				lCols = lMax2 - lMin2
+			End If
+		Case 2													&apos;	2D Array
+			lMin1 = LBound(Data, 1)	:	lMax1 = UBound(Data, 1)
+			lMin2 = LBound(Data, 2)	:	lMax2 = UBound(Data, 2)
+			lRows = lMax1 - lMin1
+			lCols = lMax2 - lMin2
+	End Select
+
+	&apos;	Size the future data array to the output dimensions
+	&apos;	Are the dimensions imposed ?
+	If Rows &gt;= 1 Then lRows = Rows - 1
+	If Columns &gt;= 1 Then lCols = Columns - 1
+	ReDim vDataArray(0 To lRows)
+
+	&apos;	Feed the output array row by row, each row being a vector
+	For i = 0 To lRows
+		ReDim vVector(0 To lCols)
+		For j = 0 To lCols
+			If i &gt; lMax1 - lMin1 Then
+				vVector(j) = cstEmpty
+			ElseIf j &gt; lMax2 - lMin2 Then
+				vVector(j) = cstEmpty
+			Else
+				Select Case iDims
+					Case -1		:	vItem = _ConvertToCellValue(Data, IsRange)
+					Case 1
+						If bHorizontal Then
+							vItem = _ConvertToCellValue(Data(j + lMin2), IsRange)
+						Else
+							vItem = _ConvertToCellValue(Data(i + lMin1), IsRange)
+						End If
+					Case 2
+						If bDataArray Then
+							vItem = _ConvertToCellValue(Data(i + lMin1)(j + lMin2), IsRange)
+						Else
+							vItem = _ConvertToCellValue(Data(i + lMin1, j + lMin2), IsRange)
+						End If
+				End Select
+				vVector(j) = vItem
+			End If
+			vDataArray(i) = vVector
+		Next j
+	Next i
+
+Finally:
+	ConvertToDataArray = vDataArray
+	SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	ScriptForge.SF_Array.ConvertToDataArray
+
+REM -----------------------------------------------------------------------------
 Public Function ConvertToDictionary(Optional ByRef Array_2D As Variant) As Variant
 &apos;&apos;&apos;	Store the content of a 2-columns array into a dictionary with case-sensitive comparison of keys
 &apos;&apos;&apos;	Key found in 1st column, Item found in 2nd
@@ -372,6 +601,120 @@ Finally:
 Catch:
 	GoTo Finally
 End Function	&apos;	ScriptForge.SF_Array.ConvertToDictionary
+
+REM -----------------------------------------------------------------------------
+Public Function ConvertToRange(Optional ByRef Data As Variant _
+								, Optional ByVal Direction As Variant _
+								) As Variant
+&apos;&apos;&apos;	Create a valid cells range content from a scalar, a 1D array, a 2D array or a data array
+&apos;&apos;&apos;	(a &quot;data array&quot; is an array of subarrays). Lower bounds are preserved.
+&apos;&apos;&apos;	The individual items are always reduced to strings or doubles. Including booleans or dates.
+&apos;&apos;&apos;	The returned scalar or array is a valid argument of the SF_Session.ExecuteCalcFunction() method.
+&apos;&apos;&apos;	Input argument may be a data array, typically when returned by a Python script.
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		Data: the input scalar, array or data array. If array, must be 1D or 2D, otherwise 0 is returned.
+&apos;&apos;&apos;		Direction: the alignment of the range when it is a vector, either &quot;V&quot;[ertical, default] or &quot;H&quot;[orizontal].
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		A scalar or a 2D array compatible with the format of the arguments expected by
+&apos;&apos;&apos;		- the SF_Session.ExecuteCalcFunction() method, in the context of [complex] array functions
+&apos;&apos;&apos;		- a Calc user-defined function when called by a macro
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		arr = CreateScriptService(&quot;Array&quot;)
+&apos;&apos;&apos;		sess = CreateScriptService(&quot;Session&quot;)
+&apos;&apos;&apos;		matrix = Array(Array(-1, 2, 3), Array(4, -5, 6), Array(7, 8, -9))	&apos;	Input = a data array
+&apos;&apos;&apos;		result = sess.ExecuteCalcFunction(&quot;ABS&quot;, arr.ConvertToRange(matrix))
+&apos;&apos;&apos;				&apos;	result is a data array; result(2)(2) = 9
+
+Dim vRange As Variant				&apos;	Return value
+Dim iDims As Integer				&apos;	Number of dimensions of Data
+Dim vDataArray As Variant			&apos;	External array of a data array
+Dim vVector As Variant				&apos;	Internal array of a data array
+Dim lMin1 As Long					&apos;	Lower bound #1
+Dim lMax1 As Long					&apos;	Upper bound #1
+Dim lMin2 As Long					&apos;	Lower bound #2
+Dim lMax2 As Long					&apos;	Upper bound #2
+Dim lMin As Long					&apos;	Lower bound
+Dim lMax As Long					&apos;	Upper bound
+Dim i As Long
+Dim j As Long
+
+Const cstThisSub = &quot;Array.ConvertToRange&quot;
+Const cstSubArgs = &quot;Data, [Direction=&quot;&quot;&quot;&quot;|&quot;&quot;V&quot;&quot;|&quot;&quot;H&quot;&quot;]&quot;
+
+	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	vRange = 0
+
+Check:
+	If IsMissing(Direction) Or IsEmpty(Direction) Then Direction = &quot;V&quot;
+	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If IsMissing(Data) Or IsEmpty(Data) Then
+			If Not SF_Utils._Validate(Data, &quot;Data&quot;) Then GoTo Finally
+		End If
+		If Not SF_Utils._Validate(Direction, &quot;Direction&quot;, V_STRING, Array(&quot;&quot;, &quot;V&quot;, &quot;H&quot;)) Then GoTo Finally
+	End If
+
+Try:
+	iDims = SF_Array.CountDims(Data)
+	If iDims = 0 Or iDims &gt; 2 Then Exit Function
+
+	Select Case iDims
+		&apos;	All input items are converted on-the-fly to an acceptable Calc cell value
+		Case -1					&apos;	Scalar
+			vRange = _ConvertToCellValue(Data, pbIsCell := True)
+		Case 1					&apos;	Vector or data array
+			&apos;	iDims &lt;&gt; 0 =&gt; Data has at least 1 item
+			lMin1 = LBound(Data)	:	lMax1 = UBound(Data)
+			If IsArray(Data(lMin1)) Then	&apos;	Data array
+				&apos;	Design a 2D array of the appropriate size
+				lMin2 = LBound(Data(lMin1))	:	lMax2 = UBound(Data(lMin1))
+				vRange = Array()
+				ReDim vRange(lMin1 To lMax1, lMin2 To lMax2)
+				For i = lMin1 To lMax1
+					If Not IsArray(Data(i)) Then
+						lMin = -1	:	lMax = -1
+					Else
+						lMin = LBound(Data(i))
+						lMax = UBound(Data(i))
+					End If
+					For j = lMin2 To lMax2
+						If j &lt; lMin Or j &gt; lMax Then vRange(i, j) = &quot;&quot; Else vRange(i, j) = _ConvertToCellValue(Data(i)(j), pbIsCell := True)
+					Next j
+				Next i
+			Else						&apos;	Vector
+				vRange = Array()
+				If UCase(Direction) = &quot;V&quot; Then		&apos;	Vertical
+					ReDim vRange(lMin1 To lMax1, 0 To 0)
+					For i = lMin1 To lMax1
+						vRange(i, 0) = _ConvertToCellValue(Data(i), pbIsCell := True)
+					Next i
+				Else								&apos;	Horizontal
+					ReDim vRange(0 To 0, lMin1 To lMax1)
+					For j = lMin1 To lMax1
+						vRange(0, j) = _ConvertToCellValue(Data(j), pbIsCell := True)
+					Next j
+				End If
+			End If
+		Case 2
+			&apos;	Copy all array items
+			vRange = Array()
+			lMin1 = LBound(Data, 1)	:	lMax1 = UBound(Data, 1)
+			lMin2 = LBound(Data, 2)	:	lMax2 = UBound(Data, 2)
+			ReDim vRange(lMin1 To lMax1, lMin2 To lMax2)
+			For i = lMin1 To lMax1
+				For j = lMin2 To lMax2
+					vRange(i, j) = _ConvertToCellValue(Data(i, j), pbIsCell := True)
+				Next j
+			Next i
+		Case Else
+	End Select
+
+Finally:
+	ConvertToRange = vRange
+	SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	ScriptForge.SF_Array.ConvertToRange
 
 REM -----------------------------------------------------------------------------
 Public Function Copy(Optional ByRef Array_ND As Variant) As Variant
@@ -2324,6 +2667,35 @@ Catch:
 End Function	&apos;	ScriptForge.SF_Array.Unique
 
 REM ============================================================= PRIVATE METHODS
+
+REM -----------------------------------------------------------------------------
+Private Function _ConvertToCellValue(ByVal pvItem As Variant _
+										, ByVal pbIsCell As Boolean _
+										) As Variant
+&apos;&apos;&apos;	Convert the argument to a valid Calc cell content, i.e. a string or a double.
+&apos;&apos;&apos;	When the argument is not convertible, either
+&apos;&apos;&apos;		- the zero-length string is returned (pbIsCell = True)
+&apos;&apos;&apos;		- the argument is returned unchanged (pbIsCell = False)
+
+Dim vCell As Variant		&apos;	Return value
+
+Try:
+	If pbIsCell Then
+		Select Case SF_Utils._VarTypeExt(pvItem)
+			Case V_STRING					:		vCell = pvItem
+			Case V_DATE						:		vCell = CDbl(pvItem)
+			Case V_NUMERIC					:		vCell = CDbl(pvItem)
+			Case V_BOOLEAN					:		vCell = CDbl(Iif(pvItem, 1, 0))
+			Case Else						:		vCell = &quot;&quot;
+		End Select
+	Else		&apos;	Return the input item unchanged
+		vCell = pvItem
+	End If
+
+Finally:
+	_ConvertToCellValue = vCell
+	Exit Function
+End Function	&apos;	ScriptForge.SF_Array._ConvertToCellValue
 
 REM -----------------------------------------------------------------------------
 Public Function _FindItem(ByRef pvArray_1D As Variant _
