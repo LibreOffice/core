@@ -155,7 +155,11 @@ void SwDDETable::ChangeContent()
             OSL_ENSURE( pBox->GetSttIdx(), "no content box" );
             SwNodeIndex aNdIdx( *pBox->GetSttNd(), 1 );
             SwTextNode* pTextNode = aNdIdx.GetNode().GetTextNode();
-            OSL_ENSURE( pTextNode, "No Node" );
+            if (!pTextNode)
+            {
+                SAL_WARN("sw.core", "No TextNode in SwDDETable::ChangeContent");
+                continue;
+            }
             SwContentIndex aCntIdx( pTextNode, 0 );
             pTextNode->EraseText( aCntIdx );
             pTextNode->InsertText( aLine.getToken( 0, '\t', nLineTokenPos ), aCntIdx );
