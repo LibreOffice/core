@@ -2398,8 +2398,9 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                                 m_aRun->append(msfilter::rtfutil::OutHex(*pStr, 2));
                             m_aRun->append('}');
                             m_aRun->append("}{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " ");
-                            xPropSet->getPropertyValue("Text") >>= aTmp;
-                            m_aRun->append(OUStringToOString(aTmp, m_rExport.GetCurrentEncoding()));
+                            xPropSet->getPropertyValue(u"Text"_ustr) >>= aTmp;
+                            m_aRun->append(
+                                msfilter::rtfutil::OutString(aTmp, m_rExport.GetCurrentEncoding()));
                             m_aRun->append('}');
                             m_aRun->append(
                                 "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FORMFIELD
@@ -2411,8 +2412,8 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                                 m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFOWNHELP);
                                 m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE
                                                    OOO_STRING_SVTOOLS_RTF_FFHELPTEXT " ");
-                                m_aRun->append(
-                                    OUStringToOString(aTmp, m_rExport.GetCurrentEncoding()));
+                                m_aRun->append(msfilter::rtfutil::OutString(
+                                    aTmp, m_rExport.GetCurrentEncoding()));
                                 m_aRun->append('}');
                             }
 
@@ -2423,8 +2424,8 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                                 m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFOWNSTAT);
                                 m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE
                                                    OOO_STRING_SVTOOLS_RTF_FFSTATTEXT " ");
-                                m_aRun->append(
-                                    OUStringToOString(aTmp, m_rExport.GetCurrentEncoding()));
+                                m_aRun->append(msfilter::rtfutil::OutString(
+                                    aTmp, m_rExport.GetCurrentEncoding()));
                                 m_aRun->append('}');
                             }
                             m_aRun->append("}");
