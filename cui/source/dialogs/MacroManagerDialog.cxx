@@ -1153,7 +1153,7 @@ void MacroManagerDialog::CheckButtons()
                 }
             }
 
-            // scripts list box state dependant buttons
+            // scripts list box state dependent buttons
             weld::TreeView& rScriptsTreeView = m_xScriptsListBox->get_widget();
             std::unique_ptr<weld::TreeIter> xScriptsSelectedIter = rScriptsTreeView.make_iterator();
             if (rScriptsTreeView.n_children()
