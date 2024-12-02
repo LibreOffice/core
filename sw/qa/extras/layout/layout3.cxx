@@ -1833,6 +1833,14 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testHiddenParagraphFollowFrame)
 {
     createSwDoc("hidden-para-follow-frame.fodt");
 
+    uno::Any aOldValue{ queryDispatchStatus(mxComponent, m_xContext, ".uno:ShowHiddenParagraphs") };
+
+    Resetter g([this, aOldValue] {
+        uno::Sequence<beans::PropertyValue> argsSH(
+            comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", aOldValue } }));
+        dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", argsSH);
+    });
+
     uno::Sequence<beans::PropertyValue> argsSH(
         comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", uno::Any(true) } }));
     dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", argsSH);
@@ -1870,6 +1878,14 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testHiddenParagraphFollowFrame)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testHiddenParagraphFlys)
 {
     createSwDoc("hidden-para-as-char-fly.fodt");
+
+    uno::Any aOldValue{ queryDispatchStatus(mxComponent, m_xContext, ".uno:ShowHiddenParagraphs") };
+
+    Resetter g([this, aOldValue] {
+        uno::Sequence<beans::PropertyValue> argsSH(
+            comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", aOldValue } }));
+        dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", argsSH);
+    });
 
     uno::Sequence<beans::PropertyValue> argsSH(
         comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", uno::Any(true) } }));
