@@ -2156,7 +2156,7 @@ OUString MacroManagerDialog::getListOfChildren(
     return result.makeStringAndClear();
 }
 
-// modified verson of void SvxScriptOrgDialog::deleteEntry(const weld::TreeIter& rEntry)
+// modified version of void SvxScriptOrgDialog::deleteEntry(const weld::TreeIter& rEntry)
 // cui/source/dialogs/scriptdlg.cxx
 void MacroManagerDialog::ScriptingFrameworkScriptsDeleteEntry(weld::TreeView& rTreeView,
                                                               const weld::TreeIter& rEntry)
