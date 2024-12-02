@@ -482,9 +482,11 @@ void MenuFloatingWindow::KillActivePopup( PopupMenu* pThisOnly )
     if ( !pActivePopup || ( pThisOnly && ( pThisOnly != pActivePopup ) ) )
         return;
 
-    if (pActivePopup->m_pWindow)
-        if (static_cast<FloatingWindow *>(pActivePopup->m_pWindow.get())->IsInCleanUp())
+    if (MenuFloatingWindow* pFloatWin = pActivePopup->ImplGetFloatingWindow())
+    {
+        if (pFloatWin->IsInCleanUp())
             return; // kill it later
+    }
     if ( pActivePopup->bInCallback )
         pActivePopup->bCanceled = true;
 
