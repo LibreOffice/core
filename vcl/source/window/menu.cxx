@@ -2724,8 +2724,6 @@ int MenuBar::GetMenuBarHeight() const
     return nMenubarHeight;
 }
 
-// bool PopupMenu::bAnyPopupInExecute = false;
-
 MenuFloatingWindow * PopupMenu::ImplGetFloatingWindow() const {
     return static_cast<MenuFloatingWindow*>(GetWindow());
 }
