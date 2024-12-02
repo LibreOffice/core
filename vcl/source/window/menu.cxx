@@ -2853,14 +2853,16 @@ void PopupMenu::ImplFlushPendingSelect()
     }
 }
 
-bool PopupMenu::PrepareRun(const VclPtr<vcl::Window>& pParentWin, tools::Rectangle& rRect,
-                           FloatWinPopupFlags& nPopupModeFlags, Menu* pSFrom,
-                           bool& bRealExecute, VclPtr<MenuFloatingWindow>& pWin)
+sal_uInt16 PopupMenu::ImplExecute(const VclPtr<vcl::Window>& pParentWin, const tools::Rectangle& rRect,
+                                  FloatWinPopupFlags nPopupModeFlags, Menu* pSFrom, bool bPreSelectFirst)
 {
-    bRealExecute = false;
+    // tdf#126054 hold this until after function completes
+    VclPtr<PopupMenu> xThis(this);
+
+    bool bRealExecute = false;
     const sal_uInt16 nItemCount = GetItemCount();
     if (!pSFrom && (vcl::IsInPopupMenuExecute() || !nItemCount))
-        return false;
+        return 0;
 
     mpLayoutData.reset();
 
@@ -2887,7 +2889,8 @@ bool PopupMenu::PrepareRun(const VclPtr<vcl::Window>& pParentWin, tools::Rectang
     }
 
     SAL_WARN_IF(GetWindow(), "vcl", "Win?!");
-    rRect.SetPos(pParentWin->OutputToScreenPixel(rRect.TopLeft()));
+    tools::Rectangle aRect(rRect);
+    aRect.SetPos(pParentWin->OutputToScreenPixel(aRect.TopLeft()));
 
     nPopupModeFlags |= FloatWinPopupFlags::NoKeyClose | FloatWinPopupFlags::AllMouseButtonClose | FloatWinPopupFlags::GrabFocus;
     if (bRealExecute)
@@ -2901,13 +2904,13 @@ bool PopupMenu::PrepareRun(const VclPtr<vcl::Window>& pParentWin, tools::Rectang
     SetMenuFlags(nMenuFlagsSaved);
 
     if (pParentWin->isDisposed())
-        return false;
+        return 0;
 
     if ( bCanceled || bKilled )
-        return false;
+        return 0;
 
     if (!nItemCount)
-        return false;
+        return 0;
 
     // The flag MenuFlags::HideDisabledEntries is inherited.
     if ( pSFrom )
@@ -2934,7 +2937,7 @@ bool PopupMenu::PrepareRun(const VclPtr<vcl::Window>& pParentWin, tools::Rectang
         ImplCallEventListeners(VclEventId::MenuSubmenuChanged, nPos);
     }
 
-    pWin = VclPtrInstance<MenuFloatingWindow>(this, pParentWin, WB_BORDER | WB_SYSTEMWINDOW);
+    VclPtr<MenuFloatingWindow> pWin = VclPtrInstance<MenuFloatingWindow>(this, pParentWin, WB_BORDER | WB_SYSTEMWINDOW);
     if (comphelper::LibreOfficeKit::isActive() && get_id() == "editviewspellmenu")
     {
         VclPtr<vcl::Window> xNotifierParent = pParentWin->GetParentWithLOKNotifier();
@@ -2956,9 +2959,9 @@ bool PopupMenu::PrepareRun(const VclPtr<vcl::Window>& pParentWin, tools::Rectang
         vcl::Window* pDeskW = m_pWindow->GetWindow( GetWindowType::RealParent );
         if( ! pDeskW )
             pDeskW = m_pWindow;
-        AbsoluteScreenPixelPoint aDesktopTL(pDeskW->OutputToAbsoluteScreenPixel(rRect.TopLeft()));
+        AbsoluteScreenPixelPoint aDesktopTL(pDeskW->OutputToAbsoluteScreenPixel(aRect.TopLeft()));
         aDesktopRect = Application::GetScreenPosSizePixel(
-            Application::GetBestScreen(AbsoluteScreenPixelRectangle(aDesktopTL, rRect.GetSize())));
+            Application::GetBestScreen(AbsoluteScreenPixelRectangle(aDesktopTL, aRect.GetSize())));
     }
 
     tools::Long nMaxHeight = aDesktopRect.GetHeight();
@@ -2973,8 +2976,8 @@ bool PopupMenu::PrepareRun(const VclPtr<vcl::Window>& pParentWin, tools::Rectang
         if ( pRef->GetParent() )
             pRef = pRef->GetParent();
 
-        AbsoluteScreenPixelRectangle devRect(pRef->OutputToAbsoluteScreenPixel(rRect.TopLeft()),
-                                 pRef->OutputToAbsoluteScreenPixel(rRect.BottomRight()));
+        AbsoluteScreenPixelRectangle devRect(pRef->OutputToAbsoluteScreenPixel(aRect.TopLeft()),
+                                             pRef->OutputToAbsoluteScreenPixel(aRect.BottomRight()));
 
         tools::Long nHeightAbove = devRect.Top() - aDesktopRect.Top();
         tools::Long nHeightBelow = aDesktopRect.Bottom() - devRect.Bottom();
@@ -3003,7 +3006,10 @@ bool PopupMenu::PrepareRun(const VclPtr<vcl::Window>& pParentWin, tools::Rectang
 
     pWin->SetFocusId( xFocusId );
     pWin->SetOutputSizePixel( aSz );
-    return true;
+
+    const bool bNative = Run(pWin, bRealExecute, bPreSelectFirst, nPopupModeFlags, pSFrom, aRect);
+    FinishRun(pWin, pParentWin, bRealExecute, bNative);
+    return nSelectedId;
 }
 
 bool PopupMenu::Run(const VclPtr<MenuFloatingWindow>& pWin, const bool bRealExecute, const bool bPreSelectFirst,
@@ -3079,21 +3085,6 @@ void PopupMenu::FinishRun(const VclPtr<MenuFloatingWindow>& pWin, const VclPtr<v
     m_pWindow.disposeAndClear();
     ImplClosePopupToolBox(pParentWin);
     ImplFlushPendingSelect();
-}
-
-sal_uInt16 PopupMenu::ImplExecute(const VclPtr<vcl::Window>& pParentWin, const tools::Rectangle& rRect,
-                                  FloatWinPopupFlags nPopupModeFlags, Menu* pSFrom, bool bPreSelectFirst)
-{
-    // tdf#126054 hold this until after function completes
-    VclPtr<PopupMenu> xThis(this);
-    bool bRealExecute = false;
-    tools::Rectangle aRect(rRect);
-    VclPtr<MenuFloatingWindow> pWin;
-    if (!PrepareRun(pParentWin, aRect, nPopupModeFlags, pSFrom, bRealExecute, pWin))
-        return 0;
-    const bool bNative = Run(pWin, bRealExecute, bPreSelectFirst, nPopupModeFlags, pSFrom, aRect);
-    FinishRun(pWin, pParentWin, bRealExecute, bNative);
-    return nSelectedId;
 }
 
 sal_uInt16 PopupMenu::ImplCalcVisEntries( tools::Long nMaxHeight, sal_uInt16 nStartEntry, sal_uInt16* pLastVisible ) const

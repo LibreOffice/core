@@ -499,7 +499,6 @@ class VCL_DLLPUBLIC PopupMenu final : public Menu
 
 private:
     SAL_DLLPRIVATE MenuFloatingWindow * ImplGetFloatingWindow() const;
-    SAL_DLLPRIVATE bool PrepareRun(const VclPtr<vcl::Window>& pParentWin, tools::Rectangle& rRect, FloatWinPopupFlags& nPopupModeFlags, Menu* pSFrom, bool& bRealExecute, VclPtr<MenuFloatingWindow>&);
     SAL_DLLPRIVATE bool Run(const VclPtr<MenuFloatingWindow>&, bool bRealExecute, bool bPreSelectFirst, FloatWinPopupFlags nPopupModeFlags, Menu* pSFrom, const tools::Rectangle& rRect);
     SAL_DLLPRIVATE void FinishRun(const VclPtr<MenuFloatingWindow>&, const VclPtr<vcl::Window>& pParentWin, bool bRealExecute, bool bIsNativeMenu);
     SAL_DLLPRIVATE sal_uInt16 ImplExecute(const VclPtr<vcl::Window>& pParentWin, const tools::Rectangle& rRect, FloatWinPopupFlags nPopupModeFlags, Menu* pSFrom, bool bPreSelectFirst);
