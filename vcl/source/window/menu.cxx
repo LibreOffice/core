@@ -2509,13 +2509,11 @@ VclPtr<MenuBarWindow> MenuBar::ImplCreate(vcl::Window* pParent, MenuBarWindow* p
 
 void MenuBar::ImplDestroy( MenuBar* pMenu, bool bDelete )
 {
-    vcl::Window *pWindow = pMenu->GetWindow();
-    if (pWindow && bDelete)
+    MenuBarWindow* pMenuWin = pMenu->getMenuBarWindow();
+    if (pMenuWin && bDelete)
     {
-        MenuBarWindow* pMenuWin = pMenu->getMenuBarWindow();
-        if (pMenuWin)
-            pMenuWin->KillActivePopup();
-        pWindow->disposeOnce();
+        pMenuWin->KillActivePopup();
+        pMenuWin->disposeOnce();
     }
     pMenu->m_pWindow = nullptr;
     if (pMenu->mpSalMenu) {
