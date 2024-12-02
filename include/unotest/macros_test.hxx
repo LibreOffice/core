@@ -20,6 +20,7 @@
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/XDesktop2.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <utility>
 
@@ -91,6 +92,11 @@ public:
     dispatchCommand(const css::uno::Reference<css::lang::XComponent>& xComponent,
                     const OUString& rCommand,
                     const css::uno::Sequence<css::beans::PropertyValue>& rPropertyValues);
+
+    static css::uno::Any
+    queryDispatchStatus(css::uno::Reference<css::lang::XComponent> const& xComponent,
+                        css::uno::Reference<css::uno::XComponentContext> const& xContext,
+                        OUString const& rURL);
 
     /// Opens rStreamName from rTempFile, assuming it's a ZIP storage.
     static std::unique_ptr<SvStream> parseExportStream(const OUString& url,
