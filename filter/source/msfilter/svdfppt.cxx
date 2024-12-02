@@ -4408,8 +4408,7 @@ PPTStyleSheet::~PPTStyleSheet()
 }
 
 PPTParaPropSet::PPTParaPropSet()
-    : mnOriginalTextPos(0)
-    , mxParaSet( new ImplPPTParaPropSet )
+    : mxParaSet( new ImplPPTParaPropSet )
 {
     mxParaSet->mnHasAnm = 1;
 }
@@ -4417,7 +4416,6 @@ PPTParaPropSet::PPTParaPropSet()
 PPTParaPropSet::PPTParaPropSet( PPTParaPropSet const & rParaPropSet )
 {
     mxParaSet = rParaPropSet.mxParaSet;
-    mnOriginalTextPos = rParaPropSet.mnOriginalTextPos;
 }
 
 PPTParaPropSet::~PPTParaPropSet()
@@ -4429,7 +4427,6 @@ PPTParaPropSet& PPTParaPropSet::operator=( const PPTParaPropSet& rParaPropSet )
     if ( this != &rParaPropSet )
     {
         mxParaSet = rParaPropSet.mxParaSet;
-        mnOriginalTextPos = rParaPropSet.mnOriginalTextPos;
     }
     return *this;
 }
@@ -5069,7 +5066,6 @@ void PPTStyleTextPropReader::ReadParaProps(SvStream& rIn, const DffRecordHeader&
             OSL_FAIL( "SJ:PPTStyleTextPropReader::could not get this PPT_PST_StyleTextPropAtom by reading the paragraph attributes" );
         }
         PPTParaPropSet* pPara = new PPTParaPropSet( aParaPropSet );
-        pPara->mnOriginalTextPos = nCharReadCnt;
         aParaPropList.emplace_back( pPara );
         if ( nCharCount )
         {
@@ -5079,7 +5075,6 @@ void PPTStyleTextPropReader::ReadParaProps(SvStream& rIn, const DffRecordHeader&
                 if ( pDat[ nCount ] == 0xd )
                 {
                     pPara = new PPTParaPropSet( aParaPropSet );
-                    pPara->mnOriginalTextPos = nCharReadCnt + nCount + 1;
                     aParaPropList.emplace_back( pPara );
                 }
             }

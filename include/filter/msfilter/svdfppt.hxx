@@ -903,7 +903,6 @@ struct ImplPPTParaPropSet final : public salhelper::SimpleReferenceObject
 
 struct PPTParaPropSet
 {
-    sal_uInt32          mnOriginalTextPos;
     rtl::Reference<ImplPPTParaPropSet> mxParaSet;
 
                         PPTParaPropSet();
