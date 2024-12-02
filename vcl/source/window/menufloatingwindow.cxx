@@ -29,7 +29,7 @@
 #include <vcl/settings.hxx>
 #include <window.h>
 
-MenuFloatingWindow::MenuFloatingWindow( Menu* pMen, vcl::Window* pParent, WinBits nStyle ) :
+MenuFloatingWindow::MenuFloatingWindow(PopupMenu* pMen, vcl::Window* pParent, WinBits nStyle ) :
     FloatingWindow( pParent, nStyle ),
     pMenu(pMen),
     aHighlightChangedTimer("vcl::MenuFloatingWindow aHighlightChangedTimer"),
@@ -451,7 +451,7 @@ void MenuFloatingWindow::Execute()
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    pSVData->maAppData.mpActivePopupMenu = static_cast<PopupMenu*>(pMenu.get());
+    pSVData->maAppData.mpActivePopupMenu = pMenu.get();
 
     Start();
 
@@ -679,7 +679,7 @@ void MenuFloatingWindow::ImplScroll( bool bUp )
 
             tools::Long nHeight = GetOutputSizePixel().Height();
             sal_uInt16 nLastVisible;
-            static_cast<PopupMenu*>(pMenu.get())->ImplCalcVisEntries( nHeight, nFirstEntry, &nLastVisible );
+            pMenu->ImplCalcVisEntries(nHeight, nFirstEntry, &nLastVisible);
             if ( pMenu->ImplGetNextVisible( nLastVisible ) == ITEMPOS_INVALID )
             {
                 bScrollDown = false;
@@ -1015,11 +1015,11 @@ void MenuFloatingWindow::ImplCursorUpDown( bool bUp, bool bHomeEnd )
 
                 Size aOutSz = GetOutputSizePixel();
                 sal_uInt16 nLastVisible;
-                static_cast<PopupMenu*>(pMenu.get())->ImplCalcVisEntries( aOutSz.Height(), nFirstEntry, &nLastVisible );
+                pMenu->ImplCalcVisEntries(aOutSz.Height(), nFirstEntry, &nLastVisible);
                 while ( n > nLastVisible )
                 {
                     ImplScroll( false );
-                    static_cast<PopupMenu*>(pMenu.get())->ImplCalcVisEntries( aOutSz.Height(), nFirstEntry, &nLastVisible );
+                    pMenu->ImplCalcVisEntries(aOutSz.Height(), nFirstEntry, &nLastVisible);
                 }
             }
             ChangeHighlightItem( n, false );

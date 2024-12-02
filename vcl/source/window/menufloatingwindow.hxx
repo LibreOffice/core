@@ -35,7 +35,7 @@ class MenuFloatingWindow : public FloatingWindow, public MenuWindow
     friend void Menu::dispose();
 
 private:
-    VclPtr<Menu> pMenu;
+    VclPtr<PopupMenu> pMenu;
     VclPtr<PopupMenu> pActivePopup;
     Timer aHighlightChangedTimer;
     Timer aSubmenuCloseTimer;
@@ -83,7 +83,7 @@ protected:
     void InvalidateItem( sal_uInt16 nPos );
 
 public:
-    MenuFloatingWindow(Menu* pMenu, vcl::Window* pParent, WinBits nStyle);
+    MenuFloatingWindow(PopupMenu* pMenu, vcl::Window* pParent, WinBits nStyle);
     virtual ~MenuFloatingWindow() override;
 
     virtual void dispose() override;
