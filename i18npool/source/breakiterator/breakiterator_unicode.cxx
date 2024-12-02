@@ -74,16 +74,6 @@ class OOoRuleBasedBreakIterator : public icu::RuleBasedBreakIterator
 
 };
 
-bool locale_requires_dictionary_iterator(const css::lang::Locale& rLocale)
-{
-    return rLocale.Language == "bo" || // Tibetan
-           rLocale.Language == "dz" || // Dzongkha
-           rLocale.Language == "ja" || // Japanese
-           rLocale.Language == "km" || // Khmer
-           rLocale.Language == "lo" || // Lao
-           rLocale.Language == "th" || // Thai
-           rLocale.Language == "zh"; // Chinese
-}
 }
 
 // loading ICU breakiterator on demand.
@@ -189,7 +179,7 @@ void BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Locale& rLocal
                         rbi.reset();
                     }
                 }
-                else if(!locale_requires_dictionary_iterator(rLocale))
+                else
                 {
                     // language;rule (not langtag, unless we'd actually load such)
                     OString aLanguage( LanguageTag( rLocale).getLanguage().toUtf8());
