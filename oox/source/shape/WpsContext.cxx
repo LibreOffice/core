@@ -715,60 +715,63 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
 
                 // Apply character color of the shape to the shape's textbox.
                 uno::Reference<text::XText> xText(mxShape, uno::UNO_QUERY);
-                uno::Any xCharColor = xPropertySet->getPropertyValue(u"CharColor"_ustr);
-                Color aColor = COL_AUTO;
-                if ((xCharColor >>= aColor) && aColor != COL_AUTO)
+                if (xText)
                 {
-                    // tdf#135923 Apply character color of the shape to the textrun
-                    //            when the character color of the textrun is default.
-                    // tdf#153791 But only if the run has no background color (shd element in OOXML)
-                    if (uno::Reference<container::XEnumerationAccess> paraEnumAccess{
-                            xText, uno::UNO_QUERY })
+                    uno::Any xCharColor = xPropertySet->getPropertyValue(u"CharColor"_ustr);
+                    Color aColor = COL_AUTO;
+                    if ((xCharColor >>= aColor) && aColor != COL_AUTO)
                     {
-                        uno::Reference<container::XEnumeration> paraEnum(
-                            paraEnumAccess->createEnumeration());
-
-                        while (paraEnum->hasMoreElements())
+                        // tdf#135923 Apply character color of the shape to the textrun
+                        //            when the character color of the textrun is default.
+                        // tdf#153791 But only if the run has no background color (shd element in OOXML)
+                        if (uno::Reference<container::XEnumerationAccess> paraEnumAccess{
+                                xText, uno::UNO_QUERY })
                         {
-                            uno::Reference<text::XTextRange> xParagraph(paraEnum->nextElement(),
-                                                                        uno::UNO_QUERY);
-                            uno::Reference<container::XEnumerationAccess> runEnumAccess(
-                                xParagraph, uno::UNO_QUERY);
-                            if (!runEnumAccess.is())
-                                continue;
-                            if (uno::Reference<beans::XPropertySet> xParaPropSet{ xParagraph,
-                                                                                  uno::UNO_QUERY })
-                                if ((xParaPropSet->getPropertyValue(u"ParaBackColor"_ustr)
-                                     >>= aColor)
-                                    && aColor != COL_AUTO)
-                                    continue;
+                            uno::Reference<container::XEnumeration> paraEnum(
+                                paraEnumAccess->createEnumeration());
 
-                            uno::Reference<container::XEnumeration> runEnum
-                                = runEnumAccess->createEnumeration();
-
-                            while (runEnum->hasMoreElements())
+                            while (paraEnum->hasMoreElements())
                             {
-                                uno::Reference<text::XTextRange> xRun(runEnum->nextElement(),
-                                                                      uno::UNO_QUERY);
-                                const uno::Reference<beans::XPropertyState> xRunState(
-                                    xRun, uno::UNO_QUERY);
-                                if (!xRunState
-                                    || xRunState->getPropertyState(u"CharColor"_ustr)
-                                           == beans::PropertyState_DEFAULT_VALUE)
-                                {
-                                    uno::Reference<beans::XPropertySet> xRunPropSet(xRun,
-                                                                                    uno::UNO_QUERY);
-                                    if (!xRunPropSet)
-                                        continue;
-                                    if ((xRunPropSet->getPropertyValue(u"CharBackColor"_ustr)
+                                uno::Reference<text::XTextRange> xParagraph(paraEnum->nextElement(),
+                                                                            uno::UNO_QUERY);
+                                uno::Reference<container::XEnumerationAccess> runEnumAccess(
+                                    xParagraph, uno::UNO_QUERY);
+                                if (!runEnumAccess.is())
+                                    continue;
+                                if (uno::Reference<beans::XPropertySet> xParaPropSet{
+                                        xParagraph, uno::UNO_QUERY })
+                                    if ((xParaPropSet->getPropertyValue(u"ParaBackColor"_ustr)
                                          >>= aColor)
                                         && aColor != COL_AUTO)
                                         continue;
-                                    if (!(xRunPropSet->getPropertyValue(u"CharColor"_ustr)
-                                          >>= aColor)
-                                        || aColor == COL_AUTO)
-                                        xRunPropSet->setPropertyValue(u"CharColor"_ustr,
-                                                                      xCharColor);
+
+                                uno::Reference<container::XEnumeration> runEnum
+                                    = runEnumAccess->createEnumeration();
+
+                                while (runEnum->hasMoreElements())
+                                {
+                                    uno::Reference<text::XTextRange> xRun(runEnum->nextElement(),
+                                                                          uno::UNO_QUERY);
+                                    const uno::Reference<beans::XPropertyState> xRunState(
+                                        xRun, uno::UNO_QUERY);
+                                    if (!xRunState
+                                        || xRunState->getPropertyState(u"CharColor"_ustr)
+                                               == beans::PropertyState_DEFAULT_VALUE)
+                                    {
+                                        uno::Reference<beans::XPropertySet> xRunPropSet(
+                                            xRun, uno::UNO_QUERY);
+                                        if (!xRunPropSet)
+                                            continue;
+                                        if ((xRunPropSet->getPropertyValue(u"CharBackColor"_ustr)
+                                             >>= aColor)
+                                            && aColor != COL_AUTO)
+                                            continue;
+                                        if (!(xRunPropSet->getPropertyValue(u"CharColor"_ustr)
+                                              >>= aColor)
+                                            || aColor == COL_AUTO)
+                                            xRunPropSet->setPropertyValue(u"CharColor"_ustr,
+                                                                          xCharColor);
+                                    }
                                 }
                             }
                         }
