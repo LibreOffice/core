@@ -445,7 +445,7 @@ void Menu::InsertItem(sal_uInt16 nItemId, const OUString& rStr, MenuItemBits nIt
     // put Item in MenuItemList
     NbcInsertItem(nItemId, nItemBits, rStr, this, nPos, rIdent);
 
-    vcl::Window* pWin = ImplGetWindow();
+    vcl::Window* pWin = GetWindow();
     mpLayoutData.reset();
     if ( pWin )
     {
@@ -509,7 +509,7 @@ void Menu::RemoveItem( sal_uInt16 nPos )
         bRemove = true;
     }
 
-    vcl::Window* pWin = ImplGetWindow();
+    vcl::Window* pWin = GetWindow();
     if ( pWin )
     {
         ImplCalcSize( pWin );
@@ -939,7 +939,7 @@ void Menu::EnableItem( sal_uInt16 nItemId, bool bEnable )
 
     pItemData->bEnabled = bEnable;
 
-    vcl::Window* pWin = ImplGetWindow();
+    vcl::Window* pWin = GetWindow();
     if ( pWin && pWin->IsVisible() )
     {
         SAL_WARN_IF(!IsMenuBar(), "vcl", "Menu::EnableItem - Popup visible!" );
@@ -983,7 +983,7 @@ void Menu::ShowItem( sal_uInt16 nItemId, bool bVisible )
     if (IsMenuBar() || !pData || (pData->bVisible == bVisible))
         return;
 
-    vcl::Window* pWin = ImplGetWindow();
+    vcl::Window* pWin = GetWindow();
     if ( pWin && pWin->IsVisible() )
     {
         SAL_WARN( "vcl", "Menu::ShowItem - ignored for visible popups!" );
@@ -1015,7 +1015,7 @@ void Menu::SetItemText( sal_uInt16 nItemId, const OUString& rStr )
     if( ImplGetSalMenu() && pData->pSalMenuItem )
         ImplGetSalMenu()->SetItemText( nPos, pData->pSalMenuItem.get(), rStr );
 
-    vcl::Window* pWin = ImplGetWindow();
+    vcl::Window* pWin = GetWindow();
     mpLayoutData.reset();
     if (pWin && IsMenuBar())
     {
@@ -2510,7 +2510,7 @@ VclPtr<vcl::Window> MenuBar::ImplCreate(vcl::Window* pParent, vcl::Window* pWind
 
 void MenuBar::ImplDestroy( MenuBar* pMenu, bool bDelete )
 {
-    vcl::Window *pWindow = pMenu->ImplGetWindow();
+    vcl::Window *pWindow = pMenu->GetWindow();
     if (pWindow && bDelete)
     {
         MenuBarWindow* pMenuWin = pMenu->getMenuBarWindow();
@@ -2545,7 +2545,7 @@ bool MenuBar::ImplHandleKeyEvent( const KeyEvent& rKEvent )
 
     bool bDone = false;
     // check for enabled, if this method is called from another window...
-    vcl::Window* pWin = ImplGetWindow();
+    vcl::Window* pWin = GetWindow();
     if (pWin && pWin->IsEnabled() && pWin->IsInputEnabled()  && !pWin->IsInModalMode())
     {
         MenuBarWindow* pMenuWin = getMenuBarWindow();
@@ -2562,7 +2562,7 @@ bool MenuBar::ImplHandleCmdEvent( const CommandEvent& rCEvent )
         return false;
 
     // check for enabled, if this method is called from another window...
-    MenuBarWindow* pWin = static_cast<MenuBarWindow*>(ImplGetWindow());
+    MenuBarWindow* pWin = static_cast<MenuBarWindow*>(GetWindow());
     if ( pWin && pWin->IsEnabled() && pWin->IsInputEnabled()  && ! pWin->IsInModalMode() )
     {
         if (rCEvent.GetCommand() == CommandEventId::ModKeyChange && ImplGetSVData()->maNWFData.mbAutoAccel)
@@ -2728,7 +2728,7 @@ int MenuBar::GetMenuBarHeight() const
 // bool PopupMenu::bAnyPopupInExecute = false;
 
 MenuFloatingWindow * PopupMenu::ImplGetFloatingWindow() const {
-    return static_cast<MenuFloatingWindow *>(Menu::ImplGetWindow());
+    return static_cast<MenuFloatingWindow *>(Menu::GetWindow());
 }
 
 PopupMenu::PopupMenu()
@@ -2749,7 +2749,7 @@ PopupMenu::~PopupMenu()
 
 void PopupMenu::ClosePopup(Menu* pMenu)
 {
-    MenuFloatingWindow* p = dynamic_cast<MenuFloatingWindow*>(ImplGetWindow());
+    MenuFloatingWindow* p = dynamic_cast<MenuFloatingWindow*>(GetWindow());
     PopupMenu *pPopup = dynamic_cast<PopupMenu*>(pMenu);
     if (p && pPopup)
         p->KillActivePopup(pPopup);
@@ -2771,13 +2771,13 @@ PopupMenu* PopupMenu::GetActivePopupMenu()
 
 void PopupMenu::EndExecute()
 {
-    if ( ImplGetWindow() )
+    if (GetWindow())
         ImplGetFloatingWindow()->EndExecute( 0 );
 }
 
 void PopupMenu::SelectItem(sal_uInt16 nId)
 {
-    if ( !ImplGetWindow() )
+    if (!GetWindow())
         return;
 
     if( nId != ITEMPOS_INVALID )
@@ -2887,7 +2887,7 @@ bool PopupMenu::PrepareRun(const VclPtr<vcl::Window>& pParentWin, tools::Rectang
                                                            | FloatWinPopupEndFlags::CloseAll);
     }
 
-    SAL_WARN_IF( ImplGetWindow(), "vcl", "Win?!" );
+    SAL_WARN_IF(GetWindow(), "vcl", "Win?!");
     rRect.SetPos(pParentWin->OutputToScreenPixel(rRect.TopLeft()));
 
     nPopupModeFlags |= FloatWinPopupFlags::NoKeyClose | FloatWinPopupFlags::AllMouseButtonClose | FloatWinPopupFlags::GrabFocus;

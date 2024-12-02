@@ -85,7 +85,7 @@ void MenuFloatingWindow::doShutdown()
         }
         if( i < nCount )
         {
-            MenuFloatingWindow* pPWin = static_cast<MenuFloatingWindow*>(pMenu->pStartedFrom->ImplGetWindow());
+            MenuFloatingWindow* pPWin = static_cast<MenuFloatingWindow*>(pMenu->pStartedFrom->GetWindow());
             if (pPWin)
                 pPWin->InvalidateItem(i);
         }
@@ -375,7 +375,7 @@ IMPL_LINK( MenuFloatingWindow, HighlightChanged, Timer*, pTimer, void )
     SetPopupModeFlags( nOldFlags );
 
     // nRet != 0, if it was stopped during Activate()...
-    if ( !nRet && ( pActivePopup == pTest ) && pActivePopup->ImplGetWindow() )
+    if ( !nRet && ( pActivePopup == pTest ) && pActivePopup->GetWindow() )
         pActivePopup->ImplGetFloatingWindow()->AddPopupModeWindow( this );
 }
 
@@ -495,7 +495,7 @@ void MenuFloatingWindow::KillActivePopup( PopupMenu* pThisOnly )
     pPopup->bInCallback = true;
     pPopup->Deactivate();
     pPopup->bInCallback = false;
-    if ( pPopup->ImplGetWindow() )
+    if (pPopup->GetWindow())
     {
         pPopup->ImplGetFloatingWindow()->StopExecute();
         pPopup->ImplGetFloatingWindow()->doShutdown();
@@ -765,7 +765,7 @@ void MenuFloatingWindow::ChangeHighlightItem( sal_uInt16 n, bool bStartPopupTime
             }
             if( i < nCount )
             {
-                MenuFloatingWindow* pPWin = static_cast<MenuFloatingWindow*>(pMenu->pStartedFrom->ImplGetWindow());
+                MenuFloatingWindow* pPWin = static_cast<MenuFloatingWindow*>(pMenu->pStartedFrom->GetWindow());
                 if( pPWin && pPWin->nHighlightedItem != i )
                 {
                     pPWin->InvalidateItem(i);
@@ -1118,7 +1118,7 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
                     if (pStart && pStart->IsMenuBar())
                     {
                         // Forward...
-                        pStart->ImplGetWindow()->KeyInput( rKEvent );
+                        pStart->GetWindow()->KeyInput(rKEvent);
                     }
                 }
             }
@@ -1149,7 +1149,7 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
                 if (pStart && pStart->IsMenuBar())
                 {
                     // Forward...
-                    pStart->ImplGetWindow()->KeyInput( rKEvent );
+                    pStart->GetWindow()->KeyInput(rKEvent);
                 }
             }
         }

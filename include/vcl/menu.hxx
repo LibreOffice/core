@@ -209,7 +209,6 @@ protected:
 public:
     SAL_DLLPRIVATE void ImplKillLayoutData() const;
 
-    SAL_DLLPRIVATE vcl::Window* ImplGetWindow() const { return pWindow; }
 #if defined(MACOSX)
     void ImplSelectWithStart( Menu* pStartMenu = nullptr );
 #endif

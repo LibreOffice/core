@@ -253,7 +253,7 @@ TaskPaneList* SystemWindow::GetTaskPaneList()
                 pMBar = static_cast<SystemWindow*>(pWin)->GetMenuBar();
         }
         if( pMBar )
-            mpImplData->mpTaskPaneList->AddWindow( pMBar->ImplGetWindow() );
+            mpImplData->mpTaskPaneList->AddWindow(pMBar->GetWindow());
         return mpImplData->mpTaskPaneList.get();
     }
 }
@@ -851,7 +851,7 @@ void SystemWindow::SetMenuBar(MenuBar* pMenuBar)
     if ( mpWindowImpl->mpBorderWindow && (mpWindowImpl->mpBorderWindow->GetType() == WindowType::BORDERWINDOW) )
     {
         if ( pOldMenuBar )
-            pOldWindow = pOldMenuBar->ImplGetWindow();
+            pOldWindow = pOldMenuBar->GetWindow();
         else
             pOldWindow = nullptr;
         if ( pOldWindow )
@@ -888,9 +888,9 @@ void SystemWindow::SetMenuBar(MenuBar* pMenuBar)
     else
     {
         if( pMenuBar )
-            pNewWindow = pMenuBar->ImplGetWindow();
+            pNewWindow = pMenuBar->GetWindow();
         if( pOldMenuBar )
-            pOldWindow = pOldMenuBar->ImplGetWindow();
+            pOldWindow = pOldMenuBar->GetWindow();
     }
 
     // update taskpane list to make menubar accessible

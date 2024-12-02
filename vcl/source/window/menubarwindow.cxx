@@ -361,7 +361,7 @@ void MenuBarWindow::KillActivePopup()
     m_pActivePopup->Deactivate();
     m_pActivePopup->bInCallback = false;
     // check for pActivePopup, if stopped by deactivate...
-    if ( m_pActivePopup->ImplGetWindow() )
+    if (m_pActivePopup->GetWindow())
     {
         if (mpParentPopup)
         {
@@ -470,7 +470,7 @@ void MenuBarWindow::ChangeHighlightItem( sal_uInt16 n, bool bSelectEntry, bool b
 
     // #57934# close active popup if applicable, as TH's background storage works.
     MenuItemData* pNextData = m_pMenu->pItemList->GetDataFromPos( n );
-    if ( m_pActivePopup && m_pActivePopup->ImplGetWindow() && ( !pNextData || ( m_pActivePopup != pNextData->pSubMenu ) ) )
+    if (m_pActivePopup && m_pActivePopup->GetWindow() && (!pNextData || (m_pActivePopup != pNextData->pSubMenu)))
         KillActivePopup(); // pActivePopup when applicable without pWin, if Rescheduled in  Activate()
 
     // activate menubar only ones per cycle...
