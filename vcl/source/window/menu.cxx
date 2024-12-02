@@ -2494,7 +2494,7 @@ VclPtr<MenuBarWindow> MenuBar::ImplCreate(vcl::Window* pParent, MenuBarWindow* p
     pMenu->pStartedFrom = nullptr;
     pMenu->m_pWindow = pMenuBarWindow;
     pMenuBarWindow->SetMenu(pMenu);
-    tools::Long nHeight = pMenuBarWindow ? pMenu->ImplCalcSize(pMenuBarWindow).Height() : 0;
+    tools::Long nHeight = pMenu->ImplCalcSize(pMenuBarWindow).Height();
 
     // depending on the native implementation or the displayable flag
     // the menubar windows is suppressed (ie, height=0)
