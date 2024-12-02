@@ -1886,6 +1886,18 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, TestTdf152839_firstRows)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(223), nHeight);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, TestTdf164098)
+{
+    createSwDoc("tdf164098.fodt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+
+    pWrtShell->StartOfSection(false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect*/ false, 6, /*bBasicCall*/ false);
+
+    // Without the fix, this line will cause a freeze:
+    pWrtShell->Insert(u"ـ"_ustr);
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();

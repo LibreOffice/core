@@ -185,7 +185,14 @@ static bool lcl_CheckKashidaPositions(SwScriptInfo& rSI, SwTextSizeInfo& rInf, S
             if (stKashidaPos.has_value())
             {
                 TextFrameIndex nNewKashidaPos{ aScanner.GetBegin() + stKashidaPos->nIndex };
-                aNewKashidaPositions.push_back(nNewKashidaPos);
+
+                // tdf#164098: The above algorithm can return out-of-range kashida positions. This
+                // can happen if, for example, a single word is split across multiple lines, and
+                // the best kashida candidate position is on the first line.
+                if (nNewKashidaPos >= nIdx && nNewKashidaPos < nEnd)
+                {
+                    aNewKashidaPositions.push_back(nNewKashidaPos);
+                }
             }
         }
     }
