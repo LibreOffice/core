@@ -202,7 +202,6 @@ protected:
     void                implEndRecord( sal_Int32 nRecId );
 
     bool                prepareMceContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    XmlFilterBase&      getDocFilter() const { return mrFilter; }
 
     enum class MCE_STATE
     {

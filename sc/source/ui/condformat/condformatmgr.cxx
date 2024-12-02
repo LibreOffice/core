@@ -185,13 +185,6 @@ void ScCondFormatManagerDlg::UpdateButtonSensitivity()
     m_xBtnEdit->set_sensitive(bNewSensitivity);
 }
 
-// Get the current conditional format selected.
-//
-ScConditionalFormat* ScCondFormatManagerDlg::GetCondFormatSelected()
-{
-    return m_xCtrlManager->GetSelection();
-}
-
 void ScCondFormatManagerDlg::ShowEasyConditionalDialog(bool isEdit)
 {
     SfxViewShell* pViewShell = SfxViewShell::Current();

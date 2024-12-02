@@ -927,7 +927,6 @@ public:
     SC_DLLPUBLIC bool                  HasPivotTable() const;
     SC_DLLPUBLIC ScDPCollection*       GetDPCollection();
     SC_DLLPUBLIC const ScDPCollection* GetDPCollection() const;
-    SC_DLLPUBLIC const ScDPObject*     GetDPAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
     SC_DLLPUBLIC ScDPObject*           GetDPAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
     SC_DLLPUBLIC ScDPObject*           GetDPAtCursor(ScAddress const& rAddress) const
     {

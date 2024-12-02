@@ -63,16 +63,6 @@ SfxMacroInfoItem* SfxMacroInfoItem::Clone( SfxItemPool *) const
     return new SfxMacroInfoItem(*this);
 }
 
-OUString SfxMacroInfoItem::GetQualifiedName() const
-{
-    OUString aMacroName = aLibName +
-        "." +
-        aModuleName +
-        "." +
-        aMethodName;
-    return aMacroName;
-}
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

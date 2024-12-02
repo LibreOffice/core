@@ -48,7 +48,6 @@ public:
     bool CondFormatsChanged() const;
     void SetModified();
 
-    ScConditionalFormat* GetCondFormatSelected();
     void ShowEasyConditionalDialog(bool isEdit = false);
 
 private:

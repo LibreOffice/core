@@ -151,10 +151,6 @@ public:
     {
         m_xTreeView->connect_changed(rLink);
     }
-    void set_size_request(int nWidth, int nHeight)
-    {
-        m_xTreeView->set_size_request(nWidth, nHeight);
-    }
     weld::TreeView& get_widget() { return *m_xTreeView; }
     void ClearAll();
 
