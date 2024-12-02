@@ -2488,13 +2488,13 @@ VclPtr<vcl::Window> MenuBar::ImplCreate(vcl::Window* pParent, vcl::Window* pWind
     VclPtr<MenuBarWindow> pMenuBarWindow = dynamic_cast<MenuBarWindow*>(pWindow);
     if (!pMenuBarWindow)
     {
-        pWindow = pMenuBarWindow = VclPtr<MenuBarWindow>::Create( pParent );
+        pMenuBarWindow = VclPtr<MenuBarWindow>::Create(pParent);
     }
 
     pMenu->pStartedFrom = nullptr;
-    pMenu->m_pWindow = pWindow;
+    pMenu->m_pWindow = pMenuBarWindow;
     pMenuBarWindow->SetMenu(pMenu);
-    tools::Long nHeight = pWindow ? pMenu->ImplCalcSize(pWindow).Height() : 0;
+    tools::Long nHeight = pMenuBarWindow ? pMenu->ImplCalcSize(pMenuBarWindow).Height() : 0;
 
     // depending on the native implementation or the displayable flag
     // the menubar windows is suppressed (ie, height=0)
@@ -2504,7 +2504,7 @@ VclPtr<vcl::Window> MenuBar::ImplCreate(vcl::Window* pParent, vcl::Window* pWind
     }
 
     pMenuBarWindow->SetHeight(nHeight);
-    return pWindow;
+    return pMenuBarWindow;
 }
 
 void MenuBar::ImplDestroy( MenuBar* pMenu, bool bDelete )
