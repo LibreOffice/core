@@ -52,8 +52,8 @@ E3dSphereObj::E3dSphereObj(
     // Set defaults
     SetDefaultAttributes(rDefault);
 
-    aCenter = rCenter;
-    aSize = r3DSize;
+    m_aCenter = rCenter;
+    m_aSize = r3DSize;
 }
 
 E3dSphereObj::E3dSphereObj(SdrModel& rSdrModel)
@@ -72,8 +72,8 @@ E3dSphereObj::E3dSphereObj(SdrModel& rSdrModel, E3dSphereObj const & rSource)
     const E3dDefaultAttributes aDefault;
     SetDefaultAttributes(aDefault);
 
-    aCenter = rSource.aCenter;
-    aSize = rSource.aSize;
+    m_aCenter = rSource.m_aCenter;
+    m_aSize = rSource.m_aSize;
 }
 
 E3dSphereObj::~E3dSphereObj()
@@ -83,8 +83,8 @@ E3dSphereObj::~E3dSphereObj()
 void E3dSphereObj::SetDefaultAttributes(const E3dDefaultAttributes& rDefault)
 {
     // Set defaults
-    aCenter = rDefault.GetDefaultSphereCenter();
-    aSize = rDefault.GetDefaultSphereSize();
+    m_aCenter = rDefault.GetDefaultSphereCenter();
+    m_aSize = rDefault.GetDefaultSphereSize();
 }
 
 SdrObjKind E3dSphereObj::GetObjIdentifier() const
@@ -108,18 +108,18 @@ rtl::Reference<SdrObject> E3dSphereObj::CloneSdrObject(SdrModel& rTargetModel) c
 
 void E3dSphereObj::SetCenter(const basegfx::B3DPoint& rNew)
 {
-    if(aCenter != rNew)
+    if(m_aCenter != rNew)
     {
-        aCenter = rNew;
+        m_aCenter = rNew;
         ActionChanged();
     }
 }
 
 void E3dSphereObj::SetSize(const basegfx::B3DVector& rNew)
 {
-    if(aSize != rNew)
+    if(m_aSize != rNew)
     {
-        aSize = rNew;
+        m_aSize = rNew;
         ActionChanged();
     }
 }

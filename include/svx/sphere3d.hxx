@@ -35,8 +35,8 @@ class E3dDefaultAttributes;
 class E3dSphereObj final : public E3dCompoundObject
 {
 private:
-    basegfx::B3DPoint               aCenter;
-    basegfx::B3DVector              aSize;
+    basegfx::B3DPoint               m_aCenter;
+    basegfx::B3DVector              m_aSize;
 
     virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
     virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override;
@@ -72,8 +72,8 @@ public:
 
     virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 
-    const basegfx::B3DPoint& Center() const { return aCenter; }
-    const basegfx::B3DVector& Size() const { return aSize; }
+    const basegfx::B3DPoint& Center() const { return m_aCenter; }
+    const basegfx::B3DVector& Size() const { return m_aSize; }
 
     // set local parameters when the geometry is recreated
     void SetCenter(const basegfx::B3DPoint& rNew);
