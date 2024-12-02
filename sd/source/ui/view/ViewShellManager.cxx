@@ -108,8 +108,10 @@ public:
         ViewShell* pViewShell);
     void DeactivateViewShell (const ViewShell& rShell);
     void ActivateShell (SfxShell& rShell);
+    void ActivateLowPriorityShell (SfxShell& rShell);
     void DeactivateShell (const SfxShell& rShell);
     void ActivateShell (const ShellDescriptor& rDescriptor);
+    void ActivateLowPriorityShell (const ShellDescriptor& rDescriptor);
     void SetFormShell (const ViewShell* pViewShell, FmFormShell* pFormShell, bool bAbove);
     void ActivateSubShell (const SfxShell& rParentShell, ShellId nId);
     void DeactivateSubShell (const SfxShell& rParentShell, ShellId nId);
@@ -317,6 +319,12 @@ void ViewShellManager::ActivateShell (SfxShell* pShell)
         mpImpl->ActivateShell(*pShell);
 }
 
+void ViewShellManager::ActivateLowPriorityShell (SfxShell* pShell)
+{
+    if (mbValid && pShell!=nullptr)
+        mpImpl->ActivateLowPriorityShell(*pShell);
+}
+
 void ViewShellManager::DeactivateShell (const SfxShell* pShell)
 {
     if (mbValid && pShell!=nullptr)
@@ -498,12 +506,32 @@ void ViewShellManager::Implementation::ActivateShell (SfxShell& rShell)
     ActivateShell(aDescriptor);
 }
 
+void ViewShellManager::Implementation::ActivateLowPriorityShell (SfxShell& rShell)
+{
+    ::osl::MutexGuard aGuard (maMutex);
+
+    // Create a new shell or recycle on in the cache.
+    ShellDescriptor aDescriptor;
+    aDescriptor.mpShell = &rShell;
+
+    ActivateLowPriorityShell(aDescriptor);
+}
+
 void ViewShellManager::Implementation::ActivateShell (const ShellDescriptor& rDescriptor)
 {
     // Put shell on top of the active view shells.
     if (rDescriptor.mpShell != nullptr)
     {
         maActiveViewShells.insert( maActiveViewShells.begin(), rDescriptor);
+    }
+}
+
+void ViewShellManager::Implementation::ActivateLowPriorityShell (const ShellDescriptor& rDescriptor)
+{
+    // Put shell on bottom of the active view shells.
+    if (rDescriptor.mpShell != nullptr)
+    {
+        maActiveViewShells.push_back( rDescriptor );
     }
 }
 
