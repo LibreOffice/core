@@ -624,11 +624,6 @@ bool Window::IsAccessibilityEventsSuppressed( bool bTraverseParentPath )
     }
 }
 
-void Window::SetAccessibilityEventsSuppressed(bool bSuppressed)
-{
-    mpWindowImpl->mbSuppressAccessibilityEvents = bSuppressed;
-}
-
 } /* namespace vcl */
 
 uno::Reference<accessibility::XAccessibleEditableText>

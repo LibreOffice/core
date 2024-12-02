@@ -1162,7 +1162,6 @@ public:
     // to avoid sending accessibility events in cases like closing dialogs
     // by default checks complete parent path
     bool                                IsAccessibilityEventsSuppressed( bool bTraverseParentPath = true );
-    void                                SetAccessibilityEventsSuppressed(bool bSuppressed);
 
     KeyEvent                            GetActivationKey() const;
 
