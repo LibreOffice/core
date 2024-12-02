@@ -93,7 +93,6 @@ public:
                               const Image& rImage) override;
     virtual void SetAccelerator(unsigned nPos, SalMenuItem* pSalMenuItem,
                                 const vcl::KeyCode& rKeyCode, const OUString& rKeyName) override;
-    virtual void GetSystemMenuData(SystemMenuData* pData) override;
     virtual void ShowCloseButton(bool bShow) override;
     virtual bool AddMenuBarButton(const SalMenuButtonItem&) override;
     virtual void RemoveMenuBarButton(sal_uInt16 nId) override;

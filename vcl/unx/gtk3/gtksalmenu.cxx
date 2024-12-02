@@ -1622,10 +1622,6 @@ void GtkSalMenu::SetAccelerator( unsigned, SalMenuItem*, const vcl::KeyCode&, co
 {
 }
 
-void GtkSalMenu::GetSystemMenuData( SystemMenuData* )
-{
-}
-
 int GtkSalMenu::GetMenuBarHeight() const
 {
     return mpMenuBarWidget ? gtk_widget_get_allocated_height(mpMenuBarWidget) : 0;

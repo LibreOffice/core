@@ -597,8 +597,6 @@ void QtMenu::SetAccelerator(unsigned, SalMenuItem* pItem, const vcl::KeyCode&,
         pAction->setShortcut(QKeySequence(toQString(rText), QKeySequence::PortableText));
 }
 
-void QtMenu::GetSystemMenuData(SystemMenuData*) {}
-
 QtMenu* QtMenu::GetTopLevel()
 {
     QtMenu* pMenu = this;

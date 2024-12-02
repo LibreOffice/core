@@ -66,7 +66,6 @@ public:
     virtual void SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const OUString& rText ) override;
     virtual void SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage) override;
     virtual void SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const vcl::KeyCode& rKeyCode, const OUString& rKeyName ) override;
-    virtual void GetSystemMenuData( SystemMenuData* pData ) override;
     virtual bool ShowNativePopupMenu(FloatingWindow * pWin, const tools::Rectangle& rRect, FloatWinPopupFlags nFlags) override;
     virtual bool AddMenuBarButton( const SalMenuButtonItem& ) override;
     virtual void RemoveMenuBarButton( sal_uInt16 nId ) override;

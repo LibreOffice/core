@@ -744,10 +744,6 @@ void AquaSalMenu::SetAccelerator( unsigned /*nPos*/, SalMenuItem* pSalMenuItem, 
         [pString release];
 }
 
-void AquaSalMenu::GetSystemMenuData( SystemMenuData* )
-{
-}
-
 AquaSalMenu::MenuBarButtonEntry* AquaSalMenu::findButtonItem( sal_uInt16 i_nItemId )
 {
     for( size_t i = 0; i < maButtons.size(); ++i )
