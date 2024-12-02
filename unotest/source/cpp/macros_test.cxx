@@ -13,9 +13,11 @@
 
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 
 #include <cppunit/TestAssert.h>
 #include <rtl/ustrbuf.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/sequence.hxx>
 
 using namespace css;
@@ -49,6 +51,62 @@ uno::Reference<css::lang::XComponent> MacrosTest::loadFromDesktop(const OUString
     OUString sMessage = "loading failed: " + rURL;
     CPPUNIT_ASSERT_MESSAGE(OUStringToOString( sMessage, RTL_TEXTENCODING_UTF8 ).getStr( ), xComponent.is());
     return xComponent;
+}
+
+namespace
+{
+class StateGetter : public ::cppu::WeakImplHelper<frame::XStatusListener>
+{
+public:
+    uno::Any& m_rOldValue;
+    bool m_Received{ false };
+    StateGetter(uno::Any& rOldValue)
+        : m_rOldValue(rOldValue)
+    {
+    }
+
+    virtual void SAL_CALL disposing(lang::EventObject const&) override
+    {
+        CPPUNIT_ASSERT(m_Received);
+    }
+    virtual void SAL_CALL statusChanged(frame::FeatureStateEvent const& rEvent) override
+    {
+        if (!m_Received)
+        {
+            m_rOldValue = rEvent.State;
+            m_Received = true;
+        }
+    }
+};
+
+} // namespace
+
+uno::Any MacrosTest::queryDispatchStatus(uno::Reference<lang::XComponent> const& xComponent,
+                                         uno::Reference<uno::XComponentContext> const& xContext,
+                                         OUString const& rURL)
+{
+    uno::Any ret;
+
+    util::URL url;
+    url.Complete = rURL;
+    {
+        uno::Reference<css::util::XURLTransformer> const xParser(
+            css::util::URLTransformer::create(xContext));
+        CPPUNIT_ASSERT(xParser.is());
+        xParser->parseStrict(url);
+    }
+
+    uno::Reference<frame::XController> const xController
+        = uno::Reference<frame::XModel>(xComponent, uno::UNO_QUERY_THROW)->getCurrentController();
+    uno::Reference<frame::XDispatchProvider> const xFrame(xController->getFrame(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFrame.is());
+    uno::Reference<frame::XDispatch> const xDisp(xFrame->queryDispatch(url, "", 0));
+    CPPUNIT_ASSERT(xDisp.is());
+
+    uno::Reference<frame::XStatusListener> const xListener{ new StateGetter(ret) };
+    xDisp->addStatusListener(xListener, url);
+
+    return ret;
 }
 
 }

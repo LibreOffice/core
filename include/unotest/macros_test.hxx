@@ -17,6 +17,8 @@
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/XDesktop2.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/uno/Any.h>
 
 struct TestMacroInfo
 {
@@ -55,6 +57,11 @@ public:
 
     css::uno::Reference< css::lang::XComponent > loadFromDesktop(const OUString& rURL, const OUString& rDocService = OUString(),
         const css::uno::Sequence<css::beans::PropertyValue>& rExtra_args = css::uno::Sequence<css::beans::PropertyValue>() );
+
+    static css::uno::Any
+    queryDispatchStatus(css::uno::Reference<css::lang::XComponent> const& xComponent,
+                        css::uno::Reference<css::uno::XComponentContext> const& xContext,
+                        OUString const& rURL);
 
 protected:
     css::uno::Reference< css::frame::XDesktop2> mxDesktop;
