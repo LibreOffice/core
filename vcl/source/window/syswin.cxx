@@ -19,6 +19,8 @@
 
 #include <memory>
 
+#include "menubarwindow.hxx"
+
 #include <o3tl/safeint.hxx>
 #include <sal/config.h>
 #include <sal/log.hxx>
@@ -844,14 +846,14 @@ void SystemWindow::SetMenuBar(MenuBar* pMenuBar)
         return;
 
     MenuBar* pOldMenuBar = mpMenuBar;
-    vcl::Window*  pOldWindow = nullptr;
-    VclPtr<vcl::Window> pNewWindow;
+    MenuBarWindow*  pOldWindow = nullptr;
+    VclPtr<MenuBarWindow> pNewWindow;
     mpMenuBar = pMenuBar;
 
     if ( mpWindowImpl->mpBorderWindow && (mpWindowImpl->mpBorderWindow->GetType() == WindowType::BORDERWINDOW) )
     {
         if ( pOldMenuBar )
-            pOldWindow = pOldMenuBar->GetWindow();
+            pOldWindow = pOldMenuBar->getMenuBarWindow();
         else
             pOldWindow = nullptr;
         if ( pOldWindow )
@@ -888,9 +890,9 @@ void SystemWindow::SetMenuBar(MenuBar* pMenuBar)
     else
     {
         if( pMenuBar )
-            pNewWindow = pMenuBar->GetWindow();
+            pNewWindow = pMenuBar->getMenuBarWindow();
         if( pOldMenuBar )
-            pOldWindow = pOldMenuBar->GetWindow();
+            pOldWindow = pOldMenuBar->getMenuBarWindow();
     }
 
     // update taskpane list to make menubar accessible
