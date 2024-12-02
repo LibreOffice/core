@@ -417,7 +417,6 @@ class VCL_DLLPUBLIC MenuBar final : public Menu
     bool mbHideBtnVisible : 1;
     bool mbDisplayable : 1;
 
-    friend class Application;
     friend class Menu;
     friend class MenuBarWindow;
     friend class SystemWindow;
