@@ -1160,8 +1160,8 @@ public:
     vcl::Window*                        GetAccessibleRelationMemberOf() const;
 
     // to avoid sending accessibility events in cases like closing dialogs
-    // by default checks complete parent path
-    bool                                IsAccessibilityEventsSuppressed( bool bTraverseParentPath = true );
+    // checks complete parent path
+    bool                                IsAccessibilityEventsSuppressed();
 
     KeyEvent                            GetActivationKey() const;
 

@@ -606,22 +606,17 @@ vcl::Window* Window::GetAccessibleRelationLabeledBy() const
     return nullptr;
 }
 
-bool Window::IsAccessibilityEventsSuppressed( bool bTraverseParentPath )
+bool Window::IsAccessibilityEventsSuppressed()
 {
-    if( !bTraverseParentPath )
-        return mpWindowImpl->mbSuppressAccessibilityEvents;
-    else
+    vcl::Window *pParent = this;
+    while (pParent && pParent->mpWindowImpl)
     {
-        vcl::Window *pParent = this;
-        while ( pParent && pParent->mpWindowImpl)
-        {
-            if( pParent->mpWindowImpl->mbSuppressAccessibilityEvents )
-                return true;
-            else
-                pParent = pParent->mpWindowImpl->mpParent; // do not use GetParent() to find borderwindows that are frames
-        }
-        return false;
+        if (pParent->mpWindowImpl->mbSuppressAccessibilityEvents)
+            return true;
+        else
+            pParent = pParent->mpWindowImpl->mpParent; // do not use GetParent() to find borderwindows that are frames
     }
+    return false;
 }
 
 } /* namespace vcl */
