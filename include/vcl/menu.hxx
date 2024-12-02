@@ -420,16 +420,12 @@ class VCL_DLLPUBLIC MenuBar final : public Menu
     friend class Application;
     friend class Menu;
     friend class MenuBarWindow;
-    friend class MenuFloatingWindow;
     friend class SystemWindow;
 
     SAL_DLLPRIVATE static VclPtr<vcl::Window> ImplCreate(vcl::Window* pParent, vcl::Window* pWindow, MenuBar* pMenu);
     SAL_DLLPRIVATE static void ImplDestroy(MenuBar* pMenu, bool bDelete);
     SAL_DLLPRIVATE bool ImplHandleKeyEvent(const KeyEvent& rKEvent);
     SAL_DLLPRIVATE bool ImplHandleCmdEvent(const CommandEvent& rCEvent);
-
-    /// Return the MenuBarWindow.
-    SAL_DLLPRIVATE MenuBarWindow* getMenuBarWindow();
 
 public:
     MenuBar();
@@ -440,6 +436,9 @@ public:
     MenuBar& operator =( const MenuBar& rMenu );
 
     virtual bool IsMenuBar() const override { return true; }
+
+    /// Return the MenuBarWindow.
+    SAL_DLLPRIVATE MenuBarWindow* getMenuBarWindow();
 
     /// Close the 'pStartedFrom' menu window.
     virtual void ClosePopup(Menu* pMenu) override;
