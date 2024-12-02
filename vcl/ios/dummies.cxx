@@ -99,10 +99,6 @@ void SalGenericInstance::updatePrinterUpdate()
 {
 }
 
-void SalGenericInstance::jobEndedPrinterUpdate()
-{
-}
-
 using namespace psp;
 
 bool AquaGraphicsBackend::drawNativeControl(ControlType /* nType */,

@@ -405,7 +405,7 @@ public:
     virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
 private:
-    virtual css::uno::Reference< ::css::drawing::XDrawPage > insertNewImpl( sal_Int32 nIndex, std::optional<OUString> oName );
+    css::uno::Reference< ::css::drawing::XDrawPage > insertNewImpl( sal_Int32 nIndex, std::optional<OUString> oName );
 };
 
 /***********************************************************************

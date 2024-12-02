@@ -195,7 +195,6 @@ public:
 
     // callbacks for printer updates
     virtual void            updatePrinterUpdate() {}
-    virtual void            jobEndedPrinterUpdate() {}
 
     /// Set the app's (somewhat) magic/main-thread to this one.
     virtual void            updateMainThread() {}

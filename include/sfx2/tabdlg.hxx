@@ -265,8 +265,8 @@ public:
     virtual void            FillUserData();
     virtual bool            IsReadOnly() const;
     // Whether the user has canceled the dialog. Allows to restore settings, etc.
-    virtual bool IsCancelMode() { return mbCancel; }
-    virtual void SetCancelMode(bool bCancel) { mbCancel = bCancel; }
+    bool IsCancelMode() { return mbCancel; }
+    void SetCancelMode(bool bCancel) { mbCancel = bCancel; }
     virtual void PageCreated (const SfxAllItemSet& aSet);
     virtual void ChangesApplied();
     static const SfxPoolItem* GetItem( const SfxItemSet& rSet, sal_uInt16 nSlot, bool bDeep = true );

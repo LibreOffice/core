@@ -67,7 +67,7 @@ public:
 #ifdef DBG_UTIL
     virtual std::string toString() const override;
 #endif
-    virtual OOXMLValue* clone() const;
+    OOXMLValue* clone() const;
 
 private:
     typedef std::variant<std::monostate, //

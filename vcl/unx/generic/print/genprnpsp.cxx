@@ -721,7 +721,6 @@ bool PspSalPrinter::StartJob(
 
 bool PspSalPrinter::EndJob()
 {
-    GetSalInstance()->jobEndedPrinterUpdate();
     return true;
 }
 
@@ -1033,10 +1032,6 @@ void SalGenericInstance::updatePrinterUpdate()
     ::psp::PrinterInfoManager& rManager( ::psp::PrinterInfoManager::get() );
     if (rManager.checkPrintersChanged(false))
         PostPrintersChanged();
-}
-
-void SalGenericInstance::jobEndedPrinterUpdate()
-{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

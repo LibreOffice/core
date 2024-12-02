@@ -179,7 +179,7 @@ public:
     virtual bool hasTextRelief() const;
     virtual bool hasShadow() const;
     virtual bool hasTextDecoration() const;
-    virtual bool hasOutline() const;
+    bool hasOutline() const;
 
     /// compare operator
     virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;

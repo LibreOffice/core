@@ -1122,8 +1122,8 @@ public:
     /// Use OS specific way to bring user attention to current window
     virtual void FlashWindow() const;
 
-    virtual void SetTaskBarProgress(int nCurrentProgress);
-    virtual void SetTaskBarState(VclTaskBarStates eTaskBarState);
+    void SetTaskBarProgress(int nCurrentProgress);
+    void SetTaskBarState(VclTaskBarStates eTaskBarState);
 
     /** @name Accessibility
      */
