@@ -446,7 +446,7 @@ Public Function ConvertToDataArray(Optional ByRef Data As Variant _
 &apos;&apos;&apos;			If bigger than Data, fill with zero-length strings
 &apos;&apos;&apos;			If smaller than Data, truncate
 &apos;&apos;&apos;			If Rows = 1 and the input array is a vector, the data array is aligned horizontally
-&apos;&apos;&apos;				By defauly, vectors are aligned vertically.
+&apos;&apos;&apos;				By default, vectors are aligned vertically.
 &apos;&apos;&apos;			When absent, the size of the output is determined by the input array.
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		The output is always an array of nested arrays. Array and nested arrays are zero-based.
