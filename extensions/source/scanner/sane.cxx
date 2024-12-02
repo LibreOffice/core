@@ -110,8 +110,7 @@ inline oslGenericFunction Sane::LoadSymbol( const char* pSymbolname )
     oslGenericFunction pFunction = osl_getAsciiFunctionSymbol( pSaneLib, pSymbolname );
     if( ! pFunction )
     {
-        fprintf( stderr, "Could not load symbol %s\n",
-                 pSymbolname );
+        SAL_WARN( "extensions.scanner", "Could not load symbol " << pSymbolname );
         bSaneSymbolLoadFailed = true;
     }
     return pFunction;
@@ -269,11 +268,11 @@ void Sane::ReloadOptions()
     SANE_Status nStatus = p_control_option( maHandle, 0, SANE_ACTION_GET_VALUE,
                                             static_cast<void*>(pOptions), nullptr );
     if( nStatus != SANE_STATUS_GOOD )
-        fprintf( stderr, "Error: sane driver returned %s while reading number of options !\n", p_strstatus( nStatus ) );
+        SAL_WARN( "extensions.scanner", "Error: sane driver returned " << p_strstatus( nStatus ) << " while reading number of options !" );
 
     mnOptions = pOptions[ 0 ];
     if( o3tl::make_unsigned(pZero->size) > sizeof( SANE_Word ) )
-        fprintf( stderr, "driver returned number of options with larger size than SANE_Word!!!\n" );
+        SAL_WARN( "extensions.scanner", "driver returned number of options with larger size than SANE_Word!!!" );
     mppOptions.reset(new const SANE_Option_Descriptor*[ mnOptions ]);
     mppOptions[ 0 ] = pZero;
     for( int i = 1; i < mnOptions; i++ )
@@ -668,7 +667,7 @@ bool Sane::Start( BitmapTransporter& rBitmap )
                     eType = FrameStyle_Separated;
                     break;
                 default:
-                    fprintf( stderr, "Warning: unknown frame style !!!\n" );
+                    SAL_WARN( "extensions.scanner", "Unknown frame style" );
             }
 
             bool bSynchronousRead = true;
@@ -717,7 +716,7 @@ bool Sane::Start( BitmapTransporter& rBitmap )
                     tv.tv_sec = 5;
                     tv.tv_usec = 0;
                     if( select( fd+1, &fdset, nullptr, nullptr, &tv ) == 0 )
-                        fprintf( stderr, "Timeout on sane_read descriptor\n" );
+                        SAL_WARN( "extensions.scanner", "Timeout on sane_read descriptor" );
                 }
                 nLen = 0;
                 nStatus = p_read( maHandle, pBuffer.get(), BYTE_BUFFER_SIZE, &nLen );
