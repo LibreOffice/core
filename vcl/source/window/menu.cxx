@@ -2353,10 +2353,9 @@ OUString Menu::GetAccessibleDescription( sal_uInt16 nItemId ) const
 
 void Menu::GetSystemMenuData( SystemMenuData* pData ) const
 {
-    Menu* pMenu = const_cast<Menu*>(this);
-    if( pData && pMenu->ImplGetSalMenu() )
+    if (pData && ImplGetSalMenu())
     {
-        pMenu->ImplGetSalMenu()->GetSystemMenuData( pData );
+        ImplGetSalMenu()->GetSystemMenuData(pData);
     }
 }
 
