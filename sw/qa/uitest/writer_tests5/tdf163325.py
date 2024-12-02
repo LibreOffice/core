@@ -14,7 +14,8 @@ from uitest.uihelper.common import get_url_for_data_file, get_state_as_dict
 class tdf163325(UITestCase):
 
     def test_tdf163325_toc_preview_crash(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf163325.odt")):
+        xFilePath = get_url_for_data_file("tdf163325.odt")
+        with self.ui_test.load_file(xFilePath):
             # Open ToC dialog and check index preview
             with self.ui_test.execute_dialog_through_command(".uno:InsertMultiIndex") as xTocDialog:
                 xShowExample = xTocDialog.getChild("showexample")
@@ -27,7 +28,7 @@ class tdf163325(UITestCase):
             # Without the fix in place, this test would have crashed here
             self.xUITest.executeCommand(".uno:UpdateAllIndexes")
 
-        with self.ui_test.load_file(get_url_for_data_file("tdf163325.odt")) as document:
+        with self.ui_test.load_file(xFilePath) as document:
             # Check that the index is present
             xDocumentIndexes = document.DocumentIndexes
             self.assertEqual(len(xDocumentIndexes), 1)
