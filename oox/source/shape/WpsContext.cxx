@@ -674,6 +674,8 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                     xPropertySet->setPropertyValue("InteropGrabBag", uno::Any(aGrabBag));
                 }
 
+                auto xPropertySetInfo = xPropertySet->getPropertySetInfo();
+
                 if (xServiceInfo.is())
                 {
                     // Handle inset attributes for Writer textframes.
@@ -693,16 +695,29 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                         = { OUString("TextLeftDistance"), OUString("TextUpperDistance"),
                             OUString("TextRightDistance"), OUString("TextLowerDistance") };
                     for (std::size_t i = 0; i < SAL_N_ELEMENTS(aShapeProps); ++i)
-                        if (oInsets[i])
+                    {
+                        if (!oInsets[i])
+                            continue;
+                        if (xPropertySetInfo && xPropertySetInfo->hasPropertyByName(aShapeProps[i]))
                             xPropertySet->setPropertyValue(aShapeProps[i], uno::Any(*oInsets[i]));
+                        else
+                            SAL_WARN("oox", "Property: " << aShapeProps[i] << " not supported");
+                    }
                 }
 
                 // Handle text vertical adjustment inside a text frame
                 if (rAttribs.hasAttribute(XML_anchor))
                 {
-                    drawing::TextVerticalAdjust eAdjust
-                        = drawingml::GetTextVerticalAdjust(rAttribs.getToken(XML_anchor, XML_t));
-                    xPropertySet->setPropertyValue("TextVerticalAdjust", uno::Any(eAdjust));
+                    if (xPropertySetInfo
+                        && xPropertySetInfo->hasPropertyByName(u"TextVerticalAdjust"_ustr))
+                    {
+                        drawing::TextVerticalAdjust eAdjust = drawingml::GetTextVerticalAdjust(
+                            rAttribs.getToken(XML_anchor, XML_t));
+                        xPropertySet->setPropertyValue(u"TextVerticalAdjust"_ustr,
+                                                       uno::Any(eAdjust));
+                    }
+                    else
+                        SAL_WARN("oox", "Property: TextVerticalAdjust not supported");
                 }
 
                 // Apply character color of the shape to the shape's textbox.
@@ -763,9 +778,14 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                     }
                 }
 
-                auto nWrappingType = rAttribs.getToken(XML_wrap, XML_square);
-                xPropertySet->setPropertyValue("TextWordWrap",
-                                               uno::Any(nWrappingType == XML_square));
+                if (xPropertySetInfo && xPropertySetInfo->hasPropertyByName(u"TextWordWrap"_ustr))
+                {
+                    auto nWrappingType = rAttribs.getToken(XML_wrap, XML_square);
+                    xPropertySet->setPropertyValue(u"TextWordWrap"_ustr,
+                                                   uno::Any(nWrappingType == XML_square));
+                }
+                else
+                    SAL_WARN("oox", "Property: TextWordWrap not supported");
 
                 return this;
             }
@@ -819,9 +839,18 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                         "FrameIsAutomaticHeight",
                         uno::Any(getBaseToken(nElementToken) == XML_spAutoFit));
                 else
-                    xPropertySet->setPropertyValue(
-                        "TextAutoGrowHeight",
-                        uno::Any(getBaseToken(nElementToken) == XML_spAutoFit));
+                {
+                    auto xPropertySetInfo = xPropertySet->getPropertySetInfo();
+                    if (xPropertySetInfo
+                        && xPropertySetInfo->hasPropertyByName(u"TextAutoGrowHeight"_ustr))
+                    {
+                        xPropertySet->setPropertyValue(
+                            u"TextAutoGrowHeight"_ustr,
+                            uno::Any(getBaseToken(nElementToken) == XML_spAutoFit));
+                    }
+                    else
+                        SAL_WARN("oox", "Property: TextAutoGrowHeight not supported");
+                }
             }
         }
         break;
