@@ -4385,11 +4385,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
 
                     if (pInputWin)
                     {
-                        // Disable the accessible VALUE_CHANGE event
-                        bool bIsSuppressed = pInputWin->IsAccessibilityEventsSuppressed(false);
-                        pInputWin->SetAccessibilityEventsSuppressed(true);
                         pInputWin->SetPosString(aPosStr);
-                        pInputWin->SetAccessibilityEventsSuppressed(bIsSuppressed);
                         pInputWin->SetSumAssignMode();
                     }
 
