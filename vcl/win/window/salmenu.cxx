@@ -302,10 +302,9 @@ void WinSalMenu::SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const
     }
 }
 
-void WinSalMenu::GetSystemMenuData( SystemMenuData* pData )
+void WinSalMenu::GetSystemMenuData(SystemMenuData& rData)
 {
-    if( pData )
-        pData->hMenu = mhMenu;
+    rData.hMenu = mhMenu;
 }
 
 /*

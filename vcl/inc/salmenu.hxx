@@ -73,7 +73,7 @@ public:
     virtual void SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const OUString& rText )= 0;
     virtual void SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage ) = 0;
     virtual void SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const vcl::KeyCode& rKeyCode, const OUString& rKeyName ) = 0;
-    virtual void GetSystemMenuData(SystemMenuData* pData);
+    virtual void GetSystemMenuData(SystemMenuData& rData);
     virtual bool ShowNativePopupMenu(FloatingWindow * pWin, const tools::Rectangle& rRect, FloatWinPopupFlags nFlags);
     virtual void ShowCloseButton(bool bShow);
     virtual bool AddMenuBarButton( const SalMenuButtonItem& ); // return false if not implemented or failure

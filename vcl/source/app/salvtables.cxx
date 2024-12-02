@@ -214,7 +214,7 @@ SalObject::~SalObject() {}
 
 SalMenu::~SalMenu() {}
 
-void SalMenu::GetSystemMenuData(SystemMenuData*) {}
+void SalMenu::GetSystemMenuData(SystemMenuData&) {}
 
 bool SalMenu::ShowNativePopupMenu(FloatingWindow*, const tools::Rectangle&, FloatWinPopupFlags)
 {

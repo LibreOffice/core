@@ -115,7 +115,7 @@ Any SAL_CALL MenuBarManager::getMenuHandle( const Sequence< sal_Int8 >& /*Proces
     {
         SystemMenuData aSystemMenuData;
 
-        m_pVCLMenu->GetSystemMenuData( &aSystemMenuData );
+        m_pVCLMenu->GetSystemMenuData(aSystemMenuData);
 #ifdef _WIN32
         if( SystemType == SystemDependent::SYSTEM_WIN32 )
         {

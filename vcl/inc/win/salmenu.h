@@ -40,7 +40,7 @@ public:
     virtual void SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const OUString& rText ) override;
     virtual void SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage ) override;
     virtual void SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const vcl::KeyCode& rKeyCode, const OUString& rKeyName ) override;
-    virtual void GetSystemMenuData( SystemMenuData* pData ) override;
+    virtual void GetSystemMenuData(SystemMenuData& rData) override;
 
     HMENU mhMenu;           // the menu handle
     bool  mbMenuBar;        // true for menu bars

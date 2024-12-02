@@ -2351,11 +2351,11 @@ OUString Menu::GetAccessibleDescription( sal_uInt16 nItemId ) const
     return GetHelpText(nItemId);
 }
 
-void Menu::GetSystemMenuData( SystemMenuData* pData ) const
+void Menu::GetSystemMenuData(SystemMenuData& rData) const
 {
-    if (pData && ImplGetSalMenu())
+    if (ImplGetSalMenu())
     {
-        ImplGetSalMenu()->GetSystemMenuData(pData);
+        ImplGetSalMenu()->GetSystemMenuData(rData);
     }
 }
 
