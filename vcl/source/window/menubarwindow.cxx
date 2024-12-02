@@ -350,8 +350,8 @@ void MenuBarWindow::KillActivePopup()
     if ( !m_pActivePopup )
         return;
 
-    if( m_pActivePopup->pWindow )
-        if( static_cast<FloatingWindow *>(m_pActivePopup->pWindow.get())->IsInCleanUp() )
+    if (m_pActivePopup->m_pWindow)
+        if (static_cast<FloatingWindow *>(m_pActivePopup->m_pWindow.get())->IsInCleanUp())
             return; // kill it later
 
     if ( m_pActivePopup->bInCallback )
@@ -375,7 +375,7 @@ void MenuBarWindow::KillActivePopup()
         }
         m_pActivePopup->ImplGetFloatingWindow()->StopExecute();
         m_pActivePopup->ImplGetFloatingWindow()->doShutdown();
-        m_pActivePopup->pWindow.disposeAndClear();
+        m_pActivePopup->m_pWindow.disposeAndClear();
     }
     m_pActivePopup = nullptr;
 }

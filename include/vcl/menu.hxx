@@ -126,7 +126,7 @@ private:
     ImplMenuDelData* mpFirstDel;
     std::unique_ptr<MenuItemList> pItemList; // list with MenuItems
     VclPtr<Menu> pStartedFrom;
-    VclPtr<vcl::Window> pWindow;
+    VclPtr<vcl::Window> m_pWindow;
 
     Link<Menu*, bool> aActivateHdl;       // Active-Handler
     Link<Menu*, bool> aDeactivateHdl;     // Deactivate-Handler
@@ -375,7 +375,7 @@ public:
     // gets the activation key of the specified item
     KeyEvent GetActivationKey( sal_uInt16 nItemId ) const;
 
-    vcl::Window* GetWindow() const { return pWindow; }
+    vcl::Window* GetWindow() const { return m_pWindow; }
 
     void SetAccessibleName( sal_uInt16 nItemId, const OUString& rStr );
     OUString GetAccessibleName( sal_uInt16 nItemId ) const;
