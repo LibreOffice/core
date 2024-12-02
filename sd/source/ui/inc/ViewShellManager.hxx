@@ -88,6 +88,11 @@ public:
     */
     void ActivateShell(SfxShell* pShell);
 
+    /** Activate the given shell, putting it at the bottom of the stack instead of
+        the top.
+     */
+    void ActivateLowPriorityShell(SfxShell* pShell);
+
     /** Deactivate the specified shell, i.e. take it and all of its
         object bars from the shell stack.
         @param pShell

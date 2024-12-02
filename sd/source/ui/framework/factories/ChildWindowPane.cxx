@@ -48,7 +48,9 @@ ChildWindowPane::ChildWindowPane (
       mpShell(std::move(pShell)),
       mbHasBeenActivated(false)
 {
-    mrViewShellBase.GetViewShellManager()->ActivateShell(mpShell.get());
+    // ChildWindowPane shells don't implement dispatch slots, so activate them
+    // at the bottom of the shellstack.
+    mrViewShellBase.GetViewShellManager()->ActivateLowPriorityShell(mpShell.get());
 
     SfxViewFrame& rViewFrame = mrViewShellBase.GetViewFrame();
 
