@@ -43,7 +43,7 @@ char const* const* SunInfo::getJavaExePaths(int * size)
         "jre/bin/java"
 #endif
     };
-    *size = SAL_N_ELEMENTS(ar);
+    *size = std::size(ar);
     return ar;
 }
 
@@ -69,7 +69,7 @@ char const* const* SunInfo::getRuntimePaths(int * size)
         "/lib/server/libjvm.so"
 #endif
     };
-    *size = SAL_N_ELEMENTS(ar);
+    *size = std::size(ar);
     return ar;
 }
 
@@ -82,7 +82,7 @@ char const* const* SunInfo::getLibraryPaths(int* size)
         "/lib/" JFW_PLUGIN_ARCH "/native_threads",
         ("/lib/" JFW_PLUGIN_ARCH)
     };
-    *size = SAL_N_ELEMENTS(ar);
+    *size = std::size(ar);
     return ar;
 #else
     *size = 0;
