@@ -904,12 +904,7 @@ struct ImplPPTParaPropSet final : public salhelper::SimpleReferenceObject
 struct PPTParaPropSet
 {
     rtl::Reference<ImplPPTParaPropSet> mxParaSet;
-
-                        PPTParaPropSet();
-                        PPTParaPropSet( PPTParaPropSet const & rParaPropSet );
-                        ~PPTParaPropSet();
-
-    PPTParaPropSet&     operator=( const PPTParaPropSet& rParaPropSet );
+    PPTParaPropSet();
 };
 
 struct ImplPPTCharPropSet

@@ -4413,24 +4413,6 @@ PPTParaPropSet::PPTParaPropSet()
     mxParaSet->mnHasAnm = 1;
 }
 
-PPTParaPropSet::PPTParaPropSet( PPTParaPropSet const & rParaPropSet )
-{
-    mxParaSet = rParaPropSet.mxParaSet;
-}
-
-PPTParaPropSet::~PPTParaPropSet()
-{
-}
-
-PPTParaPropSet& PPTParaPropSet::operator=( const PPTParaPropSet& rParaPropSet )
-{
-    if ( this != &rParaPropSet )
-    {
-        mxParaSet = rParaPropSet.mxParaSet;
-    }
-    return *this;
-}
-
 PPTCharPropSet::PPTCharPropSet(sal_uInt32 nParagraph)
     : mnOriginalTextPos(0)
     , mnParagraph(nParagraph)
