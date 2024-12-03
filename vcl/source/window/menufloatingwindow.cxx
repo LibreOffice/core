@@ -477,9 +477,9 @@ void MenuFloatingWindow::StopExecute()
         pMenu->pStartedFrom->ImplCallEventListeners( VclEventId::MenuSubmenuDeactivate, nPosInParent );
 }
 
-void MenuFloatingWindow::KillActivePopup( PopupMenu* pThisOnly )
+void MenuFloatingWindow::KillActivePopup()
 {
-    if ( !pActivePopup || ( pThisOnly && ( pThisOnly != pActivePopup ) ) )
+    if (!pActivePopup)
         return;
 
     if (MenuFloatingWindow* pFloatWin = pActivePopup->ImplGetFloatingWindow())

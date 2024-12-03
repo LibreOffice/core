@@ -2745,8 +2745,8 @@ PopupMenu::~PopupMenu()
 void PopupMenu::ClosePopup(PopupMenu* pPopupMenu)
 {
     MenuFloatingWindow* p = ImplGetFloatingWindow();
-    if (p && pPopupMenu)
-        p->KillActivePopup(pPopupMenu);
+    if (p && pPopupMenu && p->GetActivePopup() == pPopupMenu)
+        p->KillActivePopup();
 }
 
 namespace vcl
