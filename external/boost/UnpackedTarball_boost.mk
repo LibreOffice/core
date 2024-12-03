@@ -36,6 +36,12 @@ boost_patches += Wundef.patch.0
 
 boost_patches += boost.spirit.noreturn.patch
 
+boost_patches += 0001-Add-a-comma-before-ellipsis-in-constexpr_swap.patch.2
+
+# Sent upstream as <https://github.com/boostorg/move/pull/58> "Avoid
+# -Wdeprecated-variadic-comma-omission with GCC 15 trunk -std=c++26":
+boost_patches += 0001-Avoid-Wdeprecated-variadic-comma-omission-with-GCC-1.patch.2
+
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,boost))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,boost,$(BOOST_TARBALL)))
