@@ -350,9 +350,9 @@ void MenuBarWindow::KillActivePopup()
     if ( !m_pActivePopup )
         return;
 
-    if (m_pActivePopup->m_pWindow)
-        if (static_cast<FloatingWindow *>(m_pActivePopup->m_pWindow.get())->IsInCleanUp())
-            return; // kill it later
+    FloatingWindow* pFloatWin = m_pActivePopup->ImplGetFloatingWindow();
+    if (pFloatWin && pFloatWin->IsInCleanUp())
+        return; // kill it later
 
     if ( m_pActivePopup->bInCallback )
         m_pActivePopup->bCanceled = true;
