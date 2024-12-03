@@ -5640,39 +5640,46 @@ bool PDFWriterImpl::emitCatalog()
     {
         aLine.append( "/MarkInfo<</Marked true>>\n" );
     }
-    if( !m_aWidgets.empty() )
+
+    if (!m_aWidgets.empty() || !m_aCopiedWidgets.empty())
     {
-        aLine.append( "/AcroForm<</Fields[\n" );
-        int nWidgets = m_aWidgets.size();
-        int nOut = 0;
-        for( int j = 0; j < nWidgets; j++ )
+        aLine.append("/AcroForm");
+        aLine.append("<<");
+        aLine.append("/Fields");
+        aLine.append("[ ");
+
+        for (auto const& rWidget : m_aWidgets)
         {
             // output only root fields
-            if( m_aWidgets[j].m_nParent < 1 )
+            if (rWidget.m_nParent < 1)
             {
-                aLine.append( m_aWidgets[j].m_nObject );
-                aLine.append( (nOut++ % 5)==4 ? " 0 R\n" : " 0 R " );
+                appendObjectReference(rWidget.m_nObject, aLine);
             }
         }
-        aLine.append( "\n]" );
+        // Add widgets that were copied from an external PDF
+        for (auto const& rCopiedWidget : m_aCopiedWidgets)
+        {
+            appendObjectReference(rCopiedWidget.m_nObject, aLine);
+        }
+        aLine.append(" ]\n");
 
+        bool bSigned = false;
 #if HAVE_FEATURE_NSS
         if (m_nSignatureObject != -1)
-            aLine.append( "/SigFlags 3");
+        {
+            aLine.append("/SigFlags 3 ");
+            bSigned = true;
+        }
 #endif
+        aLine.append("/DR ");
+        appendObjectReference(getResourceDictObj(), aLine);
 
-        aLine.append( "/DR " );
-        aLine.append( getResourceDictObj() );
-        aLine.append( " 0 R" );
-        // NeedAppearances must not be used if PDF is signed
-        if (m_nPDFA_Version > 0
-#if HAVE_FEATURE_NSS
-            || ( m_nSignatureObject != -1 )
-#endif
-            )
-            aLine.append( ">>\n" );
-        else
-            aLine.append( "/NeedAppearances true>>\n" );
+        // NeedAppearances must not be used if PDF is signed, PDF/A is used or
+        // we have copied widgets (can't guarantee we have appearance streams in this case)
+        if (m_nPDFA_Version == 0 && !bSigned && m_aCopiedWidgets.empty())
+            aLine.append("/NeedAppearances true ");
+
+        aLine.append(">>\n");
     }
 
     //check if there is a Metadata object
@@ -9343,6 +9350,14 @@ void PDFWriterImpl::writeReferenceXObject(const ReferenceXObjectEmit& rEmit)
             return;
         }
 
+        // Get the copied resource map, so we can use that to skip objects we already copied
+        auto& rCopiedResourcesMap = rExternalPDFStream.getCopiedResources();
+
+        // Add page mapping to the copied resources map.
+        // Needed if we reference the current page and we want to prevent copying the page
+        // if it is referenced.
+        rCopiedResourcesMap.emplace(pPage->GetObjectValue(), m_aPages.back().m_nPageObject);
+
         double aOrigin[2] = { 0.0, 0.0 };
 
         // tdf#160714 use crop box for bounds of embedded PDF object
@@ -9389,52 +9404,8 @@ void PDFWriterImpl::writeReferenceXObject(const ReferenceXObjectEmit& rEmit)
             return;
         }
 
-        // Merge link annotations from pPage to our page.
-        std::vector<filter::PDFObjectElement*> aAnnots;
-        if (auto pArray = dynamic_cast<filter::PDFArrayElement*>(pPage->Lookup("Annots"_ostr)))
-        {
-            for (const auto pElement : pArray->GetElements())
-            {
-                auto pReference = dynamic_cast<filter::PDFReferenceElement*>(pElement);
-                if (!pReference)
-                {
-                    continue;
-                }
-
-                filter::PDFObjectElement* pObject = pReference->LookupObject();
-                if (!pObject)
-                {
-                    continue;
-                }
-
-                auto pType = dynamic_cast<filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
-                if (!pType || pType->GetValue() != "Annot")
-                {
-                    continue;
-                }
-
-                auto pSubtype = dynamic_cast<filter::PDFNameElement*>(pObject->Lookup("Subtype"_ostr));
-                if (!pSubtype || pSubtype->GetValue() != "Link")
-                {
-                    continue;
-                }
-
-                // Reference to a link annotation object, remember it.
-                aAnnots.push_back(pObject);
-            }
-        }
-        if (!aAnnots.empty())
-        {
-            PDFObjectCopier aCopier(*this);
-            SvMemoryStream& rDocBuffer = pPage->GetDocument().GetEditBuffer();
-            std::map<sal_Int32, sal_Int32> aMap;
-            for (const auto& pAnnot : aAnnots)
-            {
-                // Copy over the annotation and refer to its new id.
-                sal_Int32 nNewId = aCopier.copyExternalResource(rDocBuffer, *pAnnot, aMap);
-                m_aPages.back().m_aAnnotations.push_back(nNewId);
-            }
-        }
+        // Merge link and widget annotations from pPage to our page.
+        mergeAnnotationsFromExternalPage(pPage, rCopiedResourcesMap);
 
         nWrappedFormObject = createObject();
         // Write the form XObject wrapped below. This is a separate object from
@@ -9485,8 +9456,7 @@ void PDFWriterImpl::writeReferenceXObject(const ReferenceXObjectEmit& rEmit)
         }
 
         PDFObjectCopier aCopier(*this);
-        auto & rResources = rExternalPDFStream.getCopiedResources();
-        aCopier.copyPageResources(pPage, aLine, rResources);
+        aCopier.copyPageResources(pPage, aLine, rCopiedResourcesMap);
 
         aLine.append(" /BBox [ ");
         aLine.append(aOrigin[0]);
@@ -9637,6 +9607,99 @@ void PDFWriterImpl::writeReferenceXObject(const ReferenceXObjectEmit& rEmit)
     aLine.append("\nendstream\nendobj\n\n");
     if (!writeBuffer(aLine))
         return;
+}
+
+namespace
+{
+
+sal_Int32 getRootParent(filter::PDFObjectElement* pObject)
+{
+    auto* pReference = dynamic_cast<filter::PDFReferenceElement*>(pObject->Lookup("Parent"_ostr));
+    if (!pReference)
+        return pObject->GetObjectValue();
+
+    auto* pParent = pReference->LookupObject();
+    return getRootParent(pParent);
+}
+
+} // end anonymous
+
+void PDFWriterImpl::mergeAnnotationsFromExternalPage(filter::PDFObjectElement* pPage,  std::map<sal_Int32, sal_Int32>& rCopiedResourcesMap)
+{
+    auto* pResult = pPage->Lookup("Annots"_ostr);
+    filter::PDFArrayElement* pArray = nullptr;
+    // If the Annots array is a reference - get the array from the referenced object
+    auto pAnnotsReference = dynamic_cast<filter::PDFReferenceElement*>(pResult);
+    if (pAnnotsReference)
+    {
+        filter::PDFObjectElement* pObject = pAnnotsReference->LookupObject();
+        pArray = pObject->GetArray();
+    }
+    else
+    {
+        // Not a reference so is it an array
+        pArray = dynamic_cast<filter::PDFArrayElement*>(pResult);
+    }
+
+    // Have we found our /Annots array?
+    if (!pArray)
+        return;
+
+    std::unordered_set<sal_Int32> aAlreadyCopied;
+    PDFObjectCopier aCopier(*this);
+    SvMemoryStream& rDocBuffer = pPage->GetDocument().GetEditBuffer();
+
+    for (const auto pElement : pArray->GetElements())
+    {
+        auto pReference = dynamic_cast<filter::PDFReferenceElement*>(pElement);
+        if (!pReference)
+            continue;
+
+        filter::PDFObjectElement* pObject = pReference->LookupObject();
+        if (!pObject)
+            continue;
+
+        // Get the /Type and the /Subtype
+        auto pType = dynamic_cast<filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
+        auto pSubtype = dynamic_cast<filter::PDFNameElement*>(pObject->Lookup("Subtype"_ostr));
+
+        // Is it a /Annot we want to copy?
+        if (pType && pType->GetValue() == "Annot" && pSubtype)
+        {
+            bool bIsLink = pSubtype->GetValue() == "Link";
+            bool bIsWidget = pSubtype->GetValue() == "Widget";
+
+            // is link or widget
+            if (!bIsLink && !bIsWidget)
+                continue;
+
+            // Copy over the annotation and refer to its new id.
+            sal_Int32 nNewId = aCopier.copyExternalResource(rDocBuffer, *pObject, rCopiedResourcesMap);
+            m_aPages.back().m_aAnnotations.push_back(nNewId);
+
+            if (!bIsWidget)
+                continue;
+
+            // Find the root
+            sal_Int32 nRootID = getRootParent(pObject);
+
+            auto aIterator = rCopiedResourcesMap.find(nRootID);
+            if (aIterator == rCopiedResourcesMap.end()) // Can't find the mapped ID ?
+                continue;
+
+            nNewId = aIterator->second;
+
+            // Ignore if we added the ID already
+            if (aAlreadyCopied.find(nNewId) == aAlreadyCopied.end())
+            {
+                // Add new entry into copied widgets vector
+                auto& rCopiedWidget = m_aCopiedWidgets.emplace_back();
+                rCopiedWidget.m_nObject = nNewId;
+                aAlreadyCopied.emplace(nNewId);
+            }
+        }
+    }
+
 }
 
 bool PDFWriterImpl::writeBitmapObject( const BitmapEmit& rObject, bool bMask )

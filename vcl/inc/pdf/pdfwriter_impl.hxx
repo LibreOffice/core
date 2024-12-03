@@ -483,6 +483,11 @@ struct PDFScreen : public PDFAnnotation
     }
 };
 
+struct PDFWidgetCopy
+{
+    sal_Int32 m_nObject = -1;
+};
+
 struct PDFWidget : public PDFAnnotation
 {
     PDFWriter::WidgetType       m_eType;
@@ -769,9 +774,10 @@ private:
     /* structure elements (object ids) that should have ID */
     std::unordered_set<sal_Int32> m_StructElemObjsWithID;
 
-    /* contains all widgets used in the PDF
-     */
-    std::vector<PDFWidget>              m_aWidgets;
+    /* contains all widgets used in the PDF */
+    std::vector<PDFWidget> m_aWidgets;
+    std::vector<PDFWidgetCopy> m_aCopiedWidgets;
+
     /* maps radio group id to index of radio group control in m_aWidgets */
     std::map< sal_Int32, sal_Int32 >    m_aRadioGroupWidgets;
     /* unordered_map for field names, used to ensure unique field names */
@@ -895,6 +901,8 @@ private:
     void writeJPG( const JPGEmit& rEmit );
     /// Writes the form XObject proxy for the image.
     void writeReferenceXObject(const ReferenceXObjectEmit& rEmit);
+
+    void mergeAnnotationsFromExternalPage(filter::PDFObjectElement* pPage,  std::map<sal_Int32, sal_Int32>& rCopiedResourcesMap);
 
     /* tries to find the bitmap by its id and returns its emit data if exists,
        else creates a new emit data block */
