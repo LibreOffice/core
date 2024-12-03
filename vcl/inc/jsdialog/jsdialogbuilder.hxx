@@ -10,9 +10,10 @@
 #pragma once
 
 #include <jsdialog/jsdialogregister.hxx>
+#include <jsdialog/jsdialogmessages.hxx>
+
 #include <utility>
 #include <vcl/weld.hxx>
-#include <vcl/jsdialog/executor.hxx>
 #include <vcl/virdev.hxx>
 #include <salvtables.hxx>
 #include <vcl/toolkit/button.hxx>
@@ -24,7 +25,6 @@
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <comphelper/compbase.hxx>
 
-#include <deque>
 #include <list>
 #include <mutex>
 
@@ -45,98 +45,7 @@ namespace vcl
 class ILibreOfficeKitNotifier;
 }
 
-namespace jsdialog
-{
-enum MessageType
-{
-    FullUpdate,
-    WidgetUpdate,
-    Close,
-    Action,
-    Popup,
-    PopupClose
-};
-}
-
 typedef jsdialog::WidgetRegister<weld::Widget*> WidgetMap;
-
-/// Class with the message description for storing in the queue
-class JSDialogMessageInfo
-{
-public:
-    jsdialog::MessageType m_eType;
-    VclPtr<vcl::Window> m_pWindow;
-    std::unique_ptr<jsdialog::ActionDataMap> m_pData;
-
-private:
-    void copy(const JSDialogMessageInfo& rInfo)
-    {
-        this->m_eType = rInfo.m_eType;
-        this->m_pWindow = rInfo.m_pWindow;
-        if (rInfo.m_pData)
-        {
-            std::unique_ptr<jsdialog::ActionDataMap> pData(
-                new jsdialog::ActionDataMap(*rInfo.m_pData));
-            this->m_pData = std::move(pData);
-        }
-    }
-
-public:
-    JSDialogMessageInfo(jsdialog::MessageType eType, VclPtr<vcl::Window> pWindow,
-                        std::unique_ptr<jsdialog::ActionDataMap> pData)
-        : m_eType(eType)
-        , m_pWindow(std::move(pWindow))
-        , m_pData(std::move(pData))
-    {
-    }
-
-    JSDialogMessageInfo(const JSDialogMessageInfo& rInfo) { copy(rInfo); }
-
-    JSDialogMessageInfo& operator=(JSDialogMessageInfo aInfo)
-    {
-        if (this == &aInfo)
-            return *this;
-
-        copy(aInfo);
-        return *this;
-    }
-};
-
-class JSDialogNotifyIdle final : public Idle
-{
-    // used to send message
-    VclPtr<vcl::Window> m_aNotifierWindow;
-    // used to generate JSON
-    VclPtr<vcl::Window> m_aContentWindow;
-    OUString m_sTypeOfJSON;
-    OString m_LastNotificationMessage;
-    bool m_bForce;
-
-    std::deque<JSDialogMessageInfo> m_aMessageQueue;
-    std::mutex m_aQueueMutex;
-
-public:
-    JSDialogNotifyIdle(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
-                       const OUString& sTypeOfJSON);
-
-    void Invoke() override;
-
-    void clearQueue();
-    void forceUpdate();
-    void sendMessage(jsdialog::MessageType eType, const VclPtr<vcl::Window>& pWindow,
-                     std::unique_ptr<jsdialog::ActionDataMap> pData = nullptr);
-
-private:
-    void send(const OString& sMsg);
-    OString generateFullUpdate() const;
-    OString generateWidgetUpdate(VclPtr<vcl::Window> pWindow) const;
-    OString generateCloseMessage() const;
-    OString generateActionMessage(VclPtr<vcl::Window> pWindow,
-                                  std::unique_ptr<jsdialog::ActionDataMap> pData) const;
-    OString generatePopupMessage(VclPtr<vcl::Window> pWindow, const OUString& sParentId,
-                                 const OUString& sCloseId) const;
-    OString generateClosePopupMessage(const OUString& sWindowId) const;
-};
 
 class JSDialogSender
 {
