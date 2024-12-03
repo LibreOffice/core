@@ -307,7 +307,7 @@ void A11yCheckIssuesPanel::addEntryForGroup(AccessibilityCheckGroups eGroup,
 
 void A11yCheckIssuesPanel::populateIssues()
 {
-    if (!mpDoc || !(m_xLevelExpanders[0]->is_visible() || m_xLevelExpanders[1]->is_visible()))
+    if (!mpDoc || mxUpdateBox->is_visible())
         return;
 
     SfxViewShell* pViewShell = SfxViewShell::Current();
