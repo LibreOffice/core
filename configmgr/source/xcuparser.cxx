@@ -219,6 +219,10 @@ XcuParser::Operation XcuParser::parseOperation(xmlreader::Span const & text) {
         "invalid op " + text.convertFromUtf8());
 }
 
+bool XcuParser::isAlreadyFinalized(int finalizedLayer) const {
+    return finalizedLayer != Data::NO_LAYER && finalizedLayer <= valueParser_.getLayer();
+}
+
 void XcuParser::handleComponentData(xmlreader::XmlReader & reader) {
     OStringBuffer buf(256);
     buf.append('.');
@@ -301,13 +305,12 @@ void XcuParser::handleComponentData(xmlreader::XmlReader & reader) {
         throw css::uno::RuntimeException(
             "invalid operation on root node in " + reader.getUrl());
     }
-    int finalizedLayer = std::min(
-        finalized ? valueParser_.getLayer() : Data::NO_LAYER,
-        node->getFinalized());
-    node->setFinalized(finalizedLayer);
-    if (finalizedLayer < valueParser_.getLayer()) {
+    if (isAlreadyFinalized(node->getFinalized())) {
         state_.push(State::Ignore(true));
         return;
+    }
+    if (finalized) {
+        node->setFinalized(valueParser_.getLayer());
     }
     state_.push(State::Modify(node));
 }
@@ -367,7 +370,7 @@ void XcuParser::handleItem(xmlreader::XmlReader & reader) {
     default:
         break;
     }
-    if (finalizedLayer < valueParser_.getLayer()) {
+    if (isAlreadyFinalized(finalizedLayer)) {
         state_.push(State::Ignore(true));
         return;
     }
@@ -660,13 +663,12 @@ void XcuParser::handlePlainGroupProp(
         state_.push(State::Ignore(true));
         return;
     }
-    int finalizedLayer = std::min(
-        finalized ? valueParser_.getLayer() : Data::NO_LAYER,
-        property->getFinalized());
-    property->setFinalized(finalizedLayer);
-    if (finalizedLayer < valueParser_.getLayer()) {
+    if (isAlreadyFinalized(property->getFinalized())) {
         state_.push(State::Ignore(true));
         return;
+    }
+    if (finalized) {
+        property->setFinalized(valueParser_.getLayer());
     }
     if (type != TYPE_ERROR && property->getStaticType() != TYPE_ANY &&
         type != property->getStaticType())
@@ -703,13 +705,12 @@ void XcuParser::handleLocalizedGroupProp(
         state_.push(State::Ignore(true));
         return;
     }
-    int finalizedLayer = std::min(
-        finalized ? valueParser_.getLayer() : Data::NO_LAYER,
-        property->getFinalized());
-    property->setFinalized(finalizedLayer);
-    if (finalizedLayer < valueParser_.getLayer()) {
+    if (isAlreadyFinalized(property->getFinalized())) {
         state_.push(State::Ignore(true));
         return;
+    }
+    if (finalized) {
+        property->setFinalized(valueParser_.getLayer());
     }
     if (type != TYPE_ERROR && property->getStaticType() != TYPE_ANY &&
         type != property->getStaticType())
@@ -798,13 +799,12 @@ void XcuParser::handleGroupNode(
         throw css::uno::RuntimeException(
             "invalid operation on group node in " + reader.getUrl());
     }
-    int finalizedLayer = std::min(
-        finalized ? valueParser_.getLayer() : Data::NO_LAYER,
-        child->getFinalized());
-    child->setFinalized(finalizedLayer);
-    if (finalizedLayer < valueParser_.getLayer()) {
+    if (isAlreadyFinalized(child->getFinalized())) {
         state_.push(State::Ignore(true));
         return;
+    }
+    if (finalized) {
+        child->setFinalized(valueParser_.getLayer());
     }
     state_.push(State::Modify(child));
 }
@@ -877,12 +877,15 @@ void XcuParser::handleSetNode(xmlreader::XmlReader & reader, SetNode * set) {
             "set member node " + name + " references undefined template " +
             templateName + " in " + reader.getUrl());
     }
+    bool alreadyFinalized = false;
     int finalizedLayer = finalized ? valueParser_.getLayer() : Data::NO_LAYER;
     int mandatoryLayer = mandatory ? valueParser_.getLayer() : Data::NO_LAYER;
     NodeMap & members = set->getMembers();
     NodeMap::iterator i(members.find(name));
     if (i != members.end()) {
-        finalizedLayer = std::min(finalizedLayer, i->second->getFinalized());
+        auto const fin = i->second->getFinalized();
+        alreadyFinalized = isAlreadyFinalized(fin);
+        finalizedLayer = std::min(finalizedLayer, fin);
         i->second->setFinalized(finalizedLayer);
         mandatoryLayer = std::min(mandatoryLayer, i->second->getMandatory());
         i->second->setMandatory(mandatoryLayer);
@@ -891,7 +894,7 @@ void XcuParser::handleSetNode(xmlreader::XmlReader & reader, SetNode * set) {
             return;
         }
     }
-    if (finalizedLayer < valueParser_.getLayer()) {
+    if (alreadyFinalized) {
         state_.push(State::Ignore(true));
         return;
     }
