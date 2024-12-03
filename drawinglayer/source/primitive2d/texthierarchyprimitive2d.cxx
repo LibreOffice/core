@@ -19,6 +19,7 @@
 
 #include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+#include <comphelper/lok.hxx>
 
 
 using namespace com::sun::star;
@@ -146,7 +147,8 @@ namespace drawinglayer::primitive2d
             const geometry::ViewInformation2D& rViewInformation) const
         {
             // check if TextEdit is active. If not, process. If yes, suppress the content
-            if (!rViewInformation.getTextEditActive())
+            // lok case: always decompose it when we're rendering a slide show
+            if (!rViewInformation.getTextEditActive() || comphelper::LibreOfficeKit::isSlideshowRendering())
                 GroupPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
         }
 

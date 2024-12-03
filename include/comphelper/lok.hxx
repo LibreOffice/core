@@ -70,6 +70,10 @@ COMPHELPER_DLLPUBLIC bool isForkedChild();
 COMPHELPER_DLLPUBLIC void setLocalRendering(bool bLocalRendering = true);
 COMPHELPER_DLLPUBLIC bool isLocalRendering();
 
+/// Used by SlideshowLayerRenderer for signaling that a slide rendering is occurring.
+COMPHELPER_DLLPUBLIC void setSlideshowRendering(bool bSlideshowRendering);
+COMPHELPER_DLLPUBLIC bool isSlideshowRendering();
+
 /// Check whether clients want a part number in an invalidation payload.
 COMPHELPER_DLLPUBLIC bool isPartInInvalidation();
 /// Set whether clients want a part number in an invalidation payload.

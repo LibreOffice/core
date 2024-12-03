@@ -31,6 +31,7 @@
 #include <drawdoc.hxx>
 #include <unokywds.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/lok.hxx>
 
 #include <com/sun/star/animations/XAnimate.hpp>
 #include <com/sun/star/animations/XAnimationNode.hpp>
@@ -41,7 +42,6 @@
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/BufferedDecompositionPrimitive2D.hxx>
-#include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
 #include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
 
 #include <drawinglayer/tools/primitive2dxmldump.hxx>
@@ -222,6 +222,18 @@ findTextBlock(drawinglayer::primitive2d::Primitive2DContainer const& rContainer,
                 drawinglayer::primitive2d::Primitive2DContainer aPrimitiveContainer;
                 pBasePrimitive->get2DDecomposition(aPrimitiveContainer, rViewInformation2D);
                 auto* pTextBlock = findTextBlock(aPrimitiveContainer, rViewInformation2D);
+                if (pTextBlock)
+                    return pTextBlock;
+            }
+
+            // for text object in edit mode
+            auto* pTextEditPrimitive
+                = dynamic_cast<drawinglayer::primitive2d::TextHierarchyEditPrimitive2D*>(
+                    pBasePrimitive);
+            if (pTextEditPrimitive)
+            {
+                auto* pTextBlock
+                    = findTextBlock(pTextEditPrimitive->getChildren(), rViewInformation2D);
                 if (pTextBlock)
                     return pTextBlock;
             }
@@ -740,7 +752,20 @@ void SlideshowLayerRenderer::createViewAndDraw(
     Point aPoint;
 
     vcl::Region aRegion(::tools::Rectangle(aPoint, aPageSize));
-    aView.CompleteRedraw(rRenderContext.maVirtualDevice, aRegion, pRedirector);
+
+    // Rendering of a text shape in edit mode is performed by decomposing the TextHierarchyEditPrimitive2D instance.
+    // Usually such kind of primitive doesn't decompose on primitive processing, so we need to signal through a flag
+    // that a slideshow rendering is going to be performed in order to enable the decomposition.
+    // Using TextHierarchyEditPrimitive2D decomposition in place of TextEditDrawing for rendering a text object
+    // in edit mode allows to animate a single paragraph even when the related text object is in edit mode.
+    comphelper::LibreOfficeKit::setSlideshowRendering(true);
+    // Redraw slide but skip EndCompleteRedraw() which uses TextEditDrawing for rendering text when a text object is
+    // in edit mode. TextEditDrawing was causing to have artifacts displayed while playing the slideshow such as
+    // a tiny rectangle around the edited text shape.
+    SdrPaintWindow* pPaintWindow = aView.BeginCompleteRedraw(rRenderContext.maVirtualDevice);
+    OSL_ENSURE(pPaintWindow, "SlideshowLayerRenderer::createViewAndDraw: No OutDev (!)");
+    aView.DoCompleteRedraw(*pPaintWindow, aRegion, pRedirector);
+    comphelper::LibreOfficeKit::setSlideshowRendering(false);
 }
 
 namespace

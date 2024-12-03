@@ -40,6 +40,8 @@ static bool g_bViewIdForVisCursorInvalidation(false);
 
 static bool g_bLocalRendering(false);
 
+static bool g_bSlideshowRendering(false);
+
 static Compat g_eCompatFlags(Compat::none);
 
 static std::function<bool(void*, int)> g_pAnyInputCallback;
@@ -203,6 +205,16 @@ void setLocalRendering(bool bLocalRendering)
 bool isLocalRendering()
 {
     return g_bLocalRendering;
+}
+
+void setSlideshowRendering(bool bSlideshowRendering)
+{
+    g_bSlideshowRendering = bSlideshowRendering;
+}
+
+bool isSlideshowRendering()
+{
+    return g_bSlideshowRendering;
 }
 
 void setCompatFlag(Compat flag) { g_eCompatFlags = static_cast<Compat>(g_eCompatFlags | flag); }
