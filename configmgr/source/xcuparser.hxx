@@ -73,6 +73,8 @@ private:
 
     static Operation parseOperation(xmlreader::Span const & text);
 
+    bool isAlreadyFinalized(int finalizedLayer) const;
+
     void handleComponentData(xmlreader::XmlReader & reader);
 
     void handleItem(xmlreader::XmlReader & reader);
