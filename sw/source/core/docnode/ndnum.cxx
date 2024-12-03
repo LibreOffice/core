@@ -27,18 +27,20 @@
 #include <fmtanchr.hxx>
 #include <poolfmt.hxx>
 
-static const SwNode* getNodeOrAnchorNode(const SwNode* pNode)
+static const SwNode* getNodeOrAnchorNode(const SwNode* pNode, bool bCheckInlineHeading = true)
 {
     // if pNode is an inline heading in an Inline Heading
     // text frame, return its anchor node instead of pNode
+    // if bCheckInlineHeading == false, it's enough to be in an
+    // arbitrary text frame to return its anchor node
     if (const auto pFlyFormat = pNode->GetFlyFormat())
     {
         SwFormatAnchor const*const pAnchor = &pFlyFormat->GetAnchor();
         SwNode const*const pAnchorNode = pAnchor->GetAnchorNode();
         const SwFormat* pParent = pFlyFormat->DerivedFrom();
-        if ( pAnchorNode && pParent &&
+        if ( pAnchorNode && pParent && ( !bCheckInlineHeading || (
                 RndStdIds::FLY_AS_CHAR == pAnchor->GetAnchorId() &&
-                pParent->GetPoolFormatId() == RES_POOLFRM_INLINE_HEADING )
+                pParent->GetPoolFormatId() == RES_POOLFRM_INLINE_HEADING ) ) )
         {
             return pAnchorNode;
         }
@@ -58,9 +60,9 @@ bool SwOutlineNodes::Seek_Entry(const SwNode* rP, size_type* pnPos) const
     return it != end() && rP->GetIndex() == (*it)->GetIndex();
 }
 
-const SwNode* SwOutlineNodes::GetRootNode(const SwNode* pNode)
+const SwNode* SwOutlineNodes::GetRootNode(const SwNode* pNode, bool bCheckInlineHeading)
 {
-    return getNodeOrAnchorNode(pNode);
+    return getNodeOrAnchorNode(pNode, bCheckInlineHeading);
 }
 
 bool CompareSwOutlineNodesInline::operator()(const SwNode* lhs, const SwNode* rhs) const

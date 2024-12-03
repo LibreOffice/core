@@ -1174,7 +1174,7 @@ void SwDocShell::Hide(const OUString &rName, SfxStyleFamily nFamily, bool bHidde
     }
 }
 
-#define MAX_CHAR_IN_INLINE_HEADING 75
+#define MAX_CHAR_IN_INLINE_HEADING 120
 bool SwDocShell::MakeInlineHeading(SwWrtShell *pSh, SwTextFormatColl* pColl, const sal_uInt16 nMode)
 {
     // insert an inline heading frame, if only MAX_CHAR_IN_INLINE_HEADING or less
@@ -1185,6 +1185,15 @@ bool SwDocShell::MakeInlineHeading(SwWrtShell *pSh, SwTextFormatColl* pColl, con
             0 < GetView()->GetSelectionText().getLength() )
     {
         SwTextFormatColl *pLocal = pColl? pColl: (*GetDoc()->GetTextFormatColls())[0];
+        // don't put inline heading in a frame (it would be enough to limit for inline heading
+        // frames, but the recent FN_INSERT_FRAME cannot handle the insertion inside a frame
+        // correctly)
+        // TODO: allow to insert inline headings in a (not an Inline Heading) text frame
+        if ( pSh->GetCursor()->GetPointNode() !=
+                *SwOutlineNodes::GetRootNode( &pSh->GetCursor()->GetPointNode(), /*bInlineHeading=*/false ) )
+        {
+            return false;
+        }
 
         // put inside a single Undo
         SwRewriter aRewriter;
@@ -1271,7 +1280,7 @@ SfxStyleFamily SwDocShell::ApplyStyles(const OUString &rName, SfxStyleFamily nFa
                 // outline node's content is folded.
                 MakeAllOutlineContentTemporarilyVisible a(GetDoc());
 
-                // if the first 75 or less characters are selected, but not the full paragraph,
+                // if the first 120 or less characters are selected, but not the full paragraph,
                 // create an inline heading from the selected text
                 SwTextFormatColl* pColl = pStyle->GetCollection();
                 if ( MakeInlineHeading( pSh, pColl, nMode ) )

@@ -81,7 +81,7 @@ public:
     static constexpr auto npos = std::numeric_limits<size_type>::max();
 
     bool Seek_Entry(const SwNode* rP, size_type* pnPos) const;
-    static const SwNode* GetRootNode(const SwNode* pNode);
+    static const SwNode* GetRootNode(const SwNode* pNode, bool bCheckInlineHeading = true);
 };
 
 struct CompareSwOutlineNodesInline
