@@ -519,11 +519,11 @@ SvParserState SwHTMLParser::CallParser()
         aInsertionRangePam.Move( fnMoveBackward );
         m_xDoc->getIDocumentRedlineAccess().SplitRedline( aInsertionRangePam );
 
-        if (SwAttrSet const*const pAttrs = pPos->nNode.GetNode().GetTextNode()->GetpSwAttrSet())
+        ::std::unique_ptr<SfxItemSet> pSet{new SfxItemSet(m_xDoc->GetAttrPool(),
+                        RES_CHRATR_BEGIN, RES_CHRATR_END-1)};
+        if (pPos->nNode.GetNode().GetTextNode()->GetAttr(*pSet, 0, 0, false, false))
         {
-            m_pTargetCharAttrs.reset(new SfxItemSet(*pAttrs->GetPool(),
-                        RES_CHRATR_BEGIN, RES_CHRATR_END-1));
-            m_pTargetCharAttrs->Put(*pAttrs);
+            m_pTargetCharAttrs = std::move(pSet);
         }
 
         m_xDoc->SetTextFormatColl( *m_pPam,

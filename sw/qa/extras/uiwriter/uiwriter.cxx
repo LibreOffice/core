@@ -9,6 +9,7 @@
 
 #include <memory>
 #include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/document/XDocumentInsertable.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
@@ -97,6 +98,7 @@
 #include <swdtflvr.hxx>
 #include <editeng/svxenum.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/seqstream.hxx>
 #include <sfx2/classificationhelper.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <sfx2/viewfrm.hxx>
@@ -263,6 +265,7 @@ public:
     void testTdf113877_default_style();
     void testTdf113877_Standard_style();
     void testPlaceholderHTMLPaste();
+    void testPlaceholderHTMLInsert();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -410,6 +413,7 @@ public:
     CPPUNIT_TEST(testTdf113877_default_style);
     CPPUNIT_TEST(testTdf113877_Standard_style);
     CPPUNIT_TEST(testPlaceholderHTMLPaste);
+    CPPUNIT_TEST(testPlaceholderHTMLInsert);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -5197,6 +5201,48 @@ void SwUiWriterTest::testPlaceholderHTMLPaste()
         { { "SelectedFormat", uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::HTML)) } });
 
     lcl_dispatchCommand(mxComponent, ".uno:ClipboardFormatItems", aPropertyValues);
+
+    CPPUNIT_ASSERT_EQUAL(int(4), getParagraphs());
+
+    CPPUNIT_ASSERT_EQUAL(
+        awt::FontWeight::NORMAL,
+        getProperty<float>(getRun(getParagraph(1), 1, "Test "), "CharWeight"));
+    CPPUNIT_ASSERT_EQUAL(
+        awt::FontWeight::BOLD,
+        getProperty<float>(getRun(getParagraph(1), 2, "AAA"), "CharWeight"));
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD,
+                         getProperty<float>(getParagraph(2), "CharWeight"));
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD,
+                         getProperty<float>(getParagraph(3), "CharWeight"));
+    CPPUNIT_ASSERT_EQUAL(
+        awt::FontWeight::NORMAL,
+        getProperty<float>(getRun(getParagraph(4), 1, " test"), "CharWeight"));
+}
+
+void SwUiWriterTest::testPlaceholderHTMLInsert()
+{
+    createDoc("placeholder-bold-cs.fodt");
+
+    // select placeholder field
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextCursor> xCursor{ xTextDocument->getText()->createTextCursor() };
+    xCursor->gotoStart(false);
+    xCursor->goRight(5, false);
+    xCursor->goRight(1, true);
+
+    sal_Int8 const html[] = "<meta http-equiv=\"content-type\" content=\"text/html; "
+                            "charset=utf-8\"><p>AAA</p><p>BBB</p><p>CCC</p>";
+    uno::Sequence<sal_Int8> seq{html, sizeof(html)};
+    uno::Reference<io::XInputStream> xStream{ new comphelper::SequenceInputStream{seq} };
+
+    // insert HTML file
+    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+        { { "InputStream", uno::Any(xStream) },
+          { "Hidden", uno::Any(true) },
+          { "FilterName", uno::Any(OUString("HTML (StarWriter)")) } });
+
+    uno::Reference<document::XDocumentInsertable> xDocInsert{ xCursor, uno::UNO_QUERY };
+    xDocInsert->insertDocumentFromURL("private:stream", aPropertyValues);
 
     CPPUNIT_ASSERT_EQUAL(int(4), getParagraphs());
 
