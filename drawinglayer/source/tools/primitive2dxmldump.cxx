@@ -62,6 +62,7 @@
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
 #include <drawinglayer/attribute/sdrfillgraphicattribute.hxx>
 #include <drawinglayer/attribute/materialattribute3d.hxx>
+#include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
 
 using namespace drawinglayer::primitive2d;
 
@@ -1095,6 +1096,18 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 pBasePrimitive->get2DDecomposition(aPrimitiveContainer,
                                                    drawinglayer::geometry::ViewInformation2D());
                 decomposeAndWrite(aPrimitiveContainer, rWriter);
+                rWriter.endElement();
+                break;
+            }
+
+            case PRIMITIVE2D_ID_TEXTHIERARCHYEDITPRIMITIVE2D:
+            {
+                rWriter.startElement("texthierarchyedit");
+                const auto* pTextHierarchyEditPrimitive
+                    = dynamic_cast<const drawinglayer::primitive2d::TextHierarchyEditPrimitive2D*>(
+                        pBasePrimitive);
+                if (pTextHierarchyEditPrimitive)
+                    decomposeAndWrite(pTextHierarchyEditPrimitive->getContent(), rWriter);
                 rWriter.endElement();
                 break;
             }

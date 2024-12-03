@@ -19,6 +19,7 @@
 
 #include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+#include <comphelper/lok.hxx>
 
 
 using namespace com::sun::star;
@@ -146,6 +147,14 @@ namespace drawinglayer::primitive2d
         sal_uInt32 TextHierarchyEditPrimitive2D::getPrimitive2DID() const
         {
             return PRIMITIVE2D_ID_TEXTHIERARCHYEDITPRIMITIVE2D;
+        }
+
+        void TextHierarchyEditPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& /*rViewInformation*/) const
+        {
+            // lok case: decompose it when we're rendering a slide show
+            if (!comphelper::LibreOfficeKit::isSlideshowRendering())
+                return;
+            rVisitor.visit(getContent());
         }
 
 } // end of namespace

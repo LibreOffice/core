@@ -183,6 +183,9 @@ namespace drawinglayer::primitive2d
 
             /// provide unique ID
             virtual sal_uInt32 getPrimitive2DID() const override;
+
+            void get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor,
+                                    const geometry::ViewInformation2D& rViewInformation) const override;
         };
 } // end of namespace drawinglayer::primitive2d
 
