@@ -439,6 +439,25 @@ static bool isMouseScrollWheelEvent( NSEvent *pEvent )
     {
         mpFrame->UpdateFrameGeometry();
         mpFrame->CallCallback( SalEvent::Move, nullptr );
+
+#if HAVE_FEATURE_SKIA
+        // tdf#163734 Flush parent frame when Skia is enabled
+        // When a dockable window is dragged by its titlebar, a rectangle
+        // may be drawn in its parent window. However, the Skia flush
+        // timer doesn't run until after the mouse button has been
+        // released (probably due to lowering of the Skia flush timer's
+        // priority to fix tdf#163734). So run the parent frame's Skia
+        // flush timer immediately to display the rectangle.
+        if ( SkiaHelper::isVCLSkiaEnabled() &&
+             mpFrame->mbShown && mpFrame->mpParent &&
+             AquaSalFrame::isAlive( mpFrame->mpParent ) &&
+             mpFrame->mpParent->mbShown )
+        {
+            AquaSalGraphics* pGraphics = mpFrame->mpParent->mpGraphics;
+            if ( pGraphics )
+                pGraphics->Flush();
+        }
+#endif
     }
 }
 
@@ -1997,7 +2016,21 @@ static bool isMouseScrollWheelEvent( NSEvent *pEvent )
         aString = [[[NSAttributedString alloc] initWithString:aString] autorelease];
 
     // Reset cached state
+    BOOL bOldHasMarkedText = [self hasMarkedText];
     [self unmarkText];
+
+    // tdf#163876 ignore marked text generated from Command-` events
+    // For some unknown reason, when using the standard macOS French
+    // layout, pressing Command-` causes -[NSView interpretKeyEvents:]
+    // to temporarily set and unset the marked text.
+    // Command-` should only cycle through the application's windows
+    // so ignore marked text changes from such key down events.
+    if( !bOldHasMarkedText && mpLastEvent && [mpLastEvent type] == NSEventTypeKeyDown && [mpLastEvent keyCode] == 42 && ( [mpLastEvent modifierFlags] & ( NSEventModifierFlagCommand | NSEventModifierFlagOption | NSEventModifierFlagControl | NSEventModifierFlagShift ) ) == NSEventModifierFlagCommand )
+    {
+        NSString* pUnmodifiedString = [mpLastEvent charactersIgnoringModifiers];
+        if( pUnmodifiedString && ![pUnmodifiedString length] )
+            return;
+    }
 
     int len = [aString length];
     bool bReschedule = false;

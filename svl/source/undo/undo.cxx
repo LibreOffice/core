@@ -575,13 +575,9 @@ bool SfxUndoManager::ImplAddUndoAction_NoNotify( std::unique_ptr<SfxUndoAction> 
             if (m_xData->pActUndoArray->nCurUndoAction > 0)
             {
                 --m_xData->pActUndoArray->nCurUndoAction;
+                // fdo#66071 invalidate the current empty mark when removing
+                --m_xData->mnEmptyMark;
             }
-            else
-            {
-                assert(!"CurrentUndoAction going negative (!)");
-            }
-            // fdo#66071 invalidate the current empty mark when removing
-            --m_xData->mnEmptyMark;
         }
     }
 

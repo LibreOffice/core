@@ -45,8 +45,8 @@ CAIRO_TARBALL := cairo-1.17.$(CAIRO_VERSION_MICRO).tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-CDR_SHA256SUM := 5666249d613466b9aa1e987ea4109c04365866e9277d80f6cd9663e86b8ecdd4
-CDR_TARBALL := libcdr-0.1.7.tar.xz
+CDR_SHA256SUM := ced677c8300b29c91d3004bb1dddf0b99761bf5544991c26c2ee8f427e87193c
+CDR_TARBALL := libcdr-0.1.8.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
@@ -105,8 +105,8 @@ EPUBGEN_TARBALL := libepubgen-0.1.1.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-ETONYEK_SHA256SUM := b430435a6e8487888b761dc848b7981626eb814884963ffe25eb26a139301e9a
-ETONYEK_VERSION_MICRO := 10
+ETONYEK_SHA256SUM := b9fa82fbeb8cb7a701101060e4f3e1e4ef7c38f574b2859d3ecbe43604c21f83
+ETONYEK_VERSION_MICRO := 12
 ETONYEK_TARBALL := libetonyek-0.1.$(ETONYEK_VERSION_MICRO).tar.xz
 # three static lines
 # so that git cherry-pick
@@ -167,13 +167,13 @@ FONT_NOTO_KUFI_ARABIC_TARBALL := NotoKufiArabic-v2.109.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-FONT_NOTO_SANS_SHA256SUM := 1dffbaf31a0a699ee2c57dfb60c1a628010425301dd076cfb485adbe017352c1
-FONT_NOTO_SANS_TARBALL := NotoSans-v2.014.zip
+FONT_NOTO_SANS_SHA256SUM := 0c34df072a3fa7efbb7cbf34950e1f971a4447cffe365d3a359e2d4089b958f5
+FONT_NOTO_SANS_TARBALL := NotoSans-v2.015.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-FONT_NOTO_SERIF_SHA256SUM := 6abce0a80df4ef6d5a944d60c81099364481d6a7015b0721d87bc4c16acc1fd3
-FONT_NOTO_SERIF_TARBALL := NotoSerif-v2.014.zip
+FONT_NOTO_SERIF_SHA256SUM := 0e9a43c8a4b94ac76f55069ed1d7385bbcaf6b99527a94deb5619e032b7e76c1
+FONT_NOTO_SERIF_TARBALL := NotoSerif-v2.015.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
@@ -503,8 +503,8 @@ ONLINEUPDATE_TARBALL := onlineupdate-c003be8b9727672e7d30972983b375f4c200233f-2.
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-OPENLDAP_SHA256SUM := 48969323e94e3be3b03c6a132942dcba7ef8d545f2ad35401709019f696c3c4e
-OPENLDAP_TARBALL := openldap-2.6.8.tgz
+OPENLDAP_SHA256SUM := 2cb7dc73e9c8340dff0d99357fbaa578abf30cc6619f0521972c555681e6b2ff
+OPENLDAP_TARBALL := openldap-2.6.9.tgz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts

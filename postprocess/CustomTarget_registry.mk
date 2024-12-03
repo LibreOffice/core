@@ -309,6 +309,7 @@ endif
 
 ifneq ($(ENABLE_MACOSX_SANDBOX),)
 postprocess_FILES_main += $(postprocess_MOD)/org/openoffice/Office/UI/Infobar-macosxsandbox.xcu
+postprocess_FILES_main += $(postprocess_MOD)/org/openoffice/Office/Common-macosxsandbox.xcu
 endif
 
 ifneq (,$(SYSTEM_LIBEXTTEXTCAT_DATA))

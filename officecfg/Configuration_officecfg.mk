@@ -87,6 +87,7 @@ $(eval $(call gb_Configuration_add_spool_modules,registry,officecfg/registry/dat
 	org/openoffice/Office/Common-unx.xcu \
 	org/openoffice/Office/Common-unixdesktop.xcu \
 	org/openoffice/Office/Common-macosx.xcu \
+	org/openoffice/Office/Common-macosxsandbox.xcu \
 	org/openoffice/Office/Common-wnt.xcu \
 	org/openoffice/Office/Common-UseOOoFileDialogs.xcu \
 	org/openoffice/Office/Common-32bit.xcu \

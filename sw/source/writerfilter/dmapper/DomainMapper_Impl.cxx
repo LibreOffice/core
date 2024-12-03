@@ -8037,7 +8037,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                         }
 
                         //extract quick help text
-                        if (sCommand.getLength() > nIndex + 1)
+                        if (nIndex != -1 && sCommand.getLength() > nIndex + 1)
                         {
                             xFieldProperties->setPropertyValue(
                                 getPropertyName(PROP_HINT),
