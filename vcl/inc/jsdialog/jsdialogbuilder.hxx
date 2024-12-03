@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include <jsdialog/jsdialogregister.hxx>
 #include <utility>
 #include <vcl/weld.hxx>
 #include <vcl/jsdialog/executor.hxx>
@@ -44,8 +45,6 @@ namespace vcl
 class ILibreOfficeKitNotifier;
 }
 
-typedef std::map<OUString, weld::Widget*> WidgetMap;
-
 namespace jsdialog
 {
 enum MessageType
@@ -58,6 +57,8 @@ enum MessageType
     PopupClose
 };
 }
+
+typedef jsdialog::WidgetRegister<weld::Widget*> WidgetMap;
 
 /// Class with the message description for storing in the queue
 class JSDialogMessageInfo
@@ -211,6 +212,10 @@ public:
 
 class JSInstanceBuilder final : public SalInstanceBuilder, public JSDialogSender
 {
+    static jsdialog::WidgetRegister<std::shared_ptr<WidgetMap>> m_aWidgets;
+    static jsdialog::WidgetRegister<VclPtr<vcl::Window>> m_aPopups;
+    static jsdialog::WidgetRegister<weld::Menu*> m_aMenus;
+
     sal_uInt64 m_nWindowId;
     /// used in case of tab pages where dialog is not a direct top level
     VclPtr<vcl::Window> m_aParentDialog;
@@ -238,12 +243,10 @@ class JSInstanceBuilder final : public SalInstanceBuilder, public JSDialogSender
                                                    const OUString& rWidget,
                                                    std::unique_ptr<jsdialog::ActionDataMap> pData);
 
-    static std::map<OUString, WidgetMap>& GetLOKWeldWidgetsMap();
     static void InsertWindowToMap(const OUString& nWindowId);
     void RememberWidget(OUString id, weld::Widget* pWidget);
     static void RememberWidget(const OUString& nWindowId, const OUString& id,
                                weld::Widget* pWidget);
-    static weld::Widget* FindWeldWidgetsMap(const OUString& nWindowId, const OUString& rWidget);
 
     OUString getMapIdFromWindowId() const;
 
@@ -327,19 +330,14 @@ public:
                         VclButtonsType eButtonType, const OUString& rPrimaryMessage,
                         const vcl::ILibreOfficeKitNotifier* pNotifier = nullptr);
 
-    static void AddChildWidget(const OUString& nWindowId, const OUString& id,
-                               weld::Widget* pWidget);
-    static void RemoveWindowWidget(const OUString& nWindowId);
+    // regular widgets
+    static jsdialog::WidgetRegister<std::shared_ptr<WidgetMap>>& Widgets() { return m_aWidgets; };
 
     // we need to remember original popup window to close it properly (its handled by vcl)
-    static void RememberPopup(const OUString& nWindowId, const VclPtr<vcl::Window>& pWidget);
-    static void ForgetPopup(const OUString& nWindowId);
-    static vcl::Window* FindPopup(const OUString& nWindowId);
+    static jsdialog::WidgetRegister<VclPtr<vcl::Window>>& Popups() { return m_aPopups; }
 
     // menus in separate container as they don't share base class with weld::Widget
-    static void RememberMenu(const OUString& nWindowId, weld::Menu* pMenu);
-    static void ForgetMenu(const OUString& nWindowId);
-    static weld::Menu* FindMenu(const OUString& nWindowId);
+    static jsdialog::WidgetRegister<weld::Menu*>& Menus() { return m_aMenus; }
 
 private:
     const OUString& GetTypeOfJSON() const;

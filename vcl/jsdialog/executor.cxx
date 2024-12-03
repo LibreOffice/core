@@ -37,7 +37,8 @@ StringMap jsonToStringMap(const char* pJSON)
 
 void SendFullUpdate(const OUString& nWindowId, const OUString& rWidget)
 {
-    weld::Widget* pWidget = JSInstanceBuilder::FindWeldWidgetsMap(nWindowId, rWidget);
+    auto aWidgetMap = JSInstanceBuilder::Widgets().Find(nWindowId);
+    weld::Widget* pWidget = aWidgetMap ? aWidgetMap->Find(rWidget) : nullptr;
     if (auto pJSWidget = dynamic_cast<BaseJSWidget*>(pWidget))
         pJSWidget->sendFullUpdate();
 }
@@ -45,14 +46,16 @@ void SendFullUpdate(const OUString& nWindowId, const OUString& rWidget)
 void SendAction(const OUString& nWindowId, const OUString& rWidget,
                 std::unique_ptr<ActionDataMap> pData)
 {
-    weld::Widget* pWidget = JSInstanceBuilder::FindWeldWidgetsMap(nWindowId, rWidget);
+    auto aWidgetMap = JSInstanceBuilder::Widgets().Find(nWindowId);
+    weld::Widget* pWidget = aWidgetMap ? aWidgetMap->Find(rWidget) : nullptr;
     if (auto pJSWidget = dynamic_cast<BaseJSWidget*>(pWidget))
         pJSWidget->sendAction(std::move(pData));
 }
 
 bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, StringMap& rData)
 {
-    weld::Widget* pWidget = JSInstanceBuilder::FindWeldWidgetsMap(nWindowId, rWidget);
+    auto aWidgetMap = JSInstanceBuilder::Widgets().Find(nWindowId);
+    weld::Widget* pWidget = aWidgetMap ? aWidgetMap->Find(rWidget) : nullptr;
 
     OUString sControlType = rData[u"type"_ustr];
     OUString sAction = rData[u"cmd"_ustr];
@@ -63,7 +66,8 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, StringMap
         if (pWidget == nullptr || (pButton && !pButton->is_custom_handler_set()))
         {
             // welded wrapper not found - use response code instead
-            pWidget = JSInstanceBuilder::FindWeldWidgetsMap(nWindowId, u"__DIALOG__"_ustr);
+            auto aWindowMap = JSInstanceBuilder::Widgets().Find(nWindowId);
+            pWidget = aWindowMap ? aWindowMap->Find(u"__DIALOG__"_ustr) : nullptr;
             sControlType = "dialog";
             sAction = "response";
         }
@@ -79,7 +83,7 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, StringMap
         // weld::Menu doesn't have base of weld::Widget
         if (sControlType == "menu")
         {
-            weld::Menu* pMenu = JSInstanceBuilder::FindMenu(nWindowId);
+            weld::Menu* pMenu = JSInstanceBuilder::Menus().Find(nWindowId);
             if (pMenu && sAction == "activated")
             {
                 LOKTrigger::trigger_activated(*pMenu, rData["data"]);

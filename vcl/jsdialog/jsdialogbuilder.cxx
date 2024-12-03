@@ -32,22 +32,6 @@
 #include <vcl/cvtgrf.hxx>
 #include <wizdlg.hxx>
 
-static std::map<OUString, vcl::Window*>& GetLOKPopupsMap()
-{
-    // Map to remember the LOKWindowId <-> vcl popup binding.
-    static std::map<OUString, vcl::Window*> s_aLOKPopupsMap;
-
-    return s_aLOKPopupsMap;
-}
-
-static std::map<OUString, weld::Menu*>& GetLOKMenusMap()
-{
-    // Map to remember the LOKWindowId <-> weld menu binding.
-    static std::map<OUString, weld::Menu*> s_aLOKMenusMap;
-
-    return s_aLOKMenusMap;
-}
-
 namespace
 {
 void response_help(vcl::Window* pWindow)
@@ -495,15 +479,6 @@ void JSDropTarget::fire_dragEnter(const css::datatransfer::dnd::DropTargetDragEn
     }
 }
 
-OUString JSInstanceBuilder::getMapIdFromWindowId() const
-{
-    if (m_sTypeOfJSON == "sidebar" || m_sTypeOfJSON == "notebookbar"
-        || m_sTypeOfJSON == "formulabar")
-        return OUString::number(m_nWindowId) + m_sTypeOfJSON;
-    else
-        return OUString::number(m_nWindowId);
-}
-
 // used for dialogs
 JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, const std::u16string_view sUIRoot,
                                      const OUString& rUIFile, bool bPopup)
@@ -702,153 +677,19 @@ JSInstanceBuilder::~JSInstanceBuilder()
 
     if (m_nWindowId && (m_bHasTopLevelDialog || m_bIsNotebookbar))
     {
-        GetLOKWeldWidgetsMap().erase(getMapIdFromWindowId());
+        JSInstanceBuilder::Widgets().Forget(getMapIdFromWindowId());
     }
     else
     {
-        auto it = GetLOKWeldWidgetsMap().find(getMapIdFromWindowId());
-        if (it != GetLOKWeldWidgetsMap().end())
+        auto aWindowMap = JSInstanceBuilder::Widgets().Find(getMapIdFromWindowId());
+        if (aWindowMap)
         {
             std::for_each(m_aRememberedWidgets.begin(), m_aRememberedWidgets.end(),
-                          [it](const OUString& sId) { it->second.erase(sId); });
+                          [&aWindowMap](const OUString& sId) { aWindowMap->Forget(sId); });
         }
     }
 
-    GetLOKPopupsMap().erase(OUString::number(m_nWindowId));
-}
-
-std::map<OUString, WidgetMap>& JSInstanceBuilder::GetLOKWeldWidgetsMap()
-{
-    // Map to remember the LOKWindowId <-> weld widgets binding.
-    static std::map<OUString, WidgetMap> s_aLOKWeldBuildersMap;
-
-    return s_aLOKWeldBuildersMap;
-}
-
-weld::Widget* JSInstanceBuilder::FindWeldWidgetsMap(const OUString& nWindowId,
-                                                    const OUString& rWidget)
-{
-    const auto it = GetLOKWeldWidgetsMap().find(nWindowId);
-
-    if (it != GetLOKWeldWidgetsMap().end())
-    {
-        auto widgetIt = it->second.find(rWidget);
-        if (widgetIt != it->second.end())
-            return widgetIt->second;
-    }
-
-    return nullptr;
-}
-
-void JSInstanceBuilder::InsertWindowToMap(const OUString& nWindowId)
-{
-    WidgetMap map;
-    auto it = GetLOKWeldWidgetsMap().find(nWindowId);
-    if (it == GetLOKWeldWidgetsMap().end())
-        GetLOKWeldWidgetsMap().insert({ nWindowId, map });
-}
-
-void JSInstanceBuilder::RememberWidget(OUString sId, weld::Widget* pWidget)
-{
-    // do not use the same id for two widgets inside one builder
-    // exception is sidebar where we base our full invalidation on that "Panel" id sharing
-    if (m_sTypeOfJSON != "sidebar")
-    {
-        static std::atomic<unsigned long long int> nNotRepeatIndex = 0;
-        auto aWindowIt = GetLOKWeldWidgetsMap().find(getMapIdFromWindowId());
-        if (aWindowIt != GetLOKWeldWidgetsMap().end())
-        {
-            auto aWidgetIt = aWindowIt->second.find(sId);
-            if (aWidgetIt != aWindowIt->second.end())
-            {
-                unsigned long long int nIndex = nNotRepeatIndex++;
-                // found duplicated it -> add some number to the id and apply to the widget
-                sId = sId + OUString::number(nIndex);
-                SalInstanceWidget* pSalWidget = dynamic_cast<SalInstanceWidget*>(pWidget);
-                assert(pSalWidget && "can only be a SalInstanceWidget");
-                vcl::Window* pVclWidget = pSalWidget->getWidget();
-                pVclWidget->set_id(pVclWidget->get_id() + OUString::number(nIndex));
-            }
-        }
-    }
-
-    RememberWidget(getMapIdFromWindowId(), sId, pWidget);
-    m_aRememberedWidgets.push_back(sId);
-}
-
-void JSInstanceBuilder::RememberWidget(const OUString& nWindowId, const OUString& id,
-                                       weld::Widget* pWidget)
-{
-    auto it = GetLOKWeldWidgetsMap().find(nWindowId);
-    if (it != GetLOKWeldWidgetsMap().end())
-    {
-        it->second.erase(id);
-        it->second.insert(WidgetMap::value_type(id, pWidget));
-    }
-}
-
-void JSInstanceBuilder::AddChildWidget(const OUString& nWindowId, const OUString& id,
-                                       weld::Widget* pWidget)
-{
-    auto it = GetLOKWeldWidgetsMap().find(nWindowId);
-    if (it != GetLOKWeldWidgetsMap().end())
-    {
-        it->second.erase(id);
-        it->second.insert(WidgetMap::value_type(id, pWidget));
-    }
-}
-
-void JSInstanceBuilder::RemoveWindowWidget(const OUString& nWindowId)
-{
-    auto it = JSInstanceBuilder::GetLOKWeldWidgetsMap().find(nWindowId);
-    if (it != JSInstanceBuilder::GetLOKWeldWidgetsMap().end())
-    {
-        JSInstanceBuilder::GetLOKWeldWidgetsMap().erase(it);
-    }
-}
-
-void JSInstanceBuilder::RememberPopup(const OUString& nWindowId, const VclPtr<vcl::Window>& pWidget)
-{
-    GetLOKPopupsMap()[nWindowId] = pWidget;
-}
-
-void JSInstanceBuilder::ForgetPopup(const OUString& nWindowId)
-{
-    auto it = GetLOKPopupsMap().find(nWindowId);
-    if (it != GetLOKPopupsMap().end())
-        GetLOKPopupsMap().erase(it);
-}
-
-void JSInstanceBuilder::RememberMenu(const OUString& nWindowId, weld::Menu* pMenu)
-{
-    GetLOKMenusMap()[nWindowId] = pMenu;
-}
-
-void JSInstanceBuilder::ForgetMenu(const OUString& nWindowId)
-{
-    auto it = GetLOKMenusMap().find(nWindowId);
-    if (it != GetLOKMenusMap().end())
-        GetLOKMenusMap().erase(it);
-}
-
-weld::Menu* JSInstanceBuilder::FindMenu(const OUString& nWindowId)
-{
-    const auto it = GetLOKMenusMap().find(nWindowId);
-
-    if (it != GetLOKMenusMap().end())
-        return it->second;
-
-    return nullptr;
-}
-
-vcl::Window* JSInstanceBuilder::FindPopup(const OUString& nWindowId)
-{
-    const auto it = GetLOKPopupsMap().find(nWindowId);
-
-    if (it != GetLOKPopupsMap().end())
-        return it->second;
-
-    return nullptr;
+    JSInstanceBuilder::Popups().Forget(OUString::number(m_nWindowId));
 }
 
 const OUString& JSInstanceBuilder::GetTypeOfJSON() const { return m_sTypeOfJSON; }
@@ -970,8 +811,13 @@ std::unique_ptr<weld::Container> JSInstanceBuilder::weld_container(const OUStrin
         // use parent builder to send update - avoid multiple calls from many builders
         vcl::Window* pParent = pContainer->GetParent();
         OUString sId = OUString::number(m_nWindowId);
-        while (pParent && !FindWeldWidgetsMap(sId, pParent->get_id()))
+        while (pParent)
+        {
+            auto aWidgetMap = Widgets().Find(sId);
+            if (!aWidgetMap || !aWidgetMap->Find(pParent->get_id()))
+                break;
             pParent = pParent->GetParent();
+        }
 
         if (pParent)
             jsdialog::SendFullUpdate(sId, pParent->get_id());
@@ -1253,7 +1099,7 @@ std::unique_ptr<weld::Menu> JSInstanceBuilder::weld_menu(const OUString& id)
     std::unique_ptr<weld::Menu> pWeldWidget(pMenu);
 
     if (pWeldWidget)
-        RememberMenu(getMapIdFromWindowId(), pWeldWidget.get());
+        JSInstanceBuilder::Menus().Remember(getMapIdFromWindowId(), pWeldWidget.get());
 
     return pWeldWidget;
 }
@@ -1279,7 +1125,7 @@ std::unique_ptr<weld::Popover> JSInstanceBuilder::weld_popover(const OUString& i
             m_nWindowId = m_aParentDialog->GetLOKWindowId();
 
             pPopover->set_window_id(m_nWindowId);
-            JSInstanceBuilder::RememberPopup(OUString::number(m_nWindowId), pDockingWindow);
+            JSInstanceBuilder::Popups().Remember(OUString::number(m_nWindowId), pDockingWindow);
 
             InsertWindowToMap(getMapIdFromWindowId());
             initializeSender(GetNotifierWindow(), GetContentWindow(), GetTypeOfJSON());
@@ -1878,7 +1724,7 @@ JSMessageDialog::JSMessageDialog(::MessageDialog* pDialog, SalInstanceBuilder* p
         = dynamic_cast<::OKButton*>(m_xMessageDialog->get_widget_for_response(RET_OK)))
     {
         m_pOK.reset(new JSButton(m_pSender, pOKBtn, nullptr, false));
-        JSInstanceBuilder::AddChildWidget(m_sWindowId, pOKBtn->get_id(), m_pOK.get());
+        JSInstanceBuilder::RememberWidget(m_sWindowId, pOKBtn->get_id(), m_pOK.get());
         m_pOK->connect_clicked(LINK(this, JSMessageDialog, OKHdl));
     }
 
@@ -1886,7 +1732,7 @@ JSMessageDialog::JSMessageDialog(::MessageDialog* pDialog, SalInstanceBuilder* p
         = dynamic_cast<::CancelButton*>(m_xMessageDialog->get_widget_for_response(RET_CANCEL)))
     {
         m_pCancel.reset(new JSButton(m_pSender, pCancelBtn, nullptr, false));
-        JSInstanceBuilder::AddChildWidget(m_sWindowId, pCancelBtn->get_id(), m_pCancel.get());
+        JSInstanceBuilder::RememberWidget(m_sWindowId, pCancelBtn->get_id(), m_pCancel.get());
         m_pCancel->connect_clicked(LINK(this, JSMessageDialog, CancelHdl));
     }
 }
@@ -1898,7 +1744,7 @@ JSMessageDialog::~JSMessageDialog()
         // For Message Dialogs created from Application::CreateMessageDialog
         // (where there is no builder to take care of this for us) explicitly
         // remove this window id on tear down
-        JSInstanceBuilder::RemoveWindowWidget(m_sWindowId);
+        JSInstanceBuilder::Widgets().Forget(m_sWindowId);
     }
 }
 
@@ -1906,7 +1752,8 @@ void JSMessageDialog::RememberMessageDialog()
 {
     static constexpr OUString sWidgetName = u"__DIALOG__"_ustr;
     OUString sWindowId = OUString::number(m_xMessageDialog->GetLOKWindowId());
-    if (JSInstanceBuilder::FindWeldWidgetsMap(sWindowId, sWidgetName) != nullptr)
+    auto aWidgetMap = JSInstanceBuilder::Widgets().Find(sWindowId);
+    if (!aWidgetMap || !aWidgetMap->Find(sWidgetName))
         return;
 
     JSInstanceBuilder::InsertWindowToMap(sWindowId);
@@ -2037,13 +1884,13 @@ void JSToolbar::set_menu_item_active(const OUString& rIdent, bool bActive)
     {
         if (bActive)
         {
-            JSInstanceBuilder::RememberPopup(OUString::number(pPopupRoot->GetLOKWindowId()),
-                                             pFloat);
+            JSInstanceBuilder::Popups().Remember(OUString::number(pPopupRoot->GetLOKWindowId()),
+                                                 pFloat);
             sendPopup(pPopupRoot, m_xToolBox->get_id(), rIdent);
         }
         else if (bWasActive)
         {
-            JSInstanceBuilder::ForgetPopup(OUString::number(pPopupRoot->GetLOKWindowId()));
+            JSInstanceBuilder::Popups().Forget(OUString::number(pPopupRoot->GetLOKWindowId()));
             sendClosePopup(pPopupRoot->GetLOKWindowId());
         }
     }
@@ -2437,7 +2284,7 @@ void JSPopover::popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRe
 
 void JSPopover::popdown()
 {
-    vcl::Window* pPopup = JSInstanceBuilder::FindPopup(OUString::number(mnWindowId));
+    VclPtr<vcl::Window> pPopup = JSInstanceBuilder::Popups().Find(OUString::number(mnWindowId));
 
     if (pPopup)
     {
