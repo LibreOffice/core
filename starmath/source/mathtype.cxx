@@ -3120,6 +3120,7 @@ void MathType::HandleMath(SmNode *pNode)
 
 void MathType::HandleAttributes(SmNode *pNode,int nLevel)
 {
+    sal_uInt64 nOldInsertion = nInsertion;
     int nOldPending = 0;
     SmNode *pTemp       = nullptr;
     SmTextNode *pIsText = nullptr;
@@ -3193,8 +3194,7 @@ void MathType::HandleAttributes(SmNode *pNode,int nLevel)
         if ((nInsertion != 0) && nullptr != (pTemp = pNode->GetSubNode(0)))
         {
             auto nPos = pS->Tell();
-            nInsertion--;
-            pS->Seek(nInsertion);
+            pS->Seek(nInsertion - 1);
             switch(pTemp->GetToken().eType)
             {
             case TACUTE: //Not Exportable
@@ -3247,6 +3247,7 @@ void MathType::HandleAttributes(SmNode *pNode,int nLevel)
             pS->Seek(nPos);
         }
     }
+    nInsertion = nOldInsertion;
 }
 
 void MathType::HandleText(SmNode *pNode)
