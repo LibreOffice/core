@@ -747,7 +747,7 @@ void setOrAppendPropertyValue( uno::Sequence< beans::PropertyValue >& aProp, con
     pProp[ nLength ].Value = aValue;
 }
 
-bool executeRunTimeLibrary(const std::u16string_view& rSbRtl_command, SbxArray* pParameters)
+bool executeRunTimeLibrary(std::u16string_view rSbRtl_command, SbxArray* pParameters)
 {
     StarBASIC* pBasic = dynamic_cast< StarBASIC* >(StarBASIC::GetActiveModule()->GetParent());
     if (!pBasic)

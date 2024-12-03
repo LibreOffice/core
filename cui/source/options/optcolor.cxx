@@ -278,9 +278,9 @@ private:
         void SetLinks(Link<weld::Toggleable&,void> const&,
                       Link<ColorListBox&,void> const&,
                       Link<weld::Widget&,void> const&);
-        void Update (ColorConfigValue const&, const std::u16string_view&,
+        void Update (ColorConfigValue const&, std::u16string_view,
             css::uno::Reference<css::configuration::XReadWriteAccess> const&);
-        void Update (ExtendedColorConfigValue const&, const std::u16string_view&,
+        void Update (ExtendedColorConfigValue const&, std::u16string_view,
             css::uno::Reference<css::configuration::XReadWriteAccess> const&);
         void ColorChanged (ColorConfigValue&);
         void ColorChanged (ExtendedColorConfigValue&);
@@ -387,7 +387,7 @@ void ColorConfigWindow_Impl::Entry::SetLinks(Link<weld::Toggleable&,void> const&
 }
 
 // updates a default color config entry
-void ColorConfigWindow_Impl::Entry::Update(ColorConfigValue const& rValue, const std::u16string_view& rConfigPath,
+void ColorConfigWindow_Impl::Entry::Update(ColorConfigValue const& rValue, std::u16string_view rConfigPath,
     css::uno::Reference<css::configuration::XReadWriteAccess> const& xReadWriteAccess)
 {
     Color aColor(rValue.nColor);
@@ -418,7 +418,7 @@ void ColorConfigWindow_Impl::Entry::Update(ColorConfigValue const& rValue, const
 }
 
 // updates an extended color config entry
-void ColorConfigWindow_Impl::Entry::Update(ExtendedColorConfigValue const& rValue, const std::u16string_view& rConfigPath,
+void ColorConfigWindow_Impl::Entry::Update(ExtendedColorConfigValue const& rValue, std::u16string_view rConfigPath,
     css::uno::Reference<css::configuration::XReadWriteAccess> const& xReadWriteAccess)
 {
     Color aColor(rValue.getColor());

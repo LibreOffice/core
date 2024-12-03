@@ -179,9 +179,9 @@ public:
     void testFormats(ScDocument* pDoc,std::u16string_view sFormat);
 
     void goToCell(const OUString& rCell);
-    void typeString(const std::u16string_view& rStr);
-    void insertStringToCell(const OUString& rCell, const std::u16string_view& rStr);
-    void insertArrayToCell(const OUString& rCell, const std::u16string_view& rStr);
+    void typeString(std::u16string_view rStr);
+    void insertStringToCell(const OUString& rCell, std::u16string_view rStr);
+    void insertArrayToCell(const OUString& rCell, std::u16string_view rStr);
     void insertNewSheet(ScDocument& rDoc);
     void executeAutoSum();
 

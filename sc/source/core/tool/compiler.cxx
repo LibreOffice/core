@@ -4412,7 +4412,7 @@ bool ScCompiler::ToUpperAsciiOrI18nIsAscii( OUString& rUpper, const OUString& rO
     }
 }
 
-short ScCompiler::GetPossibleParaCount( const std::u16string_view& rLambdaFormula ) const
+short ScCompiler::GetPossibleParaCount( std::u16string_view rLambdaFormula ) const
 {
     sal_Unicode cSep = mxSymbols->getSymbolChar(ocSep);
     sal_Unicode cOpen = mxSymbols->getSymbolChar(ocOpen);

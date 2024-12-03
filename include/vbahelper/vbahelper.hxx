@@ -131,7 +131,7 @@ namespace ooo::vba
         VBAHELPER_DLLPUBLIC bool setPropertyValue( css::uno::Sequence< css::beans::PropertyValue >& aProp, const OUString& aName, const css::uno::Any& aValue );
         VBAHELPER_DLLPUBLIC void setOrAppendPropertyValue( css::uno::Sequence< css::beans::PropertyValue >& aProp, const OUString& aName, const css::uno::Any& aValue );
 
-        VBAHELPER_DLLPUBLIC bool executeRunTimeLibrary(const std::u16string_view& rSbRtl_command,
+        VBAHELPER_DLLPUBLIC bool executeRunTimeLibrary(std::u16string_view rSbRtl_command,
                                                        SbxArray* pParameters);
 
 class VBAHELPER_DLLPUBLIC Millimeter

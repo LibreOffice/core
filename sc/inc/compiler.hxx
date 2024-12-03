@@ -331,7 +331,7 @@ private:
 
     bool   NextNewToken(bool bInArray);
     bool ToUpperAsciiOrI18nIsAscii( OUString& rUpper, const OUString& rOrg ) const;
-    short  GetPossibleParaCount( const std::u16string_view& rLambdaFormula ) const;
+    short  GetPossibleParaCount( std::u16string_view rLambdaFormula ) const;
 
     virtual void SetError(FormulaError nError) override;
 

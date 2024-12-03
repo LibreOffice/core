@@ -251,7 +251,7 @@ protected:
      */
     xmlDocUniquePtr WrapReqifFromTempFile();
 
-    void emulateTyping(const std::u16string_view& rStr);
+    void emulateTyping(std::u16string_view rStr);
 
 private:
     void loadURL(OUString const& rURL, const char* pPassword = nullptr);

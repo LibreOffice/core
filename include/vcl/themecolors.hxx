@@ -23,7 +23,7 @@ public:
 
     static bool IsThemeLoaded() { return m_bIsThemeLoaded; }
     static void SetThemeLoaded(bool bLoaded) { m_bIsThemeLoaded = bLoaded; }
-    static bool IsAutomaticTheme(const std::u16string_view& rThemeName)
+    static bool IsAutomaticTheme(std::u16string_view rThemeName)
     {
         return rThemeName == svtools::AUTOMATIC_COLOR_SCHEME;
     }

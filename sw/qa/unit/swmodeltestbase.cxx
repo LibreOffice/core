@@ -488,7 +488,7 @@ xmlDocUniquePtr SwModelTestBase::WrapReqifFromTempFile()
     return pXmlDoc;
 }
 
-void SwModelTestBase::emulateTyping(const std::u16string_view& rStr)
+void SwModelTestBase::emulateTyping(std::u16string_view rStr)
 {
     SwXTextDocument* pTextDoc = getSwTextDoc();
     for (const char16_t c : rStr)

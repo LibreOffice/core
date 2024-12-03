@@ -361,7 +361,7 @@ static OUString getMimetypeForDocument( const Reference< XComponentContext >& xC
 }
 
 uno::Reference<security::XCertificate>
-PDFExport::GetCertificateFromSubjectName(const std::u16string_view& rSubjectName) const
+PDFExport::GetCertificateFromSubjectName(std::u16string_view rSubjectName) const
 {
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer
         = xml::crypto::SEInitializer::create(mxContext);

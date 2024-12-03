@@ -530,7 +530,7 @@ test::AccessibleTestBase::awaitDialog(const std::u16string_view name,
             maIdleHandler.Stop();
         }
 
-        ListenerHelper(const std::u16string_view& name, std::function<void(Dialog&)> callback,
+        ListenerHelper(std::u16string_view name, std::function<void(Dialog&)> callback,
                        bool bAutoClose)
             : mbWaitingForDialog(true)
             , msName(name)

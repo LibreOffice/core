@@ -3411,7 +3411,7 @@ lcl_StoreMediaAndGetURL(SvXMLExport & rExport,
 
 namespace
 {
-void ExportGraphicPreview(const uno::Reference<graphic::XGraphic>& xGraphic, SvXMLExport& rExport, const std::u16string_view& rPrefix, const std::u16string_view& rExtension, const OUString& rMimeType)
+void ExportGraphicPreview(const uno::Reference<graphic::XGraphic>& xGraphic, SvXMLExport& rExport, std::u16string_view rPrefix, std::u16string_view rExtension, const OUString& rMimeType)
 {
     const bool bExportEmbedded(rExport.getExportFlags() & SvXMLExportFlags::EMBEDDED);
 

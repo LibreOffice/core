@@ -403,9 +403,9 @@ public:
     }
 };
 
-OUString toOUString(const std::string_view& rStr)
+OUString toOUString(std::string_view str)
 {
-    return OUString::fromUtf8(rStr);
+    return OUString::fromUtf8(str);
 }
 
 update_file parse_update_file(orcus::json::node& rNode)

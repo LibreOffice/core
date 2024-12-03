@@ -72,9 +72,9 @@ public:
     }
 
     void checkCurrentPageNumber(sal_uInt16 nNum);
-    void typeString(SdXImpressDocument* rImpressDocument, const std::u16string_view& rStr);
+    void typeString(SdXImpressDocument* rImpressDocument, std::u16string_view rStr);
     void typeKey(SdXImpressDocument* rImpressDocument, const sal_uInt16 nKey);
-    void insertStringToObject(sal_uInt16 nObj, const std::u16string_view& rStr, bool bUseEscape);
+    void insertStringToObject(sal_uInt16 nObj, std::u16string_view rStr, bool bUseEscape);
     sd::slidesorter::SlideSorterViewShell* getSlideSorterViewShell();
     void lcl_search(const OUString& rKey, bool bFindAll = false, bool bBackwards = false);
 };
@@ -98,8 +98,7 @@ void SdUiImpressTest::typeKey(SdXImpressDocument* rImpressDocument, const sal_uI
     Scheduler::ProcessEventsToIdle();
 }
 
-void SdUiImpressTest::typeString(SdXImpressDocument* rImpressDocument,
-                                 const std::u16string_view& rStr)
+void SdUiImpressTest::typeString(SdXImpressDocument* rImpressDocument, std::u16string_view rStr)
 {
     for (const char16_t c : rStr)
     {
@@ -109,7 +108,7 @@ void SdUiImpressTest::typeString(SdXImpressDocument* rImpressDocument,
     }
 }
 
-void SdUiImpressTest::insertStringToObject(sal_uInt16 nObj, const std::u16string_view& rStr,
+void SdUiImpressTest::insertStringToObject(sal_uInt16 nObj, std::u16string_view rStr,
                                            bool bUseEscape)
 {
     auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());

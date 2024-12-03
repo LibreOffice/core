@@ -94,10 +94,9 @@ bool OOXMLSecExporter::Impl::isOOXMLDenylist(std::u16string_view rStreamName)
             // Don't attempt to sign other signatures for now.
             u"/_xmlsignatures" };
     // Just check the prefix, as we don't care about the content type part of the stream name.
-    return std::any_of(vDenylist.begin(), vDenylist.end(),
-                       [&](const std::u16string_view& rLiteral) {
-                           return o3tl::starts_with(rStreamName, rLiteral);
-                       });
+    return std::any_of(vDenylist.begin(), vDenylist.end(), [&](std::u16string_view rLiteral) {
+        return o3tl::starts_with(rStreamName, rLiteral);
+    });
 }
 
 bool OOXMLSecExporter::Impl::isOOXMLRelationDenylist(const OUString& rRelationName)

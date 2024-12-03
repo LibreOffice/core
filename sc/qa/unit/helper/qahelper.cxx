@@ -290,7 +290,7 @@ void ScModelTestBase::goToCell(const OUString& rCell)
     dispatchCommand(mxComponent, u".uno:GoToCell"_ustr, aArgs);
 }
 
-void ScModelTestBase::typeString(const std::u16string_view& rStr)
+void ScModelTestBase::typeString(std::u16string_view rStr)
 {
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     for (const char16_t c : rStr)
@@ -301,7 +301,7 @@ void ScModelTestBase::typeString(const std::u16string_view& rStr)
     }
 }
 
-void ScModelTestBase::insertStringToCell(const OUString& rCell, const std::u16string_view& rStr)
+void ScModelTestBase::insertStringToCell(const OUString& rCell, std::u16string_view rStr)
 {
     goToCell(rCell);
 
@@ -313,7 +313,7 @@ void ScModelTestBase::insertStringToCell(const OUString& rCell, const std::u16st
     Scheduler::ProcessEventsToIdle();
 }
 
-void ScModelTestBase::insertArrayToCell(const OUString& rCell, const std::u16string_view& rStr)
+void ScModelTestBase::insertArrayToCell(const OUString& rCell, std::u16string_view rStr)
 {
     goToCell(rCell);
 
