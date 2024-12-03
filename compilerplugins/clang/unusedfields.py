@@ -174,13 +174,8 @@ for d in definitionSet:
     if "Guard" in fieldType:
         continue
     # these are just all model classes
-    if (srcLoc.startswith("oox/")
-        or srcLoc.startswith("lotuswordpro/")
-        or srcLoc.startswith("include/oox/")
-        or srcLoc.startswith("include/filter/")
-        or srcLoc.startswith("hwpfilter/")
-        or srcLoc.startswith("filter/")
-        or srcLoc.startswith("vcl/source/filter/")):
+    if (srcLoc.startswith("lotuswordpro/")
+        or srcLoc.startswith("hwpfilter/")):
         continue
     if "(lambda at " in d[0]:
         continue

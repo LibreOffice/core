@@ -88,7 +88,6 @@ class GIFReader
     bool                bGCTransparent;         // is the image transparent, if yes:
     bool                bInterlaced;
     bool                bOverreadBlock;
-    bool                bImGraphicReady;
     bool                bGlobalPalette;
     sal_uInt8           nBackgroundColor;       // backgroundcolour
     sal_uInt8           nGCTransparentIndex;    // pixels of this index are transparent
@@ -146,7 +145,6 @@ GIFReader::GIFReader( SvStream& rStm )
     , bGCTransparent  ( false )
     , bInterlaced ( false)
     , bOverreadBlock ( false )
-    , bImGraphicReady ( false )
     , bGlobalPalette ( false )
     , nBackgroundColor ( 0 )
     , nGCTransparentIndex ( 0 )
@@ -825,7 +823,6 @@ bool GIFReader::ProcessGIF()
 
                 if ( nRet == 1 )
                 {
-                    bImGraphicReady = true;
                     eActAction = NEXT_BLOCK_READING;
                     bOverreadBlock = false;
                 }

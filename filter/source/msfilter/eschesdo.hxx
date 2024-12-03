@@ -105,11 +105,9 @@ class ImplEESdrWriter
     SvStream*           mpPicStrm;
     // own extensions
     EscherExHostAppData*    mpHostAppData;
-    bool                    mbIsTitlePossible;
     const SdrPage*          mpSdrPage;
     std::unique_ptr<EscherSolverContainer> mpSolverContainer;
 
-    void                ImplInitPageValues();
     void                ImplWritePage( EscherSolverContainer& rSolver, bool ooxmlExport );
     sal_uInt32          ImplWriteShape( ImplEESdrObject& rObj,
                             EscherSolverContainer& rSolver,

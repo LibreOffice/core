@@ -1858,7 +1858,6 @@ SVGActionWriter::SVGActionWriter( SVGExport& rExport, SVGFontExport& rFontExport
     maAttributeWriter( rExport, rFontExport, mrCurrentState ),
     maTextWriter(rExport, maAttributeWriter, *this),
     mpVDev(VclPtr<VirtualDevice>::Create()),
-    mbClipAttrChanged( false ),
     mbIsPlaceholderShape( false ),
     mpEmbeddedBitmapsMap( nullptr ),
     mbIsPreview( false )
@@ -4054,8 +4053,6 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                 const_cast<MetaAction*>(pAction)->Execute( mpVDev );
                 const vcl::Region aClipRegion = mpVDev->GetActiveClipRegion();
                 ImplWriteClipPath( aClipRegion.GetAsPolyPolygon() );
-
-                mbClipAttrChanged = true;
             }
             break;
 

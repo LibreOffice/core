@@ -316,7 +316,6 @@ private:
     SVGTextWriter                               maTextWriter;
     VclPtr<VirtualDevice>                       mpVDev;
     MapMode                                     maTargetMapMode;
-    bool                                        mbClipAttrChanged;
     bool                                        mbIsPlaceholderShape;
     const MetaBitmapActionMap*                  mpEmbeddedBitmapsMap;
     bool                                        mbIsPreview;

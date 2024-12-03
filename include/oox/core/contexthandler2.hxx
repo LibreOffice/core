@@ -72,7 +72,7 @@ struct ElementInfo;
 class OOX_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") ContextHandler2Helper
 {
 public:
-    explicit            ContextHandler2Helper( bool bEnableTrimSpace, XmlFilterBase& rFilter );
+    explicit            ContextHandler2Helper( bool bEnableTrimSpace );
     explicit            ContextHandler2Helper( const ContextHandler2Helper& rParent );
     virtual             ~ContextHandler2Helper();
 
@@ -232,7 +232,6 @@ private:
 
 protected:
     bool                mbEnableTrimSpace;  ///< True = trim whitespace in characters().
-    XmlFilterBase&      mrFilter;
 };
 
 class OOX_DLLPUBLIC ContextHandler2 : public ContextHandler, public ContextHandler2Helper

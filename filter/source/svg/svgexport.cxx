@@ -1792,11 +1792,6 @@ void SVGFilter::implGetPagePropSet( const Reference< css::drawing::XDrawPage > &
     mVisiblePagePropSet.bIsBackgroundVisible                = true;
     mVisiblePagePropSet.bAreBackgroundObjectsVisible        = true;
     mVisiblePagePropSet.bIsPageNumberFieldVisible           = false;
-    mVisiblePagePropSet.bIsHeaderFieldVisible               = false;
-    mVisiblePagePropSet.bIsFooterFieldVisible               = true;
-    mVisiblePagePropSet.bIsDateTimeFieldVisible             = true;
-    mVisiblePagePropSet.bIsDateTimeFieldFixed               = true;
-    mVisiblePagePropSet.nDateTimeFormat                     = SvxDateFormat::B;
     mVisiblePagePropSet.nPageNumberingType                  = css::style::NumberingType::ARABIC;
 
     //  We collect info on master page elements visibility, and placeholder text shape content.
@@ -1811,14 +1806,6 @@ void SVGFilter::implGetPagePropSet( const Reference< css::drawing::XDrawPage > &
     implSafeGetPagePropSet( u"IsBackgroundVisible"_ustr, xPropSet, xPropSetInfo )          >>= mVisiblePagePropSet.bIsBackgroundVisible;
     implSafeGetPagePropSet( u"IsBackgroundObjectsVisible"_ustr, xPropSet, xPropSetInfo )   >>= mVisiblePagePropSet.bAreBackgroundObjectsVisible;
     implSafeGetPagePropSet( u"IsPageNumberVisible"_ustr, xPropSet, xPropSetInfo )          >>= mVisiblePagePropSet.bIsPageNumberFieldVisible;
-    implSafeGetPagePropSet( u"IsHeaderVisible"_ustr, xPropSet, xPropSetInfo )              >>= mVisiblePagePropSet.bIsHeaderFieldVisible;
-    implSafeGetPagePropSet( u"IsFooterVisible"_ustr, xPropSet, xPropSetInfo )              >>= mVisiblePagePropSet.bIsFooterFieldVisible;
-    implSafeGetPagePropSet( u"IsDateTimeVisible"_ustr, xPropSet, xPropSetInfo )            >>= mVisiblePagePropSet.bIsDateTimeFieldVisible;
-
-    implSafeGetPagePropSet( u"IsDateTimeFixed"_ustr, xPropSet, xPropSetInfo )              >>= mVisiblePagePropSet.bIsDateTimeFieldFixed;
-    sal_Int32 nTmp;
-    if (implSafeGetPagePropSet( u"DateTimeFormat"_ustr, xPropSet, xPropSetInfo ) >>= nTmp)
-        mVisiblePagePropSet.nDateTimeFormat = static_cast<SvxDateFormat>(nTmp);
 
     if( mVisiblePagePropSet.bIsPageNumberFieldVisible )
     {

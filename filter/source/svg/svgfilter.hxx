@@ -122,22 +122,12 @@ struct PagePropertySet
     bool               bIsBackgroundVisible;
     bool               bAreBackgroundObjectsVisible;
     bool               bIsPageNumberFieldVisible;
-    bool               bIsDateTimeFieldVisible;
-    bool               bIsFooterFieldVisible;
-    bool               bIsHeaderFieldVisible;
     sal_Int32          nPageNumberingType;
-    bool               bIsDateTimeFieldFixed;
-    SvxDateFormat      nDateTimeFormat;
     PagePropertySet()
         : bIsBackgroundVisible(false)
         , bAreBackgroundObjectsVisible(false)
         , bIsPageNumberFieldVisible(false)
-        , bIsDateTimeFieldVisible(false)
-        , bIsFooterFieldVisible(false)
-        , bIsHeaderFieldVisible(false)
         , nPageNumberingType(0)
-        , bIsDateTimeFieldFixed(false)
-        , nDateTimeFormat(SvxDateFormat::AppDefault)
     {
     }
 };

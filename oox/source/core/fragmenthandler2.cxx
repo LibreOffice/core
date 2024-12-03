@@ -33,7 +33,7 @@ using namespace ::com::sun::star::xml::sax;
 
 FragmentHandler2::FragmentHandler2( XmlFilterBase& rFilter, const OUString& rFragmentPath, bool bEnableTrimSpace ) :
     FragmentHandler( rFilter, rFragmentPath ),
-    ContextHandler2Helper( bEnableTrimSpace, rFilter )
+    ContextHandler2Helper( bEnableTrimSpace )
 {
 }
 

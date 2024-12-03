@@ -45,11 +45,10 @@ struct ElementInfo
     explicit     ElementInfo() : maChars( 0), mnElement( XML_TOKEN_INVALID ), mbTrimSpaces( false ) {}
 };
 
-ContextHandler2Helper::ContextHandler2Helper( bool bEnableTrimSpace, XmlFilterBase& rFilter ) :
+ContextHandler2Helper::ContextHandler2Helper( bool bEnableTrimSpace ) :
     mxContextStack( std::make_shared<ContextStack>() ),
     mnRootStackSize( 0 ),
-    mbEnableTrimSpace( bEnableTrimSpace ),
-    mrFilter( rFilter )
+    mbEnableTrimSpace( bEnableTrimSpace )
 {
     pushElementInfo( XML_ROOT_CONTEXT );
 }
@@ -57,8 +56,7 @@ ContextHandler2Helper::ContextHandler2Helper( bool bEnableTrimSpace, XmlFilterBa
 ContextHandler2Helper::ContextHandler2Helper( const ContextHandler2Helper& rParent ) :
     mxContextStack( rParent.mxContextStack ),
     mnRootStackSize( rParent.mxContextStack->size() ),
-    mbEnableTrimSpace( rParent.mbEnableTrimSpace ),
-    mrFilter(rParent.mrFilter)
+    mbEnableTrimSpace( rParent.mbEnableTrimSpace )
 {
 }
 
