@@ -127,8 +127,8 @@ static constexpr int highbit(std::size_t n)
 {
     int k = 1;
 
-    if (n == 0)
-        return 0;
+    assert(n > 0 && "can never be called with n == 0");
+
     if constexpr (sizeof(n) == 8)
     {
         if (n & 0xffffffff00000000)

@@ -36,7 +36,11 @@ using namespace store;
 
 storeError ILockBytes::initialize (rtl::Reference< PageData::Allocator > & rxAllocator, sal_uInt16 nPageSize)
 {
-    OSL_PRECOND((STORE_MINIMUM_PAGESIZE <= nPageSize) && (nPageSize <= STORE_MAXIMUM_PAGESIZE), "invalid PageSize");
+    if (nPageSize < STORE_MINIMUM_PAGESIZE || nPageSize > STORE_MAXIMUM_PAGESIZE)
+    {
+        SAL_WARN("store", "invalid PageSize");
+        return store_E_InvalidParameter;
+    }
     return initialize_Impl (rxAllocator, nPageSize);
 }
 
