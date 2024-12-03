@@ -5026,6 +5026,72 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testRexportXnViewColorspace)
     CPPUNIT_ASSERT_EQUAL("DeviceRGB"_ostr, pColorSpaceElement->GetValue());
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testFormRoundtrip)
+{
+    // Loads and saves a PDF with filled forms. This checks the forms survive the round-trip.
+
+    // We need to enable PDFium import (and make sure to disable after the test)
+    bool bResetEnvVar = false;
+    if (getenv("LO_IMPORT_USE_PDFIUM") == nullptr)
+    {
+        bResetEnvVar = true;
+        osl_setEnvironment(u"LO_IMPORT_USE_PDFIUM"_ustr.pData, u"1"_ustr.pData);
+    }
+    comphelper::ScopeGuard aPDFiumEnvVarGuard([&]() {
+        if (bResetEnvVar)
+            osl_clearEnvironment(u"LO_IMPORT_USE_PDFIUM"_ustr.pData);
+    });
+
+    // Need to properly set the PDF export options
+    aMediaDescriptor["FilterName"] <<= OUString("draw_pdf_Export");
+    uno::Sequence<beans::PropertyValue> aFilterData(
+        comphelper::InitPropertySequence({ { "UseTaggedPDF", uno::Any(true) } }));
+    aMediaDescriptor["FilterData"] <<= aFilterData;
+
+    saveAsPDF(u"FilledUpForm.pdf");
+
+    // Parse the round-tripped document with PDFium
+    auto pPdfDocument = parsePDFExport();
+    // Should be 1 page
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPage = pPdfDocument->openPage(0);
+    std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPage->getObject(1);
+
+    // 5 annotations means 5 form fields
+    CPPUNIT_ASSERT_EQUAL(5, pPage->getAnnotationCount());
+
+    // Check each form
+    {
+        std::unique_ptr<vcl::pdf::PDFiumAnnotation> pAnnotation = pPage->getAnnotation(0);
+        CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFFormFieldType::CheckBox,
+                             pAnnotation->getFormFieldType(pPdfDocument.get()));
+    }
+
+    {
+        std::unique_ptr<vcl::pdf::PDFiumAnnotation> pAnnotation = pPage->getAnnotation(1);
+        CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFFormFieldType::ComboBox,
+                             pAnnotation->getFormFieldType(pPdfDocument.get()));
+    }
+
+    {
+        std::unique_ptr<vcl::pdf::PDFiumAnnotation> pAnnotation = pPage->getAnnotation(2);
+        CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFFormFieldType::TextField,
+                             pAnnotation->getFormFieldType(pPdfDocument.get()));
+    }
+
+    {
+        std::unique_ptr<vcl::pdf::PDFiumAnnotation> pAnnotation = pPage->getAnnotation(3);
+        CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFFormFieldType::TextField,
+                             pAnnotation->getFormFieldType(pPdfDocument.get()));
+    }
+
+    {
+        std::unique_ptr<vcl::pdf::PDFiumAnnotation> pAnnotation = pPage->getAnnotation(4);
+        CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFFormFieldType::TextField,
+                             pAnnotation->getFormFieldType(pPdfDocument.get()));
+    }
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
