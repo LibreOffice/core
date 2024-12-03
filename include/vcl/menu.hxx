@@ -201,7 +201,7 @@ protected:
                                                size_t nPos, const OUString &rIdent);
 
     /// Close the 'pStartedFrom' menu window.
-    virtual void ClosePopup(Menu* pMenu) = 0;
+    virtual void ClosePopup(PopupMenu* pPopupMenu) = 0;
 
     /// Forward the KeyInput call to the MenuBar.
     virtual void MenuBarKeyInput(const KeyEvent& rEvent);
@@ -440,7 +440,7 @@ public:
     SAL_DLLPRIVATE MenuBarWindow* getMenuBarWindow();
 
     /// Close the 'pStartedFrom' menu window.
-    virtual void ClosePopup(Menu* pMenu) override;
+    virtual void ClosePopup(PopupMenu* pPopupMenu) override;
 
     /// Forward the KeyInput call to the MenuBar.
     SAL_DLLPRIVATE virtual void MenuBarKeyInput(const KeyEvent& rEvent) override;
@@ -514,7 +514,7 @@ public:
     virtual bool IsMenuBar() const override { return false; }
 
     /// Close the 'pStartedFrom' menu window.
-    SAL_DLLPRIVATE virtual void ClosePopup(Menu* pMenu) override;
+    SAL_DLLPRIVATE virtual void ClosePopup(PopupMenu* pPopupMenu) override;
 
     void SetText( const OUString& rTitle )
     {

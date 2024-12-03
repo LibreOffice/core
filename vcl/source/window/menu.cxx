@@ -2431,12 +2431,12 @@ void MenuBar::dispose()
     Menu::dispose();
 }
 
-void MenuBar::ClosePopup(Menu *pMenu)
+void MenuBar::ClosePopup(PopupMenu *pPopupMenu)
 {
     MenuBarWindow* pMenuWin = getMenuBarWindow();
     if (!pMenuWin)
         return;
-    pMenuWin->PopupClosed(pMenu);
+    pMenuWin->PopupClosed(pPopupMenu);
 }
 
 void MenuBar::MenuBarKeyInput(const KeyEvent& rEvent)
@@ -2742,12 +2742,11 @@ PopupMenu::~PopupMenu()
     disposeOnce();
 }
 
-void PopupMenu::ClosePopup(Menu* pMenu)
+void PopupMenu::ClosePopup(PopupMenu* pPopupMenu)
 {
-    MenuFloatingWindow* p = dynamic_cast<MenuFloatingWindow*>(GetWindow());
-    PopupMenu *pPopup = dynamic_cast<PopupMenu*>(pMenu);
-    if (p && pPopup)
-        p->KillActivePopup(pPopup);
+    MenuFloatingWindow* p = ImplGetFloatingWindow();
+    if (p && pPopupMenu)
+        p->KillActivePopup(pPopupMenu);
 }
 
 namespace vcl
