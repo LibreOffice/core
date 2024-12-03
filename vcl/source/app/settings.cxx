@@ -72,13 +72,23 @@ struct ImplMouseData
     MouseWheelBehaviour             mnWheelBehavior     = MouseWheelBehaviour::FocusOnly;
 };
 
-struct ImplStyleData
+namespace
 {
-                                    ImplStyleData();
-                                    ImplStyleData( const ImplStyleData& rData );
+constexpr Size getInitListBoxPreviewDefaultLogicSize()
+{
+#ifdef IOS
+    return Size(30, 30);
+#else
+    return Size(15, 7);
+#endif
+}
 
-    void                            SetStandardStyles();
+// Structures simplifying comparison in StyleSettings::operator ==, where for some reason
+// not all members of ImplStyleData are compared. Adding elements here would automatically
+// participate in the default comparison methods.
 
+struct ColorSet
+{
     Color                           maActiveBorderColor;
     Color                           maActiveColor;
     Color                           maActiveTextColor;
@@ -151,6 +161,12 @@ struct ImplStyleData
     Color                           maTabTextColor;
     Color                           maTabRolloverTextColor;
     Color                           maTabHighlightTextColor;
+
+    bool operator==(const ColorSet&) const = default;
+};
+
+struct FontSet
+{
     vcl::Font                       maAppFont;
     vcl::Font                       maHelpFont;
     vcl::Font                       maTitleFont;
@@ -164,55 +180,73 @@ struct ImplStyleData
     vcl::Font                       maIconFont;
     vcl::Font                       maTabFont;
     vcl::Font                       maGroupFont;
+
+    bool operator==(const FontSet&) const = default;
+};
+}
+
+struct ImplStyleData
+{
+                                    ImplStyleData();
+
+    void                            SetStandardStyles();
+
+    ColorSet maColors;
+    FontSet maFonts;
     sal_Int32                       mnTitleHeight;
     sal_Int32                       mnFloatTitleHeight;
-    sal_Int32                       mnScrollBarSize;
-    sal_Int32                       mnSpinSize;
-    sal_Int32                       mnCursorSize;
-    sal_Int32                       mnAntialiasedMin;
-    sal_uInt64                      mnCursorBlinkTime;
-    DragFullOptions                 mnDragFullOptions;
-    SelectionOptions                mnSelectionOptions;
-    DisplayOptions                  mnDisplayOptions;
-    ToolbarIconSize                 mnToolbarIconSize;
-    bool                            mnUseFlatMenus;
-    StyleSettingsOptions            mnOptions;
-    bool                            mbHighContrast;
-    bool                            mbUseSystemUIFonts;
+    sal_Int32                       mnScrollBarSize = 16;
+    sal_Int32                       mnSpinSize = 16;
+    sal_Int32                       mnCursorSize = 2;
+    sal_Int32                       mnAntialiasedMin = 0;
+    sal_uInt64                      mnCursorBlinkTime = STYLE_CURSOR_NOBLINKTIME;
+    DragFullOptions                 mnDragFullOptions = DragFullOptions::All;
+    SelectionOptions                mnSelectionOptions = SelectionOptions::NONE;
+    DisplayOptions                  mnDisplayOptions = DisplayOptions::NONE;
+    ToolbarIconSize                 mnToolbarIconSize = ToolbarIconSize::Unknown;
+    StyleSettingsOptions            mnOptions = StyleSettingsOptions::NONE;
+    TriState                        meUseImagesInMenus = TRISTATE_INDET;
+    std::optional<vcl::IconThemeScanner>
+                                    mIconThemeScanner;
+    vcl::IconThemeSelector          mIconThemeSelector;
+
+    OUString                        mIconTheme;
+    sal_Int32                       mnMinThumbSize = 16;
+    TriState                        meContextMenuShortcuts = TRISTATE_INDET;
+    DialogStyle                     maDialogStyle;
+
+    bool mnUseFlatMenus : 1;
+    bool mbHighContrast : 1;
+    bool mbUseSystemUIFonts : 1;
     /**
      * Disabling AA doesn't actually disable AA of fonts, instead it is taken
      * from system settings.
      */
-    bool mbUseFontAAFromSystem;
-    bool                            mbAutoMnemonic;
-    TriState                        meUseImagesInMenus;
-    bool                            mnUseFlatBorders;
-    bool                            mbPreferredUseImagesInMenus;
-    sal_Int32                       mnMinThumbSize;
-    std::shared_ptr<vcl::IconThemeScanner>
-                                    mIconThemeScanner;
-    std::shared_ptr<vcl::IconThemeSelector>
-                                    mIconThemeSelector;
-
-    OUString                        mIconTheme;
-    bool                            mbSkipDisabledInMenus;
-    bool                            mbHideDisabledMenuItems;
-    bool                            mbPreferredContextMenuShortcuts;
-    TriState                        meContextMenuShortcuts;
+    bool mbUseFontAAFromSystem : 1;
+    bool mbAutoMnemonic : 1 = true;
+    bool mnUseFlatBorders : 1;
+    bool mbPreferredUseImagesInMenus : 1;
+    bool mbSkipDisabledInMenus : 1;
+    bool mbHideDisabledMenuItems : 1;
+    bool mbPreferredContextMenuShortcuts : 1;
     //mbPrimaryButtonWarpsSlider == true for "jump to here" behavior for primary button, otherwise
     //primary means scroll by single page. Secondary button takes the alternative behaviour
-    bool                            mbPrimaryButtonWarpsSlider;
-    DialogStyle                     maDialogStyle;
+    bool mbPrimaryButtonWarpsSlider : 1;
+    bool mbPreviewUsesCheckeredBackground : 1 = true;
 
-    sal_uInt16                      mnEdgeBlending;
-    Color                           maEdgeBlendingTopLeftColor;
-    Color                           maEdgeBlendingBottomRightColor;
-    sal_uInt16                      mnListBoxMaximumLineCount;
-    sal_uInt16                      mnColorValueSetColumnCount;
-    Size                            maListBoxPreviewDefaultLogicSize;
+    sal_uInt16                      mnEdgeBlending = 35;
+    Color                           maEdgeBlendingTopLeftColor = Color(0xC0, 0xC0, 0xC0);
+    Color                           maEdgeBlendingBottomRightColor = Color(0x40, 0x40, 0x40);
+    sal_uInt16                      mnListBoxMaximumLineCount = 25;
+
+    // For some reason this isn't actually the column count that gets used, at least on iOS, but
+    // instead what SvtAccessibilityOptions_Impl::GetColorValueSetColumnCount() in
+    // svtools/source/config/accessibilityoptions.cxx returns.
+    sal_uInt16                      mnColorValueSetColumnCount = 12;
+    ComboBoxTextSelectionMode       meComboBoxTextSelectionMode = ComboBoxTextSelectionMode::SelectText;
+    Size                            maListBoxPreviewDefaultLogicSize = getInitListBoxPreviewDefaultLogicSize();
+    // on-demand calculated in GetListBoxPreviewDefaultPixelSize()
     Size                            maListBoxPreviewDefaultPixelSize;
-    ComboBoxTextSelectionMode       meComboBoxTextSelectionMode;
-    bool                            mbPreviewUsesCheckeredBackground;
 
     OUString                        maPersonaHeaderFooter; ///< Cache the settings to detect changes.
 
@@ -471,173 +505,9 @@ bool MouseSettings::operator ==( const MouseSettings& rSet ) const
          (mxData->mnWheelBehavior       == rSet.mxData->mnWheelBehavior );
 }
 
-ImplStyleData::ImplStyleData() :
-    mnScrollBarSize(16),
-    mnSpinSize(16),
-    mnCursorSize(2),
-    mnAntialiasedMin(0),
-    mnCursorBlinkTime(STYLE_CURSOR_NOBLINKTIME),
-    mnDragFullOptions(DragFullOptions::All),
-    mnSelectionOptions(SelectionOptions::NONE),
-    mnDisplayOptions(DisplayOptions::NONE),
-    mnToolbarIconSize(ToolbarIconSize::Unknown),
-    mnOptions(StyleSettingsOptions::NONE),
-    mbAutoMnemonic(true),
-    meUseImagesInMenus(TRISTATE_INDET),
-    mnMinThumbSize(16),
-    mIconThemeSelector(std::make_shared<vcl::IconThemeSelector>()),
-    meContextMenuShortcuts(TRISTATE_INDET),
-    mnEdgeBlending(35),
-    maEdgeBlendingTopLeftColor(Color(0xC0, 0xC0, 0xC0)),
-    maEdgeBlendingBottomRightColor(Color(0x40, 0x40, 0x40)),
-    mnListBoxMaximumLineCount(25),
-    // For some reason this isn't actually the column count that gets used, at least on iOS, but
-    // instead what SvtAccessibilityOptions_Impl::GetColorValueSetColumnCount() in
-    // svtools/source/config/accessibilityoptions.cxx returns.
-    mnColorValueSetColumnCount(12),
-#ifdef IOS
-    maListBoxPreviewDefaultLogicSize(Size(30, 30)),
-#else
-    maListBoxPreviewDefaultLogicSize(Size(15, 7)),
-#endif
-    maListBoxPreviewDefaultPixelSize(Size(0, 0)), // on-demand calculated in GetListBoxPreviewDefaultPixelSize(),
-    meComboBoxTextSelectionMode(ComboBoxTextSelectionMode::SelectText),
-    mbPreviewUsesCheckeredBackground(true)
+ImplStyleData::ImplStyleData()
 {
     SetStandardStyles();
-}
-
-ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
-    maActiveBorderColor( rData.maActiveBorderColor ),
-    maActiveColor( rData.maActiveColor ),
-    maActiveTextColor( rData.maActiveTextColor ),
-    maAlternatingRowColor( rData.maAlternatingRowColor ),
-    maDefaultButtonTextColor( rData.maDefaultButtonTextColor ),
-    maButtonTextColor( rData.maButtonTextColor ),
-    maDefaultActionButtonTextColor( rData.maDefaultActionButtonTextColor ),
-    maActionButtonTextColor( rData.maActionButtonTextColor ),
-    maFlatButtonTextColor( rData.maFlatButtonTextColor ),
-    maDefaultButtonRolloverTextColor( rData.maDefaultButtonRolloverTextColor ),
-    maButtonRolloverTextColor( rData.maButtonRolloverTextColor ),
-    maDefaultActionButtonRolloverTextColor( rData.maDefaultActionButtonRolloverTextColor ),
-    maActionButtonRolloverTextColor( rData.maActionButtonRolloverTextColor ),
-    maFlatButtonRolloverTextColor( rData.maFlatButtonRolloverTextColor ),
-    maDefaultButtonPressedRolloverTextColor( rData.maDefaultButtonPressedRolloverTextColor ),
-    maButtonPressedRolloverTextColor( rData.maButtonPressedRolloverTextColor ),
-    maDefaultActionButtonPressedRolloverTextColor( rData.maDefaultActionButtonPressedRolloverTextColor ),
-    maActionButtonPressedRolloverTextColor( rData.maActionButtonPressedRolloverTextColor ),
-    maFlatButtonPressedRolloverTextColor( rData.maFlatButtonPressedRolloverTextColor ),
-    maCheckedColor( rData.maCheckedColor ),
-    maDarkShadowColor( rData.maDarkShadowColor ),
-    maDeactiveBorderColor( rData.maDeactiveBorderColor ),
-    maDeactiveColor( rData.maDeactiveColor ),
-    maDeactiveTextColor( rData.maDeactiveTextColor ),
-    maDialogColor( rData.maDialogColor ),
-    maDialogTextColor( rData.maDialogTextColor ),
-    maDisableColor( rData.maDisableColor ),
-    maFaceColor( rData.maFaceColor ),
-    maFieldColor( rData.maFieldColor ),
-    maFieldTextColor( rData.maFieldTextColor ),
-    maFieldRolloverTextColor( rData.maFieldRolloverTextColor ),
-    maGroupTextColor( rData.maGroupTextColor ),
-    maHelpColor( rData.maHelpColor ),
-    maHelpTextColor( rData.maHelpTextColor ),
-    maAccentColor( rData.maAccentColor ),
-    maHighlightColor( rData.maHighlightColor ),
-    maHighlightTextColor( rData.maHighlightTextColor ),
-    maLabelTextColor( rData.maLabelTextColor ),
-    maLightBorderColor( rData.maLightBorderColor ),
-    maLightColor( rData.maLightColor ),
-    maLinkColor( rData.maLinkColor ),
-    maMenuBarColor( rData.maMenuBarColor ),
-    maMenuBarRolloverColor( rData.maMenuBarRolloverColor ),
-    maMenuBorderColor( rData.maMenuBorderColor ),
-    maMenuColor( rData.maMenuColor ),
-    maMenuHighlightColor( rData.maMenuHighlightColor ),
-    maMenuHighlightTextColor( rData.maMenuHighlightTextColor ),
-    maMenuTextColor( rData.maMenuTextColor ),
-    maListBoxWindowBackgroundColor( rData.maListBoxWindowBackgroundColor ),
-    maListBoxWindowTextColor( rData.maListBoxWindowTextColor ),
-    maListBoxWindowHighlightColor( rData.maListBoxWindowHighlightColor ),
-    maListBoxWindowHighlightTextColor( rData.maListBoxWindowHighlightTextColor ),
-    maMenuBarTextColor( rData.maMenuBarTextColor ),
-    maMenuBarRolloverTextColor( rData.maMenuBarRolloverTextColor ),
-    maMenuBarHighlightTextColor( rData.maMenuBarHighlightTextColor ),
-    maMonoColor( rData.maMonoColor ),
-    maRadioCheckTextColor( rData.maRadioCheckTextColor ),
-    maShadowColor( rData.maShadowColor ),
-    maWarningColor( rData.maWarningColor ),
-    maWarningTextColor( rData.maWarningTextColor ),
-    maErrorColor( rData.maErrorColor ),
-    maErrorTextColor( rData.maErrorTextColor ),
-    maVisitedLinkColor( rData.maVisitedLinkColor ),
-    maToolTextColor( rData.maToolTextColor ),
-    maWindowColor( rData.maWindowColor ),
-    maWindowTextColor( rData.maWindowTextColor ),
-    maWorkspaceColor( rData.maWorkspaceColor ),
-    maActiveTabColor( rData.maActiveTabColor ),
-    maInactiveTabColor( rData.maInactiveTabColor ),
-    maTabTextColor( rData.maTabTextColor ),
-    maTabRolloverTextColor( rData.maTabRolloverTextColor ),
-    maTabHighlightTextColor( rData.maTabHighlightTextColor ),
-    maAppFont( rData.maAppFont ),
-    maHelpFont( rData.maAppFont ),
-    maTitleFont( rData.maTitleFont ),
-    maFloatTitleFont( rData.maFloatTitleFont ),
-    maMenuFont( rData.maMenuFont ),
-    maToolFont( rData.maToolFont ),
-    maLabelFont( rData.maLabelFont ),
-    maRadioCheckFont( rData.maRadioCheckFont ),
-    maPushButtonFont( rData.maPushButtonFont ),
-    maFieldFont( rData.maFieldFont ),
-    maIconFont( rData.maIconFont ),
-    maTabFont( rData.maTabFont ),
-    maGroupFont( rData.maGroupFont ),
-    mnTitleHeight(rData.mnTitleHeight),
-    mnFloatTitleHeight(rData.mnFloatTitleHeight),
-    mnScrollBarSize(rData.mnScrollBarSize),
-    mnSpinSize(rData.mnSpinSize),
-    mnCursorSize(rData.mnCursorSize),
-    mnAntialiasedMin(rData.mnAntialiasedMin),
-    mnCursorBlinkTime(rData.mnCursorBlinkTime),
-    mnDragFullOptions(rData.mnDragFullOptions),
-    mnSelectionOptions(rData.mnSelectionOptions),
-    mnDisplayOptions(rData.mnDisplayOptions),
-    mnToolbarIconSize(rData.mnToolbarIconSize),
-    mnUseFlatMenus(rData.mnUseFlatMenus),
-    mnOptions(rData.mnOptions),
-    mbHighContrast(rData.mbHighContrast),
-    mbUseSystemUIFonts(rData.mbUseSystemUIFonts),
-    mbUseFontAAFromSystem(rData.mbUseFontAAFromSystem),
-    mbAutoMnemonic(rData.mbAutoMnemonic),
-    meUseImagesInMenus(rData.meUseImagesInMenus),
-    mnUseFlatBorders(rData.mnUseFlatBorders),
-    mbPreferredUseImagesInMenus(rData.mbPreferredUseImagesInMenus),
-    mnMinThumbSize(rData.mnMinThumbSize),
-    mIconThemeSelector(std::make_shared<vcl::IconThemeSelector>(*rData.mIconThemeSelector)),
-    mIconTheme(rData.mIconTheme),
-    mbSkipDisabledInMenus(rData.mbSkipDisabledInMenus),
-    mbHideDisabledMenuItems(rData.mbHideDisabledMenuItems),
-    mbPreferredContextMenuShortcuts(rData.mbPreferredContextMenuShortcuts),
-    meContextMenuShortcuts(rData.meContextMenuShortcuts),
-    mbPrimaryButtonWarpsSlider(rData.mbPrimaryButtonWarpsSlider),
-    maDialogStyle( rData.maDialogStyle ),
-    mnEdgeBlending(rData.mnEdgeBlending),
-    maEdgeBlendingTopLeftColor(rData.maEdgeBlendingTopLeftColor),
-    maEdgeBlendingBottomRightColor(rData.maEdgeBlendingBottomRightColor),
-    mnListBoxMaximumLineCount(rData.mnListBoxMaximumLineCount),
-    mnColorValueSetColumnCount(rData.mnColorValueSetColumnCount),
-    maListBoxPreviewDefaultLogicSize(rData.maListBoxPreviewDefaultLogicSize),
-    maListBoxPreviewDefaultPixelSize(rData.maListBoxPreviewDefaultPixelSize),
-    meComboBoxTextSelectionMode(rData.meComboBoxTextSelectionMode),
-    mbPreviewUsesCheckeredBackground(rData.mbPreviewUsesCheckeredBackground),
-    maPersonaHeaderFooter( rData.maPersonaHeaderFooter ),
-    maPersonaHeaderBitmap( rData.maPersonaHeaderBitmap ),
-    maPersonaFooterBitmap( rData.maPersonaFooterBitmap ),
-    maPersonaMenuBarTextColor( rData.maPersonaMenuBarTextColor )
-{
-    if (rData.mIconThemeScanner)
-        mIconThemeScanner = std::make_shared<vcl::IconThemeScanner>(*rData.mIconThemeScanner);
 }
 
 void ImplStyleData::SetStandardStyles()
@@ -649,98 +519,98 @@ void ImplStyleData::SetStandardStyles()
         aStdFont.SetFamilyName(utl::DefaultFontConfiguration::get().getUserInterfaceFont(LanguageTag(u"en"_ustr)));
     else
         aStdFont.SetFamilyName(u"Liberation Sans"_ustr);
-    maAppFont                   = aStdFont;
-    maHelpFont                  = aStdFont;
-    maMenuFont                  = aStdFont;
-    maToolFont                  = aStdFont;
-    maGroupFont                 = aStdFont;
-    maLabelFont                 = aStdFont;
-    maRadioCheckFont            = aStdFont;
-    maPushButtonFont            = aStdFont;
-    maFieldFont                 = aStdFont;
-    maIconFont                  = aStdFont;
-    maTabFont                   = aStdFont;
+    maFonts.maAppFont                   = aStdFont;
+    maFonts.maHelpFont                  = aStdFont;
+    maFonts.maMenuFont                  = aStdFont;
+    maFonts.maToolFont                  = aStdFont;
+    maFonts.maGroupFont                 = aStdFont;
+    maFonts.maLabelFont                 = aStdFont;
+    maFonts.maRadioCheckFont            = aStdFont;
+    maFonts.maPushButtonFont            = aStdFont;
+    maFonts.maFieldFont                 = aStdFont;
+    maFonts.maIconFont                  = aStdFont;
+    maFonts.maTabFont                   = aStdFont;
 
     aStdFont.SetWeight( WEIGHT_BOLD );
-    maFloatTitleFont = maTitleFont = std::move(aStdFont);
+    maFonts.maFloatTitleFont = maFonts.maTitleFont = std::move(aStdFont);
 
-    maFaceColor                 = COL_LIGHTGRAY;
-    maCheckedColor              = Color( 0xCC, 0xCC, 0xCC );
-    maLightColor                = COL_WHITE;
-    maLightBorderColor          = COL_LIGHTGRAY;
-    maShadowColor               = COL_GRAY;
-    maDarkShadowColor           = COL_BLACK;
+    maColors.maFaceColor                 = COL_LIGHTGRAY;
+    maColors.maCheckedColor              = Color( 0xCC, 0xCC, 0xCC );
+    maColors.maLightColor                = COL_WHITE;
+    maColors.maLightBorderColor          = COL_LIGHTGRAY;
+    maColors.maShadowColor               = COL_GRAY;
+    maColors.maDarkShadowColor           = COL_BLACK;
 
-    maWarningColor              = Color(0xFE, 0xEF, 0xB3); // tdf#105829
-    maWarningTextColor          = Color(0x70, 0x43, 0x00);
-    maErrorColor                = Color(0xFF, 0xBA, 0xBA);
-    maErrorTextColor            = Color(0x7A, 0x00, 0x06);
+    maColors.maWarningColor              = Color(0xFE, 0xEF, 0xB3); // tdf#105829
+    maColors.maWarningTextColor          = Color(0x70, 0x43, 0x00);
+    maColors.maErrorColor                = Color(0xFF, 0xBA, 0xBA);
+    maColors.maErrorTextColor            = Color(0x7A, 0x00, 0x06);
 
-    maDefaultButtonTextColor                      = COL_BLACK;
-    maButtonTextColor                             = COL_BLACK;
-    maDefaultActionButtonTextColor                = COL_BLACK;
-    maActionButtonTextColor                       = COL_BLACK;
-    maFlatButtonTextColor                         = COL_BLACK;
-    maDefaultButtonRolloverTextColor              = COL_BLACK;
-    maButtonRolloverTextColor                     = COL_BLACK;
-    maDefaultActionButtonRolloverTextColor        = COL_BLACK;
-    maActionButtonRolloverTextColor               = COL_BLACK;
-    maFlatButtonRolloverTextColor                 = COL_BLACK;
-    maDefaultButtonPressedRolloverTextColor       = COL_BLACK;
-    maButtonPressedRolloverTextColor              = COL_BLACK;
-    maDefaultActionButtonPressedRolloverTextColor = COL_BLACK;
-    maActionButtonPressedRolloverTextColor        = COL_BLACK;
-    maFlatButtonPressedRolloverTextColor          = COL_BLACK;
+    maColors.maDefaultButtonTextColor                      = COL_BLACK;
+    maColors.maButtonTextColor                             = COL_BLACK;
+    maColors.maDefaultActionButtonTextColor                = COL_BLACK;
+    maColors.maActionButtonTextColor                       = COL_BLACK;
+    maColors.maFlatButtonTextColor                         = COL_BLACK;
+    maColors.maDefaultButtonRolloverTextColor              = COL_BLACK;
+    maColors.maButtonRolloverTextColor                     = COL_BLACK;
+    maColors.maDefaultActionButtonRolloverTextColor        = COL_BLACK;
+    maColors.maActionButtonRolloverTextColor               = COL_BLACK;
+    maColors.maFlatButtonRolloverTextColor                 = COL_BLACK;
+    maColors.maDefaultButtonPressedRolloverTextColor       = COL_BLACK;
+    maColors.maButtonPressedRolloverTextColor              = COL_BLACK;
+    maColors.maDefaultActionButtonPressedRolloverTextColor = COL_BLACK;
+    maColors.maActionButtonPressedRolloverTextColor        = COL_BLACK;
+    maColors.maFlatButtonPressedRolloverTextColor          = COL_BLACK;
 
-    maRadioCheckTextColor       = COL_BLACK;
-    maGroupTextColor            = COL_BLACK;
-    maLabelTextColor            = COL_BLACK;
-    maWindowColor               = COL_WHITE;
-    maWindowTextColor           = COL_BLACK;
-    maDialogColor               = COL_LIGHTGRAY;
-    maDialogTextColor           = COL_BLACK;
-    maWorkspaceColor            = Color( 0xDF, 0xDF, 0xDE );
-    maMonoColor                 = COL_BLACK;
-    maFieldColor                = COL_WHITE;
-    maFieldTextColor            = COL_BLACK;
-    maFieldRolloverTextColor    = COL_BLACK;
-    maActiveBorderColor         = COL_LIGHTGRAY;
-    maDeactiveColor             = COL_GRAY;
-    maDeactiveTextColor         = COL_LIGHTGRAY;
-    maDeactiveBorderColor       = COL_LIGHTGRAY;
-    maMenuColor                 = COL_LIGHTGRAY;
-    maMenuBarColor              = COL_LIGHTGRAY;
-    maMenuBarRolloverColor      = COL_BLUE;
-    maMenuBorderColor           = COL_LIGHTGRAY;
-    maMenuTextColor             = COL_BLACK;
-    maListBoxWindowBackgroundColor = COL_WHITE;
-    maListBoxWindowTextColor    = COL_BLACK;
-    maListBoxWindowHighlightColor = COL_BLUE;
-    maListBoxWindowHighlightTextColor = COL_WHITE;
-    maMenuBarTextColor          = COL_BLACK;
-    maMenuBarRolloverTextColor  = COL_WHITE;
-    maMenuBarHighlightTextColor = COL_WHITE;
-    maMenuHighlightColor        = COL_BLUE;
-    maMenuHighlightTextColor    = COL_WHITE;
-    maAccentColor               = COL_RED;
-    maHighlightColor            = COL_BLUE;
-    maHighlightTextColor        = COL_WHITE;
+    maColors.maRadioCheckTextColor       = COL_BLACK;
+    maColors.maGroupTextColor            = COL_BLACK;
+    maColors.maLabelTextColor            = COL_BLACK;
+    maColors.maWindowColor               = COL_WHITE;
+    maColors.maWindowTextColor           = COL_BLACK;
+    maColors.maDialogColor               = COL_LIGHTGRAY;
+    maColors.maDialogTextColor           = COL_BLACK;
+    maColors.maWorkspaceColor            = Color( 0xDF, 0xDF, 0xDE );
+    maColors.maMonoColor                 = COL_BLACK;
+    maColors.maFieldColor                = COL_WHITE;
+    maColors.maFieldTextColor            = COL_BLACK;
+    maColors.maFieldRolloverTextColor    = COL_BLACK;
+    maColors.maActiveBorderColor         = COL_LIGHTGRAY;
+    maColors.maDeactiveColor             = COL_GRAY;
+    maColors.maDeactiveTextColor         = COL_LIGHTGRAY;
+    maColors.maDeactiveBorderColor       = COL_LIGHTGRAY;
+    maColors.maMenuColor                 = COL_LIGHTGRAY;
+    maColors.maMenuBarColor              = COL_LIGHTGRAY;
+    maColors.maMenuBarRolloverColor      = COL_BLUE;
+    maColors.maMenuBorderColor           = COL_LIGHTGRAY;
+    maColors.maMenuTextColor             = COL_BLACK;
+    maColors.maListBoxWindowBackgroundColor = COL_WHITE;
+    maColors.maListBoxWindowTextColor    = COL_BLACK;
+    maColors.maListBoxWindowHighlightColor = COL_BLUE;
+    maColors.maListBoxWindowHighlightTextColor = COL_WHITE;
+    maColors.maMenuBarTextColor          = COL_BLACK;
+    maColors.maMenuBarRolloverTextColor  = COL_WHITE;
+    maColors.maMenuBarHighlightTextColor = COL_WHITE;
+    maColors.maMenuHighlightColor        = COL_BLUE;
+    maColors.maMenuHighlightTextColor    = COL_WHITE;
+    maColors.maAccentColor               = COL_RED;
+    maColors.maHighlightColor            = COL_BLUE;
+    maColors.maHighlightTextColor        = COL_WHITE;
     // make active like highlight, except with a small contrast
-    maActiveColor               = maHighlightColor;
-    maActiveColor.IncreaseLuminance(32);
-    maActiveTextColor           = maHighlightTextColor;
-    maActiveTabColor            = COL_WHITE;
-    maInactiveTabColor          = COL_LIGHTGRAY;
-    maTabTextColor              = COL_BLACK;
-    maTabRolloverTextColor      = COL_BLACK;
-    maTabHighlightTextColor     = COL_BLACK;
-    maDisableColor              = COL_GRAY;
-    maHelpColor                 = Color( 0xFF, 0xFF, 0xE0 );
-    maHelpTextColor             = COL_BLACK;
-    maLinkColor                 = COL_BLUE;
-    maVisitedLinkColor          = Color( 0x00, 0x00, 0xCC );
-    maToolTextColor             = COL_BLACK;
-    maAlternatingRowColor       = Color( 0xEE, 0xEE, 0xEE );
+    maColors.maActiveColor               = maColors.maHighlightColor;
+    maColors.maActiveColor.IncreaseLuminance(32);
+    maColors.maActiveTextColor           = maColors.maHighlightTextColor;
+    maColors.maActiveTabColor            = COL_WHITE;
+    maColors.maInactiveTabColor          = COL_LIGHTGRAY;
+    maColors.maTabTextColor              = COL_BLACK;
+    maColors.maTabRolloverTextColor      = COL_BLACK;
+    maColors.maTabHighlightTextColor     = COL_BLACK;
+    maColors.maDisableColor              = COL_GRAY;
+    maColors.maHelpColor                 = Color( 0xFF, 0xFF, 0xE0 );
+    maColors.maHelpTextColor             = COL_BLACK;
+    maColors.maLinkColor                 = COL_BLUE;
+    maColors.maVisitedLinkColor          = Color( 0x00, 0x00, 0xCC );
+    maColors.maToolTextColor             = COL_BLACK;
+    maColors.maAlternatingRowColor       = Color( 0xEE, 0xEE, 0xEE );
 
     mnTitleHeight                   = 18;
     mnFloatTitleHeight              = 13;
@@ -765,935 +635,935 @@ void
 StyleSettings::SetFaceColor( const Color& rColor )
 {
     CopyData();
-    mxData->maFaceColor = rColor;
+    mxData->maColors.maFaceColor = rColor;
 }
 
 const Color&
 StyleSettings::GetFaceColor() const
 {
-    return mxData->maFaceColor;
+    return mxData->maColors.maFaceColor;
 }
 
 void
 StyleSettings::SetCheckedColor( const Color& rColor )
 {
     CopyData();
-    mxData->maCheckedColor = rColor;
+    mxData->maColors.maCheckedColor = rColor;
 }
 
 const Color&
 StyleSettings::GetCheckedColor() const
 {
-    return mxData->maCheckedColor;
+    return mxData->maColors.maCheckedColor;
 }
 
 void
 StyleSettings::SetLightColor( const Color& rColor )
 {
     CopyData();
-    mxData->maLightColor = rColor;
+    mxData->maColors.maLightColor = rColor;
 }
 
 const Color&
 StyleSettings::GetLightColor() const
 {
-    return mxData->maLightColor;
+    return mxData->maColors.maLightColor;
 }
 
 void
 StyleSettings::SetLightBorderColor( const Color& rColor )
 {
     CopyData();
-    mxData->maLightBorderColor = rColor;
+    mxData->maColors.maLightBorderColor = rColor;
 }
 
 const Color&
 StyleSettings::GetLightBorderColor() const
 {
-    return mxData->maLightBorderColor;
+    return mxData->maColors.maLightBorderColor;
 }
 
 void
 StyleSettings::SetWarningColor( const Color& rColor )
 {
     CopyData();
-    mxData->maWarningColor = rColor;
+    mxData->maColors.maWarningColor = rColor;
 }
 
 const Color&
 StyleSettings::GetWarningColor() const
 {
-    return mxData->maWarningColor;
+    return mxData->maColors.maWarningColor;
 }
 
 void
 StyleSettings::SetWarningTextColor( const Color& rColor )
 {
     CopyData();
-    mxData->maWarningTextColor = rColor;
+    mxData->maColors.maWarningTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetWarningTextColor() const
 {
-    return mxData->maWarningTextColor;
+    return mxData->maColors.maWarningTextColor;
 }
 
 void
 StyleSettings::SetErrorColor( const Color& rColor )
 {
     CopyData();
-    mxData->maErrorColor = rColor;
+    mxData->maColors.maErrorColor = rColor;
 }
 
 const Color&
 StyleSettings::GetErrorColor() const
 {
-    return mxData->maErrorColor;
+    return mxData->maColors.maErrorColor;
 }
 
 void
 StyleSettings::SetErrorTextColor( const Color& rColor )
 {
     CopyData();
-    mxData->maErrorTextColor = rColor;
+    mxData->maColors.maErrorTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetErrorTextColor() const
 {
-    return mxData->maErrorTextColor;
+    return mxData->maColors.maErrorTextColor;
 }
 
 void
 StyleSettings::SetShadowColor( const Color& rColor )
 {
     CopyData();
-    mxData->maShadowColor = rColor;
+    mxData->maColors.maShadowColor = rColor;
 }
 
 const Color&
 StyleSettings::GetShadowColor() const
 {
-    return mxData->maShadowColor;
+    return mxData->maColors.maShadowColor;
 }
 
 void
 StyleSettings::SetDarkShadowColor( const Color& rColor )
 {
     CopyData();
-    mxData->maDarkShadowColor = rColor;
+    mxData->maColors.maDarkShadowColor = rColor;
 }
 
 const Color&
 StyleSettings::GetDarkShadowColor() const
 {
-    return mxData->maDarkShadowColor;
+    return mxData->maColors.maDarkShadowColor;
 }
 
 void
 StyleSettings::SetDefaultButtonTextColor( const Color& rColor )
 {
     CopyData();
-    mxData->maDefaultButtonTextColor = rColor;
+    mxData->maColors.maDefaultButtonTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetDefaultButtonTextColor() const
 {
-    return mxData->maDefaultButtonTextColor;
+    return mxData->maColors.maDefaultButtonTextColor;
 }
 
 void
 StyleSettings::SetButtonTextColor( const Color& rColor )
 {
     CopyData();
-    mxData->maButtonTextColor = rColor;
+    mxData->maColors.maButtonTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetButtonTextColor() const
 {
-    return mxData->maButtonTextColor;
+    return mxData->maColors.maButtonTextColor;
 }
 
 void
 StyleSettings::SetDefaultActionButtonTextColor( const Color& rColor )
 {
     CopyData();
-    mxData->maDefaultActionButtonTextColor = rColor;
+    mxData->maColors.maDefaultActionButtonTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetDefaultActionButtonTextColor() const
 {
-    return mxData->maDefaultActionButtonTextColor;
+    return mxData->maColors.maDefaultActionButtonTextColor;
 }
 
 void
 StyleSettings::SetActionButtonTextColor( const Color& rColor )
 {
     CopyData();
-    mxData->maActionButtonTextColor = rColor;
+    mxData->maColors.maActionButtonTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetActionButtonTextColor() const
 {
-    return mxData->maActionButtonTextColor;
+    return mxData->maColors.maActionButtonTextColor;
 }
 
 void
 StyleSettings::SetFlatButtonTextColor( const Color& rColor )
 {
     CopyData();
-    mxData->maFlatButtonTextColor = rColor;
+    mxData->maColors.maFlatButtonTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetFlatButtonTextColor() const
 {
-    return mxData->maFlatButtonTextColor;
+    return mxData->maColors.maFlatButtonTextColor;
 }
 
 void
 StyleSettings::SetDefaultButtonRolloverTextColor( const Color& rColor )
 {
     CopyData();
-    mxData->maDefaultButtonRolloverTextColor = rColor;
+    mxData->maColors.maDefaultButtonRolloverTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetDefaultButtonRolloverTextColor() const
 {
-    return mxData->maDefaultButtonRolloverTextColor;
+    return mxData->maColors.maDefaultButtonRolloverTextColor;
 }
 
 void
 StyleSettings::SetButtonRolloverTextColor( const Color& rColor )
 {
     CopyData();
-    mxData->maButtonRolloverTextColor = rColor;
+    mxData->maColors.maButtonRolloverTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetButtonRolloverTextColor() const
 {
-    return mxData->maButtonRolloverTextColor;
+    return mxData->maColors.maButtonRolloverTextColor;
 }
 
 void
 StyleSettings::SetDefaultActionButtonRolloverTextColor( const Color& rColor )
 {
     CopyData();
-    mxData->maDefaultActionButtonRolloverTextColor = rColor;
+    mxData->maColors.maDefaultActionButtonRolloverTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetDefaultActionButtonRolloverTextColor() const
 {
-    return mxData->maDefaultActionButtonRolloverTextColor;
+    return mxData->maColors.maDefaultActionButtonRolloverTextColor;
 }
 
 void
 StyleSettings::SetActionButtonRolloverTextColor( const Color& rColor )
 {
     CopyData();
-    mxData->maActionButtonRolloverTextColor = rColor;
+    mxData->maColors.maActionButtonRolloverTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetActionButtonRolloverTextColor() const
 {
-    return mxData->maActionButtonRolloverTextColor;
+    return mxData->maColors.maActionButtonRolloverTextColor;
 }
 
 void
 StyleSettings::SetFlatButtonRolloverTextColor( const Color& rColor )
 {
     CopyData();
-    mxData->maFlatButtonRolloverTextColor = rColor;
+    mxData->maColors.maFlatButtonRolloverTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetFlatButtonRolloverTextColor() const
 {
-    return mxData->maFlatButtonRolloverTextColor;
+    return mxData->maColors.maFlatButtonRolloverTextColor;
 }
 
 void
 StyleSettings::SetDefaultButtonPressedRolloverTextColor( const Color& rColor )
 {
     CopyData();
-    mxData->maDefaultButtonPressedRolloverTextColor = rColor;
+    mxData->maColors.maDefaultButtonPressedRolloverTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetDefaultButtonPressedRolloverTextColor() const
 {
-    return mxData->maDefaultButtonPressedRolloverTextColor;
+    return mxData->maColors.maDefaultButtonPressedRolloverTextColor;
 }
 
 void
 StyleSettings::SetButtonPressedRolloverTextColor( const Color& rColor )
 {
     CopyData();
-    mxData->maButtonPressedRolloverTextColor = rColor;
+    mxData->maColors.maButtonPressedRolloverTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetButtonPressedRolloverTextColor() const
 {
-    return mxData->maButtonPressedRolloverTextColor;
+    return mxData->maColors.maButtonPressedRolloverTextColor;
 }
 
 void
 StyleSettings::SetDefaultActionButtonPressedRolloverTextColor( const Color& rColor )
 {
     CopyData();
-    mxData->maDefaultActionButtonPressedRolloverTextColor = rColor;
+    mxData->maColors.maDefaultActionButtonPressedRolloverTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetDefaultActionButtonPressedRolloverTextColor() const
 {
-    return mxData->maDefaultActionButtonPressedRolloverTextColor;
+    return mxData->maColors.maDefaultActionButtonPressedRolloverTextColor;
 }
 
 void
 StyleSettings::SetActionButtonPressedRolloverTextColor( const Color& rColor )
 {
     CopyData();
-    mxData->maActionButtonPressedRolloverTextColor = rColor;
+    mxData->maColors.maActionButtonPressedRolloverTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetActionButtonPressedRolloverTextColor() const
 {
-    return mxData->maActionButtonPressedRolloverTextColor;
+    return mxData->maColors.maActionButtonPressedRolloverTextColor;
 }
 
 void
 StyleSettings::SetFlatButtonPressedRolloverTextColor( const Color& rColor )
 {
     CopyData();
-    mxData->maFlatButtonPressedRolloverTextColor = rColor;
+    mxData->maColors.maFlatButtonPressedRolloverTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetFlatButtonPressedRolloverTextColor() const
 {
-    return mxData->maFlatButtonPressedRolloverTextColor;
+    return mxData->maColors.maFlatButtonPressedRolloverTextColor;
 }
 
 void
 StyleSettings::SetRadioCheckTextColor( const Color& rColor )
 {
     CopyData();
-    mxData->maRadioCheckTextColor = rColor;
+    mxData->maColors.maRadioCheckTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetRadioCheckTextColor() const
 {
-    return mxData->maRadioCheckTextColor;
+    return mxData->maColors.maRadioCheckTextColor;
 }
 
 void
 StyleSettings::SetGroupTextColor( const Color& rColor )
 {
     CopyData();
-    mxData->maGroupTextColor = rColor;
+    mxData->maColors.maGroupTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetGroupTextColor() const
 {
-    return mxData->maGroupTextColor;
+    return mxData->maColors.maGroupTextColor;
 }
 
 void
 StyleSettings::SetLabelTextColor( const Color& rColor )
 {
     CopyData();
-    mxData->maLabelTextColor = rColor;
+    mxData->maColors.maLabelTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetLabelTextColor() const
 {
-    return mxData->maLabelTextColor;
+    return mxData->maColors.maLabelTextColor;
 }
 
 void
 StyleSettings::SetWindowColor( const Color& rColor )
 {
     CopyData();
-    mxData->maWindowColor = rColor;
+    mxData->maColors.maWindowColor = rColor;
 }
 
 const Color&
 StyleSettings::GetWindowColor() const
 {
-    return mxData->maWindowColor;
+    return mxData->maColors.maWindowColor;
 }
 
 void
 StyleSettings::SetWindowTextColor( const Color& rColor )
 {
     CopyData();
-    mxData->maWindowTextColor = rColor;
+    mxData->maColors.maWindowTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetWindowTextColor() const
 {
-    return mxData->maWindowTextColor;
+    return mxData->maColors.maWindowTextColor;
 }
 
 void
 StyleSettings::SetDialogColor( const Color& rColor )
 {
     CopyData();
-    mxData->maDialogColor = rColor;
+    mxData->maColors.maDialogColor = rColor;
 }
 
 const Color&
 StyleSettings::GetDialogColor() const
 {
-    return mxData->maDialogColor;
+    return mxData->maColors.maDialogColor;
 }
 
 void
 StyleSettings::SetDialogTextColor( const Color& rColor )
 {
     CopyData();
-    mxData->maDialogTextColor = rColor;
+    mxData->maColors.maDialogTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetDialogTextColor() const
 {
-    return mxData->maDialogTextColor;
+    return mxData->maColors.maDialogTextColor;
 }
 
 void
 StyleSettings::SetWorkspaceColor( const Color& rColor )
 {
     CopyData();
-    mxData->maWorkspaceColor = rColor;
+    mxData->maColors.maWorkspaceColor = rColor;
 }
 
 const Color&
 StyleSettings::GetWorkspaceColor() const
 {
-    return mxData->maWorkspaceColor;
+    return mxData->maColors.maWorkspaceColor;
 }
 
 void
 StyleSettings::SetFieldColor( const Color& rColor )
 {
     CopyData();
-    mxData->maFieldColor = rColor;
+    mxData->maColors.maFieldColor = rColor;
 }
 
 const Color&
 StyleSettings::GetFieldColor() const
 {
-    return mxData->maFieldColor;
+    return mxData->maColors.maFieldColor;
 }
 
 void
 StyleSettings::SetFieldTextColor( const Color& rColor )
 {
     CopyData();
-    mxData->maFieldTextColor = rColor;
+    mxData->maColors.maFieldTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetFieldTextColor() const
 {
-    return mxData->maFieldTextColor;
+    return mxData->maColors.maFieldTextColor;
 }
 
 void
 StyleSettings::SetFieldRolloverTextColor( const Color& rColor )
 {
     CopyData();
-    mxData->maFieldRolloverTextColor = rColor;
+    mxData->maColors.maFieldRolloverTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetFieldRolloverTextColor() const
 {
-    return mxData->maFieldRolloverTextColor;
+    return mxData->maColors.maFieldRolloverTextColor;
 }
 
 void
 StyleSettings::SetActiveColor( const Color& rColor )
 {
     CopyData();
-    mxData->maActiveColor = rColor;
+    mxData->maColors.maActiveColor = rColor;
 }
 
 const Color&
 StyleSettings::GetActiveColor() const
 {
-    return mxData->maActiveColor;
+    return mxData->maColors.maActiveColor;
 }
 
 void
 StyleSettings::SetActiveTextColor( const Color& rColor )
 {
     CopyData();
-    mxData->maActiveTextColor = rColor;
+    mxData->maColors.maActiveTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetActiveTextColor() const
 {
-    return mxData->maActiveTextColor;
+    return mxData->maColors.maActiveTextColor;
 }
 
 void
 StyleSettings::SetActiveBorderColor( const Color& rColor )
 {
     CopyData();
-    mxData->maActiveBorderColor = rColor;
+    mxData->maColors.maActiveBorderColor = rColor;
 }
 
 const Color&
 StyleSettings::GetActiveBorderColor() const
 {
-    return mxData->maActiveBorderColor;
+    return mxData->maColors.maActiveBorderColor;
 }
 
 void
 StyleSettings::SetDeactiveColor( const Color& rColor )
 {
     CopyData();
-    mxData->maDeactiveColor = rColor;
+    mxData->maColors.maDeactiveColor = rColor;
 }
 
 const Color&
 StyleSettings::GetDeactiveColor() const
 {
-    return mxData->maDeactiveColor;
+    return mxData->maColors.maDeactiveColor;
 }
 
 void
 StyleSettings::SetDeactiveTextColor( const Color& rColor )
 {
     CopyData();
-    mxData->maDeactiveTextColor = rColor;
+    mxData->maColors.maDeactiveTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetDeactiveTextColor() const
 {
-    return mxData->maDeactiveTextColor;
+    return mxData->maColors.maDeactiveTextColor;
 }
 
 void
 StyleSettings::SetDeactiveBorderColor( const Color& rColor )
 {
     CopyData();
-    mxData->maDeactiveBorderColor = rColor;
+    mxData->maColors.maDeactiveBorderColor = rColor;
 }
 
 const Color&
 StyleSettings::GetDeactiveBorderColor() const
 {
-    return mxData->maDeactiveBorderColor;
+    return mxData->maColors.maDeactiveBorderColor;
 }
 
 void
 StyleSettings::SetAccentColor( const Color& rColor )
 {
     CopyData();
-    mxData->maAccentColor = rColor;
+    mxData->maColors.maAccentColor = rColor;
 }
 
 const Color&
 StyleSettings::GetAccentColor() const
 {
-    return mxData->maAccentColor;
+    return mxData->maColors.maAccentColor;
 }
 
 void
 StyleSettings::SetHighlightColor( const Color& rColor )
 {
     CopyData();
-    mxData->maHighlightColor = rColor;
+    mxData->maColors.maHighlightColor = rColor;
 }
 
 const Color&
 StyleSettings::GetHighlightColor() const
 {
-    return mxData->maHighlightColor;
+    return mxData->maColors.maHighlightColor;
 }
 
 void
 StyleSettings::SetHighlightTextColor( const Color& rColor )
 {
     CopyData();
-    mxData->maHighlightTextColor = rColor;
+    mxData->maColors.maHighlightTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetHighlightTextColor() const
 {
-    return mxData->maHighlightTextColor;
+    return mxData->maColors.maHighlightTextColor;
 }
 
 void
 StyleSettings::SetDisableColor( const Color& rColor )
 {
     CopyData();
-    mxData->maDisableColor = rColor;
+    mxData->maColors.maDisableColor = rColor;
 }
 
 const Color&
 StyleSettings::GetDisableColor() const
 {
-    return mxData->maDisableColor;
+    return mxData->maColors.maDisableColor;
 }
 
 void
 StyleSettings::SetHelpColor( const Color& rColor )
 {
     CopyData();
-    mxData->maHelpColor = rColor;
+    mxData->maColors.maHelpColor = rColor;
 }
 
 const Color&
 StyleSettings::GetHelpColor() const
 {
-    return mxData->maHelpColor;
+    return mxData->maColors.maHelpColor;
 }
 
 void
 StyleSettings::SetHelpTextColor( const Color& rColor )
 {
     CopyData();
-    mxData->maHelpTextColor = rColor;
+    mxData->maColors.maHelpTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetHelpTextColor() const
 {
-    return mxData->maHelpTextColor;
+    return mxData->maColors.maHelpTextColor;
 }
 
 void
 StyleSettings::SetMenuColor( const Color& rColor )
 {
     CopyData();
-    mxData->maMenuColor = rColor;
+    mxData->maColors.maMenuColor = rColor;
 }
 
 const Color&
 StyleSettings::GetMenuColor() const
 {
-    return mxData->maMenuColor;
+    return mxData->maColors.maMenuColor;
 }
 
 void
 StyleSettings::SetMenuBarColor( const Color& rColor )
 {
     CopyData();
-    mxData->maMenuBarColor = rColor;
+    mxData->maColors.maMenuBarColor = rColor;
 }
 
 const Color&
 StyleSettings::GetMenuBarColor() const
 {
-    return mxData->maMenuBarColor;
+    return mxData->maColors.maMenuBarColor;
 }
 
 void
 StyleSettings::SetMenuBarRolloverColor( const Color& rColor )
 {
     CopyData();
-    mxData->maMenuBarRolloverColor = rColor;
+    mxData->maColors.maMenuBarRolloverColor = rColor;
 }
 
 const Color&
 StyleSettings::GetMenuBarRolloverColor() const
 {
-    return mxData->maMenuBarRolloverColor;
+    return mxData->maColors.maMenuBarRolloverColor;
 }
 
 void
 StyleSettings::SetMenuBorderColor( const Color& rColor )
 {
     CopyData();
-    mxData->maMenuBorderColor = rColor;
+    mxData->maColors.maMenuBorderColor = rColor;
 }
 
 const Color&
 StyleSettings::GetMenuBorderColor() const
 {
-    return mxData->maMenuBorderColor;
+    return mxData->maColors.maMenuBorderColor;
 }
 
 void
 StyleSettings::SetMenuTextColor( const Color& rColor )
 {
     CopyData();
-    mxData->maMenuTextColor = rColor;
+    mxData->maColors.maMenuTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetMenuTextColor() const
 {
-    return mxData->maMenuTextColor;
+    return mxData->maColors.maMenuTextColor;
 }
 
 void
 StyleSettings::SetMenuBarTextColor( const Color& rColor )
 {
     CopyData();
-    mxData->maMenuBarTextColor = rColor;
+    mxData->maColors.maMenuBarTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetMenuBarTextColor() const
 {
-    return mxData->maMenuBarTextColor;
+    return mxData->maColors.maMenuBarTextColor;
 }
 
 void
 StyleSettings::SetMenuBarRolloverTextColor( const Color& rColor )
 {
     CopyData();
-    mxData->maMenuBarRolloverTextColor = rColor;
+    mxData->maColors.maMenuBarRolloverTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetMenuBarRolloverTextColor() const
 {
-    return mxData->maMenuBarRolloverTextColor;
+    return mxData->maColors.maMenuBarRolloverTextColor;
 }
 
 void
 StyleSettings::SetMenuBarHighlightTextColor( const Color& rColor )
 {
     CopyData();
-    mxData->maMenuBarHighlightTextColor = rColor;
+    mxData->maColors.maMenuBarHighlightTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetMenuBarHighlightTextColor() const
 {
-    return mxData->maMenuBarHighlightTextColor;
+    return mxData->maColors.maMenuBarHighlightTextColor;
 }
 
 void
 StyleSettings::SetMenuHighlightColor( const Color& rColor )
 {
     CopyData();
-    mxData->maMenuHighlightColor = rColor;
+    mxData->maColors.maMenuHighlightColor = rColor;
 }
 
 const Color&
 StyleSettings::GetMenuHighlightColor() const
 {
-    return mxData->maMenuHighlightColor;
+    return mxData->maColors.maMenuHighlightColor;
 }
 
 void
 StyleSettings::SetMenuHighlightTextColor( const Color& rColor )
 {
     CopyData();
-    mxData->maMenuHighlightTextColor = rColor;
+    mxData->maColors.maMenuHighlightTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetMenuHighlightTextColor() const
 {
-    return mxData->maMenuHighlightTextColor;
+    return mxData->maColors.maMenuHighlightTextColor;
 }
 
 void
 StyleSettings::SetListBoxWindowBackgroundColor( const Color& rColor )
 {
     CopyData();
-    mxData->maListBoxWindowBackgroundColor = rColor;
+    mxData->maColors.maListBoxWindowBackgroundColor = rColor;
 }
 
 const Color&
 StyleSettings::GetListBoxWindowBackgroundColor() const
 {
-    return mxData->maListBoxWindowBackgroundColor;
+    return mxData->maColors.maListBoxWindowBackgroundColor;
 }
 
 void
 StyleSettings::SetListBoxWindowTextColor( const Color& rColor )
 {
     CopyData();
-    mxData->maListBoxWindowTextColor = rColor;
+    mxData->maColors.maListBoxWindowTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetListBoxWindowTextColor() const
 {
-    return mxData->maListBoxWindowTextColor;
+    return mxData->maColors.maListBoxWindowTextColor;
 }
 
 void
 StyleSettings::SetListBoxWindowHighlightColor( const Color& rColor )
 {
     CopyData();
-    mxData->maListBoxWindowHighlightColor = rColor;
+    mxData->maColors.maListBoxWindowHighlightColor = rColor;
 }
 
 const Color&
 StyleSettings::GetListBoxWindowHighlightColor() const
 {
-    return mxData->maListBoxWindowHighlightColor;
+    return mxData->maColors.maListBoxWindowHighlightColor;
 }
 
 void
 StyleSettings::SetListBoxWindowHighlightTextColor( const Color& rColor )
 {
     CopyData();
-    mxData->maListBoxWindowHighlightTextColor = rColor;
+    mxData->maColors.maListBoxWindowHighlightTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetListBoxWindowHighlightTextColor() const
 {
-    return mxData->maListBoxWindowHighlightTextColor;
+    return mxData->maColors.maListBoxWindowHighlightTextColor;
 }
 
 void
 StyleSettings::SetTabTextColor( const Color& rColor )
 {
     CopyData();
-    mxData->maTabTextColor = rColor;
+    mxData->maColors.maTabTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetTabTextColor() const
 {
-    return mxData->maTabTextColor;
+    return mxData->maColors.maTabTextColor;
 }
 
 void
 StyleSettings::SetTabRolloverTextColor( const Color& rColor )
 {
     CopyData();
-    mxData->maTabRolloverTextColor = rColor;
+    mxData->maColors.maTabRolloverTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetTabRolloverTextColor() const
 {
-    return mxData->maTabRolloverTextColor;
+    return mxData->maColors.maTabRolloverTextColor;
 }
 
 void
 StyleSettings::SetTabHighlightTextColor( const Color& rColor )
 {
     CopyData();
-    mxData->maTabHighlightTextColor = rColor;
+    mxData->maColors.maTabHighlightTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetTabHighlightTextColor() const
 {
-    return mxData->maTabHighlightTextColor;
+    return mxData->maColors.maTabHighlightTextColor;
 }
 
 void
 StyleSettings::SetLinkColor( const Color& rColor )
 {
     CopyData();
-    mxData->maLinkColor = rColor;
+    mxData->maColors.maLinkColor = rColor;
 }
 
 const Color&
 StyleSettings::GetLinkColor() const
 {
-    return mxData->maLinkColor;
+    return mxData->maColors.maLinkColor;
 }
 
 void
 StyleSettings::SetVisitedLinkColor( const Color& rColor )
 {
     CopyData();
-    mxData->maVisitedLinkColor = rColor;
+    mxData->maColors.maVisitedLinkColor = rColor;
 }
 
 const Color&
 StyleSettings::GetVisitedLinkColor() const
 {
-    return mxData->maVisitedLinkColor;
+    return mxData->maColors.maVisitedLinkColor;
 }
 
 void
 StyleSettings::SetToolTextColor( const Color& rColor )
 {
     CopyData();
-    mxData->maToolTextColor = rColor;
+    mxData->maColors.maToolTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetToolTextColor() const
 {
-    return mxData->maToolTextColor;
+    return mxData->maColors.maToolTextColor;
 }
 
 void
 StyleSettings::SetMonoColor( const Color& rColor )
 {
     CopyData();
-    mxData->maMonoColor = rColor;
+    mxData->maColors.maMonoColor = rColor;
 }
 
 const Color&
 StyleSettings::GetMonoColor() const
 {
-    return mxData->maMonoColor;
+    return mxData->maColors.maMonoColor;
 }
 
 void
 StyleSettings::SetActiveTabColor( const Color& rColor )
 {
     CopyData();
-    mxData->maActiveTabColor = rColor;
+    mxData->maColors.maActiveTabColor = rColor;
 }
 
 const Color&
 StyleSettings::GetActiveTabColor() const
 {
-    return mxData->maActiveTabColor;
+    return mxData->maColors.maActiveTabColor;
 }
 
 void
 StyleSettings::SetInactiveTabColor( const Color& rColor )
 {
     CopyData();
-    mxData->maInactiveTabColor = rColor;
+    mxData->maColors.maInactiveTabColor = rColor;
 }
 
 const Color&
 StyleSettings::GetInactiveTabColor() const
 {
-    return mxData->maInactiveTabColor;
+    return mxData->maColors.maInactiveTabColor;
 }
 
 void StyleSettings::SetAlternatingRowColor(const Color& rColor)
 {
     CopyData();
-    mxData->maAlternatingRowColor = rColor;
+    mxData->maColors.maAlternatingRowColor = rColor;
 }
 
 const Color&
 StyleSettings::GetAlternatingRowColor() const
 {
-    return mxData->maAlternatingRowColor;
+    return mxData->maColors.maAlternatingRowColor;
 }
 
 void
@@ -1843,169 +1713,169 @@ void
 StyleSettings::SetAppFont( const vcl::Font& rFont )
 {
     CopyData();
-    mxData->maAppFont = rFont;
+    mxData->maFonts.maAppFont = rFont;
 }
 
 const vcl::Font&
 StyleSettings::GetAppFont() const
 {
-    return mxData->maAppFont;
+    return mxData->maFonts.maAppFont;
 }
 
 void
 StyleSettings::SetHelpFont( const vcl::Font& rFont )
 {
     CopyData();
-    mxData->maHelpFont = rFont;
+    mxData->maFonts.maHelpFont = rFont;
 }
 
 const vcl::Font&
 StyleSettings::GetHelpFont() const
 {
-    return mxData->maHelpFont;
+    return mxData->maFonts.maHelpFont;
 }
 
 void
 StyleSettings::SetTitleFont( const vcl::Font& rFont )
 {
     CopyData();
-    mxData->maTitleFont = rFont;
+    mxData->maFonts.maTitleFont = rFont;
 }
 
 const vcl::Font&
 StyleSettings::GetTitleFont() const
 {
-    return mxData->maTitleFont;
+    return mxData->maFonts.maTitleFont;
 }
 
 void
 StyleSettings::SetFloatTitleFont( const vcl::Font& rFont )
 {
     CopyData();
-    mxData->maFloatTitleFont = rFont;
+    mxData->maFonts.maFloatTitleFont = rFont;
 }
 
 const vcl::Font&
 StyleSettings::GetFloatTitleFont() const
 {
-    return mxData->maFloatTitleFont;
+    return mxData->maFonts.maFloatTitleFont;
 }
 
 void
 StyleSettings::SetMenuFont( const vcl::Font& rFont )
 {
     CopyData();
-    mxData->maMenuFont = rFont;
+    mxData->maFonts.maMenuFont = rFont;
 }
 
 const vcl::Font&
 StyleSettings::GetMenuFont() const
 {
-    return mxData->maMenuFont;
+    return mxData->maFonts.maMenuFont;
 }
 
 void
 StyleSettings::SetToolFont( const vcl::Font& rFont )
 {
     CopyData();
-    mxData->maToolFont = rFont;
+    mxData->maFonts.maToolFont = rFont;
 }
 
 const vcl::Font&
 StyleSettings::GetToolFont() const
 {
-    return mxData->maToolFont;
+    return mxData->maFonts.maToolFont;
 }
 
 void
 StyleSettings::SetGroupFont( const vcl::Font& rFont )
 {
     CopyData();
-    mxData->maGroupFont = rFont;
+    mxData->maFonts.maGroupFont = rFont;
 }
 
 const vcl::Font&
 StyleSettings::GetGroupFont() const
 {
-    return mxData->maGroupFont;
+    return mxData->maFonts.maGroupFont;
 }
 
 void
 StyleSettings::SetLabelFont( const vcl::Font& rFont )
 {
     CopyData();
-    mxData->maLabelFont = rFont;
+    mxData->maFonts.maLabelFont = rFont;
 }
 
 const vcl::Font&
 StyleSettings::GetLabelFont() const
 {
-    return mxData->maLabelFont;
+    return mxData->maFonts.maLabelFont;
 }
 
 void
 StyleSettings::SetRadioCheckFont( const vcl::Font& rFont )
 {
     CopyData();
-    mxData->maRadioCheckFont = rFont;
+    mxData->maFonts.maRadioCheckFont = rFont;
 }
 
 const vcl::Font&
 StyleSettings::GetRadioCheckFont() const
 {
-    return mxData->maRadioCheckFont;
+    return mxData->maFonts.maRadioCheckFont;
 }
 
 void
 StyleSettings::SetPushButtonFont( const vcl::Font& rFont )
 {
     CopyData();
-    mxData->maPushButtonFont = rFont;
+    mxData->maFonts.maPushButtonFont = rFont;
 }
 
 const vcl::Font&
 StyleSettings::GetPushButtonFont() const
 {
-    return mxData->maPushButtonFont;
+    return mxData->maFonts.maPushButtonFont;
 }
 
 void
 StyleSettings::SetFieldFont( const vcl::Font& rFont )
 {
     CopyData();
-    mxData->maFieldFont = rFont;
+    mxData->maFonts.maFieldFont = rFont;
 }
 
 const vcl::Font&
 StyleSettings::GetFieldFont() const
 {
-    return mxData->maFieldFont;
+    return mxData->maFonts.maFieldFont;
 }
 
 void
 StyleSettings::SetIconFont( const vcl::Font& rFont )
 {
     CopyData();
-    mxData->maIconFont = rFont;
+    mxData->maFonts.maIconFont = rFont;
 }
 
 const vcl::Font&
 StyleSettings::GetIconFont() const
 {
-    return mxData->maIconFont;
+    return mxData->maFonts.maIconFont;
 }
 
 void
 StyleSettings::SetTabFont( const vcl::Font& rFont )
 {
     CopyData();
-    mxData->maTabFont = rFont;
+    mxData->maFonts.maTabFont = rFont;
 }
 
 const vcl::Font&
 StyleSettings::GetTabFont() const
 {
-    return mxData->maTabFont;
+    return mxData->maFonts.maTabFont;
 }
 
 sal_Int32
@@ -2329,39 +2199,39 @@ const Size& StyleSettings::GetListBoxPreviewDefaultPixelSize() const
 void StyleSettings::Set3DColors( const Color& rColor )
 {
     CopyData();
-    mxData->maFaceColor         = rColor;
-    mxData->maLightBorderColor  = rColor;
-    mxData->maMenuBorderColor   = rColor;
-    mxData->maDarkShadowColor   = COL_BLACK;
+    mxData->maColors.maFaceColor         = rColor;
+    mxData->maColors.maLightBorderColor  = rColor;
+    mxData->maColors.maMenuBorderColor   = rColor;
+    mxData->maColors.maDarkShadowColor   = COL_BLACK;
     if ( rColor != COL_LIGHTGRAY )
     {
-        mxData->maLightColor = rColor;
-        mxData->maShadowColor = rColor;
-        mxData->maDarkShadowColor = rColor;
+        mxData->maColors.maLightColor = rColor;
+        mxData->maColors.maShadowColor = rColor;
+        mxData->maColors.maDarkShadowColor = rColor;
 
         if (!rColor.IsDark())
         {
-            mxData->maLightColor.IncreaseLuminance(64);
-            mxData->maShadowColor.DecreaseLuminance(64);
-            mxData->maDarkShadowColor.DecreaseLuminance(100);
+            mxData->maColors.maLightColor.IncreaseLuminance(64);
+            mxData->maColors.maShadowColor.DecreaseLuminance(64);
+            mxData->maColors.maDarkShadowColor.DecreaseLuminance(100);
         }
         else
         {
-            mxData->maLightColor.DecreaseLuminance(64);
-            mxData->maShadowColor.IncreaseLuminance(64);
-            mxData->maDarkShadowColor.IncreaseLuminance(100);
+            mxData->maColors.maLightColor.DecreaseLuminance(64);
+            mxData->maColors.maShadowColor.IncreaseLuminance(64);
+            mxData->maColors.maDarkShadowColor.IncreaseLuminance(100);
         }
 
-        sal_uInt8 nRed = (mxData->maLightColor.GetRed() + mxData->maShadowColor.GetRed()) / 2;
-        sal_uInt8 nGreen = (mxData->maLightColor.GetGreen() + mxData->maShadowColor.GetGreen()) / 2;
-        sal_uInt8 nBlue = (mxData->maLightColor.GetBlue() + mxData->maShadowColor.GetBlue()) / 2;
-        mxData->maCheckedColor = Color(nRed, nGreen, nBlue);
+        sal_uInt8 nRed = (mxData->maColors.maLightColor.GetRed() + mxData->maColors.maShadowColor.GetRed()) / 2;
+        sal_uInt8 nGreen = (mxData->maColors.maLightColor.GetGreen() + mxData->maColors.maShadowColor.GetGreen()) / 2;
+        sal_uInt8 nBlue = (mxData->maColors.maLightColor.GetBlue() + mxData->maColors.maShadowColor.GetBlue()) / 2;
+        mxData->maColors.maCheckedColor = Color(nRed, nGreen, nBlue);
     }
     else
     {
-        mxData->maCheckedColor  = Color( 0x99, 0x99, 0x99 );
-        mxData->maLightColor    = COL_WHITE;
-        mxData->maShadowColor   = COL_GRAY;
+        mxData->maColors.maCheckedColor  = Color( 0x99, 0x99, 0x99 );
+        mxData->maColors.maLightColor    = COL_WHITE;
+        mxData->maColors.maShadowColor   = COL_GRAY;
     }
 }
 
@@ -2370,13 +2240,13 @@ void StyleSettings::SetCheckedColorSpecialCase( )
     CopyData();
     // Light gray checked color special case
     if ( GetFaceColor() == COL_LIGHTGRAY )
-        mxData->maCheckedColor = Color( 0xCC, 0xCC, 0xCC );
+        mxData->maColors.maCheckedColor = Color(0xCC, 0xCC, 0xCC);
     else
     {
-        sal_uInt8 nRed   = static_cast<sal_uInt8>((static_cast<sal_uInt16>(mxData->maFaceColor.GetRed())   + static_cast<sal_uInt16>(mxData->maLightColor.GetRed()))/2);
-        sal_uInt8 nGreen = static_cast<sal_uInt8>((static_cast<sal_uInt16>(mxData->maFaceColor.GetGreen()) + static_cast<sal_uInt16>(mxData->maLightColor.GetGreen()))/2);
-        sal_uInt8 nBlue  = static_cast<sal_uInt8>((static_cast<sal_uInt16>(mxData->maFaceColor.GetBlue())  + static_cast<sal_uInt16>(mxData->maLightColor.GetBlue()))/2);
-        mxData->maCheckedColor = Color( nRed, nGreen, nBlue );
+        sal_uInt8 nRed   = static_cast<sal_uInt8>((static_cast<sal_uInt16>(mxData->maColors.maFaceColor.GetRed())   + static_cast<sal_uInt16>(mxData->maColors.maLightColor.GetRed()))/2);
+        sal_uInt8 nGreen = static_cast<sal_uInt8>((static_cast<sal_uInt16>(mxData->maColors.maFaceColor.GetGreen()) + static_cast<sal_uInt16>(mxData->maColors.maLightColor.GetGreen()))/2);
+        sal_uInt8 nBlue  = static_cast<sal_uInt8>((static_cast<sal_uInt16>(mxData->maColors.maFaceColor.GetBlue())  + static_cast<sal_uInt16>(mxData->maColors.maLightColor.GetBlue()))/2);
+        mxData->maColors.maCheckedColor = Color(nRed, nGreen, nBlue);
     }
 }
 
@@ -2553,7 +2423,7 @@ bool StyleSettings::operator ==( const StyleSettings& rSet ) const
         return false;
     }
 
-    if (*mxData->mIconThemeSelector != *rSet.mxData->mIconThemeSelector) {
+    if (mxData->mIconThemeSelector != rSet.mxData->mIconThemeSelector) {
         return false;
     }
 
@@ -2575,78 +2445,8 @@ bool StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mxData->mbUseFontAAFromSystem     == rSet.mxData->mbUseFontAAFromSystem)      &&
          (mxData->mnUseFlatBorders          == rSet.mxData->mnUseFlatBorders)           &&
          (mxData->mnUseFlatMenus            == rSet.mxData->mnUseFlatMenus)             &&
-         (mxData->maFaceColor               == rSet.mxData->maFaceColor)                &&
-         (mxData->maCheckedColor            == rSet.mxData->maCheckedColor)             &&
-         (mxData->maLightColor              == rSet.mxData->maLightColor)               &&
-         (mxData->maLightBorderColor        == rSet.mxData->maLightBorderColor)         &&
-         (mxData->maShadowColor             == rSet.mxData->maShadowColor)              &&
-         (mxData->maDarkShadowColor         == rSet.mxData->maDarkShadowColor)          &&
-         (mxData->maWarningColor            == rSet.mxData->maWarningColor)             &&
-         (mxData->maWarningTextColor        == rSet.mxData->maWarningTextColor)         &&
-         (mxData->maErrorColor              == rSet.mxData->maErrorColor)               &&
-         (mxData->maErrorTextColor          == rSet.mxData->maErrorTextColor)           &&
-         (mxData->maButtonTextColor         == rSet.mxData->maButtonTextColor)          &&
-         (mxData->maDefaultActionButtonTextColor == rSet.mxData->maDefaultActionButtonTextColor) &&
-         (mxData->maActionButtonTextColor   == rSet.mxData->maActionButtonTextColor)    &&
-         (mxData->maButtonRolloverTextColor == rSet.mxData->maButtonRolloverTextColor)  &&
-         (mxData->maActionButtonRolloverTextColor == rSet.mxData->maActionButtonRolloverTextColor) &&
-         (mxData->maRadioCheckTextColor     == rSet.mxData->maRadioCheckTextColor)      &&
-         (mxData->maGroupTextColor          == rSet.mxData->maGroupTextColor)           &&
-         (mxData->maLabelTextColor          == rSet.mxData->maLabelTextColor)           &&
-         (mxData->maWindowColor             == rSet.mxData->maWindowColor)              &&
-         (mxData->maWindowTextColor         == rSet.mxData->maWindowTextColor)          &&
-         (mxData->maDialogColor             == rSet.mxData->maDialogColor)              &&
-         (mxData->maDialogTextColor         == rSet.mxData->maDialogTextColor)          &&
-         (mxData->maWorkspaceColor          == rSet.mxData->maWorkspaceColor)           &&
-         (mxData->maMonoColor               == rSet.mxData->maMonoColor)                &&
-         (mxData->maFieldColor              == rSet.mxData->maFieldColor)               &&
-         (mxData->maFieldTextColor          == rSet.mxData->maFieldTextColor)           &&
-         (mxData->maActiveColor             == rSet.mxData->maActiveColor)              &&
-         (mxData->maActiveTextColor         == rSet.mxData->maActiveTextColor)          &&
-         (mxData->maActiveBorderColor       == rSet.mxData->maActiveBorderColor)        &&
-         (mxData->maDeactiveColor           == rSet.mxData->maDeactiveColor)            &&
-         (mxData->maDeactiveTextColor       == rSet.mxData->maDeactiveTextColor)        &&
-         (mxData->maDeactiveBorderColor     == rSet.mxData->maDeactiveBorderColor)      &&
-         (mxData->maMenuColor               == rSet.mxData->maMenuColor)                &&
-         (mxData->maMenuBarColor            == rSet.mxData->maMenuBarColor)             &&
-         (mxData->maMenuBarRolloverColor    == rSet.mxData->maMenuBarRolloverColor)     &&
-         (mxData->maMenuBorderColor         == rSet.mxData->maMenuBorderColor)          &&
-         (mxData->maMenuTextColor           == rSet.mxData->maMenuTextColor)            &&
-         (mxData->maListBoxWindowBackgroundColor == rSet.mxData->maListBoxWindowBackgroundColor) &&
-         (mxData->maListBoxWindowTextColor       == rSet.mxData->maListBoxWindowTextColor) &&
-         (mxData->maListBoxWindowHighlightColor  == rSet.mxData->maListBoxWindowHighlightColor) &&
-         (mxData->maListBoxWindowHighlightTextColor == rSet.mxData->maListBoxWindowHighlightTextColor) &&
-         (mxData->maMenuBarTextColor        == rSet.mxData->maMenuBarTextColor)         &&
-         (mxData->maMenuBarRolloverTextColor == rSet.mxData->maMenuBarRolloverTextColor) &&
-         (mxData->maMenuHighlightColor      == rSet.mxData->maMenuHighlightColor)       &&
-         (mxData->maMenuHighlightTextColor  == rSet.mxData->maMenuHighlightTextColor)   &&
-         (mxData->maAccentColor             == rSet.mxData->maAccentColor)              &&
-         (mxData->maHighlightColor          == rSet.mxData->maHighlightColor)           &&
-         (mxData->maHighlightTextColor      == rSet.mxData->maHighlightTextColor)       &&
-         (mxData->maTabTextColor            == rSet.mxData->maTabTextColor)             &&
-         (mxData->maTabRolloverTextColor    == rSet.mxData->maTabRolloverTextColor)     &&
-         (mxData->maTabHighlightTextColor   == rSet.mxData->maTabHighlightTextColor)    &&
-         (mxData->maActiveTabColor          == rSet.mxData->maActiveTabColor)           &&
-         (mxData->maInactiveTabColor        == rSet.mxData->maInactiveTabColor)         &&
-         (mxData->maDisableColor            == rSet.mxData->maDisableColor)             &&
-         (mxData->maHelpColor               == rSet.mxData->maHelpColor)                &&
-         (mxData->maHelpTextColor           == rSet.mxData->maHelpTextColor)            &&
-         (mxData->maLinkColor               == rSet.mxData->maLinkColor)                &&
-         (mxData->maVisitedLinkColor        == rSet.mxData->maVisitedLinkColor)         &&
-         (mxData->maToolTextColor           == rSet.mxData->maToolTextColor)            &&
-         (mxData->maAppFont                 == rSet.mxData->maAppFont)                  &&
-         (mxData->maHelpFont                == rSet.mxData->maHelpFont)                 &&
-         (mxData->maTitleFont               == rSet.mxData->maTitleFont)                &&
-         (mxData->maFloatTitleFont          == rSet.mxData->maFloatTitleFont)           &&
-         (mxData->maMenuFont                == rSet.mxData->maMenuFont)                 &&
-         (mxData->maToolFont                == rSet.mxData->maToolFont)                 &&
-         (mxData->maGroupFont               == rSet.mxData->maGroupFont)                &&
-         (mxData->maLabelFont               == rSet.mxData->maLabelFont)                &&
-         (mxData->maRadioCheckFont          == rSet.mxData->maRadioCheckFont)           &&
-         (mxData->maPushButtonFont          == rSet.mxData->maPushButtonFont)           &&
-         (mxData->maFieldFont               == rSet.mxData->maFieldFont)                &&
-         (mxData->maIconFont                == rSet.mxData->maIconFont)                 &&
-         (mxData->maTabFont                 == rSet.mxData->maTabFont)                  &&
+         (mxData->maColors                  == rSet.mxData->maColors)                   &&
+         (mxData->maFonts                   == rSet.mxData->maFonts)                    &&
          (mxData->meUseImagesInMenus        == rSet.mxData->meUseImagesInMenus)         &&
          (mxData->mbPreferredUseImagesInMenus == rSet.mxData->mbPreferredUseImagesInMenus) &&
          (mxData->mbSkipDisabledInMenus     == rSet.mxData->mbSkipDisabledInMenus)      &&
@@ -3226,7 +3026,7 @@ std::vector<vcl::IconThemeInfo> const &
 StyleSettings::GetInstalledIconThemes() const
 {
     if (!mxData->mIconThemeScanner) {
-        const_cast<StyleSettings*>(this)->mxData->mIconThemeScanner = vcl::IconThemeScanner::Create(vcl::IconThemeScanner::GetStandardIconThemePath());
+        const_cast<StyleSettings*>(this)->mxData->mIconThemeScanner.emplace(vcl::IconThemeScanner::GetStandardIconThemePath());
     }
     return mxData->mIconThemeScanner->GetFoundIconThemes();
 }
@@ -3236,9 +3036,9 @@ StyleSettings::GetAutomaticallyChosenIconTheme() const
 {
     OUString desktopEnvironment = Application::GetDesktopEnvironment();
     if (!mxData->mIconThemeScanner) {
-        const_cast<StyleSettings*>(this)->mxData->mIconThemeScanner = vcl::IconThemeScanner::Create(vcl::IconThemeScanner::GetStandardIconThemePath());
+        const_cast<StyleSettings*>(this)->mxData->mIconThemeScanner.emplace(vcl::IconThemeScanner::GetStandardIconThemePath());
     }
-    OUString themeName = mxData->mIconThemeSelector->SelectIconThemeForDesktopEnvironment(
+    OUString themeName = mxData->mIconThemeSelector.SelectIconThemeForDesktopEnvironment(
             mxData->mIconThemeScanner->GetFoundIconThemes(),
             desktopEnvironment
             );
@@ -3271,9 +3071,9 @@ StyleSettings::DetermineIconTheme() const
     }
 
     if (!mxData->mIconThemeScanner) {
-        const_cast<StyleSettings*>(this)->mxData->mIconThemeScanner = vcl::IconThemeScanner::Create(vcl::IconThemeScanner::GetStandardIconThemePath());
+        const_cast<StyleSettings*>(this)->mxData->mIconThemeScanner.emplace(vcl::IconThemeScanner::GetStandardIconThemePath());
     }
-    OUString r = mxData->mIconThemeSelector->SelectIconTheme(
+    OUString r = mxData->mIconThemeSelector.SelectIconTheme(
                         mxData->mIconThemeScanner->GetFoundIconThemes(),
                         sTheme);
     return r;
@@ -3288,7 +3088,7 @@ StyleSettings::SetHighContrastMode(bool bHighContrast )
 
     CopyData();
     mxData->mbHighContrast = bHighContrast;
-    mxData->mIconThemeSelector->SetUseHighContrastTheme(bHighContrast);
+    mxData->mIconThemeSelector.SetUseHighContrastTheme(bHighContrast);
 }
 
 bool
@@ -3300,7 +3100,7 @@ StyleSettings::GetHighContrastMode() const
 void
 StyleSettings::SetPreferredIconTheme(const OUString& theme, bool bDarkIconTheme)
 {
-    const bool bChanged = mxData->mIconThemeSelector->SetPreferredIconTheme(theme, bDarkIconTheme);
+    const bool bChanged = mxData->mIconThemeSelector.SetPreferredIconTheme(theme, bDarkIconTheme);
     if (bChanged)
     {
         // clear this so it is recalculated if it was selected as the automatic theme

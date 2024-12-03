@@ -57,10 +57,9 @@ OUString convert_to_absolute_path(const OUString& path)
 
 }
 
-IconThemeScanner::IconThemeScanner()
-{}
+IconThemeScanner::IconThemeScanner() = default;
 
-void IconThemeScanner::ScanDirectoryForIconThemes(std::u16string_view paths)
+IconThemeScanner::IconThemeScanner(std::u16string_view paths)
 {
     mFoundIconThemes.clear();
 
@@ -166,14 +165,6 @@ bool
 IconThemeScanner::IconThemeIsInstalled(const OUString& themeId) const
 {
     return IconThemeInfo::IconThemeIsInVector(mFoundIconThemes, themeId);
-}
-
-/*static*/ std::shared_ptr<IconThemeScanner>
-IconThemeScanner::Create(std::u16string_view path)
-{
-    std::shared_ptr<IconThemeScanner> retval(new IconThemeScanner);
-    retval->ScanDirectoryForIconThemes(path);
-    return retval;
 }
 
 /*static*/ OUString

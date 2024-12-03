@@ -27,10 +27,13 @@ namespace vcl
 class VCL_DLLPUBLIC IconThemeScanner
 {
 public:
-    /** Factory method to create the object.
-     * Provide a path to search for IconThemes.
+    /** Provide a semicolon-separated list of paths to search for IconThemes.
+     *
+     * There are several cases when scan will fail:
+     * - The directory does not exist
+     * - There are no files which match the pattern images_xxx.zip
      */
-    static std::shared_ptr<IconThemeScanner> Create(std::u16string_view path);
+    explicit IconThemeScanner(std::u16string_view paths);
 
     /** This method will return the standard path where icon themes are located.
      */
@@ -51,15 +54,6 @@ public:
 
 private:
     IconThemeScanner();
-
-    /** Scan a directory for icon themes.
-     *
-     * @return
-     * There are several cases when this method will fail:
-     * - The directory does not exist
-     * - There are no files which match the pattern images_xxx.zip
-     */
-    void ScanDirectoryForIconThemes(std::u16string_view path);
 
     /** Adds the provided icon theme by path.
      */

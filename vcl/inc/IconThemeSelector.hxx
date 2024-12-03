@@ -66,10 +66,7 @@ public:
     SetPreferredIconTheme(const OUString&, bool bDarkIconTheme);
 
     bool
-    operator==(const vcl::IconThemeSelector&) const;
-
-    bool
-    operator!=(const vcl::IconThemeSelector&) const;
+    operator==(const vcl::IconThemeSelector&) const = default;
 
     static OUString
     GetIconThemeForDesktopEnvironment(const OUString& desktopEnvironment, bool bPreferDarkIconTheme);

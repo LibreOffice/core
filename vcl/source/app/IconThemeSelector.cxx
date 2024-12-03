@@ -163,30 +163,6 @@ IconThemeSelector::SetPreferredIconTheme(const OUString& theme, bool bDarkIconTh
     return bChanged;
 }
 
-bool
-IconThemeSelector::operator==(const vcl::IconThemeSelector& other) const
-{
-    if (this == &other) {
-        return true;
-    }
-    if (mPreferredIconTheme != other.mPreferredIconTheme) {
-        return false;
-    }
-    if (mPreferDarkIconTheme != other.mPreferDarkIconTheme) {
-        return false;
-    }
-    if (mUseHighContrastTheme != other.mUseHighContrastTheme) {
-        return false;
-    }
-    return true;
-}
-
-bool
-IconThemeSelector::operator!=(const vcl::IconThemeSelector& other) const
-{
-    return !(*this == other);
-}
-
 /*static*/ OUString
 IconThemeSelector::ReturnFallback(const std::vector<IconThemeInfo>& installedThemes)
 {
