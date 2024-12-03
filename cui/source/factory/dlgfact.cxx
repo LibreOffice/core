@@ -1003,13 +1003,31 @@ VclPtr<AbstractMacroManagerDialog>
 AbstractDialogFactory_Impl::CreateMacroManagerDialog(weld::Window* pParent,
                                                      const Reference<frame::XFrame>& rxFrame)
 {
+#if HAVE_FEATURE_SCRIPTING
     return VclPtr<AbstractMacroManagerDialog_Impl>::Create(
         std::make_shared<MacroManagerDialog>(pParent, rxFrame));
+#else
+    (void)pParent;
+    (void)rxFrame;
+    return nullptr;
+#endif
 }
 
-OUString AbstractMacroManagerDialog_Impl::GetScriptURL() const { return m_xDlg->GetScriptURL(); }
+OUString AbstractMacroManagerDialog_Impl::GetScriptURL() const
+{
+#if HAVE_FEATURE_SCRIPTING
+    return m_xDlg->GetScriptURL();
+#else
+    return OUString();
+#endif
+}
 
-void AbstractMacroManagerDialog_Impl::LoadLastUsedMacro() const { m_xDlg->LoadLastUsedMacro(); }
+void AbstractMacroManagerDialog_Impl::LoadLastUsedMacro() const
+{
+#if HAVE_FEATURE_SCRIPTING
+    m_xDlg->LoadLastUsedMacro();
+#endif
+}
 
 VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateSvxScriptOrgDialog(weld::Window* pParent,
                                             const OUString& rLanguage)
