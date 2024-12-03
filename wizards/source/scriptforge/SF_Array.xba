@@ -2673,19 +2673,30 @@ Private Function _ConvertToCellValue(ByVal pvItem As Variant _
 										, ByVal pbIsCell As Boolean _
 										) As Variant
 &apos;&apos;&apos;	Convert the argument to a valid Calc cell content, i.e. a string or a double.
-&apos;&apos;&apos;	When the argument is not convertible, either
+&apos;&apos;&apos;	When the argument is not immediately convertible, either
+&apos;&apos;&apos;		- the cell range is returned unchanged if the argument is a UNO com.sun.star.table.XCellRange object
+&apos;&apos;&apos;		- the date is converted to a double when the argument is a UNO com.sun.star.util.DateTime object
 &apos;&apos;&apos;		- the zero-length string is returned (pbIsCell = True)
 &apos;&apos;&apos;		- the argument is returned unchanged (pbIsCell = False)
 
-Dim vCell As Variant		&apos;	Return value
+Dim vCell As Variant			&apos;	Return value
+Dim oObjectDescriptor As Object	&apos;	Object descriptor (see SF_Utils)
 
 Try:
+	&apos;	Conversion takes place only when pbIsCell = True
 	If pbIsCell Then
 		Select Case SF_Utils._VarTypeExt(pvItem)
 			Case V_STRING					:		vCell = pvItem
 			Case V_DATE						:		vCell = CDbl(pvItem)
 			Case V_NUMERIC					:		vCell = CDbl(pvItem)
 			Case V_BOOLEAN					:		vCell = CDbl(Iif(pvItem, 1, 0))
+			Case V_OBJECT
+				Set oObjectDescriptor = SF_Utils._VarTypeObj(pvItem)
+				Select Case oObjectDescriptor.sObjectType
+					Case &quot;ScCellRangeObj&quot;				:	vCell = pvItem
+					Case &quot;com.sun.star.util.DateTime&quot;	:	vCell = CDbl(CDateFromUnoDateTime(pvItem))	&apos;	Python date
+					Case Else							:	vCell = &quot;&quot;
+				End Select
 			Case Else						:		vCell = &quot;&quot;
 		End Select
 	Else		&apos;	Return the input item unchanged

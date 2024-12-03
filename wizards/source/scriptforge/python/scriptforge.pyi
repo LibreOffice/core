@@ -1797,11 +1797,12 @@ class SFScriptForge:
                     Args
                         ``calcfunction``: the name of the Calc function to be called, in English.
 
-                        ``args``: the arguments to be passed to the called Calc function.
-                        Each argument must be either a string, a numeric value or an array of arrays combining
-                        those types.
+                        ``args``: the arguments to be passed to the called Calc function. Each argument may be either
+                            - a string, a numeric value, a bool or a datatime.datetime instance
+                            - a tuple or a tuple of tuples combining those types
+                            - a com.sun.star.table.XCellRange UNO object
                     Returns
-                        The value returned by the function.
+                        The value returned by the function as a scalar or a tuple of tuples.
                 """
             ...
 

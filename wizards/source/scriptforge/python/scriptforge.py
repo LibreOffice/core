@@ -1545,7 +1545,8 @@ class SFScriptForge:
                 # Arguments of Calc functions are strings or numbers. None == Empty is a good alias for no argument
                 args = (calcfunction,) + (None,)
             else:
-                args = (calcfunction,) + args
+                # Date arguments are converted on-the-fly to com.sun.star.util.DateTime
+                args = (calcfunction,) + tuple(map(SFScriptForge.SF_Basic.CDateToUnoDateTime, args))
             # ExecuteCalcFunction method has a ParamArray parameter in Basic
             return cls.SIMPLEEXEC('@SF_Session.ExecuteCalcFunction', args)
 

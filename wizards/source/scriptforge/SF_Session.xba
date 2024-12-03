@@ -190,8 +190,10 @@ Public Function ExecuteCalcFunction(Optional ByVal CalcFunction As Variant _
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		CalcFunction: the english name of the function to execute
 &apos;&apos;&apos;		pvArgs: the arguments of the called function
-&apos;&apos;&apos;			Each argument must be either a string, a numeric value
-&apos;&apos;&apos;			or an array of arrays combining those types
+&apos;&apos;&apos;			Each argument must be either
+&apos;&apos;&apos;			- a string, a numeric value, a date or a boolean
+&apos;&apos;&apos;			- a 1D array, a 2D array or an array of arrays combining those types
+&apos;&apos;&apos;			- a com.sun.star.table.XCellRange UNO object
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		The (string or numeric) value or the array of arrays returned by the call to the function
 &apos;&apos;&apos;		When the arguments contain arrays, the function is executed as an array function
@@ -205,6 +207,7 @@ Public Function ExecuteCalcFunction(Optional ByVal CalcFunction As Variant _
 
 Dim oCalc As Object				&apos;	Give access to the com.sun.star.sheet.FunctionAccess service
 Dim vReturn As Variant			&apos;	Returned value
+Dim i As Long
 Const cstThisSub = &quot;Session.ExecuteCalcFunction&quot;
 Const cstSubArgs = &quot;CalcFunction, arg0[, arg1] ...&quot;
 
@@ -223,6 +226,11 @@ Try:
 	If UBound(pvArgs) = 0 Then
 		If IsEmpty(pvArgs(0)) Then pvArgs = Array()
 	End If
+	&apos;	Force suitable arguments
+	For i = 0 To UBound(pvArgs)
+		pvArgs(i) = SF_Array.ConvertToRange(pvArgs(i), Direction := &quot;V&quot;)
+	Next i
+	&apos;	Error trapping and execution
 	If SF_Utils._ErrorHandling() Then On Local Error GoTo CatchCall
 	vReturn = oCalc.callFunction(UCase(CalcFunction), pvArgs())
 
