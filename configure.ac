@@ -15646,6 +15646,22 @@ else
 fi
 AC_SUBST(KEEP_AWAKE_CMD)
 
+dnl =========================================
+dnl Check for Jom (parallel nmake)
+dnl =========================================
+if test "$_os" = "WINNT"; then
+    AC_MSG_CHECKING([for jom (parallel nmake)])
+    AC_PATH_PROG([JOM], [jom.exe])
+    if test -z "$JOM"; then
+        AC_MSG_NOTICE([jom can help accelerate your build, but is completely optional. Get it from https://wiki.qt.io/Jom])
+        AC_MSG_NOTICE([and put it in PATH or add JOM=/unix/style/path/to/jom.exe to your autogen.input to use it])
+    else
+        PathFormat "$JOM"
+        JOM="$formatted_path"
+    fi
+    AC_SUBST(JOM)
+fi
+
 dnl ===================================================================
 dnl Setting up the environment.
 dnl ===================================================================
