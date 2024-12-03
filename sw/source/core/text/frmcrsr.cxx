@@ -637,12 +637,12 @@ bool SwTextFrame::GetModelPositionForViewPoint_(SwPosition* pPos, const Point& r
 
     if ( IsVertical() )
     {
-        if ( bChgFillData && pFillData )
+        if ( bChgFillData )
             SwitchHorizontalToVertical( pFillData->Fill().aCursor.Pos() );
         const_cast<SwTextFrame*>(this)->SwapWidthAndHeight();
     }
 
-    if ( IsRightToLeft() && bChgFillData && pFillData)
+    if ( IsRightToLeft() && bChgFillData )
     {
             SwitchLTRtoRTL( pFillData->Fill().aCursor.Pos() );
             const sal_Int16 eOrient = pFillData->pCMS->m_pFill->eOrient;
