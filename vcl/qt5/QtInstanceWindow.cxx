@@ -115,12 +115,68 @@ bool QtInstanceWindow::is_default_widget(const weld::Widget*) const
     return true;
 }
 
-void QtInstanceWindow::set_window_state(const OUString&) { assert(false && "Not implemented yet"); }
-
-OUString QtInstanceWindow::get_window_state(vcl::WindowDataMask) const
+void QtInstanceWindow::set_window_state(const OUString& rStr)
 {
-    assert(false && "Not implemented yet");
-    return OUString();
+    SolarMutexGuard g;
+
+    const vcl::WindowData aData(rStr);
+    const vcl::WindowDataMask eMask = aData.mask();
+
+    GetQtInstance().RunInMainThread([&] {
+        QRect aGeometry = getQWidget()->geometry();
+        if (eMask & vcl::WindowDataMask::X)
+            aGeometry.setX(aData.x());
+        if (eMask & vcl::WindowDataMask::Y)
+            aGeometry.setY(aData.y());
+        if (eMask & vcl::WindowDataMask::Width)
+            aGeometry.setWidth(aData.width());
+        if (eMask & vcl::WindowDataMask::Height)
+            aGeometry.setHeight(aData.height());
+
+        getQWidget()->setGeometry(aGeometry);
+
+        if (eMask & vcl::WindowDataMask::State)
+        {
+            const vcl::WindowState eState = aData.state();
+            if (eState & vcl::WindowState::Normal)
+                getQWidget()->showNormal();
+            else if (eState & vcl::WindowState::Maximized)
+                getQWidget()->showMaximized();
+            else if (eState & vcl::WindowState::Minimized)
+                getQWidget()->showMinimized();
+        }
+    });
+}
+
+OUString QtInstanceWindow::get_window_state(vcl::WindowDataMask eMask) const
+{
+    SolarMutexGuard g;
+
+    vcl::WindowData aData;
+    GetQtInstance().RunInMainThread([&] {
+        QRect aGeometry = getQWidget()->geometry();
+        if (eMask & vcl::WindowDataMask::X)
+            aData.setX(aGeometry.x());
+        if (eMask & vcl::WindowDataMask::Y)
+            aData.setY(aGeometry.y());
+        if (eMask & vcl::WindowDataMask::Width)
+            aData.setWidth(aGeometry.width());
+        if (eMask & vcl::WindowDataMask::Height)
+            aData.setHeight(aGeometry.height());
+        if (eMask & vcl::WindowDataMask::State)
+        {
+            vcl::WindowState nState = vcl::WindowState::NONE;
+            if (getQWidget()->isMaximized())
+                nState |= vcl::WindowState::Maximized;
+            else if (getQWidget()->isMinimized())
+                nState |= vcl::WindowState::Minimized;
+            else
+                nState |= vcl::WindowState::Normal;
+            aData.setState(nState);
+        }
+    });
+
+    return aData.toStr();
 }
 
 css::uno::Reference<css::awt::XWindow> QtInstanceWindow::GetXWindow()
