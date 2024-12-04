@@ -2390,6 +2390,27 @@ void Menu::HighlightItem( sal_uInt16 nItemPos )
     }
 }
 
+void Menu::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) const
+{
+    rJsonWriter.put("id", "__MENU__"); // we have single instance of menu at the time per session
+    rJsonWriter.put("type", "menu");
+    rJsonWriter.put("count", GetItemCount());
+    {
+        auto aEntries = rJsonWriter.startArray("entries");
+        for (size_t i = 0; i < GetItemCount(); i++)
+        {
+            auto aEntry = rJsonWriter.startStruct();
+            sal_uInt16 nId = GetItemId(i);
+            rJsonWriter.put("row", GetItemIdent(nId));
+            {
+                auto aColumns = rJsonWriter.startArray("columns");
+                auto aColumn = rJsonWriter.startStruct();
+                rJsonWriter.put("text", GetItemText(nId));
+            }
+        }
+    }
+}
+
 MenuBarWindow* MenuBar::getMenuBarWindow()
 {
     // so far just a dynamic_cast, hopefully to be turned into something saner

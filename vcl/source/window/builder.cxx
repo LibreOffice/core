@@ -191,6 +191,8 @@ std::unique_ptr<weld::Builder> Application::CreateBuilder(weld::Widget* pParent,
             return JSInstanceBuilder::CreateSidebarBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, nLOKWindowId);
         else if (jsdialog::isBuilderEnabledForPopup(rUIFile))
             return JSInstanceBuilder::CreatePopupBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
+        else if (jsdialog::isBuilderEnabledForMenu(rUIFile))
+            return JSInstanceBuilder::CreateMenuBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
         else if (jsdialog::isBuilderEnabled(rUIFile, bMobile))
             return JSInstanceBuilder::CreateDialogBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
     }

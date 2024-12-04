@@ -754,6 +754,9 @@ public:
 
 class JSMenu final : public SalInstanceMenu
 {
+    VclPtr<PopupMenu> m_pPopupMenu;
+    JSDialogSender* m_pSender;
+
 public:
     JSMenu(JSDialogSender* pSender, PopupMenu* pMenu, SalInstanceBuilder* pBuilder,
            bool bTakeOwnership);

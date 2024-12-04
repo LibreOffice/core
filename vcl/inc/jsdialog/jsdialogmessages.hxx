@@ -15,6 +15,7 @@
 #include <rtl/ustring.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/jsdialog/executor.hxx>
+#include <vcl/menu.hxx>
 #include <vcl/window.hxx>
 
 namespace jsdialog
@@ -26,7 +27,8 @@ enum MessageType
     Close,
     Action,
     Popup,
-    PopupClose
+    PopupClose,
+    Menu,
 };
 }
 
@@ -36,6 +38,7 @@ class JSDialogMessageInfo
 public:
     jsdialog::MessageType m_eType;
     VclPtr<vcl::Window> m_pWindow;
+    VclPtr<PopupMenu> m_pMenu;
     std::unique_ptr<jsdialog::ActionDataMap> m_pData;
 
 private:
@@ -43,6 +46,7 @@ private:
     {
         this->m_eType = rInfo.m_eType;
         this->m_pWindow = rInfo.m_pWindow;
+        this->m_pMenu = rInfo.m_pMenu;
         if (rInfo.m_pData)
         {
             std::unique_ptr<jsdialog::ActionDataMap> pData(
@@ -56,6 +60,14 @@ public:
                         std::unique_ptr<jsdialog::ActionDataMap> pData)
         : m_eType(eType)
         , m_pWindow(std::move(pWindow))
+        , m_pData(std::move(pData))
+    {
+    }
+
+    JSDialogMessageInfo(jsdialog::MessageType eType, VclPtr<PopupMenu> pMenu,
+                        std::unique_ptr<jsdialog::ActionDataMap> pData)
+        : m_eType(eType)
+        , m_pMenu(std::move(pMenu))
         , m_pData(std::move(pData))
     {
     }
@@ -93,7 +105,8 @@ public:
 
     void clearQueue();
     void forceUpdate();
-    void sendMessage(jsdialog::MessageType eType, const VclPtr<vcl::Window>& pWindow,
+    template <class VclType>
+    void sendMessage(jsdialog::MessageType eType, const VclPtr<VclType>& pTarget,
                      std::unique_ptr<jsdialog::ActionDataMap> pData = nullptr);
 
 private:
@@ -106,6 +119,7 @@ private:
     OString generatePopupMessage(VclPtr<vcl::Window> pWindow, const rtl::OUString& sParentId,
                                  const rtl::OUString& sCloseId) const;
     OString generateClosePopupMessage(const rtl::OUString& sWindowId) const;
+    OString generateMenuMessage(const VclPtr<PopupMenu>& pMenu) const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
