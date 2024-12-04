@@ -90,6 +90,7 @@
 #include <vcl/NotebookbarContextControl.hxx>
 #include <vcl/Scanline.hxx>
 #include <vcl/WindowPosSize.hxx>
+#include <vcl/accessibility/characterattributeshelper.hxx>
 #include <vcl/accessibletable.hxx>
 #include <vcl/accessibletableprovider.hxx>
 #include <vcl/alpha.hxx>
@@ -290,7 +291,6 @@
 #include <extended/AccessibleGridControlTableCell.hxx>
 #include <extended/accessiblebrowseboxcell.hxx>
 #include <helper/accresmgr.hxx>
-#include <helper/characterattributeshelper.hxx>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/cow_wrapper.hxx>

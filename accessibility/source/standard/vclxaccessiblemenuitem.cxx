@@ -18,7 +18,6 @@
  */
 
 #include <standard/vclxaccessiblemenuitem.hxx>
-#include <helper/characterattributeshelper.hxx>
 #include <comphelper/accessiblecontexthelper.hxx>
 #include <comphelper/accessiblekeybindinghelper.hxx>
 #include <com/sun/star/awt/KeyModifier.hpp>
@@ -31,6 +30,7 @@
 #include <comphelper/sequence.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/accessibility/characterattributeshelper.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>

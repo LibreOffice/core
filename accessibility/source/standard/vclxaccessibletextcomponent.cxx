@@ -19,13 +19,13 @@
 
 #include <standard/vclxaccessibletextcomponent.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <helper/characterattributeshelper.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <comphelper/accessiblecontexthelper.hxx>
+#include <vcl/accessibility/characterattributeshelper.hxx>
 #include <vcl/window.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/svapp.hxx>

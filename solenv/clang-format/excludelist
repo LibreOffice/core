@@ -100,7 +100,6 @@ accessibility/source/extended/accessibletablistbox.cxx
 accessibility/source/extended/accessibletablistboxtable.cxx
 accessibility/source/extended/textwindowaccessibility.cxx
 accessibility/source/helper/acc_factory.cxx
-accessibility/source/helper/characterattributeshelper.cxx
 accessibility/source/standard/accessiblemenubasecomponent.cxx
 accessibility/source/standard/accessiblemenucomponent.cxx
 accessibility/source/standard/accessiblemenuitemcomponent.cxx
@@ -14523,6 +14522,7 @@ vcl/quartz/salgdi.cxx
 vcl/quartz/salgdicommon.cxx
 vcl/quartz/salvd.cxx
 vcl/quartz/utils.cxx
+vcl/source/accessibility/characterattributeshelper.cxx
 vcl/source/animate/AnimationRenderer.cxx
 vcl/source/app/IconThemeInfo.cxx
 vcl/source/app/IconThemeScanner.cxx

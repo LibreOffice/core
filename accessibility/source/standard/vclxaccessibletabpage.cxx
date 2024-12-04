@@ -19,7 +19,6 @@
 
 #include <standard/vclxaccessibletabpage.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <helper/characterattributeshelper.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -30,6 +29,7 @@
 #include <comphelper/accessiblecontexthelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
+#include <vcl/accessibility/characterattributeshelper.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/unohelp2.hxx>
