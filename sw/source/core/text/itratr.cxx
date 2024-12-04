@@ -23,6 +23,7 @@
 
 #include <hintids.hxx>
 #include <editeng/charscaleitem.hxx>
+#include <editeng/cmapitem.hxx>
 #include <svl/itemiter.hxx>
 #include <svx/svdobj.hxx>
 #include <vcl/svapp.hxx>
@@ -836,6 +837,93 @@ TextFrameIndex SwAttrIter::GetNextAttr() const
             return TextFrameIndex(nNext);
         }
     }
+}
+
+namespace
+{
+class FormatBreakTracker
+{
+private:
+    std::optional<SvxCaseMap> m_nCaseMap;
+
+    bool m_bNeedsBreak = false;
+
+    void SetCaseMap(SvxCaseMap nValue)
+    {
+        if (m_nCaseMap != nValue)
+            m_bNeedsBreak = true;
+
+        m_nCaseMap = nValue;
+    }
+
+public:
+    void HandleItemSet(const SfxItemSet& rSet)
+    {
+        if (const SvxCaseMapItem* pItem = rSet.GetItem(RES_CHRATR_CASEMAP))
+            SetCaseMap(pItem->GetCaseMap());
+    }
+
+    void Reset() { m_bNeedsBreak = false; }
+
+    bool NeedsBreak() const { return m_bNeedsBreak; }
+};
+
+bool HasFormatBreakAttribute(FormatBreakTracker* pTracker, const SwTextAttr* pAttr)
+{
+    pTracker->Reset();
+
+    switch (pAttr->Which())
+    {
+        case RES_TXTATR_AUTOFMT:
+        case RES_TXTATR_CHARFMT:
+        {
+            const SfxItemSet& rSet((pAttr->Which() == RES_TXTATR_CHARFMT)
+                                       ? static_cast<SfxItemSet const&>(
+                                             pAttr->GetCharFormat().GetCharFormat()->GetAttrSet())
+                                       : *pAttr->GetAutoFormat().GetStyleHandle());
+
+            pTracker->HandleItemSet(rSet);
+        }
+        break;
+    }
+
+    if (pAttr->IsFormatIgnoreStart() || pAttr->IsFormatIgnoreEnd())
+        pTracker->Reset();
+
+    return pTracker->NeedsBreak();
+}
+}
+
+TextFrameIndex SwAttrIter::GetNextLayoutBreakAttr() const
+{
+    size_t nStartIndex(m_nStartIndex);
+    SwTextNode const* pTextNode(m_pTextNode);
+
+    sal_Int32 nNext = std::numeric_limits<sal_Int32>::max();
+
+    auto* pHints = pTextNode->GetpSwpHints();
+    if (!pHints)
+    {
+        return TextFrameIndex{ nNext };
+    }
+
+    FormatBreakTracker stTracker;
+    stTracker.HandleItemSet(pTextNode->GetSwAttrSet());
+
+    for (size_t i = 0; i < pHints->Count(); ++i)
+    {
+        SwTextAttr* const pAttr(pHints->Get(i));
+        if (HasFormatBreakAttribute(&stTracker, pAttr))
+        {
+            if (i >= nStartIndex)
+            {
+                nNext = pAttr->GetStart();
+                break;
+            }
+        }
+    }
+
+    return TextFrameIndex{ nNext };
 }
 
 namespace {
