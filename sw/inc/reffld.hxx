@@ -108,6 +108,15 @@ private:
                                         sal_Int32* pStt, sal_Int32* pEnd,
                                         SwRootFrame const* pLayout,
                                         SwTextNode* pSelf, SwFrame* pFrame);
+    static SwTextNode* FindAnchorRefStyleMarginal( SwDoc* pDoc,
+                                        sal_uInt16 nFlags,
+                                        sal_Int32* pStt, sal_Int32* pEnd,
+                                        SwTextNode* pSelf, SwFrame* pFrame,
+                                        const SwTextNode* pReference, std::u16string_view styleName);
+    static SwTextNode* FindAnchorRefStyleOther( SwDoc* pDoc,
+                                        sal_Int32* pStt, sal_Int32* pEnd,
+                                        SwTextNode* pSelf,
+                                        const SwTextNode* pReference, std::u16string_view styleName);
 };
 
 class SAL_DLLPUBLIC_RTTI SwGetRefField final : public SwField
