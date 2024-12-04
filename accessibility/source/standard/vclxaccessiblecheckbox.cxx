@@ -19,7 +19,6 @@
 
 #include <standard/vclxaccessiblecheckbox.hxx>
 
-#include <toolkit/awt/vclxwindows.hxx>
 #include <helper/accresmgr.hxx>
 #include <strings.hrc>
 
@@ -54,25 +53,15 @@ VCLXAccessibleCheckBox::VCLXAccessibleCheckBox( VCLXWindow* pVCLWindow )
 
 bool VCLXAccessibleCheckBox::IsChecked() const
 {
-    bool bChecked = false;
-
-    VCLXCheckBox* pVCLXCheckBox = static_cast< VCLXCheckBox* >( GetVCLXWindow() );
-    if ( pVCLXCheckBox && pVCLXCheckBox->getState() == sal_Int16(1) )
-        bChecked = true;
-
-    return bChecked;
+    VclPtr<CheckBox> pCheckBox = GetAs<CheckBox>();
+    return pCheckBox && pCheckBox->IsChecked();
 }
 
 
 bool VCLXAccessibleCheckBox::IsIndeterminate() const
 {
-    bool bIndeterminate = false;
-
-    VCLXCheckBox* pVCLXCheckBox = static_cast< VCLXCheckBox* >( GetVCLXWindow() );
-    if ( pVCLXCheckBox && pVCLXCheckBox->getState() == sal_Int16(2) )
-        bIndeterminate = true;
-
-    return bIndeterminate;
+    VclPtr<CheckBox> pCheckBox = GetAs<CheckBox>();
+    return pCheckBox && pCheckBox->GetState() == TRISTATE_INDET;
 }
 
 
@@ -176,23 +165,22 @@ sal_Bool VCLXAccessibleCheckBox::doAccessibleAction ( sal_Int32 nIndex )
     if ( nIndex != 0 )
         throw IndexOutOfBoundsException();
 
-    VclPtr< CheckBox > pCheckBox = GetAs< CheckBox >();
-    VCLXCheckBox* pVCLXCheckBox = static_cast< VCLXCheckBox* >( GetVCLXWindow() );
-    if ( pCheckBox && pVCLXCheckBox )
+    VclPtr<CheckBox> pCheckBox = GetAs<CheckBox>();
+    if (pCheckBox)
     {
         sal_Int32 nValueMax = sal_Int32(1);
 
         if ( pCheckBox->IsTriStateEnabled() )
             nValueMax = sal_Int32(2);
 
-        sal_Int32 nValue = static_cast<sal_Int32>(pVCLXCheckBox->getState());
+        sal_Int32 nValue = static_cast<sal_Int32>(pCheckBox->GetState());
 
         ++nValue;
 
         if ( nValue > nValueMax )
             nValue = 0;
 
-        pVCLXCheckBox->setState( static_cast<sal_Int16>(nValue) );
+        pCheckBox->SetState(static_cast<TriState>(nValue));
     }
 
     return true;
@@ -259,9 +247,9 @@ Any VCLXAccessibleCheckBox::getCurrentValue(  )
 
     Any aValue;
 
-    VCLXCheckBox* pVCLXCheckBox = static_cast< VCLXCheckBox* >( GetVCLXWindow() );
-    if ( pVCLXCheckBox )
-        aValue <<= static_cast<sal_Int32>(pVCLXCheckBox->getState());
+    VclPtr<CheckBox> pCheckBox = GetAs<CheckBox>();
+    if (pCheckBox)
+        aValue <<= static_cast<sal_Int32>(pCheckBox->GetState());
 
     return aValue;
 }
@@ -273,8 +261,8 @@ sal_Bool VCLXAccessibleCheckBox::setCurrentValue( const Any& aNumber )
 
     bool bReturn = false;
 
-    VCLXCheckBox* pVCLXCheckBox = static_cast< VCLXCheckBox* >( GetVCLXWindow() );
-    if ( pVCLXCheckBox )
+    VclPtr<CheckBox> pCheckBox = GetAs<CheckBox>();
+    if (pCheckBox)
     {
         sal_Int32 nValue = 0, nValueMin = 0, nValueMax = 0;
         OSL_VERIFY( aNumber >>= nValue );
@@ -285,7 +273,7 @@ sal_Bool VCLXAccessibleCheckBox::setCurrentValue( const Any& aNumber )
         else if ( nValue > nValueMax )
             nValue = nValueMax;
 
-        pVCLXCheckBox->setState( static_cast<sal_Int16>(nValue) );
+        pCheckBox->SetState(static_cast<TriState>(nValue));
         bReturn = true;
     }
 
