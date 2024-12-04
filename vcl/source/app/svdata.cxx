@@ -38,6 +38,8 @@
 #include <vcl/virdev.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/uitest/logger.hxx>
+
+#include <bitmap/BlendFrameCache.hxx>
 #include <salframe.hxx>
 #include <scrwnd.hxx>
 #include <helpwin.hxx>
@@ -360,15 +362,6 @@ DockingManager* ImplGetDockingManager()
         pSVData->mpDockingManager.reset(new DockingManager());
 
     return pSVData->mpDockingManager.get();
-}
-
-BlendFrameCache* ImplGetBlendFrameCache()
-{
-    ImplSVData* pSVData = ImplGetSVData();
-    if ( !pSVData->mpBlendFrameCache)
-        pSVData->mpBlendFrameCache.reset( new BlendFrameCache() );
-
-    return pSVData->mpBlendFrameCache.get();
 }
 
 void LocaleConfigurationListener::ConfigurationChanged( utl::ConfigurationBroadcaster*, ConfigurationHints nHint )

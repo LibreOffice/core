@@ -51,6 +51,8 @@
 #include <vcl/menu.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/print.hxx>
+
+#include <bitmap/BlendFrameCache.hxx>
 #include <debugevent.hxx>
 #include <scrwnd.hxx>
 #include <windowdev.hxx>

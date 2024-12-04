@@ -69,6 +69,7 @@ namespace vcl::font
     class DirectFontSubstitution;
     class PhysicalFontCollection;
 }
+struct BlendFrameCache;
 struct ImplHotKey;
 struct ImplEventHook;
 class Point;
@@ -355,27 +356,6 @@ struct ImplSVNWFData
     int mnListBoxEntryMargin = 0;
 };
 
-struct BlendFrameCache
-{
-    Size m_aLastSize;
-    sal_uInt8 m_nLastAlpha;
-    Color m_aLastColorTopLeft;
-    Color m_aLastColorTopRight;
-    Color m_aLastColorBottomRight;
-    Color m_aLastColorBottomLeft;
-    BitmapEx m_aLastResult;
-
-    BlendFrameCache()
-        : m_aLastSize(0, 0)
-        , m_nLastAlpha(0)
-        , m_aLastColorTopLeft(COL_BLACK)
-        , m_aLastColorTopRight(COL_BLACK)
-        , m_aLastColorBottomRight(COL_BLACK)
-        , m_aLastColorBottomLeft(COL_BLACK)
-    {
-    }
-};
-
 struct ImplSchedulerContext
 {
     ImplSchedulerData*      mpFirstSchedulerData[PRIO_COUNT] = { nullptr, }; ///< list of all active tasks per priority
@@ -452,7 +432,6 @@ vcl::Window* ImplGetDefaultContextWindow();
 const std::locale& ImplGetResLocale();
 VCL_PLUGIN_PUBLIC OUString VclResId(TranslateId sContextAndId);
 DockingManager*     ImplGetDockingManager();
-BlendFrameCache*    ImplGetBlendFrameCache();
 void GenerateAutoMnemonicsOnHierarchy(const vcl::Window* pWindow);
 
 VCL_PLUGIN_PUBLIC ImplSVHelpData& ImplGetSVHelpData();
