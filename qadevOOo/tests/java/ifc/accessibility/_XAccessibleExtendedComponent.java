@@ -29,7 +29,6 @@ import com.sun.star.awt.XFont;
  * <ul>
  *  <li><code> getForeground()</code></li>
  *  <li><code> getBackground()</code></li>
- *  <li><code> getFont()</code></li>
  *  <li><code> isEnabled()</code></li>
  *  <li><code> getTitledBorderText()</code></li>
  *  <li><code> getToolTipText()</code></li>
@@ -58,15 +57,6 @@ public class _XAccessibleExtendedComponent extends MultiMethodTest {
         int backColor = oObj.getBackground();
         log.println("getBackground(): " + backColor);
         tRes.tested("getBackground()", true);
-    }
-
-    /**
-     * Just calls the method.
-     */
-    public void _getFont() {
-        XFont font = oObj.getFont();
-        log.println("getFont(): " + font);
-        tRes.tested("getFont()", true);
     }
 
     /**

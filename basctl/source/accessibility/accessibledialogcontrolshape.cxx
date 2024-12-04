@@ -480,32 +480,6 @@ sal_Int32 AccessibleDialogControlShape::getBackground(  )
 
 // XAccessibleExtendedComponent
 
-
-Reference< awt::XFont > AccessibleDialogControlShape::getFont(  )
-{
-    OExternalLockGuard aGuard( this );
-
-    Reference< awt::XFont > xFont;
-    vcl::Window* pWindow = GetWindow();
-    if ( pWindow )
-    {
-        Reference< awt::XDevice > xDev( pWindow->GetComponentInterface(), UNO_QUERY );
-        if ( xDev.is() )
-        {
-            vcl::Font aFont;
-            if ( pWindow->IsControlFont() )
-                aFont = pWindow->GetControlFont();
-            else
-                aFont = pWindow->GetFont();
-            rtl::Reference<VCLXFont> pVCLXFont = new VCLXFont(*xDev, aFont);
-            xFont = pVCLXFont;
-        }
-    }
-
-    return xFont;
-}
-
-
 OUString AccessibleDialogControlShape::getTitledBorderText(  )
 {
     OExternalLockGuard aGuard( this );

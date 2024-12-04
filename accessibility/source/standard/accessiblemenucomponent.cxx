@@ -277,33 +277,6 @@ sal_Int32 OAccessibleMenuComponent::getBackground(  )
 
 // XAccessibleExtendedComponent
 
-
-Reference< awt::XFont > OAccessibleMenuComponent::getFont(  )
-{
-    OExternalLockGuard aGuard( this );
-
-    Reference< awt::XFont > xFont;
-
-    if ( m_pMenu )
-    {
-        vcl::Window* pWindow = m_pMenu->GetWindow();
-        if ( pWindow )
-        {
-            Reference< awt::XDevice > xDev( pWindow->GetComponentInterface(), UNO_QUERY );
-            if ( xDev.is() )
-            {
-                const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-                rtl::Reference<VCLXFont> pVCLXFont
-                    = new VCLXFont(*xDev, rStyleSettings.GetMenuFont());
-                xFont = pVCLXFont;
-            }
-        }
-    }
-
-    return xFont;
-}
-
-
 OUString OAccessibleMenuComponent::getTitledBorderText(  )
 {
     OExternalLockGuard aGuard( this );

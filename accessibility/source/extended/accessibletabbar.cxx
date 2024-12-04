@@ -427,31 +427,6 @@ namespace accessibility
 
     // XAccessibleExtendedComponent
 
-
-    Reference< awt::XFont > AccessibleTabBar::getFont(  )
-    {
-        OExternalLockGuard aGuard( this );
-
-        Reference< awt::XFont > xFont;
-        if ( m_pTabBar )
-        {
-            Reference< awt::XDevice > xDev( m_pTabBar->GetComponentInterface(), UNO_QUERY );
-            if ( xDev.is() )
-            {
-                vcl::Font aFont;
-                if ( m_pTabBar->IsControlFont() )
-                    aFont = m_pTabBar->GetControlFont();
-                else
-                    aFont = m_pTabBar->GetFont();
-                rtl::Reference<VCLXFont> pVCLXFont = new VCLXFont(*xDev, aFont);
-                xFont = pVCLXFont;
-            }
-        }
-
-        return xFont;
-    }
-
-
     OUString AccessibleTabBar::getTitledBorderText(  )
     {
         OExternalLockGuard aGuard( this );

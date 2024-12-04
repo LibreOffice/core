@@ -1,4 +1,3 @@
-"AccessibleMenuSeparator";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getFont()"
 "AccessibleMenuSeparator";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getTitledBorderText()"
 "AccessibleMenuSeparator";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getToolTipText()"
 "AccessibleMenuSeparator";"com::sun::star::accessibility::XAccessibleEventBroadcaster";"addEventListener()"

@@ -1,4 +1,3 @@
-"AccessibleMenuItem";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getFont()"
 "AccessibleMenuItem";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getTitledBorderText()"
 "AccessibleMenuItem";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getToolTipText()"
 "AccessibleMenuItem";"com::sun::star::accessibility::XAccessibleValue";"getCurrentValue()"

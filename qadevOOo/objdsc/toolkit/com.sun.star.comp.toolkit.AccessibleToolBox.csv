@@ -1,4 +1,3 @@
-"AccessibleToolBox";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getFont()"
 "AccessibleToolBox";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getTitledBorderText()"
 "AccessibleToolBox";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getToolTipText()"
 "AccessibleToolBox";"com::sun::star::accessibility::XAccessibleEventBroadcaster#optional";"addEventListener()"

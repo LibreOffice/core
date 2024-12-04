@@ -385,14 +385,6 @@ sal_Int32 SAL_CALL AccessibleCell::getBackground()
 
 // XAccessibleExtendedComponent
 
-
-css::uno::Reference< css::awt::XFont > SAL_CALL AccessibleCell::getFont()
-{
-//todo
-    return AccessibleComponentBase::getFont();
-}
-
-
 OUString SAL_CALL AccessibleCell::getTitledBorderText()
 {
     return AccessibleComponentBase::getTitledBorderText();

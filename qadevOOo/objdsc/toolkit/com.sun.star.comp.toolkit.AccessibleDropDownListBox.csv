@@ -1,4 +1,3 @@
-"AccessibleDropDownListBox";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getFont()"
 "AccessibleDropDownListBox";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getTitledBorderText()"
 "AccessibleDropDownListBox";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getToolTipText()"
 "AccessibleDropDownListBox";"com::sun::star::accessibility::XAccessibleEventBroadcaster#optional";"addEventListener()"

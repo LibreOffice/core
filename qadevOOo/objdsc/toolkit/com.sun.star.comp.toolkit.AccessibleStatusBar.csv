@@ -1,4 +1,3 @@
-"AccessibleStatusBar";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getFont()"
 "AccessibleStatusBar";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getTitledBorderText()"
 "AccessibleStatusBar";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getToolTipText()"
 "AccessibleStatusBar";"com::sun::star::accessibility::XAccessibleEventBroadcaster";"addEventListener()"

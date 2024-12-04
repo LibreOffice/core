@@ -37,14 +37,6 @@ module com { module sun { module star { module accessibility {
 */
 interface XAccessibleExtendedComponent : XAccessibleComponent
 {
-    /** Returns the font of this object.
-
-        @return
-            The returned reference to a font object is empty if a font is not
-            supported by this object.
-    */
-    ::com::sun::star::awt::XFont getFont ();
-
     /** Returns the titled border text.
 
         <p>This method stems from the Java interface

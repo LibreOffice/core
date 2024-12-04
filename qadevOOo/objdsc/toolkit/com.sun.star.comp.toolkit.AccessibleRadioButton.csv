@@ -1,4 +1,3 @@
-"AccessibleRadioButton";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getFont()"
 "AccessibleRadioButton";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getTitledBorderText()"
 "AccessibleRadioButton";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getToolTipText()"
 "AccessibleRadioButton";"com::sun::star::accessibility::XAccessibleValue";"getCurrentValue()"

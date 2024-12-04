@@ -1,4 +1,3 @@
-"AccessibleEdit";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getFont()"
 "AccessibleEdit";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getTitledBorderText()"
 "AccessibleEdit";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getToolTipText()"
 "AccessibleEdit";"com::sun::star::accessibility::XAccessibleEventBroadcaster";"addEventListener()"

@@ -26,15 +26,6 @@
 /**
  * @brief Just calls the method.
  */
-void XAccessibleExtendedComponentTester::testGetFont()
-{
-    auto font = mxExtendedComponent->getFont();
-    std::cout << "font: " << font << std::endl;
-}
-
-/**
- * @brief Just calls the method.
- */
 void XAccessibleExtendedComponentTester::testGetTitledBorderText()
 {
     auto titleBorderText = mxExtendedComponent->getTitledBorderText();

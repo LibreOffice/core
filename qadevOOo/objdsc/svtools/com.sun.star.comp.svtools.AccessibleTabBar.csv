@@ -1,4 +1,3 @@
-"AccessibleTabBar";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getFont()"
 "AccessibleTabBar";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getTitledBorderText()"
 "AccessibleTabBar";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getToolTipText()"
 "AccessibleTabBar";"com::sun::star::accessibility::XAccessibleEventBroadcaster";"addEventListener()"

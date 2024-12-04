@@ -1,4 +1,3 @@
-"AccessibleToolBoxItem";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getFont()"
 "AccessibleToolBoxItem";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getTitledBorderText()"
 "AccessibleToolBoxItem";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getToolTipText()"
 "AccessibleToolBoxItem";"com::sun::star::accessibility::XAccessibleValue";"getCurrentValue()"

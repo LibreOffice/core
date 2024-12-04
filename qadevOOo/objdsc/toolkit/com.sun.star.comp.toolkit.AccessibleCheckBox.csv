@@ -1,4 +1,3 @@
-"AccessibleCheckBox";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getFont()"
 "AccessibleCheckBox";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getTitledBorderText()"
 "AccessibleCheckBox";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getToolTipText()"
 "AccessibleCheckBox";"com::sun::star::accessibility::XAccessibleValue";"getCurrentValue()"

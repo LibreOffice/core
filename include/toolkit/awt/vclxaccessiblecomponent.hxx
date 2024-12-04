@@ -100,7 +100,6 @@ public:
     virtual sal_Int32 SAL_CALL getBackground(  ) override;
 
     // css::accessibility::XAccessibleExtendedComponent
-    virtual css::uno::Reference< css::awt::XFont > SAL_CALL getFont(  ) override;
     virtual OUString SAL_CALL getTitledBorderText(  ) override;
     virtual OUString SAL_CALL getToolTipText(  ) override;
 

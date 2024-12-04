@@ -1,4 +1,3 @@
-"AccessibleButton";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getFont()"
 "AccessibleButton";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getTitledBorderText()"
 "AccessibleButton";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getToolTipText()"
 "AccessibleButton";"com::sun::star::accessibility::XAccessibleValue";"getCurrentValue()"

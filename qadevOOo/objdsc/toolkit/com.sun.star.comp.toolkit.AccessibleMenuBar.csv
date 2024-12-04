@@ -1,4 +1,3 @@
-"AccessibleMenuBar";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getFont()"
 "AccessibleMenuBar";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getTitledBorderText()"
 "AccessibleMenuBar";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getToolTipText()"
 "AccessibleMenuBar";"com::sun::star::accessibility::XAccessibleEventBroadcaster";"addEventListener()"

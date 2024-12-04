@@ -227,13 +227,6 @@ sal_Int32 VCLXAccessibleHeaderBarItem::getBackground()
 
 // XAccessibleExtendedComponent
 
-
-Reference< awt::XFont > VCLXAccessibleHeaderBarItem::getFont()
-{
-    return Reference< awt::XFont >();
-}
-
-
 OUString VCLXAccessibleHeaderBarItem::getTitledBorderText()
 {
     return OUString();
