@@ -2729,13 +2729,19 @@ void ScColumn::GetBackColorFilterEntries(SCROW nRow1, SCROW nRow2, ScFilterEntri
     const ScPatternAttr* pPrevPattern = nullptr;
     ScRefCellValue aPrevCellValue;
     Color aPrevPatternColor;
+    const ScPatternAttr* pPattern = nullptr;
+    SCROW nPatternStartRow = -1;
+    SCROW nPatternEndRow = -1;
     while (nRow1 <= nRow2)
     {
         aCell.SetRow(nRow1);
 
         Color aBackColor;
         bool bCondBackColor = false;
-        const ScPatternAttr* pPattern = GetPattern(nRow1);
+        if (nRow1 <= nPatternEndRow)
+            ; // then the previous value of pPattern is still valid
+        else
+            pPattern = pAttrArray->GetPatternRange(nPatternStartRow, nPatternEndRow, nRow1);
         ScConditionalFormat* pCondFormat = rDoc.GetCondFormat(aCell.Col(), aCell.Row(), aCell.Tab());
 
         if (pPattern)
