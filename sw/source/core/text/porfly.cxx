@@ -225,7 +225,7 @@ void sw::FlyContentPortion::Paint(const SwTextPaintInfo& rInf) const
 
     if(!((m_pFly->IsCompletePaint() ||
             m_pFly->getFrameArea().Overlaps(aRepaintRect)) &&
-            SwFlyFrame::IsPaint(m_pFly->GetVirtDrawObj(), m_pFly->getRootFrame()->GetCurrShell())))
+            SwFlyFrame::IsPaint(m_pFly->GetVirtDrawObj(), *m_pFly->getRootFrame()->GetCurrShell())))
         return;
 
     SwRect aRect(m_pFly->getFrameArea());

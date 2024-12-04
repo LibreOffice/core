@@ -242,7 +242,7 @@ public:
                      const bool _bForPaint = false ) const;
 
     // Paint on this shell (consider Preview, print flag, etc. recursively)?
-    static bool IsPaint( SdrObject *pObj, const SwViewShell *pSh );
+    static bool IsPaint(SdrObject *pObj, const SwViewShell& rSh);
 
     /** SwFlyFrame::IsBackgroundTransparent
 

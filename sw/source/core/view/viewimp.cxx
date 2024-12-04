@@ -537,7 +537,7 @@ void SwViewObjectContactRedirector::createRedirectedPrimitive2DSequence(
     SdrObject* pObj = rOriginal.GetViewContact().TryToGetSdrObject();
     if ( pObj )
     {
-        bPaint = SwFlyFrame::IsPaint( pObj, &mrViewShell );
+        bPaint = SwFlyFrame::IsPaint(pObj, mrViewShell);
     }
 
     if ( !bPaint )

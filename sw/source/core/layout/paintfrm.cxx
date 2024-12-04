@@ -4101,20 +4101,19 @@ static void lcl_PaintReplacement( const SwRect &rRect, const SwViewShell &rSh )
     Graphic::DrawEx(*rSh.GetOut(), OUString(), aFont, rBmp, rRect.Pos(), rRect.SSize());
 }
 
-bool SwFlyFrame::IsPaint( SdrObject *pObj, const SwViewShell *pSh )
+bool SwFlyFrame::IsPaint(SdrObject *pObj, const SwViewShell& rSh)
 {
     SdrObjUserCall *pUserCall = GetUserCall(pObj);
 
     if ( nullptr == pUserCall )
         return true;
 
-    if ( pSh && ((!pSh->GetViewOptions()->IsDraw()
+    if ( (!rSh.GetViewOptions()->IsDraw()
              && (dynamic_cast<SdrUnoObj*>(pObj) || dynamic_cast<SdrAttrObj*>(pObj) || dynamic_cast<SwFlyDrawObj*>(pObj)))
-        || (!pSh->GetViewOptions()->IsGraphic() && dynamic_cast<SwVirtFlyDrawObj*>(pObj)) )
-         )
+        || (!rSh.GetViewOptions()->IsGraphic() && dynamic_cast<SwVirtFlyDrawObj*>(pObj)) )
     {
         SwRect rBoundRect = GetBoundRectOfAnchoredObj( pObj );
-        lcl_PaintReplacement( rBoundRect, *pSh );
+        lcl_PaintReplacement(rBoundRect, rSh);
         return false;
     }
     assert(pObj);
@@ -4123,7 +4122,7 @@ bool SwFlyFrame::IsPaint( SdrObject *pObj, const SwViewShell *pSh )
     bool bPaint =  gProp.pSFlyOnlyDraw ||
                        static_cast<SwContact*>(pUserCall)->GetFormat()->GetPrint().GetValue();
     if ( !bPaint )
-        bPaint = pSh->GetWin() && !pSh->IsPreview();
+        bPaint = rSh.GetWin() && !rSh.IsPreview();
 
     if ( bPaint )
     {
@@ -4160,7 +4159,7 @@ bool SwFlyFrame::IsPaint( SdrObject *pObj, const SwViewShell *pSh )
             {
                 if ( !pAnch->isFrameAreaPositionValid() )
                     pAnch = nullptr;
-                else if ( pSh->GetOut() == pSh->getIDocumentDeviceAccess().getPrinter( false ))
+                else if ( rSh.GetOut() == rSh.getIDocumentDeviceAccess().getPrinter( false ))
                 {
                     //HACK: we have to omit some of the objects for printing,
                     //otherwise they would be printed twice.
@@ -4183,8 +4182,7 @@ bool SwFlyFrame::IsPaint( SdrObject *pObj, const SwViewShell *pSh )
         if ( pAnch )
         {
             if ( pAnch->IsInFly() )
-                bPaint = SwFlyFrame::IsPaint( pAnch->FindFlyFrame()->GetVirtDrawObj(),
-                                            pSh );
+                bPaint = SwFlyFrame::IsPaint(pAnch->FindFlyFrame()->GetVirtDrawObj(), rSh);
             else if ( gProp.pSFlyOnlyDraw )
                 bPaint = false;
         }

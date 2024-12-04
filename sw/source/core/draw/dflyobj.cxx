@@ -509,12 +509,12 @@ void SwVirtFlyDrawObj::wrap_DoPaintObject(
     // but no paints. IsPaintInProgress() depends on SW repaint, so, as long
     // as SW paints self and calls DrawLayer() for Heaven and Hell, this will
     // be correct
-    if ( !(pShell && pShell->IsDrawingLayerPaintInProgress()) )
+    if (!pShell || !pShell->IsDrawingLayerPaintInProgress())
         return;
 
     bool bDrawObject(true);
 
-    if ( !SwFlyFrame::IsPaint( const_cast<SwVirtFlyDrawObj*>(this), pShell ) )
+    if ( !SwFlyFrame::IsPaint( const_cast<SwVirtFlyDrawObj*>(this), *pShell ) )
     {
         bDrawObject = false;
     }
