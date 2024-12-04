@@ -19,5 +19,4 @@ inline constexpr OUString RID_STR_ACC_ACTION_DECLINE = u"decrementLine"_ustr;
 inline constexpr OUString RID_STR_ACC_ACTION_INCBLOCK = u"incrementBlock"_ustr;
 inline constexpr OUString RID_STR_ACC_ACTION_DECBLOCK = u"decrementBlock"_ustr;
 
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

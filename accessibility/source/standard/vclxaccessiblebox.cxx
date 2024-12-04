@@ -26,10 +26,11 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+
+#include <vcl/accessibility/strings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolkit/combobox.hxx>
 #include <vcl/toolkit/lstbox.hxx>
-#include <strings.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

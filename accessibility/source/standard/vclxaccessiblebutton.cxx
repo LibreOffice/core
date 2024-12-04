@@ -27,8 +27,8 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <strings.hxx>
 
+#include <vcl/accessibility/strings.hxx>
 #include <vcl/toolkit/button.hxx>
 #include <vcl/event.hxx>
 #include <vcl/vclevent.hxx>

@@ -28,9 +28,9 @@
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <comphelper/accessiblecontexthelper.hxx>
+#include <vcl/accessibility/strings.hxx>
 #include <vcl/toolkit/scrbar.hxx>
 #include <vcl/vclevent.hxx>
-#include <strings.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
