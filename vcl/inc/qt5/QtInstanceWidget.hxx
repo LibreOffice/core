@@ -19,8 +19,10 @@
 #include <rtl/ustring.hxx>
 #include <vcl/sysdata.hxx>
 
-class QtInstanceWidget : public virtual weld::Widget
+class QtInstanceWidget : public QObject, public virtual weld::Widget
 {
+    Q_OBJECT
+
     QWidget* m_pWidget;
 
 public:

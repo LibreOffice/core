@@ -13,7 +13,7 @@
 
 #include <QtWidgets/QLineEdit>
 
-class QtInstanceEntry : public QObject, public QtInstanceWidget, public virtual weld::Entry
+class QtInstanceEntry : public QtInstanceWidget, public virtual weld::Entry
 {
     Q_OBJECT;
 

@@ -14,7 +14,7 @@
 #include <QtGui/QStandardItemModel>
 #include <QtWidgets/QTreeView>
 
-class QtInstanceTreeView : public QObject, public QtInstanceWidget, public virtual weld::TreeView
+class QtInstanceTreeView : public QtInstanceWidget, public virtual weld::TreeView
 {
     Q_OBJECT
 

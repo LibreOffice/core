@@ -15,6 +15,8 @@
 
 class QtInstanceTextView : public QtInstanceWidget, public virtual weld::TextView
 {
+    Q_OBJECT
+
     QPlainTextEdit* m_pTextEdit;
 
 public:

@@ -16,7 +16,7 @@
 
 #include <map>
 
-class QtInstanceNotebook : public QObject, public QtInstanceWidget, public virtual weld::Notebook
+class QtInstanceNotebook : public QtInstanceWidget, public virtual weld::Notebook
 {
     Q_OBJECT
 

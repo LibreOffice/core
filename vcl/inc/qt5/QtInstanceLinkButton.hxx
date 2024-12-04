@@ -14,9 +14,7 @@
 
 #include <QtWidgets/QLabel>
 
-class QtInstanceLinkButton : public QObject,
-                             public QtInstanceWidget,
-                             public virtual weld::LinkButton
+class QtInstanceLinkButton : public QtInstanceWidget, public virtual weld::LinkButton
 {
     Q_OBJECT
 

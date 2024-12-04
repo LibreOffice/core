@@ -13,9 +13,7 @@
 
 #include <QtWidgets/QLabel>
 
-class QtInstanceDrawingArea : public QObject,
-                              public QtInstanceWidget,
-                              public virtual weld::DrawingArea
+class QtInstanceDrawingArea : public QtInstanceWidget, public virtual weld::DrawingArea
 {
     Q_OBJECT
 

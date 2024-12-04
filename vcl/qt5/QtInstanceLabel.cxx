@@ -8,6 +8,7 @@
  */
 
 #include <QtInstanceLabel.hxx>
+#include <QtInstanceLabel.moc>
 
 #include <vcl/qt/QtUtils.hxx>
 

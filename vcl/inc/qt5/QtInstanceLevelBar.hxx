@@ -13,7 +13,7 @@
 
 #include <QtWidgets/QProgressBar>
 
-class QtInstanceLevelBar : public QObject, public QtInstanceWidget, public virtual weld::LevelBar
+class QtInstanceLevelBar : public QtInstanceWidget, public virtual weld::LevelBar
 {
     Q_OBJECT
 

@@ -15,6 +15,8 @@
 
 class QtInstanceImage : public QtInstanceWidget, public virtual weld::Image
 {
+    Q_OBJECT
+
     QLabel* m_pLabel;
 
 public:

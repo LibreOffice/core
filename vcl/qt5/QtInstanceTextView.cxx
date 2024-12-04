@@ -8,6 +8,7 @@
  */
 
 #include <QtInstanceTextView.hxx>
+#include <QtInstanceTextView.moc>
 
 #include <vcl/qt/QtUtils.hxx>
 

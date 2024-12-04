@@ -8,6 +8,8 @@
  */
 
 #include <QtInstanceWidget.hxx>
+#include <QtInstanceWidget.moc>
+
 #include <QtInstanceContainer.hxx>
 
 #include <vcl/transfer.hxx>

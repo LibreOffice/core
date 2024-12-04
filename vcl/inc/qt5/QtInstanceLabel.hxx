@@ -16,6 +16,8 @@
 
 class QtInstanceLabel : public QtInstanceWidget, public virtual weld::Label
 {
+    Q_OBJECT
+
     QLabel* m_pLabel;
 
 public:

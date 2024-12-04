@@ -13,7 +13,7 @@
 
 #include <QtWidgets/QLayout>
 
-class QtInstanceContainer : public QObject, public QtInstanceWidget, public virtual weld::Container
+class QtInstanceContainer : public QtInstanceWidget, public virtual weld::Container
 {
     Q_OBJECT
 

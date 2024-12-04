@@ -13,9 +13,7 @@
 
 #include <QtWidgets/QProgressBar>
 
-class QtInstanceProgressBar : public QObject,
-                              public QtInstanceWidget,
-                              public virtual weld::ProgressBar
+class QtInstanceProgressBar : public QtInstanceWidget, public virtual weld::ProgressBar
 {
     Q_OBJECT
 

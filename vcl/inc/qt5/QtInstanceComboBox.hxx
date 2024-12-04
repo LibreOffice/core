@@ -13,7 +13,7 @@
 
 #include <QtWidgets/QComboBox>
 
-class QtInstanceComboBox : public QObject, public QtInstanceWidget, public virtual weld::ComboBox
+class QtInstanceComboBox : public QtInstanceWidget, public virtual weld::ComboBox
 {
     Q_OBJECT
 

@@ -14,7 +14,7 @@
 #include <QtCore/QObject>
 #include <QtWidgets/QPushButton>
 
-class QtInstanceButton : public QObject, public QtInstanceWidget, public virtual weld::Button
+class QtInstanceButton : public QtInstanceWidget, public virtual weld::Button
 {
     QPushButton* m_pButton;
 

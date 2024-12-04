@@ -12,7 +12,7 @@
 #include "QtInstanceWidget.hxx"
 #include "QtExpander.hxx"
 
-class QtInstanceExpander : public QObject, public QtInstanceWidget, public virtual weld::Expander
+class QtInstanceExpander : public QtInstanceWidget, public virtual weld::Expander
 {
     Q_OBJECT
 

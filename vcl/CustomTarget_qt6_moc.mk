@@ -23,6 +23,8 @@ $(call gb_CustomTarget_get_target,vcl/qt6) : \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceDrawingArea.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceEntry.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceExpander.moc \
+	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceImage.moc \
+	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceLabel.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceLevelBar.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceLinkButton.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceMessageDialog.moc \
@@ -30,7 +32,9 @@ $(call gb_CustomTarget_get_target,vcl/qt6) : \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceProgressBar.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceRadioButton.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceSpinButton.moc \
+	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceTextView.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceTreeView.moc \
+	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceWidget.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceWindow.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtMainWindow.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtMenu.moc \

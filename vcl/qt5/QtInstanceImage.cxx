@@ -8,6 +8,7 @@
  */
 
 #include <QtInstanceImage.hxx>
+#include <QtInstanceImage.moc>
 
 #include <vcl/qt/QtUtils.hxx>
 
