@@ -479,26 +479,9 @@ void JSDropTarget::fire_dragEnter(const css::datatransfer::dnd::DropTargetDragEn
     }
 }
 
-// used for dialogs
-JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, const std::u16string_view sUIRoot,
-                                     const OUString& rUIFile, bool bPopup)
-    : SalInstanceBuilder(extract_sal_widget(pParent), sUIRoot, rUIFile)
-    , m_nWindowId(0)
-    , m_aParentDialog(nullptr)
-    , m_aContentWindow(nullptr)
-    , m_sTypeOfJSON(u"dialog"_ustr)
-    , m_bHasTopLevelDialog(false)
-    , m_bIsNotebookbar(false)
-    , m_bSentInitialUpdate(false)
-    , m_bIsNestedBuilder(false)
-    , m_aWindowToRelease(nullptr)
+void JSInstanceBuilder::initializeDialogSender()
 {
-    // when it is a popup we initialize sender in weld_popover
-    if (bPopup)
-    {
-        m_sTypeOfJSON = "popup";
-        return;
-    }
+    m_sTypeOfJSON = "dialog";
 
     vcl::Window* pRoot = m_xBuilder->get_widget_root();
 
@@ -513,25 +496,23 @@ JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, const std::u16string
     initializeSender(GetNotifierWindow(), GetContentWindow(), GetTypeOfJSON());
 }
 
-// used for sidebar panels
-JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, std::u16string_view sUIRoot,
-                                     const OUString& rUIFile, sal_uInt64 nLOKWindowId)
-    : SalInstanceBuilder(extract_sal_widget(pParent), sUIRoot, rUIFile)
-    , m_nWindowId(nLOKWindowId)
-    , m_aParentDialog(nullptr)
-    , m_aContentWindow(nullptr)
-    , m_sTypeOfJSON(u"sidebar"_ustr)
-    , m_bHasTopLevelDialog(false)
-    , m_bIsNotebookbar(false)
-    , m_bSentInitialUpdate(false)
-    , m_bIsNestedBuilder(false)
-    , m_aWindowToRelease(nullptr)
+void JSInstanceBuilder::initializePopupSender()
 {
+    // when it is a popup we initialize sender in weld_popover
+    m_sTypeOfJSON = "popup";
+}
+
+void JSInstanceBuilder::initializeSidebarSender(sal_uInt64 nLOKWindowId,
+                                                const std::u16string_view& rUIFile)
+{
+    m_sTypeOfJSON = "sidebar";
+    m_nWindowId = nLOKWindowId;
+
     vcl::Window* pRoot = m_xBuilder->get_widget_root();
 
     m_aParentDialog = pRoot->GetParentWithLOKNotifier();
 
-    if (rUIFile == "sfx/ui/panel.ui")
+    if (rUIFile == u"sfx/ui/panel.ui")
     {
         // builder for Panel, get SidebarDockingWindow as m_aContentWindow
         m_aContentWindow = pRoot;
@@ -541,7 +522,7 @@ JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, std::u16string_view 
     else
     {
         // embedded fragments cannot send close message for whole sidebar
-        if (rUIFile == "modules/simpress/ui/customanimationfragment.ui")
+        if (rUIFile == u"modules/simpress/ui/customanimationfragment.ui")
             m_bCanClose = false;
 
         // builder for PanelLayout, get SidebarDockingWindow as m_aContentWindow
@@ -555,31 +536,19 @@ JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, std::u16string_view 
     initializeSender(GetNotifierWindow(), GetContentWindow(), GetTypeOfJSON());
 }
 
-// used for notebookbar
-JSInstanceBuilder::JSInstanceBuilder(vcl::Window* pParent, std::u16string_view sUIRoot,
-                                     const OUString& rUIFile,
-                                     const css::uno::Reference<css::frame::XFrame>& rFrame,
-                                     sal_uInt64 nWindowId)
-    : SalInstanceBuilder(pParent, sUIRoot, rUIFile, rFrame)
-    , m_nWindowId(0)
-    , m_aParentDialog(nullptr)
-    , m_aContentWindow(nullptr)
-    , m_sTypeOfJSON(u"notebookbar"_ustr)
-    , m_bHasTopLevelDialog(false)
-    , m_bIsNotebookbar(false)
-    , m_bSentInitialUpdate(false)
-    , m_bIsNestedBuilder(false)
-    , m_aWindowToRelease(nullptr)
+void JSInstanceBuilder::initializeNotebookbarSender(sal_uInt64 nLOKWindowId)
 {
+    m_sTypeOfJSON = "notebookbar";
+
     vcl::Window* pRoot = m_xBuilder->get_widget_root();
     if (pRoot && pRoot->GetParent())
     {
         m_aParentDialog = pRoot->GetParent()->GetParentWithLOKNotifier();
         if (m_aParentDialog)
             m_nWindowId = m_aParentDialog->GetLOKWindowId();
-        if (!m_nWindowId && nWindowId)
+        if (!m_nWindowId && nLOKWindowId)
         {
-            m_nWindowId = nWindowId;
+            m_nWindowId = nLOKWindowId;
             m_bIsNotebookbar = true;
         }
         InsertWindowToMap(getMapIdFromWindowId());
@@ -588,22 +557,15 @@ JSInstanceBuilder::JSInstanceBuilder(vcl::Window* pParent, std::u16string_view s
     initializeSender(GetNotifierWindow(), GetContentWindow(), GetTypeOfJSON());
 }
 
-// used for formulabar
-JSInstanceBuilder::JSInstanceBuilder(vcl::Window* pParent, std::u16string_view sUIRoot,
-                                     const OUString& rUIFile, sal_uInt64 nLOKWindowId)
-    : SalInstanceBuilder(pParent, sUIRoot, rUIFile)
-    , m_nWindowId(nLOKWindowId)
-    , m_aParentDialog(nullptr)
-    , m_aContentWindow(nullptr)
-    , m_sTypeOfJSON(u"formulabar"_ustr)
-    , m_bHasTopLevelDialog(false)
-    , m_bIsNotebookbar(false)
-    , m_bSentInitialUpdate(false)
-    , m_bIsNestedBuilder(false)
-    , m_aWindowToRelease(nullptr)
+void JSInstanceBuilder::initializeFormulabarSender(sal_uInt64 nLOKWindowId,
+                                                   const std::u16string_view& sTypeOfJSON,
+                                                   vcl::Window* pVclParent)
 {
+    m_sTypeOfJSON = sTypeOfJSON;
+    m_nWindowId = nLOKWindowId;
+
     vcl::Window* pRoot = m_xBuilder->get_widget_root();
-    m_aContentWindow = pParent;
+    m_aContentWindow = pVclParent;
     if (pRoot && pRoot->GetParent())
     {
         m_aParentDialog = pRoot->GetParent()->GetParentWithLOKNotifier();
@@ -613,18 +575,76 @@ JSInstanceBuilder::JSInstanceBuilder(vcl::Window* pParent, std::u16string_view s
     initializeSender(GetNotifierWindow(), GetContentWindow(), GetTypeOfJSON());
 }
 
+void JSInstanceBuilder::initializeMenuSender(weld::Widget* pParent)
+{
+    m_sTypeOfJSON = "menu";
+    m_aParentDialog = extract_sal_widget(pParent)->GetParentWithLOKNotifier();
+    initializeSender(GetNotifierWindow(), GetContentWindow(), GetTypeOfJSON());
+}
+
+JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, vcl::Window* pVclParent,
+                                     std::u16string_view rUIRoot, const OUString& rUIFile,
+                                     JSInstanceBuilder::Type eBuilderType, sal_uInt64 nLOKWindowId,
+                                     const std::u16string_view& sTypeOfJSON,
+                                     const css::uno::Reference<css::frame::XFrame>& rFrame)
+    : SalInstanceBuilder(pVclParent ? pVclParent : extract_sal_widget(pParent), rUIRoot, rUIFile,
+                         rFrame)
+    , m_nWindowId(0)
+    , m_aParentDialog(nullptr)
+    , m_aContentWindow(nullptr)
+    , m_sTypeOfJSON("unknown")
+    , m_bHasTopLevelDialog(false)
+    , m_bIsNotebookbar(false)
+    , m_bSentInitialUpdate(false)
+    , m_bIsNestedBuilder(false)
+    , m_aWindowToRelease(nullptr)
+{
+    switch (eBuilderType)
+    {
+        case JSInstanceBuilder::Type::Dialog:
+            initializeDialogSender();
+            break;
+
+        case JSInstanceBuilder::Type::Popup:
+            initializePopupSender();
+            break;
+
+        case JSInstanceBuilder::Type::Sidebar:
+            initializeSidebarSender(nLOKWindowId, rUIFile);
+            break;
+
+        case JSInstanceBuilder::Type::Notebookbar:
+            initializeNotebookbarSender(nLOKWindowId);
+            break;
+
+        case JSInstanceBuilder::Type::Formulabar:
+            initializeFormulabarSender(nLOKWindowId, sTypeOfJSON, pVclParent);
+            break;
+
+        case JSInstanceBuilder::Type::Menu:
+            initializeMenuSender(pParent);
+            break;
+
+        default:
+            assert(false);
+    };
+}
+
 std::unique_ptr<JSInstanceBuilder> JSInstanceBuilder::CreateDialogBuilder(weld::Widget* pParent,
                                                                           const OUString& rUIRoot,
                                                                           const OUString& rUIFile)
 {
-    return std::make_unique<JSInstanceBuilder>(pParent, rUIRoot, rUIFile);
+    return std::make_unique<JSInstanceBuilder>(pParent, nullptr, rUIRoot, rUIFile,
+                                               JSInstanceBuilder::Type::Dialog);
 }
 
 std::unique_ptr<JSInstanceBuilder> JSInstanceBuilder::CreateNotebookbarBuilder(
     vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile,
     const css::uno::Reference<css::frame::XFrame>& rFrame, sal_uInt64 nWindowId)
 {
-    return std::make_unique<JSInstanceBuilder>(pParent, rUIRoot, rUIFile, rFrame, nWindowId);
+    return std::make_unique<JSInstanceBuilder>(nullptr, pParent, rUIRoot, rUIFile,
+                                               JSInstanceBuilder::Type::Notebookbar, nWindowId, u"",
+                                               rFrame);
 }
 
 std::unique_ptr<JSInstanceBuilder> JSInstanceBuilder::CreateSidebarBuilder(weld::Widget* pParent,
@@ -632,21 +652,33 @@ std::unique_ptr<JSInstanceBuilder> JSInstanceBuilder::CreateSidebarBuilder(weld:
                                                                            const OUString& rUIFile,
                                                                            sal_uInt64 nLOKWindowId)
 {
-    return std::make_unique<JSInstanceBuilder>(pParent, rUIRoot, rUIFile, nLOKWindowId);
+    return std::make_unique<JSInstanceBuilder>(pParent, nullptr, rUIRoot, rUIFile,
+                                               JSInstanceBuilder::Type::Sidebar, nLOKWindowId);
 }
 
 std::unique_ptr<JSInstanceBuilder> JSInstanceBuilder::CreatePopupBuilder(weld::Widget* pParent,
                                                                          const OUString& rUIRoot,
                                                                          const OUString& rUIFile)
 {
-    return std::make_unique<JSInstanceBuilder>(pParent, rUIRoot, rUIFile, true);
+    return std::make_unique<JSInstanceBuilder>(pParent, nullptr, rUIRoot, rUIFile,
+                                               JSInstanceBuilder::Type::Popup);
+}
+
+std::unique_ptr<JSInstanceBuilder> JSInstanceBuilder::CreateMenuBuilder(weld::Widget* pParent,
+                                                                        const OUString& rUIRoot,
+                                                                        const OUString& rUIFile)
+{
+    return std::make_unique<JSInstanceBuilder>(pParent, nullptr, rUIRoot, rUIFile,
+                                               JSInstanceBuilder::Type::Menu);
 }
 
 std::unique_ptr<JSInstanceBuilder>
 JSInstanceBuilder::CreateFormulabarBuilder(vcl::Window* pParent, const OUString& rUIRoot,
                                            const OUString& rUIFile, sal_uInt64 nLOKWindowId)
 {
-    return std::make_unique<JSInstanceBuilder>(pParent, rUIRoot, rUIFile, nLOKWindowId);
+    return std::make_unique<JSInstanceBuilder>(nullptr, pParent, rUIRoot, rUIFile,
+                                               JSInstanceBuilder::Type::Formulabar, nLOKWindowId,
+                                               u"formulabar");
 }
 
 std::unique_ptr<JSInstanceBuilder>
