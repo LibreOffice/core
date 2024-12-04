@@ -1263,6 +1263,16 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf163483_export_math_fallback)
                 "id", cNvPr_id);
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testPlaceHolderFitHeightToText)
+{
+    createSdImpressDoc("pptx/tdf160487.pptx");
+    saveAndReload(u"Impress Office Open XML"_ustr);
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(1, 0));
+    bool bTextAutoGrowHeight = false;
+    xShape->getPropertyValue(u"TextAutoGrowHeight"_ustr) >>= bTextAutoGrowHeight;
+    CPPUNIT_ASSERT_MESSAGE("PlaceHolder Fit height to text should be true.", bTextAutoGrowHeight);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
