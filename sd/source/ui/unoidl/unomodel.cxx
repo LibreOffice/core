@@ -3833,7 +3833,10 @@ OUString SdXImpressDocument::getPartInfo(int nPart)
     jsonWriter.put("innerSpacesX", innerDots.getWidth() ? gridCoarse.getWidth() / innerDots.getWidth() : 0);
     jsonWriter.put("innerSpacesY", innerDots.getHeight() ? gridCoarse.getHeight() / innerDots.getHeight() : 0);
 
-    pSdPage->GetPageInfo(jsonWriter);
+    if (pSdPage)
+        pSdPage->GetPageInfo(jsonWriter);
+    else
+        SAL_WARN("sd", "getPartInfo request for SdPage " << nPart << " that does not exist!");
 
     return OStringToOUString(jsonWriter.finishAndGetAsOString(), RTL_TEXTENCODING_UTF8);
 }
