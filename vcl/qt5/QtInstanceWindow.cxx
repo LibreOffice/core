@@ -64,14 +64,21 @@ bool QtInstanceWindow::get_resizable() const
 
 Size QtInstanceWindow::get_size() const
 {
-    assert(false && "Not implemented yet");
-    return Size();
+    SolarMutexGuard g;
+
+    Size aSize;
+    GetQtInstance().RunInMainThread([&] { aSize = toSize(getQWidget()->size()); });
+    return aSize;
 }
 
 Point QtInstanceWindow::get_position() const
 {
-    assert(false && "Not implemented yet");
-    return Point();
+    SolarMutexGuard g;
+
+    Point aPosition;
+    GetQtInstance().RunInMainThread(
+        [&] { aPosition = toPoint(getQWidget()->geometry().topLeft()); });
+    return aPosition;
 }
 
 AbsoluteScreenPixelRectangle QtInstanceWindow::get_monitor_workarea() const
