@@ -741,11 +741,11 @@ SystemWindow* SalInstanceWidget::getSystemWindow() { return m_xWidget->GetSystem
 void SalInstanceWidget::HandleEventListener(VclWindowEvent& rEvent)
 {
     if (rEvent.GetId() == VclEventId::WindowGetFocus)
-        m_aFocusInHdl.Call(*this);
+        signal_focus_in();
     else if (rEvent.GetId() == VclEventId::WindowLoseFocus)
-        m_aFocusOutHdl.Call(*this);
+        signal_focus_out();
     else if (rEvent.GetId() == VclEventId::WindowResize)
-        m_aSizeAllocateHdl.Call(m_xWidget->GetSizePixel());
+        signal_size_allocate(m_xWidget->GetSizePixel());
 }
 
 namespace
@@ -766,14 +766,14 @@ void SalInstanceWidget::HandleMouseEventListener(VclWindowEvent& rWinEvent)
         if (m_xWidget == rWinEvent.GetWindow())
         {
             const MouseEvent* pMouseEvent = static_cast<const MouseEvent*>(rWinEvent.GetData());
-            m_aMousePressHdl.Call(*pMouseEvent);
+            signal_mouse_press(*pMouseEvent);
         }
         else if (m_xWidget->ImplIsChild(rWinEvent.GetWindow()))
         {
             const MouseEvent* pMouseEvent = static_cast<const MouseEvent*>(rWinEvent.GetData());
             const MouseEvent aTransformedEvent(
                 TransformEvent(*pMouseEvent, m_xWidget, rWinEvent.GetWindow()));
-            m_aMousePressHdl.Call(aTransformedEvent);
+            signal_mouse_press(aTransformedEvent);
         }
     }
     else if (rWinEvent.GetId() == VclEventId::WindowMouseButtonUp)
@@ -781,14 +781,14 @@ void SalInstanceWidget::HandleMouseEventListener(VclWindowEvent& rWinEvent)
         if (m_xWidget == rWinEvent.GetWindow())
         {
             const MouseEvent* pMouseEvent = static_cast<const MouseEvent*>(rWinEvent.GetData());
-            m_aMouseReleaseHdl.Call(*pMouseEvent);
+            signal_mouse_release(*pMouseEvent);
         }
         else if (m_xWidget->ImplIsChild(rWinEvent.GetWindow()))
         {
             const MouseEvent* pMouseEvent = static_cast<const MouseEvent*>(rWinEvent.GetData());
             const MouseEvent aTransformedEvent(
                 TransformEvent(*pMouseEvent, m_xWidget, rWinEvent.GetWindow()));
-            m_aMouseReleaseHdl.Call(aTransformedEvent);
+            signal_mouse_release(aTransformedEvent);
         }
     }
     else if (rWinEvent.GetId() == VclEventId::WindowMouseMove)
@@ -796,14 +796,14 @@ void SalInstanceWidget::HandleMouseEventListener(VclWindowEvent& rWinEvent)
         if (m_xWidget == rWinEvent.GetWindow())
         {
             const MouseEvent* pMouseEvent = static_cast<const MouseEvent*>(rWinEvent.GetData());
-            m_aMouseMotionHdl.Call(*pMouseEvent);
+            signal_mouse_motion(*pMouseEvent);
         }
         else if (m_xWidget->ImplIsChild(rWinEvent.GetWindow()))
         {
             const MouseEvent* pMouseEvent = static_cast<const MouseEvent*>(rWinEvent.GetData());
             const MouseEvent aTransformedEvent(
                 TransformEvent(*pMouseEvent, m_xWidget, rWinEvent.GetWindow()));
-            m_aMouseMotionHdl.Call(aTransformedEvent);
+            signal_mouse_motion(aTransformedEvent);
         }
     }
 }
@@ -816,12 +816,12 @@ bool SalInstanceWidget::HandleKeyEventListener(VclWindowEvent& rEvent)
     if (rEvent.GetId() == VclEventId::WindowKeyInput)
     {
         const KeyEvent* pKeyEvent = static_cast<const KeyEvent*>(rEvent.GetData());
-        return m_aKeyPressHdl.Call(*pKeyEvent);
+        return signal_key_press(*pKeyEvent);
     }
     else if (rEvent.GetId() == VclEventId::WindowKeyUp)
     {
         const KeyEvent* pKeyEvent = static_cast<const KeyEvent*>(rEvent.GetData());
-        return m_aKeyReleaseHdl.Call(*pKeyEvent);
+        return signal_key_release(*pKeyEvent);
     }
     return false;
 }
@@ -843,7 +843,7 @@ IMPL_LINK(SalInstanceWidget, MouseEventListener, VclWindowEvent&, rEvent, void)
 
 IMPL_LINK_NOARG(SalInstanceWidget, MnemonicActivateHdl, vcl::Window&, bool)
 {
-    return m_aMnemonicActivateHdl.Call(*this);
+    return signal_mnemonic_activate();
 }
 
 namespace

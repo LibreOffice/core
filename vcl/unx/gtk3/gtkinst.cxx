@@ -2588,7 +2588,7 @@ protected:
         if (pTopLevel && g_object_get_data(G_OBJECT(pTopLevel), "g-lo-BlockFocusChange"))
             return;
 
-        m_aFocusInHdl.Call(*this);
+        weld::Widget::signal_focus_in();
     }
 
     static gboolean signalMnemonicActivate(GtkWidget*, gboolean, gpointer widget)
@@ -2596,11 +2596,6 @@ protected:
         GtkInstanceWidget* pThis = static_cast<GtkInstanceWidget*>(widget);
         SolarMutexGuard aGuard;
         return pThis->signal_mnemonic_activate();
-    }
-
-    bool signal_mnemonic_activate()
-    {
-        return m_aMnemonicActivateHdl.Call(*this);
     }
 
 #if GTK_CHECK_VERSION(4, 0, 0)
@@ -2638,7 +2633,7 @@ protected:
         if (pTopLevel && g_object_get_data(G_OBJECT(pTopLevel), "g-lo-BlockFocusChange"))
             return;
 
-        m_aFocusOutHdl.Call(*this);
+        weld::Widget::signal_focus_out();
     }
 
     virtual void ensureMouseEventWidget()
@@ -2990,10 +2985,10 @@ private:
         sal_uInt16 nCode = m_nLastMouseButton | (nModCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2));
         MouseEvent aMEvt(aPos, n_press, ImplGetMouseButtonMode(m_nLastMouseButton, nModCode), nCode, nCode);
 
-        if (nEventType == SalEvent::MouseButtonDown && m_aMousePressHdl.Call(aMEvt))
+        if (nEventType == SalEvent::MouseButtonDown && signal_mouse_press(aMEvt))
             gtk_gesture_set_state(GTK_GESTURE(pGesture), GTK_EVENT_SEQUENCE_CLAIMED);
 
-        if (nEventType == SalEvent::MouseButtonUp && m_aMouseReleaseHdl.Call(aMEvt))
+        if (nEventType == SalEvent::MouseButtonUp && signal_mouse_release(aMEvt))
             gtk_gesture_set_state(GTK_GESTURE(pGesture), GTK_EVENT_SEQUENCE_CLAIMED);
     }
 
@@ -3096,12 +3091,12 @@ private:
         {
             if (!m_aMousePressHdl.IsSet())
                 return false;
-            return m_aMousePressHdl.Call(aMEvt);
+            return signal_mouse_press(aMEvt);
         }
 
         if (!m_aMouseReleaseHdl.IsSet())
             return false;
-        return m_aMouseReleaseHdl.Call(aMEvt);
+        return signal_mouse_release(aMEvt);
     }
 #endif
 
@@ -3116,7 +3111,7 @@ private:
         sal_uInt32 nModCode = GtkSalFrame::GetMouseModCode(nState);
         MouseEvent aMEvt(aPos, 0, ImplGetMouseMoveMode(nModCode), nModCode, nModCode);
 
-        return m_aMouseMotionHdl.Call(aMEvt);
+        return signal_mouse_motion(aMEvt);
     }
 
 #if GTK_CHECK_VERSION(4, 0, 0)
@@ -3178,7 +3173,7 @@ private:
         eModifiers = eModifiers | eMouseEventModifiers;
         MouseEvent aMEvt(aPos, 0, eModifiers, nModCode, nModCode);
 
-        m_aMouseMotionHdl.Call(aMEvt);
+        signal_mouse_motion(aMEvt);
         return false;
     }
 
@@ -4100,7 +4095,7 @@ public:
 
     virtual void signal_size_allocate(guint nWidth, guint nHeight)
     {
-        m_aSizeAllocateHdl.Call(Size(nWidth, nHeight));
+        weld::Widget::signal_size_allocate(Size(nWidth, nHeight));
     }
 
 #if GTK_CHECK_VERSION(4, 0, 0)
@@ -4109,7 +4104,7 @@ public:
         if (m_aKeyPressHdl.IsSet())
         {
             SolarMutexGuard aGuard;
-            return m_aKeyPressHdl.Call(CreateKeyEvent(keyval, keycode, state, 0));
+            return weld::Widget::signal_key_press(CreateKeyEvent(keyval, keycode, state, 0));
         }
         return false;
     }
@@ -4119,7 +4114,7 @@ public:
         if (m_aKeyReleaseHdl.IsSet())
         {
             SolarMutexGuard aGuard;
-            return m_aKeyReleaseHdl.Call(CreateKeyEvent(keyval, keycode, state, 0));
+            return weld::Widget::signal_key_release(CreateKeyEvent(keyval, keycode, state, 0));
         }
         return false;
     }
@@ -4130,7 +4125,7 @@ public:
         if (m_aKeyPressHdl.IsSet())
         {
             SolarMutexGuard aGuard;
-            return m_aKeyPressHdl.Call(GtkToVcl(*pEvent));
+            return weld::Widget::signal_key_press(GtkToVcl(*pEvent));
         }
         return false;
     }
@@ -4140,7 +4135,7 @@ public:
         if (m_aKeyReleaseHdl.IsSet())
         {
             SolarMutexGuard aGuard;
-            return m_aKeyReleaseHdl.Call(GtkToVcl(*pEvent));
+            return weld::Widget::signal_key_release(GtkToVcl(*pEvent));
         }
         return false;
     }
@@ -4611,7 +4606,7 @@ IMPL_LINK(GtkInstanceWidget, SettingsChangedHdl, VclWindowEvent&, rEvent, void)
 
     DataChangedEvent* pData = static_cast<DataChangedEvent*>(rEvent.GetData());
     if (pData->GetType() == DataChangedEventType::SETTINGS)
-        m_aStyleUpdatedHdl.Call(*this);
+        signal_style_updated();
 }
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
@@ -19056,8 +19051,8 @@ public:
     virtual void click(const Point& rPos) override
     {
         MouseEvent aEvent(rPos);
-        m_aMousePressHdl.Call(aEvent);
-        m_aMouseReleaseHdl.Call(aEvent);
+        signal_mouse_press(aEvent);
+        signal_mouse_release(aEvent);
     }
 };
 

@@ -95,6 +95,26 @@ protected:
     Link<const MouseEvent&, bool> m_aMouseMotionHdl;
     Link<const MouseEvent&, bool> m_aMouseReleaseHdl;
 
+    void signal_focus_in() { m_aFocusInHdl.Call(*this); }
+    void signal_focus_out() { m_aFocusOutHdl.Call(*this); }
+    bool signal_mnemonic_activate() { return m_aMnemonicActivateHdl.Call(*this); }
+    void signal_style_updated() { m_aStyleUpdatedHdl.Call(*this); }
+    void signal_size_allocate(const Size& rSize) { m_aSizeAllocateHdl.Call(rSize); }
+    bool signal_key_press(const KeyEvent& rKeyEvent) { return m_aKeyPressHdl.Call(rKeyEvent); }
+    bool signal_key_release(const KeyEvent& rKeyEvent) { return m_aKeyReleaseHdl.Call(rKeyEvent); }
+    bool signal_mouse_press(const MouseEvent& rMouseEvent)
+    {
+        return m_aMousePressHdl.Call(rMouseEvent);
+    }
+    bool signal_mouse_motion(const MouseEvent& rMouseEvent)
+    {
+        return m_aMouseMotionHdl.Call(rMouseEvent);
+    }
+    bool signal_mouse_release(const MouseEvent& rMouseEvent)
+    {
+        return m_aMouseReleaseHdl.Call(rMouseEvent);
+    }
+
 public:
     virtual void set_sensitive(bool sensitive) = 0;
     virtual bool get_sensitive() const = 0;
