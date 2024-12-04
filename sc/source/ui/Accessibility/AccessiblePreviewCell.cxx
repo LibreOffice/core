@@ -31,7 +31,7 @@
 #include <editeng/brushitem.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/unohelp.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <comphelper/sequence.hxx>
 
@@ -221,7 +221,7 @@ tools::Rectangle ScAccessiblePreviewCell::GetBoundingBox() const
             if (xAccParentComp.is())
             {
                 tools::Rectangle aParentRect(
-                    VCLUnoHelper::ConvertToVCLRect(xAccParentComp->getBounds()));
+                    vcl::unohelper::ConvertToVCLRect(xAccParentComp->getBounds()));
                 aCellRect.Move(-aParentRect.Left(), -aParentRect.Top());
             }
         }

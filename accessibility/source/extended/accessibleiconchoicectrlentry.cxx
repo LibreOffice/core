@@ -25,7 +25,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/unohelp.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <svtools/stringtransfer.hxx>
@@ -129,7 +129,7 @@ namespace accessibility
             Reference< XAccessibleComponent > xParentComp( xParentContext, uno::UNO_QUERY );
             if( xParentComp.is() )
                 bShowing = GetBoundingBox_Impl().Overlaps(
-                    VCLUnoHelper::ConvertToVCLRect(xParentComp->getBounds()));
+                    vcl::unohelper::ConvertToVCLRect(xParentComp->getBounds()));
         }
 
         return bShowing;
@@ -152,7 +152,7 @@ namespace accessibility
 
     css::awt::Rectangle AccessibleIconChoiceCtrlEntry::implGetBounds()
     {
-        return VCLUnoHelper::ConvertToAWTRect(GetBoundingBox_Impl());
+        return vcl::unohelper::ConvertToAWTRect(GetBoundingBox_Impl());
     }
 
     OUString AccessibleIconChoiceCtrlEntry::implGetText()
@@ -324,7 +324,7 @@ namespace accessibility
 
     awt::Point SAL_CALL AccessibleIconChoiceCtrlEntry::getLocationOnScreen(  )
     {
-        return VCLUnoHelper::ConvertToAWTPoint( GetBoundingBoxOnScreen().TopLeft() );
+        return vcl::unohelper::ConvertToAWTPoint( GetBoundingBoxOnScreen().TopLeft() );
     }
 
     void SAL_CALL AccessibleIconChoiceCtrlEntry::grabFocus(  )
@@ -383,7 +383,7 @@ namespace accessibility
             tools::Rectangle aItemRect = GetBoundingBox_Impl();
             tools::Rectangle aCharRect = m_pIconCtrl->GetEntryCharacterBounds( m_nIndex, _nIndex );
             aCharRect.Move( -aItemRect.Left(), -aItemRect.Top() );
-            aBounds = VCLUnoHelper::ConvertToAWTRect(aCharRect);
+            aBounds = vcl::unohelper::ConvertToAWTRect(aCharRect);
         }
 
         return aBounds;
@@ -400,7 +400,7 @@ namespace accessibility
             vcl::ControlLayoutData aLayoutData;
             tools::Rectangle aItemRect = GetBoundingBox_Impl();
             m_pIconCtrl->RecordLayoutData( &aLayoutData, aItemRect );
-            Point aPnt(VCLUnoHelper::ConvertToVCLPoint(aPoint));
+            Point aPnt(vcl::unohelper::ConvertToVCLPoint(aPoint));
             aPnt += aItemRect.TopLeft();
             nIndex = aLayoutData.GetIndexForPoint( aPnt );
 

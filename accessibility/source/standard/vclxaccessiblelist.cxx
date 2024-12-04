@@ -30,10 +30,10 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
 #include <o3tl/safeint.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolkit/combobox.hxx>
 #include <vcl/toolkit/lstbox.hxx>
+#include <vcl/unohelp.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -877,7 +877,7 @@ awt::Rectangle VCLXAccessibleList::implGetBounds()
         && (m_pListBoxHelper->GetStyle() & WB_DROPDOWN ) == WB_DROPDOWN )
     {
         if ( m_pListBoxHelper->IsInDropDown() )
-            aBounds = VCLUnoHelper::ConvertToAWTRect(m_pListBoxHelper->GetDropDownPosSizePixel());
+            aBounds = vcl::unohelper::ConvertToAWTRect(m_pListBoxHelper->GetDropDownPosSizePixel());
     }
     else
     {
@@ -910,7 +910,7 @@ awt::Point VCLXAccessibleList::getLocationOnScreen(  )
         && (m_pListBoxHelper->GetStyle() & WB_DROPDOWN ) == WB_DROPDOWN )
     {
         if ( m_pListBoxHelper->IsInDropDown() )
-            aPos = VCLUnoHelper::ConvertToAWTPoint(
+            aPos = vcl::unohelper::ConvertToAWTPoint(
                 m_pListBoxHelper->GetDropDownPosSizePixel().TopLeft());
     }
     else

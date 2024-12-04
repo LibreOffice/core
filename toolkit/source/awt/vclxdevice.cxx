@@ -32,6 +32,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/metric.hxx>
+#include <vcl/unohelp.hxx>
 
 
 VCLXDevice::VCLXDevice()
@@ -169,9 +170,9 @@ css::awt::Point SAL_CALL VCLXDevice::convertPointToLogic( const css::awt::Point&
     if( mpOutputDevice )
     {
         MapMode aMode(VCLUnoHelper::ConvertToMapModeUnit(TargetUnit));
-        ::Point aVCLPoint = VCLUnoHelper::ConvertToVCLPoint(aPoint);
+        ::Point aVCLPoint = vcl::unohelper::ConvertToVCLPoint(aPoint);
         ::Point aDevPoint = mpOutputDevice->PixelToLogic(aVCLPoint, aMode );
-        aAWTPoint = VCLUnoHelper::ConvertToAWTPoint(aDevPoint);
+        aAWTPoint = vcl::unohelper::ConvertToAWTPoint(aDevPoint);
     }
 
     return aAWTPoint;
@@ -193,9 +194,9 @@ css::awt::Point SAL_CALL VCLXDevice::convertPointToPixel( const css::awt::Point&
     if( mpOutputDevice )
     {
         MapMode aMode(VCLUnoHelper::ConvertToMapModeUnit(SourceUnit));
-        ::Point aVCLPoint = VCLUnoHelper::ConvertToVCLPoint(aPoint);
+        ::Point aVCLPoint = vcl::unohelper::ConvertToVCLPoint(aPoint);
         ::Point aDevPoint = mpOutputDevice->LogicToPixel(aVCLPoint, aMode );
-        aAWTPoint = VCLUnoHelper::ConvertToAWTPoint(aDevPoint);
+        aAWTPoint = vcl::unohelper::ConvertToAWTPoint(aDevPoint);
     }
 
     return aAWTPoint;
@@ -217,9 +218,9 @@ css::awt::Size SAL_CALL VCLXDevice::convertSizeToLogic( const css::awt::Size& aS
     if( mpOutputDevice )
     {
         MapMode aMode(VCLUnoHelper::ConvertToMapModeUnit(TargetUnit));
-        ::Size aVCLSize = VCLUnoHelper::ConvertToVCLSize(aSize);
+        ::Size aVCLSize = vcl::unohelper::ConvertToVCLSize(aSize);
         ::Size aDevSz = mpOutputDevice->PixelToLogic(aVCLSize, aMode );
-        aAWTSize = VCLUnoHelper::ConvertToAWTSize(aDevSz);
+        aAWTSize = vcl::unohelper::ConvertToAWTSize(aDevSz);
     }
 
     return aAWTSize;
@@ -240,9 +241,9 @@ css::awt::Size SAL_CALL VCLXDevice::convertSizeToPixel( const css::awt::Size& aS
     if( mpOutputDevice )
     {
         MapMode aMode(VCLUnoHelper::ConvertToMapModeUnit(SourceUnit));
-        ::Size aVCLSize = VCLUnoHelper::ConvertToVCLSize(aSize);
+        ::Size aVCLSize = vcl::unohelper::ConvertToVCLSize(aSize);
         ::Size aDevSz = mpOutputDevice->LogicToPixel(aVCLSize, aMode );
-        aAWTSize = VCLUnoHelper::ConvertToAWTSize(aDevSz);
+        aAWTSize = vcl::unohelper::ConvertToAWTSize(aDevSz);
     }
 
     return aAWTSize;

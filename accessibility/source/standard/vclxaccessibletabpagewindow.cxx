@@ -19,9 +19,9 @@
 
 #include <standard/vclxaccessibletabpagewindow.hxx>
 #include <comphelper/accessiblecontexthelper.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
+#include <vcl/unohelp.hxx>
 #include <sal/log.hxx>
 
 using namespace ::com::sun::star;
@@ -72,7 +72,7 @@ awt::Rectangle VCLXAccessibleTabPageWindow::implGetBounds()
         {
             tools::Rectangle aRect( m_pTabPage->GetPosPixel(), m_pTabPage->GetSizePixel() );
             aRect.Move( -aPageRect.Left(), -aPageRect.Top() );
-            aBounds = VCLUnoHelper::ConvertToAWTRect(aRect);
+            aBounds = vcl::unohelper::ConvertToAWTRect(aRect);
         }
     }
 

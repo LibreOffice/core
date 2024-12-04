@@ -18,8 +18,8 @@
  */
 
 #include <extended/AccessibleBrowseBoxTable.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/accessibletableprovider.hxx>
+#include <vcl/unohelp.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 
@@ -78,7 +78,7 @@ AccessibleBrowseBoxTable::getAccessibleAtPoint( const awt::Point& rPoint )
     sal_Int32 nRow = 0;
     sal_uInt16 nColumnPos = 0;
     if (mpBrowseBox->ConvertPointToCellAddress(nRow, nColumnPos,
-                                               VCLUnoHelper::ConvertToVCLPoint(rPoint)))
+                                               vcl::unohelper::ConvertToVCLPoint(rPoint)))
         xChild = mpBrowseBox->CreateAccessibleCell( nRow, nColumnPos );
 
     return xChild;

@@ -32,6 +32,7 @@
 #include <vcl/event.hxx>
 #include <vcl/status.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/unohelp.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/stbitem.hxx>
@@ -330,7 +331,7 @@ void SAL_CALL SfxStatusBarControl::paint(
     OutputDevice* pOutDev = VCLUnoHelper::GetOutputDevice( xGraphics );
     if ( pOutDev )
     {
-        ::tools::Rectangle aRect = VCLUnoHelper::ConvertToVCLRect(rOutputRectangle);
+        ::tools::Rectangle aRect = vcl::unohelper::ConvertToVCLRect(rOutputRectangle);
         UserDrawEvent aUserDrawEvent(pOutDev, aRect, pBar->GetCurItemId());
         Paint( aUserDrawEvent );
     }

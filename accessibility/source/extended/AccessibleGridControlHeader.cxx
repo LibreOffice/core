@@ -23,6 +23,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/accessibletable.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/unohelp.hxx>
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -97,7 +98,7 @@ AccessibleGridControlHeader::getAccessibleAtPoint( const awt::Point& rPoint )
     sal_Int32 nRow = 0;
     sal_Int32 nColumnPos = 0;
     bool bConverted = m_aTable.ConvertPointToCellAddress(nRow, nColumnPos,
-                                                         VCLUnoHelper::ConvertToVCLPoint(rPoint));
+                                                         vcl::unohelper::ConvertToVCLPoint(rPoint));
     return bConverted ? implGetChild( nRow, nColumnPos ) : Reference< XAccessible >();
 }
 

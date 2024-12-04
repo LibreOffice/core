@@ -26,6 +26,7 @@
 #include <svx/svdobj.hxx>
 #include <svx/ImageMapInfo.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/unohelp.hxx>
 #include <sfx2/event.hxx>
 #include <editeng/unofield.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -302,8 +303,8 @@ static ScRange lcl_GetAnchorCell( const uno::Reference< drawing::XShape >& xShap
                 rUnoPoint.Y += rCaptionPoint.Y;
         }
         aReturn
-            = pDoc->GetRange(nTab, tools::Rectangle(VCLUnoHelper::ConvertToVCLPoint(rUnoPoint),
-                                                    VCLUnoHelper::ConvertToVCLPoint(rUnoPoint)));
+            = pDoc->GetRange(nTab, tools::Rectangle(vcl::unohelper::ConvertToVCLPoint(rUnoPoint),
+                                                    vcl::unohelper::ConvertToVCLPoint(rUnoPoint)));
     }
     else
     {
@@ -315,8 +316,8 @@ static ScRange lcl_GetAnchorCell( const uno::Reference< drawing::XShape >& xShap
                 rUnoPoint.Y += rCaptionPoint.Y;
         }
         aReturn
-            = pDoc->GetRange(nTab, tools::Rectangle(VCLUnoHelper::ConvertToVCLPoint(rUnoPoint),
-                                                    VCLUnoHelper::ConvertToVCLPoint(rUnoPoint)));
+            = pDoc->GetRange(nTab, tools::Rectangle(vcl::unohelper::ConvertToVCLPoint(rUnoPoint),
+                                                    vcl::unohelper::ConvertToVCLPoint(rUnoPoint)));
     }
 
     return aReturn;

@@ -24,9 +24,7 @@
 #include <com/sun/star/uno/Reference.h>
 
 #include <com/sun/star/awt/MouseEvent.hpp>
-#include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
-#include <com/sun/star/awt/Size.hpp>
 
 #include <vcl/bitmapex.hxx>
 #include <vcl/font.hxx>
@@ -124,38 +122,6 @@ public:
 
     /// @throws css::lang::IllegalArgumentException
     static MapUnit /* MapModeUnit */ ConvertToMapModeUnit(sal_Int16 /* com.sun.star.util.MeasureUnit.* */ _nMeasureUnit);
-
-    static inline ::Size ConvertToVCLSize(const css::awt::Size& rAWTSize)
-    {
-        return ::Size(rAWTSize.Width, rAWTSize.Height);
-    }
-
-    static inline css::awt::Size ConvertToAWTSize(const Size& rVCLSize)
-    {
-        return css::awt::Size(rVCLSize.Width(), rVCLSize.Height());
-    }
-
-    static inline ::Point ConvertToVCLPoint(const css::awt::Point& rAWTPoint)
-    {
-        return ::Point(rAWTPoint.X, rAWTPoint.Y);
-    }
-
-    static inline css::awt::Point ConvertToAWTPoint(const PointTemplateBase& rVCLPoint)
-    {
-        return css::awt::Point(rVCLPoint.X(), rVCLPoint.Y());
-    }
-
-    static inline ::tools::Rectangle ConvertToVCLRect(const css::awt::Rectangle& rAWTRect)
-    {
-        return ::tools::Rectangle(::Point(rAWTRect.X, rAWTRect.Y),
-                                  ::Size(rAWTRect.Width, rAWTRect.Height));
-    }
-
-    static inline css::awt::Rectangle ConvertToAWTRect(const RectangleTemplateBase& rVCLRect)
-    {
-        return css::awt::Rectangle(rVCLRect.Left(), rVCLRect.Top(), rVCLRect.GetWidth(),
-                                   rVCLRect.GetHeight());
-    }
 
     static css::awt::MouseEvent
         createMouseEvent(

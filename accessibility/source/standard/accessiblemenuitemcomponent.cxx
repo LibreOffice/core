@@ -26,8 +26,8 @@
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <comphelper/accessiblecontexthelper.hxx>
 #include <comphelper/accessibletexthelper.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/unohelp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/mnemonic.hxx>
@@ -239,14 +239,14 @@ awt::Rectangle OAccessibleMenuItemComponent::implGetBounds()
     if ( m_pParent )
     {
         // get bounding rectangle of the item relative to the containing window
-        aBounds = VCLUnoHelper::ConvertToAWTRect(m_pParent->GetBoundingRectangle(m_nItemPos));
+        aBounds = vcl::unohelper::ConvertToAWTRect(m_pParent->GetBoundingRectangle(m_nItemPos));
 
         // get position of containing window in screen coordinates
         vcl::Window* pWindow = m_pParent->GetWindow();
         if ( pWindow )
         {
             AbsoluteScreenPixelRectangle aRect = pWindow->GetWindowExtentsAbsolute();
-            awt::Point aWindowScreenLoc = VCLUnoHelper::ConvertToAWTPoint(aRect.TopLeft());
+            awt::Point aWindowScreenLoc = vcl::unohelper::ConvertToAWTPoint(aRect.TopLeft());
 
             // get position of accessible parent in screen coordinates
             Reference< XAccessible > xParent = getAccessibleParent();

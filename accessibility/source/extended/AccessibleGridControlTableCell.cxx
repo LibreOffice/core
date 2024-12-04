@@ -20,7 +20,7 @@
 #include <extended/AccessibleGridControlTableCell.hxx>
 #include <vcl/accessibletable.hxx>
 #include <vcl/svapp.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/unohelp.hxx>
 #include <tools/gen.hxx>
 #include <tools/debug.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -138,7 +138,7 @@ namespace accessibility
         if ( !implIsValidIndex( nIndex, implGetText().getLength() ) )
             throw IndexOutOfBoundsException();
 
-        return VCLUnoHelper::ConvertToAWTRect(
+        return vcl::unohelper::ConvertToAWTRect(
             m_aTable.GetFieldCharacterBounds(getRowPos(), getColumnPos(), nIndex));
     }
 
@@ -149,7 +149,7 @@ namespace accessibility
         ensureIsAlive();
 
         return m_aTable.GetFieldIndexAtPoint(getRowPos(), getColumnPos(),
-                                             VCLUnoHelper::ConvertToVCLPoint(_aPoint));
+                                             vcl::unohelper::ConvertToVCLPoint(_aPoint));
     }
 
     /** @return

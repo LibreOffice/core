@@ -62,6 +62,7 @@
 #include <sal/log.hxx>
 #include <tools/link.hxx>
 #include <vcl/idletask.hxx>
+#include <vcl/unohelp.hxx>
 #include <vcl/wintypes.hxx>
 
 #ifdef MACOSX
@@ -1874,7 +1875,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
         }
         else if ( !VCLUnoHelper::IsZero( rDescriptor.Bounds ) )
         {
-            tools::Rectangle aRect = VCLUnoHelper::ConvertToVCLRect(rDescriptor.Bounds);
+            tools::Rectangle aRect = vcl::unohelper::ConvertToVCLRect(rDescriptor.Bounds);
             pNewWindow->SetPosSizePixel( aRect.TopLeft(), aRect.GetSize() );
         }
 

@@ -24,6 +24,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
+#include <vcl/unohelp.hxx>
 #include <osl/mutex.hxx>
 #include <tools/gen.hxx>
 
@@ -70,9 +71,9 @@ uno::Reference< XAccessibleContext > SAL_CALL SvtRulerAccessible::getAccessibleC
 sal_Bool SAL_CALL SvtRulerAccessible::containsPoint( const awt::Point& rPoint )
 {
     // no guard -> done in getBounds()
-//  return GetBoundingBox().IsInside( VCLUnoHelper::ConvertToVCLPoint( rPoint ) );
+//  return GetBoundingBox().IsInside( vcl::unohelper::ConvertToVCLPoint( rPoint ) );
     return tools::Rectangle(Point(0, 0), GetBoundingBox().GetSize())
-        .Contains(VCLUnoHelper::ConvertToVCLPoint(rPoint));
+        .Contains(vcl::unohelper::ConvertToVCLPoint(rPoint));
 }
 
 uno::Reference< XAccessible > SAL_CALL SvtRulerAccessible::getAccessibleAtPoint( const awt::Point& )
@@ -86,25 +87,25 @@ uno::Reference< XAccessible > SAL_CALL SvtRulerAccessible::getAccessibleAtPoint(
 awt::Rectangle SAL_CALL SvtRulerAccessible::getBounds()
 {
     // no guard -> done in GetBoundingBox()
-    return VCLUnoHelper::ConvertToAWTRect(GetBoundingBox());
+    return vcl::unohelper::ConvertToAWTRect(GetBoundingBox());
 }
 
 awt::Point SAL_CALL SvtRulerAccessible::getLocation()
 {
     // no guard -> done in GetBoundingBox()
-    return VCLUnoHelper::ConvertToAWTPoint(GetBoundingBox().TopLeft());
+    return vcl::unohelper::ConvertToAWTPoint(GetBoundingBox().TopLeft());
 }
 
 awt::Point SAL_CALL SvtRulerAccessible::getLocationOnScreen()
 {
     // no guard -> done in GetBoundingBoxOnScreen()
-    return VCLUnoHelper::ConvertToAWTPoint(GetBoundingBoxOnScreen().TopLeft());
+    return vcl::unohelper::ConvertToAWTPoint(GetBoundingBoxOnScreen().TopLeft());
 }
 
 awt::Size SAL_CALL SvtRulerAccessible::getSize()
 {
     // no guard -> done in GetBoundingBox()
-    return VCLUnoHelper::ConvertToAWTSize(GetBoundingBox().GetSize());
+    return vcl::unohelper::ConvertToAWTSize(GetBoundingBox().GetSize());
 }
 
 //=====  XAccessibleContext  ==================================================

@@ -37,6 +37,7 @@
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/unohelp.hxx>
 #include <core_resource.hxx>
 #include <svx/svdundo.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -1238,7 +1239,7 @@ void OViewsWindow::EndDragObj(bool _bControlKeyPressed, const OSectionView* _pSe
                     for (; pColIter != pColEnd; ++pColIter)
                     {
                         uno::Reference< report::XReportComponent> xRC(*pColIter);
-                        aPrevious = VCLUnoHelper::ConvertToVCLPoint(xRC->getPosition());
+                        aPrevious = vcl::unohelper::ConvertToVCLPoint(xRC->getPosition());
                         awt::Size aSize = xRC->getSize();
 
                         if ( aNewPos.X() < nLeftMargin )
@@ -1259,13 +1260,13 @@ void OViewsWindow::EndDragObj(bool _bControlKeyPressed, const OSectionView* _pSe
                             aNewPos.setX( 0 );
                             xRC->setSize(aSize);
                         }
-                        xRC->setPosition(VCLUnoHelper::ConvertToAWTPoint(aNewPos));
+                        xRC->setPosition(vcl::unohelper::ConvertToAWTPoint(aNewPos));
                         if ( (pColIter+1) != pColEnd )
                         {
                             // bring aNewPos to the position of the next object
                             uno::Reference< report::XReportComponent> xRCNext = *(pColIter + 1);
                             Point aNextPosition
-                                = VCLUnoHelper::ConvertToVCLPoint(xRCNext->getPosition());
+                                = vcl::unohelper::ConvertToVCLPoint(xRCNext->getPosition());
                             aNewPos += aNextPosition - aPrevious;
                         }
                     }

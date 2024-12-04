@@ -20,7 +20,6 @@
 #include <standard/vclxaccessibleedit.hxx>
 
 #include <toolkit/awt/vclxwindows.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
@@ -38,6 +37,7 @@
 #include <vcl/toolkit/vclmedit.hxx>
 #include <vcl/textdata.hxx>
 #include <vcl/txtattr.hxx>
+#include <vcl/unohelp.hxx>
 #include <vcl/xtextedt.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
@@ -390,7 +390,7 @@ awt::Rectangle VCLXAccessibleEdit::getCharacterBounds( sal_Int32 nIndex )
         }
         else
         {
-            aBounds = VCLUnoHelper::ConvertToAWTRect(pControl->GetCharacterBounds(nIndex));
+            aBounds = vcl::unohelper::ConvertToAWTRect(pControl->GetCharacterBounds(nIndex));
         }
     }
 

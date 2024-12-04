@@ -43,6 +43,7 @@
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <svtools/embedhlp.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/unohelp.hxx>
 
 #include <sfx2/ipclient.hxx>
 #include <sfx2/viewsh.hxx>
@@ -457,7 +458,7 @@ awt::Rectangle SAL_CALL SfxInPlaceClient_Impl::getPlacement()
         aRealObjArea = pEditWin->LogicToPixel(aRealObjArea);
     }
 
-    return VCLUnoHelper::ConvertToAWTRect(aRealObjArea);
+    return vcl::unohelper::ConvertToAWTRect(aRealObjArea);
 }
 
 
@@ -487,7 +488,7 @@ awt::Rectangle SAL_CALL SfxInPlaceClient_Impl::getClipRectangle()
         aRealObjArea = pEditWin->LogicToPixel(aRealObjArea);
     }
 
-    return VCLUnoHelper::ConvertToAWTRect(aRealObjArea);
+    return vcl::unohelper::ConvertToAWTRect(aRealObjArea);
 }
 
 
@@ -515,8 +516,8 @@ void SAL_CALL SfxInPlaceClient_Impl::changedPlacement( const awt::Rectangle& aPo
 
     // check if the change is at least one pixel in size
     awt::Rectangle aOldRect = getPlacement();
-    tools::Rectangle aNewPixelRect = VCLUnoHelper::ConvertToVCLRect(aPosRect);
-    tools::Rectangle aOldPixelRect = VCLUnoHelper::ConvertToVCLRect(aOldRect);
+    tools::Rectangle aNewPixelRect = vcl::unohelper::ConvertToVCLRect(aPosRect);
+    tools::Rectangle aOldPixelRect = vcl::unohelper::ConvertToVCLRect(aOldRect);
     if ( aOldPixelRect == aNewPixelRect )
         // nothing has changed
         return;

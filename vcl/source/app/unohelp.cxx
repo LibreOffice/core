@@ -209,5 +209,36 @@ FontItalic vcl::unohelper::ConvertFontSlant(css::awt::FontSlant eSlant)
     return eRet;
 }
 
+Size vcl::unohelper::ConvertToVCLSize(const css::awt::Size& rAWTSize)
+{
+    return Size(rAWTSize.Width, rAWTSize.Height);
+}
+
+css::awt::Size vcl::unohelper::ConvertToAWTSize(const Size& rVCLSize)
+{
+    return css::awt::Size(rVCLSize.Width(), rVCLSize.Height());
+}
+
+Point vcl::unohelper::ConvertToVCLPoint(const css::awt::Point& rAWTPoint)
+{
+    return Point(rAWTPoint.X, rAWTPoint.Y);
+}
+
+css::awt::Point vcl::unohelper::ConvertToAWTPoint(const PointTemplateBase& rVCLPoint)
+{
+    return css::awt::Point(rVCLPoint.X(), rVCLPoint.Y());
+}
+
+tools::Rectangle vcl::unohelper::ConvertToVCLRect(const css::awt::Rectangle& rAWTRect)
+{
+    return ::tools::Rectangle(Point(rAWTRect.X, rAWTRect.Y),
+                              Size(rAWTRect.Width, rAWTRect.Height));
+}
+
+css::awt::Rectangle vcl::unohelper::ConvertToAWTRect(const RectangleTemplateBase& rVCLRect)
+{
+    return css::awt::Rectangle(rVCLRect.Left(), rVCLRect.Top(), rVCLRect.GetWidth(),
+                               rVCLRect.GetHeight());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

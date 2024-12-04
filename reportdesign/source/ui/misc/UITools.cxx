@@ -936,8 +936,8 @@ tools::Rectangle getRectangleFromControl(SdrObject* _pControl)
         uno::Reference< report::XReportComponent > xComponent( _pControl->getUnoShape(), uno::UNO_QUERY);
         if (xComponent.is())
         {
-            tools::Rectangle aRect(VCLUnoHelper::ConvertToVCLPoint(xComponent->getPosition()),
-                                   VCLUnoHelper::ConvertToVCLSize(xComponent->getSize()));
+            tools::Rectangle aRect(vcl::unohelper::ConvertToVCLPoint(xComponent->getPosition()),
+                                   vcl::unohelper::ConvertToVCLSize(xComponent->getSize()));
             aRect.setHeight(aRect.getOpenHeight() + 1);
             aRect.setWidth(aRect.getOpenWidth() + 1);
             return aRect;

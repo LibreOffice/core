@@ -73,6 +73,7 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 
 #include <vcl/svapp.hxx>
+#include <vcl/unohelp.hxx>
 #include <rtl/ustring.hxx>
 
 #include <cppuhelper/bootstrap.hxx>
@@ -839,7 +840,7 @@ void SwView::ExecSmartTagPopup( const Point& rPt )
 
         if ( aToFill.HasArea() )
             xPopupMenu->execute( m_pEditWin->GetComponentInterface(),
-                                 VCLUnoHelper::ConvertToAWTRect( m_pEditWin->LogicToPixel( aToFill.SVRect() ) ), css::awt::PopupMenuDirection::EXECUTE_DOWN );
+                                 vcl::unohelper::ConvertToAWTRect( m_pEditWin->LogicToPixel( aToFill.SVRect() ) ), css::awt::PopupMenuDirection::EXECUTE_DOWN );
 
         css::uno::Reference< css::lang::XComponent > xComponent( xPopupController, css::uno::UNO_QUERY );
         if ( xComponent.is() )
