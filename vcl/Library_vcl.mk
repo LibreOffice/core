@@ -99,6 +99,14 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/skia/SkiaHelper \
     vcl/source/accessibility/AccessibleTextAttributeHelper \
     vcl/source/accessibility/characterattributeshelper \
+    vcl/source/accessibility/accessiblemenubasecomponent \
+    vcl/source/accessibility/accessiblemenucomponent \
+    vcl/source/accessibility/accessiblemenuitemcomponent \
+    vcl/source/accessibility/vclxaccessiblemenu \
+    vcl/source/accessibility/vclxaccessiblemenubar \
+    vcl/source/accessibility/vclxaccessiblemenuitem \
+    vcl/source/accessibility/vclxaccessiblemenuseparator \
+    vcl/source/accessibility/vclxaccessiblepopupmenu \
     vcl/source/animate/Animation \
     vcl/source/animate/AnimationFrame \
     vcl/source/animate/AnimationRenderer \

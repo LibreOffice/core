@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <standard/accessiblemenucomponent.hxx>
+#include <accessibility/accessiblemenucomponent.hxx>
 
 class VCLXAccessiblePopupMenu final : public OAccessibleMenuComponent
 {

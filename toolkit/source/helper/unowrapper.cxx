@@ -312,9 +312,4 @@ void UnoWrapper::WindowDestroyed( vcl::Window* pWindow )
     }
 }
 
-css::uno::Reference< css::accessibility::XAccessible > UnoWrapper::CreateAccessible( Menu* pMenu, bool bIsMenuBar )
-{
-    return maAccessibleFactoryAccess.getFactory().createAccessible( pMenu, bIsMenuBar );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

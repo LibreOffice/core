@@ -19,49 +19,37 @@
 
 #pragma once
 
-#include <standard/accessiblemenubasecomponent.hxx>
+#include <accessibility/vclxaccessiblemenuitem.hxx>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
+
 #include <cppuhelper/implbase.hxx>
 
 
 
-class OAccessibleMenuComponent : public cppu::ImplInheritanceHelper<
-                                     OAccessibleMenuBaseComponent,
-                                     css::accessibility::XAccessibleSelection>
+
+class VCLXAccessibleMenu final :
+    public cppu::ImplInheritanceHelper<
+        VCLXAccessibleMenuItem, css::accessibility::XAccessibleSelection>
 {
-protected:
-    virtual bool            IsEnabled() override;
-    virtual bool            IsVisible() override;
-
-    virtual void            FillAccessibleStateSet( sal_Int64& rStateSet ) override;
-
-    // OCommonAccessibleComponent
-    virtual css::awt::Rectangle implGetBounds(  ) override;
+    virtual bool        IsFocused() override;
+    virtual bool        IsPopupMenuOpen() override;
+    sal_Int64           implGetSelectedAccessibleChildCount();
 
 public:
+    VCLXAccessibleMenu( Menu* pParent, sal_uInt16 nItemPos, Menu* pMenu = nullptr ):
+        ImplInheritanceHelper(pParent, nItemPos, pMenu) {}
 
-    OAccessibleMenuComponent( Menu* pMenu ): ImplInheritanceHelper(pMenu) {}
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XAccessibleContext
     virtual sal_Int64 SAL_CALL getAccessibleChildCount(  ) override;
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int64 i ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) override;
     virtual sal_Int16 SAL_CALL getAccessibleRole(  ) override;
-    virtual OUString SAL_CALL getAccessibleDescription(  ) override;
-    virtual OUString SAL_CALL getAccessibleName(  ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) override;
-    virtual css::lang::Locale SAL_CALL getLocale(  ) override;
 
     // XAccessibleComponent
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
-    virtual css::awt::Point SAL_CALL getLocationOnScreen(  ) override;
-    virtual void SAL_CALL grabFocus(  ) override;
-    virtual sal_Int32 SAL_CALL getForeground(  ) override;
-    virtual sal_Int32 SAL_CALL getBackground(  ) override;
-
-    // XAccessibleExtendedComponent
-    virtual OUString SAL_CALL getTitledBorderText(  ) override;
-    virtual OUString SAL_CALL getToolTipText(  ) override;
 
     // XAccessibleSelection
     virtual void SAL_CALL selectAccessibleChild( sal_Int64 nChildIndex ) override;
@@ -71,6 +59,9 @@ public:
     virtual sal_Int64 SAL_CALL getSelectedAccessibleChildCount(  ) override;
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
     virtual void SAL_CALL deselectAccessibleChild( sal_Int64 nChildIndex ) override;
+
+    // XAccessibleAction
+    virtual OUString SAL_CALL getAccessibleActionDescription ( sal_Int32 nIndex ) override;
 };
 
 

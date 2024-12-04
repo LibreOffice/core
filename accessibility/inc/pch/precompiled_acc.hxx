@@ -305,8 +305,6 @@
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <sot/sotdllapi.h>
-#include <standard/accessiblemenubasecomponent.hxx>
-#include <standard/accessiblemenuitemcomponent.hxx>
 #include <standard/vclxaccessiblebox.hxx>
 #include <standard/vclxaccessibletextcomponent.hxx>
 #include <svl/SfxBroadcaster.hxx>

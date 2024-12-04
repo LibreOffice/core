@@ -65,10 +65,6 @@ public:
 
     virtual void                WindowDestroyed( vcl::Window* pWindow ) = 0;
 
-    // Accessibility
-    virtual css::uno::Reference< css::accessibility::XAccessible >
-                                CreateAccessible( Menu* pMenu, bool bIsMenuBar ) = 0;
-
     /** Get the application's UNO wrapper object.
 
      Note that this static function will only ever try to create UNO wrapper object once, and

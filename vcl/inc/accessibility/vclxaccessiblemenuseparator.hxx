@@ -19,44 +19,19 @@
 
 #pragma once
 
-#include <standard/accessiblemenucomponent.hxx>
-#include <vcl/vclptr.hxx>
+#include <accessibility/accessiblemenuitemcomponent.hxx>
 
-class VclSimpleEvent;
-class VclWindowEvent;
-namespace vcl { class Window; }
-
-
-
-
-class VCLXAccessibleMenuBar final : public OAccessibleMenuComponent
+class VCLXAccessibleMenuSeparator final : public OAccessibleMenuItemComponent
 {
-    VclPtr<vcl::Window>     m_pWindow;
-
-    virtual bool            IsFocused() override;
-
-    DECL_LINK( WindowEventListener, VclWindowEvent&, void );
-
-    void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
-
-    // XComponent
-    virtual void SAL_CALL   disposing() override;
-
 public:
-    VCLXAccessibleMenuBar( Menu* pMenu );
-    virtual ~VCLXAccessibleMenuBar() override;
+    VCLXAccessibleMenuSeparator(Menu* pParent, sal_uInt16 nItemPos);
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XAccessibleContext
-    virtual sal_Int64 SAL_CALL getAccessibleIndexInParent(  ) override;
-    virtual sal_Int16 SAL_CALL getAccessibleRole(  ) override;
-
-    // XAccessibleExtendedComponent
-    virtual sal_Int32 SAL_CALL getBackground(  ) override;
+    virtual sal_Int16 SAL_CALL getAccessibleRole() override;
 };
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

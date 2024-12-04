@@ -46,9 +46,6 @@ accessibility/inc/extended/accessibletablistboxtable.hxx
 accessibility/inc/extended/textwindowaccessibility.hxx
 accessibility/inc/helper/IComboListBoxHelper.hxx
 accessibility/inc/helper/listboxhelper.hxx
-accessibility/inc/standard/accessiblemenubasecomponent.hxx
-accessibility/inc/standard/accessiblemenucomponent.hxx
-accessibility/inc/standard/accessiblemenuitemcomponent.hxx
 accessibility/inc/standard/vclxaccessiblebox.hxx
 accessibility/inc/standard/vclxaccessiblebutton.hxx
 accessibility/inc/standard/vclxaccessiblecheckbox.hxx
@@ -56,9 +53,6 @@ accessibility/inc/standard/vclxaccessibleedit.hxx
 accessibility/inc/standard/vclxaccessibleheaderbaritem.hxx
 accessibility/inc/standard/vclxaccessiblelist.hxx
 accessibility/inc/standard/vclxaccessiblelistitem.hxx
-accessibility/inc/standard/vclxaccessiblemenu.hxx
-accessibility/inc/standard/vclxaccessiblemenubar.hxx
-accessibility/inc/standard/vclxaccessiblemenuitem.hxx
 accessibility/inc/standard/vclxaccessibleradiobutton.hxx
 accessibility/inc/standard/vclxaccessiblescrollbar.hxx
 accessibility/inc/standard/vclxaccessiblestatusbar.hxx
@@ -99,9 +93,6 @@ accessibility/source/extended/accessibletablistbox.cxx
 accessibility/source/extended/accessibletablistboxtable.cxx
 accessibility/source/extended/textwindowaccessibility.cxx
 accessibility/source/helper/acc_factory.cxx
-accessibility/source/standard/accessiblemenubasecomponent.cxx
-accessibility/source/standard/accessiblemenucomponent.cxx
-accessibility/source/standard/accessiblemenuitemcomponent.cxx
 accessibility/source/standard/floatingwindowaccessible.cxx
 accessibility/source/standard/vclxaccessiblebox.cxx
 accessibility/source/standard/vclxaccessiblebutton.cxx
@@ -114,10 +105,6 @@ accessibility/source/standard/vclxaccessibleheaderbaritem.cxx
 accessibility/source/standard/vclxaccessiblelist.cxx
 accessibility/source/standard/vclxaccessiblelistbox.cxx
 accessibility/source/standard/vclxaccessiblelistitem.cxx
-accessibility/source/standard/vclxaccessiblemenu.cxx
-accessibility/source/standard/vclxaccessiblemenubar.cxx
-accessibility/source/standard/vclxaccessiblemenuitem.cxx
-accessibility/source/standard/vclxaccessiblepopupmenu.cxx
 accessibility/source/standard/vclxaccessibleradiobutton.cxx
 accessibility/source/standard/vclxaccessiblescrollbar.cxx
 accessibility/source/standard/vclxaccessiblestatusbar.cxx
@@ -14173,6 +14160,12 @@ vcl/inc/IPrioritable.hxx
 vcl/inc/ResampleKernel.hxx
 vcl/inc/bitmap/bmpfast.hxx
 vcl/inc/accel.hxx
+vcl/inc/accessibility/accessiblemenubasecomponent.hxx
+vcl/inc/accessibility/accessiblemenucomponent.hxx
+vcl/inc/accessibility/accessiblemenuitemcomponent.hxx
+vcl/inc/accessibility/vclxaccessiblemenu.hxx
+vcl/inc/accessibility/vclxaccessiblemenubar.hxx
+vcl/inc/accessibility/vclxaccessiblemenuitem.hxx
 vcl/inc/accmgr.hxx
 vcl/inc/animate/AnimationRenderer.hxx
 vcl/inc/brdwin.hxx
@@ -14522,6 +14515,13 @@ vcl/quartz/salgdicommon.cxx
 vcl/quartz/salvd.cxx
 vcl/quartz/utils.cxx
 vcl/source/accessibility/characterattributeshelper.cxx
+vcl/source/accessibility/accessiblemenubasecomponent.cxx
+vcl/source/accessibility/accessiblemenucomponent.cxx
+vcl/source/accessibility/accessiblemenuitemcomponent.cxx
+vcl/source/accessibility/vclxaccessiblemenu.cxx
+vcl/source/accessibility/vclxaccessiblemenubar.cxx
+vcl/source/accessibility/vclxaccessiblemenuitem.cxx
+vcl/source/accessibility/vclxaccessiblepopupmenu.cxx
 vcl/source/animate/AnimationRenderer.cxx
 vcl/source/app/IconThemeInfo.cxx
 vcl/source/app/IconThemeScanner.cxx

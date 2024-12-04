@@ -60,10 +60,6 @@ public:
 
     void                WindowDestroyed( vcl::Window* pWindow ) override;
 
-    // Accessibility
-    virtual css::uno::Reference< css::accessibility::XAccessible >
-                        CreateAccessible( Menu* pMenu, bool bIsMenuBar ) override;
-
 private:
     virtual ~UnoWrapper();
 };

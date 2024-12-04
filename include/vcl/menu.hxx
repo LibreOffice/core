@@ -401,6 +401,9 @@ public:
      * Get the ID of the window.
      */
     const OUString& get_id() const { return maID; }
+
+private:
+    css::uno::Reference<css::accessibility::XAccessible> CreateAccessible();
 };
 
 struct MenuBarButtonCallbackArg

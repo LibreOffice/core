@@ -17,8 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <standard/vclxaccessiblemenuitem.hxx>
+#include <accessibility/vclxaccessiblemenuitem.hxx>
 #include <comphelper/accessiblecontexthelper.hxx>
+
 #include <comphelper/accessiblekeybindinghelper.hxx>
 #include <com/sun/star/awt/KeyModifier.hpp>
 

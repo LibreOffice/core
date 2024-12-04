@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <standard/accessiblemenubasecomponent.hxx>
-#include <standard/vclxaccessiblemenu.hxx>
-#include <standard/vclxaccessiblemenuitem.hxx>
-#include <standard/vclxaccessiblemenuseparator.hxx>
+#include <accessibility/accessiblemenubasecomponent.hxx>
+#include <accessibility/vclxaccessiblemenu.hxx>
+#include <accessibility/vclxaccessiblemenuitem.hxx>
+#include <accessibility/vclxaccessiblemenuseparator.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
