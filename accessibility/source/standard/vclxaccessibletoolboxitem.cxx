@@ -594,10 +594,6 @@ sal_Int32 SAL_CALL VCLXAccessibleToolBoxItem::getBackground(  )
 }
 
 // XAccessibleExtendedComponent
-Reference< awt::XFont > SAL_CALL VCLXAccessibleToolBoxItem::getFont(    )
-{
-    return uno::Reference< awt::XFont >();
-}
 
 OUString SAL_CALL VCLXAccessibleToolBoxItem::getTitledBorderText(  )
 {

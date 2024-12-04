@@ -417,24 +417,6 @@ sal_Int32 OAccessibleMenuItemComponent::getBackground(  )
 
 // XAccessibleExtendedComponent
 
-
-Reference< awt::XFont > OAccessibleMenuItemComponent::getFont(  )
-{
-    OExternalLockGuard aGuard( this );
-
-    Reference< awt::XFont > xFont;
-    Reference< XAccessible > xParent = getAccessibleParent();
-    if ( xParent.is() )
-    {
-        Reference< XAccessibleExtendedComponent > xParentComp( xParent->getAccessibleContext(), UNO_QUERY );
-        if ( xParentComp.is() )
-            xFont = xParentComp->getFont();
-    }
-
-    return xFont;
-}
-
-
 OUString OAccessibleMenuItemComponent::getTitledBorderText(  )
 {
     OExternalLockGuard aGuard( this );

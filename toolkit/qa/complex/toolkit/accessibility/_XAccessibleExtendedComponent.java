@@ -29,7 +29,6 @@ import com.sun.star.uno.UnoRuntime;
  * <ul>
  *  <li><code> getForeground()</code></li>
  *  <li><code> getBackground()</code></li>
- *  <li><code> getFont()</code></li>
  *  <li><code> isEnabled()</code></li>
  *  <li><code> getTitledBorderText()</code></li>
  *  <li><code> getToolTipText()</code></li>
@@ -42,15 +41,6 @@ public class _XAccessibleExtendedComponent {
 
     public _XAccessibleExtendedComponent(XInterface object/*, LogWriter log*/) {
         oObj = UnoRuntime.queryInterface(XAccessibleExtendedComponent.class, object);
-    }
-
-    /**
-     * Just calls the method.
-     */
-    public boolean _getFont() {
-        XFont font = oObj.getFont();
-        System.out.println("getFont(): " + font);
-        return true;
     }
 
     /**

@@ -35,13 +35,11 @@ public:
     {
     }
 
-    void testGetFont();
     void testGetTitledBorderText();
     void testGetToolTipText();
 
     void testAll()
     {
-        testGetFont();
         testGetTitledBorderText();
         testGetToolTipText();
     }

@@ -1,4 +1,3 @@
-"AccessiblePopupMenu";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getFont()"
 "AccessiblePopupMenu";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getTitledBorderText()"
 "AccessiblePopupMenu";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getToolTipText()"
 "AccessiblePopupMenu";"com::sun::star::accessibility::XAccessibleEventBroadcaster";"addEventListener()"

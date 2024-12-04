@@ -215,15 +215,6 @@ sal_Int32 AccessibleChartShape::getBackground()
 }
 
 // ________ XAccessibleExtendedComponent ________
-Reference< awt::XFont > AccessibleChartShape::getFont()
-{
-    Reference< awt::XFont > xFont;
-    if ( m_pAccShape.is() )
-    {
-        xFont.set( m_pAccShape->getFont() );
-    }
-    return xFont;
-}
 
 OUString AccessibleChartShape::getTitledBorderText()
 {

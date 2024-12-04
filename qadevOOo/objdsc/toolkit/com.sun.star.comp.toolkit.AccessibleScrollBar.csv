@@ -1,4 +1,3 @@
-"AccessibleScrollBar";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getFont()"
 "AccessibleScrollBar";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getTitledBorderText()"
 "AccessibleScrollBar";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getToolTipText()"
 "AccessibleScrollBar";"com::sun::star::accessibility::XAccessibleValue";"getCurrentValue()"

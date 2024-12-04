@@ -469,24 +469,6 @@ sal_Int32 VCLXAccessibleTabPage::getBackground(  )
 
 // XAccessibleExtendedComponent
 
-
-Reference< awt::XFont > VCLXAccessibleTabPage::getFont(  )
-{
-    OExternalLockGuard aGuard( this );
-
-    Reference< awt::XFont > xFont;
-    Reference< XAccessible > xParent = getAccessibleParent();
-    if ( xParent.is() )
-    {
-        Reference< XAccessibleExtendedComponent > xParentComp( xParent->getAccessibleContext(), UNO_QUERY );
-        if ( xParentComp.is() )
-            xFont = xParentComp->getFont();
-    }
-
-    return xFont;
-}
-
-
 OUString VCLXAccessibleTabPage::getTitledBorderText(  )
 {
     OExternalLockGuard aGuard( this );

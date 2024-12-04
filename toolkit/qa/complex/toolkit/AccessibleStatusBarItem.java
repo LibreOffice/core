@@ -305,7 +305,6 @@ public class AccessibleStatusBarItem {
             System.out.println("*** Now testing XAccessibleExtendedComponent ***");
             _XAccessibleExtendedComponent _xAccExtComp =
                                     new _XAccessibleExtendedComponent(object);
-            assertTrue("failed: "+accName+" - XAccessibleExtendedComponent::getFont", _xAccExtComp._getFont());
             assertTrue("failed: "+accName+" - XAccessibleExtendedComponent::getTitledBorderText", _xAccExtComp._getTitledBorderText());
             assertTrue("failed: "+accName+" - XAccessibleExtendedComponent::getToolTipText", _xAccExtComp._getToolTipText());
 

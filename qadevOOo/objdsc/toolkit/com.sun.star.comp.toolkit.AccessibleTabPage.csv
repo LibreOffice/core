@@ -1,4 +1,3 @@
-"AccessibleTabPage";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getFont()"
 "AccessibleTabPage";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getTitledBorderText()"
 "AccessibleTabPage";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getToolTipText()"
 "AccessibleTabPage";"com::sun::star::accessibility::XAccessibleEventBroadcaster";"addEventListener()"

@@ -1,4 +1,3 @@
-"AccessibleComboBox";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getFont()"
 "AccessibleComboBox";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getTitledBorderText()"
 "AccessibleComboBox";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getToolTipText()"
 "AccessibleComboBox";"com::sun::star::accessibility::XAccessibleEventBroadcaster#optional";"addEventListener()"

@@ -25,6 +25,7 @@
 #include "a11ytextattributeswrapper.h"
 
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
+#include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontStrikeout.hpp>

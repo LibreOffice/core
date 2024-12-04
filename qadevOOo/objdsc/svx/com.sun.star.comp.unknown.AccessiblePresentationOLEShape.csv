@@ -1,4 +1,3 @@
-"AccessiblePresentationOLEShape";"com::sun::star::accessibility::XAccessibleExtendedComponent#optional";"getFont()"
 "AccessiblePresentationOLEShape";"com::sun::star::accessibility::XAccessibleExtendedComponent#optional";"getTitledBorderText()"
 "AccessiblePresentationOLEShape";"com::sun::star::accessibility::XAccessibleExtendedComponent#optional";"getToolTipText()"
 "AccessiblePresentationOLEShape";"com::sun::star::accessibility::XAccessibleEventBroadcaster#optional";"addEventListener()"

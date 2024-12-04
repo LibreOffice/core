@@ -1,4 +1,3 @@
-"AccessibleListBox";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getFont()"
 "AccessibleListBox";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getTitledBorderText()"
 "AccessibleListBox";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getToolTipText()"
 "AccessibleListBox";"com::sun::star::accessibility::XAccessibleEventBroadcaster#optional";"addEventListener()"

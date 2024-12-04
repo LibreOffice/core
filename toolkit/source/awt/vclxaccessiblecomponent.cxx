@@ -804,30 +804,6 @@ sal_Int32 SAL_CALL VCLXAccessibleComponent::getBackground(  )
 
 // XAccessibleExtendedComponent
 
-uno::Reference< awt::XFont > SAL_CALL VCLXAccessibleComponent::getFont(  )
-{
-    OExternalLockGuard aGuard( this );
-
-    uno::Reference< awt::XFont > xFont;
-    VclPtr<vcl::Window> pWindow = GetWindow();
-    if ( pWindow )
-    {
-        uno::Reference< awt::XDevice > xDev( pWindow->GetComponentInterface(), uno::UNO_QUERY );
-        if ( xDev.is() )
-        {
-            vcl::Font aFont;
-            if ( pWindow->IsControlFont() )
-                aFont = pWindow->GetControlFont();
-            else
-                aFont = pWindow->GetFont();
-            rtl::Reference<VCLXFont> pVCLXFont = new VCLXFont(*xDev, aFont);
-            xFont = pVCLXFont;
-        }
-    }
-
-    return xFont;
-}
-
 OUString SAL_CALL VCLXAccessibleComponent::getTitledBorderText(  )
 {
     OExternalLockGuard aGuard( this );

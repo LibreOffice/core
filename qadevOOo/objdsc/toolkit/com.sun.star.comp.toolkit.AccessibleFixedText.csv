@@ -1,4 +1,3 @@
-"AccessibleFixedText";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getFont()"
 "AccessibleFixedText";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getTitledBorderText()"
 "AccessibleFixedText";"com::sun::star::accessibility::XAccessibleExtendedComponent";"getToolTipText()"
 "AccessibleFixedText";"com::sun::star::accessibility::XAccessibleEventBroadcaster";"addEventListener()"

@@ -138,25 +138,6 @@ OUString SAL_CALL AccessibleChartElement::getAccessibleDescription()
 }
 
 // ________ AccessibleChartElement::XAccessibleExtendedComponent ________
-Reference< awt::XFont > SAL_CALL AccessibleChartElement::getFont()
-{
-    CheckDisposeState();
-
-    Reference< awt::XFont > xFont;
-    Reference< awt::XDevice > xDevice( Reference< awt::XWindow >( GetInfo().m_xWindow ), uno::UNO_QUERY );
-
-    if( xDevice.is())
-    {
-        Reference< beans::XMultiPropertySet > xObjProp(
-            ObjectIdentifier::getObjectPropertySet(
-                GetInfo().m_aOID.getObjectCID(), GetInfo().m_xChartDocument ), uno::UNO_QUERY );
-        awt::FontDescriptor aDescr(
-            CharacterProperties::createFontDescriptorFromPropertySet( xObjProp ));
-        xFont = xDevice->getFont( aDescr );
-    }
-
-    return xFont;
-}
 
 OUString SAL_CALL AccessibleChartElement::getTitledBorderText()
 {
