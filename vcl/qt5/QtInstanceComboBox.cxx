@@ -25,7 +25,9 @@ QtInstanceComboBox::QtInstanceComboBox(QComboBox* pComboBox)
     assert(pComboBox);
 
     QObject::connect(m_pComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this,
-                     &QtInstanceComboBox::handleCurrentIndexChanged);
+                     &QtInstanceComboBox::signalChanged);
+    QObject::connect(m_pComboBox, &QComboBox::editTextChanged, this,
+                     &QtInstanceComboBox::signalChanged);
 }
 
 void QtInstanceComboBox::insert(int nPos, const OUString& rStr, const OUString* pId,
@@ -368,6 +370,10 @@ void QtInstanceComboBox::set_max_drop_down_rows(int) { assert(false && "Not impl
 
 void QtInstanceComboBox::sortItems() { m_pComboBox->model()->sort(0, Qt::AscendingOrder); }
 
-void QtInstanceComboBox::handleCurrentIndexChanged() { signal_changed(); }
+void QtInstanceComboBox::signalChanged()
+{
+    SolarMutexGuard g;
+    signal_changed();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
