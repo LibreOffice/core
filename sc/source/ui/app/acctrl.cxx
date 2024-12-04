@@ -33,6 +33,7 @@ SFX_IMPL_STATUSBAR_CONTROL(ScAutoCalculateControl, SfxBoolItem);
 ScAutoCalculateControl::ScAutoCalculateControl(sal_uInt16 _nSlotId, sal_uInt16 _nId,
                                                StatusBar& rStb)
     : SfxStatusBarControl(_nSlotId, _nId, rStb)
+    , m_bIsActive(false)
 {
 }
 
