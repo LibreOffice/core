@@ -338,6 +338,15 @@ bool isBuilderEnabledForPopup(std::u16string_view rUIFile)
     return false;
 }
 
+bool isBuilderEnabledForMenu(std::u16string_view rUIFile)
+{
+    if (// sfx2
+        rUIFile == u"sfx/ui/stylecontextmenu.ui")
+        return true;
+
+    return false;
+}
+
 bool isBuilderEnabledForSidebar(std::u16string_view rUIFile)
 {
     return // scalc

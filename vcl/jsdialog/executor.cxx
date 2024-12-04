@@ -81,10 +81,10 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, StringMap
     if (pWidget == nullptr)
     {
         // weld::Menu doesn't have base of weld::Widget
-        if (sControlType == "menu")
+        if (rWidget == "__MENU__")
         {
             weld::Menu* pMenu = JSInstanceBuilder::Menus().Find(nWindowId);
-            if (pMenu && sAction == "activated")
+            if (pMenu && sAction == "select")
             {
                 LOKTrigger::trigger_activated(*pMenu, rData["data"]);
                 return true;
@@ -581,12 +581,17 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, StringMap
                     sal_Int32 nEntryAbsPos = o3tl::toInt32(rData["data"]);
 
                     std::unique_ptr<weld::TreeIter> itEntry(pTreeView->make_iterator());
-                    pTreeView->get_iter_abs_pos(*itEntry, nEntryAbsPos);
+                    if (pTreeView->get_iter_abs_pos(*itEntry, nEntryAbsPos))
+                    {
+                        tools::Rectangle aRect = pTreeView->get_row_area(*itEntry);
+                        CommandEvent aCommand(aRect.Center(), CommandEventId::ContextMenu);
 
-                    tools::Rectangle aRect = pTreeView->get_row_area(*itEntry);
-                    CommandEvent aCommand(aRect.Center(), CommandEventId::ContextMenu);
-
-                    LOKTrigger::trigger_popup_menu(*pTreeView, aCommand);
+                        LOKTrigger::trigger_popup_menu(*pTreeView, aCommand);
+                    }
+                    else
+                        SAL_WARN("vcl", "No absolute position found for " << nEntryAbsPos
+                                                                          << " in treeview");
+                    return true;
                 }
             }
         }

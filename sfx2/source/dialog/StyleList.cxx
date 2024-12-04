@@ -199,7 +199,7 @@ void StyleList::CreateContextMenu()
         m_bBindingUpdate = false;
     }
     mxMenu.reset();
-    mxMenuBuilder = Application::CreateBuilder(nullptr, u"sfx/ui/stylecontextmenu.ui"_ustr);
+    mxMenuBuilder = Application::CreateBuilder(m_pContainer, u"sfx/ui/stylecontextmenu.ui"_ustr);
     mxMenu = mxMenuBuilder->weld_menu(u"menu"_ustr);
     mxMenu->set_sensitive(u"edit"_ustr, m_bCanEdit);
     mxMenu->set_sensitive(u"delete"_ustr, m_bCanDel);
@@ -1576,13 +1576,14 @@ IMPL_LINK_NOARG(StyleList, Clear, void*, void)
         i.reset();
 }
 
+IMPL_LINK(StyleList, OnPopupEnd, const OUString&, sCommand, void) { MenuSelect(sCommand); }
+
 void StyleList::ShowMenu(const CommandEvent& rCEvt)
 {
     CreateContextMenu();
     weld::TreeView* pTreeView = m_xTreeBox->get_visible() ? m_xTreeBox.get() : m_xFmtLb.get();
-    OUString sCommand(
-        mxMenu->popup_at_rect(pTreeView, tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1, 1))));
-    MenuSelect(sCommand);
+    mxMenu->connect_activate(LINK(this, StyleList, OnPopupEnd));
+    mxMenu->popup_at_rect(pTreeView, tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1, 1)));
 }
 
 void StyleList::MenuSelect(const OUString& rIdent)
@@ -1715,6 +1716,9 @@ IMPL_LINK_NOARG(StyleList, MenuSelectAsyncHdl, void*, void)
         HideHdl();
     else if (sLastItemIdent == "show")
         ShowHdl();
+
+    mxMenu.reset();
+    mxMenuBuilder.reset();
 }
 
 // Double-click on a style sheet in the ListBox is applied.

@@ -32,6 +32,7 @@
 #include <vcl/vclreferencebase.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <tools/json_writer.hxx>
 #include <list>
 
 class OutputDevice;
@@ -401,6 +402,8 @@ public:
      * Get the ID of the window.
      */
     const OUString& get_id() const { return maID; }
+
+    virtual void DumpAsPropertyTree(tools::JsonWriter&) const;
 
 private:
     css::uno::Reference<css::accessibility::XAccessible> CreateAccessible();

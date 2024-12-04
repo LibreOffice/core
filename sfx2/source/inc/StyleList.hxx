@@ -129,6 +129,7 @@ public:
     void FilterSelect(sal_uInt16 nActFilter, bool bsetFilter);
 
     DECL_LINK(NewMenuExecuteAction, void*, void);
+    DECL_LINK(OnPopupEnd, const OUString&, void);
 
     bool HasStylesHighlighterFeature() { return m_bModuleHasStylesHighlighterFeature; }
     void SetHighlightParaStyles(bool bSet) { m_bHighlightParaStyles = bSet; }
