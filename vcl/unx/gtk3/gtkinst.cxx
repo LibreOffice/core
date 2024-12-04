@@ -2263,6 +2263,7 @@ namespace
             rOutRect = GdkRectangle{static_cast<int>(rInRect.Left()), static_cast<int>(rInRect.Top()),
                                  static_cast<int>(rInRect.GetWidth()), static_cast<int>(rInRect.GetHeight())};
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
             if (GTK_IS_ICON_VIEW(pWidget))
             {
                 // GtkIconView is a little weird in its positioning with scrolling, so adjust here to match what
@@ -2272,6 +2273,7 @@ namespace
                 rOutRect.x -= nOffsetX;
                 rOutRect.y -= nOffsetY;
             }
+#endif
 
             if (SwapForRTL(pWidget))
                 rOutRect.x = gtk_widget_get_allocated_width(pWidget) - rOutRect.width - 1 - rOutRect.x;
@@ -17159,9 +17161,11 @@ private:
         gtk_icon_view_get_cell_rect(m_pIconView, path, nullptr, &aRect);
         gtk_tree_path_free(path);
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
         // GtkIconView is a little weird in its positioning with scrolling
         gtk_icon_view_convert_widget_to_bin_window_coords(m_pIconView, aRect.x, aRect.y, &aRect.x,
                                                           &aRect.y);
+#endif
 
         return tools::Rectangle(aRect.x, aRect.y, aRect.x + aRect.width, aRect.y + aRect.height);
     }
