@@ -440,6 +440,11 @@ public:
     void SetUseFontAAFromSystem(bool bUseFontAAFromSystem);
     bool GetUseFontAAFromSystem() const;
 
+    // Using subpixel anti-aliasing is unwanted in some cases, like when saving to file,
+    // even when the use of anti-aliasing itself is defined by system settings.
+    void SetUseSubpixelAA(bool val);
+    bool GetUseSubpixelAA() const;
+
     void                            SetUseFlatBorders( bool bUseFlatBorders );
     bool                            GetUseFlatBorders() const;
 
