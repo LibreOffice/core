@@ -22,6 +22,8 @@ QtInstanceWidget::QtInstanceWidget(QWidget* pWidget)
     : m_pWidget(pWidget)
 {
     assert(pWidget);
+
+    connect(qApp, &QApplication::focusChanged, this, &QtInstanceWidget::applicationFocusChanged);
 }
 
 void QtInstanceWidget::set_sensitive(bool bSensitive)
@@ -575,6 +577,16 @@ void QtInstanceWidget::set_background(const Color& rBackColor)
 void QtInstanceWidget::draw(OutputDevice&, const Point&, const Size&)
 {
     assert(false && "Not implemented yet");
+}
+
+void QtInstanceWidget::applicationFocusChanged(QWidget* pOldFocus, QWidget* pNewFocus)
+{
+    SolarMutexGuard g;
+
+    if (pOldFocus == m_pWidget)
+        signal_focus_out();
+    else if (pNewFocus == m_pWidget)
+        signal_focus_in();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

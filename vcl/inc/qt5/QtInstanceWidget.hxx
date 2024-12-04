@@ -181,6 +181,9 @@ public:
     virtual void draw(OutputDevice&, const Point&, const Size&) override;
 
     static void setHelpId(QWidget& rWidget, const OUString& rHelpId);
+
+private Q_SLOTS:
+    void applicationFocusChanged(QWidget* pOldFocus, QWidget* pNewFocus);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
