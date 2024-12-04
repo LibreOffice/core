@@ -17,7 +17,7 @@ QtInstanceCheckButton::QtInstanceCheckButton(QCheckBox* pCheckBox)
     , m_pCheckBox(pCheckBox)
 {
     assert(m_pCheckBox);
-    connect(m_pCheckBox, &QCheckBox::toggled, this, [&] { signal_toggled(); });
+    connect(m_pCheckBox, &QCheckBox::toggled, this, &QtInstanceCheckButton::handleToggled);
 }
 
 void QtInstanceCheckButton::set_active(bool bActive)
@@ -71,6 +71,12 @@ OUString QtInstanceCheckButton::get_label() const
 void QtInstanceCheckButton::QtInstanceCheckButton::set_label_wrap(bool /*bWrap*/)
 {
     assert(false && "Not implemented yet");
+}
+
+void QtInstanceCheckButton::handleToggled()
+{
+    SolarMutexGuard g;
+    signal_toggled();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
