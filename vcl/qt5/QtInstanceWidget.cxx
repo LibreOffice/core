@@ -459,10 +459,27 @@ bool QtInstanceWidget::has_grab() const
 
 void QtInstanceWidget::grab_remove() { assert(false && "Not implemented yet"); }
 
-bool QtInstanceWidget::get_extents_relative_to(const Widget&, int&, int&, int&, int&) const
+bool QtInstanceWidget::get_extents_relative_to(const Widget& rRelative, int& rX, int& rY,
+                                               int& rWidth, int& rHeight) const
 {
-    assert(false && "Not implemented yet");
-    return false;
+    SolarMutexGuard g;
+
+    bool bRet = false;
+    GetQtInstance().RunInMainThread([&] {
+        QRect aGeometry = m_pWidget->geometry();
+        rWidth = aGeometry.width();
+        rHeight = aGeometry.height();
+        const QtInstanceWidget* pRelativeWidget = dynamic_cast<const QtInstanceWidget*>(&rRelative);
+        if (!pRelativeWidget)
+            return;
+
+        QPoint aRelativePos = m_pWidget->mapTo(pRelativeWidget->getQWidget(), QPoint(0, 0));
+        rX = aRelativePos.x();
+        rY = aRelativePos.y();
+        bRet = true;
+    });
+
+    return bRet;
 }
 
 bool QtInstanceWidget::get_direction() const

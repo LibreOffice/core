@@ -130,7 +130,8 @@ public:
 
     virtual void grab_remove() override;
 
-    virtual bool get_extents_relative_to(const Widget&, int&, int&, int&, int&) const override;
+    virtual bool get_extents_relative_to(const Widget& rRelative, int& rX, int& rY, int& rWidth,
+                                         int& rHeight) const override;
 
     virtual bool get_direction() const override;
 
