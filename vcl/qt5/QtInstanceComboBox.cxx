@@ -10,6 +10,8 @@
 #include <QtInstanceComboBox.hxx>
 #include <QtInstanceComboBox.moc>
 
+#include <QtInstanceEntry.hxx>
+
 #include <vcl/qt/QtUtils.hxx>
 
 #include <QtWidgets/QCompleter>
@@ -219,9 +221,9 @@ bool QtInstanceComboBox::has_entry() const
     return bEditable;
 }
 
-void QtInstanceComboBox::set_entry_message_type(weld::EntryMessageType)
+void QtInstanceComboBox::set_entry_message_type(weld::EntryMessageType eType)
 {
-    assert(false && "Not implemented yet");
+    QtInstanceEntry::setMessageType(*m_pComboBox->lineEdit(), eType);
 }
 
 void QtInstanceComboBox::set_entry_text(const OUString& rStr)

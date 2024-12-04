@@ -49,6 +49,8 @@ public:
 
     virtual void set_alignment(TxtAlign eXAlign) override;
 
+    static void setMessageType(QLineEdit& rLineEdit, weld::EntryMessageType eType);
+
 protected Q_SLOTS:
     void handleTextChanged();
 };

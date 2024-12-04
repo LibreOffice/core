@@ -120,13 +120,13 @@ bool QtInstanceEntry::get_editable() const
     return bEditable;
 }
 
-void QtInstanceEntry::set_message_type(weld::EntryMessageType eType)
+void QtInstanceEntry::setMessageType(QLineEdit& rLineEdit, weld::EntryMessageType eType)
 {
     SolarMutexGuard g;
 
     GetQtInstance().RunInMainThread([&] {
-        for (QAction* pAction : m_pLineEdit->actions())
-            m_pLineEdit->removeAction(pAction);
+        for (QAction* pAction : rLineEdit.actions())
+            rLineEdit.removeAction(pAction);
 
         switch (eType)
         {
@@ -134,18 +134,22 @@ void QtInstanceEntry::set_message_type(weld::EntryMessageType eType)
                 // don't do anything special
                 return;
             case weld::EntryMessageType::Warning:
-                m_pLineEdit->addAction(QIcon::fromTheme("dialog-warning"),
-                                       QLineEdit::TrailingPosition);
+                rLineEdit.addAction(QIcon::fromTheme("dialog-warning"),
+                                    QLineEdit::TrailingPosition);
                 return;
             case weld::EntryMessageType::Error:
-                m_pLineEdit->addAction(QIcon::fromTheme("dialog-error"),
-                                       QLineEdit::TrailingPosition);
+                rLineEdit.addAction(QIcon::fromTheme("dialog-error"), QLineEdit::TrailingPosition);
                 return;
             default:
                 assert(false && "Unknown EntryMessageType");
                 return;
         }
     });
+}
+
+void QtInstanceEntry::set_message_type(weld::EntryMessageType eType)
+{
+    setMessageType(*m_pLineEdit, eType);
 }
 
 void QtInstanceEntry::set_placeholder_text(const OUString& rText)
