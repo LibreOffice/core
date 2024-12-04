@@ -1798,7 +1798,7 @@ class SFScriptForge:
                         ``calcfunction``: the name of the Calc function to be called, in English.
 
                         ``args``: the arguments to be passed to the called Calc function. Each argument may be either
-                            - a string, a numeric value, a bool or a datatime.datetime instance
+                            - a string, a numeric value, a bool or a datetime.datetime instance
                             - a tuple or a tuple of tuples combining those types
                             - a com.sun.star.table.XCellRange UNO object
                     Returns
