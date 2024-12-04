@@ -98,6 +98,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/rendercontext/drawmode \
     vcl/skia/SkiaHelper \
     vcl/source/accessibility/AccessibleTextAttributeHelper \
+    vcl/source/accessibility/characterattributeshelper \
     vcl/source/animate/Animation \
     vcl/source/animate/AnimationFrame \
     vcl/source/animate/AnimationRenderer \
