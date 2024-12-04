@@ -112,8 +112,8 @@ css::uno::Reference< css::awt::XFont > VCLXDevice::getFont( const css::awt::Font
     css::uno::Reference< css::awt::XFont >  xRef;
     if( mpOutputDevice )
     {
-        rtl::Reference<VCLXFont> pMetric = new VCLXFont;
-        pMetric->Init( *this, VCLUnoHelper::CreateFont( rDescriptor, mpOutputDevice->GetFont() ) );
+        rtl::Reference<VCLXFont> pMetric
+            = new VCLXFont(*this, VCLUnoHelper::CreateFont(rDescriptor, mpOutputDevice->GetFont()));
         xRef = pMetric;
     }
     return xRef;

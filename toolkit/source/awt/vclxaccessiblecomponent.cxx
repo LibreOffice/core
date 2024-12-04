@@ -820,8 +820,7 @@ uno::Reference< awt::XFont > SAL_CALL VCLXAccessibleComponent::getFont(  )
                 aFont = pWindow->GetControlFont();
             else
                 aFont = pWindow->GetFont();
-            rtl::Reference<VCLXFont> pVCLXFont = new VCLXFont;
-            pVCLXFont->Init( *xDev, aFont );
+            rtl::Reference<VCLXFont> pVCLXFont = new VCLXFont(*xDev, aFont);
             xFont = pVCLXFont;
         }
     }

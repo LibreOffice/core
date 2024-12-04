@@ -30,22 +30,14 @@
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 
-VCLXFont::VCLXFont()
+VCLXFont::VCLXFont(css::awt::XDevice& rxDev, const vcl::Font& rFont)
 {
-    mpFontMetric = nullptr;
+    mxDevice = &rxDev;
+    maFont = rFont;
 }
 
 VCLXFont::~VCLXFont()
 {
-}
-
-void VCLXFont::Init( css::awt::XDevice& rxDev, const vcl::Font& rFont )
-{
-    mxDevice = &rxDev;
-
-    mpFontMetric.reset();
-
-    maFont = rFont;
 }
 
 bool VCLXFont::ImplAssertValidFontMetric()

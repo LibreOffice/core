@@ -497,8 +497,7 @@ Reference< awt::XFont > AccessibleDialogControlShape::getFont(  )
                 aFont = pWindow->GetControlFont();
             else
                 aFont = pWindow->GetFont();
-            rtl::Reference<VCLXFont> pVCLXFont = new VCLXFont;
-            pVCLXFont->Init( *xDev, aFont );
+            rtl::Reference<VCLXFont> pVCLXFont = new VCLXFont(*xDev, aFont);
             xFont = pVCLXFont;
         }
     }

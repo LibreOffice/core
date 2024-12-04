@@ -443,8 +443,7 @@ namespace accessibility
                     aFont = m_pTabBar->GetControlFont();
                 else
                     aFont = m_pTabBar->GetFont();
-                rtl::Reference<VCLXFont> pVCLXFont = new VCLXFont;
-                pVCLXFont->Init( *xDev, aFont );
+                rtl::Reference<VCLXFont> pVCLXFont = new VCLXFont(*xDev, aFont);
                 xFont = pVCLXFont;
             }
         }
