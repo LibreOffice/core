@@ -121,6 +121,24 @@ public:
 
 class JSInstanceBuilder final : public SalInstanceBuilder, public JSDialogSender
 {
+    enum Type
+    {
+        Dialog,
+        Popup,
+        Sidebar,
+        Notebookbar,
+        Formulabar,
+        Menu,
+    };
+
+    void initializeDialogSender();
+    void initializePopupSender();
+    void initializeSidebarSender(sal_uInt64 nLOKWindowId, const std::u16string_view& rUIFile);
+    void initializeNotebookbarSender(sal_uInt64 nLOKWindowId);
+    void initializeFormulabarSender(sal_uInt64 nLOKWindowId, const std::u16string_view& sTypeOfJSON,
+                                    vcl::Window* pVclParent);
+    void initializeMenuSender(weld::Widget* pParent);
+
     static jsdialog::WidgetRegister<std::shared_ptr<WidgetMap>> m_aWidgets;
     static jsdialog::WidgetRegister<VclPtr<vcl::Window>> m_aPopups;
     static jsdialog::WidgetRegister<weld::Menu*> m_aMenus;
@@ -160,22 +178,15 @@ class JSInstanceBuilder final : public SalInstanceBuilder, public JSDialogSender
     OUString getMapIdFromWindowId() const;
 
 public:
-    /// used for dialogs or popups
-    JSInstanceBuilder(weld::Widget* pParent, std::u16string_view sUIRoot, const OUString& rUIFile,
-                      bool bPopup = false);
-    /// used for sidebar panels
-    JSInstanceBuilder(weld::Widget* pParent, std::u16string_view sUIRoot, const OUString& rUIFile,
-                      sal_uInt64 nLOKWindowId);
-    /// used for notebookbar, optional nWindowId is used if getting parent id failed
-    JSInstanceBuilder(vcl::Window* pParent, std::u16string_view sUIRoot, const OUString& rUIFile,
-                      const css::uno::Reference<css::frame::XFrame>& rFrame,
-                      sal_uInt64 nWindowId = 0);
-    /// used for formulabar
-    JSInstanceBuilder(vcl::Window* pParent, std::u16string_view sUIRoot, const OUString& rUIFile,
-                      sal_uInt64 nLOKWindowId);
+    JSInstanceBuilder(weld::Widget* pParent, vcl::Window* pVclParent, std::u16string_view rUIRoot,
+                      const OUString& rUIFile, Type eBuilderType, sal_uInt64 nLOKWindowId = 0,
+                      const std::u16string_view& sTypeOfJSON = u"",
+                      const css::uno::Reference<css::frame::XFrame>& rFrame
+                      = css::uno::Reference<css::frame::XFrame>());
 
     static std::unique_ptr<JSInstanceBuilder>
     CreateDialogBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile);
+
     static std::unique_ptr<JSInstanceBuilder>
     CreateNotebookbarBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile,
                              const css::uno::Reference<css::frame::XFrame>& rFrame,
@@ -184,8 +195,13 @@ public:
                                                                    const OUString& rUIRoot,
                                                                    const OUString& rUIFile,
                                                                    sal_uInt64 nLOKWindowId = 0);
+
     static std::unique_ptr<JSInstanceBuilder>
     CreatePopupBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile);
+
+    static std::unique_ptr<JSInstanceBuilder>
+    CreateMenuBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile);
+
     static std::unique_ptr<JSInstanceBuilder> CreateFormulabarBuilder(vcl::Window* pParent,
                                                                       const OUString& rUIRoot,
                                                                       const OUString& rUIFile,
