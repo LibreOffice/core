@@ -25,6 +25,7 @@
 #include <vcl/dllapi.h>
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
+#include <o3tl/cow_wrapper.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 #include <memory>
@@ -84,11 +85,13 @@ enum class MouseWheelBehaviour
 class VCL_DLLPUBLIC MouseSettings
 {
 private:
-    SAL_DLLPRIVATE void                            CopyData();
-    std::shared_ptr<ImplMouseData>  mxData;
+    o3tl::cow_wrapper<ImplMouseData>  mxData;
 
 public:
                                     MouseSettings();
+                                    MouseSettings(const MouseSettings&);
+                                    ~MouseSettings();
+    MouseSettings&                  operator=(const MouseSettings&);
 
     void                            SetOptions( MouseSettingsOptions nOptions );
     MouseSettingsOptions            GetOptions() const;
@@ -136,7 +139,6 @@ public:
     MouseWheelBehaviour             GetWheelBehavior() const;
 
     bool                            operator ==( const MouseSettings& rSet ) const;
-    bool                            operator !=( const MouseSettings& rSet ) const;
 };
 
 struct DialogStyle
@@ -217,13 +219,14 @@ enum class ComboBoxTextSelectionMode
 
 class VCL_DLLPUBLIC StyleSettings
 {
-    SAL_DLLPRIVATE void                            CopyData();
-
 private:
-    std::shared_ptr<ImplStyleData>  mxData;
+    o3tl::cow_wrapper<ImplStyleData> mxData;
 
 public:
                                     StyleSettings();
+                                    StyleSettings(const StyleSettings&);
+                                    ~StyleSettings();
+    StyleSettings&                  operator=(const StyleSettings&);
 
     SAL_DLLPRIVATE void             Set3DColors( const Color& rColor );
 
@@ -646,7 +649,6 @@ public:
     void                            SetStandardStyles();
 
     bool                            operator ==( const StyleSettings& rSet ) const;
-    bool                            operator !=( const StyleSettings& rSet ) const;
 
     // Batch setters used by various backends
     void                            BatchSetBackgrounds( const Color &aBackColor,
@@ -716,12 +718,13 @@ namespace o3tl
 class VCL_DLLPUBLIC AllSettings
 {
 private:
-    SAL_DLLPRIVATE void                     CopyData();
-
-    std::shared_ptr<ImplAllSettingsData>    mxData;
+    o3tl::cow_wrapper<ImplAllSettingsData> mxData;
 
 public:
                                             AllSettings();
+                                            AllSettings(const AllSettings&);
+                                            ~AllSettings();
+    AllSettings&                            operator=(const AllSettings&);
 
     void                                    SetMouseSettings( const MouseSettings& rSet );
     const MouseSettings&                    GetMouseSettings() const;
@@ -758,9 +761,8 @@ public:
     SAL_DLLPRIVATE AllSettingsFlags         GetChangeFlags( const AllSettings& rSettings ) const;
 
     SAL_DLLPRIVATE bool                    operator ==( const AllSettings& rSet ) const;
-    SAL_DLLPRIVATE bool                    operator !=( const AllSettings& rSet ) const;
     SAL_DLLPRIVATE static void             LocaleSettingsChanged( ConfigurationHints nHint );
-    SAL_DLLPRIVATE SvtSysLocale&           GetSysLocale();
+    SAL_DLLPRIVATE const SvtSysLocale&     GetSysLocale() const;
 };
 
 #endif // INCLUDED_VCL_SETTINGS_HXX
