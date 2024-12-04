@@ -4305,9 +4305,27 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
             }
             else
             {
-                // tdf#127030: Only custom shapes obey the TextAutoGrowHeight option.
+                bool bAutoGrowHeightEnabled = false;
+                const SdrObject* pObj = xShape.is() ? SdrObject::getSdrObjectFromXShape(xShape) : nullptr;
+                if (pObj)
+                {
+                    switch (pObj->GetObjIdentifier())
+                    {
+                        case SdrObjKind::NONE:
+                        case SdrObjKind::Text:
+                        case SdrObjKind::TitleText:
+                        case SdrObjKind::OutlineText:
+                        case SdrObjKind::Caption:
+                        case SdrObjKind::CustomShape:
+                            bAutoGrowHeightEnabled = true;
+                            break;
+                        default:
+                            bAutoGrowHeightEnabled = false;
+                    }
+                }
+
                 bool bTextAutoGrowHeight = false;
-                if (dynamic_cast<SvxCustomShape*>(rXIface.get()) && GetProperty(rXPropSet, u"TextAutoGrowHeight"_ustr))
+                if (bAutoGrowHeightEnabled && GetProperty(rXPropSet, u"TextAutoGrowHeight"_ustr))
                     mAny >>= bTextAutoGrowHeight;
                 mpFS->singleElementNS(XML_a, (bTextAutoGrowHeight ? XML_spAutoFit : XML_noAutofit));
             }
