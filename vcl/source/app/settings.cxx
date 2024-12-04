@@ -225,6 +225,7 @@ struct ImplStyleData
      * from system settings.
      */
     bool mbUseFontAAFromSystem : 1;
+    bool mbUseSubpixelAA : 1;
     bool mbAutoMnemonic : 1 = true;
     bool mnUseFlatBorders : 1;
     bool mbPreferredUseImagesInMenus : 1;
@@ -584,6 +585,7 @@ void ImplStyleData::SetStandardStyles()
     mbHighContrast                  = false;
     mbUseSystemUIFonts              = true;
     mbUseFontAAFromSystem           = true;
+    mbUseSubpixelAA                 = true;
     mnUseFlatBorders                = false;
     mnUseFlatMenus                  = false;
     mbPreferredUseImagesInMenus     = true;
@@ -1483,6 +1485,16 @@ bool StyleSettings::GetUseFontAAFromSystem() const
     return mxData->mbUseFontAAFromSystem;
 }
 
+void StyleSettings::SetUseSubpixelAA(bool val)
+{
+    mxData->mbUseSubpixelAA = val;
+}
+
+bool StyleSettings::GetUseSubpixelAA() const
+{
+    return mxData->mbUseSubpixelAA;
+}
+
 void
 StyleSettings::SetUseFlatBorders( bool bUseFlatBorders )
 {
@@ -2285,6 +2297,7 @@ bool ImplStyleData::operator==(const ImplStyleData& rSet) const
            (mbHighContrast                    == rSet.mbHighContrast)                     &&
            (mbUseSystemUIFonts                == rSet.mbUseSystemUIFonts)                 &&
            (mbUseFontAAFromSystem             == rSet.mbUseFontAAFromSystem)              &&
+           (mbUseSubpixelAA                   == rSet.mbUseSubpixelAA)                    &&
            (mnUseFlatBorders                  == rSet.mnUseFlatBorders)                   &&
            (mnUseFlatMenus                    == rSet.mnUseFlatMenus)                     &&
            (maColors                          == rSet.maColors)                           &&
