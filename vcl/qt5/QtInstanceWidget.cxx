@@ -545,7 +545,13 @@ void QtInstanceWidget::set_toolbar_background() { assert(false && "Not implement
 
 void QtInstanceWidget::set_highlight_background() { assert(false && "Not implemented yet"); }
 
-void QtInstanceWidget::set_background(const Color&) { assert(false && "Not implemented yet"); }
+void QtInstanceWidget::set_background(const Color& rBackColor)
+{
+    QPalette aPalette = getQWidget()->palette();
+    aPalette.setColor(QPalette::Base, toQColor(rBackColor));
+    getQWidget()->setPalette(aPalette);
+    getQWidget()->setBackgroundRole(QPalette::Base);
+}
 
 void QtInstanceWidget::draw(OutputDevice&, const Point&, const Size&)
 {
