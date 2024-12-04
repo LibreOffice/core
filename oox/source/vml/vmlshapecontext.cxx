@@ -548,7 +548,14 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 nElement, const Attri
                 if (mrShapeModel.mbInGroup)
                     // FIXME: without this a text will be added into the group-shape instead of its
                     // parent shape
-                    dynamic_cast<SimpleShape&>(mrShape).setService(u"com.sun.star.drawing.TextShape"_ustr);
+                {
+                    if (mrShape.isTextBox())
+                        dynamic_cast<SimpleShape&>(mrShape).setService(
+                            u"com.sun.star.drawing.CustomShape"_ustr);
+                    else
+                        dynamic_cast<SimpleShape&>(mrShape).setService(
+                            u"com.sun.star.drawing.TextShape"_ustr);
+                }
                 else
                     // FIXME: without this we does not handle some properties like shadow
                     dynamic_cast<SimpleShape&>(mrShape).setService(u"com.sun.star.text.TextFrame"_ustr);

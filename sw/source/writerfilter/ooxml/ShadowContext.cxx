@@ -43,9 +43,6 @@ void ShadowContext::startFastElement(
     ++m_nElementLevel;
     CallData callData(m_nElementLevel, nElement, rAttribs, CallDataType::ElementAttr);
     m_aCallDataDeque.push_back(callData);
-    //TODO: determine shape vs. frame
-    // tables require frames
-    // rotation requires shapes
     if (nElement == (oox::NMSP_doc | oox::XML_tbl))
     {
         m_bImportAsWriterFrame = true;
