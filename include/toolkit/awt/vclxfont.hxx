@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLKIT_AWT_VCLXFONT_HXX
-#define INCLUDED_TOOLKIT_AWT_VCLXFONT_HXX
+#pragma once
 
 #include <config_options.h>
 #include <memory>
@@ -66,8 +65,5 @@ public:
     // css::lang::XFont2
     sal_Bool                                        SAL_CALL hasGlyphs( const OUString& aText ) override;
 };
-
-
-#endif // INCLUDED_TOOLKIT_AWT_VCLXFONT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
