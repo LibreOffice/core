@@ -1390,249 +1390,261 @@ SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const OUString& rRefMark,
         }
         break;
         case REF_STYLE:
-            if (!pSelf) break;
-
-            const SwNodes& nodes = pDoc->GetNodes();
-
-            StyleRefElementType elementType = StyleRefElementType::Default;
-            const SwTextNode* pReference = nullptr;
-
-            { /* Check if we're a footnote/endnote */
-                for (SwTextFootnote* pFootnoteIdx : pDoc->GetFootnoteIdxs())
-                {
-                    if (pLayout && pLayout->IsHideRedlines()
-                        && sw::IsFootnoteDeleted(rIDRA, *pFootnoteIdx))
-                    {
-                        continue;
-                    }
-                    const SwNodeIndex* pIdx = pFootnoteIdx->GetStartNode();
-                    if (pIdx)
-                    {
-                        SwNodeIndex aIdx(*pIdx, 1);
-                        SwTextNode* pFootnoteNode = aIdx.GetNode().GetTextNode();
-                        if (nullptr == pFootnoteNode)
-                            pFootnoteNode = static_cast<SwTextNode*>(SwNodes::GoNext(&aIdx));
-
-                        if (*pSelf == *pFootnoteNode)
-                        {
-                            elementType = StyleRefElementType::Reference;
-                            pReference = &pFootnoteIdx->GetTextNode();
-                        }
-                    }
-                }
-            }
-
-            if (pDoc->IsInHeaderFooter(*pSelf))
-            {
-                elementType = StyleRefElementType::Marginal;
-            }
-
-            if (pReference == nullptr)
-            {
-                pReference = pSelf;
-            }
-
-            // undocumented Word feature: 1 = "Heading 1" etc.
-            OUString const styleName(
-                (rRefMark.getLength() == 1 && '1' <= rRefMark[0] && rRefMark[0] <= '9')
-                ? SwStyleNameMapper::GetProgName(RES_POOLCOLL_HEADLINE1 + rRefMark[0] - '1', rRefMark)
-                : rRefMark);
-
-            switch (elementType)
-            {
-                case Marginal:
-                {
-                    // For marginals, styleref tries to act on the current page first
-                    // 1. Get the page we're on, search it from top to bottom
-
-                    bool bFlagFromBottom = (nFlags & REFFLDFLAG_STYLE_FROM_BOTTOM) == REFFLDFLAG_STYLE_FROM_BOTTOM;
-
-                    Point aPt;
-                    std::pair<Point, bool> const tmp(aPt, false);
-
-                    if (!pContentFrame) SAL_WARN("xmloff.text", "<SwGetRefFieldType::FindAnchor(..)>: Missing content frame for marginal styleref");
-                    const SwPageFrame* pPageFrame = nullptr;
-
-                    if (pContentFrame)
-                        pPageFrame = pContentFrame->FindPageFrame();
-
-                    const SwNode* pPageStart(nullptr);
-                    const SwNode* pPageEnd(nullptr);
-
-                    if (pPageFrame)
-                    {
-                        const SwContentFrame* pPageStartFrame = pPageFrame->FindFirstBodyContent();
-                        const SwContentFrame* pPageEndFrame = pPageFrame->FindLastBodyContent();
-
-                        if (pPageStartFrame) {
-                            if (pPageStartFrame->IsTextFrame())
-                            {
-                                pPageStart = static_cast<const SwTextFrame*>(pPageStartFrame)
-                                                ->GetTextNodeFirst();
-                            }
-                            else
-                            {
-                                pPageStart
-                                    = static_cast<const SwNoTextFrame*>(pPageStartFrame)->GetNode();
-                            }
-                        }
-
-                        if (pPageEndFrame) {
-                            if (pPageEndFrame->IsTextFrame())
-                            {
-                                pPageEnd = static_cast<const SwTextFrame*>(pPageEndFrame)
-                                            ->GetTextNodeFirst();
-                            }
-                            else
-                            {
-                                pPageEnd = static_cast<const SwNoTextFrame*>(pPageEndFrame)->GetNode();
-                            }
-                        }
-                    }
-
-                    if (!pPageStart || !pPageEnd)
-                    {
-                        pPageStart = pReference;
-                        pPageEnd = pReference;
-                    }
-
-                    std::deque<SwNode*> pSearchSecond;
-                    std::deque<SwNode*> pInPage; /* or pSearchFirst */
-                    std::deque<SwNode*> pSearchThird;
-
-                    bool beforeStart = true;
-                    bool beforeEnd = true;
-
-                    for (SwNodeOffset n(0); n < nodes.Count(); n++)
-                    {
-                        if (beforeStart && *pPageStart == *nodes[n])
-                        {
-                            beforeStart = false;
-                        }
-
-                        if (beforeStart)
-                        {
-                            pSearchSecond.push_front(nodes[n]);
-                        }
-                        else if (beforeEnd)
-                        {
-                            if (bFlagFromBottom)
-                                pInPage.push_front(nodes[n]);
-                            else
-                                pInPage.push_back(nodes[n]);
-
-                            if (*pPageEnd == *nodes[n])
-                            {
-                                beforeEnd = false;
-                            }
-                        }
-                        else
-                            pSearchThird.push_back(nodes[n]);
-                    }
-
-                    pTextNd = SearchForStyleAnchor(pSelf, pInPage, styleName, pStt, pEnd);
-                    if (pTextNd)
-                    {
-                        break;
-                    }
-
-                    // 2. Search up from the top of the page
-                    pTextNd = SearchForStyleAnchor(pSelf, pSearchSecond, styleName, pStt, pEnd);
-                    if (pTextNd)
-                    {
-                        break;
-                    }
-
-                    // 3. Search down from the bottom of the page
-                    pTextNd = SearchForStyleAnchor(pSelf, pSearchThird, styleName, pStt, pEnd);
-                    if (pTextNd)
-                    {
-                        break;
-                    }
-
-                    // Word has case insensitive styles. LO has case sensitive styles. If we didn't find
-                    // it yet, maybe we could with a case insensitive search. Let's do that
-
-                    pTextNd = SearchForStyleAnchor(pSelf, pInPage, styleName, pStt, pEnd,
-                                                   false /* bCaseSensitive */);
-                    if (pTextNd)
-                    {
-                        break;
-                    }
-
-                    pTextNd = SearchForStyleAnchor(pSelf, pSearchSecond, styleName, pStt, pEnd,
-                                                   false /* bCaseSensitive */);
-                    if (pTextNd)
-                    {
-                        break;
-                    }
-
-                    pTextNd = SearchForStyleAnchor(pSelf, pSearchThird, styleName, pStt, pEnd,
-                                                   false /* bCaseSensitive */);
-                    break;
-                }
-                case Reference:
-                case Default:
-                {
-                    // Normally, styleref does searches around the field position
-                    // For references, styleref acts from the position of the reference not the field
-                    // Happily, the previous code saves either one into pReference, so the following is generic for both
-
-                    std::deque<SwNode*> pSearchFirst;
-                    std::deque<SwNode*> pSearchSecond;
-
-                    bool beforeElement = true;
-
-                    for (SwNodeOffset n(0); n < nodes.Count(); n++)
-                    {
-                        if (beforeElement)
-                        {
-                            pSearchFirst.push_front(nodes[n]);
-
-                            if (*pReference == *nodes[n])
-                            {
-                                beforeElement = false;
-                            }
-                        }
-                        pSearchSecond.push_back(nodes[n]);
-                    }
-
-                    // 1. Search up until we hit the top of the document
-
-                    pTextNd = SearchForStyleAnchor(pSelf, pSearchFirst, styleName, pStt, pEnd);
-                    if (pTextNd)
-                    {
-                        break;
-                    }
-
-                    // 2. Search down until we hit the bottom of the document
-
-                    pTextNd = SearchForStyleAnchor(pSelf, pSearchSecond, styleName, pStt, pEnd);
-                    if (pTextNd)
-                    {
-                        break;
-                    }
-
-                    // Again, we need to remember that Word styles are not case sensitive
-
-                    pTextNd = SearchForStyleAnchor(pSelf, pSearchFirst, styleName, pStt, pEnd,
-                                                   false /* bCaseSensitive */);
-                    if (pTextNd)
-                    {
-                        break;
-                    }
-
-                    pTextNd = SearchForStyleAnchor(pSelf, pSearchSecond, styleName, pStt, pEnd,
-                                                   false /* bCaseSensitive */);
-                    break;
-                }
-                default:
-                    OSL_FAIL("<SwGetRefFieldType::FindAnchor(..)> - unknown getref element type");
-            }
-
+            pTextNd = FindAnchorRefStyle(pDoc, rRefMark, nFlags,
+                                          pStt, pEnd, pLayout, pSelf, pContentFrame);
             break;
     }
 
+    return pTextNd;
+}
+
+SwTextNode* SwGetRefFieldType::FindAnchorRefStyle(SwDoc* pDoc, const OUString& rRefMark,
+                                          sal_uInt16 nFlags,
+                                          sal_Int32* pStt, sal_Int32* pEnd, SwRootFrame const* const pLayout,
+                                          SwTextNode* pSelf, SwFrame* pContentFrame)
+{
+    if (!pSelf)
+        return nullptr;
+
+    SwTextNode* pTextNd = nullptr;
+
+    const SwNodes& nodes = pDoc->GetNodes();
+
+    StyleRefElementType elementType = StyleRefElementType::Default;
+    const SwTextNode* pReference = nullptr;
+    IDocumentRedlineAccess & rIDRA(pDoc->getIDocumentRedlineAccess());
+
+    /* Check if we're a footnote/endnote */
+    for (SwTextFootnote* pFootnoteIdx : pDoc->GetFootnoteIdxs())
+    {
+        if (pLayout && pLayout->IsHideRedlines()
+            && sw::IsFootnoteDeleted(rIDRA, *pFootnoteIdx))
+        {
+            continue;
+        }
+        const SwNodeIndex* pIdx = pFootnoteIdx->GetStartNode();
+        if (pIdx)
+        {
+            SwNodeIndex aIdx(*pIdx, 1);
+            SwTextNode* pFootnoteNode = aIdx.GetNode().GetTextNode();
+            if (nullptr == pFootnoteNode)
+                pFootnoteNode = static_cast<SwTextNode*>(SwNodes::GoNext(&aIdx));
+
+            if (*pSelf == *pFootnoteNode)
+            {
+                elementType = StyleRefElementType::Reference;
+                pReference = &pFootnoteIdx->GetTextNode();
+            }
+        }
+    }
+
+    if (pDoc->IsInHeaderFooter(*pSelf))
+    {
+        elementType = StyleRefElementType::Marginal;
+    }
+
+    if (pReference == nullptr)
+    {
+        pReference = pSelf;
+    }
+
+    // undocumented Word feature: 1 = "Heading 1" etc.
+    OUString const styleName(
+        (rRefMark.getLength() == 1 && '1' <= rRefMark[0] && rRefMark[0] <= '9')
+        ? SwStyleNameMapper::GetProgName(RES_POOLCOLL_HEADLINE1 + rRefMark[0] - '1', rRefMark)
+        : rRefMark);
+
+    switch (elementType)
+    {
+        case Marginal:
+        {
+            // For marginals, styleref tries to act on the current page first
+            // 1. Get the page we're on, search it from top to bottom
+
+            bool bFlagFromBottom = (nFlags & REFFLDFLAG_STYLE_FROM_BOTTOM) == REFFLDFLAG_STYLE_FROM_BOTTOM;
+
+            Point aPt;
+            std::pair<Point, bool> const tmp(aPt, false);
+
+            if (!pContentFrame) SAL_WARN("xmloff.text", "<SwGetRefFieldType::FindAnchor(..)>: Missing content frame for marginal styleref");
+            const SwPageFrame* pPageFrame = nullptr;
+
+            if (pContentFrame)
+                pPageFrame = pContentFrame->FindPageFrame();
+
+            const SwNode* pPageStart(nullptr);
+            const SwNode* pPageEnd(nullptr);
+
+            if (pPageFrame)
+            {
+                const SwContentFrame* pPageStartFrame = pPageFrame->FindFirstBodyContent();
+                const SwContentFrame* pPageEndFrame = pPageFrame->FindLastBodyContent();
+
+                if (pPageStartFrame) {
+                    if (pPageStartFrame->IsTextFrame())
+                    {
+                        pPageStart = static_cast<const SwTextFrame*>(pPageStartFrame)
+                                        ->GetTextNodeFirst();
+                    }
+                    else
+                    {
+                        pPageStart
+                            = static_cast<const SwNoTextFrame*>(pPageStartFrame)->GetNode();
+                    }
+                }
+
+                if (pPageEndFrame) {
+                    if (pPageEndFrame->IsTextFrame())
+                    {
+                        pPageEnd = static_cast<const SwTextFrame*>(pPageEndFrame)
+                                    ->GetTextNodeFirst();
+                    }
+                    else
+                    {
+                        pPageEnd = static_cast<const SwNoTextFrame*>(pPageEndFrame)->GetNode();
+                    }
+                }
+            }
+
+            if (!pPageStart || !pPageEnd)
+            {
+                pPageStart = pReference;
+                pPageEnd = pReference;
+            }
+
+            std::deque<SwNode*> pSearchSecond;
+            std::deque<SwNode*> pInPage; /* or pSearchFirst */
+            std::deque<SwNode*> pSearchThird;
+
+            bool beforeStart = true;
+            bool beforeEnd = true;
+
+            for (SwNodeOffset n(0); n < nodes.Count(); n++)
+            {
+                if (beforeStart && *pPageStart == *nodes[n])
+                {
+                    beforeStart = false;
+                }
+
+                if (beforeStart)
+                {
+                    pSearchSecond.push_front(nodes[n]);
+                }
+                else if (beforeEnd)
+                {
+                    if (bFlagFromBottom)
+                        pInPage.push_front(nodes[n]);
+                    else
+                        pInPage.push_back(nodes[n]);
+
+                    if (*pPageEnd == *nodes[n])
+                    {
+                        beforeEnd = false;
+                    }
+                }
+                else
+                    pSearchThird.push_back(nodes[n]);
+            }
+
+            pTextNd = SearchForStyleAnchor(pSelf, pInPage, styleName, pStt, pEnd);
+            if (pTextNd)
+            {
+                break;
+            }
+
+            // 2. Search up from the top of the page
+            pTextNd = SearchForStyleAnchor(pSelf, pSearchSecond, styleName, pStt, pEnd);
+            if (pTextNd)
+            {
+                break;
+            }
+
+            // 3. Search down from the bottom of the page
+            pTextNd = SearchForStyleAnchor(pSelf, pSearchThird, styleName, pStt, pEnd);
+            if (pTextNd)
+            {
+                break;
+            }
+
+            // Word has case insensitive styles. LO has case sensitive styles. If we didn't find
+            // it yet, maybe we could with a case insensitive search. Let's do that
+
+            pTextNd = SearchForStyleAnchor(pSelf, pInPage, styleName, pStt, pEnd,
+                                           false /* bCaseSensitive */);
+            if (pTextNd)
+            {
+                break;
+            }
+
+            pTextNd = SearchForStyleAnchor(pSelf, pSearchSecond, styleName, pStt, pEnd,
+                                           false /* bCaseSensitive */);
+            if (pTextNd)
+            {
+                break;
+            }
+
+            pTextNd = SearchForStyleAnchor(pSelf, pSearchThird, styleName, pStt, pEnd,
+                                           false /* bCaseSensitive */);
+            break;
+        }
+        case Reference:
+        case Default:
+        {
+            // Normally, styleref does searches around the field position
+            // For references, styleref acts from the position of the reference not the field
+            // Happily, the previous code saves either one into pReference, so the following is generic for both
+
+            std::deque<SwNode*> pSearchFirst;
+            std::deque<SwNode*> pSearchSecond;
+
+            bool beforeElement = true;
+
+            for (SwNodeOffset n(0); n < nodes.Count(); n++)
+            {
+                if (beforeElement)
+                {
+                    pSearchFirst.push_front(nodes[n]);
+
+                    if (*pReference == *nodes[n])
+                    {
+                        beforeElement = false;
+                    }
+                }
+                pSearchSecond.push_back(nodes[n]);
+            }
+
+            // 1. Search up until we hit the top of the document
+
+            pTextNd = SearchForStyleAnchor(pSelf, pSearchFirst, styleName, pStt, pEnd);
+            if (pTextNd)
+            {
+                break;
+            }
+
+            // 2. Search down until we hit the bottom of the document
+
+            pTextNd = SearchForStyleAnchor(pSelf, pSearchSecond, styleName, pStt, pEnd);
+            if (pTextNd)
+            {
+                break;
+            }
+
+            // Again, we need to remember that Word styles are not case sensitive
+
+            pTextNd = SearchForStyleAnchor(pSelf, pSearchFirst, styleName, pStt, pEnd,
+                                           false /* bCaseSensitive */);
+            if (pTextNd)
+            {
+                break;
+            }
+
+            pTextNd = SearchForStyleAnchor(pSelf, pSearchSecond, styleName, pStt, pEnd,
+                                           false /* bCaseSensitive */);
+            break;
+        }
+        default:
+            OSL_FAIL("<SwGetRefFieldType::FindAnchor(..)> - unknown getref element type");
+    }
     return pTextNd;
 }
 

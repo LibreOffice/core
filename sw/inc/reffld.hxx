@@ -101,6 +101,13 @@ public:
                                         SwTextNode* pSelf = nullptr, SwFrame* pFrame = nullptr);
     void UpdateGetReferences();
     void UpdateStyleReferences();
+
+private:
+    static SwTextNode* FindAnchorRefStyle( SwDoc* pDoc, const OUString& rRefMark,
+                                        sal_uInt16 nFlags,
+                                        sal_Int32* pStt, sal_Int32* pEnd,
+                                        SwRootFrame const* pLayout,
+                                        SwTextNode* pSelf, SwFrame* pFrame);
 };
 
 class SAL_DLLPUBLIC_RTTI SwGetRefField final : public SwField
