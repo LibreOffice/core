@@ -180,6 +180,7 @@ struct ImplStyleData
      * from system settings.
      */
     bool mbUseFontAAFromSystem;
+    bool mbUseSubpixelAA;
     bool                            mbAutoMnemonic;
     TriState                        meUseImagesInMenus;
     bool                            mnUseFlatBorders;
@@ -601,6 +602,7 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     mbHighContrast(rData.mbHighContrast),
     mbUseSystemUIFonts(rData.mbUseSystemUIFonts),
     mbUseFontAAFromSystem(rData.mbUseFontAAFromSystem),
+    mbUseSubpixelAA(rData.mbUseSubpixelAA),
     mbAutoMnemonic(rData.mbAutoMnemonic),
     meUseImagesInMenus(rData.meUseImagesInMenus),
     mnUseFlatBorders(rData.mnUseFlatBorders),
@@ -735,6 +737,7 @@ void ImplStyleData::SetStandardStyles()
     mbHighContrast                  = false;
     mbUseSystemUIFonts              = true;
     mbUseFontAAFromSystem           = true;
+    mbUseSubpixelAA                 = true;
     mnUseFlatBorders                = false;
     mnUseFlatMenus                  = false;
     mbPreferredUseImagesInMenus     = true;
@@ -1669,6 +1672,17 @@ bool StyleSettings::GetUseFontAAFromSystem() const
     return mxData->mbUseFontAAFromSystem;
 }
 
+void StyleSettings::SetUseSubpixelAA(bool val)
+{
+    CopyData();
+    mxData->mbUseSubpixelAA = val;
+}
+
+bool StyleSettings::GetUseSubpixelAA() const
+{
+    return mxData->mbUseSubpixelAA;
+}
+
 void
 StyleSettings::SetUseFlatBorders( bool bUseFlatBorders )
 {
@@ -2511,6 +2525,7 @@ bool StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mxData->mbHighContrast            == rSet.mxData->mbHighContrast)             &&
          (mxData->mbUseSystemUIFonts        == rSet.mxData->mbUseSystemUIFonts)         &&
          (mxData->mbUseFontAAFromSystem     == rSet.mxData->mbUseFontAAFromSystem)      &&
+         (mxData->mbUseSubpixelAA           == rSet.mxData->mbUseSubpixelAA)            &&
          (mxData->mnUseFlatBorders          == rSet.mxData->mnUseFlatBorders)           &&
          (mxData->mnUseFlatMenus            == rSet.mxData->mnUseFlatMenus)             &&
          (mxData->maFaceColor               == rSet.mxData->maFaceColor)                &&
