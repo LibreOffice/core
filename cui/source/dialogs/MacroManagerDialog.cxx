@@ -188,7 +188,7 @@ void ScriptContainersListBox::Remove(const weld::TreeIter* pEntryIter, bool bRem
         while (m_xTreeView->iter_compare(*xIter, *pEntryIter) != 0)
         {
             m_xTreeView->copy_iterator(*xIter, *xRemoveIter);
-            m_xTreeView->iter_previous(*xIter);
+            (void)m_xTreeView->iter_previous(*xIter);
             ScriptContainerInfo* pScriptContainerInfo
                 = weld::fromId<ScriptContainerInfo*>(m_xTreeView->get_id(*xRemoveIter));
             if (pScriptContainerInfo)
