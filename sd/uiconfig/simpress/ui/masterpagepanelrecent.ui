@@ -38,7 +38,7 @@
             <property name="activate-on-single-click">True</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="masterpagerecent_icons-atkobject">
-                <property name="AtkObject::accessible-description" translatable="yes" context="masterpagerecentpanel|extended_tip|masterpagerecent_icons">Select recenty used master slide.</property>
+                <property name="AtkObject::accessible-description" translatable="yes" context="masterpagerecentpanel|extended_tip|masterpagerecent_icons">Select recently used master slide.</property>
               </object>
             </child>
         </object>
