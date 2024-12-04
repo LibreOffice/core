@@ -108,12 +108,12 @@ void VCLXAccessibleEdit::FillAccessibleStateSet( sal_Int64& rStateSet )
 {
     VCLXAccessibleTextComponent::FillAccessibleStateSet( rStateSet );
 
-    VCLXWindow* pVCLXWindow = GetVCLXWindow();
-    if (pVCLXWindow)
+    vcl::Window* pWindow = GetWindow();
+    if (pWindow)
     {
         rStateSet |= AccessibleStateType::FOCUSABLE;
 
-        if (GetWindow() && GetWindow()->GetType() == WindowType::MULTILINEEDIT)
+        if (pWindow->GetType() == WindowType::MULTILINEEDIT)
             rStateSet |= AccessibleStateType::MULTI_LINE;
         else
             rStateSet |= AccessibleStateType::SINGLE_LINE;
