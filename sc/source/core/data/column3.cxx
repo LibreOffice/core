@@ -2735,7 +2735,7 @@ void ScColumn::GetBackColorFilterEntries(SCROW nRow1, SCROW nRow2, ScFilterEntri
 
         Color aBackColor;
         bool bCondBackColor = false;
-        const ScPatternAttr* pPattern = rDoc.GetPattern(aCell.Col(), aCell.Row(), aCell.Tab());
+        const ScPatternAttr* pPattern = GetPattern(nRow1);
         ScConditionalFormat* pCondFormat = rDoc.GetCondFormat(aCell.Col(), aCell.Row(), aCell.Tab());
 
         if (pPattern)
