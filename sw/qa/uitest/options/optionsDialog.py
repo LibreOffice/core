@@ -61,6 +61,7 @@ class optionsDialog(UITestCase):
                 xOptimal = xDialog.getChild("zoomoptimal")
                 self.assertEqual(get_state_as_dict(xOptimal)['Visible'], "true")
                 xApplyBtn = xDialog.getChild("apply")
+                self.assertIsNotNone(xApplyBtn)
 
     def test_tdf132274Web(self):
         with self.ui_test.create_doc_in_start_center("writer"):
