@@ -293,8 +293,8 @@ Reference< awt::XFont > OAccessibleMenuComponent::getFont(  )
             if ( xDev.is() )
             {
                 const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-                rtl::Reference<VCLXFont> pVCLXFont = new VCLXFont;
-                pVCLXFont->Init( *xDev, rStyleSettings.GetMenuFont() );
+                rtl::Reference<VCLXFont> pVCLXFont
+                    = new VCLXFont(*xDev, rStyleSettings.GetMenuFont());
                 xFont = pVCLXFont;
             }
         }

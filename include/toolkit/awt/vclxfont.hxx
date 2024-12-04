@@ -47,10 +47,9 @@ class UNLESS_MERGELIBS_MORE(TOOLKIT_DLLPUBLIC) VCLXFont final :
     bool            ImplAssertValidFontMetric();
 
 public:
-                    VCLXFont();
-                    virtual ~VCLXFont() override;
+    VCLXFont(css::awt::XDevice& rxDev, const vcl::Font& rFont);
+    virtual ~VCLXFont() override;
 
-    void            Init( css::awt::XDevice& rxDev, const vcl::Font& rFont );
     const vcl::Font&     GetFont() const { return maFont; }
 
     // css::lang::XFont
