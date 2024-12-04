@@ -19,6 +19,7 @@
 
 #include <awt/vclxregion.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/unohelp.hxx>
 
 
 VCLXRegion::VCLXRegion()
@@ -33,7 +34,7 @@ css::awt::Rectangle VCLXRegion::getBounds()
 {
     std::scoped_lock aGuard( maMutex );
 
-    return VCLUnoHelper::ConvertToAWTRect(maRegion.GetBoundRect());
+    return vcl::unohelper::ConvertToAWTRect(maRegion.GetBoundRect());
 }
 
 void VCLXRegion::clear()
@@ -54,28 +55,28 @@ void VCLXRegion::unionRectangle( const css::awt::Rectangle& rRect )
 {
     std::scoped_lock aGuard( maMutex );
 
-    maRegion.Union(VCLUnoHelper::ConvertToVCLRect(rRect));
+    maRegion.Union(vcl::unohelper::ConvertToVCLRect(rRect));
 }
 
 void VCLXRegion::intersectRectangle( const css::awt::Rectangle& rRect )
 {
     std::scoped_lock aGuard( maMutex );
 
-    maRegion.Intersect(VCLUnoHelper::ConvertToVCLRect(rRect));
+    maRegion.Intersect(vcl::unohelper::ConvertToVCLRect(rRect));
 }
 
 void VCLXRegion::excludeRectangle( const css::awt::Rectangle& rRect )
 {
     std::scoped_lock aGuard( maMutex );
 
-    maRegion.Exclude(VCLUnoHelper::ConvertToVCLRect(rRect));
+    maRegion.Exclude(vcl::unohelper::ConvertToVCLRect(rRect));
 }
 
 void VCLXRegion::xOrRectangle( const css::awt::Rectangle& rRect )
 {
     std::scoped_lock aGuard( maMutex );
 
-    maRegion.XOr(VCLUnoHelper::ConvertToVCLRect(rRect));
+    maRegion.XOr(vcl::unohelper::ConvertToVCLRect(rRect));
 }
 
 void VCLXRegion::unionRegion( const css::uno::Reference< css::awt::XRegion >& rxRegion )
@@ -123,14 +124,14 @@ css::uno::Sequence< css::awt::Rectangle > VCLXRegion::getRectangles()
 
     for(const auto& rRect : aRectangles)
     {
-        aRects.getArray()[a++] = VCLUnoHelper::ConvertToAWTRect(rRect);
+        aRects.getArray()[a++] = vcl::unohelper::ConvertToAWTRect(rRect);
     }
 
     //Rectangle aRect;
     //sal_uInt32 nR = 0;
     //RegionHandle h = maRegion.BeginEnumRects();
     //while ( maRegion.GetEnumRects( h, aRect ) )
-    //  aRects.getArray()[nR++] = VCLUnoHelper::ConvertToAWTRect( aRect );
+    //  aRects.getArray()[nR++] = vcl::unohelper::ConvertToAWTRect( aRect );
     //maRegion.EndEnumRects( h );
 
     return aRects;

@@ -29,6 +29,7 @@
 #include <vcl/kernarray.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/metric.hxx>
+#include <vcl/unohelp.hxx>
 #include <tools/debug.hxx>
 
 using namespace com::sun::star;
@@ -244,7 +245,7 @@ void VCLXGraphics::clear(
 
     if( mpOutputDevice )
     {
-        const ::tools::Rectangle aVCLRect = VCLUnoHelper::ConvertToVCLRect( aRect );
+        const ::tools::Rectangle aVCLRect = vcl::unohelper::ConvertToVCLRect( aRect );
         mpOutputDevice->Erase( aVCLRect );
     }
 }

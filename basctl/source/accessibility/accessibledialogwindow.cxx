@@ -35,10 +35,9 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/debug.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
-#include <toolkit/awt/vclxfont.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/unohelp.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
 namespace basctl
@@ -409,7 +408,7 @@ awt::Rectangle AccessibleDialogWindow::implGetBounds()
 {
     awt::Rectangle aBounds;
     if ( m_pDialogWindow )
-        aBounds = VCLUnoHelper::ConvertToAWTRect(
+        aBounds = vcl::unohelper::ConvertToAWTRect(
             tools::Rectangle(m_pDialogWindow->GetPosPixel(), m_pDialogWindow->GetSizePixel()));
 
     return aBounds;
@@ -685,8 +684,8 @@ Reference< XAccessible > AccessibleDialogWindow::getAccessibleAtPoint( const awt
             Reference< XAccessibleComponent > xComp( xAcc->getAccessibleContext(), UNO_QUERY );
             if ( xComp.is() )
             {
-                tools::Rectangle aRect = VCLUnoHelper::ConvertToVCLRect(xComp->getBounds());
-                Point aPos = VCLUnoHelper::ConvertToVCLPoint(rPoint);
+                tools::Rectangle aRect = vcl::unohelper::ConvertToVCLRect(xComp->getBounds());
+                Point aPos = vcl::unohelper::ConvertToVCLPoint(rPoint);
                 if ( aRect.Contains( aPos ) )
                 {
                     xChild = std::move(xAcc);

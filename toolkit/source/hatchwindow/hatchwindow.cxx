@@ -23,11 +23,11 @@
 #include "hatchwindow.hxx"
 #include "ipwin.hxx"
 
-#include <toolkit/helper/vclunohelper.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
+#include <vcl/unohelp.hxx>
 
 using namespace ::com::sun::star;
 
@@ -72,11 +72,11 @@ void VCLXHatchWindow::QueryObjAreaPixel( tools::Rectangle & aRect )
     if ( !m_xController.is() )
         return;
 
-    awt::Rectangle aUnoRequestRect = VCLUnoHelper::ConvertToAWTRect(aRect);
+    awt::Rectangle aUnoRequestRect = vcl::unohelper::ConvertToAWTRect(aRect);
 
     try {
         awt::Rectangle aUnoResultRect = m_xController->calcAdjustedRectangle( aUnoRequestRect );
-        aRect = VCLUnoHelper::ConvertToVCLRect(aUnoResultRect);
+        aRect = vcl::unohelper::ConvertToVCLRect(aUnoResultRect);
     }
     catch( uno::Exception& )
     {
@@ -88,7 +88,7 @@ void VCLXHatchWindow::RequestObjAreaPixel( const tools::Rectangle & aRect )
 {
     if ( m_xController.is() )
     {
-        awt::Rectangle aUnoRequestRect = VCLUnoHelper::ConvertToAWTRect(aRect);
+        awt::Rectangle aUnoRequestRect = vcl::unohelper::ConvertToAWTRect(aRect);
 
         try {
             m_xController->requestPositioning( aUnoRequestRect );

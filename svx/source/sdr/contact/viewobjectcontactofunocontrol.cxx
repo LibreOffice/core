@@ -45,6 +45,7 @@
 
 #include <vcl/canvastools.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/unohelp.hxx>
 #include <vcl/window.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
@@ -230,7 +231,7 @@ namespace sdr::contact {
     ::tools::Rectangle ControlHolder::getPosSize() const
     {
         // no check whether we're valid, this is the responsibility of the caller
-        return VCLUnoHelper::ConvertToVCLRect( m_xControlWindow->getPosSize() );
+        return vcl::unohelper::ConvertToVCLRect( m_xControlWindow->getPosSize() );
     }
 
 

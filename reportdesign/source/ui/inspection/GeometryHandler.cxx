@@ -67,6 +67,7 @@
 
 #include <tools/fldunit.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/unohelp.hxx>
 #include <vcl/weld.hxx>
 
 #include <core_resource.hxx>
@@ -1598,11 +1599,11 @@ void GeometryHandler::checkPosAndSize(  const awt::Point& _aNewPos,
     if ( !xSection.is() || uno::Reference< report::XShape>(xSourceReportComponent,uno::UNO_QUERY).is() ) // shapes can overlap.
         return;
 
-    ::Point aPos(VCLUnoHelper::ConvertToVCLPoint(_aNewPos));
+    ::Point aPos(vcl::unohelper::ConvertToVCLPoint(_aNewPos));
     if ( aPos.X() < 0 || aPos.Y() < 0 ) // TODO: have to check size with pos aka || (aPos.X() + aAwtSize.Width) > m_xSection->getReportDefinition()->
         throw beans::PropertyVetoException(RptResId(RID_STR_ILLEGAL_POSITION),xSourceReportComponent);
 
-    ::tools::Rectangle aSourceRect(aPos, VCLUnoHelper::ConvertToVCLSize(_aSize));
+    ::tools::Rectangle aSourceRect(aPos, vcl::unohelper::ConvertToVCLSize(_aSize));
 
     const sal_Int32 nCount = xSection->getCount();
     for (sal_Int32 i = 0; i < nCount ; ++i)
@@ -1611,8 +1612,8 @@ void GeometryHandler::checkPosAndSize(  const awt::Point& _aNewPos,
         if ( xReportComponent.is() && xReportComponent != xSourceReportComponent )
         {
             const ::tools::Rectangle aBoundRect(
-                VCLUnoHelper::ConvertToVCLPoint(xReportComponent->getPosition()),
-                VCLUnoHelper::ConvertToVCLSize(xReportComponent->getSize()));
+                vcl::unohelper::ConvertToVCLPoint(xReportComponent->getPosition()),
+                vcl::unohelper::ConvertToVCLSize(xReportComponent->getSize()));
             const ::tools::Rectangle aRect = aSourceRect.GetIntersection(aBoundRect);
             if ( !aRect.IsEmpty() && (aRect.Left() != aRect.Right() && aRect.Top() != aRect.Bottom() ) )
                 throw beans::PropertyVetoException(RptResId( RID_STR_OVERLAP_OTHER_CONTROL),xSourceReportComponent);

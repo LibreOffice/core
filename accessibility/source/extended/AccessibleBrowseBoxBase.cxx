@@ -26,8 +26,8 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/IllegalAccessibleComponentStateException.hpp>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
+#include <vcl/unohelp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
@@ -211,27 +211,27 @@ lang::Locale SAL_CALL AccessibleBrowseBoxBase::getLocale()
 sal_Bool SAL_CALL AccessibleBrowseBoxBase::containsPoint( const css::awt::Point& rPoint )
 {
     return tools::Rectangle(Point(), getBoundingBox().GetSize())
-        .Contains(VCLUnoHelper::ConvertToVCLPoint(rPoint));
+        .Contains(vcl::unohelper::ConvertToVCLPoint(rPoint));
 }
 
 awt::Rectangle SAL_CALL AccessibleBrowseBoxBase::getBounds()
 {
-    return VCLUnoHelper::ConvertToAWTRect(getBoundingBox());
+    return vcl::unohelper::ConvertToAWTRect(getBoundingBox());
 }
 
 awt::Point SAL_CALL AccessibleBrowseBoxBase::getLocation()
 {
-    return VCLUnoHelper::ConvertToAWTPoint(getBoundingBox().TopLeft());
+    return vcl::unohelper::ConvertToAWTPoint(getBoundingBox().TopLeft());
 }
 
 awt::Point SAL_CALL AccessibleBrowseBoxBase::getLocationOnScreen()
 {
-    return VCLUnoHelper::ConvertToAWTPoint(getBoundingBoxOnScreen().TopLeft());
+    return vcl::unohelper::ConvertToAWTPoint(getBoundingBoxOnScreen().TopLeft());
 }
 
 awt::Size SAL_CALL AccessibleBrowseBoxBase::getSize()
 {
-    return VCLUnoHelper::ConvertToAWTSize(getBoundingBox().GetSize());
+    return vcl::unohelper::ConvertToAWTSize(getBoundingBox().GetSize());
 }
 
 void SAL_CALL AccessibleBrowseBoxBase::focusGained( const css::awt::FocusEvent& )
@@ -351,7 +351,7 @@ bool AccessibleBrowseBoxBase::implIsShowing()
             xParentComp( mxParent->getAccessibleContext(), uno::UNO_QUERY );
         if( xParentComp.is() )
             bShowing = implGetBoundingBox().Overlaps(
-                VCLUnoHelper::ConvertToVCLRect(xParentComp->getBounds()));
+                vcl::unohelper::ConvertToVCLRect(xParentComp->getBounds()));
     }
     return bShowing;
 }

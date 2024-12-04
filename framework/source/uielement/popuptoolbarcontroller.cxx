@@ -34,6 +34,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/unohelp.hxx>
 
 #include <com/sun/star/awt/PopupMenuDirection.hpp>
 #include <com/sun/star/awt/XPopupMenu.hpp>
@@ -207,7 +208,7 @@ PopupMenuToolbarController::createPopupWindow()
     css::uno::Reference< css::awt::XPopupMenu > xPopupMenu ( m_xPopupMenu );
     sal_uInt16 nId = xPopupMenu->execute(
         css::uno::Reference< css::awt::XWindowPeer >( getParent(), css::uno::UNO_QUERY ),
-        VCLUnoHelper::ConvertToAWTRect( pToolBox->GetItemRect( m_nToolBoxId ) ),
+        vcl::unohelper::ConvertToAWTRect( pToolBox->GetItemRect( m_nToolBoxId ) ),
         ( eAlign == WindowAlign::Top || eAlign == WindowAlign::Bottom ) ?
             css::awt::PopupMenuDirection::EXECUTE_DOWN :
             css::awt::PopupMenuDirection::EXECUTE_RIGHT );

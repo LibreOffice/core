@@ -34,6 +34,7 @@
 
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/unohelp.hxx>
 #include <svl/hint.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
@@ -326,7 +327,7 @@ tools::Rectangle ScAccessiblePreviewHeaderCell::GetBoundingBox() const
             if (xAccParentComp.is())
             {
                 tools::Rectangle aParentRect(
-                    VCLUnoHelper::ConvertToVCLRect(xAccParentComp->getBounds()));
+                    vcl::unohelper::ConvertToVCLRect(xAccParentComp->getBounds()));
                 aCellRect.Move(-aParentRect.Left(), -aParentRect.Top());
             }
         }

@@ -28,12 +28,12 @@
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/awt/vclxfont.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/window.hxx>
 #include <vcl/toolkit/edit.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/unohelp.hxx>
 #include <tools/debug.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <vcl/svapp.hxx>
@@ -697,8 +697,8 @@ uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessi
             uno::Reference< accessibility::XAccessibleComponent > xComp( xAcc->getAccessibleContext(), uno::UNO_QUERY );
             if ( xComp.is() )
             {
-                tools::Rectangle aRect = VCLUnoHelper::ConvertToVCLRect(xComp->getBounds());
-                Point aPos = VCLUnoHelper::ConvertToVCLPoint(rPoint);
+                tools::Rectangle aRect = vcl::unohelper::ConvertToVCLRect(xComp->getBounds());
+                Point aPos = vcl::unohelper::ConvertToVCLPoint(rPoint);
                 if ( aRect.Contains( aPos ) )
                 {
                     xChild = std::move(xAcc);
@@ -720,12 +720,12 @@ awt::Rectangle VCLXAccessibleComponent::implGetBounds()
     if ( pWindow )
     {
         AbsoluteScreenPixelRectangle aRect = pWindow->GetWindowExtentsAbsolute();
-        aBounds = VCLUnoHelper::ConvertToAWTRect(aRect);
+        aBounds = vcl::unohelper::ConvertToAWTRect(aRect);
         vcl::Window* pParent = pWindow->GetAccessibleParentWindow();
         if ( pParent )
         {
             AbsoluteScreenPixelRectangle aParentRect = pParent->GetWindowExtentsAbsolute();
-            awt::Point aParentScreenLoc = VCLUnoHelper::ConvertToAWTPoint(aParentRect.TopLeft());
+            awt::Point aParentScreenLoc = vcl::unohelper::ConvertToAWTPoint(aParentRect.TopLeft());
             aBounds.X -= aParentScreenLoc.X;
             aBounds.Y -= aParentScreenLoc.Y;
         }

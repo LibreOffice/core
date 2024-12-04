@@ -25,6 +25,7 @@
 #include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/unohelp.hxx>
 #include <osl/mutex.hxx>
 #include <tools/debug.hxx>
 #include <tools/gen.hxx>
@@ -425,7 +426,7 @@ void SAL_CALL SvxPixelCtlAccessibleChild::disposing()
 awt::Rectangle SvxPixelCtlAccessibleChild::implGetBounds()
 {
     // no guard necessary, because no one changes maBoundingBox after creating it
-    return VCLUnoHelper::ConvertToAWTRect(maBoundingBox);
+    return vcl::unohelper::ConvertToAWTRect(maBoundingBox);
 }
 
 OUString SvxPixelCtlAccessibleChild::GetName() const

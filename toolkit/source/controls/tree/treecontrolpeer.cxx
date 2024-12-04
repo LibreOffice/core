@@ -24,7 +24,6 @@
 #include <com/sun/star/util/VetoException.hpp>
 #include <o3tl/any.hxx>
 #include <helper/property.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 
 #include <com/sun/star/awt/tree/XMutableTreeNode.hpp>
 #include <controls/treecontrolpeer.hxx>
@@ -39,6 +38,7 @@
 #include <vcl/toolkit/treelistentry.hxx>
 #include <vcl/toolkit/viewdataentry.hxx>
 #include <vcl/toolkit/svlbitm.hxx>
+#include <vcl/unohelp.hxx>
 
 #include <map>
 #include <memory>
@@ -843,7 +843,7 @@ awt::Rectangle SAL_CALL TreeControlPeer::getNodeRect( const Reference< XTreeNode
     UnoTreeListEntry* pEntry = getEntry( i_Node );
 
     ::tools::Rectangle aEntryRect( rTree.GetFocusRect( pEntry, rTree.GetEntryPosition( pEntry ).Y() ) );
-    return VCLUnoHelper::ConvertToAWTRect( aEntryRect );
+    return vcl::unohelper::ConvertToAWTRect( aEntryRect );
 }
 
 
@@ -1188,7 +1188,7 @@ css::awt::Size TreeControlPeer::getMinimumSize()
 /* todo
     MultiLineEdit* pEdit = (MultiLineEdit*) GetWindow();
     if ( pEdit )
-        aSz = VCLUnoHelper::ConvertToAWTSize(pEdit->CalcMinimumSize());
+        aSz = vcl::unohelper::ConvertToAWTSize(pEdit->CalcMinimumSize());
 */
     return aSz;
 }
@@ -1206,7 +1206,7 @@ css::awt::Size TreeControlPeer::calcAdjustedSize( const css::awt::Size& rNewSize
 /* todo
     MultiLineEdit* pEdit = (MultiLineEdit*) GetWindow();
     if ( pEdit )
-        aSz = VCLUnoHelper::ConvertToAWTSize(pEdit->CalcAdjustedSize(VCLUnoHelper::ConvertToVCLSize(rNewSize)));
+        aSz = vcl::unohelper::ConvertToAWTSize(pEdit->CalcAdjustedSize(vcl::unohelper::ConvertToVCLSize(rNewSize)));
 */
     return aSz;
 }

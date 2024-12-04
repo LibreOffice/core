@@ -31,6 +31,7 @@
 #include <vcl/keycod.hxx>
 #include <vcl/image.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/unohelp.hxx>
 #include <vcl/window.hxx>
 
 #include <com/sun/star/awt/KeyModifier.hpp>
@@ -506,7 +507,7 @@ sal_Int16 VCLXMenu::execute(
     pPopupMenu->SetMenuFlags(nMenuFlags);
     // cannot call this with mutex locked because it will call back into us
     return pPopupMenu->Execute(
-        VCLUnoHelper::GetWindow(rxWindowPeer), VCLUnoHelper::ConvertToVCLRect(rPos),
+        VCLUnoHelper::GetWindow(rxWindowPeer), vcl::unohelper::ConvertToVCLRect(rPos),
         static_cast<PopupMenuFlags>(nFlags) | PopupMenuFlags::NoMouseUpClose);
 }
 

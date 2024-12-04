@@ -35,6 +35,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/unohelp.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
 namespace basctl
@@ -146,7 +147,7 @@ awt::Rectangle AccessibleDialogControlShape::GetBounds() const
             // clip the shape's bounding box with the bounding box of its parent
             tools::Rectangle aParentRect( Point( 0, 0 ), m_pDialogWindow->GetSizePixel() );
             aRect = aRect.GetIntersection( aParentRect );
-            aBounds = VCLUnoHelper::ConvertToAWTRect(aRect);
+            aBounds = vcl::unohelper::ConvertToAWTRect(aRect);
         }
     }
 

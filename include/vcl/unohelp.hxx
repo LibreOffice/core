@@ -22,7 +22,11 @@
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/awt/FontSlant.hpp>
+#include <com/sun/star/awt/Point.hpp>
+#include <com/sun/star/awt/Rectangle.hpp>
+#include <com/sun/star/awt/Size.hpp>
 #include <tools/fontenum.hxx>
+#include <tools/gen.hxx>
 #include <vcl/dllapi.h>
 
 namespace com::sun::star::i18n {
@@ -43,6 +47,13 @@ VCL_DLLPUBLIC float               ConvertFontWeight( FontWeight eWeight );
 VCL_DLLPUBLIC FontWeight          ConvertFontWeight( float f );
 VCL_DLLPUBLIC css::awt::FontSlant ConvertFontSlant( FontItalic eWeight );
 VCL_DLLPUBLIC FontItalic          ConvertFontSlant( css::awt::FontSlant );
+VCL_DLLPUBLIC Size ConvertToVCLSize(const css::awt::Size& rAWTSize);
+VCL_DLLPUBLIC css::awt::Size ConvertToAWTSize(const Size& rVCLSize);
+VCL_DLLPUBLIC Point ConvertToVCLPoint(const css::awt::Point& rAWTPoint);
+VCL_DLLPUBLIC css::awt::Point ConvertToAWTPoint(const PointTemplateBase& rVCLPoint);
+VCL_DLLPUBLIC tools::Rectangle ConvertToVCLRect(const css::awt::Rectangle& rAWTRect);
+VCL_DLLPUBLIC css::awt::Rectangle ConvertToAWTRect(const RectangleTemplateBase& rVCLRect);
+
 }  // namespace vcl::unohelper
 
 #endif // INCLUDED_VCL_UNOHELP_HXX

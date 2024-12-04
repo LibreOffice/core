@@ -159,7 +159,7 @@ sal_Bool SAL_CALL ScAccessibleContextBase::containsPoint(const awt::Point& rPoin
     SolarMutexGuard aGuard;
     IsObjectValid();
     return tools::Rectangle(Point(), GetBoundingBox().GetSize())
-        .Contains(VCLUnoHelper::ConvertToVCLPoint(rPoint));
+        .Contains(vcl::unohelper::ConvertToVCLPoint(rPoint));
 }
 
 uno::Reference< XAccessible > SAL_CALL ScAccessibleContextBase::getAccessibleAtPoint(
@@ -173,28 +173,28 @@ awt::Rectangle SAL_CALL ScAccessibleContextBase::getBounds(  )
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
-    return VCLUnoHelper::ConvertToAWTRect(GetBoundingBox());
+    return vcl::unohelper::ConvertToAWTRect(GetBoundingBox());
 }
 
 awt::Point SAL_CALL ScAccessibleContextBase::getLocation(  )
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
-    return VCLUnoHelper::ConvertToAWTPoint(GetBoundingBox().TopLeft());
+    return vcl::unohelper::ConvertToAWTPoint(GetBoundingBox().TopLeft());
 }
 
 awt::Point SAL_CALL ScAccessibleContextBase::getLocationOnScreen(  )
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
-    return VCLUnoHelper::ConvertToAWTPoint(GetBoundingBoxOnScreen().TopLeft());
+    return vcl::unohelper::ConvertToAWTPoint(GetBoundingBoxOnScreen().TopLeft());
 }
 
 awt::Size SAL_CALL ScAccessibleContextBase::getSize(  )
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
-    return VCLUnoHelper::ConvertToAWTSize(GetBoundingBox().GetSize());
+    return vcl::unohelper::ConvertToAWTSize(GetBoundingBox().GetSize());
 }
 
 bool ScAccessibleContextBase::isShowing(  )
@@ -208,8 +208,8 @@ bool ScAccessibleContextBase::isShowing(  )
         if (xParentComponent.is())
         {
             tools::Rectangle aParentBounds(
-                VCLUnoHelper::ConvertToVCLRect(xParentComponent->getBounds()));
-            tools::Rectangle aBounds(VCLUnoHelper::ConvertToVCLRect(getBounds()));
+                vcl::unohelper::ConvertToVCLRect(xParentComponent->getBounds()));
+            tools::Rectangle aBounds(vcl::unohelper::ConvertToVCLRect(getBounds()));
             bShowing = aBounds.Overlaps(aParentBounds);
         }
     }

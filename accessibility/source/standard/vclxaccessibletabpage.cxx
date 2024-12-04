@@ -18,7 +18,6 @@
  */
 
 #include <standard/vclxaccessibletabpage.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -32,6 +31,7 @@
 #include <vcl/accessibility/characterattributeshelper.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/unohelp.hxx>
 #include <vcl/unohelp2.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
@@ -191,7 +191,7 @@ awt::Rectangle VCLXAccessibleTabPage::implGetBounds()
     awt::Rectangle aBounds( 0, 0, 0, 0 );
 
     if ( m_pTabControl )
-        aBounds = VCLUnoHelper::ConvertToAWTRect(m_pTabControl->GetTabBounds(m_nPageId));
+        aBounds = vcl::unohelper::ConvertToAWTRect(m_pTabControl->GetTabBounds(m_nPageId));
 
     return aBounds;
 }
@@ -407,8 +407,8 @@ Reference< XAccessible > VCLXAccessibleTabPage::getAccessibleAtPoint( const awt:
             Reference< XAccessibleComponent > xComp( xAcc->getAccessibleContext(), UNO_QUERY );
             if ( xComp.is() )
             {
-                tools::Rectangle aRect = VCLUnoHelper::ConvertToVCLRect(xComp->getBounds());
-                Point aPos = VCLUnoHelper::ConvertToVCLPoint(rPoint);
+                tools::Rectangle aRect = vcl::unohelper::ConvertToVCLRect(xComp->getBounds());
+                Point aPos = vcl::unohelper::ConvertToVCLPoint(rPoint);
                 if ( aRect.Contains( aPos ) )
                 {
                     return xAcc;
@@ -568,7 +568,7 @@ awt::Rectangle VCLXAccessibleTabPage::getCharacterBounds( sal_Int32 nIndex )
         tools::Rectangle aPageRect = m_pTabControl->GetTabBounds( m_nPageId );
         tools::Rectangle aCharRect; // m_pTabControl->GetCharacterBounds( m_nPageId, nIndex );
         aCharRect.Move( -aPageRect.Left(), -aPageRect.Top() );
-        aBounds = VCLUnoHelper::ConvertToAWTRect(aCharRect);
+        aBounds = vcl::unohelper::ConvertToAWTRect(aCharRect);
     }
 
     return aBounds;
@@ -584,7 +584,7 @@ sal_Int32 VCLXAccessibleTabPage::getIndexAtPoint( const awt::Point& /*aPoint*/ )
 //    {
 //        sal_uInt16 nPageId = 0;
 //        tools::Rectangle aPageRect = m_pTabControl->GetTabBounds( m_nPageId );
-//        Point aPnt( VCLUnoHelper::ConvertToVCLPoint( aPoint ) );
+//        Point aPnt( vcl::unohelper::ConvertToVCLPoint( aPoint ) );
 //        aPnt += aPageRect.TopLeft();
 //        sal_Int32 nI = m_pTabControl->GetIndexForPoint( aPnt, nPageId );
 //        if ( nI != -1 && m_nPageId == nPageId )

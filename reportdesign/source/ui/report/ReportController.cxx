@@ -67,6 +67,7 @@
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
 
 #include <vcl/svapp.hxx>
+#include <vcl/unohelp.hxx>
 
 #include <i18nutil/paper.hxx>
 #include <svx/fmview.hxx>
@@ -2414,7 +2415,7 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
         else
         {
             aDescriptor.Put(SvxSizeItem(RPTUI_ID_SIZE,
-                                        VCLUnoHelper::ConvertToVCLSize(getStyleProperty<awt::Size>(m_xReportDefinition,PROPERTY_PAPERSIZE))));
+                                        vcl::unohelper::ConvertToVCLSize(getStyleProperty<awt::Size>(m_xReportDefinition,PROPERTY_PAPERSIZE))));
             aDescriptor.Put(SvxLRSpaceItem(SvxIndentValue::twips(getStyleProperty<sal_Int32>(
                                                m_xReportDefinition, PROPERTY_LEFTMARGIN)),
                                            SvxIndentValue::twips(getStyleProperty<sal_Int32>(

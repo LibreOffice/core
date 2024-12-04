@@ -66,6 +66,7 @@
 #include <framework/titlehelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/unohelp.hxx>
 #include <tools/svborder.hxx>
 
 #include <sfx2/event.hxx>
@@ -830,9 +831,9 @@ awt::Rectangle SAL_CALL SfxBaseController::queryBorderedArea( const awt::Rectang
     SolarMutexGuard aGuard;
     if ( m_pData->m_pViewShell )
     {
-        tools::Rectangle aTmpRect = VCLUnoHelper::ConvertToVCLRect(aPreliminaryRectangle);
+        tools::Rectangle aTmpRect = vcl::unohelper::ConvertToVCLRect(aPreliminaryRectangle);
         m_pData->m_pViewShell->QueryObjAreaPixel( aTmpRect );
-        return VCLUnoHelper::ConvertToAWTRect(aTmpRect);
+        return vcl::unohelper::ConvertToAWTRect(aTmpRect);
     }
 
     return aPreliminaryRectangle;

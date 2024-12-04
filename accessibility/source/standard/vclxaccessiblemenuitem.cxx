@@ -29,13 +29,13 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <comphelper/sequence.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/accessibility/characterattributeshelper.hxx>
 #include <vcl/accessibility/strings.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/menu.hxx>
+#include <vcl/unohelp.hxx>
 #include <vcl/unohelp2.hxx>
 #include <vcl/settings.hxx>
 
@@ -239,7 +239,7 @@ awt::Rectangle VCLXAccessibleMenuItem::getCharacterBounds( sal_Int32 nIndex )
         tools::Rectangle aItemRect = m_pParent->GetBoundingRectangle( m_nItemPos );
         tools::Rectangle aCharRect = m_pParent->GetCharacterBounds( nItemId, nIndex );
         aCharRect.Move( -aItemRect.Left(), -aItemRect.Top() );
-        aBounds = VCLUnoHelper::ConvertToAWTRect(aCharRect);
+        aBounds = vcl::unohelper::ConvertToAWTRect(aCharRect);
     }
 
     return aBounds;
@@ -263,7 +263,7 @@ sal_Int32 VCLXAccessibleMenuItem::getIndexAtPoint( const awt::Point& aPoint )
     {
         sal_uInt16 nItemId = 0;
         tools::Rectangle aItemRect = m_pParent->GetBoundingRectangle( m_nItemPos );
-        Point aPnt(VCLUnoHelper::ConvertToVCLPoint(aPoint));
+        Point aPnt(vcl::unohelper::ConvertToVCLPoint(aPoint));
         aPnt += aItemRect.TopLeft();
         sal_Int32 nI = m_pParent->GetIndexForPoint( aPnt, nItemId );
         if ( nI != -1 && m_pParent->GetItemId( m_nItemPos ) == nItemId )

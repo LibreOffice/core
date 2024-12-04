@@ -20,13 +20,13 @@
 
 #include <standard/vclxaccessibletoolbox.hxx>
 #include <standard/vclxaccessibletoolboxitem.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <o3tl/safeint.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/unohelp.hxx>
 #include <vcl/vclevent.hxx>
 #include <comphelper/accessiblecontexthelper.hxx>
 #include <comphelper/accessiblewrapper.hxx>
@@ -664,7 +664,7 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleToolBox::getAccessibleAtPoint( c
     if ( pToolBox )
     {
         ToolBox::ImplToolItems::size_type nItemPos
-            = pToolBox->GetItemPos(VCLUnoHelper::ConvertToVCLPoint(_rPoint));
+            = pToolBox->GetItemPos(vcl::unohelper::ConvertToVCLPoint(_rPoint));
         if ( nItemPos != ToolBox::ITEM_NOTFOUND )
             xAccessible = getAccessibleChild( nItemPos );
     }

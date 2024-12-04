@@ -18,7 +18,6 @@
  */
 
 #include <standard/vclxaccessibletextcomponent.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
@@ -32,6 +31,7 @@
 #include <vcl/unohelp2.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/unohelp.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
 using namespace ::com::sun::star;
@@ -250,7 +250,7 @@ awt::Rectangle VCLXAccessibleTextComponent::getCharacterBounds( sal_Int32 nIndex
     awt::Rectangle aRect;
     VclPtr< Control > pControl = GetAs< Control >();
     if ( pControl )
-        aRect = VCLUnoHelper::ConvertToAWTRect(pControl->GetCharacterBounds(nIndex));
+        aRect = vcl::unohelper::ConvertToAWTRect(pControl->GetCharacterBounds(nIndex));
 
     return aRect;
 }
@@ -271,7 +271,7 @@ sal_Int32 VCLXAccessibleTextComponent::getIndexAtPoint( const awt::Point& aPoint
     sal_Int32 nIndex = -1;
     VclPtr< Control > pControl = GetAs< Control >();
     if ( pControl )
-        nIndex = pControl->GetIndexForPoint(VCLUnoHelper::ConvertToVCLPoint(aPoint));
+        nIndex = pControl->GetIndexForPoint(vcl::unohelper::ConvertToVCLPoint(aPoint));
 
     return nIndex;
 }
