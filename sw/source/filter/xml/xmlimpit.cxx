@@ -227,7 +227,7 @@ void SvXMLImportItemMapper::importXMLUnknownAttributes( SfxItemSet& rSet,
                 int i = sName.indexOf(':');
                 if (i != -1)
                 {
-                    sPrefix = sName.copy(0, i-1);
+                    sPrefix = sName.copy(0, i);
                     sName = sName.copy(i+1);
                 }
                 // the sax parser doesn't reject these, strangely
