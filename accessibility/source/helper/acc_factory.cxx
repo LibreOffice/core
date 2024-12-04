@@ -42,8 +42,6 @@
 #include <standard/vclxaccessiblestatusbar.hxx>
 #include <standard/vclxaccessibletabcontrol.hxx>
 #include <standard/vclxaccessibletabpagewindow.hxx>
-#include <standard/vclxaccessiblemenubar.hxx>
-#include <standard/vclxaccessiblepopupmenu.hxx>
 #include <extended/accessibletablistbox.hxx>
 #include <extended/AccessibleBrowseBox.hxx>
 #include <extended/accessibleiconchoicectrl.hxx>
@@ -115,8 +113,6 @@ public:
         createAccessibleContext( SVTXNumericField* _pXWindow ) override;
     virtual css::uno::Reference< css::accessibility::XAccessibleContext >
         createAccessibleContext( VCLXWindow* _pXWindow ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible >
-        createAccessible( Menu* _pMenu, bool _bIsMenuBar ) override;
 
     // ::vcl::IAccessibleFactory
     virtual vcl::IAccessibleTabListBox*
@@ -222,17 +218,6 @@ AccessibleFactory::AccessibleFactory()
 
 AccessibleFactory::~AccessibleFactory()
 {
-}
-
-Reference< XAccessible > AccessibleFactory::createAccessible( Menu* _pMenu, bool _bIsMenuBar )
-{
-    rtl::Reference<OAccessibleMenuBaseComponent> pAccessible;
-    if ( _bIsMenuBar )
-        pAccessible = new VCLXAccessibleMenuBar( _pMenu );
-    else
-        pAccessible = new VCLXAccessiblePopupMenu( _pMenu );
-    pAccessible->SetStates();
-    return pAccessible;
 }
 
 Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXButton* _pXWindow )

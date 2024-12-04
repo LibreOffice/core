@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <standard/accessiblemenubasecomponent.hxx>
+#include <accessibility/accessiblemenubasecomponent.hxx>
 
 
 

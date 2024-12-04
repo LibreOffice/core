@@ -133,11 +133,6 @@ namespace toolkit
         virtual css::uno::Reference< css::accessibility::XAccessibleContext >
             createAccessibleContext( VCLXWindow* _pXWindow ) = 0;
 
-        /** creates an accessible component for the given menu
-        */
-        virtual css::uno::Reference< css::accessibility::XAccessible >
-            createAccessible( Menu* _pMenu, bool _bIsMenuBar ) = 0;
-
     protected:
         virtual ~IAccessibleFactory() override {}
     };

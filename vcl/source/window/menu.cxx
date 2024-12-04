@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <accessibility/accessiblemenubasecomponent.hxx>
+#include <accessibility/vclxaccessiblemenubar.hxx>
+#include <accessibility/vclxaccessiblepopupmenu.hxx>
+
 #include <comphelper/diagnose_ex.hxx>
 #include <sal/log.hxx>
 
@@ -1317,6 +1321,17 @@ bool Menu::ImplIsSelectable( sal_uInt16 nPos ) const
     return bSelectable;
 }
 
+css::uno::Reference<css::accessibility::XAccessible> Menu::CreateAccessible()
+{
+    rtl::Reference<OAccessibleMenuBaseComponent> xAccessible;
+    if (IsMenuBar())
+        xAccessible = new VCLXAccessibleMenuBar(this);
+    else
+        xAccessible = new VCLXAccessiblePopupMenu(this);
+    xAccessible->SetStates();
+    return xAccessible;
+}
+
 css::uno::Reference<css::accessibility::XAccessible> Menu::GetAccessible()
 {
     // Since PopupMenu are sometimes shared by different instances of MenuBar, the mxAccessible member gets
@@ -1340,11 +1355,7 @@ css::uno::Reference<css::accessibility::XAccessible> Menu::GetAccessible()
         }
     }
     else if ( !mxAccessible.is() )
-    {
-        UnoWrapperBase* pWrapper = UnoWrapperBase::GetUnoWrapper();
-        if ( pWrapper )
-            mxAccessible = pWrapper->CreateAccessible(this, IsMenuBar());
-    }
+        mxAccessible = CreateAccessible();
 
     return mxAccessible;
 }

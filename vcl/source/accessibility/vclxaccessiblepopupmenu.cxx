@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <standard/vclxaccessiblepopupmenu.hxx>
+#include <accessibility/vclxaccessiblepopupmenu.hxx>
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <comphelper/accessiblecontexthelper.hxx>

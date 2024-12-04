@@ -72,9 +72,6 @@ $(eval $(call gb_Library_add_exception_objects,acc,\
     accessibility/source/helper/acc_factory \
     accessibility/source/helper/accresmgr \
     accessibility/source/helper/IComboListBoxHelper \
-    accessibility/source/standard/accessiblemenubasecomponent \
-    accessibility/source/standard/accessiblemenucomponent \
-    accessibility/source/standard/accessiblemenuitemcomponent \
     accessibility/source/standard/floatingwindowaccessible \
     accessibility/source/standard/svtaccessiblenumericfield \
     accessibility/source/standard/vclxaccessiblebox \
@@ -91,11 +88,6 @@ $(eval $(call gb_Library_add_exception_objects,acc,\
     accessibility/source/standard/vclxaccessiblelist \
     accessibility/source/standard/vclxaccessiblelistbox \
     accessibility/source/standard/vclxaccessiblelistitem \
-    accessibility/source/standard/vclxaccessiblemenu \
-    accessibility/source/standard/vclxaccessiblemenubar \
-    accessibility/source/standard/vclxaccessiblemenuitem \
-    accessibility/source/standard/vclxaccessiblemenuseparator \
-    accessibility/source/standard/vclxaccessiblepopupmenu \
     accessibility/source/standard/vclxaccessibleradiobutton \
     accessibility/source/standard/vclxaccessiblescrollbar \
     accessibility/source/standard/vclxaccessiblestatusbar \
