@@ -375,7 +375,7 @@ JSInstanceBuilder::~JSInstanceBuilder()
         jsdialog::SendFullUpdate(OUString::number(m_nWindowId), "__DIALOG__");
     }
 
-    if (m_sTypeOfJSON == "popup")
+    if (m_sTypeOfJSON == "popup" || m_sTypeOfJSON == "menu")
         sendClosePopup(m_nWindowId);
 
     if (m_aWindowToRelease)
@@ -399,6 +399,7 @@ JSInstanceBuilder::~JSInstanceBuilder()
     }
 
     JSInstanceBuilder::Popups().Forget(OUString::number(m_nWindowId));
+    JSInstanceBuilder::Menus().Forget(OUString::number(m_nWindowId));
 }
 
 const OUString& JSInstanceBuilder::GetTypeOfJSON() const { return m_sTypeOfJSON; }
@@ -1960,19 +1961,21 @@ void JSMenuButton::set_active(bool bActive)
     }
 }
 
-JSMenu::JSMenu(JSDialogSender* /*pSender*/, PopupMenu* pPopupMenu, SalInstanceBuilder* /*pBuilder*/,
+JSMenu::JSMenu(JSDialogSender* pSender, PopupMenu* pPopupMenu, SalInstanceBuilder* /*pBuilder*/,
                bool bTakeOwnership)
     : SalInstanceMenu(pPopupMenu, bTakeOwnership)
+    , m_pPopupMenu(pPopupMenu)
+    , m_pSender(pSender)
 {
 }
 
 OUString JSMenu::popup_at_rect(weld::Widget* /*pParent*/, const tools::Rectangle& /*rRect*/,
                                weld::Placement /*ePlace*/)
 {
-    // TODO: send message
+    // Do not block with SalInstanceMenu::popup_at_rect(pParent, rRect, ePlace);
+    m_pSender->sendMenu(m_pPopupMenu);
 
-    // first only send menu and cancel menu
-    // no return SalInstanceMenu::popup_at_rect(pParent, rRect, ePlace);
+    // Don't return any action - simulate canceled menu
     return "";
 }
 

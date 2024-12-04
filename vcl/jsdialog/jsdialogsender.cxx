@@ -45,7 +45,8 @@ void JSDialogNotifyIdle::send(const OString& sMsg)
     }
 }
 
-void JSDialogNotifyIdle::sendMessage(jsdialog::MessageType eType, VclPtr<vcl::Window> pWindow,
+template <class VclType>
+void JSDialogNotifyIdle::sendMessage(jsdialog::MessageType eType, VclPtr<VclType> pTarget,
                                      std::unique_ptr<jsdialog::ActionDataMap> pData)
 {
     std::scoped_lock aGuard(m_aQueueMutex);
@@ -53,10 +54,14 @@ void JSDialogNotifyIdle::sendMessage(jsdialog::MessageType eType, VclPtr<vcl::Wi
     // we want only the latest update of same type
     // TODO: also if we met full update - previous updates are not valid
     auto it = m_aMessageQueue.begin();
+    const VclReferenceBase* pRawTarget = static_cast<VclReferenceBase*>(pTarget);
 
     while (it != m_aMessageQueue.end())
     {
-        if (it->m_eType == eType && it->m_pWindow == pWindow)
+        const VclReferenceBase* pRawWindow = static_cast<VclReferenceBase*>(it->m_pWindow.get());
+        const VclReferenceBase* pRawMenu = it->m_pMenu.get();
+
+        if (it->m_eType == eType && (pRawWindow == pRawTarget || pRawMenu == pRawTarget))
         {
             // actions should be always sent, eg. rendering of custom entries in combobox
             if (eType == jsdialog::MessageType::Action)
@@ -70,7 +75,7 @@ void JSDialogNotifyIdle::sendMessage(jsdialog::MessageType eType, VclPtr<vcl::Wi
             it++;
     }
 
-    JSDialogMessageInfo aMessage(eType, pWindow, std::move(pData));
+    JSDialogMessageInfo aMessage(eType, pTarget, std::move(pData));
     m_aMessageQueue.push_back(aMessage);
 }
 
@@ -205,6 +210,30 @@ OString JSDialogNotifyIdle::generateClosePopupMessage(OUString sWindowId) const
     return aJsonWriter.finishAndGetAsOString();
 }
 
+OString JSDialogNotifyIdle::generateMenuMessage(const VclPtr<PopupMenu>& pMenu) const
+{
+    if (!pMenu || !m_aNotifierWindow)
+        return OString();
+
+    tools::JsonWriter aJsonWriter;
+
+    {
+        auto aChildren = aJsonWriter.startArray("children");
+        {
+            auto aStruct = aJsonWriter.startStruct();
+            pMenu->DumpAsPropertyTree(aJsonWriter);
+        }
+    }
+
+    aJsonWriter.put("jsontype", "dialog");
+    aJsonWriter.put("type", "dropdown");
+    aJsonWriter.put("cancellable", true);
+    aJsonWriter.put("popupParent", m_aNotifierWindow->get_id());
+    aJsonWriter.put("id", m_aNotifierWindow->GetLOKWindowId());
+
+    return aJsonWriter.finishAndGetAsOString();
+}
+
 void JSDialogNotifyIdle::Invoke()
 {
     std::deque<JSDialogMessageInfo> aMessageQueue;
@@ -248,6 +277,12 @@ void JSDialogNotifyIdle::Invoke()
             case jsdialog::MessageType::PopupClose:
                 send(generateClosePopupMessage((*rMessage.m_pData)[WINDOW_ID ""_ostr]));
                 break;
+
+            case jsdialog::MessageType::Menu:
+            {
+                send(generateMenuMessage(rMessage.m_pMenu));
+                break;
+            }
         }
     }
 }
@@ -273,7 +308,7 @@ void JSDialogSender::sendFullUpdate(bool bForce)
     if (bForce)
         mpIdleNotify->forceUpdate();
 
-    mpIdleNotify->sendMessage(jsdialog::MessageType::FullUpdate, nullptr);
+    mpIdleNotify->sendMessage(jsdialog::MessageType::FullUpdate, VclPtr<vcl::Window>(nullptr));
     mpIdleNotify->Start();
 }
 
@@ -283,7 +318,7 @@ void JSDialogSender::sendClose()
         return;
 
     mpIdleNotify->clearQueue();
-    mpIdleNotify->sendMessage(jsdialog::MessageType::Close, nullptr);
+    mpIdleNotify->sendMessage(jsdialog::MessageType::Close, VclPtr<vcl::Window>(nullptr));
     flush();
 }
 
@@ -328,8 +363,18 @@ void JSDialogSender::sendClosePopup(vcl::LOKWindowId nWindowId)
 
     std::unique_ptr<jsdialog::ActionDataMap> pData = std::make_unique<jsdialog::ActionDataMap>();
     (*pData)[WINDOW_ID ""_ostr] = OUString::number(nWindowId);
-    mpIdleNotify->sendMessage(jsdialog::MessageType::PopupClose, nullptr, std::move(pData));
+    mpIdleNotify->sendMessage(jsdialog::MessageType::PopupClose, VclPtr<vcl::Window>(nullptr),
+                              std::move(pData));
     flush();
+}
+
+void JSDialogSender::sendMenu(const VclPtr<PopupMenu>& pMenu)
+{
+    if (!mpIdleNotify)
+        return;
+
+    mpIdleNotify->sendMessage(jsdialog::MessageType::Menu, pMenu);
+    mpIdleNotify->Start();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

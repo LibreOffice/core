@@ -182,7 +182,7 @@ void StyleList::CreateContextMenu()
         m_bBindingUpdate = false;
     }
     mxMenu.reset();
-    mxMenuBuilder = Application::CreateBuilder(nullptr, "sfx/ui/stylecontextmenu.ui");
+    mxMenuBuilder = Application::CreateBuilder(m_pContainer, "sfx/ui/stylecontextmenu.ui");
     mxMenu = mxMenuBuilder->weld_menu("menu");
     mxMenu->set_sensitive("edit", m_bCanEdit);
     mxMenu->set_sensitive("delete", m_bCanDel);
@@ -1472,13 +1472,14 @@ IMPL_LINK_NOARG(StyleList, Clear, void*, void)
         i.reset();
 }
 
+IMPL_LINK(StyleList, OnPopupEnd, const OUString&, sCommand, void) { MenuSelect(sCommand); }
+
 void StyleList::ShowMenu(const CommandEvent& rCEvt)
 {
     CreateContextMenu();
     weld::TreeView* pTreeView = m_xTreeBox->get_visible() ? m_xTreeBox.get() : m_xFmtLb.get();
-    OUString sCommand(
-        mxMenu->popup_at_rect(pTreeView, tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1, 1))));
-    MenuSelect(sCommand);
+    mxMenu->connect_activate(LINK(this, StyleList, OnPopupEnd));
+    mxMenu->popup_at_rect(pTreeView, tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1, 1)));
 }
 
 void StyleList::MenuSelect(const OUString& rIdent)
@@ -1612,6 +1613,9 @@ IMPL_LINK_NOARG(StyleList, MenuSelectAsyncHdl, void*, void)
         HideHdl();
     else if (sLastItemIdent == "show")
         ShowHdl();
+
+    mxMenu.reset();
+    mxMenuBuilder.reset();
 }
 
 // Double-click on a style sheet in the ListBox is applied.
