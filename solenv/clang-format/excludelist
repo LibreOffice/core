@@ -70,7 +70,6 @@ accessibility/inc/standard/vclxaccessibletextcomponent.hxx
 accessibility/inc/standard/vclxaccessibletextfield.hxx
 accessibility/inc/standard/vclxaccessibletoolbox.hxx
 accessibility/inc/standard/vclxaccessibletoolboxitem.hxx
-accessibility/inc/strings.hxx
 accessibility/source/extended/AccessibleBrowseBox.cxx
 accessibility/source/extended/AccessibleBrowseBoxBase.cxx
 accessibility/source/extended/AccessibleBrowseBoxCheckBoxCell.cxx

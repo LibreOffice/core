@@ -31,13 +31,13 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <comphelper/accessiblecontexthelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <vcl/accessibility/strings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/unohelp2.hxx>
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
-#include <strings.hxx>
 #include <sal/log.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
