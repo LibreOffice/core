@@ -1316,14 +1316,6 @@ tools::Polygon  BitmapEx::GetContour( bool bContourEdgeDetect,
     if (!pAcc || !nWidth || !nHeight)
         return tools::Polygon();
 
-    const tools::Long          nStartX1 = aWorkRect.Left() + 1;
-    const tools::Long          nEndX1 = aWorkRect.Right();
-    const tools::Long          nStartX2 = nEndX1 - 1;
-    const tools::Long          nStartY1 = aWorkRect.Top() + 1;
-    const tools::Long          nEndY1 = aWorkRect.Bottom();
-
-    sal_uInt16              nPolyPos = 0;
-
     // tdf#161833 treat semi-transparent pixels as opaque
     // Limiting the contour wrapping polygon to only opaque pixels
     // causes clipping of any shadows or other semi-transparent
@@ -1337,6 +1329,14 @@ tools::Polygon  BitmapEx::GetContour( bool bContourEdgeDetect,
 
     pPoints1.reset(new Point[ nHeight ]);
     pPoints2.reset(new Point[ nHeight ]);
+
+    const tools::Long nStartX1 = aWorkRect.Left() + 1;
+    const tools::Long nEndX1 = aWorkRect.Right();
+    const tools::Long nStartX2 = nEndX1 - 1;
+    const tools::Long nStartY1 = aWorkRect.Top() + 1;
+    const tools::Long nEndY1 = aWorkRect.Bottom();
+
+    sal_uInt16 nPolyPos = 0;
 
     for (tools::Long nY = nStartY1; nY < nEndY1; nY++)
     {
