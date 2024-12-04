@@ -981,7 +981,8 @@ SbModule* createModImpl(weld::Window* pWin, const ScriptDocument& rDocument,
             // the module has existed
             if( rDocument.hasModule( aLibName, aModName ) )
                 return nullptr;
-            rDocument.createModule( aLibName, aModName, bMain, sModuleCode );
+            if (!rDocument.createModule(aLibName, aModName, bMain, sModuleCode))
+                return nullptr;
             BasicManager* pBasMgr = rDocument.getBasicManager();
             StarBASIC* pBasic = pBasMgr? pBasMgr->GetLib( aLibName ) : nullptr;
             if ( pBasic )
