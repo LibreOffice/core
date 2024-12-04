@@ -19,7 +19,7 @@
 
 #include <standard/svtaccessiblenumericfield.hxx>
 #include <comphelper/accessiblecontexthelper.hxx>
-#include <toolkit/awt/vclxwindows.hxx>
+#include <vcl/toolkit/fmtfield.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -50,9 +50,9 @@ css::uno::Any SAL_CALL SVTXAccessibleNumericField::getCurrentValue()
     OExternalLockGuard aGuard(this);
 
     double dValue = 0;
-    SVTXNumericField* pField = static_cast<SVTXNumericField*>(GetVCLXWindow());
+    VclPtr<FormattedField> pField = GetAs<FormattedField>();
     if (pField)
-        dValue = pField->getValue();
+        dValue = pField->GetFormatter().GetValue();
 
     return css::uno::Any(dValue);
 }
@@ -61,13 +61,13 @@ sal_Bool SVTXAccessibleNumericField::setCurrentValue(const css::uno::Any& aNumbe
 {
     OExternalLockGuard aGuard(this);
 
-    SVTXNumericField* pField = static_cast<SVTXNumericField*>(GetVCLXWindow());
+    VclPtr<FormattedField> pField = GetAs<FormattedField>();
     if (!pField)
         return false;
 
     double dValue = 0;
     aNumber >>= dValue;
-    pField->setValue(dValue);
+    pField->GetFormatter().SetValue(dValue);
     return true;
 }
 
@@ -76,9 +76,9 @@ css::uno::Any SAL_CALL SVTXAccessibleNumericField::getMaximumValue()
     OExternalLockGuard aGuard(this);
 
     double dValue = 0;
-    SVTXNumericField* pField = static_cast<SVTXNumericField*>(GetVCLXWindow());
+    VclPtr<FormattedField> pField = GetAs<FormattedField>();
     if (pField)
-        dValue = pField->getMax();
+        dValue = pField->GetFormatter().GetMaxValue();
 
     return css::uno::Any(dValue);
 }
@@ -88,9 +88,9 @@ css::uno::Any SAL_CALL SVTXAccessibleNumericField::getMinimumValue()
     OExternalLockGuard aGuard(this);
 
     double dValue = 0;
-    SVTXNumericField* pField = static_cast<SVTXNumericField*>(GetVCLXWindow());
+    VclPtr<FormattedField> pField = GetAs<FormattedField>();
     if (pField)
-        dValue = pField->getMin();
+        dValue = pField->GetFormatter().GetMinValue();
 
     return css::uno::Any(dValue);
 }
@@ -100,9 +100,9 @@ css::uno::Any SAL_CALL SVTXAccessibleNumericField::getMinimumIncrement()
     OExternalLockGuard aGuard(this);
 
     double dValue = 0;
-    SVTXNumericField* pField = static_cast<SVTXNumericField*>(GetVCLXWindow());
+    VclPtr<FormattedField> pField = GetAs<FormattedField>();
     if (pField)
-        dValue = pField->getSpinSize();
+        dValue = pField->GetFormatter().GetSpinSize();
 
     return css::uno::Any(dValue);
 }
