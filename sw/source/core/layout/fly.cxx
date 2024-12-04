@@ -2530,19 +2530,21 @@ Size SwFlyFrame::ChgSize( const Size& aNewSize )
     // of the fly frame
     Size aAdjustedNewSize( aNewSize );
     {
-        if ( dynamic_cast<SwFlyAtContentFrame*>(this) &&
-             Lower() && dynamic_cast<SwNoTextFrame*>(Lower()) &&
-             static_cast<SwNoTextFrame*>(Lower())->GetNode()->GetOLENode() )
+        if (dynamic_cast<SwFlyAtContentFrame*>(this))
         {
-            SwRect aClipRect;
-            ::CalcClipRect( GetVirtDrawObj(), aClipRect, false );
-            if ( aAdjustedNewSize.Width() > aClipRect.Width() )
+            auto pLower = dynamic_cast<SwNoTextFrame*>(Lower());
+            if ( pLower && pLower->GetNode()->GetOLENode() )
             {
-                aAdjustedNewSize.setWidth( aClipRect.Width() );
-            }
-            if ( aAdjustedNewSize.Height() > aClipRect.Height() )
-            {
-                aAdjustedNewSize.setWidth( aClipRect.Height() );
+                SwRect aClipRect;
+                ::CalcClipRect( GetVirtDrawObj(), aClipRect, false );
+                if ( aAdjustedNewSize.Width() > aClipRect.Width() )
+                {
+                    aAdjustedNewSize.setWidth( aClipRect.Width() );
+                }
+                if ( aAdjustedNewSize.Height() > aClipRect.Height() )
+                {
+                    aAdjustedNewSize.setWidth( aClipRect.Height() );
+                }
             }
         }
     }
