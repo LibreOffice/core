@@ -41,6 +41,7 @@ DeckDescriptor::DeckDescriptor (const DeckDescriptor& rOther)
       mbIsEnabled(rOther.mbIsEnabled),
       mnOrderIndex(rOther.mnOrderIndex),
       mbExperimental(rOther.mbExperimental),
+      mbHiddenInViewerMode(rOther.mbHiddenInViewerMode),
       mpDeck(rOther.mpDeck)
 {
 }
