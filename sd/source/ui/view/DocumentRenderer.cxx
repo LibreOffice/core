@@ -43,7 +43,9 @@
 #include <comphelper/sequence.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <editeng/editstat.hxx>
+#include <editeng/eeitem.hxx>
 #include <editeng/outlobj.hxx>
+#include <editeng/ulspitem.hxx>
 #include <svx/sdtfsitm.hxx>
 #include <svx/sdooitm.hxx>
 #include <svx/svdetc.hxx>
@@ -858,18 +860,10 @@ namespace {
             if (pNotesObj)
             {
                 // new page(s) margins
-                sal_Int32 nLeft = 2000;
-                sal_Int32 nRight = 2000;
-                sal_Int32 nTop = 2250;
-                sal_Int32 nBottom = 2250;
-
-                double nRatioX = aPageSize.Width() / 21000.0;
-                double nRatioY = aPageSize.Height() / 29700.0;
-
-                nLeft *= nRatioX;
-                nRight *= nRatioX;
-                nTop *= nRatioY;
-                nBottom *= nRatioY;
+                sal_Int32 nLeft = aPageSize.Width() * 0.1;
+                sal_Int32 nRight = nLeft;
+                sal_Int32 nTop = aPageSize.Height() * 0.075;
+                sal_Int32 nBottom = nTop;
 
                 Point aNotesPt = pNotesObj->GetRelativePos();
                 Size aNotesSize = pNotesObj->GetLogicRect().GetSize();
@@ -914,6 +908,7 @@ namespace {
                     sal_Int32 nPrevLineLen = 0;
                     sal_Int32 nPrevParaIdx = 0;
                     sal_uInt16 nActualPageNumb = 1;
+                    sal_uInt16 nPrevParaLowerSpace = 0;
                     ::tools::Long nCurrentPosY = aNotesPt.Y();
                     sal_Int32 nParaCount = pOut->GetParagraphCount();
                     std::vector<std::pair<sal_Int32, sal_Int32>> aPageBreaks;
@@ -921,11 +916,27 @@ namespace {
                     for (sal_Int32 i = 0; i < nParaCount && !bExit; ++i)
                     {
                         sal_Int32 nActualLineLen = 0;
-                        sal_uInt32 nLineCount = pOut->GetLineCount(i);
-                        for (sal_uInt32 j = 0; j < nLineCount; ++j)
+                        sal_Int32 nLineCount = pOut->GetLineCount(i);
+
+                        sal_uInt16 nLowerSpace = 0;
+                        sal_uInt16 nUpperSpace = nPrevParaLowerSpace;
+                        const SfxItemSet* pItemSet = &pOut->GetParaAttribs(i);
+                        if(pItemSet->HasItem(EE_PARA_ULSPACE))
+                        {
+                            nLowerSpace = pItemSet->Get(EE_PARA_ULSPACE).GetLower();
+                            nUpperSpace = (i != 0) ? pItemSet->Get(EE_PARA_ULSPACE).GetUpper() : 0;
+                            if (nPrevParaLowerSpace > nUpperSpace)
+                                nUpperSpace = nPrevParaLowerSpace;
+                        }
+
+                        for (sal_Int32 j = 0; j < nLineCount; ++j)
                         {
                             nActualLineLen += pOut->GetLineLen(i, j);
                             sal_Int32 nLineHeight = pOut->GetLineHeight(i, j);
+
+                            if (nUpperSpace != 0 && (i > 0) && (j == 0))
+                                nLineHeight += nUpperSpace;
+
                             sal_Int32 nNextPosY = nCurrentPosY + nLineHeight;
 
                             if (nNextPosY > nNotesPageBottom)
@@ -962,6 +973,10 @@ namespace {
                                         break;
                                     }
                                 }
+
+                                if (nUpperSpace > 0)
+                                    nLineHeight -= nUpperSpace;
+
                                 nNotesPageBottom = aPageSize.Height() - nBottom;
                                 nCurrentPosY = nTop;
                                 nActualPageNumb++;
@@ -971,6 +986,7 @@ namespace {
                             nPrevLineLen = nActualLineLen;
                             nCurrentPosY += nLineHeight;
                         }
+                        nPrevParaLowerSpace = nLowerSpace;
                     }
 
                     if (!aPageBreaks.empty())
@@ -993,13 +1009,6 @@ namespace {
                             aE.start.nIndex = 0;
                             aE.end.nPara = aPageBreaks[0].first;
                             aE.end.nIndex = aPageBreaks[0].second;
-
-                            if (aPageBreaks[0].second != 0) // Multi-line
-                            {
-                                pOut->QuickInsertLineBreak(ESelection(aE.end.nPara, aE.end.nIndex,
-                                                                      aE.end.nPara, aE.end.nIndex));
-                                nTop -= pOut->GetLineHeight(0,0);
-                            }
                             pOut->QuickDelete(aE);
 
                             Paragraph* pFirstPara = pOut->GetParagraph(0);
@@ -2472,10 +2481,8 @@ private:
                 if (pNotesObj && bCutPage)
                 {
                     // default margins
-                    sal_Int32 nTopMargin = 2250, nBottomMargin = 2250;
-                    double nRatioY = aPageSize.Height() / 29700.0;
-                    nTopMargin *= nRatioY;
-                    nBottomMargin *= nRatioY;
+                    sal_Int32 nTopMargin = aPageSize.Height() * 0.075;
+                    sal_Int32 nBottomMargin = nTopMargin;
 
                     Size nNotesObjSize = pNotesObj->GetLogicRect().GetSize();
 
