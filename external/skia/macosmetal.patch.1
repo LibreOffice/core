@@ -70,7 +70,32 @@ diff -ur skia.org/tools/window/mac/GaneshMetalWindowContext_mac.mm skia/tools/wi
  #import <Cocoa/Cocoa.h>
  #import <QuartzCore/CAConstraintLayoutManager.h>
  
-@@ -65,8 +67,7 @@
+@@ -52,7 +54,23 @@
+ 
+     SkASSERT(nil != fMainView);
+ 
+-    fMetalLayer = [CAMetalLayer layer];
++    // Related: tdf#152703 Reuse existing CAMetalLayer to stop flicker
++    // When live resizing a window, replacing the CAMetalLayer with each
++    // resize event repaints the window's background which causes a
++    // noticeable flicker. So reuse any existing CAMetalLayer already
++    // assigned to the native view.
++    BOOL reuseMetalLayer = NO;
++    if (fMainView.wantsLayer)
++    {
++        CALayer *pLayer = fMainView.layer;
++        if (pLayer && [pLayer isKindOfClass:[CAMetalLayer class]])
++        {
++            fMetalLayer = (__bridge CAMetalLayer*)pLayer;
++            reuseMetalLayer = YES;
++        }
++    }
++    if (!reuseMetalLayer)
++        fMetalLayer = [CAMetalLayer layer];
+     fMetalLayer.device = fShared->fDevice.get();
+     fMetalLayer.pixelFormat = MTLPixelFormatBGRA8Unorm;
+ 
+@@ -65,10 +83,10 @@
      fMetalLayer.autoresizingMask = kCALayerHeightSizable | kCALayerWidthSizable;
      fMetalLayer.contentsGravity = kCAGravityTopLeft;
      fMetalLayer.magnificationFilter = kCAFilterNearest;
@@ -78,9 +103,13 @@ diff -ur skia.org/tools/window/mac/GaneshMetalWindowContext_mac.mm skia/tools/wi
 -    fMetalLayer.colorspace = cs.CGColorSpace;
 +    fMetalLayer.colorspace = CGColorSpaceCreateWithName(kCGColorSpaceSRGB);
  
-     fMainView.layer = fMetalLayer;
+-    fMainView.layer = fMetalLayer;
++    if (!reuseMetalLayer)
++        fMainView.layer = fMetalLayer;
      fMainView.wantsLayer = YES;
-@@ -85,6 +86,18 @@
+ 
+     return true;
+@@ -85,6 +103,18 @@
      fMetalLayer.drawableSize = backingSize;
      fMetalLayer.contentsScale = backingScaleFactor;
  
@@ -114,4 +143,3 @@ diff -ur skia.org/tools/window/mac/MacWindowInfo.h skia/tools/window/mac/MacWind
 +SK_API void ResetBackingScaleFactor();
  
  }  // namespace skwindow
-
