@@ -347,6 +347,8 @@ void SwWW8ImplReader::ReadEmbeddedData(SvStream& rStrm, SwDocShell const * pDocS
     if( ::get_flag( nFlags, WW8_HLINK_MARK ) )
     {
         xTextMark.reset(new OUString(read_uInt32_lenPrefixed_uInt16s_ToOUString(rStrm)));
+        if (clipToFirstNull(*xTextMark))
+            SAL_WARN("sw.ww8", "HLINK_MARK with embedded null, truncating to: " << *xTextMark);
     }
 
     if (!xLongName && xShortName.get())
