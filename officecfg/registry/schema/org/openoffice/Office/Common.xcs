@@ -5570,6 +5570,12 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="ViewerAppMode" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Open all files in read-only mode</desc>
+        </info>
+        <value>false</value>
+      </prop>
       <prop oor:name="OfferSafeMode" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Offer Safe Mode to the user.</desc>

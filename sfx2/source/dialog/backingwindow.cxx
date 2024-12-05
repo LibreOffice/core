@@ -431,6 +431,19 @@ void BackingWindow::initializeLocalView()
 
 void BackingWindow::checkInstalledModules()
 {
+    if (officecfg::Office::Common::Misc::ViewerAppMode::get())
+    {
+        mxTemplateButton->set_visible(false);
+        mxCreateLabel->set_visible(false);
+        mxWriterAllButton->set_visible(false);
+        mxCalcAllButton->set_visible(false);
+        mxImpressAllButton->set_visible(false);
+        mxDrawAllButton->set_visible(false);
+        mxMathAllButton->set_visible(false);
+        mxDBAllButton->set_visible(false);
+        return;
+    }
+
     SvtModuleOptions aModuleOpt;
 
     mxWriterAllButton->set_sensitive(aModuleOpt.IsWriterInstalled());
