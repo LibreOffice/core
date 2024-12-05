@@ -130,12 +130,12 @@ SwFormatField::SwFormatField( const SwFormatField& rAttr )
 
 SwFormatField::~SwFormatField()
 {
-    SwFieldType* pType = mpField ? mpField->GetTyp() : nullptr;
+    Broadcast( SwFormatFieldHint( this, SwFormatFieldHintWhich::REMOVED ) );
 
+    SwFieldType* pType = mpField ? mpField->GetTyp() : nullptr;
     if (pType && pType->Which() == SwFieldIds::Database)
         pType = nullptr;  // DB field types destroy themselves
 
-    Broadcast( SwFormatFieldHint( this, SwFormatFieldHintWhich::REMOVED ) );
     mpField.reset();
 
     // some fields need to delete their field type
