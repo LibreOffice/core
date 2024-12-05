@@ -140,6 +140,12 @@
         </info>
         <value>false</value>
       </prop>
+      <prop oor:name="HiddenInViewer" oor:type="xs:boolean">
+        <info>
+          <desc>This flag controls whether the deck is hidden when viewer application mode is enabled.</desc>
+        </info>
+        <value>false</value>
+      </prop>
     </group>
     <group oor:name="Panel">
       <info>

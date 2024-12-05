@@ -39,6 +39,9 @@
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>100</value>
         </prop>
+        <prop oor:name="HiddenInViewer" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
       </node>
 
       <node oor:name="InspectorDeck" oor:op="replace">
@@ -59,6 +62,9 @@
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>600</value>
         </prop>
+        <prop oor:name="HiddenInViewer" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
       </node>
 
       <node oor:name="WriterPageDeck" oor:op="replace">
@@ -78,6 +84,9 @@
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>500</value>
+        </prop>
+        <prop oor:name="HiddenInViewer" oor:type="xs:boolean">
+          <value>true</value>
         </prop>
       </node>
 
@@ -122,6 +131,9 @@
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>900</value>
         </prop>
+        <prop oor:name="HiddenInViewer" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
       </node>
 
       <node oor:name="ShapesDeck" oor:op="replace">
@@ -141,6 +153,9 @@
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>500</value>
+        </prop>
+        <prop oor:name="HiddenInViewer" oor:type="xs:boolean">
+          <value>true</value>
         </prop>
       </node>
 
@@ -165,6 +180,9 @@
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>300</value>
         </prop>
+        <prop oor:name="HiddenInViewer" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
       </node>
 
       <node oor:name="SdMasterPagesDeck" oor:op="replace">
@@ -184,6 +202,9 @@
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>700</value>
+        </prop>
+        <prop oor:name="HiddenInViewer" oor:type="xs:boolean">
+          <value>true</value>
         </prop>
       </node>
 
@@ -205,6 +226,9 @@
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>600</value>
         </prop>
+        <prop oor:name="HiddenInViewer" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
       </node>
 
       <node oor:name="SdSlideTransitionDeck" oor:op="replace">
@@ -224,6 +248,9 @@
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>500</value>
+        </prop>
+        <prop oor:name="HiddenInViewer" oor:type="xs:boolean">
+          <value>true</value>
         </prop>
       </node>
 
@@ -269,6 +296,9 @@
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>200</value>
         </prop>
+        <prop oor:name="HiddenInViewer" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
       </node>
 
       <node oor:name="ScFunctionsDeck" oor:op="replace">
@@ -288,6 +318,9 @@
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>500</value>
+        </prop>
+        <prop oor:name="HiddenInViewer" oor:type="xs:boolean">
+          <value>true</value>
         </prop>
       </node>
 
@@ -313,6 +346,9 @@
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>600</value>
         </prop>
+        <prop oor:name="HiddenInViewer" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
       </node>
 
       <node oor:name="SwDesignDeck" oor:op="replace">
@@ -336,6 +372,9 @@
         <prop oor:name="IsExperimental" oor:type="xs:boolean">
           <value>true</value>
         </prop>
+        <prop oor:name="HiddenInViewer" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
       </node>
 
       <node oor:name="ElementsDeck" oor:op="replace">
@@ -355,6 +394,9 @@
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>300</value>
+        </prop>
+        <prop oor:name="HiddenInViewer" oor:type="xs:boolean">
+          <value>true</value>
         </prop>
       </node>
 

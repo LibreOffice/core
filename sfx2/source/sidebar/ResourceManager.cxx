@@ -130,6 +130,8 @@ std::shared_ptr<DeckDescriptor> ResourceManager::ImplGetDeckDescriptor(std::u16s
 {
     for (auto const& deck : maDecks)
     {
+        if (deck->mbHiddenInViewerMode && officecfg::Office::Common::Misc::ViewerAppMode::get())
+            continue;
         if (deck->mbExperimental && !officecfg::Office::Common::Misc::ExperimentalMode::get())
             continue;
         if (deck->msId == rsDeckId)
@@ -169,6 +171,8 @@ const ResourceManager::DeckContextDescriptorContainer& ResourceManager::GetMatch
     std::multimap<sal_Int32,DeckContextDescriptor> aOrderedIds;
     for (auto const& deck : maDecks)
     {
+        if (deck->mbHiddenInViewerMode && officecfg::Office::Common::Misc::ViewerAppMode::get())
+            continue;
         if (deck->mbExperimental && !officecfg::Office::Common::Misc::ExperimentalMode::get())
             continue;
 
@@ -281,6 +285,7 @@ void ResourceManager::ReadDeckList()
         rDeckDescriptor.msHelpId = "SIDEBAR_" + rDeckDescriptor.msId.toAsciiUpperCase();
         rDeckDescriptor.mnOrderIndex = getInt32(aDeckNode, u"OrderIndex"_ustr);
         rDeckDescriptor.mbExperimental = getBool(aDeckNode, u"IsExperimental"_ustr);
+        rDeckDescriptor.mbHiddenInViewerMode = getBool(aDeckNode, u"HiddenInViewer"_ustr);
 
         rDeckDescriptor.msNodeName = aDeckName;
 
