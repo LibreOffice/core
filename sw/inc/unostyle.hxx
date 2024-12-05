@@ -341,7 +341,9 @@ class SwXTextCellStyle final : public cppu::ImplInheritanceHelper
     SwBoxAutoFormat* m_pBoxAutoFormat;
     /// Stores SwBoxAutoFormat when this is not a physical style.
     std::shared_ptr<SwBoxAutoFormat> m_pBoxAutoFormat_Impl;
-    OUString m_sParentStyle;
+    /// UIName of the table style that contains this cell style
+    OUString m_sTableStyleUIName;
+    /// There are no built-in cell style names - presumably these don't need to be converted.
     OUString m_sName;
     /// If true, then it points to a core object, if false, then this is a created, but not-yet-inserted format.
     bool m_bPhysical;
