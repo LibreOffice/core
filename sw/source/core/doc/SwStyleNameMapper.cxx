@@ -263,7 +263,7 @@ void SwStyleNameMapper::FillProgName(
         rFillName = rName;
         if (nId == USHRT_MAX )
         {
-            if (eFlags == SwGetPoolIdFromName::TxtColl)
+            if (eFlags == SwGetPoolIdFromName::TxtColl || eFlags == SwGetPoolIdFromName::PageDesc)
             {
                 // check if it has a " (user)" suffix, if so remove it
                 lcl_CheckSuffixAndDelete(rFillName);
@@ -305,7 +305,7 @@ void SwStyleNameMapper::FillUIName(
     if ( nId == USHRT_MAX )
     {
         rFillName = aName;
-        if (eFlags != SwGetPoolIdFromName::TxtColl || // FIXME do it for all ids
+        if ((eFlags != SwGetPoolIdFromName::TxtColl && eFlags != SwGetPoolIdFromName::PageDesc) || // FIXME do it for all ids
             GetPoolIdFromUIName(aName, eFlags) == USHRT_MAX)
         {
             // aName isn't in our Prog name table...check if it has a " (user)" suffix, if so remove it
