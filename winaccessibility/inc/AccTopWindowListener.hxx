@@ -24,6 +24,7 @@
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 
 #include <cppuhelper/implbase.hxx>
+#include <vcl/window.hxx>
 
 #include "AccObjectWinManager.hxx"
 
@@ -58,7 +59,7 @@ public:
     void AddAllListeners(css::accessibility::XAccessible* pAccessible,
                          css::accessibility::XAccessible* pParentXAcc, HWND pWND);
     //for On-Demand load.
-    void HandleWindowOpened(css::accessibility::XAccessible* pAccessible);
+    void HandleWindowOpened(vcl::Window* pWindow);
 
     sal_Int64 GetMSComPtr(sal_Int64 hWnd, sal_Int64 lParam, sal_Int64 wParam);
 };

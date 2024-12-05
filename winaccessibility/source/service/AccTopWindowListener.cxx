@@ -36,40 +36,38 @@ using namespace com::sun::star::uno;
 /**
  *  For the new opened window, generate all the UNO accessible's object, COM object and add
  *  accessible listener to monitor all these objects.
- *  @param pAccessible      the accessible of the new opened window
+ *  @param pWindow      the new opened window
  */
-void AccTopWindowListener::HandleWindowOpened( css::accessibility::XAccessible* pAccessible )
+void AccTopWindowListener::HandleWindowOpened(vcl::Window* pWindow)
 {
-    //get SystemData from window
-    VclPtr<vcl::Window> window;
-    if (auto pvclwindow = dynamic_cast<VCLXWindow*>(pAccessible))
-        window = pvclwindow->GetWindow();
-    else if (auto pvclxcomponent = dynamic_cast<VCLXAccessibleComponent*>(pAccessible))
-        window = pvclxcomponent->GetWindow();
-    assert(window);
+    assert(pWindow);
 
-    const SystemEnvData* pSystemData = window->GetSystemData();
+    const SystemEnvData* pSystemData = pWindow->GetSystemData();
     if (!pSystemData)
         return;
 
-    Reference<css::accessibility::XAccessibleContext> xContext = pAccessible->getAccessibleContext();
+    Reference<css::accessibility::XAccessible> xAccessible = pWindow->GetAccessible();
+    if (!xAccessible.is())
+        return;
+
+    Reference<css::accessibility::XAccessibleContext> xContext = xAccessible->getAccessibleContext();
     if(!xContext.is())
         return;
 
     // add all listeners
-    m_aAccObjectManager.SaveTopWindowHandle(pSystemData->hWnd, pAccessible);
+    m_aAccObjectManager.SaveTopWindowHandle(pSystemData->hWnd, xAccessible.get());
 
-    AddAllListeners(pAccessible, nullptr, pSystemData->hWnd);
+    AddAllListeners(xAccessible.get(), nullptr, pSystemData->hWnd);
 
-    if( window->GetStyle() & WB_MOVEABLE )
-        m_aAccObjectManager.IncreaseState( pAccessible, static_cast<unsigned short>(-1) /* U_MOVEBLE */ );
+    if (pWindow->GetStyle() & WB_MOVEABLE)
+        m_aAccObjectManager.IncreaseState(xAccessible.get(), static_cast<unsigned short>(-1) /* U_MOVEBLE */ );
 
     short role = xContext->getAccessibleRole();
 
     if (role == css::accessibility::AccessibleRole::POPUP_MENU ||
             role == css::accessibility::AccessibleRole::MENU )
     {
-        m_aAccObjectManager.NotifyAccEvent(pAccessible, UnoMSAAEvent::MENUPOPUPSTART);
+        m_aAccObjectManager.NotifyAccEvent(xAccessible.get(), UnoMSAAEvent::MENUPOPUPSTART);
     }
 
     if (role == css::accessibility::AccessibleRole::FRAME ||
@@ -77,7 +75,7 @@ void AccTopWindowListener::HandleWindowOpened( css::accessibility::XAccessible* 
             role == css::accessibility::AccessibleRole::WINDOW ||
             role == css::accessibility::AccessibleRole::ALERT)
     {
-        m_aAccObjectManager.NotifyAccEvent(pAccessible, UnoMSAAEvent::SHOW);
+        m_aAccObjectManager.NotifyAccEvent(xAccessible.get(), UnoMSAAEvent::SHOW);
     }
 }
 
@@ -100,14 +98,15 @@ void AccTopWindowListener::windowOpened( const css::lang::EventObject& e )
     if ( !e.Source.is())
         return;
 
-    Reference< css::accessibility::XAccessible > xAccessible ( e.Source, UNO_QUERY );
-    css::accessibility::XAccessible* pAccessible = xAccessible.get();
-    if ( !pAccessible )
-        return;
-
     SolarMutexGuard g;
 
-    HandleWindowOpened( pAccessible );
+    VCLXWindow* pVCLXWindow = dynamic_cast<VCLXWindow*>(e.Source.get());
+    assert(pVCLXWindow && "Window is not a VCLXWindow");
+
+    vcl::Window* pWindow = pVCLXWindow->GetWindow();
+    assert(pWindow);
+
+    HandleWindowOpened(pWindow);
 }
 
 /**
@@ -172,7 +171,13 @@ void AccTopWindowListener::windowClosed( const css::lang::EventObject& e )
     if ( !e.Source.is())
         return;
 
-    Reference< css::accessibility::XAccessible > xAccessible ( e.Source, UNO_QUERY );
+    VCLXWindow* pVCLXWindow = dynamic_cast<VCLXWindow*>(e.Source.get());
+    assert(pVCLXWindow && "Window is not a VCLXWindow");
+
+    vcl::Window* pWindow = pVCLXWindow->GetWindow();
+    assert(pWindow);
+
+    Reference<css::accessibility::XAccessible> xAccessible = pWindow->GetAccessible();
     if (!xAccessible.is())
         return;
 
