@@ -109,7 +109,7 @@ void MSAAServiceImpl::handleWindowOpened(sal_Int64 nAcc)
     if (m_pTopWindowListener.is() && nAcc)
     {
         m_pTopWindowListener->HandleWindowOpened(
-            static_cast<css::accessibility::XAccessible*>(
+            static_cast<vcl::Window*>(
                 reinterpret_cast<void*>(nAcc)));
     }
 }
@@ -142,19 +142,9 @@ Sequence< OUString > MSAAServiceImpl::getSupportedServiceNames()
 static void AccessBridgeHandleExistingWindow(const Reference< XMSAAService>& xAccMgr,
                                              vcl::Window* pWindow)
 {
-    assert(pWindow);
-
-    // We have to rely on the fact that Window::GetAccessible()->getAccessibleContext() returns a valid XAccessibleContext
-    // also for other menus than menubar or toplevel popup window. Otherwise we had to traverse the hierarchy to find the
-    // context object to this menu floater. This makes the call to Window->IsMenuFloatingWindow() obsolete.
-    css::uno::Reference<css::accessibility::XAccessible> xAccessible = pWindow->GetAccessible();
-
     assert(xAccMgr.is());
-    if (xAccessible.is())
-    {
-        xAccMgr->handleWindowOpened(reinterpret_cast<sal_Int64>(xAccessible.get()));
-        SAL_INFO("iacc2", "Decide whether to register existing window with IAccessible2");
-    }
+    assert(pWindow);
+    xAccMgr->handleWindowOpened(reinterpret_cast<sal_Int64>(pWindow));
 }
 
 /*
