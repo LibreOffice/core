@@ -1035,7 +1035,7 @@
             <desc>Specifies whether protected spaces are shown on the screen.</desc>
             <label>Protected Spaces</label>
           </info>
-          <value>false</value>
+          <value>true</value>
         </prop>
         <prop oor:name="Tab" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: Tools - Options - Text document  Contents - [Section] Non-printing Characters -->
