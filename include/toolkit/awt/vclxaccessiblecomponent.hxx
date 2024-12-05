@@ -41,7 +41,7 @@ class AccessibleRelationSetHelper;
 
 
 
-class TOOLKIT_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") VCLXAccessibleComponent
+class TOOLKIT_DLLPUBLIC VCLXAccessibleComponent
         :public cppu::ImplInheritanceHelper<
              comphelper::OAccessibleExtendedComponentHelper, css::lang::XServiceInfo>
 {
