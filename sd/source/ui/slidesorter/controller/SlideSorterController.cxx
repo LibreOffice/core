@@ -382,6 +382,9 @@ bool SlideSorterController::Command (
                 // We do not support zooming with control+mouse wheel.
                 return false;
             }
+            // tdf#119745: ScrollLines gives accurate distance scrolled on touchpad. NotchDelta sign
+            // gives direction. Default is 3 lines at a time, so factor that out.
+            double scrollDistance = -pData->GetScrollLines() * pData->GetNotchDelta() / 3.0;
             // Determine whether to scroll horizontally or vertically.  This
             // depends on the orientation of the scroll bar and the
             // IsHoriz() flag of the event.
@@ -390,13 +393,13 @@ bool SlideSorterController::Command (
             {
                 GetScrollBarManager().Scroll(
                     ScrollBarManager::Orientation_Vertical,
-                    -pData->GetNotchDelta());
+                    scrollDistance);
             }
             else
             {
                 GetScrollBarManager().Scroll(
                     ScrollBarManager::Orientation_Horizontal,
-                    -pData->GetNotchDelta());
+                    scrollDistance);
             }
             mrSlideSorter.GetView().UpdatePageUnderMouse(rEvent.GetMousePosPixel());
 

@@ -155,7 +155,7 @@ public:
     */
     void Scroll(
         const Orientation eOrientation,
-        const sal_Int32 nDistance);
+        const double nDistance);
 
 private:
     SlideSorter& mrSlideSorter;
