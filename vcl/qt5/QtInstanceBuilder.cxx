@@ -81,6 +81,9 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile)
         u"svx/ui/gotopagedialog.ui"_ustr,
         u"svx/ui/safemodedialog.ui"_ustr,
         u"vcl/ui/openlockedquerybox.ui"_ustr,
+        u"vcl/ui/printerdevicepage.ui"_ustr,
+        u"vcl/ui/printerpaperpage.ui"_ustr,
+        u"vcl/ui/printerpropertiesdialog.ui"_ustr,
         u"vcl/ui/printprogressdialog.ui"_ustr,
         u"writerperfect/ui/exportepub.ui"_ustr,
     };
