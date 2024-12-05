@@ -263,10 +263,18 @@ void SwStyleNameMapper::FillProgName(
         rFillName = rName;
         if (nId == USHRT_MAX )
         {
-            // It isn't ...make sure the suffix isn't already " (user)"...if it is,
-            // we need to add another one
-            if (lcl_SuffixIsUser(rFillName))
-                rFillName += " (user)";
+            if (eFlags == SwGetPoolIdFromName::TxtColl)
+            {
+                // check if it has a " (user)" suffix, if so remove it
+                lcl_CheckSuffixAndDelete(rFillName);
+            }
+            else // FIXME don't do this
+            {
+                // It isn't ...make sure the suffix isn't already " (user)"...if it is,
+                // we need to add another one
+                if (lcl_SuffixIsUser(rFillName))
+                    rFillName += " (user)";
+            }
         }
         else
         {
@@ -287,7 +295,7 @@ void SwStyleNameMapper::FillProgName(
 // Get the UI name from the programmatic name in rName and put it into rFillName
 void SwStyleNameMapper::FillUIName(
         const OUString& rName, OUString& rFillName,
-        SwGetPoolIdFromName const eFlags)
+        SwGetPoolIdFromName const eFlags, bool const bBugfix)
 {
     OUString aName = rName;
     if (eFlags == SwGetPoolIdFromName::ChrFmt && rName == "Standard")
@@ -297,8 +305,17 @@ void SwStyleNameMapper::FillUIName(
     if ( nId == USHRT_MAX )
     {
         rFillName = aName;
-        // aName isn't in our Prog name table...check if it has a " (user)" suffix, if so remove it
-        lcl_CheckSuffixAndDelete ( rFillName );
+        if (eFlags != SwGetPoolIdFromName::TxtColl || // FIXME do it for all ids
+            !bBugfix || // TODO why does it change DOCX imports
+            GetPoolIdFromUIName(aName, eFlags) == USHRT_MAX)
+        {
+            // aName isn't in our Prog name table...check if it has a " (user)" suffix, if so remove it
+            lcl_CheckSuffixAndDelete(rFillName);
+        }
+        else
+        {
+            rFillName += " (user)";
+        }
     }
     else
     {

@@ -89,7 +89,7 @@ public:
     // This gets the UI Name from the programmatic name
     static const OUString& GetUIName(const OUString& rName, SwGetPoolIdFromName);
     static         void FillUIName(const OUString& rName, OUString& rFillName,
-                            SwGetPoolIdFromName);
+                            SwGetPoolIdFromName, bool bBugfix = false);
 
     // Get the programmatic Name from the UI name
     static const OUString& GetProgName(const OUString& rName,
