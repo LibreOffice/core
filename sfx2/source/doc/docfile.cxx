@@ -3964,6 +3964,10 @@ void SfxMedium::SaveVersionList_Impl()
 
 bool SfxMedium::IsReadOnly() const
 {
+    // Application-wide read-only mode first
+    if (officecfg::Office::Common::Misc::ViewerAppMode::get())
+        return true;
+
     // a) ReadOnly filter can't produce read/write contents!
     bool bReadOnly = pImpl->m_pFilter && (pImpl->m_pFilter->GetFilterFlags() & SfxFilterFlags::OPENREADONLY);
 

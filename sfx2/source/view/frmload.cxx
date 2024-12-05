@@ -53,6 +53,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <framework/interaction.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <rtl/ref.hxx>
 #include <sal/log.hxx>
 #include <svl/eitem.hxx>
@@ -626,6 +627,10 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
     // check for factory URLs to create a new doc, instead of loading one
     const OUString sURL = aDescriptor.getOrDefault( u"URL"_ustr, OUString() );
     const bool bIsFactoryURL = sURL.startsWith( "private:factory/" );
+
+    if (bIsFactoryURL && officecfg::Office::Common::Misc::ViewerAppMode::get())
+        return false;
+
     std::shared_ptr<const SfxFilter> pEmptyURLFilter;
     bool bInitNewModel = bIsFactoryURL;
     const bool bIsDefault = bIsFactoryURL && !bExternalModel;
