@@ -3870,7 +3870,7 @@ void Window::ApplySettings(vcl::RenderContext& /*rRenderContext*/)
 const SystemEnvData* Window::GetSystemData() const
 {
 
-    return mpWindowImpl->mpFrame ? mpWindowImpl->mpFrame->GetSystemData() : nullptr;
+    return mpWindowImpl->mpFrame ? &mpWindowImpl->mpFrame->GetSystemData() : nullptr;
 }
 
 bool Window::SupportsDoubleBuffering() const

@@ -1672,9 +1672,9 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
 SAL_WNODEPRECATED_DECLARATIONS_POP
 }
 
-const SystemEnvData* AquaSalFrame::GetSystemData() const
+const SystemEnvData& AquaSalFrame::GetSystemData() const
 {
-    return &maSysData;
+    return maSysData;
 }
 
 void AquaSalFrame::Beep()

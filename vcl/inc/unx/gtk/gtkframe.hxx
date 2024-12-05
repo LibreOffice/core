@@ -573,7 +573,7 @@ public:
     virtual void                Beep() override;
 
     // returns system data (most prominent: window handle)
-    virtual const SystemEnvData*    GetSystemData() const override;
+    virtual const SystemEnvData& GetSystemData() const override;
 
     virtual void                ResolveWindowHandle(SystemEnvData& rData) const override;
 

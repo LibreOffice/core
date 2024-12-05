@@ -6385,9 +6385,8 @@ public:
     {
         GtkSalFrame* pFrame = GtkSalFrame::getFromWindow(GTK_WIDGET(m_pWindow));
         assert(pFrame && "nothing should call this impl, yet anyway, if ever, except on result of GetFrameWeld()");
-        const SystemEnvData* pEnvData = pFrame->GetSystemData();
-        assert(pEnvData);
-        return *pEnvData;
+        const SystemEnvData& rEnvData = pFrame->GetSystemData();
+        return rEnvData;
     }
 
     virtual Size get_size() const override

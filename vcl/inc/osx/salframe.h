@@ -145,7 +145,7 @@ public:
     virtual LanguageType        GetInputLanguage() override;
     virtual void                UpdateSettings( AllSettings& rSettings ) override;
     virtual void                Beep() override;
-    virtual const SystemEnvData*    GetSystemData() const override;
+    virtual const SystemEnvData&  GetSystemData() const override;
     virtual SalPointerState     GetPointerState() override;
     virtual KeyIndicatorState   GetIndicatorState() override;
     virtual void                SimulateKeyPress( sal_uInt16 nKeyCode ) override;

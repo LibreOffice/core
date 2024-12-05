@@ -3035,9 +3035,9 @@ void GtkSalFrame::Beep()
     gdk_display_beep( getGdkDisplay() );
 }
 
-const SystemEnvData* GtkSalFrame::GetSystemData() const
+const SystemEnvData& GtkSalFrame::GetSystemData() const
 {
-    return &m_aSystemData;
+    return m_aSystemData;
 }
 
 void GtkSalFrame::ResolveWindowHandle(SystemEnvData& rData) const
