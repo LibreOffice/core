@@ -263,7 +263,7 @@ void SwStyleNameMapper::FillProgName(
         rFillName = rName;
         if (nId == USHRT_MAX )
         {
-            if (eFlags == SwGetPoolIdFromName::TxtColl || eFlags == SwGetPoolIdFromName::PageDesc || eFlags == SwGetPoolIdFromName::ChrFmt)
+            if (eFlags != SwGetPoolIdFromName::TabStyle)
             {
                 // check if it has a " (user)" suffix, if so remove it
                 lcl_CheckSuffixAndDelete(rFillName);
@@ -305,7 +305,8 @@ void SwStyleNameMapper::FillUIName(
     if ( nId == USHRT_MAX )
     {
         rFillName = aName;
-        if ((eFlags != SwGetPoolIdFromName::TxtColl && eFlags != SwGetPoolIdFromName::PageDesc && eFlags != SwGetPoolIdFromName::ChrFmt) || // FIXME do it for all ids
+        // TabStyle: unfortunately ODF documents with UIName table styles exist
+        if (eFlags == SwGetPoolIdFromName::TabStyle || // see testTdf129568ui
             GetPoolIdFromUIName(aName, eFlags) == USHRT_MAX)
         {
             // aName isn't in our Prog name table...check if it has a " (user)" suffix, if so remove it
