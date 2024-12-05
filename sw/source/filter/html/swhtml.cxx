@@ -1889,6 +1889,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
 
     case HtmlTokenId::STRIKE_ON:
     case HtmlTokenId::STRIKETHROUGH_ON:
+    case HtmlTokenId::DELETEDTEXT_ON:
         {
             NewStdAttr( HtmlTokenId::STRIKE_ON, &m_xAttrTab->pStrike,
                         SvxCrossedOutItem(STRIKEOUT_SINGLE, RES_CHRATR_CROSSEDOUT) );
@@ -1974,7 +1975,6 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
     case HtmlTokenId::ACRONYM_ON:
     case HtmlTokenId::ABBREVIATION_ON:
     case HtmlTokenId::INSERTEDTEXT_ON:
-    case HtmlTokenId::DELETEDTEXT_ON:
 
     case HtmlTokenId::TELETYPE_ON:
         NewCharFormat( nToken );

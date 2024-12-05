@@ -246,6 +246,8 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
                     pAttrItemSet->Put( *pItem );
                 if ( rESet.GetItemState( ATTR_FONT_UNDERLINE, false, &pItem) == SfxItemState::SET )
                     pAttrItemSet->Put( *pItem );
+                if ( rESet.GetItemState( ATTR_FONT_CROSSEDOUT, false, &pItem) == SfxItemState::SET )
+                    pAttrItemSet->Put( *pItem );
                 // HTML LATIN/CJK/CTL script type dependent
                 const SfxPoolItem* pFont;
                 if ( rESet.GetItemState( ATTR_FONT, false, &pFont) != SfxItemState::SET )
