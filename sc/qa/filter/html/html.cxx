@@ -13,6 +13,8 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 
+#include <editeng/crossedoutitem.hxx>
+
 #include <comphelper/propertyvalue.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zformat.hxx>
@@ -203,6 +205,30 @@ CPPUNIT_TEST_FIXTURE(Test, testPasteSingleCell)
     // i.e. data-sheets-* on <td> worked, but not on <span>.
     CPPUNIT_ASSERT_EQUAL(u"=SUM(A1:B1)"_ustr, pDoc->GetFormula(/*col=*/2, /*row=*/0, /*tab=*/0));
     CPPUNIT_ASSERT_EQUAL(static_cast<double>(3), pDoc->GetValue(/*col=*/2, /*row=*/0, /*tab=*/0));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf79298_strikeout_variants)
+{
+    createScDoc();
+
+    // Paste different strikeout variants into the first cell
+    ScDocument* pDoc = getScDoc();
+    ScAddress aCellPos(/*nColP=*/0, /*nRowP=*/0, /*nTabP=*/0);
+    ScImportExport aImporter(*pDoc, aCellPos);
+    SvFileStream aFile(createFileURL(u"tdf79298_strikeout_variants.html"), StreamMode::READ);
+    SvMemoryStream aMemory;
+    aMemory.WriteStream(aFile);
+    aMemory.Seek(0);
+    CPPUNIT_ASSERT(aImporter.ImportStream(aMemory, OUString(), SotClipboardFormatId::HTML));
+
+    // Verify HTML strikeout tags (<del>, <s>, and <strike>)
+    for (size_t nCol = 0; nCol < 3; ++nCol)
+    {
+        const ScPatternAttr* pAttr = pDoc->GetPattern(ScAddress(0, nCol, 0));
+        CPPUNIT_ASSERT_MESSAGE("Failed to get cell attribute.", pAttr);
+        const SvxCrossedOutItem& rCrossedOutItem = pAttr->GetItem(ATTR_FONT_CROSSEDOUT);
+        CPPUNIT_ASSERT_EQUAL(FontStrikeout::STRIKEOUT_SINGLE, rCrossedOutItem.GetStrikeout());
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCopyText)

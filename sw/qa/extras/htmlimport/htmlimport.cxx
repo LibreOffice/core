@@ -11,6 +11,7 @@
 
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
+#include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
@@ -374,6 +375,24 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testImageSize)
     // header when the HTML markup declared no size.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(aExpected.getWidth()), aSize.Width);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(aExpected.getHeight()), aSize.Height);
+}
+
+CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf79298StrikeoutVariants)
+{
+    createSwWebDoc("tdf79298-strikeout-variants.html");
+
+    // Without the accompanying fix in place, this tests would have failed with:
+    // - Expected: 1 (FontStrikeout::SINGLE)
+    // - Actual  : 0 (FontStrikeout::NONE)
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Strikeout for <del> missing", sal_Int16(awt::FontStrikeout::SINGLE),
+        getProperty<sal_Int16>(getRun(getParagraph(1), 1), u"CharStrikeout"_ustr));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Strikeout for <s> missing", sal_Int16(awt::FontStrikeout::SINGLE),
+        getProperty<sal_Int16>(getRun(getParagraph(2), 1), u"CharStrikeout"_ustr));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Strikeout for <strike> missing", sal_Int16(awt::FontStrikeout::SINGLE),
+        getProperty<sal_Int16>(getRun(getParagraph(3), 1), u"CharStrikeout"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf142781)

@@ -26,6 +26,7 @@
 #include <scitems.hxx>
 
 #include <editeng/colritem.hxx>
+#include <editeng/crossedoutitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/fhgtitem.hxx>
@@ -1792,6 +1793,14 @@ void ScHTMLLayoutParser::ProcToken( HtmlImportInfo* pInfo )
                 mxActEntry->aItemSet.Put( SvxPostureItem( ITALIC_NORMAL,
                     ATTR_FONT_POSTURE ) );
             }
+        }
+        break;
+        case HtmlTokenId::STRIKE_ON:
+        case HtmlTokenId::STRIKETHROUGH_ON:
+        case HtmlTokenId::DELETEDTEXT_ON:
+        {
+            if (IsAtBeginningOfText(pInfo))
+                mxActEntry->aItemSet.Put(SvxCrossedOutItem(STRIKEOUT_SINGLE, ATTR_FONT_CROSSEDOUT));
         }
         break;
         case HtmlTokenId::UNDERLINE_ON :
