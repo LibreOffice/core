@@ -212,7 +212,9 @@ void SettingsTable::lcl_attribute(Id nName, Value & val)
         m_pImpl->m_aDocVars.back().first = sStringValue;
         break;
     case NS_ooxml::LN_CT_DocVar_val:
-        m_pImpl->m_aDocVars.back().second = sStringValue;
+        m_pImpl->m_aDocVars.back().second =
+            sStringValue.replaceAll("_x000d__x000a_", "\n")
+            .replaceAll("_x000d_", "\n");
         break;
     case NS_ooxml::LN_CT_CompatSetting_name:
         m_pImpl->m_aCurrentCompatSettingName = sStringValue;
