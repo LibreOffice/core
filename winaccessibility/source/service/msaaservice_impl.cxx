@@ -144,56 +144,10 @@ static void AccessBridgeHandleExistingWindow(const Reference< XMSAAService>& xAc
 {
     assert(pWindow);
 
-    css::uno::Reference<css::accessibility::XAccessible> xAccessible;
-
-    SAL_INFO("iacc2", "Decide whether to register existing window with IAccessible2");
-
-    // Test for combo box - drop down floating windows first
-    vcl::Window* pParentWindow = pWindow->GetParent();
-
-    if (pParentWindow)
-    {
-        try
-        {
-            // The parent window of a combo box floating window should have the role COMBO_BOX
-            css::uno::Reference<css::accessibility::XAccessible> xParentAccessible(pParentWindow->GetAccessible());
-            if (xParentAccessible.is())
-            {
-                css::uno::Reference<css::accessibility::XAccessibleContext> xParentAC(xParentAccessible->getAccessibleContext());
-                if (xParentAC.is()
-                    && (css::accessibility::AccessibleRole::COMBO_BOX
-                        == xParentAC->getAccessibleRole()))
-                {
-                    // O.k. - this is a combo box floating window corresponding to the child of role LIST of the parent.
-                    // Let's not rely on a specific child order, just search for the child with the role LIST
-                    sal_Int64 nCount = xParentAC->getAccessibleChildCount();
-                    for (sal_Int64 n = 0; (n < nCount) && !xAccessible.is(); n++)
-                    {
-                        css::uno::Reference<css::accessibility::XAccessible> xChild = xParentAC->getAccessibleChild(n);
-                        if (xChild.is())
-                        {
-                            css::uno::Reference<css::accessibility::XAccessibleContext> xChildAC = xChild->getAccessibleContext();
-                            if (xChildAC.is() && (css::accessibility::AccessibleRole::LIST == xChildAC->getAccessibleRole()))
-                            {
-                                xAccessible = xChild;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        catch (css::uno::RuntimeException const&)
-        {
-            // Ignore show events that throw DisposedExceptions in getAccessibleContext()
-            return;
-        }
-    }
-
     // We have to rely on the fact that Window::GetAccessible()->getAccessibleContext() returns a valid XAccessibleContext
     // also for other menus than menubar or toplevel popup window. Otherwise we had to traverse the hierarchy to find the
     // context object to this menu floater. This makes the call to Window->IsMenuFloatingWindow() obsolete.
-    if (!xAccessible.is())
-        xAccessible = pWindow->GetAccessible();
+    css::uno::Reference<css::accessibility::XAccessible> xAccessible = pWindow->GetAccessible();
 
     assert(xAccMgr.is());
     if (xAccessible.is())
