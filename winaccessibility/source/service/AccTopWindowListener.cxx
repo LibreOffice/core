@@ -47,45 +47,37 @@ void AccTopWindowListener::HandleWindowOpened( css::accessibility::XAccessible* 
     else if (auto pvclxcomponent = dynamic_cast<VCLXAccessibleComponent*>(pAccessible))
         window = pvclxcomponent->GetWindow();
     assert(window);
-    // The SalFrame of window may be destructed at this time
-    const SystemEnvData* systemdata = nullptr;
-    try
-    {
-        systemdata = window->GetSystemData();
-    }
-    catch(...)
-    {
-        systemdata = nullptr;
-    }
+
+    const SystemEnvData* pSystemData = window->GetSystemData();
+    if (!pSystemData)
+        return;
+
     Reference<css::accessibility::XAccessibleContext> xContext = pAccessible->getAccessibleContext();
     if(!xContext.is())
         return;
 
     // add all listeners
-    if (systemdata != nullptr)
+    m_aAccObjectManager.SaveTopWindowHandle(pSystemData->hWnd, pAccessible);
+
+    AddAllListeners(pAccessible, nullptr, pSystemData->hWnd);
+
+    if( window->GetStyle() & WB_MOVEABLE )
+        m_aAccObjectManager.IncreaseState( pAccessible, static_cast<unsigned short>(-1) /* U_MOVEBLE */ );
+
+    short role = xContext->getAccessibleRole();
+
+    if (role == css::accessibility::AccessibleRole::POPUP_MENU ||
+            role == css::accessibility::AccessibleRole::MENU )
     {
-        m_aAccObjectManager.SaveTopWindowHandle(systemdata->hWnd, pAccessible);
+        m_aAccObjectManager.NotifyAccEvent(pAccessible, UnoMSAAEvent::MENUPOPUPSTART);
+    }
 
-        AddAllListeners(pAccessible,nullptr,systemdata->hWnd);
-
-        if( window->GetStyle() & WB_MOVEABLE )
-            m_aAccObjectManager.IncreaseState( pAccessible, static_cast<unsigned short>(-1) /* U_MOVEBLE */ );
-
-        short role = xContext->getAccessibleRole();
-
-        if (role == css::accessibility::AccessibleRole::POPUP_MENU ||
-                role == css::accessibility::AccessibleRole::MENU )
-        {
-            m_aAccObjectManager.NotifyAccEvent(pAccessible, UnoMSAAEvent::MENUPOPUPSTART);
-        }
-
-        if (role == css::accessibility::AccessibleRole::FRAME ||
-                role == css::accessibility::AccessibleRole::DIALOG ||
-                role == css::accessibility::AccessibleRole::WINDOW ||
-                role == css::accessibility::AccessibleRole::ALERT)
-        {
-            m_aAccObjectManager.NotifyAccEvent(pAccessible, UnoMSAAEvent::SHOW);
-        }
+    if (role == css::accessibility::AccessibleRole::FRAME ||
+            role == css::accessibility::AccessibleRole::DIALOG ||
+            role == css::accessibility::AccessibleRole::WINDOW ||
+            role == css::accessibility::AccessibleRole::ALERT)
+    {
+        m_aAccObjectManager.NotifyAccEvent(pAccessible, UnoMSAAEvent::SHOW);
     }
 }
 
