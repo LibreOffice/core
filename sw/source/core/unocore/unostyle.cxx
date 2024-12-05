@@ -898,7 +898,7 @@ uno::Any XStyleFamily::getByIndex(sal_Int32 nIndex)
     OUString sStyleName;
     try
     {
-        SwStyleNameMapper::FillUIName(m_rEntry.translateIndex(nIndex), sStyleName);
+        SwStyleNameMapper::FillProgName(m_rEntry.translateIndex(nIndex), sStyleName);
     } catch(...) {}
     if (sStyleName.isEmpty())
         GetCountOrName(&sStyleName, nIndex);
@@ -910,10 +910,10 @@ uno::Any XStyleFamily::getByIndex(sal_Int32 nIndex)
 uno::Any XStyleFamily::getByName(const OUString& rName)
 {
     SolarMutexGuard aGuard;
-    OUString sStyleName;
-    SwStyleNameMapper::FillUIName(rName, sStyleName, m_rEntry.poolId());
     if(!m_pBasePool)
         throw uno::RuntimeException();
+    OUString sStyleName;
+    SwStyleNameMapper::FillUIName(rName, sStyleName, m_rEntry.poolId());
     SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName, m_rEntry.family());
     if(!pBase)
         throw container::NoSuchElementException(rName);
@@ -1355,7 +1355,9 @@ OUString SwXStyle::getParentStyle()
     {
         if(!m_bIsDescriptor)
             throw uno::RuntimeException();
-        return m_sParentStyleName;
+        OUString ret;
+        SwStyleNameMapper::FillProgName(m_sParentStyleName, ret, lcl_GetSwEnumFromSfxEnum(m_rEntry.family()));
+        return ret;
     }
     SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName, m_rEntry.family());
     OUString aString;
@@ -1369,7 +1371,7 @@ void SwXStyle::setParentStyle(const OUString& rParentStyle)
 {
     SolarMutexGuard aGuard;
     OUString sParentStyle;
-    SwStyleNameMapper::FillUIName(rParentStyle, sParentStyle, lcl_GetSwEnumFromSfxEnum ( m_rEntry.family()) );
+    SwStyleNameMapper::FillUIName(rParentStyle, sParentStyle, lcl_GetSwEnumFromSfxEnum(m_rEntry.family()));
     if(!m_pBasePool)
     {
         if(!m_bIsDescriptor)
@@ -1377,7 +1379,7 @@ void SwXStyle::setParentStyle(const OUString& rParentStyle)
         m_sParentStyleName = sParentStyle;
         try
         {
-            const auto aAny = m_xStyleFamily->getByName(sParentStyle);
+            const auto aAny = m_xStyleFamily->getByName(rParentStyle);
             m_xStyleData = aAny.get<decltype(m_xStyleData)>();
         }
         catch(...)
