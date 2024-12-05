@@ -292,7 +292,12 @@ bool SvxTableController::onMouseButtonDown(const MouseEvent& rMEvt, vcl::Window*
     }
 
     if( rMEvt.IsRight() && eHit != TableHitKind::NONE )
+    {
+        OutlinerView* pOLV = mrView.GetTextEditOutlinerView();
+        if( pOLV )
+            pOLV->MouseButtonDown(rMEvt);
         return true; // right click will become context menu
+    }
 
     // for cell selection with the mouse remember our first hit
     if( mbLeftButtonDown )
