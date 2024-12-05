@@ -613,7 +613,12 @@ int QtInstanceTreeView::get_sort_column() const
 
 void QtInstanceTreeView::set_sort_column(int) { assert(false && "Not implemented yet"); }
 
-void QtInstanceTreeView::clear() { assert(false && "Not implemented yet"); }
+void QtInstanceTreeView::clear()
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] { m_pModel->clear(); });
+}
 
 int QtInstanceTreeView::get_height_rows(int) const
 {
