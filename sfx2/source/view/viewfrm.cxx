@@ -1263,6 +1263,9 @@ const SvBorder& SfxViewFrame::GetBorderPixelImpl() const
 
 void SfxViewFrame::AppendReadOnlyInfobar()
 {
+    if (officecfg::Office::Common::Misc::ViewerAppMode::get())
+        return;
+
     bool bSignPDF = m_xObjSh->IsSignPDF();
     bool bSignWithCert = false;
     if (bSignPDF)
@@ -1341,6 +1344,9 @@ void SfxViewFrame::HandleSecurityInfobar(const OUString& sSecondaryMessage)
 
 void SfxViewFrame::AppendContainsMacrosInfobar()
 {
+    if (officecfg::Office::Common::Misc::ViewerAppMode::get())
+        return;
+
     SfxObjectShell_Impl* pObjImpl = m_xObjSh->Get_Impl();
 
     // what's the difference between pObjImpl->documentStorageHasMacros() and pObjImpl->aMacroMode.hasMacroLibrary() ?

@@ -2019,7 +2019,8 @@ bool SfxObjectShell::isEditDocLocked() const
     Reference<XModel3> xModel = GetModel();
     if (!xModel.is())
         return false;
-    if (!officecfg::Office::Common::Misc::AllowEditReadonlyDocs::get())
+    if (officecfg::Office::Common::Misc::ViewerAppMode::get()
+        || !officecfg::Office::Common::Misc::AllowEditReadonlyDocs::get())
         return true;
     return comphelper::NamedValueCollection::getOrDefault(xModel->getArgs2( { "LockEditDoc" } ), u"LockEditDoc", false);
 }
