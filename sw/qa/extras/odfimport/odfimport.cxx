@@ -293,7 +293,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf41542_borderlessPadding)
 CPPUNIT_TEST_FIXTURE(Test, testPageStyleLayoutDefault)
 {
     createSwDoc("hello.odt");
-    uno::Reference<beans::XPropertySet> xPropertySet(getStyles(u"PageStyles"_ustr)->getByName(u"Default Page Style"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
     // This was style::PageStyleLayout_MIRRORED.
     CPPUNIT_ASSERT_EQUAL(style::PageStyleLayout_ALL, getProperty<style::PageStyleLayout>(xPropertySet, u"PageStyleLayout"_ustr));
 }
@@ -504,7 +504,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf74524)
 CPPUNIT_TEST_FIXTURE(Test, testPageStyleLayoutRight)
 {
     createSwDoc("hello.odt");
-    uno::Reference<beans::XPropertySet> xPropertySet(getStyles(u"PageStyles"_ustr)->getByName(u"Default Page Style"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
     // This caused a crash.
     xPropertySet->setPropertyValue(u"PageStyleLayout"_ustr, uno::Any(style::PageStyleLayout_RIGHT));
 }
@@ -562,7 +562,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo79269_header)
 CPPUNIT_TEST_FIXTURE(Test, testPageBackground)
 {
     createSwDoc("PageBackground.odt");
-    uno::Reference<beans::XPropertySet> xPropertySet(getStyles(u"PageStyles"_ustr)->getByName(u"Default Page Style"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
     // The background image was lost
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP, getProperty<drawing::FillStyle>(xPropertySet, u"FillStyle"_ustr));
     CPPUNIT_ASSERT_EQUAL(u"Sky"_ustr, getProperty<OUString>(xPropertySet, u"FillBitmapName"_ustr));

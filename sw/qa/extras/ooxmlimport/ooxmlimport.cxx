@@ -1727,12 +1727,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf87533_bidi)
     // "w:bidi" (specified inside Default paragraph properties) should not be ignored
     static constexpr OUString writingMode = u"WritingMode"_ustr; //getPropertyName(PROP_WRITING_MODE);
 
-    // check: "Default Style" master-style has RTL
-    {
-        const uno::Reference<beans::XPropertySet> xPropertySet(getStyles(u"PageStyles"_ustr)->getByName(u"Default Page Style"_ustr), uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(text::WritingMode2::RL_TB), getProperty<sal_Int32>(xPropertySet, writingMode));
-    }
-
     // check: "Standard" master-style has RTL
     {
         const uno::Reference<beans::XPropertySet> xPropertySet(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);

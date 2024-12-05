@@ -334,7 +334,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf138302_restartNumbering)
 DECLARE_WW8EXPORT_TEST(testTdf122429_header, "tdf122429_header.doc")
 {
     uno::Reference<container::XNameAccess> pageStyles = getStyles(u"PageStyles"_ustr);
-    uno::Reference<style::XStyle> pageStyle(pageStyles->getByName(u"Default Page Style"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> pageStyle(pageStyles->getByName(u"Standard"_ustr), uno::UNO_QUERY);
     bool headerIsOn = getProperty<bool>(pageStyle, u"HeaderIsOn"_ustr);
     CPPUNIT_ASSERT(headerIsOn);
 }
@@ -344,7 +344,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf122460_header)
     loadAndReload("tdf122460_header.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<container::XNameAccess> pageStyles = getStyles(u"PageStyles"_ustr);
-    uno::Reference<style::XStyle> pageStyle(pageStyles->getByName(u"Default Page Style"_ustr), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> pageStyle(pageStyles->getByName(u"Standard"_ustr), uno::UNO_QUERY);
     bool headerIsOn = getProperty<bool>(pageStyle, u"HeaderIsOn"_ustr);
     CPPUNIT_ASSERT(headerIsOn);
 }

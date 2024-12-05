@@ -88,6 +88,7 @@
 #include <rdfhelper.hxx>
 #include <sfx2/watermarkitem.hxx>
 
+#include <SwStyleNameMapper.hxx>
 #include <unoparagraph.hxx>
 #include <strings.hrc>
 #include <undobj.hxx>
@@ -131,7 +132,11 @@ std::vector<OUString> lcl_getUsedPageStyles(SwViewShell const * pShell)
     {
         SwPageFrame* pPage = static_cast<SwPageFrame*>(pFrame);
         if (const SwPageDesc *pDesc = pPage->FindPageDesc())
-            aReturn.push_back(pDesc->GetName());
+        {
+            OUString sStyleName;
+            SwStyleNameMapper::FillUIName(pDesc->GetName(), sStyleName, SwGetPoolIdFromName::PageDesc);
+            aReturn.push_back(sStyleName);
+        }
     }
 
     return aReturn;
