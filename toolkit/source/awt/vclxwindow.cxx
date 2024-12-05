@@ -2418,8 +2418,7 @@ css::uno::Reference< css::accessibility::XAccessibleContext > VCLXWindow::getAcc
         mpImpl->mxAccessibleContext = CreateAccessibleContext();
 
         // add as event listener to this component
-        // in case somebody disposes it, we do not want to have a (though weak) reference to a dead
-        // object
+        // in case somebody disposes it, we do not want to have a reference to a dead object
         uno::Reference< lang::XComponent > xComp( mpImpl->mxAccessibleContext, uno::UNO_QUERY );
         if ( xComp.is() )
             xComp->addEventListener( this );
