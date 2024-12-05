@@ -60,9 +60,9 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
     pObject->mpParent = pParent;
 
     SalDisplay* pSalDisp        = vcl_sal::getSalDisplay(GetGenericUnixSalData());
-    const SystemEnvData* pEnv   = pParent->GetSystemData();
+    const SystemEnvData& rEnv   = pParent->GetSystemData();
     Display* pDisp              = pSalDisp->GetDisplay();
-    ::Window aObjectParent      = static_cast<::Window>(pEnv->GetWindowHandle(pParent));
+    ::Window aObjectParent      = static_cast<::Window>(rEnv.GetWindowHandle(pParent));
     pObject->maParentWin = aObjectParent;
 
     // find out on which screen that window is

@@ -1820,11 +1820,11 @@ int SalDisplay::CaptureMouse( SalFrame *pCapture )
     m_pCapture = nullptr;
 
     // FIXME: get rid of X11SalFrame
-    const SystemEnvData* pEnvData = pCapture->GetSystemData();
+    const SystemEnvData& rEnvData = pCapture->GetSystemData();
     if( !pEnv || !*pEnv )
     {
         int ret = XGrabPointer( GetDisplay(),
-                                static_cast<::Window>(pEnvData->GetWindowHandle(pCapture)),
+                                static_cast<::Window>(rEnvData.GetWindowHandle(pCapture)),
                                 False,
                                 PointerMotionMask| ButtonPressMask|ButtonReleaseMask,
                                 GrabModeAsync,

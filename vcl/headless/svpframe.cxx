@@ -449,9 +449,9 @@ void SvpSalFrame::Beep()
 {
 }
 
-const SystemEnvData* SvpSalFrame::GetSystemData() const
+const SystemEnvData& SvpSalFrame::GetSystemData() const
 {
-    return &m_aSystemChildData;
+    return m_aSystemChildData;
 }
 
 SalFrame::SalPointerState SvpSalFrame::GetPointerState()

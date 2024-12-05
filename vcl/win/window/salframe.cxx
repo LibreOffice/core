@@ -3017,9 +3017,9 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     WinSalGraphics::updateSettingsNative( rSettings );
 }
 
-const SystemEnvData* WinSalFrame::GetSystemData() const
+const SystemEnvData& WinSalFrame::GetSystemData() const
 {
-    return &maSysData;
+    return maSysData;
 }
 
 void WinSalFrame::Beep()

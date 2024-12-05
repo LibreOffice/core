@@ -842,7 +842,7 @@ void X11SalFrame::SetExtendedFrameStyle( SalExtStyle nStyle )
     }
 }
 
-const SystemEnvData* X11SalFrame::GetSystemData() const
+const SystemEnvData& X11SalFrame::GetSystemData() const
 {
     X11SalFrame *pFrame = const_cast<X11SalFrame*>(this);
     pFrame->maSystemChildData.pDisplay      = GetXDisplay();
@@ -854,7 +854,7 @@ const SystemEnvData* X11SalFrame::GetSystemData() const
     pFrame->maSystemChildData.aShellWindow  = pFrame->GetShellWindow();
     pFrame->maSystemChildData.toolkit       = SystemEnvData::Toolkit::Gen;
     pFrame->maSystemChildData.platform      = SystemEnvData::Platform::Xcb;
-    return &maSystemChildData;
+    return maSystemChildData;
 }
 
 SalGraphics *X11SalFrame::AcquireGraphics()
