@@ -1025,8 +1025,7 @@ static bool lcl_SetTextFormatColl( SwNode* pNode, void* pArgs )
                 SwNumRule* pNumRuleAtParagraph(rTNd.GetNumRule());
                 if ( pNumRuleAtParagraph )
                 {
-                    const SwNumRuleItem& rNumRuleItemAtParagraphStyle =
-                        rTNd.GetTextColl()->GetNumRule();
+                    const SwNumRuleItem& rNumRuleItemAtParagraphStyle = pFormat->GetNumRule();
                     if ( rNumRuleItemAtParagraphStyle.GetValue() ==
                             pNumRuleAtParagraph->GetName() )
                     {
