@@ -54,7 +54,7 @@ public:
 
     virtual void                    SetLeaveEnterBackgrounds(const css::uno::Sequence<css::uno::Any>& /*rLeaveArgs*/, const css::uno::Sequence<css::uno::Any>& /*rEnterArgs*/) {}
 
-    virtual const SystemEnvData*    GetSystemData() const = 0;
+    virtual const SystemEnvData&    GetSystemData() const = 0;
 
     virtual Size GetOptimalSize() const { return Size(); }
 

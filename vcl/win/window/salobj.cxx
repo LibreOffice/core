@@ -671,9 +671,9 @@ void WinSalObject::GrabFocus()
         ::SetFocus( mhWndChild );
 }
 
-const SystemEnvData* WinSalObject::GetSystemData() const
+const SystemEnvData& WinSalObject::GetSystemData() const
 {
-    return &maSysData;
+    return maSysData;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

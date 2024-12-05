@@ -63,7 +63,7 @@ public:
     virtual void                    EndSetClipRegion() override;
     virtual void                    SetPosSize( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) override;
     virtual void                    Show( bool bVisible ) override;
-    virtual const SystemEnvData*    GetSystemData() const override;
+    virtual const SystemEnvData&    GetSystemData() const override;
 };
 
 #endif // INCLUDED_VCL_INC_OSX_SALOBJ_H

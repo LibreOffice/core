@@ -284,9 +284,9 @@ void AquaSalObject::Show( bool bVisible )
     [mpClipView setHidden: (bVisible ? NO : YES)];
 }
 
-const SystemEnvData* AquaSalObject::GetSystemData() const
+const SystemEnvData& AquaSalObject::GetSystemData() const
 {
-    return &maSysData;
+    return maSysData;
 }
 
 namespace {

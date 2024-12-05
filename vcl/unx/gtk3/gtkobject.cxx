@@ -239,9 +239,9 @@ Size GtkSalObjectBase::GetOptimalSize() const
     return Size();
 }
 
-const SystemEnvData* GtkSalObjectBase::GetSystemData() const
+const SystemEnvData& GtkSalObjectBase::GetSystemData() const
 {
-    return &m_aSystemData;
+    return m_aSystemData;
 }
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
