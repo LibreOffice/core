@@ -189,7 +189,7 @@ private:
 
 private Q_SLOTS:
     void handleActivated();
-    void handleCurrentChanged();
+    void handleSelectionChanged();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

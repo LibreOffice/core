@@ -28,8 +28,8 @@ QtInstanceTreeView::QtInstanceTreeView(QTreeView* pTreeView)
     assert(m_pSelectionModel);
 
     connect(m_pTreeView, &QTreeView::activated, this, &QtInstanceTreeView::handleActivated);
-    connect(m_pSelectionModel, &QItemSelectionModel::currentChanged, this,
-            &QtInstanceTreeView::handleCurrentChanged);
+    connect(m_pSelectionModel, &QItemSelectionModel::selectionChanged, this,
+            &QtInstanceTreeView::handleSelectionChanged);
 }
 
 void QtInstanceTreeView::insert(const weld::TreeIter* pParent, int pos, const OUString* pStr,
@@ -737,7 +737,7 @@ void QtInstanceTreeView::handleActivated()
     signal_row_activated();
 }
 
-void QtInstanceTreeView::handleCurrentChanged()
+void QtInstanceTreeView::handleSelectionChanged()
 {
     SolarMutexGuard g;
     signal_changed();
