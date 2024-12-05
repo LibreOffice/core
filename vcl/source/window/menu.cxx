@@ -24,6 +24,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <sal/log.hxx>
 
+#include <comphelper/types.hxx>
 #include <comphelper/lok.hxx>
 #include <vcl/dialoghelper.hxx>
 #include <vcl/svapp.hxx>
@@ -199,12 +200,7 @@ void Menu::dispose()
     }
 
     // dispose accessible components
-    if ( mxAccessible.is() )
-    {
-        css::uno::Reference< css::lang::XComponent> xComponent( mxAccessible, css::uno::UNO_QUERY );
-        if ( xComponent.is() )
-            xComponent->dispose();
-    }
+    comphelper::disposeComponent(mxAccessible);
 
     if ( nEventId )
         Application::RemoveUserEvent( nEventId );
