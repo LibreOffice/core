@@ -125,6 +125,11 @@ void MenuFloatingWindow::dispose()
     pMenu.clear();
     pActivePopup.clear();
     xSaveFocusId.clear();
+
+    // unset accessible taken from the PopupMenu (s. CreateAccessible),
+    // it is owned and therefore disposed by the PopupMenu
+    SetAccessible(nullptr);
+
     FloatingWindow::dispose();
 }
 

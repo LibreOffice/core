@@ -189,15 +189,7 @@ void Menu::dispose()
 {
     ImplCallEventListeners( VclEventId::ObjectDying, ITEMPOS_INVALID );
 
-    // at the window free the reference to the accessible component
-    // and make sure the MenuFloatingWindow knows about our destruction
-    if (m_pWindow)
-    {
-        MenuFloatingWindow* pFloat = static_cast<MenuFloatingWindow*>(m_pWindow.get());
-        if( pFloat->pMenu.get() == this )
-            pFloat->pMenu.clear();
-        m_pWindow->SetAccessible( css::uno::Reference< css::accessibility::XAccessible >() );
-    }
+    m_pWindow.disposeAndClear();
 
     // dispose accessible components
     comphelper::disposeComponent(mxAccessible);
@@ -2890,7 +2882,6 @@ sal_uInt16 PopupMenu::ImplExecute(const VclPtr<vcl::Window>& pParentWin, const t
                                                            | FloatWinPopupEndFlags::CloseAll);
     }
 
-    SAL_WARN_IF(GetWindow(), "vcl", "Win?!");
     tools::Rectangle aRect(rRect);
     aRect.SetPos(pParentWin->OutputToScreenPixel(aRect.TopLeft()));
 
@@ -2951,6 +2942,8 @@ sal_uInt16 PopupMenu::ImplExecute(const VclPtr<vcl::Window>& pParentWin, const t
         pWin->SetBorderStyle( WindowBorderStyle::NOBORDER );
     else
         pWin->SetBorderStyle( pWin->GetBorderStyle() | WindowBorderStyle::MENU );
+
+    m_pWindow.disposeAndClear();
     m_pWindow = pWin;
 
     Size aSz = ImplCalcSize( pWin );
@@ -3084,7 +3077,6 @@ void PopupMenu::FinishRun(const VclPtr<MenuFloatingWindow>& pWin, const VclPtr<v
         pWin->StopExecute();
 
     pWin->doShutdown();
-    m_pWindow.disposeAndClear();
     ImplClosePopupToolBox(pParentWin);
     ImplFlushPendingSelect();
 }
