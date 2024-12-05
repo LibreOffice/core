@@ -39,6 +39,7 @@ public:
     bool mbIsEnabled;
     sal_Int32 mnOrderIndex;
     bool mbExperimental;
+    bool mbHiddenInViewerMode = false;
 
     OUString msNodeName; // some impress deck nodes names are different from their Id
 
