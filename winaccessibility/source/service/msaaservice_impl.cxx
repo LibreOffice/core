@@ -139,8 +139,8 @@ Sequence< OUString > MSAAServiceImpl::getSupportedServiceNames()
    return { "com.sun.star.accessibility.MSAAService" };
 }
 
-static void AccessBridgeHandleExistingWindow(const Reference< XMSAAService > &xAccMgr,
-                                             vcl::Window *pWindow, bool bShow)
+static void AccessBridgeHandleExistingWindow(const Reference< XMSAAService>& xAccMgr,
+                                             vcl::Window* pWindow)
 {
     assert(pWindow);
 
@@ -184,10 +184,8 @@ static void AccessBridgeHandleExistingWindow(const Reference< XMSAAService > &xA
         }
         catch (css::uno::RuntimeException const&)
         {
-            // Ignore show events that throw DisposedExceptions in getAccessibleContext(),
-            // but keep revoking these windows in hide(s).
-            if (bShow)
-                return;
+            // Ignore show events that throw DisposedExceptions in getAccessibleContext()
+            return;
         }
     }
 
@@ -221,7 +219,7 @@ static void AccessBridgeUpdateOldTopWindows( const Reference< XMSAAService > &xA
             if ( xAC.is())
             {
                 if ( !xAC->getAccessibleName().isEmpty() )
-                    AccessBridgeHandleExistingWindow( xAccMgr, pTopWindow, true );
+                    AccessBridgeHandleExistingWindow(xAccMgr, pTopWindow);
             }
         }
     }
