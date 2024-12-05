@@ -173,34 +173,23 @@ void AccTopWindowListener::windowClosed( const css::lang::EventObject& e )
         return;
 
     Reference< css::accessibility::XAccessible > xAccessible ( e.Source, UNO_QUERY );
-    css::accessibility::XAccessible* pAccessible = xAccessible.get();
-    if ( pAccessible == nullptr)
+    if (!xAccessible.is())
         return;
 
-    Reference<css::accessibility::XAccessibleContext> xContext = pAccessible->getAccessibleContext();
+    Reference<css::accessibility::XAccessibleContext> xContext = xAccessible->getAccessibleContext();
     if(!xContext.is())
-    {
         return;
-    }
-    css::accessibility::XAccessibleContext* pAccessibleContext = xContext.get();
 
-    short role = -1;
-    if(pAccessibleContext != nullptr)
+    short role = xContext->getAccessibleRole();
+    if (role == css::accessibility::AccessibleRole::POPUP_MENU ||
+            role == css::accessibility::AccessibleRole::MENU)
     {
-        role = pAccessibleContext->getAccessibleRole();
-
-        if (role == css::accessibility::AccessibleRole::POPUP_MENU ||
-                role == css::accessibility::AccessibleRole::MENU)
-        {
-            m_aAccObjectManager.NotifyAccEvent(pAccessible, UnoMSAAEvent::MENUPOPUPEND);
-        }
+        m_aAccObjectManager.NotifyAccEvent(xAccessible.get(), UnoMSAAEvent::MENUPOPUPEND);
     }
 
-
-    m_aAccObjectManager.DeleteChildrenAccObj( pAccessible );
+    m_aAccObjectManager.DeleteChildrenAccObj(xAccessible.get());
     if( role != css::accessibility::AccessibleRole::POPUP_MENU )
-        m_aAccObjectManager.DeleteAccObj( pAccessible );
-
+        m_aAccObjectManager.DeleteAccObj(xAccessible.get());
 }
 
 void AccTopWindowListener::windowMinimized( const css::lang::EventObject& )
