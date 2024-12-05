@@ -111,6 +111,12 @@ public:
 
     Size const & GetPageObjectSize() const;
 
+    /** Returns the passed Size plus the gap between pages.
+        @param rObjectSize
+            Object size to start from.
+    */
+    static Size AddGap(const Size & rObjectSize);
+
     /** Return the bounding box in window coordinates of the nIndex-th page
         object.
     */
