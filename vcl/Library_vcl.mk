@@ -542,6 +542,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/jsdialog/enabled \
     vcl/jsdialog/jsdialogbuilder \
     vcl/jsdialog/jsdialogregister \
+    vcl/jsdialog/jsdialogsender \
     vcl/jsdialog/executor \
 ))
 
