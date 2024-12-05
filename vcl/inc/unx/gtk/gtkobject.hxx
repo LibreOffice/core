@@ -43,7 +43,7 @@ public:
 
     virtual void                    SetForwardKey( bool bEnable ) override;
 
-    virtual const SystemEnvData*    GetSystemData() const override;
+    virtual const SystemEnvData&    GetSystemData() const override;
 
     virtual Size                    GetOptimalSize() const override;
 

@@ -130,7 +130,7 @@ void SystemChildWindow::dispose()
 const SystemEnvData* SystemChildWindow::GetSystemData() const
 {
     if ( mpWindowImpl->mpSysObj )
-        return mpWindowImpl->mpSysObj->GetSystemData();
+        return &mpWindowImpl->mpSysObj->GetSystemData();
     else
         return nullptr;
 }

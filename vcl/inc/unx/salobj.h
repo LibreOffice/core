@@ -81,7 +81,7 @@ public:
 
     virtual void                    SetLeaveEnterBackgrounds(const css::uno::Sequence<css::uno::Any>& rLeaveArgs, const css::uno::Sequence<css::uno::Any>& rEnterArgs) override;
 
-    virtual const SystemEnvData*    GetSystemData() const override;
+    virtual const SystemEnvData&    GetSystemData() const override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

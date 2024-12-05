@@ -66,7 +66,7 @@ public:
 
     virtual void SetForwardKey(bool bEnable) override;
 
-    virtual const SystemEnvData* GetSystemData() const override { return &m_aSystemData; }
+    virtual const SystemEnvData& GetSystemData() const override { return m_aSystemData; }
 
     virtual void Reparent(SalFrame* pFrame) override;
 };

@@ -46,7 +46,7 @@ public:
     virtual void                    Show( bool bVisible ) override;
     virtual void                    Enable( bool bEnable ) override;
     virtual void                    GrabFocus() override;
-    virtual const SystemEnvData*    GetSystemData() const override;
+    virtual const SystemEnvData&    GetSystemData() const override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
