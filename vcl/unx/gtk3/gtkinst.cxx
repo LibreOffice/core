@@ -2263,17 +2263,22 @@ namespace
             rOutRect = GdkRectangle{static_cast<int>(rInRect.Left()), static_cast<int>(rInRect.Top()),
                                  static_cast<int>(rInRect.GetWidth()), static_cast<int>(rInRect.GetHeight())};
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
             if (GTK_IS_ICON_VIEW(pWidget))
             {
                 // GtkIconView is a little weird in its positioning with scrolling, so adjust here to match what
                 // it expects
                 gint nOffsetX(0), nOffsetY(0);
+#if !GTK_CHECK_VERSION(4, 0, 0)
                 gtk_icon_view_convert_widget_to_bin_window_coords(GTK_ICON_VIEW(pWidget), 0, 0, &nOffsetX, &nOffsetY);
+#else
+                GtkAdjustment* pVAdjustment = gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(pWidget));
+                nOffsetY = pVAdjustment ? gtk_adjustment_get_value(pVAdjustment) : 0;
+                GtkAdjustment* pHAdjustment = gtk_scrollable_get_hadjustment(GTK_SCROLLABLE(pWidget));
+                nOffsetX = pHAdjustment ? gtk_adjustment_get_value(pHAdjustment) : 0;
+#endif
                 rOutRect.x -= nOffsetX;
                 rOutRect.y -= nOffsetY;
             }
-#endif
 
             if (SwapForRTL(pWidget))
                 rOutRect.x = gtk_widget_get_allocated_width(pWidget) - rOutRect.width - 1 - rOutRect.x;
@@ -17160,10 +17165,15 @@ private:
         gtk_icon_view_get_cell_rect(m_pIconView, path, nullptr, &aRect);
         gtk_tree_path_free(path);
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
         // GtkIconView is a little weird in its positioning with scrolling
+#if !GTK_CHECK_VERSION(4, 0, 0)
         gtk_icon_view_convert_widget_to_bin_window_coords(m_pIconView, aRect.x, aRect.y, &aRect.x,
                                                           &aRect.y);
+#else
+        GtkAdjustment* pVAdjustment = gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(m_pIconView));
+        aRect.y -= pVAdjustment ? gtk_adjustment_get_value(pVAdjustment) : 0;
+        GtkAdjustment* pHAdjustment = gtk_scrollable_get_hadjustment(GTK_SCROLLABLE(m_pIconView));
+        aRect.x -= pHAdjustment ? gtk_adjustment_get_value(pHAdjustment) : 0;
 #endif
 
         return tools::Rectangle(aRect.x, aRect.y, aRect.x + aRect.width, aRect.y + aRect.height);
