@@ -11,6 +11,7 @@
 
 #include <jsdialog/jsdialogregister.hxx>
 #include <jsdialog/jsdialogmessages.hxx>
+#include <jsdialog/jsdialogsender.hxx>
 
 #include <utility>
 #include <vcl/weld.hxx>
@@ -28,11 +29,6 @@
 #include <list>
 #include <mutex>
 
-#define ACTION_TYPE "action_type"
-#define PARENT_ID "parent_id"
-#define WINDOW_ID "id"
-#define CLOSE_ID "close_id"
-
 class ToolBox;
 class ComboBox;
 class VclMultiLineEdit;
@@ -40,51 +36,7 @@ class SvTabListBox;
 class IconView;
 class VclScrolledWindow;
 
-namespace vcl
-{
-class ILibreOfficeKitNotifier;
-}
-
 typedef jsdialog::WidgetRegister<weld::Widget*> WidgetMap;
-
-class JSDialogSender
-{
-    std::unique_ptr<JSDialogNotifyIdle> mpIdleNotify;
-
-protected:
-    bool m_bCanClose; // specifies if can send a close message
-
-public:
-    JSDialogSender()
-        : m_bCanClose(true)
-    {
-    }
-    JSDialogSender(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
-                   const OUString& sTypeOfJSON)
-        : m_bCanClose(true)
-    {
-        initializeSender(aNotifierWindow, aContentWindow, sTypeOfJSON);
-    }
-
-    virtual ~JSDialogSender() COVERITY_NOEXCEPT_FALSE;
-
-    virtual void sendFullUpdate(bool bForce = false);
-    void sendClose();
-    void sendUpdate(VclPtr<vcl::Window> pWindow, bool bForce = false);
-    void sendAction(const VclPtr<vcl::Window>& pWindow,
-                    std::unique_ptr<jsdialog::ActionDataMap> pData);
-    void sendPopup(const VclPtr<vcl::Window>& pWindow, const OUString& rParentId,
-                   const OUString& rCloseId);
-    virtual void sendClosePopup(vcl::LOKWindowId nWindowId);
-    void flush() { mpIdleNotify->Invoke(); }
-
-protected:
-    void initializeSender(const VclPtr<vcl::Window>& rNotifierWindow,
-                          const VclPtr<vcl::Window>& rContentWindow, const OUString& rTypeOfJSON)
-    {
-        mpIdleNotify.reset(new JSDialogNotifyIdle(rNotifierWindow, rContentWindow, rTypeOfJSON));
-    }
-};
 
 class JSDropTarget final
     : public comphelper::WeakComponentImplHelper<
