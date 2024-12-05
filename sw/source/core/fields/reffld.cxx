@@ -1212,61 +1212,80 @@ namespace
         Marginal, /* headers, footers */
     };
 
-    /// Picks the first text node with a matching style from a double ended queue, starting at the front
-    /// This allows us to use the deque either as a stack or as a queue depending on whether we want to search up or down
-    SwTextNode* SearchForStyleAnchor(SwTextNode* pSelf, const std::deque<SwNode*>& pToSearch,
+    SwTextNode* SearchForStyleAnchor(SwTextNode* pSelf, SwNode* pCurrent,
                                     std::u16string_view rStyleName,
                                     sal_Int32 *const pStart, sal_Int32 *const pEnd,
                                     bool bCaseSensitive = true)
     {
-        std::deque<SwNode*> pSearching(pToSearch);
-        while (!pSearching.empty())
+        if (*pCurrent == *pSelf)
+            return nullptr;
+
+        SwTextNode* pTextNode = pCurrent->GetTextNode();
+        if (!pTextNode)
+            return nullptr;
+
+        if (bCaseSensitive
+            ? pTextNode->GetFormatColl()->GetName() == rStyleName
+            : pTextNode->GetFormatColl()->GetName().equalsIgnoreAsciiCase(rStyleName))
         {
-            SwNode* pCurrent = pSearching.front();
-            pSearching.pop_front();
-
-            if (*pCurrent == *pSelf)
-                continue;
-
-            SwTextNode* pTextNode = pCurrent->GetTextNode();
-            if (!pTextNode)
-                continue;
-
-            if (bCaseSensitive
-                ? pTextNode->GetFormatColl()->GetName() == rStyleName
-                : pTextNode->GetFormatColl()->GetName().equalsIgnoreAsciiCase(rStyleName))
+            *pStart = 0;
+            if (pEnd)
             {
-                *pStart = 0;
-                if (pEnd)
-                {
-                    *pEnd = pTextNode->GetText().getLength();
-                }
-                return pTextNode;
+                *pEnd = pTextNode->GetText().getLength();
             }
+            return pTextNode;
+        }
 
-            if (auto const pHints = pTextNode->GetpSwpHints())
+        if (auto const pHints = pTextNode->GetpSwpHints())
+        {
+            for (size_t i = 0; i < pHints->Count(); ++i)
             {
-                for (size_t i = 0; i < pHints->Count(); ++i)
+                auto const*const pHint(pHints->Get(i));
+                if (pHint->Which() == RES_TXTATR_CHARFMT)
                 {
-                    auto const*const pHint(pHints->Get(i));
-                    if (pHint->Which() == RES_TXTATR_CHARFMT)
+                    if (bCaseSensitive
+                        ? pHint->GetCharFormat().GetCharFormat()->HasName(rStyleName)
+                        : pHint->GetCharFormat().GetCharFormat()->GetName().equalsIgnoreAsciiCase(rStyleName))
                     {
-                        if (bCaseSensitive
-                            ? pHint->GetCharFormat().GetCharFormat()->HasName(rStyleName)
-                            : pHint->GetCharFormat().GetCharFormat()->GetName().equalsIgnoreAsciiCase(rStyleName))
+                        *pStart = pHint->GetStart();
+                        if (pEnd)
                         {
-                            *pStart = pHint->GetStart();
-                            if (pEnd)
-                            {
-                                *pEnd = *pHint->End();
-                            }
-                            return pTextNode;
+                            *pEnd = *pHint->End();
                         }
+                        return pTextNode;
                     }
                 }
             }
         }
 
+        return nullptr;
+    }
+    /// Picks the first text node with a matching style from the specified node range
+    SwTextNode* SearchForStyleAnchor(SwTextNode* pSelf, const SwNodes& rNodes, SwNodeOffset nNodeStart, SwNodeOffset nNodeEnd, bool bSearchBackward,
+                                    std::u16string_view rStyleName,
+                                    sal_Int32 *const pStart, sal_Int32 *const pEnd,
+                                    bool bCaseSensitive = true)
+    {
+        if (!bSearchBackward)
+        {
+            for (SwNodeOffset nCurrent = nNodeStart; nCurrent <= nNodeEnd; ++nCurrent)
+            {
+                SwNode* pCurrent = rNodes[nCurrent];
+                SwTextNode* pFound = SearchForStyleAnchor(pSelf, pCurrent, rStyleName, pStart, pEnd, bCaseSensitive);
+                if (pFound)
+                    return pFound;
+            }
+        }
+        else
+        {
+            for (SwNodeOffset nCurrent = nNodeEnd; nCurrent >= nNodeStart; --nCurrent)
+            {
+                SwNode* pCurrent = rNodes[nCurrent];
+                SwTextNode* pFound = SearchForStyleAnchor(pSelf, pCurrent, rStyleName, pStart, pEnd, bCaseSensitive);
+                if (pFound)
+                    return pFound;
+            }
+        }
         return nullptr;
     }
 }
@@ -1533,69 +1552,38 @@ SwTextNode* SwGetRefFieldType::FindAnchorRefStyleMarginal(SwDoc* pDoc,
         pPageEnd = pReference;
     }
 
-    std::deque<SwNode*> pSearchSecond;
-    std::deque<SwNode*> pInPage; /* or pSearchFirst */
-    std::deque<SwNode*> pSearchThird;
-
-    bool beforeStart = true;
-    bool beforeEnd = true;
-
+    SwNodeOffset nPageStart = pPageStart->GetIndex();
+    SwNodeOffset nPageEnd = pPageEnd->GetIndex();
     const SwNodes& nodes = pDoc->GetNodes();
-    for (SwNodeOffset n(0); n < nodes.Count(); n++)
-    {
-        if (beforeStart && *pPageStart == *nodes[n])
-        {
-            beforeStart = false;
-        }
 
-        if (beforeStart)
-        {
-            pSearchSecond.push_front(nodes[n]);
-        }
-        else if (beforeEnd)
-        {
-            if (bFlagFromBottom)
-                pInPage.push_front(nodes[n]);
-            else
-                pInPage.push_back(nodes[n]);
-
-            if (*pPageEnd == *nodes[n])
-            {
-                beforeEnd = false;
-            }
-        }
-        else
-            pSearchThird.push_back(nodes[n]);
-    }
-
-    pTextNd = SearchForStyleAnchor(pSelf, pInPage, styleName, pStt, pEnd);
+    pTextNd = SearchForStyleAnchor(pSelf, nodes, nPageStart, nPageEnd, bFlagFromBottom, styleName, pStt, pEnd);
     if (pTextNd)
         return pTextNd;
 
     // 2. Search up from the top of the page
-    pTextNd = SearchForStyleAnchor(pSelf, pSearchSecond, styleName, pStt, pEnd);
+    pTextNd = SearchForStyleAnchor(pSelf, nodes, SwNodeOffset(0), nPageStart - 1, /*bBackwards*/true, styleName, pStt, pEnd);
     if (pTextNd)
         return pTextNd;
 
     // 3. Search down from the bottom of the page
-    pTextNd = SearchForStyleAnchor(pSelf, pSearchThird, styleName, pStt, pEnd);
+    pTextNd = SearchForStyleAnchor(pSelf, nodes, nPageEnd + 1, nodes.Count() - 1, /*bBackwards*/false, styleName, pStt, pEnd);
     if (pTextNd)
         return pTextNd;
 
     // Word has case insensitive styles. LO has case sensitive styles. If we didn't find
     // it yet, maybe we could with a case insensitive search. Let's do that
 
-    pTextNd = SearchForStyleAnchor(pSelf, pInPage, styleName, pStt, pEnd,
+    pTextNd = SearchForStyleAnchor(pSelf, nodes, nPageStart, nPageEnd, bFlagFromBottom, styleName, pStt, pEnd,
                                    false /* bCaseSensitive */);
     if (pTextNd)
         return pTextNd;
 
-    pTextNd = SearchForStyleAnchor(pSelf, pSearchSecond, styleName, pStt, pEnd,
+    pTextNd = SearchForStyleAnchor(pSelf, nodes, SwNodeOffset(0), nPageStart - 1, /*bBackwards*/true, styleName, pStt, pEnd,
                                    false /* bCaseSensitive */);
     if (pTextNd)
         return pTextNd;
 
-    pTextNd = SearchForStyleAnchor(pSelf, pSearchThird, styleName, pStt, pEnd,
+    pTextNd = SearchForStyleAnchor(pSelf, nodes, nPageEnd + 1, nodes.Count() - 1, /*bBackwards*/false, styleName, pStt, pEnd,
                                    false /* bCaseSensitive */);
     return pTextNd;
 }
@@ -1609,47 +1597,30 @@ SwTextNode* SwGetRefFieldType::FindAnchorRefStyleOther(SwDoc* pDoc,
     // For references, styleref acts from the position of the reference not the field
     // Happily, the previous code saves either one into pReference, so the following is generic for both
 
-    SwTextNode* pTextNd = nullptr;
-    std::deque<SwNode*> pSearchFirst;
-    std::deque<SwNode*> pSearchSecond;
-
-    bool beforeElement = true;
-
+    SwNodeOffset nReference = pReference->GetIndex();
     const SwNodes& nodes = pDoc->GetNodes();
-    for (SwNodeOffset n(0); n < nodes.Count(); n++)
-    {
-        if (beforeElement)
-        {
-            pSearchFirst.push_front(nodes[n]);
-
-            if (*pReference == *nodes[n])
-            {
-                beforeElement = false;
-            }
-        }
-        pSearchSecond.push_back(nodes[n]);
-    }
+    SwTextNode* pTextNd = nullptr;
 
     // 1. Search up until we hit the top of the document
 
-    pTextNd = SearchForStyleAnchor(pSelf, pSearchFirst, styleName, pStt, pEnd);
+    pTextNd = SearchForStyleAnchor(pSelf, nodes, SwNodeOffset(0), nReference, /*bBackwards*/true, styleName, pStt, pEnd);
     if (pTextNd)
         return pTextNd;
 
     // 2. Search down until we hit the bottom of the document
 
-    pTextNd = SearchForStyleAnchor(pSelf, pSearchSecond, styleName, pStt, pEnd);
+    pTextNd = SearchForStyleAnchor(pSelf, nodes, nReference + 1, nodes.Count() - 1, /*bBackwards*/false, styleName, pStt, pEnd);
     if (pTextNd)
         return pTextNd;
 
     // Again, we need to remember that Word styles are not case sensitive
 
-    pTextNd = SearchForStyleAnchor(pSelf, pSearchFirst, styleName, pStt, pEnd,
+    pTextNd = SearchForStyleAnchor(pSelf, nodes, SwNodeOffset(0), nReference, /*bBackwards*/true, styleName, pStt, pEnd,
                                    false /* bCaseSensitive */);
     if (pTextNd)
         return pTextNd;
 
-    pTextNd = SearchForStyleAnchor(pSelf, pSearchSecond, styleName, pStt, pEnd,
+    pTextNd = SearchForStyleAnchor(pSelf, nodes, nReference + 1, nodes.Count() - 1, /*bBackwards*/false, styleName, pStt, pEnd,
                                    false /* bCaseSensitive */);
     return pTextNd;
 }
