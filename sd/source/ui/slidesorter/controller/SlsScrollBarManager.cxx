@@ -516,7 +516,7 @@ IMPL_LINK_NOARG(ScrollBarManager, AutoScrollTimeoutHandler, Timer *, void)
 
 void ScrollBarManager::Scroll(
     const Orientation eOrientation,
-    const sal_Int32 nDistance)
+    const double nDistance)
 {
     bool bIsVertical (false);
     switch (eOrientation)
@@ -528,51 +528,53 @@ void ScrollBarManager::Scroll(
             return;
     }
 
-    Point aNewTopLeft (
-        mpHorizontalScrollBar ? mpHorizontalScrollBar->GetThumbPos() : 0,
-        mpVerticalScrollBar ? mpVerticalScrollBar->GetThumbPos() : 0);
+    // Get current scrolling view position
+    // Fix bug where 1) scrolling view is partially scrolled, 2) view window is snapped from vertical
+    //  to horizontal or vice-versa, then 3) mouse wheel scrolled. Scrolling broke because we got an
+    //  invalid starting position from the scrollbar that's no longer displayed. Check scrollbars
+    //  visible before getting position from each.
+    bool bHorizontalScrollShown = mpHorizontalScrollBar && mpHorizontalScrollBar->IsVisible();
+    bool bVerticalScrollShown = mpVerticalScrollBar && mpVerticalScrollBar->IsVisible();
+    Point aNewTopLeft(
+        bHorizontalScrollShown ? mpHorizontalScrollBar->GetThumbPos() : 0,
+        bVerticalScrollShown ? mpVerticalScrollBar->GetThumbPos() : 0);
 
     view::Layouter& rLayouter (mrSlideSorter.GetView().GetLayouter());
 
-    // Calculate estimate of new location.
+    // Calculate new location
+    Size objectSize( rLayouter.GetPageObjectSize() );       // Size of a page in pane
+    Size objectAndGapSize = view::Layouter::AddGap(objectSize);   // Add gap between pages to size
     if (bIsVertical)
-        aNewTopLeft.AdjustY(nDistance * rLayouter.GetPageObjectSize().Height() );
+        aNewTopLeft.AdjustY(nDistance * objectAndGapSize.Height() );        // New position
     else
-        aNewTopLeft.AdjustX(nDistance * rLayouter.GetPageObjectSize().Width() );
+        aNewTopLeft.AdjustX(nDistance * objectAndGapSize.Width() );         // New position
 
-    // Adapt location to show whole slides.
+    // Get displayable area for pages
+    ::tools::Rectangle scrollArea = rLayouter.GetTotalBoundingBox();
+
+    // Prevent scrolling out of bounds by limiting scroll destination point.
     if (bIsVertical)
-        if (nDistance > 0)
-        {
-            const sal_Int32 nIndex (rLayouter.GetIndexAtPoint(
-                Point(aNewTopLeft.X(), aNewTopLeft.Y()+mpVerticalScrollBar->GetVisibleSize()),
-                true));
-            aNewTopLeft.setY( rLayouter.GetPageObjectBox(nIndex,true).Bottom()
-                - mpVerticalScrollBar->GetVisibleSize() );
-        }
-        else
-        {
-            const sal_Int32 nIndex (rLayouter.GetIndexAtPoint(
-                Point(aNewTopLeft.X(), aNewTopLeft.Y()),
-                true));
-            aNewTopLeft.setY( rLayouter.GetPageObjectBox(nIndex,true).Top() );
-        }
+    {
+        // Subtract size of view itself to get scrollable area.
+        ::tools::Long scrollbarSize = mpVerticalScrollBar->GetVisibleSize();
+        // Prevent (-) height. std::max needs type specified explicitly so params match.
+        ::tools::Long scrollHeight = std::max(static_cast<::tools::Long>(0), scrollArea.GetHeight() - scrollbarSize);
+        scrollArea.SetHeight(scrollHeight);
+        // Constrain scroll point to valid area
+        ::tools::Long constrainedY = std::clamp(aNewTopLeft.getY(), scrollArea.Top(), scrollArea.Bottom());
+        aNewTopLeft.setY(constrainedY);
+    }
     else
-        if (nDistance > 0)
-        {
-            const sal_Int32 nIndex (rLayouter.GetIndexAtPoint(
-                Point(aNewTopLeft.X()+mpVerticalScrollBar->GetVisibleSize(), aNewTopLeft.Y()),
-                true));
-            aNewTopLeft.setX( rLayouter.GetPageObjectBox(nIndex,true).Right()
-                - mpVerticalScrollBar->GetVisibleSize() );
-        }
-        else
-        {
-            const sal_Int32 nIndex (rLayouter.GetIndexAtPoint(
-                Point(aNewTopLeft.X(), aNewTopLeft.Y()),
-                    true));
-            aNewTopLeft.setX( rLayouter.GetPageObjectBox(nIndex,true).Left() );
-        }
+    {
+        // Subtract size of view itself to get scrollable area.
+        ::tools::Long scrollbarSize = mpHorizontalScrollBar->GetVisibleSize();
+        // Prevent (-) width. std::max needs type specified explicitly so params match.
+        ::tools::Long scrollWidth = std::max(static_cast<::tools::Long>(0), scrollArea.GetWidth() - scrollbarSize);
+        scrollArea.SetWidth(scrollWidth);
+        // Constrain scroll point to valid area
+        ::tools::Long constrainedX = std::clamp(aNewTopLeft.getX(), scrollArea.Left(), scrollArea.Right());
+        aNewTopLeft.setX(constrainedX);
+    }
 
     mrSlideSorter.GetController().GetVisibleAreaManager().DeactivateCurrentSlideTracking();
     SetTopLeft(aNewTopLeft);
