@@ -17,6 +17,8 @@
 #include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextField.hpp>
+#include <com/sun/star/text/XTextFieldsSupplier.hpp>
+#include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
@@ -1201,6 +1203,19 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf146269)
         auto xModifiable = mxComponent.queryThrow<util::XModifiable>();
         CPPUNIT_ASSERT(!xModifiable->isModified());
     }
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf164176, "tdf164176.docx")
+{
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(
+        xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+
+    uno::Reference<text::XTextField> xEnumerationAccess1(xFields->nextElement(), uno::UNO_QUERY);
+    rtl::OUString sPresentation = xEnumerationAccess1->getPresentation(true).trim();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), sPresentation.indexOf("_x000d_"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), sPresentation.indexOf("_x000a_"));
 }
 
 } // end of anonymous namespace
