@@ -210,9 +210,8 @@ static void AccessBridgeHandleExistingWindow(const Reference< XMSAAService > &xA
  */
 static void AccessBridgeUpdateOldTopWindows( const Reference< XMSAAService > &xAccMgr )
 {
-    sal_uInt16 nTopWindowCount = static_cast<sal_uInt16>(Application::GetTopWindowCount());
-
-    for ( sal_uInt16 i = 0; i < nTopWindowCount; i++ )
+    tools::Long nTopWindowCount = Application::GetTopWindowCount();
+    for (tools::Long i = 0; i < nTopWindowCount; i++)
     {
         vcl::Window* pTopWindow = Application::GetTopWindow( i );
         css::uno::Reference< css::accessibility::XAccessible > xAccessible = pTopWindow->GetAccessible();
