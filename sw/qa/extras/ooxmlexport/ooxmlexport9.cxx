@@ -475,7 +475,7 @@ DECLARE_OOXMLEXPORT_TEST(testKern, "kern.docx")
     // This failed: kerning was also enabled for the second paragraph.
     CPPUNIT_ASSERT(!getProperty<bool>(getRun(getParagraph(2), 1), "CharAutoKerning"));
 
-    uno::Reference<beans::XPropertySet> xStyle(getStyles("ParagraphStyles")->getByName("Default Paragraph Style"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStyle(getStyles("ParagraphStyles")->getByName("Standard"), uno::UNO_QUERY);
     //tdf107801: kerning normally isn't enabled by default for .docx
     CPPUNIT_ASSERT_EQUAL_MESSAGE("AutoKern should be false", false, getProperty<bool>(xStyle, "CharAutoKerning"));
 }
@@ -485,7 +485,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf89377, "tdf89377_tableWithBreakBeforeParaStyle.d
     // the paragraph style should set table's text-flow break-before-page
     CPPUNIT_ASSERT_EQUAL( 3, getPages() );
 
-    uno::Reference<beans::XPropertySet> xStyle(getStyles("ParagraphStyles")->getByName("Default Paragraph Style"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStyle(getStyles("ParagraphStyles")->getByName("Standard"), uno::UNO_QUERY);
     //tdf107801: kerning info wasn't exported previously.
     CPPUNIT_ASSERT_EQUAL_MESSAGE("AutoKern should be true", true, getProperty<bool>(xStyle, "CharAutoKerning"));
 }

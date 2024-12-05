@@ -874,7 +874,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf155177)
 {
     createSwDoc("tdf155177-1-min.odt");
 
-    uno::Reference<beans::XPropertySet> xStyle(getStyles("ParagraphStyles")->getByName("Body Text"),
+    uno::Reference<beans::XPropertySet> xStyle(getStyles("ParagraphStyles")->getByName("Text body"),
                                                uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(210), getProperty<sal_Int32>(xStyle, "ParaTopMargin"));
 

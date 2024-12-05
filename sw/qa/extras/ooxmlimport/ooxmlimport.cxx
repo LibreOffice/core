@@ -731,7 +731,7 @@ CPPUNIT_TEST_FIXTURE(Test, testN820504)
     uno::Reference<style::XStyleFamiliesSupplier> xFamiliesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xFamiliesAccess = xFamiliesSupplier->getStyleFamilies();
     uno::Reference<container::XNameAccess> xStylesAccess(xFamiliesAccess->getByName("ParagraphStyles"), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xStyle(xStylesAccess->getByName("Default Paragraph Style"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStyle(xStylesAccess->getByName("Standard"), uno::UNO_QUERY);
     // The problem was that the CharColor was set to AUTO (-1) even if we have some default char color set
     CPPUNIT_ASSERT_EQUAL(Color(0x3da7bb), getProperty<Color>(xStyle, "CharColor"));
 

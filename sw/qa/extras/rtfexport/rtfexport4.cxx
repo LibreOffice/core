@@ -509,7 +509,7 @@ DECLARE_RTFEXPORT_TEST(testTdf136587_noStyleName, "tdf136587_noStyleName.rtf")
                          getProperty<sal_Int16>(xStyleProps, "ParaAdjust"));
 
     // The problem was that the default style wasn't imported at all, so the fontsize was only 12.
-    xStyleProps.set(paragraphStyles->getByName("Default Paragraph Style"), uno::UNO_QUERY_THROW);
+    xStyleProps.set(paragraphStyles->getByName("Standard"), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(32.0f, getProperty<float>(xStyleProps, "CharHeight"));
 }
 
