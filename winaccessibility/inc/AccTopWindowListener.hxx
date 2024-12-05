@@ -55,10 +55,10 @@ public:
     // XEventListener
     virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
 
-    virtual void AddAllListeners(css::accessibility::XAccessible* pAccessible,
-                                 css::accessibility::XAccessible* pParentXAcc, HWND pWND);
+    void AddAllListeners(css::accessibility::XAccessible* pAccessible,
+                         css::accessibility::XAccessible* pParentXAcc, HWND pWND);
     //for On-Demand load.
-    virtual void HandleWindowOpened(css::accessibility::XAccessible* pAccessible);
+    void HandleWindowOpened(css::accessibility::XAccessible* pAccessible);
 
     sal_Int64 GetMSComPtr(sal_Int64 hWnd, sal_Int64 lParam, sal_Int64 wParam);
 };
