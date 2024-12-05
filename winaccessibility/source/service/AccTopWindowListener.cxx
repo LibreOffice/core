@@ -61,9 +61,8 @@ void AccTopWindowListener::HandleWindowOpened( css::accessibility::XAccessible* 
     if(!xContext.is())
         return;
 
-    css::accessibility::XAccessibleContext* pAccessibleContext = xContext.get();
-    //Only AccessibleContext exist, add all listeners
-    if(pAccessibleContext != nullptr && systemdata != nullptr)
+    // add all listeners
+    if (systemdata != nullptr)
     {
         m_aAccObjectManager.SaveTopWindowHandle(systemdata->hWnd, pAccessible);
 
@@ -72,7 +71,7 @@ void AccTopWindowListener::HandleWindowOpened( css::accessibility::XAccessible* 
         if( window->GetStyle() & WB_MOVEABLE )
             m_aAccObjectManager.IncreaseState( pAccessible, static_cast<unsigned short>(-1) /* U_MOVEBLE */ );
 
-        short role = pAccessibleContext->getAccessibleRole();
+        short role = xContext->getAccessibleRole();
 
         if (role == css::accessibility::AccessibleRole::POPUP_MENU ||
                 role == css::accessibility::AccessibleRole::MENU )
