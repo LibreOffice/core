@@ -30,6 +30,7 @@ SvMetaSlot::SvMetaSlot()
     , pNextSlot(nullptr)
     , nListPos(0)
     , aReadOnlyDoc ( true )
+    , aViewerApp ( true )
 {
 }
 
@@ -40,6 +41,7 @@ SvMetaSlot::SvMetaSlot( SvMetaType * pType )
     , pNextSlot(nullptr)
     , nListPos(0)
     , aReadOnlyDoc ( true )
+    , aViewerApp ( true )
 {
 }
 
@@ -47,6 +49,12 @@ bool SvMetaSlot::GetReadOnlyDoc() const
 {
     if( aReadOnlyDoc.IsSet() || !GetRef() ) return aReadOnlyDoc;
     return static_cast<SvMetaSlot *>(GetRef())->GetReadOnlyDoc();
+}
+
+bool SvMetaSlot::GetViewerApp() const
+{
+    if( aViewerApp.IsSet() || !GetRef() ) return aViewerApp;
+    return static_cast<SvMetaSlot*>(GetRef())->GetViewerApp();
 }
 
 bool SvMetaSlot::IsVariable() const
@@ -171,6 +179,7 @@ void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
     aStateMethod.ReadSvIdl( SvHash_StateMethod(), rInStm );
     ReadStringSvIdl( SvHash_DisableFlags(), rInStm, aDisableFlags );
     aReadOnlyDoc.ReadSvIdl( SvHash_ReadOnlyDoc(), rInStm );
+    aViewerApp.ReadSvIdl( SvHash_ViewerApp(), rInStm );
     aToggle.ReadSvIdl( SvHash_Toggle(), rInStm );
     aAutoUpdate.ReadSvIdl( SvHash_AutoUpdate(), rInStm );
     aAsynchron.ReadSvIdl( SvHash_Asynchron(), rInStm );
@@ -501,6 +510,8 @@ void SvMetaSlot::WriteSlot( std::string_view rShellName, sal_uInt16 nCount,
         rOutStm.WriteOString( MakeSlotName( SvHash_Container() ) ).WriteChar( '|' );
     if ( GetReadOnlyDoc() )
         rOutStm.WriteOString( MakeSlotName( SvHash_ReadOnlyDoc() ) ).WriteChar( '|' );
+    if ( GetViewerApp() )
+        rOutStm.WriteOString( MakeSlotName( SvHash_ViewerApp() ) ).WriteChar( '|' );
     rOutStm.WriteOString( "SfxSlotMode::NONE" );
 
     rOutStm.WriteChar( ',' ) << endl;

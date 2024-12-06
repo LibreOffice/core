@@ -77,6 +77,7 @@ SvGlobalHashNames::SvGlobalHashNames()
     A_ENTRY(SbxObject)
     A_ENTRY(Container)
     A_ENTRY(ReadOnlyDoc)
+    A_ENTRY(ViewerApp)
     A_ENTRY(struct)
     A_ENTRY(DisableFlags)
 {}

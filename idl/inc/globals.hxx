@@ -58,6 +58,7 @@ struct SvGlobalHashNames
     SvStringHashEntry* MM_SbxObject;
     SvStringHashEntry* MM_Container;
     SvStringHashEntry* MM_ReadOnlyDoc;
+    SvStringHashEntry* MM_ViewerApp;
     SvStringHashEntry* MM_struct;
     SvStringHashEntry* MM_DisableFlags;
 
@@ -118,6 +119,7 @@ HASH_INLINE(FastCall)
 HASH_INLINE(SbxObject)
 HASH_INLINE(Container)
 HASH_INLINE(ReadOnlyDoc)
+HASH_INLINE(ViewerApp)
 HASH_INLINE(struct)
 HASH_INLINE(DisableFlags)
 
