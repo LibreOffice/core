@@ -295,7 +295,7 @@ void SwStyleNameMapper::FillProgName(
 // Get the UI name from the programmatic name in rName and put it into rFillName
 void SwStyleNameMapper::FillUIName(
         const OUString& rName, OUString& rFillName,
-        SwGetPoolIdFromName const eFlags, bool const bBugfix)
+        SwGetPoolIdFromName const eFlags)
 {
     OUString aName = rName;
     if (eFlags == SwGetPoolIdFromName::ChrFmt && rName == "Standard")
@@ -306,7 +306,6 @@ void SwStyleNameMapper::FillUIName(
     {
         rFillName = aName;
         if (eFlags != SwGetPoolIdFromName::TxtColl || // FIXME do it for all ids
-            !bBugfix || // TODO why does it change DOCX imports
             GetPoolIdFromUIName(aName, eFlags) == USHRT_MAX)
         {
             // aName isn't in our Prog name table...check if it has a " (user)" suffix, if so remove it
