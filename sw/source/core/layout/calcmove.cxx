@@ -290,9 +290,17 @@ void SwFrame::PrepareMake(vcl::RenderContext* pRenderContext)
 
         // There is no format of previous frame, if current frame is a table
         // frame and its previous frame wants to keep with it.
-        const bool bFormatPrev = !bTab ||
-                                 !GetPrev() ||
-                                 !GetPrev()->GetAttrSet()->GetKeep().GetValue();
+        bool bFormatPrev{!bTab};
+        if (!bFormatPrev)
+        {
+            SwFrame const* pPrev{this};
+            do
+            {
+                pPrev = pPrev->GetPrev();
+            }
+            while (pPrev && pPrev->IsHiddenNow());
+            bFormatPrev = pPrev && !pPrev->GetAttrSet()->GetKeep().GetValue();
+        }
         if ( bFormatPrev )
         {
             SwFrame *pFrame = GetUpper()->Lower();
@@ -1297,7 +1305,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         pNotify->SetBordersJoinedWithPrev();
     }
 
-    const bool bKeep = IsKeep(rAttrs.GetAttrSet().GetKeep(), GetBreakItem());
+    const bool bKeep{!isHiddenNow && IsKeep(rAttrs.GetAttrSet().GetKeep(), GetBreakItem())};
 
     std::unique_ptr<SwSaveFootnoteHeight> pSaveFootnote;
     if ( bFootnote )
@@ -1715,7 +1723,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 
         if( nBottomDist >= 0 )
         {
-            if ( bKeep && bMoveable )
+            if (bKeep && bMoveable && !isHiddenNow)
             {
                 // We make sure the successor will be formatted the same.
                 // This way, we keep control until (almost) everything is stable,
@@ -2049,10 +2057,29 @@ bool SwContentFrame::WouldFit_( SwTwips nSpace,
     const SwFrame *pTmpPrev = pNewUpper->Lower();
     if( pTmpPrev && pTmpPrev->IsFootnoteFrame() )
         pTmpPrev = static_cast<const SwFootnoteFrame*>(pTmpPrev)->Lower();
-    while ( pTmpPrev && pTmpPrev->GetNext() )
-        pTmpPrev = pTmpPrev->GetNext();
+    {
+        SwFrame const* pTmpNonHidden{pTmpPrev && pTmpPrev->IsHiddenNow() ? nullptr : pTmpPrev};
+        while (pTmpPrev && pTmpPrev->GetNext())
+        {
+            pTmpPrev = pTmpPrev->GetNext();
+            if (!pTmpPrev->IsHiddenNow())
+            {
+                pTmpNonHidden = pTmpPrev;
+            }
+        }
+        pTmpPrev = pTmpNonHidden;
+    }
+
     do
     {
+        if (pFrame->IsHiddenNow())
+        {   // shortcut
+            assert(pFrame == this);
+            bRet = true;
+            pFrame = nullptr;
+            break;
+        }
+
         // #i46181#
         SwTwips nSecondCheck = 0;
         SwTwips nOldSpace = nSpace;
@@ -2217,8 +2244,8 @@ bool SwContentFrame::WouldFit_( SwTwips nSpace,
                     return true;
                 }
             }
-            SwFrame *pNxt;
-            if( nullptr != (pNxt = pFrame->FindNext()) && pNxt->IsContentFrame() &&
+            SwFrame *const pNxt{pFrame->FindNextIgnoreHidden()};
+            if (nullptr != pNxt && pNxt->IsContentFrame() &&
                 ( !pFootnoteFrame || ( pNxt->IsInFootnote() &&
                   pNxt->FindFootnoteFrame()->GetAttr() == pFootnoteFrame->GetAttr() ) ) )
             {
@@ -2244,10 +2271,7 @@ bool SwContentFrame::WouldFit_( SwTwips nSpace,
                     pTmpPrev = nullptr;
                 else
                 {
-                    if (pFrame->IsHiddenNow())
-                        pTmpPrev = lcl_NotHiddenPrev( pFrame );
-                    else
-                        pTmpPrev = pFrame;
+                    pTmpPrev = pFrame;
                 }
                 pFrame = static_cast<SwContentFrame*>(pNxt);
             }
