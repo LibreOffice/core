@@ -817,7 +817,8 @@ void ImportLib(const ScriptDocument& rDocument, weld::Dialog* pDialog,
                     // remove existing libraries
                     if ( bRemove )
                     {
-                        func_remove_entry(aLibName); // LibPage::InsertLib
+                        if (func_remove_entry)
+                            func_remove_entry(aLibName); // LibPage::InsertLib
 
                         // remove module library
                         if ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) )
@@ -939,15 +940,16 @@ void ImportLib(const ScriptDocument& rDocument, weld::Dialog* pDialog,
                             }
                         }
                     }
-
-                    func_insert_entry(aLibName); // LibPage::InsertLib
+                    if (func_insert_entry)
+                        func_insert_entry(aLibName); // LibPage::InsertLib
                     bChanges = true;
                 }
             }
 
             if (bChanges)
             {
-                func_insert_entries(); // MacroManager
+                if (func_insert_entries)
+                    func_insert_entries(); // MacroManager
                 MarkDocumentModified(rDocument);
             }
         });
