@@ -2283,7 +2283,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
         && !pAttrs->GetAttrSet().GetKeep().GetValue()
         && AreAllRowsKeepWithNext(GetFirstNonHeadlineRow(), /*bCheckParents=*/false);
     // The beloved keep attribute
-    const bool bKeep = IsKeep(pAttrs->GetAttrSet().GetKeep(), GetBreakItem(), bEmulateTableKeep);
+    const bool bKeep{!isHiddenNow && IsKeep(pAttrs->GetAttrSet().GetKeep(), GetBreakItem(), bEmulateTableKeep)};
 
     // Join follow table, if this table is not allowed to split:
     if ( bDontSplit )
@@ -2403,9 +2403,8 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                 }
                 aNotify.SetLowersComplete( false );
             }
-            SwFrame *pPre;
-            if ( bKeep || (nullptr != (pPre = FindPrev()) &&
-                pPre->GetAttrSet()->GetKeep().GetValue()) )
+            SwFrame const*const pPre{bKeep ? nullptr : FindPrevIgnoreHidden()};
+            if (bKeep || (nullptr != pPre && pPre->GetAttrSet()->GetKeep().GetValue()))
             {
                 m_bCalcLowers = true;
             }
@@ -2760,7 +2759,8 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                             oAccess.emplace(SwFrame::GetCache(), this);
                             pAttrs = oAccess->Get();
                         }
-                        if (IsKeep(pAttrs->GetAttrSet().GetKeep(), GetBreakItem(), true)
+                        if (!isHiddenNow
+                            && IsKeep(pAttrs->GetAttrSet().GetKeep(), GetBreakItem(), true)
                             && pLastRow->ShouldRowKeepWithNext())
                         {
                             bFormat = true;
@@ -5625,7 +5625,7 @@ bool SwRowFrame::ShouldRowKeepWithNext( const bool bCheckParents ) const
     const SwCellFrame* pCell = static_cast<const SwCellFrame*>(Lower());
     const SwFrame* pText = pCell->Lower();
 
-    return pText && pText->IsTextFrame() &&
+    return pText && pText->IsTextFrame() && !pText->IsHiddenNow() &&
            static_cast<const SwTextFrame*>(pText)->GetTextNodeForParaProps()->GetSwAttrSet().GetKeep(bCheckParents).GetValue();
 }
 
