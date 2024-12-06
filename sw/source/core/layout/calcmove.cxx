@@ -1139,6 +1139,16 @@ bool SwFrame::IsCollapseUpper() const
         return false;
     }
 
+    // Avoid the ignore after applying a new page style (but do it after page breaks).
+    const SwTextNode* pTextNode = pTextFrame->GetTextNodeForParaProps();
+    if (pTextNode)
+    {
+        if (pTextNode->HasSwAttrSet() && pTextNode->GetSwAttrSet().HasItem(RES_PAGEDESC))
+        {
+            return false;
+        }
+    }
+
     return true;
 }
 
