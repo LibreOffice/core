@@ -12623,7 +12623,7 @@ SfxVoidItem ThemeDialog SID_THEME_DIALOG
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
