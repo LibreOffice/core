@@ -34,13 +34,12 @@ namespace connectivity
     class OSQLParseNode;
     namespace ado
     {
+    using OPreparedStatement_BASE
+        = cppu::ImplInheritanceHelper<OStatement_Base, css::sdbc::XPreparedStatement,
+                                      css::sdbc::XParameters, css::sdbc::XResultSetMetaDataSupplier,
+                                      css::lang::XServiceInfo>;
 
-        class OPreparedStatement :  public  OStatement_Base,
-                                    public  css::sdbc::XPreparedStatement,
-                                    public  css::sdbc::XParameters,
-                                    public  css::sdbc::XResultSetMetaDataSupplier,
-                                    public  css::lang::XServiceInfo
-
+        class OPreparedStatement : public OPreparedStatement_BASE
         {
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
@@ -61,12 +60,6 @@ namespace connectivity
             DECLARE_SERVICE_INFO();
             // a Constructor, that is needed for when Returning the Object is needed:
             OPreparedStatement( OConnection* _pConnection, const OUString& sql);
-
-            virtual void SAL_CALL acquire() noexcept override;
-            virtual void SAL_CALL release() noexcept override;
-            virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-            //XTypeProvider
-            virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
             // XPreparedStatement
             virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL executeQuery(  ) override;

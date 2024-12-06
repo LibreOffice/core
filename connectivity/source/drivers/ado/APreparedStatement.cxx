@@ -55,7 +55,7 @@ using namespace com::sun::star::util;
 IMPLEMENT_SERVICE_INFO(OPreparedStatement,"com.sun.star.sdbcx.APreparedStatement","com.sun.star.sdbc.PreparedStatement");
 
 OPreparedStatement::OPreparedStatement( OConnection* _pConnection, const OUString& sql)
-    : OStatement_Base( _pConnection )
+    : OPreparedStatement_BASE(_pConnection)
 {
     osl_atomic_increment( &m_refCount );
 
@@ -90,24 +90,6 @@ OPreparedStatement::~OPreparedStatement()
         m_pParameters->Release();
         m_pParameters = nullptr;
     }
-}
-
-Any SAL_CALL OPreparedStatement::queryInterface( const Type & rType )
-{
-    Any aRet = OStatement_Base::queryInterface(rType);
-    return aRet.hasValue() ? aRet : ::cppu::queryInterface( rType,
-                                        static_cast< XPreparedStatement*>(this),
-                                        static_cast< XParameters*>(this),
-                                        static_cast< XResultSetMetaDataSupplier*>(this));
-}
-
-css::uno::Sequence< css::uno::Type > SAL_CALL OPreparedStatement::getTypes(  )
-{
-    ::cppu::OTypeCollection aTypes( cppu::UnoType<XPreparedStatement>::get(),
-                                    cppu::UnoType<XParameters>::get(),
-                                    cppu::UnoType<XResultSetMetaDataSupplier>::get());
-
-    return ::comphelper::concatSequences(aTypes.getTypes(),OStatement_Base::getTypes());
 }
 
 Reference< XResultSetMetaData > SAL_CALL OPreparedStatement::getMetaData(  )
@@ -419,16 +401,6 @@ void SAL_CALL OPreparedStatement::clearParameters(  )
             }
         }
     }
-}
-
-void SAL_CALL OPreparedStatement::acquire() noexcept
-{
-    OStatement_Base::acquire();
-}
-
-void SAL_CALL OPreparedStatement::release() noexcept
-{
-    OStatement_Base::release();
 }
 
 void OPreparedStatement::replaceParameterNodeName(OSQLParseNode const * _pNode,
