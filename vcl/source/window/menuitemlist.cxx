@@ -138,10 +138,7 @@ void MenuItemList::InsertSeparator(const OUString &rIdent, size_t nPos)
 
 void MenuItemList::Remove( size_t nPos )
 {
-    if( nPos < maItemList.size() )
-    {
-        maItemList.erase( maItemList.begin() + nPos );
-    }
+    maItemList.erase( maItemList.begin() + nPos );
 }
 
 void MenuItemList::Clear()
