@@ -2655,11 +2655,12 @@ weld::Container* SalInstanceNotebook::get_page(const OUString& rIdent) const
     sal_uInt16 nPageId = m_xNotebook->GetPageId(rIdent);
     TabPage* pPage = m_xNotebook->GetTabPage(nPageId);
     vcl::Window* pChild = pPage->GetChild(0);
-    if (m_aPages.size() < nPageIndex + 1U)
-        m_aPages.resize(nPageIndex + 1U);
-    if (!m_aPages[nPageIndex])
-        m_aPages[nPageIndex] = std::make_shared<SalInstanceContainer>(pChild, m_pBuilder, false);
-    return m_aPages[nPageIndex].get();
+    auto it = m_aPages.find(rIdent);
+    if (it != m_aPages.end())
+        return it->second.get();
+    auto pNew = std::make_shared<SalInstanceContainer>(pChild, m_pBuilder, false);
+    m_aPages[rIdent] = pNew;
+    return pNew.get();
 }
 
 void SalInstanceNotebook::set_current_page(int nPage)
@@ -2680,8 +2681,7 @@ void SalInstanceNotebook::remove_page(const OUString& rIdent)
         return;
 
     m_xNotebook->RemovePage(nPageId);
-    if (nPageIndex < m_aPages.size())
-        m_aPages.erase(m_aPages.begin() + nPageIndex);
+    m_aPages.erase(rIdent);
 
     auto iter = m_aAddedPages.find(rIdent);
     if (iter != m_aAddedPages.end())
@@ -2709,13 +2709,6 @@ void SalInstanceNotebook::insert_page(const OUString& rIdent, const OUString& rL
     m_xNotebook->SetTabPage(nNewPageId, xPage);
     m_xNotebook->SetPageName(nNewPageId, rIdent);
     m_aAddedPages.try_emplace(rIdent, xPage, xGrid);
-
-    if (nPos != -1)
-    {
-        unsigned int nPageIndex = static_cast<unsigned int>(nPos);
-        if (nPageIndex < m_aPages.size())
-            m_aPages.insert(m_aPages.begin() + nPageIndex, nullptr);
-    }
 }
 
 int SalInstanceNotebook::get_n_pages() const { return m_xNotebook->GetPageCount(); }
@@ -2795,11 +2788,12 @@ weld::Container* SalInstanceVerticalNotebook::get_page(const OUString& rIdent) c
     if (nPageIndex == -1)
         return nullptr;
     auto pChild = m_xNotebook->GetPage(rIdent);
-    if (m_aPages.size() < nPageIndex + 1U)
-        m_aPages.resize(nPageIndex + 1U);
-    if (!m_aPages[nPageIndex])
-        m_aPages[nPageIndex].reset(new SalInstanceContainer(pChild, m_pBuilder, false));
-    return m_aPages[nPageIndex].get();
+    auto it = m_aPages.find(rIdent);
+    if (it != m_aPages.end())
+        return it->second.get();
+    auto pNew = std::make_shared<SalInstanceContainer>(pChild, m_pBuilder, false);
+    m_aPages[rIdent] = pNew;
+    return pNew.get();
 }
 
 void SalInstanceVerticalNotebook::set_current_page(int nPage)
@@ -2818,8 +2812,7 @@ void SalInstanceVerticalNotebook::remove_page(const OUString& rIdent)
     if (nPageIndex == TAB_PAGE_NOTFOUND)
         return;
     m_xNotebook->RemovePage(rIdent);
-    if (nPageIndex < m_aPages.size())
-        m_aPages.erase(m_aPages.begin() + nPageIndex);
+    m_aPages.erase(rIdent);
 }
 
 void SalInstanceVerticalNotebook::insert_page(const OUString& rIdent, const OUString& rLabel,
@@ -2829,13 +2822,6 @@ void SalInstanceVerticalNotebook::insert_page(const OUString& rIdent, const OUSt
     xGrid->set_hexpand(true);
     xGrid->set_vexpand(true);
     m_xNotebook->InsertPage(rIdent, rLabel, Image(), u""_ustr, xGrid, nPos);
-
-    if (nPos != -1)
-    {
-        unsigned int nPageIndex = static_cast<unsigned int>(nPos);
-        if (nPageIndex < m_aPages.size())
-            m_aPages.insert(m_aPages.begin() + nPageIndex, nullptr);
-    }
 }
 
 int SalInstanceVerticalNotebook::get_n_pages() const { return m_xNotebook->GetPageCount(); }
