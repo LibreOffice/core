@@ -906,9 +906,6 @@ void CharAttribList::Remove(const EditCharAttrib* p)
 
 void CharAttribList::Remove(sal_Int32 nPos)
 {
-    if (nPos >= static_cast<sal_Int32>(maAttribs.size()))
-        return;
-
     maAttribs.erase(maAttribs.begin()+nPos);
 }
 
