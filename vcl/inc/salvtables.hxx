@@ -1160,7 +1160,8 @@ class SalInstanceNotebook : public SalInstanceWidget, public virtual weld::Noteb
 {
 private:
     VclPtr<TabControl> m_xNotebook;
-    mutable std::vector<std::shared_ptr<SalInstanceContainer>> m_aPages;
+    /// Constructed on-demand.
+    mutable std::map<OUString, std::shared_ptr<SalInstanceContainer>> m_aPages;
     std::map<OUString, std::pair<VclPtr<TabPage>, VclPtr<VclGrid>>> m_aAddedPages;
 
     DECL_LINK(DeactivatePageHdl, TabControl*, bool);
@@ -2297,7 +2298,8 @@ class SalInstanceVerticalNotebook : public SalInstanceWidget, public virtual wel
 {
 private:
     VclPtr<VerticalTabControl> m_xNotebook;
-    mutable std::vector<std::unique_ptr<SalInstanceContainer>> m_aPages;
+    /// Constructed on-demand.
+    mutable std::map<OUString, std::shared_ptr<SalInstanceContainer>> m_aPages;
 
     DECL_LINK(DeactivatePageHdl, VerticalTabControl*, bool);
     DECL_LINK(ActivatePageHdl, VerticalTabControl*, void);
