@@ -51,12 +51,13 @@ enum class SfxSlotMode {
     ACCELCONFIG     =   0x80000, // configurable keys
 
     CONTAINER       =  0x100000, // Operated by the container at InPlace
-    READONLYDOC     =  0x200000  // also available for read-only Documents
+    READONLYDOC     =  0x200000, // also available for read-only Documents
+    VIEWERAPP       =  0x400000, // also available in Viewer app mode
 };
 
 namespace o3tl
 {
-    template<> struct typed_flags<SfxSlotMode> : is_typed_flags<SfxSlotMode, 0x13ec72cL> {};
+    template<> struct typed_flags<SfxSlotMode> : is_typed_flags<SfxSlotMode, 0x17ec72cL> {};
 }
 
 #define SFX_EXEC_STUB( aShellClass, aExecMethod) \

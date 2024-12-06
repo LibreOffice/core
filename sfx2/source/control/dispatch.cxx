@@ -40,6 +40,7 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 #include <sfx2/app.hxx>
@@ -1156,6 +1157,7 @@ void SfxDispatcher::Update_Impl_( bool bUIActive, bool bIsMDIApp, bool bIsIPOwne
         return;
 
     StatusBarId eStatBarId = StatusBarId::None;
+    const bool isViewerAppMode = officecfg::Office::Common::Misc::ViewerAppMode::get();
 
     SfxSlotPool* pSlotPool = &SfxSlotPool::GetSlotPool( GetFrame() );
     sal_uInt16 nTotCount = xImp->aStack.size();
@@ -1217,6 +1219,14 @@ void SfxDispatcher::Update_Impl_( bool bUIActive, bool bIsMDIApp, bool bIsIPOwne
             sal_uInt32 nId = pIFace->GetChildWindowId(nNo);
             const SfxSlot *pSlot = pSlotPool->GetSlot( static_cast<sal_uInt16>(nId) );
             SAL_INFO_IF( !pSlot, "sfx.control", "Childwindow slot missing: " << nId );
+
+            if (isViewerAppMode)
+            {
+                // Skip if the slot is not allowed in viewer app mode
+                if (pSlot && !pSlot->IsMode(SfxSlotMode::VIEWERAPP))
+                    continue;
+            }
+
             if ( bReadOnlyShell )
             {
                 // only show ChildWindows if their slot is allowed for readonly documents
@@ -1609,6 +1619,7 @@ bool SfxDispatcher::FindServer_(sal_uInt16 nSlot, SfxSlotServer& rServer)
         return false;
     }
 
+    const bool isViewerAppMode = officecfg::Office::Common::Misc::ViewerAppMode::get();
     bool bReadOnly = ( SfxSlotFilterState::ENABLED_READONLY != nSlotEnableMode && xImp->bReadOnly );
     bool bCheckForCommentCommands = false;
 
@@ -1639,6 +1650,9 @@ bool SfxDispatcher::FindServer_(sal_uInt16 nSlot, SfxSlotServer& rServer)
 
         if ( pSlot && pSlot->nDisableFlags != SfxDisableFlags::NONE &&
              ( static_cast<int>(pSlot->nDisableFlags) & static_cast<int>(pObjShell->GetDisableFlags()) ) != 0 )
+            return false;
+
+        if (pSlot && !(pSlot->nFlags & SfxSlotMode::VIEWERAPP) && isViewerAppMode)
             return false;
 
         if ( pSlot && !( pSlot->nFlags & SfxSlotMode::READONLYDOC ) && bReadOnly )
