@@ -2026,10 +2026,10 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
 
     const bool bLargeTable = GetTable()->GetTabLines().size() > 64;  //arbitrary value, virtually guaranteed to be larger than one page.
     const bool bEmulateTableKeep = !bLargeTable && AreAllRowsKeepWithNext( GetFirstNonHeadlineRow(), /*bCheckParents=*/false );
-    // The beloved keep attribute
-    const bool bKeep = IsKeep(pAttrs->GetAttrSet().GetKeep(), GetBreakItem(), bEmulateTableKeep);
-
     bool const isHiddenNow(IsHiddenNow());
+    // The beloved keep attribute
+    const bool bKeep{!isHiddenNow && IsKeep(pAttrs->GetAttrSet().GetKeep(), GetBreakItem(), bEmulateTableKeep)};
+
     // All rows should keep together
     const bool bDontSplit = isHiddenNow
                 || (!IsFollow() && !GetFormat()->GetLayoutSplit().GetValue());
@@ -2150,9 +2150,8 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                 }
                 aNotify.SetLowersComplete( false );
             }
-            SwFrame *pPre;
-            if ( bKeep || (nullptr != (pPre = FindPrev()) &&
-                pPre->GetAttrSet()->GetKeep().GetValue()) )
+            SwFrame const*const pPre{bKeep ? nullptr : FindPrevIgnoreHidden()};
+            if (bKeep || (nullptr != pPre && pPre->GetAttrSet()->GetKeep().GetValue()))
             {
                 m_bCalcLowers = true;
             }
@@ -2435,7 +2434,8 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                             pAccess = std::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), this);
                             pAttrs = pAccess->Get();
                         }
-                        if (IsKeep(pAttrs->GetAttrSet().GetKeep(), GetBreakItem(), true)
+                        if (!isHiddenNow
+                            && IsKeep(pAttrs->GetAttrSet().GetKeep(), GetBreakItem(), true)
                             && pLastRow->ShouldRowKeepWithNext())
                         {
                             bFormat = true;
@@ -4862,7 +4862,7 @@ bool SwRowFrame::ShouldRowKeepWithNext( const bool bCheckParents ) const
     const SwCellFrame* pCell = static_cast<const SwCellFrame*>(Lower());
     const SwFrame* pText = pCell->Lower();
 
-    return pText && pText->IsTextFrame() &&
+    return pText && pText->IsTextFrame() && !pText->IsHiddenNow() &&
            static_cast<const SwTextFrame*>(pText)->GetTextNodeForParaProps()->GetSwAttrSet().GetKeep(bCheckParents).GetValue();
 }
 
