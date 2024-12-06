@@ -2546,11 +2546,11 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                         else
                             SAL_INFO("sw.rtf", __func__ << " unhandled form control: '"
                                                         << xInfo->getImplementationName() << "'");
-                        m_aRun->append('}');
                     }
                 }
             }
 
+            m_aRun->append('}');
             m_aRun->append('}');
         }
         break;
