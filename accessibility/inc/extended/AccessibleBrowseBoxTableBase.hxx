@@ -27,16 +27,14 @@
 
 namespace accessibility {
 
-typedef ::cppu::ImplHelper1< css::accessibility::XAccessibleTable >
+typedef cppu::ImplInheritanceHelper<BrowseBoxAccessibleElement, css::accessibility::XAccessibleTable>
         AccessibleBrowseBoxTableImplHelper;
 
 /** The BrowseBox accessible table objects inherit from this base class. It
     implements basic functionality for the XAccessibleTable interface.
     BrowseBox table objects are: the data table, the column header bar and the
     row header bar. */
-class AccessibleBrowseBoxTableBase :
-    public BrowseBoxAccessibleElement,
-    public AccessibleBrowseBoxTableImplHelper
+class AccessibleBrowseBoxTableBase : public AccessibleBrowseBoxTableImplHelper
 {
 public:
     /** Constructor sets specified name and description. If the constant of a
@@ -120,25 +118,6 @@ public:
         -   isAccessibleColumnSelected,
         -   getAccessibleCellAt,
         -   isAccessibleSelected. */
-
-    // XInterface
-
-    /** Queries for a new interface. */
-    css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType ) override;
-
-    /** Acquires the object (calls acquire() on base class). */
-    virtual void SAL_CALL acquire() noexcept override;
-
-    /** Releases the object (calls release() on base class). */
-    virtual void SAL_CALL release() noexcept override;
-
-    // XTypeProvider
-
-    /** @return  a sequence of possible types (received from base classes). */
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
-
-    /** @return  a unique implementation ID. */
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
     // XServiceInfo
 

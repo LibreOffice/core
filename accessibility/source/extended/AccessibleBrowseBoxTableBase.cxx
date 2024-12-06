@@ -41,7 +41,7 @@ AccessibleBrowseBoxTableBase::AccessibleBrowseBoxTableBase(
         const Reference< XAccessible >& rxParent,
         vcl::IAccessibleTableProvider& rBrowseBox,
         AccessibleBrowseBoxObjType eObjType ) :
-    BrowseBoxAccessibleElement( rxParent, rBrowseBox,nullptr, eObjType )
+    AccessibleBrowseBoxTableImplHelper( rxParent, rBrowseBox, nullptr, eObjType )
 {
 }
 
@@ -130,39 +130,6 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxTableBase::getAccessibleColumn( sal_Int64 
     ensureIsAlive();
     ensureIsValidIndex( nChildIndex );
     return implGetColumn( nChildIndex );
-}
-
-// XInterface -----------------------------------------------------------------
-
-Any SAL_CALL AccessibleBrowseBoxTableBase::queryInterface( const uno::Type& rType )
-{
-    Any aAny( BrowseBoxAccessibleElement::queryInterface( rType ) );
-    return aAny.hasValue() ?
-        aAny : AccessibleBrowseBoxTableImplHelper::queryInterface( rType );
-}
-
-void SAL_CALL AccessibleBrowseBoxTableBase::acquire() noexcept
-{
-    BrowseBoxAccessibleElement::acquire();
-}
-
-void SAL_CALL AccessibleBrowseBoxTableBase::release() noexcept
-{
-    BrowseBoxAccessibleElement::release();
-}
-
-// XTypeProvider --------------------------------------------------------------
-
-Sequence< uno::Type > SAL_CALL AccessibleBrowseBoxTableBase::getTypes()
-{
-    return ::comphelper::concatSequences(
-        BrowseBoxAccessibleElement::getTypes(),
-        AccessibleBrowseBoxTableImplHelper::getTypes() );
-}
-
-Sequence< sal_Int8 > SAL_CALL AccessibleBrowseBoxTableBase::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
 }
 
 // internal virtual methods ---------------------------------------------------
