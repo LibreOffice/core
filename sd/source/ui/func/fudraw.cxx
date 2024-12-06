@@ -640,7 +640,8 @@ void FuDraw::DoubleClick(const MouseEvent& rMEvt)
             SdrInventor nInv = pObj->GetObjInventor();
             SdrObjKind  nSdrObjKind = pObj->GetObjIdentifier();
 
-            if (nInv == SdrInventor::Default && nSdrObjKind == SdrObjKind::OLE2)
+            if (nInv == SdrInventor::Default && nSdrObjKind == SdrObjKind::OLE2
+                && !mpDocSh->IsReadOnly())
             {
                 // activate OLE-object
                 SfxInt16Item aItem(SID_OBJECT, 0);
@@ -649,7 +650,8 @@ void FuDraw::DoubleClick(const MouseEvent& rMEvt)
                                                  SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
                                                  { &aItem });
             }
-            else if (nInv == SdrInventor::Default &&  nSdrObjKind == SdrObjKind::Graphic && pObj->IsEmptyPresObj() )
+            else if (nInv == SdrInventor::Default && nSdrObjKind == SdrObjKind::Graphic
+                     && pObj->IsEmptyPresObj() && !mpDocSh->IsReadOnly())
             {
                 mpViewShell->GetViewFrame()->
                     GetDispatcher()->Execute( SID_INSERT_GRAPHIC,

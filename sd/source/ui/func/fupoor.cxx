@@ -232,7 +232,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                     bReturn = true;
                 }
             }
-            else
+            else if (!mpDocSh->IsReadOnly())
             {
                 // activate OLE object on RETURN for selected object
                 // activate text edit on RETURN for selected object
