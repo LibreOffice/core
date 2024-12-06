@@ -136,7 +136,7 @@ bool ViewObjectContactPrimitiveHit(
             // get primitive sequence
             sdr::contact::DisplayInfo aDisplayInfo;
             // have to make a copy of this container here, because it might be changed underneath us
-            const drawinglayer::primitive2d::Primitive2DContainer& aSequence(rVOC.getPrimitive2DSequence(aDisplayInfo));
+            const drawinglayer::primitive2d::Primitive2DContainer aSequence(rVOC.getPrimitive2DSequence(aDisplayInfo));
 
             if(!aSequence.empty())
             {
