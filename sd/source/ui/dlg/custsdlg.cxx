@@ -51,7 +51,7 @@ SdCustomShowDlg::SdCustomShowDlg(weld::Window* pWindow, SdDrawDocument& rDrawDoc
     m_xBtnEdit->connect_clicked( aLink );
     m_xBtnRemove->connect_clicked( aLink );
     m_xBtnCopy->connect_clicked( aLink );
-    m_xLbCustomShows->connect_changed( LINK( this, SdCustomShowDlg, SelectListBoxHdl ) );
+    m_xLbCustomShows->connect_selection_changed(LINK(this, SdCustomShowDlg, SelectListBoxHdl));
 
     m_xBtnStartShow->connect_clicked( LINK( this, SdCustomShowDlg, StartShowHdl ) ); // for test
 
@@ -255,8 +255,8 @@ SdDefineCustomShowDlg::SdDefineCustomShowDlg(weld::Window* pWindow, SdDrawDocume
     m_xBtnAdd->connect_clicked( aLink );
     m_xBtnRemove->connect_clicked( aLink );
     m_xEdtName->connect_changed( LINK( this, SdDefineCustomShowDlg, ClickButtonEditHdl ) );
-    m_xLbPages->connect_changed( LINK( this, SdDefineCustomShowDlg, ClickButtonHdl4 ) ); // because of status
-    m_xLbCustomPages->connect_changed( LINK( this, SdDefineCustomShowDlg, ClickButtonHdl3 ) ); // because of status
+    m_xLbPages->connect_selection_changed(LINK(this, SdDefineCustomShowDlg, ClickButtonHdl4)); // because of status
+    m_xLbCustomPages->connect_selection_changed(LINK(this, SdDefineCustomShowDlg, ClickButtonHdl3)); // because of status
 
     m_xBtnOK->connect_clicked( LINK( this, SdDefineCustomShowDlg, OKHdl ) );
 

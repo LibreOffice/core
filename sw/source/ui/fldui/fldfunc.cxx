@@ -121,8 +121,8 @@ void SwFieldFuncPage::Reset(const SfxItemSet* )
     }
 
     m_xTypeLB->connect_row_activated(LINK(this, SwFieldFuncPage, TreeViewInsertHdl));
-    m_xTypeLB->connect_changed(LINK(this, SwFieldFuncPage, TypeHdl));
-    m_xSelectionLB->connect_changed(LINK(this, SwFieldFuncPage, SelectHdl));
+    m_xTypeLB->connect_selection_changed(LINK(this, SwFieldFuncPage, TypeHdl));
+    m_xSelectionLB->connect_selection_changed(LINK(this, SwFieldFuncPage, SelectHdl));
     m_xSelectionLB->connect_row_activated(LINK(this, SwFieldFuncPage, InsertMacroHdl));
     m_xFormatLB->connect_row_activated(LINK(this, SwFieldFuncPage, TreeViewInsertHdl));
     m_xMacroBT->connect_clicked(LINK(this, SwFieldFuncPage, MacroHdl));
@@ -134,7 +134,7 @@ void SwFieldFuncPage::Reset(const SfxItemSet* )
     m_xListItemED->connect_activate(LINK(this, SwFieldFuncPage, ListModifyReturnActionHdl));
     Link<weld::Entry&,void> aListEnableLk = LINK(this, SwFieldFuncPage, ListEnableHdl);
     m_xListItemED->connect_changed(aListEnableLk);
-    m_xListItemsLB->connect_changed(LINK(this, SwFieldFuncPage, ListEnableListBoxHdl));
+    m_xListItemsLB->connect_selection_changed(LINK(this, SwFieldFuncPage, ListEnableListBoxHdl));
 
     int nSelect = -1;
     if( !IsRefresh() )

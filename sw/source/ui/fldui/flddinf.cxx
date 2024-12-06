@@ -233,9 +233,9 @@ void SwFieldDokInfPage::Reset(const SfxItemSet* )
     if (m_xSelEntry)
         TypeHdl(*m_pTypeView);
 
-    m_pTypeView->connect_changed(LINK(this, SwFieldDokInfPage, TypeHdl));
+    m_pTypeView->connect_selection_changed(LINK(this, SwFieldDokInfPage, TypeHdl));
     m_pTypeView->connect_row_activated(LINK(this, SwFieldDokInfPage, TreeViewInsertHdl));
-    m_xSelectionLB->connect_changed(LINK(this, SwFieldDokInfPage, SubTypeHdl));
+    m_xSelectionLB->connect_selection_changed(LINK(this, SwFieldDokInfPage, SubTypeHdl));
     m_xSelectionLB->connect_row_activated(LINK(this, SwFieldDokInfPage, TreeViewInsertHdl));
     m_xFormatLB->connect_row_activated(LINK(this, SwFieldDokInfPage, TreeViewInsertHdl));
 

@@ -481,7 +481,7 @@ OfaTreeOptionsDialog::OfaTreeOptionsDialog(weld::Window* pParent, bool fromExten
 
     // Init tree and handler
     xTreeLB->set_help_id(HID_OFADLG_TREELISTBOX);
-    xTreeLB->connect_changed(LINK(this, OfaTreeOptionsDialog, ShowPageHdl_Impl));
+    xTreeLB->connect_selection_changed(LINK(this, OfaTreeOptionsDialog, ShowPageHdl_Impl));
     xBackPB->connect_clicked(LINK(this, OfaTreeOptionsDialog, BackHdl_Impl));
     xApplyPB->connect_clicked(LINK(this, OfaTreeOptionsDialog, ApplyHdl_Impl));
     xOkPB->connect_clicked(LINK(this, OfaTreeOptionsDialog, ApplyHdl_Impl));

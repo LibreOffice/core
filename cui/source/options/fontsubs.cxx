@@ -72,7 +72,7 @@ SvxFontSubstTabPage::SvxFontSubstTabPage(weld::Container* pPage, weld::DialogCon
     Link<weld::ComboBox&,void> aLink2(LINK(this, SvxFontSubstTabPage, SelectComboBoxHdl));
     Link<weld::Button&,void> aClickLink(LINK(this, SvxFontSubstTabPage, ClickHdl));
 
-    m_xCheckLB->connect_changed(LINK(this, SvxFontSubstTabPage, TreeListBoxSelectHdl));
+    m_xCheckLB->connect_selection_changed(LINK(this, SvxFontSubstTabPage, TreeListBoxSelectHdl));
     m_xCheckLB->connect_column_clicked(LINK(this, SvxFontSubstTabPage, HeaderBarClick));
     m_xUseTableCB->connect_toggled(LINK(this, SvxFontSubstTabPage, ToggleHdl));
     m_xFont1CB->connect_changed(aLink2);

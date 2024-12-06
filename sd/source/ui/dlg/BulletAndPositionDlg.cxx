@@ -141,7 +141,7 @@ SvxBulletAndPositionDlg::SvxBulletAndPositionDlg(weld::Window* pWindow, const Sf
     m_xBitmapMB->connect_selected(LINK(this, SvxBulletAndPositionDlg, GraphicHdl_Impl));
     m_xBitmapMB->connect_toggled(LINK(this, SvxBulletAndPositionDlg, PopupActivateHdl_Impl));
     m_xLevelLB->set_selection_mode(SelectionMode::Multiple);
-    m_xLevelLB->connect_changed(LINK(this, SvxBulletAndPositionDlg, LevelHdl_Impl));
+    m_xLevelLB->connect_selection_changed(LINK(this, SvxBulletAndPositionDlg, LevelHdl_Impl));
     m_xWidthMF->connect_value_changed(LINK(this, SvxBulletAndPositionDlg, SizeHdl_Impl));
     m_xHeightMF->connect_value_changed(LINK(this, SvxBulletAndPositionDlg, SizeHdl_Impl));
     m_xRatioCB->connect_toggled(LINK(this, SvxBulletAndPositionDlg, RatioHdl_Impl));

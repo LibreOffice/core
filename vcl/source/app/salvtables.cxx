@@ -5302,7 +5302,7 @@ IMPL_LINK_NOARG(SalInstanceTreeView, SelectHdl, SvTreeListBox*, void)
 {
     if (notify_events_disabled())
         return;
-    signal_changed();
+    signal_selection_changed();
 }
 
 IMPL_LINK_NOARG(SalInstanceTreeView, DeSelectHdl, SvTreeListBox*, void)
@@ -5312,7 +5312,7 @@ IMPL_LINK_NOARG(SalInstanceTreeView, DeSelectHdl, SvTreeListBox*, void)
     if (m_xTreeView->GetSelectionMode() == SelectionMode::Single
         && !m_xTreeView->GetHoverSelection())
         return;
-    signal_changed();
+    signal_selection_changed();
 }
 
 IMPL_LINK_NOARG(SalInstanceTreeView, DoubleClickHdl, SvTreeListBox*, bool)

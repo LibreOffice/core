@@ -67,8 +67,8 @@ SwCondCollPage::SwCondCollPage(weld::Container* pPage, weld::DialogController* p
     m_xStyleLB->connect_row_activated(LINK(this, SwCondCollPage, AssignRemoveTreeListBoxHdl));
     m_xRemovePB->connect_clicked(LINK(this, SwCondCollPage, AssignRemoveClickHdl));
     m_xAssignPB->connect_clicked(LINK(this, SwCondCollPage, AssignRemoveClickHdl));
-    m_xTbLinks->connect_changed(LINK(this, SwCondCollPage, SelectTreeListBoxHdl));
-    m_xStyleLB->connect_changed(LINK(this, SwCondCollPage, SelectTreeListBoxHdl));
+    m_xTbLinks->connect_selection_changed(LINK(this, SwCondCollPage, SelectTreeListBoxHdl));
+    m_xStyleLB->connect_selection_changed(LINK(this, SwCondCollPage, SelectTreeListBoxHdl));
     m_xFilterLB->connect_changed(LINK(this, SwCondCollPage, SelectListBoxHdl));
 
     std::optional<SfxStyleFamilies> xFamilies(SwModule::get()->CreateStyleFamilies());

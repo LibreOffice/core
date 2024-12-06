@@ -23,7 +23,7 @@ public:
 
     static void trigger_changed(weld::ComboBox& rComboBox) { rComboBox.signal_changed(); }
 
-    static void trigger_changed(weld::TreeView& rTreeView) { rTreeView.signal_changed(); }
+    static void trigger_changed(weld::TreeView& rTreeView) { rTreeView.signal_selection_changed(); }
 
     static void trigger_changed(weld::IconView& rIconView) { rIconView.signal_selection_changed(); }
 

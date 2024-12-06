@@ -71,7 +71,7 @@ SwGlossDecideDlg::SwGlossDecideDlg(weld::Window* pParent)
     m_xListLB->set_size_request(m_xListLB->get_approximate_digit_width() * 32,
                                 m_xListLB->get_height_rows(8));
     m_xListLB->connect_row_activated(LINK(this, SwGlossDecideDlg, DoubleClickHdl));
-    m_xListLB->connect_changed(LINK(this, SwGlossDecideDlg, SelectHdl));
+    m_xListLB->connect_selection_changed(LINK(this, SwGlossDecideDlg, SelectHdl));
 }
 
 IMPL_LINK_NOARG(SwGlossDecideDlg, DoubleClickHdl, weld::TreeView&, bool)

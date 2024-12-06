@@ -39,7 +39,7 @@ SvPasteObjectDialog::SvPasteObjectDialog(weld::Window* pParent)
                                       m_xLbInsertList->get_height_rows(6));
     m_xOKButton->set_sensitive(false);
 
-    ObjectLB().connect_changed(LINK(this, SvPasteObjectDialog, SelectHdl));
+    ObjectLB().connect_selection_changed(LINK(this, SvPasteObjectDialog, SelectHdl));
     ObjectLB().connect_row_activated(LINK( this, SvPasteObjectDialog, DoubleClickHdl));
 }
 

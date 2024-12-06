@@ -71,7 +71,7 @@ ChartTypeTabPage::ChartTypeTabPage(weld::Container* pPage, weld::DialogControlle
 
     SetPageTitle(SchResId(STR_PAGE_CHARTTYPE));
 
-    m_xMainTypeList->connect_changed(LINK(this, ChartTypeTabPage, SelectMainTypeHdl));
+    m_xMainTypeList->connect_selection_changed(LINK(this, ChartTypeTabPage, SelectMainTypeHdl));
     m_xSubTypeList->SetSelectHdl( LINK( this, ChartTypeTabPage, SelectSubTypeHdl ) );
 
     m_xSubTypeList->SetStyle(m_xSubTypeList->GetStyle() |

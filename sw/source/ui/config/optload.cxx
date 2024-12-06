@@ -1042,7 +1042,7 @@ SwCaptionOptPage::SwCaptionOptPage(weld::Container* pPage, weld::DialogControlle
 
     m_xLbCaptionOrder->connect_changed(LINK(this, SwCaptionOptPage, OrderHdl));
 
-    m_xCheckLB->connect_changed(LINK(this, SwCaptionOptPage, ShowEntryHdl));
+    m_xCheckLB->connect_selection_changed(LINK(this, SwCaptionOptPage, ShowEntryHdl));
     m_xCheckLB->connect_toggled(LINK(this, SwCaptionOptPage, ToggleEntryHdl));
 }
 

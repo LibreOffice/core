@@ -80,7 +80,8 @@ XMLFilterSettingsDialog::XMLFilterSettingsDialog(weld::Window* pParent,
     m_xFilterListBox->set_size_request(m_xFilterListBox->get_approximate_digit_width() * 65,
                                        m_xFilterListBox->get_height_rows(12));
 
-    m_xFilterListBox->connect_changed( LINK( this, XMLFilterSettingsDialog, SelectionChangedHdl_Impl ) );
+    m_xFilterListBox->connect_selection_changed(
+        LINK(this, XMLFilterSettingsDialog, SelectionChangedHdl_Impl));
     m_xFilterListBox->connect_row_activated( LINK( this, XMLFilterSettingsDialog, DoubleClickHdl_Impl ) );
     m_xFilterListBox->set_accessible_name(FilterResId(STR_XML_FILTER_LISTBOX));
 

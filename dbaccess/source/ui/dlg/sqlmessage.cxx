@@ -290,7 +290,8 @@ OExceptionChainDialog::OExceptionChainDialog(weld::Window* pParent, ExceptionDis
     m_sStatusLabel = DBA_RES( STR_EXCEPTION_STATUS );
     m_sErrorCodeLabel = DBA_RES( STR_EXCEPTION_ERRORCODE );
 
-    m_xExceptionList->connect_changed(LINK(this, OExceptionChainDialog, OnExceptionSelected));
+    m_xExceptionList->connect_selection_changed(
+        LINK(this, OExceptionChainDialog, OnExceptionSelected));
 
     bool bHave22018 = false;
     size_t elementPos = 0;

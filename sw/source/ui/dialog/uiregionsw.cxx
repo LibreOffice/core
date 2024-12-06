@@ -369,7 +369,7 @@ SwEditRegionDlg::SwEditRegionDlg(weld::Window* pParent, SwWrtShell& rWrtSh)
 
     bool bWeb = dynamic_cast<SwWebDocShell*>( m_rSh.GetView().GetDocShell() ) != nullptr;
 
-    m_xTree->connect_changed(LINK(this, SwEditRegionDlg, GetFirstEntryHdl));
+    m_xTree->connect_selection_changed(LINK(this, SwEditRegionDlg, GetFirstEntryHdl));
     m_xCurName->connect_changed(LINK(this, SwEditRegionDlg, NameEditHdl));
     m_xConditionED->connect_changed( LINK( this, SwEditRegionDlg, ConditionEditHdl));
     m_xOK->connect_clicked( LINK( this, SwEditRegionDlg, OkHdl));

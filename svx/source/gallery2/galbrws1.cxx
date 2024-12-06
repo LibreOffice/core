@@ -150,7 +150,7 @@ GalleryBrowser1::GalleryBrowser1(
     mxNewTheme->connect_clicked( LINK( this, GalleryBrowser1, ClickNewThemeHdl ) );
 
     mxThemes->make_sorted();
-    mxThemes->connect_changed( LINK( this, GalleryBrowser1, SelectThemeHdl ) );
+    mxThemes->connect_selection_changed(LINK(this, GalleryBrowser1, SelectThemeHdl));
     mxThemes->connect_popup_menu(LINK(this, GalleryBrowser1, PopupMenuHdl1));
     mxThemes->connect_key_press(LINK(this, GalleryBrowser1, KeyInputHdl1));
     mxThemes->set_size_request(-1, mxThemes->get_height_rows(6));
@@ -183,7 +183,7 @@ GalleryBrowser1::GalleryBrowser1(
     mxIconView->SetSelectHdl( LINK( this, GalleryBrowser1, SelectObjectValueSetHdl ) );
     mxListView->connect_visible_range_changed(LINK(this, GalleryBrowser1, VisRowsScrolledHdl));
     mxListView->connect_size_allocate(LINK(this, GalleryBrowser1, SizeAllocHdl));
-    mxListView->connect_changed( LINK( this, GalleryBrowser1, SelectObjectHdl ) );
+    mxListView->connect_selection_changed(LINK(this, GalleryBrowser1, SelectObjectHdl));
     mxListView->connect_popup_menu(LINK(this, GalleryBrowser1, PopupMenuHdl2));
     mxListView->connect_key_press(LINK(this, GalleryBrowser1, KeyInputHdl2));
     mxListView->connect_row_activated(LINK(this, GalleryBrowser1, RowActivatedHdl));

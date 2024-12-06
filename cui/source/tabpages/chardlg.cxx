@@ -3078,8 +3078,8 @@ void SvxCharTwoLinesPage::Initialize()
     m_xTwoLinesBtn->connect_toggled(LINK(this, SvxCharTwoLinesPage, TwoLinesHdl_Impl));
 
     Link<weld::TreeView&,void> aLink = LINK(this, SvxCharTwoLinesPage, CharacterMapHdl_Impl);
-    m_xStartBracketLB->connect_changed(aLink);
-    m_xEndBracketLB->connect_changed(aLink);
+    m_xStartBracketLB->connect_selection_changed(aLink);
+    m_xEndBracketLB->connect_selection_changed(aLink);
 
     SvxFont& rFont = GetPreviewFont();
     SvxFont& rCJKFont = GetPreviewCJKFont();

@@ -399,7 +399,7 @@ SvxScriptOrgDialog::SvxScriptOrgDialog(weld::Window* pParent, OUString language)
     m_xScriptsBox->set_size_request(m_xScriptsBox->get_approximate_digit_width() * 45,
                                     m_xScriptsBox->get_height_rows(12));
 
-    m_xScriptsBox->connect_changed( LINK( this, SvxScriptOrgDialog, ScriptSelectHdl ) );
+    m_xScriptsBox->connect_selection_changed(LINK(this, SvxScriptOrgDialog, ScriptSelectHdl));
     m_xScriptsBox->connect_expanding(LINK( this, SvxScriptOrgDialog, ExpandingHdl ) );
     m_xRunButton->connect_clicked( LINK( this, SvxScriptOrgDialog, ButtonHdl ) );
     m_xCloseButton->connect_clicked( LINK( this, SvxScriptOrgDialog, ButtonHdl ) );

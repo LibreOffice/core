@@ -37,7 +37,7 @@ DevelopmentToolDockingWindow::DevelopmentToolDockingWindow(SfxBindings* pInputBi
           pInputBindings->GetDispatcher()->GetFrame()->GetObjectShell()->GetBaseModel())
     , maObjectInspectorTreeHandler(mpObjectInspectorWidgets)
 {
-    mpDocumentModelTreeView->connect_changed(
+    mpDocumentModelTreeView->connect_selection_changed(
         LINK(this, DevelopmentToolDockingWindow, DocumentModelTreeViewSelectionHandler));
     mpDomToolbar->connect_clicked(
         LINK(this, DevelopmentToolDockingWindow, DomToolbarButtonClicked));

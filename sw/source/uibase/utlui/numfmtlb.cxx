@@ -157,7 +157,7 @@ void SwNumFormatTreeView::Init()
 {
     SwNumFormatBase::Init();
 
-    mxControl->connect_changed(LINK(this, SwNumFormatTreeView, SelectHdl));
+    mxControl->connect_selection_changed(LINK(this, SwNumFormatTreeView, SelectHdl));
 }
 
 void SwNumFormatBase::SetFormatType(const SvNumFormatType nFormatType)

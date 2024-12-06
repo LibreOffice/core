@@ -815,21 +815,21 @@ SvxLinguTabPage::SvxLinguTabPage(weld::Container* pPage, weld::DialogController*
     m_xLinguDicsCLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
     m_xLinguOptionsCLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
 
-    m_xLinguModulesCLB->connect_changed( LINK( this, SvxLinguTabPage, SelectHdl_Impl ));
+    m_xLinguModulesCLB->connect_selection_changed(LINK(this, SvxLinguTabPage, SelectHdl_Impl));
     m_xLinguModulesCLB->connect_row_activated(LINK(this, SvxLinguTabPage, BoxDoubleClickHdl_Impl));
     m_xLinguModulesCLB->connect_toggled(LINK(this, SvxLinguTabPage, ModulesBoxCheckButtonHdl_Impl));
 
     m_xLinguModulesEditPB->connect_clicked( LINK( this, SvxLinguTabPage, ClickHdl_Impl ));
     m_xLinguOptionsEditPB->connect_clicked( LINK( this, SvxLinguTabPage, ClickHdl_Impl ));
 
-    m_xLinguDicsCLB->connect_changed( LINK( this, SvxLinguTabPage, SelectHdl_Impl ));
+    m_xLinguDicsCLB->connect_selection_changed(LINK(this, SvxLinguTabPage, SelectHdl_Impl));
     m_xLinguDicsCLB->connect_toggled(LINK(this, SvxLinguTabPage, DicsBoxCheckButtonHdl_Impl));
 
     m_xLinguDicsNewPB->connect_clicked( LINK( this, SvxLinguTabPage, ClickHdl_Impl ));
     m_xLinguDicsEditPB->connect_clicked( LINK( this, SvxLinguTabPage, ClickHdl_Impl ));
     m_xLinguDicsDelPB->connect_clicked( LINK( this, SvxLinguTabPage, ClickHdl_Impl ));
 
-    m_xLinguOptionsCLB->connect_changed( LINK( this, SvxLinguTabPage, SelectHdl_Impl ));
+    m_xLinguOptionsCLB->connect_selection_changed(LINK(this, SvxLinguTabPage, SelectHdl_Impl));
     m_xLinguOptionsCLB->connect_row_activated(LINK(this, SvxLinguTabPage, BoxDoubleClickHdl_Impl));
 
     m_xMoreDictsLink->connect_activate_link(LINK(this, SvxLinguTabPage, OnLinkClick));
@@ -1579,7 +1579,7 @@ SvxEditModulesDlg::SvxEditModulesDlg(weld::Window* pParent, SvxLinguData_Impl& r
 
     pDefaultLinguData.reset( new SvxLinguData_Impl( rLinguData ) );
 
-    m_xModulesCLB->connect_changed( LINK( this, SvxEditModulesDlg, SelectHdl_Impl ));
+    m_xModulesCLB->connect_selection_changed(LINK(this, SvxEditModulesDlg, SelectHdl_Impl));
     m_xModulesCLB->connect_toggled(LINK(this, SvxEditModulesDlg, BoxCheckButtonHdl_Impl));
 
     m_xClosePB->connect_clicked( LINK( this, SvxEditModulesDlg, ClickHdl_Impl ));

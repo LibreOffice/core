@@ -195,7 +195,7 @@ ScScenarioWindow::ScScenarioWindow(weld::Builder& rBuilder, const OUString& aQH_
     m_xLbScenario->set_tooltip_text(aQH_List);
     m_xEdComment->set_tooltip_text(aQH_Comment);
 
-    m_xLbScenario->connect_changed(LINK(this, ScScenarioWindow, SelectHdl));
+    m_xLbScenario->connect_selection_changed(LINK(this, ScScenarioWindow, SelectHdl));
     m_xLbScenario->connect_row_activated(LINK(this, ScScenarioWindow, DoubleClickHdl));
     m_xLbScenario->connect_key_press(LINK(this, ScScenarioWindow, KeyInputHdl));
     m_xLbScenario->connect_popup_menu(LINK(this, ScScenarioWindow, ContextMenuHdl));

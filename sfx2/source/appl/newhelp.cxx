@@ -406,7 +406,7 @@ IndexTabPage_Impl::IndexTabPage_Impl(weld::Widget* pParent, SfxHelpIndexWindow_I
     aAutoCompleteIdle.SetInvokeHandler( LINK(this, IndexTabPage_Impl, AutoCompleteHdl ));
     aKeywordTimer.SetInvokeHandler( LINK( this, IndexTabPage_Impl, TimeoutHdl ) );
     m_xIndexList->connect_row_activated(LINK(this, IndexTabPage_Impl, DoubleClickHdl));
-    m_xIndexList->connect_changed(LINK(this, IndexTabPage_Impl, TreeChangeHdl));
+    m_xIndexList->connect_selection_changed(LINK(this, IndexTabPage_Impl, TreeChangeHdl));
     m_xIndexList->connect_custom_get_size(LINK(this, IndexTabPage_Impl, CustomGetSizeHdl));
     m_xIndexList->connect_custom_render(LINK(this, IndexTabPage_Impl, CustomRenderHdl));
     m_xIndexList->set_column_custom_renderer(0, true);

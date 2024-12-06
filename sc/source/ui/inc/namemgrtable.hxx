@@ -61,7 +61,10 @@ public:
     void CheckForFormulaString();
 
     int n_children() const { return m_xTreeView->n_children(); }
-    void connect_changed(const Link<weld::TreeView&, void>& rLink) { m_xTreeView->connect_changed(rLink); }
+    void connect_changed(const Link<weld::TreeView&, void>& rLink)
+    {
+        m_xTreeView->connect_selection_changed(rLink);
+    }
     void set_cursor(int nPos) { m_xTreeView->set_cursor(nPos); }
 
     void addEntry(const ScRangeNameLine& rLine, bool bSetCurEntry);

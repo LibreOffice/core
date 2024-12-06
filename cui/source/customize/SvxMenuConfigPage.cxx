@@ -54,7 +54,7 @@ SvxMenuConfigPage::SvxMenuConfigPage(weld::Container* pPage, weld::DialogControl
     rTreeView.set_vexpand(true);
     rTreeView.show();
 
-    rTreeView.connect_changed(LINK(this, SvxMenuConfigPage, SelectMenuEntry));
+    rTreeView.connect_selection_changed(LINK(this, SvxMenuConfigPage, SelectMenuEntry));
     rTreeView.connect_popup_menu(LINK(this, SvxMenuConfigPage, ContentContextMenuHdl));
 
     m_xFunctions->get_widget().connect_popup_menu(

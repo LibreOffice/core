@@ -248,7 +248,7 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(std::shared_ptr<weld::Window> xParent, we
     weld::TreeView& rTreeView = m_pTable->GetWidget();
     rTreeView.set_selection_mode(SelectionMode::Multiple);
 
-    rTreeView.connect_changed(LINK(this, SwRedlineAcceptDlg, SelectHdl));
+    rTreeView.connect_selection_changed(LINK(this, SwRedlineAcceptDlg, SelectHdl));
     rTreeView.connect_popup_menu(LINK(this, SwRedlineAcceptDlg, CommandHdl));
 
     // avoid multiple selection of the same texts:
@@ -823,7 +823,7 @@ void SwRedlineAcceptDlg::RemoveParents(SwRedlineTable::size_type nStart, SwRedli
     weld::TreeView& rTreeView = m_pTable->GetWidget();
 
     // because of Bug of TLB that ALWAYS calls the SelectHandler at Remove:
-    rTreeView.connect_changed(Link<weld::TreeView&,void>());
+    rTreeView.connect_selection_changed(Link<weld::TreeView&, void>());
 
     bool bChildrenRemoved = false;
     rTreeView.thaw();
@@ -881,7 +881,7 @@ void SwRedlineAcceptDlg::RemoveParents(SwRedlineTable::size_type nStart, SwRedli
     }
 
     rTreeView.thaw();
-    rTreeView.connect_changed(LINK(this, SwRedlineAcceptDlg, SelectHdl));
+    rTreeView.connect_selection_changed(LINK(this, SwRedlineAcceptDlg, SelectHdl));
     // unfortunately by Remove it was selected from the TLB always again ...
     rTreeView.unselect_all();
     rTreeView.freeze();

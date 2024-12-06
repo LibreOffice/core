@@ -146,7 +146,7 @@ SwGlobalTree::SwGlobalTree(std::unique_ptr<weld::TreeView> xTreeView, SwNavigati
     m_xTreeView->set_help_id(HID_NAVIGATOR_GLOB_TREELIST);
     Select();
     m_xTreeView->connect_row_activated(LINK(this, SwGlobalTree, DoubleClickHdl));
-    m_xTreeView->connect_changed(LINK(this, SwGlobalTree, SelectHdl));
+    m_xTreeView->connect_selection_changed(LINK(this, SwGlobalTree, SelectHdl));
     m_xTreeView->connect_focus_in(LINK(this, SwGlobalTree, FocusInHdl));
     m_xTreeView->connect_key_press(LINK(this, SwGlobalTree, KeyInputHdl));
     m_xTreeView->connect_popup_menu(LINK(this, SwGlobalTree, CommandHdl));

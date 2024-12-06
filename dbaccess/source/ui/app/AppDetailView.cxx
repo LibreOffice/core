@@ -118,7 +118,7 @@ OTasksWindow::OTasksWindow(weld::Container* pParent, OApplicationDetailView* pDe
 
     m_xTreeView->set_help_id(HID_APP_CREATION_LIST);
     m_xTreeView->connect_row_activated(LINK(this, OTasksWindow, onSelected));
-    m_xTreeView->connect_changed(LINK(this, OTasksWindow, OnEntrySelectHdl));
+    m_xTreeView->connect_selection_changed(LINK(this, OTasksWindow, OnEntrySelectHdl));
     m_xTreeView->connect_focus_in(LINK(this, OTasksWindow, FocusInHdl));
     m_xTreeView->connect_focus_out(LINK(this, OTasksWindow, FocusOutHdl));
     // an arbitrary small size it's allowed to shrink to

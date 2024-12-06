@@ -1041,7 +1041,7 @@ SvxConfigPage::SvxConfigPage(weld::Container* pPage, weld::DialogController* pCo
     m_xSearchEdit->connect_focus_out(LINK(this, SvxConfigPage, FocusOut_Impl));
 
     rTreeView.connect_row_activated(LINK(this, SvxConfigPage, FunctionDoubleClickHdl));
-    rTreeView.connect_changed(LINK(this, SvxConfigPage, SelectFunctionHdl));
+    rTreeView.connect_selection_changed(LINK(this, SvxConfigPage, SelectFunctionHdl));
 }
 
 IMPL_LINK_NOARG(SvxConfigPage, SelectElementHdl, weld::ComboBox&, void)
@@ -1838,7 +1838,7 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
         m_xDialog->set_title(CuiResId(RID_CUISTR_MOVE_MENU));
     }
 
-    m_xMenuListBox->connect_changed(LINK(this, SvxMainMenuOrganizerDialog, SelectHdl));
+    m_xMenuListBox->connect_selection_changed(LINK(this, SvxMainMenuOrganizerDialog, SelectHdl));
 
     m_xMoveUpButton->connect_clicked(LINK( this, SvxMainMenuOrganizerDialog, MoveHdl));
     m_xMoveDownButton->connect_clicked(LINK( this, SvxMainMenuOrganizerDialog, MoveHdl));

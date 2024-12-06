@@ -150,8 +150,8 @@ void SwFieldDokPage::Reset(const SfxItemSet* )
     RestorePos(*m_xTypeLB);
 
     m_xTypeLB->connect_row_activated(LINK(this, SwFieldDokPage, TreeViewInsertHdl));
-    m_xTypeLB->connect_changed(LINK(this, SwFieldDokPage, TypeHdl));
-    m_xFormatLB->connect_changed(LINK(this, SwFieldDokPage, FormatHdl));
+    m_xTypeLB->connect_selection_changed(LINK(this, SwFieldDokPage, TypeHdl));
+    m_xFormatLB->connect_selection_changed(LINK(this, SwFieldDokPage, FormatHdl));
 
     if( !IsRefresh() )
     {
@@ -276,7 +276,7 @@ IMPL_LINK_NOARG(SwFieldDokPage, TypeHdl, weld::TreeView&, void)
                 }
             }
         }
-        m_xSelectionLB->connect_changed(Link<weld::TreeView&,void>());
+        m_xSelectionLB->connect_selection_changed(Link<weld::TreeView&, void>());
     }
     else
     {
@@ -285,7 +285,7 @@ IMPL_LINK_NOARG(SwFieldDokPage, TypeHdl, weld::TreeView&, void)
         AddSubType(SwFieldTypesEnum::NextPage);
         nTypeId = static_cast<SwFieldTypesEnum>(m_xSelectionLB->get_id(0).toUInt32());
         nCount = 3;
-        m_xSelectionLB->connect_changed(LINK(this, SwFieldDokPage, SubTypeHdl));
+        m_xSelectionLB->connect_selection_changed(LINK(this, SwFieldDokPage, SubTypeHdl));
     }
 
     bool bEnable = nCount != 0;

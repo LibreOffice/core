@@ -116,7 +116,10 @@ class CuiConfigFunctionListBox
 public:
     CuiConfigFunctionListBox(std::unique_ptr<weld::TreeView> xTreeView);
     void set_sensitive(bool bSensitive) { m_xTreeView->set_sensitive(bSensitive); }
-    void connect_changed(const Link<weld::TreeView&, void>& rLink) { m_xTreeView->connect_changed(rLink); }
+    void connect_changed(const Link<weld::TreeView&, void>& rLink)
+    {
+        m_xTreeView->connect_selection_changed(rLink);
+    }
     void connect_popup_menu(const Link<const CommandEvent&, bool>& rLink) { m_xTreeView->connect_popup_menu(rLink); }
     void connect_row_activated(const Link<weld::TreeView&, bool>& rLink) { m_xTreeView->connect_row_activated(rLink); }
     void freeze() { m_xTreeView->freeze(); }
@@ -210,7 +213,10 @@ class CuiConfigGroupListBox
 public:
     CuiConfigGroupListBox(std::unique_ptr<weld::TreeView> xTreeView);
     void set_sensitive(bool bSensitive) { m_xTreeView->set_sensitive(bSensitive); }
-    void connect_changed(const Link<weld::TreeView&, void>& rLink) { m_xTreeView->connect_changed(rLink); }
+    void connect_changed(const Link<weld::TreeView&, void>& rLink)
+    {
+        m_xTreeView->connect_selection_changed(rLink);
+    }
     void set_size_request(int nWidth, int nHeight) { m_xTreeView->set_size_request(nWidth, nHeight); }
     weld::TreeView& get_widget() { return *m_xTreeView; }
     ~CuiConfigGroupListBox();

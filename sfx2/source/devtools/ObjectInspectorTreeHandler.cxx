@@ -941,13 +941,13 @@ ObjectInspectorTreeHandler::ObjectInspectorTreeHandler(
     mpObjectInspectorWidgets->mpPropertiesTreeView->connect_popup_menu(
         LINK(this, ObjectInspectorTreeHandler, PopupMenuHandler));
 
-    mpObjectInspectorWidgets->mpInterfacesTreeView->connect_changed(
+    mpObjectInspectorWidgets->mpInterfacesTreeView->connect_selection_changed(
         LINK(this, ObjectInspectorTreeHandler, SelectionChanged));
-    mpObjectInspectorWidgets->mpServicesTreeView->connect_changed(
+    mpObjectInspectorWidgets->mpServicesTreeView->connect_selection_changed(
         LINK(this, ObjectInspectorTreeHandler, SelectionChanged));
-    mpObjectInspectorWidgets->mpPropertiesTreeView->connect_changed(
+    mpObjectInspectorWidgets->mpPropertiesTreeView->connect_selection_changed(
         LINK(this, ObjectInspectorTreeHandler, SelectionChanged));
-    mpObjectInspectorWidgets->mpMethodsTreeView->connect_changed(
+    mpObjectInspectorWidgets->mpMethodsTreeView->connect_selection_changed(
         LINK(this, ObjectInspectorTreeHandler, SelectionChanged));
 
     mpObjectInspectorWidgets->mpInterfacesTreeView->make_sorted();

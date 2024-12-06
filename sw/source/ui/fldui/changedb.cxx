@@ -67,7 +67,7 @@ SwChangeDBDlg::SwChangeDBDlg(SwView const & rVw)
 
     Link<weld::TreeView&,void> aLink = LINK(this, SwChangeDBDlg, TreeSelectHdl);
 
-    m_xUsedDBTLB->connect_changed(aLink);
+    m_xUsedDBTLB->connect_selection_changed(aLink);
     m_xAvailDBTLB->connect_changed(aLink);
     TreeSelect();
 }

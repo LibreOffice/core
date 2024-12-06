@@ -60,7 +60,7 @@ namespace pcr
         , m_xScratchIter(m_xControlTree->make_iterator())
         , m_xNoAssignment(m_xBuilder->weld_check_button(u"noassignment"_ustr))
     {
-        m_xControlTree->connect_changed(LINK(this, OSelectLabelDialog, OnEntrySelected));
+        m_xControlTree->connect_selection_changed(LINK(this, OSelectLabelDialog, OnEntrySelected));
         m_xControlTree->set_size_request(-1, m_xControlTree->get_height_rows(8));
 
         // fill the description

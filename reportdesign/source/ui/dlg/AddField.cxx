@@ -86,7 +86,7 @@ OAddFieldWindow::OAddFieldWindow(weld::Window* pParent, uno::Reference< beans::X
     m_xActions->set_item_sensitive(u"insert"_ustr, false);
 
     m_xListBox->connect_row_activated(LINK( this, OAddFieldWindow, OnDoubleClickHdl ) );
-    m_xListBox->connect_changed(LINK( this, OAddFieldWindow, OnSelectHdl ) );
+    m_xListBox->connect_selection_changed(LINK(this, OAddFieldWindow, OnSelectHdl));
     m_xListBox->set_size_request(m_xListBox->get_approximate_digit_width() * 45, m_xListBox->get_height_rows(8));
 
     if (!m_xRowSet.is())

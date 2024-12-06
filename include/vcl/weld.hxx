@@ -966,7 +966,7 @@ private:
     OUString m_sSavedValue;
 
 protected:
-    Link<TreeView&, void> m_aChangeHdl;
+    Link<TreeView&, void> m_aSelectionChangedHdl;
     Link<TreeView&, bool> m_aRowActivatedHdl;
     Link<int, void> m_aColumnClickedHdl;
     Link<const iter_col&, void> m_aRadioToggleHdl;
@@ -986,7 +986,7 @@ protected:
     std::function<int(const weld::TreeIter&, const weld::TreeIter&)> m_aCustomSort;
 
 protected:
-    void signal_changed() { m_aChangeHdl.Call(*this); }
+    void signal_selection_changed() { m_aSelectionChangedHdl.Call(*this); }
     bool signal_row_activated() { return m_aRowActivatedHdl.Call(*this); }
     void signal_column_clicked(int nColumn) { m_aColumnClickedHdl.Call(nColumn); }
     bool signal_expanding(const TreeIter& rIter)
@@ -1076,7 +1076,10 @@ public:
     virtual void insert_separator(int pos, const OUString& rId) = 0;
     void append_separator(const OUString& rId) { insert_separator(-1, rId); }
 
-    void connect_changed(const Link<TreeView&, void>& rLink) { m_aChangeHdl = rLink; }
+    void connect_selection_changed(const Link<TreeView&, void>& rLink)
+    {
+        m_aSelectionChangedHdl = rLink;
+    }
 
     /* A row is "activated" when the user double clicks a treeview row. It may
        also be emitted when a row is selected and Space or Enter is pressed.

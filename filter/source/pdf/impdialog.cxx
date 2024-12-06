@@ -1689,7 +1689,7 @@ ImplErrorDialog::ImplErrorDialog(weld::Window* pParent, const std::set<vcl::PDFW
         m_xExplanation->set_label(m_xErrors->get_id(0));
     }
 
-    m_xErrors->connect_changed(LINK(this, ImplErrorDialog, SelectHdl));
+    m_xErrors->connect_selection_changed(LINK(this, ImplErrorDialog, SelectHdl));
 }
 
 IMPL_LINK_NOARG(ImplErrorDialog, SelectHdl, weld::TreeView&, void)

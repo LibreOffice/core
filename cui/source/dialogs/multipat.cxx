@@ -196,7 +196,7 @@ SvxMultiPathDialog::SvxMultiPathDialog(weld::Window* pParent)
                                  m_xRadioLB->get_text_height() * 10);
     m_xRadioLB->enable_toggle_buttons(weld::ColumnToggleType::Radio);
     m_xRadioLB->connect_toggled(LINK(this, SvxMultiPathDialog, CheckHdl_Impl));
-    m_xRadioLB->connect_changed(LINK(this, SvxMultiPathDialog, SelectHdl_Impl));
+    m_xRadioLB->connect_selection_changed(LINK(this, SvxMultiPathDialog, SelectHdl_Impl));
 
     m_xAddBtn->connect_clicked(LINK(this, SvxMultiPathDialog, AddHdl_Impl));
     m_xDelBtn->connect_clicked(LINK(this, SvxMultiPathDialog, DelHdl_Impl));
@@ -213,7 +213,7 @@ SvxPathSelectDialog::SvxPathSelectDialog(weld::Window* pParent)
     m_xPathLB->set_size_request(m_xPathLB->get_approximate_digit_width() * 60,
                                 m_xPathLB->get_text_height() * 10);
 
-    m_xPathLB->connect_changed(LINK(this, SvxPathSelectDialog, SelectHdl_Impl));
+    m_xPathLB->connect_selection_changed(LINK(this, SvxPathSelectDialog, SelectHdl_Impl));
     m_xAddBtn->connect_clicked(LINK(this, SvxPathSelectDialog, AddHdl_Impl));
     m_xDelBtn->connect_clicked(LINK(this, SvxPathSelectDialog, DelHdl_Impl));
 

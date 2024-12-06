@@ -170,7 +170,7 @@ SfxVersionDialog::SfxVersionDialog(weld::Window* pParent, SfxViewFrame* pVwFrame
     m_xSaveCheckBox->connect_toggled(LINK(this, SfxVersionDialog, ToggleHdl_Impl));
     m_xCmisButton->connect_clicked( aClickLink );
 
-    m_xVersionBox->connect_changed( LINK( this, SfxVersionDialog, SelectHdl_Impl ) );
+    m_xVersionBox->connect_selection_changed(LINK(this, SfxVersionDialog, SelectHdl_Impl));
     m_xVersionBox->connect_row_activated( LINK( this, SfxVersionDialog, DClickHdl_Impl ) );
 
     m_xVersionBox->grab_focus();

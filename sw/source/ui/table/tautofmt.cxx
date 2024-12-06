@@ -115,7 +115,7 @@ void SwAutoFormatDlg::Init(const SwTableAutoFormat* pSelFormat)
     m_xBtnAdd->connect_clicked(LINK(this, SwAutoFormatDlg, AddHdl));
     m_xBtnRemove->connect_clicked(LINK(this, SwAutoFormatDlg, RemoveHdl));
     m_xBtnRename->connect_clicked(LINK(this, SwAutoFormatDlg, RenameHdl));
-    m_xLbFormat->connect_changed(LINK(this, SwAutoFormatDlg, SelFormatHdl));
+    m_xLbFormat->connect_selection_changed(LINK(this, SwAutoFormatDlg, SelFormatHdl));
 
     m_xBtnAdd->set_sensitive(m_bSetAutoFormat);
 

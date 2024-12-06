@@ -71,7 +71,7 @@ public:
 
     void connect_changed(const Link<weld::TreeView&, void>& rLink)
     {
-        m_xTreeView->connect_changed(rLink);
+        m_xTreeView->connect_selection_changed(rLink);
     }
     void connect_popup_menu(const Link<const CommandEvent&, bool>& rLink)
     {
@@ -149,7 +149,7 @@ public:
 
     void connect_changed(const Link<weld::TreeView&, void>& rLink)
     {
-        m_xTreeView->connect_changed(rLink);
+        m_xTreeView->connect_selection_changed(rLink);
     }
     weld::TreeView& get_widget() { return *m_xTreeView; }
     void ClearAll();

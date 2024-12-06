@@ -101,7 +101,7 @@ void ScColRowNameRangesDlg::Init()
     m_xBtnCancel->connect_clicked  ( LINK( this, ScColRowNameRangesDlg, CancelBtnHdl ) );
     m_xBtnAdd->connect_clicked     ( LINK( this, ScColRowNameRangesDlg, AddBtnHdl ) );
     m_xBtnRemove->connect_clicked  ( LINK( this, ScColRowNameRangesDlg, RemoveBtnHdl ) );
-    m_xLbRange->connect_changed( LINK( this, ScColRowNameRangesDlg, Range1SelectHdl ) );
+    m_xLbRange->connect_selection_changed(LINK(this, ScColRowNameRangesDlg, Range1SelectHdl));
     m_xEdAssign->SetModifyHdl  ( LINK( this, ScColRowNameRangesDlg, Range1DataModifyHdl ) );
     m_xBtnColHead->connect_toggled ( LINK( this, ScColRowNameRangesDlg, ColRowToggleHdl ) );
     m_xEdAssign2->SetModifyHdl ( LINK( this, ScColRowNameRangesDlg, Range2DataModifyHdl ) );

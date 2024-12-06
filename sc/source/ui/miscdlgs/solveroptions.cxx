@@ -77,7 +77,7 @@ ScSolverOptionsDialog::ScSolverOptionsDialog(weld::Window* pParent,
 
     m_xBtnEdit->connect_clicked( LINK( this, ScSolverOptionsDialog, ButtonHdl ) );
 
-    m_xLbSettings->connect_changed( LINK( this, ScSolverOptionsDialog, SettingsSelHdl ) );
+    m_xLbSettings->connect_selection_changed(LINK(this, ScSolverOptionsDialog, SettingsSelHdl));
     m_xLbSettings->connect_row_activated( LINK( this, ScSolverOptionsDialog, SettingsDoubleClickHdl ) );
 
     sal_Int32 nSelect = -1;

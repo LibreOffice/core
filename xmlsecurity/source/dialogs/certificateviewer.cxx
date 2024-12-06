@@ -235,7 +235,8 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP(weld::Container* pParent,
     InsertElement( XsResId( STR_THUMBPRINT_MD5 ), aLBEntry, aDetails, true );
 
     m_xElementsLB->columns_autosize();
-    m_xElementsLB->connect_changed(LINK(this, CertificateViewerDetailsTP, ElementSelectHdl));
+    m_xElementsLB->connect_selection_changed(
+        LINK(this, CertificateViewerDetailsTP, ElementSelectHdl));
 }
 
 IMPL_LINK_NOARG(CertificateViewerDetailsTP, ElementSelectHdl, weld::TreeView&, void)
@@ -275,7 +276,7 @@ CertificateViewerCertPathTP::CertificateViewerCertPathTP(weld::Container* pParen
     mxCertStatusML->set_editable(false);
 
     mxCertPathLB->columns_autosize();
-    mxCertPathLB->connect_changed( LINK( this, CertificateViewerCertPathTP, CertSelectHdl ) );
+    mxCertPathLB->connect_selection_changed(LINK(this, CertificateViewerCertPathTP, CertSelectHdl));
     mxViewCertPB->connect_clicked( LINK( this, CertificateViewerCertPathTP, ViewCertHdl ) );
 }
 

@@ -31,7 +31,7 @@ TSAURLsDialog::TSAURLsDialog(weld::Window* pParent)
     m_xAddBtn->connect_clicked(LINK(this, TSAURLsDialog, AddHdl_Impl));
     m_xDeleteBtn->connect_clicked(LINK(this, TSAURLsDialog, DeleteHdl_Impl));
     m_xOKBtn->connect_clicked(LINK(this, TSAURLsDialog, OKHdl_Impl));
-    m_xURLListBox->connect_changed(LINK(this, TSAURLsDialog, SelectHdl));
+    m_xURLListBox->connect_selection_changed(LINK(this, TSAURLsDialog, SelectHdl));
 
     try
     {

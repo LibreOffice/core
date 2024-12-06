@@ -1986,7 +1986,7 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(weld::Container* pPage, weld::DialogControl
     m_xTabPB->connect_clicked(LINK(this, SwTOXEntryTabPage, InsertTokenHdl));
     m_xHyperLinkPB->connect_clicked(LINK(this, SwTOXEntryTabPage, InsertTokenHdl));
     m_xEditStylePB->connect_clicked(LINK(this, SwTOXEntryTabPage, EditStyleHdl));
-    m_xLevelLB->connect_changed(LINK(this, SwTOXEntryTabPage, LevelHdl));
+    m_xLevelLB->connect_selection_changed(LINK(this, SwTOXEntryTabPage, LevelHdl));
     m_xTokenWIN->SetButtonSelectedHdl(LINK(this, SwTOXEntryTabPage, TokenSelectedHdl));
     m_xTokenWIN->SetModifyHdl(LINK(this, SwTOXEntryTabPage, ModifyHdl));
     m_xCharStyleLB->connect_changed(LINK(this, SwTOXEntryTabPage, StyleSelectHdl));
@@ -3573,8 +3573,8 @@ SwTOXStylesTabPage::SwTOXStylesTabPage(weld::Container* pPage, weld::DialogContr
     m_xEditStyleBT->connect_clicked(LINK(this, SwTOXStylesTabPage, EditStyleHdl));
     m_xAssignBT->connect_clicked(LINK(this, SwTOXStylesTabPage, AssignHdl));
     m_xStdBT->connect_clicked(LINK(this, SwTOXStylesTabPage, StdHdl));
-    m_xParaLayLB->connect_changed(LINK(this, SwTOXStylesTabPage, EnableSelectHdl));
-    m_xLevelLB->connect_changed(LINK(this, SwTOXStylesTabPage, EnableSelectHdl));
+    m_xParaLayLB->connect_selection_changed(LINK(this, SwTOXStylesTabPage, EnableSelectHdl));
+    m_xLevelLB->connect_selection_changed(LINK(this, SwTOXStylesTabPage, EnableSelectHdl));
     m_xParaLayLB->connect_row_activated(LINK(this, SwTOXStylesTabPage, DoubleClickHdl));
 }
 

@@ -34,7 +34,7 @@ BarGeometryResources::BarGeometryResources(weld::Builder* pBuilder)
 
 void BarGeometryResources::connect_changed(const Link<weld::TreeView&, void>& rLink)
 {
-    m_xLB_Geometry->connect_changed(rLink);
+    m_xLB_Geometry->connect_selection_changed(rLink);
 }
 
 void BarGeometryResources::set_visible(bool bShow)

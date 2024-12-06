@@ -644,7 +644,7 @@ ScCheckListMenuControl::ScCheckListMenuControl(weld::Widget* pParent, ScViewData
     mxButtonBox->show();
 
     mxMenu->connect_row_activated(LINK(this, ScCheckListMenuControl, RowActivatedHdl));
-    mxMenu->connect_changed(LINK(this, ScCheckListMenuControl, SelectHdl));
+    mxMenu->connect_selection_changed(LINK(this, ScCheckListMenuControl, SelectHdl));
     mxMenu->connect_key_press(LINK(this, ScCheckListMenuControl, MenuKeyInputHdl));
 
     mxBtnOk->connect_clicked(LINK(this, ScCheckListMenuControl, ButtonHdl));
@@ -1743,10 +1743,12 @@ ScListSubMenuControl::ScListSubMenuControl(weld::Widget* pParent, ScCheckListMen
     {
         mxBackColorMenu->set_clicks_to_toggle(1);
         mxBackColorMenu->enable_toggle_buttons(weld::ColumnToggleType::Radio);
-        mxBackColorMenu->connect_changed(LINK(this, ScListSubMenuControl, ColorSelChangedHdl));
+        mxBackColorMenu->connect_selection_changed(
+            LINK(this, ScListSubMenuControl, ColorSelChangedHdl));
         mxTextColorMenu->set_clicks_to_toggle(1);
         mxTextColorMenu->enable_toggle_buttons(weld::ColumnToggleType::Radio);
-        mxTextColorMenu->connect_changed(LINK(this, ScListSubMenuControl, ColorSelChangedHdl));
+        mxTextColorMenu->connect_selection_changed(
+            LINK(this, ScListSubMenuControl, ColorSelChangedHdl));
         SetupMenu(*mxBackColorMenu);
         SetupMenu(*mxTextColorMenu);
     }

@@ -270,7 +270,7 @@ SaneDlg::SaneDlg(weld::Window* pParent, Sane& rSane, bool bScanEnabled)
     mxScanButton->connect_clicked( LINK( this, SaneDlg, ClickBtnHdl ) );
     mxButtonOption->connect_clicked( LINK( this, SaneDlg, ClickBtnHdl ) );
     mxDeviceBox->connect_changed( LINK( this, SaneDlg, SelectHdl ) );
-    mxOptionBox->connect_changed( LINK( this, SaneDlg, OptionsBoxSelectHdl ) );
+    mxOptionBox->connect_selection_changed(LINK(this, SaneDlg, OptionsBoxSelectHdl));
     mxCancelButton->connect_clicked( LINK( this, SaneDlg, ClickBtnHdl ) );
     mxBoolCheckBox->connect_toggled( LINK( this, SaneDlg, ToggleBtnHdl ) );
     mxStringEdit->connect_changed( LINK( this, SaneDlg, ModifyHdl ) );

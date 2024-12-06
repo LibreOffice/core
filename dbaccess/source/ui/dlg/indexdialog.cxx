@@ -92,7 +92,7 @@ namespace dbaui
 
         m_xActions->connect_clicked(LINK(this, DbaIndexDialog, OnIndexAction));
 
-        m_xIndexList->connect_changed(LINK(this, DbaIndexDialog, OnIndexSelected));
+        m_xIndexList->connect_selection_changed(LINK(this, DbaIndexDialog, OnIndexSelected));
         m_xIndexList->connect_editing(LINK(this, DbaIndexDialog, OnEntryEditing),
                                       LINK(this, DbaIndexDialog, OnEntryEdited));
 

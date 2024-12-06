@@ -180,7 +180,8 @@ namespace dbp
         m_xMoveLeft->connect_clicked(LINK(this, ORadioSelectionPage, OnMoveEntry));
         m_xMoveRight->connect_clicked(LINK(this, ORadioSelectionPage, OnMoveEntry));
         m_xRadioName->connect_changed(LINK(this, ORadioSelectionPage, OnNameModified));
-        m_xExistingRadios->connect_changed(LINK(this, ORadioSelectionPage, OnEntrySelected));
+        m_xExistingRadios->connect_selection_changed(
+            LINK(this, ORadioSelectionPage, OnEntrySelected));
 
         implCheckMoveButtons();
         m_xExistingRadios->set_selection_mode(SelectionMode::Multiple);
@@ -341,7 +342,7 @@ namespace dbp
         , m_xOptions(m_xBuilder->weld_tree_view(u"radiobuttons"_ustr))
         , m_nLastSelection(::vcl::WizardTypes::WizardState(-1))
     {
-       m_xOptions->connect_changed(LINK(this, OOptionValuesPage, OnOptionSelected));
+        m_xOptions->connect_selection_changed(LINK(this, OOptionValuesPage, OnOptionSelected));
     }
 
     OOptionValuesPage::~OOptionValuesPage()

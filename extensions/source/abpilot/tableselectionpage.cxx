@@ -31,7 +31,7 @@ namespace abp
         : AddressBookSourcePage(pPage, pController, u"modules/sabpilot/ui/selecttablepage.ui"_ustr, u"SelectTablePage"_ustr)
         , m_xTableList(m_xBuilder->weld_tree_view(u"table"_ustr))
     {
-        m_xTableList->connect_changed( LINK( this, TableSelectionPage, OnTableSelected ) );
+        m_xTableList->connect_selection_changed(LINK(this, TableSelectionPage, OnTableSelected));
         m_xTableList->connect_row_activated( LINK( this, TableSelectionPage, OnTableDoubleClicked ) );
     }
 

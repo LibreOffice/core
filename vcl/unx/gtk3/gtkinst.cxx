@@ -14205,9 +14205,9 @@ private:
     GtkAdjustment* m_pVAdjustment;
     ImplSVEvent* m_pChangeEvent;
 
-    DECL_LINK(async_signal_changed, void*, void);
+    DECL_LINK(async_signal_selection_changed, void*, void);
 
-    void launch_signal_changed()
+    void launch_signal_selection_changed()
     {
         //tdf#117991 selection change is sent before the focus change, and focus change
         //is what will cause a spinbutton that currently has the focus to set its contents
@@ -14227,13 +14227,13 @@ private:
         //TODO maybe iterate over gtk_widget_observe_controllers looking for a motion controller
 #endif
 
-        m_pChangeEvent = Application::PostUserEvent(LINK(this, GtkInstanceTreeView, async_signal_changed));
+        m_pChangeEvent = Application::PostUserEvent(LINK(this, GtkInstanceTreeView, async_signal_selection_changed));
     }
 
-    static void signalChanged(GtkTreeView*, gpointer widget)
+    static void signalSelectionChanged(GtkTreeView*, gpointer widget)
     {
         GtkInstanceTreeView* pThis = static_cast<GtkInstanceTreeView*>(widget);
-        pThis->launch_signal_changed();
+        pThis->launch_signal_selection_changed();
     }
 
     void handle_row_activated()
@@ -14946,7 +14946,7 @@ public:
         , m_nExpanderImageCol(-1)
         , m_nPendingVAdjustment(-1)
         , m_nChangedSignalId(g_signal_connect(gtk_tree_view_get_selection(pTreeView), "changed",
-                             G_CALLBACK(signalChanged), this))
+                             G_CALLBACK(signalSelectionChanged), this))
         , m_nRowActivatedSignalId(g_signal_connect(pTreeView, "row-activated", G_CALLBACK(signalRowActivated), this))
         , m_nTestExpandRowSignalId(g_signal_connect(pTreeView, "test-expand-row", G_CALLBACK(signalTestExpandRow), this))
         , m_nTestCollapseRowSignalId(g_signal_connect(pTreeView, "test-collapse-row", G_CALLBACK(signalTestCollapseRow), this))
@@ -16964,10 +16964,10 @@ public:
 
 }
 
-IMPL_LINK_NOARG(GtkInstanceTreeView, async_signal_changed, void*, void)
+IMPL_LINK_NOARG(GtkInstanceTreeView, async_signal_selection_changed, void*, void)
 {
     m_pChangeEvent = nullptr;
-    signal_changed();
+    signal_selection_changed();
     m_bChangedByMouse = false;
 }
 

@@ -740,7 +740,7 @@ void QtInstanceTreeView::handleActivated()
 void QtInstanceTreeView::handleSelectionChanged()
 {
     SolarMutexGuard g;
-    signal_changed();
+    signal_selection_changed();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

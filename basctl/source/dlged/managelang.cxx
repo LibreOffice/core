@@ -88,7 +88,7 @@ void ManageLanguageDialog::Init()
     m_xAddPB->connect_clicked( LINK( this, ManageLanguageDialog, AddHdl ) );
     m_xDeletePB->connect_clicked( LINK( this, ManageLanguageDialog, DeleteHdl ) );
     m_xMakeDefPB->connect_clicked( LINK( this, ManageLanguageDialog, MakeDefHdl ) );
-    m_xLanguageLB->connect_changed( LINK( this, ManageLanguageDialog, SelectHdl ) );
+    m_xLanguageLB->connect_selection_changed(LINK(this, ManageLanguageDialog, SelectHdl));
 
     m_xLanguageLB->set_selection_mode(SelectionMode::Multiple);
 }

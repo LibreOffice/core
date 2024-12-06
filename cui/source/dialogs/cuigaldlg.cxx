@@ -610,7 +610,7 @@ void TPGalleryThemeProperties::SetXChgData( ExchangeData* _pData )
     m_xCbxPreview->connect_toggled(LINK(this, TPGalleryThemeProperties, ClickPreviewHdl));
     m_xCbbFileType->connect_changed(LINK(this, TPGalleryThemeProperties, SelectFileTypeHdl));
     m_xLbxFound->connect_row_activated(LINK(this, TPGalleryThemeProperties, DClickFoundHdl));
-    m_xLbxFound->connect_changed(LINK(this, TPGalleryThemeProperties, SelectFoundHdl));
+    m_xLbxFound->connect_selection_changed(LINK(this, TPGalleryThemeProperties, SelectFoundHdl));
     m_xLbxFound->append_text(CuiResId(RID_CUISTR_GALLERY_NOFILES));
     m_xLbxFound->show();
 

@@ -129,7 +129,7 @@ void SwInsTableDlg::InitAutoTableFormat()
 {
     m_aWndPreview.DetectRTL(m_pShell);
 
-    m_xLbFormat->connect_changed(LINK(this, SwInsTableDlg, SelFormatHdl));
+    m_xLbFormat->connect_selection_changed(LINK(this, SwInsTableDlg, SelFormatHdl));
 
     m_xTableTable.reset(new SwTableAutoFormatTable);
     m_xTableTable->Load();

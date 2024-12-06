@@ -1267,7 +1267,8 @@ SfxTemplateCategoryDialog::SfxTemplateCategoryDialog(weld::Window* pParent)
     mxNewCategoryEdit->connect_changed(LINK(this, SfxTemplateCategoryDialog, NewCategoryEditHdl));
     mxLBCategory->set_size_request(mxLBCategory->get_approximate_digit_width() * 32,
                                    mxLBCategory->get_height_rows(8));
-    mxLBCategory->connect_changed(LINK(this, SfxTemplateCategoryDialog, SelectCategoryHdl));
+    mxLBCategory->connect_selection_changed(
+        LINK(this, SfxTemplateCategoryDialog, SelectCategoryHdl));
     mxOKButton->set_sensitive(false);
 }
 

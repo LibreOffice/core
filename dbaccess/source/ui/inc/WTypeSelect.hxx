@@ -87,7 +87,7 @@ namespace dbaui
         void connect_changed(const Link<weld::TreeView&, void>& rLink)
         {
             m_aChangeHdl = rLink;
-            m_xControl->connect_changed(rLink);
+            m_xControl->connect_selection_changed(rLink);
         }
     };
 

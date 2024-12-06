@@ -82,7 +82,7 @@ ScAutoFormatDlg::~ScAutoFormatDlg()
 
 void ScAutoFormatDlg::Init()
 {
-    m_xLbFormat->connect_changed( LINK( this, ScAutoFormatDlg, SelFmtHdl ) );
+    m_xLbFormat->connect_selection_changed(LINK(this, ScAutoFormatDlg, SelFmtHdl));
     m_xBtnNumFormat->connect_toggled( LINK( this, ScAutoFormatDlg, CheckHdl ) );
     m_xBtnBorder->connect_toggled( LINK( this, ScAutoFormatDlg, CheckHdl ) );
     m_xBtnFont->connect_toggled( LINK( this, ScAutoFormatDlg, CheckHdl ) );

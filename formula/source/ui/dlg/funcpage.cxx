@@ -73,7 +73,7 @@ FuncPage::FuncPage(weld::Container* pParent, const IFunctionManager* _pFunctionM
     m_xLbFunction->set_size_request(m_xLbFunction->get_preferred_size().Width(),
                                     m_xLbFunction->get_height_rows(15));
     m_xLbCategory->connect_changed(LINK(this, FuncPage, SelComboBoxHdl));
-    m_xLbFunction->connect_changed(LINK(this, FuncPage, SelTreeViewHdl));
+    m_xLbFunction->connect_selection_changed(LINK(this, FuncPage, SelTreeViewHdl));
     m_xLbFunction->connect_row_activated(LINK(this, FuncPage, DblClkHdl));
     m_xLbFunction->connect_key_press(LINK(this, FuncPage, KeyInputHdl));
     m_xLbFunctionSearchString->connect_changed(LINK(this, FuncPage, ModifyHdl));

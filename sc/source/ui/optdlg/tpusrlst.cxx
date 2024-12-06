@@ -89,7 +89,7 @@ void ScTpUserLists::Init()
     SfxViewShell*   pSh = SfxViewShell::Current();
     ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>( pSh );
 
-    mxLbLists->connect_changed   ( LINK( this, ScTpUserLists, LbSelectHdl ) );
+    mxLbLists->connect_selection_changed(LINK(this, ScTpUserLists, LbSelectHdl));
     mxBtnNew->connect_clicked     ( LINK( this, ScTpUserLists, BtnClickHdl ) );
     mxBtnDiscard->connect_clicked ( LINK( this, ScTpUserLists, BtnClickHdl ) );
     mxBtnAdd->connect_clicked     ( LINK( this, ScTpUserLists, BtnClickHdl ) );

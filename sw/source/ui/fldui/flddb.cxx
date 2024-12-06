@@ -170,7 +170,7 @@ void SwFieldDBPage::Reset(const SfxItemSet*)
     }
     TypeHdl(nullptr);
 
-    m_xTypeLB->connect_changed(LINK(this, SwFieldDBPage, TypeListBoxHdl));
+    m_xTypeLB->connect_selection_changed(LINK(this, SwFieldDBPage, TypeListBoxHdl));
     m_xTypeLB->connect_row_activated(LINK(this, SwFieldDBPage, TreeViewInsertHdl));
 
     if (IsFieldEdit())

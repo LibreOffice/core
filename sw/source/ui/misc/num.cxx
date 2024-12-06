@@ -112,7 +112,7 @@ SwNumPositionTabPage::SwNumPositionTabPage(weld::Container* pPage, weld::DialogC
     aLk = LINK(this, SwNumPositionTabPage, IndentAtHdl_Impl);
     m_xIndentAtMF->connect_value_changed(aLk);
 
-    m_xLevelLB->connect_changed(LINK(this, SwNumPositionTabPage, LevelHdl));
+    m_xLevelLB->connect_selection_changed(LINK(this, SwNumPositionTabPage, LevelHdl));
     m_xRelativeCB->connect_toggled(LINK(this, SwNumPositionTabPage, RelativeHdl));
     m_xStandardPB->connect_clicked(LINK(this, SwNumPositionTabPage, StandardHdl));
 

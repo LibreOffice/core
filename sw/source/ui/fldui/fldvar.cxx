@@ -154,8 +154,8 @@ void SwFieldVarPage::Reset(const SfxItemSet* )
     RestorePos(*m_xTypeLB);
 
     m_xTypeLB->connect_row_activated(LINK(this, SwFieldVarPage, TreeViewInsertHdl));
-    m_xTypeLB->connect_changed(LINK(this, SwFieldVarPage, TypeHdl));
-    m_xSelectionLB->connect_changed(LINK(this, SwFieldVarPage, SubTypeListBoxHdl));
+    m_xTypeLB->connect_selection_changed(LINK(this, SwFieldVarPage, TypeHdl));
+    m_xSelectionLB->connect_selection_changed(LINK(this, SwFieldVarPage, SubTypeListBoxHdl));
     m_xSelectionLB->connect_row_activated(LINK(this, SwFieldVarPage, SubTypeInsertHdl));
     m_xFormatLB->connect_row_activated(LINK(this, SwFieldVarPage, TreeViewInsertHdl));
     m_xNumFormatLB->connect_row_activated(LINK(this, SwFieldVarPage, TreeViewInsertHdl));

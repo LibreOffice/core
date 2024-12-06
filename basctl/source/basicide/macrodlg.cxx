@@ -100,7 +100,7 @@ MacroChooser::MacroChooser(weld::Window* pParnt, const Reference< frame::XFrame 
     m_xBasicBox->connect_changed( LINK( this, MacroChooser, BasicSelectHdl ) );
 
     m_xMacroBox->connect_row_activated( LINK( this, MacroChooser, MacroDoubleClickHdl ) );
-    m_xMacroBox->connect_changed( LINK( this, MacroChooser, MacroSelectHdl ) );
+    m_xMacroBox->connect_selection_changed(LINK(this, MacroChooser, MacroSelectHdl));
     m_xMacroBox->connect_popup_menu( LINK( this, MacroChooser, ContextMenuHdl ) );
 
     m_xBasicBox->SetMode( BrowseMode::Modules );

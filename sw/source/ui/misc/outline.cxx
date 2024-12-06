@@ -122,7 +122,7 @@ SwNumNamesDlg::SwNumNamesDlg(weld::Window *pParent)
         m_xFormBox->append_text(SwResId(aID));
 
     m_xFormEdit->connect_changed(LINK(this, SwNumNamesDlg, ModifyHdl));
-    m_xFormBox->connect_changed(LINK(this, SwNumNamesDlg, SelectHdl));
+    m_xFormBox->connect_selection_changed(LINK(this, SwNumNamesDlg, SelectHdl));
     m_xFormBox->connect_row_activated(LINK(this, SwNumNamesDlg, DoubleClickHdl));
     m_xFormBox->set_size_request(-1, m_xFormBox->get_height_rows(9));
 }
@@ -411,7 +411,7 @@ SwOutlineSettingsTabPage::SwOutlineSettingsTabPage(weld::Container* pPage, weld:
     m_xNumberBox->Reload(SwInsertNumTypes::NoNumbering | SwInsertNumTypes::Extended);
     m_xCollBox->make_sorted();
     m_xCollBox->append_text(m_aNoFormatName);
-    m_xLevelLB->connect_changed(LINK(this,    SwOutlineSettingsTabPage, LevelHdl));
+    m_xLevelLB->connect_selection_changed(LINK(this, SwOutlineSettingsTabPage, LevelHdl));
     m_xAllLevelNF->connect_value_changed(LINK(this, SwOutlineSettingsTabPage, ToggleComplete));
     m_xCollBox->connect_changed(LINK(this,    SwOutlineSettingsTabPage, CollSelect));
     m_xNumberBox->connect_changed(LINK(this,  SwOutlineSettingsTabPage, NumberSelect));

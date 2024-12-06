@@ -369,11 +369,11 @@ void StyleList::Initialize()
     m_xFmtLb->connect_row_activated(LINK(this, StyleList, TreeListApplyHdl));
     m_xFmtLb->connect_mouse_press(LINK(this, StyleList, MousePressHdl));
     m_xFmtLb->connect_query_tooltip(LINK(this, StyleList, QueryTooltipHdl));
-    m_xFmtLb->connect_changed(LINK(this, StyleList, FmtSelectHdl));
+    m_xFmtLb->connect_selection_changed(LINK(this, StyleList, FmtSelectHdl));
     m_xFmtLb->connect_popup_menu(LINK(this, StyleList, PopupFlatMenuHdl));
     m_xFmtLb->connect_key_press(LINK(this, StyleList, KeyInputHdl));
     m_xFmtLb->set_selection_mode(SelectionMode::Multiple);
-    m_xTreeBox->connect_changed(LINK(this, StyleList, FmtSelectHdl));
+    m_xTreeBox->connect_selection_changed(LINK(this, StyleList, FmtSelectHdl));
     m_xTreeBox->connect_row_activated(LINK(this, StyleList, TreeListApplyHdl));
     m_xTreeBox->connect_mouse_press(LINK(this, StyleList, MousePressHdl));
     m_xTreeBox->connect_query_tooltip(LINK(this, StyleList, QueryTooltipHdl));

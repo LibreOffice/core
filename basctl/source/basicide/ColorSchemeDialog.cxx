@@ -58,7 +58,7 @@ void ColorSchemeDialog::Init()
     m_xOk->connect_clicked(LINK(this, ColorSchemeDialog, BtnOkHdl));
     m_xUseAppCollors->connect_toggled(LINK(this, ColorSchemeDialog, OptionHdl));
     m_xUseScheme->connect_toggled(LINK(this, ColorSchemeDialog, OptionHdl));
-    m_xSchemeList->connect_changed(LINK(this, ColorSchemeDialog, SelectHdl));
+    m_xSchemeList->connect_selection_changed(LINK(this, ColorSchemeDialog, SelectHdl));
 
     // Populate the list with available color schemes
     for (auto const& rName : m_pColorConfig->GetColorSchemeNames())

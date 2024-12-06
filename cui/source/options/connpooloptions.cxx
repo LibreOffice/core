@@ -79,7 +79,8 @@ namespace offapp
         m_xEnablePooling->connect_toggled( LINK(this, ConnectionPoolOptionsPage, OnEnabledDisabled) );
         m_xDriverPoolingEnabled->connect_toggled( LINK(this, ConnectionPoolOptionsPage, OnEnabledDisabled) );
 
-        m_xDriverList->connect_changed(LINK(this, ConnectionPoolOptionsPage, OnDriverRowChanged));
+        m_xDriverList->connect_selection_changed(
+            LINK(this, ConnectionPoolOptionsPage, OnDriverRowChanged));
         m_xTimeout->connect_value_changed(LINK(this, ConnectionPoolOptionsPage, OnSpinValueChanged));
     }
 

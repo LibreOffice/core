@@ -71,8 +71,9 @@ namespace dbp
             OSL_FAIL("OTableSelectionPage::OTableSelectionPage: could not collect the data source names!");
         }
 
-        m_xDatasource->connect_changed(LINK(this, OTableSelectionPage, OnListboxSelection));
-        m_xTable->connect_changed(LINK(this, OTableSelectionPage, OnListboxSelection));
+        m_xDatasource->connect_selection_changed(
+            LINK(this, OTableSelectionPage, OnListboxSelection));
+        m_xTable->connect_selection_changed(LINK(this, OTableSelectionPage, OnListboxSelection));
         m_xTable->connect_row_activated(LINK(this, OTableSelectionPage, OnListboxDoubleClicked));
         m_xSearchDatabase->connect_clicked(LINK(this, OTableSelectionPage, OnSearchClicked));
     }

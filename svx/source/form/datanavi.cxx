@@ -235,7 +235,7 @@ namespace svxform
 
         m_xToolBox->connect_clicked(LINK(this, XFormsPage, TbxSelectHdl));
 
-        m_xItemList->connect_changed(LINK(this, XFormsPage, ItemSelectHdl));
+        m_xItemList->connect_selection_changed(LINK(this, XFormsPage, ItemSelectHdl));
         m_xItemList->connect_key_press(LINK(this, XFormsPage, KeyInputHdl));
         m_xItemList->connect_popup_menu(LINK(this, XFormsPage, PopupMenuHdl));
         ItemSelectHdl(*m_xItemList);
@@ -2679,7 +2679,7 @@ namespace svxform
         };
         m_xNamespacesList->set_column_fixed_widths(aWidths);
 
-        m_xNamespacesList->connect_changed( LINK( this, NamespaceItemDialog, SelectHdl ) );
+        m_xNamespacesList->connect_selection_changed(LINK(this, NamespaceItemDialog, SelectHdl));
         Link<weld::Button&,void> aLink = LINK( this, NamespaceItemDialog, ClickHdl );
         m_xAddNamespaceBtn->connect_clicked( aLink );
         m_xEditNamespaceBtn->connect_clicked( aLink );

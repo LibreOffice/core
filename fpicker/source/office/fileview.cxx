@@ -176,7 +176,10 @@ public:
     OUString get_id(const weld::TreeIter& rIter) { return mxTreeView->get_id(rIter); }
 
     void connect_row_activated(const Link<weld::TreeView&, bool>& rLink) { mxTreeView->connect_row_activated(rLink); }
-    void connect_changed(const Link<weld::TreeView&, void>& rLink) { mxTreeView->connect_changed(rLink); }
+    void connect_changed(const Link<weld::TreeView&, void>& rLink)
+    {
+        mxTreeView->connect_selection_changed(rLink);
+    }
 
     int n_children() const { return mxTreeView->n_children(); }
 

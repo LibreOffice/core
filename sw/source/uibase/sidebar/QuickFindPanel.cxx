@@ -137,7 +137,7 @@ QuickFindPanel::QuickFindPanel(weld::Widget* pParent, const uno::Reference<frame
         LINK(this, QuickFindPanel, SearchFindsListCustomGetSizeHandler));
     m_xSearchFindsList->connect_custom_render(LINK(this, QuickFindPanel, SearchFindsListRender));
     m_xSearchFindsList->set_column_custom_renderer(1, true);
-    m_xSearchFindsList->connect_changed(
+    m_xSearchFindsList->connect_selection_changed(
         LINK(this, QuickFindPanel, SearchFindsListSelectionChangedHandler));
     m_xSearchFindsList->connect_row_activated(
         LINK(this, QuickFindPanel, SearchFindsListRowActivatedHandler));

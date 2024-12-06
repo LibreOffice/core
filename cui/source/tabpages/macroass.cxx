@@ -332,7 +332,7 @@ void SfxMacroTabPage::InitAndSetHandler()
     mpImpl->m_xAssignPB->connect_clicked(LINK(this, SfxMacroTabPage, AssignDeleteClickHdl_Impl));
     rListBox.connect_row_activated(aLnk);
 
-    rListBox.connect_changed(LINK(this, SfxMacroTabPage, SelectEvent_Impl));
+    rListBox.connect_selection_changed(LINK(this, SfxMacroTabPage, SelectEvent_Impl));
     mpImpl->m_xGroupLB->connect_changed(LINK(this, SfxMacroTabPage, SelectGroup_Impl));
     mpImpl->m_xMacroLB->connect_changed(LINK(this, SfxMacroTabPage, SelectMacro_Impl));
 

@@ -275,9 +275,9 @@ void SvxNumberFormatTabPage::Init_Impl()
 
     Link<weld::TreeView&,void> aLink2 = LINK(this, SvxNumberFormatTabPage, SelFormatTreeListBoxHdl_Impl);
     Link<weld::ComboBox&,void> aLink3 = LINK(this, SvxNumberFormatTabPage, SelFormatListBoxHdl_Impl);
-    m_xLbCategory->connect_changed(aLink2);
+    m_xLbCategory->connect_selection_changed(aLink2);
     m_xLbCategory->connect_focus_in(LINK(this, SvxNumberFormatTabPage, LostFocusHdl_Impl));
-    m_xLbFormat->connect_changed(aLink2);
+    m_xLbFormat->connect_selection_changed(aLink2);
     m_xLbFormat->connect_focus_in(LINK(this, SvxNumberFormatTabPage, LostFocusHdl_Impl));
     m_xLbLanguage->connect_changed(aLink3);
     m_xLbLanguage->connect_focus_in(LINK(this, SvxNumberFormatTabPage, LostFocusHdl_Impl));

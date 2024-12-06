@@ -37,7 +37,10 @@ public:
 
     void clear() { m_xTreeView->clear(); }
 
-    void connect_changed(const Link<weld::TreeView&, void>& rLink) { m_xTreeView->connect_changed(rLink); }
+    void connect_changed(const Link<weld::TreeView&, void>& rLink)
+    {
+        m_xTreeView->connect_selection_changed(rLink);
+    }
 
     void InsertRootEntry(const OUString& rId, const OUString& rRootLabel);
     void FillTreeEntry(const weld::TreeIter& rEntry);

@@ -57,7 +57,8 @@ WebConnectionInfoDialog::WebConnectionInfoDialog(weld::Window* pParent)
     m_xRemoveBtn->connect_clicked( LINK( this, WebConnectionInfoDialog, RemovePasswordHdl ) );
     m_xRemoveAllBtn->connect_clicked( LINK( this, WebConnectionInfoDialog, RemoveAllPasswordsHdl ) );
     m_xChangeBtn->connect_clicked( LINK( this, WebConnectionInfoDialog, ChangePasswordHdl ) );
-    m_xPasswordsLB->connect_changed( LINK( this, WebConnectionInfoDialog, EntrySelectedHdl ) );
+    m_xPasswordsLB->connect_selection_changed(
+        LINK(this, WebConnectionInfoDialog, EntrySelectedHdl));
 
     m_xRemoveBtn->set_sensitive( false );
     m_xChangeBtn->set_sensitive( false );

@@ -72,7 +72,7 @@ void ScInsertTableDlg::Init_Impl( bool bFromFile )
     m_xBtnBrowse->connect_clicked( LINK( this, ScInsertTableDlg, BrowseHdl_Impl ) );
     m_xBtnNew->connect_toggled( LINK( this, ScInsertTableDlg, ChoiceHdl_Impl ) );
     m_xBtnFromFile->connect_toggled( LINK( this, ScInsertTableDlg, ChoiceHdl_Impl ) );
-    m_xLbTables->connect_changed( LINK( this, ScInsertTableDlg, SelectHdl_Impl ) );
+    m_xLbTables->connect_selection_changed(LINK(this, ScInsertTableDlg, SelectHdl_Impl));
     m_xNfCount->connect_value_changed( LINK( this, ScInsertTableDlg, CountHdl_Impl));
     m_xBtnOk->connect_clicked( LINK( this, ScInsertTableDlg, DoEnterHdl ));
     m_xBtnBefore->set_active(true);

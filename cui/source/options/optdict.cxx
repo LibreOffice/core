@@ -243,8 +243,8 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(weld::Window* pParent, std::u16
     if (LinguMgr::GetDictionaryList().is())
         aDics = LinguMgr::GetDictionaryList()->getDictionaries();
 
-    m_xSingleColumnLB->connect_changed(LINK(this, SvxEditDictionaryDialog, SelectHdl));
-    m_xDoubleColumnLB->connect_changed(LINK(this, SvxEditDictionaryDialog, SelectHdl));
+    m_xSingleColumnLB->connect_selection_changed(LINK(this, SvxEditDictionaryDialog, SelectHdl));
+    m_xDoubleColumnLB->connect_selection_changed(LINK(this, SvxEditDictionaryDialog, SelectHdl));
 
     std::vector<int> aWidths
     {

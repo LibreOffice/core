@@ -54,7 +54,10 @@ public:
 
     void    AddDataSource(const OUString& rSource);
 
-    void connect_changed(const Link<weld::TreeView&, void>& rLink) { m_xTreeView->connect_changed(rLink); }
+    void connect_changed(const Link<weld::TreeView&, void>& rLink)
+    {
+        m_xTreeView->connect_selection_changed(rLink);
+    }
     void connect_row_activated(const Link<weld::TreeView&, bool>& rLink) { m_xTreeView->connect_row_activated(rLink); }
     std::unique_ptr<weld::TreeIter> make_iterator(const weld::TreeIter* pOrig = nullptr) const { return m_xTreeView->make_iterator(pOrig); }
     bool get_selected(weld::TreeIter* pIter) const { return m_xTreeView->get_selected(pIter); }

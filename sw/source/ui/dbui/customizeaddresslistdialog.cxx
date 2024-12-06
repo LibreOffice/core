@@ -34,7 +34,8 @@ SwCustomizeAddressListDialog::SwCustomizeAddressListDialog(
 {
     m_xFieldsLB->set_size_request(-1, m_xFieldsLB->get_height_rows(14));
 
-    m_xFieldsLB->connect_changed(LINK(this, SwCustomizeAddressListDialog, ListBoxSelectHdl_Impl));
+    m_xFieldsLB->connect_selection_changed(
+        LINK(this, SwCustomizeAddressListDialog, ListBoxSelectHdl_Impl));
     Link<weld::Button&,void> aAddRenameLk = LINK(this, SwCustomizeAddressListDialog, AddRenameHdl_Impl );
     m_xAddPB->connect_clicked(aAddRenameLk);
     m_xRenamePB->connect_clicked(aAddRenameLk);

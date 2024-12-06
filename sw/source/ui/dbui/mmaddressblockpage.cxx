@@ -526,7 +526,8 @@ SwCustomizeAddressBlockDialog::SwCustomizeAddressBlockDialog(
     for (size_t i = 0; i < rHeaders.size(); ++i)
         m_xAddressElementsLB->append(OUString::number(i), rHeaders[i].first);
     m_xOK->connect_clicked(LINK(this, SwCustomizeAddressBlockDialog, OKHdl_Impl));
-    m_xAddressElementsLB->connect_changed(LINK(this, SwCustomizeAddressBlockDialog, ListBoxSelectHdl_Impl));
+    m_xAddressElementsLB->connect_selection_changed(
+        LINK(this, SwCustomizeAddressBlockDialog, ListBoxSelectHdl_Impl));
     if (m_xAddressElementsLB->n_children())
         m_xAddressElementsLB->select(0);
     m_xDragED->SetModifyHdl(LINK(this, SwCustomizeAddressBlockDialog, EditModifyHdl_Impl));

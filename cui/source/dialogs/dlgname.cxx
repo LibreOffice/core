@@ -160,7 +160,7 @@ SvxListDialog::SvxListDialog(weld::Window* pParent)
     m_xAddBtn->connect_clicked(LINK(this, SvxListDialog, AddHdl_Impl));
     m_xRemoveBtn->connect_clicked(LINK(this, SvxListDialog, RemoveHdl_Impl));
     m_xEditBtn->connect_clicked(LINK(this, SvxListDialog, EditHdl_Impl));
-    m_xList->connect_changed(LINK(this, SvxListDialog, SelectHdl_Impl));
+    m_xList->connect_selection_changed(LINK(this, SvxListDialog, SelectHdl_Impl));
     m_xList->connect_row_activated(LINK(this, SvxListDialog, DblClickHdl_Impl));
 
     SelectionChanged();

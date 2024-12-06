@@ -384,7 +384,7 @@ namespace weld
         : m_xEntry(std::move(xEntry))
         , m_xTreeView(std::move(xTreeView))
     {
-        m_xTreeView->connect_changed(LINK(this, EntryTreeView, ClickHdl));
+        m_xTreeView->connect_selection_changed(LINK(this, EntryTreeView, ClickHdl));
         m_xEntry->connect_changed(LINK(this, EntryTreeView, ModifyHdl));
     }
 

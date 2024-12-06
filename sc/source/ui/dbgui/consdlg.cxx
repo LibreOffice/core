@@ -123,7 +123,7 @@ void ScConsolidateDlg::Init()
     m_xLbDestArea->connect_focus_in( LINK( this, ScConsolidateDlg, GetFocusHdl ) );
     m_xEdDataArea->SetModifyHdl( LINK( this, ScConsolidateDlg, ModifyHdl ) );
     m_xEdDestArea->SetModifyHdl( LINK( this, ScConsolidateDlg, ModifyHdl ) );
-    m_xLbConsAreas->connect_changed( LINK( this, ScConsolidateDlg, SelectTVHdl ) );
+    m_xLbConsAreas->connect_selection_changed(LINK(this, ScConsolidateDlg, SelectTVHdl));
     m_xLbDataArea->connect_changed( LINK( this, ScConsolidateDlg, SelectCBHdl ) );
     m_xLbDestArea->connect_changed( LINK( this, ScConsolidateDlg, SelectCBHdl ) );
     m_xBtnOk->connect_clicked( LINK( this, ScConsolidateDlg, OkHdl ) );

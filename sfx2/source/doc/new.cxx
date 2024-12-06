@@ -280,7 +280,7 @@ SfxNewFileDialog::SfxNewFileDialog(weld::Window *pParent, SfxNewFileDialogMode n
     bool bExpand = !sExtraData.isEmpty() && sExtraData[0] == 'Y';
     m_xMoreBt->set_expanded(bExpand && (nFlags != SfxNewFileDialogMode::NONE));
 
-    m_xTemplateLb->connect_changed(LINK(this, SfxNewFileDialog, TemplateSelect));
+    m_xTemplateLb->connect_selection_changed(LINK(this, SfxNewFileDialog, TemplateSelect));
     m_xTemplateLb->connect_row_activated(LINK(this, SfxNewFileDialog, DoubleClick));
 
     // update the template configuration if necessary
@@ -294,7 +294,7 @@ SfxNewFileDialog::SfxNewFileDialog(weld::Window *pParent, SfxNewFileDialogMode n
     {
         for(sal_uInt16 i = 0; i < nCount; ++i)
             m_xRegionLb->append_text(m_aTemplates.GetFullRegionName(i));
-        m_xRegionLb->connect_changed(LINK(this, SfxNewFileDialog, RegionSelect));
+        m_xRegionLb->connect_selection_changed(LINK(this, SfxNewFileDialog, RegionSelect));
     }
 
     m_aPrevIdle.SetPriority( TaskPriority::LOWEST );

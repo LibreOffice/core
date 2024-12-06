@@ -68,7 +68,10 @@ public:
     void set_size_request(int nWidth, int nHeight) { m_xControl->set_size_request(nWidth, nHeight); }
     void hide() { m_xControl->hide(); }
     void show() { m_xControl->show(); }
-    void connect_changed(const Link<weld::TreeView&, void>& rLink) { m_xControl->connect_changed(rLink); }
+    void connect_changed(const Link<weld::TreeView&, void>& rLink)
+    {
+        m_xControl->connect_selection_changed(rLink);
+    }
     void connect_column_clicked(const Link<int, void>& rLink) { m_xControl->connect_column_clicked(rLink); }
     bool get_sort_order() const { return m_xControl->get_sort_order(); }
     void set_sort_order(bool bAscending) { return m_xControl->set_sort_order(bAscending); }

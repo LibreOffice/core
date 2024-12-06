@@ -72,7 +72,7 @@ CertificateChooser::CertificateChooser(weld::Window* _pParent,
         o3tl::narrowing<int>(20*nControlWidth/100)
     };
     m_xCertLB->set_column_fixed_widths(aWidths);
-    m_xCertLB->connect_changed( LINK( this, CertificateChooser, CertificateHighlightHdl ) );
+    m_xCertLB->connect_selection_changed(LINK(this, CertificateChooser, CertificateHighlightHdl));
     m_xCertLB->connect_row_activated( LINK( this, CertificateChooser, CertificateSelectHdl ) );
     m_xViewBtn->connect_clicked( LINK( this, CertificateChooser, ViewButtonHdl ) );
     m_xSearchBox->connect_changed(LINK(this, CertificateChooser, SearchModifyHdl));

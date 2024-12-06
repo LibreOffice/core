@@ -382,7 +382,7 @@ OfaSwAutoFmtOptionsPage::OfaSwAutoFmtOptionsPage(weld::Container* pPage, weld::D
     , m_xCheckLB(m_xBuilder->weld_tree_view(u"list"_ustr))
     , m_xEditPB(m_xBuilder->weld_button(u"edit"_ustr))
 {
-    m_xCheckLB->connect_changed(LINK(this, OfaSwAutoFmtOptionsPage, SelectHdl));
+    m_xCheckLB->connect_selection_changed(LINK(this, OfaSwAutoFmtOptionsPage, SelectHdl));
     m_xCheckLB->connect_row_activated(LINK(this, OfaSwAutoFmtOptionsPage, DoubleClickEditHdl));
 
     std::vector<int> aWidths
@@ -728,7 +728,7 @@ OfaAutocorrReplacePage::OfaAutocorrReplacePage(weld::Container* pPage, weld::Dia
     m_aReplaceFixedWidths.push_back(nColWidth);
     m_aReplaceFixedWidths.push_back(nColWidth);
 
-    m_xReplaceTLB->connect_changed( LINK(this, OfaAutocorrReplacePage, SelectHdl) );
+    m_xReplaceTLB->connect_selection_changed(LINK(this, OfaAutocorrReplacePage, SelectHdl));
     m_xNewReplacePB->connect_clicked( LINK(this, OfaAutocorrReplacePage, NewDelButtonHdl) );
     m_xDeleteReplacePB->connect_clicked( LINK(this, OfaAutocorrReplacePage, NewDelButtonHdl) );
     m_xShortED->connect_changed( LINK(this, OfaAutocorrReplacePage, ModifyHdl) );
@@ -1241,8 +1241,8 @@ OfaAutocorrExceptPage::OfaAutocorrExceptPage(weld::Container* pPage, weld::Dialo
     m_xNewDoublePB->connect_clicked(LINK(this, OfaAutocorrExceptPage, NewDelButtonHdl));
     m_xDelDoublePB->connect_clicked(LINK(this, OfaAutocorrExceptPage, NewDelButtonHdl));
 
-    m_xAbbrevLB->connect_changed(LINK(this, OfaAutocorrExceptPage, SelectHdl));
-    m_xDoubleCapsLB->connect_changed(LINK(this, OfaAutocorrExceptPage, SelectHdl));
+    m_xAbbrevLB->connect_selection_changed(LINK(this, OfaAutocorrExceptPage, SelectHdl));
+    m_xDoubleCapsLB->connect_selection_changed(LINK(this, OfaAutocorrExceptPage, SelectHdl));
     m_xAbbrevED->connect_changed(LINK(this, OfaAutocorrExceptPage, ModifyHdl));
     m_xDoubleCapsED->connect_changed(LINK(this, OfaAutocorrExceptPage, ModifyHdl));
 
@@ -2180,7 +2180,7 @@ OfaSmartTagOptionsTabPage::OfaSmartTagOptionsTabPage(weld::Container* pPage, wel
     // set the handlers:
     m_xMainCB->connect_toggled(LINK(this, OfaSmartTagOptionsTabPage, CheckHdl));
     m_xPropertiesPB->connect_clicked(LINK(this, OfaSmartTagOptionsTabPage, ClickHdl));
-    m_xSmartTagTypesLB->connect_changed(LINK(this, OfaSmartTagOptionsTabPage, SelectHdl));
+    m_xSmartTagTypesLB->connect_selection_changed(LINK(this, OfaSmartTagOptionsTabPage, SelectHdl));
 }
 
 OfaSmartTagOptionsTabPage::~OfaSmartTagOptionsTabPage()

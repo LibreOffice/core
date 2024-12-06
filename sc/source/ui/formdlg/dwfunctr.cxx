@@ -76,7 +76,7 @@ ScFunctionWin::ScFunctionWin(weld::Widget* pParent)
     m_xSearchString->connect_key_press(LINK(this, ScFunctionWin, KeyInputHdl));
 
     xCatBox->connect_changed(LINK( this, ScFunctionWin, SelComboHdl));
-    xFuncList->connect_changed(LINK( this, ScFunctionWin, SelTreeHdl));
+    xFuncList->connect_selection_changed(LINK(this, ScFunctionWin, SelTreeHdl));
 
     xFuncList->connect_row_activated(LINK( this, ScFunctionWin, SetRowActivatedHdl));
     xInsertButton->connect_clicked(LINK( this, ScFunctionWin, SetSelectionClickHdl));

@@ -453,7 +453,7 @@ CustomAnimationList::CustomAnimationList(std::unique_ptr<weld::TreeView> xTreeVi
     mxEmptyLabel->set_stack_background();
 
     mxTreeView->set_selection_mode(SelectionMode::Multiple);
-    mxTreeView->connect_changed(LINK(this, CustomAnimationList, SelectHdl));
+    mxTreeView->connect_selection_changed(LINK(this, CustomAnimationList, SelectHdl));
     mxTreeView->connect_key_press(LINK(this, CustomAnimationList, KeyInputHdl));
     mxTreeView->connect_popup_menu(LINK(this, CustomAnimationList, CommandHdl));
     mxTreeView->connect_row_activated(LINK(this, CustomAnimationList, DoubleClickHdl));

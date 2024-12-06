@@ -66,7 +66,7 @@ SdPhotoAlbumDialog::SdPhotoAlbumDialog(weld::Window* pWindow, SdDrawDocument* pA
     m_xDownBtn->set_sensitive(false);
     m_xRemoveBtn->connect_clicked(LINK(this, SdPhotoAlbumDialog, RemoveHdl));
     m_xRemoveBtn->set_sensitive(false);
-    m_xImagesLst->connect_changed(LINK(this, SdPhotoAlbumDialog, SelectHdl));
+    m_xImagesLst->connect_selection_changed(LINK(this, SdPhotoAlbumDialog, SelectHdl));
     m_xInsTypeCombo->connect_changed(LINK(this, SdPhotoAlbumDialog, TypeSelectHdl));
 
     m_pGraphicFilter = std::make_unique<GraphicFilter>();

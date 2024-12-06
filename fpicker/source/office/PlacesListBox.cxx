@@ -27,7 +27,7 @@ PlacesListBox::PlacesListBox(std::unique_ptr<weld::TreeView> xControl,
                mxImpl->get_height_rows(9));
     mxImpl->set_size_request(aSize.Width(), aSize.Height());
 
-    mxImpl->connect_changed( LINK( this, PlacesListBox, Selection ) );
+    mxImpl->connect_selection_changed(LINK(this, PlacesListBox, Selection));
     mxImpl->connect_row_activated( LINK( this, PlacesListBox, DoubleClick ) ) ;
     mxImpl->connect_query_tooltip(LINK(this, PlacesListBox, QueryTooltipHdl));
 }

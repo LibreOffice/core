@@ -62,7 +62,7 @@ SwContentControlDlg::SwContentControlDlg(weld::Window* pParent, SwWrtShell& rWrt
 {
     m_xCheckedStateBtn->connect_clicked(LINK(this, SwContentControlDlg, SelectCharHdl));
     m_xUncheckedStateBtn->connect_clicked(LINK(this, SwContentControlDlg, SelectCharHdl));
-    m_xListItems->connect_changed(LINK(this, SwContentControlDlg, SelectionChangedHdl));
+    m_xListItems->connect_selection_changed(LINK(this, SwContentControlDlg, SelectionChangedHdl));
     m_xOk->connect_clicked(LINK(this, SwContentControlDlg, OkHdl));
 
     // Only 2 items would be visible by default.

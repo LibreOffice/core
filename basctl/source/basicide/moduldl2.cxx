@@ -246,7 +246,7 @@ LibPage::LibPage(weld::Container* pParent, OrganizeDialog* pDialog)
     m_xExportButton->connect_clicked( LINK( this, LibPage, ButtonHdl ) );
     m_xInsertLibButton->connect_clicked( LINK( this, LibPage, ButtonHdl ) );
     m_xDelButton->connect_clicked( LINK( this, LibPage, ButtonHdl ) );
-    m_xLibBox->connect_changed( LINK( this, LibPage, TreeListHighlightHdl ) );
+    m_xLibBox->connect_selection_changed(LINK(this, LibPage, TreeListHighlightHdl));
 
     m_xBasicsBox->connect_changed( LINK( this, LibPage, BasicSelectHdl ) );
 

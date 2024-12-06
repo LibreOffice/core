@@ -82,9 +82,9 @@ void ScTpSubTotalGroup::Init()
     assert(pDoc && "Document not found :-(");
 
     mxLbGroup->connect_changed( LINK( this, ScTpSubTotalGroup, SelectListBoxHdl ) );
-    mxLbColumns->connect_changed( LINK( this, ScTpSubTotalGroup, SelectTreeListBoxHdl ) );
+    mxLbColumns->connect_selection_changed(LINK(this, ScTpSubTotalGroup, SelectTreeListBoxHdl));
     mxLbColumns->connect_toggled( LINK( this, ScTpSubTotalGroup, CheckHdl ) );
-    mxLbFunctions->connect_changed( LINK( this, ScTpSubTotalGroup, SelectTreeListBoxHdl) );
+    mxLbFunctions->connect_selection_changed(LINK(this, ScTpSubTotalGroup, SelectTreeListBoxHdl));
     mxLbSelectAllColumns->connect_toggled( LINK( this, ScTpSubTotalGroup, CheckBoxHdl ) );
 
     mnFieldArr.resize(SC_MAXFIELDS(pDoc->GetSheetLimits()));

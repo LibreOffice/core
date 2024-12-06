@@ -65,8 +65,10 @@ ODbaseIndexDialog::ODbaseIndexDialog(weld::Window * pParent, OUString aDataSrcNa
     m_xRemoveAll->connect_clicked( LINK(this, ODbaseIndexDialog, RemoveAllClickHdl) );
     m_xPB_OK->connect_clicked( LINK(this, ODbaseIndexDialog, OKClickHdl) );
 
-    m_xLB_FreeIndexes->connect_changed( LINK(this, ODbaseIndexDialog, OnListEntrySelected) );
-    m_xLB_TableIndexes->connect_changed( LINK(this, ODbaseIndexDialog, OnListEntrySelected) );
+    m_xLB_FreeIndexes->connect_selection_changed(
+        LINK(this, ODbaseIndexDialog, OnListEntrySelected));
+    m_xLB_TableIndexes->connect_selection_changed(
+        LINK(this, ODbaseIndexDialog, OnListEntrySelected));
 
     Init();
     SetCtrls();

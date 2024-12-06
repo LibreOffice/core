@@ -184,8 +184,9 @@ DataSourceTabPage::DataSourceTabPage(weld::Container* pPage, weld::DialogControl
     SetPageTitle(SchResId(STR_OBJECT_DATASERIES_PLURAL));
 
     // set handlers
-    m_xLB_SERIES->connect_changed(LINK(this, DataSourceTabPage, SeriesSelectionChangedHdl));
-    m_xLB_ROLE->connect_changed(LINK(this, DataSourceTabPage, RoleSelectionChangedHdl));
+    m_xLB_SERIES->connect_selection_changed(
+        LINK(this, DataSourceTabPage, SeriesSelectionChangedHdl));
+    m_xLB_ROLE->connect_selection_changed(LINK(this, DataSourceTabPage, RoleSelectionChangedHdl));
 
     m_xIMB_RANGE_MAIN->connect_clicked(LINK(this, DataSourceTabPage, MainRangeButtonClickedHdl));
     m_xIMB_RANGE_CAT->connect_clicked(LINK(this, DataSourceTabPage, CategoriesRangeButtonClickedHdl));

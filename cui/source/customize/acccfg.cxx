@@ -892,11 +892,11 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage(weld::Container* pPage,
     // install handler functions
     m_xChangeButton->connect_clicked(LINK(this, SfxAcceleratorConfigPage, ChangeHdl));
     m_xRemoveButton->connect_clicked(LINK(this, SfxAcceleratorConfigPage, RemoveHdl));
-    m_xEntriesBox->connect_changed(LINK(this, SfxAcceleratorConfigPage, SelectHdl));
+    m_xEntriesBox->connect_selection_changed(LINK(this, SfxAcceleratorConfigPage, SelectHdl));
     m_xEntriesBox->connect_key_press(LINK(this, SfxAcceleratorConfigPage, KeyInputHdl));
     m_xGroupLBox->connect_changed(LINK(this, SfxAcceleratorConfigPage, SelectHdl));
     m_xFunctionBox->connect_changed(LINK(this, SfxAcceleratorConfigPage, SelectHdl));
-    m_xKeyBox->connect_changed(LINK(this, SfxAcceleratorConfigPage, SelectHdl));
+    m_xKeyBox->connect_selection_changed(LINK(this, SfxAcceleratorConfigPage, SelectHdl));
     m_xLoadButton->connect_clicked(LINK(this, SfxAcceleratorConfigPage, Load));
     m_xSaveButton->connect_clicked(LINK(this, SfxAcceleratorConfigPage, Save));
     m_xResetButton->connect_clicked(LINK(this, SfxAcceleratorConfigPage, Default));

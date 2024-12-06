@@ -361,7 +361,7 @@ ScConflictsDlg::ScConflictsDlg(weld::Window* pParent, ScViewData* pViewData, ScD
 
     maSelectionIdle.SetInvokeHandler( LINK( this, ScConflictsDlg, UpdateSelectionHdl ) );
 
-    rTreeView.connect_changed(LINK(this, ScConflictsDlg, SelectHandle));
+    rTreeView.connect_selection_changed(LINK(this, ScConflictsDlg, SelectHandle));
 
     m_xBtnKeepMine->connect_clicked( LINK( this, ScConflictsDlg, KeepMineHandle ) );
     m_xBtnKeepOther->connect_clicked( LINK( this, ScConflictsDlg, KeepOtherHandle ) );

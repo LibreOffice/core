@@ -358,10 +358,10 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
 
     m_xCbTableHeadon->connect_toggled( LINK(this, SwInsertDBColAutoPilot, HeaderHdl ));
 
-    m_xLbTextDbColumn->connect_changed( LINK( this, SwInsertDBColAutoPilot, TVSelectHdl ));
-    m_xLbTableDbColumn->connect_changed( LINK( this, SwInsertDBColAutoPilot, TVSelectHdl ));
+    m_xLbTextDbColumn->connect_selection_changed(LINK(this, SwInsertDBColAutoPilot, TVSelectHdl));
+    m_xLbTableDbColumn->connect_selection_changed(LINK(this, SwInsertDBColAutoPilot, TVSelectHdl));
     m_xLbDbFormatFromUsr->connect_changed( LINK( this, SwInsertDBColAutoPilot, CBSelectHdl ));
-    m_xLbTableCol->connect_changed( LINK( this, SwInsertDBColAutoPilot, TVSelectHdl ));
+    m_xLbTableCol->connect_selection_changed(LINK(this, SwInsertDBColAutoPilot, TVSelectHdl));
 
     m_xLbTextDbColumn->connect_row_activated( LINK( this, SwInsertDBColAutoPilot, DblClickHdl ));
     m_xLbTableDbColumn->connect_row_activated( LINK( this, SwInsertDBColAutoPilot, DblClickHdl ));

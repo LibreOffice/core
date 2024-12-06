@@ -44,7 +44,7 @@ StructPage::StructPage(weld::Container* pParent)
     m_xTlbStruct->set_size_request(m_xTlbStruct->get_approximate_digit_width() * 20,
                                    m_xTlbStruct->get_height_rows(17));
 
-    m_xTlbStruct->connect_changed(LINK( this, StructPage, SelectHdl ) );
+    m_xTlbStruct->connect_selection_changed(LINK(this, StructPage, SelectHdl));
 }
 
 StructPage::~StructPage()

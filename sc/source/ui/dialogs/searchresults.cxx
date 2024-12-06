@@ -40,7 +40,7 @@ SearchResultsDlg::SearchResultsDlg(SfxBindings* _pBindings, weld::Window* pParen
         o3tl::narrowing<int>(mxList->get_approximate_digit_width() * 10)
     };
     mxList->set_column_fixed_widths(aWidths);
-    mxList->connect_changed(LINK(this, SearchResultsDlg, ListSelectHdl));
+    mxList->connect_selection_changed(LINK(this, SearchResultsDlg, ListSelectHdl));
     mxList->connect_column_clicked(LINK(this, SearchResultsDlg, HeaderBarClick));
 }
 

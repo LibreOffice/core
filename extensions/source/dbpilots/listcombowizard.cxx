@@ -265,7 +265,8 @@ namespace dbp
         enableFormDatasourceDisplay();
 
         m_xSelectTable->connect_row_activated(LINK(this, OContentTableSelection, OnTableDoubleClicked));
-        m_xSelectTable->connect_changed(LINK(this, OContentTableSelection, OnTableSelected));
+        m_xSelectTable->connect_selection_changed(
+            LINK(this, OContentTableSelection, OnTableSelected));
     }
 
     OContentTableSelection::~OContentTableSelection()
@@ -342,7 +343,8 @@ namespace dbp
         , m_xInfo(m_xBuilder->weld_label(u"info"_ustr))
     {
         m_xInfo->set_label(compmodule::ModuleRes( isListBox() ? RID_STR_FIELDINFO_LISTBOX : RID_STR_FIELDINFO_COMBOBOX));
-        m_xSelectTableField->connect_changed(LINK(this, OContentFieldSelection, OnFieldSelected));
+        m_xSelectTableField->connect_selection_changed(
+            LINK(this, OContentFieldSelection, OnFieldSelected));
         m_xSelectTableField->connect_row_activated(LINK(this, OContentFieldSelection, OnTableDoubleClicked));
     }
 

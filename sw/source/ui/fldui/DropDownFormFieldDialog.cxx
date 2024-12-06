@@ -35,7 +35,8 @@ DropDownFormFieldDialog::DropDownFormFieldDialog(weld::Widget* pParent,
 
     m_xListItemsTreeView->set_size_request(m_xListItemEntry->get_preferred_size().Width(),
                                            m_xListItemEntry->get_preferred_size().Height() * 5);
-    m_xListItemsTreeView->connect_changed(LINK(this, DropDownFormFieldDialog, ListChangedHdl));
+    m_xListItemsTreeView->connect_selection_changed(
+        LINK(this, DropDownFormFieldDialog, ListChangedHdl));
 
     Link<weld::Button&, void> aPushButtonLink(LINK(this, DropDownFormFieldDialog, ButtonPushedHdl));
     m_xListAddButton->connect_clicked(aPushButtonLink);

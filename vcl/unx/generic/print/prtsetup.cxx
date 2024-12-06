@@ -280,8 +280,8 @@ RTSDevicePage::RTSDevicePage(weld::Widget* pPage, RTSDialog* pParent)
 
     m_xCustomEdit->connect_changed(LINK(this, RTSDevicePage, ModifyHdl));
 
-    m_xPPDKeyBox->connect_changed( LINK( this, RTSDevicePage, SelectHdl ) );
-    m_xPPDValueBox->connect_changed( LINK( this, RTSDevicePage, SelectHdl ) );
+    m_xPPDKeyBox->connect_selection_changed(LINK(this, RTSDevicePage, SelectHdl));
+    m_xPPDValueBox->connect_selection_changed(LINK(this, RTSDevicePage, SelectHdl));
 
     m_xSpaceBox->connect_changed(LINK(this, RTSDevicePage, ComboChangedHdl));
     m_xDepthBox->connect_changed(LINK(this, RTSDevicePage, ComboChangedHdl));

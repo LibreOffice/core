@@ -344,9 +344,9 @@ OAddTableDlg::OAddTableDlg(weld::Window* pParent, IAddTableDialogContext& _rCont
     m_xAddButton->connect_clicked( LINK( this, OAddTableDlg, AddClickHdl ) );
     m_xCloseButton->connect_clicked( LINK( this, OAddTableDlg, CloseClickHdl ) );
     rTableList.connect_row_activated( LINK( this, OAddTableDlg, TableListDoubleClickHdl ) );
-    rTableList.connect_changed( LINK( this, OAddTableDlg, TableListSelectHdl ) );
+    rTableList.connect_selection_changed(LINK(this, OAddTableDlg, TableListSelectHdl));
     m_xQueryList->connect_row_activated( LINK( this, OAddTableDlg, TableListDoubleClickHdl ) );
-    m_xQueryList->connect_changed( LINK( this, OAddTableDlg, TableListSelectHdl ) );
+    m_xQueryList->connect_selection_changed(LINK(this, OAddTableDlg, TableListSelectHdl));
 
     rTableList.set_selection_mode(SelectionMode::Single);
     m_xTableList->SuppressEmptyFolders();

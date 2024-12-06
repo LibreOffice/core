@@ -60,8 +60,8 @@ OWizNameMatching::OWizNameMatching(weld::Container* pPage, OCopyTableWizard* pWi
 
     m_xCTRL_LEFT->enable_toggle_buttons(weld::ColumnToggleType::Check);
 
-    m_xCTRL_LEFT->connect_changed(LINK(this,OWizNameMatching,TableListClickHdl));
-    m_xCTRL_RIGHT->connect_changed(LINK(this,OWizNameMatching,TableListRightSelectHdl));
+    m_xCTRL_LEFT->connect_selection_changed(LINK(this, OWizNameMatching, TableListClickHdl));
+    m_xCTRL_RIGHT->connect_selection_changed(LINK(this, OWizNameMatching, TableListRightSelectHdl));
 
     m_sSourceText = m_xTABLE_LEFT->get_label() + "\n";
     m_sDestText   = m_xTABLE_RIGHT->get_label() + "\n";

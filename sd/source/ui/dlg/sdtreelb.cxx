@@ -752,7 +752,7 @@ SdPageObjsTLV::SdPageObjsTLV(std::unique_ptr<weld::TreeView> xTreeView)
     , m_nRowActivateEventId(nullptr)
 {
     m_xTreeView->connect_expanding(LINK(this, SdPageObjsTLV, RequestingChildrenHdl));
-    m_xTreeView->connect_changed(LINK(this, SdPageObjsTLV, SelectHdl));
+    m_xTreeView->connect_selection_changed(LINK(this, SdPageObjsTLV, SelectHdl));
     m_xTreeView->connect_row_activated(LINK(this, SdPageObjsTLV, RowActivatedHdl));
     m_xTreeView->connect_drag_begin(LINK(this, SdPageObjsTLV, DragBeginHdl));
     m_xTreeView->connect_key_press(LINK(this, SdPageObjsTLV, KeyInputHdl));

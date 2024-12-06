@@ -417,13 +417,15 @@ MacroSecurityTrustedSourcesTP::MacroSecurityTrustedSourcesTP(weld::Container* pP
     m_xTrustCertLB->set_column_fixed_widths(aWidths);
     m_xTrustCertLB->set_size_request(nColWidth * 5.5, m_xTrustCertLB->get_height_rows(5));
 
-    m_xTrustCertLB->connect_changed( LINK( this, MacroSecurityTrustedSourcesTP, TrustCertLBSelectHdl ) );
+    m_xTrustCertLB->connect_selection_changed(
+        LINK(this, MacroSecurityTrustedSourcesTP, TrustCertLBSelectHdl));
     m_xViewCertPB->connect_clicked( LINK( this, MacroSecurityTrustedSourcesTP, ViewCertPBHdl ) );
     m_xViewCertPB->set_sensitive(false);
     m_xRemoveCertPB->connect_clicked( LINK( this, MacroSecurityTrustedSourcesTP, RemoveCertPBHdl ) );
     m_xRemoveCertPB->set_sensitive(false);
 
-    m_xTrustFileLocLB->connect_changed( LINK( this, MacroSecurityTrustedSourcesTP, TrustFileLocLBSelectHdl ) );
+    m_xTrustFileLocLB->connect_selection_changed(
+        LINK(this, MacroSecurityTrustedSourcesTP, TrustFileLocLBSelectHdl));
     m_xTrustFileLocLB->set_size_request(nColWidth * 5, m_xTrustFileLocLB->get_height_rows(5));
     m_xAddLocPB->connect_clicked( LINK( this, MacroSecurityTrustedSourcesTP, AddLocPBHdl ) );
     m_xRemoveLocPB->connect_clicked( LINK( this, MacroSecurityTrustedSourcesTP, RemoveLocPBHdl ) );

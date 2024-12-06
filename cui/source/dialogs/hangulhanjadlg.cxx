@@ -294,7 +294,8 @@ namespace svx
         , m_xListBox(rBuilder.weld_tree_view(u"listbox"_ustr))
     {
         m_xValueSet->SetSelectHdl( LINK( this, SuggestionDisplay, SelectSuggestionValueSetHdl ) );
-        m_xListBox->connect_changed( LINK( this, SuggestionDisplay, SelectSuggestionListBoxHdl ) );
+        m_xListBox->connect_selection_changed(
+            LINK(this, SuggestionDisplay, SelectSuggestionListBoxHdl));
 
         m_xValueSet->SetLineCount( LINE_CNT );
         m_xValueSet->SetStyle( m_xValueSet->GetStyle() | WB_ITEMBORDER | WB_VSCROLL );
@@ -894,7 +895,8 @@ namespace svx
 
         m_xDictsLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
 
-        m_xDictsLB->connect_changed( LINK( this, HangulHanjaOptionsDialog, DictsLB_SelectHdl ) );
+        m_xDictsLB->connect_selection_changed(
+            LINK(this, HangulHanjaOptionsDialog, DictsLB_SelectHdl));
 
         m_xOkPB->connect_clicked( LINK( this, HangulHanjaOptionsDialog, OkHdl ) );
         m_xNewPB->connect_clicked( LINK( this, HangulHanjaOptionsDialog, NewDictHdl ) );

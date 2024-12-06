@@ -1063,7 +1063,7 @@ FmFilterNavigator::FmFilterNavigator(vcl::Window* pTopLevel, std::unique_ptr<wel
     m_xTreeView->connect_custom_render(LINK(this, FmFilterNavigator, CustomRenderHdl));
     m_xTreeView->set_column_custom_renderer(1, true);
 
-    m_xTreeView->connect_changed(LINK(this, FmFilterNavigator, SelectHdl));
+    m_xTreeView->connect_selection_changed(LINK(this, FmFilterNavigator, SelectHdl));
     m_xTreeView->connect_key_press(LINK(this, FmFilterNavigator, KeyInputHdl));
     m_xTreeView->connect_popup_menu(LINK(this, FmFilterNavigator, PopupMenuHdl));
     m_xTreeView->connect_editing(LINK(this, FmFilterNavigator, EditingEntryHdl),

@@ -109,7 +109,8 @@ namespace dbaui
 
     void OParameterDialog::Construct()
     {
-        m_xAllParams->connect_changed(LINK(this, OParameterDialog, OnEntryListBoxSelected));
+        m_xAllParams->connect_selection_changed(
+            LINK(this, OParameterDialog, OnEntryListBoxSelected));
         m_xParam->connect_focus_out(LINK(this, OParameterDialog, OnValueLoseFocusHdl));
         m_xParam->connect_changed(LINK(this, OParameterDialog, OnValueModified));
         m_xTravelNext->connect_clicked(LINK(this, OParameterDialog, OnButtonClicked));

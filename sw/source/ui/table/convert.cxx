@@ -214,7 +214,7 @@ void SwConvertTableDlg::Init()
     m_xBtnAlignment->connect_toggled(aLk);
     m_xBtnNumFormat->connect_toggled(aLk);
 
-    m_xLbFormat->connect_changed(LINK(this, SwConvertTableDlg, SelFormatHdl));
+    m_xLbFormat->connect_selection_changed(LINK(this, SwConvertTableDlg, SelFormatHdl));
 
     // Then the list to be expanded by the entry "- none -".
     m_xLbFormat->append_text(SwViewShell::GetShellRes()->aStrNone);

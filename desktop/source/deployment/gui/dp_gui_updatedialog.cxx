@@ -462,7 +462,7 @@ UpdateDialog::UpdateDialog(
 
     m_xExtensionManager = deployment::ExtensionManager::get( context );
 
-    m_xUpdates->connect_changed(LINK(this, UpdateDialog, selectionHandler));
+    m_xUpdates->connect_selection_changed(LINK(this, UpdateDialog, selectionHandler));
     m_xUpdates->connect_toggled(LINK(this, UpdateDialog, entryToggled));
     m_xAll->connect_toggled(LINK(this, UpdateDialog, allHandler));
     m_xOk->connect_clicked(LINK(this, UpdateDialog, okHandler));

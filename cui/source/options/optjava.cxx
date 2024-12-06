@@ -89,7 +89,7 @@ SvxJavaOptionsPage::SvxJavaOptionsPage(weld::Container* pPage, weld::DialogContr
 
     m_xJavaList->enable_toggle_buttons(weld::ColumnToggleType::Radio);
     m_xJavaList->connect_toggled( LINK( this, SvxJavaOptionsPage, CheckHdl_Impl ) );
-    m_xJavaList->connect_changed( LINK( this, SvxJavaOptionsPage, SelectHdl_Impl ) );
+    m_xJavaList->connect_selection_changed(LINK(this, SvxJavaOptionsPage, SelectHdl_Impl));
 
     std::vector<int> aWidths
     {
@@ -653,7 +653,7 @@ SvxJavaParameterDlg::SvxJavaParameterDlg(weld::Window* pParent)
     m_xAssignBtn->connect_clicked( LINK( this, SvxJavaParameterDlg, AssignHdl_Impl ) );
     m_xRemoveBtn->connect_clicked( LINK( this, SvxJavaParameterDlg, RemoveHdl_Impl ) );
     m_xEditBtn->connect_clicked( LINK( this, SvxJavaParameterDlg, EditHdl_Impl ) );
-    m_xAssignedList->connect_changed( LINK( this, SvxJavaParameterDlg, SelectHdl_Impl ) );
+    m_xAssignedList->connect_selection_changed(LINK(this, SvxJavaParameterDlg, SelectHdl_Impl));
     m_xAssignedList->connect_row_activated( LINK( this, SvxJavaParameterDlg, DblClickHdl_Impl ) );
 
     ModifyHdl_Impl(*m_xParameterEdit);
@@ -814,7 +814,7 @@ SvxJavaClassPathDlg::SvxJavaClassPathDlg(weld::Window* pParent)
     m_xAddArchiveBtn->connect_clicked( LINK( this, SvxJavaClassPathDlg, AddArchiveHdl_Impl ) );
     m_xAddPathBtn->connect_clicked( LINK( this, SvxJavaClassPathDlg, AddPathHdl_Impl ) );
     m_xRemoveBtn->connect_clicked( LINK( this, SvxJavaClassPathDlg, RemoveHdl_Impl ) );
-    m_xPathList->connect_changed( LINK( this, SvxJavaClassPathDlg, SelectHdl_Impl ) );
+    m_xPathList->connect_selection_changed(LINK(this, SvxJavaClassPathDlg, SelectHdl_Impl));
 
     // set initial focus to path list
     m_xPathList->grab_focus();

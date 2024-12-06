@@ -115,7 +115,7 @@ SvBaseLinksDlg::SvBaseLinksDlg(weld::Window * pParent, LinkManager* pMgr, bool b
     aUpdateIdle.SetInvokeHandler( LINK( this, SvBaseLinksDlg, UpdateWaitingHdl ) );
     aUpdateIdle.SetPriority( TaskPriority::LOWEST );
 
-    m_xTbLinks->connect_changed( LINK( this, SvBaseLinksDlg, LinksSelectHdl ) );
+    m_xTbLinks->connect_selection_changed(LINK(this, SvBaseLinksDlg, LinksSelectHdl));
     m_xTbLinks->connect_row_activated( LINK( this, SvBaseLinksDlg, LinksDoubleClickHdl ) );
     m_xRbAutomatic->connect_toggled( LINK( this, SvBaseLinksDlg, ToggleHdl ) );
     m_xRbManual->connect_toggled( LINK( this, SvBaseLinksDlg, ToggleHdl ) );

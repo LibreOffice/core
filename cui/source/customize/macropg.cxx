@@ -561,7 +561,7 @@ void SvxMacroTabPage_::InitAndSetHandler( const Reference< container::XNameRepla
     if( mpImpl->xAssignComponentPB )
         mpImpl->xAssignComponentPB->connect_clicked( aLnk );
     mpImpl->xEventLB->connect_row_activated( LINK(this, SvxMacroTabPage_, DoubleClickHdl_Impl ) );
-    mpImpl->xEventLB->connect_changed( LINK( this, SvxMacroTabPage_, SelectEvent_Impl ));
+    mpImpl->xEventLB->connect_selection_changed(LINK(this, SvxMacroTabPage_, SelectEvent_Impl));
 
     std::vector<int> aWidths
     {

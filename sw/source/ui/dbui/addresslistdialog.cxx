@@ -218,7 +218,7 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent)
     m_xRemovePB->set_sensitive(m_xListLB->n_children() > 0);
     m_xFilterPB->set_sensitive(m_xListLB->n_children() > 0);
     m_xTablePB->set_sensitive(m_xListLB->n_children() > 0);
-    m_xListLB->connect_changed(LINK(this, SwAddressListDialog, ListBoxSelectHdl_Impl));
+    m_xListLB->connect_selection_changed(LINK(this, SwAddressListDialog, ListBoxSelectHdl_Impl));
     TableSelectHdl(nullptr);
 }
 

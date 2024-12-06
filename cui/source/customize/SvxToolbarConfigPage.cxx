@@ -64,7 +64,7 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(weld::Container* pPage,
     rTreeView.set_help_id(HID_SVX_CONFIG_TOOLBAR_CONTENTS);
     rTreeView.show();
 
-    rTreeView.connect_changed(LINK(this, SvxToolbarConfigPage, SelectToolbarEntry));
+    rTreeView.connect_selection_changed(LINK(this, SvxToolbarConfigPage, SelectToolbarEntry));
     rTreeView.connect_popup_menu(LINK(this, SvxToolbarConfigPage, ContentContextMenuHdl));
 
     m_xFunctions->get_widget().connect_popup_menu(

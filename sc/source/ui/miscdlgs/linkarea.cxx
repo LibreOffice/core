@@ -50,7 +50,7 @@ ScLinkedAreaDlg::ScLinkedAreaDlg(weld::Widget* pParent)
 
     m_xCbUrl->connect_entry_activate(LINK(this, ScLinkedAreaDlg, FileHdl));
     m_xBtnBrowse->connect_clicked(LINK( this, ScLinkedAreaDlg, BrowseHdl));
-    m_xLbRanges->connect_changed(LINK( this, ScLinkedAreaDlg, RangeHdl));
+    m_xLbRanges->connect_selection_changed(LINK(this, ScLinkedAreaDlg, RangeHdl));
     m_xLbRanges->set_size_request(m_xLbRanges->get_approximate_digit_width() * 54,
                                   m_xLbRanges->get_height_rows(5));
     m_xBtnReload->connect_toggled(LINK( this, ScLinkedAreaDlg, ReloadHdl));

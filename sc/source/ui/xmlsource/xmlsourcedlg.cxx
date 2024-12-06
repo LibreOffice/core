@@ -96,7 +96,7 @@ ScXMLSourceDlg::ScXMLSourceDlg(
     mxBtnOk->connect_clicked(aBtnHdl);
     mxBtnCancel->connect_clicked(aBtnHdl);
 
-    mxLbTree->connect_changed(LINK(this, ScXMLSourceDlg, TreeItemSelectHdl));
+    mxLbTree->connect_selection_changed(LINK(this, ScXMLSourceDlg, TreeItemSelectHdl));
 
     Link<formula::RefEdit&,void> aLink = LINK(this, ScXMLSourceDlg, RefModifiedHdl);
     mxRefEdit->SetModifyHdl(aLink);
