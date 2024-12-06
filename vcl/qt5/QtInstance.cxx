@@ -778,8 +778,8 @@ std::unique_ptr<QApplication> QtInstance::CreateQApplication(int& nArgc, char** 
 
 bool QtInstance::DoExecute(int& nExitCode)
 {
-    const bool bIsOnSystemEventLoop = Application::IsOnSystemEventLoop();
-    if (bIsOnSystemEventLoop)
+    const bool bIsUseSystemEventLoop = Application::IsUseSystemEventLoop();
+    if (bIsUseSystemEventLoop)
     {
 #if defined EMSCRIPTEN
         // For Emscripten, QApplication::exec() will unwind the stack by throwing a JavaScript
@@ -791,12 +791,12 @@ bool QtInstance::DoExecute(int& nExitCode)
         O3TL_UNREACHABLE;
 #endif
     }
-    return bIsOnSystemEventLoop;
+    return bIsUseSystemEventLoop;
 }
 
 void QtInstance::DoQuit()
 {
-    if (Application::IsOnSystemEventLoop())
+    if (Application::IsUseSystemEventLoop())
         QApplication::quit();
 }
 

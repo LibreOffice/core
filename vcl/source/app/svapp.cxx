@@ -350,7 +350,7 @@ void Application::Execute()
     int nExitCode = 0;
     if (!pSVData->mpDefInst->DoExecute(nExitCode))
     {
-        if (Application::IsOnSystemEventLoop())
+        if (Application::IsUseSystemEventLoop())
         {
             SAL_WARN("vcl.schedule", "Can't omit DoExecute when running on system event loop!");
             std::abort();
@@ -395,7 +395,7 @@ static bool ImplYield(bool i_bWait, bool i_bAllEvents)
 
 bool Application::Reschedule( bool i_bAllEvents )
 {
-    static const bool bAbort = Application::IsOnSystemEventLoop();
+    static const bool bAbort = Application::IsUseSystemEventLoop();
     if (bAbort)
     {
         SAL_WARN("vcl.schedule", "Application::Reschedule(" << i_bAllEvents << ")");
@@ -404,7 +404,7 @@ bool Application::Reschedule( bool i_bAllEvents )
     return ImplYield(false, i_bAllEvents);
 }
 
-bool Application::IsOnSystemEventLoop()
+bool Application::IsUseSystemEventLoop()
 {
     return ImplGetSVData()->maAppData.m_bUseSystemLoop;
 }
@@ -464,7 +464,7 @@ SAL_DLLPUBLIC_EXPORT void unit_lok_process_events_to_idle()
 
 void Application::Yield()
 {
-    static const bool bAbort = Application::IsOnSystemEventLoop();
+    static const bool bAbort = Application::IsUseSystemEventLoop();
     if (bAbort)
     {
         SAL_WARN("vcl.schedule", "Application::Yield()");

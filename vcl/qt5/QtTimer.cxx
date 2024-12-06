@@ -42,7 +42,7 @@ QtTimer::QtTimer()
 void QtTimer::timeoutActivated()
 {
     SolarMutexGuard aGuard;
-    if (Application::IsOnSystemEventLoop())
+    if (Application::IsUseSystemEventLoop())
     {
         const ImplSVData* pSVData = ImplGetSVData();
         assert(pSVData && pSVData->mpDefInst);

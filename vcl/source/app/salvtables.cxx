@@ -169,14 +169,14 @@ bool SalInstance::CallEventCallback(void const* pEvent, int nBytes)
 bool SalInstance::DoExecute(int&)
 {
     // can't run on system event loop without implementing DoExecute and DoQuit
-    if (Application::IsOnSystemEventLoop())
+    if (Application::IsUseSystemEventLoop())
         std::abort();
     return false;
 }
 
 void SalInstance::DoQuit()
 {
-    if (Application::IsOnSystemEventLoop())
+    if (Application::IsUseSystemEventLoop())
         std::abort();
 }
 

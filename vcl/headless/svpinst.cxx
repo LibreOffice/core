@@ -288,7 +288,7 @@ static void loop(void * arg) {
 }
 
 bool SvpSalInstance::DoExecute(int &) {
-    assert(Application::IsOnSystemEventLoop());
+    assert(Application::IsUseSystemEventLoop());
     // emscripten_set_main_loop will unwind the stack by throwing a JavaScript exception, so we need
     // to manually undo the call of AcquireYieldMutex() done in InitVCL:
     ReleaseYieldMutex(false);
@@ -299,7 +299,7 @@ bool SvpSalInstance::DoExecute(int &) {
 }
 
 void SvpSalInstance::DoQuit() {
-    assert(Application::IsOnSystemEventLoop());
+    assert(Application::IsUseSystemEventLoop());
 }
 
 #endif

@@ -1296,11 +1296,11 @@ public:
     static css::uno::Reference< css::ui::dialogs::XFolderPicker2 >
         createFolderPicker( const css::uno::Reference< css::uno::XComponentContext >& rServiceManager );
 
-    /** Returns true, if the VCL plugin runs on the system event loop.
+    /** Returns true, if the VCL plugin should run on the system event loop.
      *
      *  AKA the VCL plugin can't handle nested event loops, like WASM or mobile.
      */
-    static bool IsOnSystemEventLoop();
+    static bool IsUseSystemEventLoop();
 
     ///@}
 
