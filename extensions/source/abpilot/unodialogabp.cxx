@@ -35,39 +35,10 @@ namespace abp
     using namespace ::com::sun::star::ui::dialogs;
 
     OABSPilotUno::OABSPilotUno(const Reference< XComponentContext >& _rxORB)
-        :OGenericUnoDialog(_rxORB)
+        : OABSPilotUno_JBase(_rxORB)
     {
         registerProperty( u"DataSourceName"_ustr, PROPERTY_ID_DATASOURCENAME, PropertyAttribute::READONLY ,
             &m_sDataSourceName, cppu::UnoType<decltype(m_sDataSourceName)>::get() );
-    }
-
-    Any SAL_CALL OABSPilotUno::queryInterface( const Type& aType )
-    {
-        Any aReturn = svt::OGenericUnoDialog::queryInterface( aType );
-        return aReturn.hasValue() ? aReturn : OABSPilotUno_JBase::queryInterface( aType );
-    }
-
-    void SAL_CALL OABSPilotUno::acquire(  ) noexcept
-    {
-        svt::OGenericUnoDialog::acquire();
-    }
-
-    void SAL_CALL OABSPilotUno::release(  ) noexcept
-    {
-        svt::OGenericUnoDialog::release();
-    }
-
-    Sequence< Type > SAL_CALL OABSPilotUno::getTypes(  )
-    {
-        return ::comphelper::concatSequences(
-            svt::OGenericUnoDialog::getTypes(),
-            OABSPilotUno_JBase::getTypes()
-        );
-    }
-
-    Sequence<sal_Int8> SAL_CALL OABSPilotUno::getImplementationId(  )
-    {
-        return css::uno::Sequence<sal_Int8>();
     }
 
     OUString SAL_CALL OABSPilotUno::getImplementationName()

@@ -28,12 +28,11 @@
 namespace abp
 {
     class OABSPilotUno;
-    typedef ::cppu::ImplHelper1< css::task::XJob >     OABSPilotUno_JBase;
+    typedef cppu::ImplInheritanceHelper<svt::OGenericUnoDialog, css::task::XJob> OABSPilotUno_JBase;
     typedef ::comphelper::OPropertyArrayUsageHelper< OABSPilotUno > OABSPilotUno_PBase;
     /// the UNO wrapper for the address book source pilot
     class OABSPilotUno
-            : public svt::OGenericUnoDialog
-            , public OABSPilotUno_JBase
+            : public OABSPilotUno_JBase
             , public OABSPilotUno_PBase
     {
         OUString m_sDataSourceName;
@@ -42,15 +41,6 @@ namespace abp
         explicit OABSPilotUno(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
 
     private:
-        // XInterface (disambiguation)
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-        virtual void SAL_CALL acquire(  ) noexcept override;
-        virtual void SAL_CALL release(  ) noexcept override;
-
-        // XTypeProvider
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
-        virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) override;
-
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
         virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
