@@ -4966,12 +4966,21 @@ OUString INetURLObject::CutExtension()
 
 bool INetURLObject::IsExoticProtocol() const
 {
-    return m_eScheme == INetProtocol::Slot ||
-           m_eScheme == INetProtocol::Macro ||
-           m_eScheme == INetProtocol::Uno ||
-           m_eScheme == INetProtocol::VndSunStarExpand ||
-           isSchemeEqualTo(u"vnd.sun.star.script") ||
-           isSchemeEqualTo(u"service");
+    if (m_eScheme == INetProtocol::Slot ||
+        m_eScheme == INetProtocol::Macro ||
+        m_eScheme == INetProtocol::Uno ||
+        m_eScheme == INetProtocol::VndSunStarExpand ||
+        isSchemeEqualTo(u"vnd.sun.star.script") ||
+        isSchemeEqualTo(u"service"))
+    {
+        return true;
+    }
+    if (isSchemeEqualTo(u"vnd.sun.star.pkg") || isSchemeEqualTo(u"vnd.sun.star.zip"))
+    {
+        OUString sPayloadURL = GetURLPath(INetURLObject::DecodeMechanism::WithCharset);
+        return sPayloadURL.startsWith(u"//") && INetURLObject(sPayloadURL.subView(2)).IsExoticProtocol();
+    }
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
