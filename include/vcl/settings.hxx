@@ -31,8 +31,6 @@
 #include <memory>
 #include <vector>
 
-#include <optional>
-
 class BitmapEx;
 class LanguageTag;
 class SvtSysLocale;
