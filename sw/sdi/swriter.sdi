@@ -4160,7 +4160,7 @@ SfxBoolItem HighlightCharDF FN_HIGHLIGHT_CHAR_DF
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = TRUE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -5330,7 +5330,7 @@ SfxVoidItem Repaginate FN_REPAGINATE
 [
     AutoUpdate = FALSE,
     FastCall = TRUE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -6490,7 +6490,7 @@ SfxBoolItem TableNumberRecognition FN_SET_MODOPT_TBLNUMFMT
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
