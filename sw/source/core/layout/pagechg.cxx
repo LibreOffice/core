@@ -410,12 +410,14 @@ static void lcl_FormatLay( SwLayoutFrame *pLay )
 static void lcl_MakeObjs(const sw::FrameFormats<sw::SpzFrameFormat*>& rSpzs, SwPageFrame* pPage)
 {
     // formats are in the special table of the document
+    const sal_uInt16 nPhyPageNum = pPage->GetPhyPageNum();
     size_t i = 0;
-    while (i < rSpzs.size())
+    const size_t nSpzsCnt = rSpzs.size();
+    while (i < nSpzsCnt)
     {
         auto pSpz = rSpzs[i];
         const SwFormatAnchor &rAnch = pSpz->GetAnchor();
-        if ( rAnch.GetPageNum() == pPage->GetPhyPageNum() )
+        if ( rAnch.GetPageNum() == nPhyPageNum )
         {
             if( rAnch.GetAnchorNode() )
             {

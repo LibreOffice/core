@@ -1217,16 +1217,17 @@ namespace
                                     sal_Int32 *const pStart, sal_Int32 *const pEnd,
                                     bool bCaseSensitive = true)
     {
-        if (*pCurrent == *pSelf)
+        if (pCurrent == pSelf)
             return nullptr;
 
         SwTextNode* pTextNode = pCurrent->GetTextNode();
         if (!pTextNode)
             return nullptr;
 
+        auto const & rFormatName = pTextNode->GetFormatColl()->GetName();
         if (bCaseSensitive
-            ? pTextNode->GetFormatColl()->GetName() == rStyleName
-            : pTextNode->GetFormatColl()->GetName().equalsIgnoreAsciiCase(rStyleName))
+            ? rFormatName == rStyleName
+            : rFormatName.equalsIgnoreAsciiCase(rStyleName))
         {
             *pStart = 0;
             if (pEnd)
@@ -1238,7 +1239,7 @@ namespace
 
         if (auto const pHints = pTextNode->GetpSwpHints())
         {
-            for (size_t i = 0; i < pHints->Count(); ++i)
+            for (size_t i = 0, nCnt = pHints->Count(); i < nCnt; ++i)
             {
                 auto const*const pHint(pHints->Get(i));
                 if (pHint->Which() == RES_TXTATR_CHARFMT)
