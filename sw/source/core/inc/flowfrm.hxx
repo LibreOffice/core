@@ -184,6 +184,9 @@ public:
                 SvxFormatBreakItem const& rBreak,
                 bool bBreakCheck = false ) const;
 
+    SwFrame * FindPrevIgnoreHidden() const;
+    SwFrame * FindNextIgnoreHidden() const;
+
     bool HasLockedFollow() const;
 
     bool HasParaSpaceAtPages( bool bSct ) const;
