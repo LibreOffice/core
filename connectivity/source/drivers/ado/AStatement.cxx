@@ -120,11 +120,8 @@ Any SAL_CALL OStatement_Base::queryInterface( const Type & rType )
 
 css::uno::Sequence< css::uno::Type > SAL_CALL OStatement_Base::getTypes(  )
 {
-    ::cppu::OTypeCollection aTypes( cppu::UnoType<css::beans::XMultiPropertySet>::get(),
-                                    cppu::UnoType<css::beans::XFastPropertySet>::get(),
-                                    cppu::UnoType<css::beans::XPropertySet>::get());
-
-    return ::comphelper::concatSequences(aTypes.getTypes(),OStatement_BASE::getTypes());
+    return comphelper::concatSequences(cppu::OPropertySetHelper::getTypes(),
+                                       OStatement_BASE::getTypes());
 }
 
 

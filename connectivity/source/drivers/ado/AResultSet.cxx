@@ -132,11 +132,8 @@ Any SAL_CALL OResultSet::queryInterface( const Type & rType )
 
 css::uno::Sequence< css::uno::Type > SAL_CALL OResultSet::getTypes(  )
 {
-    ::cppu::OTypeCollection aTypes( cppu::UnoType<css::beans::XMultiPropertySet>::get(),
-                                    cppu::UnoType<css::beans::XFastPropertySet>::get(),
-                                    cppu::UnoType<css::beans::XPropertySet>::get());
-
-    return ::comphelper::concatSequences(aTypes.getTypes(),OResultSet_BASE::getTypes());
+    return comphelper::concatSequences(cppu::OPropertySetHelper::getTypes(),
+                                       OResultSet_BASE::getTypes());
 }
 
 sal_Int32 SAL_CALL OResultSet::findColumn( const OUString& columnName )
