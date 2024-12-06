@@ -1069,13 +1069,7 @@ void HeaderBar::RemoveItem( sal_uInt16 nItemId )
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
     if ( nPos != HEADERBAR_ITEM_NOTFOUND )
-    {
-        if ( nPos < mvItemList.size() ) {
-            auto it = mvItemList.begin();
-            it += nPos;
-            mvItemList.erase( it );
-        }
-    }
+        mvItemList.erase( mvItemList.begin() + nPos );
 }
 
 void HeaderBar::MoveItem( sal_uInt16 nItemId, sal_uInt16 nNewPos )
