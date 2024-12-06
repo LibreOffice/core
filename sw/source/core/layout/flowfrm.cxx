@@ -131,7 +131,9 @@ bool SwFlowFrame::IsKeepFwdMoveAllowed( bool bIgnoreMyOwnKeepValue )
         if ( bIgnoreMyOwnKeepValue && pFrame->GetIndPrev() )
             pFrame = pFrame->GetIndPrev();
         do
-        {   if ( pFrame->GetAttrSet()->GetKeep().GetValue() )
+        {
+            if (pFrame->GetAttrSet()->GetKeep().GetValue()
+                || pFrame->IsHiddenNow())
                 pFrame = pFrame->GetIndPrev();
             else
                 return true;
@@ -150,22 +152,42 @@ void SwFlowFrame::CheckKeep()
     // it's possible for the whole troop to move back.
     SwFrame *pPre = m_rThis.GetIndPrev();
     assert(pPre);
+    while (pPre && pPre->IsHiddenNow())
+    {
+        pPre = pPre->GetIndPrev();
+    }
+    if (!pPre)
+    {
+        return;
+    }
     if( pPre->IsSctFrame() )
     {
         SwFrame *pLast = static_cast<SwSectionFrame*>(pPre)->FindLastContent();
+        while (pLast && pLast->IsHiddenNow())
+        {
+            pLast = pLast->GetIndPrev();
+        }
         if( pLast && pLast->FindSctFrame() == pPre )
             pPre = pLast;
         else
             return;
     }
-    SwFrame* pTmp;
+    SwFrame* pTmp{pPre};
     bool bKeep;
     while ( (bKeep = pPre->GetAttrSet()->GetKeep().GetValue()) &&
-            nullptr != ( pTmp = pPre->GetIndPrev() ) )
+            nullptr != (pTmp = pTmp->GetIndPrev()) )
     {
+        if (pTmp->IsHiddenNow())
+        {
+            continue;
+        }
         if( pTmp->IsSctFrame() )
         {
             SwFrame *pLast = static_cast<SwSectionFrame*>(pTmp)->FindLastContent();
+            while (pLast && pLast->IsHiddenNow())
+            {
+                pLast = pLast->GetIndPrev();
+            }
             if( pLast && pLast->FindSctFrame() == pTmp )
                 pTmp = pLast;
             else
@@ -336,6 +358,26 @@ bool SwFlowFrame::IsKeep(SvxFormatKeepItem const& rKeep,
         }
     }
     return bKeep;
+}
+
+SwFrame * SwFlowFrame::FindPrevIgnoreHidden() const
+{
+    SwFrame * pRet{m_rThis.FindPrev()};
+    while (pRet && pRet->IsHiddenNow())
+    {
+        pRet = pRet->FindPrev();
+    }
+    return pRet;
+}
+
+SwFrame * SwFlowFrame::FindNextIgnoreHidden() const
+{
+    SwFrame * pRet{m_rThis.FindNext()};
+    while (pRet && pRet->IsHiddenNow())
+    {
+        pRet = pRet->FindNext();
+    }
+    return pRet;
 }
 
 sal_uInt8 SwFlowFrame::BwdMoveNecessary( const SwPageFrame *pPage, const SwRect &rRect )
@@ -1188,7 +1230,7 @@ bool SwFlowFrame::IsPrevObjMove() const
     if( pSh && pSh->GetViewOptions()->getBrowseMode() )
         return false;
 
-    SwFrame *pPre = m_rThis.FindPrev();
+    SwFrame *const pPre{FindPrevIgnoreHidden()};
 
     if ( pPre && pPre->GetDrawObjs() )
     {
@@ -2616,7 +2658,7 @@ bool SwFlowFrame::MoveBwd( bool &rbReformat )
     // keep with next frame and next frame is locked.
     // i#38232 - If next frame is a table, do *not* check,
     // if it's locked.
-    if ( pNewUpper && !IsFollow() &&
+    if ( pNewUpper && !IsFollow() && !m_rThis.IsHiddenNow() &&
          m_rThis.GetAttrSet()->GetKeep().GetValue() && m_rThis.GetIndNext() )
     {
         SwFrame* pIndNext = m_rThis.GetIndNext();
