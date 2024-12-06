@@ -1753,7 +1753,7 @@ void JSMessageDialog::RememberMessageDialog()
     static constexpr OUString sWidgetName = u"__DIALOG__"_ustr;
     OUString sWindowId = OUString::number(m_xMessageDialog->GetLOKWindowId());
     auto aWidgetMap = JSInstanceBuilder::Widgets().Find(sWindowId);
-    if (!aWidgetMap || !aWidgetMap->Find(sWidgetName))
+    if (aWidgetMap && aWidgetMap->Find(sWidgetName))
         return;
 
     JSInstanceBuilder::InsertWindowToMap(sWindowId);
