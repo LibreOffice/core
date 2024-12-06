@@ -943,7 +943,7 @@ namespace accessibility
             }
         }
 
-        return ::comphelper::concatSequences( aRunAttrSeq, comphelper::containerToSequence(aDiffVec) );
+        return comphelper::concatSequences(aRunAttrSeq, aDiffVec);
     }
 
     tools::Rectangle AccessibleStaticTextBase::GetParagraphBoundingBox() const
