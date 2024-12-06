@@ -2275,6 +2275,7 @@ SwNode* SwNodes::FindPrvNxtFrameNode( const SwNode& rFrameNd,
 void SwNodes::ForEach( SwNodeOffset nStart, SwNodeOffset nEnd,
                        FnForEach_SwNodes fn, void* pArgs )
 {
+    assert( nEnd <= SwNodeOffset(m_nSize) );
     if( nEnd > SwNodeOffset(m_nSize) )
         nEnd = SwNodeOffset(m_nSize);
 
