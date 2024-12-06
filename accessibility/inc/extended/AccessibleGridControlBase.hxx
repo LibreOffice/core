@@ -252,12 +252,10 @@ private:
 // a version of AccessibleGridControlBase which implements not only the XAccessibleContext,
 // but also the XAccessible
 
-typedef ::cppu::ImplHelper1 <   css::accessibility::XAccessible
-                            >   GridControlAccessibleElement_Base;
+typedef cppu::ImplInheritanceHelper <AccessibleGridControlBase, css::accessibility::XAccessible>
+                                GridControlAccessibleElement_Base;
 
-class GridControlAccessibleElement
-            :public AccessibleGridControlBase
-            ,public GridControlAccessibleElement_Base
+class GridControlAccessibleElement : public GridControlAccessibleElement_Base
 {
 protected:
     /** Constructor sets specified name and description.
@@ -270,12 +268,6 @@ protected:
         const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
         ::vcl::table::IAccessibleTable& rTable,
         ::vcl::table::AccessibleTableControlObjType  eObjType );
-
-public:
-    // XInterface
-    DECLARE_XINTERFACE( )
-    // XTypeProvider
-    DECLARE_XTYPEPROVIDER( )
 
 protected:
     virtual ~GridControlAccessibleElement() override;

@@ -430,15 +430,9 @@ sal_Int32 SAL_CALL AccessibleGridControlBase::getBackground(  )
 GridControlAccessibleElement::GridControlAccessibleElement( const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
                         ::vcl::table::IAccessibleTable& rTable,
                         ::vcl::table::AccessibleTableControlObjType  eObjType )
-    :AccessibleGridControlBase( rxParent, rTable, eObjType )
+    : GridControlAccessibleElement_Base(rxParent, rTable, eObjType)
 {
 }
-
-// XInterface
-IMPLEMENT_FORWARD_XINTERFACE2( GridControlAccessibleElement, AccessibleGridControlBase, GridControlAccessibleElement_Base)
-
-// XTypeProvider
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( GridControlAccessibleElement, AccessibleGridControlBase, GridControlAccessibleElement_Base )
 
 // css::accessibility::XAccessible
 
