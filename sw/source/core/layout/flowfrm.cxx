@@ -258,6 +258,7 @@ bool SwFlowFrame::IsKeep(SvxFormatKeepItem const& rKeep,
         SvxFormatBreakItem const& rBreak,
         bool const bCheckIfLastRowShouldKeep) const
 {
+    assert(!m_rThis.IsHiddenNow()); // check it before?
     // 1. The keep attribute is ignored inside footnotes
     // 2. For compatibility reasons, the keep attribute is
     //    ignored for frames inside table cells
