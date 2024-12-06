@@ -52,8 +52,10 @@ private:
     OUString m_aStyleName, m_aCommand, m_aStatusCommand;
     css::uno::Reference< css::util::XURLTransformer > m_xUrlTransformer;
     css::uno::Reference< css::frame::XDispatchProvider > m_xFrame;
-    css::uno::Reference< css::frame::XDispatch > m_xStatusDispatch;
+    css::uno::Reference< css::frame::XDispatch > m_xStyleApplyStatusDispatch;
+    css::uno::Reference< css::frame::XDispatch > m_xStyleFamilyStatusDispatch;
     css::uno::Reference< css::frame::XStatusListener > m_xOwner;
+    bool m_bStyleApplyEnabled = true; // If this is disabled, style family state is irrelevant
 };
 
 class StyleToolbarController final : public svt::ToolboxController

@@ -127,9 +127,12 @@ StyleDispatcher::StyleDispatcher( const css::uno::Reference< css::frame::XFrame 
     if ( m_xFrame.is() )
     {
         css::util::URL aStatusURL;
+        aStatusURL.Complete = u".uno:StyleApply"_ustr;
+        m_xUrlTransformer->parseStrict( aStatusURL );
+        m_xStyleApplyStatusDispatch = m_xFrame->queryDispatch(aStatusURL, OUString(), 0);
         aStatusURL.Complete = m_aStatusCommand;
         m_xUrlTransformer->parseStrict( aStatusURL );
-        m_xStatusDispatch = m_xFrame->queryDispatch( aStatusURL, OUString(), 0 );
+        m_xStyleFamilyStatusDispatch = m_xFrame->queryDispatch(aStatusURL, OUString(), 0);
     }
 }
 
@@ -147,32 +150,51 @@ void StyleDispatcher::dispatch( const css::util::URL& rURL,
 void StyleDispatcher::addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& rListener,
                                          const css::util::URL& /*rURL*/ )
 {
-    if ( m_xStatusDispatch.is() )
+    if ( !m_xOwner.is() )
+        m_xOwner.set( rListener );
+    if (m_xStyleApplyStatusDispatch)
     {
-        if ( !m_xOwner.is() )
-            m_xOwner.set( rListener );
-
+        css::util::URL aStatusURL;
+        aStatusURL.Complete = u".uno:StyleApply"_ustr;
+        m_xUrlTransformer->parseStrict(aStatusURL);
+        m_xStyleApplyStatusDispatch->addStatusListener(this, aStatusURL);
+    }
+    if (m_xStyleFamilyStatusDispatch)
+    {
         css::util::URL aStatusURL;
         aStatusURL.Complete = m_aStatusCommand;
         m_xUrlTransformer->parseStrict( aStatusURL );
-        m_xStatusDispatch->addStatusListener( this, aStatusURL );
+        m_xStyleFamilyStatusDispatch->addStatusListener(this, aStatusURL);
     }
 }
 
 void StyleDispatcher::removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& /*rListener*/,
                                             const css::util::URL& /*rURL*/ )
 {
-    if ( m_xStatusDispatch.is() )
+    if (m_xStyleFamilyStatusDispatch)
     {
         css::util::URL aStatusURL;
         aStatusURL.Complete = m_aStatusCommand;
         m_xUrlTransformer->parseStrict( aStatusURL );
-        m_xStatusDispatch->removeStatusListener( this, aStatusURL );
+        m_xStyleFamilyStatusDispatch->removeStatusListener(this, aStatusURL);
+    }
+    if (m_xStyleApplyStatusDispatch)
+    {
+        css::util::URL aStatusURL;
+        aStatusURL.Complete = u".uno:StyleApply"_ustr;
+        m_xUrlTransformer->parseStrict(aStatusURL);
+        m_xStyleApplyStatusDispatch->removeStatusListener(this, aStatusURL);
     }
 }
 
 void StyleDispatcher::statusChanged( const css::frame::FeatureStateEvent& rEvent )
 {
+    if (rEvent.FeatureURL.Complete == ".uno:StyleApply")
+    {
+        m_bStyleApplyEnabled = rEvent.IsEnabled;
+        return;
+    }
+
     css::frame::status::Template aTemplate;
     rEvent.State >>= aTemplate;
 
@@ -180,15 +202,18 @@ void StyleDispatcher::statusChanged( const css::frame::FeatureStateEvent& rEvent
     aEvent.FeatureURL.Complete = m_aCommand;
     m_xUrlTransformer->parseStrict( aEvent.FeatureURL );
 
-    aEvent.IsEnabled = rEvent.IsEnabled;
+    aEvent.IsEnabled = m_bStyleApplyEnabled && rEvent.IsEnabled;
     aEvent.Requery = rEvent.Requery;
     aEvent.State <<= m_aStyleName == aTemplate.StyleName;
     m_xOwner->statusChanged( aEvent );
 }
 
-void StyleDispatcher::disposing( const css::lang::EventObject& /*rSource*/ )
+void StyleDispatcher::disposing( const css::lang::EventObject& rSource )
 {
-    m_xStatusDispatch.clear();
+    if (rSource.Source == m_xStyleFamilyStatusDispatch)
+        m_xStyleFamilyStatusDispatch.clear();
+    if (rSource.Source == m_xStyleApplyStatusDispatch)
+        m_xStyleApplyStatusDispatch.clear();
 }
 
 StyleToolbarController::StyleToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rContext,
