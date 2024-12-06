@@ -57,7 +57,11 @@ sub merge_mergemodules_into_msi_database
         my $cabinetfile = "MergeModule.CABinet"; # the name of each cabinet file in a merge file
         my $infoline = "";
         my $systemcall = "";
+        my $systemcall_output = "";
         my $returnvalue = "";
+        # in cygwin the * glob needs to be escaped when passing it to msidb
+        my $globescape = "";
+        $globescape = "\\" if ( $^O =~ /cygwin/i );
 
         # 1. Analyzing the MergeModule (has only to be done once)
         #   a. -> Extracting cabinet file: msidb.exe -d <msmfile> -x MergeModule.CABinet
@@ -103,16 +107,14 @@ sub merge_mergemodules_into_msi_database
                 # remove an existing cabinet file
                 if ( -f $cabinetfile ) { unlink($cabinetfile); }
 
-                # exclude cabinet file
+                # export cabinet file
                 $systemcall = $msidb . " -d " . $filename . " -x " . $cabinetfile;
-                $returnvalue = system($systemcall);
-
-                $infoline = "Systemcall: $systemcall\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $systemcall_output = `$systemcall`;
+                $returnvalue = $? >> 8;
 
                 if ($returnvalue)
                 {
-                    $infoline = "ERROR: Could not execute $systemcall !\n";
+                    $infoline = "ERROR: Could not execute $systemcall - returncode: $returnvalue - output: $systemcall_output\n";
                     push( @installer::globals::logfileinfo, $infoline);
                     installer::exiter::exit_program("ERROR: Could not extract cabinet file from merge file: $completedest !", "merge_mergemodules_into_msi_database");
                 }
@@ -122,34 +124,25 @@ sub merge_mergemodules_into_msi_database
                     push( @installer::globals::logfileinfo, $infoline);
                 }
 
-                # exclude tables from mergefile
+                # export tables from mergefile
                 # Attention: All listed tables have to exist in the database. If they not exist, an error window pops up
                 # and the return value of msidb.exe is not zero. The error window makes it impossible to check the existence
                 # of a table with the help of the return value.
                 # Solution: Export of all tables by using "*" . Some tables must exist (File Component Directory), other
                 # tables do not need to exist (MsiAssembly).
 
-                if ( $^O =~ /cygwin/i ) {
-                    # msidb.exe really wants backslashes. (And double escaping because system() expands the string.)
-                    my $localworkdir = $workdir;
-                    $localworkdir =~ s/\//\\\\/g;
-                    $systemcall = $msidb . " -d " . $filename . " -f " . $localworkdir . " -e \\\*";
-                }
-                else
-                {
-                    $systemcall = $msidb . " -d " . $filename . " -f " . $workdir . " -e \*";
-                }
+                $systemcall = $msidb . " -d " . $filename . " -f " . $workdir . " -e $globescape*";
+                # msidb.exe really wants backslashes
+                $systemcall =~ s/\//\\\\/g;
 
-                $returnvalue = system($systemcall);
-
-                $infoline = "Systemcall: $systemcall\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $systemcall_output = `$systemcall`;
+                $returnvalue = $? >> 8;
 
                 if ($returnvalue)
                 {
-                    $infoline = "ERROR: Could not execute $systemcall !\n";
+                    $infoline = "ERROR: Could not execute $systemcall - returncode: $returnvalue - output: $systemcall_output\n";
                     push( @installer::globals::logfileinfo, $infoline);
-                    installer::exiter::exit_program("ERROR: Could not exclude tables from merge file: $completedest !", "merge_mergemodules_into_msi_database");
+                    installer::exiter::exit_program("ERROR: Could not export tables from merge file: $completedest !", "merge_mergemodules_into_msi_database");
                 }
                 else
                 {
@@ -249,39 +242,42 @@ sub merge_mergemodules_into_msi_database
                     if ( ! -f $completeremovedest ) { installer::exiter::exit_program("ERROR: msm file not found: $completeremovedest !", "merge_mergemodules_into_msi_database"); }
 
                     # Unpacking msm file
-                    if ( $^O =~ /cygwin/i ) {
-                        # msidb.exe really wants backslashes. (And double escaping because system() expands the string.)
-                        my $localcompleteremovedest = $completeremovedest;
-                        my $localremoveworkdir = $removeworkdir;
-                        $localcompleteremovedest =~ s/\//\\\\/g;
-                        $localremoveworkdir =~ s/\//\\\\/g;
-                        $systemcall = $msidb . " -d " . $localcompleteremovedest . " -f " . $localremoveworkdir . " -e \\\*";
-                    }
-                    else
-                    {
-                        $systemcall = $msidb . " -d " . $completeremovedest . " -f " . $removeworkdir . " -e \*";
-                    }
+                    $systemcall = $msidb . " -d " . $completeremovedest . " -f " . $removeworkdir . " -e $globescape*";
+                    # msidb.exe really wants backslashes
+                    $systemcall =~ s/\//\\\\/g;
 
-                    $returnvalue = system($systemcall);
+                    $systemcall_output = `$systemcall`;
+                    $returnvalue = $? >> 8;
+
+                    if ($returnvalue) {
+                        $infoline = "ERROR: Could not execute $systemcall - returncode: $returnvalue - output: $systemcall_output\n";
+                        push( @installer::globals::logfileinfo, $infoline);
+                        installer::exiter::exit_program("ERROR: $systemcall failed!", "merge_mergemodules_into_msi_database");
+                    } else {
+                        $infoline = "Success: Executed $systemcall successfully!\n";
+                        push(@installer::globals::logfileinfo, $infoline);
+                    }
 
                     my $idtfilename = $removeworkdir . $installer::globals::separator . "File.idt";
                     if ( -f $idtfilename ) { unlink $idtfilename; }
                     unlink $completeremovedest;
 
                     # Packing msm file without "File.idt"
-                    if ( $^O =~ /cygwin/i ) {
-                        # msidb.exe really wants backslashes. (And double escaping because system() expands the string.)
-                        my $localcompleteremovedest = $completeremovedest;
-                        my $localremoveworkdir = $removeworkdir;
-                        $localcompleteremovedest =~ s/\//\\\\/g;
-                        $localremoveworkdir =~ s/\//\\\\/g;
-                        $systemcall = $msidb . " -c -d " . $localcompleteremovedest . " -f " . $localremoveworkdir . " -i \\\*";
+                    $systemcall = $msidb . " -c -d " . $completeremovedest . " -f " . $removeworkdir . " -i $globescape*";
+                    # msidb.exe really wants backslashes
+                    $systemcall =~ s/\//\\\\/g;
+
+                    $systemcall_output = `$systemcall`;
+                    $returnvalue = $? >> 8;
+
+                    if ($returnvalue) {
+                        $infoline = "ERROR: Could not execute $systemcall - returncode: $returnvalue - output: $systemcall_output\n";
+                        push( @installer::globals::logfileinfo, $infoline);
+                        installer::exiter::exit_program("ERROR: $systemcall failed!", "merge_mergemodules_into_msi_database");
+                    } else {
+                        $infoline = "Success: Executed $systemcall successfully!\n";
+                        push( @installer::globals::logfileinfo, $infoline);
                     }
-                    else
-                    {
-                        $systemcall = $msidb . " -c -d " . $completeremovedest . " -f " . $removeworkdir . " -i \*";
-                    }
-                    $returnvalue = system($systemcall);
 
                     # Using this msm file for merging
                     if ( -f $completeremovedest ) { $completedest = $completeremovedest; }
@@ -360,26 +356,16 @@ sub merge_mergemodules_into_msi_database
 
             installer::logger::include_timestamp_into_logfile("\nPerformance Info: Before merging database");
 
-            if ( $^O =~ /cygwin/i ) {
-                # msidb.exe really wants backslashes. (And double escaping because system() expands the string.)
-                my $localmergemodulepath = $mergemodulehash->{'mergefilepath'};
-                my $localmsifilename = $msifilename;
-                $localmergemodulepath =~ s/\//\\\\/g;
-                $localmsifilename =~ s/\//\\\\/g;
-                $systemcall = $msidb . " -d " . $localmsifilename . " -m " . $localmergemodulepath;
-            }
-            else
-            {
-                $systemcall = $msidb . " -d " . $msifilename . " -m " . $mergemodulehash->{'mergefilepath'};
-            }
-            $returnvalue = system($systemcall);
+            $systemcall = $msidb . " -d " . $msifilename . " -m " . $mergemodulehash->{'mergefilepath'};
+            # msidb.exe really wants backslashes
+            $systemcall =~ s/\//\\\\/g;
 
-            $infoline = "Systemcall: $systemcall\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $systemcall_output = `$systemcall`;
+            $returnvalue = $? >> 8;
 
             if ($returnvalue)
             {
-                $infoline = "ERROR: Could not execute $systemcall . Returnvalue: $returnvalue!\n";
+                $infoline = "ERROR: Could not execute $systemcall - returncode: $returnvalue - output: $systemcall_output\n";
                 push( @installer::globals::logfileinfo, $infoline);
                 installer::exiter::exit_program("Could not merge msm file into database: $mergemodulehash->{'mergefilepath'}\n$infoline", "merge_mergemodules_into_msi_database");
             }
@@ -412,26 +398,16 @@ sub merge_mergemodules_into_msi_database
             if ( ( $mergemodulehash->{'componentcondition'} ) || ( $mergemodulehash->{'attributes_add'} ) ) { $workingtables = $workingtables . " Component"; }
 
             # Table "Feature" has to be exported, but it is not necessary to import it.
-            if ( $^O =~ /cygwin/i ) {
-                # msidb.exe really wants backslashes. (And double escaping because system() expands the string.)
-                my $localmsifilename = $msifilename;
-                my $localworkdir = $workdir;
-                $localmsifilename =~ s/\//\\\\/g;
-                $localworkdir =~ s/\//\\\\/g;
-                $systemcall = $msidb . " -d " . $localmsifilename . " -f " . $localworkdir . " -e " . "Feature " . $workingtables;
-            }
-            else
-            {
-                $systemcall = $msidb . " -d " . $msifilename . " -f " . $workdir . " -e " . "Feature " . $workingtables;
-            }
-            $returnvalue = system($systemcall);
+            $systemcall = $msidb . " -d " . $msifilename . " -f " . $workdir . " -e " . "Feature " . $workingtables;
+            # msidb.exe really wants backslashes
+            $systemcall =~ s/\//\\\\/g;
 
-            $infoline = "Systemcall: $systemcall\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            $systemcall_output = `$systemcall`;
+            $returnvalue = $? >> 8;
 
             if ($returnvalue)
             {
-                $infoline = "ERROR: Could not execute $systemcall !\n";
+                $infoline = "ERROR: Could not execute $systemcall - returncode: $returnvalue - output: $systemcall_output\n";
                 push( @installer::globals::logfileinfo, $infoline);
                 installer::exiter::exit_program("ERROR: Could not exclude tables from msi database: $msifilename !", "merge_mergemodules_into_msi_database");
             }
@@ -489,34 +465,39 @@ sub merge_mergemodules_into_msi_database
             my $moduleexecutetables = "ModuleInstallExecuteSequence ModuleAdminExecuteSequence ModuleAdvtExecuteSequence"; # new tables
             my $executetables = "InstallExecuteSequence InstallUISequence AdminExecuteSequence AdvtExecuteSequence"; # tables to be merged
 
+            $systemcall = $msidb . " -d " . $msifilename . " -f " . $workdir . " -e " . "Feature " . $moduleexecutetables;
+            # msidb.exe really wants backslashes
+            $systemcall =~ s/\//\\\\/g;
 
-            if ( $^O =~ /cygwin/i ) {
-                # msidb.exe really wants backslashes. (And double escaping because system() expands the string.)
-                my $localmsifilename = $msifilename;
-                my $localworkdir = $workdir;
-                $localmsifilename =~ s/\//\\\\/g;
-                $localworkdir =~ s/\//\\\\/g;
-                $systemcall = $msidb . " -d " . $localmsifilename . " -f " . $localworkdir . " -e " . "Feature " . $moduleexecutetables;
-            }
-            else
-            {
-                $systemcall = $msidb . " -d " . $msifilename . " -f " . $workdir . " -e " . "Feature " . $moduleexecutetables;
-            }
-            $returnvalue = system($systemcall);
+            $systemcall_output = `$systemcall`;
+            $returnvalue = $? >> 8;
 
-            if ( $^O =~ /cygwin/i ) {
-                # msidb.exe really wants backslashes. (And double escaping because system() expands the string.)
-                my $localmsifilename = $msifilename;
-                my $localworkdir = $workdir;
-                $localmsifilename =~ s/\//\\\\/g;
-                $localworkdir =~ s/\//\\\\/g;
-                $systemcall = $msidb . " -d " . $localmsifilename . " -f " . $localworkdir . " -e " . "Feature " . $executetables;
+            if ($returnvalue) {
+                # the exit status of this command had not been checked in the past, it fails because
+                # there is no ModuleAdminExecuteSequence table
+                $infoline = "IGNORING: Could not execute $systemcall - returncode: $returnvalue - output: $systemcall_output\n";
+                push( @installer::globals::logfileinfo, $infoline);
+                #installer::exiter::exit_program("ERROR: $infoline", "merge_mergemodules_into_msi_database");
+            } else {
+                $infoline = "Success: Executed $systemcall successfully\n";
+                push( @installer::globals::logfileinfo, $infoline);
             }
-            else
-            {
-                $systemcall = $msidb . " -d " . $msifilename . " -f " . $workdir . " -e " . "Feature " . $executetables;
+
+            $systemcall = $msidb . " -d " . $msifilename . " -f " . $workdir . " -e " . "Feature " . $executetables;
+            # msidb.exe really wants backslashes
+            $systemcall =~ s/\//\\\\/g;
+
+            $systemcall_output = `$systemcall`;
+            $returnvalue = $? >> 8;
+
+            if ($returnvalue) {
+                $infoline = "ERROR: Could not execute $systemcall - returncode: $returnvalue - output: $systemcall_output\n";
+                push( @installer::globals::logfileinfo, $infoline);
+                installer::exiter::exit_program("$infoline", "merge_mergemodules_into_msi_database");
+            } else {
+                $infoline = "Success: Executed $systemcall successfully\n";
+                push( @installer::globals::logfileinfo, $infoline);
             }
-            $returnvalue = system($systemcall);
 
             # Using 8+3 table names, that are used, when tables are integrated into database. The export of tables
             # creates idt-files, that have long names.
@@ -554,32 +535,16 @@ sub merge_mergemodules_into_msi_database
 
             installer::logger::include_timestamp_into_logfile("\nPerformance Info: Before including tables");
 
-            if ( $^O =~ /cygwin/i ) {
-                # msidb.exe really wants backslashes. (And double escaping because system() expands the string.)
-                my $localmsifilename = $msifilename;
-                my $localworkdir = $workdir;
-                $localmsifilename =~ s/\//\\\\/g;
-                $localworkdir =~ s/\//\\\\/g;
-        foreach my $table (split / /, $workingtables . ' ' . $executetables) {
-          $systemcall = $msidb . " -d " . $localmsifilename . " -f " . $localworkdir . " -i " . $table;
-          my $retval = system($systemcall);
-          $infoline = "Systemcall returned $retval: $systemcall\n";
-          push( @installer::globals::logfileinfo, $infoline);
-          $returnvalue |= $retval;
-        }
-            }
-            else
-            {
-                $systemcall = $msidb . " -d " . $msifilename . " -f " . $workdir . " -i " . $workingtables. " " . $executetables;
-        $returnvalue = system($systemcall);
-        $infoline = "Systemcall: $systemcall\n";
-        push( @installer::globals::logfileinfo, $infoline);
+            $systemcall = $msidb . " -d " . $msifilename . " -f " . $workdir . " -i " . $workingtables. " " . $executetables;
+            # msidb.exe really wants backslashes
+            $systemcall =~ s/\//\\\\/g;
 
-            }
+            $systemcall_output = `$systemcall`;
+            $returnvalue = $? >> 8;
 
             if ($returnvalue)
             {
-                $infoline = "ERROR: Could not execute $systemcall !\n";
+                $infoline = "ERROR: Could not execute $systemcall - returncode: $returnvalue - output: $systemcall_output\n";
                 push( @installer::globals::logfileinfo, $infoline);
                 installer::exiter::exit_program("ERROR: Could not include tables into msi database: $msifilename !", "merge_mergemodules_into_msi_database");
             }
@@ -1087,6 +1052,9 @@ sub change_file_table
     my $infoline = "Changing content of table \"File\"\n";
     push( @installer::globals::logfileinfo, $infoline);
 
+    my $globescape = "";
+    $globescape = "\\" if ( $^O =~ /cygwin/i );
+
     my $idtfilename = "File.idt";
     if ( ! -f $idtfilename ) { installer::exiter::exit_program("ERROR: Could not find file \"$idtfilename\" in \"$workdir\" !", "change_file_table"); }
 
@@ -1107,6 +1075,8 @@ sub change_file_table
 
     my $empty = "";
     my $unpackdir = installer::systemactions::create_directories("cab", \$empty);
+    $unpackdir = qx(cygpath -m "$unpackdir");
+    chomp $unpackdir;
     push(@installer::globals::removedirs, $unpackdir);
     $unpackdir = $unpackdir . $installer::globals::separator . $mergemodulegid;
 
@@ -1133,35 +1103,21 @@ sub change_file_table
         push( @installer::globals::logfileinfo, $infoline);
 
         # Avoid the Cygwin expand command
-        my $expandfile = "expand.exe";  # Has to be in the path
-         if ( $^O =~ /cygwin/i ) {
-            $expandfile = qx(cygpath -u "$ENV{WINDIR}"/System32/expand.exe);
-            chomp $expandfile;
-        }
+        my $expandfile = qx(cygpath -m "$ENV{WINDIR}"/System32/expand.exe);
+        chomp $expandfile;
 
         my $cabfilename = "MergeModule.CABinet";
 
-        my $systemcall = "";
-        if ( $^O =~ /cygwin/i ) {
-            my $localunpackdir = qx(cygpath -m "$unpackdir");
-            chomp $localunpackdir;
-            $systemcall = $expandfile . " " . $cabfilename . " -F:\\\* " . $localunpackdir;
-        }
-        else
-        {
-            $systemcall = $expandfile . " " . $cabfilename . " -F:\* " . $unpackdir . " 2\>\&1";
-        }
+        my $systemcall = $expandfile . " " . $cabfilename . " -F:$globescape* " . $unpackdir . " 2\>\&1";
 
-        my $returnvalue = system($systemcall);
-
-        $infoline = "Systemcall: $systemcall\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        my $systemcall_output = `$systemcall`;
+        my $returnvalue = $? >> 8;
 
         if ($returnvalue)
         {
-            $infoline = "ERROR: Could not execute $systemcall !\n";
+            $infoline = "ERROR: Could not execute $systemcall - returncode: $returnvalue - output: $systemcall_output\n";
             push( @installer::globals::logfileinfo, $infoline);
-            installer::exiter::exit_program("ERROR: Could not extract cabinet file: $mergemodulehash->{'cabinetfile'} !", "change_file_table");
+            installer::exiter::exit_program("ERROR: extracting $cabfilename failed using $systemcall", "change_file_table");
         }
         else
         {

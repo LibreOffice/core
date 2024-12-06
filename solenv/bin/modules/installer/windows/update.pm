@@ -41,28 +41,22 @@ sub extract_all_tables_from_msidatabase
     my $systemcall = "";
     my $returnvalue = "";
     my $extraslash = "";        # Has to be set for non-ActiveState perl
+    $extraslash = "\\" if ( $^O =~ /cygwin/i  );
 
     # Export of all tables by using "*"
-
-    if ( $^O =~ /cygwin/i ) {
-        # msidb.exe really wants backslashes. (And double escaping because system() expands the string.)
-        $fulldatabasepath =~ s/\//\\\\/g;
-        $workdir =~ s/\//\\\\/g;
-        $extraslash = "\\";
-    }
-    if ( $^O =~ /linux/i) {
-        $extraslash = "\\";
-    }
-
     $systemcall = $msidb . " -d " . $fulldatabasepath . " -f " . $workdir . " -e " . $extraslash . "*";
-    $returnvalue = system($systemcall);
+    # msidb.exe really wants backslashes. (And double escaping because system() expands the string.)
+    $systemcall =~ s/\//\\\\/g;
+
+    my $systemcall_output = `$systemcall`;
+    my $returnvalue = $? >> 8;
 
     $infoline = "Systemcall: $systemcall\n";
     push( @installer::globals::logfileinfo, $infoline);
 
     if ($returnvalue)
     {
-        $infoline = "ERROR: Could not execute $systemcall !\n";
+        $infoline = "ERROR: Could not execute $systemcall - returncode: $returnvalue - output: $systemcall_output\n";
         push( @installer::globals::logfileinfo, $infoline);
         installer::exiter::exit_program("ERROR: Could not exclude tables from msi database: $fulldatabasepath !", "extract_all_tables_from_msidatabase");
     }
@@ -456,7 +450,7 @@ sub readmergedatabase
         my $filename = $mergemodule->{'Name'};
         my $mergefile = $ENV{'MSM_PATH'} . $filename;
 
-        if ( ! -f $mergefile ) { installer::exiter::exit_program("ERROR: msm file not found: $filename !", "readmergedatabase"); }
+        if ( ! -f $mergefile ) { installer::exiter::exit_program("ERROR: msm file not found: $mergefile !", "readmergedatabase"); }
         my $completesource = $mergefile;
 
         my $mergegid = $mergemodule->{'gid'};
