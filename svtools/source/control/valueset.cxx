@@ -524,9 +524,7 @@ void ValueSet::RemoveItem( sal_uInt16 nItemId )
     if ( nPos == VALUESET_ITEM_NOTFOUND )
         return;
 
-    if ( nPos < mItemList.size() ) {
-        mItemList.erase( mItemList.begin() + nPos );
-    }
+    mItemList.erase( mItemList.begin() + nPos );
 
     // reset variables
     if (mnHighItemId == nItemId || mnSelItemId == nItemId)
