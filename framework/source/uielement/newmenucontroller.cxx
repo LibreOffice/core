@@ -45,7 +45,7 @@
 
 //  Defines
 constexpr OUString aSlotNewDocDirect = u".uno:AddDirect"_ustr;
-constexpr OUStringLiteral aSlotAutoPilot = u".uno:AutoPilotMenu";
+constexpr OUString aSlotAutoPilot = u".uno:AutoPilotMenu"_ustr;
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -53,6 +53,54 @@ using namespace com::sun::star::frame;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
 using namespace com::sun::star::ui;
+
+namespace
+{
+class SlotStatusGetter : public comphelper::WeakImplHelper<css::frame::XStatusListener>
+{
+public:
+    SlotStatusGetter(const css::util::URL& url,
+                     const css::uno::Reference<css::frame::XFrame>& frame)
+    {
+        if (auto provider = frame.query<css::frame::XDispatchProvider>())
+        {
+            if (auto xDispatch = provider->queryDispatch(url, {}, 0))
+            {
+                // Avoid self-destruction
+                osl_atomic_increment(&m_refCount);
+                // Adding as listener will automatically emit an initial notification
+                xDispatch->addStatusListener(this, url);
+                xDispatch->removeStatusListener(this, url);
+                osl_atomic_decrement(&m_refCount);
+            }
+        }
+    }
+
+    bool isEnabled() const { return m_bEnabled; }
+
+private:
+    // XStatusListener
+    void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& state) override
+    {
+        m_bEnabled = state.IsEnabled;
+    }
+
+    // XEventListener
+    void SAL_CALL disposing(const css::lang::EventObject&) override {} // unused
+
+    bool m_bEnabled = false;
+};
+
+bool isSlotActive(const OUString& slot, const css::uno::Reference<css::frame::XFrame>& frame,
+    const css::uno::Reference<css::util::XURLTransformer>& transformer)
+{
+    css::util::URL url;
+    url.Complete = slot;
+    transformer->parseStrict(url);
+    rtl::Reference slotStatus(new SlotStatusGetter(url, frame));
+    return slotStatus->isEnabled();
+}
+}
 
 namespace framework
 {
@@ -295,12 +343,7 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > const &
     if ( !pVCLPopupMenu )
         return;
 
-    Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
-    URL aTargetURL;
-    aTargetURL.Complete = m_bNewMenu ? aSlotNewDocDirect : OUString(aSlotAutoPilot);
-    m_xURLTransformer->parseStrict( aTargetURL );
-    Reference< XDispatch > xMenuItemDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
-    if(xMenuItemDispatch == nullptr)
+    if (!isSlotActive(m_bNewMenu ? aSlotNewDocDirect : aSlotAutoPilot, m_xFrame, m_xURLTransformer))
         return;
 
     const std::vector< SvtDynMenuEntry > aDynamicMenuEntries =
