@@ -248,11 +248,27 @@ bool QtInstanceTreeView::is_selected(int) const
 
 int QtInstanceTreeView::get_cursor_index() const
 {
-    assert(false && "Not implemented yet");
-    return -1;
+    SolarMutexGuard g;
+
+    int nIndex = -1;
+    GetQtInstance().RunInMainThread([&] {
+        const QModelIndex aCurrentIndex = m_pSelectionModel->currentIndex();
+        if (aCurrentIndex.isValid())
+            nIndex = aCurrentIndex.row();
+
+    });
+
+    return nIndex;
 }
 
-void QtInstanceTreeView::set_cursor(int) { assert(false && "Not implemented yet"); }
+void QtInstanceTreeView::set_cursor(int nPos)
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        m_pSelectionModel->setCurrentIndex(m_pModel->index(nPos, 0), QItemSelectionModel::NoUpdate);
+    });
+}
 
 int QtInstanceTreeView::find_text(const OUString& rText) const
 {
