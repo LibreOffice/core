@@ -129,7 +129,7 @@ SwFrameNotify::~SwFrameNotify() COVERITY_NOEXCEPT_FALSE
             {
                 if ( mbInvaKeep )
                 {
-                    SwFrame *pPre = mpFrame->FindPrev();
+                    SwFrame *pPre = pFlow->FindPrevIgnoreHidden();
                     if ( pPre && pPre->IsFlowFrame() )
                     {
                         // 1. pPre wants to keep with me:
