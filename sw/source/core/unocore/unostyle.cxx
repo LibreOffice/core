@@ -959,8 +959,7 @@ rtl::Reference<SwXBaseStyle> SwXStyleFamily::getStyleByName(const OUString& rNam
     if(!m_pBasePool)
         throw uno::RuntimeException();
     OUString sStyleName;
-    SwStyleNameMapper::FillUIName(rName, sStyleName, m_rEntry.poolId(),
-            !m_pDocShell->GetDoc()->IsInWriterfilterImport());
+    SwStyleNameMapper::FillUIName(rName, sStyleName, m_rEntry.poolId());
     SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName, m_rEntry.family());
     if(!pBase)
         throw container::NoSuchElementException(rName);
@@ -1013,8 +1012,7 @@ sal_Bool SwXStyleFamily::hasByName(const OUString& rName)
     if(!m_pBasePool)
         throw uno::RuntimeException();
     OUString sStyleName;
-    SwStyleNameMapper::FillUIName(rName, sStyleName, m_rEntry.poolId(),
-            m_pDocShell && !m_pDocShell->GetDoc()->IsInWriterfilterImport());
+    SwStyleNameMapper::FillUIName(rName, sStyleName, m_rEntry.poolId());
     SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName, m_rEntry.family());
     return nullptr != pBase;
 }
@@ -1025,8 +1023,7 @@ void SwXStyleFamily::insertStyleByName(const OUString& rName, const rtl::Referen
     if(!m_pBasePool)
         throw uno::RuntimeException();
     OUString sStyleName;
-    SwStyleNameMapper::FillUIName(rName, sStyleName, m_rEntry.poolId(),
-            !m_pDocShell->GetDoc()->IsInWriterfilterImport());
+    SwStyleNameMapper::FillUIName(rName, sStyleName, m_rEntry.poolId());
     SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName, m_rEntry.family());
     if (pBase)
         throw container::ElementExistException();
@@ -1039,8 +1036,7 @@ void SwXStyleFamily::insertByName(const OUString& rName, const uno::Any& rElemen
     if(!m_pBasePool)
         throw uno::RuntimeException();
     OUString sStyleName;
-    SwStyleNameMapper::FillUIName(rName, sStyleName, m_rEntry.poolId(),
-            !m_pDocShell->GetDoc()->IsInWriterfilterImport());
+    SwStyleNameMapper::FillUIName(rName, sStyleName, m_rEntry.poolId());
     SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName, m_rEntry.family());
     if (pBase)
         throw container::ElementExistException();
@@ -1103,8 +1099,7 @@ void SwXStyleFamily::replaceByName(const OUString& rName, const uno::Any& rEleme
     if(!m_pBasePool)
         throw uno::RuntimeException();
     OUString sStyleName;
-    SwStyleNameMapper::FillUIName(rName, sStyleName, m_rEntry.poolId(),
-            !m_pDocShell->GetDoc()->IsInWriterfilterImport());
+    SwStyleNameMapper::FillUIName(rName, sStyleName, m_rEntry.poolId());
     SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName, m_rEntry.family());
     // replacements only for userdefined styles
     if(!pBase)
@@ -1165,8 +1160,7 @@ void SwXStyleFamily::removeByName(const OUString& rName)
     if(!m_pBasePool)
         throw uno::RuntimeException();
     OUString sName;
-    SwStyleNameMapper::FillUIName(rName, sName, m_rEntry.poolId(),
-            m_pDocShell && !m_pDocShell->GetDoc()->IsInWriterfilterImport());
+    SwStyleNameMapper::FillUIName(rName, sName, m_rEntry.poolId());
     SfxStyleSheetBase* pBase = m_pBasePool->Find(sName, m_rEntry.family());
     if(!pBase)
         throw container::NoSuchElementException();
@@ -1439,7 +1433,9 @@ OUString SwXStyle::getParentStyle()
     {
         if(!m_bIsDescriptor)
             throw uno::RuntimeException();
-        return m_sParentStyleName;
+        OUString ret;
+        SwStyleNameMapper::FillProgName(m_sParentStyleName, ret, lcl_GetSwEnumFromSfxEnum(m_rEntry.family()));
+        return ret;
     }
     SfxStyleSheetBase* pBase = m_pBasePool->Find(m_sStyleName, m_rEntry.family());
     OUString aString;
@@ -1453,8 +1449,7 @@ void SwXStyle::setParentStyle(const OUString& rParentStyle)
 {
     SolarMutexGuard aGuard;
     OUString sParentStyle;
-    SwStyleNameMapper::FillUIName(rParentStyle, sParentStyle, lcl_GetSwEnumFromSfxEnum ( m_rEntry.family()),
-            m_pDoc && !m_pDoc->IsInWriterfilterImport());
+    SwStyleNameMapper::FillUIName(rParentStyle, sParentStyle, lcl_GetSwEnumFromSfxEnum(m_rEntry.family()));
     if(!m_pBasePool)
     {
         if(!m_bIsDescriptor)
@@ -1760,8 +1755,7 @@ void SwXStyle::SetPropertyValue<FN_UNO_FOLLOW_STYLE>(const SfxItemPropertyMapEnt
         return;
     const auto sValue(rValue.get<OUString>());
     OUString aString;
-    SwStyleNameMapper::FillUIName(sValue, aString, m_rEntry.poolId(),
-            m_pDoc && !m_pDoc->IsInWriterfilterImport());
+    SwStyleNameMapper::FillUIName(sValue, aString, m_rEntry.poolId());
     o_rStyleBase.getNewBase()->SetFollow(aString);
 }
 
@@ -1775,8 +1769,7 @@ void SwXStyle::SetPropertyValue<FN_UNO_LINK_STYLE>(const SfxItemPropertyMapEntry
         return;
     const auto sValue(rValue.get<OUString>());
     OUString aString;
-    SwStyleNameMapper::FillUIName(sValue, aString, m_rEntry.poolId(),
-            m_pDoc && !m_pDoc->IsInWriterfilterImport());
+    SwStyleNameMapper::FillUIName(sValue, aString, m_rEntry.poolId());
     o_rStyleBase.getNewBase()->SetLink(aString);
 }
 
@@ -1858,8 +1851,7 @@ void SwXStyle::SetPropertyValue<FN_UNO_PARA_STYLE_CONDITIONS>(const SfxItemPrope
         const OUString sValue(rNamedValue.Value.get<OUString>());
         // get UI style name from programmatic style name
         OUString aStyleName;
-        SwStyleNameMapper::FillUIName(sValue, aStyleName, lcl_GetSwEnumFromSfxEnum(m_rEntry.family()),
-            m_pDoc && !m_pDoc->IsInWriterfilterImport());
+        SwStyleNameMapper::FillUIName(sValue, aStyleName, lcl_GetSwEnumFromSfxEnum(m_rEntry.family()));
 
         // check for correct context and style name
         const auto nIdx(GetCommandContextIndex(rNamedValue.Name));
@@ -1903,8 +1895,7 @@ void SwXStyle::SetPropertyValue<SID_SWREGISTER_COLLECTION>(const SfxItemProperty
     aReg.SetWhich(SID_SWREGISTER_MODE);
     o_rStyleBase.GetItemSet().Put(aReg);
     OUString aString;
-    SwStyleNameMapper::FillUIName(sName, aString, SwGetPoolIdFromName::TxtColl,
-            m_pDoc && !m_pDoc->IsInWriterfilterImport());
+    SwStyleNameMapper::FillUIName(sName, aString, SwGetPoolIdFromName::TxtColl);
     o_rStyleBase.GetItemSet().Put(SfxStringItem(SID_SWREGISTER_COLLECTION, aString ) );
 }
 template<>
