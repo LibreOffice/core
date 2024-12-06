@@ -53,7 +53,7 @@ protected:
     /// for scripting : the types of the interfaces supported by this class
     ///
     /// @throws css::uno::RuntimeException
-    static css::uno::Sequence< css::uno::Type > getBaseTypes();
+    css::uno::Sequence< css::uno::Type > getBaseTypes();
 
 // OPropertySetHelper overridables
     virtual sal_Bool SAL_CALL convertFastPropertyValue(
