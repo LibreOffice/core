@@ -98,8 +98,6 @@ namespace {
 
 class DocTempl_EntryData_Impl
 {
-    RegionData_Impl*    mpParent;
-
     // the following member must be SfxObjectShellLock since it controls that SfxObjectShell lifetime by design
     // and users of this class expect it to be so.
     SfxObjectShellLock  mxObjShell;
@@ -109,12 +107,11 @@ class DocTempl_EntryData_Impl
     OUString            maTargetURL;
 
 public:
-                        DocTempl_EntryData_Impl( RegionData_Impl* pParent,
-                                        const OUString& rTitle );
+                        DocTempl_EntryData_Impl(const OUString& rTitle);
 
     const OUString&     GetTitle() const { return maTitle; }
-    const OUString&     GetTargetURL();
-    const OUString&     GetHierarchyURL();
+    const OUString&     GetTargetURL(const INetURLObject& rRootURL);
+    const OUString&     GetHierarchyURL(const INetURLObject& rRootURL);
 
     void                SetTitle( const OUString& rTitle ) { maTitle = rTitle; }
     void                SetTargetURL( const OUString& rURL ) { maTargetURL = rURL; }
@@ -133,7 +130,6 @@ namespace {
 
 class RegionData_Impl
 {
-    const SfxDocTemplate_Impl*  mpParent;
     std::vector<std::unique_ptr<DocTempl_EntryData_Impl>> maEntries;
     OUString                    maTitle;
     OUString                    maOwnURL;
@@ -143,8 +139,7 @@ private:
                                              bool& rFound ) const;
 
 public:
-                        RegionData_Impl( const SfxDocTemplate_Impl* pParent,
-                                         OUString aTitle );
+                        RegionData_Impl(OUString aTitle);
 
     void                SetHierarchyURL( const OUString& rURL) { maOwnURL = rURL; }
 
@@ -152,15 +147,16 @@ public:
     DocTempl_EntryData_Impl*     GetEntry( std::u16string_view rName ) const;
 
     const OUString&     GetTitle() const { return maTitle; }
-    const OUString&     GetHierarchyURL();
+    const OUString&     GetHierarchyURL(const INetURLObject& rRootURL);
 
     size_t              GetCount() const;
 
     void                SetTitle( const OUString& rTitle ) { maTitle = rTitle; }
 
-    void                AddEntry( const OUString& rTitle,
-                                  const OUString& rTargetURL,
-                                  const size_t *pPos );
+    void                AddEntry(const INetURLObject& rRootURL,
+                                 const OUString& rTitle,
+                                 const OUString& rTargetURL,
+                                 const size_t *pPos);
     void                DeleteEntry( size_t nIndex );
 
     int                 Compare( RegionData_Impl const * pCompareWith ) const;
@@ -173,7 +169,7 @@ class SfxDocTemplate_Impl : public SvRefBase
     uno::Reference< XPersist >               mxInfo;
     uno::Reference< XDocumentTemplates >     mxTemplates;
 
-    std::mutex          maMutex;
+    mutable std::mutex  maMutex;
     OUString            maRootURL;
     OUString            maStandardGroup;
     std::vector<std::unique_ptr<RegionData_Impl>> maRegions;
@@ -213,9 +209,18 @@ public:
 
     bool            GetTitleFromURL( const OUString& rURL, OUString& aTitle );
     bool            InsertRegion( std::unique_ptr<RegionData_Impl> pData, size_t nPos );
-    INetURLObject   GetRootURL() const { return INetURLObject(maRootURL); }
 
-    const uno::Reference< XDocumentTemplates >& getDocTemplates() const { return mxTemplates; }
+    INetURLObject   GetRootURL() const
+    {
+        std::unique_lock aGuard(maMutex);
+        return INetURLObject(maRootURL);
+    }
+
+    uno::Reference<XDocumentTemplates> getDocTemplates() const
+    {
+        std::unique_lock aGuard(maMutex);
+        return mxTemplates;
+    }
 };
 
 namespace {
@@ -418,12 +423,11 @@ OUString SfxDocumentTemplates::GetPath
     {
         DocTempl_EntryData_Impl *pEntry = pRegion->GetEntry( nIdx );
         if ( pEntry )
-            return pEntry->GetTargetURL();
+            return pEntry->GetTargetURL(pImp->GetRootURL());
     }
 
     return OUString();
 }
-
 
 OUString SfxDocumentTemplates::GetTemplateTargetURLFromComponent( std::u16string_view aGroupName,
                                                                     std::u16string_view aTitle )
@@ -616,7 +620,7 @@ bool SfxDocumentTemplates::CopyOrMove
 
     if ( xTemplates->addTemplate( pTargetRgn->GetTitle(),
                                   aTitle,
-                                  pSource->GetTargetURL() ) )
+                                  pSource->GetTargetURL(pImp->GetRootURL()) ) )
     {
         const OUString aNewTargetURL = GetTemplateTargetURLFromComponent( pTargetRgn->GetTitle(), aTitle );
         if ( aNewTargetURL.isEmpty() )
@@ -642,7 +646,7 @@ bool SfxDocumentTemplates::CopyOrMove
 
         // todo: fix SfxDocumentTemplates to handle size_t instead of sal_uInt16
         size_t temp_nTargetIdx = nTargetIdx;
-        pTargetRgn->AddEntry( aTitle, aNewTargetURL, &temp_nTargetIdx );
+        pTargetRgn->AddEntry(pImp->GetRootURL(), aTitle, aNewTargetURL, &temp_nTargetIdx);
 
         return true;
     }
@@ -652,7 +656,6 @@ bool SfxDocumentTemplates::CopyOrMove
 
     return false;
 }
-
 
 bool SfxDocumentTemplates::Move
 (
@@ -766,7 +769,7 @@ bool SfxDocumentTemplates::CopyTo
 
         TransferInfo aTransferInfo;
         aTransferInfo.MoveData = false;
-        aTransferInfo.SourceURL = pSource->GetTargetURL();
+        aTransferInfo.SourceURL = pSource->GetTargetURL(pImp->GetRootURL());
         aTransferInfo.NewTitle = aTitle;
         aTransferInfo.NameClash = NameClash::RENAME;
 
@@ -881,7 +884,7 @@ bool SfxDocumentTemplates::CopyFrom
 
     if( bTemplateAdded )
     {
-        INetURLObject aTemplObj( pTargetRgn->GetHierarchyURL() );
+        INetURLObject aTemplObj(pTargetRgn->GetHierarchyURL(pImp->GetRootURL()));
         aTemplObj.insertName( aTitle, false,
                               INetURLObject::LAST_SEGMENT,
                               INetURLObject::EncodeMechanism::All );
@@ -902,7 +905,7 @@ bool SfxDocumentTemplates::CopyFrom
 
                 // todo: fix SfxDocumentTemplates to handle size_t instead of sal_uInt16
                 size_t temp_nIdx = nIdx;
-                pTargetRgn->AddEntry( aTitle, aTemplName, &temp_nIdx );
+                pTargetRgn->AddEntry(pImp->GetRootURL(), aTitle, aTemplName, &temp_nIdx);
                 rName = aTitle;
                 return true;
             }
@@ -1016,10 +1019,8 @@ bool SfxDocumentTemplates::InsertDir
 
     uno::Reference< XDocumentTemplates > xTemplates = pImp->getDocTemplates();
 
-    if ( xTemplates->addGroup( rText ) )
-    {
-        return pImp->InsertRegion( std::make_unique<RegionData_Impl>( pImp.get(), rText ), nRegion );
-    }
+    if (xTemplates->addGroup(rText))
+        return pImp->InsertRegion(std::make_unique<RegionData_Impl>(rText), nRegion);
 
     return false;
 }
@@ -1037,7 +1038,7 @@ bool SfxDocumentTemplates::InsertTemplate(sal_uInt16 nSourceRegion, sal_uInt16 n
         return false;
 
     size_t pos = nIdx;
-    pRegion->AddEntry( rName, rPath, &pos );
+    pRegion->AddEntry(pImp->GetRootURL(), rName, rPath, &pos);
 
     return true;
 }
@@ -1140,7 +1141,7 @@ bool SfxDocumentTemplates::GetFull
 
             if ( pEntry )
             {
-                rPath = pEntry->GetTargetURL();
+                rPath = pEntry->GetTargetURL(pImp->GetRootURL());
                 break;
             }
         }
@@ -1195,7 +1196,7 @@ bool SfxDocumentTemplates::GetLogicNames
             for ( sal_uInt16 j=0; j<nChildCount; ++j )
             {
                 DocTempl_EntryData_Impl *pEntry = pData->GetEntry( j );
-                if ( pEntry && pEntry->GetTargetURL() == aPath )
+                if ( pEntry && pEntry->GetTargetURL(pImp->GetRootURL()) == aPath )
                 {
                     rRegion = pData->GetTitle();
                     rName = pEntry->GetTitle();
@@ -1249,25 +1250,21 @@ void SfxDocumentTemplates::ReInitFromComponent()
     pImp->ReInitFromComponent();
 }
 
-DocTempl_EntryData_Impl::DocTempl_EntryData_Impl( RegionData_Impl* pParent,
-                                const OUString& rTitle )
+DocTempl_EntryData_Impl::DocTempl_EntryData_Impl(const OUString& rTitle)
+    : maTitle(SfxDocumentTemplates::ConvertResourceString(rTitle))
 {
-    mpParent    = pParent;
-    maTitle     = SfxDocumentTemplates::ConvertResourceString(rTitle);
 }
-
 
 int DocTempl_EntryData_Impl::Compare( std::u16string_view rTitle ) const
 {
     return maTitle.compareTo( rTitle );
 }
 
-
-const OUString& DocTempl_EntryData_Impl::GetHierarchyURL()
+const OUString& DocTempl_EntryData_Impl::GetHierarchyURL(const INetURLObject& rRootURL)
 {
     if ( maOwnURL.isEmpty() )
     {
-        INetURLObject aTemplateObj( mpParent->GetHierarchyURL() );
+        INetURLObject aTemplateObj(rRootURL);
 
         aTemplateObj.insertName( GetTitle(), false,
                      INetURLObject::LAST_SEGMENT,
@@ -1280,15 +1277,14 @@ const OUString& DocTempl_EntryData_Impl::GetHierarchyURL()
     return maOwnURL;
 }
 
-
-const OUString& DocTempl_EntryData_Impl::GetTargetURL()
+const OUString& DocTempl_EntryData_Impl::GetTargetURL(const INetURLObject& rRootURL)
 {
     if ( maTargetURL.isEmpty() )
     {
         uno::Reference< XCommandEnvironment > aCmdEnv;
         Content aRegion;
 
-        if ( Content::create( GetHierarchyURL(), aCmdEnv, comphelper::getProcessComponentContext(), aRegion ) )
+        if ( Content::create( GetHierarchyURL(rRootURL), aCmdEnv, comphelper::getProcessComponentContext(), aRegion ) )
         {
             getTextProperty_Impl( aRegion, TARGET_URL, maTargetURL );
         }
@@ -1301,10 +1297,8 @@ const OUString& DocTempl_EntryData_Impl::GetTargetURL()
     return maTargetURL;
 }
 
-
-RegionData_Impl::RegionData_Impl( const SfxDocTemplate_Impl* pParent,
-                                  OUString aTitle )
-                                  : mpParent(pParent), maTitle(std::move(aTitle))
+RegionData_Impl::RegionData_Impl(OUString aTitle)
+    : maTitle(std::move(aTitle))
 {
 }
 
@@ -1328,12 +1322,12 @@ size_t RegionData_Impl::GetEntryPos( std::u16string_view rTitle, bool& rFound ) 
     return nCount;
 }
 
-
-void RegionData_Impl::AddEntry( const OUString& rTitle,
-                                const OUString& rTargetURL,
-                                const size_t *pPos )
+void RegionData_Impl::AddEntry(const INetURLObject& rRootURL,
+                               const OUString& rTitle,
+                               const OUString& rTargetURL,
+                               const size_t *pPos)
 {
-    INetURLObject aLinkObj( GetHierarchyURL() );
+    INetURLObject aLinkObj( GetHierarchyURL(rRootURL) );
     aLinkObj.insertName( rTitle, false,
                       INetURLObject::LAST_SEGMENT,
                       INetURLObject::EncodeMechanism::All );
@@ -1348,8 +1342,7 @@ void RegionData_Impl::AddEntry( const OUString& rTitle,
     if ( pPos )
         nPos = *pPos;
 
-    auto pEntry = std::make_unique<DocTempl_EntryData_Impl>(
-        this, rTitle );
+    auto pEntry = std::make_unique<DocTempl_EntryData_Impl>(rTitle);
     pEntry->SetTargetURL( rTargetURL );
     pEntry->SetHierarchyURL( aLinkURL );
     if ( nPos < maEntries.size() ) {
@@ -1361,18 +1354,16 @@ void RegionData_Impl::AddEntry( const OUString& rTitle,
         maEntries.push_back( std::move(pEntry) );
 }
 
-
 size_t RegionData_Impl::GetCount() const
 {
     return maEntries.size();
 }
 
-
-const OUString& RegionData_Impl::GetHierarchyURL()
+const OUString& RegionData_Impl::GetHierarchyURL(const INetURLObject& rRootURL)
 {
     if ( maOwnURL.isEmpty() )
     {
-        INetURLObject aRegionObj( mpParent->GetRootURL() );
+        INetURLObject aRegionObj(rRootURL);
 
         aRegionObj.insertName( GetTitle(), false,
                      INetURLObject::LAST_SEGMENT,
@@ -1384,7 +1375,6 @@ const OUString& RegionData_Impl::GetHierarchyURL()
 
     return maOwnURL;
 }
-
 
 DocTempl_EntryData_Impl* RegionData_Impl::GetEntry( std::u16string_view rName ) const
 {
@@ -1480,7 +1470,7 @@ void SfxDocTemplate_Impl::AddRegion( std::unique_lock<std::mutex>& /*rGuard*/,
                                      const OUString& rTitle,
                                      Content& rContent )
 {
-    auto pRegion = std::make_unique<RegionData_Impl>( this, rTitle );
+    auto pRegion = std::make_unique<RegionData_Impl>(rTitle);
     auto pRegionTmp = pRegion.get();
 
     if ( ! InsertRegion( std::move(pRegion), size_t(-1) ) )
@@ -1506,12 +1496,11 @@ void SfxDocTemplate_Impl::AddRegion( std::unique_lock<std::mutex>& /*rGuard*/,
     {
         while ( xResultSet->next() )
         {
-            pRegionTmp->AddEntry( xRow->getString( 1 ), xRow->getString( 2 ), nullptr );
+            pRegionTmp->AddEntry(INetURLObject(maRootURL), xRow->getString( 1 ), xRow->getString( 2 ), nullptr);
         }
     }
     catch ( Exception& ) {}
 }
-
 
 void SfxDocTemplate_Impl::CreateFromHierarchy( std::unique_lock<std::mutex>& rGuard, Content &rTemplRoot )
 {
