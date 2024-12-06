@@ -4435,10 +4435,10 @@ test_cl_exe()
         AC_MSG_ERROR([No mspdb${mspdbnum}.dll in $2, Visual Studio installation broken?])
     fi
 
-    # The compiles has to find its shared libraries
+    # The compiler has to find its shared libraries
     OLD_PATH="$PATH"
-    TEMP_PATH=`cygpath -d "$2"`
-    PATH="`cygpath -u "$TEMP_PATH"`:$PATH"
+    PathFormat "$2"
+    PATH="$formatted_path_unix:$PATH"
 
     if ! "$CL_EXE_PATH" -? </dev/null >/dev/null 2>&1; then
         AC_MSG_ERROR([no compiler (cl.exe) in $2])
@@ -7101,7 +7101,8 @@ find_msms()
     esac
 
     if test -n "$msmdir"; then
-        msmdir=`cygpath -m "$msmdir"`
+        PathFormat "$msmdir"
+        msmdir="$formatted_path"
         AC_MSG_RESULT([$msmdir])
     else
         if test "$ENABLE_RELEASE_BUILD" = "TRUE" ; then
@@ -8959,7 +8960,7 @@ if test $_os = "WINNT"; then
         if test "$i" = msi; then
             find_msms "$with_redist"
             if test -n "$msmdir"; then
-                MSM_PATH=`win_short_path_for_make "$msmdir"`
+                MSM_PATH=`win_short_path_for_make "$msmdir"`/
                 SCPDEFS="$SCPDEFS -DWITH_VC_REDIST=$with_redist"
             fi
             break
