@@ -25,6 +25,7 @@
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
+#include <osl/file.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/inputdlg.hxx>
@@ -578,6 +579,7 @@ IMPL_LINK(ScriptContainersListBox, QueryTooltip, const weld::TreeIter&, rEntryIt
                 && xModLibContainer->isLibraryLink(aLibName))
             {
                 OUString aLinkURL = xModLibContainer->getLibraryLinkURL(aLibName);
+                osl::File::getSystemPathFromFileURL(aLinkURL, aLinkURL);
                 return aLinkURL;
             }
         }
@@ -966,7 +968,13 @@ void MacroManagerDialog::UpdateUI()
                 if (xModLibContainer.is() && xModLibContainer->hasByName(aLibName)
                     && xModLibContainer->isLibraryLink(aLibName))
                 {
-                    sDescriptionText = xModLibContainer->getLibraryLinkURL(aLibName);
+                    OUString aLinkURL = xModLibContainer->getLibraryLinkURL(aLibName);
+                    OUString aSysPath;
+                    if (osl::File::getSystemPathFromFileURL(aLinkURL, aSysPath)
+                        == osl::FileBase::E_None)
+                        sDescriptionText = aSysPath;
+                    else
+                        sDescriptionText = aLinkURL;
                 }
             }
         }
