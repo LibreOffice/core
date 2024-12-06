@@ -515,12 +515,6 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getBackground(  )
 }
 
 
-// XInterface
-IMPLEMENT_FORWARD_XINTERFACE2( BrowseBoxAccessibleElement, AccessibleBrowseBoxBase, BrowseBoxAccessibleElement_Base )
-
-// XTypeProvider
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( BrowseBoxAccessibleElement, AccessibleBrowseBoxBase, BrowseBoxAccessibleElement_Base )
-
 // css::accessibility::XAccessible
 
 Reference< css::accessibility::XAccessibleContext > SAL_CALL BrowseBoxAccessibleElement::getAccessibleContext()
@@ -533,7 +527,7 @@ Reference< css::accessibility::XAccessibleContext > SAL_CALL BrowseBoxAccessible
 
 BrowseBoxAccessibleElement::BrowseBoxAccessibleElement( const css::uno::Reference< css::accessibility::XAccessible >& rxParent, ::vcl::IAccessibleTableProvider& rBrowseBox,
         const css::uno::Reference< css::awt::XWindow >& _xFocusWindow, AccessibleBrowseBoxObjType  eObjType )
-    :AccessibleBrowseBoxBase( rxParent, rBrowseBox, _xFocusWindow, eObjType )
+    : BrowseBoxAccessibleElement_Base(rxParent, rBrowseBox, _xFocusWindow, eObjType)
 {
 }
 
@@ -541,7 +535,7 @@ BrowseBoxAccessibleElement::BrowseBoxAccessibleElement( const css::uno::Referenc
 BrowseBoxAccessibleElement::BrowseBoxAccessibleElement( const css::uno::Reference< css::accessibility::XAccessible >& rxParent, ::vcl::IAccessibleTableProvider& rBrowseBox,
         const css::uno::Reference< css::awt::XWindow >& _xFocusWindow, AccessibleBrowseBoxObjType  eObjType,
         const OUString& rName, const OUString& rDescription )
-    :AccessibleBrowseBoxBase( rxParent, rBrowseBox, _xFocusWindow, eObjType, rName, rDescription )
+    : BrowseBoxAccessibleElement_Base(rxParent, rBrowseBox, _xFocusWindow, eObjType, rName, rDescription)
 {
 }
 

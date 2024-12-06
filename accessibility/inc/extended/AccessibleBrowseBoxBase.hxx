@@ -309,12 +309,10 @@ private:
 // a version of AccessibleBrowseBoxBase which implements not only the XAccessibleContext,
 // but also the XAccessible
 
-typedef ::cppu::ImplHelper1 <   css::accessibility::XAccessible
-                            >   BrowseBoxAccessibleElement_Base;
+typedef cppu::ImplInheritanceHelper<AccessibleBrowseBoxBase, css::accessibility::XAccessible>
+                                BrowseBoxAccessibleElement_Base;
 
-class BrowseBoxAccessibleElement
-            :public AccessibleBrowseBoxBase
-            ,public BrowseBoxAccessibleElement_Base
+class BrowseBoxAccessibleElement : public BrowseBoxAccessibleElement_Base
 {
 protected:
     /** Constructor sets specified name and description. If the constant of a
@@ -355,10 +353,6 @@ public:
     // noncopyable
     BrowseBoxAccessibleElement(const BrowseBoxAccessibleElement&) = delete;
     const BrowseBoxAccessibleElement& operator=(const BrowseBoxAccessibleElement&) = delete;
-    // XInterface
-    DECLARE_XINTERFACE( )
-    // XTypeProvider
-    DECLARE_XTYPEPROVIDER( )
 
 protected:
     virtual ~BrowseBoxAccessibleElement() override;
