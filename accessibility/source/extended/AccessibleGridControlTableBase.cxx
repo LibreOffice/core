@@ -41,7 +41,7 @@ AccessibleGridControlTableBase::AccessibleGridControlTableBase(
         const Reference< XAccessible >& rxParent,
         IAccessibleTable& rTable,
         AccessibleTableControlObjType eObjType ) :
-    GridControlAccessibleElement( rxParent, rTable, eObjType )
+    AccessibleGridControlTableImplHelper( rxParent, rTable, eObjType )
 {
 }
 
@@ -156,39 +156,6 @@ sal_Int32 SAL_CALL AccessibleGridControlTableBase::getAccessibleColumn( sal_Int6
     ensureIsAlive();
     ensureIsValidIndex( nChildIndex );
     return implGetColumn( nChildIndex );
-}
-
-// XInterface -----------------------------------------------------------------
-
-Any SAL_CALL AccessibleGridControlTableBase::queryInterface( const uno::Type& rType )
-{
-    Any aAny( GridControlAccessibleElement::queryInterface( rType ) );
-    return aAny.hasValue() ?
-        aAny : AccessibleGridControlTableImplHelper::queryInterface( rType );
-}
-
-void SAL_CALL AccessibleGridControlTableBase::acquire() noexcept
-{
-    GridControlAccessibleElement::acquire();
-}
-
-void SAL_CALL AccessibleGridControlTableBase::release() noexcept
-{
-    GridControlAccessibleElement::release();
-}
-
-// XTypeProvider --------------------------------------------------------------
-
-Sequence< uno::Type > SAL_CALL AccessibleGridControlTableBase::getTypes()
-{
-    return ::comphelper::concatSequences(
-        GridControlAccessibleElement::getTypes(),
-        AccessibleGridControlTableImplHelper::getTypes() );
-}
-
-Sequence< sal_Int8 > SAL_CALL AccessibleGridControlTableBase::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
 }
 
 // internal helper methods ----------------------------------------------------
