@@ -104,6 +104,8 @@ void Acceptor::run()
             SAL_INFO( "desktop.offacc",
                 "Acceptor::run now enabled and continuing");
 
+            std::unique_lock g(m_aMutex);
+
             // accept connection
             Reference< XConnection > rConnection = m_rAcceptor->accept( m_aConnectString );
             // if we return without a valid connection we must assume that the acceptor
@@ -117,7 +119,6 @@ void Acceptor::run()
             // create the bridge. The remote end will have a reference to this bridge
             // thus preventing the bridge from being disposed. When the remote end releases
             // the bridge, it will be destructed.
-            std::unique_lock g(m_aMutex);
             m_bridges.add(m_rBridgeFactory->createBridge(
                 u""_ustr, m_aProtocol, rConnection, rInstanceProvider));
         } catch (const Exception&) {
