@@ -50,6 +50,7 @@ public:
     SvMetaSlot*      pNextSlot;
     sal_uInt32       nListPos;
     SvBOOL           aReadOnlyDoc;
+    SvBOOL           aViewerApp;
 
     void            WriteSlot( std::string_view rShellName,
                             sal_uInt16 nCount, std::string_view rSlotId,
@@ -103,6 +104,7 @@ public:
     bool                GetFastCall() const;
     bool                GetContainer() const;
     bool                GetReadOnlyDoc() const;
+    bool                GetViewerApp() const;
 
     sal_uInt32           GetListPos() const
                         { return nListPos; }
