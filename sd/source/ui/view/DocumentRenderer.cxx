@@ -921,8 +921,8 @@ namespace {
                     for (sal_Int32 i = 0; i < nParaCount && !bExit; ++i)
                     {
                         sal_Int32 nActualLineLen = 0;
-                        sal_uInt32 nLineCount = pOut->GetLineCount(i);
-                        for (sal_uInt32 j = 0; j < nLineCount; ++j)
+                        sal_Int32 nLineCount = pOut->GetLineCount(i);
+                        for (sal_Int32 j = 0; j < nLineCount; ++j)
                         {
                             nActualLineLen += pOut->GetLineLen(i, j);
                             sal_Int32 nLineHeight = pOut->GetLineHeight(i, j);

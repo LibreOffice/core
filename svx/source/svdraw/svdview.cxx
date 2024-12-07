@@ -1246,7 +1246,7 @@ OUString SdrView::GetStatusText()
         // At the end of a line of any multi-line paragraph, we display the
         // position of the next line of the same paragraph, if there is one.
         sal_uInt16 nParaLine = 0;
-        sal_uInt32 nParaLineCount = mpTextEditOutliner->GetLineCount(aSel.end.nPara);
+        sal_Int32 nParaLineCount = mpTextEditOutliner->GetLineCount(aSel.end.nPara);
         bool bBrk = false;
         while (!bBrk)
         {

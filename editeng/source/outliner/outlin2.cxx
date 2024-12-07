@@ -308,7 +308,7 @@ bool Outliner::IsInUndo() const
     return pEditEngine->IsInUndo();
 }
 
-sal_uInt32 Outliner::GetLineCount( sal_Int32 nParagraph ) const
+sal_Int32 Outliner::GetLineCount( sal_Int32 nParagraph ) const
 {
     return pEditEngine->GetLineCount( nParagraph );
 }

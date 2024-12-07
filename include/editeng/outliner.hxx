@@ -866,7 +866,7 @@ public:
     SAL_DLLPRIVATE const Link<Outliner*,void>& GetEndMovingHdl() const {return aEndMovingHdl;}
     SAL_DLLPRIVATE void            SetEndMovingHdl( const Link<Outliner*,void>& rLink){aEndMovingHdl=rLink;}
 
-    sal_uInt32           GetLineCount( sal_Int32 nParagraph ) const;
+    sal_Int32       GetLineCount( sal_Int32 nParagraph ) const;
     sal_Int32           GetLineLen( sal_Int32 nParagraph, sal_Int32 nLine ) const;
     sal_uInt32           GetLineHeight( sal_Int32 nParagraph, sal_Int32 nLine = 0 );
 
