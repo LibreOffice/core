@@ -958,7 +958,7 @@ rtl::Reference<SwXBaseStyle> SwXStyleFamily::getStyleByName(const OUString& rNam
     SolarMutexGuard aGuard;
     OUString sStyleName;
     SwStyleNameMapper::FillUIName(rName, sStyleName, m_rEntry.poolId(),
-            m_pDocShell && !m_pDocShell->GetDoc()->IsInWriterfilterImport());
+            !m_pDocShell->GetDoc()->IsInWriterfilterImport());
     if(!m_pBasePool)
         throw uno::RuntimeException();
     SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName, m_rEntry.family());
@@ -1026,7 +1026,7 @@ void SwXStyleFamily::insertStyleByName(const OUString& rName, const rtl::Referen
         throw uno::RuntimeException();
     OUString sStyleName;
     SwStyleNameMapper::FillUIName(rName, sStyleName, m_rEntry.poolId(),
-            m_pDocShell && !m_pDocShell->GetDoc()->IsInWriterfilterImport());
+            !m_pDocShell->GetDoc()->IsInWriterfilterImport());
     SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName, m_rEntry.family());
     if (pBase)
         throw container::ElementExistException();
@@ -1040,7 +1040,7 @@ void SwXStyleFamily::insertByName(const OUString& rName, const uno::Any& rElemen
         throw uno::RuntimeException();
     OUString sStyleName;
     SwStyleNameMapper::FillUIName(rName, sStyleName, m_rEntry.poolId(),
-            m_pDocShell && !m_pDocShell->GetDoc()->IsInWriterfilterImport());
+            !m_pDocShell->GetDoc()->IsInWriterfilterImport());
     SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName, m_rEntry.family());
     if (pBase)
         throw container::ElementExistException();
