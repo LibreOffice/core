@@ -354,6 +354,49 @@ namespace tools_urlobj
             }
         }
 
+        void testIsExoticProtocol() {
+            {
+                INetURLObject url(u"vnd.sun.star.pkg://slot%3A0");
+                CPPUNIT_ASSERT_EQUAL(INetProtocol::VndSunStarPkg, url.GetProtocol());
+                CPPUNIT_ASSERT(url.IsExoticProtocol());
+            }
+            {
+                INetURLObject url(u"vnd.sun.star.pkg://vnd.sun.star.pkg%3A%2F%2Fslot%253A0");
+                CPPUNIT_ASSERT_EQUAL(INetProtocol::VndSunStarPkg, url.GetProtocol());
+                CPPUNIT_ASSERT(url.IsExoticProtocol());
+            }
+            {
+                INetURLObject url(u"vnd.sun.star.pkg://http%3A%2F%2Fexample.net");
+                CPPUNIT_ASSERT_EQUAL(INetProtocol::VndSunStarPkg, url.GetProtocol());
+                CPPUNIT_ASSERT(!url.IsExoticProtocol());
+            }
+            {
+                INetURLObject url(u"vnd.sun.star.zip://slot%3A0");
+                CPPUNIT_ASSERT_EQUAL(INetProtocol::Generic, url.GetProtocol());
+                CPPUNIT_ASSERT(url.IsExoticProtocol());
+            }
+            {
+                INetURLObject url(u"vnd.sun.star.zip://slot%3A0/foo");
+                CPPUNIT_ASSERT_EQUAL(INetProtocol::Generic, url.GetProtocol());
+                CPPUNIT_ASSERT(url.IsExoticProtocol());
+            }
+            {
+                INetURLObject url(u"vnd.sun.star.zip://slot%3A0?foo");
+                CPPUNIT_ASSERT_EQUAL(INetProtocol::Generic, url.GetProtocol());
+                CPPUNIT_ASSERT(url.IsExoticProtocol());
+            }
+            {
+                INetURLObject url(u"vnd.sun.star.zip://slot%3A0#foo");
+                CPPUNIT_ASSERT_EQUAL(INetProtocol::Generic, url.GetProtocol());
+                CPPUNIT_ASSERT(url.IsExoticProtocol());
+            }
+            {
+                INetURLObject url(u"vnd.sun.star.zip://http%3A%2F%2Fexample.net");
+                CPPUNIT_ASSERT_EQUAL(INetProtocol::Generic, url.GetProtocol());
+                CPPUNIT_ASSERT(!url.IsExoticProtocol());
+            }
+        }
+
         // Change the following lines only, if you add, remove or rename
         // member functions of the current class,
         // because these macros are need by auto register mechanism.
@@ -371,6 +414,7 @@ namespace tools_urlobj
         CPPUNIT_TEST( testChangeScheme );
         CPPUNIT_TEST( testTd146382 );
         CPPUNIT_TEST( testParseSmart );
+        CPPUNIT_TEST( testIsExoticProtocol );
         CPPUNIT_TEST_SUITE_END(  );
     };                          // class createPool
 
