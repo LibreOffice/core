@@ -15,6 +15,24 @@
 // role used for the ID in the QStandardItem
 constexpr int ROLE_ID = Qt::UserRole + 1000;
 
+namespace
+{
+struct QtInstanceTreeIter final : public weld::TreeIter
+{
+    QModelIndex m_aModelIndex;
+
+    explicit QtInstanceTreeIter(QModelIndex aModelIndex)
+        : m_aModelIndex(aModelIndex)
+    {
+    }
+
+    virtual bool equal(const TreeIter& rOther) const override
+    {
+        return m_aModelIndex == static_cast<const QtInstanceTreeIter&>(rOther).m_aModelIndex;
+    }
+};
+};
+
 QtInstanceTreeView::QtInstanceTreeView(QTreeView* pTreeView)
     : QtInstanceWidget(pTreeView)
     , m_pTreeView(pTreeView)
@@ -300,19 +318,7 @@ int QtInstanceTreeView::find_text(const OUString& rText) const
     return nIndex;
 }
 
-OUString QtInstanceTreeView::get_id(int nPos) const
-{
-    SolarMutexGuard g;
-
-    OUString sId;
-    GetQtInstance().RunInMainThread([&] {
-        QVariant aRoleData = m_pModel->data(m_pModel->index(nPos, 0), ROLE_ID);
-        if (aRoleData.canConvert<QString>())
-            sId = toOUString(aRoleData.toString());
-    });
-
-    return sId;
-}
+OUString QtInstanceTreeView::get_id(int nPos) const { return get_id(modelIndex(nPos)); }
 
 int QtInstanceTreeView::find_id(const OUString& rId) const
 {
@@ -333,21 +339,32 @@ int QtInstanceTreeView::find_id(const OUString& rId) const
     return nIndex;
 }
 
-std::unique_ptr<weld::TreeIter> QtInstanceTreeView::make_iterator(const weld::TreeIter*) const
+std::unique_ptr<weld::TreeIter> QtInstanceTreeView::make_iterator(const weld::TreeIter* pOrig) const
 {
-    assert(false && "Not implemented yet");
-    return nullptr;
+    const QModelIndex aIndex = pOrig ? modelIndex(*pOrig) : QModelIndex();
+    return std::make_unique<QtInstanceTreeIter>(aIndex);
 }
 
-void QtInstanceTreeView::copy_iterator(const weld::TreeIter&, weld::TreeIter&) const
+void QtInstanceTreeView::copy_iterator(const weld::TreeIter& rSource, weld::TreeIter& rDest) const
 {
-    assert(false && "Not implemented yet");
+    static_cast<QtInstanceTreeIter&>(rDest).m_aModelIndex = modelIndex(rSource);
 }
 
-bool QtInstanceTreeView::get_selected(weld::TreeIter*) const
+bool QtInstanceTreeView::get_selected(weld::TreeIter* pIter) const
 {
-    assert(false && "Not implemented yet");
-    return false;
+    SolarMutexGuard g;
+
+    bool bHasSelection = false;
+    GetQtInstance().RunInMainThread([&] {
+        const QModelIndexList aSelectedIndexes = m_pSelectionModel->selectedIndexes();
+        if (aSelectedIndexes.empty())
+            return;
+
+        bHasSelection = true;
+        if (pIter)
+            static_cast<QtInstanceTreeIter*>(pIter)->m_aModelIndex = aSelectedIndexes.first();
+    });
+    return bHasSelection;
 }
 
 bool QtInstanceTreeView::get_cursor(weld::TreeIter*) const
@@ -498,10 +515,9 @@ void QtInstanceTreeView::set_id(const weld::TreeIter&, const OUString&)
     assert(false && "Not implemented yet");
 }
 
-OUString QtInstanceTreeView::get_id(const weld::TreeIter&) const
+OUString QtInstanceTreeView::get_id(const weld::TreeIter& rIter) const
 {
-    assert(false && "Not implemented yet");
-    return OUString();
+    return get_id(modelIndex(rIter));
 }
 
 void QtInstanceTreeView::set_image(const weld::TreeIter&, const OUString&, int)
@@ -772,6 +788,27 @@ QAbstractItemView::SelectionMode QtInstanceTreeView::mapSelectionMode(SelectionM
             assert(false && "unhandled selection mode");
             return QAbstractItemView::SingleSelection;
     }
+}
+
+QModelIndex QtInstanceTreeView::modelIndex(int nPos) const { return m_pModel->index(nPos, 0); }
+
+QModelIndex QtInstanceTreeView::modelIndex(const weld::TreeIter& rIter)
+{
+    return static_cast<const QtInstanceTreeIter&>(rIter).m_aModelIndex;
+}
+
+OUString QtInstanceTreeView::get_id(const QModelIndex& rModelIndex) const
+{
+    SolarMutexGuard g;
+
+    OUString sId;
+    GetQtInstance().RunInMainThread([&] {
+        QVariant aRoleData = m_pModel->data(rModelIndex, ROLE_ID);
+        if (aRoleData.canConvert<QString>())
+            sId = toOUString(aRoleData.toString());
+    });
+
+    return sId;
 }
 
 void QtInstanceTreeView::handleActivated()

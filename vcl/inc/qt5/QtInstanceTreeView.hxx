@@ -185,6 +185,9 @@ public:
     using QtInstanceWidget::get_sensitive;
 
 private:
+    QModelIndex modelIndex(int nPos) const;
+    static QModelIndex modelIndex(const weld::TreeIter& rIter);
+    OUString get_id(const QModelIndex& rModelIndex) const;
     static QAbstractItemView::SelectionMode mapSelectionMode(SelectionMode eMode);
 
 private Q_SLOTS:
