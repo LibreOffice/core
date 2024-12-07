@@ -33,8 +33,9 @@
 using namespace com::sun::star;
 using namespace xmloff::token;
 
-ScXMLExportDDELinks::ScXMLExportDDELinks(ScXMLExport& rTempExport)
-    : rExport(rTempExport)
+ScXMLExportDDELinks::ScXMLExportDDELinks(ScDocument& rDoc, ScXMLExport& rTempExport)
+    : m_rDoc(rDoc)
+    , rExport(rTempExport)
 {
 }
 
@@ -68,11 +69,7 @@ void ScXMLExportDDELinks::WriteCell(const ScMatrixValue& aVal, sal_Int32 nRepeat
 
 void ScXMLExportDDELinks::WriteTable(const sal_Int32 nPos)
 {
-    ScDocument* pDoc = rExport.GetDocument();
-    if (!pDoc)
-        return;
-
-    const ScMatrix* pMatrix = pDoc->GetDdeLinkResultMatrix(static_cast<sal_uInt16>(nPos));
+    const ScMatrix* pMatrix = m_rDoc.GetDdeLinkResultMatrix(static_cast<sal_uInt16>(nPos));
     if (!pMatrix)
         return;
 
@@ -136,8 +133,7 @@ void ScXMLExportDDELinks::WriteDDELinks(const uno::Reference<sheet::XSpreadsheet
                 rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_DDE_ITEM, xDDELink->getItem());
                 rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_AUTOMATIC_UPDATE, XML_TRUE);
                 sal_uInt8 nMode;
-                ScDocument* pDoc = rExport.GetDocument();
-                if (pDoc && pDoc->GetDdeLinkMode(nDDELink, nMode))
+                if (m_rDoc.GetDdeLinkMode(nDDELink, nMode))
                 {
                     switch (nMode)
                     {

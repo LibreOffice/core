@@ -57,8 +57,7 @@ using namespace com::sun::star;
 using namespace xmloff::token;
 
 ScXMLExportDataPilot::ScXMLExportDataPilot(ScXMLExport& rTempExport)
-    : rExport(rTempExport),
-    pDoc( nullptr )
+    : rExport(rTempExport)
 {
 }
 
@@ -137,7 +136,7 @@ void ScXMLExportDataPilot::WriteDPCondition(const ScQueryEntry& aQueryEntry, boo
     SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_FILTER_CONDITION, true, true);
 }
 
-void ScXMLExportDataPilot::WriteDPFilter(const ScQueryParam& aQueryParam)
+void ScXMLExportDataPilot::WriteDPFilter(ScDocument& rDoc, const ScQueryParam& aQueryParam)
 {
     SCSIZE nQueryEntryCount = aQueryParam.GetEntryCount();
     if (nQueryEntryCount <= 0)
@@ -177,7 +176,7 @@ void ScXMLExportDataPilot::WriteDPFilter(const ScQueryParam& aQueryParam)
         ScRange aConditionRange(aQueryParam.nCol1, aQueryParam.nRow1, aQueryParam.nTab,
             aQueryParam.nCol2, aQueryParam.nRow2, aQueryParam.nTab);
         OUString sConditionRange;
-        ScRangeStringConverter::GetStringFromRange( sConditionRange, aConditionRange, pDoc, ::formula::FormulaGrammar::CONV_OOO );
+        ScRangeStringConverter::GetStringFromRange( sConditionRange, aConditionRange, &rDoc, ::formula::FormulaGrammar::CONV_OOO );
         if (!sConditionRange.isEmpty())
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CONDITION_SOURCE_RANGE_ADDRESS, sConditionRange);
     }
@@ -730,13 +729,9 @@ void ScXMLExportDataPilot::WriteGrandTotal(::xmloff::token::XMLTokenEnum eOrient
     SvXMLElementExport aElemGrandTotal(rExport, XML_NAMESPACE_TABLE_EXT, XML_DATA_PILOT_GRAND_TOTAL, true, true);
 }
 
-void ScXMLExportDataPilot::WriteDataPilots()
+void ScXMLExportDataPilot::WriteDataPilots(ScDocument& rDoc)
 {
-    pDoc = rExport.GetDocument();
-    if (!pDoc)
-        return;
-
-    ScDPCollection* pDPs = pDoc->GetDPCollection();
+    ScDPCollection* pDPs = rDoc.GetDPCollection();
     if (!pDPs)
         return;
 
@@ -754,8 +749,8 @@ void ScXMLExportDataPilot::WriteDataPilots()
 
         ScRange aOutRange((*pDPs)[i].GetOutRange());
         OUString sTargetRangeAddress;
-        ScRangeStringConverter::GetStringFromRange( sTargetRangeAddress, aOutRange, pDoc, ::formula::FormulaGrammar::CONV_OOO );
-        ScDocAttrIterator aAttrItr(*pDoc, aOutRange.aStart.Tab(),
+        ScRangeStringConverter::GetStringFromRange( sTargetRangeAddress, aOutRange, &rDoc, ::formula::FormulaGrammar::CONV_OOO );
+        ScDocAttrIterator aAttrItr(rDoc, aOutRange.aStart.Tab(),
             aOutRange.aStart.Col(), aOutRange.aStart.Row(),
             aOutRange.aEnd.Col(), aOutRange.aEnd.Row());
         SCCOL nCol;
@@ -771,7 +766,7 @@ void ScXMLExportDataPilot::WriteDataPilots()
                 {
                     ScAddress aButtonAddr(nCol, nButtonRow, aOutRange.aStart.Tab());
                     ScRangeStringConverter::GetStringFromAddress(
-                        sOUButtonList, aButtonAddr, pDoc, ::formula::FormulaGrammar::CONV_OOO, ' ', true );
+                        sOUButtonList, aButtonAddr, &rDoc, ::formula::FormulaGrammar::CONV_OOO, ' ', true );
                 }
             }
             pAttr = aAttrItr.GetNext(nCol, nRow1, nRow2);
@@ -843,13 +838,13 @@ void ScXMLExportDataPilot::WriteDataPilots()
 
             OUString sCellRangeAddress;
             ScRangeStringConverter::GetStringFromRange(
-                sCellRangeAddress, pSheetSource->GetSourceRange(), pDoc,
+                sCellRangeAddress, pSheetSource->GetSourceRange(), &rDoc,
                 ::formula::FormulaGrammar::CONV_OOO);
 
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CELL_RANGE_ADDRESS, sCellRangeAddress);
             SvXMLElementExport aElemSCR(rExport, XML_NAMESPACE_TABLE, XML_SOURCE_CELL_RANGE, true, true);
             rExport.CheckAttrList();
-            WriteDPFilter(pSheetSource->GetQueryParam());
+            WriteDPFilter(rDoc, pSheetSource->GetQueryParam());
         }
         else if ((*pDPs)[i].IsImportData())
         {

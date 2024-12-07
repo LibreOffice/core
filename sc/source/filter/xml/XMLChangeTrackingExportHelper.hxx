@@ -29,6 +29,7 @@ class XText;
 
 class ScChangeAction;
 class ScChangeTrack;
+class ScDocument;
 class ScXMLExport;
 struct ScCellValue;
 class ScChangeActionDel;
@@ -37,6 +38,7 @@ class ScEditEngineTextObj;
 
 class ScChangeTrackingExportHelper
 {
+    ScDocument& m_rDoc;
     ScXMLExport& rExport;
 
     ScChangeTrack* pChangeTrack;
@@ -74,7 +76,7 @@ class ScChangeTrackingExportHelper
     void WorkWithChangeAction(ScChangeAction* pAction);
 
 public:
-    explicit ScChangeTrackingExportHelper(ScXMLExport& rExport);
+    explicit ScChangeTrackingExportHelper(ScDocument& rDoc, ScXMLExport& rExport);
     ~ScChangeTrackingExportHelper();
 
     void CollectAutoStyles();

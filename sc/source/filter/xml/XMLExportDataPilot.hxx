@@ -42,12 +42,11 @@ struct ScQueryEntry;
 class ScXMLExportDataPilot
 {
     ScXMLExport&        rExport;
-    ScDocument*         pDoc;
 
     static OUString getDPOperatorXML(const ScQueryOp aFilterOperator, const utl::SearchParam::SearchType eSearchType);
     void WriteDPCondition(const ScQueryEntry& aQueryEntry, bool bIsCaseSensitive,
             utl::SearchParam::SearchType eSearchType);
-    void WriteDPFilter(const ScQueryParam& aQueryParam);
+    void WriteDPFilter(ScDocument& rDoc, const ScQueryParam& aQueryParam);
 
     void WriteFieldReference(const ScDPSaveDimension* pDim);
     void WriteSortInfo(const ScDPSaveDimension* pDim);
@@ -68,7 +67,7 @@ class ScXMLExportDataPilot
 
 public:
     explicit ScXMLExportDataPilot(ScXMLExport& rExport);
-    void WriteDataPilots();
+    void WriteDataPilots(ScDocument& rDoc);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

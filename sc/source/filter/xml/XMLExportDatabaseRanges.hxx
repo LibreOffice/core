@@ -26,18 +26,17 @@ class ScXMLExport;
 class ScDocument;
 class ScMyEmptyDatabaseRangesContainer;
 
-void writeSort(ScXMLExport& mrExport, const ScSortParam& aParam, const ScRange& aRange,
-               const ScDocument* mpDoc);
+void writeSort(ScXMLExport& rExport, const ScSortParam& rParam, const ScRange& rRange,
+               const ScDocument& rDoc);
 
 class ScXMLExportDatabaseRanges
 {
     ScXMLExport& rExport;
-    ScDocument* pDoc;
 
 public:
     explicit ScXMLExportDatabaseRanges(ScXMLExport& rExport);
     ScMyEmptyDatabaseRangesContainer GetEmptyDatabaseRanges();
-    void WriteDatabaseRanges();
+    void WriteDatabaseRanges(ScDocument& rDoc);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

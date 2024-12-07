@@ -710,6 +710,8 @@ void ScXMLAutoStylePoolP::exportStyleContent(
     if (nFamily != XmlStyleFamily::TABLE_CELL)
         return;
 
+    ScDocument* pDoc = rScXMLExport.GetDocument();
+
     for(const auto& rProperty : rProperties)
     {
         if (rProperty.mnIndex != -1)
@@ -743,7 +745,6 @@ void ScXMLAutoStylePoolP::exportStyleContent(
                                             rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_CONDITION, sCondition);
                                             rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_APPLY_STYLE_NAME, rScXMLExport.EncodeStyleName( sStyleName ));
                                             OUString sOUBaseAddress;
-                                            ScDocument* pDoc = rScXMLExport.GetDocument();
                                             ScRangeStringConverter::GetStringFromAddress( sOUBaseAddress,
                                                 xSheetCondition->getSourcePosition(), pDoc, FormulaGrammar::CONV_OOO );
                                             rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_BASE_CELL_ADDRESS, sOUBaseAddress);
@@ -798,7 +799,7 @@ void ScXMLAutoStylePoolP::exportStyleContent(
                                             rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_APPLY_STYLE_NAME, rScXMLExport.EncodeStyleName( sStyleName ));
                                             OUString sOUBaseAddress;
                                             ScRangeStringConverter::GetStringFromAddress( sOUBaseAddress,
-                                                xSheetCondition->getSourcePosition(), rScXMLExport.GetDocument(), FormulaGrammar::CONV_OOO );
+                                                xSheetCondition->getSourcePosition(), pDoc, FormulaGrammar::CONV_OOO );
                                             rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_BASE_CELL_ADDRESS, sOUBaseAddress);
                                             SvXMLElementExport aMElem(rScXMLExport, XML_NAMESPACE_STYLE, XML_MAP, true, true);
                                         }

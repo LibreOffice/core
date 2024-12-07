@@ -568,7 +568,7 @@ void ScMyNotEmptyCellsIterator::UpdateAddress( ScAddress& rAddress )
     }
 }
 
-void ScMyNotEmptyCellsIterator::SetCellData( ScMyCell& rMyCell, const ScAddress& rAddress )
+void ScMyNotEmptyCellsIterator::SetCellData(ScDocument& rDoc, ScMyCell& rMyCell, const ScAddress& rAddress)
 {
     rMyCell.maBaseCell.clear();
     rMyCell.aCellAddress = rAddress;
@@ -603,7 +603,7 @@ void ScMyNotEmptyCellsIterator::SetCellData( ScMyCell& rMyCell, const ScAddress&
     if (rMyCell.maBaseCell.getType() == CELLTYPE_FORMULA)
     {
         bool bIsMatrixBase = false;
-        if (rExport.IsMatrix(rMyCell.maCellAddress, rMyCell.aMatrixRange, bIsMatrixBase))
+        if (ScXMLExport::IsMatrix(rDoc, rMyCell.maCellAddress, rMyCell.aMatrixRange, bIsMatrixBase))
         {
             rMyCell.bIsMatrixBase = bIsMatrixBase;
             rMyCell.bIsMatrixCovered = !bIsMatrixBase;
@@ -611,10 +611,11 @@ void ScMyNotEmptyCellsIterator::SetCellData( ScMyCell& rMyCell, const ScAddress&
     }
 }
 
-void ScMyNotEmptyCellsIterator::HasAnnotation(ScMyCell& aCell)
+//static
+void ScMyNotEmptyCellsIterator::HasAnnotation(ScDocument& rDoc, ScMyCell& aCell)
 {
     aCell.bHasAnnotation = false;
-    ScPostIt* pNote = rExport.GetDocument()->GetNote(aCell.maCellAddress);
+    ScPostIt* pNote = rDoc.GetNote(aCell.maCellAddress);
 
     if(pNote)
     {
@@ -623,7 +624,8 @@ void ScMyNotEmptyCellsIterator::HasAnnotation(ScMyCell& aCell)
     }
 }
 
-void ScMyNotEmptyCellsIterator::SetCurrentTable(const SCTAB nTable,
+void ScMyNotEmptyCellsIterator::SetCurrentTable(ScDocument& rDoc,
+    const SCTAB nTable,
     const uno::Reference<sheet::XSpreadsheet>& rxTable)
 {
     aLastAddress.SetRow( 0 );
@@ -636,7 +638,7 @@ void ScMyNotEmptyCellsIterator::SetCurrentTable(const SCTAB nTable,
 
     mpCellItr.reset(
         new ScHorizontalCellIterator(
-            *rExport.GetDocument(), nCurrentTable, 0, 0,
+            rDoc, nCurrentTable, 0, 0,
             static_cast<SCCOL>(rExport.GetSharedData()->GetLastColumn(nCurrentTable)),
             static_cast<SCROW>(rExport.GetSharedData()->GetLastRow(nCurrentTable))));
 
@@ -665,10 +667,9 @@ void ScMyNotEmptyCellsIterator::SkipTable(SCTAB nSkip)
         pDetectiveOp->SkipTable(nSkip);
 }
 
-bool ScMyNotEmptyCellsIterator::GetNext(ScMyCell& aCell, ScFormatRangeStyles* pCellStyles)
+bool ScMyNotEmptyCellsIterator::GetNext(ScDocument& rDoc, ScMyCell& aCell, ScFormatRangeStyles* pCellStyles)
 {
-    ScDocument* pDoc = rExport.GetDocument();
-    ScAddress  aAddress( pDoc->MaxCol() + 1, pDoc->MaxRow() + 1, nCurrentTable );
+    ScAddress  aAddress( rDoc.MaxCol() + 1, rDoc.MaxRow() + 1, nCurrentTable );
 
     UpdateAddress( aAddress );
 
@@ -687,10 +688,10 @@ bool ScMyNotEmptyCellsIterator::GetNext(ScMyCell& aCell, ScFormatRangeStyles* pC
     if( pDetectiveOp )
         pDetectiveOp->UpdateAddress( aAddress );
 
-    bool bFoundCell( ( aAddress.Col() <= pDoc->MaxCol() ) && ( aAddress.Row() <= pDoc->MaxRow() + 1 ) );
+    bool bFoundCell( ( aAddress.Col() <= rDoc.MaxCol() ) && ( aAddress.Row() <= rDoc.MaxRow() + 1 ) );
     if( bFoundCell )
     {
-        SetCellData( aCell, aAddress );
+        SetCellData(rDoc, aCell, aAddress);
         if( pShapes )
             pShapes->SetCellData( aCell );
         if( pNoteShapes )
@@ -706,7 +707,7 @@ bool ScMyNotEmptyCellsIterator::GetNext(ScMyCell& aCell, ScFormatRangeStyles* pC
         if( pDetectiveOp )
             pDetectiveOp->SetCellData( aCell );
 
-        HasAnnotation( aCell );
+        HasAnnotation(rDoc, aCell);
         bool bIsAutoStyle(false);
         // Ranges before the previous cell are not needed by ExportFormatRanges anymore and can be removed
         SCROW nRemoveBeforeRow = aLastAddress.Row();
