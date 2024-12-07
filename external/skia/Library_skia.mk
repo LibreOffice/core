@@ -1309,6 +1309,15 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
 	$(LO_SKIA_AVOID_INLINE_COPIES) \
 ))
 
+ifeq ($(CPUNAME),LOONGARCH64)
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
+    UnpackedTarball/skia/src/opts/SkOpts_lasx \
+    UnpackedTarball/skia/src/core/SkSwizzler_opts_lasx \
+    UnpackedTarball/skia/src/core/SkBlitRow_opts_lasx \
+    UnpackedTarball/skia/src/core/SkBitmapProcState_opts_lasx, \
+        $(LO_SKIA_AVOID_INLINE_COPIES) \
+))
+endif
 
 # Skcms code is used by png writer, which is used by SkiaHelper::dump(). Building
 # this without optimizations would mean having each pixel of saved images be
