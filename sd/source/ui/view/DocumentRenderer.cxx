@@ -2454,9 +2454,8 @@ private:
                             rInfo.meOrientation,
                             nPaperBin));
             }
-            else // Notes
+            else if (SdPage* pPage = GetFilteredPage(nPageIndex, PageKind::Notes))// Notes
             {
-                SdPage* pPage = GetFilteredPage(nPageIndex, PageKind::Notes);
                 SdDrawDocument* pDocument = mrBase.GetMainViewShell()->GetDoc();
 
                 // Clone the current page to create an independent instance.
