@@ -231,11 +231,9 @@ void SAL_CALL OGridControlModel::setParent( const css::uno::Reference<css::uno::
 Sequence< Type > SAL_CALL OGridControlModel::getTypes(  )
 {
     return concatSequences(
-        concatSequences(
             OControlModel::getTypes(),
             OInterfaceContainer::getTypes(),
-            OErrorBroadcaster::getTypes()
-        ),
+            OErrorBroadcaster::getTypes(),
         OGridControlModel_BASE::getTypes()
     );
 }

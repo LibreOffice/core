@@ -420,7 +420,7 @@ uno::Sequence< OUString > SAL_CALL Svx3DSceneObject::getSupportedServiceNames()
 {
     return comphelper::concatSequences(
         SvxShape::getSupportedServiceNames(),
-        std::initializer_list<std::u16string_view>{ u"com.sun.star.drawing.Shape3DScene" });
+        std::initializer_list<OUString>{ u"com.sun.star.drawing.Shape3DScene"_ustr });
 }
 
 Svx3DCubeObject::Svx3DCubeObject(SdrObject* pObj)
@@ -540,8 +540,8 @@ uno::Sequence< OUString > SAL_CALL Svx3DCubeObject::getSupportedServiceNames()
 {
     return comphelper::concatSequences(
         SvxShape::getSupportedServiceNames(),
-        std::initializer_list<std::u16string_view>{ u"com.sun.star.drawing.Shape3D",
-                                          u"com.sun.star.drawing.Shape3DCube" });
+        std::initializer_list<OUString>{ u"com.sun.star.drawing.Shape3D"_ustr,
+                                         u"com.sun.star.drawing.Shape3DCube"_ustr });
 }
 
 Svx3DSphereObject::Svx3DSphereObject(SdrObject* pObj)
@@ -645,8 +645,8 @@ uno::Sequence< OUString > SAL_CALL Svx3DSphereObject::getSupportedServiceNames()
 {
     return comphelper::concatSequences(
         SvxShape::getSupportedServiceNames(),
-        std::initializer_list<std::u16string_view>{ u"com.sun.star.drawing.Shape3D",
-                                          u"com.sun.star.drawing.Shape3DSphere" });
+        std::initializer_list<OUString>{ u"com.sun.star.drawing.Shape3D"_ustr,
+                                         u"com.sun.star.drawing.Shape3DSphere"_ustr });
 }
 
 Svx3DLatheObject::Svx3DLatheObject(SdrObject* pObj)
@@ -825,8 +825,8 @@ uno::Sequence< OUString > SAL_CALL Svx3DLatheObject::getSupportedServiceNames()
 {
     return comphelper::concatSequences(
         SvxShape::getSupportedServiceNames(),
-        std::initializer_list<std::u16string_view>{ u"com.sun.star.drawing.Shape3D",
-                                          u"com.sun.star.drawing.Shape3DLathe" });
+        std::initializer_list<OUString>{ u"com.sun.star.drawing.Shape3D"_ustr,
+                                         u"com.sun.star.drawing.Shape3DLathe"_ustr });
 }
 
 Svx3DExtrudeObject::Svx3DExtrudeObject(SdrObject* pObj)
@@ -908,8 +908,8 @@ uno::Sequence< OUString > SAL_CALL Svx3DExtrudeObject::getSupportedServiceNames(
 {
     return comphelper::concatSequences(
         SvxShape::getSupportedServiceNames(),
-        std::initializer_list<std::u16string_view>{ u"com.sun.star.drawing.Shape3D",
-                                          u"com.sun.star.drawing.Shape3DExtrude" });
+        std::initializer_list<OUString>{ u"com.sun.star.drawing.Shape3D"_ustr,
+                                         u"com.sun.star.drawing.Shape3DExtrude"_ustr });
 }
 
 Svx3DPolygonObject::Svx3DPolygonObject(SdrObject* pObj)
@@ -1044,8 +1044,8 @@ uno::Sequence< OUString > SAL_CALL Svx3DPolygonObject::getSupportedServiceNames(
 {
     return comphelper::concatSequences(
         SvxShape::getSupportedServiceNames(),
-        std::initializer_list<std::u16string_view>{ u"com.sun.star.drawing.Shape3D",
-                                          u"com.sun.star.drawing.Shape3DPolygon" });
+        std::initializer_list<OUString>{ u"com.sun.star.drawing.Shape3D"_ustr,
+                                         u"com.sun.star.drawing.Shape3DPolygon"_ustr });
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

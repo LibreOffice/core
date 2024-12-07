@@ -2212,7 +2212,7 @@ uno::Sequence< OUString > SwXShape::getSupportedServiceNames()
     if (SvxShape* pSvxShape = GetSvxShape())
         aSeq = pSvxShape->getSupportedServiceNames();
     return comphelper::concatSequences(
-        aSeq, std::initializer_list<std::u16string_view>{ u"com.sun.star.drawing.Shape" });
+        aSeq, std::initializer_list<OUString>{ u"com.sun.star.drawing.Shape"_ustr });
 }
 
 SvxShape*   SwXShape::GetSvxShape()

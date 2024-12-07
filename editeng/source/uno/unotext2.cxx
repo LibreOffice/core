@@ -357,11 +357,11 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextContent::getSupportedServiceNames()
 {
     return comphelper::concatSequences(
         SvxUnoTextRangeBase::getSupportedServiceNames(),
-        std::initializer_list<std::u16string_view>{ u"com.sun.star.style.ParagraphProperties",
-                                          u"com.sun.star.style.ParagraphPropertiesComplex",
-                                          u"com.sun.star.style.ParagraphPropertiesAsian",
-                                          u"com.sun.star.text.TextContent",
-                                          u"com.sun.star.text.Paragraph" });
+        std::initializer_list<OUString>{ u"com.sun.star.style.ParagraphProperties"_ustr,
+                                         u"com.sun.star.style.ParagraphPropertiesComplex"_ustr,
+                                         u"com.sun.star.style.ParagraphPropertiesAsian"_ustr,
+                                         u"com.sun.star.text.TextContent"_ustr,
+                                         u"com.sun.star.text.Paragraph"_ustr });
 }
 
 
@@ -618,10 +618,10 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextCursor::getSupportedServiceNames()
 {
     return comphelper::concatSequences(
         SvxUnoTextRangeBase::getSupportedServiceNames(),
-        std::initializer_list<std::u16string_view>{ u"com.sun.star.style.ParagraphProperties",
-                                          u"com.sun.star.style.ParagraphPropertiesComplex",
-                                          u"com.sun.star.style.ParagraphPropertiesAsian",
-                                          u"com.sun.star.text.TextCursor" });
+        std::initializer_list<OUString>{ u"com.sun.star.style.ParagraphProperties"_ustr,
+                                         u"com.sun.star.style.ParagraphPropertiesComplex"_ustr,
+                                         u"com.sun.star.style.ParagraphPropertiesAsian"_ustr,
+                                         u"com.sun.star.text.TextCursor"_ustr });
 }
 
 

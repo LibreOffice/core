@@ -2219,7 +2219,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextBase::getSupportedServiceNames_Stat
 {
     return comphelper::concatSequences(
         SvxUnoTextRangeBase::getSupportedServiceNames_Static(),
-        std::initializer_list<std::u16string_view>{ u"com.sun.star.text.Text" });
+        std::initializer_list<OUString>{ u"com.sun.star.text.Text"_ustr });
 }
 
 const uno::Sequence< sal_Int8 > & SvxUnoTextBase::getUnoTunnelId() noexcept
