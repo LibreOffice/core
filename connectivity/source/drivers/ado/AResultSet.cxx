@@ -263,7 +263,7 @@ sal_Int32 SAL_CALL OResultSet::getRow(  )
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    PositionEnum_Param aPos;
+    PositionEnum aPos;
     m_pRecordSet->get_AbsolutePosition(&aPos);
     return  (aPos > 0) ? static_cast<sal_Int32>(aPos) : m_nRowPos;
     // return the rowcount from driver if the driver doesn't support this return our count

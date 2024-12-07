@@ -22,11 +22,11 @@ gb_MKTEMP := mktemp --tmpdir=$(TMPDIR) gbuild.XXXXXX
 gb_RUN_CONFIGURE := CONFIG_SHELL=$(shell cygpath -ms /bin/sh)
 
 # define _WIN32_WINNT and WINVER will be derived from it in sdkddkver.h
-# current baseline is Windows 7 (NT 6.1)
+# current baseline is Windows 10 (1507)
 # for _WIN32_IE, if _WIN32_WINNT >= 0x0600 the derived value from
 # sdkddkver.h is sufficient
 gb_WIN_VERSION_DEFS := \
-	-D_WIN32_WINNT=0x0601 \
+	-D_WIN32_WINNT=_WIN32_WINNT_WIN10 \
 	-DWIN32 \
 	-DWNT \
 

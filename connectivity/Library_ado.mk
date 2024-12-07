@@ -31,6 +31,12 @@ $(eval $(call gb_Library_add_cxxflags,ado,\
 ))
 endif
 
+ifeq ($(COM),MSC)
+$(eval $(call gb_Library_add_cxxflags,ado,\
+	-DADO_SUPPRESS_MESSAGE \
+))
+endif
+
 $(eval $(call gb_Library_use_system_win32_libs,ado,\
 	ole32 \
 	oleaut32 \

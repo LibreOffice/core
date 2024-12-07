@@ -7,10 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#if !defined(NTDDI_VERSION) || NTDDI_VERSION < NTDDI_WIN8
-#define NTDDI_VERSION NTDDI_WIN8 // needed for IApplicationActivationManager
-#endif
-
 #include <sal/config.h>
 
 #include <comphelper/scopeguard.hxx>

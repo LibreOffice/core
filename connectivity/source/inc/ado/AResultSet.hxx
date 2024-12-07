@@ -66,7 +66,7 @@ namespace connectivity::ado
             css::uno::Reference< css::sdbc::XResultSetMetaData>        m_xMetaData;
             std::vector<OLEVariant>       m_aBookmarks;
             OLEVariant                      m_aValue;
-            ADO_LONGPTR                     m_nRowPos;
+            long m_nRowPos;
             bool                            m_bEOF;
             bool                            m_bOnFirstAfterOpen;
 

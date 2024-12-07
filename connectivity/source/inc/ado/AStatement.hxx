@@ -71,7 +71,7 @@ namespace connectivity::ado
             std::vector<connectivity::OTypeInfo>      m_aTypeInfo;    // Hashtable containing an entry
                                                                         //  for each row returned by
                                                                         //  DatabaseMetaData.getTypeInfo.
-            ADO_LONGPTR                                 m_nMaxRows;
+            long m_nMaxRows;
             sal_Int32                                   m_nFetchSize;
             LockTypeEnum                                m_eLockType;
             CursorTypeEnum                              m_eCursorType;

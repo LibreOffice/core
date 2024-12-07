@@ -374,7 +374,7 @@ Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch(  )
         {
             assignRecordSet( pSet );
 
-            ADO_LONGPTR nValue;
+            long nValue;
             if(m_RecordSet.get_RecordCount(nValue))
                 pArray[j] = nValue;
         }
@@ -426,7 +426,7 @@ sal_Int32 SAL_CALL OStatement_Base::getUpdateCount(  )
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
 
-    ADO_LONGPTR nRet;
+    long nRet;
     if(m_RecordSet.IsValid() && m_RecordSet.get_RecordCount(nRet))
         return nRet;
     return -1;
@@ -489,7 +489,7 @@ sal_Int32 OStatement_Base::getQueryTimeOut() const
 
 sal_Int32 OStatement_Base::getMaxRows() const
 {
-    ADO_LONGPTR nRet=-1;
+    long nRet = -1;
     if(!(m_RecordSet.IsValid() && m_RecordSet.get_MaxRecords(nRet)))
         ::dbtools::throwFunctionSequenceException(nullptr);
     return nRet;

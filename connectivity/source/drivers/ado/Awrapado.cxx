@@ -422,7 +422,7 @@ WpADOProperties WpADOField::get_Properties()
 sal_Int32 WpADOField::GetActualSize() const
 {
     assert(pInterface);
-    ADO_LONGPTR nActualSize=0;
+    long nActualSize = 0;
     pInterface->get_ActualSize(&nActualSize);
     return nActualSize;
 }
@@ -445,7 +445,7 @@ sal_Int32 WpADOField::GetStatus() const
 sal_Int32 WpADOField::GetDefinedSize() const
 {
     assert(pInterface);
-    ADO_LONGPTR nDefinedSize=0;
+    long nDefinedSize = 0;
     pInterface->get_DefinedSize(&nDefinedSize);
     return nDefinedSize;
 }
@@ -697,10 +697,10 @@ bool WpADORecordset::Supports( /* [in] */ CursorOptionEnum CursorOptions)
     return bSupports == VARIANT_TRUE;
 }
 
-PositionEnum_Param WpADORecordset::get_AbsolutePosition()
+PositionEnum WpADORecordset::get_AbsolutePosition()
 {
     assert(pInterface);
-    PositionEnum_Param aTemp=adPosUnknown;
+    PositionEnum aTemp = adPosUnknown;
     pInterface->get_AbsolutePosition(&aTemp);
     return aTemp;
 }
@@ -815,13 +815,13 @@ bool WpADORecordset::NextRecordset(OLEVariant& RecordsAffected,ADORecordset** pp
     return SUCCEEDED(pInterface->NextRecordset(&RecordsAffected,ppiRset));
 }
 
-bool WpADORecordset::get_RecordCount(ADO_LONGPTR &_nRet) const
+bool WpADORecordset::get_RecordCount(long& _nRet) const
 {
     assert(pInterface);
     return SUCCEEDED(pInterface->get_RecordCount(&_nRet));
 }
 
-bool WpADORecordset::get_MaxRecords(ADO_LONGPTR &_nRet) const
+bool WpADORecordset::get_MaxRecords(long& _nRet) const
 {
     assert(pInterface);
     return SUCCEEDED(pInterface->get_MaxRecords(&_nRet));
