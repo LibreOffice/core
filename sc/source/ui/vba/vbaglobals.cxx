@@ -225,7 +225,7 @@ ScVbaGlobals::getAvailableServiceNames(  )
 {
     static const uno::Sequence< OUString > serviceNames = comphelper::concatSequences(
         ScVbaGlobals_BASE::getAvailableServiceNames(),
-        uno::Sequence< OUString >
+        std::initializer_list<OUString>
         {
             u"ooo.vba.excel.Range"_ustr,
             u"ooo.vba.excel.Workbook"_ustr,
