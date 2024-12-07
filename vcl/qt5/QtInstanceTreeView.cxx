@@ -653,7 +653,15 @@ int QtInstanceTreeView::get_height_rows(int) const
     return 0;
 }
 
-void QtInstanceTreeView::columns_autosize() { assert(false && "Not implemented yet"); }
+void QtInstanceTreeView::columns_autosize()
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        for (int i = 0; i < m_pModel->columnCount(); i++)
+            m_pTreeView->resizeColumnToContents(i);
+    });
+}
 
 void QtInstanceTreeView::set_column_fixed_widths(const std::vector<int>&)
 {
