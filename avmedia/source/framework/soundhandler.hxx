@@ -29,6 +29,7 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
+#include <comphelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/weak.hxx>
 
@@ -49,15 +50,9 @@ namespace avmedia{
     @devstatus      ready
     @threadsafe     yes
 *//*-*************************************************************************************************************/
-class SoundHandler  :   // interfaces
-                        public  css::lang::XTypeProvider
-                    ,   public  css::lang::XServiceInfo
-                    ,   public  css::frame::XNotifyingDispatch // => XDispatch
-                    ,   public  css::document::XExtendedFilterDetection
-                        // baseclasses
-                        // Order is necessary for right initialization!
-                    ,   private cppu::BaseMutex
-                    ,   public  ::cppu::OWeakObject
+class SoundHandler : public comphelper::WeakImplHelper<css::lang::XServiceInfo,
+                                                       css::frame::XNotifyingDispatch, // => XDispatch
+                                                       css::document::XExtendedFilterDetection>
 {
     // public methods
     public:
@@ -66,14 +61,7 @@ class SoundHandler  :   // interfaces
                  SoundHandler();
         virtual ~SoundHandler(                                                                        ) override;
 
-        //  XInterface, XTypeProvider, XServiceInfo
-        virtual css::uno::Any  SAL_CALL queryInterface( const css::uno::Type& aType   ) override;
-        virtual void SAL_CALL acquire() noexcept override;
-        virtual void SAL_CALL release() noexcept override;
-        virtual css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes () override;
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
-
-    /* interface XServiceInfo */
+        //  XServiceInfo
        virtual OUString                                               SAL_CALL getImplementationName              (                                                                               ) override;
        virtual sal_Bool                                               SAL_CALL supportsService                    ( const OUString&                                               sServiceName    ) override;
        virtual css::uno::Sequence< OUString >                         SAL_CALL getSupportedServiceNames           (                                                                               ) override;

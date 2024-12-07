@@ -33,61 +33,7 @@
 namespace avmedia{
 
 
-//  XInterface, XTypeProvider, XServiceInfo
-
-
-void SAL_CALL SoundHandler::acquire() noexcept
-{
-       /* Don't use mutex in methods of XInterface! */
-       OWeakObject::acquire();
-}
-
-void SAL_CALL SoundHandler::release() noexcept
-{
-       /* Don't use mutex in methods of XInterface! */
-       OWeakObject::release();
-}
-
-css::uno::Any SAL_CALL SoundHandler::queryInterface( const css::uno::Type& aType )
-{
-       /* Attention: Don't use mutex or guard in this method!!! Is a method of XInterface.     */
-        /* Ask for my own supported interfaces ...*/
-       css::uno::Any aReturn( ::cppu::queryInterface( aType,
-               static_cast< css::lang::XTypeProvider* >(this),
-               static_cast< css::lang::XServiceInfo* >(this),
-               static_cast< css::frame::XNotifyingDispatch* >(this),
-               static_cast< css::frame::XDispatch* >(this),
-               static_cast< css::document::XExtendedFilterDetection* >(this)));
-       /* If searched interface not supported by this class ... */
-       if ( !aReturn.hasValue() )
-       {
-               /* ... ask baseclass for interfaces! */
-               aReturn = OWeakObject::queryInterface( aType );
-       }
-        /* Return result of this search. */
-       return aReturn;
-}
-
-css::uno::Sequence< sal_Int8 > SAL_CALL SoundHandler::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
-css::uno::Sequence< css::uno::Type > SAL_CALL SoundHandler::getTypes()
-{
-    static ::cppu::OTypeCollection aTypeCollection(
-        cppu::UnoType<css::lang::XTypeProvider>::get(),
-        cppu::UnoType<css::lang::XServiceInfo>::get(),
-        cppu::UnoType<css::frame::XNotifyingDispatch>::get(),
-        cppu::UnoType<css::frame::XDispatch>::get(),
-        cppu::UnoType<css::document::XExtendedFilterDetection>::get());
-
-    return aTypeCollection.getTypes();
-}
-
-/*===========================================================================================================*/
-/* XServiceInfo */
-/*===========================================================================================================*/
+//  XServiceInfo
 OUString SAL_CALL SoundHandler::getImplementationName()
 {
     return u"com.sun.star.comp.framework.SoundHandler"_ustr;
@@ -162,7 +108,7 @@ void SAL_CALL SoundHandler::dispatchWithNotification(const css::util::URL&      
                                                      const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {
     // SAFE {
-    const ::osl::MutexGuard aLock( m_aMutex );
+    const std::unique_lock aLock(m_aMutex);
 
     utl::MediaDescriptor aDescriptor(lDescriptor);
 
@@ -274,7 +220,7 @@ OUString SAL_CALL SoundHandler::detect( css::uno::Sequence< css::beans::Property
 IMPL_LINK_NOARG(SoundHandler, implts_PlayerNotify, Timer *, void)
 {
     // SAFE {
-    ::osl::ClearableMutexGuard aLock( m_aMutex );
+    std::unique_lock aLock(m_aMutex);
 
     if (m_xPlayer.is() && m_xPlayer->isPlaying() && m_xPlayer->getMediaTime() < m_xPlayer->getDuration())
     {
@@ -304,7 +250,7 @@ IMPL_LINK_NOARG(SoundHandler, implts_PlayerNotify, Timer *, void)
 
     // } SAFE
     //release aLock before end of method at which point xOperationHold goes out of scope and pThis dies
-    aLock.clear();
+    aLock.unlock();
 }
 
 } // namespace framework
