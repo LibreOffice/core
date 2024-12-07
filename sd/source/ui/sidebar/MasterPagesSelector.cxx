@@ -466,9 +466,9 @@ void MasterPagesSelector::InvalidatePreview (const SdPage* pPage)
     }
 }
 
-VclPtr<VirtualDevice> MasterPagesSelector::GetVirtualDevice(Image pImage)
+VclPtr<VirtualDevice> MasterPagesSelector::GetVirtualDevice(const Image& rImage)
 {
-    BitmapEx aPreviewBitmap = pImage.GetBitmapEx();
+    BitmapEx aPreviewBitmap = rImage.GetBitmapEx();
     VclPtr<VirtualDevice> pVDev = VclPtr<VirtualDevice>::Create();
     const Point aNull(0, 0);
     if (pVDev->GetDPIScaleFactor() > 1)
