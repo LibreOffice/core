@@ -146,7 +146,7 @@ void ScMyValidationsContainer::AddValidation(const uno::Any& aTempAny,
     }
 }
 
-OUString ScMyValidationsContainer::GetCondition(ScXMLExport& rExport, const ScMyValidation& aValidation)
+OUString ScMyValidationsContainer::GetCondition(ScDocument& rDoc, ScXMLExport& rExport, const ScMyValidation& aValidation)
 {
     /* ATTENTION! Should the condition to not write sheet::ValidationType_ANY
      * ever be changed, adapt the conditional call of
@@ -252,12 +252,9 @@ OUString ScMyValidationsContainer::GetCondition(ScXMLExport& rExport, const ScMy
     }
     if (!sCondition.isEmpty())
     {
-        if (ScDocument* pDoc = rExport.GetDocument())
-        {
-            const formula::FormulaGrammar::Grammar eGrammar = pDoc->GetStorageGrammar();
-            sal_uInt16 nNamespacePrefix = (eGrammar == formula::FormulaGrammar::GRAM_ODFF ? XML_NAMESPACE_OF : XML_NAMESPACE_OOOC);
-            sCondition = rExport.GetNamespaceMap().GetQNameByKey( nNamespacePrefix, sCondition, false );
-        }
+        const formula::FormulaGrammar::Grammar eGrammar = rDoc.GetStorageGrammar();
+        sal_uInt16 nNamespacePrefix = (eGrammar == formula::FormulaGrammar::GRAM_ODFF ? XML_NAMESPACE_OF : XML_NAMESPACE_OOOC);
+        sCondition = rExport.GetNamespaceMap().GetQNameByKey( nNamespacePrefix, sCondition, false );
     }
 
     return sCondition;
@@ -311,7 +308,7 @@ void ScMyValidationsContainer::WriteMessage(ScXMLExport& rExport,
     }
 }
 
-void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
+void ScMyValidationsContainer::WriteValidations(ScDocument& rDoc, ScXMLExport& rExport)
 {
     if (aValidationVec.empty())
         return;
@@ -320,7 +317,7 @@ void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
     for (const auto& rValidation : aValidationVec)
     {
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, rValidation.sName);
-        OUString sCondition(GetCondition(rExport, rValidation));
+        OUString sCondition(GetCondition(rDoc, rExport, rValidation));
         if (!sCondition.isEmpty())
         {
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CONDITION, sCondition);
@@ -350,7 +347,7 @@ void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
                 }
             }
         }
-        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_BASE_CELL_ADDRESS, GetBaseCellAddress(rExport.GetDocument(), rValidation.aBaseCell));
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_BASE_CELL_ADDRESS, GetBaseCellAddress(&rDoc, rValidation.aBaseCell));
         SvXMLElementExport aElemV(rExport, XML_NAMESPACE_TABLE, XML_CONTENT_VALIDATION, true, true);
         if (rValidation.bShowInputMessage || !rValidation.sInputMessage.isEmpty() || !rValidation.sInputTitle.isEmpty())
         {

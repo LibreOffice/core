@@ -335,9 +335,9 @@ class ScMyNotEmptyCellsIterator
     SCTAB                       nCurrentTable;
 
     void                        UpdateAddress( ScAddress& rAddress );
-    void SetCellData( ScMyCell& rMyCell, const ScAddress& rAddress );
+    void SetCellData(ScDocument& rDoc, ScMyCell& rMyCell, const ScAddress& rAddress);
 
-    void                        HasAnnotation( ScMyCell& aCell );
+    static void                 HasAnnotation(ScDocument& rDoc, ScMyCell& aCell);
 public:
     explicit                    ScMyNotEmptyCellsIterator(ScXMLExport& rExport);
                                 ~ScMyNotEmptyCellsIterator();
@@ -359,11 +359,11 @@ public:
     void                 SetDetectiveOp(ScMyDetectiveOpContainer* pNewDetectiveOp)
                                     { pDetectiveOp = pNewDetectiveOp; }
 
-    void                        SetCurrentTable(const SCTAB nTable,
+    void                        SetCurrentTable(ScDocument& rDoc, const SCTAB nTable,
                                     const css::uno::Reference<css::sheet::XSpreadsheet>& rxTable);
     void                        SkipTable(SCTAB nSkip);
 
-    bool                        GetNext(ScMyCell& aCell, ScFormatRangeStyles* pCellStyles);
+    bool                        GetNext(ScDocument& rDoc, ScMyCell& aCell, ScFormatRangeStyles* pCellStyles);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

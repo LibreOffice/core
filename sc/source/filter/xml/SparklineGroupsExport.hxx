@@ -29,6 +29,7 @@ namespace sc
 /** Handle the export of sparkline groups and sparklines */
 class SparklineGroupsExport
 {
+    ScDocument& m_rDoc;
     ScXMLExport& m_rExport;
     SCTAB m_nTable;
 
@@ -44,7 +45,7 @@ class SparklineGroupsExport
     void insertBool(bool bValue, xmloff::token::XMLTokenEnum eToken);
 
 public:
-    SparklineGroupsExport(ScXMLExport& rExport, SCTAB nTable);
+    SparklineGroupsExport(ScDocument& rDoc, ScXMLExport& rExport, SCTAB nTable);
 
     void write();
 };

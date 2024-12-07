@@ -28,8 +28,9 @@ using namespace xmloff::token;
 
 namespace sc
 {
-SparklineGroupsExport::SparklineGroupsExport(ScXMLExport& rExport, SCTAB nTable)
-    : m_rExport(rExport)
+SparklineGroupsExport::SparklineGroupsExport(ScDocument& rDoc, ScXMLExport& rExport, SCTAB nTable)
+    : m_rDoc(rDoc)
+    , m_rExport(rExport)
     , m_nTable(nTable)
 {
 }
@@ -62,12 +63,10 @@ void SparklineGroupsExport::insertBool(bool bValue, XMLTokenEnum eToken)
 
 void SparklineGroupsExport::addSparklineAttributes(Sparkline const& rSparkline)
 {
-    auto const* pDocument = m_rExport.GetDocument();
-
     {
         OUString sAddressString;
         ScAddress aAddress(rSparkline.getColumn(), rSparkline.getRow(), m_nTable);
-        ScRangeStringConverter::GetStringFromAddress(sAddressString, aAddress, pDocument,
+        ScRangeStringConverter::GetStringFromAddress(sAddressString, aAddress, &m_rDoc,
                                                      formula::FormulaGrammar::CONV_OOO);
         m_rExport.AddAttribute(XML_NAMESPACE_CALC_EXT, XML_CELL_ADDRESS, sAddressString);
     }
@@ -75,7 +74,7 @@ void SparklineGroupsExport::addSparklineAttributes(Sparkline const& rSparkline)
     {
         OUString sDataRangeString;
         ScRangeList const& rRangeList = rSparkline.getInputRange();
-        ScRangeStringConverter::GetStringFromRangeList(sDataRangeString, &rRangeList, pDocument,
+        ScRangeStringConverter::GetStringFromRangeList(sDataRangeString, &rRangeList, &m_rDoc,
                                                        formula::FormulaGrammar::CONV_OOO);
         m_rExport.AddAttribute(XML_NAMESPACE_CALC_EXT, XML_DATA_RANGE, sDataRangeString);
     }
@@ -215,8 +214,7 @@ void SparklineGroupsExport::addSparklineGroup(
 
 void SparklineGroupsExport::write()
 {
-    auto* pDocument = m_rExport.GetDocument();
-    if (sc::SparklineList* pSparklineList = pDocument->GetSparklineList(m_nTable))
+    if (sc::SparklineList* pSparklineList = m_rDoc.GetSparklineList(m_nTable))
     {
         auto const aSparklineGroups = pSparklineList->getSparklineGroups();
         if (!aSparklineGroups.empty())

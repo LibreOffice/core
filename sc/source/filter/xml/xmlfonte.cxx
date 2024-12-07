@@ -41,7 +41,7 @@ private:
     void AddFontItems(const sal_uInt16* pWhichIds, sal_uInt8 nIdCount, const SfxItemPool* pItemPool, const bool bExportDefaults);
 
 public:
-    ScXMLFontAutoStylePool_Impl( ScXMLExport& rExport, bool bEmbedFonts);
+    ScXMLFontAutoStylePool_Impl(ScDocument* pDoc, ScXMLExport& rExport, bool bEmbedFonts);
 };
 
 }
@@ -71,10 +71,9 @@ void ScXMLFontAutoStylePool_Impl::AddFontItems(const sal_uInt16* pWhichIds, sal_
     }
 }
 
-ScXMLFontAutoStylePool_Impl::ScXMLFontAutoStylePool_Impl(ScXMLExport& rExportP, bool bEmbedFonts)
+ScXMLFontAutoStylePool_Impl::ScXMLFontAutoStylePool_Impl(ScDocument* pDoc, ScXMLExport& rExportP, bool bEmbedFonts)
     : XMLFontAutoStylePool(rExportP, bEmbedFonts)
 {
-    ScDocument* pDoc = rExportP.GetDocument();
     if (!pDoc)
         return;
 
@@ -156,9 +155,10 @@ XMLFontAutoStylePool* ScXMLExport::CreateFontAutoStylePool()
     // the embedding only in one of them.
     if(!( getExportFlags() & SvXMLExportFlags::CONTENT ))
         blockFontEmbedding = true;
-    if (mpDoc && !mpDoc->IsEmbedFonts())
+    ScDocument* pDoc = GetDocument();
+    if (pDoc && !pDoc->IsEmbedFonts())
         blockFontEmbedding = true;
-    return new ScXMLFontAutoStylePool_Impl( *this, !blockFontEmbedding );
+    return new ScXMLFontAutoStylePool_Impl(pDoc, *this, !blockFontEmbedding);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

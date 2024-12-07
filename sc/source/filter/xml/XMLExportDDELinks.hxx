@@ -25,16 +25,18 @@ namespace com::sun::star::uno { template <class interface_type> class Reference;
 namespace com::sun::star::sheet { class XSpreadsheetDocument; }
 
 class ScXMLExport;
+class ScDocument;
 struct ScMatrixValue;
 
 class ScXMLExportDDELinks
 {
+    ScDocument&         m_rDoc;
     ScXMLExport&        rExport;
 
     void                WriteCell(const ScMatrixValue& aVal, sal_Int32 nRepeat);
     void                WriteTable(const sal_Int32 nPos);
 public:
-    explicit ScXMLExportDDELinks(ScXMLExport& rExport);
+    explicit ScXMLExportDDELinks(ScDocument& rDoc, ScXMLExport& rExport);
     void WriteDDELinks(const css::uno::Reference < css::sheet::XSpreadsheetDocument >& xSpreadDoc);
 };
 

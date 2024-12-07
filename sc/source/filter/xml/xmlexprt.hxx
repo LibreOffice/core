@@ -71,7 +71,6 @@ class CompileFormulaContext;
 
 class ScXMLExport : public SvXMLExport
 {
-    ScDocument*                 mpDoc;
     css::uno::Reference <css::sheet::XSpreadsheet> xCurrentTable;
 
     css::uno::Reference<css::io::XInputStream> xSourceStream;
@@ -138,11 +137,11 @@ class ScXMLExport : public SvXMLExport
     virtual void ExportContent_() override;
     virtual void ExportMeta_() override;
 
-    void CollectInternalShape( css::uno::Reference< css::drawing::XShape > const & xShape );
+    void CollectInternalShape(ScDocument& rDoc, css::uno::Reference< css::drawing::XShape > const & xShape);
 
     static css::table::CellRangeAddress GetEndAddress(const css::uno::Reference<css::sheet::XSpreadsheet>& xTable);
-    ScMyAreaLinksContainer GetAreaLinks();
-    ScMyDetectiveOpContainer GetDetectiveOpList();
+    static ScMyAreaLinksContainer GetAreaLinks(ScDocument& rDoc);
+    ScMyDetectiveOpContainer GetDetectiveOpList(ScDocument& rDoc);
     void WriteSingleColumn(const sal_Int32 nRepeatColumns, const sal_Int32 nStyleIndex,
         const sal_Int32 nIndex, const bool bIsAutoStyle, const bool bIsVisible);
     void WriteColumn(const sal_Int32 nColumn, const sal_Int32 nRepeatColumns,
@@ -150,9 +149,9 @@ class ScXMLExport : public SvXMLExport
     void OpenHeaderColumn();
     void CloseHeaderColumn();
     void ExportColumns(const sal_Int32 nTable, const ScRange& aColumnHeaderRange, const bool bHasColumnHeader);
-    void ExportExternalRefCacheStyles();
-    void ExportCellTextAutoStyles(sal_Int32 nTable);
-    void ExportFormatRanges(const sal_Int32 nStartCol, const sal_Int32 nStartRow,
+    void ExportExternalRefCacheStyles(ScDocument& rDoc);
+    void ExportCellTextAutoStyles(ScDocument& rDoc, sal_Int32 nTable);
+    void ExportFormatRanges(ScDocument& rDoc, const sal_Int32 nStartCol, const sal_Int32 nStartRow,
         const sal_Int32 nEndCol, const sal_Int32 nEndRow, const sal_Int32 nSheet);
     void WriteRowContent();
     void WriteRowStartTag(const sal_Int32 nIndex, const sal_Int32 nEmptyRows, bool bHidden, bool bFiltered);
@@ -164,43 +163,43 @@ class ScXMLExport : public SvXMLExport
                          bool bHidden, bool bFiltered);
     void OpenRow(const sal_Int32 nTable, const sal_Int32 nStartRow, const sal_Int32 nRepeatRow, ScXMLCachedRowAttrAccess& rRowAttr);
     void CloseRow(const sal_Int32 nRow);
-    void GetColumnRowHeader(bool& bHasColumnHeader, ScRange& aColumnHeaderRange,
+    void GetColumnRowHeader(ScDocument& rDoc, bool& bHasColumnHeader, ScRange& aColumnHeaderRange,
         bool& bHasRowHeader, ScRange& aRowHeaderRange, OUString& rPrintRanges) const;
     static void FillFieldGroup(ScOutlineArray* pFields, ScMyOpenCloseColumnRowGroup* pGroups);
-    void FillColumnRowGroups();
+    void FillColumnRowGroups(ScDocument& rDoc);
 
     bool GetMerged (const css::table::CellRangeAddress* pCellRange,
         const css::uno::Reference <css::sheet::XSpreadsheet>& xTable);
 
-    void WriteTable(sal_Int32 nTable, const css::uno::Reference< css::sheet::XSpreadsheet>& xTable);
-    void WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount);
-    void WriteEditCell(const EditTextObject* pText);
+    void WriteTable(ScDocument& rDoc, sal_Int32 nTable, const css::uno::Reference< css::sheet::XSpreadsheet>& xTable);
+    void WriteCell(ScDocument& rDoc, ScMyCell& aCell, sal_Int32 nEqualCellCount);
+    void WriteEditCell(ScDocument& rDoc, const EditTextObject* pText);
     void WriteMultiLineFormulaResult(const ScFormulaCell* pCell);
     void WriteAreaLink(const ScMyCell& rMyCell);
-    void WriteAnnotation(const ScMyCell& rMyCell);
-    void WriteDetective(const ScMyCell& rMyCell);
-    void ExportShape(const css::uno::Reference < css::drawing::XShape >& xShape, css::awt::Point* pPoint);
-    void WriteShapes(const ScMyCell& rMyCell);
-    void WriteTableShapes();
+    void WriteAnnotation(ScDocument& rDoc, const ScMyCell& rMyCell);
+    void WriteDetective(ScDocument& rDoc, const ScMyCell& rMyCell);
+    void ExportShape(ScDocument& rDoc, const css::uno::Reference < css::drawing::XShape >& xShape, css::awt::Point* pPoint);
+    void WriteShapes(ScDocument& rDoc, const ScMyCell& rMyCell);
+    void WriteTableShapes(ScDocument& rDoc);
     void SetRepeatAttribute(sal_Int32 nEqualCellCount, bool bIncProgress);
 
     static bool IsEditCell(const ScMyCell& rCell);
-    bool IsCellEqual(const ScMyCell& aCell1, const ScMyCell& aCell2);
+    static bool IsCellEqual(ScDocument& rDoc, const ScMyCell& aCell1, const ScMyCell& aCell2);
 
-    void WriteCalculationSettings(const css::uno::Reference <css::sheet::XSpreadsheetDocument>& xSpreadDoc);
+    void WriteCalculationSettings(ScDocument& rDoc, const css::uno::Reference <css::sheet::XSpreadsheetDocument>& xSpreadDoc);
     void WriteTableSource();
-    void WriteScenario();   // core implementation
-    void WriteTheLabelRanges(const css::uno::Reference< css::sheet::XSpreadsheetDocument >& xSpreadDoc);
-    void WriteLabelRanges( const css::uno::Reference< css::container::XIndexAccess >& xRangesIAccess, bool bColumn );
-    void WriteNamedExpressions();
-    void WriteExternalDataMapping();
-    void WriteExternalDataTransformations(const std::vector<std::shared_ptr<sc::DataTransformation>>& aDataTransformations);
-    void WriteDataStream();
-    void WriteNamedRange(ScRangeName* pRangeName);
-    void exportSparklineGroups(SCTAB nTab);
-    void ExportConditionalFormat(SCTAB nTab);
-    void WriteExternalRefCaches();
-    void WriteConsolidation();  // core implementation
+    void WriteScenario(ScDocument& rDoc);   // core implementation
+    void WriteTheLabelRanges(ScDocument& rDoc, const css::uno::Reference< css::sheet::XSpreadsheetDocument >& xSpreadDoc);
+    void WriteLabelRanges(ScDocument& rDoc, const css::uno::Reference< css::container::XIndexAccess >& xRangesIAccess, bool bColumn);
+    void WriteNamedExpressions(ScDocument& rDoc);
+    void WriteExternalDataMapping(ScDocument& rDoc);
+    void WriteExternalDataTransformations(ScDocument& rDoc, const std::vector<std::shared_ptr<sc::DataTransformation>>& rDataTransformations);
+    void WriteDataStream(ScDocument& rDoc);
+    void WriteNamedRange(ScDocument& rDoc, ScRangeName* pRangeName);
+    void exportSparklineGroups(ScDocument& rDoc, SCTAB nTab);
+    void ExportConditionalFormat(ScDocument& rDoc, SCTAB nTab);
+    void WriteExternalRefCaches(ScDocument& rDoc);
+    void WriteConsolidation(ScDocument& rDoc);  // core implementation
 
     void CollectUserDefinedNamespaces(const SfxItemPool* pPool, sal_uInt16 nAttrib);
 
@@ -238,17 +237,16 @@ public:
     void collectAutoStyles() override;
 
     static sal_Int16 GetMeasureUnit();
-    SAL_RET_MAYBENULL ScDocument*          GetDocument()           { return mpDoc; }
-    SAL_RET_MAYBENULL const ScDocument*    GetDocument() const     { return mpDoc; }
-    bool IsMatrix (const ScAddress& aCell,
-        ScRange& aCellAddress, bool& bIsFirst) const;
+    SAL_RET_MAYBENULL ScDocument* GetDocument();
+    static bool IsMatrix (ScDocument& rDoc, const ScAddress& aCell,
+        ScRange& aCellAddress, bool& bIsFirst);
 
     const rtl::Reference < XMLPropertySetMapper >& GetCellStylesPropertySetMapper() const { return xCellStylesPropertySetMapper; }
     const rtl::Reference < XMLPropertySetMapper >& GetTableStylesPropertySetMapper() const { return xTableStylesPropertySetMapper; }
 
     void SetSourceStream( const css::uno::Reference<css::io::XInputStream>& xNewStream );
 
-    void GetChangeTrackViewSettings(css::uno::Sequence<css::beans::PropertyValue>& rProps);
+    static void GetChangeTrackViewSettings(ScDocument& rDoc, css::uno::Sequence<css::beans::PropertyValue>& rProps);
     virtual void GetViewSettings(css::uno::Sequence<css::beans::PropertyValue>& rProps) override;
     virtual void GetConfigurationSettings(css::uno::Sequence<css::beans::PropertyValue>& rProps) override;
 

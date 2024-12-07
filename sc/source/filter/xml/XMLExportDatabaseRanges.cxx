@@ -55,7 +55,7 @@ constexpr OUString SC_USERLIST = u"UserList"_ustr;
 using namespace com::sun::star;
 using namespace xmloff::token;
 
-void writeSort(ScXMLExport& mrExport, const ScSortParam& aParam, const ScRange& aRange, const ScDocument* mpDoc)
+void writeSort(ScXMLExport& mrExport, const ScSortParam& aParam, const ScRange& aRange, const ScDocument& rDoc)
 {
     // Count sort items first.
     size_t nSortCount = 0;
@@ -78,7 +78,7 @@ void writeSort(ScXMLExport& mrExport, const ScSortParam& aParam, const ScRange& 
     {
         OUString aStr;
         ScRangeStringConverter::GetStringFromAddress(
-            aStr, aOutPos, mpDoc, ::formula::FormulaGrammar::CONV_OOO);
+            aStr, aOutPos, &rDoc, ::formula::FormulaGrammar::CONV_OOO);
         mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TARGET_RANGE_ADDRESS, aStr);
     }
 
@@ -119,8 +119,7 @@ void writeSort(ScXMLExport& mrExport, const ScSortParam& aParam, const ScRange& 
 }
 
 ScXMLExportDatabaseRanges::ScXMLExportDatabaseRanges(ScXMLExport& rTempExport)
-    : rExport(rTempExport),
-    pDoc( nullptr )
+    : rExport(rTempExport)
 {
 }
 
@@ -174,13 +173,13 @@ namespace {
 class WriteDatabaseRange
 {
     ScXMLExport& mrExport;
-    ScDocument* mpDoc;
+    ScDocument& mrDoc;
     sal_Int32 mnCounter;
     ScDBCollection::RangeType meRangeType;
 public:
 
-    WriteDatabaseRange(ScXMLExport& rExport, ScDocument* pDoc) :
-        mrExport(rExport), mpDoc(pDoc), mnCounter(0), meRangeType(ScDBCollection::GlobalNamed) {}
+    WriteDatabaseRange(ScXMLExport& rExport, ScDocument& rDoc) :
+        mrExport(rExport), mrDoc(rDoc), mnCounter(0), meRangeType(ScDBCollection::GlobalNamed) {}
 
     void setRangeType(ScDBCollection::RangeType eNew)
     {
@@ -227,7 +226,7 @@ private:
         rData.GetArea(aRange);
         OUString aRangeStr;
         ScRangeStringConverter::GetStringFromRange(
-            aRangeStr, aRange, mpDoc, ::formula::FormulaGrammar::CONV_OOO);
+            aRangeStr, aRange, &mrDoc, ::formula::FormulaGrammar::CONV_OOO);
         mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TARGET_RANGE_ADDRESS, aRangeStr);
 
         // various boolean flags.
@@ -271,7 +270,7 @@ private:
 
         writeImport(rData);
         writeFilter(rData);
-        writeSort(mrExport, aParam, aRange, mpDoc);
+        writeSort(mrExport, aParam, aRange, mrDoc);
         writeSubtotals(rData);
     }
 
@@ -521,7 +520,7 @@ private:
         {
             OUString aAddrStr;
             ScRangeStringConverter::GetStringFromAddress(
-                aAddrStr, ScAddress(aParam.nDestCol, aParam.nDestRow, aParam.nDestTab), mpDoc, ::formula::FormulaGrammar::CONV_OOO);
+                aAddrStr, ScAddress(aParam.nDestCol, aParam.nDestRow, aParam.nDestTab), &mrDoc, ::formula::FormulaGrammar::CONV_OOO);
             mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TARGET_RANGE_ADDRESS, aAddrStr);
         }
 
@@ -530,7 +529,7 @@ private:
         {
             OUString aAddrStr;
             ScRangeStringConverter::GetStringFromRange(
-                aAddrStr, aAdvSource, mpDoc, ::formula::FormulaGrammar::CONV_OOO);
+                aAddrStr, aAdvSource, &mrDoc, ::formula::FormulaGrammar::CONV_OOO);
             if (!aAddrStr.isEmpty())
                 mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CONDITION_SOURCE_RANGE_ADDRESS, aAddrStr);
         }
@@ -703,18 +702,14 @@ private:
 
 }
 
-void ScXMLExportDatabaseRanges::WriteDatabaseRanges()
+void ScXMLExportDatabaseRanges::WriteDatabaseRanges(ScDocument& rDoc)
 {
-    pDoc = rExport.GetDocument();
-    if (!pDoc)
-        return;
-
     // Get sheet-local anonymous ranges.
-    SCTAB nTabCount = pDoc->GetTableCount();
+    SCTAB nTabCount = rDoc.GetTableCount();
     std::map<SCTAB, const ScDBData*> aSheetDBs;
     for (SCTAB i = 0; i < nTabCount; ++i)
     {
-        const ScDBData* p = pDoc->GetAnonymousDBData(i);
+        const ScDBData* p = rDoc.GetAnonymousDBData(i);
         if (p)
             aSheetDBs.emplace(i, p);
     }
@@ -722,7 +717,7 @@ void ScXMLExportDatabaseRanges::WriteDatabaseRanges()
     bool bHasRanges = !aSheetDBs.empty();
 
     // See if we have global ranges.
-    ScDBCollection* pDBCollection = pDoc->GetDBCollection();
+    ScDBCollection* pDBCollection = rDoc.GetDBCollection();
     if (pDBCollection)
     {
         if (!pDBCollection->getNamedDBs().empty() || !pDBCollection->getAnonDBs().empty())
@@ -735,7 +730,7 @@ void ScXMLExportDatabaseRanges::WriteDatabaseRanges()
 
     SvXMLElementExport aElemDRs(rExport, XML_NAMESPACE_TABLE, XML_DATABASE_RANGES, true, true);
 
-    WriteDatabaseRange func(rExport, pDoc);
+    WriteDatabaseRange func(rExport, rDoc);
 
     if (pDBCollection)
     {
