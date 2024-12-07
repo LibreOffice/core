@@ -236,7 +236,7 @@ std::vector<int> QtInstanceTreeView::get_selected_rows() const
     std::vector<int> aSelectedRows;
 
     GetQtInstance().RunInMainThread([&] {
-        const QModelIndexList aSelectionIndexes = m_pSelectionModel->selection().indexes();
+        const QModelIndexList aSelectionIndexes = m_pSelectionModel->selectedRows();
         for (const QModelIndex& aIndex : aSelectionIndexes)
             aSelectedRows.push_back(aIndex.row());
     });
