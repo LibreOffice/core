@@ -4975,10 +4975,21 @@ bool INetURLObject::IsExoticProtocol() const
     {
         return true;
     }
-    if (isSchemeEqualTo(u"vnd.sun.star.pkg") || isSchemeEqualTo(u"vnd.sun.star.zip"))
+    if (m_eScheme == INetProtocol::VndSunStarPkg) {
+        return INetURLObject(GetHost(INetURLObject::DecodeMechanism::WithCharset))
+            .IsExoticProtocol();
+    }
+    if (isSchemeEqualTo(u"vnd.sun.star.zip"))
     {
-        OUString sPayloadURL = GetURLPath(INetURLObject::DecodeMechanism::WithCharset);
-        return sPayloadURL.startsWith(u"//") && INetURLObject(sPayloadURL.subView(2)).IsExoticProtocol();
+        OUString sPayloadURL = GetURLPath(INetURLObject::DecodeMechanism::NONE);
+        if (!sPayloadURL.startsWith(u"//")) {
+            return false;
+        }
+        auto const find = [&sPayloadURL](auto c) {
+            auto const n = sPayloadURL.indexOf(c, 2);
+            return n == -1 ? sPayloadURL.getLength() : n;
+        };
+        return INetURLObject(decode(sPayloadURL.copy(2, std::min(find('/'), find('?')) - 2), INetURLObject::DecodeMechanism::WithCharset)).IsExoticProtocol();
     }
     return false;
 }
