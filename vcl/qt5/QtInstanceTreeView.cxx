@@ -142,7 +142,12 @@ void QtInstanceTreeView::unselect(int nPos)
     });
 }
 
-void QtInstanceTreeView::remove(int) { assert(false && "Not implemented yet"); }
+void QtInstanceTreeView::remove(int nPos)
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] { m_pModel->removeRow(nPos); });
+}
 
 OUString QtInstanceTreeView::get_text(int nRow, int nCol) const
 {

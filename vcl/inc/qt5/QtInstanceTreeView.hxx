@@ -42,7 +42,7 @@ public:
     virtual int get_selected_index() const override;
     virtual void select(int nPos) override;
     virtual void unselect(int nPos) override;
-    virtual void remove(int pos) override;
+    virtual void remove(int nPos) override;
     virtual OUString get_text(int nRow, int nCol = -1) const override;
     virtual void set_text(int nRow, const OUString& rText, int nCol = -1) override;
     virtual void set_sensitive(int row, bool bSensitive, int col = -1) override;
