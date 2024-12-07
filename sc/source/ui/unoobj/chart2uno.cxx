@@ -739,19 +739,19 @@ void Chart2Positioner::createPositionMap()
         SCCOL nCol1 = s.Col(), nCol2 = e.Col();
         SCROW nRow1 = s.Row(), nRow2 = e.Row();
         SCTAB nTab1 = s.Tab(), nTab2 = e.Tab();
-        assert(nTab2 < MAXTABCOUNT);
 
         for (SCTAB nTab = nTab1; nTab <= nTab2; ++nTab)
         {
-            // columns on secondary sheets are appended; we treat them as if
-            // all columns are on the same sheet.  TODO: We can't assume that
-            // the column range is 16-bit; remove that restriction.
-            sal_uInt32 nInsCol = (static_cast<sal_uInt32>(nTab) << 16) |
-                (bNoGlue ? 0 : static_cast<sal_uInt32>(nCol1));
+            assert (nCol1 >= 0);
+            sal_uInt32 nInsCol = bNoGlue ? 0 : static_cast<sal_uInt32>(nCol1) & 0xFFFF;
 
             for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol, ++nInsCol)
             {
-                FormulaTokenMap& rCol = aCols[nInsCol];
+                // columns on secondary sheets are appended; we treat them as if
+                // all columns are on the same sheet.  TODO: We can't assume that
+                // the column range is 16-bit; remove that restriction.
+                sal_uInt32 nInsKey = (static_cast<sal_uInt32>(nTab) << 16) | nInsCol;
+                FormulaTokenMap& rCol = aCols[nInsKey];
 
                 auto nInsRow = bNoGlue ? nNoGlueRow : nRow1;
                 for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow, ++nInsRow)
