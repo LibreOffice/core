@@ -164,7 +164,10 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
         }
         else
         {
-            pObject = new QDialogButtonBox(pParentWidget);
+            QDialogButtonBox* pButtonBox = new QDialogButtonBox(pParentWidget);
+            if (hasOrientationVertical(rMap))
+                pButtonBox->setOrientation(Qt::Vertical);
+            pObject = pButtonBox;
         }
     }
     else if (sName == u"GtkButton")
