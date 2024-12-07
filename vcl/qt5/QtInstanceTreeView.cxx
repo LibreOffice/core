@@ -301,7 +301,7 @@ OUString QtInstanceTreeView::get_id(int nPos) const
 
     OUString sId;
     GetQtInstance().RunInMainThread([&] {
-        QVariant aRoleData = m_pModel->data(m_pModel->index(0, nPos), ROLE_ID);
+        QVariant aRoleData = m_pModel->data(m_pModel->index(nPos, 0), ROLE_ID);
         if (aRoleData.canConvert<QString>())
             sId = toOUString(aRoleData.toString());
     });
