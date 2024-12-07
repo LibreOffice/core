@@ -30,7 +30,7 @@ class ScConditionalFormatList;
 class ScCondFormatDlgData
 {
 public:
-    ScCondFormatDlgData(std::shared_ptr<ScConditionalFormatList> pCondFormats, sal_Int32 nItem,
+    ScCondFormatDlgData(std::shared_ptr<ScConditionalFormatList> pCondFormats, sal_uInt32 nItem,
                         bool bManaged);
 
     ScCondFormatDlgData(ScCondFormatDlgData const&) = default;
@@ -38,7 +38,7 @@ public:
 
     bool IsManaged() const;
     condformat::dialog::ScCondFormatDialogType GetDialogType() const;
-    sal_Int32 GetIndex() const;
+    sal_uInt32 GetIndex() const;
 
     void SetDialogType(condformat::dialog::ScCondFormatDialogType eType);
 
@@ -46,7 +46,7 @@ public:
 
 private:
     std::shared_ptr<ScConditionalFormatList> mpCondFormats;
-    sal_Int32 mnItem;
+    sal_uInt32 mnItem;
     condformat::dialog::ScCondFormatDialogType meDialogType;
     bool mbManaged;
 };

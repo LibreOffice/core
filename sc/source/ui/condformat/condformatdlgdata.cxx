@@ -14,7 +14,7 @@
 #include <condformatdlgdata.hxx>
 
 ScCondFormatDlgData::ScCondFormatDlgData(std::shared_ptr<ScConditionalFormatList> pCondFormats,
-        sal_Int32 nItem, bool bManaged):
+        sal_uInt32 nItem, bool bManaged):
     mpCondFormats(std::move(pCondFormats)),
     mnItem(nItem),
     meDialogType(condformat::dialog::CONDITION),
@@ -32,7 +32,7 @@ condformat::dialog::ScCondFormatDialogType ScCondFormatDlgData::GetDialogType() 
     return meDialogType;
 }
 
-sal_Int32 ScCondFormatDlgData::GetIndex() const
+sal_uInt32 ScCondFormatDlgData::GetIndex() const
 {
     return mnItem;
 }

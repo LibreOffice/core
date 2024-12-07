@@ -2958,7 +2958,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         else if (nRet == DLG_RET_EDIT)
                         {
                             ScConditionalFormat* pFormat = pDlg->GetCondFormatSelected();
-                            sal_Int32 nIndex = pFormat ? pFormat->GetKey() : -1;
+                            sal_uInt32 nIndex = pFormat ? pFormat->GetKey() : sal_uInt32(-1);
                             // Put the xml string parameter to initialize the
                             // Conditional Format Dialog. ( edit selected conditional format )
                             pTabViewShell->setScCondFormatDlgItem(

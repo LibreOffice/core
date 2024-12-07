@@ -78,7 +78,7 @@ public:
 class ScCondFormatDlg : public ScAnyRefDlgController
 {
 private:
-    sal_Int32 mnKey;
+    sal_uInt32 mnKey;
 
     ScAddress maPos;
     ScViewData* mpViewData;
