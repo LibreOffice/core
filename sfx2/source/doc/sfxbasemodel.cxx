@@ -1188,6 +1188,19 @@ void SAL_CALL SfxBaseModel::setArgs(const Sequence<beans::PropertyValue>& aArgs)
             pMedium->GetItemSet().Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, rArg.Value));
             ok = true;
         }
+        else if (rArg.Name == "FilterName")
+        {
+            // HACK: Needed a way to tweak the filter after loading has started,
+            // but changing this must be avoided unless clearly intentional.
+            if (aArgs.size() == 1)
+            {
+                if (rArg.Value >>= sValue)
+                {
+                    pMedium->GetItemSet().Put(SfxStringItem(SID_FILTER_NAME, sValue));
+                    ok = true;
+                }
+            }
+        }
         if (!ok)
         {
             throw lang::IllegalArgumentException("Setting property not supported: " + rArg.Name,
