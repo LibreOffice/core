@@ -589,7 +589,7 @@ OUString VCLXAccessibleToolBox::getImplementationName()
 Sequence< OUString > VCLXAccessibleToolBox::getSupportedServiceNames()
 {
     return comphelper::concatSequences(VCLXAccessibleComponent::getSupportedServiceNames(),
-                                       Sequence<OUString>{u"com.sun.star.accessibility.AccessibleToolBox"_ustr});
+                                       std::initializer_list<OUString>{u"com.sun.star.accessibility.AccessibleToolBox"_ustr});
 }
 
 // XAccessibleContext

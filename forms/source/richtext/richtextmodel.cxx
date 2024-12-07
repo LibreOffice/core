@@ -263,7 +263,7 @@ namespace frm
 
     Sequence< OUString > SAL_CALL ORichTextModel::getSupportedServiceNames()
     {
-        Sequence< OUString > aOwnNames {
+        static constexpr OUString aOwnNames[] {
             FRM_SUN_COMPONENT_RICHTEXTCONTROL,
             u"com.sun.star.text.TextRange"_ustr,
             u"com.sun.star.style.CharacterProperties"_ustr,

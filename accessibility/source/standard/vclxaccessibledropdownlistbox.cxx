@@ -39,7 +39,7 @@ OUString VCLXAccessibleDropDownListBox::getImplementationName()
 Sequence< OUString > VCLXAccessibleDropDownListBox::getSupportedServiceNames()
 {
     return comphelper::concatSequences(VCLXAccessibleBox::getSupportedServiceNames(),
-                                       Sequence<OUString>{u"com.sun.star.accessibility.AccessibleDropDownListBox"_ustr});
+                                       std::initializer_list<OUString>{u"com.sun.star.accessibility.AccessibleDropDownListBox"_ustr});
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -3717,11 +3717,11 @@ Sequence< OUString > SAL_CALL ODatabaseForm::getSupportedServiceNames()
 
     // concat without own services
     return ::comphelper::concatSequences(
-        css::uno::Sequence<OUString> {
+        aServices,
+        std::initializer_list<OUString>{
             FRM_SUN_FORMCOMPONENT, u"com.sun.star.form.FormComponents"_ustr,
             FRM_SUN_COMPONENT_FORM, FRM_SUN_COMPONENT_HTMLFORM,
-            FRM_SUN_COMPONENT_DATAFORM, FRM_COMPONENT_FORM },
-        aServices
+            FRM_SUN_COMPONENT_DATAFORM, FRM_COMPONENT_FORM }
     );
 }
 

@@ -61,10 +61,10 @@ Any SAL_CALL java_sql_CallableStatement::queryInterface( const Type & rType )
 
 css::uno::Sequence< css::uno::Type > SAL_CALL java_sql_CallableStatement::getTypes(  )
 {
-    ::cppu::OTypeCollection aTypes( cppu::UnoType<css::sdbc::XRow>::get(),
-                                    cppu::UnoType<css::sdbc::XOutParameters>::get());
+    css::uno::Type aTypes[] { cppu::UnoType<css::sdbc::XRow>::get(),
+                              cppu::UnoType<css::sdbc::XOutParameters>::get() };
 
-    return ::comphelper::concatSequences(aTypes.getTypes(),java_sql_PreparedStatement::getTypes());
+    return ::comphelper::concatSequences(java_sql_PreparedStatement::getTypes(), aTypes);
 }
 
 sal_Bool SAL_CALL java_sql_CallableStatement::wasNull(  )

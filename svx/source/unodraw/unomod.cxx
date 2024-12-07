@@ -468,7 +468,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoDrawingModel::getAvailableServiceNames(
 {
     const uno::Sequence< OUString > aSNS_ORG( SvxFmMSFactory::getAvailableServiceNames() );
 
-    uno::Sequence< OUString > aSNS{
+    static constexpr OUString aSNS[] {
         u"com.sun.star.drawing.DashTable"_ustr,
         u"com.sun.star.drawing.GradientTable"_ustr,
         u"com.sun.star.drawing.HatchTable"_ustr,

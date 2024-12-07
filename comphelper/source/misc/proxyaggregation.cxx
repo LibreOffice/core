@@ -208,7 +208,7 @@ namespace comphelper
         return comphelper::concatSequences(
                 OComponentProxyAggregationHelper::getTypes(),
                 // append XComponent, coming from WeakComponentImplHelperBase
-                Sequence { cppu::UnoType<XComponent>::get() });
+                std::initializer_list<Type>{ cppu::UnoType<XComponent>::get() });
     }
 
 

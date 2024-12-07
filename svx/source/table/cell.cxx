@@ -834,7 +834,7 @@ void SAL_CALL Cell::release() noexcept
 Sequence< Type > SAL_CALL Cell::getTypes(  )
 {
     return comphelper::concatSequences( SvxUnoTextBase::getTypes(),
-        Sequence {
+        std::initializer_list<Type>{
             cppu::UnoType<XMergeableCell>::get(),
             cppu::UnoType<XLayoutConstrains>::get() });
 }

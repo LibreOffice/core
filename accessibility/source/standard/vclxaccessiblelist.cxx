@@ -602,7 +602,7 @@ OUString VCLXAccessibleList::getImplementationName()
 Sequence< OUString > VCLXAccessibleList::getSupportedServiceNames()
 {
     return comphelper::concatSequences(VCLXAccessibleComponent::getSupportedServiceNames(),
-                                       Sequence<OUString>{u"com.sun.star.accessibility.AccessibleList"_ustr});
+                                       std::initializer_list<OUString>{u"com.sun.star.accessibility.AccessibleList"_ustr});
 }
 
 void VCLXAccessibleList::UpdateVisibleLineCount()

@@ -1508,7 +1508,7 @@ css::uno::Sequence<OUString> SAL_CALL OBoundControlModel::getSupportedServiceNam
 
 Sequence< OUString > OBoundControlModel::getSupportedServiceNames_Static()
 {
-    Sequence<OUString> aOwnServiceNames { u"com.sun.star.form.DataAwareControlModel"_ustr };
+    static constexpr OUString aOwnServiceNames[] { u"com.sun.star.form.DataAwareControlModel"_ustr };
     return ::comphelper::concatSequences(
         OControlModel::getSupportedServiceNames_Static(),
         aOwnServiceNames

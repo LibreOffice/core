@@ -550,7 +550,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoTextField::getTypes()
     {
         maTypeSequence = comphelper::concatSequences(
             OComponentHelper::getTypes(),
-            uno::Sequence {
+            std::initializer_list<uno::Type>{
                 cppu::UnoType<text::XTextField>::get(),
                 cppu::UnoType<beans::XPropertySet>::get(),
                 cppu::UnoType<lang::XServiceInfo>::get(),

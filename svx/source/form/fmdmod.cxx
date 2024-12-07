@@ -81,12 +81,8 @@ using namespace ::svxform;
         FM_SUN_COMPONENT_IMAGECONTROL
     };
 
-    static const sal_uInt16 nSvxComponentServiceNameListCount = SAL_N_ELEMENTS(aSvxComponentServiceNameList);
-
-    auto aSeq( comphelper::arrayToSequence< OUString >(aSvxComponentServiceNameList, nSvxComponentServiceNameListCount) );
-
     ::com::sun::star::uno::Sequence< OUString > aParentSeq( SvxUnoDrawMSFactory::getAvailableServiceNames() );
-    return comphelper::concatSequences( aParentSeq, aSeq );
+    return comphelper::concatSequences(aParentSeq, aSvxComponentServiceNameList);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

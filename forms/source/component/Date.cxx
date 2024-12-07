@@ -119,7 +119,7 @@ css::uno::Reference< css::util::XCloneable > SAL_CALL ODateModel::createClone()
 
 css::uno::Sequence<OUString> SAL_CALL ODateModel::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals {
+    static constexpr OUString vals[] {
        BINDABLE_CONTROL_MODEL,
        DATA_AWARE_CONTROL_MODEL,
        VALIDATABLE_CONTROL_MODEL,

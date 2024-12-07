@@ -73,7 +73,7 @@ namespace frm
         // to benefit from the functionality for binding to spreadsheet cells
     Sequence< OUString > SAL_CALL OSpinButtonModel::getSupportedServiceNames()
     {
-        Sequence< OUString > aOwnNames { FRM_SUN_COMPONENT_SPINBUTTON, BINDABLE_INTEGER_VALUE_RANGE };
+        static constexpr OUString aOwnNames[] { FRM_SUN_COMPONENT_SPINBUTTON, BINDABLE_INTEGER_VALUE_RANGE };
 
         return ::comphelper::combineSequences(
             getAggregateServiceNames(),

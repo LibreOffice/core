@@ -48,7 +48,7 @@ using namespace ::com::sun::star::util;
 Sequence<Type> OFileControlModel::_getTypes()
 {
     static Sequence<Type> const aTypes =
-        concatSequences(OControlModel::_getTypes(), Sequence<Type>{ cppu::UnoType<XReset>::get() });
+        concatSequences(OControlModel::_getTypes(), std::initializer_list<Type>{ cppu::UnoType<XReset>::get() });
     return aTypes;
 }
 
