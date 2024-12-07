@@ -41,41 +41,17 @@ constexpr auto PROGRESSBAR_DEFAULT_BLOCKVALUE = 1;
 constexpr sal_Int32 PROGRESSBAR_LINECOLOR_BRIGHT = sal_Int32(COL_WHITE);
 constexpr sal_Int32 PROGRESSBAR_LINECOLOR_SHADOW = sal_Int32(COL_BLACK);
 
-class ProgressBar final : public css::awt::XControlModel
-                    , public css::awt::XProgressBar
-                    , public BaseControl
+using ProgressBar_BASE = cppu::ImplInheritanceHelper<BaseControl,
+                                                     css::awt::XControlModel,
+                                                     css::awt::XProgressBar>;
+
+class ProgressBar final : public ProgressBar_BASE
 {
 public:
 
     ProgressBar( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     virtual ~ProgressBar() override;
-
-    //  XInterface
-
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-
-    /**
-        @short      increment refcount
-        @seealso    XInterface
-        @seealso    release()
-        @onerror    A RuntimeException is thrown.
-    */
-
-    virtual void SAL_CALL acquire() noexcept override;
-
-    /**
-        @short      decrement refcount
-        @seealso    XInterface
-        @seealso    acquire()
-        @onerror    A RuntimeException is thrown.
-    */
-
-    virtual void SAL_CALL release() noexcept override;
-
-    //  XTypeProvider
-
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
 
     //  XProgressBar
 

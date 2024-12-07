@@ -40,50 +40,13 @@ namespace unocontrols {
 //  construct/destruct
 
 BaseContainerControl::BaseContainerControl( const Reference< XComponentContext >& rxContext )
-    : BaseControl   ( rxContext  )
+    : BaseContainerControl_BASE(rxContext)
     , m_aListeners  ( m_aMutex  )
 {
 }
 
 BaseContainerControl::~BaseContainerControl()
 {
-}
-
-//  XInterface
-
-Any SAL_CALL BaseContainerControl::queryInterface( const Type& rType )
-{
-    // Ask for my own supported interfaces ...
-    // Attention: XTypeProvider and XInterface are supported by WeakComponentImplHelper!
-    Any aReturn ( ::cppu::queryInterface(   rType                                       ,
-                                               static_cast< XControlModel*      > ( this )  ,
-                                               static_cast< XControlContainer*  > ( this )
-                                        )
-                );
-
-    // If searched interface supported by this class ...
-    if ( aReturn.hasValue() )
-    {
-        // ... return this information.
-        return aReturn;
-    }
-    else
-    {
-        // Else; ... ask baseclass for interfaces!
-        return BaseControl::queryInterface( rType );
-    }
-}
-
-//  XTypeProvider
-
-Sequence< Type > SAL_CALL BaseContainerControl::getTypes()
-{
-    static OTypeCollection ourTypeCollection(
-                cppu::UnoType<XControlModel>::get(),
-                cppu::UnoType<XControlContainer>::get(),
-                BaseControl::getTypes() );
-
-    return ourTypeCollection.getTypes();
 }
 
 //  XControl

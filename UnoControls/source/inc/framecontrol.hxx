@@ -31,9 +31,10 @@ namespace unocontrols { class OConnectionPointContainerHelper; }
 
 namespace unocontrols {
 
-class FrameControl final : public css::awt::XControlModel
-                    , public css::lang::XConnectionPointContainer
-                    , public BaseControl                                // This order is necessary for right initialization of m_aMutex!
+using FrameControl_BASE = cppu::ImplInheritanceHelper<BaseControl, css::awt::XControlModel,
+                                                      css::lang::XConnectionPointContainer>;
+
+class FrameControl final : public FrameControl_BASE     // This order is necessary for right initialization of m_aMutex!
                     , public ::cppu::OBroadcastHelper
                     , public ::cppu::OPropertySetHelper
 {

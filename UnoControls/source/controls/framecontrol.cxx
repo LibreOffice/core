@@ -27,6 +27,7 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <osl/diagnose.h>
@@ -58,7 +59,7 @@ enum PropertyHandle  // values represent index in PropertyArray
 //  construct/destruct
 
 FrameControl::FrameControl( const Reference< XComponentContext >& rxContext)
-    : BaseControl                   ( rxContext                                     )
+    : FrameControl_BASE             ( rxContext                                     )
     , OBroadcastHelper              ( m_aMutex                                      )
     , OPropertySetHelper            ( *static_cast< OBroadcastHelper * >(this)      )
     , m_aConnectionPointContainer   ( new OConnectionPointContainerHelper(m_aMutex) )
@@ -72,23 +73,10 @@ FrameControl::~FrameControl()
 //  XInterface
 Any SAL_CALL FrameControl::queryInterface( const Type& rType )
 {
-    // Ask for my own supported interfaces ...
-    // Attention: XTypeProvider and XInterface are supported by WeakComponentImplHelper!
-    Any aReturn ( ::cppu::queryInterface(   rType                                               ,
-                                               static_cast< XControlModel*              > ( this )  ,
-                                               static_cast< XConnectionPointContainer*  > ( this )
-                                        )
-                );
-
+    Any aReturn = OPropertySetHelper::queryInterface(rType);
     if (aReturn.hasValue())
         return aReturn;
-
-    // If searched interface not supported by this class ...
-    // ... ask baseclasses.
-    aReturn = OPropertySetHelper::queryInterface(rType);
-    if (aReturn.hasValue())
-        return aReturn;
-    return BaseControl::queryInterface(rType);
+    return FrameControl_BASE::queryInterface(rType);
 }
 
 //  XInterface
@@ -98,7 +86,7 @@ void SAL_CALL FrameControl::acquire() noexcept
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
 
     // Forward to baseclass
-    BaseControl::acquire();
+    FrameControl_BASE::acquire();
 }
 
 //  XInterface
@@ -108,20 +96,16 @@ void SAL_CALL FrameControl::release() noexcept
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
 
     // Forward to baseclass
-    BaseControl::release();
+    FrameControl_BASE::release();
 }
 
 //  XTypeProvider
 
 Sequence< Type > SAL_CALL FrameControl::getTypes()
 {
-    static OTypeCollection ourTypeCollection(
-                cppu::UnoType<XControlModel>::get(),
-                cppu::UnoType<XControlContainer>::get(),
-                cppu::UnoType<XConnectionPointContainer>::get(),
-                BaseControl::getTypes() );
-
-    return ourTypeCollection.getTypes();
+    static Sequence myTypes = comphelper::concatSequences(FrameControl_BASE::getTypes(),
+                                                          OPropertySetHelper::getTypes());
+    return myTypes;
 }
 
 OUString FrameControl::getImplementationName()

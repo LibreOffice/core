@@ -39,81 +39,18 @@ namespace unocontrols { class OMRCListenerMultiplexerHelper; }
 
 namespace unocontrols {
 
-class BaseControl   : public css::lang::XServiceInfo
-                    , public css::awt::XPaintListener
-                    , public css::awt::XWindowListener
-                    , public css::awt::XView
-                    , public css::awt::XWindow
-                    , public css::awt::XControl
-                    , public cppu::BaseMutex
-                    , public ::cppu::WeakComponentImplHelper<>
+class BaseControl : public cppu::BaseMutex,
+                    public cppu::WeakComponentImplHelper<css::lang::XServiceInfo,
+                                                         css::awt::XPaintListener,
+                                                         css::awt::XWindowListener,
+                                                         css::awt::XView,
+                                                         css::awt::XWindow,
+                                                         css::awt::XControl>
 {
 public:
     BaseControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     virtual ~BaseControl() override;
-
-    //  XInterface
-
-    /**
-        @short      give answer, if interface is supported
-        @descr      The interfaces are searched by type.
-
-        @seealso    XInterface
-
-        @param      "rType" is the type of searched interface.
-
-        @return     Any     information about found interface
-
-        @onerror    A RuntimeException is thrown.
-    */
-
-    virtual css::uno::Any SAL_CALL queryInterface(
-        const css::uno::Type& aType
-    ) override;
-
-    /**
-        @short      increment refcount
-        @seealso    XInterface
-        @seealso    release()
-        @onerror    A RuntimeException is thrown.
-    */
-
-    virtual void SAL_CALL acquire() noexcept override;
-
-    /**
-        @short      decrement refcount
-        @seealso    XInterface
-        @seealso    acquire()
-        @onerror    A RuntimeException is thrown.
-    */
-
-    virtual void SAL_CALL release() noexcept override;
-
-    //  XTypeProvider
-
-    /**
-        @short      get information about supported interfaces
-        @seealso    XTypeProvider
-        @return     Sequence of types of all supported interfaces
-
-        @onerror    A RuntimeException is thrown.
-    */
-
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
-
-    /**
-        @short      get implementation id
-        @descr      This ID is necessary for UNO-caching. If there no ID, cache is disabled.
-                    Another way, cache is enabled.
-
-        @seealso    XTypeProvider
-        @return     ID as Sequence of byte
-
-        @onerror    A RuntimeException is thrown.
-    */
-
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
     //  XServiceInfo
 
@@ -265,7 +202,7 @@ public:
     virtual void SAL_CALL windowHidden( const css::lang::EventObject& aEvent ) override;
 
 protected:
-    using WeakComponentImplHelper::disposing;
+    using WeakComponentImplHelperBase::disposing;
 
     const css::uno::Reference< css::uno::XComponentContext >& impl_getComponentContext() const { return m_xComponentContext;}
 

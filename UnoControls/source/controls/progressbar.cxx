@@ -34,7 +34,7 @@ namespace unocontrols {
 //  construct/destruct
 
 ProgressBar::ProgressBar( const Reference< XComponentContext >& rxContext )
-    : BaseControl           (    rxContext                   )
+    : ProgressBar_BASE      (    rxContext                   )
     , m_bHorizontal         (    PROGRESSBAR_DEFAULT_HORIZONTAL         )
     , m_aBlockSize          (    PROGRESSBAR_DEFAULT_BLOCKDIMENSION     )
     , m_nForegroundColor    (    PROGRESSBAR_DEFAULT_FOREGROUNDCOLOR    )
@@ -48,57 +48,6 @@ ProgressBar::ProgressBar( const Reference< XComponentContext >& rxContext )
 
 ProgressBar::~ProgressBar()
 {
-}
-
-//  XInterface
-Any SAL_CALL ProgressBar::queryInterface( const Type& rType )
-{
-    // Ask for my own supported interfaces ...
-    // Attention: XTypeProvider and XInterface are supported by WeakComponentImplHelper!
-    Any aReturn ( ::cppu::queryInterface(   rType                                   ,
-                                            static_cast< XControlModel* > ( this )  ,
-                                            static_cast< XProgressBar*  > ( this )
-                                        )
-                );
-
-    if (aReturn.hasValue())
-        return aReturn;
-
-    // If searched interface not supported by this class ...
-    // ... ask baseclasses.
-    return BaseControl::queryInterface(rType);
-}
-
-//  XInterface
-void SAL_CALL ProgressBar::acquire() noexcept
-{
-    // Attention:
-    //  Don't use mutex or guard in this method!!! Is a method of XInterface.
-
-    // Forward to baseclass
-    BaseControl::acquire();
-}
-
-//  XInterface
-void SAL_CALL ProgressBar::release() noexcept
-{
-    // Attention:
-    //  Don't use mutex or guard in this method!!! Is a method of XInterface.
-
-    // Forward to baseclass
-    BaseControl::release();
-}
-
-//  XTypeProvider
-
-Sequence< Type > SAL_CALL ProgressBar::getTypes()
-{
-    static OTypeCollection ourTypeCollection(
-                cppu::UnoType<XControlModel>::get(),
-                cppu::UnoType<XProgressBar>::get(),
-                BaseControl::getTypes() );
-
-    return ourTypeCollection.getTypes();
 }
 
 //  XProgressBar

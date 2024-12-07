@@ -33,46 +33,17 @@ struct IMPL_ControlInfo
     OUString                                  sName;
 };
 
-class BaseContainerControl  : public css::awt::XControlModel
-                            , public css::awt::XControlContainer
-                            , public BaseControl
+using BaseContainerControl_BASE = cppu::ImplInheritanceHelper<BaseControl,
+                                                              css::awt::XControlModel,
+                                                              css::awt::XControlContainer>;
+
+class BaseContainerControl : public BaseContainerControl_BASE
 {
 public:
 
     BaseContainerControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     virtual ~BaseContainerControl() override;
-
-    //  XInterface
-
-    /**
-        @short      give answer, if interface is supported
-        @descr      The interfaces are searched by type.
-
-        @seealso    XInterface
-
-        @param      "rType" is the type of searched interface.
-
-        @return     Any     information about found interface
-
-        @onerror    A RuntimeException is thrown.
-    */
-
-    virtual css::uno::Any SAL_CALL queryInterface(
-        const css::uno::Type& aType
-    ) override;
-
-    //  XTypeProvider
-
-    /**
-        @short      get information about supported interfaces
-        @seealso    XTypeProvider
-        @return     Sequence of types of all supported interfaces
-
-        @onerror    A RuntimeException is thrown.
-    */
-
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
 
     //  XControl
 
@@ -121,7 +92,7 @@ public:
     virtual void SAL_CALL setVisible( sal_Bool bVisible ) override;
 
 protected:
-    using WeakComponentImplHelper::disposing;
+    using WeakComponentImplHelperBase::disposing;
 
     virtual css::awt::WindowDescriptor impl_getWindowDescriptor(
         const css::uno::Reference< css::awt::XWindowPeer >& xParentPeer
