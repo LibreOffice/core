@@ -1129,7 +1129,10 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
         if( bMT_EMAIL )
         {
             // Reset internal mail accounting data
-            m_pImpl->m_xLastMessage.clear();
+            {
+                std::unique_lock aGuard(m_pImpl->m_aAllEmailSendMutex);
+                m_pImpl->m_xLastMessage.clear();
+            }
 
             xMailDispatcher.set( new MailDispatcher(rMergeDescriptor.xSmtpServer) );
             xMailListener = new MailDispatcherListener_Impl( *this );
