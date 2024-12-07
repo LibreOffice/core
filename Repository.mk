@@ -745,7 +745,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,spsuppfiles
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooobinarytable, \
 	$(if $(WINDOWS_SDK_HOME),\
 		instooofiltmsi \
-		inst_msu_msi \
 		qslnkmsi \
 		reg_dlls \
 		reg4allmsdoc \

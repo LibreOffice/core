@@ -1,1 +1,0 @@
-module msc-externals copies the bundled MSVC runtime DLLs into instdir

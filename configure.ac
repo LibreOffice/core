@@ -4158,7 +4158,6 @@ cygwin*|wsl*)
         SCPDEFS="$SCPDEFS -DWINDOWS_AARCH64"
         WIN_HOST_ARCH="arm64"
         WIN_HOST_BITS=64
-        with_ucrt_dir=no
         ;;
     *)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
@@ -8945,23 +8944,6 @@ if test "$_os" = "Linux" -a "$host_cpu" = "powerpc"; then
 fi
 AC_SUBST([JITC_PROCESSOR_TYPE])
 
-# Misc Windows Stuff
-AC_ARG_WITH(ucrt-dir,
-    AS_HELP_STRING([--with-ucrt-dir],
-        [path to the directory with the arch-specific MSU packages of the Windows Universal CRT redistributables
-        (MS KB 2999226) for packaging into the installsets (without those the target system needs to install
-        the UCRT or Visual C++ Runtimes manually). The directory must contain the following 6 files:
-            Windows6.1-KB2999226-x64.msu
-            Windows6.1-KB2999226-x86.msu
-            Windows8.1-KB2999226-x64.msu
-            Windows8.1-KB2999226-x86.msu
-            Windows8-RT-KB2999226-x64.msu
-            Windows8-RT-KB2999226-x86.msu
-        A zip archive including those files is available from Microsoft site:
-        https://www.microsoft.com/en-us/download/details.aspx?id=48234]),
-,)
-
-UCRT_REDISTDIR="$with_ucrt_dir"
 if test $_os = "WINNT"; then
     find_msvc_x64_dlls
     MSVC_DLL_PATH=`win_short_path_for_make "$msvcdllpath"`
@@ -8983,36 +8965,8 @@ if test $_os = "WINNT"; then
             break
         fi
     done
-
-    if test "$UCRT_REDISTDIR" = "no"; then
-        dnl explicitly disabled
-        UCRT_REDISTDIR=""
-    else
-        PathFormat "$UCRT_REDISTDIR"
-        UCRT_REDISTDIR="$formatted_path"
-        UCRT_REDISTDIR_unix="$formatted_path_unix"
-        if ! test -f "$UCRT_REDISTDIR_unix/Windows6.1-KB2999226-x64.msu" -a \
-                  -f "$UCRT_REDISTDIR_unix/Windows6.1-KB2999226-x86.msu" -a \
-                  -f "$UCRT_REDISTDIR_unix/Windows8.1-KB2999226-x64.msu" -a \
-                  -f "$UCRT_REDISTDIR_unix/Windows8.1-KB2999226-x86.msu" -a \
-                  -f "$UCRT_REDISTDIR_unix/Windows8-RT-KB2999226-x64.msu" -a \
-                  -f "$UCRT_REDISTDIR_unix/Windows8-RT-KB2999226-x86.msu"; then
-            UCRT_REDISTDIR=""
-            if test -n "$PKGFORMAT"; then
-               for i in $PKGFORMAT; do
-                   case "$i" in
-                   msi)
-                       AC_MSG_WARN([--without-ucrt-dir not specified or MSUs not found - installer will have runtime dependency])
-                       add_warning "--without-ucrt-dir not specified or MSUs not found - installer will have runtime dependency"
-                       ;;
-                   esac
-               done
-            fi
-        fi
-    fi
 fi
 
-AC_SUBST(UCRT_REDISTDIR)
 AC_SUBST(MSVC_DLL_PATH)
 AC_SUBST(MSVC_DLLS)
 AC_SUBST(MSM_PATH)

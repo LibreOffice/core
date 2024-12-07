@@ -4310,10 +4310,6 @@ $(call gb_ExternalProject_use_static_libraries,$(1),dtoa)
 
 endef
 
-$(eval $(call gb_Helper_register_packages_for_install,ucrt_binarytable,\
-	$(if $(UCRT_REDISTDIR),ucrt) \
-))
-
 ifneq ($(SYSTEM_BOX2D),)
 
 define gb_LinkTarget__use_box2d
