@@ -296,7 +296,16 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
     }
     else if (sName == u"GtkTreeViewColumn")
     {
-        SAL_WARN("vcl.qt", "GtkTreeViewColumn properties not evaluated yet");
+        QTreeView* pTreeView = qobject_cast<QTreeView*>(pParentWidget);
+        assert(pTreeView && "Tree view column doesn't have a tree view parent");
+        QStandardItemModel* pModel = qobject_cast<QStandardItemModel*>(pTreeView->model());
+        assert(pModel && "Tree view doesn't have QStandardItemModel set");
+        const int nCol = pModel->columnCount();
+        pModel->insertColumn(nCol);
+        pModel->setHeaderData(nCol, Qt::Horizontal, toQString(extractTitle(rMap)));
+
+        // nothing else to do, return tree view parent for the widget
+        return pTreeView;
     }
     else
     {

@@ -644,7 +644,10 @@ void QtInstanceTreeView::clear()
 {
     SolarMutexGuard g;
 
-    GetQtInstance().RunInMainThread([&] { m_pModel->clear(); });
+    GetQtInstance().RunInMainThread([&] {
+        // don't use QStandardItemModel::clear, as that would remove header data as well
+        m_pModel->removeRows(0, m_pModel->rowCount());
+    });
 }
 
 int QtInstanceTreeView::get_height_rows(int) const

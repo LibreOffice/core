@@ -1007,11 +1007,6 @@ namespace
         return f;
     }
 
-    OUString extractTitle(VclBuilder::stringmap &rMap)
-    {
-        return extractStringEntry(rMap, u"title"_ustr);
-    }
-
     bool extractSortIndicator(VclBuilder::stringmap &rMap)
     {
         return extractBoolEntry(rMap, u"sort-indicator"_ustr, false);
@@ -3409,6 +3404,11 @@ bool BuilderBase::extractResizable(stringmap& rMap)
 bool BuilderBase::extractShowExpanders(VclBuilder::stringmap& rMap)
 {
     return extractBoolEntry(rMap, u"show-expanders"_ustr, true);
+}
+
+OUString BuilderBase::extractTitle(VclBuilder::stringmap &rMap)
+{
+    return extractStringEntry(rMap, u"title"_ustr);
 }
 
 OUString BuilderBase::extractTooltipText(stringmap& rMap)
