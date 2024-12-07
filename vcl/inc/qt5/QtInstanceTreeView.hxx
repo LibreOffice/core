@@ -44,7 +44,7 @@ public:
     virtual void unselect(int nPos) override;
     virtual void remove(int pos) override;
     virtual OUString get_text(int nRow, int nCol = -1) const override;
-    virtual void set_text(int row, const OUString& rText, int col = -1) override;
+    virtual void set_text(int nRow, const OUString& rText, int nCol = -1) override;
     virtual void set_sensitive(int row, bool bSensitive, int col = -1) override;
     virtual bool get_sensitive(int row, int col) const override;
     virtual void set_id(int row, const OUString& rId) override;

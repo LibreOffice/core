@@ -162,9 +162,20 @@ OUString QtInstanceTreeView::get_text(int nRow, int nCol) const
     return sText;
 }
 
-void QtInstanceTreeView::set_text(int, const OUString&, int)
+void QtInstanceTreeView::set_text(int nRow, const OUString& rText, int nCol)
 {
-    assert(false && "Not implemented yet");
+    assert(nCol != -1 && "Support for special index -1 (first text column) not implemented yet");
+
+    SolarMutexGuard g;
+    GetQtInstance().RunInMainThread([&] {
+        QStandardItem* pItem = m_pModel->item(nRow, nCol);
+        if (!pItem)
+        {
+            pItem = new QStandardItem;
+            m_pModel->setItem(nRow, nCol, pItem);
+        }
+        pItem->setText(toQString(rText));
+    });
 }
 
 void QtInstanceTreeView::set_sensitive(int, bool, int) { assert(false && "Not implemented yet"); }
