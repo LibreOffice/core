@@ -189,6 +189,7 @@
 #define SCSTR_QHELP_BTNEQUAL                        NC_("SCSTR_QHELP_BTNEQUAL", "Formula")
 #define SCSTR_QHELP_EXPAND_FORMULA                  NC_("SCSTR_QHELP_EXPAND_FORMULA", "Expand Formula Bar")
 #define SCSTR_QHELP_COLLAPSE_FORMULA                NC_("SCSTR_QHELP_COLLAPSE_FORMULA", "Collapse Formula Bar")
+#define SCSTR_QHELP_SELECT_ALL_CELLS                NC_("SCSTR_QHELP_SELECT_ALL_CELLS", "Click here to select all cells")
 
 #define STR_UNKNOWN_USER_CONFLICT                   NC_("STR_UNKNOWN_USER_CONFLICT", "Unknown User")
 
