@@ -449,16 +449,6 @@ std::shared_ptr<SvtFileDialog_Base> SvtFilePicker::implCreateDialog( weld::Windo
 }
 
 
-// disambiguate XInterface
-
-IMPLEMENT_FORWARD_XINTERFACE2( SvtFilePicker, OCommonPicker, SvtFilePicker_Base )
-
-
-// disambiguate XTypeProvider
-
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( SvtFilePicker, OCommonPicker, SvtFilePicker_Base )
-
-
 // XExecutableDialog functions
 
 

@@ -46,7 +46,8 @@ typedef css::uno::Sequence< UnoFilterEntry >   UnoFilterList;  // can be transpo
 
 // class SvtFilePicker ---------------------------------------------------
 
-typedef ::cppu::ImplHelper5 <   css::ui::dialogs::XFilePicker3
+typedef cppu::ImplInheritanceHelper <svt::OCommonPicker
+                            ,   css::ui::dialogs::XFilePicker3
                             ,   css::ui::dialogs::XFilePickerControlAccess
                             ,   css::ui::dialogs::XFilePreview
                             ,   css::lang::XServiceInfo
@@ -54,7 +55,6 @@ typedef ::cppu::ImplHelper5 <   css::ui::dialogs::XFilePicker3
                             >   SvtFilePicker_Base;
 
 class SvtFilePicker :public SvtFilePicker_Base
-                    ,public ::svt::OCommonPicker
                     ,public ::svt::IFilePickerListener
 {
 protected:
@@ -83,16 +83,6 @@ protected:
 public:
                        SvtFilePicker();
     virtual           ~SvtFilePicker() override;
-
-
-    // disambiguate XInterface
-
-    DECLARE_XINTERFACE( )
-
-
-    // disambiguate XTypeProvider
-
-    DECLARE_XTYPEPROVIDER( )
 
 
     // XExecutableDialog functions
