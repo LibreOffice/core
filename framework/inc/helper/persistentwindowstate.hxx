@@ -84,6 +84,10 @@ class PersistentWindowState final : public  ::cppu::WeakImplHelper<
         // XEventListener
         virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent) override;
 
+        // Helper to explicitly save the state of rFrame's window to the config
+        static void SaveWindowStateToConfig(const css::uno::Reference<css::uno::XComponentContext>& rContext,
+                                            const css::uno::Reference<css::frame::XFrame>& rFrame);
+
     // helper
 
     private:

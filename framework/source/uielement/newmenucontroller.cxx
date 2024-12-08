@@ -32,6 +32,7 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 
 #include <comphelper/propertyvalue.hxx>
+#include <helper/persistentwindowstate.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandinfoprovider.hxx>
@@ -382,6 +383,10 @@ void SAL_CALL NewMenuController::itemSelected( const css::awt::MenuEvent& rEvent
         if (pAttributes)
             aTargetFrame = pAttributes->aTargetFrame;
     }
+
+    // tdf#144407 save the current window state so a new window of the same type will
+    // open with the same settings
+    PersistentWindowState::SaveWindowStateToConfig(m_xContext, m_xFrame);
 
     Sequence< PropertyValue > aArgsList{ comphelper::makePropertyValue(u"Referer"_ustr,
                                                                        u"private:user"_ustr) };

@@ -260,6 +260,31 @@ void PersistentWindowState::implst_setWindowStateOnWindow(const css::uno::Refere
     // <- SOLAR SAFE ------------------------
 }
 
+//static
+void PersistentWindowState::SaveWindowStateToConfig(const css::uno::Reference<css::uno::XComponentContext>& rContext,
+                                                    const css::uno::Reference<css::frame::XFrame>& rFrame)
+{
+    // We don't want to do this stuff when being used through LibreOfficeKit
+    if (comphelper::LibreOfficeKit::isActive())
+        return;
+
+    if (!rFrame.is())
+        return;
+
+    css::uno::Reference<css::awt::XWindow> xWindow = rFrame->getContainerWindow();
+    if (!xWindow.is())
+        return;
+
+    // unknown module -> no configuration available!
+    OUString sModuleName = PersistentWindowState::implst_identifyModule(rContext, rFrame);
+    if (sModuleName.isEmpty())
+        return;
+
+    OUString sWindowState = PersistentWindowState::implst_getWindowStateFromWindow(xWindow);
+    PersistentWindowState::implst_setWindowStateOnConfig(rContext, sModuleName, sWindowState);
+}
+
+
 } // namespace framework
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

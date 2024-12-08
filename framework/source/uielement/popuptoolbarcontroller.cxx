@@ -22,6 +22,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <helper/persistentwindowstate.hxx>
 #include <menuconfiguration.hxx>
 #include <svtools/imagemgr.hxx>
 #include <svtools/toolboxcontroller.hxx>
@@ -703,6 +704,10 @@ void SAL_CALL NewToolbarController::execute( sal_Int16 /*KeyModifier*/ )
     }
     else
         aURL = m_aCommandURL;
+
+    // tdf#144407 save the current window state so a new window of the same type will
+    // open with the same settings
+    PersistentWindowState::SaveWindowStateToConfig(m_xContext, m_xFrame);
 
     css::uno::Sequence< css::beans::PropertyValue > aArgs{ comphelper::makePropertyValue(
         u"Referer"_ustr, u"private:user"_ustr) };
