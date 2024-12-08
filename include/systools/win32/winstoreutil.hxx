@@ -12,6 +12,7 @@
 #include <sal/config.h>
 
 #include <prewin.h>
+#include <appmodel.h>
 #include <postwin.h>
 
 namespace sal::systools
@@ -19,13 +20,8 @@ namespace sal::systools
 // Returns true if the current process is run as a Windows store app, which has some specifics
 inline bool IsStorePackagedApp()
 {
-    // GetCurrentPackageFullName is only available since Windows 8
-    HMODULE hDll = GetModuleHandleW(L"kernel32.dll");
-    using Func_t = LONG WINAPI(UINT32*, PWSTR);
-    if (auto pFunc = reinterpret_cast<Func_t*>(GetProcAddress(hDll, "GetCurrentPackageFullName")))
-        if (UINT32 size = 0; pFunc(&size, nullptr) == ERROR_INSUFFICIENT_BUFFER)
-            return true;
-    return false;
+    UINT32 size = 0;
+    return GetCurrentPackageFullName(&size, nullptr) == ERROR_INSUFFICIENT_BUFFER;
 }
 } // sal::systools
 
