@@ -376,7 +376,7 @@ NameClashContinuation interactiveNameClashResolve(
             {
                 // Handler handled the request.
                 uno::Reference< task::XInteractionAbort > xAbort(
-                    xSelection.get(), uno::UNO_QUERY );
+                    xSelection->getXWeak(), uno::UNO_QUERY );
                 if ( xAbort.is() )
                 {
                     // Abort.
@@ -387,7 +387,7 @@ NameClashContinuation interactiveNameClashResolve(
                     uno::Reference<
                         ucb::XInteractionReplaceExistingData >
                             xReplace(
-                                xSelection.get(), uno::UNO_QUERY );
+                                xSelection->getXWeak(), uno::UNO_QUERY );
                     if ( xReplace.is() )
                     {
                         // Try again: Replace existing data.
@@ -398,7 +398,7 @@ NameClashContinuation interactiveNameClashResolve(
                         uno::Reference<
                             ucb::XInteractionSupplyName >
                                 xSupplyName(
-                                    xSelection.get(), uno::UNO_QUERY );
+                                    xSelection->getXWeak(), uno::UNO_QUERY );
                         if ( xSupplyName.is() )
                         {
                             // Try again: Use new name.

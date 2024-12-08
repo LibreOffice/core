@@ -2627,7 +2627,7 @@ static OUString obtainPassword(
             {
                 // Handler handled the request.
                 uno::Reference< task::XInteractionAbort > xAbort(
-                    xSelection.get(), uno::UNO_QUERY );
+                    xSelection->getXWeak(), uno::UNO_QUERY );
                 if ( xAbort.is() )
                 {
                     throw ucb::CommandFailedException(
@@ -2637,7 +2637,7 @@ static OUString obtainPassword(
                 }
 
                 uno::Reference< task::XInteractionPassword > xPassword(
-                    xSelection.get(), uno::UNO_QUERY );
+                    xSelection->getXWeak(), uno::UNO_QUERY );
                 if ( xPassword.is() )
                 {
                     return xPassword->getPassword();

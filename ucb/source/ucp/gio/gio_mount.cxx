@@ -157,7 +157,7 @@ static void ooo_mount_operation_ask_password (GMountOperation *op,
         return;
     }
 
-    css::uno::Reference< css::task::XInteractionAbort > xAbort(xSelection.get(), css::uno::UNO_QUERY );
+    css::uno::Reference< css::task::XInteractionAbort > xAbort(xSelection->getXWeak(), css::uno::UNO_QUERY );
     if ( xAbort.is() )
     {
         g_mount_operation_reply (op, G_MOUNT_OPERATION_ABORTED);

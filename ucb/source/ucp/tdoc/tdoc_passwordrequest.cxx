@@ -37,25 +37,13 @@ namespace tdoc_ucp
 {
     namespace {
 
-    class InteractionSupplyPassword :
-                      public ucbhelper::InteractionContinuation,
-                      public lang::XTypeProvider,
-                      public task::XInteractionPassword
+    using InteractionSupplyPassword_BASE = cppu::ImplInheritanceHelper<ucbhelper::InteractionContinuation,
+                                                                       task::XInteractionPassword>;
+    class InteractionSupplyPassword : public InteractionSupplyPassword_BASE
     {
     public:
         explicit InteractionSupplyPassword( ucbhelper::InteractionRequest * pRequest )
-            : InteractionContinuation( pRequest ) {}
-
-        // XInterface
-        virtual uno::Any SAL_CALL queryInterface( const uno::Type & rType ) override;
-        virtual void SAL_CALL acquire()
-            noexcept override;
-        virtual void SAL_CALL release()
-            noexcept override;
-
-        // XTypeProvider
-        virtual uno::Sequence< uno::Type > SAL_CALL getTypes() override;
-        virtual uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+            : InteractionSupplyPassword_BASE( pRequest ) {}
 
         // XInteractionContinuation
         virtual void SAL_CALL select() override;
@@ -74,61 +62,6 @@ namespace tdoc_ucp
 
 
 // InteractionSupplyPassword Implementation.
-
-
-// XInterface methods.
-
-
-// virtual
-void SAL_CALL InteractionSupplyPassword::acquire()
-    noexcept
-{
-    OWeakObject::acquire();
-}
-
-
-// virtual
-void SAL_CALL InteractionSupplyPassword::release()
-    noexcept
-{
-    OWeakObject::release();
-}
-
-
-// virtual
-uno::Any SAL_CALL
-InteractionSupplyPassword::queryInterface( const uno::Type & rType )
-{
-    uno::Any aRet = cppu::queryInterface( rType,
-                static_cast< lang::XTypeProvider * >( this ),
-                static_cast< task::XInteractionContinuation * >( this ),
-                static_cast< task::XInteractionPassword * >( this ) );
-
-    return aRet.hasValue()
-            ? aRet : InteractionContinuation::queryInterface( rType );
-}
-
-
-// XTypeProvider methods.
-
-
-// virtual
-uno::Sequence< sal_Int8 > SAL_CALL
-InteractionSupplyPassword::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
-
-// virtual
-uno::Sequence< uno::Type > SAL_CALL InteractionSupplyPassword::getTypes()
-{
-    static cppu::OTypeCollection s_aCollection(
-                cppu::UnoType<lang::XTypeProvider>::get(),
-                cppu::UnoType<task::XInteractionPassword>::get() );
-
-    return s_aCollection.getTypes();
-}
 
 
 // XInteractionContinuation methods.

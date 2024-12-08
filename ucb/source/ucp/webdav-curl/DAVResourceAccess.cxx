@@ -80,7 +80,7 @@ int DAVAuthListener_Impl::authenticate(
             {
                 // Handler handled the request.
                 uno::Reference< task::XInteractionAbort > xAbort(
-                    xSelection.get(), uno::UNO_QUERY );
+                    xSelection->getXWeak(), uno::UNO_QUERY );
                 if ( !xAbort.is() )
                 {
                     const rtl::Reference<

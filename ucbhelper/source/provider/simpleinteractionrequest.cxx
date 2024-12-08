@@ -62,25 +62,23 @@ ContinuationFlags SimpleInteractionRequest::getResponse() const
     rtl::Reference< InteractionContinuation > xSelection = getSelection();
     if ( xSelection.is() )
     {
-        InteractionContinuation * pSelection = xSelection.get();
-
         uno::Reference< task::XInteractionAbort > xAbort(
-                                        pSelection, uno::UNO_QUERY );
+                                        xSelection->getXWeak(), uno::UNO_QUERY );
         if ( xAbort.is() )
             return ContinuationFlags::Abort;
 
         uno::Reference< task::XInteractionRetry > xRetry(
-                                        pSelection, uno::UNO_QUERY );
+                                        xSelection->getXWeak(), uno::UNO_QUERY );
         if ( xRetry.is() )
             return ContinuationFlags::Retry;
 
         uno::Reference< task::XInteractionApprove > xApprove(
-                                        pSelection, uno::UNO_QUERY );
+                                        xSelection->getXWeak(), uno::UNO_QUERY );
         if ( xApprove.is() )
             return ContinuationFlags::Approve;
 
         uno::Reference< task::XInteractionDisapprove > xDisapprove(
-                                        pSelection, uno::UNO_QUERY );
+                                        xSelection->getXWeak(), uno::UNO_QUERY );
         if ( xDisapprove.is() )
             return ContinuationFlags::Disapprove;
 

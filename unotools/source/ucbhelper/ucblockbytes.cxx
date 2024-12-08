@@ -750,8 +750,7 @@ static bool UCBOpenContentSync(
                     rtl::Reference< ucbhelper::InteractionContinuation > ref
                         = xIR->getSelection();
                     if(ref.is()) {
-                        Reference<XInterface> xInt(ref);
-                        xRet.set(xInt,UNO_QUERY);
+                        xRet.set(ref->getXWeak(), UNO_QUERY);
                     }
                 }
 

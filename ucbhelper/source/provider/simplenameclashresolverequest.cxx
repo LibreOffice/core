@@ -27,35 +27,21 @@ using namespace com::sun::star;
 
 namespace ucbhelper {
 
+using InteractionSupplyName_BASE = cppu::ImplInheritanceHelper<InteractionContinuation,
+                                                               css::ucb::XInteractionSupplyName>;
 /**
   * This class implements a standard interaction continuation, namely the
   * interface XInteractionSupplyName. Instances of this class can be passed
   * along with an interaction request to indicate the possibility to
   * supply a new name.
   */
-class InteractionSupplyName : public InteractionContinuation,
-                              public css::lang::XTypeProvider,
-                              public css::ucb::XInteractionSupplyName
+class InteractionSupplyName : public InteractionSupplyName_BASE
 {
     OUString m_aName;
 
 public:
     explicit InteractionSupplyName( InteractionRequest * pRequest )
-    : InteractionContinuation( pRequest ) {}
-
-    // XInterface
-    virtual css::uno::Any SAL_CALL
-    queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire()
-        noexcept override;
-    virtual void SAL_CALL release()
-        noexcept override;
-
-    // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL
-    getTypes() override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL
-    getImplementationId() override;
+    : InteractionSupplyName_BASE( pRequest ) {}
 
     // XInteractionContinuation
     virtual void SAL_CALL select() override;
@@ -73,44 +59,6 @@ public:
       */
     const OUString & getName() const { return m_aName; }
 };
-
-void SAL_CALL InteractionSupplyName::acquire()
-    noexcept
-{
-    OWeakObject::acquire();
-}
-
-void SAL_CALL InteractionSupplyName::release()
-    noexcept
-{
-    OWeakObject::release();
-}
-
-uno::Any SAL_CALL
-InteractionSupplyName::queryInterface( const uno::Type & rType )
-{
-    uno::Any aRet = cppu::queryInterface( rType,
-                static_cast< lang::XTypeProvider * >( this ),
-                static_cast< task::XInteractionContinuation * >( this ),
-                static_cast< ucb::XInteractionSupplyName * >( this ) );
-
-    return aRet.hasValue()
-            ? aRet : InteractionContinuation::queryInterface( rType );
-}
-
-uno::Sequence< sal_Int8 > SAL_CALL InteractionSupplyName::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
-uno::Sequence< uno::Type > SAL_CALL InteractionSupplyName::getTypes()
-{
-    static cppu::OTypeCollection s_aCollection(
-                cppu::UnoType<lang::XTypeProvider>::get(),
-                cppu::UnoType<ucb::XInteractionSupplyName>::get() );
-
-    return s_aCollection.getTypes();
-}
 
 void SAL_CALL InteractionSupplyName::select()
 {

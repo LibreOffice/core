@@ -589,7 +589,7 @@ void SfxMedium::CheckFileDate( const util::DateTime& aInitDate )
         xHandler->handle( xInteractionRequestImpl );
 
         ::rtl::Reference< ::ucbhelper::InteractionContinuation > xSelected = xInteractionRequestImpl->getSelection();
-        if ( uno::Reference< task::XInteractionAbort >( xSelected.get(), uno::UNO_QUERY ).is() )
+        if ( uno::Reference< task::XInteractionAbort >( cppu::getXWeak(xSelected.get()), uno::UNO_QUERY ).is() )
         {
             SetError(ERRCODE_ABORT);
         }
@@ -1170,11 +1170,11 @@ SfxMedium::ShowLockResult SfxMedium::ShowLockedDocumentDialog(const LockFileEntr
 
         bool bOpenReadOnly = false;
         ::rtl::Reference< ::ucbhelper::InteractionContinuation > xSelected = xInteractionRequestImpl->getSelection();
-        if ( uno::Reference< task::XInteractionAbort >( xSelected.get(), uno::UNO_QUERY ).is() )
+        if ( uno::Reference< task::XInteractionAbort >( cppu::getXWeak(xSelected.get()), uno::UNO_QUERY ).is() )
         {
             SetError(ERRCODE_ABORT);
         }
-        else if ( uno::Reference< task::XInteractionDisapprove >( xSelected.get(), uno::UNO_QUERY ).is() )
+        else if ( uno::Reference< task::XInteractionDisapprove >( cppu::getXWeak(xSelected.get()), uno::UNO_QUERY ).is() )
         {
             // own lock on loading, user has selected to ignore the lock
             // own lock on saving, user has selected to ignore the lock
@@ -1188,12 +1188,12 @@ SfxMedium::ShowLockResult SfxMedium::ShowLockedDocumentDialog(const LockFileEntr
             else
                 nResult = ShowLockResult::Succeeded;
         }
-        else if (uno::Reference< task::XInteractionRetry >(xSelected.get(), uno::UNO_QUERY).is())
+        else if (uno::Reference< task::XInteractionRetry >(cppu::getXWeak(xSelected.get()), uno::UNO_QUERY).is())
         {
             // User decided to ignore the alien (stale?) lock file without filesystem lock
             nResult = ShowLockResult::Succeeded;
         }
-        else if (uno::Reference< task::XInteractionApprove >( xSelected.get(), uno::UNO_QUERY ).is())
+        else if (uno::Reference< task::XInteractionApprove >( cppu::getXWeak(xSelected.get()), uno::UNO_QUERY ).is())
         {
             bOpenReadOnly = true;
         }
@@ -1264,12 +1264,12 @@ bool SfxMedium::ShowLockFileProblemDialog(MessageDlg nWhichDlg)
         ::rtl::Reference< ::ucbhelper::InteractionContinuation > xSelected = xIgnoreRequestImpl->getSelection();
         bool bReadOnly = true;
 
-        if (uno::Reference<task::XInteractionAbort>(xSelected.get(), uno::UNO_QUERY).is())
+        if (uno::Reference<task::XInteractionAbort>(cppu::getXWeak(xSelected.get()), uno::UNO_QUERY).is())
         {
             SetError(ERRCODE_ABORT);
             bReadOnly = false;
         }
-        else if (!uno::Reference<task::XInteractionApprove>(xSelected.get(), uno::UNO_QUERY).is())
+        else if (!uno::Reference<task::XInteractionApprove>(cppu::getXWeak(xSelected.get()), uno::UNO_QUERY).is())
         {
             // user selected "Notify"
             pImpl->m_bNotifyWhenEditable = true;
@@ -4940,7 +4940,7 @@ IMPL_STATIC_LINK(SfxMedium, ShowReloadEditableDialog, void*, p, void)
             xHandler->handle(xInteractionRequestImpl);
             ::rtl::Reference<::ucbhelper::InteractionContinuation> xSelected
                 = xInteractionRequestImpl->getSelection();
-            if (uno::Reference<task::XInteractionApprove>(xSelected.get(), uno::UNO_QUERY).is())
+            if (uno::Reference<task::XInteractionApprove>(cppu::getXWeak(xSelected.get()), uno::UNO_QUERY).is())
             {
                 for (SfxViewFrame* pFrame = SfxViewFrame::GetFirst(); pFrame;
                      pFrame = SfxViewFrame::GetNext(*pFrame))

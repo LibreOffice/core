@@ -828,7 +828,7 @@ OUString PasswordContainer::RequestPasswordFromUser( PasswordRequestMode aRMode,
 
         if ( xSelection.is() )
         {
-            Reference< XInteractionAbort > xAbort( xSelection.get(), UNO_QUERY );
+            Reference< XInteractionAbort > xAbort( xSelection->getXWeak(), UNO_QUERY );
             if ( !xAbort.is() )
             {
                 const ::rtl::Reference< ucbhelper::InteractionSupplyAuthentication > & xSupp

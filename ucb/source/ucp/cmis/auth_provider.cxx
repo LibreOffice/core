@@ -48,7 +48,7 @@ namespace cmis
                 {
                     // Handler handled the request.
                     uno::Reference< task::XInteractionAbort > xAbort(
-                        xSelection.get(), uno::UNO_QUERY );
+                        xSelection->getXWeak(), uno::UNO_QUERY );
                     if ( !xAbort.is() )
                     {
                         const rtl::Reference<
@@ -91,7 +91,7 @@ namespace cmis
                 if (xSelection.is())
                 {
                     // Handler handled the request.
-                    uno::Reference<task::XInteractionAbort> xAbort(xSelection.get(),
+                    uno::Reference<task::XInteractionAbort> xAbort(xSelection->getXWeak(),
                                                                    uno::UNO_QUERY);
                     if (!xAbort.is())
                     {

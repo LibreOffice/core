@@ -143,44 +143,6 @@ void InteractionContinuation::recordSelection()
 // InteractionAbort Implementation.
 
 
-// XInterface methods.
-
-
-// virtual
-uno::Any SAL_CALL
-InteractionAbort::queryInterface( const uno::Type & rType )
-{
-    uno::Any aRet = cppu::queryInterface( rType,
-                static_cast< lang::XTypeProvider * >( this ),
-                static_cast< task::XInteractionContinuation * >( this ),
-                static_cast< task::XInteractionAbort * >( this ) );
-
-    return aRet.hasValue()
-            ? aRet : InteractionContinuation::queryInterface( rType );
-}
-
-
-// XTypeProvider methods.
-
-
-// virtual
-uno::Sequence< sal_Int8 > SAL_CALL InteractionAbort::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
-
-// virtual
-uno::Sequence< uno::Type > SAL_CALL InteractionAbort::getTypes()
-{
-    static cppu::OTypeCollection s_aCollection(
-                cppu::UnoType<lang::XTypeProvider>::get(),
-                cppu::UnoType<task::XInteractionAbort>::get() );
-
-    return s_aCollection.getTypes();
-}
-
-
 // XInteractionContinuation methods.
 
 
@@ -192,44 +154,6 @@ void SAL_CALL InteractionAbort::select()
 
 
 // InteractionRetry Implementation.
-
-
-// XInterface methods.
-
-
-// virtual
-uno::Any SAL_CALL
-InteractionRetry::queryInterface( const uno::Type & rType )
-{
-    uno::Any aRet = cppu::queryInterface( rType,
-                static_cast< lang::XTypeProvider * >( this ),
-                static_cast< task::XInteractionContinuation * >( this ),
-                static_cast< task::XInteractionRetry * >( this ) );
-
-    return aRet.hasValue()
-            ? aRet : InteractionContinuation::queryInterface( rType );
-}
-
-
-// XTypeProvider methods.
-
-
-// virtual
-uno::Sequence< sal_Int8 > SAL_CALL InteractionRetry::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
-
-// virtual
-uno::Sequence< uno::Type > SAL_CALL InteractionRetry::getTypes()
-{
-    static cppu::OTypeCollection s_aCollection(
-                cppu::UnoType<lang::XTypeProvider>::get(),
-                cppu::UnoType<task::XInteractionRetry>::get() );
-
-    return s_aCollection.getTypes();
-}
 
 
 // XInteractionContinuation methods.
@@ -245,44 +169,6 @@ void SAL_CALL InteractionRetry::select()
 // InteractionApprove Implementation.
 
 
-// XInterface methods.
-
-
-// virtual
-uno::Any SAL_CALL
-InteractionApprove::queryInterface( const uno::Type & rType )
-{
-    uno::Any aRet = cppu::queryInterface( rType,
-                static_cast< lang::XTypeProvider * >( this ),
-                static_cast< task::XInteractionContinuation * >( this ),
-                static_cast< task::XInteractionApprove * >( this ) );
-
-    return aRet.hasValue()
-            ? aRet : InteractionContinuation::queryInterface( rType );
-}
-
-
-// XTypeProvider methods.
-
-
-// virtual
-uno::Sequence< sal_Int8 > SAL_CALL InteractionApprove::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
-
-// virtual
-uno::Sequence< uno::Type > SAL_CALL InteractionApprove::getTypes()
-{
-    static cppu::OTypeCollection s_aCollection(
-                cppu::UnoType<lang::XTypeProvider>::get(),
-                cppu::UnoType<task::XInteractionApprove>::get() );
-
-    return s_aCollection.getTypes();
-}
-
-
 // XInteractionContinuation methods.
 
 
@@ -296,44 +182,6 @@ void SAL_CALL InteractionApprove::select()
 // InteractionDisapprove Implementation.
 
 
-// XInterface methods.
-
-
-// virtual
-uno::Any SAL_CALL
-InteractionDisapprove::queryInterface( const uno::Type & rType )
-{
-    uno::Any aRet = cppu::queryInterface( rType,
-                static_cast< lang::XTypeProvider * >( this ),
-                static_cast< task::XInteractionContinuation * >( this ),
-                static_cast< task::XInteractionDisapprove * >( this ) );
-
-    return aRet.hasValue()
-            ? aRet : InteractionContinuation::queryInterface( rType );
-}
-
-
-// XTypeProvider methods.
-
-
-// virtual
-uno::Sequence< sal_Int8 > SAL_CALL InteractionDisapprove::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
-
-// virtual
-uno::Sequence< uno::Type > SAL_CALL InteractionDisapprove::getTypes()
-{
-    static cppu::OTypeCollection s_aCollection(
-                cppu::UnoType<lang::XTypeProvider>::get(),
-                cppu::UnoType<task::XInteractionDisapprove>::get() );
-
-    return s_aCollection.getTypes();
-}
-
-
 // XInteractionContinuation methods.
 
 
@@ -345,46 +193,6 @@ void SAL_CALL InteractionDisapprove::select()
 
 
 // InteractionSupplyAuthentication Implementation.
-
-
-// XInterface methods.
-
-
-// virtual
-uno::Any SAL_CALL
-InteractionSupplyAuthentication::queryInterface( const uno::Type & rType )
-{
-    uno::Any aRet = cppu::queryInterface( rType,
-            static_cast< lang::XTypeProvider * >( this ),
-            static_cast< task::XInteractionContinuation * >( this ),
-            static_cast< ucb::XInteractionSupplyAuthentication * >( this ),
-            static_cast< ucb::XInteractionSupplyAuthentication2 * >( this ));
-
-    return aRet.hasValue()
-            ? aRet : InteractionContinuation::queryInterface( rType );
-}
-
-
-// XTypeProvider methods.
-
-
-// virtual
-uno::Sequence< sal_Int8 > SAL_CALL
-InteractionSupplyAuthentication::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
-
-// virtual
-uno::Sequence< uno::Type > SAL_CALL InteractionSupplyAuthentication::getTypes()
-{
-    static cppu::OTypeCollection s_aCollection(
-                cppu::UnoType<lang::XTypeProvider>::get(),
-                cppu::UnoType<ucb::XInteractionSupplyAuthentication2>::get() );
-
-    return s_aCollection.getTypes();
-}
 
 
 // XInteractionContinuation methods.
@@ -538,45 +346,6 @@ void SAL_CALL InteractionSupplyAuthentication::setUseSystemCredentials(
 // InteractionReplaceExistingData Implementation.
 
 
-// XInterface methods.
-
-
-// virtual
-uno::Any SAL_CALL
-InteractionReplaceExistingData::queryInterface( const uno::Type & rType )
-{
-    uno::Any aRet = cppu::queryInterface( rType,
-                static_cast< lang::XTypeProvider * >( this ),
-                static_cast< task::XInteractionContinuation * >( this ),
-                static_cast< ucb::XInteractionReplaceExistingData * >( this ) );
-
-    return aRet.hasValue()
-            ? aRet : InteractionContinuation::queryInterface( rType );
-}
-
-
-// XTypeProvider methods.
-
-
-// virtual
-uno::Sequence< sal_Int8 > SAL_CALL
-InteractionReplaceExistingData::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
-
-// virtual
-uno::Sequence< uno::Type > SAL_CALL InteractionReplaceExistingData::getTypes()
-{
-    static cppu::OTypeCollection s_aCollection(
-                cppu::UnoType<lang::XTypeProvider>::get(),
-                cppu::UnoType<ucb::XInteractionReplaceExistingData>::get() );
-
-    return s_aCollection.getTypes();
-}
-
-
 // XInteractionContinuation methods.
 
 
@@ -587,20 +356,6 @@ void SAL_CALL InteractionReplaceExistingData::select()
 }
 
 // InteractionAuthFallback Implementation
-
-// XInterface methods.
-
-// virtual
-uno::Any SAL_CALL
-InteractionAuthFallback::queryInterface( const uno::Type & rType )
-{
-    uno::Any aRet = cppu::queryInterface( rType,
-            static_cast< task::XInteractionContinuation * >( this ),
-            static_cast< ucb::XInteractionAuthFallback * >( this ));
-
-    return aRet.hasValue()
-            ? aRet : InteractionContinuation::queryInterface( rType );
-}
 
 // XInteractionContinuation methods.
 

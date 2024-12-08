@@ -130,7 +130,7 @@ public:
   * method the way that they simply call recordSelection() which is provided by
   * this class.
   */
-class UNLESS_MERGELIBS(UCBHELPER_DLLPUBLIC) InteractionContinuation : public cppu::OWeakObject
+class UNLESS_MERGELIBS(UCBHELPER_DLLPUBLIC) InteractionContinuation : public cppu::WeakImplHelper<>
 {
     InteractionRequest* m_pRequest;
 
@@ -150,138 +150,84 @@ public:
 };
 
 
+using InteractionAbort_BASE = cppu::ImplInheritanceHelper<InteractionContinuation,
+                                                          css::task::XInteractionAbort>;
 /**
   * This class implements a standard interaction continuation, namely the
   * interface XInteractionAbort. Instances of this class can be passed
   * along with an interaction request to indicate the possibility to abort
   * the operation that caused the request.
   */
-class UNLESS_MERGELIBS(UCBHELPER_DLLPUBLIC) InteractionAbort final : public InteractionContinuation,
-                         public css::lang::XTypeProvider,
-                         public css::task::XInteractionAbort
+class UNLESS_MERGELIBS(UCBHELPER_DLLPUBLIC) InteractionAbort final : public InteractionAbort_BASE
 {
 public:
     InteractionAbort( InteractionRequest * pRequest )
-    : InteractionContinuation( pRequest ) {}
-
-    // XInterface
-    virtual css::uno::Any SAL_CALL
-    queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() noexcept override
-    { OWeakObject::acquire(); }
-    virtual void SAL_CALL release() noexcept override
-    { OWeakObject::release(); }
-
-    // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL
-    getTypes() override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL
-    getImplementationId() override;
+    : InteractionAbort_BASE( pRequest ) {}
 
     // XInteractionContinuation
     virtual void SAL_CALL select() override;
 };
 
 
+using InteractionRetry_BASE = cppu::ImplInheritanceHelper<InteractionContinuation,
+                                                          css::task::XInteractionRetry>;
 /**
   * This class implements a standard interaction continuation, namely the
   * interface XInteractionRetry. Instances of this class can be passed
   * along with an interaction request to indicate the possibility to retry
   * the operation that caused the request.
   */
-class UNLESS_MERGELIBS(UCBHELPER_DLLPUBLIC) InteractionRetry final : public InteractionContinuation,
-                         public css::lang::XTypeProvider,
-                         public css::task::XInteractionRetry
+class UNLESS_MERGELIBS(UCBHELPER_DLLPUBLIC) InteractionRetry final : public InteractionRetry_BASE
 {
 public:
     InteractionRetry( InteractionRequest * pRequest )
-    : InteractionContinuation( pRequest ) {}
-
-    // XInterface
-    virtual css::uno::Any SAL_CALL
-    queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() noexcept override
-    { OWeakObject::acquire(); }
-    virtual void SAL_CALL release() noexcept override
-    { OWeakObject::release(); }
-
-    // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL
-    getTypes() override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL
-    getImplementationId() override;
+    : InteractionRetry_BASE( pRequest ) {}
 
     // XInteractionContinuation
     virtual void SAL_CALL select() override;
 };
 
 
+using InteractionApprove_BASE = cppu::ImplInheritanceHelper<InteractionContinuation,
+                                                            css::task::XInteractionApprove>;
 /**
   * This class implements a standard interaction continuation, namely the
   * interface XInteractionApprove. Instances of this class can be passed
   * along with an interaction request to indicate the possibility to approve
   * the request.
   */
-class UCBHELPER_DLLPUBLIC InteractionApprove final : public InteractionContinuation,
-                           public css::lang::XTypeProvider,
-                           public css::task::XInteractionApprove
+class UCBHELPER_DLLPUBLIC InteractionApprove final : public InteractionApprove_BASE
 {
 public:
     InteractionApprove( InteractionRequest * pRequest )
-    : InteractionContinuation( pRequest ) {}
-
-    // XInterface
-    virtual css::uno::Any SAL_CALL
-    queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() noexcept override
-    { OWeakObject::acquire(); }
-    virtual void SAL_CALL release() noexcept override
-    { OWeakObject::release(); }
-
-    // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL
-    getTypes() override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL
-    getImplementationId() override;
+    : InteractionApprove_BASE( pRequest ) {}
 
     // XInteractionContinuation
     virtual void SAL_CALL select() override;
 };
 
 
+using InteractionDisapprove_BASE = cppu::ImplInheritanceHelper<InteractionContinuation,
+                                                               css::task::XInteractionDisapprove>;
 /**
   * This class implements a standard interaction continuation, namely the
   * interface XInteractionDisapprove. Instances of this class can be passed
   * along with an interaction request to indicate the possibility to disapprove
   * the request.
   */
-class UCBHELPER_DLLPUBLIC InteractionDisapprove final : public InteractionContinuation,
-                              public css::lang::XTypeProvider,
-                              public css::task::XInteractionDisapprove
+class UCBHELPER_DLLPUBLIC InteractionDisapprove final : public InteractionDisapprove_BASE
 {
 public:
     InteractionDisapprove( InteractionRequest * pRequest )
-    : InteractionContinuation( pRequest ) {}
-
-    // XInterface
-    virtual css::uno::Any SAL_CALL
-    queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() noexcept override
-    { OWeakObject::acquire(); }
-    virtual void SAL_CALL release() noexcept override
-    { OWeakObject::release(); }
-
-    // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL
-    getTypes() override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL
-    getImplementationId() override;
+    : InteractionDisapprove_BASE( pRequest ) {}
 
     // XInteractionContinuation
     virtual void SAL_CALL select() override;
 };
 
 
+using InteractionSupplyAuthentication_BASE = cppu::ImplInheritanceHelper<InteractionContinuation,
+                                                                         css::ucb::XInteractionSupplyAuthentication2>;
 /**
   * This class implements a standard interaction continuation, namely the
   * interface XInteractionSupplyAuthentication. Instances of this class can be
@@ -289,9 +235,7 @@ public:
   * interaction handler to supply the missing authentication data.
   */
 class UCBHELPER_DLLPUBLIC InteractionSupplyAuthentication final :
-                  public InteractionContinuation,
-                  public css::lang::XTypeProvider,
-                  public css::ucb::XInteractionSupplyAuthentication2
+                  public InteractionSupplyAuthentication_BASE
 {
     css::uno::Sequence< css::ucb::RememberAuthentication >
                   m_aRememberPasswordModes;
@@ -354,20 +298,6 @@ public:
                     const css::uno::Sequence< css::ucb::RememberAuthentication > & rRememberAccountModes,
                     const css::ucb::RememberAuthentication  eDefaultRememberAccountMode,
                     bool bCanUseSystemCredentials );
-
-    // XInterface
-    virtual css::uno::Any SAL_CALL
-    queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() noexcept override
-    { OWeakObject::acquire(); }
-    virtual void SAL_CALL release() noexcept override
-    { OWeakObject::release(); }
-
-    // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL
-    getTypes() override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL
-    getImplementationId() override;
 
     // XInteractionContinuation
     virtual void SAL_CALL select() override;
@@ -461,7 +391,7 @@ inline InteractionSupplyAuthentication::InteractionSupplyAuthentication(
     const css::uno::Sequence< css::ucb::RememberAuthentication > & rRememberAccountModes,
     const css::ucb::RememberAuthentication eDefaultRememberAccountMode,
     bool bCanUseSystemCredentials )
-: InteractionContinuation( pRequest ),
+: InteractionSupplyAuthentication_BASE( pRequest ),
   m_aRememberPasswordModes( rRememberPasswordModes ),
   m_aRememberAccountModes( rRememberAccountModes ),
   m_eRememberPasswordMode( eDefaultRememberPasswordMode ),
@@ -477,6 +407,8 @@ inline InteractionSupplyAuthentication::InteractionSupplyAuthentication(
 }
 
 
+using InteractionReplaceExistingData_BASE = cppu::ImplInheritanceHelper<InteractionContinuation,
+                                                                        css::ucb::XInteractionReplaceExistingData>;
 /**
   * This class implements a standard interaction continuation, namely the
   * interface XInteractionReplaceExistingData. Instances of this class can be
@@ -484,49 +416,26 @@ inline InteractionSupplyAuthentication::InteractionSupplyAuthentication(
   * replace existing data.
   */
 class InteractionReplaceExistingData final :
-                  public InteractionContinuation,
-                  public css::lang::XTypeProvider,
-                  public css::ucb::XInteractionReplaceExistingData
+                  public InteractionReplaceExistingData_BASE
 {
 public:
     InteractionReplaceExistingData( InteractionRequest * pRequest )
-    : InteractionContinuation( pRequest ) {}
-
-    // XInterface
-    virtual css::uno::Any SAL_CALL
-    queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() noexcept override
-    { OWeakObject::acquire(); }
-    virtual void SAL_CALL release() noexcept override
-    { OWeakObject::release(); }
-
-    // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL
-    getTypes() override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL
-    getImplementationId() override;
+    : InteractionReplaceExistingData_BASE( pRequest ) {}
 
     // XInteractionContinuation
     virtual void SAL_CALL select() override;
 };
 
+using InteractionAuthFallback_BASE = cppu::ImplInheritanceHelper<InteractionContinuation,
+                                                                 css::ucb::XInteractionAuthFallback>;
 class UCBHELPER_DLLPUBLIC InteractionAuthFallback final :
-                  public InteractionContinuation,
-                  public css::ucb::XInteractionAuthFallback
+                  public InteractionAuthFallback_BASE
 {
     OUString m_aCode;
 
 public:
     InteractionAuthFallback( InteractionRequest * pRequest )
-    : InteractionContinuation( pRequest ) {}
-
-    // XInterface
-    virtual css::uno::Any SAL_CALL
-    queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() noexcept override
-    { OWeakObject::acquire(); }
-    virtual void SAL_CALL release() noexcept override
-    { OWeakObject::release(); }
+    : InteractionAuthFallback_BASE( pRequest ) {}
 
     // XInteractionContinuation
     virtual void SAL_CALL select() override;
@@ -535,8 +444,6 @@ public:
     virtual void SAL_CALL setCode( const OUString& code ) override;
     /// @throws css::uno::RuntimeException
     const OUString& getCode() const;
-
-
 };
 
 
