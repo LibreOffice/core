@@ -33,10 +33,7 @@ OPropertyContainer2::~OPropertyContainer2() {}
 Sequence<Type> OPropertyContainer2::getBaseTypes()
 {
     // just the types from our one and only base class
-    ::cppu::OTypeCollection aTypes(cppu::UnoType<XPropertySet>::get(),
-                                   cppu::UnoType<XFastPropertySet>::get(),
-                                   cppu::UnoType<XMultiPropertySet>::get());
-    return aTypes.getTypes();
+    return comphelper::OPropertySetHelper::getTypes();
 }
 
 bool OPropertyContainer2::convertFastPropertyValue(std::unique_lock<std::mutex>& /*rGuard*/,

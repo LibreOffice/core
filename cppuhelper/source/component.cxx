@@ -107,13 +107,13 @@ void OComponentHelper::release() noexcept
 
 Sequence< Type > OComponentHelper::getTypes()
 {
-    static OTypeCollection s_aTypes(
+    static const Sequence s_aTypes {
         cppu::UnoType<lang::XComponent>::get(),
         cppu::UnoType<lang::XTypeProvider>::get(),
         cppu::UnoType<XAggregation>::get(),
-        cppu::UnoType<XWeak>::get() );
+        cppu::UnoType<XWeak>::get() };
 
-    return s_aTypes.getTypes();
+    return s_aTypes;
 }
 
 // XComponent
