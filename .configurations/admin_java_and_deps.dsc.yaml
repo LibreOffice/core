@@ -61,15 +61,6 @@ properties:
         Uri: https://repo1.maven.org/maven2/junit/junit/4.10/junit-4.10.jar
         ChecksumType: SHA256
         Checksum: 36a747ca1e0b86f6ea88055b8723bb87030d627766da6288bf077afdeeb0f75a
-    - resource: xPSDesiredStateConfiguration/xRemoteFile
-      id: ucrt
-      directives:
-        description: download ucrts
-      settings:
-        DestinationPath: C:/Users/Public/Downloads
-        Uri: https://download.microsoft.com/download/C/5/D/C5D68AA1-F62E-422A-9084-4AD85CEB8D4D/WindowsUCRT.zip
-        ChecksumType: SHA256
-        Checksum: 3c9fff1e102adbab55e588ce58b4291db885a530b2ae3bcca851c2721c8be3e1
     - resource: xPSDesiredStateConfiguration/xMsiPackage
       id: JDK_x64
       directives:

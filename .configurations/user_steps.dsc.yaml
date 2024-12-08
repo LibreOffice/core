@@ -18,7 +18,6 @@ properties:
         # the empty string element is so that each file can be specified with trailing comma
         TestScript: |
           $files = @(
-              "WindowsUCRT.zip",
               "apache-ant-1.10.15-bin.zip",
               "clang-format-5.0.0-win.exe",
               "jom_1_1_4.zip",
@@ -94,16 +93,6 @@ properties:
         GetScript:  Test-Path -Path "$env:USERPROFILE/lo/apache-ant-1.10.15/bin/ant"
         SetScript: Expand-Archive -LiteralPath "$env:PUBLIC/Downloads/apache-ant-1.10.15-bin.zip" -Destination "$env:USERPROFILE/lo/"
     - resource: xPSDesiredStateConfiguration/xScript
-      id: ucrt-extract
-      dependsOn:
-        - lodir
-      directives:
-        description: extract ucrts to the ~/lo directory
-      settings:
-        TestScript: Test-Path -Path "$env:USERPROFILE/lo/ucrt/Windows8.1-KB2999226-x64.msu"
-        GetScript:  Test-Path -Path "$env:USERPROFILE/lo/ucrt/Windows8.1-KB2999226-x64.msu"
-        SetScript: Expand-Archive -LiteralPath "$env:PUBLIC/Downloads/WindowsUCRT.zip" -Destination "$env:USERPROFILE/lo/ucrt"
-    - resource: xPSDesiredStateConfiguration/xScript
       id: spp-extract
       dependsOn:
         - lodir
@@ -172,7 +161,6 @@ properties:
           --with-ant-home=$env:USERPROFILE\lo\apache-ant-1.10.15
           --with-junit=$env:USERPROFILE\lo\junit-4.10.jar
           --with-doxygen=$env:USERPROFILE\lo\spp\c\bin\doxygen.exe
-          --with-ucrt-dir=$env:USERPROFILE\lo\ucrt
           #--enable-odk
           #--disable-dependency-tracking
           #--enable-dbgutil
