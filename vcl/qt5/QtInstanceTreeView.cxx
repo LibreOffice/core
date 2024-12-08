@@ -562,9 +562,19 @@ void QtInstanceTreeView::all_foreach(const std::function<bool(weld::TreeIter&)>&
     assert(false && "Not implemented yet");
 }
 
-void QtInstanceTreeView::selected_foreach(const std::function<bool(weld::TreeIter&)>&)
+void QtInstanceTreeView::selected_foreach(const std::function<bool(weld::TreeIter&)>& func)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        QModelIndexList aSelectionIndexes = m_pSelectionModel->selectedRows();
+        for (QModelIndex& aIndex : aSelectionIndexes)
+        {
+            QtInstanceTreeIter aIter(aIndex);
+            if (func(aIter))
+                return;
+        }
+    });
 }
 
 void QtInstanceTreeView::visible_foreach(const std::function<bool(weld::TreeIter&)>&)
