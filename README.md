@@ -35,7 +35,7 @@ These are the current minimal operating system and compiler versions to
 run and compile LibreOffice, also used by the TDF builds:
 
 * Windows:
-    * Runtime: Windows 7
+    * Runtime: Windows 10
     * Build: Cygwin + Visual Studio 2019 version 16.10
 * macOS:
     * Runtime: 10.15
