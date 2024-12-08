@@ -956,11 +956,11 @@ rtl::Reference<SwXStyle> SwXStyleFamily::getParagraphStyleByName(const OUString&
 rtl::Reference<SwXBaseStyle> SwXStyleFamily::getStyleByName(const OUString& rName)
 {
     SolarMutexGuard aGuard;
+    if(!m_pBasePool)
+        throw uno::RuntimeException();
     OUString sStyleName;
     SwStyleNameMapper::FillUIName(rName, sStyleName, m_rEntry.poolId(),
             !m_pDocShell->GetDoc()->IsInWriterfilterImport());
-    if(!m_pBasePool)
-        throw uno::RuntimeException();
     SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName, m_rEntry.family());
     if(!pBase)
         throw container::NoSuchElementException(rName);
@@ -1104,7 +1104,7 @@ void SwXStyleFamily::replaceByName(const OUString& rName, const uno::Any& rEleme
         throw uno::RuntimeException();
     OUString sStyleName;
     SwStyleNameMapper::FillUIName(rName, sStyleName, m_rEntry.poolId(),
-            m_pDocShell && !m_pDocShell->GetDoc()->IsInWriterfilterImport());
+            !m_pDocShell->GetDoc()->IsInWriterfilterImport());
     SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName, m_rEntry.family());
     // replacements only for userdefined styles
     if(!pBase)
