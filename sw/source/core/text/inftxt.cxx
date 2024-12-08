@@ -1357,12 +1357,14 @@ void SwTextPaintInfo::DrawCSDFHighlighting(const SwLinePortion &rPor) const
             OUString sCharStyleDisplayName;
             sCharStyleDisplayName = SwStyleNameMapper::GetUIName(sCurrentCharStyle,
                                                                  SwGetPoolIdFromName::ChrFmt);
-            if (!sCharStyleDisplayName.isEmpty()
-                    && rCharStylesColorMap.find(sCharStyleDisplayName)
-                    != rCharStylesColorMap.end())
+            if (!sCharStyleDisplayName.isEmpty())
             {
-                aFillColor = rCharStylesColorMap[sCharStyleDisplayName].first;
-                sCSNumberOrDF = OUString::number(rCharStylesColorMap[sCharStyleDisplayName].second);
+                auto it = rCharStylesColorMap.find(sCharStyleDisplayName);
+                if (it != rCharStylesColorMap.end())
+                {
+                    aFillColor = it->second.first;
+                    sCSNumberOrDF = OUString::number(it->second.second);
+                }
             }
         }
     }
