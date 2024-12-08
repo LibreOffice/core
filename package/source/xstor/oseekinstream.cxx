@@ -32,7 +32,7 @@ OInputSeekStream::OInputSeekStream( OWriteStream_Impl& pImpl,
                                     uno::Reference < io::XInputStream > const & xStream,
                                     const uno::Sequence< beans::PropertyValue >& aProps,
                                     sal_Int32 nStorageType )
-: OInputCompStream( pImpl, xStream, aProps, nStorageType )
+    : OInputSeekStream_BASE(pImpl, xStream, aProps, nStorageType)
 {
     m_xSeekable.set( m_xStream, uno::UNO_QUERY );
     OSL_ENSURE( m_xSeekable.is(), "No seeking support!" );
@@ -41,7 +41,7 @@ OInputSeekStream::OInputSeekStream( OWriteStream_Impl& pImpl,
 OInputSeekStream::OInputSeekStream( uno::Reference < io::XInputStream > const & xStream,
                                     const uno::Sequence< beans::PropertyValue >& aProps,
                                     sal_Int32 nStorageType )
-: OInputCompStream( xStream, aProps, nStorageType )
+    : OInputSeekStream_BASE(xStream, aProps, nStorageType)
 {
     m_xSeekable.set( m_xStream, uno::UNO_QUERY );
     OSL_ENSURE( m_xSeekable.is(), "No seeking support!" );
@@ -49,42 +49,6 @@ OInputSeekStream::OInputSeekStream( uno::Reference < io::XInputStream > const & 
 
 OInputSeekStream::~OInputSeekStream()
 {
-}
-
-uno::Sequence< uno::Type > SAL_CALL OInputSeekStream::getTypes()
-{
-    static cppu::OTypeCollection aTypeCollection(cppu::UnoType<io::XSeekable>::get(),
-                                                   OInputCompStream::getTypes());
-
-    return aTypeCollection.getTypes();
-}
-
-uno::Any SAL_CALL OInputSeekStream::queryInterface( const uno::Type& rType )
-{
-    // Attention:
-    //  Don't use mutex or guard in this method!!! Is a method of XInterface.
-
-    uno::Any aReturn( ::cppu::queryInterface( rType,
-                                           static_cast< io::XSeekable* >( this ) ) );
-
-    if ( aReturn.hasValue() )
-    {
-        return aReturn ;
-    }
-
-    return OInputCompStream::queryInterface( rType ) ;
-}
-
-void SAL_CALL OInputSeekStream::acquire()
-        noexcept
-{
-    OInputCompStream::acquire();
-}
-
-void SAL_CALL OInputSeekStream::release()
-        noexcept
-{
-    OInputCompStream::release();
 }
 
 void SAL_CALL OInputSeekStream::seek( sal_Int64 location )
