@@ -109,10 +109,6 @@ void BlocklistParserTest::testEvaluate()
 
     // Check OS
     CPPUNIT_ASSERT_EQUAL(false, FindBlocklistedDeviceInList(
-                                    aDriveInfos, VersionType::OpenGL, u"10.20.30.40", vendorNVIDIA, u"all"_ustr, DRIVER_OS_WINDOWS_7));
-    CPPUNIT_ASSERT_EQUAL(false, FindBlocklistedDeviceInList(
-                                    aDriveInfos, VersionType::OpenGL, u"10.20.30.40", vendorNVIDIA, u"all"_ustr, DRIVER_OS_WINDOWS_8));
-    CPPUNIT_ASSERT_EQUAL(false, FindBlocklistedDeviceInList(
                                     aDriveInfos, VersionType::OpenGL, u"10.20.30.40", vendorNVIDIA, u"all"_ustr, DRIVER_OS_WINDOWS_10));
 
     // Check generic OS
@@ -127,21 +123,19 @@ void BlocklistParserTest::testEvaluate()
 
     // Check Vendors
     CPPUNIT_ASSERT_EQUAL(true, FindBlocklistedDeviceInList(
-                                    aDriveInfos, VersionType::OpenGL, u"10.20.30.40", vendorMicrosoft, u"all"_ustr, DRIVER_OS_WINDOWS_7));
-    CPPUNIT_ASSERT_EQUAL(true, FindBlocklistedDeviceInList(
                                     aDriveInfos, VersionType::OpenGL, u"10.20.30.40", vendorMicrosoft, u"all"_ustr, DRIVER_OS_WINDOWS_10));
 
     // Check Versions
     CPPUNIT_ASSERT_EQUAL(true, FindBlocklistedDeviceInList(
-                                    aDriveInfos, VersionType::OpenGL, u"10.20.30.39", vendorAMD, u"all"_ustr, DRIVER_OS_WINDOWS_7));
+                                    aDriveInfos, VersionType::OpenGL, u"10.20.30.39", vendorAMD, u"all"_ustr, DRIVER_OS_WINDOWS_10));
     CPPUNIT_ASSERT_EQUAL(false, FindBlocklistedDeviceInList(
-                                    aDriveInfos, VersionType::OpenGL, u"10.20.30.40", vendorAMD, u"all"_ustr, DRIVER_OS_WINDOWS_7));
+                                    aDriveInfos, VersionType::OpenGL, u"10.20.30.40", vendorAMD, u"all"_ustr, DRIVER_OS_WINDOWS_10));
     CPPUNIT_ASSERT_EQUAL(false, FindBlocklistedDeviceInList(
-                                    aDriveInfos, VersionType::OpenGL, u"10.20.30.41", vendorAMD, u"all"_ustr, DRIVER_OS_WINDOWS_7));
+                                    aDriveInfos, VersionType::OpenGL, u"10.20.30.41", vendorAMD, u"all"_ustr, DRIVER_OS_WINDOWS_10));
 
     // Check
     CPPUNIT_ASSERT_EQUAL(true, FindBlocklistedDeviceInList(
-                                    aDriveInfos, VersionType::OpenGL, u"9.17.10.4229", vendorIntel, u"all"_ustr, DRIVER_OS_WINDOWS_7));
+                                    aDriveInfos, VersionType::OpenGL, u"9.17.10.4229", vendorIntel, u"all"_ustr, DRIVER_OS_WINDOWS_10));
 
 
 }

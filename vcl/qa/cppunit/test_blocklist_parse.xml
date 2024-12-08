@@ -12,16 +12,16 @@
         <entry os="all" vendor="all" compare="less" version="10.20.30.40">
             <device id="all"/>
         </entry>
-        <entry os="7" vendor="nvidia" compare="equal" version="10.20.30.40">
+        <entry os="10" vendor="nvidia" compare="equal" version="10.20.30.40">
             <device id="all"/>
         </entry>
-        <entry os="8" vendor="microsoft" compare="not_equal" version="10.20.30.40">
+        <entry os="10" vendor="microsoft" compare="not_equal" version="10.20.30.40">
             <device id="all"/>
         </entry>
-        <entry os="8" vendor="0xcafe" compare="not_equal" version="10.20.30.40">
+        <entry os="10" vendor="0xcafe" compare="not_equal" version="10.20.30.40">
             <device id="all"/>
         </entry>
-        <entry os="8_1" compare="between_exclusive" version="10.20.30.40">
+        <entry os="10" compare="between_exclusive" version="10.20.30.40">
             <device id="all"/>
         </entry>
         <entry os="10" compare="between_inclusive" version="10.20.30.40">
@@ -38,16 +38,16 @@
         <entry os="all" vendor="all" compare="less" version="10.20.30.40">
             <device id="all"/>
         </entry>
-        <entry os="7" vendor="nvidia" compare="equal" version="10.20.30.40">
+        <entry os="10" vendor="nvidia" compare="equal" version="10.20.30.40">
             <device id="all"/>
         </entry>
-        <entry os="8" vendor="microsoft" compare="not_equal" version="10.20.30.40">
+        <entry os="10" vendor="microsoft" compare="not_equal" version="10.20.30.40">
             <device id="all"/>
         </entry>
-        <entry os="8" vendor="0xcafe" compare="not_equal" version="10.20.30.40">
+        <entry os="10" vendor="0xcafe" compare="not_equal" version="10.20.30.40">
             <device id="all"/>
         </entry>
-        <entry os="8_1" compare="between_exclusive" version="10.20.30.40">
+        <entry os="10" compare="between_exclusive" version="10.20.30.40">
             <device id="all"/>
         </entry>
         <entry os="10" compare="between_inclusive" version="10.20.30.40">

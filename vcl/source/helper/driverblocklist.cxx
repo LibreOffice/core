@@ -28,12 +28,6 @@ static OperatingSystem getOperatingSystem(std::string_view rString)
 {
     if (rString == "all")
         return DRIVER_OS_ALL;
-    else if (rString == "7")
-        return DRIVER_OS_WINDOWS_7;
-    else if (rString == "8")
-        return DRIVER_OS_WINDOWS_8;
-    else if (rString == "8_1")
-        return DRIVER_OS_WINDOWS_8_1;
     else if (rString == "10")
         return DRIVER_OS_WINDOWS_10;
     else if (rString == "windows")
@@ -537,12 +531,6 @@ static OperatingSystem getOperatingSystem()
     // based on http://msdn.microsoft.com/en-us/library/ms724834(VS.85).aspx
     switch (DriverBlocklist::GetWindowsVersion())
     {
-        case 0x00060001:
-            return DRIVER_OS_WINDOWS_7;
-        case 0x00060002:
-            return DRIVER_OS_WINDOWS_8;
-        case 0x00060003:
-            return DRIVER_OS_WINDOWS_8_1;
         case 0x000A0000: // Major 10 Minor 0
             return DRIVER_OS_WINDOWS_10;
         default:
