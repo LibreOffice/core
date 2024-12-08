@@ -41,6 +41,7 @@
 #include <tabcont.hxx>
 #include <scmod.hxx>
 #include <sc.hrc>
+#include <strings.hrc>
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <drawview.hxx>
@@ -80,6 +81,7 @@ ScCornerButton::ScCornerButton( vcl::Window* pParent, ScViewData* pData ) :
     pViewData( pData )
 {
     ScCornerButton::EnableRTL( false );
+    SetQuickHelpText(ScResId(SCSTR_QHELP_SELECT_ALL_CELLS));
 }
 
 ScCornerButton::~ScCornerButton()
