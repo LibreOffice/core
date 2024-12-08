@@ -24,19 +24,15 @@
 #include <com/sun/star/sheet/XSheetCellCursor.hpp>
 #include <com/sun/star/sheet/XUsedAreaCursor.hpp>
 
-class ScCellCursorObj final : public ScCellRangeObj,
-                        public css::sheet::XSheetCellCursor,
-                        public css::sheet::XUsedAreaCursor,
-                        public css::table::XCellCursor
+using ScCellCursorObj_BASE = cppu::ImplInheritanceHelper<ScCellRangeObj,
+                                                         css::sheet::XSheetCellCursor,
+                                                         css::sheet::XUsedAreaCursor,
+                                                         css::table::XCellCursor>;
+class ScCellCursorObj final : public ScCellCursorObj_BASE
 {
 public:
                             ScCellCursorObj(ScDocShell* pDocSh, const ScRange& rR);
     virtual                 ~ScCellCursorObj() override;
-
-    virtual css::uno::Any SAL_CALL queryInterface(
-                                const css::uno::Type & rType ) override;
-    virtual void SAL_CALL   acquire() noexcept override;
-    virtual void SAL_CALL   release() noexcept override;
 
                             // XSheetCellCursor
     virtual void SAL_CALL   collapseToCurrentRegion() override;
@@ -75,10 +71,6 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
-                            // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

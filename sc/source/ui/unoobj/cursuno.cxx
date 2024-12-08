@@ -32,51 +32,12 @@ constexpr OUString SCSHEETCELLCURSOR_SERVICE = u"com.sun.star.sheet.SheetCellCur
 constexpr OUString SCCELLCURSOR_SERVICE = u"com.sun.star.table.CellCursor"_ustr;
 
 ScCellCursorObj::ScCellCursorObj(ScDocShell* pDocSh, const ScRange& rR) :
-    ScCellRangeObj( pDocSh, rR )
+    ScCellCursorObj_BASE( pDocSh, rR )
 {
 }
 
 ScCellCursorObj::~ScCellCursorObj()
 {
-}
-
-uno::Any SAL_CALL ScCellCursorObj::queryInterface( const uno::Type& rType )
-{
-    uno::Any aReturn = ::cppu::queryInterface(rType,
-                    static_cast<sheet::XSheetCellCursor*>(this),
-                    static_cast<sheet::XUsedAreaCursor*>(this),
-                    static_cast<table::XCellCursor*>(this));
-    if ( aReturn.hasValue() )
-        return aReturn;
-
-    return ScCellRangeObj::queryInterface( rType );
-}
-
-void SAL_CALL ScCellCursorObj::acquire() noexcept
-{
-    ScCellRangeObj::acquire();
-}
-
-void SAL_CALL ScCellCursorObj::release() noexcept
-{
-    ScCellRangeObj::release();
-}
-
-uno::Sequence<uno::Type> SAL_CALL ScCellCursorObj::getTypes()
-{
-    return comphelper::concatSequences(
-        ScCellRangeObj::getTypes(),
-        uno::Sequence<uno::Type>
-        {
-            cppu::UnoType<sheet::XSheetCellCursor>::get(),
-            cppu::UnoType<sheet::XUsedAreaCursor>::get(),
-            cppu::UnoType<table::XCellCursor>::get()
-        } );
-}
-
-uno::Sequence<sal_Int8> SAL_CALL ScCellCursorObj::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
 }
 
 // XSheetCellCursor

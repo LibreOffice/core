@@ -3927,7 +3927,7 @@ sal_Int32 SAL_CALL ScCellRangesBase::replaceAll( const uno::Reference<util::XSea
 }
 
 ScCellRangesObj::ScCellRangesObj(ScDocShell* pDocSh, const ScRangeList& rR)
-    : ScCellRangesBase(pDocSh, rR)
+    : ScCellRangesObj_BASE(pDocSh, rR)
 {
 }
 
@@ -3938,51 +3938,6 @@ ScCellRangesObj::~ScCellRangesObj()
 void ScCellRangesObj::RefChanged()
 {
     ScCellRangesBase::RefChanged();
-}
-
-uno::Any SAL_CALL ScCellRangesObj::queryInterface( const uno::Type& rType )
-{
-    uno::Any aReturn = ::cppu::queryInterface(rType,
-                    static_cast<sheet::XSheetCellRangeContainer*>(this),
-                    static_cast<sheet::XSheetCellRanges*>(this),
-                    static_cast<container::XIndexAccess*>(this),
-                    static_cast<container::XElementAccess*>(static_cast<container::XIndexAccess*>(this)),
-                    static_cast<container::XEnumerationAccess*>(this),
-                    static_cast<container::XNameContainer*>(this),
-                    static_cast<container::XNameReplace*>(this),
-                    static_cast<container::XNameAccess*>(this));
-    if ( aReturn.hasValue() )
-        return aReturn;
-
-    return ScCellRangesBase::queryInterface( rType );
-}
-
-void SAL_CALL ScCellRangesObj::acquire() noexcept
-{
-    ScCellRangesBase::acquire();
-}
-
-void SAL_CALL ScCellRangesObj::release() noexcept
-{
-    ScCellRangesBase::release();
-}
-
-uno::Sequence<uno::Type> SAL_CALL ScCellRangesObj::getTypes()
-{
-    static const uno::Sequence<uno::Type> aTypes = comphelper::concatSequences(
-        ScCellRangesBase::getTypes(),
-        uno::Sequence<uno::Type>
-        {
-            cppu::UnoType<sheet::XSheetCellRangeContainer>::get(),
-            cppu::UnoType<container::XNameContainer>::get(),
-            cppu::UnoType<container::XEnumerationAccess>::get()
-        } );
-    return aTypes;
-}
-
-uno::Sequence<sal_Int8> SAL_CALL ScCellRangesObj::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
 }
 
 // XCellRanges
@@ -4490,7 +4445,7 @@ uno::Reference<table::XCellRange> ScCellRangeObj::CreateRangeFromDoc( const ScDo
 }
 
 ScCellRangeObj::ScCellRangeObj(ScDocShell* pDocSh, const ScRange& rR) :
-    ScCellRangesBase( pDocSh, rR ),
+    ScCellRangeObj_BASE( pDocSh, rR ),
     pRangePropSet( lcl_GetRangePropertySet() ),
     aRange( rR )
 {
@@ -4513,76 +4468,6 @@ void ScCellRangeObj::RefChanged()
         aRange = rFirst;
         aRange.PutInOrder();
     }
-}
-
-uno::Any SAL_CALL ScCellRangeObj::queryInterface( const uno::Type& rType )
-{
-    uno::Any aReturn = ::cppu::queryInterface(rType,
-                    static_cast<sheet::XCellRangeAddressable*>(this),
-                    static_cast<table::XCellRange*>(this),
-                    static_cast<sheet::XSheetCellRange*>(this),
-                    static_cast<sheet::XArrayFormulaRange*>(this),
-                    static_cast<sheet::XArrayFormulaTokens*>(this),
-                    static_cast<sheet::XCellRangeData*>(this),
-                    static_cast<sheet::XCellRangeFormula*>(this),
-                    static_cast<sheet::XMultipleOperation*>(this),
-                    static_cast<util::XMergeable*>(this),
-                    static_cast<sheet::XCellSeries*>(this),
-                    static_cast<table::XAutoFormattable*>(this),
-                    static_cast<util::XSortable*>(this),
-                    static_cast<sheet::XSheetFilterableEx*>(this),
-                    static_cast<sheet::XSheetFilterable*>(this),
-                    static_cast<sheet::XSubTotalCalculatable*>(this),
-                    static_cast<table::XColumnRowRange*>(this),
-                    static_cast<util::XImportable*>(this),
-                    static_cast<sheet::XCellFormatRangesSupplier*>(this),
-                    static_cast<sheet::XUniqueCellFormatRangesSupplier*>(this));
-    if ( aReturn.hasValue() )
-        return aReturn;
-
-    return ScCellRangesBase::queryInterface( rType );
-}
-
-void SAL_CALL ScCellRangeObj::acquire() noexcept
-{
-    ScCellRangesBase::acquire();
-}
-
-void SAL_CALL ScCellRangeObj::release() noexcept
-{
-    ScCellRangesBase::release();
-}
-
-uno::Sequence<uno::Type> SAL_CALL ScCellRangeObj::getTypes()
-{
-    static const uno::Sequence<uno::Type> aTypes = comphelper::concatSequences(
-        ScCellRangesBase::getTypes(),
-        uno::Sequence<uno::Type>
-        {
-            cppu::UnoType<sheet::XCellRangeAddressable>::get(),
-            cppu::UnoType<sheet::XSheetCellRange>::get(),
-            cppu::UnoType<sheet::XArrayFormulaRange>::get(),
-            cppu::UnoType<sheet::XArrayFormulaTokens>::get(),
-            cppu::UnoType<sheet::XCellRangeData>::get(),
-            cppu::UnoType<sheet::XCellRangeFormula>::get(),
-            cppu::UnoType<sheet::XMultipleOperation>::get(),
-            cppu::UnoType<util::XMergeable>::get(),
-            cppu::UnoType<sheet::XCellSeries>::get(),
-            cppu::UnoType<table::XAutoFormattable>::get(),
-            cppu::UnoType<util::XSortable>::get(),
-            cppu::UnoType<sheet::XSheetFilterableEx>::get(),
-            cppu::UnoType<sheet::XSubTotalCalculatable>::get(),
-            cppu::UnoType<table::XColumnRowRange>::get(),
-            cppu::UnoType<util::XImportable>::get(),
-            cppu::UnoType<sheet::XCellFormatRangesSupplier>::get(),
-            cppu::UnoType<sheet::XUniqueCellFormatRangesSupplier>::get()
-        } );
-    return aTypes;
-}
-
-uno::Sequence<sal_Int8> SAL_CALL ScCellRangeObj::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
 }
 
 // XCellRange
@@ -5713,7 +5598,7 @@ const SfxItemPropertyMap& ScCellObj::GetCellPropertyMap()
 }
 
 ScCellObj::ScCellObj(ScDocShell* pDocSh, const ScAddress& rP) :
-    ScCellRangeObj( pDocSh, ScRange(rP,rP) ),
+    ScCellObj_BASE( pDocSh, ScRange(rP,rP) ),
     pCellPropSet( lcl_GetCellPropertySet() ),
     aCellPos( rP ),
     nActionLockCount( 0 )
@@ -5752,61 +5637,6 @@ void ScCellObj::RefChanged()
     {
         aCellPos = rRanges[ 0 ].aStart;
     }
-}
-
-uno::Any SAL_CALL ScCellObj::queryInterface( const uno::Type& rType )
-{
-    uno::Any aReturn = ::cppu::queryInterface(rType,
-                    static_cast<table::XCell*>(this),
-                    static_cast<table::XCell2*>(this),
-                    static_cast<sheet::XFormulaTokens*>(this),
-                    static_cast<sheet::XCellAddressable*>(this),
-                    static_cast<text::XText*>(this),
-                    static_cast<text::XSimpleText*>(this),
-                    static_cast<text::XTextRange*>(this),
-                    static_cast<container::XEnumerationAccess*>(this),
-                    static_cast<container::XElementAccess*>(this),
-                    static_cast<sheet::XSheetAnnotationAnchor*>(this),
-                    static_cast<text::XTextFieldsSupplier*>(this),
-                    static_cast<document::XActionLockable*>(this));
-    if ( aReturn.hasValue() )
-        return aReturn;
-
-    return ScCellRangeObj::queryInterface( rType );
-}
-
-void SAL_CALL ScCellObj::acquire() noexcept
-{
-    ScCellRangeObj::acquire();
-}
-
-void SAL_CALL ScCellObj::release() noexcept
-{
-    ScCellRangeObj::release();
-}
-
-uno::Sequence<uno::Type> SAL_CALL ScCellObj::getTypes()
-{
-    static const uno::Sequence<uno::Type> aTypes = comphelper::concatSequences(
-        ScCellRangeObj::getTypes(),
-        uno::Sequence<uno::Type>
-        {
-            cppu::UnoType<table::XCell>::get(),
-            cppu::UnoType<sheet::XCellAddressable>::get(),
-            cppu::UnoType<text::XText>::get(),
-            cppu::UnoType<container::XEnumerationAccess>::get(),
-            cppu::UnoType<sheet::XSheetAnnotationAnchor>::get(),
-            cppu::UnoType<text::XTextFieldsSupplier>::get(),
-            cppu::UnoType<document::XActionLockable>::get(),
-            cppu::UnoType<sheet::XFormulaTokens>::get(),
-            cppu::UnoType<table::XCell2>::get()
-        } );
-    return aTypes;
-}
-
-uno::Sequence<sal_Int8> SAL_CALL ScCellObj::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
 }
 
 // helper methods
@@ -6496,7 +6326,7 @@ static ScRange MaxDocRange(ScDocShell* pDocSh, SCTAB nTab)
 }
 
 ScTableSheetObj::ScTableSheetObj( ScDocShell* pDocSh, SCTAB nTab ) :
-    ScCellRangeObj( pDocSh, MaxDocRange(pDocSh, nTab) ),
+    ScTableSheetObj_BASE( pDocSh, MaxDocRange(pDocSh, nTab) ),
     pSheetPropSet(lcl_GetSheetPropertySet())
 {
 }
@@ -6509,78 +6339,6 @@ void ScTableSheetObj::InitInsertSheet(ScDocShell* pDocSh, SCTAB nTab)
 {
     ScDocument& rDoc = pDocSh->GetDocument();
     InitInsertRange( pDocSh, ScRange(0,0,nTab, rDoc.MaxCol(),rDoc.MaxRow(),nTab) );
-}
-
-uno::Any SAL_CALL ScTableSheetObj::queryInterface( const uno::Type& rType )
-{
-    uno::Any aReturn = ::cppu::queryInterface(rType,
-                    static_cast<sheet::XSpreadsheet*>(this),
-                    static_cast<container::XNamed*>(this),
-                    static_cast<sheet::XSheetPageBreak*>(this),
-                    static_cast<sheet::XCellRangeMovement*>(this),
-                    static_cast<table::XTableChartsSupplier*>(this),
-                    static_cast<sheet::XDataPilotTablesSupplier*>(this),
-                    static_cast<sheet::XScenariosSupplier*>(this),
-                    static_cast<sheet::XSheetAnnotationsSupplier*>(this),
-                    static_cast<drawing::XDrawPageSupplier*>(this),
-                    static_cast<sheet::XPrintAreas*>(this),
-                    static_cast<sheet::XSheetAuditing*>(this),
-                    static_cast<sheet::XSheetOutline*>(this),
-                    static_cast<util::XProtectable*>(this),
-                    static_cast<sheet::XScenario*>(this),
-                    static_cast<sheet::XScenarioEnhanced*>(this),
-                    static_cast<sheet::XSheetLinkable*>(this),
-                    static_cast<sheet::XExternalSheetName*>(this),
-                    static_cast<document::XEventsSupplier*>(this),
-                    static_cast<table::XTablePivotChartsSupplier*>(this));
-    if ( aReturn.hasValue() )
-        return aReturn;
-
-    return ScCellRangeObj::queryInterface( rType );
-}
-
-void SAL_CALL ScTableSheetObj::acquire() noexcept
-{
-    ScCellRangeObj::acquire();
-}
-
-void SAL_CALL ScTableSheetObj::release() noexcept
-{
-    ScCellRangeObj::release();
-}
-
-uno::Sequence<uno::Type> SAL_CALL ScTableSheetObj::getTypes()
-{
-    static const uno::Sequence<uno::Type> aTypes = comphelper::concatSequences(
-        ScCellRangeObj::getTypes(),
-        uno::Sequence<uno::Type>
-        {
-            cppu::UnoType<sheet::XSpreadsheet>::get(),
-            cppu::UnoType<container::XNamed>::get(),
-            cppu::UnoType<sheet::XSheetPageBreak>::get(),
-            cppu::UnoType<sheet::XCellRangeMovement>::get(),
-            cppu::UnoType<table::XTableChartsSupplier>::get(),
-            cppu::UnoType<sheet::XDataPilotTablesSupplier>::get(),
-            cppu::UnoType<sheet::XScenariosSupplier>::get(),
-            cppu::UnoType<sheet::XSheetAnnotationsSupplier>::get(),
-            cppu::UnoType<drawing::XDrawPageSupplier>::get(),
-            cppu::UnoType<sheet::XPrintAreas>::get(),
-            cppu::UnoType<sheet::XSheetAuditing>::get(),
-            cppu::UnoType<sheet::XSheetOutline>::get(),
-            cppu::UnoType<util::XProtectable>::get(),
-            cppu::UnoType<sheet::XScenario>::get(),
-            cppu::UnoType<sheet::XScenarioEnhanced>::get(),
-            cppu::UnoType<sheet::XSheetLinkable>::get(),
-            cppu::UnoType<sheet::XExternalSheetName>::get(),
-            cppu::UnoType<document::XEventsSupplier>::get(),
-            cppu::UnoType<table::XTablePivotChartsSupplier>::get()
-        } );
-    return aTypes;
-}
-
-uno::Sequence<sal_Int8> SAL_CALL ScTableSheetObj::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
 }
 
 //  Helper functions
@@ -8247,45 +8005,13 @@ uno::Sequence<OUString> SAL_CALL ScTableSheetObj::getSupportedServiceNames()
 }
 
 ScTableColumnObj::ScTableColumnObj( ScDocShell* pDocSh, SCCOL nCol, SCTAB nTab ) :
-    ScCellRangeObj( pDocSh, ScRange(nCol,0,nTab, nCol, pDocSh->GetDocument().MaxRow(),nTab) ),
+    ScTableColumnObj_BASE( pDocSh, ScRange(nCol,0,nTab, nCol, pDocSh->GetDocument().MaxRow(),nTab) ),
     pColPropSet(lcl_GetColumnPropertySet())
 {
 }
 
 ScTableColumnObj::~ScTableColumnObj()
 {
-}
-
-uno::Any SAL_CALL ScTableColumnObj::queryInterface( const uno::Type& rType )
-{
-    uno::Any aReturn = ::cppu::queryInterface(rType,
-                    static_cast<container::XNamed*>(this));
-    if ( aReturn.hasValue() )
-        return aReturn;
-
-    return ScCellRangeObj::queryInterface( rType );
-}
-
-void SAL_CALL ScTableColumnObj::acquire() noexcept
-{
-    ScCellRangeObj::acquire();
-}
-
-void SAL_CALL ScTableColumnObj::release() noexcept
-{
-    ScCellRangeObj::release();
-}
-
-uno::Sequence<uno::Type> SAL_CALL ScTableColumnObj::getTypes()
-{
-    return comphelper::concatSequences(
-        ScCellRangeObj::getTypes(),
-        uno::Sequence<uno::Type> { cppu::UnoType<container::XNamed>::get() } );
-}
-
-uno::Sequence<sal_Int8> SAL_CALL ScTableColumnObj::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
 }
 
 // XNamed
