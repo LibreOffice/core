@@ -44,7 +44,7 @@ namespace unocontrols {
 //  construct/destruct
 
 StatusIndicator::StatusIndicator( const css::uno::Reference< XComponentContext >& rxContext )
-    : BaseContainerControl  ( rxContext  )
+    : StatusIndicator_BASE(rxContext)
 {
     // It's not allowed to work with member in this method (refcounter !!!)
     // But with a HACK (++refcount) its "OK" :-(
@@ -71,62 +71,6 @@ StatusIndicator::StatusIndicator( const css::uno::Reference< XComponentContext >
 }
 
 StatusIndicator::~StatusIndicator() {}
-
-//  XInterface
-
-Any SAL_CALL StatusIndicator::queryInterface( const Type& rType )
-{
-    // Ask for my own supported interfaces ...
-    // Attention: XTypeProvider and XInterface are supported by WeakComponentImplHelper!
-    Any aReturn ( ::cppu::queryInterface( rType                                     ,
-                                          static_cast< XLayoutConstrains*   > ( this )  ,
-                                          static_cast< XStatusIndicator*    > ( this )
-                                        )
-                );
-
-    // If searched interface not supported by this class ...
-    if ( !aReturn.hasValue() )
-    {
-        // ... ask baseclasses.
-        aReturn = BaseControl::queryInterface( rType );
-    }
-
-    return aReturn;
-}
-
-//  XInterface
-
-void SAL_CALL StatusIndicator::acquire() noexcept
-{
-    // Attention:
-    //  Don't use mutex or guard in this method!!! Is a method of XInterface.
-
-    // Forward to baseclass
-    BaseControl::acquire();
-}
-
-//  XInterface
-
-void SAL_CALL StatusIndicator::release() noexcept
-{
-    // Attention:
-    //  Don't use mutex or guard in this method!!! Is a method of XInterface.
-
-    // Forward to baseclass
-    BaseControl::release();
-}
-
-//  XTypeProvider
-
-Sequence< Type > SAL_CALL StatusIndicator::getTypes()
-{
-    static OTypeCollection ourTypeCollection(
-                cppu::UnoType<XLayoutConstrains>::get(),
-                cppu::UnoType<XStatusIndicator>::get(),
-                BaseContainerControl::getTypes() );
-
-    return ourTypeCollection.getTypes();
-}
 
 //  XStatusIndicator
 

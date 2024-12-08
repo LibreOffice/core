@@ -42,61 +42,15 @@ constexpr sal_Int32 STATUSINDICATOR_BACKGROUNDCOLOR = sal_Int32(COL_LIGHTGRAY);
 constexpr sal_Int32 STATUSINDICATOR_LINECOLOR_BRIGHT = sal_Int32(COL_WHITE);
 constexpr sal_Int32 STATUSINDICATOR_LINECOLOR_SHADOW = sal_Int32(COL_BLACK);
 
-class StatusIndicator final : public css::awt::XLayoutConstrains
-                        , public css::task::XStatusIndicator
-                        , public BaseContainerControl
+using StatusIndicator_BASE = cppu::ImplInheritanceHelper<BaseContainerControl,
+                                                         css::awt::XLayoutConstrains,
+                                                         css::task::XStatusIndicator>;
+class StatusIndicator final : public StatusIndicator_BASE
 {
 public:
     StatusIndicator( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     virtual ~StatusIndicator() override;
-
-    //  XInterface
-
-    /**
-        @short      give answer, if interface is supported
-        @descr      The interfaces are searched by type.
-
-        @seealso    XInterface
-
-        @param      "rType" is the type of searched interface.
-
-        @return     Any     information about found interface
-
-        @onerror    A RuntimeException is thrown.
-    */
-
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-
-    /**
-        @short      increment refcount
-        @seealso    XInterface
-        @seealso    release()
-        @onerror    A RuntimeException is thrown.
-    */
-
-    virtual void SAL_CALL acquire() noexcept override;
-
-    /**
-        @short      decrement refcount
-        @seealso    XInterface
-        @seealso    acquire()
-        @onerror    A RuntimeException is thrown.
-    */
-
-    virtual void SAL_CALL release() noexcept override;
-
-    //  XTypeProvider
-
-    /**
-        @short      get information about supported interfaces
-        @seealso    XTypeProvider
-        @return     Sequence of types of all supported interfaces
-
-        @onerror    A RuntimeException is thrown.
-    */
-
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
 
     //  XStatusIndicator
 

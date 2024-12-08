@@ -51,7 +51,7 @@ constexpr OUStringLiteral DEFAULT_BUTTONLABEL = u"Abbrechen";
 namespace unocontrols {
 
 ProgressMonitor::ProgressMonitor( const css::uno::Reference< XComponentContext >& rxContext )
-    : BaseContainerControl  ( rxContext  )
+    : ProgressMonitor_BASE(rxContext)
 {
     // It's not allowed to work with member in this method (refcounter !!!)
     // But with a HACK (++refcount) its "OK" :-(
@@ -107,58 +107,6 @@ ProgressMonitor::ProgressMonitor( const css::uno::Reference< XComponentContext >
 ProgressMonitor::~ProgressMonitor()
 {
     impl_cleanMemory ();
-}
-
-//  XInterface
-Any SAL_CALL ProgressMonitor::queryInterface( const Type& rType )
-{
-    // Ask for my own supported interfaces ...
-    // Attention: XTypeProvider and XInterface are supported by WeakComponentImplHelper!
-    Any aReturn ( ::cppu::queryInterface( rType ,
-                                          static_cast< XLayoutConstrains* > ( this ) ,
-                                          static_cast< XButton*           > ( this ) ,
-                                          static_cast< XProgressMonitor*  > ( this )
-                                        )
-                );
-
-    if (aReturn.hasValue())
-        return aReturn;
-
-    // If searched interface not supported by this class ...
-    // ... ask baseclasses.
-    return BaseControl::queryInterface(rType);
-}
-
-//  XInterface
-void SAL_CALL ProgressMonitor::acquire() noexcept
-{
-    // Attention:
-    //  Don't use mutex or guard in this method!!! Is a method of XInterface.
-
-    // Forward to baseclass
-    BaseControl::acquire();
-}
-
-//  XInterface
-void SAL_CALL ProgressMonitor::release() noexcept
-{
-    // Attention:
-    //  Don't use mutex or guard in this method!!! Is a method of XInterface.
-
-    // Forward to baseclass
-    BaseControl::release();
-}
-
-//  XTypeProvider
-Sequence< Type > SAL_CALL ProgressMonitor::getTypes()
-{
-    static OTypeCollection ourTypeCollection(
-                cppu::UnoType<XLayoutConstrains>::get(),
-                cppu::UnoType<XButton>::get(),
-                cppu::UnoType<XProgressMonitor>::get(),
-                BaseContainerControl::getTypes() );
-
-    return ourTypeCollection.getTypes();
 }
 
 //  XProgressMonitor
