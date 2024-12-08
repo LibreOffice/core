@@ -33,12 +33,6 @@
 #include <vector>
 
 #include <dwrite_3.h>
-// Currently, we build with _WIN32_WINNT=0x0601 (Windows 7), which means newer
-// declarations in dwrite_3.h will not be visible.
-#if WINVER < 0x0A00
-#  include "dw-extra.h"
-#endif
-
 #include <o3tl/lru_map.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>

@@ -15010,7 +15010,6 @@ vcl/win/dtrans/XNotifyingDataObject.hxx
 vcl/win/dtrans/XTDataObject.cxx
 vcl/win/dtrans/XTDataObject.hxx
 vcl/win/gdi/DWriteTextRenderer.cxx
-vcl/win/gdi/dw-extra.h
 vcl/win/gdi/gdiimpl.cxx
 vcl/win/gdi/gdiimpl.hxx
 vcl/win/gdi/salbmp.cxx
