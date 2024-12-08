@@ -55,16 +55,12 @@ public:
 
 
 
-
-class UcbContentProviderProxy :
-                public cppu::OWeakObject,
-                public css::lang::XTypeProvider,
-                public css::lang::XServiceInfo,
-                public css::ucb::XContentProviderSupplier,
-                public css::ucb::XContentProvider,
-                public css::ucb::XParameterizedContentProvider
+using UcbContentProviderProxy_BASE = comphelper::WeakImplHelper<css::lang::XServiceInfo,
+                                                                css::ucb::XContentProviderSupplier,
+                                                                css::ucb::XContentProvider,
+                                                                css::ucb::XParameterizedContentProvider>;
+class UcbContentProviderProxy : public UcbContentProviderProxy_BASE
 {
-    std::mutex    m_aMutex;
     OUString m_aService;
     OUString m_aTemplate;
     OUString m_aArguments;
@@ -86,13 +82,8 @@ public:
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire()
-        noexcept override;
-    virtual void SAL_CALL release()
-        noexcept override;
 
     // XTypeProvider
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
 
     // XServiceInfo

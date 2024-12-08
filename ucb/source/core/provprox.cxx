@@ -108,31 +108,12 @@ UcbContentProviderProxy::~UcbContentProviderProxy()
 
 
 // XInterface methods.
-void SAL_CALL UcbContentProviderProxy::acquire()
-    noexcept
-{
-    OWeakObject::acquire();
-}
-
-void SAL_CALL UcbContentProviderProxy::release()
-    noexcept
-{
-    OWeakObject::release();
-}
 
 // virtual
 Any SAL_CALL
 UcbContentProviderProxy::queryInterface( const Type & rType )
 {
-    Any aRet = cppu::queryInterface( rType,
-                static_cast< XTypeProvider * >( this ),
-                static_cast< XServiceInfo * >( this ),
-                static_cast< XContentProvider * >( this ),
-                static_cast< XParameterizedContentProvider * >( this ),
-                static_cast< XContentProviderSupplier * >( this ) );
-
-    if ( !aRet.hasValue() )
-        aRet = OWeakObject::queryInterface( rType );
+    Any aRet = UcbContentProviderProxy_BASE::queryInterface(rType);
 
     if ( !aRet.hasValue() )
     {
@@ -148,28 +129,13 @@ UcbContentProviderProxy::queryInterface( const Type & rType )
 
 // XTypeProvider methods.
 
-
-XTYPEPROVIDER_COMMON_IMPL( UcbContentProviderProxy );
-
-
 Sequence< Type > SAL_CALL UcbContentProviderProxy::getTypes()
 {
     // Get original provider and forward the call...
-    Reference< XTypeProvider > xProvider( getContentProvider(), UNO_QUERY );
-    if ( xProvider.is() )
-    {
+    if (Reference<XTypeProvider> xProvider{ getContentProvider(), UNO_QUERY })
         return xProvider->getTypes();
-    }
-    else
-    {
-        static cppu::OTypeCollection s_aCollection(
-            CPPU_TYPE_REF( XTypeProvider ),
-            CPPU_TYPE_REF( XServiceInfo ),
-            CPPU_TYPE_REF( XContentProvider ),
-            CPPU_TYPE_REF( XParameterizedContentProvider ),
-            CPPU_TYPE_REF( XContentProviderSupplier ) );
-        return s_aCollection.getTypes();
-    }
+
+    return UcbContentProviderProxy_BASE::getTypes();
 }
 
 
