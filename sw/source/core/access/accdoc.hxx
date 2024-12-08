@@ -86,12 +86,13 @@ public:
     virtual css::awt::Size SAL_CALL getSize() override;
 };
 
+using SwAccessibleDocument_BASE = cppu::ImplInheritanceHelper<SwAccessibleDocumentBase,
+                                                              css::accessibility::XAccessibleSelection,
+                                                              css::accessibility::XAccessibleExtendedAttributes>;
 /**
  * access to an accessible Writer document
  */
-class SwAccessibleDocument : public SwAccessibleDocumentBase,
-                             public css::accessibility::XAccessibleSelection,
-                             public css::accessibility::XAccessibleExtendedAttributes
+class SwAccessibleDocument : public SwAccessibleDocument_BASE
 {
     // Implementation for XAccessibleSelection interface
     SwAccessibleSelectionHelper maSelectionHelper;
@@ -122,25 +123,6 @@ public:
     // the AccessibleContext service.
     virtual css::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames() override;
-
-    // XInterface
-
-    // XInterface is inherited through SwAccessibleContext and
-    // XAccessibleSelection. These methods are needed to avoid
-    // ambiguities.
-
-    virtual css::uno::Any SAL_CALL queryInterface(
-        const css::uno::Type& aType ) override;
-
-    virtual void SAL_CALL acquire(  ) noexcept override
-        { SwAccessibleContext::acquire(); };
-
-    virtual void SAL_CALL release(  ) noexcept override
-        { SwAccessibleContext::release(); };
-
-    // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
     // XAccessibleSelection
 

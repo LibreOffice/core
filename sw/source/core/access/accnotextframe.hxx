@@ -29,9 +29,10 @@ class SwFlyFrame;
 class SwNoTextNode;
 class SwAccessibleNoTextHyperlink;
 
-class SwAccessibleNoTextFrame : public  SwAccessibleFrameBase,
-                                public css::accessibility::XAccessibleImage,
-                                public css::accessibility::XAccessibleHypertext//Added by yangzhh for HyperLink
+using SwAccessibleNoTextFrame_BASE = cppu::ImplInheritanceHelper<SwAccessibleFrameBase,
+                                                                 css::accessibility::XAccessibleImage,
+                                                                 css::accessibility::XAccessibleHypertext>;
+class SwAccessibleNoTextFrame : public SwAccessibleNoTextFrame_BASE
 {
     friend class SwAccessibleNoTextHyperlink;
     rtl::Reference< SwAccessibleNoTextHyperlink > m_xHyperlink;
@@ -59,22 +60,6 @@ public:
     /// Return this object's description.
     virtual OUString SAL_CALL
         getAccessibleDescription() override;
-
-    // XInterface methods need to be implemented to disambiguate
-    // between those inherited through SwAccessibleContext and
-    // XAccessibleImage.
-
-    virtual css::uno::Any SAL_CALL queryInterface(
-        const css::uno::Type& aType ) override;
-
-    virtual void SAL_CALL acquire(  ) noexcept override
-        { SwAccessibleContext::acquire(); };
-
-    virtual void SAL_CALL release(  ) noexcept override
-        { SwAccessibleContext::release(); };
-
-    // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
     // XAccessibleImage
     virtual OUString SAL_CALL

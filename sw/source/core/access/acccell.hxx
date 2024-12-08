@@ -27,10 +27,11 @@ class SwCellFrame;
 class SwAccessibleTable;
 class SwFrameFormat;
 
-class SwAccessibleCell : public SwAccessibleContext,
-                  public css::accessibility::XAccessibleValue,
-                  public css::accessibility::XAccessibleSelection,
-                  public  css::accessibility::XAccessibleExtendedAttributes
+using SwAccessibleCell_BASE = cppu::ImplInheritanceHelper<SwAccessibleContext,
+                                                          css::accessibility::XAccessibleValue,
+                                                          css::accessibility::XAccessibleSelection,
+                                                          css::accessibility::XAccessibleExtendedAttributes>;
+class SwAccessibleCell : public SwAccessibleCell_BASE
 {
     // Implementation for XAccessibleSelection interface
     SwAccessibleSelectionHelper m_aSelectionHelper;
@@ -82,24 +83,6 @@ public:
     virtual void Dispose(bool bRecursive, bool bCanSkipInvisible = true) override;
 
     virtual void InvalidatePosOrSize( const SwRect& rFrame ) override;
-
-    // XInterface
-
-    // (XInterface methods need to be implemented to disambiguate
-    // between those inherited through SwAccessibleContext and
-    // XAccessibleValue).
-
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-
-    virtual void SAL_CALL acquire(  ) noexcept override
-        { SwAccessibleContext::acquire(); };
-
-    virtual void SAL_CALL release(  ) noexcept override
-        { SwAccessibleContext::release(); };
-
-    // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
     // XAccessibleExtendedAttributes
     css::uno::Any SAL_CALL getExtendedAttributes() override ;

@@ -38,11 +38,12 @@ namespace sw::access {
     class SwAccessibleChild;
 }
 
+using SwAccessibleTable_BASE = cppu::ImplInheritanceHelper<SwAccessibleContext,
+                                                           css::accessibility::XAccessibleTable,
+                                                           css::accessibility::XAccessibleSelection,
+                                                           css::accessibility::XAccessibleTableSelection>;
 class SwAccessibleTable :
-        public SwAccessibleContext,
-        public css::accessibility::XAccessibleTable,
-        public css::accessibility::XAccessibleSelection,
-        public css::accessibility::XAccessibleTableSelection,
+        public SwAccessibleTable_BASE,
         public SvtListener
 {
     std::unique_ptr<SwAccessibleTableData_Impl> mpTableData;    // the table's data, protected by SolarMutex
@@ -94,25 +95,6 @@ protected:
 public:
     SwAccessibleTable(std::shared_ptr<SwAccessibleMap> const& pInitMap,
                       const SwTabFrame* pTableFrame);
-
-    // XInterface
-
-    // (XInterface methods need to be implemented to disambiguate
-    // between those inherited through SwAccessibleContext and
-    // XAccessibleTable).
-
-    virtual css::uno::Any SAL_CALL queryInterface(
-        const css::uno::Type& aType ) override;
-
-    virtual void SAL_CALL acquire(  ) noexcept override
-        { SwAccessibleContext::acquire(); };
-
-    virtual void SAL_CALL release(  ) noexcept override
-        { SwAccessibleContext::release(); };
-
-    // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
     // XAccessibleContext
 
@@ -243,11 +225,6 @@ protected:
 public:
     SwAccessibleTableColHeaders(std::shared_ptr<SwAccessibleMap> const& pMap,
                                 const SwTabFrame *pTabFrame);
-
-    // XInterface
-
-    virtual css::uno::Any SAL_CALL queryInterface(
-        const css::uno::Type& aType ) override;
 
     // XAccessibleContext
 

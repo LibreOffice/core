@@ -346,7 +346,7 @@ void SwAccessibleDocument::GetStates( sal_Int64& rStateSet )
 
 SwAccessibleDocument::SwAccessibleDocument(
         std::shared_ptr<SwAccessibleMap> const& pInitMap)
-    : SwAccessibleDocumentBase(pInitMap)
+    : SwAccessibleDocument_BASE(pInitMap)
     , maSelectionHelper(*this)
 {
     SetName(pInitMap->GetDocName());
@@ -431,40 +431,6 @@ sal_Bool SAL_CALL SwAccessibleDocument::supportsService(const OUString& sTestSer
 uno::Sequence< OUString > SAL_CALL SwAccessibleDocument::getSupportedServiceNames()
 {
     return { sServiceName, sAccessibleServiceName };
-}
-
-// XInterface
-
-uno::Any SwAccessibleDocument::queryInterface(
-    const uno::Type& rType )
-{
-    uno::Any aRet;
-    if ( rType == cppu::UnoType<XAccessibleSelection>::get() )
-    {
-        uno::Reference<XAccessibleSelection> aSelect = this;
-        aRet <<= aSelect;
-    }
-    else  if ( rType == cppu::UnoType<XAccessibleExtendedAttributes>::get())
-    {
-        uno::Reference<XAccessibleExtendedAttributes> aAttribute = this;
-        aRet <<= aAttribute;
-    }
-    else
-        aRet = SwAccessibleContext::queryInterface( rType );
-    return aRet;
-}
-
-// XTypeProvider
-uno::Sequence< uno::Type > SAL_CALL SwAccessibleDocument::getTypes()
-{
-    return cppu::OTypeCollection(
-            cppu::UnoType<XAccessibleSelection>::get(),
-            SwAccessibleDocumentBase::getTypes() ).getTypes();
-}
-
-uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleDocument::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
 }
 
 // XAccessibleSelection

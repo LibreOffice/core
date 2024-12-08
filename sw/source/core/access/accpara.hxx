@@ -50,17 +50,18 @@ namespace com::sun::star {
 typedef std::unordered_map< OUString,
                          css::beans::PropertyValue > tAccParaPropValMap;
 
+using SwAccessibleParagraph_BASE = cppu::ImplInheritanceHelper<SwAccessibleContext,
+                                                               css::accessibility::XAccessibleEditableText,
+                                                               css::accessibility::XAccessibleSelection,
+                                                               css::accessibility::XAccessibleHypertext,
+                                                               css::accessibility::XAccessibleTextMarkup,
+                                                               css::accessibility::XAccessibleMultiLineText,
+                                                               css::accessibility::XAccessibleTextAttributes,
+                                                               css::accessibility::XAccessibleTextSelection,
+                                                               css::accessibility::XAccessibleExtendedAttributes>;
 class SwAccessibleParagraph :
         public SfxListener,
-        public SwAccessibleContext,
-        public css::accessibility::XAccessibleEditableText,
-        public css::accessibility::XAccessibleSelection,
-        public css::accessibility::XAccessibleHypertext,
-        public css::accessibility::XAccessibleTextMarkup,
-        public css::accessibility::XAccessibleMultiLineText,
-        public css::accessibility::XAccessibleTextAttributes,
-        public css::accessibility::XAccessibleTextSelection,
-        public css::accessibility::XAccessibleExtendedAttributes
+        public SwAccessibleParagraph_BASE
 {
     friend class SwAccessibleHyperlink;
 
@@ -278,25 +279,6 @@ public:
     // the AccessibleContext service.
     virtual css::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames() override;
-
-    // XInterface
-
-    // (XInterface methods need to be implemented to disambiguate
-    // between those inherited through SwAccessibleContext and
-    // XAccessibleEditableText).
-
-    virtual css::uno::Any SAL_CALL queryInterface(
-        const css::uno::Type& aType ) override;
-
-    virtual void SAL_CALL acquire(  ) noexcept override
-        { SwAccessibleContext::acquire(); };
-
-    virtual void SAL_CALL release(  ) noexcept override
-        { SwAccessibleContext::release(); };
-
-    // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
     // XAccessibleText
     virtual sal_Int32 SAL_CALL getCaretPosition() override;

@@ -58,7 +58,7 @@ SwAccessibleNoTextFrame::SwAccessibleNoTextFrame(
         std::shared_ptr<SwAccessibleMap> const& pInitMap,
         sal_Int16 nInitRole,
         const SwFlyFrame* pFlyFrame  ) :
-    SwAccessibleFrameBase( pInitMap, nInitRole, pFlyFrame )
+    SwAccessibleNoTextFrame_BASE( pInitMap, nInitRole, pFlyFrame )
 {
     const SwNoTextNode* pNd = GetNoTextNode();
     // #i73249#
@@ -155,34 +155,6 @@ OUString SAL_CALL SwAccessibleNoTextFrame::getAccessibleDescription()
     ThrowIfDisposed();
 
     return msDesc;
-}
-
-// XInterface
-
-uno::Any SAL_CALL SwAccessibleNoTextFrame::queryInterface( const uno::Type& aType )
-{
-    if( aType ==
-        ::cppu::UnoType<XAccessibleImage>::get() )
-    {
-        uno::Reference<XAccessibleImage> xImage = this;
-        return uno::Any(xImage);
-    }
-    else if ( aType == cppu::UnoType<XAccessibleHypertext>::get())
-    {
-        uno::Reference<XAccessibleHypertext> aAccHypertext = this;
-        return uno::Any( aAccHypertext );
-    }
-    else
-        return SwAccessibleContext::queryInterface( aType );
-}
-
-// XTypeProvider
-
-uno::Sequence< uno::Type > SAL_CALL SwAccessibleNoTextFrame::getTypes()
-{
-    return cppu::OTypeCollection(
-        ::cppu::UnoType<XAccessibleImage>::get(),
-        SwAccessibleFrameBase::getTypes() ).getTypes();
 }
 
 /// XAccessibleImage

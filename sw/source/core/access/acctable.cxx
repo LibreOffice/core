@@ -608,7 +608,7 @@ void SwAccessibleTable::GetStates( sal_Int64& rStateSet )
 SwAccessibleTable::SwAccessibleTable(
         std::shared_ptr<SwAccessibleMap> const& pInitMap,
         const SwTabFrame* pTabFrame  ) :
-    SwAccessibleContext( pInitMap, AccessibleRole::TABLE, pTabFrame )
+    SwAccessibleTable_BASE( pInitMap, AccessibleRole::TABLE, pTabFrame )
 {
     const SwFrameFormat* pFrameFormat = pTabFrame->GetFormat();
     StartListening(const_cast<SwFrameFormat*>(pFrameFormat)->GetNotifier());
@@ -665,46 +665,6 @@ void SwAccessibleTable::Notify(const SfxHint& rHint)
             FireAccessibleEvent( aEvent );
         }
     }
-}
-
-uno::Any SwAccessibleTable::queryInterface( const uno::Type& rType )
-{
-    uno::Any aRet;
-    if ( rType == cppu::UnoType<XAccessibleTable>::get() )
-    {
-        uno::Reference<XAccessibleTable> xThis( this );
-        aRet <<= xThis;
-    }
-    else if ( rType == cppu::UnoType<XAccessibleSelection>::get() )
-    {
-        uno::Reference<XAccessibleSelection> xSelection( this );
-        aRet <<= xSelection;
-    }
-    else if ( rType == cppu::UnoType<XAccessibleTableSelection>::get() )
-    {
-        uno::Reference<XAccessibleTableSelection> xTableExtent( this );
-        aRet <<= xTableExtent;
-    }
-    else
-    {
-        aRet = SwAccessibleContext::queryInterface(rType);
-    }
-
-    return aRet;
-}
-
-// XTypeProvider
-uno::Sequence< uno::Type > SAL_CALL SwAccessibleTable::getTypes()
-{
-    return cppu::OTypeCollection(
-        cppu::UnoType<XAccessibleSelection>::get(),
-        cppu::UnoType<XAccessibleTable>::get(),
-        SwAccessibleContext::getTypes() ).getTypes();
-}
-
-uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleTable::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
 }
 
 // #i77106#
@@ -1645,12 +1605,6 @@ std::unique_ptr<SwAccessibleTableData_Impl> SwAccessibleTableColHeaders::CreateN
 
 void SwAccessibleTableColHeaders::Notify(const SfxHint& )
 {
-}
-
-// XInterface
-uno::Any SAL_CALL SwAccessibleTableColHeaders::queryInterface( const uno::Type& aType )
-{
-    return SwAccessibleTable::queryInterface( aType );
 }
 
 // XAccessibleContext

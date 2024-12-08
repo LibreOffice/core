@@ -98,7 +98,7 @@ void SwAccessibleCell::GetStates( sal_Int64& rStateSet )
 
 SwAccessibleCell::SwAccessibleCell(std::shared_ptr<SwAccessibleMap> const& pInitMap,
                                     const SwCellFrame *pCellFrame )
-    : SwAccessibleContext( pInitMap, AccessibleRole::TABLE_CELL, pCellFrame )
+    : SwAccessibleCell_BASE(pInitMap, AccessibleRole::TABLE_CELL, pCellFrame)
     , m_aSelectionHelper( *this )
     , m_bIsSelected( false )
 {
@@ -269,49 +269,6 @@ void SwAccessibleCell::InvalidatePosOrSize( const SwRect& rOldBox )
     if( xAccImpl.is() )
         xAccImpl->InvalidateChildPosOrSize( SwAccessibleChild(GetFrame()), rOldBox );
     SwAccessibleContext::InvalidatePosOrSize( rOldBox );
-}
-
-// XAccessibleInterface
-
-uno::Any SwAccessibleCell::queryInterface( const uno::Type& rType )
-{
-    if (rType == cppu::UnoType<XAccessibleExtendedAttributes>::get())
-    {
-        uno::Any aR;
-        aR <<= uno::Reference<XAccessibleExtendedAttributes>(this);
-        return aR;
-    }
-
-    if (rType == cppu::UnoType<XAccessibleSelection>::get())
-    {
-        uno::Any aR;
-        aR <<= uno::Reference<XAccessibleSelection>(this);
-        return aR;
-    }
-    if ( rType == ::cppu::UnoType<XAccessibleValue>::get() )
-    {
-        uno::Reference<XAccessibleValue> xValue = this;
-        uno::Any aRet;
-        aRet <<= xValue;
-        return aRet;
-    }
-    else
-    {
-        return SwAccessibleContext::queryInterface( rType );
-    }
-}
-
-// XTypeProvider
-uno::Sequence< uno::Type > SAL_CALL SwAccessibleCell::getTypes()
-{
-    return cppu::OTypeCollection(
-        ::cppu::UnoType<XAccessibleValue>::get(),
-        SwAccessibleContext::getTypes() ).getTypes();
-}
-
-uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleCell::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
 }
 
 // XAccessibleValue
