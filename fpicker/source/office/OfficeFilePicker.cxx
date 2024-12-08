@@ -458,21 +458,6 @@ IMPLEMENT_FORWARD_XINTERFACE2( SvtFilePicker, OCommonPicker, SvtFilePicker_Base 
 
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( SvtFilePicker, OCommonPicker, SvtFilePicker_Base )
 
-IMPLEMENT_FORWARD_XINTERFACE3( SvtRemoteFilePicker, SvtFilePicker, OCommonPicker, SvtFilePicker_Base )
-
-
-// disambiguate XTypeProvider
-
-css::uno::Sequence< css::uno::Type > SAL_CALL SvtRemoteFilePicker::getTypes(  )
-{
-    return ::comphelper::concatSequences(
-        SvtFilePicker::getTypes(),
-        OCommonPicker::getTypes(),
-        SvtFilePicker_Base::getTypes()
-    );
-}
-IMPLEMENT_GET_IMPLEMENTATION_ID( SvtRemoteFilePicker )
-
 
 // XExecutableDialog functions
 

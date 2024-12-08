@@ -221,14 +221,6 @@ public:
 
     virtual std::shared_ptr<SvtFileDialog_Base> implCreateDialog( weld::Window* pParent ) override;
 
-    // disambiguate XInterface
-
-    DECLARE_XINTERFACE( )
-
-    // disambiguate XTypeProvider
-
-    DECLARE_XTYPEPROVIDER( )
-
     /* XServiceInfo */
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& sServiceName ) override;
