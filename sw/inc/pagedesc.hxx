@@ -395,7 +395,7 @@ public:
 
     OUString const & GetName() const;
 
-    operator SwPageDesc() const; // #i7983#
+    explicit operator SwPageDesc() const; // #i7983#
 };
 
 namespace sw {

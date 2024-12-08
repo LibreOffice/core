@@ -231,7 +231,7 @@ void SwUndoPageDesc::UndoImpl(::sw::UndoRedoContext &)
     // Move (header/footer)content node responsibility from new page descriptor to old one again.
     if( m_bExchange )
         ExchangeContentNodes( m_aNew.m_PageDesc, m_aOld.m_PageDesc );
-    m_pDoc->ChgPageDesc(m_aOld.GetName(), m_aOld);
+    m_pDoc->ChgPageDesc(m_aOld.GetName(), SwPageDesc(m_aOld));
     ExitHeaderFooterEdit();
 }
 
@@ -240,7 +240,7 @@ void SwUndoPageDesc::RedoImpl(::sw::UndoRedoContext &)
     // Move (header/footer)content node responsibility from old page descriptor to new one again.
     if( m_bExchange )
         ExchangeContentNodes( m_aOld.m_PageDesc, m_aNew.m_PageDesc );
-    m_pDoc->ChgPageDesc(m_aNew.GetName(), m_aNew);
+    m_pDoc->ChgPageDesc(m_aNew.GetName(), SwPageDesc(m_aNew));
     ExitHeaderFooterEdit();
 }
 
@@ -280,7 +280,7 @@ void SwUndoPageDescCreate::UndoImpl(::sw::UndoRedoContext &)
 
 void SwUndoPageDescCreate::DoImpl()
 {
-    SwPageDesc aPageDesc = m_aNew;
+    SwPageDesc aPageDesc(m_aNew);
     m_pDoc->MakePageDesc(m_aNew.GetName(), &aPageDesc, false);
 }
 
@@ -320,7 +320,7 @@ SwUndoPageDescDelete::~SwUndoPageDescDelete()
 
 void SwUndoPageDescDelete::UndoImpl(::sw::UndoRedoContext &)
 {
-    SwPageDesc aPageDesc = m_aOld;
+    SwPageDesc aPageDesc(m_aOld);
     m_pDoc->MakePageDesc(m_aOld.GetName(), &aPageDesc, false);
 }
 
