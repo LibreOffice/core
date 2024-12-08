@@ -174,15 +174,8 @@ void ColorConfig_Impl::Load(const OUString& rScheme)
     if (!ThemeColors::IsAutomaticTheme(sScheme))
     {
         uno::Sequence<OUString> aSchemes = GetSchemeNames();
-        bool bFound = false;
-        for (const OUString& rSchemeName : aSchemes)
-        {
-            if (sScheme == rSchemeName)
-            {
-                bFound = true;
-                break;
-            }
-        }
+        bool bFound = std::any_of(aSchemes.begin(), aSchemes.end(),
+            [&sScheme](const OUString& rSchemeName) { return sScheme == rSchemeName; });
 
         if (!bFound)
             sScheme = AUTOMATIC_COLOR_SCHEME;
