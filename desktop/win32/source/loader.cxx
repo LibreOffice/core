@@ -34,6 +34,10 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ini_parser.hpp>
 
+// For PathCchCanonicalizeEx
+#include <pathcch.h>
+#pragma comment(lib, "Pathcch.lib")
+
 namespace {
 
 void fail()
@@ -249,6 +253,7 @@ int officeloader_impl(bool bAllowConsole)
 
     std::vector<std::wstring> aEscapedArgs;
     bool bHeadlessMode = false;
+    const size_t nPathSize = 32 * 1024;
     for (std::wstring_view arg : CommandArgs())
     {
         // Check command line arguments for "--headless" parameter. We only set the environment
@@ -258,25 +263,38 @@ int officeloader_impl(bool bAllowConsole)
         if (arg == L"-headless" || arg == L"--headless")
             bHeadlessMode = true;
         // check for wildcards in arguments - Windows does not expand automatically
-        else if (arg.find_first_of(L"*?") != std::wstring_view::npos)
+        else if (arg.size() < nPathSize && arg.find_first_of(L"*?") != std::wstring_view::npos)
         {
+            const wchar_t* path(arg.data());
+            // 1. PathCchCanonicalizeEx only works with backslashes, so preprocess to comply
+            wchar_t buf1[nPathSize], buf2[nPathSize];
+            arg.copy(buf1, arg.size());
+            buf1[arg.size()] = '\0';
+            std::replace(buf1, buf1 + arg.size(), '/', '\\');
+            // 2. Canonicalize the path: if needed, drop the .. and . segments; if long, make sure
+            //    that path has \\?\ long path prefix present (required for FindFirstFileW)
+            if (SUCCEEDED(
+                    PathCchCanonicalizeEx(buf2, std::size(buf1), buf1, PATHCCH_ALLOW_LONG_PATHS)))
+                path = buf2;
+            // 3. Expand the wildcards
             WIN32_FIND_DATAW aFindData;
-            HANDLE h = FindFirstFileW(arg.data(), &aFindData);
+            HANDLE h = FindFirstFileW(path, &aFindData);
             if (h != INVALID_HANDLE_VALUE)
             {
-                const int nPathSize = 32 * 1024;
                 wchar_t drive[3];
-                wchar_t dir[nPathSize];
-                wchar_t path[nPathSize];
-                _wsplitpath_s(arg.data(), drive, std::size(drive), dir, std::size(dir), nullptr, 0,
-                              nullptr, 0);
-                do
+                bool splitted = _wsplitpath_s(path, drive, std::size(drive), buf1, std::size(buf1),
+                                              nullptr, 0, nullptr, 0) == 0;
+                if (splitted)
                 {
-                    _wmakepath_s(path, std::size(path), drive, dir, aFindData.cFileName, nullptr);
-                    aEscapedArgs.push_back(EscapeArg(path));
-                } while (FindNextFileW(h, &aFindData));
+                    do
+                    {
+                        if (_wmakepath_s(buf2, drive, buf1, aFindData.cFileName, nullptr) == 0)
+                            aEscapedArgs.push_back(EscapeArg(buf2));
+                    } while (FindNextFileW(h, &aFindData));
+                }
                 FindClose(h);
-                continue;
+                if (splitted)
+                    continue;
             }
         }
 
