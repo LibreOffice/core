@@ -458,6 +458,9 @@ void SaveToolbarController::initialize( const css::uno::Sequence< css::uno::Any 
 {
     PopupMenuToolbarController::initialize( aArguments );
 
+    // Also listen to the status of the slot used for read-only case
+    m_aListenerMap.emplace(u".uno:SaveAs"_ustr, css::uno::Reference<css::frame::XDispatch>());
+
     ToolBox* pToolBox = nullptr;
     ToolBoxItemId nId;
     if ( !getToolboxId( nId, &pToolBox ) )
@@ -540,9 +543,9 @@ void SaveToolbarController::statusChanged( const css::frame::FeatureStateEvent& 
 
     bool bLastReadOnly = m_bReadOnly;
     m_bReadOnly = m_xStorable.is() && m_xStorable->isReadonly();
+    OUString sCommand = m_bReadOnly ? u".uno:SaveAs"_ustr : m_aCommandURL;
     if ( bLastReadOnly != m_bReadOnly )
     {
-        OUString sCommand = m_bReadOnly ? u".uno:SaveAs"_ustr : m_aCommandURL;
         auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(sCommand,
             vcl::CommandInfoProvider::GetModuleIdentifier(m_xFrame));
         pToolBox->SetQuickHelpText( nId,
@@ -552,8 +555,8 @@ void SaveToolbarController::statusChanged( const css::frame::FeatureStateEvent& 
         updateImage();
     }
 
-    if ( !m_bReadOnly )
-        pToolBox->EnableItem( nId, rEvent.IsEnabled );
+    if (rEvent.FeatureURL.Complete == sCommand)
+        pToolBox->EnableItem(nId, rEvent.IsEnabled);
 }
 
 void SaveToolbarController::modified( const css::lang::EventObject& /*rEvent*/ )
