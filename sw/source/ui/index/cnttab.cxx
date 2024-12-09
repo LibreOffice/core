@@ -382,7 +382,7 @@ SwTOXDescription& SwMultiTOXTabDialog::GetTOXDescription(CurTOXType eType)
             }
         }
         else if(TOX_INDEX == eType.eType)
-            m_vTypeData[nIndex].m_pDescription->SetMainEntryCharStyle(SwResId(STR_POOLCHR_IDX_MAIN_ENTRY));
+            m_vTypeData[nIndex].m_pDescription->SetMainEntryCharStyle(UIName(SwResId(STR_POOLCHR_IDX_MAIN_ENTRY)));
 
     }
     return *m_vTypeData[nIndex].m_pDescription;
@@ -463,7 +463,7 @@ IMPL_LINK_NOARG(SwMultiTOXTabDialog, ShowPreviewHdl, weld::Toggleable&, void)
     m_xDialog->resize_to_request();
 }
 
-bool SwMultiTOXTabDialog::IsNoNum(SwWrtShell& rSh, const OUString& rName)
+bool SwMultiTOXTabDialog::IsNoNum(SwWrtShell& rSh, const UIName& rName)
 {
     SwTextFormatColl* pColl = rSh.GetParaStyle(rName);
     if(pColl && ! pColl->IsAssignedToListLevelOfOutlineStyle())
@@ -479,7 +479,7 @@ namespace {
 
 class SwAddStylesDlg_Impl : public SfxDialogController
 {
-    OUString*       m_pStyleArr;
+    UIName*       m_pStyleArr;
 
     std::unique_ptr<weld::Button> m_xOk;
     std::unique_ptr<weld::Button> m_xLeftPB;
@@ -496,13 +496,13 @@ class SwAddStylesDlg_Impl : public SfxDialogController
     DECL_LINK(HeaderBarClick, int, void);
 
 public:
-    SwAddStylesDlg_Impl(weld::Window* pParent, SwWrtShell const & rWrtSh, OUString rStringArr[]);
+    SwAddStylesDlg_Impl(weld::Window* pParent, SwWrtShell const & rWrtSh, UIName rStringArr[]);
 };
 
 }
 
 SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(weld::Window* pParent,
-            SwWrtShell const & rWrtSh, OUString rStringArr[])
+            SwWrtShell const & rWrtSh, UIName rStringArr[])
     : SfxDialogController(pParent, u"modules/swriter/ui/assignstylesdialog.ui"_ustr, u"AssignStylesDialog"_ustr)
     , m_pStyleArr(rStringArr)
     , m_xOk(m_xBuilder->weld_button(u"ok"_ustr))
@@ -539,13 +539,13 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(weld::Window* pParent,
     int nRow(0);
     for (sal_uInt16 i = 0; i < MAXLEVEL; ++i)
     {
-        const OUString &rStyles{rStringArr[i]};
+        const UIName &rStyles{rStringArr[i]};
         if (rStyles.isEmpty())
             continue;
         sal_Int32 nPos(0);
         do
         {
-            OUString sEntry = rStyles.getToken(0, TOX_STYLE_DELIMITER, nPos);
+            OUString sEntry = rStyles.toString().getToken(0, TOX_STYLE_DELIMITER, nPos);
             m_xHeaderTree->append_text(sEntry);
             for (sal_uInt16 j = 0; j <= MAXLEVEL; ++j)
             {
@@ -564,7 +564,7 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(weld::Window* pParent,
         if (rColl.IsDefault())
             continue;
 
-        const OUString aName = rColl.GetName();
+        const UIName aName = rColl.GetName();
         if (!aName.isEmpty())
         {
             bool bEntry = false;
@@ -579,7 +579,7 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(weld::Window* pParent,
             }
             if (!bEntry)
             {
-                m_xHeaderTree->append_text(aName);
+                m_xHeaderTree->append_text(aName.toString());
                 for (sal_uInt16 k = 0; k <= MAXLEVEL; ++k)
                 {
                     TriState eState = k == 0 ? TRISTATE_TRUE : TRISTATE_FALSE;
@@ -686,7 +686,7 @@ IMPL_LINK(SwAddStylesDlg_Impl, KeyInput, const KeyEvent&, rKEvt, bool)
 IMPL_LINK_NOARG(SwAddStylesDlg_Impl, OkHdl, weld::Button&, void)
 {
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
-        m_pStyleArr[i].clear();
+        m_pStyleArr[i] = UIName();
 
     int nChildren = m_xHeaderTree->n_children();
     for (int i = 0; i < nChildren; ++i)
@@ -704,8 +704,8 @@ IMPL_LINK_NOARG(SwAddStylesDlg_Impl, OkHdl, weld::Button&, void)
         {
             int nLevel = nToggleColumn - 1;
             if(!m_pStyleArr[nLevel].isEmpty())
-                m_pStyleArr[nLevel] += OUStringChar(TOX_STYLE_DELIMITER);
-            m_pStyleArr[nLevel] += m_xHeaderTree->get_text(i, 0);
+                m_pStyleArr[nLevel] = UIName(m_pStyleArr[nLevel].toString() + OUStringChar(TOX_STYLE_DELIMITER));
+            m_pStyleArr[nLevel] = UIName(m_pStyleArr[nLevel].toString() + m_xHeaderTree->get_text(i, 0));
         }
     }
 
@@ -1010,7 +1010,7 @@ void SwTOXSelectTabPage::ApplyTOXDescription()
             if (rColl.IsDefault())
                 continue;
 
-            OUString const name(rColl.GetName());
+            OUString const name(rColl.GetName().toString());
             if (!name.isEmpty())
             {
                 m_xParaStyleLB->append_text(name);
@@ -1018,9 +1018,9 @@ void SwTOXSelectTabPage::ApplyTOXDescription()
         }
         // first, init ParaStyle - because any later init (e.g. m_xFromCaptionsRB)
         // ends up calling FillTOXDescription() resetting rDesc!
-        OUString const& rStyle(rDesc.GetStyleNames(0));
-        assert(rStyle.indexOf(TOX_STYLE_DELIMITER) == -1);
-        if (rStyle.isEmpty())
+        UIName const& rStyle(rDesc.GetStyleNames(0));
+        assert(rStyle.toString().indexOf(TOX_STYLE_DELIMITER) == -1);
+        if (rStyle.toString().isEmpty())
         {
             m_xParaStyleCB->set_active(false);
             m_xParaStyleLB->set_sensitive(false);
@@ -1029,7 +1029,7 @@ void SwTOXSelectTabPage::ApplyTOXDescription()
         {
             m_xParaStyleCB->set_active(true);
             m_xParaStyleLB->set_sensitive(true);
-            m_xParaStyleLB->set_active_text(rStyle);
+            m_xParaStyleLB->set_active_text(rStyle.toString());
         }
     }
 
@@ -1058,7 +1058,7 @@ void SwTOXSelectTabPage::ApplyTOXDescription()
     }
     else if (TOX_ILLUSTRATIONS == aCurType.eType || TOX_TABLES == aCurType.eType)
     {
-        OUString sName(rDesc.GetSequenceName());
+        OUString sName(rDesc.GetSequenceName().toString());
         int nIndex = m_xCaptionSequenceLB->find_text(sName);
         if (nIndex != -1)
             m_xCaptionSequenceLB->set_active(nIndex);
@@ -1170,15 +1170,15 @@ void SwTOXSelectTabPage::FillTOXDescription()
         case TOX_ILLUSTRATIONS:
         case TOX_TABLES :
             rDesc.SetCreateFromObjectNames(m_xFromObjectNamesRB->get_active());
-            rDesc.SetSequenceName(m_xCaptionSequenceLB->get_active_text());
+            rDesc.SetSequenceName(UIName(m_xCaptionSequenceLB->get_active_text()));
             rDesc.SetCaptionDisplay(static_cast<SwCaptionDisplay>(m_xDisplayTypeLB->get_active()));
             if (m_xParaStyleCB->get_active())
             {
-                m_aStyleArr[0] = m_xParaStyleLB->get_active_text();
+                m_aStyleArr[0] = UIName(m_xParaStyleLB->get_active_text());
             }
             else
             {
-                m_aStyleArr[0] = OUString();
+                m_aStyleArr[0] = UIName();
             }
         break;
         case TOX_OBJECTS:
@@ -1195,11 +1195,11 @@ void SwTOXSelectTabPage::FillTOXDescription()
             rDesc.SetOLEOptions(nOLEData);
             if (m_xParaStyleCB->get_active())
             {
-                m_aStyleArr[0] = m_xParaStyleLB->get_active_text();
+                m_aStyleArr[0] = UIName(m_xParaStyleLB->get_active_text());
             }
             else
             {
-                m_aStyleArr[0] = OUString();
+                m_aStyleArr[0] = UIName();
             }
         }
         break;
@@ -1262,7 +1262,7 @@ void SwTOXSelectTabPage::Reset( const SfxItemSet* )
         SwFieldType *pType = rSh.GetFieldType( i, SwFieldIds::SetExp );
         if( pType->Which() == SwFieldIds::SetExp &&
             static_cast<SwSetExpFieldType *>( pType)->GetType() & nsSwGetSetExpType::GSE_SEQ )
-            m_xCaptionSequenceLB->append_text(pType->GetName());
+            m_xCaptionSequenceLB->append_text(pType->GetName().toString());
     }
 
     if(pTOXDlg->IsTOXEditMode())
@@ -1342,13 +1342,13 @@ IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl, weld::ComboBox&, rBox, void)
 
     if( nType & TO_ILLUSTRATION )
     {
-        OUString sName(SwStyleNameMapper::GetUIName(RES_POOLCOLL_LABEL_FIGURE, ProgName()));
-        m_xCaptionSequenceLB->set_active_text(sName);
+        UIName sName(SwStyleNameMapper::GetUIName(RES_POOLCOLL_LABEL_FIGURE, ProgName()));
+        m_xCaptionSequenceLB->set_active_text(sName.toString());
     }
     else if( nType & TO_TABLE )
     {
-        OUString sName(SwStyleNameMapper::GetUIName(RES_POOLCOLL_LABEL_TABLE, ProgName()));
-        m_xCaptionSequenceLB->set_active_text(sName);
+        UIName sName(SwStyleNameMapper::GetUIName(RES_POOLCOLL_LABEL_TABLE, ProgName()));
+        m_xCaptionSequenceLB->set_active_text(sName.toString());
     }
     else if( nType & TO_USER )
     {
@@ -1629,7 +1629,7 @@ public:
         return m_aFormToken;
     }
 
-    void SetCharStyleName(const OUString& rSet, sal_uInt16 nPoolId)
+    void SetCharStyleName(const UIName& rSet, sal_uInt16 nPoolId)
     {
         m_aFormToken.sCharStyleName = rSet;
         m_aFormToken.nPoolId = nPoolId;
@@ -1764,7 +1764,7 @@ public:
     void SetPrevNextLink(const Link<SwTOXButton&,void>& rLink) {m_aPrevNextControlLink = rLink;}
     const SwFormToken& GetFormToken() const {return m_aFormToken;}
 
-    void SetCharStyleName(const OUString& rSet, sal_uInt16 nPoolId)
+    void SetCharStyleName(const UIName& rSet, sal_uInt16 nPoolId)
         {
             m_aFormToken.sCharStyleName = rSet;
             m_aFormToken.nPoolId = nPoolId;
@@ -2147,12 +2147,12 @@ void SwTOXEntryTabPage::Reset( const SfxItemSet* )
     if(TOX_INDEX == aCurType.eType)
     {
         SwTOXDescription& rDesc = pTOXDlg->GetTOXDescription(aCurType);
-        const OUString& sMainEntryCharStyle = rDesc.GetMainEntryCharStyle();
+        const UIName& sMainEntryCharStyle = rDesc.GetMainEntryCharStyle();
         if(!sMainEntryCharStyle.isEmpty())
         {
-            if (m_xMainEntryStyleLB->find_text(sMainEntryCharStyle) == -1)
-                m_xMainEntryStyleLB->append_text(sMainEntryCharStyle);
-            m_xMainEntryStyleLB->set_active_text(sMainEntryCharStyle);
+            if (m_xMainEntryStyleLB->find_text(sMainEntryCharStyle.toString()) == -1)
+                m_xMainEntryStyleLB->append_text(sMainEntryCharStyle.toString());
+            m_xMainEntryStyleLB->set_active_text(sMainEntryCharStyle.toString());
         }
         else
             m_xMainEntryStyleLB->set_active_text(m_sNoCharStyle);
@@ -2287,7 +2287,7 @@ void SwTOXEntryTabPage::UpdateDescriptor()
     if(TOX_INDEX == m_aLastTOXType.eType)
     {
         const OUString sTemp(m_xMainEntryStyleLB->get_active_text());
-        rDesc.SetMainEntryCharStyle(m_sNoCharStyle == sTemp ? OUString(): sTemp);
+        rDesc.SetMainEntryCharStyle(UIName(m_sNoCharStyle == sTemp ? OUString(): sTemp));
         SwTOIOptions nIdxOptions = rDesc.GetIndexOptions() & ~SwTOIOptions::AlphaDelimiter;
         if (m_xAlphaDelimCB->get_active())
             nIdxOptions |= SwTOIOptions::AlphaDelimiter;
@@ -2418,7 +2418,7 @@ IMPL_LINK(SwTOXEntryTabPage, InsertTokenHdl, weld::Button&, rBtn, void)
         eTokenType = TOKEN_TAB_STOP;
     }
     SwFormToken aInsert(eTokenType);
-    aInsert.sCharStyleName = sCharStyle;
+    aInsert.sCharStyleName = UIName(sCharStyle);
     aInsert.nTabStopPosition = 0;
     aInsert.nChapterFormat = nChapterFormat; // i89791
     m_xTokenWIN->InsertAtSelection(aInsert);
@@ -2507,7 +2507,7 @@ IMPL_LINK_NOARG(SwTOXEntryTabPage, SortKeyHdl, weld::Toggleable&, void)
 IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken&, rToken, void)
 {
     if (!rToken.sCharStyleName.isEmpty())
-        m_xCharStyleLB->set_active_text(rToken.sCharStyleName);
+        m_xCharStyleLB->set_active_text(rToken.sCharStyleName.toString());
     else
         m_xCharStyleLB->set_active_text(m_sNoCharStyle);
 
@@ -2630,9 +2630,9 @@ IMPL_LINK(SwTOXEntryTabPage, StyleSelectHdl, weld::ComboBox&, rBox, void)
     if(pCtrl)
     {
         if(WindowType::EDIT == pCtrl->GetType())
-            static_cast<SwTOXEdit*>(pCtrl)->SetCharStyleName(sEntry, nId);
+            static_cast<SwTOXEdit*>(pCtrl)->SetCharStyleName(UIName(sEntry), nId);
         else
-            static_cast<SwTOXButton*>(pCtrl)->SetCharStyleName(sEntry, nId);
+            static_cast<SwTOXButton*>(pCtrl)->SetCharStyleName(UIName(sEntry), nId);
 
     }
     ModifyHdl(nullptr);
@@ -2742,7 +2742,7 @@ void SwTOXEntryTabPage::SetWrtShell(SwWrtShell& rSh)
         }
     }
     m_xMainEntryStyleLB->set_active_text(SwStyleNameMapper::GetUIName(
-                                           RES_POOLCHR_IDX_MAIN_ENTRY, ProgName()));
+                                           RES_POOLCHR_IDX_MAIN_ENTRY, ProgName()).toString());
 }
 
  const TranslateId STR_TOKEN_ARY[] =
@@ -3411,7 +3411,7 @@ OUString SwTokenWindow::CreateQuickHelp(const SwFormToken& rToken)
     {
         if (!rToken.sCharStyleName.isEmpty())
         {
-            sEntry += " " + m_sCharStyle + rToken.sCharStyleName;
+            sEntry += " " + m_sCharStyle + rToken.sCharStyleName.toString();
         }
     }
 
@@ -3611,7 +3611,7 @@ void SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
     if( !m_pCurrentForm->GetTemplate( 0 ).isEmpty() )
     {
         aStr += " " + OUStringChar(aDeliStart)
-              + m_pCurrentForm->GetTemplate( 0 )
+              + m_pCurrentForm->GetTemplate( 0 ).toString()
               + OUStringChar(aDeliEnd);
     }
     m_xLevelLB->append_text(aStr);
@@ -3631,7 +3631,7 @@ void SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
         if( !m_pCurrentForm->GetTemplate( i ).isEmpty() )
         {
             aStr += " " + OUStringChar(aDeliStart)
-                  + m_pCurrentForm->GetTemplate( i )
+                  + m_pCurrentForm->GetTemplate( i ).toString()
                   + OUStringChar(aDeliEnd);
         }
         m_xLevelLB->append_text(aStr);
@@ -3648,13 +3648,13 @@ void SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
     {
         const SwTextFormatColl *pColl = &rSh.GetTextFormatColl( i );
         if( !pColl->IsDefault() )
-            m_xParaLayLB->append_text( pColl->GetName() );
+            m_xParaLayLB->append_text( pColl->GetName().toString() );
     }
 
     // query pool collections and set them for the directory
     for( sal_uInt16 i = 0; i < m_pCurrentForm->GetFormMax(); ++i )
     {
-        aStr = m_pCurrentForm->GetTemplate( i );
+        aStr = m_pCurrentForm->GetTemplate( i ).toString();
         if (!aStr.isEmpty() && m_xParaLayLB->find_text(aStr) == -1)
             m_xParaLayLB->append_text(aStr);
     }
@@ -3701,7 +3701,7 @@ IMPL_LINK_NOARG(SwTOXStylesTabPage, AssignHdl, weld::Button&, void)
         + m_xParaLayLB->get_selected_text()
         + OUStringChar(aDeliEnd));
 
-    m_pCurrentForm->SetTemplate(nLevPos, m_xParaLayLB->get_selected_text());
+    m_pCurrentForm->SetTemplate(nLevPos, UIName(m_xParaLayLB->get_selected_text()));
 
     m_xLevelLB->remove(nLevPos);
     m_xLevelLB->insert_text(nLevPos, aStr);
@@ -3718,7 +3718,7 @@ IMPL_LINK_NOARG(SwTOXStylesTabPage, StdHdl, weld::Button&, void)
         m_xLevelLB->remove(nPos);
         m_xLevelLB->insert_text(nPos, aStr);
         m_xLevelLB->select_text(aStr);
-        m_pCurrentForm->SetTemplate(nPos, OUString());
+        m_pCurrentForm->SetTemplate(nPos, UIName());
         Modify();
     }
 }
@@ -3729,7 +3729,7 @@ IMPL_LINK_NOARG(SwTOXStylesTabPage, DoubleClickHdl, weld::TreeView&, bool)
     SwWrtShell& rSh = static_cast<SwMultiTOXTabDialog*>(GetDialogController())->GetWrtShell();
 
     if(m_xParaLayLB->get_selected_index() != -1 &&
-       (m_xLevelLB->get_selected_index() == 0 || SwMultiTOXTabDialog::IsNoNum(rSh, aTmpName)))
+       (m_xLevelLB->get_selected_index() == 0 || SwMultiTOXTabDialog::IsNoNum(rSh, UIName(aTmpName))))
         AssignHdl(*m_xAssignBT);
 
     return true;
@@ -3744,7 +3744,7 @@ IMPL_LINK_NOARG(SwTOXStylesTabPage, EnableSelectHdl, weld::TreeView&, void)
     const OUString aTmpName(m_xParaLayLB->get_selected_text());
     m_xAssignBT->set_sensitive(m_xParaLayLB->get_selected_index() != -1 &&
                                m_xLevelLB->get_selected_index() != -1 &&
-       (m_xLevelLB->get_selected_index() == 0 || SwMultiTOXTabDialog::IsNoNum(rSh, aTmpName)));
+       (m_xLevelLB->get_selected_index() == 0 || SwMultiTOXTabDialog::IsNoNum(rSh, UIName(aTmpName))));
     m_xEditStyleBT->set_sensitive(m_xParaLayLB->get_selected_index() != -1);
 }
 

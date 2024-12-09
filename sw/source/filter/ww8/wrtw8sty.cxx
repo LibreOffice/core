@@ -324,7 +324,7 @@ void MSWordStyles::BuildStylesTable()
     for (size_t n = 1; n < rArr.size() && m_aStyles.size() < MSWORD_MAX_STYLES_LIMIT; ++n)
     {
         if (m_rExport.GetExportFormat() == MSWordExportBase::DOCX
-            && rArr[n]->GetName().startsWith("ListLabel"))
+            && rArr[n]->GetName().toString().startsWith("ListLabel"))
         {
             // tdf#92335 don't export redundant DOCX import style "ListLabel"
             continue;
@@ -372,7 +372,7 @@ void MSWordStyles::BuildStylesTable()
     for (size_t i = 0; i < rNumRuleTable.size() && m_aStyles.size() < MSWORD_MAX_STYLES_LIMIT; ++i)
     {
         const SwNumRule* pNumRule = rNumRuleTable[i];
-        if (pNumRule->IsAutoRule() || pNumRule->GetName().startsWith("WWNum"))
+        if (pNumRule->IsAutoRule() || pNumRule->GetName().toString().startsWith("WWNum"))
             continue;
         m_aStyles.emplace_back(pNumRule);
     }
@@ -430,9 +430,9 @@ void MSWordStyles::BuildWwNames()
         if (!entry.ww_name.isEmpty())
             continue;
         if (entry.format)
-            entry.ww_name = StripWWSuffix(entry.format->GetName());
+            entry.ww_name = StripWWSuffix(entry.format->GetName().toString());
         else if (entry.num_rule)
-            entry.ww_name = StripWWSuffix(entry.num_rule->GetName());
+            entry.ww_name = StripWWSuffix(entry.num_rule->GetName().toString());
         else
             continue;
         makeUniqueName(entry.ww_name);

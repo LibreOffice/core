@@ -344,7 +344,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCopyBookmarks)
     nActual = 0;
     for (auto pSpz : *pDoc->GetSpzFrameFormats())
     {
-        if (pSpz->GetName().indexOf("Copy") == -1)
+        if (pSpz->GetName().toString().indexOf("Copy") == -1)
         {
             ++nActual;
         }

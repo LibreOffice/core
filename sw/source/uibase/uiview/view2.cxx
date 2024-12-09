@@ -392,7 +392,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
     SwDocShell* pDocShell = GetDocShell();
     SwDoc* pDoc = pDocShell->GetDoc();
 
-    OUString sGraphicFormat = SwResId(STR_POOLFRM_GRAPHIC);
+    UIName sGraphicFormat( SwResId(STR_POOLFRM_GRAPHIC) );
 
     const SfxStringItem* pName = rReq.GetArg<SfxStringItem>(SID_INSERT_GRAPHIC);
     bool bShowError = !pName;
@@ -426,7 +426,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
             const SwFrameFormat* pFormat = (*pDoc->GetFrameFormats())[ i ];
             if(pFormat->IsDefault() || pFormat->IsAuto())
                 continue;
-            aFormats.push_back(pFormat->GetName());
+            aFormats.push_back(pFormat->GetName().toString());
         }
 
         // pool formats
@@ -517,7 +517,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
             bAsLink = pAsLink->GetValue();
         if (const SfxStringItem* pStyle = rReq.GetArg<SfxStringItem>(FN_PARAM_2);
             pStyle && !pStyle->GetValue().isEmpty())
-            sGraphicFormat = pStyle->GetValue();
+            sGraphicFormat = UIName(pStyle->GetValue());
 
 #if HAVE_FEATURE_DESKTOP
         if( nHtmlMode & HTMLMODE_ON )
@@ -1742,7 +1742,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
     const SwSection* CurrSect = rShell.GetCurrSection();
     if( CurrSect )
     {
-        const OUString& sCurrentSectionName = CurrSect->GetSectionName();
+        const UIName& sCurrentSectionName = CurrSect->GetSectionName();
         if(sCurrentSectionName != m_sOldSectionName)
         {
             SwCursorShell::FireSectionChangeEvent(2, 1);
@@ -1752,7 +1752,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
     else if (!m_sOldSectionName.isEmpty())
     {
         SwCursorShell::FireSectionChangeEvent(2, 1);
-        m_sOldSectionName= OUString();
+        m_sOldSectionName= UIName();
     }
     //get column change event
     if(rShell.bColumnChange())
@@ -1944,7 +1944,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
             case FN_STAT_TEMPLATE:
             {
                 rSet.Put(SfxStringItem( FN_STAT_TEMPLATE,
-                                        rShell.GetCurPageStyle()));
+                                        rShell.GetCurPageStyle().toString()));
 
             }
             break;
@@ -2085,7 +2085,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 if( rShell.IsCursorInTable() )
                 {
                     // table name + cell coordinate
-                    sStr = rShell.GetTableFormat()->GetName() + ":" + rShell.GetBoxNms();
+                    sStr = rShell.GetTableFormat()->GetName().toString() + ":" + rShell.GetBoxNms();
                     eCategory = StatusCategory::TableCell;
                 }
                 else
@@ -2101,20 +2101,20 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                                 const SwTOXBase* pTOX = m_pWrtShell->GetCurTOX();
                                 if( pTOX )
                                 {
-                                    sStr = pTOX->GetTOXName();
+                                    sStr = pTOX->GetTOXName().toString();
                                     eCategory = StatusCategory::TableOfContents;
                                 }
                                 else
                                 {
                                     OSL_ENSURE( false,
                                         "Unknown kind of section" );
-                                    sStr = pCurrSect->GetSectionName();
+                                    sStr = pCurrSect->GetSectionName().toString();
                                     eCategory = StatusCategory::Section;
                                 }
                             }
                             break;
                         default:
-                            sStr = pCurrSect->GetSectionName();
+                            sStr = pCurrSect->GetSectionName().toString();
                             eCategory = StatusCategory::Section;
                             break;
                         }
@@ -2136,15 +2136,15 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                             if(SfxItemState::DEFAULT <=
                                aSet.GetItemState(RES_PARATR_NUMRULE))
                             {
-                                const OUString& rNumStyle =
+                                const UIName sNumStyle =
                                     aSet.Get(RES_PARATR_NUMRULE).GetValue();
-                                if(!rNumStyle.isEmpty())
+                                if(!sNumStyle.isEmpty())
                                 {
                                     if(!sStr.isEmpty())
                                         sStr += sStatusDelim;
                                     if (eCategory == StatusCategory::NONE)
                                         eCategory = StatusCategory::ListStyle;
-                                    sStr += rNumStyle;
+                                    sStr += sNumStyle.toString();
                                 }
                             }
                         }
@@ -2657,7 +2657,7 @@ bool SwView::JumpToSwMark( const ReferenceMarkerName& rMark )
             else if( sCmp == "table" )
             {
                 m_pWrtShell->EnterStdMode();
-                bRet = m_pWrtShell->GotoTable( sName );
+                bRet = m_pWrtShell->GotoTable( UIName(sName) );
             }
             else if( sCmp == "sequence" )
             {
@@ -2705,7 +2705,7 @@ bool SwView::JumpToSwMark( const ReferenceMarkerName& rMark )
             }
 
             // for all types of Flys
-            if( FLYCNTTYPE_ALL != eFlyType && m_pWrtShell->GotoFly( sName, eFlyType ))
+            if( FLYCNTTYPE_ALL != eFlyType && m_pWrtShell->GotoFly( UIName(sName), eFlyType ))
             {
                 bRet = true;
                 if( FLYCNTTYPE_FRM == eFlyType )

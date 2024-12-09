@@ -887,28 +887,28 @@ SwSvxNumBulletTabDialog::~SwSvxNumBulletTabDialog()
 void SwSvxNumBulletTabDialog::PageCreated(const OUString& rPageId, SfxTabPage& rPage)
 {
     // set styles' names and metric
-    OUString sNumCharFormat, sBulletCharFormat;
+    UIName sNumCharFormat, sBulletCharFormat;
     SwStyleNameMapper::FillUIName( RES_POOLCHR_NUM_LEVEL, sNumCharFormat );
     SwStyleNameMapper::FillUIName( RES_POOLCHR_BULLET_LEVEL, sBulletCharFormat );
 
     if (rPageId == "singlenum")
     {
         SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-        aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFormat));
-        aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFormat));
+        aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFormat.toString()));
+        aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFormat.toString()));
         rPage.PageCreated(aSet);
     }
     else if (rPageId == "bullets")
     {
         SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-        aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFormat));
+        aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFormat.toString()));
         rPage.PageCreated(aSet);
     }
     else if (rPageId == "customize")
     {
         SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-        aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFormat));
-        aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFormat));
+        aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFormat.toString()));
+        aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFormat.toString()));
         // collect char styles
         m_xDummyCombo->clear();
         m_xDummyCombo->append_text(SwViewShell::GetShellRes()->aStrNone);

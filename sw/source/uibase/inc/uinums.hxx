@@ -35,14 +35,14 @@ namespace sw { class StoredChapterNumberingRules; }
 
 class SW_DLLPUBLIC SwNumRulesWithName final
 {
-    OUString maName;
+    UIName maName;
     // the NumRule's formats _have_ to be independent of a document
     // (They should always be there!)
     class SAL_DLLPRIVATE SwNumFormatGlobal
     {
         friend class SwNumRulesWithName;
         SwNumFormat m_aFormat;
-        OUString m_sCharFormatName;
+        UIName m_sCharFormatName;
         sal_uInt16 m_nCharPoolId;
         std::vector<std::unique_ptr<SfxPoolItem>> m_Items;
 
@@ -60,8 +60,8 @@ class SW_DLLPUBLIC SwNumRulesWithName final
 
     friend class sw::StoredChapterNumberingRules;
     friend class SwChapterNumRules;
-    void SetName(const OUString& rSet) {maName = rSet;}
-    void SetNumFormat(size_t, SwNumFormat const&, OUString const&);
+    void SetName(const UIName& rSet) {maName = rSet;}
+    void SetNumFormat(size_t, SwNumFormat const&, UIName const&);
     SwNumRulesWithName() = default;
 
 public:
@@ -71,10 +71,10 @@ public:
 
     SwNumRulesWithName &operator=(const SwNumRulesWithName &);
 
-    const OUString& GetName() const               { return maName; }
+    const UIName& GetName() const               { return maName; }
     void ResetNumRule(SwWrtShell& rSh, SwNumRule& ) const;
 
-    void GetNumFormat(size_t, SwNumFormat const*&, OUString const*&) const;
+    void GetNumFormat(size_t, SwNumFormat const*&, UIName const*&) const;
 };
 
 class SW_DLLPUBLIC SwChapterNumRules final

@@ -24,6 +24,7 @@
 #include "swtypes.hxx"
 #include "calbck.hxx"
 #include "nodeoffset.hxx"
+#include "names.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <cppuhelper/weakref.hxx>
@@ -268,7 +269,7 @@ public:
     static const OUString & GetTypeStr( SwFieldTypesEnum nTypeId );
 
     /// Only in derived classes.
-    virtual OUString        GetName() const;
+    virtual UIName        GetName() const;
     virtual std::unique_ptr<SwFieldType> Copy() const = 0;
     virtual void QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const;
     virtual void PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich );

@@ -2151,7 +2151,7 @@ bool SwFEShell::ImpEndCreate()
             text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
         // #i44344#, #i44681# - positioning attributes already set
         pFormat->PosAttrSet();
-        pFormat->SetFormatName(rSdrObj.GetName());
+        pFormat->SetFormatName(UIName(rSdrObj.GetName()));
 
         SwDrawContact *pContact = new SwDrawContact( pFormat, &rSdrObj );
         // #i35635#
@@ -2599,7 +2599,7 @@ void SwFEShell::MirrorSelection( bool bHorizontal )
 
 // jump to named frame (Graphic/OLE)
 
-bool SwFEShell::GotoFly( const OUString& rName, FlyCntType eType, bool bSelFrame )
+bool SwFEShell::GotoFly( const UIName& rName, FlyCntType eType, bool bSelFrame )
 {
     bool bRet = false;
     static SwNodeType const aChkArr[ 4 ] = {

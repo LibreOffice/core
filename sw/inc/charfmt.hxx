@@ -29,7 +29,7 @@ class SW_DLLPUBLIC SwCharFormat final : public SwFormat
 
     SwTextFormatColl* mpLinkedParaFormat = nullptr;
 
-    SwCharFormat( SwAttrPool& rPool, const OUString &rFormatName,
+    SwCharFormat( SwAttrPool& rPool, const UIName &rFormatName,
                 SwCharFormat *pDerivedFrom )
           : SwFormat( rPool, rFormatName, aCharFormatSetRange, pDerivedFrom, RES_CHRFMT )
     {}

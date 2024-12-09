@@ -155,11 +155,11 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet* )
 
     const SwCharFormat* pCharFormat = pInf->GetCharFormat(
                         *m_pSh->GetView().GetDocShell()->GetDoc());
-    m_xFootnoteCharTextTemplBox->set_active_text(pCharFormat->GetName());
+    m_xFootnoteCharTextTemplBox->set_active_text(pCharFormat->GetName().toString());
     m_xFootnoteCharTextTemplBox->save_value();
 
     pCharFormat = pInf->GetAnchorCharFormat( *m_pSh->GetDoc() );
-    m_xFootnoteCharAnchorTemplBox->set_active_text( pCharFormat->GetName() );
+    m_xFootnoteCharAnchorTemplBox->set_active_text( pCharFormat->GetName().toString() );
     m_xFootnoteCharAnchorTemplBox->save_value();
 
         // styles   special regions
@@ -172,42 +172,42 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet* )
         pStyle = pStyleSheetPool->Next();
     }
 
-    OUString sStr;
+    UIName sStr;
     SwStyleNameMapper::FillUIName( static_cast< sal_uInt16 >(m_bEndNote ? RES_POOLCOLL_ENDNOTE
                            : RES_POOLCOLL_FOOTNOTE), sStr );
-    if (m_xParaTemplBox->find_text(sStr) == -1)
-        m_xParaTemplBox->append_text(sStr);
+    if (m_xParaTemplBox->find_text(sStr.toString()) == -1)
+        m_xParaTemplBox->append_text(sStr.toString());
 
     SwTextFormatColl* pColl = pInf->GetFootnoteTextColl();
     if( !pColl )
-        m_xParaTemplBox->set_active_text(sStr);      // Default
+        m_xParaTemplBox->set_active_text(sStr.toString());      // Default
     else
     {
         OSL_ENSURE(!pColl->IsDefault(), "default style for footnotes is wrong");
-        const int nPos = m_xParaTemplBox->find_text(pColl->GetName());
+        const int nPos = m_xParaTemplBox->find_text(pColl->GetName().toString());
         if (nPos != -1)
             m_xParaTemplBox->set_active( nPos );
         else
         {
-            m_xParaTemplBox->append_text(pColl->GetName());
-            m_xParaTemplBox->set_active_text(pColl->GetName());
+            m_xParaTemplBox->append_text(pColl->GetName().toString());
+            m_xParaTemplBox->set_active_text(pColl->GetName().toString());
         }
     }
 
     // page
     for (sal_uInt16 i = RES_POOLPAGE_BEGIN; i < RES_POOLPAGE_END; ++i)
-        m_xPageTemplBox->append_text(SwStyleNameMapper::GetUIName(i, ProgName()));
+        m_xPageTemplBox->append_text(SwStyleNameMapper::GetUIName(i, ProgName()).toString());
 
     const size_t nCount = m_pSh->GetPageDescCnt();
     for(size_t i = 0; i < nCount; ++i)
     {
         const SwPageDesc &rPageDesc = m_pSh->GetPageDesc(i);
-        if (m_xPageTemplBox->find_text(rPageDesc.GetName()) == -1)
-            m_xPageTemplBox->append_text(rPageDesc.GetName());
+        if (m_xPageTemplBox->find_text(rPageDesc.GetName().toString()) == -1)
+            m_xPageTemplBox->append_text(rPageDesc.GetName().toString());
     }
     m_xPageTemplBox->make_sorted();
 
-    m_xPageTemplBox->set_active_text(pInf->GetPageDesc(*m_pSh->GetDoc())->GetName());
+    m_xPageTemplBox->set_active_text(pInf->GetPageDesc(*m_pSh->GetDoc())->GetName().toString());
 }
 
 std::unique_ptr<SfxTabPage> SwEndNoteOptionPage::Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *rSet )
@@ -350,14 +350,14 @@ bool SwEndNoteOptionPage::FillItemSet( SfxItemSet * )
     if (nPos != -1)
     {
         const OUString aFormatName( m_xParaTemplBox->get_active_text() );
-        SwTextFormatColl *pColl = m_pSh->GetParaStyle(aFormatName, SwWrtShell::GETSTYLE_CREATEANY);
+        SwTextFormatColl *pColl = m_pSh->GetParaStyle(UIName(aFormatName), SwWrtShell::GETSTYLE_CREATEANY);
         assert(pColl && "paragraph style not found");
         pInf->SetFootnoteTextColl(*pColl);
     }
 
     // page template
     pInf->ChgPageDesc( m_pSh->FindPageDescByName(
-                                m_xPageTemplBox->get_active_text(), true ) );
+                                UIName(m_xPageTemplBox->get_active_text()), true ) );
 
     if ( m_bEndNote )
     {

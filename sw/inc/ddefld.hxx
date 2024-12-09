@@ -49,7 +49,7 @@ namespace sw
 // FieldType for DDE
 class SW_DLLPUBLIC SwDDEFieldType final : public SwFieldType
 {
-    OUString m_aName;
+    UIName m_aName;
     OUString m_aExpansion;
 
     tools::SvRef<sfx2::SvBaseLink> m_RefLink;
@@ -62,7 +62,7 @@ class SW_DLLPUBLIC SwDDEFieldType final : public SwFieldType
     SAL_DLLPRIVATE void RefCntChgd();
 
 public:
-    SwDDEFieldType( OUString aName, const OUString& rCmd,
+    SwDDEFieldType( UIName aName, const OUString& rCmd,
                     SfxLinkUpdateMode );
     virtual ~SwDDEFieldType() override;
 
@@ -71,7 +71,7 @@ public:
                                                   m_bCRLFFlag = false; }
 
     virtual std::unique_ptr<SwFieldType> Copy() const override;
-    virtual OUString GetName() const override;
+    virtual UIName GetName() const override;
 
     virtual void QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual void PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;

@@ -106,8 +106,8 @@ namespace
             SwSection* pSect = pSectFormat->GetSection();
             if (pSect)
             {
-                OUString sNm(bCaseSensitive ? pSect->GetSectionName()
-                                            : GetAppCharClass().lowercase(pSect->GetSectionName()));
+                OUString sNm(bCaseSensitive ? pSect->GetSectionName().toString()
+                                            : GetAppCharClass().lowercase(pSect->GetSectionName().toString()));
                 if (sNm == sCompare)
                 {
                     // found, so get the data
@@ -130,7 +130,7 @@ namespace
         const OUString aItem = GetAppCharClass().lowercase(rItem);
         for (const SwFrameFormat* pTableFormat : *rDoc.GetTableFrameFormats())
         {
-            OUString sNm(GetAppCharClass().lowercase(pTableFormat->GetName()));
+            OUString sNm(GetAppCharClass().lowercase(pTableFormat->GetName().toString()));
             if (sNm == aItem)
             {
                 SwTable* pTmpTable = SwTable::FindTable(pTableFormat);
@@ -424,7 +424,7 @@ bool DocumentLinksAdministrationManager::SelectServerObj( std::u16string_view rS
         }
         else if( sCmp == u"frame" )
         {
-            const SwFlyFrameFormat* pFlyFormat = m_rDoc.FindFlyByName( sName );
+            const SwFlyFrameFormat* pFlyFormat = m_rDoc.FindFlyByName( UIName(sName) );
             if( pFlyFormat )
             {
                 SwNodeIndex* pIdx = const_cast<SwNodeIndex*>(pFlyFormat->GetContent().GetContentIdx());

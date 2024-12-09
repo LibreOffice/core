@@ -44,7 +44,7 @@
 #define FRAME_OFFSET 4
 
 AutoFormatPreview::AutoFormatPreview()
-    : maCurrentData(OUString())
+    : maCurrentData(TableStyleName())
     , mbFitWidth(false)
     , mbRTL(false)
     , maStringJan(SwResId(STR_JAN))

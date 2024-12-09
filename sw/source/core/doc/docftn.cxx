@@ -137,7 +137,7 @@ SwSection* SwEndNoteInfo::GetSwSection(SwDoc& rDoc) const
     if (!m_pSwSection)
     {
         SwSectionFormat* pFormat = rDoc.MakeSectionFormat();
-        pFormat->SetFormatName(UNO_NAME_ENDNOTE);
+        pFormat->SetFormatName(UIName(UNO_NAME_ENDNOTE));
         pFormat->SetFormatAttr(SwFormatEndAtTextEnd(FTNEND_ATTXTEND));
         m_pSwSection.reset(new SwSection(SectionType::Content, pFormat->GetName(), *pFormat));
     }

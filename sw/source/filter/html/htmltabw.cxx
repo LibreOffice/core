@@ -1043,7 +1043,7 @@ SwHTMLWriter& OutHTML_SwTableNode( SwHTMLWriter& rWrt, SwTableNode & rNode,
         nFlyHSpace = nFlyVSpace = 0;
 
     if( !pFormat->GetName().isEmpty() )
-        rWrt.OutImplicitMark( pFormat->GetName(), "table" );
+        rWrt.OutImplicitMark( pFormat->GetName().toString(), "table" );
 
     if( text::HoriOrientation::NONE!=eDivHoriOri )
     {

@@ -51,19 +51,19 @@ public:
 
 class SW_DLLPUBLIC SwRedlineExtraData_FormatColl final : public SwRedlineExtraData
 {
-    OUString m_sFormatNm;
+    UIName m_sFormatNm;
     std::unique_ptr<SfxItemSet> m_pSet;
     sal_uInt16 m_nPoolId;
     bool m_bFormatAll; // don't strip the last paragraph mark
 public:
-    SwRedlineExtraData_FormatColl( OUString aColl, sal_uInt16 nPoolFormatId,
+    SwRedlineExtraData_FormatColl( UIName aColl, sal_uInt16 nPoolFormatId,
                                 const SfxItemSet* pSet = nullptr, bool bFormatAll = true );
     virtual ~SwRedlineExtraData_FormatColl() override;
     virtual SwRedlineExtraData* CreateNew() const override;
     virtual void Reject( SwPaM& rPam ) const override;
     virtual bool operator == ( const SwRedlineExtraData& ) const override;
 
-    const OUString& GetFormatName() const        { return m_sFormatNm; }
+    const UIName& GetFormatName() const        { return m_sFormatNm; }
     void SetItemSet( const SfxItemSet& rSet );
     SfxItemSet* GetItemSet( ) const { return m_pSet.get(); }
     void SetFormatAll( bool bAll )               { m_bFormatAll = bAll; }

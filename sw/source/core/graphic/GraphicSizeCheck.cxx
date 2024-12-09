@@ -54,7 +54,7 @@ bool GraphicSizeViolation::check()
     return isDPITooLow() || isDPITooHigh();
 }
 
-const OUString& GraphicSizeViolation::getGraphicName()
+const UIName& GraphicSizeViolation::getGraphicName()
 {
     return m_pGraphicNode->GetFlyFormat()->GetName();
 }
@@ -118,7 +118,7 @@ OUString GraphicSizeCheckGUIEntry::getText()
         sText = SwResId(STR_WARNING_GRAPHIC_PIXEL_COUNT_HIGH);
     }
 
-    sText = sText.replaceAll("%NAME%", m_pViolation->getGraphicName());
+    sText = sText.replaceAll("%NAME%", m_pViolation->getGraphicName().toString());
     sText = sText.replaceAll("%DPIX%", OUString::number(m_pViolation->getDPIX()));
     sText = sText.replaceAll("%DPIY%", OUString::number(m_pViolation->getDPIY()));
 

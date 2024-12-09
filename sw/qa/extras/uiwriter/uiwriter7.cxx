@@ -156,7 +156,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf79236)
     SwDoc* pDoc = getSwDoc();
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
     //Getting some paragraph style
-    SwTextFormatColl* pTextFormat = pDoc->FindTextFormatCollByName(u"Body Text"_ustr);
+    SwTextFormatColl* pTextFormat = pDoc->FindTextFormatCollByName(UIName(u"Body Text"_ustr));
     const SwAttrSet& rAttrSet = pTextFormat->GetAttrSet();
     std::unique_ptr<SfxItemSet> pNewSet = rAttrSet.Clone();
     sal_uInt16 initialCount = pNewSet->Count();
@@ -177,7 +177,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf79236)
     //Setting the updated item set on the style
     pDoc->ChgFormat(*pTextFormat, *pNewSet);
     //Checking the Changes
-    SwTextFormatColl* pTextFormat2 = pDoc->FindTextFormatCollByName(u"Body Text"_ustr);
+    SwTextFormatColl* pTextFormat2 = pDoc->FindTextFormatCollByName(UIName(u"Body Text"_ustr));
     const SwAttrSet& rAttrSet2 = pTextFormat2->GetAttrSet();
     const SvxAdjustItem& rAdjustItem2 = rAttrSet2.GetAdjust();
     SvxAdjust Adjust2 = rAdjustItem2.GetAdjust();
@@ -185,7 +185,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf79236)
     CPPUNIT_ASSERT_EQUAL(SvxAdjust::Right, Adjust2);
     //Undo the changes
     rUndoManager.Undo();
-    SwTextFormatColl* pTextFormat3 = pDoc->FindTextFormatCollByName(u"Body Text"_ustr);
+    SwTextFormatColl* pTextFormat3 = pDoc->FindTextFormatCollByName(UIName(u"Body Text"_ustr));
     const SwAttrSet& rAttrSet3 = pTextFormat3->GetAttrSet();
     const SvxAdjustItem& rAdjustItem3 = rAttrSet3.GetAdjust();
     SvxAdjust Adjust3 = rAdjustItem3.GetAdjust();
@@ -193,7 +193,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf79236)
     CPPUNIT_ASSERT_EQUAL(SvxAdjust::Left, Adjust3);
     //Redo the changes
     rUndoManager.Redo();
-    SwTextFormatColl* pTextFormat4 = pDoc->FindTextFormatCollByName(u"Body Text"_ustr);
+    SwTextFormatColl* pTextFormat4 = pDoc->FindTextFormatCollByName(UIName(u"Body Text"_ustr));
     const SwAttrSet& rAttrSet4 = pTextFormat4->GetAttrSet();
     const SvxAdjustItem& rAdjustItem4 = rAttrSet4.GetAdjust();
     SvxAdjust Adjust4 = rAdjustItem4.GetAdjust();
@@ -201,7 +201,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf79236)
     CPPUNIT_ASSERT_EQUAL(SvxAdjust::Right, Adjust4);
     //Undo the changes
     rUndoManager.Undo();
-    SwTextFormatColl* pTextFormat5 = pDoc->FindTextFormatCollByName(u"Body Text"_ustr);
+    SwTextFormatColl* pTextFormat5 = pDoc->FindTextFormatCollByName(UIName(u"Body Text"_ustr));
     const SwAttrSet& rAttrSet5 = pTextFormat5->GetAttrSet();
     const SvxAdjustItem& rAdjustItem5 = rAttrSet5.GetAdjust();
     SvxAdjust Adjust5 = rAdjustItem5.GetAdjust();
@@ -407,8 +407,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf69282)
     mxComponent.clear();
     createSwDoc();
     SwDoc* target = getSwDoc();
-    SwPageDesc* sPageDesc = source->MakePageDesc(u"SourceStyle"_ustr);
-    SwPageDesc* tPageDesc = target->MakePageDesc(u"TargetStyle"_ustr);
+    SwPageDesc* sPageDesc = source->MakePageDesc(UIName(u"SourceStyle"_ustr));
+    SwPageDesc* tPageDesc = target->MakePageDesc(UIName(u"TargetStyle"_ustr));
     sPageDesc->ChgFirstShare(false);
     CPPUNIT_ASSERT(!sPageDesc->IsFirstShared());
     SwFrameFormat& rSourceMasterFormat = sPageDesc->GetMaster();
@@ -423,7 +423,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf69282)
     verticalSpace.SetLower(14);
     rSourceMasterFormat.SetFormatAttr(verticalSpace);
     //Changing the style and copying it to target
-    source->ChgPageDesc(u"SourceStyle"_ustr, *sPageDesc);
+    source->ChgPageDesc(UIName(u"SourceStyle"_ustr), *sPageDesc);
     target->CopyPageDesc(*sPageDesc, *tPageDesc);
     //Checking the set values on all Formats in target
     SwFrameFormat& rTargetMasterFormat = tPageDesc->GetMaster();
@@ -467,8 +467,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf69282WithMirror)
     mxComponent.clear();
     createSwDoc();
     SwDoc* target = getSwDoc();
-    SwPageDesc* sPageDesc = source->MakePageDesc(u"SourceStyle"_ustr);
-    SwPageDesc* tPageDesc = target->MakePageDesc(u"TargetStyle"_ustr);
+    SwPageDesc* sPageDesc = source->MakePageDesc(UIName(u"SourceStyle"_ustr));
+    SwPageDesc* tPageDesc = target->MakePageDesc(UIName(u"TargetStyle"_ustr));
     //Enabling Mirror
     sPageDesc->SetUseOn(UseOnPage::Mirror);
     SwFrameFormat& rSourceMasterFormat = sPageDesc->GetMaster();
@@ -483,7 +483,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf69282WithMirror)
     verticalSpace.SetLower(14);
     rSourceMasterFormat.SetFormatAttr(verticalSpace);
     //Changing the style and copying it to target
-    source->ChgPageDesc(u"SourceStyle"_ustr, *sPageDesc);
+    source->ChgPageDesc(UIName(u"SourceStyle"_ustr), *sPageDesc);
     target->CopyPageDesc(*sPageDesc, *tPageDesc);
     //Checking the set values on all Formats in target
     SwFrameFormat& rTargetMasterFormat = tPageDesc->GetMaster();
@@ -661,7 +661,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf60967)
     CPPUNIT_ASSERT(pShell);
     SwPaM* pCursor = pShell->GetCursor();
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
-    pWrtShell->ChangeHeaderOrFooter(u"Default Page Style", true, true, true);
+    pWrtShell->ChangeHeaderOrFooter(UIName(u"Default Page Style"_ustr), true, true, true);
     //Inserting table
     SwInsertTableOptions TableOpt(SwInsertTableFlags::DefaultBorder, 0);
     pWrtShell->InsertTable(TableOpt, 2, 2);
@@ -2128,7 +2128,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf86639)
     createSwDoc("tdf86639.rtf");
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
-    SwTextFormatColl* pColl = pDoc->FindTextFormatCollByName(u"Heading"_ustr);
+    SwTextFormatColl* pColl = pDoc->FindTextFormatCollByName(UIName(u"Heading"_ustr));
     pWrtShell->SetTextFormatColl(pColl);
     OUString aExpected = pColl->GetAttrSet().GetFont().GetFamilyName();
     // This was Calibri, should be Liberation Sans.
@@ -2837,7 +2837,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf149184)
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     // Removing the footer for all styles
-    pWrtShell->ChangeHeaderOrFooter(u"", false, false, false);
+    pWrtShell->ChangeHeaderOrFooter(UIName(u""_ustr), false, false, false);
 
     // export to simplefooter.doc
 

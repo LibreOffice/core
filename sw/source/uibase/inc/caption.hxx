@@ -22,6 +22,7 @@
 #include <tools/globname.hxx>
 #include <SwCapObjType.hxx>
 #include <swdllapi.h>
+#include <names.hxx>
 
 class SW_DLLPUBLIC InsCaptionOpt
 {
@@ -36,7 +37,7 @@ private:
     sal_uInt16      m_nPos;
     sal_uInt16      m_nLevel;
     OUString        m_sSeparator;
-    OUString        m_sCharacterStyle;
+    UIName          m_sCharacterStyle;
 
     bool         m_bIgnoreSeqOpts;    // is not being saved
     bool         m_bCopyAttributes;   //          -""-
@@ -72,8 +73,8 @@ public:
     const OUString&  GetSeparator() const                { return m_sSeparator; }
     void             SetSeparator(const OUString& rSep)    { m_sSeparator = rSep; }
 
-    const OUString&         GetCharacterStyle() const { return m_sCharacterStyle; }
-    void                    SetCharacterStyle(const OUString& rStyle)
+    const UIName&         GetCharacterStyle() const { return m_sCharacterStyle; }
+    void                    SetCharacterStyle(const UIName& rStyle)
                                     { m_sCharacterStyle = rStyle; }
 
     bool&            IgnoreSeqOpts()                 { return m_bIgnoreSeqOpts; }

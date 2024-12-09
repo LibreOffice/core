@@ -935,7 +935,7 @@ uno::Sequence< OUString > SwXTextTables::getElementNames()
         {
             SwFrameFormat& rFormat = GetDoc().GetTableFrameFormat(i, true);
 
-            pArray[i] = rFormat.GetName();
+            pArray[i] = rFormat.GetName().toString();
         }
     }
     return aSeq;
@@ -1199,13 +1199,13 @@ uno::Any SwXFrames::getByName(const OUString& rName)
     switch(m_eType)
     {
         case FLYCNTTYPE_GRF:
-            pFormat = GetDoc().FindFlyByName(rName, SwNodeType::Grf);
+            pFormat = GetDoc().FindFlyByName(UIName(rName), SwNodeType::Grf);
             break;
         case FLYCNTTYPE_OLE:
-            pFormat = GetDoc().FindFlyByName(rName, SwNodeType::Ole);
+            pFormat = GetDoc().FindFlyByName(UIName(rName), SwNodeType::Ole);
             break;
         default:
-            pFormat = GetDoc().FindFlyByName(rName, SwNodeType::Text);
+            pFormat = GetDoc().FindFlyByName(UIName(rName), SwNodeType::Text);
             break;
     }
     if(!pFormat)
@@ -1234,11 +1234,11 @@ sal_Bool SwXFrames::hasByName(const OUString& rName)
     switch(m_eType)
     {
         case FLYCNTTYPE_GRF:
-            return GetDoc().FindFlyByName(rName, SwNodeType::Grf) != nullptr;
+            return GetDoc().FindFlyByName(UIName(rName), SwNodeType::Grf) != nullptr;
         case FLYCNTTYPE_OLE:
-            return GetDoc().FindFlyByName(rName, SwNodeType::Ole) != nullptr;
+            return GetDoc().FindFlyByName(UIName(rName), SwNodeType::Ole) != nullptr;
         default:
-            return GetDoc().FindFlyByName(rName, SwNodeType::Text) != nullptr;
+            return GetDoc().FindFlyByName(UIName(rName), SwNodeType::Text) != nullptr;
     }
 }
 
@@ -1440,7 +1440,7 @@ uno::Sequence< OUString > SwXTextSections::getElementNames()
             {
                 pFormat = rSectFormats[++nIndex];
             }
-            pArray[i] = pFormat->GetSection()->GetSectionName();
+            pArray[i] = pFormat->GetSection()->GetSectionName().toString();
         }
     }
     return aSeq;

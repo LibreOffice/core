@@ -18,7 +18,7 @@
 namespace sw {
 
 void
-ToxLinkProcessor::StartNewLink(sal_Int32 startPosition, const OUString& characterStyle)
+ToxLinkProcessor::StartNewLink(sal_Int32 startPosition, const UIName& characterStyle)
 {
     SAL_INFO_IF(m_oStartedLink, "sw.core", "ToxLinkProcessor: LS without LE");
     m_oStartedLink.emplace(startPosition, characterStyle);
@@ -54,7 +54,7 @@ void ToxLinkProcessor::CloseLink(sal_Int32 endPosition, const OUString& url, boo
     std::unique_ptr<ClosedLink> pClosedLink(
             new ClosedLink(uri, m_oStartedLink->mStartPosition, endPosition));
 
-    const OUString& characterStyle = m_oStartedLink->mCharacterStyle;
+    const UIName& characterStyle = m_oStartedLink->mCharacterStyle;
     sal_uInt16 poolId = ObtainPoolId(characterStyle);
     pClosedLink->mINetFormat.SetVisitedFormatAndId(characterStyle, poolId);
     pClosedLink->mINetFormat.SetINetFormatAndId(characterStyle, poolId);
@@ -64,7 +64,7 @@ void ToxLinkProcessor::CloseLink(sal_Int32 endPosition, const OUString& url, boo
 }
 
 sal_uInt16
-ToxLinkProcessor::ObtainPoolId(const OUString& characterStyle) const
+ToxLinkProcessor::ObtainPoolId(const UIName& characterStyle) const
 {
     if (characterStyle.isEmpty()) {
         return USHRT_MAX;

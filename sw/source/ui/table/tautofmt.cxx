@@ -127,7 +127,7 @@ void SwAutoFormatDlg::Init(const SwTableAutoFormat* pSelFormat)
     for (sal_uInt8 i = 0, nCount = static_cast<sal_uInt8>(m_xTableTable->size()); i < nCount; i++)
     {
         SwTableAutoFormat const& rFormat = (*m_xTableTable)[i];
-        m_xLbFormat->append_text(rFormat.GetName());
+        m_xLbFormat->append_text(rFormat.GetName().toString());
         if (pSelFormat && rFormat.GetName() == pSelFormat->GetName())
             m_nIndex = i;
     }
@@ -218,13 +218,13 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, AddHdl, weld::Button&, void)
                 if (n >= m_xTableTable->size())
                 {
                     // Format with the name does not already exist, so take up.
-                    std::unique_ptr<SwTableAutoFormat> pNewData(new SwTableAutoFormat(aFormatName));
+                    std::unique_ptr<SwTableAutoFormat> pNewData(new SwTableAutoFormat(TableStyleName(aFormatName)));
                     bool bGetOk = m_pShell->GetTableAutoFormat(*pNewData);
                     SAL_WARN_IF(!bGetOk, "sw.ui", "GetTableAutoFormat failed for: " << aFormatName);
 
                     // Insert sorted!!
                     for (n = 1; n < m_xTableTable->size(); ++n)
-                        if ((*m_xTableTable)[n].GetName() > aFormatName)
+                        if ((*m_xTableTable)[n].GetName().toString() > aFormatName)
                             break;
 
                     m_xTableTable->InsertAutoFormat(n, std::move(pNewData));
@@ -317,11 +317,11 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RenameHdl, weld::Button&, void)
                     m_xLbFormat->remove(m_nDfltStylePos + nIndex);
                     std::unique_ptr<SwTableAutoFormat> p(m_xTableTable->ReleaseAutoFormat(nIndex));
 
-                    p->SetName(aFormatName);
+                    p->SetName(TableStyleName(aFormatName));
 
                     // keep all arrays sorted!
                     for (n = 1; n < m_xTableTable->size(); ++n)
-                        if ((*m_xTableTable)[n].GetName() > aFormatName)
+                        if ((*m_xTableTable)[n].GetName().toString() > aFormatName)
                         {
                             break;
                         }
@@ -371,7 +371,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, SelFormatHdl, weld::TreeView&, void)
     {
         m_nIndex = 255;
 
-        SwTableAutoFormat aTmp(SwViewShell::GetShellRes()->aStrNone);
+        SwTableAutoFormat aTmp(TableStyleName(SwViewShell::GetShellRes()->aStrNone));
         aTmp.SetFont(false);
         aTmp.SetJustify(false);
         aTmp.SetFrame(false);

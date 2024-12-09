@@ -58,7 +58,7 @@ std::unique_ptr<SwField> SwMacroField::Copy() const
 
 OUString SwMacroField::GetFieldName() const
 {
-    return GetTyp()->GetName() + " " + m_aMacro;
+    return GetTyp()->GetName().toString() + " " + m_aMacro;
 }
 
 OUString SwMacroField::GetLibName() const

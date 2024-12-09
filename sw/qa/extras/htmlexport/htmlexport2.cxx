@@ -572,7 +572,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testSectionDir)
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Insert(u"test"_ustr);
     pWrtShell->SelAll();
-    SwSectionData aSectionData(SectionType::Content, u"mysect"_ustr);
+    SwSectionData aSectionData(SectionType::Content, UIName(u"mysect"_ustr));
     pWrtShell->InsertSection(aSectionData);
 
     // When exporting to (reqif-)xhtml:

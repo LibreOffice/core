@@ -36,7 +36,7 @@
 
 using namespace com::sun::star;
 
-SwFormat::SwFormat( SwAttrPool& rPool, const OUString& rFormatNm,
+SwFormat::SwFormat( SwAttrPool& rPool, const UIName& rFormatNm,
               const WhichRangesContainer& pWhichRanges, SwFormat *pDrvdFrame,
               sal_uInt16 nFormatWhich ) :
     m_aFormatName( rFormatNm ),
@@ -121,7 +121,7 @@ SwFormat &SwFormat::operator=(const SwFormat& rFormat)
     return *this;
 }
 
-void SwFormat::SetFormatName( const OUString& rNewName, bool bBroadcast )
+void SwFormat::SetFormatName( const UIName& rNewName, bool bBroadcast )
 {
     OSL_ENSURE( !IsDefault(), "SetName: Defaultformat" );
     if( bBroadcast )
@@ -193,7 +193,7 @@ void SwFormat::Destr()
         SwFormat::ResetFormatAttr(RES_PAGEDESC);
         SAL_WARN("sw.core",
                  "~SwFormat: format still has clients on death, but parent format is missing: "
-                     << GetName());
+                     << GetName().toString());
         return;
     }
     PrepareFormatDeath(SwFormatChangeHint(this, DerivedFrom()));
@@ -776,11 +776,11 @@ void SwFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("symbol"), "%s", BAD_CAST(typeid(*this).name()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"),
-                                      BAD_CAST(m_aFormatName.toUtf8().getStr()));
+                                      BAD_CAST(m_aFormatName.toString().toUtf8().getStr()));
     if (SwFormat* pDerivedFrom = DerivedFrom())
     {
         (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("derived-from"),
-                                          BAD_CAST(pDerivedFrom->GetName().toUtf8().getStr()));
+                                          BAD_CAST(pDerivedFrom->GetName().toString().toUtf8().getStr()));
     }
     m_aSet.dumpAsXml(pWriter);
     (void)xmlTextWriterEndElement(pWriter);
@@ -789,13 +789,13 @@ void SwFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
 SwFormatsBase::~SwFormatsBase()
 {}
 
-SwFormat* SwFormatsBase::FindFormatByName( const OUString& rName ) const
+SwFormat* SwFormatsBase::FindFormatByName( const UIName& rName ) const
 {
     SwFormat* pFnd = nullptr;
     for( size_t n = 0; n < GetFormatCount(); ++n )
     {
         // Does the Doc already contain the template?
-        if( GetFormat(n)->HasName( rName ) )
+        if( GetFormat(n)->HasName( rName.toString() ) )
         {
             pFnd = GetFormat(n);
             break;

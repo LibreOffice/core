@@ -782,7 +782,7 @@ void SwXMLExport::ExportTableAutoStyles(const SwTableNode& rTableNd)
     SwXMLTableFrameFormatsSort_Impl aExpCells(rBoxFormats);
     SwXMLTableInfo_Impl aTableInfo(&rTable, XML_NAMESPACE_TABLE, rRowFormats, rBoxFormats);
     ExportTableLinesAutoStyles( rTable.GetTabLines(), nAbsWidth, nBaseWidth,
-                                pTableFormat->GetName(), aExpCols, aExpRows, aExpCells,
+                                pTableFormat->GetName().toString(), aExpCols, aExpRows, aExpCells,
                                 aTableInfo, true);
 
 }
@@ -1122,16 +1122,16 @@ void SwXMLExport::ExportTable( const SwTableNode& rTableNd )
     const SwFrameFormat *pTableFormat = rTable.GetFrameFormat();
     if (pTableFormat && !pTableFormat->GetName().isEmpty())
     {
-        AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, pTableFormat->GetName());
+        AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, pTableFormat->GetName().toString());
         AddAttribute(XML_NAMESPACE_TABLE, XML_STYLE_NAME,
-                     EncodeStyleName(pTableFormat->GetName()));
+                     EncodeStyleName(pTableFormat->GetName().toString()));
     }
 
     // table:template-name=
     if (!rTable.GetTableStyleName().isEmpty())
     {
         ProgName sStyleName;
-        SwStyleNameMapper::FillProgName(rTable.GetTableStyleName(), sStyleName, SwGetPoolIdFromName::TableStyle);
+        SwStyleNameMapper::FillProgName(UIName(rTable.GetTableStyleName().toString()), sStyleName, SwGetPoolIdFromName::TableStyle);
         AddAttribute(XML_NAMESPACE_TABLE, XML_TEMPLATE_NAME, sStyleName.toString());
     }
 
@@ -1145,7 +1145,7 @@ void SwXMLExport::ExportTable( const SwTableNode& rTableNd )
 
         // connection name
         AddAttribute( XML_NAMESPACE_OFFICE, XML_NAME,
-                      pDDEFieldType->GetName() );
+                      pDDEFieldType->GetName().toString() );
 
         // DDE command
         const OUString& sCmd = pDDEFieldType->GetCmd();

@@ -147,7 +147,7 @@ class SwSetExpField;
 
 class SW_DLLPUBLIC SwSetExpFieldType final : public SwValueFieldType
 {
-    OUString       m_sName;
+    UIName       m_sName;
     OUString      m_sDelim;
     sal_uInt16      m_nType;
     sal_uInt8       m_nLevel;
@@ -156,10 +156,10 @@ class SW_DLLPUBLIC SwSetExpFieldType final : public SwValueFieldType
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
 public:
-    SwSetExpFieldType( SwDoc* pDoc, OUString aName,
+    SwSetExpFieldType( SwDoc* pDoc, UIName aName,
                         sal_uInt16 nType = nsSwGetSetExpType::GSE_EXPR );
     virtual std::unique_ptr<SwFieldType> Copy() const override;
-    virtual OUString        GetName() const override;
+    virtual UIName          GetName() const override;
 
     inline void             SetType(sal_uInt16 nTyp);
     inline sal_uInt16       GetType() const;
@@ -171,7 +171,7 @@ public:
     void                    SetDeleted( bool b )    { m_bDeleted = b; }
 
     /// Overlay, because set-field takes care for its being updated by itself.
-    inline const OUString&  GetSetRefName() const;
+    inline const UIName&  GetSetRefName() const;
 
     void   SetSeqRefNo( SwSetExpField& rField );
 
@@ -198,7 +198,7 @@ inline void SwSetExpFieldType::SetType( sal_uInt16 nTyp )
 inline sal_uInt16 SwSetExpFieldType::GetType() const
     { return m_nType;   }
 
-inline const OUString& SwSetExpFieldType::GetSetRefName() const
+inline const UIName& SwSetExpFieldType::GetSetRefName() const
     { return m_sName; }
 
 class SW_DLLPUBLIC SwSetExpField final : public SwFormulaField

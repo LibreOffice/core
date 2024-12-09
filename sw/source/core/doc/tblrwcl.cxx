@@ -2051,7 +2051,7 @@ void SwTable::CopyHeadlineIntoTable( SwTableNode& rTableNd )
 
 bool SwTable::MakeCopy( SwDoc& rInsDoc, const SwPosition& rPos,
                         const SwSelBoxes& rSelBoxes,
-                        bool bCpyName, const OUString& rStyleName ) const
+                        bool bCpyName, const TableStyleName& rStyleName ) const
 {
     // Find all Boxes/Lines
     FndBox_ aFndBox( nullptr, nullptr );

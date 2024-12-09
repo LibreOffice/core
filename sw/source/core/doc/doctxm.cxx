@@ -385,7 +385,7 @@ SwTOXBaseSection* SwDoc::InsertTableOf( const SwPaM& aPam,
     assert(!bExpand || pLayout != nullptr);
     GetIDocumentUndoRedo().StartUndo( SwUndoId::INSTOX, nullptr );
 
-    OUString sSectNm = GetUniqueTOXBaseName( *rTOX.GetTOXType(), rTOX.GetTOXName() );
+    UIName sSectNm( GetUniqueTOXBaseName( *rTOX.GetTOXType(), rTOX.GetTOXName().toString() ) );
     SwSectionData aSectionData( SectionType::ToxContent, sSectNm );
 
     std::tuple<SwTOXBase const*, sw::RedlineMode, sw::FieldmarkMode, sw::ParagraphBreakMode> const tmp(
@@ -418,7 +418,7 @@ SwTOXBaseSection* SwDoc::InsertTableOf( const SwPaM& aPam,
             SwTextNode* pHeadNd = GetNodes().MakeTextNode( aIdx.GetNode(),
                             getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD ) );
 
-            SwSectionData headerData( SectionType::ToxHeader, pNewSection->GetTOXName()+"_Head" );
+            SwSectionData headerData( SectionType::ToxHeader, UIName(pNewSection->GetTOXName().toString()+"_Head") );
 
             --aIdx;
             SwSectionFormat* pSectFormat = MakeSectionFormat();
@@ -447,7 +447,7 @@ void SwDoc::InsertTableOf( SwNodeOffset nSttNd, SwNodeOffset nEndNd,
         pSectNd = pSectNd->StartOfSectionNode()->FindSectionNode();
     }
 
-    const OUString sSectNm = GetUniqueTOXBaseName(*rTOX.GetTOXType(), rTOX.GetTOXName());
+    const UIName sSectNm( GetUniqueTOXBaseName(*rTOX.GetTOXType(), rTOX.GetTOXName().toString()) );
 
     SwSectionData aSectionData( SectionType::ToxContent, sSectNm );
 
@@ -689,11 +689,11 @@ OUString SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
         const SwSection& rSect = pSectNd->GetSection();
         if (rSect.GetType()==SectionType::ToxContent)
         {
-            const OUString& rNm = rSect.GetSectionName();
-            if ( rNm.startsWith(aName) )
+            const UIName& rNm = rSect.GetSectionName();
+            if ( rNm.toString().startsWith(aName) )
             {
                 // Calculate number and set the Flag
-                sal_Int32 nNum = o3tl::toInt32(rNm.subView(nNmLen)) - 1;
+                sal_Int32 nNum = o3tl::toInt32(rNm.toString().subView(nNmLen)) - 1;
                 if (nNum >= 0 && o3tl::make_unsigned(nNum) < mpSectionFormatTable->size())
                     pSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
             }
@@ -725,12 +725,12 @@ OUString SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
     return aName + OUString::number( ++nNum );
 }
 
-bool SwDoc::SetTOXBaseName(const SwTOXBase& rTOXBase, const OUString& rName)
+bool SwDoc::SetTOXBaseName(const SwTOXBase& rTOXBase, const UIName& rName)
 {
     assert( dynamic_cast<const SwTOXBaseSection*>( &rTOXBase) && "no TOXBaseSection!" );
     SwTOXBaseSection* pTOX = const_cast<SwTOXBaseSection*>(static_cast<const SwTOXBaseSection*>(&rTOXBase));
 
-    if (GetUniqueTOXBaseName(*rTOXBase.GetTOXType(), rName) == rName)
+    if (GetUniqueTOXBaseName(*rTOXBase.GetTOXType(), rName.toString()) == rName)
     {
         pTOX->SetTOXName(rName);
         pTOX->SetSectionName(rName);
@@ -854,7 +854,7 @@ static bool IsHeadingContained(const SwTextNode* pChptrNd, const SwNode& rNd)
 // Table of contents class
 SwTOXBaseSection::SwTOXBaseSection(SwTOXBase const& rBase, SwSectionFormat & rFormat)
     : SwTOXBase( rBase )
-    , SwSection( SectionType::ToxContent, OUString(), rFormat )
+    , SwSection( SectionType::ToxContent, UIName(), rFormat )
 {
     SetProtect( rBase.IsProtected() );
     SetSectionName( GetTOXName() );
@@ -1078,7 +1078,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
                                 GetTextFormatColl( FORM_TITLE ) );
         pHeadNd->InsertText( GetTitle(), SwContentIndex( pHeadNd ) );
 
-        SwSectionData headerData( SectionType::ToxHeader, GetTOXName()+"_Head" );
+        SwSectionData headerData( SectionType::ToxHeader, UIName(GetTOXName().toString()+"_Head") );
 
         --aIdx;
         SwSectionFormat* pSectFormat = rDoc.MakeSectionFormat();
@@ -1261,7 +1261,7 @@ void SwTOXBaseSection::InsertAlphaDelimiter( const SwTOXInternational& rIntl )
 SwTextFormatColl* SwTOXBaseSection::GetTextFormatColl( sal_uInt16 nLevel )
 {
     SwDoc* pDoc = GetFormat()->GetDoc();
-    const OUString& rName = GetTOXForm().GetTemplate( nLevel );
+    const UIName& rName = GetTOXForm().GetTemplate( nLevel );
     SwTextFormatColl* pColl = !rName.isEmpty() ? pDoc->FindTextFormatCollByName(rName) :nullptr;
     if( !pColl )
     {
@@ -1441,7 +1441,7 @@ void SwTOXBaseSection::UpdateTemplate(const SwTextNode* pOwnChapterNode,
     SwDoc* pDoc = GetFormat()->GetDoc();
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
     {
-        const OUString sTmpStyleNames = GetStyleNames(i);
+        const UIName sTmpStyleNames = GetStyleNames(i);
         if (sTmpStyleNames.isEmpty())
             continue;
 
@@ -1449,7 +1449,7 @@ void SwTOXBaseSection::UpdateTemplate(const SwTextNode* pOwnChapterNode,
         while (nIndex >= 0)
         {
             SwTextFormatColl* pColl = pDoc->FindTextFormatCollByName(
-                                    sTmpStyleNames.getToken( 0, TOX_STYLE_DELIMITER, nIndex ));
+                                    UIName(sTmpStyleNames.toString().getToken( 0, TOX_STYLE_DELIMITER, nIndex )));
             //TODO: no outline Collections in content indexes if OutlineLevels are already included
             if( !pColl ||
                 ( TOX_CONTENT == SwTOXBase::GetType() &&
@@ -1493,7 +1493,7 @@ void SwTOXBaseSection::UpdateSequence(const SwTextNode* pOwnChapterNode,
                 || !sw::IsFieldDeletedInModel(pDoc->getIDocumentRedlineAccess(), *pTextField)))
         {
             const SwSetExpField& rSeqField = dynamic_cast<const SwSetExpField&>(*(pFormatField->GetField()));
-            const OUString sName = GetSequenceName()
+            const OUString sName = GetSequenceName().toString()
                 + OUStringChar(cSequenceMarkSeparator)
                 + OUString::number( rSeqField.GetSeqNumber() );
             std::unique_ptr<SwTOXPara> pNew(new SwTOXPara( rTextNode, SwTOXElement::Sequence, 1, sName ));

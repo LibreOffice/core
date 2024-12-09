@@ -592,7 +592,7 @@ TextAndReading SwTOXPara::GetText_Impl(SwRootFrame const*const pLayout) const
             // Find the FlyFormat; the object/graphic name is there
             SwFrameFormat* pFly = pNd->GetFlyFormat();
             if( pFly )
-                return TextAndReading(pFly->GetName(), OUString());
+                return TextAndReading(pFly->GetName().toString(), OUString());
 
             OSL_ENSURE( false, "Graphic/object without name" );
             TranslateId pId = SwTOXElement::Ole == eType
@@ -703,7 +703,7 @@ std::pair<OUString, bool> SwTOXPara::GetURL(SwRootFrame const*const) const
             SwFrameFormat* pFly = pNd->GetFlyFormat();
             if( pFly )
             {
-                aText = "#" + pFly->GetName() + OUStringChar(cMarkSeparator);
+                aText = "#" + pFly->GetName().toString() + OUStringChar(cMarkSeparator);
                 std::optional<OUString> pStr;
                 switch( eType )
                 {
@@ -757,7 +757,7 @@ TextAndReading SwTOXTable::GetText_Impl(SwRootFrame const*const) const
             pNd->FindTableNode();
         if (pTableNd)
         {
-            return TextAndReading(pTableNd->GetTable().GetFrameFormat()->GetName(), OUString());
+            return TextAndReading(pTableNd->GetTable().GetFrameFormat()->GetName().toString(), OUString());
         }
     }
 
@@ -780,11 +780,11 @@ std::pair<OUString, bool> SwTOXTable::GetURL(SwRootFrame const*const) const
     if (!pNd)
         return std::make_pair(OUString(), false);
 
-    const OUString sName = static_cast<const SwTableNode*>(pNd)->GetTable().GetFrameFormat()->GetName();
+    const UIName sName = static_cast<const SwTableNode*>(pNd)->GetTable().GetFrameFormat()->GetName();
     if ( sName.isEmpty() )
         return std::make_pair(OUString(), false);
 
-    return std::make_pair("#" + sName + OUStringChar(cMarkSeparator) + "table", false);
+    return std::make_pair("#" + sName.toString() + OUStringChar(cMarkSeparator) + "table", false);
 }
 
 SwTOXAuthority::SwTOXAuthority( const SwContentNode& rNd,

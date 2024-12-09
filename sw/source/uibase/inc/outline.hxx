@@ -35,7 +35,7 @@ class SwOutlineTabDialog final : public SfxTabDialogController
     static     sal_uInt16    s_nNumLevel;
     static_assert(sizeof(s_nNumLevel) * CHAR_BIT >= MAXLEVEL);
 
-    OUString            m_aCollNames[MAXLEVEL];
+    UIName              m_aCollNames[MAXLEVEL];
 
     SwWrtShell&         m_rWrtSh;
     std::unique_ptr<SwNumRule>  m_xNumRule;
@@ -58,7 +58,7 @@ public:
 
     SwNumRule*          GetNumRule() { return m_xNumRule.get(); }
     sal_uInt16          GetLevel(std::u16string_view rFormatName) const;
-    OUString*           GetCollNames() {return m_aCollNames;}
+    UIName*             GetCollNames() {return m_aCollNames;}
 
     static sal_uInt16   GetActNumLevel() {return s_nNumLevel;}
     static void         SetActNumLevel(sal_uInt16 nSet) {s_nNumLevel = nSet;}
@@ -67,10 +67,10 @@ public:
 class SwOutlineSettingsTabPage final : public SfxTabPage
 {
     OUString            m_aNoFormatName;
-    OUString            m_aSaveCollNames[MAXLEVEL];
+    UIName              m_aSaveCollNames[MAXLEVEL];
     SwWrtShell*         m_pSh;
     SwNumRule*          m_pNumRule;
-    OUString*           m_pCollNames;
+    UIName*             m_pCollNames;
     sal_uInt16          m_nActLevel;
     NumberingPreview  m_aPreviewWIN;
 

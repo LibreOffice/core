@@ -326,7 +326,7 @@ SwXTextSection::attach(const uno::Reference< text::XTextRange > & xTextRange)
         }
     }
 
-    SwSectionData aSect(eType, pDoc->GetUniqueSectionName(&m_pImpl->m_sName));
+    SwSectionData aSect(eType, UIName(pDoc->GetUniqueSectionName(&m_pImpl->m_sName)));
     aSect.SetCondition(m_pImpl->m_pProps->m_sCondition);
     aSect.SetLinkFileName(m_pImpl->m_pProps->m_sLinkFileName +
         OUStringChar(sfx2::cTokenSeparator) +
@@ -1081,7 +1081,7 @@ SwXTextSection::Impl::GetPropertyValues_Impl(
             {
                 if (pFormat)
                 {
-                    pRet[nProperty] <<= pFormat->GetSection()->GetSectionName();
+                    pRet[nProperty] <<= pFormat->GetSection()->GetSectionName().toString();
                 }
             }
             break;
@@ -1633,7 +1633,7 @@ OUString SAL_CALL SwXTextSection::getName()
     SwSectionFormat const*const pFormat = m_pImpl->GetSectionFormat();
     if(pFormat)
     {
-        sRet = pFormat->GetSection()->GetSectionName();
+        sRet = pFormat->GetSection()->GetSectionName().toString();
     }
     else if (m_pImpl->m_bIsDescriptor)
     {
@@ -1655,7 +1655,7 @@ void SAL_CALL SwXTextSection::setName(const OUString& rName)
     {
         SwSection *const pSect = pFormat->GetSection();
         SwSectionData aSection(*pSect);
-        aSection.SetSectionName(rName);
+        aSection.SetSectionName(UIName(rName));
 
         const SwSectionFormats& rFormats = pFormat->GetDoc()->GetSections();
         size_t nApplyPos = SIZE_MAX;

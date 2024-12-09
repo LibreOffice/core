@@ -183,7 +183,7 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
     m_pSh->StartUndo( SwUndoId::UI_INSERT_CHART );
     m_pSh->StartAllAction();
 
-    OUString aName;
+    UIName aName;
     if (m_pSh->IsCursorInTable())
     {
         aName = m_pSh->GetTableFormat()->GetName();

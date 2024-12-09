@@ -409,7 +409,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
         if( !bError )
         {
             OUString sTableName( aBuffer.makeStringAndClear() );
-            pOLENode->SetChartTableName( GetRenameMap().Get( XML_TEXT_RENAME_TYPE_TABLE, sTableName ) );
+            pOLENode->SetChartTableName( UIName(GetRenameMap().Get( XML_TEXT_RENAME_TYPE_TABLE, sTableName )) );
         }
     }
 

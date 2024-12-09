@@ -643,7 +643,7 @@ public:
     SW_DLLPUBLIC bool GoNextCell( bool bAppendLine = true );
     SW_DLLPUBLIC bool GoPrevCell();
     // go to this box (if available and inside of table)
-    bool GotoTable( const OUString& rName );
+    bool GotoTable( const UIName& rName );
 
     // select a table row, column or box (based on the current cursor)
     bool SelTableRow() { return SelTableRowOrCol( true  ); }
@@ -709,8 +709,8 @@ public:
     // in a headerframe otherwise in a footerframe
     SW_DLLPUBLIC bool IsInHeaderFooter( bool* pbInHeader = nullptr ) const;
 
-    bool GotoNextTOXBase( const OUString* = nullptr );
-    bool GotoPrevTOXBase( const OUString* = nullptr );
+    bool GotoNextTOXBase( const UIName* = nullptr );
+    bool GotoPrevTOXBase( const UIName* = nullptr );
     void GotoTOXMarkBase();
     // jump to the next or previous index entry
     bool GotoNxtPrvTOXMark( bool bNext = true );

@@ -245,7 +245,7 @@ bool lcl_IsHeadlineCell( const SwCellFrame& rCellFrame )
     {
         SwTable const*const pTable(rCellFrame.FindTabFrame()->GetTable());
         assert(pTable);
-        OUString const& rStyleName(pTable->GetTableStyleName());
+        TableStyleName const& rStyleName(pTable->GetTableStyleName());
         if (!rStyleName.isEmpty())
         {
             if (SwTableAutoFormat const*const pTableAF =
@@ -2569,7 +2569,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                 {
                     Point aNullPt;
                     const SwRect aLinkRect = pFrameFormat->FindLayoutRect( false, &aNullPt );
-                    OUString const linkName(pItem->GetName());
+                    UIName const linkName(pItem->GetName());
                     // Link PageNums
                     std::vector<sal_Int32> aLinkPageNums = CalcOutputPageNums( aLinkRect );
 
@@ -2578,7 +2578,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                     {
                         tools::Rectangle aRect(SwRectToPDFRect(pCurrPage, aLinkRect.SVRect()));
                         const sal_Int32 nLinkId =
-                            pPDFExtOutDevData->CreateLink(aRect, linkName, aLinkPageNum);
+                            pPDFExtOutDevData->CreateLink(aRect, linkName.toString(), aLinkPageNum);
 
                         // Store link info for tagged pdf output:
                         const IdMapEntry aLinkEntry(aLinkRect, nLinkId);
@@ -2599,7 +2599,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                             {
                                 const SwTextNode* pTNd = pAnchorNode->GetTextNode();
                                 if ( pTNd )
-                                    MakeHeaderFooterLinks(*pPDFExtOutDevData, *pTNd, aLinkRect, nDestId, aURL, bInternal, linkName);
+                                    MakeHeaderFooterLinks(*pPDFExtOutDevData, *pTNd, aLinkRect, nDestId, aURL, bInternal, linkName.toString());
                             }
                         }
                     }

@@ -22,6 +22,7 @@
 #include <rtl/ustring.hxx>
 
 class SwList;
+class UIName;
 
 /** Provides access to the lists of a document.
 */
@@ -29,16 +30,16 @@ class IDocumentListsAccess
 {
     public:
         virtual SwList* createList( const OUString& rListId,
-                                    const OUString& rDefaultListStyleName ) = 0;
+                                    const UIName& rDefaultListStyleName ) = 0;
         virtual SwList* getListByName( const OUString& rListId ) const = 0;
 
-        virtual void createListForListStyle( const OUString& rListStyleName ) = 0;
-        virtual SwList* getListForListStyle( const OUString& rListStyleName ) const = 0;
-        virtual void deleteListForListStyle( const OUString& rListStyleName ) = 0;
-        virtual void deleteListsByDefaultListStyle( const OUString& rListStyleName ) = 0;
+        virtual void createListForListStyle( const UIName& rListStyleName ) = 0;
+        virtual SwList* getListForListStyle( const UIName& rListStyleName ) const = 0;
+        virtual void deleteListForListStyle( const UIName& rListStyleName ) = 0;
+        virtual void deleteListsByDefaultListStyle( const UIName& rListStyleName ) = 0;
         // #i91400#
-        virtual void trackChangeOfListStyleName( const OUString& rListStyleName,
-                                                 const OUString& rNewListStyleName ) = 0;
+        virtual void trackChangeOfListStyleName( const UIName& rListStyleName,
+                                                 const UIName& rNewListStyleName ) = 0;
     protected:
         virtual ~IDocumentListsAccess() {};
 };

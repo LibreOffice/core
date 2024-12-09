@@ -81,9 +81,9 @@ private:
     std::unique_ptr<SfxItemSet> m_pTableItemSet;
 
     /** name of the character format (if it exist) */
-    OUString m_aCharStyle;
+    UIName m_aCharStyle;
     /** name of the paragraph format (if it exist) */
-    OUString m_aParaStyle;
+    UIName m_aParaStyle;
     //no frame style because it contains position information
 
     /** specify if the Paste function have to clear the current object */

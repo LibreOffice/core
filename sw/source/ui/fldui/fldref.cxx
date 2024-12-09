@@ -238,7 +238,7 @@ void SwFieldRefPage::Reset(const SfxItemSet* )
 
         if ((nsSwGetSetExpType::GSE_SEQ & pType->GetType()) && pType->HasWriterListeners() && pSh->IsUsed(*pType))
         {
-            m_xTypeLB->append(OUString::number(REFFLDFLAG | n), pType->GetName());
+            m_xTypeLB->append(OUString::number(REFFLDFLAG | n), pType->GetName().toString());
         }
     }
 
@@ -1177,7 +1177,7 @@ bool SwFieldRefPage::FillItemSet(SfxItemSet* )
 
                 nTypeId = static_cast<sal_uInt16>(SwFieldTypesEnum::GetRef);
                 nSubType = REF_SEQUENCEFLD;
-                aName = pType->GetName();
+                aName = pType->GetName().toString();
 
                 if (pType->GetSeqFieldList(aArr, pSh->GetLayout())
                     && aArr.SeekEntry(aElem, &nPos))

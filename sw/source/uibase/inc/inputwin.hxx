@@ -27,6 +27,7 @@
 #include <vcl/toolbox.hxx>
 
 #include <sfx2/childwin.hxx>
+#include <names.hxx>
 
 class SwFieldMgr;
 class SwWrtShell;
@@ -52,7 +53,7 @@ public:
         SetSizePixel(m_xWidget->get_preferred_size());
     }
 
-    void UpdateRange(std::u16string_view rSel, const OUString& rTableName);
+    void UpdateRange(std::u16string_view rSel, const UIName& rTableName);
 
     virtual void dispose() override
     {
@@ -153,7 +154,8 @@ friend class InputEdit;
     std::unique_ptr<SwFieldMgr> m_pMgr;
     SwWrtShell*     m_pWrtShell;
     SwView*         m_pView;
-    OUString        m_aCurrentTableName, m_sOldFormula;
+    UIName          m_aCurrentTableName;
+    OUString        m_sOldFormula;
 
     bool            m_bFirst : 1;  // initialisations at first call
     bool            m_bIsTable : 1;

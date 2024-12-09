@@ -112,14 +112,14 @@ public:
     void                CreateOrUpdateExample(
                             TOXTypes nTOXIndex, sal_uInt16 nPage = 0, sal_uInt16 nCurLevel = USHRT_MAX);
 
-    static bool IsNoNum(SwWrtShell& rSh, const OUString& rName);
+    static bool IsNoNum(SwWrtShell& rSh, const UIName& rName);
 };
 
 class SwTOXSelectTabPage final : public SfxTabPage
 {
     std::unique_ptr<IndexEntryResource> m_pIndexRes;
 
-    OUString        m_aStyleArr[MAXLEVEL];
+    UIName          m_aStyleArr[MAXLEVEL];
     OUString        m_sAutoMarkURL;
     OUString        m_sAutoMarkType;
     OUString        m_sAddStyleUser;

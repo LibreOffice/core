@@ -255,7 +255,7 @@ static void lcl_SetSpecialProperty(SwFrameFormat* pFormat,
             const SwPageDesc* pDesc = nullptr;
             if (!sPageStyle.isEmpty())
             {
-                OUString sPageStyleUIName;
+                UIName sPageStyleUIName;
                 SwStyleNameMapper::FillUIName(ProgName(sPageStyle), sPageStyleUIName, SwGetPoolIdFromName::PageDesc);
                 pDesc = SwPageDesc::GetByName(*pFormat->GetDoc(), sPageStyleUIName);
             }
@@ -323,7 +323,7 @@ static uno::Any lcl_GetSpecialProperty(SwFrameFormat* pFormat, const SfxItemProp
             return uno::Any(text::WrapTextMode_NONE);
 
         case FN_PARAM_LINK_DISPLAY_NAME :
-            return uno::Any(pFormat->GetName());
+            return uno::Any(pFormat->GetName().toString());
 
         case FN_UNO_REDLINE_NODE_START:
         case FN_UNO_REDLINE_NODE_END:
@@ -1837,9 +1837,9 @@ void SwTableProperties_Impl::ApplyTableAttr(const SwTable& rTable, SwDoc& rDoc)
         OUString sPageStyleProgName = pPage->get<OUString>();
         if(!sPageStyleProgName.isEmpty())
         {
-            OUString sPageStyleUIName;
-            SwStyleNameMapper::FillUIName(ProgName(sPageStyleProgName), sPageStyleUIName, SwGetPoolIdFromName::PageDesc);
-            const SwPageDesc* pDesc = SwPageDesc::GetByName(rDoc, sPageStyleUIName);
+            UIName sPageStyle;
+            SwStyleNameMapper::FillUIName(ProgName(sPageStyleProgName), sPageStyle, SwGetPoolIdFromName::PageDesc);
+            const SwPageDesc* pDesc = SwPageDesc::GetByName(rDoc, sPageStyle);
             if(pDesc)
             {
                 SwFormatPageDesc aDesc(pDesc);
@@ -2133,7 +2133,7 @@ SwXTextTable::attach(const uno::Reference<text::XTextRange> & xTextRange)
         {
             sal_uInt16 nIndex = 1;
             tableName = m_pImpl->m_sTableName;
-            while (pDoc->FindTableFormatByName(tableName, true) && nIndex < USHRT_MAX)
+            while (pDoc->FindTableFormatByName(UIName(tableName), true) && nIndex < USHRT_MAX)
                 tableName = m_pImpl->m_sTableName + OUString::number(nIndex++);
         }
 
@@ -2706,9 +2706,9 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                     OUString sProgName;
                     if (!(aValue >>= sProgName))
                         break;
-                    OUString sName;
+                    UIName sName;
                     SwStyleNameMapper::FillUIName(ProgName(sProgName), sName, SwGetPoolIdFromName::TableStyle);
-                    pTable->SetTableStyleName(sName);
+                    pTable->SetTableStyleName(TableStyleName(sName.toString()));
                     SwDoc* pDoc = pFormat->GetDoc();
                     if (SwFEShell* pFEShell = pDoc->GetDocShell()->GetFEShell())
                         pFEShell->UpdateTableStyleFormatting(pTable->GetTableNode());
@@ -2952,7 +2952,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
                 {
                     SwTable* pTable = SwTable::FindTable(pFormat);
                     ProgName sName;
-                    SwStyleNameMapper::FillProgName(pTable->GetTableStyleName(), sName, SwGetPoolIdFromName::TableStyle);
+                    SwStyleNameMapper::FillProgName(UIName(pTable->GetTableStyleName().toString()), sName, SwGetPoolIdFromName::TableStyle);
                     aRet <<= sName.toString();
                 }
                 break;
@@ -2997,7 +2997,7 @@ OUString SwXTextTable::getName()
         throw uno::RuntimeException();
     if(pFormat)
     {
-        return pFormat->GetName();
+        return pFormat->GetName().toString();
     }
     return m_pImpl->m_sTableName;
 }
@@ -3014,7 +3014,7 @@ void SwXTextTable::setName(const OUString& rName)
 
     if(pFormat)
     {
-        const OUString aOldName( pFormat->GetName() );
+        const UIName aOldName( pFormat->GetName() );
         const sw::TableFrameFormats* pFrameFormats = pFormat->GetDoc()->GetTableFrameFormats();
         for (size_t i = pFrameFormats->size(); i;)
         {
@@ -3027,7 +3027,7 @@ void SwXTextTable::setName(const OUString& rName)
             }
         }
 
-        pFormat->SetFormatName( rName );
+        pFormat->SetFormatName( UIName(rName) );
 
         SwStartNode *pStNd;
         SwNodeIndex aIdx( *pFormat->GetDoc()->GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );
@@ -3038,7 +3038,7 @@ void SwXTextTable::setName(const OUString& rName)
             if ( pNd->IsOLENode() &&
                 aOldName == static_cast<const SwOLENode*>(pNd)->GetChartTableName() )
             {
-                static_cast<SwOLENode*>(pNd)->SetChartTableName( rName );
+                static_cast<SwOLENode*>(pNd)->SetChartTableName( UIName(rName) );
 
                 SwTable* pTable = SwTable::FindTable( pFormat );
                 //TL_CHART2: chart needs to be notified about name changes

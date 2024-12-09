@@ -1170,7 +1170,7 @@ void SwFEShell::PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_uInt1
     }
     MovePage( GetThisFrame, GetFirstSub );
     ::std::optional<SwPaM> oSourcePam( *GetCursor()->GetPoint() );
-    OUString sStartingPageDesc = GetPageDesc( GetCurPageDesc()).GetName();
+    UIName sStartingPageDesc = GetPageDesc( GetCurPageDesc()).GetName();
     SwPageDesc* pDesc = rToFill.FindPageDescByName( sStartingPageDesc, true );
     if( pDesc )
         rToFill.ChgCurPageDesc( *pDesc );

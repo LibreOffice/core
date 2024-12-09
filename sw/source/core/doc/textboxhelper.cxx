@@ -732,7 +732,7 @@ void SwTextBoxHelper::getProperty(SwFrameFormat const* pShape, sal_uInt16 nWID, 
         }
         break;
         case MID_CHAIN_NAME:
-            rValue <<= pFormat->GetName();
+            rValue <<= pFormat->GetName().toString();
             break;
         default:
             SAL_WARN("sw.core", "SwTextBoxHelper::getProperty: unhandled member-id: "

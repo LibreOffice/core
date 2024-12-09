@@ -419,7 +419,7 @@ IMPL_LINK( SwInputWindow, SelTableCellsNotify, SwWrtShell&, rCaller, void )
     {
         SwFrameFormat* pTableFormat = rCaller.GetTableFormat();
         OUString sBoxNms( rCaller.GetBoxNms() );
-        OUString sTableNm;
+        UIName sTableNm;
         if( pTableFormat && m_aCurrentTableName != pTableFormat->GetName() )
             sTableNm = pTableFormat->GetName();
 
@@ -519,7 +519,7 @@ IMPL_LINK_NOARG(InputEdit, ActivateHdl, weld::Entry&, bool)
 }
 
 void InputEdit::UpdateRange(std::u16string_view rBoxes,
-                                    const OUString& rName )
+                                    const UIName& rName )
 {
     if( rBoxes.empty() )
     {
@@ -528,7 +528,7 @@ void InputEdit::UpdateRange(std::u16string_view rBoxes,
     }
     const sal_Unicode   cOpen = '<', cClose = '>',
                 cOpenBracket = '(';
-    OUString aPrefix = rName;
+    OUString aPrefix = rName.toString();
     if(!rName.isEmpty())
         aPrefix += ".";
     OUString aBoxes = aPrefix + rBoxes;

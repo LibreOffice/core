@@ -659,7 +659,7 @@ void SwView::Replace()
         m_pWrtShell->StartUndo(SwUndoId::UI_REPLACE_STYLE, &aRewriter);
 
         m_pWrtShell->SetTextFormatColl( m_pWrtShell->GetParaStyle(
-                            s_pSrchItem->GetReplaceString(),
+                            UIName(s_pSrchItem->GetReplaceString()),
                             SwWrtShell::GETSTYLE_CREATESOME ));
 
         m_pWrtShell->EndUndo();
@@ -821,8 +821,8 @@ sal_Int32 SwView::FUNC_Search(const SwSearchOptions& rOptions)
     else if( s_pSrchItem->GetPattern() )
     {
         // Searching (and replacing) templates
-        const OUString& sRplStr( s_pSrchItem->GetReplaceString() );
-        nFound = m_pWrtShell->SearchTempl( s_pSrchItem->GetSearchString(),
+        const UIName sRplStr( s_pSrchItem->GetReplaceString() );
+        nFound = m_pWrtShell->SearchTempl( UIName(s_pSrchItem->GetSearchString()),
             rOptions.eStart,
             rOptions.eEnd,
             eRanges,

@@ -21,6 +21,7 @@
 
 #include "swatrset.hxx"
 #include "swtypes.hxx"
+#include "names.hxx"
 #include <utility>
 #include <vcl/vclptr.hxx>
 
@@ -237,9 +238,9 @@ public:
 class NameChanged final : public SfxHint
 {
 public:
-    const OUString m_sOld;
-    const OUString m_sNew;
-    NameChanged(const OUString& rOld, const OUString& rNew) : SfxHint(SfxHintId::SwNameChanged), m_sOld(rOld), m_sNew(rNew) {};
+    const UIName m_sOld;
+    const UIName m_sNew;
+    NameChanged(const UIName& rOld, const UIName& rNew) : SfxHint(SfxHintId::SwNameChanged), m_sOld(rOld), m_sNew(rNew) {};
 };
 class TitleChanged final : public SfxHint
 {
@@ -379,7 +380,7 @@ public:
     const SwTable* m_pTable;         ///< Pointer to the current table
     union {
         const SwTable* pDelTable;  ///< Merge: Pointer to the table to be removed
-        const OUString* pNewTableNm; ///< Split: the name of the new table
+        const UIName* pNewTableNm; ///< Split: the name of the new table
     } m_aData;
     sal_uInt16 m_nSplitLine;       ///< Split: from this BaseLine on will be split
     TableFormulaUpdateFlags m_eFlags;

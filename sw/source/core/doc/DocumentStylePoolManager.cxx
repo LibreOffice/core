@@ -605,7 +605,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
             // in online we can have multiple languages, use translated name
             if (comphelper::LibreOfficeKit::isActive())
             {
-                OUString aName = SwStyleNameMapper::GetUIName(nId, ProgName());
+                UIName aName = SwStyleNameMapper::GetUIName(nId, ProgName());
                 if (!aName.isEmpty())
                     pNewColl->SetFormatName(aName);
             }
@@ -654,7 +654,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
     if (!pResId)
         return GetTextCollFromPool(RES_POOLCOLL_STANDARD);
 
-    OUString aNm(SwResId(pResId));
+    UIName aNm(SwResId(pResId));
 
     // A Set for all to-be-set Attributes
     SwAttrSet aSet( m_rDoc.GetAttrPool(), aTextFormatCollSetRange );
@@ -1560,7 +1560,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
         }
     }
 
-    OUString aNm(SwResId(pRCId));
+    UIName aNm(SwResId(pRCId));
     SwAttrSet aSet(m_rDoc.GetAttrPool(), *pWhichRange);
 
     {
@@ -1811,7 +1811,7 @@ SwPageDesc* DocumentStylePoolManager::GetPageDescFromPool( sal_uInt16 nId, bool 
     SwPageDesc* pNewPgDsc = nullptr;
     {
         static_assert(std::ssize(STR_POOLPAGE_ARY) == RES_POOLPAGE_END - RES_POOLPAGE_BEGIN, "### unexpected size!");
-        const OUString aNm(SwResId(STR_POOLPAGE_ARY[nId - RES_POOLPAGE_BEGIN]));
+        const UIName aNm(SwResId(STR_POOLPAGE_ARY[nId - RES_POOLPAGE_BEGIN]));
         const bool bIsModified = m_rDoc.getIDocumentState().IsModified();
 
         {
@@ -1987,7 +1987,7 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
     }
 
     static_assert(std::ssize(STR_POOLNUMRULE_NUM_ARY) == RES_POOLNUMRULE_END - RES_POOLNUMRULE_BEGIN, "### unexpected size!");
-    OUString aNm(SwResId(STR_POOLNUMRULE_NUM_ARY[nId - RES_POOLNUMRULE_BEGIN]));
+    UIName aNm(SwResId(STR_POOLNUMRULE_NUM_ARY[nId - RES_POOLNUMRULE_BEGIN]));
 
     SwCharFormat *pNumCFormat = nullptr, *pBullCFormat = nullptr;
 

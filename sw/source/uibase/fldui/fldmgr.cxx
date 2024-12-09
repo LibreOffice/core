@@ -616,7 +616,7 @@ void SwFieldMgr::GetSubTypes(SwFieldTypesEnum nTypeId, std::vector<OUString>& rT
                       (nWhich == SwFieldIds::SetExp &&
                       !(static_cast<SwSetExpFieldType*>(pFieldType)->GetType() & nsSwGetSetExpType::GSE_SEQ))) ) )
                 {
-                    rToFill.push_back(pFieldType->GetName());
+                    rToFill.push_back(pFieldType->GetName().toString());
                 }
             }
             break;
@@ -1149,7 +1149,7 @@ bool SwFieldMgr::InsertField(
                 sCmd = sCmd.replaceFirst(" ", OUStringChar(sfx2::cTokenSeparator), &nIndex);
             }
 
-            SwDDEFieldType aType( rData.m_sPar1, sCmd, static_cast<SfxLinkUpdateMode>(nFormatId) );
+            SwDDEFieldType aType( UIName(rData.m_sPar1), sCmd, static_cast<SfxLinkUpdateMode>(nFormatId) );
             SwDDEFieldType* pTyp = static_cast<SwDDEFieldType*>( pCurShell->InsertFieldType( aType ) );
             pField.reset(new SwDDEField( pTyp ));
             break;
@@ -1336,7 +1336,7 @@ bool SwFieldMgr::InsertField(
             if(!pTyp)
             {
                 pTyp = static_cast<SwUserFieldType*>( pCurShell->InsertFieldType(
-                    SwUserFieldType(pCurShell->GetDoc(), rData.m_sPar1)) );
+                    SwUserFieldType(pCurShell->GetDoc(), UIName(rData.m_sPar1))) );
             }
             if (pTyp->GetContent(nFormatId) != rData.m_sPar2)
                 pTyp->SetContent(rData.m_sPar2, nFormatId);
@@ -1389,7 +1389,7 @@ bool SwFieldMgr::InsertField(
                 return false;
 
             SwSetExpFieldType* pTyp = static_cast<SwSetExpFieldType*>( pCurShell->InsertFieldType(
-                SwSetExpFieldType(pCurShell->GetDoc(), rData.m_sPar1) ) );
+                SwSetExpFieldType(pCurShell->GetDoc(), UIName(rData.m_sPar1)) ) );
 
             std::unique_ptr<SwSetExpField> pExpField(new SwSetExpField( pTyp, rData.m_sPar2, nFormatId));
             pExpField->SetSubType(nSubType);
@@ -1402,7 +1402,7 @@ bool SwFieldMgr::InsertField(
     case SwFieldTypesEnum::Sequence:
         {
             SwSetExpFieldType* pTyp = static_cast<SwSetExpFieldType*>( pCurShell->InsertFieldType(
-                SwSetExpFieldType(pCurShell->GetDoc(), rData.m_sPar1, nsSwGetSetExpType::GSE_SEQ)));
+                SwSetExpFieldType(pCurShell->GetDoc(), UIName(rData.m_sPar1), nsSwGetSetExpType::GSE_SEQ)));
 
             sal_uInt8 nLevel = static_cast< sal_uInt8 >(nSubType & 0xff);
 

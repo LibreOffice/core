@@ -86,10 +86,10 @@ void SAL_CALL SwXTextDefaults::setPropertyValue( const OUString& rPropertyName, 
         if(!(aValue >>= uStyle))
             throw lang::IllegalArgumentException();
 
-        OUString sStyle;
+        UIName sStyle;
         SwStyleNameMapper::FillUIName(ProgName(uStyle), sStyle, SwGetPoolIdFromName::ChrFmt );
         SwDocStyleSheet* pStyle =
-            static_cast<SwDocStyleSheet*>(m_pDoc->GetDocShell()->GetStyleSheetPool()->Find(sStyle, SfxStyleFamily::Char));
+            static_cast<SwDocStyleSheet*>(m_pDoc->GetDocShell()->GetStyleSheetPool()->Find(sStyle.toString(), SfxStyleFamily::Char));
         std::unique_ptr<SwFormatDrop> pDrop;
         std::unique_ptr<SwFormatCharFormat> pCharFormat;
         if(!pStyle)

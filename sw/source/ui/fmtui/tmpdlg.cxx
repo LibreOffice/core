@@ -270,7 +270,7 @@ void SwTemplateDlgController::RefreshInputSet()
 void SwTemplateDlgController::PageCreated(const OUString& rId, SfxTabPage &rPage )
 {
     // set style's and metric's names
-    OUString sNumCharFormat, sBulletCharFormat;
+    UIName sNumCharFormat, sBulletCharFormat;
     SwStyleNameMapper::FillUIName( RES_POOLCHR_NUM_LEVEL, sNumCharFormat);
     SwStyleNameMapper::FillUIName( RES_POOLCHR_BULLET_LEVEL, sBulletCharFormat);
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
@@ -345,9 +345,9 @@ void SwTemplateDlgController::PageCreated(const OUString& rId, SfxTabPage &rPage
         if(0 == (m_nHtmlMode & HTMLMODE_ON ))
         {
             std::vector<OUString> aList;
-            OUString aNew;
+            UIName aNew;
             SwStyleNameMapper::FillUIName( RES_POOLCOLL_TEXT, aNew );
-            aList.push_back( aNew );
+            aList.push_back( aNew.toString() );
             if( m_pWrtShell )
             {
                 SfxStyleSheetBasePool* pStyleSheetPool = m_pWrtShell->
@@ -432,21 +432,21 @@ void SwTemplateDlgController::PageCreated(const OUString& rId, SfxTabPage &rPage
     }
     else if (rId == "bullets")
     {
-        aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFormat));
+        aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFormat.toString()));
         rPage.PageCreated(aSet);
     }
     else if (rId == "outline")
     {
         if (SfxStyleFamily::Pseudo == m_nType)
         {
-            aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFormat));
-            aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFormat));
+            aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFormat.toString()));
+            aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFormat.toString()));
             rPage.PageCreated(aSet);
         }
         else if (SfxStyleFamily::Para == m_nType)
         {
             //  handle if the current paragraph style is assigned to a list level of outline style,
-            SwTextFormatColl* pTmpColl = m_pWrtShell->FindTextFormatCollByName( GetStyleSheet().GetName() );
+            SwTextFormatColl* pTmpColl = m_pWrtShell->FindTextFormatCollByName( UIName(GetStyleSheet().GetName()) );
             if( pTmpColl && pTmpColl->IsAssignedToListLevelOfOutlineStyle() )
             {
                 static_cast<SwParagraphNumTabPage&>(rPage).DisableOutline() ;
@@ -468,8 +468,8 @@ void SwTemplateDlgController::PageCreated(const OUString& rId, SfxTabPage &rPage
     }
     else if (rId == "customize")
     {
-        aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFormat));
-        aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFormat));
+        aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFormat.toString()));
+        aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFormat.toString()));
 
         // collect character styles
         std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, u"modules/swriter/ui/comboboxfragment.ui"_ustr));

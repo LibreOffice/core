@@ -30,6 +30,7 @@
 #include <unobaseclass.hxx>
 #include <unocoll.hxx>
 #include <fldbas.hxx>
+#include <names.hxx>
 
 class SwDoc;
 class SwFormatField;

@@ -242,9 +242,9 @@ sal_Int32 SwWrtShell::SearchPattern( const i18nutil::SearchOptions2& rSearchOpt,
 
 // Description: search for templates
 
-sal_Int32 SwWrtShell::SearchTempl( const OUString &rTempl,
+sal_Int32 SwWrtShell::SearchTempl( const UIName &rTempl,
                                SwDocPositions eStt, SwDocPositions eEnd,
-                               FindRanges eFlags, const OUString* pReplTempl )
+                               FindRanges eFlags, const UIName* pReplTempl )
 {
         // no enhancement of existing selections
     if(!(eFlags & FindRanges::InSel))

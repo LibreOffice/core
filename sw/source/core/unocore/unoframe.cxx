@@ -952,11 +952,11 @@ bool SwFrameProperties_Impl::AnyToItemSet(SwDoc *pDoc, SfxItemSet& rSet, SfxItem
     {
         OUString sStyleProgName;
         *pStyleName >>= sStyleProgName;
-        OUString sStyleUIName;
+        UIName sStyleUIName;
         SwStyleNameMapper::FillUIName(ProgName(sStyleProgName), sStyleUIName, SwGetPoolIdFromName::FrmFmt);
         if (SwDocShell* pShell = pDoc->GetDocShell())
         {
-            pStyle = static_cast<SwDocStyleSheet*>(pShell->GetStyleSheetPool()->Find(sStyleUIName,
+            pStyle = static_cast<SwDocStyleSheet*>(pShell->GetStyleSheetPool()->Find(sStyleUIName.toString(),
                                                         SfxStyleFamily::Frame));
         }
     }
@@ -1035,11 +1035,11 @@ bool SwGraphicProperties_Impl::AnyToItemSet(
     {
         OUString sStyleProgName;
         *pStyleName >>= sStyleProgName;
-        OUString sStyleUIName;
-        SwStyleNameMapper::FillUIName(ProgName(sStyleProgName), sStyleUIName, SwGetPoolIdFromName::FrmFmt);
+        UIName sStyle;
+        SwStyleNameMapper::FillUIName(ProgName(sStyleProgName), sStyle, SwGetPoolIdFromName::FrmFmt);
         if (SwDocShell* pShell = pDoc->GetDocShell())
         {
-            pStyle = static_cast<SwDocStyleSheet*>(pShell->GetStyleSheetPool()->Find(sStyleUIName,
+            pStyle = static_cast<SwDocStyleSheet*>(pShell->GetStyleSheetPool()->Find(sStyle.toString(),
                                                         SfxStyleFamily::Frame));
         }
     }
@@ -1230,10 +1230,10 @@ OUString SwXFrame::getName()
     SolarMutexGuard aGuard;
     SwFrameFormat* pFormat = GetFrameFormat();
     if(pFormat)
-        return pFormat->GetName();
+        return pFormat->GetName().toString();
     if(!m_bIsDescriptor)
         throw uno::RuntimeException();
-    return m_sName;
+    return m_sName.toString();
 }
 
 void SwXFrame::setName(const OUString& rName)
@@ -1242,14 +1242,14 @@ void SwXFrame::setName(const OUString& rName)
     SwFrameFormat* pFormat = GetFrameFormat();
     if(pFormat)
     {
-        pFormat->GetDoc()->SetFlyName(static_cast<SwFlyFrameFormat&>(*pFormat), rName);
+        pFormat->GetDoc()->SetFlyName(static_cast<SwFlyFrameFormat&>(*pFormat), UIName(rName));
         if(pFormat->GetName() != rName)
         {
             throw uno::RuntimeException(u"SwXFrame::setName(): Illegal object name. Duplicate name?"_ustr);
         }
     }
     else if(m_bIsDescriptor)
-        m_sName = rName;
+        m_sName = UIName(rName);
     else
         throw uno::RuntimeException();
 }
@@ -1324,11 +1324,11 @@ static SwFrameFormat *lcl_GetFrameFormat( const ::uno::Any& rValue, SwDoc *pDoc 
     {
         OUString uTemp;
         rValue >>= uTemp;
-        OUString sStyle;
+        UIName sStyle;
         SwStyleNameMapper::FillUIName(ProgName(uTemp), sStyle,
                 SwGetPoolIdFromName::FrmFmt);
         SwDocStyleSheet* pStyle =
-                static_cast<SwDocStyleSheet*>(pDocSh->GetStyleSheetPool()->Find(sStyle,
+                static_cast<SwDocStyleSheet*>(pDocSh->GetStyleSheetPool()->Find(sStyle.toString(),
                                                     SfxStyleFamily::Frame));
         if(pStyle)
             pRet = pStyle->GetFrameFormat();
@@ -1644,7 +1644,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
             }
             else
             {
-                SwFrameFormat* pChain = pDoc->GetFlyFrameFormatByName(sChainName);
+                SwFrameFormat* pChain = pDoc->GetFlyFrameFormatByName(UIName(sChainName));
                 if(pChain)
                 {
                     SwFrameFormat* pSource = bNextFrame ? pFormat : pChain;
@@ -2137,7 +2137,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
         }
         else if(FN_PARAM_LINK_DISPLAY_NAME == pEntry->nWID)
         {
-            aAny <<= pFormat->GetName();
+            aAny <<= pFormat->GetName().toString();
         }
         else if(FN_UNO_Z_ORDER == pEntry->nWID)
         {

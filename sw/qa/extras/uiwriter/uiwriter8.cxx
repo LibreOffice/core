@@ -966,7 +966,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testInsertAutoTextIntoListFromParaStyle)
         CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, pSet->GetItemState(RES_MARGIN_FIRSTLINE, true));
         CPPUNIT_ASSERT_EQUAL(SfxItemState::DEFAULT, pSet->GetItemState(RES_MARGIN_TEXTLEFT, false));
         CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, pSet->GetItemState(RES_MARGIN_TEXTLEFT, true));
-        CPPUNIT_ASSERT_EQUAL(u"ListAndIndents"_ustr, rNode.GetTextColl()->GetName());
+        CPPUNIT_ASSERT_EQUAL(u"ListAndIndents"_ustr, rNode.GetTextColl()->GetName().toString());
         CPPUNIT_ASSERT_EQUAL(u"Item We confirm receipt of your application material."_ustr,
                              rNode.GetText());
         pNumRule = rNode.GetNumRule();
@@ -986,7 +986,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testInsertAutoTextIntoListFromParaStyle)
         CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, pSet->GetItemState(RES_PARATR_NUMRULE, false));
         CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, pSet->GetItemState(RES_MARGIN_FIRSTLINE, false));
         CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, pSet->GetItemState(RES_MARGIN_TEXTLEFT, false));
-        CPPUNIT_ASSERT_EQUAL(u"Default Paragraph Style"_ustr, rNode.GetTextColl()->GetName());
+        CPPUNIT_ASSERT_EQUAL(u"Default Paragraph Style"_ustr,
+                             rNode.GetTextColl()->GetName().toString());
         CPPUNIT_ASSERT(rNode.GetText().startsWith("As more applicants applied"));
         CPPUNIT_ASSERT_EQUAL(pNumRule, rNode.GetNumRule());
         CPPUNIT_ASSERT_EQUAL(pTextLeftMargin->ResolveTextLeft({}),
@@ -1012,7 +1013,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testInsertAutoTextIntoListFromParaStyle)
         CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, pSet->GetItemState(RES_MARGIN_FIRSTLINE, true));
         CPPUNIT_ASSERT_EQUAL(SfxItemState::DEFAULT, pSet->GetItemState(RES_MARGIN_TEXTLEFT, false));
         CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, pSet->GetItemState(RES_MARGIN_TEXTLEFT, true));
-        CPPUNIT_ASSERT_EQUAL(u"ListAndIndents"_ustr, rNode.GetTextColl()->GetName());
+        CPPUNIT_ASSERT_EQUAL(u"ListAndIndents"_ustr, rNode.GetTextColl()->GetName().toString());
         CPPUNIT_ASSERT(rNode.GetText().endsWith("as soon as we have come to a decision."));
         CPPUNIT_ASSERT_EQUAL(pNumRule, rNode.GetNumRule());
         CPPUNIT_ASSERT_EQUAL(pTextLeftMargin->ResolveTextLeft({}),
@@ -1038,7 +1039,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testInsertAutoTextIntoListFromParaStyle)
         CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, pSet->GetItemState(RES_MARGIN_FIRSTLINE, true));
         CPPUNIT_ASSERT_EQUAL(SfxItemState::DEFAULT, pSet->GetItemState(RES_MARGIN_TEXTLEFT, false));
         CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, pSet->GetItemState(RES_MARGIN_TEXTLEFT, true));
-        CPPUNIT_ASSERT_EQUAL(u"ListAndIndents"_ustr, rNode.GetTextColl()->GetName());
+        CPPUNIT_ASSERT_EQUAL(u"ListAndIndents"_ustr, rNode.GetTextColl()->GetName().toString());
         CPPUNIT_ASSERT_EQUAL(u"more"_ustr, rNode.GetText()); // pre-existing list item
         CPPUNIT_ASSERT_EQUAL(pNumRule, rNode.GetNumRule());
         CPPUNIT_ASSERT_EQUAL(pTextLeftMargin->ResolveTextLeft({}),
@@ -1078,7 +1079,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf146248)
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     // Delete the header
-    pWrtShell->ChangeHeaderOrFooter(u"Default Page Style", true, false, false);
+    pWrtShell->ChangeHeaderOrFooter(UIName(u"Default Page Style"_ustr), true, false, false);
 
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xPageStyle, u"HeaderIsOn"_ustr));
 
@@ -1104,7 +1105,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf161741)
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), rUndoManager.GetUndoActionCount());
 
     // Create a header
-    pWrtShell->ChangeHeaderOrFooter(u"Default Page Style", /*header*/ true, /*on*/ true, false);
+    pWrtShell->ChangeHeaderOrFooter(UIName(u"Default Page Style"_ustr), /*header*/ true,
+                                    /*on*/ true, false);
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xPageStyle, u"HeaderIsOn"_ustr));
 
     // create an additional non-header undo point
@@ -1190,7 +1192,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf107427)
 
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     // Delete the header
-    pWrtShell->ChangeHeaderOrFooter(u"Default Page Style", true, false, false);
+    pWrtShell->ChangeHeaderOrFooter(UIName(u"Default Page Style"_ustr), true, false, false);
 
     pLayout = parseLayoutDump();
     assertXPath(pLayout, "/root/page[1]/header", 0);
@@ -3143,12 +3145,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf73483)
     createSwDoc("pageBreakWithPageStyle.fodt");
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
-    CPPUNIT_ASSERT_EQUAL(u"Right Page"_ustr, pWrtShell->GetCurPageStyle());
+    CPPUNIT_ASSERT_EQUAL(u"Right Page"_ustr, pWrtShell->GetCurPageStyle().toString());
 
     dispatchCommand(mxComponent, u".uno:ResetAttributes"_ustr,
                     {}); // Ctrl+M "Clear Direct Formatting"
     // Make sure that clearing direct formatting doesn't clear the page style
-    CPPUNIT_ASSERT_EQUAL(u"Right Page"_ustr, pWrtShell->GetCurPageStyle());
+    CPPUNIT_ASSERT_EQUAL(u"Right Page"_ustr, pWrtShell->GetCurPageStyle().toString());
 
     // Make sure that the page break with page style survives ODF save-and-reload
     saveAndReload(u"writer8"_ustr);

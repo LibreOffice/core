@@ -777,7 +777,7 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
     EndAllAction();
 }
 
-OUString SwEditShell::GetUniqueNumRuleName() const
+UIName SwEditShell::GetUniqueNumRuleName() const
 {
     return GetDoc()->GetUniqueNumRuleName();
 }
@@ -789,7 +789,7 @@ void SwEditShell::ChgNumRuleFormats( const SwNumRule& rRule )
     EndAllAction();
 }
 
-void SwEditShell::ReplaceNumRule( const OUString& rOldRule, const OUString& rNewRule )
+void SwEditShell::ReplaceNumRule( const UIName& rOldRule, const UIName& rNewRule )
 {
     StartAllAction();
     SwPosition const pos(sw::GetParaPropsPos(*GetLayout(), *GetCursor()->GetPoint()));

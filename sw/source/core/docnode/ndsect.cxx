@@ -670,11 +670,11 @@ void SwDoc::UpdateSection( size_t const nPos, SwSectionData & rNewData,
                 &&  (rNewData.GetLinkFileName() != sCompareString)
                 &&  (rNewData.GetLinkFileName() != pSection->GetLinkFileName()));
 
-    OUString sSectName( rNewData.GetSectionName() );
+    UIName sSectName( rNewData.GetSectionName() );
     if (sSectName != pSection->GetSectionName())
-        sSectName = GetUniqueSectionName( &sSectName );
+        sSectName = UIName(GetUniqueSectionName( &sSectName.toString() ));
     else
-        sSectName.clear();
+        sSectName = UIName();
 
     /// In SwSection::operator=(..) class member m_bCondHiddenFlag is always set to true.
     /// IMHO this have to be changed, but I can't estimate the consequences:
@@ -1241,8 +1241,8 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc& rDoc, const SwNodeIndex& rIdx ) c
         }
         else
         {
-            const OUString sSectionName(GetSection().GetSectionName());
-            pNewSect->SetSectionName(rDoc.GetUniqueSectionName( &sSectionName ));
+            const UIName sSectionName(GetSection().GetSectionName());
+            pNewSect->SetSectionName(UIName(rDoc.GetUniqueSectionName( &sSectionName.toString() )));
         }
     }
 
@@ -1411,11 +1411,11 @@ OUString SwDoc::GetUniqueSectionName( const OUString* pChkStr ) const
         const SwSectionNode *const pSectNd = pFormat->GetSectionNode();
         if( pSectNd != nullptr )
         {
-            const OUString& rNm = pSectNd->GetSection().GetSectionName();
-            if (rNm.startsWith( aName ))
+            const UIName& rNm = pSectNd->GetSection().GetSectionName();
+            if (rNm.toString().startsWith( aName ))
             {
                 // Calculate the Number and reset the Flag
-                nNum = o3tl::toInt32(rNm.subView( aName.getLength() ));
+                nNum = o3tl::toInt32(rNm.toString().subView( aName.getLength() ));
                 if (nNum)
                 {
                     --nNum;

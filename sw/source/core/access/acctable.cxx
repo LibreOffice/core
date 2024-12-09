@@ -608,9 +608,9 @@ SwAccessibleTable::SwAccessibleTable(
 {
     const SwFrameFormat* pFrameFormat = pTabFrame->GetFormat();
     StartListening(const_cast<SwFrameFormat*>(pFrameFormat)->GetNotifier());
-    SetName( pFrameFormat->GetName() + "-" + OUString::number( pTabFrame->GetPhyPageNum() ) );
+    SetName( pFrameFormat->GetName().toString() + "-" + OUString::number( pTabFrame->GetPhyPageNum() ) );
 
-    const OUString sArg1( static_cast< const SwTabFrame * >( GetFrame() )->GetFormat()->GetName() );
+    const OUString sArg1( static_cast< const SwTabFrame * >( GetFrame() )->GetFormat()->GetName().toString() );
     const OUString sArg2( GetFormattedPageNumber() );
 
     m_sDesc = GetResource( STR_ACCESS_TABLE_DESC, &sArg1, &sArg2 );
@@ -635,9 +635,9 @@ void SwAccessibleTable::Notify(const SfxHint& rHint)
     {
         const SwFrameFormat *pFrameFormat = pTabFrame->GetFormat();
         const OUString sOldName( GetName() );
-        const OUString sNewTabName = pFrameFormat->GetName();
+        const UIName sNewTabName = pFrameFormat->GetName();
 
-        SetName( sNewTabName + "-" + OUString::number( pTabFrame->GetPhyPageNum() ) );
+        SetName( sNewTabName.toString() + "-" + OUString::number( pTabFrame->GetPhyPageNum() ) );
 
         if( sOldName != GetName() )
         {
@@ -648,7 +648,7 @@ void SwAccessibleTable::Notify(const SfxHint& rHint)
         const OUString sOldDesc( m_sDesc );
         const OUString sArg2( GetFormattedPageNumber() );
 
-        m_sDesc = GetResource( STR_ACCESS_TABLE_DESC, &sNewTabName, &sArg2 );
+        m_sDesc = GetResource( STR_ACCESS_TABLE_DESC, &sNewTabName.toString(), &sArg2 );
         if( m_sDesc != sOldDesc )
         {
             FireAccessibleEvent(AccessibleEventId::DESCRIPTION_CHANGED, uno::Any(sOldDesc),
@@ -1567,7 +1567,7 @@ SwAccessibleTableColHeaders::SwAccessibleTableColHeaders(
 
     const SwFrameFormat* pFrameFormat = pTabFrame->GetFormat();
     StartListening(const_cast<SwFrameFormat*>(pFrameFormat)->GetNotifier());
-    const OUString aName = pFrameFormat->GetName() + "-ColumnHeaders";
+    const OUString aName = pFrameFormat->GetName().toString() + "-ColumnHeaders";
 
     SetName( aName + "-" + OUString::number( pTabFrame->GetPhyPageNum() ) );
 

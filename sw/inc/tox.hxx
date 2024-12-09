@@ -244,7 +244,7 @@ enum FormTokenType
 struct SW_DLLPUBLIC SwFormToken
 {
     OUString        sText;
-    OUString        sCharStyleName;
+    UIName          sCharStyleName;
     SwTwips         nTabStopPosition;
     FormTokenType   eTokenType;
     sal_uInt16          nPoolId;
@@ -314,7 +314,7 @@ public:
 class SW_DLLPUBLIC SwForm
 {
     SwFormTokens    m_aPattern[ AUTH_TYPE_END + 1 ]; // #i21237#
-    OUString  m_aTemplate[ AUTH_TYPE_END + 1 ];
+    UIName  m_aTemplate[ AUTH_TYPE_END + 1 ];
 
     TOXTypes    m_eType;
     sal_uInt16      m_nFormMaxLevel;
@@ -328,8 +328,8 @@ public:
 
     SwForm& operator=( const SwForm& rForm );
 
-    inline void SetTemplate(sal_uInt16 nLevel, const OUString& rName);
-    inline OUString const & GetTemplate(sal_uInt16 nLevel) const;
+    inline void SetTemplate(sal_uInt16 nLevel, const UIName& rName);
+    inline UIName const & GetTemplate(sal_uInt16 nLevel) const;
 
     // #i21237#
     void    SetPattern(sal_uInt16 nLevel, SwFormTokens&& rName);
@@ -426,14 +426,14 @@ namespace o3tl {
 class SW_DLLPUBLIC SwTOXBase : public SwClient
 {
     SwForm      m_aForm;              // description of the lines
-    OUString    m_aName;              // unique name
+    UIName      m_aName;              // unique name
     OUString    m_aTitle;             // title
     OUString    m_aBookmarkName;      //Bookmark Name
 
-    OUString    m_sMainEntryCharStyle; // name of the character style applied to main index entries
+    UIName      m_sMainEntryCharStyle; // name of the character style applied to main index entries
 
-    OUString    m_aStyleNames[MAXLEVEL]; // (additional) style names TOX_CONTENT, TOX_USER
-    OUString    m_sSequenceName;      // FieldTypeName of a caption sequence
+    UIName      m_aStyleNames[MAXLEVEL]; // (additional) style names TOX_CONTENT, TOX_USER
+    UIName      m_sSequenceName;      // FieldTypeName of a caption sequence
 
     LanguageType    m_eLanguage;
     OUString        m_sSortAlgorithm;
@@ -479,8 +479,8 @@ public:
 
     SwTOXElement        GetCreateType() const;      // creation types
 
-    const OUString&     GetTOXName() const {return m_aName;}
-    void                SetTOXName(const OUString& rSet) {m_aName = rSet;}
+    const UIName&       GetTOXName() const {return m_aName;}
+    void                SetTOXName(const UIName& rSet) {m_aName = rSet;}
 
     // for record the TOC field expression of MS Word binary format
     const OUString&     GetMSTOCExpression() const{return maMSTOCExpression;}
@@ -500,8 +500,8 @@ public:
 
     TOXTypes            GetType() const;
 
-    const OUString&     GetMainEntryCharStyle() const {return m_sMainEntryCharStyle;}
-    void                SetMainEntryCharStyle(const OUString& rSet)  {m_sMainEntryCharStyle = rSet;}
+    const UIName&       GetMainEntryCharStyle() const {return m_sMainEntryCharStyle;}
+    void                SetMainEntryCharStyle(const UIName& rSet)  {m_sMainEntryCharStyle = rSet;}
 
     // content index only
     inline void             SetLevel(sal_uInt16);                   // consider outline level
@@ -517,12 +517,12 @@ public:
 
     // index of objects
 
-    OUString const &        GetStyleNames(sal_uInt16 nLevel) const
+    UIName const &          GetStyleNames(sal_uInt16 nLevel) const
                                 {
                                 SAL_WARN_IF( nLevel >= MAXLEVEL, "sw", "Which level?");
                                 return m_aStyleNames[nLevel];
                                 }
-    void                    SetStyleNames(const OUString& rSet, sal_uInt16 nLevel)
+    void                    SetStyleNames(const UIName& rSet, sal_uInt16 nLevel)
                                 {
                                 SAL_WARN_IF( nLevel >= MAXLEVEL, "sw", "Which level?");
                                 m_aStyleNames[nLevel] = rSet;
@@ -539,8 +539,8 @@ public:
     bool                    IsProtected() const { return m_bProtected; }
     void                    SetProtected(bool bSet) { m_bProtected = bSet; }
 
-    const OUString&         GetSequenceName() const {return m_sSequenceName;}
-    void                    SetSequenceName(const OUString& rSet) {m_sSequenceName = rSet;}
+    const UIName&           GetSequenceName() const {return m_sSequenceName;}
+    void                    SetSequenceName(const UIName& rSet) {m_sSequenceName = rSet;}
 
     SwCaptionDisplay        GetCaptionDisplay() const { return m_eCaptionDisplay;}
     void                    SetCaptionDisplay(SwCaptionDisplay eSet) {m_eCaptionDisplay = eSet;}
@@ -664,13 +664,13 @@ inline OUString const & SwTOXMark::GetSecondaryKeyReading() const
 
 //SwForm
 
-inline void SwForm::SetTemplate(sal_uInt16 nLevel, const OUString& rTemplate)
+inline void SwForm::SetTemplate(sal_uInt16 nLevel, const UIName& rTemplate)
 {
     SAL_WARN_IF(nLevel >= GetFormMax(), "sw", "Index >= GetFormMax()");
     m_aTemplate[nLevel] = rTemplate;
 }
 
-inline OUString const & SwForm::GetTemplate(sal_uInt16 nLevel) const
+inline UIName const & SwForm::GetTemplate(sal_uInt16 nLevel) const
 {
     SAL_WARN_IF(nLevel >= GetFormMax(), "sw", "Index >= GetFormMax()");
     return m_aTemplate[nLevel];

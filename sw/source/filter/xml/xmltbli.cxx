@@ -1060,7 +1060,7 @@ static SwDDEFieldType* lcl_GetDDEFieldType(SwXMLDDETableContext_Impl* pContext,
     if (nullptr == pType)
     {
         // create new field type and return
-        SwDDEFieldType aDDEFieldType(sName, sCommand, nType);
+        SwDDEFieldType aDDEFieldType(UIName(sName), sCommand, nType);
         pType = static_cast<SwDDEFieldType*>(pTableNode->
             GetDoc().getIDocumentFieldsAccess().InsertFieldType(aDDEFieldType));
     }
@@ -1168,7 +1168,7 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     OUString sTableName;
     if( !aName.isEmpty() )
     {
-        const SwTableFormat *pTableFormat = pDoc->FindTableFormatByName( aName );
+        const SwTableFormat *pTableFormat = pDoc->FindTableFormatByName( UIName(aName) );
         if( !pTableFormat )
             sTableName = aName;
     }
@@ -1183,10 +1183,10 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
         OUString test = aName.isEmpty()
                                   ? OUString(rImport.GetDefTableName() + OUString::number(nextIx))
                                   : OUString(aName + "_" + OUString::number(nextIx));
-        if (const SwTableFormat* pExisting = pDoc->FindTableFormatByName(test); !pExisting)
+        if (const SwTableFormat* pExisting = pDoc->FindTableFormatByName(UIName(test)); !pExisting)
             sTableName = test;
         else
-            sTableName = pDoc->GetUniqueTableName();
+            sTableName = pDoc->GetUniqueTableName().toString();
         GetImport().GetTextImport()
             ->GetRenameMap().Add( XML_TEXT_RENAME_TYPE_TABLE, aName, sTableName );
     }
@@ -2505,9 +2505,9 @@ void SwXMLTableContext::MakeTable()
 
     sal_uInt8 nPercentWidth = 0U;
 
-    OUString sStyleName;
+    UIName sStyleName;
     SwStyleNameMapper::FillUIName( ProgName(m_aTemplateName), sStyleName, SwGetPoolIdFromName::TableStyle );
-    m_pTableNode->GetTable().SetTableStyleName( sStyleName );
+    m_pTableNode->GetTable().SetTableStyleName( TableStyleName(sStyleName.toString()) );
     m_pTableNode->GetTable().SetRowsToRepeat( m_nHeaderRows );
     m_pTableNode->GetTable().SetTableModel( !m_bHasSubTables );
 

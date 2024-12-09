@@ -38,7 +38,7 @@ using namespace ::com::sun::star;
 
 SwNumRule* MSWordExportBase::DuplicateNumRuleImpl(const SwNumRule *pRule)
 {
-    const OUString sPrefix("WW8TempExport" + OUString::number( m_nUniqueList++ ));
+    const UIName sPrefix("WW8TempExport" + OUString::number( m_nUniqueList++ ));
     SwNumRule* pMyNumRule =
             new SwNumRule( m_rDoc.GetUniqueNumRuleName( &sPrefix ),
                            SvxNumberFormat::LABEL_WIDTH_AND_POSITION );
@@ -625,13 +625,13 @@ void WW8Export::OutListNamesTab()
     for( ; nNms < nCount; ++nNms )
     {
         const SwNumRule& rRule = *(*m_pUsedNumTable)[ nNms ];
-        OUString sNm;
+        UIName sNm;
         if( !rRule.IsAutoRule() )
             sNm = rRule.GetName();
 
-        m_pTableStrm->WriteUInt16( sNm.getLength() );
+        m_pTableStrm->WriteUInt16( sNm.toString().getLength() );
         if (!sNm.isEmpty())
-            SwWW8Writer::WriteString16(*m_pTableStrm, sNm, false);
+            SwWW8Writer::WriteString16(*m_pTableStrm, sNm.toString(), false);
     }
 
     SwWW8Writer::WriteLong( *m_pTableStrm, m_pFib->m_fcSttbListNames + 2, nNms );

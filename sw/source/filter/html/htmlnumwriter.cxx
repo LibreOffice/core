@@ -97,7 +97,7 @@ SwHTMLWriter& OutHTML_NumberBulletListStart( SwHTMLWriter& rWrt,
     bool bStartValue = false;
     if( !bSameRule && rInfo.GetDepth() )
     {
-        OUString aName( rInfo.GetNumRule()->GetName() );
+        UIName aName( rInfo.GetNumRule()->GetName() );
         if( 0 != rWrt.m_aNumRuleNames.count( aName ) )
         {
             // The rule has been applied before

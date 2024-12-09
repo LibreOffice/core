@@ -142,7 +142,7 @@ class SW_DLLPUBLIC SwPageDesc final
     friend class SwDoc;
     friend class SwPageDescs;
 
-    OUString    m_StyleName;
+    UIName    m_StyleName;
     SvxNumberType m_NumType;
     SwFrameFormat    m_Master;
     SwFrameFormat    m_Left;
@@ -182,21 +182,21 @@ class SW_DLLPUBLIC SwPageDesc final
 
     SAL_DLLPRIVATE void ResetAllAttr();
 
-    SAL_DLLPRIVATE SwPageDesc(const OUString&, SwFrameFormat*, SwDoc *pDc );
+    SAL_DLLPRIVATE SwPageDesc(const UIName&, SwFrameFormat*, SwDoc *pDc );
 
     struct change_name
     {
-        change_name(const OUString &rName) : mName(rName) {}
+        change_name(const UIName &rName) : mName(rName) {}
         void operator()(SwPageDesc *pPageDesc) { pPageDesc->m_StyleName = mName; }
-        const OUString &mName;
+        const UIName &mName;
     };
 
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
 public:
     bool IsUsed() const;
-    const OUString& GetName() const { return m_StyleName; }
-    bool SetName(const OUString& rNewName);
+    const UIName& GetName() const { return m_StyleName; }
+    bool SetName(const UIName& rNewName);
 
     bool GetLandscape() const { return m_IsLandscape; }
     void SetLandscape( bool bNew ) { m_IsLandscape = bNew; }
@@ -291,7 +291,7 @@ public:
     /// Given a SwNode return the pagedesc in use at that location.
     static const SwPageDesc* GetPageDescOfNode(const SwNode& rNd);
 
-    static SwPageDesc* GetByName(SwDoc& rDoc, std::u16string_view rName);
+    static SwPageDesc* GetByName(SwDoc& rDoc, const UIName& rName);
 
     SwPageDesc& operator=( const SwPageDesc& );
 
@@ -304,9 +304,9 @@ public:
 namespace std {
     template<>
     struct less<SwPageDesc*> {
-        bool operator()(const SwPageDesc *pPageDesc, std::u16string_view rName) const
+        bool operator()(const SwPageDesc *pPageDesc, const UIName& rName) const
             { return pPageDesc->GetName() < rName; }
-        bool operator()(std::u16string_view rName, const SwPageDesc *pPageDesc) const
+        bool operator()(const UIName& rName, const SwPageDesc *pPageDesc) const
             { return rName < pPageDesc->GetName(); }
         bool operator()(const SwPageDesc *lhs, const SwPageDesc *rhs) const
             { return lhs->GetName() < rhs->GetName(); }
@@ -381,7 +381,7 @@ public:
     SwPageDesc m_PageDesc;
 private:
     SwDoc * m_pDoc;
-    OUString m_sFollow;
+    UIName m_sFollow;
 
     void SetPageDesc(const SwPageDesc & rPageDesc);
 
@@ -393,7 +393,7 @@ public:
     SwPageDescExt & operator = (const SwPageDescExt & rSrc);
     SwPageDescExt & operator = (const SwPageDesc & rSrc);
 
-    OUString const & GetName() const;
+    UIName const & GetName() const;
 
     explicit operator SwPageDesc() const; // #i7983#
 };
@@ -421,13 +421,13 @@ typedef boost::multi_index_container<
 class SwPageDescs final
 {
     // function updating ByName index via modify
-    friend bool SwPageDesc::SetName( const OUString& rNewName );
+    friend bool SwPageDesc::SetName( const UIName& rNewName );
 
     typedef SwPageDescsBase::nth_index<0>::type ByPos;
     typedef SwPageDescsBase::nth_index<1>::type ByName;
     typedef ByPos::iterator iterator;
 
-    iterator find_( const OUString &name ) const;
+    iterator find_( const UIName &name ) const;
 
     SwPageDescsBase   m_Array;
     ByPos            &m_PosIndex;
@@ -452,7 +452,7 @@ public:
     void erase( size_type index );
     void erase( const_iterator const& position );
 
-    const_iterator find( const OUString &name ) const
+    const_iterator find( const UIName &name ) const
         { return find_( name ); }
     const value_type& operator[]( size_t index_ ) const
         { return m_PosIndex.operator[]( index_ ); }

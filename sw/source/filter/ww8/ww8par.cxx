@@ -1304,7 +1304,7 @@ const SwNumFormat* SwWW8FltControlStack::GetNumFormatFromStack(const SwPosition 
         if (rTextNode.IsCountedInList())
         {
             OUString sName(static_cast<const SfxStringItem*>(pItem)->GetValue());
-            const SwNumRule *pRule = m_rDoc.FindNumRulePtr(sName);
+            const SwNumRule *pRule = m_rDoc.FindNumRulePtr(UIName(sName));
             if (pRule)
                 pRet = GetNumFormatFromSwNumRuleLevel(*pRule, rTextNode.GetActualListLevel());
         }
@@ -3758,7 +3758,7 @@ bool SwWW8ImplReader::ReadChar(tools::Long nPosCp, tools::Long nCpOfs)
                     else if (m_bSpec)
                     {
                         SwFrameFormat* pAsCharFlyFormat =
-                            m_rDoc.MakeFrameFormat(OUString(), m_rDoc.GetDfltFrameFormat(), true);
+                            m_rDoc.MakeFrameFormat(UIName(), m_rDoc.GetDfltFrameFormat(), true);
                         SwFormatAnchor aAnchor(RndStdIds::FLY_AS_CHAR);
                         pAsCharFlyFormat->SetFormatAttr(aAnchor);
                         pResult = ImportGraf(nullptr, pAsCharFlyFormat);
@@ -4200,7 +4200,7 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
             if (m_xCurrentItemSet && !pFormat)
             {
                 OUString sPrefix = "WW8Dropcap" + OUString::number(m_nDropCap++);
-                pNewSwCharFormat = m_rDoc.MakeCharFormat(sPrefix, m_rDoc.GetDfltCharFormat());
+                pNewSwCharFormat = m_rDoc.MakeCharFormat(UIName(sPrefix), m_rDoc.GetDfltCharFormat());
                 m_xCurrentItemSet->ClearItem(RES_CHRATR_ESCAPEMENT);
                 pNewSwCharFormat->SetFormatAttr(*m_xCurrentItemSet);
             }
@@ -4500,7 +4500,7 @@ SwFormatPageDesc wwSectionManager::SetSwFormatPageDesc(mySegIter const &rIter,
     else
     {
         rIter->mpPage = mrReader.m_rDoc.MakePageDesc(
-            SwViewShell::GetShellRes()->GetPageDescName(mnDesc, ShellResource::NORMAL_PAGE),
+            UIName(SwViewShell::GetShellRes()->GetPageDescName(mnDesc, ShellResource::NORMAL_PAGE)),
             nullptr, false);
     }
     OSL_ENSURE(rIter->mpPage, "no page!");

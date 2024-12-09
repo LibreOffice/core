@@ -41,7 +41,7 @@
 #include <poolfmt.hxx>
 #include <calbck.hxx>
 
-SwPageDesc::SwPageDesc(const OUString& rName, SwFrameFormat *pFormat, SwDoc *const pDoc)
+SwPageDesc::SwPageDesc(const UIName& rName, SwFrameFormat *pFormat, SwDoc *const pDoc)
     : sw::BroadcastingModify()
     , m_StyleName( rName )
     , m_Master( pDoc->GetAttrPool(), rName, pFormat )
@@ -152,7 +152,7 @@ bool SwPageDesc::IsUsed() const
     return false;
 }
 
-bool SwPageDesc::SetName( const OUString& rNewName )
+bool SwPageDesc::SetName( const UIName& rNewName )
 {
     bool renamed = true;
     if (m_pdList) {
@@ -588,7 +588,7 @@ const TranslateId STR_POOLPAGE[] =
     STR_POOLPAGE_LANDSCAPE
 };
 
-SwPageDesc* SwPageDesc::GetByName(SwDoc& rDoc, std::u16string_view rName)
+SwPageDesc* SwPageDesc::GetByName(SwDoc& rDoc, const UIName& rName)
 {
     const size_t nDCount = rDoc.GetPageDescCnt();
 
@@ -618,7 +618,7 @@ void SwPageDesc::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwPageDesc"));
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("m_StyleName"), "%s",
-                                      BAD_CAST(m_StyleName.toUtf8().getStr()));
+                                      BAD_CAST(m_StyleName.toString().toUtf8().getStr()));
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("m_pFollow"), "%p", m_pFollow);
     (void)xmlTextWriterWriteFormatAttribute(
         pWriter, BAD_CAST("m_eUse"), "0x%s",
@@ -711,7 +711,7 @@ SwPageDescExt::~SwPageDescExt()
 {
 }
 
-OUString const & SwPageDescExt::GetName() const
+UIName const & SwPageDescExt::GetName() const
 {
     return m_PageDesc.GetName();
 }
@@ -761,7 +761,7 @@ SwPageDescs::~SwPageDescs()
         delete *it;
 }
 
-SwPageDescs::iterator SwPageDescs::find_(const OUString &name) const
+SwPageDescs::iterator SwPageDescs::find_(const UIName &name) const
 {
     ByName::iterator it = m_NameIndex.find( name );
     return m_Array.iterator_to( *it );

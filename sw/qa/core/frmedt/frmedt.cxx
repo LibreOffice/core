@@ -59,7 +59,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreFrmedtTest, testTextboxReanchor)
     CPPUNIT_ASSERT(pTextFrameObj);
     SwFrameFormat* pTextFrameFormat = FindFrameFormat(pTextFrameObj);
     CPPUNIT_ASSERT(pTextFrameFormat);
-    CPPUNIT_ASSERT_EQUAL(u"Frame2"_ustr, pTextFrameFormat->GetName());
+    CPPUNIT_ASSERT_EQUAL(u"Frame2"_ustr, pTextFrameFormat->GetName().toString());
     SwFrameFormat* pDrawShapeFormat = FindFrameFormat(pDrawShape);
     SwNodeOffset nOldAnchor = pDrawShapeFormat->GetAnchor().GetAnchorNode()->GetIndex();
     pShell->FindAnchorPos(pTextFrameObj->GetLastBoundRect().Center(), true);
@@ -182,7 +182,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreFrmedtTest, testSplitFlyInsertCaption)
 
     // When trying to insert a caption below that table:
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
-    pWrtShell->GotoTable(u"Table1"_ustr);
+    pWrtShell->GotoTable(UIName(u"Table1"_ustr));
     InsCaptionOpt aOpt;
     SwView& rView = pWrtShell->GetView();
     aOpt.SetCategory(u"Table"_ustr);

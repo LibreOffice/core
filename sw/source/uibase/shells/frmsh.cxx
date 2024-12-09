@@ -209,16 +209,16 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 SwFormatURL aURL( aSet.Get( RES_URL ) );
 
                 OUString sOldName(rHLinkItem.GetName().toAsciiUpperCase());
-                OUString sFlyName(rSh.GetFlyName().toAsciiUpperCase());
+                OUString sFlyName(rSh.GetFlyName().toString().toAsciiUpperCase());
                 if (sOldName != sFlyName)
                 {
                     OUString sName(sOldName);
                     sal_uInt16 i = 1;
-                    while (rSh.FindFlyByName(sName))
+                    while (rSh.FindFlyByName(UIName(sName)))
                     {
                         sName = sOldName + "_" + OUString::number(i++);
                     }
-                    rSh.SetFlyName(sName);
+                    rSh.SetFlyName(UIName(sName));
                 }
                 aURL.SetURL( rURL, false );
                 aURL.SetTargetFrameName(rTarget);
@@ -470,7 +470,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 if(nSel & SelectionType::Ole)
                     aSet.Put( SfxBoolItem(FN_KEEP_ASPECT_RATIO, pVOpt->IsKeepRatio()) );
                 aSet.Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(GetView().GetDocShell())));
-                aSet.Put(SfxStringItem(FN_SET_FRM_NAME, rSh.GetFlyName()));
+                aSet.Put(SfxStringItem(FN_SET_FRM_NAME, rSh.GetFlyName().toString()));
                 aSet.Put(SfxStringItem(FN_UNO_DESCRIPTION, rSh.GetObjDescription()));
                 if( nSel & SelectionType::Ole )
                 {
@@ -558,14 +558,14 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                             rSh.AutoUpdateFrame(pFormat, *pOutSet);
                             // Anything which is not supported by the format must be set hard.
                             if(const SfxStringItem* pFrameName = pOutSet->GetItemIfSet(FN_SET_FRM_NAME, false))
-                                rSh.SetFlyName(pFrameName->GetValue());
+                                rSh.SetFlyName(UIName(pFrameName->GetValue()));
                             SfxItemSetFixed<
                                     RES_FRM_SIZE, RES_FRM_SIZE,
                                     RES_SURROUND, RES_ANCHOR>  aShellSet( GetPool() );
                             aShellSet.Put(*pOutSet);
                             aMgr.SetAttrSet(aShellSet);
                             if(const SfxStringItem* pFrameName = pOutSet->GetItemIfSet(FN_SET_FRM_NAME, false))
-                                rSh.SetFlyName(pFrameName->GetValue());
+                                rSh.SetFlyName(UIName(pFrameName->GetValue()));
                         }
                         else
                             aMgr.SetAttrSet( *pOutSet );
@@ -594,7 +594,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                             if (!sPrevName.isEmpty())
                             {
                                 //needs cast - no non-const method available
-                                SwFrameFormat* pPrevFormat = rSh.GetDoc()->GetFlyFrameFormatByName(sPrevName);
+                                SwFrameFormat* pPrevFormat = rSh.GetDoc()->GetFlyFrameFormatByName(UIName(sPrevName));
                                 SAL_WARN_IF(!pPrevFormat, "sw.ui", "No frame found!");
                                 if(pPrevFormat)
                                 {
@@ -625,7 +625,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                             if (!sNextName.isEmpty())
                             {
                                 //needs cast - no non-const method available
-                                SwFrameFormat* pNextFormat = rSh.GetDoc()->GetFlyFrameFormatByName(sNextName);
+                                SwFrameFormat* pNextFormat = rSh.GetDoc()->GetFlyFrameFormatByName(UIName(sNextName));
                                 SAL_WARN_IF(!pNextFormat, "sw.ui", "No frame found!");
                                 if(pNextFormat)
                                 {
@@ -661,16 +661,16 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             if ( pSdrView &&
                  pSdrView->GetMarkedObjectList().GetMarkCount() == 1 )
             {
-                OUString aName(rSh.GetFlyName());
+                UIName aName(rSh.GetFlyName());
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 VclPtr<AbstractSvxObjectNameDialog> pDlg(
-                    pFact->CreateSvxObjectNameDialog(GetView().GetFrameWeld(), aName));
+                    pFact->CreateSvxObjectNameDialog(GetView().GetFrameWeld(), aName.toString()));
 
                 pDlg->StartExecuteAsync(
                     [this, pDlg] (sal_Int32 nResult)->void
                     {
                         if (nResult == RET_OK)
-                            GetShell().SetFlyName(pDlg->GetName());
+                            GetShell().SetFlyName(UIName(pDlg->GetName()));
                         pDlg->disposeOnce();
                     }
                 );
@@ -923,7 +923,7 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                 {
                     aHLinkItem.SetURL(pFormatURL->GetURL());
                     aHLinkItem.SetTargetFrame(pFormatURL->GetTargetFrameName());
-                    aHLinkItem.SetName(rSh.GetFlyName());
+                    aHLinkItem.SetName(rSh.GetFlyName().toString());
                 }
 
                 aHLinkItem.SetInsertMode(static_cast<SvxLinkInsertMode>(aHLinkItem.GetInsertMode() |

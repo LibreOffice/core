@@ -86,13 +86,14 @@ void AccessibilityIssue::gotoIssue() const
         case IssueObject::TEXTFRAME:
         case IssueObject::HYPERLINKFLY:
         {
-            bool bSelected = pWrtShell->GotoFly(TempIssueObject.m_sObjectID, FLYCNTTYPE_ALL, true);
+            bool bSelected
+                = pWrtShell->GotoFly(UIName(TempIssueObject.m_sObjectID), FLYCNTTYPE_ALL, true);
 
             // bring issue to attention
             if (bSelected)
             {
                 if (const SwFlyFrameFormat* pFlyFormat
-                    = m_pDoc->FindFlyByName(TempIssueObject.m_sObjectID, SwNodeType::NONE))
+                    = m_pDoc->FindFlyByName(UIName(TempIssueObject.m_sObjectID), SwNodeType::NONE))
                 {
                     if (SwFlyFrame* pFlyFrame
                         = SwIterator<SwFlyFrame, SwFormat>(*pFlyFormat).First())
@@ -172,11 +173,12 @@ void AccessibilityIssue::gotoIssue() const
         break;
         case IssueObject::TABLE:
         {
-            pWrtShell->GotoTable(TempIssueObject.m_sObjectID);
+            pWrtShell->GotoTable(UIName(TempIssueObject.m_sObjectID));
 
             // bring issue to attention
-            if (SwTable* pTmpTable = SwTable::FindTable(
-                    TempIssueObject.m_pDoc->FindTableFormatByName(TempIssueObject.m_sObjectID)))
+            if (SwTable* pTmpTable
+                = SwTable::FindTable(TempIssueObject.m_pDoc->FindTableFormatByName(
+                    UIName(TempIssueObject.m_sObjectID))))
             {
                 if (SwTableNode* pTableNode = pTmpTable->GetTableNode())
                 {
@@ -271,7 +273,7 @@ void AccessibilityIssue::quickFixIssue() const
         case IssueObject::OLE:
         {
             SwFlyFrameFormat* pFlyFormat
-                = const_cast<SwFlyFrameFormat*>(m_pDoc->FindFlyByName(m_sObjectID));
+                = const_cast<SwFlyFrameFormat*>(m_pDoc->FindFlyByName(UIName(m_sObjectID)));
             if (pFlyFormat)
             {
                 OUString aDescription(pFlyFormat->GetObjDescription());
@@ -361,7 +363,7 @@ void AccessibilityIssue::quickFixIssue() const
                 else
                 {
                     SwFlyFrameFormat* const pFlyFormat{ const_cast<SwFlyFrameFormat*>(
-                        m_pDoc->FindFlyByName(m_sObjectID)) };
+                        m_pDoc->FindFlyByName(UIName(m_sObjectID))) };
                     if (pFlyFormat)
                     {
                         SwFormatURL item{ pFlyFormat->GetURL() };

@@ -238,7 +238,7 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf121168, "section_ps.odt", "4_v01.ods", "Tabe
         {
             const SwPageDesc* pDesc = pPageFrm->GetPageDesc();
             CPPUNIT_ASSERT_EQUAL(OUString("Teststyle" + OUString::number(nPageNum / 2 + 1)),
-                                 pDesc->GetName());
+                                 pDesc->GetName().toString());
         }
         pPageFrm = static_cast<const SwPageFrame*>(pPageFrm->GetNext());
     }
@@ -359,8 +359,8 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf128148, "tdf128148.odt", "4_v01.ods", "Tabel
         const sal_uInt16 nPageNum = pPageFrm->GetPhyPageNum();
         const bool bIsEvenPage = ((nPageNum % 2) == 0);
 
-        const OUString& sPageStyle = pPageFrm->GetPageDesc()->GetName();
-        uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(sPageStyle), uno::UNO_QUERY);
+        const UIName& sPageStyle = pPageFrm->GetPageDesc()->GetName();
+        uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(sPageStyle.toString()), uno::UNO_QUERY);
 
         bool bHeaderIsOn = false;
         xPageStyle->getPropertyValue(UNO_NAME_HEADER_IS_ON) >>= bHeaderIsOn;

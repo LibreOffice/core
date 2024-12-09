@@ -158,8 +158,8 @@ public:
     SwNumRuleItem()
         : SfxStringItem( RES_PARATR_NUMRULE, OUString() ) {}
 
-    SwNumRuleItem( const OUString& rRuleName )
-        : SfxStringItem( RES_PARATR_NUMRULE, rRuleName ) {}
+    SwNumRuleItem( const UIName& rRuleName )
+        : SfxStringItem( RES_PARATR_NUMRULE, rRuleName.toString() ) {}
 
     SwNumRuleItem(SwNumRuleItem const &) = default; // SfxPoolItem copy function dichotomy
 
@@ -177,6 +177,7 @@ public:
 
     virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    UIName GetValue() const { return UIName(SfxStringItem::GetValue()); }
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };

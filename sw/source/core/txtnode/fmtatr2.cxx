@@ -142,7 +142,7 @@ void SwFormatCharFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("text-attribute"), "%p", m_pTextAttribute);
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("char-format"), "%p", GetCharFormat());
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("char-format-name"),
-                                      BAD_CAST(GetCharFormat()->GetName().toUtf8().getStr()));
+                                      BAD_CAST(GetCharFormat()->GetName().toString().toUtf8().getStr()));
     (void)xmlTextWriterEndElement(pWriter);
 }
 
@@ -317,7 +317,7 @@ bool SwFormatINetFormat::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         break;
         case MID_URL_VISITED_FMT:
         {
-            OUString sVal = msVisitedFormatName;
+            UIName sVal = msVisitedFormatName;
             if (sVal.isEmpty() && mnVisitedFormatId != 0)
                 SwStyleNameMapper::FillUIName(mnVisitedFormatId, sVal);
             ProgName aRet;
@@ -329,7 +329,7 @@ bool SwFormatINetFormat::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         break;
         case MID_URL_UNVISITED_FMT:
         {
-            OUString sVal = msINetFormatName;
+            UIName sVal = msINetFormatName;
             if (sVal.isEmpty() && mnINetFormatId != 0)
                 SwStyleNameMapper::FillUIName(mnINetFormatId, sVal);
             ProgName aRet;
@@ -403,7 +403,7 @@ bool SwFormatINetFormat::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             {
                 OUString sVal;
                 rVal >>= sVal;
-                OUString aString;
+                UIName aString;
                 SwStyleNameMapper::FillUIName( ProgName(sVal), aString, SwGetPoolIdFromName::ChrFmt );
                 msVisitedFormatName = aString;
                 mnVisitedFormatId = SwStyleNameMapper::GetPoolIdFromUIName( msVisitedFormatName,
@@ -414,7 +414,7 @@ bool SwFormatINetFormat::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             {
                 OUString sVal;
                 rVal >>= sVal;
-                OUString aString;
+                UIName aString;
                 SwStyleNameMapper::FillUIName( ProgName(sVal), aString, SwGetPoolIdFromName::ChrFmt );
                 msINetFormatName = aString;
                 mnINetFormatId = SwStyleNameMapper::GetPoolIdFromUIName( msINetFormatName, SwGetPoolIdFromName::ChrFmt );

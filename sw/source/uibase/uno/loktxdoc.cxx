@@ -871,13 +871,13 @@ void GetSections(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
     auto aBookmarks = rJsonWriter.startArray("sections");
     for (const auto& pSection : pDoc->GetSections())
     {
-        if (!pSection->GetName().startsWith(aNamePrefix))
+        if (!pSection->GetName().toString().startsWith(aNamePrefix))
         {
             continue;
         }
 
         auto aProperty = rJsonWriter.startStruct();
-        rJsonWriter.put("name", pSection->GetName());
+        rJsonWriter.put("name", pSection->GetName().toString());
     }
 }
 }

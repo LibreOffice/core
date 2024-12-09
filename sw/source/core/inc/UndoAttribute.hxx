@@ -42,7 +42,7 @@ class SwUndoAttr final : public SwUndo, private SwUndRng
     std::unique_ptr<SwRedlineSaveDatas> m_pRedlineSaveData;
     SwNodeOffset m_nNodeIndex;                         // Offset: for Redlining
     const SetAttrMode m_nInsertFlags;               // insert flags
-    OUString m_aChrFormatName;
+    UIName m_aChrFormatName;
 
     void RemoveIdx( SwDoc& rDoc );
     void redoAttribute(SwPaM& rPam, const sw::UndoRedoContext& rContext);
@@ -86,7 +86,7 @@ public:
 class SwUndoFormatAttr final : public SwUndo
 {
     friend class SwUndoDefaultAttr;
-    OUString m_sFormatName;
+    UIName m_sFormatName;
     std::optional<SfxItemSet> m_oOldSet;      // old attributes
     sal_Int32 m_nAnchorContentOffset;
     SwNodeOffset m_nNodeIndex;

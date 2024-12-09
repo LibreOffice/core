@@ -54,6 +54,7 @@ class SwViewShell;
 class SwDocStyleSheetPool;
 class SwXTextDocument;
 class SwTextFormatColl;
+class UIName;
 namespace svt
 {
 class EmbeddedObjectRef;
@@ -131,8 +132,8 @@ class SW_DLLPUBLIC SwDocShell
     /// Used to activate certain dialog pane
     SAL_DLLPRIVATE void Edit(
         weld::Window* pDialogParent,
-        const OUString &rName,
-        const OUString& rParent,
+        const UIName& rName,
+        const UIName& rParent,
         const SfxStyleFamily nFamily,
         SfxStyleSearchBits nMask,
         const bool bNew,
@@ -150,8 +151,8 @@ class SW_DLLPUBLIC SwDocShell
         SwWrtShell* pShell,
         sal_uInt16 nMode);
     SAL_DLLPRIVATE SfxStyleFamily        DoWaterCan( const OUString &rName, SfxStyleFamily nFamily);
-    SAL_DLLPRIVATE void                  UpdateStyle(const OUString &rName, SfxStyleFamily nFamily, SwWrtShell* pShell);
-    SAL_DLLPRIVATE void                  MakeByExample(const OUString &rName,
+    SAL_DLLPRIVATE void                  UpdateStyle(const UIName &rName, SfxStyleFamily nFamily, SwWrtShell* pShell);
+    SAL_DLLPRIVATE void                  MakeByExample(const UIName &rName,
                                                SfxStyleFamily nFamily, SfxStyleSearchBits nMask, SwWrtShell* pShell);
 
     SAL_DLLPRIVATE void                  SubInitNew();   ///< for InitNew and HtmlSourceMode.
@@ -274,7 +275,7 @@ public:
     /// Identifies slot by which the dialog is triggered. Used to activate certain dialog pane
     void FormatPage(
         weld::Window* pDialogParent,
-        const OUString& rPage,
+        const UIName& rPage,
         const OUString& rPageId,
         SwWrtShell& rActShell,
         SfxRequest* pRequest = nullptr);

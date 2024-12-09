@@ -237,7 +237,7 @@ SwUndoInsTable::SwUndoInsTable( const SwPosition& rPos, sal_uInt16 nCl, sal_uInt
                             sal_uInt16 nAdj, const SwInsertTableOptions& rInsTableOpts,
                             const SwTableAutoFormat* pTAFormat,
                             const std::vector<sal_uInt16> *pColArr,
-                            const OUString & rName)
+                            const UIName & rName)
     : SwUndo( SwUndoId::INSTABLE, &rPos.GetDoc() ),
     m_aInsTableOptions( rInsTableOpts ),
     m_nStartNode( rPos.GetNodeIndex() ), m_nRows( nRw ), m_nColumns( nCl ), m_nAdjust( nAdj )
@@ -1444,7 +1444,7 @@ SwUndoTableAutoFormat::UndoRedo(bool const bUndo, ::sw::UndoRedoContext & rConte
     SwTable& table = pTableNd->GetTable();
     if (table.GetTableStyleName() != m_TableStyleName)
     {
-        OUString const temp(table.GetTableStyleName());
+        TableStyleName const temp(table.GetTableStyleName());
         table.SetTableStyleName(m_TableStyleName);
         m_TableStyleName = temp;
     }
@@ -3107,7 +3107,7 @@ void CheckTable( const SwTable& rTable )
 }
 #endif
 
-SwUndoTableStyleMake::SwUndoTableStyleMake(OUString aName, const SwDoc& rDoc)
+SwUndoTableStyleMake::SwUndoTableStyleMake(TableStyleName aName, const SwDoc& rDoc)
     : SwUndo(SwUndoId::TBLSTYLE_CREATE, &rDoc),
     m_sName(std::move(aName))
 { }
@@ -3136,7 +3136,7 @@ void SwUndoTableStyleMake::RedoImpl(::sw::UndoRedoContext & rContext)
 SwRewriter SwUndoTableStyleMake::GetRewriter() const
 {
     SwRewriter aResult;
-    aResult.AddRule(UndoArg1, m_sName);
+    aResult.AddRule(UndoArg1, m_sName.toString());
     return aResult;
 }
 
@@ -3166,7 +3166,7 @@ void SwUndoTableStyleDelete::RedoImpl(::sw::UndoRedoContext & rContext)
 SwRewriter SwUndoTableStyleDelete::GetRewriter() const
 {
     SwRewriter aResult;
-    aResult.AddRule(UndoArg1, m_pAutoFormat->GetName());
+    aResult.AddRule(UndoArg1, m_pAutoFormat->GetName().toString());
     return aResult;
 }
 
@@ -3192,7 +3192,7 @@ void SwUndoTableStyleUpdate::RedoImpl(::sw::UndoRedoContext & rContext)
 SwRewriter SwUndoTableStyleUpdate::GetRewriter() const
 {
     SwRewriter aResult;
-    aResult.AddRule(UndoArg1, m_pNewFormat->GetName());
+    aResult.AddRule(UndoArg1, m_pNewFormat->GetName().toString());
     return aResult;
 }
 

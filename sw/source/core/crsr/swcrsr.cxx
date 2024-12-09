@@ -2249,12 +2249,12 @@ bool SwCursor::GoPrevNextCell( bool bNext, sal_uInt16 nCnt )
     return !IsInProtectTable( true );
 }
 
-bool SwTableCursor::GotoTable( const OUString& )
+bool SwTableCursor::GotoTable( const UIName& )
 {
     return false; // invalid action
 }
 
-bool SwCursor::GotoTable( const OUString& rName )
+bool SwCursor::GotoTable( const UIName& rName )
 {
     bool bRet = false;
     if ( !HasMark() )

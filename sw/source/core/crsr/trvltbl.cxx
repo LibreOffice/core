@@ -787,7 +787,7 @@ OUString SwCursorShell::GetBoxNms() const
     return sNm;
 }
 
-bool SwCursorShell::GotoTable( const OUString& rName )
+bool SwCursorShell::GotoTable( const UIName& rName )
 {
     SwCallLink aLk( *this ); // watch Cursor-Moves
     bool bRet = !m_pTableCursor && m_pCurrentCursor->GotoTable( rName );

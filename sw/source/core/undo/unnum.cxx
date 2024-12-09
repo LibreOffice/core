@@ -45,7 +45,7 @@ SwUndoInsNum::SwUndoInsNum( const SwPaM& rPam, const SwNumRule& rRule )
 }
 
 SwUndoInsNum::SwUndoInsNum( const SwPosition& rPos, const SwNumRule& rRule,
-                            OUString aReplaceRule )
+                            UIName aReplaceRule )
     : SwUndo( SwUndoId::INSNUM, &rPos.GetNode().GetDoc() ),
     m_aNumRule( rRule ),
     m_sReplaceRule(std::move( aReplaceRule )), m_nLRSavePos( 0 )

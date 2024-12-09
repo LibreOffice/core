@@ -289,7 +289,7 @@ void SwDoc::CopyMasterHeader(const SwPageDesc &rChged, const SwFormatHeader &rHe
                      (bFirst ? rDesc.IsFirstShared() : rDesc.IsHeaderShared()))
                 {
                     SwFrameFormat *pFormat = new SwFrameFormat( GetAttrPool(),
-                            bFirst ? u"First header"_ustr : u"Left header"_ustr,
+                            UIName(bFirst ? u"First header"_ustr : u"Left header"_ustr),
                                                     GetDfltFrameFormat() );
                     ::lcl_DescSetAttr( *pRight, *pFormat, false );
                     // The section which the right header attribute is pointing
@@ -366,7 +366,7 @@ void SwDoc::CopyMasterFooter(const SwPageDesc &rChged, const SwFormatFooter &rFo
                      (bFirst ? rDesc.IsFirstShared() : rDesc.IsFooterShared()))
                 {
                     SwFrameFormat *pFormat = new SwFrameFormat( GetAttrPool(),
-                            bFirst ? u"First footer"_ustr : u"Left footer"_ustr,
+                            UIName(bFirst ? u"First footer"_ustr : u"Left footer"_ustr),
                                                     GetDfltFrameFormat() );
                     ::lcl_DescSetAttr( *pRight, *pFormat, false );
                     // The section to which the right footer attribute is pointing
@@ -734,7 +734,7 @@ void SwDoc::PreDelPageDesc(SwPageDesc const * pDel)
     }
 }
 
-void SwDoc::BroadcastStyleOperation(const OUString& rName, SfxStyleFamily eFamily,
+void SwDoc::BroadcastStyleOperation(const UIName& rName, SfxStyleFamily eFamily,
                                     SfxHintId nOp)
 {
     if (mpDocShell)
@@ -743,7 +743,7 @@ void SwDoc::BroadcastStyleOperation(const OUString& rName, SfxStyleFamily eFamil
 
         if (pPool)
         {
-            SfxStyleSheetBase* pBase = pPool->Find(rName, eFamily);
+            SfxStyleSheetBase* pBase = pPool->Find(rName.toString(), eFamily);
 
             if (pBase != nullptr)
                 pPool->Broadcast(SfxStyleSheetHint( nOp, *pBase ));
@@ -776,7 +776,7 @@ void SwDoc::DelPageDesc( size_t i, bool bBroadcast )
     getIDocumentState().SetModified();
 }
 
-SwPageDesc* SwDoc::MakePageDesc(const OUString &rName, const SwPageDesc *pCpy,
+SwPageDesc* SwDoc::MakePageDesc(const UIName &rName, const SwPageDesc *pCpy,
                             bool bRegardLanguage)
 {
     SwPageDesc *pNew;
@@ -939,7 +939,7 @@ IMPL_LINK_NOARG( SwDoc, DoUpdateModifiedOLE, Timer *, void )
 }
 
 static SwPageDesc* lcl_FindPageDesc( const SwPageDescs *pPageDescs,
-                                     size_t *pPos, const OUString &rName )
+                                     size_t *pPos, const UIName &rName )
 {
     SwPageDesc* res = nullptr;
     SwPageDescs::const_iterator it = pPageDescs->find( rName );
@@ -954,7 +954,7 @@ static SwPageDesc* lcl_FindPageDesc( const SwPageDescs *pPageDescs,
     return res;
 }
 
-SwPageDesc* SwDoc::FindPageDesc( const OUString & rName, size_t* pPos ) const
+SwPageDesc* SwDoc::FindPageDesc( const UIName & rName, size_t* pPos ) const
 {
     return lcl_FindPageDesc( &m_PageDescs, pPos, rName );
 }
@@ -977,7 +977,7 @@ bool SwDoc::ContainsPageDesc( const SwPageDesc *pDesc, size_t* pPos ) const
     return true;
 }
 
-void SwDoc::DelPageDesc( const OUString & rName, bool bBroadcast )
+void SwDoc::DelPageDesc( const UIName & rName, bool bBroadcast )
 {
     size_t nI;
 
@@ -985,7 +985,7 @@ void SwDoc::DelPageDesc( const OUString & rName, bool bBroadcast )
         DelPageDesc(nI, bBroadcast);
 }
 
-void SwDoc::ChgPageDesc( const OUString & rName, const SwPageDesc & rDesc)
+void SwDoc::ChgPageDesc( const UIName & rName, const SwPageDesc & rDesc)
 {
     size_t nI;
 

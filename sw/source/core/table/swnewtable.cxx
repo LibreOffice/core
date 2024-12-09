@@ -2396,7 +2396,7 @@ bool SwTable::CanConvertSubtables() const
     {
         return false; // no table box formulas yet
     }
-    OUString const tableName(GetFrameFormat()->GetName());
+    UIName const tableName(GetFrameFormat()->GetName());
     SwNodeIndex temp(*pDoc->GetNodes().GetEndOfAutotext().StartOfSectionNode(), +1);
     while (SwStartNode const*const pStartNode = temp.GetNode().GetStartNode())
     {

@@ -957,12 +957,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf115065)
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
-    pWrtShell->GotoTable(u"Table2"_ustr);
+    pWrtShell->GotoTable(UIName(u"Table2"_ustr));
     SwRect aRect = pWrtShell->GetCurrFrame()->getFrameArea();
     // Destination point is the middle of the first cell of second table
     Point ptTo(aRect.Left() + aRect.Width() / 2, aRect.Top() + aRect.Height() / 2);
 
-    pWrtShell->GotoTable(u"Table1"_ustr);
+    pWrtShell->GotoTable(UIName(u"Table1"_ustr));
     aRect = pWrtShell->GetCurrFrame()->getFrameArea();
     // Source point is the middle of the first cell of first table
     Point ptFrom(aRect.Left() + aRect.Width() / 2, aRect.Top() + aRect.Height() / 2);
@@ -1002,13 +1002,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf84806_MovingMultipleTableRows)
 
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
 
-    pWrtShell->GotoTable(u"Table2"_ustr);
+    pWrtShell->GotoTable(UIName(u"Table2"_ustr));
     SwRect aRect = pWrtShell->GetCurrFrame()->getFrameArea();
     // Destination point is the middle of the first cell of second table
     Point ptTo(aRect.Left() + aRect.Width() / 2, aRect.Top() + aRect.Height() / 2);
 
     // Move rows of the first table into the second table
-    pWrtShell->GotoTable(u"Table1"_ustr);
+    pWrtShell->GotoTable(UIName(u"Table1"_ustr));
     pWrtShell->SelTable();
     rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
     xTransfer->PrivateDrop(*pWrtShell, ptTo, /*bMove=*/true, /*bXSelection=*/true);
@@ -1073,13 +1073,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf147181_TrackedMovingOfMultipleTable
 
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
 
-    pWrtShell->GotoTable(u"Table2"_ustr);
+    pWrtShell->GotoTable(UIName(u"Table2"_ustr));
     SwRect aRect = pWrtShell->GetCurrFrame()->getFrameArea();
     // Destination point is the middle of the first cell of second table
     Point ptTo(aRect.Left() + aRect.Width() / 2, aRect.Top() + aRect.Height() / 2);
 
     // Move rows of the first table into the second table
-    pWrtShell->GotoTable(u"Table1"_ustr);
+    pWrtShell->GotoTable(UIName(u"Table1"_ustr));
     pWrtShell->SelTable();
     rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
     xTransfer->PrivateDrop(*pWrtShell, ptTo, /*bMove=*/true, /*bXSelection=*/true);
@@ -2068,26 +2068,26 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf115132)
     const SwTable* pTable = &pWrtShell->InsertTable(TableOpt, 2, 3);
     const SwTableFormat* pFormat = pTable->GetFrameFormat();
     CPPUNIT_ASSERT(pFormat);
-    vTestTableNames.push_back(pFormat->GetName());
+    vTestTableNames.push_back(pFormat->GetName().toString());
     pWrtShell->EndOfSection();
     // Create a table after a paragraph
     pTable = &pWrtShell->InsertTable(TableOpt, 2, 3);
     pFormat = pTable->GetFrameFormat();
     CPPUNIT_ASSERT(pFormat);
-    vTestTableNames.push_back(pFormat->GetName());
+    vTestTableNames.push_back(pFormat->GetName().toString());
     // Create a table immediately after the previous
     pTable = &pWrtShell->InsertTable(TableOpt, 2, 3);
     pFormat = pTable->GetFrameFormat();
     CPPUNIT_ASSERT(pFormat);
-    vTestTableNames.push_back(pFormat->GetName());
+    vTestTableNames.push_back(pFormat->GetName().toString());
     // Create a nested table in the middle of last row
-    pWrtShell->GotoTable(vTestTableNames.back());
+    pWrtShell->GotoTable(UIName(vTestTableNames.back()));
     for (int i = 0; i < 4; ++i)
         pWrtShell->GoNextCell(false);
     pTable = &pWrtShell->InsertTable(TableOpt, 2, 3);
     pFormat = pTable->GetFrameFormat();
     CPPUNIT_ASSERT(pFormat);
-    vTestTableNames.push_back(pFormat->GetName());
+    vTestTableNames.push_back(pFormat->GetName().toString());
 
     // Now check that in any cell in all tables we don't go out of a cell
     // using Delete or Backspace. We test cases when a table is the first node;
@@ -2096,7 +2096,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf115132)
     // in nested table.
     for (const auto& rTableName : vTestTableNames)
     {
-        pWrtShell->GotoTable(rTableName);
+        pWrtShell->GotoTable(UIName(rTableName));
         do
         {
             const SwStartNode* pNd = pWrtShell->GetCursor()->GetPointNode().FindTableBoxStartNode();
@@ -3363,7 +3363,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf151828)
     CPPUNIT_ASSERT(pFormat);
 
     // set name of table to 'MyTableName'
-    pWrtShell->SetTableName(*pFormat, u"MyTableName"_ustr);
+    pWrtShell->SetTableName(*pFormat, UIName(u"MyTableName"_ustr));
 
     // cut and paste the table
     dispatchCommand(mxComponent, u".uno:SelectTable"_ustr, {});
@@ -3377,7 +3377,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf151828)
     CPPUNIT_ASSERT(pFormat);
 
     // Before the fix the pasted table name was 'Table1'.
-    CPPUNIT_ASSERT_EQUAL(u"MyTableName"_ustr, pFormat->GetName());
+    CPPUNIT_ASSERT_EQUAL(u"MyTableName"_ustr, pFormat->GetName().toString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf146178)
@@ -3423,7 +3423,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf106663HeaderTextFrameGoToNextPlacem
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     // Move the cursor into the fly frame of the document's header
-    pWrtShell->GotoFly(u"FrameInHeader"_ustr, FLYCNTTYPE_FRM, false);
+    pWrtShell->GotoFly(UIName(u"FrameInHeader"_ustr), FLYCNTTYPE_FRM, false);
 
     // Check that GoToNextPlacemarker highlights the first field instead of the second one
     dispatchCommand(mxComponent, u".uno:GoToNextPlacemarker"_ustr, {});

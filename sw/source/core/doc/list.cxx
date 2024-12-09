@@ -182,7 +182,7 @@ void SwList::NotifyItemsOnListLevel( const int nLevel )
     }
 }
 
-void SwList::SetDefaultListStyleName(OUString const& rNew)
+void SwList::SetDefaultListStyleName(UIName const& rNew)
 {
     msDefaultListStyleName = rNew;
 }

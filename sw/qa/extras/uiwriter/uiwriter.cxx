@@ -390,7 +390,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testCopyPastePageBreak)
 
     CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
     CPPUNIT_ASSERT_EQUAL(u"WithMargin"_ustr, getProperty<OUString>(getParagraph(1), u"PageDescName"_ustr));
-    CPPUNIT_ASSERT_EQUAL(u"TargetSection"_ustr, pWrtShell->GetCurrSection()->GetSectionName());
+    CPPUNIT_ASSERT_EQUAL(u"TargetSection"_ustr, pWrtShell->GetCurrSection()->GetSectionName().toString());
     // page style WithMargin is used
     CPPUNIT_ASSERT_EQUAL(tools::Long(5669), pWrtShell->GetLayout()->GetLower()->getFramePrintArea().Top());
 
@@ -399,7 +399,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testCopyPastePageBreak)
     CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
     CPPUNIT_ASSERT_EQUAL(u"WithMargin"_ustr, getProperty<OUString>(getParagraph(1), u"PageDescName"_ustr));
     CPPUNIT_ASSERT_EQUAL(size_t(2), pDoc->GetSections().size());
-    CPPUNIT_ASSERT_EQUAL(u"SourceSection"_ustr, pWrtShell->GetCurrSection()->GetSectionName());
+    CPPUNIT_ASSERT_EQUAL(u"SourceSection"_ustr, pWrtShell->GetCurrSection()->GetSectionName().toString());
     // the problem was that there was a page break now
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // page style WithMargin is used
@@ -408,7 +408,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testCopyPastePageBreak)
     pWrtShell->Undo();
     CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
     CPPUNIT_ASSERT_EQUAL(u"WithMargin"_ustr, getProperty<OUString>(getParagraph(1), u"PageDescName"_ustr));
-    CPPUNIT_ASSERT_EQUAL(u"TargetSection"_ustr, pWrtShell->GetCurrSection()->GetSectionName());
+    CPPUNIT_ASSERT_EQUAL(u"TargetSection"_ustr, pWrtShell->GetCurrSection()->GetSectionName().toString());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // page style WithMargin is used
     CPPUNIT_ASSERT_EQUAL(tools::Long(5669), pWrtShell->GetLayout()->GetLower()->getFramePrintArea().Top());
@@ -417,7 +417,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testCopyPastePageBreak)
     CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
     CPPUNIT_ASSERT_EQUAL(u"WithMargin"_ustr, getProperty<OUString>(getParagraph(1), u"PageDescName"_ustr));
     CPPUNIT_ASSERT_EQUAL(size_t(2), pDoc->GetSections().size());
-    CPPUNIT_ASSERT_EQUAL(u"SourceSection"_ustr, pWrtShell->GetCurrSection()->GetSectionName());
+    CPPUNIT_ASSERT_EQUAL(u"SourceSection"_ustr, pWrtShell->GetCurrSection()->GetSectionName().toString());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // page style WithMargin is used
     CPPUNIT_ASSERT_EQUAL(tools::Long(5669), pWrtShell->GetLayout()->GetLower()->getFramePrintArea().Top());
@@ -425,7 +425,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testCopyPastePageBreak)
     pWrtShell->Undo();
     CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
     CPPUNIT_ASSERT_EQUAL(u"WithMargin"_ustr, getProperty<OUString>(getParagraph(1), u"PageDescName"_ustr));
-    CPPUNIT_ASSERT_EQUAL(u"TargetSection"_ustr, pWrtShell->GetCurrSection()->GetSectionName());
+    CPPUNIT_ASSERT_EQUAL(u"TargetSection"_ustr, pWrtShell->GetCurrSection()->GetSectionName().toString());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // page style WithMargin is used
     CPPUNIT_ASSERT_EQUAL(tools::Long(5669), pWrtShell->GetLayout()->GetLower()->getFramePrintArea().Top());
@@ -1231,7 +1231,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testCp1000071)
 
     // Change the document layout to be 2 columns, and then undo.
     pWrtShell->SelAll();
-    SwSectionData section(SectionType::Content, pWrtShell->GetUniqueSectionName());
+    SwSectionData section(SectionType::Content, UIName(pWrtShell->GetUniqueSectionName()));
     SfxItemSet set( getSwDocShell()->GetPool(), svl::Items<RES_COL, RES_COL> );
     SwFormatCol col;
     col.Init( 2, 0, 10000 );
@@ -1862,7 +1862,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTextCursorInvalidation)
     // can't go right in empty header
     CPPUNIT_ASSERT(!xCursor->goRight(1, false));
 // this does not actually delete the header:    xPageStyle->setPropertyValue("HeaderIsOn", uno::makeAny(false));
-    pWrtShell->ChangeHeaderOrFooter(u"Default Page Style", true, false, false);
+    pWrtShell->ChangeHeaderOrFooter(UIName(u"Default Page Style"_ustr), true, false, false);
     // must be disposed after deleting header
     // cursor ends up in body
     // UPDATE: this behaviour has been corrected as a side effect of the fix to tdf#46561:

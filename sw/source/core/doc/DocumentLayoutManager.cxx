@@ -129,7 +129,7 @@ SwFrameFormat *DocumentLayoutManager::MakeLayoutFormat( RndStdIds eRequest, cons
     case RndStdIds::FOOTER:
         {
             pFormat = new SwFrameFormat( m_rDoc.GetAttrPool(),
-                                 (bHeader ? u"Right header"_ustr : u"Right footer"_ustr),
+                                 UIName(bHeader ? u"Right header"_ustr : u"Right footer"_ustr),
                                  m_rDoc.GetDfltFrameFormat() );
 
             const SwNode& rEndOfAutotext( m_rDoc.GetNodes().GetEndOfAutotext() );
@@ -159,7 +159,7 @@ SwFrameFormat *DocumentLayoutManager::MakeLayoutFormat( RndStdIds eRequest, cons
 
     case RndStdIds::DRAW_OBJECT:
         {
-            pFormat = m_rDoc.MakeDrawFrameFormat( OUString(), m_rDoc.GetDfltFrameFormat() );
+            pFormat = m_rDoc.MakeDrawFrameFormat( UIName(), m_rDoc.GetDfltFrameFormat() );
             if( pSet )      // Set a few more attributes
                 pFormat->SetFormatAttr( *pSet );
 
@@ -370,7 +370,7 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
         SwXFrame::GetOrCreateSdrObject(*pFormat);
     }
     else
-        pDest = m_rDoc.MakeDrawFrameFormat( OUString(), pDest );
+        pDest = m_rDoc.MakeDrawFrameFormat( UIName(), pDest );
 
     // Copy all other or new attributes
     pDest->CopyAttrs( rSource );
@@ -397,14 +397,14 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
         if( !m_rDoc.IsCopyIsMove() || &m_rDoc != pSrcDoc )
         {
             if( (m_rDoc.IsInReading() && !bInHeaderFooter) || m_rDoc.IsInMailMerge() )
-                pDest->SetFormatName( OUString() );
+                pDest->SetFormatName( UIName() );
             else
             {
                 // Test first if the name is already taken, if so generate a new one.
                 SwNodeType nNdTyp = aRg.aStart.GetNode().GetNodeType();
 
-                OUString sOld( pDest->GetName() );
-                pDest->SetFormatName( OUString() );
+                UIName sOld( pDest->GetName() );
+                pDest->SetFormatName( UIName() );
                 if( m_rDoc.FindFlyByName( sOld, nNdTyp ) )     // found one
                     switch( nNdTyp )
                     {
@@ -470,7 +470,7 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
         // Format name should have unique name. Let's use object name as a fallback
         SdrObject *pObj = pDest->FindSdrObject();
         if (pObj)
-            pDest->SetFormatName(pObj->GetName());
+            pDest->SetFormatName(UIName(pObj->GetName()));
     }
 
     // If the draw format has a TextBox, then copy its fly format as well.

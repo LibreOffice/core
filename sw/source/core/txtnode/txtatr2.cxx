@@ -182,7 +182,7 @@ SwCharFormat* SwTextINetFormat::GetCharFormat()
         }
 
         const sal_uInt16 nId = IsVisited() ? rFormat.GetVisitedFormatId() : rFormat.GetINetFormatId();
-        const OUString& rStr = IsVisited() ? rFormat.GetVisitedFormat() : rFormat.GetINetFormat();
+        const UIName& rStr = IsVisited() ? rFormat.GetVisitedFormat() : rFormat.GetINetFormat();
         if (rStr.isEmpty())
         {
             OSL_ENSURE( false, "<SwTextINetFormat::GetCharFormat()> - missing character format at hyperlink attribute");
@@ -300,7 +300,7 @@ SwCharFormat* SwTextRuby::GetCharFormat()
     if( !rFormat.GetText().isEmpty() )
     {
         const SwDoc& rDoc = GetTextNode().GetDoc();
-        const OUString& rStr = rFormat.GetCharFormatName();
+        const UIName& rStr = rFormat.GetCharFormatName();
         const sal_uInt16 nId = rStr.isEmpty()
                              ? o3tl::narrowing<sal_uInt16>(RES_POOLCHR_RUBYTEXT)
                              : rFormat.GetCharFormatId();

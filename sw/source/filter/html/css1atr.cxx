@@ -618,7 +618,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFormat *pFormat, OString& rTok
         if( USER_FMT & nPoolId )
         {
             // user templates
-            const OUString& aNm(pPFormat->GetName());
+            const UIName& aNm(pPFormat->GetName());
 
             if (!bChrFormat && aNm == OOO_STRING_SVTOOLS_HTML_blockquote)
             {
@@ -892,7 +892,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFormat *pFormat, OString& rTok
         // we export it as <TOKEN>.<CLASS>, otherwise as .<CLASS>.
         // <CLASS> is the name of the template after removing all characters
         // before and including the first '.'
-        rClass = pFormat->GetName();
+        rClass = pFormat->GetName().toString();
         sal_Int32 nPos = rClass.indexOf( '.' );
         if( nPos >= 0 && rClass.getLength() > nPos+1 )
         {
@@ -1524,7 +1524,7 @@ static SwHTMLWriter& OutCSS1_SwFormat( SwHTMLWriter& rWrt, const SwFormat& rForm
         if( USER_FMT & nPoolFormatId )
         {
             // user templates
-            const OUString& aNm(rFormat.GetName());
+            const UIName& aNm(rFormat.GetName());
 
             if (aNm == "DD 1" || aNm == "DT 1")
                 rWrt.m_nDfltBottomMargin = 0;
@@ -1579,8 +1579,8 @@ static SwHTMLWriter& OutCSS1_SwFormat( SwHTMLWriter& rWrt, const SwFormat& rForm
         else
         {
             if( nPoolFormatId==RES_POOLCOLL_TEXT )
-                rWrt.m_aScriptParaStyles.insert( pDoc->GetTextCollFromPool( RES_POOLCOLL_STANDARD, false )->GetName() );
-            rWrt.m_aScriptParaStyles.insert( rFormat.GetName() );
+                rWrt.m_aScriptParaStyles.insert( pDoc->GetTextCollFromPool( RES_POOLCOLL_STANDARD, false )->GetName().toString() );
+            rWrt.m_aScriptParaStyles.insert( rFormat.GetName().toString() );
         }
         bHasScriptDependencies = true;
     }

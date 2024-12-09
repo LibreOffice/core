@@ -73,7 +73,7 @@ std::unique_ptr<SwField> SwTableField::Copy() const
 
 OUString SwTableField::GetFieldName() const
 {
-    return GetTyp()->GetName() + " " + const_cast<SwTableField *>(this)->GetCommand();
+    return GetTyp()->GetName().toString() + " " + const_cast<SwTableField *>(this)->GetCommand();
 }
 
 /// search TextNode containing this field

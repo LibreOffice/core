@@ -238,7 +238,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineInHiddenSection)
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     pWrtShell->EndOfSection(true);
 
-    SwSectionData section(SectionType::Content, pWrtShell->GetUniqueSectionName());
+    SwSectionData section(SectionType::Content, UIName(pWrtShell->GetUniqueSectionName()));
     section.SetHidden(true);
     SwSection const* pSection = pWrtShell->InsertSection(section, nullptr);
 

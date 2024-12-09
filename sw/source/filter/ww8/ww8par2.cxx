@@ -726,8 +726,8 @@ SwNumRule* SwWW8ImplReader::GetStyRule()
     if( m_xStyles->mpStyRule )         // Bullet-Style already present
         return m_xStyles->mpStyRule;
 
-    static constexpr OUString aBaseName(u"WW8StyleNum"_ustr);
-    const OUString aName( m_rDoc.GetUniqueNumRuleName( &aBaseName, false) );
+    static constexpr UIName aBaseName(u"WW8StyleNum"_ustr);
+    const UIName aName( m_rDoc.GetUniqueNumRuleName( &aBaseName, false) );
 
     // #i86652#
     sal_uInt16 nRul = m_rDoc.MakeNumRule( aName, nullptr,
@@ -808,7 +808,7 @@ void SwWW8ImplReader::Read_ANLevelDesc( sal_uInt16, const sal_uInt8* pData, shor
         // If NumRuleItems were set, either directly or through inheritance, disable them now
         m_pCurrentColl->SetFormatAttr( SwNumRuleItem() );
 
-        static constexpr OUString aName(u"Outline"_ustr);
+        static constexpr UIName aName(u"Outline"_ustr);
         SwNumRule aNR( m_rDoc.GetUniqueNumRuleName( &aName ),
                        SvxNumberFormat::LABEL_WIDTH_AND_POSITION,
                        OUTLINE_RULE );
@@ -892,7 +892,7 @@ SwNumRule *ANLDRuleMap::GetNumRule(const SwDoc& rDoc, sal_uInt8 nNumType)
     const OUString& rNumRule = WW8_Numbering == nNumType ? msNumberingNumRule : msOutlineNumRule;
     if (rNumRule.isEmpty())
         return nullptr;
-    return rDoc.FindNumRulePtr(rNumRule);
+    return rDoc.FindNumRulePtr(UIName(rNumRule));
 }
 
 void ANLDRuleMap::SetNumRule(const OUString& rNumRule, sal_uInt8 nNumType)
@@ -925,7 +925,7 @@ void SwWW8ImplReader::StartAnl(const sal_uInt8* pSprm13)
         sNumRule = m_xTableDesc->GetNumRuleName();
         if (!sNumRule.isEmpty())
         {
-            pNumRule = m_rDoc.FindNumRulePtr(sNumRule);
+            pNumRule = m_rDoc.FindNumRulePtr(UIName(sNumRule));
             if (!pNumRule)
                 sNumRule.clear();
             else
@@ -941,8 +941,8 @@ void SwWW8ImplReader::StartAnl(const sal_uInt8* pSprm13)
     SwWW8StyInf * pStyInf = GetStyle(m_nCurrentColl);
     if (sNumRule.isEmpty() && pStyInf != nullptr &&  pStyInf->m_bHasStyNumRule)
     {
-        sNumRule = pStyInf->m_pFormat->GetNumRule().GetValue();
-        pNumRule = m_rDoc.FindNumRulePtr(sNumRule);
+        sNumRule = pStyInf->m_pFormat->GetNumRule().GetValue().toString();
+        pNumRule = m_rDoc.FindNumRulePtr(UIName(sNumRule));
         if (!pNumRule)
             sNumRule.clear();
     }
@@ -953,7 +953,7 @@ void SwWW8ImplReader::StartAnl(const sal_uInt8* pSprm13)
         {
             // #i86652#
             pNumRule = m_rDoc.GetNumRuleTable()[
-                            m_rDoc.MakeNumRule( sNumRule, nullptr,
+                            m_rDoc.MakeNumRule( UIName(sNumRule), nullptr,
                                               SvxNumberFormat::LABEL_ALIGNMENT ) ];
         }
         if (m_xTableDesc)
@@ -961,13 +961,13 @@ void SwWW8ImplReader::StartAnl(const sal_uInt8* pSprm13)
             if (!aS12.pSprm)
                 aS12 = m_xPlcxMan->HasParaSprm(m_bVer67 ? 12 : NS_sprm::LN_PAnld); // sprmAnld
             if (!aS12.pSprm || aS12.nRemainingData < sal_Int32(sizeof(WW8_ANLD)) || !reinterpret_cast<WW8_ANLD const *>(aS12.pSprm)->fNumberAcross)
-                m_xTableDesc->SetNumRuleName(pNumRule->GetName());
+                m_xTableDesc->SetNumRuleName(pNumRule->GetName().toString());
         }
     }
 
     m_bAnl = true;
 
-    sNumRule = pNumRule ? pNumRule->GetName() : OUString();
+    sNumRule = pNumRule ? pNumRule->GetName().toString() : OUString();
     // set NumRules via stack
     m_xCtrlStck->NewAttr(*m_pPaM->GetPoint(),
         SfxStringItem(RES_FLTR_NUMRULE, sNumRule));
@@ -3801,7 +3801,7 @@ bool WW8RStyle::PrepareStyle(SwWW8StyInf &rSI, ww::sti eSti, sal_uInt16 nThisSty
     {
         // Para-Style
         sw::util::ParaStyleMapper::StyleResult aResult =
-            mpIo->m_aParaStyleMapper.GetStyle(rSI.GetOrgWWName(), eSti, rParaCollisions);
+            mpIo->m_aParaStyleMapper.GetStyle(UIName(rSI.GetOrgWWName()), eSti, rParaCollisions);
         pColl = aResult.first;
         bStyExist = aResult.second;
     }
@@ -3809,7 +3809,7 @@ bool WW8RStyle::PrepareStyle(SwWW8StyInf &rSI, ww::sti eSti, sal_uInt16 nThisSty
     {
         // Char-Style
         sw::util::CharStyleMapper::StyleResult aResult =
-            mpIo->m_aCharStyleMapper.GetStyle(rSI.GetOrgWWName(), eSti, rCharCollisions);
+            mpIo->m_aCharStyleMapper.GetStyle(UIName(rSI.GetOrgWWName()), eSti, rCharCollisions);
         pColl = aResult.first;
         bStyExist = aResult.second;
     }

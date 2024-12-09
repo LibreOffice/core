@@ -38,7 +38,7 @@ namespace sw{ class DocumentStylePoolManager; }
 class SAL_DLLPUBLIC_RTTI SwFormatColl: public SwFormat
 {
 protected:
-    SwFormatColl( SwAttrPool& rPool, const OUString &rFormatName,
+    SwFormatColl( SwAttrPool& rPool, const UIName &rFormatName,
                 const WhichRangesContainer& pWhichRanges, SwFormatColl* pDerFrom,
                 sal_uInt16 nFormatWhich )
           : SwFormat( rPool, rFormatName, pWhichRanges, pDerFrom, nFormatWhich )
@@ -70,7 +70,7 @@ class SW_DLLPUBLIC SwTextFormatColl
     SwCharFormat* mpLinkedCharFormat = nullptr;
 
 protected:
-    SwTextFormatColl( SwAttrPool& rPool, const OUString &rFormatCollName,
+    SwTextFormatColl( SwAttrPool& rPool, const UIName &rFormatCollName,
                     SwTextFormatColl* pDerFrom = nullptr,
                     sal_uInt16 nFormatWh = RES_TXTFMTCOLL )
         : SwFormatColl(rPool, rFormatCollName, aTextFormatCollSetRange, pDerFrom, nFormatWh)
@@ -155,7 +155,7 @@ class SwGrfFormatColl final : public SwFormatColl
 {
     friend class SwDoc;
 
-    SwGrfFormatColl( SwAttrPool& rPool, const OUString &rFormatCollName,
+    SwGrfFormatColl( SwAttrPool& rPool, const UIName &rFormatCollName,
                     SwGrfFormatColl* pDerFrom = nullptr )
         : SwFormatColl( rPool, rFormatCollName, aGrfFormatCollSetRange,
                     pDerFrom, RES_GRFFMTCOLL )
@@ -217,7 +217,7 @@ class SW_DLLPUBLIC SwConditionTextFormatColl final : public SwTextFormatColl
 
     SwFormatCollConditions m_CondColls;
 
-    SwConditionTextFormatColl( SwAttrPool& rPool, const OUString &rFormatCollName,
+    SwConditionTextFormatColl( SwAttrPool& rPool, const UIName &rFormatCollName,
                             SwTextFormatColl* pDerFrom )
         : SwTextFormatColl( rPool, rFormatCollName, pDerFrom, RES_CONDTXTFMTCOLL )
     {}

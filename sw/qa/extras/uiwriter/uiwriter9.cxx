@@ -489,7 +489,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf165351)
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     // Move the cursor into the fly frame
-    pWrtShell->GotoFly(u"Frame1"_ustr, FLYCNTTYPE_FRM, false);
+    pWrtShell->GotoFly(UIName(u"Frame1"_ustr), FLYCNTTYPE_FRM, false);
     pWrtShell->EndOfSection();
     pWrtShell->GoNextCell(/*bAppendLine=*/true);
     pWrtShell->Undo();
@@ -1219,7 +1219,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf71583)
             else
             {
                 std::optional<sal_uInt16> oPageNumber = 1;
-                OUString sPageStyle(u"Default Page Style"_ustr);
+                UIName sPageStyle(u"Default Page Style"_ustr);
                 rWrtSh.InsertPageBreak(&sPageStyle, oPageNumber);
             }
         }

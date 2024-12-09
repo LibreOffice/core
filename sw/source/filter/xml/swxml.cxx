@@ -350,15 +350,13 @@ static void lcl_AdjustOutlineStylesForOOo(SwDoc& _rDoc)
 {
     // array containing the names of the default outline styles ('Heading 1',
     // 'Heading 2', ..., 'Heading 10')
-    OUString aDefOutlStyleNames[ MAXLEVEL ];
+    ProgName aDefOutlStyleNames[ MAXLEVEL ];
     {
-        ProgName sStyleName;
         for ( sal_uInt8 i = 0; i < MAXLEVEL; ++i )
         {
-            sStyleName =
+            aDefOutlStyleNames[i] =
                 SwStyleNameMapper::GetProgName( RES_POOLCOLL_HEADLINE1 + i,
-                                                sStyleName.toString() );
-            aDefOutlStyleNames[i] = sStyleName.toString();
+                                                UIName() );
         }
     }
 
@@ -388,8 +386,9 @@ static void lcl_AdjustOutlineStylesForOOo(SwDoc& _rDoc)
 
         for ( sal_uInt8 i = 0; i < MAXLEVEL; ++i )
         {
+            // FIXME: comparing ProgName to UIName ?
             if ( aCreatedDefaultOutlineStyles[ i ] == nullptr &&
-                 pColl->GetName() == aDefOutlStyleNames[i] )
+                 pColl->GetName().toString() == aDefOutlStyleNames[i].toString() )
             {
                 aCreatedDefaultOutlineStyles[ i ] = pColl;
                 break;

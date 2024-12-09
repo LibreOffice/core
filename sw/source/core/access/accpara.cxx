@@ -1175,7 +1175,7 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
             case SwFieldIds::HiddenText:
             case SwFieldIds::SetExp:
                 {
-                    sEntry = pField->GetTyp()->GetName();
+                    sEntry = pField->GetTyp()->GetName().toString();
                     if (sEntry.getLength() > 0)
                     {
                         strTypeName += "-" + sEntry;
@@ -1426,7 +1426,7 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
             {
                 PropertyValue rPropVal;
                 rPropVal.Name = UNO_NAME_PARA_STYLE_NAME;
-                rPropVal.Value <<= pTextNode->GetTextColl()->GetName();
+                rPropVal.Value <<= pTextNode->GetTextColl()->GetName().toString();
                 rPropVal.Handle = -1;
                 rPropVal.State = beans::PropertyState_DEFAULT_VALUE;
 

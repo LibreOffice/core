@@ -203,11 +203,11 @@ lcl_setCharStyle(SwDoc& rDoc, const uno::Any & rValue, SfxItemSet & rSet)
     {
         throw lang::IllegalArgumentException();
     }
-    OUString sStyle;
+    UIName sStyle;
     SwStyleNameMapper::FillUIName(ProgName(uStyle), sStyle,
             SwGetPoolIdFromName::ChrFmt);
     SwDocStyleSheet *const pStyle = static_cast<SwDocStyleSheet*>(
-        pDocSh->GetStyleSheetPool()->Find(sStyle, SfxStyleFamily::Char));
+        pDocSh->GetStyleSheetPool()->Find(sStyle.toString(), SfxStyleFamily::Char));
     if (!pStyle)
     {
         throw lang::IllegalArgumentException();
@@ -250,11 +250,11 @@ SwUnoCursorHelper::SetTextFormatColl(const uno::Any & rAny, SwPaM & rPaM)
         return;
     OUString uStyle;
     rAny >>= uStyle;
-    OUString sStyle;
+    UIName sStyle;
     SwStyleNameMapper::FillUIName(ProgName(uStyle), sStyle,
             SwGetPoolIdFromName::TxtColl );
     SwDocStyleSheet *const pStyle = static_cast<SwDocStyleSheet*>(
-            pDocSh->GetStyleSheetPool()->Find(sStyle, SfxStyleFamily::Para));
+            pDocSh->GetStyleSheetPool()->Find(sStyle.toString(), SfxStyleFamily::Para));
     if (!pStyle)
     {
         throw lang::IllegalArgumentException();
@@ -289,7 +289,7 @@ SwUnoCursorHelper::SetPageDesc(
     {
         pNewDesc.reset(new SwFormatPageDesc());
     }
-    OUString sDescName;
+    UIName sDescName;
     SwStyleNameMapper::FillUIName(ProgName(uDescName), sDescName,
             SwGetPoolIdFromName::PageDesc);
     if (!pNewDesc->GetPageDesc() ||
@@ -384,14 +384,14 @@ lcl_setDropcapCharStyle(SwPaM const & rPam, SfxItemSet & rItemSet,
     {
         throw lang::IllegalArgumentException();
     }
-    OUString sStyle;
+    UIName sStyle;
     SwStyleNameMapper::FillUIName(ProgName(uStyle), sStyle,
             SwGetPoolIdFromName::ChrFmt);
     SwDoc& rDoc = rPam.GetDoc();
     //default character style must not be set as default format
     SwDocStyleSheet *const pStyle = static_cast<SwDocStyleSheet*>(
             rDoc.GetDocShell()
-            ->GetStyleSheetPool()->Find(sStyle, SfxStyleFamily::Char));
+            ->GetStyleSheetPool()->Find(sStyle.toString(), SfxStyleFamily::Char));
     if (!pStyle || pStyle->GetCharFormat() == rDoc.GetDfltCharFormat())
     {
         throw lang::IllegalArgumentException();
@@ -428,7 +428,7 @@ lcl_setRubyCharstyle(SfxItemSet & rItemSet, uno::Any const& rValue)
     {
         pRuby.reset(new SwFormatRuby(OUString()));
     }
-    OUString sStyle;
+    UIName sStyle;
     SwStyleNameMapper::FillUIName(ProgName(sTmp), sStyle,
             SwGetPoolIdFromName::ChrFmt);
     pRuby->SetCharFormatName(sStyle);

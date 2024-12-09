@@ -162,7 +162,7 @@ SwFlyFrameFormat* SwDoc::MakeFlySection_( const SwPosition& rAnchPos,
     if( !pFrameFormat )
         pFrameFormat = getIDocumentStylePoolAccess().GetFrameFormatFromPool( RES_POOLFRM_FRAME );
 
-    OUString sName;
+    UIName sName;
     switch( rNode.GetNodeType() )
     {
         case SwNodeType::Grf:        sName = GetUniqueGrfName();     break;
@@ -639,7 +639,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
         SwLabelType const eType, std::u16string_view rText, std::u16string_view rSeparator,
             const OUString& rNumberingSeparator,
             const bool bBefore, const sal_uInt16 nId, const SwNodeOffset nNdIdx,
-            const OUString& rCharacterStyle,
+            const UIName& rCharacterStyle,
             const bool bCpyBrd )
 {
     ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
@@ -896,7 +896,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
         }
         if( pType)
         {
-            aText += pType->GetName();
+            aText += pType->GetName().toString();
             if( !bOrderNumberingFirst )
                 aText += " ";
         }
@@ -966,7 +966,7 @@ SwDoc::InsertLabel(
         SwLabelType const eType, OUString const& rText, OUString const& rSeparator,
         OUString const& rNumberingSeparator,
         bool const bBefore, sal_uInt16 const nId, SwNodeOffset const nNdIdx,
-        OUString const& rCharacterStyle,
+        UIName const& rCharacterStyle,
         bool const bCpyBrd )
 {
     std::unique_ptr<SwUndoInsertLabel> pUndo;
@@ -1000,7 +1000,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable
                                      const OUString& rSeparator,
                                      const OUString& rNumberSeparator,
                                      const sal_uInt16 nId,
-                                     const OUString& rCharacterStyle,
+                                     const UIName& rCharacterStyle,
                                      SdrObject& rSdrObj )
 {
     ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
@@ -1190,7 +1190,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable
         }
         if ( pType )
         {
-            aText += pType->GetName();
+            aText += pType->GetName().toString();
             if( !bOrderNumberingFirst )
                 aText += " ";
         }
@@ -1237,7 +1237,7 @@ SwFlyFrameFormat* SwDoc::InsertDrawLabel(
         OUString const& rSeparator,
         OUString const& rNumberSeparator,
         sal_uInt16 const nId,
-        OUString const& rCharacterStyle,
+        UIName const& rCharacterStyle,
         SdrObject& rSdrObj )
 {
     SwDrawContact *const pContact =
@@ -1287,10 +1287,10 @@ static void lcl_collectUsedNums(std::vector<unsigned int>& rSetFlags, sal_Int32 
     }
 }
 
-static void lcl_collectUsedNums(std::vector<unsigned int>& rSetFlags, sal_Int32 nNmLen, const SdrObject& rObj, const OUString& rCmpName)
+static void lcl_collectUsedNums(std::vector<unsigned int>& rSetFlags, sal_Int32 nNmLen, const SdrObject& rObj, const UIName& rCmpName)
 {
     const OUString& sName = rObj.GetName();
-    lcl_collectUsedNums(rSetFlags, nNmLen, sName, rCmpName);
+    lcl_collectUsedNums(rSetFlags, nNmLen, sName, rCmpName.toString());
     // tdf#122487 take groups into account, iterate and recurse through their
     // contents for name collision check
     if (!rObj.IsGroupObject())
@@ -1322,7 +1322,7 @@ namespace
     }
 }
 
-static OUString lcl_GetUniqueFlyName(const SwDoc& rDoc, TranslateId pDefStrId, sal_uInt16 eType, std::u16string_view rPrefix = std::u16string_view(), SwNodeType nNdTyp = SwNodeType::NONE)
+static UIName lcl_GetUniqueFlyName(const SwDoc& rDoc, TranslateId pDefStrId, sal_uInt16 eType, std::u16string_view rPrefix = std::u16string_view(), SwNodeType nNdTyp = SwNodeType::NONE)
 {
     assert(eType >= RES_FMT_BEGIN && eType < RES_FMT_END);
     if (rDoc.IsInMailMerge())
@@ -1330,7 +1330,7 @@ static OUString lcl_GetUniqueFlyName(const SwDoc& rDoc, TranslateId pDefStrId, s
         OUString newName = "MailMergeFly"
             + DateTimeToOUString( DateTime( DateTime::SYSTEM ) )
             + OUString::number( rDoc.GetSpzFrameFormats()->size() + 1 );
-        return newName;
+        return UIName(newName);
     }
 
     if (!rPrefix.empty())
@@ -1345,16 +1345,16 @@ static OUString lcl_GetUniqueFlyName(const SwDoc& rDoc, TranslateId pDefStrId, s
         {
             aTmp = aPrefix + OUString::number(nCnt);
             ++nCnt;
-            if (!rDoc.FindFlyByName(aTmp, nNdTyp))
+            if (!rDoc.FindFlyByName(UIName(aTmp), nNdTyp))
             {
                 break;
             }
         }
-        return aTmp;
+        return UIName(aTmp);
     }
 
-    OUString aName(SwResId(pDefStrId));
-    sal_Int32 nNmLen = aName.getLength();
+    UIName aName(SwResId(pDefStrId));
+    sal_Int32 nNmLen = aName.toString().getLength();
 
     std::vector<unsigned int> aUsedNums;
     aUsedNums.reserve(rDoc.GetSpzFrameFormats()->size());
@@ -1370,40 +1370,40 @@ static OUString lcl_GetUniqueFlyName(const SwDoc& rDoc, TranslateId pDefStrId, s
                 lcl_collectUsedNums(aUsedNums, nNmLen, *pObj, aName);
         }
 
-        lcl_collectUsedNums(aUsedNums, nNmLen, pFlyFormat->GetName(), aName);
+        lcl_collectUsedNums(aUsedNums, nNmLen, pFlyFormat->GetName().toString(), aName.toString());
     }
 
     // All numbers are flagged accordingly, so determine the right one
     auto nNum = first_available_number(aUsedNums) + 1;
-    return aName + OUString::number(nNum);
+    return UIName(aName.toString() + OUString::number(nNum));
 }
 
-OUString SwDoc::GetUniqueGrfName(std::u16string_view rPrefix) const
+UIName SwDoc::GetUniqueGrfName(UIName rPrefix) const
 {
-    return lcl_GetUniqueFlyName(*this, STR_GRAPHIC_DEFNAME, RES_FLYFRMFMT, rPrefix, SwNodeType::Grf);
+    return lcl_GetUniqueFlyName(*this, STR_GRAPHIC_DEFNAME, RES_FLYFRMFMT, rPrefix.toString(), SwNodeType::Grf);
 }
 
-OUString SwDoc::GetUniqueOLEName() const
+UIName SwDoc::GetUniqueOLEName() const
 {
     return lcl_GetUniqueFlyName(*this, STR_OBJECT_DEFNAME, RES_FLYFRMFMT);
 }
 
-OUString SwDoc::GetUniqueFrameName() const
+UIName SwDoc::GetUniqueFrameName() const
 {
     return lcl_GetUniqueFlyName(*this, STR_FRAME_DEFNAME, RES_FLYFRMFMT);
 }
 
-OUString SwDoc::GetUniqueShapeName() const
+UIName SwDoc::GetUniqueShapeName() const
 {
     return lcl_GetUniqueFlyName(*this, STR_SHAPE_DEFNAME, RES_DRAWFRMFMT);
 }
 
-OUString SwDoc::GetUniqueDrawObjectName() const
+UIName SwDoc::GetUniqueDrawObjectName() const
 {
     return lcl_GetUniqueFlyName(*this, TranslateId(nullptr, "DrawObject"), RES_DRAWFRMFMT);
 }
 
-const SwFlyFrameFormat* SwDoc::FindFlyByName( const OUString& rName, SwNodeType nNdTyp ) const
+const SwFlyFrameFormat* SwDoc::FindFlyByName( const UIName& rName, SwNodeType nNdTyp ) const
 {
     auto it = GetSpzFrameFormats()->findByTypeAndName( RES_FLYFRMFMT, rName );
     if( it == GetSpzFrameFormats()->typeAndNameEnd() )
@@ -1429,13 +1429,13 @@ const SwFlyFrameFormat* SwDoc::FindFlyByName( const OUString& rName, SwNodeType 
     return nullptr;
 }
 
-void SwDoc::SetFlyName( SwFlyFrameFormat& rFormat, const OUString& rName )
+void SwDoc::SetFlyName( SwFlyFrameFormat& rFormat, const UIName& rName )
 {
     if (rFormat.GetName() == rName)
     {
         return;
     }
-    OUString sName( rName );
+    UIName sName( rName );
     if( sName.isEmpty() || FindFlyByName( sName ) )
     {
         TranslateId pTyp = STR_FRAME_DEFNAME;
@@ -1480,22 +1480,22 @@ void SwDoc::SetAllUniqueFlyNames()
         pFlyFormat = (*GetSpzFrameFormats())[ --n ];
         if( RES_FLYFRMFMT == pFlyFormat->Which() )
         {
-            const OUString& aNm = pFlyFormat->GetName();
+            const UIName& aNm = pFlyFormat->GetName();
             if ( !aNm.isEmpty() )
             {
                 sal_Int32 *pNum = nullptr;
                 sal_Int32 nLen = 0;
-                if ( aNm.startsWith(sGrfNm) )
+                if ( aNm.toString().startsWith(sGrfNm) )
                 {
                     nLen = sGrfNm.getLength();
                     pNum = &nGrfNum;
                 }
-                else if( aNm.startsWith(sFlyNm) )
+                else if( aNm.toString().startsWith(sFlyNm) )
                 {
                     nLen = sFlyNm.getLength();
                     pNum = &nFlyNum;
                 }
-                else if( aNm.startsWith(sOLENm) )
+                else if( aNm.toString().startsWith(sOLENm) )
                 {
                     nLen = sOLENm.getLength();
                     pNum = &nOLENum;
@@ -1503,7 +1503,7 @@ void SwDoc::SetAllUniqueFlyNames()
 
                 if ( pNum )
                 {
-                    const sal_Int32 nNewLen = o3tl::toInt32(aNm.subView( nLen ));
+                    const sal_Int32 nNewLen = o3tl::toInt32(aNm.toString().subView( nLen ));
                     if (*pNum < nNewLen)
                         *pNum = nNewLen;
                 }
@@ -1534,13 +1534,13 @@ void SwDoc::SetAllUniqueFlyNames()
             switch( GetNodes()[ pIdx->GetIndex() + 1 ]->GetNodeType() )
             {
             case SwNodeType::Grf:
-                pFlyFormat->SetFormatName( sGrfNm + OUString::number( ++nGrfNum ));
+                pFlyFormat->SetFormatName( UIName(sGrfNm + OUString::number( ++nGrfNum )));
                 break;
             case SwNodeType::Ole:
-                pFlyFormat->SetFormatName( sOLENm + OUString::number( ++nOLENum ));
+                pFlyFormat->SetFormatName( UIName(sOLENm + OUString::number( ++nOLENum )));
                 break;
             default:
-                pFlyFormat->SetFormatName( sFlyNm + OUString::number( ++nFlyNum ));
+                pFlyFormat->SetFormatName( UIName(sFlyNm + OUString::number( ++nFlyNum )));
                 break;
             }
         }

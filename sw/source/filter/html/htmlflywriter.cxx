@@ -538,7 +538,7 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
         sOut.append(OString::Concat(" ") + pStr + "=\"");
         Strm().WriteOString( sOut );
         sOut.setLength(0);
-        HTMLOutFuncs::Out_String( Strm(), rFrameFormat.GetName() );
+        HTMLOutFuncs::Out_String( Strm(), rFrameFormat.GetName().toString() );
         sOut.append('\"');
     }
 
@@ -800,7 +800,7 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
         !rFrameFormat.GetName().isEmpty() && !bReplacement)
     {
         const char* pAttributeName = (nFrameOptions & HtmlFrmOpts::Id) ? OOO_STRING_SVTOOLS_HTML_O_id : OOO_STRING_SVTOOLS_HTML_O_name;
-        aHtml.attribute(pAttributeName, rFrameFormat.GetName());
+        aHtml.attribute(pAttributeName, rFrameFormat.GetName().toString());
     }
 
     // Name
@@ -1285,7 +1285,7 @@ SwHTMLWriter& OutHTML_ImageStart( HtmlWriter& rHtml, SwHTMLWriter& rWrt, const S
     // <a name=...></a>...<img ...>
     if( pMarkType && !rFrameFormat.GetName().isEmpty() )
     {
-        rWrt.OutImplicitMark( rFrameFormat.GetName(), pMarkType );
+        rWrt.OutImplicitMark( rFrameFormat.GetName().toString(), pMarkType );
     }
 
     // URL -> <a>...<img ... >...</a>
@@ -1908,7 +1908,7 @@ static SwHTMLWriter & OutHTML_FrameFormatAsImage( SwHTMLWriter& rWrt, const SwFr
     OutHTML_ImageOLEStart(rWrt, aGraphic, rFrameFormat);
 
     HtmlWriter aHtml(rWrt.Strm(), rWrt.maNamespace);
-    OutHTML_ImageStart( aHtml, rWrt, rFrameFormat, GraphicURL, aGraphic, rFrameFormat.GetName(), aSz,
+    OutHTML_ImageStart( aHtml, rWrt, rFrameFormat, GraphicURL, aGraphic, rFrameFormat.GetName().toString(), aSz,
                     HtmlFrmOpts::GenImgMask, "frame",
                     aIMap.GetIMapObjectCount() ? &aIMap : nullptr, aMimeType, true);
 

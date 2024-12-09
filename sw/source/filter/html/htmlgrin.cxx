@@ -839,7 +839,7 @@ IMAGE_SETEVENT:
 
     if( !sHTMLGrfName.isEmpty() )
     {
-        pFlyFormat->SetFormatName( sHTMLGrfName );
+        pFlyFormat->SetFormatName( UIName(sHTMLGrfName) );
 
         // maybe jump to graphic
         if( JumpToMarks::Graphic == m_eJumpTo && sHTMLGrfName == m_sJmpMark )

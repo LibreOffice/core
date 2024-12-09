@@ -161,19 +161,26 @@ class SwStyleSheetIterator final : public SfxStyleSheetIterator, public SfxListe
     // Local helper class.
     class SwPoolFormatList
     {
-        std::vector<std::pair<SfxStyleFamily, OUString>> maImpl;
-        typedef std::unordered_map<std::pair<SfxStyleFamily, OUString>, sal_uInt32> UniqueHash;
+        struct Hash
+        {
+            size_t operator()(const std::pair<SfxStyleFamily, UIName>& p) const
+            {
+                return std::hash<SfxStyleFamily>()(p.first) ^ std::hash<UIName>()(p.second);
+            }
+        };
+        std::vector<std::pair<SfxStyleFamily, UIName>> maImpl;
+        typedef std::unordered_map<std::pair<SfxStyleFamily, UIName>, sal_uInt32, Hash> UniqueHash;
         UniqueHash maUnique;
         void rehash();
     public:
         SwPoolFormatList() {}
-        void Append( SfxStyleFamily eFam, const OUString& rStr );
+        void Append( SfxStyleFamily eFam, const UIName& rStr );
         void clear() { maImpl.clear(); maUnique.clear(); }
         size_t size() { return maImpl.size(); }
         bool empty() { return maImpl.empty(); }
-        sal_uInt32 FindName(SfxStyleFamily eFam, const OUString& rName);
-        void RemoveName(SfxStyleFamily eFam, const OUString& rName);
-        const std::pair<SfxStyleFamily,OUString> &operator[](sal_uInt32 nIdx) { return maImpl[ nIdx ]; }
+        sal_uInt32 FindName(SfxStyleFamily eFam, const UIName& rName);
+        void RemoveName(SfxStyleFamily eFam, const UIName& rName);
+        const std::pair<SfxStyleFamily,UIName> &operator[](sal_uInt32 nIdx) { return maImpl[ nIdx ]; }
     };
 
     rtl::Reference< SwDocStyleSheet > mxIterSheet;
@@ -182,7 +189,7 @@ class SwStyleSheetIterator final : public SfxStyleSheetIterator, public SfxListe
     sal_uInt32          m_nLastPos;
     bool                m_bFirstCalled;
 
-    bool IsUsedInComments(const OUString& rName) const;
+    bool IsUsedInComments(const UIName& rName) const;
     void                AppendStyleList(const std::vector<OUString>& rLst,
                                         bool        bUsed,
                                         bool        bTestHidden,

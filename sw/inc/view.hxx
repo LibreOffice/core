@@ -32,6 +32,7 @@
 #include "swtypes.hxx"
 #include "shellid.hxx"
 #include "viewsh.hxx"
+#include "names.hxx"
 
 #include <svx/sdr/overlay/overlayobject.hxx>
 
@@ -186,7 +187,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     sal_uInt16              m_nNewPage;
 
     sal_uInt16          m_nOldPageNum;
-    OUString            m_sOldSectionName;
+    UIName              m_sOldSectionName;
 
     Point               m_aTabColFromDocPos;  // moving table columns out of the document
     SwTextNode           * m_pNumRuleNodeFromDoc; // Moving indent of numrule #i23726#

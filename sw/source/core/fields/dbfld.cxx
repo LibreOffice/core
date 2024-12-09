@@ -55,11 +55,11 @@ SwDBFieldType::SwDBFieldType(SwDoc* pDocPtr, const OUString& rNam, SwDBData aDBD
 {
     if(!m_aDBData.sDataSource.isEmpty() || !m_aDBData.sCommand.isEmpty())
     {
-        m_sName = m_aDBData.sDataSource
+        m_sName = UIName(m_aDBData.sDataSource
             + OUStringChar(DB_DELIM)
             + m_aDBData.sCommand
             + OUStringChar(DB_DELIM)
-            + m_sName;
+            + m_sName.toString());
     }
 }
 
@@ -72,7 +72,7 @@ std::unique_ptr<SwFieldType> SwDBFieldType::Copy() const
     return std::make_unique<SwDBFieldType>(GetDoc(), m_sColumn, m_aDBData);
 }
 
-OUString SwDBFieldType::GetName() const
+UIName SwDBFieldType::GetName() const
 {
     return m_sName;
 }
@@ -221,7 +221,7 @@ std::unique_ptr<SwField> SwDBField::Copy() const
 
 OUString SwDBField::GetFieldName() const
 {
-    const OUString rDBName = static_cast<SwDBFieldType*>(GetTyp())->GetName();
+    const OUString rDBName = static_cast<SwDBFieldType*>(GetTyp())->GetName().toString();
 
     OUString sContent( rDBName.getToken(0, DB_DELIM) );
 
@@ -342,7 +342,7 @@ void SwDBField::Evaluate()
 /// get name
 OUString SwDBField::GetPar1() const
 {
-    return static_cast<const SwDBFieldType*>(GetTyp())->GetName();
+    return static_cast<const SwDBFieldType*>(GetTyp())->GetName().toString();
 }
 
 sal_uInt16 SwDBField::GetSubType() const

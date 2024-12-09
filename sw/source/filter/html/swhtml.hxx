@@ -614,7 +614,7 @@ class SwHTMLParser : public SfxHTMLParser, public SvtListener
 
     // insert/close Fly-Frames
     void InsertFlyFrame( const SfxItemSet& rItemSet, HTMLAttrContext *pCntxt,
-                         const OUString& rId );
+                         const UIName& rId );
 
     void SaveDocContext( HTMLAttrContext *pCntxt, HtmlContextFlags nFlags,
                        const SwPosition *pNewPos );

@@ -234,8 +234,8 @@ namespace SwUnoCursorHelper
     SW_DLLPUBLIC void GetSelectableFromAny(
         css::uno::Reference<css::uno::XInterface> const& xIfc,
         SwDoc & rTargetDoc,
-        std::optional<SwPaM>& o_rpPaM, std::pair<OUString, FlyCntType> & o_rFrame,
-        OUString & o_rTableName, SwUnoTableCursor const*& o_rpTableCursor,
+        std::optional<SwPaM>& o_rpPaM, std::pair<UIName, FlyCntType> & o_rFrame,
+        UIName & o_rTableName, SwUnoTableCursor const*& o_rpTableCursor,
         ::sw::mark::MarkBase const*& o_rpMark,
         std::vector<SdrObject *> & o_rSdrObjects);
 

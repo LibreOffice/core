@@ -953,7 +953,7 @@ void SwWrtShell::ConnectObj( svt::EmbeddedObjectRef& xObj, const SwRect &rPrt,
 
 // Insert hard page break;
 // Selections will be overwritten
-void SwWrtShell::InsertPageBreak(const OUString *pPageDesc, const ::std::optional<sal_uInt16>& oPgNum )
+void SwWrtShell::InsertPageBreak(const UIName *pPageDesc, const ::std::optional<sal_uInt16>& oPgNum )
 {
     if (!lcl_IsAllowed(this))
         return;
@@ -1854,7 +1854,7 @@ bool SwWrtShell::IsSectionEditableInReadonly() const
 //            text collection with this name exists, or
 //            this is a default template.
 
-SwTextFormatColl *SwWrtShell::GetParaStyle(const OUString &rCollName, GetStyle eCreate )
+SwTextFormatColl *SwWrtShell::GetParaStyle(const UIName &rCollName, GetStyle eCreate )
 {
     SwTextFormatColl* pColl = FindTextFormatCollByName( rCollName );
     if( !pColl && GETSTYLE_NOCREATE != eCreate )
@@ -1871,7 +1871,7 @@ SwTextFormatColl *SwWrtShell::GetParaStyle(const OUString &rCollName, GetStyle e
 //            character template with this name exists, or
 //            this is a default template or template is automatic.
 
-SwCharFormat *SwWrtShell::GetCharStyle(const OUString &rFormatName, GetStyle eCreate )
+SwCharFormat *SwWrtShell::GetCharStyle(const UIName &rFormatName, GetStyle eCreate )
 {
     SwCharFormat* pFormat = FindCharFormatByName( rFormatName );
     if( !pFormat && GETSTYLE_NOCREATE != eCreate )
@@ -1888,7 +1888,7 @@ SwCharFormat *SwWrtShell::GetCharStyle(const OUString &rFormatName, GetStyle eCr
 //            frame format with this name exists or
 //            this is a default format or the format is automatic.
 
-SwFrameFormat *SwWrtShell::GetTableStyle(std::u16string_view rFormatName)
+SwFrameFormat *SwWrtShell::GetTableStyle(const UIName& rFormatName)
 {
     for( size_t i = GetTableFrameFormatCount(); i; )
     {
@@ -1907,7 +1907,7 @@ void SwWrtShell::addCurrentPosition() {
 
 // Applying templates
 
-void SwWrtShell::SetPageStyle(const OUString &rCollName)
+void SwWrtShell::SetPageStyle(const UIName &rCollName)
 {
     if( !SwCursorShell::HasSelection() && !IsSelFrameMode() && !GetSelectedObjCount() )
     {
@@ -1919,7 +1919,7 @@ void SwWrtShell::SetPageStyle(const OUString &rCollName)
 
 // Access templates
 
-OUString const & SwWrtShell::GetCurPageStyle() const
+UIName const & SwWrtShell::GetCurPageStyle() const
 {
     return GetPageDesc(GetCurPageDesc( false/*bCalcFrame*/ )).GetName();
 }
@@ -2176,7 +2176,7 @@ void SwWrtShell::SetReadonlyOption(bool bSet)
 // given all styles are changed
 
 void SwWrtShell::ChangeHeaderOrFooter(
-    std::u16string_view rStyleName, bool bHeader, bool bOn, bool bShowWarning)
+    const UIName& rStyleName, bool bHeader, bool bOn, bool bShowWarning)
 {
     SdrView *const pSdrView = GetDrawView();
     if (pSdrView && pSdrView->IsTextEdit())
@@ -2192,8 +2192,8 @@ void SwWrtShell::ChangeHeaderOrFooter(
             nFrom < nTo; ++nFrom )
     {
         SwPageDesc aDesc( GetPageDesc( nFrom ));
-        OUString sTmp(aDesc.GetName());
-        if( rStyleName.empty() || rStyleName == sTmp )
+        UIName sTmp(aDesc.GetName());
+        if( rStyleName.toString().isEmpty() || rStyleName == sTmp )
         {
             bool bChgd = false;
 
@@ -2248,7 +2248,7 @@ void SwWrtShell::ChangeHeaderOrFooter(
                     if ( !IsHeaderFooterEdit() )
                         ToggleHeaderFooterEdit();
                     bCursorSet = SetCursorInHdFt(
-                            rStyleName.empty() ? SIZE_MAX : nFrom,
+                            rStyleName.toString().isEmpty() ? SIZE_MAX : nFrom,
                             bHeader );
                 }
             }

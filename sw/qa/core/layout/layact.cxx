@@ -58,7 +58,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyNextRowInvalidatePos)
     // When adding a new paragraph at the end of B1:
     // Go to the table: A1 cell.
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
-    pWrtShell->GotoTable(u"Table1"_ustr);
+    pWrtShell->GotoTable(UIName(u"Table1"_ustr));
     // Go to the column: B1 cell.
     pWrtShell->GoNextCell();
     // Go to the end of the B1 cell, on page 2.

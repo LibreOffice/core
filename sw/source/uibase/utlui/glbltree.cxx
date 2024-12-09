@@ -489,7 +489,7 @@ void SwGlobalTree::Display(bool bOnlyUpdateUserData)
                 case GLBLDOC_SECTION:
                 {
                     const SwSection* pSect = pCont->GetSection();
-                    sEntry = pSect->GetSectionName();
+                    sEntry = pSect->GetSectionName().toString();
                     aImage = RID_BMP_DROP_REGION;
                 }
                 break;
@@ -633,7 +633,7 @@ void SwGlobalTree::ExecuteContextMenuAction(std::u16string_view rSelectedPopupEn
         if (pCont)
         {
             SfxStringItem aName(FN_EDIT_REGION,
-                    pCont->GetSection()->GetSectionName());
+                    pCont->GetSection()->GetSectionName().toString());
             rDispatch.ExecuteList(FN_EDIT_REGION, SfxCallMode::ASYNCHRON,
                     { &aName });
         }
@@ -860,7 +860,7 @@ void SwGlobalTree::GotoContent(const SwGlblDocContent* pCont)
         break;
         case GLBLDOC_TOXBASE:
         {
-            const OUString sName = pCont->GetTOX()->GetTOXName();
+            const UIName sName = pCont->GetTOX()->GetTOXName();
             if (!m_pActiveShell->GotoNextTOXBase(&sName))
                 m_pActiveShell->GotoPrevTOXBase(&sName);
         }
@@ -1117,7 +1117,7 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* _pContent, const Sequen
         if ( nAddNumber )
             sSectionName = sTempSectionName;
 
-        SwSectionData aSectionData(SectionType::Content, sSectionName);
+        SwSectionData aSectionData(SectionType::Content, UIName(sSectionName));
         aSectionData.SetProtectFlag(true);
         aSectionData.SetHidden(false);
 

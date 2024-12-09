@@ -304,9 +304,9 @@ protected:
 public:
     std::vector<OUString> m_aImgMapNames;   // written image maps
     std::set<OUString> m_aImplicitMarks;    // implicit jump marks
-    std::set<OUString> m_aNumRuleNames;     // names of exported num rules
+    std::set<UIName> m_aNumRuleNames;     // names of exported num rules
     std::set<OUString> m_aScriptParaStyles; // script dependent para styles
-    std::set<OUString> m_aScriptTextStyles; // script dependent text styles
+    std::set<UIName> m_aScriptTextStyles; // script dependent text styles
     std::vector<OUString> m_aOutlineMarks;
     std::vector<SwNodeOffset> m_aOutlineMarkPoss;
     HTMLControls m_aHTMLControls;     // the forms to be written
@@ -601,7 +601,7 @@ public:
     static void GetEEAttrsFromDrwObj( SfxItemSet& rItemSet,
                                       const SdrObject *pObj );
 
-    static sal_uInt16 GetDefListLvl( std::u16string_view rNm, sal_uInt16 nPoolId );
+    static sal_uInt16 GetDefListLvl( const UIName& rNm, sal_uInt16 nPoolId );
 
     sal_uInt32 GetHTMLMode() const
     {

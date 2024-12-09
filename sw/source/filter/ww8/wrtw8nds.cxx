@@ -3656,10 +3656,10 @@ void WW8AttributeOutput::OutputFlyFrame_Impl( const ww8::Frame& rFormat, const P
                 // because we deliver the normal content of the table cell, and no border
                 // ( Flag was deleted above in aSaveData() )
                 m_rWW8Export.m_bOutTable = true;
-                const OUString& aName = rFrameFormat.GetName();
-                m_rWW8Export.StartCommentOutput(aName);
+                const UIName& aName = rFrameFormat.GetName();
+                m_rWW8Export.StartCommentOutput(aName.toString());
                 m_rWW8Export.WriteText();
-                m_rWW8Export.EndCommentOutput(aName);
+                m_rWW8Export.EndCommentOutput(aName.toString());
             }
             else
                 m_rWW8Export.WriteText();

@@ -696,7 +696,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorder)
         pWrtShell->Insert(u"first"_ustr);
         pWrtShell->SplitNode();
         pWrtShell->Insert(u"second"_ustr);
-        SwPageDesc* pDesc = pWrtShell->FindPageDescByName(u"Left Page"_ustr, true);
+        SwPageDesc* pDesc = pWrtShell->FindPageDescByName(UIName(u"Left Page"_ustr), true);
         SwPaM aPaM(*pWrtShell->GetCursor()->GetPoint());
         SwFormatPageDesc aFormatPageDesc(pDesc);
         pDocShell->GetDoc()->getIDocumentContentOperations().InsertPoolItem(aPaM, aFormatPageDesc);
@@ -719,9 +719,9 @@ CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorder)
     SwDocShell* pDocShell = getSwDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     pWrtShell->Down(/*bSelect=*/false);
-    OUString aPageStyle = pWrtShell->GetCurPageStyle();
+    UIName aPageStyle = pWrtShell->GetCurPageStyle();
     uno::Reference<beans::XPropertySet> xPageStyle(
-        getStyles(u"PageStyles"_ustr)->getByName(aPageStyle), uno::UNO_QUERY);
+        getStyles(u"PageStyles"_ustr)->getByName(aPageStyle.toString()), uno::UNO_QUERY);
     auto nTopMargin = xPageStyle->getPropertyValue(u"TopMargin"_ustr).get<sal_Int32>();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(501), nTopMargin);
     auto aTopBorder = xPageStyle->getPropertyValue(u"TopBorder"_ustr).get<table::BorderLine2>();

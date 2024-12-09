@@ -1541,12 +1541,12 @@ bool SwTransferable::Paste(SwWrtShell& rSh, const TransferableDataHelper& rData,
             if ( eOld & RedlineFlags::On )
                 rSh.GetDoc()->getIDocumentRedlineAccess().SetRedlineFlags( eOld & ~RedlineFlags::On );
 
-            OUString sPreviousTableName;
+            UIName sPreviousTableName;
             do
             {
                 // tdf#152245 add a limit to the loop, if it's not possible to delete the table
                 const SwTableNode* pNode = rSh.GetCursor()->GetPointNode().FindTableNode();
-                const OUString sTableName = pNode->GetTable().GetFrameFormat()->GetName();
+                const UIName sTableName = pNode->GetTable().GetFrameFormat()->GetName();
                 if ( sTableName == sPreviousTableName )
                     break;
                 sPreviousTableName = sTableName;
@@ -2688,13 +2688,13 @@ bool SwTransferable::PasteDDE( const TransferableDataHelper& rData,
     SwFieldType* pTyp = nullptr;
     size_t i = 1;
     size_t j;
-    OUString aName;
+    UIName aName;
     bool bDoublePaste = false;
     const size_t nSize = rWrtShell.GetFieldTypeCount();
     const ::utl::TransliterationWrapper& rColl = ::GetAppCmpStrIgnore();
 
     do {
-        aName = aApp + OUString::number( i );
+        aName = UIName(aApp + OUString::number( i ));
         for( j = INIT_FLDTYPES; j < nSize; j++ )
         {
             pTyp = rWrtShell.GetFieldType( j );
@@ -2707,7 +2707,7 @@ bool SwTransferable::PasteDDE( const TransferableDataHelper& rData,
                     bDoublePaste = true;
                     break;
                 }
-                else if( rColl.isEqual( aName, pTyp->GetName() ) )
+                else if( rColl.isEqual( aName.toString(), pTyp->GetName().toString() ) )
                     break;
             }
         }
@@ -3190,7 +3190,7 @@ bool SwTransferable::PasteFileName( const TransferableDataHelper& rData,
                     // and then pull up the insert-region-dialog
                     SwSectionData aSect(
                                     SectionType::FileLink,
-                                    rSh.GetDoc()->GetUniqueSectionName() );
+                                    UIName(rSh.GetDoc()->GetUniqueSectionName()) );
                     aSect.SetLinkFileName( sFileURL );
                     aSect.SetProtectFlag( true );
 
@@ -3354,7 +3354,7 @@ bool SwTransferable::PasteFileList( const TransferableDataHelper& rData,
         aFileList.Count() )
     {
         SwPasteSdr nAct = bLink ? SwPasteSdr::SetAttr : SwPasteSdr::Insert;
-        OUString sFlyNm;
+        UIName sFlyNm;
         // iterate over the filelist
         for( sal_uLong n = 0, nEnd = aFileList.Count(); n < nEnd; ++n )
         {
@@ -4435,7 +4435,7 @@ SwTransferDdeLink::SwTransferDdeLink( SwTransferable& rTrans, SwWrtShell& rSh )
     {
         SwFrameFormat* pFormat = rSh.GetTableFormat();
         if( pFormat )
-            m_sName = pFormat->GetName();
+            m_sName = pFormat->GetName().toString();
     }
     else
     {

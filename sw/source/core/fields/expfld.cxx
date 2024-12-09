@@ -501,7 +501,7 @@ bool SwGetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     return true;
 }
 
-SwSetExpFieldType::SwSetExpFieldType( SwDoc* pDc, OUString aName, sal_uInt16 nTyp )
+SwSetExpFieldType::SwSetExpFieldType( SwDoc* pDc, UIName aName, sal_uInt16 nTyp )
     : SwValueFieldType( pDc, SwFieldIds::SetExp ),
     m_sName( std::move(aName) ),
     m_sDelim( u"."_ustr ),
@@ -522,7 +522,7 @@ std::unique_ptr<SwFieldType> SwSetExpFieldType::Copy() const
     return pNew;
 }
 
-OUString SwSetExpFieldType::GetName() const
+UIName SwSetExpFieldType::GetName() const
 {
     return m_sName;
 }
@@ -817,7 +817,7 @@ SwSetExpField::SwSetExpField(SwSetExpFieldType* pTyp, const OUString& rFormel,
         m_fValueRLHidden = 1.0;
         if( rFormel.isEmpty() )
         {
-            SetFormula(pTyp->GetName() + "+1");
+            SetFormula(pTyp->GetName().toString() + "+1");
         }
     }
 }
@@ -831,7 +831,7 @@ OUString SwSetExpField::ExpandImpl(SwRootFrame const*const pLayout) const
 {
     if (mnSubType & nsSwExtendedSubType::SUB_CMD)
     {   // we need the CommandString
-        return GetTyp()->GetName() + " = " + GetFormula();
+        return GetTyp()->GetName().toString() + " = " + GetFormula();
     }
     if(!(mnSubType & nsSwExtendedSubType::SUB_INVISIBLE))
     {   // value is visible
@@ -852,7 +852,7 @@ OUString SwSetExpField::GetFieldName() const
     OUString aStr(
         SwFieldType::GetTypeStr( nStrType )
         + " "
-        + GetTyp()->GetName() );
+        + GetTyp()->GetName().toString() );
 
     // Sequence: without formula
     if (SwFieldTypesEnum::Sequence != nStrType)
@@ -1016,7 +1016,7 @@ sal_Int32 SwGetExpField::GetReferenceTextPos( const SwFormatField& rFormat, SwDo
 
 OUString SwSetExpField::GetPar1() const
 {
-    return static_cast<const SwSetExpFieldType*>(GetTyp())->GetName();
+    return static_cast<const SwSetExpFieldType*>(GetTyp())->GetName().toString();
 }
 
 OUString SwSetExpField::GetPar2() const
@@ -1076,7 +1076,7 @@ bool SwSetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         {
             OUString sTmp;
             rAny >>= sTmp;
-            SetPar1( SwStyleNameMapper::GetUIName( ProgName(sTmp), SwGetPoolIdFromName::TxtColl ) );
+            SetPar1( SwStyleNameMapper::GetUIName( ProgName(sTmp), SwGetPoolIdFromName::TxtColl ).toString() );
         }
         break;
     case FIELD_PROP_PAR2:
@@ -1170,7 +1170,7 @@ bool SwSetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         rAny <<= static_cast<sal_Int16>(mnSeqNo);
         break;
     case FIELD_PROP_PAR1:
-        rAny <<= SwStyleNameMapper::GetProgName(GetPar1(), SwGetPoolIdFromName::TxtColl ).toString();
+        rAny <<= SwStyleNameMapper::GetProgName(UIName(GetPar1()), SwGetPoolIdFromName::TxtColl ).toString();
         break;
     case FIELD_PROP_PAR2:
         {
@@ -1291,7 +1291,7 @@ OUString SwInputField::GetFieldName() const
     OUString aStr(SwField::GetFieldName());
     if ((mnSubType & 0x00ff) == INP_USR)
     {
-        aStr += GetTyp()->GetName() + " " + getContent();
+        aStr += GetTyp()->GetName().toString() + " " + getContent();
     }
     return aStr;
 }

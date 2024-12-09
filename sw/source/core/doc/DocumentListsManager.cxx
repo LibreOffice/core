@@ -33,7 +33,7 @@ DocumentListsManager::DocumentListsManager( SwDoc& i_rSwdoc ) : m_rDoc( i_rSwdoc
 }
 
 SwList* DocumentListsManager::createList( const OUString& rListId,
-                           const OUString& sDefaultListStyleName )
+                           const UIName& sDefaultListStyleName )
 {
     OUString sListId = rListId;
     if ( sListId.isEmpty() )
@@ -73,7 +73,7 @@ SwList* DocumentListsManager::getListByName( const OUString& sListId ) const
     return pList;
 }
 
-void DocumentListsManager::createListForListStyle( const OUString& sListStyleName )
+void DocumentListsManager::createListForListStyle( const UIName& sListStyleName )
 {
     if ( sListStyleName.isEmpty() )
     {
@@ -104,12 +104,11 @@ void DocumentListsManager::createListForListStyle( const OUString& sListStyleNam
     pNumRule->SetDefaultListId( pNewList->GetListId() );
 }
 
-SwList* DocumentListsManager::getListForListStyle( const OUString& sListStyleName ) const
+SwList* DocumentListsManager::getListForListStyle( const UIName& sListStyleName ) const
 {
     SwList* pList = nullptr;
 
-    std::unordered_map< OUString, SwList* >::const_iterator
-                            aListIter = maListStyleLists.find( sListStyleName );
+    auto aListIter = maListStyleLists.find( sListStyleName );
     if ( aListIter != maListStyleLists.end() )
     {
         pList = (*aListIter).second;
@@ -118,7 +117,7 @@ SwList* DocumentListsManager::getListForListStyle( const OUString& sListStyleNam
     return pList;
 }
 
-void DocumentListsManager::deleteListForListStyle( const OUString& sListStyleName )
+void DocumentListsManager::deleteListForListStyle( const UIName& sListStyleName )
 {
     OUString sListId;
     {
@@ -137,7 +136,7 @@ void DocumentListsManager::deleteListForListStyle( const OUString& sListStyleNam
     }
 }
 
-void DocumentListsManager::deleteListsByDefaultListStyle( const OUString& rListStyleName )
+void DocumentListsManager::deleteListsByDefaultListStyle( const UIName& rListStyleName )
 {
     auto aListIter = maLists.begin();
     while ( aListIter != maLists.end() )
@@ -151,8 +150,8 @@ void DocumentListsManager::deleteListsByDefaultListStyle( const OUString& rListS
     }
 }
 
-void DocumentListsManager::trackChangeOfListStyleName( const OUString& sListStyleName,
-                                        const OUString& sNewListStyleName )
+void DocumentListsManager::trackChangeOfListStyleName( const UIName& sListStyleName,
+                                        const UIName& sNewListStyleName )
 {
     SwList* pList = getListForListStyle( sListStyleName );
     OSL_ENSURE( pList,

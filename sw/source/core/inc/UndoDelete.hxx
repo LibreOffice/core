@@ -46,7 +46,7 @@ class SwUndoDelete final
     std::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoStart;
     std::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoEnd;
 
-    OUString m_sTableName;
+    UIName m_sTableName;
 
     SwNodeOffset m_nNode;
     SwNodeOffset m_nNdDiff;           // difference of Nodes before/after Delete
@@ -99,7 +99,7 @@ public:
     void SetPgBrkFlags( bool bPageBreak, bool bPageDesc )
         { m_bResetPgDesc = bPageDesc; m_bResetPgBrk = bPageBreak; }
 
-    void SetTableName(const OUString & rName);
+    void SetTableName(const UIName & rName);
 
     // SwUndoTableCpyTable needs this information:
     bool IsDelFullPara() const { return m_bDelFullPara; }

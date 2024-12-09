@@ -31,7 +31,7 @@ class SwUndoInsNum final : public SwUndo, private SwUndRng
     SwNumRule m_aNumRule;
     std::unique_ptr<SwHistory> m_pHistory;
     std::unique_ptr<SwNumRule> m_pOldNumRule;
-    OUString m_sReplaceRule;
+    UIName m_sReplaceRule;
     sal_uInt16 m_nLRSavePos;
 
 public:
@@ -39,7 +39,7 @@ public:
     SwUndoInsNum( const SwNumRule& rOldRule, const SwNumRule& rNewRule,
                   const SwDoc& rDoc, SwUndoId nUndoId = SwUndoId::INSFMTATTR );
     SwUndoInsNum( const SwPosition& rPos, const SwNumRule& rRule,
-                            OUString aReplaceRule );
+                            UIName aReplaceRule );
 
     virtual ~SwUndoInsNum() override;
 

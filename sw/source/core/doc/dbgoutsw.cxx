@@ -389,7 +389,7 @@ static OUString lcl_dbg_out(const SwFrameFormat & rFrameFormat)
     OUString aResult = "[ " +
         OUString::number(reinterpret_cast<sal_uIntPtr>(&rFrameFormat), 16) +
         "(" +
-        rFrameFormat.GetName() + ")";
+        rFrameFormat.GetName().toString() + ")";
 
     if (rFrameFormat.IsAuto())
         aResult += "*";
@@ -514,14 +514,14 @@ static OUString lcl_dbg_out(const SwNode & rNode)
                 aTmpStr += lcl_dbg_out(*(pTextNode->GetNum()));
             }
             aTmpStr += "</number><rule>" +
-                pNumRule->GetName();
+                pNumRule->GetName().toString();
 
             const SwNumRuleItem * pItem = nullptr;
 
             if (pAttrSet &&
                 (pItem = pAttrSet->GetItemIfSet(RES_PARATR_NUMRULE, false)))
             {
-                aTmpStr += "(" + pItem->GetValue() + ")*";
+                aTmpStr += "(" + pItem->GetValue().toString() + ")*";
             }
 
             const SwNumFormat * pNumFormat = nullptr;
@@ -544,7 +544,7 @@ static OUString lcl_dbg_out(const SwNode & rNode)
 
         if (pColl)
         {
-            aTmpStr += "<coll>" + pColl->GetName() + "(";
+            aTmpStr += "<coll>" + pColl->GetName().toString() + "(";
 
             SwTextFormatColl *pTextColl = static_cast<SwTextFormatColl*>(pColl);
             if (pTextColl->IsAssignedToListLevelOfOutlineStyle())
@@ -558,11 +558,11 @@ static OUString lcl_dbg_out(const SwNode & rNode)
 
             const SwNumRuleItem & rItem =
                 pColl->GetFormatAttr(RES_PARATR_NUMRULE);
-            const OUString& sNumruleName = rItem.GetValue();
+            const UIName sNumruleName = rItem.GetValue();
 
             if (!sNumruleName.isEmpty())
             {
-                aTmpStr += ", " + sNumruleName;
+                aTmpStr += ", " + sNumruleName.toString();
             }
             aTmpStr += ")"
                 "</coll>";
@@ -572,7 +572,7 @@ static OUString lcl_dbg_out(const SwNode & rNode)
 
         if (pCColl)
         {
-            aTmpStr += "<ccoll>" + pCColl->GetName() + "</ccoll>";
+            aTmpStr += "<ccoll>" + pCColl->GetName().toString() + "</ccoll>";
         }
 
         aTmpStr += "<frms>" + lcl_AnchoredFrames(rNode) + "</frms>";
@@ -667,7 +667,7 @@ static OUString lcl_dbg_out(const SvxNumberFormat & rFormat)
 
 static OUString lcl_dbg_out(const SwNumRule & rRule)
 {
-    OUStringBuffer aResult("[ " + rRule.GetName() + " [");
+    OUStringBuffer aResult("[ " + rRule.GetName().toString() + " [");
 
     for (sal_uInt8 n = 0; n < MAXLEVEL; n++)
     {
@@ -689,7 +689,7 @@ const char * dbg_out(const SwNumRule & rRule)
 
 static OUString lcl_dbg_out(const SwTextFormatColl & rFormat)
 {
-    return rFormat.GetName() + "(" +
+    return rFormat.GetName().toString() + "(" +
         OUString::number(rFormat.GetAttrOutlineLevel()) + ")";
 }
 
@@ -717,7 +717,7 @@ static OUString lcl_dbg_out(const SwNumRuleTable & rTable)
         if (n > 0)
             aResult.append(", ");
 
-        aResult.append(rTable[n]->GetName());
+        aResult.append(rTable[n]->GetName().toString());
 
         aResult.append("(" + OUString::number(reinterpret_cast<sal_uIntPtr>(rTable[n]), 16) + ")");
     }

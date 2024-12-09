@@ -303,13 +303,13 @@ void SwTextShell::ExecSetNumber(SfxRequest const &rReq)
                                                     ? pNumRuleAtCurrentSelection->MakeSvxNumRule()
                                                     : aNewNumRule.MakeSvxNumRule();
 
-                    OUString aNumCharFormat, aBulletCharFormat;
+                    UIName aNumCharFormat, aBulletCharFormat;
                     SwStyleNameMapper::FillUIName( RES_POOLCHR_NUM_LEVEL, aNumCharFormat );
                     SwStyleNameMapper::FillUIName( RES_POOLCHR_BULLET_LEVEL, aBulletCharFormat );
 
                     SfxAllItemSet aSet( GetPool() );
-                    aSet.Put( SfxStringItem( SID_NUM_CHAR_FMT, aNumCharFormat ) );
-                    aSet.Put( SfxStringItem( SID_BULLET_CHAR_FMT, aBulletCharFormat ) );
+                    aSet.Put( SfxStringItem( SID_NUM_CHAR_FMT, aNumCharFormat.toString() ) );
+                    aSet.Put( SfxStringItem( SID_BULLET_CHAR_FMT, aBulletCharFormat.toString() ) );
                     aSet.Put( SvxNumBulletItem( aNewSvxNumRule, SID_ATTR_NUMBERING_RULE ) );
 
                     pNBOTypeMgr->SetItems( &aSet );

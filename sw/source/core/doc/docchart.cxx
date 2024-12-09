@@ -94,7 +94,7 @@ void SwDoc::DoUpdateAllCharts()
 
 void SwDoc::UpdateCharts_( const SwTable& rTable, SwViewShell const & rVSh ) const
 {
-    OUString aName( rTable.GetFrameFormat()->GetName() );
+    UIName aName( rTable.GetFrameFormat()->GetName() );
     SwStartNode *pStNd;
     SwNodeIndex aIdx( *GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );
     while( nullptr != (pStNd = aIdx.GetNode().GetStartNode()) )
@@ -136,7 +136,7 @@ void SwDoc::UpdateCharts_( const SwTable& rTable, SwViewShell const & rVSh ) con
     }
 }
 
-void SwDoc::UpdateCharts( const OUString& rName ) const
+void SwDoc::UpdateCharts( const UIName& rName ) const
 {
     SwTable* pTmpTable = SwTable::FindTable( FindTableFormatByName( rName ) );
     if( pTmpTable )
@@ -148,9 +148,9 @@ void SwDoc::UpdateCharts( const OUString& rName ) const
     }
 }
 
-void SwDoc::SetTableName( SwFrameFormat& rTableFormat, const OUString &rNewName )
+void SwDoc::SetTableName( SwFrameFormat& rTableFormat, const UIName &rNewName )
 {
-    const OUString aOldName( rTableFormat.GetName() );
+    const UIName aOldName( rTableFormat.GetName() );
 
     bool bNameFound = rNewName.isEmpty();
     if( !bNameFound )

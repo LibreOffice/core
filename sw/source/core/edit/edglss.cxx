@@ -178,7 +178,7 @@ bool SwEditShell::CopySelToDoc( SwDoc& rInsDoc )
             bool bCpyTableNm = aBoxes.size() == pTableNd->GetTable().GetTabSortBoxes().size();
             if( bCpyTableNm )
             {
-                const OUString rTableName = pTableNd->GetTable().GetFrameFormat()->GetName();
+                const UIName rTableName = pTableNd->GetTable().GetFrameFormat()->GetName();
                 const sw::TableFrameFormats& rTableFormats = *rInsDoc.GetTableFrameFormats();
                 for( auto n = rTableFormats.size(); n; )
                     if( rTableFormats[ --n ]->GetName() == rTableName )

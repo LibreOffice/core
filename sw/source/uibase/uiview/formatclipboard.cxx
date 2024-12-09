@@ -493,7 +493,7 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
             if(!m_aCharStyle.isEmpty() && !bNoCharacterFormats )
             {
                 // look for the named text format in the pool
-                SwDocStyleSheet* pStyle = static_cast<SwDocStyleSheet*>(pPool->Find(m_aCharStyle, SfxStyleFamily::Char));
+                SwDocStyleSheet* pStyle = static_cast<SwDocStyleSheet*>(pPool->Find(m_aCharStyle.toString(), SfxStyleFamily::Char));
 
                 // if the style is found
                 if( pStyle )
@@ -520,7 +520,7 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
                 if(!m_aParaStyle.isEmpty())
                 {
                     // look for the named paragraph format in the pool
-                    SwDocStyleSheet* pStyle = static_cast<SwDocStyleSheet*>(pPool->Find(m_aParaStyle, SfxStyleFamily::Para));
+                    SwDocStyleSheet* pStyle = static_cast<SwDocStyleSheet*>(pPool->Find(m_aParaStyle.toString(), SfxStyleFamily::Para));
                     if( pStyle )
                     {
                         // store the attributes from this style in aItemVector in order
@@ -614,9 +614,9 @@ void SwFormatClipboard::Erase()
     m_pTableItemSet.reset();
 
     if( !m_aCharStyle.isEmpty() )
-        m_aCharStyle.clear();
+        m_aCharStyle = UIName();
     if( !m_aParaStyle.isEmpty() )
-        m_aParaStyle.clear();
+        m_aParaStyle = UIName();
 
     m_bPersistentCopy = false;
 }

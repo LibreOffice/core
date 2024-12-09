@@ -2694,8 +2694,8 @@ void SwPageFrame::dumpAsXml(xmlTextWriterPtr writer) const
     (void)xmlTextWriterStartElement(writer, BAD_CAST("page_info"));
     (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("phyNum"), "%d", GetPhyPageNum());
     (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("virtNum"), "%d", GetVirtPageNum());
-    OUString aFormatName = GetPageDesc()->GetName();
-    (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST("pageDesc"), "%s", BAD_CAST(OUStringToOString(aFormatName, RTL_TEXTENCODING_UTF8).getStr()));
+    UIName aFormatName = GetPageDesc()->GetName();
+    (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST("pageDesc"), "%s", BAD_CAST(OUStringToOString(aFormatName.toString(), RTL_TEXTENCODING_UTF8).getStr()));
     (void)xmlTextWriterEndElement(writer);
     if (auto const* pObjs = GetSortedObjs())
     {

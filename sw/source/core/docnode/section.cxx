@@ -95,7 +95,7 @@ namespace {
     };
 }
 
-SwSectionData::SwSectionData(SectionType const eType, OUString aName)
+SwSectionData::SwSectionData(SectionType const eType, UIName aName)
     : m_eType(eType)
     , m_sSectionName(std::move(aName))
     , m_nPage(0)
@@ -189,12 +189,12 @@ void SwSectionData::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwSectionData"));
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("section-name"), BAD_CAST(m_sSectionName.toUtf8().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("section-name"), BAD_CAST(m_sSectionName.toString().toUtf8().getStr()));
     (void)xmlTextWriterEndElement(pWriter);
 }
 
 SwSection::SwSection(
-        SectionType const eType, OUString const& rName, SwSectionFormat & rFormat)
+        SectionType const eType, UIName const& rName, SwSectionFormat & rFormat)
     : SwClient(& rFormat)
     , m_Data(eType, rName)
 {
@@ -606,7 +606,7 @@ const SwTOXBase* SwSection::GetTOXBase() const
 }
 
 SwSectionFormat::SwSectionFormat( SwFrameFormat* pDrvdFrame, SwDoc *pDoc )
-    : SwFrameFormat( pDoc->GetAttrPool(), OUString(), pDrvdFrame )
+    : SwFrameFormat( pDoc->GetAttrPool(), UIName(), pDrvdFrame )
 {
     LockModify();
     SetFormatAttr( *GetDfltAttr( RES_COL ) );
@@ -1271,7 +1271,7 @@ static void lcl_UpdateLinksInSect( const SwBaseLink& rUpdLnk, SwSectionNode& rSe
                         SwFrameFormat* pFormat = (*pFormats)[ --nCnt ];
                         SwFormatAnchor aAnchor( pFormat->GetAnchor() );
                         if ( RndStdIds::FLY_AT_PAGE == aAnchor.GetAnchorId() &&
-                                pFormat->GetName().indexOf(sFileName) > -1 )
+                                pFormat->GetName().toString().indexOf(sFileName) > -1 )
                         {
                             pDoc->getIDocumentLayoutAccess().DelLayoutFormat( pFormat );
                         }
@@ -1292,7 +1292,7 @@ static void lcl_UpdateLinksInSect( const SwBaseLink& rUpdLnk, SwSectionNode& rSe
                         {
                             // add file name of the source document to the name of the copied object
                             // Note: used for the recognition of the copied objects anchored at page
-                            pCpyFormat->SetFormatName( pCpyFormat->GetName() + " (" + sFileName + ")" );
+                            pCpyFormat->SetFormatName( UIName(pCpyFormat->GetName().toString() + " (" + sFileName + ")") );
 
                             // sum page counts of the previous sections
                             if ( nPrevPages == 0 )

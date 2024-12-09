@@ -219,7 +219,7 @@ bool    SwNumRuleItem::PutValue( const uno::Any& rVal, sal_uInt8 )
 {
     OUString uName;
     rVal >>= uName;
-    SetValue(SwStyleNameMapper::GetUIName(ProgName(uName), SwGetPoolIdFromName::NumRule));
+    SetValue(SwStyleNameMapper::GetUIName(ProgName(uName), SwGetPoolIdFromName::NumRule).toString());
     return true;
 }
 
@@ -227,7 +227,7 @@ void SwNumRuleItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwNumRuleItem"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(GetValue().toUtf8().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(GetValue().toString().toUtf8().getStr()));
     (void)xmlTextWriterEndElement(pWriter);
 }
 

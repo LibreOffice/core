@@ -281,7 +281,7 @@ class SwDoc final
     mutable std::unique_ptr<SwNumRuleTable> mpNumRuleTable;     //< List of all named NumRules.
 
     // Hash map to find numrules by name
-    mutable std::unordered_map<OUString, SwNumRule *> maNumRuleMap;
+    mutable std::unordered_map<UIName, SwNumRule *> maNumRuleMap;
 
     std::unique_ptr<SwPagePreviewPrtData> m_pPgPViewPrtData; //< Indenting / spacing for printing of page view.
     SwExtTextInput  *mpExtInputRing;
@@ -352,7 +352,7 @@ private:
                                 SwFrameFormat* );
     sal_Int8 SetFlyFrameAnchor( SwFrameFormat& rFlyFormat, SfxItemSet& rSet, bool bNewFrames );
 
-    typedef SwFormat* (SwDoc::*FNCopyFormat)( const OUString&, SwFormat*, bool );
+    typedef SwFormat* (SwDoc::*FNCopyFormat)( const UIName&, SwFormat*, bool );
     SwFormat* CopyFormat( const SwFormat& rFormat, const SwFormatsBase& rFormatArr,
                         FNCopyFormat fnCopyFormat, const SwFormat& rDfltFormat );
     void CopyFormatArr( const SwFormatsBase& rSourceArr, SwFormatsBase const & rDestArr,
@@ -393,11 +393,11 @@ private:
     DECL_LINK( DoUpdateModifiedOLE, Timer *, void );
 
 public:
-    SW_DLLPUBLIC SwFormat *MakeCharFormat_(const OUString &, SwFormat *, bool );
-    SwFormat *MakeFrameFormat_(const OUString &, SwFormat *, bool );
+    SW_DLLPUBLIC SwFormat *MakeCharFormat_(const UIName &, SwFormat *, bool );
+    SwFormat *MakeFrameFormat_(const UIName &, SwFormat *, bool );
 
 private:
-    SwFormat *MakeTextFormatColl_(const OUString &, SwFormat *, bool );
+    SwFormat *MakeTextFormatColl_(const UIName &, SwFormat *, bool );
 
 private:
     OUString msDocAccTitle;
@@ -603,8 +603,8 @@ public:
                         bool bDrawAlso,
                         bool bAsCharAlso = false ) const;
 
-    SwFlyFrameFormat  *MakeFlyFrameFormat (const OUString &rFormatName, SwFrameFormat *pDerivedFrom);
-    SwDrawFrameFormat *MakeDrawFrameFormat(const OUString &rFormatName, SwFrameFormat *pDerivedFrom);
+    SwFlyFrameFormat  *MakeFlyFrameFormat (const UIName &rFormatName, SwFrameFormat *pDerivedFrom);
+    SwDrawFrameFormat *MakeDrawFrameFormat(const UIName &rFormatName, SwFrameFormat *pDerivedFrom);
 
     // From now on this interface has to be used for Flys.
     // pAnchorPos must be set, if they are not attached to pages AND
@@ -701,16 +701,16 @@ public:
     SW_DLLPUBLIC SwDBData const & GetDBData();
 
     // Some helper functions
-    OUString GetUniqueGrfName(std::u16string_view rPrefix = std::u16string_view()) const;
-    OUString GetUniqueOLEName() const;
-    SW_DLLPUBLIC OUString GetUniqueFrameName() const;
-    OUString GetUniqueShapeName() const;
-    SW_DLLPUBLIC OUString GetUniqueDrawObjectName() const;
+    UIName GetUniqueGrfName(UIName rPrefix = UIName()) const;
+    UIName GetUniqueOLEName() const;
+    SW_DLLPUBLIC UIName GetUniqueFrameName() const;
+    UIName GetUniqueShapeName() const;
+    SW_DLLPUBLIC UIName GetUniqueDrawObjectName() const;
 
     SW_DLLPUBLIC o3tl::sorted_vector<SwRootFrame*> GetAllLayouts();
 
-    void SetFlyName( SwFlyFrameFormat& rFormat, const OUString& rName );
-    SW_DLLPUBLIC const SwFlyFrameFormat* FindFlyByName( const OUString& rName, SwNodeType nNdTyp = SwNodeType::NONE ) const;
+    void SetFlyName( SwFlyFrameFormat& rFormat, const UIName& rName );
+    SW_DLLPUBLIC const SwFlyFrameFormat* FindFlyByName( const UIName& rName, SwNodeType nNdTyp = SwNodeType::NONE ) const;
 
     static void GetGrfNms( const SwFlyFrameFormat& rFormat, OUString* pGrfName, OUString* pFltName );
 
@@ -780,15 +780,15 @@ public:
     // Remove all language dependencies from all existing formats
     void RemoveAllFormatLanguageDependencies();
 
-    SW_DLLPUBLIC SwFrameFormat* MakeFrameFormat(const OUString &rFormatName, SwFrameFormat *pDerivedFrom,
+    SW_DLLPUBLIC SwFrameFormat* MakeFrameFormat(const UIName &rFormatName, SwFrameFormat *pDerivedFrom,
                           bool bAuto = true);
     SW_DLLPUBLIC void DelFrameFormat( SwFrameFormat *pFormat, bool bBroadcast = false );
-    SwFrameFormat* FindFrameFormatByName( const OUString& rName ) const;
+    SwFrameFormat* FindFrameFormatByName( const UIName& rName ) const;
 
-    SW_DLLPUBLIC SwCharFormat *MakeCharFormat(const OUString &rFormatName, SwCharFormat *pDerivedFrom);
+    SW_DLLPUBLIC SwCharFormat *MakeCharFormat(const UIName &rFormatName, SwCharFormat *pDerivedFrom);
     void       DelCharFormat(size_t nFormat, bool bBroadcast = false);
     void       DelCharFormat(SwCharFormat const * pFormat, bool bBroadcast = false);
-    SwCharFormat* FindCharFormatByName( const OUString& rName ) const
+    SwCharFormat* FindCharFormatByName( const UIName& rName ) const
         {   return mpCharFormatTable->FindFormatByName(rName); }
 
     // Formatcollections (styles)
@@ -797,9 +797,9 @@ public:
     SwTextFormatColl* GetDfltTextFormatColl() { return mpDfltTextFormatColl.get(); }
     const SwTextFormatColls *GetTextFormatColls() const { return mpTextFormatCollTable.get(); }
     SwTextFormatColls *GetTextFormatColls() { return mpTextFormatCollTable.get(); }
-    SW_DLLPUBLIC SwTextFormatColl *MakeTextFormatColl( const OUString &rFormatName,
+    SW_DLLPUBLIC SwTextFormatColl *MakeTextFormatColl( const UIName &rFormatName,
                                   SwTextFormatColl *pDerivedFrom);
-    SwConditionTextFormatColl* MakeCondTextFormatColl( const OUString &rFormatName,
+    SwConditionTextFormatColl* MakeCondTextFormatColl( const UIName &rFormatName,
                                                SwTextFormatColl *pDerivedFrom);
     void DelTextFormatColl(size_t nFormat, bool bBroadcast = false);
     void DelTextFormatColl( SwTextFormatColl const * pColl, bool bBroadcast = false );
@@ -815,7 +815,7 @@ public:
                        const bool bResetListAttrs = false,
                        const bool bResetAllCharAttrs = false,
                        SwRootFrame const* pLayout = nullptr);
-    SwTextFormatColl* FindTextFormatCollByName( const OUString& rName ) const
+    SwTextFormatColl* FindTextFormatCollByName( const UIName& rName ) const
         {   return mpTextFormatCollTable->FindFormatByName(rName); }
 
     void ChkCondColls();
@@ -823,7 +823,7 @@ public:
     const SwGrfFormatColl* GetDfltGrfFormatColl() const   { return mpDfltGrfFormatColl.get(); }
     SwGrfFormatColl* GetDfltGrfFormatColl()  { return mpDfltGrfFormatColl.get(); }
     const SwGrfFormatColls *GetGrfFormatColls() const     { return mpGrfFormatCollTable.get(); }
-    SwGrfFormatColl *MakeGrfFormatColl(const OUString &rFormatName,
+    SwGrfFormatColl *MakeGrfFormatColl(const UIName &rFormatName,
                                     SwGrfFormatColl *pDerivedFrom);
 
     // Table formatting
@@ -831,9 +831,9 @@ public:
           sw::TableFrameFormats* GetTableFrameFormats()        { return mpTableFrameFormatTable.get(); }
     SW_DLLPUBLIC size_t GetTableFrameFormatCount( bool bUsed ) const;
     SwTableFormat& GetTableFrameFormat(size_t nFormat, bool bUsed ) const;
-    SwTableFormat* MakeTableFrameFormat(const OUString &rFormatName, SwFrameFormat *pDerivedFrom);
+    SwTableFormat* MakeTableFrameFormat(const UIName &rFormatName, SwFrameFormat *pDerivedFrom);
     void        DelTableFrameFormat( SwTableFormat* pFormat );
-    SW_DLLPUBLIC SwTableFormat* FindTableFormatByName( const OUString& rName, bool bAll = false ) const;
+    SW_DLLPUBLIC SwTableFormat* FindTableFormatByName( const UIName& rName, bool bAll = false ) const;
 
     /** Access to frames.
     Iterate over Flys - for Basic-Collections. */
@@ -842,7 +842,7 @@ public:
     SW_DLLPUBLIC std::vector<SwFrameFormat const*> GetFlyFrameFormats(
             FlyCntType eType,
             bool bIgnoreTextBoxes);
-    SwFrameFormat* GetFlyFrameFormatByName( const OUString& sFrameFormatName );
+    SwFrameFormat* GetFlyFrameFormatByName( const UIName& sFrameFormatName );
 
     // Copy formats in own arrays and return them.
     SwFrameFormat  *CopyFrameFormat ( const SwFrameFormat& );
@@ -900,7 +900,7 @@ public:
     size_t GetPageDescCnt() const { return m_PageDescs.size(); }
     const SwPageDesc& GetPageDesc(const size_t i) const { return *m_PageDescs[i]; }
     SwPageDesc& GetPageDesc(size_t const i) { return *m_PageDescs[i]; }
-    SW_DLLPUBLIC SwPageDesc* FindPageDesc(const OUString& rName, size_t* pPos = nullptr) const;
+    SW_DLLPUBLIC SwPageDesc* FindPageDesc(const UIName& rName, size_t* pPos = nullptr) const;
     // Just searches the pointer in the m_PageDescs vector!
     bool        ContainsPageDesc(const SwPageDesc *pDesc, size_t* pPos) const;
 
@@ -920,14 +920,14 @@ public:
         { CopyPageDescHeaderFooterImpl( false, rSrcFormat, rDestFormat ); }
 
     // For Reader
-    SW_DLLPUBLIC void ChgPageDesc( const OUString & rName, const SwPageDesc& );
+    SW_DLLPUBLIC void ChgPageDesc( const UIName & rName, const SwPageDesc& );
     SW_DLLPUBLIC void ChgPageDesc( size_t i, const SwPageDesc& );
-    void DelPageDesc( const OUString & rName, bool bBroadcast = false);
+    void DelPageDesc( const UIName & rName, bool bBroadcast = false);
     void DelPageDesc( size_t i, bool bBroadcast = false );
     void PreDelPageDesc(SwPageDesc const * pDel);
-    SW_DLLPUBLIC SwPageDesc* MakePageDesc(const OUString &rName, const SwPageDesc* pCpy = nullptr,
+    SW_DLLPUBLIC SwPageDesc* MakePageDesc(const UIName &rName, const SwPageDesc* pCpy = nullptr,
                              bool bRegardLanguage = true);
-    void BroadcastStyleOperation(const OUString& rName, SfxStyleFamily eFamily,
+    void BroadcastStyleOperation(const UIName& rName, SfxStyleFamily eFamily,
                                  SfxHintId nOp);
 
     /** The html import sometimes overwrites the page sizes set in
@@ -963,7 +963,7 @@ public:
     OUString GetUniqueTOXBaseName( const SwTOXType& rType,
                                    const OUString& sChkStr ) const;
 
-    bool SetTOXBaseName(const SwTOXBase& rTOXBase, const OUString& rName);
+    bool SetTOXBaseName(const SwTOXBase& rTOXBase, const UIName& rName);
 
     // After reading file update all tables/indices
     void SetUpdateTOX( bool bFlag )            { mbUpdateTOX = bFlag; }
@@ -1103,24 +1103,24 @@ public:
     void AddNumRule(SwNumRule * pRule);
 
     // add optional parameter <eDefaultNumberFormatPositionAndSpaceMode>
-    SW_DLLPUBLIC sal_uInt16 MakeNumRule( const OUString &rName,
+    SW_DLLPUBLIC sal_uInt16 MakeNumRule( const UIName &rName,
         const SwNumRule* pCpy = nullptr,
         const SvxNumberFormat::SvxNumPositionAndSpaceMode eDefaultNumberFormatPositionAndSpaceMode =
             SvxNumberFormat::LABEL_WIDTH_AND_POSITION );
-    sal_uInt16 FindNumRule( std::u16string_view rName ) const;
+    sal_uInt16 FindNumRule( const UIName& rName ) const;
     std::set<OUString> GetUsedBullets();
-    SW_DLLPUBLIC SwNumRule* FindNumRulePtr( const OUString& rName ) const;
+    SW_DLLPUBLIC SwNumRule* FindNumRulePtr( const UIName& rName ) const;
 
     // Deletion only possible if Rule is not used!
-    bool RenameNumRule(const OUString & aOldName, const OUString & aNewName,
+    bool RenameNumRule(const UIName & aOldName, const UIName & aNewName,
                            bool bBroadcast = false);
-    SW_DLLPUBLIC bool DelNumRule( const OUString& rName, bool bBroadCast = false );
-    SW_DLLPUBLIC OUString GetUniqueNumRuleName( const OUString* pChkStr = nullptr, bool bAutoNum = true ) const;
+    SW_DLLPUBLIC bool DelNumRule( const UIName& rName, bool bBroadCast = false );
+    SW_DLLPUBLIC UIName GetUniqueNumRuleName( const UIName* pChkStr = nullptr, bool bAutoNum = true ) const;
 
     void UpdateNumRule();   // Update all invalids.
     void ChgNumRuleFormats( const SwNumRule& rRule );
-    void ReplaceNumRule( const SwPosition& rPos, const OUString& rOldRule,
-                        const OUString& rNewRule );
+    void ReplaceNumRule( const SwPosition& rPos, const UIName& rOldRule,
+                        const UIName& rNewRule );
 
     // Goto next/previous on same level.
     static bool GotoNextNum( SwPosition&, SwRootFrame const* pLayout,
@@ -1239,7 +1239,7 @@ public:
                        sal_uInt16 nCnt, bool bSameHeight = false );
 
     TableMergeErr MergeTable( SwPaM& rPam );
-    OUString GetUniqueTableName() const;
+    UIName GetUniqueTableName() const;
     bool IsInsTableFormatNum() const;
     bool IsInsTableChangeNumFormat() const;
     bool IsInsTableAlignNum() const;
@@ -1262,7 +1262,7 @@ public:
 
     /// AutoFormat for table/table selection.
     /// @param bResetDirect Reset direct formatting that might be applied to the cells.
-    bool SetTableAutoFormat(const SwSelBoxes& rBoxes, const SwTableAutoFormat& rNew, bool bResetDirect = false, OUString const* pStyleNameToSet = nullptr);
+    bool SetTableAutoFormat(const SwSelBoxes& rBoxes, const SwTableAutoFormat& rNew, bool bResetDirect = false, TableStyleName const* pStyleNameToSet = nullptr);
 
     // Query attributes.
     bool GetTableAutoFormat( const SwSelBoxes& rBoxes, SwTableAutoFormat& rGet );
@@ -1276,11 +1276,11 @@ public:
     /// Counts table styles without triggering lazy-load of them.
     bool HasTableStyles() const { return m_pTableStyles != nullptr; }
     // Create a new table style. Tracked by Undo.
-    SW_DLLPUBLIC SwTableAutoFormat* MakeTableStyle(const OUString& rName);
+    SW_DLLPUBLIC SwTableAutoFormat* MakeTableStyle(const TableStyleName& rName);
     // Delete table style named rName. Tracked by undo.
-    SW_DLLPUBLIC std::unique_ptr<SwTableAutoFormat> DelTableStyle(const OUString& rName, bool bBroadcast = false);
+    SW_DLLPUBLIC std::unique_ptr<SwTableAutoFormat> DelTableStyle(const TableStyleName& rName, bool bBroadcast = false);
     // Change (replace) a table style named rName. Tracked by undo.
-    SW_DLLPUBLIC void ChgTableStyle(const OUString& rName, const SwTableAutoFormat& rNewFormat);
+    SW_DLLPUBLIC void ChgTableStyle(const TableStyleName& rName, const SwTableAutoFormat& rNewFormat);
 
     const SwCellStyleTable& GetCellStyles() const  { return *mpCellStyles; }
           SwCellStyleTable& GetCellStyles()        { return *mpCellStyles; }
@@ -1302,13 +1302,13 @@ public:
 
     bool InsCopyOfTable( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
                         const SwTable* pCpyTable, bool bCpyName = false,
-                        bool bCorrPos = false, const OUString& rStyleName = u""_ustr );
+                        bool bCorrPos = false, const TableStyleName& rStyleName = TableStyleName() );
 
-    void UnProtectCells( const OUString& rTableName );
+    void UnProtectCells( const UIName& rTableName );
     bool UnProtectCells( const SwSelBoxes& rBoxes );
     void UnProtectTables( const SwPaM& rPam );
     bool HasTableAnyProtection( const SwPosition* pPos,
-                              const OUString* pTableName,
+                              const UIName* pTableName,
                               bool* pFullTableProtection );
 
     // Split table at baseline position, i.e. create a new table.
@@ -1320,13 +1320,13 @@ public:
     bool MergeTable( const SwPosition& rPos, bool bWithPrev );
 
     // Make charts of given table update.
-    void UpdateCharts( const OUString& rName ) const;
+    void UpdateCharts( const UIName& rName ) const;
 
     // Update all charts, for that exists any table.
     void UpdateAllCharts()          { DoUpdateAllCharts(); }
 
     // Table is renamed and refreshes charts.
-    void SetTableName( SwFrameFormat& rTableFormat, const OUString &rNewName );
+    void SetTableName( SwFrameFormat& rTableFormat, const UIName &rNewName );
 
     // @return the reference in document that is set for name.
     const SwFormatRefMark* GetRefMark( const ReferenceMarkerName& rName ) const;
@@ -1347,11 +1347,11 @@ public:
     SwFlyFrameFormat* InsertLabel( const SwLabelType eType, const OUString &rText, const OUString& rSeparator,
                     const OUString& rNumberingSeparator,
                     const bool bBefore, const sal_uInt16 nId, const SwNodeOffset nIdx,
-                    const OUString& rCharacterStyle,
+                    const UIName& rCharacterStyle,
                     const bool bCpyBrd );
     SwFlyFrameFormat* InsertDrawLabel(
         const OUString &rText, const OUString& rSeparator, const OUString& rNumberSeparator,
-        const sal_uInt16 nId, const OUString& rCharacterStyle, SdrObject& rObj );
+        const sal_uInt16 nId, const UIName& rCharacterStyle, SdrObject& rObj );
 
     // Query attribute pool.
     const SwAttrPool& GetAttrPool() const   { return *mpAttrPool; }
@@ -1662,7 +1662,7 @@ public:
     // Change a format undoable.
     SW_DLLPUBLIC void ChgFormat(SwFormat & rFormat, const SfxItemSet & rSet);
 
-    void RenameFormat(SwFormat & rFormat, const OUString & sNewName,
+    void RenameFormat(SwFormat & rFormat, const UIName & sNewName,
                    bool bBroadcast = false);
 
     // Change a TOX undoable.

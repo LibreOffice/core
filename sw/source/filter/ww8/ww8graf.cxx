@@ -169,7 +169,7 @@ void wwFrameNamer::SetUniqueGraphName(SwFrameFormat *pFrameFormat, std::u16strin
     if (mbIsDisabled || rFixed.empty())
         return;
 
-    pFrameFormat->SetFormatName(msSeed+OUString::number(++mnImportedGraphicsCount) + ": " + rFixed);
+    pFrameFormat->SetFormatName(UIName(msSeed+OUString::number(++mnImportedGraphicsCount) + ": " + rFixed));
 }
 
 // ReadGrafStart reads object data and if necessary creates an anchor
@@ -2926,7 +2926,7 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( tools::Long nGrafAnchorCp )
     if (pRetFrameFormat /*#i52825# */)
     {
         if (!aObjName.isEmpty())
-            pRetFrameFormat->SetFormatName( aObjName );
+            pRetFrameFormat->SetFormatName( UIName(aObjName) );
         if (pRetFrameFormat->GetName().isEmpty())
         {
             if (bDrawObj)

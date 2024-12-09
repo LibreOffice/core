@@ -125,7 +125,7 @@ SwAccessibleFrameBase::SwAccessibleFrameBase(
 
     StartListening(const_cast<SwFrameFormat*>(pFrameFormat)->GetNotifier());
 
-    SetName( pFrameFormat->GetName() );
+    SetName( pFrameFormat->GetName().toString() );
 
     m_bIsSelected = IsSelected();
 }
@@ -212,7 +212,7 @@ void SwAccessibleFrameBase::Notify(const SfxHint& rHint)
         const OUString sOldName( GetName() );
         assert( rNameChanged.m_sOld == sOldName);
 
-        SetName( pFrameFormat->GetName() );
+        SetName( pFrameFormat->GetName().toString() );
         assert( rNameChanged.m_sNew == GetName());
 
         if( sOldName != GetName() )

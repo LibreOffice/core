@@ -80,7 +80,7 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
         else
             aTmpStr = rSh.GetUniqueSectionName();
 
-        SwSectionData aSection(SectionType::Content, aTmpStr);
+        SwSectionData aSection(SectionType::Content, UIName(aTmpStr));
         rReq.SetReturnValue(SfxStringItem(FN_INSERT_REGION, aTmpStr));
 
         aSet.Put( *pSet );

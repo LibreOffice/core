@@ -148,7 +148,7 @@ SwInsertChart::SwInsertChart( const Link<css::ui::dialogs::DialogClosedEvent*, v
         if( ! rWrtShell.IsTableComplexForChart())
         {
             SwFrameFormat* pTableFormat = rWrtShell.GetTableFormat();
-            aRangeString = pTableFormat->GetName() + "." + rWrtShell.GetBoxNms();
+            aRangeString = pTableFormat->GetName().toString() + "." + rWrtShell.GetBoxNms();
 
             // get table data provider
             xDataProvider.set( pView->GetDocShell()->getIDocumentChartDataProviderAccess().GetChartDataProvider( true ) );

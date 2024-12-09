@@ -124,9 +124,9 @@ constexpr OUString MetadataFieldServiceName = u"com.sun.star.text.textfield.Meta
 constexpr OUString DocInfoServiceName = u"com.sun.star.text.TextField.DocInfo.Custom"_ustr;
 
 /// Find all page styles which are currently used in the document.
-std::vector<OUString> lcl_getUsedPageStyles(SwViewShell const * pShell)
+std::vector<ProgName> lcl_getUsedPageStyles(SwViewShell const * pShell)
 {
-    std::vector<OUString> aReturn;
+    std::vector<ProgName> aReturn;
 
     SwRootFrame* pLayout = pShell->GetLayout();
     for (SwFrame* pFrame = pLayout->GetLower(); pFrame; pFrame = pFrame->GetNext())
@@ -136,7 +136,7 @@ std::vector<OUString> lcl_getUsedPageStyles(SwViewShell const * pShell)
         {
             ProgName sStyleName;
             SwStyleNameMapper::FillProgName(pDesc->GetName(), sStyleName, SwGetPoolIdFromName::PageDesc);
-            aReturn.push_back(sStyleName.toString());
+            aReturn.push_back(sStyleName);
         }
     }
 
@@ -797,10 +797,10 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
     uno::Reference<document::XDocumentProperties> xDocumentProperties = pObjSh->getDocProperties();
 
     const OUString sPolicy = SfxClassificationHelper::policyTypeToString(SfxClassificationHelper::getPolicyType());
-    const std::vector<OUString> aUsedPageStyles = lcl_getUsedPageStyles(this);
-    for (const OUString& rPageStyleName : aUsedPageStyles)
+    const std::vector<ProgName> aUsedPageStyles = lcl_getUsedPageStyles(this);
+    for (const ProgName& rPageStyleName : aUsedPageStyles)
     {
-        uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(rPageStyleName), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(rPageStyleName.toString()), uno::UNO_QUERY);
 
         // HEADER
         bool bHeaderIsOn = false;
@@ -844,9 +844,9 @@ void SwEditShell::ApplyAdvancedClassification(std::vector<svx::ClassificationRes
     // Insert full text as document property
     svx::classification::insertFullTextualRepresentationAsDocumentProperty(xPropertyContainer, aCreator, rResults);
 
-    for (const OUString& rPageStyleName : aUsedPageStyles)
+    for (const ProgName& rPageStyleName : aUsedPageStyles)
     {
-        uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(rPageStyleName), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(rPageStyleName.toString()), uno::UNO_QUERY);
 
         // HEADER
         bool bHeaderIsOn = false;
@@ -973,9 +973,9 @@ std::vector<svx::ClassificationResult> SwEditShell::CollectAdvancedClassificatio
     uno::Reference<container::XNameAccess> xStyleFamilies = xModel->getStyleFamilies();
     uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName(u"PageStyles"_ustr), uno::UNO_QUERY);
 
-    std::vector<OUString> aPageStyles = lcl_getUsedPageStyles(this);
-    const OUString& aPageStyleString = aPageStyles.back();
-    uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(aPageStyleString), uno::UNO_QUERY);
+    std::vector<ProgName> aPageStyles = lcl_getUsedPageStyles(this);
+    const ProgName& aPageStyleString = aPageStyles.back();
+    uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(aPageStyleString.toString()), uno::UNO_QUERY);
 
     bool bHeaderIsOn = false;
     xPageStyle->getPropertyValue(UNO_NAME_HEADER_IS_ON) >>= bHeaderIsOn;
@@ -1396,10 +1396,10 @@ SfxWatermarkItem SwEditShell::GetWatermark() const
     rtl::Reference<SwXTextDocument> xModel = pDocShell->GetBaseModel();
     uno::Reference<container::XNameAccess> xStyleFamilies = xModel->getStyleFamilies();
     uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName(u"PageStyles"_ustr), uno::UNO_QUERY);
-    std::vector<OUString> aUsedPageStyles = lcl_getUsedPageStyles(this);
-    for (const OUString& rPageStyleName : aUsedPageStyles)
+    std::vector<ProgName> aUsedPageStyles = lcl_getUsedPageStyles(this);
+    for (const ProgName& rPageStyleName : aUsedPageStyles)
     {
-        uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(rPageStyleName), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xPageStyle(xStyleFamily->getByName(rPageStyleName.toString()), uno::UNO_QUERY);
 
         bool bHeaderIsOn = false;
         xPageStyle->getPropertyValue(UNO_NAME_HEADER_IS_ON) >>= bHeaderIsOn;
@@ -2221,7 +2221,7 @@ void SwEditShell::SetTextFormatColl(SwTextFormatColl *pFormat,
         if (!rPaM.HasReadonlySel( GetViewOptions()->IsFormView(), true))
         {
             // store previous paragraph style for track changes
-            OUString sParaStyleName;
+            UIName sParaStyleName;
             sal_uInt16 nPoolId = USHRT_MAX;
             SwContentNode * pCnt = rPaM.Start()->GetNode().GetContentNode();
             if ( pCnt && pCnt->GetTextNode() && GetDoc()->getIDocumentRedlineAccess().IsRedlineOn() )
@@ -2273,7 +2273,7 @@ void SwEditShell::SetTextFormatColl(SwTextFormatColl *pFormat,
     EndAllAction();
 }
 
-SwTextFormatColl* SwEditShell::MakeTextFormatColl(const OUString& rFormatCollName,
+SwTextFormatColl* SwEditShell::MakeTextFormatColl(const UIName& rFormatCollName,
         SwTextFormatColl* pParent)
 {
     SwTextFormatColl *pColl;

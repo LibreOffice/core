@@ -417,15 +417,15 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
     {
         const OUString& rColl = pCollectionItem->GetValue();
         SwDoc& rDoc = *rMaster.GetDoc();
-        SwTextFormatColl* pColl = rDoc.FindTextFormatCollByName( rColl );
+        SwTextFormatColl* pColl = rDoc.FindTextFormatCollByName( UIName(rColl) );
         if( !pColl )
         {
             const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(
-                rColl, SwGetPoolIdFromName::TxtColl );
+                UIName(rColl), SwGetPoolIdFromName::TxtColl );
             if( USHRT_MAX != nId )
                 pColl = rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool( nId );
             else
-                pColl = rDoc.MakeTextFormatColl( rColl,
+                pColl = rDoc.MakeTextFormatColl( UIName(rColl),
                             rDoc.GetDfltTextFormatColl() );
         }
         if( pColl )
@@ -464,7 +464,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
 
     // Page data
     SvxPageItem aPageItem(SID_ATTR_PAGE);
-    aPageItem.SetDescName(rPageDesc.GetName());
+    aPageItem.SetDescName(rPageDesc.GetName().toString());
     aPageItem.SetPageUsage(lcl_convertUseToSvx(rPageDesc.GetUseOn()));
     aPageItem.SetLandscape(rPageDesc.GetLandscape());
     aPageItem.SetNumType(rPageDesc.GetNumType().GetNumberingType());
@@ -501,7 +501,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
 
     SfxStringItem aFollow(SID_ATTR_PAGE_EXT1, OUString());
     if(rPageDesc.GetFollow())
-        aFollow.SetValue(rPageDesc.GetFollow()->GetName());
+        aFollow.SetValue(rPageDesc.GetFollow()->GetName().toString());
     rSet.Put(aFollow);
 
     // Header
@@ -613,7 +613,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
     aReg.SetWhich(SID_SWREGISTER_MODE);
     rSet.Put(aReg);
     if(pCol)
-        rSet.Put(SfxStringItem(SID_SWREGISTER_COLLECTION, pCol->GetName()));
+        rSet.Put(SfxStringItem(SID_SWREGISTER_COLLECTION, pCol->GetName().toString()));
 
     std::map<OUString, css::uno::Any> aGrabBagMap;
     if (SfxGrabBagItem const* pItem = rSet.GetItemIfSet(SID_ATTR_CHAR_GRABBAG))
@@ -691,7 +691,7 @@ void SfxToSwPageDescAttr( const SwWrtShell& rShell, SfxItemSet& rSet )
             // Delete only, if PageDesc will be enabled!
             rSet.ClearItem( RES_BREAK );
             SwPageDesc* pDesc = const_cast<SwWrtShell&>(rShell).FindPageDescByName(
-                                                    rDescName, true );
+                                                    UIName(rDescName), true );
             if( pDesc )
                 aPgDesc.RegisterToPageDesc( *pDesc );
         }
@@ -720,7 +720,7 @@ void SfxToSwPageDescAttr( const SwWrtShell& rShell, SfxItemSet& rSet )
 void SwToSfxPageDescAttr( SfxItemSet& rCoreSet )
 {
     const SwFormatPageDesc* pPageDescItem = nullptr;
-    OUString aName;
+    UIName aName;
     ::std::optional<sal_uInt16> oNumOffset;
     bool bPut = true;
     switch( rCoreSet.GetItemState( RES_PAGEDESC, true, &pPageDescItem ) )
@@ -751,7 +751,7 @@ void SwToSfxPageDescAttr( SfxItemSet& rCoreSet )
     }
 
     if(bPut)
-        rCoreSet.Put( SvxPageModelItem( aName, true, SID_ATTR_PARA_MODEL ) );
+        rCoreSet.Put( SvxPageModelItem( aName.toString(), true, SID_ATTR_PARA_MODEL ) );
 }
 
 // Determine metric
@@ -793,7 +793,7 @@ void FillCharStyleListBox(weld::ComboBox& rToFill, SwDocShell* pDocSh, bool bSor
     {
         if(bWithDefault || pBase->GetName() !=  sStandard)
         {
-            sal_IntPtr nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( pBase->GetName(), SwGetPoolIdFromName::ChrFmt );
+            sal_IntPtr nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( UIName(pBase->GetName()), SwGetPoolIdFromName::ChrFmt );
             OUString sId(OUString::number(nPoolId));
             if (bSorted)
                 InsertStringSorted(sId, pBase->GetName(), rToFill, nOffset);
@@ -807,14 +807,14 @@ void FillCharStyleListBox(weld::ComboBox& rToFill, SwDocShell* pDocSh, bool bSor
     {
         if(pFormat->IsDefault())
             continue;
-        const OUString& rName = pFormat->GetName();
-        if (rToFill.find_text(rName) == -1)
+        const UIName& rName = pFormat->GetName();
+        if (rToFill.find_text(rName.toString()) == -1)
         {
             OUString sId(OUString::number(USHRT_MAX));
             if (bSorted)
-                InsertStringSorted(sId, rName, rToFill, nOffset);
+                InsertStringSorted(sId, rName.toString(), rToFill, nOffset);
             else
-                rToFill.append(sId, rName);
+                rToFill.append(sId, rName.toString());
         }
     }
     rToFill.thaw();

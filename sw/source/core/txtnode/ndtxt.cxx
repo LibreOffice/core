@@ -1882,9 +1882,9 @@ SwTextField* SwTextNode::GetFieldTextAttrAt(
     return pTextField;
 }
 
-static SwCharFormat* lcl_FindCharFormat( const SwCharFormats* pCharFormats, std::u16string_view rName )
+static SwCharFormat* lcl_FindCharFormat( const SwCharFormats* pCharFormats, const UIName& rName )
 {
-    if( !rName.empty() )
+    if( !rName.isEmpty() )
     {
         const size_t nArrLen = pCharFormats->size();
         for( size_t i = 1; i < nArrLen; i++ )
@@ -2989,7 +2989,7 @@ SwNumRule* SwTextNode::GetNumRule(bool bInParent) const
     bool bNoNumRule = false;
     if ( pItem )
     {
-        OUString sNumRuleName =
+        UIName sNumRuleName =
             static_cast<const SwNumRuleItem *>(pItem)->GetValue();
         if (!sNumRuleName.isEmpty())
         {
@@ -4008,7 +4008,7 @@ namespace {
         rTextNode.GetDoc().ResetAttrs( aPam, false, aAttrs, false );
     }
 
-    void HandleApplyTextNodeFormatChange( SwTextNode& rTextNode, std::u16string_view sNumRule, std::u16string_view sOldNumRule, bool bNumRuleSet, bool bParagraphStyleChanged );
+    void HandleApplyTextNodeFormatChange( SwTextNode& rTextNode, const UIName& sNumRule, const UIName& sOldNumRule, bool bNumRuleSet, bool bParagraphStyleChanged );
 
     // Helper method for special handling of modified attributes at text node.
     // The following is handled:
@@ -4027,8 +4027,8 @@ namespace {
                               pNewValue ? pNewValue->Which() : 0 ;
         bool bNumRuleSet = false;
         bool bParagraphStyleChanged = false;
-        OUString sNumRule;
-        OUString sOldNumRule;
+        UIName sNumRule;
+        UIName sOldNumRule;
         switch ( nWhich )
         {
             case RES_PARATR_NUMRULE:
@@ -4068,8 +4068,8 @@ namespace {
                                 const SwAttrSetChg* pNewValue )
     {
         bool bNumRuleSet = false;
-        OUString sNumRule;
-        OUString sOldNumRule;
+        UIName sNumRule;
+        UIName sOldNumRule;
         const SwNumRule* pFormerNumRuleAtTextNode =
             rTextNode.GetNum() ? rTextNode.GetNum()->GetNumRule() : nullptr;
         if ( pFormerNumRuleAtTextNode )
@@ -4103,8 +4103,8 @@ namespace {
     {
         bool bNumRuleSet = false;
         bool bParagraphStyleChanged = true;
-        OUString sNumRule;
-        OUString sOldNumRule;
+        UIName sNumRule;
+        UIName sOldNumRule;
         if( rTextNode.GetNodes().IsDocNodes() )
         {
             const SwNumRule* pFormerNumRuleAtTextNode =
@@ -4131,13 +4131,13 @@ namespace {
         HandleApplyTextNodeFormatChange(rTextNode, sNumRule, sOldNumRule, bNumRuleSet, bParagraphStyleChanged);
     }
 
-    void HandleApplyTextNodeFormatChange( SwTextNode& rTextNode, std::u16string_view sNumRule, std::u16string_view sOldNumRule, bool bNumRuleSet, bool bParagraphStyleChanged )
+    void HandleApplyTextNodeFormatChange( SwTextNode& rTextNode, const UIName& sNumRule, const UIName& sOldNumRule, bool bNumRuleSet, bool bParagraphStyleChanged )
     {
         if ( sNumRule != sOldNumRule )
         {
             if ( bNumRuleSet )
             {
-                if (sNumRule.empty())
+                if (sNumRule.isEmpty())
                 {
                     rTextNode.RemoveFromList();
                     if ( bParagraphStyleChanged )
@@ -4179,7 +4179,7 @@ namespace {
                 }
             }
         }
-        else if (!sNumRule.empty() && !rTextNode.IsInList())
+        else if (!sNumRule.isEmpty() && !rTextNode.IsInList())
         {
             rTextNode.AddToList();
         }
@@ -5520,7 +5520,7 @@ void SwTextNode::dumpAsXml(xmlTextWriterPtr pWriter) const
     if (GetFormatColl())
     {
         (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwTextFormatColl"));
-        (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(GetFormatColl()->GetName().toUtf8().getStr()));
+        (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(GetFormatColl()->GetName().toString().toUtf8().getStr()));
         (void)xmlTextWriterEndElement(pWriter);
     }
 

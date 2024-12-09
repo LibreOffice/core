@@ -4069,7 +4069,7 @@ void RtfAttributeOutput::WriteExpand(const SwField* pField)
     {
         //#i119803# Export user field for RTF filter
         case SwFieldIds::User:
-            sCmd = pField->GetTyp()->GetName();
+            sCmd = pField->GetTyp()->GetName().toString();
             m_rExport.OutputField(pField, ww::eNONE, sCmd);
             break;
         default:

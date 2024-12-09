@@ -188,7 +188,7 @@ void SwEnvFormatPage::Edit(std::u16string_view rIdent, bool bSender)
 
         SwAbstractDialogFactory& rFact = swui::GetFactory();
 
-        const OUString sFormatStr = pColl->GetName();
+        const OUString sFormatStr( pColl->GetName().toString() );
         VclPtr<SfxAbstractTabDialog> pDlg(rFact.CreateSwCharDlg(GetFrameWeld(), pSh->GetView(), *xTmpSet, SwCharDlgMode::Env, &sFormatStr));
         pDlg->StartExecuteAsync(
             [pDlg, xTmpSet=std::move(xTmpSet), pCollSet] (sal_Int32 nResult)->void
@@ -237,7 +237,7 @@ void SwEnvFormatPage::Edit(std::u16string_view rIdent, bool bSender)
         aTmpSet.Put(SvxBitmapListItem(pDrawModel->GetBitmapList(), SID_BITMAP_LIST));
         aTmpSet.Put(SvxPatternListItem(pDrawModel->GetPatternList(), SID_PATTERN_LIST));
 
-        const OUString sFormatStr = pColl->GetName();
+        const OUString sFormatStr( pColl->GetName().toString() );
         SwParaDlg aDlg(GetFrameWeld(), pSh->GetView(), aTmpSet, DLG_ENVELOP, &sFormatStr);
 
         if (aDlg.run() == RET_OK)

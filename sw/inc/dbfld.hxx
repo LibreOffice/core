@@ -28,7 +28,7 @@ class SwDoc;
 class SW_DLLPUBLIC SwDBFieldType final : public SwValueFieldType
 {
     SwDBData    m_aDBData;
-    OUString m_sName;          ///< only used in ::GetName() !
+    UIName m_sName;          ///< only used in ::GetName() !
     OUString m_sColumn;
     tools::Long        m_nRefCnt;
 
@@ -37,7 +37,7 @@ public:
     SwDBFieldType(SwDoc* pDocPtr, const OUString& rColumnName, SwDBData aDBData);
     virtual ~SwDBFieldType() override;
 
-    virtual OUString GetName() const override;
+    virtual UIName GetName() const override;
     virtual std::unique_ptr<SwFieldType> Copy() const override;
 
     void     AddRef() { m_nRefCnt++; }

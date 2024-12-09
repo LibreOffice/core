@@ -62,7 +62,7 @@ class SW_DLLPUBLIC SwSectionData
 private:
     SectionType m_eType;
 
-    OUString m_sSectionName;
+    UIName m_sSectionName;
     OUString m_sCondition; ///< Hide condition
     OUString m_sLinkFileName;
     OUString m_sLinkFilePassword; // Must be changed to Sequence.
@@ -85,14 +85,14 @@ private:
 
 public:
 
-    SwSectionData(SectionType const eType, OUString aName);
+    SwSectionData(SectionType const eType, UIName aName);
     explicit SwSectionData(SwSection const&);
     SwSectionData(SwSectionData const&);
     SwSectionData & operator=(SwSectionData const&);
     bool operator==(SwSectionData const&) const;
 
-    const OUString& GetSectionName() const         { return m_sSectionName; }
-    void SetSectionName(OUString const& rName){ m_sSectionName = rName; }
+    const UIName& GetSectionName() const         { return m_sSectionName; }
+    void SetSectionName(UIName const& rName){ m_sSectionName = rName; }
     SectionType GetType() const             { return m_eType; }
     void SetType(SectionType const eNew)    { m_eType = eNew; }
 
@@ -164,7 +164,7 @@ protected:
 
 public:
 
-    SwSection(SectionType const eType, OUString const& rName,
+    SwSection(SectionType const eType, UIName const& rName,
                 SwSectionFormat & rFormat);
     virtual ~SwSection() override;
 
@@ -172,8 +172,8 @@ public:
 
     void SetSectionData(SwSectionData const& rData);
 
-    const OUString& GetSectionName() const         { return m_Data.GetSectionName(); }
-    void SetSectionName(OUString const& rName){ m_Data.SetSectionName(rName); }
+    const UIName& GetSectionName() const         { return m_Data.GetSectionName(); }
+    void SetSectionName(UIName const& rName){ m_Data.SetSectionName(rName); }
     SectionType GetType() const             { return m_Data.GetType(); }
     void SetType(SectionType const eType)   { return m_Data.SetType(eType); }
 

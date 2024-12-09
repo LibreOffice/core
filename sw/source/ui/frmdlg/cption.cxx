@@ -142,7 +142,7 @@ SwCaptionDialog::SwCaptionDialog(weld::Window *pParent, SwView &rV)
         SwFieldType *pType = m_pMgr->GetFieldType( SwFieldIds::Unknown, i );
         if( pType->Which() == SwFieldIds::SetExp &&
             static_cast<SwSetExpFieldType *>( pType)->GetType() & nsSwGetSetExpType::GSE_SEQ )
-            m_xCategoryBox->append_text(pType->GetName());
+            m_xCategoryBox->append_text(pType->GetName().toString());
     }
 
     OUString sString;
@@ -192,7 +192,7 @@ SwCaptionDialog::SwCaptionDialog(weld::Window *pParent, SwView &rV)
     if( nPoolId )
     {
         if (sString.isEmpty())
-            sString = SwStyleNameMapper::GetUIName(nPoolId, ProgName());
+            sString = SwStyleNameMapper::GetUIName(nPoolId, ProgName()).toString();
         auto nIndex = m_xCategoryBox->find_text(sString);
         if (nIndex != -1)
             m_xCategoryBox->set_active(nIndex);
@@ -284,7 +284,7 @@ void SwCaptionDialog::Apply()
     aOpt.SetPos(m_xPosBox->get_active());
     aOpt.IgnoreSeqOpts() = true;
     aOpt.CopyAttributes() = m_bCopyAttributes;
-    aOpt.SetCharacterStyle( m_sCharacterStyle );
+    aOpt.SetCharacterStyle( UIName(m_sCharacterStyle) );
     m_rView.InsertCaption( &aOpt );
     s_aSepTextSave = m_xSepEdit->get_text();
 }
@@ -497,7 +497,7 @@ void SwSequenceOptionDialog::Apply()
     else if( !m_aFieldTypeName.isEmpty() && nLvl < MAXLEVEL )
     {
         // then we have to insert that
-        SwSetExpFieldType aFieldType( rSh.GetDoc(), m_aFieldTypeName, nsSwGetSetExpType::GSE_SEQ );
+        SwSetExpFieldType aFieldType( rSh.GetDoc(), UIName(m_aFieldTypeName), nsSwGetSetExpType::GSE_SEQ );
         aFieldType.SetDelimiter( OUString(cDelim) );
         aFieldType.SetOutlineLvl( nLvl );
         rSh.InsertFieldType( aFieldType );

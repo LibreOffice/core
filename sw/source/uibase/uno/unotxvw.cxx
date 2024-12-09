@@ -153,8 +153,8 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface)
     else
     {
         std::optional<SwPaM> pPaM;
-        std::pair<OUString, FlyCntType> frame;
-        OUString tableName;
+        std::pair<UIName, FlyCntType> frame;
+        UIName tableName;
         SwUnoTableCursor const* pTableCursor(nullptr);
         ::sw::mark::MarkBase const* pMark(nullptr);
         SwUnoCursorHelper::GetSelectableFromAny(xInterface, *pDoc,
@@ -566,7 +566,7 @@ void SAL_CALL SwXTextView::setRubyList(
             {
                 if(rProperty.Value >>= sTmp)
                 {
-                    OUString sName;
+                    UIName sName;
                     SwStyleNameMapper::FillUIName(ProgName(sTmp), sName, SwGetPoolIdFromName::ChrFmt );
                     const sal_uInt16 nPoolId = sName.isEmpty() ? 0
                         : SwStyleNameMapper::GetPoolIdFromUIName(sName,

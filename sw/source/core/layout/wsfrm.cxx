@@ -4242,7 +4242,7 @@ void SwLayoutFrame::dumpAsXmlAttributes(xmlTextWriterPtr writer) const
     if (pFormat)
     {
         (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "format" ), "%p", pFormat);
-        (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "formatName" ), "%s", BAD_CAST(pFormat->GetName().toUtf8().getStr()));
+        (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "formatName" ), "%s", BAD_CAST(pFormat->GetName().toString().toUtf8().getStr()));
     }
 }
 

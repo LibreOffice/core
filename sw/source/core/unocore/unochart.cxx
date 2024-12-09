@@ -255,13 +255,13 @@ static OUString GetCellRangeName( const SwFrameFormat &rTableFormat, SwUnoCursor
     return aRes;
 }
 
-static OUString GetRangeRepFromTableAndCells( std::u16string_view rTableName,
+static OUString GetRangeRepFromTableAndCells( const UIName& rTableName,
         std::u16string_view rStartCell, std::u16string_view rEndCell,
         bool bForceEndCellName )
 {
-    OSL_ENSURE( !rTableName.empty(), "table name missing" );
+    OSL_ENSURE( !rTableName.isEmpty(), "table name missing" );
     OSL_ENSURE( !rStartCell.empty(), "cell name missing" );
-    OUString aRes = OUString::Concat(rTableName) + "." + rStartCell;
+    OUString aRes = rTableName.toString() + "." + rStartCell;
 
     if (!rEndCell.empty())
     {
@@ -277,7 +277,7 @@ static OUString GetRangeRepFromTableAndCells( std::u16string_view rTableName,
 
 static bool GetTableAndCellsFromRangeRep(
         std::u16string_view rRangeRepresentation,
-        OUString &rTableName,
+        UIName &rTableName,
         OUString &rStartCell,
         OUString &rEndCell,
         bool bSortStartEndCells = true )
@@ -313,14 +313,14 @@ static bool GetTableAndCellsFromRangeRep(
                         !aStartCell.isEmpty() && !aEndCell.isEmpty();
     if (bSuccess)
     {
-        rTableName    = aTableName;
+        rTableName    = UIName(aTableName);
         rStartCell  = aStartCell;
         rEndCell    = aEndCell;
     }
     return bSuccess;
 }
 
-static void GetTableByName( const SwDoc &rDoc, std::u16string_view rTableName,
+static void GetTableByName( const SwDoc &rDoc, const UIName& rTableName,
         SwFrameFormat **ppTableFormat, SwTable **ppTable)
 {
     SwFrameFormat *pTableFormat = nullptr;
@@ -348,7 +348,7 @@ static void GetFormatAndCreateCursorFromRangeRep(
         SwFrameFormat    **ppTableFormat,     // will be set to the table format of the table used in the range representation
         std::shared_ptr<SwUnoCursor>&   rpUnoCursor )   // will be set to cursor spanning the cell range (cursor will be created!)
 {
-    OUString aTableName;    // table name
+    UIName aTableName;    // table name
     OUString aStartCell;  // name of top left cell
     OUString aEndCell;    // name of bottom right cell
     bool bNamesFound = GetTableAndCellsFromRangeRep( rRangeRepresentation,
@@ -421,7 +421,7 @@ static bool GetSubranges( std::u16string_view rRangeRepresentation,
     if (nLen != 0)
     {
         OUString *pRanges = aRanges.getArray();
-        OUString aFirstTable;
+        UIName aFirstTable;
         sal_Int32 nPos = 0;
         for( sal_Int32 i = 0; i < nLen && bRes; ++i )
         {
@@ -430,7 +430,8 @@ static bool GetSubranges( std::u16string_view rRangeRepresentation,
             {
                 pRanges[nCnt] = aRange;
 
-                OUString aTableName, aStartCell, aEndCell;
+                UIName aTableName;
+                OUString aStartCell, aEndCell;
                 if (!GetTableAndCellsFromRangeRep( aRange,
                                                    aTableName, aStartCell, aEndCell ))
                     bRes = false;
@@ -463,7 +464,7 @@ static void SortSubranges( uno::Sequence< OUString > &rSubRanges, bool bCmpByCol
     sal_Int32 nLen = rSubRanges.getLength();
     OUString *pSubRanges = rSubRanges.getArray();
 
-    OUString aSmallestTableName;
+    UIName aSmallestTableName;
     OUString aSmallestStartCell;
     OUString aSmallestEndCell;
 
@@ -478,7 +479,7 @@ static void SortSubranges( uno::Sequence< OUString > &rSubRanges, bool bCmpByCol
         for (sal_Int32 k = i+1;  k < nLen;  ++k)
         {
             // get cell names for sub range
-            OUString aTableName;
+            UIName aTableName;
             OUString aStartCell;
             OUString aEndCell;
             GetTableAndCellsFromRangeRep( pSubRanges[k],
@@ -580,7 +581,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
     {
         //try to correct the range here
         //work around wrong writer ranges ( see Issue 58464 )
-        OUString aChartTableName;
+        UIName aChartTableName;
 
         const SwNodes& rNodes = m_pDoc->GetNodes();
         for( SwNodeOffset nN = rNodes.Count(); nN--; )
@@ -663,7 +664,8 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
     //!! just be ignored silently
     for (const OUString& rSubRange : aSubRanges)
     {
-        OUString aTableName, aStartCell, aEndCell;
+        UIName aTableName;
+        OUString aStartCell, aEndCell;
         bool bOk2 = GetTableAndCellsFromRangeRep(
                             rSubRange, aTableName, aStartCell, aEndCell );
         OSL_ENSURE(bOk2, "failed to get table and start/end cells");
@@ -812,7 +814,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
             aDataDesc.nBottom   = oi;
             aDataDesc.nRight    = aDataDesc.nLeft + aDataLen[oi] - 1;
         }
-        const OUString aBaseName = pTableFormat->GetName() + ".";
+        const OUString aBaseName = pTableFormat->GetName().toString() + ".";
 
         OUString aLabelRange;
         if (aLabelIdx[oi] != -1)
@@ -926,7 +928,8 @@ OUString SwChartDataProvider::GetBrokenCellRangeForExport(
     if (std::u16string_view::npos == rCellRangeRepresentation.find( ';' ))
     {
         // get current cell and table names
-        OUString aTableName, aStartCell, aEndCell;
+        UIName aTableName;
+        OUString aStartCell, aEndCell;
         GetTableAndCellsFromRangeRep( rCellRangeRepresentation,
             aTableName, aStartCell, aEndCell, false );
         sal_Int32 nStartCol = -1, nStartRow = -1, nEndCol = -1, nEndRow = -1;
@@ -969,7 +972,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
 
     SwFrameFormat *pTableFormat = nullptr;
     SwTable  *pTable    = nullptr;
-    OUString  aTableName;
+    UIName  aTableName;
     sal_Int32 nTableRows = 0;
     sal_Int32 nTableCols = 0;
 
@@ -1014,8 +1017,10 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
 
         // get table and cell names for label and values data sequences
         // (start and end cell will be sorted, i.e. start cell <= end cell)
-        OUString aLabelTableName, aLabelStartCell, aLabelEndCell;
-        OUString aValuesTableName, aValuesStartCell, aValuesEndCell;
+        UIName aLabelTableName;
+        OUString aLabelStartCell, aLabelEndCell;
+        UIName aValuesTableName;
+        OUString aValuesStartCell, aValuesEndCell;
         OUString aLabelRange, aValuesRange;
         if (xCurLabel.is())
             aLabelRange = xCurLabel->getSourceRangeRepresentation();
@@ -1168,7 +1173,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
 
     // build value for 'CellRangeRepresentation'
 
-    const OUString aCellRangeBase = aTableName + ".";
+    const OUString aCellRangeBase = aTableName.toString() + ".";
     OUString aCurRange;
     for (sal_Int32 i = 0;  i < nTableRows;  ++i)
     {
@@ -1641,7 +1646,7 @@ OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const OUString& rRange
         if (pTable != pFirstFoundTable)
             throw lang::IllegalArgumentException();
 
-        OUString aTableName;
+        UIName aTableName;
         OUString aStartCell;
         OUString aEndCell;
         if (!GetTableAndCellsFromRangeRep( aRange, aTableName, aStartCell, aEndCell ))
@@ -1655,7 +1660,7 @@ OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const OUString& rRange
         //!! following objects/functions are implemented in XMLRangeHelper.?xx
         //!! which is a copy of the respective file from chart2 !!
         XMLRangeHelper::CellRange aCellRange;
-        aCellRange.aTableName = aTableName;
+        aCellRange.aTableName = aTableName.toString();
         aCellRange.aUpperLeft.nColumn   = nCol;
         aCellRange.aUpperLeft.nRow      = nRow;
         aCellRange.aUpperLeft.bIsEmpty  = false;
@@ -1865,7 +1870,7 @@ OUString SAL_CALL SwChartDataSequence::getSourceRangeRepresentation(  )
     {
         const OUString aCellRange( GetCellRangeName( *pTableFormat, *m_pTableCursor ) );
         OSL_ENSURE( !aCellRange.isEmpty(), "failed to get cell range" );
-        aRes = pTableFormat->GetName() + "." + aCellRange;
+        aRes = pTableFormat->GetName().toString() + "." + aCellRange;
     }
     return aRes;
 }

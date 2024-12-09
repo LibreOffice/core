@@ -51,7 +51,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf144576_ascii)
     uno::Reference<text::XTextTable> xTable1(xTableNames->getByName(u"Table1"_ustr),
                                              uno::UNO_QUERY);
 
-    pWrtShell->GotoTable(u"Table1"_ustr);
+    pWrtShell->GotoTable(UIName(u"Table1"_ustr));
     pWrtShell->Insert(u"A"_ustr);
     pWrtShell->GoNextCell(false);
     pWrtShell->Insert(u"B"_ustr);
@@ -100,7 +100,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf144576_ascii)
     uno::Reference<text::XTextRange> xCellB1(xTable1->getCellByName(u"B1"_ustr), uno::UNO_QUERY);
     xCellB1->setString(u""_ustr);
 
-    pWrtShell->GotoTable(u"Table1"_ustr);
+    pWrtShell->GotoTable(UIName(u"Table1"_ustr));
     pWrtShell->Insert(u"A"_ustr);
     pWrtShell->SplitNode();
     pWrtShell->Insert(u"A1"_ustr);

@@ -91,15 +91,15 @@ class SW_DLLPUBLIC SwFrameFormat
 
     struct change_name
     {
-        change_name(const OUString &rName) : mName(rName) {}
+        change_name(const UIName &rName) : mName(rName) {}
         void operator()(SwFormat *pFormat) { pFormat->m_aFormatName = mName; }
-        const OUString &mName;
+        const UIName &mName;
     };
 
 protected:
     SwFrameFormat(
         SwAttrPool& rPool,
-        const OUString &rFormatNm,
+        const UIName &rFormatNm,
         SwFrameFormat *pDrvdFrame,
         sal_uInt16 nFormatWhich = RES_FRMFMT,
         const WhichRangesContainer& pWhichRange = aFrameFormatSetRange);
@@ -186,7 +186,7 @@ public:
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
-    virtual void SetFormatName( const OUString& rNewName, bool bBroadcast=false ) override;
+    virtual void SetFormatName( const UIName& rNewName, bool bBroadcast=false ) override;
     void MoveTableBox(SwTableBox& rTableBox, const SwFrameFormat* pOldFormat);
     virtual bool IsVisible() const;
 };
@@ -198,7 +198,7 @@ namespace sw
         friend ::SwFlyFrameFormat;
         SpzFrameFormat(
             SwAttrPool& rPool,
-            const OUString& rFormatName,
+            const UIName& rFormatName,
             SwFrameFormat* pDerivedFrame,
             sal_uInt16 nFormatWhich)
             : SwFrameFormat(rPool, rFormatName, pDerivedFrame, nFormatWhich)
@@ -227,7 +227,7 @@ class SW_DLLPUBLIC SwFlyFrameFormat final : public sw::SpzFrameFormat
     SwFlyFrameFormat( const SwFlyFrameFormat &rCpy ) = delete;
     SwFlyFrameFormat &operator=( const SwFlyFrameFormat &rCpy ) = delete;
 
-    SwFlyFrameFormat( SwAttrPool& rPool, const OUString &rFormatNm, SwFrameFormat *pDrvdFrame );
+    SwFlyFrameFormat( SwAttrPool& rPool, const UIName &rFormatNm, SwFrameFormat *pDrvdFrame );
 
 public:
     virtual ~SwFlyFrameFormat() override;
@@ -416,7 +416,7 @@ class SW_DLLPUBLIC SwDrawFrameFormat final : public sw::SpzFrameFormat
 
     bool mbPosAttrSet;
 
-    SwDrawFrameFormat(SwAttrPool& rPool, const OUString& rFormatName, SwFrameFormat* pDerivedFrame)
+    SwDrawFrameFormat(SwAttrPool& rPool, const UIName& rFormatName, SwFrameFormat* pDerivedFrame)
         : sw::SpzFrameFormat(rPool, rFormatName, pDerivedFrame, RES_DRAWFRMFMT),
           m_pSdrObjectCached(nullptr),
           meLayoutDir(SwFrameFormat::HORI_L2R),

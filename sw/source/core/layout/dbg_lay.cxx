@@ -520,8 +520,8 @@ static OString lcl_TableInfo(const SwTabFrame* pTabFrame)
 {
     const SwTable* pTable = pTabFrame->GetTable();
     const SwFormat* pFormat = static_cast<const SwFormat*>(pTable->GetRegisteredIn());
-    const OUString& text = pFormat->GetName();
-    return OUStringToOString(text, RTL_TEXTENCODING_ASCII_US);
+    const UIName& text = pFormat->GetName();
+    return OUStringToOString(text.toString(), RTL_TEXTENCODING_ASCII_US);
 }
 
 static OString lcl_RowInfo(const SwRowFrame* pFrame)

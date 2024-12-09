@@ -141,7 +141,7 @@ namespace
                 aValue.PutString( static_cast<const SwSetExpField*>(pField)->GetExpStr(pLayout) );
 
             // set the new value in Calculator
-            rCalc.VarChange( pField->GetTyp()->GetName(), aValue );
+            rCalc.VarChange( pField->GetTyp()->GetName().toString(), aValue );
         }
         else if( pMgr )
         {
@@ -227,10 +227,10 @@ SwFieldType* DocumentFieldsManager::InsertFieldType(const SwFieldType &rFieldTyp
     case SwFieldIds::Dde:
         {
             const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
-            OUString sFieldNm( rFieldTyp.GetName() );
+            OUString sFieldNm( rFieldTyp.GetName().toString() );
             for( ; i < nSize; ++i )
                 if( nFieldWhich == (*mpFieldTypes)[i]->Which() &&
-                    rSCmp.isEqual( sFieldNm, (*mpFieldTypes)[i]->GetName() ))
+                    rSCmp.isEqual( sFieldNm, (*mpFieldTypes)[i]->GetName().toString() ))
                         return (*mpFieldTypes)[i].get();
         }
         break;
@@ -325,7 +325,7 @@ SwFieldType* DocumentFieldsManager::GetFieldType(
 
         if (nResId == pFieldType->Which())
         {
-            OUString aFieldName( pFieldType->GetName() );
+            OUString aFieldName( pFieldType->GetName().toString() );
             if (bDbFieldMatching && nResId == SwFieldIds::Database)    // #i51815#
                 aFieldName = aFieldName.replace(DB_DELIM, '.');
 
@@ -431,13 +431,13 @@ void DocumentFieldsManager::InsDeletedFieldType( SwFieldType& rFieldTyp )
             SwFieldIds::Dde == nFieldWhich, "Wrong FieldType" );
 
     const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
-    const OUString aFieldNm = rFieldTyp.GetName();
+    const OUString aFieldNm = rFieldTyp.GetName().toString();
 
     for( SwFieldTypes::size_type i = INIT_FLDTYPES; i < nSize; ++i )
     {
         SwFieldType* pFnd = (*mpFieldTypes)[i].get();
         if( nFieldWhich == pFnd->Which() &&
-            rSCmp.isEqual( aFieldNm, pFnd->GetName() ) )
+            rSCmp.isEqual( aFieldNm, pFnd->GetName().toString() ) )
         {
             // find new name
             SwFieldTypes::size_type nNum = 1;
@@ -447,7 +447,7 @@ void DocumentFieldsManager::InsDeletedFieldType( SwFieldType& rFieldTyp )
                 {
                     pFnd = (*mpFieldTypes)[i].get();
                     if( nFieldWhich == pFnd->Which() &&
-                        rSCmp.isEqual( sSrch, pFnd->GetName() ) )
+                        rSCmp.isEqual( sSrch, pFnd->GetName().toString() ) )
                         break;
                 }
                 if( i >= nSize )        // not found
@@ -870,7 +870,7 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
             case SwFieldIds::User:
                 {
                     // Entry present?
-                    const OUString aNm = pFieldType->GetName();
+                    const OUString aNm = pFieldType->GetName().toString();
                     OUString sExpand(const_cast<SwUserFieldType*>(static_cast<const SwUserFieldType*>(pFieldType))->Expand(nsSwGetSetExpType::GSE_STRING, 0, LANGUAGE_SYSTEM));
                     auto pFnd = aHashStrTable.find( aNm );
                     if( pFnd != aHashStrTable.end() )
@@ -1046,7 +1046,7 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
             if( pMgr->IsDataSourceOpen(aTmpDBData.sDataSource, aTmpDBData.sCommand, false))
                 aCalc.VarChange( sDBNumNm, pMgr->GetSelectedRecordId(aTmpDBData.sDataSource, aTmpDBData.sCommand, aTmpDBData.nCommandType));
 
-            const OUString aName = pField->GetTyp()->GetName();
+            const OUString aName = pField->GetTyp()->GetName().toString();
 
             // Add entry to hash table
             // Entry present?
@@ -1095,7 +1095,7 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
                         pSField->ChgExpStr( aNew, pLayout );
 
                     // lookup the field's name
-                    aNew = static_cast<SwSetExpFieldType*>(pSField->GetTyp())->GetSetRefName();
+                    aNew = static_cast<SwSetExpFieldType*>(pSField->GetTyp())->GetSetRefName().toString();
                     // Entry present?
                     auto pFnd = aHashStrTable.find( aNew );
                     if( pFnd != aHashStrTable.end() )
@@ -1130,7 +1130,7 @@ void DocumentFieldsManager::UpdateExpFieldsImpl(
                 {
                     SwSetExpField* pSField = const_cast<SwSetExpField*>(static_cast<const SwSetExpField*>(pField));
                     SwSetExpFieldType* pSFieldTyp = static_cast<SwSetExpFieldType*>(pField->GetTyp());
-                    OUString aNew = pSFieldTyp->GetName();
+                    OUString aNew = pSFieldTyp->GetName().toString();
 
                     SwNode* pSeqNd = nullptr;
 
@@ -1598,7 +1598,7 @@ void DocumentFieldsManager::FieldsToExpand( std::unordered_map<OUString, OUStrin
                 pSField->ChgExpStr(aNew, &rLayout);
 
                 // look up the field's name
-                aNew = static_cast<SwSetExpFieldType*>(pSField->GetTyp())->GetSetRefName();
+                aNew = static_cast<SwSetExpFieldType*>(pSField->GetTyp())->GetSetRefName().toString();
                 // Entry present?
                 auto pFnd = rHashTable.find( aNew );
                 if( pFnd != rHashTable.end() )
@@ -1611,7 +1611,7 @@ void DocumentFieldsManager::FieldsToExpand( std::unordered_map<OUString, OUStrin
             break;
         case SwFieldIds::Database:
             {
-                const OUString aName = pField->GetTyp()->GetName();
+                const OUString aName = pField->GetTyp()->GetName().toString();
 
                 // Insert entry in the hash table
                 // Entry present?
@@ -1722,15 +1722,15 @@ void DocumentFieldsManager::InitFieldTypes()       // is being called by the CTO
     // MIB 14.04.95: In Sw3StringPool::Setup (sw3imp.cxx) and
     //               lcl_sw3io_InSetExpField (sw3field.cxx) now also
     mpFieldTypes->emplace_back( new SwSetExpFieldType(&m_rDoc,
-                SwResId(STR_POOLCOLL_LABEL_ABB), nsSwGetSetExpType::GSE_SEQ) );
+                UIName(SwResId(STR_POOLCOLL_LABEL_ABB)), nsSwGetSetExpType::GSE_SEQ) );
     mpFieldTypes->emplace_back( new SwSetExpFieldType(&m_rDoc,
-                SwResId(STR_POOLCOLL_LABEL_TABLE), nsSwGetSetExpType::GSE_SEQ) );
+                UIName(SwResId(STR_POOLCOLL_LABEL_TABLE)), nsSwGetSetExpType::GSE_SEQ) );
     mpFieldTypes->emplace_back( new SwSetExpFieldType(&m_rDoc,
-                SwResId(STR_POOLCOLL_LABEL_FRAME), nsSwGetSetExpType::GSE_SEQ) );
+                UIName(SwResId(STR_POOLCOLL_LABEL_FRAME)), nsSwGetSetExpType::GSE_SEQ) );
     mpFieldTypes->emplace_back( new SwSetExpFieldType(&m_rDoc,
-                SwResId(STR_POOLCOLL_LABEL_DRAWING), nsSwGetSetExpType::GSE_SEQ) );
+                UIName(SwResId(STR_POOLCOLL_LABEL_DRAWING)), nsSwGetSetExpType::GSE_SEQ) );
     mpFieldTypes->emplace_back( new SwSetExpFieldType(&m_rDoc,
-                SwResId(STR_POOLCOLL_LABEL_FIGURE), nsSwGetSetExpType::GSE_SEQ) );
+                UIName(SwResId(STR_POOLCOLL_LABEL_FIGURE)), nsSwGetSetExpType::GSE_SEQ) );
 
     assert( mpFieldTypes->size() == INIT_FLDTYPES );
 }

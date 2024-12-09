@@ -48,7 +48,7 @@ void SwInsTableDlg::GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rC
     if (m_xTAutoFormat && !comphelper::LibreOfficeKit::isActive())
     {
         prTAFormat.reset(new SwTableAutoFormat( *m_xTAutoFormat ));
-        rAutoName = prTAFormat->GetName();
+        rAutoName = prTAFormat->GetName().toString();
     }
 
     rInsTableOpts.mnInsMode = nInsMode;
@@ -88,7 +88,7 @@ SwInsTableDlg::SwInsTableDlg(SwView& rView)
     m_xWndPreview->set_size_request(nWidth, nHeight);
 
     m_xNameEdit->connect_insert_text(LINK(this, SwInsTableDlg, TextFilterHdl));
-    m_xNameEdit->set_text(m_pShell->GetUniqueTableName());
+    m_xNameEdit->set_text(m_pShell->GetUniqueTableName().toString());
     m_xNameEdit->connect_changed(LINK(this, SwInsTableDlg, ModifyName));
     m_xRowSpinButton->connect_changed(LINK(this, SwInsTableDlg, ModifyRowCol));
     m_xColSpinButton->connect_changed(LINK(this, SwInsTableDlg, ModifyRowCol));
@@ -142,7 +142,7 @@ void SwInsTableDlg::InitAutoTableFormat()
             i < nCount; i++)
     {
         SwTableAutoFormat const& rFormat = (*m_xTableTable)[ i ];
-        m_xLbFormat->append_text(rFormat.GetName());
+        m_xLbFormat->append_text(rFormat.GetName().toString());
         if (m_xTAutoFormat && rFormat.GetName() == m_xTAutoFormat->GetName())
             m_lbIndex = i;
     }
@@ -185,7 +185,7 @@ IMPL_LINK_NOARG(SwInsTableDlg, SelFormatHdl, weld::TreeView&, void)
         m_aWndPreview.NotifyChange( (*m_xTableTable)[m_tbIndex] );
     else
     {
-        SwTableAutoFormat aTmp( SwViewShell::GetShellRes()->aStrNone );
+        SwTableAutoFormat aTmp( TableStyleName(SwViewShell::GetShellRes()->aStrNone) );
         aTmp.DisableAll();
 
         m_aWndPreview.NotifyChange( aTmp );
@@ -206,7 +206,7 @@ IMPL_LINK_NOARG(SwInsTableDlg, OKHdl, weld::Button&, void)
     }
     else
     {
-        m_xTAutoFormat.reset(new SwTableAutoFormat( SwViewShell::GetShellRes()->aStrNone ));
+        m_xTAutoFormat.reset(new SwTableAutoFormat( TableStyleName(SwViewShell::GetShellRes()->aStrNone) ));
         m_xTAutoFormat->DisableAll();
     }
 
@@ -216,7 +216,7 @@ IMPL_LINK_NOARG(SwInsTableDlg, OKHdl, weld::Button&, void)
 IMPL_LINK( SwInsTableDlg, ModifyName, weld::Entry&, rEdit, void )
 {
     OUString sTableName = rEdit.get_text();
-    m_xInsertBtn->set_sensitive(m_pShell->GetTableStyle(sTableName) == nullptr);
+    m_xInsertBtn->set_sensitive(m_pShell->GetTableStyle(UIName(sTableName)) == nullptr);
 }
 
 // We use weld::Entry's "changed" notification here, not weld::SpinButton's "value_changed", because

@@ -61,15 +61,15 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testStashedHeaderFooter)
     mxComponent.clear();
 
     // Source
-    SwPageDesc* pSourcePageDesc = pSourceDocument->MakePageDesc(u"SourceStyle"_ustr);
+    SwPageDesc* pSourcePageDesc = pSourceDocument->MakePageDesc(UIName(u"SourceStyle"_ustr));
     pSourcePageDesc->ChgFirstShare(false);
     CPPUNIT_ASSERT(!pSourcePageDesc->IsFirstShared());
     pSourcePageDesc->StashFrameFormat(pSourcePageDesc->GetFirstMaster(), true, false, true);
-    pSourceDocument->ChgPageDesc(u"SourceStyle"_ustr, *pSourcePageDesc);
+    pSourceDocument->ChgPageDesc(UIName(u"SourceStyle"_ustr), *pSourcePageDesc);
     CPPUNIT_ASSERT(pSourcePageDesc->HasStashedFormat(true, false, true));
 
     // Target
-    SwPageDesc* pTargetPageDesc = pTargetDocument->MakePageDesc(u"TargetStyle"_ustr);
+    SwPageDesc* pTargetPageDesc = pTargetDocument->MakePageDesc(UIName(u"TargetStyle"_ustr));
 
     // Copy source to target
     pTargetDocument->CopyPageDesc(*pSourcePageDesc, *pTargetPageDesc);

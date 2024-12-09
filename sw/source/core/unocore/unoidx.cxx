@@ -560,7 +560,7 @@ SwXDocumentIndex::setPropertyValue(
             {
                 throw lang::IllegalArgumentException();
             }
-            rTOXBase.SetTOXName(sNewName);
+            rTOXBase.SetTOXName(UIName(sNewName));
         }
         break;
         case WID_USER_IDX_NAME:
@@ -690,7 +690,7 @@ SwXDocumentIndex::setPropertyValue(
             // convert file-format/API/external programmatic english name
             // to internal UI name before usage
             rTOXBase.SetSequenceName( SwStyleNameMapper::GetSpecialExtraUIName(
-                                ProgName(lcl_AnyToType<OUString>(rValue)) ) );
+                                ProgName(lcl_AnyToType<OUString>(rValue) )) );
         }
         break;
         case WID_LABEL_DISPLAY_TYPE:
@@ -719,7 +719,7 @@ SwXDocumentIndex::setPropertyValue(
         break;
         case WID_MAIN_ENTRY_CHARACTER_STYLE_NAME:
         {
-            OUString aString;
+            UIName aString;
             SwStyleNameMapper::FillUIName(ProgName(lcl_AnyToType<OUString>(rValue)),
                 aString, SwGetPoolIdFromName::ChrFmt);
             rTOXBase.SetMainEntryCharStyle( aString );
@@ -755,7 +755,7 @@ SwXDocumentIndex::setPropertyValue(
         break;
         case WID_PARA_HEAD:
         {
-            OUString aString;
+            UIName aString;
             SwStyleNameMapper::FillUIName( ProgName(lcl_AnyToType<OUString>(rValue)),
                 aString, SwGetPoolIdFromName::TxtColl);
             bForm = true;
@@ -769,7 +769,7 @@ SwXDocumentIndex::setPropertyValue(
         break;
         case WID_PARA_SEP:
         {
-            OUString aString;
+            UIName aString;
             bForm = true;
             SwStyleNameMapper::FillUIName( ProgName(lcl_AnyToType<OUString>(rValue)),
                 aString, SwGetPoolIdFromName::TxtColl);
@@ -789,7 +789,7 @@ SwXDocumentIndex::setPropertyValue(
                     throw lang::IllegalArgumentException();
                 }
                 lcl_AnyToBitMask(uno::Any(true), nCreate, SwTOXElement::Template);
-                OUString uiStyle;
+                UIName uiStyle;
                 SwStyleNameMapper::FillUIName(ProgName(style), uiStyle, SwGetPoolIdFromName::TxtColl);
                 rTOXBase.SetStyleNames(uiStyle, 0);
             }
@@ -818,7 +818,7 @@ SwXDocumentIndex::setPropertyValue(
             bForm = true;
             // in sdbcx::Index Label 1 begins at Pos 2 otherwise at Pos 1
             const sal_uInt16 nLPos = rTOXBase.GetType() == TOX_INDEX ? 2 : 1;
-            OUString aString;
+            UIName aString;
             SwStyleNameMapper::FillUIName( ProgName(lcl_AnyToType<OUString>(rValue)),
                 aString, SwGetPoolIdFromName::TxtColl);
             aForm.SetTemplate(nLPos + pEntry->nWID - WID_PARA_LEV1, aString );
@@ -933,7 +933,7 @@ SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
                 break;
             }
             case WID_IDX_NAME:
-                aRet <<= pTOXBase->GetTOXName();
+                aRet <<= pTOXBase->GetTOXName().toString();
             break;
             case WID_USER_IDX_NAME:
             {
@@ -1116,10 +1116,10 @@ SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
             {
                 if (nCreate & SwTOXElement::Template)
                 {   // there is only one style, at top level
-                    OUString const& rStyle(pTOXBase->GetStyleNames(0));
+                    UIName const& rStyle(pTOXBase->GetStyleNames(0));
                     if (!rStyle.isEmpty())
                     {
-                        assert(rStyle.indexOf(TOX_STYLE_DELIMITER) == -1);
+                        assert(rStyle.toString().indexOf(TOX_STYLE_DELIMITER) == -1);
                         ProgName ret;
                         SwStyleNameMapper::FillProgName(rStyle, ret,
                             SwGetPoolIdFromName::TxtColl);
@@ -1424,7 +1424,7 @@ OUString SAL_CALL SwXDocumentIndex::getName()
     SwSectionFormat *const pSectionFormat( m_pImpl->GetSectionFormat() );
     if (m_pImpl->m_bIsDescriptor)
     {
-        return m_pImpl->m_oProps->GetTOXBase().GetTOXName();
+        return m_pImpl->m_oProps->GetTOXBase().GetTOXName().toString();
     }
 
     if(!pSectionFormat)
@@ -1432,7 +1432,7 @@ OUString SAL_CALL SwXDocumentIndex::getName()
         throw uno::RuntimeException();
     }
 
-    return pSectionFormat->GetSection()->GetSectionName();
+    return pSectionFormat->GetSection()->GetSectionName().toString();
 }
 
 void SAL_CALL
@@ -1448,12 +1448,12 @@ SwXDocumentIndex::setName(const OUString& rName)
     SwSectionFormat *const pSectionFormat( m_pImpl->GetSectionFormat() );
     if (m_pImpl->m_bIsDescriptor)
     {
-        m_pImpl->m_oProps->GetTOXBase().SetTOXName(rName);
+        m_pImpl->m_oProps->GetTOXBase().SetTOXName(UIName(rName));
     }
     else if (pSectionFormat)
     {
         const bool bSuccess = pSectionFormat->GetDoc()->SetTOXBaseName(
-            *static_cast<SwTOXBaseSection*>(pSectionFormat->GetSection()), rName);
+            *static_cast<SwTOXBaseSection*>(pSectionFormat->GetSection()), UIName(rName));
         if (!bSuccess)
         {
             throw uno::RuntimeException();
@@ -2428,7 +2428,7 @@ SwXDocumentIndexes::getElementNames()
         if( SectionType::ToxContent == pSect->GetType() &&
             pSect->GetFormat()->GetSectionNode())
         {
-            pArray[nCnt++] = static_cast<SwTOXBaseSection const*>(pSect)->GetTOXName();
+            pArray[nCnt++] = static_cast<SwTOXBaseSection const*>(pSect)->GetTOXName().toString();
         }
     }
     return aRet;
@@ -2518,7 +2518,7 @@ SwXDocumentIndex::StyleAccess_Impl::replaceByIndex(
     const sal_Int32 nStyles = aSeq.getLength();
     const OUString* pStyles = aSeq.getConstArray();
     OUStringBuffer sSetStyles;
-    OUString aString;
+    UIName aString;
     for(sal_Int32 i = 0; i < nStyles; i++)
     {
         if(i)
@@ -2527,9 +2527,9 @@ SwXDocumentIndex::StyleAccess_Impl::replaceByIndex(
         }
         SwStyleNameMapper::FillUIName(ProgName(pStyles[i]), aString,
                 SwGetPoolIdFromName::TxtColl);
-        sSetStyles.append(aString);
+        sSetStyles.append(aString.toString());
     }
-    rTOXBase.SetStyleNames(sSetStyles.makeStringAndClear(), o3tl::narrowing<sal_uInt16>(nIndex));
+    rTOXBase.SetStyleNames(UIName(sSetStyles.makeStringAndClear()), o3tl::narrowing<sal_uInt16>(nIndex));
 }
 
 sal_Int32 SAL_CALL
@@ -2550,9 +2550,9 @@ SwXDocumentIndex::StyleAccess_Impl::getByIndex(sal_Int32 nIndex)
 
     SwTOXBase & rTOXBase( m_xParent->m_pImpl->GetTOXSectionOrThrow() );
 
-    const OUString& rStyles =
+    const UIName& rStyles =
         rTOXBase.GetStyleNames(o3tl::narrowing<sal_uInt16>(nIndex));
-    const sal_Int32 nStyles = comphelper::string::getTokenCount(rStyles, TOX_STYLE_DELIMITER);
+    const sal_Int32 nStyles = comphelper::string::getTokenCount(rStyles.toString(), TOX_STYLE_DELIMITER);
     uno::Sequence<OUString> aStyles(nStyles);
     OUString* pStyles = aStyles.getArray();
     ProgName aString;
@@ -2560,7 +2560,7 @@ SwXDocumentIndex::StyleAccess_Impl::getByIndex(sal_Int32 nIndex)
     for(sal_Int32 i = 0; i < nStyles; ++i)
     {
         SwStyleNameMapper::FillProgName(
-            rStyles.getToken(0, TOX_STYLE_DELIMITER, nPos),
+            UIName(rStyles.toString().getToken(0, TOX_STYLE_DELIMITER, nPos)),
             aString,
             SwGetPoolIdFromName::TxtColl);
         pStyles[i] = aString.toString();
@@ -2676,7 +2676,7 @@ SwXDocumentIndex::TokenAccess_Impl::replaceByIndex(
             }
             else if ( pProperties[j].Name == "CharacterStyleName" )
             {
-                OUString sCharStyleName;
+                UIName sCharStyleName;
                 SwStyleNameMapper::FillUIName(
                         ProgName(lcl_AnyToType<OUString>(pProperties[j].Value)),
                         sCharStyleName,
@@ -2804,7 +2804,7 @@ SwXDocumentIndex::TokenAccess_Impl::replaceByIndex(
         {
             if (aToken.eTokenType == TOKEN_LINK_START && aToken.sCharStyleName.isEmpty())
             {
-                aToken.sCharStyleName = SwResId(STR_POOLCHR_TOXJUMP);
+                aToken.sCharStyleName = UIName(SwResId(STR_POOLCHR_TOXJUMP));
             }
         }
 

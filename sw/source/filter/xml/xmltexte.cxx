@@ -315,7 +315,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
         }
         if( SV_EMBEDDED_OWN == nType && !pOLENd->GetChartTableName().isEmpty() )
         {
-            OUString sRange( pOLENd->GetChartTableName() );
+            OUString sRange( pOLENd->GetChartTableName().toString() );
             OUStringBuffer aBuffer( sRange.getLength() + 2 );
             for( sal_Int32 i=0; i < sRange.getLength(); i++ )
             {

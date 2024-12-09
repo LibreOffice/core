@@ -191,7 +191,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                 {
                     OUString sLevel;
                     if(bOn)
-                        sLevel = rDesc.GetStyleNames(i);
+                        sLevel = rDesc.GetStyleNames(i).toString();
                     const sal_Int32 nStyles =
                         comphelper::string::getTokenCount(sLevel, TOX_STYLE_DELIMITER);
                     uno::Sequence<OUString> aStyles(nStyles);
@@ -314,7 +314,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                         pPropValArr[0].Name = "TokenType";
                         pPropValArr[0].Value <<= sTokenType;
                         pPropValArr[1].Name = "CharacterStyleName";
-                        pPropValArr[1].Value <<= aToken.sCharStyleName;
+                        pPropValArr[1].Value <<= aToken.sCharStyleName.toString();
                         if(TOKEN_TAB_STOP == aToken.eTokenType)
                         {
                             pPropValArr[2].Name = "TabStopRightAligned";
@@ -351,7 +351,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
         }
         if(bInitialCreate || !nPage || nPage == TOX_PAGE_STYLES)
         {
-            lcl_SetProp(xInfo, xIdxProps, u"ParaStyleHeading"_ustr, pForm->GetTemplate(0));
+            lcl_SetProp(xInfo, xIdxProps, u"ParaStyleHeading"_ustr, pForm->GetTemplate(0).toString());
             sal_uInt16 nOffset = 0;
             sal_uInt16 nEndLevel = 2;
             switch(m_eCurrentTOXType.eType)
@@ -360,7 +360,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                 {
                     nOffset = 1;
                     nEndLevel = 4;
-                    lcl_SetProp(xInfo, xIdxProps, u"ParaStyleSeparator"_ustr, pForm->GetTemplate(1));
+                    lcl_SetProp(xInfo, xIdxProps, u"ParaStyleSeparator"_ustr, pForm->GetTemplate(1).toString());
                 }
                 break;
                 case TOX_CONTENT :
@@ -373,7 +373,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                 lcl_SetProp(xInfo,
                     xIdxProps,
                     "ParaStyleLevel" + OUString::number( i ),
-                    pForm->GetTemplate(i + nOffset));
+                    pForm->GetTemplate(i + nOffset).toString());
             }
         }
         m_vTypeData[nTOXIndex].m_oIndexSections->xDocumentIndex->update();

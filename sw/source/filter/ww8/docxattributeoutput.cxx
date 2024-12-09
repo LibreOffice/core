@@ -4228,7 +4228,7 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
             {
                 // Get the item set that holds all the changes properties
                 const SfxItemSet *pChangesSet = pFormattingChanges->GetItemSet();
-                const OUString & sParaStyleName = pFormattingChanges->GetFormatName();
+                const UIName & sParaStyleName = pFormattingChanges->GetFormatName();
                 if (pChangesSet || !sParaStyleName.isEmpty())
                 {
                     m_pSerializer->mark(Tag_Redline_2);
@@ -4245,7 +4245,7 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
                         // an arbitrary string from the original document.
                         // Note that Word does *not* roundtrip unknown style names in redlines!
                         if (sStyleName.isEmpty())
-                            sStyleName = MSWordStyles::CreateStyleId(sParaStyleName);
+                            sStyleName = MSWordStyles::CreateStyleId(sParaStyleName.toString());
                         if (!sStyleName.isEmpty())
                             m_pSerializer->singleElementNS(XML_w, XML_pStyle, FSNS(XML_w, XML_val), sStyleName);
                     }
@@ -5445,7 +5445,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
     OUString const descr(pGrfNode ? pGrfNode->GetDescription() : pOLEFrameFormat->GetObjDescription());
     OUString const title(pGrfNode ? pGrfNode->GetTitle() : pOLEFrameFormat->GetObjTitle());
     auto const docPrattrList(CreateDocPrAttrList(
-        GetExport(), m_anchorId++, pFrameFormat->GetName(), title, descr));
+        GetExport(), m_anchorId++, pFrameFormat->GetName().toString(), title, descr));
     m_pSerializer->startElementNS( XML_wp, XML_docPr, docPrattrList );
 
     OUString sURL, sRelId;
@@ -6475,13 +6475,13 @@ void DocxAttributeOutput::WriteFlyFrame(const ww8::Frame& rFrame)
 
                 // The frame output is postponed to the end of the anchor paragraph
                 bool bDuplicate = false;
-                const OUString& rName = rFrame.GetFrameFormat().GetName();
+                const UIName& rName = rFrame.GetFrameFormat().GetName();
                 if (m_aFramesOfParagraph.size() && !rName.isEmpty())
                 {
                     const unsigned nSize = m_aFramesOfParagraph.top().size();
                     for (unsigned nIndex = 0; nIndex < nSize; ++nIndex)
                     {
-                        const OUString& rNameExisting
+                        const UIName& rNameExisting
                             = m_aFramesOfParagraph.top()[nIndex].GetFrameFormat().GetName();
 
                         if (rName == rNameExisting)

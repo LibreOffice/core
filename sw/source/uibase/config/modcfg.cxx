@@ -596,7 +596,7 @@ static void lcl_WriteOpt(const InsCaptionOpt& rOpt, Any* pValues, sal_Int32 nPro
         case 5: pValues[nProp] <<= rOpt.GetSeparator();break;//Delimiter",
         case 6: pValues[nProp] <<= static_cast<sal_Int32>(rOpt.GetLevel());   break;//Level",
         case 7: pValues[nProp] <<= static_cast<sal_Int32>(rOpt.GetPos());     break;//Position",
-        case 8: pValues[nProp] <<= rOpt.GetCharacterStyle(); break; //CharacterStyle
+        case 8: pValues[nProp] <<= rOpt.GetCharacterStyle().toString(); break; //CharacterStyle
         case 9: pValues[nProp] <<= rOpt.CopyAttributes(); break; //ApplyAttributes
     }
 }
@@ -831,7 +831,7 @@ static void lcl_ReadOpt(InsCaptionOpt& rOpt, const Any* pValues, sal_Int32 nProp
         case 8 : //CharacterStyle
         {
             OUString sTemp; pValues[nProp] >>= sTemp;
-            rOpt.SetCharacterStyle( sTemp );
+            rOpt.SetCharacterStyle( UIName(sTemp) );
         }
         break;
         case 9 : //ApplyAttributes

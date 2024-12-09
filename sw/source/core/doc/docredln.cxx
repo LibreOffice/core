@@ -1098,7 +1098,7 @@ bool SwRedlineExtraData::operator == ( const SwRedlineExtraData& ) const
     return false;
 }
 
-SwRedlineExtraData_FormatColl::SwRedlineExtraData_FormatColl( OUString aColl,
+SwRedlineExtraData_FormatColl::SwRedlineExtraData_FormatColl( UIName aColl,
                                                 sal_uInt16 nPoolFormatId,
                                                 const SfxItemSet* pItemSet,
                                                 bool bFormatAll )

@@ -230,12 +230,12 @@ SwDoc::SwDoc()
     m_pDocumentLayoutManager( new ::sw::DocumentLayoutManager( *this ) ),
     m_pDocumentStylePoolManager( new ::sw::DocumentStylePoolManager( *this ) ),
     m_pDocumentExternalDataManager( new ::sw::DocumentExternalDataManager ),
-    mpDfltFrameFormat( new SwFrameFormat( GetAttrPool(), u"Frameformat"_ustr, nullptr ) ),
-    mpEmptyPageFormat( new SwFrameFormat( GetAttrPool(), u"Empty Page"_ustr, mpDfltFrameFormat.get() ) ),
-    mpColumnContFormat( new SwFrameFormat( GetAttrPool(), u"Columncontainer"_ustr, mpDfltFrameFormat.get() ) ),
-    mpDfltCharFormat( new SwCharFormat( GetAttrPool(), DEFAULT_CHAR_FORMAT_NAME, nullptr ) ),
-    mpDfltTextFormatColl( new SwTextFormatColl( GetAttrPool(), u"Paragraph style"_ustr ) ),
-    mpDfltGrfFormatColl( new SwGrfFormatColl( GetAttrPool(), u"Graphikformatvorlage"_ustr ) ),
+    mpDfltFrameFormat( new SwFrameFormat( GetAttrPool(), UIName(u"Frameformat"_ustr), nullptr ) ),
+    mpEmptyPageFormat( new SwFrameFormat( GetAttrPool(), UIName(u"Empty Page"_ustr), mpDfltFrameFormat.get() ) ),
+    mpColumnContFormat( new SwFrameFormat( GetAttrPool(), UIName(u"Columncontainer"_ustr), mpDfltFrameFormat.get() ) ),
+    mpDfltCharFormat( new SwCharFormat( GetAttrPool(), UIName(DEFAULT_CHAR_FORMAT_NAME), nullptr ) ),
+    mpDfltTextFormatColl( new SwTextFormatColl( GetAttrPool(), UIName(u"Paragraph style"_ustr) ) ),
+    mpDfltGrfFormatColl( new SwGrfFormatColl( GetAttrPool(), UIName(u"Graphikformatvorlage"_ustr) ) ),
     mpFrameFormatTable( new sw::FrameFormats<SwFrameFormat*>() ),
     mpCharFormatTable( new SwCharFormats ),
     mpCharFormatDeletionTable( new SwCharFormats ),
@@ -694,7 +694,7 @@ void SwDoc::ClearDoc()
     InitTOXTypes();
 
     // create a dummy pagedesc for the layout
-    SwPageDesc* pDummyPgDsc = MakePageDesc(u"?DUMMY?"_ustr);
+    SwPageDesc* pDummyPgDsc = MakePageDesc(UIName(u"?DUMMY?"_ustr));
 
     SwNodeIndex aSttIdx( *GetNodes().GetEndOfContent().StartOfSectionNode(), 1 );
     // create the first one over and over again (without attributes/style etc.
@@ -962,11 +962,11 @@ rtl::Reference<SfxObjectShell> SwDoc::CreateCopy(bool bCallInitNew, bool bEmpty)
 }
 
 // save bulk letters as single documents
-static OUString lcl_FindUniqueName(SwWrtShell* pTargetShell, std::u16string_view rStartingPageDesc, sal_uLong nDocNo )
+static UIName lcl_FindUniqueName(SwWrtShell* pTargetShell, std::u16string_view rStartingPageDesc, sal_uLong nDocNo )
 {
     do
     {
-        OUString sTest = rStartingPageDesc + OUString::number( nDocNo );
+        UIName sTest( rStartingPageDesc + OUString::number( nDocNo ) );
         if( !pTargetShell->FindPageDescByName( sTest ) )
             return sTest;
         ++nDocNo;
@@ -1003,13 +1003,13 @@ static void lcl_CopyFollowPageDesc(
     // note: these may at any point form a cycle, so a loop is needed and it
     // must be detected that the last iteration closes the cycle and doesn't
     // copy the first page desc of the cycle again.
-    std::map<OUString, OUString> followMap{ { rSourcePageDesc.GetName(), rTargetPageDesc.GetName() } };
+    std::map<UIName, UIName> followMap{ { rSourcePageDesc.GetName(), rTargetPageDesc.GetName() } };
     SwPageDesc const* pCurSourcePageDesc(&rSourcePageDesc);
     SwPageDesc const* pCurTargetPageDesc(&rTargetPageDesc);
     do
     {
         const SwPageDesc* pFollowPageDesc = pCurSourcePageDesc->GetFollow();
-        OUString sFollowPageDesc = pFollowPageDesc->GetName();
+        UIName sFollowPageDesc = pFollowPageDesc->GetName();
         if (sFollowPageDesc == pCurSourcePageDesc->GetName())
         {
             break;
@@ -1019,7 +1019,7 @@ static void lcl_CopyFollowPageDesc(
         auto const itMapped(followMap.find(sFollowPageDesc));
         if (itMapped == followMap.end())
         {
-            OUString sNewFollowPageDesc = lcl_FindUniqueName(&rTargetShell, sFollowPageDesc, nDocNo);
+            UIName sNewFollowPageDesc = lcl_FindUniqueName(&rTargetShell, sFollowPageDesc.toString(), nDocNo);
             pTargetFollowPageDesc = pTargetDoc->MakePageDesc(sNewFollowPageDesc);
             pTargetDoc->CopyPageDesc(*pFollowPageDesc, *pTargetFollowPageDesc, false);
         }
@@ -1094,14 +1094,14 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
             const SwWrtShell *pSourceShell = rSource.GetDocShell()->GetWrtShell();
             const SwPageDesc& rSourcePageDesc = pSourceShell->GetPageDesc(
                                                     pSourceShell->GetCurPageDesc());
-            const OUString sStartingPageDesc = rSourcePageDesc.GetName();
+            const UIName sStartingPageDesc = rSourcePageDesc.GetName();
             const bool bPageStylesWithHeaderFooter = lcl_PageDescOrFollowContainsHeaderFooter(rSourcePageDesc);
             if( bPageStylesWithHeaderFooter )
             {
                 // create a new pagestyle
                 // copy the pagedesc from the current document to the new
                 // document and change the name of the to-be-applied style
-                OUString sNewPageDescName = lcl_FindUniqueName(pTargetShell, sStartingPageDesc, nDocNo );
+                UIName sNewPageDescName = lcl_FindUniqueName(pTargetShell, sStartingPageDesc.toString(), nDocNo );
                 pTargetPageDesc = MakePageDesc( sNewPageDescName );
                 if( pTargetPageDesc )
                 {
@@ -1268,7 +1268,7 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
                 SwFormatPageDesc *aDesc = static_cast< SwFormatPageDesc* >( pNewItem.get() );
 #ifdef DBG_UTIL
                 if ( aDesc->GetPageDesc() )
-                    SAL_INFO( "sw.docappend", "PD Update " << aDesc->GetPageDesc()->GetName() );
+                    SAL_INFO( "sw.docappend", "PD Update " << aDesc->GetPageDesc()->GetName().toString() );
                 else
                     SAL_INFO( "sw.docappend", "PD New" );
 #endif

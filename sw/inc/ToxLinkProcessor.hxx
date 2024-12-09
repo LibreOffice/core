@@ -31,7 +31,7 @@ public:
     virtual ~ToxLinkProcessor() {}
 
     void
-    StartNewLink(sal_Int32 startPosition, const OUString& characterStyle);
+    StartNewLink(sal_Int32 startPosition, const UIName& characterStyle);
 
     /** Close a link which has been found during processing.
      *
@@ -54,15 +54,15 @@ private:
      * This method is overridden in the unittests. You should not override it yourself.
      */
     virtual sal_uInt16
-    ObtainPoolId(const OUString& characterStyle) const;
+    ObtainPoolId(const UIName& characterStyle) const;
 
     /** Information about a started link */
     struct StartedLink {
-        StartedLink(sal_Int32 startPosition, OUString characterStyle) :
+        StartedLink(sal_Int32 startPosition, UIName characterStyle) :
                 mStartPosition(startPosition), mCharacterStyle(std::move(characterStyle)) {
         }
         sal_Int32 mStartPosition;
-        OUString mCharacterStyle;
+        UIName mCharacterStyle;
     };
 
     /** A link that has been encountered while parsing a tox.

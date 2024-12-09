@@ -133,7 +133,7 @@ protected:
     sal_uInt16      m_nRowsToRepeat;      // Number of rows to repeat on every page.
 
     /// Name of the table style to be applied on this table.
-    OUString maTableStyleName;
+    TableStyleName maTableStyleName;
 
     bool        m_bModifyLocked   :1;
     bool        m_bNewModel       :1; // false: old SubTableModel; true: new RowSpanModel
@@ -193,10 +193,10 @@ public:
     bool IsNewModel() const { return m_bNewModel; }
 
     /// Return the table style name of this table.
-    const OUString& GetTableStyleName() const { return maTableStyleName; }
+    const TableStyleName& GetTableStyleName() const { return maTableStyleName; }
 
     /// Set the new table style name for this table.
-    void SetTableStyleName(const OUString& rName) { maTableStyleName = rName; }
+    void SetTableStyleName(const TableStyleName& rName) { maTableStyleName = rName; }
 
     sal_uInt16 GetRowsToRepeat() const { return std::min( o3tl::narrowing<sal_uInt16>(GetTabLines().size()), m_nRowsToRepeat ); }
     void SetRowsToRepeat( sal_uInt16 nNumOfRows ) { m_nRowsToRepeat = nNumOfRows; }
@@ -284,7 +284,7 @@ public:
                                  const bool bPerformValidCheck = false ) const;
     // Copy selected boxes to another document.
     bool MakeCopy( SwDoc&, const SwPosition&, const SwSelBoxes&,
-                    bool bCpyName = false, const OUString& rStyleName = u""_ustr ) const;
+                    bool bCpyName = false, const TableStyleName& rStyleName = TableStyleName() ) const;
     // Copy table in this
     bool InsTable( const SwTable& rCpyTable, const SwNodeIndex&,
                     SwUndoTableCpyTable* pUndo );
@@ -366,7 +366,7 @@ public:
     void SwitchFormulasToInternalRepresentation()
         { UpdateFields(TBL_BOXPTR); }
     void Merge(const SwTable& rTable, SwHistory* pHistory);
-    void Split(const OUString& sNewTableName, sal_uInt16 nSplitLine, SwHistory* pHistory);
+    void Split(const UIName& sNewTableName, sal_uInt16 nSplitLine, SwHistory* pHistory);
 
     static void GatherFormulas(SwDoc& rDoc, std::vector<SwTableBoxFormula*>& rvFormulas);
 

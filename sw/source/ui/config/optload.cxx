@@ -1242,16 +1242,16 @@ void SwCaptionOptPage::UpdateEntry(int nSelEntry)
                 if( pType->Which() == SwFieldIds::SetExp &&
                     static_cast<SwSetExpFieldType *>( pType)->GetType() & nsSwGetSetExpType::GSE_SEQ )
                 {
-                    m_xCategoryBox->append_text(pType->GetName());
+                    m_xCategoryBox->append_text(pType->GetName().toString());
                 }
             }
         }
         else
         {
-            m_xCategoryBox->append_text(m_sIllustration);
-            m_xCategoryBox->append_text(m_sTable);
-            m_xCategoryBox->append_text(m_sText);
-            m_xCategoryBox->append_text(m_sDrawing);
+            m_xCategoryBox->append_text(m_sIllustration.toString());
+            m_xCategoryBox->append_text(m_sTable.toString());
+            m_xCategoryBox->append_text(m_sText.toString());
+            m_xCategoryBox->append_text(m_sDrawing.toString());
         }
 
         if (!pOpt->GetCategory().isEmpty())
@@ -1339,7 +1339,7 @@ void SwCaptionOptPage::UpdateEntry(int nSelEntry)
         m_xEdDelim->set_text(pOpt->GetSeparator());
         m_xNumberingSeparatorED->set_text(pOpt->GetNumSeparator());
         if (!pOpt->GetCharacterStyle().isEmpty())
-            m_xCharStyleLB->set_active_text(pOpt->GetCharacterStyle());
+            m_xCharStyleLB->set_active_text(pOpt->GetCharacterStyle().toString());
         else
             m_xCharStyleLB->set_active(0);
 
@@ -1388,9 +1388,9 @@ void SwCaptionOptPage::SaveEntry(int nEntry)
     pOpt->SetSeparator(m_xEdDelim->get_text());
     pOpt->SetNumSeparator(m_xNumberingSeparatorED->get_text());
     if (m_xCharStyleLB->get_active() == -1)
-        pOpt->SetCharacterStyle(u""_ustr);
+        pOpt->SetCharacterStyle(UIName(u""_ustr));
     else
-        pOpt->SetCharacterStyle(m_xCharStyleLB->get_active_text());
+        pOpt->SetCharacterStyle(UIName(m_xCharStyleLB->get_active_text()));
     pOpt->CopyAttributes() = m_xApplyBorderCB->get_active();
 }
 

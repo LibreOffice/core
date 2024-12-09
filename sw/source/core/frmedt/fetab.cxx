@@ -1171,7 +1171,7 @@ void SwFEShell::UnProtectTables()
     EndAllActionAndCall();
 }
 
-bool SwFEShell::HasTableAnyProtection( const OUString* pTableName,
+bool SwFEShell::HasTableAnyProtection( const UIName* pTableName,
                                      bool* pFullTableProtection )
 {
     return GetDoc()->HasTableAnyProtection( GetCursor()->GetPoint(), pTableName,
@@ -1392,7 +1392,7 @@ bool SwFEShell::IsAdjustCellWidthAllowed( bool bBalance ) const
     return false;
 }
 
-void SwFEShell::SetTableStyle(const OUString& rStyleName)
+void SwFEShell::SetTableStyle(const TableStyleName& rStyleName)
 {
     // make sure SwDoc has the style
     SwTableAutoFormat *pTableFormat = GetDoc()->GetTableStyles().FindAutoFormat(rStyleName);
@@ -1413,7 +1413,7 @@ bool SwFEShell::ResetTableStyle()
     if (!pTableNode)
         return false;
 
-    OUString takingAddressOfRValue;
+    TableStyleName takingAddressOfRValue;
     return UpdateTableStyleFormatting(pTableNode, false, &takingAddressOfRValue);
 }
 
@@ -1428,11 +1428,12 @@ bool SwFEShell::SetTableStyle(const SwTableAutoFormat& rStyle)
         return false;
 
     // set the name & update
-    return UpdateTableStyleFormatting(pTableNode, false, &rStyle.GetName());
+    TableStyleName aStyleName = rStyle.GetName();
+    return UpdateTableStyleFormatting(pTableNode, false, &aStyleName);
 }
 
 bool SwFEShell::UpdateTableStyleFormatting(SwTableNode *pTableNode,
-        bool bResetDirect, OUString const*const pStyleName)
+        bool bResetDirect, TableStyleName const*const pStyleName)
 {
     if (!pTableNode)
     {
@@ -1441,7 +1442,7 @@ bool SwFEShell::UpdateTableStyleFormatting(SwTableNode *pTableNode,
             return false;
     }
 
-    OUString const aTableStyleName(pStyleName
+    TableStyleName const aTableStyleName(pStyleName
             ? *pStyleName
             : pTableNode->GetTable().GetTableStyleName());
 
@@ -1449,7 +1450,7 @@ bool SwFEShell::UpdateTableStyleFormatting(SwTableNode *pTableNode,
     SwTableAutoFormat* pTableStyle;
     if (pStyleName && pStyleName->isEmpty())
     {
-        pNone.reset(new SwTableAutoFormat(SwViewShell::GetShellRes()->aStrNone));
+        pNone.reset(new SwTableAutoFormat(TableStyleName(SwViewShell::GetShellRes()->aStrNone)));
         pNone->DisableAll();
         pTableStyle = pNone.get();
     }

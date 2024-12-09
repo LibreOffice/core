@@ -359,7 +359,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
             pColArr = nullptr;
     }
 
-    OUString aTableName = rTableName;
+    UIName aTableName(rTableName);
     if (aTableName.isEmpty() || FindTableFormatByName(aTableName) != nullptr)
         aTableName = GetUniqueTableName();
 
@@ -3786,7 +3786,7 @@ static bool lcl_SetAFormatBox(FndBox_ & rBox, SetAFormatTabPara *pSetPara, bool 
 
 bool SwDoc::SetTableAutoFormat(const SwSelBoxes& rBoxes,
         const SwTableAutoFormat& rNew, bool bResetDirect,
-        OUString const*const pStyleNameToSet)
+        TableStyleName const*const pStyleNameToSet)
 {
     OSL_ENSURE( !rBoxes.empty(), "No valid Box list" );
     SwTableNode* pTableNd = const_cast<SwTableNode*>(rBoxes[0]->GetSttNd()->FindTableNode());
@@ -3960,13 +3960,13 @@ SwTableAutoFormatTable& SwDoc::GetTableStyles()
     return *m_pTableStyles;
 }
 
-OUString SwDoc::GetUniqueTableName() const
+UIName SwDoc::GetUniqueTableName() const
 {
     if( IsInMailMerge())
     {
-        OUString newName = "MailMergeTable"
+        UIName newName( "MailMergeTable"
             + DateTimeToOUString( DateTime( DateTime::SYSTEM ) )
-            + OUString::number( mpTableFrameFormatTable->size() + 1 );
+            + OUString::number( mpTableFrameFormatTable->size() + 1 ) );
         return newName;
     }
 
@@ -3981,11 +3981,11 @@ OUString SwDoc::GetUniqueTableName() const
     {
         const SwTableFormat* pFormat = (*mpTableFrameFormatTable)[ n ];
         if( !pFormat->IsDefault() && IsUsed( *pFormat ) &&
-            pFormat->GetName().startsWith( aName ) )
+            pFormat->GetName().toString().startsWith( aName ) )
         {
             // Get number and set the Flag
             const sal_Int32 nNmLen = aName.getLength();
-            size_t nNum = o3tl::toInt32(pFormat->GetName().subView( nNmLen ));
+            size_t nNum = o3tl::toInt32(pFormat->GetName().toString().subView( nNmLen ));
             if( nNum-- && nNum < mpTableFrameFormatTable->size() )
                 pSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
         }
@@ -4009,10 +4009,10 @@ OUString SwDoc::GetUniqueTableName() const
         }
     }
 
-    return aName + OUString::number( ++nNum );
+    return UIName(aName + OUString::number( ++nNum ));
 }
 
-SwTableFormat* SwDoc::FindTableFormatByName( const OUString& rName, bool bAll ) const
+SwTableFormat* SwDoc::FindTableFormatByName( const UIName& rName, bool bAll ) const
 {
     const SwFormat* pRet = nullptr;
     if( bAll )
@@ -4333,7 +4333,7 @@ void SwDoc::ClearBoxNumAttrs( SwNode& rNode )
  * This method is called by edglss.cxx/fecopy.cxx
  */
 bool SwDoc::InsCopyOfTable( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
-                        const SwTable* pCpyTable, bool bCpyName, bool bCorrPos, const OUString& rStyleName )
+                        const SwTable* pCpyTable, bool bCpyName, bool bCorrPos, const TableStyleName& rStyleName )
 {
     bool bRet;
 
@@ -4491,7 +4491,7 @@ bool SwDoc::UnProtectTableCells( SwTable& rTable )
     return bChgd;
 }
 
-void SwDoc::UnProtectCells( const OUString& rName )
+void SwDoc::UnProtectCells( const UIName& rName )
 {
     SwTableFormat* pFormat = FindTableFormatByName( rName );
     if( pFormat )
@@ -4579,7 +4579,7 @@ void SwDoc::UnProtectTables( const SwPaM& rPam )
 }
 
 bool SwDoc::HasTableAnyProtection( const SwPosition* pPos,
-                                 const OUString* pTableName,
+                                 const UIName* pTableName,
                                  bool* pFullTableProtection )
 {
     bool bHasProtection = false;
@@ -4619,7 +4619,7 @@ bool SwDoc::HasTableAnyProtection( const SwPosition* pPos,
     return bHasProtection;
 }
 
-SwTableAutoFormat* SwDoc::MakeTableStyle(const OUString& rName)
+SwTableAutoFormat* SwDoc::MakeTableStyle(const TableStyleName& rName)
 {
     SwTableAutoFormat aTableFormat(rName);
     GetTableStyles().AddAutoFormat(aTableFormat);
@@ -4636,10 +4636,10 @@ SwTableAutoFormat* SwDoc::MakeTableStyle(const OUString& rName)
     return pTableFormat;
 }
 
-std::unique_ptr<SwTableAutoFormat> SwDoc::DelTableStyle(const OUString& rName, bool bBroadcast)
+std::unique_ptr<SwTableAutoFormat> SwDoc::DelTableStyle(const TableStyleName& rName, bool bBroadcast)
 {
     if (bBroadcast)
-        BroadcastStyleOperation(rName, SfxStyleFamily::Table, SfxHintId::StyleSheetErased);
+        BroadcastStyleOperation(UIName(rName.toString()), SfxStyleFamily::Table, SfxHintId::StyleSheetErased);
 
     std::unique_ptr<SwTableAutoFormat> pReleasedFormat = GetTableStyles().ReleaseAutoFormat(rName);
 
@@ -4653,7 +4653,7 @@ std::unique_ptr<SwTableAutoFormat> SwDoc::DelTableStyle(const OUString& rName, b
             SwTable* pTable = SwTable::FindTable(pFrameFormat);
             if (pTable->GetTableStyleName() == pReleasedFormat->GetName())
             {
-                pTable->SetTableStyleName(u""_ustr);
+                pTable->SetTableStyleName(TableStyleName());
                 vAffectedTables.push_back(pTable);
             }
         }
@@ -4670,7 +4670,7 @@ std::unique_ptr<SwTableAutoFormat> SwDoc::DelTableStyle(const OUString& rName, b
     return pReleasedFormat;
 }
 
-void SwDoc::ChgTableStyle(const OUString& rName, const SwTableAutoFormat& rNewFormat)
+void SwDoc::ChgTableStyle(const TableStyleName& rName, const SwTableAutoFormat& rNewFormat)
 {
     SwTableAutoFormat* pFormat = GetTableStyles().FindAutoFormat(rName);
     if (!pFormat)

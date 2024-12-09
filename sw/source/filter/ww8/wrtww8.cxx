@@ -3301,7 +3301,7 @@ void MSWordExportBase::AddLinkTarget(std::u16string_view rURL)
     else if( sCmp == "graphic" )
     {
         OUString aName(BookmarkToWriter(aURL.subView(0, nPos)));
-        if (const SwFlyFrameFormat* pFormat = m_rDoc.FindFlyByName(aName, SwNodeType::Grf))
+        if (const SwFlyFrameFormat* pFormat = m_rDoc.FindFlyByName(UIName(aName), SwNodeType::Grf))
         {
             const SwFormatAnchor& rFormatAnchor = pFormat->GetAnchor();
             if (SwNode* pAnchorNode = rFormatAnchor.GetAnchorNode())
@@ -3311,14 +3311,14 @@ void MSWordExportBase::AddLinkTarget(std::u16string_view rURL)
     else if( sCmp == "frame" )
     {
         OUString aName(BookmarkToWriter(aURL.subView(0, nPos)));
-        if (const SwFlyFrameFormat* pFormat = m_rDoc.FindFlyByName(aName, SwNodeType::Text))
+        if (const SwFlyFrameFormat* pFormat = m_rDoc.FindFlyByName(UIName(aName), SwNodeType::Text))
             if (const SwNodeIndex* pIdx = pFormat->GetContent().GetContentIdx())
                 m_aImplicitBookmarks.emplace_back(aURL, pIdx->GetIndex() + 1);
     }
     else if( sCmp == "ole" )
     {
         OUString aName(BookmarkToWriter(aURL.subView(0, nPos)));
-        if (const SwFlyFrameFormat* pFormat = m_rDoc.FindFlyByName(aName, SwNodeType::Ole))
+        if (const SwFlyFrameFormat* pFormat = m_rDoc.FindFlyByName(UIName(aName), SwNodeType::Ole))
         {
             const SwFormatAnchor& rFormatAnchor = pFormat->GetAnchor();
             if (SwNode* pAnchorNode = rFormatAnchor.GetAnchorNode())
@@ -3343,7 +3343,7 @@ void MSWordExportBase::AddLinkTarget(std::u16string_view rURL)
     else if( sCmp == "table" )
     {
         OUString aName(BookmarkToWriter(aURL.subView(0, nPos)));
-        if (const SwTable* pTable = SwTable::FindTable(m_rDoc.FindTableFormatByName(aName)))
+        if (const SwTable* pTable = SwTable::FindTable(m_rDoc.FindTableFormatByName(UIName(aName))))
             if (const SwTableNode* pTableNode = pTable->GetTabSortBoxes()[1]->GetSttNd()->FindTableNode())
                 m_aImplicitBookmarks.emplace_back(aURL, pTableNode->GetIndex() + 2);
     }

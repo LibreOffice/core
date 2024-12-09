@@ -556,7 +556,7 @@ ErrCode SwHTMLWriter::WriteStream()
 
                 // save only the tag of section
                 OString aName = HTMLOutFuncs::ConvertStringToHTML(
-                    pSNd->GetSection().GetSectionName() );
+                    pSNd->GetSection().GetSectionName().toString() );
 
                 aStartTags =
                     "<" + GetNamespace() + OOO_STRING_SVTOOLS_HTML_division
@@ -755,13 +755,13 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
 
     OStringBuffer sOut("<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_division);
 
-    const OUString& rName = rSection.GetSectionName();
+    const UIName& rName = rSection.GetSectionName();
     if( !rName.isEmpty() && !bContinued )
     {
         sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_id "=\"");
         rHTMLWrt.Strm().WriteOString( sOut );
         sOut.setLength(0);
-        HTMLOutFuncs::Out_String( rHTMLWrt.Strm(), rName );
+        HTMLOutFuncs::Out_String( rHTMLWrt.Strm(), rName.toString() );
         sOut.append('\"');
     }
 
@@ -824,7 +824,7 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
 
     rHTMLWrt.SetLFPossible(true);
     if( !rName.isEmpty() && !bContinued )
-        rHTMLWrt.OutImplicitMark( rName, "region" );
+        rHTMLWrt.OutImplicitMark( rName.toString(), "region" );
 
     rHTMLWrt.IncIndentLevel();
 }

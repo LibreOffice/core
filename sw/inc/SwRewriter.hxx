@@ -40,7 +40,8 @@ public:
     SwRewriter();
 
     void AddRule(SwUndoArg eWhat, const OUString& rWith);
-    // convenience method
+    // convenience methods
+    void AddRule(SwUndoArg eWhat, const UIName& rWith) { AddRule(eWhat, rWith.toString()); }
     void AddRule(SwUndoArg eWhat, const ReferenceMarkerName& rWith)
     {
         AddRule(eWhat, rWith.toString());

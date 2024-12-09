@@ -606,7 +606,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCursorTraversal)
 
     // When going from A1 to A2:
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
-    pWrtShell->GotoTable(u"Table1"_ustr);
+    pWrtShell->GotoTable(UIName(u"Table1"_ustr));
     SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
     CPPUNIT_ASSERT_EQUAL(u"A1"_ustr, pTextNode->GetText());
     pWrtShell->Down(/*bSelect=*/false);
@@ -627,7 +627,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyRowDelete)
 
     // When deleting the row of A2:
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
-    pWrtShell->GotoTable(u"Table1"_ustr);
+    pWrtShell->GotoTable(UIName(u"Table1"_ustr));
     pWrtShell->Down(/*bSelect=*/false);
     SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
     // We delete the right row:
@@ -649,7 +649,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFly1stRowDelete)
 
     // When deleting the row of A1:
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
-    pWrtShell->GotoTable(u"Table1"_ustr);
+    pWrtShell->GotoTable(UIName(u"Table1"_ustr));
     SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
     // We delete the right row:
     CPPUNIT_ASSERT_EQUAL(u"A1"_ustr, pTextNode->GetText());
@@ -672,7 +672,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFly3rdRowDelete)
 
     // When deleting the row of A3:
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
-    pWrtShell->GotoTable(u"Table1"_ustr);
+    pWrtShell->GotoTable(UIName(u"Table1"_ustr));
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->Down(/*bSelect=*/false);
     SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();

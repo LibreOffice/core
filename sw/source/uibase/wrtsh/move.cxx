@@ -634,7 +634,7 @@ bool SwWrtShell::GotoMark( const ::sw::mark::MarkBase* const pMark, bool bSelect
     return bRet;
 }
 
-bool SwWrtShell::GotoFly( const OUString& rName, FlyCntType eType, bool bSelFrame )
+bool SwWrtShell::GotoFly( const UIName& rName, FlyCntType eType, bool bSelFrame )
 {
     SwPosition aPos = *GetCursor()->GetPoint();
     bool bRet = SwFEShell::GotoFly(rName, eType, bSelFrame);
@@ -706,7 +706,7 @@ bool SwWrtShell::GotoRefMark( const ReferenceMarkerName& rRefMark, sal_uInt16 nS
     return bRet;
 }
 
-bool SwWrtShell::GotoNextTOXBase( const OUString* pName )
+bool SwWrtShell::GotoNextTOXBase( const UIName* pName )
 {
     SwPosition aPos = *GetCursor()->GetPoint();
     bool bRet = SwCursorShell::GotoNextTOXBase(pName);
@@ -715,7 +715,7 @@ bool SwWrtShell::GotoNextTOXBase( const OUString* pName )
     return bRet;
 }
 
-bool SwWrtShell::GotoTable( const OUString& rName )
+bool SwWrtShell::GotoTable( const UIName& rName )
 {
     SwPosition aPos = *GetCursor()->GetPoint();
     bool bRet = SwCursorShell::GotoTable(rName);

@@ -231,7 +231,7 @@ void SwNoTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect cons
             if ( aText.isEmpty() && pNd->IsGrfNode() )
                 GetRealURL( *static_cast<const SwGrfNode*>(pNd), aText );
             if( aText.isEmpty() )
-                aText = FindFlyFrame()->GetFormat()->GetName();
+                aText = FindFlyFrame()->GetFormat()->GetName().toString();
             lcl_PaintReplacement( getFrameArea(), aText, *pSh, this, false );
         }
         return;
@@ -1298,7 +1298,7 @@ void SwNoTextFrame::ImplPaintPictureGraphic( vcl::RenderContext* pOut,
                 *pOut,
                 aPrimitives,
                 aGraphicTransform,
-                nullptr == pGrfNd->GetFlyFormat() ? OUString() : pGrfNd->GetFlyFormat()->GetName(),
+                nullptr == pGrfNd->GetFlyFormat() ? OUString() : pGrfNd->GetFlyFormat()->GetName().toString(),
                 rNoTNd.GetTitle(),
                 rNoTNd.GetDescription());
             bSucceeded = true;
@@ -1316,7 +1316,7 @@ void SwNoTextFrame::ImplPaintPictureGraphic( vcl::RenderContext* pOut,
             rGrfObj,
             aGrfAttr,
             aGraphicTransform,
-            nullptr == pGrfNd->GetFlyFormat() ? OUString() : pGrfNd->GetFlyFormat()->GetName(),
+            nullptr == pGrfNd->GetFlyFormat() ? OUString() : pGrfNd->GetFlyFormat()->GetName().toString(),
             rNoTNd.GetTitle(),
             rNoTNd.GetDescription());
     }

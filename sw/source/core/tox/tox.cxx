@@ -363,7 +363,7 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
     if (bNeedsLink)
     {
         SwFormToken aLinkStt (TOKEN_LINK_START);
-        aLinkStt.sCharStyleName = SwResId(STR_POOLCHR_TOXJUMP);
+        aLinkStt.sCharStyleName = UIName(SwResId(STR_POOLCHR_TOXJUMP));
         aTokens.push_back(aLinkStt);
     }
 
@@ -391,7 +391,7 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
     if (bNeedsLink)
         aTokens.emplace_back(TOKEN_LINK_END);
 
-    SetTemplate(0, SwResId(*pPoolId++));
+    SetTemplate(0, UIName(SwResId(*pPoolId++)));
 
     if(TOX_INDEX == m_eType)
     {
@@ -404,12 +404,12 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
                 aTmpTokens.push_back(aTmpToken);
 
                 SetPattern( i, std::move(aTmpTokens) );
-                SetTemplate(i, SwResId(STR_POOLCOLL_TOX_IDXBREAK));
+                SetTemplate(i, UIName(SwResId(STR_POOLCOLL_TOX_IDXBREAK)));
             }
             else
             {
                 SetPattern( i, std::vector(aTokens) );
-                SetTemplate(i, SwResId(STR_POOLCOLL_TOX_ARY[i - 1]));
+                SetTemplate(i, UIName(SwResId(STR_POOLCOLL_TOX_ARY[i - 1])));
             }
         }
     }
@@ -432,7 +432,7 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
                 pPoolId = STR_POOLCOLL_TOX_USER_EXTRA_ARY;
             else if( TOX_AUTHORITIES == m_eType ) //reuse the same STR_POOLCOLL_TOX_AUTHORITIES1 id each time
                 pPoolId = STR_POOLCOLL_TOX_AUTHORITIES_ARY + 1;
-            SetTemplate(i, SwResId(*pPoolId));
+            SetTemplate(i, UIName(SwResId(*pPoolId)));
         }
     }
 }
@@ -626,7 +626,7 @@ void SwTOXBase::CopyTOXBase( SwDoc* pDoc, const SwTOXBase& rSource )
     if( !pDoc || pDoc->IsCopyIsMove() )
         m_aName = rSource.GetTOXName();
     else
-        m_aName = pDoc->GetUniqueTOXBaseName( *pType, rSource.GetTOXName() );
+        m_aName = UIName(pDoc->GetUniqueTOXBaseName( *pType, rSource.GetTOXName().toString() ));
 }
 
 // TOX specific functions
@@ -718,7 +718,7 @@ OUString SwFormToken::GetString() const
         break;
     }
 
-    OUString sData = " " + sCharStyleName + "," + OUString::number( nPoolId ) + ",";
+    OUString sData = " " + sCharStyleName.toString() + "," + OUString::number( nPoolId ) + ",";
 
     // TabStopPosition and TabAlign or ChapterInfoFormat
     switch (eTokenType)
@@ -869,7 +869,7 @@ lcl_BuildToken(std::u16string_view sPattern, size_t & nCurPatternPos)
     sToken = sToken.substr( nTokenLen, sToken.size() - nTokenLen - 1);
 
     sal_Int32 nIdx{ 0 };
-    eRet.sCharStyleName = o3tl::getToken(sToken, 0, ',', nIdx );
+    eRet.sCharStyleName = UIName(OUString(o3tl::getToken(sToken, 0, ',', nIdx )));
     std::u16string_view sTmp( o3tl::getToken(sToken, 0, ',', nIdx ));
     if( !sTmp.empty() )
         eRet.nPoolId = o3tl::narrowing<sal_uInt16>(o3tl::toInt32(sTmp));

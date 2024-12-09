@@ -300,7 +300,7 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testDeleteHeader)
     CPPUNIT_ASSERT(pWrtShell);
 
     // modify header
-    pWrtShell->ChangeHeaderOrFooter(u"Default Page Style", true, false, false);
+    pWrtShell->ChangeHeaderOrFooter(UIName(u"Default Page Style"_ustr), true, false, false);
     pWrtShell->GetWin()->GrabFocusToDocument();
 
     // re-check A11Y issues

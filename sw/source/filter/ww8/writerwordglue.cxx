@@ -121,8 +121,8 @@ namespace myImplHelpers
     public:
         MapperImpl(SwDoc &rDoc) : mrDoc(rDoc) {}
         SwTextFormatColl* GetBuiltInStyle(ww::sti eSti);
-        SwTextFormatColl* GetStyle(const OUString &rName);
-        SwTextFormatColl* MakeStyle(const OUString &rName);
+        SwTextFormatColl* GetStyle(const UIName &rName);
+        SwTextFormatColl* MakeStyle(const UIName &rName);
     };
 
     SwTextFormatColl* MapperImpl<SwTextFormatColl>::GetBuiltInStyle(ww::sti eSti)
@@ -166,12 +166,12 @@ namespace myImplHelpers
         return pRet;
     }
 
-    SwTextFormatColl* MapperImpl<SwTextFormatColl>::GetStyle(const OUString &rName)
+    SwTextFormatColl* MapperImpl<SwTextFormatColl>::GetStyle(const UIName &rName)
     {
         return sw::util::GetParaStyle(mrDoc, rName);
     }
 
-    SwTextFormatColl* MapperImpl<SwTextFormatColl>::MakeStyle(const OUString &rName)
+    SwTextFormatColl* MapperImpl<SwTextFormatColl>::MakeStyle(const UIName &rName)
     {
         return mrDoc.MakeTextFormatColl(rName,
             mrDoc.GetDfltTextFormatColl());
@@ -184,8 +184,8 @@ namespace myImplHelpers
     public:
         MapperImpl(SwDoc &rDoc) : mrDoc(rDoc) {}
         SwCharFormat* GetBuiltInStyle(ww::sti eSti);
-        SwCharFormat* GetStyle(const OUString &rName);
-        SwCharFormat* MakeStyle(const OUString &rName);
+        SwCharFormat* GetStyle(const UIName &rName);
+        SwCharFormat* MakeStyle(const UIName &rName);
     };
 
     SwCharFormat* MapperImpl<SwCharFormat>::GetBuiltInStyle(ww::sti eSti)
@@ -227,12 +227,12 @@ namespace myImplHelpers
         return pRet;
     }
 
-    SwCharFormat* MapperImpl<SwCharFormat>::GetStyle(const OUString &rName)
+    SwCharFormat* MapperImpl<SwCharFormat>::GetStyle(const UIName &rName)
     {
         return sw::util::GetCharStyle(mrDoc, rName);
     }
 
-    SwCharFormat* MapperImpl<SwCharFormat>::MakeStyle(const OUString &rName)
+    SwCharFormat* MapperImpl<SwCharFormat>::MakeStyle(const UIName &rName)
     {
         return mrDoc.MakeCharFormat(rName, mrDoc.GetDfltCharFormat());
     }
@@ -242,18 +242,18 @@ namespace myImplHelpers
     private:
         MapperImpl<C> maHelper;
         o3tl::sorted_vector<const C*> maUsedStyles;
-        C* MakeNonCollidingStyle(const OUString& rName,
+        C* MakeNonCollidingStyle(const UIName& rName,
                                  std::map<OUString, sal_Int32>& rCollisions);
     public:
         typedef std::pair<C*, bool> StyleResult;
         explicit StyleMapperImpl(SwDoc &rDoc) : maHelper(rDoc) {}
-        StyleResult GetStyle(const OUString& rName, ww::sti eSti,
+        StyleResult GetStyle(const UIName& rName, ww::sti eSti,
                              std::map<OUString, sal_Int32>& rCollisions);
     };
 
     template<class C>
     typename StyleMapperImpl<C>::StyleResult
-    StyleMapperImpl<C>::GetStyle(const OUString& rName, ww::sti eSti,
+    StyleMapperImpl<C>::GetStyle(const UIName& rName, ww::sti eSti,
                                  std::map<OUString, sal_Int32>& rCollisions)
     {
         C *pRet = maHelper.GetBuiltInStyle(eSti);
@@ -274,12 +274,12 @@ namespace myImplHelpers
 
         if (!pRet)
         {
-            OUString aName(rName);
-            sal_Int32 nIdx = rName.indexOf(',');
+            OUString aName(rName.toString());
+            sal_Int32 nIdx = rName.toString().indexOf(',');
             // No commas allow in SW style names
             if (-1 != nIdx)
-                aName = rName.copy( 0, nIdx );
-            pRet = MakeNonCollidingStyle(aName, rCollisions);
+                aName = rName.toString().copy( 0, nIdx );
+            pRet = MakeNonCollidingStyle(UIName(aName), rCollisions);
         }
 
         if (pRet)
@@ -289,13 +289,13 @@ namespace myImplHelpers
     }
 
     template<class C>
-    C* StyleMapperImpl<C>::MakeNonCollidingStyle(const OUString& rName,
+    C* StyleMapperImpl<C>::MakeNonCollidingStyle(const UIName& rName,
                                                  std::map<OUString, sal_Int32>& rCollisions)
     {
-        OUString aName(rName);
+        OUString aName(rName.toString());
         C* pColl = nullptr;
 
-        if (nullptr != (pColl = maHelper.GetStyle(aName)))
+        if (nullptr != (pColl = maHelper.GetStyle(UIName(aName))))
         {
             //If the style collides first stick WW- in front of it, unless
             //it already has it and then successively add a larger and
@@ -313,7 +313,7 @@ namespace myImplHelpers
                 nI = aFind->second;
 
             while (
-                    nullptr != (pColl = maHelper.GetStyle(aName)) &&
+                    nullptr != (pColl = maHelper.GetStyle(UIName(aName))) &&
                     (nI < SAL_MAX_INT32)
                   )
             {
@@ -323,7 +323,7 @@ namespace myImplHelpers
             rCollisions.insert_or_assign(aBaseName, nI);
         }
 
-        return pColl ? nullptr : maHelper.MakeStyle(aName);
+        return pColl ? nullptr : maHelper.MakeStyle(UIName(aName));
     }
 
     static OUString FindBestMSSubstituteFont(std::u16string_view rFont)
@@ -477,7 +477,7 @@ namespace sw
         }
 
         ParaStyleMapper::StyleResult ParaStyleMapper::GetStyle(
-            const OUString& rName, ww::sti eSti,
+            const UIName& rName, ww::sti eSti,
             std::map<OUString, sal_Int32>& rCollisions)
         {
             return mpImpl->GetStyle(rName, eSti, rCollisions);
@@ -493,7 +493,7 @@ namespace sw
         }
 
         CharStyleMapper::StyleResult CharStyleMapper::GetStyle(
-            const OUString& rName, ww::sti eSti,
+            const UIName& rName, ww::sti eSti,
             std::map<OUString, sal_Int32>& rCollisions)
         {
             return mpImpl->GetStyle(rName, eSti, rCollisions);

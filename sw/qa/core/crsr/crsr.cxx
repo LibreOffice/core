@@ -211,7 +211,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreCrsrTest, testContentControlProtectedSection)
     pWrtShell->InsertContentControl(SwContentControlType::DATE);
     pWrtShell->SelAll();
     OUString aSectionName = pWrtShell->GetUniqueSectionName();
-    SwSectionData aSection(SectionType::Content, aSectionName);
+    SwSectionData aSection(SectionType::Content, UIName(aSectionName));
     aSection.SetProtectFlag(true);
     pWrtShell->InsertSection(aSection);
 

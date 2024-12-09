@@ -917,11 +917,11 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testConvertToTextFrame)
     // When checking the anchor of the inner frame:
     SwDoc* pDoc = getSwDoc();
     const sw::FrameFormats<sw::SpzFrameFormat*>& rFrames = *pDoc->GetSpzFrameFormats();
-    sw::SpzFrameFormat* pFrame3 = rFrames.FindFrameFormatByName(u"Frame3"_ustr);
+    sw::SpzFrameFormat* pFrame3 = rFrames.FindFrameFormatByName(UIName(u"Frame3"_ustr));
     SwNodeIndex aFrame3Anchor = pFrame3->GetAnchor().GetContentAnchor()->nNode;
 
     // Then make sure it's anchored in the outer frame's last content node:
-    sw::SpzFrameFormat* pFrame4 = rFrames.FindFrameFormatByName(u"Frame4"_ustr);
+    sw::SpzFrameFormat* pFrame4 = rFrames.FindFrameFormatByName(UIName(u"Frame4"_ustr));
     SwPaM aPaM(*pFrame4->GetContent().GetContentIdx()->GetNode().EndOfSectionNode());
     aPaM.Move(fnMoveBackward, GoInContent);
     // Without the accompanying fix in place, this test would have failed with:

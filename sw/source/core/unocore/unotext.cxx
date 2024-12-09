@@ -1630,7 +1630,7 @@ SwXText::convertToTextFrame(
     // we have to work with the SdrObjects, as unique name is not guaranteed in their frame format
     // tdf#115094: do nothing if we have a graphic node
     o3tl::sorted_vector<const SdrObject*> aAnchoredObjectsByPtr;
-    std::set<OUString> aAnchoredObjectsByName;
+    std::set<UIName> aAnchoredObjectsByName;
     for (size_t i = 0; i < m_pDoc->GetSpzFrameFormats()->size(); ++i)
     {
         const SwFrameFormat* pFrameFormat = (*m_pDoc->GetSpzFrameFormats())[i];

@@ -622,7 +622,7 @@ IMPL_LINK_NOARG(SwInsertDBColAutoPilot, TableFormatHdl, weld::Button&, void)
         m_pTableSet.reset(new SfxItemSet( rSh.GetAttrPool(), SwuiGetUITableAttrRange() ));
 
         // At first acquire the simple attributes
-        m_pTableSet->Put( SfxStringItem( FN_PARAM_TABLE_NAME, rSh.GetUniqueTableName() ));
+        m_pTableSet->Put( SfxStringItem( FN_PARAM_TABLE_NAME, rSh.GetUniqueTableName().toString() ));
         m_pTableSet->Put( SfxUInt16Item( FN_PARAM_TABLE_HEADLINE, 1 ) );
 
         m_pTableSet->Put( SfxUInt16Item( SID_BACKGRND_DESTINATION,
@@ -1176,15 +1176,15 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                 const OUString sTmplNm(m_xLbDbParaColl->get_active_text());
                 if( m_sNoTmpl != sTmplNm )
                 {
-                    pColl = rSh.FindTextFormatCollByName( sTmplNm );
+                    pColl = rSh.FindTextFormatCollByName( UIName(sTmplNm) );
                     if( !pColl )
                     {
                         const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(
-                            sTmplNm, SwGetPoolIdFromName::TxtColl );
+                            UIName(sTmplNm), SwGetPoolIdFromName::TxtColl );
                         if( USHRT_MAX != nId )
                             pColl = rSh.GetTextCollFromPool( nId );
                         else
-                            pColl = rSh.MakeTextFormatColl( sTmplNm );
+                            pColl = rSh.MakeTextFormatColl( UIName(sTmplNm) );
                     }
                     rSh.SetTextFormatColl( pColl );
                 }
@@ -1527,7 +1527,7 @@ void SwInsertDBColAutoPilot::ImplCommit()
         pValues[5].Value <<= sTmp;
 
     if (m_xTAutoFormat)
-        pValues[6].Value <<= m_xTAutoFormat->GetName();
+        pValues[6].Value <<= m_xTAutoFormat->GetName().toString();
 
     pValues[7].Value <<= m_xRbAsTable->get_active();
     pValues[8].Value <<= m_xRbAsField->get_active();
@@ -1563,7 +1563,8 @@ void SwInsertDBColAutoPilot::ImplCommit()
         pSubValues[2].Value <<= pColumn->bHasFormat;
         pSubValues[3].Value <<= pColumn->bIsDBFormat;
 
-        SwStyleNameMapper::FillUIName( RES_POOLCOLL_STANDARD, sTmp );
+        UIName sTmpUIName;
+        SwStyleNameMapper::FillUIName( RES_POOLCOLL_STANDARD, sTmpUIName );
         const SvNumberformat* pNF = rNFormatr.GetEntry( pColumn->nUsrNumFormat );
         LanguageType eLang;
         if( pNF )
@@ -1573,7 +1574,7 @@ void SwInsertDBColAutoPilot::ImplCommit()
         }
         else
         {
-            pSubValues[4].Value <<= sTmp;
+            pSubValues[4].Value <<= sTmpUIName.toString();
             eLang = GetAppLanguage();
         }
 

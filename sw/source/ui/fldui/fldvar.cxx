@@ -293,7 +293,7 @@ void SwFieldVarPage::SubTypeHdl(const weld::TreeView* pBox)
                 {
                     if (pBox || (m_bInit && !IsRefresh()))    // only when interacting via mouse
                     {
-                        m_xNameED->set_text(pType->GetName());
+                        m_xNameED->set_text(pType->GetName().toString());
 
                         if (pType->GetType() == UF_STRING)
                         {
@@ -467,7 +467,7 @@ void SwFieldVarPage::SubTypeHdl(const weld::TreeView* pBox)
 
                     if(pType)
                     {
-                        m_xNameED->set_text(pType->GetName());
+                        m_xNameED->set_text(pType->GetName().toString());
 
                         //JP 28.08.95: DDE-Topics/-Items can have blanks in their names!
                         //              That's not considered here yet
@@ -1068,7 +1068,7 @@ IMPL_LINK(SwFieldVarPage, TBClickHdl, weld::Button&, rBox, void)
                     pSh = ::GetActiveWrtShell();
                 if(pSh)
                 {
-                    SwUserFieldType aType( pSh->GetDoc(), sName );
+                    SwUserFieldType aType( pSh->GetDoc(), UIName(sName) );
 
                     if (nNumFormatPos != -1)
                     {
@@ -1096,7 +1096,7 @@ IMPL_LINK(SwFieldVarPage, TBClickHdl, weld::Button&, rBox, void)
                     sValue = sValue.replaceFirst( " ", OUStringChar(sfx2::cTokenSeparator), &nTmpPos );
                     sValue = sValue.replaceFirst( " ", OUStringChar(sfx2::cTokenSeparator), &nTmpPos );
 
-                    SwDDEFieldType aType(sName, sValue, static_cast<SfxLinkUpdateMode>(nFormat));
+                    SwDDEFieldType aType(UIName(sName), sValue, static_cast<SfxLinkUpdateMode>(nFormat));
                     m_xSelectionLB->append_text(sName);
                     m_xSelectionLB->select_text(sName);
                     GetFieldMgr().InsertFieldType(aType);   // DDE-Field new

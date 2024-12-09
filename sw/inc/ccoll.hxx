@@ -22,6 +22,7 @@
 #include <svl/poolitem.hxx>
 #include <tools/solar.h>
 #include "swdllapi.h"
+#include "names.hxx"
 
 enum class Master_CollCondition;
 
@@ -40,7 +41,7 @@ class SW_DLLPUBLIC SwCondCollItem final : public SfxPoolItem
 {
     static const CommandStruct  s_aCmds[COND_COMMAND_COUNT];
 
-    OUString                    m_sStyles[COND_COMMAND_COUNT];
+    UIName                    m_sStyles[COND_COMMAND_COUNT];
 
 public:
     DECLARE_ITEM_TYPE_FUNCTION(SwCondCollItem)
@@ -57,8 +58,8 @@ public:
 
     static const CommandStruct* GetCmds() { return s_aCmds; }
 
-    OUString            GetStyle(sal_uInt16 nPos) const;
-    void                SetStyle(const OUString* pStyle, sal_uInt16 nPos);
+    UIName              GetStyle(sal_uInt16 nPos) const;
+    void                SetStyle(const UIName* pStyle, sal_uInt16 nPos);
 
 };
 

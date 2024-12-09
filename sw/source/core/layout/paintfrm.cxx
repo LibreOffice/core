@@ -4544,7 +4544,7 @@ void SwTextFrame::PaintParagraphStylesHighlighting() const
         return;
 
     const SwTextFormatColl* pColl = GetTextNodeFirst()->GetTextColl();
-    OUString sStyleName = pColl->GetName();
+    UIName sStyleName = pColl->GetName();
 
     Color nStyleColor;
     int nStyleNumber(-1);
@@ -4557,17 +4557,17 @@ void SwTextFrame::PaintParagraphStylesHighlighting() const
         // Do this so these are stable across views regardless of an individual
         // user's selection mode in the style panel.
         nStyleNumber = pWrtSh->GetDoc()->GetTextFormatColls()->GetPos(pColl);
-        nStyleColor = ColorHash(sStyleName);
+        nStyleColor = ColorHash(sStyleName.toString());
     }
     else
     {
         StylesSpotlightColorMap& rParaStylesColorMap
                 = pWrtSh->GetView().GetStylesSpotlightParaColorMap();
-        bSpotlightStyle = rParaStylesColorMap.contains(sStyleName);
+        bSpotlightStyle = rParaStylesColorMap.contains(sStyleName.toString());
         if (bSpotlightStyle)
         {
-            nStyleNumber = rParaStylesColorMap[sStyleName].second;
-            nStyleColor = rParaStylesColorMap[sStyleName].first;
+            nStyleNumber = rParaStylesColorMap[sStyleName.toString()].second;
+            nStyleColor = rParaStylesColorMap[sStyleName.toString()].first;
         }
     }
 

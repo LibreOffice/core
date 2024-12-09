@@ -32,7 +32,7 @@ class SW_DLLPUBLIC SwFormatRuby final : public SfxPoolItem
     friend class SwTextRuby;
 
     OUString m_sRubyText;                     ///< The ruby text.
-    OUString m_sCharFormatName;               ///< Name of the charformat.
+    UIName m_sCharFormatName;                 ///< Name of the charformat.
     SwTextRuby* m_pTextAttr;                  ///< The TextAttribute.
     sal_uInt16 m_nCharFormatId;               ///< PoolId of the charformat.
     sal_uInt16 m_nPosition;                   ///< Position of the Ruby-character.
@@ -64,8 +64,8 @@ public:
     const OUString& GetText() const                    { return m_sRubyText; }
     void SetText( const OUString& rText )        { m_sRubyText = rText; }
 
-    const OUString& GetCharFormatName() const             { return m_sCharFormatName; }
-    void SetCharFormatName( const OUString& rNm )  { m_sCharFormatName = rNm; }
+    const UIName& GetCharFormatName() const             { return m_sCharFormatName; }
+    void SetCharFormatName( const UIName& rNm )  { m_sCharFormatName = rNm; }
 
     sal_uInt16 GetCharFormatId() const                 { return m_nCharFormatId; }
     void SetCharFormatId( sal_uInt16 nNew )            { m_nCharFormatId = nNew; }

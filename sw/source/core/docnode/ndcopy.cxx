@@ -253,7 +253,7 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc& rDoc, const SwNodeIndex& rIdx ) const
     }
 
     // Copy the TableFrameFormat
-    OUString sTableName( GetTable().GetFrameFormat()->GetName() );
+    UIName sTableName( GetTable().GetFrameFormat()->GetName() );
     if( !rDoc.IsCopyIsMove() )
     {
         const sw::TableFrameFormats& rTableFormats = *rDoc.GetTableFrameFormats();

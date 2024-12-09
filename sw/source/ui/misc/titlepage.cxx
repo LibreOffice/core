@@ -128,11 +128,11 @@ void SwTitlePageDlg::FillList()
     sal_uInt16 nTitlePages = m_xPageCountNF->get_value();
     m_xPagePropertiesLB->clear();
     if (mpTitleDesc)
-        m_xPagePropertiesLB->append_text(mpTitleDesc->GetName());
+        m_xPagePropertiesLB->append_text(mpTitleDesc->GetName().toString());
     if (nTitlePages > 1 && mpIndexDesc)
-        m_xPagePropertiesLB->append_text(mpIndexDesc->GetName());
+        m_xPagePropertiesLB->append_text(mpIndexDesc->GetName().toString());
     if (mpNormalDesc)
-        m_xPagePropertiesLB->append_text(mpNormalDesc->GetName());
+        m_xPagePropertiesLB->append_text(mpNormalDesc->GetName().toString());
     m_xPagePropertiesLB->set_active(0);
 }
 
@@ -268,7 +268,7 @@ IMPL_LINK_NOARG(SwTitlePageDlg, EditHdl, weld::Button&, void)
         return;
     SwWrtShell& rWrtShell = pView->GetWrtShell();
     SwView& rView = rWrtShell.GetView();
-    rView.GetDocShell()->FormatPage(getDialog(), m_xPagePropertiesLB->get_active_text(), u"page"_ustr, rWrtShell);
+    rView.GetDocShell()->FormatPage(getDialog(), UIName(m_xPagePropertiesLB->get_active_text()), u"page"_ustr, rWrtShell);
     rView.InvalidateRulerPos();
 }
 

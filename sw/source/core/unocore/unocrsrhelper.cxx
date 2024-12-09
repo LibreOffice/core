@@ -114,8 +114,8 @@ static void lcl_createPamCopy(std::optional<SwPaM>& o_rpPam, const SwPaM& rPam)
 
 void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
         SwDoc & rTargetDoc,
-        std::optional<SwPaM>& o_rpPaM, std::pair<OUString, FlyCntType> & o_rFrame,
-        OUString & o_rTableName, SwUnoTableCursor const*& o_rpTableCursor,
+        std::optional<SwPaM>& o_rpPaM, std::pair<UIName, FlyCntType> & o_rFrame,
+        UIName & o_rTableName, SwUnoTableCursor const*& o_rpTableCursor,
         ::sw::mark::MarkBase const*& o_rpMark,
         std::vector<SdrObject *> & o_rSdrObjects)
 {
@@ -832,8 +832,8 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
             if(pSwNum->GetNumRule())
             {
                 SwNumRule aRule(*pSwNum->GetNumRule());
-                const OUString* pNewCharStyles =  pSwNum->GetNewCharStyleNames();
-                const OUString* pBulletFontNames = pSwNum->GetBulletFontNames();
+                const UIName* pNewCharStyles =  pSwNum->GetNewCharStyleNames();
+                const UIName* pBulletFontNames = pSwNum->GetBulletFontNames();
                 for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
                 {
                     SwNumFormat aFormat(aRule.Get( i ));
@@ -870,10 +870,10 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                                 {
                                     SfxStyleSheetBasePool* pPool = pShell->GetStyleSheetPool();
                                     SfxStyleSheetBase* pBase;
-                                    pBase = pPool->Find(pNewCharStyles[i], SfxStyleFamily::Char);
+                                    pBase = pPool->Find(pNewCharStyles[i].toString(), SfxStyleFamily::Char);
                                     // shall it really be created?
                                     if(!pBase)
-                                        pBase = &pPool->Make(pNewCharStyles[i], SfxStyleFamily::Page);
+                                        pBase = &pPool->Make(pNewCharStyles[i].toString(), SfxStyleFamily::Page);
                                     pCharFormat = static_cast<SwDocStyleSheet*>(pBase)->GetCharFormat();
                                 }
                             }
@@ -896,7 +896,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                             const FontList* pList = pFontListItem->GetFontList();
 
                             vcl::Font aFont(pList->Get(
-                                pBulletFontNames[i],WEIGHT_NORMAL, ITALIC_NONE));
+                                pBulletFontNames[i].toString(), WEIGHT_NORMAL, ITALIC_NONE));
                             aFormat.SetBulletFont(&aFont);
                         }
                     }
@@ -1305,7 +1305,7 @@ void makeRedline( SwPaM const & rPaM,
             if (!aRevertProperties.hasElements())
             {
                 // to reject the paragraph style change, use standard style
-                xRedlineExtraData.reset(new SwRedlineExtraData_FormatColl( u""_ustr,  RES_POOLCOLL_STANDARD, nullptr ));
+                xRedlineExtraData.reset(new SwRedlineExtraData_FormatColl( UIName(u""_ustr),  RES_POOLCOLL_STANDARD, nullptr ));
             }
         }
         else
@@ -1356,7 +1356,8 @@ void makeRedline( SwPaM const & rPaM,
             if (!aWhichPairs.empty())
             {
                 sal_uInt16 nStylePoolId = USHRT_MAX;
-                OUString sParaStyleName, sUIStyle;
+                OUString sParaStyleName;
+                UIName sUIStyle;
                 SfxItemSet aItemSet(rDoc.GetAttrPool(), std::move(aWhichPairs));
 
                 for (size_t i = 0; i < aEntries.size(); ++i)
@@ -1368,10 +1369,10 @@ void makeRedline( SwPaM const & rPaM,
                         rValue >>= xNumberingRules;
                         if (xNumberingRules.is())
                         {
-                            aItemSet.Put( SwNumRuleItem( xNumberingRules->getName() ));
+                            aItemSet.Put( SwNumRuleItem( UIName(xNumberingRules->getName()) ));
                             // keep it during export
                             SwNumRule* pRule = rDoc.FindNumRulePtr(
-                                        xNumberingRules->getName());
+                                        UIName(xNumberingRules->getName()));
                             if (pRule)
                                 pRule->SetUsedByRedline(true);
                         }
@@ -1392,10 +1393,10 @@ void makeRedline( SwPaM const & rPaM,
                 SwStyleNameMapper::FillUIName(ProgName(sParaStyleName), sUIStyle,
                                               SwGetPoolIdFromName::TxtColl);
                 xRedlineExtraData.reset(new SwRedlineExtraData_FormatColl(
-                    sUIStyle.isEmpty() ? sParaStyleName : sUIStyle, nStylePoolId, &aItemSet));
+                    sUIStyle.isEmpty() ? UIName(sParaStyleName) : sUIStyle, nStylePoolId, &aItemSet));
             }
             else if (eType == RedlineType::ParagraphFormat)
-                xRedlineExtraData.reset(new SwRedlineExtraData_FormatColl( u""_ustr, RES_POOLCOLL_STANDARD, nullptr ));
+                xRedlineExtraData.reset(new SwRedlineExtraData_FormatColl( UIName(u""_ustr), RES_POOLCOLL_STANDARD, nullptr ));
         }
     }
 

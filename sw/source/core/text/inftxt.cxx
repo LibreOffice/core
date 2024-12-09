@@ -1357,7 +1357,7 @@ void SwTextPaintInfo::DrawCSDFHighlighting(const SwLinePortion &rPor) const
     // check for CS formatting, if not CS formatted check for direct character formatting
     if (!sCurrentCharStyle.isEmpty())
     {
-        OUString sCharStyleDisplayName = SwStyleNameMapper::GetUIName(ProgName(sCurrentCharStyle),
+        UIName sCharStyleDisplayName = SwStyleNameMapper::GetUIName(ProgName(sCurrentCharStyle),
                                                              SwGetPoolIdFromName::ChrFmt);
         if (comphelper::LibreOfficeKit::isActive())
         {
@@ -1367,7 +1367,7 @@ void SwTextPaintInfo::DrawCSDFHighlighting(const SwLinePortion &rPor) const
                 // Do this so these are stable across views regardless of an individual
                 // user's selection mode in the style panel.
                 sCSNumberOrDF = OUString::number(pFrame->GetDoc().GetCharFormats()->GetPos(pCharFormat));
-                aFillColor = ColorHash(sCharStyleDisplayName);
+                aFillColor = ColorHash(sCharStyleDisplayName.toString());
             }
         }
         else
@@ -1375,7 +1375,7 @@ void SwTextPaintInfo::DrawCSDFHighlighting(const SwLinePortion &rPor) const
             if (!sCharStyleDisplayName.isEmpty())
             {
                 StylesSpotlightColorMap& rCharStylesColorMap = pView->GetStylesSpotlightCharColorMap();
-                auto it = rCharStylesColorMap.find(sCharStyleDisplayName);
+                auto it = rCharStylesColorMap.find(sCharStyleDisplayName.toString());
                 if (it != rCharStylesColorMap.end())
                 {
                     sCSNumberOrDF = OUString::number(it->second.second);

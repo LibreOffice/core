@@ -159,14 +159,14 @@ void SwNumRulesWithName::ResetNumRule(SwWrtShell& rSh, SwNumRule& rNumRule) cons
 }
 
 void SwNumRulesWithName::GetNumFormat(
-    size_t const nIndex, SwNumFormat const*& rpNumFormat, OUString const*& rpName) const
+    size_t const nIndex, SwNumFormat const*& rpNumFormat, UIName const*& rpName) const
 {
     rpNumFormat = (m_aFormats[nIndex]) ? &m_aFormats[nIndex]->m_aFormat : nullptr;
     rpName = (m_aFormats[nIndex]) ? &m_aFormats[nIndex]->m_sCharFormatName : nullptr;
 }
 
 void SwNumRulesWithName::SetNumFormat(
-        size_t const nIndex, SwNumFormat const& rNumFormat, OUString const& rName)
+        size_t const nIndex, SwNumFormat const& rNumFormat, UIName const& rName)
 {
     m_aFormats[nIndex].reset( new SwNumFormatGlobal(rNumFormat) );
     m_aFormats[nIndex]->m_sCharFormatName = rName;

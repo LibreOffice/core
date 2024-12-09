@@ -74,7 +74,7 @@ private:
     // Descriptor-interface
     std::unique_ptr<BaseFrameProperties_Impl> m_pProps;
     bool m_bIsDescriptor;
-    OUString                        m_sName;
+    UIName                          m_sName;
 
     sal_Int64                       m_nDrawAspect;
     sal_Int64                       m_nVisibleAreaWidth;

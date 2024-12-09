@@ -165,7 +165,7 @@ SwOutlineTabDialog::SwOutlineTabDialog(weld::Window* pParent, const SfxItemSet* 
     AddTabPage(u"position"_ustr, &SwNumPositionTabPage::Create, nullptr);
     AddTabPage(u"numbering"_ustr, &SwOutlineSettingsTabPage::Create, nullptr);
 
-    OUString sHeadline;
+    UIName sHeadline;
     sal_uInt16 i;
 
     for( i = 0; i < MAXLEVEL; ++i )
@@ -229,7 +229,7 @@ IMPL_LINK_NOARG(SwOutlineTabDialog, FormHdl, weld::Toggleable&, void)
         const SwNumRulesWithName *pRules = m_pChapterNumRules->GetRules(i);
         if (!pRules)
             continue;
-        m_xMenuButton->set_item_label("form" + OUString::number(i + 1), pRules->GetName());
+        m_xMenuButton->set_item_label("form" + OUString::number(i + 1), pRules->GetName().toString());
     }
 }
 
@@ -263,7 +263,7 @@ IMPL_LINK(SwOutlineTabDialog, MenuSelectHdl, const OUString&, rIdent, void)
         {
             const SwNumRulesWithName *pRules = m_pChapterNumRules->GetRules(i);
             if(pRules)
-                aStrArr[i] = &pRules->GetName();
+                aStrArr[i] = &pRules->GetName().toString();
             else
                 aStrArr[i] = nullptr;
         }
@@ -328,7 +328,7 @@ short SwOutlineTabDialog::Ok()
             const SfxPoolItem & rItem =
                 rTextColl.GetFormatAttr(RES_PARATR_NUMRULE, false);
 
-            if (static_cast<sal_uInt8>(GetLevel(rTextColl.GetName())) == MAXLEVEL)
+            if (static_cast<sal_uInt8>(GetLevel(rTextColl.GetName().toString())) == MAXLEVEL)
             {
                 if(rTextColl.IsAssignedToListLevelOfOutlineStyle())
                 {
@@ -342,7 +342,7 @@ short SwOutlineTabDialog::Ok()
             }
             else
             {
-                rTextColl.AssignToListLevelOfOutlineStyle(GetLevel(rTextColl.GetName()));
+                rTextColl.AssignToListLevelOfOutlineStyle(GetLevel(rTextColl.GetName().toString()));
 
                 if (static_cast<const SwNumRuleItem &>(rItem).GetValue() !=
                     pOutlineRule->GetName())
@@ -356,7 +356,7 @@ short SwOutlineTabDialog::Ok()
 
     for(i = 0; i < MAXLEVEL; ++i )
     {
-        OUString sHeadline;
+        UIName sHeadline;
         ::SwStyleNameMapper::FillUIName( static_cast< sal_uInt16 >(RES_POOLCOLL_HEADLINE1 + i),
                                          sHeadline );
         SwTextFormatColl* pColl = m_rWrtSh.FindTextFormatCollByName( sHeadline );
@@ -479,7 +479,7 @@ void    SwOutlineSettingsTabPage::Update()
         if (bSameCharFormat)
         {
             if (pFirstFormat)
-                m_xCharFormatLB->set_active_text(pFirstFormat->GetName());
+                m_xCharFormatLB->set_active_text(pFirstFormat->GetName().toString());
             else
                 m_xCharFormatLB->set_active_text(SwViewShell::GetShellRes()->aStrNone);
         }
@@ -501,9 +501,9 @@ void    SwOutlineSettingsTabPage::Update()
     else
     {
         sal_uInt16 nTmpLevel = lcl_BitToLevel(m_nActLevel);
-        OUString aColl(m_pCollNames[nTmpLevel]);
+        UIName aColl(m_pCollNames[nTmpLevel]);
         if(!aColl.isEmpty())
-            m_xCollBox->set_active_text(aColl);
+            m_xCollBox->set_active_text(aColl.toString());
         else
             m_xCollBox->set_active_text(m_aNoFormatName);
         const SwNumFormat &rFormat = m_pNumRule->Get(nTmpLevel);
@@ -513,7 +513,7 @@ void    SwOutlineSettingsTabPage::Update()
         m_xSuffixED->set_text(rFormat.GetSuffix());
         const SwCharFormat* pFormat = rFormat.GetCharFormat();
         if(pFormat)
-            m_xCharFormatLB->set_active_text(pFormat->GetName());
+            m_xCharFormatLB->set_active_text(pFormat->GetName().toString());
         else
             m_xCharFormatLB->set_active_text(SwViewShell::GetShellRes()->aStrNone);
 
@@ -578,16 +578,16 @@ IMPL_LINK( SwOutlineSettingsTabPage, CollSelect, weld::ComboBox&, rBox, void )
     const OUString aCollName(rBox.get_active_text());
     //0xFFFF not allowed here (disable)
     sal_uInt16 nTmpLevel = lcl_BitToLevel(m_nActLevel);
-    OUString sOldName( m_pCollNames[nTmpLevel] );
+    UIName sOldName( m_pCollNames[nTmpLevel] );
 
     for( i = 0; i < MAXLEVEL; ++i)
         m_pCollNames[i] = m_aSaveCollNames[i];
 
-    m_pCollNames[nTmpLevel] = aCollName;
+    m_pCollNames[nTmpLevel] = UIName(aCollName);
             // template already in use?
     for( i = 0; i < MAXLEVEL; ++i)
         if(i != nTmpLevel && m_pCollNames[i] == aCollName )
-            m_pCollNames[i].clear();
+            m_pCollNames[i] = UIName();
 
     // search the oldname and put it into the current entries
     if( !sOldName.isEmpty() )
@@ -736,7 +736,7 @@ void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
     for (sal_uInt16 i = 0; i < MAXLEVEL; ++i)
     {
         m_xCollBox->append_text( SwStyleNameMapper::GetUIName(
-                                    static_cast< sal_uInt16 >(RES_POOLCOLL_HEADLINE1 + i), ProgName()));
+                                    static_cast< sal_uInt16 >(RES_POOLCOLL_HEADLINE1 + i), ProgName()).toString());
         m_xLevelLB->append_text( OUString::number(i + 1) );
     }
     OUString sStr = "1 - " + OUString::number(MAXLEVEL);
@@ -749,7 +749,7 @@ void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
         SwTextFormatColl &rTextColl = m_pSh->GetTextFormatColl(i);
         if(!rTextColl.IsDefault())
         {
-            sStr = rTextColl.GetName();
+            sStr = rTextColl.GetName().toString();
             if (m_xCollBox->find_text(sStr) == -1)
                 m_xCollBox->append_text(sStr);
         }
@@ -1067,7 +1067,7 @@ void NumberingPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Re
                     Point(nXStart + nTextOffset, nYStart),
                     (m_pOutlineNames == nullptr
                      ? utl::ConfigManager::getProductName()
-                     : m_pOutlineNames[nLevel]));
+                     : m_pOutlineNames[nLevel].toString()));
             }
         }
     }

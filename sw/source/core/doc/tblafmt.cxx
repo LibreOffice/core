@@ -368,8 +368,8 @@ void SwBoxAutoFormat::SetXObject(rtl::Reference<SwXTextCellStyle> const& xObject
     m_xAutoFormatUnoObject = xObject.get();
 }
 
-SwTableAutoFormat::SwTableAutoFormat( OUString aName )
-    : m_aName( std::move(aName) )
+SwTableAutoFormat::SwTableAutoFormat( const TableStyleName& aName )
+    : m_aName( aName )
     , m_nStrResId( USHRT_MAX )
     , m_aKeepWithNextPara(std::make_shared<SvxFormatKeepItem>(false, RES_KEEP))
     , m_aRepeatHeading( 0 )
@@ -758,14 +758,14 @@ bool SwTableAutoFormat::Load( SvStream& rStream, const SwAfVersions& rVersions )
         bool b;
         // --- from 680/dr25 on: store strings as UTF-8
         rtl_TextEncoding eCharSet = (nVal >= AUTOFORMAT_ID_680DR25) ? RTL_TEXTENCODING_UTF8 : rStream.GetStreamCharSet();
-        m_aName = rStream.ReadUniOrByteString( eCharSet );
+        m_aName = TableStyleName(rStream.ReadUniOrByteString( eCharSet ));
         if( AUTOFORMAT_DATA_ID_552 <= nVal )
         {
             rStream.ReadUInt16( m_nStrResId );
             // start from 3d because default is added via constructor
             if( m_nStrResId < RES_POOLTABLESTYLE_END - RES_POOLTABLESTYLE_3D )
             {
-                m_aName = SwStyleNameMapper::GetUIName(RES_POOLTABLESTYLE_3D + m_nStrResId, ProgName(m_aName));
+                m_aName = TableStyleName(SwStyleNameMapper::GetUIName(RES_POOLTABLESTYLE_3D + m_nStrResId, ProgName(m_aName.toString())).toString());
             }
             else
                 m_nStrResId = USHRT_MAX;
@@ -812,7 +812,7 @@ bool SwTableAutoFormat::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
 {
     rStream.WriteUInt16( AUTOFORMAT_DATA_ID );
     // --- from 680/dr25 on: store strings as UTF-8
-    write_uInt16_lenPrefixed_uInt8s_FromOUString(rStream, m_aName,
+    write_uInt16_lenPrefixed_uInt8s_FromOUString(rStream, m_aName.toString(),
         RTL_TEXTENCODING_UTF8 );
     rStream.WriteUInt16( m_nStrResId );
     rStream.WriteBool( m_bInclFont );
@@ -961,7 +961,7 @@ void SwTableAutoFormatTable::EraseAutoFormat(size_t const i)
     m_pImpl->m_AutoFormats.erase(m_pImpl->m_AutoFormats.begin() + i);
 }
 
-void SwTableAutoFormatTable::EraseAutoFormat(const OUString& rName)
+void SwTableAutoFormatTable::EraseAutoFormat(const TableStyleName& rName)
 {
     auto iter = std::find_if(m_pImpl->m_AutoFormats.begin(), m_pImpl->m_AutoFormats.end(),
         [&rName](const std::unique_ptr<SwTableAutoFormat>& rpFormat) { return rpFormat->GetName() == rName; });
@@ -981,7 +981,7 @@ std::unique_ptr<SwTableAutoFormat> SwTableAutoFormatTable::ReleaseAutoFormat(siz
     return pRet;
 }
 
-std::unique_ptr<SwTableAutoFormat> SwTableAutoFormatTable::ReleaseAutoFormat(const OUString& rName)
+std::unique_ptr<SwTableAutoFormat> SwTableAutoFormatTable::ReleaseAutoFormat(const TableStyleName& rName)
 {
     std::unique_ptr<SwTableAutoFormat> pRet;
     auto iter = std::find_if(m_pImpl->m_AutoFormats.begin(), m_pImpl->m_AutoFormats.end(),
@@ -994,7 +994,7 @@ std::unique_ptr<SwTableAutoFormat> SwTableAutoFormatTable::ReleaseAutoFormat(con
     return pRet;
 }
 
-SwTableAutoFormat* SwTableAutoFormatTable::FindAutoFormat(std::u16string_view rName) const
+SwTableAutoFormat* SwTableAutoFormatTable::FindAutoFormat(const TableStyleName& rName) const
 {
     for (const auto &rFormat : m_pImpl->m_AutoFormats)
     {
@@ -1013,7 +1013,7 @@ SwTableAutoFormatTable::SwTableAutoFormatTable()
     : m_pImpl(new Impl)
 {
     std::unique_ptr<SwTableAutoFormat> pNew(new SwTableAutoFormat(
-                SwStyleNameMapper::GetUIName(RES_POOLTABLESTYLE_DEFAULT, ProgName())));
+                TableStyleName(SwStyleNameMapper::GetUIName(RES_POOLTABLESTYLE_DEFAULT, ProgName()).toString())));
 
     sal_uInt8 i;
 
@@ -1115,7 +1115,7 @@ bool SwTableAutoFormatTable::Load( SvStream& rStream )
                     for (sal_uInt16 i = 0; i < nCount; ++i)
                     {
                         std::unique_ptr<SwTableAutoFormat> pNew(
-                            new SwTableAutoFormat( OUString() ));
+                            new SwTableAutoFormat( TableStyleName() ));
                         bRet = pNew->Load( rStream, aVersions );
                         if( bRet )
                         {
@@ -1191,7 +1191,7 @@ SwCellStyleDescriptor SwCellStyleTable::operator[](size_t i) const
     return SwCellStyleDescriptor(m_aCellStyles[i]);
 }
 
-void SwCellStyleTable::AddBoxFormat(const SwBoxAutoFormat& rBoxFormat, const OUString& sName)
+void SwCellStyleTable::AddBoxFormat(const SwBoxAutoFormat& rBoxFormat, const UIName& sName)
 {
     m_aCellStyles.emplace_back(sName, std::make_unique<SwBoxAutoFormat>(rBoxFormat));
 }
@@ -1199,7 +1199,7 @@ void SwCellStyleTable::AddBoxFormat(const SwBoxAutoFormat& rBoxFormat, const OUS
 void SwCellStyleTable::RemoveBoxFormat(const OUString& sName)
 {
     auto iter = std::find_if(m_aCellStyles.begin(), m_aCellStyles.end(),
-        [&sName](const std::pair<OUString, std::unique_ptr<SwBoxAutoFormat>>& rStyle) { return rStyle.first == sName; });
+        [&sName](const std::pair<UIName, std::unique_ptr<SwBoxAutoFormat>>& rStyle) { return rStyle.first == sName; });
     if (iter != m_aCellStyles.end())
     {
         m_aCellStyles.erase(iter);
@@ -1208,7 +1208,7 @@ void SwCellStyleTable::RemoveBoxFormat(const OUString& sName)
     SAL_INFO("sw.core", "SwCellStyleTable::RemoveBoxFormat, format with given name doesn't exists");
 }
 
-const OUString & SwCellStyleTable::GetBoxFormatName(const SwBoxAutoFormat& rBoxFormat) const
+UIName SwCellStyleTable::GetBoxFormatName(const SwBoxAutoFormat& rBoxFormat) const
 {
     for (size_t i=0; i < m_aCellStyles.size(); ++i)
     {
@@ -1217,10 +1217,10 @@ const OUString & SwCellStyleTable::GetBoxFormatName(const SwBoxAutoFormat& rBoxF
     }
 
     // box format not found
-    return EMPTY_OUSTRING;
+    return UIName();
 }
 
-SwBoxAutoFormat* SwCellStyleTable::GetBoxFormat(std::u16string_view sName) const
+SwBoxAutoFormat* SwCellStyleTable::GetBoxFormat(const UIName& sName) const
 {
     for (size_t i=0; i < m_aCellStyles.size(); ++i)
     {
@@ -1231,7 +1231,7 @@ SwBoxAutoFormat* SwCellStyleTable::GetBoxFormat(std::u16string_view sName) const
     return nullptr;
 }
 
-void SwCellStyleTable::ChangeBoxFormatName(std::u16string_view sFromName, const OUString& sToName)
+void SwCellStyleTable::ChangeBoxFormatName(std::u16string_view sFromName, const UIName& sToName)
 {
     if (!GetBoxFormat(sToName))
     {

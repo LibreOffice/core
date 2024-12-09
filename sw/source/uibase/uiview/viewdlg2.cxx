@@ -217,15 +217,15 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
     SwWrtShell &rSh = GetWrtShell();
     if(!rName.isEmpty())
     {
-        sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName(rName, SwGetPoolIdFromName::TxtColl);
+        sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName(UIName(rName), SwGetPoolIdFromName::TxtColl);
         if( USHRT_MAX != nPoolId )
             rSh.GetTextCollFromPool(nPoolId);
             // Pool template does not exist: Does it exist on the document?
-        else if( !rSh.GetParaStyle(rName) )
+        else if( !rSh.GetParaStyle(UIName(rName)) )
         {
             // It also does not exist in the document: generate
             SwTextFormatColl* pDerivedFrom = rSh.GetTextCollFromPool(RES_POOLCOLL_LABEL);
-            rSh.MakeTextFormatColl(rName, pDerivedFrom);
+            rSh.MakeTextFormatColl(UIName(rName), pDerivedFrom);
         }
     }
 
@@ -245,7 +245,7 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
     if (!pFieldType && !rName.isEmpty() )
     {
         // Create new field types
-        SwSetExpFieldType aSwSetExpFieldType(rSh.GetDoc(), rName, nsSwGetSetExpType::GSE_SEQ);
+        SwSetExpFieldType aSwSetExpFieldType(rSh.GetDoc(), UIName(rName), nsSwGetSetExpType::GSE_SEQ);
         aMgr.InsertFieldType(aSwSetExpFieldType);
         pFieldType = static_cast<SwSetExpFieldType*>(aMgr.GetFieldType(SwFieldIds::SetExp, rName));
     }
@@ -267,7 +267,7 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
         for (size_t i = 0; i < nCount; ++i)
         {
             pType = aMgr.GetFieldType(SwFieldIds::Unknown, i);
-            OUString aTmpName( pType->GetName() );
+            UIName aTmpName( pType->GetName() );
             if (aTmpName == rName && pType->Which() == SwFieldIds::SetExp)
             {
                 nID = i;

@@ -1152,7 +1152,7 @@ void SwDoc::SetNodeNumStart( const SwPosition& rPos, sal_uInt16 nStt )
 }
 
 // We can only delete if the Rule is unused!
-bool SwDoc::DelNumRule( const OUString& rName, bool bBroadcast )
+bool SwDoc::DelNumRule( const UIName& rName, bool bBroadcast )
 {
     sal_uInt16 nPos = FindNumRule( rName );
 
@@ -1181,7 +1181,7 @@ bool SwDoc::DelNumRule( const OUString& rName, bool bBroadcast )
         getIDocumentListsAccess().deleteListsByDefaultListStyle( rName );
         // #i34097# DeleteAndDestroy deletes rName if
         // rName is directly taken from the numrule.
-        const OUString aTmpName( rName );
+        const UIName aTmpName( rName );
         delete (*mpNumRuleTable)[ nPos ];
         mpNumRuleTable->erase( mpNumRuleTable->begin() + nPos );
         maNumRuleMap.erase(aTmpName);
@@ -1214,7 +1214,7 @@ void SwDoc::ChgNumRuleFormats( const SwNumRule& rRule )
     getIDocumentState().SetModified();
 }
 
-bool SwDoc::RenameNumRule(const OUString & rOldName, const OUString & rNewName,
+bool SwDoc::RenameNumRule(const UIName & rOldName, const UIName & rNewName,
                               bool bBroadcast)
 {
     assert(!FindNumRulePtr(rNewName));
@@ -1246,7 +1246,7 @@ bool SwDoc::RenameNumRule(const OUString & rOldName, const OUString & rNewName,
             if (SfxItemState::SET == rAttrSet.GetItemState(RES_PARATR_NUMRULE, false, &pTempItem))
             {
                 const SwNumRuleItem* pNumItem = static_cast<const SwNumRuleItem*>(pTempItem);
-                if (pNumItem->GetValue().equals(rOldName))
+                if (pNumItem->GetValue() == rOldName)
                     pColl->SetFormatAttr( aItem );
             }
         }
@@ -1287,7 +1287,7 @@ void SwDoc::StopNumRuleAnimations( const OutputDevice* pOut )
 }
 
 void SwDoc::ReplaceNumRule( const SwPosition& rPos,
-                            const OUString& rOldRule, const OUString& rNewRule )
+                            const UIName& rOldRule, const UIName& rNewRule )
 {
     SwNumRule *pOldRule = FindNumRulePtr( rOldRule ),
               *pNewRule = FindNumRulePtr( rNewRule );
@@ -2585,7 +2585,7 @@ SwNumRule* SwDoc::GetNumRuleAtPos(SwPosition& rPos,
     return pRet;
 }
 
-sal_uInt16 SwDoc::FindNumRule( std::u16string_view rName ) const
+sal_uInt16 SwDoc::FindNumRule( const UIName& rName ) const
 {
     for( sal_uInt16 n = mpNumRuleTable->size(); n; )
         if( (*mpNumRuleTable)[ --n ]->GetName() == rName )
@@ -2617,7 +2617,7 @@ std::set<OUString> SwDoc::GetUsedBullets()
     return aUsedBullets;
 }
 
-SwNumRule* SwDoc::FindNumRulePtr( const OUString& rName ) const
+SwNumRule* SwDoc::FindNumRulePtr( const UIName& rName ) const
 {
     auto it = maNumRuleMap.find(rName);
     if (it == maNumRuleMap.end())
@@ -2639,7 +2639,7 @@ void SwDoc::AddNumRule(SwNumRule * pRule)
     getIDocumentListsAccess().createListForListStyle( pRule->GetName() );
 }
 
-sal_uInt16 SwDoc::MakeNumRule( const OUString &rName,
+sal_uInt16 SwDoc::MakeNumRule( const UIName &rName,
             const SwNumRule* pCpy,
             const SvxNumberFormat::SvxNumPositionAndSpaceMode eDefaultNumberFormatPositionAndSpaceMode )
 {
@@ -2678,15 +2678,15 @@ sal_uInt16 SwDoc::MakeNumRule( const OUString &rName,
     return nRet;
 }
 
-OUString SwDoc::GetUniqueNumRuleName( const OUString* pChkStr, bool bAutoNum ) const
+UIName SwDoc::GetUniqueNumRuleName( const UIName* pChkStr, bool bAutoNum ) const
 {
     // If we got pChkStr, then the caller expects that in case it's not yet
     // used, it'll be returned.
     if( IsInMailMerge() && !pChkStr )
     {
-        OUString newName = "MailMergeNumRule"
+        UIName newName( "MailMergeNumRule"
             + DateTimeToOUString( DateTime( DateTime::SYSTEM ) )
-            + OUString::number( mpNumRuleTable->size() + 1 );
+            + OUString::number( mpNumRuleTable->size() + 1 ) );
         return newName;
     }
 
@@ -2710,7 +2710,7 @@ OUString SwDoc::GetUniqueNumRuleName( const OUString* pChkStr, bool bAutoNum ) c
             pChkStr = nullptr;
     }
     else if( pChkStr && !pChkStr->isEmpty() )
-        aName = *pChkStr;
+        aName = pChkStr->toString();
     else
     {
         pChkStr = nullptr;
@@ -2737,7 +2737,7 @@ OUString SwDoc::GetUniqueNumRuleName( const OUString* pChkStr, bool bAutoNum ) c
     for( auto const & pNumRule: *mpNumRuleTable )
         if( nullptr != pNumRule )
         {
-            const OUString sNm = pNumRule->GetName();
+            const OUString sNm = pNumRule->GetName().toString();
             std::u16string_view aSuffix;
             if( sNm.startsWith( aName, &aSuffix ) && aSuffix.size() > 0 )
             {
@@ -2773,7 +2773,7 @@ OUString SwDoc::GetUniqueNumRuleName( const OUString* pChkStr, bool bAutoNum ) c
     }
     if( pChkStr && !pChkStr->isEmpty() )
         return *pChkStr;
-    return aName + OUString::number( ++nNum );
+    return UIName(aName + OUString::number( ++nNum ));
 }
 
 void SwDoc::UpdateNumRule()

@@ -346,14 +346,14 @@ void SwAttrSet::CopyToModify( sw::BroadcastingModify& rMod ) const
             if( pSrcDoc != pDstDoc &&
                 (pNumRuleItem = GetItemIfSet( RES_PARATR_NUMRULE, false )) )
             {
-                const OUString& rNm = pNumRuleItem->GetValue();
-                if( !rNm.isEmpty() )
+                UIName aNm(pNumRuleItem->GetValue());
+                if( !aNm.isEmpty() )
                 {
-                    SwNumRule* pDestRule = pDstDoc->FindNumRulePtr( rNm );
+                    SwNumRule* pDestRule = pDstDoc->FindNumRulePtr( aNm );
                     if( pDestRule )
                         pDestRule->Invalidate();
                     else
-                        pDstDoc->MakeNumRule( rNm, pSrcDoc->FindNumRulePtr( rNm ) );
+                        pDstDoc->MakeNumRule( aNm, pSrcDoc->FindNumRulePtr( aNm ) );
                 }
             }
 
@@ -370,7 +370,7 @@ void SwAttrSet::CopyToModify( sw::BroadcastingModify& rMod ) const
                 {
                     const SwList* pList = pSrcDoc->getIDocumentListsAccess().getListByName( sListId );
                     // copy list style, if needed
-                    const OUString& sDefaultListStyleName =
+                    const UIName& sDefaultListStyleName =
                                             pList->GetDefaultListStyleName();
                     // #i92811#
                     const SwNumRule* pDstDocNumRule =

@@ -247,7 +247,7 @@ static std::unique_ptr<SwPrintUIOptions> lcl_GetPrintUIOptions(
     return std::make_unique<SwPrintUIOptions>( nCurrentPage, bWebDoc, bSwSrcView, bHasSelection, bHasPostIts, rPrintData );
 }
 
-static SwTextFormatColl *lcl_GetParaStyle(const OUString& rCollName, SwDoc& rDoc)
+static SwTextFormatColl *lcl_GetParaStyle(const UIName& rCollName, SwDoc& rDoc)
 {
     SwTextFormatColl* pColl = rDoc.FindTextFormatCollByName( rCollName );
     if( !pColl )
@@ -736,8 +736,8 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
     }
     else if(pSearch->m_bStyles)
     {
-        SwTextFormatColl *pSearchColl = lcl_GetParaStyle(pSearch->m_sSearchText, pUnoCursor->GetDoc());
-        SwTextFormatColl *pReplaceColl = lcl_GetParaStyle(pSearch->m_sReplaceText, pUnoCursor->GetDoc());
+        SwTextFormatColl *pSearchColl = lcl_GetParaStyle(UIName(pSearch->m_sSearchText), pUnoCursor->GetDoc());
+        SwTextFormatColl *pReplaceColl = lcl_GetParaStyle(UIName(pSearch->m_sReplaceText), pUnoCursor->GetDoc());
 
         bool bCancel;
         nResult = pUnoCursor->FindFormat(*pSearchColl,
@@ -848,7 +848,7 @@ SwUnoCursor* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor >
         }
         else if(pSearch->m_bStyles)
         {
-            SwTextFormatColl *pSearchColl = lcl_GetParaStyle(pSearch->m_sSearchText, pUnoCursor->GetDoc());
+            SwTextFormatColl *pSearchColl = lcl_GetParaStyle(UIName(pSearch->m_sSearchText), pUnoCursor->GetDoc());
             //pSearch->sReplaceText
             SwTextFormatColl *pReplaceColl = nullptr;
             bool bCancel;

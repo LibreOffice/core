@@ -773,7 +773,7 @@ void SwFmDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
 
     if (pSvxShape->GetSdrObject()->GetName().isEmpty())
     {
-        pSvxShape->GetSdrObject()->SetName(m_pDoc->GetUniqueShapeName());
+        pSvxShape->GetSdrObject()->SetName(m_pDoc->GetUniqueShapeName().toString());
     }
 
     SwFrameFormat* pFormat = ::FindFrameFormat( pObj );
@@ -781,7 +781,7 @@ void SwFmDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
     {
         if (pFormat->GetName().isEmpty())
         {
-            pFormat->SetFormatName(pSvxShape->GetSdrObject()->GetName(), false);
+            pFormat->SetFormatName(UIName(pSvxShape->GetSdrObject()->GetName()), false);
         }
     }
     pShape->m_bDescriptor = false;

@@ -1640,7 +1640,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
         {
             SbxArrayRef xArgs = new SbxArray;
             SbxVariableRef xVar = new SbxVariable;
-            xVar->PutString( pFlyFormat->GetName() );
+            xVar->PutString( pFlyFormat->GetName().toString() );
             xArgs->Put(xVar.get(), 1);
 
             xVar = new SbxVariable;
@@ -4485,7 +4485,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                             sal_uInt32 nPos = 0;
                             SbxArrayRef xArgs = new SbxArray;
                             SbxVariableRef xVar = new SbxVariable;
-                            xVar->PutString( pFlyFormat->GetName() );
+                            xVar->PutString( pFlyFormat->GetName().toString() );
                             xArgs->Put(xVar.get(), ++nPos);
 
                             if( SvMacroItemId::SwFrmResize == nEvent )
@@ -4962,7 +4962,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                             sal_uInt32 nPos = 0;
                             SbxArrayRef xArgs = new SbxArray;
                             SbxVariableRef xVar = new SbxVariable;
-                            xVar->PutString( pFlyFormat->GetName() );
+                            xVar->PutString( pFlyFormat->GetName().toString() );
                             xArgs->Put(xVar.get(), ++nPos);
 
                             if( SvMacroItemId::SwFrmResize == nEvent )
@@ -5336,7 +5336,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
         }
         else
         {
-            OUString aStyleName;
+            UIName aStyleName;
             switch ( m_pApplyTempl->eType )
             {
                 case SfxStyleFamily::Para:
@@ -5413,7 +5413,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                 if ( pSfxShell )
                 {
                     SfxRequest aReq(m_rView.GetViewFrame(), SID_STYLE_APPLY);
-                    aReq.AppendItem( SfxStringItem( SID_STYLE_APPLY, aStyleName ) );
+                    aReq.AppendItem( SfxStringItem( SID_STYLE_APPLY, aStyleName.toString() ) );
                     aReq.AppendItem( SfxUInt16Item( SID_STYLE_FAMILY, static_cast<sal_uInt16>(m_pApplyTempl->eType) ) );
                     aReq.Done();
                 }

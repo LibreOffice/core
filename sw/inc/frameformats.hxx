@@ -49,7 +49,7 @@ template <class value_type> class FrameFormats final : public SwFormatsBase
     struct FrameFormatsKey
         : boost::multi_index::composite_key<
               value_type,
-              boost::multi_index::const_mem_fun<SwFormat, const OUString&, &SwFormat::GetName>,
+              boost::multi_index::const_mem_fun<SwFormat, const UIName&, &SwFormat::GetName>,
               boost::multi_index::const_mem_fun<SwFormat, sal_uInt16, &SwFormat::Which>,
               boost::multi_index::identity<value_type> // the actual object pointer
               >
@@ -135,12 +135,12 @@ public:
         return m_vContainer.template project<ByPos>(it);
     };
 
-    const_name_iterator findByTypeAndName(sal_uInt16 type, const OUString& name) const
+    const_name_iterator findByTypeAndName(sal_uInt16 type, const UIName& name) const
     {
         return GetByTypeAndName().find(std::make_tuple(name, type));
     };
     // search for formats by name
-    range_type findRangeByName(const OUString& rName) const
+    range_type findRangeByName(const UIName& rName) const
     {
         auto& idx = GetByTypeAndName();
         auto it = idx.lower_bound(std::make_tuple(rName, sal_uInt16(0)));
@@ -169,7 +169,7 @@ public:
     {
         return const_cast<value_type&>(operator[](idx));
     };
-    virtual void Rename(const SwFrameFormat& rFormat, const OUString& sNewName) override
+    virtual void Rename(const SwFrameFormat& rFormat, const UIName& sNewName) override
     {
         assert(dynamic_cast<value_type>(const_cast<SwFrameFormat*>(&rFormat)));
         iterator it = find(static_cast<value_type>(const_cast<SwFrameFormat*>(&rFormat)));
@@ -224,7 +224,7 @@ public:
     };
 
     // Override return type to reduce casting
-    value_type FindFrameFormatByName(const OUString& rName) const
+    value_type FindFrameFormatByName(const UIName& rName) const
     {
         auto& idx = GetByTypeAndName();
         auto it = idx.lower_bound(std::make_tuple(rName, sal_uInt16(0)));

@@ -450,7 +450,7 @@ OUString SwGetRefField::ExpandImpl(SwRootFrame const*const pLayout) const
 
 OUString SwGetRefField::GetFieldName() const
 {
-    const OUString aName = GetTyp()->GetName();
+    const OUString aName = GetTyp()->GetName().toString();
     if ( !aName.isEmpty() || !m_sSetRefName.isEmpty() )
     {
         return aName + " " + m_sSetRefName.toString();
@@ -946,7 +946,7 @@ bool SwGetRefField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         OUString sTmp(GetPar1());
         if(REF_SEQUENCEFLD == m_nSubType)
         {
-            sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( sTmp, SwGetPoolIdFromName::TxtColl );
+            sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( UIName(sTmp), SwGetPoolIdFromName::TxtColl );
             switch( nPoolId )
             {
                 case RES_POOLCOLL_LABEL_ABB:
@@ -1261,10 +1261,10 @@ namespace
         if (!pTextNode)
             return nullptr;
 
-        auto const & rFormatName = pTextNode->GetFormatColl()->GetName();
+        UIName const & rFormatName = pTextNode->GetFormatColl()->GetName();
         if (bCaseSensitive
             ? rFormatName == rStyleName
-            : rFormatName.equalsIgnoreAsciiCase(rStyleName))
+            : rFormatName.toString().equalsIgnoreAsciiCase(rStyleName))
         {
             *pStart = 0;
             if (pEnd)
@@ -1283,7 +1283,7 @@ namespace
                 {
                     if (bCaseSensitive
                         ? pHint->GetCharFormat().GetCharFormat()->HasName(rStyleName)
-                        : pHint->GetCharFormat().GetCharFormat()->GetName().equalsIgnoreAsciiCase(rStyleName))
+                        : pHint->GetCharFormat().GetCharFormat()->GetName().toString().equalsIgnoreAsciiCase(rStyleName))
                     {
                         *pStart = pHint->GetStart();
                         if (pEnd)
@@ -1507,7 +1507,7 @@ SwTextNode* SwGetRefFieldType::FindAnchorRefStyle(SwDoc* pDoc, const ReferenceMa
     const OUString& sRefMarkStr = rRefMark.toString();
     OUString const styleName(
         (sRefMarkStr.getLength() == 1 && '1' <= sRefMarkStr[0] && sRefMarkStr[0] <= '9')
-        ? SwStyleNameMapper::GetProgName(RES_POOLCOLL_HEADLINE1 + sRefMarkStr[0] - '1', sRefMarkStr).toString()
+        ? SwStyleNameMapper::GetProgName(RES_POOLCOLL_HEADLINE1 + sRefMarkStr[0] - '1', UIName(sRefMarkStr)).toString()
         : sRefMarkStr);
 
     switch (elementType)

@@ -132,7 +132,7 @@ public:
     bool SetFormatBreak( SfxItemSet& rItemSet,
                       const SvxCSS1PropertyInfo& rPropInfo );
 
-    static void AddClassName( OUString& rFormatName, std::u16string_view rClass );
+    static void AddClassName( UIName& rFormatName, std::u16string_view rClass );
 
     static bool MayBePositioned( const SvxCSS1PropertyInfo& rPropInfo,
                                  bool bAutoWidth=false );

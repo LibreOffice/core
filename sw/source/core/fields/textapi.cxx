@@ -94,12 +94,12 @@ public:
     using SvxOutlinerForwarder::SvxOutlinerForwarder;
     OUString GetStyleSheet(sal_Int32 nPara) const override
     {
-        return SwStyleNameMapper::GetProgName(SvxOutlinerForwarder::GetStyleSheet(nPara), SwGetPoolIdFromName::TxtColl).toString();
+        return SwStyleNameMapper::GetProgName(UIName(SvxOutlinerForwarder::GetStyleSheet(nPara)), SwGetPoolIdFromName::TxtColl).toString();
     }
 
     void SetStyleSheet(sal_Int32 nPara, const OUString& rStyleName) override
     {
-        SvxOutlinerForwarder::SetStyleSheet(nPara, SwStyleNameMapper::GetUIName(ProgName(rStyleName), SwGetPoolIdFromName::TxtColl));
+        SvxOutlinerForwarder::SetStyleSheet(nPara, SwStyleNameMapper::GetUIName(ProgName(rStyleName), SwGetPoolIdFromName::TxtColl).toString());
     }
 };
 

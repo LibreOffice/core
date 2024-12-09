@@ -1051,11 +1051,11 @@ void WW8ListManager::AdjustLVL( sal_uInt8 nLevel, SwNumRule& rNumRule,
         if (nMaxLevel == nIdenticalItemSetLevel)
         {
             // Define Style
-            const OUString aName( (!sPrefix.isEmpty() ? sPrefix : rNumRule.GetName())
+            const OUString aName( (!sPrefix.isEmpty() ? sPrefix : rNumRule.GetName().toString())
                                   + "z" + OUString::number( nLevel ) );
 
             // remove const by casting
-            pFormat = m_rDoc.MakeCharFormat(aName, m_rDoc.GetDfltCharFormat());
+            pFormat = m_rDoc.MakeCharFormat(UIName(aName), m_rDoc.GetDfltCharFormat());
             bNewCharFormatCreated = true;
             // Set Attributes
             pFormat->SetFormatAttr( *pThisLevelItemSet );
@@ -1104,7 +1104,7 @@ void WW8ListManager::AdjustLVL( sal_uInt8 nLevel, SwNumRule& rNumRule,
 SwNumRule* WW8ListManager::CreateNextRule(bool bSimple)
 {
     // Used to build the Style Name
-    const OUString sPrefix("WW8Num" + OUString::number(m_nUniqueList++));
+    const UIName sPrefix("WW8Num" + OUString::number(m_nUniqueList++));
     // #i86652#
     sal_uInt16 nRul =
             m_rDoc.MakeNumRule( m_rDoc.GetUniqueNumRuleName(&sPrefix), nullptr,
@@ -1341,7 +1341,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                     break;
                 // create name-prefix for NumRule-Name
                 // and (if necessary) for Style-Name
-                const OUString sPrefix("WW8NumSt" + OUString::number( nLfo + 1 ));
+                const UIName sPrefix("WW8NumSt" + OUString::number( nLfo + 1 ));
                 // Now assign pNumRule its actual value!!!
                 // (it contained the parent NumRule up to this point)
 
@@ -1449,7 +1449,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                 for (sal_uInt8 nLevel = 0; nLevel < rLFOInfo.nLfoLvl; ++nLevel)
                 {
                     AdjustLVL( nLevel, *rLFOInfo.pNumRule, aItemSet, aCharFormat,
-                        bNewCharFormatCreated, sPrefix );
+                        bNewCharFormatCreated, sPrefix.toString() );
                 }
             }
         }
@@ -1801,7 +1801,7 @@ void SwWW8ImplReader::RegisterNumFormatOnTextNode(sal_uInt16 nCurrentLFO,
     // WW8ListManager::nMaxLevel indicates body text, cancelling an inherited numbering.
     if (nCurrentLFO < USHRT_MAX && nCurrentLevel == WW8ListManager::nMaxLevel)
     {
-        pTextNd->SetAttr(SwNumRuleItem(OUString()));
+        pTextNd->SetAttr(SwNumRuleItem(UIName()));
         return;
     }
 
@@ -1824,7 +1824,7 @@ void SwWW8ImplReader::RegisterNumFormatOnTextNode(sal_uInt16 nCurrentLFO,
     {
         // Now this is either not a part of Chapter Numbering,
         // or else it is using a different numRule than the one copied to Chapter Numbering.
-        OUString sName = pRule == m_pChosenWW8OutlineStyle ? m_rDoc.GetOutlineNumRule()->GetName()
+        UIName sName = pRule == m_pChosenWW8OutlineStyle ? m_rDoc.GetOutlineNumRule()->GetName()
                                                            : pRule->GetName();
         pTextNd->SetAttr(SwNumRuleItem(sName));
     }

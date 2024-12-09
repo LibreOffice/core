@@ -401,7 +401,7 @@ namespace {
 void InsertBreak(SwWrtShell& rWrtSh,
                  sal_uInt16 nKind,
                  ::std::optional<sal_uInt16> oPageNumber,
-                 const OUString& rTemplateName, std::optional<SwLineBreakClear> oClear)
+                 const UIName& rTemplateName, std::optional<SwLineBreakClear> oClear)
 {
     switch ( nKind )
     {
@@ -472,7 +472,7 @@ void UpdateSections(const SfxRequest& rReq, SwWrtShell& rWrtSh)
     for (size_t i = 0; i < rFormats.size(); ++i)
     {
         const SwSectionFormat* pFormat = rFormats[i];
-        if (!pFormat->GetName().startsWith(aSectionNamePrefix))
+        if (!pFormat->GetName().toString().startsWith(aSectionNamePrefix))
         {
             continue;
         }
@@ -483,7 +483,7 @@ void UpdateSections(const SfxRequest& rReq, SwWrtShell& rWrtSh)
         }
 
         comphelper::SequenceAsHashMap aMap(aSections[nSectionIndex++]);
-        OUString aSectionName = aMap[u"RegionName"_ustr].get<OUString>();
+        UIName aSectionName( aMap[u"RegionName"_ustr].get<OUString>() );
         if (aSectionName != pFormat->GetName())
         {
             const_cast<SwSectionFormat*>(pFormat)->SetFormatName(aSectionName, /*bBroadcast=*/true);
@@ -534,7 +534,7 @@ void DeleteSections(const SfxRequest& rReq, SwWrtShell& rWrtSh)
     SwDoc* pDoc = rWrtSh.GetDoc();
     std::vector<SwSectionFormat*> aRemovals;
     for (SwSectionFormat* pFormat : pDoc->GetSections())
-        if (aSectionNamePrefix.isEmpty() || pFormat->GetName().startsWith(aSectionNamePrefix))
+        if (aSectionNamePrefix.isEmpty() || pFormat->GetName().toString().startsWith(aSectionNamePrefix))
             aRemovals.push_back(pFormat);
 
     for (const auto& pFormat : aRemovals)
@@ -1234,13 +1234,13 @@ void SwTextShell::Execute(SfxRequest &rReq)
             {
                 ::std::optional<sal_uInt16> oPageNumber;
                 std::optional<SwLineBreakClear> oClear;
-                OUString aTemplateName;
+                UIName aTemplateName;
                 sal_uInt16 nKind = static_cast<const SfxInt16Item*>(pItem)->GetValue();
                 const SfxStringItem* pTemplate = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
                 const SfxUInt16Item* pNumber = rReq.GetArg<SfxUInt16Item>(FN_PARAM_2);
                 const SfxBoolItem* pIsNumberFilled = rReq.GetArg<SfxBoolItem>(FN_PARAM_3);
                 if ( pTemplate )
-                    aTemplateName = pTemplate->GetValue();
+                    aTemplateName = UIName(pTemplate->GetValue());
                 if ( pNumber && pIsNumberFilled && pIsNumberFilled->GetValue() )
                     oPageNumber = pNumber->GetValue();
 
@@ -1262,7 +1262,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                             ::std::optional<sal_uInt16> oPageNumber = pAbstractDialog->GetPageNumber();
                             std::optional<SwLineBreakClear> oClear = pAbstractDialog->GetClear();
 
-                            InsertBreak(rWrtSh, nKind, oPageNumber, aTemplateName, oClear);
+                            InsertBreak(rWrtSh, nKind, oPageNumber, UIName(aTemplateName), oClear);
                         }
                     });
             }
@@ -1824,10 +1824,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
                         if (const SwFormatDrop* pDropItem = pSet->GetItemIfSet(RES_PARATR_DROP, false))
                         {
-                            OUString sCharStyleName;
+                            UIName sCharStyleName;
                             if (pDropItem->GetCharFormat())
                                 sCharStyleName = pDropItem->GetCharFormat()->GetName();
-                            pSet->Put(SfxStringItem(FN_DROP_CHAR_STYLE_NAME, sCharStyleName));
+                            pSet->Put(SfxStringItem(FN_DROP_CHAR_STYLE_NAME, sCharStyleName.toString()));
                         }
 
                         const XFillStyleItem* pFS = pSet->GetItem<XFillStyleItem>(XATTR_FILLSTYLE);
@@ -2050,7 +2050,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         bool bOn = true;
         if( SfxItemState::SET == pArgs->GetItemState(FN_PARAM_1, false, &pItem))
             bOn = static_cast<const SfxBoolItem*>(pItem)->GetValue();
-        rWrtSh.ChangeHeaderOrFooter(sStyleName, FN_INSERT_PAGEHEADER == nSlot, bOn, !rReq.IsAPI());
+        rWrtSh.ChangeHeaderOrFooter(UIName(sStyleName), FN_INSERT_PAGEHEADER == nSlot, bOn, !rReq.IsAPI());
         rReq.Done();
     }
     break;

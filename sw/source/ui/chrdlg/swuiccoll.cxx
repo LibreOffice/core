@@ -111,7 +111,7 @@ bool SwCondCollPage::FillItemSet(SfxItemSet *rSet)
     SwCondCollItem aCondItem;
     for (size_t i = 0; i < m_aStrArr.size(); ++i)
     {
-        const OUString sEntry = m_xTbLinks->get_text(i, 1);
+        const UIName sEntry( m_xTbLinks->get_text(i, 1) );
         aCondItem.SetStyle( &sEntry, i);
     }
     rSet->Put(aCondItem);
@@ -147,7 +147,7 @@ void SwCondCollPage::Reset(const SfxItemSet *)
             HasCondition( SwCollCondition( nullptr, m_pCmds[n].nCnd, m_pCmds[n].nSubCond ) ) )
             && pCond->GetTextFormatColl() )
         {
-            m_xTbLinks->set_text(n, pCond->GetTextFormatColl()->GetName(), 1);
+            m_xTbLinks->set_text(n, pCond->GetTextFormatColl()->GetName().toString(), 1);
         }
 
         if (0 == n)

@@ -463,19 +463,19 @@ public:
     void SetCheckForOLEInCaption( bool bFlag )  { m_bCheckForOLEInCaption = bFlag; }
 
     /// Set name at selected FlyFrame.
-    SW_DLLPUBLIC void SetFlyName( const OUString& rName );
-    OUString GetFlyName() const;
+    SW_DLLPUBLIC void SetFlyName( const UIName& rName );
+    UIName GetFlyName() const;
 
     /// get reference to OLE object (if there is one) for selected FlyFrame
     css::uno::Reference < css::embed::XEmbeddedObject > GetOleRef() const;
 
     /// Created unique name for frame.
-    SW_DLLPUBLIC OUString GetUniqueGrfName() const;
-    SW_DLLPUBLIC OUString GetUniqueOLEName() const;
-    SW_DLLPUBLIC OUString GetUniqueFrameName() const;
+    SW_DLLPUBLIC UIName GetUniqueGrfName() const;
+    SW_DLLPUBLIC UIName GetUniqueOLEName() const;
+    SW_DLLPUBLIC UIName GetUniqueFrameName() const;
 
     /// Jump to named Fly (graphic/OLE).
-    bool GotoFly( const OUString& rName, FlyCntType eType,
+    bool GotoFly( const UIName& rName, FlyCntType eType,
                   bool bSelFrame );
 
     /// Position is a graphic with URL?
@@ -614,7 +614,7 @@ public:
     SW_DLLPUBLIC size_t GetCurPageDesc( const bool bCalcFrame = true ) const;
     size_t GetMousePageDesc( const Point &rPt ) const;
     SW_DLLPUBLIC size_t GetPageDescCnt() const;
-    SW_DLLPUBLIC SwPageDesc* FindPageDescByName( const OUString& rName,
+    SW_DLLPUBLIC SwPageDesc* FindPageDescByName( const UIName& rName,
                                     bool bGetFromPool = false,
                                     size_t* pPos = nullptr );
 
@@ -713,7 +713,7 @@ public:
                              cursor is not allowed in readonly. */
     SW_DLLPUBLIC void UnProtectCells();  ///< Refers to table selection.
     void UnProtectTables();   ///< Unprotect all tables in selection.
-    bool HasTableAnyProtection( const OUString* pTableName,
+    bool HasTableAnyProtection( const UIName* pTableName,
                               bool* pFullTableProtection );
     bool CanUnProtectCells() const;
 
@@ -734,7 +734,7 @@ public:
     bool IsAdjustCellWidthAllowed( bool bBalance = false ) const;
 
     /// Set table style of the current table.
-    void SetTableStyle(const OUString& rStyleName);
+    void SetTableStyle(const TableStyleName& rStyleName);
     SW_DLLPUBLIC bool SetTableStyle(const SwTableAutoFormat& rNew);
     SW_DLLPUBLIC bool ResetTableStyle();
 
@@ -742,7 +742,7 @@ public:
     /// @param pTableNode Table node to update.  When nullptr, current cursor position is used.
     /// @param bResetDirect Reset direct formatting that might be applied to the cells.
     /// @param pStyleName new style to apply
-    bool UpdateTableStyleFormatting(SwTableNode *pTableNode = nullptr, bool bResetDirect = false, OUString const* pStyleName = nullptr);
+    bool UpdateTableStyleFormatting(SwTableNode *pTableNode = nullptr, bool bResetDirect = false, TableStyleName const* pStyleName = nullptr);
 
     SW_DLLPUBLIC bool GetTableAutoFormat( SwTableAutoFormat& rGet );
 
@@ -761,7 +761,7 @@ public:
     void InsertLabel( const SwLabelType eType, const OUString &rText, const OUString& rSeparator,
                       const OUString& rNumberSeparator,
                       const bool bBefore, const sal_uInt16 nId,
-                      const OUString& rCharacterStyle,
+                      const UIName& rCharacterStyle,
                       const bool bCpyBrd );
 
     /// The ruler needs some information too.
@@ -783,10 +783,10 @@ public:
 
     SW_DLLPUBLIC void GetConnectableFrameFormats
     (SwFrameFormat & rFormat, std::u16string_view rReference, bool bSuccessors,
-     std::vector< OUString > & aPrevPageVec,
-     std::vector< OUString > & aThisPageVec,
-     std::vector< OUString > & aNextPageVec,
-     std::vector< OUString > & aRestVec);
+     std::vector< UIName > & aPrevPageVec,
+     std::vector< UIName > & aThisPageVec,
+     std::vector< UIName > & aNextPageVec,
+     std::vector< UIName > & aRestVec);
 
     /** SwFEShell::GetShapeBackground
 

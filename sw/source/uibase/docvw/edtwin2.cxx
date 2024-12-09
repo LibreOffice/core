@@ -100,7 +100,7 @@ bool HasValidPropertyValue(const uno::Any& rAny)
 
 bool PSCSDFPropsQuickHelp(const HelpEvent &rEvt, SwWrtShell& rSh)
 {
-    OUString sText;
+    UIName sText;
     SwView& rView = rSh.GetView();
 
     if (rView.IsHighlightCharDF() || rView.IsSpotlightParaStyles()
@@ -190,7 +190,7 @@ bool PSCSDFPropsQuickHelp(const HelpEvent &rEvt, SwWrtShell& rSh)
                         const uno::Any aAny = xRange->getPropertyValue(rPropName);
                         if (HasValidPropertyValue(aAny))
                         {
-                            sText = SwResId(STR_CHARACTER_DIRECT_FORMATTING);
+                            sText = UIName(SwResId(STR_CHARACTER_DIRECT_FORMATTING));
                             break;
                         }
                     }
@@ -222,7 +222,7 @@ bool PSCSDFPropsQuickHelp(const HelpEvent &rEvt, SwWrtShell& rSh)
                     sText = SwStyleNameMapper::GetUIName(ProgName(sParaStyle), SwGetPoolIdFromName::TxtColl);
                     // check for paragraph direct formatting
                     if (SwDoc::HasParagraphDirectFormatting(aPos))
-                        sText = sText + " + " + SwResId(STR_PARAGRAPH_DIRECT_FORMATTING);
+                        sText = UIName(sText.toString() + " + " + SwResId(STR_PARAGRAPH_DIRECT_FORMATTING));
                     break;
                 }
             } while((pContentFrame = pContentFrame->GetFollow()));
@@ -249,7 +249,7 @@ bool PSCSDFPropsQuickHelp(const HelpEvent &rEvt, SwWrtShell& rSh)
         aRect.AdjustBottom(1);
 
         QuickHelpFlags nStyle = QuickHelpFlags::NONE; //TipStyleBalloon;
-        Help::ShowQuickHelp(rSh.GetWin(), aRect, sText, nStyle);
+        Help::ShowQuickHelp(rSh.GetWin(), aRect, sText.toString(), nStyle);
     }
 
     return !sText.isEmpty();

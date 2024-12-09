@@ -128,7 +128,7 @@ const SwPageDesc& SwFEShell::GetPageDesc( size_t i ) const
     return GetDoc()->GetPageDesc( i );
 }
 
-SwPageDesc* SwFEShell::FindPageDescByName( const OUString& rName,
+SwPageDesc* SwFEShell::FindPageDescByName( const UIName& rName,
                                             bool bGetFromPool,
                                             size_t* pPos )
 {

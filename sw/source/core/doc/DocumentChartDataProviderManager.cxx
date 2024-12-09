@@ -57,7 +57,7 @@ void DocumentChartDataProviderManager::CreateChartInternalDataProviders( const S
     if (!pTable)
         return;
 
-    OUString aName( pTable->GetFrameFormat()->GetName() );
+    UIName aName( pTable->GetFrameFormat()->GetName() );
     SwOLENode *pONd;
     SwStartNode *pStNd;
     SwNodeIndex aIdx( *m_rDoc.GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );

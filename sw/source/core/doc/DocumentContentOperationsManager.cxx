@@ -1282,7 +1282,7 @@ namespace //local functions originally from docfmt.cxx
                         {
                             // Get the item set that holds all the changes properties
                             const SfxItemSet *pChangesSet = pFormattingChanges->GetItemSet();
-                            xExtra.reset(new SwRedlineExtraData_FormatColl(u""_ustr, USHRT_MAX, pChangesSet));
+                            xExtra.reset(new SwRedlineExtraData_FormatColl(UIName(u""_ustr), USHRT_MAX, pChangesSet));
                             break;
                         }
                     }
@@ -1318,7 +1318,7 @@ namespace //local functions originally from docfmt.cxx
             // which doesn't handle invalid/dontcare items so clear them here
             aSet.ClearInvalidItems();
 
-            xExtra.reset(new SwRedlineExtraData_FormatColl(u""_ustr, USHRT_MAX, &aSet));
+            xExtra.reset(new SwRedlineExtraData_FormatColl(UIName(u""_ustr), USHRT_MAX, &aSet));
         }
 
         pRedline->SetExtraData(xExtra.get() );
@@ -1526,7 +1526,7 @@ namespace //local functions originally from docfmt.cxx
 
                 SwNumFormat aNumFormat = pNumRule->Get(o3tl::narrowing<sal_uInt16>(nLevel));
                 SwCharFormat * pCharFormat =
-                    rDoc.FindCharFormatByName(aNumFormat.GetCharFormatName());
+                    rDoc.FindCharFormatByName(UIName(aNumFormat.GetCharFormatName()));
 
                 if (pCharFormat)
                 {
@@ -3334,7 +3334,7 @@ SwDrawFrameFormat* DocumentContentOperationsManager::InsertDrawObj(
     SdrObject& rDrawObj,
     const SfxItemSet& rFlyAttrSet )
 {
-    SwDrawFrameFormat* pFormat = m_rDoc.MakeDrawFrameFormat( OUString(), m_rDoc.GetDfltFrameFormat() );
+    SwDrawFrameFormat* pFormat = m_rDoc.MakeDrawFrameFormat( UIName(), m_rDoc.GetDfltFrameFormat() );
 
     const SwFormatAnchor* pAnchor = rFlyAttrSet.GetItemIfSet( RES_ANCHOR, false );
     pFormat->SetFormatAttr( rFlyAttrSet );

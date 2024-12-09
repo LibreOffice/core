@@ -1180,7 +1180,7 @@ void SwWW8ImplReader::InsertTagField( const sal_uInt16 nId, const OUString& rTag
     {                                                   // tag normally
 
         SwFieldType* pFT = m_rDoc.getIDocumentFieldsAccess().InsertFieldType(
-                                SwSetExpFieldType( &m_rDoc, aName, nsSwGetSetExpType::GSE_STRING ) );
+                                SwSetExpFieldType( &m_rDoc, UIName(aName), nsSwGetSetExpType::GSE_STRING ) );
         SwSetExpField aField( static_cast<SwSetExpFieldType*>(pFT), rTagText );                            // SUB_INVISIBLE
         sal_uInt16 nSubType = ( SwFltGetFlag( m_nFieldFlags, SwFltControlStack::TAGS_VISIBLE ) ) ? 0 : nsSwExtendedSubType::SUB_INVISIBLE;
         aField.SetSubType(nSubType | nsSwGetSetExpType::GSE_STRING);
@@ -1461,7 +1461,7 @@ eF_ResT SwWW8ImplReader::Read_F_InputVar( WW8FieldDesc* pF, OUString& rStr )
     const tools::Long nNo = MapBookmarkVariables(pF, sOrigName, aResult);
 
     SwSetExpFieldType* pFT = static_cast<SwSetExpFieldType*>(m_rDoc.getIDocumentFieldsAccess().InsertFieldType(
-        SwSetExpFieldType(&m_rDoc, sOrigName, nsSwGetSetExpType::GSE_STRING)));
+        SwSetExpFieldType(&m_rDoc, UIName(sOrigName), nsSwGetSetExpType::GSE_STRING)));
     SwSetExpField aField(pFT, aResult);
     aField.SetSubType(nsSwExtendedSubType::SUB_INVISIBLE | nsSwGetSetExpType::GSE_STRING);
     aField.SetInputFlag(true);
@@ -1477,7 +1477,7 @@ eF_ResT SwWW8ImplReader::Read_F_InputVar( WW8FieldDesc* pF, OUString& rStr )
 eF_ResT SwWW8ImplReader::Read_F_ANumber( WW8FieldDesc*, OUString& rStr )
 {
     if( !m_pNumFieldType ){     // 1st time
-        SwSetExpFieldType aT( &m_rDoc, u"AutoNr"_ustr, nsSwGetSetExpType::GSE_SEQ );
+        SwSetExpFieldType aT( &m_rDoc, UIName(u"AutoNr"_ustr), nsSwGetSetExpType::GSE_SEQ );
         m_pNumFieldType = static_cast<SwSetExpFieldType*>(m_rDoc.getIDocumentFieldsAccess().InsertFieldType( aT ));
     }
     SwSetExpField aField( m_pNumFieldType, OUString(), GetNumberPara( rStr ) );
@@ -1547,7 +1547,7 @@ eF_ResT SwWW8ImplReader::Read_F_Seq( WW8FieldDesc*, OUString& rStr )
         return eF_ResT::TAGIGN;
 
     SwSetExpFieldType* pFT = static_cast<SwSetExpFieldType*>(m_rDoc.getIDocumentFieldsAccess().InsertFieldType(
-                        SwSetExpFieldType( &m_rDoc, aSequenceName, nsSwGetSetExpType::GSE_SEQ ) ) );
+                        SwSetExpFieldType( &m_rDoc, UIName(aSequenceName), nsSwGetSetExpType::GSE_SEQ ) ) );
     SwSetExpField aField( pFT, OUString(), eNumFormat );
 
     //#i120654# Add bHidden for /h flag (/h: Hide the field result.)
@@ -2127,7 +2127,7 @@ eF_ResT SwWW8ImplReader::Read_F_Set( WW8FieldDesc* pF, OUString& rStr )
 
     const tools::Long nNo = MapBookmarkVariables(pF, sOrigName, sVal);
 
-    SwFieldType* pFT = m_rDoc.getIDocumentFieldsAccess().InsertFieldType( SwSetExpFieldType( &m_rDoc, sOrigName,
+    SwFieldType* pFT = m_rDoc.getIDocumentFieldsAccess().InsertFieldType( SwSetExpFieldType( &m_rDoc, UIName(sOrigName),
         nsSwGetSetExpType::GSE_STRING ) );
     SwSetExpField aField( static_cast<SwSetExpFieldType*>(pFT), sVal, ULONG_MAX );
     aField.SetSubType(nsSwExtendedSubType::SUB_INVISIBLE | nsSwGetSetExpType::GSE_STRING);
@@ -2316,8 +2316,8 @@ eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, OUString& rStr )
             static constexpr OUString sLinkStyle(u"Index Link"_ustr);
             const sal_uInt16 nPoolId =
                 SwStyleNameMapper::GetPoolIdFromProgName( ProgName(sLinkStyle), SwGetPoolIdFromName::ChrFmt );
-            aURL.SetVisitedFormatAndId( sLinkStyle, nPoolId);
-            aURL.SetINetFormatAndId( sLinkStyle, nPoolId );
+            aURL.SetVisitedFormatAndId( UIName(sLinkStyle), nPoolId);
+            aURL.SetINetFormatAndId( UIName(sLinkStyle), nPoolId );
             m_xCtrlStck->NewAttr( *m_pPaM->GetPoint(), aURL );
         }
         return eF_ResT::TEXT;
@@ -2599,7 +2599,7 @@ eF_ResT SwWW8ImplReader::Read_F_IncludeText( WW8FieldDesc* /*pF*/, OUString& rSt
     SwPosition aTmpPos(*m_pPaM->GetPoint());
 
     SwSectionData aSection(SectionType::FileLink,
-            m_aSectionNameGenerator.UniqueName());
+            UIName(m_aSectionNameGenerator.UniqueName()));
     aSection.SetLinkFileName( aPara );
     aSection.SetProtectFlag(true);
 
@@ -2859,10 +2859,10 @@ void SwWW8ImplReader::Read_SubF_Ruby( WW8ReadFieldParams& rReadParam)
     //Create a new char style if necessary
     if (!pCharFormat)
     {
-        OUString aNm;
+        UIName aNm;
         //Take this as the base name
         SwStyleNameMapper::FillUIName(RES_POOLCHR_RUBYTEXT,aNm);
-        aNm+=OUString::number(m_aRubyCharFormats.size()+1);
+        aNm = UIName(aNm.toString() + OUString::number(m_aRubyCharFormats.size()+1));
         SwCharFormat *pFormat = m_rDoc.MakeCharFormat(aNm, m_rDoc.GetDfltCharFormat());
         SvxFontHeightItem aHeightItem(nFontSize*10, 100, RES_CHRATR_FONTSIZE);
         SvxFontItem aFontItem(FAMILY_DONTKNOW,sFontName,
@@ -2901,7 +2901,7 @@ static void lcl_toxMatchACSwitch(SwDoc const & rDoc,
         // Read Sequence Name and store in TOXBase
         OUString sSeqName( rParam.GetResult() );
         lcl_ConvertSequenceName( sSeqName );
-        rBase.SetSequenceName( sSeqName );
+        rBase.SetSequenceName( UIName(sSeqName) );
     }
 }
 
@@ -2950,9 +2950,9 @@ static void lcl_toxMatchTSwitch(SwWW8ImplReader const & rReader, SwTOXBase& rBas
     {
         const SwFormat* pStyle = rReader.GetStyleWithOrgWWName(sTemplate);
         if( pStyle )
-            sTemplate = pStyle->GetName();
+            sTemplate = pStyle->GetName().toString();
         // Store Style for Level 0 into TOXBase
-        rBase.SetStyleNames( sTemplate, 0 );
+        rBase.SetStyleNames( UIName(sTemplate), 0 );
     }
     else while( -1 != nIndex )
     {
@@ -2974,12 +2974,12 @@ static void lcl_toxMatchTSwitch(SwWW8ImplReader const & rReader, SwTOXBase& rBas
                     = rReader.GetStyleWithOrgWWName( sTemplate );
 
             if( pStyle )
-                sTemplate = pStyle->GetName();
+                sTemplate = pStyle->GetName().toString();
 
-            OUString sStyles( rBase.GetStyleNames( nLevel ) );
+            UIName sStyles( rBase.GetStyleNames( nLevel ) );
             if( !sStyles.isEmpty() )
-                sStyles += OUStringChar(TOX_STYLE_DELIMITER);
-            sStyles += sTemplate;
+                sStyles = UIName(sStyles.toString() + OUStringChar(TOX_STYLE_DELIMITER));
+            sStyles = UIName(sStyles.toString() + sTemplate);
             rBase.SetStyleNames( sStyles, nLevel );
         }
         // read next style name...
@@ -3341,8 +3341,8 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
             // also include the hyperlinks and page references
             SwFormToken aLinkStart(TOKEN_LINK_START);
             SwFormToken aLinkEnd(TOKEN_LINK_END);
-            aLinkStart.sCharStyleName = "Index Link";
-            aLinkEnd.sCharStyleName = "Index Link";
+            aLinkStart.sCharStyleName = UIName("Index Link");
+            aLinkEnd.sCharStyleName = UIName("Index Link");
             SwForm aForm(pBase->GetTOXForm());
             sal_uInt16 nEnd = aForm.GetFormMax()-1;
 
@@ -3635,8 +3635,8 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, OUString& rStr 
         OUString sLinkStyle(u"Index Link"_ustr);
         sal_uInt16 nPoolId =
             SwStyleNameMapper::GetPoolIdFromProgName( ProgName(sLinkStyle), SwGetPoolIdFromName::ChrFmt );
-        aURL.SetVisitedFormatAndId( sLinkStyle, nPoolId );
-        aURL.SetINetFormatAndId( sLinkStyle, nPoolId );
+        aURL.SetVisitedFormatAndId( UIName(sLinkStyle), nPoolId );
+        aURL.SetINetFormatAndId( UIName(sLinkStyle), nPoolId );
     }
 
     //As an attribute this needs to be closed, and that'll happen from

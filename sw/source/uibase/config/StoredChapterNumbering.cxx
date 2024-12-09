@@ -80,14 +80,14 @@ public:
         {
             return OUString();
         }
-        return pRules->GetName();
+        return pRules->GetName().toString();
     }
 
     virtual void SAL_CALL setName(OUString const& rName) override
     {
         SolarMutexGuard g;
         SwNumRulesWithName *const pRules(GetOrCreateRules());
-        pRules->SetName(rName);
+        pRules->SetName(UIName(rName));
     }
 
     // XElementAccess
@@ -119,7 +119,7 @@ public:
             return uno::Any();
         }
         SwNumFormat const* pNumFormat(nullptr);
-        OUString const* pCharStyleName(nullptr);
+        UIName const* pCharStyleName(nullptr);
         pRules->GetNumFormat(nIndex, pNumFormat, pCharStyleName);
         if (!pNumFormat)
         {   // the dialog only fills in those levels that are non-default
@@ -146,7 +146,7 @@ public:
 
         SolarMutexGuard g;
         SwNumFormat aNumberFormat;
-        OUString charStyleName;
+        UIName charStyleName;
         SwXNumberingRules::SetPropertiesToNumFormat(
             aNumberFormat,
             charStyleName,
@@ -205,7 +205,7 @@ public:
     }
 
     void ExportRules(
-            std::set<OUString> const& rCharStyles,
+            std::set<UIName> const& rCharStyles,
             std::vector<uno::Reference<container::XIndexReplace>> const& rRules)
     {
         GetDocHandler()->startDocument();
@@ -237,10 +237,10 @@ public:
                 AddAttribute( XML_NAMESPACE_STYLE, XML_FAMILY, XML_TEXT );
                 bool bEncoded(false);
                 AddAttribute( XML_NAMESPACE_STYLE, XML_NAME,
-                              EncodeStyleName(rCharStyle, &bEncoded) );
+                              EncodeStyleName(rCharStyle.toString(), &bEncoded) );
                 if (bEncoded)
                 {
-                    AddAttribute(XML_NAMESPACE_STYLE, XML_DISPLAY_NAME, rCharStyle);
+                    AddAttribute(XML_NAMESPACE_STYLE, XML_DISPLAY_NAME, rCharStyle.toString());
                 }
 
                 SvXMLElementExport style(*this,
@@ -402,7 +402,7 @@ void ExportStoredChapterNumberingRules(SwChapterNumRules & rRules,
 
     // if style name contains a space then name != display-name
     // ... and the import needs to map from name to display-name then!
-    std::set<OUString> charStyles;
+    std::set<UIName> charStyles;
     std::vector<uno::Reference<container::XIndexReplace>> numRules;
     for (size_t i = 0; i < SwChapterNumRules::nMaxRules; ++i)
     {
@@ -411,7 +411,7 @@ void ExportStoredChapterNumberingRules(SwChapterNumRules & rRules,
             for (size_t j = 0; j < MAXLEVEL; ++j)
             {
                 SwNumFormat const* pDummy(nullptr);
-                OUString const* pCharStyleName(nullptr);
+                UIName const* pCharStyleName(nullptr);
                 pRule->GetNumFormat(j, pDummy, pCharStyleName);
                 if (pCharStyleName && !pCharStyleName->isEmpty())
                 {

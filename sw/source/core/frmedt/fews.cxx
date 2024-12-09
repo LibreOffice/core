@@ -430,7 +430,7 @@ sal_uInt16 SwFEShell::GetPageOffset() const
 void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rText, const OUString& rSeparator,
                              const OUString& rNumberSeparator,
                              const bool bBefore, const sal_uInt16 nId,
-                             const OUString& rCharacterStyle,
+                             const UIName& rCharacterStyle,
                              const bool bCpyBrd )
 {
     // get node index of cursor position, SwDoc can do everything else itself

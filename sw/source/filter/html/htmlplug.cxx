@@ -686,7 +686,7 @@ bool SwHTMLParser::InsertEmbed()
 
     // set name at FrameFormat
     if( !aName.isEmpty() )
-        pFlyFormat->SetFormatName( aName );
+        pFlyFormat->SetFormatName( UIName(aName) );
 
     // set the alternative text
     SwNoTextNode *pNoTextNd =
@@ -1244,7 +1244,7 @@ SwHTMLWriter& OutHTML_FrameFormatOLENode( SwHTMLWriter& rWrt, const SwFrameForma
         rWrt.OutNewLine( true );
 
     if( !rFrameFormat.GetName().isEmpty() )
-        rWrt.OutImplicitMark( rFrameFormat.GetName(),
+        rWrt.OutImplicitMark( rFrameFormat.GetName().toString(),
                                   "ole" );
     uno::Any aAny;
     SvGlobalName aGlobName( xObj->getClassID() );

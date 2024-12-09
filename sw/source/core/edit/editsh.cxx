@@ -363,7 +363,7 @@ svt::EmbeddedObjectRef& SwEditShell::GetOLEObject() const
     return rOObj.GetObject();
 }
 
-bool SwEditShell::HasOLEObj( std::u16string_view rName ) const
+bool SwEditShell::HasOLEObj( const UIName& rName ) const
 {
     SwStartNode *pStNd;
     SwNodeIndex aIdx( *GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );
@@ -381,20 +381,20 @@ bool SwEditShell::HasOLEObj( std::u16string_view rName ) const
     return false;
 }
 
-void SwEditShell::SetChartName( const OUString &rName )
+void SwEditShell::SetChartName( const UIName &rName )
 {
     SwOLENode *pONd = GetCursor()->GetPointNode().GetOLENode();
     OSL_ENSURE( pONd, "ChartNode not found" );
     pONd->SetChartTableName( rName );
 }
 
-void SwEditShell::UpdateCharts( const OUString& rName )
+void SwEditShell::UpdateCharts( const UIName& rName )
 {
     GetDoc()->UpdateCharts( rName );
 }
 
 /// change table name
-void SwEditShell::SetTableName( SwFrameFormat& rTableFormat, const OUString &rNewName )
+void SwEditShell::SetTableName( SwFrameFormat& rTableFormat, const UIName &rNewName )
 {
     GetDoc()->SetTableName( rTableFormat, rNewName );
 }

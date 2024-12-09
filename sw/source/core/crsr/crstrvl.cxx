@@ -263,7 +263,7 @@ bool SwCursorShell::SetCursorInHdFt(size_t nDescNo, bool bInHeader, bool bEven, 
 }
 
 /// jump to the next index
-bool SwCursorShell::GotoNextTOXBase( const OUString* pName )
+bool SwCursorShell::GotoNextTOXBase( const UIName* pName )
 {
     const SwSectionFormats& rFormats = GetDoc()->GetSections();
     SwContentNode* pFnd = nullptr;
@@ -310,7 +310,7 @@ bool SwCursorShell::GotoNextTOXBase( const OUString* pName )
 }
 
 /// jump to previous index
-bool SwCursorShell::GotoPrevTOXBase( const OUString* pName )
+bool SwCursorShell::GotoPrevTOXBase( const UIName* pName )
 {
     const SwSectionFormats& rFormats = GetDoc()->GetSections();
     SwContentNode* pFnd = nullptr;
@@ -2158,10 +2158,10 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
             rContentAtPos.sStr += OUString::number( aPos.GetContentIndex());
             rContentAtPos.sStr += ")";
             rContentAtPos.sStr += "\nParagraph Style: ";
-            rContentAtPos.sStr += pTextNd->GetFormatColl()->GetName();
+            rContentAtPos.sStr += pTextNd->GetFormatColl()->GetName().toString();
             if( pTextNd->GetCondFormatColl() )
             {
-                rContentAtPos.sStr += "\nConditional Style: " + pTextNd->GetCondFormatColl()->GetName();
+                rContentAtPos.sStr += "\nConditional Style: " + pTextNd->GetCondFormatColl()->GetName().toString();
             }
 
             if( aSet.Count() )

@@ -136,10 +136,10 @@ private:
     OUString m_sSWGraphic;
     OUString m_sOLE;
 
-    OUString m_sIllustration;
-    OUString m_sTable;
-    OUString m_sText;
-    OUString m_sDrawing;
+    UIName m_sIllustration;
+    UIName m_sTable;
+    UIName m_sText;
+    UIName m_sDrawing;
 
     OUString m_sBegin;
     OUString m_sEnd;

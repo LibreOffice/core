@@ -33,6 +33,7 @@
 #include <osl/diagnose.h>
 #include "coreframestyle.hxx"
 #include "unobasestyle.hxx"
+#include "names.hxx"
 
 class StyleFamilyEntry;
 class SwStyleBase_Impl;
@@ -62,11 +63,11 @@ class SAL_DLLPUBLIC_RTTI SwXStyle
       public SvtListener
 {
     SwDoc* m_pDoc;
-    OUString m_sStyleUIName; ///< UIName, needs conversion to ProgName
+    UIName m_sStyleUIName; ///< UIName, needs conversion to ProgName
     const StyleFamilyEntry& m_rEntry;
     bool m_bIsDescriptor;
     bool m_bIsConditional;
-    OUString m_sParentStyleUIName; ///< UIName, needs conversion to ProgName
+    UIName m_sParentStyleUIName; ///< UIName, needs conversion to ProgName
     // cache UNO stylesheets
     std::unordered_map<SfxStyleSheetBase*, rtl::Reference<SwDocStyleSheet>> maUnoStyleSheets;
 
@@ -95,7 +96,7 @@ protected:
 public:
     SwXStyle(SwDoc* pDoc, SfxStyleFamily eFam, bool bConditional = false);
     SwXStyle(SfxStyleSheetBasePool* pPool, SfxStyleFamily eFamily, SwDoc* pDoc,
-             const OUString& rStyleName);
+             const UIName& rStyleName);
     virtual ~SwXStyle() override;
 
     static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
@@ -186,12 +187,12 @@ public:
 
     SW_DLLPUBLIC rtl::Reference<SwXNumberingRules> getNumberingRules();
 
-    const OUString& GetStyleUIName() const { return m_sStyleUIName; }
+    const UIName& GetStyleUIName() const { return m_sStyleUIName; }
     SfxStyleFamily GetFamily() const;
 
     bool IsDescriptor() const { return m_bIsDescriptor; }
     bool IsConditional() const { return m_bIsConditional; }
-    const OUString& GetParentStyleUIName() const { return m_sParentStyleUIName; }
+    const UIName& GetParentStyleUIName() const { return m_sParentStyleUIName; }
     void SetDoc(SwDoc* pDc, SfxStyleSheetBasePool* pPool)
     {
         m_bIsDescriptor = false;
@@ -202,7 +203,7 @@ public:
     SwDoc* GetDoc() const { return m_pDoc; }
     void Invalidate();
     void ApplyDescriptorProperties();
-    void SetStyleUIName(const OUString& rSet) { m_sStyleUIName = rSet; }
+    void SetStyleUIName(const UIName& rSet) { m_sStyleUIName = rSet; }
     /// @throws beans::PropertyVetoException
     /// @throws lang::IllegalArgumentException
     /// @throws lang::WrappedTargetException
@@ -223,7 +224,7 @@ typedef cppu::ImplInheritanceHelper<SwXStyle, css::document::XEventsSupplier> Sw
 class SwXFrameStyle : public SwXFrameStyle_Base, public sw::ICoreFrameStyle
 {
 public:
-    SwXFrameStyle(SfxStyleSheetBasePool& rPool, SwDoc* pDoc, const OUString& rStyleName)
+    SwXFrameStyle(SfxStyleSheetBasePool& rPool, SwDoc* pDoc, const UIName& rStyleName)
         : SwXFrameStyle_Base(&rPool, SfxStyleFamily::Frame, pDoc, rStyleName)
     {
     }
@@ -246,7 +247,7 @@ protected:
     GetPropertyValues_Impl(const css::uno::Sequence<OUString>& aPropertyNames);
 
 public:
-    SwXPageStyle(SfxStyleSheetBasePool& rPool, SwDocShell* pDocSh, const OUString& rStyleName);
+    SwXPageStyle(SfxStyleSheetBasePool& rPool, SwDocShell* pDocSh, const UIName& rStyleName);
     explicit SwXPageStyle(SwDocShell* pDocSh);
 
     virtual void SAL_CALL setPropertyValue(const OUString& aPropertyName,

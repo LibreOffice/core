@@ -148,7 +148,7 @@ bool SwIntrnlRefLink::IsInRange( SwNodeOffset nSttNd, SwNodeOffset nEndNd ) cons
     return bInRange;
 }
 
-SwDDEFieldType::SwDDEFieldType( OUString aName,
+SwDDEFieldType::SwDDEFieldType( UIName aName,
                                const OUString& rCmd, SfxLinkUpdateMode nUpdateType )
     : SwFieldType( SwFieldIds::Dde ),
     m_aName( std::move(aName) ), m_pDoc( nullptr ), m_nRefCount( 0 )
@@ -175,7 +175,7 @@ std::unique_ptr<SwFieldType> SwDDEFieldType::Copy() const
     return pType;
 }
 
-OUString SwDDEFieldType::GetName() const
+UIName SwDDEFieldType::GetName() const
 {
     return m_aName;
 }
@@ -365,7 +365,7 @@ std::unique_ptr<SwField> SwDDEField::Copy() const
 /// get field type name
 OUString SwDDEField::GetPar1() const
 {
-    return static_cast<const SwDDEFieldType*>(GetTyp())->GetName();
+    return static_cast<const SwDDEFieldType*>(GetTyp())->GetName().toString();
 }
 
 /// get field type command

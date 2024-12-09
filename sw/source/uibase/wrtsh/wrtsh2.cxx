@@ -801,7 +801,7 @@ void SwWrtShell::NavigatorPaste(const NaviContentBookmark& rBkmk)
     }
     else if (sInsert == "sectionlink" || sInsert == "sectioncopy")
     {
-        SwSectionData aSection( SectionType::FileLink, GetUniqueSectionName() );
+        SwSectionData aSection( SectionType::FileLink, UIName(GetUniqueSectionName()) );
         OUString aLinkFile = o3tl::getToken(rsURL, 0, '#')
                 + OUStringChar(sfx2::cTokenSeparator)
                 + OUStringChar(sfx2::cTokenSeparator)

@@ -476,7 +476,7 @@ void SwHTMLParser::NewNumberBulletListItem( HtmlTokenId nToken )
 
     std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(nToken));
 
-    OUString aNumRuleName;
+    UIName aNumRuleName;
     if( GetNumInfo().GetNumRule() )
     {
         aNumRuleName = GetNumInfo().GetNumRule()->GetName();
@@ -607,7 +607,7 @@ void SwHTMLParser::SetNodeNum( sal_uInt8 nLevel )
     }
 
     OSL_ENSURE( GetNumInfo().GetNumRule(), "No numbering rule" );
-    const OUString& rName = GetNumInfo().GetNumRule()->GetName();
+    const UIName& rName = GetNumInfo().GetNumRule()->GetName();
     static_cast<SwContentNode *>(pTextNode)->SetAttr( SwNumRuleItem(rName) );
 
     pTextNode->SetAttrListLevel( nLevel );

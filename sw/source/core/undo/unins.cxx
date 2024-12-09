@@ -839,7 +839,7 @@ SwUndoInsertLabel::SwUndoInsertLabel( const SwLabelType eTyp,
                                       OUString aNumberSeparator,
                                       const bool bBef,
                                       const sal_uInt16 nInitId,
-                                      OUString aCharacterStyle,
+                                      UIName aCharacterStyle,
                                       const bool bCpyBorder,
                                       const SwDoc* pDoc )
     : SwUndo( SwUndoId::INSERTLABEL, pDoc ),

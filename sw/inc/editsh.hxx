@@ -292,15 +292,15 @@ public:
     /// TABLE
     size_t GetTableFrameFormatCount( bool bUsed = false ) const;
     SwFrameFormat& GetTableFrameFormat(size_t nFormat, bool bUsed = false ) const;
-    SW_DLLPUBLIC OUString GetUniqueTableName() const;
+    SW_DLLPUBLIC UIName GetUniqueTableName() const;
 
     /// CHAR
     SW_DLLPUBLIC sal_uInt16 GetCharFormatCount() const;
     SW_DLLPUBLIC SwCharFormat& GetCharFormat(sal_uInt16 nFormat) const;
     SwCharFormat* GetCurCharFormat() const;
     void FillByEx(SwCharFormat*);
-    SwCharFormat* MakeCharFormat( const OUString& rName );
-    SW_DLLPUBLIC SwCharFormat* FindCharFormatByName( const OUString& rName ) const;
+    SwCharFormat* MakeCharFormat( const UIName& rName );
+    SW_DLLPUBLIC SwCharFormat* FindCharFormatByName( const UIName& rName ) const;
 
     /* FormatCollections (new) - Explaining the general naming pattern:
      * GetXXXCount() returns the count of xxx in the document.
@@ -342,10 +342,10 @@ public:
     SW_DLLPUBLIC void SetTextFormatColl(SwTextFormatColl*,
         const bool bResetListAttrs = false,
         SetAttrMode nMode = SetAttrMode::DEFAULT);
-    SW_DLLPUBLIC SwTextFormatColl *MakeTextFormatColl(const OUString &rFormatCollName,
+    SW_DLLPUBLIC SwTextFormatColl *MakeTextFormatColl(const UIName &rFormatCollName,
         SwTextFormatColl *pDerivedFrom = nullptr);
     void FillByEx(SwTextFormatColl*);
-    SW_DLLPUBLIC SwTextFormatColl* FindTextFormatCollByName( const OUString& rName ) const;
+    SW_DLLPUBLIC SwTextFormatColl* FindTextFormatCollByName( const UIName& rName ) const;
 
     /// @return "Auto-Collection" with given Id. If it does not exist create it.
     SW_DLLPUBLIC SwTextFormatColl* GetTextCollFromPool( sal_uInt16 nId );
@@ -569,7 +569,7 @@ public:
     bool SelectionHasNumber() const;
     bool SelectionHasBullet() const;
 
-    SW_DLLPUBLIC OUString GetUniqueNumRuleName() const;
+    SW_DLLPUBLIC UIName GetUniqueNumRuleName() const;
     void ChgNumRuleFormats( const SwNumRule& rRule );
 
     /// Set (and query if) a numbering with StartFlag starts at current PointPos.
@@ -579,7 +579,7 @@ public:
 
     sal_uInt16 GetNodeNumStart( SwPaM* pPaM ) const;
 
-    void ReplaceNumRule( const OUString& rOldRule, const OUString& rNewRule );
+    void ReplaceNumRule( const UIName& rOldRule, const UIName& rNewRule );
 
     /** Searches for a text node with a numbering rule.
      in case a list style is found, <sListId> holds the list id, to which the
@@ -692,7 +692,7 @@ public:
     // #i73788#
     /// Remove default parameter, because method always called this default value.
     SW_DLLPUBLIC Graphic GetIMapGraphic() const; ///< @return a graphic for all Flys!
-    const SwFlyFrameFormat* FindFlyByName( const OUString& rName ) const;
+    const SwFlyFrameFormat* FindFlyByName( const UIName& rName ) const;
 
     /** @return a ClientObject, if CurrentCursor->Point() points to a SwOLENode
      (and mark is neither set not pointint to same ClientObject)
@@ -700,13 +700,13 @@ public:
     SW_DLLPUBLIC svt::EmbeddedObjectRef& GetOLEObject() const;
 
     /// Is there an OLEObject with this name (SwFormat)?
-    bool HasOLEObj( std::u16string_view rName ) const;
+    bool HasOLEObj( const UIName& rName ) const;
 
     /// @return pointer to the data of the chart in which Cursr is.
-    void SetChartName( const OUString &rName );
+    void SetChartName( const UIName &rName );
 
     /// Update content of all charts for table with given name.
-    void UpdateCharts( const OUString& rName );
+    void UpdateCharts( const UIName& rName );
 
     OUString GetCurWord() const;
 
@@ -754,7 +754,7 @@ public:
                          sal_uInt16 nRows, sal_uInt16 nCols  );
 
     void UpdateTable();
-    SW_DLLPUBLIC void SetTableName( SwFrameFormat& rTableFormat, const OUString &rNewName );
+    SW_DLLPUBLIC void SetTableName( SwFrameFormat& rTableFormat, const UIName &rNewName );
 
     SW_DLLPUBLIC SwFrameFormat *GetTableFormat();
     SW_DLLPUBLIC bool TextToTable( const SwInsertTableOptions& rInsTableOpts,  ///< All

@@ -146,16 +146,16 @@ bool SwCondCollItem::operator==( const SfxPoolItem& rItem) const
     return bReturn;
 }
 
-OUString SwCondCollItem::GetStyle(sal_uInt16 const nPos) const
+UIName SwCondCollItem::GetStyle(sal_uInt16 const nPos) const
 {
-    return (nPos < COND_COMMAND_COUNT) ? m_sStyles[nPos] : OUString();
+    return (nPos < COND_COMMAND_COUNT) ? m_sStyles[nPos] : UIName();
 }
 
 void
-SwCondCollItem::SetStyle(OUString const*const pStyle, sal_uInt16 const nPos)
+SwCondCollItem::SetStyle(UIName const*const pStyle, sal_uInt16 const nPos)
 {
     if( nPos < COND_COMMAND_COUNT )
-        m_sStyles[nPos] = pStyle ? *pStyle : OUString();
+        m_sStyles[nPos] = pStyle ? *pStyle : UIName();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

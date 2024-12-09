@@ -147,7 +147,7 @@ void SwFlyFrameAttrMgr::UpdateAttrMgr()
 void SwFlyFrameAttrMgr::UpdateFlyFrame_()
 {
     if (const SfxStringItem* pItem = m_aSet.GetItemIfSet(FN_SET_FRM_NAME, false))
-        m_pOwnSh->SetFlyName(pItem->GetValue());
+        m_pOwnSh->SetFlyName(UIName(pItem->GetValue()));
 
     m_pOwnSh->SetModified();
 

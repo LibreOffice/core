@@ -176,7 +176,7 @@ public:
     bool Right( sal_uInt16 nCnt )  { return LeftRight(false, nCnt, SwCursorSkipMode::Chars, false/*bAllowVisual*/, false/*bSkipHidden*/, false, nullptr, false); }
     bool GoNextCell( sal_uInt16 nCnt = 1 )  { return GoPrevNextCell( true, nCnt ); }
     bool GoPrevCell( sal_uInt16 nCnt = 1 )  { return GoPrevNextCell( false, nCnt ); }
-    virtual bool GotoTable( const OUString& rName );
+    virtual bool GotoTable( const UIName& rName );
     bool GotoTableBox( const OUString& rName );
     bool GotoRegion( std::u16string_view rName );
     SW_DLLPUBLIC bool GotoFootnoteAnchor();
@@ -277,7 +277,7 @@ public:
     virtual bool LeftRight( bool bLeft, sal_uInt16 nCnt, SwCursorSkipMode nMode,
         bool bAllowVisual, bool bSkipHidden, bool bInsertCursor,
         SwRootFrame const*, bool) override;
-    virtual bool GotoTable( const OUString& rName ) override;
+    virtual bool GotoTable( const UIName& rName ) override;
 
     void InsertBox( const SwTableBox& rTableBox );
     void DeleteBox(size_t nPos);

@@ -488,7 +488,7 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
                 SwFormatDrop aDropItem(aSet.Get(RES_PARATR_DROP));
                 SwCharFormat* pFormat = nullptr;
                 if(!sCharStyleName.isEmpty())
-                    pFormat = rSh.FindCharFormatByName( sCharStyleName );
+                    pFormat = rSh.FindCharFormatByName( UIName(sCharStyleName) );
                 aDropItem.SetCharFormat( pFormat );
                 aSet.Put(aDropItem);
                 rSh.SetAttrSet(aSet);

@@ -1172,10 +1172,10 @@ void SwDocUpdateField::InsertFieldType( const SwFieldType& rType )
     switch( rType.Which() )
     {
     case SwFieldIds::User :
-        sFieldName = static_cast<const SwUserFieldType&>(rType).GetName();
+        sFieldName = static_cast<const SwUserFieldType&>(rType).GetName().toString();
         break;
     case SwFieldIds::SetExp:
-        sFieldName = static_cast<const SwSetExpFieldType&>(rType).GetName();
+        sFieldName = static_cast<const SwSetExpFieldType&>(rType).GetName().toString();
         break;
     default:
         OSL_ENSURE( false, "No valid field type" );
@@ -1199,10 +1199,10 @@ void SwDocUpdateField::RemoveFieldType( const SwFieldType& rType )
     switch( rType.Which() )
     {
     case SwFieldIds::User :
-        sFieldName = static_cast<const SwUserFieldType&>(rType).GetName();
+        sFieldName = static_cast<const SwUserFieldType&>(rType).GetName().toString();
         break;
     case SwFieldIds::SetExp:
-        sFieldName = static_cast<const SwSetExpFieldType&>(rType).GetName();
+        sFieldName = static_cast<const SwSetExpFieldType&>(rType).GetName().toString();
         break;
     default: break;
     }

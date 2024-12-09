@@ -139,7 +139,7 @@ SwUndoFormatAttr::SwUndoFormatAttr( SfxItemSet&& rOldSet,
     , m_nFormatWhich( rChgFormat.Which() )
     , m_bSaveDrawPt( bSaveDrawPt )
 {
-    assert(m_sFormatName.getLength());
+    assert(!m_sFormatName.isEmpty());
 
     Init( rChgFormat );
 }
@@ -154,7 +154,7 @@ SwUndoFormatAttr::SwUndoFormatAttr( const SfxPoolItem& rItem, SwFormat& rChgForm
     , m_nFormatWhich( rChgFormat.Which() )
     , m_bSaveDrawPt( bSaveDrawPt )
 {
-    assert(m_sFormatName.getLength());
+    assert(!m_sFormatName.isEmpty());
 
     m_oOldSet->Put( rItem );
     Init( rChgFormat );
@@ -758,7 +758,9 @@ SwUndoAttr::SwUndoAttr( const SwPaM& rRange, const SfxPoolItem& rAttr,
     {
         uno::Any aValue;
         pItem->QueryValue(aValue, RES_TXTATR_CHARFMT);
-        aValue >>= m_aChrFormatName;
+        OUString sTmp;
+        if (aValue >>= sTmp)
+            m_aChrFormatName = UIName(sTmp);
     }
 }
 
@@ -776,7 +778,9 @@ SwUndoAttr::SwUndoAttr( const SwPaM& rRange, SfxItemSet aSet,
     {
         uno::Any aValue;
         pItem->QueryValue(aValue, RES_TXTATR_CHARFMT);
-        aValue >>= m_aChrFormatName;
+        OUString sTmp;
+        if (aValue >>= sTmp)
+            m_aChrFormatName = UIName(sTmp);
     }
 }
 

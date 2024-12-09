@@ -12,6 +12,34 @@
 #include <functional>
 
 /// Thin wrapper around OUString to make visible in code when we are dealing with a UIName vs a Programmatic Name
+class UIName
+{
+public:
+    UIName() {}
+    constexpr explicit UIName(const OUString& s)
+        : m_s(s)
+    {
+    }
+    const OUString& toString() const { return m_s; }
+    bool isEmpty() const { return m_s.isEmpty(); }
+    bool operator==(const UIName& s) const { return m_s == s.m_s; }
+    bool operator==(const OUString& s) const { return m_s == s; }
+    bool operator==(std::u16string_view s) const { return m_s == s; }
+    bool operator<(const UIName& s) const { return m_s < s.m_s; }
+    bool operator>(const UIName& s) const { return m_s > s.m_s; }
+
+private:
+    OUString m_s;
+};
+
+namespace std
+{
+template <> struct hash<UIName>
+{
+    std::size_t operator()(UIName const& s) const { return std::hash<OUString>()(s.toString()); }
+};
+}
+
 class ProgName
 {
 public:
@@ -62,5 +90,27 @@ template <> struct hash<ReferenceMarkerName>
     }
 };
 }
+
+// SwTableAutoFormat names are their special little snowflake. Mostly they are UINames, but sometimes they
+// are programmatic names, so I isolated them into their own world.
+class TableStyleName
+{
+public:
+    TableStyleName() {}
+    constexpr explicit TableStyleName(const OUString& s)
+        : m_s(s)
+    {
+    }
+    const OUString& toString() const { return m_s; }
+    bool isEmpty() const { return m_s.isEmpty(); }
+    bool operator==(const TableStyleName& s) const = default;
+    bool operator==(const OUString& s) const { return m_s == s; }
+    bool operator==(std::u16string_view s) const { return m_s == s; }
+    bool operator<(const TableStyleName& s) const { return m_s < s.m_s; }
+    bool operator>(const TableStyleName& s) const { return m_s > s.m_s; }
+
+private:
+    OUString m_s;
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

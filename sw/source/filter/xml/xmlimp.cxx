@@ -822,8 +822,8 @@ void SwXMLImport::MergeListsAtDocumentInsertPosition(SwDoc *pDoc)
         if (! pList2)
             return;
 
-        const OUString& sDefaultListStyleName1 = pList1->GetDefaultListStyleName();
-        const OUString& sDefaultListStyleName2 = pList2->GetDefaultListStyleName();
+        const UIName& sDefaultListStyleName1 = pList1->GetDefaultListStyleName();
+        const UIName& sDefaultListStyleName2 = pList2->GetDefaultListStyleName();
 
         if (sDefaultListStyleName1 != sDefaultListStyleName2)
         {

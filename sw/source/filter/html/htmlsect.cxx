@@ -205,7 +205,7 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
                 static_cast<const SwStartNode *>( &rContentStIdx.GetNode() );
             aDelPam.GetPoint()->Assign( pStNd->EndOfSectionIndex() );
 
-            SwSectionData aSection(SectionType::Content, m_xDoc->GetUniqueSectionName());
+            SwSectionData aSection(SectionType::Content, UIName(m_xDoc->GetUniqueSectionName()));
             if (SwSection* pOldContent = m_xDoc->InsertSwSection(aDelPam, aSection, nullptr, nullptr, false))
                 pOldContent->SetHidden(true);
 
@@ -270,7 +270,7 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
         SetAttr( true, true, pPostIts.get() );
 
         // make name of section unique
-        const OUString aName( m_xDoc->GetUniqueSectionName( !aId.isEmpty() ? &aId : nullptr ) );
+        const UIName aName( m_xDoc->GetUniqueSectionName( !aId.isEmpty() ? &aId : nullptr ) );
 
         if( !aHRef.isEmpty() )
         {
@@ -641,7 +641,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
             aPropInfo.m_aId.clear();
         }
 
-        InsertFlyFrame(aFrameItemSet, xCntxt.get(), aFlyName);
+        InsertFlyFrame(aFrameItemSet, xCntxt.get(), UIName(aFlyName));
 
         xCntxt->SetPopStack( true );
         bPositioned = true;
@@ -680,7 +680,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
         SetAttr( true, true, pPostIts.get() );
 
         // Make section name unique.
-        OUString aName( m_xDoc->GetUniqueSectionName( !aId.isEmpty() ? &aId : nullptr ) );
+        UIName aName( m_xDoc->GetUniqueSectionName( !aId.isEmpty() ? &aId : nullptr ) );
         SwSectionData aSection( SectionType::Content, aName );
 
         SfxItemSetFixed<RES_FRMATR_BEGIN, RES_FRMATR_END-1> aFrameItemSet( m_xDoc->GetAttrPool() );
@@ -750,7 +750,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
 
 void SwHTMLParser::InsertFlyFrame( const SfxItemSet& rItemSet,
                                    HTMLAttrContext *pCntxt,
-                                   const OUString& rName )
+                                   const UIName& rName )
 {
     RndStdIds eAnchorId =
         rItemSet.Get( RES_ANCHOR ).GetAnchorId();

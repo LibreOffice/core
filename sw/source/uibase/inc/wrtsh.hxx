@@ -325,7 +325,7 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
                     RndStdIds nAnchorType = RndStdIds::FLY_AT_PARA);
 
     void    InsertByWord( const OUString & );
-    SW_DLLPUBLIC void InsertPageBreak(const OUString *pPageDesc = nullptr, const ::std::optional<sal_uInt16>& rPgNum = std::nullopt);
+    SW_DLLPUBLIC void InsertPageBreak(const UIName *pPageDesc = nullptr, const ::std::optional<sal_uInt16>& rPgNum = std::nullopt);
     void InsertEnclosingChars(std::u16string_view sStartStr, std::u16string_view sEndStr);
     SW_DLLPUBLIC void InsertLineBreak(std::optional<SwLineBreakClear> oClear = std::nullopt);
     void    InsertColumnBreak();
@@ -373,15 +373,15 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
                     GETSTYLE_CREATESOME,        // if on PoolId create mapt
                     GETSTYLE_CREATEANY };       // return standard if applicable
 
-    SW_DLLPUBLIC SwTextFormatColl* GetParaStyle(const OUString &rCollName,
+    SW_DLLPUBLIC SwTextFormatColl* GetParaStyle(const UIName &rCollName,
                                     GetStyle eCreate = GETSTYLE_NOCREATE);
-    SW_DLLPUBLIC SwCharFormat* GetCharStyle(const OUString &rFormatName,
+    SW_DLLPUBLIC SwCharFormat* GetCharStyle(const UIName &rFormatName,
                                     GetStyle eCreate = GETSTYLE_NOCREATE);
-    SW_DLLPUBLIC SwFrameFormat* GetTableStyle(std::u16string_view rFormatName);
+    SW_DLLPUBLIC SwFrameFormat* GetTableStyle(const UIName& rFormatName);
 
-    void            SetPageStyle(const OUString &rCollName);
+    void            SetPageStyle(const UIName &rCollName);
 
-    SW_DLLPUBLIC OUString const & GetCurPageStyle() const;
+    SW_DLLPUBLIC UIName const & GetCurPageStyle() const;
 
     // change current style using the attributes in effect
     void    QuickUpdateStyle();
@@ -402,10 +402,10 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
                          FindRanges eFlags = FindRanges::InBody,
                          bool bReplace = false );
 
-    sal_Int32 SearchTempl  (const OUString &rTempl,
+    sal_Int32 SearchTempl  (const UIName &rTempl,
                          SwDocPositions eStart, SwDocPositions eEnd,
                          FindRanges eFlags = FindRanges::InBody,
-                         const OUString* pReplTempl = nullptr );
+                         const UIName* pReplTempl = nullptr );
 
     sal_Int32 SearchAttr   (const SfxItemSet& rFindSet,
                          bool bNoColls,
@@ -495,7 +495,7 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
     SwNavigationMgr& GetNavigationMgr() { return m_aNavigationMgr; }
 
     void addCurrentPosition();
-    SW_DLLPUBLIC bool GotoFly( const OUString& rName, FlyCntType eType = FLYCNTTYPE_ALL,
+    SW_DLLPUBLIC bool GotoFly( const UIName& rName, FlyCntType eType = FLYCNTTYPE_ALL,
          bool bSelFrame = true );
     bool GotoINetAttr( const SwTextINetFormat& rAttr );
     void GotoOutline( SwOutlineNodes::size_type nIdx );
@@ -503,13 +503,13 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
     bool GotoRegion( std::u16string_view rName );
     bool GotoRefMark( const ReferenceMarkerName& rRefMark, sal_uInt16 nSubType = 0,
         sal_uInt16 nSeqNo = 0, sal_uInt16 nFlags = 0 );
-    SW_DLLPUBLIC bool GotoNextTOXBase( const OUString* pName = nullptr);
-    SW_DLLPUBLIC bool GotoTable( const OUString& rName );
+    SW_DLLPUBLIC bool GotoNextTOXBase( const UIName* pName = nullptr);
+    SW_DLLPUBLIC bool GotoTable( const UIName& rName );
     void GotoFormatField( const SwFormatField& rField );
     const SwRangeRedline* GotoRedline( SwRedlineTable::size_type nArrPos, bool bSelect);
     SW_DLLPUBLIC bool GotoDrawingObject(std::u16string_view rName);
     void GotoFootnoteAnchor(const SwTextFootnote& rTextFootnote);
-    SW_DLLPUBLIC void ChangeHeaderOrFooter(std::u16string_view rStyleName, bool bHeader, bool bOn, bool bShowWarning);
+    SW_DLLPUBLIC void ChangeHeaderOrFooter(const UIName& rStyleName, bool bHeader, bool bOn, bool bShowWarning);
     virtual void SetShowHeaderFooterSeparator( FrameControlType eControl, bool bShow ) override;
 
     /// Inserts a new annotation/comment at the current cursor position / selection.

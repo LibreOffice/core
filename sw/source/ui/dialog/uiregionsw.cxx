@@ -109,10 +109,10 @@ static void lcl_FillList( SwWrtShell& rSh, weld::ComboBox& rSubRegions, weld::Co
                     (eTmpType = pFormat->GetSection()->GetType()) != SectionType::ToxContent
                     && SectionType::ToxHeader != eTmpType )
             {
-                    const OUString sString(pFormat->GetSection()->GetSectionName());
+                    const UIName sString(pFormat->GetSection()->GetSectionName());
                     if (pAvailNames)
-                        pAvailNames->append_text(sString);
-                    rSubRegions.append_text(sString);
+                        pAvailNames->append_text(sString.toString());
+                    rSubRegions.append_text(sString.toString());
                     lcl_FillList( rSh, rSubRegions, pAvailNames, pFormat );
             }
         }
@@ -131,10 +131,10 @@ static void lcl_FillList( SwWrtShell& rSh, weld::ComboBox& rSubRegions, weld::Co
                     (eTmpType = pFormat->GetSection()->GetType()) != SectionType::ToxContent
                     && SectionType::ToxHeader != eTmpType )
                 {
-                    const OUString sString(pFormat->GetSection()->GetSectionName());
+                    const UIName sString(pFormat->GetSection()->GetSectionName());
                     if (pAvailNames)
-                        pAvailNames->append_text(sString);
-                    rSubRegions.append_text(sString);
+                        pAvailNames->append_text(sString.toString());
+                    rSubRegions.append_text(sString.toString());
                     lcl_FillList( rSh, rSubRegions, pAvailNames, pFormat );
                 }
             }
@@ -491,7 +491,7 @@ void SwEditRegionDlg::RecurseList(const SwSectionFormat* pFormat, const weld::Tr
                 SwSection *pSect = pFormat->GetSection();
                 SectRepr* pSectRepr = new SectRepr( n, *pSect );
 
-                OUString sText(pSect->GetSectionName());
+                OUString sText(pSect->GetSectionName().toString());
                 OUString sImage(BuildBitmap(pSect->IsProtect(),pSect->IsHidden()));
                 OUString sId(weld::toId(pSectRepr));
                 m_xTree->insert(nullptr, -1, &sText, &sId, nullptr, nullptr, false, xIter.get());
@@ -524,7 +524,7 @@ void SwEditRegionDlg::RecurseList(const SwSectionFormat* pFormat, const weld::Tr
                 SectRepr* pSectRepr=new SectRepr(
                                 FindArrPos( pSect->GetFormat() ), *pSect );
 
-                OUString sText(pSect->GetSectionName());
+                OUString sText(pSect->GetSectionName().toString());
                 OUString sImage = BuildBitmap(pSect->IsProtect(), pSect->IsHidden());
                 OUString sId(weld::toId(pSectRepr));
                 m_xTree->insert(pEntry, -1, &sText, &sId, nullptr, nullptr, false, xIter.get());
@@ -1284,7 +1284,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, NameEditHdl, weld::Entry&, void)
         const OUString aName = m_xCurName->get_text();
         m_xTree->set_text(*xIter, aName);
         SectRepr* pRepr = weld::fromId<SectRepr*>(m_xTree->get_id(*xIter));
-        pRepr->GetSectionData().SetSectionName(aName);
+        pRepr->GetSectionData().SetSectionName(UIName(aName));
 
         m_xOK->set_sensitive(!aName.isEmpty());
     }
@@ -1452,7 +1452,7 @@ short SwInsertSectionTabDialog::Ok()
                 pCol->GetColumns().size()));
         }
         aRequest.AppendItem(SfxStringItem( FN_PARAM_REGION_NAME,
-                    m_pSectionData->GetSectionName()));
+                    m_pSectionData->GetSectionName().toString()));
         aRequest.AppendItem(SfxStringItem( FN_PARAM_REGION_CONDITION,
                     m_pSectionData->GetCondition()));
         aRequest.AppendItem(SfxBoolItem( FN_PARAM_REGION_HIDDEN,
@@ -1551,7 +1551,7 @@ void    SwInsertSectionTabPage::SetWrtShell(SwWrtShell& rSh)
             ->GetSectionData();
     if (pSectionData) // something set?
     {
-        const OUString sSectionName(pSectionData->GetSectionName());
+        const OUString sSectionName(pSectionData->GetSectionName().toString());
         m_xCurName->set_entry_text(rSh.GetUniqueSectionName(&sSectionName));
         m_xProtectCB->set_active( pSectionData->IsProtectFlag() );
         ChangeProtectHdl(*m_xProtectCB);
@@ -1569,7 +1569,7 @@ void    SwInsertSectionTabPage::SetWrtShell(SwWrtShell& rSh)
 
 bool SwInsertSectionTabPage::FillItemSet( SfxItemSet* )
 {
-    SwSectionData aSection(SectionType::Content, m_xCurName->get_active_text());
+    SwSectionData aSection(SectionType::Content, UIName(m_xCurName->get_active_text()));
     aSection.SetCondition(m_xConditionED->get_text());
     bool bProtected = m_xProtectCB->get_active();
     aSection.SetProtectFlag(bProtected);

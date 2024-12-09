@@ -216,7 +216,7 @@ void SwConvertTableDlg::Init()
     for (sal_uInt8 i = 0, nCount = static_cast<sal_uInt8>(m_xTableTable->size()); i < nCount; i++)
     {
         SwTableAutoFormat const& rFormat = (*m_xTableTable)[i];
-        m_xLbFormat->append_text(rFormat.GetName());
+        m_xLbFormat->append_text(rFormat.GetName().toString());
         if (pSelFormat && rFormat.GetName() == pSelFormat->GetName())
             m_nIndex = i;
     }
@@ -301,7 +301,7 @@ IMPL_LINK_NOARG(SwConvertTableDlg, SelFormatHdl, weld::TreeView&, void)
     {
         m_nIndex = 255;
 
-        SwTableAutoFormat aTmp(SwViewShell::GetShellRes()->aStrNone);
+        SwTableAutoFormat aTmp(TableStyleName(SwViewShell::GetShellRes()->aStrNone));
         aTmp.SetFont(false);
         aTmp.SetJustify(false);
         aTmp.SetFrame(false);

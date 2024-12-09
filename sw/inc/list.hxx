@@ -46,9 +46,9 @@ class SwList
 
         const OUString & GetListId() const { return msListId; }
 
-        const OUString & GetDefaultListStyleName() const { return msDefaultListStyleName; }
+        const UIName & GetDefaultListStyleName() const { return msDefaultListStyleName; }
 
-        void SetDefaultListStyleName(OUString const&);
+        void SetDefaultListStyleName(UIName const&);
 
         void InsertListItem(SwNodeNum& rNodeNum,
                             SwListRedlineType eRedlines,
@@ -75,7 +75,7 @@ class SwList
         // unique identifier of the list
         const OUString msListId;
         // default list style for the list items, identified by the list style name
-        OUString msDefaultListStyleName;
+        UIName msDefaultListStyleName;
 
         // list trees for certain document ranges
         struct tListTreeForRange

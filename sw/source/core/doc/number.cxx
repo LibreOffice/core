@@ -79,9 +79,9 @@ const sal_uInt16 SwNumRule::saDefNumIndents[ MAXLEVEL ] = {
     o3tl::toTwips(250, o3tl::Length::in100),
 };
 
-OUString SwNumRule::GetOutlineRuleName()
+UIName SwNumRule::GetOutlineRuleName()
 {
-    return u"Outline"_ustr;
+    return UIName(u"Outline"_ustr);
 }
 
 const SwNumFormat& SwNumRule::Get( sal_uInt16 i ) const
@@ -108,7 +108,7 @@ const SwNumFormat* SwNumRule::GetNumFormat( sal_uInt16 i ) const
 }
 
 // #i91400#
-void SwNumRule::SetName( const OUString & rName,
+void SwNumRule::SetName( const UIName & rName,
                          IDocumentListsAccess& rDocListAccess)
 {
     if ( msName == rName )
@@ -171,7 +171,7 @@ void SwNumRule::RemoveTextNode( SwTextNode& rTextNode )
     }
 }
 
-void SwNumRule::SetNumRuleMap(std::unordered_map<OUString, SwNumRule *> *
+void SwNumRule::SetNumRuleMap(std::unordered_map<UIName, SwNumRule *> *
                               pNumRuleMap)
 {
     mpNumRuleMap = pNumRuleMap;
@@ -222,8 +222,8 @@ SwNumFormat::SwNumFormat(const SvxNumberFormat& rNumFormat, SwDoc* pDoc)
     sal_Int16 eMyVertOrient = rNumFormat.GetVertOrient();
     SetGraphicBrush( rNumFormat.GetBrush(), &rNumFormat.GetGraphicSize(),
                                                 &eMyVertOrient);
-    const OUString rCharStyleName = rNumFormat.SvxNumberFormat::GetCharFormatName();
-    if( !rCharStyleName.isEmpty() )
+    const UIName rCharStyleName(rNumFormat.SvxNumberFormat::GetCharFormatName());
+    if( !rCharStyleName.toString().isEmpty() )
     {
         SwCharFormat* pCFormat = pDoc->FindCharFormatByName( rCharStyleName );
         if( !pCFormat )
@@ -326,7 +326,7 @@ void SwNumFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
 OUString SwNumFormat::GetCharFormatName() const
 {
     if(static_cast<const SwCharFormat*>(GetRegisteredIn()))
-        return static_cast<const SwCharFormat*>(GetRegisteredIn())->GetName();
+        return static_cast<const SwCharFormat*>(GetRegisteredIn())->GetName().toString();
 
     return OUString();
 }
@@ -376,7 +376,7 @@ const SwFormatVertOrient*      SwNumFormat::GetGraphicOrientation() const
     }
 }
 
-SwNumRule::SwNumRule( OUString aNm,
+SwNumRule::SwNumRule( UIName aNm,
                       const SvxNumberFormat::SvxNumPositionAndSpaceMode eDefaultNumberFormatPositionAndSpaceMode,
                       SwNumRuleType eType )
   : mpNumRuleMap(nullptr),
@@ -578,7 +578,7 @@ SwNumRule& SwNumRule::operator=( const SwNumRule& rNumRule )
     return *this;
 }
 
-void SwNumRule::Reset( const OUString& rName )
+void SwNumRule::Reset( const UIName& rName )
 {
     for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
         Set( n, nullptr);
@@ -980,7 +980,7 @@ OUString SwNumRule::MakeParagraphStyleListString() const
     {
         if (!aParagraphStyleListString.isEmpty())
             aParagraphStyleListString += ", ";
-        aParagraphStyleListString += rParagraphStyle->GetName();
+        aParagraphStyleListString += rParagraphStyle->GetName().toString();
     }
     return aParagraphStyleListString;
 }
@@ -1038,7 +1038,7 @@ SvxNumRule SwNumRule::MakeSvxNumRule() const
         if(rNumFormat.GetCharFormat())
         {
             SwNumFormat aNewFormat = rNumFormat;
-            aNewFormat.SetCharFormatName(rNumFormat.GetCharFormat()->GetName());
+            aNewFormat.SetCharFormatName(rNumFormat.GetCharFormat()->GetName().toString());
             aRule.SetLevel(n, aNewFormat, maFormats[n] != nullptr);
         }
         else
@@ -1192,7 +1192,7 @@ void SwNumRule::RemoveParagraphStyle( SwTextFormatColl& rTextFormatColl )
 void SwNumRule::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwNumRule"));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("msName"), BAD_CAST(msName.toUtf8().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("msName"), BAD_CAST(msName.toString().toUtf8().getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("mnPoolFormatId"), BAD_CAST(OString::number(mnPoolFormatId).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("mbAutoRuleFlag"), BAD_CAST(OString::boolean(mbAutoRuleFlag).getStr()));
 

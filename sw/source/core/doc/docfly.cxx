@@ -149,7 +149,7 @@ SwFrameFormat* SwDoc::GetFlyNum( size_t nIdx, FlyCntType eType, bool bIgnoreText
     return pRetFormat;
 }
 
-SwFrameFormat* SwDoc::GetFlyFrameFormatByName( const OUString& rFrameFormatName )
+SwFrameFormat* SwDoc::GetFlyFrameFormatByName( const UIName& rFrameFormatName )
 {
     auto pFrameFormats = GetSpzFrameFormats();
     auto it = pFrameFormats->findByTypeAndName( RES_FLYFRMFMT, rFrameFormatName );

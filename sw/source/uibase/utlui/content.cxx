@@ -607,7 +607,7 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                     if (SwTable* pTable = SwTable::FindTable(&rTableFormat))
                         nYPos = getYPos(*pTable->GetTableNode());
                 }
-                auto pCnt = std::make_unique<SwContent>(this, rTableFormat.GetName(), nYPos);
+                auto pCnt = std::make_unique<SwContent>(this, rTableFormat.GetName().toString(), nYPos);
                 if(!rTableFormat.IsVisible())
                     pCnt->SetInvisible();
                 m_pMember->insert(std::move(pCnt));
@@ -642,7 +642,7 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
             for (size_t i = 0; i < nCount; ++i)
             {
                 SwFrameFormat const*const pFrameFormat = formats[i];
-                const OUString sFrameName = pFrameFormat->GetName();
+                const UIName sFrameName = pFrameFormat->GetName();
 
                 SwContent* pCnt;
                 tools::Long nYPos =
@@ -652,12 +652,12 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                     OUString sLink;
                     SwDoc::GetGrfNms(*static_cast<const SwFlyFrameFormat*>(pFrameFormat), &sLink,
                                      nullptr);
-                    pCnt = new SwGraphicContent(this, sFrameName, INetURLObject::decode(sLink,
+                    pCnt = new SwGraphicContent(this, sFrameName.toString(), INetURLObject::decode(sLink,
                                            INetURLObject::DecodeMechanism::Unambiguous), nYPos);
                 }
                 else
                 {
-                    pCnt = new SwContent(this, sFrameName, nYPos);
+                    pCnt = new SwContent(this, sFrameName.toString(), nYPos);
                 }
                 if(!pFrameFormat->IsVisible())
                     pCnt->SetInvisible();
@@ -868,7 +868,7 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                 const SwNodeIndex* pNodeIndex = pFormat->GetContent().GetContentIdx();
                 if (pNodeIndex)
                 {
-                    const OUString& sSectionName = pSection->GetSectionName();
+                    const UIName& sSectionName = pSection->GetSectionName();
 
                     sal_uInt8 nLevel = 0;
                     SwSectionFormat* pParentFormat = pFormat->GetParent();
@@ -878,7 +878,7 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                         pParentFormat = pParentFormat->GetParent();
                     }
 
-                    auto pCnt(std::make_unique<SwRegionContent>(this, sSectionName, nLevel,
+                    auto pCnt(std::make_unique<SwRegionContent>(this, sSectionName.toString(), nLevel,
                                             m_bAlphabeticSort ? 0 : getYPos(pNodeIndex->GetNode()),
                                                                 pFormat));
 
@@ -1000,10 +1000,10 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
             for ( sal_uInt16 nTox = 0; nTox < nCount; nTox++ )
             {
                 const SwTOXBase* pBase = m_pWrtShell->GetTOX( nTox );
-                OUString sTOXNm( pBase->GetTOXName() );
+                UIName sTOXNm( pBase->GetTOXName() );
 
                 SwContent* pCnt = new SwTOXBaseContent(
-                        this, sTOXNm, m_bAlphabeticSort ? 0 : nTox, *pBase);
+                        this, sTOXNm.toString(), m_bAlphabeticSort ? 0 : nTox, *pBase);
 
                 if(pBase && !pBase->IsVisible())
                     pCnt->SetInvisible();
@@ -1995,7 +1995,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                     bRemoveUnprotectEntry = false;
                     bRemoveDeleteTableEntry = false;
                     bool bFull = false;
-                    OUString sTableName = weld::fromId<SwContent*>(m_xTreeView->get_id(*xEntry))->GetName();
+                    UIName sTableName(weld::fromId<SwContent*>(m_xTreeView->get_id(*xEntry))->GetName());
                     bool bProt = m_pActiveShell->HasTableAnyProtection( &sTableName, &bFull );
                     xPop->set_sensitive(OUString::number(403), !bFull);
                     xPop->set_sensitive(OUString::number(404), bProt);
@@ -3516,9 +3516,9 @@ bool SwContentTree::FillTransferData(TransferDataContainer& rTransfer)
                 else
                     return false;
 
-                const OUString sFieldTypeName = pField->GetTyp()->GetName();
+                const UIName sFieldTypeName = pField->GetTyp()->GetName();
                 sCrossRef = OUString::number(static_cast<int>(REFERENCESUBTYPE::REF_SEQUENCEFLD))
-                        + u"|" + sFieldTypeName + u"|" + sVal;
+                        + u"|" + sFieldTypeName.toString() + u"|" + sVal;
             }
             else if (eActType == ContentTypeId::REFERENCE)
             {
@@ -4721,8 +4721,8 @@ void SwContentTree::UpdateTracking()
             }
             if (!aContentTypeName.isEmpty())
             {
-                OUString aName(m_pActiveShell->GetFlyName());
-                lcl_SelectByContentTypeAndName(this, *m_xTreeView, aContentTypeName, aName);
+                UIName aName(m_pActiveShell->GetFlyName());
+                lcl_SelectByContentTypeAndName(this, *m_xTreeView, aContentTypeName, aName.toString());
                 return;
             }
         }
@@ -4842,9 +4842,9 @@ void SwContentTree::UpdateTracking()
         {
             if (mTrackContentType[ContentTypeId::TABLE] && m_pActiveShell->GetTableFormat())
             {
-                OUString aName = m_pActiveShell->GetTableFormat()->GetName();
+                UIName aName = m_pActiveShell->GetTableFormat()->GetName();
                 lcl_SelectByContentTypeAndName(this, *m_xTreeView, SwResId(STR_CONTENT_TYPE_TABLE),
-                                               aName);
+                                               aName.toString());
                 return;
             }
         }
@@ -4854,7 +4854,7 @@ void SwContentTree::UpdateTracking()
         {
             if (mTrackContentType[ContentTypeId::INDEX])
                 lcl_SelectByContentTypeAndName(this, *m_xTreeView, SwResId(STR_CONTENT_TYPE_INDEX),
-                                               pTOX->GetTOXName());
+                                               pTOX->GetTOXName().toString());
             return;
         }
         // section
@@ -4864,7 +4864,7 @@ void SwContentTree::UpdateTracking()
             if (mTrackContentType[ContentTypeId::REGION])
             {
                 lcl_SelectByContentTypeAndName(this, *m_xTreeView, SwResId(STR_CONTENT_TYPE_REGION),
-                                               pSection->GetSectionName());
+                                               pSection->GetSectionName().toString());
                 return;
             }
             else
@@ -5144,7 +5144,7 @@ bool SwContentTree::IsSelectedEntryCurrentDocCursorPosition(const weld::TreeIter
     {
         return lcl_IsSelectedCompareByContentTypeAndName(
             rEntry, *m_xTreeView, ContentTypeId::TABLE,
-            m_pActiveShell->GetTableFormat()->GetName());
+            m_pActiveShell->GetTableFormat()->GetName().toString());
     }
     // graphic, frame, and ole
     if (m_pActiveShell->GetSelectionType()
@@ -5160,7 +5160,7 @@ bool SwContentTree::IsSelectedEntryCurrentDocCursorPosition(const weld::TreeIter
         else // to quiet compiler warning/error
             return false;
         return lcl_IsSelectedCompareByContentTypeAndName(rEntry, *m_xTreeView, eContentTypeId,
-                                                         m_pActiveShell->GetFlyName());
+                                                         m_pActiveShell->GetFlyName().toString());
     }
     // hyperlinks
     // not in ToxContent tdf#148312 <- does this apply here?
@@ -5238,7 +5238,7 @@ bool SwContentTree::IsSelectedEntryCurrentDocCursorPosition(const weld::TreeIter
     if (const SwSection* pSection = m_pActiveShell->GetCurrSection())
     {
         return lcl_IsSelectedCompareByContentTypeAndName(
-            rEntry, *m_xTreeView, ContentTypeId::REGION, pSection->GetSectionName());
+            rEntry, *m_xTreeView, ContentTypeId::REGION, pSection->GetSectionName().toString());
     }
     // bookmark (unsure about this)
     if (m_pActiveShell->GetSelectionType() & SelectionType::Text)
@@ -6048,7 +6048,7 @@ void SwContentTree::ExecuteContextMenuAction(const OUString& rSelectedPopupEntry
             }
             else if (eTypeId == ContentTypeId::TABLE)
             {
-                m_pActiveShell->GotoTable(pCnt->GetName());
+                m_pActiveShell->GotoTable(UIName(pCnt->GetName()));
                 m_pActiveShell->GetView().GetViewFrame().GetDispatcher()->Execute(FN_TABLE_SELECT_ALL);
             }
             else if (eTypeId == ContentTypeId::REGION)
@@ -6282,7 +6282,7 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
             if(nMode == EditEntryMode::UNPROTECT_TABLE)
             {
                 m_pActiveShell->GetView().GetDocShell()->
-                        GetDoc()->UnProtectCells( pCnt->GetName());
+                        GetDoc()->UnProtectCells( UIName(pCnt->GetName()));
             }
             else if(nMode == EditEntryMode::DELETE)
             {
@@ -6417,9 +6417,9 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
                 {
                     rtl::Reference< SwXTextDocument > xModel = m_pActiveShell->GetView().GetDocShell()->GetBaseModel();
                     rtl::Reference< SwXDocumentIndexes> xIdxAcc = xModel->getSwDocumentIndexes();
-                    if(xIdxAcc.is() && xIdxAcc->hasByName(pBase->GetTOXName()))
+                    if(xIdxAcc.is() && xIdxAcc->hasByName(pBase->GetTOXName().toString()))
                     {
-                        Any aIdx = xIdxAcc->getByName(pBase->GetTOXName());
+                        Any aIdx = xIdxAcc->getByName(pBase->GetTOXName().toString());
                         Reference< XDocumentIndex> xIdx;
                         if(aIdx >>= xIdx)
                             xIdx->update();
@@ -6503,7 +6503,8 @@ bool SwContentTree::IsDeletable(const SwContent* pContent)
     if (eContentTypeId == ContentTypeId::TABLE)
     {
         bool bFull = false;
-        m_pActiveShell->HasTableAnyProtection(&pContent->GetName(), &bFull);
+        const UIName sTableName(pContent->GetName());
+        m_pActiveShell->HasTableAnyProtection(&sTableName, &bFull);
         return !bFull;
     }
     // bookmark
@@ -6551,7 +6552,7 @@ void SwContentTree::DeleteAllContentOfEntryContentType(const weld::TreeIter& rEn
         for (size_t i = 0; i < nCount; i++)
         {
             const SwContent* pContent = pContentType->GetMember(i);
-            m_pActiveShell->GotoTable(pContent->GetName());
+            m_pActiveShell->GotoTable(UIName(pContent->GetName()));
             m_pActiveShell->SelTable();
             m_pActiveShell->DeleteTable();
         }
@@ -6573,7 +6574,7 @@ void SwContentTree::DeleteAllContentOfEntryContentType(const weld::TreeIter& rEn
         for (size_t i = 0; i < nCount; i++)
         {
             const OUString& rName(pContentType->GetMember(i)->GetName());
-            m_pActiveShell->GotoFly(rName);
+            m_pActiveShell->GotoFly(UIName(rName));
             m_pActiveShell->DelRight();
         }
         m_pActiveShell->EndUndo();
@@ -6842,14 +6843,14 @@ void SwContentTree::GotoContent(const SwContent* pCnt)
         break;
         case ContentTypeId::TABLE     :
         {
-            m_pActiveShell->GotoTable(pCnt->GetName());
+            m_pActiveShell->GotoTable(UIName(pCnt->GetName()));
         }
         break;
         case ContentTypeId::FRAME     :
         case ContentTypeId::GRAPHIC   :
         case ContentTypeId::OLE       :
         {
-            m_pActiveShell->GotoFly(pCnt->GetName());
+            m_pActiveShell->GotoFly(UIName(pCnt->GetName()));
         }
         break;
         case ContentTypeId::BOOKMARK:
@@ -6921,7 +6922,7 @@ void SwContentTree::GotoContent(const SwContent* pCnt)
         break;
         case ContentTypeId::INDEX:
         {
-            const OUString& sName(pCnt->GetName());
+            const UIName sName(pCnt->GetName());
             if (!m_pActiveShell->GotoNextTOXBase(&sName))
                 m_pActiveShell->GotoPrevTOXBase(&sName);
         }
@@ -7110,7 +7111,7 @@ void SwContentTree::BringEntryToAttention(const weld::TreeIter& rEntry)
             else if (nType == ContentTypeId::TABLE)
             {
                 if (const sw::TableFrameFormats* pFrameFormats = m_pActiveShell->GetDoc()->GetTableFrameFormats())
-                    if (const SwTableFormat* pFrameFormat = pFrameFormats->FindFrameFormatByName(pCnt->GetName()))
+                    if (const SwTableFormat* pFrameFormat = pFrameFormats->FindFrameFormatByName(UIName(pCnt->GetName())))
                     {
                         SwTable* pTable = SwTable::FindTable(pFrameFormat);
                         if (pTable)
@@ -7126,7 +7127,7 @@ void SwContentTree::BringEntryToAttention(const weld::TreeIter& rEntry)
                 else if(nType == ContentTypeId::OLE)
                     eNodeType = SwNodeType::Ole;
                 if (const SwFrameFormat* pFrameFormat =
-                        m_pActiveShell->GetDoc()->FindFlyByName(pCnt->GetName(), eNodeType))
+                        m_pActiveShell->GetDoc()->FindFlyByName(UIName(pCnt->GetName()), eNodeType))
                     BringFramesToAttention(std::vector<const SwFrameFormat*> {pFrameFormat});
             }
             else if (nType == ContentTypeId::BOOKMARK)

@@ -343,10 +343,10 @@ public:
 class SwHistoryChangeCharFormat final : public SwHistoryHint
 {
     const SfxItemSet m_OldSet;
-    const OUString m_Format;
+    const UIName m_Format;
 
 public:
-    SwHistoryChangeCharFormat( SfxItemSet aSet, OUString  sFormat);
+    SwHistoryChangeCharFormat( SfxItemSet aSet, UIName  sFormat);
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet ) override;
 
 };

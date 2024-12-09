@@ -93,7 +93,7 @@ HTMLOutEvent const aAnchorEventTable[] =
 
 static SwHTMLWriter& OutHTML_SvxAdjust( SwHTMLWriter& rWrt, const SfxPoolItem& rHt );
 
-sal_uInt16 SwHTMLWriter::GetDefListLvl( std::u16string_view rNm, sal_uInt16 nPoolId )
+sal_uInt16 SwHTMLWriter::GetDefListLvl( const UIName& rNm, sal_uInt16 nPoolId )
 {
     if( nPoolId == RES_POOLCOLL_HTML_DD )
     {
@@ -105,14 +105,14 @@ sal_uInt16 SwHTMLWriter::GetDefListLvl( std::u16string_view rNm, sal_uInt16 nPoo
     }
 
     OUString sDTDD = u"" OOO_STRING_SVTOOLS_HTML_dt " "_ustr;
-    if( o3tl::starts_with(rNm, sDTDD) )
+    if( o3tl::starts_with(rNm.toString(), sDTDD) )
         // DefinitionList - term
-        return o3tl::narrowing<sal_uInt16>(o3tl::toInt32(rNm.substr( sDTDD.getLength() ))) | HTML_DLCOLL_DT;
+        return o3tl::narrowing<sal_uInt16>(o3tl::toInt32(rNm.toString().subView( sDTDD.getLength() ))) | HTML_DLCOLL_DT;
 
     sDTDD = OOO_STRING_SVTOOLS_HTML_dd " ";
-    if( o3tl::starts_with(rNm, sDTDD) )
+    if( o3tl::starts_with(rNm.toString(), sDTDD) )
         // DefinitionList - definition
-        return o3tl::narrowing<sal_uInt16>(o3tl::toInt32(rNm.substr( sDTDD.getLength() ))) | HTML_DLCOLL_DD;
+        return o3tl::narrowing<sal_uInt16>(o3tl::toInt32(rNm.toString().subView( sDTDD.getLength() ))) | HTML_DLCOLL_DD;
 
     return 0;
 }
@@ -508,7 +508,7 @@ static void OutHTML_SwFormat( SwHTMLWriter& rWrt, const SwFormat& rFormat,
                                       rWrt.m_bCfgOutStyles, rWrt.m_eLang,
                                       rWrt.m_nCSS1Script );
         rWrt.m_TextCollInfos.insert(std::unique_ptr<SwHTMLFormatInfo>(pFormatInfo));
-        if( rWrt.m_aScriptParaStyles.count( rFormat.GetName() ) )
+        if( rWrt.m_aScriptParaStyles.count( rFormat.GetName().toString() ) )
             pFormatInfo->bScriptDependent = true;
     }
 
@@ -1123,7 +1123,7 @@ class HTMLEndPosLst
     SwDoc* m_pDoc; // the current document
     SwDoc* m_pTemplate; // the HTML template (or 0)
     std::optional<Color> m_xDefaultColor; // the default foreground colors
-    std::set<OUString>& m_rScriptTextStyles;
+    std::set<UIName>& m_rScriptTextStyles;
 
     sal_uLong m_nHTMLMode;
     bool m_bOutStyles : 1; // are styles exported
@@ -1168,7 +1168,7 @@ public:
 
     HTMLEndPosLst( SwDoc *pDoc, SwDoc* pTemplate, std::optional<Color> xDfltColor,
                    bool bOutStyles, sal_uLong nHTMLMode,
-                   const OUString& rText, std::set<OUString>& rStyles );
+                   const OUString& rText, std::set<UIName>& rStyles );
     ~HTMLEndPosLst();
 
     // insert an attribute
@@ -1599,7 +1599,7 @@ const SwHTMLFormatInfo *HTMLEndPosLst::GetFormatInfo( const SwFormat& rFormat,
 }
 
 HTMLEndPosLst::HTMLEndPosLst(SwDoc* pD, SwDoc* pTempl, std::optional<Color> xDfltCol, bool bStyles,
-                             sal_uLong nMode, const OUString& rText, std::set<OUString>& rStyles)
+                             sal_uLong nMode, const OUString& rText, std::set<UIName>& rStyles)
     : m_pDoc(pD)
     , m_pTemplate(pTempl)
     , m_xDefaultColor(std::move(xDfltCol))

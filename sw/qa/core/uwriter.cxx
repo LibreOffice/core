@@ -984,7 +984,7 @@ void SwDocTest::testMergePortionsDeleteNotSorted()
     SwPaM aPaM(aIdx);
     m_pDoc->getIDocumentContentOperations().InsertString(aPaM, u"  AABBCC"_ustr);
 
-    SwCharFormat *const pCharFormat(m_pDoc->MakeCharFormat(u"foo"_ustr, nullptr));
+    SwCharFormat *const pCharFormat(m_pDoc->MakeCharFormat(UIName(u"foo"_ustr), nullptr));
     SwFormatCharFormat const charFormat(pCharFormat);
 
     SwFormatINetFormat const inetFormat(u"http://example.com"_ustr, u""_ustr);
@@ -1073,7 +1073,7 @@ void SwDocTest::testTableAutoFormats()
     CPPUNIT_ASSERT_EQUAL( size_t(1),  aTableAFT.size() );
 
     //create new style
-    SwTableAutoFormat aTableAF( u"TestItemStyle"_ustr );
+    SwTableAutoFormat aTableAF( TableStyleName(u"TestItemStyle"_ustr) );
 
     //create new AutoFormat
     SwBoxAutoFormat aBoxAF;
@@ -1254,7 +1254,7 @@ void SwDocTest::testTableAutoFormats()
     CPPUNIT_ASSERT_EQUAL( size_t(2),  aLoadTAFT.size() );
 
     //assert the values
-    SwTableAutoFormat* pLoadAF = aLoadTAFT.FindAutoFormat( u"TestItemStyle" );
+    SwTableAutoFormat* pLoadAF = aLoadTAFT.FindAutoFormat( TableStyleName(u"TestItemStyle"_ustr) );
     CPPUNIT_ASSERT( pLoadAF );
     //GetFont
     CPPUNIT_ASSERT( bool( pLoadAF->GetBoxFormat(0).GetFont() == aFont ) );
@@ -1856,7 +1856,7 @@ void SwDocTest::test64kPageDescs()
     for (size_t i = 0; i < nPageDescCount; ++i)
     {
         OUString aName = "Page" + OUString::number(i);
-        m_pDoc->MakePageDesc( aName );
+        m_pDoc->MakePageDesc( UIName(aName) );
     }
 
     size_t nCount = m_pDoc->GetPageDescCnt();
@@ -1866,26 +1866,26 @@ void SwDocTest::test64kPageDescs()
 
     const SwPageDesc &rDesc = m_pDoc->GetPageDesc( nPageDescCount );
     SwPageDesc &rZeroDesc = m_pDoc->GetPageDesc( 0 );
-    CPPUNIT_ASSERT_EQUAL( u"Page65535"_ustr, rDesc.GetName() );
+    CPPUNIT_ASSERT_EQUAL( u"Page65535"_ustr, rDesc.GetName().toString() );
 
     SwPageDesc aDesc( rDesc );
     static constexpr OUString aChanged(u"Changed01"_ustr);
-    aDesc.SetName( aChanged );
+    aDesc.SetName( UIName(aChanged) );
     m_pDoc->ChgPageDesc( nPageDescCount, aDesc );
 
     size_t nPos;
-    SwPageDesc *pDesc = m_pDoc->FindPageDesc( aChanged, &nPos );
+    SwPageDesc *pDesc = m_pDoc->FindPageDesc( UIName(aChanged), &nPos );
     CPPUNIT_ASSERT( pDesc != nullptr );
     CPPUNIT_ASSERT_EQUAL( nPageDescCount, nPos );
 
     // check if we didn't mess up PageDesc at pos 0
     // (happens with 16bit int overflow)
-    OUString aZeroName = rZeroDesc.GetName();
+    UIName aZeroName = rZeroDesc.GetName();
     rZeroDesc = m_pDoc->GetPageDesc( 0 );
-    CPPUNIT_ASSERT_EQUAL( aZeroName, rZeroDesc.GetName() );
+    CPPUNIT_ASSERT_EQUAL( aZeroName.toString(), rZeroDesc.GetName().toString() );
 
-    m_pDoc->DelPageDesc( aChanged, /*bBroadcast*/true );
-    pDesc = m_pDoc->FindPageDesc( aChanged, &nPos );
+    m_pDoc->DelPageDesc( UIName(aChanged), /*bBroadcast*/true );
+    pDesc = m_pDoc->FindPageDesc( UIName(aChanged), &nPos );
     // not there anymore
     CPPUNIT_ASSERT( !pDesc );
     CPPUNIT_ASSERT_EQUAL( std::numeric_limits<size_t>::max(), nPos);

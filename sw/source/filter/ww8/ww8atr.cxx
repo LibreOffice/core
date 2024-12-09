@@ -1084,7 +1084,7 @@ OUString MSWordExportBase::GetBookmarkName( sal_uInt16 nTyp, const OUString* pNa
 OUString MSWordExportBase::GetStyleRefName(const OUString& rName)
 {
     SwTextFormatColls* pTextFormatColls = m_rDoc.GetTextFormatColls();
-    SwTextFormatColl* pTextFormat = pTextFormatColls->FindFormatByName(rName);
+    SwTextFormatColl* pTextFormat = pTextFormatColls->FindFormatByName(UIName(rName));
 
     if (pTextFormat == nullptr)
         return "\"" + rName + "\"";
@@ -1757,7 +1757,7 @@ const SwCharFormat* GetSwCharFormat(const SwFormatINetFormat& rINet, SwDoc& rDoc
         return nullptr;
 
     const sal_uInt16 nId = rINet.GetINetFormatId();
-    const OUString& rStr = rINet.GetINetFormat();
+    const UIName& rStr = rINet.GetINetFormat();
     if (rStr.isEmpty())
     {
         OSL_ENSURE( false, "WW8AttributeOutput::TextINetFormat(..) - missing unvisited character format at hyperlink attribute" );
@@ -2180,7 +2180,7 @@ void AttributeOutputBase::GenerateBookmarksForSequenceField(const SwTextNode& rN
             if (pField && pField->GetTyp()->Which() == SwFieldIds::SetExp && pField->GetSubType() == nsSwGetSetExpType::GSE_SEQ)
             {
                 const sal_uInt16 nSeqFieldNumber = static_cast<const SwSetExpField*>(pField)->GetSeqNumber();
-                const OUString sObjectName = static_cast<const SwSetExpFieldType*>(pField->GetTyp())->GetName();
+                const UIName sObjectName = static_cast<const SwSetExpFieldType*>(pField->GetTyp())->GetName();
                 const SwFieldTypes* pFieldTypes = GetExport().m_rDoc.getIDocumentFieldsAccess().GetFieldTypes();
                 bool bHaveFullBkm = false;
                 bool bHaveLabelAndNumberBkm = false;
@@ -2196,7 +2196,7 @@ void AttributeOutputBase::GenerateBookmarksForSequenceField(const SwTextNode& rN
                         {
                             SwGetRefField* pRefField = static_cast<SwGetRefField*>(pFormatField->GetField());
                             // If we have a reference to the current sequence field
-                            if(pRefField->GetSeqNo() == nSeqFieldNumber && pRefField->GetSetRefName() == sObjectName)
+                            if(pRefField->GetSeqNo() == nSeqFieldNumber && pRefField->GetSetRefName() == ReferenceMarkerName(sObjectName.toString()))
                             {
                                 // Need to create a separate run for separator character
                                 SwWW8AttrIter aLocalAttrIter( GetExport(), rNode ); // We need a local iterator having the right number of runs
@@ -2427,10 +2427,10 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                 if (!pTOX->IsFromObjectNames())
                 {
                     sStr = FieldString(eCode) + "\\c ";
-                    const OUString& seqName = pTOX->GetSequenceName();
+                    const UIName& seqName = pTOX->GetSequenceName();
                     if(!seqName.isEmpty())
                     {
-                        sStr += "\"" + seqName + sEntryEnd;
+                        sStr += "\"" + seqName.toString() + sEntryEnd;
                     }
                     OUString aText;
                     int nRet = ::lcl_CheckForm( pTOX->GetTOXForm(), 1, aText );
@@ -2447,8 +2447,8 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                 }
                 if (pTOX->GetCreateType() & SwTOXElement::Template)
                 {
-                    OUString const& rStyle(pTOX->GetStyleNames(0));
-                    assert(rStyle.indexOf(TOX_STYLE_DELIMITER) == -1);
+                    UIName const& rStyle(pTOX->GetStyleNames(0));
+                    assert(rStyle.toString().indexOf(TOX_STYLE_DELIMITER) == -1);
                     SwTextFormatColl const*const pColl = GetExport().m_rDoc.FindTextFormatCollByName(rStyle);
                     if (pColl)
                     {
@@ -2577,7 +2577,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                                 {
                                     if (!sTOption.isEmpty())
                                         sTOption += tsep;
-                                    sTOption += pColl->GetName() + tsep + OUString::number(nTestLvl + 1);
+                                    sTOption += pColl->GetName().toString() + tsep + OUString::number(nTestLvl + 1);
                                 }
                             }
                         }
@@ -2593,16 +2593,16 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                         // #i99641# - Consider additional styles regardless of TOX-outlinelevel
                         for( n = 0; n < MAXLEVEL; ++n )
                         {
-                            const OUString& rStyles = pTOX->GetStyleNames( n );
+                            const UIName& rStyles = pTOX->GetStyleNames( n );
                             if( !rStyles.isEmpty() )
                             {
                                 sal_Int32 nPos = 0;
                                 const OUString sLvl{tsep + OUString::number(n + 1)};
                                 do {
-                                    const OUString sStyle( rStyles.getToken( 0, TOX_STYLE_DELIMITER, nPos ));
+                                    const OUString sStyle( rStyles.toString().getToken( 0, TOX_STYLE_DELIMITER, nPos ));
                                     if( !sStyle.isEmpty() )
                                     {
-                                        SwTextFormatColl* pColl = GetExport().m_rDoc.FindTextFormatCollByName(sStyle);
+                                        SwTextFormatColl* pColl = GetExport().m_rDoc.FindTextFormatCollByName(UIName(sStyle));
                                         if (pColl)
                                         {
                                             OUString const converted(GetExport().m_pStyles->GetStyleWWName(pColl));
@@ -2969,9 +2969,9 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
         {
             OUString sStr;
             if (GetExport().FieldsQuoted())
-                sStr = FieldString(ww::eSEQ) + pField->GetTyp()->GetName() + " ";
+                sStr = FieldString(ww::eSEQ) + pField->GetTyp()->GetName().toString() + " ";
             else
-                sStr = FieldString(ww::eSEQ) + "\"" + pField->GetTyp()->GetName() +"\" ";
+                sStr = FieldString(ww::eSEQ) + "\"" + pField->GetTyp()->GetName().toString() +"\" ";
             GetNumberPara( sStr, *pField );
             GetExport().OutputField(pField, ww::eSEQ, sStr);
         }
@@ -3468,7 +3468,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                     // Sometimes we can't find the outline node, in that case let's just fallback to exporting the text
 
                     sStr = FieldString(ww::eSTYLEREF)
-                         + GetExport().GetStyleRefName(pOutlineNd->GetFormatColl()->GetName());
+                         + GetExport().GetStyleRefName(pOutlineNd->GetFormatColl()->GetName().toString());
                 }
 
                 GetExport().OutputField(pField, ww::eSTYLEREF, sStr);

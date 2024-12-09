@@ -1210,7 +1210,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                     if(bToTable)
                     {
                         if(pTAFormat)
-                            aReq.AppendItem( SfxStringItem( FN_PARAM_2, pTAFormat->GetName()));
+                            aReq.AppendItem( SfxStringItem( FN_PARAM_2, pTAFormat->GetName().toString()));
                         aReq.AppendItem( SfxBoolItem ( FN_PARAM_3, bool(aInsTableOpts.mnInsMode & SwInsertTableFlags::Headline)));
                         aReq.AppendItem( SfxInt16Item( FN_PARAM_4, static_cast<short>(aInsTableOpts.mnRowsToRepeat) ));
                         aReq.AppendItem( SfxBoolItem ( FN_PARAM_5, bool(aInsTableOpts.mnInsMode & SwInsertTableFlags::DefaultBorder) ));
@@ -3103,11 +3103,11 @@ static void EndUndo(SwWrtShell& rSh)
 
 static void InsertTableImpl(SwWrtShell& rSh,
                     SwView &rTempView,
-                    const OUString& aTableName,
+                    const UIName& aTableName,
                     sal_uInt16 nRows,
                     sal_uInt16 nCols,
                     SwInsertTableOptions aInsTableOpts,
-                    const OUString& aAutoName,
+                    const TableStyleName& aAutoName,
                     const std::unique_ptr<SwTableAutoFormat>& pTAFormat)
 {
     rSh.StartUndo(SwUndoId::INSTABLE);
@@ -3237,7 +3237,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
 
                         if( nCols && nRows )
                         {
-                            InsertTableImpl( rSh, rTempView, aTableName, nRows, nCols, aInsTableOpts, aAutoName, pTAFormat );
+                            InsertTableImpl( rSh, rTempView, UIName(aTableName), nRows, nCols, aInsTableOpts, TableStyleName(aAutoName), pTAFormat );
                             EndUndo(rSh);
                         }
                     }
@@ -3255,7 +3255,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
             _rRequest.AppendItem( SfxInt32Item( FN_PARAM_1, static_cast<sal_Int32>(aInsTableOptsIn.mnInsMode) ) );
             _rRequest.Done();
 
-            InsertTableImpl( rSh, rTempView, aTableNameIn, nRowsIn, nColsIn, aInsTableOptsIn, aAutoNameIn, pTAFormatIn );
+            InsertTableImpl( rSh, rTempView, UIName(aTableNameIn), nRowsIn, nColsIn, aInsTableOptsIn, TableStyleName(aAutoNameIn), pTAFormatIn );
 
             bCallEndUndo = true;
         }

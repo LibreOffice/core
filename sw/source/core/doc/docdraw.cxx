@@ -280,7 +280,7 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
         OSL_ENSURE( rMrkList.GetMarkCount() == 1, "GroupMarked more or none groups." );
 
         SdrObject* pNewGroupObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
-        pNewGroupObj->SetName(pFormat->GetName());
+        pNewGroupObj->SetName(pFormat->GetName().toString());
         pNewContact = new SwDrawContact( pFormat, pNewGroupObj );
         // #i35635#
         pNewContact->MoveObjToVisibleLayer( pNewGroupObj );
@@ -407,7 +407,7 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
                         pFormat->SetPositionLayoutDir(
                             text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
                         if (pSubObj->GetName().isEmpty())
-                            pSubObj->SetName(pFormat->GetName());
+                            pSubObj->SetName(pFormat->GetName().toString());
                         pFormatsAndObjs[i].emplace_back( pFormat, pSubObj );
 
                         if( bUndo )

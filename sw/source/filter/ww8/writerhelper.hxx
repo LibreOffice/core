@@ -272,7 +272,7 @@ namespace sw
 
             @return A Paragraph Style if one exists which matches the name
         */
-        SwTextFormatColl* GetParaStyle(SwDoc &rDoc, const OUString& rName);
+        SwTextFormatColl* GetParaStyle(SwDoc &rDoc, const UIName& rName);
 
         /** Get a Character Style which fits a given name
 
@@ -287,7 +287,7 @@ namespace sw
 
             @return A Character Style if one exists which matches the name
         */
-        SwCharFormat* GetCharStyle(SwDoc &rDoc, const OUString& rName);
+        SwCharFormat* GetCharStyle(SwDoc &rDoc, const UIName& rName);
 
         /** Sort sequence of Paragraph Styles by assigned outline style list level
 

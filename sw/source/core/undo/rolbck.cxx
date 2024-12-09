@@ -1006,7 +1006,7 @@ void SwHistoryChangeFlyChain::SetInDoc( SwDoc* pDoc, bool )
 
 // -> #i27615#
 SwHistoryChangeCharFormat::SwHistoryChangeCharFormat(SfxItemSet aSet,
-                                     OUString sFormat)
+                                     UIName sFormat)
     : SwHistoryHint(HSTRY_CHGCHARFMT)
     , m_OldSet(std::move(aSet)), m_Format(std::move(sFormat))
 {

@@ -34,9 +34,9 @@ class SwForm;
 class SW_DLLPUBLIC SwTOXDescription
 {
     TOXTypes            m_eTOXType;
-    OUString            m_aStyleNames[MAXLEVEL];
-    OUString            m_sSequenceName;
-    OUString            m_sMainEntryCharStyle;
+    UIName              m_aStyleNames[MAXLEVEL];
+    UIName              m_sSequenceName;
+    UIName              m_sMainEntryCharStyle;
     OUString            m_sAutoMarkURL;
     std::optional<OUString>
                         m_aTitle;
@@ -89,9 +89,9 @@ public:
 
     TOXTypes        GetTOXType() const { return m_eTOXType;}
 
-    const OUString& GetStyleNames(sal_uInt16 nLvl) const
+    const UIName&   GetStyleNames(sal_uInt16 nLvl) const
                                 {return m_aStyleNames[nLvl];}
-    void            SetStyleNames(const OUString& rSet, sal_uInt16 nLvl)
+    void            SetStyleNames(const UIName& rSet, sal_uInt16 nLvl)
                                 {m_aStyleNames[nLvl] = rSet; }
 
     const OUString& GetAutoMarkURL() const { return m_sAutoMarkURL;}
@@ -112,8 +112,8 @@ public:
     void            SetIndexOptions(SwTOIOptions nSet) { m_nIndexOptions = nSet;}
     SwTOIOptions    GetIndexOptions() const { return m_nIndexOptions;}
 
-    const OUString& GetMainEntryCharStyle() const {return m_sMainEntryCharStyle;}
-    void            SetMainEntryCharStyle(const OUString& rSet)  {m_sMainEntryCharStyle = rSet;}
+    const UIName&   GetMainEntryCharStyle() const {return m_sMainEntryCharStyle;}
+    void            SetMainEntryCharStyle(const UIName& rSet)  {m_sMainEntryCharStyle = rSet;}
 
     void            SetLevel(sal_uInt8 nSet) {m_nLevel = nSet;}
     sal_uInt8           GetLevel()const  {return m_nLevel; }
@@ -121,8 +121,8 @@ public:
     void            SetCreateFromObjectNames(bool bSet) { m_bFromObjectNames = bSet;}
     bool            IsCreateFromObjectNames() const {return m_bFromObjectNames;}
 
-    const OUString& GetSequenceName() const {return m_sSequenceName;}
-    void            SetSequenceName(const OUString& rSet) {m_sSequenceName = rSet;}
+    const UIName&   GetSequenceName() const {return m_sSequenceName;}
+    void            SetSequenceName(const UIName& rSet) {m_sSequenceName = rSet;}
 
     SwCaptionDisplay    GetCaptionDisplay() const { return m_eCaptionDisplay;}
     void                SetCaptionDisplay(SwCaptionDisplay eSet) {m_eCaptionDisplay = eSet;}

@@ -25,6 +25,7 @@
 #include "calbck.hxx"
 #include "hintids.hxx"
 #include "swatrset.hxx"
+#include "names.hxx"
 #include <memory>
 
 class IDocumentSettingAccess;
@@ -47,7 +48,7 @@ class SW_DLLPUBLIC SwFormat : public sw::BorderCacheOwner, public sw::Broadcasti
 {
     friend class SwFrameFormat;
 
-    OUString m_aFormatName;
+    UIName m_aFormatName;
     SwAttrSet m_aSet;
 
     sal_uInt16 m_nWhichId;
@@ -67,7 +68,7 @@ class SW_DLLPUBLIC SwFormat : public sw::BorderCacheOwner, public sw::Broadcasti
     virtual void InvalidateInSwFntCache() {};
 
 protected:
-    SwFormat( SwAttrPool& rPool, const OUString& rFormatNm,
+    SwFormat( SwAttrPool& rPool, const UIName& rFormatNm,
             const WhichRangesContainer& pWhichRanges, SwFormat *pDrvdFrame, sal_uInt16 nFormatWhich );
     SwFormat( const SwFormat& rFormat );
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
@@ -128,9 +129,9 @@ public:
     SwFormat* DerivedFrom() const { return const_cast<SwFormat*>(static_cast<const SwFormat*>(GetRegisteredIn())); }
     bool IsDefault() const { return DerivedFrom() == nullptr; }
 
-    const OUString& GetName() const                  { return m_aFormatName; }
+    const UIName& GetName() const                  { return m_aFormatName; }
     bool HasName(std::u16string_view rName) const { return m_aFormatName == rName; }
-    virtual void SetFormatName( const OUString& rNewName, bool bBroadcast=false );
+    virtual void SetFormatName( const UIName& rNewName, bool bBroadcast=false );
 
     /// For querying the attribute array.
     const SwAttrSet& GetAttrSet() const { return m_aSet; }

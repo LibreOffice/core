@@ -573,7 +573,7 @@ void SAL_CALL SwXFieldMaster::setPropertyValue(
         {
             const std::vector<OUString>& rExtraArr(
                     SwStyleNameMapper::GetExtraUINameArray());
-            const OUString sTypeName = pType->GetName();
+            const OUString sTypeName = pType->GetName().toString();
             static sal_uInt16 nIds[] =
             {
                 RES_POOLCOLL_LABEL_DRAWING - RES_POOLCOLL_EXTRA_BEGIN,
@@ -638,7 +638,7 @@ void SAL_CALL SwXFieldMaster::setPropertyValue(
         {
             case SwFieldIds::User :
             {
-                SwUserFieldType aType(m_pImpl->m_pDoc, sTypeName);
+                SwUserFieldType aType(m_pImpl->m_pDoc, UIName(sTypeName));
                 pType2 = m_pImpl->m_pDoc->getIDocumentFieldsAccess().InsertFieldType(aType);
                 static_cast<SwUserFieldType*>(pType2)->SetContent(m_pImpl->m_sParam1);
                 static_cast<SwUserFieldType*>(pType2)->SetValue(m_pImpl->m_fParam1);
@@ -648,14 +648,14 @@ void SAL_CALL SwXFieldMaster::setPropertyValue(
             break;
             case SwFieldIds::Dde :
             {
-                SwDDEFieldType aType(sTypeName, m_pImpl->m_sParam1,
+                SwDDEFieldType aType(UIName(sTypeName), m_pImpl->m_sParam1,
                     m_pImpl->m_bParam1 ? SfxLinkUpdateMode::ALWAYS : SfxLinkUpdateMode::ONCALL);
                 pType2 = m_pImpl->m_pDoc->getIDocumentFieldsAccess().InsertFieldType(aType);
             }
             break;
             case SwFieldIds::SetExp :
             {
-                SwSetExpFieldType aType(m_pImpl->m_pDoc, sTypeName);
+                SwSetExpFieldType aType(m_pImpl->m_pDoc, UIName(sTypeName));
                 if (!m_pImpl->m_sParam1.isEmpty())
                     aType.SetDelimiter(OUString(m_pImpl->m_sParam1[0]));
                 if (m_pImpl->m_nParam1 > -1 && m_pImpl->m_nParam1 < MAXLEVEL)
@@ -992,7 +992,7 @@ void SwXFieldMaster::Impl::Notify(const SfxHint& rHint)
 
 ProgName SwXFieldMaster::GetProgrammaticName(const SwFieldType& rType, SwDoc& rDoc)
 {
-    const OUString sName(rType.GetName());
+    const UIName sName(rType.GetName());
     if(SwFieldIds::SetExp == rType.Which())
     {
         const SwFieldTypes* pTypes = rDoc.getIDocumentFieldsAccess().GetFieldTypes();
@@ -1004,7 +1004,7 @@ ProgName SwXFieldMaster::GetProgrammaticName(const SwFieldType& rType, SwDoc& rD
             }
         }
     }
-    return ProgName(sName);
+    return ProgName(sName.toString());
 }
 
 OUString SwXFieldMaster::LocalizeFormula(
@@ -1012,13 +1012,13 @@ OUString SwXFieldMaster::LocalizeFormula(
     const OUString& rFormula,
     bool bQuery)
 {
-    const OUString sTypeName(rField.GetTyp()->GetName());
+    const UIName sTypeName(rField.GetTyp()->GetName());
     const ProgName sProgName(
         SwStyleNameMapper::GetProgName(sTypeName, SwGetPoolIdFromName::TxtColl ));
-    if(sProgName.toString() != sTypeName)
+    if(sProgName.toString() != sTypeName.toString())
     {
-        const OUString sSource = bQuery ? sTypeName : sProgName.toString();
-        const OUString sDest = bQuery ? sProgName.toString() : sTypeName;
+        const OUString sSource = bQuery ? sTypeName.toString() : sProgName.toString();
+        const OUString sDest = bQuery ? sProgName.toString() : sTypeName.toString();
         if(rFormula.startsWith(sSource))
         {
             return sDest + rFormula.subView(sSource.getLength());
@@ -1093,7 +1093,7 @@ public:
     bool m_bIsDescriptor;
     bool m_bCallUpdate;
     SwServiceType m_nServiceId;
-    OUString m_sTypeName;
+    UIName m_sTypeName;
     std::unique_ptr<SwFieldProperties_Impl> m_pProps;
 
     Impl(SwDoc *const pDoc, SwFormatField *const pFormat, SwServiceType nServiceId)
@@ -1601,7 +1601,7 @@ void SAL_CALL SwXTextField::attach(
             case SwServiceType::FieldTypeUser:
             {
                 SwFieldType* pFieldType =
-                    pDoc->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::User, m_pImpl->m_sTypeName, true);
+                    pDoc->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::User, m_pImpl->m_sTypeName.toString(), true);
                 if (!pFieldType)
                     throw uno::RuntimeException();
                 sal_uInt16 nUserSubType = (m_pImpl->m_pProps->bBool1)
@@ -1653,7 +1653,7 @@ void SAL_CALL SwXTextField::attach(
             case SwServiceType::FieldTypeDDE:
             {
                 SwFieldType* pFieldType =
-                    pDoc->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Dde, m_pImpl->m_sTypeName, true);
+                    pDoc->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Dde, m_pImpl->m_sTypeName.toString(), true);
                 if (!pFieldType)
                     throw uno::RuntimeException();
                 xField.reset(new SwDDEField( static_cast<SwDDEFieldType*>(pFieldType) ));
@@ -1722,7 +1722,7 @@ void SAL_CALL SwXTextField::attach(
             case SwServiceType::FieldTypeDatabase:
             {
                 SwFieldType* pFieldType =
-                    pDoc->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Database, m_pImpl->m_sTypeName, false);
+                    pDoc->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Database, m_pImpl->m_sTypeName.toString(), false);
                 if (!pFieldType)
                     throw uno::RuntimeException();
                 xField.reset(new SwDBField(static_cast<SwDBFieldType*>(pFieldType),
@@ -1739,7 +1739,7 @@ void SAL_CALL SwXTextField::attach(
             case SwServiceType::FieldTypeSetExp:
             {
                 SwFieldType* pFieldType =
-                    pDoc->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::SetExp, m_pImpl->m_sTypeName, true);
+                    pDoc->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::SetExp, m_pImpl->m_sTypeName.toString(), true);
                 if (!pFieldType)
                     throw uno::RuntimeException();
                 // detect the field type's sub type and set an appropriate number format
@@ -1821,7 +1821,7 @@ void SAL_CALL SwXTextField::attach(
             case SwServiceType::FieldTypeInput:
             {
                 SwFieldType* pFieldType =
-                    pDoc->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Input, m_pImpl->m_sTypeName, true);
+                    pDoc->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::Input, m_pImpl->m_sTypeName.toString(), true);
                 if (!pFieldType)
                     throw uno::RuntimeException();
                 sal_uInt16 nInpSubType =
@@ -2721,10 +2721,10 @@ static SwFieldIds lcl_GetIdByName( OUString& rName, OUString& rTypeName )
         nResId = SwFieldIds::SetExp;
 
         const OUString sFieldTypName( rName.getToken( 0, '.', nIdx ));
-        const OUString sUIName( SwStyleNameMapper::GetSpecialExtraUIName( ProgName(sFieldTypName) ) );
+        const UIName sUIName( SwStyleNameMapper::GetSpecialExtraUIName( ProgName(sFieldTypName) ) );
 
         if( sUIName != sFieldTypName )
-            rName = comphelper::string::setToken(rName, 1, '.', sUIName);
+            rName = comphelper::string::setToken(rName, 1, '.', sUIName.toString());
     }
     else if (rTypeName.equalsIgnoreAsciiCase("DataBase"))
     {
@@ -2778,10 +2778,10 @@ bool SwXTextFieldMasters::getInstanceName(
     switch( rFieldType.Which() )
     {
     case SwFieldIds::User:
-        sField = "User." + rFieldType.GetName();
+        sField = "User." + rFieldType.GetName().toString();
         break;
     case SwFieldIds::Dde:
-        sField = "DDE." + rFieldType.GetName();
+        sField = "DDE." + rFieldType.GetName().toString();
         break;
 
     case SwFieldIds::SetExp:
@@ -2789,7 +2789,7 @@ bool SwXTextFieldMasters::getInstanceName(
         break;
 
     case SwFieldIds::Database:
-        sField = "DataBase." + rFieldType.GetName().replaceAll(OUStringChar(DB_DELIM), ".");
+        sField = "DataBase." + rFieldType.GetName().toString().replaceAll(OUStringChar(DB_DELIM), ".");
         break;
 
     case SwFieldIds::TableOfAuthorities:

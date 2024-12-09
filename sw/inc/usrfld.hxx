@@ -37,7 +37,7 @@ class SW_DLLPUBLIC SwUserFieldType final : public SwValueFieldType
     bool    m_bDeleted : 1;
     /// Float value type.
     double  m_nValue;
-    OUString  m_aName;
+    UIName  m_aName;
     /// String value type.
     OUString  m_aContent;
     /// Language used by m_aContents
@@ -45,9 +45,9 @@ class SW_DLLPUBLIC SwUserFieldType final : public SwValueFieldType
     sal_uInt16  m_nType;
 
 public:
-    SwUserFieldType( SwDoc* pDocPtr, const OUString& );
+    SwUserFieldType( SwDoc* pDocPtr, const UIName& );
 
-    virtual OUString        GetName() const override;
+    virtual UIName          GetName() const override;
     virtual std::unique_ptr<SwFieldType> Copy() const override;
 
     OUString                Expand(sal_uInt32 nFormat, sal_uInt16 nSubType, LanguageType nLng);

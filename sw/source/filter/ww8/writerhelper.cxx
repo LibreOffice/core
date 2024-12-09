@@ -443,7 +443,7 @@ namespace sw
             return aStyles;
         }
 
-        SwTextFormatColl* GetParaStyle(SwDoc &rDoc, const OUString& rName)
+        SwTextFormatColl* GetParaStyle(SwDoc &rDoc, const UIName& rName)
         {
             // Search first in the Doc-Styles
             SwTextFormatColl* pColl = rDoc.FindTextFormatCollByName(rName);
@@ -458,7 +458,7 @@ namespace sw
             return pColl;
         }
 
-        SwCharFormat* GetCharStyle(SwDoc &rDoc, const OUString& rName)
+        SwCharFormat* GetCharStyle(SwDoc &rDoc, const UIName& rName)
         {
             SwCharFormat *pFormat = rDoc.FindCharFormatByName(rName);
             if (!pFormat)

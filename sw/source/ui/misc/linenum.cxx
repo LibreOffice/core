@@ -105,7 +105,7 @@ SwLineNumberingDlg::SwLineNumberingDlg(const SwView& rVw)
     const SwLineNumberInfo &rInf = m_pSh->GetLineNumberInfo();
     IDocumentStylePoolAccess& rIDSPA = m_pSh->getIDocumentStylePoolAccess();
 
-    OUString sStyleName(rInf.GetCharFormat( rIDSPA )->GetName());
+    OUString sStyleName(rInf.GetCharFormat( rIDSPA )->GetName().toString());
     const int nPos = m_xCharStyleLB->find_text(sStyleName);
 
     if (nPos != -1)
@@ -184,7 +184,7 @@ IMPL_LINK_NOARG(SwLineNumberingDlg, OKHdl, weld::Button&, void)
 
     // char styles
     OUString sCharFormatName(m_xCharStyleLB->get_active_text());
-    SwCharFormat *pCharFormat = m_pSh->FindCharFormatByName(sCharFormatName);
+    SwCharFormat *pCharFormat = m_pSh->FindCharFormatByName(UIName(sCharFormatName));
 
     if (!pCharFormat)
     {

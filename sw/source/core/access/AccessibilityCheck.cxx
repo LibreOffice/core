@@ -352,16 +352,17 @@ class NoTextNodeAltTextCheck : public NodeCheck
                     sURL = aAbbreviatedPath;
                 }
 
-                OUString sIssueText = SwResId(STR_LINKED_GRAPHIC)
-                                          .replaceAll("%OBJECT_NAME%", pFrameFormat->GetName())
-                                          .replaceFirst("%LINK%", sURL);
+                OUString sIssueText
+                    = SwResId(STR_LINKED_GRAPHIC)
+                          .replaceAll("%OBJECT_NAME%", pFrameFormat->GetName().toString())
+                          .replaceFirst("%LINK%", sURL);
 
                 auto pIssue = lclAddIssue(m_rIssueCollection, sIssueText,
                                           sfx::AccessibilityIssueID::LINKED_GRAPHIC,
                                           sfx::AccessibilityIssueLevel::WARNLEV);
                 pIssue->setDoc(pNoTextNode->GetDoc());
                 pIssue->setIssueObject(IssueObject::LINKED);
-                pIssue->setObjectID(pFrameFormat->GetName());
+                pIssue->setObjectID(pFrameFormat->GetName().toString());
                 pIssue->setNode(pNoTextNode);
                 pIssue->setAdditionalInfo({ aSystemPath });
             }
@@ -371,7 +372,7 @@ class NoTextNodeAltTextCheck : public NodeCheck
             return;
 
         OUString sIssueText
-            = SwResId(STR_NO_ALT).replaceAll("%OBJECT_NAME%", pFrameFormat->GetName());
+            = SwResId(STR_NO_ALT).replaceAll("%OBJECT_NAME%", pFrameFormat->GetName().toString());
 
         if (pNoTextNode->IsOLENode())
         {
@@ -380,7 +381,7 @@ class NoTextNodeAltTextCheck : public NodeCheck
                               sfx::AccessibilityIssueLevel::ERRORLEV);
             pIssue->setDoc(pNoTextNode->GetDoc());
             pIssue->setIssueObject(IssueObject::OLE);
-            pIssue->setObjectID(pFrameFormat->GetName());
+            pIssue->setObjectID(pFrameFormat->GetName().toString());
         }
         else if (pNoTextNode->IsGrfNode())
         {
@@ -392,7 +393,7 @@ class NoTextNodeAltTextCheck : public NodeCheck
                                           sfx::AccessibilityIssueLevel::ERRORLEV);
                 pIssue->setDoc(pNoTextNode->GetDoc());
                 pIssue->setIssueObject(IssueObject::GRAPHIC);
-                pIssue->setObjectID(pFrameFormat->GetName());
+                pIssue->setObjectID(pFrameFormat->GetName().toString());
                 pIssue->setNode(pNoTextNode);
             }
         }
@@ -422,14 +423,15 @@ private:
     void addTableIssue(SwTable const& rTable, SwDoc& rDoc)
     {
         const SwTableFormat* pFormat = rTable.GetFrameFormat();
-        OUString sName = pFormat->GetName();
-        OUString sIssueText = SwResId(STR_TABLE_MERGE_SPLIT).replaceAll("%OBJECT_NAME%", sName);
+        UIName sName = pFormat->GetName();
+        OUString sIssueText
+            = SwResId(STR_TABLE_MERGE_SPLIT).replaceAll("%OBJECT_NAME%", sName.toString());
         auto pIssue = lclAddIssue(m_rIssueCollection, sIssueText,
                                   sfx::AccessibilityIssueID::TABLE_MERGE_SPLIT,
                                   sfx::AccessibilityIssueLevel::WARNLEV);
         pIssue->setDoc(rDoc);
         pIssue->setIssueObject(IssueObject::TABLE);
-        pIssue->setObjectID(sName);
+        pIssue->setObjectID(sName.toString());
     }
 
     void checkTableNode(SwTableNode* pTableNode)
@@ -530,7 +532,7 @@ private:
                 pIssue->setDoc(pTableNode->GetDoc());
                 pIssue->setIssueObject(IssueObject::TABLE);
                 if (const SwTableFormat* pFormat = rTable.GetFrameFormat())
-                    pIssue->setObjectID(pFormat->GetName());
+                    pIssue->setObjectID(pFormat->GetName().toString());
             }
         }
     }
@@ -2269,7 +2271,7 @@ public:
                                                   sfx::AccessibilityIssueID::FLOATING_TEXT,
                                                   sfx::AccessibilityIssueLevel::WARNLEV);
                         pIssue->setIssueObject(IssueObject::TEXTFRAME);
-                        pIssue->setObjectID(pFormat->GetName());
+                        pIssue->setObjectID(pFormat->GetName().toString());
                         pIssue->setDoc(pCurrent->GetDoc());
                         pIssue->setNode(pCurrent);
                     }
@@ -2557,15 +2559,15 @@ public:
                 const SwAttrSet& rAttrSet = pTextFormatCollection->GetAttrSet();
                 if (rAttrSet.GetLanguage(false).GetLanguage() == LANGUAGE_NONE)
                 {
-                    OUString sName = pTextFormatCollection->GetName();
-                    OUString sIssueText
-                        = SwResId(STR_STYLE_NO_LANGUAGE).replaceAll("%STYLE_NAME%", sName);
+                    UIName sName = pTextFormatCollection->GetName();
+                    OUString sIssueText = SwResId(STR_STYLE_NO_LANGUAGE)
+                                              .replaceAll("%STYLE_NAME%", sName.toString());
 
                     auto pIssue = lclAddIssue(m_rIssueCollection, sIssueText,
                                               sfx::AccessibilityIssueID::STYLE_LANGUAGE,
                                               sfx::AccessibilityIssueLevel::WARNLEV);
                     pIssue->setIssueObject(IssueObject::LANGUAGE_NOT_SET);
-                    pIssue->setObjectID(sName);
+                    pIssue->setObjectID(sName.toString());
                     pIssue->setDoc(*pDoc);
                 }
             }
@@ -2702,7 +2704,7 @@ void AccessibilityCheck::checkObject(SwNode* pCurrent, SwFrameFormat const& rFra
                 if (pNameIssue)
                 {
                     pNameIssue->setIssueObject(IssueObject::HYPERLINKFLY);
-                    pNameIssue->setObjectID(rFrameFormat.GetName());
+                    pNameIssue->setObjectID(rFrameFormat.GetName().toString());
                     pNameIssue->setNode(pCurrent);
                     pNameIssue->setDoc(*m_pDoc);
                 }

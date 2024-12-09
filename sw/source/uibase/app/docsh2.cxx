@@ -1041,7 +1041,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                             SwTextFormatColl &rTextColl = *(*m_xDoc->GetTextFormatColls())[ i ];
                             if( !rTextColl.IsDefault() && rTextColl.IsAtDocNodeSet() )
                             {
-                                pEntries[nIdx++] = sStyle + rTextColl.GetName();
+                                pEntries[nIdx++] = sStyle + rTextColl.GetName().toString();
                             }
                         }
 
@@ -1116,7 +1116,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         {
                             const SwTextFormatColl* pSplitColl = nullptr;
                             if ( !aTemplateName.isEmpty() )
-                                pSplitColl = m_xDoc->FindTextFormatCollByName(aTemplateName);
+                                pSplitColl = m_xDoc->FindTextFormatCollByName(UIName(aTemplateName));
                             bDone = bCreateHtml
                                 ? m_xDoc->GenerateHTMLDoc( aFileName, pSplitColl )
                                 : m_xDoc->GenerateGlobalDoc( aFileName, pSplitColl );

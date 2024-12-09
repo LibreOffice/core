@@ -303,7 +303,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             aFrameSize.SetWhich( GetPool().GetWhichIDFromSlotID( SID_ATTR_PAGE_SIZE ) );
             aSet.Put( aFrameSize );
 
-            aSet.Put(SfxStringItem(FN_SET_FRM_NAME, rSh.GetFlyName()));
+            aSet.Put(SfxStringItem(FN_SET_FRM_NAME, rSh.GetFlyName().toString()));
             aSet.Put(SfxStringItem(FN_UNO_DESCRIPTION, rSh.GetObjDescription()));
             if ( nSlot == FN_FORMAT_GRAFIC_DLG )
             {

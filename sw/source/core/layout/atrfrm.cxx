@@ -858,7 +858,7 @@ void SwFormatPageDesc::dumpAsXml(xmlTextWriterPtr pWriter) const
         (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("oNumOffset"), BAD_CAST("none"));
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("pPageDesc"), "%p", GetPageDesc());
     if (const SwPageDesc* pPageDesc = GetPageDesc())
-        (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("presentation"), BAD_CAST(pPageDesc->GetName().toUtf8().getStr()));
+        (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("presentation"), BAD_CAST(pPageDesc->GetName().toString().toUtf8().getStr()));
     (void)xmlTextWriterEndElement(pWriter);
 }
 
@@ -2294,11 +2294,11 @@ bool SwFormatChain::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     {
         case MID_CHAIN_PREVNAME:
             if ( GetPrev() )
-                aRet = GetPrev()->GetName();
+                aRet = GetPrev()->GetName().toString();
             break;
         case MID_CHAIN_NEXTNAME:
             if ( GetNext() )
-                aRet = GetNext()->GetName();
+                aRet = GetNext()->GetName().toString();
             break;
         default:
             OSL_ENSURE( false, "unknown MemberId" );
@@ -2655,7 +2655,7 @@ SwHeaderAndFooterEatSpacingItem* SwHeaderAndFooterEatSpacingItem::Clone( SfxItem
 
 SwFrameFormat::SwFrameFormat(
     SwAttrPool& rPool,
-    const OUString &rFormatNm,
+    const UIName &rFormatNm,
     SwFrameFormat *pDrvdFrame,
     sal_uInt16 nFormatWhich,
     const WhichRangesContainer& pWhichRange)
@@ -2695,7 +2695,7 @@ SwFrameFormat::~SwFrameFormat()
     m_pOtherTextBoxFormats.reset();
 }
 
-void SwFrameFormat::SetFormatName( const OUString& rNewName, bool bBroadcast )
+void SwFrameFormat::SetFormatName( const UIName& rNewName, bool bBroadcast )
 {
     if (m_ffList != nullptr) {
         SAL_INFO_IF(m_aFormatName == rNewName, "sw.core", "SwFrmFmt not really renamed, as both names are equal");
@@ -3042,7 +3042,7 @@ void SwFrameFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterEndElement(pWriter);
 }
 
-SwFlyFrameFormat::SwFlyFrameFormat(SwAttrPool& rPool, const OUString &rFormatName, SwFrameFormat* pDerivedFrame)
+SwFlyFrameFormat::SwFlyFrameFormat(SwAttrPool& rPool, const UIName &rFormatName, SwFrameFormat* pDerivedFrame)
     : sw::SpzFrameFormat(rPool, rFormatName, pDerivedFrame, RES_FLYFRMFMT)
 {}
 

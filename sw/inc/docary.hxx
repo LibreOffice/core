@@ -47,8 +47,8 @@ public:
     virtual ~SwFormatsBase();
 
     // default linear search implementation, some subclasses will override with a more efficient search
-    virtual SwFormat* FindFormatByName(const OUString& rName) const;
-    virtual void Rename(const SwFrameFormat&, const OUString&) {};
+    virtual SwFormat* FindFormatByName(const UIName& rName) const;
+    virtual void Rename(const SwFrameFormat&, const UIName&) {};
 
     SwFormatsBase() = default;
     SwFormatsBase(SwFormatsBase const &) = default;
@@ -160,7 +160,7 @@ public:
         { return SwVectorModifyBase<Value>::operator[](idx); }
 
     // Override return type to reduce casting
-    virtual Value FindFormatByName(const OUString& rName) const override
+    virtual Value FindFormatByName(const UIName& rName) const override
     { return static_cast<Value>(SwFormatsBase::FindFormatByName(rName)); }
 };
 

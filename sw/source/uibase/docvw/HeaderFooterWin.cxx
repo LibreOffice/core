@@ -295,7 +295,7 @@ void SwHeaderFooterWin::SetOffset(Point aOffset)
             : SwResId(STR_HEADER_TITLE);
 
     sal_Int32 nPos = m_sLabel.lastIndexOf("%1");
-    m_sLabel = m_sLabel.replaceAt(nPos, 2, pDesc->GetName());
+    m_sLabel = m_sLabel.replaceAt(nPos, 2, pDesc->GetName().toString());
     m_xMenuButton->set_accessible_name(m_sLabel);
 
     // Compute the text size and get the box position & size from it
@@ -480,7 +480,7 @@ void SwHeaderFooterWin::ExecuteCommand(std::u16string_view rIdent)
     SwWrtShell& rSh = rView.GetWrtShell();
 
     const SwPageFrame* pPageFrame = SwFrameMenuButtonBase::GetPageFrame(m_pFrame);
-    const OUString& rStyleName = pPageFrame->GetPageDesc()->GetName();
+    const UIName& rStyleName = pPageFrame->GetPageDesc()->GetName();
     if (rIdent == u"edit")
     {
         OUString sPageId = m_bIsHeader ? u"header"_ustr : u"footer"_ustr;
@@ -550,7 +550,7 @@ IMPL_LINK_NOARG(SwHeaderFooterWin, ClickHdl, weld::Button&, void)
     SwWrtShell& rSh = rView.GetWrtShell();
 
     const SwPageFrame* pPageFrame = SwFrameMenuButtonBase::GetPageFrame(m_pFrame);
-    const OUString& rStyleName = pPageFrame->GetPageDesc()->GetName();
+    const UIName& rStyleName = pPageFrame->GetPageDesc()->GetName();
     {
         VclPtr<SwHeaderFooterWin> xThis(this);
         rSh.ChangeHeaderOrFooter( rStyleName, m_bIsHeader, true, false );

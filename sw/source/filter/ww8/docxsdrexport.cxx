@@ -1824,7 +1824,7 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, int nAncho
         rtl::Reference<sax_fastparser::FastAttributeList> pDocPrAttrList
             = sax_fastparser::FastSerializerHelper::createAttrList();
         pDocPrAttrList->add(XML_id, OString::number(nAnchorId));
-        pDocPrAttrList->add(XML_name, rFrameFormat.GetName());
+        pDocPrAttrList->add(XML_name, rFrameFormat.GetName().toString());
 
         pFS->startElementNS(XML_wp, XML_docPr, pDocPrAttrList);
 

@@ -976,7 +976,7 @@ void SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
             SwTextFormatColl* pParentColl = nullptr;
             if( !aClass.isEmpty() )
             {
-                OUString aName( pColl->GetName() );
+                UIName aName( pColl->GetName() );
                 AddClassName( aName, aClass );
 
                 pParentColl = pColl;
@@ -1011,8 +1011,8 @@ void SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
                 // set the attributes of the DropCap attribute
                 if( Css1ScriptFlags::AllMask == nScript )
                 {
-                    OUString sName(pColl->GetName());
-                    FillDropCap( aDrop, rItemSet, &sName );
+                    UIName sName(pColl->GetName());
+                    FillDropCap( aDrop, rItemSet, &sName.toString() );
                 }
                 else
                 {
@@ -1038,8 +1038,8 @@ void SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
                         aScriptItemSet.ClearItem( RES_CHRATR_CTL_POSTURE );
                         aScriptItemSet.ClearItem( RES_CHRATR_CTL_WEIGHT );
                     }
-                    OUString sName(pColl->GetName());
-                    FillDropCap( aDrop, aScriptItemSet, &sName );
+                    UIName sName(pColl->GetName());
+                    FillDropCap( aDrop, aScriptItemSet, &sName.toString() );
                 }
 
                 // Only set the attribute if "float: left" is specified and
@@ -1070,7 +1070,7 @@ void SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
     SwCharFormat *pParentCFormat = nullptr;
     if( !aClass.isEmpty() )
     {
-        OUString aName( pCFormat->GetName() );
+        UIName aName( pCFormat->GetName() );
         AddClassName( aName, aClass );
         pParentCFormat = pCFormat;
 
@@ -1155,7 +1155,7 @@ SwCharFormat* SwCSS1Parser::GetChrFormat( HtmlTokenId nToken2, const OUString& r
     }
     else
     {
-        OUString sCName( OUString::createFromAscii(sName) );
+        UIName sCName( OUString::createFromAscii(sName) );
         pCFormat = m_pDoc->FindCharFormatByName( sCName );
         if( !pCFormat )
         {
@@ -1172,7 +1172,7 @@ SwCharFormat* SwCSS1Parser::GetChrFormat( HtmlTokenId nToken2, const OUString& r
     GetScriptFromClass( aClass, false );
     if( !aClass.isEmpty() )
     {
-        OUString aTmp( pCFormat->GetName() );
+        UIName aTmp( pCFormat->GetName() );
         AddClassName( aTmp, aClass );
         SwCharFormat *pClassCFormat = m_pDoc->FindCharFormatByName( aTmp );
         if( pClassCFormat )
@@ -1265,7 +1265,7 @@ SwTextFormatColl *SwCSS1Parser::GetTextFormatColl( sal_uInt16 nTextColl,
     if( !aClass.isEmpty() )
     {
         assert(pColl && "No paragraph style???");
-        OUString aTmp( pColl->GetName() );
+        UIName aTmp( pColl->GetName() );
         AddClassName( aTmp, aClass );
         SwTextFormatColl* pClassColl = m_pDoc->FindTextFormatCollByName( aTmp );
 
@@ -1446,11 +1446,11 @@ bool SwCSS1Parser::MayBePositioned( const SvxCSS1PropertyInfo& rPropInfo,
              SVX_CSS1_LTYPE_PERCENTAGE   == rPropInfo.m_eWidthType );
 }
 
-void SwCSS1Parser::AddClassName( OUString& rFormatName, std::u16string_view rClass )
+void SwCSS1Parser::AddClassName( UIName& rFormatName, std::u16string_view rClass )
 {
     OSL_ENSURE( !rClass.empty(), "Style class without length?" );
 
-    rFormatName += OUString::Concat(".") + rClass;
+    rFormatName = UIName(rFormatName.toString() + "." + rClass);
 }
 
 void SwCSS1Parser::FillDropCap( SwFormatDrop& rDrop,
@@ -1500,17 +1500,17 @@ void SwCSS1Parser::FillDropCap( SwFormatDrop& rDrop,
         return;
 
     SwCharFormat *pCFormat = nullptr;
-    OUString aName;
+    UIName aName;
     if( pName )
     {
-        aName = *pName + ".FL";   // first letter
+        aName = UIName(*pName + ".FL");   // first letter
         pCFormat = m_pDoc->FindCharFormatByName( aName );
     }
     else
     {
         do
         {
-            aName = "first-letter " + OUString::number( static_cast<sal_Int32>(++m_nDropCapCnt) );
+            aName = UIName("first-letter " + OUString::number( static_cast<sal_Int32>(++m_nDropCapCnt) ));
         }
         while( m_pDoc->FindCharFormatByName(aName) );
     }

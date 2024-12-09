@@ -24,6 +24,7 @@
 #include <o3tl/deleter.hxx>
 #include <memory>
 #include <unordered_map>
+#include <names.hxx>
 
 class SwList;
 class SwDoc;
@@ -38,16 +39,16 @@ class DocumentListsManager final : public IDocumentListsAccess
         DocumentListsManager( SwDoc& i_rSwdoc );
 
         SwList* createList( const OUString& rListId,
-                                    const OUString& rDefaultListStyleName ) override;
+                                    const UIName& rDefaultListStyleName ) override;
         SwList* getListByName( const OUString& rListId ) const override;
 
-        void createListForListStyle( const OUString& rListStyleName ) override;
-        SwList* getListForListStyle( const OUString& rListStyleName ) const override;
-        void deleteListForListStyle( const OUString& rListStyleName ) override;
-        void deleteListsByDefaultListStyle( const OUString& rListStyleName ) override;
+        void createListForListStyle( const UIName& rListStyleName ) override;
+        SwList* getListForListStyle( const UIName& rListStyleName ) const override;
+        void deleteListForListStyle( const UIName& rListStyleName ) override;
+        void deleteListsByDefaultListStyle( const UIName& rListStyleName ) override;
         // #i91400#
-        void trackChangeOfListStyleName( const OUString& rListStyleName,
-                                                 const OUString& rNewListStyleName ) override;
+        void trackChangeOfListStyleName( const UIName& rListStyleName,
+                                                 const UIName& rNewListStyleName ) override;
         virtual ~DocumentListsManager() override;
 
     private:
@@ -61,7 +62,7 @@ class DocumentListsManager final : public IDocumentListsAccess
         // container to hold the lists of the text document
         std::unordered_map<OUString, SwListPtr> maLists;
         // relation between list style and its default list
-        std::unordered_map<OUString, SwList*> maListStyleLists;
+        std::unordered_map<UIName, SwList*> maListStyleLists;
 
         OUString CreateUniqueListId();
         OUString MakeListIdUnique( const OUString& aSuggestedUniqueListId );

@@ -622,7 +622,7 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
     // then map this name to the corresponding user interface name.
     ProgName sProgName( GetImport().GetStyleDisplayName( XmlStyleFamily::MASTER_PAGE,
                                              m_sMasterPageName ) );
-    OUString sUIName;
+    UIName sUIName;
     SwStyleNameMapper::FillUIName( sProgName,
                                    sUIName,
                                    SwGetPoolIdFromName::PageDesc);

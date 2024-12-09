@@ -755,13 +755,13 @@ void SwDoc::DelTableFrameFormat( SwTableFormat *pFormat )
     delete pFormat;
 }
 
-SwFrameFormat* SwDoc::FindFrameFormatByName( const OUString& rName ) const
+SwFrameFormat* SwDoc::FindFrameFormatByName( const UIName& rName ) const
 {
     return static_cast<SwFrameFormat*>(mpFrameFormatTable->FindFormatByName(rName));
 }
 
 /// Create the formats
-SwFlyFrameFormat *SwDoc::MakeFlyFrameFormat( const OUString &rFormatName,
+SwFlyFrameFormat *SwDoc::MakeFlyFrameFormat( const UIName &rFormatName,
                                     SwFrameFormat *pDerivedFrom )
 {
     SwFlyFrameFormat *pFormat = new SwFlyFrameFormat( GetAttrPool(), rFormatName, pDerivedFrom );
@@ -770,7 +770,7 @@ SwFlyFrameFormat *SwDoc::MakeFlyFrameFormat( const OUString &rFormatName,
     return pFormat;
 }
 
-SwDrawFrameFormat *SwDoc::MakeDrawFrameFormat( const OUString &rFormatName,
+SwDrawFrameFormat *SwDoc::MakeDrawFrameFormat( const UIName &rFormatName,
                                      SwFrameFormat *pDerivedFrom )
 {
     SwDrawFrameFormat *pFormat = new SwDrawFrameFormat( GetAttrPool(), rFormatName, pDerivedFrom);
@@ -803,7 +803,7 @@ SwTableFormat& SwDoc::GetTableFrameFormat(size_t nFormat, bool bUsed) const
     throw std::out_of_range("Format index out of range.");
 }
 
-SwTableFormat* SwDoc::MakeTableFrameFormat( const OUString &rFormatName,
+SwTableFormat* SwDoc::MakeTableFrameFormat( const UIName &rFormatName,
                                     SwFrameFormat *pDerivedFrom )
 {
     SwTableFormat* pFormat = new SwTableFormat( GetAttrPool(), rFormatName, pDerivedFrom );
@@ -813,7 +813,7 @@ SwTableFormat* SwDoc::MakeTableFrameFormat( const OUString &rFormatName,
     return pFormat;
 }
 
-SwFrameFormat *SwDoc::MakeFrameFormat(const OUString &rFormatName,
+SwFrameFormat *SwDoc::MakeFrameFormat(const UIName &rFormatName,
                             SwFrameFormat *pDerivedFrom,
                             bool bAuto)
 {
@@ -832,7 +832,7 @@ SwFrameFormat *SwDoc::MakeFrameFormat(const OUString &rFormatName,
     return pFormat;
 }
 
-SwFormat *SwDoc::MakeFrameFormat_(const OUString &rFormatName,
+SwFormat *SwDoc::MakeFrameFormat_(const UIName &rFormatName,
                             SwFormat *pDerivedFrom,
                             bool bAuto)
 {
@@ -841,7 +841,7 @@ SwFormat *SwDoc::MakeFrameFormat_(const OUString &rFormatName,
     return pFrameFormat;
 }
 
-SwCharFormat *SwDoc::MakeCharFormat( const OUString &rFormatName,
+SwCharFormat *SwDoc::MakeCharFormat( const UIName &rFormatName,
                                SwCharFormat *pDerivedFrom )
 {
     SwCharFormat *pFormat = new SwCharFormat( GetAttrPool(), rFormatName, pDerivedFrom );
@@ -858,7 +858,7 @@ SwCharFormat *SwDoc::MakeCharFormat( const OUString &rFormatName,
     return pFormat;
 }
 
-SwFormat *SwDoc::MakeCharFormat_(const OUString &rFormatName,
+SwFormat *SwDoc::MakeCharFormat_(const UIName &rFormatName,
                             SwFormat *pDerivedFrom,
                             bool /*bAuto*/)
 {
@@ -868,7 +868,7 @@ SwFormat *SwDoc::MakeCharFormat_(const OUString &rFormatName,
 }
 
 /// Create the FormatCollections
-SwTextFormatColl* SwDoc::MakeTextFormatColl( const OUString &rFormatName,
+SwTextFormatColl* SwDoc::MakeTextFormatColl( const UIName &rFormatName,
                                      SwTextFormatColl *pDerivedFrom)
 {
     SwTextFormatColl *pFormatColl = new SwTextFormatColl( GetAttrPool(), rFormatName,
@@ -887,7 +887,7 @@ SwTextFormatColl* SwDoc::MakeTextFormatColl( const OUString &rFormatName,
     return pFormatColl;
 }
 
-SwFormat *SwDoc::MakeTextFormatColl_(const OUString &rFormatName,
+SwFormat *SwDoc::MakeTextFormatColl_(const UIName &rFormatName,
                             SwFormat *pDerivedFrom,
                             bool /*bAuto*/)
 {
@@ -896,7 +896,7 @@ SwFormat *SwDoc::MakeTextFormatColl_(const OUString &rFormatName,
     return pTextFormatColl;
 }
 
-SwConditionTextFormatColl* SwDoc::MakeCondTextFormatColl( const OUString &rFormatName,
+SwConditionTextFormatColl* SwDoc::MakeCondTextFormatColl( const UIName &rFormatName,
                                                   SwTextFormatColl *pDerivedFrom)
 {
     SwConditionTextFormatColl*pFormatColl = new SwConditionTextFormatColl( GetAttrPool(),
@@ -916,7 +916,7 @@ SwConditionTextFormatColl* SwDoc::MakeCondTextFormatColl( const OUString &rForma
 }
 
 // GRF
-SwGrfFormatColl* SwDoc::MakeGrfFormatColl( const OUString &rFormatName,
+SwGrfFormatColl* SwDoc::MakeGrfFormatColl( const UIName &rFormatName,
                                      SwGrfFormatColl *pDerivedFrom )
 {
     SwGrfFormatColl *pFormatColl = new SwGrfFormatColl( GetAttrPool(), rFormatName,
@@ -1222,17 +1222,17 @@ SwTextFormatColl* SwDoc::CopyTextColl( const SwTextFormatColl& rColl )
             false );
         if( pItem )
         {
-            const OUString& rName = pItem->GetValue();
-            if( !rName.isEmpty() )
+            UIName aName( pItem->GetValue() );
+            if( !aName.isEmpty() )
             {
-                const SwNumRule* pRule = rColl.GetDoc()->FindNumRulePtr( rName );
+                const SwNumRule* pRule = rColl.GetDoc()->FindNumRulePtr( aName );
                 if( pRule && !pRule->IsAutoRule() )
                 {
-                    SwNumRule* pDestRule = FindNumRulePtr( rName );
+                    SwNumRule* pDestRule = FindNumRulePtr( aName );
                     if( pDestRule )
                         pDestRule->Invalidate();
                     else
-                        MakeNumRule( rName, pRule );
+                        MakeNumRule( aName, pRule );
                 }
             }
         }
@@ -1309,7 +1309,7 @@ void SwDoc::CopyFormatArr( const SwFormatsBase& rSourceArr,
                 && pItem->GetPageDesc() )
         {
             SwFormatPageDesc aPageDesc( *pItem );
-            const OUString& rNm = aPageDesc.GetPageDesc()->GetName();
+            const UIName& rNm = aPageDesc.GetPageDesc()->GetName();
             SwPageDesc* pPageDesc = FindPageDesc( rNm );
             if( !pPageDesc )
             {
@@ -1385,7 +1385,7 @@ void SwDoc::CopyPageDescHeaderFooterImpl( bool bCpyHeader,
     if( !pOldFormat )
         return;
 
-    SwFrameFormat* pNewFormat = new SwFrameFormat( GetAttrPool(), u"CpyDesc"_ustr,
+    SwFrameFormat* pNewFormat = new SwFrameFormat( GetAttrPool(), UIName(u"CpyDesc"_ustr),
                                         GetDfltFrameFormat() );
     pNewFormat->CopyAttrs( *pOldFormat );
 
@@ -1554,7 +1554,7 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
                 {
                     if (pStashedFormatSrc->GetDoc() != this)
                     {
-                        SwFrameFormat newFormat(GetAttrPool(), u"CopyDesc"_ustr, GetDfltFrameFormat());
+                        SwFrameFormat newFormat(GetAttrPool(), UIName(u"CopyDesc"_ustr), GetDfltFrameFormat());
 
                         SfxItemSet aAttrSet(pStashedFormatSrc->GetAttrSet());
                         aAttrSet.ClearItem(RES_HEADER);
@@ -1753,7 +1753,7 @@ bool SwDoc::DontExpandFormat( const SwPosition& rPos, bool bFlag )
 SwTableBoxFormat* SwDoc::MakeTableBoxFormat()
 {
     SwTableBoxFormat* pFormat = new SwTableBoxFormat( GetAttrPool(), mpDfltFrameFormat.get() );
-    pFormat->SetFormatName("TableBox" + OUString::number(reinterpret_cast<sal_IntPtr>(pFormat)));
+    pFormat->SetFormatName(UIName("TableBox" + OUString::number(reinterpret_cast<sal_IntPtr>(pFormat))));
     getIDocumentState().SetModified();
     return pFormat;
 }
@@ -1761,7 +1761,7 @@ SwTableBoxFormat* SwDoc::MakeTableBoxFormat()
 SwTableLineFormat* SwDoc::MakeTableLineFormat()
 {
     SwTableLineFormat* pFormat = new SwTableLineFormat( GetAttrPool(), mpDfltFrameFormat.get() );
-    pFormat->SetFormatName("TableLine" + OUString::number(reinterpret_cast<sal_IntPtr>(pFormat)));
+    pFormat->SetFormatName(UIName("TableLine" + OUString::number(reinterpret_cast<sal_IntPtr>(pFormat))));
     getIDocumentState().SetModified();
     return pFormat;
 }
@@ -1950,7 +1950,7 @@ void SwDoc::ChgFormat(SwFormat & rFormat, const SfxItemSet & rSet)
     rFormat.SetFormatAttr(rSet);
 }
 
-void SwDoc::RenameFormat(SwFormat & rFormat, const OUString & sNewName,
+void SwDoc::RenameFormat(SwFormat & rFormat, const UIName & sNewName,
                       bool bBroadcast)
 {
     SfxStyleFamily eFamily = SfxStyleFamily::All;

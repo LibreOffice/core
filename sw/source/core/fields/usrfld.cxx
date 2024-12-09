@@ -76,7 +76,7 @@ std::unique_ptr<SwField> SwUserField::Copy() const
 OUString SwUserField::GetFieldName() const
 {
     return SwFieldType::GetTypeStr(SwFieldTypesEnum::User) +
-        " " + GetTyp()->GetName() + " = " +
+        " " + GetTyp()->GetName().toString() + " = " +
         static_cast<SwUserFieldType*>(GetTyp())->GetContent();
 }
 
@@ -93,7 +93,7 @@ void SwUserField::SetValue( const double& rVal )
 /// Get name
 OUString SwUserField::GetPar1() const
 {
-    return static_cast<const SwUserFieldType*>(GetTyp())->GetName();
+    return static_cast<const SwUserFieldType*>(GetTyp())->GetName().toString();
 }
 
 /// Get content
@@ -174,7 +174,7 @@ void SwUserField::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterEndElement(pWriter);
 }
 
-SwUserFieldType::SwUserFieldType( SwDoc* pDocPtr, const OUString& aNam )
+SwUserFieldType::SwUserFieldType( SwDoc* pDocPtr, const UIName& aNam )
     : SwValueFieldType( pDocPtr, SwFieldIds::User ),
     m_nValue( 0 ),
     m_nType(nsSwGetSetExpType::GSE_STRING)
@@ -210,7 +210,7 @@ std::unique_ptr<SwFieldType> SwUserFieldType::Copy() const
     return pTmp;
 }
 
-OUString SwUserFieldType::GetName() const
+UIName SwUserFieldType::GetName() const
 {
     return m_aName;
 }

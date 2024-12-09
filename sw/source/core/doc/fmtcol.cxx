@@ -62,7 +62,7 @@ namespace TextFormatCollFunc
         }
         if (pNewNumRuleItem)
         {
-            const OUString& sNumRuleName = pNewNumRuleItem->GetValue();
+            const UIName sNumRuleName = pNewNumRuleItem->GetValue();
             if ( sNumRuleName.isEmpty() ||
                  sNumRuleName != pTextFormatColl->GetDoc()->GetOutlineNumRule()->GetName() )
             {
@@ -79,7 +79,7 @@ namespace TextFormatCollFunc
         const SwNumRuleItem* pNumRuleItem = rTextFormatColl.GetItemIfSet(RES_PARATR_NUMRULE, false);
         if (pNumRuleItem)
         {
-            const OUString& sNumRuleName = pNumRuleItem->GetValue();
+            const UIName sNumRuleName = pNumRuleItem->GetValue();
             if ( !sNumRuleName.isEmpty() )
             {
                 pNumRule = rTextFormatColl.GetDoc()->FindNumRulePtr( sNumRuleName );
@@ -554,12 +554,12 @@ void SwTextFormatColl::dumpAsXml(xmlTextWriterPtr pWriter) const
     if (mpNextTextFormatColl)
     {
         (void)xmlTextWriterWriteAttribute(
-            pWriter, BAD_CAST("next"), BAD_CAST(mpNextTextFormatColl->GetName().toUtf8().getStr()));
+            pWriter, BAD_CAST("next"), BAD_CAST(mpNextTextFormatColl->GetName().toString().toUtf8().getStr()));
     }
     if (mpLinkedCharFormat)
     {
         (void)xmlTextWriterWriteAttribute(
-            pWriter, BAD_CAST("linked"), BAD_CAST(mpLinkedCharFormat->GetName().toUtf8().getStr()));
+            pWriter, BAD_CAST("linked"), BAD_CAST(mpLinkedCharFormat->GetName().toString().toUtf8().getStr()));
     }
 
     SwFormat::dumpAsXml(pWriter);

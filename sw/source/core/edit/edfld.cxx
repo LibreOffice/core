@@ -111,7 +111,7 @@ void SwEditShell::RemoveFieldType(SwFieldIds nResId, const OUString& rStr)
         SwFieldType* pFieldType = (*pFieldTypes)[i].get();
         if( pFieldType->Which() == nResId )
         {
-            if( aTmp == rCC.lowercase( pFieldType->GetName() ) )
+            if( aTmp == rCC.lowercase( pFieldType->GetName().toString() ) )
             {
                 GetDoc()->getIDocumentFieldsAccess().RemoveFieldType(i);
                 return;

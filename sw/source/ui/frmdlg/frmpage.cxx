@@ -452,27 +452,27 @@ static size_t lcl_GetFrameMapCount( const FrameMap* pMap)
 }
 
 static void lcl_InsertVectors(weld::ComboBox& rBox,
-    const std::vector< OUString >& rPrev, const std::vector< OUString >& rThis,
-    const std::vector< OUString >& rNext, const std::vector< OUString >& rRemain)
+    const std::vector< UIName >& rPrev, const std::vector< UIName >& rThis,
+    const std::vector< UIName >& rNext, const std::vector< UIName >& rRemain)
 {
     for(const auto& rItem : rPrev)
-        rBox.append_text(rItem);
+        rBox.append_text(rItem.toString());
     for(const auto& rItem : rThis)
-        rBox.append_text(rItem);
+        rBox.append_text(rItem.toString());
     for(const auto& rItem : rNext)
-        rBox.append_text(rItem);
+        rBox.append_text(rItem.toString());
     rBox.append_separator(u""_ustr);
     //now insert all strings sorted
     const auto nStartPos = rBox.get_count();
 
     for(const auto& rItem : rPrev)
-        ::InsertStringSorted(u""_ustr, rItem, rBox, nStartPos );
+        ::InsertStringSorted(u""_ustr, rItem.toString(), rBox, nStartPos );
     for(const auto& rItem : rThis)
-        ::InsertStringSorted(u""_ustr, rItem, rBox, nStartPos );
+        ::InsertStringSorted(u""_ustr, rItem.toString(), rBox, nStartPos );
     for(const auto& rItem : rNext)
-        ::InsertStringSorted(u""_ustr, rItem, rBox, nStartPos );
+        ::InsertStringSorted(u""_ustr, rItem.toString(), rBox, nStartPos );
     for(const auto& rItem : rRemain)
-        ::InsertStringSorted(u""_ustr, rItem, rBox, nStartPos );
+        ::InsertStringSorted(u""_ustr, rItem.toString(), rBox, nStartPos );
 }
 
 // --> OD 2009-08-31 #mongolianlayout#
@@ -3033,10 +3033,10 @@ void SwFrameAddPage::Reset(const SfxItemSet *rSet )
     {
         // insert graphic - properties
         // bNew is not set, so recognise by selection
-        OUString aTmpName1;
+        UIName aTmpName1;
         if(const SfxStringItem* pNameItem = rSet->GetItemIfSet(FN_SET_FRM_NAME, false))
         {
-            aTmpName1 = pNameItem->GetValue();
+            aTmpName1 = UIName(pNameItem->GetValue());
         }
 
         OSL_ENSURE(m_pWrtSh, "no Shell?");
@@ -3052,7 +3052,7 @@ void SwFrameAddPage::Reset(const SfxItemSet *rSet )
             m_pWrtSh->SetFlyName(aTmpName1);
         }
 
-        m_xNameED->set_text( aTmpName1 );
+        m_xNameED->set_text( aTmpName1.toString() );
         m_xNameED->save_value();
     }
     else
@@ -3080,7 +3080,7 @@ void SwFrameAddPage::Reset(const SfxItemSet *rSet )
         {
             const SwFormatChain &rChain = pFormat->GetChain();
             const SwFlyFrameFormat* pFlyFormat;
-            OUString sNextChain, sPrevChain;
+            UIName sNextChain, sPrevChain;
             pFlyFormat = rChain.GetPrev();
             if (pFlyFormat != nullptr)
             {
@@ -3093,20 +3093,20 @@ void SwFrameAddPage::Reset(const SfxItemSet *rSet )
                 sNextChain = pFlyFormat->GetName();
             }
             //determine chainable frames
-            std::vector< OUString > aPrevPageFrames;
-            std::vector< OUString > aThisPageFrames;
-            std::vector< OUString > aNextPageFrames;
-            std::vector< OUString > aRemainFrames;
-            m_pWrtSh->GetConnectableFrameFormats(*pFormat, sNextChain, false,
+            std::vector< UIName > aPrevPageFrames;
+            std::vector< UIName > aThisPageFrames;
+            std::vector< UIName > aNextPageFrames;
+            std::vector< UIName > aRemainFrames;
+            m_pWrtSh->GetConnectableFrameFormats(*pFormat, sNextChain.toString(), false,
                             aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames );
             for (sal_Int32 nEntry = m_xPrevLB->get_count(); nEntry > 1; nEntry--)
                 m_xPrevLB->remove(nEntry - 1);
             lcl_InsertVectors(*m_xPrevLB, aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames);
             if(!sPrevChain.isEmpty())
             {
-                if (m_xPrevLB->find_text(sPrevChain) == -1)
-                    m_xPrevLB->insert_text(1, sPrevChain);
-                m_xPrevLB->set_active_text(sPrevChain);
+                if (m_xPrevLB->find_text(sPrevChain.toString()) == -1)
+                    m_xPrevLB->insert_text(1, sPrevChain.toString());
+                m_xPrevLB->set_active_text(sPrevChain.toString());
             }
             else
                 m_xPrevLB->set_active(0);
@@ -3115,16 +3115,16 @@ void SwFrameAddPage::Reset(const SfxItemSet *rSet )
             aThisPageFrames.clear();
             aRemainFrames.clear();
 
-            m_pWrtSh->GetConnectableFrameFormats(*pFormat, sPrevChain, true,
+            m_pWrtSh->GetConnectableFrameFormats(*pFormat, sPrevChain.toString(), true,
                             aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames );
             for (sal_Int32 nEntry = m_xNextLB->get_count(); nEntry > 1; nEntry--)
                 m_xNextLB->remove(nEntry - 1);
             lcl_InsertVectors(*m_xNextLB, aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames);
             if(!sNextChain.isEmpty())
             {
-                if (m_xNextLB->find_text(sNextChain) == -1)
-                    m_xNextLB->insert_text(1, sNextChain);
-                m_xNextLB->set_active_text(sNextChain);
+                if (m_xNextLB->find_text(sNextChain.toString()) == -1)
+                    m_xNextLB->insert_text(1, sNextChain.toString());
+                m_xNextLB->set_active_text(sNextChain.toString());
             }
             else
                 m_xNextLB->set_active(0);
@@ -3231,11 +3231,11 @@ bool SwFrameAddPage::FillItemSet(SfxItemSet *rSet)
             OUString sNextChain, sPrevChain;
             pFlyFormat = rChain.GetPrev();
             if (pFlyFormat != nullptr)
-                sPrevChain = pFlyFormat->GetName();
+                sPrevChain = pFlyFormat->GetName().toString();
 
             pFlyFormat = rChain.GetNext();
             if (pFlyFormat != nullptr)
-                sNextChain = pFlyFormat->GetName();
+                sNextChain = pFlyFormat->GetName().toString();
             if(sPrevChain != sCurrentPrevChain)
                 bRet |= nullptr != rSet->Put(SfxStringItem(FN_PARAM_CHAIN_PREVIOUS, sCurrentPrevChain));
             if(sNextChain != sCurrentNextChain)
@@ -3300,10 +3300,10 @@ IMPL_LINK(SwFrameAddPage, ChainModifyHdl, weld::ComboBox&, rBox, void)
     for (sal_Int32 nEntry = rChangeLB.get_count(); nEntry > 1; nEntry--)
         rChangeLB.remove(nEntry - 1);
     //determine chainable frames
-    std::vector< OUString > aPrevPageFrames;
-    std::vector< OUString > aThisPageFrames;
-    std::vector< OUString > aNextPageFrames;
-    std::vector< OUString > aRemainFrames;
+    std::vector< UIName > aPrevPageFrames;
+    std::vector< UIName > aThisPageFrames;
+    std::vector< UIName > aNextPageFrames;
+    std::vector< UIName > aRemainFrames;
     m_pWrtSh->GetConnectableFrameFormats(*pFormat, bNextBox ? sCurrentNextChain : sCurrentPrevChain, !bNextBox,
                     aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames );
     lcl_InsertVectors(rChangeLB,

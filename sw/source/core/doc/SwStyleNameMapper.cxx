@@ -69,11 +69,12 @@ bool lcl_SuffixIsUser(std::u16string_view rString)
     return rString.size() > 8 && o3tl::ends_with(rString, u" (user)");
 }
 
-void lcl_CheckSuffixAndDelete(OUString & rString)
+template<class T>
+void lcl_CheckSuffixAndDelete(T & rString)
 {
-    if (lcl_SuffixIsUser(rString))
+    if (lcl_SuffixIsUser(rString.toString()))
     {
-        rString = rString.copy(0, rString.getLength() - 7);
+        rString = T(rString.toString().copy(0, rString.toString().getLength() - 7));
     }
 }
 
@@ -243,33 +244,33 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
 }
 
 // This gets the UI name from the programmatic name
-const OUString& SwStyleNameMapper::GetUIName(const ProgName& rName,
+UIName SwStyleNameMapper::GetUIName(const ProgName& rName,
                                              SwGetPoolIdFromName const eFlags)
 {
     sal_uInt16 nId = GetPoolIdFromProgName ( rName, eFlags );
-    return nId != USHRT_MAX ? GetUIName( nId, rName ) : rName.toString();
+    return nId != USHRT_MAX ? GetUIName( nId, rName ) : UIName(rName.toString());
 }
 
 // Get the programmatic name from the UI name
 ProgName SwStyleNameMapper::GetProgName(
-        const OUString& rName, SwGetPoolIdFromName const eFlags)
+        const UIName& rName, SwGetPoolIdFromName const eFlags)
 {
     sal_uInt16 nId = GetPoolIdFromUIName ( rName, eFlags );
-    return nId != USHRT_MAX ? GetProgName( nId, rName ) : ProgName(rName);
+    return nId != USHRT_MAX ? GetProgName( nId, rName ) : ProgName(rName.toString());
 }
 
 // Get the programmatic name from the UI name in rName and put it into rFillName
 void SwStyleNameMapper::FillProgName(
-        const OUString& rName, ProgName& rFillName,
+        const UIName& rName, ProgName& rFillName,
         SwGetPoolIdFromName const eFlags)
 {
     sal_uInt16 nId = GetPoolIdFromUIName ( rName, eFlags );
     if ( nId == USHRT_MAX )
     {
         // rName isn't in our UI name table...check if it's in the programmatic one
-        nId = GetPoolIdFromProgName ( ProgName(rName), eFlags );
+        nId = GetPoolIdFromProgName ( ProgName(rName.toString()), eFlags );
 
-        rFillName = ProgName(rName);
+        rFillName = ProgName(rName.toString());
         if (nId == USHRT_MAX )
         {
             if (eFlags != SwGetPoolIdFromName::TableStyle)
@@ -297,13 +298,13 @@ void SwStyleNameMapper::FillProgName(
         fillProgNameFromId(nId, rFillName);
     }
 
-    if (eFlags == SwGetPoolIdFromName::ChrFmt && rName == SwResId(STR_POOLCHR_STANDARD))
+    if (eFlags == SwGetPoolIdFromName::ChrFmt && rName.toString() == SwResId(STR_POOLCHR_STANDARD))
         rFillName = ProgName("Standard");
 }
 
 // Get the UI name from the programmatic name in rName and put it into rFillName
 void SwStyleNameMapper::FillUIName(
-        const ProgName& rName, OUString& rFillName,
+        const ProgName& rName, UIName& rFillName,
         SwGetPoolIdFromName const eFlags)
 {
     ProgName aName = rName;
@@ -313,23 +314,23 @@ void SwStyleNameMapper::FillUIName(
     sal_uInt16 nId = GetPoolIdFromProgName ( aName, eFlags );
     if ( nId == USHRT_MAX )
     {
-        rFillName = aName.toString();
-        // TableStyle: unfortunately ODF documents with UIName table styles exist
+        rFillName = UIName(aName.toString());
+        // TabStyle: unfortunately ODF documents with UIName table styles exist
         if (eFlags == SwGetPoolIdFromName::TableStyle || // see testTdf129568ui
-            GetPoolIdFromUIName(aName.toString(), eFlags) == USHRT_MAX)
+            GetPoolIdFromUIName(UIName(aName.toString()), eFlags) == USHRT_MAX)
         {
             // aName isn't in our Prog name table...check if it has a " (user)" suffix, if so remove it
             lcl_CheckSuffixAndDelete(rFillName);
         }
         else
         {
-            rFillName += " (user)";
+            rFillName = UIName(rFillName.toString() + " (user)");
         }
     }
     else
     {
         // If we aren't trying to disambiguate, then just do a normal fill
-        fillNameFromId(nId, rFillName, false);
+        fillUINameFromId(nId, rFillName);
     }
 }
 
@@ -427,10 +428,10 @@ const OUString& SwStyleNameMapper::getNameFromId(
     return pStrArr ? pStrArr->operator[](nId - nStt) : rFillName;
 }
 
-void SwStyleNameMapper::fillNameFromId(
-        sal_uInt16 const nId, OUString& rFillName, bool bProgName)
+void SwStyleNameMapper::fillUINameFromId(
+        sal_uInt16 const nId, UIName& rFillName)
 {
-    rFillName = getNameFromId(nId, rFillName, bProgName);
+    rFillName = UIName(getNameFromId(nId, rFillName.toString(), /*bProgName*/false));
 }
 
 void SwStyleNameMapper::fillProgNameFromId(
@@ -440,16 +441,16 @@ void SwStyleNameMapper::fillProgNameFromId(
 }
 
 // Get the UI name from the pool ID
-void SwStyleNameMapper::FillUIName(sal_uInt16 const nId, OUString& rFillName)
+void SwStyleNameMapper::FillUIName(sal_uInt16 const nId, UIName& rFillName)
 {
-    fillNameFromId(nId, rFillName, false);
+    fillUINameFromId(nId, rFillName);
 }
 
 // Get the UI name from the pool ID
-const OUString& SwStyleNameMapper::GetUIName(
+UIName SwStyleNameMapper::GetUIName(
         sal_uInt16 const nId, const ProgName& rName)
 {
-    return getNameFromId(nId, rName.toString(), false);
+    return UIName(getNameFromId(nId, rName.toString(), false));
 }
 
 // Get the programmatic name from the pool ID
@@ -460,17 +461,17 @@ void SwStyleNameMapper::FillProgName(sal_uInt16 nId, ProgName& rFillName)
 
 // Get the programmatic name from the pool ID
 ProgName
-SwStyleNameMapper::GetProgName(sal_uInt16 const nId, const OUString& rName)
+SwStyleNameMapper::GetProgName(sal_uInt16 const nId, const UIName& rName)
 {
-    return ProgName(getNameFromId(nId, rName, true));
+    return ProgName(getNameFromId(nId, rName.toString(), true));
 }
 
 // This gets the PoolId from the UI Name
 sal_uInt16 SwStyleNameMapper::GetPoolIdFromUIName(
-        const OUString& rName, SwGetPoolIdFromName const eFlags)
+        const UIName& rName, SwGetPoolIdFromName const eFlags)
 {
     const NameToIdHash & rHashMap = getHashTable ( eFlags, false );
-    NameToIdHash::const_iterator aIter = rHashMap.find(rName);
+    NameToIdHash::const_iterator aIter = rHashMap.find(rName.toString());
     return aIter != rHashMap.end() ? (*aIter).second : USHRT_MAX;
 }
 
@@ -797,15 +798,15 @@ const std::vector<OUString>& SwStyleNameMapper::GetCellStyleProgNameArray()
 }
 
 ProgName
-SwStyleNameMapper::GetSpecialExtraProgName(const OUString& rExtraUIName)
+SwStyleNameMapper::GetSpecialExtraProgName(const UIName& rExtraUIName)
 {
-    return ProgName(lcl_GetSpecialExtraName( rExtraUIName, true ));
+    return ProgName(lcl_GetSpecialExtraName( rExtraUIName.toString(), true ));
 }
 
-const OUString &
+UIName
 SwStyleNameMapper::GetSpecialExtraUIName(const ProgName& rExtraProgName)
 {
-    return lcl_GetSpecialExtraName( rExtraProgName.toString(), false );
+    return UIName(lcl_GetSpecialExtraName( rExtraProgName.toString(), false ));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

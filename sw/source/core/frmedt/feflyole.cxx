@@ -76,12 +76,12 @@ SwFlyFrame *SwFEShell::FindFlyFrame( const uno::Reference < embed::XEmbeddedObje
     return pFly;
 }
 
-OUString SwFEShell::GetUniqueOLEName() const
+UIName SwFEShell::GetUniqueOLEName() const
 {
     return GetDoc()->GetUniqueOLEName();
 }
 
-OUString SwFEShell::GetUniqueFrameName() const
+UIName SwFEShell::GetUniqueFrameName() const
 {
     return GetDoc()->GetUniqueFrameName();
 }

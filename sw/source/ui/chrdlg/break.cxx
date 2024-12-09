@@ -105,7 +105,7 @@ IMPL_LINK_NOARG(SwBreakDlg, OkHdl, weld::Button&, void)
         // position 0 says 'Without'.
         const SwPageDesc *pPageDesc;
         if (nPos != 0 && nPos != -1)
-            pPageDesc = m_rSh.FindPageDescByName(m_xPageCollBox->get_active_text(), true);
+            pPageDesc = m_rSh.FindPageDescByName(UIName(m_xPageCollBox->get_active_text()), true);
         else
             pPageDesc = &m_rSh.GetPageDesc(m_rSh.GetCurPageDesc());
 
@@ -166,20 +166,20 @@ SwBreakDlg::SwBreakDlg(weld::Window *pParent, SwWrtShell &rS)
     for (size_t i = 0; i < nCount; ++i)
     {
         const SwPageDesc &rPageDesc = m_rSh.GetPageDesc(i);
-        ::InsertStringSorted(u""_ustr, rPageDesc.GetName(), *m_xPageCollBox, 1 );
+        ::InsertStringSorted(u""_ustr, rPageDesc.GetName().toString(), *m_xPageCollBox, 1 );
     }
 
-    OUString aFormatName;
+    UIName aFormatName;
     for (sal_uInt16 i = RES_POOLPAGE_BEGIN; i < RES_POOLPAGE_END; ++i)
     {
         aFormatName = SwStyleNameMapper::GetUIName( i, ProgName() );
-        if (m_xPageCollBox->find_text(aFormatName) == -1)
-            ::InsertStringSorted(u""_ustr, aFormatName, *m_xPageCollBox, 1 );
+        if (m_xPageCollBox->find_text(aFormatName.toString()) == -1)
+            ::InsertStringSorted(u""_ustr, aFormatName.toString(), *m_xPageCollBox, 1 );
     }
     //add landscape page
     aFormatName = SwStyleNameMapper::GetUIName( RES_POOLPAGE_LANDSCAPE, ProgName() );
-    if (m_xPageCollBox->find_text(aFormatName) == -1)
-        ::InsertStringSorted(u""_ustr, aFormatName, *m_xPageCollBox, 1);
+    if (m_xPageCollBox->find_text(aFormatName.toString()) == -1)
+        ::InsertStringSorted(u""_ustr, aFormatName.toString(), *m_xPageCollBox, 1);
     CheckEnable();
     m_xPageNumEdit->set_text(OUString());
     UpdateImage();

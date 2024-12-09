@@ -147,7 +147,7 @@ static std::shared_ptr<SwTableRep> lcl_TableParamToItemSet( SfxItemSet& rSet, Sw
     rSh.GetTabCols( aCols );
 
     //At first get the simple attributes.
-    rSet.Put( SfxStringItem( FN_PARAM_TABLE_NAME, pFormat->GetName()));
+    rSet.Put( SfxStringItem( FN_PARAM_TABLE_NAME, pFormat->GetName().toString()));
     rSet.Put( SfxUInt16Item( FN_PARAM_TABLE_HEADLINE, rSh.GetRowsToRepeat() ) );
     rSet.Put( pFormat->GetShadow() );
     rSet.Put(SfxUInt16Item(FN_TABLE_SET_VERT_ALIGN, rSh.GetBoxAlign()));
@@ -403,7 +403,7 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
         rSh.SetBoxAlign(pAlignItem->GetValue());
 
     if( const SfxStringItem* pNameItem = rSet.GetItemIfSet( FN_PARAM_TABLE_NAME, false ))
-        rSh.SetTableName( *pFormat, pNameItem->GetValue() );
+        rSh.SetTableName( *pFormat, UIName(pNameItem->GetValue()) );
 
     // Copy the chosen attributes in the ItemSet.
     static const sal_uInt16 aIds[] =

@@ -1360,7 +1360,7 @@ bool  SwTextFlowPage::FillItemSet( SfxItemSet* rSet )
             || (pDesc->GetPageDesc()->GetName() != sPage)
             || (pDesc->GetNumOffset() != oPageNum))
         {
-            SwFormatPageDesc aFormat( m_pShell->FindPageDescByName( sPage, true ) );
+            SwFormatPageDesc aFormat( m_pShell->FindPageDescByName( UIName(sPage), true ) );
             aFormat.SetNumOffset(oPageNum);
             bModified |= nullptr != rSet->Put( aFormat );
             bPageItemPut = bState;
@@ -1439,15 +1439,15 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
         for( size_t i = 0; i < nCount; ++i)
         {
             const SwPageDesc &rPageDesc = m_pShell->GetPageDesc(i);
-            m_xPageCollLB->append_text(rPageDesc.GetName());
+            m_xPageCollLB->append_text(rPageDesc.GetName().toString());
         }
 
-        OUString aFormatName;
+        UIName aFormatName;
         for (sal_uInt16 i = RES_POOLPAGE_BEGIN; i < RES_POOLPAGE_END; ++i)
         {
             aFormatName = SwStyleNameMapper::GetUIName(i, ProgName());
-            if (m_xPageCollLB->find_text(aFormatName) == -1)
-                m_xPageCollLB->append_text(aFormatName);
+            if (m_xPageCollLB->find_text(aFormatName.toString()) == -1)
+                m_xPageCollLB->append_text(aFormatName.toString());
         }
 
         if(const SvxFormatKeepItem* pKeepItem = rSet->GetItemIfSet( RES_KEEP, false ))
@@ -1494,7 +1494,7 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
                 }
 
                 if(pDesc)
-                    sPageDesc = pDesc->GetName();
+                    sPageDesc = pDesc->GetName().toString();
                 if (!sPageDesc.isEmpty() && m_xPageCollLB->find_text(sPageDesc) != -1)
                 {
                     m_xPageCollLB->set_active_text(sPageDesc);

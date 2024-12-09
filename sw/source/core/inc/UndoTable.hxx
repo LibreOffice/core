@@ -55,7 +55,7 @@ void NotifyTableCollapsedParagraph(const SwContentNode* pNode, SwCursorShell *co
 /// Implements undo/redo for Table -> Insert Table.
 class SwUndoInsTable final : public SwUndo
 {
-    OUString m_sTableName;
+    UIName m_sTableName;
     SwInsertTableOptions m_aInsTableOptions;
     std::unique_ptr<SwDDEFieldType> m_pDDEFieldType;
     std::optional<std::vector<sal_uInt16>> m_oColumnWidth;
@@ -69,7 +69,7 @@ public:
     SwUndoInsTable( const SwPosition&, sal_uInt16 nCols, sal_uInt16 nRows,
                     sal_uInt16 eAdjust, const SwInsertTableOptions& rInsTableOpts,
                     const SwTableAutoFormat* pTAFormat, const std::vector<sal_uInt16> *pColArr,
-                  const OUString & rName);
+                  const UIName & rName);
 
     virtual ~SwUndoInsTable() override;
 
@@ -82,7 +82,7 @@ public:
 
 class SwUndoTextToTable final : public SwUndo, public SwUndRng
 {
-    OUString m_sTableName;
+    UIName m_sTableName;
     SwInsertTableOptions m_aInsertTableOpts;
     std::vector<SwNodeOffset> mvDelBoxes;
     std::unique_ptr<SwTableAutoFormat> m_pAutoFormat;
@@ -108,7 +108,7 @@ public:
 
 class SwUndoTableToText final : public SwUndo
 {
-    OUString m_sTableName;
+    UIName m_sTableName;
     std::unique_ptr<SwDDEFieldType> m_pDDEFieldType;
     std::unique_ptr<SaveTable> m_pTableSave;
     SwTableToTextSaves m_vBoxSaves;
@@ -151,7 +151,7 @@ class SwUndoTableNumFormat;
 
 class SwUndoTableAutoFormat final : public SwUndo
 {
-    OUString m_TableStyleName;
+    TableStyleName m_TableStyleName;
     SwNodeOffset m_nStartNode;
     std::unique_ptr<SaveTable> m_pSaveTable;
     std::vector< std::shared_ptr<SwUndoTableNumFormat> > m_Undos;
@@ -344,7 +344,7 @@ public:
 
 class SwUndoMergeTable final : public SwUndo
 {
-    OUString m_aName;
+    UIName m_aName;
     SwNodeOffset m_nTableNode;
     std::unique_ptr<SaveTable> m_pSaveTable, m_pSaveHdl;
     std::unique_ptr<SwHistory> m_pHistory;
@@ -381,10 +381,10 @@ void InsertSort( std::vector<sal_uInt16>& rArr, sal_uInt16 nIdx );
 
 class SwUndoTableStyleMake final : public SwUndo
 {
-    OUString m_sName;
+    TableStyleName m_sName;
     std::unique_ptr<SwTableAutoFormat> m_pAutoFormat;
 public:
-    SwUndoTableStyleMake(OUString aName, const SwDoc& rDoc);
+    SwUndoTableStyleMake(TableStyleName aName, const SwDoc& rDoc);
 
     virtual ~SwUndoTableStyleMake() override;
 

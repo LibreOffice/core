@@ -1096,7 +1096,7 @@ void SwFEShell::InsertDrawObj( SdrObject& rDrawObj,
 
     if (pFormat)
     {
-        pFormat->SetFormatName(rDrawObj.GetName());
+        pFormat->SetFormatName(UIName(rDrawObj.GetName()));
         // select drawing object
         Imp()->GetDrawView()->MarkObj( &rDrawObj, Imp()->GetPageView() );
     }
@@ -1575,7 +1575,7 @@ SwFrameFormat* SwFEShell::WizardGetFly()
     return nullptr;
 }
 
-void SwFEShell::SetFlyName( const OUString& rName )
+void SwFEShell::SetFlyName( const UIName& rName )
 {
     SwLayoutFrame *pFly = GetSelectedFlyFrame();
     if( pFly )
@@ -1585,14 +1585,14 @@ void SwFEShell::SetFlyName( const OUString& rName )
     }
 }
 
-OUString SwFEShell::GetFlyName() const
+UIName SwFEShell::GetFlyName() const
 {
     SwLayoutFrame *pFly = GetSelectedFlyFrame();
     if( pFly )
         return pFly->GetFormat()->GetName();
 
     OSL_ENSURE( false, "no FlyFrame selected" );
-    return OUString();
+    return UIName();
 }
 
 uno::Reference < embed::XEmbeddedObject > SwFEShell::GetOleRef() const
@@ -1609,7 +1609,7 @@ uno::Reference < embed::XEmbeddedObject > SwFEShell::GetOleRef() const
     return xObj;
 }
 
-OUString SwFEShell::GetUniqueGrfName() const
+UIName SwFEShell::GetUniqueGrfName() const
 {
     return GetDoc()->GetUniqueGrfName();
 }
@@ -1680,7 +1680,7 @@ const SwFrameFormat* SwFEShell::IsURLGrfAtPos( const Point& rPt, OUString* pURL,
             if ( bSetTargetFrameName )
                 *pTargetFrameName = rURL.GetTargetFrameName();
             if ( bSetDescription )
-                *pDescription = pFly->GetFormat()->GetName();
+                *pDescription = pFly->GetFormat()->GetName().toString();
         }
     }
     pDView->SetHitTolerancePixel( nOld );
@@ -1718,7 +1718,7 @@ const Graphic *SwFEShell::GetGrfAtPos( const Point &rPt,
 
                 pNd->GetFileFilterNms( &rName, nullptr );
                 if ( rName.isEmpty() )
-                    rName = pFly->GetFormat()->GetName();
+                    rName = pFly->GetFormat()->GetName().toString();
                 return &pNd->GetGrf(true);
             }
         }
@@ -1977,10 +1977,10 @@ static sal_uInt16 SwFormatGetPageNum(const SwFlyFrameFormat * pFormat)
 void SwFEShell::GetConnectableFrameFormats(SwFrameFormat & rFormat,
                                       std::u16string_view rReference,
                                       bool bSuccessors,
-                                      std::vector< OUString > & aPrevPageVec,
-                                      std::vector< OUString > & aThisPageVec,
-                                      std::vector< OUString > & aNextPageVec,
-                                      std::vector< OUString > & aRestVec)
+                                      std::vector< UIName > & aPrevPageVec,
+                                      std::vector< UIName > & aThisPageVec,
+                                      std::vector< UIName > & aNextPageVec,
+                                      std::vector< UIName > & aRestVec)
 {
     StartAction();
 
@@ -2031,7 +2031,7 @@ void SwFEShell::GetConnectableFrameFormats(SwFrameFormat & rFormat,
 
         for (const auto& rpFormat : aTmpSpzArray)
         {
-            const OUString aString = rpFormat->GetName();
+            const UIName aString = rpFormat->GetName();
 
             /* rFormat is not a valid successor or predecessor of
                itself */

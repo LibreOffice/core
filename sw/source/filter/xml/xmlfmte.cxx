@@ -67,7 +67,7 @@ void SwXMLExport::ExportFormat(const SwFormat& rFormat, enum XMLTokenEnum eFamil
     // style:name="..."
     assert(oStyleName || (eFamily != XML_TABLE_ROW && eFamily != XML_TABLE_CELL));
     bool bEncoded = false;
-    OUString const name(oStyleName ? *oStyleName : rFormat.GetName());
+    OUString const name(oStyleName ? *oStyleName : rFormat.GetName().toString());
     AddAttribute(XML_NAMESPACE_STYLE, XML_NAME, EncodeStyleName(name, &bEncoded));
     if( bEncoded )
     {

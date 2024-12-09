@@ -720,7 +720,7 @@ SwSectionFormat *wwSectionManager::InsertSection(
     SwPaM const & rMyPaM, wwSection &rSection)
 {
     SwSectionData aSection( SectionType::Content,
-            mrReader.m_rDoc.GetUniqueSectionName() );
+            UIName(mrReader.m_rDoc.GetUniqueSectionName()) );
 
     SfxItemSet aSet( mrReader.m_rDoc.GetAttrPool(), aFrameFormatSetRange );
 
@@ -899,7 +899,7 @@ void wwSectionManager::CreateSep(const tools::Long nTextPos)
             return;
         OUString sSectionName = mrReader.m_aLinkStringMap[SVBT16ToUInt16( static_cast<WW8_WKB*>(pData)->nLinkId) ];
         sSectionName = mrReader.ConvertFFileName(sSectionName);
-        SwSectionData aSection(SectionType::FileLink, sSectionName);
+        SwSectionData aSection(SectionType::FileLink, UIName(sSectionName));
         aSection.SetLinkFileName( sSectionName );
         aSection.SetProtectFlag(true);
         // #i19922# - improvement: return value of method <Insert> not used.

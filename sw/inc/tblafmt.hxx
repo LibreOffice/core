@@ -159,7 +159,7 @@ class SW_DLLPUBLIC SwTableAutoFormat
 
     unotools::WeakReference<SwXTextTableStyle> m_xUnoTextTableStyle;
 
-    OUString m_aName;
+    TableStyleName m_aName; // note that this could be a ProgName __or__ a UIName
     sal_uInt16 m_nStrResId;
 
     // Common flags of Calc and Writer.
@@ -185,7 +185,7 @@ class SW_DLLPUBLIC SwTableAutoFormat
     bool m_bHidden;
     bool m_bUserDefined;
 public:
-    SwTableAutoFormat( OUString aName );
+    SwTableAutoFormat( const TableStyleName& aName );
     SwTableAutoFormat( const SwTableAutoFormat& rNew );
     ~SwTableAutoFormat();
 
@@ -202,8 +202,8 @@ public:
     SwBoxAutoFormat& GetBoxFormat( sal_uInt8 nPos );
     static const SwBoxAutoFormat& GetDefaultBoxFormat();
 
-    void SetName( const OUString& rNew ) { m_aName = rNew; m_nStrResId = USHRT_MAX; }
-    const OUString& GetName() const { return m_aName; }
+    void SetName( const TableStyleName& rNew ) { m_aName = rNew; m_nStrResId = USHRT_MAX; }
+    const TableStyleName& GetName() const { return m_aName; }
 
     void UpdateFromSet( sal_uInt8 nPos, const SfxItemSet& rSet,
                                 SwTableAutoFormatUpdateFlags eFlags, SvNumberFormatter const * );
@@ -285,13 +285,13 @@ public:
 
     void InsertAutoFormat(size_t i, std::unique_ptr<SwTableAutoFormat> pFormat);
     void EraseAutoFormat(size_t i);
-    void EraseAutoFormat(const OUString& rName);
+    void EraseAutoFormat(const TableStyleName& rName);
     std::unique_ptr<SwTableAutoFormat> ReleaseAutoFormat(size_t i);
     /// Removes an autoformat. Returns pointer to the removed autoformat or nullptr.
-    std::unique_ptr<SwTableAutoFormat> ReleaseAutoFormat(const OUString& rName);
+    std::unique_ptr<SwTableAutoFormat> ReleaseAutoFormat(const TableStyleName& rName);
 
     /// Find table style with the provided name, return nullptr when not found.
-    SwTableAutoFormat* FindAutoFormat(std::u16string_view rName) const;
+    SwTableAutoFormat* FindAutoFormat(const TableStyleName& rName) const;
 
     void Load();
     bool Save() const;
@@ -299,17 +299,17 @@ public:
 
 class SwCellStyleDescriptor
 {
-    const std::pair<OUString, std::unique_ptr<SwBoxAutoFormat>>& m_rCellStyleDesc;
+    const std::pair<UIName, std::unique_ptr<SwBoxAutoFormat>>& m_rCellStyleDesc;
 public:
-    SwCellStyleDescriptor(const std::pair<OUString, std::unique_ptr<SwBoxAutoFormat>>& rCellStyleDesc) : m_rCellStyleDesc(rCellStyleDesc) { }
+    SwCellStyleDescriptor(const std::pair<UIName, std::unique_ptr<SwBoxAutoFormat>>& rCellStyleDesc) : m_rCellStyleDesc(rCellStyleDesc) { }
 
-    const OUString&  GetName() const   { return m_rCellStyleDesc.first; }
+    const UIName&  GetName() const   { return m_rCellStyleDesc.first; }
     const SwBoxAutoFormat& GetAutoFormat() const   { return *m_rCellStyleDesc.second; }
 };
 
 class SwCellStyleTable
 {
-    std::vector<std::pair<OUString, std::unique_ptr<SwBoxAutoFormat>>> m_aCellStyles;
+    std::vector<std::pair<UIName, std::unique_ptr<SwBoxAutoFormat>>> m_aCellStyles;
 public:
     SwCellStyleTable();
     ~SwCellStyleTable();
@@ -319,13 +319,13 @@ public:
     void clear();
 
     /// Add a copy of rBoxFormat
-    void AddBoxFormat(const SwBoxAutoFormat& rBoxFormat, const OUString& sName);
+    void AddBoxFormat(const SwBoxAutoFormat& rBoxFormat, const UIName& sName);
     void RemoveBoxFormat(const OUString& sName);
-    void ChangeBoxFormatName(std::u16string_view sFromName, const OUString& sToName);
-    /// If found returns its name. If not found returns an empty OUString
-    const OUString & GetBoxFormatName(const SwBoxAutoFormat& rBoxFormat) const;
+    void ChangeBoxFormatName(std::u16string_view sFromName, const UIName& sToName);
+    /// If found returns its name. If not found returns an empty UIName
+    UIName GetBoxFormatName(const SwBoxAutoFormat& rBoxFormat) const;
     /// If found returns a ptr to a BoxFormat. If not found returns nullptr
-    SwBoxAutoFormat* GetBoxFormat(std::u16string_view sName) const;
+    SwBoxAutoFormat* GetBoxFormat(const UIName& sName) const;
 };
 
 #endif

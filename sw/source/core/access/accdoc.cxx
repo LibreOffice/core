@@ -626,7 +626,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
         SwSectionFrame* pCurrSctFrame=static_cast<SwFrame*>(pCurrFrame)->FindSctFrame();
         if(pCurrSctFrame!=nullptr && pCurrSctFrame->GetSection()!=nullptr )
         {
-            OUString sectionName = pCurrSctFrame->GetSection()->GetSectionName();
+            OUString sectionName = pCurrSctFrame->GetSection()->GetSectionName().toString();
 
             sectionName = sectionName.replaceFirst( "\\" , "\\\\" );
             sectionName = sectionName.replaceFirst( "=" , "\\=" );

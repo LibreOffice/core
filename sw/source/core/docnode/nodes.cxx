@@ -201,7 +201,7 @@ void SwNodes::ChgNode( SwNodeIndex const & rDelPos, SwNodeOffset nSz,
         if( !bRestPersData && !bSavePersData && pDestDoc )
             bSavePersData = bRestPersData = true;
 
-        OUString sNumRule;
+        UIName sNumRule;
         for( SwNodeOffset n(0); n < nSz; n++ )
         {
             SwNode* pNd = &rDelPos.GetNode();
@@ -2375,7 +2375,7 @@ void SwNodes::RemoveNode( SwNodeOffset nDelPos, SwNodeOffset nSz, bool bDel )
             ? SfxViewShell::Current() : nullptr;
         if (pKitClipSh)
         {
-            OUString fieldCommand = pSectionNode->GetSection().GetSectionName();
+            OUString fieldCommand = pSectionNode->GetSection().GetSectionName().toString();
             tools::JsonWriter aJson;
             aJson.put("commandName", ".uno:DeleteSection");
             aJson.put("success", true);

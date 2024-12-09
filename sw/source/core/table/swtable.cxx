@@ -1655,7 +1655,7 @@ void SwTable::GatherFormulas(SwDoc& rDoc, std::vector<SwTableBoxFormula*>& rvFor
     }
 }
 
-void SwTable::Split(const OUString& sNewTableName, sal_uInt16 nSplitLine, SwHistory* pHistory)
+void SwTable::Split(const UIName& sNewTableName, sal_uInt16 nSplitLine, SwHistory* pHistory)
 {
     SwTableFormulaUpdate aHint(this);
     aHint.m_eFlags = TBL_SPLITTBL;

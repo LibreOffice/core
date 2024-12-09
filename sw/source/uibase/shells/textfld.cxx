@@ -1162,7 +1162,7 @@ FIELD_INSERT:
                 const bool bIsSinglePage = rDesc.GetFollow() != &rDesc;
                 const size_t nMirrorPagesNeeded = rDesc.IsFirstShared() ? 2 : 3;
                 const ReferenceMarkerName sBookmarkName( OUString::Concat("PageNumWizard_")
-                    + (bHeader ? "HEADER" : "FOOTER") + "_" + rDesc.GetName()
+                    + (bHeader ? "HEADER" : "FOOTER") + "_" + rDesc.GetName().toString()
                     + OUString::number(rSh.GetVirtPageNum()) );
                 IDocumentMarkAccess& rIDMA = *rSh.getIDocumentMarkAccess();
 
@@ -1224,7 +1224,7 @@ FIELD_INSERT:
                             const OutputDevice* pOutDev = Application::GetDefaultDevice();
                             const SwViewShell* pViewSh
                                 = rDoc.getIDocumentLayoutAccess().GetCurrentViewShell();
-                            OUString sParaStyle(bHeader ? "Header" : "Footer");
+                            UIName sParaStyle(bHeader ? "Header" : "Footer");
                             SwTextFormatColl* pStyle = rDoc.FindTextFormatCollByName(sParaStyle);
                             if (pStyle && pOutDev)
                             {

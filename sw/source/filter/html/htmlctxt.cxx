@@ -504,7 +504,7 @@ bool SwHTMLParser::DoPositioning( SfxItemSet &rItemSet,
             }
         }
 
-        InsertFlyFrame(aFrameItemSet, pContext, rPropInfo.m_aId);
+        InsertFlyFrame(aFrameItemSet, pContext, UIName(rPropInfo.m_aId));
         pContext->SetPopStack( true );
         rPropInfo.m_aId.clear();
         bRet = true;

@@ -175,7 +175,7 @@ namespace sw
                 rName and WW-rName[0..SAL_MAX_INT32], which is both unlikely
                 and impossible.
             */
-            StyleResult GetStyle(const OUString& rName, ww::sti eSti,
+            StyleResult GetStyle(const UIName& rName, ww::sti eSti,
                                  std::map<OUString, sal_Int32>& rCollisions);
         };
 
@@ -237,7 +237,7 @@ namespace sw
                 rName and WW-rName[0..SAL_MAX_INT32], which is both unlikely
                 and impossible.
             */
-            StyleResult GetStyle(const OUString& rName, ww::sti eSti,
+            StyleResult GetStyle(const UIName& rName, ww::sti eSti,
                                  std::map<OUString, sal_Int32>& rCollisions);
         };
 

@@ -522,7 +522,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
     case RES_FLTR_NUMRULE:          // insert Numrule
         {
             const OUString& rNumNm = static_cast<SfxStringItem*>(rEntry.m_pAttr.get())->GetValue();
-            SwNumRule* pNumRule = m_rDoc.FindNumRulePtr( rNumNm );
+            SwNumRule* pNumRule = m_rDoc.FindNumRulePtr( UIName(rNumNm) );
             if( pNumRule )
             {
                 if (rEntry.MakeRegion(aRegion, SwFltStackEntry::RegionMode::CheckNodes))
@@ -542,7 +542,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                     }
                 }
                 else
-                    m_rDoc.DelNumRule( rNumNm );
+                    m_rDoc.DelNumRule( UIName(rNumNm) );
             }
         }
         break;
@@ -557,7 +557,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                 SwFieldType* pFT = m_rDoc.getIDocumentFieldsAccess().GetFieldType(SwFieldIds::SetExp, rName, false);
                 if (!pFT)
                 {
-                    SwSetExpFieldType aS(&m_rDoc, rName, nsSwGetSetExpType::GSE_STRING);
+                    SwSetExpFieldType aS(&m_rDoc, UIName(rName), nsSwGetSetExpType::GSE_STRING);
                     pFT = m_rDoc.getIDocumentFieldsAccess().InsertFieldType(aS);
                 }
                 SwSetExpField aField(static_cast<SwSetExpFieldType*>(pFT), pB->GetValSys());

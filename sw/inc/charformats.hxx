@@ -31,7 +31,7 @@
 struct char_formats_name_key
     : boost::multi_index::composite_key<
           SwCharFormat*,
-          boost::multi_index::const_mem_fun<SwFormat, const OUString&, &SwFormat::GetName>,
+          boost::multi_index::const_mem_fun<SwFormat, const UIName&, &SwFormat::GetName>,
           boost::multi_index::identity<SwCharFormat*> // the actual object pointer
           >
 {
@@ -46,7 +46,7 @@ typedef boost::multi_index_container<
 class SW_DLLPUBLIC SwCharFormats final : public SwFormatsBase
 {
     // function updating ByName index via modify
-    friend void SwFormat::SetFormatName(const OUString&, bool);
+    friend void SwFormat::SetFormatName(const UIName&, bool);
 
 public:
     typedef SwCharFormatsBase::nth_index<0>::type ByPos;
@@ -83,7 +83,7 @@ public:
     size_t GetPos(const SwCharFormat* p) const;
 
     // search for formats by name
-    ByName::const_iterator findByName(const OUString& name) const;
+    ByName::const_iterator findByName(const UIName& name) const;
 
     SwCharFormat* operator[](size_t index_) const { return m_PosIndex.operator[](index_); }
     const_iterator begin() const { return m_PosIndex.begin(); }
@@ -101,10 +101,10 @@ public:
     void DeleteAndDestroyAll(bool keepDefault = false);
 
     // Override return type to reduce casting
-    virtual SwCharFormat* FindFormatByName(const OUString& rName) const override;
+    virtual SwCharFormat* FindFormatByName(const UIName& rName) const override;
 
     /** Need to call this when the format name changes */
-    void SetFormatNameAndReindex(SwCharFormat* v, const OUString& sNewName);
+    void SetFormatNameAndReindex(SwCharFormat* v, const UIName& sNewName);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

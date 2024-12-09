@@ -196,7 +196,7 @@ ToxTextGenerator::GenerateText(SwDoc* pDoc,
         {
             const auto& aToken = aPattern[i];
             sal_Int32 nStartCharStyle = rText.getLength();
-            OUString aCharStyleName = aToken.sCharStyleName;
+            UIName aCharStyleName = aToken.sCharStyleName;
             switch( aToken.eTokenType )
             {
             case TOKEN_ENTRY_NO:
@@ -269,7 +269,7 @@ ToxTextGenerator::GenerateText(SwDoc* pDoc,
                     SwContentIndex aIdx( pTOXNd, rText.getLength() );
                     if (eField == ToxAuthorityField::AUTH_FIELD_URL)
                     {
-                        aCharStyleName = SwResId(STR_POOLCHR_INET_NORMAL);
+                        aCharStyleName = UIName(SwResId(STR_POOLCHR_INET_NORMAL));
                         mLinkProcessor->StartNewLink(rText.getLength(), aCharStyleName);
                     }
                     rBase.FillText( *pTOXNd, aIdx, o3tl::narrowing<sal_uInt16>(eField), pLayout );

@@ -106,12 +106,12 @@ SwFrameFormat& SwEditShell::GetTableFrameFormat(size_t nFormat, bool bUsed ) con
     return GetDoc()->GetTableFrameFormat(nFormat, bUsed );
 }
 
-OUString SwEditShell::GetUniqueTableName() const
+UIName SwEditShell::GetUniqueTableName() const
 {
     return GetDoc()->GetUniqueTableName();
 }
 
-SwCharFormat* SwEditShell::MakeCharFormat( const OUString& rName )
+SwCharFormat* SwEditShell::MakeCharFormat( const UIName& rName )
 {
     SwCharFormat* pDerivedFrom = GetDoc()->GetDfltCharFormat();
 
@@ -139,17 +139,17 @@ bool SwEditShell::IsUsed( const sw::BroadcastingModify& rModify ) const
     return mxDoc->IsUsed( rModify );
 }
 
-const SwFlyFrameFormat* SwEditShell::FindFlyByName( const OUString& rName ) const
+const SwFlyFrameFormat* SwEditShell::FindFlyByName( const UIName& rName ) const
 {
     return mxDoc->FindFlyByName(rName);
 }
 
-SwCharFormat* SwEditShell::FindCharFormatByName( const OUString& rName ) const
+SwCharFormat* SwEditShell::FindCharFormatByName( const UIName& rName ) const
 {
     return mxDoc->FindCharFormatByName( rName );
 }
 
-SwTextFormatColl* SwEditShell::FindTextFormatCollByName( const OUString& rName ) const
+SwTextFormatColl* SwEditShell::FindTextFormatCollByName( const UIName& rName ) const
 {
     return mxDoc->FindTextFormatCollByName( rName );
 }

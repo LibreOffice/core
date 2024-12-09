@@ -93,7 +93,7 @@ class SW_DLLPUBLIC SwOLENode final: public SwNoTextNode
 {
     friend class SwNodes;
     mutable SwOLEObj maOLEObj;
-    OUString msChartTableName;     ///< with chart objects: name of referenced table.
+    UIName msChartTableName;     ///< with chart objects: name of referenced table.
     bool   mbOLESizeInvalid; /**< Should be considered at SwDoc::PrtOLENotify
                                    (e.g. copied). Is not persistent. */
 
@@ -156,8 +156,8 @@ public:
     // #i99665#
     bool IsChart() const;
 
-    const OUString& GetChartTableName() const { return msChartTableName; }
-    void SetChartTableName( const OUString& rNm ) { msChartTableName = rNm; }
+    const UIName& GetChartTableName() const { return msChartTableName; }
+    void SetChartTableName( const UIName& rNm ) { msChartTableName = rNm; }
 
 
     // react on visual change (invalidate)

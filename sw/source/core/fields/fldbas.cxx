@@ -135,9 +135,9 @@ SwFieldType::SwFieldType( SwFieldIds nWhichId )
 {
 }
 
-OUString SwFieldType::GetName() const
+UIName SwFieldType::GetName() const
 {
-    return OUString();
+    return UIName();
 }
 
 void SwFieldType::QueryValue( uno::Any&, sal_uInt16 ) const
