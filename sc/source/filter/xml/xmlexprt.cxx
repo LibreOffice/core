@@ -5261,36 +5261,38 @@ void ScXMLExport::GetChangeTrackViewSettings(ScDocument& rDoc, uno::Sequence<bea
 
 void ScXMLExport::GetViewSettings(uno::Sequence<beans::PropertyValue>& rProps)
 {
-    if (GetModel().is())
+    if (!GetModel().is())
+        return;
+
+    ScModelObj* pDocObj(comphelper::getFromUnoTunnel<ScModelObj>( GetModel() ));
+    if (!pDocObj)
+        return;
+
+    SfxObjectShell* pEmbeddedObj = pDocObj->GetEmbeddedObject();
+    if (pEmbeddedObj)
     {
         rProps.realloc(4);
         beans::PropertyValue* pProps(rProps.getArray());
-        ScModelObj* pDocObj(comphelper::getFromUnoTunnel<ScModelObj>( GetModel() ));
-        if (pDocObj)
-        {
-            SfxObjectShell* pEmbeddedObj = pDocObj->GetEmbeddedObject();
-            if (pEmbeddedObj)
-            {
-                tools::Rectangle aRect(pEmbeddedObj->GetVisArea());
-                sal_uInt16 i(0);
-                pProps[i].Name = "VisibleAreaTop";
-                pProps[i].Value <<= static_cast<sal_Int32>(aRect.Top());
-                pProps[++i].Name = "VisibleAreaLeft";
-                pProps[i].Value <<= static_cast<sal_Int32>(aRect.Left());
-                pProps[++i].Name = "VisibleAreaWidth";
-                pProps[i].Value <<= static_cast<sal_Int32>(aRect.getOpenWidth());
-                pProps[++i].Name = "VisibleAreaHeight";
-                pProps[i].Value <<= static_cast<sal_Int32>(aRect.getOpenHeight());
-            }
-        }
-        ScDocument* pDoc = pDocObj->GetDocument();
-        if (!pDoc)
-        {
-            SAL_WARN("sc", "no ScDocument!");
-            return;
-        }
-        GetChangeTrackViewSettings(*pDoc, rProps);
+
+        tools::Rectangle aRect(pEmbeddedObj->GetVisArea());
+        sal_uInt16 i(0);
+        pProps[i].Name = "VisibleAreaTop";
+        pProps[i].Value <<= static_cast<sal_Int32>(aRect.Top());
+        pProps[++i].Name = "VisibleAreaLeft";
+        pProps[i].Value <<= static_cast<sal_Int32>(aRect.Left());
+        pProps[++i].Name = "VisibleAreaWidth";
+        pProps[i].Value <<= static_cast<sal_Int32>(aRect.getOpenWidth());
+        pProps[++i].Name = "VisibleAreaHeight";
+        pProps[i].Value <<= static_cast<sal_Int32>(aRect.getOpenHeight());
     }
+
+    ScDocument* pDoc = pDocObj->GetDocument();
+    if (!pDoc)
+    {
+        SAL_WARN("sc", "no ScDocument!");
+        return;
+    }
+    GetChangeTrackViewSettings(*pDoc, rProps);
 }
 
 void ScXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>& rProps)
