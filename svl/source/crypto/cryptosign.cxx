@@ -936,6 +936,7 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
 {
 #if !USE_CRYPTO_ANY
     (void)rCMSHexBuffer;
+    (void)m_rSigningContext;
     return false;
 #else
     // Create the PKCS#7 object.
