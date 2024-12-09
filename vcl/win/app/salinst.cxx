@@ -1045,84 +1045,30 @@ static OUString getWinArch()
     }
 }
 
-static OUString getOSVersionString(DWORD nMajorVersion, DWORD nMinorVersion, DWORD nBuildNumber)
+static OUString getOSVersionString(DWORD nBuildNumber)
 {
     OUStringBuffer result = u"Windows";
-    if (nMajorVersion == 6 && nMinorVersion == 1)
-        result.append(" 7 Service Pack 1");
-    else if (nMajorVersion == 6 && nMinorVersion == 2)
-        result.append(" 8");
-    else if (nMajorVersion == 6 && nMinorVersion == 3)
-        result.append(" 8.1");
-    else if (nMajorVersion == 10 && nMinorVersion == 0)
-    {
-        if (nBuildNumber >= 22000)
-            result.append(" 11");
-        else
-            result.append(" 10");
-    }
+    if (nBuildNumber >= 22000)
+        result.append(" 11");
+    else if (nBuildNumber > 0)
+        result.append(" 10");
     else // We don't know what Windows it is
         result.append(" unknown");
 
     result.append(getWinArch());
 
-    if (nMajorVersion || nMinorVersion || nBuildNumber)
-    {
-        result.append(" (");
-        if (nMajorVersion || nMinorVersion)
-        {
-            result.append(OUString::number(nMajorVersion) + u"." + OUString::number(nMinorVersion));
-            if (nBuildNumber)
-                result.append(" ");
-        }
-        if (nBuildNumber)
-            result.append("build " + OUString::number(nBuildNumber));
-        result.append(")");
-    }
+    if (nBuildNumber)
+        result.append(" (build " + OUString::number(nBuildNumber) + ")");
 
     return result.makeStringAndClear();
 }
 
-WinOSVersionInfo WinSalInstance::getWinOSVersionInfo()
+DWORD WinSalInstance::getWindowsBuildNumber()
 {
-    static const WinOSVersionInfo aResult = []
+    static const DWORD nResult = []
     {
-        WinOSVersionInfo aVersion;
-        // GetVersion(Ex) and VersionHelpers (based on VerifyVersionInfo) API are
-        // subject to manifest-based behavior since Windows 8.1, so give wrong results.
-        // Another approach would be to use NetWkstaGetInfo, but that has some small
-        // reported delays (some milliseconds), and might get slower in domains with
-        // poor network connections.
-        // So go with a solution described at https://msdn.microsoft.com/en-us/library/ms724429
-        bool bHaveVerFromKernel32 = false;
-        if (HMODULE h_kernel32 = GetModuleHandleW(L"kernel32.dll"))
-        {
-            wchar_t szPath[MAX_PATH];
-            DWORD dwCount = GetModuleFileNameW(h_kernel32, szPath, SAL_N_ELEMENTS(szPath));
-            if (dwCount != 0 && dwCount < SAL_N_ELEMENTS(szPath))
-            {
-                dwCount = GetFileVersionInfoSizeW(szPath, nullptr);
-                if (dwCount != 0)
-                {
-                    std::unique_ptr<char[]> ver(new char[dwCount]);
-                    if (GetFileVersionInfoW(szPath, 0, dwCount, ver.get()) != FALSE)
-                    {
-                        void* pBlock = nullptr;
-                        UINT dwBlockSz = 0;
-                        if (VerQueryValueW(ver.get(), L"\\", &pBlock, &dwBlockSz) != FALSE
-                            && dwBlockSz >= sizeof(VS_FIXEDFILEINFO))
-                        {
-                            VS_FIXEDFILEINFO* vi1 = static_cast<VS_FIXEDFILEINFO*>(pBlock);
-                            aVersion.m_nMajorVersion = HIWORD(vi1->dwProductVersionMS);
-                            aVersion.m_nMinorVersion = LOWORD(vi1->dwProductVersionMS);
-                            bHaveVerFromKernel32 = true;
-                        }
-                    }
-                }
-            }
-        }
-        // Now use RtlGetVersion (which is not subject to deprecation for GetVersion(Ex) API)
-        // to get build number and SP info
+        DWORD nBuildNumber = 0;
+        // use RtlGetVersion to get build number
         if (HMODULE h_ntdll = GetModuleHandleW(L"ntdll.dll"))
         {
             if (auto RtlGetVersion
@@ -1132,24 +1078,18 @@ WinOSVersionInfo WinSalInstance::getWinOSVersionInfo()
                 vi2.dwOSVersionInfoSize = sizeof(vi2);
                 if (STATUS_SUCCESS == RtlGetVersion(&vi2))
                 {
-                    if (!bHaveVerFromKernel32) // we failed above; let's hope this would be useful
-                    {
-                        aVersion.m_nMajorVersion = vi2.dwMajorVersion;
-                        aVersion.m_nMinorVersion = vi2.dwMinorVersion;
-                    }
-                    aVersion.m_nBuildNumber = vi2.dwBuildNumber;
+                    nBuildNumber = vi2.dwBuildNumber;
                 }
             }
         }
-        return aVersion;
+        return nBuildNumber;
     }();
-    return aResult;
+    return nResult;
 }
 
 OUString WinSalInstance::getOSVersion()
 {
-    WinOSVersionInfo aInfo = getWinOSVersionInfo();
-    return getOSVersionString(aInfo.m_nMajorVersion, aInfo.m_nMinorVersion, aInfo.m_nBuildNumber);
+    return getOSVersionString(getWindowsBuildNumber());
 }
 
 void WinSalInstance::BeforeAbort(const OUString&, bool)

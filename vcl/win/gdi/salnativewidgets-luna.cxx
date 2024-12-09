@@ -1153,8 +1153,7 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
 
             if (bUseDarkMode && (bChecked || (nState & (ControlState::PRESSED) || (nState & ControlState::ROLLOVER))))
             {
-                const WinOSVersionInfo aVersion = WinSalInstance::getWinOSVersionInfo();
-                if (aVersion.m_nMajorVersion == 10 && aVersion.m_nBuildNumber >= 22000)
+                if (WinSalInstance::getWindowsBuildNumber() >= 22000)
                 {
                     // tdf#152534 workaround bug with Windows 11 Dark theme using
                     // light blue as highlight color which gives insufficient

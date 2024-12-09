@@ -28,13 +28,6 @@
 
 class SalYieldMutex;
 
-struct WinOSVersionInfo
-{
-    DWORD m_nMajorVersion = 0;
-    DWORD m_nMinorVersion = 0;
-    DWORD m_nBuildNumber = 0;
-};
-
 class WinSalInstance : public SalInstance
 {
 public:
@@ -80,7 +73,7 @@ public:
     virtual OUString            GetConnectionIdentifier() override;
     virtual void                AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService) override;
 
-    static WinOSVersionInfo getWinOSVersionInfo();
+    static DWORD getWindowsBuildNumber();
     virtual OUString            getOSVersion() override;
     virtual void BeforeAbort(const OUString&, bool) override;
 
