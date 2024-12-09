@@ -1348,6 +1348,28 @@ static OUString enumtoString(AutoLayout aut)
     return retstr;
 }
 
+AutoLayout SdPage::stringToAutoLayout(std::u16string_view rLayoutName)
+{
+    for (int i = AUTOLAYOUT_START; i < AUTOLAYOUT_END; i++)
+    {
+        AutoLayout nLId = static_cast<AutoLayout>(i);
+        if (autoLayoutToString(nLId) == rLayoutName)
+        {
+            return nLId;
+        }
+    }
+    return AUTOLAYOUT_END;
+}
+
+OUString SdPage::autoLayoutToString(AutoLayout nLayoutId)
+{
+    if (nLayoutId == AUTOLAYOUT_TITLE)
+    {
+        return "AUTOLAYOUT_TITLE";
+    }
+    return enumtoString(nLayoutId);
+}
+
 static void CalcAutoLayoutRectangles( SdPage const & rPage,::tools::Rectangle* rRectangle ,const OUString& sLayoutType )
 {
     ::tools::Rectangle aTitleRect;

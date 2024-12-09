@@ -1629,6 +1629,110 @@ void AnimationsExporter::exportAnimate(const Reference<XAnimate>& xAnimate)
     }
 }
 
+void GetDocStructureSlides(::tools::JsonWriter& rJsonWriter, SdXImpressDocument* pDoc,
+                           const std::map<OUString, OUString>& rArguments)
+{
+    auto it = rArguments.find(u"filter"_ustr);
+    if (it != rArguments.end())
+    {
+        // If filter is present but we are filtering not to slide informations
+        if (!it->second.equals(u"slides"_ustr))
+            return;
+    }
+
+    sal_uInt16 nPageCount = pDoc->GetDoc()->GetSdPageCount(PageKind::Standard);
+    sal_uInt16 nMasterPageCount = pDoc->GetDoc()->GetMasterSdPageCount(PageKind::Standard);
+
+    rJsonWriter.put("SlideCount", nPageCount);
+    rJsonWriter.put("MasterSlideCount", nMasterPageCount);
+
+    // write data of every master slide
+    if (nMasterPageCount > 0)
+    {
+        auto aMasterPagesNode = rJsonWriter.startArray("MasterSlides");
+        for (int nMPId = 0; nMPId < nMasterPageCount; nMPId++)
+        {
+            auto aMasterPageNode = rJsonWriter.startNode("MasterSlide " + std::to_string(nMPId));
+            const OUString& aMName
+                = pDoc->GetDoc()->GetMasterSdPage(nMPId, PageKind::Standard)->GetName();
+            rJsonWriter.put("Name", aMName);
+        }
+    }
+
+    // write data of every slide
+    if (nPageCount > 0)
+    {
+        auto aPagesNode = rJsonWriter.startArray("Slides");
+        for (int nPId = 0; nPId < nPageCount; nPId++)
+        {
+            auto aPageNode = rJsonWriter.startNode("Slide " + std::to_string(nPId));
+            SdPage* pPageStandard = pDoc->GetDoc()->GetSdPage(nPId, PageKind::Standard);
+
+            // Slide Name
+            rJsonWriter.put("SlideName", pPageStandard->GetName());
+
+            // MatserSlide Name
+            const FmFormPage* pMasterPage
+                = dynamic_cast<const FmFormPage*>(&pPageStandard->TRG_GetMasterPage());
+
+            if (pMasterPage)
+            {
+                rJsonWriter.put("MasterSlideName", pMasterPage->GetName());
+            }
+
+            // Layout id, and name.
+            AutoLayout nLayout = pPageStandard->GetAutoLayout();
+            rJsonWriter.put("LayoutId", static_cast<int>(nLayout));
+            rJsonWriter.put("LayoutName", SdPage::autoLayoutToString(nLayout));
+
+            // Every Objects in the page
+            int nObjCount = pPageStandard->GetObjCount();
+            rJsonWriter.put("ObjectCount", nObjCount);
+
+            if (nObjCount > 0)
+            {
+                auto aObjectsNode = rJsonWriter.startArray("Objects");
+                for (int nOId = 0; nOId < nObjCount; nOId++)
+                {
+                    auto aObjectNode = rJsonWriter.startNode("Objects " + std::to_string(nOId));
+                    SdrObject* pSdrObj = pPageStandard->GetObj(nOId);
+                    SdrTextObj* pSdrTxtObj = DynCastSdrTextObj(pSdrObj);
+                    if (pSdrTxtObj && pSdrTxtObj->HasText())
+                    {
+                        sal_Int32 nTextCount = pSdrTxtObj->getTextCount();
+                        rJsonWriter.put("TextCount", nTextCount);
+                        if (nTextCount > 0)
+                        {
+                            auto aTextsNode = rJsonWriter.startArray("Texts");
+                            for (int nTId = 0; nTId < nTextCount; nTId++)
+                            {
+                                auto aTextNode
+                                    = rJsonWriter.startNode("Text " + std::to_string(nTId));
+                                SdrText* pSdrTxt = pSdrTxtObj->getText(nTId);
+                                OutlinerParaObject* pOutlinerParaObject
+                                    = pSdrTxt->GetOutlinerParaObject();
+
+                                sal_Int32 nParaCount
+                                    = pOutlinerParaObject->GetTextObject().GetParagraphCount();
+
+                                rJsonWriter.put("ParaCount", nParaCount);
+                                auto aParasNode = rJsonWriter.startArray("Paragraphs");
+                                for (int nParaId = 0; nParaId < nParaCount; nParaId++)
+                                {
+                                    OUString aParaStr(
+                                        pOutlinerParaObject->GetTextObject().GetText(nParaId));
+
+                                    rJsonWriter.putSimpleValue(aParaStr);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 } // end anonymous namespace
 
 SdUnoForbiddenCharsTable::SdUnoForbiddenCharsTable( SdrModel* pModel )
@@ -1922,6 +2026,20 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         }
     }
     SfxBaseModel::Notify( rBC, rHint );
+}
+
+void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter, std::string_view rCommand)
+{
+    static constexpr OStringLiteral aExtractDocStructure(".uno:ExtractDocumentStructure");
+
+    std::map<OUString, OUString> aMap
+        = SfxLokHelper::parseCommandParameters(OUString::fromUtf8(rCommand));
+
+    if (o3tl::starts_with(rCommand, aExtractDocStructure))
+    {
+        auto commentsNode = rJsonWriter.startNode("DocStructure");
+        GetDocStructureSlides(rJsonWriter, this, aMap);
+    }
 }
 
 /******************************************************************************
