@@ -23,6 +23,7 @@
 #include <optional>
 #include <unordered_map>
 #include <unordered_set>
+#include <drawinglayer/primitive2d/CommonTypes.hxx>
 
 #include <frozen/bits/defines.h>
 #include <frozen/bits/elsa_std.h>
@@ -111,6 +112,8 @@ struct RenderState
 
     std::array<sal_Int32, 4> maIndices = { 0, 0, 0, 0 };
 
+    std::vector<drawinglayer::primitive2d::Primitive2DReference> maPrimitivesToUnhide;
+
     SdrObject* mpCurrentTarget = nullptr;
     sal_Int32 mnCurrentTargetParagraph = -1;
 
@@ -160,6 +163,7 @@ private:
     void setupAnimations();
     void setupMasterPageFields();
     void resolveEffect(CustomAnimationEffectPtr const& rEffect);
+    void cleanup();
 
 public:
     SlideshowLayerRenderer(SdrPage& rPage, bool bRenderBackground, bool bRenderMasterPage);
