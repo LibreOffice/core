@@ -380,6 +380,9 @@ public:
     */
     void getGraphicsForPrefetch(std::vector<Graphic*>& graphics) const;
 
+    static AutoLayout stringToAutoLayout(std::u16string_view rLayoutName);
+    static OUString autoLayoutToString(AutoLayout nLayoutId);
+
     static sal_uInt16 mnLastPageId;
 
 private:

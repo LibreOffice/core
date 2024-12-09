@@ -453,4 +453,6 @@
 #define SID_PRESENTATION_MINIMIZER          (SID_SD_START+450)
 #define SID_ALIGN_PAGE                      (SID_SD_START+451)
 
+#define FN_TRANSFORM_DOCUMENT_STRUCTURE     (SID_SD_START+452)
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

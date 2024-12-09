@@ -2195,6 +2195,23 @@ SfxVoidItem InsertLayer SID_INSERTLAYER
     GroupId = SfxGroupId::Insert;
 ]
 
+SfxVoidItem TransformDocumentStructure FN_TRANSFORM_DOCUMENT_STRUCTURE
+(SfxStringItem DataJson FN_PARAM_1)
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Edit;
+]
+
 SfxVoidItem InsertPage SID_INSERTPAGE
 (SfxStringItem PageName ID_VAL_PAGENAME,SfxUInt32Item WhatLayout ID_VAL_WHATLAYOUT,SfxBoolItem IsPageBack ID_VAL_ISPAGEBACK,SfxBoolItem IsPageObj ID_VAL_ISPAGEOBJ,SfxUInt16Item InsertPos ID_INSERT_POS)
 [

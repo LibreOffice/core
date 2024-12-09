@@ -48,6 +48,7 @@
 #include <docmodel/uno/UnoTheme.hxx>
 #include <docmodel/theme/Theme.hxx>
 #include <docmodel/color/ComplexColorJSON.hxx>
+#include <tools/json_writer.hxx>
 
 #include <drawdoc.hxx>
 #include <DrawDocShell.hxx>
@@ -165,6 +166,113 @@ void SdUiImpressTest::lcl_search(const OUString& rKey, bool bFindAll, bool bBack
     }));
 
     dispatchCommand(mxComponent, u".uno:ExecuteSearch"_ustr, aPropertyValues);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureTransformExtractSlide)
+{
+    createSdImpressDoc("odp/tdf161430.odp");
+
+    OString aJson = R"json(
+{
+    "Transforms": {
+        "SlideCommands": [
+            {"JumpToSlideByName": "Slide 3"},
+            {"MoveSlide": 0},
+            {"RenameSlide": "Slide3-Renamed"},
+            {"DeleteSlide": 2},
+            {"JumpToSlide": 2},
+            {"DeleteSlide": ""},
+            {"JumpToSlide": 1},
+            {"DuplicateSlide": ""},
+            {"RenameSlide": "Slide1-Duplicated"},
+            {"InsertMasterSlide": 1},
+            {"RenameSlide": "SlideInserted-1"},
+            {"ChangeLayout": 18},
+            {"JumpToSlide": "last"},
+            {"InsertMasterSlideByName": "Topic Separator white"},
+            {"RenameSlide": "SlideInserted-Name"},
+            {"ChangeLayoutByName": "AUTOLAYOUT_TITLE_2CONTENT"},
+            {"SetText.0": "first"},
+            {"SetText.1": "second"},
+            {"SetText.2": "third"},
+            {"DuplicateSlide": 1},
+            {"MoveSlide.2": 6}
+        ]
+    }
+}
+)json"_ostr;
+
+    //transform
+    uno::Sequence<css::beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue(u"DataJson"_ustr,
+                                      uno::Any(OStringToOUString(aJson, RTL_TEXTENCODING_UTF8))),
+    };
+    dispatchCommand(mxComponent, u".uno:TransformDocumentStructure"_ustr, aArgs);
+
+    //extract
+    tools::JsonWriter aJsonWriter;
+    std::string_view aCommand(".uno:ExtractDocumentStructure?filter=slides");
+    auto pXPresDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    pXPresDocument->getCommandValues(aJsonWriter, aCommand);
+
+    OString aExpectedStr
+        = "{ \"DocStructure\": { \"SlideCount\": 7, \"MasterSlideCount\": 8, \"MasterSlides\": [ "
+          "\"MasterSlide 0\": { \"Name\": \"Topic_Separator_Purple\"}, \"MasterSlide 1\": { "
+          "\"Name\": \"Content_sidebar_White\"}, \"MasterSlide 2\": { \"Name\": \"Topic Separator "
+          "white\"}, \"MasterSlide 3\": { \"Name\": \"Content_sidebar_White_\"}, \"MasterSlide "
+          "4\": { \"Name\": \"Topic_Separator_Purple_\"}, \"MasterSlide 5\": { \"Name\": "
+          "\"Content_White_Purple_Sidebar\"}, \"MasterSlide 6\": { \"Name\": \"Default 1\"}, "
+          "\"MasterSlide 7\": { \"Name\": \"Default 1_\"}], \"Slides\": [ \"Slide 0\": { "
+          "\"SlideName\": \"Slide3-Renamed\", \"MasterSlideName\": "
+          "\"Content_White_Purple_Sidebar\", \"LayoutId\": 3, \"LayoutName\": "
+          "\"AUTOLAYOUT_TITLE_2CONTENT\", \"ObjectCount\": 4, \"Objects\": [ \"Objects 0\": { "
+          "\"TextCount\": 1, \"Texts\": [ \"Text 0\": { \"ParaCount\": 1, \"Paragraphs\": [ "
+          "\"Friendly Open Source Project\"]}]}, \"Objects 1\": { }, \"Objects 2\": { "
+          "\"TextCount\": 1, \"Texts\": [ \"Text 0\": { \"ParaCount\": 9, \"Paragraphs\": [ \"Real "
+          "Open Source\", \"100% open-source code\", \"Built with LibreOffice technology\", "
+          "\"Built with Free Software technology stacks: primarily C++\", \"Runs best on Linux\", "
+          "\"Open Development\", \"Anyone can contribute & participate\", \"Follow commits and "
+          "tickets\", \"Public community calls - forum has details\"]}]}, \"Objects 3\": { "
+          "\"TextCount\": 1, \"Texts\": [ \"Text 0\": { \"ParaCount\": 5, \"Paragraphs\": [ "
+          "\"Focus:\", \"a non-renewable resource.\", \"Office Productivity & Documents\", "
+          "\"Excited about migrating your\\u0001documents\", \"Grateful to our partners for "
+          "solving\\u0001other problems.\"]}]}]}, \"Slide 1\": { \"SlideName\": \"Slide 2\", "
+          "\"MasterSlideName\": \"Topic_Separator_Purple\", \"LayoutId\": 3, \"LayoutName\": "
+          "\"AUTOLAYOUT_TITLE_2CONTENT\", \"ObjectCount\": 1, \"Objects\": [ \"Objects 0\": { "
+          "\"TextCount\": 1, \"Texts\": [ \"Text 0\": { \"ParaCount\": 3, \"Paragraphs\": [ "
+          "\"Collabora Online\", \"\", \"Powerful Online Collaboration\"]}]}]}, \"Slide 2\": { "
+          "\"SlideName\": \"Slide1-Duplicated\", \"MasterSlideName\": \"Topic_Separator_Purple\", "
+          "\"LayoutId\": 3, \"LayoutName\": \"AUTOLAYOUT_TITLE_2CONTENT\", \"ObjectCount\": 1, "
+          "\"Objects\": [ \"Objects 0\": { \"TextCount\": 1, \"Texts\": [ \"Text 0\": { "
+          "\"ParaCount\": 3, \"Paragraphs\": [ \"Collabora Online\", \"\", \"Powerful Online "
+          "Collaboration\"]}]}]}, \"Slide 3\": { \"SlideName\": \"SlideInserted-1\", "
+          "\"MasterSlideName\": \"Content_sidebar_White\", \"LayoutId\": 18, \"LayoutName\": "
+          "\"AUTOLAYOUT_TITLE_4CONTENT\", \"ObjectCount\": 5, \"Objects\": [ \"Objects 0\": { "
+          "\"TextCount\": 1, \"Texts\": [ \"Text 0\": { \"ParaCount\": 1, \"Paragraphs\": [ "
+          "\"Click to add Title\"]}]}, \"Objects 1\": { \"TextCount\": 1, \"Texts\": [ \"Text 0\": "
+          "{ \"ParaCount\": 1, \"Paragraphs\": [ \"Click to add Text\"]}]}, \"Objects 2\": { "
+          "\"TextCount\": 1, \"Texts\": [ \"Text 0\": { \"ParaCount\": 1, \"Paragraphs\": [ "
+          "\"Click to add Text\"]}]}, \"Objects 3\": { \"TextCount\": 1, \"Texts\": [ \"Text 0\": "
+          "{ \"ParaCount\": 1, \"Paragraphs\": [ \"Click to add Text\"]}]}, \"Objects 4\": { "
+          "\"TextCount\": 1, \"Texts\": [ \"Text 0\": { \"ParaCount\": 1, \"Paragraphs\": [ "
+          "\"Click to add Text\"]}]}]}, \"Slide 4\": { \"SlideName\": \"Slide 6\", "
+          "\"MasterSlideName\": \"Topic_Separator_Purple\", \"LayoutId\": 3, \"LayoutName\": "
+          "\"AUTOLAYOUT_TITLE_2CONTENT\", \"ObjectCount\": 1, \"Objects\": [ \"Objects 0\": { "
+          "\"TextCount\": 1, \"Texts\": [ \"Text 0\": { \"ParaCount\": 1, \"Paragraphs\": [ \"With "
+          "thanks to our Partners, Customers & Community !\"]}]}]}, \"Slide 5\": { \"SlideName\": "
+          "\"SlideInserted-Name\", \"MasterSlideName\": \"Topic Separator white\", \"LayoutId\": "
+          "3, \"LayoutName\": \"AUTOLAYOUT_TITLE_2CONTENT\", \"ObjectCount\": 3, \"Objects\": [ "
+          "\"Objects 0\": { \"TextCount\": 1, \"Texts\": [ \"Text 0\": { \"ParaCount\": 1, "
+          "\"Paragraphs\": [ \"first\"]}]}, \"Objects 1\": { \"TextCount\": 1, \"Texts\": [ \"Text "
+          "0\": { \"ParaCount\": 1, \"Paragraphs\": [ \"second\"]}]}, \"Objects 2\": { "
+          "\"TextCount\": 1, \"Texts\": [ \"Text 0\": { \"ParaCount\": 1, \"Paragraphs\": [ "
+          "\"third\"]}]}]}, \"Slide 6\": { \"SlideName\": \"Slide 7\", \"MasterSlideName\": "
+          "\"Topic_Separator_Purple\", \"LayoutId\": 3, \"LayoutName\": "
+          "\"AUTOLAYOUT_TITLE_2CONTENT\", \"ObjectCount\": 1, \"Objects\": [ \"Objects 0\": { "
+          "\"TextCount\": 1, \"Texts\": [ \"Text 0\": { \"ParaCount\": 3, \"Paragraphs\": [ "
+          "\"Collabora Online\", \"\", \"Powerful Online Collaboration\"]}]}]}]}}"_ostr;
+
+    CPPUNIT_ASSERT_EQUAL(aExpectedStr, aJsonWriter.finishAndGetAsOString());
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf111522)
