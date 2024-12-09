@@ -57,6 +57,7 @@ private:
     SdrModel& mrModel;
 
     EEControlBits mnSavedControlBits;
+    Color maSavedBackgroundColor;
 
 public:
     ScopedVclPtrInstance<VirtualDevice> maVirtualDevice;
@@ -65,8 +66,13 @@ public:
         : mrModel(rModel)
         , maVirtualDevice(DeviceFormat::WITHOUT_ALPHA)
     {
-        // Turn off spelling
         SdrOutliner& rOutliner = mrModel.GetDrawOutliner();
+
+        // Set the background color
+        maSavedBackgroundColor = rOutliner.GetBackgroundColor();
+        rOutliner.SetBackgroundColor(rPage.GetPageBackgroundColor());
+
+        // Turn off spelling
         mnSavedControlBits = rOutliner.GetControlWord();
         rOutliner.SetControlWord(mnSavedControlBits & ~EEControlBits::ONLINESPELLING);
 
@@ -93,6 +99,7 @@ public:
         // Restore spelling
         SdrOutliner& rOutliner = mrModel.GetDrawOutliner();
         rOutliner.SetControlWord(mnSavedControlBits);
+        rOutliner.SetBackgroundColor(maSavedBackgroundColor);
     }
 };
 
