@@ -318,6 +318,37 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testStylesWithHeader)
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[4]->m_eIssueID);
 }
 
+// Text contrast tests
+// see https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html
+CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckTextContrast)
+{
+    // first test doc has these issues:
+    // * normal text with contrast < 4.5
+    // * large text with contrast < 3.0
+    // * bold text with font size 13 (i.e. not considered large) with contrast < 4.5
+    createSwDoc("ContrastTestFail.odt");
+    SwDoc* pDoc = getSwDoc();
+    sw::AccessibilityCheck aCheck(pDoc);
+    aCheck.check();
+    auto& aIssues = aCheck.getIssueCollection().getIssues();
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aIssues.size());
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_CONTRAST, aIssues[0]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_CONTRAST, aIssues[1]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_CONTRAST, aIssues[2]->m_eIssueID);
+
+    // second test doc has large text with contrast between 3.0 and 4.5,
+    // which is sufficient for large text
+    // both of these are considered large text according to the spec:
+    // * non-bold text font with size 18
+    // * bold text with font size 14
+    createSwDoc("ContrastTestOK.odt");
+    SwDoc* pDocOK = getSwDoc();
+    sw::AccessibilityCheck aCheckOK(pDocOK);
+    aCheckOK.check();
+    auto& aIssuesOK = aCheckOK.getIssueCollection().getIssues();
+    CPPUNIT_ASSERT_EQUAL(size_t(0), aIssuesOK.size());
+}
+
 namespace
 {
 std::vector<std::shared_ptr<sfx::AccessibilityIssue>>
