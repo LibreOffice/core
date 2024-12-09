@@ -2013,10 +2013,10 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const ::tools::Rectangle& rN
                             }
                         }
                     }
-                    else if ( eObjKind != SdrObjKind::TitleText   &&
-                              eObjKind != SdrObjKind::OutlineText &&
-                              DynCastSdrTextObj( pObj.get() ) !=  nullptr       &&
-                              pObj->GetOutlinerParaObject() )
+                    else if (eObjKind != SdrObjKind::TitleText
+                             && eObjKind != SdrObjKind::OutlineText && mePageKind != PageKind::Notes
+                             && DynCastSdrTextObj(pObj.get()) != nullptr
+                             && pObj->GetOutlinerParaObject())
                     {
                         /******************************************************
                         * normal text object: adjust text height
