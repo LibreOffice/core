@@ -1172,6 +1172,10 @@ bool ImpSvNumberInputScan::CanForceToIso8601( DateOrder eDateOrder )
             eDateOrder = GetDateOrder();
         }
 
+        // No date pattern matched at all can be forced to ISO 8601 here as is.
+        if (GetDatePatternNumbers() == 0)
+            return true;
+
         nCanForceToIso8601 = 1;
     }
 
