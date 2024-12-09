@@ -153,6 +153,7 @@
 #include <sfx2/lokcomponenthelpers.hxx>
 #include <sfx2/DocumentSigner.hxx>
 #include <sfx2/sidebar/Sidebar.hxx>
+#include <sfx2/lokunocmdlist.hxx>
 #include <svl/numformat.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
@@ -3264,7 +3265,9 @@ static char* lo_extractDocumentStructureRequest(LibreOfficeKit* /*pThis*/, const
 
                 //if it is a writer document..
                 uno::Reference<lang::XServiceInfo> xDocument(xComp, uno::UNO_QUERY_THROW);
-                if (xDocument->supportsService(u"com.sun.star.text.TextDocument"_ustr) || xDocument->supportsService(u"com.sun.star.text.WebDocument"_ustr))
+                if (xDocument->supportsService(u"com.sun.star.text.TextDocument"_ustr)
+                    || xDocument->supportsService(u"com.sun.star.text.WebDocument"_ustr)
+                    || xDocument->supportsService(u"com.sun.star.presentation.PresentationDocument"_ustr))
                 {
                     tools::JsonWriter aJson;
                     {
@@ -3826,244 +3829,6 @@ static void doc_iniUnoCommands ()
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    static constexpr OUString sUnoCommands[] =
-    {
-        u".uno:AlignLeft"_ustr,
-        u".uno:AlignHorizontalCenter"_ustr,
-        u".uno:AlignRight"_ustr,
-        u".uno:BackgroundColor"_ustr,
-        u".uno:TableCellBackgroundColor"_ustr,
-        u".uno:Bold"_ustr,
-        u".uno:CenterPara"_ustr,
-        u".uno:CharBackColor"_ustr,
-        u".uno:CharBackgroundExt"_ustr,
-        u".uno:CharFontName"_ustr,
-        u".uno:Color"_ustr,
-        u".uno:ControlCodes"_ustr,
-        u".uno:DecrementIndent"_ustr,
-        u".uno:DefaultBullet"_ustr,
-        u".uno:DefaultNumbering"_ustr,
-        u".uno:FontColor"_ustr,
-        u".uno:FontHeight"_ustr,
-        u".uno:IncrementIndent"_ustr,
-        u".uno:Italic"_ustr,
-        u".uno:JustifyPara"_ustr,
-        u".uno:JumpToMark"_ustr,
-        u".uno:OutlineFont"_ustr,
-        u".uno:LeftPara"_ustr,
-        u".uno:LanguageStatus"_ustr,
-        u".uno:RightPara"_ustr,
-        u".uno:Shadowed"_ustr,
-        u".uno:SubScript"_ustr,
-        u".uno:SuperScript"_ustr,
-        u".uno:Strikeout"_ustr,
-        u".uno:StyleApply"_ustr,
-        u".uno:Underline"_ustr,
-        u".uno:ModifiedStatus"_ustr,
-        u".uno:Undo"_ustr,
-        u".uno:Redo"_ustr,
-        u".uno:InsertPage"_ustr,
-        u".uno:DeletePage"_ustr,
-        u".uno:DuplicatePage"_ustr,
-        u".uno:InsertSlide"_ustr,
-        u".uno:DeleteSlide"_ustr,
-        u".uno:DuplicateSlide"_ustr,
-        u".uno:ChangeTheme"_ustr,
-        u".uno:Cut"_ustr,
-        u".uno:Copy"_ustr,
-        u".uno:Paste"_ustr,
-        u".uno:SelectAll"_ustr,
-        u".uno:ReplyComment"_ustr,
-        u".uno:ResolveComment"_ustr,
-        u".uno:ResolveCommentThread"_ustr,
-        u".uno:PromoteComment"_ustr,
-        u".uno:InsertRowsBefore"_ustr,
-        u".uno:InsertRowsAfter"_ustr,
-        u".uno:InsertColumnsBefore"_ustr,
-        u".uno:InsertColumnsAfter"_ustr,
-        u".uno:DeleteRows"_ustr,
-        u".uno:DeleteColumns"_ustr,
-        u".uno:DeleteTable"_ustr,
-        u".uno:SelectTable"_ustr,
-        u".uno:EntireRow"_ustr,
-        u".uno:EntireColumn"_ustr,
-        u".uno:EntireCell"_ustr,
-        u".uno:AssignLayout"_ustr,
-        u".uno:StatusDocPos"_ustr,
-        u".uno:RowColSelCount"_ustr,
-        u".uno:StatusPageStyle"_ustr,
-        u".uno:InsertMode"_ustr,
-        u".uno:SpellOnline"_ustr,
-        u".uno:StatusSelectionMode"_ustr,
-        u".uno:StateTableCell"_ustr,
-        u".uno:StatusBarFunc"_ustr,
-        u".uno:StatePageNumber"_ustr,
-        u".uno:StateWordCount"_ustr,
-        u".uno:SelectionMode"_ustr,
-        u".uno:PageStatus"_ustr,
-        u".uno:LayoutStatus"_ustr,
-        u".uno:Scale"_ustr,
-        u".uno:Context"_ustr,
-        u".uno:WrapText"_ustr,
-        u".uno:ToggleMergeCells"_ustr,
-        u".uno:NameGroup"_ustr,
-        u".uno:ObjectTitleDescription"_ustr,
-        u".uno:NumberFormatCurrency"_ustr,
-        u".uno:NumberFormatPercent"_ustr,
-        u".uno:NumberFormatDecimal"_ustr,
-        u".uno:NumberFormatIncDecimals"_ustr,
-        u".uno:NumberFormatDecDecimals"_ustr,
-        u".uno:NumberFormatDate"_ustr,
-        u".uno:EditHeaderAndFooter"_ustr,
-        u".uno:FrameLineColor"_ustr,
-        u".uno:SortAscending"_ustr,
-        u".uno:SortDescending"_ustr,
-        u".uno:TrackChanges"_ustr,
-        u".uno:ShowTrackedChanges"_ustr,
-        u".uno:NextTrackedChange"_ustr,
-        u".uno:PreviousTrackedChange"_ustr,
-        u".uno:AcceptAllTrackedChanges"_ustr,
-        u".uno:RejectAllTrackedChanges"_ustr,
-        u".uno:TableDialog"_ustr,
-        u".uno:FormatCellDialog"_ustr,
-        u".uno:FontDialog"_ustr,
-        u".uno:ParagraphDialog"_ustr,
-        u".uno:OutlineBullet"_ustr,
-        u".uno:InsertIndexesEntry"_ustr,
-        u".uno:DocumentRepair"_ustr,
-        u".uno:TransformDialog"_ustr,
-        u".uno:InsertPageHeader"_ustr,
-        u".uno:InsertPageFooter"_ustr,
-        u".uno:OnlineAutoFormat"_ustr,
-        u".uno:InsertObjectChart"_ustr,
-        u".uno:InsertSection"_ustr,
-        u".uno:InsertAnnotation"_ustr,
-        u".uno:DeleteAnnotation"_ustr,
-        u".uno:InsertPagebreak"_ustr,
-        u".uno:InsertColumnBreak"_ustr,
-        u".uno:HyperlinkDialog"_ustr,
-        u".uno:InsertSymbol"_ustr,
-        u".uno:EditRegion"_ustr,
-        u".uno:ThesaurusDialog"_ustr,
-        u".uno:FormatArea"_ustr,
-        u".uno:FormatLine"_ustr,
-        u".uno:FormatColumns"_ustr,
-        u".uno:Watermark"_ustr,
-        u".uno:ResetAttributes"_ustr,
-        u".uno:Orientation"_ustr,
-        u".uno:ObjectAlignLeft"_ustr,
-        u".uno:ObjectAlignRight"_ustr,
-        u".uno:AlignCenter"_ustr,
-        u".uno:TransformPosX"_ustr,
-        u".uno:TransformPosY"_ustr,
-        u".uno:TransformWidth"_ustr,
-        u".uno:TransformHeight"_ustr,
-        u".uno:ObjectBackOne"_ustr,
-        u".uno:SendToBack"_ustr,
-        u".uno:ObjectForwardOne"_ustr,
-        u".uno:BringToFront"_ustr,
-        u".uno:WrapRight"_ustr,
-        u".uno:WrapThrough"_ustr,
-        u".uno:WrapLeft"_ustr,
-        u".uno:WrapIdeal"_ustr,
-        u".uno:WrapOn"_ustr,
-        u".uno:WrapOff"_ustr,
-        u".uno:UpdateCurIndex"_ustr,
-        u".uno:InsertCaptionDialog"_ustr,
-        u".uno:FormatGroup"_ustr,
-        u".uno:SplitTable"_ustr,
-        u".uno:SplitCell"_ustr,
-        u".uno:MergeCells"_ustr,
-        u".uno:DeleteNote"_ustr,
-        u".uno:AcceptChanges"_ustr,
-        u".uno:FormatPaintbrush"_ustr,
-        u".uno:SetDefault"_ustr,
-        u".uno:ParaLeftToRight"_ustr,
-        u".uno:ParaRightToLeft"_ustr,
-        u".uno:ParaspaceIncrease"_ustr,
-        u".uno:ParaspaceDecrease"_ustr,
-        u".uno:AcceptTrackedChange"_ustr,
-        u".uno:RejectTrackedChange"_ustr,
-        u".uno:AcceptTrackedChangeToNext"_ustr,
-        u".uno:RejectTrackedChangeToNext"_ustr,
-        u".uno:ShowResolvedAnnotations"_ustr,
-        u".uno:InsertBreak"_ustr,
-        u".uno:InsertEndnote"_ustr,
-        u".uno:InsertFootnote"_ustr,
-        u".uno:InsertReferenceField"_ustr,
-        u".uno:InsertBookmark"_ustr,
-        u".uno:InsertAuthoritiesEntry"_ustr,
-        u".uno:InsertMultiIndex"_ustr,
-        u".uno:InsertField"_ustr,
-        u".uno:PageNumberWizard"_ustr,
-        u".uno:InsertPageNumberField"_ustr,
-        u".uno:InsertPageCountField"_ustr,
-        u".uno:InsertDateField"_ustr,
-        u".uno:InsertTitleField"_ustr,
-        u".uno:InsertFieldCtrl"_ustr,
-        u".uno:CharmapControl"_ustr,
-        u".uno:EnterGroup"_ustr,
-        u".uno:LeaveGroup"_ustr,
-        u".uno:AlignUp"_ustr,
-        u".uno:AlignMiddle"_ustr,
-        u".uno:AlignDown"_ustr,
-        u".uno:TraceChangeMode"_ustr,
-        u".uno:Combine"_ustr,
-        u".uno:Merge"_ustr,
-        u".uno:Dismantle"_ustr,
-        u".uno:Substract"_ustr,
-        u".uno:DistributeSelection"_ustr,
-        u".uno:Intersect"_ustr,
-        u".uno:BorderInner"_ustr,
-        u".uno:BorderOuter"_ustr,
-        u".uno:FreezePanes"_ustr,
-        u".uno:FreezePanesColumn"_ustr,
-        u".uno:FreezePanesRow"_ustr,
-        u".uno:Sidebar"_ustr,
-        u".uno:SheetRightToLeft"_ustr,
-        u".uno:RunMacro"_ustr,
-        u".uno:SpacePara1"_ustr,
-        u".uno:SpacePara15"_ustr,
-        u".uno:SpacePara2"_ustr,
-        u".uno:InsertSparkline"_ustr,
-        u".uno:DeleteSparkline"_ustr,
-        u".uno:DeleteSparklineGroup"_ustr,
-        u".uno:EditSparklineGroup"_ustr,
-        u".uno:EditSparkline"_ustr,
-        u".uno:GroupSparklines"_ustr,
-        u".uno:UngroupSparklines"_ustr,
-        u".uno:FormatSparklineMenu"_ustr,
-        u".uno:DataDataPilotRun"_ustr,
-        u".uno:RecalcPivotTable"_ustr,
-        u".uno:DeletePivotTable"_ustr,
-        u".uno:Protect"_ustr,
-        u".uno:UnsetCellsReadOnly"_ustr,
-        u".uno:ContentControlProperties"_ustr,
-        u".uno:DeleteContentControl"_ustr,
-        u".uno:InsertCheckboxContentControl"_ustr,
-        u".uno:InsertContentControl"_ustr,
-        u".uno:InsertDateContentControl"_ustr,
-        u".uno:InsertDropdownContentControl"_ustr,
-        u".uno:InsertPlainTextContentControl"_ustr,
-        u".uno:InsertPictureContentControl"_ustr,
-        u".uno:DataFilterAutoFilter"_ustr,
-        u".uno:CellProtection"_ustr,
-        u".uno:MoveKeepInsertMode"_ustr,
-        u".uno:ToggleSheetGrid"_ustr,
-        u".uno:ChangeBezier"_ustr,
-        u".uno:DistributeHorzCenter"_ustr,
-        u".uno:DistributeHorzDistance"_ustr,
-        u".uno:DistributeHorzLeft"_ustr,
-        u".uno:DistributeHorzRight"_ustr,
-        u".uno:DistributeVertBottom"_ustr,
-        u".uno:DistributeVertCenter"_ustr,
-        u".uno:DistributeVertDistance"_ustr,
-        u".uno:DistributeVertTop"_ustr,
-        u".uno:AnimationEffects"_ustr,
-        u".uno:ExecuteAnimationEffect"_ustr,
-        u".uno:EditDoc"_ustr,
-    };
-
     util::URL aCommandURL;
     SfxViewShell* pViewShell = SfxViewShell::Current();
     SfxViewFrame* pViewFrame = pViewShell ? &pViewShell->GetViewFrame() : nullptr;
@@ -4102,17 +3867,22 @@ static void doc_iniUnoCommands ()
     SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool(pViewFrame);
     uno::Reference<util::XURLTransformer> xParser(util::URLTransformer::create(xContext));
 
-    for (const auto & sUnoCommand : sUnoCommands)
+    const std::map<std::u16string_view, KitUnoCommand>& rUnoCommandList = GetKitUnoCommandList();
+    for (const auto& aUnoCommand : rUnoCommandList)
     {
-        aCommandURL.Complete = sUnoCommand;
-        xParser->parseStrict(aCommandURL);
-
-        // when null, this command is not supported by the given component
-        // (like eg. Calc does not have ".uno:DefaultBullet" etc.)
-        if (const SfxSlot* pSlot = rSlotPool.GetUnoSlot(aCommandURL.Path))
+        if (aUnoCommand.second.initializeForStatusUpdates)
         {
-            // Initialize slot to dispatch .uno: Command.
-            pViewFrame->GetBindings().GetDispatch(pSlot, aCommandURL, false);
+            aCommandURL.Complete = u".uno:"_ustr + aUnoCommand.first;
+            xParser->parseStrict(aCommandURL);
+
+            // when null, this command is not supported by the given component
+            // (like eg. Calc does not have ".uno:DefaultBullet" etc.)
+            if (const SfxSlot* pSlot = rSlotPool.GetUnoSlot(aCommandURL.Path))
+            {
+                // Initialize slot to dispatch .uno: Command.
+                pViewFrame->GetBindings().GetDispatch(pSlot, aCommandURL, false);
+            }
+
         }
     }
 }

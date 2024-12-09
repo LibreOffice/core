@@ -146,6 +146,10 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
+    FN_TRANSFORM_DOCUMENT_STRUCTURE
+    [
+        ExecMethod = FuTemporary ;
+    ]
     SID_INSERTPAGE // ole : no, status : play rec
     [
         ExecMethod = FuTemporary ;
