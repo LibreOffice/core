@@ -186,7 +186,7 @@ bool PathDragResize::EndSdrDrag(bool /*bCopy*/)
         {
             const Point aRef( DragStat().GetRef1() );
             basegfx::B2DHomMatrix aTrans(basegfx::utils::createTranslateB2DHomMatrix(-aRef.X(), -aRef.Y()));
-            aTrans.scale(double(aXFact), double(aYFact));
+            aTrans.scale(double(m_aXFact), double(m_aYFact));
             aTrans.translate(aRef.X(), aRef.Y());
             basegfx::B2DPolyPolygon aDragPoly(pPathObj->GetPathPoly());
             aDragPoly.transform(aTrans);

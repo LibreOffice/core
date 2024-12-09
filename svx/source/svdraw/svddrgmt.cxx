@@ -1723,8 +1723,8 @@ PointerStyle SdrDragMove::GetSdrDragPointer() const
 
 SdrDragResize::SdrDragResize(SdrDragView& rNewView)
 :   SdrDragMethod(rNewView),
-    aXFact(1,1),
-    aYFact(1,1)
+    m_aXFact(1,1),
+    m_aYFact(1,1)
 {
 }
 
@@ -1744,20 +1744,20 @@ OUString SdrDragResize::GetSdrDragComment() const
     if(!nYDiv)
         nYDiv = 1;
 
-    bool bX(aXFact != aFact1 && std::abs(nXDiv) > 1);
-    bool bY(aYFact != aFact1 && std::abs(nYDiv) > 1);
+    bool bX(m_aXFact != aFact1 && std::abs(nXDiv) > 1);
+    bool bY(m_aYFact != aFact1 && std::abs(nYDiv) > 1);
 
     if(bX || bY)
     {
         aStr += " (";
 
-        bool bEqual(aXFact == aYFact);
+        bool bEqual(m_aXFact == m_aYFact);
         if(bX)
         {
             if(!bEqual)
                 aStr += "x=";
 
-            aStr += SdrModel::GetPercentString(aXFact);
+            aStr += SdrModel::GetPercentString(m_aXFact);
         }
 
         if(bY && !bEqual)
@@ -1765,7 +1765,7 @@ OUString SdrDragResize::GetSdrDragComment() const
             if(bX)
                 aStr += " ";
 
-            aStr += "y=" + SdrModel::GetPercentString(aYFact);
+            aStr += "y=" + SdrModel::GetPercentString(m_aYFact);
         }
 
         aStr += ")";
@@ -1825,7 +1825,7 @@ basegfx::B2DHomMatrix SdrDragResize::getCurrentTransformation() const
 {
     basegfx::B2DHomMatrix aRetval(basegfx::utils::createTranslateB2DHomMatrix(
         -DragStat().GetRef1().X(), -DragStat().GetRef1().Y()));
-    aRetval.scale(double(aXFact), double(aYFact));
+    aRetval.scale(double(m_aXFact), double(m_aYFact));
     aRetval.translate(DragStat().GetRef1().X(), DragStat().GetRef1().Y());
 
     return aRetval;
@@ -2005,8 +2005,8 @@ void SdrDragResize::MoveSdrDrag(const Point& rNoSnapPnt)
         {
             Hide();
             DragStat().NextMove(aPnt);
-            aXFact=aNewXFact;
-            aYFact=aNewYFact;
+            m_aXFact=aNewXFact;
+            m_aYFact=aNewYFact;
 
             aNewXFact = double(aNewXFact) > 0 ? aNewXFact : Fraction(1, 1);
             aNewYFact = double(aNewYFact) > 0 ? aNewYFact : Fraction(1, 1);
@@ -2020,7 +2020,7 @@ void SdrDragResize::MoveSdrDrag(const Point& rNoSnapPnt)
 
 void SdrDragResize::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
 {
-    rTarget.Resize(DragStat().GetRef1(),aXFact,aYFact);
+    rTarget.Resize(DragStat().GetRef1(),m_aXFact,m_aYFact);
 }
 
 bool SdrDragResize::EndSdrDrag(bool bCopy)
@@ -2029,15 +2029,15 @@ bool SdrDragResize::EndSdrDrag(bool bCopy)
 
     if (IsDraggingPoints())
     {
-        getSdrDragView().ResizeMarkedPoints(DragStat().GetRef1(),aXFact,aYFact);
+        getSdrDragView().ResizeMarkedPoints(DragStat().GetRef1(),m_aXFact,m_aYFact);
     }
     else if (IsDraggingGluePoints())
     {
-        getSdrDragView().ResizeMarkedGluePoints(DragStat().GetRef1(),aXFact,aYFact,bCopy);
+        getSdrDragView().ResizeMarkedGluePoints(DragStat().GetRef1(),m_aXFact,m_aYFact,bCopy);
     }
     else
     {
-        getSdrDragView().ResizeMarkedObj(DragStat().GetRef1(),aXFact,aYFact,bCopy);
+        getSdrDragView().ResizeMarkedObj(DragStat().GetRef1(),m_aXFact,m_aYFact,bCopy);
     }
 
     return true;
