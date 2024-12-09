@@ -27,6 +27,7 @@
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
+#include <QtWidgets/QListView>
 #include <QtWidgets/QLayout>
 #include <QtWidgets/QPlainTextEdit>
 #include <QtWidgets/QProgressBar>
@@ -224,6 +225,13 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
     {
         pLayoutParentWidget = new QWidget(pParentWidget);
         pObject = new QGridLayout(pLayoutParentWidget);
+    }
+    else if (sName == u"GtkIconView")
+    {
+        QListView* pListView = new QListView(pParentWidget);
+        pListView->setModel(new QStandardItemModel(pListView));
+        pListView->setViewMode(QListView::IconMode);
+        pObject = pListView;
     }
     else if (sName == u"GtkImage")
     {

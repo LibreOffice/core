@@ -22,6 +22,7 @@
 #include <QtInstanceLabel.hxx>
 #include <QtInstanceLevelBar.hxx>
 #include <QtInstanceLinkButton.hxx>
+#include <QtInstanceIconView.hxx>
 #include <QtInstanceMessageDialog.hxx>
 #include <QtInstanceNotebook.hxx>
 #include <QtInstanceProgressBar.hxx>
@@ -319,10 +320,12 @@ std::unique_ptr<weld::TreeView> QtInstanceBuilder::weld_tree_view(const OUString
     return xRet;
 }
 
-std::unique_ptr<weld::IconView> QtInstanceBuilder::weld_icon_view(const OUString&)
+std::unique_ptr<weld::IconView> QtInstanceBuilder::weld_icon_view(const OUString& rId)
 {
-    assert(false && "Not implemented yet");
-    return nullptr;
+    QListView* pListView = m_xBuilder->get<QListView>(rId);
+    std::unique_ptr<weld::IconView> xRet(pListView ? std::make_unique<QtInstanceIconView>(pListView)
+                                                   : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::Label> QtInstanceBuilder::weld_label(const OUString& rId)
