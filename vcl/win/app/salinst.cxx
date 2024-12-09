@@ -311,30 +311,7 @@ SalData::~SalData()
 
 bool OSSupportsDarkMode()
 {
-    bool bRet = false;
-    if (HMODULE h_ntdll = GetModuleHandleW(L"ntdll.dll"))
-    {
-        typedef LONG(WINAPI* RtlGetVersion_t)(PRTL_OSVERSIONINFOW);
-        if (auto RtlGetVersion
-            = reinterpret_cast<RtlGetVersion_t>(GetProcAddress(h_ntdll, "RtlGetVersion")))
-        {
-            RTL_OSVERSIONINFOW vi2{};
-            vi2.dwOSVersionInfoSize = sizeof(vi2);
-            if (RtlGetVersion(&vi2) == 0)
-            {
-                if (vi2.dwMajorVersion > 10)
-                    bRet = true;
-                else if (vi2.dwMajorVersion == 10)
-                {
-                    if (vi2.dwMinorVersion > 0)
-                        bRet = true;
-                    else if (vi2.dwBuildNumber >= 18362)
-                        bRet = true;
-                }
-            }
-        }
-    }
-    return bRet;
+    return WinSalInstance::getWindowsBuildNumber() >= 18362;
 }
 
 namespace {
