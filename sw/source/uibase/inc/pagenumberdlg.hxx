@@ -33,6 +33,7 @@ class SwPageNumberDlg final : public SfxDialogController
     std::unique_ptr<weld::ComboBox> m_xPageNumberAlignment;
     std::unique_ptr<weld::CheckButton> m_xMirrorOnEvenPages;
     std::unique_ptr<weld::CheckButton> m_xIncludePageTotal;
+    std::unique_ptr<weld::CheckButton> m_xIncludePageRangeTotal;
     std::unique_ptr<weld::CheckButton> m_xFitIntoExistingMargins;
     std::unique_ptr<SvxPageNumberListBox> m_xPageNumberTypeLB;
 
@@ -44,6 +45,7 @@ class SwPageNumberDlg final : public SfxDialogController
 
     DECL_LINK(OkHdl, weld::Button&, void);
     DECL_LINK(IncludePageTotalChangeHdl, weld::Toggleable&, void);
+    DECL_LINK(IncludePageRangeTotalChangeHdl, weld::Toggleable&, void);
     DECL_LINK(PositionSelectHdl, weld::ComboBox&, void);
     DECL_LINK(AlignmentSelectHdl, weld::ComboBox&, void);
     DECL_LINK(NumberTypeSelectHdl, weld::ComboBox&, void);
@@ -56,6 +58,7 @@ public:
     int GetPageNumberAlignment() const { return m_aPageNumberAlignment; }
     bool GetMirrorOnEvenPages() const;
     bool GetIncludePageTotal() const;
+    bool GetIncludePageRangeTotal() const;
     bool GetFitIntoExistingMargins() const;
     SvxNumType GetPageNumberType() const { return m_nPageNumberType; }
     void SetPageNumberType(SvxNumType nSet);

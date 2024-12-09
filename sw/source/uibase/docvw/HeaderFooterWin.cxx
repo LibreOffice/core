@@ -537,6 +537,11 @@ void SwHeaderFooterWin::ExecuteCommand(std::u16string_view rIdent)
         SfxViewFrame& rVFrame = rSh.GetView().GetViewFrame();
         rVFrame.GetBindings().Execute(FN_INSERT_FLD_PGCOUNT);
     }
+    else if (rIdent == u"insert_pagecount_in_range")
+    {
+        SfxViewFrame& rVFrame = rSh.GetView().GetViewFrame();
+        rVFrame.GetBindings().Execute(FN_INSERT_FLD_RANGE_PGCOUNT);
+    }
 }
 
 IMPL_LINK_NOARG(SwHeaderFooterWin, ClickHdl, weld::Button&, void)

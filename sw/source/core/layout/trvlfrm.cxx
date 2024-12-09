@@ -1866,20 +1866,8 @@ Point SwFrame::GetRelPos() const
     return aRet;
 }
 
-/** @return the virtual page number with the offset. */
-sal_uInt16 SwFrame::GetVirtPageNum() const
+static const SwFrame* lcl_FindStartOfVirtualPages(const SwPageFrame *pPage)
 {
-    const SwPageFrame *pPage = FindPageFrame();
-    if ( !pPage || !pPage->GetUpper() )
-        return 0;
-
-    sal_uInt16 nPhyPage = pPage->GetPhyPageNum();
-    const SwRootFrame* pRootFrame = static_cast<const SwRootFrame*>(pPage->GetUpper());
-    if ( !pRootFrame->IsVirtPageNum() )
-        return nPhyPage;
-
-    //Search the nearest section using the virtual page number.
-    const SwFrame *pFoundFrame = nullptr;
     const SwPageFrame* pPageFrameIter = pPage;
     while (pPageFrameIter)
     {
@@ -1895,13 +1883,28 @@ sal_uInt16 SwFrame::GetVirtPageNum() const
                 pMod->CallSwClientNotify(aHint);
                 if(aHint.GetPage())
                 {
-                    pFoundFrame = aHint.GetFrame();
-                    break;
+                    return aHint.GetFrame();
                 }
             }
         }
         pPageFrameIter = static_cast<const SwPageFrame*>(pPageFrameIter->GetPrev());
     }
+    return nullptr;
+}
+/** @return the virtual page number with the offset. */
+sal_uInt16 SwFrame::GetVirtPageNum() const
+{
+    const SwPageFrame *pPage = FindPageFrame();
+    if ( !pPage || !pPage->GetUpper() )
+        return 0;
+
+    sal_uInt16 nPhyPage = pPage->GetPhyPageNum();
+    const SwRootFrame* pRootFrame = static_cast<const SwRootFrame*>(pPage->GetUpper());
+    if ( !pRootFrame->IsVirtPageNum() )
+        return nPhyPage;
+
+    //Search the nearest section using the virtual page number.
+    const SwFrame *pFoundFrame = lcl_FindStartOfVirtualPages(pPage);
     if ( pFoundFrame )
     {
         ::std::optional<sal_uInt16> oNumOffset = pFoundFrame->GetPageDescItem().GetNumOffset();
@@ -1915,6 +1918,39 @@ sal_uInt16 SwFrame::GetVirtPageNum() const
         }
     }
     return nPhyPage;
+}
+
+sal_uInt16 SwFrame::GetVirtPageCount() const
+{
+    const SwPageFrame *pPage = FindPageFrame();
+    if ( !pPage || !pPage->GetUpper() )
+        return 0;
+
+    const SwRootFrame* pRootFrame = static_cast<const SwRootFrame*>(pPage->GetUpper());
+    if ( !pRootFrame->IsVirtPageNum() )
+        return pRootFrame->GetPageNum();
+
+    //Search the nearest section using the virtual page number and the nearest
+    //follower without a virtual page number.
+    const SwFrame *pFoundFrame = lcl_FindStartOfVirtualPages(pPage);
+    const SwPageFrame* pEndPage = pPage;
+    const SwPageFrame* pPageFrameIter = static_cast<const SwPageFrame*>(pPage->GetNext());;
+    while (pPageFrameIter)
+    {
+        const SwContentFrame* pContentFrame = pPageFrameIter->FindFirstBodyContent();
+        if (pContentFrame)
+        {
+            const SwFormatPageDesc& rFormatPageDesc = pContentFrame->GetPageDescItem();
+
+            if ( rFormatPageDesc.GetNumOffset() && rFormatPageDesc.GetDefinedIn() )
+                break;
+            else
+                pEndPage = pPageFrameIter;
+        }
+        pPageFrameIter = static_cast<const SwPageFrame*>(pPageFrameIter->GetNext());
+    }
+    sal_uInt16 nStartPage = pFoundFrame ? pFoundFrame->GetPhyPageNum() : 1;
+    return pEndPage->GetPhyPageNum() - nStartPage + 1;
 }
 
 /** Determines and sets those cells which are enclosed by the selection. */

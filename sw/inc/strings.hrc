@@ -1012,6 +1012,7 @@
 #define FLD_STAT_GRF                            NC_("FLD_STAT_GRF", "Image")
 #define FLD_STAT_OBJ                            NC_("FLD_STAT_OBJ", "OLE objects")
 #define FLD_STAT_PAGE                           NC_("FLD_STAT_PAGE", "Pages")
+#define FLD_STAT_PAGE_RANGE                     NC_("FLD_STAT_PAGE", "Pages in range")
 //  SubCmd DDETypes
 #define FMT_DDE_HOT                             NC_("FMT_DDE_HOT", "DDE automatic")
 #define FMT_DDE_NORMAL                          NC_("FMT_DDE_NORMAL", "DDE manual")

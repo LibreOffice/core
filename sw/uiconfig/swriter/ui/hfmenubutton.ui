@@ -48,6 +48,14 @@
         <property name="use-underline">True</property>
       </object>
     </child>
+    <child>
+        <object class="GtkMenuItem" id="insert_pagecount_in_range">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes" context="headerfootermenu|insert_pagecount_in_range">Insert Page Count In Range</property>
+            <property name="use-underline">True</property>
+        </object>
+    </child>
   </object>
   <object class="GtkBox" id="HFMenuButton">
     <property name="visible">True</property>

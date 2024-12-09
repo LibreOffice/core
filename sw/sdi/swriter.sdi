@@ -3478,6 +3478,23 @@ SfxVoidItem InsertPageCountField FN_INSERT_FLD_PGCOUNT
     GroupId = SfxGroupId::Insert;
 ]
 
+SfxVoidItem InsertPageCountInRangeField FN_INSERT_FLD_RANGE_PGCOUNT
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Insert;
+]
+
 SfxObjectShellItem InsertPageFooter FN_INSERT_PAGEFOOTER
 (SfxStringItem PageStyle FN_INSERT_PAGEFOOTER,SfxBoolItem On FN_PARAM_1)
 [

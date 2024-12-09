@@ -788,6 +788,7 @@ public:
     int GetPageNumberAlignment() const override { return m_pDlg->GetPageNumberAlignment(); }
     bool GetMirrorOnEvenPages() const override { return m_pDlg->GetMirrorOnEvenPages(); }
     bool GetIncludePageTotal() const override { return m_pDlg->GetIncludePageTotal(); }
+    bool GetIncludePageRangeTotal() const override { return m_pDlg->GetIncludePageRangeTotal(); }
     bool GetFitIntoExistingMargins() const override { return m_pDlg->GetFitIntoExistingMargins(); }
     SvxNumType GetPageNumberType() const override { return m_pDlg->GetPageNumberType(); }
     void SetPageNumberType(SvxNumType nSet) override { m_pDlg->SetPageNumberType(nSet); }

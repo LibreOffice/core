@@ -1402,6 +1402,7 @@ page-breaks-on-group-change
 page-content
 page-continuation-string
 page-count
+page-count-range
 page-end-margin
 page-height
 page-master

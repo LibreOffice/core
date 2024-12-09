@@ -130,6 +130,7 @@ char const FIELD_SERVICE_FILE_NAME[] = "FileName";
 char const FIELD_SERVICE_CHAPTER[] = "Chapter";
 char const FIELD_SERVICE_TEMPLATE_NAME[] = "TemplateName";
 char const FIELD_SERVICE_PAGE_COUNT[] = "PageCount";
+char const FIELD_SERVICE_PAGE_COUNT_RANGE[] = "PageCountRange";
 char const FIELD_SERVICE_PARAGRAPH_COUNT[] = "ParagraphCount";
 char const FIELD_SERVICE_WORD_COUNT[] = "WordCount";
 char const FIELD_SERVICE_CHARACTER_COUNT[] = "CharacterCount";
@@ -249,6 +250,7 @@ SvXMLEnumStringMapEntry<FieldIdEnum> const aFieldServiceNameMapping[] =
     ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_TEMPLATE_NAME, FIELD_ID_TEMPLATE_NAME ),
 
     ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_PAGE_COUNT, FIELD_ID_COUNT_PAGES ),
+    ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_PAGE_COUNT_RANGE, FIELD_ID_COUNT_PAGES_RANGE ),
     ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_PARAGRAPH_COUNT, FIELD_ID_COUNT_PARAGRAPHS ),
     ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_WORD_COUNT, FIELD_ID_COUNT_WORDS ),
     ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_CHARACTER_COUNT, FIELD_ID_COUNT_CHARACTERS ),
@@ -592,6 +594,7 @@ enum FieldIdEnum XMLTextFieldExport::MapFieldName(
         case FIELD_ID_REFPAGE_SET:
         case FIELD_ID_REFPAGE_GET:
         case FIELD_ID_COUNT_PAGES:
+        case FIELD_ID_COUNT_PAGES_RANGE:
         case FIELD_ID_COUNT_PARAGRAPHS:
         case FIELD_ID_COUNT_WORDS:
         case FIELD_ID_COUNT_CHARACTERS:
@@ -683,6 +686,7 @@ bool XMLTextFieldExport::IsStringField(
         return false;
 
     case FIELD_ID_COUNT_PAGES:
+    case FIELD_ID_COUNT_PAGES_RANGE:
     case FIELD_ID_COUNT_PARAGRAPHS:
     case FIELD_ID_COUNT_WORDS:
     case FIELD_ID_COUNT_CHARACTERS:
@@ -929,6 +933,7 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
     case FIELD_ID_REFPAGE_SET:
     case FIELD_ID_REFPAGE_GET:
     case FIELD_ID_COUNT_PAGES:
+    case FIELD_ID_COUNT_PAGES_RANGE:
     case FIELD_ID_COUNT_PARAGRAPHS:
     case FIELD_ID_COUNT_WORDS:
     case FIELD_ID_COUNT_CHARACTERS:
@@ -1494,9 +1499,24 @@ void XMLTextFieldExport::ExportFieldHelper(
             ProcessNumberingType(GetInt16Property(gsPropertyNumberingType,
                                                   rPropSet));
         }
-        ExportElement(MapCountFieldName(nToken), sPresentation);
+        ExportElement(MapCountFieldName(nToken), sPresentation, XML_NAMESPACE_TEXT);
         break;
 
+    case FIELD_ID_COUNT_PAGES_RANGE:
+        if (GetExport().getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
+        {
+            if (xPropSetInfo->hasPropertyByName(gsPropertyNumberingType))
+            {
+                ProcessNumberingType(GetInt16Property(gsPropertyNumberingType,
+                                                      rPropSet));
+            }
+            ExportElement(MapCountFieldName(nToken), sPresentation, XML_NAMESPACE_LO_EXT);
+        }
+        else
+        {
+              GetExport().Characters(sPresentation);
+        }
+        break;
     case FIELD_ID_CONDITIONAL_TEXT:
         ProcessString(XML_CONDITION, XML_NAMESPACE_OOOW,
                       GetStringProperty(gsPropertyCondition, rPropSet));
@@ -2271,13 +2291,14 @@ void XMLTextFieldExport::ExportElement(enum XMLTokenEnum eElementName,
 }
 
 void XMLTextFieldExport::ExportElement(enum XMLTokenEnum eElementName,
-                                       const OUString& sContent)
+                                       const OUString& sContent,
+                                       sal_uInt16 nNamespace)
 {
     DBG_ASSERT(eElementName != XML_TOKEN_INVALID, "invalid element name!");
     if (eElementName != XML_TOKEN_INVALID)
     {
         // Element
-        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
+        SvXMLElementExport aElem( GetExport(), nNamespace,
                 eElementName, false, false );
         // export content
         GetExport().Characters(sContent);
@@ -3049,6 +3070,9 @@ enum XMLTokenEnum XMLTextFieldExport::MapCountFieldName(FieldIdEnum nToken)
     {
         case FIELD_ID_COUNT_PAGES:
             eElement = XML_PAGE_COUNT;
+            break;
+        case FIELD_ID_COUNT_PAGES_RANGE:
+            eElement = XML_PAGE_COUNT_RANGE;
             break;
         case FIELD_ID_COUNT_PARAGRAPHS:
             eElement = XML_PARAGRAPH_COUNT;

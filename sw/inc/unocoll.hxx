@@ -126,6 +126,7 @@ enum class SwServiceType {
     FieldTypeDocInfoDescription     =  59,
     FieldTypeDocInfoCreateAuthor    =  60,
     FieldTypeDocInfoCreateDateTime  =  61,
+    FieldTypePageCountRange         =  62,
     FieldTypeDummy1                 =  63,
     FieldTypeDummy2                 =  64,
     FieldTypeDummy3                 =  65,
@@ -215,6 +216,7 @@ enum class SwServiceType {
 #define CSS_TEXT_TEXTFIELD_DATABASE_NAME                "com.sun.star.text.textfield.DatabaseName"
 #define CSS_TEXT_TEXTFIELD_TABLE_FORMULA                "com.sun.star.text.textfield.TableFormula"
 #define CSS_TEXT_TEXTFIELD_PAGE_COUNT                   "com.sun.star.text.textfield.PageCount"
+#define CSS_TEXT_TEXTFIELD_PAGE_COUNT_RANGE             "com.sun.star.text.textfield.PageCountRange"
 #define CSS_TEXT_TEXTFIELD_PARAGRAPH_COUNT              "com.sun.star.text.textfield.ParagraphCount"
 #define CSS_TEXT_TEXTFIELD_WORD_COUNT                   "com.sun.star.text.textfield.WordCount"
 #define CSS_TEXT_TEXTFIELD_CHARACTER_COUNT              "com.sun.star.text.textfield.CharacterCount"

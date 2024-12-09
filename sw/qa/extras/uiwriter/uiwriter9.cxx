@@ -19,11 +19,13 @@
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/table/TableBorder2.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
+#include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/text/XParagraphCursor.hpp>
+
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
 #include <comphelper/lok.hxx>
@@ -1182,6 +1184,87 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf164140)
     // Without the fix, this will be non-zero
     auto stAfterKashida = pSI->GetKashidaPositions();
     CPPUNIT_ASSERT_EQUAL(size_t(0), stAfterKashida.size());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf71583)
+{
+    //create a document, multiple pages, some restart page counting
+    // insert page count in section fields and check the calculated
+    // values
+
+    auto insertParagraphAndBreak = [](sal_Int32& nParagraph, SwWrtShell& rWrtSh,
+                                      uno::Reference<lang::XComponent> xComponent,
+                                      const sal_uInt16 nPages) {
+        for (sal_uInt16 nPage = 0; nPage < nPages; ++nPage)
+        {
+            rWrtSh.Insert(u"Paragraph "_ustr);
+            rWrtSh.Insert(OUString::number(nParagraph));
+            ++nParagraph;
+            auto xModel(xComponent.queryThrow<frame::XModel>());
+            auto xFactory(xComponent.queryThrow<lang::XMultiServiceFactory>());
+            auto xTextViewCursorSupplier(
+                xModel->getCurrentController().queryThrow<text::XTextViewCursorSupplier>());
+            auto xTextRangeCursor(
+                xTextViewCursorSupplier->getViewCursor().queryThrow<text::XTextRange>());
+
+            uno::Reference<text::XTextField> xTextField(
+                xFactory->createInstance(u"com.sun.star.text.TextField.PageCountRange"_ustr),
+                uno::UNO_QUERY);
+            xTextRangeCursor->getText()->insertTextContent(xTextRangeCursor, xTextField, false);
+
+            rWrtSh.SttEndDoc(false);
+            rWrtSh.SplitNode();
+            if (nPage < nPages - 1)
+                rWrtSh.InsertPageBreak();
+            else
+            {
+                std::optional<sal_uInt16> oPageNumber = 1;
+                OUString sPageStyle(u"Default Page Style"_ustr);
+                rWrtSh.InsertPageBreak(&sPageStyle, oPageNumber);
+            }
+        }
+    };
+
+    auto checkDocument = [this]() {
+        auto checkFieldContent = [this](uno::Reference<text::XText>& xBodyText, sal_uInt16 nPara,
+                                        rtl::OUString sSymbol) {
+            uno::Reference<text::XTextRange> xPara(getParagraphOfText(nPara, xBodyText));
+            const uno::Reference<text::XTextRange> xRun = getRun(xPara, 2);
+            uno::Reference<text::XTextField> xTextField
+                = getProperty<uno::Reference<text::XTextField>>(xRun, u"TextField"_ustr);
+            OUString sPresentation = xTextField->getPresentation(false);
+            CPPUNIT_ASSERT_EQUAL(sSymbol, sPresentation);
+        };
+
+        auto xModel(mxComponent.queryThrow<text::XTextDocument>());
+        uno::Reference<text::XText> xBodyText = xModel->getText();
+        OUString sCompare = u"B"_ustr;
+
+        for (sal_uInt16 nPara = 1; nPara < 25; nPara += 2)
+        {
+            if (nPara == 5)
+                sCompare = u"D"_ustr;
+            if (nPara == 13)
+                sCompare = u"F"_ustr;
+            checkFieldContent(xBodyText, nPara, sCompare);
+        }
+    };
+    createSwDoc();
+    SwWrtShell* pWrtShell = nullptr;
+    {
+        pWrtShell = getSwDocShell()->GetWrtShell();
+        CPPUNIT_ASSERT(pWrtShell);
+
+        sal_Int32 nParagraph = 0;
+        for (int i = 1; i <= 3; ++i)
+            insertParagraphAndBreak(nParagraph, *pWrtShell, mxComponent, i * 2);
+        checkDocument();
+    }
+
+    {
+        saveAndReload(u"writer8"_ustr);
+        checkDocument();
+    }
 }
 
 } // end of anonymous namespace

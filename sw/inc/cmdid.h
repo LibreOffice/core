@@ -341,6 +341,7 @@ class SwUINumRuleItem;
 #define FN_DELETE_FIELDS (FN_INSERT2 + 40)
 #define FN_DELETE_SECTIONS (FN_INSERT2 + 41)
 #define FN_DELETE_CONTENT_CONTROL (FN_INSERT2 + 42) /* Delete content control formatting */
+#define FN_INSERT_FLD_RANGE_PGCOUNT (FN_INSERT2 + 43) /*insert field page count in range*/
 
 // Region: Format
 #define FN_AUTOFORMAT_APPLY     (FN_FORMAT + 1 ) /* apply autoformat options */

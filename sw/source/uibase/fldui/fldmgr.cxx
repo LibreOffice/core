@@ -196,6 +196,7 @@ const TranslateId FMT_FF_ARY[] =
 const TranslateId FLD_STAT_ARY[] =
 {
     FLD_STAT_PAGE,
+    FLD_STAT_PAGE_RANGE,
     FLD_STAT_PARA,
     FLD_STAT_WORD,
     FLD_STAT_CHAR,

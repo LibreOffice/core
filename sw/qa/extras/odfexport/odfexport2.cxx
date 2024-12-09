@@ -2044,6 +2044,15 @@ CPPUNIT_TEST_FIXTURE(Test, testMsWordUlTrailSpace)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf71583)
+{
+    // Verifies that loext:text-indent correctly round-trips
+    loadAndReload("tdf71583.odt");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    assertXPathNodeName(pXmlDoc, "//office:body/office:text/text:p/*[1]",
+                        "page-count-range");
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

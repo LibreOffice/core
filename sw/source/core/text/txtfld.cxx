@@ -117,7 +117,11 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
         case SwFieldIds::DocStat:
             if (!bName && pSh && !pSh->Imp()->IsUpdateExpFields())
             {
-                static_cast<SwDocStatField*>(pField)->ChangeExpansion(m_pFrame);
+                SwDocStatField* pDocStatField = static_cast<SwDocStatField*>(pField);
+                sal_uInt16 nVirtPageCount = 0;
+                if (pDocStatField->GetSubType() == SwDocStatSubType::DS_PAGE_RANGE)
+                    nVirtPageCount = m_pFrame->GetVirtPageCount();
+                pDocStatField->ChangeExpansion(m_pFrame, nVirtPageCount);
             }
             break;
         case SwFieldIds::PageNumber:

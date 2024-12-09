@@ -157,6 +157,7 @@ const ServiceIdResId aServiceToRes[] =
     {SwFieldIds::Database,           SwServiceType::FieldTypeDatabase              },
     {SwFieldIds::DatabaseName,       SwServiceType::FieldTypeDatabaseName          },
     {SwFieldIds::DocStat,            SwServiceType::FieldTypePageCount             },
+    {SwFieldIds::DocStat,            SwServiceType::FieldTypePageCountRange        },
     {SwFieldIds::DocStat,            SwServiceType::FieldTypeParagraphCount        },
     {SwFieldIds::DocStat,            SwServiceType::FieldTypeWordCount             },
     {SwFieldIds::DocStat,            SwServiceType::FieldTypeCharacterCount        },
@@ -247,6 +248,7 @@ static SwServiceType lcl_GetServiceForField( const SwField& rField )
         {
             switch( rField.GetSubType() )
             {
+            case DS_PAGE_RANGE:nSrvId = SwServiceType::FieldTypePageCountRange; break;
             case DS_PAGE: nSrvId = SwServiceType::FieldTypePageCount; break;
             case DS_PARA: nSrvId = SwServiceType::FieldTypeParagraphCount; break;
             case DS_WORD: nSrvId = SwServiceType::FieldTypeWordCount     ; break;
@@ -357,6 +359,7 @@ static sal_uInt16 lcl_GetPropertyMapOfService( SwServiceType nServiceId )
     case SwServiceType::FieldTypeDatabase: nRet = PROPERTY_MAP_FLDTYP_DATABASE; break;
     case SwServiceType::FieldTypeDatabaseName: nRet = PROPERTY_MAP_FLDTYP_DATABASE_NAME; break;
     case SwServiceType::FieldTypeTableFormula: nRet = PROPERTY_MAP_FLDTYP_TABLE_FORMULA; break;
+    case SwServiceType::FieldTypePageCountRange:
     case SwServiceType::FieldTypePageCount:
     case SwServiceType::FieldTypeParagraphCount:
     case SwServiceType::FieldTypeWordCount:
@@ -1856,6 +1859,7 @@ void SAL_CALL SwXTextField::attach(
             }
             break;
             case SwServiceType::FieldTypePageCount:
+            case SwServiceType::FieldTypePageCountRange:
             case SwServiceType::FieldTypeParagraphCount:
             case SwServiceType::FieldTypeWordCount:
             case SwServiceType::FieldTypeCharacterCount:
@@ -1872,12 +1876,13 @@ void SAL_CALL SwXTextField::attach(
                     case SwServiceType::FieldTypeTableCount           : nSubType = DS_TBL;  break;
                     case SwServiceType::FieldTypeGraphicObjectCount  : nSubType = DS_GRF;  break;
                     case SwServiceType::FieldTypeEmbeddedObjectCount : nSubType = DS_OLE;  break;
+                    case SwServiceType::FieldTypePageCountRange  :     nSubType = DS_PAGE_RANGE; break;
                     default: break;
                 }
                 SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DocStat);
                 xField.reset(new SwDocStatField(
                         static_cast<SwDocStatFieldType*>(pFieldType),
-                        nSubType, m_pImpl->m_pProps->nUSHORT2));
+                        nSubType, m_pImpl->m_pProps->nUSHORT2, m_pImpl->m_pProps->nUSHORT1));
             }
             break;
             case SwServiceType::FieldTypeBibliography:

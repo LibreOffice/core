@@ -4033,7 +4033,6 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
       </rng:attribute>
     </rng:optional>
   </rng:define>
-
   <!-- TODO no proposal for page number on multipage formats -->
   <rng:define name="draw-image-attlist" combine="interleave">
     <rng:optional>
@@ -4041,5 +4040,15 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
         <rng:ref name="integer"/>
       </rng:attribute>
       </rng:optional>
+  </rng:define>
+  <!-- tdf#71583 -->
+  <rng:define name="paragraph-content" combine="choice">
+    <rng:element>
+        <rng:choice>
+            <rng:name>loext:page-count-range</rng:name>
+        </rng:choice>
+        <rng:ref name="common-field-num-format-attlist"/>
+        <rng:text/>
+    </rng:element>
   </rng:define>
 </rng:grammar>

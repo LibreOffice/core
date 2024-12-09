@@ -10,6 +10,7 @@
 <menu:menupopup xmlns:menu="http://openoffice.org/2001/menu">
   <menu:menuitem menu:id=".uno:InsertPageNumberField"/>
   <menu:menuitem menu:id=".uno:InsertPageCountField"/>
+  <menu:menuitem menu:id=".uno:InsertPageCountInRangeField"/>
   <menu:menuitem menu:id=".uno:InsertDateField"/>
   <menu:menuitem menu:id=".uno:InsertDateFieldVar"/>
   <menu:menuitem menu:id=".uno:InsertTimeField"/>

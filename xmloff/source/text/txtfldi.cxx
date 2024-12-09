@@ -383,6 +383,7 @@ XMLTextFieldImportContext::CreateTextFieldImportContext(
         case XML_ELEMENT(TEXT, XML_IMAGE_COUNT):
         case XML_ELEMENT(TEXT, XML_OBJECT_COUNT):
         case XML_ELEMENT(TEXT, XML_PAGE_COUNT):
+        case XML_ELEMENT(LO_EXT, XML_PAGE_COUNT_RANGE):
             pContext = new XMLCountFieldImportContext( rImport, rHlp, nToken);
             break;
 
@@ -2237,6 +2238,9 @@ OUString XMLCountFieldImportContext::MapTokenToServiceName(
             break;
         case XML_ELEMENT(TEXT, XML_PAGE_COUNT):
             pServiceName = "PageCount";
+            break;
+        case XML_ELEMENT(LO_EXT, XML_PAGE_COUNT_RANGE):
+            pServiceName = "PageCountRange";
             break;
         default:
             XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);

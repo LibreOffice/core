@@ -1502,6 +1502,7 @@ namespace xmloff::token {
         TOKEN( "page-content",                    XML_PAGE_CONTENT ),
         TOKEN( "page-continuation-string",        XML_PAGE_CONTINUATION_STRING ),
         TOKEN( "page-count",                      XML_PAGE_COUNT ),
+        TOKEN( "page-count-range",                XML_PAGE_COUNT_RANGE ),
         TOKEN( "page-end-margin",                 XML_PAGE_END_MARGIN ),
         TOKEN( "page-height",                     XML_PAGE_HEIGHT ),
         TOKEN( "page-master",                     XML_PAGE_MASTER ),
