@@ -63,9 +63,8 @@ static ImplFontAttrs lcl_IsCJKFont( std::u16string_view rFontName )
 {
     // Test, if Fontname includes CJK characters --> In this case we
     // mention that it is a CJK font
-    for(size_t i = 0; i < rFontName.size(); i++)
+    for (const sal_Unicode& ch : rFontName)
     {
-        const sal_Unicode ch = rFontName[i];
         // japanese
         if ( ((ch >= 0x3040) && (ch <= 0x30FF)) ||
              ((ch >= 0x3190) && (ch <= 0x319F)) )
