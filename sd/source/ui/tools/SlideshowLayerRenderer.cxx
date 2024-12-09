@@ -159,8 +159,9 @@ OUString getMasterTextFieldType(SdrObject* pObject)
 bool isGroup(SdrObject* pObject) { return pObject->getChildrenOfSdrObject() != nullptr; }
 
 /// Sets visible for all kinds of polypolys in the container
-void changePolyPolys(drawinglayer::primitive2d::Primitive2DContainer& rContainer,
-                     bool bRenderObject)
+void changePolyPolys(
+    drawinglayer::primitive2d::Primitive2DContainer& rContainer, bool bRenderObject,
+    std::vector<drawinglayer::primitive2d::Primitive2DReference>& rPrimitivesToUnhide)
 {
     for (auto& pBasePrimitive : rContainer)
     {
@@ -171,13 +172,16 @@ void changePolyPolys(drawinglayer::primitive2d::Primitive2DContainer& rContainer
             || pBasePrimitive->getPrimitive2DID() == PRIMITIVE2D_ID_POLYPOLYGONHAIRLINEPRIMITIVE2D)
         {
             pBasePrimitive->setVisible(bRenderObject);
+            if (!bRenderObject)
+                rPrimitivesToUnhide.push_back(pBasePrimitive);
         }
     }
 }
 
 /// Searches for rectangle primitive and changes if the background should be rendered
-void changeBackground(drawinglayer::primitive2d::Primitive2DContainer const& rContainer,
-                      bool bRenderObject)
+void changeBackground(
+    drawinglayer::primitive2d::Primitive2DContainer const& rContainer, bool bRenderObject,
+    std::vector<drawinglayer::primitive2d::Primitive2DReference>& rPrimitivesToUnhide)
 {
     for (size_t i = 0; i < rContainer.size(); i++)
     {
@@ -187,7 +191,7 @@ void changeBackground(drawinglayer::primitive2d::Primitive2DContainer const& rCo
             drawinglayer::primitive2d::Primitive2DContainer aPrimitiveContainer;
             pBasePrimitive->get2DDecomposition(aPrimitiveContainer,
                                                drawinglayer::geometry::ViewInformation2D());
-            changePolyPolys(aPrimitiveContainer, bRenderObject);
+            changePolyPolys(aPrimitiveContainer, bRenderObject, rPrimitivesToUnhide);
         }
     }
 }
@@ -250,9 +254,11 @@ findTextBlock(drawinglayer::primitive2d::Primitive2DContainer const& rContainer,
 }
 
 /// show/hide paragraphs in the container
-void modifyParagraphs(drawinglayer::primitive2d::Primitive2DContainer& rContainer,
-                      drawinglayer::geometry::ViewInformation2D const& rViewInformation2D,
-                      std::deque<sal_Int32> const& rPreserveIndices, bool bRenderObject)
+void modifyParagraphs(
+    drawinglayer::primitive2d::Primitive2DContainer& rContainer,
+    drawinglayer::geometry::ViewInformation2D const& rViewInformation2D,
+    std::deque<sal_Int32> const& rPreserveIndices, bool bRenderObject,
+    std::vector<drawinglayer::primitive2d::Primitive2DReference>& rPrimitivesToUnhide)
 {
     auto* pTextBlock = findTextBlock(rContainer, rViewInformation2D);
 
@@ -277,11 +283,13 @@ void modifyParagraphs(drawinglayer::primitive2d::Primitive2DContainer& rContaine
                 bool bHideIndex = aIterator == rPreserveIndices.end();
 
                 pParagraphPrimitive2d.setVisible(!bHideIndex);
+                if (bHideIndex)
+                    rPrimitivesToUnhide.push_back(pPrimitive);
             }
             nIndex++;
         }
 
-        changeBackground(rContainer, bRenderObject);
+        changeBackground(rContainer, bRenderObject, rPrimitivesToUnhide);
     }
 }
 
@@ -558,8 +566,10 @@ public:
             auto const& rViewInformation2D = rOriginal.GetObjectContact().getViewInformation2D();
             auto rContainer
                 = static_cast<drawinglayer::primitive2d::Primitive2DContainer&>(rVisitor);
+
             modifyParagraphs(rContainer, rViewInformation2D, rParagraphs,
-                             mrRenderPass.mbRenderObjectBackground);
+                             mrRenderPass.mbRenderObjectBackground,
+                             mrRenderState.maPrimitivesToUnhide);
         }
     }
 };
@@ -999,8 +1009,10 @@ bool SlideshowLayerRenderer::render(unsigned char* pBuffer, bool& bIsBitmapLayer
     else
     {
         if (maRenderState.maRenderPasses.empty())
+        {
+            cleanup();
             return false;
-
+        }
         auto const& rRenderPass = maRenderState.maRenderPasses.front();
         maRenderState.meStage = rRenderPass.meStage;
 
@@ -1017,6 +1029,14 @@ bool SlideshowLayerRenderer::render(unsigned char* pBuffer, bool& bIsBitmapLayer
     }
 
     return true;
+}
+
+void SlideshowLayerRenderer::cleanup()
+{
+    for (auto& pPrimitive : maRenderState.maPrimitivesToUnhide)
+    {
+        pPrimitive->setVisible(true);
+    }
 }
 
 } // end of namespace sd
