@@ -24,9 +24,6 @@
 
 #include <factory.hxx>
 
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-
 extern "C" {
 
     VCL_DLLPUBLIC void* vcl_component_getFactory(
@@ -37,10 +34,10 @@ extern "C" {
         if (!pXUnoSMgr)
             return nullptr;
 
-        Reference< css::lang::XMultiServiceFactory > xMgr(
+        css::uno::Reference<css::lang::XMultiServiceFactory> xMgr(
             static_cast<css::lang::XMultiServiceFactory*>(pXUnoSMgr));
 
-        Reference< css::lang::XSingleServiceFactory > xFactory;
+        css::uno::Reference<css::lang::XSingleServiceFactory> xFactory;
 
         if( vcl::DragSource_getImplementationName().equalsAscii( pImplementationName ) )
         {
