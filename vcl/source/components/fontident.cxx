@@ -36,17 +36,12 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::awt;
-
 namespace vcl
 {
 
 namespace {
 
-class FontIdentificator : public ::cppu::WeakImplHelper< XMaterialHolder, XInitialization, XServiceInfo >
+class FontIdentificator : public ::cppu::WeakImplHelper<css::beans::XMaterialHolder, css::lang::XInitialization, css::lang::XServiceInfo>
 {
     Font        m_aFont;
 public:
@@ -55,24 +50,24 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ) override;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const Sequence< Any >& ) override;
+    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>&) override;
 
     // XMaterialHolder
-    virtual Any SAL_CALL getMaterial() override;
+    virtual css::uno::Any SAL_CALL getMaterial() override;
 
 };
 
 }
 
-void SAL_CALL FontIdentificator::initialize( const Sequence<Any>& i_rArgs )
+void SAL_CALL FontIdentificator::initialize(const css::uno::Sequence<css::uno::Any>& i_rArgs)
 {
     if( !ImplGetSVData() )
         return; // VCL not initialized
 
-    Sequence< sal_Int8 > aFontBuf;
+    css::uno::Sequence<sal_Int8> aFontBuf;
     for( const auto& rArg : i_rArgs )
     {
         if( rArg >>= aFontBuf )
@@ -83,12 +78,12 @@ void SAL_CALL FontIdentificator::initialize( const Sequence<Any>& i_rArgs )
     }
 }
 
-Any SAL_CALL FontIdentificator::getMaterial()
+css::uno::Any SAL_CALL FontIdentificator::getMaterial()
 {
     if( !ImplGetSVData() )
-        return Any(); // VCL not initialized
+        return css::uno::Any(); // VCL not initialized
 
-    FontDescriptor aFD;
+    css::awt::FontDescriptor aFD;
     aFD.Name                = m_aFont.GetFamilyName();
     aFD.Height              = 0;
     aFD.Width               = 0;
@@ -145,7 +140,7 @@ Any SAL_CALL FontIdentificator::getMaterial()
         aFD.Slant = css::awt::FontSlant_DONTKNOW;
         break;
     }
-    return Any( aFD );
+    return css::uno::Any( aFD );
 }
 
 // XServiceInfo
@@ -159,7 +154,7 @@ sal_Bool SAL_CALL FontIdentificator::supportsService( const OUString& i_rService
     return cppu::supportsService(this, i_rServiceName);
 }
 
-Sequence< OUString > SAL_CALL FontIdentificator::getSupportedServiceNames()
+css::uno::Sequence<OUString> SAL_CALL FontIdentificator::getSupportedServiceNames()
 {
     return { u"com.sun.star.awt.FontIdentificator"_ustr };
 }
