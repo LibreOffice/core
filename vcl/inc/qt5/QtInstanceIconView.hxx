@@ -28,10 +28,10 @@ public:
     virtual int get_item_width() const override;
     virtual void set_item_width(int width) override;
 
-    virtual void insert(int pos, const OUString* pStr, const OUString* pId,
+    virtual void insert(int nPos, const OUString* pStr, const OUString* pId,
                         const OUString* pIconName, weld::TreeIter* pRet) override;
 
-    virtual void insert(int pos, const OUString* pStr, const OUString* pId,
+    virtual void insert(int nPos, const OUString* pStr, const OUString* pId,
                         const VirtualDevice* pIcon, weld::TreeIter* pRet) override;
 
     virtual void insert_separator(int pos, const OUString* pId) override;
@@ -45,7 +45,7 @@ public:
     virtual OUString get_selected_text() const override;
 
     virtual OUString get_id(int pos) const override;
-    virtual void select(int pos) override;
+    virtual void select(int nPos) override;
     virtual void unselect(int pos) override;
     virtual void set_image(int pos, VirtualDevice* pDevice) override;
     virtual void set_text(int pos, const OUString& rText) override;

@@ -12,6 +12,9 @@
 
 #include <vcl/qt/QtUtils.hxx>
 
+// role used for the ID in the QStandardItem
+constexpr int ROLE_ID = Qt::UserRole + 1000;
+
 QtInstanceIconView::QtInstanceIconView(QListView* pListView)
     : QtInstanceWidget(pListView)
     , m_pListView(pListView)
@@ -43,10 +46,28 @@ void QtInstanceIconView::insert(int, const OUString*, const OUString*, const OUS
     assert(false && "Not implemented yet");
 }
 
-void QtInstanceIconView::insert(int, const OUString*, const OUString*, const VirtualDevice*,
-                                weld::TreeIter*)
+void QtInstanceIconView::insert(int nPos, const OUString* pStr, const OUString* pId,
+                                const VirtualDevice* pIcon, weld::TreeIter* pRet)
 {
-    assert(false && "Not implemented yet");
+    assert(!pRet && "Support for pRet param not implemented yet");
+    (void)pRet;
+
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        if (nPos == -1)
+            nPos = m_pModel->rowCount();
+
+        QStandardItem* pItem = new QStandardItem;
+        if (pStr)
+            pItem->setText(toQString(*pStr));
+        if (pId)
+            pItem->setData(toQString(*pId), ROLE_ID);
+        if (pIcon)
+            pItem->setIcon(QIcon(toQPixmap(*pIcon)));
+
+        m_pModel->insertRow(nPos, pItem);
+    });
 }
 
 void QtInstanceIconView::insert_separator(int, const OUString*)
@@ -56,11 +77,28 @@ void QtInstanceIconView::insert_separator(int, const OUString*)
 
 OUString QtInstanceIconView::get_selected_id() const
 {
-    assert(false && "Not implemented yet");
-    return OUString();
+    SolarMutexGuard g;
+
+    OUString sId;
+    GetQtInstance().RunInMainThread([&] {
+        const QModelIndexList aSelectedIndexes = m_pSelectionModel->selectedIndexes();
+        if (aSelectedIndexes.empty())
+            return;
+
+        QVariant aIdData = aSelectedIndexes.first().data(ROLE_ID);
+        if (aIdData.canConvert<QString>())
+            sId = toOUString(aIdData.toString());
+    });
+
+    return sId;
 }
 
-void QtInstanceIconView::clear() { assert(false && "Not implemented yet"); }
+void QtInstanceIconView::clear()
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] { m_pModel->clear(); });
+}
 
 int QtInstanceIconView::count_selected_items() const
 {
@@ -80,7 +118,12 @@ OUString QtInstanceIconView::get_id(int) const
     return OUString();
 }
 
-void QtInstanceIconView::select(int) { assert(false && "Not implemented yet"); }
+void QtInstanceIconView::select(int nPos)
+{
+    SolarMutexGuard g;
+    GetQtInstance().RunInMainThread(
+        [&] { m_pSelectionModel->select(m_pModel->index(nPos, 0), QItemSelectionModel::Select); });
+}
 
 void QtInstanceIconView::unselect(int) { assert(false && "Not implemented yet"); }
 
@@ -157,8 +200,12 @@ void QtInstanceIconView::selected_foreach(const std::function<bool(weld::TreeIte
 
 int QtInstanceIconView::n_children() const
 {
-    assert(false && "Not implemented yet");
-    return 0;
+    SolarMutexGuard g;
+
+    int nChildren = 0;
+    GetQtInstance().RunInMainThread([&] { nChildren = m_pModel->rowCount(); });
+
+    return nChildren;
 }
 
 void QtInstanceIconView::handleActivated()
