@@ -1161,7 +1161,7 @@ void Test::testIsNumberFormat()
         { "Sept 1", true }, //tdf#127363
         { "5/d", false }, //tdf#143165
         { "Jan 1 2000", true },
-        { "5-12-14", false },
+        { "5-12-14", true }, // tdf#164239
         { "005-12-14", true },
         { "15-10-30", true },
         { "2015-10-30", true },
@@ -1223,26 +1223,28 @@ void checkSpecificNumberFormats( SvNumberFormatter& rFormatter,
 void Test::testIsNumberFormatSpecific()
 {
     {
-        // en-US uses M/D/Y format, test that a-b-c input with a<=31 and b<=12
-        // does not lead to a/b/c date output
+        // en-US uses M/D/Y format, test that without Y-M-D pattern an a-b-c
+        // input with a<=12 leads to ISO a-b-c date output.
         SvNumberFormatter aFormatter(m_xContext, LANGUAGE_ENGLISH_US);
 
         std::vector<FormatInputOutput> aIO = {
-            {  "5-12-14", false, "", 0 },
-            { "32-12-14",  true, "1932-12-14", 0 }
+            { "005-12-14", true, "0005-12-14", 0 },
+            {   "5-12-14", true, "2005-12-14", 0 },
+            {  "32-12-14", true, "1932-12-14", 0 }
         };
 
         checkSpecificNumberFormats( aFormatter, aIO, "[en-US] date");
     }
 
     {
-        // de-DE uses D.M.Y format, test that a-b-c input with a<=31 and b<=12
-        // does not lead to a.b.c date output
+        // de-DE uses D.M.Y format, test that without Y-M-D pattern an a-b-c
+        // input with a<=31 leads to ISO a-b-c date output.
         SvNumberFormatter aFormatter(m_xContext, LANGUAGE_GERMAN);
 
         std::vector<FormatInputOutput> aIO = {
-            {  "5-12-14", false, "", 0 },
-            { "32-12-14",  true, "1932-12-14", 0 }
+            { "005-12-14", true, "0005-12-14", 0 },
+            {   "5-12-14", true, "2005-12-14", 0 },
+            {  "32-12-14", true, "1932-12-14", 0 }
         };
 
         checkSpecificNumberFormats( aFormatter, aIO, "[de-DE] date");
@@ -1254,6 +1256,7 @@ void Test::testIsNumberFormatSpecific()
         SvNumberFormatter aFormatter(m_xContext, LANGUAGE_DUTCH);
 
         std::vector<FormatInputOutput> aIO = {
+            { "001-2-11",   true, "0001-02-11", 0 },
             { "22-11-1999", true, "22-11-99", 0 },      // if default YY changes to YYYY adapt this
             { "1999-11-22", true, "1999-11-22", 0 },
             { "1-2-11",     true, "01-02-11", 0 },      // if default YY changes to YYYY adapt this
