@@ -780,6 +780,11 @@ bool AbstractSwPageNumberDlg_Impl::GetIncludePageTotal() const
     return m_xDlg->GetIncludePageTotal();
 }
 
+bool AbstractSwPageNumberDlg_Impl::GetIncludePageRangeTotal() const
+{
+    return m_xDlg->GetIncludePageRangeTotal();
+}
+
 SvxNumType AbstractSwPageNumberDlg_Impl::GetPageNumberType() const
 {
     return m_xDlg->GetPageNumberType();

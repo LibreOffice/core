@@ -1754,6 +1754,16 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf163703)
     CPPUNIT_ASSERT_EQUAL(css::awt::FontSlant_NONE,
                          getProperty<css::awt::FontSlant>(x3rdRun, u"CharPosture"_ustr));
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf71583)
+{
+    // Verifies that loext:text-indent correctly round-trips
+    loadAndReload("tdf71583.odt");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    assertXPathNodeName(pXmlDoc, "//office:body/office:text/text:p/*[1]",
+                        "page-count-range");
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

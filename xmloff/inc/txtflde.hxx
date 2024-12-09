@@ -108,6 +108,8 @@ enum FieldIdEnum {
     FIELD_ID_COUNT_WORDS,           //                    - words
     FIELD_ID_COUNT_CHARACTERS,      //                    - chars
     FIELD_ID_COUNT_PAGES,           //                    - pages
+    FIELD_ID_COUNT_PAGES_RANGE,     //                    - pages in range
+
     FIELD_ID_COUNT_TABLES,          //                    - tables
     FIELD_ID_COUNT_GRAPHICS,        //                    - graphics
     FIELD_ID_COUNT_OBJECTS,         //                    - objects
@@ -227,7 +229,8 @@ private:
 
     /// export an element with string content
     void ExportElement(enum ::xmloff::token::XMLTokenEnum eElement, /// element token
-                       const OUString& sContent); /// element content
+                       const OUString& sContent,
+                       sal_uInt16 nNamespace = XML_NAMESPACE_TEXT); /// element content
 
     /// export a macro (as used in the macro field)
     void ExportMacro( const css::uno::Reference< css::beans::XPropertySet> & rPropSet,

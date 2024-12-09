@@ -52,12 +52,14 @@ enum SwDocStatSubType
 {
     DS_BEGIN,
     DS_PAGE = DS_BEGIN,
+    // page count in current range
+    DS_PAGE_RANGE,
     DS_PARA,
     DS_WORD,
     DS_CHAR,
     DS_TBL,
     DS_GRF,
-    DS_OLE,
+    DS_OLE
 };
 
 typedef sal_uInt16  SwDocInfoSubType;
@@ -256,21 +258,24 @@ class SAL_DLLPUBLIC_RTTI SwDocStatFieldType final : public SwFieldType
 
 public:
     SwDocStatFieldType(SwDoc&);
-    OUString                Expand(sal_uInt16 nSubType, SvxNumType nFormat) const;
+    OUString                Expand(sal_uInt16 nSubType, SvxNumType nFormat,
+        sal_uInt16 nVirtPageCount) const;
     virtual std::unique_ptr<SwFieldType> Copy() const override;
 
     void             SetNumFormat( SvxNumType eFormat )  { m_nNumberingType = eFormat; }
+    void             UpdateRangeFields(SwRootFrame const*const pLayout);
 };
 
 class SW_DLLPUBLIC SwDocStatField final : public SwField
 {
     sal_uInt16 m_nSubType;
+    sal_uInt16 m_nVirtPageCount;
 
 public:
     SwDocStatField( SwDocStatFieldType*,
-                    sal_uInt16 nSubType, sal_uInt32 nFormat);
+                    sal_uInt16 nSubType, sal_uInt32 nFormat, sal_uInt16 nVirtPageCount = 0);
 
-    void ChangeExpansion( const SwFrame* pFrame );
+    void ChangeExpansion( const SwFrame* pFrame, sal_uInt16 nVirtPageCount);
 
     virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;

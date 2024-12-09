@@ -306,6 +306,7 @@ inline constexpr OUString UNO_NAME_NUMBERING_TYPE = u"NumberingType"_ustr;
 inline constexpr OUString UNO_NAME_OFFSET = u"Offset"_ustr;
 inline constexpr OUString UNO_NAME_ON = u"On"_ustr;
 inline constexpr OUString UNO_NAME_OPAQUE = u"Opaque"_ustr;
+inline constexpr OUString UNO_NAME_PAGE_COUNT_RANGE = u"PageCountRange"_ustr;
 inline constexpr OUString UNO_NAME_PAGE_TOGGLE = u"PageToggle"_ustr;
 inline constexpr OUString UNO_NAME_PAGE_DESC_NAME = u"PageDescName"_ustr;
 inline constexpr OUString UNO_NAME_PAGE_NUMBER_OFFSET = u"PageNumberOffset"_ustr;

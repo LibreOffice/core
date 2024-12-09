@@ -1859,6 +1859,31 @@ Point SwFrame::GetRelPos() const
     return aRet;
 }
 
+static const SwFrame* lcl_FindStartOfVirtualPages(const SwPageFrame *pPage)
+{
+    const SwPageFrame* pPageFrameIter = pPage;
+    while (pPageFrameIter)
+    {
+        const SwContentFrame* pContentFrame = pPageFrameIter->FindFirstBodyContent();
+        if (pContentFrame)
+        {
+            const SwFormatPageDesc& rFormatPageDesc = pContentFrame->GetPageDescItem();
+
+            if ( rFormatPageDesc.GetNumOffset() && rFormatPageDesc.GetDefinedIn() )
+            {
+                const sw::BroadcastingModify* pMod = rFormatPageDesc.GetDefinedIn();
+                sw::VirtPageNumHint aHint(pPage);
+                pMod->CallSwClientNotify(aHint);
+                if(aHint.GetPage())
+                {
+                    return aHint.GetFrame();
+                }
+            }
+        }
+        pPageFrameIter = static_cast<const SwPageFrame*>(pPageFrameIter->GetPrev());
+    }
+    return nullptr;
+}
 /** @return the virtual page number with the offset. */
 sal_uInt16 SwFrame::GetVirtPageNum() const
 {
@@ -1867,52 +1892,59 @@ sal_uInt16 SwFrame::GetVirtPageNum() const
         return 0;
 
     sal_uInt16 nPhyPage = pPage->GetPhyPageNum();
-    if ( !static_cast<const SwRootFrame*>(pPage->GetUpper())->IsVirtPageNum() )
+    const SwRootFrame* pRootFrame = static_cast<const SwRootFrame*>(pPage->GetUpper());
+    if ( !pRootFrame->IsVirtPageNum() )
         return nPhyPage;
 
     //Search the nearest section using the virtual page number.
-    //Because searching backwards needs a lot of time we search specific using
-    //the dependencies. From the PageDescs we get the attributes and from the
-    //attributes we get the sections.
-    const SwPageFrame *pVirtPage = nullptr;
-    const SwFrame *pFrame = nullptr;
-    const SfxItemPool &rPool = pPage->GetFormat()->GetDoc()->GetAttrPool();
-    ItemSurrogates aSurrogates;
-    rPool.GetItemSurrogates(aSurrogates, RES_PAGEDESC);
-    for (const SfxPoolItem* pItem : aSurrogates)
+    const SwFrame *pFoundFrame = lcl_FindStartOfVirtualPages(pPage);
+    if ( pFoundFrame )
     {
-        const SwFormatPageDesc *pDesc = dynamic_cast<const SwFormatPageDesc*>(pItem);
-        if ( !pDesc )
-            continue;
-
-        if ( pDesc->GetNumOffset() && pDesc->GetDefinedIn() )
-        {
-            auto pMod = pDesc->GetDefinedIn();
-            sw::VirtPageNumHint aHint(pPage);
-            pMod->CallSwClientNotify(aHint);
-            if(aHint.GetPage())
-            {
-                if(!pVirtPage || aHint.GetPage()->GetPhyPageNum() > pVirtPage->GetPhyPageNum())
-                {
-                    pVirtPage = aHint.GetPage();
-                    pFrame = aHint.GetFrame();
-                }
-            }
-        }
-    }
-    if ( pFrame )
-    {
-        ::std::optional<sal_uInt16> oNumOffset = pFrame->GetPageDescItem().GetNumOffset();
+        ::std::optional<sal_uInt16> oNumOffset = pFoundFrame->GetPageDescItem().GetNumOffset();
         if (oNumOffset)
         {
-            return nPhyPage - pFrame->GetPhyPageNum() + *oNumOffset;
+            return nPhyPage - pFoundFrame->GetPhyPageNum() + *oNumOffset;
         }
         else
         {
-            return nPhyPage - pFrame->GetPhyPageNum();
+            return nPhyPage - pFoundFrame->GetPhyPageNum();
         }
     }
     return nPhyPage;
+}
+
+sal_uInt16 SwFrame::GetVirtPageCount() const
+{
+    const SwPageFrame *pPage = FindPageFrame();
+    if ( !pPage || !pPage->GetUpper() )
+        return 0;
+
+    const SwRootFrame* pRootFrame = static_cast<const SwRootFrame*>(pPage->GetUpper());
+    if ( !pRootFrame->IsVirtPageNum() )
+        return pRootFrame->GetPageNum();
+
+    //Search the nearest section using the virtual page number and the nearest
+    //follower without a virtual page number.
+    const SwFrame *pFoundFrame = lcl_FindStartOfVirtualPages(pPage);
+    const SwPageFrame* pEndPage = pPage;
+    const SwPageFrame* pPageFrameIter = static_cast<const SwPageFrame*>(pPage->GetNext());;
+    while (pPageFrameIter)
+    {
+        const SwContentFrame* pContentFrame = pPageFrameIter->FindFirstBodyContent();
+        if (pContentFrame)
+        {
+            const SwFormatPageDesc& rFormatPageDesc = pContentFrame->GetPageDescItem();
+
+            if ( rFormatPageDesc.GetNumOffset() && rFormatPageDesc.GetDefinedIn() )
+                break;
+            else
+                pEndPage = pPageFrameIter;
+        }
+        pPageFrameIter = static_cast<const SwPageFrame*>(pPageFrameIter->GetNext());
+    }
+    sal_uInt16 nStartPage = pFoundFrame ? pFoundFrame->GetPhyPageNum() : 1;
+    return pEndPage->GetPhyPageNum() - nStartPage + 1;
+    return 1;
 }
 
 /** Determines and sets those cells which are enclosed by the selection. */

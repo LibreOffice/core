@@ -1281,8 +1281,17 @@ void DocumentFieldsManager::UpdatePageFields(const SwTwips nDocPos)
             pFieldType->UpdateDocPos(nDocPos);
             break;
         case SwFieldIds::DocStat:
+        {
             pFieldType->CallSwClientNotify(sw::LegacyModifyHint(nullptr, nullptr));
-            break;
+            SwRootFrame const* pLayout(nullptr);
+            for (SwRootFrame const*const pLay : m_rDoc.GetAllLayouts())
+            {
+                if (!pLay->IsHideRedlines())
+                    pLayout = pLay;
+            }
+            static_cast<SwDocStatFieldType*>(pFieldType)->UpdateRangeFields(pLayout);
+        }
+        break;
         case SwFieldIds::GetRef:
             static_cast<SwGetRefFieldType*>(pFieldType)->UpdateStyleReferences();
             // Style references can vary across different pages (e.g. in header/footer)

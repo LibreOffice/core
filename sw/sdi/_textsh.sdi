@@ -956,6 +956,22 @@ interface BaseText
         ReadOnlyDoc = FALSE ;
     ]
 
+    FN_INSERT_FLD_RANGE_PGCOUNT
+    [
+        ExecMethod = ExecField ;
+        StateMethod = StateField ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+        ReadOnlyDoc = FALSE ;
+    ]
+
+    FN_INSERT_FLD_RANGE_PGCOUNT
+    [
+        ExecMethod = ExecField ;
+        StateMethod = StateField ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+        ReadOnlyDoc = FALSE ;
+    ]
+
     FN_INSERT_FLD_TITLE
     [
         ExecMethod = ExecField ;

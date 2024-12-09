@@ -733,7 +733,8 @@ SwDocStatFieldType::SwDocStatFieldType(SwDoc& rDocument)
 {
 }
 
-OUString SwDocStatFieldType::Expand(sal_uInt16 nSubType, SvxNumType nFormat) const
+OUString SwDocStatFieldType::Expand(sal_uInt16 nSubType,
+    SvxNumType nFormat, sal_uInt16 nVirtPageCount) const
 {
     sal_uInt32 nVal = 0;
     const SwDocStat& rDStat = m_rDoc.getIDocumentStatistics().GetDocStat();
@@ -752,6 +753,11 @@ OUString SwDocStatFieldType::Expand(sal_uInt16 nSubType, SvxNumType nFormat) con
             if( SVX_NUM_PAGEDESC == nFormat )
                 nFormat = m_nNumberingType;
             break;
+        case DS_PAGE_RANGE:
+            nVal = nVirtPageCount;
+            if( SVX_NUM_PAGEDESC == nFormat )
+                nFormat = m_nNumberingType;
+            break;
         default:
             OSL_FAIL( "SwDocStatFieldType::Expand: unknown SubType" );
     }
@@ -766,26 +772,56 @@ std::unique_ptr<SwFieldType> SwDocStatFieldType::Copy() const
 {
     return std::make_unique<SwDocStatFieldType>(m_rDoc);
 }
+void SwDocStatFieldType::UpdateRangeFields(SwRootFrame const*const pLayout)
+{
+    std::vector<SwFormatField*> vFields;
+    GatherFields(vFields);
+    for(auto pFormatField: vFields)
+    {
+        SwDocStatField* pDocStatField = static_cast<SwDocStatField*>(pFormatField->GetField());
+        if (pDocStatField->GetSubType() == DS_PAGE_RANGE)
+        {
+            SwTextField* pTField = pFormatField->GetTextField();
+            const SwTextNode& rTextNd = pTField->GetTextNode();
 
+            // Always the first! (in Tab-Headline, header/footer )
+            Point aPt;
+            std::pair<Point, bool> const tmp(aPt, false);
+            const SwContentFrame *const pFrame = rTextNd.getLayoutFrame(
+                pLayout, nullptr, &tmp);
+
+            if (pFrame &&
+                pFrame->IsInDocBody() &&
+                pFrame->FindPageFrame())
+            {
+                pDocStatField->ChangeExpansion(pFrame, pFrame->GetVirtPageCount());
+            }
+        }
+    }
+}
 /**
  * @param pTyp
  * @param nSub SubType
  * @param nFormat
  */
-SwDocStatField::SwDocStatField(SwDocStatFieldType* pTyp, sal_uInt16 nSub, sal_uInt32 nFormat)
+SwDocStatField::SwDocStatField(SwDocStatFieldType* pTyp, sal_uInt16 nSub,
+    sal_uInt32 nFormat, sal_uInt16 nVirtPageCount)
     : SwField(pTyp, nFormat),
-    m_nSubType(nSub)
-{}
+    m_nSubType(nSub),
+    m_nVirtPageCount(nVirtPageCount)
+{
+}
 
 OUString SwDocStatField::ExpandImpl(SwRootFrame const*const) const
 {
-    return static_cast<SwDocStatFieldType*>(GetTyp())->Expand(m_nSubType, static_cast<SvxNumType>(GetFormat()));
+    return static_cast<SwDocStatFieldType*>(GetTyp())
+        ->Expand(m_nSubType, static_cast<SvxNumType>(GetFormat()), m_nVirtPageCount);
 }
 
 std::unique_ptr<SwField> SwDocStatField::Copy() const
 {
     return std::make_unique<SwDocStatField>(
-                    static_cast<SwDocStatFieldType*>(GetTyp()), m_nSubType, GetFormat() );
+        static_cast<SwDocStatFieldType*>(GetTyp()), m_nSubType, GetFormat(), m_nVirtPageCount );
 }
 
 sal_uInt16 SwDocStatField::GetSubType() const
@@ -798,11 +834,13 @@ void SwDocStatField::SetSubType(sal_uInt16 nSub)
     m_nSubType = nSub;
 }
 
-void SwDocStatField::ChangeExpansion( const SwFrame* pFrame )
+void SwDocStatField::ChangeExpansion(const SwFrame* pFrame, sal_uInt16 nVirtPageCount)
 {
     if( DS_PAGE == m_nSubType && SVX_NUM_PAGEDESC == GetFormat() )
         static_cast<SwDocStatFieldType*>(GetTyp())->SetNumFormat(
                 pFrame->FindPageFrame()->GetPageDesc()->GetNumType().GetNumberingType() );
+    else if (nVirtPageCount && DS_PAGE_RANGE == m_nSubType)
+        m_nVirtPageCount = nVirtPageCount;
 }
 
 bool SwDocStatField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
@@ -811,6 +849,9 @@ bool SwDocStatField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     {
     case FIELD_PROP_USHORT2:
         rAny <<= static_cast<sal_Int16>(GetFormat());
+        break;
+    case FIELD_PROP_USHORT1:
+        rAny <<= static_cast<sal_Int32>(m_nVirtPageCount);
         break;
 
     default:
@@ -833,6 +874,17 @@ bool SwDocStatField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
                     nSet != SVX_NUM_BITMAP)
             {
                 SetFormat(nSet);
+                bRet = true;
+            }
+        }
+        break;
+    case FIELD_PROP_USHORT1:
+        {
+            sal_Int32 nSet = 0;
+            rAny >>= nSet;
+            if (nSet >= 0 && nSet < USHRT_MAX)
+            {
+                m_nVirtPageCount = static_cast<sal_uInt16>(nSet);
                 bRet = true;
             }
         }

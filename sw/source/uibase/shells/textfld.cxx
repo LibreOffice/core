@@ -761,8 +761,9 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             bIsText = false;
             goto FIELD_INSERT;
         case FN_INSERT_FLD_PGCOUNT :
+        case FN_INSERT_FLD_RANGE_PGCOUNT:
             nInsertType = SwFieldTypesEnum::DocumentStatistics;
-            nInsertSubType = 0;
+            nInsertSubType = FN_INSERT_FLD_RANGE_PGCOUNT == nSlot ? 1 : 0;
             bIsText = false;
             nInsertFormat = SVX_NUM_PAGEDESC;
             goto FIELD_INSERT;
@@ -1306,11 +1307,14 @@ FIELD_INSERT:
                 SwInsertField_Data aData(SwFieldTypesEnum::PageNumber, 0,
                             OUString(), OUString(), SVX_NUM_PAGEDESC);
                 aMgr.InsertField(aData);
-                if (pDlg->GetIncludePageTotal())
+                if (pDlg->GetIncludePageTotal() ||
+                    pDlg->GetIncludePageRangeTotal())
                 {
                     rDoc->getIDocumentContentOperations().InsertString(*rSh.GetCursor(), u" / "_ustr);
-                    SwInsertField_Data aPageTotalData(SwFieldTypesEnum::DocumentStatistics, DS_PAGE,
-                                                      OUString(), OUString(), SVX_NUM_PAGEDESC);
+                    SwInsertField_Data aPageTotalData(SwFieldTypesEnum::DocumentStatistics,
+                        pDlg->GetIncludePageTotal() ? DS_PAGE : DS_PAGE_RANGE,
+                        OUString(), OUString(), SVX_NUM_PAGEDESC);
+
                     aMgr.InsertField(aPageTotalData);
                 }
 
@@ -1641,6 +1645,7 @@ void SwTextShell::StateField( SfxItemSet &rSet )
         case FN_INSERT_FLD_AUTHOR:
         case FN_INSERT_FLD_DATE:
         case FN_INSERT_FLD_PGCOUNT:
+        case FN_INSERT_FLD_RANGE_PGCOUNT:
         case FN_INSERT_FLD_PGNUMBER:
         case FN_INSERT_FLD_TIME:
         case FN_INSERT_FLD_TITLE:

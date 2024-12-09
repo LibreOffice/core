@@ -742,6 +742,7 @@ public:
 
     sal_uInt16 GetPhyPageNum() const;   // page number without offset
     SW_DLLPUBLIC sal_uInt16 GetVirtPageNum() const;  // page number with offset
+    SW_DLLPUBLIC sal_uInt16 GetVirtPageCount() const;  // page count between offsets
     bool OnRightPage() const { return 0 != GetPhyPageNum() % 2; };
     bool WannaRightPage() const;
     bool OnFirstPage() const;

@@ -133,7 +133,8 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
         CallSwClientNotify(rHint);
         return;
     }
-    else if (rHint.GetId() == SfxHintId::SwVirtPageNumHint)
+    else if (rHint.GetId() == SfxHintId::SwVirtPageNumHint)// ||
+        //rHint.GetId() == SfxHintId::SwVirtPageCountHint)
     {
         CallSwClientNotify(rHint);
         return;

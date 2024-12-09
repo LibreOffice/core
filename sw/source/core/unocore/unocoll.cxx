@@ -346,7 +346,7 @@ const ProvNamesId_Type aProvNamesId[] =
     { "com.sun.star.text.TextField.DocInfo.Description",      SwServiceType::FieldTypeDocInfoDescription },
     { "com.sun.star.text.TextField.DocInfo.CreateAuthor",     SwServiceType::FieldTypeDocInfoCreateAuthor },
     { "com.sun.star.text.TextField.DocInfo.CreateDateTime",   SwServiceType::FieldTypeDocInfoCreateDateTime },
-    { "",                                                     SwServiceType::FieldTypeDummy0 },
+    { "com.sun.star.text.TextField.PageCountRange",           SwServiceType::FieldTypePageCountRange },
     { "",                                                     SwServiceType::FieldTypeDummy1 },
     { "",                                                     SwServiceType::FieldTypeDummy2 },
     { "",                                                     SwServiceType::FieldTypeDummy3 },
@@ -428,6 +428,7 @@ const ProvNamesId_Type aProvNamesId[] =
     { CSS_TEXT_TEXTFIELD_DATABASE_NAME,               SwServiceType::FieldTypeDatabaseName },
     { CSS_TEXT_TEXTFIELD_TABLE_FORMULA,               SwServiceType::FieldTypeTableFormula },
     { CSS_TEXT_TEXTFIELD_PAGE_COUNT,                  SwServiceType::FieldTypePageCount },
+    { CSS_TEXT_TEXTFIELD_PAGE_COUNT_RANGE,            SwServiceType::FieldTypePageCountRange },
     { CSS_TEXT_TEXTFIELD_PARAGRAPH_COUNT,             SwServiceType::FieldTypeParagraphCount },
     { CSS_TEXT_TEXTFIELD_WORD_COUNT,                  SwServiceType::FieldTypeWordCount },
     { CSS_TEXT_TEXTFIELD_CHARACTER_COUNT,             SwServiceType::FieldTypeCharacterCount },
@@ -731,6 +732,7 @@ SwXServiceProvider::MakeInstance(SwServiceType nObjectType, SwDoc & rDoc)
         case SwServiceType::FieldTypeDatabase:
         case SwServiceType::FieldTypeDatabaseName:
         case SwServiceType::FieldTypePageCount:
+        case SwServiceType::FieldTypePageCountRange:
         case SwServiceType::FieldTypeParagraphCount:
         case SwServiceType::FieldTypeWordCount:
         case SwServiceType::FieldTypeCharacterCount:

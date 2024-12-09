@@ -34,6 +34,7 @@ SwPageNumberDlg::SwPageNumberDlg(weld::Window* pParent)
     , m_xPageNumberAlignment(m_xBuilder->weld_combo_box(u"alignmentCombo"_ustr))
     , m_xMirrorOnEvenPages(m_xBuilder->weld_check_button(u"mirrorCheckbox"_ustr))
     , m_xIncludePageTotal(m_xBuilder->weld_check_button(u"pagetotalCheckbox"_ustr))
+    , m_xIncludePageRangeTotal(m_xBuilder->weld_check_button(u"pagerangetotalCheckbox"_ustr))
     , m_xPageNumberTypeLB(new SvxPageNumberListBox(m_xBuilder->weld_combo_box(u"numfmtlb"_ustr)))
     , m_xPreviewImage(m_xBuilder->weld_image(u"previewImage"_ustr))
     , m_aPageNumberPosition(1) // bottom
@@ -48,10 +49,13 @@ SwPageNumberDlg::SwPageNumberDlg(weld::Window* pParent)
     m_xMirrorOnEvenPages->set_sensitive(false);
     m_xMirrorOnEvenPages->set_state(TRISTATE_TRUE);
     m_xIncludePageTotal->set_state(TRISTATE_FALSE);
+    m_xIncludePageRangeTotal->set_state(TRISTATE_FALSE);
     SvxNumOptionsTabPageHelper::GetI18nNumbering(m_xPageNumberTypeLB->get_widget(),
                                                  ::std::numeric_limits<sal_uInt16>::max());
     m_xPageNumberTypeLB->connect_changed(LINK(this, SwPageNumberDlg, NumberTypeSelectHdl));
     m_xIncludePageTotal->connect_toggled(LINK(this, SwPageNumberDlg, IncludePageTotalChangeHdl));
+    m_xIncludePageRangeTotal->connect_toggled(
+        LINK(this, SwPageNumberDlg, IncludePageRangeTotalChangeHdl));
     updateImage();
 }
 
@@ -81,6 +85,13 @@ IMPL_LINK_NOARG(SwPageNumberDlg, NumberTypeSelectHdl, weld::ComboBox&, void)
 
 IMPL_LINK_NOARG(SwPageNumberDlg, IncludePageTotalChangeHdl, weld::Toggleable&, void)
 {
+    m_xIncludePageRangeTotal->set_sensitive(m_xIncludePageTotal->get_state() != TRISTATE_TRUE);
+    updateImage();
+}
+
+IMPL_LINK_NOARG(SwPageNumberDlg, IncludePageRangeTotalChangeHdl, weld::Toggleable&, void)
+{
+    m_xIncludePageTotal->set_sensitive(m_xIncludePageRangeTotal->get_state() != TRISTATE_TRUE);
     updateImage();
 }
 
@@ -93,6 +104,11 @@ bool SwPageNumberDlg::GetMirrorOnEvenPages()
 bool SwPageNumberDlg::GetIncludePageTotal()
 {
     return m_xIncludePageTotal->get_state() == TRISTATE_TRUE;
+}
+
+bool SwPageNumberDlg::GetIncludePageRangeTotal() const
+{
+    return m_xIncludePageRangeTotal->get_state() == TRISTATE_TRUE;
 }
 
 void SwPageNumberDlg::SetPageNumberType(SvxNumType nSet)
@@ -116,7 +132,8 @@ void SwPageNumberDlg::updateImage()
 
     OUString sText = u"#"_ustr;
 
-    if (m_xIncludePageTotal->get_state() == TRISTATE_TRUE)
+    if (m_xIncludePageTotal->get_state() == TRISTATE_TRUE
+        || m_xIncludePageRangeTotal->get_state() == TRISTATE_TRUE)
     {
         sText += " / #";
     }

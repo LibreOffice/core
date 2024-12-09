@@ -1484,6 +1484,7 @@ namespace xmloff::token {
         XML_PAGE_CONTENT,
         XML_PAGE_CONTINUATION_STRING,
         XML_PAGE_COUNT,
+        XML_PAGE_COUNT_RANGE,
         XML_PAGE_END_MARGIN,
         XML_PAGE_HEIGHT,
         XML_PAGE_MASTER,
