@@ -861,7 +861,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf82173_footnoteStyle, "tdf82173_footnoteStyle.doc
     // This was footnote text, which didn't match with newly created footnotes
     CPPUNIT_ASSERT_EQUAL(u"Footnote"_ustr, getProperty<OUString>(getParagraphOfText(1, xFootnoteText), u"ParaStyleName"_ustr));
 
-    uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"CharacterStyles"_ustr)->getByName(u"Footnote Characters"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"CharacterStyles"_ustr)->getByName(u"Footnote Symbol"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL( sal_Int32(58),       getProperty< sal_Int32 >(xPageStyle, u"CharEscapementHeight"_ustr) );
     CPPUNIT_ASSERT_EQUAL( COL_LIGHTGREEN, getProperty<Color>(xPageStyle, u"CharColor"_ustr));
 
@@ -890,7 +890,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf82173_endnoteStyle, "tdf82173_endnoteStyle.docx"
     CPPUNIT_ASSERT_EQUAL(u"Endnote"_ustr, getProperty<OUString>(getParagraphOfText(1, xEndnoteText), u"ParaStyleName"_ustr));
     CPPUNIT_ASSERT_EQUAL(Color(0x993300), getProperty<Color>(getParagraphOfText(1, xEndnoteText), u"CharColor"_ustr));
 
-    uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"CharacterStyles"_ustr)->getByName(u"Endnote Characters"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"CharacterStyles"_ustr)->getByName(u"Endnote Symbol"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL( sal_Int32(58),       getProperty< sal_Int32 >(xPageStyle, u"CharEscapementHeight"_ustr) );
     CPPUNIT_ASSERT_EQUAL( COL_LIGHTMAGENTA, getProperty<Color>(xPageStyle, u"CharColor"_ustr));
 
