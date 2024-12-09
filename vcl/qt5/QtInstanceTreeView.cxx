@@ -640,9 +640,15 @@ int QtInstanceTreeView::n_children() const
     return nChildCount;
 }
 
-void QtInstanceTreeView::make_sorted() { assert(false && "Not implemented yet"); }
+void QtInstanceTreeView::make_sorted()
+{
+    GetQtInstance().RunInMainThread([&] { m_pTreeView->setSortingEnabled(true); });
+}
 
-void QtInstanceTreeView::make_unsorted() { assert(false && "Not implemented yet"); }
+void QtInstanceTreeView::make_unsorted()
+{
+    GetQtInstance().RunInMainThread([&] { m_pTreeView->setSortingEnabled(false); });
+}
 
 bool QtInstanceTreeView::get_sort_order() const
 {
