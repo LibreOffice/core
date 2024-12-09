@@ -5139,7 +5139,7 @@ bool ScFormulaCell::InterpretFormulaGroupOpenCL(sc::FormulaLogger::GroupScope& a
 
     int nMaxGroupLength = INT_MAX;
 
-#ifdef _WIN32
+#if defined(_WIN32) && HAVE_FEATURE_OPENCL
     // Heuristic: Certain old low-end OpenCL implementations don't
     // work for us with too large group lengths. 1000 was determined
     // empirically to be a good compromise.
