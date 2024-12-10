@@ -482,10 +482,15 @@ void ThumbnailView::CalculateItemPositions(bool bScrollBarUsed)
         y += mnItemHeight + nVItemSpace;
     }
 
-    // tdf#162510 - adjust first item to take into account the new line after pinned items
-    auto nFirstItemAdjustment = mnCols - nItemCountPinned % mnCols;
-    if (nFirstItemAdjustment <= nFirstItem)
-        nFirstItem -= nFirstItemAdjustment;
+    // tdf#164102 - adjust first item only if there are any pinned items
+    if (const auto nRemainingPinnedSlots = nItemCountPinned % mnCols)
+    {
+        // tdf#162510 - adjust first item to take into account the new line after pinned items
+        const auto nFirstItemAdjustment = mnCols - nRemainingPinnedSlots;
+        if (nFirstItemAdjustment <= nFirstItem)
+            nFirstItem -= nFirstItemAdjustment;
+    }
+
 #endif
 
     // If want also draw parts of items in the last line,
