@@ -55,8 +55,8 @@ void VCLXAccessibleRadioButton::ProcessWindowEvent( const VclWindowEvent& rVclWi
             Any aOldValue;
             Any aNewValue;
 
-            VCLXRadioButton* pVCLXRadioButton = static_cast< VCLXRadioButton* >( GetVCLXWindow() );
-            if ( pVCLXRadioButton && pVCLXRadioButton->getState() )
+            VclPtr<RadioButton> pRadioButton = GetAs<RadioButton>();
+            if (pRadioButton && pRadioButton->IsChecked())
                 aNewValue <<= AccessibleStateType::CHECKED;
             else
                 aOldValue <<= AccessibleStateType::CHECKED;
@@ -74,7 +74,7 @@ void VCLXAccessibleRadioButton::FillAccessibleRelationSet( utl::AccessibleRelati
 {
     VCLXAccessibleTextComponent::FillAccessibleRelationSet( rRelationSet );
 
-    VclPtr< RadioButton > pRadioButton = GetAsDynamic< RadioButton >();
+    VclPtr<RadioButton> pRadioButton = GetAs<RadioButton>();
     if ( !pRadioButton )
         return;
 
@@ -95,12 +95,12 @@ void VCLXAccessibleRadioButton::FillAccessibleStateSet( sal_Int64& rStateSet )
 {
     VCLXAccessibleTextComponent::FillAccessibleStateSet( rStateSet );
 
-    VCLXRadioButton* pVCLXRadioButton = static_cast< VCLXRadioButton* >( GetVCLXWindow() );
-    if ( pVCLXRadioButton )
+    VclPtr<RadioButton> pRadioButton = GetAs<RadioButton>();
+    if (pRadioButton)
     {
         rStateSet |= AccessibleStateType::CHECKABLE;
         rStateSet |= AccessibleStateType::FOCUSABLE;
-        if ( pVCLXRadioButton->getState() )
+        if (pRadioButton->IsChecked())
             rStateSet |= AccessibleStateType::CHECKED;
     }
 }
@@ -139,9 +139,9 @@ sal_Bool VCLXAccessibleRadioButton::doAccessibleAction ( sal_Int32 nIndex )
     if ( nIndex != 0 )
         throw IndexOutOfBoundsException();
 
-    VCLXRadioButton* pVCLXRadioButton = static_cast< VCLXRadioButton* >( GetVCLXWindow() );
-    if ( pVCLXRadioButton && !pVCLXRadioButton->getState() )
-        pVCLXRadioButton->setState( true );
+    VclPtr<RadioButton> pRadioButton = GetAs<RadioButton>();
+    if (pRadioButton && !pRadioButton->IsChecked())
+        pRadioButton->Check(true);
 
     return true;
 }
@@ -202,9 +202,9 @@ Any VCLXAccessibleRadioButton::getCurrentValue(  )
 
     Any aValue;
 
-    VCLXRadioButton* pVCLXRadioButton = static_cast< VCLXRadioButton* >( GetVCLXWindow() );
-    if ( pVCLXRadioButton )
-        aValue <<= static_cast<sal_Int32>(pVCLXRadioButton->getState());
+    VclPtr<RadioButton> pRadioButton = GetAs<RadioButton>();
+    if (pRadioButton)
+        aValue <<= static_cast<sal_Int32>(pRadioButton->IsChecked() ? 1 : 0);
 
     return aValue;
 }
@@ -216,8 +216,8 @@ sal_Bool VCLXAccessibleRadioButton::setCurrentValue( const Any& aNumber )
 
     bool bReturn = false;
 
-    VCLXRadioButton* pVCLXRadioButton = static_cast< VCLXRadioButton* >( GetVCLXWindow() );
-    if ( pVCLXRadioButton )
+    VclPtr<RadioButton> pRadioButton = GetAs<RadioButton>();
+    if (pRadioButton)
     {
         sal_Int32 nValue = 0;
         OSL_VERIFY( aNumber >>= nValue );
@@ -227,7 +227,7 @@ sal_Bool VCLXAccessibleRadioButton::setCurrentValue( const Any& aNumber )
         else if ( nValue > 1 )
             nValue = 1;
 
-        pVCLXRadioButton->setState( nValue == 1 );
+        pRadioButton->Check(nValue == 1);
         bReturn = true;
     }
 
