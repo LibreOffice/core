@@ -62,6 +62,8 @@ public:
     // XAccessibleContext
     OUString SAL_CALL getAccessibleName(  ) override;
 
+private:
+    sal_Int64 GetOrientationState() const;
 };
 
 
