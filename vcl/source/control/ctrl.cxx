@@ -42,11 +42,11 @@ Control::Control( WindowType nType ) :
     ImplInitControlData();
 }
 
-Control::Control( vcl::Window* pParent, WinBits nStyle ) :
-    Window( WindowType::CONTROL )
+Control::Control(vcl::Window* pParent, WinBits eStyle)
+    : Window(WindowType::CONTROL)
 {
     ImplInitControlData();
-    ImplInit( pParent, nStyle, nullptr );
+    ImplInit(pParent, eStyle, nullptr);
 }
 
 Control::~Control()
