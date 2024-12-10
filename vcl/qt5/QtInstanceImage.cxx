@@ -21,14 +21,26 @@ QtInstanceImage::QtInstanceImage(QLabel* pLabel)
 
 void QtInstanceImage::set_from_icon_name(const OUString& rIconName)
 {
-    m_pLabel->setPixmap(loadQPixmapIcon(rIconName));
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] { m_pLabel->setPixmap(loadQPixmapIcon(rIconName)); });
 }
 
-void QtInstanceImage::set_image(VirtualDevice*) { assert(false && "Not implemented yet"); }
+void QtInstanceImage::set_image(VirtualDevice* pDevice)
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        if (pDevice)
+            m_pLabel->setPixmap(toQPixmap(*pDevice));
+    });
+}
 
 void QtInstanceImage::set_image(const css::uno::Reference<css::graphic::XGraphic>& rGraphic)
 {
-    m_pLabel->setPixmap(toQPixmap(rGraphic));
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] { m_pLabel->setPixmap(toQPixmap(rGraphic)); });
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
