@@ -16,6 +16,8 @@ pdfium_patches += build.patch.1
 pdfium_patches += msvc2017.patch.1
 # Avoids Windows 8 build dependency.
 pdfium_patches += windows7.patch.1
+# https://pdfium-review.googlesource.com/c/pdfium/+/125170
+pdfium_patches += CPWL_Dash-switch-to-universal-init.patch.1
 pdfium_patches += c++20-comparison.patch
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,pdfium))
