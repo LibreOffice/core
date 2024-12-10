@@ -41,6 +41,8 @@ private:
     VclPtr<Window>  mpFloatingWindow;
     OUString         msCurItemIdent;
     sal_uInt16      mnCurItemId;
+    // whether the MenuButton is the owner of mpMenu
+    bool mbOwnPopupMenu = false;
     bool            mbDelayMenu;
     bool            mbStartingMenu;
     Link<MenuButton*,void> maActivateHdl;
@@ -80,7 +82,7 @@ public:
     //before being shown
     void            SetDelayMenu(bool bDelay) { mbDelayMenu = bDelay; }
 
-    void            SetPopupMenu(PopupMenu* pNewMenu);
+    void            SetPopupMenu(PopupMenu* pNewMenu, bool bTakeOwnership);
     PopupMenu*      GetPopupMenu() const { return mpMenu; }
 
     void            SetPopover(Window* pWindow);

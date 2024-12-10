@@ -166,6 +166,8 @@ void MenuButton::dispose()
 {
     mpMenuTimer.reset();
     mpFloatingWindow.clear();
+    if (mpMenu && mbOwnPopupMenu)
+        mpMenu->dispose();
     mpMenu.clear();
     PushButton::dispose();
 }
@@ -240,12 +242,16 @@ void MenuButton::Select()
     maSelectHdl.Call( this );
 }
 
-void MenuButton::SetPopupMenu(PopupMenu* pNewMenu)
+void MenuButton::SetPopupMenu(PopupMenu* pNewMenu, bool bTakeOwnership)
 {
     if (pNewMenu == mpMenu)
         return;
 
+    if (mpMenu && mbOwnPopupMenu)
+        mpMenu->dispose();
+
     mpMenu = pNewMenu;
+    mbOwnPopupMenu = bTakeOwnership;
 }
 
 void MenuButton::SetPopover(Window* pWindow)

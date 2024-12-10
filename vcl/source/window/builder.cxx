@@ -760,7 +760,7 @@ VclBuilder::VclBuilder(vcl::Window* pParent, std::u16string_view sUIDir, const O
             "vcl", "missing elements of button/menu");
         if (!pTarget || !pMenu)
             continue;
-        pTarget->SetPopupMenu(pMenu);
+        pTarget->SetPopupMenu(pMenu, true);
     }
 
     //Remove ScrollWindow parent widgets whose children in vcl implement scrolling
