@@ -333,11 +333,11 @@ IMPL_LINK_NOARG(ComboBox, ImplSelectHdl, LinkParamNone*, void)
             sal_Int32 nIndex = 0;
             while ( nIndex >= 0 )
             {
-                sal_Int32  nPrevIndex = nIndex;
+                const sal_Int32 nPrevIndex = nIndex;
                 std::u16string_view aToken = o3tl::getToken(aText, 0, m_cMultiSep, nIndex );
-                sal_Int32  nTokenLen = aToken.size();
+                const sal_Int32 nTokenLen = aToken.size();
                 aToken = comphelper::string::strip(aToken, ' ');
-                sal_Int32 nP = m_pImplLB->GetEntryList().FindEntry( aToken );
+                const sal_Int32 nP = m_pImplLB->GetEntryList().FindEntry( aToken );
                 if ((nP != LISTBOX_ENTRY_NOTFOUND) && (!m_pImplLB->GetEntryList().IsEntryPosSelected(nP)))
                 {
                     aText = aText.replaceAt( nPrevIndex, nTokenLen, u"" );
@@ -356,7 +356,7 @@ IMPL_LINK_NOARG(ComboBox, ImplSelectHdl, LinkParamNone*, void)
             // attach missing entries
             ::std::set< sal_Int32 > aSelInText;
             lcl_GetSelectedEntries( aSelInText, aText, m_cMultiSep, m_pImplLB->GetEntryList() );
-            sal_Int32 nSelectedEntries = m_pImplLB->GetEntryList().GetSelectedEntryCount();
+            const sal_Int32 nSelectedEntries = m_pImplLB->GetEntryList().GetSelectedEntryCount();
             for ( sal_Int32 n = 0; n < nSelectedEntries; n++ )
             {
                 sal_Int32 nP = m_pImplLB->GetEntryList().GetSelectedEntryPos( n );
@@ -705,7 +705,7 @@ bool ComboBox::EventNotify( NotifyEvent& rNEvt )
         && !IsReadOnly())
     {
         KeyEvent aKeyEvt = *rNEvt.GetKeyEvent();
-        sal_uInt16   nKeyCode = aKeyEvt.GetKeyCode().GetCode();
+        const sal_uInt16 nKeyCode = aKeyEvt.GetKeyCode().GetCode();
         switch( nKeyCode )
         {
             case KEY_UP:
@@ -991,7 +991,7 @@ tools::Long ComboBox::getMaxWidthScrollBarAndDownButton() const
     tools::Rectangle aContent, aBound;
 
     // use the full extent of the control
-    tools::Rectangle aArea( Point(), pBorder->GetOutputSizePixel() );
+    const tools::Rectangle aArea(Point(), pBorder->GetOutputSizePixel());
 
     if ( GetNativeControlRegion(ControlType::Combobox, ControlPart::ButtonDown,
         aArea, ControlState::NONE, aControlValue, aBound, aContent) )
@@ -999,7 +999,7 @@ tools::Long ComboBox::getMaxWidthScrollBarAndDownButton() const
         nButtonDownWidth = aContent.getOpenWidth();
     }
 
-    tools::Long nScrollBarWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
+    const tools::Long nScrollBarWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
 
     return std::max(nScrollBarWidth, nButtonDownWidth);
 }
@@ -1073,7 +1073,7 @@ Size ComboBox::CalcAdjustedSize( const Size& rPrefSize ) const
 Size ComboBox::CalcBlockSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const
 {
     // show ScrollBars where appropriate
-    Size aMinSz = CalcMinimumSize();
+    const Size aMinSz = CalcMinimumSize();
     Size aSz;
 
     // height
@@ -1117,16 +1117,16 @@ tools::Long ComboBox::GetDropDownEntryHeight() const
 
 void ComboBox::GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const
 {
-    tools::Long nCharWidth = GetTextWidth(OUString(u'x'));
+    const tools::Long nCharWidth = GetTextWidth(OUString(u'x'));
     if ( !IsDropDownBox() )
     {
-        Size aOutSz = GetMainWindow()->GetOutputSizePixel();
+        const Size aOutSz = GetMainWindow()->GetOutputSizePixel();
         rnCols = (nCharWidth > 0) ? static_cast<sal_uInt16>(aOutSz.Width()/nCharWidth) : 1;
         rnLines = static_cast<sal_uInt16>(aOutSz.Height()/GetDropDownEntryHeight());
     }
     else
     {
-        Size aOutSz = m_pSubEdit->GetOutputSizePixel();
+        const Size aOutSz = m_pSubEdit->GetOutputSizePixel();
         rnCols = (nCharWidth > 0) ? static_cast<sal_uInt16>(aOutSz.Width()/nCharWidth) : 1;
         rnLines = 1;
     }
@@ -1136,9 +1136,9 @@ void ComboBox::Draw(OutputDevice* pDev, const Point& rPos, SystemTextColorFlags 
 {
     GetMainWindow()->ApplySettings(*pDev);
 
-    Point aPos = pDev->LogicToPixel( rPos );
-    Size aSize = GetSizePixel();
-    vcl::Font aFont = GetMainWindow()->GetDrawPixelFont( pDev );
+    const Point aPos = pDev->LogicToPixel( rPos );
+    const Size aSize = GetSizePixel();
+    const vcl::Font aFont = GetMainWindow()->GetDrawPixelFont( pDev );
 
     pDev->Push();
     pDev->SetMapMode();
@@ -1148,8 +1148,8 @@ void ComboBox::Draw(OutputDevice* pDev, const Point& rPos, SystemTextColorFlags 
     // Border/Background
     pDev->SetLineColor();
     pDev->SetFillColor();
-    bool bBorder = (GetStyle() & WB_BORDER);
-    bool bBackground = IsControlBackground();
+    const bool bBorder = (GetStyle() & WB_BORDER);
+    const bool bBackground = IsControlBackground();
     if ( bBorder || bBackground )
     {
         tools::Rectangle aRect( aPos, aSize );
@@ -1168,9 +1168,9 @@ void ComboBox::Draw(OutputDevice* pDev, const Point& rPos, SystemTextColorFlags 
     // contents
     if ( !IsDropDownBox() )
     {
-        tools::Long        nOnePixel = GetDrawPixel( pDev, 1 );
-        tools::Long        nTextHeight = pDev->GetTextHeight();
-        tools::Long        nEditHeight = nTextHeight + 6*nOnePixel;
+        const tools::Long nOnePixel = GetDrawPixel(pDev, 1);
+        const tools::Long nTextHeight = pDev->GetTextHeight();
+        const tools::Long nEditHeight = nTextHeight + 6 * nOnePixel;
         DrawTextFlags eTextStyle = DrawTextFlags::VCenter;
 
         // First, draw the edit part
@@ -1232,7 +1232,7 @@ void ComboBox::Draw(OutputDevice* pDev, const Point& rPos, SystemTextColorFlags 
     // Call Edit::Draw after restoring the MapMode...
     if ( IsDropDownBox() )
     {
-        Size aOrigSize(m_pSubEdit->GetSizePixel());
+        const Size aOrigSize(m_pSubEdit->GetSizePixel());
         m_pSubEdit->SetSizePixel(GetSizePixel());
         m_pSubEdit->Draw(pDev, rPos, eFlags);
         m_pSubEdit->SetSizePixel(aOrigSize);
@@ -1374,7 +1374,7 @@ void ComboBox::SetNoSelection()
 tools::Rectangle ComboBox::GetBoundingRectangle( sal_Int32 nItem ) const
 {
     tools::Rectangle aRect = GetMainWindow()->GetBoundingRectangle( nItem );
-    tools::Rectangle aOffset = GetMainWindow()->GetWindowExtentsRelative( *static_cast<vcl::Window*>(const_cast<ComboBox *>(this)) );
+    const tools::Rectangle aOffset = GetMainWindow()->GetWindowExtentsRelative( *static_cast<vcl::Window*>(const_cast<ComboBox *>(this)) );
     aRect.Move( aOffset.Left(), aOffset.Top() );
     return aRect;
 }
@@ -1443,7 +1443,7 @@ tools::Long ComboBox::GetIndexForPoint( const Point& rPoint, sal_Int32& rPos ) c
 
         // convert coordinates to ImplListBoxWindow pixel coordinate space
         Point aConvPoint = LogicToPixel( rPoint );
-        AbsoluteScreenPixelPoint aConvPointAbs = OutputToAbsoluteScreenPixel( aConvPoint );
+        const AbsoluteScreenPixelPoint aConvPointAbs = OutputToAbsoluteScreenPixel( aConvPoint );
         aConvPoint = rMain->AbsoluteScreenToOutputPixel( aConvPointAbs );
         aConvPoint = rMain->PixelToLogic( aConvPoint );
 
@@ -1468,7 +1468,7 @@ ComboBoxBounds ComboBox::calcComboBoxDropDownComponentBounds(
     ComboBoxBounds aBounds;
 
     tools::Long    nTop = 0;
-    tools::Long    nBottom = rOutSz.Height();
+    const tools::Long nBottom = rOutSz.Height();
 
     vcl::Window *pBorder = GetWindow(GetWindowType::Border);
     ImplControlValue aControlValue;
