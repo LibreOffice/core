@@ -118,11 +118,13 @@ void ComboBox::ImplCalcEditHeight()
     if ( !IsDropDownBox() )
         m_nDDHeight += 4;
 
-    tools::Rectangle aCtrlRegion( Point( 0, 0 ), Size( 10, 10 ) );
-    tools::Rectangle aBoundRegion, aContentRegion;
+    const tools::Rectangle aCtrlRegion(Point(0, 0), Size(10, 10));
+    tools::Rectangle aBoundRegion;
+    tools::Rectangle aContentRegion;
     ImplControlValue aControlValue;
-    ControlType aType = IsDropDownBox() ? ControlType::Combobox : ControlType::Editbox;
-    if( GetNativeControlRegion( aType, ControlPart::Entire,
+    const ControlType eType = IsDropDownBox() ? ControlType::Combobox : ControlType::Editbox;
+
+    if( GetNativeControlRegion( eType, ControlPart::Entire,
                                 aCtrlRegion,
                                 ControlState::ENABLED,
                                 aControlValue,
@@ -136,7 +138,8 @@ void ComboBox::ImplCalcEditHeight()
 
 void ComboBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
-    bool bNoBorder = ( nStyle & WB_NOBORDER ) != 0;
+    const bool bNoBorder = ( nStyle & WB_NOBORDER ) != 0;
+
     if ( !(nStyle & WB_DROPDOWN) )
     {
         nStyle &= ~WB_BORDER;
@@ -260,7 +263,7 @@ IMPL_LINK_NOARG(ComboBox, ImplPopupModeEndHdl, FloatingWindow*, void)
                     m_pFloatWin->GetPopupModeStartSaveSelection()))
         {
             m_pImplLB->SelectEntry(m_pFloatWin->GetPopupModeStartSaveSelection(), true);
-            bool bTravelSelect = m_pImplLB->IsTravelSelect();
+            const bool bTravelSelect = m_pImplLB->IsTravelSelect();
             m_pImplLB->SetTravelSelect( true );
             Select();
             m_pImplLB->SetTravelSelect( bTravelSelect );
@@ -277,12 +280,12 @@ IMPL_LINK_NOARG(ComboBox, ImplPopupModeEndHdl, FloatingWindow*, void)
 
 IMPL_LINK(ComboBox, ImplAutocompleteHdl, Edit&, rEdit, void)
 {
-    Selection           aSel = rEdit.GetSelection();
+    const Selection aSel = rEdit.GetSelection();
 
     {
-        OUString    aFullText = rEdit.GetText();
-        OUString    aStartText = aFullText.copy( 0, static_cast<sal_Int32>(aSel.Max()) );
-        sal_Int32   nStart = m_pImplLB->GetCurrentPos();
+        const OUString aFullText = rEdit.GetText();
+        const OUString aStartText = aFullText.copy( 0, static_cast<sal_Int32>(aSel.Max()) );
+        sal_Int32 nStart = m_pImplLB->GetCurrentPos();
 
         if ( nStart == LISTBOX_ENTRY_NOTFOUND )
             nStart = 0;
@@ -306,7 +309,7 @@ IMPL_LINK(ComboBox, ImplAutocompleteHdl, Edit&, rEdit, void)
 
         if ( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
-            OUString aText = m_pImplLB->GetEntryList().GetEntryText( nPos );
+            const OUString aText = m_pImplLB->GetEntryList().GetEntryText( nPos );
             Selection aSelection( aText.getLength(), aStartText.getLength() );
             rEdit.SetText( aText, aSelection );
         }
@@ -315,7 +318,7 @@ IMPL_LINK(ComboBox, ImplAutocompleteHdl, Edit&, rEdit, void)
 
 IMPL_LINK_NOARG(ComboBox, ImplSelectHdl, LinkParamNone*, void)
 {
-    bool bPopup = IsInDropDown();
+    const bool bPopup = IsInDropDown();
     bool bCallSelect = false;
     if (m_pImplLB->IsSelectionChanged() || bPopup)
     {
