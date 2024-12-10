@@ -63,6 +63,7 @@
 #include <svl/asiancfg.hxx>
 #include <svl/voiditem.hxx>
 #include <i18nutil/unicode.hxx>
+#include <i18nutil/scriptchangescanner.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/flagguard.hxx>
 #include <comphelper/lok.hxx>
@@ -1715,50 +1716,15 @@ void ImpEditEngine::InitScriptTypes( sal_Int32 nPara )
         pField = pField->GetEnd() ? pNode->GetCharAttribs().FindNextAttrib( EE_FEATURE_FIELD, pField->GetEnd() ) : nullptr;
     }
 
-    sal_Int32 nTextLen = aText.getLength();
-
-    sal_Int32 nPos = 0;
-    short nScriptType = _xBI->getScriptType( aText, nPos );
-    rTypes.emplace_back( nScriptType, nPos, nTextLen );
-    nPos = _xBI->endOfScript( aText, nPos, nScriptType );
-    while ( ( nPos != -1 ) && ( nPos < nTextLen ) )
+    auto pScriptScanner = i18nutil::MakeScriptChangeScanner(
+        aText, SvtLanguageOptions::GetI18NScriptTypeOfLanguage(GetDefaultLanguage()));
+    while (!pScriptScanner->AtEnd() || rTypes.empty())
     {
-        rTypes.back().nEndPos = nPos;
+        auto stChange = pScriptScanner->Peek();
+        rTypes.emplace_back(stChange.m_nScriptType, stChange.m_nStartIndex, stChange.m_nEndIndex);
 
-        nScriptType = _xBI->getScriptType( aText, nPos );
-        tools::Long nEndPos = _xBI->endOfScript( aText, nPos, nScriptType );
-
-        if ( ( nScriptType == i18n::ScriptType::WEAK ) || ( nScriptType == rTypes.back().nScriptType ) )
-        {
-            // Expand last ScriptTypePosInfo, don't create weak or unnecessary portions
-            rTypes.back().nEndPos = nEndPos;
-        }
-        else
-        {
-            auto nPrevPos = nPos;
-            auto nPrevChar = aText.iterateCodePoints(&nPrevPos, -1);
-            if (_xBI->getScriptType(aText, nPrevPos) == i18n::ScriptType::WEAK)
-            {
-                auto nChar = aText.iterateCodePoints(&nPos, 0);
-                auto nType = unicode::getUnicodeType(nChar);
-                if (nType == css::i18n::UnicodeType::NON_SPACING_MARK ||
-                    nType == css::i18n::UnicodeType::ENCLOSING_MARK ||
-                    nType == css::i18n::UnicodeType::COMBINING_SPACING_MARK ||
-                    (nPrevChar == 0x202F /* NNBSP, tdf#112594 */ &&
-                     u_getIntPropertyValue(nChar, UCHAR_SCRIPT) == USCRIPT_MONGOLIAN))
-                {
-                    rTypes.back().nEndPos = nPos = nPrevPos;
-                    break;
-                }
-            }
-            rTypes.emplace_back( nScriptType, nPos, nTextLen );
-        }
-
-        nPos = nEndPos;
+        pScriptScanner->Advance();
     }
-
-    if ( rTypes[0].nScriptType == i18n::ScriptType::WEAK )
-        rTypes[0].nScriptType = ( rTypes.size() > 1 ) ? rTypes[1].nScriptType : SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetDefaultLanguage() );
 
     // create writing direction information:
     WritingDirectionInfos& rDirInfos = pParaPortion->getWritingDirectionInfos();

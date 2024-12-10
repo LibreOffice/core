@@ -80,6 +80,7 @@
 #include <i18nutil/scripttypedetector.hxx>
 #include <i18nutil/unicode.hxx>
 #include <i18nutil/kashida.hxx>
+#include <i18nutil/scriptchangescanner.hxx>
 #include <unotxdoc.hxx>
 
 using namespace ::com::sun::star;
@@ -1410,40 +1411,17 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
     // remove invalid entries from kashida array
     m_Kashida.erase(m_Kashida.begin() + nCntKash, m_Kashida.end());
 
-    // TAKE CARE OF WEAK CHARACTERS: WE MUST FIND AN APPROPRIATE
-    // SCRIPT FOR WEAK CHARACTERS AT THE BEGINNING OF A PARAGRAPH
-
-    if (WEAK == g_pBreakIt->GetBreakIter()->getScriptType(rText, sal_Int32(nChg)))
+    // Construct the script change scanner and advance it to the change range
+    auto pScriptScanner = i18nutil::MakeScriptChangeScanner(
+        rText, SvtLanguageOptions::GetI18NScriptTypeOfLanguage(GetAppLanguage()));
+    while (!pScriptScanner->AtEnd())
     {
-        // If the beginning of the current group is weak, this means that
-        // all of the characters in this group are weak. We have to assign
-        // the scripts to these characters depending on the fonts which are
-        // set for these characters to display them.
-        TextFrameIndex nEnd(
-            g_pBreakIt->GetBreakIter()->endOfScript(rText, sal_Int32(nChg), WEAK));
-
-        if (nEnd > TextFrameIndex(rText.getLength()) || nEnd < TextFrameIndex(0))
-            nEnd = TextFrameIndex(rText.getLength());
-
-        nScript = SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetAppLanguage() );
-
-        SAL_WARN_IF( i18n::ScriptType::LATIN != nScript &&
-                i18n::ScriptType::ASIAN != nScript &&
-                i18n::ScriptType::COMPLEX != nScript, "sw.core", "Wrong default language" );
-
-        nChg = nEnd;
-
-        // Get next script type or set to weak in order to exit
-        sal_uInt8 nNextScript = (nEnd < TextFrameIndex(rText.getLength()))
-            ? static_cast<sal_uInt8>(g_pBreakIt->GetBreakIter()->getScriptType(rText, sal_Int32(nEnd)))
-            : sal_uInt8(WEAK);
-
-        if ( nScript != nNextScript )
+        if (pScriptScanner->Peek().m_nStartIndex <= static_cast<sal_Int32>(nChg))
         {
-            m_ScriptChanges.emplace_back(nEnd, nScript);
-            nCnt++;
-            nScript = nNextScript;
+            break;
         }
+
+        pScriptScanner->Advance();
     }
 
     // UPDATE THE SCRIPT INFO ARRAYS:
@@ -1451,38 +1429,12 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
     while (nChg < TextFrameIndex(rText.getLength())
            || (m_ScriptChanges.empty() && rText.isEmpty()))
     {
-        SAL_WARN_IF( i18n::ScriptType::WEAK == nScript,
-                "sw.core", "Inserting WEAK into SwScriptInfo structure" );
+        auto stChange = pScriptScanner->Peek();
+        pScriptScanner->Advance();
 
-        TextFrameIndex nSearchStt = nChg;
-        nChg = TextFrameIndex(g_pBreakIt->GetBreakIter()->endOfScript(
-                    rText, sal_Int32(nSearchStt), nScript));
-
-        if (nChg > TextFrameIndex(rText.getLength()) || nChg < TextFrameIndex(0))
-            nChg = TextFrameIndex(rText.getLength());
-
-        // special case for dotted circle since it can be used with complex
-        // before a mark, so we want it associated with the mark's script
-        // tdf#112594: another special case for NNBSP followed by a Mongolian
-        // character, since NNBSP has special uses in Mongolian (tdf#112594)
-        auto nPos = sal_Int32(nChg);
-        auto nPrevPos = nPos;
-        auto nPrevChar = rText.iterateCodePoints(&nPrevPos, -1);
-        if (nChg < TextFrameIndex(rText.getLength()) && nChg > TextFrameIndex(0) &&
-            i18n::ScriptType::WEAK == g_pBreakIt->GetBreakIter()->getScriptType(rText, nPrevPos))
-        {
-            auto nChar = rText.iterateCodePoints(&nPos, 0);
-            auto nType = unicode::getUnicodeType(nChar);
-            if (nType == css::i18n::UnicodeType::NON_SPACING_MARK ||
-                nType == css::i18n::UnicodeType::ENCLOSING_MARK ||
-                nType == css::i18n::UnicodeType::COMBINING_SPACING_MARK ||
-                (nPrevChar == CHAR_NNBSP &&
-                 u_getIntPropertyValue(nChar, UCHAR_SCRIPT) == USCRIPT_MONGOLIAN))
-            {
-                nPos = nPrevPos;
-            }
-        }
-        m_ScriptChanges.emplace_back(TextFrameIndex(nPos), nScript);
+        nScript = stChange.m_nScriptType;
+        nChg = TextFrameIndex{ stChange.m_nEndIndex };
+        m_ScriptChanges.emplace_back(nChg, nScript);
         ++nCnt;
 
         // if current script is asian, we search for compressible characters

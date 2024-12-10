@@ -367,15 +367,13 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf112594)
     xmlDocUniquePtr pXmlDoc = load("odp/Tdf112594.fodp");
 
     // Test that a NNBSP is grouped with the Mongolian characters after it, so
-    // we have one text array covering the whole string.
-    //
-    // Without the fix, it fails with:
-    // - Expected: 4
-    // - Actual  : 3
-    // - In <>, attribute 'length' of '/metafile/push[1]/push[1]/textarray[3]' incorrect value.
+    // we have two text arrays, one covering the digits, and the other with the rest.
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "index", u"0");
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "length", u"4");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "length", u"2");
     assertXPathContent(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]/text", u"11\u202f\u1824");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[4]", "index", u"2");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[4]", "length", u"2");
+    assertXPathContent(pXmlDoc, "/metafile/push[1]/push[1]/textarray[4]/text", u"11\u202f\u1824");
 }
 
 CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf152906_AdjustToContour)
