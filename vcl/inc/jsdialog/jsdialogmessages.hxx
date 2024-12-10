@@ -98,25 +98,25 @@ class JSDialogNotifyIdle final : public Idle
 
 public:
     JSDialogNotifyIdle(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
-                       const OUString& sTypeOfJSON);
+                       const rtl::OUString& sTypeOfJSON);
 
     void Invoke() override;
 
     void clearQueue();
     void forceUpdate();
     template <class VclType>
-    void sendMessage(jsdialog::MessageType eType, const VclPtr<VclType>& pTarget,
+    void sendMessage(const jsdialog::MessageType eType, const VclPtr<VclType>& pTarget,
                      std::unique_ptr<jsdialog::ActionDataMap> pData = nullptr);
 
 private:
     void send(const OString& sMsg);
     OString generateFullUpdate() const;
-    OString generateWidgetUpdate(VclPtr<vcl::Window> pWindow) const;
+    OString generateWidgetUpdate(const VclPtr<vcl::Window>& pWindow) const;
     OString generateCloseMessage() const;
-    OString generateActionMessage(VclPtr<vcl::Window> pWindow,
+    OString generateActionMessage(const VclPtr<vcl::Window>& pWindow,
                                   std::unique_ptr<jsdialog::ActionDataMap> pData) const;
-    OString generatePopupMessage(VclPtr<vcl::Window> pWindow, const rtl::OUString& sParentId,
-                                 const rtl::OUString& sCloseId) const;
+    OString generatePopupMessage(const VclPtr<vcl::Window>& pWindow, const rtl::OUString& sParentId,
+                                 const OUString& sCloseId) const;
     OString generateClosePopupMessage(const rtl::OUString& sWindowId) const;
     OString generateMenuMessage(const VclPtr<PopupMenu>& pMenu) const;
 };

@@ -48,8 +48,8 @@ public:
         : m_bCanClose(true)
     {
     }
-    JSDialogSender(VclPtr<vcl::Window> aNotifierWindow, VclPtr<vcl::Window> aContentWindow,
-                   const OUString& sTypeOfJSON)
+    JSDialogSender(const VclPtr<vcl::Window>& aNotifierWindow,
+                   const VclPtr<vcl::Window>& aContentWindow, const OUString& sTypeOfJSON)
         : m_bCanClose(true)
     {
         initializeSender(aNotifierWindow, aContentWindow, sTypeOfJSON);
@@ -59,10 +59,11 @@ public:
 
     virtual void sendFullUpdate(bool bForce = false);
     void sendClose();
-    void sendUpdate(VclPtr<vcl::Window> pWindow, bool bForce = false);
-    virtual void sendAction(VclPtr<vcl::Window> pWindow,
+    void sendUpdate(const VclPtr<vcl::Window>& pWindow, bool bForce = false);
+    virtual void sendAction(const VclPtr<vcl::Window>& pWindow,
                             std::unique_ptr<jsdialog::ActionDataMap> pData);
-    virtual void sendPopup(VclPtr<vcl::Window> pWindow, OUString sParentId, OUString sCloseId);
+    virtual void sendPopup(const VclPtr<vcl::Window>& pWindow, const OUString& sParentId,
+                           const OUString& sCloseId);
     virtual void sendMenu(const VclPtr<PopupMenu>& pMenu);
     virtual void sendClosePopup(vcl::LOKWindowId nWindowId);
     void flush() { mpIdleNotify->Invoke(); }
