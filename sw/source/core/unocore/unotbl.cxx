@@ -1710,7 +1710,11 @@ uno::Any SwXTextTableCursor::getPropertyValue(const OUString& rPropertyName)
         {
             auto pFormat(SwUnoCursorHelper::GetCurTextFormatColl(rUnoCursor, false));
             if(pFormat)
-                aResult <<= pFormat->GetName();
+            {
+                OUString ret;
+                SwStyleNameMapper::FillProgName(pFormat->GetName(), ret, SwGetPoolIdFromName::TxtColl);
+                aResult <<= ret;
+            }
         }
         break;
         default:
@@ -3490,7 +3494,9 @@ uno::Any SAL_CALL SwXCellRange::getPropertyValue(const OUString& rPropertyName)
                     SwUnoCursorHelper::GetCurTextFormatColl(*m_pImpl->m_pTableCursor, false);
                 OUString sRet;
                 if (pTmpFormat)
-                    sRet = pTmpFormat->GetName();
+                {
+                    SwStyleNameMapper::FillProgName(pTmpFormat->GetName(), sRet, SwGetPoolIdFromName::TxtColl);
+                }
                 aRet <<= sRet;
             }
             break;
