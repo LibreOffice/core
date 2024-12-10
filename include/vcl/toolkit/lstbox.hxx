@@ -114,7 +114,7 @@ protected:
     bool               IsDropDownBox() const { return mpFloatWin != nullptr; }
 
 protected:
-    SAL_DLLPRIVATE explicit ListBox( WindowType nType );
+    SAL_DLLPRIVATE explicit ListBox( WindowType eType );
 
     SAL_DLLPRIVATE virtual void FillLayoutData() const override;
 

@@ -66,14 +66,14 @@ static vcl::Window* ImplGetLabelFor(vcl::Window* pFrameWindow, WindowType nMyTyp
                                                  false );
                 if( pSWindow && isVisibleInLayout(pSWindow) && ! (pSWindow->GetStyle() & WB_NOLABEL) )
                 {
-                    WindowType nType = pSWindow->GetType();
-                    if( nType != WindowType::FIXEDTEXT   &&
-                        nType != WindowType::FIXEDLINE   &&
-                        nType != WindowType::GROUPBOX )
+                    WindowType eType = pSWindow->GetType();
+                    if( eType != WindowType::FIXEDTEXT   &&
+                        eType != WindowType::FIXEDLINE   &&
+                        eType != WindowType::GROUPBOX )
                     {
                         pWindow = pSWindow;
                     }
-                    else if( bThisIsAGroupControl && ( nType == WindowType::FIXEDTEXT ) )
+                    else if( bThisIsAGroupControl && ( eType == WindowType::FIXEDTEXT ) )
                     {
                         pWindow = pSWindow;
                     }
@@ -142,13 +142,13 @@ static Window* ImplGetLabeledBy(Window* pFrameWindow, WindowType nMyType, const 
                                                  false );
                 if( pSWindow && isVisibleInLayout(pSWindow) && !(pSWindow->GetStyle() & WB_NOLABEL) )
                 {
-                    WindowType nType = pSWindow->GetType();
-                    if ( nType == WindowType::FIXEDTEXT ||
-                         nType == WindowType::FIXEDLINE ||
-                         nType == WindowType::GROUPBOX )
+                    WindowType eType = pSWindow->GetType();
+                    if ( eType == WindowType::FIXEDTEXT ||
+                         eType == WindowType::FIXEDLINE ||
+                         eType == WindowType::GROUPBOX )
                     {
                         // a fixed text can't be labelled by a fixed text.
-                        if ( ( nMyType != WindowType::FIXEDTEXT ) || ( nType != WindowType::FIXEDTEXT ) )
+                        if ( ( nMyType != WindowType::FIXEDTEXT ) || ( eType != WindowType::FIXEDTEXT ) )
                             pWindow = pSWindow;
                         break;
                     }

@@ -99,15 +99,15 @@ namespace {
 
 bool isDialogWindow(vcl::Window const * pWindow)
 {
-    WindowType nType = pWindow->GetType();
-    if (nType == WindowType::DIALOG || nType == WindowType::MODELESSDIALOG)
+    WindowType eType = pWindow->GetType();
+    if (eType == WindowType::DIALOG || eType == WindowType::MODELESSDIALOG)
         return true;
 
     // MESSBOX, INFOBOX, WARNINGBOX, ERRORBOX, QUERYBOX
-    if (nType >= WindowType::MESSBOX && nType <= WindowType::QUERYBOX)
+    if (eType >= WindowType::MESSBOX && eType <= WindowType::QUERYBOX)
         return true;
 
-    if (nType == WindowType::TABDIALOG)
+    if (eType == WindowType::TABDIALOG)
         return true;
 
     return false;

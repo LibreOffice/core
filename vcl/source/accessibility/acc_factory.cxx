@@ -129,34 +129,34 @@ Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(vcl::
     if (!pWindow)
         return nullptr;
 
-    WindowType nType = pWindow->GetType();
+    WindowType eType = pWindow->GetType();
 
-    if ( nType == WindowType::STATUSBAR )
+    if ( eType == WindowType::STATUSBAR )
     {
         return new VCLXAccessibleStatusBar(pWindow);
     }
 
-    else if ( nType == WindowType::TABCONTROL )
+    else if ( eType == WindowType::TABCONTROL )
     {
         return new VCLXAccessibleTabControl(pWindow);
     }
 
-    else if ( nType == WindowType::TABPAGE && pWindow->GetAccessibleParentWindow() && pWindow->GetAccessibleParentWindow()->GetType() == WindowType::TABCONTROL )
+    else if ( eType == WindowType::TABPAGE && pWindow->GetAccessibleParentWindow() && pWindow->GetAccessibleParentWindow()->GetType() == WindowType::TABCONTROL )
     {
         return new VCLXAccessibleTabPageWindow(pWindow);
     }
 
-    else if ( nType == WindowType::FLOATINGWINDOW )
+    else if ( eType == WindowType::FLOATINGWINDOW )
     {
         return new FloatingWindowAccessible(pWindow);
     }
 
-    else if ( nType == WindowType::BORDERWINDOW && hasFloatingChild( pWindow ) )
+    else if ( eType == WindowType::BORDERWINDOW && hasFloatingChild( pWindow ) )
     {
         return new FloatingWindowAccessible(pWindow);
     }
 
-    else if ( ( nType == WindowType::HELPTEXTWINDOW ) || ( nType == WindowType::FIXEDLINE ) )
+    else if ( ( eType == WindowType::HELPTEXTWINDOW ) || ( eType == WindowType::FIXEDLINE ) )
     {
         return new VCLXAccessibleFixedText(pWindow);
     }

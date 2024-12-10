@@ -42,8 +42,8 @@ void ButtonDialog::ImplInitButtonDialogData()
     mbFormat                = true;
 }
 
-ButtonDialog::ButtonDialog( WindowType nType ) :
-    Dialog( nType )
+ButtonDialog::ButtonDialog( WindowType eType ) :
+    Dialog( eType )
 {
     ImplInitButtonDialogData();
 }

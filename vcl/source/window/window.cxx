@@ -94,8 +94,8 @@ using namespace ::com::sun::star::datatransfer::dnd;
 
 namespace vcl {
 
-Window::Window( WindowType nType )
-    : mpWindowImpl(new WindowImpl( *this, nType ))
+Window::Window( WindowType eType )
+    : mpWindowImpl(new WindowImpl( *this, eType ))
 {
     // true: this outdev will be mirrored if RTL window layout (UI mirroring) is globally active
     mpWindowImpl->mxOutDev->mbEnableRTL = AllSettings::GetLayoutRTL();
@@ -586,7 +586,7 @@ bool WindowOutputDevice::CanEnableNativeWidget() const
 
 } /* namespace vcl */
 
-WindowImpl::WindowImpl( vcl::Window& rWindow, WindowType nType )
+WindowImpl::WindowImpl( vcl::Window& rWindow, WindowType eType )
 {
     mxOutDev = VclPtr<vcl::WindowOutputDevice>::Create(rWindow);
     maZoom                              = Fraction( 1, 1 );
@@ -637,7 +637,7 @@ WindowImpl::WindowImpl( vcl::Window& rWindow, WindowType nType )
     mnStyle                             = 0;                         // style (init in ImplInitWindow)
     mnPrevStyle                         = 0;                         // prevstyle (set in SetStyle)
     mnExtendedStyle                     = WindowExtendedStyle::NONE; // extended style (init in ImplInitWindow)
-    mnType                              = nType;                     // type
+    meType                              = eType;                     // type
     mnGetFocusFlags                     = GetFocusFlags::NONE;       // Flags for GetFocus()-Call
     mnWaitCount                         = 0;                         // Wait-Count (>1 == "wait" mouse pointer)
     mnPaintFlags                        = ImplPaintFlags::NONE;      // Flags for ImplCallPaint
@@ -1022,7 +1022,7 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
         if( nStyle & WB_SYSTEMCHILDWINDOW )
             nFrameStyle |= SalFrameStyleFlags::SYSTEMCHILD;
 
-        switch (mpWindowImpl->mnType)
+        switch (mpWindowImpl->meType)
         {
             case WindowType::DIALOG:
             case WindowType::TABDIALOG:

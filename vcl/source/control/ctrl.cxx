@@ -36,8 +36,8 @@ void Control::ImplInitControlData()
     mbShowAccelerator       = false;
 }
 
-Control::Control( WindowType nType ) :
-    Window( nType )
+Control::Control(WindowType eType)
+    : Window(eType)
 {
     ImplInitControlData();
 }

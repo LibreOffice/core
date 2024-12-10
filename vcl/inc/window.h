@@ -297,7 +297,7 @@ public:
     WinBits             mnStyle;
     WinBits             mnPrevStyle;
     WindowExtendedStyle mnExtendedStyle;
-    WindowType          mnType;
+    WindowType          meType;
     ControlPart         mnNativeBackground;
     sal_uInt16          mnWaitCount;
     ImplPaintFlags      mnPaintFlags;

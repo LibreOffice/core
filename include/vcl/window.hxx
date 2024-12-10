@@ -692,7 +692,7 @@ private:
 
 protected:
     // Single argument ctors shall be explicit.
-    SAL_DLLPRIVATE explicit             Window( WindowType nType );
+    SAL_DLLPRIVATE explicit             Window( WindowType eType );
 
             void                        SetCompoundControl( bool bCompound );
 
@@ -762,7 +762,7 @@ public:
     SAL_DLLPRIVATE WinBits              GetPrevStyle() const;
     void                                SetExtendedStyle( WindowExtendedStyle nExtendedStyle );
     WindowExtendedStyle                 GetExtendedStyle() const;
-    void                                SetType( WindowType nType );
+    void                                SetType( WindowType eType );
     WindowType                          GetType() const;
     bool                                IsSystemWindow() const;
     SAL_DLLPRIVATE bool                 IsDockingWindow() const;

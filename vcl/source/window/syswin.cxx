@@ -78,8 +78,8 @@ bool SystemWindow::LayoutIdle::DecideTransferredExecution()
     return true;
 }
 
-SystemWindow::SystemWindow(WindowType nType, const char* pIdleDebugName, bool transferableIdle)
-    : Window(nType)
+SystemWindow::SystemWindow(WindowType eType, const char* pIdleDebugName, bool transferableIdle)
+    : Window(eType)
     , mpImplData(new ImplData)
     , maLayoutIdle( pIdleDebugName, *this, transferableIdle )
 {

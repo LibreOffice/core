@@ -1031,16 +1031,16 @@ WindowExtendedStyle Window::GetExtendedStyle() const
     return mpWindowImpl ? mpWindowImpl->mnExtendedStyle : WindowExtendedStyle::NONE;
 }
 
-void Window::SetType( WindowType nType )
+void Window::SetType( WindowType eType )
 {
     if (mpWindowImpl)
-        mpWindowImpl->mnType = nType;
+        mpWindowImpl->meType = eType;
 }
 
 WindowType Window::GetType() const
 {
     if (mpWindowImpl)
-        return mpWindowImpl->mnType;
+        return mpWindowImpl->meType;
     else
         return WindowType::NONE;
 }

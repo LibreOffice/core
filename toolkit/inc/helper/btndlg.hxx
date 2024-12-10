@@ -61,7 +61,7 @@ public:
     void                RemoveButton( sal_uInt16 nId );
 
 protected:
-                        ButtonDialog( WindowType nType );
+                        ButtonDialog( WindowType eType );
     tools::Long                ImplGetButtonSize();
 
 private:

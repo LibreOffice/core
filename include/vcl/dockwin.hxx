@@ -171,7 +171,7 @@ public:
     SAL_DLLPRIVATE bool    isDeferredInit() const { return mbIsDeferredInit; }
     virtual        void    doDeferredInit(WinBits nBits);
 protected:
-    SAL_DLLPRIVATE DockingWindow( WindowType nType, const char* pIdleDebugName = "vcl::DockingWindow maLayoutIdle");
+    SAL_DLLPRIVATE DockingWindow( WindowType eType, const char* pIdleDebugName = "vcl::DockingWindow maLayoutIdle");
 public:
     DockingWindow(vcl::Window* pParent, WinBits nStyle, const char* pIdleDebugName = "vcl::DockingWindow maLayoutIdle");
     SAL_DLLPRIVATE DockingWindow(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription,

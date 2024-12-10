@@ -345,8 +345,8 @@ void DockingWindow::ImplInitSettings()
     SetBackground( aColor );
 }
 
-DockingWindow::DockingWindow( WindowType nType, const char* pIdleDebugName ) :
-    Window(nType),
+DockingWindow::DockingWindow( WindowType eType, const char* pIdleDebugName ) :
+    Window(eType),
     maLayoutIdle( pIdleDebugName )
 {
     ImplInitDockingWindowData();

@@ -34,8 +34,8 @@
 #include <boost/property_tree/ptree.hpp>
 #include <tools/json_writer.hxx>
 
-ListBox::ListBox(WindowType nType)
-    : Control(nType)
+ListBox::ListBox(WindowType eType)
+    : Control(eType)
     , mpImplLB(nullptr)
 {
     ImplInitListBoxData();

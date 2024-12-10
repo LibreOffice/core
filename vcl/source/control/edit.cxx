@@ -121,8 +121,8 @@ void Impl_IMEInfos::DestroyAttribs()
     nLen = 0;
 }
 
-Edit::Edit( WindowType nType )
-    : Control( nType )
+Edit::Edit( WindowType eType )
+    : Control( eType )
 {
     ImplInitEditData();
 }

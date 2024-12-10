@@ -1377,32 +1377,32 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( rtl::Reference<VCLXWindow>* ppNewCom
     OUString aServiceName = rDescriptor.WindowServiceName.toAsciiLowerCase();
 
     VclPtr<vcl::Window> pNewWindow;
-    WindowType nType = ImplGetComponentType( aServiceName );
+    WindowType eType = ImplGetComponentType( aServiceName );
     bool bFrameControl = false;
     if ( aServiceName == "frame" )
         bFrameControl = true;
     if ( aServiceName == "tabcontrolnotabs" )
     {
         nWinBits |= WB_NOBORDER;
-        nType = ImplGetComponentType( u"tabcontrol"_ustr );
+        eType = ImplGetComponentType( u"tabcontrol"_ustr );
     }
     if ( !pParent )
     {
         // If the component needs a parent, then return NULL,
         // some time later css::uno::Exception...
         bool bException = true;
-        if  (   ( nType == WindowType::DIALOG )
-            ||  ( nType == WindowType::MODELESSDIALOG )
-            ||  ( nType == WindowType::MESSBOX )
-            ||  ( nType == WindowType::INFOBOX )
-            ||  ( nType == WindowType::WARNINGBOX )
-            ||  ( nType == WindowType::ERRORBOX )
-            ||  ( nType == WindowType::QUERYBOX )
+        if  (   ( eType == WindowType::DIALOG )
+            ||  ( eType == WindowType::MODELESSDIALOG )
+            ||  ( eType == WindowType::MESSBOX )
+            ||  ( eType == WindowType::INFOBOX )
+            ||  ( eType == WindowType::WARNINGBOX )
+            ||  ( eType == WindowType::ERRORBOX )
+            ||  ( eType == WindowType::QUERYBOX )
             )
             bException = false;
-        else if ( ( nType == WindowType::WINDOW ) ||
-                  ( nType == WindowType::WORKWINDOW ) ||
-                  ( nType == WindowType::TOOLKIT_FRAMEWINDOW ) )
+        else if ( ( eType == WindowType::WINDOW ) ||
+                  ( eType == WindowType::WORKWINDOW ) ||
+                  ( eType == WindowType::TOOLKIT_FRAMEWINDOW ) )
         {
             if ( rDescriptor.Type == css::awt::WindowClass_TOP )
                 bException = false;
@@ -1415,10 +1415,10 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( rtl::Reference<VCLXWindow>* ppNewCom
         }
     }
 
-    if ( nType != WindowType::NONE )
+    if ( eType != WindowType::NONE )
     {
         SolarMutexGuard aVclGuard;
-        switch ( nType )
+        switch ( eType )
         {
             case WindowType::CANCELBUTTON:
                 pNewWindow = VclPtr<CancelButton>::Create( pParent, nWinBits );
@@ -1657,7 +1657,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( rtl::Reference<VCLXWindow>* ppNewCom
             case WindowType::DOCKINGWINDOW:
                 if ( rDescriptor.Type == css::awt::WindowClass_TOP )
                 {
-                    if (nType == WindowType::DOCKINGWINDOW )
+                    if (eType == WindowType::DOCKINGWINDOW )
                         pNewWindow = VclPtr<DockingWindow>::Create( pParent, nWinBits );
                     else
                     {
@@ -1729,7 +1729,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( rtl::Reference<VCLXWindow>* ppNewCom
                 }
                 else if ( rDescriptor.Type == css::awt::WindowClass_CONTAINER )
                 {
-                    if (nType == WindowType::DOCKINGWINDOW )
+                    if (eType == WindowType::DOCKINGWINDOW )
                         pNewWindow = VclPtr<DockingWindow>::Create( pParent, nWinBits );
                     else
                         pNewWindow = VclPtr<vcl::Window>::Create( pParent, nWinBits );
@@ -1737,7 +1737,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( rtl::Reference<VCLXWindow>* ppNewCom
                 }
                 else
                 {
-                    if (nType == WindowType::DOCKINGWINDOW )
+                    if (eType == WindowType::DOCKINGWINDOW )
                         pNewWindow = VclPtr<DockingWindow>::Create( pParent, nWinBits );
                     else
                         pNewWindow = VclPtr<vcl::Window>::Create( pParent, nWinBits );

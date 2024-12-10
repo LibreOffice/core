@@ -91,7 +91,7 @@ public:
     SAL_DLLPRIVATE static vcl::Window* GetDefDialogParent();
 
 protected:
-    explicit        Dialog( WindowType nType );
+    explicit        Dialog( WindowType eType );
     explicit        Dialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription);
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags ) override;
     virtual void    settingOptimalLayoutSize(Window *pBox) override;

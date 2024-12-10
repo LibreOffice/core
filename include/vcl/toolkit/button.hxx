@@ -61,7 +61,7 @@ public:
     SAL_DLLPRIVATE void             ImplSetSeparatorX( tools::Long nX );
 
 protected:
-    SAL_DLLPRIVATE explicit Button( WindowType nType );
+    SAL_DLLPRIVATE explicit Button( WindowType eType );
 
     // for drawing RadioButton or CheckButton that has Text and/or Image
     SAL_DLLPRIVATE void ImplDrawRadioCheck(OutputDevice* pDev, WinBits nWinStyle, SystemTextColorFlags nSystemTextColorFlags,

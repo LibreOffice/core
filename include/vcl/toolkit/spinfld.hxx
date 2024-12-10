@@ -30,7 +30,7 @@
 class VCL_DLLPUBLIC SpinField : public Edit
 {
 public:
-    explicit        SpinField( vcl::Window* pParent, WinBits nWinStyle, WindowType nType = WindowType::SPINFIELD );
+    explicit        SpinField( vcl::Window* pParent, WinBits nWinStyle, WindowType eType = WindowType::SPINFIELD );
     virtual         ~SpinField() override;
     SAL_DLLPRIVATE virtual void dispose() override;
 

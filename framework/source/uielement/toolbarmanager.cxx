@@ -1182,8 +1182,8 @@ void ToolBarManager::CreateControllers()
                     VclPtr<vcl::Window> pItemWin = VCLUnoHelper::GetWindow( xWindow );
                     if ( pItemWin )
                     {
-                        WindowType nType = pItemWin->GetType();
-                        if ( m_pToolBar && (nType == WindowType::LISTBOX || nType == WindowType::MULTILISTBOX || nType == WindowType::COMBOBOX) )
+                        WindowType eType = pItemWin->GetType();
+                        if ( m_pToolBar && (eType == WindowType::LISTBOX || eType == WindowType::MULTILISTBOX || eType == WindowType::COMBOBOX) )
                             pItemWin->SetAccessibleName( m_pToolBar->GetItemText( nId ) );
                         m_pImpl->SetItemWindow( nId, pItemWin );
                     }

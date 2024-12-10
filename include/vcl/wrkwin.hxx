@@ -58,7 +58,7 @@ private:
     WorkWindow&  operator =( const WorkWindow& rWin ) = delete;
 
 protected:
-    explicit        WorkWindow( WindowType nType );
+    explicit        WorkWindow( WindowType eType );
     SAL_DLLPRIVATE void ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData = nullptr );
     SAL_DLLPRIVATE void ImplSetFrameState(vcl::WindowState);
 

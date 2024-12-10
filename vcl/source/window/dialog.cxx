@@ -547,8 +547,8 @@ void Dialog::ImplLOKNotifier(vcl::Window* pParent)
     }
 }
 
-Dialog::Dialog( WindowType nType )
-    : SystemWindow( nType, "vcl::Dialog maLayoutIdle", true )
+Dialog::Dialog( WindowType eType )
+    : SystemWindow( eType, "vcl::Dialog maLayoutIdle", true )
     , mnInitFlag(InitFlag::Default)
 {
     ImplInitDialogData();

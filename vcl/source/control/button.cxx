@@ -98,8 +98,8 @@ mbSmallSymbol(false), mbGeneratedTooltip(false),  meImageAlign(ImageAlign::Top),
 {
 }
 
-Button::Button( WindowType nType ) :
-    Control( nType ),
+Button::Button( WindowType eType ) :
+    Control( eType ),
     mpButtonData( std::make_unique<ImplCommonButtonData>() )
 {
 }

@@ -137,7 +137,7 @@ protected:
     virtual void dragOver(const css::datatransfer::dnd::DropTargetDragEvent& dtde) override;
 
 protected:
-    SAL_DLLPRIVATE Edit(WindowType nType);
+    SAL_DLLPRIVATE Edit(WindowType eType);
     virtual void FillLayoutData() const override;
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 public:

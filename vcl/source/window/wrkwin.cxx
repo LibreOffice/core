@@ -82,8 +82,8 @@ void WorkWindow::ImplInit( vcl::Window* pParent, WinBits nStyle, const css::uno:
         ImplInit( pParent, nStyle );
 }
 
-WorkWindow::WorkWindow( WindowType nType ) :
-    SystemWindow( nType, "vcl::WorkWindow maLayoutIdle" )
+WorkWindow::WorkWindow( WindowType eType ) :
+    SystemWindow( eType, "vcl::WorkWindow maLayoutIdle" )
 {
     ImplInitWorkWindowData();
 }

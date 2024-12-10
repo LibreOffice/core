@@ -93,7 +93,7 @@ private:
                             Control & operator= (const Control &) = delete;
 
 protected:
-    SAL_DLLPRIVATE Control( WindowType nType );
+    SAL_DLLPRIVATE Control( WindowType eType );
     virtual void    FillLayoutData() const;
 
     // helper method for composite controls

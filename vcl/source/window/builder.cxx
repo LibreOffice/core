@@ -170,16 +170,16 @@ namespace
     void setupFromActionName(Button *pButton, VclBuilder::stringmap &rMap, const css::uno::Reference<css::frame::XFrame>& rFrame);
 
 #if defined SAL_LOG_WARN
-    bool isButtonType(WindowType nType)
+    bool isButtonType(WindowType eType)
     {
-        return nType == WindowType::PUSHBUTTON ||
-               nType == WindowType::OKBUTTON ||
-               nType == WindowType::CANCELBUTTON ||
-               nType == WindowType::HELPBUTTON ||
-               nType == WindowType::IMAGEBUTTON ||
-               nType == WindowType::MENUBUTTON ||
-               nType == WindowType::MOREBUTTON ||
-               nType == WindowType::SPINBUTTON;
+        return eType == WindowType::PUSHBUTTON ||
+               eType == WindowType::OKBUTTON ||
+               eType == WindowType::CANCELBUTTON ||
+               eType == WindowType::HELPBUTTON ||
+               eType == WindowType::IMAGEBUTTON ||
+               eType == WindowType::MENUBUTTON ||
+               eType == WindowType::MOREBUTTON ||
+               eType == WindowType::SPINBUTTON;
     }
 #endif
 
