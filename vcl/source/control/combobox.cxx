@@ -22,20 +22,15 @@
 #include <set>
 
 #include <comphelper/string.hxx>
-#include <vcl/toolkit/lstbox.hxx>
+
 #include <vcl/builder.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/vclevent.hxx>
 #include <vcl/uitest/uiobject.hxx>
-#include <sal/log.hxx>
 
 #include <listbox.hxx>
 #include <comphelper/lok.hxx>
-#include <tools/json_writer.hxx>
 #include <o3tl/string_view.hxx>
-
 
 struct ComboBoxBounds
 {
