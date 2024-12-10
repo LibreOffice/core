@@ -1282,7 +1282,8 @@ SwHTMLWriter& OutHTML_ImageStart( HtmlWriter& rHtml, SwHTMLWriter& rWrt, const S
         {
             aMapURL = pURLItem->GetURL();
             aName = pURLItem->GetName();
-            aTarget = pURLItem->GetTargetFrameName();
+            if (!rWrt.mbReqIF) // no target attribute for ReqIF
+                aTarget = pURLItem->GetTargetFrameName();
         }
         else if (rWrt.mbReqIF && pAltImgMap)
         {
@@ -1293,8 +1294,8 @@ SwHTMLWriter& OutHTML_ImageStart( HtmlWriter& rHtml, SwHTMLWriter& rWrt, const S
                 {
                     aMapURL = pIMapObject->GetURL();
                     aName = pIMapObject->GetName();
-                    aTarget = pIMapObject->GetTarget();
-                    if (!aMapURL.isEmpty() || !aName.isEmpty() || !aTarget.isEmpty())
+                    // Don't read target for ReqIF
+                    if (!aMapURL.isEmpty() || !aName.isEmpty())
                         break;
                 }
             }
