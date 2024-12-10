@@ -3105,13 +3105,16 @@ SwHTMLWriter& OutHTML_INetFormat( SwHTMLWriter& rWrt, const SwFormatINetFormat& 
         sOut = "\""_ostr;
     }
 
-    const OUString& rTarget = rINetFormat.GetTargetFrame();
-    if( !rTarget.isEmpty() )
+    if (!rWrt.mbReqIF) // no target attribute for ReqIF
     {
-        sOut += " " OOO_STRING_SVTOOLS_HTML_O_target "=\"";
-        rWrt.Strm().WriteOString( sOut );
-        HTMLOutFuncs::Out_String( rWrt.Strm(), rTarget );
-        sOut = "\""_ostr;
+        const OUString& rTarget = rINetFormat.GetTargetFrame();
+        if (!rTarget.isEmpty())
+        {
+            sOut += " " OOO_STRING_SVTOOLS_HTML_O_target "=\"";
+            rWrt.Strm().WriteOString(sOut);
+            HTMLOutFuncs::Out_String(rWrt.Strm(), rTarget);
+            sOut = "\""_ostr;
+        }
     }
 
     if( !sRel.isEmpty() )

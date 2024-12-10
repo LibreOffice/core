@@ -8,13 +8,13 @@
  </office:styles>
  <office:body>
   <office:text>
-   <text:p><draw:a xlink:type="simple" xlink:href="foo/bar"><draw:frame draw:style-name="Frame" draw:name="image1" svg:width="17cm" svg:height="25mm" style:rel-height="scale"><draw:image draw:mime-type="image/png">
+   <text:p><draw:a xlink:type="simple" xlink:href="foo/bar" office:target-frame-name="_blank"><draw:frame draw:style-name="Frame" draw:name="image1" svg:width="17cm" svg:height="25mm" style:rel-height="scale"><draw:image draw:mime-type="image/png">
        <office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAAAMSURBVBhXY/jPwAAAAwEBAGMkVdMAAAAASUVORK5C</office:binary-data>
       </draw:image>
      </draw:frame></draw:a>image1 with a hyperlink, and this text with <text:a xlink:type="simple" xlink:href="baz" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">another hyperlink</text:a></text:p>
    <text:p><draw:frame draw:style-name="Frame" draw:name="frame" svg:width="17cm">
      <draw:text-box fo:min-height="1pt">
-      <text:p><draw:a xlink:type="simple" xlink:href="foo/bar"><draw:frame draw:style-name="Frame" draw:name="image2" svg:width="17cm" svg:height="25mm"><draw:image draw:mime-type="image/png">
+      <text:p><draw:a xlink:type="simple" xlink:href="foo/bar" office:target-frame-name="_blank"><draw:frame draw:style-name="Frame" draw:name="image2" svg:width="17cm" svg:height="25mm"><draw:image draw:mime-type="image/png">
           <office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAAAMSURBVBhXY/jPwAAAAwEBAGMkVdMAAAAASUVORK5C</office:binary-data>
          </draw:image>
         </draw:frame></draw:a>image2 with a hyperlink, and this text with <text:a xlink:type="simple" xlink:href="baz" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">another hyperlink</text:a>, in a frame</text:p>
