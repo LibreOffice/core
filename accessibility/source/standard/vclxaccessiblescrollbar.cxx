@@ -165,9 +165,9 @@ Any VCLXAccessibleScrollBar::getCurrentValue(  )
 
     Any aValue;
 
-    VCLXScrollBar* pVCLXScrollBar = static_cast< VCLXScrollBar* >( GetVCLXWindow() );
-    if ( pVCLXScrollBar )
-        aValue <<=  pVCLXScrollBar->getValue();
+    VclPtr<ScrollBar> pScrollBar = GetAs<ScrollBar>();
+    if (pScrollBar)
+        aValue <<= sal_Int32(pScrollBar->GetThumbPos());
 
     return aValue;
 }
@@ -179,20 +179,19 @@ sal_Bool VCLXAccessibleScrollBar::setCurrentValue( const Any& aNumber )
 
     bool bReturn = false;
 
-    VCLXScrollBar* pVCLXScrollBar = static_cast< VCLXScrollBar* >( GetVCLXWindow() );
-    if ( pVCLXScrollBar )
+    VclPtr<ScrollBar> pScrollBar = GetAs<ScrollBar>();
+    if (pScrollBar)
     {
-        sal_Int32 nValue = 0, nValueMin = 0, nValueMax = 0;
+        sal_Int32 nValue = 0;
         OSL_VERIFY( aNumber >>= nValue );
-        OSL_VERIFY( getMinimumValue() >>= nValueMin );
-        OSL_VERIFY( getMaximumValue() >>= nValueMax );
+        sal_Int32 nValueMax = pScrollBar->GetRangeMax();
 
-        if ( nValue < nValueMin )
-            nValue = nValueMin;
+        if (nValue < 0)
+            nValue = 0;
         else if ( nValue > nValueMax )
             nValue = nValueMax;
 
-        pVCLXScrollBar->setValue( nValue );
+        pScrollBar->DoScroll(nValue);
         bReturn = true;
     }
 
@@ -206,9 +205,9 @@ Any VCLXAccessibleScrollBar::getMaximumValue(  )
 
     Any aValue;
 
-    VCLXScrollBar* pVCLXScrollBar = static_cast< VCLXScrollBar* >( GetVCLXWindow() );
-    if ( pVCLXScrollBar )
-        aValue <<= pVCLXScrollBar->getMaximum();
+    VclPtr<ScrollBar> pScrollBar = GetAs<ScrollBar>();
+    if (pScrollBar)
+        aValue <<= sal_Int32(pScrollBar->GetRangeMax());
 
     return aValue;
 }
