@@ -45,6 +45,15 @@ class SwDocShell;
 class SwXNumberingRules;
 class SwDocStyleSheet;
 
+/** The names of built-in styles at the API are ProgNames which are not subject
+    to i18n and must never change - these are written into ODF files.
+
+    The names of built-in styles in the core document model are UINames which
+    are subject to i18n and may change in different versions.
+
+    Take care to use SwStyleNameMapper::GetProgName() or
+    SwStyleNameMapper::GetUIName() to convert here in the UNO service.
+  */
 class SAL_DLLPUBLIC_RTTI SwXStyle
     : public cppu::ImplInheritanceHelper<
           SwXBaseStyle, css::beans::XMultiPropertySet, css::lang::XServiceInfo,
@@ -53,11 +62,11 @@ class SAL_DLLPUBLIC_RTTI SwXStyle
       public SvtListener
 {
     SwDoc* m_pDoc;
-    OUString m_sStyleName;
+    OUString m_sStyleUIName; ///< UIName, needs conversion to ProgName
     const StyleFamilyEntry& m_rEntry;
     bool m_bIsDescriptor;
     bool m_bIsConditional;
-    OUString m_sParentStyleName;
+    OUString m_sParentStyleUIName; ///< UIName, needs conversion to ProgName
     // cache UNO stylesheets
     std::unordered_map<SfxStyleSheetBase*, rtl::Reference<SwDocStyleSheet>> maUnoStyleSheets;
 
@@ -177,12 +186,12 @@ public:
 
     SW_DLLPUBLIC rtl::Reference<SwXNumberingRules> getNumberingRules();
 
-    const OUString& GetStyleName() const { return m_sStyleName; }
+    const OUString& GetStyleUIName() const { return m_sStyleUIName; }
     SfxStyleFamily GetFamily() const;
 
     bool IsDescriptor() const { return m_bIsDescriptor; }
     bool IsConditional() const { return m_bIsConditional; }
-    const OUString& GetParentStyleName() const { return m_sParentStyleName; }
+    const OUString& GetParentStyleUIName() const { return m_sParentStyleUIName; }
     void SetDoc(SwDoc* pDc, SfxStyleSheetBasePool* pPool)
     {
         m_bIsDescriptor = false;
@@ -193,7 +202,7 @@ public:
     SwDoc* GetDoc() const { return m_pDoc; }
     void Invalidate();
     void ApplyDescriptorProperties();
-    void SetStyleName(const OUString& rSet) { m_sStyleName = rSet; }
+    void SetStyleUIName(const OUString& rSet) { m_sStyleUIName = rSet; }
     /// @throws beans::PropertyVetoException
     /// @throws lang::IllegalArgumentException
     /// @throws lang::WrappedTargetException
