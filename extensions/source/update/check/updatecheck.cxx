@@ -1182,7 +1182,6 @@ UpdateCheck::showDialog(bool forceCheck)
     }
 }
 
-
 void
 UpdateCheck::setUpdateInfo(const UpdateInfo& aInfo)
 {
@@ -1253,6 +1252,11 @@ UpdateCheck::setUpdateInfo(const UpdateInfo& aInfo)
     setUIState(eUIState, bSuppressBubble);
 }
 
+bool UpdateCheck::hasOfficeUpdate() const
+{
+    std::unique_lock aGuard(m_aMutex);
+    return m_aUpdateInfo.BuildId.getLength() > 0;
+}
 
 void
 UpdateCheck::setCheckFailedState()

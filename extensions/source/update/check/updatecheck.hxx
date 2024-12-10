@@ -93,7 +93,7 @@ public:
     bool shouldShowExtUpdDlg() const { return ( m_bShowExtUpdDlg && m_bHasExtensionUpdate ); }
     void showExtensionDialog();
     void setHasExtensionUpdates( bool bHasUpdates ) { m_bHasExtensionUpdate = bHasUpdates; }
-    bool hasOfficeUpdate() const { return (m_aUpdateInfo.BuildId.getLength() > 0); }
+    bool hasOfficeUpdate() const;
 
     // DownloadInteractionHandler
     virtual bool downloadTargetExists(const OUString& rFileName) override;
