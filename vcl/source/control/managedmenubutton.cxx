@@ -42,7 +42,7 @@ void ManagedMenuButton::dispose()
 void ManagedMenuButton::PrepareExecute()
 {
     if (!GetPopupMenu())
-        SetPopupMenu(VclPtr<PopupMenu>::Create());
+        SetPopupMenu(VclPtr<PopupMenu>::Create(), true);
 
     MenuButton::PrepareExecute();
 
