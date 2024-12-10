@@ -4565,8 +4565,7 @@ SfxVoidItem ChangePicture SID_CHANGE_PICTURE
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    ViewerApp = FALSE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -4600,8 +4599,7 @@ SfxVoidItem CompressGraphic SID_COMPRESS_GRAPHIC
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    ViewerApp = FALSE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
