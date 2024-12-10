@@ -92,13 +92,6 @@ void SwConvertTableDlg::GetValues(sal_Unicode& rDelim, SwInsertTableOptions& rIn
 SwConvertTableDlg::SwConvertTableDlg(SwView& rView, bool bToTable)
     : SfxDialogController(rView.GetFrameWeld(), u"modules/swriter/ui/converttexttable.ui"_ustr,
                           u"ConvertTextTableDialog"_ustr)
-    , m_aStrTitle(SwResId(STR_ADD_AUTOFORMAT_TITLE))
-    , m_aStrLabel(SwResId(STR_ADD_AUTOFORMAT_LABEL))
-    , m_aStrClose(SwResId(STR_BTN_AUTOFORMAT_CLOSE))
-    , m_aStrDelTitle(SwResId(STR_DEL_AUTOFORMAT_TITLE))
-    , m_aStrDelMsg(SwResId(STR_DEL_AUTOFORMAT_MSG))
-    , m_aStrRenameTitle(SwResId(STR_RENAME_AUTOFORMAT_TITLE))
-    , m_aStrInvalidFormat(SwResId(STR_INVALID_AUTOFORMAT_NAME))
     , m_nIndex(0)
     , m_nDfltStylePos(0)
     , m_bCoreDataChanged(false)
@@ -122,7 +115,6 @@ SwConvertTableDlg::SwConvertTableDlg(SwView& rView, bool bToTable)
     , m_xBtnPattern(m_xBuilder->weld_check_button(u"patterncb"_ustr))
     , m_xBtnAlignment(m_xBuilder->weld_check_button(u"alignmentcb"_ustr))
     , m_xWndPreview(new weld::CustomWeld(*m_xBuilder, u"preview"_ustr, m_aWndPreview))
-    , m_pShell(&rView.GetWrtShell())
 {
     m_aWndPreview.DetectRTL(&rView.GetWrtShell());
     m_xTableTable->Load();
