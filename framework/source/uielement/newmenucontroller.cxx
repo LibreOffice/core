@@ -56,26 +56,12 @@ using namespace com::sun::star::ui;
 
 namespace
 {
+/**
+ * A simple status listener, storing the "enabled" status from the last status notification
+ */
 class SlotStatusGetter : public comphelper::WeakImplHelper<css::frame::XStatusListener>
 {
 public:
-    SlotStatusGetter(const css::util::URL& url,
-                     const css::uno::Reference<css::frame::XFrame>& frame)
-    {
-        if (auto provider = frame.query<css::frame::XDispatchProvider>())
-        {
-            if (auto xDispatch = provider->queryDispatch(url, {}, 0))
-            {
-                // Avoid self-destruction
-                osl_atomic_increment(&m_refCount);
-                // Adding as listener will automatically emit an initial notification
-                xDispatch->addStatusListener(this, url);
-                xDispatch->removeStatusListener(this, url);
-                osl_atomic_decrement(&m_refCount);
-            }
-        }
-    }
-
     bool isEnabled() const { return m_bEnabled; }
 
 private:
@@ -94,11 +80,23 @@ private:
 bool isSlotActive(const OUString& slot, const css::uno::Reference<css::frame::XFrame>& frame,
     const css::uno::Reference<css::util::XURLTransformer>& transformer)
 {
-    css::util::URL url;
-    url.Complete = slot;
-    transformer->parseStrict(url);
-    rtl::Reference slotStatus(new SlotStatusGetter(url, frame));
-    return slotStatus->isEnabled();
+    if (auto provider = frame.query<css::frame::XDispatchProvider>())
+    {
+        css::util::URL url;
+        url.Complete = slot;
+        transformer->parseStrict(url);
+        if (auto dispatch = provider->queryDispatch(url, {}, 0))
+        {
+            rtl::Reference slotStatus(new SlotStatusGetter);
+            // Adding as listener will automatically emit an initial notification. The status
+            // reported in the notification will be stored in the SlotStatusGetter instance.
+            dispatch->addStatusListener(slotStatus, url);
+            dispatch->removeStatusListener(slotStatus, url);
+            return slotStatus->isEnabled();
+        }
+    }
+
+    return false;
 }
 }
 
