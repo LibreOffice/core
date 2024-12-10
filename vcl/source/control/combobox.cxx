@@ -136,28 +136,28 @@ void ComboBox::ImplCalcEditHeight()
     }
 }
 
-void ComboBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
+void ComboBox::ImplInit(vcl::Window* pParent, WinBits eStyle)
 {
-    const bool bNoBorder = ( nStyle & WB_NOBORDER ) != 0;
+    const bool bNoBorder = (eStyle & WB_NOBORDER) != 0;
 
-    if ( !(nStyle & WB_DROPDOWN) )
+    if (!(eStyle & WB_DROPDOWN))
     {
-        nStyle &= ~WB_BORDER;
-        nStyle |= WB_NOBORDER;
+        eStyle &= ~WB_BORDER;
+        eStyle |= WB_NOBORDER;
     }
     else
     {
         if ( !bNoBorder )
-            nStyle |= WB_BORDER;
+            eStyle |= WB_BORDER;
     }
 
-    Edit::ImplInit( pParent, nStyle );
+    Edit::ImplInit(pParent, eStyle);
     SetBackground();
 
     // DropDown ?
-    WinBits nEditStyle = nStyle & ( WB_LEFT | WB_RIGHT | WB_CENTER );
-    WinBits nListStyle = nStyle;
-    if( nStyle & WB_DROPDOWN )
+    WinBits eEditStyle = eStyle & (WB_LEFT | WB_RIGHT | WB_CENTER);
+    WinBits eListStyle = eStyle;
+    if (eStyle & WB_DROPDOWN)
     {
         m_pFloatWin = VclPtr<ImplListBoxFloatingWindow>::Create( this );
         if (!IsNativeControlSupported(ControlType::Pushbutton, ControlPart::Focus))
@@ -170,21 +170,21 @@ void ComboBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
         m_pBtn->SetMBDownHdl(LINK(this, ComboBox, ImplClickBtnHdl));
         m_pBtn->Show();
 
-        nEditStyle |= WB_NOBORDER;
-        nListStyle &= ~WB_BORDER;
-        nListStyle |= WB_NOBORDER;
+        eEditStyle |= WB_NOBORDER;
+        eListStyle &= ~WB_BORDER;
+        eListStyle |= WB_NOBORDER;
     }
     else
     {
         if ( !bNoBorder )
         {
-            nEditStyle |= WB_BORDER;
-            nListStyle &= ~WB_NOBORDER;
-            nListStyle |= WB_BORDER;
+            eEditStyle |= WB_BORDER;
+            eListStyle &= ~WB_NOBORDER;
+            eListStyle |= WB_BORDER;
         }
     }
 
-    m_pSubEdit.set( VclPtr<Edit>::Create( this, nEditStyle ) );
+    m_pSubEdit.set(VclPtr<Edit>::Create(this, eEditStyle));
     m_pSubEdit->EnableRTL( false );
     SetSubEdit( m_pSubEdit );
     m_pSubEdit->SetPosPixel( Point() );
@@ -194,7 +194,7 @@ void ComboBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
     vcl::Window* pLBParent = this;
     if (m_pFloatWin)
         pLBParent = m_pFloatWin;
-    m_pImplLB = VclPtr<ImplListBox>::Create( pLBParent, nListStyle|WB_SIMPLEMODE|WB_AUTOHSCROLL );
+    m_pImplLB = VclPtr<ImplListBox>::Create(pLBParent, eListStyle | WB_SIMPLEMODE | WB_AUTOHSCROLL);
     m_pImplLB->SetPosPixel( Point() );
     m_pImplLB->SetSelectHdl(LINK(this, ComboBox, ImplSelectHdl));
     m_pImplLB->SetCancelHdl( LINK(this, ComboBox, ImplCancelHdl));
@@ -213,13 +213,15 @@ void ComboBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
     SetCompoundControl( true );
 }
 
-WinBits ComboBox::ImplInitStyle( WinBits nStyle )
+WinBits ComboBox::ImplInitStyle(WinBits eStyle)
 {
-    if ( !(nStyle & WB_NOTABSTOP) )
-        nStyle |= WB_TABSTOP;
-    if ( !(nStyle & WB_NOGROUP) )
-        nStyle |= WB_GROUP;
-    return nStyle;
+    if (!(eStyle & WB_NOTABSTOP))
+        eStyle |= WB_TABSTOP;
+
+    if (!(eStyle & WB_NOGROUP))
+        eStyle |= WB_GROUP;
+
+    return eStyle;
 }
 
 void ComboBox::EnableAutocomplete( bool bEnable, bool bMatchCase )
@@ -536,15 +538,15 @@ sal_uInt16 ComboBox::GetDropDownLineCount() const
     return nLines;
 }
 
-void ComboBox::setPosSizePixel( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,
-                                PosSizeFlags nFlags )
+void ComboBox::setPosSizePixel(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,
+                               PosSizeFlags eFlags)
 {
-    if( IsDropDownBox() && ( nFlags & PosSizeFlags::Size ) )
+    if (IsDropDownBox() && (eFlags & PosSizeFlags::Size))
     {
         Size aPrefSz = m_pFloatWin->GetPrefSize();
-        if ((nFlags & PosSizeFlags::Height) && (nHeight >= 2*m_nDDHeight))
+        if ((eFlags & PosSizeFlags::Height) && (nHeight >= 2*m_nDDHeight))
             aPrefSz.setHeight( nHeight-m_nDDHeight );
-        if ( nFlags & PosSizeFlags::Width )
+        if (eFlags & PosSizeFlags::Width)
             aPrefSz.setWidth( nWidth );
         m_pFloatWin->SetPrefSize(aPrefSz);
 
@@ -552,7 +554,7 @@ void ComboBox::setPosSizePixel( tools::Long nX, tools::Long nY, tools::Long nWid
             nHeight = m_nDDHeight;
     }
 
-    Edit::setPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
+    Edit::setPosSizePixel(nX, nY, nWidth, nHeight, eFlags);
 }
 
 void ComboBox::Resize()
@@ -609,17 +611,17 @@ void ComboBox::FillLayoutData() const
     }
 }
 
-void ComboBox::StateChanged( StateChangedType nType )
+void ComboBox::StateChanged(StateChangedType eType)
 {
-    Edit::StateChanged( nType );
+    Edit::StateChanged(eType);
 
-    if ( nType == StateChangedType::ReadOnly )
+    if (eType == StateChangedType::ReadOnly)
     {
         m_pImplLB->SetReadOnly( IsReadOnly() );
         if (m_pBtn)
             m_pBtn->Enable( IsEnabled() && !IsReadOnly() );
     }
-    else if ( nType == StateChangedType::Enable )
+    else if (eType == StateChangedType::Enable)
     {
         m_pSubEdit->Enable( IsEnabled() );
         m_pImplLB->Enable( IsEnabled() && !IsReadOnly() );
@@ -627,40 +629,40 @@ void ComboBox::StateChanged( StateChangedType nType )
             m_pBtn->Enable( IsEnabled() && !IsReadOnly() );
         Invalidate();
     }
-    else if( nType == StateChangedType::UpdateMode )
+    else if (eType == StateChangedType::UpdateMode)
     {
         m_pImplLB->SetUpdateMode( IsUpdateMode() );
     }
-    else if ( nType == StateChangedType::Zoom )
+    else if (eType == StateChangedType::Zoom)
     {
         m_pImplLB->SetZoom( GetZoom() );
         m_pSubEdit->SetZoom( GetZoom() );
         ImplCalcEditHeight();
         Resize();
     }
-    else if ( nType == StateChangedType::ControlFont )
+    else if (eType == StateChangedType::ControlFont)
     {
         m_pImplLB->SetControlFont( GetControlFont() );
         m_pSubEdit->SetControlFont( GetControlFont() );
         ImplCalcEditHeight();
         Resize();
     }
-    else if ( nType == StateChangedType::ControlForeground )
+    else if (eType == StateChangedType::ControlForeground)
     {
         m_pImplLB->SetControlForeground( GetControlForeground() );
         m_pSubEdit->SetControlForeground( GetControlForeground() );
     }
-    else if ( nType == StateChangedType::ControlBackground )
+    else if (eType == StateChangedType::ControlBackground)
     {
         m_pImplLB->SetControlBackground( GetControlBackground() );
         m_pSubEdit->SetControlBackground( GetControlBackground() );
     }
-    else if ( nType == StateChangedType::Style )
+    else if (eType == StateChangedType::Style)
     {
         SetStyle( ImplInitStyle( GetStyle() ) );
         GetMainWindow()->EnableSort( ( GetStyle() & WB_SORT ) != 0 );
     }
-    else if( nType == StateChangedType::Mirroring )
+    else if (eType == StateChangedType::Mirroring)
     {
         if (m_pBtn)
         {
@@ -1130,7 +1132,7 @@ void ComboBox::GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines
     }
 }
 
-void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags )
+void ComboBox::Draw(OutputDevice* pDev, const Point& rPos, SystemTextColorFlags eFlags)
 {
     GetMainWindow()->ApplySettings(*pDev);
 
@@ -1169,23 +1171,23 @@ void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags
         tools::Long        nOnePixel = GetDrawPixel( pDev, 1 );
         tools::Long        nTextHeight = pDev->GetTextHeight();
         tools::Long        nEditHeight = nTextHeight + 6*nOnePixel;
-        DrawTextFlags nTextStyle = DrawTextFlags::VCenter;
+        DrawTextFlags eTextStyle = DrawTextFlags::VCenter;
 
         // First, draw the edit part
         Size aOrigSize(m_pSubEdit->GetSizePixel());
         m_pSubEdit->SetSizePixel(Size(aSize.Width(), nEditHeight));
-        m_pSubEdit->Draw( pDev, aPos, nFlags );
+        m_pSubEdit->Draw(pDev, aPos, eFlags);
         m_pSubEdit->SetSizePixel(aOrigSize);
 
         // Second, draw the listbox
         if ( GetStyle() & WB_CENTER )
-            nTextStyle |= DrawTextFlags::Center;
+            eTextStyle |= DrawTextFlags::Center;
         else if ( GetStyle() & WB_RIGHT )
-            nTextStyle |= DrawTextFlags::Right;
+            eTextStyle |= DrawTextFlags::Right;
         else
-            nTextStyle |= DrawTextFlags::Left;
+            eTextStyle |= DrawTextFlags::Left;
 
-        if ( nFlags & SystemTextColorFlags::Mono )
+        if (eFlags & SystemTextColorFlags::Mono)
         {
             pDev->SetTextColor( COL_BLACK );
         }
@@ -1219,7 +1221,7 @@ void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags
         // the drawing starts here
         for ( sal_Int32 n = 0; n < nLines; ++n )
         {
-            pDev->DrawText( aTextRect, m_pImplLB->GetEntryList().GetEntryText( n+nTEntry ), nTextStyle );
+            pDev->DrawText(aTextRect, m_pImplLB->GetEntryList().GetEntryText(n + nTEntry), eTextStyle);
             aTextRect.AdjustTop(nTextHeight );
             aTextRect.AdjustBottom(nTextHeight );
         }
@@ -1232,7 +1234,7 @@ void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags
     {
         Size aOrigSize(m_pSubEdit->GetSizePixel());
         m_pSubEdit->SetSizePixel(GetSizePixel());
-        m_pSubEdit->Draw( pDev, rPos, nFlags );
+        m_pSubEdit->Draw(pDev, rPos, eFlags);
         m_pSubEdit->SetSizePixel(aOrigSize);
         // DD-Button ?
     }
@@ -1544,11 +1546,11 @@ bool ComboBox::set_property(const OUString &rKey, const OUString &rValue)
         // the focus gets stuck in it, so try here to behave like gtk does
         // with the settings that work, i.e. can.focus of false doesn't
         // set the hard WB_NOTABSTOP
-        WinBits nBits = GetStyle();
-        nBits &= ~(WB_TABSTOP|WB_NOTABSTOP);
+        WinBits eBits = GetStyle();
+        eBits &= ~(WB_TABSTOP|WB_NOTABSTOP);
         if (toBool(rValue))
-            nBits |= WB_TABSTOP;
-        SetStyle(nBits);
+            eBits |= WB_TABSTOP;
+        SetStyle(eBits);
     }
     else if (rKey == "placeholder-text")
         SetPlaceholderText(rValue);
