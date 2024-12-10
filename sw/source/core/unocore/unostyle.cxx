@@ -1408,7 +1408,7 @@ void SwXStyle::setName(const OUString& rProgName)
     if(!pBase || !pBase->IsUserDefined())
         throw uno::RuntimeException();
     OUString sUIName;
-    // conversion should actully be irrelevant due to IsUserDefined() check
+    // conversion should actually be irrelevant due to IsUserDefined() check
     SwStyleNameMapper::FillUIName(rProgName, sUIName, m_rEntry.poolId());
     rtl::Reference<SwDocStyleSheet> xTmp(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
     if (!xTmp->SetName(sUIName))
