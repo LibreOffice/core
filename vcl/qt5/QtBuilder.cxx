@@ -318,6 +318,13 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
         // nothing else to do, return tree view parent for the widget
         return pTreeView;
     }
+    else if (sName == u"GtkViewport")
+    {
+        // GtkViewport is an adaptor to make GtkWidgets scrollable
+        // inside a GtkScrolledWindow; no equivalent needed for widgets
+        // inside QScrollArea - just create a simple QWidget
+        pObject = new QWidget(pParentWidget);
+    }
     else
     {
         SAL_WARN("vcl.qt", "Widget type not supported yet: "
