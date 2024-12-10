@@ -3101,6 +3101,8 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_160867)
     assertXPath(pXmlDoc, "//reqif-xhtml:p[2]/reqif-xhtml:a/reqif-xhtml:object"_ostr);
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "//reqif-xhtml:p[2]/reqif-xhtml:a"_ostr, "href"_ostr)
                        .endsWith("foo/bar"));
+    // There must be no 'target' attribute
+    assertXPathNoAttribute(pXmlDoc, "//reqif-xhtml:p[2]/reqif-xhtml:a", "target");
 }
 
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_161979)
@@ -3425,6 +3427,20 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifNoTypeInUL)
     xmlDocUniquePtr pXmlDoc = WrapReqifFromTempFile();
     // Without the accompanying fix in place, this test would have failed
     assertXPathNoAttribute(pXmlDoc, "//reqif-xhtml:ul/reqif-xhtml:li/reqif-xhtml:ul", "type");
+}
+
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifNoTargetInA)
+{
+    // Given a document with a link with target:
+    createSwDoc("link_with_target.fodt");
+
+    // When exporting to XHTML:
+    ExportToReqif();
+
+    // Check that 'a' element has no 'target' attribute
+    xmlDocUniquePtr pXmlDoc = WrapReqifFromTempFile();
+    // Without the accompanying fix in place, this test would have failed
+    assertXPathNoAttribute(pXmlDoc, "//reqif-xhtml:a", "target");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
