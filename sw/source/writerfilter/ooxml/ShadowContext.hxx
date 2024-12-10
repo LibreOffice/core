@@ -50,7 +50,7 @@ class CallData
     //char
     ::rtl::OUString m_aChars;
 
-    //unknwon
+    //unknown
     ::rtl::OUString m_sNameSpace;
     ::rtl::OUString m_sElement;
 
