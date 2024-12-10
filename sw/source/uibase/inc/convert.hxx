@@ -37,13 +37,6 @@ struct SwInsertTableOptions;
 
 class SwConvertTableDlg final : public SfxDialogController
 {
-    OUString m_aStrTitle;
-    OUString m_aStrLabel;
-    OUString m_aStrClose;
-    OUString m_aStrDelTitle;
-    OUString m_aStrDelMsg;
-    OUString m_aStrRenameTitle;
-    OUString m_aStrInvalidFormat;
     sal_uInt8 m_nIndex;
     sal_uInt8 m_nDfltStylePos;
     bool m_bCoreDataChanged : 1;
@@ -76,7 +69,6 @@ class SwConvertTableDlg final : public SfxDialogController
     std::unique_ptr<weld::CheckButton> m_xBtnAlignment;
     AutoFormatPreview m_aWndPreview;
     std::unique_ptr<weld::CustomWeld> m_xWndPreview;
-    SwWrtShell* m_pShell;
 
     void Init();
     void UpdateChecks(const SwTableAutoFormat&, bool bEnableBtn);
