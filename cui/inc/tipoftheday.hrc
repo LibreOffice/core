@@ -58,7 +58,7 @@ const std::tuple<TranslateId, OUString, OUString, tipModule> TIPOFTHEDAY_STRINGA
      { NC_("RID_CUI_TIPOFTHEDAY", "Writing a book? %PRODUCTNAME master document lets you manage large documents as a container for individual %PRODUCTNAME Writer files."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/swriter/guide/globaldoc.html", "", swriter}, //local help missing
      { NC_("RID_CUI_TIPOFTHEDAY", "You can create editable Hybrid PDFs with %PRODUCTNAME."), "https://wiki.documentfoundation.org/Documentation/HowTo/CreateAHybridPDF", "hybrid_pdf.png", soffice},
      { NC_("RID_CUI_TIPOFTHEDAY", "Explore the ten different functions in the status bar (at the bottom of the document window). Place the cursor over each field for an explanation. If not visible, use View ▸ Status Bar."), "", "", swriter},
-     { NC_("RID_CUI_TIPOFTHEDAY", "Want to sum a cell through several sheets? Refer to the range of sheets e.g. =SUM(Sheet1.A1:Sheet2.A1)."), "", "sum_sheets.png", scalc},
+     { NC_("RID_CUI_TIPOFTHEDAY", "Want to sum a cell through several sheets? Refer to the range of sheets e.g. =SUM(Sheet1.A1:Sheet2.A3)."), "", "sum_sheets.png", scalc},
      { NC_("RID_CUI_TIPOFTHEDAY", "You can create fillable form documents (even PDFs) with %PRODUCTNAME."), "https://www.techrepublic.com/article/how-to-create-interactive-pdfs-with-libreoffice", "formdocuments.png", soffice},
      { NC_("RID_CUI_TIPOFTHEDAY", "Cannot see all the text in a cell? Expand the input line in the formula bar and you can scroll."), "", "expand_formula_bar.png", scalc},
      { NC_("RID_CUI_TIPOFTHEDAY", "Optimize your table layout with Table ▸ Size ▸ Distribute Rows / Columns Evenly."), "", "", swriter},
