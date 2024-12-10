@@ -138,7 +138,7 @@ class SAL_DLLPUBLIC_RTTI ScPatternAttr final
     sal_uInt64                  mnPAKey;
     mutable size_t              mnRefCount;
 #ifdef DBG_UTIL
-    sal_uInt32                  m_nSerialNumber;
+    [[maybe_unused]] sal_uInt32 m_nSerialNumber;
     bool                        m_bDeleted;
 #endif
 
