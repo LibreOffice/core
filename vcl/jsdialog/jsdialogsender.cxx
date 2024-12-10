@@ -46,7 +46,8 @@ void JSDialogNotifyIdle::send(const OString& sMsg)
 }
 
 template <class VclType>
-void JSDialogNotifyIdle::sendMessage(jsdialog::MessageType eType, VclPtr<VclType> pTarget,
+void JSDialogNotifyIdle::sendMessage(const jsdialog::MessageType eType,
+                                     const VclPtr<VclType>& pTarget,
                                      std::unique_ptr<jsdialog::ActionDataMap> pData)
 {
     std::scoped_lock aGuard(m_aQueueMutex);
@@ -94,7 +95,7 @@ OString JSDialogNotifyIdle::generateFullUpdate() const
     return aJsonWriter.finishAndGetAsOString();
 }
 
-OString JSDialogNotifyIdle::generateWidgetUpdate(VclPtr<vcl::Window> pWindow) const
+OString JSDialogNotifyIdle::generateWidgetUpdate(const VclPtr<vcl::Window>& pWindow) const
 {
     if (!pWindow || !m_aNotifierWindow)
         return OString();
@@ -125,7 +126,7 @@ OString JSDialogNotifyIdle::generateCloseMessage() const
 }
 
 OString
-JSDialogNotifyIdle::generateActionMessage(VclPtr<vcl::Window> pWindow,
+JSDialogNotifyIdle::generateActionMessage(const VclPtr<vcl::Window>& pWindow,
                                           std::unique_ptr<jsdialog::ActionDataMap> pData) const
 {
     tools::JsonWriter aJsonWriter;
@@ -146,8 +147,9 @@ JSDialogNotifyIdle::generateActionMessage(VclPtr<vcl::Window> pWindow,
     return aJsonWriter.finishAndGetAsOString();
 }
 
-OString JSDialogNotifyIdle::generatePopupMessage(VclPtr<vcl::Window> pWindow, OUString sParentId,
-                                                 OUString sCloseId) const
+OString JSDialogNotifyIdle::generatePopupMessage(const VclPtr<vcl::Window>& pWindow,
+                                                 const OUString& sParentId,
+                                                 const OUString& sCloseId) const
 {
     if (!pWindow || !m_aNotifierWindow)
         return OString();
@@ -195,7 +197,7 @@ OString JSDialogNotifyIdle::generatePopupMessage(VclPtr<vcl::Window> pWindow, OU
     return aJsonWriter.finishAndGetAsOString();
 }
 
-OString JSDialogNotifyIdle::generateClosePopupMessage(OUString sWindowId) const
+OString JSDialogNotifyIdle::generateClosePopupMessage(const OUString& sWindowId) const
 {
     if (!m_aNotifierWindow)
         return OString();
@@ -322,7 +324,7 @@ void JSDialogSender::sendClose()
     flush();
 }
 
-void JSDialogSender::sendUpdate(VclPtr<vcl::Window> pWindow, bool bForce)
+void JSDialogSender::sendUpdate(const VclPtr<vcl::Window>& pWindow, bool bForce)
 {
     if (!mpIdleNotify)
         return;
@@ -334,7 +336,7 @@ void JSDialogSender::sendUpdate(VclPtr<vcl::Window> pWindow, bool bForce)
     mpIdleNotify->Start();
 }
 
-void JSDialogSender::sendAction(VclPtr<vcl::Window> pWindow,
+void JSDialogSender::sendAction(const VclPtr<vcl::Window>& pWindow,
                                 std::unique_ptr<jsdialog::ActionDataMap> pData)
 {
     if (!mpIdleNotify)
@@ -344,7 +346,8 @@ void JSDialogSender::sendAction(VclPtr<vcl::Window> pWindow,
     mpIdleNotify->Start();
 }
 
-void JSDialogSender::sendPopup(VclPtr<vcl::Window> pWindow, OUString sParentId, OUString sCloseId)
+void JSDialogSender::sendPopup(const VclPtr<vcl::Window>& pWindow, const OUString& sParentId,
+                               const OUString& sCloseId)
 {
     if (!mpIdleNotify)
         return;

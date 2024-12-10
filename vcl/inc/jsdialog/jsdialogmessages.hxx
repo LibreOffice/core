@@ -105,19 +105,19 @@ public:
     void clearQueue();
     void forceUpdate();
     template <class VclType>
-    void sendMessage(jsdialog::MessageType eType, VclPtr<VclType> pWindow,
+    void sendMessage(const jsdialog::MessageType eType, const VclPtr<VclType>& pWindow,
                      std::unique_ptr<jsdialog::ActionDataMap> pData = nullptr);
 
 private:
     void send(const OString& sMsg);
     OString generateFullUpdate() const;
-    OString generateWidgetUpdate(VclPtr<vcl::Window> pWindow) const;
+    OString generateWidgetUpdate(const VclPtr<vcl::Window>& pWindow) const;
     OString generateCloseMessage() const;
-    OString generateActionMessage(VclPtr<vcl::Window> pWindow,
+    OString generateActionMessage(const VclPtr<vcl::Window>& pWindow,
                                   std::unique_ptr<jsdialog::ActionDataMap> pData) const;
-    OString generatePopupMessage(VclPtr<vcl::Window> pWindow, OUString sParentId,
-                                 OUString sCloseId) const;
-    OString generateClosePopupMessage(OUString sWindowId) const;
+    OString generatePopupMessage(const VclPtr<vcl::Window>& pWindow, const OUString& sParentId,
+                                 const OUString& sCloseId) const;
+    OString generateClosePopupMessage(const OUString& sWindowId) const;
     OString generateMenuMessage(const VclPtr<PopupMenu>& pMenu) const;
 };
 
