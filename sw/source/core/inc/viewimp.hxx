@@ -21,7 +21,6 @@
 
 #include <tools/color.hxx>
 #include <svx/svdtypes.hxx>
-#include <svx/sdr/contact/viewobjectcontactredirector.hxx>
 #include <swrect.hxx>
 #include <swregion.hxx>
 #include <memory>
@@ -46,24 +45,8 @@ class SwPagePreviewLayout;
 struct PreviewPage;
 class SwTextFrame;
 // --> OD #i76669#
-//namespace sdr::contact { class ViewObjectContactRedirector; }
+namespace sdr::contact { class ViewObjectContactRedirector; }
 // <--
-class SwViewObjectContactRedirector : public sdr::contact::ViewObjectContactRedirector
-{
-    private:
-        const SwViewShell& mrViewShell;
-
-    public:
-        explicit SwViewObjectContactRedirector( const SwViewShell& rSh )
-            : mrViewShell( rSh )
-        {};
-
-        virtual void createRedirectedPrimitive2DSequence(
-                                const sdr::contact::ViewObjectContact& rOriginal,
-                                const sdr::contact::DisplayInfo& rDisplayInfo,
-                                drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) override;
-};
-
 
 class SwViewShellImp
 {
