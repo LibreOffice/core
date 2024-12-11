@@ -48,7 +48,7 @@ ControllerItem::~ControllerItem()
 void ControllerItem::ReceiverNotifyItemUpdate(sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pState)
 {
-    if (nSID == SID_ATTR_METRIC && comphelper::LibreOfficeKit::isActive())
+    if (nSID == SID_ATTR_METRIC && comphelper::LibreOfficeKit::isActive() && pState)
     {
         std::unique_ptr<SfxPoolItem> xClose(pState->Clone());
         MeasurementSystem eSystem
