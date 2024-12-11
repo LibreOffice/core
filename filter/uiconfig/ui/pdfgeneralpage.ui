@@ -527,15 +527,15 @@
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child>
-          <object class="GtkFrame" id="frame4">
+          <object class="GtkFrame" id="general_frame">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="margin-end">6</property>
             <property name="label-xalign">0</property>
             <property name="shadow-type">none</property>
             <child>
-              <!-- n-columns=1 n-rows=6 -->
-              <object class="GtkGrid" id="grid10">
+              <!-- n-columns=1 n-rows=3 -->
+              <object class="GtkGrid" id="general_grid">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="margin-start">12</property>
@@ -547,14 +547,99 @@
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
-                    <property name="tooltip-text" translatable="yes" context="pdfgeneralpage|embed|tooltip_text">Creates a PDF that is easily editable in %PRODUCTNAME</property>
+                    <property name="tooltip-text" translatable="yes" context="pdfgeneralpage|embed|tooltip_text">Creates a PDF that embeds the original ODF file as an attachment.</property>
                     <property name="halign">start</property>
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="embed-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|embed">This setting enables you to export the document as a .pdf file containing two file formats: PDF and ODF.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|embed">This setting enables you to export the document as a .pdf file containing two file formats: PDF and ODF as an attachment. </property>
                       </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <!-- n-columns=1 n-rows=1 -->
+                  <object class="GtkGrid">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="row-spacing">6</property>
+                    <child>
+                      <!-- n-columns=2 n-rows=1 -->
+                      <object class="GtkGrid" id="pdfagrid">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="margin-start">18</property>
+                        <property name="hexpand">True</property>
+                        <property name="column-spacing">14</property>
+                        <child>
+                          <object class="GtkComboBoxText" id="pdf_version">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="tooltip-text" translatable="yes" context="pdfgeneralpage|pdf_version|tooltip_text">Select the PDF version. PDF/A version variants creates an ISO 19005 compliant PDF file, ideal for long-term document preservation.</property>
+                            <property name="hexpand">True</property>
+                            <property name="active">3</property>
+                            <items>
+                              <item id="17" translatable="yes" context="pdfgeneralpage|pdf_version">PDF 1.7</item>
+                              <item id="20" translatable="yes" context="pdfgeneralpage|pdf_version">PDF 2.0</item>
+                              <item id="1" context="pdfgeneralpage|pdf_version">PDF/A-1b (PDF 1.4 base)</item>
+                              <item id="2" context="pdfgeneralpage|pdf_version">PDF/A-2b (PDF 1.7 base)</item>
+                              <item id="3" context="pdfgeneralpage|pdf_version">PDF/A-3b (PDF 1.7 base)</item>
+                              <item id="4" translatable="yes" context="pdfgeneralpage|pdf_version">PDF/A-4 (PDF 2.0 base)</item>
+                            </items>
+                            <accessibility>
+                              <relation type="labelled-by" target="pdf_version_label"/>
+                            </accessibility>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="pdf_version-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|pdf_version">Versions can be either the "classic" PDF (i.e. PDF 1.7, PDF 2.0) or PDF/A conformant. PDF/A is defined as an electronic document file format for long term preservation  and archiving. It allows only a subset of PDF features that are compatible with that use case. For example: All fonts that were used in the source document will be embedded into the generated PDF file. PDF tags will be written.</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left-attach">1</property>
+                            <property name="top-attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="pdfabox">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <object class="GtkLabel" id="pdf_version_label">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="valign">baseline</property>
+                                <property name="vexpand">True</property>
+                                <property name="label" translatable="yes" context="pdfgeneralpage|pdf_version">PDF_ Version:</property>
+                                <property name="use-underline">True</property>
+                                <accessibility>
+                                  <relation type="label-for" target="pdf_version"/>
+                                </accessibility>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">0</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
+                      </packing>
                     </child>
                   </object>
                   <packing>
@@ -563,52 +648,66 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="tagged">
-                    <property name="label" translatable="yes" context="pdfgeneralpage|tagged">_Tagged PDF (add document structure)</property>
+                  <object class="GtkCheckButton" id="pdfua">
+                    <property name="label" translatable="yes" context="pdfgeneralpage|pdfua">Universal Accessibilit_y (PDF/UA)</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
-                    <property name="tooltip-text" translatable="yes" context="pdfgeneralpage|tagged|tooltip_text">Includes a document's content structure information in a PDF</property>
+                    <property name="tooltip-text" translatable="yes" context="pdfgeneralpage|pdfua|tooltip_text">Creates a universal accessibility-compliant PDF file that follows the requirements of PDF/UA (ISO 14289) specifications.</property>
                     <property name="halign">start</property>
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
-                      <object class="AtkObject" id="tagged-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|tagged">Select to write PDF tags. This can increase file size by huge amounts.</property>
+                      <object class="AtkObject" id="pdfua-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|pdfua">Creates a universal accessibility-complying PDF file that follows the requirements of PDF/UA (ISO 14289) specifications.</property>
                       </object>
                     </child>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">3</property>
+                    <property name="top-attach">1</property>
                   </packing>
                 </child>
-                <child>
-                  <object class="GtkCheckButton" id="forms">
-                    <property name="label" translatable="yes" context="pdfgeneralpage|forms">Create PDF for_m</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="tooltip-text" translatable="yes" context="pdfgeneralpage|forms|tooltip_text">Creates a PDF with fields that can be filled out</property>
-                    <property name="halign">start</property>
-                    <property name="use-underline">True</property>
-                    <property name="draw-indicator">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="forms-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|forms">Choose to create a PDF form. This can be filled out and printed by the user of the PDF document.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">4</property>
-                  </packing>
-                </child>
+              </object>
+            </child>
+            <child type="label">
+              <object class="GtkLabel" id="general_label">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes" context="pdfgeneralpage|general_label">General</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkFrame" id="forms_frame">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label-xalign">0</property>
+            <property name="shadow-type">none</property>
+            <child>
+              <!-- n-columns=1 n-rows=2 -->
+              <object class="GtkGrid" id="forms_grid">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="double-buffered">False</property>
+                <property name="margin-start">12</property>
+                <property name="margin-top">6</property>
+                <property name="row-spacing">3</property>
                 <child>
                   <!-- n-columns=2 n-rows=2 -->
-                  <object class="GtkGrid" id="formsframe">
+                  <object class="GtkGrid" id="forms_options_grid">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
+                    <property name="double-buffered">False</property>
                     <property name="margin-start">18</property>
                     <property name="hexpand">True</property>
                     <property name="row-spacing">6</property>
@@ -657,12 +756,12 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox" id="submitformatbox">
+                      <object class="GtkBox" id="submitformatbox1">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="orientation">vertical</property>
                         <child>
-                          <object class="GtkLabel" id="label7">
+                          <object class="GtkLabel" id="submit_format_label">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="halign">start</property>
@@ -689,134 +788,37 @@
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">5</property>
-                  </packing>
-                </child>
-                <child>
-                  <!-- n-columns=1 n-rows=2 -->
-                  <object class="GtkGrid">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="row-spacing">6</property>
-                    <child>
-                      <object class="GtkCheckButton" id="pdfa">
-                        <property name="label" translatable="yes" context="pdfgeneralpage|pdfa">Archival (P_DF/A, ISO 19005)</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="tooltip-text" translatable="yes" context="pdfgeneralpage|pdfa|tooltip_text">Creates an ISO 19005-2 compliant PDF file, ideal for long-term document preservation</property>
-                        <property name="halign">start</property>
-                        <property name="use-underline">True</property>
-                        <property name="draw-indicator">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="pdfa-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|pdfa">Converts to the PDF/A-2b or PDF/A-1b format. This is defined as an electronic document file format for long term preservation. All fonts that were used in the source document will be embedded into the generated PDF file. PDF tags will be written.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <!-- n-columns=2 n-rows=1 -->
-                      <object class="GtkGrid" id="pdfagrid">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="margin-start">18</property>
-                        <property name="hexpand">True</property>
-                        <property name="column-spacing">14</property>
-                        <child>
-                          <object class="GtkComboBoxText" id="pdfaversion">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="hexpand">True</property>
-                            <property name="active">3</property>
-                            <items>
-                              <item id="1" context="pdfgeneralpage|pdfaversion">PDF/A-1b</item>
-                              <item id="2" context="pdfgeneralpage|pdfaversion">PDF/A-2b</item>
-                              <item id="3" context="pdfgeneralpage|pdfaversion">PDF/A-3b</item>
-                            </items>
-                            <accessibility>
-                              <relation type="labelled-by" target="pdfaversionlabel"/>
-                            </accessibility>
-                          </object>
-                          <packing>
-                            <property name="left-attach">1</property>
-                            <property name="top-attach">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkBox" id="pdfabox">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="orientation">vertical</property>
-                            <child>
-                              <object class="GtkLabel" id="pdfaversionlabel">
-                                <property name="visible">True</property>
-                                <property name="can-focus">False</property>
-                                <property name="halign">start</property>
-                                <property name="valign">baseline</property>
-                                <property name="vexpand">True</property>
-                                <property name="label" translatable="yes" context="pdfgeneralpage|pdfaversion">PDF_/A version:</property>
-                                <property name="use-underline">True</property>
-                                <accessibility>
-                                  <relation type="label-for" target="pdfaversion"/>
-                                </accessibility>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left-attach">0</property>
-                            <property name="top-attach">0</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
                     <property name="top-attach">1</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="pdfua">
-                    <property name="label" translatable="yes" context="pdfgeneralpage|pdfua">Universal Accessibilit_y (PDF/UA)</property>
+                  <object class="GtkCheckButton" id="forms">
+                    <property name="label" translatable="yes" context="pdfgeneralpage|forms">Create PDF for_m</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
-                    <property name="tooltip-text" translatable="yes" context="pdfgeneralpage|pdfua|tooltip_text">Creates a universal accessibility-compliant PDF file that follows the requirements of PDF/UA (ISO 14289) specifications.</property>
+                    <property name="tooltip-text" translatable="yes" context="pdfgeneralpage|forms|tooltip_text">Creates a PDF with fields that can be filled out</property>
                     <property name="halign">start</property>
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
-                      <object class="AtkObject" id="pdfua-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|pdfua">Creates a universal accessibility-complying PDF file that follows the requirements of PDF/UA (ISO 14289) specifications.</property>
+                      <object class="AtkObject" id="forms-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|forms">Choose to create a PDF form. This can be filled out and printed by the user of the PDF document.</property>
                       </object>
                     </child>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">2</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
               </object>
             </child>
             <child type="label">
-              <object class="GtkLabel" id="label4">
+              <object class="GtkLabel" id="forms_label">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="pdfgeneralpage|label4">General</property>
+                <property name="label" translatable="yes" context="pdfgeneralpage|forms_label">Forms</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -826,18 +828,18 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">0</property>
+            <property name="position">1</property>
           </packing>
         </child>
         <child>
-          <object class="GtkFrame" id="frame7">
+          <object class="GtkFrame" id="structure_frame">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="label-xalign">0</property>
             <property name="shadow-type">none</property>
             <child>
-              <!-- n-columns=1 n-rows=10 -->
-              <object class="GtkGrid" id="grid2">
+              <!-- n-columns=1 n-rows=11 -->
+              <object class="GtkGrid" id="structure_grid">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="margin-start">12</property>
@@ -849,10 +851,10 @@
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
+                    <property name="tooltip-text" translatable="yes" context="pdfgeneralpage|bookmarks|tooltip_text">Export headings along with hyperlinked entries in Table of Contents as PDF bookmarks.</property>
                     <property name="halign">start</property>
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
-                    <property name="tooltip-text" translatable="yes" context="pdfgeneralpage|bookmarks|tooltip_text">Export headings along with hyperlinked entries in Table of Contents as PDF bookmarks.</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="bookmarks-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|bookmarks">PDF bookmarks are created for all paragraphs with outline level 1 or greater and for all “Table of Contents” entries with hyperlinks.</property>
@@ -861,7 +863,7 @@
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
+                    <property name="top-attach">1</property>
                   </packing>
                 </child>
                 <child>
@@ -881,7 +883,7 @@
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">1</property>
+                    <property name="top-attach">2</property>
                   </packing>
                 </child>
                 <child>
@@ -901,7 +903,7 @@
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">2</property>
+                    <property name="top-attach">3</property>
                   </packing>
                 </child>
                 <child>
@@ -921,7 +923,7 @@
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">8</property>
+                    <property name="top-attach">9</property>
                   </packing>
                 </child>
                 <child>
@@ -941,7 +943,7 @@
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">9</property>
+                    <property name="top-attach">10</property>
                   </packing>
                 </child>
                 <child>
@@ -961,7 +963,7 @@
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">6</property>
+                    <property name="top-attach">7</property>
                   </packing>
                 </child>
                 <child>
@@ -981,7 +983,7 @@
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">4</property>
+                    <property name="top-attach">5</property>
                   </packing>
                 </child>
                 <child>
@@ -1002,7 +1004,7 @@
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">5</property>
+                    <property name="top-attach">6</property>
                   </packing>
                 </child>
                 <child>
@@ -1022,7 +1024,7 @@
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">7</property>
+                    <property name="top-attach">8</property>
                   </packing>
                 </child>
                 <child>
@@ -1042,16 +1044,37 @@
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">3</property>
+                    <property name="top-attach">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="tagged">
+                    <property name="label" translatable="yes" context="pdfgeneralpage|tagged">_Tagged PDF (add document structure)</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="tooltip-text" translatable="yes" context="pdfgeneralpage|tagged|tooltip_text">Includes a document's content structure information in a PDF</property>
+                    <property name="halign">start</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="tagged-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|tagged">Select to write PDF tags. This can increase file size by huge amounts.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
                   </packing>
                 </child>
               </object>
             </child>
             <child type="label">
-              <object class="GtkLabel" id="label9">
+              <object class="GtkLabel" id="structure_label">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="pdfgeneralpage|label9">Structure</property>
+                <property name="label" translatable="yes" context="pdfgeneralpage|structure_label">Structure</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -1061,7 +1084,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">1</property>
+            <property name="position">2</property>
           </packing>
         </child>
       </object>
@@ -1071,15 +1094,8 @@
       </packing>
     </child>
   </object>
-  <object class="GtkSizeGroup" id="comboBoxSizegroup">
-    <widgets>
-      <widget name="format"/>
-      <widget name="pdfaversion"/>
-    </widgets>
-  </object>
   <object class="GtkSizeGroup" id="pdfSizeGroup">
     <widgets>
-      <widget name="submitformatbox"/>
       <widget name="pdfabox"/>
     </widgets>
   </object>
@@ -1104,4 +1120,5 @@
       <widget name="watermarkentry"/>
     </widgets>
   </object>
+  <object class="GtkSizeGroup" id="comboBoxSizegroup"/>
 </interface>

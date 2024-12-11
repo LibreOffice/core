@@ -197,9 +197,8 @@ class ImpPDFTabGeneralPage : public SfxTabPage
     std::unique_ptr<weld::MetricSpinButton> mxNfQuality;
     std::unique_ptr<weld::CheckButton> mxCbReduceImageResolution;
     std::unique_ptr<weld::ComboBox> mxCoReduceImageResolution;
-    std::unique_ptr<weld::CheckButton> mxCbPDFA;
     std::unique_ptr<weld::CheckButton> mxCbPDFUA;
-    std::unique_ptr<weld::ComboBox> mxRbPDFAVersion;
+    std::unique_ptr<weld::ComboBox> mxRbPDFVersion;
     std::unique_ptr<weld::CheckButton> mxCbTaggedPDF;
     std::unique_ptr<weld::CheckButton> mxCbExportFormFields;
     std::unique_ptr<weld::Widget> mxFormsFrame;
@@ -238,7 +237,8 @@ class ImpPDFTabGeneralPage : public SfxTabPage
     void                        ToggleSheetsHdl();
     void                        EnableExportNotesPages();
 
-    DECL_LINK(TogglePDFVersionOrUniversalAccessibilityHandle, weld::Toggleable&, void);
+    DECL_LINK(TogglePDFUniversalAccessibilityHandle, weld::Toggleable&, void);
+    DECL_LINK(SelectPDFVersion, weld::ComboBox&, void);
 
     std::shared_ptr<weld::MessageDialog> mxPasswordUnusedWarnDialog;
 
@@ -246,6 +246,8 @@ class ImpPDFTabGeneralPage : public SfxTabPage
     {
         return mpParent && mpParent->maConfigItem.IsReadOnly(rPropertyName);
     }
+
+    void thePDFVersionChanged();
 
 public:
 
@@ -256,7 +258,7 @@ public:
 
     void                        GetFilterConfigItem(ImpPDFTabDialog* paParent);
     void                        SetFilterConfigItem(ImpPDFTabDialog* paParent);
-    bool                        IsPdfaSelected() const { return mxCbPDFA->get_active(); }
+    bool IsPdfaSelected() const;
     bool IsPdfUaSelected() const { return mxCbPDFUA->get_active(); }
 };
 
