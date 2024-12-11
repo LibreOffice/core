@@ -174,9 +174,6 @@ namespace comphelper
     {
         OExternalLockGuard aGuard( this );
 
-        // -1 for child not found/no parent (according to specification)
-        sal_Int64 nRet = -1;
-
         try
         {
             Reference< XAccessibleContext > xParentContext( implGetParentContext() );
@@ -198,11 +195,11 @@ namespace comphelper
                 return -1;
 
             sal_Int64 nChildCount = xParentContext->getAccessibleChildCount();
-            for ( sal_Int64 nChild = 0; ( nChild < nChildCount ) && ( -1 == nRet ); ++nChild )
+            for (sal_Int64 nChild = 0; nChild < nChildCount; ++nChild)
             {
                 Reference< XAccessible > xChild( xParentContext->getAccessibleChild( nChild ) );
                 if ( xChild.get() == xCreator.get() )
-                    nRet = nChild;
+                    return nChild;
             }
         }
         catch( const Exception& )
@@ -210,7 +207,7 @@ namespace comphelper
             OSL_FAIL( "OCommonAccessibleComponent::getAccessibleIndexInParent: caught an exception!" );
         }
 
-        return nRet;
+        return -1;
     }
 
 
