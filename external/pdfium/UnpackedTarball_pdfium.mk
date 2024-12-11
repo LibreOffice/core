@@ -10,8 +10,6 @@
 pdfium_patches :=
 # Fixes build on our baseline.
 pdfium_patches += build.patch.1
-# https://pdfium-review.googlesource.com/c/pdfium/+/125170
-pdfium_patches += CPWL_Dash-switch-to-universal-init.patch.1
 pdfium_patches += c++20-comparison.patch
 
 pdfium_patches += constexpr-template.patch
