@@ -2347,6 +2347,11 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq)
             }
         }
 
+        // Defer broadcast of postit field update from layout until oTextPara has been
+        // applied to the field's associated postit window
+        if (oTextPara)
+            StartAction();
+
         rFieldMgr.InsertField( aData );
 
         Push();
@@ -2354,11 +2359,12 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq)
         pPostIt = static_cast<SwPostItField*>(rFieldMgr.GetCurField());
 
         if (pPostIt && oTextPara)
-        {
             pPostIt->SetTextObject(*oTextPara);
-        }
 
         Pop(SwCursorShell::PopMode::DeleteCurrent); // Restore cursor position
+
+        if (oTextPara)
+            EndAction();
     }
 
     // Client has disabled annotations rendering, no need to
