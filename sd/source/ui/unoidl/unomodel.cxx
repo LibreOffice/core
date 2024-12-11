@@ -421,7 +421,7 @@ constexpr auto constTransitionSubTypeToString = mapEnumToString<sal_Int16>({
 constexpr auto constAnimationNodeTypeToString = mapEnumToString<sal_Int16>({
     { AnimationNodeType::ANIMATE, "Animate" },
     { AnimationNodeType::ANIMATECOLOR, "AnimateColor" },
-    { AnimationNodeType::ANIMATEMOTION, "Animate" },
+    { AnimationNodeType::ANIMATEMOTION, "AnimateMotion" },
     { AnimationNodeType::ANIMATEPHYSICS, "Animate" },
     { AnimationNodeType::ANIMATETRANSFORM, "AnimateTransform" },
     { AnimationNodeType::AUDIO, "Audio" },
