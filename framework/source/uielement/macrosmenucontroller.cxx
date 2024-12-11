@@ -28,6 +28,7 @@
 #include <osl/mutex.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <unotools/securityoptions.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -67,8 +68,7 @@ MacrosMenuController::~MacrosMenuController()
 // private function
 void MacrosMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > const & rPopupMenu )
 {
-    bool bMacrosDisabled = officecfg::Office::Common::Security::Scripting::DisableMacrosExecution::get();
-    if (bMacrosDisabled)
+    if (SvtSecurityOptions::IsMacroDisabled())
         return;
 
     SolarMutexGuard aSolarMutexGuard;

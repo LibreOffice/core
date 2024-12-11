@@ -58,6 +58,7 @@
 #include <svl/whiter.hxx>
 #include <svx/svxids.hrc>
 #include <tools/debug.hxx>
+#include <unotools/securityoptions.hxx>
 #include <utility>
 #include <vcl/locktoplevels.hxx>
 #include <vcl/errinf.hxx>
@@ -318,7 +319,7 @@ void ModulWindow::BasicExecute()
 {
     // #116444# check security settings before macro execution
     ScriptDocument aDocument( GetDocument() );
-    bool bMacrosDisabled = officecfg::Office::Common::Security::Scripting::DisableMacrosExecution::get();
+    bool bMacrosDisabled = SvtSecurityOptions::IsMacroDisabled();
     if (bMacrosDisabled || (aDocument.isDocument() && !aDocument.allowMacros()))
     {
         std::unique_ptr<weld::MessageDialog> xBox(
