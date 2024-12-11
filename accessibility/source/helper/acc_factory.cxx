@@ -289,58 +289,59 @@ Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLX
 Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXWindow* _pXWindow )
 {
     VclPtr<vcl::Window> pWindow = _pXWindow->GetWindow();
-    if ( pWindow )
-    {
-        WindowType nType = pWindow->GetType();
+    if (!pWindow)
+        return nullptr;
 
-        if ( nType == WindowType::MENUBARWINDOW || pWindow->IsMenuFloatingWindow() || pWindow->IsToolbarFloatingWindow() )
+    WindowType nType = pWindow->GetType();
+
+    if ( nType == WindowType::MENUBARWINDOW || pWindow->IsMenuFloatingWindow() || pWindow->IsToolbarFloatingWindow() )
+    {
+        Reference< XAccessible > xAcc( pWindow->GetAccessible() );
+        if ( xAcc.is() )
         {
-            Reference< XAccessible > xAcc( pWindow->GetAccessible() );
-            if ( xAcc.is() )
+            Reference<XAccessibleContext > xContext(xAcc->getAccessibleContext());
+            if ( pWindow->GetType() == WindowType::MENUBARWINDOW ||
+                ( xContext.is() && xContext->getAccessibleRole() == AccessibleRole::POPUP_MENU ) )
             {
-                Reference<XAccessibleContext > xContext(xAcc->getAccessibleContext());
-                if ( pWindow->GetType() == WindowType::MENUBARWINDOW ||
-                    ( xContext.is() && xContext->getAccessibleRole() == AccessibleRole::POPUP_MENU ) )
-                {
-                    return xContext;
-                }
+                return xContext;
             }
         }
-
-        else if ( nType == WindowType::STATUSBAR )
-        {
-            return new VCLXAccessibleStatusBar(_pXWindow);
-        }
-
-        else if ( nType == WindowType::TABCONTROL )
-        {
-            return new VCLXAccessibleTabControl(_pXWindow);
-        }
-
-        else if ( nType == WindowType::TABPAGE && pWindow->GetAccessibleParentWindow() && pWindow->GetAccessibleParentWindow()->GetType() == WindowType::TABCONTROL )
-        {
-            return new VCLXAccessibleTabPageWindow(_pXWindow);
-        }
-
-        else if ( nType == WindowType::FLOATINGWINDOW )
-        {
-            return new FloatingWindowAccessible(_pXWindow);
-        }
-
-        else if ( nType == WindowType::BORDERWINDOW && hasFloatingChild( pWindow ) )
-        {
-            return new FloatingWindowAccessible(_pXWindow);
-        }
-
-        else if ( ( nType == WindowType::HELPTEXTWINDOW ) || ( nType == WindowType::FIXEDLINE ) )
-        {
-            return new VCLXAccessibleFixedText(_pXWindow);
-        }
-        else
-        {
-            return new VCLXAccessibleComponent(_pXWindow);
-        }
     }
+
+    else if ( nType == WindowType::STATUSBAR )
+    {
+        return new VCLXAccessibleStatusBar(_pXWindow);
+    }
+
+    else if ( nType == WindowType::TABCONTROL )
+    {
+        return new VCLXAccessibleTabControl(_pXWindow);
+    }
+
+    else if ( nType == WindowType::TABPAGE && pWindow->GetAccessibleParentWindow() && pWindow->GetAccessibleParentWindow()->GetType() == WindowType::TABCONTROL )
+    {
+        return new VCLXAccessibleTabPageWindow(_pXWindow);
+    }
+
+    else if ( nType == WindowType::FLOATINGWINDOW )
+    {
+        return new FloatingWindowAccessible(_pXWindow);
+    }
+
+    else if ( nType == WindowType::BORDERWINDOW && hasFloatingChild( pWindow ) )
+    {
+        return new FloatingWindowAccessible(_pXWindow);
+    }
+
+    else if ( ( nType == WindowType::HELPTEXTWINDOW ) || ( nType == WindowType::FIXEDLINE ) )
+    {
+        return new VCLXAccessibleFixedText(_pXWindow);
+    }
+    else
+    {
+        return new VCLXAccessibleComponent(_pXWindow);
+    }
+
     return nullptr;
 }
 
