@@ -134,7 +134,7 @@ std::vector<OUString> lcl_getUsedPageStyles(SwViewShell const * pShell)
         if (const SwPageDesc *pDesc = pPage->FindPageDesc())
         {
             OUString sStyleName;
-            SwStyleNameMapper::FillUIName(pDesc->GetName(), sStyleName, SwGetPoolIdFromName::PageDesc);
+            SwStyleNameMapper::FillProgName(pDesc->GetName(), sStyleName, SwGetPoolIdFromName::PageDesc);
             aReturn.push_back(sStyleName);
         }
     }
