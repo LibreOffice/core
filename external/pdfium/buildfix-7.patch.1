@@ -180,14 +180,14 @@ pdfium/core/fpdfdoc/cpdf_formcontrol.cpp:134: undefined reference to `fxcrt::Str
 +++ pdfium/core/fpdfdoc/cpdf_pagelabel.cpp	2025-11-12 11:26:09.615649063 +0100
 @@ -20,9 +20,9 @@
  WideString MakeRoman(int num) {
-   constexpr auto kArabic = fxcrt::ToArray<const int>(
+   static constexpr auto kArabic = fxcrt::ToArray<const int>(
        {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1});
 -  const auto kRoman = fxcrt::ToArray<const WideStringView>(
 +  std::array<const WideStringView, 13> kRoman =
        {L"m", L"cm", L"d", L"cd", L"c", L"xc", L"l", L"xl", L"x", L"ix", L"v",
 -       L"iv", L"i"});
 +       L"iv", L"i"};
-   constexpr int kMaxNum = 1000000;
+   static constexpr int kMaxNum = 1000000;
  
    num %= kMaxNum;
 --- pdfium/core/fpdfdoc/cpvt_variabletext.cpp.orig	2025-11-12 11:28:21.534664730 +0100
@@ -204,3 +204,18 @@ pdfium/core/fpdfdoc/cpdf_formcontrol.cpp:134: undefined reference to `fxcrt::Str
  
  }  // namespace
  
+--- pdfium/core/fpdfdoc/cpdf_generateap.cpp.orig	2025-11-12 12:02:45.057324704 +0100
++++ pdfium/core/fpdfdoc/cpdf_generateap.cpp	2025-11-12 12:03:45.923858903 +0100
+@@ -824,8 +824,10 @@
+     body_stream << "q\n" << button;
+     WriteRect(body_stream, button_rect) << " re f\n";
+     body_stream << "Q\n";
+-    static const BorderStyleInfo kButtonBorderStyleInfo{
+-        .width = 2, .style = BorderStyle::kBeveled, .dash_pattern{3, 0, 0}};
++    BorderStyleInfo kButtonBorderStyleInfo;
++    kButtonBorderStyleInfo.width = 2;
++    kButtonBorderStyleInfo.style = BorderStyle::kBeveled;
++    kButtonBorderStyleInfo.dash_pattern = {3, 0, 0};
+     ByteString button_border =
+         GenerateBorderAP(button_rect, kButtonBorderStyleInfo,
+                          CFX_Color(CFX_Color::Type::kGray, 0));
