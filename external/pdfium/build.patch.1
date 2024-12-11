@@ -50,7 +50,9 @@ index 435fafa85..d8e8bfbc4 100644
              typename = internal::EnableIfSpanCompatibleContainer<Container, T>>
 -  constexpr span(Container& container)
 +  span(Container& container)
-       : span(container.data(), container.size()) {}
+       // SAFETY: `size()` is the number of elements that can be safely accessed
+       // at `data()`.
+       : UNSAFE_BUFFERS(span(container.data(), container.size())) {}
  #endif
  
 @@ -225,7 +225,7 @@ class TRIVIAL_ABI GSL_POINTER span {
@@ -59,9 +61,9 @@ index 435fafa85..d8e8bfbc4 100644
              typename = internal::EnableIfLegalSpanConversion<U, T>>
 -  constexpr span(const span<U, M, R>& other)
 +  span(const span<U, M, R>& other)
-       : span(other.data(), other.size()) {}
- 
-   span& operator=(const span& other) noexcept {
+       // SAFETY: `size()` is the number of elements that can be safely accessed
+       // at `data()`.
+       : UNSAFE_BUFFERS(span(other.data(), other.size())) {}
 diff --git a/core/fxcrt/numerics/safe_conversions_impl.h b/core/fxcrt/numerics/safe_conversions_impl.h
 index 44c921a14..0152a89b7 100644
 --- a/core/fxcrt/numerics/safe_conversions_impl.h
