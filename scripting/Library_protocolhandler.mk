@@ -32,6 +32,7 @@ $(eval $(call gb_Library_use_libraries,protocolhandler,\
 	sal \
 	sfx \
 	tl \
+	utl \
 	vcl \
 ))
 

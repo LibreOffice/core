@@ -69,6 +69,7 @@
 #include <vcl/toolbox.hxx>
 
 #include <unotools/moduleoptions.hxx>
+#include <unotools/securityoptions.hxx>
 #include <rtl/bootstrap.hxx>
 
 #include <com/sun/star/frame/ModuleManager.hpp>
@@ -1897,9 +1898,7 @@ void SfxApplication::OfaState_Impl(SfxItemSet &rSet)
     if ( comphelper::LibreOfficeKit::isActive() )
         rSet.DisableItem( SID_AUTO_CORRECT_DLG );
 
-    bool bMacrosDisabled
-        = officecfg::Office::Common::Security::Scripting::DisableMacrosExecution::get();
-    if (bMacrosDisabled)
+    if (SvtSecurityOptions::IsMacroDisabled())
     {
         rSet.DisableItem(SID_RUNMACRO);
         rSet.DisableItem(SID_MACROORGANIZER);
