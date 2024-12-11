@@ -1831,11 +1831,11 @@ void SwXStyle::SetPropertyValue<sal_uInt16(RES_TXTATR_CJK_RUBY)>(const SfxItemPr
         pRuby.reset(new SwFormatRuby(OUString()));
     OUString sStyle;
     SwStyleNameMapper::FillUIName(sValue, sStyle, SwGetPoolIdFromName::ChrFmt);
-    pRuby->SetCharFormatName(sValue);
+    pRuby->SetCharFormatName(sStyle);
     pRuby->SetCharFormatId(0);
     if(!sValue.isEmpty())
     {
-        const sal_uInt16 nId(SwStyleNameMapper::GetPoolIdFromUIName(sValue, SwGetPoolIdFromName::ChrFmt));
+        const sal_uInt16 nId(SwStyleNameMapper::GetPoolIdFromUIName(sStyle, SwGetPoolIdFromName::ChrFmt));
         pRuby->SetCharFormatId(nId);
     }
     rStyleSet.Put(std::move(pRuby));
