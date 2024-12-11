@@ -21,12 +21,12 @@ template <class T> class WidgetRegister
     std::map<OUString, T>& Map() { return m_aWidgetMap; }
 
 public:
-    void Remember(const OUString& rId, T pWidget);
+    void Remember(const OUString& rId, const T& pWidget);
     void Forget(const OUString& rId);
     T Find(const OUString& rId);
 };
 
-template <class T> void WidgetRegister<T>::Remember(const OUString& nWindowId, T pMenu)
+template <class T> void WidgetRegister<T>::Remember(const OUString& nWindowId, const T& pMenu)
 {
     Map()[nWindowId] = pMenu;
 }
