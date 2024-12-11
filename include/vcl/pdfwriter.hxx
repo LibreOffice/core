@@ -190,11 +190,12 @@ public:
         PDF_1_6,
         PDF_1_7,
         PDF_2_0,
-        PDF_A_1,
-        PDF_A_2,
-        PDF_A_3,
+        PDF_A_1, // PDF/A-1b - Based on PDF 1.4. PDF/A-1a is not implemented.
+        PDF_A_2, // Based on PDF 1.7
+        PDF_A_3, // Based on PDF 1.7 + allows embedded
         PDF_A_4, // Based on PDF 2.0
-    }; //i59651, PDF/A-1b & -1a, only -1b implemented for now
+        Default = PDF_1_7
+    };
 
     // for the meaning of DestAreaType please look at PDF Reference Manual
     // version 1.4 section 8.2.1, page 475
@@ -705,7 +706,7 @@ public:
                 DefaultLinkAction( PDFWriter::URIAction ),
                 ConvertOOoTargetToPDFTarget( false ),
                 ForcePDFAction( false ),
-                Version(PDFWriter::PDFVersion::PDF_1_7),
+                Version(PDFWriter::PDFVersion::Default),
                 UniversalAccessibilityCompliance( false ),
                 Tagged( false ),
                 SubmitFormat( PDFWriter::FDF ),
