@@ -380,8 +380,7 @@ void VCLXAccessibleComponent::disposing()
 
 vcl::Window* VCLXAccessibleComponent::GetWindow() const
 {
-    return GetVCLXWindow() ? GetVCLXWindow()->GetWindow()
-                           : nullptr;
+    return m_xEventSource;
 }
 
 void VCLXAccessibleComponent::FillAccessibleRelationSet( utl::AccessibleRelationSetHelper& rRelationSet )
