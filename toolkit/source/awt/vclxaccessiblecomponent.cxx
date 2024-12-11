@@ -753,8 +753,8 @@ void VCLXAccessibleComponent::grabFocus(  )
     OExternalLockGuard aGuard( this );
 
     sal_Int64 nStates = getAccessibleStateSet();
-    if ( m_xVCLXWindow.is() && ( nStates & accessibility::AccessibleStateType::FOCUSABLE ) )
-        m_xVCLXWindow->setFocus();
+    if (m_xEventSource && (nStates & accessibility::AccessibleStateType::FOCUSABLE))
+        m_xEventSource->GrabFocus();
 }
 
 sal_Int32 SAL_CALL VCLXAccessibleComponent::getForeground(  )
