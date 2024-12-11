@@ -200,4 +200,9 @@ void OutlinerEditEng::SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet )
         pOwner->UndoActionEnd();
 }
 
+sal_Int16 OutlinerEditEng::GetDepth(sal_Int32 nPara) const
+{
+    return pOwner->GetDepth(nPara);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
