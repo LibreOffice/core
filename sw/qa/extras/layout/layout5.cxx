@@ -1371,6 +1371,32 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf153136)
     // CPPUNIT_ASSERT_GREATER(large, height);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testFoMargin)
+{
+    createSwDoc("fomargin.fodt");
+    auto pXmlDoc = parseLayoutDump();
+
+    auto nPage1Width
+        = getXPath(pXmlDoc, "/root/page[1]/body/txt[1]/infos/bounds", "width").toInt32();
+    CPPUNIT_ASSERT_GREATER(sal_Int32(9600), nPage1Width);
+    CPPUNIT_ASSERT_LESS(sal_Int32(9700), nPage1Width);
+
+    auto nPage1Height
+        = getXPath(pXmlDoc, "/root/page[1]/body/txt[1]/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_GREATER(sal_Int32(13800), nPage1Height);
+    CPPUNIT_ASSERT_LESS(sal_Int32(14000), nPage1Height);
+
+    auto nPage2Width
+        = getXPath(pXmlDoc, "/root/page[2]/body/txt[1]/infos/bounds", "width").toInt32();
+    CPPUNIT_ASSERT_GREATER(sal_Int32(9600), nPage2Width);
+    CPPUNIT_ASSERT_LESS(sal_Int32(9700), nPage2Width);
+
+    auto nPage2Height
+        = getXPath(pXmlDoc, "/root/page[2]/body/txt[1]/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_GREATER(sal_Int32(13100), nPage2Height);
+    CPPUNIT_ASSERT_LESS(sal_Int32(13400), nPage2Height);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
