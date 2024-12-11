@@ -1253,6 +1253,21 @@ namespace {
         {
             SdPage& rHandoutPage (*rDocument.GetSdPage(0, PageKind::Handout));
 
+            Size aPageSize(rHandoutPage.GetSize());
+            Size aPrintPageSize = rPrinter.GetPrintPageSize();
+
+            if ((aPageSize.Width() < aPageSize.Height()
+                 && aPrintPageSize.Width() > aPrintPageSize.Height())
+                || (aPageSize.Width() > aPageSize.Height()
+                    && aPrintPageSize.Width() < aPrintPageSize.Height()))
+            {
+                ::tools::Long nTmp = aPageSize.Width();
+                aPageSize.setWidth(aPageSize.Height());
+                aPageSize.setHeight(nTmp);
+
+                rHandoutPage.SetSize(aPageSize);
+            }
+
             Reference< css::beans::XPropertySet > xHandoutPage( rHandoutPage.getUnoPage(), UNO_QUERY );
             static constexpr OUString sPageNumber( u"Number"_ustr );
 
@@ -1809,8 +1824,14 @@ private:
 
         const bool bDrawLines (eLayout == AUTOLAYOUT_HANDOUT3);
 
+        Size aHandoutPageSize = pHandout->GetSize();
+        lcl_AdjustPageSize(aHandoutPageSize, mpPrinter->GetPrintPageSize());
+        Orientation eOrient = aHandoutPageSize.Width() > aHandoutPageSize.Height()
+                                  ? Orientation::Landscape
+                                  : Orientation::Portrait;
+
         std::vector< ::tools::Rectangle > aAreas;
-        SdPage::CalculateHandoutAreas( rModel, eLayout, bHandoutHorizontal, aAreas );
+        SdPage::CalculateHandoutAreas( rModel, eLayout, bHandoutHorizontal, aAreas, eOrient );
 
         std::vector< ::tools::Rectangle >::iterator iter( aAreas.begin() );
         while( iter != aAreas.end() )
@@ -2053,28 +2074,18 @@ private:
         SdPage& rMaster (dynamic_cast<SdPage&>(rHandoutPage.TRG_GetMasterPage()));
         rInfo.meOrientation = rMaster.GetOrientation();
 
-        const Size aPaperSize (rInfo.mpPrinter->GetPaperSize());
-        if( (rInfo.meOrientation == Orientation::Landscape &&
-              (aPaperSize.Width() < aPaperSize.Height()))
-           ||
-            (rInfo.meOrientation == Orientation::Portrait &&
-              (aPaperSize.Width() > aPaperSize.Height()))
-          )
-        {
-            maPrintSize = awt::Size(aPaperSize.Height(), aPaperSize.Width());
-        }
-        else
-        {
-            maPrintSize = awt::Size(aPaperSize.Width(), aPaperSize.Height());
-        }
+        Size aPaperSize (rInfo.mpPrinter->GetPaperSize());
+        lcl_AdjustPageSize(aPaperSize, rInfo.mpPrinter->GetPrintPageSize());
+        maPrintSize = awt::Size(aPaperSize.Width(),aPaperSize.Height());
 
         MapMode aMap (rInfo.maMap);
         const Point aPageOfs (rInfo.mpPrinter->GetPageOffset());
 
         if ( bScalePage )
         {
-            const Size aPageSize (rHandoutPage.GetSize());
-            const Size aPrintSize (rInfo.mpPrinter->GetOutputSize());
+            Size aPageSize (rHandoutPage.GetSize());
+            Size aPrintSize (rInfo.mpPrinter->GetOutputSize());
+            lcl_AdjustPageSize(aPageSize, aPrintSize);
 
             const double fHorz = static_cast<double>(aPrintSize.Width())    / aPageSize.Width();
             const double fVert = static_cast<double>(aPrintSize.Height()) / aPageSize.Height();
