@@ -10,6 +10,7 @@
 #pragma once
 
 #include <deque>
+#include <mutex>
 
 #include <rtl/ustring.hxx>
 #include <vcl/idle.hxx>
