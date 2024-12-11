@@ -43,6 +43,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <framework/documentundoguard.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <unotools/securityoptions.hxx>
 
 #include <com/sun/star/uri/XUriReference.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrlReference.hpp>
@@ -117,7 +118,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
     const URL& aURL, const Sequence < PropertyValue >& lArgs,
     const Reference< XDispatchResultListener >& xListener )
 {
-    if (officecfg::Office::Common::Security::Scripting::DisableMacrosExecution::get())
+    if (SvtSecurityOptions::IsMacroDisabled())
         return;
 
     sal_Int16 aState = css::frame::DispatchResultState::FAILURE;

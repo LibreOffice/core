@@ -3401,8 +3401,7 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                 case SID_RECORDMACRO :
                 {
                     const OUString& sName{GetObjectShell()->GetFactory().GetFactoryName()};
-                    bool bMacrosDisabled = officecfg::Office::Common::Security::Scripting::DisableMacrosExecution::get();
-                    if (bMacrosDisabled ||
+                    if (SvtSecurityOptions::IsMacroDisabled() ||
                          !officecfg::Office::Common::Misc::MacroRecorderMode::get() ||
                          ( sName!="swriter" && sName!="scalc" ) )
                     {
