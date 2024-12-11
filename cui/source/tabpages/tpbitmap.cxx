@@ -787,7 +787,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl, weld::Button&, void)
         pDlg.disposeAndClear();
 
         if( !nError )
-            AddBitmap(aGraphic, aName);
+            AddBitmap(std::move(aGraphic), aName);
     }
     else
     {
