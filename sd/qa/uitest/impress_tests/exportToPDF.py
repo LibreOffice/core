@@ -43,7 +43,7 @@ class exportToPDF(UITestCase):
                         self.assertEqual("true", get_state_as_dict(xDialog.getChild(child))['Selected'])
 
                     nonSelectedChildren = ['allowdups', 'center', 'comments', 'convert', 'embed', 'emptypages', 'export', 'exportplaceholders',
-                            'firstonleft', 'forms', 'hiddenpages', 'menubar', 'notes', 'onlynotes', 'open', 'pdfa', 'pdfua', 'resize', 'singlepagesheets',
+                            'firstonleft', 'forms', 'hiddenpages', 'menubar', 'notes', 'onlynotes', 'open', 'pdfua', 'resize', 'singlepagesheets',
                             'toolbar', 'usereferencexobject', 'viewpdf', 'watermark', 'window']
 
                     for child in nonSelectedChildren:
