@@ -205,7 +205,9 @@ void SetMacroSecurityLevel( sal_Int32 _nLevel )
 
 bool IsMacroDisabled()
 {
-    return comphelper::IsFuzzing() || officecfg::Office::Common::Security::Scripting::DisableMacrosExecution::get();
+    return comphelper::IsFuzzing()
+           || officecfg::Office::Common::Security::Scripting::DisableMacrosExecution::get()
+           || officecfg::Office::Common::Misc::ViewerAppMode::get();
 }
 
 std::vector< SvtSecurityOptions::Certificate > GetTrustedAuthors()
