@@ -75,6 +75,7 @@
 #include <memory>
 #include <string_view>
 #include <fstream>
+#include <outleeng.hxx>
 
 using namespace ::com::sun::star;
 
@@ -4396,10 +4397,17 @@ bool ImpEditEngine::isInEmptyClusterAtTheEnd(ParaPortion& rPortion)
         return false;
 
     sal_Int32 nCurrent = rParagraphs.lastIndex();
+
     while (nCurrent > 0 && rParagraphs.getRef(nCurrent).IsEmpty())
     {
         if (nCurrent == nPortion)
-            return true;
+        {
+            OutlinerEditEng* pOutlEditEng{ dynamic_cast<OutlinerEditEng*>(mpEditEngine)};
+            if (pOutlEditEng)
+                return pOutlEditEng->GetDepth(nCurrent) < 0;
+            else
+                return true;
+        }
         nCurrent--;
     }
     return false;

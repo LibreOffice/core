@@ -77,6 +77,8 @@ public:
 
     virtual tools::Rectangle   GetBulletArea( sal_Int32 nPara ) override;
 
+    sal_Int16       GetDepth( sal_Int32 nPara ) const;
+
     /// @returns state of the SdrCompatibilityFlag
     std::optional<bool> GetCompatFlag(SdrCompatibilityFlag eFlag) const;
 
