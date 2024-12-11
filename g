@@ -107,7 +107,7 @@ refresh_all_hooks()
     # of the other modes described above will do plain copies.
     # So in case of git-bash use hardlinks since those work just fine, everywhere else use symlinks
     if [ $gitbash -ne 1 ]; then
-        lnarg="--symbolic"
+        lnarg="-s"
     fi
     # There's no ".git" e.g. in a secondary worktree
     if [ -d ".git" ]; then
