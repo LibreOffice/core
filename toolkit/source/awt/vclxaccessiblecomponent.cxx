@@ -101,7 +101,7 @@ IMPL_LINK( VCLXAccessibleComponent, WindowEventListener, VclWindowEvent&, rEvent
      * might have been destroyed by the previous VCLEventListener (if no AT tool
      * is running), e.g. sub-toolbars in impress.
      */
-    if ( m_xVCLXWindow.is() /* #122218# */ && (rEvent.GetId() != VclEventId::WindowEndPopupMode) )
+    if (m_xEventSource && (rEvent.GetId() != VclEventId::WindowEndPopupMode))
     {
         DBG_ASSERT( rEvent.GetWindow(), "Window???" );
         if( !rEvent.GetWindow()->IsAccessibilityEventsSuppressed() || ( rEvent.GetId() == VclEventId::ObjectDying ) )
@@ -113,7 +113,7 @@ IMPL_LINK( VCLXAccessibleComponent, WindowEventListener, VclWindowEvent&, rEvent
 
 IMPL_LINK( VCLXAccessibleComponent, WindowChildEventListener, VclWindowEvent&, rEvent, void )
 {
-    if ( m_xVCLXWindow.is() /* #i68079# */ )
+    if (m_xEventSource)
     {
         DBG_ASSERT( rEvent.GetWindow(), "Window???" );
         if( !rEvent.GetWindow()->IsAccessibilityEventsSuppressed() )
