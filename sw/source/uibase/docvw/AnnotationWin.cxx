@@ -97,6 +97,7 @@ void ImportHTML(Outliner& rOutliner, const OUString& rHtml)
     // Insert newlines for divs, not normally done, so to keep things simple
     // only enable that for this case.
     xValues->Append(SvKeyValue("newline-on-div", "true"));
+    xValues->Append(SvKeyValue("content-type", "text/html;charset=utf-8"));
     rOutliner.Read(aHTMLStream, "", EETextFormat::Html, xValues.get());
 }
 
