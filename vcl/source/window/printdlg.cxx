@@ -659,8 +659,6 @@ PrintDialog::PrintDialog(weld::Window* i_pWindow, std::shared_ptr<PrinterControl
 
     initFromMultiPageSetup( maPController->getMultipage() );
 
-    updatePageSize(mxOrientationBox->get_active());
-
     // setup optional UI options set by application
     setupOptionalUI();
 
@@ -1207,22 +1205,9 @@ void PrintDialog::updateNup( bool i_bMayUseCache )
         aMPS.aPaperSize = maNupPortraitSize;
     else // automatic mode
     {
-        updatePageSize(mxOrientationBox->get_active());
-        Size aPrintPageSize = maPController->getPrinter()->GetPrintPageSize();
-
         // get size of first real page to see if it is portrait or landscape
         // we assume same page sizes for all the pages for this
         Size aPageSize = getJobPageSize();
-
-        if ((aPageSize.Width() < aPageSize.Height()
-             && aPrintPageSize.Width() > aPrintPageSize.Height())
-            || (aPageSize.Width() > aPageSize.Height()
-                && aPrintPageSize.Width() < aPrintPageSize.Height()))
-        {
-            tools::Long nTmp = aPageSize.Width();
-            aPageSize.setWidth(aPageSize.Height());
-            aPageSize.setHeight(nTmp);
-        }
 
         Size aMultiSize( aPageSize.Width() * nCols, aPageSize.Height() * nRows );
         if( aMultiSize.Width() > aMultiSize.Height() ) // fits better on landscape
@@ -1936,6 +1921,7 @@ IMPL_LINK(PrintDialog, ToggleHdl, weld::Toggleable&, rButton, void)
         {
             mxOrientationBox->set_sensitive( true );
             mxOrientationBox->set_active( ORIENTATION_AUTOMATIC );
+            updatePageSize(mxOrientationBox->get_active());
             enableNupControls( true );
             updateNupFromPages();
         }
@@ -2020,6 +2006,7 @@ IMPL_LINK( PrintDialog, SelectHdl, weld::ComboBox&, rBox, void )
             maFirstPageSize = Size();
 
             updateOrientationBox();
+            updatePageSize(mxOrientationBox->get_active());
 
             // update text fields
             mxOKButton->set_label(maPrintText);
@@ -2037,10 +2024,10 @@ IMPL_LINK( PrintDialog, SelectHdl, weld::ComboBox&, rBox, void )
 
             setPaperSizes();
             updateOrientationBox();
+            updatePageSize(mxOrientationBox->get_active());
             maUpdatePreviewIdle.Start();
         }
 
-        updatePageSize(mxOrientationBox->get_active());
         setupPaperSidesBox();
     }
     else if ( &rBox == mxPaperSidesBox.get() )
@@ -2083,10 +2070,6 @@ IMPL_LINK( PrintDialog, SelectHdl, weld::ComboBox&, rBox, void )
         maPController->setPaperSizeFromUser( Size( aInfo.getWidth(), aInfo.getHeight() ) );
 
         updatePageSize(mxOrientationBox->get_active());
-
-        int nOrientation = mxOrientationBox->get_active();
-        if (nOrientation != ORIENTATION_AUTOMATIC)
-            setPaperOrientation(static_cast<Orientation>(nOrientation - 1), true);
 
         maUpdatePreviewNoCacheIdle.Start();
     }
@@ -2218,6 +2201,8 @@ IMPL_LINK( PrintDialog, UIOption_SelectHdl, weld::ComboBox&, i_rBox, void )
     }
 
     checkOptionalControlDependencies();
+
+    updatePageSize(mxOrientationBox->get_active());
 
     // update preview and page settings
     maUpdatePreviewNoCacheIdle.Start();

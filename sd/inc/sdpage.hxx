@@ -348,7 +348,7 @@ public:
     ::tools::Rectangle   GetTitleRect() const;
     ::tools::Rectangle   GetLayoutRect() const;
 
-    static void CalculateHandoutAreas( SdDrawDocument& rModel, AutoLayout eLayout, bool bHorizontal, std::vector< ::tools::Rectangle >& rAreas );
+    static void CalculateHandoutAreas( SdDrawDocument& rModel, AutoLayout eLayout, bool bHorizontal, std::vector< ::tools::Rectangle >& rAreas, Orientation eOrient );
 
     /** Set the "precious" flag to the given value.
     */
