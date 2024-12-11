@@ -35,9 +35,6 @@ namespace toolkit
 
     //= OAccessibleControlContext
 
-
-    typedef ::comphelper::OAccessibleComponentHelper    OAccessibleControlContext_Base;
-
     /** class implementing the AccessibleContext for a UNO control - to be used in design mode of the control.
         <p><b>life time control<b/><br/>
         This control should be held weak by the creator (a UNO control), it itself holds a hard reference to the
@@ -45,8 +42,7 @@ namespace toolkit
         is being disposed.</p>
     */
     class OAccessibleControlContext final
-            :public cppu::ImplInheritanceHelper<
-                OAccessibleControlContext_Base, css::lang::XEventListener>
+            : public cppu::ImplInheritanceHelper<comphelper::OAccessibleComponentHelper, css::lang::XEventListener>
     {
     public:
         /** creates an accessible context for a uno control

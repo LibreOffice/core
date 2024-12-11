@@ -76,7 +76,7 @@ namespace toolkit
         startModelListening();
 
         // announce the XAccessible to our base class
-        OAccessibleControlContext_Base::lateInit( _rxCreator );
+        comphelper::OAccessibleComponentHelper::lateInit( _rxCreator );
     }
 
 
@@ -187,7 +187,7 @@ namespace toolkit
         m_xControlModel.clear();
         m_xModelPropsInfo.clear();
 
-        OAccessibleControlContext_Base::disposing();
+        comphelper::OAccessibleComponentHelper::disposing();
     }
 
 
