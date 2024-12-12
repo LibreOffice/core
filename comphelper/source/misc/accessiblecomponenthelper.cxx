@@ -181,24 +181,11 @@ namespace comphelper
                 return -1;
 
             //  iterate over parent's children and search for this object
-
-            // our own XAccessible for comparing with the children of our parent
-            Reference< XAccessible > xCreator( m_aCreator);
-
-            OSL_ENSURE( xCreator.is(), "OCommonAccessibleComponent::getAccessibleIndexInParent: invalid creator!" );
-                // two ideas why this could be NULL:
-                // * nobody called our late ctor (init), so we never had a creator at all -> bad
-                // * the creator is already dead. In this case, we should have been disposed, and
-                //   never survived the above OContextEntryGuard.
-                // in all other situations the creator should be non-NULL
-            if (!xCreator.is())
-                return -1;
-
             sal_Int64 nChildCount = xParentContext->getAccessibleChildCount();
             for (sal_Int64 nChild = 0; nChild < nChildCount; ++nChild)
             {
                 Reference< XAccessible > xChild( xParentContext->getAccessibleChild( nChild ) );
-                if ( xChild.get() == xCreator.get() )
+                if (xChild.is() && xChild->getAccessibleContext().get() == this)
                     return nChild;
             }
         }

@@ -65,11 +65,6 @@ namespace comphelper
             separation of XAccessible from XAccessibleContext), you may pass <code>this</code> here.</p>
 
             <p>The object is hold weak, so its life time is not affected.</p>
-
-            <p>The object is needed for performance reasons: for <method>getAccessibleIndexInParent</method>,
-            all children (which are XAccessible's theirself) of our parent have to be asked. If we know our
-            XAccessible, we can compare it with all the children, instead of asking all children for their
-            context and comparing this context with ourself.</p>
         */
         void    lateInit( const css::uno::Reference< css::accessibility::XAccessible >& _rxAccessible );
 
@@ -99,7 +94,8 @@ namespace comphelper
         // XAccessibleContext - default implementations
         /** default implementation for retrieving the index of this object within the parent
             <p>This basic implementation here returns the index <code>i</code> of the child for which
-                <code>&lt;parent&gt;.getAccessibleChild( i )</code> equals our creator.</p>
+                <code>&lt;parent&gt;.getAccessibleChild(i).getAccessibleContext()</code> returns
+                a reference to this OCommonAccessibleComponent object.</p>
         */
         virtual sal_Int64 SAL_CALL getAccessibleIndexInParent(  ) override;
         /** default implementation for retrieving the locale
