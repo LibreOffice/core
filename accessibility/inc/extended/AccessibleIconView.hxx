@@ -18,7 +18,7 @@ namespace accessibility
 class AccessibleIconView final : public AccessibleListBox
 {
 public:
-    AccessibleIconView(SvTreeListBox const& _rListBox,
+    AccessibleIconView(SvTreeListBox& _rListBox,
                        const css::uno::Reference<css::accessibility::XAccessible>& _xParent);
 
 protected:

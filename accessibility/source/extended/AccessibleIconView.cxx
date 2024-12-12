@@ -19,8 +19,7 @@
 namespace accessibility
 {
 AccessibleIconView::AccessibleIconView(
-    SvTreeListBox const& _rListBox,
-    const css::uno::Reference<css::accessibility::XAccessible>& _xParent)
+    SvTreeListBox& _rListBox, const css::uno::Reference<css::accessibility::XAccessible>& _xParent)
     : AccessibleListBox(_rListBox, _xParent)
 {
 }
