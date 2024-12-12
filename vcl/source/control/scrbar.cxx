@@ -834,6 +834,13 @@ void ScrollBar::ImplDragThumb( const Point& rMousePos )
 void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
 {
     bool bPrimaryWarps = GetSettings().GetStyleSettings().GetPrimaryButtonWarpsSlider();
+#ifdef MACOSX
+    // tdf#147067 Jump to clicked spot if left mouse click with Option key
+    // Most macOS applications such as TextEdit and Safari jump to the
+    // clicked spot if the Option key is pressed during a left mouse click.
+    if (!bPrimaryWarps && rMEvt.IsLeft() && rMEvt.GetModifier() == KEY_MOD2)
+        bPrimaryWarps = true;
+#endif
     bool bWarp = bPrimaryWarps ? rMEvt.IsLeft() : rMEvt.IsMiddle();
     bool bPrimaryWarping = bWarp && rMEvt.IsLeft();
     bool bPage = bPrimaryWarps ? rMEvt.IsRight() : rMEvt.IsLeft();
