@@ -19,33 +19,31 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface OOoContentDataParser : NSObject <NSXMLParserDelegate> {
-    // indicates if we are interested in an element's content
-    BOOL shouldReadCharacters;
+#define MEDIA_TYPE_PDF @"application/pdf"
+#define MEDIA_TYPE_PNG @"image/png"
 
-    // the MD importer's values
-    NSMutableDictionary *mdiValues;
-
-    // all of the text inside a document
-    NSMutableString *textContent;
-
-    // the current element's content
-    NSMutableString *runningTextContent;
+@interface OOoManifestParser : NSObject <NSXMLParserDelegate>
+{
+    NSMutableDictionary* metaValues;
 }
 
 - (void)parseXML:(NSData*)data intoDictionary:(NSMutableDictionary*)dict;
 
-// delegates
-- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict;
+//delegates
+- (void)parser:(NSXMLParser*)parser
+    didStartElement:(NSString*)elementName
+       namespaceURI:(NSString*)namespaceURI
+      qualifiedName:(NSString*)qualifiedName
+         attributes:(NSDictionary*)attributeDict;
 
-- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName;
+- (void)parser:(NSXMLParser*)parser
+    didEndElement:(NSString*)elementName
+     namespaceURI:(NSString*)namespaceURI
+    qualifiedName:(NSString*)qName;
 
-- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string;
+- (void)parser:(NSXMLParser*)parser foundCharacters:(NSString*)string;
 
-- (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError;
-
-- (void)parserDidEndDocument:(NSXMLParser *)parser;
-
+- (void)parser:(NSXMLParser*)parser parseErrorOccurred:(NSError*)parseError;
 @end
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -66,6 +66,8 @@ endef
 gb_StaticLibrary_add_cobject = $(call gb_StaticLibrary__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_StaticLibrary_add_cobjects = $(call gb_StaticLibrary__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_StaticLibrary_add_cxxobject = $(call gb_StaticLibrary__forward_to_Linktarget,$(0),$(1),$(2),$(3))
+gb_StaticLibrary_add_objcobject = $(call gb_StaticLibrary__forward_to_Linktarget,$(0),$(1),$(2),$(3))
+gb_StaticLibrary_add_objcobjects = $(call gb_StaticLibrary__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_StaticLibrary_add_cxxobjects = $(call gb_StaticLibrary__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_StaticLibrary_add_objcxxobject = $(call gb_StaticLibrary__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_StaticLibrary_add_objcxxobjects = $(call gb_StaticLibrary__forward_to_Linktarget,$(0),$(1),$(2),$(3))

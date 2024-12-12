@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+-->
+<plist version="1.0">
+<dict>
+    <key>CFBundleDevelopmentRegion</key>
+    <string>en</string>
+    <key>CFBundleDisplayName</key>
+    <string>LibreOffice Quick Look Preview</string>
+    <key>CFBundleExecutable</key>
+    <string>QuickLookPreview</string>
+    <key>CFBundleIdentifier</key>
+    <string>org.libreoffice.quicklookpreview</string>
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
+    <key>CFBundleName</key>
+    <string>QuickLookPreview</string>
+    <key>CFBundlePackageType</key>
+    <string>XPC!</string>
+    <key>CFBundleShortVersionString</key>
+    <string>1.0</string>
+    <key>CFBundleSupportedPlatforms</key>
+    <array>
+        <string>MacOSX</string>
+    </array>
+    <key>CFBundleVersion</key>
+    <string>1</string>
+    <key>LSMinimumSystemVersion</key>
+    <string>12.0</string>
+    <key>NSExtension</key>
+    <dict>
+        <key>NSExtensionAttributes</key>
+        <dict>
+            <key>QLIsDataBasedPreview</key>
+            <false/>
+            <key>QLSupportedContentTypes</key>
+            <array>
+                <string>org.openoffice.text</string>
+                <string>org.oasis-open.opendocument.text</string>
+                <string>org.openoffice.spreadsheet</string>
+                <string>org.oasis-open.opendocument.spreadsheet</string>
+                <string>org.openoffice.presentation</string>
+                <string>org.oasis-open.opendocument.presentation</string>
+                <string>org.openoffice.graphics</string>
+                <string>org.oasis-open.opendocument.graphics</string>
+                <string>org.openoffice.text-master</string>
+                <string>org.oasis-open.opendocument.text-master</string>
+                <string>org.openoffice.formula</string>
+                <string>org.oasis-open.opendocument.formula</string>
+                <string>org.openoffice.text-template</string>
+                <string>org.oasis-open.opendocument.text-template</string>
+                <string>org.openoffice.spreadsheet-template</string>
+                <string>org.oasis-open.opendocument.spreadsheet-template</string>
+                <string>org.openoffice.presentation-template</string>
+                <string>org.oasis-open.opendocument.presentation-template</string>
+                <string>org.openoffice.graphics-template</string>
+                <string>org.oasis-open.opendocument.graphics-template</string>
+                <string>org.oasis-open.opendocument.database</string>
+            </array>
+            <key>QLSupportsSearchableItems</key>
+            <false/>
+        </dict>
+        <key>NSExtensionPointIdentifier</key>
+        <string>com.apple.quicklook.preview</string>
+        <key>NSExtensionPrincipalClass</key>
+        <string>PreviewViewController</string>
+    </dict>
+</dict>
+</plist>

@@ -19,9 +19,10 @@
 
 #import <zlib.h>
 
-#import "OOoSpotlightImporter.h"
+#import "OOoSpotlightAndQuickLookImporter.h"
 #import "OOoMetaDataParser.h"
 #import "OOoContentDataParser.h"
+#import "OOoManifestParser.h"
 
 /* a dictionary to hold the UTIs */
 static NSDictionary *uti2kind;
@@ -338,7 +339,7 @@ static NSData *getUncompressedData(NSFileHandle *file, NSString *name)
     }
 }
 
-@implementation OOoSpotlightImporter
+@implementation OOoSpotlightAndQuickLookImporter
 
 /* initialize is only called once the first time this class is loaded */
 + (void)initialize
@@ -437,6 +438,69 @@ static NSData *getUncompressedData(NSFileHandle *file, NSString *name)
     return YES;
 }
 
+- (NSImage*)importDocumentThumbnail:(NSString*)pathToFile {
+    if (!pathToFile || ![pathToFile length])
+        return nil;
+
+    NSFileHandle *unzipFile = [self openZipFileAtPath:pathToFile];
+    if (!unzipFile)
+        return nil;
+
+    NSData *manifest = [self manifestFileFromZip:unzipFile];
+    if (!manifest) {
+        [unzipFile closeFile];
+        return nil;
+    }
+
+    [manifest retain];
+
+    NSMutableDictionary *attributes = [NSMutableDictionary new];
+
+    OOoManifestParser *parser = [OOoManifestParser new];
+    [parser parseXML:manifest intoDictionary:attributes];
+    [parser release];
+
+    NSMutableArray<NSString *> *pathArray = [NSMutableArray arrayWithCapacity:[attributes count]];
+
+    // NeoOffice files have a low resolution .pdf thumbnail so if there is a .pdf
+    // thumbnail available, use that
+    NSString *path = [attributes objectForKey:MEDIA_TYPE_PDF];
+    if (path && [path length])
+        [pathArray addObject:path];
+
+    // OpenOffice, NeoOffice, and LibreOffice files normally have a .png thumbnail
+    path = [attributes objectForKey:MEDIA_TYPE_PNG];
+    if (path && [path length])
+        [pathArray addObject:path];
+
+    for (NSString *key in [attributes allKeys]) {
+        if (![key length] || [key isEqualToString:MEDIA_TYPE_PDF] || [key isEqualToString:MEDIA_TYPE_PNG])
+            continue;
+        path = [attributes objectForKey:key];
+        if (path && [path length])
+            [pathArray addObject:path];
+    }
+
+    [attributes release];
+    [manifest release];
+
+    NSImage *image = nil;
+    for (path in pathArray) {
+        NSData *imageData = getUncompressedData(unzipFile, path);
+        if (imageData) {
+            image = [[NSImage alloc] initWithData:imageData];
+            if (image) {
+                [image autorelease];
+                break;
+            }
+        }
+    }
+
+    [unzipFile closeFile];
+
+    return image;
+}
+
 /* openZipFileAtPath returns the file as a valid data structure or nil otherwise*/
 - (NSFileHandle*)openZipFileAtPath:(NSString*)pathToFile
 {
@@ -481,6 +545,12 @@ static NSData *getUncompressedData(NSFileHandle *file, NSString *name)
     return getUncompressedData(unzipFile, @"content.xml");
 }
 
+- (NSData*) manifestFileFromZip:(NSFileHandle*)unzipFile
+{
+    if (unzipFile == nil)
+        return nil;
+    return getUncompressedData(unzipFile, @"META-INF/manifest.xml");
+}
 
 @end
 

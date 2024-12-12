@@ -3538,9 +3538,6 @@ extensions/source/logging/logrecord.cxx
 extensions/source/logging/logrecord.hxx
 extensions/source/logging/methodguard.hxx
 extensions/source/logging/plaintextformatter.cxx
-extensions/source/macosx/spotlight/GetMetadataForFile.h
-extensions/source/macosx/spotlight/OOoContentDataParser.h
-extensions/source/macosx/spotlight/OOoMetaDataParser.h
 extensions/source/ole/comifaces.hxx
 extensions/source/ole/jscriptclasses.cxx
 extensions/source/ole/jscriptclasses.hxx
