@@ -6234,14 +6234,21 @@ bool PDFWriterImpl::emitTrailer()
         aLine.append( "> ]\n" );
     }
 
-    if( !aDocChecksum.isEmpty() )
+    // Writes the /DocChecksum - hash off the PDF stream
+    // This entry is not defined in the standard, so don't write it if we
+    // are using PDF/UA or PDF/A as the compliance checkers will complain.
+    // Actually we shouldn't write it at all...
+    if (!aDocChecksum.isEmpty() && !m_bIsPDF_UA && m_nPDFA_Version == 0)
     {
         aLine.append( "/DocChecksum /" );
         aLine.append( aDocChecksum );
         aLine.append( "\n" );
     }
 
-    if (!m_aDocumentAttachedFiles.empty())
+    // Writes the /AdditionalStreams - writes the embedded / attached files into the PDF
+    // This entry is not defined in the standard, so don't write it if we
+    // are using PDF/UA or PDF/A as the compliance checkers will complain.
+    if (!m_aDocumentAttachedFiles.empty() && !m_bIsPDF_UA && m_nPDFA_Version == 0)
     {
         aLine.append( "/AdditionalStreams [" );
         for (auto const& rAttachedFile : m_aDocumentAttachedFiles)
