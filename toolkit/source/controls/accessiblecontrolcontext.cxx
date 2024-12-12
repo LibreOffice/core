@@ -46,26 +46,9 @@ namespace toolkit
     //= OAccessibleControlContext
 
 
-    OAccessibleControlContext::OAccessibleControlContext()
+    OAccessibleControlContext::OAccessibleControlContext(const Reference< XAccessible >& rxCreator)
     {
-        // nothing to do here, we have a late ctor
-    }
-
-
-    OAccessibleControlContext::~OAccessibleControlContext()
-    {
-        ensureDisposed();
-    }
-
-
-    void OAccessibleControlContext::Init( const Reference< XAccessible >& _rxCreator )
-    {
-        OContextEntryGuard aGuard( this );
-
-        // retrieve the model of the control
-        OSL_ENSURE( !m_xControlModel.is(), "OAccessibleControlContext::Init: already know a control model...!???" );
-
-        Reference< awt::XControl > xControl( _rxCreator, UNO_QUERY );
+        Reference<awt::XControl> xControl(rxCreator, UNO_QUERY);
         if ( xControl.is() )
             m_xControlModel.set(xControl->getModel(), css::uno::UNO_QUERY);
         OSL_ENSURE( m_xControlModel.is(), "OAccessibleControlContext::Init: invalid creator (no control, or control without model!" );
@@ -76,7 +59,13 @@ namespace toolkit
         startModelListening();
 
         // announce the XAccessible to our base class
-        comphelper::OAccessibleComponentHelper::lateInit( _rxCreator );
+        comphelper::OAccessibleComponentHelper::lateInit(rxCreator);
+    }
+
+
+    OAccessibleControlContext::~OAccessibleControlContext()
+    {
+        ensureDisposed();
     }
 
 
@@ -85,8 +74,7 @@ namespace toolkit
         rtl::Reference<OAccessibleControlContext> pNew;
         try
         {
-            pNew = new OAccessibleControlContext;
-            pNew->Init( _rxCreator );
+            pNew = new OAccessibleControlContext(_rxCreator);
         }
         catch( const Exception& )
         {

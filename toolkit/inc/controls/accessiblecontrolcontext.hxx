@@ -86,15 +86,8 @@ namespace toolkit
 
         vcl::Window* implGetWindow( css::uno::Reference< css::awt::XWindow >* _pxUNOWindow = nullptr ) const;
 
-        /// ctor. @see Init
-        OAccessibleControlContext();
+        OAccessibleControlContext(const css::uno::Reference<css::accessibility::XAccessible>& rxCreator);
         virtual ~OAccessibleControlContext() override;
-
-        /** late ctor
-        */
-        void Init(
-            const css::uno::Reference< css::accessibility::XAccessible >& _rxCreator
-        );
 
         // OCommonAccessibleComponent overridables
         virtual css::awt::Rectangle implGetBounds(  ) override;
