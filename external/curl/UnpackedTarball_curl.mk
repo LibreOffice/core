@@ -25,6 +25,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,curl,\
 	external/curl/curl-msvc-disable-protocols.patch.1 \
 	external/curl/zlib.patch.0 \
 	external/curl/configurable-z-option.patch.0 \
+	external/curl/undefined.patch.0 \
 ))
 
 ifeq ($(OS)-$(COM_IS_CLANG),WNT-TRUE)
