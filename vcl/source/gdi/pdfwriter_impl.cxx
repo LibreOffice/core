@@ -3560,6 +3560,9 @@ bool PDFWriterImpl::appendDest( sal_Int32 nDestID, OStringBuffer& rBuffer )
 
 void PDFWriterImpl::addDocumentAttachedFile(OUString const& rFileName, OUString const& rMimeType, OUString const& rDescription, std::unique_ptr<PDFOutputStream> rStream)
 {
+    if (m_nPDFA_Version == 1 || m_nPDFA_Version == 2)
+        return;
+
     sal_Int32 nObjectID = addEmbeddedFile(std::move(rStream), rMimeType);
     auto& rAttachedFile = m_aDocumentAttachedFiles.emplace_back();
     rAttachedFile.maFilename = rFileName;
