@@ -3627,6 +3627,15 @@ OString SwXTextDocument::getViewRenderState(SfxViewShell* pViewShell)
             if (pVOpt->GetDocColor() == svtools::ColorConfig::GetDefaultColor(svtools::DOCCOLOR, 1))
                 aState.append('D');
 
+            if (pView->IsSpotlightParaStyles() || pView->IsSpotlightCharStyles())
+            {
+                aState.append('H');
+                if (pView->IsSpotlightParaStyles())
+                    aState.append('P');
+                if (pView->IsSpotlightCharStyles())
+                    aState.append('C');
+            }
+
             aState.append(';');
 
             OString aThemeName = OUStringToOString(pVOpt->GetThemeName(), RTL_TEXTENCODING_UTF8);

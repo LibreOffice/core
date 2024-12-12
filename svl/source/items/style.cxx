@@ -284,6 +284,11 @@ void SfxStyleSheetBase::SetHelpId( const OUString& rFile, sal_uInt32 nId )
     nHelpId = nId;
 }
 
+sal_Int32 SfxStyleSheetBase::GetSpotlightId()
+{
+    return -1;
+}
+
 /**
  * Next style possible?
  * Default: Yes

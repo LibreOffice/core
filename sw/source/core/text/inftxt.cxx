@@ -19,6 +19,7 @@
 
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
 
+#include <comphelper/lok.hxx>
 #include <unotools/linguprops.hxx>
 #include <unotools/lingucfg.hxx>
 #include <fmtinfmt.hxx>
@@ -27,6 +28,7 @@
 #include <svl/ctloptions.hxx>
 #include <sfx2/infobar.hxx>
 #include <sfx2/printer.hxx>
+#include <sfx2/StylePreviewRenderer.hxx>
 #include <sal/log.hxx>
 #include <editeng/hyphenzoneitem.hxx>
 #include <editeng/hngpnctitem.hxx>
@@ -1323,9 +1325,7 @@ void SwTextPaintInfo::DrawCSDFHighlighting(const SwLinePortion &rPor) const
     if (!pView)
         return;
 
-    StylesHighlighterColorMap& rCharStylesColorMap = pView->GetStylesHighlighterCharColorMap();
-
-    if (rCharStylesColorMap.empty() && !pView->IsHighlightCharDF())
+    if (!pView->IsSpotlightCharStyles() && !pView->IsHighlightCharDF())
         return;
 
     SwRect aRect;
@@ -1352,17 +1352,30 @@ void SwTextPaintInfo::DrawCSDFHighlighting(const SwLinePortion &rPor) const
     // check for CS formatting, if not CS formatted check for direct character formatting
     if (!sCurrentCharStyle.isEmpty())
     {
-        if (!rCharStylesColorMap.empty())
+        OUString sCharStyleDisplayName = SwStyleNameMapper::GetUIName(sCurrentCharStyle,
+                                                             SwGetPoolIdFromName::ChrFmt);
+        if (comphelper::LibreOfficeKit::isActive())
         {
-            OUString sCharStyleDisplayName;
-            sCharStyleDisplayName = SwStyleNameMapper::GetUIName(sCurrentCharStyle,
-                                                                 SwGetPoolIdFromName::ChrFmt);
-            if (!sCharStyleDisplayName.isEmpty()
-                    && rCharStylesColorMap.find(sCharStyleDisplayName)
-                    != rCharStylesColorMap.end())
+            // For simplicity in kit mode, we render in the document "all styles" that exist
+            if (const SwCharFormat* pCharFormat = pFrame->GetDoc().FindCharFormatByName(sCharStyleDisplayName))
             {
-                aFillColor = rCharStylesColorMap[sCharStyleDisplayName].first;
-                sCSNumberOrDF = OUString::number(rCharStylesColorMap[sCharStyleDisplayName].second);
+                // Do this so these are stable across views regardless of an individual
+                // user's selection mode in the style panel.
+                sCSNumberOrDF = OUString::number(pFrame->GetDoc().GetCharFormats()->GetPos(pCharFormat));
+                aFillColor = ColorHash(sCharStyleDisplayName);
+            }
+        }
+        else
+        {
+            if (!sCharStyleDisplayName.isEmpty())
+            {
+                StylesHighlighterColorMap& rCharStylesColorMap = pView->GetStylesHighlighterCharColorMap();
+                auto it = rCharStylesColorMap.find(sCharStyleDisplayName);
+                if (it != rCharStylesColorMap.end())
+                {
+                    sCSNumberOrDF = OUString::number(it->second.second);
+                    aFillColor = it->second.first;
+                }
             }
         }
     }
