@@ -46,11 +46,10 @@ namespace toolkit
     //= OAccessibleControlContext
 
 
-    OAccessibleControlContext::OAccessibleControlContext(const Reference< XAccessible >& rxCreator)
+    OAccessibleControlContext::OAccessibleControlContext(const css::uno::Reference<css::awt::XControl>& rxControl)
     {
-        Reference<awt::XControl> xControl(rxCreator, UNO_QUERY);
-        if ( xControl.is() )
-            m_xControlModel.set(xControl->getModel(), css::uno::UNO_QUERY);
+        if (rxControl.is())
+            m_xControlModel.set(rxControl->getModel(), css::uno::UNO_QUERY);
         OSL_ENSURE( m_xControlModel.is(), "OAccessibleControlContext::Init: invalid creator (no control, or control without model!" );
         if ( !m_xControlModel.is() )
             throw DisposedException();  // caught by the caller (the create method)
@@ -58,7 +57,7 @@ namespace toolkit
         // start listening at the model
         startModelListening();
 
-        m_aCreator = rxCreator;
+        m_aControl = rxControl;
     }
 
 
@@ -68,16 +67,16 @@ namespace toolkit
     }
 
 
-    rtl::Reference<OAccessibleControlContext> OAccessibleControlContext::create( const Reference< XAccessible >& _rxCreator )
+    rtl::Reference<OAccessibleControlContext> OAccessibleControlContext::create(const Reference<awt::XControl>& rXControl)
     {
         rtl::Reference<OAccessibleControlContext> pNew;
         try
         {
-            pNew = new OAccessibleControlContext(_rxCreator);
+            pNew = new OAccessibleControlContext(rXControl);
         }
         catch( const Exception& )
         {
-            TOOLS_WARN_EXCEPTION( "toolkit", "OAccessibleControlContext::create: caught an exception from the late ctor!" );
+            TOOLS_WARN_EXCEPTION( "toolkit", "OAccessibleControlContext::create: caught an exception in ctor!" );
         }
         return pNew;
     }
@@ -199,7 +198,7 @@ namespace toolkit
 
     vcl::Window* OAccessibleControlContext::implGetWindow( Reference< awt::XWindow >* _pxUNOWindow ) const
     {
-        Reference<awt::XControl> xControl(m_aCreator.get(), UNO_QUERY);
+        Reference<awt::XControl> xControl(m_aControl);
         Reference< awt::XWindow > xWindow;
         if ( xControl.is() )
             xWindow.set(xControl->getPeer(), css::uno::UNO_QUERY);
