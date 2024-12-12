@@ -2621,6 +2621,25 @@ void  SwDocStyleSheet::SetHelpId( const OUString& r, sal_uInt32 nId )
     }
 }
 
+sal_Int32 SwDocStyleSheet::GetSpotlightId()
+{
+    if (nFamily == SfxStyleFamily::Para)
+    {
+        SwTextFormatColl* pColl = m_pColl ?
+            m_pColl : m_rDoc.FindTextFormatCollByName(aName);
+        return pColl ?  m_rDoc.GetTextFormatColls()->GetPos(pColl) : -1;
+    }
+
+    if (nFamily == SfxStyleFamily::Char)
+    {
+        SwCharFormat* pCharFormat = m_pCharFormat
+            ? m_pCharFormat : m_rDoc.FindCharFormatByName(aName);
+        return pCharFormat ?  m_rDoc.GetCharFormats()->GetPos(pCharFormat) : -1;
+    }
+
+    return SfxStyleSheetBase::GetSpotlightId();
+}
+
 // methods for DocStyleSheetPool
 SwDocStyleSheetPool::SwDocStyleSheetPool( SwDoc& rDocument, bool bOrg )
     : SfxStyleSheetBasePool(rDocument.GetAttrPool())

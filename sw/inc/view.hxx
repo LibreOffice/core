@@ -729,7 +729,9 @@ public:
     virtual void flushPendingLOKInvalidateTiles() override;
     virtual std::optional<OString> getLOKPayload(int nType, int nViewId) const override;
 
-    bool IsHighlightCharDF() { return m_bIsHighlightCharDF; }
+    bool IsHighlightCharDF() const { return m_bIsHighlightCharDF; }
+    bool IsSpotlightParaStyles() const { return m_bIsSpotlightParaStyles; }
+    bool IsSpotlightCharStyles() const { return m_bIsSpotlightCharStyles; }
 
 private:
     AutoTimer m_aBringToAttentionBlinkTimer;

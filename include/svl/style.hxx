@@ -172,6 +172,9 @@ public:
     virtual sal_uInt32 GetHelpId( OUString& rFile );
     virtual void   SetHelpId( const OUString& r, sal_uInt32 nId );
 
+    // Spotlight Id, @return -1 for style not in use
+    virtual sal_Int32 GetSpotlightId();
+
     virtual SfxItemSet& GetItemSet();
     /// Due to writer's usual lack of sanity this is a separate function for
     /// preview only; it shall not create the style in case it does not exist.

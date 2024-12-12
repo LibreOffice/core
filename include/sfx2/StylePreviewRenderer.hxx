@@ -52,6 +52,8 @@ public:
 
 } // end namespace sfx2
 
+SFX2_DLLPUBLIC Color ColorHash(std::u16string_view rString);
+
 #endif // INCLUDED_SVX_STYLEPREVIEWRENDERER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

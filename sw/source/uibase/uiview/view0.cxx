@@ -29,6 +29,7 @@
 #include <viewopt.hxx>
 #include <globals.h>
 #include <sfx2/infobar.hxx>
+#include <sfx2/lokhelper.hxx>
 #include <sfx2/request.hxx>
 #include <svl/whiter.hxx>
 #include <svx/srchdlg.hxx>
@@ -37,9 +38,11 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <uivwimp.hxx>
+#include <unotxdoc.hxx>
 #include <avmedia/mediaplayer.hxx>
 #include <swmodule.hxx>
 #include <com/sun/star/linguistic2/XLinguProperties.hpp>
+#include <comphelper/servicehelper.hxx>
 #include <osl/diagnose.h>
 
 #include <sfx2/objface.hxx>
@@ -570,10 +573,13 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
         break;
 
     case SID_SPOTLIGHT_PARASTYLES:
-        if (!pArgs || (pArgs && !pArgs->HasItem(FN_PARAM_1)))
+        if (!comphelper::LibreOfficeKit::isActive())
         {
-            const SfxStringItem sDeckName(SID_SIDEBAR_DECK, u"StyleListDeck"_ustr);
-            GetDispatcher().ExecuteList(SID_SIDEBAR_DECK, SfxCallMode::SYNCHRON, { &sDeckName });
+            if (!pArgs || !pArgs->HasItem(FN_PARAM_1))
+            {
+                const SfxStringItem sDeckName(SID_SIDEBAR_DECK, u"StyleListDeck"_ustr);
+                GetDispatcher().ExecuteList(SID_SIDEBAR_DECK, SfxCallMode::SYNCHRON, { &sDeckName });
+            }
         }
         if (STATE_TOGGLE == eState)
             bFlag = !m_bIsSpotlightParaStyles;
@@ -581,10 +587,13 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
         break;
 
     case SID_SPOTLIGHT_CHARSTYLES:
-        if (!pArgs || (pArgs && !pArgs->HasItem(FN_PARAM_1)))
+        if (!comphelper::LibreOfficeKit::isActive())
         {
-            const SfxStringItem sDeckName(SID_SIDEBAR_DECK, u"StyleListDeck"_ustr);
-            GetDispatcher().ExecuteList(SID_SIDEBAR_DECK, SfxCallMode::SYNCHRON, { &sDeckName });
+            if (!pArgs || !pArgs->HasItem(FN_PARAM_1))
+            {
+                const SfxStringItem sDeckName(SID_SIDEBAR_DECK, u"StyleListDeck"_ustr);
+                GetDispatcher().ExecuteList(SID_SIDEBAR_DECK, SfxCallMode::SYNCHRON, { &sDeckName });
+            }
         }
         if (STATE_TOGGLE == eState)
             bFlag = !m_bIsSpotlightCharStyles;
@@ -754,6 +763,14 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
         rSh.ResetModified();
 
     pModule->ApplyUsrPref( *pOpt, this, bWebView ? SvViewOpt::DestWeb : SvViewOpt::DestText );
+
+    if (nSlot == SID_SPOTLIGHT_CHARSTYLES || nSlot == SID_SPOTLIGHT_PARASTYLES)
+    {
+        SwXTextDocument* pModel = comphelper::getFromUnoTunnel<SwXTextDocument>(GetCurrentDocument());
+        SfxLokHelper::notifyViewRenderState(this, pModel);
+        if (vcl::Window *pMyWin = rSh.GetWin())
+            pMyWin->Invalidate();
+    }
 
     // #i6193# let postits know about new spellcheck setting
     if ( nSlot == SID_AUTOSPELL_CHECK )

@@ -34,6 +34,7 @@
 #include <svl/intitem.hxx>
 #include <svl/style.hxx>
 #include <svl/itemset.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Common.hxx>
 
@@ -95,8 +96,6 @@ public:
     }
 };
 
-namespace
-{
 Color ColorHash(std::u16string_view rString)
 {
     static constexpr auto aSaturationArray = std::to_array<sal_uInt16>({ 90, 75, 60 });
@@ -129,6 +128,8 @@ Color ColorHash(std::u16string_view rString)
     return aColor;
 }
 
+namespace
+{
 // used to disallow the default character style in the styles highlighter character styles color map
 std::optional<OUString> sDefaultCharStyleUIName;
 }
@@ -630,20 +631,23 @@ class StyleTree_Impl
 private:
     OUString aName;
     OUString aParent;
+    sal_Int32 nSpotlightId;
     StyleTreeArr_Impl pChildren;
 
 public:
     bool HasParent() const { return !aParent.isEmpty(); }
 
-    StyleTree_Impl(OUString _aName, OUString _aParent)
+    StyleTree_Impl(OUString _aName, OUString _aParent, sal_Int32 _nSpotlightId)
         : aName(std::move(_aName))
         , aParent(std::move(_aParent))
+        , nSpotlightId(_nSpotlightId)
         , pChildren(0)
     {
     }
 
     const OUString& getName() const { return aName; }
     const OUString& getParent() const { return aParent; }
+    sal_Int32 getSpotlightId() const { return nSpotlightId; }
     StyleTreeArr_Impl& getChildren() { return pChildren; }
 };
 }
@@ -707,25 +711,30 @@ static bool IsExpanded_Impl(const std::vector<OUString>& rEntries, std::u16strin
     return false;
 }
 
-static void lcl_Update(weld::TreeView& rTreeView, weld::TreeIter& rIter, const OUString& rName,
-                       SfxStyleFamily eFam, SfxViewShell* pViewSh)
+static void lcl_Update(weld::TreeView& rTreeView, weld::TreeIter& rIter,
+                       const StyleTree_Impl& rEntry, SfxStyleFamily eFam, SfxViewShell* pViewSh)
 {
+    const OUString& rName = rEntry.getName();
+
     Color aColor = ColorHash(rName);
 
-    int nColor;
-    if (eFam == SfxStyleFamily::Para)
-    {
-        StylesHighlighterColorMap& rParaStylesColorMap
-            = pViewSh->GetStylesHighlighterParaColorMap();
-        nColor = rParaStylesColorMap.size();
-        rParaStylesColorMap[rName] = std::pair(aColor, nColor);
-    }
+    // For kit keep the id used for spotlight/number-image for a style stable
+    // regardless of the selection mode of the style panel, so multiple views
+    // on a document all share the same id for a style.
+    sal_Int32 nSpotlightId;
+    if (comphelper::LibreOfficeKit::isActive())
+        nSpotlightId = rEntry.getSpotlightId();
     else
     {
-        StylesHighlighterColorMap& rCharStylesColorMap
-            = pViewSh->GetStylesHighlighterCharColorMap();
-        nColor = rCharStylesColorMap.size();
-        rCharStylesColorMap[rName] = std::pair(aColor, nColor);
+        StylesHighlighterColorMap& rColorMap = (eFam == SfxStyleFamily::Para)
+                                                   ? pViewSh->GetStylesHighlighterParaColorMap()
+                                                   : pViewSh->GetStylesHighlighterCharColorMap();
+        nSpotlightId = rColorMap.size();
+        rColorMap[rName] = std::pair(aColor, nSpotlightId);
+    }
+
+    if (eFam == SfxStyleFamily::Char)
+    {
         // don't show a color or number for default character style 'No Character Style' entry
         if (rName == sDefaultCharStyleUIName.value() /*"No Character Style"*/)
         {
@@ -743,9 +752,13 @@ static void lcl_Update(weld::TreeView& rTreeView, weld::TreeIter& rIter, const O
     xDevice->SetFillColor(aColor);
     const tools::Rectangle aRect(Point(0, 0), aImageSize);
     xDevice->DrawRect(aRect);
-    xDevice->SetTextColor(COL_BLACK);
-    xDevice->DrawText(aRect, OUString::number(nColor),
-                      DrawTextFlags::Center | DrawTextFlags::VCenter);
+    // In kit mode, unused styles are -1, so we can just skip the number image for those
+    if (nSpotlightId != -1)
+    {
+        xDevice->SetTextColor(COL_BLACK);
+        xDevice->DrawText(aRect, OUString::number(nSpotlightId),
+                          DrawTextFlags::Center | DrawTextFlags::VCenter);
+    }
 
     rTreeView.set_id(rIter, rName);
     rTreeView.set_text(rIter, rName);
@@ -770,7 +783,7 @@ static void FillBox_Impl(weld::TreeView& rBox, StyleTreeArr_Impl& rTreeArray,
                                       if (pStyleSheetPool)
                                           pStyle = pStyleSheetPool->Find(rChildName, eStyleFamily);
                                       if (pStyle && pStyle->IsUsed())
-                                          lcl_Update(rBox, rIter, rChildName, eStyleFamily,
+                                          lcl_Update(rBox, rIter, *pChildEntry, eStyleFamily,
                                                      pViewShell);
                                       else
                                       {
@@ -1075,7 +1088,8 @@ void StyleList::FillTreeBox(SfxStyleFamily eFam)
             ;
         else
         {
-            StyleTree_Impl* pNew = new StyleTree_Impl(pStyle->GetName(), pStyle->GetParent());
+            StyleTree_Impl* pNew = new StyleTree_Impl(pStyle->GetName(), pStyle->GetParent(),
+                                                      pStyle->GetSpotlightId());
             aArr.emplace_back(pNew);
         }
         pStyle = m_pStyleSheetPool->Next();
@@ -1255,7 +1269,7 @@ void StyleList::UpdateStyles(StyleFlags nFlags)
     SfxStyleSheetBase* pStyle = m_pStyleSheetPool->First(eFam, nFilter);
 
     std::unique_ptr<weld::TreeIter> xEntry = m_xFmtLb->make_iterator();
-    std::vector<OUString> aStrings;
+    std::vector<StyleTree_Impl> aStyles;
 
     comphelper::string::NaturalStringSorter aSorter(
         ::comphelper::getProcessComponentContext(),
@@ -1263,7 +1277,7 @@ void StyleList::UpdateStyles(StyleFlags nFlags)
 
     while (pStyle)
     {
-        aStrings.push_back(pStyle->GetName());
+        aStyles.emplace_back(pStyle->GetName(), pStyle->GetParent(), pStyle->GetSpotlightId());
         pStyle = m_pStyleSheetPool->Next();
     }
     OUString aUIName = getDefaultStyleName(eFam);
@@ -1272,9 +1286,14 @@ void StyleList::UpdateStyles(StyleFlags nFlags)
     // sorting twice is faster than sorting once.
     // The first sort has a cheap comparator, and gets the list into mostly-sorted order.
     // Then the second sort needs to call its (much more expensive) comparator less often.
-    std::sort(aStrings.begin(), aStrings.end());
-    std::sort(aStrings.begin(), aStrings.end(),
-              [&aSorter, &aUIName](const OUString& rLHS, const OUString& rRHS) {
+    std::sort(aStyles.begin(), aStyles.end(),
+              [](const StyleTree_Impl& rLHS, const StyleTree_Impl& rRHS) {
+                  return rLHS.getName() < rRHS.getName();
+              });
+    std::sort(aStyles.begin(), aStyles.end(),
+              [&aSorter, &aUIName](const StyleTree_Impl& rLHSS, const StyleTree_Impl& rRHSS) {
+                  const OUString& rLHS = rLHSS.getName();
+                  const OUString& rRHS = rRHSS.getName();
                   if (rRHS == aUIName)
                       return false;
                   if (rLHS == aUIName)
@@ -1303,7 +1322,7 @@ void StyleList::UpdateStyles(StyleFlags nFlags)
         pHighlighterColorMap->clear();
     }
 
-    size_t nCount = aStrings.size();
+    size_t nCount = aStyles.size();
 
     if (pViewShell && m_bModuleHasStylesHighlighterFeature
         && ((eFam == SfxStyleFamily::Para && m_bHighlightParaStyles)
@@ -1311,14 +1330,15 @@ void StyleList::UpdateStyles(StyleFlags nFlags)
     {
         m_xFmtLb->bulk_insert_for_each(
             nCount,
-            [this, &aStrings, eFam, pViewShell](weld::TreeIter& rIter, int nIdx) {
-                auto pChildStyle = m_pStyleSheetPool->Find(aStrings[nIdx], eFam);
+            [this, &aStyles, eFam, pViewShell](weld::TreeIter& rIter, int nIdx) {
+                const OUString& rName = aStyles[nIdx].getName();
+                auto pChildStyle = m_pStyleSheetPool->Find(rName, eFam);
                 if (pChildStyle && pChildStyle->IsUsed())
-                    lcl_Update(*m_xFmtLb, rIter, aStrings[nIdx], eFam, pViewShell);
+                    lcl_Update(*m_xFmtLb, rIter, aStyles[nIdx], eFam, pViewShell);
                 else
                 {
-                    m_xFmtLb->set_id(rIter, aStrings[nIdx]);
-                    m_xFmtLb->set_text(rIter, aStrings[nIdx]);
+                    m_xFmtLb->set_id(rIter, rName);
+                    m_xFmtLb->set_text(rIter, rName);
                 }
             },
             nullptr, nullptr, /*bGoingToSetText*/ true);
@@ -1326,9 +1346,10 @@ void StyleList::UpdateStyles(StyleFlags nFlags)
     else
     {
         m_xFmtLb->bulk_insert_for_each(nCount,
-                                       [this, &aStrings](weld::TreeIter& rIter, int nIdx) {
-                                           m_xFmtLb->set_id(rIter, aStrings[nIdx]);
-                                           m_xFmtLb->set_text(rIter, aStrings[nIdx]);
+                                       [this, &aStyles](weld::TreeIter& rIter, int nIdx) {
+                                           const OUString& rName = aStyles[nIdx].getName();
+                                           m_xFmtLb->set_id(rIter, rName);
+                                           m_xFmtLb->set_text(rIter, rName);
                                        },
                                        nullptr, nullptr, /*bGoingToSetText*/ true);
     }
