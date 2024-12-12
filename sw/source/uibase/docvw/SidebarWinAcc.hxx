@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 
 class SwViewShell;
@@ -27,6 +28,24 @@ class SwFrame;
 namespace sw::annotation { class SwAnnotationWin; }
 
 namespace sw::sidebarwindows {
+
+class SidebarWinAccessibleContext : public VCLXAccessibleComponent
+{
+public:
+    explicit SidebarWinAccessibleContext(sw::annotation::SwAnnotationWin& rSidebarWin,
+                                         SwViewShell& rViewShell, const SwFrame* pAnchorFrame);
+
+    void ChangeAnchor(const SwFrame* pAnchorFrame);
+
+    virtual css::uno::Reference<css::accessibility::XAccessible>
+        SAL_CALL getAccessibleParent() override;
+
+    virtual sal_Int64 SAL_CALL getAccessibleIndexInParent() override;
+
+private:
+    SwViewShell& mrViewShell;
+    const SwFrame* mpAnchorFrame;
+};
 
 class SidebarWinAccessible : public VCLXWindow
 {
