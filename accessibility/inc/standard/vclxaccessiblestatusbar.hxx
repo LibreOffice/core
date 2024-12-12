@@ -49,7 +49,7 @@ private:
     virtual void SAL_CALL   disposing() override;
 
 public:
-    VCLXAccessibleStatusBar( VCLXWindow* pVCLXWindow );
+    VCLXAccessibleStatusBar(vcl::Window* pWindow);
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

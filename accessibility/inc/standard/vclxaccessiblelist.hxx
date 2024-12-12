@@ -47,9 +47,8 @@ class VCLXAccessibleList final
 public:
     enum BoxType {COMBOBOX, LISTBOX};
 
-    VCLXAccessibleList (VCLXWindow* pVCLXindow, BoxType aBoxType,
-                        const css::uno::Reference<
-                            css::accessibility::XAccessible >& _xParent);
+    VCLXAccessibleList(vcl::Window* pWindow, BoxType aBoxType,
+                       const css::uno::Reference<css::accessibility::XAccessible>& _xParent);
 
     /** The index that is passed to this method is returned on following
         calls to getAccessibleIndexInParent.

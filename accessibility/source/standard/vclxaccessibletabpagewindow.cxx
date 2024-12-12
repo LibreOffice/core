@@ -32,8 +32,8 @@ using namespace ::comphelper;
 
 
 
-VCLXAccessibleTabPageWindow::VCLXAccessibleTabPageWindow( VCLXWindow* pVCLXWindow )
-    :VCLXAccessibleComponent( pVCLXWindow )
+VCLXAccessibleTabPageWindow::VCLXAccessibleTabPageWindow(vcl::Window* pWindow)
+    : VCLXAccessibleComponent(pWindow)
 {
     m_pTabPage = GetAs<TabPage>();
     m_pTabControl = nullptr;

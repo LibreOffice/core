@@ -31,7 +31,7 @@
 class VCLXAccessibleDropDownListBox final : public VCLXAccessibleBox
 {
 public:
-    VCLXAccessibleDropDownListBox(VCLXWindow* pVCLXindow);
+    VCLXAccessibleDropDownListBox(ListBox* pListBox);
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

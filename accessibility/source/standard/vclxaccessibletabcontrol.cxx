@@ -41,8 +41,8 @@ using namespace ::comphelper;
 
 
 
-VCLXAccessibleTabControl::VCLXAccessibleTabControl( VCLXWindow* pVCLXWindow )
-    :ImplInheritanceHelper( pVCLXWindow )
+VCLXAccessibleTabControl::VCLXAccessibleTabControl(vcl::Window* pWindow)
+    : ImplInheritanceHelper(pWindow)
 {
     m_pTabControl = GetAs<TabControl>();
     if (!m_pTabControl)

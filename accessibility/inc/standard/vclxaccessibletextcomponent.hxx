@@ -56,7 +56,7 @@ protected:
     virtual void SAL_CALL                   disposing() override;
 
 public:
-    VCLXAccessibleTextComponent( VCLXWindow* pVCLXWindow );
+    VCLXAccessibleTextComponent(vcl::Window* pWindow);
 
     // XAccessibleText
     virtual sal_Int32 SAL_CALL getCaretPosition() override;

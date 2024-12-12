@@ -25,8 +25,7 @@
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 
 #include <cppuhelper/implbase.hxx>
-
-
+#include <vcl/toolkit/button.hxx>
 
 
 class VCLXAccessibleRadioButton final : public cppu::ImplInheritanceHelper<
@@ -41,7 +40,8 @@ class VCLXAccessibleRadioButton final : public cppu::ImplInheritanceHelper<
     virtual void FillAccessibleStateSet( sal_Int64& rStateSet ) override;
 
 public:
-    VCLXAccessibleRadioButton( VCLXWindow* pVCLXWindow ): ImplInheritanceHelper(pVCLXWindow) {}
+    VCLXAccessibleRadioButton(RadioButton* pRadioButton)
+        : ImplInheritanceHelper(pRadioButton) {}
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

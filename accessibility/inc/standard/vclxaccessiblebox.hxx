@@ -25,6 +25,7 @@
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <vcl/toolkit/lstbox.hxx>
 
 class VCLXAccessibleList;
 
@@ -46,7 +47,7 @@ public:
         either COMBOBOX or LISTBOX and a flag
         indicating whether the box is a drop down box.
     */
-    VCLXAccessibleBox (VCLXWindow* pVCLXindow, BoxType aType, bool bIsDropDownBox);
+    VCLXAccessibleBox(vcl::Window* pBox, BoxType aType, bool bIsDropDownBox);
 
 
     // XAccessible

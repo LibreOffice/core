@@ -19,7 +19,6 @@
 
 #include <standard/svtaccessiblenumericfield.hxx>
 #include <comphelper/accessiblecontexthelper.hxx>
-#include <vcl/toolkit/fmtfield.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -27,8 +26,8 @@
 using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
 
-SVTXAccessibleNumericField::SVTXAccessibleNumericField(VCLXWindow* pVCLWindow)
-    : ImplInheritanceHelper(pVCLWindow)
+SVTXAccessibleNumericField::SVTXAccessibleNumericField(FormattedField* pFormattedField)
+    : ImplInheritanceHelper(pFormattedField)
 {
 }
 

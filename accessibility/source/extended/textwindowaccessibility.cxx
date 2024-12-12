@@ -703,7 +703,7 @@ void Paragraph::checkDisposed()
 
 Document::Document(::VCLXWindow * pVclXWindow, ::TextEngine & rEngine,
                    ::TextView & rView):
-    VCLXAccessibleComponent(pVclXWindow),
+    VCLXAccessibleComponent(pVclXWindow->GetWindow()),
     m_xAccessible(pVclXWindow),
     m_rEngine(rEngine),
     m_rView(rView),

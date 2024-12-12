@@ -24,8 +24,8 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-VCLXAccessibleListBox::VCLXAccessibleListBox (VCLXWindow* pVCLWindow)
-    : VCLXAccessibleBox (pVCLWindow, VCLXAccessibleBox::LISTBOX, false)
+VCLXAccessibleListBox::VCLXAccessibleListBox(ListBox* pListBox)
+    : VCLXAccessibleBox(pListBox, VCLXAccessibleBox::LISTBOX, false)
 {
 }
 

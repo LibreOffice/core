@@ -30,10 +30,9 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
 
 
-VCLXAccessibleTextField::VCLXAccessibleTextField (VCLXWindow* pVCLWindow, const Reference< XAccessible >& _xParent) :
-    ImplInheritanceHelper (pVCLWindow),
-    m_xParent( _xParent )
-
+VCLXAccessibleTextField::VCLXAccessibleTextField(vcl::Window* pWindow, const Reference<XAccessible>& _xParent)
+    : ImplInheritanceHelper(pWindow)
+    , m_xParent( _xParent )
 {
 }
 

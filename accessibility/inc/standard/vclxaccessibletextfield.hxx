@@ -33,8 +33,8 @@ class VCLXAccessibleTextField final :
     public cppu::ImplInheritanceHelper<VCLXAccessibleTextComponent, css::accessibility::XAccessible>
 {
 public:
-    VCLXAccessibleTextField (VCLXWindow* pVCLXindow,
-                             const css::uno::Reference< css::accessibility::XAccessible >& _xParent);
+    VCLXAccessibleTextField(vcl::Window* pWindow,
+                            const css::uno::Reference<css::accessibility::XAccessible>& _xParent);
 
     // XAccessible
     css::uno::Reference< css::accessibility::XAccessibleContext> SAL_CALL

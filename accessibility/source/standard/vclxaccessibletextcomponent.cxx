@@ -44,10 +44,9 @@ using namespace ::comphelper;
 
 
 
-VCLXAccessibleTextComponent::VCLXAccessibleTextComponent( VCLXWindow* pVCLXWindow )
-    :ImplInheritanceHelper( pVCLXWindow )
+VCLXAccessibleTextComponent::VCLXAccessibleTextComponent(vcl::Window* pWindow)
+    : ImplInheritanceHelper(pWindow)
 {
-    VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow )
         m_sText = removeMnemonicFromString( pWindow->GetText() );
 }

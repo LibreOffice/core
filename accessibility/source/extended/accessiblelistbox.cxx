@@ -43,7 +43,7 @@ namespace accessibility
     // Ctor() and Dtor()
 
     AccessibleListBox::AccessibleListBox(SvTreeListBox& _rListBox, const Reference< XAccessible >& _xParent)
-        : ImplInheritanceHelper( _rListBox.GetWindowPeer() ),
+        : ImplInheritanceHelper(&_rListBox),
         m_xParent( _xParent )
     {
     }

@@ -34,7 +34,7 @@ namespace dbaui
     using namespace ::com::sun::star;
 
     OConnectionLineAccess::OConnectionLineAccess(OTableConnection* _pLine)
-        : ImplInheritanceHelper(_pLine->GetComponentInterface().is() ? _pLine->GetWindowPeer() : nullptr)
+        : ImplInheritanceHelper(_pLine)
         ,m_pLine(_pLine)
     {
     }

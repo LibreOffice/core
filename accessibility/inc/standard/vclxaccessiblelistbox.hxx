@@ -29,7 +29,7 @@
 class VCLXAccessibleListBox final : public VCLXAccessibleBox
 {
 public:
-    VCLXAccessibleListBox(VCLXWindow* pVCLXindow);
+    VCLXAccessibleListBox(ListBox* pListBox);
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

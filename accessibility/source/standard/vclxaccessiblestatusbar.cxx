@@ -37,8 +37,8 @@ using namespace ::comphelper;
 
 
 
-VCLXAccessibleStatusBar::VCLXAccessibleStatusBar( VCLXWindow* pVCLXWindow )
-    :VCLXAccessibleComponent( pVCLXWindow )
+VCLXAccessibleStatusBar::VCLXAccessibleStatusBar(vcl::Window* pWindow)
+    : VCLXAccessibleComponent(pWindow)
 {
     m_pStatusBar = GetAs<StatusBar>();
 

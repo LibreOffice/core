@@ -25,8 +25,7 @@
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 
 #include <cppuhelper/implbase.hxx>
-
-
+#include <vcl/toolkit/edit.hxx>
 
 
 class VCLXAccessibleEdit : public cppu::ImplInheritanceHelper<
@@ -54,7 +53,7 @@ protected:
     virtual bool                PreferFullTextInTextChangedEvent() override;
 
 public:
-    VCLXAccessibleEdit( VCLXWindow* pVCLXindow );
+    VCLXAccessibleEdit(Edit* pEdit);
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

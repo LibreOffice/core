@@ -876,7 +876,9 @@ uno::Reference< accessibility::XAccessibleContext > VCLXWindow::CreateAccessible
     SolarMutexGuard aGuard;
     if (mpImpl->mbDisposing)
         return nullptr;
-    return getAccessibleFactory().createAccessibleContext( this );
+
+    VclPtr<vcl::Window> pWindow = GetWindow();
+    return getAccessibleFactory().createAccessibleContext(pWindow);
 }
 
 void VCLXWindow::SetSynthesizingVCLEvent( bool _b )

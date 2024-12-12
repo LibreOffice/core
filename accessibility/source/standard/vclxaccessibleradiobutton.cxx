@@ -32,7 +32,6 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <vcl/accessibility/strings.hxx>
 #include <vcl/window.hxx>
-#include <vcl/toolkit/button.hxx>
 #include <vcl/event.hxx>
 #include <vcl/vclevent.hxx>
 

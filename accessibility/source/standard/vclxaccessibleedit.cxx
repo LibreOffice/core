@@ -33,7 +33,6 @@
 #include <vcl/window.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/toolkit/edit.hxx>
 #include <vcl/toolkit/vclmedit.hxx>
 #include <vcl/textdata.hxx>
 #include <vcl/txtattr.hxx>
@@ -55,8 +54,8 @@ using namespace ::comphelper;
 // VCLXAccessibleEdit
 
 
-VCLXAccessibleEdit::VCLXAccessibleEdit( VCLXWindow* pVCLWindow )
-    :ImplInheritanceHelper( pVCLWindow )
+VCLXAccessibleEdit::VCLXAccessibleEdit(Edit* pEdit)
+    :ImplInheritanceHelper(pEdit)
 {
     m_nCaretPosition = getCaretPosition();
 }

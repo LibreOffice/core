@@ -42,23 +42,16 @@
 using namespace ::com::sun::star;
 using namespace ::comphelper;
 
-VCLXAccessibleComponent::VCLXAccessibleComponent( VCLXWindow* pVCLXWindow )
+VCLXAccessibleComponent::VCLXAccessibleComponent(vcl::Window* pWindow)
+    : m_xWindow(pWindow)
 {
-    m_xVCLXWindow = pVCLXWindow;
-
-    DBG_ASSERT( pVCLXWindow->GetWindow(), "VCLXAccessibleComponent - no window!" );
-    m_xWindow = pVCLXWindow->GetWindow();
+    DBG_ASSERT(pWindow, "VCLXAccessibleComponent - no window!");
     if (m_xWindow)
     {
         m_xWindow->AddEventListener(LINK(this, VCLXAccessibleComponent, WindowEventListener));
         m_xWindow->AddChildEventListener(
             LINK(this, VCLXAccessibleComponent, WindowChildEventListener));
     }
-}
-
-VCLXWindow* VCLXAccessibleComponent::GetVCLXWindow() const
-{
-    return m_xVCLXWindow.get();
 }
 
 void VCLXAccessibleComponent::DisconnectEvents()
@@ -215,7 +208,6 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
         case VclEventId::ObjectDying:
         {
             DisconnectEvents();
-            m_xVCLXWindow.clear();
         }
         break;
         case VclEventId::WindowChildDestroyed:
@@ -373,8 +365,6 @@ void VCLXAccessibleComponent::disposing()
     DisconnectEvents();
 
     OAccessibleExtendedComponentHelper::disposing();
-
-    m_xVCLXWindow.clear();
 }
 
 vcl::Window* VCLXAccessibleComponent::GetWindow() const { return m_xWindow; }

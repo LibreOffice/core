@@ -25,6 +25,7 @@
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 
 #include <cppuhelper/implbase.hxx>
+#include <vcl/toolkit/button.hxx>
 
 
 
@@ -40,7 +41,8 @@ class VCLXAccessibleButton final : public cppu::ImplInheritanceHelper<
     virtual void FillAccessibleStateSet( sal_Int64& rStateSet ) override;
 
 public:
-    VCLXAccessibleButton( VCLXWindow* pVCLXWindow ): ImplInheritanceHelper(pVCLXWindow) {}
+    VCLXAccessibleButton(PushButton* pButton)
+        : ImplInheritanceHelper(pButton) {}
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

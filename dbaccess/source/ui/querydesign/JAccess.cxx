@@ -32,7 +32,7 @@ namespace dbaui
     using namespace ::com::sun::star::lang;
 
     OJoinDesignViewAccess::OJoinDesignViewAccess(OJoinTableView* _pTableView)
-        :ImplInheritanceHelper(_pTableView->GetComponentInterface().is() ? _pTableView->GetWindowPeer() : nullptr)
+        :ImplInheritanceHelper(_pTableView)
         ,m_pTableView(_pTableView)
     {
     }

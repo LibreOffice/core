@@ -29,7 +29,6 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
-#include <vcl/toolkit/button.hxx>
 #include <vcl/event.hxx>
 #include <vcl/vclevent.hxx>
 
@@ -43,8 +42,8 @@ using namespace ::comphelper;
 // VCLXAccessibleCheckBox
 
 
-VCLXAccessibleCheckBox::VCLXAccessibleCheckBox( VCLXWindow* pVCLWindow )
-    :ImplInheritanceHelper( pVCLWindow )
+VCLXAccessibleCheckBox::VCLXAccessibleCheckBox(CheckBox* pCheckBox)
+    :ImplInheritanceHelper(pCheckBox)
 {
     m_bChecked = IsChecked();
     m_bIndeterminate = IsIndeterminate();

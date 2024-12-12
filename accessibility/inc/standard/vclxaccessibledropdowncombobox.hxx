@@ -21,6 +21,8 @@
 
 #include <standard/vclxaccessiblebox.hxx>
 
+#include <vcl/toolkit/combobox.hxx>
+
 /** The accessible drop down combobox has two children.  The first is the
     text field represented by an object of the
     VCLXAccessibleEdit class.  The second is the list
@@ -31,7 +33,7 @@
 class VCLXAccessibleDropDownComboBox final : public VCLXAccessibleBox
 {
 public:
-    VCLXAccessibleDropDownComboBox(VCLXWindow* pVCLXindow);
+    VCLXAccessibleDropDownComboBox(ComboBox* pComboBox);
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

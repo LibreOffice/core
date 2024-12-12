@@ -34,7 +34,7 @@ namespace dbaui
     using namespace ::com::sun::star;
 
     OTableWindowAccess::OTableWindowAccess(OTableWindow* _pTable)
-        :ImplInheritanceHelper(_pTable->GetComponentInterface().is() ? _pTable->GetWindowPeer() : nullptr)
+        :ImplInheritanceHelper(_pTable)
         ,m_pTable(_pTable)
     {
     }

@@ -31,8 +31,8 @@ namespace sw::sidebarwindows {
 // implementation of accessible context for <SidebarWinAccessible> instance
 SidebarWinAccessibleContext::SidebarWinAccessibleContext(
     sw::annotation::SwAnnotationWin& rSidebarWin, SwViewShell& rViewShell,
-    const SwFrame* pAnchorFrame, SidebarWinAccessible* pSidebarWinAccessible)
-    : VCLXAccessibleComponent(pSidebarWinAccessible)
+    const SwFrame* pAnchorFrame)
+    : VCLXAccessibleComponent(&rSidebarWin)
     , mrViewShell(rViewShell)
     , mpAnchorFrame(pAnchorFrame)
 {
@@ -100,7 +100,7 @@ css::uno::Reference<css::accessibility::XAccessibleContext>
 SidebarWinAccessible::getAccessibleContext()
 {
     if (!m_xAccContext.is())
-        m_xAccContext = new SidebarWinAccessibleContext(mrSidebarWin, mrViewShell, mpAnchorFrame, this);
+        m_xAccContext = new SidebarWinAccessibleContext(mrSidebarWin, mrViewShell, mpAnchorFrame);
 
     return m_xAccContext;
 }

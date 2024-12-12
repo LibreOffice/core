@@ -57,6 +57,8 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <vcl/toolkit/lstbox.hxx>
 #include <vcl/toolkit/combobox.hxx>
+#include <vcl/toolkit/fixed.hxx>
+#include <vcl/toolkit/fixedhyper.hxx>
 #include <extended/AccessibleGridControl.hxx>
 #include <vcl/accessibletable.hxx>
 
@@ -86,33 +88,31 @@ public:
 
     // ::toolkit::IAccessibleFactory
     virtual css::uno::Reference< css::accessibility::XAccessibleContext >
-        createAccessibleContext( VCLXButton* _pXWindow ) override;
+        createAccessibleContext(PushButton* pButton) override;
     virtual css::uno::Reference< css::accessibility::XAccessibleContext >
-        createAccessibleContext( VCLXCheckBox* _pXWindow ) override;
+        createAccessibleContext(CheckBox* pCheckBox) override;
     virtual css::uno::Reference< css::accessibility::XAccessibleContext >
-        createAccessibleContext( VCLXRadioButton* _pXWindow ) override;
+        createAccessibleContext(RadioButton* pRadioButton) override;
     virtual css::uno::Reference< css::accessibility::XAccessibleContext >
-        createAccessibleContext( VCLXListBox* _pXWindow ) override;
+        createAccessibleContext(ListBox* pListBox) override;
     virtual css::uno::Reference< css::accessibility::XAccessibleContext >
-        createAccessibleContext( VCLXFixedText* _pXWindow ) override;
+        createAccessibleContext(FixedText* pFixedText) override;
     virtual css::uno::Reference< css::accessibility::XAccessibleContext >
-        createAccessibleContext( VCLXFixedHyperlink* _pXWindow ) override;
+        createAccessibleContext(FixedHyperlink* pFixedHyperlink) override;
     virtual css::uno::Reference< css::accessibility::XAccessibleContext >
-        createAccessibleContext( VCLXScrollBar* _pXWindow ) override;
+        createAccessibleContext(ScrollBar* pScrollBar) override;
     virtual css::uno::Reference< css::accessibility::XAccessibleContext >
-        createAccessibleContext( VCLXEdit* _pXWindow ) override;
+        createAccessibleContext(Edit* pEdit) override;
     virtual css::uno::Reference< css::accessibility::XAccessibleContext >
-        createAccessibleContext( VCLXMultiLineEdit* _pXWindow ) override;
+        createAccessibleContext(ComboBox* pComboBox) override;
     virtual css::uno::Reference< css::accessibility::XAccessibleContext >
-        createAccessibleContext( VCLXComboBox* _pXWindow ) override;
+        createAccessibleContext(ToolBox* pToolBox) override;
     virtual css::uno::Reference< css::accessibility::XAccessibleContext >
-        createAccessibleContext( VCLXToolBox* _pXWindow ) override;
+        createAccessibleContext(HeaderBar* pHeaderBar) override;
     virtual css::uno::Reference< css::accessibility::XAccessibleContext >
-        createAccessibleContext( VCLXHeaderBar* _pXWindow ) override;
+        createAccessibleContext(FormattedField* pFormattedField) override;
     virtual css::uno::Reference< css::accessibility::XAccessibleContext >
-        createAccessibleContext( SVTXNumericField* _pXWindow ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext >
-        createAccessibleContext( VCLXWindow* _pXWindow ) override;
+        createAccessibleContext(vcl::Window* pWindow) override;
 
     // ::vcl::IAccessibleFactory
     virtual vcl::IAccessibleTabListBox*
@@ -220,75 +220,67 @@ AccessibleFactory::~AccessibleFactory()
 {
 }
 
-Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXButton* _pXWindow )
+Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(PushButton* pButton)
 {
-    return new VCLXAccessibleButton( _pXWindow );
+    return new VCLXAccessibleButton(pButton);
 }
 
-Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXCheckBox* _pXWindow )
+Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(CheckBox* pCheckBox)
 {
-    return new VCLXAccessibleCheckBox( _pXWindow );
+    return new VCLXAccessibleCheckBox(pCheckBox);
 }
 
-Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXRadioButton* _pXWindow )
+Reference<XAccessibleContext> AccessibleFactory::createAccessibleContext(RadioButton* pRadioButton)
 {
-    return new VCLXAccessibleRadioButton( _pXWindow );
+    return new VCLXAccessibleRadioButton(pRadioButton);
 }
 
-Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXListBox* _pXWindow )
+Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(ListBox* pListBox)
 {
     bool bIsDropDownBox = false;
-    VclPtr< ListBox > pBox = _pXWindow->GetAs< ListBox >();
-    if ( pBox )
-        bIsDropDownBox = ( ( pBox->GetStyle() & WB_DROPDOWN ) == WB_DROPDOWN );
+    if (pListBox)
+        bIsDropDownBox = ((pListBox->GetStyle() & WB_DROPDOWN) == WB_DROPDOWN);
 
     if ( bIsDropDownBox )
-        return new VCLXAccessibleDropDownListBox( _pXWindow );
+        return new VCLXAccessibleDropDownListBox(pListBox);
     else
-        return new VCLXAccessibleListBox( _pXWindow );
+        return new VCLXAccessibleListBox(pListBox);
 }
 
-Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXFixedText* _pXWindow )
+Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(FixedText* pFixedText)
 {
-    return new VCLXAccessibleFixedText( _pXWindow );
+    return new VCLXAccessibleFixedText(pFixedText);
 }
 
-Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXFixedHyperlink* _pXWindow )
+Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(FixedHyperlink* pFixedHyperlink)
 {
-    return new VCLXAccessibleFixedHyperlink( _pXWindow );
+    return new VCLXAccessibleFixedHyperlink(pFixedHyperlink);
 }
 
-Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXScrollBar* _pXWindow )
+Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(ScrollBar* pScrollBar)
 {
-    return new VCLXAccessibleScrollBar( _pXWindow );
+    return new VCLXAccessibleScrollBar(pScrollBar);
 }
 
-Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXEdit* _pXWindow )
+Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(Edit* pEdit)
 {
-    return new VCLXAccessibleEdit( _pXWindow );
+    return new VCLXAccessibleEdit(pEdit);
 }
 
-Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXMultiLineEdit* _pXWindow )
-{
-    return new VCLXAccessibleEdit( _pXWindow );
-}
-
-Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXComboBox* _pXWindow )
+Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(ComboBox* pComboBox)
 {
     bool bIsDropDownBox = false;
-    VclPtr< ComboBox > pBox = _pXWindow->GetAs< ComboBox >();
-    if ( pBox )
-        bIsDropDownBox = ( ( pBox->GetStyle() & WB_DROPDOWN ) == WB_DROPDOWN );
+    if (pComboBox)
+        bIsDropDownBox = ((pComboBox->GetStyle() & WB_DROPDOWN) == WB_DROPDOWN);
 
     if ( bIsDropDownBox )
-        return new VCLXAccessibleDropDownComboBox( _pXWindow );
+        return new VCLXAccessibleDropDownComboBox(pComboBox);
     else
-        return new VCLXAccessibleComboBox( _pXWindow );
+        return new VCLXAccessibleComboBox(pComboBox);
 }
 
-Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXWindow* _pXWindow )
+Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(vcl::Window* pWindow)
 {
-    VclPtr<vcl::Window> pWindow = _pXWindow->GetWindow();
     if (!pWindow)
         return nullptr;
 
@@ -310,54 +302,54 @@ Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLX
 
     else if ( nType == WindowType::STATUSBAR )
     {
-        return new VCLXAccessibleStatusBar(_pXWindow);
+        return new VCLXAccessibleStatusBar(pWindow);
     }
 
     else if ( nType == WindowType::TABCONTROL )
     {
-        return new VCLXAccessibleTabControl(_pXWindow);
+        return new VCLXAccessibleTabControl(pWindow);
     }
 
     else if ( nType == WindowType::TABPAGE && pWindow->GetAccessibleParentWindow() && pWindow->GetAccessibleParentWindow()->GetType() == WindowType::TABCONTROL )
     {
-        return new VCLXAccessibleTabPageWindow(_pXWindow);
+        return new VCLXAccessibleTabPageWindow(pWindow);
     }
 
     else if ( nType == WindowType::FLOATINGWINDOW )
     {
-        return new FloatingWindowAccessible(_pXWindow);
+        return new FloatingWindowAccessible(pWindow);
     }
 
     else if ( nType == WindowType::BORDERWINDOW && hasFloatingChild( pWindow ) )
     {
-        return new FloatingWindowAccessible(_pXWindow);
+        return new FloatingWindowAccessible(pWindow);
     }
 
     else if ( ( nType == WindowType::HELPTEXTWINDOW ) || ( nType == WindowType::FIXEDLINE ) )
     {
-        return new VCLXAccessibleFixedText(_pXWindow);
+        return new VCLXAccessibleFixedText(pWindow);
     }
     else
     {
-        return new VCLXAccessibleComponent(_pXWindow);
+        return new VCLXAccessibleComponent(pWindow);
     }
 
     return nullptr;
 }
 
-Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXToolBox* _pXWindow )
+Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(ToolBox* pToolBox)
 {
-    return new VCLXAccessibleToolBox( _pXWindow );
+    return new VCLXAccessibleToolBox(pToolBox);
 }
 
-Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXHeaderBar* _pXWindow )
+Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(HeaderBar* pHeaderBar)
 {
-    return new VCLXAccessibleHeaderBar(_pXWindow);
+    return new VCLXAccessibleHeaderBar(pHeaderBar);
 }
 
-Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( SVTXNumericField* _pXWindow )
+Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(FormattedField* pFormattedField)
 {
-    return new SVTXAccessibleNumericField( _pXWindow );
+    return new SVTXAccessibleNumericField(pFormattedField);
 }
 
 vcl::IAccessibleTabListBox* AccessibleFactory::createAccessibleTabListBox(

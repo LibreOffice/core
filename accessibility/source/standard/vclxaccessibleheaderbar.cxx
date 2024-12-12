@@ -31,10 +31,10 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
 
-VCLXAccessibleHeaderBar::VCLXAccessibleHeaderBar(VCLXWindow* pVCLWindow)
-    : VCLXAccessibleComponent(pVCLWindow)
+VCLXAccessibleHeaderBar::VCLXAccessibleHeaderBar(HeaderBar* pHeaderBar)
+    : VCLXAccessibleComponent(pHeaderBar)
 {
-    m_pHeadBar = GetAs<HeaderBar>();
+    m_pHeadBar = pHeaderBar;
 }
 
 VCLXAccessibleHeaderBar::~VCLXAccessibleHeaderBar() {}

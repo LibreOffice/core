@@ -20,6 +20,7 @@
 #pragma once
 
 #include <cppuhelper/implbase.hxx>
+#include <vcl/toolkit/fmtfield.hxx>
 #include <vcl/vclevent.hxx>
 
 #include <standard/vclxaccessibleedit.hxx>
@@ -30,7 +31,7 @@ class SVTXAccessibleNumericField final
     : public cppu::ImplInheritanceHelper<VCLXAccessibleEdit, css::accessibility::XAccessibleValue>
 {
 public:
-    SVTXAccessibleNumericField(VCLXWindow* pVCLXindow);
+    SVTXAccessibleNumericField(FormattedField* pFormattedField);
 
     virtual void ProcessWindowEvent(const VclWindowEvent& rVclWindowEvent) override;
 

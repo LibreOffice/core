@@ -41,6 +41,7 @@
 #include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/fmtfield.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/headbar.hxx>
 #include <vcl/toolkit/lstbox.hxx>
 #include <vcl/toolkit/combobox.hxx>
 #include <vcl/toolkit/field.hxx>
@@ -381,7 +382,8 @@ VCLXButton::~VCLXButton()
 
 css::uno::Reference< css::accessibility::XAccessibleContext > VCLXButton::CreateAccessibleContext()
 {
-    return getAccessibleFactory().createAccessibleContext( this );
+    VclPtr<PushButton> pButton = GetAs<PushButton>();
+    return getAccessibleFactory().createAccessibleContext(pButton);
 }
 
 void VCLXButton::dispose()
@@ -782,7 +784,8 @@ VCLXCheckBox::VCLXCheckBox() :  maActionListeners( *this ), maItemListeners( *th
 
 css::uno::Reference< css::accessibility::XAccessibleContext > VCLXCheckBox::CreateAccessibleContext()
 {
-    return getAccessibleFactory().createAccessibleContext( this );
+    VclPtr<CheckBox> pCheckBox = GetAs<CheckBox>();
+    return getAccessibleFactory().createAccessibleContext(pCheckBox);
 }
 
 void VCLXCheckBox::dispose()
@@ -1066,7 +1069,8 @@ VCLXRadioButton::VCLXRadioButton() : maItemListeners( *this ), maActionListeners
 
 css::uno::Reference< css::accessibility::XAccessibleContext > VCLXRadioButton::CreateAccessibleContext()
 {
-    return getAccessibleFactory().createAccessibleContext( this );
+    VclPtr<RadioButton> pRadioButton = GetAs<RadioButton>();
+    return getAccessibleFactory().createAccessibleContext(pRadioButton);
 }
 
 void VCLXRadioButton::dispose()
@@ -1793,7 +1797,8 @@ css::uno::Reference< css::accessibility::XAccessibleContext > VCLXListBox::Creat
 {
     SolarMutexGuard aGuard;
 
-    return getAccessibleFactory().createAccessibleContext( this );
+    VclPtr<ListBox> pListBox = GetAs<ListBox>();
+    return getAccessibleFactory().createAccessibleContext(pListBox);
 }
 
 void VCLXListBox::setProperty( const OUString& PropertyName, const css::uno::Any& Value)
@@ -2781,7 +2786,8 @@ void VCLXFixedHyperlink::ProcessWindowEvent( const VclWindowEvent& rVclWindowEve
 
 css::uno::Reference< css::accessibility::XAccessibleContext > VCLXFixedHyperlink::CreateAccessibleContext()
 {
-    return getAccessibleFactory().createAccessibleContext( this );
+    VclPtr<FixedHyperlink> pFixedHyperlink = GetAs<FixedHyperlink>();
+    return getAccessibleFactory().createAccessibleContext(pFixedHyperlink);
 }
 
 void VCLXFixedHyperlink::setText( const OUString& Text )
@@ -3032,7 +3038,8 @@ VCLXFixedText::~VCLXFixedText()
 
 css::uno::Reference< css::accessibility::XAccessibleContext > VCLXFixedText::CreateAccessibleContext()
 {
-    return getAccessibleFactory().createAccessibleContext( this );
+    VclPtr<FixedText> pFixedText = GetAs<FixedText>();
+    return getAccessibleFactory().createAccessibleContext(pFixedText);
 }
 
 void VCLXFixedText::setText( const OUString& Text )
@@ -3159,7 +3166,8 @@ VCLXScrollBar::VCLXScrollBar() : maAdjustmentListeners( *this )
 
 css::uno::Reference< css::accessibility::XAccessibleContext > VCLXScrollBar::CreateAccessibleContext()
 {
-    return getAccessibleFactory().createAccessibleContext( this );
+    VclPtr<ScrollBar> pScrollBar = GetAs<ScrollBar>();
+    return getAccessibleFactory().createAccessibleContext(pScrollBar);
 }
 
 // css::lang::XComponent
@@ -3629,7 +3637,8 @@ VCLXEdit::VCLXEdit() : maTextListeners( *this )
 
 css::uno::Reference< css::accessibility::XAccessibleContext > VCLXEdit::CreateAccessibleContext()
 {
-    return getAccessibleFactory().createAccessibleContext( this );
+    VclPtr<Edit> pEdit = GetAs<Edit>();
+    return getAccessibleFactory().createAccessibleContext(pEdit);
 }
 
 void VCLXEdit::dispose()
@@ -3997,7 +4006,8 @@ css::uno::Reference< css::accessibility::XAccessibleContext > VCLXComboBox::Crea
 {
     SolarMutexGuard aGuard;
 
-    return getAccessibleFactory().createAccessibleContext( this );
+    VclPtr<ComboBox> pComboBox = GetAs<ComboBox>();
+    return getAccessibleFactory().createAccessibleContext(pComboBox);
 }
 
 void VCLXComboBox::dispose()
@@ -4627,12 +4637,12 @@ VCLXDateField::~VCLXDateField()
 //change the window type here to match the role
 css::uno::Reference< css::accessibility::XAccessibleContext > VCLXDateField::CreateAccessibleContext()
 {
-    VclPtr< vcl::Window > pWindow = GetWindow();
-    if ( pWindow )
+    VclPtr<Edit> pEdit = GetAs<Edit>();
+    if (pEdit)
     {
-        pWindow->SetType( WindowType::DATEFIELD );
+        pEdit->SetType( WindowType::DATEFIELD );
     }
-    return getAccessibleFactory().createAccessibleContext( this );
+    return getAccessibleFactory().createAccessibleContext(pEdit);
 }
 
 void VCLXDateField::setProperty( const OUString& PropertyName, const css::uno::Any& Value)
@@ -4961,12 +4971,12 @@ VCLXTimeField::~VCLXTimeField()
 //change the window type here to match the role
 css::uno::Reference< css::accessibility::XAccessibleContext > VCLXTimeField::CreateAccessibleContext()
 {
-    VclPtr< vcl::Window > pWindow = GetWindow();
-    if ( pWindow )
+    VclPtr<Edit> pEdit = GetAs<Edit>();
+    if (pEdit)
     {
-        pWindow->SetType( WindowType::TIMEFIELD );
+        pEdit->SetType( WindowType::TIMEFIELD );
     }
-    return getAccessibleFactory().createAccessibleContext( this );
+    return getAccessibleFactory().createAccessibleContext(pEdit);
 }
 
 void VCLXTimeField::setTime( const util::Time& aTime )
@@ -5954,7 +5964,8 @@ VCLXToolBox::~VCLXToolBox()
 
 css::uno::Reference< css::accessibility::XAccessibleContext > VCLXToolBox::CreateAccessibleContext()
 {
-    return getAccessibleFactory().createAccessibleContext( this );
+    VclPtr<ToolBox> pToolBox = GetAs<ToolBox>();
+    return getAccessibleFactory().createAccessibleContext(pToolBox);
 }
 
 VCLXHeaderBar::VCLXHeaderBar()
@@ -5967,7 +5978,8 @@ VCLXHeaderBar::~VCLXHeaderBar()
 
 css::uno::Reference< css::accessibility::XAccessibleContext > VCLXHeaderBar::CreateAccessibleContext()
 {
-    return getAccessibleFactory().createAccessibleContext( this );
+    VclPtr<HeaderBar> pHeaderBar = GetAs<HeaderBar>();
+    return getAccessibleFactory().createAccessibleContext(pHeaderBar);
 }
 
 
@@ -7348,7 +7360,8 @@ SVTXNumericField::~SVTXNumericField()
 
 css::uno::Reference<accessibility::XAccessibleContext> SVTXNumericField::CreateAccessibleContext()
 {
-    return getAccessibleFactory().createAccessibleContext(this);
+    VclPtr<FormattedField> pFormattedField = GetAs<FormattedField>();
+    return getAccessibleFactory().createAccessibleContext(pFormattedField);
 }
 
 
@@ -7879,7 +7892,8 @@ void VCLXMultiLineEdit::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
 
 css::uno::Reference<css::accessibility::XAccessibleContext> VCLXMultiLineEdit::CreateAccessibleContext()
 {
-    return getAccessibleFactory().createAccessibleContext(this);
+    VclPtr<MultiLineEdit> pMultiLineEdit = GetAs<MultiLineEdit>();
+    return getAccessibleFactory().createAccessibleContext(pMultiLineEdit);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

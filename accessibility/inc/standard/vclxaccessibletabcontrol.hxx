@@ -60,7 +60,7 @@ private:
     virtual void SAL_CALL   disposing() override;
 
 public:
-    VCLXAccessibleTabControl( VCLXWindow* pVCLXWindow );
+    VCLXAccessibleTabControl(vcl::Window* pWindow);
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

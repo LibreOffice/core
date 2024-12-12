@@ -20,7 +20,6 @@
 
 #include <vcl/headbar.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
-#include <toolkit/awt/vclxwindow.hxx>
 
 typedef std::vector<css::uno::WeakReference<css::accessibility::XAccessible>> ListItems;
 
@@ -31,7 +30,7 @@ class VCLXAccessibleHeaderBar final : public VCLXAccessibleComponent
 public:
     virtual ~VCLXAccessibleHeaderBar() override;
 
-    VCLXAccessibleHeaderBar(VCLXWindow* pVCLXindow);
+    VCLXAccessibleHeaderBar(HeaderBar* pHeaderBar);
 
     // XAccessibleContext
     virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;

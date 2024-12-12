@@ -41,7 +41,7 @@ private:
     virtual void SAL_CALL   disposing() override;
 
 public:
-    VCLXAccessibleTabPageWindow( VCLXWindow* pVCLXWindow );
+    VCLXAccessibleTabPageWindow(vcl::Window* pWindow);
 
     // XAccessibleContext
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) override;

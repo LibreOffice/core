@@ -43,7 +43,7 @@ namespace accessibility
 
     AccessibleIconChoiceCtrl::AccessibleIconChoiceCtrl(SvtIconChoiceCtrl& _rIconCtrl,
                                                        const Reference<XAccessible>& _xParent)
-        : ImplInheritanceHelper(_rIconCtrl.GetWindowPeer())
+        : ImplInheritanceHelper(&_rIconCtrl)
         , m_xParent(_xParent)
     {
     }

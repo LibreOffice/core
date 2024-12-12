@@ -30,7 +30,6 @@
 #include <vcl/accessibility/strings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolkit/combobox.hxx>
-#include <vcl/toolkit/lstbox.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -38,8 +37,8 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::accessibility;
 
-VCLXAccessibleBox::VCLXAccessibleBox (VCLXWindow* pVCLWindow, BoxType aType, bool bIsDropDownBox)
-    : ImplInheritanceHelper (pVCLWindow),
+VCLXAccessibleBox::VCLXAccessibleBox(vcl::Window* pBox, BoxType aType, bool bIsDropDownBox)
+    : ImplInheritanceHelper(pBox),
       m_aBoxType (aType),
       m_bIsDropDownBox (bIsDropDownBox)
 {
@@ -299,7 +298,7 @@ Reference<XAccessible> SAL_CALL VCLXAccessibleBox::getAccessibleChild (sal_Int64
             // List.
             if ( ! m_xList.is())
             {
-                m_xList = new VCLXAccessibleList(GetVCLXWindow(),
+                m_xList = new VCLXAccessibleList(GetWindow(),
                     (m_aBoxType == LISTBOX ? VCLXAccessibleList::LISTBOX : VCLXAccessibleList::COMBOBOX),
                                                                     this);
                 m_xList->SetIndexInParent(i);
@@ -318,7 +317,7 @@ Reference<XAccessible> SAL_CALL VCLXAccessibleBox::getAccessibleChild (sal_Int64
                         m_xText = pComboBox->GetSubEdit()->GetAccessible();
                 }
                 else if (m_bIsDropDownBox)
-                    m_xText = new VCLXAccessibleTextField (GetVCLXWindow(),this);
+                    m_xText = new VCLXAccessibleTextField(GetWindow(), this);
             }
             xChild = m_xText;
         }

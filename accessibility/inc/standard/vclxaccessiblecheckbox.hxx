@@ -25,8 +25,7 @@
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 
 #include <cppuhelper/implbase.hxx>
-
-
+#include <vcl/toolkit/button.hxx>
 
 
 class VCLXAccessibleCheckBox final : public cppu::ImplInheritanceHelper<
@@ -52,7 +51,7 @@ private:
     virtual void FillAccessibleStateSet( sal_Int64& rStateSet ) override;
 
 public:
-    VCLXAccessibleCheckBox( VCLXWindow* pVCLXindow );
+    VCLXAccessibleCheckBox(CheckBox* pCheckBox);
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

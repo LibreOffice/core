@@ -46,7 +46,6 @@ class TOOLKIT_DLLPUBLIC VCLXAccessibleComponent
              comphelper::OAccessibleExtendedComponentHelper, css::lang::XServiceInfo>
 {
 private:
-    rtl::Reference<VCLXWindow>      m_xVCLXWindow;
     VclPtr<vcl::Window> m_xWindow;
 
     DECL_DLLPRIVATE_LINK( WindowEventListener, VclWindowEvent&, void );
@@ -62,10 +61,9 @@ protected:
     virtual css::uno::Reference< css::accessibility::XAccessible > GetChildAccessible( const VclWindowEvent& rVclWindowEvent );
 
 public:
-    VCLXAccessibleComponent( VCLXWindow* pVCLXWindow );
+    VCLXAccessibleComponent(vcl::Window* pWindow);
     virtual ~VCLXAccessibleComponent() override;
 
-    VCLXWindow*    GetVCLXWindow() const;
     vcl::Window* GetWindow() const;
     template< class derived_type > derived_type* GetAs() const {
         return static_cast< derived_type * >( GetWindow() ); }

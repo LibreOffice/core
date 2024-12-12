@@ -63,7 +63,7 @@ private:
     virtual void SAL_CALL disposing() override;
 
 public:
-    VCLXAccessibleToolBox( VCLXWindow* pVCLXWindow );
+    VCLXAccessibleToolBox(ToolBox* pToolBox);
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

@@ -25,8 +25,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 
-VCLXAccessibleComboBox::VCLXAccessibleComboBox (VCLXWindow* pVCLWindow)
-    : VCLXAccessibleBox (pVCLWindow, VCLXAccessibleBox::COMBOBOX, false)
+VCLXAccessibleComboBox::VCLXAccessibleComboBox(ComboBox* pComboBox)
+    : VCLXAccessibleBox(pComboBox, VCLXAccessibleBox::COMBOBOX, false)
 {
 }
 

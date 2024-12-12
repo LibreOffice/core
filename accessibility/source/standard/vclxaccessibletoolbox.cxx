@@ -112,10 +112,8 @@ namespace
 
 // VCLXAccessibleToolBox
 
-VCLXAccessibleToolBox::VCLXAccessibleToolBox( VCLXWindow* pVCLXWindow ) :
-
-    ImplInheritanceHelper( pVCLXWindow )
-
+VCLXAccessibleToolBox::VCLXAccessibleToolBox(ToolBox* pToolBox)
+    : ImplInheritanceHelper(pToolBox)
 {
 }
 
