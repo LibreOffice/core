@@ -194,7 +194,7 @@ private:
     SfxShell* mpTopShell;
     SfxShell* mpTopViewShell;
 
-    std::shared_ptr<ViewShell> mpOverridingShell;
+    std::weak_ptr<ViewShell> mpOverridingShell;
 
     void UpdateShellStack();
 
@@ -624,7 +624,7 @@ void ViewShellManager::Implementation::DeactivateSubShell (
 
 std::shared_ptr<ViewShell> ViewShellManager::Implementation::GetOverridingShell()
 {
-    return mpOverridingShell;
+    return mpOverridingShell.lock();
 }
 
 void ViewShellManager::Implementation::RemoveOverridingMainShell()
