@@ -83,6 +83,14 @@ class JSInstanceBuilder final : public SalInstanceBuilder, public JSDialogSender
         Menu,
     };
 
+    struct JSDialogRegister
+    {
+        jsdialog::WidgetRegister<std::shared_ptr<WidgetMap>> aWidgets;
+        jsdialog::WidgetRegister<VclPtr<vcl::Window>> aPopups;
+        jsdialog::WidgetRegister<weld::Menu*> aMenus;
+    };
+    static JSDialogRegister m_aWidgetRegister;
+
     void initializeDialogSender();
     void initializePopupSender();
     void initializeSidebarSender(sal_uInt64 nLOKWindowId, const std::u16string_view& rUIFile);
@@ -90,10 +98,6 @@ class JSInstanceBuilder final : public SalInstanceBuilder, public JSDialogSender
     void initializeFormulabarSender(sal_uInt64 nLOKWindowId, const std::u16string_view& sTypeOfJSON,
                                     vcl::Window* pVclParent);
     void initializeMenuSender(weld::Widget* pParent);
-
-    static jsdialog::WidgetRegister<std::shared_ptr<WidgetMap>> m_aWidgets;
-    static jsdialog::WidgetRegister<VclPtr<vcl::Window>> m_aPopups;
-    static jsdialog::WidgetRegister<weld::Menu*> m_aMenus;
 
     sal_uInt64 m_nWindowId;
     /// used in case of tab pages where dialog is not a direct top level
@@ -208,13 +212,19 @@ public:
                         const vcl::ILibreOfficeKitNotifier* pNotifier = nullptr);
 
     // regular widgets
-    static jsdialog::WidgetRegister<std::shared_ptr<WidgetMap>>& Widgets() { return m_aWidgets; };
+    static jsdialog::WidgetRegister<std::shared_ptr<WidgetMap>>& Widgets()
+    {
+        return m_aWidgetRegister.aWidgets;
+    };
 
     // we need to remember original popup window to close it properly (its handled by vcl)
-    static jsdialog::WidgetRegister<VclPtr<vcl::Window>>& Popups() { return m_aPopups; }
+    static jsdialog::WidgetRegister<VclPtr<vcl::Window>>& Popups()
+    {
+        return m_aWidgetRegister.aPopups;
+    }
 
     // menus in separate container as they don't share base class with weld::Widget
-    static jsdialog::WidgetRegister<weld::Menu*>& Menus() { return m_aMenus; }
+    static jsdialog::WidgetRegister<weld::Menu*>& Menus() { return m_aWidgetRegister.aMenus; }
 
 private:
     const OUString& GetTypeOfJSON() const;
