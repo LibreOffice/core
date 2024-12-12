@@ -56,8 +56,7 @@ getDWritePrivateFontCollection(IDWriteFontFace* fontFace)
 
     static sal::systools::COMReference<IDWriteFontSetBuilder> dwriteFontSetBuilder = [] {
         sal::systools::COMReference<IDWriteFontSetBuilder> builder;
-        sal::systools::ThrowIfFailed(dwriteFactory3->CreateFontSetBuilder(&dwriteFontSetBuilder),
-                                     SAL_WHERE);
+        sal::systools::ThrowIfFailed(dwriteFactory3->CreateFontSetBuilder(&builder), SAL_WHERE);
         return builder;
     }();
 
