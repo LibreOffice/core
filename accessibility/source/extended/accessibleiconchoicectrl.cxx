@@ -41,9 +41,10 @@ namespace accessibility
 
     // Ctor() and Dtor()
 
-    AccessibleIconChoiceCtrl::AccessibleIconChoiceCtrl( SvtIconChoiceCtrl const & _rIconCtrl, const Reference< XAccessible >& _xParent ) :
-        ImplInheritanceHelper( _rIconCtrl.GetWindowPeer() ),
-        m_xParent       ( _xParent )
+    AccessibleIconChoiceCtrl::AccessibleIconChoiceCtrl(SvtIconChoiceCtrl& _rIconCtrl,
+                                                       const Reference<XAccessible>& _xParent)
+        : ImplInheritanceHelper(_rIconCtrl.GetWindowPeer())
+        , m_xParent(_xParent)
     {
     }
 

@@ -57,8 +57,9 @@ namespace accessibility
             @param  _xParent
                 is our parent accessible object
         */
-        AccessibleIconChoiceCtrl( SvtIconChoiceCtrl const & _rIconCtrl,
-                                  const css::uno::Reference< css::accessibility::XAccessible >& _xParent );
+        AccessibleIconChoiceCtrl(
+            SvtIconChoiceCtrl& _rIconCtrl,
+            const css::uno::Reference<css::accessibility::XAccessible>& _xParent);
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
