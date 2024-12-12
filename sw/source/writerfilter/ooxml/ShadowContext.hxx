@@ -61,6 +61,7 @@ public:
              CallDataType eType)
         : m_nLevel(nLevel)
         , m_eType(eType)
+        , m_nElement(0)
         , m_aAttributes(new sax_fastparser::FastAttributeList(rAttributes))
         , m_sNameSpace(rNameSpace)
         , m_sElement(rElement)
@@ -71,6 +72,7 @@ public:
     CallData(sal_uInt32 nLevel, const ::rtl::OUString& rNameSpace, const ::rtl::OUString& rElement)
         : m_nLevel(nLevel)
         , m_eType(CallDataType::EndUnknown)
+        , m_nElement(0)
         , m_sNameSpace(rNameSpace)
         , m_sElement(rElement)
     {
@@ -99,6 +101,7 @@ public:
     CallData(sal_uInt32 nLevel, const ::rtl::OUString& rChars)
         : m_nLevel(nLevel)
         , m_eType(CallDataType::Char)
+        , m_nElement(0)
         , m_aChars(rChars)
     {
     }
@@ -154,3 +157,5 @@ private:
     bool m_bImportAsWriterFrame;
 };
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
