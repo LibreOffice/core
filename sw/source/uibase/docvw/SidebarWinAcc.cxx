@@ -31,8 +31,8 @@ namespace sw::sidebarwindows {
 // implementation of accessible context for <SidebarWinAccessible> instance
 SidebarWinAccessibleContext::SidebarWinAccessibleContext(
     sw::annotation::SwAnnotationWin& rSidebarWin, SwViewShell& rViewShell,
-    const SwFrame* pAnchorFrame)
-    : VCLXAccessibleComponent(dynamic_cast<VCLXWindow*>(rSidebarWin.CreateAccessible().get()))
+    const SwFrame* pAnchorFrame, SidebarWinAccessible* pSidebarWinAccessible)
+    : VCLXAccessibleComponent(pSidebarWinAccessible)
     , mrViewShell(rViewShell)
     , mpAnchorFrame(pAnchorFrame)
 {
@@ -111,10 +111,8 @@ void SidebarWinAccessible::ChangeSidebarItem( const SwSidebarItem& rSidebarItem 
 
 css::uno::Reference< css::accessibility::XAccessibleContext > SidebarWinAccessible::CreateAccessibleContext()
 {
-    rtl::Reference<SidebarWinAccessibleContext> pAccContext =
-                                new SidebarWinAccessibleContext( mrSidebarWin,
-                                                                 mrViewShell,
-                                                                 mpAnchorFrame );
+    rtl::Reference<SidebarWinAccessibleContext> pAccContext
+        = new SidebarWinAccessibleContext(mrSidebarWin, mrViewShell, mpAnchorFrame, this);
     m_bAccContextCreated = true;
     return pAccContext;
 }

@@ -29,11 +29,14 @@ namespace sw::annotation { class SwAnnotationWin; }
 
 namespace sw::sidebarwindows {
 
+class SidebarWinAccessible;
+
 class SidebarWinAccessibleContext : public VCLXAccessibleComponent
 {
 public:
     explicit SidebarWinAccessibleContext(sw::annotation::SwAnnotationWin& rSidebarWin,
-                                         SwViewShell& rViewShell, const SwFrame* pAnchorFrame);
+                                         SwViewShell& rViewShell, const SwFrame* pAnchorFrame,
+                                         SidebarWinAccessible* pSidebarWinAccessible);
 
     void ChangeAnchor(const SwFrame* pAnchorFrame);
 
