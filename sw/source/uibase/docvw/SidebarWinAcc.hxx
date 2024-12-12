@@ -29,25 +29,8 @@ namespace sw::annotation { class SwAnnotationWin; }
 
 namespace sw::sidebarwindows {
 
-class SidebarWinAccessibleContext : public VCLXAccessibleComponent
-{
-public:
-    explicit SidebarWinAccessibleContext(sw::annotation::SwAnnotationWin& rSidebarWin,
-                                         SwViewShell& rViewShell, const SwFrame* pAnchorFrame);
-
-    void ChangeAnchor(const SwFrame* pAnchorFrame);
-
-    virtual css::uno::Reference<css::accessibility::XAccessible>
-        SAL_CALL getAccessibleParent() override;
-
-    virtual sal_Int64 SAL_CALL getAccessibleIndexInParent() override;
-
-private:
-    SwViewShell& mrViewShell;
-    const SwFrame* mpAnchorFrame;
-};
-
-class SidebarWinAccessible : public VCLXWindow
+class SidebarWinAccessible
+    : public cppu::ImplInheritanceHelper<VCLXAccessibleComponent, css::accessibility::XAccessible>
 {
     public:
         explicit SidebarWinAccessible( sw::annotation::SwAnnotationWin& rSidebarWin,
@@ -58,13 +41,15 @@ class SidebarWinAccessible : public VCLXWindow
         virtual css::uno::Reference<css::accessibility::XAccessibleContext>
             SAL_CALL getAccessibleContext() override;
 
+        virtual css::uno::Reference<css::accessibility::XAccessible>
+            SAL_CALL getAccessibleParent() override;
+        virtual sal_Int64 SAL_CALL getAccessibleIndexInParent() override;
+
         void ChangeSidebarItem( const SwSidebarItem& rSidebarItem );
 
     private:
-        sw::annotation::SwAnnotationWin& mrSidebarWin;
         SwViewShell& mrViewShell;
         const SwFrame* mpAnchorFrame;
-        rtl::Reference<SidebarWinAccessibleContext> m_xAccContext;
 };
 
 } // end of namespace sw::sidebarwindows

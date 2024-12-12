@@ -28,26 +28,34 @@
 
 namespace sw::sidebarwindows {
 
-// implementation of accessible context for <SidebarWinAccessible> instance
-SidebarWinAccessibleContext::SidebarWinAccessibleContext(
-    sw::annotation::SwAnnotationWin& rSidebarWin, SwViewShell& rViewShell,
-    const SwFrame* pAnchorFrame)
-    : VCLXAccessibleComponent(&rSidebarWin)
+SidebarWinAccessible::SidebarWinAccessible(sw::annotation::SwAnnotationWin& rSidebarWin,
+                                           SwViewShell& rViewShell,
+                                           const SwSidebarItem& rSidebarItem)
+    : ImplInheritanceHelper(&rSidebarWin)
     , mrViewShell(rViewShell)
-    , mpAnchorFrame(pAnchorFrame)
+    , mpAnchorFrame(rSidebarItem.maLayoutInfo.mpAnchorFrame)
 {
     rSidebarWin.SetAccessibleRole(css::accessibility::AccessibleRole::COMMENT);
 }
 
-void SidebarWinAccessibleContext::ChangeAnchor(const SwFrame* pAnchorFrame)
+SidebarWinAccessible::~SidebarWinAccessible() {}
+
+void SidebarWinAccessible::ChangeSidebarItem(const SwSidebarItem& rSidebarItem)
 {
     SolarMutexGuard aGuard;
 
-    mpAnchorFrame = pAnchorFrame;
+    mpAnchorFrame = rSidebarItem.maLayoutInfo.mpAnchorFrame;
 }
 
-css::uno::Reference<css::accessibility::XAccessible>
-SidebarWinAccessibleContext::getAccessibleParent()
+css::uno::Reference<css::accessibility::XAccessibleContext>
+SidebarWinAccessible::getAccessibleContext()
+{
+    ensureAlive();
+
+    return this;
+}
+
+css::uno::Reference<css::accessibility::XAccessible> SidebarWinAccessible::getAccessibleParent()
 {
     SolarMutexGuard aGuard;
 
@@ -61,7 +69,7 @@ SidebarWinAccessibleContext::getAccessibleParent()
     return xAccParent;
 }
 
-sal_Int64 SAL_CALL SidebarWinAccessibleContext::getAccessibleIndexInParent()
+sal_Int64 SAL_CALL SidebarWinAccessible::getAccessibleIndexInParent()
 {
     SolarMutexGuard aGuard;
 
@@ -73,36 +81,6 @@ sal_Int64 SAL_CALL SidebarWinAccessibleContext::getAccessibleIndexInParent()
     }
 
     return nIndex;
-}
-
-// implementation of accessible for <SwAnnotationWin> instance
-SidebarWinAccessible::SidebarWinAccessible( sw::annotation::SwAnnotationWin& rSidebarWin,
-                                            SwViewShell& rViewShell,
-                                            const SwSidebarItem& rSidebarItem )
-    : mrSidebarWin( rSidebarWin )
-    , mrViewShell( rViewShell )
-    , mpAnchorFrame( rSidebarItem.maLayoutInfo.mpAnchorFrame )
-{
-    SetWindow( &mrSidebarWin );
-}
-
-SidebarWinAccessible::~SidebarWinAccessible()
-{
-}
-
-void SidebarWinAccessible::ChangeSidebarItem( const SwSidebarItem& rSidebarItem )
-{
-    if (m_xAccContext.is())
-        m_xAccContext->ChangeAnchor(rSidebarItem.maLayoutInfo.mpAnchorFrame);
-}
-
-css::uno::Reference<css::accessibility::XAccessibleContext>
-SidebarWinAccessible::getAccessibleContext()
-{
-    if (!m_xAccContext.is())
-        m_xAccContext = new SidebarWinAccessibleContext(mrSidebarWin, mrViewShell, mpAnchorFrame);
-
-    return m_xAccContext;
 }
 
 } // end of namespace sw::sidebarwindows
