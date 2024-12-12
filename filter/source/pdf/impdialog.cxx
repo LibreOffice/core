@@ -535,6 +535,13 @@ bool ImpPDFTabGeneralPage::IsPdfaSelected() const
         aVersion == u"4"_ustr;
 }
 
+bool ImpPDFTabGeneralPage::IsPDFAVersionSelected(sal_Int32 nInputVersion) const
+{
+    OUString aVersion = mxRbPDFVersion->get_active_id();
+    sal_Int32 nSelectedVersion = aVersion.toInt32();
+    return nSelectedVersion == nInputVersion;
+}
+
 void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
 {
     mpParent = pParent;
@@ -626,6 +633,12 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
         mbUseTaggedPDFUserSelection = pParent->mbUseTaggedPDFUserSelection;
 
     mxCbExportBookmarks->set_active(pParent->mbExportBookmarksUserSelection);
+
+    mxCbAddStream->show();
+    mxCbAddStream->set_active(pParent->mbAddStream);
+    mxCbAddStream->connect_toggled(LINK(this, ImpPDFTabGeneralPage, ToggleAddStreamHdl));
+    ToggleAddStreamHdl(*mxCbAddStream); // init addstream dependencies
+
     thePDFVersionChanged();
 
     mxCbExportFormFields->set_active(pParent->mbExportFormFields);
@@ -718,13 +731,6 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
     mxCbExportPlaceholders->set_active(pParent->mbIsExportPlaceholders);
     mxCbExportPlaceholders->set_sensitive(
         mbIsWriter && !pParent->maConfigItem.IsReadOnly(u"ExportPlaceholders"_ustr));
-
-    mxCbAddStream->show();
-    mxCbAddStream->set_active(pParent->mbAddStream);
-    mxCbAddStream->set_sensitive(!pParent->maConfigItem.IsReadOnly(u"IsAddStream"_ustr));
-
-    mxCbAddStream->connect_toggled(LINK(this, ImpPDFTabGeneralPage, ToggleAddStreamHdl));
-    ToggleAddStreamHdl(*mxCbAddStream); // init addstream dependencies
 }
 
 void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* pParent )
@@ -940,9 +946,6 @@ void ImpPDFTabGeneralPage::thePDFVersionChanged()
     if (pSecPage)
         pSecPage->ImplPDFASecurityControl();
 
-    mxCbTaggedPDF->set_sensitive(
-        !bIsPDFA && !bIsPDFUA && !IsReadOnlyProperty(u"UseTaggedPDF"_ustr));
-
     mxRbPDFVersion->set_sensitive(!IsReadOnlyProperty(u"SelectPdfVersion"_ustr));
 
     if (bIsPDFA || bIsPDFUA)
@@ -950,6 +953,7 @@ void ImpPDFTabGeneralPage::thePDFVersionChanged()
         // store the users selection of subordinate controls and set required PDF/A values
         mbUseTaggedPDFUserSelection = mxCbTaggedPDF->get_active();
         mxCbTaggedPDF->set_active(true);
+        mxCbTaggedPDF->set_sensitive(false);
 
         // if a password was set, inform the user that this will not be used
         if (bIsPDFA && pSecPage && pSecPage->hasPassword())
@@ -965,6 +969,24 @@ void ImpPDFTabGeneralPage::thePDFVersionChanged()
     {
         // restore the users values of subordinate controls
         mxCbTaggedPDF->set_active(mbUseTaggedPDFUserSelection);
+        mxCbTaggedPDF->set_sensitive(!IsReadOnlyProperty(u"UseTaggedPDF"_ustr));
+    }
+
+    if (IsPDFAVersionSelected(1) || IsPDFAVersionSelected(2))
+    {
+        if (mxCbAddStream->get_sensitive())
+        {
+            if (mpParent)
+                mpParent->mbAddStream = mxCbAddStream->get_active();
+
+            mxCbAddStream->set_active(false);
+            mxCbAddStream->set_sensitive(false);
+        }
+    }
+    else if (mpParent && !mxCbAddStream->get_sensitive())
+    {
+        mxCbAddStream->set_active(mpParent->mbAddStream);
+        mxCbAddStream->set_sensitive(!mpParent->maConfigItem.IsReadOnly(u"IsAddStream"_ustr));
     }
 
     if (bIsPDFUA)

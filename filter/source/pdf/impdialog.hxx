@@ -259,6 +259,7 @@ public:
     void                        GetFilterConfigItem(ImpPDFTabDialog* paParent);
     void                        SetFilterConfigItem(ImpPDFTabDialog* paParent);
     bool IsPdfaSelected() const;
+    bool IsPDFAVersionSelected(sal_Int32 nVersion) const;
     bool IsPdfUaSelected() const { return mxCbPDFUA->get_active(); }
 };
 
