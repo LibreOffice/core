@@ -1782,7 +1782,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
             i--;
             OutlinerView* pOLV = pTEOutliner->GetView(i);
             sal_uInt16 nMorePix = pOLV->GetInvalidateMore() + 10;
-            vcl::Window* pWin = pOLV->GetWindow();
+            VclPtr<vcl::Window> pWin = pOLV->GetWindow();
             tools::Rectangle aRect(pOLV->GetOutputArea());
             pTEOutliner->RemoveView(i);
             if (!mbTextEditDontDelete || i != 0)
