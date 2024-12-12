@@ -1089,12 +1089,20 @@ void StyleList::FillTreeBox(SfxStyleFamily eFam)
     const sal_uInt16 nCount = aArr.size();
 
     SfxViewShell* pViewShell = m_pCurObjShell->GetViewShell();
+    StylesHighlighterColorMap* pHighlighterColorMap = nullptr;
+    bool bOrigMapHasEntries = false;
     if (pViewShell && m_bModuleHasStylesHighlighterFeature)
     {
         if (eFam == SfxStyleFamily::Para)
-            pViewShell->GetStylesHighlighterParaColorMap().clear();
+            pHighlighterColorMap = &pViewShell->GetStylesHighlighterParaColorMap();
         else if (eFam == SfxStyleFamily::Char)
-            pViewShell->GetStylesHighlighterCharColorMap().clear();
+            pHighlighterColorMap = &pViewShell->GetStylesHighlighterCharColorMap();
+    }
+
+    if (pHighlighterColorMap && !pHighlighterColorMap->empty())
+    {
+        bOrigMapHasEntries = true;
+        pHighlighterColorMap->clear();
     }
 
     bool blcl_insert = pViewShell && m_bModuleHasStylesHighlighterFeature
@@ -1113,12 +1121,11 @@ void StyleList::FillTreeBox(SfxStyleFamily eFam)
 
     m_xTreeBox->thaw();
 
-    // hack for x11 to make view update
-    if (pViewShell && m_bModuleHasStylesHighlighterFeature)
-    {
-        SfxViewFrame* pViewFrame = m_pBindings->GetDispatcher_Impl()->GetFrame();
-        pViewFrame->Resize(true);
-    }
+    // make view update
+    if (pViewShell && pHighlighterColorMap
+        && (!pHighlighterColorMap->empty() || bOrigMapHasEntries))
+        static_cast<SfxListener*>(pViewShell)
+            ->Notify(*m_pStyleSheetPool, SfxHint(SfxHintId::StylesHighlighterModified));
 
     std::unique_ptr<weld::TreeIter> xEntry = m_xTreeBox->make_iterator();
     bool bEntry = m_xTreeBox->get_iter_first(*xEntry);
@@ -1280,12 +1287,20 @@ void StyleList::UpdateStyles(StyleFlags nFlags)
     m_xFmtLb->clear();
 
     SfxViewShell* pViewShell = m_pCurObjShell->GetViewShell();
+    StylesHighlighterColorMap* pHighlighterColorMap = nullptr;
+    bool bOrigMapHasEntries = false;
     if (pViewShell && m_bModuleHasStylesHighlighterFeature)
     {
         if (eFam == SfxStyleFamily::Para)
-            pViewShell->GetStylesHighlighterParaColorMap().clear();
+            pHighlighterColorMap = &pViewShell->GetStylesHighlighterParaColorMap();
         else if (eFam == SfxStyleFamily::Char)
-            pViewShell->GetStylesHighlighterCharColorMap().clear();
+            pHighlighterColorMap = &pViewShell->GetStylesHighlighterCharColorMap();
+    }
+
+    if (pHighlighterColorMap && !pHighlighterColorMap->empty())
+    {
+        bOrigMapHasEntries = true;
+        pHighlighterColorMap->clear();
     }
 
     size_t nCount = aStrings.size();
@@ -1322,12 +1337,11 @@ void StyleList::UpdateStyles(StyleFlags nFlags)
 
     m_xFmtLb->thaw();
 
-    // hack for x11 to make view update
-    if (pViewShell && m_bModuleHasStylesHighlighterFeature)
-    {
-        SfxViewFrame* pViewFrame = m_pBindings->GetDispatcher_Impl()->GetFrame();
-        pViewFrame->Resize(true);
-    }
+    // make view update
+    if (pViewShell && pHighlighterColorMap
+        && (!pHighlighterColorMap->empty() || bOrigMapHasEntries))
+        static_cast<SfxListener*>(pViewShell)
+            ->Notify(*m_pStyleSheetPool, SfxHint(SfxHintId::StylesHighlighterModified));
 
     // Selects the current style if any
     SfxTemplateItem* pState = m_pFamilyState[m_nActFamily - 1].get();
