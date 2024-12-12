@@ -58,8 +58,8 @@ class SidebarWinAccessible : public VCLXWindow
                                        const SwSidebarItem& rSidebarItem );
         virtual ~SidebarWinAccessible() override;
 
-        virtual css::uno::Reference< css::accessibility::XAccessibleContext >
-                CreateAccessibleContext() override;
+        virtual css::uno::Reference<css::accessibility::XAccessibleContext>
+            SAL_CALL getAccessibleContext() override;
 
         void ChangeSidebarItem( const SwSidebarItem& rSidebarItem );
 
@@ -67,7 +67,7 @@ class SidebarWinAccessible : public VCLXWindow
         sw::annotation::SwAnnotationWin& mrSidebarWin;
         SwViewShell& mrViewShell;
         const SwFrame* mpAnchorFrame;
-        bool m_bAccContextCreated;
+        rtl::Reference<SidebarWinAccessibleContext> m_xAccContext;
 };
 
 } // end of namespace sw::sidebarwindows

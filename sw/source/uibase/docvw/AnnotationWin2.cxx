@@ -1451,9 +1451,6 @@ void SwAnnotationWin::ChangeSidebarItem( SwSidebarItem const & rSidebarItem )
 css::uno::Reference< css::accessibility::XAccessible > SwAnnotationWin::CreateAccessible()
 {
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
-    // This is rather dodgy code. Normally in CreateAccessible, if we want a custom
-    // object, we return a custom object, but we do no override the default toolkit
-    // window peer.
     if (!mxSidebarWinAccessible)
         mxSidebarWinAccessible = new SidebarWinAccessible( *this,
                                                           mrView.GetWrtShell(),

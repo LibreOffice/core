@@ -82,7 +82,6 @@ SidebarWinAccessible::SidebarWinAccessible( sw::annotation::SwAnnotationWin& rSi
     : mrSidebarWin( rSidebarWin )
     , mrViewShell( rViewShell )
     , mpAnchorFrame( rSidebarItem.maLayoutInfo.mpAnchorFrame )
-    , m_bAccContextCreated( false )
 {
     SetWindow( &mrSidebarWin );
 }
@@ -93,28 +92,17 @@ SidebarWinAccessible::~SidebarWinAccessible()
 
 void SidebarWinAccessible::ChangeSidebarItem( const SwSidebarItem& rSidebarItem )
 {
-    if ( !m_bAccContextCreated )
-        return;
-
-    css::uno::Reference< css::accessibility::XAccessibleContext > xAcc
-                                                = getAccessibleContext();
-    if ( xAcc.is() )
-    {
-        SidebarWinAccessibleContext* pAccContext =
-                    dynamic_cast<SidebarWinAccessibleContext*>(xAcc.get());
-        if ( pAccContext )
-        {
-            pAccContext->ChangeAnchor( rSidebarItem.maLayoutInfo.mpAnchorFrame );
-        }
-    }
+    if (m_xAccContext.is())
+        m_xAccContext->ChangeAnchor(rSidebarItem.maLayoutInfo.mpAnchorFrame);
 }
 
-css::uno::Reference< css::accessibility::XAccessibleContext > SidebarWinAccessible::CreateAccessibleContext()
+css::uno::Reference<css::accessibility::XAccessibleContext>
+SidebarWinAccessible::getAccessibleContext()
 {
-    rtl::Reference<SidebarWinAccessibleContext> pAccContext
-        = new SidebarWinAccessibleContext(mrSidebarWin, mrViewShell, mpAnchorFrame, this);
-    m_bAccContextCreated = true;
-    return pAccContext;
+    if (!m_xAccContext.is())
+        m_xAccContext = new SidebarWinAccessibleContext(mrSidebarWin, mrViewShell, mpAnchorFrame, this);
+
+    return m_xAccContext;
 }
 
 } // end of namespace sw::sidebarwindows
