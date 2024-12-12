@@ -68,11 +68,6 @@ const rtl::Reference<SvxShowCharSetItemAcc> & SvxShowCharSetItem::GetAccessible(
 SvxShowCharSetAcc::SvxShowCharSetAcc(SvxShowCharSet* pParent)
     : m_pParent(pParent)
 {
-    osl_atomic_increment(&m_refCount);
-    {
-        lateInit(this);
-    }
-    osl_atomic_decrement(&m_refCount);
 }
 
 SvxShowCharSetAcc::~SvxShowCharSetAcc()
@@ -365,11 +360,6 @@ sal_Int32 SAL_CALL SvxShowCharSetAcc::getAccessibleColumn( sal_Int64 nChildIndex
 SvxShowCharSetItemAcc::SvxShowCharSetItemAcc( SvxShowCharSetItem* pParent ) : mpParent( pParent )
 {
     OSL_ENSURE(pParent,"NO parent supplied!");
-    osl_atomic_increment(&m_refCount);
-    { // #b6211265 #
-        lateInit(this);
-    }
-    osl_atomic_decrement(&m_refCount);
 }
 
 

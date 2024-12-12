@@ -58,8 +58,7 @@ namespace toolkit
         // start listening at the model
         startModelListening();
 
-        // announce the XAccessible to our base class
-        comphelper::OAccessibleComponentHelper::lateInit(rxCreator);
+        m_aCreator = rxCreator;
     }
 
 
@@ -200,7 +199,7 @@ namespace toolkit
 
     vcl::Window* OAccessibleControlContext::implGetWindow( Reference< awt::XWindow >* _pxUNOWindow ) const
     {
-        Reference< awt::XControl > xControl( getAccessibleCreator(), UNO_QUERY );
+        Reference<awt::XControl> xControl(m_aCreator.get(), UNO_QUERY);
         Reference< awt::XWindow > xWindow;
         if ( xControl.is() )
             xWindow.set(xControl->getPeer(), css::uno::UNO_QUERY);

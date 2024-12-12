@@ -96,6 +96,8 @@ namespace toolkit
                     m_xControlModel;        // the model of the control which's context we implement
         css::uno::Reference< css::beans::XPropertySetInfo >
                     m_xModelPropsInfo;      // the cached property set info of the model
+        // the XAccessible which created our XAccessibleContext
+        css::uno::WeakReference<css::accessibility::XAccessible> m_aCreator;
     };
 
 

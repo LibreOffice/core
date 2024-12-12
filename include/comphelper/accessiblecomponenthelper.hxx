@@ -50,28 +50,12 @@ namespace comphelper
     {
         friend class OContextEntryGuard;
     private:
-        css::uno::WeakReference< css::accessibility::XAccessible > m_aCreator;         // the XAccessible which created our XAccessibleContext
         AccessibleEventNotifier::TClientId m_nClientId;
 
     protected:
         virtual ~OCommonAccessibleComponent( ) override;
 
         OCommonAccessibleComponent( );
-
-        /** late construction
-        @param _rxAccessible
-            the Accessible object which created this context.
-            <p>If your derived implementation implements the XAccessible (and does not follow the proposed
-            separation of XAccessible from XAccessibleContext), you may pass <code>this</code> here.</p>
-
-            <p>The object is hold weak, so its life time is not affected.</p>
-        */
-        void    lateInit( const css::uno::Reference< css::accessibility::XAccessible >& _rxAccessible );
-
-        /** retrieves the creator previously set with <method>lateInit</method>
-        */
-        css::uno::Reference< css::accessibility::XAccessible >
-                getAccessibleCreator( ) const;
 
     public:
         // XAccessibleEventBroadcaster

@@ -53,9 +53,6 @@ VCLXAccessibleComponent::VCLXAccessibleComponent( VCLXWindow* pVCLXWindow )
         m_xEventSource->AddEventListener( LINK( this, VCLXAccessibleComponent, WindowEventListener ) );
         m_xEventSource->AddChildEventListener( LINK( this, VCLXAccessibleComponent, WindowChildEventListener ) );
     }
-
-    // announce the XAccessible of our creator to the base class
-    lateInit( pVCLXWindow );
 }
 
 VCLXWindow* VCLXAccessibleComponent::GetVCLXWindow() const

@@ -151,19 +151,6 @@ namespace comphelper
         }
     }
 
-
-    void OCommonAccessibleComponent::lateInit( const Reference< XAccessible >& _rxAccessible )
-    {
-        m_aCreator = _rxAccessible;
-    }
-
-
-    Reference< XAccessible > OCommonAccessibleComponent::getAccessibleCreator( ) const
-    {
-        return m_aCreator;
-    }
-
-
     OUString SAL_CALL OCommonAccessibleComponent::getAccessibleId(  )
     {
         return OUString();
