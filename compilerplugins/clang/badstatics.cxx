@@ -209,9 +209,7 @@ public:
                     .Class("ScDocument").GlobalNamespace()) // not owning
                 || name == "s_aLOKWindowsMap" // LOK only, guarded by assert, and LOK never tries to perform a VCL cleanup
                     // vcl/inc/jsdialog/jsdialogbuilder.hxx
-                || name == "m_aWidgets" // LOK only, similar case as above
-                || name == "m_aPopups" // LOK only, similar case as above
-                || name == "m_aMenus" // LOK only, similar case as above
+                || name == "m_aWidgetRegister" // LOK only, similar case as above
                     //
                 || name == "gNotebookBarManager" // LOK only case, when notebookbar is closed - VclPtr instance is removed
                 || name == "gStaticManager" // vcl/source/graphic/Manager.cxx - stores non-owning pointers

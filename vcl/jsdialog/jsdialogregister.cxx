@@ -10,9 +10,7 @@
 #include <jsdialog/jsdialogregister.hxx>
 #include <jsdialog/jsdialogbuilder.hxx>
 
-jsdialog::WidgetRegister<std::shared_ptr<WidgetMap>> JSInstanceBuilder::m_aWidgets;
-jsdialog::WidgetRegister<VclPtr<vcl::Window>> JSInstanceBuilder::m_aPopups;
-jsdialog::WidgetRegister<weld::Menu*> JSInstanceBuilder::m_aMenus;
+JSInstanceBuilder::JSDialogRegister JSInstanceBuilder::m_aWidgetRegister;
 
 OUString JSInstanceBuilder::getMapIdFromWindowId() const
 {
