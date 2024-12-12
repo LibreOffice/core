@@ -994,9 +994,6 @@ bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, bool bCopy, bool bRec
         if ( m_pDocument->GetChangeTrack() )
             return false;
 
-        if ( nSrcTab<nDestTab && nDestTab!=SC_TAB_APPEND )
-            nDestTab--;
-
         if ( nSrcTab == nDestTab )
         {
             //! allow only for api calls?
