@@ -11,18 +11,22 @@
 
 $(eval $(call gb_Library_Bundle,OOoSpotlightImporter))
 
+$(eval $(call gb_Library_set_include,OOoSpotlightImporter,\
+	-I$(SRCDIR)/extensions/source/macosx/common \
+	$$(INCLUDE) \
+))
+
 $(eval $(call gb_Library_add_objcobjects,OOoSpotlightImporter,\
 	extensions/source/macosx/spotlight/GetMetadataForFile \
-	extensions/source/macosx/spotlight/OOoContentDataParser \
-	extensions/source/macosx/spotlight/OOoMetaDataParser \
-	extensions/source/macosx/spotlight/OOoSpotlightImporter \
 	extensions/source/macosx/spotlight/main \
 ))
 
+$(eval $(call gb_Library_use_static_libraries,OOoSpotlightImporter,\
+	extensions_macosx_common \
+))
+
 $(eval $(call gb_Library_use_system_darwin_frameworks,OOoSpotlightImporter,\
-	CoreFoundation \
-	Foundation \
-	CoreServices \
+	AppKit \
 ))
 
 $(eval $(call gb_Library_use_external,OOoSpotlightImporter,zlib))

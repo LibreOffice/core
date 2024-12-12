@@ -19,7 +19,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface OOoSpotlightImporter : NSObject
+@interface OOoSpotlightAndQuickLookImporter : NSObject
 {
 }
 
@@ -27,11 +27,16 @@
            contentType:(NSString*)contentTypeUTI
             attributes:(NSMutableDictionary*)attributes;
 
+- (NSImage*)importDocumentThumbnail:(NSString*)pathToFile;
+
 - (NSFileHandle*)openZipFileAtPath:(NSString*)pathToFile;
 
 - (NSData*)metaDataFileFromZip:(NSFileHandle*)unzipFile;
 
 - (NSData*)contentDataFileFromZip:(NSFileHandle*)unzipFile;
+
+- (NSData*)manifestFileFromZip:(NSFileHandle*)unzipFile;
+
 @end
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

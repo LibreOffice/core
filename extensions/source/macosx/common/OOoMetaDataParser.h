@@ -19,28 +19,35 @@
 
 #import <Cocoa/Cocoa.h>
 
-
-@interface OOoMetaDataParser : NSObject <NSXMLParserDelegate> {
+@interface OOoMetaDataParser : NSObject <NSXMLParserDelegate>
+{
     //indicates if content should be read
     BOOL shouldReadCharacters;
     //indicates if the current element is a custom metadata tag
     BOOL isCustom;
 
-    NSMutableDictionary *metaValues;
-    NSMutableString *textCurrentElement;
-    NSString *customAttribute;
+    NSMutableDictionary* metaValues;
+    NSMutableString* textCurrentElement;
+    NSString* customAttribute;
 }
 
 - (void)parseXML:(NSData*)data intoDictionary:(NSMutableDictionary*)dict;
 
 //delegates
-- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict;
+- (void)parser:(NSXMLParser*)parser
+    didStartElement:(NSString*)elementName
+       namespaceURI:(NSString*)namespaceURI
+      qualifiedName:(NSString*)qualifiedName
+         attributes:(NSDictionary*)attributeDict;
 
-- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName;
+- (void)parser:(NSXMLParser*)parser
+    didEndElement:(NSString*)elementName
+     namespaceURI:(NSString*)namespaceURI
+    qualifiedName:(NSString*)qName;
 
-- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string;
+- (void)parser:(NSXMLParser*)parser foundCharacters:(NSString*)string;
 
-- (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError;
+- (void)parser:(NSXMLParser*)parser parseErrorOccurred:(NSError*)parseError;
 @end
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

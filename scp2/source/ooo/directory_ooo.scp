@@ -65,6 +65,41 @@ Directory gid_Dir_Bundle_Contents_Library_Spotlight_Bundle_Contents
 End
 #endif
 
+#ifdef MACOSX
+Directory gid_Dir_Bundle_Contents_PlugIns
+    ParentID = gid_Dir_Bundle_Contents;
+    HostName = "PlugIns";
+End
+#endif
+
+#ifdef MACOSX
+Directory gid_Dir_Bundle_Contents_PlugIns_Preview
+    ParentID = gid_Dir_Bundle_Contents_PlugIns;
+    HostName = "QuickLookPreview.appex";
+End
+#endif
+
+#ifdef MACOSX
+Directory gid_Dir_Bundle_Contents_PlugIns_Preview_Contents
+    ParentID = gid_Dir_Bundle_Contents_PlugIns_Preview;
+    HostName = "Contents";
+End
+#endif
+
+#ifdef MACOSX
+Directory gid_Dir_Bundle_Contents_PlugIns_Thumbnail
+    ParentID = gid_Dir_Bundle_Contents_PlugIns;
+    HostName = "QuickLookThumbnail.appex";
+End
+#endif
+
+#ifdef MACOSX
+Directory gid_Dir_Bundle_Contents_PlugIns_Thumbnail_Contents
+    ParentID = gid_Dir_Bundle_Contents_PlugIns_Thumbnail;
+    HostName = "Contents";
+End
+#endif
+
 #if defined MACOSX
 Unixlink gid_Unixlink_Applications
     BIN_FILE_BODY;

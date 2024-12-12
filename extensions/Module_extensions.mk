@@ -104,9 +104,16 @@ endif # WNT
 
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_Module_add_targets,extensions,\
+	StaticLibrary_extensions_macosx_common \
 	Library_OOoSpotlightImporter \
+	Executable_QuickLookPreview \
+	Executable_QuickLookThumbnail \
 	Package_mdibundle \
 	Package_OOoSpotlightImporter \
+	Package_quicklookpreviewappex \
+	Package_QuickLookPreview \
+	Package_quicklookthumbnailappex \
+	Package_QuickLookThumbnail \
 ))
 endif # OS=MACOSX
 

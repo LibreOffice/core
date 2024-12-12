@@ -25,6 +25,7 @@ done
 APP_BUNDLE="$1"
 entitlements=
 entitlements_helper=
+entitlements_quicklookappex="--entitlements $SRCDIR/sysui/desktop/macosx/quicklookappex.entitlements"
 application_identifier=
 if test -n "$ENABLE_MACOSX_SANDBOX"; then
     # In a sandboxed build executables need the entitlements
@@ -48,6 +49,12 @@ if test -z "$MACOSX_CODESIGNING_IDENTITY"; then
         exit 1
     fi
 
+    # Quick Look plugins will only load if with sandbox entitlements
+    find "$APP_BUNDLE" -name 'QuickLook*.appex' -type d |
+    while read appex; do
+        codesign --force --prefix=$MACOSX_BUNDLE_IDENTIFIER. --sign - $entitlements_quicklookappex "$appex" || exit 1
+    done
+
     # Skip codesigning for non-release builds if there is no identity set but
     # set entitlements to allow Xcode's Instruments application to connect to
     # the application. Note: the following command fails on some Mac Intel
@@ -65,6 +72,7 @@ if test -z "$MACOSX_CODESIGNING_IDENTITY"; then
     else
         rm "$APP_BUNDLE/Contents/MacOS/soffice.withentitlements"
     fi
+
     exit 0
 fi
 
@@ -115,6 +123,12 @@ done
 find "$APP_BUNDLE" -name '*.mdimporter' -type d |
 while read bundle; do
     codesign --force --prefix=$MACOSX_BUNDLE_IDENTIFIER. --sign "$MACOSX_CODESIGNING_IDENTITY" "$bundle" || exit 1
+done
+
+# Quick Look plugins will only load if with sandbox entitlements
+find "$APP_BUNDLE" -name 'QuickLook*.appex' -type d |
+while read appex; do
+    codesign --force --prefix=$MACOSX_BUNDLE_IDENTIFIER. --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements_quicklookappex "$appex" || exit 1
 done
 
 # Sign executables

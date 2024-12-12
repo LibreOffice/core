@@ -22,7 +22,7 @@
 #include <Foundation/Foundation.h>
 
 #include "GetMetadataForFile.h"
-#import "OOoSpotlightImporter.h"
+#import "OOoSpotlightAndQuickLookImporter.h"
 
 /* -----------------------------------------------------------------------------
     Get metadata attributes from file
@@ -42,7 +42,7 @@ Boolean GetMetadataForFile(void* thisInterface,
     /* Return TRUE if successful, FALSE if there was no data provided */
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 
-    OOoSpotlightImporter *importer = [OOoSpotlightImporter new];
+    OOoSpotlightAndQuickLookImporter *importer = [OOoSpotlightAndQuickLookImporter new];
 
     Boolean importOK = NO;
     @try {
