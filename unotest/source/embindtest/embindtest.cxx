@@ -9,7 +9,9 @@
 
 #include <sal/config.h>
 
-#include <cassert>
+#include <cstdlib>
+#include <iostream>
+#include <source_location>
 
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -49,6 +51,17 @@ class XComponentContext;
 
 namespace
 {
+void verify(bool value, std::source_location const& location = std::source_location::current())
+{
+    if (!value)
+    {
+        std::cerr << "Verification failed in " << location.function_name() << " at "
+                  << location.file_name() << ":" << location.line() << ":" << location.column()
+                  << "\n";
+        std::abort();
+    }
+}
+
 class TestThread : public salhelper::Thread
 {
 public:
@@ -903,11 +916,11 @@ class Test : public cppu::WeakImplHelper<org::libreoffice::embindtest::XTest>
         css::uno::Reference<org::libreoffice::embindtest::XAttributes> const& object) override
     {
         auto const ok1 = object->getLongAttribute() == 789;
-        assert(ok1);
+        verify(ok1);
         auto const ok2 = object->getStringAttribute() == u"foo"_ustr;
-        assert(ok2);
+        verify(ok2);
         auto const ok3 = object->getReadOnlyAttribute();
-        assert(ok3);
+        verify(ok3);
         return ok1 && ok2 && ok3;
     }
 
@@ -978,146 +991,146 @@ private:
         }
         {
             auto const val = ifcCpp->getBoolean();
-            assert(val);
+            verify(val);
             auto const ok = ifcCpp->isBoolean(val);
-            assert(ok);
+            verify(ok);
         }
         {
             auto const val = ifcCpp->getByte();
-            assert(val == -12);
+            verify(val == -12);
             auto const ok = ifcCpp->isByte(val);
-            assert(ok);
+            verify(ok);
         }
         {
             auto const val = ifcCpp->getShort();
-            assert(val == -1234);
+            verify(val == -1234);
             auto const ok = ifcCpp->isShort(val);
-            assert(ok);
+            verify(ok);
         }
         {
             auto const val = ifcCpp->getUnsignedShort();
-            assert(val == 54321);
+            verify(val == 54321);
             auto const ok = ifcCpp->isUnsignedShort(val);
-            assert(ok);
+            verify(ok);
         }
         {
             auto const val = ifcCpp->getLong();
-            assert(val == -123456);
+            verify(val == -123456);
             auto const ok = ifcCpp->isLong(val);
-            assert(ok);
+            verify(ok);
         }
         {
             auto const val = ifcCpp->getUnsignedLong();
-            assert(val == 3456789012);
+            verify(val == 3456789012);
             auto const ok = ifcCpp->isUnsignedLong(val);
-            assert(ok);
+            verify(ok);
         }
         {
             auto const val = ifcCpp->getHyper();
-            assert(val == -123456789);
+            verify(val == -123456789);
             auto const ok = ifcCpp->isHyper(val);
-            assert(ok);
+            verify(ok);
         }
         {
             auto const val = ifcCpp->getUnsignedHyper();
-            assert(val == 9876543210);
+            verify(val == 9876543210);
             auto const ok = ifcCpp->isUnsignedHyper(val);
-            assert(ok);
+            verify(ok);
         }
         {
             auto const val = ifcCpp->getFloat();
-            assert(val == -10.25);
+            verify(val == -10.25);
             auto const ok = ifcCpp->isFloat(val);
-            assert(ok);
+            verify(ok);
         }
         {
             auto const val = ifcCpp->getDouble();
-            assert(val == 100.5);
+            verify(val == 100.5);
             auto const ok = ifcCpp->isDouble(val);
-            assert(ok);
+            verify(ok);
         }
         {
             auto const val = ifcCpp->getChar();
-            assert(val == u'Ö');
+            verify(val == u'Ö');
             auto const ok = ifcCpp->isChar(val);
-            assert(ok);
+            verify(ok);
         }
         {
             auto const val = ifcCpp->getString();
-            assert(val == u"hä"_ustr);
+            verify(val == u"hä"_ustr);
             auto const ok = ifcCpp->isString(val);
-            assert(ok);
+            verify(ok);
         }
         {
             auto const val = ifcCpp->getType();
-            assert(val == cppu::UnoType<sal_Int32>::get());
+            verify(val == cppu::UnoType<sal_Int32>::get());
             auto const ok = ifcCpp->isType(val);
-            assert(ok);
+            verify(ok);
         }
         {
             auto const val = ifcCpp->getEnum();
-            assert(val == org::libreoffice::embindtest::Enum_E_2);
+            verify(val == org::libreoffice::embindtest::Enum_E_2);
             auto const ok = ifcCpp->isEnum(val);
-            assert(ok);
+            verify(ok);
         }
         {
             auto const val = ifcCpp->getStruct();
-            assert((val
-                    == org::libreoffice::embindtest::Struct{
-                           true,
-                           -12,
-                           -1234,
-                           54321,
-                           -123456,
-                           3456789012,
-                           -123456789,
-                           9876543210,
-                           -10.25,
-                           100.5,
-                           u'Ö',
-                           u"hä"_ustr,
-                           cppu::UnoType<sal_Int32>::get(),
-                           css::uno::Any(sal_Int32(-123456)),
-                           { u"foo"_ustr, u"barr"_ustr, u"bazzz"_ustr },
-                           org::libreoffice::embindtest::Enum_E_2,
-                           { -123456 },
-                           { { u"foo"_ustr },
-                             -123456,
-                             css::uno::Any(sal_Int32(-123456)),
-                             { u"barr"_ustr } },
-                           ifcCpp }));
+            verify(val
+                   == org::libreoffice::embindtest::Struct{
+                          true,
+                          -12,
+                          -1234,
+                          54321,
+                          -123456,
+                          3456789012,
+                          -123456789,
+                          9876543210,
+                          -10.25,
+                          100.5,
+                          u'Ö',
+                          u"hä"_ustr,
+                          cppu::UnoType<sal_Int32>::get(),
+                          css::uno::Any(sal_Int32(-123456)),
+                          { u"foo"_ustr, u"barr"_ustr, u"bazzz"_ustr },
+                          org::libreoffice::embindtest::Enum_E_2,
+                          { -123456 },
+                          { { u"foo"_ustr },
+                            -123456,
+                            css::uno::Any(sal_Int32(-123456)),
+                            { u"barr"_ustr } },
+                          ifcCpp });
             auto const ok = ifcCpp->isStruct(val);
-            assert(ok);
+            verify(ok);
         }
         {
             auto const val = ifcCpp->getStructLong();
-            assert(val == org::libreoffice::embindtest::StructLong{ -123456 });
+            verify(val == org::libreoffice::embindtest::StructLong{ -123456 });
             auto const ok = ifcCpp->isStructLong(val);
-            assert(ok);
+            verify(ok);
         }
         {
             auto const val = ifcCpp->getStructString();
-            assert(val == org::libreoffice::embindtest::StructString{ u"hä"_ustr });
+            verify(val == org::libreoffice::embindtest::StructString{ u"hä"_ustr });
             auto const ok = ifcCpp->isStructString(val);
-            assert(ok);
+            verify(ok);
         }
         {
             auto const val = ifcCpp->getAnyVoid();
-            assert(val == css::uno::Any());
+            verify(val == css::uno::Any());
             auto const ok = ifcCpp->isAnyVoid(val);
-            assert(ok);
+            verify(ok);
         }
         {
             auto const val = ifcCpp->getSequenceBoolean();
-            assert((val == css::uno::Sequence<sal_Bool>{ true, true, false }));
+            verify(val == css::uno::Sequence<sal_Bool>{ true, true, false });
             auto const ok = ifcCpp->isSequenceBoolean(val);
-            assert(ok);
+            verify(ok);
         }
         {
             auto const val = ifcCpp->getNull();
-            assert(val == css::uno::Reference<org::libreoffice::embindtest::XTest>());
+            verify(val == css::uno::Reference<org::libreoffice::embindtest::XTest>());
             auto const ok = ifcCpp->isNull(val);
-            assert(ok);
+            verify(ok);
         }
         {
             sal_Bool value1;
@@ -1141,64 +1154,64 @@ private:
             ifcCpp->getOut(value1, value2, value3, value4, value5, value6, value7, value8, value9,
                            value10, value11, value12, value13, value14, value15, value16, value17,
                            value18);
-            assert(value1);
-            assert(value2 == -12);
-            assert(value3 == -1234);
-            assert(value4 == 54321);
-            assert(value5 == -123456);
-            assert(value6 == 3456789012);
-            assert(value7 == -123456789);
-            assert(value8 == 9876543210);
-            assert(value9 == -10.25);
-            assert(value10 == 100.5);
-            assert(value11 == u'Ö');
-            assert(value12 == u"hä"_ustr);
-            assert(value13 == cppu::UnoType<sal_Int32>::get());
-            assert(value14 == css::uno::Any(sal_Int32(-123456)));
-            assert((value15
-                    == css::uno::Sequence<OUString>{ u"foo"_ustr, u"barr"_ustr, u"bazzz"_ustr }));
-            assert(value16 == org::libreoffice::embindtest::Enum_E_2);
-            assert((value17
-                    == org::libreoffice::embindtest::Struct{
-                           true,
-                           -12,
-                           -1234,
-                           54321,
-                           -123456,
-                           3456789012,
-                           -123456789,
-                           9876543210,
-                           -10.25,
-                           100.5,
-                           u'Ö',
-                           u"hä"_ustr,
-                           cppu::UnoType<sal_Int32>::get(),
-                           css::uno::Any(sal_Int32(-123456)),
-                           { u"foo"_ustr, u"barr"_ustr, u"bazzz"_ustr },
-                           org::libreoffice::embindtest::Enum_E_2,
-                           { -123456 },
-                           { { u"foo"_ustr },
-                             -123456,
-                             css::uno::Any(sal_Int32(-123456)),
-                             { u"barr"_ustr } },
-                           ifcCpp }));
-            assert(value18 == ifcCpp);
+            verify(value1);
+            verify(value2 == -12);
+            verify(value3 == -1234);
+            verify(value4 == 54321);
+            verify(value5 == -123456);
+            verify(value6 == 3456789012);
+            verify(value7 == -123456789);
+            verify(value8 == 9876543210);
+            verify(value9 == -10.25);
+            verify(value10 == 100.5);
+            verify(value11 == u'Ö');
+            verify(value12 == u"hä"_ustr);
+            verify(value13 == cppu::UnoType<sal_Int32>::get());
+            verify(value14 == css::uno::Any(sal_Int32(-123456)));
+            verify(value15
+                   == css::uno::Sequence<OUString>{ u"foo"_ustr, u"barr"_ustr, u"bazzz"_ustr });
+            verify(value16 == org::libreoffice::embindtest::Enum_E_2);
+            verify(value17
+                   == org::libreoffice::embindtest::Struct{
+                          true,
+                          -12,
+                          -1234,
+                          54321,
+                          -123456,
+                          3456789012,
+                          -123456789,
+                          9876543210,
+                          -10.25,
+                          100.5,
+                          u'Ö',
+                          u"hä"_ustr,
+                          cppu::UnoType<sal_Int32>::get(),
+                          css::uno::Any(sal_Int32(-123456)),
+                          { u"foo"_ustr, u"barr"_ustr, u"bazzz"_ustr },
+                          org::libreoffice::embindtest::Enum_E_2,
+                          { -123456 },
+                          { { u"foo"_ustr },
+                            -123456,
+                            css::uno::Any(sal_Int32(-123456)),
+                            { u"barr"_ustr } },
+                          ifcCpp });
+            verify(value18 == ifcCpp);
         }
         try
         {
             ifcCpp->throwRuntimeException();
-            assert(false);
+            verify(false);
         }
         catch (css::uno::RuntimeException& e)
         {
-            assert(e.Message.startsWith("test"));
+            verify(e.Message.startsWith("test"));
         }
         {
             auto const val1 = ifcCpp->getStringAttribute();
-            assert(val1 == u"hä"_ustr);
+            verify(val1 == u"hä"_ustr);
             ifcCpp->setStringAttribute(u"foo"_ustr);
             auto const val2 = ifcCpp->getStringAttribute();
-            assert(val2 == u"foo"_ustr);
+            verify(val2 == u"foo"_ustr);
         }
         return css::uno::Any(true);
     }

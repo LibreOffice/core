@@ -4451,7 +4451,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,org/freedesktop/PackageKit,\
     SyncDbusSessionHelper \
 ))
 
-ifeq ($(OS)-$(ENABLE_DBGUTIL),EMSCRIPTEN-TRUE)
+ifeq ($(OS),EMSCRIPTEN)
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,org/libreoffice/embindtest, \
     Constants \
     Enum \
