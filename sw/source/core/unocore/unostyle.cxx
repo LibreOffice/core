@@ -912,16 +912,22 @@ uno::Any SwXStyleFamily::getByIndex(sal_Int32 nIndex)
         throw lang::IndexOutOfBoundsException();
     if(!m_pBasePool)
         throw uno::RuntimeException();
-    OUString sStyleName;
+
+    OUString sStyleProgName;
     try
     {
-        SwStyleNameMapper::FillProgName(m_rEntry.translateIndex(nIndex), sStyleName);
+        SwStyleNameMapper::FillProgName(m_rEntry.translateIndex(nIndex), sStyleProgName);
     } catch(...) {}
-    if (sStyleName.isEmpty())
-        GetCountOrName(&sStyleName, nIndex);
-    if(sStyleName.isEmpty())
+    if (!sStyleProgName.isEmpty())
+        return getByName(sStyleProgName);
+
+    OUString sStyleUIName;
+    GetCountOrName(&sStyleUIName, nIndex);
+    if(sStyleUIName.isEmpty())
         throw lang::IndexOutOfBoundsException();
-    return getByName(sStyleName);
+
+    SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleUIName, m_rEntry.family());
+    return uno::Any(uno::Reference<style::XStyle>(getStyle(pBase, sStyleUIName)));
 }
 
 uno::Any SwXStyleFamily::getByName(const OUString& rName)
@@ -963,6 +969,11 @@ rtl::Reference<SwXBaseStyle> SwXStyleFamily::getStyleByName(const OUString& rPro
     SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName, m_rEntry.family());
     if(!pBase)
         throw container::NoSuchElementException(rProgName);
+    return getStyle(pBase, sStyleName);
+}
+
+rtl::Reference<SwXBaseStyle> SwXStyleFamily::getStyle(SfxStyleSheetBase* pBase, const OUString& sStyleName)
+{
     rtl::Reference<SwXBaseStyle> xStyle = FindStyle(sStyleName);
     if(!xStyle.is())
         switch (m_rEntry.family())
