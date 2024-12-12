@@ -1000,6 +1000,54 @@ IMPL_LINK(StyleList, EnableTreeDrag, bool, m_bEnable, void)
     m_bTreeDrag = m_bEnable;
 }
 
+namespace
+{
+class StyleHighlightUpdateGuard
+{
+private:
+    bool m_bOrigMapHasEntries;
+    SfxViewShell* m_pViewShell;
+    StylesHighlighterColorMap* m_pHighlighterColorMap;
+    SfxStyleSheetBasePool& m_rStyleSheetPool;
+
+public:
+    StyleHighlightUpdateGuard(SfxViewShell* pViewShell, bool bModuleHasStylesHighlighterFeature,
+                              SfxStyleSheetBasePool& rStyleSheetPool, SfxStyleFamily eFam)
+        : m_bOrigMapHasEntries(false)
+        , m_pViewShell(pViewShell)
+        , m_pHighlighterColorMap(nullptr)
+        , m_rStyleSheetPool(rStyleSheetPool)
+    {
+        if (pViewShell && bModuleHasStylesHighlighterFeature)
+        {
+            if (eFam == SfxStyleFamily::Para)
+                m_pHighlighterColorMap = &pViewShell->GetStylesHighlighterParaColorMap();
+            else if (eFam == SfxStyleFamily::Char)
+                m_pHighlighterColorMap = &pViewShell->GetStylesHighlighterCharColorMap();
+        }
+
+        if (m_pHighlighterColorMap && !m_pHighlighterColorMap->empty())
+        {
+            m_bOrigMapHasEntries = true;
+            m_pHighlighterColorMap->clear();
+        }
+    }
+
+    ~StyleHighlightUpdateGuard()
+    {
+        if (!m_pViewShell)
+            return;
+        // make view update, but skip notify if before and after are both empty to skip
+        // unnecessary invalidates
+        if (m_pHighlighterColorMap && (!m_pHighlighterColorMap->empty() || m_bOrigMapHasEntries))
+        {
+            static_cast<SfxListener*>(m_pViewShell)
+                ->Notify(m_rStyleSheetPool, SfxHint(SfxHintId::StylesHighlighterModified));
+        }
+    }
+};
+}
+
 // Fill the treeview
 
 void StyleList::FillTreeBox(SfxStyleFamily eFam)
@@ -1032,13 +1080,9 @@ void StyleList::FillTreeBox(SfxStyleFamily eFam)
     const sal_uInt16 nCount = aArr.size();
 
     SfxViewShell* pViewShell = m_pCurObjShell->GetViewShell();
-    if (pViewShell && m_bModuleHasStylesHighlighterFeature)
-    {
-        if (eFam == SfxStyleFamily::Para)
-            pViewShell->GetStylesHighlighterParaColorMap().clear();
-        else if (eFam == SfxStyleFamily::Char)
-            pViewShell->GetStylesHighlighterCharColorMap().clear();
-    }
+
+    auto xUpdateGuard = std::make_unique<StyleHighlightUpdateGuard>(
+        pViewShell, m_bModuleHasStylesHighlighterFeature, *m_pStyleSheetPool, eFam);
 
     bool blcl_insert = pViewShell && m_bModuleHasStylesHighlighterFeature
                        && ((eFam == SfxStyleFamily::Para && m_bHighlightParaStyles)
@@ -1058,12 +1102,8 @@ void StyleList::FillTreeBox(SfxStyleFamily eFam)
 
     m_xTreeBox->thaw();
 
-    // hack for x11 to make view update
-    if (pViewShell && m_bModuleHasStylesHighlighterFeature)
-    {
-        SfxViewFrame* pViewFrame = m_pBindings->GetDispatcher_Impl()->GetFrame();
-        pViewFrame->Resize(true);
-    }
+    // make view update
+    xUpdateGuard.reset();
 
     std::unique_ptr<weld::TreeIter> xEntry = m_xTreeBox->make_iterator();
     bool bEntry = m_xTreeBox->get_iter_first(*xEntry);
@@ -1225,13 +1265,9 @@ void StyleList::UpdateStyles(StyleFlags nFlags)
     m_xFmtLb->clear();
 
     SfxViewShell* pViewShell = m_pCurObjShell->GetViewShell();
-    if (pViewShell && m_bModuleHasStylesHighlighterFeature)
-    {
-        if (eFam == SfxStyleFamily::Para)
-            pViewShell->GetStylesHighlighterParaColorMap().clear();
-        else if (eFam == SfxStyleFamily::Char)
-            pViewShell->GetStylesHighlighterCharColorMap().clear();
-    }
+
+    auto xUpdateGuard = std::make_unique<StyleHighlightUpdateGuard>(
+        pViewShell, m_bModuleHasStylesHighlighterFeature, *m_pStyleSheetPool, eFam);
 
     size_t nCount = aStrings.size();
     size_t nPos = 0;
@@ -1253,12 +1289,8 @@ void StyleList::UpdateStyles(StyleFlags nFlags)
 
     m_xFmtLb->thaw();
 
-    // hack for x11 to make view update
-    if (pViewShell && m_bModuleHasStylesHighlighterFeature)
-    {
-        SfxViewFrame* pViewFrame = m_pBindings->GetDispatcher_Impl()->GetFrame();
-        pViewFrame->Resize(true);
-    }
+    // make view update
+    xUpdateGuard.reset();
 
     // Selects the current style if any
     SfxTemplateItem* pState = m_pFamilyState[m_nActFamily - 1].get();
