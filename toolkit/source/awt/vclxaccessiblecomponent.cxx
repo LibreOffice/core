@@ -47,11 +47,12 @@ VCLXAccessibleComponent::VCLXAccessibleComponent( VCLXWindow* pVCLXWindow )
     m_xVCLXWindow = pVCLXWindow;
 
     DBG_ASSERT( pVCLXWindow->GetWindow(), "VCLXAccessibleComponent - no window!" );
-    m_xEventSource = pVCLXWindow->GetWindow();
-    if ( m_xEventSource )
+    m_xWindow = pVCLXWindow->GetWindow();
+    if (m_xWindow)
     {
-        m_xEventSource->AddEventListener( LINK( this, VCLXAccessibleComponent, WindowEventListener ) );
-        m_xEventSource->AddChildEventListener( LINK( this, VCLXAccessibleComponent, WindowChildEventListener ) );
+        m_xWindow->AddEventListener(LINK(this, VCLXAccessibleComponent, WindowEventListener));
+        m_xWindow->AddChildEventListener(
+            LINK(this, VCLXAccessibleComponent, WindowChildEventListener));
     }
 }
 
@@ -62,11 +63,12 @@ VCLXWindow* VCLXAccessibleComponent::GetVCLXWindow() const
 
 void VCLXAccessibleComponent::DisconnectEvents()
 {
-    if ( m_xEventSource )
+    if (m_xWindow)
     {
-        m_xEventSource->RemoveEventListener( LINK( this, VCLXAccessibleComponent, WindowEventListener ) );
-        m_xEventSource->RemoveChildEventListener( LINK( this, VCLXAccessibleComponent, WindowChildEventListener ) );
-        m_xEventSource.clear();
+        m_xWindow->RemoveEventListener(LINK(this, VCLXAccessibleComponent, WindowEventListener));
+        m_xWindow->RemoveChildEventListener(
+            LINK(this, VCLXAccessibleComponent, WindowChildEventListener));
+        m_xWindow.clear();
     }
 }
 
@@ -98,7 +100,7 @@ IMPL_LINK( VCLXAccessibleComponent, WindowEventListener, VclWindowEvent&, rEvent
      * might have been destroyed by the previous VCLEventListener (if no AT tool
      * is running), e.g. sub-toolbars in impress.
      */
-    if (m_xEventSource && (rEvent.GetId() != VclEventId::WindowEndPopupMode))
+    if (m_xWindow && (rEvent.GetId() != VclEventId::WindowEndPopupMode))
     {
         DBG_ASSERT( rEvent.GetWindow(), "Window???" );
         if( !rEvent.GetWindow()->IsAccessibilityEventsSuppressed() || ( rEvent.GetId() == VclEventId::ObjectDying ) )
@@ -110,7 +112,7 @@ IMPL_LINK( VCLXAccessibleComponent, WindowEventListener, VclWindowEvent&, rEvent
 
 IMPL_LINK( VCLXAccessibleComponent, WindowChildEventListener, VclWindowEvent&, rEvent, void )
 {
-    if (m_xEventSource)
+    if (m_xWindow)
     {
         DBG_ASSERT( rEvent.GetWindow(), "Window???" );
         if( !rEvent.GetWindow()->IsAccessibilityEventsSuppressed() )
@@ -375,10 +377,7 @@ void VCLXAccessibleComponent::disposing()
     m_xVCLXWindow.clear();
 }
 
-vcl::Window* VCLXAccessibleComponent::GetWindow() const
-{
-    return m_xEventSource;
-}
+vcl::Window* VCLXAccessibleComponent::GetWindow() const { return m_xWindow; }
 
 void VCLXAccessibleComponent::FillAccessibleRelationSet( utl::AccessibleRelationSetHelper& rRelationSet )
 {
@@ -750,8 +749,8 @@ void VCLXAccessibleComponent::grabFocus(  )
     OExternalLockGuard aGuard( this );
 
     sal_Int64 nStates = getAccessibleStateSet();
-    if (m_xEventSource && (nStates & accessibility::AccessibleStateType::FOCUSABLE))
-        m_xEventSource->GrabFocus();
+    if (m_xWindow && (nStates & accessibility::AccessibleStateType::FOCUSABLE))
+        m_xWindow->GrabFocus();
 }
 
 sal_Int32 SAL_CALL VCLXAccessibleComponent::getForeground(  )

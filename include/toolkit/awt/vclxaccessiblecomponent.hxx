@@ -47,7 +47,7 @@ class TOOLKIT_DLLPUBLIC VCLXAccessibleComponent
 {
 private:
     rtl::Reference<VCLXWindow>      m_xVCLXWindow;
-    VclPtr<vcl::Window>             m_xEventSource;
+    VclPtr<vcl::Window> m_xWindow;
 
     DECL_DLLPRIVATE_LINK( WindowEventListener, VclWindowEvent&, void );
     DECL_DLLPRIVATE_LINK( WindowChildEventListener, VclWindowEvent&, void );
