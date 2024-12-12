@@ -2650,7 +2650,8 @@ void SdrObjCustomShape::TakeTextAnchorRect( tools::Rectangle& rAnchorRect ) cons
     if ( GetTextBounds( rAnchorRect ) )
     {
         Point aRotateRef( maSnapRect.Center() );
-        AdjustRectToTextDistance(rAnchorRect);
+        const double fExtraTextRotation(GetExtraTextRotation());
+        AdjustRectToTextDistance(rAnchorRect, fExtraTextRotation);
 
         if ( rAnchorRect.GetWidth() < 2 )
             rAnchorRect.SetRight( rAnchorRect.Left() + 1 );   // minimal width is 2

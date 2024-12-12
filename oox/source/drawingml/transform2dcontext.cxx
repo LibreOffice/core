@@ -135,6 +135,39 @@ bool ConstructPresetTextRectangle(Shape& rShape, awt::Rectangle& rRect)
             rRect.Height = rShape.getSize().Height;
             return true;
         }
+        case XML_upArrowCallout:
+        case XML_downArrowCallout:
+        {
+            // The identifiers here reflect the guides name value in presetShapeDefinitions.xml
+            sal_Int32 nWidth = rShape.getSize().Width;
+            sal_Int32 nHeight = rShape.getSize().Height;
+            if (nWidth == 0 || nHeight == 0)
+                return false;
+            // double adj1 = 25000.0;
+            // double adj2 = 25000.0;
+            double adj3 = 25000.0; // height of arrow head
+            double adj4 = 64977.0; // height of arrow shaft
+            const auto& aAdjGdList = rShape.getCustomShapeProperties()->getAdjustmentGuideList();
+            if (aAdjGdList.size() == 4)
+            {
+                // adj1 = aAdjGdList[0].maFormula.toDouble();
+                // adj2 = aAdjGdList[1].maFormula.toDouble();
+                adj3 = aAdjGdList[2].maFormula.toDouble();
+                adj4 = aAdjGdList[3].maFormula.toDouble();
+            }
+
+            double maxAdj3 = 100000.0 * nHeight / std::min(nWidth, nHeight);
+            adj3 = std::clamp<double>(adj3, 0, maxAdj3);
+            double q2 = adj3 * std::min(nWidth, nHeight) / nHeight;
+            double maxAdj4 = 100000.0 - q2;
+            adj4 = std::clamp<double>(adj4, 0, maxAdj4);
+
+            rRect.X = rShape.getPosition().X;
+            rRect.Y = rShape.getPosition().Y;
+            rRect.Width = rShape.getSize().Width;
+            rRect.Height = nHeight * adj4 / 100000.0;
+            return true;
+        }
         case XML_gear6:
         {
             // The identifiers here reflect the guides name value in presetShapeDefinitions.xml

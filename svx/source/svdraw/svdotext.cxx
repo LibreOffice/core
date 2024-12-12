@@ -619,7 +619,7 @@ void SdrTextObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
 }
 
 // See also: <unnamed>::getTextAnchorRange in svx/source/sdr/primitive2d/sdrdecompositiontools.cxx
-void SdrTextObj::AdjustRectToTextDistance(tools::Rectangle& rAnchorRect) const
+void SdrTextObj::AdjustRectToTextDistance(tools::Rectangle& rAnchorRect, double fExtraRot) const
 {
     const tools::Long nLeftDist = GetTextLeftDistance();
     const tools::Long nRightDist = GetTextRightDistance();
@@ -627,10 +627,20 @@ void SdrTextObj::AdjustRectToTextDistance(tools::Rectangle& rAnchorRect) const
     const tools::Long nLowerDist = GetTextLowerDistance();
     if (!IsVerticalWriting())
     {
-        rAnchorRect.AdjustLeft(nLeftDist);
-        rAnchorRect.AdjustTop(nUpperDist);
-        rAnchorRect.AdjustRight(-nRightDist);
-        rAnchorRect.AdjustBottom(-nLowerDist);
+        if (fExtraRot == 180.0)
+        {
+            rAnchorRect.AdjustLeft(nLeftDist);
+            rAnchorRect.AdjustTop(-nUpperDist);
+            rAnchorRect.AdjustRight(-nRightDist);
+            rAnchorRect.AdjustBottom(nLowerDist);
+        }
+        else
+        {
+            rAnchorRect.AdjustLeft(nLeftDist);
+            rAnchorRect.AdjustTop(nUpperDist);
+            rAnchorRect.AdjustRight(-nRightDist);
+            rAnchorRect.AdjustBottom(-nLowerDist);
+        }
     }
     else if (IsTopToBottom())
     {

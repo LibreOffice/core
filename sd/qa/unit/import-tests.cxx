@@ -1340,6 +1340,37 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testBnc870237)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-158), pObj->GetMergedItem(SDRATTR_TEXT_LEFTDIST).GetValue());
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf150789)
+{
+    createSdImpressDoc("pptx/tdf150789.pptx");
+    const SdrPage* pPage = GetPage(1);
+
+    // Simulate a:ext inside dsp:txXfrm with changing the lower distance of prst="upArrowCallout" textbox
+    const SdrObjGroup* pGroupObj = dynamic_cast<SdrObjGroup*>(pPage->GetObj(0));
+
+    const std::array<size_t, 2> nShapes = { 4, 7 };
+    for (auto i : nShapes)
+    {
+        const SdrObject* pObj = pGroupObj->GetSubList()->GetObj(i);
+        CPPUNIT_ASSERT_MESSAGE("no object", pObj != nullptr);
+
+        OUString sShapeType;
+        const SdrCustomShapeGeometryItem& rGeometryItem(
+            pObj->GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY));
+        const css::uno::Any aAny = *rGeometryItem.GetPropertyValueByName("Type");
+        if (aAny.hasValue())
+            aAny >>= sShapeType;
+        CPPUNIT_ASSERT_EQUAL(OUString("ooxml-upArrowCallout"), sShapeType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(395),
+                             pObj->GetMergedItem(SDRATTR_TEXT_UPPERDIST).GetValue());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1424),
+                             pObj->GetMergedItem(SDRATTR_TEXT_LOWERDIST).GetValue());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(395),
+                             pObj->GetMergedItem(SDRATTR_TEXT_RIGHTDIST).GetValue());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(395), pObj->GetMergedItem(SDRATTR_TEXT_LEFTDIST).GetValue());
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SdImportTest, testCreationDate)
 {
     createSdImpressDoc("fdo71434.pptx");

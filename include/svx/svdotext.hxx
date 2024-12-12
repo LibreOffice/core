@@ -418,7 +418,7 @@ public:
     virtual void TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRect, bool bNoEditText,
         tools::Rectangle* pAnchorRect, bool bLineWidth = true ) const;
     // Takes writing direction into account when adjusting the rectangle
-    void AdjustRectToTextDistance(tools::Rectangle& rAnchorRect) const;
+    void AdjustRectToTextDistance(tools::Rectangle& rAnchorRect, double fExtraRot = 0.0) const;
     virtual void TakeTextAnchorRect(::tools::Rectangle& rAnchorRect) const;
     const GeoStat& GetGeoStat() const { return maGeo; }
 
