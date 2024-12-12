@@ -56,7 +56,7 @@ void XSpreadsheets::testMoveByName()
 
     // get sheet from the new position
     uno::Reference< container::XIndexAccess > oIndexAccess(xSpreadsheets, UNO_QUERY_THROW);
-    uno::Any aAny = oIndexAccess->getByIndex(1);
+    uno::Any aAny = oIndexAccess->getByIndex(2);
     uno::Reference< container::XNamed > xNamed;
     CPPUNIT_ASSERT(aAny >>= xNamed);
 
