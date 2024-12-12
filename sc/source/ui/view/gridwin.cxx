@@ -2127,6 +2127,10 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
                 if (!bWasMouseCaptured && IsMouseCaptured())
                     ReleaseMouse();
 
+                const bool lokReadOnly = comphelper::LibreOfficeKit::isActive() && pViewSh->IsLokReadOnlyView();
+                if (lokReadOnly)
+                    return; // Return as if the action was performed, so the flow is not affected.
+
                 LaunchDataSelectMenu( aListValPos.Col(), aListValPos.Row() );
 
                 nMouseStatus = SC_GM_FILTER;    // not set in DoAutoFilterMenue for bDataSelect
