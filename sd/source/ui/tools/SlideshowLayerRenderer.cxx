@@ -42,6 +42,7 @@
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/BufferedDecompositionPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/Tools.hxx>
 #include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
 
 #include <drawinglayer/tools/primitive2dxmldump.hxx>
@@ -170,7 +171,8 @@ void changePolyPolys(
             || pBasePrimitive->getPrimitive2DID() == PRIMITIVE2D_ID_POLYPOLYGONGRADIENTPRIMITIVE2D
             || pBasePrimitive->getPrimitive2DID() == PRIMITIVE2D_ID_POLYPOLYGONGRAPHICPRIMITIVE2D
             || pBasePrimitive->getPrimitive2DID() == PRIMITIVE2D_ID_POLYPOLYGONHATCHPRIMITIVE2D
-            || pBasePrimitive->getPrimitive2DID() == PRIMITIVE2D_ID_POLYPOLYGONHAIRLINEPRIMITIVE2D)
+            || pBasePrimitive->getPrimitive2DID() == PRIMITIVE2D_ID_POLYPOLYGONHAIRLINEPRIMITIVE2D
+            || pBasePrimitive->getPrimitive2DID() == PRIMITIVE2D_ID_UNIFIEDTRANSPARENCEPRIMITIVE2D)
         {
             pBasePrimitive->setVisible(bRenderObject);
             if (!bRenderObject)
