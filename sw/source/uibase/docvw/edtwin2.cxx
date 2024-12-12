@@ -102,8 +102,8 @@ bool PSCSDFPropsQuickHelp(const HelpEvent &rEvt, SwWrtShell& rSh)
     OUString sText;
     SwView& rView = rSh.GetView();
 
-    if (rView.IsHighlightCharDF() || rView.GetStylesHighlighterParaColorMap().size()
-            || rView.GetStylesHighlighterCharColorMap().size())
+    if (rView.IsHighlightCharDF() || rView.IsSpotlightParaStyles()
+            || rView.IsSpotlightCharStyles())
     {
         SwPosition aPos(rSh.GetDoc()->GetNodes());
         Point aPt(rSh.GetWin()->PixelToLogic(
@@ -138,7 +138,7 @@ bool PSCSDFPropsQuickHelp(const HelpEvent &rEvt, SwWrtShell& rSh)
 
         if (bContainsPt)
         {
-            if (rView.GetStylesHighlighterCharColorMap().size())
+            if (rView.IsSpotlightCharStyles())
             {
                 // check if in CS formatting highlighted area
                 OUString sCharStyle;
@@ -196,7 +196,7 @@ bool PSCSDFPropsQuickHelp(const HelpEvent &rEvt, SwWrtShell& rSh)
                 }
             }
         }
-        else if (rView.GetStylesHighlighterParaColorMap().size())
+        else if (rView.IsSpotlightParaStyles())
         {
             // check if in paragraph style formatting highlighted area
             pContentFrame = aPos.GetContentNode()->GetTextNode()->getLayoutFrame(

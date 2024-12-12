@@ -114,6 +114,8 @@ public:
     virtual sal_uLong GetHelpId( OUString& rFile ) override;
     virtual void SetHelpId( const OUString& r, sal_uLong nId ) override;
 
+    virtual sal_Int32 GetSpotlightId() override;
+
     /** Preset the members without physical access.
      Used by StyleSheetPool. */
     void                    PresetName(const OUString& rName)  { aName   = rName; }
