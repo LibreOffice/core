@@ -31,7 +31,7 @@ $(eval $(call gb_Module_add_targets,unotest,\
 endif
 endif
 
-ifeq ($(OS)-$(ENABLE_DBGUTIL),EMSCRIPTEN-TRUE)
+ifeq ($(OS),EMSCRIPTEN)
 $(eval $(call gb_Module_add_targets,unotest, \
     Library_embindtest \
 ))

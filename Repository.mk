@@ -407,7 +407,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	drawinglayercore \
 	drawinglayer \
 	editeng \
-	$(if $(filter EMSCRIPTEN,$(OS)),$(if $(ENABLE_DBGUTIL),embindtest)) \
+	$(if $(filter EMSCRIPTEN,$(OS)),embindtest) \
 	$(if $(filter WNT,$(OS)),emser) \
 	evtatt \
 	$(call gb_Helper_optional,DBCONNECTIVITY, \
