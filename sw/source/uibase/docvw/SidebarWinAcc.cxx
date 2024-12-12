@@ -26,8 +26,8 @@
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 
-namespace sw::sidebarwindows {
-
+namespace sw::sidebarwindows
+{
 SidebarWinAccessible::SidebarWinAccessible(sw::annotation::SwAnnotationWin& rSidebarWin,
                                            SwViewShell& rViewShell,
                                            const SwSidebarItem& rSidebarItem)

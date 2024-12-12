@@ -25,31 +25,33 @@
 class SwViewShell;
 class SwSidebarItem;
 class SwFrame;
-namespace sw::annotation { class SwAnnotationWin; }
+namespace sw::annotation
+{
+class SwAnnotationWin;
+}
 
-namespace sw::sidebarwindows {
-
+namespace sw::sidebarwindows
+{
 class SidebarWinAccessible
     : public cppu::ImplInheritanceHelper<VCLXAccessibleComponent, css::accessibility::XAccessible>
 {
-    public:
-        explicit SidebarWinAccessible( sw::annotation::SwAnnotationWin& rSidebarWin,
-                                       SwViewShell& rViewShell,
-                                       const SwSidebarItem& rSidebarItem );
-        virtual ~SidebarWinAccessible() override;
+public:
+    explicit SidebarWinAccessible(sw::annotation::SwAnnotationWin& rSidebarWin,
+                                  SwViewShell& rViewShell, const SwSidebarItem& rSidebarItem);
+    virtual ~SidebarWinAccessible() override;
 
-        virtual css::uno::Reference<css::accessibility::XAccessibleContext>
-            SAL_CALL getAccessibleContext() override;
+    virtual css::uno::Reference<css::accessibility::XAccessibleContext>
+        SAL_CALL getAccessibleContext() override;
 
-        virtual css::uno::Reference<css::accessibility::XAccessible>
-            SAL_CALL getAccessibleParent() override;
-        virtual sal_Int64 SAL_CALL getAccessibleIndexInParent() override;
+    virtual css::uno::Reference<css::accessibility::XAccessible>
+        SAL_CALL getAccessibleParent() override;
+    virtual sal_Int64 SAL_CALL getAccessibleIndexInParent() override;
 
-        void ChangeSidebarItem( const SwSidebarItem& rSidebarItem );
+    void ChangeSidebarItem(const SwSidebarItem& rSidebarItem);
 
-    private:
-        SwViewShell& mrViewShell;
-        const SwFrame* mpAnchorFrame;
+private:
+    SwViewShell& mrViewShell;
+    const SwFrame* mpAnchorFrame;
 };
 
 } // end of namespace sw::sidebarwindows
