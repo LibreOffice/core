@@ -65,6 +65,10 @@ $(eval $(call gb_Library_add_exception_objects,acc,\
     accessibility/source/extended/AccessibleIconView \
     accessibility/source/extended/accessiblelistbox \
     accessibility/source/extended/accessiblelistboxentry \
+    accessibility/source/extended/accessibletabbar \
+    accessibility/source/extended/accessibletabbarbase \
+    accessibility/source/extended/accessibletabbarpage \
+    accessibility/source/extended/accessibletabbarpagelist \
     accessibility/source/extended/accessibletablistbox \
     accessibility/source/extended/accessibletablistboxtable \
     accessibility/source/extended/textwindowaccessibility \
@@ -99,14 +103,5 @@ $(eval $(call gb_Library_add_exception_objects,acc,\
     accessibility/source/standard/vclxaccessibletoolbox \
     accessibility/source/standard/vclxaccessibletoolboxitem \
 ))
-
-ifneq ($(filter SCRIPTING,$(BUILD_TYPE)),)
-$(eval $(call gb_Library_add_exception_objects,acc,\
-    accessibility/source/extended/accessibletabbar \
-    accessibility/source/extended/accessibletabbarbase \
-    accessibility/source/extended/accessibletabbarpage \
-    accessibility/source/extended/accessibletabbarpagelist \
-))
-endif
 
 # vim:set noet sw=4 ts=4:

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_features.h>
 #include <config_feature_desktop.h>
 
 #include <cppuhelper/supportsservice.hxx>
@@ -375,12 +374,7 @@ Reference< XAccessible > AccessibleFactory::createAccessibleIconChoiceCtrl(
 
 Reference< XAccessible > AccessibleFactory::createAccessibleTabBar( TabBar& _rTabBar ) const
 {
-#if HAVE_FEATURE_SCRIPTING
     return new AccessibleTabBar( &_rTabBar );
-#else
-    (void)_rTabBar;
-    return nullptr;
-#endif
 }
 
 Reference< XAccessibleContext > AccessibleFactory::createAccessibleTextWindowContext(
