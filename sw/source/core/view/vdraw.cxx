@@ -212,6 +212,7 @@ void SwViewShellImp::NotifySizeChg( const Size &rNewSz )
 
     OSL_ENSURE( m_pShell->getIDocumentDrawModelAccess().GetDrawModel(), "NotifySizeChg without DrawModel" );
     SdrPage* pPage = m_pShell->getIDocumentDrawModelAccess().GetDrawModel()->GetPage( 0 );
+    std::vector<SdrObject*> aCandidatesToMove;
     for (const rtl::Reference<SdrObject>& pObj : *pPage)
     {
         if( dynamic_cast<const SwVirtFlyDrawObj*>( pObj.get()) ==  nullptr )
@@ -252,27 +253,33 @@ void SwViewShellImp::NotifySizeChg( const Size &rNewSz )
                 continue;
             }
 
-            const tools::Rectangle aObjBound( pObj->GetCurrentBoundRect() );
-            if ( !aDocRect.Contains( aObjBound ) )
-            {
-                Size aSz;
-                if ( aObjBound.Left() > aDocRect.Right() )
-                    aSz.setWidth( (aDocRect.Right() - aObjBound.Left()) - MINFLY );
-                if ( aObjBound.Top() > aDocRect.Bottom() )
-                    aSz.setHeight( (aDocRect.Bottom() - aObjBound.Top()) - MINFLY );
-                if ( aSz.Width() || aSz.Height() )
-                    pObj->Move( aSz );
+            aCandidatesToMove.push_back(pObj.get());
+        }
+    }
 
-                // Don't let large objects disappear to the top
-                aSz.setWidth(0);
-                aSz.setHeight(0);
-                if ( aObjBound.Right() < aDocRect.Left() )
-                    aSz.setWidth( (aDocRect.Left() - aObjBound.Right()) + MINFLY );
-                if ( aObjBound.Bottom() < aDocRect.Top() )
-                    aSz.setHeight( (aDocRect.Top() - aObjBound.Bottom()) + MINFLY );
-                if ( aSz.Width() || aSz.Height() )
-                    pObj->Move( aSz );
-            }
+    // Moving a SdrObject can invalidate their positions in SdrPage's container of objects
+    for (const auto pObj : aCandidatesToMove)
+    {
+        const tools::Rectangle aObjBound( pObj->GetCurrentBoundRect() );
+        if ( !aDocRect.Contains( aObjBound ) )
+        {
+            Size aSz;
+            if ( aObjBound.Left() > aDocRect.Right() )
+                aSz.setWidth( (aDocRect.Right() - aObjBound.Left()) - MINFLY );
+            if ( aObjBound.Top() > aDocRect.Bottom() )
+                aSz.setHeight( (aDocRect.Bottom() - aObjBound.Top()) - MINFLY );
+            if ( aSz.Width() || aSz.Height() )
+                pObj->Move( aSz );
+
+            // Don't let large objects disappear to the top
+            aSz.setWidth(0);
+            aSz.setHeight(0);
+            if ( aObjBound.Right() < aDocRect.Left() )
+                aSz.setWidth( (aDocRect.Left() - aObjBound.Right()) + MINFLY );
+            if ( aObjBound.Bottom() < aDocRect.Top() )
+                aSz.setHeight( (aDocRect.Top() - aObjBound.Bottom()) + MINFLY );
+            if ( aSz.Width() || aSz.Height() )
+                pObj->Move( aSz );
         }
     }
 }
