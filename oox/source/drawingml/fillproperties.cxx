@@ -833,7 +833,7 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
         {
             geometry::IntegerRectangle2D oClipRect( maBlipProps.moClipRect.value() );
             awt::Size aOriginalSize( rGraphicHelper.getOriginalSize( xGraphic ) );
-            if ( aOriginalSize.Width && aOriginalSize.Height )
+            if (aOriginalSize.Width > 0 && aOriginalSize.Height > 0)
             {
                 text::GraphicCrop aGraphCrop( 0, 0, 0, 0 );
                 if ( oClipRect.X1 )

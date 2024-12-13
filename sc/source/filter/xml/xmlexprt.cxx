@@ -3699,7 +3699,18 @@ void ScXMLExport::WriteTableShapes()
                 // GetSnapRect() from associated SdrObject.
                 uno::Reference<beans::XPropertySet> xShapeProp(rxShape, uno::UNO_QUERY);
                 awt::Rectangle aFrameRect;
-                if (xShapeProp.is() && (xShapeProp->getPropertyValue(u"FrameRect"_ustr) >>= aFrameRect))
+                if (!xShapeProp.is())
+                {
+                    SAL_WARN("sc", "no shape propertyset");
+                    continue;
+                }
+                uno::Reference<beans::XPropertySetInfo> xPropSetInfo = xShapeProp->getPropertySetInfo();
+                if (!xPropSetInfo->hasPropertyByName(u"FrameRect"_ustr))
+                {
+                    SAL_WARN("sc", "shape doesn't support FrameRect property");
+                    continue;
+                }
+                if (xShapeProp->getPropertyValue(u"FrameRect"_ustr) >>= aFrameRect)
                 {
                     // file format uses shape in LTR mode. newLeft = - oldRight = - (oldLeft + width).
                     // newTranslate = oldTranslate - refPoint, oldTranslate from transformation matrix,

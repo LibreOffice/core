@@ -4884,12 +4884,32 @@ OUString INetURLObject::CutExtension()
 
 bool INetURLObject::IsExoticProtocol() const
 {
-    return m_eScheme == INetProtocol::Slot ||
-           m_eScheme == INetProtocol::Macro ||
-           m_eScheme == INetProtocol::Uno ||
-           m_eScheme == INetProtocol::VndSunStarExpand ||
-           isSchemeEqualTo(u"vnd.sun.star.script") ||
-           isSchemeEqualTo(u"service");
+    if (m_eScheme == INetProtocol::Slot ||
+        m_eScheme == INetProtocol::Macro ||
+        m_eScheme == INetProtocol::Uno ||
+        m_eScheme == INetProtocol::VndSunStarExpand ||
+        isSchemeEqualTo(u"vnd.sun.star.script") ||
+        isSchemeEqualTo(u"service"))
+    {
+        return true;
+    }
+    if (m_eScheme == INetProtocol::VndSunStarPkg) {
+        return INetURLObject(GetHost(INetURLObject::DecodeMechanism::WithCharset))
+            .IsExoticProtocol();
+    }
+    if (isSchemeEqualTo(u"vnd.sun.star.zip"))
+    {
+        OUString sPayloadURL = GetURLPath(INetURLObject::DecodeMechanism::NONE);
+        if (!sPayloadURL.startsWith(u"//")) {
+            return false;
+        }
+        auto const find = [&sPayloadURL](auto c) {
+            auto const n = sPayloadURL.indexOf(c, 2);
+            return n == -1 ? sPayloadURL.getLength() : n;
+        };
+        return INetURLObject(decode(sPayloadURL.subView(2, std::min(find('/'), find('?')) - 2), INetURLObject::DecodeMechanism::WithCharset)).IsExoticProtocol();
+    }
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -391,21 +391,7 @@ static void drawBox(CGContextRef context, const NSRect& rc, NSColor* pColor)
     NSRect rect = { NSZeroPoint, NSMakeSize(rc.size.width, rc.size.height) };
     NSBox* pBox = [[NSBox alloc] initWithFrame: rect];
     [pBox setBoxType: NSBoxCustom];
-
-    // Related tdf#163945: Set fill color to NSColorTypeComponentBased color type
-    // Many system colors have the NSColorTypeCatalog color type. For
-    // some unkown reason, setting the NSBox's fill color to a color set
-    // to NSColorTypeCatalog causes drawing to take at least twice as long
-    // as when the fill color is set to NSColorTypeComponentBased. So,
-    // only draw with a fill color set to NSColorTypeComponentBased.
-    NSColor* pRGBColor = pColor;
-    if ([pColor type] != NSColorTypeComponentBased)
-    {
-        pRGBColor = [pColor colorUsingType: NSColorTypeComponentBased];
-        if (!pRGBColor)
-            pRGBColor = pColor;
-    }
-    [pBox setFillColor: pRGBColor];
+    [pBox setFillColor: pColor];
 
     // -[NSBox setBorderType: NSNoBorder] is deprecated so hide the border
     // by setting the border color to transparent

@@ -2433,7 +2433,8 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                             m_aRun->append('}');
                             m_aRun->append("}{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " ");
                             xPropSet->getPropertyValue(u"Text"_ustr) >>= aTmp;
-                            m_aRun->append(OUStringToOString(aTmp, m_rExport.GetCurrentEncoding()));
+                            m_aRun->append(
+                                msfilter::rtfutil::OutString(aTmp, m_rExport.GetCurrentEncoding()));
                             m_aRun->append('}');
                             m_aRun->append(
                                 "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FORMFIELD
@@ -2445,8 +2446,8 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                                 m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFOWNHELP);
                                 m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE
                                                    OOO_STRING_SVTOOLS_RTF_FFHELPTEXT " ");
-                                m_aRun->append(
-                                    OUStringToOString(aTmp, m_rExport.GetCurrentEncoding()));
+                                m_aRun->append(msfilter::rtfutil::OutString(
+                                    aTmp, m_rExport.GetCurrentEncoding()));
                                 m_aRun->append('}');
                             }
 
@@ -2457,8 +2458,8 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                                 m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFOWNSTAT);
                                 m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE
                                                    OOO_STRING_SVTOOLS_RTF_FFSTATTEXT " ");
-                                m_aRun->append(
-                                    OUStringToOString(aTmp, m_rExport.GetCurrentEncoding()));
+                                m_aRun->append(msfilter::rtfutil::OutString(
+                                    aTmp, m_rExport.GetCurrentEncoding()));
                                 m_aRun->append('}');
                             }
                             m_aRun->append("}");
@@ -2545,11 +2546,11 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                         else
                             SAL_INFO("sw.rtf", __func__ << " unhandled form control: '"
                                                         << xInfo->getImplementationName() << "'");
-                        m_aRun->append('}');
                     }
                 }
             }
 
+            m_aRun->append('}');
             m_aRun->append('}');
         }
         break;
@@ -4424,8 +4425,6 @@ bool RtfAttributeOutput::FlyFrameOLEMath(const SwFlyFrameFormat* pFlyFrameFormat
 
     m_aRunText->append("{" LO_STRING_SVTOOLS_RTF_MMATH " ");
     uno::Reference<util::XCloseable> xClosable = xObj->getComponent();
-    if (!xClosable.is())
-        return false;
     auto pBase = dynamic_cast<oox::FormulaImExportBase*>(xClosable.get());
     SAL_WARN_IF(!pBase, "sw.rtf", "Math OLE object cannot write out RTF");
     if (pBase)

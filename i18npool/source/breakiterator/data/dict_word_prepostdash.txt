@@ -82,6 +82,9 @@ $MidLetter          = [[\p{Word_Break = MidLetter}]-$ExcludedML $IncludedML];
 
 $PrePostHyphen      = [:name = HYPHEN-MINUS:];
 
+### tdf#162514: For spell checking, abbreviations may end with a period.
+$PostPeriod         = [:name = FULL STOP:];
+
 ### END CUSTOMIZATION
 
 $Hiragana           = [:Hiragana:];
@@ -148,9 +151,10 @@ $Ideographic $ExFm* {400};          #
 
 ### BEGIN CUSTOMIZATION
 ### Unknown issue number: Allow leading and trailing hyphens in certain languages
+### tdf#162514: For spell checking, abbreviations may end with a period.
 
 # ($ALetterPlus | $Hebrew_Letter) $ExFm* ($ALetterPlus | $Hebrew_Letter);
-($PrePostHyphen) ? ($ALetterPlus | $Hebrew_Letter) $ExFm* ($ALetterPlus | $Hebrew_Letter) ($PrePostHyphen)?;
+($PrePostHyphen) ? ($ALetterPlus | $Hebrew_Letter) $ExFm* ($ALetterPlus | $Hebrew_Letter) ($PrePostHyphen | $PostPeriod)?;
 
 ### END CUSTOMIZATION
 
@@ -158,9 +162,10 @@ $Ideographic $ExFm* {400};          #
 
 ### BEGIN CUSTOMIZATION
 ### Unknown issue number: Allow leading and trailing hyphens in certain languages
+### tdf#162514: For spell checking, abbreviations may end with a period.
 
 # ($ALetterPlus | $Hebrew_Letter)  $ExFm* ($MidLetter | $MidNumLet | $Single_Quote) $ExFm* ($ALetterPlus | $Hebrew_Letter) {200};
-($PrePostHyphen)? ($ALetterPlus | $Hebrew_Letter)  $ExFm* ($MidLetter | $MidNumLet | $Single_Quote) $ExFm* ($ALetterPlus | $Hebrew_Letter) ($PrePostHyphen)? {200};
+($PrePostHyphen)? ($ALetterPlus | $Hebrew_Letter)  $ExFm* ($MidLetter | $MidNumLet | $Single_Quote) $ExFm* ($ALetterPlus | $Hebrew_Letter) ($PrePostHyphen | $PostPeriod)? {200};
 
 ### END CUSTOMIZATION
 

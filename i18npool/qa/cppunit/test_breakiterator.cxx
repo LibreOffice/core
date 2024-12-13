@@ -48,9 +48,11 @@ public:
     void testLegacyDictWordPrepostDash_nds_DE();
     void testLegacyDictWordPrepostDash_nl_NL();
     void testLegacyDictWordPrepostDash_sv_SE();
+    void testDictWordAbbreviation();
     void testHebrewGereshGershaim();
     void testLegacySurrogatePairs();
     void testWordCount();
+    void testDictionaryIteratorLanguages();
 
     CPPUNIT_TEST_SUITE(TestBreakIterator);
     CPPUNIT_TEST(testLineBreaking);
@@ -71,9 +73,11 @@ public:
     CPPUNIT_TEST(testLegacyDictWordPrepostDash_nds_DE);
     CPPUNIT_TEST(testLegacyDictWordPrepostDash_nl_NL);
     CPPUNIT_TEST(testLegacyDictWordPrepostDash_sv_SE);
+    CPPUNIT_TEST(testDictWordAbbreviation);
     CPPUNIT_TEST(testHebrewGereshGershaim);
     CPPUNIT_TEST(testLegacySurrogatePairs);
     CPPUNIT_TEST(testWordCount);
+    CPPUNIT_TEST(testDictionaryIteratorLanguages);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1595,6 +1599,25 @@ void TestBreakIterator::doTestJapanese(uno::Reference< i18n::XBreakIterator > co
         CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aBounds.startPos);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(6), aBounds.endPos);
     }
+
+    {
+        // tdf#162912: Double-clicking should only select one Basic identifier
+        static constexpr OUString aTest = u"ThisComponent.CurrentSelection"_ustr;
+
+        aBounds = xBreak->getWordBoundary(aTest, 5, aLocale, i18n::WordType::DICTIONARY_WORD, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(30), aBounds.endPos);
+
+        aBounds = xBreak->getWordBoundary(aTest, 5, aLocale,
+                                          i18n::WordType::ANYWORD_IGNOREWHITESPACES, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(13), aBounds.endPos);
+
+        aBounds = xBreak->getWordBoundary(aTest, 15, aLocale,
+                                          i18n::WordType::ANYWORD_IGNOREWHITESPACES, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(14), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(30), aBounds.endPos);
+    }
 }
 
 void TestBreakIterator::testJapanese()
@@ -1642,6 +1665,49 @@ void TestBreakIterator::testLegacyDictWordPrepostDash_de_DE()
             = m_xBreak->getWordBoundary(aTest, 13, aLocale, i18n::WordType::DICTIONARY_WORD, false);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(9), aBounds.startPos);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(16), aBounds.endPos);
+    }
+}
+
+void TestBreakIterator::testDictWordAbbreviation()
+{
+    std::vector<lang::Locale> aLocale{
+        { "en", "US", "" }, // dict_word locale
+        { "de", "DE", "" } // dict_word_prepostdash locale
+    };
+
+    for (const auto& rLocale : aLocale)
+    {
+        auto aTest = u"Examples: e.g. i.e. etc. and such"_ustr;
+
+        i18n::Boundary aBounds
+            = m_xBreak->getWordBoundary(aTest, 3, rLocale, i18n::WordType::DICTIONARY_WORD, false);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(8), aBounds.endPos);
+
+        aBounds
+            = m_xBreak->getWordBoundary(aTest, 10, rLocale, i18n::WordType::DICTIONARY_WORD, false);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(10), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(14), aBounds.endPos);
+
+        aBounds
+            = m_xBreak->getWordBoundary(aTest, 15, rLocale, i18n::WordType::DICTIONARY_WORD, false);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(15), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(19), aBounds.endPos);
+
+        aBounds
+            = m_xBreak->getWordBoundary(aTest, 20, rLocale, i18n::WordType::DICTIONARY_WORD, false);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(20), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(24), aBounds.endPos);
+
+        aBounds
+            = m_xBreak->getWordBoundary(aTest, 26, rLocale, i18n::WordType::DICTIONARY_WORD, false);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(25), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(28), aBounds.endPos);
+
+        aBounds
+            = m_xBreak->getWordBoundary(aTest, 30, rLocale, i18n::WordType::DICTIONARY_WORD, false);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(29), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(33), aBounds.endPos);
     }
 }
 
@@ -1915,7 +1981,233 @@ void TestBreakIterator::testWordCount()
 
         const OUString str = u"Wordの様にワード数をするのにTest\n植松町"_ustr;
 
-        CPPUNIT_ASSERT_EQUAL(7, count_words_fn(str, aLocale));
+        CPPUNIT_ASSERT_EQUAL(8, count_words_fn(str, aLocale));
+    }
+}
+
+void TestBreakIterator::testDictionaryIteratorLanguages()
+{
+    // Thai
+    {
+        lang::Locale aLocale{ "th", "TH", "" };
+
+        const OUString aStr = u"รอนานหรือเปล่า"_ustr;
+
+        i18n::Boundary aBounds;
+
+        aBounds
+            = m_xBreak->getWordBoundary(aStr, 1, aLocale, i18n::WordType::DICTIONARY_WORD, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aBounds.endPos);
+
+        aBounds
+            = m_xBreak->getWordBoundary(aStr, 3, aLocale, i18n::WordType::DICTIONARY_WORD, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aBounds.endPos);
+
+        aBounds
+            = m_xBreak->getWordBoundary(aStr, 6, aLocale, i18n::WordType::DICTIONARY_WORD, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(9), aBounds.endPos);
+
+        aBounds
+            = m_xBreak->getWordBoundary(aStr, 10, aLocale, i18n::WordType::DICTIONARY_WORD, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(9), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(14), aBounds.endPos);
+
+        aBounds = m_xBreak->getWordBoundary(aStr, 1, aLocale, i18n::WordType::ANY_WORD, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aBounds.endPos);
+
+        aBounds = m_xBreak->getWordBoundary(aStr, 3, aLocale, i18n::WordType::ANY_WORD, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aBounds.endPos);
+
+        aBounds = m_xBreak->getWordBoundary(aStr, 6, aLocale, i18n::WordType::ANY_WORD, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(9), aBounds.endPos);
+
+        aBounds = m_xBreak->getWordBoundary(aStr, 10, aLocale, i18n::WordType::ANY_WORD, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(9), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(14), aBounds.endPos);
+
+        aBounds = m_xBreak->getWordBoundary(aStr, 1, aLocale,
+                                            i18n::WordType::ANYWORD_IGNOREWHITESPACES, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aBounds.endPos);
+
+        aBounds = m_xBreak->getWordBoundary(aStr, 3, aLocale,
+                                            i18n::WordType::ANYWORD_IGNOREWHITESPACES, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aBounds.endPos);
+
+        aBounds = m_xBreak->getWordBoundary(aStr, 6, aLocale,
+                                            i18n::WordType::ANYWORD_IGNOREWHITESPACES, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(9), aBounds.endPos);
+
+        aBounds = m_xBreak->getWordBoundary(aStr, 10, aLocale,
+                                            i18n::WordType::ANYWORD_IGNOREWHITESPACES, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(9), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(14), aBounds.endPos);
+    }
+
+    // Japanese
+    {
+        lang::Locale aLocale{ "ja", "JP", "" };
+
+        const OUString aStr = u"通産省工業技術院北海道"_ustr;
+
+        i18n::Boundary aBounds;
+
+        aBounds
+            = m_xBreak->getWordBoundary(aStr, 1, aLocale, i18n::WordType::DICTIONARY_WORD, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aBounds.endPos);
+
+        aBounds
+            = m_xBreak->getWordBoundary(aStr, 2, aLocale, i18n::WordType::DICTIONARY_WORD, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aBounds.endPos);
+
+        aBounds
+            = m_xBreak->getWordBoundary(aStr, 4, aLocale, i18n::WordType::DICTIONARY_WORD, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aBounds.endPos);
+
+        aBounds
+            = m_xBreak->getWordBoundary(aStr, 6, aLocale, i18n::WordType::DICTIONARY_WORD, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(7), aBounds.endPos);
+
+        aBounds
+            = m_xBreak->getWordBoundary(aStr, 7, aLocale, i18n::WordType::DICTIONARY_WORD, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(7), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(8), aBounds.endPos);
+
+        aBounds
+            = m_xBreak->getWordBoundary(aStr, 9, aLocale, i18n::WordType::DICTIONARY_WORD, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(8), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(11), aBounds.endPos);
+
+        aBounds = m_xBreak->getWordBoundary(aStr, 1, aLocale, i18n::WordType::ANY_WORD, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aBounds.endPos);
+
+        aBounds = m_xBreak->getWordBoundary(aStr, 2, aLocale, i18n::WordType::ANY_WORD, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aBounds.endPos);
+
+        aBounds = m_xBreak->getWordBoundary(aStr, 4, aLocale, i18n::WordType::ANY_WORD, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aBounds.endPos);
+
+        aBounds = m_xBreak->getWordBoundary(aStr, 6, aLocale, i18n::WordType::ANY_WORD, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(7), aBounds.endPos);
+
+        aBounds = m_xBreak->getWordBoundary(aStr, 7, aLocale, i18n::WordType::ANY_WORD, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(7), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(8), aBounds.endPos);
+
+        aBounds = m_xBreak->getWordBoundary(aStr, 9, aLocale, i18n::WordType::ANY_WORD, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(8), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(11), aBounds.endPos);
+
+        aBounds = m_xBreak->getWordBoundary(aStr, 1, aLocale,
+                                            i18n::WordType::ANYWORD_IGNOREWHITESPACES, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aBounds.endPos);
+
+        aBounds = m_xBreak->getWordBoundary(aStr, 2, aLocale,
+                                            i18n::WordType::ANYWORD_IGNOREWHITESPACES, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aBounds.endPos);
+
+        aBounds = m_xBreak->getWordBoundary(aStr, 4, aLocale,
+                                            i18n::WordType::ANYWORD_IGNOREWHITESPACES, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aBounds.endPos);
+
+        aBounds = m_xBreak->getWordBoundary(aStr, 6, aLocale,
+                                            i18n::WordType::ANYWORD_IGNOREWHITESPACES, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(7), aBounds.endPos);
+
+        aBounds = m_xBreak->getWordBoundary(aStr, 7, aLocale,
+                                            i18n::WordType::ANYWORD_IGNOREWHITESPACES, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(7), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(8), aBounds.endPos);
+
+        aBounds = m_xBreak->getWordBoundary(aStr, 9, aLocale,
+                                            i18n::WordType::ANYWORD_IGNOREWHITESPACES, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(8), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(11), aBounds.endPos);
+    }
+
+    // Chinese
+    {
+        lang::Locale aLocale{ "zh", "CN", "" };
+
+        const OUString aStr = u"很高兴认识你"_ustr;
+
+        i18n::Boundary aBounds;
+
+        aBounds
+            = m_xBreak->getWordBoundary(aStr, 0, aLocale, i18n::WordType::DICTIONARY_WORD, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aBounds.endPos);
+
+        aBounds
+            = m_xBreak->getWordBoundary(aStr, 1, aLocale, i18n::WordType::DICTIONARY_WORD, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aBounds.endPos);
+
+        aBounds
+            = m_xBreak->getWordBoundary(aStr, 3, aLocale, i18n::WordType::DICTIONARY_WORD, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aBounds.endPos);
+
+        aBounds
+            = m_xBreak->getWordBoundary(aStr, 5, aLocale, i18n::WordType::DICTIONARY_WORD, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(6), aBounds.endPos);
+
+        aBounds = m_xBreak->getWordBoundary(aStr, 0, aLocale, i18n::WordType::ANY_WORD, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aBounds.endPos);
+
+        aBounds = m_xBreak->getWordBoundary(aStr, 1, aLocale, i18n::WordType::ANY_WORD, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aBounds.endPos);
+
+        aBounds = m_xBreak->getWordBoundary(aStr, 3, aLocale, i18n::WordType::ANY_WORD, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aBounds.endPos);
+
+        aBounds = m_xBreak->getWordBoundary(aStr, 5, aLocale, i18n::WordType::ANY_WORD, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(6), aBounds.endPos);
+
+        aBounds = m_xBreak->getWordBoundary(aStr, 0, aLocale,
+                                            i18n::WordType::ANYWORD_IGNOREWHITESPACES, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aBounds.endPos);
+
+        aBounds = m_xBreak->getWordBoundary(aStr, 1, aLocale,
+                                            i18n::WordType::ANYWORD_IGNOREWHITESPACES, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aBounds.endPos);
+
+        aBounds = m_xBreak->getWordBoundary(aStr, 3, aLocale,
+                                            i18n::WordType::ANYWORD_IGNOREWHITESPACES, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aBounds.endPos);
+
+        aBounds = m_xBreak->getWordBoundary(aStr, 5, aLocale,
+                                            i18n::WordType::ANYWORD_IGNOREWHITESPACES, true);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aBounds.startPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(6), aBounds.endPos);
     }
 }
 

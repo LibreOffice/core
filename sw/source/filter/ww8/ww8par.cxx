@@ -216,6 +216,15 @@ namespace
     }
 }
 
+// returns true if an embedded null was found
+static bool clipToFirstNull(OUString& rStr)
+{
+    sal_Int32 nEmbeddedNullIdx = rStr.indexOf(0);
+    if (nEmbeddedNullIdx != -1)
+        rStr = rStr.copy(0, nEmbeddedNullIdx);
+    return nEmbeddedNullIdx != -1;
+}
+
 void SwWW8ImplReader::ReadEmbeddedData(SvStream& rStrm, SwDocShell const * pDocShell, struct HyperLinksTable& hlStr)
 {
     // (0x01B8) HLINK
@@ -338,6 +347,8 @@ void SwWW8ImplReader::ReadEmbeddedData(SvStream& rStrm, SwDocShell const * pDocS
     if( ::get_flag( nFlags, WW8_HLINK_MARK ) )
     {
         xTextMark.reset(new OUString(read_uInt32_lenPrefixed_uInt16s_ToOUString(rStrm)));
+        if (clipToFirstNull(*xTextMark))
+            SAL_WARN("sw.ww8", "HLINK_MARK with embedded null, truncating to: " << *xTextMark);
     }
 
     if (!xLongName && xShortName)
@@ -347,6 +358,8 @@ void SwWW8ImplReader::ReadEmbeddedData(SvStream& rStrm, SwDocShell const * pDocS
 
     if (xLongName)
     {
+        if (clipToFirstNull(*xLongName))
+            SAL_WARN("sw.ww8", "HLINK with embedded null, truncating to: " << *xLongName);
         if (xTextMark)
         {
             if (xLongName->isEmpty())

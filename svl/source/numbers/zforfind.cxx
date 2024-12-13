@@ -1172,6 +1172,10 @@ bool ImpSvNumberInputScan::CanForceToIso8601( DateOrder eDateOrder )
             eDateOrder = GetDateOrder();
         }
 
+        // No date pattern matched at all can be forced to ISO 8601 here as is.
+        if (GetDatePatternNumbers() == 0)
+            return true;
+
         nCanForceToIso8601 = 1;
     }
 
@@ -2563,6 +2567,20 @@ bool ImpSvNumberInputScan::ScanStartString( const OUString& rString )
 }
 
 
+static bool lcl_isBlanks( const OUString& rStr )
+{
+    if (rStr.isEmpty())
+        return false;
+
+    for (sal_Int32 i = rStr.getLength(); i-- > 0; )
+    {
+        if (rStr[i] != ' ')
+            return false;
+    }
+    return true;
+}
+
+
 /**
  * Analyze string in the middle
  * All gone => true
@@ -2664,8 +2682,9 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString, sal_uInt16 nS
                   (nNumericsCnt == 3 &&                     // or 3 numbers
                    (nStringPos == 3 ||                      // and 4th string particle
                     (nStringPos == 4 && nSign)) &&          // or 5th if signed
-                   sStrArray[nStringPos-2].indexOf('/') == -1)))  // and not 23/11/1999
-                                                                  // that was not accepted as date yet
+                   lcl_isBlanks(sStrArray[nStringPos-2])))) // and not 23/11/1999
+                                                            // that was not accepted as date yet,
+                                                            // nor anything else than blanks after integer.
         {
             SkipBlanks(rString, nPos);
             if (nPos == rString.getLength())

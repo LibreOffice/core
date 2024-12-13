@@ -39,7 +39,7 @@ endif
 
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_Library_use_libraries,merged,\
-	AppleRemote \
+	$(if $(ENABLE_MACOSX_SANDBOX),,AppleRemote) \
 ))
 endif
 

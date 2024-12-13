@@ -183,7 +183,7 @@ public:
         const sal_Int32 nColumn,
         const bool bClampToValidRange) const;
 
-        ::tools::Rectangle GetPageObjectBox (
+    ::tools::Rectangle GetPageObjectBox (
         const sal_Int32 nIndex,
         const bool bIncludeBorderAndGap = false) const;
 
@@ -347,6 +347,14 @@ sal_Int32 Layouter::GetIndex (const sal_Int32 nRow, const sal_Int32 nColumn) con
 Size const & Layouter::GetPageObjectSize() const
 {
     return mpImplementation->maPageObjectSize;
+}
+
+Size Layouter::AddGap(const Size & rObjectSize)
+{
+    Size newSize = rObjectSize;
+    newSize.AdjustWidth(Implementation::gnHorizontalGap);
+    newSize.AdjustHeight(Implementation::gnVerticalGap);
+    return newSize;
 }
 
 ::tools::Rectangle Layouter::GetPageObjectBox (
