@@ -4576,15 +4576,18 @@ void SwTextFrame::PaintParagraphStylesHighlighting() const
 
         pRenderContext->Push(vcl::PushFlags::ALL);
 
-        pRenderContext->SetFillColor(rParaStylesColorMap[sStyleName].first);
-        pRenderContext->SetLineColor(rParaStylesColorMap[sStyleName].first);
+        Color nStyleColor = rParaStylesColorMap[sStyleName].first;
+        int nStyleNumber = rParaStylesColorMap[sStyleName].second;
+
+        pRenderContext->SetFillColor(nStyleColor);
+        pRenderContext->SetLineColor(nStyleColor);
 
         pRenderContext->DrawRect(aRect);
 
         // draw hatch pattern if paragraph has direct formatting
         if (SwDoc::HasParagraphDirectFormatting(SwPosition(*GetTextNodeForParaProps())))
         {
-            Color aHatchColor(rParaStylesColorMap[sStyleName].first);
+            Color aHatchColor(nStyleColor);
             // make hatch line color 41% darker than the fill color
             aHatchColor.ApplyTintOrShade(-4100);
             Hatch aHatch(HatchStyle::Single, aHatchColor, 50, 450_deg10);
@@ -4593,8 +4596,8 @@ void SwTextFrame::PaintParagraphStylesHighlighting() const
 
         pRenderContext->SetFont(aFont);
         pRenderContext->SetLayoutMode(vcl::text::ComplexTextLayoutFlags::Default);
-        pRenderContext->SetTextFillColor(rParaStylesColorMap[sStyleName].first);
-        pRenderContext->DrawText(aRect, OUString::number(rParaStylesColorMap[sStyleName].second),
+        pRenderContext->SetTextFillColor(nStyleColor);
+        pRenderContext->DrawText(aRect, OUString::number(nStyleNumber),
                                  DrawTextFlags::Center | DrawTextFlags::VCenter);
 
         pRenderContext->Pop();
