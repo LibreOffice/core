@@ -22,6 +22,7 @@
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 
 #include <comphelper/interfacecontainer3.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -34,14 +35,9 @@
 
 class DicEvtListenerHelper;
 
-
-class DicList :
-    public cppu::WeakImplHelper
-    <
-        css::linguistic2::XSearchableDictionaryList,
-        css::lang::XComponent,
-        css::lang::XServiceInfo
-    >
+class DicList : public cppu::WeakImplHelper<css::linguistic2::XSearchableDictionaryList,
+                                            css::lang::XComponent, css::lang::XServiceInfo,
+                                            css::lang::XInitialization>
 {
     class MyAppExitListener : public linguistic::AppExitListener
     {
@@ -67,6 +63,7 @@ class DicList :
 
     DicList( const DicList & ) = delete;
     DicList & operator = (const DicList &) = delete;
+
 
     void                CreateDicList();
     DictionaryVec_t &   GetOrCreateDicList()
@@ -110,6 +107,10 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+
+    // XInitialization
+    virtual void SAL_CALL
+    initialize(const css::uno::Sequence<css::uno::Any>& /*rArguments*/) override;
 
     // non UNO-specific
     void    SaveDics();
