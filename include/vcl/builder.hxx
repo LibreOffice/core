@@ -127,8 +127,6 @@ private:
     };
     std::vector<WinAndId> m_aChildren;
 
-    typedef StringPair RadioButtonGroupMap;
-
     struct ButtonImageWidgetMap
     {
         OUString m_sID;
@@ -179,8 +177,6 @@ private:
 
     struct VclParserState
     {
-        std::vector<RadioButtonGroupMap> m_aGroupMaps;
-
         std::vector<ComboBoxModelMap> m_aModelMaps;
 
         std::vector<TextBufferMap> m_aTextBufferMaps;
@@ -254,7 +250,6 @@ private:
 
     static int  getImageSize(const stringmap &rMap);
 
-    void        extractGroup(const OUString &id, stringmap &rVec);
     void        extractModel(const OUString &id, stringmap &rVec);
     void        extractBuffer(const OUString &id, stringmap &rVec);
     static bool extractAdjustmentToMap(const OUString &id, stringmap &rVec, std::vector<WidgetAdjustmentMap>& rAdjustmentMap);

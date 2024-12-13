@@ -77,6 +77,7 @@ protected:
     };
 
     typedef StringPair MnemonicWidgetMap;
+    typedef StringPair RadioButtonGroupMap;
 
     static void collectPangoAttribute(xmlreader::XmlReader& reader, stringmap& rMap);
     static void collectAtkRelationAttribute(xmlreader::XmlReader& reader, stringmap& rMap);
@@ -111,6 +112,9 @@ protected:
 
     void extractMnemonicWidget(const OUString& id, stringmap& rMap);
     const std::vector<MnemonicWidgetMap>& getMnemonicWidgetMaps() const;
+
+    void extractRadioButtonGroup(const OUString& id, stringmap& rVec);
+    const std::vector<RadioButtonGroupMap>& getRadioButtonGroupMaps() const;
 
     OUString finalizeValue(const OString& rContext, const OString& rValue,
                            const bool bTranslate) const;
@@ -149,6 +153,7 @@ private:
         std::map<OUString, TextBuffer> m_aTextBuffers;
 
         std::vector<MnemonicWidgetMap> m_aMnemonicWidgetMaps;
+        std::vector<RadioButtonGroupMap> m_aRadioButtonGroupMaps;
     };
 
     std::unique_ptr<ParserState> m_pParserState;

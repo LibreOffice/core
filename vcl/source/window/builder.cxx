@@ -481,6 +481,11 @@ const std::vector<BuilderBase::MnemonicWidgetMap>& BuilderBase::getMnemonicWidge
     return m_pParserState->m_aMnemonicWidgetMaps;
 }
 
+const std::vector<BuilderBase::RadioButtonGroupMap>& BuilderBase::getRadioButtonGroupMaps() const {
+    assert(m_pParserState && "parser state no more valid");
+    return m_pParserState->m_aRadioButtonGroupMaps;
+}
+
 OUString BuilderBase::finalizeValue(const OString& rContext, const OString& rValue,
                                     const bool bTranslate) const
 {
@@ -554,7 +559,7 @@ VclBuilder::VclBuilder(vcl::Window* pParent, std::u16string_view sUIDir, const O
     }
 
     //Set radiobutton groups when everything has been imported
-    for (auto const& elem : m_pVclParserState->m_aGroupMaps)
+    for (auto const& elem : getRadioButtonGroupMaps())
     {
         RadioButton *pOne = get<RadioButton>(elem.m_sID);
         RadioButton *pOther = get<RadioButton>(elem.m_sValue);
@@ -1098,7 +1103,7 @@ namespace
     }
 }
 
-void VclBuilder::extractGroup(const OUString &id, stringmap &rMap)
+void BuilderBase::extractRadioButtonGroup(const OUString &id, stringmap &rMap)
 {
     VclBuilder::stringmap::iterator aFind = rMap.find(u"group"_ustr);
     if (aFind != rMap.end())
@@ -1107,7 +1112,7 @@ void VclBuilder::extractGroup(const OUString &id, stringmap &rMap)
         sal_Int32 nDelim = sID.indexOf(':');
         if (nDelim != -1)
             sID = sID.copy(0, nDelim);
-        m_pVclParserState->m_aGroupMaps.emplace_back(id, sID);
+        m_pParserState->m_aRadioButtonGroupMaps.emplace_back(id, sID);
         rMap.erase(aFind);
     }
 }
@@ -1603,7 +1608,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
     }
     else if (name == "GtkRadioButton")
     {
-        extractGroup(id, rMap);
+        extractRadioButtonGroup(id, rMap);
         WinBits nBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK;
         VclPtr<RadioButton> xButton = VclPtr<RadioButton>::Create(pParent, true, nBits);
         xButton->SetImageAlign(ImageAlign::Left); //default to left
