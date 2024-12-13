@@ -964,7 +964,7 @@ Document::retrieveCharacterAttributes(
 
     //character posture
     aAttrib.Name = "CharPosture";
-    aAttrib.Value <<= static_cast<sal_Int16>(aFont.GetItalic());
+    aAttrib.Value <<= vcl::unohelper::ConvertFontSlant(aFont.GetItalic());
     aAttribs.push_back(aAttrib);
 
     //character relief
