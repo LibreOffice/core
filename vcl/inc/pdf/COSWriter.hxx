@@ -72,6 +72,11 @@ public:
     OStringBuffer& getLine() { return mrBuffer; }
 
     void startDict() { mrBuffer.append("<<"); }
+    void startDictWithKey(std::string_view key)
+    {
+        mrBuffer.append(key);
+        mrBuffer.append("<<");
+    }
     void endDict() { mrBuffer.append(">>\n"); }
 
     void startStream() { mrBuffer.append("stream\n"); }

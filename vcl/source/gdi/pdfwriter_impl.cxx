@@ -5233,26 +5233,28 @@ bool PDFWriterImpl::emitEmbeddedFiles()
         aLine.append(" /Params ");
         appendObjectReference(nParamsObject, aLine);
         aLine.append(">>\nstream\n");
-        checkAndEnableStreamEncryption(rEmbeddedFile.m_nObject);
         if (!writeBuffer(aLine)) return false;
-        disableStreamEncryption();
         aLine.setLength(0);
 
         sal_Int64 nSize{};
         if (!rEmbeddedFile.m_aDataContainer.isEmpty())
         {
             nSize = rEmbeddedFile.m_aDataContainer.getSize();
+            checkAndEnableStreamEncryption(rEmbeddedFile.m_nObject);
             if (!writeBufferBytes(rEmbeddedFile.m_aDataContainer.getData(), rEmbeddedFile.m_aDataContainer.getSize()))
                 return false;
+            disableStreamEncryption();
         }
         else if (rEmbeddedFile.m_pStream)
         {
+            checkAndEnableStreamEncryption(rEmbeddedFile.m_nObject);
             sal_uInt64 nBegin = getCurrentFilePosition();
             css::uno::Reference<css::io::XOutputStream> xStream(new PDFStreamIf(this));
             rEmbeddedFile.m_pStream->write(xStream);
             rEmbeddedFile.m_pStream.reset();
             xStream.clear();
             nSize = sal_Int64(getCurrentFilePosition() - nBegin);
+            disableStreamEncryption();
         }
         aLine.append("\nendstream\nendobj\n\n");
         if (!writeBuffer(aLine)) return false;
@@ -5361,29 +5363,26 @@ bool PDFWriterImpl::emitCatalog()
     {
         if (!updateObject(rAttachedFile.mnObjectId))
             return false;
-        aLine.setLength( 0 );
+        aLine.setLength(0);
 
-        appendObjectID(rAttachedFile.mnObjectId, aLine);
-        aLine.append("<</Type /Filespec");
-        aLine.append("/F<");
-        COSWriter::appendUnicodeTextString(rAttachedFile.maFilename, aLine);
-        aLine.append("> ");
+        aWriter.startObject(rAttachedFile.mnObjectId);
+        aWriter.startDict();
+        aWriter.write("/Type", "/Filespec");
+        aWriter.writeKeyAndUnicodeEncrypt("/F", rAttachedFile.maFilename, rAttachedFile.mnObjectId);
         if (PDFWriter::PDFVersion::PDF_1_7 <= m_aContext.Version)
         {
-            aLine.append("/UF<");
-            COSWriter::appendUnicodeTextString(rAttachedFile.maFilename, aLine);
-            aLine.append("> ");
+            aWriter.writeKeyAndUnicodeEncrypt("/UF", rAttachedFile.maFilename, rAttachedFile.mnObjectId);
         }
         if (!rAttachedFile.maDescription.isEmpty())
         {
-            aLine.append("/Desc <");
-            COSWriter::appendUnicodeTextString(rAttachedFile.maDescription, aLine);
-            aLine.append("> ");
+            aWriter.writeKeyAndUnicodeEncrypt("/Desc", rAttachedFile.maDescription, rAttachedFile.mnObjectId);
         }
-        aLine.append("/EF <</F ");
-        appendObjectReference(rAttachedFile.mnEmbeddedFileObjectId, aLine);
-        aLine.append(">>");
-        aLine.append(">>\nendobj\n\n");
+        aLine.append("/EF");
+        aWriter.startDict();
+        aWriter.writeKeyAndReference("/F", rAttachedFile.mnEmbeddedFileObjectId);
+        aWriter.endDict();
+        aWriter.endDict();
+        aWriter.endObject();
         if (!writeBuffer(aLine)) return false;
     }
 
@@ -5408,18 +5407,17 @@ bool PDFWriterImpl::emitCatalog()
 
     if (!m_aDocumentAttachedFiles.empty())
     {
-        aLine.append("/Names ");
-        aLine.append("<</EmbeddedFiles <</Names [");
+        aWriter.startDictWithKey("/Names");
+        aWriter.startDictWithKey("/EmbeddedFiles");
+        aLine.append("/Names [");
         for (auto & rAttachedFile : m_aDocumentAttachedFiles)
         {
-            aLine.append('<');
-            COSWriter::appendUnicodeTextString(rAttachedFile.maFilename, aLine);
-            aLine.append('>');
-            aLine.append(' ');
-            appendObjectReference(rAttachedFile.mnObjectId, aLine);
+            aWriter.writeUnicodeEncrypt(rAttachedFile.maFilename, m_nCatalogObject);
+            aWriter.writeReference(rAttachedFile.mnObjectId);
         }
-        aLine.append("]>>>>");
-        aLine.append("\n" );
+        aLine.append("]");
+        aWriter.endDict();
+        aWriter.endDict();
     }
 
     if( m_aContext.PageLayout != PDFWriter::DefaultLayout )
