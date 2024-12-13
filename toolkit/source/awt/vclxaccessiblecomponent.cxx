@@ -26,8 +26,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
-#include <toolkit/awt/vclxwindow.hxx>
-#include <toolkit/awt/vclxfont.hxx>
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/window.hxx>
