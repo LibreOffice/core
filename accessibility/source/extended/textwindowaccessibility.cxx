@@ -701,9 +701,9 @@ void Paragraph::checkDisposed()
         OUString(), getXWeak());
 }
 
-Document::Document(::VCLXWindow * pVclXWindow, ::TextEngine & rEngine,
-                   ::TextView & rView):
-    VCLXAccessibleComponent(pVclXWindow->GetWindow()),
+Document::Document(vcl::Window* pWindow, ::TextEngine & rEngine,
+                   ::TextView & rView)
+    : VCLXAccessibleComponent(pWindow),
     m_rEngine(rEngine),
     m_rView(rView),
     m_aEngineListener(*this),

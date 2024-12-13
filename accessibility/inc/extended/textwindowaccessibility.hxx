@@ -316,8 +316,7 @@ typedef std::unordered_map< OUString,
 class Document final : public ::VCLXAccessibleComponent, public ::SfxListener
 {
 public:
-    Document(::VCLXWindow * pVclXWindow, ::TextEngine & rEngine,
-             ::TextView & rView);
+    Document(vcl::Window* pWindow, ::TextEngine & rEngine, ::TextView & rView);
 
     css::uno::Reference<css::accessibility::XAccessible> getAccessible() const;
 

@@ -41,6 +41,7 @@ namespace com::sun::star {
 namespace vcl { class IAccessibleBrowseBox; }
 namespace vcl { class IAccessibleTabListBox; }
 namespace vcl { class IAccessibleTableProvider; }
+namespace vcl { class Window; }
 
 class SvHeaderTabListBox;
 class SvtIconChoiceCtrl;
@@ -112,7 +113,7 @@ namespace vcl
 
         virtual css::uno::Reference< css::accessibility::XAccessibleContext >
             createAccessibleTextWindowContext(
-                VCLXWindow* pVclXWindow, TextEngine& rEngine, TextView& rView
+                vcl::Window* pWindow, TextEngine& rEngine, TextView& rView
             ) const = 0;
 
         virtual css::uno::Reference< css::accessibility::XAccessible >

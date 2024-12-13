@@ -146,7 +146,7 @@ public:
 
     virtual css::uno::Reference< css::accessibility::XAccessibleContext >
         createAccessibleTextWindowContext(
-            VCLXWindow* pVclXWindow, TextEngine& rEngine, TextView& rView
+            vcl::Window* pWindow, TextEngine& rEngine, TextView& rView
         ) const override;
 
     virtual css::uno::Reference< css::accessibility::XAccessible >
@@ -387,9 +387,9 @@ Reference< XAccessible > AccessibleFactory::createAccessibleTabBar( TabBar& _rTa
 }
 
 Reference< XAccessibleContext > AccessibleFactory::createAccessibleTextWindowContext(
-    VCLXWindow* pVclXWindow, TextEngine& rEngine, TextView& rView ) const
+    vcl::Window* pWindow, TextEngine& rEngine, TextView& rView) const
 {
-    return new Document( pVclXWindow, rEngine, rView );
+    return new Document(pWindow, rEngine, rView );
 }
 
 Reference< XAccessible > AccessibleFactory::createAccessibleTreeListBox(

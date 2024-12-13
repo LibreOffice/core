@@ -57,7 +57,7 @@ TextWindowPeer::TextWindowPeer(TextView & view):
 css::uno::Reference<css::accessibility::XAccessibleContext>
 TextWindowPeer::CreateAccessibleContext() {
     return m_aFactoryAccess.getFactory().createAccessibleTextWindowContext(
-        this, m_rEngine, m_rView);
+        GetWindow(), m_rEngine, m_rView);
 }
 
 }
