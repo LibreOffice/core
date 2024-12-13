@@ -190,7 +190,6 @@ public:
         createAccessibleCheckBoxCell(
             const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
             vcl::IAccessibleTableProvider& _rBrowseBox,
-            const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
             sal_Int32 _nRowPos,
             sal_uInt16 _nColPos,
             const TriState& _eState,
@@ -428,10 +427,9 @@ Reference< XAccessible > AccessibleFactory::createAccessibleBrowseBoxHeaderCell(
 
 Reference< XAccessible > AccessibleFactory::createAccessibleCheckBoxCell(
     const Reference< XAccessible >& _rxParent, vcl::IAccessibleTableProvider& _rBrowseBox,
-    const Reference< XWindow >& _xFocusWindow, sal_Int32 _nRowPos, sal_uInt16 _nColPos,
-    const TriState& _eState, bool _bIsTriState ) const
+    sal_Int32 _nRowPos, sal_uInt16 _nColPos, const TriState& _eState, bool _bIsTriState) const
 {
-    return new AccessibleCheckBoxCell( _rxParent, _rBrowseBox, _xFocusWindow,
+    return new AccessibleCheckBoxCell( _rxParent, _rBrowseBox,
         _nRowPos, _nColPos, _eState, _bIsTriState );
 }
 

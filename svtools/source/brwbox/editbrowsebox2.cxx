@@ -48,7 +48,6 @@ Reference< XAccessible > EditBrowseBox::CreateAccessibleCheckBoxCell(sal_Int32 _
         xReturn = getAccessibleFactory().createAccessibleCheckBoxCell(
             xAccContext->getAccessibleChild( ::vcl::BBINDEX_TABLE ),
             *this,
-            nullptr,
             _nRow,
             _nColumnPos,
             eState,

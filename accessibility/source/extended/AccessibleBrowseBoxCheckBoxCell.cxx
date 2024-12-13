@@ -30,12 +30,11 @@ namespace accessibility
 
     AccessibleCheckBoxCell::AccessibleCheckBoxCell(const Reference<XAccessible >& _rxParent,
                                 vcl::IAccessibleTableProvider& _rBrowseBox,
-                                const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
                                 sal_Int32 _nRowPos,
                                 sal_uInt16 _nColPos
                                 ,const TriState& _eState,
                                 bool _bIsTriState)
-        :AccessibleBrowseBoxCell(_rxParent, _rBrowseBox, _xFocusWindow, _nRowPos, _nColPos, AccessibleBrowseBoxObjType::CheckBoxCell)
+        :AccessibleBrowseBoxCell(_rxParent, _rBrowseBox, nullptr, _nRowPos, _nColPos, AccessibleBrowseBoxObjType::CheckBoxCell)
         ,m_eState(_eState)
         ,m_bIsTriState(_bIsTriState)
     {

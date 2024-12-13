@@ -44,7 +44,6 @@ namespace accessibility
     public:
         AccessibleCheckBoxCell(const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
                                 ::vcl::IAccessibleTableProvider& _rBrowseBox,
-                                const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
                                 sal_Int32 _nRowPos,
                                 sal_uInt16 _nColPos,
                                 const TriState& _eState,
