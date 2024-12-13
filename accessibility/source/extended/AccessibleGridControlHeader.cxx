@@ -20,7 +20,6 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <extended/AccessibleGridControlHeader.hxx>
 #include <extended/AccessibleGridControlHeaderCell.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/accessibletable.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/unohelp.hxx>

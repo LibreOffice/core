@@ -43,7 +43,6 @@
 #include <comphelper/sequence.hxx>
 
 #include <algorithm>
-#include <memory>
 #include <numeric>
 #include <vector>
 

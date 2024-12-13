@@ -34,7 +34,6 @@
 #include <com/sun/star/accessibility/XAccessibleTextAttributes.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
-#include <toolkit/awt/vclxwindow.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/accessibletexthelper.hxx>
@@ -43,7 +42,6 @@
 
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <queue>
-#include <memory>
 #include <unordered_map>
 
 class TextEngine;

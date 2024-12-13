@@ -19,8 +19,6 @@
 
 #include <standard/vclxaccessibleradiobutton.hxx>
 
-#include <toolkit/awt/vclxwindows.hxx>
-
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <comphelper/accessiblecontexthelper.hxx>
 #include <comphelper/accessiblekeybindinghelper.hxx>

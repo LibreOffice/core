@@ -19,7 +19,6 @@
 
 #include <standard/vclxaccessiblelistbox.hxx>
 #include <comphelper/sequence.hxx>
-#include <toolkit/awt/vclxwindow.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

@@ -19,7 +19,6 @@
 
 #include <standard/vclxaccessiblescrollbar.hxx>
 
-#include <toolkit/awt/vclxwindows.hxx>
 #include <helper/accresmgr.hxx>
 #include <strings.hrc>
 

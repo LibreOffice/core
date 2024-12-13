@@ -20,7 +20,6 @@
 #include <standard/vclxaccessibledropdowncombobox.hxx>
 
 #include <comphelper/sequence.hxx>
-#include <toolkit/awt/vclxwindow.hxx>
 #include <vcl/vclevent.hxx>
 
 
