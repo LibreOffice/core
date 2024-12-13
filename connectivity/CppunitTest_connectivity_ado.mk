@@ -28,6 +28,7 @@ $(eval $(call gb_CppunitTest_use_sdk_api,connectivity_ado))
 ifeq ($(COM),GCC)
 $(eval $(call gb_CppunitTest_add_cxxflags,connectivity_ado,\
 	-fpermissive \
+	-DADO_SUPPRESS_MESSAGE \
 ))
 endif
 

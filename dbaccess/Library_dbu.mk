@@ -58,6 +58,12 @@ $(eval $(call gb_Library_use_libraries,dbu,\
     vcl \
 ))
 
+ifeq ($(COM),MSC)
+$(eval $(call gb_Library_add_cxxflags,dbu,\
+	-DADO_SUPPRESS_MESSAGE \
+))
+endif
+
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_use_system_win32_libs,dbu,\
     ole32 \
