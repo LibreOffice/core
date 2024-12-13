@@ -226,8 +226,11 @@ float QtInstanceWidget::get_approximate_digit_width() const
 
 int QtInstanceWidget::get_text_height() const
 {
-    assert(false && "Not implemented yet");
-    return 0;
+    SolarMutexGuard g;
+
+    int nHeight = 0;
+    GetQtInstance().RunInMainThread([&] { nHeight = m_pWidget->fontMetrics().height(); });
+    return nHeight;
 }
 
 Size QtInstanceWidget::get_pixel_size(const OUString&) const
