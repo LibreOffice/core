@@ -4397,7 +4397,7 @@ OString SdXImpressDocument::getPresentationInfo() const
                 aJsonWriter.put("empty", bIsDrawPageEmpty);
 
                 // Notes
-                SdPage* pNotesPage = mpDoc->GetSdPage((pPage->GetPageNum() - 1) >> 1, PageKind::Notes);
+                SdPage* pNotesPage = pPage ? mpDoc->GetSdPage((pPage->GetPageNum() - 1) >> 1, PageKind::Notes) : nullptr;
                 if (pNotesPage)
                 {
                     SdrObject* pNotes = pNotesPage->GetPresObj(PresObjKind::Notes);
