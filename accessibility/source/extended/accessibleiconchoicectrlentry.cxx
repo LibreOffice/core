@@ -22,13 +22,14 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/unohelp.hxx>
+#include <vcl/unohelp2.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <svtools/stringtransfer.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
@@ -429,8 +430,12 @@ namespace accessibility
             || ( 0 > nEndIndex ) || ( sText.getLength() <= nEndIndex ) )
             throw IndexOutOfBoundsException();
 
+        if (!m_pIconCtrl)
+            return false;
+
         sal_Int32 nLen = nEndIndex - nStartIndex + 1;
-        ::svt::OStringTransfer::CopyString( sText.copy( nStartIndex, nLen ), m_pIconCtrl );
+        css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipBoard = m_pIconCtrl->GetClipboard();
+        vcl::unohelper::TextDataObject::CopyStringTo(sText.copy(nStartIndex, nLen), xClipBoard);
 
         return true;
     }

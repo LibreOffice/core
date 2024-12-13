@@ -20,18 +20,19 @@
 #include <extended/accessiblelistboxentry.hxx>
 #include <extended/accessiblelistbox.hxx>
 #include <vcl/toolkit/treelistbox.hxx>
-#include <svtools/stringtransfer.hxx>
 #include <vcl/toolkit/svlbitm.hxx>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/unohelp.hxx>
+#include <vcl/unohelp2.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
@@ -666,8 +667,12 @@ namespace accessibility
             || ( 0 > nEndIndex ) || ( sText.getLength() <= nEndIndex ) )
             throw IndexOutOfBoundsException();
 
+        if (!m_pTreeListBox)
+            return false;
+
         sal_Int32 nLen = nEndIndex - nStartIndex + 1;
-        ::svt::OStringTransfer::CopyString( sText.copy( nStartIndex, nLen ), m_pTreeListBox );
+        css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipBoard = m_pTreeListBox->GetClipboard();
+        vcl::unohelper::TextDataObject::CopyStringTo(sText.copy(nStartIndex, nLen), xClipBoard);
 
         return true;
     }
