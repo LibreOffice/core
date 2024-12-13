@@ -75,9 +75,9 @@ public:
         @param _xFocusWindow    The window that gets all the focus events.
         @param eObjType         Object type */
     AccessibleBrowseBoxBase(
-        css::uno::Reference< css::accessibility::XAccessible > xParent,
+        const css::uno::Reference<css::accessibility::XAccessible>& xParent,
         ::vcl::IAccessibleTableProvider& rBrowseBox,
-        css::uno::Reference< css::awt::XWindow >  _xFocusWindow,
+        const css::uno::Reference<css::awt::XWindow>& xFocusWindow,
         AccessibleBrowseBoxObjType eObjType );
 
     /** Constructor sets specified name and description.

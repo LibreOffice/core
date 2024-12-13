@@ -50,21 +50,13 @@ using namespace com::sun::star::accessibility::AccessibleStateType;
 // Ctor/Dtor/disposing
 
 AccessibleBrowseBoxBase::AccessibleBrowseBoxBase(
-        css::uno::Reference< css::accessibility::XAccessible > xParent,
-        ::vcl::IAccessibleTableProvider&                      rBrowseBox,
-        css::uno::Reference< css::awt::XWindow > _xFocusWindow,
-        AccessibleBrowseBoxObjType      eObjType ) :
-    AccessibleBrowseBoxImplHelper( m_aMutex ),
-    mxParent(std::move( xParent )),
-    mpBrowseBox( &rBrowseBox ),
-    m_xFocusWindow(std::move(_xFocusWindow)),
-    maName( rBrowseBox.GetAccessibleObjectName( eObjType ) ),
-    maDescription( rBrowseBox.GetAccessibleObjectDescription( eObjType ) ),
-    meObjType( eObjType ),
-    m_aClientId(0)
+    const css::uno::Reference<css::accessibility::XAccessible>& xParent,
+    ::vcl::IAccessibleTableProvider& rBrowseBox,
+    const css::uno::Reference<css::awt::XWindow>& xFocusWindow, AccessibleBrowseBoxObjType eObjType)
+    : AccessibleBrowseBoxBase(xParent, rBrowseBox, xFocusWindow, eObjType,
+                              rBrowseBox.GetAccessibleObjectName(eObjType),
+                              rBrowseBox.GetAccessibleObjectDescription(eObjType))
 {
-    if ( m_xFocusWindow.is() )
-        m_xFocusWindow->addFocusListener( this );
 }
 
 AccessibleBrowseBoxBase::AccessibleBrowseBoxBase(
