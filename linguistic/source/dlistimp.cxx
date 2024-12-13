@@ -324,6 +324,11 @@ void DicList::SearchForDictionaries(
             uno::Reference< XDictionary > xDic =
                         new DictionaryNeo( aDicTitle.isEmpty() ? aDicName : aDicTitle, nLang, eType, aURL, bIsWriteablePath );
 
+            // when using libreofficekit we don't have "options" dialog to make user-dictionaries active
+            // so when we add user-dictionary, we make them active as well
+            if (comphelper::LibreOfficeKit::isActive())
+                xDic->setActive(true);
+
             addDictionary( xDic );
             nCount++;
         }
@@ -570,6 +575,16 @@ void SAL_CALL
 
     if (!bDisposing && rxListener.is())
         aEvtListeners.removeInterface( rxListener );
+}
+
+void SAL_CALL DicList::initialize(const css::uno::Sequence<css::uno::Any>& /*rArguments*/)
+{
+    osl::MutexGuard aGuard(GetLinguMutex());
+
+    if (!bInCreation && !bDisposing)
+    {
+        CreateDicList();
+    }
 }
 
 void DicList::CreateDicList()
