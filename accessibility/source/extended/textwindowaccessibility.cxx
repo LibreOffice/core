@@ -704,7 +704,6 @@ void Paragraph::checkDisposed()
 Document::Document(::VCLXWindow * pVclXWindow, ::TextEngine & rEngine,
                    ::TextView & rView):
     VCLXAccessibleComponent(pVclXWindow->GetWindow()),
-    m_xAccessible(pVclXWindow),
     m_rEngine(rEngine),
     m_rView(rView),
     m_aEngineListener(*this),
@@ -727,6 +726,13 @@ Document::Document(::VCLXWindow * pVclXWindow, ::TextEngine & rEngine,
     m_nFocused = m_aParagraphs.size();
     m_aEngineListener.startListening(m_rEngine);
     m_aViewListener.startListening(*m_rView.GetWindow());
+}
+
+css::uno::Reference<css::accessibility::XAccessible> Document::getAccessible() const
+{
+    if (vcl::Window* pWindow = GetWindow())
+        return pWindow->GetAccessible();
+    return nullptr;
 }
 
 css::lang::Locale Document::retrieveLocale()

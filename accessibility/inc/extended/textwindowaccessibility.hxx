@@ -319,8 +319,7 @@ public:
     Document(::VCLXWindow * pVclXWindow, ::TextEngine & rEngine,
              ::TextView & rView);
 
-    const css::uno::Reference< css::accessibility::XAccessible >&
-    getAccessible() const { return m_xAccessible; }
+    css::uno::Reference<css::accessibility::XAccessible> getAccessible() const;
 
     css::lang::Locale retrieveLocale();
 
@@ -531,7 +530,6 @@ private:
     Paragraphs::iterator visibleEnd() { return getIter(m_nVisibleEnd); }
     Paragraphs::iterator focused() { return getIter(m_nFocused); }
 
-    css::uno::Reference< css::accessibility::XAccessible > m_xAccessible;
     ::TextEngine & m_rEngine;
     ::TextView & m_rView;
 
