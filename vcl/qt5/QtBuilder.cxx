@@ -20,6 +20,7 @@
 #include <vcl/qt/QtUtils.hxx>
 
 #include <QtGui/QStandardItemModel>
+#include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QDialog>
@@ -275,6 +276,7 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
     else if (sName == u"GtkRadioButton")
     {
         pObject = new QRadioButton(pParentWidget);
+        extractRadioButtonGroup(sID, rMap);
     }
     else if (sName == u"GtkScrolledWindow")
     {
@@ -473,9 +475,30 @@ void QtBuilder::setMnemonicWidget(const OUString& rLabelId, const OUString& rMne
     pLabel->setBuddy(static_cast<QWidget*>(pBuddy));
 }
 
-void QtBuilder::setRadioButtonGroup(const OUString&, const OUString&)
+void QtBuilder::setRadioButtonGroup(const OUString& rRadioButtonId, const OUString& rRadioGroupId)
 {
-    SAL_WARN("vcl.qt", "Not implemented yet");
+    // insert all buttons into a button group owned by button whose matches the group's
+    QRadioButton* pGroupOwner = get<QRadioButton>(rRadioGroupId);
+    assert(pGroupOwner && "No radio button with the given group name");
+
+    QButtonGroup* pButtonGroup = nullptr;
+    static const char* const pPropertyKey = "PROPERTY_BUTTONGROUP";
+    QVariant aVariant = pGroupOwner->property(pPropertyKey);
+    if (aVariant.canConvert<QButtonGroup*>())
+    {
+        pButtonGroup = aVariant.value<QButtonGroup*>();
+    }
+    else
+    {
+        pButtonGroup = new QButtonGroup(pGroupOwner);
+        pButtonGroup->addButton(pGroupOwner);
+    }
+
+    QRadioButton* pRadioButton = get<QRadioButton>(rRadioButtonId);
+    assert(pRadioButton && "No radio button with given ID");
+    pButtonGroup->addButton(pRadioButton);
+
+    pGroupOwner->setProperty(pPropertyKey, QVariant::fromValue(pButtonGroup));
 }
 
 void QtBuilder::setPriority(QObject*, int) { SAL_WARN("vcl.qt", "Ignoring priority"); }
