@@ -87,6 +87,9 @@ namespace dbaui
         m_xClose->connect_clicked(LINK(this, DirectSQLDialog, OnCloseClick));
         m_xSQLHistory->connect_changed(LINK(this, DirectSQLDialog, OnListEntrySelected));
 
+        m_xDirectSQL->set_active(true);
+        m_xShowOutput->set_active(true);
+
         for (size_t i = 0; i < memp.SQLHistory.size(); i++)
         {
             implAddToStatementHistory(memp.SQLHistory[i], true);
