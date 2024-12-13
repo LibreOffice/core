@@ -470,8 +470,9 @@ ScPostIt::~ScPostIt()
 
 std::unique_ptr<ScPostIt> ScPostIt::Clone( const ScAddress& rOwnPos, ScDocument& rDestDoc, const ScAddress& rDestPos, bool bCloneCaption ) const
 {
-    // tdf#117307: Don't clone comment, if it is in the same position
-    if ( (rOwnPos == rDestPos) && !mrDoc.IsClipboard() )
+    // tdf#117307: Don't clone comment, if it is in the same position in the same document
+    const bool bIsSameDoc = mrDoc.GetPool() == rDestDoc.GetPool();
+    if (bIsSameDoc && !mrDoc.IsClipboard() && rOwnPos == rDestPos)
         bCloneCaption = false;
     CreateCaptionFromInitData( rOwnPos );
     sal_uInt32 nPostItId = comphelper::LibreOfficeKit::isActive() ? 0 : mnPostItId;
