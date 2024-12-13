@@ -7433,8 +7433,8 @@ if test "$GXX" = "yes" -a -z "$COM_IS_CLANG"; then
     _gpp_version=`$CXX -dumpversion`
     _gpp_majmin=`echo $_gpp_version | $AWK -F. '{ print \$1*100+\$2 }'`
 
-    if test "$_gpp_majmin" -lt "700"; then
-        AC_MSG_ERROR([You need to use GNU C++ compiler version >= 7.0 to build LibreOffice, you have $_gpp_version.])
+    if test "$_gpp_majmin" -lt "1200"; then
+        AC_MSG_ERROR([You need to use GNU C++ compiler version >= 12.0 to build LibreOffice, you have $_gpp_version.])
     else
         AC_MSG_RESULT([ok (g++ $_gpp_version)])
     fi
