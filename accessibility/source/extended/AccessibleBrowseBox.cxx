@@ -20,9 +20,9 @@
 #include <extended/AccessibleBrowseBox.hxx>
 #include <extended/AccessibleBrowseBoxTable.hxx>
 #include <extended/AccessibleBrowseBoxHeaderBar.hxx>
+#include <com/sun/star/awt/XVclWindowPeer.hdl>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <utility>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/accessibletableprovider.hxx>
 #include <vcl/unohelp.hxx>
 #include <sal/types.h>
@@ -44,7 +44,9 @@ AccessibleBrowseBox::AccessibleBrowseBox(
     : AccessibleBrowseBoxBase( _rxParent, _rBrowseBox,nullptr, AccessibleBrowseBoxObjType::BrowseBox ),
       m_aCreator(_rxCreator)
 {
-    m_xFocusWindow = VCLUnoHelper::GetInterface(mpBrowseBox->GetWindowInstance());
+    css::uno::Reference<css::awt::XWindow> xWindow(
+        mpBrowseBox->GetWindowInstance()->GetComponentInterface(), css::uno::UNO_QUERY);
+    m_xFocusWindow = xWindow;
 }
 
 void AccessibleBrowseBox::setCreator( const css::uno::Reference< css::accessibility::XAccessible >& _rxCreator )

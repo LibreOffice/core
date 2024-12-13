@@ -33,7 +33,6 @@ $(eval $(call gb_Library_use_libraries,acc,\
     sot \
     svl \
     svt \
-    tk \
     tl \
     utl \
     vcl \
