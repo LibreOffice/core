@@ -67,11 +67,10 @@ namespace accessibility
 
     AccessibleBrowseBoxTableCell::AccessibleBrowseBoxTableCell(const Reference<XAccessible >& _rxParent,
                                 vcl::IAccessibleTableProvider& _rBrowseBox,
-                                const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
                                 sal_Int32 _nRowPos,
                                 sal_uInt16 _nColPos,
                                 sal_Int32 _nOffset )
-        :AccessibleBrowseBoxCell( _rxParent, _rBrowseBox, _xFocusWindow, _nRowPos, _nColPos )
+        :AccessibleBrowseBoxCell(_rxParent, _rBrowseBox, nullptr, _nRowPos, _nColPos)
     {
         m_nOffset = ( _nOffset == OFFSET_DEFAULT ) ? sal_Int32(vcl::BBINDEX_FIRSTCONTROL) : _nOffset;
         sal_Int32 nIndex = getIndex_Impl( _nRowPos, _nColPos, _rBrowseBox.GetColumnCount() );

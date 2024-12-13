@@ -106,7 +106,6 @@ Reference< XAccessible > BrowseBox::CreateAccessibleCell( sal_Int32 _nRow, sal_u
     return m_aFactoryAccess.getFactory().createAccessibleBrowseBoxTableCell(
         getAccessibleTable(),
         *this,
-        nullptr,
         _nRow,
         _nColumnPos,
         OFFSET_DEFAULT

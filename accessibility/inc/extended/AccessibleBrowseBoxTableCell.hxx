@@ -45,7 +45,6 @@ namespace accessibility
     public:
         AccessibleBrowseBoxTableCell( const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
                                     ::vcl::IAccessibleTableProvider& _rBrowseBox,
-                                    const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
                                     sal_Int32 _nRowId,
                                     sal_uInt16 _nColId,
                                     sal_Int32 _nOffset );

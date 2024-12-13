@@ -896,7 +896,7 @@ Reference< XAccessible > SvHeaderTabListBox::CreateAccessibleCell( sal_Int32 _nR
                 m_pAccessible->getTable(), *this, nullptr, _nRow, _nColumnPos, eState, false );
     else
         xChild = m_pImpl->m_aFactoryAccess.getFactory().createAccessibleBrowseBoxTableCell(
-                m_pAccessible->getTable(), *this, nullptr, _nRow, _nColumnPos, OFFSET_NONE );
+                m_pAccessible->getTable(), *this, _nRow, _nColumnPos, OFFSET_NONE );
 
     return xChild;
 }

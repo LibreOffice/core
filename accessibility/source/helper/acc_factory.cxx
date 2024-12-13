@@ -172,7 +172,6 @@ public:
         createAccessibleBrowseBoxTableCell(
             const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
             vcl::IAccessibleTableProvider& _rBrowseBox,
-            const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
             sal_Int32 _nRowId,
             sal_uInt16 _nColId,
             sal_Int32 _nOffset
@@ -413,9 +412,9 @@ Reference< XAccessible > AccessibleFactory::createAccessibleBrowseBoxHeaderBar(
 
 Reference< XAccessible > AccessibleFactory::createAccessibleBrowseBoxTableCell(
     const Reference< XAccessible >& _rxParent, vcl::IAccessibleTableProvider& _rBrowseBox,
-    const Reference< XWindow >& _xFocusWindow, sal_Int32 _nRowId, sal_uInt16 _nColId, sal_Int32 _nOffset ) const
+    sal_Int32 _nRowId, sal_uInt16 _nColId, sal_Int32 _nOffset) const
 {
-    return new AccessibleBrowseBoxTableCell( _rxParent, _rBrowseBox, _xFocusWindow,
+    return new AccessibleBrowseBoxTableCell( _rxParent, _rBrowseBox,
         _nRowId, _nColId, _nOffset );
 }
 
