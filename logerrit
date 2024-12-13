@@ -30,24 +30,6 @@ branch_or_default() {
     echo "${branch}"
 }
 
-submit() {
-    TYPE=${2:-''}
-    BRANCH=$(branch_or_default $1)
-
-    if [ "$BRANCH" = "master" ]; then
-        WEEKOLDDATE=$(date --date="7 days ago" +%s 2> /dev/null)
-        if [ "$WEEKOLDDATE" = "" ]; then
-            WEEKOLDDATE=$(date -v-7d +%s) # BSD equivalent
-        fi
-        PARENTDATE=$(git show -s --format=%ct HEAD~1)
-        if [[ $PARENTDATE -lt $WEEKOLDDATE ]]; then
-            echo "Your branch is older than a week, do './g pull -r' and retry"
-            exit 1
-        fi
-    fi
-    git push "$GERRITURL" "HEAD:refs/for/$BRANCH$TYPE"
-}
-
 logerrit() {
     echo "Host logerrit gerrit.libreoffice.org"
     if test -n "${2-}" && test -f "$HOME/.ssh/id_$2"; then
@@ -176,7 +158,21 @@ case "$1" in
         fi
     ;;
     submit)
-        submit "$2"
+        BRANCH=$(branch_or_default $2)
+        TYPE=${3:+"%$3"}
+
+        if [ "$BRANCH" = "master" ]; then
+            WEEKOLDDATE=$(date --date="7 days ago" +%s 2> /dev/null)
+            if [ "$WEEKOLDDATE" = "" ]; then
+                WEEKOLDDATE=$(date -v-7d +%s) # BSD equivalent
+            fi
+            PARENTDATE=$(git show -s --format=%ct HEAD~1)
+            if [[ $PARENTDATE -lt $WEEKOLDDATE ]]; then
+                echo "Your branch is older than a week, do './g pull -r' and retry"
+                exit 1
+            fi
+        fi
+        git push "$GERRITURL" "HEAD:refs/for/$BRANCH$TYPE"
     ;;
     nextchange)
         if test -n "$(git status -s -uno)"; then
