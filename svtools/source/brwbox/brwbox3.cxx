@@ -51,7 +51,6 @@ namespace svt
                 _nPos,
                 _rParent,
                 _rBrowseBox,
-                nullptr,
                 _eType
             );
             aFind = _raHeaderCells.emplace( _nPos, xAccessible ).first;

@@ -32,11 +32,10 @@ namespace accessibility
 AccessibleBrowseBoxHeaderCell::AccessibleBrowseBoxHeaderCell(sal_Int32 _nColumnRowId,
                                   const Reference< XAccessible >& rxParent,
                                   vcl::IAccessibleTableProvider& rBrowseBox,
-                                  const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
                                   AccessibleBrowseBoxObjType eObjType)
 : BrowseBoxAccessibleElement(rxParent,
                           rBrowseBox,
-                          _xFocusWindow,
+                          nullptr,
                           eObjType,
                           rBrowseBox.GetAccessibleObjectName( eObjType ,_nColumnRowId),
                           rBrowseBox.GetAccessibleObjectDescription( eObjType ,_nColumnRowId))

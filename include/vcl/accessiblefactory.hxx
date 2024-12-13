@@ -137,7 +137,6 @@ namespace vcl
                 sal_Int32 _nColumnRowId,
                 const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
                 vcl::IAccessibleTableProvider& _rBrowseBox,
-                const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
                 AccessibleBrowseBoxObjType  _eObjType
             ) const = 0;
 

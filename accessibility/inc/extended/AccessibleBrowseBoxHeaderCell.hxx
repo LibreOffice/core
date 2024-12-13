@@ -29,7 +29,6 @@ namespace accessibility
         AccessibleBrowseBoxHeaderCell(sal_Int32 _nColumnRowId,
                                           const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
                                           ::vcl::IAccessibleTableProvider&                  _rBrowseBox,
-                                          const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
                                           AccessibleBrowseBoxObjType  _eObjType);
         /** @return  The count of visible children. */
         virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;

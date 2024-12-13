@@ -182,7 +182,6 @@ public:
             sal_Int32 _nColumnRowId,
             const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
             vcl::IAccessibleTableProvider& _rBrowseBox,
-            const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
             AccessibleBrowseBoxObjType  _eObjType
         ) const override;
 
@@ -419,10 +418,10 @@ Reference< XAccessible > AccessibleFactory::createAccessibleBrowseBoxTableCell(
 
 Reference< XAccessible > AccessibleFactory::createAccessibleBrowseBoxHeaderCell(
     sal_Int32 _nColumnRowId, const Reference< XAccessible >& rxParent, vcl::IAccessibleTableProvider& _rBrowseBox,
-    const Reference< XWindow >& _xFocusWindow, AccessibleBrowseBoxObjType  _eObjType ) const
+    AccessibleBrowseBoxObjType  _eObjType) const
 {
     return new AccessibleBrowseBoxHeaderCell( _nColumnRowId, rxParent, _rBrowseBox,
-        _xFocusWindow, _eObjType );
+        _eObjType);
 }
 
 Reference< XAccessible > AccessibleFactory::createAccessibleCheckBoxCell(

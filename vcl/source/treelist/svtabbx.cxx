@@ -924,8 +924,7 @@ Reference< XAccessible > SvHeaderTabListBox::CreateAccessibleColumnHeader( sal_u
         // no -> create new header cell
         xChild = m_pImpl->m_aFactoryAccess.getFactory().createAccessibleBrowseBoxHeaderCell(
             _nColumn, m_pAccessible->getHeaderBar(),
-            *this, nullptr, AccessibleBrowseBoxObjType::ColumnHeaderCell
-        );
+            *this, AccessibleBrowseBoxObjType::ColumnHeaderCell);
 
         // insert into list
         m_aAccessibleChildren[ _nColumn ] = xChild;
