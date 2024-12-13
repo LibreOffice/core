@@ -8,27 +8,31 @@ get_SHA_for_change() {
     SHA=$(ssh "${GERRITHOST?}" gerrit query --all-approvals change:"$1" | grep ref | tail -1 | cut -d: -f2 | sed 's/^ *//')
 }
 
-get_tracked_branch() {
-    local BRANCH=$(git symbolic-ref HEAD|sed 's|refs/heads/||')
-    local REMOTE=$(git config branch.$BRANCH.remote)
-    git rev-parse --abbrev-ref --symbolic-full-name HEAD@{upstream}|sed "s|${REMOTE}/||"
+branch_or_default() {
+    local branch=$1
+    if test -z "${branch}"; then
+        # Try to use the tracked branch
+        branch=$(git symbolic-ref HEAD|sed 's|refs/heads/||')
+        local remote=$(git config branch.${branch}.remote)
+        branch=$(git rev-parse --abbrev-ref --symbolic-full-name HEAD@{upstream}|sed "s|${remote}/||")
+        if test -z "$branch"; then
+            branch=$(git symbolic-ref HEAD 2> /dev/null)
+            branch="${branch##refs/heads/}"
+            if test -z "${branch}"; then
+                echo >&2 "no branch specified, and could not guess the current branch"
+                exit 1
+            fi
+            echo >&2 "no branch specified, guessing current branch ${branch}"
+        else
+            echo >&2 "no branch specified, guessing tracked branch ${branch}"
+        fi
+    fi
+    echo "${branch}"
 }
 
 submit() {
-    BRANCH=$1
     TYPE=${2:-''}
-    if test -z "$BRANCH"; then
-        BRANCH=$(get_tracked_branch)
-        if test -z "$BRANCH"; then
-            BRANCH=$(git symbolic-ref HEAD 2> /dev/null)
-            BRANCH="${BRANCH##refs/heads/}"
-            if test -z "$BRANCH"; then
-                echo "no branch specified, and could not guess the current branch"
-                exit 1
-            fi
-        fi
-        echo "no branch specified, guessing current branch $BRANCH"
-    fi
+    BRANCH=$(branch_or_default $1)
 
     if [ "$BRANCH" = "master" ]; then
         WEEKOLDDATE=$(date --date="7 days ago" +%s 2> /dev/null)
@@ -187,19 +191,7 @@ case "$1" in
         BACKUPBRANCH=backup/$CHANGEID-$(date +%F-%H%M%S)
         git branch "$BACKUPBRANCH"
         echo "current state backed up as $BACKUPBRANCH"
-        BRANCH=$2
-        if test -z "$BRANCH"; then
-            BRANCH=$(get_tracked_branch)
-            if test -z "$BRANCH"; then
-                BRANCH=$(git symbolic-ref HEAD 2> /dev/null)
-                BRANCH="${BRANCH##refs/heads/}"
-                if test -z "$BRANCH"; then
-                    echo "no branch specified, and could not guess the current branch"
-                    exit 1
-                fi
-            fi
-            echo "no branch specified, guessing current branch $BRANCH"
-        fi
+        BRANCH=$(branch_or_default $2)
         git reset --hard "remotes/origin/$BRANCH"
     ;;
     checkout)
@@ -238,19 +230,7 @@ case "$1" in
         fi
         CHANGEID=$3
 
-        BRANCH=$2
-        if test -z "$BRANCH"; then
-            BRANCH=$(get_tracked_branch)
-            if test -z "$BRANCH"; then
-                BRANCH=$(git symbolic-ref HEAD 2> /dev/null)
-                BRANCH="${BRANCH##refs/heads/}"
-                if test -z "$BRANCH"; then
-                    echo "no branch specified, and could not guess the current branch"
-                    exit 1
-                fi
-            fi
-            echo "no branch specified, guessing current branch $BRANCH"
-        fi
+        BRANCH=$(branch_or_default $2)
         BRANCH="${BRANCH##feature/}"
         WORKDIR=$(mktemp -d)
         if test -z "$WORKDIR"; then
