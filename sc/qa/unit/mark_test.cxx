@@ -136,12 +136,8 @@ private:
 static void lcl_GetSortedRanges( const ScRangeList& rRangeList, ScRangeList& rRangeListOut )
 {
     rRangeListOut.RemoveAll();
-    std::vector<ScRange> aRanges;
-    size_t nSize = rRangeList.size();
-    aRanges.reserve( nSize );
-    aRanges.insert(aRanges.end(), rRangeList.begin(), rRangeList.end());
-    std::sort( aRanges.begin(), aRanges.end() );
-    rRangeListOut.insert(rRangeListOut.end(), aRanges.begin(), aRanges.end());
+    rRangeListOut.insert(rRangeListOut.end(), rRangeList.begin(), rRangeList.end());
+    std::sort(rRangeListOut.begin(), rRangeListOut.end());
 }
 
 void Test::testSimpleMark( const ScRange& rRange, const ScRange& rSelectionCover,
