@@ -6068,8 +6068,8 @@ void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, sal_uInt32 nL
     // relevant data of all contained FBSEs in out pointer array.
     // We also count all found FBSEs in member nBLIPCount.
 
-    const sal_uLong nSkipBLIPLen = 20;  // skip to get to the nBLIPLen
-    const sal_uLong nSkipBLIPPos =  4;  // thereafter skip up to nBLIPPos
+    const sal_uInt8 nSkipBLIPLen = 20;  // skip to get to the nBLIPLen
+    const sal_uInt8 nSkipBLIPPos =  4;  // thereafter skip up to nBLIPPos
 
     sal_uInt32 nBLIPLen = 0, nBLIPPos = 0;
 
