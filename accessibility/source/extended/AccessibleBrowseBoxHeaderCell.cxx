@@ -35,7 +35,6 @@ AccessibleBrowseBoxHeaderCell::AccessibleBrowseBoxHeaderCell(sal_Int32 _nColumnR
                                   AccessibleBrowseBoxObjType eObjType)
 : BrowseBoxAccessibleElement(rxParent,
                           rBrowseBox,
-                          nullptr,
                           eObjType,
                           rBrowseBox.GetAccessibleObjectName( eObjType ,_nColumnRowId),
                           rBrowseBox.GetAccessibleObjectDescription( eObjType ,_nColumnRowId))

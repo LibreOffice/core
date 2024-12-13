@@ -518,16 +518,15 @@ Reference< css::accessibility::XAccessibleContext > SAL_CALL BrowseBoxAccessible
 
 
 BrowseBoxAccessibleElement::BrowseBoxAccessibleElement( const css::uno::Reference< css::accessibility::XAccessible >& rxParent, ::vcl::IAccessibleTableProvider& rBrowseBox,
-        const css::uno::Reference< css::awt::XWindow >& _xFocusWindow, AccessibleBrowseBoxObjType  eObjType )
-    : BrowseBoxAccessibleElement_Base(rxParent, rBrowseBox, _xFocusWindow, eObjType)
+        AccessibleBrowseBoxObjType eObjType )
+    : BrowseBoxAccessibleElement_Base(rxParent, rBrowseBox, nullptr, eObjType)
 {
 }
 
 
 BrowseBoxAccessibleElement::BrowseBoxAccessibleElement( const css::uno::Reference< css::accessibility::XAccessible >& rxParent, ::vcl::IAccessibleTableProvider& rBrowseBox,
-        const css::uno::Reference< css::awt::XWindow >& _xFocusWindow, AccessibleBrowseBoxObjType  eObjType,
-        const OUString& rName, const OUString& rDescription )
-    : BrowseBoxAccessibleElement_Base(rxParent, rBrowseBox, _xFocusWindow, eObjType, rName, rDescription)
+        AccessibleBrowseBoxObjType  eObjType, const OUString& rName, const OUString& rDescription )
+    : BrowseBoxAccessibleElement_Base(rxParent, rBrowseBox, nullptr, eObjType, rName, rDescription)
 {
 }
 

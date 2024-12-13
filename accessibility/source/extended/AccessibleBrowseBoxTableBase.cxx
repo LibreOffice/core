@@ -41,7 +41,7 @@ AccessibleBrowseBoxTableBase::AccessibleBrowseBoxTableBase(
         const Reference< XAccessible >& rxParent,
         vcl::IAccessibleTableProvider& rBrowseBox,
         AccessibleBrowseBoxObjType eObjType ) :
-    AccessibleBrowseBoxTableImplHelper( rxParent, rBrowseBox, nullptr, eObjType )
+    AccessibleBrowseBoxTableImplHelper(rxParent, rBrowseBox, eObjType)
 {
 }
 

@@ -323,20 +323,17 @@ protected:
 
         @param rxParent         XAccessible interface of the parent object.
         @param rBrowseBox       The BrowseBox control.
-        @param _xFocusWindow    The window that gets all the focus events.
         @param eObjType         Object type
     */
     BrowseBoxAccessibleElement(
         const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
         ::vcl::IAccessibleTableProvider& rBrowseBox,
-        const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
         AccessibleBrowseBoxObjType eObjType );
 
     /** Constructor sets specified name and description.
 
         @param rxParent         XAccessible interface of the parent object.
         @param rBrowseBox       The BrowseBox control.
-        @param _xFocusWindow    The window that gets all the focus events.
         @param eObjType         Object type
         @param rName            The name of this object.
         @param rDescription     The description text of this object.
@@ -344,7 +341,6 @@ protected:
     BrowseBoxAccessibleElement(
         const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
         ::vcl::IAccessibleTableProvider& rBrowseBox,
-        const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
         AccessibleBrowseBoxObjType eObjType,
         const OUString& rName,
         const OUString& rDescription );
