@@ -19,8 +19,8 @@
 
 #pragma once
 
-#include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <svl/lstner.hxx>
+#include <vcl/accessibility/vclxaccessiblecomponent.hxx>
 #include <vcl/textdata.hxx>
 #include <vcl/texteng.hxx>
 #include <vcl/textview.hxx>

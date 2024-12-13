@@ -22,7 +22,7 @@
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <toolkit/awt/vclxaccessiblecomponent.hxx>
+#include <vcl/accessibility/vclxaccessiblecomponent.hxx>
 #include <vcl/vclptr.hxx>
 
 using css::accessibility::AccessibleRelationType;

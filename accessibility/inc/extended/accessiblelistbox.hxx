@@ -21,8 +21,8 @@
 
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <vcl/accessibility/vclxaccessiblecomponent.hxx>
 #include <vcl/vclevent.hxx>
-#include <toolkit/awt/vclxaccessiblecomponent.hxx>
 
 #include <unordered_map>
 

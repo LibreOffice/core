@@ -19,12 +19,12 @@
 
 #pragma once
 
-#include <toolkit/awt/vclxaccessiblecomponent.hxx>
 
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 
 #include <cppuhelper/implbase.hxx>
+#include <vcl/accessibility/vclxaccessiblecomponent.hxx>
 #include <vcl/toolkit/scrbar.hxx>
 
 

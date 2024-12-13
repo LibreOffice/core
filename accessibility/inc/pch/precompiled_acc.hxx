@@ -310,7 +310,6 @@
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/hint.hxx>
 #include <svl/svldllapi.h>
-#include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <toolkit/awt/vclxwindows.hxx>
 #include <toolkit/dllapi.h>

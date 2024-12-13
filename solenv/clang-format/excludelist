@@ -6055,7 +6055,6 @@ include/test/util/xreplaceable.hxx
 include/test/util/xsearchable.hxx
 include/test/xmldiff.hxx
 include/test/xmltesttools.hxx
-include/toolkit/awt/vclxaccessiblecomponent.hxx
 include/toolkit/awt/vclxdevice.hxx
 include/toolkit/awt/vclxfont.hxx
 include/toolkit/awt/vclxmenu.hxx
@@ -6226,6 +6225,7 @@ include/vcl/ITiledRenderable.hxx
 include/vcl/ImageTree.hxx
 include/vcl/Scanline.hxx
 include/vcl/abstdlg.hxx
+include/vcl/accessibility/vclxaccessiblecomponent.hxx
 include/vcl/accessiblefactory.hxx
 include/vcl/accessibletable.hxx
 include/vcl/accessibletableprovider.hxx
@@ -13536,7 +13536,6 @@ toolkit/source/awt/asynccallback.cxx
 toolkit/source/awt/scrollabledialog.cxx
 toolkit/source/awt/stylesettings.cxx
 toolkit/source/awt/stylesettings.hxx
-toolkit/source/awt/vclxaccessiblecomponent.cxx
 toolkit/source/awt/vclxbitmap.cxx
 toolkit/source/awt/vclxcontainer.cxx
 toolkit/source/awt/vclxdevice.cxx
@@ -14516,6 +14515,7 @@ vcl/source/accessibility/characterattributeshelper.cxx
 vcl/source/accessibility/accessiblemenubasecomponent.cxx
 vcl/source/accessibility/accessiblemenucomponent.cxx
 vcl/source/accessibility/accessiblemenuitemcomponent.cxx
+vcl/source/accessibility/vclxaccessiblecomponent.cxx
 vcl/source/accessibility/vclxaccessiblemenu.cxx
 vcl/source/accessibility/vclxaccessiblemenubar.cxx
 vcl/source/accessibility/vclxaccessiblemenuitem.cxx

@@ -17,10 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_TOOLKIT_AWT_VCLXACCESSIBLECOMPONENT_HXX
-#define INCLUDED_TOOLKIT_AWT_VCLXACCESSIBLECOMPONENT_HXX
+#pragma once
 
-#include <toolkit/dllapi.h>
+#include <vcl/dllapi.h>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/accessiblecomponenthelper.hxx>
@@ -41,7 +40,7 @@ class AccessibleRelationSetHelper;
 
 
 
-class TOOLKIT_DLLPUBLIC VCLXAccessibleComponent
+class VCL_DLLPUBLIC VCLXAccessibleComponent
         :public cppu::ImplInheritanceHelper<
              comphelper::OAccessibleExtendedComponentHelper, css::lang::XServiceInfo>
 {
@@ -119,8 +118,5 @@ protected:
     sal_Int64 getAccessibleStateSet() => override FillAccessibleStateSet( ... )
 
 ---------------------------------------------------------- */
-
-
-#endif // INCLUDED_TOOLKIT_AWT_VCLXACCESSIBLECOMPONENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

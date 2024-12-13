@@ -335,10 +335,6 @@ excludelist:
     - com/sun/star/datatransfer/dnd/XDropTargetListener.hpp
     include/vcl/weld.hxx:
     # base class has to be a complete type
-    - com/sun/star/accessibility/XAccessibleRelationSet.hpp
-    - com/sun/star/accessibility/XAccessible.hpp
-    include/toolkit/awt/vclxaccessiblecomponent.hxx:
-    # base class has to be a complete type
     - com/sun/star/lang/XServiceInfo.hpp
     include/toolkit/awt/vclxwindow.hxx:
     # base class has to be a complete type

@@ -19,9 +19,9 @@
 
 #pragma once
 
-#include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <vcl/accessibility/vclxaccessiblecomponent.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/vclptr.hxx>
 

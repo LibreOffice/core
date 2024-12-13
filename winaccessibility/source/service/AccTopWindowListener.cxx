@@ -20,9 +20,9 @@
 
 #include <sal/log.hxx>
 #include <vcl/window.hxx>
-#include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 
+#include <vcl/accessibility/vclxaccessiblecomponent.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/svapp.hxx>
 

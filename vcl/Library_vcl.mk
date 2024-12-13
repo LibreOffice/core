@@ -102,6 +102,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/accessibility/accessiblemenubasecomponent \
     vcl/source/accessibility/accessiblemenucomponent \
     vcl/source/accessibility/accessiblemenuitemcomponent \
+    vcl/source/accessibility/vclxaccessiblecomponent \
     vcl/source/accessibility/vclxaccessiblemenu \
     vcl/source/accessibility/vclxaccessiblemenubar \
     vcl/source/accessibility/vclxaccessiblemenuitem \

@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <toolkit/awt/vclxaccessiblecomponent.hxx>
+#include <vcl/accessibility/vclxaccessiblecomponent.hxx>
 
 class FloatingWindowAccessible final : public VCLXAccessibleComponent
 {

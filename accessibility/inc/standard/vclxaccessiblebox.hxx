@@ -23,8 +23,8 @@
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/accessibility/XAccessibleKeyBinding.hpp>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
-#include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <vcl/accessibility/vclxaccessiblecomponent.hxx>
 #include <vcl/toolkit/lstbox.hxx>
 
 class VCLXAccessibleList;

@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <toolkit/awt/vclxaccessiblecomponent.hxx>
+#include <vcl/accessibility/vclxaccessiblecomponent.hxx>
 #include <vcl/status.hxx>
 #include <vcl/vclptr.hxx>
 

@@ -19,8 +19,8 @@
 
 #pragma once
 
-#include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
+#include <vcl/accessibility/vclxaccessiblecomponent.hxx>
 
 class SwViewShell;
 class SwSidebarItem;

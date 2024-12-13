@@ -30,7 +30,7 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
-#include <toolkit/awt/vclxaccessiblecomponent.hxx>
+#include <vcl/accessibility/vclxaccessiblecomponent.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/window.hxx>

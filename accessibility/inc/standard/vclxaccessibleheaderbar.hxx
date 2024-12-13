@@ -18,8 +18,8 @@
  */
 #pragma once
 
+#include <vcl/accessibility/vclxaccessiblecomponent.hxx>
 #include <vcl/headbar.hxx>
-#include <toolkit/awt/vclxaccessiblecomponent.hxx>
 
 typedef std::vector<css::uno::WeakReference<css::accessibility::XAccessible>> ListItems;
 

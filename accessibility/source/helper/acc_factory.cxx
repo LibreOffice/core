@@ -38,7 +38,6 @@
 #include <standard/vclxaccessibleradiobutton.hxx>
 #include <standard/vclxaccessiblescrollbar.hxx>
 #include <standard/vclxaccessibletoolbox.hxx>
-#include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <standard/vclxaccessiblestatusbar.hxx>
 #include <standard/vclxaccessibletabcontrol.hxx>
 #include <standard/vclxaccessibletabpagewindow.hxx>
@@ -60,6 +59,7 @@
 #include <vcl/toolkit/fixed.hxx>
 #include <vcl/toolkit/fixedhyper.hxx>
 #include <extended/AccessibleGridControl.hxx>
+#include <vcl/accessibility/vclxaccessiblecomponent.hxx>
 #include <vcl/accessibletable.hxx>
 
 #include <floatingwindowaccessible.hxx>
