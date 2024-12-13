@@ -473,6 +473,11 @@ void QtBuilder::setMnemonicWidget(const OUString& rLabelId, const OUString& rMne
     pLabel->setBuddy(static_cast<QWidget*>(pBuddy));
 }
 
+void QtBuilder::setRadioButtonGroup(const OUString&, const OUString&)
+{
+    SAL_WARN("vcl.qt", "Not implemented yet");
+}
+
 void QtBuilder::setPriority(QObject*, int) { SAL_WARN("vcl.qt", "Ignoring priority"); }
 
 void QtBuilder::setContext(QObject*, std::vector<vcl::EnumContext::Context>&&)

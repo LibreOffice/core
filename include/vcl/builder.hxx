@@ -270,6 +270,7 @@ private:
                             bool bToolbarItem) override;
 
     void setMnemonicWidget(const OUString& rLabelId, const OUString& rMnemonicWidgetId) override;
+    void setRadioButtonGroup(const OUString& rRadioButtonId, const OUString& rRadioGroupId) override;
     void setPriority(vcl::Window* pWindow, int nPriority) override;
     void setContext(vcl::Window* pWindow,
                     std::vector<vcl::EnumContext::Context>&& aContext) override;

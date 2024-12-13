@@ -558,24 +558,6 @@ VclBuilder::VclBuilder(vcl::Window* pParent, std::u16string_view sUIDir, const O
         }
     }
 
-    //Set radiobutton groups when everything has been imported
-    for (auto const& elem : getRadioButtonGroupMaps())
-    {
-        RadioButton *pOne = get<RadioButton>(elem.m_sID);
-        RadioButton *pOther = get<RadioButton>(elem.m_sValue);
-        SAL_WARN_IF(!pOne || !pOther, "vcl", "missing member of radiobutton group");
-        if (pOne && pOther)
-        {
-            if (isLegacy())
-                pOne->group(*pOther);
-            else
-            {
-                pOther->group(*pOne);
-                std::stable_sort(pOther->m_xGroup->begin(), pOther->m_xGroup->end(), sortIntoBestTabTraversalOrder(this));
-            }
-        }
-    }
-
 #ifndef NDEBUG
     o3tl::sorted_vector<OUString> models;
 #endif
@@ -2807,6 +2789,23 @@ void VclBuilder::setMnemonicWidget(const OUString& rLabelId, const OUString& rMn
                                          << " member of Mnemonic Widget Mapping");
     if (pOne && pOther)
         pOne->set_mnemonic_widget(pOther);
+}
+
+void VclBuilder::setRadioButtonGroup(const OUString& rRadioButtonId, const OUString& rRadioGroupId)
+{
+    RadioButton *pOne = get<RadioButton>(rRadioButtonId);
+    RadioButton *pOther = get<RadioButton>(rRadioGroupId);
+    SAL_WARN_IF(!pOne || !pOther, "vcl", "missing member of radiobutton group");
+    if (pOne && pOther)
+    {
+        if (isLegacy())
+            pOne->group(*pOther);
+        else
+        {
+            pOther->group(*pOne);
+            std::stable_sort(pOther->m_xGroup->begin(), pOther->m_xGroup->end(), sortIntoBestTabTraversalOrder(this));
+        }
+    }
 }
 
 void VclBuilder::setPriority(vcl::Window* pWindow, int nPriority)

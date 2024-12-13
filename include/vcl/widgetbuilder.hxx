@@ -82,6 +82,10 @@ protected:
         {
             setMnemonicWidget(rMnemonic.m_sID, rMnemonic.m_sValue);
         }
+
+        // Set radiobutton groups when everything has been imported
+        for (const RadioButtonGroupMap& rGroup : getRadioButtonGroupMaps())
+            setRadioButtonGroup(rGroup.m_sID, rGroup.m_sValue);
     }
 
     // either pParent or pAtkProps must be set, pParent for a child of a widget, pAtkProps for
@@ -546,6 +550,8 @@ protected:
         = 0;
 
     virtual void setMnemonicWidget(const OUString& rLabelId, const OUString& rMnemonicWidgetId) = 0;
+    virtual void setRadioButtonGroup(const OUString& rRadioButtonId, const OUString& rRadioGroupId)
+        = 0;
     virtual void setPriority(Widget* pWidget, int nPriority) = 0;
     virtual void setContext(Widget* pWidget, std::vector<vcl::EnumContext::Context>&& aContext) = 0;
 

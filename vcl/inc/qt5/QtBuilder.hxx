@@ -70,6 +70,8 @@ public:
 
     virtual void setMnemonicWidget(const OUString& rLabelId,
                                    const OUString& rMnemonicWidgetId) override;
+    virtual void setRadioButtonGroup(const OUString& rRadioButtonId,
+                                     const OUString& rRadioGroupId) override;
     virtual void setPriority(QObject* pObject, int nPriority) override;
     virtual void setContext(QObject* pObject,
                             std::vector<vcl::EnumContext::Context>&& aContext) override;
