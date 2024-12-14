@@ -41,6 +41,11 @@ private:
 
     std::vector<WinAndId> m_aChildren;
 
+    // vector of pairs, each containing:
+    // * a widget to remove from the widget hierarchy and delete (first item)
+    // * the widget to put in its place instead (second item)
+    std::vector<std::pair<QWidget*, QWidget*>> m_aWidgetReplacements;
+
 public:
     QtBuilder(QObject* pParent, std::u16string_view sUIRoot, const OUString& rUIFile);
     virtual ~QtBuilder();
@@ -87,6 +92,8 @@ public:
 
 private:
     static void deleteObject(QObject* pObject);
+    // remove pOldWidget from the widget hierarchy and set (child widget) pNewWidget in its place
+    static void replaceWidget(QWidget* pOldWidget, QWidget* pNewWidget);
     void setProperties(QObject* obj, stringmap& rProps);
     static void setLabelProperties(QLabel& rLabel, stringmap& rProps);
     void setSpinButtonProperties(QDoubleSpinBox& rSpinBox, stringmap& rProps);

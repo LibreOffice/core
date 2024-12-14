@@ -51,6 +51,10 @@ QtBuilder::QtBuilder(QObject* pParent, std::u16string_view sUIRoot, const OUStri
     : WidgetBuilder(sUIRoot, rUIFile, false)
 {
     processUIFile(pParent);
+
+    // tweak widget hierarchy (remove unnecessary parent widgets)
+    for (const std::pair<QWidget*, QWidget*>& rPair : m_aWidgetReplacements)
+        replaceWidget(rPair.first, rPair.second);
 }
 
 QtBuilder::~QtBuilder() {}
@@ -434,6 +438,27 @@ void QtBuilder::tweakInsertedChild(QObject* pParent, QObject* pCurrentChild, std
         }
     }
 
+    if (QScrollArea* pScrollAreaParent = qobject_cast<QScrollArea*>(pParent))
+    {
+        if (QAbstractScrollArea* pScrollArea = qobject_cast<QAbstractScrollArea*>(pCurrentChild))
+        {
+            // if the child provides scrolling capabilities itself, it doesn't need
+            // another scroll area parent -> mark parent scroll area for removal
+            m_aWidgetReplacements.emplace_back(pScrollAreaParent, pScrollArea);
+        }
+        else
+        {
+            // set as the scroll area's widget
+            QWidget* pCurrentWidget = nullptr;
+            if (pCurrentChild->isWidgetType())
+                pCurrentWidget = static_cast<QWidget*>(pCurrentChild);
+            else
+                pCurrentWidget = static_cast<QLayout*>(pCurrentChild)->parentWidget();
+            assert(pCurrentWidget);
+            pScrollAreaParent->setWidget(pCurrentWidget);
+        }
+    }
+
     if (QDialog* pDialog = qobject_cast<QDialog*>(pCurrentChild))
     {
         // no action needed for QMessageBox, where the default button box is used
@@ -623,6 +648,18 @@ void QtBuilder::deleteObject(QObject* pObject)
     if (pObject->isWidgetType())
         static_cast<QWidget*>(pObject)->hide();
     pObject->deleteLater();
+}
+
+void QtBuilder::replaceWidget(QWidget* pOldWidget, QWidget* pNewWidget)
+{
+    QWidget* pParent = pOldWidget->parentWidget();
+    assert(pParent);
+    QLayout* pParentLayout = pParent->layout();
+    assert(pParentLayout && "New parent widget has no layout - not supported (yet)");
+
+    // replace old with new widget and mark old widget for removal
+    std::unique_ptr<QLayoutItem> pOldItem(pParentLayout->replaceWidget(pOldWidget, pNewWidget));
+    deleteObject(pOldWidget);
 }
 
 void QtBuilder::setProperties(QObject* pObject, stringmap& rProps)
