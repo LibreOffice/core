@@ -1169,6 +1169,9 @@ void SortedResultSet::PropertyChangedImpl(std::unique_lock<std::mutex>& rGuard, 
 
 void SortedResultSet::CopyData( SortedResultSet *pSource )
 {
+    std::unique_lock aGuard(maMutex);
+    std::unique_lock aSrcGuard(pSource->maMutex);
+
     const SortedEntryList& rSrcS2O = pSource->maS2O;
 
     sal_IntPtr i, nCount;
