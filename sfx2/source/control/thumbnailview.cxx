@@ -708,14 +708,20 @@ bool ThumbnailView::KeyInput( const KeyEvent& rKEvt )
                         aRange = std::make_pair(nLastPos,nNextPos-1);
                 }
                 else
+                {
+                    assert(nLastPos > 0);
                     aRange = std::make_pair(nNextPos,nLastPos-1);
+                }
             }
             else if (nLastPos == nSelPos)
             {
                 if (nNextPos > nLastPos)
                     aRange = std::make_pair(nLastPos+1,nNextPos);
                 else
+                {
+                    assert(nLastPos > 0);
                     aRange = std::make_pair(nNextPos,nLastPos-1);
+                }
             }
             else
             {
