@@ -491,11 +491,23 @@ bool QtInstanceWidget::get_extents_relative_to(const Widget& rRelative, int& rX,
 
 bool QtInstanceWidget::get_direction() const
 {
-    assert(false && "Not implemented yet");
-    return false;
+    SolarMutexGuard g;
+
+    bool bRTL = false;
+    GetQtInstance().RunInMainThread(
+        [&] { bRTL = m_pWidget->layoutDirection() == Qt::LayoutDirection::RightToLeft; });
+    return bRTL;
 }
 
-void QtInstanceWidget::set_direction(bool) { assert(false && "Not implemented yet"); }
+void QtInstanceWidget::set_direction(bool bRTL)
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        m_pWidget->setLayoutDirection(bRTL ? Qt::LayoutDirection::RightToLeft
+                                           : Qt::LayoutDirection::LeftToRight);
+    });
+}
 
 void QtInstanceWidget::freeze(){};
 

@@ -137,7 +137,7 @@ public:
 
     virtual bool get_direction() const override;
 
-    virtual void set_direction(bool) override;
+    virtual void set_direction(bool bRTL) override;
 
     virtual void freeze() override;
 
