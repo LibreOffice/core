@@ -24,15 +24,19 @@
 #include <vector>
 #include <memory>
 
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
+#include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XLocator.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+
+#include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/namespacemap.hxx>
 
-#include "Transformer.hxx"
 #include "TransformerActions.hxx"
 #include "TransformerTokenMap.hxx"
 
@@ -49,7 +53,9 @@ class XMLMutableAttributeList;
 
 const sal_uInt16 INVALID_ACTIONS = 0xffff;
 
-class XMLTransformerBase : public XMLTransformer
+class XMLTransformerBase : public cppu::WeakImplHelper<css::xml::sax::XExtendedDocumentHandler,
+                                                       css::lang::XServiceInfo,
+                                                       css::lang::XInitialization>
 {
     friend class XMLTransformerContext;
 

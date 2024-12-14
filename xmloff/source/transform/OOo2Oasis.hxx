@@ -26,10 +26,10 @@
 
 class XMLTransformerOOoEventMap_Impl;
 
-class OOo2OasisTransformer :
-        public XMLTransformerBase,
-        public css::document::XImporter,
-        public css::document::XFilter
+using OOo2OasisTransformer_BASE = cppu::ImplInheritanceHelper<XMLTransformerBase,
+                                                              css::document::XImporter,
+                                                              css::document::XFilter>;
+class OOo2OasisTransformer : public OOo2OasisTransformer_BASE
 {
     OUString const m_aImplName;
     OUString const m_aSubServiceName;
@@ -50,21 +50,6 @@ public:
                           OUString aSubServiceName ) noexcept;
     virtual ~OOo2OasisTransformer() noexcept override;
 
-    // XInterface
-
-    // (XInterface methods need to be implemented to disambiguate
-    // between those inherited through XMLTransformerBase and
-    // the new interfaces).
-
-    virtual css::uno::Any SAL_CALL queryInterface(
-        const css::uno::Type& aType ) override;
-
-    virtual void SAL_CALL acquire(  ) noexcept override
-        { XMLTransformerBase::acquire(); };
-
-    virtual void SAL_CALL release(  ) noexcept override
-        { XMLTransformerBase::release(); };
-
     // XInitialization
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
@@ -73,9 +58,6 @@ public:
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
-
-    // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
     // XImporter
     virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;

@@ -1554,7 +1554,7 @@ OUString OOo2OasisTransformer::GetEventName( const OUString& rName, bool )
 OOo2OasisTransformer::OOo2OasisTransformer( OUString aImplName,
                                             OUString aSubServiceName )
         noexcept :
-    XMLTransformerBase( aActionTable, aTokenMap ),
+    OOo2OasisTransformer_BASE( aActionTable, aTokenMap ),
     m_aImplName(std::move(aImplName)),
     m_aSubServiceName(std::move(aSubServiceName)),
     m_pEventMap( nullptr )
@@ -1613,27 +1613,6 @@ OOo2OasisTransformer::~OOo2OasisTransformer() noexcept
     for(auto & rp : m_aActions)
         rp.reset();
     XMLEventOOoTransformerContext::FlushEventMap( m_pEventMap );
-}
-
-Any OOo2OasisTransformer::queryInterface( const Type& rType )
-{
-    Any aRet;
-    if ( rType == cppu::UnoType<XImporter>::get())
-    {
-        Reference<XImporter> xThis( this );
-        aRet <<= xThis;
-    }
-    else if ( rType == cppu::UnoType<XFilter>::get())
-    {
-        Reference<XFilter> xThis( this );
-        aRet <<= xThis;
-    }
-    else
-    {
-        aRet = XMLTransformerBase::queryInterface(rType);
-    }
-
-    return aRet;
 }
 
 // XImporter
@@ -1744,16 +1723,6 @@ sal_Bool SAL_CALL OOo2OasisTransformer::supportsService( const OUString& Service
 Sequence< OUString > SAL_CALL OOo2OasisTransformer::getSupportedServiceNames(  )
 {
     return { };
-}
-
-// XTypeProvider
-Sequence< css::uno::Type > SAL_CALL OOo2OasisTransformer::getTypes()
-{
-    return cppu::OTypeCollection(
-            cppu::UnoType<XImporter>::get(),
-            cppu::UnoType<XFilter>::get(),
-            XMLTransformerBase::getTypes()
-        ).getTypes();
 }
 
 // Service registration
