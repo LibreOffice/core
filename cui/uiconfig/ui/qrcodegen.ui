@@ -125,54 +125,30 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="label_margin">
+                      <object class="GtkScrolledWindow">
                         <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes" context="qrcodegen|label_margin" comments="Set Margin around QR">Margin:</property>
-                        <property name="use-underline">True</property>
-                        <property name="mnemonic-widget">edit_margin</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label_type">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes" context="qrcodegen|label_type" comments="Select type">Type:</property>
-                        <property name="use-underline">True</property>
-                        <property name="mnemonic-widget">choose_type</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">3</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkComboBoxText" id="choose_type">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
+                        <property name="can-focus">True</property>
                         <property name="hexpand">True</property>
-                        <property name="active">0</property>
-                        <items>
-                          <item translatable="yes" context="qrcodegen|QrCode">QR Code</item>
-                          <item translatable="yes" context="qrcodegen|BarCode">Barcode</item>
-                        </items>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="choose_type-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="type">The type of code to generate.</property>
+                        <property name="vexpand">True</property>
+                        <property name="hscrollbar-policy">always</property>
+                        <property name="shadow-type">in</property>
+                        <child>
+                          <object class="GtkTextView" id="edit_text">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="edit_text-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="qr text">The text from which to generate the code.</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
-                        <property name="top-attach">3</property>
+                        <property name="top-attach">0</property>
                       </packing>
                     </child>
                     <child>
@@ -205,26 +181,6 @@
                       <packing>
                         <property name="left-attach">0</property>
                         <property name="top-attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkSpinButton" id="edit_margin">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="activates-default">True</property>
-                        <property name="truncate-multiline">True</property>
-                        <property name="adjustment">margin_value</property>
-                        <property name="snap-to-ticks">True</property>
-                        <property name="numeric">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="edit_margin-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="edit margin">The margin surrounding the code.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">2</property>
                       </packing>
                     </child>
                     <child>
@@ -332,30 +288,74 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkScrolledWindow">
+                      <object class="GtkLabel" id="label_margin">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes" context="qrcodegen|label_margin" comments="Set Margin around QR">Margin:</property>
+                        <property name="use-underline">True</property>
+                        <property name="mnemonic-widget">edit_margin</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSpinButton" id="edit_margin">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
-                        <property name="hscrollbar-policy">always</property>
-                        <property name="shadow-type">in</property>
-                        <child>
-                          <object class="GtkTextView" id="edit_text">
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="hexpand">True</property>
-                            <property name="vexpand">True</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="edit_text-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="qr text">The text from which to generate the code.</property>
-                              </object>
-                            </child>
+                        <property name="activates-default">True</property>
+                        <property name="truncate-multiline">True</property>
+                        <property name="adjustment">margin_value</property>
+                        <property name="snap-to-ticks">True</property>
+                        <property name="numeric">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="edit_margin-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="edit margin">The margin surrounding the code.</property>
                           </object>
                         </child>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
-                        <property name="top-attach">0</property>
+                        <property name="top-attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label_type">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes" context="qrcodegen|label_type" comments="Select type">Type:</property>
+                        <property name="use-underline">True</property>
+                        <property name="mnemonic-widget">choose_type</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBoxText" id="choose_type">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="hexpand">True</property>
+                        <property name="active">0</property>
+                        <items>
+                          <item translatable="yes" context="qrcodegen|QrCode">QR Code</item>
+                          <item translatable="yes" context="qrcodegen|BarCode">Barcode</item>
+                        </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="choose_type-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="type">The type of code to generate.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">3</property>
                       </packing>
                     </child>
                   </object>
