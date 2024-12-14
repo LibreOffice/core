@@ -322,13 +322,16 @@ void TemplateDlgLocalView::updateSelection()
         ThumbnailView::SelectItem(ListView::get_nId(nIndex));
     }
 
-    sal_uInt16 nCursorId = get_cursor_nId();
+    int nCursorIndex = get_cursor_index();
+    if (nCursorIndex == -1)
+        return;
+
+    sal_uInt16 nCursorId = get_nId(nCursorIndex);
     size_t nPos = GetItemPos(nCursorId);
     ThumbnailViewItem* pItem = ImplGetItem(nPos);
     const TemplateViewItem* pViewItem = dynamic_cast<const TemplateViewItem*>(pItem);
     if (pViewItem)
         maSelectedItem = dynamic_cast<TemplateViewItem*>(pItem);
-    return;
 }
 
 IMPL_LINK_NOARG(TemplateDlgLocalView, RowActivatedHdl, weld::TreeView&, bool)
