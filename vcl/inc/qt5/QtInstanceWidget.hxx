@@ -151,7 +151,7 @@ public:
 
     virtual void help_hierarchy_foreach(const std::function<bool(const OUString&)>&) override;
 
-    virtual OUString strip_mnemonic(const OUString&) const override;
+    virtual OUString strip_mnemonic(const OUString& rLabel) const override;
 
     virtual OUString escape_ui_str(const OUString& rLabel) const override;
 

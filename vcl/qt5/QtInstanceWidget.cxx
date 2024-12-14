@@ -519,10 +519,9 @@ void QtInstanceWidget::help_hierarchy_foreach(const std::function<bool(const OUS
     assert(false && "Not implemented yet");
 }
 
-OUString QtInstanceWidget::strip_mnemonic(const OUString&) const
+OUString QtInstanceWidget::strip_mnemonic(const OUString& rLabel) const
 {
-    assert(false && "Not implemented yet");
-    return OUString();
+    return rLabel.replaceFirst("&", "");
 }
 
 OUString QtInstanceWidget::escape_ui_str(const OUString& rLabel) const
