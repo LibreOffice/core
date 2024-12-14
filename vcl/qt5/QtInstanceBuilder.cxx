@@ -27,6 +27,7 @@
 #include <QtInstanceNotebook.hxx>
 #include <QtInstanceProgressBar.hxx>
 #include <QtInstanceRadioButton.hxx>
+#include <QtInstanceScrolledWindow.hxx>
 #include <QtInstanceSpinButton.hxx>
 #include <QtInstanceTextView.hxx>
 #include <QtInstanceTreeView.hxx>
@@ -166,10 +167,13 @@ std::unique_ptr<weld::Frame> QtInstanceBuilder::weld_frame(const OUString& rId)
     return xRet;
 }
 
-std::unique_ptr<weld::ScrolledWindow> QtInstanceBuilder::weld_scrolled_window(const OUString&, bool)
+std::unique_ptr<weld::ScrolledWindow> QtInstanceBuilder::weld_scrolled_window(const OUString& rId,
+                                                                              bool)
 {
-    assert(false && "Not implemented yet");
-    return nullptr;
+    QScrollArea* pScrollArea = m_xBuilder->get<QScrollArea>(rId);
+    std::unique_ptr<weld::ScrolledWindow> xRet(
+        pScrollArea ? std::make_unique<QtInstanceScrolledWindow>(pScrollArea) : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::Notebook> QtInstanceBuilder::weld_notebook(const OUString& rId)
