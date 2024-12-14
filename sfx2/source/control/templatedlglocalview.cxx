@@ -293,7 +293,7 @@ void TemplateDlgLocalView::syncCursor()
         std::vector<int> aSelRows = ListView::get_selected_rows();
         if (aSelRows.empty())
             return;
-        sal_uInt16 nCursorId = ListView::get_cursor_nId();
+        sal_uInt16 nCursorId = get_cursor_nId();
         ThumbnailView::SelectItem(nCursorId);
         MakeItemVisible(nCursorId);
 
@@ -322,7 +322,7 @@ void TemplateDlgLocalView::updateSelection()
         ThumbnailView::SelectItem(ListView::get_nId(nIndex));
     }
 
-    sal_uInt16 nCursorId = ListView::get_cursor_nId();
+    sal_uInt16 nCursorId = get_cursor_nId();
     size_t nPos = GetItemPos(nCursorId);
     ThumbnailViewItem* pItem = ImplGetItem(nPos);
     const TemplateViewItem* pViewItem = dynamic_cast<const TemplateViewItem*>(pItem);
