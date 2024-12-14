@@ -1108,6 +1108,8 @@ class SwCreateAuthEntryDlg_Impl : public weld::GenericDialogController
     DECL_LINK(PageNumHdl, weld::Toggleable&, void);
     DECL_LINK(TargetTypeHdl, weld::ComboBox&, void);
 
+    void SetFields(const OUString pFields[], bool bNewEntry, bool bSetIdentifier);
+
 public:
     SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
                               const OUString pFields[],
@@ -1630,10 +1632,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
                 m_xTypeListBox->append_text(
                     SwAuthorityFieldType::GetAuthTypeName(static_cast<ToxAuthorityType>(j)));
             }
-            if(!pFields[aCurInfo.nToxField].isEmpty())
-            {
-                m_xTypeListBox->set_active(pFields[aCurInfo.nToxField].toInt32());
-            }
+
             m_xTypeListBox->set_grid_left_attach(1);
             m_xTypeListBox->set_grid_top_attach(bLeft ? nLeftRow : nRightRow);
             m_xTypeListBox->set_hexpand(true);
@@ -1662,7 +1661,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
                 for (const OUString& a : aIds)
                     m_xIdentifierBox->append_text(a);
             }
-            m_xIdentifierBox->set_entry_text(pFields[aCurInfo.nToxField]);
+
             m_xIdentifierBox->set_grid_left_attach(1);
             m_xIdentifierBox->set_grid_top_attach(bLeft ? nLeftRow : nRightRow);
             m_xIdentifierBox->set_hexpand(true);
@@ -1678,15 +1677,6 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
             else
                 m_aOrigContainers.back()->move(m_xTargetTypeListBox.get(), m_xRight.get());
 
-            if(!pFields[aCurInfo.nToxField].isEmpty())
-            {
-                m_xTargetTypeListBox->set_active(pFields[aCurInfo.nToxField].toInt32());
-            }
-            else if(m_bNewEntryMode)
-            {
-                // For new documents, set value to "BibliographyTableRow"
-                m_xTargetTypeListBox->set_active(SwAuthorityField::TargetType::BibliographyTableRow);
-            }
             m_xTargetTypeListBox->set_grid_left_attach(1);
             m_xTargetTypeListBox->set_grid_top_attach(bLeft ? nLeftRow : nRightRow);
             m_xTargetTypeListBox->set_hexpand(true);
@@ -1699,14 +1689,6 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
         {
             m_pBoxes[nIndex] = m_aBuilders.back()->weld_box(u"vbox"_ustr);
             m_pEdits[nIndex] = m_aBuilders.back()->weld_entry(u"entry"_ustr);
-
-            if (AUTH_FIELD_TARGET_URL == aCurInfo.nToxField)
-            {
-                m_pTargetURLField = m_pEdits[nIndex].get();
-                assert(m_xTargetTypeListBox);
-                m_pTargetURLField->set_sensitive(
-                    m_xTargetTypeListBox->get_active() == SwAuthorityField::TargetType::UseTargetURL);
-            }
 
             if (bLeft)
                 m_aOrigContainers.back()->move(m_pBoxes[nIndex].get(), m_xLeft.get());
@@ -1726,29 +1708,6 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
                 m_xLocalPageCB->set_buildable_name(m_xLocalPageCB->get_buildable_name()
                                                    + "-local-visible");
                 m_xLocalPageSB = m_aBuilders.back()->weld_spin_button(u"pagesb"_ustr);
-            }
-
-            // Now that both pEdits[nIndex] and m_xPageSB is initialized, set their values.
-            OUString aText = pFields[aCurInfo.nToxField];
-            if (aCurInfo.nToxField == AUTH_FIELD_LOCAL_URL)
-            {
-                OUString aUrl;
-                int nPageNumber;
-                if (SplitUrlAndPage(aText, aUrl, nPageNumber))
-                {
-                    m_pEdits[nIndex]->set_text(aUrl);
-                    m_xLocalPageCB->set_active(true);
-                    m_xLocalPageSB->set_sensitive(true);
-                    m_xLocalPageSB->set_value(nPageNumber);
-                }
-                else
-                {
-                    m_pEdits[nIndex]->set_text(aText);
-                }
-            }
-            else
-            {
-                m_pEdits[nIndex]->set_text(aText);
             }
             m_pEdits[nIndex]->show();
             m_pEdits[nIndex]->set_help_id(aCurInfo.pHelpId);
@@ -1778,11 +1737,70 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
             ++nRightRow;
         bLeft = !bLeft;
     }
+    SetFields(pFields, bNewEntry, !bNewEntry);
     assert(m_xTypeListBox && "this will exist after the loop");
     EnableHdl(*m_xTypeListBox);
 }
 
-OUString  SwCreateAuthEntryDlg_Impl::GetEntryText(ToxAuthorityField eField) const
+void SwCreateAuthEntryDlg_Impl::SetFields(const OUString pFields[], bool bNewEntry, bool bSetIdentifier) {
+    for (int nIndex = 0; nIndex < AUTH_FIELD_END; ++nIndex)
+    {
+        switch (const TextInfo aCurInfo = aTextInfoArr[nIndex]; aCurInfo.nToxField)
+        {
+        case AUTH_FIELD_IDENTIFIER:
+            if (!bNewEntry && bSetIdentifier)
+            {
+                assert(m_xIdentifierBox);
+                m_xIdentifierBox->set_entry_text(pFields[aCurInfo.nToxField]);
+            }
+            break;
+        case AUTH_FIELD_AUTHORITY_TYPE:
+            if (!pFields[aCurInfo.nToxField].isEmpty())
+            {
+                m_xTypeListBox->set_active(pFields[aCurInfo.nToxField].toInt32());
+            }
+            else
+            {
+                m_xTypeListBox->clear();
+            }
+            break;
+        case AUTH_FIELD_TARGET_TYPE:
+            if (!pFields[aCurInfo.nToxField].isEmpty())
+            {
+                m_xTargetTypeListBox->set_active(pFields[aCurInfo.nToxField].toInt32());
+            }
+            else
+            {
+                // For new entries, set value to "BibliographyTableRow", for legacy ones set it to "UseDisplayURL"
+                m_xTargetTypeListBox->set_active(bNewEntry ? SwAuthorityField::TargetType::BibliographyTableRow : SwAuthorityField::TargetType::UseDisplayURL);
+            }
+            break;
+        default:
+            if (AUTH_FIELD_TARGET_URL == aCurInfo.nToxField)
+            {
+                m_pTargetURLField = m_pEdits[nIndex].get();
+                assert(m_xTargetTypeListBox);
+                m_pTargetURLField->set_sensitive(
+                    m_xTargetTypeListBox->get_active() == SwAuthorityField::TargetType::UseTargetURL);
+            }
+
+            OUString aText = pFields[aCurInfo.nToxField], aUrl;
+            if (int nPageNumber; AUTH_FIELD_LOCAL_URL == aCurInfo.nToxField && SplitUrlAndPage(aText, aUrl, nPageNumber))
+            {
+                m_pEdits[nIndex]->set_text(aUrl);
+                m_xLocalPageCB->set_active(true);
+                m_xLocalPageSB->set_sensitive(true);
+                m_xLocalPageSB->set_value(nPageNumber);
+            }
+            else
+            {
+                m_pEdits[nIndex]->set_text(aText);
+            }
+        }
+    }
+}
+
+OUString SwCreateAuthEntryDlg_Impl::GetEntryText(ToxAuthorityField eField) const
 {
     if( AUTH_FIELD_AUTHORITY_TYPE == eField )
     {
@@ -1833,18 +1851,10 @@ IMPL_LINK(SwCreateAuthEntryDlg_Impl, IdentifierHdl, weld::ComboBox&, rBox, void)
     if(!pEntry)
         return;
 
-    for(int i = 0; i < AUTH_FIELD_END; i++)
-    {
-        const TextInfo aCurInfo = aTextInfoArr[i];
-        if(AUTH_FIELD_IDENTIFIER == aCurInfo.nToxField)
-            continue;
-        if(AUTH_FIELD_AUTHORITY_TYPE == aCurInfo.nToxField)
-            m_xTypeListBox->set_active_text(
-                        pEntry->GetAuthorField(aCurInfo.nToxField));
-        else
-            m_pEdits[i]->set_text(
-                        pEntry->GetAuthorField(aCurInfo.nToxField));
-    }
+    OUString sFields[AUTH_FIELD_END];
+    for(int ii = 0; ii < AUTH_FIELD_END; ++ii)
+        sFields[ii] = pEntry->GetAuthorField(ToxAuthorityField(ii));
+    SetFields(sFields, false, false);
 }
 
 IMPL_LINK(SwCreateAuthEntryDlg_Impl, ShortNameHdl, weld::Entry&, rEdit, void)
