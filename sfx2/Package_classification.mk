@@ -12,6 +12,7 @@ $(eval $(call gb_Package_Package,sfx2_classification,$(SRCDIR)/sfx2))
 $(eval $(call gb_Package_add_files,sfx2_classification,$(LIBO_SHARE_FOLDER)/classification,\
 	classification/example.xml \
 	classification/example_ca-ES.xml \
+	classification/example_es-ES.xml \
 	classification/example_fr-FR.xml \
 	classification/example_hu-HU.xml \
 	classification/example_nl-NL.xml \
