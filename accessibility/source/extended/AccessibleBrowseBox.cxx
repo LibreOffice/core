@@ -41,12 +41,10 @@ using namespace ::com::sun::star::accessibility;
 AccessibleBrowseBox::AccessibleBrowseBox(
             const css::uno::Reference< css::accessibility::XAccessible >& _rxParent, const css::uno::Reference< css::accessibility::XAccessible >& _rxCreator,
             ::vcl::IAccessibleTableProvider& _rBrowseBox )
-    : AccessibleBrowseBoxBase( _rxParent, _rBrowseBox,nullptr, AccessibleBrowseBoxObjType::BrowseBox ),
-      m_aCreator(_rxCreator)
+    : AccessibleBrowseBoxBase(_rxParent, _rBrowseBox, nullptr, AccessibleBrowseBoxObjType::BrowseBox)
+    , m_aCreator(_rxCreator)
 {
-    css::uno::Reference<css::awt::XWindow> xWindow(
-        mpBrowseBox->GetWindowInstance()->GetComponentInterface(), css::uno::UNO_QUERY);
-    m_xFocusWindow = xWindow;
+    m_xFocusWindow.set(mpBrowseBox->GetWindowInstance()->GetComponentInterface(), css::uno::UNO_QUERY);
 }
 
 void AccessibleBrowseBox::setCreator( const css::uno::Reference< css::accessibility::XAccessible >& _rxCreator )
