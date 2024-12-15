@@ -153,7 +153,7 @@ def unwrapInclude(include):
     return include[1:-1]
 
 
-def processIWYUOutput(iwyuOutput, moduleRules, fileName, noexclude, checknamespaces, finderrors):
+def processIWYUOutput(iwyuOutput, moduleRules, fileName, noexclude, checknamespaces, finderrors, removefwdd):
     inAdd = False
     toAdd = []
     inRemove = False
@@ -213,15 +213,26 @@ def processIWYUOutput(iwyuOutput, moduleRules, fileName, noexclude, checknamespa
                 toAdd.append(line)
 
         if inRemove and not checknamespaces:
-            match = re.match("- #include (.*)  // lines (.*)-.*", line)
-            if match:
-                # Only suggest removals for now. Removing fwd decls is more complex: they may be
-                # indeed unused or they may removed to be replaced with an include. And we want to
-                # avoid the later.
-                include = unwrapInclude(match.group(1))
-                lineno = match.group(2)
-                if not ignoreRemoval(include, toAdd, currentFileName, moduleRules, noexclude):
-                    toRemove.append("%s:%s: %s" % (currentFileName, lineno, include))
+            if not removefwdd:
+                match = re.match("- #include (.*)  // lines (.*)-.*", line)
+                if match:
+                    include = unwrapInclude(match.group(1))
+                    lineno = match.group(2)
+                    if not ignoreRemoval(include, toAdd, currentFileName, moduleRules, noexclude):
+                        toRemove.append("%s:%s: %s" % (currentFileName, lineno, include))
+                    continue
+            else:
+                # Search for obsolete forward declarations, but not header -> fwdecl replacements
+                match = re.match("- (.*;(?: })*)*  // lines (.*)-.*", line)
+                if match:
+                    fwdDecl = match.group(1)
+                    if fwdDecl.endswith(";"):
+                        # Remove trailing semicolon.
+                        fwdDecl = fwdDecl[:-1]
+                    lineno = match.group(2)
+                    if not ignoreRemoval(fwdDecl, toAdd, currentFileName, moduleRules, noexclude):
+                        toRemove.append("%s:%s: %s" % (currentFileName, lineno, fwdDecl))
+                    continue
 
         if inFull:
             if checknamespaces:
@@ -398,25 +409,32 @@ def processIWYUOutput(iwyuOutput, moduleRules, fileName, noexclude, checknamespa
                     # Get the row number, normal IWYU output does not contain this info
                     subprocess.run(["git", "grep", "-n", "namespace.*[^a-zA-Z]"+nameSpace+" *;", fileName])
 
-    for remove in sorted(toRemove):
-        print("ERROR: %s: remove not needed include" % remove)
+    if removefwdd:
+        for remove in sorted(toRemove):
+            print("ERROR: %s: remove not needed forward declaration" % remove)
+    else:
+        for remove in sorted(toRemove):
+            print("ERROR: %s: remove not needed include" % remove)
     return len(toRemove)
 
 
-def run_tool(task_queue, failed_files, dontstop, noexclude, checknamespaces, finderrors):
+def run_tool(task_queue, failed_files, dontstop, noexclude, checknamespaces, finderrors, removefwdd):
     while True:
         invocation, moduleRules = task_queue.get()
         if not len(failed_files):
             print("[IWYU] " + invocation.split(' ')[-1])
             p = subprocess.Popen(invocation, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-            retcode = processIWYUOutput(p.communicate()[0].decode('utf-8').splitlines(), moduleRules, invocation.split(' ')[-1], noexclude, checknamespaces, finderrors)
+            retcode = processIWYUOutput(p.communicate()[0].decode('utf-8').splitlines(), moduleRules, invocation.split(' ')[-1], noexclude, checknamespaces, finderrors, removefwdd)
             if finderrors:
                 if p.returncode == 1:
                     print("Running the IWYU process returned error code:\n" + invocation)
-            if retcode == -1 and not checknamespaces:
+            if retcode == -1 and not checknamespaces and not removefwdd:
                 print("ERROR: A file is probably not self contained, check this commands output:\n" + invocation)
             elif retcode > 0:
-                print("ERROR: The following command found unused includes:\n" + invocation)
+                if not removefwdd:
+                    print("ERROR: The following command found unused includes:\n" + invocation)
+                else:
+                    print("ERROR: The following command found unused forward declarations:\n" + invocation)
                 if not dontstop:
                     failed_files.append(invocation)
         task_queue.task_done()
@@ -438,7 +456,7 @@ def isInUnoIncludeFile(path):
             or path.startswith("include/uno/")
 
 
-def tidy(compileCommands, paths, dontstop, noexclude, checknamespaces, finderrors):
+def tidy(compileCommands, paths, dontstop, noexclude, checknamespaces, finderrors, removefwdd):
     return_code = 0
 
     try:
@@ -446,7 +464,7 @@ def tidy(compileCommands, paths, dontstop, noexclude, checknamespaces, finderror
         task_queue = queue.Queue(max_task)
         failed_files = []
         for _ in range(max_task):
-            t = threading.Thread(target=run_tool, args=(task_queue, failed_files, dontstop, noexclude, checknamespaces, finderrors))
+            t = threading.Thread(target=run_tool, args=(task_queue, failed_files, dontstop, noexclude, checknamespaces, finderrors, removefwdd))
             t.daemon = True
             t.start()
 
@@ -488,7 +506,15 @@ def tidy(compileCommands, paths, dontstop, noexclude, checknamespaces, finderror
             if assume:
                 args = args.replace(assumeAbs, "-x c++ " + pathAbs)
 
-            invocation = "include-what-you-use -Xiwyu --no_fwd_decls -Xiwyu --max_line_length=200 " + args
+            if not removefwdd:
+                invocation = "include-what-you-use -Xiwyu --no_fwd_decls -Xiwyu --max_line_length=200 " + args
+            # In --fwdecl mode we ask for fw declaration removal suggestions.
+            # In this mode obsolete fw declarations are suggested for removal.
+            # Later we ignore the header removal suggestions, which may be
+            # there because of possibility of replacement with fw declarations
+            # but those and our CI are not reliable enough yet for use
+            else:
+                invocation = "include-what-you-use -Xiwyu --cxx17ns -Xiwyu --max_line_length=200 " + args
             task_queue.put((invocation, moduleRules))
 
         task_queue.join()
@@ -521,6 +547,8 @@ def main(argv):
     parser.add_argument('--finderrors', action='store_true',
                    help='Report IWYU failures when it returns with -1 error code. '
                         'Use only for debugging this script!')
+    parser.add_argument('--fwdecl', action='store_true',
+                    help='Suggest removal of obsolete forward declarations')
 
     args = parser.parse_args()
 
@@ -533,8 +561,14 @@ def main(argv):
         for root, dirs, files in os.walk(args.recursive[0]):
             for file in files:
                 if args.headers:
-                    if (file.endswith(".hxx") or file.endswith(".hrc") or file.endswith(".h")):
-                        list_of_files.append(os.path.join(root,file))
+                    if not args.fwdecl:
+                        if (file.endswith(".hxx") or file.endswith(".hrc") or file.endswith(".h")):
+                            list_of_files.append(os.path.join(root,file))
+                    else:
+                        # In fwdecl mode don't check hrc files as they contain a lot of fw declarations
+                        # used in defines and iwyu (0.21 at least) can not yet understand those properly
+                        if (file.endswith(".hxx") or file.endswith(".h")):
+                            list_of_files.append(os.path.join(root,file))
                 else:
                     if (file.endswith(".cxx") or file.endswith(".c")):
                         list_of_files.append(os.path.join(root,file))
@@ -569,7 +603,7 @@ def main(argv):
             if not file.exists():
                 print("WARNING: File listed in " + rulePath + " no longer exists: " + pathname)
 
-    tidy(compileCommands, paths=list_of_files, dontstop=vars(args)["continue"], noexclude=args.noexclude, checknamespaces=args.ns, finderrors=args.finderrors)
+    tidy(compileCommands, paths=list_of_files, dontstop=vars(args)["continue"], noexclude=args.noexclude, checknamespaces=args.ns, finderrors=args.finderrors, removefwdd=args.fwdecl)
 
 if __name__ == '__main__':
     main(sys.argv[1:])
