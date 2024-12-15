@@ -58,9 +58,7 @@ public:
     int                             mnMinHeight;            // min. client height in pixels
     int                             mnMaxWidth;             // max. client width in pixels
     int                             mnMaxHeight;            // max. client height in pixels
-    NSRect                          maFullScreenRect;       // old window size when in FullScreen
     bool                            mbGraphics;             // is Graphics used?
-    bool                            mbFullScreen;           // is Window in FullScreen?
     bool                            mbShown;
     bool                            mbInitShow;
     bool                            mbPositioned;
@@ -99,6 +97,18 @@ public:
 
     // tdf#155266 force flush after scrolling
     bool                            mbForceFlush;
+
+    // Is window in LibreOffice full screen mode
+    bool                            mbInternalFullScreen;
+    // Window size to restore to when exiting LibreOffice full screen mode
+    NSRect                          maInternalFullScreenRestoreRect;
+    // Desired window size when entering exiting LibreOffice full screen mode
+    NSRect                          maInternalFullScreenExpectedRect;
+
+    // Is window in native full screen mode
+    bool                            mbNativeFullScreen;
+    // Window size to restore to when exiting LibreOffice full screen mode
+    NSRect                          maNativeFullScreenRestoreRect;
 
 public:
     /** Constructor
