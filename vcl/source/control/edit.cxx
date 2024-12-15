@@ -17,58 +17,39 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <utility>
+#include <comphelper/string.hxx>
+#include <i18nlangtag/languagetag.hxx>
+#include <o3tl/string_view.hxx>
+#include <officecfg/Office/Common.hxx>
+
 #include <vcl/builder.hxx>
-#include <vcl/event.hxx>
 #include <vcl/cursor.hxx>
-#include <vcl/menu.hxx>
-#include <vcl/toolkit/edit.hxx>
-#include <vcl/weld.hxx>
-#include <vcl/specialchars.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/transfer.hxx>
-#include <vcl/uitest/uiobject.hxx>
+#include <vcl/event.hxx>
 #include <vcl/ptrstyle.hxx>
+#include <vcl/specialchars.hxx>
+#include <vcl/toolkit/edit.hxx>
+#include <vcl/transfer.hxx>
+#include <vcl/unohelp2.hxx>
+#include <vcl/uitest/uiobject.hxx>
+#include <vcl/weld.hxx>
 
 #include <window.h>
 #include <svdata.hxx>
 #include <strings.hrc>
 
-#include <com/sun/star/i18n/BreakIterator.hpp>
-#include <com/sun/star/i18n/CharacterIteratorMode.hpp>
-#include <com/sun/star/i18n/WordType.hpp>
-#include <com/sun/star/datatransfer/XTransferable.hpp>
-#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
-
-#include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
-
-#include <com/sun/star/i18n/InputSequenceChecker.hpp>
+#include <com/sun/star/i18n/BreakIterator.hpp>
+#include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/InputSequenceCheckMode.hpp>
+#include <com/sun/star/i18n/InputSequenceChecker.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
-
-#include <com/sun/star/uno/Any.hxx>
-
-#include <comphelper/processfactory.hxx>
-#include <comphelper/string.hxx>
-
-#include <sot/exchange.hxx>
-#include <sot/formats.hxx>
-#include <sal/macros.h>
-#include <sal/log.hxx>
-
-#include <i18nlangtag/languagetag.hxx>
-#include <vcl/unohelp2.hxx>
-#include <o3tl/safeint.hxx>
-#include <o3tl/string_view.hxx>
-#include <officecfg/Office/Common.hxx>
-#include <tools/json_writer.hxx>
+#include <com/sun/star/i18n/WordType.hpp>
 
 #include <algorithm>
 #include <memory>
 #include <string_view>
+#include <utility>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
