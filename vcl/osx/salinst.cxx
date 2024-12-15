@@ -468,7 +468,7 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
         for( auto pSalFrame : pInst->getFrames() )
         {
             const AquaSalFrame* pFrame = static_cast<const AquaSalFrame*>( pSalFrame );
-            if ( pFrame->mbFullScreen )
+            if ( pFrame->mbInternalFullScreen )
             {
                 bIsFullScreenMode = true;
                 break;

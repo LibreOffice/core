@@ -74,7 +74,6 @@ AquaSalFrame::AquaSalFrame( SalFrame* pParent, SalFrameStyleFlags salFrameStyle 
     mnMaxWidth(0),
     mnMaxHeight(0),
     mbGraphics(false),
-    mbFullScreen( false ),
     mbShown(false),
     mbInitShow(true),
     mbPositioned(false),
@@ -91,7 +90,12 @@ AquaSalFrame::AquaSalFrame( SalFrame* pParent, SalFrameStyleFlags salFrameStyle 
     mnICOptions( InputContextFlags::NONE ),
     mnBlinkCursorDelay( nMinBlinkCursorDelay ),
     mbForceFlushScrolling( false ),
-    mbForceFlushProgressBar( false )
+    mbForceFlushProgressBar( false ),
+    mbInternalFullScreen( false ),
+    maInternalFullScreenRestoreRect( NSZeroRect ),
+    maInternalFullScreenExpectedRect( NSZeroRect ),
+    mbNativeFullScreen( false ),
+    maNativeFullScreenRestoreRect( NSZeroRect )
 {
     mpParent = dynamic_cast<AquaSalFrame*>(pParent);
 
@@ -123,7 +127,7 @@ AquaSalFrame::AquaSalFrame( SalFrame* pParent, SalFrameStyleFlags salFrameStyle 
 
 AquaSalFrame::~AquaSalFrame()
 {
-    if (mbFullScreen)
+    if (mbInternalFullScreen)
         doShowFullScreen(false, maGeometry.screen());
 
     assert( GetSalData()->mpInstance->IsMainThread() );
@@ -403,7 +407,7 @@ void AquaSalFrame::initShow()
     OSX_SALDATA_RUNINMAIN( initShow() )
 
     mbInitShow = false;
-    if( ! mbPositioned && ! mbFullScreen )
+    if( ! mbPositioned && ! mbInternalFullScreen )
     {
         AbsoluteScreenPixelRectangle aScreenRect;
         GetWorkArea( aScreenRect );
@@ -544,7 +548,11 @@ void AquaSalFrame::Show(bool bVisible, bool bNoActivate)
         if( mpParent && [mpNSWindow parentWindow] == mpParent->mpNSWindow )
             [mpParent->mpNSWindow removeChildWindow: mpNSWindow];
 
-        [mpNSWindow orderOut: NSApp];
+        // Related: tdf#161623 close windows, don't order them out
+        // Ordering out a native full screen window would leave the
+        // application in a state where there is no Desktop and both
+        // the menubar and the Dock are hidden.
+        [mpNSWindow close];
     }
 }
 
@@ -675,7 +683,7 @@ void AquaSalFrame::SetWindowState(const vcl::WindowData* pState)
 
     // set normal state
     NSRect aStateRect = [mpNSWindow frame];
-    aStateRect = [NSWindow contentRectForFrameRect: aStateRect styleMask: mnStyleMask];
+    aStateRect = [NSWindow contentRectForFrameRect: aStateRect styleMask: [mpNSWindow styleMask]];
     CocoaToVCL(aStateRect);
     if (pState->mask() & vcl::WindowDataMask::X)
         aStateRect.origin.x = float(pState->x());
@@ -686,7 +694,7 @@ void AquaSalFrame::SetWindowState(const vcl::WindowData* pState)
     if (pState->mask() & vcl::WindowDataMask::Height)
         aStateRect.size.height = float(pState->height());
     VCLToCocoa(aStateRect);
-    aStateRect = [NSWindow frameRectForContentRect: aStateRect styleMask: mnStyleMask];
+    aStateRect = [NSWindow frameRectForContentRect: aStateRect styleMask: [mpNSWindow styleMask]];
     [mpNSWindow setFrame: aStateRect display: NO];
 
     if (pState->state() == vcl::WindowState::Minimized)
@@ -745,19 +753,53 @@ bool AquaSalFrame::GetWindowState(vcl::WindowData* pState)
     pState->setMask(vcl::WindowDataMask::PosSizeState);
 
     NSRect aStateRect = [mpNSWindow frame];
-    aStateRect = [NSWindow contentRectForFrameRect: aStateRect styleMask: mnStyleMask];
+    aStateRect = [NSWindow contentRectForFrameRect: aStateRect styleMask: [mpNSWindow styleMask]];
     CocoaToVCL( aStateRect );
-    pState->setX(static_cast<sal_Int32>(aStateRect.origin.x));
-    pState->setY(static_cast<sal_Int32>(aStateRect.origin.y));
-    pState->setWidth(static_cast<sal_uInt32>(aStateRect.size.width));
-    pState->setHeight(static_cast<sal_uInt32>(aStateRect.size.height));
 
-    if( [mpNSWindow isMiniaturized] )
-        pState->setState(vcl::WindowState::Minimized);
-    else if( ! [mpNSWindow isZoomed] )
-        pState->setState(vcl::WindowState::Normal);
+    if( mbInternalFullScreen && !NSIsEmptyRect( maInternalFullScreenRestoreRect ) )
+    {
+        pState->setX(maInternalFullScreenRestoreRect.origin.x);
+        pState->setY(maInternalFullScreenRestoreRect.origin.y);
+        pState->setWidth(maInternalFullScreenRestoreRect.size.width);
+        pState->setHeight(maInternalFullScreenRestoreRect.size.height);
+        pState->SetMaximizedX(static_cast<sal_Int32>(aStateRect.origin.x));
+        pState->SetMaximizedY(static_cast<sal_Int32>(aStateRect.origin.x));
+        pState->SetMaximizedWidth(static_cast<sal_uInt32>(aStateRect.size.width));
+        pState->SetMaximizedHeight(static_cast<sal_uInt32>(aStateRect.size.height));
+
+        pState->rMask() |= vcl::WindowDataMask::MaximizedX | vcl::WindowDataMask::MaximizedY | vcl::WindowDataMask::MaximizedWidth | vcl::WindowDataMask::MaximizedHeight;
+
+        pState->setState(vcl::WindowState::FullScreen);
+    }
+    else if( mbNativeFullScreen && !NSIsEmptyRect( maNativeFullScreenRestoreRect ) )
+    {
+        pState->setX(maNativeFullScreenRestoreRect.origin.x);
+        pState->setY(maNativeFullScreenRestoreRect.origin.y);
+        pState->setWidth(maNativeFullScreenRestoreRect.size.width);
+        pState->setHeight(maNativeFullScreenRestoreRect.size.height);
+        pState->SetMaximizedX(static_cast<sal_Int32>(aStateRect.origin.x));
+        pState->SetMaximizedY(static_cast<sal_Int32>(aStateRect.origin.x));
+        pState->SetMaximizedWidth(static_cast<sal_uInt32>(aStateRect.size.width));
+        pState->SetMaximizedHeight(static_cast<sal_uInt32>(aStateRect.size.height));
+
+        pState->rMask() |= vcl::WindowDataMask::MaximizedX | vcl::WindowDataMask::MaximizedY | vcl::WindowDataMask::MaximizedWidth | vcl::WindowDataMask::MaximizedHeight;
+
+        pState->setState(vcl::WindowState::FullScreen);
+    }
     else
-        pState->setState(vcl::WindowState::Maximized);
+    {
+        pState->setX(static_cast<sal_Int32>(aStateRect.origin.x));
+        pState->setY(static_cast<sal_Int32>(aStateRect.origin.y));
+        pState->setWidth(static_cast<sal_uInt32>(aStateRect.size.width));
+        pState->setHeight(static_cast<sal_uInt32>(aStateRect.size.height));
+
+        if( [mpNSWindow isMiniaturized] )
+            pState->setState(vcl::WindowState::Minimized);
+        else if( ! [mpNSWindow isZoomed] )
+            pState->setState(vcl::WindowState::Normal);
+        else
+            pState->setState(vcl::WindowState::Maximized);
+    }
 
     return true;
 }
@@ -813,22 +855,18 @@ void AquaSalFrame::doShowFullScreen( bool bFullScreen, sal_Int32 nDisplay )
         return;
     }
 
-    SAL_INFO("vcl.osx", __func__ << ": mbFullScreen=" << mbFullScreen << ", bFullScreen=" << bFullScreen);
+    SAL_INFO("vcl.osx", __func__ << ": mbInternalFullScreen=" << mbInternalFullScreen << ", bFullScreen=" << bFullScreen);
 
-    if( mbFullScreen == bFullScreen )
+    if( mbInternalFullScreen == bFullScreen )
         return;
 
     OSX_SALDATA_RUNINMAIN( ShowFullScreen( bFullScreen, nDisplay ) )
 
-    mbFullScreen = bFullScreen;
+    mbInternalFullScreen = bFullScreen;
 
     if( bFullScreen )
     {
-        // hide the dock and the menubar if we are on the menu screen
-        // which is always on index 0 according to documentation
-        bool bHideMenu = (nDisplay == 0);
-
-        NSRect aNewContentRect = NSZeroRect;
+        NSRect aNewFrameRect = NSZeroRect;
         // get correct screen
         NSScreen* pScreen = nil;
         NSArray* pScreens = [NSScreen screens];
@@ -839,51 +877,110 @@ void AquaSalFrame::doShowFullScreen( bool bFullScreen, sal_Int32 nDisplay )
             else
             {
                 // this means span all screens
-                bHideMenu = true;
                 NSEnumerator* pEnum = [pScreens objectEnumerator];
                 while( (pScreen = [pEnum nextObject]) != nil )
                 {
                     NSRect aScreenRect = [pScreen frame];
-                    if( aScreenRect.origin.x < aNewContentRect.origin.x )
+                    if( aScreenRect.origin.x < aNewFrameRect.origin.x )
                     {
-                        aNewContentRect.size.width += aNewContentRect.origin.x - aScreenRect.origin.x;
-                        aNewContentRect.origin.x = aScreenRect.origin.x;
+                        aNewFrameRect.size.width += aNewFrameRect.origin.x - aScreenRect.origin.x;
+                        aNewFrameRect.origin.x = aScreenRect.origin.x;
                     }
-                    if( aScreenRect.origin.y < aNewContentRect.origin.y )
+                    if( aScreenRect.origin.y < aNewFrameRect.origin.y )
                     {
-                        aNewContentRect.size.height += aNewContentRect.origin.y - aScreenRect.origin.y;
-                        aNewContentRect.origin.y = aScreenRect.origin.y;
+                        aNewFrameRect.size.height += aNewFrameRect.origin.y - aScreenRect.origin.y;
+                        aNewFrameRect.origin.y = aScreenRect.origin.y;
                     }
-                    if( aScreenRect.origin.x + aScreenRect.size.width > aNewContentRect.origin.x + aNewContentRect.size.width )
-                        aNewContentRect.size.width = aScreenRect.origin.x + aScreenRect.size.width - aNewContentRect.origin.x;
-                    if( aScreenRect.origin.y + aScreenRect.size.height > aNewContentRect.origin.y + aNewContentRect.size.height )
-                        aNewContentRect.size.height = aScreenRect.origin.y + aScreenRect.size.height - aNewContentRect.origin.y;
+                    if( aScreenRect.origin.x + aScreenRect.size.width > aNewFrameRect.origin.x + aNewFrameRect.size.width )
+                        aNewFrameRect.size.width = aScreenRect.origin.x + aScreenRect.size.width - aNewFrameRect.origin.x;
+                    if( aScreenRect.origin.y + aScreenRect.size.height > aNewFrameRect.origin.y + aNewFrameRect.size.height )
+                        aNewFrameRect.size.height = aScreenRect.origin.y + aScreenRect.size.height - aNewFrameRect.origin.y;
                 }
             }
         }
-        if( aNewContentRect.size.width == 0 && aNewContentRect.size.height == 0 )
+        if( aNewFrameRect.size.width == 0 && aNewFrameRect.size.height == 0 )
         {
             if( pScreen == nil )
                 pScreen = [mpNSWindow screen];
             if( pScreen == nil )
                 pScreen = [NSScreen mainScreen];
 
-            aNewContentRect = [pScreen frame];
+            aNewFrameRect = [pScreen frame];
         }
 
-        if( bHideMenu )
-            [NSMenu setMenuBarVisible:NO];
+        // Show the menubar if application is in native full screen mode
+        // since hiding the menubar in that mode will cause the window's
+        // titlebar to fail to display or hide as expected.
+        if( [NSApp presentationOptions] & NSApplicationPresentationFullScreen )
+        {
+            [NSMenu setMenuBarVisible: YES];
+        }
+        // Hide the dock and the menubar if this or one of its child
+        // windows are the key window
+        else if( AquaSalFrame::isAlive( this ) )
+        {
+            bool bNativeFullScreen = false;
+            const AquaSalFrame *pParentFrame = this;
+            while( pParentFrame )
+            {
+                bNativeFullScreen |= pParentFrame->mbNativeFullScreen;
+                pParentFrame = AquaSalFrame::isAlive( pParentFrame->mpParent ) ? pParentFrame->mpParent : nullptr;
+            }
 
-        maFullScreenRect = [mpNSWindow frame];
+            if( !bNativeFullScreen )
+            {
+                const NSWindow *pParentWindow = [NSApp keyWindow];
+                while( pParentWindow && pParentWindow != mpNSWindow )
+                    pParentWindow = [pParentWindow parentWindow];
+                if( pParentWindow == mpNSWindow )
+                    [NSMenu setMenuBarVisible: NO];
+            }
+        }
 
-        [mpNSWindow setFrame: [NSWindow frameRectForContentRect: aNewContentRect styleMask: mnStyleMask] display: mbShown ? YES : NO];
+        if( mbNativeFullScreen && !NSIsEmptyRect( maNativeFullScreenRestoreRect ) )
+            maInternalFullScreenRestoreRect = maNativeFullScreenRestoreRect;
+        else
+            maInternalFullScreenRestoreRect = [mpNSWindow frame];
+
+        // Related: tdf#161623 do not add the window's titlebar height
+        // to the window's frame as that will cause the titlebar to be
+        // pushed offscreen.
+        maInternalFullScreenExpectedRect = aNewFrameRect;
+
+        [mpNSWindow setFrame: maInternalFullScreenExpectedRect display: mbShown ? YES : NO];
     }
     else
     {
-        [mpNSWindow setFrame: maFullScreenRect display: mbShown ? YES : NO];
+        // Show the dock and the menubar if this or one of its children are
+        // the key window
+        const NSWindow *pParentWindow = [NSApp keyWindow];
+        while( pParentWindow && pParentWindow != mpNSWindow )
+            pParentWindow = [pParentWindow parentWindow];
+        if( pParentWindow == mpNSWindow )
+        {
+            [NSMenu setMenuBarVisible: YES];
+        }
+        // Show the dock and the menubar if there is no native modal dialog
+        // and if the key window is nil or is not a SalFrameWindow instance.
+        // If a SalFrameWindow is the key window, it should have already set
+        // the menubar visibility to match its LibreOffice full screen mode
+        // state.
+        else if( ![NSApp modalWindow] )
+        {
+            NSWindow *pKeyWindow = [NSApp keyWindow];
+            if( !pKeyWindow || ![pKeyWindow isKindOfClass: [SalFrameWindow class]] )
+                [NSMenu setMenuBarVisible: YES];
+        }
 
-        // show the dock and the menubar
-        [NSMenu setMenuBarVisible:YES];
+        if( !NSIsEmptyRect( maInternalFullScreenRestoreRect ) )
+        {
+            if( !mbNativeFullScreen || NSIsEmptyRect( maNativeFullScreenRestoreRect ) )
+                [mpNSWindow setFrame: maInternalFullScreenRestoreRect display: mbShown ? YES : NO];
+
+            maInternalFullScreenRestoreRect = NSZeroRect;
+        }
+
+        maInternalFullScreenExpectedRect = NSZeroRect;
     }
 
     UpdateFrameGeometry();
@@ -1610,7 +1707,7 @@ void AquaSalFrame::SetPosSize(
         [mpNSWindow deminiaturize: NSApp]; // expand the window
 
     NSRect aFrameRect = [mpNSWindow frame];
-    NSRect aContentRect = [NSWindow contentRectForFrameRect: aFrameRect styleMask: mnStyleMask];
+    NSRect aContentRect = [NSWindow contentRectForFrameRect: aFrameRect styleMask: [mpNSWindow styleMask]];
 
     // position is always relative to parent frame
     NSRect aParentContentRect;
@@ -1625,7 +1722,7 @@ void AquaSalFrame::SetPosSize(
                 nX = static_cast<tools::Long>(mpParent->maGeometry.width()) - aContentRect.size.width - 1 - nX;
         }
         NSRect aParentFrameRect = [mpParent->mpNSWindow frame];
-        aParentContentRect = [NSWindow contentRectForFrameRect: aParentFrameRect styleMask: mpParent->mnStyleMask];
+        aParentContentRect = [NSWindow contentRectForFrameRect: aParentFrameRect styleMask: [mpParent->mpNSWindow styleMask]];
     }
     else
         aParentContentRect = maScreenRect; // use screen if no parent
@@ -1656,7 +1753,7 @@ void AquaSalFrame::SetPosSize(
 
     // do not display yet, we need to update our backbuffer
     {
-        [mpNSWindow setFrame: [NSWindow frameRectForContentRect: aContentRect styleMask: mnStyleMask] display: NO];
+        [mpNSWindow setFrame: [NSWindow frameRectForContentRect: aContentRect styleMask: [mpNSWindow styleMask]] display: NO];
     }
 
     UpdateFrameGeometry();
@@ -1901,7 +1998,7 @@ void AquaSalFrame::UpdateFrameGeometry()
     }
 
     NSRect aFrameRect = [mpNSWindow frame];
-    NSRect aContentRect = [NSWindow contentRectForFrameRect: aFrameRect styleMask: mnStyleMask];
+    NSRect aContentRect = [NSWindow contentRectForFrameRect: aFrameRect styleMask: [mpNSWindow styleMask]];
 
     NSRect aTrackRect = { NSZeroPoint, aContentRect.size };
 

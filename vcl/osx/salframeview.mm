@@ -243,6 +243,47 @@ static bool isMouseScrollWheelEvent( NSEvent *pEvent )
     return ( pEvent && [pEvent type] == NSEventTypeScrollWheel && [pEvent phase] == NSEventPhaseNone && [pEvent momentumPhase] == NSEventPhaseNone );
 }
 
+static void updateMenuBarVisibility( const AquaSalFrame *pFrame )
+{
+    // Show the menubar if application is in native full screen mode
+    // since hiding the menubar in that mode will cause the window's
+    // titlebar to fail to display or fail to hide when expected.
+    if( [NSApp presentationOptions] & NSApplicationPresentationFullScreen )
+    {
+        [NSMenu setMenuBarVisible: YES];
+    }
+    // Hide the dock and the menubar if the key window or one of its
+    // parent windows are in LibreOffice full screen mode. Otherwise,
+    // show the dock and the menubar.
+    else if( AquaSalFrame::isAlive( pFrame ) )
+    {
+        bool bInternalFullScreen = false;
+        bool bNativeFullScreen = false;
+        const AquaSalFrame *pParentFrame = pFrame;
+        while( pParentFrame )
+        {
+            bInternalFullScreen |= pParentFrame->mbInternalFullScreen;
+            bNativeFullScreen |= pParentFrame->mbNativeFullScreen;
+            pParentFrame = AquaSalFrame::isAlive( pParentFrame->mpParent ) ? pParentFrame->mpParent : nullptr;
+        }
+
+        if( bInternalFullScreen && !bNativeFullScreen )
+        {
+            const NSWindow *pParentWindow = [NSApp keyWindow];
+            while( pParentWindow && pParentWindow != pFrame->getNSWindow() )
+                pParentWindow = [pParentWindow parentWindow];
+            if( pParentWindow == pFrame->getNSWindow() )
+                [NSMenu setMenuBarVisible: NO];
+            else
+                [NSMenu setMenuBarVisible: YES];
+        }
+        else
+        {
+            [NSMenu setMenuBarVisible: YES];
+        }
+    }
+}
+
 @interface NSResponder (SalFrameWindow)
 -(BOOL)accessibilityIsIgnored;
 @end
@@ -281,6 +322,7 @@ static bool isMouseScrollWheelEvent( NSEvent *pEvent )
     // i.e. it maximizes / unmaximises the window. Sure, that state can also be confused with LO's
     // home-grown full-screen mode. Oh well.
 
+    [pNSWindow setReleasedWhenClosed: NO];
     [pNSWindow setCollectionBehavior: NSWindowCollectionBehaviorFullScreenNone];
 
     // Disable window restoration until we support it directly
@@ -354,7 +396,7 @@ static bool isMouseScrollWheelEvent( NSEvent *pEvent )
         return YES;
     if( mpFrame->mnStyle & SalFrameStyleFlags::OWNERDRAWDECORATION )
         return YES;
-    if( mpFrame->mbFullScreen )
+    if( mpFrame->mbInternalFullScreen )
         return YES;
     return [super canBecomeKeyWindow];
 }
@@ -380,12 +422,14 @@ static bool isMouseScrollWheelEvent( NSEvent *pEvent )
             mpFrame->mpMenu->setMainMenu();
         else if( ! mpFrame->mpParent &&
                  ( (mpFrame->mnStyle & nGuessDocument) == nGuessDocument || // set default menu for e.g. help
-                    mpFrame->mbFullScreen ) )                               // set default menu for e.g. presentation
+                    mpFrame->mbInternalFullScreen ) )                               // set default menu for e.g. presentation
         {
             AquaSalMenu::setDefaultMenu();
         }
         mpFrame->CallCallback( SalEvent::GetFocus, nullptr );
         mpFrame->SendPaintEvent(); // repaint controls as active
+
+        updateMenuBarVisibility( mpFrame );
     }
 
     // Prevent the same native input method popup that was cancelled in a
@@ -406,6 +450,25 @@ static bool isMouseScrollWheelEvent( NSEvent *pEvent )
     {
         mpFrame->CallCallback(SalEvent::LoseFocus, nullptr);
         mpFrame->SendPaintEvent(); // repaint controls as inactive
+    }
+
+    // Show the menubar if application is in native full screen mode
+    // since hiding the menubar in that mode will cause the window's
+    // titlebar to fail to display or fail to hide when expected.
+    if( [NSApp presentationOptions] & NSApplicationPresentationFullScreen )
+    {
+        [NSMenu setMenuBarVisible: YES];
+    }
+    // Show the dock and the menubar if there is no native modal dialog
+    // and if the key window is nil or is not a SalFrameWindow instance.
+    // If a SalFrameWindow is the key window, it should have already set
+    // the menubar visibility to match its LibreOffice full screen mode
+    // state.
+    else if ( ![NSApp modalWindow] )
+    {
+        NSWindow *pKeyWindow = [NSApp keyWindow];
+        if( !pKeyWindow || ![pKeyWindow isKindOfClass: [SalFrameWindow class]] )
+            [NSMenu setMenuBarVisible: YES];
     }
 }
 
@@ -589,24 +652,58 @@ static bool isMouseScrollWheelEvent( NSEvent *pEvent )
     return bRet;
 }
 
--(void)windowDidEnterFullScreen: (NSNotification*)pNotification
+-(void)windowWillEnterFullScreen: (NSNotification*)pNotification
 {
+    (void)pNotification;
     SolarMutexGuard aGuard;
 
-    if( !mpFrame || !AquaSalFrame::isAlive( mpFrame))
-        return;
-    mpFrame->mbFullScreen = true;
-    (void)pNotification;
+    if( AquaSalFrame::isAlive( mpFrame) )
+    {
+        mpFrame->mbNativeFullScreen = true;
+
+        if( mpFrame->mbInternalFullScreen && !NSIsEmptyRect( mpFrame->maInternalFullScreenRestoreRect ) )
+            mpFrame->maNativeFullScreenRestoreRect = mpFrame->maInternalFullScreenRestoreRect;
+        else
+            mpFrame->maNativeFullScreenRestoreRect = [mpFrame->getNSWindow() frame];
+
+        updateMenuBarVisibility( mpFrame );
+    }
+}
+
+-(void)windowDidFailToEnterFullScreen: (NSWindow *)pWindow
+{
+    (void)pWindow;
+    SolarMutexGuard aGuard;
+
+    if( AquaSalFrame::isAlive( mpFrame) )
+    {
+        mpFrame->mbNativeFullScreen = false;
+
+        mpFrame->maNativeFullScreenRestoreRect = NSZeroRect;
+
+        updateMenuBarVisibility( mpFrame );
+    }
 }
 
 -(void)windowDidExitFullScreen: (NSNotification*)pNotification
 {
+    (void)pNotification;
     SolarMutexGuard aGuard;
 
-    if( !mpFrame || !AquaSalFrame::isAlive( mpFrame))
-        return;
-    mpFrame->mbFullScreen = false;
-    (void)pNotification;
+    if( AquaSalFrame::isAlive( mpFrame) )
+    {
+        mpFrame->mbNativeFullScreen = false;
+
+        if( !NSIsEmptyRect( mpFrame->maNativeFullScreenRestoreRect ) )
+        {
+            if ( !mpFrame->mbInternalFullScreen || NSIsEmptyRect( mpFrame->maInternalFullScreenRestoreRect ) )
+                [mpFrame->getNSWindow() setFrame: mpFrame->maNativeFullScreenRestoreRect display: mpFrame->mbShown ? YES : NO];
+
+            mpFrame->maNativeFullScreenRestoreRect = NSZeroRect;
+        }
+
+        updateMenuBarVisibility( mpFrame );
+    }
 }
 
 -(void)windowDidChangeBackingProperties:(NSNotification *)pNotification
@@ -782,6 +879,31 @@ static bool isMouseScrollWheelEvent( NSEvent *pEvent )
     }
 
     [self clearResetParentWindowTimer];
+}
+
+-(NSRect)constrainFrameRect: (NSRect)aFrameRect toScreen: (NSScreen *)pScreen
+{
+    SolarMutexGuard aGuard;
+
+    NSRect aRet = [super constrainFrameRect: aFrameRect toScreen: pScreen];
+
+    // Related: tdf#161623 the menubar and Dock are both hidden when a
+    // window enters LibreOffice full screen mode. However, the call to
+    // -[super constrainFrameRect:toScreen:] shrinks the window frame to
+    // allow room for the menubar if the window is on the main screen. So,
+    // force the return value to match the frame that LibreOffice expects.
+    if( AquaSalFrame::isAlive( mpFrame) && mpFrame->mbInternalFullScreen && !NSIsEmptyRect( mpFrame->maInternalFullScreenExpectedRect ) )
+        aRet = mpFrame->maInternalFullScreenExpectedRect;
+
+    return aRet;
+}
+
+- (NSArray<NSWindow *> *)customWindowsToExitFullScreenForWindow: (NSWindow *)pWindow
+{
+    // Related: tdf#161623 our code will reset the frame immediately after
+    // native full screen mode has exited so suppress animation when exiting
+    // native full screen mode.
+    return [NSArray arrayWithObject: self];
 }
 
 @end
