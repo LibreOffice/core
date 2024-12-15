@@ -45,7 +45,7 @@ namespace weld {
 
 class PopupMenu;
 class VclBuilder;
-struct DDInfo;
+struct DragDropInfo;
 struct Impl_IMEInfos;
 
 #define EDIT_NOLIMIT                SAL_MAX_INT32
@@ -57,7 +57,7 @@ class VCL_DLLPUBLIC Edit : public Control, public vcl::unohelper::DragAndDropCli
 private:
     VclPtr<Edit>        mpSubEdit;
     TextFilter*         mpFilterText;
-    std::unique_ptr<DDInfo, o3tl::default_delete<DDInfo>> mpDDInfo;
+    std::unique_ptr<DragDropInfo, o3tl::default_delete<DragDropInfo>> mpDDInfo;
     std::unique_ptr<Impl_IMEInfos> mpIMEInfos;
     OUStringBuffer      maText;
     OUString            maPlaceholderText;

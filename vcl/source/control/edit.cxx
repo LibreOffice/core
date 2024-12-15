@@ -67,7 +67,7 @@ static FncGetSpecialChars pImplFncGetSpecialChars = nullptr;
 #define EDIT_DELMODE_RESTOFWORD     12
 #define EDIT_DELMODE_RESTOFCONTENT  13
 
-struct DDInfo
+struct DragDropInfo
 {
     vcl::Cursor     aCursor;
     Selection       aDndStartSel;
@@ -77,7 +77,7 @@ struct DDInfo
     bool            bVisCursor = false;
     bool            bIsStringSupported = false;
 
-    DDInfo()
+    DragDropInfo()
     {
         aCursor.SetStyle( CURSOR_SHADOW );
     }
@@ -2719,7 +2719,7 @@ void Edit::dragGestureRecognized(const css::datatransfer::dnd::DragGestureEvent&
         return;
 
     if ( !mpDDInfo )
-        mpDDInfo.reset(new DDInfo);
+        mpDDInfo.reset(new DragDropInfo);
 
     mpDDInfo->bStarterOfDD = true;
     mpDDInfo->aDndStartSel = aSel;
@@ -2812,7 +2812,7 @@ void Edit::dragEnter(const css::datatransfer::dnd::DropTargetDragEnterEvent& rDT
 {
     if ( !mpDDInfo )
     {
-        mpDDInfo.reset(new DDInfo);
+        mpDDInfo.reset(new DragDropInfo);
     }
     // search for string data type
     const css::uno::Sequence<css::datatransfer::DataFlavor>& rFlavors(rDTDE.SupportedDataFlavors);
