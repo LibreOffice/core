@@ -71,20 +71,15 @@ struct DDInfo
 {
     vcl::Cursor     aCursor;
     Selection       aDndStartSel;
-    sal_Int32       nDropPos;
-    bool            bStarterOfDD;
-    bool            bDroppedInMe;
-    bool            bVisCursor;
-    bool            bIsStringSupported;
+    sal_Int32       nDropPos = 0;
+    bool            bStarterOfDD = false;
+    bool            bDroppedInMe = false;
+    bool            bVisCursor = false;
+    bool            bIsStringSupported = false;
 
     DDInfo()
     {
         aCursor.SetStyle( CURSOR_SHADOW );
-        nDropPos = 0;
-        bStarterOfDD = false;
-        bDroppedInMe = false;
-        bVisCursor = false;
-        bIsStringSupported = false;
     }
 };
 
