@@ -51,10 +51,6 @@
 #include <string_view>
 #include <utility>
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-
 // - Redo
 // - if Tracking-Cancel recreate DefaultSelection
 
@@ -228,7 +224,7 @@ void Edit::dispose()
             GetDropTarget()->removeDropTargetListener( mxDnDListener );
         }
 
-        mxDnDListener->disposing( lang::EventObject() );  // #95154# #96585# Empty Source means it's the Client
+        mxDnDListener->disposing(css::lang::EventObject());  // #95154# #96585# Empty Source means it's the Client
         mxDnDListener.clear();
     }
 
@@ -309,13 +305,13 @@ void Edit::ImplInit(vcl::Window* pParent, WinBits nStyle)
     SetPointer( PointerStyle::Text );
     ApplySettings(*GetOutDev());
 
-    uno::Reference< datatransfer::dnd::XDragGestureRecognizer > xDGR = GetDragGestureRecognizer();
+    css::uno::Reference<css::datatransfer::dnd::XDragGestureRecognizer> xDGR = GetDragGestureRecognizer();
     if ( xDGR.is() )
     {
         xDGR->addDragGestureListener( mxDnDListener );
         GetDropTarget()->addDropTargetListener( mxDnDListener );
         GetDropTarget()->setActive( true );
-        GetDropTarget()->setDefaultActions( datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE );
+        GetDropTarget()->setDefaultActions(css::datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE);
     }
 }
 
@@ -657,19 +653,19 @@ void Edit::ImplDelete( const Selection& rSelection, sal_uInt8 nDirection, sal_uI
 
     if ( !aSelection.Len() )
     {
-        uno::Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
+        css::uno::Reference<css::i18n::XBreakIterator> xBI = ImplGetBreakIterator();
         if ( nDirection == EDIT_DEL_LEFT )
         {
             if ( nMode == EDIT_DELMODE_RESTOFWORD )
             {
                 const OUString sText = maText.toString();
-                i18n::Boundary aBoundary = xBI->getWordBoundary( sText, aSelection.Min(),
-                        GetSettings().GetLanguageTag().getLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, true );
+                css::i18n::Boundary aBoundary = xBI->getWordBoundary(sText, aSelection.Min(),
+                        GetSettings().GetLanguageTag().getLocale(), css::i18n::WordType::ANYWORD_IGNOREWHITESPACES, true);
                 auto startPos = aBoundary.startPos;
                 if ( startPos == aSelection.Min() )
                 {
-                    aBoundary = xBI->previousWord( sText, aSelection.Min(),
-                            GetSettings().GetLanguageTag().getLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES );
+                    aBoundary = xBI->previousWord(sText, aSelection.Min(),
+                            GetSettings().GetLanguageTag().getLocale(), css::i18n::WordType::ANYWORD_IGNOREWHITESPACES);
                     startPos = std::max(aBoundary.startPos, sal_Int32(0));
                 }
                 aSelection.Min() = startPos;
@@ -681,16 +677,16 @@ void Edit::ImplDelete( const Selection& rSelection, sal_uInt8 nDirection, sal_uI
             else
             {
                 sal_Int32 nCount = 1;
-                aSelection.Min() = xBI->previousCharacters( maText.toString(), aSelection.Min(),
-                        GetSettings().GetLanguageTag().getLocale(), i18n::CharacterIteratorMode::SKIPCHARACTER, nCount, nCount );
+                aSelection.Min() = xBI->previousCharacters(maText.toString(), aSelection.Min(),
+                        GetSettings().GetLanguageTag().getLocale(), css::i18n::CharacterIteratorMode::SKIPCHARACTER, nCount, nCount);
             }
         }
         else
         {
             if ( nMode == EDIT_DELMODE_RESTOFWORD )
             {
-                i18n::Boundary aBoundary = xBI->nextWord( maText.toString(), aSelection.Max(),
-                        GetSettings().GetLanguageTag().getLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES );
+                css::i18n::Boundary aBoundary = xBI->nextWord( maText.toString(), aSelection.Max(),
+                        GetSettings().GetLanguageTag().getLocale(), css::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
                 aSelection.Max() = aBoundary.startPos;
             }
             else if ( nMode == EDIT_DELMODE_RESTOFCONTENT )
@@ -700,8 +696,8 @@ void Edit::ImplDelete( const Selection& rSelection, sal_uInt8 nDirection, sal_uI
             else
             {
                 sal_Int32 nCount = 1;
-                aSelection.Max() = xBI->nextCharacters( maText.toString(), aSelection.Max(),
-                        GetSettings().GetLanguageTag().getLocale(), i18n::CharacterIteratorMode::SKIPCHARACTER, nCount, nCount );
+                aSelection.Max() = xBI->nextCharacters(maText.toString(), aSelection.Max(),
+                        GetSettings().GetLanguageTag().getLocale(), css::i18n::CharacterIteratorMode::SKIPCHARACTER, nCount, nCount);
             }
         }
     }
@@ -721,17 +717,17 @@ OUString Edit::ImplGetValidString( const OUString& rString )
     return aValidString;
 }
 
-uno::Reference <i18n::XBreakIterator> const& Edit::ImplGetBreakIterator()
+css::uno::Reference<css::i18n::XBreakIterator> const& Edit::ImplGetBreakIterator()
 {
     if (!mxBreakIterator)
-        mxBreakIterator = i18n::BreakIterator::create(::comphelper::getProcessComponentContext());
+        mxBreakIterator = css::i18n::BreakIterator::create(::comphelper::getProcessComponentContext());
     return mxBreakIterator;
 }
 
-uno::Reference <i18n::XExtendedInputSequenceChecker> const& Edit::ImplGetInputSequenceChecker()
+css::uno::Reference<css::i18n::XExtendedInputSequenceChecker> const& Edit::ImplGetInputSequenceChecker()
 {
     if (!mxISC.is())
-        mxISC = i18n::InputSequenceChecker::create(::comphelper::getProcessComponentContext());
+        mxISC = css::i18n::InputSequenceChecker::create(::comphelper::getProcessComponentContext());
     return mxISC;
 }
 
@@ -782,22 +778,22 @@ void Edit::ImplInsertText( const OUString& rStr, const Selection* pNewSel, bool 
 
         // determine if input-sequence-checking should be applied or not
 
-        uno::Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
+        css::uno::Reference<css::i18n::XBreakIterator> xBI = ImplGetBreakIterator();
         bool bIsInputSequenceChecking = rStr.getLength() == 1 &&
                 officecfg::Office::Common::I18N::CTL::CTLFont::get() &&
                 officecfg::Office::Common::I18N::CTL::CTLSequenceChecking::get() &&
                 aSelection.Min() > 0 && /* first char needs not to be checked */
-                xBI.is() && i18n::ScriptType::COMPLEX == xBI->getScriptType( rStr, 0 );
+                xBI.is() && css::i18n::ScriptType::COMPLEX == xBI->getScriptType( rStr, 0 );
 
         if (bIsInputSequenceChecking)
         {
-            uno::Reference < i18n::XExtendedInputSequenceChecker > xISC = ImplGetInputSequenceChecker();
+            css::uno::Reference <css::i18n::XExtendedInputSequenceChecker> xISC = ImplGetInputSequenceChecker();
             if (xISC.is())
             {
                 sal_Unicode cChar = rStr[0];
                 sal_Int32 nTmpPos = aSelection.Min();
                 sal_Int16 nCheckMode = officecfg::Office::Common::I18N::CTL::CTLSequenceCheckingRestricted::get()?
-                        i18n::InputSequenceCheckMode::STRICT : i18n::InputSequenceCheckMode::BASIC;
+                        css::i18n::InputSequenceCheckMode::STRICT : css::i18n::InputSequenceCheckMode::BASIC;
 
                 // the text that needs to be checked is only the one
                 // before the current cursor position
@@ -1227,17 +1223,17 @@ void Edit::ImplCopyToSelectionClipboard()
     }
 }
 
-void Edit::ImplCopy( uno::Reference< datatransfer::clipboard::XClipboard > const & rxClipboard )
+void Edit::ImplCopy(css::uno::Reference<css::datatransfer::clipboard::XClipboard> const & rxClipboard)
 {
     vcl::unohelper::TextDataObject::CopyStringTo( GetSelected(), rxClipboard );
 }
 
-void Edit::ImplPaste( uno::Reference< datatransfer::clipboard::XClipboard > const & rxClipboard )
+void Edit::ImplPaste(css::uno::Reference<css::datatransfer::clipboard::XClipboard> const & rxClipboard)
 {
     if ( !rxClipboard.is() )
         return;
 
-    uno::Reference< datatransfer::XTransferable > xDataObj;
+    css::uno::Reference<css::datatransfer::XTransferable> xDataObj;
 
     try
         {
@@ -1251,11 +1247,11 @@ void Edit::ImplPaste( uno::Reference< datatransfer::clipboard::XClipboard > cons
     if ( !xDataObj.is() )
         return;
 
-    datatransfer::DataFlavor aFlavor;
+    css::datatransfer::DataFlavor aFlavor;
     SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aFlavor );
     try
     {
-        uno::Any aData = xDataObj->getTransferData( aFlavor );
+        css::uno::Any aData = xDataObj->getTransferData(aFlavor);
         OUString aText;
         aData >>= aText;
 
@@ -1279,7 +1275,7 @@ void Edit::ImplPaste( uno::Reference< datatransfer::clipboard::XClipboard > cons
 
         ReplaceSelected( aText );
     }
-    catch( const css::uno::Exception& )
+    catch(const css::uno::Exception&)
     {
     }
 }
@@ -1307,9 +1303,9 @@ void Edit::MouseButtonDown( const MouseEvent& rMEvt )
         }
         else if ( rMEvt.GetClicks() == 2 )
         {
-            uno::Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
-            i18n::Boundary aBoundary = xBI->getWordBoundary( maText.toString(), aSelection.Max(),
-                     GetSettings().GetLanguageTag().getLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, true );
+            css::uno::Reference <css::i18n::XBreakIterator> xBI = ImplGetBreakIterator();
+            css::i18n::Boundary aBoundary = xBI->getWordBoundary( maText.toString(), aSelection.Max(),
+                     GetSettings().GetLanguageTag().getLocale(), css::i18n::WordType::ANYWORD_IGNOREWHITESPACES, true );
             ImplSetSelection( Selection( aBoundary.startPos, aBoundary.endPos ) );
             ImplCopyToSelectionClipboard();
         }
@@ -1484,7 +1480,7 @@ bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                 if ( !rKEvt.GetKeyCode().IsMod2() )
                 {
                     ImplClearLayoutData();
-                    uno::Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
+                    css::uno::Reference<css::i18n::XBreakIterator> xBI = ImplGetBreakIterator();
 
                     Selection aSel( maSelection );
                     bool bWord = rKEvt.GetKeyCode().IsMod1();
@@ -1532,33 +1528,33 @@ bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                         if ( bWord )
                         {
                             const OUString sText = maText.toString();
-                            i18n::Boundary aBoundary = xBI->getWordBoundary( sText, aSel.Max(),
-                                    GetSettings().GetLanguageTag().getLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, true );
+                            css::i18n::Boundary aBoundary = xBI->getWordBoundary(sText, aSel.Max(),
+                                    GetSettings().GetLanguageTag().getLocale(), css::i18n::WordType::ANYWORD_IGNOREWHITESPACES, true);
                             if ( aBoundary.startPos == aSel.Max() )
-                                aBoundary = xBI->previousWord( sText, aSel.Max(),
-                                        GetSettings().GetLanguageTag().getLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES );
+                                aBoundary = xBI->previousWord(sText, aSel.Max(),
+                                        GetSettings().GetLanguageTag().getLocale(), css::i18n::WordType::ANYWORD_IGNOREWHITESPACES);
                             aSel.Max() = aBoundary.startPos;
                         }
                         else
                         {
                             sal_Int32 nCount = 1;
-                            aSel.Max() = xBI->previousCharacters( maText.toString(), aSel.Max(),
-                                    GetSettings().GetLanguageTag().getLocale(), i18n::CharacterIteratorMode::SKIPCHARACTER, nCount, nCount );
+                            aSel.Max() = xBI->previousCharacters(maText.toString(), aSel.Max(),
+                                    GetSettings().GetLanguageTag().getLocale(), css::i18n::CharacterIteratorMode::SKIPCHARACTER, nCount, nCount);
                         }
                     }
                     else if ( bGoRight && ( aSel.Max() < maText.getLength() ) )
                     {
                         if ( bWord )
                         {
-                            i18n::Boundary aBoundary = xBI->nextWord( maText.toString(), aSel.Max(),
-                                    GetSettings().GetLanguageTag().getLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES );
+                            css::i18n::Boundary aBoundary = xBI->nextWord(maText.toString(), aSel.Max(),
+                                    GetSettings().GetLanguageTag().getLocale(), css::i18n::WordType::ANYWORD_IGNOREWHITESPACES);
                             aSel.Max() = aBoundary.startPos;
                         }
                         else
                         {
                             sal_Int32 nCount = 1;
-                            aSel.Max() = xBI->nextCharacters( maText.toString(), aSel.Max(),
-                                    GetSettings().GetLanguageTag().getLocale(), i18n::CharacterIteratorMode::SKIPCHARACTER, nCount, nCount );
+                            aSel.Max() = xBI->nextCharacters(maText.toString(), aSel.Max(),
+                                    GetSettings().GetLanguageTag().getLocale(), css::i18n::CharacterIteratorMode::SKIPCHARACTER, nCount, nCount);
                         }
                     }
                     else if ( bGoHome )
@@ -1937,18 +1933,18 @@ void Edit::Command( const CommandEvent& rCEvt )
         {
             // only paste if text available in clipboard
             bool bData = false;
-            uno::Reference< datatransfer::clipboard::XClipboard > xClipboard = GetClipboard();
+            css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard = GetClipboard();
 
             if ( xClipboard.is() )
             {
-                uno::Reference< datatransfer::XTransferable > xDataObj;
+                css::uno::Reference<css::datatransfer::XTransferable> xDataObj;
                 {
                     SolarMutexReleaser aReleaser;
                     xDataObj = xClipboard->getContents();
                 }
                 if ( xDataObj.is() )
                 {
-                    datatransfer::DataFlavor aFlavor;
+                    css::datatransfer::DataFlavor aFlavor;
                     SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aFlavor );
                     bData = xDataObj->isDataFlavorSupported( aFlavor );
                 }
@@ -2710,7 +2706,7 @@ VclPtr<PopupMenu> Edit::CreatePopupMenu()
 }
 
 // css::datatransfer::dnd::XDragGestureListener
-void Edit::dragGestureRecognized( const css::datatransfer::dnd::DragGestureEvent& rDGE )
+void Edit::dragGestureRecognized(const css::datatransfer::dnd::DragGestureEvent& rDGE)
 {
     SolarMutexGuard aVclGuard;
 
@@ -2737,9 +2733,9 @@ void Edit::dragGestureRecognized( const css::datatransfer::dnd::DragGestureEvent
         EndTracking();  // before D&D disable tracking
 
     rtl::Reference<vcl::unohelper::TextDataObject> pDataObj = new vcl::unohelper::TextDataObject( GetSelected() );
-    sal_Int8 nActions = datatransfer::dnd::DNDConstants::ACTION_COPY;
+    sal_Int8 nActions = css::datatransfer::dnd::DNDConstants::ACTION_COPY;
     if ( !IsReadOnly() )
-        nActions |= datatransfer::dnd::DNDConstants::ACTION_MOVE;
+        nActions |= css::datatransfer::dnd::DNDConstants::ACTION_MOVE;
     rDGE.DragSource->startDrag( rDGE, nActions, 0 /*cursor*/, 0 /*image*/, pDataObj, mxDnDListener );
     if ( GetCursor() )
         GetCursor()->Hide();
@@ -2750,7 +2746,7 @@ void Edit::dragDropEnd( const css::datatransfer::dnd::DragSourceDropEvent& rDSDE
 {
     SolarMutexGuard aVclGuard;
 
-    if (rDSDE.DropSuccess && (rDSDE.DropAction & datatransfer::dnd::DNDConstants::ACTION_MOVE) && mpDDInfo)
+    if (rDSDE.DropSuccess && (rDSDE.DropAction & css::datatransfer::dnd::DNDConstants::ACTION_MOVE) && mpDDInfo)
     {
         Selection aSel( mpDDInfo->aDndStartSel );
         if ( mpDDInfo->bDroppedInMe )
@@ -2792,14 +2788,14 @@ void Edit::drop( const css::datatransfer::dnd::DropTargetDropEvent& rDTDE )
         aSel.Max() = mpDDInfo->nDropPos;
         ImplSetSelection( aSel );
 
-        uno::Reference< datatransfer::XTransferable > xDataObj = rDTDE.Transferable;
+        css::uno::Reference<css::datatransfer::XTransferable> xDataObj = rDTDE.Transferable;
         if ( xDataObj.is() )
         {
-            datatransfer::DataFlavor aFlavor;
+            css::datatransfer::DataFlavor aFlavor;
             SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aFlavor );
             if ( xDataObj->isDataFlavorSupported( aFlavor ) )
             {
-                uno::Any aData = xDataObj->getTransferData( aFlavor );
+                css::uno::Any aData = xDataObj->getTransferData(aFlavor);
                 OUString aText;
                 aData >>= aText;
                 ImplInsertText( aText );
@@ -2817,14 +2813,14 @@ void Edit::drop( const css::datatransfer::dnd::DropTargetDropEvent& rDTDE )
     rDTDE.Context->dropComplete( bChanges );
 }
 
-void Edit::dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& rDTDE )
+void Edit::dragEnter(const css::datatransfer::dnd::DropTargetDragEnterEvent& rDTDE)
 {
     if ( !mpDDInfo )
     {
         mpDDInfo.reset(new DDInfo);
     }
     // search for string data type
-    const Sequence< css::datatransfer::DataFlavor >& rFlavors( rDTDE.SupportedDataFlavors );
+    const css::uno::Sequence<css::datatransfer::DataFlavor>& rFlavors(rDTDE.SupportedDataFlavors);
     mpDDInfo->bIsStringSupported = std::any_of(rFlavors.begin(), rFlavors.end(),
         [](const css::datatransfer::DataFlavor& rFlavor) {
             sal_Int32 nIndex = 0;
@@ -2833,14 +2829,14 @@ void Edit::dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& rD
         });
 }
 
-void Edit::dragExit( const css::datatransfer::dnd::DropTargetEvent& )
+void Edit::dragExit(const css::datatransfer::dnd::DropTargetEvent&)
 {
     SolarMutexGuard aVclGuard;
 
     ImplHideDDCursor();
 }
 
-void Edit::dragOver( const css::datatransfer::dnd::DropTargetDragEvent& rDTDE )
+void Edit::dragOver(const css::datatransfer::dnd::DropTargetDragEvent& rDTDE)
 {
     SolarMutexGuard aVclGuard;
 
