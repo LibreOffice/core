@@ -894,12 +894,10 @@ namespace
         return extractStringEntry(rMap, u"type-hint"_ustr, u"normal"_ustr);
     }
 
-#if HAVE_FEATURE_DESKTOP
     bool extractModal(VclBuilder::stringmap &rMap)
     {
         return extractBoolEntry(rMap, u"modal"_ustr, false);
     }
-#endif
 
     bool extractDecorated(VclBuilder::stringmap &rMap)
     {
@@ -1987,6 +1985,9 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
     else if (name == "GtkPopover")
     {
         WinBits nBits = extractDeferredBits(rMap);
+        // If a Popover is not modal don't grab focus when it pops up
+        if (!extractModal(rMap))
+            nBits |= WB_NOPOINTERFOCUS;
         xWindow = VclPtr<DockingWindow>::Create(pParent, nBits|WB_DOCKABLE|WB_MOVEABLE);
     }
     else if (name == "GtkCalendar")

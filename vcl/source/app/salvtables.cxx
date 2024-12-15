@@ -7125,7 +7125,9 @@ void SalInstancePopover::popup_at_rect(weld::Widget* pParent, const tools::Recta
     aRect.SetRight(aPt.X());
     aRect.SetBottom(aPt.Y());
 
-    FloatWinPopupFlags nFlags = FloatWinPopupFlags::GrabFocus | FloatWinPopupFlags::NoMouseUpClose;
+    FloatWinPopupFlags nFlags = FloatWinPopupFlags::NoMouseUpClose;
+    if (!(pWidget->GetStyle() & WB_NOPOINTERFOCUS))
+        nFlags = nFlags | FloatWinPopupFlags::GrabFocus;
     if (ePlace == weld::Placement::Under)
         nFlags = nFlags | FloatWinPopupFlags::Down;
     else
