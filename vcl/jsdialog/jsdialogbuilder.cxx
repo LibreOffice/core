@@ -1017,13 +1017,12 @@ bool JSAssistant::runAsync(std::shared_ptr<Dialog> const& rxSelf,
 
 std::unique_ptr<weld::Button> JSDialog::weld_button_for_response(int nResponse)
 {
-    PushButton* pButton
-        = dynamic_cast<::PushButton*>(m_xDialog->get_widget_for_response(nResponse));
-    std::unique_ptr<weld::Button> xWeldWidget
-        = pButton ? std::make_unique<JSButton>(m_pSender, pButton, nullptr, false) : nullptr;
-
-    if (xWeldWidget)
+    std::unique_ptr<weld::Button> xWeldWidget;
+    if (PushButton* pButton
+        = dynamic_cast<::PushButton*>(m_xDialog->get_widget_for_response(nResponse)))
     {
+        xWeldWidget = std::make_unique<JSButton>(m_pSender, pButton, nullptr, false);
+
         auto pParentDialog = m_xDialog->GetParentWithLOKNotifier();
         if (pParentDialog)
             JSInstanceBuilder::RememberWidget(OUString::number(pParentDialog->GetLOKWindowId()),
@@ -1047,11 +1046,11 @@ std::unique_ptr<weld::Button> JSAssistant::weld_button_for_response(int nRespons
         pButton = m_xWizard->m_pCancel;
     else if (nResponse == RET_HELP)
         pButton = m_xWizard->m_pHelp;
+
     if (pButton)
+    {
         xWeldWidget = std::make_unique<JSButton>(m_pSender, pButton, nullptr, false);
 
-    if (xWeldWidget)
-    {
         auto pParentDialog = m_xWizard->GetParentWithLOKNotifier();
         if (pParentDialog)
             JSInstanceBuilder::RememberWidget(OUString::number(pParentDialog->GetLOKWindowId()),
