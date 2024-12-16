@@ -64,7 +64,7 @@ struct ScDataFormFragment
     std::unique_ptr<weld::Label> m_xLabel;
     std::unique_ptr<weld::Entry> m_xEdit;
 
-    ScDataFormFragment(weld::Container* pGrid, int nLine);
+    ScDataFormFragment(weld::Grid* pGrid, int nLine);
 };
 
 class ScViewFunc : public ScTabView

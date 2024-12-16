@@ -34,7 +34,7 @@ ScDataFormDlg::ScDataFormDlg(weld::Window* pParent, ScTabViewShell* pTabViewShel
     , m_xBtnNext(m_xBuilder->weld_button(u"next"_ustr))
     , m_xBtnClose(m_xBuilder->weld_button(u"close"_ustr))
     , m_xSlider(m_xBuilder->weld_scrolled_window(u"scrollbar"_ustr, true))
-    , m_xGrid(m_xBuilder->weld_container(u"grid"_ustr))
+    , m_xGrid(m_xBuilder->weld_grid(u"grid"_ustr))
     , m_xFixedText(m_xBuilder->weld_label(u"label"_ustr))
 {
     sNewRecord = m_xFixedText->get_label();
@@ -340,16 +340,16 @@ void ScDataFormDlg::SetButtonState()
         m_aEntries[0]->m_xEdit->grab_focus();
 }
 
-ScDataFormFragment::ScDataFormFragment(weld::Container* pGrid, int nLine)
+ScDataFormFragment::ScDataFormFragment(weld::Grid* pGrid, int nLine)
     : m_xBuilder(Application::CreateBuilder(pGrid, u"modules/scalc/ui/dataformfragment.ui"_ustr))
     , m_xLabel(m_xBuilder->weld_label(u"label"_ustr))
     , m_xEdit(m_xBuilder->weld_entry(u"entry"_ustr))
 {
-    m_xLabel->set_grid_left_attach(0);
-    m_xLabel->set_grid_top_attach(nLine);
+    pGrid->set_child_left_attach(*m_xLabel, 0);
+    pGrid->set_child_top_attach(*m_xLabel, nLine);
 
-    m_xEdit->set_grid_left_attach(1);
-    m_xEdit->set_grid_top_attach(nLine);
+    pGrid->set_child_left_attach(*m_xEdit, 1);
+    pGrid->set_child_top_attach(*m_xEdit, nLine);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

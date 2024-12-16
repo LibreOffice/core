@@ -41,7 +41,7 @@ private:
     std::unique_ptr<weld::Button> m_xBtnNext;
     std::unique_ptr<weld::Button> m_xBtnClose;
     std::unique_ptr<weld::ScrolledWindow> m_xSlider;
-    std::unique_ptr<weld::Container> m_xGrid;
+    std::unique_ptr<weld::Grid> m_xGrid;
     std::unique_ptr<weld::Label> m_xFixedText;
     std::vector<std::unique_ptr<ScDataFormFragment>> m_aEntries;
 
