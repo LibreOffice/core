@@ -80,7 +80,7 @@ FmFormObj::FmFormObj(SdrModel& rSdrModel, FmFormObj const & rSource)
 
     // If UnoControlModel is part of an event environment,
     // events may assigned to it.
-    Reference< XFormComponent >  xContent(rSource.xUnoControlModel, UNO_QUERY);
+    Reference< XFormComponent >  xContent(rSource.m_xUnoControlModel, UNO_QUERY);
     if (xContent.is())
     {
         Reference< XEventAttacherManager >  xManager(xContent->getParent(), UNO_QUERY);
@@ -603,7 +603,7 @@ bool FmFormObj::EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd )
         {
             try
             {
-                Reference< XFormComponent >  xContent( xUnoControlModel, UNO_QUERY_THROW );
+                Reference< XFormComponent >  xContent( m_xUnoControlModel, UNO_QUERY_THROW );
                 Reference< XForm > xParentForm( xContent->getParent(), UNO_QUERY );
 
                 Reference< XIndexContainer > xFormToInsertInto;

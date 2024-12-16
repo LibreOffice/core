@@ -47,11 +47,11 @@ class SVXCORE_DLLPUBLIC SdrUnoObj : public SdrRectObj
 
     std::unique_ptr<SdrUnoObjDataHolder>        m_pImpl;
 
-    OUString                    aUnoControlModelTypeName;
-    OUString                    aUnoControlTypeName;
+    OUString                    m_aUnoControlModelTypeName;
+    OUString                    m_aUnoControlTypeName;
 
 protected:
-    css::uno::Reference< css::awt::XControlModel > xUnoControlModel; // Can also be set from outside
+    css::uno::Reference< css::awt::XControlModel > m_xUnoControlModel; // Can also be set from outside
 
 private:
     SVX_DLLPRIVATE void CreateUnoControlModel(const OUString& rModelName);
@@ -85,7 +85,7 @@ public:
 
     virtual void SetContextWritingMode( const sal_Int16 _nContextWritingMode ) override;
 
-    const css::uno::Reference< css::awt::XControlModel >& GetUnoControlModel() const {return xUnoControlModel;}
+    const css::uno::Reference< css::awt::XControlModel >& GetUnoControlModel() const {return m_xUnoControlModel;}
     css::uno::Reference< css::awt::XControl > GetUnoControl(const SdrView& _rView, const OutputDevice& _rOut) const;
 
     /** Retrieves a temporary XControl instance for a given output device
@@ -118,8 +118,8 @@ public:
             css::uno::Reference< css::awt::XControlContainer >& _inout_ControlContainer
         ) const;
 
-    const OUString& GetUnoControlTypeName() const { return aUnoControlTypeName; }
-    const OUString& getUnoControlModelTypeName() const { return aUnoControlModelTypeName; }
+    const OUString& GetUnoControlTypeName() const { return m_aUnoControlTypeName; }
+    const OUString& getUnoControlModelTypeName() const { return m_aUnoControlModelTypeName; }
 
     virtual void SetUnoControlModel( const css::uno::Reference< css::awt::XControlModel >& xModel );
 
