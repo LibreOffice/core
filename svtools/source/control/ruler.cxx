@@ -2744,7 +2744,7 @@ void Ruler::DrawTicks()
 uno::Reference< XAccessible > Ruler::CreateAccessible()
 {
     vcl::Window* pParent = GetAccessibleParentWindow();
-    OSL_ENSURE( pParent, "-SvxRuler::CreateAccessible(): No Parent!" );
+    assert(pParent && "Ruler::CreateAccessible(): No Parent!");
     uno::Reference< XAccessible >   xAccParent  = pParent->GetAccessible();
     if( xAccParent.is() )
     {
