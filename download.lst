@@ -14,8 +14,8 @@ ARGON2_TARBALL := phc-winner-argon2-20190702.tar.gz
 # so that git cherry-pick
 # will not run into conflicts
 # please repack the tarball using external/boost/repack_tarball.sh
-BOOST_SHA256SUM := efd6d4ce7e8571ba86f77a30bee2d3dd8dccd306721351464fc6998dd00b0c8c
-BOOST_TARBALL := boost_1_86_0.tar.xz
+BOOST_SHA256SUM := 750cbad72488ffbd6000f77d4fc40246e96141da556ee99000c1dc8664ea1157
+BOOST_TARBALL := boost_1_87_0.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
