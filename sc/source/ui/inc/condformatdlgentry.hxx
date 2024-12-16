@@ -308,7 +308,7 @@ class ScIconSetFrmtEntry : public ScCondFrmtEntry
     // icon set ui elements
     std::unique_ptr<weld::ComboBox> mxLbIconSetType;
 
-    std::unique_ptr<weld::Container> mxIconParent;
+    std::unique_ptr<weld::Grid> mxIconParent;
 
     typedef std::vector<std::unique_ptr<ScIconSetFrmtDataEntry>> ScIconSetFrmtDataEntriesType;
     ScIconSetFrmtDataEntriesType maEntries;

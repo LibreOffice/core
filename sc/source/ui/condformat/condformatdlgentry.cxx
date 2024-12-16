@@ -1340,18 +1340,18 @@ private:
     std::unique_ptr<weld::Label> mxFtEntry;
     std::unique_ptr<weld::Entry> mxEdEntry;
     std::unique_ptr<weld::ComboBox> mxLbEntryType;
-    weld::Container* mpContainer;
+    weld::Grid* mpParentGrid;
 
 public:
-    ScIconSetFrmtDataEntry(weld::Container* pParent, ScIconSetType eType, const ScDocument& rDoc,
+    ScIconSetFrmtDataEntry(weld::Grid* pParent, ScIconSetType eType, const ScDocument& rDoc,
             sal_Int32 i, const ScColorScaleEntry* pEntry = nullptr);
     ~ScIconSetFrmtDataEntry();
     void Show() { mxGrid->show(); }
     void Hide() { mxGrid->hide(); }
     void set_grid_top_attach(int nTop)
     {
-        mxGrid->set_grid_left_attach(0);
-        mxGrid->set_grid_top_attach(nTop);
+        mpParentGrid->set_child_left_attach(*mxGrid, 0);
+        mpParentGrid->set_child_top_attach(*mxGrid, nTop);
     }
 
     ScColorScaleEntry* CreateEntry(ScDocument& rDoc, const ScAddress& rPos) const;
@@ -1359,14 +1359,14 @@ public:
     void SetFirstEntry();
 };
 
-ScIconSetFrmtDataEntry::ScIconSetFrmtDataEntry(weld::Container* pParent, ScIconSetType eType, const ScDocument& rDoc, sal_Int32 i, const ScColorScaleEntry* pEntry)
+ScIconSetFrmtDataEntry::ScIconSetFrmtDataEntry(weld::Grid* pParent, ScIconSetType eType, const ScDocument& rDoc, sal_Int32 i, const ScColorScaleEntry* pEntry)
     : mxBuilder(Application::CreateBuilder(pParent, u"modules/scalc/ui/conditionaliconset.ui"_ustr))
     , mxGrid(mxBuilder->weld_container(u"ConditionalIconSet"_ustr))
     , mxImgIcon(mxBuilder->weld_image(u"icon"_ustr))
     , mxFtEntry(mxBuilder->weld_label("label"))
     , mxEdEntry(mxBuilder->weld_entry(u"entry"_ustr))
     , mxLbEntryType(mxBuilder->weld_combo_box(u"listbox"_ustr))
-    , mpContainer(pParent)
+    , mpParentGrid(pParent)
 {
     mxImgIcon->set_from_icon_name(ScIconSetFormat::getIconName(eType, i));
     if(pEntry)
@@ -1404,7 +1404,7 @@ ScIconSetFrmtDataEntry::ScIconSetFrmtDataEntry(weld::Container* pParent, ScIconS
 
 ScIconSetFrmtDataEntry::~ScIconSetFrmtDataEntry()
 {
-    mpContainer->move(mxGrid.get(), nullptr);
+    mpParentGrid->move(mxGrid.get(), nullptr);
 }
 
 ScColorScaleEntry* ScIconSetFrmtDataEntry::CreateEntry(ScDocument& rDoc, const ScAddress& rPos) const
@@ -1454,7 +1454,7 @@ ScIconSetFrmtEntry::ScIconSetFrmtEntry(ScCondFormatList* pParent, ScDocument& rD
     : ScCondFrmtEntry(pParent, rDoc, rPos)
     , mxLbColorFormat(mxBuilder->weld_combo_box(u"colorformat"_ustr))
     , mxLbIconSetType(mxBuilder->weld_combo_box(u"iconsettype"_ustr))
-    , mxIconParent(mxBuilder->weld_container(u"iconparent"_ustr))
+    , mxIconParent(mxBuilder->weld_grid(u"iconparent"_ustr))
 {
     mxLbColorFormat->set_size_request(CommonWidgetWidth, -1);
     mxLbIconSetType->set_size_request(CommonWidgetWidth, -1);
