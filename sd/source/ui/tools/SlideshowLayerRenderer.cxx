@@ -49,10 +49,13 @@ struct RenderContext
     SdrModel& mrModel;
 
     EEControlBits mnSavedControlBits;
+    Fraction maScale;
     ScopedVclPtrInstance<VirtualDevice> maVirtualDevice;
 
-    RenderContext(unsigned char* pBuffer, SdrModel& rModel, SdrPage& rPage, Size const& rSlideSize)
+    RenderContext(unsigned char* pBuffer, SdrModel& rModel, SdrPage& rPage, Size const& rSlideSize,
+                  const Fraction& rScale)
         : mrModel(rModel)
+        , maScale(rScale)
         , maVirtualDevice(DeviceFormat::WITHOUT_ALPHA)
     {
         // Turn off spelling
@@ -62,8 +65,8 @@ struct RenderContext
 
         maVirtualDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
 
-        maVirtualDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(rSlideSize, Fraction(1.0),
-                                                                   Point(), pBuffer);
+        maVirtualDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(rSlideSize, maScale, Point(),
+                                                                   pBuffer);
         Size aPageSize(rPage.GetSize());
 
         MapMode aMapMode(MapUnit::Map100thMM);
@@ -598,14 +601,14 @@ void SlideshowLayerRenderer::writeJSON(OString& rJsonMsg)
     maRenderState.incrementIndex();
 }
 
-bool SlideshowLayerRenderer::render(unsigned char* pBuffer, OString& rJsonMsg)
+bool SlideshowLayerRenderer::render(unsigned char* pBuffer, double& rScale, OString& rJsonMsg)
 {
     // We want to render one pass (one iteration through objects)
 
     // Reset state for this pass
     maRenderState.resetPass();
 
-    RenderContext aRenderContext(pBuffer, mrModel, mrPage, maSlideSize);
+    RenderContext aRenderContext(pBuffer, mrModel, mrPage, maSlideSize, Fraction(rScale));
     createViewAndDraw(aRenderContext);
 
     // Check if we are done rendering all passes and there is no more output
