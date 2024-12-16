@@ -299,7 +299,7 @@ public:
     /// @see vcl::ITiledRenderable::postSlideshowCleanup().
     void postSlideshowCleanup() override;
     /// @see vcl::ITiledRenderable::renderNextSlideLayer().
-    bool renderNextSlideLayer(unsigned char* pBuffer, bool& bIsBitmapLayer, OUString& rJsonMsg) override;
+    bool renderNextSlideLayer(unsigned char* pBuffer, bool& bIsBitmapLayer, double& rScale, OUString& rJsonMsg) override;
 
     // XComponent
 
