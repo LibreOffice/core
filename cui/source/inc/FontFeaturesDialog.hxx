@@ -20,10 +20,11 @@ namespace cui
 {
 struct FontFeatureItem
 {
-    FontFeatureItem(weld::Widget* pParent)
-        : m_aFeatureCode(0)
+    FontFeatureItem(weld::Grid* pParentGrid)
+        : m_pParentGrid(pParentGrid)
+        , m_aFeatureCode(0)
         , m_nDefault(-1)
-        , m_xBuilder(Application::CreateBuilder(pParent, u"cui/ui/fontfragment.ui"_ustr))
+        , m_xBuilder(Application::CreateBuilder(pParentGrid, u"cui/ui/fontfragment.ui"_ustr))
         , m_xContainer(m_xBuilder->weld_widget(u"fontentry"_ustr))
         , m_xText(m_xBuilder->weld_label(u"label"_ustr))
         , m_xCombo(m_xBuilder->weld_combo_box(u"combo"_ustr))
@@ -32,6 +33,7 @@ struct FontFeatureItem
         m_xCheck->connect_toggled(LINK(this, FontFeatureItem, CheckBoxToggledHdl));
     }
 
+    weld::Grid* m_pParentGrid;
     sal_uInt32 m_aFeatureCode;
     sal_Int32 m_nDefault;
     weld::TriStateEnabled m_aTriStateEnabled;
@@ -56,11 +58,11 @@ private:
     SvxFontPrevWindow m_aPreviewWindow;
     std::unique_ptr<weld::ScrolledWindow> m_xContentWindow;
     std::unique_ptr<weld::Container> m_xContentBox;
-    std::unique_ptr<weld::Container> m_xContentGrid;
+    std::unique_ptr<weld::Grid> m_xContentGrid;
     std::unique_ptr<weld::Container> m_xStylisticSetsBox;
-    std::unique_ptr<weld::Container> m_xStylisticSetsGrid;
+    std::unique_ptr<weld::Grid> m_xStylisticSetsGrid;
     std::unique_ptr<weld::Container> m_xCharacterVariantsBox;
-    std::unique_ptr<weld::Container> m_xCharacterVariantsGrid;
+    std::unique_ptr<weld::Grid> m_xCharacterVariantsGrid;
     std::unique_ptr<weld::CustomWeld> m_xPreviewWindow;
 
     void initialize();

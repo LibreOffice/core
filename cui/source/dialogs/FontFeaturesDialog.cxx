@@ -25,11 +25,11 @@ FontFeaturesDialog::FontFeaturesDialog(weld::Window* pParent, OUString aFontName
     , m_sFontName(std::move(aFontName))
     , m_xContentWindow(m_xBuilder->weld_scrolled_window(u"contentWindow"_ustr))
     , m_xContentBox(m_xBuilder->weld_container(u"contentBox"_ustr))
-    , m_xContentGrid(m_xBuilder->weld_container(u"contentGrid"_ustr))
+    , m_xContentGrid(m_xBuilder->weld_grid(u"contentGrid"_ustr))
     , m_xStylisticSetsBox(m_xBuilder->weld_container(u"stylisticSetsBox"_ustr))
-    , m_xStylisticSetsGrid(m_xBuilder->weld_container(u"stylisticSetsGrid"_ustr))
+    , m_xStylisticSetsGrid(m_xBuilder->weld_grid(u"stylisticSetsGrid"_ustr))
     , m_xCharacterVariantsBox(m_xBuilder->weld_container(u"characterVariantsBox"_ustr))
-    , m_xCharacterVariantsGrid(m_xBuilder->weld_container(u"characterVariantsGrid"_ustr))
+    , m_xCharacterVariantsGrid(m_xBuilder->weld_grid(u"characterVariantsGrid"_ustr))
     , m_xPreviewWindow(new weld::CustomWeld(*m_xBuilder, u"preview"_ustr, m_aPreviewWindow))
 {
     initialize();
@@ -139,8 +139,10 @@ int FontFeaturesDialog::fillGrid(std::vector<vcl::font::Feature> const& rFontFea
 
         sal_Int32 nGridPositionX = (nIdx % 2) * 2;
         sal_Int32 nGridPositionY = nIdx / 2;
-        aCurrentItem.m_xContainer->set_grid_left_attach(nGridPositionX);
-        aCurrentItem.m_xContainer->set_grid_top_attach(nGridPositionY);
+        aCurrentItem.m_pParentGrid->set_child_left_attach(*aCurrentItem.m_xContainer,
+                                                          nGridPositionX);
+        aCurrentItem.m_pParentGrid->set_child_top_attach(*aCurrentItem.m_xContainer,
+                                                         nGridPositionY);
 
         Link<weld::ComboBox&, void> aComboBoxSelectHandler
             = LINK(this, FontFeaturesDialog, ComboBoxSelectedHdl);
