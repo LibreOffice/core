@@ -19,42 +19,41 @@
 
 #pragma once
 
+
+#include "accessibletabbarbase.hxx"
+#include "accessibletabbarpage.hxx"
+
 #include <com/sun/star/accessibility/XAccessible.hpp>
+#include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <extended/accessibletabbarbase.hxx>
 
+#include <vector>
 
 namespace accessibility
 {
-
-
-
-
-    class AccessibleTabBarPage final : public cppu::ImplInheritanceHelper<
-                                           AccessibleTabBarBase,
-                                           css::accessibility::XAccessible,
-                                           css::lang::XServiceInfo>
+    class AccessibleTabBarPageList final : public cppu::ImplInheritanceHelper<
+                                               AccessibleTabBarBase,
+                                               css::accessibility::XAccessible,
+                                               css::accessibility::XAccessibleSelection,
+                                               css::lang::XServiceInfo>
     {
-        friend class AccessibleTabBarPageList;
-
     private:
-        sal_uInt16              m_nPageId;
-        bool                    m_bShowing;
-        bool                    m_bSelected;
-        OUString                m_sPageText;
+        typedef std::vector< rtl::Reference< AccessibleTabBarPage > > AccessibleChildren;
 
-        css::uno::Reference< css::accessibility::XAccessible >        m_xParent;
+        AccessibleChildren      m_aAccessibleChildren;
+        sal_Int32               m_nIndexInParent;
 
-        bool                    IsEnabled();
-        bool                    IsShowing() const;
-        bool                    IsSelected() const;
+        void                    UpdateShowing( bool bShowing );
+        void                    UpdateSelected( sal_Int32 i, bool bSelected );
+        void                    UpdatePageText( sal_Int32 i );
 
-        void                    SetShowing( bool bShowing );
-        void                    SetSelected( bool bSelected );
-        void                    SetPageText( const OUString& sPageText );
+        void                    InsertChild( sal_Int32 i );
+        void                    RemoveChild( sal_Int32 i );
+        void                    MoveChild( sal_Int32 i, sal_Int32 j );
 
-        void                    FillAccessibleStateSet( sal_Int64& rStateSet );
+        virtual void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
+        void            FillAccessibleStateSet( sal_Int64& rStateSet );
 
         // OCommonAccessibleComponent
         virtual css::awt::Rectangle implGetBounds(  ) override;
@@ -63,8 +62,7 @@ namespace accessibility
         virtual void SAL_CALL   disposing() override;
 
     public:
-        AccessibleTabBarPage( TabBar* pTabBar, sal_uInt16 nPageId,
-                              const css::uno::Reference< css::accessibility::XAccessible >& rxParent );
+        AccessibleTabBarPageList( TabBar* pTabBar, sal_Int32 nIndexInParent );
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
@@ -95,6 +93,18 @@ namespace accessibility
         // XAccessibleExtendedComponent
         virtual OUString SAL_CALL getTitledBorderText(  ) override;
         virtual OUString SAL_CALL getToolTipText(  ) override;
+
+        // XAccessibleSelection
+        virtual void SAL_CALL selectAccessibleChild( sal_Int64 nChildIndex ) override;
+        virtual sal_Bool SAL_CALL isAccessibleChildSelected( sal_Int64 nChildIndex ) override;
+        virtual void SAL_CALL clearAccessibleSelection(  ) override;
+        virtual void SAL_CALL selectAllAccessibleChildren(  ) override;
+        virtual sal_Int64 SAL_CALL getSelectedAccessibleChildCount(  ) override;
+        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
+        virtual void SAL_CALL deselectAccessibleChild( sal_Int64 nChildIndex ) override;
+
+    private:
+        rtl::Reference< AccessibleTabBarPage > getAccessibleChildImpl( sal_Int64 i );
     };
 
 

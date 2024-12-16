@@ -37,10 +37,6 @@ accessibility/inc/extended/accessibleiconchoicectrl.hxx
 accessibility/inc/extended/accessibleiconchoicectrlentry.hxx
 accessibility/inc/extended/accessiblelistbox.hxx
 accessibility/inc/extended/accessiblelistboxentry.hxx
-accessibility/inc/extended/accessibletabbar.hxx
-accessibility/inc/extended/accessibletabbarbase.hxx
-accessibility/inc/extended/accessibletabbarpage.hxx
-accessibility/inc/extended/accessibletabbarpagelist.hxx
 accessibility/inc/extended/accessibletablistbox.hxx
 accessibility/inc/extended/accessibletablistboxtable.hxx
 accessibility/inc/extended/textwindowaccessibility.hxx
@@ -85,10 +81,6 @@ accessibility/source/extended/accessibleiconchoicectrl.cxx
 accessibility/source/extended/accessibleiconchoicectrlentry.cxx
 accessibility/source/extended/accessiblelistbox.cxx
 accessibility/source/extended/accessiblelistboxentry.cxx
-accessibility/source/extended/accessibletabbar.cxx
-accessibility/source/extended/accessibletabbarbase.cxx
-accessibility/source/extended/accessibletabbarpage.cxx
-accessibility/source/extended/accessibletabbarpagelist.cxx
 accessibility/source/extended/accessibletablistbox.cxx
 accessibility/source/extended/accessibletablistboxtable.cxx
 accessibility/source/extended/textwindowaccessibility.cxx
@@ -11052,6 +11044,14 @@ svtools/source/config/printoptions.cxx
 svtools/source/config/test/test.cxx
 svtools/source/control/accessibleruler.cxx
 svtools/source/control/accessibleruler.hxx
+svtools/source/control/accessibletabbar.cxx
+svtools/source/control/accessibletabbar.hxx
+svtools/source/control/accessibletabbarbase.cxx
+svtools/source/control/accessibletabbarbase.hxx
+svtools/source/control/accessibletabbarpage.cxx
+svtools/source/control/accessibletabbarpage.hxx
+svtools/source/control/accessibletabbarpagelist.cxx
+svtools/source/control/accessibletabbarpagelist.hxx
 svtools/source/control/asynclink.cxx
 svtools/source/control/ctrlbox.cxx
 svtools/source/control/ctrltool.cxx

@@ -89,6 +89,10 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/config/printoptions \
     svtools/source/contnr/querydelete \
     svtools/source/control/accessibleruler \
+    svtools/source/control/accessibletabbar \
+    svtools/source/control/accessibletabbarbase \
+    svtools/source/control/accessibletabbarpage \
+    svtools/source/control/accessibletabbarpagelist \
     svtools/source/control/asynclink \
     svtools/source/control/collatorres \
     svtools/source/control/ctrlbox \

@@ -106,11 +106,6 @@ namespace vcl
                 const css::uno::Reference< css::accessibility::XAccessible >& _xParent
             ) const = 0;
 
-        virtual css::uno::Reference< css::accessibility::XAccessible >
-            createAccessibleTabBar(
-                TabBar& _rTabBar
-            ) const = 0;
-
         virtual css::uno::Reference< css::accessibility::XAccessibleContext >
             createAccessibleTextWindowContext(
                 vcl::Window* pWindow, TextEngine& rEngine, TextView& rView

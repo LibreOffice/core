@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "accessibletabbar.hxx"
 
 #include <svtools/tabbar.hxx>
 #include <tools/time.hxx>
@@ -30,8 +31,6 @@
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandevent.hxx>
-#include <vcl/svtaccessiblefactory.hxx>
-#include <vcl/accessiblefactory.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/weldutils.hxx>
 #include <svtools/svtresid.hxx>
@@ -510,8 +509,6 @@ struct TabBar_Impl
     ScopedVclPtr<TabButtons>    mxButtonBox;
     ScopedVclPtr<TabBarEdit>    mxEdit;
     std::vector<ImplTabBarItem> maItemList;
-
-    vcl::AccessibleFactoryAccess  maAccessibleFactory;
 
     sal_uInt16 getItemSize() const
     {
@@ -2536,7 +2533,7 @@ void TabBar::SetAddButtonEnabled(bool bAddButtonEnabled)
 
 css::uno::Reference<css::accessibility::XAccessible> TabBar::CreateAccessible()
 {
-    return mpImpl->maAccessibleFactory.getFactory().createAccessibleTabBar(*this);
+    return new accessibility::AccessibleTabBar(this);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

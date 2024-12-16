@@ -32,7 +32,6 @@ $(eval $(call gb_Library_use_libraries,acc,\
     i18nlangtag \
     sot \
     svl \
-    svt \
     tl \
     utl \
     vcl \
@@ -65,10 +64,6 @@ $(eval $(call gb_Library_add_exception_objects,acc,\
     accessibility/source/extended/AccessibleIconView \
     accessibility/source/extended/accessiblelistbox \
     accessibility/source/extended/accessiblelistboxentry \
-    accessibility/source/extended/accessibletabbar \
-    accessibility/source/extended/accessibletabbarbase \
-    accessibility/source/extended/accessibletabbarpage \
-    accessibility/source/extended/accessibletabbarpagelist \
     accessibility/source/extended/accessibletablistbox \
     accessibility/source/extended/accessibletablistboxtable \
     accessibility/source/extended/textwindowaccessibility \

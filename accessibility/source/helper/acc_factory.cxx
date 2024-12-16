@@ -44,7 +44,6 @@
 #include <extended/AccessibleBrowseBox.hxx>
 #include <extended/accessibleiconchoicectrl.hxx>
 #include <extended/AccessibleIconView.hxx>
-#include <extended/accessibletabbar.hxx>
 #include <extended/accessiblelistbox.hxx>
 #include <extended/AccessibleBrowseBoxHeaderBar.hxx>
 #include <extended/textwindowaccessibility.hxx>
@@ -136,11 +135,6 @@ public:
         createAccessibleIconChoiceCtrl(
             SvtIconChoiceCtrl& _rIconCtrl,
             const css::uno::Reference< css::accessibility::XAccessible >& _xParent
-        ) const override;
-
-    virtual css::uno::Reference< css::accessibility::XAccessible >
-        createAccessibleTabBar(
-            TabBar& _rTabBar
         ) const override;
 
     virtual css::uno::Reference< css::accessibility::XAccessibleContext >
@@ -354,11 +348,6 @@ Reference< XAccessible > AccessibleFactory::createAccessibleIconChoiceCtrl(
     SvtIconChoiceCtrl& _rIconCtrl, const Reference< XAccessible >& _xParent ) const
 {
     return new AccessibleIconChoiceCtrl( _rIconCtrl, _xParent );
-}
-
-Reference< XAccessible > AccessibleFactory::createAccessibleTabBar( TabBar& _rTabBar ) const
-{
-    return new AccessibleTabBar( &_rTabBar );
 }
 
 Reference< XAccessibleContext > AccessibleFactory::createAccessibleTextWindowContext(
