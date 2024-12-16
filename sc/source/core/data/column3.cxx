@@ -2731,7 +2731,6 @@ void ScColumn::GetBackColorFilterEntries(SCROW nRow1, SCROW nRow2, ScFilterEntri
     ScRefCellValue aPrevCellValue;
     Color aPrevPatternColor;
     Color aPrevInsertColor;
-    const ScPatternAttr* pPattern = nullptr;
     ScConditionalFormat* pCondFormat = nullptr;
     const ScCondFormatIndexes* pCondFormats = nullptr;
     Color aBackgroundBrushColor;
@@ -2748,42 +2747,41 @@ void ScColumn::GetBackColorFilterEntries(SCROW nRow1, SCROW nRow2, ScFilterEntri
             ; // then the previous value of pPattern and pCondFormat and pCondFormats and aBackgroundBrushColor is still valid
         else
         {
-            pPattern = pAttrArray->GetPatternRange(nPatternStartRow, nPatternEndRow, nRow1);
-            pCondFormats = &pPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData();
-            sal_uInt32 nIndex = 0;
-            if(!pCondFormats->empty())
-                nIndex = (*pCondFormats)[0];
-            if (nIndex)
+            if (const ScPatternAttr* pPattern = pAttrArray->GetPatternRange(nPatternStartRow, nPatternEndRow, nRow1))
             {
-                assert(pCondFormList);
-                pCondFormat = pCondFormList->GetFormat( nIndex );
-            }
-            else
-                pCondFormat = nullptr;
-            aBackgroundBrushColor = pPattern->GetItem(ATTR_BACKGROUND).GetColor();
-        }
-
-        if (pPattern)
-        {
-            if (!pCondFormats->empty())
-            {
-                // Speed up processing when dealing with runs of identical cells. This avoids
-                // an expensive GetCondResult call.
-                ScRefCellValue aCellValue = GetCellValue(nRow1);
-                if (pPrevPattern == pPattern && aCellValue == aPrevCellValue)
+                pCondFormats = &pPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData();
+                sal_uInt32 nIndex = 0;
+                if(!pCondFormats->empty())
+                    nIndex = (*pCondFormats)[0];
+                if (nIndex)
                 {
-                    aBackColor = aPrevPatternColor;
-                    bCondBackColor = true;
+                    assert(pCondFormList);
+                    pCondFormat = pCondFormList->GetFormat( nIndex );
                 }
                 else
+                    pCondFormat = nullptr;
+                aBackgroundBrushColor = pPattern->GetItem(ATTR_BACKGROUND).GetColor();
+
+                if (!pCondFormats->empty())
                 {
-                    const SfxItemSet* pCondSet = rDoc.GetCondResult(GetCol(), nRow1, GetTab());
-                    const SvxBrushItem* pCondBrush = &pPattern->GetItem(ATTR_BACKGROUND, pCondSet);
-                    aBackColor = pCondBrush->GetColor();
-                    bCondBackColor = true;
-                    aPrevCellValue = aCellValue;
-                    pPrevPattern = pPattern;
-                    aPrevPatternColor = aBackColor;
+                    // Speed up processing when dealing with runs of identical cells. This avoids
+                    // an expensive GetCondResult call.
+                    ScRefCellValue aCellValue = GetCellValue(nRow1);
+                    if (pPrevPattern == pPattern && aCellValue == aPrevCellValue)
+                    {
+                        aBackColor = aPrevPatternColor;
+                        bCondBackColor = true;
+                    }
+                    else
+                    {
+                        const SfxItemSet* pCondSet = rDoc.GetCondResult(GetCol(), nRow1, GetTab());
+                        const SvxBrushItem* pCondBrush = &pPattern->GetItem(ATTR_BACKGROUND, pCondSet);
+                        aBackColor = pCondBrush->GetColor();
+                        bCondBackColor = true;
+                        aPrevCellValue = aCellValue;
+                        pPrevPattern = pPattern;
+                        aPrevPatternColor = aBackColor;
+                    }
                 }
             }
         }
