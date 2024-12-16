@@ -55,7 +55,7 @@ namespace pcr
                                weld::Container* pInitialControlParent)
         : m_sEntryName(std::move(aEntryName))
         , m_xBuilder(Application::CreateBuilder(pParent, u"modules/spropctrlr/ui/browserline.ui"_ustr))
-        , m_xContainer(m_xBuilder->weld_container(u"BrowserLine"_ustr))
+        , m_xGrid(m_xBuilder->weld_grid(u"BrowserLine"_ustr))
         , m_xFtTitle(m_xBuilder->weld_label(u"label"_ustr))
         , m_xBrowseButton(m_xBuilder->weld_button(u"browse"_ustr))
         , m_xAdditionalBrowseButton(m_xBuilder->weld_button(u"morebrowse"_ustr))
@@ -77,7 +77,7 @@ namespace pcr
     {
         implHideBrowseButton(true);
         implHideBrowseButton(false);
-        m_pParent->move(m_xContainer.get(), nullptr);
+        m_pParent->move(m_xGrid.get(), nullptr);
     }
 
     void OBrowserLine::IndentTitle( bool _bIndent )
@@ -116,8 +116,8 @@ namespace pcr
 
         if ( m_pControlWindow )
         {
-            m_pInitialControlParent->move(m_pControlWindow, m_xContainer.get());
-            m_pControlWindow->set_grid_left_attach(1);
+            m_pInitialControlParent->move(m_pControlWindow, m_xGrid.get());
+            m_xGrid->set_child_left_attach(*m_pControlWindow, 1);
             m_xFtTitle->set_mnemonic_widget(m_pControlWindow);
             m_pControlWindow->show();
         }

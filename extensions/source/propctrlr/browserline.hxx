@@ -50,7 +50,7 @@ namespace pcr
     private:
         OUString                m_sEntryName;
         std::unique_ptr<weld::Builder> m_xBuilder;
-        std::unique_ptr<weld::Container> m_xContainer;
+        std::unique_ptr<weld::Grid> m_xGrid;
         std::unique_ptr<weld::Label> m_xFtTitle;
         std::unique_ptr<weld::Button> m_xBrowseButton;
         std::unique_ptr<weld::Button> m_xAdditionalBrowseButton;
@@ -91,7 +91,7 @@ namespace pcr
         OUString            GetTitle() const;
         void                SetTitleWidth(sal_uInt16);
 
-        int                 GetRowHeight() const { return m_xContainer->get_preferred_size().Height(); }
+        int                 GetRowHeight() const { return m_xGrid->get_preferred_size().Height(); }
         void                Show(bool bFlag=true);
         void                Hide();
 
