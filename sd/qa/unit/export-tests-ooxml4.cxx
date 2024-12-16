@@ -579,6 +579,10 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testShapeSoftEdgeEffect)
     sal_Int32 nRadius = -1;
     xShapeProps->getPropertyValue(u"SoftEdgeRadius"_ustr) >>= nRadius;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(635), nRadius); // 18 pt
+
+    xShapeProps.set(getShapeFromPage(1, 0));
+    xShapeProps->getPropertyValue(u"SoftEdgeRadius"_ustr) >>= nRadius;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(353), nRadius); // 10 pt
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testShapeShadowBlurEffect)
