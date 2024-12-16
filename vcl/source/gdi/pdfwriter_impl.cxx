@@ -136,57 +136,6 @@ void appendObjectReference(sal_Int32 nObjectID, OStringBuffer & aLine)
     aLine.append(" 0 R ");
 }
 
-void appendHex(sal_Int8 nInt, OStringBuffer& rBuffer)
-{
-    static const char pHexDigits[] = { '0', '1', '2', '3', '4', '5', '6', '7',
-                                           '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
-    rBuffer.append( pHexDigits[ (nInt >> 4) & 15 ] );
-    rBuffer.append( pHexDigits[ nInt & 15 ] );
-}
-
-void appendHexArray(sal_uInt8* pArray, size_t nSize, OStringBuffer& rBuffer)
-{
-    for (size_t i = 0; i < nSize; i++)
-        appendHex(pArray[i], rBuffer);
-}
-
-//used only to emit encoded passwords
-void appendLiteralString( const char* pStr, sal_Int32 nLength, OStringBuffer& rBuffer )
-{
-    while( nLength )
-    {
-        switch( *pStr )
-        {
-        case '\n' :
-            rBuffer.append( "\\n" );
-            break;
-        case '\r' :
-            rBuffer.append( "\\r" );
-            break;
-        case '\t' :
-            rBuffer.append( "\\t" );
-            break;
-        case '\b' :
-            rBuffer.append( "\\b" );
-            break;
-        case '\f' :
-            rBuffer.append( "\\f" );
-            break;
-        case '(' :
-        case ')' :
-        case '\\' :
-            rBuffer.append( "\\" );
-            rBuffer.append( static_cast<char>(*pStr) );
-            break;
-        default:
-            rBuffer.append( static_cast<char>(*pStr) );
-            break;
-        }
-        pStr++;
-        nLength--;
-    }
-}
-
 /*
  * Convert a string before using it.
  *
@@ -228,8 +177,8 @@ void appendDestinationName( const OUString& rString, OStringBuffer& rBuffer )
         {
             sal_Int8 aValueHigh = sal_Int8(aChar >> 8);
             if(aValueHigh > 0)
-                appendHex( aValueHigh, rBuffer );
-            appendHex( static_cast<sal_Int8>(aChar & 255 ), rBuffer );
+                vcl::COSWriter::appendHex(aValueHigh, rBuffer);
+            vcl::COSWriter::appendHex(static_cast<sal_Int8>(aChar & 255 ), rBuffer);
         }
     }
 }
@@ -282,7 +231,7 @@ void PDFWriterImpl::createWidgetFieldName( sal_Int32 i_nWidgetIndex, const PDFWr
         else
         {
             aBuffer.append( '#' );
-            appendHex( static_cast<sal_Int8>(aStr[i]), aBuffer );
+            COSWriter::appendHex(static_cast<sal_Int8>(aStr[i]), aBuffer);
         }
     }
 
@@ -1459,86 +1408,6 @@ OString PDFWriter::GetDateTime(svl::crypto::SigningContext* pSigningContext)
     return aRet.makeStringAndClear();
 }
 
-
-/* i12626 methods */
-/*
-check if the Unicode string must be encrypted or not, perform the requested task,
-append the string as unicode hex, encrypted if needed
- */
-inline void PDFWriterImpl::appendUnicodeTextStringEncrypt( const OUString& rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer )
-{
-    rOutBuffer.append( "<" );
-    if (m_aContext.Encryption.canEncrypt())
-    {
-        const sal_Unicode* pStr = rInString.getStr();
-        sal_Int32 nLen = rInString.getLength();
-        //prepare a unicode string, encrypt it
-        enableStringEncryption( nInObjectNumber );
-        sal_Int32 nChars = 2 + (nLen * 2);
-        m_vEncryptionBuffer.resize(nChars);
-        sal_uInt8 *pCopy = m_vEncryptionBuffer.data();
-        *pCopy++ = 0xFE;
-        *pCopy++ = 0xFF;
-        // we need to prepare a byte stream from the unicode string buffer
-        for( int i = 0; i < nLen; i++ )
-        {
-            sal_Unicode aUnChar = pStr[i];
-            *pCopy++ = static_cast<sal_uInt8>( aUnChar >> 8 );
-            *pCopy++ = static_cast<sal_uInt8>( aUnChar & 255 );
-        }
-        //encrypt in place
-        std::vector<sal_uInt8> aNewBuffer(nChars);
-        m_pPDFEncryptor->encrypt(m_vEncryptionBuffer.data(), nChars, aNewBuffer, nChars);
-        //now append, hexadecimal (appendHex), the encrypted result
-        appendHexArray(aNewBuffer.data(), aNewBuffer.size(), rOutBuffer);
-    }
-    else
-        COSWriter::appendUnicodeTextString(rInString, rOutBuffer);
-    rOutBuffer.append( ">" );
-}
-
-inline void PDFWriterImpl::appendLiteralStringEncrypt( std::string_view rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer )
-{
-    rOutBuffer.append( "(" );
-    sal_Int32 nChars = rInString.size();
-    //check for encryption, if ok, encrypt the string, then convert with appndLiteralString
-    if (m_aContext.Encryption.canEncrypt())
-    {
-        m_vEncryptionBuffer.resize(nChars);
-        //encrypt the string in a buffer, then append it
-        enableStringEncryption(nInObjectNumber);
-        m_pPDFEncryptor->encrypt(rInString.data(), nChars, m_vEncryptionBuffer, nChars);
-        appendLiteralString(reinterpret_cast<char*>(m_vEncryptionBuffer.data()), m_vEncryptionBuffer.size(), rOutBuffer);
-    }
-    else
-        appendLiteralString( rInString.data(), nChars , rOutBuffer );
-    rOutBuffer.append( ")" );
-}
-
-void PDFWriterImpl::appendLiteralStringEncrypt( std::u16string_view rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer, rtl_TextEncoding nEnc )
-{
-    OString aBufferString( OUStringToOString( rInString, nEnc ) );
-    sal_Int32 nLen = aBufferString.getLength();
-    OStringBuffer aBuf( nLen );
-    const char* pT = aBufferString.getStr();
-
-    for( sal_Int32 i = 0; i < nLen; i++, pT++ )
-    {
-        if( (*pT & 0x80) == 0 )
-            aBuf.append( *pT );
-        else
-        {
-            aBuf.append( '<' );
-            appendHex( *pT, aBuf );
-            aBuf.append( '>' );
-        }
-    }
-    aBufferString = aBuf.makeStringAndClear();
-    appendLiteralStringEncrypt( aBufferString, nInObjectNumber, rOutBuffer);
-}
-
-/* end i12626 methods */
-
 void PDFWriterImpl::emitComment( const char* pComment )
 {
     OString aLine = OString::Concat("% ") + pComment + "\n";
@@ -2155,13 +2024,13 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
         if( !rEle.m_aActualText.isEmpty() )
         {
             aLine.append( "/ActualText" );
-            appendUnicodeTextStringEncrypt( rEle.m_aActualText, rEle.m_nObject, aLine );
+            aWriter.writeUnicodeEncrypt(rEle.m_aActualText, rEle.m_nObject);
             aLine.append( "\n" );
         }
         if( !rEle.m_aAltText.isEmpty() )
         {
             aLine.append( "/Alt" );
-            appendUnicodeTextStringEncrypt( rEle.m_aAltText, rEle.m_nObject, aLine );
+            aWriter.writeUnicodeEncrypt(rEle.m_aAltText, rEle.m_nObject);
             aLine.append( "\n" );
         }
     }
@@ -2672,7 +2541,7 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
                         auto nAlpha = aColor.GetAlpha();
                         OStringBuffer aName(16);
                         aName.append("GS");
-                        appendHex(nAlpha, aName);
+                        COSWriter::appendHex(nAlpha, aName);
 
                         aContents.append("/" + aName + " gs ");
 
@@ -2692,7 +2561,7 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
                 aContents.append(
                     " Tf "
                     "<");
-                appendHex(rLayer.m_nSubsetGlyphID, aContents);
+                COSWriter::appendHex(rLayer.m_nSubsetGlyphID, aContents);
                 aContents.append(
                     ">Tj "
                     "ET "
@@ -2924,14 +2793,14 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8 const * pEncoding,
                     + " beginbfchar\n" );
             }
             aContents.append( '<' );
-            appendHex( static_cast<sal_Int8>(pEncoding[n]), aContents );
+            COSWriter::appendHex(static_cast<sal_Int8>(pEncoding[n]), aContents);
             aContents.append( "> <" );
             // TODO: handle code points>U+FFFF
             sal_Int32 nIndex = pEncToUnicodeIndex[n];
             for( sal_Int32 j = 0; j < pCodeUnitsPerGlyph[n]; j++ )
             {
-                appendHex( static_cast<sal_Int8>(rCodeUnits[nIndex + j] / 256), aContents );
-                appendHex( static_cast<sal_Int8>(rCodeUnits[nIndex + j] & 255), aContents );
+                COSWriter::appendHex(static_cast<sal_Int8>(rCodeUnits[nIndex + j] / 256), aContents);
+                COSWriter::appendHex(static_cast<sal_Int8>(rCodeUnits[nIndex + j] & 255), aContents);
             }
             aContents.append( ">\n" );
             nCount++;
@@ -3411,6 +3280,7 @@ sal_Int32 PDFWriterImpl::emitOutline()
     {
         PDFOutlineEntry& rItem = m_aOutline[i];
         OStringBuffer aLine( 1024 );
+        COSWriter aWriter(aLine, m_aContext.Encryption.getParams(), m_pPDFEncryptor);
 
         if (!updateObject(rItem.m_nObject))
             return 0;
@@ -3435,7 +3305,7 @@ sal_Int32 PDFWriterImpl::emitOutline()
         {
             // Title, Dest, Parent, Prev, Next
             aLine.append( "/Title" );
-            appendUnicodeTextStringEncrypt( rItem.m_aTitle, rItem.m_nObject, aLine );
+            aWriter.writeUnicodeEncrypt(rItem.m_aTitle, rItem.m_nObject);
             aLine.append( "\n" );
             // Dest is not required
             if( rItem.m_nDestID >= 0 && o3tl::make_unsigned(rItem.m_nDestID) < m_aDests.size() )
@@ -3625,14 +3495,14 @@ bool PDFWriterImpl::emitScreenAnnotations()
             if (PDFWriter::PDFVersion::PDF_1_7 <= m_aContext.Version)
             {   // ISO 14289-1:2014, Clause: 7.11
                 aLine.append("/UF ");
-                appendUnicodeTextStringEncrypt(rScreen.m_aURL, rScreen.m_nObject, aLine);
+                aWriter.writeUnicodeEncrypt(rScreen.m_aURL, rScreen.m_nObject);
             }
         }
         if (PDFWriter::PDFVersion::PDF_1_6 <= m_aContext.Version
             && !rScreen.m_AltText.isEmpty())
         {   // ISO 14289-1:2014, Clause: 7.11
             aLine.append("/Desc ");
-            appendUnicodeTextStringEncrypt(rScreen.m_AltText, rScreen.m_nObject, aLine);
+            aWriter.writeUnicodeEncrypt(rScreen.m_AltText, rScreen.m_nObject);
         }
         aLine.append(" >>\n"); // end of /D
         // Allow playing the video via a tempfile.
@@ -3643,7 +3513,7 @@ bool PDFWriterImpl::emitScreenAnnotations()
         // ISO 14289-1:2014, Clause: 7.18.6.2
         // Alt text is a "Multi-language Text Array"
         aLine.append(" /Alt [ () ");
-        appendUnicodeTextStringEncrypt(rScreen.m_AltText, rScreen.m_nObject, aLine);
+        aWriter.writeUnicodeEncrypt(rScreen.m_AltText, rScreen.m_nObject);
         aLine.append(" ] "
                      ">>");
 
@@ -3703,7 +3573,7 @@ bool PDFWriterImpl::emitLinkAnnotations()
         aLine.append( "]" );
         // ISO 14289-1:2014, Clause: 7.18.5
         aLine.append("/Contents");
-        appendUnicodeTextStringEncrypt(rLink.m_AltText, rLink.m_nObject, aLine);
+        aWriter.writeUnicodeEncrypt(rLink.m_AltText, rLink.m_nObject);
         if( rLink.m_nDest >= 0 )
         {
             aLine.append( "/Dest" );
@@ -3967,6 +3837,8 @@ void appendAnnotationBorder(float fBorderWidth, OStringBuffer & aLine)
 
 void PDFWriterImpl::emitTextAnnotationLine(OStringBuffer & aLine, PDFNoteEntry const & rNote)
 {
+    COSWriter aWriter(aLine, m_aContext.Encryption.getParams(), m_pPDFEncryptor);
+
     appendObjectID(rNote.m_nObject, aLine);
 
     double fPageHeight = m_aPages[rNote.m_nPage].getHeight();
@@ -4049,14 +3921,14 @@ void PDFWriterImpl::emitTextAnnotationLine(OStringBuffer & aLine, PDFNoteEntry c
 
     // contents of the note (type text string)
     aLine.append("/Contents ");
-    appendUnicodeTextStringEncrypt(rNote.m_aContents.maContents, rNote.m_nObject, aLine);
+    aWriter.writeUnicodeEncrypt(rNote.m_aContents.maContents, rNote.m_nObject);
     aLine.append("\n");
 
     // optional title
     if (!rNote.m_aContents.maTitle.isEmpty())
     {
         aLine.append("/T ");
-        appendUnicodeTextStringEncrypt(rNote.m_aContents.maTitle, rNote.m_nObject, aLine);
+        aWriter.writeUnicodeEncrypt(rNote.m_aContents.maTitle, rNote.m_nObject);
         aLine.append("\n");
     }
 
@@ -4510,7 +4382,7 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
     aDA.append( " " );
     m_aPages[ m_nCurrentPage ].appendMappedLength( nCharYOffset, aDA );
     aDA.append( " Td <" );
-    appendHex( nMappedGlyph, aDA );
+    COSWriter::appendHex( nMappedGlyph, aDA );
     aDA.append( "> Tj\nET\nQ\nEMC\n" );
     writeBuffer( aDA );
     endRedirect();
@@ -4777,6 +4649,7 @@ bool PDFWriterImpl::emitWidgetAnnotations()
         OStringBuffer aLine( 1024 );
         COSWriter aWriter(aLine, m_aContext.Encryption.getParams(), m_pPDFEncryptor);
         OStringBuffer aValue( 256 );
+        COSWriter aValueWriter(aValue, m_aContext.Encryption.getParams(), m_pPDFEncryptor);
         aLine.append( rWidget.m_nObject );
         aLine.append( " 0 obj\n"
                       "<<" );
@@ -4849,7 +4722,9 @@ bool PDFWriterImpl::emitWidgetAnnotations()
                             sal_Int32 nEntry = rWidget.m_aSelectedEntries[i];
                             if( nEntry >= 0
                                 && o3tl::make_unsigned(nEntry) < rWidget.m_aListEntries.size() )
-                                appendUnicodeTextStringEncrypt( rWidget.m_aListEntries[ nEntry ], rWidget.m_nObject, aValue );
+                            {
+                                aValueWriter.writeUnicodeEncrypt(rWidget.m_aListEntries[ nEntry ], rWidget.m_nObject);
+                            }
                         }
                         aValue.append( "]" );
                     }
@@ -4857,19 +4732,19 @@ bool PDFWriterImpl::emitWidgetAnnotations()
                              rWidget.m_aSelectedEntries[0] >= 0 &&
                              o3tl::make_unsigned(rWidget.m_aSelectedEntries[0]) < rWidget.m_aListEntries.size() )
                     {
-                        appendUnicodeTextStringEncrypt( rWidget.m_aListEntries[ rWidget.m_aSelectedEntries[0] ], rWidget.m_nObject, aValue );
+                        aValueWriter.writeUnicodeEncrypt(rWidget.m_aListEntries[ rWidget.m_aSelectedEntries[0] ], rWidget.m_nObject);
                     }
                     else
-                        appendUnicodeTextStringEncrypt( OUString(), rWidget.m_nObject, aValue );
+                        aValueWriter.writeUnicodeEncrypt( OUString(), rWidget.m_nObject);
                     aLine.append( "Ch" );
                     break;
                 case PDFWriter::ComboBox:
-                    appendUnicodeTextStringEncrypt( rWidget.m_aValue, rWidget.m_nObject, aValue );
+                    aValueWriter.writeUnicodeEncrypt( rWidget.m_aValue, rWidget.m_nObject);
                     aLine.append( "Ch" );
                     break;
                 case PDFWriter::Edit:
                     aLine.append( "Tx" );
-                    appendUnicodeTextStringEncrypt( rWidget.m_aValue, rWidget.m_nObject, aValue );
+                    aValueWriter.writeUnicodeEncrypt( rWidget.m_aValue, rWidget.m_nObject);
                     break;
                 case PDFWriter::Signature:
                     aLine.append( "Sig" );
@@ -6144,7 +6019,7 @@ bool PDFWriterImpl::emitTrailer()
     OStringBuffer aDocChecksum( 2*RTL_DIGEST_LENGTH_MD5+1 );
     ::std::vector<unsigned char> const nMD5Sum(m_DocDigest.finalize());
     for (sal_uInt8 i : nMD5Sum)
-        appendHex( i, aDocChecksum );
+        COSWriter::appendHex( i, aDocChecksum );
     // document id set in setDocInfo method
     // emit trailer
     aLine.setLength( 0 );
@@ -6171,13 +6046,13 @@ bool PDFWriterImpl::emitTrailer()
         aLine.append( "/ID [ <" );
         for (auto const& item : m_aContext.Encryption.DocumentIdentifier)
         {
-            appendHex( sal_Int8(item), aLine );
+            COSWriter::appendHex( sal_Int8(item), aLine );
         }
         aLine.append( ">\n"
                       "<" );
         for (auto const& item : m_aContext.Encryption.DocumentIdentifier)
         {
-            appendHex( sal_Int8(item), aLine );
+            COSWriter::appendHex( sal_Int8(item), aLine );
         }
         aLine.append( "> ]\n" );
     }
@@ -6682,7 +6557,7 @@ void PDFWriterImpl::drawVerticalGlyphs(
             rLine.append( " Tf" );
         }
         rLine.append( "<" );
-        appendHex( rGlyphs[i].m_nMappedGlyphId, rLine );
+        COSWriter::appendHex( rGlyphs[i].m_nMappedGlyphId, rLine );
         rLine.append( ">Tj\n" );
     }
 }
@@ -6760,14 +6635,14 @@ void PDFWriterImpl::drawHorizontalGlyphs(
         OStringBuffer aKernedLine( 256 ), aUnkernedLine( 256 );
         aKernedLine.append( "[<" );
         aUnkernedLine.append( '<' );
-        appendHex( rGlyphs[nBeginRun].m_nMappedGlyphId, aKernedLine );
-        appendHex( rGlyphs[nBeginRun].m_nMappedGlyphId, aUnkernedLine );
+        COSWriter::appendHex( rGlyphs[nBeginRun].m_nMappedGlyphId, aKernedLine );
+        COSWriter::appendHex( rGlyphs[nBeginRun].m_nMappedGlyphId, aUnkernedLine );
 
         aMat.invert();
         bool bNeedKern = false;
         for( sal_uInt32 nPos = nBeginRun+1; nPos < aRunEnds[nRun]; nPos++ )
         {
-            appendHex( rGlyphs[nPos].m_nMappedGlyphId, aUnkernedLine );
+            COSWriter::appendHex( rGlyphs[nPos].m_nMappedGlyphId, aUnkernedLine );
             // check if default glyph positioning is sufficient
             const basegfx::B2DPoint aThisPos = aMat.transform( rGlyphs[nPos].m_aPos );
             const basegfx::B2DPoint aPrevPos = aMat.transform( rGlyphs[nPos-1].m_aPos );
@@ -6787,7 +6662,7 @@ void PDFWriterImpl::drawHorizontalGlyphs(
                 aKernedLine.append( nAdjustment );
                 aKernedLine.append( "<" );
             }
-            appendHex( rGlyphs[nPos].m_nMappedGlyphId, aKernedLine );
+            COSWriter::appendHex( rGlyphs[nPos].m_nMappedGlyphId, aKernedLine );
         }
         aKernedLine.append( ">]TJ\n" );
         aUnkernedLine.append( ">Tj\n" );
@@ -7080,8 +6955,8 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
                 for (int i = 0; i < nCharCount; i++)
                 {
                     sal_Unicode aChar = rText[nCharPos + i];
-                    appendHex(static_cast<sal_Int8>(aChar >> 8), aLine);
-                    appendHex(static_cast<sal_Int8>(aChar & 255), aLine);
+                    COSWriter::appendHex(static_cast<sal_Int8>(aChar >> 8), aLine);
+                    COSWriter::appendHex(static_cast<sal_Int8>(aChar & 255), aLine);
                 }
                 aLine.append( ">>>\nBDC\n" );
             }
@@ -9753,16 +9628,16 @@ bool PDFWriterImpl::writeBitmapObject( const BitmapEmit& rObject, bool bMask )
                 std::vector<sal_uInt8> aOutputBuffer(nChar);
                 m_pPDFEncryptor->encrypt(m_vEncryptionBuffer.data(), nChar, aOutputBuffer, nChar);
                 //now queue the data for output
-                appendHexArray(aOutputBuffer.data(), aOutputBuffer.size(), aLine);
+                COSWriter::appendHexArray(aOutputBuffer.data(), aOutputBuffer.size(), aLine);
             }
             else //no encryption requested (PDF/A-1a program flow drops here)
             {
                 for( sal_uInt16 i = 0; i < pAccess->GetPaletteEntryCount(); i++ )
                 {
                     const BitmapColor& rColor = pAccess->GetPaletteColor( i );
-                    appendHex( rColor.GetRed(), aLine );
-                    appendHex( rColor.GetGreen(), aLine );
-                    appendHex( rColor.GetBlue(), aLine );
+                    COSWriter::appendHex( rColor.GetRed(), aLine );
+                    COSWriter::appendHex( rColor.GetGreen(), aLine );
+                    COSWriter::appendHex( rColor.GetBlue(), aLine );
                 }
             }
             aLine.append( ">\n]\n" );

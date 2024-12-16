@@ -866,13 +866,6 @@ private:
     /* */
     void enableStringEncryption( sal_Int32 nObject );
 
-public: // Temporary for PDFStructureWriter
-    // test if the encryption is active, if yes than encrypt the unicode string  and add to the OStringBuffer parameter
-    void appendUnicodeTextStringEncrypt( const OUString& rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer );
-
-    void appendLiteralStringEncrypt( std::u16string_view rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer, rtl_TextEncoding nEnc = RTL_TEXTENCODING_ASCII_US );
-    void appendLiteralStringEncrypt( std::string_view rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer );
-
 private:
     /* creates fonts and subsets that will be emitted later */
     void registerGlyph(const sal_GlyphId, const vcl::font::PhysicalFontFace*, const LogicalFontInstance* pFont, const std::vector<sal_Ucs>&, sal_Int32, sal_uInt8&, sal_Int32&);
