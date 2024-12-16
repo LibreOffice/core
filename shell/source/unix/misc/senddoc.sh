@@ -65,15 +65,15 @@ case $(basename "$MAILER" | sed 's/-.*$//') in
         while [ "$1" != "" ]; do
             case $1 in
                 --to)
-                    TO=${TO:-}${TO:+,}$2
+                    TO=${TO:+${TO},}$2
                     shift
                     ;;
                 --cc)
-                    CC=${CC:-}${CC:+,}$2
+                    CC=${CC:+${CC},}$2
                     shift
                     ;;
                 --bcc)
-                    BCC=${BCC:-}${BCC:+,}$2
+                    BCC=${BCC:+${BCC},}$2
                     shift
                     ;;
                 --subject)
@@ -85,7 +85,7 @@ case $(basename "$MAILER" | sed 's/-.*$//') in
                     shift
                     ;;
                 --attach)
-                    ATTACH=${ATTACH:-}${ATTACH:+,}$(printf file://%s "$2" | "${URI_ENCODE}")
+                    ATTACH=${ATTACH:+${ATTACH},}$(printf file://%s "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 *)
@@ -95,22 +95,22 @@ case $(basename "$MAILER" | sed 's/-.*$//') in
         done
 
         if [ "$TO" != "" ]; then
-            COMMAND=${COMMAND:-}${COMMAND:+,}to=\'${TO}\'
+            COMMAND=${COMMAND:+${COMMAND},}to=\'${TO}\'
         fi
         if [ "$CC" != "" ]; then
-            COMMAND=${COMMAND:-}${COMMAND:+,}cc=\'${CC}\'
+            COMMAND=${COMMAND:+${COMMAND},}cc=\'${CC}\'
         fi
         if [ "$BCC" != "" ]; then
-            COMMAND=${COMMAND:-}${COMMAND:+,}bcc=\'${BCC}\'
+            COMMAND=${COMMAND:+${COMMAND},}bcc=\'${BCC}\'
         fi
         if [ "$SUBJECT" != "" ]; then
-            COMMAND=${COMMAND:-}${COMMAND:+,}subject=\'${SUBJECT}\'
+            COMMAND=${COMMAND:+${COMMAND},}subject=\'${SUBJECT}\'
         fi
         if [ "$BODY" != "" ]; then
-            COMMAND=${COMMAND:-}${COMMAND:+,}body=\'${BODY}\'
+            COMMAND=${COMMAND:+${COMMAND},}body=\'${BODY}\'
         fi
         if [ "$ATTACH" != "" ]; then
-            COMMAND=${COMMAND:-}${COMMAND:+,}attachment=\'${ATTACH}\'
+            COMMAND=${COMMAND:+${COMMAND},}attachment=\'${ATTACH}\'
         fi
 
         run_mozilla "$MAILER" "$COMMAND"
@@ -121,15 +121,15 @@ case $(basename "$MAILER" | sed 's/-.*$//') in
         while [ "$1" != "" ]; do
             case $1 in
                 --to)
-                    TO="${TO:-}${TO:+,}$2"
+                    TO="${TO:+${TO},}$2"
                     shift
                     ;;
                 --cc)
-                    CC="${CC:-}${CC:+,}$2"
+                    CC="${CC:+${CC},}$2"
                     shift
                     ;;
                 --bcc)
-                    BCC="${BCC:-}${BCC:+,}$2"
+                    BCC="${BCC:+${BCC},}$2"
                     shift
                     ;;
                 --subject)
@@ -145,7 +145,7 @@ case $(basename "$MAILER" | sed 's/-.*$//') in
                     shift
                     ;;
                 --attach)
-                    ATTACH="${ATTACH:-}${ATTACH:+ }--attach "$(printf file://%s "$2" | "${URI_ENCODE}")
+                    ATTACH="${ATTACH:+${ATTACH} }--attach "$(printf file://%s "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 *)
@@ -155,11 +155,11 @@ case $(basename "$MAILER" | sed 's/-.*$//') in
         done
 
         ${MAILER} --composer \
-            ${CC:+--cc} ${CC:+"${CC}"}  \
-            ${BCC:+--bcc} ${BCC:+"${BCC}"} \
-            ${SUBJECT:+--subject} ${SUBJECT:+"${SUBJECT}"}  \
-            ${BODY:+--body} ${BODY:+"${BODY}"} \
-            ${FROM:+--header} ${FROM:+"From: ${FROM}"} \
+            ${CC:+--cc "${CC}"} \
+            ${BCC:+--bcc "${BCC}"} \
+            ${SUBJECT:+--subject "${SUBJECT}"} \
+            ${BODY:+--body "${BODY}"} \
+            ${FROM:+--header "From: ${FROM}"} \
             ${ATTACH:+${ATTACH}}  \
             ${TO:+"${TO}"}
         ;;
@@ -173,15 +173,15 @@ case $(basename "$MAILER" | sed 's/-.*$//') in
                     shift
                     ;;
                 --to)
-                    TO="${TO:-}${TO:+,}$2"
+                    TO="${TO:+${TO},}$2"
                     shift
                     ;;
                 --cc)
-                    CC="${CC:-}${CC:+,}$2"
+                    CC="${CC:+${CC},}$2"
                     shift
                     ;;
                 --bcc)
-                    BCC="${BCC:-}${BCC:+,}$2"
+                    BCC="${BCC:+${BCC},}$2"
                     shift
                     ;;
                 --subject)
@@ -205,12 +205,12 @@ case $(basename "$MAILER" | sed 's/-.*$//') in
         done
 
         x-terminal-emulator -e ${MAILER} \
-            ${FROM:+-e} ${FROM:+"set from=\"${FROM}\""} \
-            ${CC:+-c} ${CC:+"${CC}"} \
-            ${BCC:+-b} ${BCC:+"${BCC}"} \
-            ${SUBJECT:+-s} ${SUBJECT:+"${SUBJECT}"} \
-            ${BODY:+-i} ${BODY:+"${BODY}"} \
-            ${ATTACH:+-a} ${ATTACH:+"${ATTACH}"} \
+            ${FROM:+-e "set from=\"${FROM}\""} \
+            ${CC:+-c "${CC}"} \
+            ${BCC:+-b "${BCC}"} \
+            ${SUBJECT:+-s "${SUBJECT}"} \
+            ${BODY:+-i "${BODY}"} \
+            ${ATTACH:+-a "${ATTACH}"} \
             ${TO:+"${TO}"} &
         rm -f "$BODY"
         ;;
@@ -221,30 +221,30 @@ case $(basename "$MAILER" | sed 's/-.*$//') in
             case $1 in
                 --to)
                     if [ "${TO}" != "" ]; then
-                        MAILTO="${MAILTO:-}${MAILTO:+&}to=$2"
+                        MAILTO="${MAILTO:+${MAILTO}&}to=$2"
                     else
                         TO="$2"
                     fi
                     shift
                     ;;
                 --cc)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}cc="$(printf %s "$2" | "${URI_ENCODE}")
+                    MAILTO="${MAILTO:+${MAILTO}&}cc="$(printf %s "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 --bcc)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}bcc="$(printf %s "$2" | "${URI_ENCODE}")
+                    MAILTO="${MAILTO:+${MAILTO}&}bcc="$(printf %s "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 --subject)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}subject"=$(printf %s "$2" | "${URI_ENCODE}")
+                    MAILTO="${MAILTO:+${MAILTO}&}subject"=$(printf %s "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 --body)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}body="$(printf %s "$2" | "${URI_ENCODE}")
+                    MAILTO="${MAILTO:+${MAILTO}&}body="$(printf %s "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 --attach)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}attach="$(printf file://%s "$2" | "${URI_ENCODE}")
+                    MAILTO="${MAILTO:+${MAILTO}&}attach="$(printf file://%s "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 *)
@@ -263,30 +263,30 @@ case $(basename "$MAILER" | sed 's/-.*$//') in
             case $1 in
                 --to)
                     if [ "${TO}" != "" ]; then
-                        MAILTO="${MAILTO:-}${MAILTO:+&}to=$2"
+                        MAILTO="${MAILTO:+${MAILTO}&}to=$2"
                     else
                         TO="$2"
                     fi
                     shift
                     ;;
                 --cc)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}cc="$(printf %s "$2" | "${URI_ENCODE}")
+                    MAILTO="${MAILTO:+${MAILTO}&}cc="$(printf %s "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 --bcc)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}bcc="$(printf %s "$2" | "${URI_ENCODE}")
+                    MAILTO="${MAILTO:+${MAILTO}&}bcc="$(printf %s "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 --subject)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}subject"=$(printf %s "$2" | "${URI_ENCODE}")
+                    MAILTO="${MAILTO:+${MAILTO}&}subject"=$(printf %s "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 --body)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}body="$(printf %s "$2" | "${URI_ENCODE}")
+                    MAILTO="${MAILTO:+${MAILTO}&}body="$(printf %s "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 --attach)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}attachment="$(printf file://%s "$2" | "${URI_ENCODE}")
+                    MAILTO="${MAILTO:+${MAILTO}&}attachment="$(printf file://%s "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 *)
@@ -304,7 +304,7 @@ case $(basename "$MAILER" | sed 's/-.*$//') in
         while [ "$1" != "" ]; do
             case $1 in
                 --to)
-                    TO=${TO:-}${TO:+,}$2
+                    TO=${TO:+${TO},}$2
                     shift
                     ;;
                 --attach)
@@ -317,7 +317,7 @@ case $(basename "$MAILER" | sed 's/-.*$//') in
             shift;
         done
 
-        ${MAILER} ${TO:+-T} ${TO:-} ${ATTACH:+-a} ${ATTACH:+"${ATTACH}"}
+        ${MAILER} ${TO:+-T ${TO}} ${ATTACH:+-a "${ATTACH}"}
         ;;
 
     sylpheed | claws)
@@ -325,11 +325,11 @@ case $(basename "$MAILER" | sed 's/-.*$//') in
         while [ "$1" != "" ]; do
             case $1 in
                 --to)
-                    TO=${TO:-}${TO:+,}$2
+                    TO=${TO:+${TO},}$2
                     shift
                     ;;
                 --attach)
-                    ATTACH=${ATTACH:-}${ATTACH:+,}$(printf file://%s "$2" | "${URI_ENCODE}")
+                    ATTACH=${ATTACH:+${ATTACH},}$(printf file://%s "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 *)
@@ -338,7 +338,7 @@ case $(basename "$MAILER" | sed 's/-.*$//') in
             shift;
         done
 
-         ${MAILER} ${TO:+--compose} ${TO:-} ${ATTACH:+--attach} ${ATTACH:-}
+         ${MAILER} ${TO:+--compose ${TO}} ${ATTACH:+--attach ${ATTACH}}
         ;;
 
     Mail | Thunderbird | Betterbird | *.app )
@@ -347,7 +347,7 @@ case $(basename "$MAILER" | sed 's/-.*$//') in
             case $1 in
                 --attach)
                     #i95688# fix filenames containing accented chars, whatever alien
-                    ATTACH="${ATTACH:-}${ATTACH:+ }"$(printf file://%s "$2" | "${URI_ENCODE}")
+                    ATTACH="${ATTACH:+${ATTACH} }"$(printf file://%s "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 *)
@@ -384,33 +384,33 @@ case $(basename "$MAILER" | sed 's/-.*$//') in
             case $1 in
                 --to)
                     if [ "${TO}" != "" ]; then
-                        MAILTO="${MAILTO:-}${MAILTO:+&}to=$2"
+                        MAILTO="${MAILTO:+${MAILTO}&}to=$2"
                     else
                         TO="$2"
                     fi
                     shift
                     ;;
                 --cc)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}cc="$(printf %s "$2" | "${URI_ENCODE}")
+                    MAILTO="${MAILTO:+${MAILTO}&}cc="$(printf %s "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 --bcc)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}bcc="$(printf %s "$2" | "${URI_ENCODE}")
+                    MAILTO="${MAILTO:+${MAILTO}&}bcc="$(printf %s "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 --subject)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}subject"=$(printf %s "$2" | "${URI_ENCODE}")
+                    MAILTO="${MAILTO:+${MAILTO}&}subject"=$(printf %s "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 --body)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}body="$(printf %s "$2" | "${URI_ENCODE}")
+                    MAILTO="${MAILTO:+${MAILTO}&}body="$(printf %s "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 --attach)
                     if [ "$MAILER" = "/usr/bin/xdg-email" ]; then
-                        MAILTO="${MAILTO:-}${MAILTO:+&}attach="$(printf file://%s "$2" | "${URI_ENCODE}")
+                        MAILTO="${MAILTO:+${MAILTO}&}attach="$(printf file://%s "$2" | "${URI_ENCODE}")
                     else
-                        MAILTO="${MAILTO:-}${MAILTO:+&}attachment="$(printf file://%s "$2" | "${URI_ENCODE}")
+                        MAILTO="${MAILTO:+${MAILTO}&}attachment="$(printf file://%s "$2" | "${URI_ENCODE}")
                     fi
                     shift
                     ;;
