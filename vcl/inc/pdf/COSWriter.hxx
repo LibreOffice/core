@@ -29,20 +29,6 @@ class COSWriter
 
     void appendLiteralString(const char* pStr, sal_Int32 nLength);
 
-    template <typename T> static void appendHex(T nValue, OStringBuffer& rBuffer)
-    {
-        static constexpr const auto constHexDigits = std::to_array<char>(
-            { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' });
-        rBuffer.append(constHexDigits[(nValue >> 4) & 15]);
-        rBuffer.append(constHexDigits[nValue & 15]);
-    }
-
-    void appendHexArray(sal_uInt8* pArray, size_t nSize)
-    {
-        for (size_t i = 0; i < nSize; i++)
-            appendHex(pArray[i], mrBuffer);
-    }
-
 public:
     COSWriter(EncryptionParams aParams = EncryptionParams(),
               std::shared_ptr<IPDFEncryptor> const& pPDFEncryptor = nullptr)
@@ -146,8 +132,22 @@ public:
     {
         mrBuffer.append(key);
         mrBuffer.append("<");
-        appendHexArray(pData, nSize);
+        COSWriter::appendHexArray(pData, nSize, mrBuffer);
         mrBuffer.append(">");
+    }
+
+    template <typename T> static void appendHex(T nValue, OStringBuffer& rBuffer)
+    {
+        static constexpr const auto constHexDigits = std::to_array<char>(
+            { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' });
+        rBuffer.append(constHexDigits[(nValue >> 4) & 15]);
+        rBuffer.append(constHexDigits[nValue & 15]);
+    }
+
+    static void appendHexArray(sal_uInt8* pArray, size_t nSize, OStringBuffer& rBuffer)
+    {
+        for (size_t i = 0; i < nSize; i++)
+            appendHex(pArray[i], rBuffer);
     }
 
     static void appendUnicodeTextString(const OUString& rString, OStringBuffer& rBuffer);

@@ -79,7 +79,7 @@ void COSWriter::writeUnicodeEncrypt(OUString const& rString, sal_Int32 nObject)
         std::vector<sal_uInt8> aNewBuffer(nChars);
         mpPDFEncryptor->encrypt(aEncryptionBuffer.data(), nChars, aNewBuffer, nChars);
         //now append, hexadecimal (appendHex), the encrypted result
-        appendHexArray(aNewBuffer.data(), aNewBuffer.size());
+        COSWriter::appendHexArray(aNewBuffer.data(), aNewBuffer.size(), mrBuffer);
         mrBuffer.append(">");
     }
     else
