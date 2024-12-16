@@ -747,6 +747,7 @@ SwTableColumnPage::SwTableColumnPage(weld::Container* pPage, weld::DialogControl
                    m_xBuilder->weld_label(u"3"_ustr),
                    m_xBuilder->weld_label(u"4"_ustr),
                    m_xBuilder->weld_label(u"5"_ustr)}
+    , m_xColumnWidthsGrid(m_xBuilder->weld_grid(u"columnwidthsgrid"_ustr))
     , m_xModifyTableCB(m_xBuilder->weld_check_button(u"adaptwidth"_ustr))
     , m_xProportionalCB(m_xBuilder->weld_check_button(u"adaptcolumns"_ustr))
     , m_xSpaceFT(m_xBuilder->weld_label(u"spaceft"_ustr))
@@ -782,8 +783,8 @@ IMPL_LINK_NOARG(SwTableColumnPage, SizeHdl, void*, void)
         if (pTopLevel->get_preferred_size().Width() > aOrigSize.Width())
         {
             m_nMetFields = i + 1;
-            m_aTextArr[i]->set_grid_width(1);
-            m_xUpBtn->set_grid_left_attach(m_nMetFields * 2 - 1);
+            m_xColumnWidthsGrid->set_child_column_span(*m_aTextArr[i], 1);
+            m_xColumnWidthsGrid->set_child_left_attach(*m_xUpBtn, m_nMetFields * 2 - 1);
             break;
         }
     }

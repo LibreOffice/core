@@ -111,6 +111,7 @@ class SwTableColumnPage : public SfxTabPage
 
     SwPercentField  m_aFieldArr[MET_FIELDS];
     std::unique_ptr<weld::Label> m_aTextArr[MET_FIELDS];
+    std::unique_ptr<weld::Grid> m_xColumnWidthsGrid;
     std::unique_ptr<weld::CheckButton> m_xModifyTableCB;
     std::unique_ptr<weld::CheckButton> m_xProportionalCB;
     std::unique_ptr<weld::Label> m_xSpaceFT;

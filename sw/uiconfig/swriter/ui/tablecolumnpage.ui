@@ -168,7 +168,7 @@
         <property name="shadow-type">none</property>
         <child>
           <!-- n-columns=12 n-rows=2 -->
-          <object class="GtkGrid" id="grid17">
+          <object class="GtkGrid" id="columnwidthsgrid">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="margin-start">12</property>
