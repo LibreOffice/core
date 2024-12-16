@@ -60,12 +60,15 @@ private:
 
     EEControlBits mnSavedControlBits;
     Color maSavedBackgroundColor;
+    Fraction maScale;
 
 public:
     ScopedVclPtrInstance<VirtualDevice> maVirtualDevice;
 
-    RenderContext(unsigned char* pBuffer, SdrModel& rModel, SdrPage& rPage, Size const& rSlideSize)
+    RenderContext(unsigned char* pBuffer, SdrModel& rModel, SdrPage& rPage, Size const& rSlideSize,
+                  const Fraction& rScale)
         : mrModel(rModel)
+        , maScale(rScale)
         , maVirtualDevice(DeviceFormat::WITHOUT_ALPHA)
     {
         SdrOutliner& rOutliner = mrModel.GetDrawOutliner();
@@ -80,8 +83,8 @@ public:
 
         maVirtualDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
 
-        maVirtualDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(rSlideSize, Fraction(1.0),
-                                                                   Point(), pBuffer);
+        maVirtualDevice->SetOutputSizePixelScaleOffsetAndLOKBuffer(rSlideSize, maScale, Point(),
+                                                                   pBuffer);
         Size aPageSize(rPage.GetSize());
 
         MapMode aMapMode(MapUnit::Map100thMM);
@@ -980,11 +983,12 @@ void SlideshowLayerRenderer::writeJSON(OString& rJsonMsg, RenderPass const& rRen
     maRenderState.incrementIndex();
 }
 
-bool SlideshowLayerRenderer::render(unsigned char* pBuffer, bool& bIsBitmapLayer, OString& rJsonMsg)
+bool SlideshowLayerRenderer::render(unsigned char* pBuffer, bool& bIsBitmapLayer, double& rScale,
+                                    OString& rJsonMsg)
 {
     // We want to render one pass (one iteration through objects)
 
-    RenderContext aRenderContext(pBuffer, mrModel, mrPage, maSlideSize);
+    RenderContext aRenderContext(pBuffer, mrModel, mrPage, maSlideSize, Fraction(rScale));
 
     // Render Background and analyze other passes
     if (maRenderState.meStage == RenderStage::Background)
@@ -1007,7 +1011,7 @@ bool SlideshowLayerRenderer::render(unsigned char* pBuffer, bool& bIsBitmapLayer
         // We need to return a valid layer, so if background has to be skipped
         // render the next layer
         if (!mbRenderBackground)
-            render(pBuffer, bIsBitmapLayer, rJsonMsg);
+            render(pBuffer, bIsBitmapLayer, rScale, rJsonMsg);
     }
     else
     {
