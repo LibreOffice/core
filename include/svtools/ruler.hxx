@@ -654,8 +654,6 @@ private:
     std::unique_ptr<RulerSelection> mxCurrentHitTest;
     std::unique_ptr<RulerSelection> mxPreviousHitTest;
 
-    rtl::Reference<SvtRulerAccessible> mxAccContext;
-
     std::map<OUString, SalLayoutGlyphs> maTextGlyphs;
 
     SVT_DLLPRIVATE void ImplVDrawLine(vcl::RenderContext& rRenderContext,  tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2 );

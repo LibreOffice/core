@@ -285,7 +285,6 @@ void Ruler::dispose()
 {
     mpSaveData.reset();
     mpDragData.reset();
-    mxAccContext.clear();
     Window::dispose();
 }
 
@@ -2749,8 +2748,6 @@ uno::Reference< XAccessible > Ruler::CreateAccessible()
     uno::Reference< XAccessible >   xAccParent  = pParent->GetAccessible();
     if( xAccParent.is() )
     {
-        // MT: Fixed compiler issue because the address from a temporary object was used.
-        // BUT: Should it really be a Pointer, instead of const&???
         OUString aStr;
         if ( mnWinStyle & WB_HORZ )
         {
@@ -2760,9 +2757,7 @@ uno::Reference< XAccessible > Ruler::CreateAccessible()
         {
             aStr = SvtResId(STR_SVT_ACC_RULER_VERT_NAME);
         }
-        mxAccContext = new SvtRulerAccessible( xAccParent, *this, aStr );
-        SetAccessible(mxAccContext);
-        return mxAccContext;
+        return new SvtRulerAccessible(xAccParent, *this, aStr);
     }
     else
         return uno::Reference< XAccessible >();
