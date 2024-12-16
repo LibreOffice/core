@@ -777,20 +777,20 @@ struct SwAssignFragment
     std::unique_ptr<weld::ComboBox> m_xComboBox;
     std::unique_ptr<weld::Label> m_xPreview;
 
-    SwAssignFragment(weld::Container* pGrid, int nLine)
+    SwAssignFragment(weld::Grid* pGrid, int nLine)
         : m_xBuilder(Application::CreateBuilder(pGrid, u"modules/swriter/ui/assignfragment.ui"_ustr))
         , m_xLabel(m_xBuilder->weld_label(u"label"_ustr))
         , m_xComboBox(m_xBuilder->weld_combo_box(u"combobox"_ustr))
         , m_xPreview(m_xBuilder->weld_label(u"preview"_ustr))
     {
-        m_xLabel->set_grid_left_attach(0);
-        m_xLabel->set_grid_top_attach(nLine);
+        pGrid->set_child_left_attach(*m_xLabel, 0);
+        pGrid->set_child_top_attach(*m_xLabel, nLine);
 
-        m_xComboBox->set_grid_left_attach(1);
-        m_xComboBox->set_grid_top_attach(nLine);
+        pGrid->set_child_left_attach(*m_xComboBox, 1);
+        pGrid->set_child_top_attach(*m_xComboBox, nLine);
 
-        m_xPreview->set_grid_left_attach(2);
-        m_xPreview->set_grid_top_attach(nLine);
+        pGrid->set_child_left_attach(*m_xPreview, 2);
+        pGrid->set_child_top_attach(*m_xPreview, nLine);
     }
 };
 
@@ -800,7 +800,7 @@ class SwAssignFieldsControl
 {
     friend class SwAssignFieldsDialog;
     std::unique_ptr<weld::ScrolledWindow> m_xVScroll;
-    std::unique_ptr<weld::Container> m_xGrid;
+    std::unique_ptr<weld::Grid> m_xGrid;
 
     std::vector<SwAssignFragment> m_aFields;
 
@@ -814,7 +814,7 @@ class SwAssignFieldsControl
     void MakeVisible(const tools::Rectangle & rRect);
 public:
     SwAssignFieldsControl(std::unique_ptr<weld::ScrolledWindow> xWindow,
-                          std::unique_ptr<weld::Container> xGrid);
+                          std::unique_ptr<weld::Grid> xGrid);
 
     void Init(SwAssignFieldsDialog* pDialog, SwMailMergeConfigItem& rConfigItem);
     void SetModifyHdl(const Link<LinkParamNone*,void>& rModifyHdl)
@@ -825,7 +825,7 @@ public:
 };
 
 SwAssignFieldsControl::SwAssignFieldsControl(std::unique_ptr<weld::ScrolledWindow> xWindow,
-                                             std::unique_ptr<weld::Container> xGrid)
+                                             std::unique_ptr<weld::Grid> xGrid)
     : m_xVScroll(std::move(xWindow))
     , m_xGrid(std::move(xGrid))
     , m_rConfigItem(nullptr)
@@ -984,7 +984,7 @@ SwAssignFieldsDialog::SwAssignFieldsDialog(
     , m_xOK(m_xBuilder->weld_button(u"ok"_ustr))
     , m_xPreviewWin(new weld::CustomWeld(*m_xBuilder, u"PREVIEW"_ustr, *m_xPreview))
     , m_xFieldsControl(new SwAssignFieldsControl(m_xBuilder->weld_scrolled_window(u"scroll"_ustr),
-                                                 m_xBuilder->weld_container(u"FIELDS"_ustr)))
+                                                 m_xBuilder->weld_grid(u"FIELDS"_ustr)))
 {
     m_xPreviewWin->set_size_request(m_xMatchingFI->get_approximate_digit_width() * 45,
                                     m_xMatchingFI->get_text_height() * 5);
