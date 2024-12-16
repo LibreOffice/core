@@ -1574,6 +1574,11 @@ void SwXStyle::SetPropertyValue<sal_uInt16(RES_PAPER_BIN)>(const SfxItemProperty
     if (!rValue.has<OUString>() && !rValue.has<sal_Int32>())
         throw lang::IllegalArgumentException();
     SfxPrinter* pPrinter = m_pDoc->getIDocumentDeviceAccess().getPrinter(true);
+
+    // PAPER_BINs have no meaning when there is no actual printer
+    if (pPrinter->IsDisplayPrinter())
+        return;
+
     using printeridx_t = decltype(pPrinter->GetPaperBinCount());
     printeridx_t nBin = std::numeric_limits<printeridx_t>::max();
     if(rValue.has<OUString>())
