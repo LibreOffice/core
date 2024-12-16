@@ -84,7 +84,10 @@ private:
     std::unique_ptr<weld::Label> m_xFtCreatedBy;
     std::unique_ptr<weld::Label> m_xFtCustomized;
 
+    std::unique_ptr<weld::Grid> m_xAreaGrid;
+    std::unique_ptr<weld::Widget> m_xLeftScrolledWindow;
     std::unique_ptr<weld::Widget> m_xLeft;
+    std::unique_ptr<weld::Widget> m_xRightScrolledWindow;
     std::unique_ptr<weld::Widget> m_xRight;
 
     std::unique_ptr<ScEditWindow> m_xWndLeft;

@@ -73,7 +73,7 @@
     <property name="spacing">6</property>
     <child>
       <!-- n-columns=3 n-rows=2 -->
-      <object class="GtkGrid" id="grid1">
+      <object class="GtkGrid" id="areagrid">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="row-spacing">12</property>
@@ -122,7 +122,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkScrolledWindow">
+          <object class="GtkScrolledWindow" id="scrolledwindow_LEFT">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="border-width">0</property>
@@ -182,7 +182,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkScrolledWindow">
+          <object class="GtkScrolledWindow" id="scrolledwindow_RIGHT">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="border-width">0</property>

@@ -63,7 +63,10 @@ ScHFEditPage::ScHFEditPage(weld::Container* pPage, weld::DialogController* pCont
     , m_xFtNone(m_xBuilder->weld_label(u"labelSTR_HF_NONE_IN_BRACKETS"_ustr))
     , m_xFtCreatedBy(m_xBuilder->weld_label(u"labelSTR_HF_CREATED_BY"_ustr))
     , m_xFtCustomized(m_xBuilder->weld_label(u"labelSTR_HF_CUSTOMIZED"_ustr))
+    , m_xAreaGrid(m_xBuilder->weld_grid(u"areagrid"_ustr))
+    , m_xLeftScrolledWindow(m_xBuilder->weld_widget(u"scrolledwindow_LEFT"_ustr))
     , m_xLeft(m_xBuilder->weld_widget(u"labelFT_LEFT"_ustr))
+    , m_xRightScrolledWindow(m_xBuilder->weld_widget(u"scrolledwindow_RIGHT"_ustr))
     , m_xRight(m_xBuilder->weld_widget(u"labelFT_RIGHT"_ustr))
     , m_xWndLeft(new ScEditWindow(Left, pController->getDialog()))
     , m_xWndCenter(new ScEditWindow(Center, pController->getDialog()))
@@ -99,15 +102,15 @@ ScHFEditPage::ScHFEditPage(weld::Container* pPage, weld::DialogController* pCont
     //swap left/right areas and their labels in RTL mode
     if( AllSettings::GetLayoutRTL() )
     {
-        sal_Int32 nOldLeftAttach = m_xLeft->get_grid_left_attach();
-        sal_Int32 nOldRightAttach = m_xRight->get_grid_left_attach();
-        m_xLeft->set_grid_left_attach(nOldRightAttach);
-        m_xRight->set_grid_left_attach(nOldLeftAttach);
+        sal_Int32 nOldLeftAttach = m_xAreaGrid->get_child_left_attach(*m_xLeft);
+        sal_Int32 nOldRightAttach = m_xAreaGrid->get_child_left_attach(*m_xRight);
+        m_xAreaGrid->set_child_left_attach(*m_xLeft, nOldRightAttach);
+        m_xAreaGrid->set_child_left_attach(*m_xRight, nOldLeftAttach);
 
-        nOldLeftAttach = m_xWndLeftWnd->get_grid_left_attach();
-        nOldRightAttach = m_xWndRightWnd->get_grid_left_attach();
-        m_xWndLeftWnd->set_grid_left_attach(nOldRightAttach);
-        m_xWndRightWnd->set_grid_left_attach(nOldLeftAttach);
+        nOldLeftAttach = m_xAreaGrid->get_child_left_attach(*m_xLeftScrolledWindow);
+        nOldRightAttach = m_xAreaGrid->get_child_left_attach(*m_xRightScrolledWindow);
+        m_xAreaGrid->set_child_left_attach(*m_xLeftScrolledWindow, nOldRightAttach);
+        m_xAreaGrid->set_child_left_attach(*m_xRightScrolledWindow, nOldLeftAttach);
     }
     m_xWndLeft->SetFont( rDefaultCellAttribute );
     m_xWndCenter->SetFont( rDefaultCellAttribute );
