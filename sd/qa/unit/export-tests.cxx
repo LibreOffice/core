@@ -1581,6 +1581,20 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testSoftEdges)
         pXmlDoc,
         "/office:document-content/office:automatic-styles/style:style[2]/style:graphic-properties",
         "softedge-radius", u"0.635cm");
+
+    // Text frame object
+    xShapeProps.set(getShapeFromPage(1, 0));
+    CPPUNIT_ASSERT(xShapeProps->getPropertyValue(u"SoftEdgeRadius"_ustr) >>= nRad);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(353), nRad); // 10 pt
+
+    // Test ODF element
+    pXmlDoc = parseExport(u"content.xml"_ustr);
+    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[3]",
+                "family", u"graphic");
+    assertXPath(
+        pXmlDoc,
+        "/office:document-content/office:automatic-styles/style:style[3]/style:graphic-properties",
+        "softedge-radius", u"0.353cm");
 }
 
 CPPUNIT_TEST_FIXTURE(SdExportTest, testShadowBlur)

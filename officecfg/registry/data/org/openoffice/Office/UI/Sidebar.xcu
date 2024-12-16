@@ -807,10 +807,12 @@
             Calc,           Draw,       hidden  ;
             DrawImpress,    Draw,       hidden  ;
             DrawImpress,    Graphic,    hidden  ;
+            DrawImpress,    TextObject, hidden  ;
             WriterVariants, Draw,       hidden  ;
-            Calc,    DrawFontwork, visible ;
+            Calc,           TextObject, hidden  ;
+            Calc,           DrawFontwork, visible ;
             DrawImpress,    DrawFontwork, visible ;
-            WriterVariants,    DrawFontwork, visible ;
+            WriterVariants, DrawFontwork, visible ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">
