@@ -142,6 +142,53 @@ void COSWriter::appendUnicodeTextString(const OUString& rString, OStringBuffer& 
     }
 }
 
+void COSWriter::appendName(std::u16string_view rStr, OStringBuffer& rBuffer)
+{
+    // FIXME i59651 add a check for max length of 127 chars? Per PDF spec 1.4, appendix C.1
+    // I guess than when reading the #xx sequence it will count for a single character.
+    OString aStr(OUStringToOString(rStr, RTL_TEXTENCODING_UTF8));
+    int nLen = aStr.getLength();
+    for (int i = 0; i < nLen; i++)
+    {
+        /*  #i16920# PDF recommendation: output UTF8, any byte
+         *  outside the interval [33(=ASCII'!');126(=ASCII'~')]
+         *  should be escaped hexadecimal
+         *  for the sake of ghostscript which also reads PDF
+         *  but has a narrower acceptance rate we only pass
+         *  alphanumerics and '-' literally.
+         */
+        if ((aStr[i] >= 'A' && aStr[i] <= 'Z') || (aStr[i] >= 'a' && aStr[i] <= 'z')
+            || (aStr[i] >= '0' && aStr[i] <= '9') || aStr[i] == '-')
+        {
+            rBuffer.append(aStr[i]);
+        }
+        else
+        {
+            rBuffer.append('#');
+            appendHex(static_cast<sal_Int8>(aStr[i]), rBuffer);
+        }
+    }
+}
+
+void COSWriter::appendName(const char* pStr, OStringBuffer& rBuffer)
+{
+    // FIXME i59651 see above
+    while (pStr && *pStr)
+    {
+        if ((*pStr >= 'A' && *pStr <= 'Z') || (*pStr >= 'a' && *pStr <= 'z')
+            || (*pStr >= '0' && *pStr <= '9') || *pStr == '-')
+        {
+            rBuffer.append(*pStr);
+        }
+        else
+        {
+            rBuffer.append('#');
+            appendHex(static_cast<sal_Int8>(*pStr), rBuffer);
+        }
+        pStr++;
+    }
+}
+
 } //end vcl::pdf
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
