@@ -44,6 +44,7 @@
 #include <drawinglayer/primitive2d/BufferedDecompositionPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/Tools.hxx>
 #include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
+#include <drawinglayer/primitive2d/textprimitive2d.hxx>
 
 #include <drawinglayer/tools/primitive2dxmldump.hxx>
 
@@ -256,11 +257,45 @@ findTextBlock(drawinglayer::primitive2d::Primitive2DContainer const& rContainer,
     return nullptr;
 }
 
+/// Retrieve paragraph font color to be used in the json message attached to the animated layer
+Color getParagraphFontColor(
+    const drawinglayer::primitive2d::TextHierarchyParagraphPrimitive2D& pParagraphPrimitive2d)
+{
+    auto& rLinesContainer = const_cast<drawinglayer::primitive2d::Primitive2DContainer&>(
+        pParagraphPrimitive2d.getChildren());
+    for (auto& pLine : rLinesContainer)
+    {
+        if (pLine->getPrimitive2DID() == PRIMITIVE2D_ID_TEXTHIERARCHYLINEPRIMITIVE2D)
+        {
+            auto& rLinePrimitive2d
+                = static_cast<drawinglayer::primitive2d::TextHierarchyLinePrimitive2D&>(*pLine);
+            auto& rPortionsContainer = const_cast<drawinglayer::primitive2d::Primitive2DContainer&>(
+                rLinePrimitive2d.getChildren());
+            for (auto& pPortion : rPortionsContainer)
+            {
+                if (pPortion->getPrimitive2DID() == PRIMITIVE2D_ID_TEXTSIMPLEPORTIONPRIMITIVE2D)
+                {
+                    auto& rPortionPrimitive2d
+                        = static_cast<drawinglayer::primitive2d::TextSimplePortionPrimitive2D&>(
+                            *pPortion);
+                    Color aColor(rPortionPrimitive2d.getFontColor());
+                    SAL_INFO("sd", "SlideshowLayerRenderer: modifyParagraphs: "
+                                   "text: "
+                                       << rPortionPrimitive2d.getText()
+                                       << ", color: " << aColor.AsRGBHEXString());
+                    return aColor;
+                }
+            }
+        }
+    }
+    return COL_AUTO;
+}
+
 /// show/hide paragraphs in the container
 void modifyParagraphs(
     const drawinglayer::primitive2d::Primitive2DContainer& rContainer,
     drawinglayer::geometry::ViewInformation2D const& rViewInformation2D,
-    std::deque<sal_Int32> const& rPreserveIndices, bool bRenderObject,
+    std::deque<sal_Int32> const& rPreserveIndices, bool bRenderObject, Color& rFontColor,
     std::vector<drawinglayer::primitive2d::Primitive2DReference>& rPrimitivesToUnhide)
 {
     auto* pTextBlock = findTextBlock(rContainer, rViewInformation2D);
@@ -277,6 +312,8 @@ void modifyParagraphs(
                 auto& pParagraphPrimitive2d
                     = static_cast<drawinglayer::primitive2d::TextHierarchyParagraphPrimitive2D&>(
                         *pPrimitive);
+
+                rFontColor = getParagraphFontColor(pParagraphPrimitive2d);
 
                 // find the index
                 auto aIterator
@@ -531,10 +568,10 @@ class RenderPassObjectRedirector : public sdr::contact::ViewObjectContactRedirec
 {
 protected:
     RenderState& mrRenderState;
-    RenderPass const& mrRenderPass;
+    RenderPass& mrRenderPass;
 
 public:
-    RenderPassObjectRedirector(RenderState& rRenderState, RenderPass const& rRenderPass)
+    RenderPassObjectRedirector(RenderState& rRenderState, RenderPass& rRenderPass)
         : mrRenderState(rRenderState)
         , mrRenderPass(rRenderPass)
     {
@@ -571,7 +608,7 @@ public:
                 = static_cast<drawinglayer::primitive2d::Primitive2DContainer&>(rVisitor);
 
             modifyParagraphs(rContainer, rViewInformation2D, rParagraphs,
-                             mrRenderPass.mbRenderObjectBackground,
+                             mrRenderPass.mbRenderObjectBackground, mrRenderPass.maFontColor,
                              mrRenderState.maPrimitivesToUnhide);
         }
     }
@@ -808,51 +845,9 @@ void writeBoundingBox(::tools::JsonWriter& aJsonWriter, const SdrObject* pObject
     aJsonWriter.put("height", aRect.GetHeight());
 }
 
-uno::Reference<text::XTextRange>
-getParagraphFromShape(int nPara, uno::Reference<beans::XPropertySet> const& xShape)
-{
-    uno::Reference<text::XText> xText
-        = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY_THROW)->getText();
-    if (!xText.is())
-        return {};
-
-    uno::Reference<container::XEnumerationAccess> paraEnumAccess(xText, uno::UNO_QUERY);
-    if (!paraEnumAccess.is())
-        return {};
-    uno::Reference<container::XEnumeration> paraEnum(paraEnumAccess->createEnumeration());
-    if (!paraEnum.is())
-        return {};
-
-    for (int i = 0; i < nPara; ++i)
-        paraEnum->nextElement();
-
-    uno::Reference<text::XTextRange> xParagraph(paraEnum->nextElement(), uno::UNO_QUERY_THROW);
-
-    return xParagraph;
-}
-
-void writeFontColor(::tools::JsonWriter& aJsonWriter, SdrObject* pObject, sal_Int32 nParagraph)
-{
-    uno::Reference<drawing::XShape> xShape = GetXShapeForSdrObject(pObject);
-    uno::Reference<beans::XPropertySet> xShapePropSet(xShape, uno::UNO_QUERY_THROW);
-    if (!xShapePropSet.is())
-        return;
-
-    uno::Reference<text::XTextRange> xParagraph = getParagraphFromShape(nParagraph, xShapePropSet);
-    if (!xParagraph.is())
-        return;
-
-    uno::Reference<beans::XPropertySet> xPropSet(xParagraph->getStart(), uno::UNO_QUERY_THROW);
-    if (!xPropSet)
-        return;
-
-    Color aCharColor;
-    xPropSet->getPropertyValue("CharColor") >>= aCharColor;
-    aJsonWriter.put("fontColor", "#" + aCharColor.AsRGBHEXString());
-}
-
 void writeAnimated(::tools::JsonWriter& aJsonWriter, AnimationLayerInfo const& rLayerInfo,
-                   SdrObject* pObject, sal_Int32 nParagraph = -1)
+                   SdrObject* pObject, sal_Int32 nParagraph = -1,
+                   const Color& rFontColor = COL_AUTO)
 {
     aJsonWriter.put("type", "animated");
     {
@@ -891,7 +886,12 @@ void writeAnimated(::tools::JsonWriter& aJsonWriter, AnimationLayerInfo const& r
             }
             else
             {
-                writeFontColor(aJsonWriter, pObject, nParagraph);
+                if (rFontColor == COL_AUTO)
+                {
+                    SAL_WARN("sd", "SlideshowLayerRenderer: on writing JSON info for an animated "
+                                   "paragraph layer: font color is set to auto.");
+                }
+                aJsonWriter.put("fontColor", "#" + rFontColor.AsRGBHEXString());
             }
         }
     }
@@ -932,7 +932,8 @@ void SlideshowLayerRenderer::writeJSON(OString& rJsonMsg, RenderPass const& rRen
             auto aParagraphInfoIterator = rInfo.maParagraphInfos.find(nParagraph);
             if (aParagraphInfoIterator != rInfo.maParagraphInfos.end())
             {
-                writeAnimated(aJsonWriter, aParagraphInfoIterator->second, pObject, nParagraph);
+                writeAnimated(aJsonWriter, aParagraphInfoIterator->second, pObject, nParagraph,
+                              rRenderPass.maFontColor);
             }
         }
         else if (rInfo.moObjectInfo)
@@ -1017,7 +1018,7 @@ bool SlideshowLayerRenderer::render(unsigned char* pBuffer, bool& bIsBitmapLayer
             cleanup();
             return false;
         }
-        auto const& rRenderPass = maRenderState.maRenderPasses.front();
+        auto& rRenderPass = maRenderState.maRenderPasses.front();
         maRenderState.meStage = rRenderPass.meStage;
 
         bIsBitmapLayer = !rRenderPass.mbPlaceholder;
