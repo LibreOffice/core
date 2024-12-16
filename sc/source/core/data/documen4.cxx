@@ -813,8 +813,10 @@ const SfxItemSet* ScDocument::GetCondResult(
     ScRefCellValue& rCell, const ScAddress& rPos, const ScConditionalFormatList& rList,
     const ScCondFormatIndexes& rIndex ) const
 {
-    for (const auto& rItem : rIndex)
+    for (size_t i = 0, nLen = rIndex.size(); i < nLen; ++i)
     {
+        const auto& rItem = rIndex[i];
+
         const ScConditionalFormat* pForm = rList.GetFormat(rItem);
         if (!pForm)
             continue;
