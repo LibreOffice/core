@@ -16,6 +16,7 @@ $(eval $(call gb_Module_add_targets,extras,\
 	CustomTarget_gallsystem \
 	CustomTarget_templates \
 	Package_autocorr \
+	Package_autotext \
 	Package_autotextuser \
 	Package_cfgsrvnolang \
 	Package_cfgusr \
