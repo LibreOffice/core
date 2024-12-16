@@ -282,21 +282,7 @@ Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(vcl::
 
     WindowType nType = pWindow->GetType();
 
-    if ( nType == WindowType::MENUBARWINDOW || pWindow->IsMenuFloatingWindow() || pWindow->IsToolbarFloatingWindow() )
-    {
-        Reference< XAccessible > xAcc( pWindow->GetAccessible() );
-        if ( xAcc.is() )
-        {
-            Reference<XAccessibleContext > xContext(xAcc->getAccessibleContext());
-            if ( pWindow->GetType() == WindowType::MENUBARWINDOW ||
-                ( xContext.is() && xContext->getAccessibleRole() == AccessibleRole::POPUP_MENU ) )
-            {
-                return xContext;
-            }
-        }
-    }
-
-    else if ( nType == WindowType::STATUSBAR )
+    if ( nType == WindowType::STATUSBAR )
     {
         return new VCLXAccessibleStatusBar(pWindow);
     }
@@ -329,8 +315,6 @@ Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(vcl::
     {
         return new VCLXAccessibleComponent(pWindow);
     }
-
-    return nullptr;
 }
 
 Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(ToolBox* pToolBox)
