@@ -150,57 +150,6 @@ void appendHexArray(sal_uInt8* pArray, size_t nSize, OStringBuffer& rBuffer)
         appendHex(pArray[i], rBuffer);
 }
 
-void appendName( std::u16string_view rStr, OStringBuffer& rBuffer )
-{
-// FIXME i59651 add a check for max length of 127 chars? Per PDF spec 1.4, appendix C.1
-// I guess than when reading the #xx sequence it will count for a single character.
-    OString aStr( OUStringToOString( rStr, RTL_TEXTENCODING_UTF8 ) );
-    int nLen = aStr.getLength();
-    for( int i = 0; i < nLen; i++ )
-    {
-        /*  #i16920# PDF recommendation: output UTF8, any byte
-         *  outside the interval [33(=ASCII'!');126(=ASCII'~')]
-         *  should be escaped hexadecimal
-         *  for the sake of ghostscript which also reads PDF
-         *  but has a narrower acceptance rate we only pass
-         *  alphanumerics and '-' literally.
-         */
-        if( (aStr[i] >= 'A' && aStr[i] <= 'Z' ) ||
-            (aStr[i] >= 'a' && aStr[i] <= 'z' ) ||
-            (aStr[i] >= '0' && aStr[i] <= '9' ) ||
-            aStr[i] == '-' )
-        {
-            rBuffer.append( aStr[i] );
-        }
-        else
-        {
-            rBuffer.append( '#' );
-            appendHex( static_cast<sal_Int8>(aStr[i]), rBuffer );
-        }
-    }
-}
-
-void appendName( const char* pStr, OStringBuffer& rBuffer )
-{
-    // FIXME i59651 see above
-    while( pStr && *pStr )
-    {
-        if( (*pStr >= 'A' && *pStr <= 'Z' ) ||
-            (*pStr >= 'a' && *pStr <= 'z' ) ||
-            (*pStr >= '0' && *pStr <= '9' ) ||
-            *pStr == '-' )
-        {
-            rBuffer.append( *pStr );
-        }
-        else
-        {
-            rBuffer.append( '#' );
-            appendHex( static_cast<sal_Int8>(*pStr), rBuffer );
-        }
-        pStr++;
-    }
-}
-
 //used only to emit encoded passwords
 void appendLiteralString( const char* pStr, sal_Int32 nLength, OStringBuffer& rBuffer )
 {
@@ -2437,7 +2386,7 @@ sal_Int32 PDFWriterImpl::emitBuildinFont(const pdf::BuildinFontFace* pFD, sal_In
         OString::number(nFontObject)
         + " 0 obj\n"
           "<</Type/Font/Subtype/Type1/BaseFont/" );
-    appendName( rBuildinFont.m_pPSName, aLine );
+    COSWriter::appendName( rBuildinFont.m_pPSName, aLine );
     aLine.append( "\n" );
     if( rBuildinFont.m_eCharSet == RTL_TEXTENCODING_MS_1252 )
          aLine.append( "/Encoding/WinAnsiEncoding\n" );
@@ -2497,7 +2446,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const vcl::font:
                 + " 0 obj\n"
                   "<</Type/Font/Subtype/TrueType"
                   "/BaseFont/" );
-            appendName( aInfo.m_aPSName, aLine );
+            COSWriter::appendName( aInfo.m_aPSName, aLine );
             aLine.append( "\n" );
             if (!pFace->IsMicrosoftSymbolEncoded())
                 aLine.append( "/Encoding/WinAnsiEncoding\n" );
@@ -2610,7 +2559,7 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
             OString::number(nFontObject)
             + " 0 obj\n"
               "<</Type/Font/Subtype/Type3/Name/");
-        appendName(aSubsetInfo.m_aPSName, aLine);
+        COSWriter::appendName(aSubsetInfo.m_aPSName, aLine);
 
         aLine.append(
             "\n/FontBBox["
@@ -2926,7 +2875,7 @@ static void appendSubsetName( int nSubsetID, std::u16string_view rPSName, OStrin
         }
         rBuffer.append( '+' );
     }
-    appendName( rPSName, rBuffer );
+    COSWriter::appendName( rPSName, rBuffer );
 }
 
 sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8 const * pEncoding,
@@ -4794,7 +4743,7 @@ bool PDFWriterImpl::emitWidgetAnnotations()
                         SvMemoryStream* pStream = stream_it->second;
                         app_it->second.erase( stream_it );
                         OStringBuffer aBuf( rWidget.m_aOnValue.getLength()*2 );
-                        appendName( rWidget.m_aOnValue, aBuf );
+                        COSWriter::appendName( rWidget.m_aOnValue, aBuf );
                         (app_it->second)[ aBuf.makeStringAndClear() ] = pStream;
                     }
                     else
@@ -4813,7 +4762,7 @@ bool PDFWriterImpl::emitWidgetAnnotations()
                         SvMemoryStream* pStream = stream_it->second;
                         app_it->second.erase( stream_it );
                         OStringBuffer aBuf( rWidget.m_aOffValue.getLength()*2 );
-                        appendName( rWidget.m_aOffValue, aBuf );
+                        COSWriter::appendName( rWidget.m_aOffValue, aBuf );
                         (app_it->second)[ aBuf.makeStringAndClear() ] = pStream;
                     }
                     else
@@ -4882,7 +4831,7 @@ bool PDFWriterImpl::emitWidgetAnnotations()
                         if( rWidget.m_aValue.isEmpty() )
                             aValue.append( "Off" );
                         else
-                            appendName( rWidget.m_aValue, aValue );
+                            COSWriter::appendName( rWidget.m_aValue, aValue );
                     }
                     [[fallthrough]];
                 case PDFWriter::PushButton:
@@ -5226,7 +5175,7 @@ bool PDFWriterImpl::emitEmbeddedFiles()
         if (!rEmbeddedFile.m_aSubType.isEmpty())
         {
             aLine.append("/Subtype /");
-            appendName(rEmbeddedFile.m_aSubType, aLine);
+            COSWriter::appendName(rEmbeddedFile.m_aSubType, aLine);
         }
         aLine.append(" /Length ");
         appendObjectReference(nSizeObject, aLine);
@@ -6250,7 +6199,7 @@ bool PDFWriterImpl::emitTrailer()
         for (auto const& rAttachedFile : m_aDocumentAttachedFiles)
         {
             aLine.append( "/" );
-            appendName(rAttachedFile.maMimeType, aLine);
+            COSWriter::appendName(rAttachedFile.maMimeType, aLine);
             aLine.append(" ");
             appendObjectReference(rAttachedFile.mnEmbeddedFileObjectId, aLine);
             aLine.append("\n");
@@ -11095,7 +11044,7 @@ void PDFWriterImpl::initStructureElement(sal_Int32 const id,
     if( !rAlias.empty() && eType != PDFWriter::NonStructElement )
     {
         OStringBuffer aNameBuf( rAlias.size() );
-        appendName( rAlias, aNameBuf );
+        COSWriter::appendName( rAlias, aNameBuf );
         OString aAliasName( aNameBuf.makeStringAndClear() );
         rEle.m_aAlias = aAliasName;
         addRoleMap(aAliasName, eType);
@@ -11890,7 +11839,7 @@ void PDFWriterImpl::ensureUniqueRadioOnValues()
                         SvMemoryStream* pStream = stream_it->second;
                         app_it->second.erase( stream_it );
                         OStringBuffer aBuf( rKid.m_aOnValue.getLength()*2 );
-                        appendName( rKid.m_aOnValue, aBuf );
+                        COSWriter::appendName( rKid.m_aOnValue, aBuf );
                         (app_it->second)[ aBuf.makeStringAndClear() ] = pStream;
                     }
                     else
@@ -11909,7 +11858,7 @@ void PDFWriterImpl::ensureUniqueRadioOnValues()
                         SvMemoryStream* pStream = stream_it->second;
                         app_it->second.erase( stream_it );
                         OStringBuffer aBuf( rKid.m_aOffValue.getLength()*2 );
-                        appendName( rKid.m_aOffValue, aBuf );
+                        COSWriter::appendName( rKid.m_aOffValue, aBuf );
                         (app_it->second)[ aBuf.makeStringAndClear() ] = pStream;
                     }
                     else
