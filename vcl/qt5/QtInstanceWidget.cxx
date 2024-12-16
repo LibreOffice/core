@@ -277,24 +277,6 @@ OUString QtInstanceWidget::get_help_id() const
     return toOUString(aHelpIdVariant.toString());
 }
 
-void QtInstanceWidget::set_grid_left_attach(int) { assert(false && "Not implemented yet"); }
-
-int QtInstanceWidget::get_grid_left_attach() const
-{
-    assert(false && "Not implemented yet");
-    return -1;
-}
-
-void QtInstanceWidget::set_grid_width(int) { assert(false && "Not implemented yet"); }
-
-void QtInstanceWidget::set_grid_top_attach(int) { assert(false && "Not implemented yet"); }
-
-int QtInstanceWidget::get_grid_top_attach() const
-{
-    assert(false && "Not implemented yet");
-    return -1;
-}
-
 void QtInstanceWidget::set_hexpand(bool) { assert(false && "Not implemented yet"); }
 
 bool QtInstanceWidget::get_hexpand() const

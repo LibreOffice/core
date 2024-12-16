@@ -74,16 +74,6 @@ public:
 
     virtual OUString get_help_id() const override;
 
-    virtual void set_grid_left_attach(int) override;
-
-    virtual int get_grid_left_attach() const override;
-
-    virtual void set_grid_width(int) override;
-
-    virtual void set_grid_top_attach(int) override;
-
-    virtual int get_grid_top_attach() const override;
-
     virtual void set_hexpand(bool) override;
 
     virtual bool get_hexpand() const override;

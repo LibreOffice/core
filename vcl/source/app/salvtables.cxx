@@ -437,22 +437,6 @@ void SalInstanceWidget::set_help_id(const OUString& rId) { return m_xWidget->Set
 
 OUString SalInstanceWidget::get_help_id() const { return m_xWidget->GetHelpId(); }
 
-void SalInstanceWidget::set_grid_left_attach(int nAttach)
-{
-    m_xWidget->set_grid_left_attach(nAttach);
-}
-
-int SalInstanceWidget::get_grid_left_attach() const { return m_xWidget->get_grid_left_attach(); }
-
-void SalInstanceWidget::set_grid_width(int nCols) { m_xWidget->set_grid_width(nCols); }
-
-void SalInstanceWidget::set_grid_top_attach(int nAttach)
-{
-    m_xWidget->set_grid_top_attach(nAttach);
-}
-
-int SalInstanceWidget::get_grid_top_attach() const { return m_xWidget->get_grid_top_attach(); }
-
 void SalInstanceWidget::set_hexpand(bool bExpand) { m_xWidget->set_hexpand(bExpand); }
 
 bool SalInstanceWidget::get_hexpand() const { return m_xWidget->get_hexpand(); }

@@ -195,16 +195,6 @@ public:
     virtual OUString get_help_id() const = 0;
     virtual void set_help_id(const OUString& rName) = 0;
 
-    // NOTE: The following 5 methods for handling grid positions
-    // and column span are deprecated and should not be used in new code.
-    // Call the corresponding weld::Grid methods on the parent grid instead.
-    // (These deprecated methods will be dropped once existing code has been ported.)
-    virtual void set_grid_left_attach(int nAttach) = 0;
-    virtual int get_grid_left_attach() const = 0;
-    virtual void set_grid_width(int nCols) = 0;
-    virtual void set_grid_top_attach(int nAttach) = 0;
-    virtual int get_grid_top_attach() const = 0;
-
     virtual void set_hexpand(bool bExpand) = 0;
     virtual bool get_hexpand() const = 0;
     virtual void set_vexpand(bool bExpand) = 0;
