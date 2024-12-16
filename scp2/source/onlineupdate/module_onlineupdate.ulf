@@ -20,5 +20,4 @@
 en-US = "Online Update"
 
 [STR_DESC_MODULE_OPT_ONLINEUPDATE]
-en-US = "Get automatically notified when a new update of %PRODUCTNAME becomes available." 
-
+en-US = "Get automatically notified when a new update for %PRODUCTNAME or any installed extensions becomes available."
