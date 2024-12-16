@@ -1528,6 +1528,46 @@ void SalInstanceBox::reorder_child(weld::Widget* pWidget, int nNewPosition)
 
 void SalInstanceBox::sort_native_button_order() { ::sort_native_button_order(*m_xBox); }
 
+SalInstanceGrid::SalInstanceGrid(VclGrid* pGrid, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : SalInstanceContainer(pGrid, pBuilder, bTakeOwnership)
+{
+}
+
+void SalInstanceGrid::set_child_left_attach(weld::Widget& rWidget, int nAttach)
+{
+    vcl::Window* pChild = dynamic_cast<SalInstanceWidget&>(rWidget).getWidget();
+    assert(pChild && pChild->GetParent() == getWidget() && "widget is not a grid child");
+    pChild->set_grid_left_attach(nAttach);
+}
+
+int SalInstanceGrid::get_child_left_attach(weld::Widget& rWidget) const
+{
+    vcl::Window* pChild = dynamic_cast<SalInstanceWidget&>(rWidget).getWidget();
+    assert(pChild && pChild->GetParent() == getWidget() && "widget is not a grid child");
+    return pChild->get_grid_left_attach();
+}
+
+void SalInstanceGrid::set_child_column_span(weld::Widget& rWidget, int nCols)
+{
+    vcl::Window* pChild = dynamic_cast<SalInstanceWidget&>(rWidget).getWidget();
+    assert(pChild && pChild->GetParent() == getWidget() && "widget is not a grid child");
+    pChild->set_grid_width(nCols);
+}
+
+void SalInstanceGrid::set_child_top_attach(weld::Widget& rWidget, int nAttach)
+{
+    vcl::Window* pChild = dynamic_cast<SalInstanceWidget&>(rWidget).getWidget();
+    assert(pChild && pChild->GetParent() == getWidget() && "widget is not a grid child");
+    pChild->set_grid_top_attach(nAttach);
+}
+
+int SalInstanceGrid::get_child_top_attach(weld::Widget& rWidget) const
+{
+    vcl::Window* pChild = dynamic_cast<SalInstanceWidget&>(rWidget).getWidget();
+    assert(pChild && pChild->GetParent() == getWidget() && "widget is not a grid child");
+    return pChild->get_grid_top_attach();
+}
+
 namespace
 {
 void CollectChildren(const vcl::Window& rCurrent, const basegfx::B2IPoint& rTopLeft,
@@ -7260,6 +7300,12 @@ std::unique_ptr<weld::Box> SalInstanceBuilder::weld_box(const OUString& id)
 {
     VclBox* pContainer = m_xBuilder->get<VclBox>(id);
     return pContainer ? std::make_unique<SalInstanceBox>(pContainer, this, false) : nullptr;
+}
+
+std::unique_ptr<weld::Grid> SalInstanceBuilder::weld_grid(const OUString& id)
+{
+    VclGrid* pGrid = m_xBuilder->get<VclGrid>(id);
+    return pGrid ? std::make_unique<SalInstanceGrid>(pGrid, this, false) : nullptr;
 }
 
 std::unique_ptr<weld::Paned> SalInstanceBuilder::weld_paned(const OUString& id)

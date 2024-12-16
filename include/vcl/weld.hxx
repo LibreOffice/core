@@ -195,6 +195,10 @@ public:
     virtual OUString get_help_id() const = 0;
     virtual void set_help_id(const OUString& rName) = 0;
 
+    // NOTE: The following 5 methods for handling grid positions
+    // and column span are deprecated and should not be used in new code.
+    // Call the corresponding weld::Grid methods on the parent grid instead.
+    // (These deprecated methods will be dropped once existing code has been ported.)
     virtual void set_grid_left_attach(int nAttach) = 0;
     virtual int get_grid_left_attach() const = 0;
     virtual void set_grid_width(int nCols) = 0;
@@ -420,6 +424,16 @@ public:
     virtual void reorder_child(weld::Widget* pWidget, int position) = 0;
     // Sort ok/cancel etc buttons in platform order
     virtual void sort_native_button_order() = 0;
+};
+
+class VCL_DLLPUBLIC Grid : virtual public Container
+{
+public:
+    virtual void set_child_left_attach(weld::Widget& rWidget, int nAttach) = 0;
+    virtual int get_child_left_attach(weld::Widget& rWidget) const = 0;
+    virtual void set_child_column_span(weld::Widget& rWidget, int nCols) = 0;
+    virtual void set_child_top_attach(weld::Widget& rWidget, int nAttach) = 0;
+    virtual int get_child_top_attach(weld::Widget& rWidget) const = 0;
 };
 
 class VCL_DLLPUBLIC Paned : virtual public Container
@@ -2657,6 +2671,7 @@ public:
     virtual std::unique_ptr<Widget> weld_widget(const OUString& id) = 0;
     virtual std::unique_ptr<Container> weld_container(const OUString& id) = 0;
     virtual std::unique_ptr<Box> weld_box(const OUString& id) = 0;
+    virtual std::unique_ptr<Grid> weld_grid(const OUString& id) = 0;
     virtual std::unique_ptr<Paned> weld_paned(const OUString& id) = 0;
     virtual std::unique_ptr<Button> weld_button(const OUString& id) = 0;
     virtual std::unique_ptr<MenuButton> weld_menu_button(const OUString& id) = 0;

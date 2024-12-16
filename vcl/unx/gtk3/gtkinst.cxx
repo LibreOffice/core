@@ -6201,6 +6201,98 @@ public:
     }
 };
 
+class GtkInstanceGrid : public GtkInstanceContainer, public virtual weld::Grid
+{
+private:
+    GtkGrid* m_pGrid;
+
+public:
+    GtkInstanceGrid(GtkGrid* pGrid, GtkInstanceBuilder* pBuilder, bool bTakeOwnership)
+#if !GTK_CHECK_VERSION(4, 0, 0)
+        : GtkInstanceContainer(GTK_CONTAINER(pGrid), pBuilder, bTakeOwnership)
+#else
+        : GtkInstanceContainer(GTK_WIDGET(pGrid), pBuilder, bTakeOwnership)
+#endif
+        , m_pGrid(pGrid)
+    {
+    }
+
+public:
+    virtual void set_child_left_attach(weld::Widget& rWidget, int nAttach) override
+    {
+        GtkWidget* pWidget = dynamic_cast<GtkInstanceWidget&>(rWidget).getWidget();
+        assert(gtk_widget_get_parent(pWidget) == GTK_WIDGET(m_pGrid) && "widget is not a grid child");
+#if GTK_CHECK_VERSION(4, 0, 0)
+        int row, width, height;
+        gtk_grid_query_child(m_pGrid, pWidget, nullptr, &row, &width, &height);
+        g_object_ref(pWidget);
+        gtk_grid_remove(m_pGrid, pWidget);
+        gtk_grid_attach(m_pGrid, pWidget, nAttach, row, width, height);
+        g_object_unref(pWidget);
+#else
+        gtk_container_child_set(GTK_CONTAINER(m_pGrid), pWidget, "left-attach", nAttach, nullptr);
+#endif
+    }
+
+    virtual int get_child_left_attach(weld::Widget& rWidget) const override
+    {
+        GtkWidget* pWidget = dynamic_cast<GtkInstanceWidget&>(rWidget).getWidget();
+        assert(gtk_widget_get_parent(pWidget) == GTK_WIDGET(m_pGrid) && "widget is not a grid child");
+        gint nAttach(0);
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_grid_query_child(m_pGrid, pWidget, &nAttach, nullptr, nullptr, nullptr);
+#else
+        gtk_container_child_get(GTK_CONTAINER(m_pGrid), pWidget, "left-attach", &nAttach, nullptr);
+#endif
+        return nAttach;
+    }
+
+    virtual void set_child_column_span(weld::Widget& rWidget, int nCols) override
+    {
+        GtkWidget* pWidget = dynamic_cast<GtkInstanceWidget&>(rWidget).getWidget();
+        assert(gtk_widget_get_parent(pWidget) == GTK_WIDGET(m_pGrid) && "widget is not a grid child");
+#if GTK_CHECK_VERSION(4, 0, 0)
+        int col, row, height;
+        gtk_grid_query_child(m_pGrid, pWidget, &col, &row, nullptr, &height);
+        g_object_ref(pWidget);
+        gtk_grid_remove(m_pGrid, pWidget);
+        gtk_grid_attach(m_pGrid, pWidget, col, row, nCols, height);
+        g_object_unref(pWidget);
+#else
+        gtk_container_child_set(GTK_CONTAINER(m_pGrid), pWidget, "width", nCols, nullptr);
+#endif
+    }
+
+    virtual void set_child_top_attach(weld::Widget& rWidget, int nAttach) override
+    {
+        GtkWidget* pWidget = dynamic_cast<GtkInstanceWidget&>(rWidget).getWidget();
+        assert(gtk_widget_get_parent(pWidget) == GTK_WIDGET(m_pGrid) && "widget is not a grid child");
+#if GTK_CHECK_VERSION(4, 0, 0)
+        int col, width, height;
+        gtk_grid_query_child(m_pGrid, pWidget, &col, nullptr, &width, &height);
+        g_object_ref(pWidget);
+        gtk_grid_remove(m_pGrid, pWidget);
+        gtk_grid_attach(m_pGrid, pWidget, col, nAttach, width, height);
+        g_object_unref(pWidget);
+#else
+        gtk_container_child_set(GTK_CONTAINER(m_pGrid), pWidget, "top-attach", nAttach, nullptr);
+#endif
+    }
+
+    virtual int get_child_top_attach(weld::Widget& rWidget) const override
+    {
+        GtkWidget* pWidget = dynamic_cast<GtkInstanceWidget&>(rWidget).getWidget();
+        assert(gtk_widget_get_parent(pWidget) == GTK_WIDGET(m_pGrid) && "widget is not a grid child");
+        gint nAttach(0);
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_grid_query_child(m_pGrid, pWidget, nullptr, &nAttach, nullptr, nullptr);
+#else
+        gtk_container_child_get(GTK_CONTAINER(m_pGrid), pWidget, "top-attach", &nAttach, nullptr);
+#endif
+        return nAttach;
+    }
+};
+
 }
 
 namespace
@@ -24584,6 +24676,15 @@ public:
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pBox));
         return std::make_unique<GtkInstanceBox>(pBox, this, false);
+    }
+
+    virtual std::unique_ptr<weld::Grid> weld_grid(const OUString &id) override
+    {
+        GtkGrid* pGrid = GTK_GRID(gtk_builder_get_object(m_pBuilder, OUStringToOString(id, RTL_TEXTENCODING_UTF8).getStr()));
+        if (!pGrid)
+            return nullptr;
+        auto_add_parentless_widgets_to_container(GTK_WIDGET(pGrid));
+        return std::make_unique<GtkInstanceGrid>(pGrid, this, false);
     }
 
     virtual std::unique_ptr<weld::Paned> weld_paned(const OUString &id) override

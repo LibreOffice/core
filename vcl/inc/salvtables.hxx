@@ -64,6 +64,8 @@ public:
 
     virtual std::unique_ptr<weld::Box> weld_box(const OUString& id) override;
 
+    virtual std::unique_ptr<weld::Grid> weld_grid(const OUString& id) override;
+
     virtual std::unique_ptr<weld::Paned> weld_paned(const OUString& id) override;
 
     virtual std::unique_ptr<weld::Frame> weld_frame(const OUString& id) override;
@@ -2135,6 +2137,19 @@ public:
     SalInstanceBox(VclBox* pContainer, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
     virtual void reorder_child(weld::Widget* pWidget, int nNewPosition) override;
     virtual void sort_native_button_order() override;
+};
+
+class SalInstanceGrid : public SalInstanceContainer, public virtual weld::Grid
+{
+public:
+    SalInstanceGrid(VclGrid* pGrid, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
+
+public:
+    virtual void set_child_left_attach(weld::Widget& rWidget, int nAttach) override;
+    virtual int get_child_left_attach(weld::Widget& rWidget) const override;
+    virtual void set_child_column_span(weld::Widget& rWidget, int nCols) override;
+    virtual void set_child_top_attach(weld::Widget& rWidget, int nAttach) override;
+    virtual int get_child_top_attach(weld::Widget& rWidget) const override;
 };
 
 class SalInstanceImage : public SalInstanceWidget, public virtual weld::Image

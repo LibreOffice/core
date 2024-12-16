@@ -153,6 +153,12 @@ std::unique_ptr<weld::Box> QtInstanceBuilder::weld_box(const OUString&)
     return nullptr;
 }
 
+std::unique_ptr<weld::Grid> QtInstanceBuilder::weld_grid(const OUString&)
+{
+    assert(false && "Not implemented yet");
+    return nullptr;
+}
+
 std::unique_ptr<weld::Paned> QtInstanceBuilder::weld_paned(const OUString&)
 {
     assert(false && "Not implemented yet");
