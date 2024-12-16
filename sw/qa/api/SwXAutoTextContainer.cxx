@@ -53,6 +53,15 @@ public:
         Reference<text::XAutoTextContainer> xAutoTextContainer
             = text::AutoTextContainer::create(comphelper::getProcessComponentContext());
 
+        try
+        {
+            // See qadevOOo/tests/java/mod/_sw/SwXAutoTextGroup.java.
+            xAutoTextContainer->removeByName(u"myNewGroup2*1"_ustr);
+        }
+        catch (const container::NoSuchElementException&)
+        {
+        }
+
         Reference<container::XNameAccess> xNA(xAutoTextContainer, UNO_QUERY_THROW);
         Sequence<rtl::OUString> aNames = xNA->getElementNames();
         std::cout << aNames[0] << std::endl;
