@@ -50,17 +50,17 @@ struct SwAddressFragment
     std::unique_ptr<weld::Entry> m_xEntry;
     weld::Container* m_pGrid;
 
-    SwAddressFragment(weld::Container* pGrid, int nLine)
+    SwAddressFragment(weld::Grid* pGrid, int nLine)
         : m_xBuilder(Application::CreateBuilder(pGrid, u"modules/swriter/ui/addressfragment.ui"_ustr))
         , m_xLabel(m_xBuilder->weld_label(u"label"_ustr))
         , m_xEntry(m_xBuilder->weld_entry(u"entry"_ustr))
         , m_pGrid(pGrid)
     {
-        m_xLabel->set_grid_left_attach(0);
-        m_xLabel->set_grid_top_attach(nLine);
+        pGrid->set_child_left_attach(*m_xLabel, 0);
+        pGrid->set_child_top_attach(*m_xLabel, nLine);
 
-        m_xEntry->set_grid_left_attach(1);
-        m_xEntry->set_grid_top_attach(nLine);
+        pGrid->set_child_left_attach(*m_xEntry, 1);
+        pGrid->set_child_top_attach(*m_xEntry, nLine);
     }
 
     ~SwAddressFragment()
@@ -82,7 +82,7 @@ class SwAddressControl_Impl
     bool                            m_bNoDataSet;
 
     std::unique_ptr<weld::ScrolledWindow> m_xScrollBar;
-    std::unique_ptr<weld::Container> m_xWindow;
+    std::unique_ptr<weld::Grid> m_xWindow;
     std::vector<std::unique_ptr<SwAddressFragment>> m_aLines;
 
     DECL_LINK(GotFocusHdl_Impl, weld::Widget&, void);
@@ -106,7 +106,7 @@ SwAddressControl_Impl::SwAddressControl_Impl(weld::Builder& rBuilder)
     , m_nCurrentDataSet(0)
     , m_bNoDataSet(true)
     , m_xScrollBar(rBuilder.weld_scrolled_window(u"scrollwin"_ustr))
-    , m_xWindow(rBuilder.weld_container(u"CONTAINER"_ustr))
+    , m_xWindow(rBuilder.weld_grid(u"CONTAINER"_ustr))
 {
 }
 
