@@ -423,6 +423,16 @@ static sal_Int32 lcl_GetWidth(const HTMLOptions& options)
     }
     return 1000;
 }
+static sal_Int32 lcl_GetSpan(const HTMLOptions& options)
+{
+    for (HTMLOptions::const_iterator optionIt = options.begin(); optionIt != options.end();
+         ++optionIt)
+    {
+        if (optionIt->GetToken() == HtmlOptionId::SPAN)
+            return optionIt->GetNumber();
+    }
+    return 1;
+}
 void SdrTableHTMLParser::ProcToken(HtmlImportInfo* pInfo)
 {
     HTMLParser* pHtmlParser = static_cast<HTMLParser*>(pInfo->pParser);
@@ -492,6 +502,23 @@ void SdrTableHTMLParser::ProcToken(HtmlImportInfo* pInfo)
         }
         break;
         case HtmlTokenId::COL_OFF:
+            break;
+        case HtmlTokenId::COLGROUP_ON:
+        {
+            const sal_Int32 nSpan = lcl_GetSpan(options);
+            for (sal_Int32 nCol = 0; nCol < nSpan; ++nCol)
+            {
+                std::shared_ptr<HTMLCellDefault> pDefault(mpInsDefault.release());
+                maDefaultList.push_back(pDefault);
+                const sal_Int32 nSize = lcl_GetWidth(options) + mnLastEdge;
+                if (nSize > mnLastEdge)
+                    InsertColumnEdge(nSize);
+                mnLastEdge = nSize;
+                mpInsDefault.reset(new HTMLCellDefault());
+            }
+        }
+        break;
+        case HtmlTokenId::COLGROUP_OFF:
             break;
 
         default:
