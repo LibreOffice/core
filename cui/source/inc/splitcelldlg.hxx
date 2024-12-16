@@ -25,6 +25,7 @@ class SvxSplitTableDlg : public weld::GenericDialogController
 {
 private:
     std::unique_ptr<weld::SpinButton> m_xCountEdit;
+    std::unique_ptr<weld::Grid> m_xGrid;
     std::unique_ptr<weld::RadioButton> m_xHorzBox;
     std::unique_ptr<weld::RadioButton> m_xVertBox;
     std::unique_ptr<weld::CheckButton> m_xPropCB;

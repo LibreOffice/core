@@ -22,6 +22,7 @@
 SvxSplitTableDlg::SvxSplitTableDlg(weld::Window *pParent, bool bIsTableVertical, tools::Long nMaxVertical, tools::Long nMaxHorizontal)
     : GenericDialogController(pParent, u"cui/ui/splitcellsdialog.ui"_ustr, u"SplitCellsDialog"_ustr)
     , m_xCountEdit(m_xBuilder->weld_spin_button(u"countnf"_ustr))
+    , m_xGrid(m_xBuilder->weld_grid("directiongrid"))
     , m_xHorzBox(!bIsTableVertical ? m_xBuilder->weld_radio_button(u"hori"_ustr) : m_xBuilder->weld_radio_button(u"vert"_ustr))
     , m_xVertBox(!bIsTableVertical ? m_xBuilder->weld_radio_button(u"vert"_ustr) : m_xBuilder->weld_radio_button(u"hori"_ustr))
     , m_xPropCB(m_xBuilder->weld_check_button(u"prop"_ustr))
@@ -42,10 +43,10 @@ SvxSplitTableDlg::SvxSplitTableDlg(weld::Window *pParent, bool bIsTableVertical,
     //exchange the meaning of horizontal and vertical for vertical text
     if (bIsTableVertical)
     {
-        int nHorzTopAttach = m_xHorzBox->get_grid_top_attach();
-        int nVertTopAttach = m_xVertBox->get_grid_top_attach();
-        m_xHorzBox->set_grid_top_attach(nVertTopAttach);
-        m_xVertBox->set_grid_top_attach(nHorzTopAttach);
+        int nHorzTopAttach = m_xGrid->get_child_top_attach(*m_xHorzBox);
+        int nVertTopAttach = m_xGrid->get_child_top_attach(*m_xVertBox);
+        m_xGrid->set_child_top_attach(*m_xHorzBox, nVertTopAttach);
+        m_xGrid->set_child_top_attach(*m_xVertBox, nHorzTopAttach);
         m_xHorzBox->set_active(m_xVertBox->get_active());
     }
 }
