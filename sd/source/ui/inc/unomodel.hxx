@@ -308,7 +308,7 @@ public:
     /// @see vcl::ITiledRenderable::postSlideshowCleanup().
     SD_DLLPUBLIC void postSlideshowCleanup() override;
     /// @see vcl::ITiledRenderable::renderNextSlideLayer().
-    SD_DLLPUBLIC bool renderNextSlideLayer(unsigned char* pBuffer, bool& bIsBitmapLayer, OUString& rJsonMsg) override;
+    SD_DLLPUBLIC bool renderNextSlideLayer(unsigned char* pBuffer, bool& bIsBitmapLayer, double& rScale, OUString& rJsonMsg) override;
 
     rtl::Reference< SdDrawPagesAccess > getSdDrawPages();
 

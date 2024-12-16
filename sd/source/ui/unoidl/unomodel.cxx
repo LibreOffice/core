@@ -4587,7 +4587,7 @@ void SdXImpressDocument::postSlideshowCleanup()
     pViewSh->destroyXSlideShowInstance();
 }
 
-bool SdXImpressDocument::renderNextSlideLayer(unsigned char* pBuffer, bool& bIsBitmapLayer, OUString& rJsonMsg)
+bool SdXImpressDocument::renderNextSlideLayer(unsigned char* pBuffer, bool& bIsBitmapLayer, double& rScale, OUString& rJsonMsg)
 {
     bool bDone = true;
 
@@ -4595,7 +4595,7 @@ bool SdXImpressDocument::renderNextSlideLayer(unsigned char* pBuffer, bool& bIsB
         return bDone;
 
     OString sMsg;
-    bool bOK = mpSlideshowLayerRenderer->render(pBuffer, sMsg);
+    bool bOK = mpSlideshowLayerRenderer->render(pBuffer, rScale, sMsg);
 
     if (bOK)
     {

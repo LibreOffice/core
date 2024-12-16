@@ -2837,15 +2837,17 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering)
     {
         std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
         bool bIsBitmapLayer = false;
+        double dScale = 1.0;
         OUString rJsonMsg;
-        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, rJsonMsg));
     }
 
     {
         std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
         bool bIsBitmapLayer = false;
+        double dScale = 1.0;
         OUString rJsonMsg;
-        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, rJsonMsg));
         CPPUNIT_ASSERT(bIsBitmapLayer);
         // TODO - check JSON content
 
@@ -2865,8 +2867,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering)
     {
         std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
         bool bIsBitmapLayer = false;
+        double dScale = 1.0;
         OUString rJsonMsg;
-        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, rJsonMsg));
         CPPUNIT_ASSERT(bIsBitmapLayer);
         // TODO - check JSON content
         debugWriteImageToFile(2, pBuffer, nViewWidth, nViewHeight, rJsonMsg.toUtf8().getStr());
@@ -2886,8 +2889,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering)
     {
         std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
         bool bIsBitmapLayer = false;
+        double dScale = 1.0;
         OUString rJsonMsg;
-        CPPUNIT_ASSERT(pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, rJsonMsg));
     }
     pXImpressDocument->postSlideshowCleanup();
 }
@@ -2918,15 +2922,17 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_WithFie
     {
         std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
         bool bIsBitmapLayer = false;
+        double dScale = 1.0;
         OUString rJsonMsg;
-        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, rJsonMsg));
     }
 
     {
         std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
         bool bIsBitmapLayer = false;
+        double dScale = 1.0;
         OUString rJsonMsg;
-        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, rJsonMsg));
         CPPUNIT_ASSERT(bIsBitmapLayer);
         // TODO - check JSON content
         debugWriteImageToFile(1, pBuffer, nViewWidth, nViewHeight, rJsonMsg.toUtf8().getStr());
@@ -2946,8 +2952,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_WithFie
     {
         std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
         bool bIsBitmapLayer = false;
+        double dScale = 1.0;
         OUString rJsonMsg;
-        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, rJsonMsg));
         CPPUNIT_ASSERT(bIsBitmapLayer);
         // TODO - check JSON content
         debugWriteImageToFile(2, pBuffer, nViewWidth, nViewHeight, rJsonMsg.toUtf8().getStr());
@@ -2967,8 +2974,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_WithFie
     {
         std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
         bool bIsBitmapLayer = false;
+        double dScale = 1.0;
         OUString rJsonMsg;
-        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, rJsonMsg));
         CPPUNIT_ASSERT(bIsBitmapLayer);
         // TODO - check JSON content
         debugWriteImageToFile(3, pBuffer, nViewWidth, nViewHeight, rJsonMsg.toUtf8().getStr());
@@ -2988,8 +2996,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_WithFie
     {
         std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
         bool bIsBitmapLayer = false;
+        double dScale = 1.0;
         OUString rJsonMsg;
-        CPPUNIT_ASSERT(pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, rJsonMsg));
     }
 
     pXImpressDocument->postSlideshowCleanup();
@@ -3013,8 +3022,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
     {
         std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
         bool bIsBitmapLayer = false;
+        double dScale = 1.0;
         OUString rJsonMsg;
-        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, rJsonMsg));
         CPPUNIT_ASSERT(bIsBitmapLayer);
 
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"group\": \"Background\"") >= 0);
@@ -3030,8 +3040,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
     {
         std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
         bool bIsBitmapLayer = false;
+        double dScale = 1.0;
         OUString rJsonMsg;
-        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, rJsonMsg));
         CPPUNIT_ASSERT(bIsBitmapLayer);
 
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"group\": \"MasterPage\"") >= 0);
@@ -3047,8 +3058,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
     {
         std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
         bool bIsBitmapLayer = false;
+        double dScale = 1.0;
         OUString rJsonMsg;
-        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, rJsonMsg));
         CPPUNIT_ASSERT(bIsBitmapLayer);
 
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"group\": \"MasterPage\"") >= 0);
@@ -3064,8 +3076,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
     {
         std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
         bool bIsBitmapLayer = false;
+        double dScale = 1.0;
         OUString rJsonMsg;
-        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, rJsonMsg));
         CPPUNIT_ASSERT(bIsBitmapLayer);
 
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"group\": \"DrawPage\"") >= 0);
@@ -3081,8 +3094,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
     {
         std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
         bool bIsBitmapLayer = false;
+        double dScale = 1.0;
         OUString rJsonMsg;
-        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, rJsonMsg));
         CPPUNIT_ASSERT(bIsBitmapLayer);
 
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"group\": \"DrawPage\"") >= 0);
@@ -3098,8 +3112,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
     {
         std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
         bool bIsBitmapLayer = false;
+        double dScale = 1.0;
         OUString rJsonMsg;
-        CPPUNIT_ASSERT(pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, rJsonMsg));
     }
 
     pXImpressDocument->postSlideshowCleanup();
@@ -3123,8 +3138,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
     {
         std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
         bool bIsBitmapLayer = false;
+        double dScale = 1.0;
         OUString rJsonMsg;
-        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, rJsonMsg));
         CPPUNIT_ASSERT(bIsBitmapLayer);
 
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"group\": \"Background\"") >= 0);
@@ -3141,8 +3157,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
     {
         std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
         bool bIsBitmapLayer = false;
+        double dScale = 1.0;
         OUString rJsonMsg;
-        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, rJsonMsg));
         CPPUNIT_ASSERT(bIsBitmapLayer);
 
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"group\": \"MasterPage\"") >= 0);
@@ -3156,8 +3173,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
     {
         std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
         bool bIsBitmapLayer = false;
+        double dScale = 1.0;
         OUString rJsonMsg;
-        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, rJsonMsg));
         CPPUNIT_ASSERT(bIsBitmapLayer);
 
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"group\": \"MasterPage\"") >= 0);
@@ -3171,8 +3189,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
     {
         std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
         bool bIsBitmapLayer = false;
+        double dScale = 1.0;
         OUString rJsonMsg;
-        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, rJsonMsg));
         CPPUNIT_ASSERT(bIsBitmapLayer);
 
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"group\": \"DrawPage\"") >= 0);
@@ -3187,8 +3206,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
     {
         std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
         bool bIsBitmapLayer = false;
+        double dScale = 1.0;
         OUString rJsonMsg;
-        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, rJsonMsg));
+
         CPPUNIT_ASSERT(bIsBitmapLayer);
 
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"group\": \"DrawPage\"") >= 0);
@@ -3203,8 +3224,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
     {
         std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
         bool bIsBitmapLayer = false;
+        double dScale = 1.0;
         OUString rJsonMsg;
-        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, rJsonMsg));
         CPPUNIT_ASSERT(bIsBitmapLayer);
 
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"group\": \"DrawPage\"") >= 0);
@@ -3220,8 +3242,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
     {
         std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
         bool bIsBitmapLayer = false;
+        double dScale = 1.0;
         OUString rJsonMsg;
-        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, rJsonMsg));
         CPPUNIT_ASSERT(bIsBitmapLayer);
 
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"group\": \"DrawPage\"") >= 0);
@@ -3236,8 +3259,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
     {
         std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
         bool bIsBitmapLayer = false;
+        double dScale = 1.0;
         OUString rJsonMsg;
-        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, rJsonMsg));
         CPPUNIT_ASSERT(bIsBitmapLayer);
 
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"group\": \"DrawPage\"") >= 0);
@@ -3253,8 +3277,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
     {
         std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
         bool bIsBitmapLayer = false;
+        double dScale = 1.0;
         OUString rJsonMsg;
-        CPPUNIT_ASSERT(pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, rJsonMsg));
     }
 
     pXImpressDocument->postSlideshowCleanup();
@@ -3279,8 +3304,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
     {
         std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
         bool bIsBitmapLayer = false;
+        double dScale = 1.0;
         OUString rJsonMsg;
-        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, rJsonMsg));
 
         debugWriteImageToFile(1, pBuffer, nViewWidth, nViewHeight, rJsonMsg.toUtf8().getStr());
     }
@@ -3288,8 +3314,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
     {
         std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
         bool bIsBitmapLayer = false;
+        double dScale = 1.0;
         OUString rJsonMsg;
-        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, rJsonMsg));
 
         debugWriteImageToFile(2, pBuffer, nViewWidth, nViewHeight, rJsonMsg.toUtf8().getStr());
     }
@@ -3297,8 +3324,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
     {
         std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
         bool bIsBitmapLayer = false;
+        double dScale = 1.0;
         OUString rJsonMsg;
-        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, rJsonMsg));
 
         debugWriteImageToFile(3, pBuffer, nViewWidth, nViewHeight, rJsonMsg.toUtf8().getStr());
     }
@@ -3306,8 +3334,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
     {
         std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
         bool bIsBitmapLayer = false;
+        double dScale = 1.0;
         OUString rJsonMsg;
-        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, rJsonMsg));
 
         debugWriteImageToFile(4, pBuffer, nViewWidth, nViewHeight, rJsonMsg.toUtf8().getStr());
     }
@@ -3315,8 +3344,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
     {
         std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
         bool bIsBitmapLayer = false;
+        double dScale = 1.0;
         OUString rJsonMsg;
-        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, rJsonMsg));
 
         debugWriteImageToFile(5, pBuffer, nViewWidth, nViewHeight, rJsonMsg.toUtf8().getStr());
     }
@@ -3325,8 +3355,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
     {
         std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
         bool bIsBitmapLayer = false;
+        double dScale = 1.0;
         OUString rJsonMsg;
-        CPPUNIT_ASSERT(pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, rJsonMsg));
     }
 
     pXImpressDocument->postSlideshowCleanup();
@@ -3351,8 +3382,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
     {
         std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
         bool bIsBitmapLayer = false;
+        double dScale = 1.0;
         OUString rJsonMsg;
-        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, rJsonMsg));
 
         debugWriteImageToFile(1, pBuffer, nViewWidth, nViewHeight, rJsonMsg.toUtf8().getStr());
     }
@@ -3360,8 +3392,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
     {
         std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
         bool bIsBitmapLayer = false;
+        double dScale = 1.0;
         OUString rJsonMsg;
-        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, rJsonMsg));
 
         debugWriteImageToFile(2, pBuffer, nViewWidth, nViewHeight, rJsonMsg.toUtf8().getStr());
     }
@@ -3369,8 +3402,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
     {
         std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
         bool bIsBitmapLayer = false;
+        double dScale = 1.0;
         OUString rJsonMsg;
-        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, rJsonMsg));
 
         debugWriteImageToFile(3, pBuffer, nViewWidth, nViewHeight, rJsonMsg.toUtf8().getStr());
     }
@@ -3379,8 +3413,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
     {
         std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
         bool bIsBitmapLayer = false;
+        double dScale = 1.0;
         OUString rJsonMsg;
-        CPPUNIT_ASSERT(pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, rJsonMsg));
     }
 
     pXImpressDocument->postSlideshowCleanup();
