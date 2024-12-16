@@ -85,7 +85,7 @@ case $(basename "$MAILER" | sed 's/-.*$//') in
                     shift
                     ;;
                 --attach)
-                    ATTACH=${ATTACH:-}${ATTACH:+,}$(echo "file://$2" | "${URI_ENCODE}")
+                    ATTACH=${ATTACH:-}${ATTACH:+,}$(printf file://%s "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 *)
@@ -145,7 +145,7 @@ case $(basename "$MAILER" | sed 's/-.*$//') in
                     shift
                     ;;
                 --attach)
-                    ATTACH="${ATTACH:-}${ATTACH:+ }--attach "$(echo "file://$2" | "${URI_ENCODE}")
+                    ATTACH="${ATTACH:-}${ATTACH:+ }--attach "$(printf file://%s "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 *)
@@ -228,23 +228,23 @@ case $(basename "$MAILER" | sed 's/-.*$//') in
                     shift
                     ;;
                 --cc)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}cc="$(echo "$2" | "${URI_ENCODE}")
+                    MAILTO="${MAILTO:-}${MAILTO:+&}cc="$(printf %s "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 --bcc)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}bcc="$(echo "$2" | "${URI_ENCODE}")
+                    MAILTO="${MAILTO:-}${MAILTO:+&}bcc="$(printf %s "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 --subject)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}subject"=$(echo "$2" | "${URI_ENCODE}")
+                    MAILTO="${MAILTO:-}${MAILTO:+&}subject"=$(printf %s "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 --body)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}body="$(echo "$2" | "${URI_ENCODE}")
+                    MAILTO="${MAILTO:-}${MAILTO:+&}body="$(printf %s "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 --attach)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}attach="$(echo "file://$2" | "${URI_ENCODE}")
+                    MAILTO="${MAILTO:-}${MAILTO:+&}attach="$(printf file://%s "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 *)
@@ -270,23 +270,23 @@ case $(basename "$MAILER" | sed 's/-.*$//') in
                     shift
                     ;;
                 --cc)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}cc="$(echo "$2" | "${URI_ENCODE}")
+                    MAILTO="${MAILTO:-}${MAILTO:+&}cc="$(printf %s "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 --bcc)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}bcc="$(echo "$2" | "${URI_ENCODE}")
+                    MAILTO="${MAILTO:-}${MAILTO:+&}bcc="$(printf %s "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 --subject)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}subject"=$(echo "$2" | "${URI_ENCODE}")
+                    MAILTO="${MAILTO:-}${MAILTO:+&}subject"=$(printf %s "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 --body)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}body="$(echo "$2" | "${URI_ENCODE}")
+                    MAILTO="${MAILTO:-}${MAILTO:+&}body="$(printf %a "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 --attach)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}attachment="$(echo "file://$2" | "${URI_ENCODE}")
+                    MAILTO="${MAILTO:-}${MAILTO:+&}attachment="$(printf file://%s "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 *)
@@ -329,7 +329,7 @@ case $(basename "$MAILER" | sed 's/-.*$//') in
                     shift
                     ;;
                 --attach)
-                    ATTACH=${ATTACH:-}${ATTACH:+,}$(echo "file://$2" | "${URI_ENCODE}")
+                    ATTACH=${ATTACH:-}${ATTACH:+,}$(printf file://%s "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 *)
@@ -347,7 +347,7 @@ case $(basename "$MAILER" | sed 's/-.*$//') in
             case $1 in
                 --attach)
                     #i95688# fix filenames containing accented chars, whatever alien
-                    ATTACH="${ATTACH:-}${ATTACH:+ }"$(echo "file://$2" | "${URI_ENCODE}")
+                    ATTACH="${ATTACH:-}${ATTACH:+ }"$(printf file://%s "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 *)
@@ -391,26 +391,26 @@ case $(basename "$MAILER" | sed 's/-.*$//') in
                     shift
                     ;;
                 --cc)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}cc="$(echo "$2" | "${URI_ENCODE}")
+                    MAILTO="${MAILTO:-}${MAILTO:+&}cc="$(printf %s "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 --bcc)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}bcc="$(echo "$2" | "${URI_ENCODE}")
+                    MAILTO="${MAILTO:-}${MAILTO:+&}bcc="$(printf %s "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 --subject)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}subject"=$(echo "$2" | "${URI_ENCODE}")
+                    MAILTO="${MAILTO:-}${MAILTO:+&}subject"=$(printf %s "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 --body)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}body="$(echo "$2" | "${URI_ENCODE}")
+                    MAILTO="${MAILTO:-}${MAILTO:+&}body="$(printf %s "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 --attach)
                     if [ "$MAILER" = "/usr/bin/xdg-email" ]; then
-                        MAILTO="${MAILTO:-}${MAILTO:+&}attach="$(echo "file://$2" | "${URI_ENCODE}")
+                        MAILTO="${MAILTO:-}${MAILTO:+&}attach="$(printf file://%s "$2" | "${URI_ENCODE}")
                     else
-                        MAILTO="${MAILTO:-}${MAILTO:+&}attachment="$(echo "file://$2" | "${URI_ENCODE}")
+                        MAILTO="${MAILTO:-}${MAILTO:+&}attachment="$(printf file://%s "$2" | "${URI_ENCODE}")
                     fi
                     shift
                     ;;

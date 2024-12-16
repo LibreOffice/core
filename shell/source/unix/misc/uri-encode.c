@@ -30,8 +30,8 @@ int main(void) {
         c = getchar();
         if (c == EOF) {
             exit(errno == 0 ? EXIT_SUCCESS : EXIT_FAILURE);
-        } else if (isalnum(c) || strchr("!$'()*+,-.:=@_~/\n", c) != NULL) {
-            /* valid RFC 2396 pchar characters + '/' + newline */
+        } else if (isalnum(c) || strchr("!$'()*+,-.:=@_~/", c) != NULL) {
+            /* valid RFC 2396 pchar characters + '/' */
             if (putchar(c) == EOF) {
                 exit(EXIT_FAILURE);
             }
