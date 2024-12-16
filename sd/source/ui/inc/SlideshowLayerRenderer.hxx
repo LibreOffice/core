@@ -28,6 +28,7 @@
 #include <frozen/bits/defines.h>
 #include <frozen/bits/elsa_std.h>
 #include <frozen/unordered_set.h>
+#include <tools/color.hxx>
 
 class SdrPage;
 class SdrModel;
@@ -96,6 +97,8 @@ struct RenderPass
     sal_Int32 mnParagraph = -1;
     bool mbPlaceholder = false;
     OUString maFieldType;
+
+    Color maFontColor = COL_AUTO;
 
     bool isEmpty() { return maObjectsAndParagraphs.empty(); }
 };
