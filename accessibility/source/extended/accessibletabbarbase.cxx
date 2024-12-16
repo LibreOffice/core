@@ -18,9 +18,7 @@
  */
 
 #include <extended/accessibletabbarbase.hxx>
-#ifndef ACCESSIBILITY_EXT_ACCESSIBLETABBARPAGELIST
 #include <extended/accessibletabbarpagelist.hxx>
-#endif
 #include <svtools/tabbar.hxx>
 #include <vcl/vclevent.hxx>
 
