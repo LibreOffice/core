@@ -72,7 +72,7 @@ Partial::Partial(
         for (Node * p = &root_;;) {
             OUString seg;
             bool end = parseSegment(includedPath, &n, &seg);
-            p = &p->children[seg];
+            p = !seg.isEmpty() ? &p->children[seg] : p;
             if (p->startInclude) {
                 break;
             }
