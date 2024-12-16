@@ -1085,14 +1085,14 @@ class SwCreateAuthEntryDlg_Impl : public weld::GenericDialogController
     bool            m_bNewEntryMode;
     bool            m_bNameAllowed;
 
-    std::vector<std::unique_ptr<weld::Container>> m_aOrigContainers;
+    std::vector<std::unique_ptr<weld::Grid>> m_aOrigContainers;
     std::vector<std::unique_ptr<weld::Label>> m_aFixedTexts;
     std::unique_ptr<weld::Box> m_pBoxes[AUTH_FIELD_END];
     std::unique_ptr<weld::Entry> m_pEdits[AUTH_FIELD_END];
     std::unique_ptr<weld::Button> m_xOKBT;
     std::unique_ptr<weld::Container> m_xBox;
-    std::unique_ptr<weld::Container> m_xLeft;
-    std::unique_ptr<weld::Container> m_xRight;
+    std::unique_ptr<weld::Grid> m_xLeft;
+    std::unique_ptr<weld::Grid> m_xRight;
     std::unique_ptr<weld::ComboBox> m_xTypeListBox;
     std::unique_ptr<weld::ComboBox> m_xIdentifierBox;
     std::unique_ptr<weld::Button> m_xLocalBrowseButton;
@@ -1595,8 +1595,8 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
     , m_bNameAllowed(true)
     , m_xOKBT(m_xBuilder->weld_button(u"ok"_ustr))
     , m_xBox(m_xBuilder->weld_container(u"box"_ustr))
-    , m_xLeft(m_xBuilder->weld_container(u"leftgrid"_ustr))
-    , m_xRight(m_xBuilder->weld_container(u"rightgrid"_ustr))
+    , m_xLeft(m_xBuilder->weld_grid(u"leftgrid"_ustr))
+    , m_xRight(m_xBuilder->weld_grid(u"rightgrid"_ustr))
     , m_pTargetURLField(nullptr)
 {
     bool bLeft = true;
@@ -1607,23 +1607,20 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
         m_aBuilders.emplace_back(Application::CreateBuilder(m_xBox.get(), u"modules/swriter/ui/bibliofragment.ui"_ustr));
         const TextInfo aCurInfo = aTextInfoArr[nIndex];
 
-        m_aOrigContainers.emplace_back(m_aBuilders.back()->weld_container(u"biblioentry"_ustr));
+        m_aOrigContainers.emplace_back(m_aBuilders.back()->weld_grid(u"biblioentry"_ustr));
         m_aFixedTexts.emplace_back(m_aBuilders.back()->weld_label(u"label"_ustr));
-        if (bLeft)
-            m_aOrigContainers.back()->move(m_aFixedTexts.back().get(), m_xLeft.get());
-        else
-            m_aOrigContainers.back()->move(m_aFixedTexts.back().get(), m_xRight.get());
-        m_aFixedTexts.back()->set_grid_left_attach(0);
-        m_aFixedTexts.back()->set_grid_top_attach(bLeft ? nLeftRow : nRightRow);
+
+        weld::Grid* pTargetGrid = bLeft ? m_xLeft.get() : m_xRight.get();
+        m_aOrigContainers.back()->move(m_aFixedTexts.back().get(), pTargetGrid);
+        pTargetGrid->set_child_left_attach(*m_aFixedTexts.back(), 0);
+        pTargetGrid->set_child_top_attach(*m_aFixedTexts.back(), bLeft ? nLeftRow : nRightRow);
+
         m_aFixedTexts.back()->set_label(SwResId(STR_AUTH_FIELD_ARY[aCurInfo.nToxField]));
         m_aFixedTexts.back()->show();
         if( AUTH_FIELD_AUTHORITY_TYPE == aCurInfo.nToxField )
         {
             m_xTypeListBox = m_aBuilders.back()->weld_combo_box(u"listbox"_ustr);
-            if (bLeft)
-                m_aOrigContainers.back()->move(m_xTypeListBox.get(), m_xLeft.get());
-            else
-                m_aOrigContainers.back()->move(m_xTypeListBox.get(), m_xRight.get());
+            m_aOrigContainers.back()->move(m_xTypeListBox.get(), pTargetGrid);
 
             for (int j = 0; j < AUTH_TYPE_END; j++)
             {
@@ -1634,8 +1631,8 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
             {
                 m_xTypeListBox->set_active(pFields[aCurInfo.nToxField].toInt32());
             }
-            m_xTypeListBox->set_grid_left_attach(1);
-            m_xTypeListBox->set_grid_top_attach(bLeft ? nLeftRow : nRightRow);
+            pTargetGrid->set_child_left_attach(*m_xTypeListBox, 1);
+            pTargetGrid->set_child_top_attach(*m_xTypeListBox, bLeft ? nLeftRow : nRightRow);
             m_xTypeListBox->set_hexpand(true);
             m_xTypeListBox->show();
             m_xTypeListBox->connect_changed(LINK(this, SwCreateAuthEntryDlg_Impl, EnableHdl));
@@ -1645,10 +1642,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
         else if(AUTH_FIELD_IDENTIFIER == aCurInfo.nToxField && !m_bNewEntryMode)
         {
             m_xIdentifierBox = m_aBuilders.back()->weld_combo_box(u"combobox"_ustr);
-            if (bLeft)
-                m_aOrigContainers.back()->move(m_xIdentifierBox.get(), m_xLeft.get());
-            else
-                m_aOrigContainers.back()->move(m_xIdentifierBox.get(), m_xRight.get());
+            m_aOrigContainers.back()->move(m_xIdentifierBox.get(), pTargetGrid);
 
             m_xIdentifierBox->connect_changed(LINK(this,
                                     SwCreateAuthEntryDlg_Impl, IdentifierHdl));
@@ -1663,8 +1657,8 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
                     m_xIdentifierBox->append_text(a);
             }
             m_xIdentifierBox->set_entry_text(pFields[aCurInfo.nToxField]);
-            m_xIdentifierBox->set_grid_left_attach(1);
-            m_xIdentifierBox->set_grid_top_attach(bLeft ? nLeftRow : nRightRow);
+            pTargetGrid->set_child_left_attach(*m_xIdentifierBox, 1);
+            pTargetGrid->set_child_top_attach(*m_xIdentifierBox, bLeft ? nLeftRow : nRightRow);
             m_xIdentifierBox->set_hexpand(true);
             m_xIdentifierBox->show();
             m_xIdentifierBox->set_help_id(aCurInfo.pHelpId);
@@ -1673,10 +1667,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
         else if (AUTH_FIELD_TARGET_TYPE == aCurInfo.nToxField)
         {
             m_xTargetTypeListBox = m_aBuilders.back()->weld_combo_box(u"listbox-target-type"_ustr);
-            if (bLeft)
-                m_aOrigContainers.back()->move(m_xTargetTypeListBox.get(), m_xLeft.get());
-            else
-                m_aOrigContainers.back()->move(m_xTargetTypeListBox.get(), m_xRight.get());
+            m_aOrigContainers.back()->move(m_xTargetTypeListBox.get(), pTargetGrid);
 
             if(!pFields[aCurInfo.nToxField].isEmpty())
             {
@@ -1687,8 +1678,8 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
                 // For new documents, set value to "BibliographyTableRow"
                 m_xTargetTypeListBox->set_active(SwAuthorityField::TargetType::BibliographyTableRow);
             }
-            m_xTargetTypeListBox->set_grid_left_attach(1);
-            m_xTargetTypeListBox->set_grid_top_attach(bLeft ? nLeftRow : nRightRow);
+            pTargetGrid->set_child_left_attach(*m_xTargetTypeListBox, 1);
+            pTargetGrid->set_child_top_attach(*m_xTargetTypeListBox, bLeft ? nLeftRow : nRightRow);
             m_xTargetTypeListBox->set_hexpand(true);
             m_xTargetTypeListBox->show();
             m_xTargetTypeListBox->connect_changed(LINK(this, SwCreateAuthEntryDlg_Impl, TargetTypeHdl));
@@ -1708,13 +1699,10 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
                     m_xTargetTypeListBox->get_active() == SwAuthorityField::TargetType::UseTargetURL);
             }
 
-            if (bLeft)
-                m_aOrigContainers.back()->move(m_pBoxes[nIndex].get(), m_xLeft.get());
-            else
-                m_aOrigContainers.back()->move(m_pBoxes[nIndex].get(), m_xRight.get());
+            m_aOrigContainers.back()->move(m_pBoxes[nIndex].get(), pTargetGrid);
 
-            m_pBoxes[nIndex]->set_grid_left_attach(1);
-            m_pBoxes[nIndex]->set_grid_top_attach(bLeft ? nLeftRow : nRightRow);
+            pTargetGrid->set_child_left_attach(*m_pBoxes[nIndex], 1);
+            pTargetGrid->set_child_top_attach(*m_pBoxes[nIndex], bLeft ? nLeftRow : nRightRow);
             m_pBoxes[nIndex]->set_hexpand(true);
             if (aCurInfo.nToxField == AUTH_FIELD_LOCAL_URL)
             {
