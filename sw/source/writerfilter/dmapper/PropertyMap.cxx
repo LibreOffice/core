@@ -1507,6 +1507,16 @@ void SectionPropertyMap::CreateEvenOddPageStyleCopy(DomainMapper_Impl& rDM_Impl,
                     else if (rProperty.Name == u"RightMargin"_ustr)
                         sSetName = u"LeftMargin"_ustr;
                 }
+
+                if (rProperty.Name == u"PrinterPaperTray"_ustr
+                    || rProperty.Name == u"PrinterPaperTrayIndex"_ustr)
+                {
+                    const uno::Any aTray = pageProperties->getPropertyValue(rProperty.Name);
+                    // exception if tray SET with an empty value (even though it may be empty)
+                    if (aTray.has<OUString>() && aTray.get<OUString>().isEmpty())
+                        continue;
+                }
+
                 evenOddStyle->setPropertyValue(
                     sSetName,
                     pageProperties->getPropertyValue(rProperty.Name));
