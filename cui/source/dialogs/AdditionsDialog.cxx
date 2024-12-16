@@ -433,7 +433,7 @@ AdditionsDialog::AdditionsDialog(weld::Window* pParent, const OUString& sAdditio
     , m_xEntrySearch(m_xBuilder->weld_entry(u"entrySearch"_ustr))
     , m_xButtonClose(m_xBuilder->weld_button(u"buttonClose"_ustr))
     , m_xContentWindow(m_xBuilder->weld_scrolled_window(u"contentWindow"_ustr))
-    , m_xContentGrid(m_xBuilder->weld_container(u"contentGrid"_ustr))
+    , m_xContentGrid(m_xBuilder->weld_grid(u"contentGrid"_ustr))
     , m_xLabelProgress(m_xBuilder->weld_label(u"labelProgress"_ustr))
     , m_xGearBtn(m_xBuilder->weld_menu_button(u"buttonGear"_ustr))
 {
@@ -602,9 +602,9 @@ bool AdditionsDialog::sortByDownload(const AdditionInfo& a, const AdditionInfo& 
     return a.sDownloadNumber.toUInt32() > b.sDownloadNumber.toUInt32();
 }
 
-AdditionsItem::AdditionsItem(weld::Widget* pParent, AdditionsDialog* pParentDialog,
+AdditionsItem::AdditionsItem(weld::Grid* pParentGrid, AdditionsDialog* pParentDialog,
                              const AdditionInfo& additionInfo)
-    : m_xBuilder(Application::CreateBuilder(pParent, u"cui/ui/additionsfragment.ui"_ustr))
+    : m_xBuilder(Application::CreateBuilder(pParentGrid, u"cui/ui/additionsfragment.ui"_ustr))
     , m_xContainer(m_xBuilder->weld_widget(u"additionsEntry"_ustr))
     , m_xImageScreenshot(m_xBuilder->weld_image(u"imageScreenshot"_ustr))
     , m_xButtonInstall(m_xBuilder->weld_button(u"buttonInstall"_ustr))
@@ -629,8 +629,8 @@ AdditionsItem::AdditionsItem(weld::Widget* pParent, AdditionsDialog* pParentDial
     SolarMutexGuard aGuard;
 
     // AdditionsItem set location
-    m_xContainer->set_grid_left_attach(0);
-    m_xContainer->set_grid_top_attach(pParentDialog->m_aAdditionsItems.size());
+    pParentGrid->set_child_left_attach(*m_xContainer, 0);
+    pParentGrid->set_child_top_attach(*m_xContainer, pParentDialog->m_aAdditionsItems.size());
 
     // Set maximum length of the extension title
     OUString sExtensionName;
