@@ -282,7 +282,7 @@ case $(basename "$MAILER" | sed 's/-.*$//') in
                     shift
                     ;;
                 --body)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}body="$(printf %a "$2" | "${URI_ENCODE}")
+                    MAILTO="${MAILTO:-}${MAILTO:+&}body="$(printf %s "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 --attach)
