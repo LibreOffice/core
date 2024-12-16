@@ -26,7 +26,7 @@
 ScCondFormatList::ScCondFormatList(ScCondFormatDlg* pDialogParent,
                                    ScDocument& rDoc,
                                    std::unique_ptr<weld::ScrolledWindow> xWindow,
-                                   std::unique_ptr<weld::Container> xGrid)
+                                   std::unique_ptr<weld::Grid> xGrid)
     : mxScrollWindow(std::move(xWindow))
     , mxGrid(std::move(xGrid))
     , mbFrozen(false)
@@ -441,7 +441,7 @@ ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW,
     , mxEdRange(new formula::RefEdit(m_xBuilder->weld_entry(u"edassign"_ustr)))
     , mxRbRange(new formula::RefButton(m_xBuilder->weld_button(u"rbassign"_ustr)))
     , mxCondFormList(new ScCondFormatList(this, mpViewData->GetDocument(), m_xBuilder->weld_scrolled_window(u"listwindow"_ustr),
-                                          m_xBuilder->weld_container(u"list"_ustr)))
+                                          m_xBuilder->weld_grid(u"list"_ustr)))
 {
     mxEdRange->SetReferences(this, mxFtRange.get());
     mxRbRange->SetReferences(this, mxEdRange.get());

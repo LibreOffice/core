@@ -30,7 +30,7 @@ class ScCondFormatList
 {
 private:
     std::unique_ptr<weld::ScrolledWindow> mxScrollWindow;
-    std::unique_ptr<weld::Container> mxGrid;
+    std::unique_ptr<weld::Grid> mxGrid;
 
     typedef std::vector<std::unique_ptr<ScCondFrmtEntry>> EntryContainer;
     EntryContainer maEntries;
@@ -47,8 +47,8 @@ public:
     ScCondFormatList(ScCondFormatDlg* pParent,
                      ScDocument& rDoc,
                      std::unique_ptr<weld::ScrolledWindow> xWindow,
-                     std::unique_ptr<weld::Container> xGrid);
-    weld::Container* GetContainer() { return mxGrid.get(); }
+                     std::unique_ptr<weld::Grid> xGrid);
+    weld::Grid* GetGrid() { return mxGrid.get(); }
     ~ScCondFormatList();
 
     void init(const ScConditionalFormat* pFormat,

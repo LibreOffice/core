@@ -52,7 +52,7 @@ static bool isLOKMobilePhone()
 
 ScCondFrmtEntry::ScCondFrmtEntry(ScCondFormatList* pParent, ScDocument& rDoc, const ScAddress& rPos)
     : mpParent(pParent)
-    , mxBuilder(Application::CreateBuilder(pParent->GetContainer(), isLOKMobilePhone()?u"modules/scalc/ui/conditionalentrymobile.ui"_ustr:u"modules/scalc/ui/conditionalentry.ui"_ustr))
+    , mxBuilder(Application::CreateBuilder(pParent->GetGrid(), isLOKMobilePhone()?u"modules/scalc/ui/conditionalentrymobile.ui"_ustr:u"modules/scalc/ui/conditionalentry.ui"_ustr))
     , mxBorder(mxBuilder->weld_widget(u"border"_ustr))
     , mxGrid(mxBuilder->weld_container(u"grid"_ustr))
     , mxFtCondNr(mxBuilder->weld_label(u"number"_ustr))
@@ -73,13 +73,18 @@ ScCondFrmtEntry::ScCondFrmtEntry(ScCondFormatList* pParent, ScDocument& rDoc, co
 
 ScCondFrmtEntry::~ScCondFrmtEntry()
 {
-    mpParent->GetContainer()->move(mxBorder.get(), nullptr);
+    mpParent->GetGrid()->move(mxBorder.get(), nullptr);
 }
 
 IMPL_LINK_NOARG(ScCondFrmtEntry, EntrySelectHdl, const MouseEvent&, bool)
 {
     maClickHdl.Call(*this);
     return false;
+}
+
+void ScCondFrmtEntry::set_grid_top_attach(int nAttach)
+{
+    mpParent->GetGrid()->set_child_top_attach(*mxBorder, nAttach);
 }
 
 void ScCondFrmtEntry::SetIndex(sal_Int32 nIndex)
