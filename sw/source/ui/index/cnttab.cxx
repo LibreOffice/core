@@ -1581,7 +1581,7 @@ public:
 
     virtual void set_grid_left_attach(int nPos) override
     {
-        m_xEntry->set_grid_left_attach(nPos);
+        m_pParent->get_child_container()->set_child_left_attach(*m_xEntry, nPos);
     }
 
     virtual void get_extents_relative_to(weld::Widget& rRelative, int& x, int& y, int& width, int& height) override
@@ -1741,7 +1741,7 @@ public:
 
     virtual void set_grid_left_attach(int nPos) override
     {
-        m_xButton->set_grid_left_attach(nPos);
+        m_pParent->get_child_container()->set_child_left_attach(*m_xButton, nPos);
     }
 
     void get_extents_relative_to(weld::Widget& rRelative, int& x, int& y, int& width, int& height) override
@@ -2782,7 +2782,7 @@ SwTokenWindow::SwTokenWindow(std::unique_ptr<weld::Container> xParent)
     , m_xBuilder(Application::CreateBuilder(m_xParentWidget.get(), u"modules/swriter/ui/tokenwidget.ui"_ustr))
     , m_xContainer(m_xBuilder->weld_container(u"TokenWidget"_ustr))
     , m_xLeftScrollWin(m_xBuilder->weld_button(u"left"_ustr))
-    , m_xCtrlParentWin(m_xBuilder->weld_container(u"ctrl"_ustr))
+    , m_xCtrlParentWin(m_xBuilder->weld_grid(u"ctrl"_ustr))
     , m_xScrollWin(m_xBuilder->weld_scrolled_window(u"scrollwin"_ustr))
     , m_xRightScrollWin(m_xBuilder->weld_button(u"right"_ustr))
 {

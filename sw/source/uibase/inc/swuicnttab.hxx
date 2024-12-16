@@ -248,7 +248,7 @@ class SwTokenWindow
     std::unique_ptr<weld::Builder> m_xBuilder;
     std::unique_ptr<weld::Container> m_xContainer;
     std::unique_ptr<weld::Button> m_xLeftScrollWin;
-    std::unique_ptr<weld::Container> m_xCtrlParentWin;
+    std::unique_ptr<weld::Grid> m_xCtrlParentWin;
     std::unique_ptr<weld::ScrolledWindow> m_xScrollWin;
     std::unique_ptr<weld::Button> m_xRightScrollWin;
     std::vector<std::unique_ptr<SwTOXWidget>> m_aControlList;
@@ -271,7 +271,7 @@ class SwTokenWindow
 
 public:
     SwTokenWindow(std::unique_ptr<weld::Container> xParent);
-    weld::Container* get_child_container() { return m_xCtrlParentWin.get(); }
+    weld::Grid* get_child_container() { return m_xCtrlParentWin.get(); }
     ~SwTokenWindow();
 
     void SetTabPage(SwTOXEntryTabPage *pParent) { m_pParent = pParent; }
