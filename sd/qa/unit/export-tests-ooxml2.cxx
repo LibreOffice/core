@@ -1316,7 +1316,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf106867)
                 "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/p:par/"
                 "p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:cmd/"
                 "p:cBhvr/p:tgtEl/p:spTgt",
-                "spid", u"67");
+                "spid", u"14");
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf112280)
@@ -1695,7 +1695,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testAccentColor)
     xmlDocUniquePtr pXmlDocTheme1 = parseExport(u"ppt/theme/theme1.xml"_ustr);
     assertXPath(pXmlDocTheme1, "/a:theme/a:themeElements/a:clrScheme/a:accent6/a:srgbClr", "val",
                 u"70ad47");
-    xmlDocUniquePtr pXmlDocTheme2 = parseExport(u"ppt/theme/theme12.xml"_ustr);
+    xmlDocUniquePtr pXmlDocTheme2 = parseExport(u"ppt/theme/theme2.xml"_ustr);
     assertXPath(pXmlDocTheme2, "/a:theme/a:themeElements/a:clrScheme/a:accent6/a:srgbClr", "val",
                 u"deb340");
 
