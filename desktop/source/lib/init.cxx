@@ -5271,6 +5271,17 @@ static void updateConfig(const OUString& rConfigPath)
             auto xUpdate(css::configuration::Update::get(comphelper::getProcessComponentContext()));
             xUpdate->insertModificationXcuFile(aXcuPath, { u"/"_ustr }, {});
         }
+        else if (sFileName == "wordbook")
+        {
+            uno::Reference<css::linguistic2::XSearchableDictionaryList> xDicList
+                = LinguMgr::GetDictionaryList();
+            if (xDicList.is())
+            {
+                uno::Reference<lang::XInitialization> xReInitDictionaryList(xDicList,
+                                                                            uno::UNO_QUERY_THROW);
+                xReInitDictionaryList->initialize({});
+            }
+        }
     }
 }
 
@@ -8337,14 +8348,6 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
             uno::Reference<lang::XInitialization> xReInitSettings(xPathSettings, uno::UNO_QUERY_THROW);
             xReInitSettings->initialize({});
 
-            uno::Reference<css::linguistic2::XSearchableDictionaryList> xDicList
-                = LinguMgr::GetDictionaryList();
-            if (xDicList.is())
-            {
-                uno::Reference<lang::XInitialization> xReInitDictionaryList(xDicList,
-                                                                            uno::UNO_QUERY_THROW);
-                xReInitDictionaryList->initialize({});
-            }
         }
     }
 
