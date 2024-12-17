@@ -1296,7 +1296,7 @@ SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const OUString& rRefMark,
                                           sal_Int32* pStart, sal_Int32* pEnd, SwRootFrame const* const pLayout,
                                           SwTextNode* pSelf, SwFrame* pContentFrame)
 {
-    OSL_ENSURE( pStart, "Why did no one check the StartPos?" );
+    assert( pStart && "Why did no one check the StartPos?" );
 
     IDocumentRedlineAccess & rIDRA(pDoc->getIDocumentRedlineAccess());
     SwTextNode* pTextNd = nullptr;
