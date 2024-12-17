@@ -3939,6 +3939,32 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf137063)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf164124)
+{
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+
+    OUString aCode = u"YYYY-MM-DD"_ustr;
+    sal_Int32 nCheckPos;
+    SvNumFormatType nType;
+    sal_uInt32 nFormat;
+    SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
+    pFormatter->PutEntry( aCode, nCheckPos, nType, nFormat );
+
+    ScPatternAttr aNewAttrs(m_pDoc->getCellAttributeHelper());
+    SfxItemSet& rSet = aNewAttrs.GetItemSet();
+    rSet.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
+    m_pDoc->ApplyPattern(0, 0, 0, aNewAttrs);
+
+    m_pDoc->SetString(ScAddress(0,0,0), u"2021-6/1"_ustr);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 2021-6/1
+    // - Actual  : 1905-07-19
+    CPPUNIT_ASSERT_EQUAL(u"2021-6/1"_ustr, m_pDoc->GetString(ScAddress(0,0,0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf126342)
 {
     m_pDoc->InsertTab(0, u"Test"_ustr);
