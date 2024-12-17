@@ -1030,7 +1030,10 @@ weld::Button* JSDialog::weld_widget_for_response(int nResponse)
 {
     PushButton* pButton
         = dynamic_cast<::PushButton*>(m_xDialog->get_widget_for_response(nResponse));
-    auto pWeldWidget = pButton ? new JSButton(m_pSender, pButton, nullptr, false) : nullptr;
+    if (!pButton)
+        return nullptr;
+
+    JSButton* pWeldWidget = new JSButton(m_pSender, pButton, nullptr, false);
 
     if (pWeldWidget)
     {
