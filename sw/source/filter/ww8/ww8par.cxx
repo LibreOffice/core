@@ -4831,7 +4831,7 @@ void SwWW8ImplReader::ReadDocVars()
     uno::Reference< container::XNameAccess > xFieldMasterAccess = xFieldsSupplier->getTextFieldMasters();
     for(size_t i = 0; i < aDocVarStrings.size(); i++)
     {
-        const OUString &rName = aDocVarStrings[i];
+        const OUString sName = sw::FilterControlChars(aDocVarStrings[i]);
         uno::Any aValue;
         if (aDocValueStrings.size() > i)
         {
@@ -4843,7 +4843,7 @@ void SwWW8ImplReader::ReadDocVars()
         }
 
         uno::Reference< beans::XPropertySet > xMaster;
-        OUString sFieldMasterService("com.sun.star.text.FieldMaster.User." + rName);
+        OUString sFieldMasterService("com.sun.star.text.FieldMaster.User." + sName);
 
         // Find or create Field Master
         if (xFieldMasterAccess->hasByName(sFieldMasterService))
@@ -4853,7 +4853,7 @@ void SwWW8ImplReader::ReadDocVars()
         else
         {
             xMaster.set(xTextFactory->createInstance(u"com.sun.star.text.FieldMaster.User"_ustr), uno::UNO_QUERY_THROW);
-            xMaster->setPropertyValue(u"Name"_ustr, uno::Any(rName));
+            xMaster->setPropertyValue(u"Name"_ustr, uno::Any(sName));
         }
         xMaster->setPropertyValue(u"Content"_ustr, aValue);
     }
