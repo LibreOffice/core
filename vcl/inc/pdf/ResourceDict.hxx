@@ -12,6 +12,7 @@
 
 #include <rtl/strbuf.hxx>
 #include <map>
+#include <vcl/pdfwriter.hxx>
 
 namespace vcl::pdf
 {
@@ -31,7 +32,7 @@ struct ResourceDict
     std::map<OString, sal_Int32> m_aShadings;
     std::map<OString, sal_Int32> m_aPatterns;
 
-    void append(OStringBuffer& rBuffer, sal_Int32 nFontDictObject);
+    void append(OStringBuffer& rBuffer, sal_Int32 nFontDictObject, PDFWriter::PDFVersion eVersion);
 };
 }
 

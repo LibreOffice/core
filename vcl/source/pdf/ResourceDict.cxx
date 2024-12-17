@@ -9,6 +9,7 @@
  */
 
 #include <pdf/ResourceDict.hxx>
+#include <pdf/COSWriter.hxx>
 
 namespace vcl::pdf
 {
@@ -40,19 +41,28 @@ void appendResourceMap(OStringBuffer& rBuf, const char* pPrefix,
 }
 }
 
-void ResourceDict::append(OStringBuffer& rBuf, sal_Int32 nFontDictObject)
+void ResourceDict::append(OStringBuffer& rBuf, sal_Int32 nFontDictObject,
+                          PDFWriter::PDFVersion eVersion)
 {
-    rBuf.append("<<\n");
+    COSWriter aWriter(rBuf);
+    aWriter.startDict();
     if (nFontDictObject)
-        rBuf.append("/Font " + OString::number(nFontDictObject) + " 0 R\n");
+        aWriter.writeKeyAndReference("/Font", nFontDictObject);
     appendResourceMap(rBuf, "XObject", m_aXObjects);
     appendResourceMap(rBuf, "ExtGState", m_aExtGStates);
     appendResourceMap(rBuf, "Shading", m_aShadings);
     appendResourceMap(rBuf, "Pattern", m_aPatterns);
-    rBuf.append("/ProcSet[/PDF/Text");
-    if (!m_aXObjects.empty())
-        rBuf.append("/ImageC/ImageI/ImageB");
-    rBuf.append("]\n>>\n");
+
+    if (eVersion < PDFWriter::PDFVersion::PDF_2_0)
+    {
+        rBuf.append("/ProcSet");
+        rBuf.append("[");
+        rBuf.append("/PDF/Text");
+        if (!m_aXObjects.empty())
+            rBuf.append("/ImageC/ImageI/ImageB");
+        rBuf.append("]\n");
+    }
+    aWriter.endDict();
 }
 
 } // end vcl::pdf
