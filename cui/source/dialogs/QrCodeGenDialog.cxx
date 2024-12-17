@@ -274,7 +274,7 @@ bool QrCodeGenDialog::runAsync(const std::shared_ptr<QrCodeGenDialog>& rControll
     });
 #else
     (void)rController;
-    (void)rFunc;
+    rFunc(RET_CANCEL);
 #endif
     return true;
 }
