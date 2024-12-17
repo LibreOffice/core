@@ -45,7 +45,7 @@ Reference< XAccessible > EditBrowseBox::CreateAccessibleCheckBoxCell(sal_Int32 _
     Reference< XAccessible > xReturn;
     if ( xAccContext.is() )
     {
-        xReturn = getAccessibleFactory().createAccessibleCheckBoxCell(
+        xReturn = AccessibleFactory::createAccessibleCheckBoxCell(
             xAccContext->getAccessibleChild( ::vcl::BBINDEX_TABLE ),
             *this,
             _nRow,
@@ -75,7 +75,7 @@ void EditBrowseBox::implCreateActiveAccessible( )
     if ( !(xMy.is() && xCont.is()) )
          return;
 
-    m_aImpl->m_xActiveCell = getAccessibleFactory().createEditBrowseBoxTableCellAccess(
+    m_aImpl->m_xActiveCell = AccessibleFactory::createEditBrowseBoxTableCellAccess(
          xMy,                                                       // parent accessible
          xCont,                                                     // control accessible
          VCLUnoHelper::GetInterface( &aController->GetWindow() ),   // focus window (for notifications)

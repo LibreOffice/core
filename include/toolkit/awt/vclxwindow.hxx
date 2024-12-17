@@ -49,11 +49,6 @@ namespace vcl { class Window; }
 
 class VclWindowEvent;
 
-namespace vcl
-{
-    class IAccessibleFactory;
-}
-
 
 class UnoPropertyArrayHelper;
 class VCLXWindowImpl;
@@ -88,8 +83,6 @@ protected:
     bool            IsSynthesizingVCLEvent() const;
 
     void        SetSystemParent_Impl( const css::uno::Any& rHandle );
-
-    vcl::IAccessibleFactory&  getAccessibleFactory();
 
     // helper ...
     static void     PushPropertyIds( std::vector< sal_uInt16 > &aIds, int nFirstId, ...);

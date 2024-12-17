@@ -352,7 +352,7 @@ css::uno::Reference< XAccessible > SvtIconChoiceCtrl::CreateAccessible()
         if ( xAccParent.is() )
         {
             css::uno::Reference< css::awt::XVclWindowPeer > xHoldAlive(GetComponentInterface());
-            xAccessible = _pImpl->GetAccessibleFactory().createAccessibleIconChoiceCtrl( *this, xAccParent );
+            xAccessible = AccessibleFactory::createAccessibleIconChoiceCtrl(*this, xAccParent);
         }
     }
     return xAccessible;

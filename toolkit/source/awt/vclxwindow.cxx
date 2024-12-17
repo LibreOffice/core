@@ -46,6 +46,7 @@
 #include <tools/color.hxx>
 #include <tools/fract.hxx>
 #include <tools/debug.hxx>
+#include <vcl/accessiblefactory.hxx>
 #include <vcl/event.hxx>
 #include <vcl/dockwin.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
@@ -60,7 +61,6 @@
 #include "stylesettings.hxx"
 #include <tools/urlobj.hxx>
 
-#include <helper/accessibilityclient.hxx>
 #include <helper/unopropertyarrayhelper.hxx>
 #include <atomic>
 
@@ -91,7 +91,6 @@ private:
 
 private:
     VCLXWindow&                         mrAntiImpl;
-    ::toolkit::AccessibilityClient      maAccFactory;
     bool                                mbDisposed;
     bool                                mbDrawingOntoParent;    // no bit mask, is passed around  by reference
     bool                            mbEnableVisible;
@@ -163,11 +162,6 @@ public:
     /** notifies the object that its VCLXWindow is being disposed
     */
     void    disposing();
-
-    ::toolkit::AccessibilityClient& getAccessibleFactory()
-    {
-        return maAccFactory;
-    }
 
     Reference< XStyleSettings > getStyleSettings();
 
@@ -342,12 +336,6 @@ void VCLXWindow::ImplExecuteAsyncWithoutSolarLock( const Callback& i_callback )
     if (mpImpl->mbDisposing)
         return;
     mpImpl->callBackAsync( i_callback );
-}
-
-
-vcl::IAccessibleFactory& VCLXWindow::getAccessibleFactory()
-{
-    return mpImpl->getAccessibleFactory().getFactory();
 }
 
 void VCLXWindow::SetWindow( const VclPtr<vcl::Window> &pWindow )
@@ -878,7 +866,7 @@ uno::Reference< accessibility::XAccessibleContext > VCLXWindow::CreateAccessible
         return nullptr;
 
     VclPtr<vcl::Window> pWindow = GetWindow();
-    return getAccessibleFactory().createAccessibleContext(pWindow);
+    return AccessibleFactory::createAccessibleContext(pWindow);
 }
 
 void VCLXWindow::SetSynthesizingVCLEvent( bool _b )

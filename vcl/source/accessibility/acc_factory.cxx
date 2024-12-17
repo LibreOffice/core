@@ -75,14 +75,6 @@ bool hasFloatingChild(vcl::Window *pWindow)
 }
 };
 
-AccessibleFactory::AccessibleFactory()
-{
-}
-
-AccessibleFactory::~AccessibleFactory()
-{
-}
-
 Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(PushButton* pButton)
 {
     return new VCLXAccessibleButton(pButton);
@@ -199,150 +191,94 @@ Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext(Forma
     return new SVTXAccessibleNumericField(pFormattedField);
 }
 
-vcl::IAccessibleTabListBox* AccessibleFactory::createAccessibleTabListBox(
-    const Reference< XAccessible >& rxParent, SvHeaderTabListBox& rBox ) const
+vcl::IAccessibleTabListBox*
+AccessibleFactory::createAccessibleTabListBox(const Reference<XAccessible>& rxParent,
+                                              SvHeaderTabListBox& rBox)
 {
     return new AccessibleTabListBox( rxParent, rBox );
 }
 
-rtl::Reference<vcl::IAccessibleBrowseBox> AccessibleFactory::createAccessibleBrowseBox(
-    const Reference< XAccessible >& _rxParent, vcl::IAccessibleTableProvider& _rBrowseBox ) const
+rtl::Reference<vcl::IAccessibleBrowseBox>
+AccessibleFactory::createAccessibleBrowseBox(const Reference<XAccessible>& _rxParent,
+                                             vcl::IAccessibleTableProvider& _rBrowseBox)
 {
     return new AccessibleBrowseBoxAccess( _rxParent, _rBrowseBox );
 }
 
-rtl::Reference<IAccessibleTableControl> AccessibleFactory::createAccessibleTableControl(
-    const Reference< XAccessible >& _rxParent, IAccessibleTable& _rTable ) const
+rtl::Reference<IAccessibleTableControl>
+AccessibleFactory::createAccessibleTableControl(const Reference<XAccessible>& _rxParent,
+                                                IAccessibleTable& _rTable)
 {
     return new AccessibleGridControlAccess( _rxParent, _rTable );
 }
 
-Reference< XAccessible > AccessibleFactory::createAccessibleIconChoiceCtrl(
-    SvtIconChoiceCtrl& _rIconCtrl, const Reference< XAccessible >& _xParent ) const
+Reference<XAccessible>
+AccessibleFactory::createAccessibleIconChoiceCtrl(SvtIconChoiceCtrl& _rIconCtrl,
+                                                  const Reference<XAccessible>& _xParent)
 {
     return new AccessibleIconChoiceCtrl( _rIconCtrl, _xParent );
 }
 
-Reference< XAccessibleContext > AccessibleFactory::createAccessibleTextWindowContext(
-    vcl::Window* pWindow, TextEngine& rEngine, TextView& rView) const
+Reference<XAccessibleContext>
+AccessibleFactory::createAccessibleTextWindowContext(vcl::Window* pWindow, TextEngine& rEngine,
+                                                     TextView& rView)
 {
     return new Document(pWindow, rEngine, rView );
 }
 
-Reference< XAccessible > AccessibleFactory::createAccessibleTreeListBox(
-    SvTreeListBox& _rListBox, const Reference< XAccessible >& _xParent ) const
+Reference<XAccessible>
+AccessibleFactory::createAccessibleTreeListBox(SvTreeListBox& _rListBox,
+                                               const Reference<XAccessible>& _xParent)
 {
     return new AccessibleListBox( _rListBox, _xParent );
 }
 
-Reference< XAccessible > AccessibleFactory::createAccessibleIconView(
-    SvTreeListBox& _rListBox, const Reference< XAccessible >& _xParent ) const
+Reference<XAccessible>
+AccessibleFactory::createAccessibleIconView(SvTreeListBox& _rListBox,
+                                            const Reference<XAccessible>& _xParent)
 {
     return new AccessibleIconView( _rListBox, _xParent );
 }
 
-Reference< XAccessible > AccessibleFactory::createAccessibleBrowseBoxHeaderBar(
-    const Reference< XAccessible >& rxParent, vcl::IAccessibleTableProvider& _rOwningTable,
-    AccessibleBrowseBoxObjType _eObjType ) const
+Reference<XAccessible>
+AccessibleFactory::createAccessibleBrowseBoxHeaderBar(const Reference<XAccessible>& rxParent,
+                                                      vcl::IAccessibleTableProvider& _rOwningTable,
+                                                      AccessibleBrowseBoxObjType _eObjType)
 {
     return new AccessibleBrowseBoxHeaderBar( rxParent, _rOwningTable, _eObjType );
 }
 
-Reference< XAccessible > AccessibleFactory::createAccessibleBrowseBoxTableCell(
-    const Reference< XAccessible >& _rxParent, vcl::IAccessibleTableProvider& _rBrowseBox,
-    sal_Int32 _nRowId, sal_uInt16 _nColId, sal_Int32 _nOffset) const
+Reference<XAccessible> AccessibleFactory::createAccessibleBrowseBoxTableCell(
+    const Reference<XAccessible>& _rxParent, vcl::IAccessibleTableProvider& _rBrowseBox,
+    sal_Int32 _nRowId, sal_uInt16 _nColId, sal_Int32 _nOffset)
 {
     return new AccessibleBrowseBoxTableCell( _rxParent, _rBrowseBox,
         _nRowId, _nColId, _nOffset );
 }
 
-Reference< XAccessible > AccessibleFactory::createAccessibleBrowseBoxHeaderCell(
-    sal_Int32 _nColumnRowId, const Reference< XAccessible >& rxParent, vcl::IAccessibleTableProvider& _rBrowseBox,
-    AccessibleBrowseBoxObjType  _eObjType) const
+Reference<XAccessible> AccessibleFactory::createAccessibleBrowseBoxHeaderCell(
+    sal_Int32 _nColumnRowId, const Reference<XAccessible>& rxParent,
+    vcl::IAccessibleTableProvider& _rBrowseBox, AccessibleBrowseBoxObjType _eObjType)
 {
     return new AccessibleBrowseBoxHeaderCell( _nColumnRowId, rxParent, _rBrowseBox,
         _eObjType);
 }
 
-Reference< XAccessible > AccessibleFactory::createAccessibleCheckBoxCell(
-    const Reference< XAccessible >& _rxParent, vcl::IAccessibleTableProvider& _rBrowseBox,
-    sal_Int32 _nRowPos, sal_uInt16 _nColPos, const TriState& _eState, bool _bIsTriState) const
+Reference<XAccessible> AccessibleFactory::createAccessibleCheckBoxCell(
+    const Reference<XAccessible>& _rxParent, vcl::IAccessibleTableProvider& _rBrowseBox,
+    sal_Int32 _nRowPos, sal_uInt16 _nColPos, const TriState& _eState, bool _bIsTriState)
 {
     return new AccessibleCheckBoxCell( _rxParent, _rBrowseBox,
         _nRowPos, _nColPos, _eState, _bIsTriState );
 }
 
-Reference< XAccessible > AccessibleFactory::createEditBrowseBoxTableCellAccess(
-    const Reference< XAccessible >& _rxParent, const Reference< XAccessible >& _rxControlAccessible,
-    const Reference< XWindow >& _rxFocusWindow, vcl::IAccessibleTableProvider& _rBrowseBox,
-    sal_Int32 _nRowPos, sal_uInt16 _nColPos ) const
+Reference<XAccessible> AccessibleFactory::createEditBrowseBoxTableCellAccess(
+    const Reference<XAccessible>& _rxParent, const Reference<XAccessible>& _rxControlAccessible,
+    const Reference<XWindow>& _rxFocusWindow, vcl::IAccessibleTableProvider& _rBrowseBox,
+    sal_Int32 _nRowPos, sal_uInt16 _nColPos)
 {
     return new EditBrowseBoxTableCellAccess( _rxParent, _rxControlAccessible,
         _rxFocusWindow, _rBrowseBox, _nRowPos, _nColPos );
 }
-
-#if HAVE_FEATURE_DESKTOP
-
-/// anonymous implementation namespace
-namespace {
-
-class GetStandardAccessibleFactoryService:
-    public ::cppu::WeakImplHelper<
-        css::lang::XServiceInfo,
-        css::lang::XUnoTunnel>
-{
-public:
-    // css::lang::XServiceInfo:
-    virtual OUString SAL_CALL getImplementationName() override
-        { return u"com.sun.star.accessibility.comp.GetStandardAccessibleFactoryService"_ustr; }
-    virtual sal_Bool SAL_CALL supportsService(const OUString & serviceName) override
-        { return cppu::supportsService(this, serviceName); }
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override
-        { return { u"com.sun.star.accessibility.GetStandardAccessibleFactoryService"_ustr }; }
-
-    // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const ::css::uno::Sequence< ::sal_Int8 >& /*aIdentifier*/ ) override
-    {
-        vcl::IAccessibleFactory* pFactory = new AccessibleFactory;
-        pFactory->acquire();
-        return reinterpret_cast<sal_Int64>(pFactory);
-    }
-};
-
-} // closing anonymous implementation namespace
-
-/* this is the entry point to retrieve a factory for the vcl-level Accessible/Contexts supplied
-    by this library
-
-    This function implements the factory function needed in vcl
-    (of type GetStandardAccComponentFactory).
-*/
-extern "C"
-{
-    SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
-    com_sun_star_accessibility_GetStandardAccessibleFactoryService_get_implementation(
-        css::uno::XComponentContext *,
-        css::uno::Sequence<css::uno::Any> const &)
-    {
-        return cppu::acquire(new GetStandardAccessibleFactoryService);
-    }
-}
-
-/** this is the entry point to retrieve a factory for the svtools-level Accessible/Contexts supplied
-    by this library
-
-    This function implements the factory function needed in svtools
-    (of type GetSvtAccessibilityComponentFactory).
-*/
-extern "C"
-{
-    SAL_DLLPUBLIC_EXPORT void* getSvtAccessibilityComponentFactory()
-    {
-        ::vcl::IAccessibleFactory* pFactory = new AccessibleFactory;
-        pFactory->acquire();
-        return pFactory;
-    }
-}
-#endif // HAVE_FEATURE_DESKTOP
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1398,10 +1398,6 @@ include/vcl/accessibility/AccessibleTextAttributeHelper.hxx:63
     class rtl::OUString GetIAccessible2TextAttributes(const class com::sun::star::uno::Reference<class com::sun::star::accessibility::XAccessibleText> &,enum IA2AttributeType,int,int &,int &)
     enum IA2AttributeType eAttributeType
     3
-include/vcl/accessiblefactory.hxx:119
-    class com::sun::star::uno::Reference<class com::sun::star::accessibility::XAccessible> vcl::IAccessibleFactory::createAccessibleBrowseBoxHeaderBar(const class com::sun::star::uno::Reference<class com::sun::star::accessibility::XAccessible> &,class vcl::IAccessibleTableProvider &,enum AccessibleBrowseBoxObjType) const
-    enum AccessibleBrowseBoxObjType _eObjType
-    3
 include/vcl/BitmapAlphaClampFilter.hxx:22
     void BitmapAlphaClampFilter::BitmapAlphaClampFilter(unsigned char)
     unsigned char cThreshold

@@ -86,8 +86,4 @@
     <service name="com.sun.star.awt.FontIdentificator"/>
     <optional/>
   </implementation>
-  <implementation name="com.sun.star.accessibility.comp.GetStandardAccessibleFactoryService"
-      constructor="com_sun_star_accessibility_GetStandardAccessibleFactoryService_get_implementation">
-    <service name="com.sun.star.accessibility.GetStandardAccessibleFactoryService"/>
-  </implementation>
 </component>

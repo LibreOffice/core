@@ -2379,7 +2379,7 @@ namespace svt::table
             Reference< XAccessible > const xAccParent = i_parentWindow.GetAccessible();
             if ( xAccParent.is() )
             {
-                m_pAccessibleTable = m_aFactoryAccess.getFactory().createAccessibleTableControl(
+                m_pAccessibleTable = AccessibleFactory::createAccessibleTableControl(
                     xAccParent, m_rAntiImpl
                 );
             }

@@ -23,7 +23,6 @@
 #include <controls/table/tablemodel.hxx>
 #include <controls/table/tablecontrolinterface.hxx>
 
-#include <vcl/svtaccessiblefactory.hxx>
 #include <vcl/accessibletable.hxx>
 
 #include <vcl/seleng.hxx>
@@ -131,7 +130,6 @@ namespace svt::table
         RowPos                  m_nAnchor;
         bool                    m_bUpdatingColWidths;
 
-        vcl::AccessibleFactoryAccess     m_aFactoryAccess;
         rtl::Reference<vcl::table::IAccessibleTableControl> m_pAccessibleTable;
 
     public:

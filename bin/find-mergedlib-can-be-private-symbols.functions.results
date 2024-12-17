@@ -151,7 +151,6 @@ BrowseBox::ToggleSelectedColumn()
 BrowseBox::commitBrowseBoxEvent(short, com::sun::star::uno::Any const&, com::sun::star::uno::Any const&)
 BrowseBox::commitHeaderBarEvent(short, com::sun::star::uno::Any const&, com::sun::star::uno::Any const&, bool)
 BrowseBox::commitTableEvent(short, com::sun::star::uno::Any const&, com::sun::star::uno::Any const&)
-BrowseBox::getAccessibleFactory()
 BrowseBox::isAccessibleAlive() const
 Button::GetImageAlign() const
 Button::SetImageAlign(ImageAlign)
@@ -9947,7 +9946,6 @@ VCLXWindow::IsSynthesizingVCLEvent() const
 VCLXWindow::PushPropertyIds(std::vector<unsigned short, std::allocator<unsigned short> >&, int, ...)
 VCLXWindow::SetSynthesizingVCLEvent(bool)
 VCLXWindow::SetSystemParent_Impl(com::sun::star::uno::Any const&)
-VCLXWindow::getAccessibleFactory()
 VCLXWindow::notifyWindowRemoved(vcl::Window const&)
 VCLXWindow::resumeVclEventListening()
 VCLXWindow::suspendVclEventListening()

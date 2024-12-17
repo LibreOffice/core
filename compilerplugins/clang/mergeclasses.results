@@ -693,7 +693,6 @@ merge sw::mark::IDropdownFieldmark with sw::mark::DropDownFieldmark
 merge sw::util::WrtRedlineAuthor with WW8_WrtRedlineAuthor
 merge test::EventPosterHelper with test::AccessibleEventPosterHelper
 merge test::EventPosterHelperBase with test::EventPosterHelper
-maybe merge toolkit::IAccessibleFactory with (anonymous namespace)::AccessibleFactory, in modules toolkit and accessibility
 merge ucbhelper::ActiveDataSink_Base with ucbhelper::ActiveDataSink
 merge ucbhelper::CommandEnvironment_Base with ucbhelper::CommandEnvironment
 merge ucbhelper::InterceptedInteraction_Base with ucbhelper::InterceptedInteraction
@@ -704,7 +703,6 @@ merge utl::OInputStreamWrapper_Base with utl::OInputStreamWrapper
 merge vcl::DeletionNotifier with SalFrame
 merge vcl::ExtOutDevData with vcl::PDFExtOutDevData
 maybe merge vcl::IAccessibleBrowseBox with accessibility::AccessibleBrowseBoxAccess, in modules vcl and accessibility
-maybe merge vcl::IAccessibleFactory with (anonymous namespace)::AccessibleFactory, in modules vcl and accessibility
 maybe merge vcl::IAccessibleTabListBox with accessibility::AccessibleTabListBox, in modules vcl and accessibility
 maybe merge vcl::PDFOutputStream with (anonymous namespace)::PDFExportStreamDoc, in modules vcl and filter
 merge vcl::SolarThreadExecutor with vcl::solarthread::detail::GenericSolarThreadExecutor

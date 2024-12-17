@@ -39,15 +39,14 @@ namespace svt
                                             sal_Int32 _nPos,
                                             AccessibleBrowseBoxObjType _eType,
                                             const Reference< XAccessible >& _rParent,
-                                            BrowseBox& _rBrowseBox,
-                                            vcl::IAccessibleFactory const & rFactory
+                                            BrowseBox& _rBrowseBox
                                           )
     {
         Reference< XAccessible > xRet;
         BrowseBox::THeaderCellMap::iterator aFind = _raHeaderCells.find(_nPos);
         if ( aFind == _raHeaderCells.end() )
         {
-            Reference< XAccessible > xAccessible = rFactory.createAccessibleBrowseBoxHeaderCell(
+            Reference< XAccessible > xAccessible = AccessibleFactory::createAccessibleBrowseBoxHeaderCell(
                 _nPos,
                 _rParent,
                 _rBrowseBox,
@@ -85,7 +84,7 @@ Reference< XAccessible > BrowseBox::CreateAccessible()
         Reference< XAccessible > xAccParent = pParent->GetAccessible();
         if( xAccParent.is() )
         {
-            m_pAccessible = getAccessibleFactory().createAccessibleBrowseBox(
+            m_pAccessible = AccessibleFactory::createAccessibleBrowseBox(
                 xAccParent, *this
             );
         }
@@ -102,7 +101,7 @@ Reference< XAccessible > BrowseBox::CreateAccessibleCell( sal_Int32 _nRow, sal_u
     // BBINDEX_TABLE must be the table
     OSL_ENSURE(m_pAccessible,"Invalid call: Accessible is null");
 
-    return m_aFactoryAccess.getFactory().createAccessibleBrowseBoxTableCell(
+    return AccessibleFactory::createAccessibleBrowseBoxTableCell(
         getAccessibleTable(),
         *this,
         _nRow,
@@ -119,8 +118,7 @@ Reference< XAccessible > BrowseBox::CreateAccessibleRowHeader( sal_Int32 _nRow )
         _nRow,
         AccessibleBrowseBoxObjType::RowHeaderCell,
         getAccessibleHeaderBar(AccessibleBrowseBoxObjType::RowHeaderBar),
-        *this,
-        m_aFactoryAccess.getFactory()
+        *this
     );
 }
 
@@ -132,8 +130,7 @@ Reference< XAccessible > BrowseBox::CreateAccessibleColumnHeader( sal_uInt16 _nC
             _nColumnPos,
             AccessibleBrowseBoxObjType::ColumnHeaderCell,
             getAccessibleHeaderBar(AccessibleBrowseBoxObjType::ColumnHeaderBar),
-            *this,
-            m_aFactoryAccess.getFactory()
+            *this
     );
 }
 
@@ -407,11 +404,6 @@ void BrowseBox::commitBrowseBoxEvent( sal_Int16 _nEventId, const Any& _rNewValue
 {
     if ( isAccessibleAlive() )
         m_pAccessible->commitEvent( _nEventId, _rNewValue, _rOldValue);
-}
-
-::vcl::IAccessibleFactory& BrowseBox::getAccessibleFactory()
-{
-    return m_aFactoryAccess.getFactory();
 }
 
 bool BrowseBox::isAccessibleAlive( ) const

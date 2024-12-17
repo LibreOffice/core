@@ -6211,7 +6211,6 @@ include/vcl/splitwin.hxx
 include/vcl/status.hxx
 include/vcl/stdtext.hxx
 include/vcl/svapp.hxx
-include/vcl/svtaccessiblefactory.hxx
 include/vcl/syschild.hxx
 include/vcl/sysdata.hxx
 include/vcl/syswin.hxx
@@ -14737,7 +14736,6 @@ vcl/source/helper/commandinfoprovider.cxx
 vcl/source/helper/displayconnectiondispatch.cxx
 vcl/source/helper/evntpost.cxx
 vcl/source/helper/strhelper.cxx
-vcl/source/helper/svtaccessiblefactory.cxx
 vcl/source/image/Image.cxx
 vcl/source/image/ImageRepository.cxx
 vcl/source/image/ImageTree.cxx

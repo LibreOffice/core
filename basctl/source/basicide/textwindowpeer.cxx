@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <vcl/svtaccessiblefactory.hxx>
 #include <vcl/accessiblefactory.hxx>
 
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
@@ -45,7 +44,6 @@ private:
 
     TextEngine & m_rEngine;
     TextView & m_rView;
-    vcl::AccessibleFactoryAccess m_aFactoryAccess;
 };
 
 TextWindowPeer::TextWindowPeer(TextView & view):
@@ -56,7 +54,7 @@ TextWindowPeer::TextWindowPeer(TextView & view):
 
 css::uno::Reference<css::accessibility::XAccessibleContext>
 TextWindowPeer::CreateAccessibleContext() {
-    return m_aFactoryAccess.getFactory().createAccessibleTextWindowContext(
+    return AccessibleFactory::createAccessibleTextWindowContext(
         GetWindow(), m_rEngine, m_rView);
 }
 

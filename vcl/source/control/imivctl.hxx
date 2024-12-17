@@ -27,7 +27,6 @@
 #include <vcl/idle.hxx>
 #include <vcl/vclptr.hxx>
 #include <tools/debug.hxx>
-#include <vcl/svtaccessiblefactory.hxx>
 #include <vcl/toolkit/ivctrl.hxx>
 #include <vcl/toolkit/scrbar.hxx>
 
@@ -131,7 +130,6 @@ class SvxIconChoiceCtrl_Impl
     SvxIconChoiceCtrlEntry* pCurHighlightFrame;
     SvxIconChoiceCtrlEntry* pCursor;
     LocalFocus              aFocus;                             // Data for focusrect
-    ::vcl::AccessibleFactoryAccess aAccFactory;
 
     bool                    bBoundRectsDirty;
 
@@ -291,11 +289,6 @@ public:
     static void         DrawHighlightFrame(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
 
     void                CallEventListeners( VclEventId nEvent, void* pData );
-
-    ::vcl::IAccessibleFactory& GetAccessibleFactory()
-    {
-        return aAccFactory.getFactory();
-    }
 };
 
 typedef std::map<sal_uInt16, SvxIconChoiceCtrlEntryPtrVec> IconChoiceMap;

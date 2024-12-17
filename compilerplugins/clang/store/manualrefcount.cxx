@@ -114,11 +114,6 @@ public:
              return;
         if (loplugin::isSamePathname(fn, SRCDIR "/ucb/source/ucp/file/filprp.cxx"))
              return;
-        // calling release() ?
-        if (loplugin::isSamePathname(fn, SRCDIR "/toolkit/source/helper/accessibilityclient.cxx"))
-             return;
-        if (loplugin::isSamePathname(fn, SRCDIR "/svtools/source/misc/svtaccessiblefactory.cxx"))
-             return;
 
         // implementing css::uno::XInterface
         if (loplugin::isSamePathname(fn, SRCDIR "/sd/source/ui/animations/motionpathtag.cxx"))

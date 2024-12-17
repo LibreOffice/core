@@ -28,7 +28,6 @@
 #include <vcl/timer.hxx>
 #include <vcl/AccessibleBrowseBoxObjType.hxx>
 #include <vcl/accessibletableprovider.hxx>
-#include <vcl/svtaccessiblefactory.hxx>
 #include <vector>
 #include <stack>
 
@@ -44,10 +43,6 @@ class MeasureStatusBar;
 
 namespace svt {
     class BrowseBoxImpl;
-}
-
-namespace vcl {
-    class IAccessibleFactory;
 }
 
 namespace weld {
@@ -349,7 +344,6 @@ private:
     Color           m_aCursorColor;     // special color for cursor, COL_TRANSPARENT for usual (VCL-painted) "inverted" cursor
     BrowserMode     m_nCurrentMode;     // last argument of SetMode (redundant, as our other members represent the current settings, too)
 
-    vcl::AccessibleFactoryAccess m_aFactoryAccess;
     rtl::Reference<vcl::IAccessibleBrowseBox> m_pAccessible;
 
     THeaderCellMap m_aColHeaderCellMap;
@@ -395,10 +389,6 @@ private:
     /// @see AccessibleBrowseBox::getTable
     css::uno::Reference<css::accessibility::XAccessible>
     getAccessibleTable();
-
-protected:
-    /// retrieves the XAccessible implementation associated with the BrowseBox instance
-    SAL_DLLPRIVATE ::vcl::IAccessibleFactory&   getAccessibleFactory();
 
 protected:
     bool                m_bNavigationBar;

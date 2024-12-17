@@ -23,7 +23,6 @@
 #include <vcl/seleng.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/image.hxx>
-#include <vcl/svtaccessiblefactory.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/toolkit/scrbar.hxx>
 #include <vcl/toolkit/treelistbox.hxx>
@@ -92,9 +91,6 @@ private:
     SvLBoxTab*           m_pActiveTab;
 
     VclPtr<ScrollBarBox> m_aScrBarBox;
-
-    ::vcl::AccessibleFactoryAccess
-                        m_aFactoryAccess;
 
     static Image*       s_pDefCollapsed;
     static Image*       s_pDefExpanded;

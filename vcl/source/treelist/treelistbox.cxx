@@ -3461,7 +3461,7 @@ css::uno::Reference< XAccessible > SvTreeListBox::CreateAccessible()
         {
             // need to be done here to get the vclxwindow later on in the accessible
             css::uno::Reference< css::awt::XVclWindowPeer > xHoldAlive(GetComponentInterface());
-            xAccessible = pImpl->m_aFactoryAccess.getFactory().createAccessibleTreeListBox( *this, xAccParent );
+            xAccessible = AccessibleFactory::createAccessibleTreeListBox( *this, xAccParent );
         }
     }
     return xAccessible;

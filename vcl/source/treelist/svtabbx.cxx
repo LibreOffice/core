@@ -18,7 +18,6 @@
  */
 
 #include <comphelper/types.hxx>
-#include <vcl/svtaccessiblefactory.hxx>
 #include <vcl/accessiblefactory.hxx>
 #include <vcl/toolkit/svtabbx.hxx>
 #include <vcl/headbar.hxx>
@@ -545,7 +544,6 @@ namespace vcl
     struct SvHeaderTabListBoxImpl
     {
         VclPtr<HeaderBar>       m_pHeaderBar;
-        AccessibleFactoryAccess m_aFactoryAccess;
 
         SvHeaderTabListBoxImpl() : m_pHeaderBar( nullptr ) { }
     };
@@ -662,7 +660,7 @@ IMPL_LINK_NOARG(SvHeaderTabListBox, CreateAccessibleHdl_Impl, HeaderBar*, void)
         css::uno::Reference< XAccessible > xAccParent = pParent->GetAccessible();
         if ( xAccParent.is() )
         {
-            Reference< XAccessible > xAccessible = m_pImpl->m_aFactoryAccess.getFactory().createAccessibleBrowseBoxHeaderBar(
+            Reference<XAccessible> xAccessible = AccessibleFactory::createAccessibleBrowseBoxHeaderBar(
                 xAccParent, *this, AccessibleBrowseBoxObjType::ColumnHeaderBar );
             m_pImpl->m_pHeaderBar->SetAccessible( xAccessible );
         }
@@ -892,10 +890,10 @@ Reference< XAccessible > SvHeaderTabListBox::CreateAccessibleCell( sal_Int32 _nR
     TriState eState = TRISTATE_INDET;
     bool bIsCheckBox = IsCellCheckBox( _nRow, _nColumnPos, eState );
     if ( bIsCheckBox )
-        xChild = m_pImpl->m_aFactoryAccess.getFactory().createAccessibleCheckBoxCell(
+        xChild = AccessibleFactory::createAccessibleCheckBoxCell(
                 m_pAccessible->getTable(), *this, _nRow, _nColumnPos, eState, false);
     else
-        xChild = m_pImpl->m_aFactoryAccess.getFactory().createAccessibleBrowseBoxTableCell(
+        xChild = AccessibleFactory::createAccessibleBrowseBoxTableCell(
                 m_pAccessible->getTable(), *this, _nRow, _nColumnPos, OFFSET_NONE );
 
     return xChild;
@@ -922,7 +920,7 @@ Reference< XAccessible > SvHeaderTabListBox::CreateAccessibleColumnHeader( sal_u
     if ( !xChild.is() && m_pAccessible )
     {
         // no -> create new header cell
-        xChild = m_pImpl->m_aFactoryAccess.getFactory().createAccessibleBrowseBoxHeaderCell(
+        xChild = AccessibleFactory::createAccessibleBrowseBoxHeaderCell(
             _nColumn, m_pAccessible->getHeaderBar(),
             *this, AccessibleBrowseBoxObjType::ColumnHeaderCell);
 
@@ -1167,7 +1165,7 @@ Reference< XAccessible > SvHeaderTabListBox::CreateAccessible()
         Reference< XAccessible > xAccParent = pParent->GetAccessible();
         if ( xAccParent.is() )
         {
-            m_pAccessible = m_pImpl->m_aFactoryAccess.getFactory().createAccessibleTabListBox( xAccParent, *this );
+            m_pAccessible = AccessibleFactory::createAccessibleTabListBox( xAccParent, *this );
             if ( m_pAccessible )
                 xAccessible = m_pAccessible->getMyself();
         }

@@ -20,6 +20,7 @@
 #pragma once
 
 #include <vcl/AccessibleBrowseBoxObjType.hxx>
+#include <vcl/dllapi.h>
 
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/uno/Reference.hxx>
@@ -69,275 +70,91 @@ namespace vcl
         class IAccessibleTable;
         class IAccessibleTableControl;
     }
+}
 
-    /** a function which is able to create a factory for the standard Accessible/Context
-        components needed for standard toolkit controls
-
-        The returned pointer denotes an instance of the IAccessibleFactory, which has been acquired
-        <em>once</em>. The caller is responsible for holding this reference as long as it needs the
-        factory, and release it afterwards.
-    */
-    typedef void* (* GetSvtAccessibilityComponentFactory)( );
-
-
-    /** a function which is able to create a factory for the standard Accessible/Context
-        components needed for standard VCL controls
-
-        The returned pointer denotes an instance of the IAccessibleFactory, which has been acquired
-        <em>once</em>. The caller is responsible for holding this reference as long as it needs the
-        factory, and release it afterwards.
-    */
-    typedef void* (* GetStandardAccComponentFactory)( );
-
-
-    //= IAccessibleFactory
-
-    class IAccessibleFactory : public virtual ::salhelper::SimpleReferenceObject
-    {
-    public:
-        virtual vcl::IAccessibleTabListBox*
-            createAccessibleTabListBox(
-                const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
-                SvHeaderTabListBox& rBox
-            ) const = 0;
-        virtual css::uno::Reference< css::accessibility::XAccessible >
-            createAccessibleTreeListBox(
-                SvTreeListBox& _rListBox,
-                const css::uno::Reference< css::accessibility::XAccessible >& _xParent
-            ) const = 0;
-        virtual css::uno::Reference< css::accessibility::XAccessible >
-            createAccessibleIconView(
-                SvTreeListBox& _rListBox,
-                const css::uno::Reference< css::accessibility::XAccessible >& _xParent
-            ) const = 0;
-        virtual rtl::Reference<vcl::IAccessibleBrowseBox>
-            createAccessibleBrowseBox(
-                const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
-                vcl::IAccessibleTableProvider& _rBrowseBox
-            ) const = 0;
-        virtual rtl::Reference<table::IAccessibleTableControl>
-            createAccessibleTableControl(
-                const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
-                table::IAccessibleTable& _rTable
-            ) const = 0;
-
-        virtual css::uno::Reference< css::accessibility::XAccessible >
-            createAccessibleIconChoiceCtrl(
-                SvtIconChoiceCtrl& _rIconCtrl,
-                const css::uno::Reference< css::accessibility::XAccessible >& _xParent
-            ) const = 0;
-
-        virtual css::uno::Reference< css::accessibility::XAccessibleContext >
-            createAccessibleTextWindowContext(
-                vcl::Window* pWindow, TextEngine& rEngine, TextView& rView
-            ) const = 0;
-
-        virtual css::uno::Reference< css::accessibility::XAccessible >
-            createAccessibleBrowseBoxHeaderBar(
-                const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
-                vcl::IAccessibleTableProvider& _rOwningTable,
-                AccessibleBrowseBoxObjType _eObjType
-            ) const = 0;
-
-        virtual css::uno::Reference< css::accessibility::XAccessible >
-            createAccessibleBrowseBoxTableCell(
-                const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
-                vcl::IAccessibleTableProvider& _rBrowseBox,
-                sal_Int32 _nRowId,
-                sal_uInt16 _nColId,
-                sal_Int32 _nOffset
-            ) const = 0;
-
-        virtual css::uno::Reference< css::accessibility::XAccessible >
-            createAccessibleBrowseBoxHeaderCell(
-                sal_Int32 _nColumnRowId,
-                const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
-                vcl::IAccessibleTableProvider& _rBrowseBox,
-                AccessibleBrowseBoxObjType  _eObjType
-            ) const = 0;
-
-        virtual css::uno::Reference< css::accessibility::XAccessible >
-            createAccessibleCheckBoxCell(
-                const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
-                vcl::IAccessibleTableProvider& _rBrowseBox,
-                sal_Int32 _nRowPos,
-                sal_uInt16 _nColPos,
-                const TriState& _eState,
-                bool _bIsTriState
-            ) const = 0;
-
-        virtual css::uno::Reference< css::accessibility::XAccessible >
-            createEditBrowseBoxTableCellAccess(
-                const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
-                const css::uno::Reference< css::accessibility::XAccessible >& _rxControlAccessible,
-                const css::uno::Reference< css::awt::XWindow >& _rxFocusWindow,
-                vcl::IAccessibleTableProvider& _rBrowseBox,
-                sal_Int32 _nRowPos,
-                sal_uInt16 _nColPos
-            ) const = 0;
-
-        /** creates an accessible context for a button window
-        */
-        virtual css::uno::Reference< css::accessibility::XAccessibleContext >
-        createAccessibleContext(PushButton* pButton) = 0;
-
-        /** creates an accessible context for a checkbox window
-        */
-        virtual css::uno::Reference< css::accessibility::XAccessibleContext >
-        createAccessibleContext(CheckBox* pCheckBox) = 0;
-
-        /** creates an accessible context for a radio button window
-        */
-        virtual css::uno::Reference< css::accessibility::XAccessibleContext >
-        createAccessibleContext(RadioButton* pRadioButton) = 0;
-
-        /** creates an accessible context for a listbox window
-        */
-        virtual css::uno::Reference< css::accessibility::XAccessibleContext >
-        createAccessibleContext(ListBox* pListBox) = 0;
-
-        /** creates an accessible context for a fixed hyperlink window
-        */
-        virtual css::uno::Reference< css::accessibility::XAccessibleContext >
-        createAccessibleContext(FixedHyperlink* pFixedHyperlink) = 0;
-
-        /** creates an accessible context for a fixed text window
-        */
-        virtual css::uno::Reference< css::accessibility::XAccessibleContext >
-        createAccessibleContext(FixedText* pFixedText) = 0;
-
-        /** creates an accessible context for a scrollbar window
-        */
-        virtual css::uno::Reference< css::accessibility::XAccessibleContext >
-        createAccessibleContext(ScrollBar* pScrollBar) = 0;
-
-        /** creates an accessible context for an edit window
-        */
-        virtual css::uno::Reference< css::accessibility::XAccessibleContext >
-        createAccessibleContext(Edit* pEdit) = 0;
-
-        /** creates an accessible context for a combo box window
-        */
-        virtual css::uno::Reference< css::accessibility::XAccessibleContext >
-        createAccessibleContext(ComboBox* pComboBox) = 0;
-
-        /** creates an accessible context for a toolbox window
-        */
-        virtual css::uno::Reference< css::accessibility::XAccessibleContext >
-        createAccessibleContext(ToolBox* pToolBox) = 0;
-
-        /** creates an accessible context for a headerbar window
-        */
-        virtual css::uno::Reference< css::accessibility::XAccessibleContext >
-        createAccessibleContext(HeaderBar* pHeaderBar) = 0;
-
-        /** creates an accessible context for a numeric field
-        */
-        virtual css::uno::Reference< css::accessibility::XAccessibleContext >
-        createAccessibleContext(FormattedField* pFormattedField) = 0;
-
-        /** creates an accessible context for a generic window
-        */
-        virtual css::uno::Reference< css::accessibility::XAccessibleContext >
-        createAccessibleContext(vcl::Window* pWindow) = 0;
-
-    protected:
-        virtual ~IAccessibleFactory() override {}
-    };
-
-}   // namespace vcl
-
-class AccessibleFactory : public vcl::IAccessibleFactory
+class VCL_DLLPUBLIC AccessibleFactory
 {
 public:
-    AccessibleFactory();
+    AccessibleFactory() = delete;
 
-    virtual css::uno::Reference<css::accessibility::XAccessibleContext>
-    createAccessibleContext(PushButton* pButton) override;
-    virtual css::uno::Reference<css::accessibility::XAccessibleContext>
-    createAccessibleContext(CheckBox* pCheckBox) override;
-    virtual css::uno::Reference<css::accessibility::XAccessibleContext>
-    createAccessibleContext(RadioButton* pRadioButton) override;
-    virtual css::uno::Reference<css::accessibility::XAccessibleContext>
-    createAccessibleContext(ListBox* pListBox) override;
-    virtual css::uno::Reference<css::accessibility::XAccessibleContext>
-    createAccessibleContext(FixedText* pFixedText) override;
-    virtual css::uno::Reference<css::accessibility::XAccessibleContext>
-    createAccessibleContext(FixedHyperlink* pFixedHyperlink) override;
-    virtual css::uno::Reference<css::accessibility::XAccessibleContext>
-    createAccessibleContext(ScrollBar* pScrollBar) override;
-    virtual css::uno::Reference<css::accessibility::XAccessibleContext>
-    createAccessibleContext(Edit* pEdit) override;
-    virtual css::uno::Reference<css::accessibility::XAccessibleContext>
-    createAccessibleContext(ComboBox* pComboBox) override;
-    virtual css::uno::Reference<css::accessibility::XAccessibleContext>
-    createAccessibleContext(ToolBox* pToolBox) override;
-    virtual css::uno::Reference<css::accessibility::XAccessibleContext>
-    createAccessibleContext(HeaderBar* pHeaderBar) override;
-    virtual css::uno::Reference<css::accessibility::XAccessibleContext>
-    createAccessibleContext(FormattedField* pFormattedField) override;
-    virtual css::uno::Reference<css::accessibility::XAccessibleContext>
-    createAccessibleContext(vcl::Window* pWindow) override;
+    static css::uno::Reference<css::accessibility::XAccessibleContext>
+    createAccessibleContext(PushButton* pButton);
+    static css::uno::Reference<css::accessibility::XAccessibleContext>
+    createAccessibleContext(CheckBox* pCheckBox);
+    static css::uno::Reference<css::accessibility::XAccessibleContext>
+    createAccessibleContext(RadioButton* pRadioButton);
+    static css::uno::Reference<css::accessibility::XAccessibleContext>
+    createAccessibleContext(ListBox* pListBox);
+    static css::uno::Reference<css::accessibility::XAccessibleContext>
+    createAccessibleContext(FixedText* pFixedText);
+    static css::uno::Reference<css::accessibility::XAccessibleContext>
+    createAccessibleContext(FixedHyperlink* pFixedHyperlink);
+    static css::uno::Reference<css::accessibility::XAccessibleContext>
+    createAccessibleContext(ScrollBar* pScrollBar);
+    static css::uno::Reference<css::accessibility::XAccessibleContext>
+    createAccessibleContext(Edit* pEdit);
+    static css::uno::Reference<css::accessibility::XAccessibleContext>
+    createAccessibleContext(ComboBox* pComboBox);
+    static css::uno::Reference<css::accessibility::XAccessibleContext>
+    createAccessibleContext(ToolBox* pToolBox);
+    static css::uno::Reference<css::accessibility::XAccessibleContext>
+    createAccessibleContext(HeaderBar* pHeaderBar);
+    static css::uno::Reference<css::accessibility::XAccessibleContext>
+    createAccessibleContext(FormattedField* pFormattedField);
+    static css::uno::Reference<css::accessibility::XAccessibleContext>
+    createAccessibleContext(vcl::Window* pWindow);
 
-    virtual vcl::IAccessibleTabListBox*
+    static vcl::IAccessibleTabListBox*
     createAccessibleTabListBox(const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
-                               SvHeaderTabListBox& rBox) const override;
+                               SvHeaderTabListBox& rBox);
 
-    virtual rtl::Reference<vcl::IAccessibleBrowseBox>
+    static rtl::Reference<vcl::IAccessibleBrowseBox>
     createAccessibleBrowseBox(const css::uno::Reference<css::accessibility::XAccessible>& _rxParent,
-                              vcl::IAccessibleTableProvider& _rBrowseBox) const override;
+                              vcl::IAccessibleTableProvider& _rBrowseBox);
 
-    virtual rtl::Reference<vcl::table::IAccessibleTableControl> createAccessibleTableControl(
+    static rtl::Reference<vcl::table::IAccessibleTableControl> createAccessibleTableControl(
         const css::uno::Reference<css::accessibility::XAccessible>& _rxParent,
-        vcl::table::IAccessibleTable& _rTable) const override;
+        vcl::table::IAccessibleTable& _rTable);
 
-    virtual css::uno::Reference<css::accessibility::XAccessible> createAccessibleIconChoiceCtrl(
+    static css::uno::Reference<css::accessibility::XAccessible> createAccessibleIconChoiceCtrl(
         SvtIconChoiceCtrl& _rIconCtrl,
-        const css::uno::Reference<css::accessibility::XAccessible>& _xParent) const override;
+        const css::uno::Reference<css::accessibility::XAccessible>& _xParent);
 
-    virtual css::uno::Reference<css::accessibility::XAccessibleContext>
-    createAccessibleTextWindowContext(vcl::Window* pWindow, TextEngine& rEngine,
-                                      TextView& rView) const override;
+    static css::uno::Reference<css::accessibility::XAccessibleContext>
+    createAccessibleTextWindowContext(vcl::Window* pWindow, TextEngine& rEngine, TextView& rView);
 
-    virtual css::uno::Reference<css::accessibility::XAccessible> createAccessibleTreeListBox(
+    static css::uno::Reference<css::accessibility::XAccessible> createAccessibleTreeListBox(
         SvTreeListBox& _rListBox,
-        const css::uno::Reference<css::accessibility::XAccessible>& _xParent) const override;
+        const css::uno::Reference<css::accessibility::XAccessible>& _xParent);
 
-    virtual css::uno::Reference<css::accessibility::XAccessible> createAccessibleIconView(
-        SvTreeListBox& _rListBox,
-        const css::uno::Reference<css::accessibility::XAccessible>& _xParent) const override;
+    static css::uno::Reference<css::accessibility::XAccessible>
+    createAccessibleIconView(SvTreeListBox& _rListBox,
+                             const css::uno::Reference<css::accessibility::XAccessible>& _xParent);
 
-    virtual css::uno::Reference<css::accessibility::XAccessible> createAccessibleBrowseBoxHeaderBar(
+    static css::uno::Reference<css::accessibility::XAccessible> createAccessibleBrowseBoxHeaderBar(
         const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
-        vcl::IAccessibleTableProvider& _rOwningTable,
-        AccessibleBrowseBoxObjType _eObjType) const override;
+        vcl::IAccessibleTableProvider& _rOwningTable, AccessibleBrowseBoxObjType _eObjType);
 
-    virtual css::uno::Reference<css::accessibility::XAccessible> createAccessibleBrowseBoxTableCell(
+    static css::uno::Reference<css::accessibility::XAccessible> createAccessibleBrowseBoxTableCell(
         const css::uno::Reference<css::accessibility::XAccessible>& _rxParent,
         vcl::IAccessibleTableProvider& _rBrowseBox, sal_Int32 _nRowId, sal_uInt16 _nColId,
-        sal_Int32 _nOffset) const override;
+        sal_Int32 _nOffset);
 
-    virtual css::uno::Reference<css::accessibility::XAccessible>
-    createAccessibleBrowseBoxHeaderCell(
+    static css::uno::Reference<css::accessibility::XAccessible> createAccessibleBrowseBoxHeaderCell(
         sal_Int32 _nColumnRowId,
         const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
-        vcl::IAccessibleTableProvider& _rBrowseBox,
-        AccessibleBrowseBoxObjType _eObjType) const override;
+        vcl::IAccessibleTableProvider& _rBrowseBox, AccessibleBrowseBoxObjType _eObjType);
 
-    virtual css::uno::Reference<css::accessibility::XAccessible> createAccessibleCheckBoxCell(
+    static css::uno::Reference<css::accessibility::XAccessible> createAccessibleCheckBoxCell(
         const css::uno::Reference<css::accessibility::XAccessible>& _rxParent,
         vcl::IAccessibleTableProvider& _rBrowseBox, sal_Int32 _nRowPos, sal_uInt16 _nColPos,
-        const TriState& _eState, bool _bIsTriState) const override;
+        const TriState& _eState, bool _bIsTriState);
 
-    virtual css::uno::Reference<css::accessibility::XAccessible> createEditBrowseBoxTableCellAccess(
+    static css::uno::Reference<css::accessibility::XAccessible> createEditBrowseBoxTableCellAccess(
         const css::uno::Reference<css::accessibility::XAccessible>& _rxParent,
         const css::uno::Reference<css::accessibility::XAccessible>& _rxControlAccessible,
         const css::uno::Reference<css::awt::XWindow>& _rxFocusWindow,
-        vcl::IAccessibleTableProvider& _rBrowseBox, sal_Int32 _nRowPos,
-        sal_uInt16 _nColPos) const override;
-
-protected:
-    virtual ~AccessibleFactory() override;
+        vcl::IAccessibleTableProvider& _rBrowseBox, sal_Int32 _nRowPos, sal_uInt16 _nColPos);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

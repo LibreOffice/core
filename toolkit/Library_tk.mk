@@ -120,7 +120,6 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/hatchwindow/hatchwindow \
     toolkit/source/hatchwindow/hatchwindowfactory \
     toolkit/source/hatchwindow/ipwin \
-    toolkit/source/helper/accessibilityclient \
     toolkit/source/helper/btndlg \
     toolkit/source/helper/imagealign \
     toolkit/source/helper/listenermultiplexer \
