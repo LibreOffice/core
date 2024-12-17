@@ -686,11 +686,7 @@ double ScDocument::RoundValueAsShown( double fVal, sal_uInt32 nFormat, const ScI
             if (nPrecision == static_cast<short>(SvNumberFormatter::UNLIMITED_PRECISION))
                 return fVal;
         }
-        double fRound = ::rtl::math::round( fVal, nPrecision );
-        if ( ::rtl::math::approxEqual( fVal, fRound ) )
-            return fVal;        // rounding might introduce some error
-        else
-            return fRound;
+        return ::rtl::math::round( fVal, nPrecision );
     }
     else
         return fVal;
