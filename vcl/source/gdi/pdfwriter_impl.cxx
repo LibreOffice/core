@@ -5988,7 +5988,10 @@ sal_Int32 PDFWriterImpl::emitEncrypt()
 bool PDFWriterImpl::emitTrailer()
 {
     // emit doc info
-    sal_Int32 nDocInfoObject = emitInfoDict( );
+    sal_Int32 nDocInfoObject = 0;
+    // Deprecated in PDF 2.0, but still allowed if /PieceInfo is written (which we don't support)
+    if (m_aContext.Version < PDFWriter::PDFVersion::PDF_2_0)
+        nDocInfoObject = emitInfoDict();
 
     sal_Int32 nSecObject = 0;
 
