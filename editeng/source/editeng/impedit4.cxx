@@ -453,15 +453,19 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel, bool bCl
 
                 aUsedParagraphStyles.insert(pParaStyle);
 
-                const OUString& rParent = pParaStyle->GetParent();
-                if (!rParent.isEmpty())
+                // Collect parents of the style recursively.
+                OUString aParent = pParaStyle->GetParent();
+                while (!aParent.isEmpty())
                 {
                     auto pParent = static_cast<SfxStyleSheet*>(
-                        GetStyleSheetPool()->Find(rParent, pParaStyle->GetFamily()));
-                    if (pParent)
+                        GetStyleSheetPool()->Find(aParent, pParaStyle->GetFamily()));
+                    if (!pParent)
                     {
-                        aUsedParagraphStyles.insert(pParent);
+                        break;
                     }
+
+                    aUsedParagraphStyles.insert(pParent);
+                    aParent = pParent->GetParent();
                 }
 
                 const OUString& rFollow = pParaStyle->GetFollow();
