@@ -125,6 +125,7 @@
 
 #include <expfld.hxx>
 #include <unotxdoc.hxx>
+#include <unoidxcoll.hxx>
 
 #define CTYPE_CNT   0
 #define CTYPE_CTT   1
@@ -6247,13 +6248,12 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
                 case EditEntryMode::RENAME:
                 {
                     rtl::Reference< SwXTextDocument > xModel = m_pActiveShell->GetView().GetDocShell()->GetBaseModel();
-                    Reference< XIndexAccess> xIdxAcc(xModel->getDocumentIndexes());
-                    Reference< XNameAccess >xLocalNameAccess(xIdxAcc, UNO_QUERY);
+                    rtl::Reference< SwXDocumentIndexes> xIdxAcc = xModel->getSwDocumentIndexes();
                     if(EditEntryMode::RENAME == nMode)
-                        xNameAccess = std::move(xLocalNameAccess);
-                    else if(xLocalNameAccess.is() && xLocalNameAccess->hasByName(pBase->GetTOXName()))
+                        xNameAccess = xIdxAcc;
+                    else if(xIdxAcc.is() && xIdxAcc->hasByName(pBase->GetTOXName()))
                     {
-                        Any aIdx = xLocalNameAccess->getByName(pBase->GetTOXName());
+                        Any aIdx = xIdxAcc->getByName(pBase->GetTOXName());
                         Reference< XDocumentIndex> xIdx;
                         if(aIdx >>= xIdx)
                             xIdx->update();

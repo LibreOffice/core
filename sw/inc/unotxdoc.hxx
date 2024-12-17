@@ -524,6 +524,7 @@ public:
 
     SwDocShell*                 GetDocShell() {return m_pDocShell;}
 
+    rtl::Reference<SwXDocumentIndexes> getSwDocumentIndexes();
     rtl::Reference<SwXTextTables> getSwTextTables();
     rtl::Reference<SwFmDrawPage> getSwDrawPage();
     rtl::Reference<SwXFootnotes> getSwXFootnotes();

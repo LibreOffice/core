@@ -1905,6 +1905,11 @@ Sequence< OUString > SwXTextDocument::getSupportedServiceNames()
 
 Reference< XIndexAccess >  SwXTextDocument::getDocumentIndexes()
 {
+    return getSwDocumentIndexes();
+}
+
+rtl::Reference< SwXDocumentIndexes >  SwXTextDocument::getSwDocumentIndexes()
+{
     SolarMutexGuard aGuard;
     ThrowIfInvalid();
 

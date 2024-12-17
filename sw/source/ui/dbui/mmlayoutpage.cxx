@@ -591,12 +591,11 @@ IMPL_LINK_NOARG(SwMailMergeLayoutPage, PreviewLoadedHdl_Impl, SwOneExampleFrame&
 {
     m_xExampleContainerWIN->show();
 
-    Reference< XModel > & xModel = m_xExampleFrame->GetModel();
+    rtl::Reference< SwXTextDocument > & xModel = m_xExampleFrame->GetModel();
     //now the ViewOptions should be set properly
     Reference< XViewSettingsSupplier >  xSettings(xModel->getCurrentController(), UNO_QUERY);
     m_xViewProperties = xSettings->getViewSettings();
-    auto pXDoc = comphelper::getFromUnoTunnel<SwXTextDocument>(xModel);
-    SwDocShell* pDocShell = pXDoc->GetDocShell();
+    SwDocShell* pDocShell = xModel->GetDocShell();
     m_pExampleWrtShell = pDocShell->GetWrtShell();
     OSL_ENSURE(m_pExampleWrtShell, "No SwWrtShell found!");
     if(!m_pExampleWrtShell)

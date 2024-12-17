@@ -41,11 +41,12 @@
 
 class SwView;
 class SwXTextCursor;
+class SwXTextDocument;
 
 class SW_DLLPUBLIC SwOneExampleFrame final : public weld::CustomWidgetController
 {
     ScopedVclPtr<VirtualDevice> m_xVirDev;
-    css::uno::Reference< css::frame::XModel >         m_xModel;
+    rtl::Reference< SwXTextDocument >         m_xModel;
     css::uno::Reference< css::frame::XController >    m_xController;
     rtl::Reference< SwXTextCursor >                   m_xCursor;
 
@@ -75,7 +76,7 @@ public:
     virtual bool Command(const CommandEvent& rCEvt) override;
     virtual ~SwOneExampleFrame() override;
 
-    css::uno::Reference< css::frame::XModel > &       GetModel()      {return m_xModel;}
+    rtl::Reference< SwXTextDocument > &               GetModel()      {return m_xModel;}
     rtl::Reference< SwXTextCursor > &                 GetTextCursor() {return m_xCursor;}
 
     void ClearDocument();

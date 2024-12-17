@@ -27,6 +27,7 @@
 #include <unotools.hxx>
 #include <unoprnms.hxx>
 #include <unotextcursor.hxx>
+#include <unotxdoc.hxx>
 #include <i18nutil/unicode.hxx>
 #include <o3tl/string_view.hxx>
 #include <rtl/string.h>
@@ -189,7 +190,7 @@ void SwOneExampleFrame::CreateControl()
             { "Hidden", uno::Any(true) }
         }));
 
-    m_xModel.set(xDesktop->loadComponentFromURL(sTempURL, u"_blank"_ustr, 0, args), uno::UNO_QUERY);
+    m_xModel = dynamic_cast<SwXTextDocument*>(xDesktop->loadComponentFromURL(sTempURL, u"_blank"_ustr, 0, args).get());
 
     m_aLoadedIdle.Start();
 }
@@ -283,8 +284,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer, void )
             m_bIsInitialized = true;
         }
 
-        uno::Reference< text::XTextDocument >  xDoc(m_xModel, uno::UNO_QUERY);
-        uno::Reference< text::XText >  xText = xDoc->getText();
+        uno::Reference< text::XText >  xText = m_xModel->getText();
         uno::Reference< text::XTextCursor > xTextCursor = xText->createTextCursor();
         m_xCursor = dynamic_cast<SwXTextCursor*>(xTextCursor.get());
         assert(bool(xTextCursor) == bool(m_xCursor) && "expect to get SwXTextCursor type here");
@@ -366,8 +366,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer, void )
         OUString sPageStyle;
         aPageStyle >>= sPageStyle;
 
-        uno::Reference< style::XStyleFamiliesSupplier >  xSSupp( xDoc, uno::UNO_QUERY);
-        uno::Reference< container::XNameAccess >  xStyles = xSSupp->getStyleFamilies();
+        uno::Reference< container::XNameAccess >  xStyles = m_xModel->getStyleFamilies();
         uno::Any aPFamily = xStyles->getByName( u"PageStyles"_ustr );
         uno::Reference< container::XNameContainer >  xPFamily;
 

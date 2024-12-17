@@ -39,6 +39,7 @@
 
 #include <SwStyleNameMapper.hxx>
 #include <swuicnttab.hxx>
+#include <unoidxcoll.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
@@ -86,16 +87,13 @@ IMPL_LINK_NOARG(SwMultiTOXTabDialog, CreateExample_Hdl, SwOneExampleFrame&, void
 {
     try
     {
-        uno::Reference< frame::XModel > & xModel = m_xExampleFrame->GetModel();
-        auto pDoc = comphelper::getFromUnoTunnel<SwXTextDocument>(xModel);
+        rtl::Reference< SwXTextDocument > & xDoc = m_xExampleFrame->GetModel();
 
-        if( pDoc )
-            pDoc->GetDocShell()->LoadStyles_( *m_rWrtShell.GetView().GetDocShell(), true );
+        if( xDoc )
+            xDoc->GetDocShell()->LoadStyles_( *m_rWrtShell.GetView().GetDocShell(), true );
 
-        uno::Reference< text::XTextSectionsSupplier >  xSectionSupplier(
-                                                 xModel, uno::UNO_QUERY);
         uno::Reference< container::XNameAccess >  xSections =
-                                        xSectionSupplier->getTextSections();
+                                        xDoc->getTextSections();
 
         for(int i = 0; i < 7; ++i )
         {
@@ -103,8 +101,7 @@ IMPL_LINK_NOARG(SwMultiTOXTabDialog, CreateExample_Hdl, SwOneExampleFrame&, void
             uno::Any aSection = xSections->getByName( sTmp );
             aSection >>= m_vTypeData[i].m_oIndexSections->xContainerSection;
         }
-        uno::Reference< text::XDocumentIndexesSupplier >  xIdxSupp(xModel, uno::UNO_QUERY);
-        uno::Reference< container::XIndexAccess >  xIdxs = xIdxSupp->getDocumentIndexes();
+        rtl::Reference< SwXDocumentIndexes >  xIdxs = xDoc->getSwDocumentIndexes();
         int n = xIdxs->getCount();
         while(n)
         {
@@ -144,7 +141,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
         OSL_ENSURE(m_vTypeData[nTOXIndex].m_oIndexSections &&
                         m_vTypeData[nTOXIndex].m_oIndexSections->xContainerSection.is(),
                             "Section not created");
-        uno::Reference< frame::XModel > & xModel = m_xExampleFrame->GetModel();
+        rtl::Reference< SwXTextDocument > & xModel = m_xExampleFrame->GetModel();
         bool bInitialCreate = true;
         if(!m_vTypeData[nTOXIndex].m_oIndexSections->xDocumentIndex.is())
         {
@@ -155,11 +152,9 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
              xAnchor = xAnchor->getStart();
              uno::Reference< text::XTextCursor >  xCursor = xAnchor->getText()->createTextCursorByRange(xAnchor);
 
-             uno::Reference< lang::XMultiServiceFactory >  xFact(xModel, uno::UNO_QUERY);
-
              OUString sIndexTypeName(OUString::createFromAscii( IndexServiceNames[
                     nTOXIndex <= TOX_AUTHORITIES ? nTOXIndex : TOX_USER] ));
-             m_vTypeData[nTOXIndex].m_oIndexSections->xDocumentIndex.set(xFact->createInstance(sIndexTypeName), uno::UNO_QUERY);
+             m_vTypeData[nTOXIndex].m_oIndexSections->xDocumentIndex.set(xModel->createInstance(sIndexTypeName), uno::UNO_QUERY);
              uno::Reference< text::XTextContent >  xContent = m_vTypeData[nTOXIndex].m_oIndexSections->xDocumentIndex;
              xCursor->getText()->insertTextContent(xCursor, xContent, false);
         }
