@@ -212,7 +212,9 @@ OString JSDialogNotifyIdle::generateClosePopupMessage(const OUString& sWindowId)
     return aJsonWriter.finishAndGetAsOString();
 }
 
-OString JSDialogNotifyIdle::generateMenuMessage(const VclPtr<PopupMenu>& pMenu) const
+OString JSDialogNotifyIdle::generateMenuMessage(const VclPtr<PopupMenu>& pMenu,
+                                                const OUString& sParentId,
+                                                const OUString& sCloseId) const
 {
     if (!pMenu || !m_aNotifierWindow)
         return OString();
@@ -230,7 +232,8 @@ OString JSDialogNotifyIdle::generateMenuMessage(const VclPtr<PopupMenu>& pMenu) 
     aJsonWriter.put("jsontype", "dialog");
     aJsonWriter.put("type", "dropdown");
     aJsonWriter.put("cancellable", true);
-    aJsonWriter.put("popupParent", m_aNotifierWindow->get_id());
+    aJsonWriter.put("popupParent", sParentId);
+    aJsonWriter.put("clickToClose", sCloseId);
     aJsonWriter.put("id", m_aNotifierWindow->GetLOKWindowId());
 
     return aJsonWriter.finishAndGetAsOString();
@@ -282,7 +285,8 @@ void JSDialogNotifyIdle::Invoke()
 
             case jsdialog::MessageType::Menu:
             {
-                send(generateMenuMessage(rMessage.m_pMenu));
+                send(generateMenuMessage(rMessage.m_pMenu, (*rMessage.m_pData)[PARENT_ID ""_ostr],
+                                         (*rMessage.m_pData)[CLOSE_ID ""_ostr]));
                 break;
             }
         }
@@ -371,12 +375,17 @@ void JSDialogSender::sendClosePopup(vcl::LOKWindowId nWindowId)
     flush();
 }
 
-void JSDialogSender::sendMenu(const VclPtr<PopupMenu>& pMenu)
+void JSDialogSender::sendMenu(const VclPtr<PopupMenu>& pMenu, const OUString& sParentId,
+                              const OUString& sCloseId)
 {
     if (!mpIdleNotify)
         return;
 
-    mpIdleNotify->sendMessage(jsdialog::MessageType::Menu, pMenu);
+    std::unique_ptr<jsdialog::ActionDataMap> pData = std::make_unique<jsdialog::ActionDataMap>();
+    (*pData)[PARENT_ID ""_ostr] = sParentId;
+    (*pData)[CLOSE_ID ""_ostr] = sCloseId;
+
+    mpIdleNotify->sendMessage(jsdialog::MessageType::Menu, pMenu, std::move(pData));
     mpIdleNotify->Start();
 }
 
