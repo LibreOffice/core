@@ -10437,8 +10437,8 @@ fi
 if test \( "$cross_compiling" = yes -a -z "$PYTHON_FOR_BUILD" \) -o "$enable_python" = internal; then
     SYSTEM_PYTHON=
     PYTHON_VERSION_MAJOR=3
-    PYTHON_VERSION_MINOR=10
-    PYTHON_VERSION=${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}.16
+    PYTHON_VERSION_MINOR=11
+    PYTHON_VERSION=${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}.11
     if ! grep -q -i python.*${PYTHON_VERSION} ${SRC_ROOT}/download.lst; then
         AC_MSG_ERROR([PYTHON_VERSION ${PYTHON_VERSION} but no matching file in download.lst])
     fi
@@ -14188,6 +14188,11 @@ if test "$ENABLE_ONLINE_UPDATE_MAR" = TRUE -o "$enable_python" = internal; then
     else
         AC_MSG_RESULT([no])
         BUILD_TYPE="$BUILD_TYPE BZIP2"
+        if test "$COM" = "MSC"; then
+            BZIP2_LIBS="${WORKDIR}/UnpackedTarball/bzip2/libbz2.lib"
+        else
+            BZIP2_LIBS="-L${WORKDIR}/UnpackedTarball/bzip2 -lbz2"
+        fi
     fi
 fi
 AC_SUBST(SYSTEM_BZIP2)

@@ -21,14 +21,11 @@ ifneq ($(MSYSTEM),)
 $(eval $(call gb_UnpackedTarball_set_patchflags,python3,--binary))
 endif
 
-# external/python3/0001-bpo-45898-Remove-duplicate-symbols-from-_ctypes-cfie.patch.1:
-# backport from https://github.com/python/cpython/commit/38f331d4656394ae0f425568e26790ace778e076
 $(eval $(call gb_UnpackedTarball_add_patches,python3,\
-	external/python3/0001-bpo-45898-Remove-duplicate-symbols-from-_ctypes-cfie.patch.1 \
 	external/python3/i100492-freebsd.patch.1 \
 	external/python3/python-3.3.0-darwin.patch.1 \
-	external/python3/python-3.8-msvc-libffi.patch.1 \
 	external/python3/python-3.7.6-msvc-ssl.patch.1 \
+	external/python3/replace-powershell-with-wget.patch.1 \
 	external/python3/python-3.5.4-msvc-disable.patch.1 \
 	external/python3/ubsan.patch.0 \
 	external/python3/python-3.5.tweak.strip.soabi.patch \

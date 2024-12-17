@@ -1,7 +1,7 @@
 --- Python/ceval_gil.h
 +++ Python/ceval_gil.h
-@@ -135,6 +135,7 @@
- 
+@@ -136,6 +136,7 @@
+ #ifdef HAVE_FORK
  static void recreate_gil(struct _gil_runtime_state *gil)
  {
 +    _Py_ANNOTATE_RWLOCK_RELEASED(&gil->locked, 1);
