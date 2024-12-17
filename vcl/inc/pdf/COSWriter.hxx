@@ -120,6 +120,14 @@ public:
     void writeLiteralEncrypt(std::u16string_view value, sal_Int32 nObject,
                              rtl_TextEncoding nEncoding = RTL_TEXTENCODING_ASCII_US);
 
+    void writeKeyAndLiteralEncrypt(std::string_view key, std::u16string_view value,
+                                   sal_Int32 nObject,
+                                   rtl_TextEncoding nEncoding = RTL_TEXTENCODING_ASCII_US)
+    {
+        mrBuffer.append(key);
+        writeLiteralEncrypt(value, nObject, nEncoding);
+    }
+
     void writeLiteralEncrypt(std::string_view value, sal_Int32 nObject);
 
     void writeKeyAndLiteralEncrypt(std::string_view key, std::string_view value, sal_Int32 nObject)
