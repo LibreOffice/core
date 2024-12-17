@@ -20,6 +20,7 @@
 #include <fpdf_save.h>
 #include <fpdf_signature.h>
 #include <fpdf_formfill.h>
+#include <fpdf_attachment.h>
 
 #include <osl/endian.h>
 #include <vcl/bitmap.hxx>
@@ -489,6 +490,23 @@ public:
     FPDF_FORMHANDLE getPointer();
 };
 
+class PDFiumAttachmentImpl final : public PDFiumAttachment
+{
+private:
+    FPDF_ATTACHMENT mpAttachment;
+    PDFiumAttachmentImpl(const PDFiumSignatureImpl&) = delete;
+    PDFiumAttachmentImpl& operator=(const PDFiumSignatureImpl&) = delete;
+
+public:
+    PDFiumAttachmentImpl(FPDF_ATTACHMENT pAttachment)
+        : mpAttachment(pAttachment)
+    {
+    }
+
+    OUString getName() override;
+    bool getFile(std::vector<unsigned char>& rOutBuffer) override;
+};
+
 class PDFiumDocumentImpl : public PDFiumDocument
 {
 private:
@@ -509,11 +527,13 @@ public:
     basegfx::B2DSize getPageSize(int nIndex) override;
     int getPageCount() override;
     int getSignatureCount() override;
+    int getAttachmentCount() override;
     int getFileVersion() override;
     bool saveWithVersion(SvMemoryStream& rStream, int nFileVersion) override;
 
     std::unique_ptr<PDFiumPage> openPage(int nIndex) override;
     std::unique_ptr<PDFiumSignature> getSignature(int nIndex) override;
+    std::unique_ptr<PDFiumAttachment> getAttachment(int nIndex) override;
     std::vector<unsigned int> getTrailerEnds() override;
     OUString getBookmarks() override;
 };
@@ -742,6 +762,29 @@ util::DateTime PDFiumSignatureImpl::getTime()
     return aRet;
 }
 
+OUString PDFiumAttachmentImpl::getName()
+{
+    return getUnicodeString([this](FPDF_WCHAR* buffer, unsigned long length) {
+        return FPDFAttachment_GetName(mpAttachment, buffer, length);
+    });
+}
+
+bool PDFiumAttachmentImpl::getFile(std::vector<unsigned char>& rOutBuffer)
+{
+    rOutBuffer.clear();
+
+    unsigned long nLength{};
+    if (!FPDFAttachment_GetFile(mpAttachment, nullptr, 0, &nLength))
+        return false;
+
+    rOutBuffer.resize(nLength);
+    unsigned long nActualLength{};
+    if (!FPDFAttachment_GetFile(mpAttachment, rOutBuffer.data(), nLength, &nActualLength))
+        return false;
+    rOutBuffer.resize(nActualLength);
+    return true;
+}
+
 PDFiumDocumentImpl::PDFiumDocumentImpl(FPDF_DOCUMENT pPdfDocument)
     : mpPdfDocument(pPdfDocument)
     , m_aFormCallbacks()
@@ -780,6 +823,17 @@ std::unique_ptr<PDFiumSignature> PDFiumDocumentImpl::getSignature(int nIndex)
         pPDFiumSignature = std::make_unique<PDFiumSignatureImpl>(pSignature);
     }
     return pPDFiumSignature;
+}
+
+std::unique_ptr<PDFiumAttachment> PDFiumDocumentImpl::getAttachment(int nIndex)
+{
+    std::unique_ptr<PDFiumAttachment> pPDFiumAttachment;
+    FPDF_ATTACHMENT pAttachment = FPDFDoc_GetAttachment(mpPdfDocument, nIndex);
+    if (pAttachment)
+    {
+        pPDFiumAttachment = std::make_unique<PDFiumAttachmentImpl>(pAttachment);
+    }
+    return pPDFiumAttachment;
 }
 
 std::vector<unsigned int> PDFiumDocumentImpl::getTrailerEnds()
@@ -854,6 +908,8 @@ basegfx::B2DSize PDFiumDocumentImpl::getPageSize(int nIndex)
 int PDFiumDocumentImpl::getPageCount() { return FPDF_GetPageCount(mpPdfDocument); }
 
 int PDFiumDocumentImpl::getSignatureCount() { return FPDF_GetSignatureCount(mpPdfDocument); }
+
+int PDFiumDocumentImpl::getAttachmentCount() { return FPDFDoc_GetAttachmentCount(mpPdfDocument); }
 
 int PDFiumDocumentImpl::getFileVersion()
 {

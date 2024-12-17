@@ -225,6 +225,15 @@ public:
     virtual css::util::DateTime getTime() = 0;
 };
 
+class VCL_DLLPUBLIC PDFiumAttachment
+{
+public:
+    virtual ~PDFiumAttachment() = default;
+
+    virtual OUString getName() = 0;
+    virtual bool getFile(std::vector<unsigned char>& rOutBuffer) = 0;
+};
+
 class VCL_DLLPUBLIC PDFiumDocument
 {
 public:
@@ -235,10 +244,13 @@ public:
     virtual int getPageCount() = 0;
     virtual int getSignatureCount() = 0;
     virtual int getFileVersion() = 0;
+    virtual int getAttachmentCount() = 0;
     virtual bool saveWithVersion(SvMemoryStream& rStream, int nFileVersion) = 0;
 
     virtual std::unique_ptr<PDFiumPage> openPage(int nIndex) = 0;
     virtual std::unique_ptr<PDFiumSignature> getSignature(int nIndex) = 0;
+    virtual std::unique_ptr<PDFiumAttachment> getAttachment(int nIndex) = 0;
+
     virtual std::vector<unsigned int> getTrailerEnds() = 0;
     virtual OUString getBookmarks() = 0;
 };
