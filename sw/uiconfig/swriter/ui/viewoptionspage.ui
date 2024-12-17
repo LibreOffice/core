@@ -890,7 +890,7 @@
                     <property name="column-spacing">6</property>
                     <child>
                       <object class="GtkRadioButton" id="zoomlatest">
-                        <property name="label" translatable="yes" context="zoomdialog|zoomlatest">Use latest setting</property>
+                        <property name="label" translatable="yes" context="zoomdialog|zoomlatest">Use last document setting</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
@@ -899,7 +899,7 @@
                         <property name="draw-indicator">True</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="zoomlatest-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|zoomlatest">Uses the zoom setting that has been applied manually.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|zoomlatest">Uses the zoom setting that was stored in the document, or for new documents, the last one manually applied.</property>
                           </object>
                         </child>
                       </object>
@@ -921,7 +921,7 @@
                         <property name="group">zoomlatest</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="zoompreferred-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|zoompreferred">Applies preferred zoom settings to documents.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="zoomdialog|extended_tip|zoompreferred">Applies preferred zoom settings, overriding any values stored in documents.</property>
                           </object>
                         </child>
                       </object>
