@@ -44,7 +44,7 @@ private:
 class ScOverlayHint : public sdr::overlay::OverlayObject
 {
 public:
-    ScOverlayHint(OUString aTit, const OUString& rMsg, const Color& rColor, vcl::Font aFont);
+    ScOverlayHint(OUString aTit, const OUString& rMsg, const Color& rBack, const Color& rText, vcl::Font aFont);
     Size GetSizePixel() const;
     void SetPos(const Point& rPos, const MapMode& rMode);
 
@@ -57,6 +57,7 @@ private:
     const OUString m_aTitle;
     const OUString m_aMessage;
     const vcl::Font m_aTextFont;
+    const Color m_aTextColor;
     MapMode m_aMapMode;
     sal_Int32 m_nLeft;
     sal_Int32 m_nTop;

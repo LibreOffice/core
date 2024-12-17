@@ -835,9 +835,13 @@ void ScTabView::TestHintWindow()
                  aPos.X() < aWinSize.Width() && aPos.Y() < aWinSize.Height() )
             {
                 const svtools::ColorConfig& rColorCfg = ScModule::get()->GetColorConfig();
-                Color aCommentColor = rColorCfg.GetColorValue(svtools::CALCNOTESBACKGROUND).nColor;
+                // tdf#156398 use same color combination as used in XclDefaultPalette
+                Color aCommentText = rColorCfg.GetColorValue(svtools::FONTCOLOR).nColor;
+                Color aCommentBack = rColorCfg.GetColorValue(svtools::CALCNOTESBACKGROUND).nColor;
                 // create HintWindow, determines its size by itself
-                ScOverlayHint* pOverlay = new ScOverlayHint(aTitle, aMessage, aCommentColor, pFrameWin->GetFont());
+                ScOverlayHint* pOverlay = new ScOverlayHint(aTitle, aMessage,
+                                                            aCommentBack, aCommentText,
+                                                            pFrameWin->GetFont());
 
                 mxInputHintOO.reset(new sdr::overlay::OverlayObjectList);
                 mxInputHintOO->append(std::unique_ptr<sdr::overlay::OverlayObject>(pOverlay));
@@ -872,7 +876,10 @@ void ScTabView::TestHintWindow()
                         //missing portions will be displayed in the other split windows to form an apparent
                         //single tip, albeit "under" the split lines
                         Point aOtherPos(pWindow->ScreenToOutputPixel(pWin->OutputToScreenPixel(aHintPos)));
-                        std::unique_ptr<ScOverlayHint> pOtherOverlay(new ScOverlayHint(aTitle, aMessage, aCommentColor, pFrameWin->GetFont()));
+                        std::unique_ptr<ScOverlayHint> pOtherOverlay(new ScOverlayHint(aTitle, aMessage,
+                                                                                       aCommentBack,
+                                                                                       aCommentText,
+                                                                                       pFrameWin->GetFont()));
                         Point aFooPos(pWindow->PixelToLogic(aOtherPos, pWindow->GetDrawMapMode()));
                         pOtherOverlay->SetPos(aFooPos, pWindow->GetDrawMapMode());
                         xOverlayManager->add(*pOtherOverlay);
