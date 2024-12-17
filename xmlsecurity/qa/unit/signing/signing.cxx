@@ -1363,6 +1363,137 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature12_ODF)
     }
 }
 
+/// Test if a macro signature from an OTT 1.0 is dropped for ODT 1.2
+CPPUNIT_TEST_FIXTURE(SigningTest, testDropMacroTemplateSignature)
+{
+    const OUString aURL(createFileURL(u"tdf42316.ott"));
+    const OUString sLoadMessage = "loading failed: " + aURL;
+
+    // load the template as-is to validate signatures
+    mxComponent = loadFromDesktop(
+        aURL, OUString(), comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
+
+    // we are a template, and have a non-invalid macro signature
+    assertDocument(CPPUNIT_SOURCELINE(), u"writer8_template"_ustr, SignatureState::NOSIGNATURES,
+                   SignatureState::NOTVALIDATED, OUString());
+
+    // create new document from template
+    load(aURL);
+    CPPUNIT_ASSERT_MESSAGE(OUStringToOString(sLoadMessage, RTL_TEXTENCODING_UTF8).getStr(),
+                           mxComponent.is());
+
+    // we are somehow a template (?), and have just a valid macro signature
+    assertDocument(CPPUNIT_SOURCELINE(), u"writer8_template"_ustr, SignatureState::NOSIGNATURES,
+                   SignatureState::NOTVALIDATED, OUString());
+
+    // save as new ODT document
+    saveAndReload(u"writer8"_ustr);
+
+    // the loaded document is a 1.2 ODT without any signatures
+    assertDocument(CPPUNIT_SOURCELINE(), u"writer8"_ustr, SignatureState::NOSIGNATURES,
+                   SignatureState::NOSIGNATURES, ODFVER_013_TEXT);
+
+    // load the template as-is to validate signatures
+    mxComponent->dispose();
+    mxComponent = loadFromDesktop(
+        aURL, OUString(), comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
+
+    // we are a template, and have a non-invalid macro signature
+    assertDocument(CPPUNIT_SOURCELINE(), u"writer8_template"_ustr, SignatureState::NOSIGNATURES,
+                   SignatureState::NOTVALIDATED, OUString());
+
+    // save as new OTT template
+    save(u"writer8_template"_ustr);
+
+    // load the template as-is to validate signatures
+    mxComponent->dispose();
+    mxComponent
+        = loadFromDesktop(maTempFile.GetURL(), OUString(),
+                          comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
+
+    // the loaded document is a 1.2 OTT without any signatures
+    assertDocument(CPPUNIT_SOURCELINE(), u"writer8_template"_ustr, SignatureState::NOSIGNATURES,
+                   SignatureState::NOSIGNATURES, ODFVER_013_TEXT);
+}
+
+/// Test if a macro signature from a OTT 1.0 template is preserved for ODT 1.0
+CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature10)
+{
+    // set ODF version 1.0 / 1.1 as default
+    Resetter _([]() {
+        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Save::ODF::DefaultVersion::set(3, pBatch);
+        return pBatch->commit();
+    });
+    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+        comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::Save::ODF::DefaultVersion::set(2, pBatch);
+    pBatch->commit();
+
+    const OUString aFormats[] = { u"writer8"_ustr, u"writer8_template"_ustr };
+
+    for (OUString const& sFormat : aFormats)
+    {
+        const OUString aURL(createFileURL(u"tdf42316.ott"));
+        const OUString sLoadMessage = "loading failed: " + aURL;
+
+        // load the template as-is to validate signatures
+        mxComponent = loadFromDesktop(
+            aURL, OUString(),
+            comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
+
+        // we are a template, and have a non-invalid macro signature
+        assertDocument(CPPUNIT_SOURCELINE(), u"writer8_template"_ustr, SignatureState::NOSIGNATURES,
+                       SignatureState::NOTVALIDATED, OUString());
+
+        // create new document from template
+        load(aURL);
+        CPPUNIT_ASSERT_MESSAGE(OUStringToOString(sLoadMessage, RTL_TEXTENCODING_UTF8).getStr(),
+                               mxComponent.is());
+
+        // we are somehow a template (?), and have just a valid macro signature
+        assertDocument(CPPUNIT_SOURCELINE(), u"writer8_template"_ustr, SignatureState::NOSIGNATURES,
+                       SignatureState::NOTVALIDATED, OUString());
+
+        // FIXME: Error: element "manifest:manifest" is missing "version" attribute
+        skipValidation();
+
+        if (sFormat == "writer8")
+            // save as new ODT document
+            saveAndReload(sFormat);
+        else
+        {
+            // save as new OTT template
+            save(u"writer8_template"_ustr);
+
+            // load the saved OTT template as-is to validate signatures
+            mxComponent->dispose();
+            mxComponent = loadFromDesktop(
+                maTempFile.GetURL(), OUString(),
+                comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
+        }
+
+        assertDocument(CPPUNIT_SOURCELINE(), sFormat, SignatureState::NOSIGNATURES,
+                       SignatureState::NOTVALIDATED, OUString());
+
+        save(u"writer8_template"_ustr);
+
+        // load the template as-is to validate signatures
+        mxComponent->dispose();
+        mxComponent = loadFromDesktop(
+            maTempFile.GetURL(), OUString(),
+            comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
+
+        // the loaded document is a OTT with a non-invalid macro signature
+        assertDocument(CPPUNIT_SOURCELINE(), u"writer8_template"_ustr, SignatureState::NOSIGNATURES,
+                       SignatureState::NOTVALIDATED, OUString());
+
+        mxComponent->dispose();
+        mxComponent.clear();
+    }
+}
+
 #endif
 
 void SigningTest::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
