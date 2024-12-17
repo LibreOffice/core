@@ -24,6 +24,7 @@
 #include <com/sun/star/text/XTextRangeCompare.hpp>
 #include <doc.hxx>
 #include <docsh.hxx>
+#include <unotxdoc.hxx>
 #include "wordvbahelper.hxx"
 #include <rtl/ref.hxx>
 #include <sal/log.hxx>
@@ -31,11 +32,16 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaFind::SwVbaFind( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, uno::Reference< frame::XModel > xModel ) :
-    SwVbaFind_BASE( rParent, rContext ), mxModel( std::move(xModel) ), mbReplace( false ), mnReplaceType( word::WdReplace::wdReplaceOne ), mnWrap( word::WdFindWrap::wdFindStop )
+SwVbaFind::SwVbaFind( const uno::Reference< ooo::vba::XHelperInterface >& rParent,
+                      const uno::Reference< uno::XComponentContext >& rContext,
+                      rtl::Reference< SwXTextDocument > xModel ) :
+    SwVbaFind_BASE( rParent, rContext ),
+    mxModel( std::move(xModel) ),
+    mbReplace( false ),
+    mnReplaceType( word::WdReplace::wdReplaceOne ),
+    mnWrap( word::WdFindWrap::wdFindStop )
 {
-    mxReplaceable.set( mxModel, uno::UNO_QUERY_THROW );
-    mxPropertyReplace.set( mxReplaceable->createReplaceDescriptor(), uno::UNO_QUERY_THROW );
+    mxPropertyReplace.set( mxModel->createReplaceDescriptor(), uno::UNO_QUERY_THROW );
     mxTVC = word::getXTextViewCursor( mxModel );
     mxSelSupp.set( mxModel->getCurrentController(), uno::UNO_QUERY_THROW );
 }
@@ -46,11 +52,11 @@ SwVbaFind::~SwVbaFind()
 
 uno::Reference< word::XFind > SwVbaFind::GetOrCreateFind(const uno::Reference< ooo::vba::XHelperInterface >& rParent,
                                                          const uno::Reference< uno::XComponentContext >& rContext,
-                                                         const uno::Reference< frame::XModel >& xModel,
+                                                         const rtl::Reference< SwXTextDocument >& xModel,
                                                          const uno::Reference< text::XTextRange >& xTextRange)
 {
     rtl::Reference< SwVbaFind > xFind;
-    SwDoc* pDoc = word::getDocShell( xModel )->GetDoc();
+    SwDoc* pDoc = xModel->GetDocShell()->GetDoc();
     if( pDoc )
         xFind = dynamic_cast<SwVbaFind *>( pDoc->getVbaFind().get() );
     if ( !xFind )
@@ -99,16 +105,16 @@ uno::Reference< text::XTextRange > SwVbaFind::FindOneElement()
     {
         if( getForward() )
         {
-            xFoundOne.set( mxReplaceable->findNext( mxTextRange->getStart(), uno::Reference< util::XSearchDescriptor >( mxPropertyReplace, uno::UNO_QUERY_THROW ) ), uno::UNO_QUERY );
+            xFoundOne.set( mxModel->findNext( mxTextRange->getStart(), uno::Reference< util::XSearchDescriptor >( mxPropertyReplace, uno::UNO_QUERY_THROW ) ), uno::UNO_QUERY );
         }
         else
         {
-            xFoundOne.set( mxReplaceable->findNext( mxTextRange->getEnd(), uno::Reference< util::XSearchDescriptor >( mxPropertyReplace, uno::UNO_QUERY_THROW ) ), uno::UNO_QUERY );
+            xFoundOne.set( mxModel->findNext( mxTextRange->getEnd(), uno::Reference< util::XSearchDescriptor >( mxPropertyReplace, uno::UNO_QUERY_THROW ) ), uno::UNO_QUERY );
         }
 
         if( xFoundOne.is() && InEqualRange( xFoundOne ) )
         {
-            xFoundOne.set( mxReplaceable->findNext( xFoundOne, uno::Reference< util::XSearchDescriptor >( mxPropertyReplace, uno::UNO_QUERY_THROW ) ), uno::UNO_QUERY );
+            xFoundOne.set( mxModel->findNext( xFoundOne, uno::Reference< util::XSearchDescriptor >( mxPropertyReplace, uno::UNO_QUERY_THROW ) ), uno::UNO_QUERY );
         }
         else if( xFoundOne.is() && !InRange( xFoundOne ) )
         {
@@ -117,7 +123,7 @@ uno::Reference< text::XTextRange > SwVbaFind::FindOneElement()
     }
     else
     {
-        xFoundOne.set( mxReplaceable->findNext( mxTextRange, uno::Reference< util::XSearchDescriptor >( mxPropertyReplace, uno::UNO_QUERY_THROW ) ), uno::UNO_QUERY );
+        xFoundOne.set( mxModel->findNext( mxTextRange, uno::Reference< util::XSearchDescriptor >( mxPropertyReplace, uno::UNO_QUERY_THROW ) ), uno::UNO_QUERY );
     }
 
     if( !xFoundOne.is() && ( getWrap() == word::WdFindWrap::wdFindContinue || getWrap() == word::WdFindWrap::wdFindAsk ) )
@@ -125,12 +131,12 @@ uno::Reference< text::XTextRange > SwVbaFind::FindOneElement()
         if( getForward() )
         {
             mxTVC->gotoStart(false);
-            xFoundOne.set( mxReplaceable->findNext( mxTextRange->getStart(), uno::Reference< util::XSearchDescriptor >( mxPropertyReplace, uno::UNO_QUERY_THROW ) ), uno::UNO_QUERY );
+            xFoundOne.set( mxModel->findNext( mxTextRange->getStart(), uno::Reference< util::XSearchDescriptor >( mxPropertyReplace, uno::UNO_QUERY_THROW ) ), uno::UNO_QUERY );
         }
         else
         {
             mxTVC->gotoEnd( false );
-            xFoundOne.set( mxReplaceable->findNext( mxTextRange->getEnd(), uno::Reference< util::XSearchDescriptor >( mxPropertyReplace, uno::UNO_QUERY_THROW ) ), uno::UNO_QUERY );
+            xFoundOne.set( mxModel->findNext( mxTextRange->getEnd(), uno::Reference< util::XSearchDescriptor >( mxPropertyReplace, uno::UNO_QUERY_THROW ) ), uno::UNO_QUERY );
 
         }
     }
@@ -164,7 +170,7 @@ bool SwVbaFind::SearchReplace()
             }
             case word::WdReplace::wdReplaceAll:
             {
-                uno::Reference< container::XIndexAccess > xIndexAccess = mxReplaceable->findAll( uno::Reference< util::XSearchDescriptor >( mxPropertyReplace, uno::UNO_QUERY_THROW ) );
+                uno::Reference< container::XIndexAccess > xIndexAccess = mxModel->findAll( uno::Reference< util::XSearchDescriptor >( mxPropertyReplace, uno::UNO_QUERY_THROW ) );
                 if( xIndexAccess->getCount() > 0 )
                 {
                     for( sal_Int32 i = 0; i < xIndexAccess->getCount(); i++ )

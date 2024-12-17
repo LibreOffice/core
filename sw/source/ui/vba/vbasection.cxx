@@ -21,12 +21,18 @@
 #include <vbahelper/vbahelper.hxx>
 #include "vbapagesetup.hxx"
 #include "vbaheadersfooters.hxx"
+#include <unotxdoc.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaSection::SwVbaSection( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, uno::Reference< frame::XModel >  xModel, uno::Reference< beans::XPropertySet >  xProps ) :
-    SwVbaSection_BASE( rParent, rContext ), mxModel(std::move( xModel )), mxPageProps(std::move( xProps ))
+SwVbaSection::SwVbaSection( const uno::Reference< ooo::vba::XHelperInterface >& rParent,
+                            const uno::Reference< uno::XComponentContext >& rContext,
+                            rtl::Reference< SwXTextDocument > xModel,
+                            uno::Reference< beans::XPropertySet > xProps )
+: SwVbaSection_BASE( rParent, rContext ),
+  mxModel(std::move( xModel )),
+  mxPageProps(std::move( xProps ))
 {
 }
 

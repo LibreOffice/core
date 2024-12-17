@@ -24,6 +24,8 @@
 #include "wordvbahelper.hxx"
 #include <cppuhelper/implbase.hxx>
 #include <utility>
+#include <unotxdoc.hxx>
+#include <unostyle.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -59,15 +61,19 @@ class SectionCollectionHelper : public ::cppu::WeakImplHelper< container::XIndex
 private:
     uno::Reference< XHelperInterface > mxParent;
     uno::Reference< uno::XComponentContext > mxContext;
-    uno::Reference< frame::XModel > mxModel;
+    rtl::Reference< SwXTextDocument > mxModel;
     XSectionVec mxSections;
 
 public:
     /// @throws uno::RuntimeException
-    SectionCollectionHelper( uno::Reference< XHelperInterface >  xParent, uno::Reference< uno::XComponentContext > xContext, uno::Reference< frame::XModel >  xModel ) : mxParent(std::move( xParent )), mxContext(std::move( xContext )), mxModel(std::move( xModel ))
+    SectionCollectionHelper( uno::Reference< XHelperInterface >  xParent,
+                             uno::Reference< uno::XComponentContext > xContext,
+                             rtl::Reference< SwXTextDocument >  xModel )
+    : mxParent(std::move( xParent )),
+      mxContext(std::move( xContext )),
+      mxModel(std::move( xModel ))
     {
-        uno::Reference< style::XStyleFamiliesSupplier > xSytleFamSupp( mxModel, uno::UNO_QUERY_THROW );
-        uno::Reference< container::XNameAccess > xSytleFamNames( xSytleFamSupp->getStyleFamilies(), uno::UNO_SET_THROW );
+        rtl::Reference< SwXStyleFamilies > xSytleFamNames( mxModel->getSwStyleFamilies() );
         uno::Reference< container::XIndexAccess > xPageStyles( xSytleFamNames->getByName(u"PageStyles"_ustr), uno::UNO_QUERY_THROW );
         sal_Int32 nCount = xPageStyles->getCount();
         for( sal_Int32 index = 0; index < nCount; ++index )
@@ -83,7 +89,13 @@ public:
     }
 
     /// @throws uno::RuntimeException
-    SectionCollectionHelper( uno::Reference< XHelperInterface >  xParent, uno::Reference< uno::XComponentContext > xContext, uno::Reference< frame::XModel >  xModel, const uno::Reference< text::XTextRange >& xTextRange ) : mxParent(std::move( xParent )), mxContext(std::move( xContext )), mxModel(std::move( xModel ))
+    SectionCollectionHelper( uno::Reference< XHelperInterface >  xParent,
+                             uno::Reference< uno::XComponentContext > xContext,
+                             rtl::Reference< SwXTextDocument >  xModel,
+                             const uno::Reference< text::XTextRange >& xTextRange )
+        : mxParent(std::move( xParent )),
+          mxContext(std::move( xContext )),
+          mxModel(std::move( xModel ))
     {
         // Hacky implementation of Range.Sections, only support 1 section
         uno::Reference< beans::XPropertySet > xRangeProps( xTextRange, uno::UNO_QUERY_THROW );
@@ -122,10 +134,15 @@ public:
 
 class SectionsEnumWrapper : public EnumerationHelperImpl
 {
-    uno::Reference< frame::XModel > mxModel;
+    rtl::Reference< SwXTextDocument > mxModel;
 public:
     /// @throws uno::RuntimeException
-    SectionsEnumWrapper( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration,  uno::Reference< frame::XModel >  xModel  ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ), mxModel(std::move( xModel )){}
+    SectionsEnumWrapper( const uno::Reference< XHelperInterface >& xParent,
+                         const uno::Reference< uno::XComponentContext >& xContext,
+                         const uno::Reference< container::XEnumeration >& xEnumeration,
+                         rtl::Reference< SwXTextDocument > xModel  )
+    : EnumerationHelperImpl( xParent, xContext, xEnumeration ),
+      mxModel(std::move( xModel )){}
 
     virtual uno::Any SAL_CALL nextElement(  ) override
     {
@@ -136,11 +153,20 @@ public:
 
 }
 
-SwVbaSections::SwVbaSections( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< frame::XModel >& xModel ): SwVbaSections_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( new SectionCollectionHelper( xParent, xContext, xModel ) ) ),  mxModel( xModel )
+SwVbaSections::SwVbaSections( const uno::Reference< XHelperInterface >& xParent,
+                              const uno::Reference< uno::XComponentContext > & xContext,
+                              const rtl::Reference< SwXTextDocument >& xModel )
+  : SwVbaSections_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( new SectionCollectionHelper( xParent, xContext, xModel ) ) ),
+    mxModel( xModel )
 {
 }
 
-SwVbaSections::SwVbaSections( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< frame::XModel >& xModel, const uno::Reference< text::XTextRange >& xTextRange ): SwVbaSections_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( new SectionCollectionHelper( xParent, xContext, xModel, xTextRange ) ) ),  mxModel( xModel )
+SwVbaSections::SwVbaSections( const uno::Reference< XHelperInterface >& xParent,
+                              const uno::Reference< uno::XComponentContext > & xContext,
+                              const rtl::Reference< SwXTextDocument >& xModel,
+                              const uno::Reference< text::XTextRange >& xTextRange )
+  : SwVbaSections_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( new SectionCollectionHelper( xParent, xContext, xModel, xTextRange ) ) ),
+    mxModel( xModel )
 {
 }
 

@@ -36,10 +36,13 @@
 #include <comphelper/scopeguard.hxx>
 #include <editeng/numitem.hxx>
 #include "vbalisttemplate.hxx"
+#include "wordvbahelper.hxx"
+#include <unotxdoc.hxx>
 
 #include <vector>
 
 using namespace ::ooo::vba;
+using namespace ::ooo::vba::word;
 using namespace ::com::sun::star;
 
 SwVbaListFormat::SwVbaListFormat( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, uno::Reference< text::XTextRange >  xTextRange ) : SwVbaListFormat_BASE( rParent, rContext ), mxTextRange(std::move( xTextRange ))
@@ -131,10 +134,8 @@ static void addParagraphsToList(const Ref& a,
 
 void SAL_CALL SwVbaListFormat::ConvertNumbersToText(  )
 {
-    css::uno::Reference<css::frame::XModel> xModel(getThisWordDoc(mxContext));
-    css::uno::Reference<css::document::XUndoManagerSupplier> xUndoSupplier(
-        xModel, css::uno::UNO_QUERY_THROW);
-    css::uno::Reference<css::document::XUndoManager> xUndoManager(xUndoSupplier->getUndoManager());
+    rtl::Reference<SwXTextDocument> xModel(getThisWordDoc(mxContext));
+    css::uno::Reference<css::document::XUndoManager> xUndoManager(xModel->getUndoManager());
     xUndoManager->enterUndoContext(u"ConvertNumbersToText"_ustr);
     xModel->lockControllers();
     comphelper::ScopeGuard g([xModel, xUndoManager]() {

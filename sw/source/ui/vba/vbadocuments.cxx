@@ -28,11 +28,13 @@
 
 #include <osl/file.hxx>
 #include <utility>
+#include <unotxdoc.hxx>
+
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 static uno::Any
-getDocument( uno::Reference< uno::XComponentContext > const & xContext, const uno::Reference< text::XTextDocument > &xDoc, const uno::Any& aApplication )
+getDocument( uno::Reference< uno::XComponentContext > const & xContext, const rtl::Reference< SwXTextDocument > &xDoc, const uno::Any& aApplication )
 {
     // FIXME: fine as long as SwVbaDocument is stateless ...
     if( !xDoc.is() )
@@ -54,7 +56,7 @@ public:
     virtual uno::Any SAL_CALL nextElement(  ) override
     {
         uno::Reference< text::XTextDocument > xDoc( m_xEnumeration->nextElement(), uno::UNO_QUERY_THROW );
-        return getDocument( m_xContext, xDoc, m_aApplication );
+        return getDocument( m_xContext, dynamic_cast<SwXTextDocument*>(xDoc.get()), m_aApplication );
     }
 };
 
@@ -84,7 +86,7 @@ uno::Any
 SwVbaDocuments::createCollectionObject( const uno::Any& aSource )
 {
     uno::Reference< text::XTextDocument > xDoc( aSource, uno::UNO_QUERY_THROW );
-    return getDocument( mxContext, xDoc, Application() );
+    return getDocument( mxContext, dynamic_cast<SwXTextDocument*>(xDoc.get()), Application() );
 }
 
 uno::Any SAL_CALL
@@ -96,7 +98,7 @@ SwVbaDocuments::Add( const uno::Any& Template, const uno::Any& /*NewTemplate*/, 
         return  Open( sFileName, uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any());
     }
     uno::Reference <text::XTextDocument> xTextDoc( createDocument() , uno::UNO_QUERY_THROW );
-    return getDocument( mxContext, xTextDoc, Application() );
+    return getDocument( mxContext, dynamic_cast<SwXTextDocument*>(xTextDoc.get()), Application() );
 }
 
 // #TODO# #FIXME# can any of the unused params below be used?
@@ -123,7 +125,7 @@ SwVbaDocuments::Open( const OUString& Filename, const uno::Any& /*ConfirmConvers
         osl::FileBase::getFileURLFromSystemPath( Filename, aURL );
 
     uno::Reference <text::XTextDocument> xSpreadDoc( openDocument( Filename, ReadOnly, {}), uno::UNO_QUERY_THROW );
-    uno::Any aRet = getDocument( mxContext, xSpreadDoc, Application() );
+    uno::Any aRet = getDocument( mxContext, dynamic_cast<SwXTextDocument*>(xSpreadDoc.get()), Application() );
     uno::Reference< word::XDocument > xDocument( aRet, uno::UNO_QUERY );
     if ( xDocument.is() )
         xDocument->Activate();

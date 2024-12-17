@@ -48,13 +48,11 @@ typedef InheritedHelperInterfaceWeakImpl< ooo::vba::XDocumentBase > VbaDocumentB
 class VBAHELPER_DLLPUBLIC VbaDocumentBase : public VbaDocumentBase_BASE
 {
 protected:
-    css::uno::Reference< css::frame::XModel > mxModel;
     css::uno::Reference< css::uno::XInterface > mxVBProject;
 protected:
-    const css::uno::Reference< css::frame::XModel >& getModel() const { return mxModel; }
+    virtual css::uno::Reference< css::frame::XModel > getModel() const = 0;
 public:
-    VbaDocumentBase(    const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,
-            css::uno::Reference< css::frame::XModel > xModel );
+    VbaDocumentBase(    const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext );
     VbaDocumentBase(    css::uno::Sequence< css::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext );
 
     // Attributes

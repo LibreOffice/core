@@ -869,6 +869,14 @@ sal_Int32 SwXTextTables::getCount()
 
 uno::Any SAL_CALL SwXTextTables::getByIndex(sal_Int32 nInputIndex)
 {
+    uno::Reference<XTextTable> xTable = getTextTableByIndex(nInputIndex);
+    uno::Any aRet;
+    aRet <<= xTable;
+    return aRet;
+}
+
+rtl::Reference<SwXTextTable> SwXTextTables::getTextTableByIndex(sal_Int32 nInputIndex)
+{
     SolarMutexGuard aGuard;
 
     if (nInputIndex < 0)
@@ -883,10 +891,7 @@ uno::Any SAL_CALL SwXTextTables::getByIndex(sal_Int32 nInputIndex)
             --nIndex;
         else
         {
-            uno::Reference<XTextTable> xTable = SwXTextTables::GetObject(*pFormat);
-            uno::Any aRet;
-            aRet <<= xTable;
-            return aRet;
+            return SwXTextTables::GetObject(*pFormat);
         }
     }
     throw IndexOutOfBoundsException();

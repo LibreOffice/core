@@ -24,30 +24,36 @@
 #include <com/sun/star/text/XTextViewCursor.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <rtl/ref.hxx>
 
 class SwDocShell;
 class SwView;
+class SwXTextDocument;
+class SwXBaseStyle;
+
 namespace ooo::vba::word
     {
-        //css::uno::Reference< css::frame::XModel > getCurrentDocument() throw (css::uno::RuntimeException);
-        SwDocShell* getDocShell( const css::uno::Reference< css::frame::XModel>& xModel );
-        SwView* getView( const css::uno::Reference< css::frame::XModel>& xModel );
+        SwView* getView( const rtl::Reference<SwXTextDocument>& xModel );
         /// @throws css::uno::RuntimeException
-        css::uno::Reference< css::text::XTextViewCursor > getXTextViewCursor( const css::uno::Reference< css::frame::XModel >& xModel );
+        css::uno::Reference< css::text::XTextViewCursor > getXTextViewCursor( const rtl::Reference< SwXTextDocument >& xModel );
         /// @throws css::uno::RuntimeException
-        css::uno::Reference< css::style::XStyle > getCurrentPageStyle( const css::uno::Reference< css::frame::XModel >& xModel );
+        rtl::Reference< SwXBaseStyle > getCurrentPageStyle( const rtl::Reference< SwXTextDocument >& xModel );
         /// @throws css::uno::RuntimeException
-        css::uno::Reference< css::style::XStyle > getCurrentPageStyle( const css::uno::Reference< css::frame::XModel>& xModel, const css::uno::Reference< css::beans::XPropertySet >& xProps );
+        rtl::Reference< SwXBaseStyle > getCurrentPageStyle( const rtl::Reference< SwXTextDocument>& xModel, const css::uno::Reference< css::beans::XPropertySet >& xProps );
         /// @throws css::uno::RuntimeException
-        sal_Int32 getPageCount( const css::uno::Reference< css::frame::XModel>& xModel );
+        sal_Int32 getPageCount( const rtl::Reference<SwXTextDocument>& xModel );
         /// @throws css::uno::RuntimeException
-        css::uno::Reference< css::style::XStyle > getDefaultParagraphStyle( const css::uno::Reference< css::frame::XModel >& xModel );
+        rtl::Reference< SwXBaseStyle > getDefaultParagraphStyle( const rtl::Reference< SwXTextDocument >& xModel );
         /// @throws css::uno::RuntimeException
         css::uno::Reference< css::text::XTextRange > getFirstObjectPosition( const css::uno::Reference< css::text::XText >& xText );
         /// @throws css::uno::RuntimeException
-        css::uno::Reference< css::text::XText > getCurrentXText( const css::uno::Reference< css::frame::XModel>& xModel );
+        css::uno::Reference< css::text::XText > getCurrentXText( const rtl::Reference<SwXTextDocument>& xModel );
         /// @throws css::uno::RuntimeException
-        bool gotoSelectedObjectAnchor( const css::uno::Reference< css::frame::XModel>& xModel );
+        bool gotoSelectedObjectAnchor( const rtl::Reference<SwXTextDocument>& xModel );
+        /// @throws css::uno::RuntimeException
+        rtl::Reference< SwXTextDocument > getCurrentWordDoc( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+        /// @throws css::uno::RuntimeException
+        rtl::Reference< SwXTextDocument > getThisWordDoc( const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
     enum E_DIRECTION
     {

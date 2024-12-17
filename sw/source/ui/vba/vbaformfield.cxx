@@ -14,6 +14,7 @@
 #include <doc.hxx>
 #include <docsh.hxx>
 #include <unotextrange.hxx>
+#include <unotxdoc.hxx>
 
 #include "vbaformfield.hxx"
 #include "vbaformfieldcheckbox.hxx"
@@ -33,7 +34,7 @@ using namespace ::com::sun::star;
  */
 SwVbaFormField::SwVbaFormField(const uno::Reference<ooo::vba::XHelperInterface>& rParent,
                                const uno::Reference<uno::XComponentContext>& rContext,
-                               const uno::Reference<text::XTextDocument>& xTextDocument,
+                               const rtl::Reference<SwXTextDocument>& xTextDocument,
                                sw::mark::Fieldmark& rFormField)
     : SwVbaFormField_BASE(rParent, rContext)
     , m_xTextDocument(xTextDocument)
@@ -63,7 +64,7 @@ uno::Any SwVbaFormField::TextInput()
 
 uno::Any SwVbaFormField::Previous()
 {
-    SwDoc* pDoc = word::getDocShell(m_xTextDocument)->GetDoc();
+    SwDoc* pDoc = m_xTextDocument->GetDocShell()->GetDoc();
     if (!pDoc)
         return uno::Any();
 
@@ -91,7 +92,7 @@ uno::Any SwVbaFormField::Previous()
 
 uno::Any SwVbaFormField::Next()
 {
-    SwDoc* pDoc = word::getDocShell(m_xTextDocument)->GetDoc();
+    SwDoc* pDoc = m_xTextDocument->GetDocShell()->GetDoc();
     if (!pDoc)
         return uno::Any();
 
@@ -120,7 +121,7 @@ uno::Any SwVbaFormField::Next()
 uno::Reference<word::XRange> SwVbaFormField::Range()
 {
     uno::Reference<word::XRange> xRet;
-    SwDoc* pDoc = word::getDocShell(m_xTextDocument)->GetDoc();
+    SwDoc* pDoc = m_xTextDocument->GetDocShell()->GetDoc();
     if (pDoc)
     {
         rtl::Reference<SwXTextRange> xText(SwXTextRange::CreateXTextRange(

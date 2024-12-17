@@ -222,7 +222,7 @@ getCurrentDoc( const OUString& sKey )
 }
 
 /// @throws uno::RuntimeException
-static uno::Reference< frame::XModel >
+uno::Reference< frame::XModel >
 getCurrentDocCtx( const OUString& ctxName, const uno::Reference< uno::XComponentContext >& xContext )
 {
     uno::Reference< frame::XModel > xModel;
@@ -238,12 +238,6 @@ getThisExcelDoc( const uno::Reference< uno::XComponentContext >& xContext )
     return getCurrentDocCtx( u"ExcelDocumentContext"_ustr , xContext );
 }
 
-uno::Reference< frame::XModel >
-getThisWordDoc( const uno::Reference< uno::XComponentContext >& xContext )
-{
-    return getCurrentDocCtx( u"WordDocumentContext"_ustr , xContext );
-}
-
  uno::Reference< frame::XModel >
 getCurrentExcelDoc( const uno::Reference< uno::XComponentContext >& xContext )
 {
@@ -257,27 +251,6 @@ getCurrentExcelDoc( const uno::Reference< uno::XComponentContext >& xContext )
         try
         {
             xModel = getThisExcelDoc( xContext );
-        }
-        catch (const uno::Exception&)
-        {
-        }
-    }
-    return xModel;
-}
-
- uno::Reference< frame::XModel >
-getCurrentWordDoc( const uno::Reference< uno::XComponentContext >& xContext )
-{
-    uno::Reference< frame::XModel > xModel;
-    try
-    {
-        xModel = getCurrentDoc( u"ThisWordDoc"_ustr );
-    }
-    catch (const uno::Exception&)
-    {
-        try
-        {
-            xModel = getThisWordDoc( xContext );
         }
         catch (const uno::Exception&)
         {

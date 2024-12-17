@@ -23,13 +23,18 @@
 #include <ooo/vba/word/XDialogs.hpp>
 #include <vbahelper/vbadialogsbase.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <rtl/ref.hxx>
+
+class SwXTextDocument;
 
 typedef cppu::ImplInheritanceHelper< VbaDialogsBase, ov::word::XDialogs > SwVbaDialogs_BASE;
 
 class SwVbaDialogs : public SwVbaDialogs_BASE
 {
 public:
-    SwVbaDialogs( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > &xContext, const css::uno::Reference< css::frame::XModel >& xModel ): SwVbaDialogs_BASE( xParent, xContext, xModel ) {}
+    SwVbaDialogs( const css::uno::Reference< ov::XHelperInterface >& xParent,
+                  const css::uno::Reference< css::uno::XComponentContext > &xContext,
+                  const rtl::Reference< SwXTextDocument >& xModel );
 
     // XCollection
     virtual css::uno::Any SAL_CALL Item( const css::uno::Any& Index ) override;
@@ -37,6 +42,8 @@ public:
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
+private:
+    rtl::Reference< SwXTextDocument > m_xModel;
 };
 
 #endif // INCLUDED_SW_SOURCE_UI_VBA_VBADIALOGS_HXX

@@ -25,11 +25,22 @@
 #include "vbarange.hxx"
 #include <utility>
 #include <vbahelper/vbashapes.hxx>
+#include <unotxdoc.hxx>
+#include <unodraw.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaHeaderFooter::SwVbaHeaderFooter( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, uno::Reference< frame::XModel >  xModel, uno::Reference< beans::XPropertySet > xProps, bool isHeader, sal_Int32 index ) : SwVbaHeaderFooter_BASE( rParent, rContext ), mxModel(std::move( xModel )), mxPageStyleProps(std::move( xProps )), mbHeader( isHeader ), mnIndex( index )
+SwVbaHeaderFooter::SwVbaHeaderFooter( const uno::Reference< ooo::vba::XHelperInterface >& rParent,
+                                      const uno::Reference< uno::XComponentContext >& rContext,
+                                      rtl::Reference< SwXTextDocument >  xModel,
+                                      uno::Reference< beans::XPropertySet > xProps,
+                                      bool isHeader, sal_Int32 index )
+: SwVbaHeaderFooter_BASE( rParent, rContext ),
+  mxModel(std::move( xModel )),
+  mxPageStyleProps(std::move( xProps )),
+  mbHeader( isHeader ),
+  mnIndex( index )
 {
 }
 
@@ -66,18 +77,16 @@ uno::Reference< word::XRange > SAL_CALL SwVbaHeaderFooter::getRange()
     }
 
     uno::Reference< text::XText > xText( mxPageStyleProps->getPropertyValue( sPropsNameText ), uno::UNO_QUERY_THROW );
-    uno::Reference< text::XTextDocument > xDocument( mxModel, uno::UNO_QUERY_THROW );
-    return uno::Reference< word::XRange >( new SwVbaRange( this, mxContext, xDocument, xText->getStart(), xText->getEnd(), xText ) );
+    return uno::Reference< word::XRange >( new SwVbaRange( this, mxContext, mxModel, xText->getStart(), xText->getEnd(), xText ) );
 }
 
 uno::Any SAL_CALL
 SwVbaHeaderFooter::Shapes( const uno::Any& index )
 {
     // #FIXME: only get the shapes in the current header/footer
-    uno::Reference< drawing::XDrawPageSupplier > xDrawPageSupplier( mxModel, uno::UNO_QUERY_THROW );
     //uno::Reference< drawing::XShapes > xShapes( xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY_THROW );
-    uno::Reference< container::XIndexAccess > xIndexAccess( xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY_THROW );
-    uno::Reference< XCollection > xCol( new ScVbaShapes( this, mxContext, xIndexAccess, mxModel ) );
+    rtl::Reference< SwFmDrawPage > xIndexAccess( mxModel->getSwDrawPage() );
+    uno::Reference< XCollection > xCol( new ScVbaShapes( this, mxContext, xIndexAccess, static_cast<SfxBaseModel*>(mxModel.get()) ) );
     if ( index.hasValue() )
         return xCol->Item( index, uno::Any() );
     return uno::Any( xCol );

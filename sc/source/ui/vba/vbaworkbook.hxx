@@ -31,6 +31,11 @@ class ScVbaWorkbook : public ScVbaWorkbook_BASE
     static bool setFilterPropsFromFormat( sal_Int32 nFormat, css::uno::Sequence< css::beans::PropertyValue >& rProps );
     void init();
 
+    css::uno::Reference< css::frame::XModel > mxModel;
+
+protected:
+    virtual css::uno::Reference< css::frame::XModel > getModel() const override { return mxModel; }
+
 public:
     ScVbaWorkbook(  const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,
             css::uno::Reference< css::frame::XModel > const & xModel );

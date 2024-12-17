@@ -35,6 +35,8 @@
 
 #include "vbawindow.hxx"
 
+class SwXTextDocument;
+
 typedef cppu::ImplInheritanceHelper< VbaApplicationBase, ooo::vba::word::XApplication, ooo::vba::XSinkCaller > SwVbaApplication_BASE;
 
 // This class is currently not a singleton. One instance is created per document with (potential?)
@@ -123,6 +125,8 @@ public:
     virtual void SAL_CALL CallSinks( const OUString& Method, css::uno::Sequence< css::uno::Any >& Arguments ) override;
 
     virtual css::uno::Reference< css::frame::XModel > getCurrentDocument() override;
+
+    rtl::Reference<SwXTextDocument> getCurrentSwDocument();
 };
 #endif // INCLUDED_SW_SOURCE_UI_VBA_VBAAPPLICATION_HXX
 

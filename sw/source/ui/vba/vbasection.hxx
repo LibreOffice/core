@@ -21,18 +21,24 @@
 
 #include <ooo/vba/word/XSection.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
+#include <rtl/ref.hxx>
+
+class SwXTextDocument;
 
 typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XSection > SwVbaSection_BASE;
 
 class SwVbaSection : public SwVbaSection_BASE
 {
 private:
-    css::uno::Reference< css::frame::XModel > mxModel;
+    rtl::Reference< SwXTextDocument > mxModel;
     css::uno::Reference< css::beans::XPropertySet > mxPageProps;
 
 public:
     /// @throws css::uno::RuntimeException
-    SwVbaSection( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, css::uno::Reference< css::frame::XModel >  xModel, css::uno::Reference< css::beans::XPropertySet >  xProps );
+    SwVbaSection( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent,
+                  const css::uno::Reference< css::uno::XComponentContext >& rContext,
+                  rtl::Reference< SwXTextDocument > xModel,
+                  css::uno::Reference< css::beans::XPropertySet > xProps );
     virtual ~SwVbaSection() override;
 
     // Attributes

@@ -63,11 +63,18 @@
 #include <tblenum.hxx>
 #include <sal/log.hxx>
 #include <fesh.hxx>
+#include <unotxdoc.hxx>
+#include <unodraw.hxx>
+#include <unobasestyle.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaSelection::SwVbaSelection( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, uno::Reference< frame::XModel > xModel ) : SwVbaSelection_BASE( rParent, rContext ), mxModel(std::move( xModel ))
+SwVbaSelection::SwVbaSelection( const uno::Reference< ooo::vba::XHelperInterface >& rParent,
+                                const uno::Reference< uno::XComponentContext >& rContext,
+                                rtl::Reference< SwXTextDocument > xModel )
+: SwVbaSelection_BASE( rParent, rContext ),
+  mxModel(std::move( xModel ))
 {
     mxTextViewCursor = word::getXTextViewCursor( mxModel );
 }
@@ -99,8 +106,7 @@ uno::Reference< word::XRange > SAL_CALL
 SwVbaSelection::getRange()
 {
     uno::Reference< text::XTextRange > xTextRange = GetSelectedRange();
-    uno::Reference< text::XTextDocument > xDocument( mxModel, uno::UNO_QUERY_THROW );
-    return uno::Reference< word::XRange >( new SwVbaRange( this, mxContext, xDocument, xTextRange->getStart(), xTextRange->getEnd(), mxTextViewCursor->getText() ) );
+    return uno::Reference< word::XRange >( new SwVbaRange( this, mxContext, mxModel, xTextRange->getStart(), xTextRange->getEnd(), mxTextViewCursor->getText() ) );
 }
 
 OUString SAL_CALL
@@ -217,7 +223,7 @@ SwVbaSelection::Delete( const uno::Any& _unit, const uno::Any& _count )
             }
         }
     }
-    dispatchRequests( mxModel,u".uno:Delete"_ustr );
+    dispatchRequests( static_cast<SfxBaseModel*>(mxModel.get()), u".uno:Delete"_ustr );
 }
 
 void
@@ -554,7 +560,7 @@ SwVbaSelection::getFont()
 void SAL_CALL
 SwVbaSelection::TypeBackspace()
 {
-    dispatchRequests( mxModel,u".uno:SwBackspace"_ustr );
+    dispatchRequests( static_cast<SfxBaseModel*>(mxModel.get()), u".uno:SwBackspace"_ustr );
 }
 
 uno::Reference< word::XRange > SAL_CALL SwVbaSelection::GoTo( const uno::Any& _what, const uno::Any& _which, const uno::Any& _count, const uno::Any& _name )
@@ -796,8 +802,7 @@ SwVbaSelection::Tables( const uno::Any& aIndex )
     xCursorProps->getPropertyValue(u"TextTable"_ustr) >>= xTextTable;
     if( xTextTable.is() )
     {
-            uno::Reference< css::text::XTextDocument > xTextDoc( mxModel, uno::UNO_QUERY_THROW );
-            uno::Reference< word::XTable > xVBATable = new SwVbaTable( mxParent, mxContext, xTextDoc, xTextTable );
+            uno::Reference< word::XTable > xVBATable = new SwVbaTable( mxParent, mxContext, mxModel, xTextTable );
             aRet <<= xVBATable;
             return aRet;
     }
@@ -811,8 +816,7 @@ SwVbaSelection::Tables( const uno::Any& aIndex )
         if ( pFormat )
         {
             uno::Reference< text::XTextTable > xTable = SwXTextTables::GetObject(*pFormat);
-            uno::Reference< css::text::XTextDocument > xTextDoc( mxModel, uno::UNO_QUERY_THROW );
-            uno::Reference< word::XTable > xVBATable = new SwVbaTable( mxParent, mxContext, xTextDoc, xTable );
+            uno::Reference< word::XTable > xVBATable = new SwVbaTable( mxParent, mxContext, mxModel, xTable );
             aRet <<= xVBATable;
         }
     }
@@ -834,7 +838,7 @@ SwVbaSelection::getHeaderFooter()
 {
     if( HeaderFooterHelper::isHeaderFooter( mxModel ) )
     {
-        uno::Reference< beans::XPropertySet > xPageStyleProps( word::getCurrentPageStyle( mxModel ), uno::UNO_QUERY_THROW );
+        rtl::Reference< SwXBaseStyle > xPageStyleProps( word::getCurrentPageStyle( mxModel ) );
         sal_Int32 nIndex = word::WdHeaderFooterIndex::wdHeaderFooterPrimary;
         bool isHeader = HeaderFooterHelper::isHeader( mxModel );
         if( HeaderFooterHelper::isEvenPagesHeader( mxModel ) || HeaderFooterHelper::isEvenPagesFooter( mxModel ) )
@@ -859,10 +863,9 @@ SwVbaSelection::ShapeRange( )
         xShapes->add( xShape );
     }
 
-    uno::Reference< drawing::XDrawPageSupplier > xDrawPageSupplier( mxModel, uno::UNO_QUERY_THROW );
-    uno::Reference< drawing::XDrawPage > xDrawPage = xDrawPageSupplier->getDrawPage();
+    rtl::Reference< SwFmDrawPage > xDrawPage = mxModel->getSwDrawPage();
     uno::Reference< container::XIndexAccess > xShapesAccess( xShapes, uno::UNO_QUERY_THROW );
-    return uno::Any( uno::Reference< msforms::XShapeRange >( new ScVbaShapeRange( this, mxContext, xShapesAccess, xDrawPage, mxModel ) ) );
+    return uno::Any( uno::Reference< msforms::XShapeRange >( new ScVbaShapeRange( this, mxContext, xShapesAccess, xDrawPage, static_cast<SfxBaseModel*>(mxModel.get()) ) ) );
 }
 
 ::sal_Int32 SAL_CALL SwVbaSelection::getStart()
@@ -1035,7 +1038,7 @@ uno::Any SAL_CALL SwVbaSelection::Cells( const uno::Any& index )
 
 void SAL_CALL SwVbaSelection::Copy(  )
 {
-    dispatchRequests( mxModel,u".uno:Copy"_ustr );
+    dispatchRequests( static_cast<SfxBaseModel*>(mxModel.get()), u".uno:Copy"_ustr );
 }
 
 void SAL_CALL SwVbaSelection::CopyAsPicture(  )
@@ -1046,7 +1049,7 @@ void SAL_CALL SwVbaSelection::CopyAsPicture(  )
 
 void SAL_CALL SwVbaSelection::Paste(  )
 {
-    dispatchRequests( mxModel,u".uno:Paste"_ustr );
+    dispatchRequests( static_cast<SfxBaseModel*>(mxModel.get()), u".uno:Paste"_ustr );
 }
 
 void SAL_CALL SwVbaSelection::Collapse( const uno::Any& Direction )
@@ -1093,7 +1096,7 @@ void SAL_CALL SwVbaSelection::WholeStory(  )
             // insert an empty line
             uno::Reference< text::XTextRange > xFirstCellRange = word::getFirstObjectPosition( xText );
             mxTextViewCursor->gotoRange( xFirstCellRange, false );
-            dispatchRequests( mxModel,u".uno:InsertPara"_ustr );
+            dispatchRequests( static_cast<SfxBaseModel*>(mxModel.get()), u".uno:InsertPara"_ustr );
         }
     }
     uno::Reference< text::XTextRange > xStart = xText->getStart();
@@ -1112,7 +1115,7 @@ void SAL_CALL SwVbaSelection::SplitTable()
     if( !IsInTable() )
         throw uno::RuntimeException();
 
-    SwDocShell* pDocShell = word::getDocShell( mxModel );
+    SwDocShell* pDocShell = mxModel->GetDocShell();
     if( pDocShell )
     {
         if (SwFEShell* pFEShell = pDocShell->GetFEShell())
@@ -1142,9 +1145,8 @@ SwVbaSelection::Paragraphs( const uno::Any& aIndex )
     xParaCursor->gotoStartOfParagraph( false );
     xParaCursor->gotoStartOfParagraph( true );
 
-    uno::Reference< text::XTextDocument > xTextDoc( mxModel, uno::UNO_QUERY_THROW );
     uno::Reference< text::XTextRange > xParaRange( xParaCursor, uno::UNO_QUERY_THROW );
-    uno::Reference< word::XParagraph > xParagraph = new SwVbaParagraph( mxParent, mxContext, xTextDoc, xParaRange );
+    uno::Reference< word::XParagraph > xParagraph = new SwVbaParagraph( mxParent, mxContext, mxModel, xParaRange );
 
     aRet <<= xParagraph;
     return aRet;

@@ -24,24 +24,26 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
+#include <rtl/ref.hxx>
+
+class SwXTextDocument;
 
 typedef CollTestImplHelper< ooo::vba::word::XBookmarks > SwVbaBookmarks_BASE;
 
 class SwVbaBookmarks : public SwVbaBookmarks_BASE
 {
 private:
-    css::uno::Reference< css::frame::XModel > mxModel;
-    css::uno::Reference< css::text::XBookmarksSupplier > mxBookmarksSupplier;
+    rtl::Reference< SwXTextDocument > mxModel;
 
 private:
     /// @throws css::uno::RuntimeException
     void removeBookmarkByName( const OUString& rName );
 
 public:
-    SwVbaBookmarks( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XIndexAccess >& xBookmarks, css::uno::Reference< css::frame::XModel > xModel );
+    SwVbaBookmarks( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XIndexAccess >& xBookmarks, rtl::Reference< SwXTextDocument > xModel );
 
     /// @throws css::uno::RuntimeException
-    static void addBookmarkByName( const css::uno::Reference< css::frame::XModel >& xModel, const OUString& rName, const css::uno::Reference< css::text::XTextRange >& rTextRange );
+    static void addBookmarkByName( const rtl::Reference< SwXTextDocument >& xModel, const OUString& rName, const css::uno::Reference< css::text::XTextRange >& rTextRange );
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;

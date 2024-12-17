@@ -17,6 +17,7 @@
 #include "vbaformfield.hxx"
 #include "vbaformfields.hxx"
 #include "wordvbahelper.hxx"
+#include <unotxdoc.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -26,11 +27,11 @@ using namespace ::com::sun::star;
 //        [in] -1 to indicate searching using the provided name, SAL_MAX_INT32 for totals
 //        [out] rIndex indicates the found index, or the total number of fieldmarks
 static sw::mark::Fieldmark* lcl_getFieldmark(std::string_view rName, sal_Int32& rIndex,
-                                             const uno::Reference<frame::XModel>& xModel,
+                                             const rtl::Reference<SwXTextDocument>& xModel,
                                              uno::Sequence<OUString>* pElementNames = nullptr)
 
 {
-    SwDoc* pDoc = word::getDocShell(xModel)->GetDoc();
+    SwDoc* pDoc = xModel->GetDocShell()->GetDoc();
     if (!pDoc)
         return nullptr;
 
@@ -105,14 +106,14 @@ class FormFieldCollectionHelper
 private:
     uno::Reference<XHelperInterface> mxParent;
     uno::Reference<uno::XComponentContext> mxContext;
-    uno::Reference<text::XTextDocument> mxTextDocument;
+    rtl::Reference<SwXTextDocument> mxTextDocument;
     sw::mark::Fieldmark* m_pCache;
 
 public:
     /// @throws css::uno::RuntimeException
     FormFieldCollectionHelper(uno::Reference<ov::XHelperInterface> xParent,
                               uno::Reference<uno::XComponentContext> xContext,
-                              uno::Reference<text::XTextDocument> xTextDocument)
+                              rtl::Reference<SwXTextDocument> xTextDocument)
         : mxParent(std::move(xParent))
         , mxContext(std::move(xContext))
         , mxTextDocument(std::move(xTextDocument))
@@ -178,7 +179,7 @@ public:
 
 SwVbaFormFields::SwVbaFormFields(const uno::Reference<XHelperInterface>& xParent,
                                  const uno::Reference<uno::XComponentContext>& xContext,
-                                 const uno::Reference<text::XTextDocument>& xTextDocument)
+                                 const rtl::Reference<SwXTextDocument>& xTextDocument)
     : SwVbaFormFields_BASE(xParent, xContext,
                            uno::Reference<container::XIndexAccess>(
                                new FormFieldCollectionHelper(xParent, xContext, xTextDocument)))

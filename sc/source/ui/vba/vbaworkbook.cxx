@@ -188,13 +188,19 @@ ScVbaWorkbook::init()
         pShell->RegisterAutomationWorkbookObject( this );
 }
 
-ScVbaWorkbook::ScVbaWorkbook(   const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, css::uno::Reference< css::frame::XModel > const & xModel ) : ScVbaWorkbook_BASE( xParent, xContext, xModel )
+ScVbaWorkbook::ScVbaWorkbook( const css::uno::Reference< ov::XHelperInterface >& xParent,
+                              const css::uno::Reference< css::uno::XComponentContext >& xContext,
+                              css::uno::Reference< css::frame::XModel > const & xModel )
+: ScVbaWorkbook_BASE( xParent, xContext ),
+  mxModel(xModel)
 {
     init();
 }
 
 ScVbaWorkbook::ScVbaWorkbook( uno::Sequence< uno::Any> const & args,
-    uno::Reference< uno::XComponentContext> const & xContext ) : ScVbaWorkbook_BASE( args, xContext )
+                              uno::Reference< uno::XComponentContext> const & xContext )
+: ScVbaWorkbook_BASE( args, xContext ),
+  mxModel(getXSomethingFromArgs< frame::XModel >( args, 1 ))
 {
     init();
 }

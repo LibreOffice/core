@@ -25,13 +25,13 @@ using namespace ::com::sun::star;
 
 void SAL_CALL VbaDialogBase::Show()
 {
-    if (m_xModel.is())
+    if (auto xModel = getModel())
     {
         OUString aURL = mapIndexToName(mnIndex);
         if (aURL.isEmpty())
             throw uno::RuntimeException(u"Unable to open the specified dialog"_ustr);
 
-        dispatchRequests(m_xModel, aURL, {});
+        dispatchRequests(xModel, aURL, {});
     }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

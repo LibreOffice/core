@@ -23,6 +23,8 @@
 #include <com/sun/star/document/XRedlinesSupplier.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
+#include <unotxdoc.hxx>
+#include <unoredlines.hxx>
 #include <utility>
 
 using namespace ::ooo::vba;
@@ -56,8 +58,8 @@ class RevisionCollectionHelper : public ::cppu::WeakImplHelper< container::XInde
 {
     RevisionMap mRevisionMap;
 public:
-/// @throws css::uno::RuntimeException
-RevisionCollectionHelper( const uno::Reference< frame::XModel >& xModel, const uno::Reference< text::XTextRange >& xTextRange );
+    /// @throws css::uno::RuntimeException
+    RevisionCollectionHelper( const rtl::Reference< SwXTextDocument >& xModel, const uno::Reference< text::XTextRange >& xTextRange );
 
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) override { return  cppu::UnoType<beans::XPropertySet>::get(); }
@@ -81,11 +83,10 @@ RevisionCollectionHelper( const uno::Reference< frame::XModel >& xModel, const u
 
 }
 
-RevisionCollectionHelper::RevisionCollectionHelper( const uno::Reference< frame::XModel >& xModel, const uno::Reference< text::XTextRange >& xTextRange )
+RevisionCollectionHelper::RevisionCollectionHelper( const rtl::Reference< SwXTextDocument >& xModel, const uno::Reference< text::XTextRange >& xTextRange )
     {
         uno::Reference< text::XTextRangeCompare > xTRC( xTextRange->getText(), uno::UNO_QUERY_THROW );
-        uno::Reference< document::XRedlinesSupplier > xRedlinesSupp( xModel, uno::UNO_QUERY_THROW );
-        uno::Reference< container::XIndexAccess > xRedlines( xRedlinesSupp->getRedlines(), uno::UNO_QUERY_THROW );
+        rtl::Reference< SwXRedlines > xRedlines( xModel->getSwRedlines() );
         sal_Int32 nCount = xRedlines->getCount();
         for( sal_Int32 index = 0; index < nCount; index++ )
         {
@@ -102,10 +103,15 @@ namespace {
 
 class RevisionsEnumeration : public EnumerationHelperImpl
 {
-    uno::Reference< frame::XModel > m_xModel;
+    rtl::Reference< SwXTextDocument > m_xModel;
 public:
     /// @throws uno::RuntimeException
-    RevisionsEnumeration( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration,  uno::Reference< frame::XModel >  xModel  ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ), m_xModel(std::move( xModel )) {}
+    RevisionsEnumeration( const uno::Reference< XHelperInterface >& xParent,
+                          const uno::Reference< uno::XComponentContext >& xContext,
+                          const uno::Reference< container::XEnumeration >& xEnumeration,
+                          rtl::Reference< SwXTextDocument > xModel  )
+    : EnumerationHelperImpl( xParent, xContext, xEnumeration ),
+      m_xModel(std::move( xModel )) {}
 
     virtual uno::Any SAL_CALL nextElement(  ) override
     {
@@ -117,11 +123,21 @@ public:
 
 }
 
-SwVbaRevisions::SwVbaRevisions( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< frame::XModel >& xModel, const uno::Reference< text::XTextRange >& xTextRange ): SwVbaRevisions_BASE( xParent, xContext, new RevisionCollectionHelper( xModel, xTextRange ) ),  mxModel( xModel )
+SwVbaRevisions::SwVbaRevisions( const uno::Reference< XHelperInterface >& xParent,
+                                const uno::Reference< uno::XComponentContext > & xContext,
+                                const rtl::Reference< SwXTextDocument >& xModel,
+                                const uno::Reference< text::XTextRange >& xTextRange )
+: SwVbaRevisions_BASE( xParent, xContext, new RevisionCollectionHelper( xModel, xTextRange ) ),
+  mxModel( xModel )
 {
 }
 
-SwVbaRevisions::SwVbaRevisions( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, uno::Reference< frame::XModel >  xModel, const uno::Reference< container::XIndexAccess >& xIndexAccess ): SwVbaRevisions_BASE( xParent, xContext, xIndexAccess ),  mxModel(std::move( xModel ))
+SwVbaRevisions::SwVbaRevisions( const uno::Reference< XHelperInterface >& xParent,
+                                const uno::Reference< uno::XComponentContext > & xContext,
+                                rtl::Reference< SwXTextDocument > xModel,
+                                const uno::Reference< container::XIndexAccess >& xIndexAccess )
+: SwVbaRevisions_BASE( xParent, xContext, xIndexAccess ),
+  mxModel(std::move( xModel ))
 {
 }
 

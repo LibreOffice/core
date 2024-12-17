@@ -24,16 +24,16 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <utility>
 #include "vbarange.hxx"
+#include <unotxdoc.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 SwVbaBookmark::SwVbaBookmark( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext,
-    css::uno::Reference< frame::XModel > xModel, OUString aBookmarkName ) :
+    rtl::Reference< SwXTextDocument > xModel, OUString aBookmarkName ) :
     SwVbaBookmark_BASE( rParent, rContext ), mxModel(std::move( xModel )), maBookmarkName(std::move( aBookmarkName )), mbValid( true )
 {
-    uno::Reference< text::XBookmarksSupplier > xBookmarksSupplier( mxModel, uno::UNO_QUERY_THROW );
-    mxBookmark.set( xBookmarksSupplier->getBookmarks()->getByName( maBookmarkName ), uno::UNO_QUERY_THROW );
+    mxBookmark.set( mxModel->getBookmarks()->getByName( maBookmarkName ), uno::UNO_QUERY_THROW );
 }
 
 SwVbaBookmark::~SwVbaBookmark()
@@ -49,8 +49,7 @@ void SwVbaBookmark::checkVality()
 void SAL_CALL SwVbaBookmark::Delete()
 {
     checkVality();
-    uno::Reference< text::XTextDocument > xTextDocument( mxModel, uno::UNO_QUERY_THROW );
-    xTextDocument->getText()->removeTextContent( mxBookmark );
+    mxModel->getText()->removeTextContent( mxBookmark );
     mbValid = false;
 }
 
@@ -75,9 +74,8 @@ void SAL_CALL SwVbaBookmark::setName( const OUString& _name )
 uno::Any SAL_CALL SwVbaBookmark::Range()
 {
     uno::Reference< text::XTextContent > xTextContent( mxBookmark, uno::UNO_SET_THROW );
-    uno::Reference< text::XTextDocument > xTextDocument( mxModel, uno::UNO_QUERY_THROW );
     uno::Reference< text::XTextRange > xTextRange( xTextContent->getAnchor(), uno::UNO_SET_THROW );
-    return uno::Any( uno::Reference< word::XRange>(  new SwVbaRange( this, mxContext, xTextDocument, xTextRange->getStart(), xTextRange->getEnd(), xTextRange->getText() ) ) );
+    return uno::Any( uno::Reference< word::XRange>(  new SwVbaRange( this, mxContext, mxModel, xTextRange->getStart(), xTextRange->getEnd(), xTextRange->getText() ) ) );
 }
 
 OUString

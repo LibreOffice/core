@@ -22,19 +22,29 @@
 #include <cppuhelper/implbase.hxx>
 #include <ooo/vba/word/XDialog.hpp>
 #include <vbahelper/vbadialogbase.hxx>
+#include <rtl/ref.hxx>
+
+class SwXTextDocument;
 
 typedef cppu::ImplInheritanceHelper< VbaDialogBase, ov::word::XDialog > SwVbaDialog_BASE;
 
 class SwVbaDialog : public SwVbaDialog_BASE
 {
 public:
-    SwVbaDialog( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::frame::XModel >& xModel, sal_Int32 nIndex ):SwVbaDialog_BASE( xParent, xContext, xModel, nIndex ) {}
+    SwVbaDialog( const css::uno::Reference< ov::XHelperInterface >& xParent,
+                 const css::uno::Reference< css::uno::XComponentContext > & xContext,
+                 const rtl::Reference< SwXTextDocument >& xModel,
+                 sal_Int32 nIndex );
 
     // Methods
     virtual OUString mapIndexToName( sal_Int32 nIndex ) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
+
+    virtual css::uno::Reference< css::frame::XModel > getModel() const override;
+private:
+    rtl::Reference< SwXTextDocument > m_xModel;
 };
 
 #endif // INCLUDED_SW_SOURCE_UI_VBA_VBADIALOG_HXX

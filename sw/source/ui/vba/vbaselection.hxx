@@ -35,7 +35,7 @@ typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XSelection > SwVbaSele
 class SwVbaSelection : public SwVbaSelection_BASE
 {
 private:
-    css::uno::Reference< css::frame::XModel > mxModel;
+    rtl::Reference< SwXTextDocument > mxModel;
     css::uno::Reference< css::text::XTextViewCursor > mxTextViewCursor;
 
 private:
@@ -58,7 +58,7 @@ private:
 
 public:
     /// @throws css::uno::RuntimeException
-    SwVbaSelection( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, css::uno::Reference< css::frame::XModel > xModel );
+    SwVbaSelection( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, rtl::Reference< SwXTextDocument > xModel );
     virtual ~SwVbaSelection() override;
 
     // Attribute

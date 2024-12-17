@@ -22,17 +22,19 @@
 #include <ooo/vba/word/WdSectionStart.hpp>
 #include <ooo/vba/word/WdOrientation.hpp>
 #include "wordvbahelper.hxx"
+#include <unotxdoc.hxx>
+#include <unobasestyle.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
 SwVbaPageSetup::SwVbaPageSetup(const uno::Reference< XHelperInterface >& xParent,
                 const uno::Reference< uno::XComponentContext >& xContext,
-                const uno::Reference< frame::XModel >& xModel,
+                const rtl::Reference< SwXTextDocument >& xModel,
                 const uno::Reference< beans::XPropertySet >& xProps ):
-           SwVbaPageSetup_BASE( xParent, xContext )
+           SwVbaPageSetup_BASE( xParent, xContext ),
+           mxModel(xModel)
 {
-    mxModel.set( xModel, uno::UNO_SET_THROW );
     mxPageProps.set( xProps, uno::UNO_SET_THROW );
     mnOrientPortrait = word::WdOrientation::wdOrientPortrait;
     mnOrientLandscape = word::WdOrientation::wdOrientLandscape;
@@ -151,7 +153,7 @@ void SAL_CALL SwVbaPageSetup::setDifferentFirstPageHeaderFooter( sal_Bool status
     else
         newStyle = "Standard";
 
-    uno::Reference< beans::XPropertySet > xStyleProps( word::getCurrentPageStyle( mxModel ), uno::UNO_QUERY_THROW );
+    rtl::Reference< SwXBaseStyle > xStyleProps( word::getCurrentPageStyle( mxModel ) );
     sal_Int32 nTopMargin = 0;
     xStyleProps->getPropertyValue(u"TopMargin"_ustr) >>= nTopMargin;
     sal_Int32 nBottomMargin = 0;
@@ -191,7 +193,7 @@ void SAL_CALL SwVbaPageSetup::setDifferentFirstPageHeaderFooter( sal_Bool status
         xCursorProps->setPropertyValue(u"PageDescName"_ustr, uno::Any( newStyle ) );
     }
 
-    uno::Reference< beans::XPropertySet > xFirstPageProps( word::getCurrentPageStyle( mxModel ), uno::UNO_QUERY_THROW );
+    rtl::Reference< SwXBaseStyle > xFirstPageProps( word::getCurrentPageStyle( mxModel ) );
     xFirstPageProps->setPropertyValue(u"TopMargin"_ustr, uno::Any( nTopMargin ) );
     xFirstPageProps->setPropertyValue(u"BottomMargin"_ustr, uno::Any( nBottomMargin ) );
     xFirstPageProps->setPropertyValue(u"LeftMargin"_ustr, uno::Any( nLeftMargin ) );

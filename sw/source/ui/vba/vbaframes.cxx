@@ -20,6 +20,7 @@
 #include "vbaframe.hxx"
 #include <com/sun/star/frame/XModel.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <unotxdoc.hxx>
 #include <utility>
 
 using namespace ::ooo::vba;
@@ -33,11 +34,19 @@ private:
     uno::Reference< XHelperInterface > mxParent;
     uno::Reference< uno::XComponentContext > mxContext;
     uno::Reference< container::XIndexAccess> mxIndexAccess;
-    uno::Reference< frame::XModel > mxModel;
+    rtl::Reference< SwXTextDocument > mxModel;
     sal_Int32 mnCurrentPos;
 public:
     /// @throws uno::RuntimeException
-    FramesEnumeration( uno::Reference< XHelperInterface > xParent, uno::Reference< uno::XComponentContext >  xContext, uno::Reference< container::XIndexAccess >  xIndexAccess,  uno::Reference< frame::XModel >  xModel  ) : mxParent(std::move( xParent )), mxContext(std::move( xContext)), mxIndexAccess(std::move( xIndexAccess )), mxModel(std::move( xModel )), mnCurrentPos(0)
+    FramesEnumeration( uno::Reference< XHelperInterface > xParent,
+                       uno::Reference< uno::XComponentContext > xContext,
+                       uno::Reference< container::XIndexAccess > xIndexAccess,
+                       rtl::Reference< SwXTextDocument >  xModel  )
+    : mxParent(std::move( xParent )),
+      mxContext(std::move( xContext)),
+      mxIndexAccess(std::move( xIndexAccess )),
+      mxModel(std::move( xModel )),
+      mnCurrentPos(0)
     {
     }
     virtual sal_Bool SAL_CALL hasMoreElements(  ) override
@@ -57,9 +66,13 @@ public:
 
 }
 
-SwVbaFrames::SwVbaFrames( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< container::XIndexAccess >& xFrames, uno::Reference< frame::XModel >  xModel ): SwVbaFrames_BASE( xParent, xContext, xFrames ), mxModel(std::move( xModel ))
+SwVbaFrames::SwVbaFrames( const uno::Reference< XHelperInterface >& xParent,
+                          const uno::Reference< uno::XComponentContext > & xContext,
+                          const uno::Reference< container::XIndexAccess >& xFrames,
+                          rtl::Reference< SwXTextDocument > xModel )
+: SwVbaFrames_BASE( xParent, xContext, xFrames ),
+  mxModel(std::move( xModel ))
 {
-    mxFramesSupplier.set( mxModel, uno::UNO_QUERY_THROW );
 }
 // XEnumerationAccess
 uno::Type

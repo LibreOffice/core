@@ -22,18 +22,27 @@
 #include <vbahelper/vbacollectionimpl.hxx>
 #include <ooo/vba/word/XRevisions.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
+#include <rtl/ref.hxx>
+
+class SwXTextDocument;
 
 typedef CollTestImplHelper< ooo::vba::word::XRevisions > SwVbaRevisions_BASE;
 
 class SwVbaRevisions : public SwVbaRevisions_BASE
 {
 private:
-    css::uno::Reference< css::frame::XModel > mxModel;
+    rtl::Reference< SwXTextDocument > mxModel;
 
 public:
-    SwVbaRevisions( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::text::XTextRange >& xTextRange );
+    SwVbaRevisions( const css::uno::Reference< ov::XHelperInterface >& xParent,
+                    const css::uno::Reference< css::uno::XComponentContext > & xContext,
+                    const rtl::Reference< SwXTextDocument >& xModel,
+                    const css::uno::Reference< css::text::XTextRange >& xTextRange );
 
-    SwVbaRevisions( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, css::uno::Reference< css::frame::XModel >  xModel, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess );
+    SwVbaRevisions( const css::uno::Reference< ov::XHelperInterface >& xParent,
+                    const css::uno::Reference< css::uno::XComponentContext > & xContext,
+                    rtl::Reference< SwXTextDocument > xModel,
+                    const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess );
 
     // Methods
     virtual void SAL_CALL AcceptAll(  ) override;

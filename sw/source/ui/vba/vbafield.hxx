@@ -18,12 +18,16 @@
  */
 #ifndef INCLUDED_SW_SOURCE_UI_VBA_VBAFIELD_HXX
 #define INCLUDED_SW_SOURCE_UI_VBA_VBAFIELD_HXX
+
 #include <vbahelper/vbahelperinterface.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <ooo/vba/word/XField.hpp>
 #include <ooo/vba/word/XFields.hpp>
 #include <vbahelper/vbacollectionimpl.hxx>
+#include <rtl/ref.hxx>
+
+class SwXTextDocument;
 
 typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XField > SwVbaField_BASE;
 
@@ -44,8 +48,7 @@ typedef CollTestImplHelper< ov::word::XFields > SwVbaFields_BASE;
 
 class SwVbaFields : public SwVbaFields_BASE
 {
-    css::uno::Reference< css::frame::XModel > mxModel;
-    css::uno::Reference< css::lang::XMultiServiceFactory > mxMSF;
+    rtl::Reference< SwXTextDocument > mxModel;
 private:
     /// @throws css::uno::RuntimeException
     /// @throws css::script::BasicErrorException
@@ -54,7 +57,9 @@ private:
     css::uno::Reference< css::text::XTextField > Create_Field_DocProperty( const OUString& _text );
 
 public:
-    SwVbaFields( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::frame::XModel >& xModel );
+    SwVbaFields( const css::uno::Reference< ov::XHelperInterface >& xParent,
+                 const css::uno::Reference< css::uno::XComponentContext > & xContext,
+                 const rtl::Reference< SwXTextDocument >& xModel );
     // XFields
     virtual css::uno::Reference< ::ooo::vba::word::XField > SAL_CALL Add( const css::uno::Reference< ::ooo::vba::word::XRange >& Range, const css::uno::Any& Type, const css::uno::Any& Text, const css::uno::Any& PreserveFormatting ) override;
     virtual sal_Int32 SAL_CALL Update() override;

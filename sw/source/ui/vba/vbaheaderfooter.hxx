@@ -22,20 +22,27 @@
 #include <ooo/vba/word/XHeaderFooter.hpp>
 #include <ooo/vba/word/XRange.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
+#include <rtl/ref.hxx>
+
+class SwXTextDocument;
 
 typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XHeaderFooter > SwVbaHeaderFooter_BASE;
 
 class SwVbaHeaderFooter : public SwVbaHeaderFooter_BASE
 {
 private:
-    css::uno::Reference< css::frame::XModel > mxModel;
+    rtl::Reference< SwXTextDocument > mxModel;
     css::uno::Reference< css::beans::XPropertySet > mxPageStyleProps;
     bool mbHeader;
     sal_Int32 mnIndex;
 
 public:
     /// @throws css::uno::RuntimeException
-    SwVbaHeaderFooter( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, css::uno::Reference< css::frame::XModel >  xModel, css::uno::Reference< css::beans::XPropertySet >  xProps, bool isHeader, sal_Int32 index );
+    SwVbaHeaderFooter( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent,
+                       const css::uno::Reference< css::uno::XComponentContext >& rContext,
+                       rtl::Reference< SwXTextDocument > xModel,
+                       css::uno::Reference< css::beans::XPropertySet > xProps,
+                       bool isHeader, sal_Int32 index );
 
     // Attributes
     virtual sal_Bool SAL_CALL getIsHeader() override;

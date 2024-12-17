@@ -24,6 +24,8 @@
 #include <com/sun/star/text/XDocumentIndexesSupplier.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <utility>
+#include <unotxdoc.hxx>
+#include <unoidxcoll.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -60,15 +62,15 @@ class TableOfContentsCollectionHelper : public ::cppu::WeakImplHelper< container
 private:
     uno::Reference< XHelperInterface > mxParent;
     uno::Reference< uno::XComponentContext > mxContext;
-    uno::Reference< text::XTextDocument > mxTextDocument;
+    rtl::Reference< SwXTextDocument > mxTextDocument;
     std::vector< uno::Reference< text::XDocumentIndex > > maToc;
 
 public:
     /// @throws uno::RuntimeException
-    TableOfContentsCollectionHelper( uno::Reference< ov::XHelperInterface > xParent, uno::Reference< uno::XComponentContext > xContext, uno::Reference< text::XTextDocument >  xDoc ): mxParent(std::move( xParent )), mxContext(std::move( xContext )), mxTextDocument(std::move( xDoc ))
+    TableOfContentsCollectionHelper( uno::Reference< ov::XHelperInterface > xParent, uno::Reference< uno::XComponentContext > xContext, rtl::Reference< SwXTextDocument >  xDoc )
+        : mxParent(std::move( xParent )), mxContext(std::move( xContext )), mxTextDocument(std::move( xDoc ))
     {
-        uno::Reference< text::XDocumentIndexesSupplier > xDocIndexSupp( mxTextDocument, uno::UNO_QUERY_THROW );
-        uno::Reference< container::XIndexAccess > xDocIndexes = xDocIndexSupp->getDocumentIndexes();
+        rtl::Reference< SwXDocumentIndexes > xDocIndexes = mxTextDocument->getSwDocumentIndexes();
         sal_Int32 nCount = xDocIndexes->getCount();
         for( sal_Int32 i = 0; i < nCount; i++ )
         {
@@ -109,15 +111,15 @@ public:
 
 }
 
-SwVbaTablesOfContents::SwVbaTablesOfContents( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< text::XTextDocument >& xDoc ) : SwVbaTablesOfContents_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( new TableOfContentsCollectionHelper( xParent, xContext, xDoc ) ) ),  mxTextDocument( xDoc )
+SwVbaTablesOfContents::SwVbaTablesOfContents( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const rtl::Reference< SwXTextDocument >& xDoc )
+    : SwVbaTablesOfContents_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( new TableOfContentsCollectionHelper( xParent, xContext, xDoc ) ) ),  mxTextDocument( xDoc )
 {
 }
 
 uno::Reference< word::XTableOfContents > SAL_CALL
 SwVbaTablesOfContents::Add( const uno::Reference< word::XRange >& Range, const uno::Any& /*UseHeadingStyles*/, const uno::Any& /*UpperHeadingLevel*/, const uno::Any& LowerHeadingLevel, const uno::Any& UseFields, const uno::Any& /*TableID*/, const uno::Any& /*RightAlignPageNumbers*/, const uno::Any& /*IncludePageNumbers*/, const uno::Any& /*AddedStyles*/, const uno::Any& /*UseHyperlinks*/, const uno::Any& /*HidePageNumbersInWeb*/, const uno::Any& /*UseOutlineLevels*/ )
 {
-    uno::Reference< lang::XMultiServiceFactory > xDocMSF( mxTextDocument, uno::UNO_QUERY_THROW );
-    uno::Reference< text::XDocumentIndex > xDocumentIndex( xDocMSF->createInstance(u"com.sun.star.text.ContentIndex"_ustr), uno::UNO_QUERY_THROW );
+    uno::Reference< text::XDocumentIndex > xDocumentIndex( mxTextDocument->createInstance(u"com.sun.star.text.ContentIndex"_ustr), uno::UNO_QUERY_THROW );
 
     uno::Reference< beans::XPropertySet > xTocProps( xDocumentIndex, uno::UNO_QUERY_THROW );
     xTocProps->setPropertyValue(u"IsProtected"_ustr, uno::Any( false ) );

@@ -26,15 +26,17 @@
 #include <com/sun/star/util/XPropertyReplace.hpp>
 #include <com/sun/star/text/XTextViewCursor.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <rtl/ref.hxx>
+
+class SwXTextDocument;
 
 typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XFind > SwVbaFind_BASE;
 
 class SwVbaFind : public SwVbaFind_BASE
 {
 private:
-    css::uno::Reference< css::frame::XModel > mxModel;
+    rtl::Reference< SwXTextDocument > mxModel;
     css::uno::Reference< css::text::XTextRange > mxTextRange;
-    css::uno::Reference< css::util::XReplaceable > mxReplaceable;
     css::uno::Reference< css::util::XPropertyReplace> mxPropertyReplace;
     css::uno::Reference< css::text::XTextViewCursor> mxTVC;
     css::uno::Reference< css::view::XSelectionSupplier> mxSelSupp;
@@ -58,9 +60,15 @@ private:
     bool SearchReplace();
 
     /// @throws css::uno::RuntimeException
-    SwVbaFind( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, css::uno::Reference< css::frame::XModel > xModel );
+    SwVbaFind( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent,
+               const css::uno::Reference< css::uno::XComponentContext >& rContext,
+               rtl::Reference< SwXTextDocument > xModel );
 public:
-    static css::uno::Reference< ooo::vba::word::XFind > GetOrCreateFind(const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::text::XTextRange >& xTextRange);
+    static css::uno::Reference< ooo::vba::word::XFind > GetOrCreateFind(
+                const css::uno::Reference< ooo::vba::XHelperInterface >& rParent,
+                const css::uno::Reference< css::uno::XComponentContext >& rContext,
+                const rtl::Reference< SwXTextDocument >& xModel,
+                const css::uno::Reference< css::text::XTextRange >& xTextRange);
     virtual ~SwVbaFind() override;
 
     // Attributes

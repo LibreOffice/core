@@ -19,21 +19,25 @@
 
 #ifndef INCLUDED_SW_SOURCE_UI_VBA_VBATABLE_HXX
 #define INCLUDED_SW_SOURCE_UI_VBA_VBATABLE_HXX
+
 #include <vbahelper/vbahelperinterface.hxx>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <ooo/vba/word/XRange.hpp>
 #include <ooo/vba/word/XTable.hpp>
+#include <rtl/ref.hxx>
+
+class SwXTextDocument;
 
 typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XTable > SwVbaTable_BASE;
 
 class SwVbaTable : public SwVbaTable_BASE
 {
-    css::uno::Reference< css::text::XTextDocument > mxTextDocument;
+    rtl::Reference< SwXTextDocument > mxTextDocument;
     css::uno::Reference< css::text::XTextTable > mxTextTable;
 public:
     /// @throws css::uno::RuntimeException
-    SwVbaTable( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, css::uno::Reference< css::text::XTextDocument > xDocument, const css::uno::Reference< css::text::XTextTable >& xTextTable);
+    SwVbaTable( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, rtl::Reference< SwXTextDocument > xDocument, const css::uno::Reference< css::text::XTextTable >& xTextTable);
     virtual css::uno::Reference< ::ooo::vba::word::XRange > SAL_CALL Range(  ) override;
     virtual void SAL_CALL Select(  ) override;
     virtual void SAL_CALL Delete(  ) override;

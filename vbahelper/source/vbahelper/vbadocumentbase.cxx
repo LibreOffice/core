@@ -43,12 +43,15 @@
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
-VbaDocumentBase::VbaDocumentBase( const uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, uno::Reference< frame::XModel >  xModel ) : VbaDocumentBase_BASE( xParent, xContext ),  mxModel(std::move( xModel ))
+VbaDocumentBase::VbaDocumentBase( const uno::Reference< ov::XHelperInterface >& xParent,
+                                  const uno::Reference< uno::XComponentContext >& xContext )
+: VbaDocumentBase_BASE( xParent, xContext )
 {
 }
 
 VbaDocumentBase::VbaDocumentBase( uno::Sequence< uno::Any> const & args,
-    uno::Reference< uno::XComponentContext> const & xContext ) : VbaDocumentBase_BASE( getXSomethingFromArgs< XHelperInterface >( args, 0 ), xContext ),  mxModel( getXSomethingFromArgs< frame::XModel >( args, 1 ) )
+                                  uno::Reference< uno::XComponentContext> const & xContext )
+: VbaDocumentBase_BASE( getXSomethingFromArgs< XHelperInterface >( args, 0 ), xContext )
 {
 }
 

@@ -28,6 +28,7 @@ typedef cppu::ImplInheritanceHelper<VbaPageSetupBase, ov::excel::XPageSetup> ScV
 
 class ScVbaPageSetup : public ScVbaPageSetup_BASE
 {
+    css::uno::Reference<css::frame::XModel> mxModel;
     css::uno::Reference<css::sheet::XSpreadsheet> mxSheet;
     bool mbIsLandscape;
 

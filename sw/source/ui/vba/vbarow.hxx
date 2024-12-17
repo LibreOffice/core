@@ -23,6 +23,9 @@
 #include <vbahelper/vbahelperinterface.hxx>
 #include <com/sun/star/table/XTableRows.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
+#include <rtl/ref.hxx>
+
+class SwXTextDocument;
 
 typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XRow > SwVbaRow_BASE;
 
@@ -50,7 +53,7 @@ public:
     virtual void SAL_CALL SetHeight( float height, sal_Int32 heightrule ) override;
 
     /// @throws css::uno::RuntimeException
-    static void SelectRow( const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::text::XTextTable >& xTextTable, sal_Int32 nStartRow, sal_Int32 nEndRow );
+    static void SelectRow( const rtl::Reference< SwXTextDocument >& xModel, const css::uno::Reference< css::text::XTextTable >& xTextTable, sal_Int32 nStartRow, sal_Int32 nEndRow );
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

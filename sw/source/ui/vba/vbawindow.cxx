@@ -29,6 +29,7 @@
 #include "vbapane.hxx"
 #include "wordvbahelper.hxx"
 #include <view.hxx>
+#include <unotxdoc.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
@@ -36,9 +37,10 @@ using namespace ::ooo::vba;
 SwVbaWindow::SwVbaWindow(
         const uno::Reference< XHelperInterface >& xParent,
         const uno::Reference< uno::XComponentContext >& xContext,
-        const uno::Reference< frame::XModel >& xModel,
+        const rtl::Reference< SwXTextDocument >& xModel,
         const uno::Reference< frame::XController >& xController ) :
-    WindowImpl_BASE( xParent, xContext, xModel, xController )
+    WindowImpl_BASE( xParent, xContext, xController ),
+    m_xModel(xModel)
 {
 }
 

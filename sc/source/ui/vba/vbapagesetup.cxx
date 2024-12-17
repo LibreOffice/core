@@ -44,11 +44,13 @@ using namespace ::ooo::vba;
 ScVbaPageSetup::ScVbaPageSetup(const uno::Reference< XHelperInterface >& xParent,
                 const uno::Reference< uno::XComponentContext >& xContext,
                 uno::Reference< sheet::XSpreadsheet > xSheet,
-                const uno::Reference< frame::XModel >& xModel):
-           ScVbaPageSetup_BASE( xParent, xContext ), mxSheet(std::move( xSheet )), mbIsLandscape( false )
+                const uno::Reference< frame::XModel >& xModel)
+: ScVbaPageSetup_BASE( xParent, xContext ),
+  mxModel(xModel),
+  mxSheet(std::move( xSheet )),
+  mbIsLandscape( false )
 {
     // query for current page style
-    mxModel.set( xModel, uno::UNO_SET_THROW );
     uno::Reference< beans::XPropertySet > xSheetProps( mxSheet, uno::UNO_QUERY_THROW );
     uno::Any aValue = xSheetProps->getPropertyValue(u"PageStyle"_ustr);
     OUString aStyleName;

@@ -22,8 +22,10 @@
 #include <com/sun/star/text/XParagraphCursor.hpp>
 #include "wordvbahelper.hxx"
 #include "vbarange.hxx"
+#include <unotxdoc.hxx>
 
 using namespace ::ooo::vba;
+using namespace ::ooo::vba::word;
 using namespace ::com::sun::star;
 
 SwVbaAutoTextEntry::SwVbaAutoTextEntry( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, uno::Reference< text::XAutoTextEntry >  xEntry ) :
@@ -59,11 +61,11 @@ uno::Reference< word::XRange > SAL_CALL SwVbaAutoTextEntry::Insert( const uno::R
             if( xParaCursor->isStartOfParagraph() && xParaCursor->isEndOfParagraph() )
             {
                 //remove the blank paragraph
-                uno::Reference< frame::XModel > xModel( getCurrentWordDoc( mxContext ), uno::UNO_SET_THROW );
+                rtl::Reference< SwXTextDocument > xModel( getCurrentWordDoc( mxContext ) );
                 uno::Reference< text::XTextViewCursor > xTVCursor = word::getXTextViewCursor( xModel );
                 uno::Reference< text::XTextRange > xCurrentRange( xTC->getEnd(), uno::UNO_SET_THROW );
                 xTVCursor->gotoRange( xCurrentRange, false );
-                dispatchRequests( xModel,u".uno:Delete"_ustr );
+                dispatchRequests( static_cast<SfxBaseModel*>(xModel.get()), u".uno:Delete"_ustr );
                 xTVCursor->gotoRange( xEndMarker->getEnd(), false );
             }
         }

@@ -21,19 +21,22 @@
 
 #include <ooo/vba/word/XPane.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
+#include <rtl/ref.hxx>
+
+class SwXTextDocument;
 
 typedef InheritedHelperInterfaceWeakImpl<ooo::vba::word::XPane> SwVbaPane_BASE;
 
 class SwVbaPane : public SwVbaPane_BASE
 {
 private:
-    css::uno::Reference<css::frame::XModel> mxModel;
+    rtl::Reference<SwXTextDocument> mxModel;
 
 public:
     /// @throws css::uno::RuntimeException
     SwVbaPane(const css::uno::Reference<ooo::vba::XHelperInterface>& rParent,
               const css::uno::Reference<css::uno::XComponentContext>& rContext,
-              css::uno::Reference<css::frame::XModel> xModel);
+              rtl::Reference<SwXTextDocument> xModel);
     virtual ~SwVbaPane() override;
 
     // Methods

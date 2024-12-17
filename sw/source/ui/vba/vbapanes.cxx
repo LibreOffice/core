@@ -19,6 +19,7 @@
 #include "vbapanes.hxx"
 #include "vbapane.hxx"
 #include <cppuhelper/implbase.hxx>
+#include <unotxdoc.hxx>
 #include <utility>
 
 using namespace ::ooo::vba;
@@ -32,10 +33,13 @@ class PanesIndexAccess : public ::cppu::WeakImplHelper<container::XIndexAccess >
 private:
     uno::Reference< XHelperInterface > mxParent;
     uno::Reference< uno::XComponentContext > mxContext;
-    uno::Reference< frame::XModel > mxModel;
+    rtl::Reference< SwXTextDocument > mxModel;
 
 public:
-    PanesIndexAccess( uno::Reference< XHelperInterface > xParent, uno::Reference< uno::XComponentContext > xContext, uno::Reference< frame::XModel >  xModel ) : mxParent(std::move( xParent )), mxContext(std::move( xContext )), mxModel(std::move( xModel )) {}
+    PanesIndexAccess( uno::Reference< XHelperInterface > xParent,
+                      uno::Reference< uno::XComponentContext > xContext,
+                      rtl::Reference< SwXTextDocument >  xModel )
+    : mxParent(std::move( xParent )), mxContext(std::move( xContext )), mxModel(std::move( xModel )) {}
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(  ) override
@@ -79,9 +83,10 @@ public:
 
 }
 
-SwVbaPanes::SwVbaPanes( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< frame::XModel >& xModel ): SwVbaPanes_BASE( xParent, xContext, new PanesIndexAccess( xParent, xContext, xModel ) )
+SwVbaPanes::SwVbaPanes( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const rtl::Reference< SwXTextDocument >& xModel ): SwVbaPanes_BASE( xParent, xContext, new PanesIndexAccess( xParent, xContext, xModel ) )
 {
 }
+
 // XEnumerationAccess
 uno::Type
 SwVbaPanes::getElementType()

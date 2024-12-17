@@ -192,7 +192,8 @@ ScVbaWindow::ScVbaWindow(
         const uno::Reference< uno::XComponentContext >& xContext,
         const uno::Reference< frame::XModel >& xModel,
         const uno::Reference< frame::XController >& xController ) :
-    WindowImpl_BASE( xParent, xContext, xModel, xController )
+    WindowImpl_BASE( xParent, xContext, xController ),
+    m_xModel(xModel)
 {
     init();
 }
@@ -200,7 +201,8 @@ ScVbaWindow::ScVbaWindow(
 ScVbaWindow::ScVbaWindow(
         const uno::Sequence< uno::Any >& args,
         const uno::Reference< uno::XComponentContext >& xContext ) :
-    WindowImpl_BASE( args, xContext )
+    WindowImpl_BASE( args, xContext ),
+    m_xModel(getXSomethingFromArgs< frame::XModel >( args, 1, false ))
 {
     init();
 }

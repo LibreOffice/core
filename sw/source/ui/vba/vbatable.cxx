@@ -33,6 +33,7 @@
 #include "vbarows.hxx"
 #include "vbacolumns.hxx"
 #include "vbaapplication.hxx"
+#include <unotxdoc.hxx>
 
 #include <tools/UnitConversion.hxx>
 
@@ -41,7 +42,12 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaTable::SwVbaTable(  const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, uno::Reference< text::XTextDocument > xDocument, const  uno::Reference< text::XTextTable >& xTextTable) : SwVbaTable_BASE( rParent, rContext ), mxTextDocument(std::move( xDocument ))
+SwVbaTable::SwVbaTable(  const uno::Reference< ooo::vba::XHelperInterface >& rParent,
+                         const uno::Reference< uno::XComponentContext >& rContext,
+                         rtl::Reference< SwXTextDocument > xDocument,
+                         const  uno::Reference< text::XTextTable >& xTextTable)
+: SwVbaTable_BASE( rParent, rContext ),
+  mxTextDocument(std::move( xDocument ))
 {
     mxTextTable.set( xTextTable, uno::UNO_SET_THROW );
 }
@@ -55,8 +61,7 @@ SwVbaTable::Range(  )
 void SAL_CALL
 SwVbaTable::Select(  )
 {
-    uno::Reference< frame::XModel > xModel( mxTextDocument, uno::UNO_QUERY_THROW );
-    uno::Reference< frame::XController > xController = xModel->getCurrentController();
+    uno::Reference< frame::XController > xController = mxTextDocument->getCurrentController();
 
     uno::Reference< text::XTextViewCursorSupplier > xViewCursorSupplier( xController, uno::UNO_QUERY_THROW );
     uno::Reference< view::XSelectionSupplier > xSelectionSupplier( xController, uno::UNO_QUERY_THROW );

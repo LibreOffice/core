@@ -21,26 +21,29 @@
 
 #include <vbahelper/vbahelper.hxx>
 #include <com/sun/star/text/XText.hpp>
+#include <rtl/ref.hxx>
+
+class SwXTextDocument;
 
 class HeaderFooterHelper
 {
 public:
     /// @throws css::uno::RuntimeException
-    static bool isHeaderFooter(const css::uno::Reference<css::frame::XModel>& xModel);
+    static bool isHeaderFooter(const rtl::Reference<SwXTextDocument>& xModel);
     /// @throws css::uno::RuntimeException
     static bool isHeaderFooter(const css::uno::Reference<css::text::XText>& xText);
     /// @throws css::uno::RuntimeException
-    static bool isHeader(const css::uno::Reference<css::frame::XModel>& xModel);
+    static bool isHeader(const rtl::Reference<SwXTextDocument>& xModel);
     /// @throws css::uno::RuntimeException
-    static bool isFirstPageHeader(const css::uno::Reference<css::frame::XModel>& xModel);
+    static bool isFirstPageHeader(const rtl::Reference<SwXTextDocument>& xModel);
     /// @throws css::uno::RuntimeException
-    static bool isEvenPagesHeader(const css::uno::Reference<css::frame::XModel>& xModel);
+    static bool isEvenPagesHeader(const rtl::Reference<SwXTextDocument>& xModel);
     /// @throws css::uno::RuntimeException
-    static bool isFooter(const css::uno::Reference<css::frame::XModel>& xModel);
+    static bool isFooter(const rtl::Reference<SwXTextDocument>& xModel);
     /// @throws css::uno::RuntimeException
-    static bool isFirstPageFooter(const css::uno::Reference<css::frame::XModel>& xModel);
+    static bool isFirstPageFooter(const rtl::Reference<SwXTextDocument>& xModel);
     /// @throws css::uno::RuntimeException
-    static bool isEvenPagesFooter(const css::uno::Reference<css::frame::XModel>& xModel);
+    static bool isEvenPagesFooter(const rtl::Reference<SwXTextDocument>& xModel);
 };
 
 #endif

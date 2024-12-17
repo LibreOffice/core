@@ -21,6 +21,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <utility>
+#include <unotxdoc.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -37,7 +38,7 @@ SwVbaParagraph::~SwVbaParagraph()
 uno::Reference< word::XRange > SAL_CALL
 SwVbaParagraph::getRange( )
 {
-    return uno::Reference< word::XRange >( new SwVbaRange( this, mxContext, mxTextDocument, mxTextRange->getStart(), mxTextRange->getEnd(), mxTextRange->getText() ) );
+    return uno::Reference< word::XRange >( new SwVbaRange( this, mxContext, dynamic_cast<SwXTextDocument*>(mxTextDocument.get()), mxTextRange->getStart(), mxTextRange->getEnd(), mxTextRange->getText() ) );
 }
 
 uno::Any SAL_CALL

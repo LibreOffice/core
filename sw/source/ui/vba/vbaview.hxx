@@ -23,13 +23,16 @@
 #include <com/sun/star/text/XTextViewCursor.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <rtl/ref.hxx>
+
+class SwXTextDocument;
 
 typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XView > SwVbaView_BASE;
 
 class SwVbaView : public SwVbaView_BASE
 {
 private:
-    css::uno::Reference< css::frame::XModel >         mxModel;
+    rtl::Reference< SwXTextDocument >         mxModel;
     css::uno::Reference< css::text::XTextViewCursor > mxViewCursor;
     css::uno::Reference< css::beans::XPropertySet >   mxViewSettings;
 
@@ -39,8 +42,9 @@ private:
 
 public:
     /// @throws css::uno::RuntimeException
-    SwVbaView( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext,
-        css::uno::Reference< css::frame::XModel > xModel );
+    SwVbaView( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent,
+               const css::uno::Reference< css::uno::XComponentContext >& rContext,
+               rtl::Reference< SwXTextDocument > xModel );
     virtual ~SwVbaView() override;
 
    // XView

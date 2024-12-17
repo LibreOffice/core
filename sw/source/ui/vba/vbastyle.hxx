@@ -26,19 +26,25 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <ooo/vba/word/XFont.hpp>
+#include <rtl/ref.hxx>
+
+class SwXTextDocument;
 
 typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XStyle > SwVbaStyle_BASE;
 
 class SwVbaStyle : public SwVbaStyle_BASE
 {
 private:
-    css::uno::Reference< css::frame::XModel > mxModel;
+    rtl::Reference< SwXTextDocument > mxModel;
     css::uno::Reference< css::beans::XPropertySet > mxStyleProps;
     css::uno::Reference< css::style::XStyle > mxStyle;
 public:
     /// @throws css::script::BasicErrorException
     /// @throws css::uno::RuntimeException
-    SwVbaStyle( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, css::uno::Reference< css::frame::XModel >  xModel, const css::uno::Reference< css::beans::XPropertySet >& _xPropertySet );
+    SwVbaStyle( const css::uno::Reference< ov::XHelperInterface >& xParent,
+                const css::uno::Reference< css::uno::XComponentContext > & xContext,
+                rtl::Reference< SwXTextDocument > xModel,
+                const css::uno::Reference< css::beans::XPropertySet >& _xPropertySet );
 
     /// @throws css::uno::RuntimeException
     static void setStyle( const css::uno::Reference< css::beans::XPropertySet >& xParaProps, const css::uno::Any& xStyle );

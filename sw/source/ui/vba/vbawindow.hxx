@@ -18,12 +18,16 @@
  */
 #ifndef INCLUDED_SW_SOURCE_UI_VBA_VBAWINDOW_HXX
 #define INCLUDED_SW_SOURCE_UI_VBA_VBAWINDOW_HXX
+
 #include <cppuhelper/implbase.hxx>
 #include <ooo/vba/word/XWindow.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <vbahelper/vbahelperinterface.hxx>
 #include <vbahelper/vbawindowbase.hxx>
+#include <rtl/ref.hxx>
+
+class SwXTextDocument;
 
 typedef cppu::ImplInheritanceHelper< VbaWindowBase, ov::word::XWindow > WindowImpl_BASE;
 
@@ -34,7 +38,7 @@ public:
     SwVbaWindow(
         const css::uno::Reference< ov::XHelperInterface >& xParent,
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
-        const css::uno::Reference< css::frame::XModel >& xModel,
+        const rtl::Reference< SwXTextDocument >& xModel,
         const css::uno::Reference< css::frame::XController >& xController );
 
     // Attributes
@@ -52,6 +56,8 @@ public:
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
+private:
+    rtl::Reference< SwXTextDocument > m_xModel;
 };
 
 #endif // INCLUDED_SW_SOURCE_UI_VBA_VBAWINDOW_HXX

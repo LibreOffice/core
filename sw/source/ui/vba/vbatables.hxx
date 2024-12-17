@@ -22,14 +22,19 @@
 
 #include <ooo/vba/word/XTables.hpp>
 #include <vbahelper/vbacollectionimpl.hxx>
+#include <rtl/ref.hxx>
+
+class SwXTextDocument;
 
 typedef CollTestImplHelper< ov::word::XTables > SwVbaTables_BASE;
 
 class SwVbaTables : public SwVbaTables_BASE
 {
-    css::uno::Reference< css::frame::XModel > mxDocument;
+    rtl::Reference< SwXTextDocument > mxDocument;
 public:
-    SwVbaTables( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::frame::XModel >& xDocument );
+    SwVbaTables( const css::uno::Reference< ov::XHelperInterface >& xParent,
+                 const css::uno::Reference< css::uno::XComponentContext > & xContext,
+                 const rtl::Reference< SwXTextDocument >& xDocument );
     // XTables
     virtual css::uno::Reference< ov::word::XTable > SAL_CALL Add( const css::uno::Reference< ::ooo::vba::word::XRange >& Range, const css::uno::Any& NumRows, const css::uno::Any& NumColumns, const css::uno::Any& DefaultTableBehavior, const css::uno::Any& AutoFitBehavior ) override;
     // XEnumerationAccess

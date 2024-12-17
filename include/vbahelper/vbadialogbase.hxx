@@ -46,13 +46,14 @@ typedef InheritedHelperInterfaceWeakImpl< ov::XDialogBase > VbaDialogBase_BASE;
 class VBAHELPER_DLLPUBLIC VbaDialogBase : public VbaDialogBase_BASE
 {
     sal_Int32 mnIndex;
-    css::uno::Reference< css::frame::XModel > m_xModel;
 public:
-    VbaDialogBase( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, css::uno::Reference< css::frame::XModel > xModel, sal_Int32 nIndex ):VbaDialogBase_BASE( xParent, xContext ), mnIndex( nIndex ), m_xModel(std::move( xModel )) {}
+    VbaDialogBase( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, sal_Int32 nIndex ):VbaDialogBase_BASE( xParent, xContext ), mnIndex( nIndex ) {}
 
     // Methods
     virtual void SAL_CALL Show() override;
     virtual OUString mapIndexToName( sal_Int32 nIndex ) = 0;
+
+    virtual css::uno::Reference< css::frame::XModel > getModel() const = 0;
 };
 
 #endif // INCLUDED_VBAHELPER_VBADIALOGBASE_HXX

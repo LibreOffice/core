@@ -22,17 +22,19 @@
 #include <vbahelper/vbacollectionimpl.hxx>
 #include <ooo/vba/word/XFrames.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
+#include <rtl/ref.hxx>
+
+class SwXTextDocument;
 
 typedef CollTestImplHelper< ooo::vba::word::XFrames > SwVbaFrames_BASE;
 
 class SwVbaFrames : public SwVbaFrames_BASE
 {
 private:
-    css::uno::Reference< css::frame::XModel > mxModel;
-    css::uno::Reference< css::text::XTextFramesSupplier > mxFramesSupplier;
+    rtl::Reference< SwXTextDocument > mxModel;
 
 public:
-    SwVbaFrames( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XIndexAccess >& xFrames, css::uno::Reference< css::frame::XModel >  xModel );
+    SwVbaFrames( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XIndexAccess >& xFrames, rtl::Reference< SwXTextDocument >  xModel );
 
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() override;

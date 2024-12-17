@@ -1176,6 +1176,11 @@ Reference< XNameAccess >  SwXTextDocument::getReferenceMarks()
 
 Reference< XEnumerationAccess >  SwXTextDocument::getTextFields()
 {
+    return getSwTextFields();
+}
+
+rtl::Reference< SwXTextFieldTypes >  SwXTextDocument::getSwTextFields()
+{
     SolarMutexGuard aGuard;
     ThrowIfInvalid();
     if(!mxXTextFieldTypes.is())
@@ -1262,6 +1267,11 @@ Reference< XNameAccess >  SwXTextDocument::getGraphicObjects()
 }
 
 Reference< XNameAccess >  SwXTextDocument::getTextFrames()
+{
+    return getSwTextFrames();
+}
+
+rtl::Reference< SwXTextFrames >  SwXTextDocument::getSwTextFrames()
 {
     SolarMutexGuard aGuard;
     ThrowIfInvalid();
@@ -2328,6 +2338,11 @@ Reference< XNameAccess >  SwXTextDocument::getLinks()
 }
 
 Reference< XEnumerationAccess > SwXTextDocument::getRedlines(  )
+{
+    return getSwRedlines();
+}
+
+rtl::Reference< SwXRedlines > SwXTextDocument::getSwRedlines(  )
 {
     if(!mxXRedlines.is())
     {

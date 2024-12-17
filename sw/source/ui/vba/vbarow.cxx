@@ -26,8 +26,11 @@
 #include <ooo/vba/word/WdRowHeightRule.hpp>
 #include <ooo/vba/word/WdConstants.hpp>
 #include "vbatablehelper.hxx"
+#include "wordvbahelper.hxx"
+#include <unotxdoc.hxx>
 
 using namespace ::ooo::vba;
+using namespace ::ooo::vba::word;
 using namespace ::com::sun::star;
 
 SwVbaRow::SwVbaRow( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext,uno::Reference< text::XTextTable >  xTextTable, sal_Int32 nIndex ) :
@@ -79,7 +82,7 @@ SwVbaRow::Select( )
     SelectRow( getCurrentWordDoc(mxContext), mxTextTable, mnIndex, mnIndex );
 }
 
-void SwVbaRow::SelectRow( const uno::Reference< frame::XModel >& xModel, const uno::Reference< text::XTextTable >& xTextTable, sal_Int32 nStartRow, sal_Int32 nEndRow )
+void SwVbaRow::SelectRow( const rtl::Reference< SwXTextDocument >& xModel, const uno::Reference< text::XTextTable >& xTextTable, sal_Int32 nStartRow, sal_Int32 nEndRow )
 {
     OUString sRangeName = "A" + OUString::number(nStartRow + 1);
     SwVbaTableHelper aTableHelper( xTextTable );

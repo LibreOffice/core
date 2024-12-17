@@ -22,17 +22,20 @@
 #include <vbahelper/vbacollectionimpl.hxx>
 #include <ooo/vba/word/XSections.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
+#include <rtl/ref.hxx>
+
+class SwXTextDocument;
 
 typedef CollTestImplHelper< ooo::vba::word::XSections > SwVbaSections_BASE;
 
 class SwVbaSections : public SwVbaSections_BASE
 {
 private:
-    css::uno::Reference< css::frame::XModel > mxModel;
+    rtl::Reference< SwXTextDocument > mxModel;
 
 public:
-    SwVbaSections( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::frame::XModel >& xModel );
-    SwVbaSections( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::text::XTextRange >& xTextRange );
+    SwVbaSections( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const rtl::Reference< SwXTextDocument >& xModel );
+    SwVbaSections( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const rtl::Reference< SwXTextDocument >& xModel, const css::uno::Reference< css::text::XTextRange >& xTextRange );
 
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() override;

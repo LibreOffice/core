@@ -75,15 +75,14 @@ namespace ooo::vba
         VBAHELPER_DLLPUBLIC SfxObjectShell* getSfxObjShell( const css::uno::Reference< css::frame::XModel >& xModel );
 
         /// @throws css::uno::RuntimeException
-        css::uno::Reference< css::frame::XModel > getCurrentDoc( const OUString& sKey );
+        VBAHELPER_DLLPUBLIC css::uno::Reference< css::frame::XModel > getCurrentDoc( const OUString& sKey );
         /// @throws css::uno::RuntimeException
         VBAHELPER_DLLPUBLIC css::uno::Reference< css::frame::XModel > getThisExcelDoc( const css::uno::Reference< css::uno::XComponentContext >& xContext );
         /// @throws css::uno::RuntimeException
-        VBAHELPER_DLLPUBLIC css::uno::Reference< css::frame::XModel > getThisWordDoc( const css::uno::Reference< css::uno::XComponentContext >& xContext );
-        /// @throws css::uno::RuntimeException
         VBAHELPER_DLLPUBLIC css::uno::Reference< css::frame::XModel > getCurrentExcelDoc( const css::uno::Reference< css::uno::XComponentContext >& xContext );
-        /// @throws css::uno::RuntimeException
-        VBAHELPER_DLLPUBLIC css::uno::Reference< css::frame::XModel > getCurrentWordDoc( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+
+        /// @throws uno::RuntimeException
+        VBAHELPER_DLLPUBLIC css::uno::Reference< css::frame::XModel > getCurrentDocCtx( const OUString& ctxName, const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
         /// @throws css::uno::RuntimeException
         VBAHELPER_DLLPUBLIC css::uno::Reference< css::beans::XIntrospectionAccess > getIntrospectionAccess( const css::uno::Any& aObject );

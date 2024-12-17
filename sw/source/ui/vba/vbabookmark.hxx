@@ -22,13 +22,16 @@
 #include <ooo/vba/word/XBookmark.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 #include <com/sun/star/text/XTextContent.hpp>
+#include <rtl/ref.hxx>
+
+class SwXTextDocument;
 
 typedef InheritedHelperInterfaceWeakImpl<ooo::vba::word::XBookmark> SwVbaBookmark_BASE;
 
 class SwVbaBookmark : public SwVbaBookmark_BASE
 {
 private:
-    css::uno::Reference<css::frame::XModel> mxModel;
+    rtl::Reference<SwXTextDocument> mxModel;
     css::uno::Reference<css::text::XTextContent> mxBookmark;
     OUString maBookmarkName;
     bool mbValid;
@@ -41,7 +44,7 @@ public:
     /// @throws css::uno::RuntimeException
     SwVbaBookmark(const css::uno::Reference<ooo::vba::XHelperInterface>& rParent,
                   const css::uno::Reference<css::uno::XComponentContext>& rContext,
-                  css::uno::Reference<css::frame::XModel> xModel, OUString aName);
+                  rtl::Reference<SwXTextDocument> xModel, OUString aName);
     virtual ~SwVbaBookmark() override;
 
     // Methods

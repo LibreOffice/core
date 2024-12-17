@@ -12,6 +12,9 @@
 #include <ooo/vba/word/XContentControls.hpp>
 
 #include <vbahelper/vbacollectionimpl.hxx>
+#include <rtl/ref.hxx>
+
+class SwXTextDocument;
 
 typedef CollTestImplHelper<ooo::vba::word::XContentControls> SwVbaContentControls_BASE;
 
@@ -21,8 +24,8 @@ public:
     /// @throws css::uno::RuntimeException
     SwVbaContentControls(const css::uno::Reference<ov::XHelperInterface>& xParent,
                          const css::uno::Reference<css::uno::XComponentContext>& xContext,
-                         const css::uno::Reference<css::text::XTextDocument>& xTextDocument,
-                         const OUString& rTag, const OUString& rTitle);
+                         const rtl::Reference<SwXTextDocument>& xTextDocument, const OUString& rTag,
+                         const OUString& rTitle);
 
     // XContentControls
     //css::uno::Reference<ooo::vba::word::XContentControl> SAL_CALL Add(const css::uno::Any& Type, const css::uno::Any& Range) override;

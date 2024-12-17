@@ -73,7 +73,7 @@ typedef ::cppu::WeakImplHelper
 ,   css::container::XUniqueIDAccess
 > SwXTextFieldTypes_Base;
 
-class SwXTextFieldTypes final
+class SW_DLLPUBLIC SwXTextFieldTypes final
     : public SwXTextFieldTypes_Base
     , public SwUnoCollection
 {

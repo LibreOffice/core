@@ -22,13 +22,16 @@
 #include <ooo/vba/XDocumentProperties.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <vbahelper/vbacollectionimpl.hxx>
+#include <rtl/ref.hxx>
+
+class SwXTextDocument;
 
 typedef CollTestImplHelper< ov::XDocumentProperties > SwVbaDocumentproperties_BASE;
 
 class SwVbaBuiltinDocumentProperties : public SwVbaDocumentproperties_BASE
 {
 public:
-    SwVbaBuiltinDocumentProperties( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::frame::XModel >& xDocument );
+    SwVbaBuiltinDocumentProperties( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const rtl::Reference< SwXTextDocument >& xDocument );
 
     // XDocumentProperties
     virtual css::uno::Reference< ::ooo::vba::XDocumentProperty > SAL_CALL Add( const OUString& Name, sal_Bool LinkToContent, ::sal_Int8 Type, const css::uno::Any& Value, const css::uno::Any& LinkSource ) override;
@@ -46,7 +49,7 @@ public:
 class SwVbaCustomDocumentProperties : public SwVbaBuiltinDocumentProperties
 {
 public:
-    SwVbaCustomDocumentProperties( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::frame::XModel >& xDocument );
+    SwVbaCustomDocumentProperties( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const rtl::Reference< SwXTextDocument >& xDocument );
 // XDocumentProperties
     virtual css::uno::Reference< ::ooo::vba::XDocumentProperty > SAL_CALL Add( const OUString& Name, sal_Bool LinkToContent, ::sal_Int8 Type, const css::uno::Any& Value, const css::uno::Any& LinkSource ) override;
     // XHelperInterface

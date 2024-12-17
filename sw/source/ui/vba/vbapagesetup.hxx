@@ -25,12 +25,17 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 #include <vbahelper/vbapagesetupbase.hxx>
+#include <rtl/ref.hxx>
+
+class SwXTextDocument;
 
 typedef cppu::ImplInheritanceHelper< VbaPageSetupBase, ooo::vba::word::XPageSetup > SwVbaPageSetup_BASE;
 
 class SwVbaPageSetup :  public SwVbaPageSetup_BASE
 {
 private:
+    rtl::Reference< SwXTextDocument > mxModel;
+
     /// @throws css::uno::RuntimeException
     OUString getStyleOfFirstPage() const;
 
@@ -38,7 +43,7 @@ public:
     /// @throws css::uno::RuntimeException
     SwVbaPageSetup( const css::uno::Reference< ooo::vba::XHelperInterface >& xParent,
                     const css::uno::Reference< css::uno::XComponentContext >& xContext,
-                    const css::uno::Reference< css::frame::XModel >& xModel,
+                    const rtl::Reference< SwXTextDocument >& xModel,
                     const css::uno::Reference< css::beans::XPropertySet >& xProps );
 
     // Attributes

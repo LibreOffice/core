@@ -12,22 +12,25 @@
 #include <ooo/vba/word/XFormField.hpp>
 
 #include <vbahelper/vbahelperinterface.hxx>
+#include <rtl/ref.hxx>
 
 #include <IDocumentMarkAccess.hxx>
+
+class SwXTextDocument;
 
 typedef InheritedHelperInterfaceWeakImpl<ooo::vba::word::XFormField> SwVbaFormField_BASE;
 
 class SwVbaFormField : public SwVbaFormField_BASE
 {
 private:
-    css::uno::Reference<css::text::XTextDocument> m_xTextDocument;
+    rtl::Reference<SwXTextDocument> m_xTextDocument;
     sw::mark::Fieldmark& m_rFormField;
 
 public:
     /// @throws css::uno::RuntimeException
     SwVbaFormField(const css::uno::Reference<ooo::vba::XHelperInterface>& rParent,
                    const css::uno::Reference<css::uno::XComponentContext>& rContext,
-                   const uno::Reference<text::XTextDocument>& xTextDocument,
+                   const rtl::Reference<SwXTextDocument>& xTextDocument,
                    sw::mark::Fieldmark& rFormField);
     ~SwVbaFormField() override;
 

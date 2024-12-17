@@ -27,13 +27,16 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <ooo/vba/word/XListFormat.hpp>
+#include <rtl/ref.hxx>
+
+class SwXTextDocument;
 
 typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XRange > SwVbaRange_BASE;
 
 class SwVbaRange : public SwVbaRange_BASE
 {
 private:
-    css::uno::Reference< css::text::XTextDocument > mxTextDocument;
+    rtl::Reference< SwXTextDocument > mxTextDocument;
     css::uno::Reference< css::text::XTextCursor >   mxTextCursor;
     css::uno::Reference< css::text::XText >         mxText;
 
@@ -46,15 +49,27 @@ private:
 public:
     /// @throws css::script::BasicErrorException
     /// @throws css::uno::RuntimeException
-    SwVbaRange( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, css::uno::Reference< css::text::XTextDocument > xTextDocument, const css::uno::Reference< css::text::XTextRange >& rStart);
+    SwVbaRange( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent,
+                const css::uno::Reference< css::uno::XComponentContext >& rContext,
+                rtl::Reference< SwXTextDocument > xTextDocument,
+                const css::uno::Reference< css::text::XTextRange >& rStart);
     /// @throws css::script::BasicErrorException
     /// @throws css::uno::RuntimeException
-    SwVbaRange( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, css::uno::Reference< css::text::XTextDocument > xTextDocument, const css::uno::Reference< css::text::XTextRange >& rStart, const css::uno::Reference< css::text::XTextRange >& rEnd );
+    SwVbaRange( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent,
+                const css::uno::Reference< css::uno::XComponentContext >& rContext,
+                rtl::Reference< SwXTextDocument > xTextDocument,
+                const css::uno::Reference< css::text::XTextRange >& rStart,
+                const css::uno::Reference< css::text::XTextRange >& rEnd );
     /// @throws css::script::BasicErrorException
     /// @throws css::uno::RuntimeException
-    SwVbaRange( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, css::uno::Reference< css::text::XTextDocument > xTextDocument, const css::uno::Reference< css::text::XTextRange >& rStart, const css::uno::Reference< css::text::XTextRange >& rEnd, css::uno::Reference< css::text::XText > xText);
+    SwVbaRange( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent,
+                const css::uno::Reference< css::uno::XComponentContext >& rContext,
+                rtl::Reference< SwXTextDocument > xTextDocument,
+                const css::uno::Reference< css::text::XTextRange >& rStart,
+                const css::uno::Reference< css::text::XTextRange >& rEnd,
+                css::uno::Reference< css::text::XText > xText);
     virtual ~SwVbaRange() override;
-    const css::uno::Reference< css::text::XTextDocument >& getDocument() const { return mxTextDocument; }
+    const rtl::Reference< SwXTextDocument >& getDocument() const { return mxTextDocument; }
 
     virtual css::uno::Reference< css::text::XTextRange > SAL_CALL getXTextRange() override;
     const css::uno::Reference< css::text::XText >& getXText() const { return mxText; }

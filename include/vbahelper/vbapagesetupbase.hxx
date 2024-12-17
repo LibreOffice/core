@@ -44,7 +44,6 @@ typedef InheritedHelperInterfaceWeakImpl< ooo::vba::XPageSetupBase > VbaPageSetu
 class VBAHELPER_DLLPUBLIC VbaPageSetupBase :  public VbaPageSetupBase_BASE
 {
 protected:
-    css::uno::Reference< css::frame::XModel > mxModel;
     css::uno::Reference< css::beans::XPropertySet > mxPageProps;
     sal_Int32 mnOrientLandscape;
     sal_Int32 mnOrientPortrait;

@@ -22,6 +22,9 @@
 #include <ooo/vba/word/XColumn.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 #include <com/sun/star/text/XTextTable.hpp>
+#include <rtl/ref.hxx>
+
+class SwXTextDocument;
 
 typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XColumn > SwVbaColumn_BASE;
 
@@ -42,7 +45,7 @@ public:
     virtual void SAL_CALL Select(  ) override;
 
     /// @throws css::uno::RuntimeException
-    static void SelectColumn( const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::text::XTextTable >& xTextTable, sal_Int32 nStartColumn, sal_Int32 nEndColumn );
+    static void SelectColumn( const rtl::Reference< SwXTextDocument >& xModel, const css::uno::Reference< css::text::XTextTable >& xTextTable, sal_Int32 nStartColumn, sal_Int32 nEndColumn );
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

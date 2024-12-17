@@ -27,6 +27,8 @@
 #include <com/sun/star/style/XStyle.hpp>
 #include <ooo/vba/word/WdBuiltinStyle.hpp>
 #include <ooo/vba/word/WdStyleType.hpp>
+#include <unotxdoc.hxx>
+#include <unostyle.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -173,15 +175,14 @@ class StyleCollectionHelper : public ::cppu::WeakImplHelper< container::XNameAcc
                                                              container::XEnumerationAccess >
 {
 private:
-    uno::Reference< container::XNameAccess > mxParaStyles;
+    rtl::Reference< SwXStyleFamily > mxParaStyles;
     uno::Any m_cachePos;
 public:
-    explicit StyleCollectionHelper( const uno::Reference< frame::XModel >& _xModel )
+    explicit StyleCollectionHelper( const rtl::Reference< SwXTextDocument >& _xModel )
     {
         // we only concern about the Paragraph styles
-        uno::Reference< style::XStyleFamiliesSupplier > xStyleSupplier( _xModel, uno::UNO_QUERY_THROW);
-        uno::Reference< container::XNameAccess > xStyleFamilies = xStyleSupplier->getStyleFamilies();
-        mxParaStyles.set( xStyleFamilies->getByName(u"ParagraphStyles"_ustr), uno::UNO_QUERY_THROW  );
+        rtl::Reference< SwXStyleFamilies > xStyleFamilies = _xModel->getSwStyleFamilies();
+        mxParaStyles = xStyleFamilies->GetParagraphStyles();
     }
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) override { return  cppu::UnoType<style::XStyle>::get(); }
@@ -237,16 +238,14 @@ public:
     // XIndexAccess
     virtual ::sal_Int32 SAL_CALL getCount(  ) override
     {
-        uno::Reference< container::XIndexAccess > xIndexAccess( mxParaStyles, uno::UNO_QUERY_THROW );
-        return xIndexAccess->getCount();
+        return mxParaStyles->getCount();
     }
     virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
     {
         if ( Index < 0 || Index >= getCount() )
             throw lang::IndexOutOfBoundsException();
 
-        uno::Reference< container::XIndexAccess > xIndexAccess( mxParaStyles, uno::UNO_QUERY_THROW );
-        return xIndexAccess->getByIndex( Index );
+        return mxParaStyles->getByIndex( Index );
     }
     // XEnumerationAccess
     virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration(  ) override
@@ -276,10 +275,12 @@ public:
 
 }
 
-SwVbaStyles::SwVbaStyles( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< css::uno::XComponentContext > & xContext, const uno::Reference< frame::XModel >& xModel )
-    : SwVbaStyles_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( new StyleCollectionHelper( xModel )  ) ), mxModel( xModel )
+SwVbaStyles::SwVbaStyles( const uno::Reference< XHelperInterface >& xParent,
+                          const uno::Reference< css::uno::XComponentContext > & xContext,
+                          const rtl::Reference< SwXTextDocument >& xModel )
+    : SwVbaStyles_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( new StyleCollectionHelper( xModel ) ) ),
+      mxModel( xModel )
 {
-    mxMSF.set( mxModel, uno::UNO_QUERY_THROW );
 }
 
 uno::Any
@@ -338,9 +339,8 @@ SwVbaStyles::Item( const uno::Any& Index1, const uno::Any& Index2 )
                         default:
                             DebugHelper::basicexception( ERRCODE_BASIC_INTERNAL_ERROR, {} );
                     }
-                    uno::Reference< style::XStyleFamiliesSupplier > xStyleSupplier( mxModel, uno::UNO_QUERY_THROW);
-                    uno::Reference< container::XNameAccess > xStylesAccess( xStyleSupplier->getStyleFamilies()->getByName( aStyleType ), uno::UNO_QUERY_THROW );
-                    uno::Reference< beans::XPropertySet > xStyleProps( xStylesAccess->getByName( aStyleName ), uno::UNO_QUERY_THROW );
+                    rtl::Reference< SwXStyleFamily > xStylesAccess( mxModel->getSwStyleFamilies()->GetStylesByName( aStyleType ) );
+                    rtl::Reference< SwXBaseStyle > xStyleProps( xStylesAccess->getStyleByName( aStyleName ) );
                     // set the property "NumberingStyleName" if it is a listbullet
                     if( pTable->wdStyleType == word::WdStyleType::wdStyleTypeList )
                     {

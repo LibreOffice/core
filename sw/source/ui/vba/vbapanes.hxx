@@ -20,13 +20,18 @@
 
 #include <vbahelper/vbacollectionimpl.hxx>
 #include <ooo/vba/word/XPanes.hpp>
+#include <rtl/ref.hxx>
+
+class SwXTextDocument;
 
 typedef CollTestImplHelper< ooo::vba::word::XPanes > SwVbaPanes_BASE;
 
 class SwVbaPanes : public SwVbaPanes_BASE
 {
 public:
-    SwVbaPanes( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::frame::XModel >& xModel );
+    SwVbaPanes( const css::uno::Reference< ov::XHelperInterface >& xParent,
+                const css::uno::Reference< css::uno::XComponentContext > & xContext,
+                const rtl::Reference< SwXTextDocument >& xModel );
 
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() override;

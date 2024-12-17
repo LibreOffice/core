@@ -25,15 +25,18 @@
 #include <vbahelper/vbadocumentbase.hxx>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <rtl/ref.hxx>
 
 #include <vector>
+
+class SwXTextDocument;
 
 typedef cppu::ImplInheritanceHelper< VbaDocumentBase, ooo::vba::word::XDocument, ooo::vba::XSinkCaller > SwVbaDocument_BASE;
 
 class SwVbaDocument : public SwVbaDocument_BASE
 {
 private:
-    css::uno::Reference< css::text::XTextDocument > mxTextDocument;
+    rtl::Reference< SwXTextDocument > mxTextDocument;
 
     std::vector<css::uno::Reference< ooo::vba::XSink >> mvSinks;
 
@@ -41,8 +44,11 @@ private:
     css::uno::Any getControlShape( std::u16string_view sName );
     css::uno::Reference< css::container::XNameAccess > getFormControls() const;
 
+protected:
+    virtual css::uno::Reference< css::frame::XModel > getModel() const override;
+
 public:
-    SwVbaDocument( const css::uno::Reference< ooo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& m_xContext, css::uno::Reference< css::frame::XModel > const & xModel );
+    SwVbaDocument( const css::uno::Reference< ooo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& m_xContext, rtl::Reference< SwXTextDocument > const & xModel );
     SwVbaDocument(  css::uno::Sequence< css::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext );
     virtual ~SwVbaDocument() override;
 

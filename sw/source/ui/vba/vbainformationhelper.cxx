@@ -26,6 +26,8 @@
 #include <vbahelper/vbahelper.hxx>
 #include <viewsh.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <unotxdoc.hxx>
+#include <unobasestyle.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -38,21 +40,21 @@ sal_Int32 SwVbaInformationHelper::handleWdActiveEndPageNumber( const css::uno::R
     return xPageCursor->getPage();
 }
 
-sal_Int32 SwVbaInformationHelper::handleWdNumberOfPagesInDocument( const css::uno::Reference< css::frame::XModel >& xModel )
+sal_Int32 SwVbaInformationHelper::handleWdNumberOfPagesInDocument( const rtl::Reference< SwXTextDocument >& xModel )
 {
     return word::getPageCount( xModel );
 }
 
-double SwVbaInformationHelper::handleWdVerticalPositionRelativeToPage( const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::text::XTextViewCursor >& xTVCursor )
+double SwVbaInformationHelper::handleWdVerticalPositionRelativeToPage( const rtl::Reference< SwXTextDocument >& xModel, const css::uno::Reference< css::text::XTextViewCursor >& xTVCursor )
 {
     xTVCursor->collapseToStart();
-    uno::Reference< beans::XPropertySet > xStyleProps( word::getCurrentPageStyle( xModel ), uno::UNO_QUERY_THROW );
+    rtl::Reference< SwXBaseStyle > xStyleProps( word::getCurrentPageStyle( xModel ) );
     sal_Int32 nTopMargin = 0;
     xStyleProps->getPropertyValue( u"TopMargin"_ustr ) >>= nTopMargin;
     sal_Int32 nCurrentPos = xTVCursor->getPosition().Y;
 
     sal_Int32 nCurrentPage = handleWdActiveEndPageNumber( xTVCursor );
-    SwDoc* pDoc = word::getDocShell( xModel )->GetDoc();
+    SwDoc* pDoc = xModel->GetDocShell()->GetDoc();
     SwViewShell* pViewSh = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
     sal_Int32 nPageHeight = pViewSh ? pViewSh->GetPageSize( nCurrentPage, false ).Height() : 0;
     // FIXME: handle multiple page style

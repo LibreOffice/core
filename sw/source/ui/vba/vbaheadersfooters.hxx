@@ -21,18 +21,25 @@
 
 #include <vbahelper/vbacollectionimpl.hxx>
 #include <ooo/vba/word/XHeadersFooters.hpp>
+#include <rtl/ref.hxx>
+
+class SwXTextDocument;
 
 typedef CollTestImplHelper< ooo::vba::word::XHeadersFooters > SwVbaHeadersFooters_BASE;
 
 class SwVbaHeadersFooters : public SwVbaHeadersFooters_BASE
 {
 private:
-    css::uno::Reference< css::frame::XModel > mxModel;
+    rtl::Reference< SwXTextDocument > mxModel;
     css::uno::Reference< css::beans::XPropertySet > mxPageStyleProps;
     bool mbHeader;
 
 public:
-    SwVbaHeadersFooters( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::beans::XPropertySet >& xProps, bool isHeader );
+    SwVbaHeadersFooters( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent,
+                         const css::uno::Reference< css::uno::XComponentContext >& rContext,
+                         const rtl::Reference< SwXTextDocument >& xModel,
+                         const css::uno::Reference< css::beans::XPropertySet >& xProps,
+                         bool isHeader );
 
     virtual ::sal_Int32 SAL_CALL getCount() override;
     virtual css::uno::Any SAL_CALL Item( const css::uno::Any& Index1, const css::uno::Any& ) override;

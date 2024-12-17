@@ -26,12 +26,14 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <vbahelper/vbahelper.hxx>
 #include <unotxdoc.hxx>
 #include <doc.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <view.hxx>
 #include <viewsh.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <unostyle.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
@@ -39,20 +41,13 @@ using namespace ::ooo::vba;
 namespace ooo::vba::word
 {
 
-SwDocShell* getDocShell( const uno::Reference< frame::XModel>& xModel )
+SwView* getView( const rtl::Reference< SwXTextDocument>& xModel )
 {
-    uno::Reference< lang::XUnoTunnel > xTunnel( xModel, uno::UNO_QUERY_THROW );
-    SwXTextDocument* pXDoc = comphelper::getFromUnoTunnel<SwXTextDocument>(xTunnel);
-    return pXDoc ? pXDoc->GetDocShell() : nullptr;
-}
-
-SwView* getView( const uno::Reference< frame::XModel>& xModel )
-{
-    SwDocShell* pDocShell = getDocShell( xModel );
+    SwDocShell* pDocShell = xModel->GetDocShell( );
     return pDocShell? pDocShell->GetView() : nullptr;
 }
 
-uno::Reference< text::XTextViewCursor > getXTextViewCursor( const uno::Reference< frame::XModel >& xModel )
+uno::Reference< text::XTextViewCursor > getXTextViewCursor( const rtl::Reference< SwXTextDocument >& xModel )
 {
     uno::Reference< frame::XController > xController = xModel->getCurrentController();
     uno::Reference< text::XTextViewCursorSupplier > xTextViewCursorSupp( xController, uno::UNO_QUERY_THROW );
@@ -60,37 +55,33 @@ uno::Reference< text::XTextViewCursor > getXTextViewCursor( const uno::Reference
     return xTextViewCursor;
 }
 
-uno::Reference< style::XStyle > getCurrentPageStyle( const uno::Reference< frame::XModel >& xModel )
+rtl::Reference< SwXBaseStyle > getCurrentPageStyle( const rtl::Reference< SwXTextDocument >& xModel )
 {
     uno::Reference< beans::XPropertySet > xCursorProps( getXTextViewCursor( xModel ), uno::UNO_QUERY_THROW );
     return getCurrentPageStyle( xModel, xCursorProps );
 }
 
-uno::Reference< style::XStyle > getCurrentPageStyle( const uno::Reference< frame::XModel >& xModel, const uno::Reference< beans::XPropertySet >& xProps )
+rtl::Reference< SwXBaseStyle > getCurrentPageStyle( const rtl::Reference< SwXTextDocument >& xModel, const uno::Reference< beans::XPropertySet >& xProps )
 {
     OUString aPageStyleName;
     xProps->getPropertyValue(u"PageStyleName"_ustr) >>= aPageStyleName;
-    uno::Reference< style::XStyleFamiliesSupplier > xSytleFamSupp( xModel, uno::UNO_QUERY_THROW );
-    uno::Reference< container::XNameAccess > xSytleFamNames( xSytleFamSupp->getStyleFamilies(), uno::UNO_SET_THROW );
-    uno::Reference< container::XNameAccess > xPageStyles( xSytleFamNames->getByName(u"PageStyles"_ustr), uno::UNO_QUERY_THROW );
-    uno::Reference< style::XStyle > xStyle( xPageStyles->getByName( aPageStyleName ), uno::UNO_QUERY_THROW );
-
-    return xStyle;
+    rtl::Reference< SwXStyleFamilies > xStyleFamNames( xModel->getSwStyleFamilies() );
+    rtl::Reference< SwXStyleFamily > xPageStyles( xStyleFamNames->GetPageStyles() );
+    return xPageStyles->getStyleByName( aPageStyleName );
 }
 
-sal_Int32 getPageCount( const uno::Reference< frame::XModel>& xModel )
+sal_Int32 getPageCount( const rtl::Reference<SwXTextDocument>& xModel )
 {
-    SwDocShell* pDocShell = getDocShell( xModel );
+    SwDocShell* pDocShell = xModel->GetDocShell();
     SwViewShell* pViewSh = pDocShell ? pDocShell->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() : nullptr;
     return pViewSh ? pViewSh->GetPageCount() : 0;
 }
 
-uno::Reference< style::XStyle > getDefaultParagraphStyle( const uno::Reference< frame::XModel >& xModel )
+rtl::Reference< SwXBaseStyle > getDefaultParagraphStyle( const rtl::Reference< SwXTextDocument >& xModel )
 {
-    uno::Reference< style::XStyleFamiliesSupplier > xSytleFamSupp( xModel, uno::UNO_QUERY_THROW );
-    uno::Reference< container::XNameAccess > xSytleFamNames( xSytleFamSupp->getStyleFamilies(), uno::UNO_SET_THROW );
-    uno::Reference< container::XNameAccess > xParaStyles( xSytleFamNames->getByName(u"ParagraphStyles"_ustr), uno::UNO_QUERY_THROW );
-    uno::Reference< style::XStyle > xStyle( xParaStyles->getByName(u"Standard"_ustr), uno::UNO_QUERY_THROW );
+    rtl::Reference< SwXStyleFamilies > xStyleFamNames( xModel->getSwStyleFamilies() );
+    rtl::Reference< SwXStyleFamily > xParaStyles( xStyleFamNames->GetParagraphStyles() );
+    rtl::Reference< SwXBaseStyle > xStyle( xParaStyles->getStyleByName(u"Standard"_ustr) );
 
     return xStyle;
 }
@@ -116,7 +107,7 @@ uno::Reference< text::XTextRange > getFirstObjectPosition( const uno::Reference<
     return xTextRange;
 }
 
-uno::Reference< text::XText > getCurrentXText( const uno::Reference< frame::XModel >& xModel )
+uno::Reference< text::XText > getCurrentXText( const rtl::Reference< SwXTextDocument >& xModel )
 {
     uno::Reference< text::XTextRange > xTextRange;
     uno::Reference< text::XTextContent > xTextContent( xModel->getCurrentSelection(), uno::UNO_QUERY );
@@ -157,7 +148,7 @@ uno::Reference< text::XText > getCurrentXText( const uno::Reference< frame::XMod
     return xText;
 }
 
-bool gotoSelectedObjectAnchor( const uno::Reference< frame::XModel>& xModel )
+bool gotoSelectedObjectAnchor( const rtl::Reference<SwXTextDocument>& xModel )
 {
     bool isObjectSelected = false;
     uno::Reference< text::XTextContent > xTextContent( xModel->getCurrentSelection(), uno::UNO_QUERY );
@@ -169,6 +160,30 @@ bool gotoSelectedObjectAnchor( const uno::Reference< frame::XModel>& xModel )
         isObjectSelected = true;
     }
     return isObjectSelected;
+}
+
+rtl::Reference< SwXTextDocument > getCurrentWordDoc( const uno::Reference< uno::XComponentContext >& xContext )
+{
+    try
+    {
+        return dynamic_cast<SwXTextDocument*>(getCurrentDoc( u"ThisWordDoc"_ustr ).get());
+    }
+    catch (const uno::Exception&)
+    {
+        try
+        {
+            return getThisWordDoc( xContext );
+        }
+        catch (const uno::Exception&)
+        {
+        }
+    }
+    return {};
+}
+
+rtl::Reference< SwXTextDocument > getThisWordDoc( const uno::Reference< uno::XComponentContext >& xContext )
+{
+    return dynamic_cast<SwXTextDocument*>(::ooo::vba::getCurrentDocCtx( u"WordDocumentContext"_ustr , xContext ).get());
 }
 
 }

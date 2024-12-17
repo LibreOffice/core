@@ -20,6 +20,7 @@
 #include "vbaheaderfooter.hxx"
 #include <cppuhelper/implbase.hxx>
 #include <utility>
+#include <unotxdoc.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -32,12 +33,21 @@ class HeadersFootersIndexAccess : public ::cppu::WeakImplHelper<container::XInde
 private:
     uno::Reference< XHelperInterface > mxParent;
     uno::Reference< uno::XComponentContext > mxContext;
-    uno::Reference< frame::XModel > mxModel;
+    rtl::Reference< SwXTextDocument > mxModel;
     uno::Reference< beans::XPropertySet > mxPageStyleProps;
     bool mbHeader;
 
 public:
-    HeadersFootersIndexAccess( uno::Reference< XHelperInterface > xParent, uno::Reference< uno::XComponentContext >  xContext, uno::Reference< frame::XModel >  xModel, uno::Reference< beans::XPropertySet >  xPageStyleProps, bool bHeader ) : mxParent(std::move( xParent )), mxContext(std::move( xContext )), mxModel(std::move( xModel )), mxPageStyleProps(std::move( xPageStyleProps )), mbHeader( bHeader ) {}
+    HeadersFootersIndexAccess( uno::Reference< XHelperInterface > xParent,
+                               uno::Reference< uno::XComponentContext > xContext,
+                               rtl::Reference< SwXTextDocument > xModel,
+                               uno::Reference< beans::XPropertySet > xPageStyleProps,
+                               bool bHeader )
+    : mxParent(std::move( xParent )),
+      mxContext(std::move( xContext )),
+      mxModel(std::move( xModel )),
+      mxPageStyleProps(std::move( xPageStyleProps )),
+      mbHeader( bHeader ) {}
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(  ) override
@@ -82,7 +92,13 @@ public:
 
 }
 
-SwVbaHeadersFooters::SwVbaHeadersFooters( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< frame::XModel >& xModel, const uno::Reference< beans::XPropertySet >& xPageStyleProps, bool isHeader ): SwVbaHeadersFooters_BASE( xParent, xContext, new HeadersFootersIndexAccess( xParent, xContext, xModel, xPageStyleProps, isHeader ) ),  mxModel( xModel ), mxPageStyleProps( xPageStyleProps ), mbHeader( isHeader )
+SwVbaHeadersFooters::SwVbaHeadersFooters( const uno::Reference< XHelperInterface >& xParent,
+                                          const uno::Reference< uno::XComponentContext > & xContext,
+                                          const rtl::Reference< SwXTextDocument >& xModel,
+                                          const uno::Reference< beans::XPropertySet >& xPageStyleProps,
+                                          bool isHeader )
+  : SwVbaHeadersFooters_BASE( xParent, xContext, new HeadersFootersIndexAccess( xParent, xContext, xModel, xPageStyleProps, isHeader ) ),
+    mxModel( xModel ), mxPageStyleProps( xPageStyleProps ), mbHeader( isHeader )
 {
 }
 

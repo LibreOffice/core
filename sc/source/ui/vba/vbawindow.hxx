@@ -32,6 +32,7 @@ typedef cppu::ImplInheritanceHelper< VbaWindowBase, ov::excel::XWindow > WindowI
 class ScVbaWindow : public WindowImpl_BASE
 {
 private:
+    css::uno::Reference<css::frame::XModel> m_xModel;
     css::uno::Reference< ov::excel::XPane > m_xPane;
 
     void init();

@@ -20,6 +20,7 @@
 #include "vbacontentcontrol.hxx"
 #include "vbacontentcontrollistentries.hxx"
 #include "vbarange.hxx"
+#include <unotxdoc.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -33,7 +34,7 @@ using namespace ::com::sun::star;
  */
 SwVbaContentControl::SwVbaContentControl(const uno::Reference<XHelperInterface>& rParent,
                                          const uno::Reference<uno::XComponentContext>& rContext,
-                                         const uno::Reference<text::XTextDocument>& xTextDocument,
+                                         const rtl::Reference<SwXTextDocument>& xTextDocument,
                                          std::shared_ptr<SwContentControl> pContentControl)
     : SwVbaContentControl_BASE(rParent, rContext)
     , mxTextDocument(xTextDocument)

@@ -49,11 +49,13 @@
 #include <editeng/acorrcfg.hxx>
 #include <swdll.hxx>
 #include <swmodule.hxx>
+#include <unotxdoc.hxx>
 #include "vbalistgalleries.hxx"
 #include <tools/urlobj.hxx>
 
 using namespace ::ooo;
 using namespace ::ooo::vba;
+using namespace ::ooo::vba::word;
 using namespace ::com::sun::star;
 
 namespace {
@@ -113,14 +115,14 @@ SwVbaApplication::getName()
 uno::Reference< word::XDocument > SAL_CALL
 SwVbaApplication::getActiveDocument()
 {
-    return new SwVbaDocument( this, mxContext, getCurrentDocument() );
+    return new SwVbaDocument( this, mxContext, getCurrentSwDocument() );
 }
 
 rtl::Reference<SwVbaWindow>
 SwVbaApplication::getActiveSwVbaWindow()
 {
     // #FIXME so far can't determine Parent
-    uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_SET_THROW );
+    rtl::Reference< SwXTextDocument > xModel( getCurrentSwDocument() );
     uno::Reference< frame::XController > xController( xModel->getCurrentController(), uno::UNO_SET_THROW );
     return new SwVbaWindow( uno::Reference< XHelperInterface >(), mxContext, xModel, xController );
 }
@@ -165,7 +167,7 @@ SwVbaApplication::CommandBars( const uno::Any& aIndex )
 uno::Reference< word::XSelection > SAL_CALL
 SwVbaApplication::getSelection()
 {
-    return new SwVbaSelection( this, mxContext, getCurrentDocument() );
+    return new SwVbaSelection( this, mxContext, getCurrentSwDocument() );
 }
 
 uno::Reference< word::XWordBasic > SAL_CALL
@@ -196,7 +198,7 @@ SwVbaApplication::Addins( const uno::Any& index )
 uno::Any SAL_CALL
 SwVbaApplication::Dialogs( const uno::Any& index )
 {
-    uno::Reference< word::XDialogs > xCol( new SwVbaDialogs( this, mxContext, getCurrentDocument() ));
+    uno::Reference< word::XDialogs > xCol( new SwVbaDialogs( this, mxContext, getCurrentSwDocument() ));
     if ( index.hasValue() )
         return xCol->Item( index );
     return uno::Any( xCol );
@@ -205,7 +207,7 @@ SwVbaApplication::Dialogs( const uno::Any& index )
 uno::Any SAL_CALL
 SwVbaApplication::ListGalleries( const uno::Any& index )
 {
-    uno::Reference< text::XTextDocument > xTextDoc( getCurrentDocument(), uno::UNO_QUERY_THROW );
+    rtl::Reference< SwXTextDocument > xTextDoc( getCurrentSwDocument() );
     uno::Reference< XCollection > xCol( new SwVbaListGalleries( this, mxContext, xTextDoc ) );
     if ( index.hasValue() )
         return xCol->Item( index, uno::Any() );
@@ -330,7 +332,7 @@ void SAL_CALL SwVbaApplication::setCustomizationContext(const uno::Any& /*_custo
 void SAL_CALL SwVbaApplication::setStatusBar( const OUString& _statusbar )
 {
     // ScVbaAppSettings::setStatusBar() also uses the XStatusIndicator to show this, so maybe that is OK?
-    uno::Reference< frame::XModel > xModel = getCurrentDocument();
+    rtl::Reference< SwXTextDocument > xModel = getCurrentSwDocument();
     if (xModel.is())
     {
         uno::Reference< task::XStatusIndicatorSupplier > xStatusIndicatorSupplier( xModel->getCurrentController(), uno::UNO_QUERY );
@@ -365,7 +367,7 @@ float SAL_CALL SwVbaApplication::PointsToCentimeters( float Points )
 float SAL_CALL SwVbaApplication::PixelsToPoints( float Pixels, ::sal_Bool fVertical )
 {
     //Set up xDevice
-    uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_SET_THROW );
+    rtl::Reference< SwXTextDocument > xModel( getCurrentSwDocument() );
     uno::Reference< frame::XController > xController( xModel->getCurrentController(), uno::UNO_SET_THROW );
     uno::Reference< frame::XFrame > xFrame( xController->getFrame(), uno::UNO_SET_THROW );
     uno::Reference< awt::XWindow > xWindow( xFrame->getContainerWindow(), uno::UNO_SET_THROW );
@@ -376,7 +378,7 @@ float SAL_CALL SwVbaApplication::PixelsToPoints( float Pixels, ::sal_Bool fVerti
 
 float SAL_CALL SwVbaApplication::PointsToPixels( float Pixels, ::sal_Bool fVertical )
 {
-    uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_SET_THROW );
+    rtl::Reference< SwXTextDocument > xModel( getCurrentSwDocument() );
     uno::Reference< frame::XController > xController( xModel->getCurrentController(), uno::UNO_SET_THROW );
     uno::Reference< frame::XFrame > xFrame( xController->getFrame(), uno::UNO_SET_THROW );
     uno::Reference< awt::XWindow > xWindow( xFrame->getContainerWindow(), uno::UNO_SET_THROW );
@@ -490,6 +492,12 @@ SwVbaApplication::getServiceNames()
 
 uno::Reference< frame::XModel >
 SwVbaApplication::getCurrentDocument()
+{
+    return static_cast<SfxBaseModel*>(getCurrentWordDoc( mxContext ).get());
+}
+
+rtl::Reference< SwXTextDocument >
+SwVbaApplication::getCurrentSwDocument()
 {
     return getCurrentWordDoc( mxContext );
 }

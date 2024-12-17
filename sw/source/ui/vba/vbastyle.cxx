@@ -27,11 +27,18 @@
 #include "vbapalette.hxx"
 #include "vbaparagraphformat.hxx"
 #include "vbastyles.hxx"
+#include <unotxdoc.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaStyle::SwVbaStyle( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, uno::Reference< frame::XModel>  xModel, const uno::Reference< beans::XPropertySet >& _xPropertySet ) : SwVbaStyle_BASE( xParent, xContext ) , mxModel(std::move( xModel )), mxStyleProps( _xPropertySet )
+SwVbaStyle::SwVbaStyle( const uno::Reference< XHelperInterface >& xParent,
+                        const uno::Reference< uno::XComponentContext > & xContext,
+                        rtl::Reference< SwXTextDocument>  xModel,
+                        const uno::Reference< beans::XPropertySet >& _xPropertySet )
+: SwVbaStyle_BASE( xParent, xContext ),
+  mxModel(std::move( xModel )),
+  mxStyleProps( _xPropertySet )
 {
     mxStyle.set( _xPropertySet, uno::UNO_QUERY_THROW );
 }
@@ -132,7 +139,6 @@ uno::Reference< word::XParagraphFormat > SAL_CALL SwVbaStyle::getParagraphFormat
         throw uno::RuntimeException();
     }
 
-    uno::Reference< text::XTextDocument > xTextDocument( mxModel, uno::UNO_QUERY_THROW );
     return uno::Reference< word::XParagraphFormat >( new SwVbaParagraphFormat( this, mxContext, mxStyleProps ) );
 }
 

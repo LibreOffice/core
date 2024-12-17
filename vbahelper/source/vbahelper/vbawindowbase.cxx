@@ -30,18 +30,15 @@ using namespace ::ooo::vba;
 VbaWindowBase::VbaWindowBase(
         const uno::Reference< XHelperInterface >& xParent,
         const uno::Reference< uno::XComponentContext >& xContext,
-        const css::uno::Reference< css::frame::XModel >& xModel,
         const uno::Reference< frame::XController >& xController ) :
-    WindowBaseImpl_BASE( xParent, xContext ),
-    m_xModel( xModel, uno::UNO_SET_THROW )
+    WindowBaseImpl_BASE( xParent, xContext )
 {
     construct( xController );
 }
 
 VbaWindowBase::VbaWindowBase( uno::Sequence< uno::Any > const & args,
         uno::Reference< uno::XComponentContext > const & xContext ) :
-    WindowBaseImpl_BASE( getXSomethingFromArgs< XHelperInterface >( args, 0, false ), xContext ),
-    m_xModel( getXSomethingFromArgs< frame::XModel >( args, 1, false ) )
+    WindowBaseImpl_BASE( getXSomethingFromArgs< XHelperInterface >( args, 0, false ), xContext )
 {
     construct( getXSomethingFromArgs< frame::XController >( args, 2 ) );
 }

@@ -20,13 +20,16 @@
 #include <utility>
 #include <vbahelper/vbahelper.hxx>
 #include "vbaview.hxx"
+#include <unotxdoc.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaPane::SwVbaPane( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext,
-    uno::Reference< frame::XModel > xModel ) :
-    SwVbaPane_BASE( rParent, rContext ), mxModel(std::move( xModel ))
+SwVbaPane::SwVbaPane( const uno::Reference< ooo::vba::XHelperInterface >& rParent,
+                      const uno::Reference< uno::XComponentContext >& rContext,
+                      rtl::Reference< SwXTextDocument > xModel )
+: SwVbaPane_BASE( rParent, rContext ),
+  mxModel(std::move( xModel ))
 {
 }
 
@@ -43,7 +46,7 @@ SwVbaPane::View()
 void SAL_CALL
 SwVbaPane::Close( )
 {
-    dispatchRequests( mxModel,u".uno:CloseWin"_ustr );
+    dispatchRequests( static_cast<SfxBaseModel*>(mxModel.get()), u".uno:CloseWin"_ustr );
 }
 
 OUString

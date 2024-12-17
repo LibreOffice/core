@@ -12,6 +12,7 @@
 #include <ooo/vba/word/XFormFields.hpp>
 
 #include <vbahelper/vbacollectionimpl.hxx>
+#include <rtl/ref.hxx>
 
 typedef CollTestImplHelper<ooo::vba::word::XFormFields> SwVbaFormFields_BASE;
 
@@ -21,7 +22,7 @@ public:
     /// @throws css::uno::RuntimeException
     SwVbaFormFields(const css::uno::Reference<ov::XHelperInterface>& xParent,
                     const css::uno::Reference<css::uno::XComponentContext>& xContext,
-                    const css::uno::Reference<css::text::XTextDocument>& xTextDocument);
+                    const rtl::Reference<SwXTextDocument>& xTextDocument);
 
     // XFormFields
     sal_Bool SAL_CALL getShaded() override;

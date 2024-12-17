@@ -55,7 +55,6 @@ public:
     VbaWindowBase(
         const css::uno::Reference< ov::XHelperInterface >& xParent,
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
-        const css::uno::Reference< css::frame::XModel >& xModel,
         const css::uno::Reference< css::frame::XController >& xController );
     /// @throws css::uno::RuntimeException
     VbaWindowBase(
@@ -85,8 +84,6 @@ protected:
     css::uno::Reference< css::awt::XWindow > getWindow() const;
     /// @throws css::uno::RuntimeException
     css::uno::Reference< css::awt::XWindow2 > getWindow2() const;
-
-    css::uno::Reference< css::frame::XModel > m_xModel;
 
 private:
     /// @throws css::uno::RuntimeException

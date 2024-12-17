@@ -22,16 +22,20 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <ooo/vba/word/XStyles.hpp>
 #include <vbahelper/vbacollectionimpl.hxx>
+#include <rtl/ref.hxx>
+
+class SwXTextDocument;
 
 typedef CollTestImplHelper< ooo::vba::word::XStyles > SwVbaStyles_BASE;
 class SwVbaStyles: public SwVbaStyles_BASE
 {
-    css::uno::Reference< css::frame::XModel > mxModel;
-    css::uno::Reference< css::lang::XMultiServiceFactory > mxMSF;
+    rtl::Reference< SwXTextDocument > mxModel;
 public:
     /// @throws css::script::BasicErrorException
     /// @throws css::uno::RuntimeException
-    SwVbaStyles( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::frame::XModel >& xModel );
+    SwVbaStyles( const css::uno::Reference< ov::XHelperInterface >& xParent,
+                 const css::uno::Reference< css::uno::XComponentContext > & xContext,
+                 const rtl::Reference< SwXTextDocument >& xModel );
 
     virtual css::uno::Any SAL_CALL Item(const css::uno::Any& Index1, const css::uno::Any& Index2) override;
     // XEnumerationAccess

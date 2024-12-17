@@ -23,6 +23,8 @@
 #include <osl/file.hxx>
 #include <tools/urlobj.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include "wordvbahelper.hxx"
+#include <unotxdoc.hxx>
 
 #ifdef _WIN32
 #include <cstddef>
@@ -34,6 +36,7 @@
 #endif
 
 using namespace ::ooo::vba;
+using namespace ::ooo::vba::word;
 using namespace ::com::sun::star;
 
 PrivateProfileStringListener::~PrivateProfileStringListener()
@@ -175,7 +178,7 @@ SwVbaSystem::~SwVbaSystem()
 sal_Int32 SAL_CALL
 SwVbaSystem::getCursor()
 {
-    PointerStyle nPointerStyle = getPointerStyle( getCurrentWordDoc(mxContext) );
+    PointerStyle nPointerStyle = getPointerStyle( static_cast<SfxBaseModel*>(getCurrentWordDoc(mxContext).get()) );
 
     switch( nPointerStyle )
     {
@@ -201,24 +204,24 @@ SwVbaSystem::setCursor( sal_Int32 _cursor )
         {
             case word::WdCursorType::wdCursorNorthwestArrow:
             {
-                setCursorHelper( getCurrentWordDoc(mxContext), PointerStyle::Arrow, false );
+                setCursorHelper( static_cast<SfxBaseModel*>(getCurrentWordDoc(mxContext).get()), PointerStyle::Arrow, false );
                 break;
             }
             case word::WdCursorType::wdCursorWait:
             {
                 //It will set the edit window, toobar and statusbar's mouse pointer.
-                setCursorHelper( getCurrentWordDoc(mxContext), PointerStyle::Wait, true );
+                setCursorHelper( static_cast<SfxBaseModel*>(getCurrentWordDoc(mxContext).get()), PointerStyle::Wait, true );
                 break;
             }
             case word::WdCursorType::wdCursorIBeam:
             {
                 //It will set the edit window, toobar and statusbar's mouse pointer.
-                setCursorHelper( getCurrentWordDoc( mxContext ), PointerStyle::Text, true );
+                setCursorHelper( static_cast<SfxBaseModel*>(getCurrentWordDoc( mxContext ).get()), PointerStyle::Text, true );
                 break;
             }
             case word::WdCursorType::wdCursorNormal:
             {
-                setCursorHelper( getCurrentWordDoc( mxContext ), PointerStyle::Null, false );
+                setCursorHelper( static_cast<SfxBaseModel*>(getCurrentWordDoc( mxContext ).get()), PointerStyle::Null, false );
                 break;
             }
             default:

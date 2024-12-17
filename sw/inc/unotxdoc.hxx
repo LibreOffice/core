@@ -554,6 +554,9 @@ public:
     rtl::Reference<SwXTextEmbeddedObject> createTextEmbeddedObject();
     rtl::Reference<SvXMLEmbeddedObjectHelper> createEmbeddedObjectResolver();
     rtl::Reference< SwXStyleFamilies > getSwStyleFamilies();
+    rtl::Reference< SwXRedlines > getSwRedlines();
+    rtl::Reference<SwXTextFieldTypes> getSwTextFields();
+    rtl::Reference<SwXTextFrames> getSwTextFrames();
 };
 
 class SwXLinkTargetSupplier final : public cppu::WeakImplHelper

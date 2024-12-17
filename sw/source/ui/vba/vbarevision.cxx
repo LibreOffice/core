@@ -25,12 +25,20 @@
 #include <docsh.hxx>
 #include <doc.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <unotxdoc.hxx>
+#include <unoredlines.hxx>
 #include <utility>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaRevision::SwVbaRevision( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, uno::Reference< frame::XModel >  xModel, uno::Reference< beans::XPropertySet >  xRedlineProps ) : SwVbaRevision_BASE( rParent, rContext ), mxModel(std::move( xModel )), mxRedlineProps(std::move( xRedlineProps ))
+SwVbaRevision::SwVbaRevision( const uno::Reference< ooo::vba::XHelperInterface >& rParent,
+                              const uno::Reference< uno::XComponentContext >& rContext,
+                              rtl::Reference< SwXTextDocument > xModel,
+                              uno::Reference< beans::XPropertySet >  xRedlineProps )
+: SwVbaRevision_BASE( rParent, rContext ),
+  mxModel(std::move( xModel )),
+  mxRedlineProps(std::move( xRedlineProps ))
 {
 }
 
@@ -41,8 +49,7 @@ SwVbaRevision::~SwVbaRevision()
 sal_Int32 SwVbaRevision::GetPosition()
 {
     sal_Int32 nPos = -1;
-    uno::Reference< document::XRedlinesSupplier > xRedlinesSupp( mxModel, uno::UNO_QUERY_THROW );
-    uno::Reference< container::XIndexAccess > xRedlines( xRedlinesSupp->getRedlines(), uno::UNO_QUERY_THROW );
+    rtl::Reference< SwXRedlines > xRedlines( mxModel->getSwRedlines() );
     sal_Int32 nCount = xRedlines->getCount();
     for( sal_Int32 i = 0; i < nCount; i++ )
     {
@@ -63,7 +70,7 @@ sal_Int32 SwVbaRevision::GetPosition()
 void SAL_CALL
 SwVbaRevision::Accept()
 {
-    SwDoc* pDoc = word::getDocShell( mxModel )->GetDoc();
+    SwDoc* pDoc = mxModel->GetDocShell()->GetDoc();
     if( pDoc )
         pDoc->getIDocumentRedlineAccess().AcceptRedline( GetPosition(), true );
 }
@@ -71,7 +78,7 @@ SwVbaRevision::Accept()
 void SAL_CALL
 SwVbaRevision::Reject( )
 {
-    SwDoc* pDoc = word::getDocShell( mxModel )->GetDoc();
+    SwDoc* pDoc = mxModel->GetDocShell()->GetDoc();
     if( pDoc )
         pDoc->getIDocumentRedlineAccess().RejectRedline( GetPosition(), true );
 }

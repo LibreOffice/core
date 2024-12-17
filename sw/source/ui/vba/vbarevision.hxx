@@ -21,13 +21,16 @@
 
 #include <ooo/vba/word/XRevision.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
+#include <rtl/ref.hxx>
+
+class SwXTextDocument;
 
 typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XRevision > SwVbaRevision_BASE;
 
 class SwVbaRevision : public SwVbaRevision_BASE
 {
 private:
-    css::uno::Reference< css::frame::XModel > mxModel;
+    rtl::Reference< SwXTextDocument > mxModel;
     css::uno::Reference< css::beans::XPropertySet > mxRedlineProps;
 
 private:
@@ -36,7 +39,10 @@ private:
 
 public:
     /// @throws css::uno::RuntimeException
-    SwVbaRevision( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, css::uno::Reference< css::frame::XModel >  xModel, css::uno::Reference< css::beans::XPropertySet >  xRedlineProps );
+    SwVbaRevision( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent,
+                   const css::uno::Reference< css::uno::XComponentContext >& rContext,
+                   rtl::Reference< SwXTextDocument > xModel,
+                   css::uno::Reference< css::beans::XPropertySet >  xRedlineProps );
     virtual ~SwVbaRevision() override;
 
     // Methods

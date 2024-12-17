@@ -23,8 +23,11 @@
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include "vbatablehelper.hxx"
+#include "wordvbahelper.hxx"
+#include <unotxdoc.hxx>
 
 using namespace ::ooo::vba;
+using namespace ::ooo::vba::word;
 using namespace ::com::sun::star;
 
 SwVbaColumn::SwVbaColumn( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, uno::Reference< text::XTextTable >  xTextTable, sal_Int32 nIndex ) :
@@ -57,7 +60,7 @@ SwVbaColumn::Select( )
     SelectColumn( getCurrentWordDoc(mxContext), mxTextTable, mnIndex, mnIndex );
 }
 
-void SwVbaColumn::SelectColumn( const uno::Reference< frame::XModel >& xModel, const uno::Reference< text::XTextTable >& xTextTable, sal_Int32 nStartColumn, sal_Int32 nEndColumn )
+void SwVbaColumn::SelectColumn( const rtl::Reference< SwXTextDocument >& xModel, const uno::Reference< text::XTextTable >& xTextTable, sal_Int32 nStartColumn, sal_Int32 nEndColumn )
 {
     OUString sStartCol = SwVbaTableHelper::getColumnStr( nStartColumn );
     OUString aRangeName = sStartCol + OUString::number( 1 );

@@ -38,7 +38,7 @@ cppu::WeakImplHelper
     css::lang::XServiceInfo
 >
 SwRedlinesBaseClass;
-class SwXRedlines final : public SwRedlinesBaseClass,
+class SW_DLLPUBLIC SwXRedlines final : public SwRedlinesBaseClass,
     public SwUnoCollection
 {
     virtual ~SwXRedlines() override;

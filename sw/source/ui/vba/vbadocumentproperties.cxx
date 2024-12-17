@@ -30,7 +30,9 @@
 #include "wordvbahelper.hxx"
 #include <fesh.hxx>
 #include <docsh.hxx>
+#include <unotxdoc.hxx>
 #include <utility>
+
 using namespace ::ooo::vba;
 using namespace css;
 
@@ -67,15 +69,12 @@ namespace {
 class PropertGetSetHelper
 {
 protected:
-    uno::Reference< frame::XModel > m_xModel;
+    rtl::Reference< SwXTextDocument > m_xModel;
     uno::Reference<document::XDocumentProperties> m_xDocProps;
 public:
-    explicit PropertGetSetHelper( uno::Reference< frame::XModel >  xModel ):m_xModel(std::move( xModel ))
+    explicit PropertGetSetHelper( rtl::Reference< SwXTextDocument > xModel ) : m_xModel(std::move( xModel ))
     {
-        uno::Reference<document::XDocumentPropertiesSupplier> const
-            xDocPropSupp(m_xModel, uno::UNO_QUERY_THROW);
-        m_xDocProps.set(xDocPropSupp->getDocumentProperties(),
-                uno::UNO_SET_THROW);
+        m_xDocProps.set(m_xModel->getDocumentProperties(), uno::UNO_SET_THROW);
     }
     virtual ~PropertGetSetHelper() {}
     virtual uno::Any getPropertyValue( const OUString& rPropName ) = 0;
@@ -90,7 +89,7 @@ public:
 class BuiltinPropertyGetSetHelper : public PropertGetSetHelper
 {
 public:
-    explicit BuiltinPropertyGetSetHelper( const uno::Reference< frame::XModel >& xModel ) :PropertGetSetHelper( xModel )
+    explicit BuiltinPropertyGetSetHelper( const rtl::Reference< SwXTextDocument >& xModel ) :PropertGetSetHelper( xModel )
     {
     }
     virtual uno::Any getPropertyValue( const OUString& rPropName ) override
@@ -271,7 +270,7 @@ public:
 class CustomPropertyGetSetHelper : public BuiltinPropertyGetSetHelper
 {
 public:
-    explicit CustomPropertyGetSetHelper( const uno::Reference< frame::XModel >& xModel ) :BuiltinPropertyGetSetHelper( xModel )
+    explicit CustomPropertyGetSetHelper( const rtl::Reference< SwXTextDocument >& xModel ) :BuiltinPropertyGetSetHelper( xModel )
     {
     }
     virtual uno::Any getPropertyValue( const OUString& rPropName ) override
@@ -288,12 +287,10 @@ public:
 class StatisticPropertyGetSetHelper : public PropertGetSetHelper
 {
     SwDocShell* mpDocShell;
-    uno::Reference< beans::XPropertySet > mxModelProps;
 public:
-    explicit StatisticPropertyGetSetHelper( const uno::Reference< frame::XModel >& xModel ) :PropertGetSetHelper( xModel ) , mpDocShell( nullptr )
+    explicit StatisticPropertyGetSetHelper( const rtl::Reference< SwXTextDocument >& xModel ) :PropertGetSetHelper( xModel ) , mpDocShell( nullptr )
     {
-            mxModelProps.set( m_xModel, uno::UNO_QUERY_THROW );
-            mpDocShell = word::getDocShell( xModel );
+        mpDocShell = m_xModel->GetDocShell();
     }
     virtual uno::Any getPropertyValue( const OUString& rPropName ) override
     {
@@ -301,7 +298,7 @@ public:
         {
             // Characters, ParagraphCount & WordCount are available from
             // the model ( and additionally these also update the statics object )
-            return mxModelProps->getPropertyValue( rPropName );
+            return m_xModel->getPropertyValue( rPropName );
         }
         catch (const uno::Exception&)
         {
@@ -398,7 +395,7 @@ class BuiltInIndexHelper
     MSOIndexToOODocPropInfo m_docPropInfoMap;
 
 public:
-    explicit BuiltInIndexHelper( const uno::Reference< frame::XModel >& xModel )
+    explicit BuiltInIndexHelper( const rtl::Reference< SwXTextDocument >& xModel )
     {
         auto aStandardHelper = std::make_shared<BuiltinPropertyGetSetHelper>( xModel );
         auto aUsingStatsHelper = std::make_shared<StatisticPropertyGetSetHelper>( xModel );
@@ -672,13 +669,13 @@ class BuiltInPropertiesImpl : public PropertiesImpl_BASE
 {
 protected:
 
-    uno::Reference< frame::XModel > m_xModel;
+    rtl::Reference< SwXTextDocument > m_xModel;
 
     DocProps mDocProps;
     DocPropsByName mNamedDocProps;
 
     public:
-    BuiltInPropertiesImpl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, uno::Reference< frame::XModel >  xModel ) : m_xModel(std::move( xModel ))
+    BuiltInPropertiesImpl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, rtl::Reference< SwXTextDocument >  xModel ) : m_xModel(std::move( xModel ))
     {
         BuiltInIndexHelper builtIns( m_xModel );
         for ( sal_Int32 index = word::WdBuiltInProperty::wdPropertyTitle; index <= word::WdBuiltInProperty::wdPropertyCharsWSpaces; ++index )
@@ -744,7 +741,11 @@ protected:
 
 }
 
-SwVbaBuiltinDocumentProperties::SwVbaBuiltinDocumentProperties( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< frame::XModel >& xModel ) : SwVbaDocumentproperties_BASE( xParent, xContext,  uno::Reference< container::XIndexAccess >( new BuiltInPropertiesImpl( xParent, xContext, xModel ) ) )
+SwVbaBuiltinDocumentProperties::SwVbaBuiltinDocumentProperties(
+    const uno::Reference< XHelperInterface >& xParent,
+    const uno::Reference< uno::XComponentContext >& xContext,
+    const rtl::Reference< SwXTextDocument >& xModel )
+: SwVbaDocumentproperties_BASE( xParent, xContext,  uno::Reference< container::XIndexAccess >( new BuiltInPropertiesImpl( xParent, xContext, xModel ) ) )
 {
 }
 
@@ -799,11 +800,16 @@ class CustomPropertiesImpl : public PropertiesImpl_BASE
 {
     uno::Reference< XHelperInterface > m_xParent;
     uno::Reference< uno::XComponentContext > m_xContext;
-    uno::Reference< frame::XModel > m_xModel;
+    rtl::Reference< SwXTextDocument > m_xModel;
     uno::Reference< beans::XPropertySet > mxUserDefinedProp;
     std::shared_ptr< PropertGetSetHelper > mpPropGetSetHelper;
 public:
-    CustomPropertiesImpl( uno::Reference< XHelperInterface >  xParent, uno::Reference< uno::XComponentContext > xContext, uno::Reference< frame::XModel >  xModel ) : m_xParent(std::move( xParent )), m_xContext(std::move( xContext )), m_xModel(std::move( xModel ))
+    CustomPropertiesImpl( uno::Reference< XHelperInterface > xParent,
+                          uno::Reference< uno::XComponentContext > xContext,
+                          rtl::Reference< SwXTextDocument >  xModel )
+        : m_xParent(std::move( xParent )),
+          m_xContext(std::move( xContext )),
+          m_xModel(std::move( xModel ))
     {
         // suck in the document( custom ) properties
         mpPropGetSetHelper = std::make_shared<CustomPropertyGetSetHelper>( m_xModel );
@@ -885,7 +891,7 @@ public:
 
 }
 
-SwVbaCustomDocumentProperties::SwVbaCustomDocumentProperties( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< frame::XModel >& xModel ) : SwVbaBuiltinDocumentProperties( xParent, xContext, xModel )
+SwVbaCustomDocumentProperties::SwVbaCustomDocumentProperties( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const rtl::Reference< SwXTextDocument >& xModel ) : SwVbaBuiltinDocumentProperties( xParent, xContext, xModel )
 {
     // replace the m_xIndexAccess implementation ( we need a virtual init )
     m_xIndexAccess.set( new CustomPropertiesImpl( xParent, xContext, xModel ) );

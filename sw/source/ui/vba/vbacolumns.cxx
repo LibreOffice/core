@@ -21,8 +21,11 @@
 #include "vbacolumns.hxx"
 #include "vbacolumn.hxx"
 #include "vbatablehelper.hxx"
+#include "wordvbahelper.hxx"
+#include <unotxdoc.hxx>
 
 using namespace ::ooo::vba;
+using namespace ::ooo::vba::word;
 using namespace ::com::sun::star;
 
 namespace {
