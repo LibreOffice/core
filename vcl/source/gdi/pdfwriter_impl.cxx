@@ -2218,7 +2218,7 @@ bool PDFWriterImpl::emitTilings()
             aTilingObj.append( "]\n" );
         }
         aTilingObj.append( "/Resources" );
-        tiling.m_aResources.append( aTilingObj, getFontDictObject() );
+        tiling.m_aResources.append(aTilingObj, getFontDictObject(), m_aContext.Version);
         if( bDeflate )
             aTilingObj.append( "/Filter/FlateDecode" );
         aTilingObj.append( "/Length "
@@ -2688,7 +2688,7 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
         // write resources dict
         aLine.setLength(0);
         aLine.append(OString::number(nResources) + " 0 obj\n");
-        aResourceDict.append(aLine, nFontDict);
+        aResourceDict.append(aLine, nFontDict, m_aContext.Version);
         aLine.append("endobj\n\n");
         if (!updateObject(nResources))
             return false;
@@ -3192,7 +3192,7 @@ sal_Int32 PDFWriterImpl::emitResources()
     aLine.setLength( 0 );
     aLine.append( OString::number(nResourceDict)
         + " 0 obj\n" );
-    m_aGlobalResourceDict.append( aLine, getFontDictObject() );
+    m_aGlobalResourceDict.append(aLine, getFontDictObject(), m_aContext.Version);
     aLine.append( "endobj\n\n" );
     if (!writeBuffer(aLine)) return 0;
     return nResourceDict;
