@@ -47,6 +47,7 @@ $(eval $(call gb_Library_use_system_win32_libs,install_updateservice, \
     kernel32 \
     user32 \
     advapi32 \
+    ole32 \
     shell32 \
     shlwapi \
 ))

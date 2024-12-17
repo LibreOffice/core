@@ -18,6 +18,7 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <msiquery.h>
+#include <shlobj.h>
 
 #include <pathhash.h>
 
@@ -80,6 +81,23 @@ CloseHandleGuard guard(HANDLE handle) { return CloseHandleGuard(handle, CloseHan
 
 bool runExecutable(std::wstring const& installLocation, wchar_t const* argument)
 {
+    bool use = false;
+    PWSTR progPath;
+    if (SHGetKnownFolderPath(FOLDERID_ProgramFiles, 0, nullptr, &progPath) == S_OK)
+    {
+        auto const n = wcslen(progPath);
+        // For SHGetKnownFolderPath it is guaranteed that "The returned path does not include a
+        // trailing backslash":
+        use = (installLocation.size() == n
+               || (installLocation.size() > n && installLocation[n] == L'\\'))
+              && _wcsnicmp(progPath, installLocation.data(), n) == 0;
+    }
+    CoTaskMemFree(progPath);
+    if (!use)
+    {
+        return true;
+    }
+
     std::wstring cmdline(L"\"");
     cmdline += installLocation;
     cmdline += L"\\program\\update_service.exe\" ";
