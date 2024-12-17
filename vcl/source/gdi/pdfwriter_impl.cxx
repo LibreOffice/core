@@ -5879,6 +5879,15 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
     lcl_assignMeta(m_aContext.DocumentInfo.Subject, aMetadata.msSubject);
     lcl_assignMeta(m_aContext.DocumentInfo.Producer, aMetadata.msProducer);
     aMetadata.msPDFVersion = getPDFVersionStr(m_aContext.Version);
+    if (m_nPDFA_Version == 4)
+    {
+        // if we have embedded files we need to use conformance level "F"
+        aMetadata.msConformance = m_aEmbeddedFiles.empty() ? ""_ostr : "F"_ostr;
+    }
+    else
+    {
+        aMetadata.msConformance = "B"_ostr;
+    }
     lcl_assignMeta(m_aContext.DocumentInfo.Keywords, aMetadata.msKeywords);
     lcl_assignMeta(m_aContext.DocumentInfo.Contributor, aMetadata.maContributor);
     lcl_assignMeta(m_aContext.DocumentInfo.Coverage, aMetadata.msCoverage);

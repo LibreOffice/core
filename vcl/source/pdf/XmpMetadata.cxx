@@ -27,12 +27,7 @@ constexpr const char* constPadding = "                                        "
                                      "\n";
 }
 
-XmpMetadata::XmpMetadata()
-    : mbWritten(false)
-    , mnPDF_A(0)
-    , mbPDF_UA(false)
-{
-}
+XmpMetadata::XmpMetadata() = default;
 
 void XmpMetadata::write()
 {
@@ -62,10 +57,19 @@ void XmpMetadata::write()
             aXmlWriter.content(sPdfVersion);
             aXmlWriter.endElement();
 
-            aXmlWriter.startElement("pdfaid:conformance");
-            aXmlWriter.content("B"_ostr);
-            aXmlWriter.endElement();
+            if (mnPDF_A == 4)
+            {
+                aXmlWriter.startElement("pdfaid:rev");
+                aXmlWriter.content("2020"_ostr);
+                aXmlWriter.endElement();
+            }
 
+            if (!msConformance.isEmpty())
+            {
+                aXmlWriter.startElement("pdfaid:conformance");
+                aXmlWriter.content(msConformance);
+                aXmlWriter.endElement();
+            }
             aXmlWriter.endElement();
         }
 
