@@ -1967,11 +1967,22 @@ JSMenu::JSMenu(JSDialogSender* pSender, PopupMenu* pPopupMenu, SalInstanceBuilde
 {
 }
 
-OUString JSMenu::popup_at_rect(weld::Widget* /*pParent*/, const tools::Rectangle& /*rRect*/,
+OUString JSMenu::popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect,
                                weld::Placement /*ePlace*/)
 {
     // Do not block with SalInstanceMenu::popup_at_rect(pParent, rRect, ePlace);
-    m_pSender->sendMenu(m_pPopupMenu);
+
+    // we find position based on parent widget id and row text inside TreeView for context menu
+    OUString sCancelId;
+    weld::TreeView* pTree = dynamic_cast<weld::TreeView*>(pParent);
+    if (pTree)
+    {
+        std::unique_ptr<weld::TreeIter> itEntry(pTree->make_iterator());
+        if (pTree->get_dest_row_at_pos(rRect.Center(), itEntry.get(), false, false))
+            sCancelId = pTree->get_text(*itEntry);
+    }
+
+    m_pSender->sendMenu(m_pPopupMenu, pParent ? pParent->get_buildable_name() : "", sCancelId);
 
     // Don't return any action - simulate canceled menu
     return "";
