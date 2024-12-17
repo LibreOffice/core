@@ -22,6 +22,7 @@
 
 #include <vcl/AccessibleBrowseBoxObjType.hxx>
 
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <salhelper/simplereferenceobject.hxx>
@@ -43,9 +44,20 @@ namespace vcl { class IAccessibleTabListBox; }
 namespace vcl { class IAccessibleTableProvider; }
 namespace vcl { class Window; }
 
+class CheckBox;
+class ComboBox;
+class Edit;
+class FixedHyperlink;
+class FixedText;
+class FormattedField;
+class HeaderBar;
+class ListBox;
+class PushButton;
+class RadioButton;
+class ScrollBar;
 class SvHeaderTabListBox;
 class SvtIconChoiceCtrl;
-class TabBar;
+class ToolBox;
 class SvTreeListBox;
 class VCLXWindow;
 class TextEngine;
@@ -67,6 +79,16 @@ namespace vcl
         factory, and release it afterwards.
     */
     typedef void* (* GetSvtAccessibilityComponentFactory)( );
+
+
+    /** a function which is able to create a factory for the standard Accessible/Context
+        components needed for standard VCL controls
+
+        The returned pointer denotes an instance of the IAccessibleFactory, which has been acquired
+        <em>once</em>. The caller is responsible for holding this reference as long as it needs the
+        factory, and release it afterwards.
+    */
+    typedef void* (* GetStandardAccComponentFactory)( );
 
 
     //= IAccessibleFactory
@@ -154,6 +176,71 @@ namespace vcl
                 sal_Int32 _nRowPos,
                 sal_uInt16 _nColPos
             ) const = 0;
+
+        /** creates an accessible context for a button window
+        */
+        virtual css::uno::Reference< css::accessibility::XAccessibleContext >
+        createAccessibleContext(PushButton* pButton) = 0;
+
+        /** creates an accessible context for a checkbox window
+        */
+        virtual css::uno::Reference< css::accessibility::XAccessibleContext >
+        createAccessibleContext(CheckBox* pCheckBox) = 0;
+
+        /** creates an accessible context for a radio button window
+        */
+        virtual css::uno::Reference< css::accessibility::XAccessibleContext >
+        createAccessibleContext(RadioButton* pRadioButton) = 0;
+
+        /** creates an accessible context for a listbox window
+        */
+        virtual css::uno::Reference< css::accessibility::XAccessibleContext >
+        createAccessibleContext(ListBox* pListBox) = 0;
+
+        /** creates an accessible context for a fixed hyperlink window
+        */
+        virtual css::uno::Reference< css::accessibility::XAccessibleContext >
+        createAccessibleContext(FixedHyperlink* pFixedHyperlink) = 0;
+
+        /** creates an accessible context for a fixed text window
+        */
+        virtual css::uno::Reference< css::accessibility::XAccessibleContext >
+        createAccessibleContext(FixedText* pFixedText) = 0;
+
+        /** creates an accessible context for a scrollbar window
+        */
+        virtual css::uno::Reference< css::accessibility::XAccessibleContext >
+        createAccessibleContext(ScrollBar* pScrollBar) = 0;
+
+        /** creates an accessible context for an edit window
+        */
+        virtual css::uno::Reference< css::accessibility::XAccessibleContext >
+        createAccessibleContext(Edit* pEdit) = 0;
+
+        /** creates an accessible context for a combo box window
+        */
+        virtual css::uno::Reference< css::accessibility::XAccessibleContext >
+        createAccessibleContext(ComboBox* pComboBox) = 0;
+
+        /** creates an accessible context for a toolbox window
+        */
+        virtual css::uno::Reference< css::accessibility::XAccessibleContext >
+        createAccessibleContext(ToolBox* pToolBox) = 0;
+
+        /** creates an accessible context for a headerbar window
+        */
+        virtual css::uno::Reference< css::accessibility::XAccessibleContext >
+        createAccessibleContext(HeaderBar* pHeaderBar) = 0;
+
+        /** creates an accessible context for a numeric field
+        */
+        virtual css::uno::Reference< css::accessibility::XAccessibleContext >
+        createAccessibleContext(FormattedField* pFormattedField) = 0;
+
+        /** creates an accessible context for a generic window
+        */
+        virtual css::uno::Reference< css::accessibility::XAccessibleContext >
+        createAccessibleContext(vcl::Window* pWindow) = 0;
 
     protected:
         virtual ~IAccessibleFactory() override {}

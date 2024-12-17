@@ -20,7 +20,7 @@
 #ifndef INCLUDED_TOOLKIT_INC_HELPER_ACCESSIBILITYCLIENT_HXX
 #define INCLUDED_TOOLKIT_INC_HELPER_ACCESSIBILITYCLIENT_HXX
 
-#include <toolkit/helper/accessiblefactory.hxx>
+#include <vcl/accessiblefactory.hxx>
 
 namespace toolkit
 {
@@ -44,7 +44,7 @@ namespace toolkit
     public:
         AccessibilityClient();
 
-        IAccessibleFactory& getFactory();
+        vcl::IAccessibleFactory& getFactory();
 
     private:
         void ensureInitialized();

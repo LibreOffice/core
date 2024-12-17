@@ -20,8 +20,6 @@
 #include <config_feature_desktop.h>
 
 #include <cppuhelper/supportsservice.hxx>
-#include <toolkit/awt/vclxwindows.hxx>
-#include <toolkit/helper/accessiblefactory.hxx>
 #include <vcl/accessiblefactory.hxx>
 #include <standard/svtaccessiblenumericfield.hxx>
 #include <standard/vclxaccessiblebutton.hxx>
@@ -78,13 +76,11 @@ bool hasFloatingChild(vcl::Window *pWindow)
 }
 
 // IAccessibleFactory
-class AccessibleFactory :public ::toolkit::IAccessibleFactory
-                        ,public ::vcl::IAccessibleFactory
+class AccessibleFactory : public ::vcl::IAccessibleFactory
 {
 public:
     AccessibleFactory();
 
-    // ::toolkit::IAccessibleFactory
     virtual css::uno::Reference< css::accessibility::XAccessibleContext >
         createAccessibleContext(PushButton* pButton) override;
     virtual css::uno::Reference< css::accessibility::XAccessibleContext >
@@ -112,7 +108,6 @@ public:
     virtual css::uno::Reference< css::accessibility::XAccessibleContext >
         createAccessibleContext(vcl::Window* pWindow) override;
 
-    // ::vcl::IAccessibleFactory
     virtual vcl::IAccessibleTabListBox*
         createAccessibleTabListBox(
             const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
@@ -432,7 +427,7 @@ public:
     // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::css::uno::Sequence< ::sal_Int8 >& /*aIdentifier*/ ) override
     {
-        ::toolkit::IAccessibleFactory* pFactory = new AccessibleFactory;
+        vcl::IAccessibleFactory* pFactory = new AccessibleFactory;
         pFactory->acquire();
         return reinterpret_cast<sal_Int64>(pFactory);
     }
@@ -440,10 +435,10 @@ public:
 
 } // closing anonymous implementation namespace
 
-/* this is the entry point to retrieve a factory for the toolkit-level Accessible/Contexts supplied
+/* this is the entry point to retrieve a factory for the vcl-level Accessible/Contexts supplied
     by this library
 
-    This function implements the factory function needed in toolkit
+    This function implements the factory function needed in vcl
     (of type GetStandardAccComponentFactory).
 */
 extern "C"

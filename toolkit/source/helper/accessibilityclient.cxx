@@ -22,7 +22,6 @@
 
 #include <sal/config.h>
 
-#include <toolkit/helper/accessiblefactory.hxx>
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
@@ -39,7 +38,7 @@ namespace toolkit
 
     namespace
     {
-        ::rtl::Reference< IAccessibleFactory >   s_pFactory;
+        rtl::Reference<vcl::IAccessibleFactory> s_pFactory;
     }
 
 
@@ -65,7 +64,7 @@ namespace toolkit
             auto xService = css::accessibility::GetStandardAccessibleFactoryService::create(comphelper::getProcessComponentContext());
             assert(xService);
             // get a factory instance
-            IAccessibleFactory* pFactory = reinterpret_cast<IAccessibleFactory*>(xService->getSomething({}));
+            vcl::IAccessibleFactory* pFactory = reinterpret_cast<vcl::IAccessibleFactory*>(xService->getSomething({}));
             assert(pFactory);
             s_pFactory = pFactory;
             pFactory->release();
@@ -76,7 +75,7 @@ namespace toolkit
         m_bInitialized = true;
     }
 
-    IAccessibleFactory& AccessibilityClient::getFactory()
+    vcl::IAccessibleFactory& AccessibilityClient::getFactory()
     {
         ensureInitialized();
         OSL_ENSURE( s_pFactory.is(), "AccessibilityClient::getFactory: at least a dummy factory should have been created!" );

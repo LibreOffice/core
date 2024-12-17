@@ -49,7 +49,7 @@ namespace vcl { class Window; }
 
 class VclWindowEvent;
 
-namespace toolkit
+namespace vcl
 {
     class IAccessibleFactory;
 }
@@ -89,7 +89,7 @@ protected:
 
     void        SetSystemParent_Impl( const css::uno::Any& rHandle );
 
-    ::toolkit::IAccessibleFactory&  getAccessibleFactory();
+    vcl::IAccessibleFactory&  getAccessibleFactory();
 
     // helper ...
     static void     PushPropertyIds( std::vector< sal_uInt16 > &aIds, int nFirstId, ...);

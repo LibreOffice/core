@@ -18,7 +18,6 @@
  */
 
 #include <toolkit/awt/vclxwindows.hxx>
-#include <toolkit/helper/accessiblefactory.hxx>
 #include <com/sun/star/awt/LineEndFormat.hpp>
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
@@ -38,10 +37,12 @@
 #include <awt/vclxwindows.hxx>
 #include <controls/filectrl.hxx>
 #include <controls/svmedit.hxx>
+#include <vcl/accessiblefactory.hxx>
 #include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/fmtfield.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/headbar.hxx>
+#include <vcl/toolbox.hxx>
 #include <vcl/toolkit/lstbox.hxx>
 #include <vcl/toolkit/combobox.hxx>
 #include <vcl/toolkit/field.hxx>

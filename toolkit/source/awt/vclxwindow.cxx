@@ -345,7 +345,7 @@ void VCLXWindow::ImplExecuteAsyncWithoutSolarLock( const Callback& i_callback )
 }
 
 
-::toolkit::IAccessibleFactory& VCLXWindow::getAccessibleFactory()
+vcl::IAccessibleFactory& VCLXWindow::getAccessibleFactory()
 {
     return mpImpl->getAccessibleFactory().getFactory();
 }
