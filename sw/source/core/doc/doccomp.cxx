@@ -1920,9 +1920,9 @@ SaveMergeRedline::SaveMergeRedline( const SwNode& rDstNd,
 {
     SwPosition aPos( rDstNd );
 
-    const SwPosition* pStt = rSrcRedl.Start();
+    const SwPosition* pStart = rSrcRedl.Start();
     if( rDstNd.IsContentNode() )
-        aPos.SetContent( pStt->GetContentIndex() );
+        aPos.SetContent( pStart->GetContentIndex() );
     pDestRedl = new SwRangeRedline( rSrcRedl.GetRedlineData(), aPos );
 
     if( RedlineType::Delete != pDestRedl->GetType() )
@@ -1933,7 +1933,7 @@ SaveMergeRedline::SaveMergeRedline( const SwNode& rDstNd,
 
     pDestRedl->SetMark();
     pDestRedl->GetPoint()->Adjust( pEnd->GetNodeIndex() -
-                                    pStt->GetNodeIndex() );
+                                    pStart->GetNodeIndex() );
     if( pDestRedl->GetPointContentNode() )
         pDestRedl->GetPoint()->SetContent( pEnd->GetContentIndex() );
 }

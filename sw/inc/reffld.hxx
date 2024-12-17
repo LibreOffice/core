@@ -96,7 +96,7 @@ public:
 
     static SwTextNode* FindAnchor( SwDoc* pDoc, const OUString& rRefMark,
                                         sal_uInt16 nSubType, sal_uInt16 nSeqNo, sal_uInt16 nFlags,
-                                        sal_Int32* pStt, sal_Int32* pEnd = nullptr,
+                                        sal_Int32* pStart, sal_Int32* pEnd = nullptr,
                                         SwRootFrame const* pLayout = nullptr,
                                         SwTextNode* pSelf = nullptr, SwFrame* pFrame = nullptr);
     void UpdateGetReferences();
@@ -105,16 +105,16 @@ public:
 private:
     static SwTextNode* FindAnchorRefStyle( SwDoc* pDoc, const OUString& rRefMark,
                                         sal_uInt16 nFlags,
-                                        sal_Int32* pStt, sal_Int32* pEnd,
+                                        sal_Int32* pStart, sal_Int32* pEnd,
                                         SwRootFrame const* pLayout,
                                         SwTextNode* pSelf, SwFrame* pFrame);
     static SwTextNode* FindAnchorRefStyleMarginal( SwDoc* pDoc,
                                         sal_uInt16 nFlags,
-                                        sal_Int32* pStt, sal_Int32* pEnd,
+                                        sal_Int32* pStart, sal_Int32* pEnd,
                                         SwTextNode* pSelf, SwFrame* pFrame,
                                         const SwTextNode* pReference, std::u16string_view styleName);
     static SwTextNode* FindAnchorRefStyleOther( SwDoc* pDoc,
-                                        sal_Int32* pStt, sal_Int32* pEnd,
+                                        sal_Int32* pStart, sal_Int32* pEnd,
                                         SwTextNode* pSelf,
                                         const SwTextNode* pReference, std::u16string_view styleName);
 };

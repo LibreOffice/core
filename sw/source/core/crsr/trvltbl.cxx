@@ -137,7 +137,7 @@ bool SwCursorShell::SelTableRowOrCol( bool bRow, bool bRowSimple )
 
     CurrShell aCurr( this );
 
-    const SwTableBox* pStt = nullptr;
+    const SwTableBox* pStart = nullptr;
     const SwTableBox* pEnd = nullptr;
 
     // search box based on layout
@@ -155,7 +155,7 @@ bool SwCursorShell::SelTableRowOrCol( bool bRow, bool bRowSimple )
         if( aBoxes.empty() )
             return false;
 
-        pStt = aBoxes[0];
+        pStart = aBoxes[0];
         pEnd = aBoxes.back();
     }
     // #i32329# Enhanced table selection
@@ -167,7 +167,7 @@ bool SwCursorShell::SelTableRowOrCol( bool bRow, bool bRowSimple )
         if( aBoxes.empty() )
             return false;
 
-        pStt = aBoxes[0];
+        pStart = aBoxes[0];
         pEnd = aBoxes.back();
 
         m_eEnhancedTableSel = eSearchType;
@@ -193,7 +193,7 @@ bool SwCursorShell::SelTableRowOrCol( bool bRow, bool bRowSimple )
 
         const bool bVert = pFrame->ImplFindTabFrame()->IsVertical();
 
-        // If we select upwards it is sufficient to set pStt and pEnd
+        // If we select upwards it is sufficient to set pStart and pEnd
         // to the first resp. last box of the selection obtained from
         // GetTableSel. However, selecting downwards requires the frames
         // located at the corners of the selection. This does not work
@@ -210,13 +210,13 @@ bool SwCursorShell::SelTableRowOrCol( bool bRow, bool bRowSimple )
 
         if ( bSelectUp )
         {
-            pStt = aBoxes[0];
+            pStart = aBoxes[0];
             pEnd = aBoxes.back();
         }
         else
         {
             // will become point of table cursor
-            pStt = aCells[bVert ? 0 : (bRow ? 2 : 1)]->GetTabBox();
+            pStart = aCells[bVert ? 0 : (bRow ? 2 : 1)]->GetTabBox();
             // will become mark of table cursor
             pEnd = aCells[bVert ? 3 : (bRow ? 1 : 2)]->GetTabBox();
         }
@@ -236,7 +236,7 @@ bool SwCursorShell::SelTableRowOrCol( bool bRow, bool bRowSimple )
     m_pTableCursor->GetPoint()->Assign( *pEnd->GetSttNd()->EndOfSectionNode() );
     m_pTableCursor->Move( fnMoveBackward, GoInContent );
     m_pTableCursor->SetMark();
-    m_pTableCursor->GetPoint()->Assign( *pStt->GetSttNd()->EndOfSectionNode() );
+    m_pTableCursor->GetPoint()->Assign( *pStart->GetSttNd()->EndOfSectionNode() );
     m_pTableCursor->Move( fnMoveBackward, GoInContent );
 
     // set PtPos 'close' to the reference table, otherwise we might get problems

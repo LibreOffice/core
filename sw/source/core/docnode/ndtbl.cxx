@@ -630,9 +630,9 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
                                    const SwTableAutoFormat* pTAFormat )
 {
     // See if the selection contains a Table
-    auto [pStt, pEnd] = rRange.StartEnd(); // SwPosition*
+    auto [pStart, pEnd] = rRange.StartEnd(); // SwPosition*
     {
-        SwNodeOffset nCnt = pStt->GetNodeIndex();
+        SwNodeOffset nCnt = pStart->GetNodeIndex();
         for( ; nCnt <= pEnd->GetNodeIndex(); ++nCnt )
             if( !GetNodes()[ nCnt ]->IsTextNode() )
                 return nullptr;
@@ -649,10 +649,10 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
     getIDocumentRedlineAccess().AcceptRedline(rRange, true);
 
     // Save first node in the selection if it is a context node
-    SwContentNode * pSttContentNd = pStt->GetNode().GetContentNode();
+    SwContentNode * pSttContentNd = pStart->GetNode().GetContentNode();
 
-    SwPaM aOriginal( *pStt, *pEnd );
-    pStt = aOriginal.GetMark();
+    SwPaM aOriginal( *pStart, *pEnd );
+    pStart = aOriginal.GetMark();
     pEnd = aOriginal.GetPoint();
 
     SwUndoTextToTable* pUndo = nullptr;
@@ -669,9 +669,9 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
     ::PaMCorrAbs( aOriginal, *pEnd );
 
     // Make sure that the range is on Node Edges
-    SwNodeRange aRg( pStt->GetNode(), pEnd->GetNode() );
-    if( pStt->GetContentIndex() )
-        getIDocumentContentOperations().SplitNode( *pStt, false );
+    SwNodeRange aRg( pStart->GetNode(), pEnd->GetNode() );
+    if( pStart->GetContentIndex() )
+        getIDocumentContentOperations().SplitNode( *pStart, false );
 
     bool bEndContent = 0 != pEnd->GetContentIndex();
 
@@ -684,7 +684,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
             getIDocumentContentOperations().SplitNode( *pEnd, false );
             const_cast<SwPosition*>(pEnd)->Adjust(SwNodeOffset(-1));
             // A Node and at the End?
-            if( pStt->GetNodeIndex() >= pEnd->GetNodeIndex() )
+            if( pStart->GetNodeIndex() >= pEnd->GetNodeIndex() )
                 --aRg.aStart;
         }
         else
@@ -1183,7 +1183,7 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
 
     //!!! not necessarily TextNodes !!!
     SwPaM aOriginal( rStartRange.aStart, rEndRange.aEnd );
-    const SwPosition *pStt = aOriginal.GetMark();
+    const SwPosition *pStart = aOriginal.GetMark();
     SwPosition *pEnd = aOriginal.GetPoint();
 
     bool const bUndo(GetIDocumentUndoRedo().DoesUndo());
@@ -1196,9 +1196,9 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
     ::PaMCorrAbs( aOriginal, *pEnd );
 
     // make sure that the range is on Node Edges
-    SwNodeRange aRg( pStt->GetNode(), pEnd->GetNode() );
-    if( pStt->GetContentIndex() )
-        getIDocumentContentOperations().SplitNode( *pStt, false );
+    SwNodeRange aRg( pStart->GetNode(), pEnd->GetNode() );
+    if( pStart->GetContentIndex() )
+        getIDocumentContentOperations().SplitNode( *pStart, false );
 
     bool bEndContent = 0 != pEnd->GetContentIndex();
 
@@ -1211,7 +1211,7 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
             getIDocumentContentOperations().SplitNode( *pEnd, false );
             pEnd->Adjust(SwNodeOffset(-1));
             // A Node and at the End?
-            if( pStt->GetNodeIndex() >= pEnd->GetNodeIndex() )
+            if( pStart->GetNodeIndex() >= pEnd->GetNodeIndex() )
                 --aRg.aStart;
         }
         else
@@ -1219,7 +1219,7 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
     }
 
     assert(aRg.aEnd.GetNode() == pEnd->GetNode());
-    assert(aRg.aStart.GetNode() == pStt->GetNode());
+    assert(aRg.aStart.GetNode() == pStart->GetNode());
     if( aRg.aEnd.GetIndex() == aRg.aStart.GetIndex() )
     {
         OSL_FAIL( "empty range" );
@@ -4564,8 +4564,8 @@ void SwDoc::UnProtectTables( const SwPaM& rPam )
                 bool bFound = false;
                 SwPaM* pTmp = const_cast<SwPaM*>(&rPam);
                 do {
-                    auto [pStt, pEnd] = pTmp->StartEnd(); // SwPosition*
-                    bFound = pStt->GetNodeIndex() < nTableIdx &&
+                    auto [pStart, pEnd] = pTmp->StartEnd(); // SwPosition*
+                    bFound = pStart->GetNodeIndex() < nTableIdx &&
                             nTableIdx < pEnd->GetNodeIndex();
 
                 } while( !bFound && &rPam != ( pTmp = pTmp->GetNext() ) );

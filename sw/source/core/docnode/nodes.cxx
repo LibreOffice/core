@@ -1493,16 +1493,16 @@ sal_uInt16 HighestLevel( SwNodes & rNodes, const SwNodeRange & rRange )
  */
 void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
 {
-    auto [pStt, pEnd] = rPam.StartEnd(); // SwPosition*
+    auto [pStart, pEnd] = rPam.StartEnd(); // SwPosition*
 
-    if( !rPam.HasMark() || *pStt >= *pEnd )
+    if( !rPam.HasMark() || *pStart >= *pEnd )
         return;
 
-    if( this == &rNodes && *pStt <= rPos && rPos < *pEnd )
+    if( this == &rNodes && *pStart <= rPos && rPos < *pEnd )
         return;
 
     SwNodeIndex aEndIdx( pEnd->GetNode() );
-    SwNodeIndex aSttIdx( pStt->GetNode() );
+    SwNodeIndex aSttIdx( pStart->GetNode() );
     SwTextNode *const pSrcNd = aSttIdx.GetNode().GetTextNode();
     SwTextNode * pDestNd = rPos.GetNode().GetTextNode();
     bool bSplitDestNd = true;
@@ -1523,15 +1523,15 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
                         pEnd->GetNode().IsTextNode();
 
         // move the content into the new node
-        bool bOneNd = pStt->GetNode() == pEnd->GetNode();
+        bool bOneNd = pStart->GetNode() == pEnd->GetNode();
         const sal_Int32 nLen =
                 ( bOneNd ? std::min(pEnd->GetContentIndex(), pSrcNd->Len()) : pSrcNd->Len() )
-                - pStt->GetContentIndex();
+                - pStart->GetContentIndex();
 
         if( !pEnd->GetNode().IsContentNode() )
         {
             bOneNd = true;
-            SwNodeOffset nSttNdIdx = pStt->GetNodeIndex() + 1;
+            SwNodeOffset nSttNdIdx = pStart->GetNodeIndex() + 1;
             const SwNodeOffset nEndNdIdx = pEnd->GetNodeIndex();
             for( ; nSttNdIdx < nEndNdIdx; ++nSttNdIdx )
             {
@@ -1571,12 +1571,12 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
             if( nLen )
             {
                 pSrcNd->CutText( pDestNd, SwContentIndex( pDestNd, pDestNd->Len()),
-                            pStt->nContent, nLen );
+                            pStart->nContent, nLen );
             }
         }
         else if ( nLen )
         {
-            pSrcNd->CutText( pDestNd, rPos.nContent, pStt->nContent, nLen );
+            pSrcNd->CutText( pDestNd, rPos.nContent, pStart->nContent, nLen );
         }
 
         if( bCopyCollFormat )
@@ -1591,7 +1591,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
             // Correct the PaM, because it might have happened that the move
             // went over the node borders (so the data might be in different nodes).
             // Also, a selection is invalidated.
-            pEnd->nContent = pStt->nContent;
+            pEnd->nContent = pStart->nContent;
             rPam.DeleteMark();
             GetDoc().GetDocShell()->Broadcast( SwFormatFieldHint( nullptr,
                 rNodes.IsDocNodes() ? SwFormatFieldHintWhich::INSERTED : SwFormatFieldHintWhich::REMOVED ) );
@@ -1686,30 +1686,30 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
     if( aEndIdx != aSttIdx )
     {
         // move the nodes into the NodesArray
-        const SwNodeOffset nSttDiff = aSttIdx.GetIndex() - pStt->GetNodeIndex();
+        const SwNodeOffset nSttDiff = aSttIdx.GetIndex() - pStart->GetNodeIndex();
         SwNodeRange aRg( aSttIdx, aEndIdx );
         MoveNodes( aRg, rNodes, rPos.GetNode() );
 
         // if in the same node array, all indices are now at new positions (so correct them)
         if( &rNodes == this )
         {
-            pStt->nNode = aRg.aEnd.GetIndex() - nSttDiff;
+            pStart->nNode = aRg.aEnd.GetIndex() - nSttDiff;
         }
     }
 
     // if the StartNode was moved to whom the cursor pointed, so
     // the content must be registered in the current content!
-    if ( pStt->GetNode() == GetEndOfContent() )
+    if ( pStart->GetNode() == GetEndOfContent() )
     {
-        const bool bSuccess = GoPrevious( &pStt->nNode );
+        const bool bSuccess = GoPrevious( &pStart->nNode );
         OSL_ENSURE( bSuccess, "Move() - no ContentNode here" );
     }
-    pStt->nContent.Assign( pStt->GetNode().GetContentNode(),
-                            pStt->GetContentIndex() );
+    pStart->nContent.Assign( pStart->GetNode().GetContentNode(),
+                            pStart->GetContentIndex() );
     // Correct the PaM, because it might have happened that the move
     // went over the node borders (so the data might be in different nodes).
     // Also, a selection is invalidated.
-    *pEnd = *pStt;
+    *pEnd = *pStart;
     rPam.DeleteMark();
     GetDoc().GetDocShell()->Broadcast( SwFormatFieldHint( nullptr,
                 rNodes.IsDocNodes() ? SwFormatFieldHintWhich::INSERTED : SwFormatFieldHintWhich::REMOVED ) );

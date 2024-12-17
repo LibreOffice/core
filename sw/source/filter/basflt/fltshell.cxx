@@ -761,13 +761,13 @@ const SfxPoolItem* SwFltControlStack::GetOpenStackAttr(const SwPosition& rPos, s
 
 void SwFltControlStack::Delete(const SwPaM &rPam)
 {
-    auto [pStt, pEnd] = rPam.StartEnd(); // SwPosition*
+    auto [pStart, pEnd] = rPam.StartEnd(); // SwPosition*
 
-    if( !rPam.HasMark() || *pStt >= *pEnd )
+    if( !rPam.HasMark() || *pStart >= *pEnd )
         return;
 
-    SwNodeIndex aStartNode(pStt->GetNode(), -1);
-    const sal_Int32 nStartIdx = pStt->GetContentIndex();
+    SwNodeIndex aStartNode(pStart->GetNode(), -1);
+    const sal_Int32 nStartIdx = pStart->GetContentIndex();
     SwNodeIndex aEndNode(pEnd->GetNode(), -1);
     const sal_Int32 nEndIdx = pEnd->GetContentIndex();
 

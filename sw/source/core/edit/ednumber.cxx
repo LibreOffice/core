@@ -428,10 +428,10 @@ bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
                 {
                     SwNodeOffset nStt = aPos.GetNodeIndex(), nIdx = nStt - 1;
 
-                    if (SwTextNode const*const pStt = aPos.GetNode().GetTextNode())
+                    if (SwTextNode const*const pStart = aPos.GetNode().GetTextNode())
                     {
                         std::pair<SwTextNode *, SwTextNode *> nodes(
-                            sw::GetFirstAndLastNode(*GetLayout(), *pStt));
+                            sw::GetFirstAndLastNode(*GetLayout(), *pStart));
                         nIdx = nodes.first->GetIndex() - 1;
                     }
                     while( nIdx && (
@@ -451,10 +451,10 @@ bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
                     pOrig == aCursor.GetPointNode().GetTextNode()->GetNumRule() )
                 {
                     SwNodeOffset nStt = aCursor.GetPoint()->GetNodeIndex(), nIdx = nStt+1;
-                    if (SwTextNode const*const pStt = aCursor.GetPoint()->GetNode().GetTextNode())
+                    if (SwTextNode const*const pStart = aCursor.GetPoint()->GetNode().GetTextNode())
                     {
                         std::pair<SwTextNode *, SwTextNode *> nodes(
-                            sw::GetFirstAndLastNode(*GetLayout(), *pStt));
+                            sw::GetFirstAndLastNode(*GetLayout(), *pStart));
                         nIdx = nodes.second->GetIndex() + 1;
                     }
 

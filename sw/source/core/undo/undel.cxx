@@ -214,7 +214,7 @@ SwUndoDelete::SwUndoDelete(
         m_pHistory.reset( new SwHistory );
 
     // delete all footnotes for now
-    auto [pStt, pEnd] = rPam.StartEnd(); // SwPosition*
+    auto [pStart, pEnd] = rPam.StartEnd(); // SwPosition*
 
     // Step 1. deletion/record of content indices
     if( m_bDelFullPara )
@@ -224,7 +224,7 @@ SwUndoDelete::SwUndoDelete(
                         DelContentType(DelContentType::AllMask | DelContentType::CheckNoCntnt) );
 
         ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
-        DelBookmarks(pStt->GetNode(), pEnd->GetNode());
+        DelBookmarks(pStart->GetNode(), pEnd->GetNode());
     }
     else
     {
@@ -234,7 +234,7 @@ SwUndoDelete::SwUndoDelete(
         ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
         if (m_nEndNode - m_nSttNode > SwNodeOffset(1)) // check for fully selected nodes
         {
-            SwNodeIndex const start(pStt->GetNode(), +1);
+            SwNodeIndex const start(pStart->GetNode(), +1);
             DelBookmarks(start.GetNode(), pEnd->GetNode());
         }
     }
@@ -242,7 +242,7 @@ SwUndoDelete::SwUndoDelete(
     m_nSetPos = m_pHistory ? m_pHistory->Count() : 0;
 
     // Is already anything deleted?
-    m_nNdDiff = m_nSttNode - pStt->GetNodeIndex();
+    m_nNdDiff = m_nSttNode - pStart->GetNodeIndex();
 
     m_bJoinNext = !bFullPara && pEnd == rPam.GetPoint();
     m_bBackSp = !bFullPara && !m_bJoinNext;
@@ -250,7 +250,7 @@ SwUndoDelete::SwUndoDelete(
     SwTextNode *pSttTextNd = nullptr, *pEndTextNd = nullptr;
     if( !bFullPara )
     {
-        pSttTextNd = pStt->GetNode().GetTextNode();
+        pSttTextNd = pStart->GetNode().GetTextNode();
         pEndTextNd = m_nSttNode == m_nEndNode
                     ? pSttTextNd
                     : pEnd->GetNode().GetTextNode();
@@ -260,13 +260,13 @@ SwUndoDelete::SwUndoDelete(
         DelFullParaMoveFrames(rDoc, *this, *m_pRedlSaveData);
     }
 
-    bool bMoveNds = *pStt != *pEnd      // any area still existent?
-                && ( SaveContent( pStt, pEnd, pSttTextNd, pEndTextNd ) || m_bFromTableCopy );
+    bool bMoveNds = *pStart != *pEnd      // any area still existent?
+                && ( SaveContent( pStart, pEnd, pSttTextNd, pEndTextNd ) || m_bFromTableCopy );
 
     if( pSttTextNd && pEndTextNd && pSttTextNd != pEndTextNd )
     {
         // two different TextNodes, thus save also the TextFormatCollection
-        m_pHistory->AddColl(pSttTextNd->GetTextColl(), pStt->GetNodeIndex(), SwNodeType::Text);
+        m_pHistory->AddColl(pSttTextNd->GetTextColl(), pStart->GetNodeIndex(), SwNodeType::Text);
         m_pHistory->AddColl(pEndTextNd->GetTextColl(), pEnd->GetNodeIndex(), SwNodeType::Text);
 
         if( !m_bJoinNext )        // Selection from bottom to top
@@ -448,10 +448,10 @@ SwUndoDelete::SwUndoDelete(
         m_pHistory.reset();
 }
 
-bool SwUndoDelete::SaveContent( const SwPosition* pStt, const SwPosition* pEnd,
+bool SwUndoDelete::SaveContent( const SwPosition* pStart, const SwPosition* pEnd,
                     SwTextNode* pSttTextNd, SwTextNode* pEndTextNd )
 {
-    SwNodeOffset nNdIdx = pStt->GetNodeIndex();
+    SwNodeOffset nNdIdx = pStart->GetNodeIndex();
     // 1 - copy start in Start-String
     if( pSttTextNd )
     {
@@ -468,12 +468,12 @@ bool SwUndoDelete::SaveContent( const SwPosition* pStt, const SwPosition* pEnd,
         sal_Int32 nLen = (bOneNode
                     ? pEnd->GetContentIndex()
                     : pSttTextNd->GetText().getLength())
-            - pStt->GetContentIndex();
+            - pStart->GetContentIndex();
 
         // delete now also the text (all attribute changes are added to
         // UNDO history)
         m_aSttStr = pSttTextNd->GetText().copy(m_nSttContent, nLen);
-        pSttTextNd->EraseText( *pStt, nLen );
+        pSttTextNd->EraseText( *pStart, nLen );
         if( pSttTextNd->GetpSwpHints() )
             pSttTextNd->GetpSwpHints()->DeRegister();
 
@@ -537,10 +537,10 @@ bool SwUndoDelete::CanGrouping( SwDoc& rDoc, const SwPaM& rDelPam )
     if( m_nSttNode != m_nEndNode || ( !m_bGroup && m_nSttContent+1 != m_nEndContent ))
         return false;
 
-    auto [pStt, pEnd] = rDelPam.StartEnd(); // SwPosition*
+    auto [pStart, pEnd] = rDelPam.StartEnd(); // SwPosition*
 
-    if( pStt->GetNode() != pEnd->GetNode() ||
-        pStt->GetContentIndex()+1 != pEnd->GetContentIndex() ||
+    if( pStart->GetNode() != pEnd->GetNode() ||
+        pStart->GetContentIndex()+1 != pEnd->GetContentIndex() ||
         pEnd->GetNodeIndex() != m_nSttNode )
         return false;
 
@@ -552,7 +552,7 @@ bool SwUndoDelete::CanGrouping( SwDoc& rDoc, const SwPaM& rDelPam )
         m_bBackSp = true;
     }
     // note: compare m_nSttContent here because the text isn't there any more!
-    else if( pStt->GetContentIndex() == m_nSttContent )
+    else if( pStart->GetContentIndex() == m_nSttContent )
     {
         if( m_bGroup && m_bBackSp ) return false;
         m_bBackSp = false;
@@ -561,11 +561,11 @@ bool SwUndoDelete::CanGrouping( SwDoc& rDoc, const SwPaM& rDelPam )
         return false;
 
     // are both Nodes (Node/Undo array) TextNodes at all?
-    SwTextNode * pDelTextNd = pStt->GetNode().GetTextNode();
+    SwTextNode * pDelTextNd = pStart->GetNode().GetTextNode();
     if( !pDelTextNd ) return false;
 
     sal_Int32 nUChrPos = m_bBackSp ? 0 : m_aSttStr->getLength()-1;
-    sal_Unicode cDelChar = pDelTextNd->GetText()[ pStt->GetContentIndex() ];
+    sal_Unicode cDelChar = pDelTextNd->GetText()[ pStart->GetContentIndex() ];
     CharClass& rCC = GetAppCharClass();
     if( ( CH_TXTATR_BREAKWORD == cDelChar || CH_TXTATR_INWORD == cDelChar ) ||
         rCC.isLetterNumeric( OUString( cDelChar ), 0 ) !=
@@ -575,7 +575,7 @@ bool SwUndoDelete::CanGrouping( SwDoc& rDoc, const SwPaM& rDelPam )
     // tdf#132725 - if at-char/at-para flys would be deleted, don't group!
     // DelContentIndex() would be called at the wrong time here, the indexes
     // in the stored SwHistoryTextFlyCnt would be wrong when Undo is invoked
-    if (IsFlySelectedByCursor(rDoc, *pStt, *pEnd))
+    if (IsFlySelectedByCursor(rDoc, *pStart, *pEnd))
     {
         return false;
     }
@@ -594,7 +594,7 @@ bool SwUndoDelete::CanGrouping( SwDoc& rDoc, const SwPaM& rDelPam )
                 auto const ppMark(rIDMA.findMark(pHistoryBM->GetName()));
                 if (ppMark != rIDMA.getAllMarksEnd()
                     && (m_bBackSp
-                            ? ((**ppMark).GetMarkPos() == *pStt)
+                            ? ((**ppMark).GetMarkPos() == *pStart)
                             : ((**ppMark).IsExpanded()
                                 && (**ppMark).GetOtherMarkPos() == *pEnd)))
                 {   // prevent grouping that would delete this mark on Redo()
@@ -627,7 +627,7 @@ bool SwUndoDelete::CanGrouping( SwDoc& rDoc, const SwPaM& rDelPam )
         nUChrPos++;
     }
     m_aSttStr = m_aSttStr->replaceAt( nUChrPos, 0, rtl::OUStringChar(cDelChar) );
-    pDelTextNd->EraseText( *pStt, 1 );
+    pDelTextNd->EraseText( *pStart, 1 );
 
     m_bGroup = true;
     return true;

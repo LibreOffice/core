@@ -56,13 +56,13 @@ void SwEditShell::Insert(const SwTOXMark& rMark)
     StartAllAction();
     for(SwPaM& rPaM : GetCursor()->GetRingContainer())
     {
-        auto [pStt, pEnd] = rPaM.StartEnd(); // SwPosition*
+        auto [pStart, pEnd] = rPaM.StartEnd(); // SwPosition*
         if( bInsAtPos )
         {
-            SwPaM aTmp( *pStt );
+            SwPaM aTmp( *pStart );
             GetDoc()->getIDocumentContentOperations().InsertPoolItem( aTmp, rMark );
         }
-        else if( *pEnd != *pStt )
+        else if( *pEnd != *pStart )
         {
             GetDoc()->getIDocumentContentOperations().InsertPoolItem(
                 rPaM, rMark, SetAttrMode::DONTEXPAND );

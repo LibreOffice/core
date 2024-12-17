@@ -509,10 +509,10 @@ void SwHyphIter::Ignore()
 
 void SwHyphIter::DelSoftHyph( SwPaM &rPam )
 {
-    const SwPosition* pStt = rPam.Start();
-    const sal_Int32 nStart = pStt->GetContentIndex();
+    const SwPosition* pStart = rPam.Start();
+    const sal_Int32 nStart = pStart->GetContentIndex();
     const sal_Int32 nEnd   = rPam.End()->GetContentIndex();
-    SwTextNode *pNode = pStt->GetNode().GetTextNode();
+    SwTextNode *pNode = pStart->GetNode().GetTextNode();
     pNode->DelSoftHyph( nStart, nEnd );
 }
 

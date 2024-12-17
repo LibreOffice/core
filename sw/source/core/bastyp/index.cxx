@@ -233,43 +233,43 @@ void SwContentIndexReg::Update(
     const sal_Int32 nDiff,
     UpdateMode const eMode)
 {
-    SwContentIndex* pStt = const_cast<SwContentIndex*>(&rIdx);
+    SwContentIndex* pStart = const_cast<SwContentIndex*>(&rIdx);
     const sal_Int32 nNewVal = rIdx.m_nIndex;
     if (eMode & UpdateMode::Negative)
     {
         const sal_Int32 nLast = rIdx.m_nIndex + nDiff;
-        pStt = rIdx.m_pNext;
+        pStart = rIdx.m_pNext;
         // skip over the ones that already have the right value
-        while (pStt && pStt->m_nIndex == nNewVal)
-            pStt = pStt->m_pNext;
-        while (pStt && pStt->m_nIndex <= nLast)
+        while (pStart && pStart->m_nIndex == nNewVal)
+            pStart = pStart->m_pNext;
+        while (pStart && pStart->m_nIndex <= nLast)
         {
-            pStt->m_nIndex = nNewVal;
-            pStt = pStt->m_pNext;
+            pStart->m_nIndex = nNewVal;
+            pStart = pStart->m_pNext;
         }
-        while( pStt )
+        while( pStart )
         {
-            pStt->m_nIndex = pStt->m_nIndex - nDiff;
-            pStt = pStt->m_pNext;
+            pStart->m_nIndex = pStart->m_nIndex - nDiff;
+            pStart = pStart->m_pNext;
         }
     }
     else
     {
-        while (pStt && pStt->m_nIndex == nNewVal)
+        while (pStart && pStart->m_nIndex == nNewVal)
         {
-            pStt->m_nIndex = pStt->m_nIndex + nDiff;
-            pStt = pStt->m_pPrev;
+            pStart->m_nIndex = pStart->m_nIndex + nDiff;
+            pStart = pStart->m_pPrev;
         }
-        pStt = rIdx.m_pNext;
-        while( pStt )
+        pStart = rIdx.m_pNext;
+        while( pStart )
         {
             // HACK: avoid updating position of cross-ref bookmarks
-            if (pStt->m_pOwner && pStt->m_pOwner->GetOwnerType() == SwContentIndexOwnerType::Mark
-                && dynamic_cast< ::sw::mark::CrossRefBookmark const*>(pStt->m_pOwner))
+            if (pStart->m_pOwner && pStart->m_pOwner->GetOwnerType() == SwContentIndexOwnerType::Mark
+                && dynamic_cast< ::sw::mark::CrossRefBookmark const*>(pStart->m_pOwner))
                 ; // do nothing
             else
-                pStt->m_nIndex = pStt->m_nIndex + nDiff;
-            pStt = pStt->m_pNext;
+                pStart->m_nIndex = pStart->m_nIndex + nDiff;
+            pStart = pStart->m_pNext;
         }
     }
 }

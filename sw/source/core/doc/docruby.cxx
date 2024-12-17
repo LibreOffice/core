@@ -53,13 +53,13 @@ sal_uInt16 SwDoc::FillRubyList( const SwPaM& rPam, SwRubyList& rList )
                 *_pStartCursor2 = _pStartCursor;
     bool bCheckEmpty = &rPam != _pStartCursor;
     do {
-        auto [pStt, pEnd] = _pStartCursor->StartEnd(); // SwPosition*
-        if( !bCheckEmpty || ( pStt != pEnd && *pStt != *pEnd ))
+        auto [pStart, pEnd] = _pStartCursor->StartEnd(); // SwPosition*
+        if( !bCheckEmpty || ( pStart != pEnd && *pStart != *pEnd ))
         {
-            SwPaM aPam( *pStt );
+            SwPaM aPam( *pStart );
             do {
                 std::unique_ptr<SwRubyListEntry> pNew(new SwRubyListEntry);
-                if( pEnd != pStt )
+                if( pEnd != pStart )
                 {
                     aPam.SetMark();
                     *aPam.GetMark() = *pEnd;
@@ -102,15 +102,15 @@ void SwDoc::SetRubyList(SwPaM& rPam, const SwRubyList& rList)
     int nCurrBaseTexts = 0;
 
     const SwPaM* pStartCursor = rPam.GetNext();
-    auto [pStt, pEnd] = pStartCursor->StartEnd();
+    auto [pStart, pEnd] = pStartCursor->StartEnd();
 
-    bool bCheckEmpty = (&rPam == pStartCursor) || (pStt != pEnd && *pStt != *pEnd);
+    bool bCheckEmpty = (&rPam == pStartCursor) || (pStart != pEnd && *pStart != *pEnd);
 
     // Sequentially replace as many spans as possible
-    SwPaM aPam(*pStt);
+    SwPaM aPam(*pStart);
     while (bCheckEmpty && nListEntry < rList.size() && nCurrBaseTexts < nMaxBaseTexts)
     {
-        if (pEnd != pStt)
+        if (pEnd != pStart)
         {
             aPam.SetMark();
             *aPam.GetMark() = *pEnd;
@@ -169,7 +169,7 @@ void SwDoc::SetRubyList(SwPaM& rPam, const SwRubyList& rList)
     // Delete any spans past the end of the ruby list
     while (nListEntry == rList.size() && nCurrBaseTexts < nMaxBaseTexts && *aPam.GetPoint() < *pEnd)
     {
-        if (pEnd != pStt)
+        if (pEnd != pStart)
         {
             aPam.SetMark();
             *aPam.GetMark() = *pEnd;

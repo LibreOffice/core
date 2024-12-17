@@ -64,7 +64,7 @@ class SwUndoDelete final
     bool m_bFromTableCopy : 1; // TRUE: called by SwUndoTableCpyTable
     SwDeleteFlags m_DeleteFlags;
 
-    bool SaveContent( const SwPosition* pStt, const SwPosition* pEnd,
+    bool SaveContent( const SwPosition* pStart, const SwPosition* pEnd,
                     SwTextNode* pSttTextNd, SwTextNode* pEndTextNd );
 
 public:

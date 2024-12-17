@@ -571,7 +571,7 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
                 {
                     pWrtShell->SelectTableRow();
                     SwCursor* pTableCursor = static_cast<SwCursor*>(GetTableCursor());
-                    auto pStt = aBoxes[nBox];
+                    auto pStart = aBoxes[nBox];
                     if ( !pTableCursor )
                         pTableCursor = GetCursor(true);
 
@@ -579,7 +579,7 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
                     {
                         // set start and end of the selection
                         pTableCursor->DeleteMark();
-                        pTableCursor->GetPoint()->Assign( *pStt->GetSttNd()->EndOfSectionNode() );
+                        pTableCursor->GetPoint()->Assign( *pStart->GetSttNd()->EndOfSectionNode() );
                         pTableCursor->Move( fnMoveBackward, GoInContent );
                         pWrtShell->UpdateCursor();
                     }

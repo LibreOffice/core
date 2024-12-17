@@ -333,8 +333,8 @@ void sw_GetJoinFlags( SwPaM& rPam, bool& rJoinText, bool& rJoinPrev )
     if( rPam.GetPoint()->GetNode() == rPam.GetMark()->GetNode() )
         return;
 
-    auto [pStt, pEnd] = rPam.StartEnd(); // SwPosition*
-    SwTextNode *pSttNd = pStt->GetNode().GetTextNode();
+    auto [pStart, pEnd] = rPam.StartEnd(); // SwPosition*
+    SwTextNode *pSttNd = pStart->GetNode().GetTextNode();
     if( !pSttNd )
         return;
 
@@ -343,14 +343,14 @@ void sw_GetJoinFlags( SwPaM& rPam, bool& rJoinText, bool& rJoinPrev )
     if( !rJoinText )
         return;
 
-    bool bExchange = pStt == rPam.GetPoint();
-    if( !pStt->GetContentIndex() &&
+    bool bExchange = pStart == rPam.GetPoint();
+    if( !pStart->GetContentIndex() &&
         pEndNd->GetText().getLength() != pEnd->GetContentIndex())
         bExchange = !bExchange;
     if( bExchange )
         rPam.Exchange();
-    rJoinPrev = rPam.GetPoint() == pStt;
-    OSL_ENSURE( !pStt->GetContentIndex() &&
+    rJoinPrev = rPam.GetPoint() == pStart;
+    OSL_ENSURE( !pStart->GetContentIndex() &&
         pEndNd->GetText().getLength() != pEnd->GetContentIndex()
         ? (rPam.GetPoint()->GetNode() < rPam.GetMark()->GetNode())
         : (rPam.GetPoint()->GetNode() > rPam.GetMark()->GetNode()),
@@ -832,16 +832,16 @@ void SwDoc::DeleteAutoCorrExceptWord()
 void SwDoc::CountWords( const SwPaM& rPaM, SwDocStat& rStat )
 {
     // This is a modified version of SwDoc::TransliterateText
-    auto [pStt, pEnd] = rPaM.StartEnd(); // SwPosition*
+    auto [pStart, pEnd] = rPaM.StartEnd(); // SwPosition*
 
-    const SwNodeOffset nSttNd = pStt->GetNodeIndex();
+    const SwNodeOffset nSttNd = pStart->GetNodeIndex();
     const SwNodeOffset nEndNd = pEnd->GetNodeIndex();
 
-    const sal_Int32 nSttCnt = pStt->GetContentIndex();
+    const sal_Int32 nSttCnt = pStart->GetContentIndex();
     const sal_Int32 nEndCnt = pEnd->GetContentIndex();
 
-    const SwTextNode* pTNd = pStt->GetNode().GetTextNode();
-    if( pStt == pEnd && pTNd )                  // no region ?
+    const SwTextNode* pTNd = pStart->GetNode().GetTextNode();
+    if( pStart == pEnd && pTNd )                  // no region ?
     {
         // do nothing
         return;
@@ -849,7 +849,7 @@ void SwDoc::CountWords( const SwPaM& rPaM, SwDocStat& rStat )
 
     if( nSttNd != nEndNd )
     {
-        SwNodeIndex aIdx( pStt->GetNode() );
+        SwNodeIndex aIdx( pStart->GetNode() );
         if( nSttCnt )
         {
             ++aIdx;
