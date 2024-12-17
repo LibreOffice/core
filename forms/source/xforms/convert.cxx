@@ -280,7 +280,7 @@ Convert& Convert::get()
 
 bool Convert::hasType( const css::uno::Type& rType )
 {
-    return maMap.find( rType ) != maMap.end();
+    return maMap.contains( rType );
 }
 
 css::uno::Sequence<css::uno::Type> Convert::getTypes() const

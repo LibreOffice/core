@@ -246,7 +246,7 @@ Sequence<OUString> ComponentContext::getElementNames()
 sal_Bool ComponentContext::hasByName( OUString const & name )
 {
     std::unique_lock guard( m_aMutex );
-    return m_map.find( name ) != m_map.end();
+    return m_map.contains( name );
 }
 
 // XElementAccess

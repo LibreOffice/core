@@ -565,7 +565,7 @@ bool WPXSvInputStream::existsSubStream(const char* const name)
     if (isOLE())
     {
         ensureOLEIsInitialized();
-        return mpOLEStorage->maNameMap.end() != mpOLEStorage->maNameMap.find(aName);
+        return mpOLEStorage->maNameMap.contains(aName);
     }
 
     mxSeekable->seek(0);
@@ -573,7 +573,7 @@ bool WPXSvInputStream::existsSubStream(const char* const name)
     if (isZip())
     {
         ensureZipIsInitialized();
-        return mpZipStorage->maNameMap.end() != mpZipStorage->maNameMap.find(aName);
+        return mpZipStorage->maNameMap.contains(aName);
     }
 
     return false;

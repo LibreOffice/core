@@ -7693,7 +7693,7 @@ static void lo_setDocumentPassword(LibreOfficeKit* pThis,
     assert(pThis);
     assert(pURL);
     LibLibreOffice_Impl *const pLib = static_cast<LibLibreOffice_Impl*>(pThis);
-    assert(pLib->mInteractionMap.find(OString(pURL)) != pLib->mInteractionMap.end());
+    assert(pLib->mInteractionMap.contains(OString(pURL)));
     pLib->mInteractionMap.find(OString(pURL))->second->SetPassword(pPassword);
 }
 

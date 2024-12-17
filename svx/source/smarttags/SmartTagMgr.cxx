@@ -491,7 +491,7 @@ void SmartTagMgr::AssociateActionsWithRecognizers()
             const OUString aSmartTagName = xRecognizer->getSmartTagName(j);
 
             // check if smart tag type has already been processed:
-            if ( maSmartTagMap.find( aSmartTagName ) != maSmartTagMap.end() )
+            if ( maSmartTagMap.contains( aSmartTagName ) )
                 continue;
 
             bool bFound = false;

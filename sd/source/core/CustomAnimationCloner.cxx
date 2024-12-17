@@ -275,7 +275,7 @@ namespace sd
     {
         if( xSource.is() )
         {
-            if( maShapeMap.find(xSource) != maShapeMap.end() )
+            if( maShapeMap.contains(xSource) )
             {
                 return maShapeMap[xSource];
             }

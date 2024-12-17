@@ -53,7 +53,7 @@ css::uno::Sequence< OUString > SAL_CALL CMimeContentType::getParameters( )
 
 sal_Bool SAL_CALL CMimeContentType::hasParameter( const OUString& aName )
 {
-    return ( m_ParameterMap.end( ) != m_ParameterMap.find( aName.toAsciiLowerCase() ) );
+    return m_ParameterMap.contains( aName.toAsciiLowerCase() );
 }
 
 OUString SAL_CALL CMimeContentType::getParameterValue( const OUString& aName )

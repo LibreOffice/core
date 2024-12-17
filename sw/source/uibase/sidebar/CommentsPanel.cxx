@@ -528,7 +528,7 @@ void CommentsPanel::deleteComment(sal_uInt32 nId)
     // // If the root comment is deleted, the new root comment of the thread should be the next comment in the thread
     // // but due to a bug `getRootCommentWin` returns root comment of some other/random thread so we completely lose
     // // access to the current thread.
-    // if (mpThreadsMap.find(nId) != mpThreadsMap.end())
+    // if (mpThreadsMap.contains(nId))
     // {
     //     pRootNote = mpThreadsMap[nId];
     // }

@@ -140,8 +140,8 @@ CPPUNIT_TEST_FIXTURE(Test, testSetDocumentPropertiesUpdate)
     // - Actual  : foo
     // i.e. ZOTERO_PREF_1 was not updated.
     CPPUNIT_ASSERT_EQUAL(u"test"_ustr, it->second.get<OUString>());
-    CPPUNIT_ASSERT(bool(aMap.find(u"ZOTERO_PREF_2"_ustr) == aMap.end()));
-    CPPUNIT_ASSERT(aMap.find(u"OTHER"_ustr) != aMap.end());
+    CPPUNIT_ASSERT(!aMap.contains(u"ZOTERO_PREF_2"_ustr));
+    CPPUNIT_ASSERT(aMap.contains(u"OTHER"_ustr));
 }
 }
 

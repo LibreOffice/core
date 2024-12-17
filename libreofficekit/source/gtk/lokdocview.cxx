@@ -1789,7 +1789,7 @@ static const GdkRGBA& getDarkColor(int nViewId, LOKDocViewPrivate& priv)
         GdkRGBA aColor = aColors[nColorCounter++ % aColors.size()];
         aColorMap[nViewId] = aColor;
     }
-    assert(aColorMap.find(nViewId) != aColorMap.end());
+    assert(aColorMap.contains(nViewId));
     return aColorMap[nViewId];
 }
 

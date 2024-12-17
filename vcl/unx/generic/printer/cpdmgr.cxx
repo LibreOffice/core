@@ -507,7 +507,7 @@ void CPDManager::initialize()
     std::unordered_map<OUString, Printer>::iterator it = m_aPrinters.begin();
     while (it != m_aPrinters.end())
     {
-        if (m_aCPDDestMap.find(it->first) != m_aCPDDestMap.end())
+        if (m_aCPDDestMap.contains(it->first))
         {
             ++it;
             continue;

@@ -383,7 +383,7 @@ void CUPSManager::initialize()
     std::unordered_map< OUString, Printer >::iterator it = m_aPrinters.begin();
     while(it != m_aPrinters.end())
     {
-        if( m_aCUPSDestMap.find( it->first ) != m_aCUPSDestMap.end() )
+        if( m_aCUPSDestMap.contains( it->first ) )
         {
             ++it;
             continue;

@@ -251,7 +251,7 @@ css::uno::Any SAL_CALL LngXStringKeyMap::getValue(const OUString& aKey)
 
 sal_Bool SAL_CALL LngXStringKeyMap::hasValue(const OUString& aKey)
 {
-    return maMap.find(aKey) != maMap.end();
+    return maMap.contains(aKey);
 }
 
 ::sal_Int32 SAL_CALL LngXStringKeyMap::getCount() { return maMap.size(); }
@@ -341,7 +341,7 @@ OUString GrammarCheckingIterator::GetOrCreateDocId(
     OUString aRes;
     if (xComponent.is())
     {
-        if (m_aDocIdMap.find( xComponent.get() ) != m_aDocIdMap.end())
+        if (m_aDocIdMap.contains( xComponent.get() ))
         {
             // return already existing entry
             aRes = m_aDocIdMap[ xComponent.get() ];

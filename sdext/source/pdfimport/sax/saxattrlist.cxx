@@ -53,7 +53,7 @@ OUString SAL_CALL SaxAttrList::getTypeByIndex( sal_Int16 i_nIndex)
 
 OUString SAL_CALL SaxAttrList::getTypeByName( const OUString& i_rName )
 {
-    return (m_aIndexMap.find( i_rName ) != m_aIndexMap.end()) ? CDATA : OUString();
+    return (m_aIndexMap.contains( i_rName )) ? CDATA : OUString();
 }
 
 OUString SAL_CALL SaxAttrList::getValueByIndex( sal_Int16 i_nIndex )

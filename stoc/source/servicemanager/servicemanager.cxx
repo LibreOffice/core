@@ -1047,7 +1047,7 @@ void OServiceManager::insert( const Any & Element )
 // helper function
 bool OServiceManager::haveFactoryWithThisImplementation(const OUString& aImplName)
 {
-    return ( m_ImplementationNameMap.find(aImplName) != m_ImplementationNameMap.end());
+    return m_ImplementationNameMap.contains(aImplName);
 }
 
 // XSet

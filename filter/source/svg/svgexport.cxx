@@ -2222,7 +2222,7 @@ bool SVGFilter::implExportShape( const Reference< css::drawing::XShape >& rxShap
                     }
 
                     const GDIMetaFile* pEmbeddedBitmapsMtf = nullptr;
-                    if( mEmbeddedBitmapActionMap.find( rxShape ) !=  mEmbeddedBitmapActionMap.end() )
+                    if( mEmbeddedBitmapActionMap.contains( rxShape ) )
                     {
                         pEmbeddedBitmapsMtf = &( mEmbeddedBitmapActionMap[ rxShape ].GetRepresentation() );
                     }

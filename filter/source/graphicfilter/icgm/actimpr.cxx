@@ -321,7 +321,7 @@ void CGMImpressOutAct::ImplSetFillBundle()
     drawing::Hatch aHatch;
 
     aHatch.Color = nFillColor;
-    if ( mpCGM->pElement->maHatchMap.find( nHatchIndex ) !=  mpCGM->pElement->maHatchMap.end() )
+    if ( mpCGM->pElement->maHatchMap.contains( nHatchIndex ) )
     {
         HatchEntry& rHatchEntry = mpCGM->pElement->maHatchMap[ nHatchIndex ];
         switch ( rHatchEntry.HatchStyle )

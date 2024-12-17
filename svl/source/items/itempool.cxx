@@ -208,7 +208,7 @@ const SlotIDToWhichIDMap& ItemInfoPackage::getSlotIDToWhichIDMap() const
             if (0 != rCandidate.getSlotID())
             {
 #ifdef DBG_UTIL
-                if (maSlotIDToWhichIDMap.find(rCandidate.getSlotID()) != maSlotIDToWhichIDMap.end())
+                if (maSlotIDToWhichIDMap.contains(rCandidate.getSlotID()))
                     assert(false && "ITEM: SlotID used double in ItemInfoPackage (!)");
 #endif
                 maSlotIDToWhichIDMap[rCandidate.getSlotID()] = rCandidate.getWhich();

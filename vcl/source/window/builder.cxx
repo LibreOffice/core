@@ -1673,7 +1673,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
     }
     else if (name == "GtkIconView")
     {
-        assert(rMap.find(u"model"_ustr) != rMap.end() && "GtkIconView must have a model");
+        assert(rMap.contains(u"model"_ustr) && "GtkIconView must have a model");
 
         //window we want to apply the packing props for this GtkIconView to
         VclPtr<vcl::Window> xWindowForPackingProps;
@@ -1696,7 +1696,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
     {
         if (!isLegacy())
         {
-            assert(rMap.find(u"model"_ustr) != rMap.end() && "GtkTreeView must have a model");
+            assert(rMap.contains(u"model"_ustr) && "GtkTreeView must have a model");
         }
 
         //window we want to apply the packing props for this GtkTreeView to
