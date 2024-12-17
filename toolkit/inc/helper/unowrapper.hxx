@@ -28,15 +28,11 @@
 #include <vcl/toolkit/unowrap.hxx>
 #include <vcl/window.hxx>
 
-#include <helper/accessibilityclient.hxx>
-
-
 
 class UnoWrapper final : public UnoWrapperBase
 {
 private:
     css::uno::Reference< css::awt::XToolkit>  mxToolkit;
-    ::toolkit::AccessibilityClient            maAccessibleFactoryAccess;
 
 public:
     UnoWrapper( const css::uno::Reference< css::awt::XToolkit>& rxToolkit );
