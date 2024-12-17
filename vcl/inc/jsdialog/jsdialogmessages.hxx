@@ -118,7 +118,8 @@ private:
     OString generatePopupMessage(const VclPtr<vcl::Window>& pWindow, const rtl::OUString& sParentId,
                                  const OUString& sCloseId) const;
     OString generateClosePopupMessage(const rtl::OUString& sWindowId) const;
-    OString generateMenuMessage(const VclPtr<PopupMenu>& pMenu) const;
+    OString generateMenuMessage(const VclPtr<PopupMenu>& pMenu, const OUString& sParentId,
+                                const OUString& sCloseId) const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

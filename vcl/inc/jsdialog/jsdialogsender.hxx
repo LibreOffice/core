@@ -64,7 +64,8 @@ public:
                             std::unique_ptr<jsdialog::ActionDataMap> pData);
     virtual void sendPopup(const VclPtr<vcl::Window>& pWindow, const OUString& sParentId,
                            const OUString& sCloseId);
-    virtual void sendMenu(const VclPtr<PopupMenu>& pMenu);
+    virtual void sendMenu(const VclPtr<PopupMenu>& pMenu, const OUString& sParentId,
+                          const OUString& sCloseId);
     virtual void sendClosePopup(vcl::LOKWindowId nWindowId);
     void flush() { mpIdleNotify->Invoke(); }
 
