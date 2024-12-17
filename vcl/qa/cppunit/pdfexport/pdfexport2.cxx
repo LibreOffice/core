@@ -6105,6 +6105,69 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf164106SplitReorderedClusters)
     fnCompareIndices(6, 13);
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testPDFAttachmentsWithEncryptedFile)
+{
+    // Encrypt the document and use the hybrid mode.
+    // The original ODF document will be saved to the PDF as an attachment.
+
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    uno::Sequence<beans::PropertyValue> aFilterData
+        = { comphelper::makePropertyValue("IsAddStream", true),
+            comphelper::makePropertyValue("EncryptFile", true),
+            comphelper::makePropertyValue("DocumentOpenPassword", OUString("secret")) };
+    aMediaDescriptor["FilterData"] <<= aFilterData;
+
+    saveAsPDF(u"SimpleTestDocument.fodt");
+
+    // Parse the round-tripped document with PDFium
+    auto pPdfDocument = parsePDFExport("secret"_ostr);
+
+    // Should be 1 page
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+
+    // Should have 1 attachment
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getAttachmentCount());
+
+    // Get the attachment
+    auto pAttachment = pPdfDocument->getAttachment(0);
+    CPPUNIT_ASSERT(pAttachment);
+
+    // Check the filename of the attachment
+    CPPUNIT_ASSERT_EQUAL(u"Original.odt"_ustr, pAttachment->getName());
+
+    // Write the attachment to the buffer
+    std::vector<sal_uInt8> aBuffer;
+    CPPUNIT_ASSERT(pAttachment->getFile(aBuffer));
+    CPPUNIT_ASSERT_GREATER(size_t(0), aBuffer.size());
+
+    // Create a temp file and store the content of the attachment
+    utl::TempFileNamed aTempFile;
+    aTempFile.EnableKillingFile();
+    {
+        SvFileStream aOutputStream(aTempFile.GetURL(), StreamMode::WRITE | StreamMode::TRUNC);
+        aOutputStream.WriteBytes(aBuffer.data(), aBuffer.size());
+    }
+
+    // Load the attached document from the temp file
+    UnoApiTest::loadFromURL(aTempFile.GetURL());
+
+    // Check the content - first paragraph
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xTextDocument.is());
+    uno::Reference<container::XEnumerationAccess> xParagraphEnumAccess(xTextDocument->getText(),
+                                                                       uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xParagraphEnumAccess.is());
+    uno::Reference<container::XEnumeration> xParagraphEnum
+        = xParagraphEnumAccess->createEnumeration();
+    uno::Reference<text::XTextContent> const xElement(xParagraphEnum->nextElement(),
+                                                      uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xElement.is());
+    uno::Reference<text::XTextRange> const xParagraph(xElement, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xParagraph.is());
+
+    CPPUNIT_ASSERT_EQUAL(u"This is a test document."_ustr, xParagraph->getString());
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
