@@ -957,8 +957,8 @@ namespace
                 {
                     // handle paragraph formatting changes
                     // (range is only a full paragraph or a part of it)
-                    const SwPosition* pStt = pRedl->Start();
-                    SwTextNode* pTNd = pStt->GetNode().GetTextNode();
+                    const SwPosition* pStart = pRedl->Start();
+                    SwTextNode* pTNd = pStart->GetNode().GetTextNode();
                     if( pTNd )
                     {
                         // expand range to the whole paragraph
@@ -1023,14 +1023,14 @@ namespace
         SwRedlineTable::size_type n = 0;
         int nCount = 0;
 
-        const SwPosition* pStt = rPam.Start(),
+        const SwPosition* pStart = rPam.Start(),
                         * pEnd = rPam.End();
-        const SwRangeRedline* pFnd = rArr.FindAtPosition( *pStt, n );
+        const SwRangeRedline* pFnd = rArr.FindAtPosition( *pStart, n );
         if( pFnd &&     // Is new a part of it?
-            ( *pFnd->Start() != *pStt || *pFnd->End() > *pEnd ))
+            ( *pFnd->Start() != *pStart || *pFnd->End() > *pEnd ))
         {
             // Only revoke the partial selection
-            if( (*fn_AcceptReject)( rArr, n, bCallDelete, pStt, pEnd ))
+            if( (*fn_AcceptReject)( rArr, n, bCallDelete, pStart, pEnd ))
                 nCount++;
             ++n;
         }
@@ -1060,7 +1060,7 @@ namespace
                         {
                             // Only revoke the partial selection
                             if( (m > 0 || RedlineType::ParagraphFormat == pTmp->GetType()) &&
-                                (*fn_AcceptReject)( rArr, o, bCallDelete, pStt, pEnd ))
+                                (*fn_AcceptReject)( rArr, o, bCallDelete, pStart, pEnd ))
                             {
                                 bHasParagraphFormatChange = true;
                                 nCount++;
@@ -1079,18 +1079,18 @@ namespace
         // The Selection is only in the ContentSection. If there are Redlines
         // to Non-ContentNodes before or after that, then the Selections
         // expand to them.
-        auto [pStt, pEnd] = rPam.StartEnd(); // SwPosition*
+        auto [pStart, pEnd] = rPam.StartEnd(); // SwPosition*
         SwDoc& rDoc = rPam.GetDoc();
-        if( !pStt->GetContentIndex() &&
-            !rDoc.GetNodes()[ pStt->GetNodeIndex() - 1 ]->IsContentNode() )
+        if( !pStart->GetContentIndex() &&
+            !rDoc.GetNodes()[ pStart->GetNodeIndex() - 1 ]->IsContentNode() )
         {
-            const SwRangeRedline* pRedl = rDoc.getIDocumentRedlineAccess().GetRedline( *pStt, nullptr );
+            const SwRangeRedline* pRedl = rDoc.getIDocumentRedlineAccess().GetRedline( *pStart, nullptr );
             if( pRedl )
             {
                 const SwPosition* pRStt = pRedl->Start();
                 if( !pRStt->GetContentIndex() && pRStt->GetNodeIndex() ==
-                    pStt->GetNodeIndex() - 1 )
-                    *pStt = *pRStt;
+                    pStart->GetNodeIndex() - 1 )
+                    *pStart = *pRStt;
             }
         }
         if( pEnd->GetNode().IsContentNode() &&
@@ -1353,23 +1353,23 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
         }
     }
 
-    auto [pStt, pEnd] = pNewRedl->StartEnd(); // SwPosition*
+    auto [pStart, pEnd] = pNewRedl->StartEnd(); // SwPosition*
     {
-        SwTextNode* pTextNode = pStt->GetNode().GetTextNode();
+        SwTextNode* pTextNode = pStart->GetNode().GetTextNode();
         if( pTextNode == nullptr )
         {
-            if( pStt->GetContentIndex() > 0 )
+            if( pStart->GetContentIndex() > 0 )
             {
                 OSL_ENSURE( false, "Redline start: non-text-node with content" );
-                pStt->SetContent( 0 );
+                pStart->SetContent( 0 );
             }
         }
         else
         {
-            if( pStt->GetContentIndex() > pTextNode->Len() )
+            if( pStart->GetContentIndex() > pTextNode->Len() )
             {
                 OSL_ENSURE( false, "Redline start: index after text" );
-                pStt->SetContent( pTextNode->Len() );
+                pStart->SetContent( pTextNode->Len() );
             }
         }
         pTextNode = pEnd->GetNode().GetTextNode();
@@ -1390,7 +1390,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
             }
         }
     }
-    if( ( *pStt == *pEnd ) &&
+    if( ( *pStart == *pEnd ) &&
         ( pNewRedl->GetContentIdx() == nullptr ) )
     {   // Do not insert empty redlines
         delete pNewRedl;
@@ -1399,7 +1399,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
     bool bCompress = false;
     SwRedlineTable::size_type n = 0;
     // look up the first Redline for the starting position
-    if( !GetRedline( *pStt, &n ) && n > 0 )
+    if( !GetRedline( *pStart, &n ) && n > 0 )
         --n;
     const SwRedlineTable::size_type nStartPos = n;
     bool bDec = false;
@@ -1419,7 +1419,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
             continue;
         }
 
-        SwComparePosition eCmpPos = ComparePosition( *pStt, *pEnd, *pRStt, *pREnd );
+        SwComparePosition eCmpPos = ComparePosition( *pStart, *pEnd, *pRStt, *pREnd );
 
         if ( SwComparePosition::Before == eCmpPos && !IsPrevPos( *pEnd, *pRStt ))
             break;
@@ -1439,7 +1439,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
 
                     // Merge if applicable?
                     if( (( SwComparePosition::Behind == eCmpPos &&
-                           IsPrevPos( *pREnd, *pStt ) ) ||
+                           IsPrevPos( *pREnd, *pStart ) ) ||
                          ( SwComparePosition::CollideStart == eCmpPos ) ||
                          ( SwComparePosition::OverlapBehind == eCmpPos ) ) &&
                         pRedl->CanCombine( *pNewRedl ) &&
@@ -1466,7 +1466,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                         ( !n ||
                          *maRedlineTable[ n-1 ]->End() != *pRStt ))
                     {
-                        pRedl->SetStart( *pStt, pRStt );
+                        pRedl->SetStart( *pStart, pRStt );
                         // re-insert
                         maRedlineTable.Remove( n );
                         maRedlineTable.Insert( pRedl );
@@ -1483,15 +1483,15 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                     }
                     else if( SwComparePosition::OverlapBehind == eCmpPos )
                     {
-                        *pStt = *pREnd;
-                        if( ( *pStt == *pEnd ) &&
+                        *pStart = *pREnd;
+                        if( ( *pStart == *pEnd ) &&
                             ( pNewRedl->GetContentIdx() == nullptr ) )
                             bDelete = bMaybeNotify = true;
                     }
                     else if( SwComparePosition::OverlapBefore == eCmpPos )
                     {
                         *pEnd = *pRStt;
-                        if( ( *pStt == *pEnd ) &&
+                        if( ( *pStart == *pEnd ) &&
                             ( pNewRedl->GetContentIdx() == nullptr ) )
                             bDelete = bMaybeNotify = true;
                     }
@@ -1526,8 +1526,8 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                         pCpy->SetStart( *pEnd );
                         maRedlineTable.Insert( pCpy );
                     }
-                    pRedl->SetEnd( *pStt, pREnd );
-                    if( ( *pStt == *pRStt ) &&
+                    pRedl->SetEnd( *pStart, pREnd );
+                    if( ( *pStart == *pRStt ) &&
                         ( pRedl->GetContentIdx() == nullptr ) )
                     {
                         maRedlineTable.DeleteAndDestroy( n );
@@ -1551,7 +1551,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                     pSplit->SetEnd( *pRStt );
                     pNewRedl->SetStart( *pREnd );
                     maRedlineTable.Insert( pSplit );
-                    if( *pStt == *pEnd && pNewRedl->GetContentIdx() == nullptr )
+                    if( *pStart == *pEnd && pNewRedl->GetContentIdx() == nullptr )
                     {
                         delete pNewRedl;
                         pNewRedl = nullptr;
@@ -1567,7 +1567,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                 {
                     // handle overlapping redlines in broken documents
                     *pEnd = *pRStt;
-                    if( ( *pStt == *pEnd ) &&
+                    if( ( *pStart == *pEnd ) &&
                         ( pNewRedl->GetContentIdx() == nullptr ) )
                     {
                         delete pNewRedl;
@@ -1588,8 +1588,8 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                         pCpy->SetStart( *pEnd );
                         maRedlineTable.Insert( pCpy );
                     }
-                    pRedl->SetEnd( *pStt, pREnd );
-                    if( ( *pStt == *pRStt ) &&
+                    pRedl->SetEnd( *pStart, pREnd );
+                    if( ( *pStart == *pRStt ) &&
                         ( pRedl->GetContentIdx() == nullptr ) )
                     {
                         maRedlineTable.DeleteAndDestroy( n );
@@ -1613,7 +1613,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                     pSplit->SetEnd( *pRStt );
                     pNewRedl->SetStart( *pREnd );
                     maRedlineTable.Insert( pSplit );
-                    if( *pStt == *pEnd && pNewRedl->GetContentIdx() == nullptr )
+                    if( *pStart == *pEnd && pNewRedl->GetContentIdx() == nullptr )
                     {
                         delete pNewRedl;
                         pNewRedl = nullptr;
@@ -1644,8 +1644,8 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                     break;
 
                 case SwComparePosition::OverlapBehind:
-                    pRedl->SetEnd( *pStt, pREnd );
-                    if( *pStt == *pRStt && pRedl->GetContentIdx() == nullptr )
+                    pRedl->SetEnd( *pStart, pREnd );
+                    if( *pStart == *pRStt && pRedl->GetContentIdx() == nullptr )
                     {
                         maRedlineTable.DeleteAndDestroy( n );
                         bDec = true;
@@ -1669,8 +1669,8 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                         {
                             SwRangeRedline* pNew = new SwRangeRedline( *pRedl );
                             pNew->SetStart( *pEnd );
-                            pRedl->SetEnd( *pStt, pREnd );
-                            if( *pStt == *pRStt && pRedl->GetContentIdx() == nullptr )
+                            pRedl->SetEnd( *pStart, pREnd );
+                            if( *pStart == *pRStt && pRedl->GetContentIdx() == nullptr )
                                 maRedlineTable.DeleteAndDestroy( n );
                             AppendRedline( pNew, bCallDelete );
                             n = 0;      // re-initialize
@@ -1678,7 +1678,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                         }
                     }
                     else
-                        pRedl->SetEnd( *pStt, pREnd );
+                        pRedl->SetEnd( *pStart, pREnd );
                     break;
                 default:
                     break;
@@ -1703,9 +1703,9 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                         {
                             pNewRedl->SetEnd(*pRStt, pEnd);
                         }
-                        else if (*pStt == *pRStt)
+                        else if (*pStart == *pRStt)
                         {
-                            pNewRedl->SetStart(*pREnd, pStt);
+                            pNewRedl->SetStart(*pREnd, pStart);
                         }
                         else
                         {
@@ -1736,14 +1736,14 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                         // If that's the case we can merge it, meaning
                         // the new one covers this well
                         if( SwComparePosition::OverlapBehind == eCmpPos )
-                            pNewRedl->SetStart( *pRStt, pStt );
+                            pNewRedl->SetStart( *pRStt, pStart );
                         else
                             pNewRedl->SetEnd( *pREnd, pEnd );
                         maRedlineTable.DeleteAndDestroy( n );
                         bDec = true;
                     }
                     else if( SwComparePosition::OverlapBehind == eCmpPos )
-                        pNewRedl->SetStart( *pREnd, pStt );
+                        pNewRedl->SetStart( *pREnd, pStart );
                     else
                         pNewRedl->SetEnd( *pRStt, pEnd );
                     break;
@@ -1774,7 +1774,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                         // If that's the case we can merge it, meaning
                         // the new one covers this well
                         if( SwComparePosition::CollideStart == eCmpPos )
-                            pNewRedl->SetStart( *pRStt, pStt );
+                            pNewRedl->SetStart( *pRStt, pStart );
                         else
                             pNewRedl->SetEnd( *pREnd, pEnd );
 
@@ -1845,7 +1845,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                             // For this case, we completely delete the
                             // paragraphs (if, of course, we also start on
                             // a paragraph boundary).
-                            if( (pStt->GetContentIndex() == 0) &&
+                            if( (pStart->GetContentIndex() == 0) &&
                                 pEnd->GetNode().IsEndNode() )
                             {
                                 pEnd->Adjust(SwNodeOffset(-1));
@@ -1903,15 +1903,15 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
 
                     case SwComparePosition::OverlapBehind:
                         {
-                            SwPaM aPam( *pStt, *pREnd );
+                            SwPaM aPam( *pStart, *pREnd );
 
-                            if( *pStt == *pRStt )
+                            if( *pStart == *pRStt )
                             {
                                 maRedlineTable.DeleteAndDestroy( n );
                                 bDec = true;
                             }
                             else
-                                pRedl->SetEnd( *pStt, pREnd );
+                                pRedl->SetEnd( *pStart, pREnd );
 
                             if( bCallDelete )
                             {
@@ -1959,11 +1959,11 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
 
                     case SwComparePosition::Inside:
                         {
-                            if( *pRStt == *pStt )
+                            if( *pRStt == *pStart )
                             {
                                 // #i97421#
                                 // redline w/out extent loops
-                                if (*pStt != *pEnd)
+                                if (*pStart != *pEnd)
                                 {
                                     pNewRedl->PushData( *pRedl, false );
                                     pRedl->SetStart( *pEnd, pRStt );
@@ -1981,7 +1981,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                                     pNew = new SwRangeRedline( *pRedl );
                                     pNew->SetStart( *pEnd );
                                 }
-                                pRedl->SetEnd( *pStt, pREnd );
+                                pRedl->SetEnd( *pStart, pREnd );
                                 if( !pRedl->HasValidRange() )
                                 {
                                     // re-insert
@@ -1999,15 +1999,15 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                             {
                                 pNewRedl->SetEnd( *pRStt, pEnd );
                             }
-                            else if (*pStt == *pRStt)
+                            else if (*pStart == *pRStt)
                             {
-                                pNewRedl->SetStart(*pREnd, pStt);
+                                pNewRedl->SetStart(*pREnd, pStart);
                             }
                             else
                             {
                                 pNew = new SwRangeRedline( *pNewRedl );
                                 pNew->SetEnd( *pRStt );
-                                pNewRedl->SetStart( *pREnd, pStt );
+                                pNewRedl->SetStart( *pREnd, pStart );
                             }
                             bCompress = true;
                         }
@@ -2043,10 +2043,10 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
 
                     case SwComparePosition::OverlapBehind:
                         {
-                            if( *pStt == *pRStt )
+                            if( *pStart == *pRStt )
                             {
                                 pRedl->PushData( *pNewRedl );
-                                pNewRedl->SetStart( *pREnd, pStt );
+                                pNewRedl->SetStart( *pREnd, pStart );
                                 if( IsHideChanges( meRedlineFlags ))
                                 {
                                     maRedlineTable.Insert( pNewRedl );
@@ -2058,8 +2058,8 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                             {
                                 pNew = new SwRangeRedline( *pRedl );
                                 pNew->PushData( *pNewRedl );
-                                pNew->SetStart( *pStt );
-                                pNewRedl->SetStart( *pREnd, pStt );
+                                pNew->SetStart( *pStart );
+                                pNewRedl->SetStart( *pREnd, pStart );
                                 pRedl->SetEnd( *pNew->Start(), pREnd );
                                 if( !pRedl->HasValidRange() )
                                 {
@@ -2104,7 +2104,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                     break;
 
                 case SwComparePosition::OverlapBehind:
-                    pRedl->SetEnd( *pStt, pREnd );
+                    pRedl->SetEnd( *pStart, pREnd );
                     break;
 
                 case SwComparePosition::Equal:
@@ -2124,8 +2124,8 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                         {
                             SwRangeRedline* pNew = new SwRangeRedline( *pRedl );
                             pNew->SetStart( *pEnd );
-                            pRedl->SetEnd( *pStt, pREnd );
-                            if( ( *pStt == *pRStt ) &&
+                            pRedl->SetEnd( *pStart, pREnd );
+                            if( ( *pStart == *pRStt ) &&
                                 ( pRedl->GetContentIdx() == nullptr ) )
                                 maRedlineTable.DeleteAndDestroy( n );
                             AppendRedline( pNew, bCallDelete );
@@ -2134,7 +2134,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                         }
                     }
                     else
-                        pRedl->SetEnd( *pStt, pREnd );
+                        pRedl->SetEnd( *pStart, pREnd );
                     break;
                 default:
                     break;
@@ -2157,7 +2157,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                     break;
 
                 case SwComparePosition::OverlapBehind:
-                    pNewRedl->SetStart( *pREnd, pStt );
+                    pNewRedl->SetStart( *pREnd, pStart );
                     break;
 
                 case SwComparePosition::Equal:
@@ -2175,9 +2175,9 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                     {
                         pNewRedl->SetEnd(*pRStt, pEnd);
                     }
-                    else if (*pStt == *pRStt)
+                    else if (*pStart == *pRStt)
                     {
-                        pNewRedl->SetStart(*pREnd, pStt);
+                        pNewRedl->SetStart(*pREnd, pStart);
                     }
                     else
                     {
@@ -2218,8 +2218,8 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                     }
                     else if( *pREnd == *pEnd )
                         // or else only shorten the current one
-                        pRedl->SetEnd( *pStt, pREnd );
-                    else if( *pRStt == *pStt )
+                        pRedl->SetEnd( *pStart, pREnd );
+                    else if( *pRStt == *pStart )
                     {
                         // or else only shorten the current one
                         pRedl->SetStart( *pEnd, pRStt );
@@ -2234,7 +2234,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                         // we need to split it
                         SwRangeRedline* pNew = new SwRangeRedline( *pRedl );
                         pNew->SetStart( *pEnd );
-                        pRedl->SetEnd( *pStt, pREnd );
+                        pRedl->SetEnd( *pStart, pREnd );
                         AppendRedline( pNew, bCallDelete );
                         n = 0;      // re-initialize
                         bDec = true;
@@ -2249,14 +2249,14 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                         // If that's the case we can merge it, meaning
                         // the new one covers this well
                         if( SwComparePosition::OverlapBehind == eCmpPos )
-                            pNewRedl->SetStart( *pRStt, pStt );
+                            pNewRedl->SetStart( *pRStt, pStart );
                         else
                             pNewRedl->SetEnd( *pREnd, pEnd );
                         maRedlineTable.DeleteAndDestroy( n );
                         bDec = false;
                     }
                     else if( SwComparePosition::OverlapBehind == eCmpPos )
-                        pNewRedl->SetStart( *pREnd, pStt );
+                        pNewRedl->SetStart( *pREnd, pStart );
                     else
                         pNewRedl->SetEnd( *pRStt, pEnd );
                     break;
@@ -2264,7 +2264,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                 case SwComparePosition::CollideEnd:
                     if( pRedl->IsOwnRedline( *pNewRedl ) &&
                         pRedl->CanCombine( *pNewRedl ) &&
-                        (n == 0 || *maRedlineTable[ n-1 ]->End() < *pStt))
+                        (n == 0 || *maRedlineTable[ n-1 ]->End() < *pStart))
                     {
                         // If that's the case we can merge it, meaning
                         // the new one covers this well
@@ -2282,7 +2282,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                     {
                         // If that's the case we can merge it, meaning
                         // the new one covers this well
-                        pNewRedl->SetStart( *pRStt, pStt );
+                        pNewRedl->SetStart( *pRStt, pStart );
                         maRedlineTable.DeleteAndDestroy( n );
                         bDec = true;
                     }
@@ -2307,7 +2307,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
 
     if( pNewRedl )
     {
-        if( ( *pStt == *pEnd ) &&
+        if( ( *pStart == *pEnd ) &&
             ( pNewRedl->GetContentIdx() == nullptr ) )
         {   // Do not insert empty redlines
             delete pNewRedl;
@@ -2317,7 +2317,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
         {
             if ( bCallDelete && RedlineType::Delete == pNewRedl->GetType() )
             {
-                if ( pStt->GetContentIndex() != 0 )
+                if ( pStart->GetContentIndex() != 0 )
                 {
                     // tdf#119571 update the style of the joined paragraph
                     // after a partially deleted paragraph to show its correct style
@@ -2326,7 +2326,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                     // to avoid text insertion with bad style in the deleted
                     // area later (except paragraphs of the removed tables).
 
-                    SwContentNode* pDelNd = pStt->GetNode().GetContentNode();
+                    SwContentNode* pDelNd = pStart->GetNode().GetContentNode();
                     // start copying the style of the first paragraph from the end of the range
                     SwContentNode* pTextNd = pEnd->GetNode().GetContentNode();
                     SwNodeIndex aIdx( pEnd->GetNode() );
@@ -2348,7 +2348,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                                 pNewRedl->SetEnd( aPos );
 
                                 // get extradata for reset formatting of the modified paragraph
-                                std::unique_ptr<SwRedlineExtraData_FormatColl> pExtraData = lcl_CopyStyle(aPos, *pStt, false);
+                                std::unique_ptr<SwRedlineExtraData_FormatColl> pExtraData = lcl_CopyStyle(aPos, *pStart, false);
                                 if (pExtraData)
                                 {
                                     if (!bFirst)
@@ -2365,7 +2365,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                             }
 
                             // modify paragraph formatting
-                            lcl_CopyStyle(*pStt, aPos);
+                            lcl_CopyStyle(*pStart, aPos);
                         }
 
                         if (bFirst)
@@ -2413,7 +2413,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                 // this doesn't work for selections with multiple tables
                 if ( m_rDoc.GetIDocumentUndoRedo().DoesUndo() )
                 {
-                    SwNodeIndex aSttIdx( pStt->GetNode() );
+                    SwNodeIndex aSttIdx( pStart->GetNode() );
                     SwNodeIndex aEndIdx( pEnd->GetNode() );
                     while ( aSttIdx < aEndIdx )
                     {
@@ -2594,22 +2594,22 @@ bool DocumentRedlineManager::SplitRedline( const SwPaM& rRange )
 {
     if (maRedlineTable.empty())
         return false;
-    auto [pStt, pEnd] = rRange.StartEnd(); // SwPosition*
+    auto [pStart, pEnd] = rRange.StartEnd(); // SwPosition*
     // tdf#144208 this happens a lot during load of some DOCX files.
     if (*pEnd > maRedlineTable.GetMaxEndPos())
         return false;
     bool bChg = false;
     SwRedlineTable::size_type n = 0;
-    //FIXME overlapping problem GetRedline( *pStt, &n );
+    //FIXME overlapping problem GetRedline( *pStart, &n );
     while (n < maRedlineTable.size())
     {
         SwRangeRedline * pRedline = maRedlineTable[ n ];
         auto [pRedlineStart, pRedlineEnd] = pRedline->StartEnd();
-        if (*pRedlineStart <= *pStt && *pEnd <= *pRedlineEnd)
+        if (*pRedlineStart <= *pStart && *pEnd <= *pRedlineEnd)
         {
             bChg = true;
             int nn = 0;
-            if (*pStt == *pRedlineStart)
+            if (*pStart == *pRedlineStart)
                 nn += 1;
             if (*pEnd == *pRedlineEnd)
                 nn += 2;
@@ -2619,7 +2619,7 @@ bool DocumentRedlineManager::SplitRedline( const SwPaM& rRange )
             {
             case 0:
                 pNew = new SwRangeRedline( *pRedline );
-                pRedline->SetEnd( *pStt, pRedlineEnd );
+                pRedline->SetEnd( *pStart, pRedlineEnd );
                 pNew->SetStart( *pEnd );
                 break;
 
@@ -2628,7 +2628,7 @@ bool DocumentRedlineManager::SplitRedline( const SwPaM& rRange )
                 break;
 
             case 2:
-                *pRedlineEnd = *pStt;
+                *pRedlineEnd = *pStart;
                 break;
 
             case 3:
@@ -2679,9 +2679,9 @@ bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUnd
         }
     }
 
-    auto [pStt, pEnd] = rRange.StartEnd(); // SwPosition*
+    auto [pStart, pEnd] = rRange.StartEnd(); // SwPosition*
     SwRedlineTable::size_type n = 0;
-    GetRedline( *pStt, &n );
+    GetRedline( *pStart, &n );
     while (n < maRedlineTable.size())
     {
         SwRangeRedline* pRedl = maRedlineTable[ n ];
@@ -2692,7 +2692,7 @@ bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUnd
         }
 
         auto [pRStt, pREnd] = pRedl->StartEnd(); // SwPosition*
-        switch( ComparePosition( *pStt, *pEnd, *pRStt, *pREnd ) )
+        switch( ComparePosition( *pStart, *pEnd, *pRStt, *pREnd ) )
         {
         case SwComparePosition::Equal:
         case SwComparePosition::Outside:
@@ -2712,7 +2712,7 @@ bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUnd
 
         case SwComparePosition::OverlapBehind:
                 pRedl->InvalidateRange(SwRangeRedline::Invalidation::Remove);
-                pRedl->SetEnd( *pStt, pREnd );
+                pRedl->SetEnd( *pStart, pREnd );
                 pRedl->InvalidateRange(SwRangeRedline::Invalidation::Add);
                 if( !pRedl->HasValidRange() )
                 {
@@ -2728,7 +2728,7 @@ bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUnd
             {
                 // this one needs to be split
                 pRedl->InvalidateRange(SwRangeRedline::Invalidation::Remove);
-                if( *pRStt == *pStt )
+                if( *pRStt == *pStart )
                 {
                     pRedl->SetStart( *pEnd, pRStt );
                     pRedl->InvalidateRange(SwRangeRedline::Invalidation::Add);
@@ -2747,7 +2747,7 @@ bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUnd
                     }
                     else
                         pCpy = nullptr;
-                    pRedl->SetEnd( *pStt, pREnd );
+                    pRedl->SetEnd( *pStart, pREnd );
                     pRedl->InvalidateRange(SwRangeRedline::Invalidation::Add);
                     if( !pRedl->HasValidRange() )
                     {
@@ -2937,10 +2937,10 @@ const SwRangeRedline* DocumentRedlineManager::GetRedline( const SwPosition& rPos
         {
             nM = nU + ( nO - nU ) / 2;
             const SwRangeRedline* pRedl = maRedlineTable[ nM ];
-            auto [pStt, pEnd] = pRedl->StartEnd();
-            if( pEnd == pStt
-                    ? *pStt == rPos
-                    : ( *pStt <= rPos && rPos < *pEnd ) )
+            auto [pStart, pEnd] = pRedl->StartEnd();
+            if( pEnd == pStart
+                    ? *pStart == rPos
+                    : ( *pStart <= rPos && rPos < *pEnd ) )
             {
                 while( nM && rPos == *maRedlineTable[ nM - 1 ]->End() &&
                     rPos == *maRedlineTable[ nM - 1 ]->Start() )
@@ -3247,9 +3247,9 @@ bool DocumentRedlineManager::AcceptRedline( const SwPaM& rPam, bool bCallDelete,
 
 void DocumentRedlineManager::AcceptRedlineParagraphFormatting( const SwPaM &rPam )
 {
-    auto [pStt, pEnd] = rPam.StartEnd(); // SwPosition*
+    auto [pStart, pEnd] = rPam.StartEnd(); // SwPosition*
 
-    const SwNodeOffset nSttIdx = pStt->GetNodeIndex();
+    const SwNodeOffset nSttIdx = pStart->GetNodeIndex();
     const SwNodeOffset nEndIdx = pEnd->GetNodeIndex();
 
     for( SwRedlineTable::size_type n = 0; n < maRedlineTable.size() ; ++n )
@@ -3705,10 +3705,10 @@ const SwRangeRedline* DocumentRedlineManager::SelPrevRedline( SwPaM& rPam ) cons
     const SwRangeRedline* pFnd = GetRedlineTable().FindAtPosition( rSttPos, n, false );
     if( pFnd )
     {
-        const SwPosition* pStt = pFnd->Start();
-        if( !pStt->GetNode().IsContentNode() )
+        const SwPosition* pStart = pFnd->Start();
+        if( !pStart->GetNode().IsContentNode() )
         {
-            SwNodeIndex aTmp( pStt->GetNode() );
+            SwNodeIndex aTmp( pStart->GetNode() );
             SwContentNode* pCNd = SwNodes::GoNextSection(&aTmp);
             if( !pCNd || ( aTmp == rSttPos.GetNode() &&
                 !rSttPos.GetContentIndex() ))
@@ -3821,15 +3821,15 @@ const SwRangeRedline* DocumentRedlineManager::SelPrevRedline( SwPaM& rPam ) cons
 bool DocumentRedlineManager::SetRedlineComment( const SwPaM& rPaM, const OUString& rS )
 {
     bool bRet = false;
-    auto [pStt, pEnd] = rPaM.StartEnd(); // SwPosition*
+    auto [pStart, pEnd] = rPaM.StartEnd(); // SwPosition*
     SwRedlineTable::size_type n = 0;
-    if( GetRedlineTable().FindAtPosition( *pStt, n ) )
+    if( GetRedlineTable().FindAtPosition( *pStart, n ) )
     {
         for( ; n < maRedlineTable.size(); ++n )
         {
             bRet = true;
             SwRangeRedline* pTmp = maRedlineTable[ n ];
-            if( pStt != pEnd && *pTmp->Start() > *pEnd )
+            if( pStart != pEnd && *pTmp->Start() > *pEnd )
                 break;
 
             pTmp->SetComment( rS );

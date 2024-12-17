@@ -314,11 +314,11 @@ sal_Int32 SwWW8AttrIter::SearchNext( sal_Int32 nStartPos )
         {
             const SwRangeRedline* pRedl = m_rExport.m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ nRedLinePos ];
 
-            auto [pStt, pEnd] = pRedl->StartEnd(); // SwPosition*
+            auto [pStart, pEnd] = pRedl->StartEnd(); // SwPosition*
 
-            if( pStt->GetNode() == m_rNode )
+            if( pStart->GetNode() == m_rNode )
             {
-                const sal_Int32 i = pStt->GetContentIndex();
+                const sal_Int32 i = pStart->GetContentIndex();
                 if( i >= nStartPos && i < nMinPos )
                     nMinPos = i;
             }
@@ -1655,13 +1655,13 @@ const SwRedlineData* SwWW8AttrIter::GetRunLevelRedline( sal_Int32 nPos )
     {
         const SwRangeRedline* pRedl = m_rExport.m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ m_nCurRedlinePos ];
 
-        auto [pStt, pEnd] = pRedl->StartEnd(); // SwPosition*
+        auto [pStart, pEnd] = pRedl->StartEnd(); // SwPosition*
 
-        if( pStt->GetNode() == m_rNode )
+        if( pStart->GetNode() == m_rNode )
         {
-            if( pStt->GetContentIndex() >= nPos )
+            if( pStart->GetContentIndex() >= nPos )
             {
-                if( pStt->GetContentIndex() == nPos )
+                if( pStart->GetContentIndex() == nPos )
                 {
                         switch( pRedl->GetType() )
                         {
@@ -1911,13 +1911,13 @@ static SwTextFormatColl& lcl_getFormatCollection( MSWordExportBase& rExport, con
     while( nPos < nMax )
     {
         const SwRangeRedline* pRedl = rExport.m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ nPos++ ];
-        auto [pStt, pEnd] = pRedl->StartEnd(); // SwPosition*
+        auto [pStart, pEnd] = pRedl->StartEnd(); // SwPosition*
         // Looking for deletions, which ends in current pTextNode
         if( RedlineType::Delete == pRedl->GetRedlineData().GetType() &&
-            pEnd->GetNode() == *pTextNode && pStt->GetNode() != *pTextNode &&
-            pStt->GetNode().IsTextNode() )
+            pEnd->GetNode() == *pTextNode && pStart->GetNode() != *pTextNode &&
+            pStart->GetNode().IsTextNode() )
         {
-            pTextNode = pStt->GetNode().GetTextNode();
+            pTextNode = pStart->GetNode().GetTextNode();
             nMax = nPos;
             nPos = 0;
         }

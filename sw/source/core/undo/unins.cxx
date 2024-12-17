@@ -584,15 +584,15 @@ SwUndoReplace::Impl::Impl(
     , m_bRegExp(bRegExp)
 {
 
-    auto [pStt, pEnd] = rPam.StartEnd(); // SwPosition*
+    auto [pStart, pEnd] = rPam.StartEnd(); // SwPosition*
 
-    m_nSttNd = m_nEndNd = pStt->GetNodeIndex();
-    m_nSttCnt = pStt->GetContentIndex();
+    m_nSttNd = m_nEndNd = pStart->GetNodeIndex();
+    m_nSttCnt = pStart->GetContentIndex();
     m_nSelEnd = m_nEndCnt = pEnd->GetContentIndex();
 
     m_bSplitNext = m_nSttNd != pEnd->GetNodeIndex();
 
-    SwTextNode* pNd = pStt->GetNode().GetTextNode();
+    SwTextNode* pNd = pStart->GetNode().GetTextNode();
     assert(pNd && "Dude, where's my TextNode?");
 
     m_pHistory.reset( new SwHistory );
@@ -600,7 +600,7 @@ SwUndoReplace::Impl::Impl(
 
     m_nSetPos = m_pHistory->Count();
 
-    SwNodeOffset nNewPos = pStt->GetNodeIndex();
+    SwNodeOffset nNewPos = pStart->GetNodeIndex();
     m_nOffset = m_nSttNd - nNewPos;
 
     if ( pNd->GetpSwpHints() )

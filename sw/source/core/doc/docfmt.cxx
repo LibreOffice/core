@@ -237,12 +237,12 @@ void SwDoc::RstTextAttrs(const SwPaM &rRg, bool bInclRefToxMark,
         pHst = &pUndo->GetHistory();
         GetIDocumentUndoRedo().AppendUndo(std::move(pUndo));
     }
-    auto [pStt, pEnd] = rRg.StartEnd(); // SwPosition*
+    auto [pStart, pEnd] = rRg.StartEnd(); // SwPosition*
     sw::DocumentContentOperationsManager::ParaRstFormat aPara(
-            pStt, pEnd, pHst, nullptr, pLayout );
+            pStart, pEnd, pHst, nullptr, pLayout );
     aPara.bInclRefToxMark = bInclRefToxMark;
     aPara.bExactRange = bExactRange;
-    GetNodes().ForEach( pStt->GetNodeIndex(), pEnd->GetNodeIndex()+1,
+    GetNodes().ForEach( pStart->GetNodeIndex(), pEnd->GetNodeIndex()+1,
                         sw::DocumentContentOperationsManager::lcl_RstTextAttr, &aPara );
     getIDocumentState().SetModified();
 }
@@ -324,9 +324,9 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
         GetIDocumentUndoRedo().AppendUndo(std::move(pUndo));
     }
 
-    auto [pStt, pEnd] = pPam->StartEnd(); // SwPosition*
+    auto [pStart, pEnd] = pPam->StartEnd(); // SwPosition*
     sw::DocumentContentOperationsManager::ParaRstFormat aPara(
-            pStt, pEnd, pHst, nullptr, pLayout);
+            pStart, pEnd, pHst, nullptr, pLayout);
 
     // mst: not including META here; it seems attrs with CH_TXTATR are omitted
     SfxItemSetFixed<RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
@@ -343,9 +343,9 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
         aPara.pDelSet = &aDelSet;
 
     bool bAdd = true;
-    SwNodeIndex aTmpStt( pStt->GetNode() );
+    SwNodeIndex aTmpStt( pStart->GetNode() );
     SwNodeIndex aTmpEnd( pEnd->GetNode() );
-    if( pStt->GetContentIndex() )     // just one part
+    if( pStart->GetContentIndex() )     // just one part
     {
         // set up a later, and all CharFormatAttr -> TextFormatAttr
         SwTextNode* pTNd = aTmpStt.GetNode().GetTextNode();
@@ -371,7 +371,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
         ++aTmpEnd;
         bAdd = false;
     }
-    else if( pStt->GetNode() != pEnd->GetNode() || !pStt->GetContentIndex() )
+    else if( pStart->GetNode() != pEnd->GetNode() || !pStart->GetContentIndex() )
     {
         SwTextNode* pTNd = aTmpEnd.GetNode().GetTextNode();
         if( pTNd && pTNd->HasSwAttrSet() && pTNd->GetpSwAttrSet()->Count() )
@@ -389,11 +389,11 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
     }
 
     if( aTmpStt < aTmpEnd )
-        GetNodes().ForEach( pStt->GetNode(), aTmpEnd.GetNode(), lcl_RstAttr, &aPara );
+        GetNodes().ForEach( pStart->GetNode(), aTmpEnd.GetNode(), lcl_RstAttr, &aPara );
     else if( !rRg.HasMark() )
     {
         aPara.bResetAll = false ;
-        ::lcl_RstAttr( &pStt->GetNode(), &aPara );
+        ::lcl_RstAttr( &pStart->GetNode(), &aPara );
         aPara.bResetAll = true ;
     }
 
@@ -401,7 +401,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
     {
         if( bAdd )
             ++aTmpEnd;
-        GetNodes().ForEach( pStt->GetNode(), aTmpEnd.GetNode(), sw::DocumentContentOperationsManager::lcl_RstTextAttr, &aPara );
+        GetNodes().ForEach( pStart->GetNode(), aTmpEnd.GetNode(), sw::DocumentContentOperationsManager::lcl_RstTextAttr, &aPara );
     }
 
     getIDocumentState().SetModified();
@@ -1085,7 +1085,7 @@ bool SwDoc::SetTextFormatColl(const SwPaM &rRg,
                           SwRootFrame const*const pLayout)
 {
     SwDataChanged aTmp( rRg );
-    auto [pStt, pEnd] = rRg.StartEnd(); // SwPosition*
+    auto [pStart, pEnd] = rRg.StartEnd(); // SwPosition*
     SwHistory* pHst = nullptr;
     bool bRet = true;
 
@@ -1100,7 +1100,7 @@ bool SwDoc::SetTextFormatColl(const SwPaM &rRg,
 
     std::shared_ptr<SfxItemSet> pDelSet;
     sw::DocumentContentOperationsManager::ParaRstFormat aPara(
-            pStt, pEnd, pHst, nullptr, pLayout);
+            pStart, pEnd, pHst, nullptr, pLayout);
     aPara.pFormatColl = pFormat;
     aPara.bReset = bReset;
     // #i62675#
@@ -1113,7 +1113,7 @@ bool SwDoc::SetTextFormatColl(const SwPaM &rRg,
         aPara.pDelSet = pDelSet.get();
     }
 
-    GetNodes().ForEach( pStt->GetNodeIndex(), pEnd->GetNodeIndex()+1,
+    GetNodes().ForEach( pStart->GetNodeIndex(), pEnd->GetNodeIndex()+1,
                         lcl_SetTextFormatColl, &aPara );
     if( !aPara.nWhich )
         bRet = false;           // didn't find a valid Node

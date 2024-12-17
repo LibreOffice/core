@@ -259,7 +259,7 @@ ErrCode SwASCIIParser::CallParser()
 
 ErrCode SwASCIIParser::ReadChars()
 {
-    sal_Unicode *pStt = nullptr, *pEnd = nullptr, *pLastStt = nullptr;
+    sal_Unicode *pStart = nullptr, *pEnd = nullptr, *pLastStt = nullptr;
     tools::Long nReadCnt = 0, nLineLen = 0;
     sal_Unicode cLastCR = 0;
     bool bSwapUnicode = false;
@@ -320,9 +320,9 @@ ErrCode SwASCIIParser::ReadChars()
     sal_Size nArrOffset = 0;
 
     do {
-        if( pStt >= pEnd )
+        if( pStart >= pEnd )
         {
-            if( pLastStt != pStt )
+            if( pLastStt != pStart )
                 InsertText( OUString( pLastStt ));
 
             // Read a new block
@@ -360,14 +360,14 @@ ErrCode SwASCIIParser::ReadChars()
                 if( 0 != nArrOffset )
                     memmove(m_pArr.get(), m_pArr.get() + nCntBytes, nArrOffset);
 
-                pStt = pLastStt = aWork.get();
-                pEnd = pStt + nNewLen;
+                pStart = pLastStt = aWork.get();
+                pEnd = pStart + nNewLen;
             }
             else
             {
-                pStt = pLastStt = reinterpret_cast<sal_Unicode*>(m_pArr.get());
+                pStart = pLastStt = reinterpret_cast<sal_Unicode*>(m_pArr.get());
                 auto nChars = lGCount / 2;
-                pEnd = pStt + nChars;
+                pEnd = pStart + nChars;
 
                 if( bSwapUnicode )
                 {
@@ -388,28 +388,28 @@ ErrCode SwASCIIParser::ReadChars()
 
             if( cLastCR )
             {
-                if( 0x0a == *pStt && 0x0d == cLastCR )
-                    pLastStt = ++pStt;
+                if( 0x0a == *pStart && 0x0d == cLastCR )
+                    pLastStt = ++pStart;
                 cLastCR = 0;
                 nLineLen = 0;
                 // We skip the last one at the end
-                if (!m_rInput.eof() || !(pEnd == pStt || (!*pEnd && pEnd == pStt + 1)))
+                if (!m_rInput.eof() || !(pEnd == pStart || (!*pEnd && pEnd == pStart + 1)))
                     m_rDoc.getIDocumentContentOperations().SplitNode(*m_oPam->GetPoint(), false);
             }
         }
 
         bool bIns = true, bSplitNode = false;
-        switch( *pStt )
+        switch( *pStart )
         {
 
         case 0x0a:  if( LINEEND_LF == pUseMe->GetParaFlags() )
                     {
                         bIns = false;
-                        *pStt = 0;
-                        ++pStt;
+                        *pStart = 0;
+                        ++pStart;
 
                         // We skip the last one at the end
-                        if (!m_rInput.eof() || pEnd != pStt)
+                        if (!m_rInput.eof() || pEnd != pStart)
                             bSplitNode = true;
                     }
                     break;
@@ -417,23 +417,23 @@ ErrCode SwASCIIParser::ReadChars()
         case 0x0d:  if( LINEEND_LF != pUseMe->GetParaFlags() )
                     {
                         bIns = false;
-                        *pStt = 0;
-                        ++pStt;
+                        *pStart = 0;
+                        ++pStart;
 
                         bool bChkSplit = true;
                         if( LINEEND_CRLF == pUseMe->GetParaFlags() )
                         {
-                            if( pStt == pEnd )
+                            if( pStart == pEnd )
                             {
                                 cLastCR = 0x0d;
                                 bChkSplit = false;
                             }
-                            else if( 0x0a == *pStt )
-                                ++pStt;
+                            else if( 0x0a == *pStart )
+                                ++pStart;
                         }
 
                         // We skip the last one at the end
-                        if (bChkSplit && (!m_rInput.eof() || pEnd != pStt))
+                        if (bChkSplit && (!m_rInput.eof() || pEnd != pStart))
                             bSplitNode = true;
                     }
                     break;
@@ -441,7 +441,7 @@ ErrCode SwASCIIParser::ReadChars()
         case 0x0c:
                     {
                         // Insert a hard page break
-                        *pStt++ = 0;
+                        *pStart++ = 0;
                         if( nLineLen )
                         {
                             InsertText( OUString( pLastStt ));
@@ -450,42 +450,42 @@ ErrCode SwASCIIParser::ReadChars()
                                                                          false);
                         m_rDoc.getIDocumentContentOperations().InsertPoolItem(
                             *m_oPam, SvxFormatBreakItem(SvxBreak::PageBefore, RES_BREAK));
-                        pLastStt = pStt;
+                        pLastStt = pStart;
                         nLineLen = 0;
                         bIns = false;
                     }
                     break;
 
         case 0x1a:
-            if (nReadCnt == m_nFileSize && pStt + 1 == pEnd)
-                *pStt = 0;
+            if (nReadCnt == m_nFileSize && pStart + 1 == pEnd)
+                *pStart = 0;
             else
-                *pStt = '#'; // Replacement visualisation
+                *pStart = '#'; // Replacement visualisation
             break;
 
         case '\t':  break;
 
         default:
-            if( ' ' > *pStt )
+            if( ' ' > *pStart )
             // Found control char, replace with '#'
-                *pStt = '#';
+                *pStart = '#';
             break;
         }
 
         if( bIns )
         {
             if( ( nLineLen >= MAX_ASCII_PARA - 100 ) &&
-                ( ( *pStt == ' ' ) || ( nLineLen >= MAX_ASCII_PARA - 1 ) ) )
+                ( ( *pStart == ' ' ) || ( nLineLen >= MAX_ASCII_PARA - 1 ) ) )
             {
-                sal_Unicode c = *pStt;
-                *pStt = 0;
+                sal_Unicode c = *pStart;
+                *pStart = 0;
                 InsertText( OUString( pLastStt ));
                 m_rDoc.getIDocumentContentOperations().SplitNode(*m_oPam->GetPoint(), false);
-                pLastStt = pStt;
+                pLastStt = pStart;
                 nLineLen = 0;
-                *pStt = c;
+                *pStart = c;
             }
-            ++pStt;
+            ++pStart;
             ++nLineLen;
         }
         else if( bSplitNode )
@@ -496,7 +496,7 @@ ErrCode SwASCIIParser::ReadChars()
                 m_rDoc.getIDocumentContentOperations().AppendTextNode(*m_oPam->GetPoint());
             else
                 m_rDoc.getIDocumentContentOperations().SplitNode(*m_oPam->GetPoint(), false);
-            pLastStt = pStt;
+            pLastStt = pStart;
             nLineLen = 0;
         }
     } while(true);

@@ -1292,10 +1292,10 @@ namespace
 
 SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const OUString& rRefMark,
                                           sal_uInt16 nSubType, sal_uInt16 nSeqNo, sal_uInt16 nFlags,
-                                          sal_Int32* pStt, sal_Int32* pEnd, SwRootFrame const* const pLayout,
+                                          sal_Int32* pStart, sal_Int32* pEnd, SwRootFrame const* const pLayout,
                                           SwTextNode* pSelf, SwFrame* pContentFrame)
 {
-    OSL_ENSURE( pStt, "Why did no one check the StartPos?" );
+    OSL_ENSURE( pStart, "Why did no one check the StartPos?" );
 
     IDocumentRedlineAccess & rIDRA(pDoc->getIDocumentRedlineAccess());
     SwTextNode* pTextNd = nullptr;
@@ -1309,7 +1309,7 @@ SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const OUString& rRefMark,
                                            pRefMark->GetTextNode(), *pRefMark)))
             {
                 pTextNd = const_cast<SwTextNode*>(&pRef->GetTextRefMark()->GetTextNode());
-                *pStt = pRef->GetTextRefMark()->GetStart();
+                *pStart = pRef->GetTextRefMark()->GetStart();
                 if( pEnd )
                     *pEnd = pRef->GetTextRefMark()->GetAnyEnd();
             }
@@ -1333,9 +1333,9 @@ SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const OUString& rRefMark,
                             || !sw::IsFieldDeletedInModel(rIDRA, *pTextField)))
                     {
                         pTextNd = pTextField->GetpTextNode();
-                        *pStt = pTextField->GetStart();
+                        *pStart = pTextField->GetStart();
                         if( pEnd )
-                            *pEnd = (*pStt) + 1;
+                            *pEnd = (*pStart) + 1;
                         break;
                     }
                 }
@@ -1354,12 +1354,12 @@ SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const OUString& rRefMark,
                 const SwPosition* pPos = &pBkmk->GetMarkStart();
 
                 pTextNd = pPos->GetNode().GetTextNode();
-                *pStt = pPos->GetContentIndex();
+                *pStart = pPos->GetContentIndex();
                 if(pEnd)
                 {
                     if(!pBkmk->IsExpanded())
                     {
-                        *pEnd = *pStt;
+                        *pEnd = *pStart;
                         // #i81002#
                         if(dynamic_cast< ::sw::mark::CrossRefBookmark const *>(pBkmk))
                         {
@@ -1401,7 +1401,7 @@ SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const OUString& rRefMark,
                         if( nullptr == pTextNd )
                             pTextNd = static_cast<SwTextNode*>(SwNodes::GoNext(&aIdx));
                     }
-                    *pStt = 0;
+                    *pStart = 0;
                     if( pEnd )
                         *pEnd = 0;
                     break;
@@ -1410,7 +1410,7 @@ SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const OUString& rRefMark,
         break;
         case REF_STYLE:
             pTextNd = FindAnchorRefStyle(pDoc, rRefMark, nFlags,
-                                          pStt, pEnd, pLayout, pSelf, pContentFrame);
+                                          pStart, pEnd, pLayout, pSelf, pContentFrame);
             break;
     }
 
@@ -1419,7 +1419,7 @@ SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const OUString& rRefMark,
 
 SwTextNode* SwGetRefFieldType::FindAnchorRefStyle(SwDoc* pDoc, const OUString& rRefMark,
                                           sal_uInt16 nFlags,
-                                          sal_Int32* pStt, sal_Int32* pEnd, SwRootFrame const* const pLayout,
+                                          sal_Int32* pStart, sal_Int32* pEnd, SwRootFrame const* const pLayout,
                                           SwTextNode* pSelf, SwFrame* pContentFrame)
 {
     if (!pSelf)
@@ -1475,12 +1475,12 @@ SwTextNode* SwGetRefFieldType::FindAnchorRefStyle(SwDoc* pDoc, const OUString& r
     {
         case Marginal:
             pTextNd = FindAnchorRefStyleMarginal(pDoc, nFlags,
-                                          pStt, pEnd, pSelf, pContentFrame, pReference, styleName);
+                                          pStart, pEnd, pSelf, pContentFrame, pReference, styleName);
             break;
         case Reference:
         case Default:
             pTextNd = FindAnchorRefStyleOther(pDoc,
-                                          pStt, pEnd, pSelf, pReference, styleName);
+                                          pStart, pEnd, pSelf, pReference, styleName);
             break;
         default:
             OSL_FAIL("<SwGetRefFieldType::FindAnchor(..)> - unknown getref element type");
@@ -1490,7 +1490,7 @@ SwTextNode* SwGetRefFieldType::FindAnchorRefStyle(SwDoc* pDoc, const OUString& r
 
 SwTextNode* SwGetRefFieldType::FindAnchorRefStyleMarginal(SwDoc* pDoc,
                                           sal_uInt16 nFlags,
-                                          sal_Int32* pStt, sal_Int32* pEnd,
+                                          sal_Int32* pStart, sal_Int32* pEnd,
                                           SwTextNode* pSelf, SwFrame* pContentFrame,
                                           const SwTextNode* pReference, std::u16string_view styleName)
 {
@@ -1556,40 +1556,40 @@ SwTextNode* SwGetRefFieldType::FindAnchorRefStyleMarginal(SwDoc* pDoc,
     SwNodeOffset nPageEnd = pPageEnd->GetIndex();
     const SwNodes& nodes = pDoc->GetNodes();
 
-    pTextNd = SearchForStyleAnchor(pSelf, nodes, nPageStart, nPageEnd, bFlagFromBottom, styleName, pStt, pEnd);
+    pTextNd = SearchForStyleAnchor(pSelf, nodes, nPageStart, nPageEnd, bFlagFromBottom, styleName, pStart, pEnd);
     if (pTextNd)
         return pTextNd;
 
     // 2. Search up from the top of the page
-    pTextNd = SearchForStyleAnchor(pSelf, nodes, SwNodeOffset(0), nPageStart - 1, /*bBackwards*/true, styleName, pStt, pEnd);
+    pTextNd = SearchForStyleAnchor(pSelf, nodes, SwNodeOffset(0), nPageStart - 1, /*bBackwards*/true, styleName, pStart, pEnd);
     if (pTextNd)
         return pTextNd;
 
     // 3. Search down from the bottom of the page
-    pTextNd = SearchForStyleAnchor(pSelf, nodes, nPageEnd + 1, nodes.Count() - 1, /*bBackwards*/false, styleName, pStt, pEnd);
+    pTextNd = SearchForStyleAnchor(pSelf, nodes, nPageEnd + 1, nodes.Count() - 1, /*bBackwards*/false, styleName, pStart, pEnd);
     if (pTextNd)
         return pTextNd;
 
     // Word has case insensitive styles. LO has case sensitive styles. If we didn't find
     // it yet, maybe we could with a case insensitive search. Let's do that
 
-    pTextNd = SearchForStyleAnchor(pSelf, nodes, nPageStart, nPageEnd, bFlagFromBottom, styleName, pStt, pEnd,
+    pTextNd = SearchForStyleAnchor(pSelf, nodes, nPageStart, nPageEnd, bFlagFromBottom, styleName, pStart, pEnd,
                                    false /* bCaseSensitive */);
     if (pTextNd)
         return pTextNd;
 
-    pTextNd = SearchForStyleAnchor(pSelf, nodes, SwNodeOffset(0), nPageStart - 1, /*bBackwards*/true, styleName, pStt, pEnd,
+    pTextNd = SearchForStyleAnchor(pSelf, nodes, SwNodeOffset(0), nPageStart - 1, /*bBackwards*/true, styleName, pStart, pEnd,
                                    false /* bCaseSensitive */);
     if (pTextNd)
         return pTextNd;
 
-    pTextNd = SearchForStyleAnchor(pSelf, nodes, nPageEnd + 1, nodes.Count() - 1, /*bBackwards*/false, styleName, pStt, pEnd,
+    pTextNd = SearchForStyleAnchor(pSelf, nodes, nPageEnd + 1, nodes.Count() - 1, /*bBackwards*/false, styleName, pStart, pEnd,
                                    false /* bCaseSensitive */);
     return pTextNd;
 }
 
 SwTextNode* SwGetRefFieldType::FindAnchorRefStyleOther(SwDoc* pDoc,
-                                          sal_Int32* pStt, sal_Int32* pEnd,
+                                          sal_Int32* pStart, sal_Int32* pEnd,
                                           SwTextNode* pSelf,
                                           const SwTextNode* pReference, std::u16string_view styleName)
 {
@@ -1609,24 +1609,24 @@ SwTextNode* SwGetRefFieldType::FindAnchorRefStyleOther(SwDoc* pDoc,
 
     // 1. Search up until we hit the top of the document
 
-    pTextNd = SearchForStyleAnchor(pSelf, nodes, SwNodeOffset(0), nReference, /*bBackwards*/true, styleName, pStt, pEnd);
+    pTextNd = SearchForStyleAnchor(pSelf, nodes, SwNodeOffset(0), nReference, /*bBackwards*/true, styleName, pStart, pEnd);
     if (pTextNd)
         return pTextNd;
 
     // 2. Search down until we hit the bottom of the document
 
-    pTextNd = SearchForStyleAnchor(pSelf, nodes, nReference + 1, nodes.Count() - 1, /*bBackwards*/false, styleName, pStt, pEnd);
+    pTextNd = SearchForStyleAnchor(pSelf, nodes, nReference + 1, nodes.Count() - 1, /*bBackwards*/false, styleName, pStart, pEnd);
     if (pTextNd)
         return pTextNd;
 
     // Again, we need to remember that Word styles are not case sensitive
 
-    pTextNd = SearchForStyleAnchor(pSelf, nodes, SwNodeOffset(0), nReference, /*bBackwards*/true, styleName, pStt, pEnd,
+    pTextNd = SearchForStyleAnchor(pSelf, nodes, SwNodeOffset(0), nReference, /*bBackwards*/true, styleName, pStart, pEnd,
                                    false /* bCaseSensitive */);
     if (pTextNd)
         return pTextNd;
 
-    pTextNd = SearchForStyleAnchor(pSelf, nodes, nReference + 1, nodes.Count() - 1, /*bBackwards*/false, styleName, pStt, pEnd,
+    pTextNd = SearchForStyleAnchor(pSelf, nodes, nReference + 1, nodes.Count() - 1, /*bBackwards*/false, styleName, pStart, pEnd,
                                    false /* bCaseSensitive */);
     return pTextNd;
 }

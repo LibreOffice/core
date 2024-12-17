@@ -179,9 +179,9 @@ void SwEditShell::SetSectionAttr( const SfxItemSet& rSet,
 
         for(SwPaM& rPaM : GetCursor()->GetRingContainer())
         {
-            auto [pStt, pEnd] = rPaM.StartEnd(); // SwPosition*
+            auto [pStart, pEnd] = rPaM.StartEnd(); // SwPosition*
 
-            SwSectionNode* pSttSectNd = pStt->GetNode().FindSectionNode(),
+            SwSectionNode* pSttSectNd = pStart->GetNode().FindSectionNode(),
                                * pEndSectNd = pEnd->GetNode().FindSectionNode();
 
             if( pSttSectNd || pEndSectNd )
@@ -195,7 +195,7 @@ void SwEditShell::SetSectionAttr( const SfxItemSet& rSet,
 
                 if( pSttSectNd && pEndSectNd )
                 {
-                    SwNodeIndex aSIdx( pStt->GetNode() );
+                    SwNodeIndex aSIdx( pStart->GetNode() );
                     SwNodeIndex aEIdx( pEnd->GetNode() );
                     if( pSttSectNd->EndOfSectionIndex() <
                         pEndSectNd->GetIndex() )
@@ -249,10 +249,10 @@ sal_uInt16 SwEditShell::GetFullSelectedSectionCount() const
     for(SwPaM& rPaM : GetCursor()->GetRingContainer())
     {
 
-        auto [pStt, pEnd] = rPaM.StartEnd(); // SwPosition*
+        auto [pStart, pEnd] = rPaM.StartEnd(); // SwPosition*
         const SwContentNode* pCNd;
         // check the selection, if Start at Node begin and End at Node end
-        if( pStt->GetContentIndex() ||
+        if( pStart->GetContentIndex() ||
             ( nullptr == ( pCNd = pEnd->GetNode().GetContentNode() )) ||
             pCNd->Len() != pEnd->GetContentIndex() )
         {
@@ -266,7 +266,7 @@ sal_uInt16 SwEditShell::GetFullSelectedSectionCount() const
 // What about only a table inside the section ?
 //      There is only a table selection possible!
 
-        SwNodeIndex aSIdx( pStt->GetNode(), -1 ), aEIdx( pEnd->GetNode(), +1 );
+        SwNodeIndex aSIdx( pStart->GetNode(), -1 ), aEIdx( pEnd->GetNode(), +1 );
         if( !aSIdx.GetNode().IsSectionNode() ||
             !aEIdx.GetNode().IsEndNode() ||
             !aEIdx.GetNode().StartOfSectionNode()->IsSectionNode() )

@@ -111,10 +111,10 @@ void SwExtraRedlineTable::dumpAsXml(xmlTextWriterPtr pWriter) const
 }
 
 #if OSL_DEBUG_LEVEL > 0
-static bool CheckPosition( const SwPosition* pStt, const SwPosition* pEnd )
+static bool CheckPosition( const SwPosition* pStart, const SwPosition* pEnd )
 {
     int nError = 0;
-    SwNode* pSttNode = &pStt->GetNode();
+    SwNode* pSttNode = &pStart->GetNode();
     SwNode* pEndNode = &pEnd->GetNode();
     SwNode* pSttTab = pSttNode->StartOfSectionNode()->FindTableNode();
     SwNode* pEndTab = pEndNode->StartOfSectionNode()->FindTableNode();
@@ -503,8 +503,8 @@ std::vector<std::unique_ptr<SwRangeRedline>> GetAllValidRanges(std::unique_ptr<S
 {
     std::vector<std::unique_ptr<SwRangeRedline>> ret;
     // Create valid "sub-ranges" from the Selection
-    auto [pStt, pEnd] = p->StartEnd(); // SwPosition*
-    SwPosition aNewStt( *pStt );
+    auto [pStart, pEnd] = p->StartEnd(); // SwPosition*
+    SwPosition aNewStt( *pStart );
     SwNodes& rNds = aNewStt.GetNodes();
     SwContentNode* pC;
 
@@ -1786,26 +1786,26 @@ void SwRangeRedline::CalcStartEnd( SwNodeOffset nNdIdx, sal_Int32& rStart, sal_I
     }
 }
 
-static void lcl_storeAnnotationMarks(SwDoc& rDoc, const SwPosition* pStt, const SwPosition* pEnd)
+static void lcl_storeAnnotationMarks(SwDoc& rDoc, const SwPosition* pStart, const SwPosition* pEnd)
 {
     // tdf#115815 keep original start position of collapsed annotation ranges
     // as temporary bookmarks (removed after file saving and file loading)
     IDocumentMarkAccess& rDMA(*rDoc.getIDocumentMarkAccess());
-    for (auto iter = rDMA.findFirstAnnotationMarkNotStartsBefore(*pStt);
+    for (auto iter = rDMA.findFirstAnnotationMarkNotStartsBefore(*pStart);
           iter != rDMA.getAnnotationMarksEnd(); ++iter)
     {
         SwPosition const& rStartPos((**iter).GetMarkStart());
         // vector is sorted by start pos, so we can exit early
         if ( rStartPos > *pEnd )
             break;
-        if ( *pStt <= rStartPos && rStartPos < *pEnd )
+        if ( *pStart <= rStartPos && rStartPos < *pEnd )
         {
             auto pOldMark = rDMA.findAnnotationBookmark((**iter).GetName());
             if ( pOldMark == rDMA.getBookmarksEnd() )
             {
                 // at start of redlines use a 1-character length bookmark range
                 // instead of a 0-character length bookmark position to avoid its losing
-                sal_Int32 nLen = (*pStt == rStartPos) ? 1 : 0;
+                sal_Int32 nLen = (*pStart == rStartPos) ? 1 : 0;
                 SwPaM aPam( rStartPos.GetNode(), rStartPos.GetContentIndex(),
                                 rStartPos.GetNode(), rStartPos.GetContentIndex() + nLen);
                 ::sw::mark::Bookmark* pBookmark = rDMA.makeAnnotationBookmark(
@@ -1826,11 +1826,11 @@ void SwRangeRedline::MoveToSection()
 {
     if( !m_oContentSect )
     {
-        auto [pStt, pEnd] = StartEnd(); // SwPosition*
+        auto [pStart, pEnd] = StartEnd(); // SwPosition*
 
         SwDoc& rDoc = GetDoc();
-        SwPaM aPam( *pStt, *pEnd );
-        SwContentNode* pCSttNd = pStt->GetNode().GetContentNode();
+        SwPaM aPam( *pStart, *pEnd );
+        SwContentNode* pCSttNd = pStart->GetNode().GetContentNode();
         SwContentNode* pCEndNd = pEnd->GetNode().GetContentNode();
 
         if( !pCSttNd )
@@ -1840,9 +1840,9 @@ void SwRangeRedline::MoveToSection()
             const SwRedlineTable& rTable = rDoc.getIDocumentRedlineAccess().GetRedlineTable();
             for(SwRangeRedline* pRedl : rTable)
             {
-                if( pRedl->GetBound() == *pStt )
+                if( pRedl->GetBound() == *pStart )
                     pRedl->GetBound() = *pEnd;
-                if( pRedl->GetBound(false) == *pStt )
+                if( pRedl->GetBound(false) == *pStart )
                     pRedl->GetBound(false) = *pEnd;
             }
         }
@@ -1865,7 +1865,7 @@ void SwRangeRedline::MoveToSection()
             if( pCSttNd && pCEndNd )
             {
                 // tdf#140982 keep annotation ranges in deletions in margin mode
-                lcl_storeAnnotationMarks( rDoc, pStt, pEnd );
+                lcl_storeAnnotationMarks( rDoc, pStart, pEnd );
                 rDoc.getIDocumentContentOperations().MoveAndJoin( aPam, aPos );
             }
             else
@@ -1886,7 +1886,7 @@ void SwRangeRedline::MoveToSection()
         }
         m_oContentSect.emplace( *pSttNd );
 
-        if( pStt == GetPoint() )
+        if( pStart == GetPoint() )
             Exchange();
 
         DeleteMark();
@@ -1900,9 +1900,9 @@ void SwRangeRedline::CopyToSection()
     if( m_oContentSect )
         return;
 
-    auto [pStt, pEnd] = StartEnd(); // SwPosition*
+    auto [pStart, pEnd] = StartEnd(); // SwPosition*
 
-    SwContentNode* pCSttNd = pStt->GetNode().GetContentNode();
+    SwContentNode* pCSttNd = pStart->GetNode().GetContentNode();
     SwContentNode* pCEndNd = pEnd->GetNode().GetContentNode();
 
     SwStartNode* pSttNd;
@@ -1931,7 +1931,7 @@ void SwRangeRedline::CopyToSection()
 
         // tdf#115815 keep original start position of collapsed annotation ranges
         // as temporary bookmarks (removed after file saving and file loading)
-        lcl_storeAnnotationMarks( rDoc, pStt, pEnd );
+        lcl_storeAnnotationMarks( rDoc, pStart, pEnd );
         rDoc.getIDocumentContentOperations().CopyRange(*this, aPos, SwCopyFlags::CheckPosInFly);
 
         // Take over the style from the EndNode if needed
@@ -1959,7 +1959,7 @@ void SwRangeRedline::CopyToSection()
         }
         else
         {
-            SwNodeRange aRg( pStt->GetNode(), SwNodeOffset(0), pEnd->GetNode(), SwNodeOffset(1) );
+            SwNodeRange aRg( pStart->GetNode(), SwNodeOffset(0), pEnd->GetNode(), SwNodeOffset(1) );
             rDoc.GetDocumentContentOperationsManager().CopyWithFlyInFly(aRg, *pSttNd->EndOfSectionNode());
         }
     }
@@ -1974,11 +1974,11 @@ void SwRangeRedline::DelCopyOfSection(size_t nMyPos)
     if( !m_oContentSect )
         return;
 
-    auto [pStt, pEnd] = StartEnd(); // SwPosition*
+    auto [pStart, pEnd] = StartEnd(); // SwPosition*
 
     SwDoc& rDoc = GetDoc();
-    SwPaM aPam( *pStt, *pEnd );
-    SwContentNode* pCSttNd = pStt->GetNode().GetContentNode();
+    SwPaM aPam( *pStart, *pEnd );
+    SwContentNode* pCSttNd = pStart->GetNode().GetContentNode();
     SwContentNode* pCEndNd = pEnd->GetNode().GetContentNode();
 
     if( !pCSttNd )
@@ -1988,9 +1988,9 @@ void SwRangeRedline::DelCopyOfSection(size_t nMyPos)
         const SwRedlineTable& rTable = rDoc.getIDocumentRedlineAccess().GetRedlineTable();
         for(SwRangeRedline* pRedl : rTable)
         {
-            if( pRedl->GetBound() == *pStt )
+            if( pRedl->GetBound() == *pStart )
                 pRedl->GetBound() = *pEnd;
-            if( pRedl->GetBound(false) == *pStt )
+            if( pRedl->GetBound(false) == *pStart )
                 pRedl->GetBound(false) = *pEnd;
         }
     }
@@ -2047,7 +2047,7 @@ void SwRangeRedline::DelCopyOfSection(size_t nMyPos)
         rDoc.getIDocumentContentOperations().DeleteRange( aPam );
     }
 
-    if( pStt == GetPoint() )
+    if( pStart == GetPoint() )
         Exchange();
 
     DeleteMark();

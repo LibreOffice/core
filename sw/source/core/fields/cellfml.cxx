@@ -972,17 +972,17 @@ void SwTableFormula::GetBoxes( const SwTableBox& rSttBox,
                                 SwSelBoxes& rBoxes )
 {
     // get all selected boxes via layout
-    const SwLayoutFrame *pStt, *pEnd;
+    const SwLayoutFrame *pStart, *pEnd;
     const SwFrame* pFrame = lcl_GetBoxFrame( rSttBox );
-    pStt = pFrame ? pFrame->GetUpper() : nullptr;
+    pStart = pFrame ? pFrame->GetUpper() : nullptr;
     pFrame = lcl_GetBoxFrame( rEndBox );
     pEnd = pFrame ? pFrame->GetUpper() : nullptr;
-    if( !pStt || !pEnd )
+    if( !pStart || !pEnd )
         return ;                        // no valid selection
 
-    GetTableSel( pStt, pEnd, rBoxes, nullptr );
+    GetTableSel( pStart, pEnd, rBoxes, nullptr );
 
-    const SwTable* pTable = pStt->FindTabFrame()->GetTable();
+    const SwTable* pTable = pStart->FindTabFrame()->GetTable();
 
     // filter headline boxes
     if( pTable->GetRowsToRepeat() <= 0 )
@@ -1004,7 +1004,7 @@ void SwTableFormula::GetBoxes( const SwTableBox& rSttBox,
         if( pTable->IsHeadline( *pLine ) )
             break;      // headline in this area!
 
-        const SwTabFrame *pStartTable = pStt->FindTabFrame();
+        const SwTabFrame *pStartTable = pStart->FindTabFrame();
         const SwTabFrame *pEndTable = pEnd->FindTabFrame();
 
         if (pStartTable == pEndTable) // no split table

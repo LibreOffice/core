@@ -2055,9 +2055,9 @@ bool SwDoc::MoveParagraph(SwPaM& rPam, SwNodeOffset nOffset, bool const bIsOutlM
 bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
         bool const bIsOutlMv, SwRootFrame const*const pLayout)
 {
-    auto [pStt, pEnd] = rPam.StartEnd(); // SwPosition*
+    auto [pStart, pEnd] = rPam.StartEnd(); // SwPosition*
 
-    SwNodeOffset nStIdx = pStt->GetNodeIndex();
+    SwNodeOffset nStIdx = pStart->GetNodeIndex();
     SwNodeOffset nEndIdx = pEnd->GetNodeIndex();
 
     // Here are some sophisticated checks whether the wished PaM will be moved or not.
@@ -2155,11 +2155,11 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
     // Test for Redlining - Can the Selection be moved at all, actually?
     if( !getIDocumentRedlineAccess().IsIgnoreRedline() )
     {
-        SwRedlineTable::size_type nRedlPos = getIDocumentRedlineAccess().GetRedlinePos( pStt->GetNode(), RedlineType::Delete );
+        SwRedlineTable::size_type nRedlPos = getIDocumentRedlineAccess().GetRedlinePos( pStart->GetNode(), RedlineType::Delete );
         if( SwRedlineTable::npos != nRedlPos )
         {
             SwContentNode* pCNd = pEnd->GetNode().GetContentNode();
-            SwPosition aStPos( pStt->GetNode() );
+            SwPosition aStPos( pStart->GetNode() );
             SwPosition aEndPos( pEnd->GetNode(), pCNd, pCNd ? pCNd->Len() : 1 );
             bool bCheckDel = true;
 
@@ -2204,14 +2204,14 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
         SwDataChanged aTmp( rPam );
     }
 
-    SwNodeIndex aIdx( nOffset > SwNodeOffset(0) ? pEnd->GetNode() : pStt->GetNode(), nOffs );
-    SwNodeRange aMvRg( pStt->GetNode(), SwNodeOffset(0), pEnd->GetNode(), SwNodeOffset(+1) );
+    SwNodeIndex aIdx( nOffset > SwNodeOffset(0) ? pEnd->GetNode() : pStart->GetNode(), nOffs );
+    SwNodeRange aMvRg( pStart->GetNode(), SwNodeOffset(0), pEnd->GetNode(), SwNodeOffset(+1) );
 
     SwRangeRedline* pOwnRedl = nullptr;
     if( getIDocumentRedlineAccess().IsRedlineOn() )
     {
         // If the range is completely in the own Redline, we can move it!
-        SwRedlineTable::size_type nRedlPos = getIDocumentRedlineAccess().GetRedlinePos( pStt->GetNode(), RedlineType::Insert );
+        SwRedlineTable::size_type nRedlPos = getIDocumentRedlineAccess().GetRedlinePos( pStart->GetNode(), RedlineType::Insert );
         if( SwRedlineTable::npos != nRedlPos )
         {
             SwRangeRedline* pTmp = getIDocumentRedlineAccess().GetRedlineTable()[ nRedlPos ];
@@ -2220,8 +2220,8 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
             const SwContentNode* pCEndNd = pEnd->GetNode().GetContentNode();
             // Is completely in the range and is the own Redline too?
             if( aTmpRedl.IsOwnRedline( *pTmp ) &&
-                (pRStt->GetNode() < pStt->GetNode() ||
-                (pRStt->GetNode() == pStt->GetNode() && !pRStt->GetContentIndex()) ) &&
+                (pRStt->GetNode() < pStart->GetNode() ||
+                (pRStt->GetNode() == pStart->GetNode() && !pRStt->GetContentIndex()) ) &&
                 (pEnd->GetNode() < pREnd->GetNode() ||
                 (pEnd->GetNode() == pREnd->GetNode() &&
                  pCEndNd ? pREnd->GetContentIndex() == pCEndNd->Len()
@@ -2255,7 +2255,7 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
             // First the Insert, then the Delete
             SwPosition aInsPos( aIdx );
 
-            std::optional<SwPaM> oPam( std::in_place, pStt->GetNode(), 0, aMvRg.aEnd.GetNode(), 0 );
+            std::optional<SwPaM> oPam( std::in_place, pStart->GetNode(), 0, aMvRg.aEnd.GetNode(), 0 );
 
             SwPaM& rOrigPam(rPam);
             rOrigPam.DeleteMark();
@@ -2410,7 +2410,7 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
             {
                 SwRedlineTable& rTable = getIDocumentRedlineAccess().GetRedlineTable();
                 SwRedlineTable::size_type nRedlPosWithEmpty =
-                    getIDocumentRedlineAccess().GetRedlinePos( pStt->GetNode(), RedlineType::Insert );
+                    getIDocumentRedlineAccess().GetRedlinePos( pStart->GetNode(), RedlineType::Insert );
                 if ( SwRedlineTable::npos != nRedlPosWithEmpty )
                 {
                     pOwnRedl = rTable[nRedlPosWithEmpty];

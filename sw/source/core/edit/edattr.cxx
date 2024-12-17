@@ -661,10 +661,10 @@ SvtScriptType SwEditShell::GetScriptType() const
     {
         for(SwPaM& rPaM : GetCursor()->GetRingContainer())
         {
-            auto [pStt, pEnd] = rPaM.StartEnd(); // SwPosition*
-            if( pStt == pEnd || *pStt == *pEnd )
+            auto [pStart, pEnd] = rPaM.StartEnd(); // SwPosition*
+            if( pStart == pEnd || *pStart == *pEnd )
             {
-                const SwTextNode* pTNd = pStt->GetNode().GetTextNode();
+                const SwTextNode* pTNd = pStart->GetNode().GetTextNode();
                 if( pTNd )
                 {
                     // try to get SwScriptInfo
@@ -672,12 +672,12 @@ SvtScriptType SwEditShell::GetScriptType() const
                     const SwScriptInfo *const pScriptInfo =
                         SwScriptInfo::GetScriptInfo(*pTNd, &pFrame);
 
-                    sal_Int32 nPos = pStt->GetContentIndex();
+                    sal_Int32 nPos = pStart->GetContentIndex();
                     //Task 90448: we need the scripttype of the previous
                     //              position, if no selection exist!
                     if( nPos )
                     {
-                        SwContentIndex aIdx( pStt->GetContentNode(), pStt->GetContentIndex() );
+                        SwContentIndex aIdx( pStart->GetContentNode(), pStart->GetContentIndex() );
                         if( pTNd->GoPrevious( &aIdx, SwCursorSkipMode::Chars ) )
                             nPos = aIdx.GetIndex();
                     }
@@ -700,7 +700,7 @@ SvtScriptType SwEditShell::GetScriptType() const
             else
             {
                 SwNodeOffset nEndIdx = pEnd->GetNodeIndex();
-                SwNodeIndex aIdx( pStt->GetNode() );
+                SwNodeIndex aIdx( pStart->GetNode() );
                 for( ; aIdx.GetIndex() <= nEndIdx; ++aIdx )
                     if( aIdx.GetNode().IsTextNode() )
                     {
@@ -712,8 +712,8 @@ SvtScriptType SwEditShell::GetScriptType() const
                         const SwScriptInfo *const pScriptInfo =
                             SwScriptInfo::GetScriptInfo(*pTNd, &pFrame);
 
-                        sal_Int32 nChg = aIdx == pStt->GetNode()
-                                                ? pStt->GetContentIndex()
+                        sal_Int32 nChg = aIdx == pStart->GetNode()
+                                                ? pStart->GetContentIndex()
                                                 : 0;
                         sal_Int32 nEndPos = aIdx == nEndIdx
                                                 ? pEnd->GetContentIndex()
@@ -816,17 +816,17 @@ LanguageType SwEditShell::GetCurLang() const
 sal_uInt16 SwEditShell::GetScalingOfSelectedText() const
 {
     const SwPaM* pCursor = GetCursor();
-    const SwPosition* pStt = pCursor->Start();
-    const SwTextNode* pTNd = pStt->GetNode().GetTextNode();
+    const SwPosition* pStart = pCursor->Start();
+    const SwTextNode* pTNd = pStart->GetNode().GetTextNode();
     OSL_ENSURE( pTNd, "no textnode available" );
 
     sal_uInt16 nScaleWidth;
     if( pTNd )
     {
         SwTextFrame *const pFrame(static_cast<SwTextFrame *>(
-                    pTNd->getLayoutFrame(GetLayout(), pStt)));
+                    pTNd->getLayoutFrame(GetLayout(), pStart)));
         assert(pFrame); // shell cursor must be positioned in node with frame
-        TextFrameIndex const nStart(pFrame->MapModelToViewPos(*pStt));
+        TextFrameIndex const nStart(pFrame->MapModelToViewPos(*pStart));
         TextFrameIndex const nEnd(
             sw::FrameContainsNode(*pFrame, pCursor->End()->GetNodeIndex())
                 ? pFrame->MapModelToViewPos(*pCursor->End())

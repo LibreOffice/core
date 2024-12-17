@@ -87,7 +87,7 @@ using namespace com::sun::star;
  */
 static void CheckRange( SwCursor* pCurrentCursor )
 {
-    auto [pStt, pEnd] = pCurrentCursor->StartEnd(); // SwPosition*
+    auto [pStart, pEnd] = pCurrentCursor->StartEnd(); // SwPosition*
 
     SwPaM *pTmpDel = nullptr,
           *pTmp = pCurrentCursor->GetNext();
@@ -96,14 +96,14 @@ static void CheckRange( SwCursor* pCurrentCursor )
     while( pTmp != pCurrentCursor )
     {
         auto [pTmpStt, pTmpEnd] = pTmp->StartEnd(); // SwPosition*
-        if( *pStt <= *pTmpStt )
+        if( *pStart <= *pTmpStt )
         {
             if( *pEnd > *pTmpStt ||
                 ( *pEnd == *pTmpStt && *pEnd == *pTmpEnd ))
                 pTmpDel = pTmp;
         }
         else
-            if( *pStt < *pTmpEnd )
+            if( *pStart < *pTmpEnd )
                 pTmpDel = pTmp;
 
          // If Point or Mark is within the Cursor range, we need to remove the old
@@ -3221,7 +3221,7 @@ bool SwCursorShell::ParkTableCursor()
 
 void SwCursorShell::ParkPams( SwPaM* pDelRg, SwShellCursor** ppDelRing )
 {
-    auto [pStt, pEnd] = pDelRg->StartEnd(); // SwPosition*
+    auto [pStart, pEnd] = pDelRg->StartEnd(); // SwPosition*
 
     SwPaM *pTmpDel = nullptr, *pTmp = *ppDelRing;
 
@@ -3235,14 +3235,14 @@ void SwCursorShell::ParkPams( SwPaM* pDelRg, SwShellCursor** ppDelRing )
         auto [pTmpStt, pTmpEnd] = pTmp->StartEnd(); // SwPosition*
         // If a SPoint or GetMark are in a cursor area then cancel the old area.
         // During comparison keep in mind that End() is outside the area.
-        if( *pStt <= *pTmpStt )
+        if( *pStart <= *pTmpStt )
         {
             if( *pEnd > *pTmpStt ||
                 ( *pEnd == *pTmpStt && *pEnd == *pTmpEnd ))
                 pTmpDel = pTmp;
         }
         else
-            if( *pStt < *pTmpEnd )
+            if( *pStart < *pTmpEnd )
                 pTmpDel = pTmp;
 
         bGoNext = true;

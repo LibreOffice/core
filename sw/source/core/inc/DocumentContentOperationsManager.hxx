@@ -132,12 +132,12 @@ public:
         /// From the attributes included in the range, delete only the ones which have exactly same range. Don't delete the ones which are simply included in the range.
         bool bExactRange;
 
-        ParaRstFormat(const SwPosition* pStt, const SwPosition* pEnd,
+        ParaRstFormat(const SwPosition* pStart, const SwPosition* pEnd,
                    SwHistory* pHst, const SfxItemSet* pSet = nullptr,
                    SwRootFrame const*const pLay = nullptr)
             : pFormatColl(nullptr)
             , pHistory(pHst)
-            , pSttNd(pStt)
+            , pSttNd(pStart)
             , pEndNd(pEnd)
             , pDelSet(pSet)
             , pLayout(pLay)
