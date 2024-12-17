@@ -1,9 +1,9 @@
 --- configure
 +++ configure
-@@ -12333,13 +12333,13 @@
- 	;;
- esac
- 
+@@ -16356,13 +16356,13 @@
+       ZLIB_CFLAGS=${ZLIB_CFLAGS-""}
+       ZLIB_LIBS=${ZLIB_LIBS-"-lz"}
+       py_check_lib_save_LIBS=$LIBS
 -{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for inflateCopy in -lz" >&5
 -$as_echo_n "checking for inflateCopy in -lz... " >&6; }
 +{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for inflateCopy in -lzlib" >&5
@@ -17,39 +17,3 @@
  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
  /* end confdefs.h.  */
  
---- setup.py
-+++ setup.py
-@@ -1483,7 +1483,7 @@
-         #
-         # You can upgrade zlib to version 1.1.4 yourself by going to
-         # http://www.gzip.org/zlib/
--        zlib_inc = find_file('zlib.h', [], self.inc_dirs)
-+        zlib_inc = [os.environ.get('ZLIB_INCDIR')]
-         have_zlib = False
-         if zlib_inc is not None:
-             zlib_h = zlib_inc[0] + '/zlib.h'
-@@ -1500,13 +1500,13 @@
-                         version = line.split()[2]
-                         break
-             if version >= version_req:
--                if (self.compiler.find_library_file(self.lib_dirs, 'z')):
-+                if (self.compiler.find_library_file(self.lib_dirs, 'zlib')):
-                     if MACOS:
-                         zlib_extra_link_args = ('-Wl,-search_paths_first',)
-                     else:
-                         zlib_extra_link_args = ()
-                     self.add(Extension('zlib', ['zlibmodule.c'],
--                                       libraries=['z'],
-+                                       libraries=['zlib'],
-                                        extra_link_args=zlib_extra_link_args))
-                     have_zlib = True
-                 else:
-@@ -1520,7 +1520,7 @@
-         # crc32 if we have it.  Otherwise binascii uses its own.
-         if have_zlib:
-             extra_compile_args = ['-DUSE_ZLIB_CRC32']
--            libraries = ['z']
-+            libraries = ['zlib']
-             extra_link_args = zlib_extra_link_args
-         else:
-             extra_compile_args = []

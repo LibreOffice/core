@@ -183,7 +183,7 @@ endif
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib,\
 	LICENSE \
 	Lib/__future__.py \
-	Lib/__phello__.foo.py \
+	Lib/__hello__.py \
 	Lib/_aix_support.py \
 	Lib/_bootsubprocess.py \
 	Lib/_collections_abc.py \
@@ -207,7 +207,6 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/asyncore.py \
 	Lib/base64.py \
 	Lib/bdb.py \
-	Lib/binhex.py \
 	Lib/bisect.py \
 	Lib/bz2.py \
 	Lib/cProfile.py \
@@ -294,7 +293,6 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/queue.py \
 	Lib/quopri.py \
 	Lib/random.py \
-	Lib/re.py \
 	Lib/reprlib.py \
 	Lib/rlcompleter.py \
 	Lib/runpy.py \
@@ -353,6 +351,16 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/zipimport.py \
 ))
 
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/__phello__,\
+	Lib/__phello__/__init__.py \
+	Lib/__phello__/spam.py \
+))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/__phello__/ham,\
+	Lib/__phello__/ham/__init__.py \
+	Lib/__phello__/ham/eggs.py \
+))
+
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/asyncio,\
 	Lib/asyncio/__init__.py \
 	Lib/asyncio/__main__.py \
@@ -378,8 +386,10 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/asyncio/staggered.py \
 	Lib/asyncio/streams.py \
 	Lib/asyncio/subprocess.py \
+	Lib/asyncio/taskgroups.py \
 	Lib/asyncio/tasks.py \
 	Lib/asyncio/threads.py \
+	Lib/asyncio/timeouts.py \
 	Lib/asyncio/transports.py \
 	Lib/asyncio/trsock.py \
 	Lib/asyncio/unix_events.py \
@@ -457,7 +467,6 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/distutils/command/__init__.py \
 	Lib/distutils/command/bdist.py \
 	Lib/distutils/command/bdist_dumb.py \
-	Lib/distutils/command/bdist_msi.py \
 	Lib/distutils/command/bdist_rpm.py \
 	Lib/distutils/command/build.py \
 	Lib/distutils/command/build_clib.py \
@@ -657,13 +666,12 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/importlib,\
 	Lib/importlib/__init__.py \
 	Lib/importlib/_abc.py \
-	Lib/importlib/_adapters.py \
 	Lib/importlib/_bootstrap.py \
 	Lib/importlib/_bootstrap_external.py \
-	Lib/importlib/_common.py \
 	Lib/importlib/abc.py \
 	Lib/importlib/machinery.py \
-	Lib/importlib/resources.py \
+	Lib/importlib/readers.py \
+	Lib/importlib/simple.py \
 	Lib/importlib/util.py \
 ))
 
@@ -675,6 +683,17 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/importlib/metadata/_itertools.py \
 	Lib/importlib/metadata/_meta.py \
 	Lib/importlib/metadata/_text.py \
+))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/importlib/resources,\
+	Lib/importlib/resources/__init__.py \
+	Lib/importlib/resources/_adapters.py \
+	Lib/importlib/resources/_common.py \
+	Lib/importlib/resources/_itertools.py \
+	Lib/importlib/resources/_legacy.py \
+	Lib/importlib/resources/abc.py \
+	Lib/importlib/resources/readers.py \
+	Lib/importlib/resources/simple.py \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/json,\
@@ -821,6 +840,21 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/pydoc_data/topics.py \
 ))
 
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/re,\
+	Lib/re/__init__.py \
+	Lib/re/_casefix.py \
+	Lib/re/_compiler.py \
+	Lib/re/_constants.py \
+	Lib/re/_parser.py \
+))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/tomllib,\
+	Lib/tomllib/__init__.py \
+	Lib/tomllib/_parser.py \
+	Lib/tomllib/_re.py \
+	Lib/tomllib/_types.py \
+))
+
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/unittest,\
 	Lib/unittest/__init__.py \
 	Lib/unittest/__main__.py \
@@ -851,6 +885,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/wsgiref/handlers.py \
 	Lib/wsgiref/headers.py \
 	Lib/wsgiref/simple_server.py \
+	Lib/wsgiref/types.py \
 	Lib/wsgiref/util.py \
 	Lib/wsgiref/validate.py \
 ))
