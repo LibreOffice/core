@@ -43,7 +43,6 @@ endif
 
 ifneq ($(ENABLE_WASM_STRIP_ACCESSIBILITY),TRUE)
 $(eval $(call gb_Module_add_moduledirs,libreoffice,\
-	accessibility \
 	winaccessibility \
 ))
 endif

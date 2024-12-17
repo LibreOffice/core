@@ -118,7 +118,6 @@ gb_MERGE_LIBRARY_LIST := \
 ifneq ($(MERGELIBS_MORE),)
 
 gb_MERGE_LIBRARY_LIST += \
-	acc \
 	$(if $(filter $(OS),WNT), \
 		ado \
 	) \

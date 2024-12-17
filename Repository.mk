@@ -519,7 +519,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 ))
 
 $(eval $(call gb_Helper_register_plugins_for_install,OOOLIBS,ooo, \
-    acc \
     $(if $(ENABLE_CUSTOMTARGET_COMPONENTS),components) \
     cui \
     icg \
@@ -1208,7 +1207,6 @@ $(eval $(call gb_ExternalExecutable_register_executables,\
 
 # Resources
 $(eval $(call gb_Helper_register_mos,\
-	acc \
     $(call gb_Helper_optional,AVMEDIA,avmedia) \
 	$(call gb_Helper_optional,SCRIPTING,basctl) \
 	chart \

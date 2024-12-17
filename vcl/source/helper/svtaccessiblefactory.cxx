@@ -86,7 +86,7 @@ namespace vcl
 #if ENABLE_MERGELIBS_MORE
             s_hAccessibleImplementationModule = osl_loadModuleRelative( &thisModule, u"" SVLIBRARY( "merged" ) ""_ustr.pData, 0 );
 #else
-            s_hAccessibleImplementationModule = osl_loadModuleRelative( &thisModule, u"" SVLIBRARY( "acc" ) ""_ustr.pData, 0 );
+            s_hAccessibleImplementationModule = osl_loadModuleRelative( &thisModule, u"" SVLIBRARY( "vcl" ) ""_ustr.pData, 0 );
 #endif
             assert(s_hAccessibleImplementationModule);
             s_pAccessibleFactoryFunc = reinterpret_cast<GetSvtAccessibilityComponentFactory>(

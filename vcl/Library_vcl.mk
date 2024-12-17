@@ -97,17 +97,71 @@ $(eval $(call gb_Library_use_externals,vcl,\
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/rendercontext/drawmode \
     vcl/skia/SkiaHelper \
+    vcl/source/accessibility/AccessibleBrowseBox \
+    vcl/source/accessibility/AccessibleBrowseBoxBase \
+    vcl/source/accessibility/AccessibleBrowseBoxCheckBoxCell \
+    vcl/source/accessibility/AccessibleBrowseBoxHeaderBar \
+    vcl/source/accessibility/AccessibleBrowseBoxHeaderCell \
+    vcl/source/accessibility/AccessibleBrowseBoxTable \
+    vcl/source/accessibility/AccessibleBrowseBoxTableBase \
+    vcl/source/accessibility/AccessibleBrowseBoxTableCell \
+    vcl/source/accessibility/AccessibleGridControl \
+    vcl/source/accessibility/AccessibleGridControlBase \
+    vcl/source/accessibility/AccessibleGridControlHeader \
+    vcl/source/accessibility/AccessibleGridControlHeaderCell \
+    vcl/source/accessibility/AccessibleGridControlTable \
+    vcl/source/accessibility/AccessibleGridControlTableBase \
+    vcl/source/accessibility/AccessibleGridControlTableCell \
     vcl/source/accessibility/AccessibleTextAttributeHelper \
-    vcl/source/accessibility/characterattributeshelper \
+    vcl/source/accessibility/acc_factory \
+    vcl/source/accessibility/accessiblebrowseboxcell \
+    vcl/source/accessibility/accessibleeditbrowseboxcell \
+    vcl/source/accessibility/accessibleiconchoicectrl \
+    vcl/source/accessibility/accessibleiconchoicectrlentry \
+    vcl/source/accessibility/AccessibleIconView \
+    vcl/source/accessibility/accessiblelistbox \
+    vcl/source/accessibility/accessiblelistboxentry \
     vcl/source/accessibility/accessiblemenubasecomponent \
     vcl/source/accessibility/accessiblemenucomponent \
     vcl/source/accessibility/accessiblemenuitemcomponent \
+    vcl/source/accessibility/accessibletablistbox \
+    vcl/source/accessibility/accessibletablistboxtable \
+    vcl/source/accessibility/characterattributeshelper \
+    vcl/source/accessibility/textwindowaccessibility \
+    vcl/source/accessibility/floatingwindowaccessible \
+    vcl/source/accessibility/IComboListBoxHelper \
+    vcl/source/accessibility/svtaccessiblenumericfield \
+    vcl/source/accessibility/vclxaccessiblebox \
+    vcl/source/accessibility/vclxaccessiblebutton \
+    vcl/source/accessibility/vclxaccessiblecheckbox \
+    vcl/source/accessibility/vclxaccessiblecombobox \
     vcl/source/accessibility/vclxaccessiblecomponent \
+    vcl/source/accessibility/vclxaccessibledropdowncombobox \
+    vcl/source/accessibility/vclxaccessibledropdownlistbox \
+    vcl/source/accessibility/vclxaccessibleedit \
+    vcl/source/accessibility/vclxaccessiblefixedhyperlink \
+    vcl/source/accessibility/vclxaccessiblefixedtext \
+    vcl/source/accessibility/vclxaccessibleheaderbar \
+    vcl/source/accessibility/vclxaccessibleheaderbaritem \
+    vcl/source/accessibility/vclxaccessiblelist \
+    vcl/source/accessibility/vclxaccessiblelistbox \
+    vcl/source/accessibility/vclxaccessiblelistitem \
     vcl/source/accessibility/vclxaccessiblemenu \
     vcl/source/accessibility/vclxaccessiblemenubar \
     vcl/source/accessibility/vclxaccessiblemenuitem \
     vcl/source/accessibility/vclxaccessiblemenuseparator \
     vcl/source/accessibility/vclxaccessiblepopupmenu \
+    vcl/source/accessibility/vclxaccessibleradiobutton \
+    vcl/source/accessibility/vclxaccessiblescrollbar \
+    vcl/source/accessibility/vclxaccessiblestatusbar \
+    vcl/source/accessibility/vclxaccessiblestatusbaritem \
+    vcl/source/accessibility/vclxaccessibletabcontrol \
+    vcl/source/accessibility/vclxaccessibletabpage \
+    vcl/source/accessibility/vclxaccessibletabpagewindow \
+    vcl/source/accessibility/vclxaccessibletextcomponent \
+    vcl/source/accessibility/vclxaccessibletextfield \
+    vcl/source/accessibility/vclxaccessibletoolbox \
+    vcl/source/accessibility/vclxaccessibletoolboxitem \
     vcl/source/animate/Animation \
     vcl/source/animate/AnimationFrame \
     vcl/source/animate/AnimationRenderer \
