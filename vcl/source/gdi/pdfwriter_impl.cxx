@@ -3677,10 +3677,21 @@ we check in the following sequence:
             aLine.append( "/A<</Type/Action/S");
             if( bIsUNCPath ) // handle Win UNC paths
             {
-                aLine.append( "/Launch/Win<</F" );
-                // INetURLObject is not good with UNC paths, use original path
-                aWriter.writeLiteralEncrypt(url, rLink.m_nObject, osl_getThreadTextEncoding());
-                aLine.append( ">>" );
+                aLine.append("/Launch");
+                // Entry /Win is deprecated in PDF 2.0
+                if (m_aContext.Version >= PDFWriter::PDFVersion::PDF_2_0)
+                {
+                    // So write /F directly. AFAICS it's up to PDF viewer to resolve this correctly
+                    aWriter.writeKeyAndLiteralEncrypt("/F", url, rLink.m_nObject, osl_getThreadTextEncoding());
+                }
+                else
+                {
+                    aLine.append("/Win");
+                    aWriter.startDict();
+                    // INetURLObject is not good with UNC paths, use original path
+                    aWriter.writeKeyAndLiteralEncrypt("/F", url, rLink.m_nObject, osl_getThreadTextEncoding());
+                    aWriter.endDict();
+                }
             }
             else
             {
