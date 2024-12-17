@@ -20,7 +20,7 @@ namespace vcl::pdf
 class XmpMetadata
 {
 private:
-    bool mbWritten;
+    bool mbWritten = false;
     std::unique_ptr<SvMemoryStream> mpMemoryStream;
 
 public:
@@ -29,6 +29,10 @@ public:
     OString msSubject;
     OString msProducer;
     OString msPDFVersion;
+    // For PDF/A-1 to PDF/A-3 this is required and we shall use pdfaid:conformance value B (we don't support A)
+    // For PDF/A-4 the pdfaid:conformance entry is optional and the only valid values are E or F
+    // We shall set F if we use embedded files
+    OString msConformance = "B"_ostr;
     OString msKeywords;
     std::vector<OString> maContributor;
     OString msCoverage;
@@ -41,8 +45,8 @@ public:
     OString m_sCreatorTool;
     OString m_sCreateDate;
 
-    sal_Int32 mnPDF_A;
-    bool mbPDF_UA;
+    sal_Int32 mnPDF_A = 0;
+    bool mbPDF_UA = false;
 
 public:
     XmpMetadata();
