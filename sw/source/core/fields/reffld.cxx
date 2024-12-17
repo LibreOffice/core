@@ -1484,7 +1484,7 @@ SwTextNode* SwGetRefFieldType::FindAnchorRefStyle(SwDoc* pDoc, const OUString& r
                                           pStt, pEnd, pSelf, pReference, styleName);
             break;
         default:
-            OSL_FAIL("<SwGetRefFieldType::FindAnchor(..)> - unknown getref element type");
+            OSL_FAIL("<SwGetRefFieldType::FindAnchorRefStyle(..)> - unknown getref element type");
     }
     return pTextNd;
 }
@@ -1505,7 +1505,7 @@ SwTextNode* SwGetRefFieldType::FindAnchorRefStyleMarginal(SwDoc* pDoc,
     Point aPt;
     std::pair<Point, bool> const tmp(aPt, false);
 
-    if (!pContentFrame) SAL_WARN("xmloff.text", "<SwGetRefFieldType::FindAnchor(..)>: Missing content frame for marginal styleref");
+    if (!pContentFrame) SAL_WARN("xmloff.text", "<SwGetRefFieldType::FindAnchorRefStyleMarginal(..)>: Missing content frame for marginal styleref");
     const SwPageFrame* pPageFrame = nullptr;
 
     if (pContentFrame)
