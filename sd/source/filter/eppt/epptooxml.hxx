@@ -131,6 +131,9 @@ private:
     css::uno::Reference<css::drawing::XShape> GetReferencedPlaceholderXShape(const PlaceholderType eType, PageType ePageType) const;
     void WritePlaceholderReferenceShapes(PowerPointShapeExport& rDML, PageType ePageType);
 
+    void FindEquivalentMasterPages();
+    sal_uInt32 GetEquivalentMasterPage(sal_uInt32 nMasterPage);
+
     /// Should we export as .pptm, ie. do we contain macros?
     bool mbPptm;
 
@@ -140,12 +143,17 @@ private:
     ::sax_fastparser::FSHelperPtr mPresentationFS;
 
     LayoutInfo mLayoutInfo[OOXML_LAYOUT_SIZE];
+    // Pairs of masters and layouts as used by Impress
+    std::vector<std::pair<SdrPage*, sal_Int32>> maMastersLayouts;
+    // For each Impress master, which master will represent it on the exported file (themselves by default)
+    std::vector<sal_uInt32> maEquivalentMasters;
     std::vector< ::sax_fastparser::FSHelperPtr > mpSlidesFSArray;
     sal_Int32 mnLayoutFileIdMax;
 
     sal_uInt32 mnSlideIdMax;
     sal_uInt32 mnSlideMasterIdMax;
     sal_uInt32 mnAnimationNodeIdMax;
+    sal_uInt32 mnThemeIdMax;
 
     sal_uInt32 mnDiagramId;
 

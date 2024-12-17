@@ -1107,15 +1107,12 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf157740_slideMasters)
     createSdImpressDoc("pptx/tdf157740.pptx");
     saveAndReload("Impress Office Open XML");
 
-    // Test how many slidemaster we have
+    // The original file has 1 slide master and 7 slide layouts in that master
     xmlDocUniquePtr pXmlDocContent = parseExport("ppt/presentation.xml");
-    assertXPath(pXmlDocContent, "/p:presentation/p:sldMasterIdLst/p:sldMasterId"_ostr, 7);
+    assertXPath(pXmlDocContent, "/p:presentation/p:sldMasterIdLst/p:sldMasterId"_ostr, 1);
 
     pXmlDocContent = parseExport("ppt/slideMasters/slideMaster1.xml");
-    assertXPath(pXmlDocContent, "/p:sldMaster/p:sldLayoutIdLst/p:sldLayoutId"_ostr, 1);
-
-    pXmlDocContent = parseExport("ppt/slideMasters/slideMaster7.xml");
-    assertXPath(pXmlDocContent, "/p:sldMaster/p:sldLayoutIdLst/p:sldLayoutId"_ostr, 1);
+    assertXPath(pXmlDocContent, "/p:sldMaster/p:sldLayoutIdLst/p:sldLayoutId"_ostr, 7);
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf159931_slideLayouts)
