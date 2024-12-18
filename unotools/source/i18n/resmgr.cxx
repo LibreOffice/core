@@ -200,10 +200,12 @@ namespace Translate
         assert(!strchr(sContextAndId.getId(), '\004') && "should be using nget, not get");
 
         //if it's a key id locale, generate it here
-        if (std::use_facet<boost::locale::info>(loc).language() == "qtz")
-        {
-            OString sKeyId(genKeyId(OString::Concat(sContextAndId.mpContext) + "|" + std::string_view(sContextAndId.getId())));
-            return OUString::fromUtf8(sKeyId) + u"\u2016" + OUString::fromUtf8(sContextAndId.getId());
+        if (std::has_facet<boost::locale::info>(loc)) {
+            if (std::use_facet<boost::locale::info>(loc).language() == "qtz")
+            {
+                OString sKeyId(genKeyId(OString::Concat(sContextAndId.mpContext) + "|" + std::string_view(sContextAndId.getId())));
+                return OUString::fromUtf8(sKeyId) + u"\u2016" + OUString::fromUtf8(sContextAndId.getId());
+            }
         }
 
         //otherwise translate it
