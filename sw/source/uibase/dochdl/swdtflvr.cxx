@@ -3878,7 +3878,7 @@ bool SwTransferable::PrivatePaste(SwWrtShell& rShell, SwPasteContext* pContext, 
     }
     if ( nSelection & SelectionType::DrawObject) //unselect hovering graphics
     {
-        rShell.ResetSelect(nullptr,false);
+        rShell.ResetSelect(nullptr, false, ScrollSizeMode::ScrollSizeDefault);
     }
 
     bool bInWrd = false, bEndWrd = false, bSttWrd = false,

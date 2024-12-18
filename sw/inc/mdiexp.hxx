@@ -22,6 +22,7 @@
 #include "tblenum.hxx"
 #include "swdllapi.h"
 #include <unotools/resmgr.hxx>
+#include "viewsh.hxx"
 
 #include <string_view>
 
@@ -30,7 +31,8 @@ class Size;
 class SwViewShell;
 class SwDocShell;
 
-extern void ScrollMDI(SwViewShell const * pVwSh, const SwRect &, sal_uInt16 nRangeX, sal_uInt16 nRangeY);
+extern void ScrollMDI(SwViewShell const * pVwSh, const SwRect &, sal_uInt16 nRangeX, sal_uInt16 nRangeY
+    , ScrollSizeMode eScrollSizeMode = ScrollSizeMode::ScrollSizeDefault);
 extern bool IsScrollMDI(SwViewShell const * pVwSh, const SwRect &);
 extern void SizeNotify(SwViewShell const * pVwSh, const Size &);
 
