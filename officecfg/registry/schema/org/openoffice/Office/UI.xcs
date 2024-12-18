@@ -902,7 +902,7 @@
         </info>
         <prop oor:name="Light" oor:type="xs:int">
           <info>
-            <desc>Specifies light color for the comments in BAISC source code.</desc>
+            <desc>Specifies light color for the comments in BASIC source code.</desc>
           </info>
         </prop>
         <prop oor:name="Dark" oor:type="xs:int">
