@@ -255,16 +255,32 @@ static void updateMenuBarVisibility( const AquaSalFrame *pFrame )
     // Hide the dock and the menubar if the key window or one of its
     // parent windows are in LibreOffice full screen mode. Otherwise,
     // show the dock and the menubar.
-    else if( AquaSalFrame::isAlive( pFrame ) && [pFrame->getNSWindow() isKeyWindow] )
+    else if( AquaSalFrame::isAlive( pFrame ) )
     {
+        bool bInternalFullScreen = false;
+        bool bNativeFullScreen = false;
         const AquaSalFrame *pParentFrame = pFrame;
-        while( pParentFrame && !pParentFrame->mbInternalFullScreen )
-            pParentFrame = AquaSalFrame::isAlive( pFrame->mpParent ) ? pParentFrame->mpParent : nullptr;
+        while( pParentFrame )
+        {
+            bInternalFullScreen |= pParentFrame->mbInternalFullScreen;
+            bNativeFullScreen |= pParentFrame->mbNativeFullScreen;
+            pParentFrame = AquaSalFrame::isAlive( pParentFrame->mpParent ) ? pParentFrame->mpParent : nullptr;
+        }
 
-        if( pParentFrame && pParentFrame->mbInternalFullScreen )
-            [NSMenu setMenuBarVisible: NO];
+        if( bInternalFullScreen && !bNativeFullScreen )
+        {
+            const NSWindow *pParentWindow = [NSApp keyWindow];
+            while( pParentWindow && pParentWindow != pFrame->getNSWindow() )
+                pParentWindow = [pParentWindow parentWindow];
+            if( pParentWindow == pFrame->getNSWindow() )
+                [NSMenu setMenuBarVisible: NO];
+            else
+                [NSMenu setMenuBarVisible: YES];
+        }
         else
+        {
             [NSMenu setMenuBarVisible: YES];
+        }
     }
 }
 
@@ -437,12 +453,19 @@ static void updateMenuBarVisibility( const AquaSalFrame *pFrame )
         mpFrame->SendPaintEvent(); // repaint controls as inactive
     }
 
+    // Show the menubar if application is in native full screen mode
+    // since hiding the menubar in that mode will cause the window's
+    // titlebar to fail to display or fail to hide when expected.
+    if( [NSApp presentationOptions] & NSApplicationPresentationFullScreen )
+    {
+        [NSMenu setMenuBarVisible: YES];
+    }
     // Show the dock and the menubar if there is no native modal dialog
     // and if the key window is nil or is not a SalFrameWindow instance.
     // If a SalFrameWindow is the key window, it should have already set
     // the menubar visibility to match its LibreOffice full screen mode
     // state.
-    if ( ![NSApp modalWindow] )
+    else if ( ![NSApp modalWindow] )
     {
         NSWindow *pKeyWindow = [NSApp keyWindow];
         if( !pKeyWindow || ![pKeyWindow isKindOfClass: [SalFrameWindow class]] )

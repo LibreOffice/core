@@ -287,12 +287,15 @@
     // Related: tdf#161623 the menubar is always visible when in native
     // full screen mode so disable all menu items when also in LibreOffice
     // full screen mode to mimic the effect of a hidden menubar.
-    if ([NSApp presentationOptions] & NSApplicationPresentationFullScreen)
+    SolarMutexGuard aGuard;
+    const AquaSalFrame* pFrame = mpMenuItem->mpParentMenu ? mpMenuItem->mpParentMenu->getFrame() : nullptr;
+    if (pFrame && AquaSalFrame::isAlive( pFrame ) && pFrame->mbInternalFullScreen)
     {
-        SolarMutexGuard aGuard;
-
-        const AquaSalFrame* pFrame = mpMenuItem->mpParentMenu ? mpMenuItem->mpParentMenu->getFrame() : nullptr;
-        if( pFrame && AquaSalFrame::isAlive( pFrame ) && pFrame->mbInternalFullScreen )
+        NSMenu *pMainMenu = [NSApp mainMenu];
+        NSMenu *pParentMenu = [pMenuItem menu];
+        while (pParentMenu && pParentMenu != pMainMenu)
+            pParentMenu = [pParentMenu supermenu];
+        if (pParentMenu && pParentMenu == pMainMenu)
             return NO;
     }
 

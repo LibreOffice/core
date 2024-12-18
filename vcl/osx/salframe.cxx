@@ -918,13 +918,24 @@ void AquaSalFrame::doShowFullScreen( bool bFullScreen, sal_Int32 nDisplay )
         }
         // Hide the dock and the menubar if this or one of its child
         // windows are the key window
-        else
+        else if( AquaSalFrame::isAlive( this ) )
         {
-            const NSWindow *pParentWindow = [NSApp keyWindow];
-            while( pParentWindow && pParentWindow != mpNSWindow )
-                pParentWindow = [pParentWindow parentWindow];
-            if( pParentWindow == mpNSWindow )
-                [NSMenu setMenuBarVisible: NO];
+            bool bNativeFullScreen = false;
+            const AquaSalFrame *pParentFrame = this;
+            while( pParentFrame )
+            {
+                bNativeFullScreen |= pParentFrame->mbNativeFullScreen;
+                pParentFrame = AquaSalFrame::isAlive( pParentFrame->mpParent ) ? pParentFrame->mpParent : nullptr;
+            }
+
+            if( !bNativeFullScreen )
+            {
+                const NSWindow *pParentWindow = [NSApp keyWindow];
+                while( pParentWindow && pParentWindow != mpNSWindow )
+                    pParentWindow = [pParentWindow parentWindow];
+                if( pParentWindow == mpNSWindow )
+                    [NSMenu setMenuBarVisible: NO];
+            }
         }
 
         if( mbNativeFullScreen && !NSIsEmptyRect( maNativeFullScreenRestoreRect ) )
