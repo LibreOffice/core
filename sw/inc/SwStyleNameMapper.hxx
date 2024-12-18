@@ -118,7 +118,7 @@ public:
 
     // Get the Pool ID from the programmatic name
     SAL_WARN_UNUSED_RESULT
-    static sal_uInt16 GetPoolIdFromProgName(const OUString& rName,
+    SW_DLLPUBLIC static sal_uInt16 GetPoolIdFromProgName(const OUString& rName,
                                             SwGetPoolIdFromName);
 
     // used to convert the 4 special ExtraProg/UINames for
