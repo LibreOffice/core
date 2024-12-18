@@ -638,6 +638,18 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/encodings/zlib_codec.py \
 ))
 
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/ensurepip,\
+	Lib/ensurepip/__init__.py \
+	Lib/ensurepip/__main__.py \
+	Lib/ensurepip/_uninstall.py \
+))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/ensurepip/_bundled,\
+	Lib/ensurepip/_bundled/__init__.py \
+	Lib/ensurepip/_bundled/pip-23.0.1-py3-none-any.whl \
+	Lib/ensurepip/_bundled/setuptools-65.5.0-py3-none-any.whl \
+))
+
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/html,\
 	Lib/html/__init__.py \
 	Lib/html/entities.py \
