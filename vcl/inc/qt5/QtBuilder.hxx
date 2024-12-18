@@ -27,14 +27,14 @@
 class QtBuilder : public WidgetBuilder<QObject, QObject*, QMenu, QMenu*>
 {
 private:
-    QObject* get_by_name(std::u16string_view sID);
+    QWidget* get_by_name(std::u16string_view sID);
     struct WinAndId
     {
         OUString m_sID;
-        QObject* m_pWindow;
-        WinAndId(OUString sId, QObject* pWindow)
+        QWidget* m_pWidget;
+        WinAndId(OUString sId, QWidget* pWidget)
             : m_sID(std::move(sId))
-            , m_pWindow(pWindow)
+            , m_pWidget(pWidget)
         {
         }
     };

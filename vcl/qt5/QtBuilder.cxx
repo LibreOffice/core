@@ -59,12 +59,12 @@ QtBuilder::QtBuilder(QObject* pParent, std::u16string_view sUIRoot, const OUStri
 
 QtBuilder::~QtBuilder() {}
 
-QObject* QtBuilder::get_by_name(std::u16string_view sID)
+QWidget* QtBuilder::get_by_name(std::u16string_view sID)
 {
     for (auto const& child : m_aChildren)
     {
         if (child.m_sID == sID)
-            return child.m_pWindow;
+            return child.m_pWidget;
     }
 
     return nullptr;
@@ -397,7 +397,8 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
             pParentGridLayout->addLayout(pLayout, pParentGridLayout->rowCount(), 0);
     }
 
-    m_aChildren.emplace_back(sID, pObject);
+    if (pWidget)
+        m_aChildren.emplace_back(sID, pWidget);
 
     return pObject;
 }
@@ -492,12 +493,12 @@ void QtBuilder::tweakInsertedChild(QObject* pParent, QObject* pCurrentChild, std
 void QtBuilder::setMnemonicWidget(const OUString& rLabelId, const OUString& rMnemonicWidgetId)
 {
     QLabel* pLabel = get<QLabel>(rLabelId);
-    QObject* pBuddy = get_by_name(rMnemonicWidgetId);
+    QWidget* pBuddy = get_by_name(rMnemonicWidgetId);
 
-    if (!pLabel || !pBuddy || !pBuddy->isWidgetType())
+    if (!pLabel || !pBuddy)
         return;
 
-    pLabel->setBuddy(static_cast<QWidget*>(pBuddy));
+    pLabel->setBuddy(pBuddy);
 }
 
 void QtBuilder::setRadioButtonGroup(const OUString& rRadioButtonId, const OUString& rRadioGroupId)

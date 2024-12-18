@@ -136,16 +136,12 @@ std::unique_ptr<weld::Widget> QtInstanceBuilder::weld_widget(const OUString& rId
 
 std::unique_ptr<weld::Container> QtInstanceBuilder::weld_container(const OUString& rId)
 {
-    QLayout* pLayout = m_xBuilder->get<QLayout>(rId);
-    if (!pLayout)
+    QWidget* pWidget = m_xBuilder->get<QWidget>(rId);
+    if (!pWidget)
         return nullptr;
 
-    QWidget* pParentWidget = pLayout->parentWidget();
-    assert(pParentWidget && pParentWidget == pLayout->parent()
-           && "layout has no direct widget parent");
-    std::unique_ptr<weld::Container> xRet(
-        pParentWidget ? std::make_unique<QtInstanceContainer>(pParentWidget) : nullptr);
-    return xRet;
+    assert(pWidget->layout() && "no layout");
+    return std::make_unique<QtInstanceContainer>(pWidget);
 }
 
 std::unique_ptr<weld::Box> QtInstanceBuilder::weld_box(const OUString&)
@@ -156,16 +152,12 @@ std::unique_ptr<weld::Box> QtInstanceBuilder::weld_box(const OUString&)
 
 std::unique_ptr<weld::Grid> QtInstanceBuilder::weld_grid(const OUString& rId)
 {
-    QGridLayout* pLayout = m_xBuilder->get<QGridLayout>(rId);
-    if (!pLayout)
+    QWidget* pWidget = m_xBuilder->get<QWidget>(rId);
+    if (!pWidget)
         return nullptr;
 
-    QWidget* pParentWidget = pLayout->parentWidget();
-    assert(pParentWidget && pParentWidget == pLayout->parent()
-           && "layout has no direct widget parent");
-    std::unique_ptr<weld::Grid> xRet(pParentWidget ? std::make_unique<QtInstanceGrid>(pParentWidget)
-                                                   : nullptr);
-    return xRet;
+    assert(qobject_cast<QGridLayout*>(pWidget->layout()) && "no grid layout");
+    return std::make_unique<QtInstanceGrid>(pWidget);
 }
 
 std::unique_ptr<weld::Paned> QtInstanceBuilder::weld_paned(const OUString&)
