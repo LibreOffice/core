@@ -22,8 +22,9 @@ QtInstanceMessageDialog::QtInstanceMessageDialog(QMessageBox* pMessageDialog)
 {
     assert(m_pMessageDialog);
 
-    m_pExtraControlsContainer = addWidgetForExtraItems();
-    assert(m_pExtraControlsContainer);
+    m_pExtraControlsContainer = new QWidget;
+    m_pExtraControlsContainer->setLayout(new QVBoxLayout);
+    positionExtraControlsContainer();
 }
 
 void QtInstanceMessageDialog::set_primary_text(const rtl::OUString& rText)
@@ -36,7 +37,10 @@ void QtInstanceMessageDialog::set_primary_text(const rtl::OUString& rText)
         return;
     }
 
+    // update text and ensure that extra controls are contained in the
+    // dialog's layout (new layout gets set when setting text)
     m_pMessageDialog->setText(toQString(rText));
+    positionExtraControlsContainer();
 }
 
 void QtInstanceMessageDialog::set_secondary_text(const rtl::OUString& rText)
@@ -49,7 +53,10 @@ void QtInstanceMessageDialog::set_secondary_text(const rtl::OUString& rText)
         return;
     }
 
+    // update text and ensure that extra controls are contained in the
+    // dialog's layout (new layout gets set when setting text)
     m_pMessageDialog->setInformativeText(toQString(rText));
+    positionExtraControlsContainer();
 }
 
 std::unique_ptr<weld::Container> QtInstanceMessageDialog::weld_message_area()
@@ -173,13 +180,18 @@ void QtInstanceMessageDialog::dialogFinished(int nResult)
 
     QtInstanceDialog::dialogFinished(nResponseCode);
 }
-
-QWidget* QtInstanceMessageDialog::addWidgetForExtraItems()
+void QtInstanceMessageDialog::positionExtraControlsContainer()
 {
+    assert(m_pExtraControlsContainer);
+
     // make use of implementation detail that QMessageBox uses QGridLayout for its layout
     // (logic here will need to be adjusted if that ever changes)
     QGridLayout* pDialogLayout = qobject_cast<QGridLayout*>(m_pMessageDialog->layout());
     assert(pDialogLayout && "QMessageBox has unexpected layout");
+
+    // no need to reposition if layout didn't change
+    if (pDialogLayout->indexOf(m_pExtraControlsContainer) >= 0)
+        return;
 
     // find last label
     const int nItemCount = pDialogLayout->count();
@@ -219,11 +231,7 @@ QWidget* QtInstanceMessageDialog::addWidgetForExtraItems()
     int nLabelColSpan = 0;
     pDialogLayout->getItemPosition(nLastLabelIndex, &nLabelRow, &nLabelCol, &nLabelRowSpan,
                                    &nLabelColSpan);
-    QWidget* pWidget = new QWidget;
-    pWidget->setLayout(new QVBoxLayout);
-    pDialogLayout->addWidget(pWidget, nLabelRow + 1, nLabelCol);
-
-    return pWidget;
+    pDialogLayout->addWidget(m_pExtraControlsContainer, nLabelRow + 1, nLabelCol);
 }
 
 QPushButton* QtInstanceMessageDialog::buttonForResponseCode(int nResponse)

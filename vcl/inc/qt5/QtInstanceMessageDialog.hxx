@@ -43,7 +43,7 @@ public:
     virtual int run() override;
 
 private:
-    QWidget* addWidgetForExtraItems();
+    void positionExtraControlsContainer();
     virtual QPushButton* buttonForResponseCode(int nResponse);
 
 protected slots:
