@@ -175,7 +175,6 @@ UI_FILELIST(vcl, "UIConfig/vcl.filelist")
 UI_FILELIST(writerperfect, "UIConfig/writerperfect.filelist")
 UI_FILELIST(xmlsec, "UIConfig/xmlsec.filelist")
 
-MO_FILELIST_ALL_LANG(acc)
 MO_FILELIST_ALL_LANG(avmedia)
 #ifndef DISABLE_SCRIPTING
 MO_FILELIST_ALL_LANG(basctl)
