@@ -361,6 +361,8 @@ void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, bool bForceTextAttr
         if(((maDash.GetDots() && maDash.GetDotLen()) || (maDash.GetDashes() && maDash.GetDashLen())) && maDash.GetDistance())
         {
             mpLineAttr->Put(XLineDashItem(OUString(), maDash));
+            // tdf#155211 - change line style to dashed
+            mpLineAttr->Put(XLineStyleItem(drawing::LineStyle_DASH));
         }
         else
         {

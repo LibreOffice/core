@@ -13,6 +13,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
@@ -30,6 +31,7 @@
 #include <svx/svxids.hrc>
 #include <svx/svdoashp.hxx>
 #include <svx/svdotable.hxx>
+#include <svx/xlineit0.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xflgrit.hxx>
@@ -344,6 +346,34 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf143412)
     dispatchCommand(mxComponent, u".uno:ConvertIntoMetaFile"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pActualPage->GetObjCount());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf155211_dashed_line)
+{
+    createSdImpressDoc();
+
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pActualPage->GetObjCount());
+
+    OUString aImageURL = createFileURL(u"tdf155211_dashed_line.svg");
+    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+        { "FileName", uno::Any(aImageURL) },
+    }));
+    dispatchCommand(mxComponent, u".uno:InsertGraphic"_ustr, aArgs);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pActualPage->GetObjCount());
+
+    // split the (auto-selected) svg
+    dispatchCommand(mxComponent, u".uno:Break"_ustr, {});
+
+    SdrObject* pObject = pActualPage->GetObj(2);
+    const XLineStyleItem& rStyleItem = pObject->GetMergedItem(XATTR_LINESTYLE);
+    // tdf#115162: Without the fix in place, this test would have failed with
+    // - Expected: 2 (LineStyle_DASH)
+    // - Actual  : 1 (LineStyle_SOLID)
+    CPPUNIT_ASSERT_EQUAL(drawing::LineStyle_DASH, rStyleItem.GetValue());
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf162455)
