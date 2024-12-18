@@ -568,7 +568,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
 -    if (fDebugCallback != VK_NULL_HANDLE) {
 -        fDestroyDebugReportCallbackEXT(fInstance, fDebugCallback, nullptr);
 +    if (fGlobalShared->fDebugCallback != VK_NULL_HANDLE) {
-+        fGlobalShared->fDestroyDebugReportCallbackEXT(fGlobalShared->fInstance, fDebugCallback, nullptr);
++        fGlobalShared->fDestroyDebugReportCallbackEXT(fGlobalShared->fInstance, fGlobalShared->fDebugCallback, nullptr);
      }
  #endif
 

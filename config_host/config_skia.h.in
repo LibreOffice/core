@@ -40,6 +40,9 @@ are the same.
 // Memory allocator for Vulkan.
 #define SK_USE_VMA 1
 
+// Enable Vulkan validation layers (set by configure).
+#undef SK_ENABLE_VK_LAYERS
+
 #define SK_CODEC_DECODES_PNG 1
 #define SK_ENCODE_PNG 1
 
