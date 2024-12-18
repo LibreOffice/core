@@ -75,7 +75,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testStatusBarPageNumber)
 
     // Then make sure the page number in view 2 is correct:
     // FIXME this should not happen, but it does from time to time.
-    if (!aView2.m_aStateChanges.empty())
+    if (aView2.m_aStateChanges.empty())
     {
         return;
     }
