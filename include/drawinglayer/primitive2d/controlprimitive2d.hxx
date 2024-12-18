@@ -93,6 +93,9 @@ public:
         return mxControlModel;
     }
 
+    /// check if this control is visible as ChildWindow
+    bool isVisibleAsChildWindow() const;
+
     /** mxControl access. This will on demand create the awt::XControl using createXControl()
         if it does not exist. It may already have been created or even handed over at
         incarnation
