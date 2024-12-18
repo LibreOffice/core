@@ -285,7 +285,7 @@
         return NO;
 
     // Related: tdf#161623 the menubar is always visible when in native
-    // full screen mode so disble all menu items when also in LibreOffice
+    // full screen mode so disable all menu items when also in LibreOffice
     // full screen mode to mimic the effect of a hidden menubar.
     if ([NSApp presentationOptions] & NSApplicationPresentationFullScreen)
     {
