@@ -80,6 +80,7 @@ namespace dbaui
         m_xSQLEd->set_size_request(nWidth, nHeight);
         m_xStatus->set_size_request(-1, nHeight);
         m_xOutput->set_size_request(-1, nHeight);
+        m_xSQLHistory->set_size_request(nWidth, -1);
 
         m_xSQL->GrabFocus();
 
