@@ -453,7 +453,7 @@ void SwIndexMarkPane::Apply()
 {
     InsertUpdate();
     if(m_bSelected)
-        m_pSh->ResetSelect(nullptr, false);
+        m_pSh->ResetSelect(nullptr, false, ScrollSizeMode::ScrollSizeDefault);
 }
 
 // apply changes

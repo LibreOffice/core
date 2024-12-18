@@ -33,12 +33,13 @@
 
 // Core-Notify
 void ScrollMDI( SwViewShell const * pVwSh, const SwRect &rRect,
-                sal_uInt16 nRangeX, sal_uInt16 nRangeY)
+                sal_uInt16 nRangeX, sal_uInt16 nRangeY,
+                ScrollSizeMode eScrollSizeMode)
 {
     SfxViewShell *pSfxViewShell = pVwSh->GetSfxViewShell();
 
     if (SwView* pSwView = dynamic_cast<SwView *>(pSfxViewShell))
-        pSwView->Scroll(rRect.SVRect(), nRangeX, nRangeY);
+        pSwView->Scroll(rRect.SVRect(), nRangeX, nRangeY, eScrollSizeMode);
 }
 
 // Docmdi - movable

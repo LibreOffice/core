@@ -318,7 +318,7 @@ void SwWrtShell::PopMode()
 // eponymous methods in the CursorShell, the second removes
 // all selections at first.
 
-tools::Long SwWrtShell::SetCursor(const Point *pPt, bool bTextOnly)
+tools::Long SwWrtShell::SetCursor(const Point *pPt, bool bTextOnly, ScrollSizeMode eScrollSizeMode)
 {
         // Remove a possibly present selection at the position
         // of the mouseclick
@@ -327,14 +327,14 @@ tools::Long SwWrtShell::SetCursor(const Point *pPt, bool bTextOnly)
         ClearMark();
     }
 
-    return SwCursorShell::SetCursor(*pPt, bTextOnly);
+    return SwCursorShell::SetCursor(*pPt, bTextOnly, true, false, eScrollSizeMode );
 }
 
-tools::Long SwWrtShell::SetCursorKillSel(const Point *pPt, bool bTextOnly )
+tools::Long SwWrtShell::SetCursorKillSel(const Point *pPt, bool bTextOnly, ScrollSizeMode eScrollSizeMode )
 {
     SwActContext aActContext(this);
-    ResetSelect(pPt,false);
-    return SwCursorShell::SetCursor(*pPt, bTextOnly);
+    ResetSelect(pPt, false, ScrollSizeMode::ScrollSizeDefault);
+    return SwCursorShell::SetCursor(*pPt, bTextOnly, true, false, eScrollSizeMode);
 }
 
 void SwWrtShell::UnSelectFrame()
@@ -347,7 +347,7 @@ void SwWrtShell::UnSelectFrame()
 
 // Remove of all selections
 
-tools::Long SwWrtShell::ResetSelect(const Point *,bool)
+tools::Long SwWrtShell::ResetSelect(const Point *, bool, ScrollSizeMode)
 {
     if(IsSelFrameMode())
     {
@@ -393,7 +393,8 @@ void SwWrtShell::SetSplitVerticalByDefault(bool value)
 
 // Do nothing
 
-tools::Long SwWrtShell::Ignore(const Point *, bool ) {
+tools::Long SwWrtShell::Ignore(const Point *, bool, ScrollSizeMode )
+{
     return 1;
 }
 
@@ -674,7 +675,6 @@ void SwWrtShell::EnterAddMode()
     if(IsTableMode()) return;
     if(m_bBlockMode)
         LeaveBlockMode();
-    m_fnKillSel = &SwWrtShell::Ignore;
     m_fnSetCursor = &SwWrtShell::SetCursor;
     m_bAddMode = true;
     m_bBlockMode = false;

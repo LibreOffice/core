@@ -764,7 +764,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OkHdl, weld::Button&, void)
 
     m_rSh.StartAllAction();
     m_rSh.StartUndo();
-    m_rSh.ResetSelect( nullptr,false );
+    m_rSh.ResetSelect( nullptr,false, ScrollSizeMode::ScrollSizeDefault );
 
     std::unique_ptr<weld::TreeIter> xIter(m_xTree->make_iterator());
     if (m_xTree->get_iter_first(*xIter))
