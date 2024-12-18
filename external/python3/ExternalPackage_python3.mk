@@ -176,12 +176,10 @@ endif
 # test - probably unnecessary? was explicitly removed #i116738#
 # venv - why would we need virtual environments
 #
-# These lists are now sorted with "LC_COLLATE=C sort", by using
-#   find Lib/ -name "*.py" | sort | sed -e 's/^/\t/' -e 's/$/ \\/'
+# Call generateExternalPackage.py to update the lists below
 #
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib,\
-	LICENSE \
 	Lib/__future__.py \
 	Lib/__phello__.foo.py \
 	Lib/_aix_support.py \
@@ -413,11 +411,11 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/ctypes/macholib,\
 	Lib/ctypes/macholib/README.ctypes \
-	Lib/ctypes/macholib/fetch_macholib \
-	Lib/ctypes/macholib/fetch_macholib.bat \
 	Lib/ctypes/macholib/__init__.py \
 	Lib/ctypes/macholib/dyld.py \
 	Lib/ctypes/macholib/dylib.py \
+	Lib/ctypes/macholib/fetch_macholib \
+	Lib/ctypes/macholib/fetch_macholib.bat \
 	Lib/ctypes/macholib/framework.py \
 ))
 
@@ -687,10 +685,10 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/lib2to3,\
-	Lib/lib2to3/__init__.py \
-	Lib/lib2to3/__main__.py \
 	Lib/lib2to3/Grammar.txt \
 	Lib/lib2to3/PatternGrammar.txt \
+	Lib/lib2to3/__init__.py \
+	Lib/lib2to3/__main__.py \
 	Lib/lib2to3/btm_matcher.py \
 	Lib/lib2to3/btm_utils.py \
 	Lib/lib2to3/fixer_base.py \
@@ -758,7 +756,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/lib2to3/fixes/fix_zip.py \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/pgen2,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/lib2to3/pgen2,\
 	Lib/lib2to3/pgen2/__init__.py \
 	Lib/lib2to3/pgen2/conv.py \
 	Lib/lib2to3/pgen2/driver.py \
@@ -789,8 +787,6 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/multiprocessing/__init__.py \
 	Lib/multiprocessing/connection.py \
 	Lib/multiprocessing/context.py \
-	Lib/multiprocessing/dummy/__init__.py \
-	Lib/multiprocessing/dummy/connection.py \
 	Lib/multiprocessing/forkserver.py \
 	Lib/multiprocessing/heap.py \
 	Lib/multiprocessing/managers.py \
@@ -820,6 +816,10 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/pydoc_data/__init__.py \
 	Lib/pydoc_data/_pydoc.css \
 	Lib/pydoc_data/topics.py \
+))
+
+$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/site-packages,\
+	Lib/site-packages/README.txt \
 ))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/unittest,\
@@ -904,10 +904,6 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/zoneinfo/_common.py \
 	Lib/zoneinfo/_tzpath.py \
 	Lib/zoneinfo/_zoneinfo.py \
-))
-
-$(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/site-packages,\
-	Lib/site-packages/README.txt \
 ))
 
 # vim: set noet sw=4 ts=4:
