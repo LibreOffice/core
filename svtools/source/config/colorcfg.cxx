@@ -106,7 +106,7 @@ namespace {
 
 uno::Sequence< OUString> GetPropertyNames(std::u16string_view rScheme)
 {
-    // this assums that all the entries will have at max 3 properties. this
+    // this assumes that all the entries will have at max 3 properties. this
     // might not be the case as more and more UI elements support the bitmap
     // background property. If that happens we might want to increase it to
     // 5 * ColorConfigEntryCount; shouldn't be a problem now
@@ -217,7 +217,7 @@ void ColorConfig_Impl::Load(const OUString& rScheme)
               || (MiscSettings::GetAppColorMode() == 0 && MiscSettings::GetUseDarkMode());
 
         // based on the appearance (light/dark) cache the value of the appropriate color in nColor.
-        // this way we don't have to add hunderds of function calls in the codebase and it will be fast.
+        // this way we don't have to add hundreds of function calls in the codebase and it will be fast.
         if (bIsDarkMode)
             m_aConfigValues[i].nColor = m_aConfigValues[i].nDarkColor;
         else
