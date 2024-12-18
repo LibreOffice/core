@@ -509,7 +509,7 @@
         </info>
         <prop oor:name="Light" oor:type="xs:int">
           <info>
-            <desc>Specifies light color for the manula page breaks in Calc.</desc>
+            <desc>Specifies light color for the manual page breaks in Calc.</desc>
           </info>
         </prop>
         <prop oor:name="Dark" oor:type="xs:int">
