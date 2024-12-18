@@ -28,8 +28,8 @@ public:
 
     virtual void connect_container_focus_changed(const Link<Container&, void>& rLink) override;
 
-private:
-    QLayout& getLayout();
+protected:
+    virtual QLayout& getLayout() const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

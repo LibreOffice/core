@@ -18,6 +18,7 @@
 #include <QtInstanceEntry.hxx>
 #include <QtInstanceExpander.hxx>
 #include <QtInstanceFrame.hxx>
+#include <QtInstanceGrid.hxx>
 #include <QtInstanceImage.hxx>
 #include <QtInstanceLabel.hxx>
 #include <QtInstanceLevelBar.hxx>
@@ -153,10 +154,18 @@ std::unique_ptr<weld::Box> QtInstanceBuilder::weld_box(const OUString&)
     return nullptr;
 }
 
-std::unique_ptr<weld::Grid> QtInstanceBuilder::weld_grid(const OUString&)
+std::unique_ptr<weld::Grid> QtInstanceBuilder::weld_grid(const OUString& rId)
 {
-    assert(false && "Not implemented yet");
-    return nullptr;
+    QGridLayout* pLayout = m_xBuilder->get<QGridLayout>(rId);
+    if (!pLayout)
+        return nullptr;
+
+    QWidget* pParentWidget = pLayout->parentWidget();
+    assert(pParentWidget && pParentWidget == pLayout->parent()
+           && "layout has no direct widget parent");
+    std::unique_ptr<weld::Grid> xRet(pParentWidget ? std::make_unique<QtInstanceGrid>(pParentWidget)
+                                                   : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::Paned> QtInstanceBuilder::weld_paned(const OUString&)

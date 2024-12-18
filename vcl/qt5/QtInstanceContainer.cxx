@@ -55,7 +55,7 @@ void QtInstanceContainer::connect_container_focus_changed(const Link<Container&,
     weld::Container::connect_container_focus_changed(rLink);
 }
 
-QLayout& QtInstanceContainer::getLayout()
+QLayout& QtInstanceContainer::getLayout() const
 {
     QLayout* pLayout = getQWidget()->layout();
     assert(pLayout);
