@@ -33,7 +33,6 @@ BEGIN
     $installer::globals::product = "";
     $installer::globals::languagelist = "";
     $installer::globals::added_english = 0;
-    $installer::globals::set_office_start_language = 0;
 
     $installer::globals::destdir = "";
     $installer::globals::rootpath = "";

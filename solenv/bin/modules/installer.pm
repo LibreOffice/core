@@ -573,11 +573,6 @@ sub run {
 
         my $filesinproductlanguageresolvedarrayref = installer::scriptitems::resolving_all_languages_in_productlists($filesinproductarrayref, $languagesarrayref);
 
-        if ( ! $installer::globals::set_office_start_language )
-        {
-            $filesinproductlanguageresolvedarrayref = installer::scriptitems::remove_office_start_language_files($filesinproductlanguageresolvedarrayref);
-        }
-
         installer::scriptitems::changing_name_of_language_dependent_keys($filesinproductlanguageresolvedarrayref);
 
         $filesinproductlanguageresolvedarrayref = installer::scriptitems::remove_non_existent_languages_in_productlists($filesinproductlanguageresolvedarrayref, $languagestringref, "Name", "file");

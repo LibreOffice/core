@@ -38,7 +38,6 @@ $(eval $(call gb_Configuration_add_datas,registry,officecfg/registry/data,\
 	org/openoffice/Office/ExtensionManager.xcu \
 	org/openoffice/Office/Impress.xcu \
 	org/openoffice/Office/Jobs.xcu \
-	org/openoffice/Office/Linguistic.xcu \
 	org/openoffice/Office/Logging.xcu \
 	org/openoffice/Office/Math.xcu \
 	org/openoffice/Office/ProtocolHandler.xcu \
@@ -92,7 +91,6 @@ $(eval $(call gb_Configuration_add_spool_modules,registry,officecfg/registry/dat
 	org/openoffice/Office/Common-UseOOoFileDialogs.xcu \
 	org/openoffice/Office/Common-32bit.xcu \
 	org/openoffice/Office/Jobs-impress.xcu \
-	org/openoffice/Office/Linguistic-ForceDefaultLanguage.xcu \
 	org/openoffice/Office/ProtocolHandler-impress.xcu \
 	org/openoffice/Office/Common-cjk.xcu \
 	org/openoffice/Office/Common-ctl.xcu \

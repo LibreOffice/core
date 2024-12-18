@@ -425,13 +425,6 @@ postprocess_FILES_pdfimport := \
 	$(SRCDIR)/sdext/source/pdfimport/config/pdf_types.xcu
 endif
 
-ifeq (WNT,$(OS))
-postprocess_XCDS += forcedefault.xcd
-postprocess_DEPS_forcedefault := main
-postprocess_FILES_forcedefault := \
-	$(postprocess_MOD)/org/openoffice/Office/Linguistic-ForceDefaultLanguage.xcu
-endif
-
 #
 # All DBCONNECTIVITY handling (including OS specifics!)
 #

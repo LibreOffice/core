@@ -56,17 +56,6 @@ File gid_File_Share_Registry_Main_Xcd
     Name = "main.xcd";
 End
 
-#ifdef WNT
-
-File gid_File_Share_Registry_Forcedefault_Xcd
-    TXT_FILE_BODY;
-    Styles = (PACKED, SCPZIP_REPLACE, SET_OFFICE_LANGUAGE);
-    Dir = gid_Brand_Dir_Share_Registry;
-    Name = "forcedefault.xcd";
-End
-
-#endif
-
 File gid_File_Rdb_Offapi
     TXT_FILE_BODY;
     Dir = gid_Brand_Dir_Program_Types;
