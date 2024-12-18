@@ -157,6 +157,39 @@ CPPUNIT_TEST_FIXTURE(Test, testRTFStyleExportParentRecursive)
     SvMemoryStream& rStream = pData->GetRTFStream();
     CPPUNIT_ASSERT_GREATER(static_cast<sal_uInt64>(0), rStream.remainingSize());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testRTFStyleExportFollowRecursive)
+{
+    // Given a document with text that has a paragraph style with a follow that itself has a follow:
+    EditEngine aEditEngine(mpItemPool.get());
+    rtl::Reference<SfxStyleSheetPool> xStyles(new SfxStyleSheetPool(*mpItemPool));
+    xStyles->Make("mystyle1", SfxStyleFamily::Para);
+    xStyles->Make("mystyle2", SfxStyleFamily::Para);
+    xStyles->Make("mystyle3", SfxStyleFamily::Para);
+    auto pStyle1 = static_cast<SfxStyleSheet*>(xStyles->Find("mystyle1", SfxStyleFamily::Para));
+    auto pStyle2 = static_cast<SfxStyleSheet*>(xStyles->Find("mystyle2", SfxStyleFamily::Para));
+    auto pStyle3 = static_cast<SfxStyleSheet*>(xStyles->Find("mystyle3", SfxStyleFamily::Para));
+    pStyle1->SetFollow(pStyle2->GetName());
+    pStyle2->SetFollow(pStyle3->GetName());
+    pStyle3->SetFollow(pStyle3->GetName());
+    pStyle1->GetItemSet().SetRanges(svl::Items<WEIGHT_BOLD, EE_CHAR_WEIGHT>);
+    SvxWeightItem aItem(WEIGHT_BOLD, EE_CHAR_WEIGHT);
+    pStyle1->GetItemSet().Put(aItem);
+    aEditEngine.SetStyleSheetPool(xStyles.get());
+    OUString aText = u"mytest"_ustr;
+    aEditEngine.SetText(aText);
+    aEditEngine.SetStyleSheet(0, pStyle1);
+
+    // When copying to the clipboard as RTF:
+    // Without the accompanying fix in place, this test would have crashed here:
+    uno::Reference<datatransfer::XTransferable> xData
+        = aEditEngine.CreateTransferable(ESelection(0, 0, 0, aText.getLength()));
+
+    // Then make sure we produce RTF and not crash:
+    auto pData = dynamic_cast<EditDataObject*>(xData.get());
+    SvMemoryStream& rStream = pData->GetRTFStream();
+    CPPUNIT_ASSERT_GREATER(static_cast<sal_uInt64>(0), rStream.remainingSize());
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

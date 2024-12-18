@@ -468,15 +468,25 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel, bool bCl
                     aParent = pParent->GetParent();
                 }
 
-                const OUString& rFollow = pParaStyle->GetFollow();
-                if (!rFollow.isEmpty())
+                // Collect follows of the style recursively.
+                OUString aFollow = pParaStyle->GetFollow();
+                while (!aFollow.isEmpty())
                 {
                     auto pFollow = static_cast<SfxStyleSheet*>(
-                        GetStyleSheetPool()->Find(rFollow, pParaStyle->GetFamily()));
-                    if (pFollow)
+                        GetStyleSheetPool()->Find(aFollow, pParaStyle->GetFamily()));
+                    if (!pFollow)
                     {
-                        aUsedParagraphStyles.insert(pFollow);
+                        break;
                     }
+
+                    auto it = aUsedParagraphStyles.insert(pFollow);
+                    // A style is fine to have itself as a follow.
+                    if (!it.second)
+                    {
+                        // No insertion happened, so this is visited already.
+                        break;
+                    }
+                    aFollow = pFollow->GetFollow();
                 }
             }
         }
