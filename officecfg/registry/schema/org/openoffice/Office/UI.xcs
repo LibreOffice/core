@@ -1027,7 +1027,7 @@
         </prop>
         <prop oor:name="Dark" oor:type="xs:int">
           <info>
-            <desc>Specifies dark color for the SQL strigns.</desc>
+            <desc>Specifies dark color for the SQL strings.</desc>
           </info>
         </prop>
       </group>
