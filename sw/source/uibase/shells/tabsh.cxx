@@ -858,7 +858,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             break;
         case FN_TABLE_SET_READ_ONLY_CELLS:
             rSh.ProtectCells();
-            rSh.ResetSelect( nullptr, false );
+            rSh.ResetSelect( nullptr, false, ScrollSizeMode::ScrollSizeDefault );
             bCallDone = true;
             break;
         case FN_TABLE_UNSET_READ_ONLY_CELLS:

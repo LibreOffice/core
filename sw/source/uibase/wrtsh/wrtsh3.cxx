@@ -49,7 +49,7 @@ using namespace ::com::sun::star;
 bool SwWrtShell::MoveBookMark( BookMarkMove eFuncId, const ::sw::mark::MarkBase* const pMark)
 {
     addCurrentPosition();
-    (this->*m_fnKillSel)( nullptr, false );
+    (this->*m_fnKillSel)( nullptr, false, ScrollSizeMode::ScrollSizeDefault );
 
     bool bRet = true;
     switch(eFuncId)
@@ -75,7 +75,7 @@ bool SwWrtShell::MoveBookMark( BookMarkMove eFuncId, const ::sw::mark::MarkBase*
 
 bool SwWrtShell::GotoField( const SwFormatField& rField )
 {
-    (this->*m_fnKillSel)( nullptr, false );
+    (this->*m_fnKillSel)( nullptr, false, ScrollSizeMode::ScrollSizeDefault );
 
     bool bRet = SwCursorShell::GotoFormatField( rField );
     if( bRet && IsSelFrameMode() )
@@ -122,7 +122,7 @@ bool SwWrtShell::GotoContentControl(const SwFormatContentControl& rContentContro
         return true;
     }
 
-    (this->*m_fnKillSel)(nullptr, false);
+    (this->*m_fnKillSel)(nullptr, false, ScrollSizeMode::ScrollSizeDefault);
 
     bool bRet = SwCursorShell::GotoFormatContentControl(rContentControl);
 
@@ -223,7 +223,7 @@ bool SwWrtShell::GotoContentControl(const SwFormatContentControl& rContentContro
 
 bool SwWrtShell::GotoFieldmark(::sw::mark::Fieldmark const * const pMark)
 {
-    (this->*m_fnKillSel)( nullptr, false );
+    (this->*m_fnKillSel)( nullptr, false, ScrollSizeMode::ScrollSizeDefault );
     bool bRet = SwCursorShell::GotoFieldmark(pMark);
     if( bRet && IsSelFrameMode() )
     {

@@ -4072,7 +4072,7 @@ void SwXTextDocument::resetSelection()
     SolarMutexGuard aGuard;
 
     SwWrtShell* pWrtShell = m_pDocShell->GetWrtShell();
-    pWrtShell->ResetSelect(nullptr, false);
+    pWrtShell->ResetSelect(nullptr, false, ScrollSizeMode::ScrollSizeDefault);
 }
 
 void SAL_CALL SwXTextDocument::paintTile( const ::css::uno::Any& Parent, ::sal_Int32 nOutputWidth, ::sal_Int32 nOutputHeight, ::sal_Int32 nTilePosX, ::sal_Int32 nTilePosY, ::sal_Int32 nTileWidth, ::sal_Int32 nTileHeight )

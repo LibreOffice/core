@@ -2669,7 +2669,7 @@ std::vector<SwFrameFormat const*> SwFEShell::GetFlyFrameFormats(
 }
 
 // show the current selected object
-void SwFEShell::MakeSelVisible()
+void SwFEShell::MakeSelVisible(ScrollSizeMode eScrollSizeMode)
 {
     if ( Imp()->HasDrawView() &&
          Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount() )
@@ -2678,7 +2678,7 @@ void SwFEShell::MakeSelVisible()
         MakeVisible( SwRect(Imp()->GetDrawView()->GetAllMarkedRect()) );
     }
     else
-        SwCursorShell::MakeSelVisible();
+        SwCursorShell::MakeSelVisible(eScrollSizeMode);
 }
 
 // how is the selected object protected?

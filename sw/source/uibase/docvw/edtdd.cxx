@@ -371,7 +371,7 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
             if(aPixPt.Y() < aWin.Top()) aPixPt.AdjustY( -nMargin );
             Point aDocPt(PixelToLogic(aPixPt));
             SwRect rect(aDocPt,Size(1,1));
-            rSh.MakeVisible(rect);
+            rSh.MakeVisible(rect, ScrollSizeMode::ScrollSizeTimer2);
         }
     }
 
@@ -461,7 +461,7 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
             CleanupDropUserMarker();
             SwContentAtPos aCont( IsAttrAtPos::ContentCheck );
             if(rSh.GetContentAtPos(aDocPt, aCont))
-                rSh.SwCursorShell::SetVisibleCursor( aDocPt );
+                rSh.SwCursorShell::SetVisibleCursor( aDocPt, ScrollSizeMode::ScrollSizeMouseSelection );
         }
         else
         {
