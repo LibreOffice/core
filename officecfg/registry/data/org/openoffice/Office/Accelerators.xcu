@@ -1421,7 +1421,7 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
         <node oor:name="SPACE_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:SelectColumn</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:SelectColumn</value>
           </prop>
         </node>
         <node oor:name="SPACE_MOD3" oor:op="replace">
@@ -1433,9 +1433,9 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
         <node oor:name="SPACE_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:SelectAll</value>
-            <value xml:lang="zh-TW">.uno:SelectColumn</value>
-            <value xml:lang="zh-CN">.uno:SelectColumn</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:SelectAll</value>
+            <value xml:lang="zh-TW" install:module="unxwnt">.uno:SelectColumn</value>
+            <value xml:lang="zh-CN" install:module="unxwnt">.uno:SelectColumn</value>
           </prop>
         </node>
         <node oor:name="SPACE_SHIFT_MOD3" oor:op="replace">
