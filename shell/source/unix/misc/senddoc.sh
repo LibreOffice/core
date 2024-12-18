@@ -68,7 +68,9 @@ case $(printf %s "$MAILER_TYPE" | sed 's/-.*$//') in
         ;;
 
     evolution | gnome | groupwise | xdg) # NB. shortened from the dash on
-        MAILER_TYPE=generic-mailto
+        if [ "$MAILER_TYPE" != "xdg-email" ]; then
+            MAILER_TYPE=generic-mailto
+        fi
         ;;
 
     dtmail)
@@ -84,6 +86,8 @@ case $(printf %s "$MAILER_TYPE" | sed 's/-.*$//') in
         ;;
 
     *)
+        MAILER_TYPE=generic-mailto
+
         # LO is configured to use something we do not recognize, or is not configured.
         # Try to be smart, and send the mail anyway, if we have the
         # possibility to do so.
@@ -104,7 +108,9 @@ case $(printf %s "$MAILER_TYPE" | sed 's/-.*$//') in
             exit 2
         fi
 
-        MAILER_TYPE=generic-mailto
+        if [ "$(basename "$MAILER")" = "xdg-email" ]; then
+            MAILER_TYPE=xdg-email
+        fi
         ;;
 esac
 
@@ -269,7 +275,7 @@ case $MAILER_TYPE in
         rm -f "$BODY"
         ;;
 
-    generic-mailto)
+    generic-mailto | xdg-email)
 
         while [ "$1" != "" ]; do
             case $1 in
@@ -301,6 +307,10 @@ case $MAILER_TYPE in
                     # Just add both attach and attachment "headers" - some apps use one, some the other
                     ATTACH_URL=$(printf file://%s "$2" | "${URI_ENCODE}")
                     MAILTO="${MAILTO:+${MAILTO}&}attach=${ATTACH_URL}&attachment=${ATTACH_URL}"
+                    if [ "$MAILER_TYPE" = "xdg-email" ]; then
+                        # Also add the argument: see https://gitlab.freedesktop.org/xdg/xdg-utils/-/issues/177
+                        ATTACH="${ATTACH:+${ATTACH} }--attach \"$2\""
+                    fi
                     shift
                     ;;
                 *)
@@ -310,7 +320,7 @@ case $MAILER_TYPE in
         done
 
         MAILTO="mailto:${TO}?${MAILTO}"
-        ${MAILER} "${MAILTO}" &
+        eval "${MAILER} ${ATTACH} \"${MAILTO}\"" &
         ;;
 
     dtmail)
