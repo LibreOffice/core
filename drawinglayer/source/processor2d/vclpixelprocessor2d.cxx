@@ -624,8 +624,38 @@ void VclPixelProcessor2D::processUnifiedTransparencePrimitive2D(
 void VclPixelProcessor2D::processControlPrimitive2D(
     const primitive2d::ControlPrimitive2D& rControlPrimitive)
 {
-    // control primitive
+    // find out if the control is already visualized as a VCL-ChildWindow
+    bool bControlIsVisibleAsChildWindow(rControlPrimitive.isVisibleAsChildWindow());
+
+    // tdf#131281 The FormControls are not painted when using the Tiled Rendering for a simple
+    // reason: when e.g. bControlIsVisibleAsChildWindow is true. This is the case because the
+    // office is in non-layout mode (default for controls at startup). For the common office
+    // this means that there exists a real VCL-System-Window for the control, so it is *not*
+    // painted here due to being exactly obscured by that real Window (and creates danger of
+    // flickering, too).
+    // Tiled Rendering clients usually do *not* have real VCL-Windows for the controls, but
+    // exactly that would be needed on each client displaying the tiles (what would be hard
+    // to do but also would have advantages - the clients would have real controls in the
+    //  shape of their target system which could be interacted with...). It is also what the
+    // office does.
+    // For now, fallback to just render these controls when Tiled Rendering is active to just
+    // have them displayed on all clients.
+    if (bControlIsVisibleAsChildWindow && comphelper::LibreOfficeKit::isActive())
+    {
+        // Do force paint when we are in Tiled Renderer and FormControl is 'visible'
+        bControlIsVisibleAsChildWindow = false;
+    }
+
+    if (bControlIsVisibleAsChildWindow)
+    {
+        // f the control is already visualized as a VCL-ChildWindow it
+        // does not need to be painted at all
+        return;
+    }
+
+    // get awt::XControl from control primitive
     const uno::Reference<awt::XControl>& rXControl(rControlPrimitive.getXControl());
+    bool bDone(false);
 
     try
     {
@@ -636,50 +666,23 @@ void VclPixelProcessor2D::processControlPrimitive2D(
 
         if (xNewGraphics.is())
         {
-            // find out if the control is already visualized as a VCL-ChildWindow. If yes,
-            // it does not need to be painted at all.
-            uno::Reference<awt::XWindow2> xControlWindow(rXControl, uno::UNO_QUERY_THROW);
-            bool bControlIsVisibleAsChildWindow(rXControl->getPeer().is()
-                                                && xControlWindow->isVisible());
+            // Needs to be drawn. Link new graphics and view
+            xControlView->setGraphics(xNewGraphics);
 
-            // tdf#131281 The FormControls are not painted when using the Tiled Rendering for a simple
-            // reason: when e.g. bControlIsVisibleAsChildWindow is true. This is the case because the
-            // office is in non-layout mode (default for controls at startup). For the common office
-            // this means that there exists a real VCL-System-Window for the control, so it is *not*
-            // painted here due to being exactly obscured by that real Window (and creates danger of
-            // flickering, too).
-            // Tiled Rendering clients usually do *not* have real VCL-Windows for the controls, but
-            // exactly that would be needed on each client displaying the tiles (what would be hard
-            // to do but also would have advantages - the clients would have real controls in the
-            //  shape of their target system which could be interacted with...). It is also what the
-            // office does.
-            // For now, fallback to just render these controls when Tiled Rendering is active to just
-            // have them displayed on all clients.
-            if (bControlIsVisibleAsChildWindow && comphelper::LibreOfficeKit::isActive())
-            {
-                // Do force paint when we are in Tiled Renderer and FormControl is 'visible'
-                bControlIsVisibleAsChildWindow = false;
-            }
+            // get position
+            const basegfx::B2DHomMatrix aObjectToPixel(maCurrentTransformation
+                                                       * rControlPrimitive.getTransform());
+            const basegfx::B2DPoint aTopLeftPixel(aObjectToPixel * basegfx::B2DPoint(0.0, 0.0));
 
-            if (!bControlIsVisibleAsChildWindow)
-            {
-                // Needs to be drawn. Link new graphics and view
-                xControlView->setGraphics(xNewGraphics);
+            // Do not forget to use the evtl. offsetted origin of the target device,
+            // e.g. when used with mask/transparence buffer device
+            const Point aOrigin(mpOutputDevice->GetMapMode().GetOrigin());
+            xControlView->draw(aOrigin.X() + basegfx::fround(aTopLeftPixel.getX()),
+                               aOrigin.Y() + basegfx::fround(aTopLeftPixel.getY()));
 
-                // get position
-                const basegfx::B2DHomMatrix aObjectToPixel(maCurrentTransformation
-                                                           * rControlPrimitive.getTransform());
-                const basegfx::B2DPoint aTopLeftPixel(aObjectToPixel * basegfx::B2DPoint(0.0, 0.0));
-
-                // Do not forget to use the evtl. offsetted origin of the target device,
-                // e.g. when used with mask/transparence buffer device
-                const Point aOrigin(mpOutputDevice->GetMapMode().GetOrigin());
-                xControlView->draw(aOrigin.X() + basegfx::fround(aTopLeftPixel.getX()),
-                                   aOrigin.Y() + basegfx::fround(aTopLeftPixel.getY()));
-
-                // restore original graphics
-                xControlView->setGraphics(xOriginalGraphics);
-            }
+            // restore original graphics
+            xControlView->setGraphics(xOriginalGraphics);
+            bDone = true;
         }
     }
     catch (const uno::Exception&)
@@ -687,7 +690,10 @@ void VclPixelProcessor2D::processControlPrimitive2D(
         // #i116763# removing since there is a good alternative when the xControlView
         // is not found and it is allowed to happen
         // DBG_UNHANDLED_EXCEPTION();
+    }
 
+    if (!bDone)
+    {
         // process recursively and use the decomposition as Bitmap
         process(rControlPrimitive);
     }

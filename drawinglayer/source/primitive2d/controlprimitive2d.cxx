@@ -30,6 +30,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/awt/PosSize.hpp>
+#include <com/sun/star/awt/XWindow2.hpp>
 #include <vcl/bitmapex.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -177,21 +178,15 @@ namespace drawinglayer::primitive2d
                                 // get bitmap
                                 const BitmapEx aContent(aVirtualDevice->GetBitmapEx(Point(), aSizePixel));
 
-                                // to avoid scaling, use the Bitmap pixel size as primitive size
-                                const Size aBitmapSize(aContent.GetSizePixel());
-                                basegfx::B2DVector aBitmapSizeLogic(
-                                    rViewInformation.getInverseObjectToViewTransformation() *
-                                    basegfx::B2DVector(aBitmapSize.getWidth() - 1, aBitmapSize.getHeight() - 1));
-
-                                if(bScaleUsed)
-                                {
-                                    // if scaled adapt to scaled size
-                                    aBitmapSizeLogic /= fFactor;
-                                }
+                                // snap translate and scale to discrete position (pixel) to avoid sub-pixel offset and blurring further
+                                basegfx::B2DVector aSnappedTranslate(basegfx::fround(rViewInformation.getObjectToViewTransformation() * aTranslate));
+                                aSnappedTranslate = rViewInformation.getInverseObjectToViewTransformation() * aSnappedTranslate;
+                                basegfx::B2DVector aSnappedScale(basegfx::fround(rViewInformation.getObjectToViewTransformation() * aScale));
+                                aSnappedScale = rViewInformation.getInverseObjectToViewTransformation() * aSnappedScale;
 
                                 // short form for scale and translate transformation
                                 const basegfx::B2DHomMatrix aBitmapTransform(basegfx::utils::createScaleTranslateB2DHomMatrix(
-                                    aBitmapSizeLogic.getX(), aBitmapSizeLogic.getY(), aTranslate.getX(), aTranslate.getY()));
+                                    aSnappedScale.getX(), aSnappedScale.getY(), aSnappedTranslate.getX(), aSnappedTranslate.getY()));
 
                                 // create primitive
                                 xRetval = new BitmapPrimitive2D(
@@ -311,6 +306,25 @@ namespace drawinglayer::primitive2d
             basegfx::B2DRange aRetval(0.0, 0.0, 1.0, 1.0);
             aRetval.transform(getTransform());
             return aRetval;
+        }
+
+        bool ControlPrimitive2D::isVisibleAsChildWindow() const
+        {
+            // find out if the control is already visualized as a VCL-ChildWindow
+            const uno::Reference<awt::XControl>& rXControl(getXControl());
+
+            try
+            {
+                uno::Reference<awt::XWindow2> xControlWindow(rXControl, uno::UNO_QUERY_THROW);
+                return rXControl->getPeer().is() && xControlWindow->isVisible();
+            }
+            catch (const uno::Exception&)
+            {
+                // #i116763# since there is a good alternative when the xControlView
+                // is not found and it is allowed to happen
+            }
+
+            return false;
         }
 
         void ControlPrimitive2D::get2DDecomposition(Primitive2DDecompositionVisitor& rVisitor, const geometry::ViewInformation2D& rViewInformation) const

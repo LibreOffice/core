@@ -18,6 +18,7 @@
 #include <vcl/cairo.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
+#include <comphelper/lok.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
@@ -46,6 +47,7 @@
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
 #include <drawinglayer/primitive2d/shadowprimitive2d.hxx>
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
+#include <drawinglayer/primitive2d/controlprimitive2d.hxx>
 #include <drawinglayer/converters.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>
@@ -1199,9 +1201,6 @@ void CairoPixelProcessor2D::paintBitmapAlpha(const BitmapEx& rBitmapEx,
         cairo_stroke(mpRT);
     }
 
-    const sal_uInt32 nWidth(cairo_image_surface_get_width(pTarget));
-    const sal_uInt32 nHeight(cairo_image_surface_get_height(pTarget));
-
     cairo_set_source_surface(mpRT, pTarget, 0, 0);
 
     // get the pattern created by cairo_set_source_surface and
@@ -1223,38 +1222,21 @@ void CairoPixelProcessor2D::paintBitmapAlpha(const BitmapEx& rBitmapEx,
     // page shadows, these DO use 8x1/1x8 images which led me to
     // that problem. I double-checked that these *are* correctly
     // defined, that is not the problem.
-    // I see two solutions:
-    static bool bRenderMasked(true);
+    // Decided now to use clipping always. That again is
+    // simple (we are in unit coordinates)
+    cairo_rectangle(mpRT, 0, 0, 1, 1);
+    cairo_clip(mpRT);
+    cairo_matrix_scale(&aMatrix, cairo_image_surface_get_width(pTarget),
+                       cairo_image_surface_get_height(pTarget));
 
-    if (bRenderMasked)
-    {
-        // Consequence is that these need clipping. That again is
-        // simple (we are in unit coordinates). Only do for RGBA,
-        // for RGB this effect does not happen
-        if (CAIRO_FORMAT_ARGB32 == cairo_image_surface_get_format(pTarget))
-        {
-            cairo_rectangle(mpRT, 0, 0, 1, 1);
-            cairo_clip(mpRT);
-        }
-
-        cairo_matrix_scale(&aMatrix, nWidth, nHeight);
-    }
-    else
-    {
-        // Alternative: for RGBA, resize/scale it SLIGHTLY to force
-        // that half pixel overlap to be inside the unit range.
-        // That makes the error disappear, so no clip needed, but
-        // SLIGHTLY smaller.
-        if (CAIRO_FORMAT_ARGB32 == cairo_image_surface_get_format(pTarget))
-        {
-            cairo_matrix_init_scale(&aMatrix, nWidth + 1, nHeight + 1);
-            cairo_matrix_translate(&aMatrix, -0.5 / (nWidth + 1), -0.5 / (nHeight + 1));
-        }
-        else
-        {
-            cairo_matrix_scale(&aMatrix, nWidth, nHeight);
-        }
-    }
+    // The alternative wpuld be: resize/scale it SLIGHTLY to force
+    // that half pixel overlap to be inside the unit range.
+    // That makes the error disappear, so no clip needed, but
+    // SLIGHTLY smaller. Keeping this code if someone might have
+    // to finetune this later for reference.
+    //
+    // cairo_matrix_init_scale(&aMatrix, nWidth + 1, nHeight + 1);
+    // cairo_matrix_translate(&aMatrix, -0.5 / (nWidth + 1), -0.5 / (nHeight + 1));
 
     // The error/effect described above also is connected to the
     // filter used, so I checked the filter modes available
@@ -1271,6 +1253,14 @@ void CairoPixelProcessor2D::paintBitmapAlpha(const BitmapEx& rBitmapEx,
     // CAIRO_FILTER_GOOD seems to be the default anyways, but set it
     // to be on the safe side
     cairo_pattern_set_filter(sourcepattern, CAIRO_FILTER_GOOD);
+
+    // also set extend to CAIRO_EXTEND_PAD, else the outside of the
+    // bitmap is guessed as COL_BLACK and the filtering would blend
+    // against COL_BLACK what might give strange gray lines at borders
+    // of white-on-white bitmaps (used e.g. when painting controls).
+    // NOTE: CAIRO_EXTEND_REPEAT also works with clipping and might be
+    // broader supported by CVairo implementations
+    cairo_pattern_set_extend(sourcepattern, CAIRO_EXTEND_PAD);
 
     cairo_pattern_set_matrix(sourcepattern, &aMatrix);
 
@@ -3699,6 +3689,34 @@ void CairoPixelProcessor2D::processSvgRadialGradientPrimitive2D(
     cairo_restore(mpRT);
 }
 
+void CairoPixelProcessor2D::processControlPrimitive2D(
+    const primitive2d::ControlPrimitive2D& rControlPrimitive)
+{
+    // find out if the control is already visualized as a VCL-ChildWindow
+    bool bControlIsVisibleAsChildWindow(rControlPrimitive.isVisibleAsChildWindow());
+
+    // tdf#131281 FormControl rendering for Tiled Rendering
+    if (bControlIsVisibleAsChildWindow && comphelper::LibreOfficeKit::isActive())
+    {
+        // Do force paint when we are in Tiled Renderer and FormControl is 'visible'
+        bControlIsVisibleAsChildWindow = false;
+    }
+
+    if (bControlIsVisibleAsChildWindow)
+    {
+        // f the control is already visualized as a VCL-ChildWindow it
+        // does not need to be painted at all
+        return;
+    }
+
+    // process recursively and use the decomposition as Bitmap
+    // NOTE: The VclPixelProcessor2D tries to paint it using
+    // UNO API and awt::XView/awt::XGraphics to directly paint the
+    // control. To do so would need the target OutDev which we
+    // want to avoid here
+    process(rControlPrimitive);
+}
+
 void CairoPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
 {
     const cairo_status_t aStart(cairo_status(mpRT));
@@ -3857,6 +3875,12 @@ void CairoPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimit
         {
             processSvgRadialGradientPrimitive2D(
                 static_cast<const primitive2d::SvgRadialGradientPrimitive2D&>(rCandidate));
+            break;
+        }
+        case PRIMITIVE2D_ID_CONTROLPRIMITIVE2D:
+        {
+            processControlPrimitive2D(
+                static_cast<const primitive2d::ControlPrimitive2D&>(rCandidate));
             break;
         }
 
