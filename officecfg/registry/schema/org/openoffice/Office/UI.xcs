@@ -200,12 +200,12 @@
         </info>
         <prop oor:name="Light" oor:type="xs:int">
           <info>
-            <desc>Specifies light color for the incorrect grammer.</desc>
+            <desc>Specifies light color for the incorrect grammar.</desc>
           </info>
         </prop>
         <prop oor:name="Dark" oor:type="xs:int">
           <info>
-            <desc>Specifies dark color for the incorrect grammer.</desc>
+            <desc>Specifies dark color for the incorrect grammar.</desc>
           </info>
         </prop>
       </group>
