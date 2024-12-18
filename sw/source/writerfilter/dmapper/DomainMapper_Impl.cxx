@@ -3864,7 +3864,8 @@ bool isContentEmpty(uno::Reference<text::XText> const& xText)
     }
 
     bool bContentEmpty{};
-    xTextProperties->getPropertyValue("IsContentEmpty") >>= bContentEmpty;
+    if (xTextProperties->getPropertySetInfo()->hasPropertyByName(u"IsContentEmpty"_ustr))
+        xTextProperties->getPropertyValue(u"IsContentEmpty"_ustr) >>= bContentEmpty;
     return bContentEmpty;
 }
 
