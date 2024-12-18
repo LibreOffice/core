@@ -410,8 +410,8 @@ IMPL_LINK_NOARG(SvxAppearanceTabPage, ColorValueChgHdl, ColorListBox&, void)
     else
         aCurrentEntryColor.nLightColor = m_xColorChangeBtn->GetSelectEntryColor();
 
-    // use nColor for caching the value of color in use. This avoids tidious refactoring which IMO
-    // would use function calls to discriminate between colors. those functions themself call some virtual functions
+    // use nColor for caching the value of color in use. This avoids tedious refactoring which IMO
+    // would use function calls to discriminate between colors. Those functions themself call some virtual functions
     // making the whole thing super slow (comparatively).
     aCurrentEntryColor.nColor = m_xColorChangeBtn->GetSelectEntryColor();
 
