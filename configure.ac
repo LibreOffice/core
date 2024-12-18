@@ -1598,6 +1598,11 @@ libo_FUZZ_ARG_ENABLE(skia,
         [Disable building Skia. Use --enable-skia=debug to build without optimizations.])
 )
 
+libo_FUZZ_ARG_ENABLE(skia-vulkan-validation,
+    AS_HELP_STRING([--enable-skia-vulkan-validation],
+        [Enable Vulkan validation layers under Skia. The Vulkan SDK must be installed externally.])
+)
+
 ###############################################################################
 
 dnl ---------- *** ----------
@@ -12759,6 +12764,10 @@ if test "$enable_skia" != "no" -a "$build_skia" = "yes" -a -z "$DISABLE_GUI"; th
             AC_DEFINE(SK_VULKAN,1)
             SKIA_GPU=VULKAN
             AC_SUBST(SKIA_GPU)
+        fi
+
+        if test "$enable_skia_vulkan_validation" = "yes"; then
+            AC_DEFINE(SK_ENABLE_VK_LAYERS,1)
         fi
     else
         AC_MSG_RESULT([no (freetype too old)])
