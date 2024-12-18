@@ -7,12 +7,15 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+import os
 from uitest.framework import UITestCase
 from uitest.uihelper.common import type_text
 
 class insertQrCode(UITestCase):
 
    def test_insert_qr_code_gen(self):
+      if os.getenv('ENABLE_ZXING') == 'TRUE':
+
         with self.ui_test.create_doc_in_start_center("calc") as document:
             with self.ui_test.execute_dialog_through_command(".uno:InsertQrCode") as xDialog:
 
