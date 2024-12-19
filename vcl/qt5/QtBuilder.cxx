@@ -36,6 +36,7 @@
 #include <QtWidgets/QRadioButton>
 #include <QtWidgets/QScrollArea>
 #include <QtWidgets/QTabWidget>
+#include <QtWidgets/QToolButton>
 #include <QtWidgets/QTreeView>
 
 namespace
@@ -302,6 +303,10 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
     else if (sName == u"GtkTextView")
     {
         pObject = new QPlainTextEdit(pParentWidget);
+    }
+    else if (sName == u"GtkToggleButton")
+    {
+        pObject = new QToolButton(pParentWidget);
     }
     else if (sName == u"GtkTreeView")
     {

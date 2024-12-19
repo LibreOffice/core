@@ -104,6 +104,12 @@ bool QtInstanceButton::hasCustomClickHandler(QAbstractButton& rButton)
     return aProp.toBool();
 }
 
+QAbstractButton& QtInstanceButton::getButton() const
+{
+    assert(m_pButton);
+    return *m_pButton;
+}
+
 void QtInstanceButton::buttonClicked()
 {
     SolarMutexGuard g;

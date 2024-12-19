@@ -31,7 +31,10 @@
 #include <QtInstanceScrolledWindow.hxx>
 #include <QtInstanceSpinButton.hxx>
 #include <QtInstanceTextView.hxx>
+#include <QtInstanceToggleButton.hxx>
 #include <QtInstanceTreeView.hxx>
+
+#include <QtWidgets/QToolButton>
 
 QtInstanceBuilder::QtInstanceBuilder(QWidget* pParent, std::u16string_view sUIRoot,
                                      const OUString& rUIFile)
@@ -219,10 +222,12 @@ std::unique_ptr<weld::LinkButton> QtInstanceBuilder::weld_link_button(const OUSt
     return xRet;
 }
 
-std::unique_ptr<weld::ToggleButton> QtInstanceBuilder::weld_toggle_button(const OUString&)
+std::unique_ptr<weld::ToggleButton> QtInstanceBuilder::weld_toggle_button(const OUString& rId)
 {
-    assert(false && "Not implemented yet");
-    return nullptr;
+    QAbstractButton* pButton = m_xBuilder->get<QAbstractButton>(rId);
+    std::unique_ptr<weld::ToggleButton> xRet(
+        pButton ? std::make_unique<QtInstanceToggleButton>(pButton) : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::RadioButton> QtInstanceBuilder::weld_radio_button(const OUString& rId)
