@@ -131,8 +131,20 @@ void CrashReporter::writeCommonInfo()
     ucbhelper::InternetProxyDecider proxy_decider(::comphelper::getProcessComponentContext());
 
     static constexpr OUString protocol = u"https"_ustr;
-    static constexpr OUString url = u"crashreport.libreoffice.org"_ustr;
     const sal_Int32 port = 443;
+
+    // read configuration item 'CrashDumpUrl'
+    OUString url;
+    rtl::Bootstrap::get("CrashDumpUrl", url);
+    if (url.isEmpty())
+    {
+        // no url in config, bail out, but still set proper crash
+        // directory for local dump generation (in case
+        // CrashDumpEnable is on
+        updateMinidumpLocation();
+        mbInit = false;
+        return;
+    }
 
     const OUString proxy_server = proxy_decider.getProxy(protocol, url, port);
 
@@ -269,6 +281,12 @@ void CrashReporter::removeExceptionHandler()
 
 bool CrashReporter::IsDumpEnable()
 {
+    static bool bConfigRead = false;
+    static bool bEnable = true; // default, always on
+
+    if (bConfigRead)
+        return bEnable;
+
     auto const env = std::getenv("CRASH_DUMP_ENABLE");
     if (env != nullptr && env[0] != '\0') {
         return true;
@@ -277,9 +295,11 @@ bool CrashReporter::IsDumpEnable()
     OUString sToken;
     if (rtl::Bootstrap::get("CrashDumpEnable", sToken))
     {
-        return sToken.toBoolean();
+        bEnable = sToken.toBoolean();
     }
-    return true; // default, always on
+
+    bConfigRead = true;
+    return bEnable;
 }
 
 
