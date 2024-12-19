@@ -18,8 +18,8 @@
  */
 #pragma once
 
-#include <rtl/string.hxx>
-#include <svx/svxdlg.hxx>
+#include <sal/config.h>
+
 #include <vcl/weld.hxx>
 
 class SvxInsRowColDlg : public weld::GenericDialogController
@@ -34,21 +34,6 @@ public:
 
     bool isInsertBefore() const;
     sal_uInt16 getInsertCount() const;
-};
-
-class SvxAbstractInsRowColDlg_Impl final : public SvxAbstractInsRowColDlg
-{
-    std::shared_ptr<SvxInsRowColDlg> m_xDlg;
-
-public:
-    explicit SvxAbstractInsRowColDlg_Impl(std::shared_ptr<SvxInsRowColDlg> p)
-        : m_xDlg(std::move(p))
-    {
-    }
-    virtual short Execute() override;
-    virtual bool StartExecuteAsync(AsyncContext& rCtx) override;
-    virtual bool isInsertBefore() const override;
-    virtual sal_uInt16 getInsertCount() const override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

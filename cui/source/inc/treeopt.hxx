@@ -203,11 +203,6 @@ private:
 
     void InitItemSets(OptionsGroupInfo& rGroupInfo);
 
-    virtual short run() override;
-
-    virtual weld::Button& GetOKButton() const override { return *xOkPB; }
-    virtual const SfxItemSet* GetExampleSet() const override { return nullptr; }
-
     int applySearchFilter(const OUString& rSearchTerm);
 
     void ImplDestroy();
@@ -239,6 +234,11 @@ public:
     static OUString     getCurrentFactory_Impl( const css::uno::Reference< css::frame::XFrame >& _xFrame );
 
     void                SetNeedsRestart( svtools::RestartReason eReason );
+
+    virtual short run() override;
+
+    virtual weld::Button& GetOKButton() const override { return *xOkPB; }
+    virtual const SfxItemSet* GetExampleSet() const override { return nullptr; }
 };
 
 // class ExtensionsTabPage -----------------------------------------------

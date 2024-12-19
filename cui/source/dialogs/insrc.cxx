@@ -51,24 +51,4 @@ SvxInsRowColDlg::SvxInsRowColDlg(weld::Window* pParent, bool bColumn, const OUSt
     m_xDialog->set_help_id(rHelpId);
 }
 
-short SvxAbstractInsRowColDlg_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
-bool SvxAbstractInsRowColDlg_Impl::StartExecuteAsync(AsyncContext &rCtx)
-{
-    return weld::GenericDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
-}
-
-bool SvxAbstractInsRowColDlg_Impl::isInsertBefore() const
-{
-    return m_xDlg->isInsertBefore();
-}
-
-sal_uInt16 SvxAbstractInsRowColDlg_Impl::getInsertCount() const
-{
-    return m_xDlg->getInsertCount();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -20,6 +20,8 @@
 #include <config_extensions.h>
 #include <config_wasm_strip.h>
 
+#include <vcl/abstdlgimpl.hxx>
+
 #include <align.hxx>
 #include "dlgfact.hxx"
 
@@ -108,51 +110,13 @@ using namespace svx;
 
 namespace
 {
-// Templated base class storing the dialog pointer, and implementing Execute, StartExecuteAsync,
-// and the shared constructor used by derived classes
-template <class Base, class Dialog, template <class...> class Ptr, bool Async>
-    requires std::is_base_of_v<VclAbstractDialog, Base>
-             && std::is_base_of_v<weld::DialogController, Dialog>
-class ControllerImpl_BASE : public Base
-{
-public:
-    explicit ControllerImpl_BASE(Ptr<Dialog> p)
-        : m_pDlg(std::move(p))
-    {
-    }
-
-    short Execute() override { return m_pDlg->run(); }
-
-    bool StartExecuteAsync(VclAbstractDialog::AsyncContext& rCtx) override
-    {
-        if constexpr (Async)
-            return Dialog::runAsync(this->m_pDlg, rCtx.maEndDialogFn);
-        else
-            return Base::StartExecuteAsync(rCtx); // assert / fail
-    }
-
-protected:
-    Ptr<Dialog> m_pDlg;
-};
-
-// Base for synchronously called dialogs, using unique_ptr
-template <class Base, class Dialog>
-using ControllerImpl_Sync = ControllerImpl_BASE<Base, Dialog, std::unique_ptr, false>;
-
-// Base for synchronously called dialogs, using shared_ptr
-template <class Base, class Dialog>
-using ControllerImpl_Sync_Shared = ControllerImpl_BASE<Base, Dialog, std::shared_ptr, false>;
-
-// Base for asynchronously called dialogs
-template <class Base, class Dialog>
-using ControllerImpl_Async = ControllerImpl_BASE<Base, Dialog, std::shared_ptr, true>;
-
 // Dialogs with simplest interface
 
-using CuiAbstractController_Impl = ControllerImpl_Sync<VclAbstractDialog, weld::DialogController>;
+template <class Dialog>
+using CuiAbstractController_Impl = vcl::AbstractDialogImpl_Sync<VclAbstractDialog, Dialog>;
 
-using CuiAbstractControllerAsync_Impl
-    = ControllerImpl_Async<VclAbstractDialog, weld::DialogController>;
+template <class Dialog>
+using CuiAbstractControllerAsync_Impl = vcl::AbstractDialogImpl_Async<VclAbstractDialog, Dialog>;
 }
 
 // Create dialogs with simplest interface
@@ -165,7 +129,7 @@ VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateVclDialog(weld::Wind
             Reference< frame::XFrame > xFrame;
             auto xDlg = std::make_shared<OfaTreeOptionsDialog>(pParent, xFrame, /*bActivateLastSelection*/false);
             xDlg->ActivatePage(SID_SB_DBREGISTEROPTIONS);
-            return VclPtr<CuiAbstractControllerAsync_Impl>::Create(std::move(xDlg));
+            return VclPtr<CuiAbstractControllerAsync_Impl<OfaTreeOptionsDialog>>::Create(std::move(xDlg));
         }
         case SID_OPTIONS_TREEDIALOG :
         case SID_LANGUAGE_OPTIONS :
@@ -180,7 +144,7 @@ VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateVclDialog(weld::Wind
                 //open the tab page "tools/options/languages"
                 xDlg->ActivatePage(OFA_TP_LANGUAGES_FOR_SET_DOCUMENT_LANGUAGE);
             }
-            return VclPtr<CuiAbstractController_Impl>::Create(std::move(xDlg));
+            return VclPtr<CuiAbstractController_Impl<OfaTreeOptionsDialog>>::Create(std::move(xDlg));
         }
         break;
 
@@ -208,62 +172,63 @@ VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateFrameDialog(weld::Wi
     }
 
     if (xDlg)
-        return VclPtr<CuiAbstractController_Impl>::Create(std::move(xDlg));
+        return VclPtr<CuiAbstractController_Impl<OfaTreeOptionsDialog>>::Create(std::move(xDlg));
     return nullptr;
 }
 
 namespace
 {
 class AbstractSecurityOptionsDialog_Impl final
-    : public ControllerImpl_Sync<AbstractSecurityOptionsDialog, SecurityOptionsDialog>
+    : public vcl::AbstractDialogImpl_Sync<AbstractSecurityOptionsDialog, SecurityOptionsDialog>
 {
 public:
-    using ControllerImpl_BASE::ControllerImpl_BASE; // inherited ctor
+    using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
     bool SetSecurityOptions() override { return m_pDlg->SetSecurityOptions(); }
 };
 }
 
 VclPtr<AbstractSecurityOptionsDialog> AbstractDialogFactory_Impl::CreateSvxSecurityOptionsDialog(weld::Window* pParent)
 {
-    return VclPtr<AbstractSecurityOptionsDialog_Impl>::Create(std::make_unique<svx::SecurityOptionsDialog>(pParent));
+    return VclPtr<AbstractSecurityOptionsDialog_Impl>::Create(pParent);
 }
 
 namespace
 {
+template <class Dialog>
 class CuiAbstractTabController_Impl final
-    : public ControllerImpl_Async<SfxAbstractTabDialog, SfxTabDialogController>
+    : public vcl::AbstractDialogImpl_Async<SfxAbstractTabDialog, Dialog>
 {
 public:
-    using ControllerImpl_BASE::ControllerImpl_BASE; // inherited ctor
-    void SetCurPageId(const OUString& rName) override { m_pDlg->SetCurPageId(rName); }
-    const SfxItemSet* GetOutputItemSet() const override { return m_pDlg->GetOutputItemSet(); }
+    using vcl::AbstractDialogImpl_Async<SfxAbstractTabDialog, Dialog>::AbstractDialogImpl_Async;
+    void SetCurPageId(const OUString& rName) override { this->m_pDlg->SetCurPageId(rName); }
+    const SfxItemSet* GetOutputItemSet() const override { return this->m_pDlg->GetOutputItemSet(); }
     WhichRangesContainer GetInputRanges(const SfxItemPool& pItem) override
     {
-        return m_pDlg->GetInputRanges(pItem);
+        return this->m_pDlg->GetInputRanges(pItem);
     }
-    void SetInputSet(const SfxItemSet* pInSet) override { m_pDlg->SetInputSet(pInSet); }
+    void SetInputSet(const SfxItemSet* pInSet) override { this->m_pDlg->SetInputSet(pInSet); }
 
     // From class Window.
-    void SetText(const OUString& rStr) override { m_pDlg->set_title(rStr); }
+    void SetText(const OUString& rStr) override { this->m_pDlg->set_title(rStr); }
 
     // screenshotting
     std::vector<OUString> getAllPageUIXMLDescriptions() const override
     {
-        return m_pDlg->getAllPageUIXMLDescriptions();
+        return this->m_pDlg->getAllPageUIXMLDescriptions();
     }
     bool selectPageByUIXMLDescription(const OUString& rUIXMLDescription) override
     {
-        return m_pDlg->selectPageByUIXMLDescription(rUIXMLDescription);
+        return this->m_pDlg->selectPageByUIXMLDescription(rUIXMLDescription);
     }
-    BitmapEx createScreenshot() const override { return m_pDlg->createScreenshot(); }
-    OUString GetScreenshotId() const override { return m_pDlg->GetScreenshotId(); }
+    BitmapEx createScreenshot() const override { return this->m_pDlg->createScreenshot(); }
+    OUString GetScreenshotId() const override { return this->m_pDlg->GetScreenshotId(); }
 };
 }
 
 // TabDialog outside the drawing layer
 VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateAutoCorrTabDialog(weld::Window* pParent, const SfxItemSet* pAttrSet)
 {
-    return VclPtr<CuiAbstractTabController_Impl>::Create(std::make_shared<OfaAutoCorrDlg>(pParent, pAttrSet));
+    return VclPtr<CuiAbstractTabController_Impl<OfaAutoCorrDlg>>::Create(pParent, pAttrSet);
 }
 
 VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateCustomizeTabDialog(weld::Window* pParent,
@@ -272,7 +237,7 @@ VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateCustomizeTabDialo
 {
     auto xDlg1 = std::make_shared<SvxConfigDialog>(pParent, pAttrSet);
     xDlg1->SetFrame(xViewFrame);
-    return VclPtr<CuiAbstractTabController_Impl>::Create(std::move(xDlg1));
+    return VclPtr<CuiAbstractTabController_Impl<SvxConfigDialog>>::Create(std::move(xDlg1));
 }
 
 // TabDialog that use functionality of the drawing layer
@@ -280,17 +245,17 @@ VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateTextTabDialog(wel
                                             const SfxItemSet* pAttrSet,
                                             SdrView* pView)
 {
-    return VclPtr<CuiAbstractTabController_Impl>::Create(std::make_shared<SvxTextTabDialog>(pParent, pAttrSet, pView));
+    return VclPtr<CuiAbstractTabController_Impl<SvxTextTabDialog>>::Create(pParent, pAttrSet, pView);
 }
 
 namespace
 {
 // AbstractSvxCaptionDialog implementations just forwards everything to the dialog
 class AbstractSvxCaptionDialog_Impl final
-    : public ControllerImpl_Async<AbstractSvxCaptionDialog, SvxCaptionTabDialog>
+    : public vcl::AbstractDialogImpl_Async<AbstractSvxCaptionDialog, SvxCaptionTabDialog>
 {
 public:
-    using ControllerImpl_BASE::ControllerImpl_BASE; // inherited ctor
+    using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
     void SetValidateFramePosLink(const Link<SvxSwFrameValidation&, void>& rLink) override
     {
         m_pDlg->SetValidateFramePosLink(rLink);
@@ -311,16 +276,17 @@ VclPtr<AbstractSvxCaptionDialog> AbstractDialogFactory_Impl::CreateCaptionDialog
                                                                                  const SdrView* pView,
                                                                                  SvxAnchorIds nAnchorTypes)
 {
-    return VclPtr<AbstractSvxCaptionDialog_Impl>::Create(std::make_shared<SvxCaptionTabDialog>(pParent, pView, nAnchorTypes));
+    return VclPtr<AbstractSvxCaptionDialog_Impl>::Create(pParent, pView, nAnchorTypes);
 }
 
 namespace
 {
 class AbstractHangulHanjaConversionDialog_Impl final
-    : public ControllerImpl_Sync<AbstractHangulHanjaConversionDialog, HangulHanjaConversionDialog>
+    : public vcl::AbstractDialogImpl_Sync<AbstractHangulHanjaConversionDialog,
+                                          HangulHanjaConversionDialog>
 {
 public:
-    using ControllerImpl_BASE::ControllerImpl_BASE; // inherited ctor
+    using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
     void EndDialog(sal_Int32 nResult) override { m_pDlg->response(nResult); }
     void EnableRubySupport(bool bVal) override { m_pDlg->EnableRubySupport(bVal); }
     void SetByCharacter(bool bByCharacter) override { m_pDlg->SetByCharacter(bByCharacter); }
@@ -387,16 +353,16 @@ public:
 
 VclPtr<AbstractHangulHanjaConversionDialog> AbstractDialogFactory_Impl::CreateHangulHanjaConversionDialog(weld::Widget* pParent)
 {
-    return VclPtr<AbstractHangulHanjaConversionDialog_Impl>::Create(std::make_unique<HangulHanjaConversionDialog>(pParent));
+    return VclPtr<AbstractHangulHanjaConversionDialog_Impl>::Create(pParent);
 }
 
 namespace
 {
 class AbstractThesaurusDialog_Impl final
-    : public ControllerImpl_Async<AbstractThesaurusDialog, SvxThesaurusDialog>
+    : public vcl::AbstractDialogImpl_Async<AbstractThesaurusDialog, SvxThesaurusDialog>
 {
 public:
-    using ControllerImpl_BASE::ControllerImpl_BASE; // inherited ctor
+    using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
     OUString GetWord() override { return m_pDlg->GetWord(); }
 };
 }
@@ -405,17 +371,17 @@ VclPtr<AbstractThesaurusDialog> AbstractDialogFactory_Impl::CreateThesaurusDialo
                                 css::uno::Reference<css::linguistic2::XThesaurus> xThesaurus,
                                 const OUString &rWord, LanguageType nLanguage)
 {
-    return VclPtr<AbstractThesaurusDialog_Impl>::Create(std::make_shared<SvxThesaurusDialog>(pParent, xThesaurus, rWord, nLanguage));
+    return VclPtr<AbstractThesaurusDialog_Impl>::Create(pParent, xThesaurus, rWord, nLanguage);
 }
 
 #if !ENABLE_WASM_STRIP_EXTRA
 namespace
 {
 class AbstractHyphenWordDialog_Impl final
-    : public ControllerImpl_Sync<AbstractHyphenWordDialog, SvxHyphenWordDialog>
+    : public vcl::AbstractDialogImpl_Sync<AbstractHyphenWordDialog, SvxHyphenWordDialog>
 {
 public:
-    using ControllerImpl_BASE::ControllerImpl_BASE; // inherited ctor
+    using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
 #if ENABLE_WASM_STRIP_HUNSPELL
     short Execute() override { return 0; }
 #endif
@@ -429,7 +395,7 @@ VclPtr<AbstractHyphenWordDialog> AbstractDialogFactory_Impl::CreateHyphenWordDia
                                                 SvxSpellWrapper* pWrapper)
 {
 #if !ENABLE_WASM_STRIP_EXTRA
-    return VclPtr<AbstractHyphenWordDialog_Impl>::Create(std::make_unique<SvxHyphenWordDialog>(rWord, nLang, pParent, xHyphen, pWrapper));
+    return VclPtr<AbstractHyphenWordDialog_Impl>::Create(rWord, nLang, pParent, xHyphen, pWrapper);
 #else
     (void) pParent;
     (void) rWord;
@@ -443,26 +409,26 @@ VclPtr<AbstractHyphenWordDialog> AbstractDialogFactory_Impl::CreateHyphenWordDia
 namespace
 {
 class AbstractFmShowColsDialog_Impl final
-    : public ControllerImpl_Sync<AbstractFmShowColsDialog, FmShowColsDialog>
+    : public vcl::AbstractDialogImpl_Sync<AbstractFmShowColsDialog, FmShowColsDialog>
 {
 public:
-    using ControllerImpl_BASE::ControllerImpl_BASE; // inherited ctor
+    using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
     void SetColumns(const Reference<XIndexContainer>& xCols) override { m_pDlg->SetColumns(xCols); }
 };
 }
 
 VclPtr<AbstractFmShowColsDialog> AbstractDialogFactory_Impl::CreateFmShowColsDialog(weld::Window* pParent)
 {
-    return VclPtr<AbstractFmShowColsDialog_Impl>::Create(std::make_unique<FmShowColsDialog>(pParent));
+    return VclPtr<AbstractFmShowColsDialog_Impl>::Create(pParent);
 }
 
 namespace
 {
 class AbstractSvxZoomDialog_Impl final
-    : public ControllerImpl_Sync<AbstractSvxZoomDialog, SvxZoomDialog>
+    : public vcl::AbstractDialogImpl_Sync<AbstractSvxZoomDialog, SvxZoomDialog>
 {
 public:
-    using ControllerImpl_BASE::ControllerImpl_BASE; // inherited ctor
+    using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
     void SetLimits(sal_uInt16 nMin, sal_uInt16 nMax) override { m_pDlg->SetLimits(nMin, nMax); }
     void HideButton(ZoomButtonId nBtnId) override { m_pDlg->HideButton(nBtnId); }
     const SfxItemSet* GetOutputItemSet() const override { return m_pDlg->GetOutputItemSet(); }
@@ -471,15 +437,16 @@ public:
 
 VclPtr<AbstractSvxZoomDialog> AbstractDialogFactory_Impl::CreateSvxZoomDialog(weld::Window* pParent, const SfxItemSet& rCoreSet)
 {
-    return VclPtr<AbstractSvxZoomDialog_Impl>::Create(std::make_unique<SvxZoomDialog>(pParent, rCoreSet));
+    return VclPtr<AbstractSvxZoomDialog_Impl>::Create(pParent, rCoreSet);
 }
 
 namespace
 {
-class AbstractSpellDialog_Impl final : public ControllerImpl_Async<AbstractSpellDialog, SpellDialog>
+class AbstractSpellDialog_Impl final
+    : public vcl::AbstractDialogImpl_Async<AbstractSpellDialog, SpellDialog>
 {
 public:
-    using ControllerImpl_BASE::ControllerImpl_BASE; // inherited ctor
+    using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
     void InvalidateDialog() override { m_pDlg->InvalidateDialog(); }
     std::shared_ptr<SfxDialogController> GetController() override { return m_pDlg; }
     SfxBindings& GetBindings() override { return m_pDlg->GetBindings(); }
@@ -491,13 +458,13 @@ VclPtr<AbstractSpellDialog> AbstractDialogFactory_Impl::CreateSvxSpellDialog(
                         SfxBindings* pBindings,
                         svx::SpellDialogChildWindow* pSpellChildWindow)
 {
-    return VclPtr<AbstractSpellDialog_Impl>::Create(std::make_shared<svx::SpellDialog>(pSpellChildWindow, pParent, pBindings));
+    return VclPtr<AbstractSpellDialog_Impl>::Create(pSpellChildWindow, pParent, pBindings);
 }
 
 VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateActualizeProgressDialog(weld::Widget* pParent,
                                                                                                GalleryTheme* pThm)
 {
-   return VclPtr<CuiAbstractController_Impl>::Create(std::make_unique<ActualizeProgress>(pParent, pThm));
+   return VclPtr<CuiAbstractController_Impl<ActualizeProgress>>::Create(pParent, pThm);
 }
 
 void AbstractDialogFactory_Impl::ShowAsyncScriptErrorDialog(weld::Window* pParent, const css::uno::Any& rException)
@@ -508,10 +475,10 @@ void AbstractDialogFactory_Impl::ShowAsyncScriptErrorDialog(weld::Window* pParen
 namespace
 {
 class AbstractScriptSelectorDialog_Impl final
-    : public ControllerImpl_Async<AbstractScriptSelectorDialog, SvxScriptSelectorDialog>
+    : public vcl::AbstractDialogImpl_Async<AbstractScriptSelectorDialog, SvxScriptSelectorDialog>
 {
 public:
-    using ControllerImpl_BASE::ControllerImpl_BASE; // inherited ctor
+    using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
     OUString GetScriptURL() const override { return m_pDlg->GetScriptURL(); }
     void SetRunLabel() override { m_pDlg->SetRunLabel(); }
 };
@@ -520,17 +487,17 @@ public:
 VclPtr<AbstractScriptSelectorDialog> AbstractDialogFactory_Impl::CreateScriptSelectorDialog(weld::Window* pParent,
         const Reference<frame::XFrame>& rxFrame)
 {
-    return VclPtr<AbstractScriptSelectorDialog_Impl>::Create(std::make_shared<SvxScriptSelectorDialog>(pParent, rxFrame));
+    return VclPtr<AbstractScriptSelectorDialog_Impl>::Create(pParent, rxFrame);
 }
 
 #if HAVE_FEATURE_SCRIPTING
 namespace
 {
 class AbstractMacroManagerDialog_Impl final
-    : public ControllerImpl_Async<AbstractMacroManagerDialog, MacroManagerDialog>
+    : public vcl::AbstractDialogImpl_Async<AbstractMacroManagerDialog, MacroManagerDialog>
 {
 public:
-    using ControllerImpl_BASE::ControllerImpl_BASE; // inherited ctor
+    using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
     OUString GetScriptURL() const override { return m_pDlg->GetScriptURL(); }
     void LoadLastUsedMacro() const override { m_pDlg->LoadLastUsedMacro(); }
 };
@@ -542,8 +509,7 @@ AbstractDialogFactory_Impl::CreateMacroManagerDialog(weld::Window* pParent,
                                                      const Reference<frame::XFrame>& rxFrame)
 {
 #if HAVE_FEATURE_SCRIPTING
-    return VclPtr<AbstractMacroManagerDialog_Impl>::Create(
-        std::make_shared<MacroManagerDialog>(pParent, rxFrame));
+    return VclPtr<AbstractMacroManagerDialog_Impl>::Create(pParent, rxFrame);
 #else
     (void)pParent;
     (void)rxFrame;
@@ -554,15 +520,16 @@ AbstractDialogFactory_Impl::CreateMacroManagerDialog(weld::Window* pParent,
 VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateSvxScriptOrgDialog(weld::Window* pParent,
                                             const OUString& rLanguage)
 {
-    return VclPtr<CuiAbstractController_Impl>::Create(std::make_unique<SvxScriptOrgDialog>(pParent, rLanguage));
+    return VclPtr<CuiAbstractController_Impl<SvxScriptOrgDialog>>::Create(pParent, rLanguage);
 }
 
 namespace
 {
-class AbstractTitleDialog_Impl final : public ControllerImpl_Sync<AbstractTitleDialog, TitleDialog>
+class AbstractTitleDialog_Impl final
+    : public vcl::AbstractDialogImpl_Sync<AbstractTitleDialog, TitleDialog>
 {
 public:
-    using ControllerImpl_BASE::ControllerImpl_BASE; // inherited ctor
+    using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
     OUString GetTitle() const override { return m_pDlg->GetTitle(); }
 };
 }
@@ -570,16 +537,16 @@ public:
 VclPtr<AbstractTitleDialog> AbstractDialogFactory_Impl::CreateTitleDialog(weld::Widget* pParent,
                                             const OUString& rOldText)
 {
-   return VclPtr<AbstractTitleDialog_Impl>::Create(std::make_unique<TitleDialog>(pParent, rOldText));
+   return VclPtr<AbstractTitleDialog_Impl>::Create(pParent, rOldText);
 }
 
 namespace
 {
 class AbstractGalleryIdDialog_Impl final
-    : public ControllerImpl_Sync<AbstractGalleryIdDialog, GalleryIdDialog>
+    : public vcl::AbstractDialogImpl_Sync<AbstractGalleryIdDialog, GalleryIdDialog>
 {
 public:
-    using ControllerImpl_BASE::ControllerImpl_BASE; // inherited ctor
+    using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
     sal_uInt32 GetId() const override { return m_pDlg->GetId(); }
 };
 }
@@ -587,23 +554,22 @@ public:
 VclPtr<AbstractGalleryIdDialog> AbstractDialogFactory_Impl::CreateGalleryIdDialog(weld::Widget* pParent,
                                             GalleryTheme* pThm)
 {
-   return VclPtr<AbstractGalleryIdDialog_Impl>::Create(std::make_unique<GalleryIdDialog>(pParent, pThm));
+   return VclPtr<AbstractGalleryIdDialog_Impl>::Create(pParent, pThm);
 }
 
 VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateGalleryThemePropertiesDialog(weld::Widget* pParent,
                                             ExchangeData* pData,
                                             SfxItemSet* pItemSet)
 {
-    return VclPtr<CuiAbstractTabController_Impl>::Create(std::make_shared<GalleryThemeProperties>(
-                                                         pParent, pData, pItemSet));
+    return VclPtr<CuiAbstractTabController_Impl<GalleryThemeProperties>>::Create(pParent, pData, pItemSet);
 }
 
 namespace
 {
-class AbstractURLDlg_Impl final : public ControllerImpl_Sync<AbstractURLDlg, URLDlg>
+class AbstractURLDlg_Impl final : public vcl::AbstractDialogImpl_Sync<AbstractURLDlg, URLDlg>
 {
 public:
-    using ControllerImpl_BASE::ControllerImpl_BASE; // inherited ctor
+    using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
     OUString GetURL() const override { return m_pDlg->GetURL(); }
     OUString GetAltText() const override { return m_pDlg->GetAltText(); }
     OUString GetDesc() const override { return m_pDlg->GetDesc(); }
@@ -617,32 +583,30 @@ VclPtr<AbstractURLDlg> AbstractDialogFactory_Impl::CreateURLDialog(weld::Widget*
                                             const OUString& rTarget, const OUString& rName,
                                             TargetList& rTargetList )
 {
-    return VclPtr<AbstractURLDlg_Impl>::Create(std::make_unique<URLDlg>(pParent, rURL, rAltText, rDescription,
-                                                                        rTarget, rName, rTargetList));
-
+    return VclPtr<AbstractURLDlg_Impl>::Create(pParent, rURL, rAltText, rDescription, rTarget, rName, rTargetList);
 }
 
 VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateTabItemDialog(weld::Window* pParent,
     const SfxItemSet& rSet)
 {
-    return VclPtr<CuiAbstractTabController_Impl>::Create(std::make_shared<SvxSearchFormatDialog>(
-                                                         pParent, rSet));
+    return VclPtr<CuiAbstractTabController_Impl<SvxSearchFormatDialog>>::Create(pParent, rSet);
 }
 
 VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateSvxSearchAttributeDialog(weld::Window* pParent,
                                             SearchAttrItemList& rLst,
                                             const WhichRangesContainer& pWhRanges )
 {
-    return VclPtr<CuiAbstractController_Impl>::Create(std::make_unique<SvxSearchAttributeDialog>(pParent, rLst, pWhRanges));
+    return VclPtr<CuiAbstractController_Impl<SvxSearchAttributeDialog>>::Create(pParent, rLst, pWhRanges);
 }
 
 namespace
 {
 class AbstractSvxSearchSimilarityDialog_Impl final
-    : public ControllerImpl_Async<AbstractSvxSearchSimilarityDialog, SvxSearchSimilarityDialog>
+    : public vcl::AbstractDialogImpl_Async<AbstractSvxSearchSimilarityDialog,
+                                           SvxSearchSimilarityDialog>
 {
 public:
-    using ControllerImpl_BASE::ControllerImpl_BASE; // inherited ctor
+    using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
     sal_uInt16 GetOther() override { return m_pDlg->GetOther(); }
     sal_uInt16 GetShorter() override { return m_pDlg->GetShorter(); }
     sal_uInt16 GetLonger() override { return m_pDlg->GetLonger(); }
@@ -656,7 +620,7 @@ VclPtr<AbstractSvxSearchSimilarityDialog> AbstractDialogFactory_Impl::CreateSvxS
                                                             sal_uInt16 nShorter,
                                                             sal_uInt16 nLonger)
 {
-    return VclPtr<AbstractSvxSearchSimilarityDialog_Impl>::Create(std::make_unique<SvxSearchSimilarityDialog>(pParent, bRelax, nOther, nShorter, nLonger));
+    return VclPtr<AbstractSvxSearchSimilarityDialog_Impl>::Create(pParent, bRelax, nOther, nShorter, nLonger);
 }
 
 VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateSvxBorderBackgroundDlg(
@@ -664,21 +628,21 @@ VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateSvxBorderBackgrou
     const SfxItemSet& rCoreSet,
     bool bEnableDrawingLayerFillStyles)
 {
-    return VclPtr<CuiAbstractTabController_Impl>::Create(std::make_shared<SvxBorderBackgroundDlg>(
+    return VclPtr<CuiAbstractTabController_Impl<SvxBorderBackgroundDlg>>::Create(
         pParent,
         rCoreSet,
         /*bEnableSelector*/true,
-        bEnableDrawingLayerFillStyles));
+        bEnableDrawingLayerFillStyles);
 }
 
 namespace
 {
 // AbstractSvxTransformTabDialog implementations just forwards everything to the dialog
 class AbstractSvxTransformTabDialog_Impl final
-    : public ControllerImpl_Async<AbstractSvxTransformTabDialog, SvxTransformTabDialog>
+    : public vcl::AbstractDialogImpl_Async<AbstractSvxTransformTabDialog, SvxTransformTabDialog>
 {
 public:
-    using ControllerImpl_BASE::ControllerImpl_BASE; // inherited ctor
+    using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
     void SetValidateFramePosLink(const Link<SvxSwFrameValidation&, void>& rLink) override
     {
         m_pDlg->SetValidateFramePosLink(rLink);
@@ -700,7 +664,7 @@ VclPtr<AbstractSvxTransformTabDialog> AbstractDialogFactory_Impl::CreateSvxTrans
                                                                                               const SdrView* pView,
                                                                                               SvxAnchorIds nAnchorTypes)
 {
-    return VclPtr<AbstractSvxTransformTabDialog_Impl>::Create(std::make_shared<SvxTransformTabDialog>(pParent, pAttr,pView, nAnchorTypes));
+    return VclPtr<AbstractSvxTransformTabDialog_Impl>::Create(pParent, pAttr,pView, nAnchorTypes);
 }
 
 VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateSchTransformTabDialog(weld::Window* pParent,
@@ -712,16 +676,16 @@ VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateSchTransformTabDi
             bSizeTabPage ? SvxAnchorIds::NoProtect :  SvxAnchorIds::NoProtect|SvxAnchorIds::NoResize);
     pDlg->RemoveTabPage( u"RID_SVXPAGE_ANGLE"_ustr );
     pDlg->RemoveTabPage( u"RID_SVXPAGE_SLANT"_ustr );
-    return VclPtr<CuiAbstractTabController_Impl>::Create(std::move(pDlg));
+    return VclPtr<CuiAbstractTabController_Impl<SvxTransformTabDialog>>::Create(std::move(pDlg));
 }
 
 namespace
 {
 class AbstractSvxJSearchOptionsDialog_Impl final
-    : public ControllerImpl_Sync<AbstractSvxJSearchOptionsDialog, SvxJSearchOptionsDialog>
+    : public vcl::AbstractDialogImpl_Sync<AbstractSvxJSearchOptionsDialog, SvxJSearchOptionsDialog>
 {
 public:
-    using ControllerImpl_BASE::ControllerImpl_BASE; // inherited ctor
+    using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
     TransliterationFlags GetTransliterationFlags() const override
     {
         return m_pDlg->GetTransliterationFlags();
@@ -733,16 +697,16 @@ VclPtr<AbstractSvxJSearchOptionsDialog> AbstractDialogFactory_Impl::CreateSvxJSe
                                                             const SfxItemSet& rOptionsSet,
                                                             TransliterationFlags nInitialFlags)
 {
-    return VclPtr<AbstractSvxJSearchOptionsDialog_Impl>::Create(std::make_unique<SvxJSearchOptionsDialog>(pParent, rOptionsSet, nInitialFlags));
+    return VclPtr<AbstractSvxJSearchOptionsDialog_Impl>::Create(pParent, rOptionsSet, nInitialFlags);
 }
 
 namespace
 {
 class AbstractFmInputRecordNoDialog_Impl final
-    : public ControllerImpl_Sync<AbstractFmInputRecordNoDialog, FmInputRecordNoDialog>
+    : public vcl::AbstractDialogImpl_Sync<AbstractFmInputRecordNoDialog, FmInputRecordNoDialog>
 {
 public:
-    using ControllerImpl_BASE::ControllerImpl_BASE; // inherited ctor
+    using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
     void SetValue(tools::Long nNew) override { m_pDlg->SetValue(nNew); }
     tools::Long GetValue() const override { return m_pDlg->GetValue(); }
 };
@@ -750,16 +714,16 @@ public:
 
 VclPtr<AbstractFmInputRecordNoDialog> AbstractDialogFactory_Impl::CreateFmInputRecordNoDialog(weld::Window* pParent)
 {
-    return VclPtr<AbstractFmInputRecordNoDialog_Impl>::Create(std::make_unique<FmInputRecordNoDialog>(pParent));
+    return VclPtr<AbstractFmInputRecordNoDialog_Impl>::Create(pParent);
 }
 
 namespace
 {
 class AbstractSvxNewDictionaryDialog_Impl final
-    : public ControllerImpl_Sync<AbstractSvxNewDictionaryDialog, SvxNewDictionaryDialog>
+    : public vcl::AbstractDialogImpl_Sync<AbstractSvxNewDictionaryDialog, SvxNewDictionaryDialog>
 {
 public:
-    using ControllerImpl_BASE::ControllerImpl_BASE; // inherited ctor
+    using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
     Reference<css::linguistic2::XDictionary> GetNewDictionary() override
     {
         return m_pDlg->GetNewDictionary();
@@ -769,21 +733,21 @@ public:
 
 VclPtr<AbstractSvxNewDictionaryDialog> AbstractDialogFactory_Impl::CreateSvxNewDictionaryDialog(weld::Window* pParent)
 {
-    return VclPtr<AbstractSvxNewDictionaryDialog_Impl>::Create(std::make_unique<SvxNewDictionaryDialog>(pParent));
+    return VclPtr<AbstractSvxNewDictionaryDialog_Impl>::Create(pParent);
 }
 
 VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateSvxEditDictionaryDialog(weld::Window* pParent, const OUString& rName)
 {
-    return VclPtr<CuiAbstractController_Impl>::Create(std::make_unique<SvxEditDictionaryDialog>(pParent, rName));
+    return VclPtr<CuiAbstractController_Impl<SvxEditDictionaryDialog>>::Create(pParent, rName);
 }
 
 namespace
 {
 class AbstractSvxNameDialog_Impl final
-    : public ControllerImpl_Sync<AbstractSvxNameDialog, SvxNameDialog>
+    : public vcl::AbstractDialogImpl_Sync<AbstractSvxNameDialog, SvxNameDialog>
 {
 public:
-    using ControllerImpl_BASE::ControllerImpl_BASE; // inherited ctor
+    using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
     OUString GetName() override { return m_pDlg->GetName(); }
     void SetCheckNameHdl(const Link<AbstractSvxNameDialog&, bool>& rLink) override;
     void SetCheckNameTooltipHdl(const Link<AbstractSvxNameDialog&, OUString>& rLink) override;
@@ -832,16 +796,16 @@ IMPL_LINK_NOARG(AbstractSvxNameDialog_Impl, CheckNameTooltipHdl, SvxNameDialog&,
 VclPtr<AbstractSvxNameDialog> AbstractDialogFactory_Impl::CreateSvxNameDialog(weld::Window* pParent,
                                     const OUString& rName, const OUString& rDesc, const OUString& rTitle)
 {
-    return VclPtr<AbstractSvxNameDialog_Impl>::Create(std::make_unique<SvxNameDialog>(pParent, rName, rDesc, rTitle));
+    return VclPtr<AbstractSvxNameDialog_Impl>::Create(pParent, rName, rDesc, rTitle);
 }
 
 namespace
 {
 class AbstractSvxObjectNameDialog_Impl final
-    : public ControllerImpl_Async<AbstractSvxObjectNameDialog, SvxObjectNameDialog>
+    : public vcl::AbstractDialogImpl_Async<AbstractSvxObjectNameDialog, SvxObjectNameDialog>
 {
 public:
-    using ControllerImpl_BASE::ControllerImpl_BASE; // inherited ctor
+    using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
     OUString GetName() override { return m_pDlg->GetName(); }
     void SetCheckNameHdl(const Link<AbstractSvxObjectNameDialog&, bool>& rLink) override;
 
@@ -873,16 +837,17 @@ IMPL_LINK_NOARG(AbstractSvxObjectNameDialog_Impl, CheckNameHdl, SvxObjectNameDia
 
 VclPtr<AbstractSvxObjectNameDialog> AbstractDialogFactory_Impl::CreateSvxObjectNameDialog(weld::Window* pParent, const OUString& rName)
 {
-    return VclPtr<AbstractSvxObjectNameDialog_Impl>::Create(std::make_unique<SvxObjectNameDialog>(pParent, rName));
+    return VclPtr<AbstractSvxObjectNameDialog_Impl>::Create(pParent, rName);
 }
 
 namespace
 {
 class AbstractSvxObjectTitleDescDialog_Impl final
-    : public ControllerImpl_Async<AbstractSvxObjectTitleDescDialog, SvxObjectTitleDescDialog>
+    : public vcl::AbstractDialogImpl_Async<AbstractSvxObjectTitleDescDialog,
+                                           SvxObjectTitleDescDialog>
 {
 public:
-    using ControllerImpl_BASE::ControllerImpl_BASE; // inherited ctor
+    using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
     OUString GetTitle() override { return m_pDlg->GetTitle(); }
     OUString GetDescription() override { return m_pDlg->GetDescription(); }
     bool IsDecorative() override { return m_pDlg->IsDecorative(); }
@@ -891,16 +856,16 @@ public:
 
 VclPtr<AbstractSvxObjectTitleDescDialog> AbstractDialogFactory_Impl::CreateSvxObjectTitleDescDialog(weld::Window* pParent, const OUString& rTitle, const OUString& rDescription, bool const isDecorative)
 {
-    return VclPtr<AbstractSvxObjectTitleDescDialog_Impl>::Create(std::make_unique<SvxObjectTitleDescDialog>(pParent, rTitle, rDescription, isDecorative));
+    return VclPtr<AbstractSvxObjectTitleDescDialog_Impl>::Create(pParent, rTitle, rDescription, isDecorative);
 }
 
 namespace
 {
 class AbstractSvxMultiPathDialog_Impl final
-    : public ControllerImpl_Sync<AbstractSvxMultiPathDialog, SvxMultiPathDialog>
+    : public vcl::AbstractDialogImpl_Sync<AbstractSvxMultiPathDialog, SvxMultiPathDialog>
 {
 public:
-    using ControllerImpl_BASE::ControllerImpl_BASE; // inherited ctor
+    using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
     OUString GetPath() const override { return m_pDlg->GetPath(); }
     void SetPath(const OUString& rPath) override { m_pDlg->SetPath(rPath); }
     void SetTitle(const OUString& rNewTitle) override { m_pDlg->SetTitle(rNewTitle); }
@@ -909,16 +874,16 @@ public:
 
 VclPtr<AbstractSvxMultiPathDialog> AbstractDialogFactory_Impl::CreateSvxMultiPathDialog(weld::Window* pParent)
 {
-    return VclPtr<AbstractSvxMultiPathDialog_Impl>::Create(std::make_unique<SvxMultiPathDialog>(pParent));
+    return VclPtr<AbstractSvxMultiPathDialog_Impl>::Create(pParent);
 }
 
 namespace
 {
 class AbstractSvxPathSelectDialog_Impl final
-    : public ControllerImpl_Sync<AbstractSvxMultiPathDialog, SvxPathSelectDialog>
+    : public vcl::AbstractDialogImpl_Sync<AbstractSvxMultiPathDialog, SvxPathSelectDialog>
 {
 public:
-    using ControllerImpl_BASE::ControllerImpl_BASE; // inherited ctor
+    using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
     OUString GetPath() const override { return m_pDlg->GetPath(); }
     void SetPath(const OUString& rPath) override { m_pDlg->SetPath(rPath); }
     void SetTitle(const OUString& rNewTitle) override { m_pDlg->SetTitle(rNewTitle); }
@@ -927,16 +892,16 @@ public:
 
 VclPtr<AbstractSvxMultiPathDialog> AbstractDialogFactory_Impl::CreateSvxPathSelectDialog(weld::Window* pParent)
 {
-    return VclPtr<AbstractSvxPathSelectDialog_Impl>::Create(std::make_unique<SvxPathSelectDialog>(pParent));
+    return VclPtr<AbstractSvxPathSelectDialog_Impl>::Create(pParent);
 }
 
 namespace
 {
 class AbstractSvxHpLinkDlg_Impl final
-    : public ControllerImpl_Sync_Shared<AbstractSvxHpLinkDlg, SvxHpLinkDlg>
+    : public vcl::AbstractDialogImpl_Sync_Shared<AbstractSvxHpLinkDlg, SvxHpLinkDlg>
 {
 public:
-    using ControllerImpl_BASE::ControllerImpl_BASE; // inherited ctor
+    using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
     std::shared_ptr<SfxDialogController> GetController() override { return m_pDlg; }
     bool QueryClose() override { return m_pDlg->QueryClose(); }
 };
@@ -944,16 +909,16 @@ public:
 
 VclPtr<AbstractSvxHpLinkDlg> AbstractDialogFactory_Impl::CreateSvxHpLinkDlg(SfxChildWindow* pChild, SfxBindings* pBindings, weld::Window* pParent)
 {
-    return VclPtr<AbstractSvxHpLinkDlg_Impl>::Create(std::make_shared<SvxHpLinkDlg>(pBindings, pChild, pParent));
+    return VclPtr<AbstractSvxHpLinkDlg_Impl>::Create(pBindings, pChild, pParent);
 }
 
 namespace
 {
 class AbstractFmSearchDialog_Impl final
-    : public ControllerImpl_Sync<AbstractFmSearchDialog, FmSearchDialog>
+    : public vcl::AbstractDialogImpl_Sync<AbstractFmSearchDialog, FmSearchDialog>
 {
 public:
-    using ControllerImpl_BASE::ControllerImpl_BASE; // inherited ctor
+    using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
     void SetFoundHandler(const Link<FmFoundRecordInformation&, void>& lnk) override
     {
         m_pDlg->SetFoundHandler(lnk);
@@ -972,21 +937,20 @@ VclPtr<AbstractFmSearchDialog> AbstractDialogFactory_Impl::CreateFmSearchDialog(
                                                         sal_Int16 nInitialContext,
                                                         const Link<FmSearchContext&,sal_uInt32>& lnkContextSupplier)
 {
-    return VclPtr<AbstractFmSearchDialog_Impl>::Create(std::make_unique<FmSearchDialog>(pParent,
-                                                         strInitialText, _rContexts, nInitialContext, lnkContextSupplier));
-
+    return VclPtr<AbstractFmSearchDialog_Impl>::Create(pParent, strInitialText, _rContexts, nInitialContext, lnkContextSupplier);
 }
 
 namespace
 {
+template <class Dialog>
 class AbstractGraphicFilterDialog_Impl final
-    : public ControllerImpl_Async<AbstractGraphicFilterDialog, GraphicFilterDialog>
+    : public vcl::AbstractDialogImpl_Async<AbstractGraphicFilterDialog, Dialog>
 {
 public:
-    using ControllerImpl_BASE::ControllerImpl_BASE; // inherited ctor
+    using vcl::AbstractDialogImpl_Async<AbstractGraphicFilterDialog, Dialog>::AbstractDialogImpl_Async;
     Graphic GetFilteredGraphic(const Graphic& rGraphic, double fScaleX, double fScaleY) override
     {
-        return m_pDlg->GetFilteredGraphic(rGraphic, fScaleX, fScaleY);
+        return this->m_pDlg->GetFilteredGraphic(rGraphic, fScaleX, fScaleY);
     }
 };
 }
@@ -994,47 +958,47 @@ public:
 VclPtr<AbstractGraphicFilterDialog> AbstractDialogFactory_Impl::CreateGraphicFilterEmboss(weld::Window* pParent,
                                             const Graphic& rGraphic)
 {
-    return VclPtr<AbstractGraphicFilterDialog_Impl>::Create(std::make_unique<GraphicFilterEmboss>(pParent, rGraphic, RectPoint::MM));
+    return VclPtr<AbstractGraphicFilterDialog_Impl<GraphicFilterEmboss>>::Create(pParent, rGraphic, RectPoint::MM);
 }
 
 VclPtr<AbstractGraphicFilterDialog> AbstractDialogFactory_Impl::CreateGraphicFilterPoster(weld::Window* pParent,
                                             const Graphic& rGraphic)
 {
-    return VclPtr<AbstractGraphicFilterDialog_Impl>::Create(std::make_unique<GraphicFilterPoster>(pParent, rGraphic, 16));
+    return VclPtr<AbstractGraphicFilterDialog_Impl<GraphicFilterPoster>>::Create(pParent, rGraphic, 16);
 }
 
 VclPtr<AbstractGraphicFilterDialog> AbstractDialogFactory_Impl::CreateGraphicFilterSepia(weld::Window* pParent,
                                             const Graphic& rGraphic)
 {
-    return VclPtr<AbstractGraphicFilterDialog_Impl>::Create(std::make_unique<GraphicFilterSepia>(pParent, rGraphic, 10));
+    return VclPtr<AbstractGraphicFilterDialog_Impl<GraphicFilterSepia>>::Create(pParent, rGraphic, 10);
 }
 
 VclPtr<AbstractGraphicFilterDialog> AbstractDialogFactory_Impl::CreateGraphicFilterSmooth(weld::Window* pParent,
                                             const Graphic& rGraphic, double nRadius)
 {
-    return VclPtr<AbstractGraphicFilterDialog_Impl>::Create(std::make_unique<GraphicFilterSmooth>(pParent, rGraphic, nRadius));
+    return VclPtr<AbstractGraphicFilterDialog_Impl<GraphicFilterSmooth>>::Create(pParent, rGraphic, nRadius);
 }
 
 VclPtr<AbstractGraphicFilterDialog> AbstractDialogFactory_Impl::CreateGraphicFilterSolarize(weld::Window* pParent,
                                             const Graphic& rGraphic)
 {
-    return VclPtr<AbstractGraphicFilterDialog_Impl>::Create(std::make_unique<GraphicFilterSolarize>(pParent, rGraphic, 128, false /*bInvert*/));
+    return VclPtr<AbstractGraphicFilterDialog_Impl<GraphicFilterSolarize>>::Create(pParent, rGraphic, 128, false /*bInvert*/);
 }
 
 VclPtr<AbstractGraphicFilterDialog> AbstractDialogFactory_Impl::CreateGraphicFilterMosaic(weld::Window* pParent,
                                             const Graphic& rGraphic)
 {
-    return VclPtr<AbstractGraphicFilterDialog_Impl>::Create(std::make_unique<GraphicFilterMosaic>(pParent, rGraphic, 4, 4, false /*bEnhanceEdges*/));
+    return VclPtr<AbstractGraphicFilterDialog_Impl<GraphicFilterMosaic>>::Create(pParent, rGraphic, 4, 4, false /*bEnhanceEdges*/);
 }
 
 namespace
 {
 // AbstractSvxAreaTabDialog implementations just forwards everything to the dialog
 class AbstractSvxAreaTabDialog_Impl final
-    : public ControllerImpl_Async<AbstractSvxAreaTabDialog, SvxAreaTabDialog>
+    : public vcl::AbstractDialogImpl_Async<AbstractSvxAreaTabDialog, SvxAreaTabDialog>
 {
 public:
-    using ControllerImpl_BASE::ControllerImpl_BASE; // inherited ctor
+    using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
     void SetCurPageId(const OUString& rName) override { m_pDlg->SetCurPageId(rName); }
     const SfxItemSet* GetOutputItemSet() const override { return m_pDlg->GetOutputItemSet(); }
     WhichRangesContainer GetInputRanges(const SfxItemPool& pItem) override
@@ -1052,8 +1016,7 @@ VclPtr<AbstractSvxAreaTabDialog> AbstractDialogFactory_Impl::CreateSvxAreaTabDia
                                                             bool bShadow,
                                                             bool bSlideBackground)
 {
-    return VclPtr<AbstractSvxAreaTabDialog_Impl>::Create(
-        std::make_shared<SvxAreaTabDialog>(pParent, pAttr, pModel, bShadow, bSlideBackground));
+    return VclPtr<AbstractSvxAreaTabDialog_Impl>::Create(pParent, pAttr, pModel, bShadow, bSlideBackground);
 }
 
 VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateSvxLineTabDialog(weld::Window* pParent, const SfxItemSet* pAttr, //add forSvxLineTabDialog
@@ -1061,20 +1024,20 @@ VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateSvxLineTabDialog(
                                                                  const SdrObject* pObj ,
                                                                  bool bHasObj)
 {
-    return VclPtr<CuiAbstractTabController_Impl>::Create(std::make_shared<SvxLineTabDialog>(pParent, pAttr, pModel, pObj,bHasObj));
+    return VclPtr<CuiAbstractTabController_Impl<SvxLineTabDialog>>::Create(pParent, pAttr, pModel, pObj,bHasObj);
 }
 
 namespace
 {
 class AbstractSvxCharacterMapDialog_Impl
-    : public ControllerImpl_Async<SfxAbstractDialog, SvxCharacterMap>
+    : public vcl::AbstractDialogImpl_Async<SfxAbstractDialog, SvxCharacterMap>
 {
 public:
-    using ControllerImpl_BASE::ControllerImpl_BASE; // inherited ctor
+    using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
     bool StartExecuteAsync(AsyncContext& rCtx) override
     {
         m_pDlg->prepForRun();
-        return SvxCharacterMap::runAsync(m_pDlg, rCtx.maEndDialogFn);
+        return AbstractDialogImpl_BASE::StartExecuteAsync(rCtx);
     }
     const SfxItemSet* GetOutputItemSet() const override { return m_pDlg->GetOutputItemSet(); }
     void SetText(const OUString& rStr) override { m_pDlg->set_title(rStr); }
@@ -1084,20 +1047,21 @@ public:
 VclPtr<SfxAbstractDialog> AbstractDialogFactory_Impl::CreateCharMapDialog(weld::Window* pParent, const SfxItemSet& rAttr,
                                                                           const Reference< XFrame >& rDocumentFrame)
 {
-    return VclPtr<AbstractSvxCharacterMapDialog_Impl>::Create(std::make_unique<SvxCharacterMap>(pParent, &rAttr, rDocumentFrame));
+    return VclPtr<AbstractSvxCharacterMapDialog_Impl>::Create(pParent, &rAttr, rDocumentFrame);
 }
 
 namespace
 {
+template <class Dialog>
 class CuiAbstractSingleTabController_Impl final
-    : public ControllerImpl_Async<SfxAbstractDialog, SfxSingleTabDialogController>
+    : public vcl::AbstractDialogImpl_Async<SfxAbstractDialog, Dialog>
 {
 public:
-    using ControllerImpl_BASE::ControllerImpl_BASE; // inherited ctor
-    const SfxItemSet* GetOutputItemSet() const override { return m_pDlg->GetOutputItemSet(); }
+    using vcl::AbstractDialogImpl_Async<SfxAbstractDialog, Dialog>::AbstractDialogImpl_Async;
+    const SfxItemSet* GetOutputItemSet() const override { return this->m_pDlg->GetOutputItemSet(); }
 
     // From class Window.
-    void SetText(const OUString& rStr) override { m_pDlg->set_title(rStr); }
+    void SetText(const OUString& rStr) override { this->m_pDlg->set_title(rStr); }
 };
 }
 
@@ -1105,7 +1069,7 @@ VclPtr<SfxAbstractDialog> AbstractDialogFactory_Impl::CreateEventConfigDialog(we
                                                                               std::unique_ptr<const SfxItemSet> xAttr,
                                                                               const Reference< XFrame >& rDocumentFrame)
 {
-    return VclPtr<CuiAbstractSingleTabController_Impl>::Create(std::make_unique<SfxMacroAssignDlg>(pParent, rDocumentFrame, std::move(xAttr)));
+    return VclPtr<CuiAbstractSingleTabController_Impl<SfxMacroAssignDlg>>::Create(pParent, rDocumentFrame, std::move(xAttr));
 }
 
 VclPtr<SfxAbstractDialog> AbstractDialogFactory_Impl::CreateSfxDialog(weld::Window* pParent,
@@ -1116,11 +1080,11 @@ VclPtr<SfxAbstractDialog> AbstractDialogFactory_Impl::CreateSfxDialog(weld::Wind
     switch ( nResId )
     {
         case RID_SVXPAGE_MEASURE:
-            return VclPtr<CuiAbstractSingleTabController_Impl>::Create(std::make_unique<SvxMeasureDialog>(pParent, rAttr, pView));
+            return VclPtr<CuiAbstractSingleTabController_Impl<SvxMeasureDialog>>::Create(pParent, rAttr, pView);
         case RID_SVXPAGE_CONNECTION:
-            return VclPtr<CuiAbstractSingleTabController_Impl>::Create(std::make_unique<SvxConnectionDialog>(pParent, rAttr, pView));
+            return VclPtr<CuiAbstractSingleTabController_Impl<SvxConnectionDialog>>::Create(pParent, rAttr, pView);
         case RID_SFXPAGE_DBREGISTER:
-            return VclPtr<CuiAbstractSingleTabController_Impl>::Create(std::make_unique<DatabaseRegistrationDialog>(pParent, rAttr));
+            return VclPtr<CuiAbstractSingleTabController_Impl<DatabaseRegistrationDialog>>::Create(pParent, rAttr);
     }
 
     return nullptr;
@@ -1129,10 +1093,10 @@ VclPtr<SfxAbstractDialog> AbstractDialogFactory_Impl::CreateSfxDialog(weld::Wind
 namespace
 {
 class AbstractSvxPostItDialog_Impl final
-    : public ControllerImpl_Sync<AbstractSvxPostItDialog, SvxPostItDialog>
+    : public vcl::AbstractDialogImpl_Sync<AbstractSvxPostItDialog, SvxPostItDialog>
 {
 public:
-    using ControllerImpl_BASE::ControllerImpl_BASE; // inherited ctor
+    using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
     // From class Window
     void SetText(const OUString& rStr) override { m_pDlg->set_title(rStr); }
     const SfxItemSet* GetOutputItemSet() const override { return m_pDlg->GetOutputItemSet(); }
@@ -1189,17 +1153,18 @@ VclPtr<AbstractSvxPostItDialog> AbstractDialogFactory_Impl::CreateSvxPostItDialo
                                                                                   const SfxItemSet& rCoreSet,
                                                                                   bool bPrevNext)
 {
-    return VclPtr<AbstractSvxPostItDialog_Impl>::Create(std::make_unique<SvxPostItDialog>(pParent, rCoreSet, bPrevNext));
+    return VclPtr<AbstractSvxPostItDialog_Impl>::Create(pParent, rCoreSet, bPrevNext);
 }
 
 namespace {
 
-class SvxMacroAssignDialog_Impl : public ControllerImpl_Async<VclAbstractDialog, SvxMacroAssignDlg>
+class SvxMacroAssignDialog_Impl
+    : public vcl::AbstractDialogImpl_Async<VclAbstractDialog, SvxMacroAssignDlg>
 {
 public:
     SvxMacroAssignDialog_Impl( weld::Window* _pParent, const Reference< XFrame >& _rxDocumentFrame, const bool _bUnoDialogMode,
             const Reference< XNameReplace >& _rxEvents, const sal_uInt16 _nInitiallySelectedEvent )
-        : ControllerImpl_BASE(nullptr)
+        : AbstractDialogImpl_BASE(nullptr)
         , m_aItems( SfxGetpApp()->GetPool(), svl::Items<SID_ATTR_MACROITEM, SID_ATTR_MACROITEM> )
     {
         m_aItems.Put( SfxBoolItem( SID_ATTR_MACROITEM, _bUnoDialogMode ) );
@@ -1364,10 +1329,10 @@ GetTabPageRanges AbstractDialogFactory_Impl::GetTabPageRangesFunc( sal_uInt16 nI
 namespace
 {
 class AbstractInsertObjectDialog_Impl final
-    : public ControllerImpl_Sync<SfxAbstractInsertObjectDialog, InsertObjectDialog_Impl>
+    : public vcl::AbstractDialogImpl_Sync<SfxAbstractInsertObjectDialog, InsertObjectDialog_Impl>
 {
 public:
-    using ControllerImpl_BASE::ControllerImpl_BASE; // inherited ctor
+    using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
     Reference<css::embed::XEmbeddedObject> GetObject() override { return m_pDlg->GetObject(); }
     Reference<css::io::XInputStream> GetIconIfIconified(OUString* pGraphicMediaType) override
     {
@@ -1409,10 +1374,10 @@ VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateEditObjectDialog(wel
 namespace
 {
 class AbstractPasteDialog_Impl final
-    : public ControllerImpl_Async<SfxAbstractPasteDialog, SvPasteObjectDialog>
+    : public vcl::AbstractDialogImpl_Async<SfxAbstractPasteDialog, SvPasteObjectDialog>
 {
 public:
-    using ControllerImpl_BASE::ControllerImpl_BASE; // inherited ctor
+    using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
     void Insert(SotClipboardFormatId nFormat, const OUString& rFormatName) override
     {
         m_pDlg->Insert(nFormat, rFormatName);
@@ -1439,12 +1404,13 @@ public:
 
 VclPtr<SfxAbstractPasteDialog> AbstractDialogFactory_Impl::CreatePasteDialog(weld::Window* pParent)
 {
-    return VclPtr<AbstractPasteDialog_Impl>::Create(std::make_shared<SvPasteObjectDialog>(pParent));
+    return VclPtr<AbstractPasteDialog_Impl>::Create(pParent);
 }
 
 VclPtr<SfxAbstractLinksDialog> AbstractDialogFactory_Impl::CreateLinksDialog(weld::Window* pParent, sfx2::LinkManager* pMgr, bool bHTML, sfx2::SvBaseLink* p)
 {
-    using AbstractLinksDialog_Impl = ControllerImpl_Async<SfxAbstractLinksDialog, SvBaseLinksDlg>;
+    using AbstractLinksDialog_Impl
+        = vcl::AbstractDialogImpl_Async<SfxAbstractLinksDialog, SvBaseLinksDlg>;
     auto xLinkDlg(std::make_unique<SvBaseLinksDlg>(pParent, pMgr, bHTML));
     if (p)
         xLinkDlg->SetActLink(p);
@@ -1453,12 +1419,28 @@ VclPtr<SfxAbstractLinksDialog> AbstractDialogFactory_Impl::CreateLinksDialog(wel
 
 VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateSvxFormatCellsDialog(weld::Window* pParent, const SfxItemSet& rAttr, const SdrModel& rModel, bool bStyle)
 {
-    return VclPtr<CuiAbstractTabController_Impl>::Create(std::make_shared<SvxFormatCellsDialog>(pParent, rAttr, rModel, bStyle));
+    return VclPtr<CuiAbstractTabController_Impl<SvxFormatCellsDialog>>::Create(pParent, rAttr, rModel, bStyle);
+}
+
+namespace
+{
+class SvxAbstractSplitTableDialog_Impl
+    : public vcl::AbstractDialogImpl_Async<SvxAbstractSplitTableDialog, SvxSplitTableDlg>
+{
+public:
+    using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
+
+    bool IsHorizontal() const override { return m_pDlg->IsHorizontal(); }
+    bool IsProportional() const override { return m_pDlg->IsProportional(); }
+    tools::Long GetCount() const override { return m_pDlg->GetCount(); }
+
+    void SetSplitVerticalByDefault() override { m_pDlg->SetSplitVerticalByDefault(); }
+};
 }
 
 VclPtr<SvxAbstractSplitTableDialog> AbstractDialogFactory_Impl::CreateSvxSplitTableDialog(weld::Window* pParent, bool bIsTableVertical, tools::Long nMaxVertical)
 {
-    return VclPtr<SvxAbstractSplitTableDialog_Impl>::Create( std::make_shared<SvxSplitTableDlg>(pParent, bIsTableVertical, nMaxVertical, 99 ));
+    return VclPtr<SvxAbstractSplitTableDialog_Impl>::Create(pParent, bIsTableVertical, nMaxVertical, 99);
 }
 
 std::shared_ptr<SvxAbstractNewTableDialog> AbstractDialogFactory_Impl::CreateSvxNewTableDialog(weld::Window* pParent)
@@ -1468,21 +1450,34 @@ std::shared_ptr<SvxAbstractNewTableDialog> AbstractDialogFactory_Impl::CreateSvx
 
 VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateOptionsDialog(weld::Window* pParent, const OUString& rExtensionId)
 {
-    return VclPtr<CuiAbstractController_Impl>::Create(std::make_unique<OfaTreeOptionsDialog>(pParent, rExtensionId));
+    return VclPtr<CuiAbstractController_Impl<OfaTreeOptionsDialog>>::Create(pParent, rExtensionId);
+}
+
+namespace
+{
+class SvxAbstractInsRowColDlg_Impl final
+    : public vcl::AbstractDialogImpl_Async<SvxAbstractInsRowColDlg, SvxInsRowColDlg>
+{
+public:
+    using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
+    virtual bool isInsertBefore() const override { return m_pDlg->isInsertBefore(); }
+    virtual sal_uInt16 getInsertCount() const override { return m_pDlg->getInsertCount(); }
+};
 }
 
 VclPtr<SvxAbstractInsRowColDlg> AbstractDialogFactory_Impl::CreateSvxInsRowColDlg(weld::Window* pParent, bool bCol, const OUString& rHelpId)
 {
-    return VclPtr<SvxAbstractInsRowColDlg_Impl>::Create(std::make_shared<SvxInsRowColDlg>(pParent, bCol, rHelpId));
+    return VclPtr<SvxAbstractInsRowColDlg_Impl>::Create(pParent, bCol, rHelpId);
 }
 
 namespace
 {
 class AbstractPasswordToOpenModifyDialog_Impl final
-    : public ControllerImpl_Async<AbstractPasswordToOpenModifyDialog, PasswordToOpenModifyDialog>
+    : public vcl::AbstractDialogImpl_Async<AbstractPasswordToOpenModifyDialog,
+                                           PasswordToOpenModifyDialog>
 {
 public:
-    using ControllerImpl_BASE::ControllerImpl_BASE; // inherited ctor
+    using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
     OUString GetPasswordToOpen() const override { return m_pDlg->GetPasswordToOpen(); }
     OUString GetPasswordToModify() const override { return m_pDlg->GetPasswordToModify(); }
     bool IsRecommendToOpenReadonly() const override { return m_pDlg->IsRecommendToOpenReadonly(); }
@@ -1494,24 +1489,24 @@ public:
 VclPtr<AbstractPasswordToOpenModifyDialog> AbstractDialogFactory_Impl::CreatePasswordToOpenModifyDialog(
     weld::Window * pParent, sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify)
 {
-    return VclPtr<AbstractPasswordToOpenModifyDialog_Impl>::Create(std::make_unique<PasswordToOpenModifyDialog>(pParent, nMaxPasswdLen, bIsPasswordToModify));
+    return VclPtr<AbstractPasswordToOpenModifyDialog_Impl>::Create(pParent, nMaxPasswdLen, bIsPasswordToModify);
 }
 
 VclPtr<AbstractScreenshotAnnotationDlg> AbstractDialogFactory_Impl::CreateScreenshotAnnotationDlg(weld::Dialog& rParentDialog)
 {
     using AbstractScreenshotAnnotationDlg_Impl
-        = ControllerImpl_Sync<AbstractScreenshotAnnotationDlg, ScreenshotAnnotationDlg>;
+        = vcl::AbstractDialogImpl_Sync<AbstractScreenshotAnnotationDlg, ScreenshotAnnotationDlg>;
 
-    return VclPtr<AbstractScreenshotAnnotationDlg_Impl>::Create(std::make_unique<ScreenshotAnnotationDlg>(rParentDialog));
+    return VclPtr<AbstractScreenshotAnnotationDlg_Impl>::Create(rParentDialog);
 }
 
 namespace
 {
 class AbstractSignatureLineDialog_Impl final
-    : public ControllerImpl_Async<AbstractSignatureLineDialog, SignatureLineDialog>
+    : public vcl::AbstractDialogImpl_Async<AbstractSignatureLineDialog, SignatureLineDialog>
 {
 public:
-    using ControllerImpl_BASE::ControllerImpl_BASE; // inherited ctor
+    using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
     void Apply() override { m_pDlg->Apply(); }
 };
 }
@@ -1519,17 +1514,16 @@ public:
 VclPtr<AbstractSignatureLineDialog> AbstractDialogFactory_Impl::CreateSignatureLineDialog(
     weld::Window* pParent, const Reference<XModel> xModel, bool bEditExisting)
 {
-    return VclPtr<AbstractSignatureLineDialog_Impl>::Create(
-        std::make_unique<SignatureLineDialog>(pParent, xModel, bEditExisting));
+    return VclPtr<AbstractSignatureLineDialog_Impl>::Create(pParent, xModel, bEditExisting);
 }
 
 namespace
 {
 class AbstractSignSignatureLineDialog_Impl final
-    : public ControllerImpl_Async<AbstractSignSignatureLineDialog, SignSignatureLineDialog>
+    : public vcl::AbstractDialogImpl_Async<AbstractSignSignatureLineDialog, SignSignatureLineDialog>
 {
 public:
-    using ControllerImpl_BASE::ControllerImpl_BASE; // inherited ctor
+    using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
     void Apply() override { m_pDlg->Apply(); }
 };
 }
@@ -1538,17 +1532,15 @@ VclPtr<AbstractSignSignatureLineDialog>
 AbstractDialogFactory_Impl::CreateSignSignatureLineDialog(weld::Window* pParent,
                                                           const Reference<XModel> xModel)
 {
-    return VclPtr<AbstractSignSignatureLineDialog_Impl>::Create(
-        std::make_unique<SignSignatureLineDialog>(pParent, xModel));
+    return VclPtr<AbstractSignSignatureLineDialog_Impl>::Create(pParent, xModel);
 }
 
 VclPtr<AbstractQrCodeGenDialog> AbstractDialogFactory_Impl::CreateQrCodeGenDialog(
     weld::Window* pParent, const Reference<XModel> xModel, bool bEditExisting)
 {
     using AbstractQrCodeGenDialog_Impl
-        = ControllerImpl_Async<AbstractQrCodeGenDialog, QrCodeGenDialog>;
-    return VclPtr<AbstractQrCodeGenDialog_Impl>::Create(
-        std::make_shared<QrCodeGenDialog>(pParent, xModel, bEditExisting));
+        = vcl::AbstractDialogImpl_Async<AbstractQrCodeGenDialog, QrCodeGenDialog>;
+    return VclPtr<AbstractQrCodeGenDialog_Impl>::Create(pParent, xModel, bEditExisting);
 }
 
 VclPtr<AbstractAdditionsDialog> AbstractDialogFactory_Impl::CreateAdditionsDialog(
@@ -1556,9 +1548,8 @@ VclPtr<AbstractAdditionsDialog> AbstractDialogFactory_Impl::CreateAdditionsDialo
 {
 #if HAVE_FEATURE_EXTENSIONS
     using AbstractAdditionsDialog_Impl
-        = ControllerImpl_Async<AbstractAdditionsDialog, weld::GenericDialogController>;
-    return VclPtr<AbstractAdditionsDialog_Impl>::Create(
-        std::make_unique<AdditionsDialog>(pParent, sAdditionsTag));
+        = vcl::AbstractDialogImpl_Async<AbstractAdditionsDialog, AdditionsDialog>;
+    return VclPtr<AbstractAdditionsDialog_Impl>::Create(pParent, sAdditionsTag);
 #else
     (void) pParent;
     (void) sAdditionsTag;
@@ -1569,16 +1560,14 @@ VclPtr<AbstractAdditionsDialog> AbstractDialogFactory_Impl::CreateAdditionsDialo
 VclPtr<VclAbstractDialog>
 AbstractDialogFactory_Impl::CreateAboutDialog(weld::Window* pParent)
 {
-    return VclPtr<CuiAbstractControllerAsync_Impl>::Create(
-        std::make_shared<AboutDialog>(pParent));
+    return VclPtr<CuiAbstractControllerAsync_Impl<AboutDialog>>::Create(pParent);
 }
 
 VclPtr<VclAbstractDialog>
 AbstractDialogFactory_Impl::CreateTipOfTheDayDialog(weld::Window* pParent)
 {
 #if !ENABLE_WASM_STRIP_PINGUSER
-    return VclPtr<CuiAbstractControllerAsync_Impl>::Create(
-        std::make_shared<TipOfTheDayDialog>(pParent));
+    return VclPtr<CuiAbstractControllerAsync_Impl<TipOfTheDayDialog>>::Create(pParent);
 #else
     (void) pParent;
     return nullptr;
@@ -1589,16 +1578,14 @@ VclPtr<VclAbstractDialog>
 AbstractDialogFactory_Impl::CreateWidgetTestDialog(weld::Window* pParent)
 {
     using CuiAbstractWidgetTestControllerAsync_Impl
-        = ControllerImpl_Async<VclAbstractDialog, weld::GenericDialogController>;
-    return VclPtr<CuiAbstractWidgetTestControllerAsync_Impl>::Create(
-        std::make_shared<WidgetTestDialog>(pParent));
+        = vcl::AbstractDialogImpl_Async<VclAbstractDialog, WidgetTestDialog>;
+    return VclPtr<CuiAbstractWidgetTestControllerAsync_Impl>::Create(pParent);
 }
 
 VclPtr<VclAbstractDialog>
 AbstractDialogFactory_Impl::CreateToolbarmodeDialog(weld::Window* pParent)
 {
-    return VclPtr<CuiAbstractController_Impl>::Create(
-        std::make_unique<ToolbarmodeDialog>(pParent));
+    return VclPtr<CuiAbstractController_Impl<ToolbarmodeDialog>>::Create(pParent);
 }
 
 VclPtr<AbstractDiagramDialog>
@@ -1606,9 +1593,9 @@ AbstractDialogFactory_Impl::CreateDiagramDialog(
     weld::Window* pParent,
     SdrObjGroup& rDiagram)
 {
-    using AbstractDiagramDialog_Impl = ControllerImpl_Async<AbstractDiagramDialog, DiagramDialog>;
-    return VclPtr<AbstractDiagramDialog_Impl>::Create(
-        std::make_unique<DiagramDialog>(pParent, rDiagram));
+    using AbstractDiagramDialog_Impl
+        = vcl::AbstractDialogImpl_Async<AbstractDiagramDialog, DiagramDialog>;
+    return VclPtr<AbstractDiagramDialog_Impl>::Create(pParent, rDiagram);
 }
 
 #ifdef _WIN32
@@ -1616,8 +1603,7 @@ VclPtr<VclAbstractDialog>
 AbstractDialogFactory_Impl::CreateFileExtCheckDialog(weld::Window* pParent, const OUString& sTitle,
                                                      const OUString& sMsg)
 {
-    return VclPtr<CuiAbstractController_Impl>::Create(
-        std::make_unique<FileExtCheckDialog>(pParent, sTitle, sMsg));
+    return VclPtr<CuiAbstractController_Impl<FileExtCheckDialog>>::Create(pParent, sTitle, sMsg);
 }
 #endif
 

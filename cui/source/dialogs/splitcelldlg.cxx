@@ -82,34 +82,4 @@ void SvxSplitTableDlg::SetSplitVerticalByDefault()
         m_xVertBox->set_active(true); // tdf#60242
 }
 
-bool SvxAbstractSplitTableDialog_Impl::IsHorizontal() const
-{
-    return m_xDlg->IsHorizontal();
-}
-
-bool SvxAbstractSplitTableDialog_Impl::IsProportional() const
-{
-    return m_xDlg->IsProportional();
-}
-
-tools::Long SvxAbstractSplitTableDialog_Impl::GetCount() const
-{
-    return m_xDlg->GetCount();
-}
-
-void SvxAbstractSplitTableDialog_Impl::SetSplitVerticalByDefault()
-{
-    m_xDlg->SetSplitVerticalByDefault();
-}
-
-short SvxAbstractSplitTableDialog_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
-bool SvxAbstractSplitTableDialog_Impl::StartExecuteAsync(AsyncContext& rContext)
-{
-    return weld::DialogController::runAsync(m_xDlg, rContext.maEndDialogFn);
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
