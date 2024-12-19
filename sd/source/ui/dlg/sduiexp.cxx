@@ -19,7 +19,9 @@
 
 #include "sddlgfact.hxx"
 #include <sal/types.h>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
 class SdAbstractDialogFactory;
