@@ -411,7 +411,7 @@ sal_uInt16 Window::getDefaultAccessibleRole() const
 sal_uInt16 Window::GetAccessibleRole() const
 {
     if (!mpWindowImpl)
-        return 0;
+        return accessibility::AccessibleRole::UNKNOWN;
 
     sal_uInt16 nRole = mpWindowImpl->mpAccessibleInfos ? mpWindowImpl->mpAccessibleInfos->nAccessibleRole : 0xFFFF;
     if ( nRole == 0xFFFF )
