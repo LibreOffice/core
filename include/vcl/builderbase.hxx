@@ -45,6 +45,7 @@ public:
     typedef stringmap Adjustment;
     typedef stringmap TextBuffer;
 
+    static OUString extractActionName(stringmap& rMap);
     static sal_Int32 extractActive(stringmap& rMap);
     static bool extractResizable(stringmap& rMap);
 
@@ -88,6 +89,7 @@ protected:
     static bool extractHeadersVisible(stringmap& rMap);
     static bool extractEntry(stringmap& rMap);
     static OUString extractIconName(stringmap& rMap);
+    static OUString extractLabel(stringmap& rMap);
     static bool extractShowExpanders(stringmap& rMap);
     static OUString extractTitle(stringmap& rMap);
     static OUString extractTooltipText(stringmap& rMap);

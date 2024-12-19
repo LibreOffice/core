@@ -953,16 +953,6 @@ namespace
         return nBits;
     }
 
-    OUString extractLabel(VclBuilder::stringmap &rMap)
-    {
-        return extractStringEntry(rMap, u"label"_ustr);
-    }
-
-    OUString extractActionName(VclBuilder::stringmap &rMap)
-    {
-        return extractStringEntry(rMap, u"action-name"_ustr);
-    }
-
     Size extractSizeRequest(VclBuilder::stringmap &rMap)
     {
         OUString sWidthRequest(u"0"_ustr);
@@ -1009,7 +999,7 @@ namespace
         if (!rFrame.is())
             return;
 
-        OUString aCommand(extractActionName(rMap));
+        OUString aCommand(BuilderBase::extractActionName(rMap));
         if (aCommand.isEmpty())
             return;
 
@@ -3355,6 +3345,11 @@ bool BuilderBase::hasOrientationVertical(VclBuilder::stringmap &rMap)
     return bVertical;
 }
 
+OUString BuilderBase::extractActionName(stringmap& rMap)
+{
+    return extractStringEntry(rMap, u"action-name"_ustr);
+}
+
 sal_Int32 BuilderBase::extractActive(VclBuilder::stringmap& rMap)
 {
     sal_Int32 nActiveId = 0;
@@ -3401,6 +3396,11 @@ OUString BuilderBase::extractIconName(VclBuilder::stringmap &rMap)
         return OUString();
     OUString sReplace = mapStockToImageResource(sIconName);
     return !sReplace.isEmpty() ? sReplace : sIconName;
+}
+
+OUString BuilderBase::extractLabel(VclBuilder::stringmap& rMap)
+{
+    return extractStringEntry(rMap, u"label"_ustr);
 }
 
 bool BuilderBase::extractResizable(stringmap& rMap)
