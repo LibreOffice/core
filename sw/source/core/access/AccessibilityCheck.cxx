@@ -2653,7 +2653,8 @@ void AccessibilityCheck::checkObject(SwNode* pCurrent, SdrObject* pObject)
         || nObjId == SdrObjKind::Media || nObjId == SdrObjKind::Group
         || nObjId == SdrObjKind::Graphic || nInv == SdrInventor::FmForm)
     {
-        if (pObject->GetTitle().isEmpty() && pObject->GetDescription().isEmpty())
+        if (!pObject->IsDecorative() && pObject->GetTitle().isEmpty()
+            && pObject->GetDescription().isEmpty())
         {
             const OUString& sName = pObject->GetName();
             OUString sIssueText = SwResId(STR_NO_ALT).replaceAll("%OBJECT_NAME%", sName);
