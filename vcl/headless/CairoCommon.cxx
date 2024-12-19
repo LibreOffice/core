@@ -2022,7 +2022,7 @@ std::optional<BitmapBuffer> FastConvert24BitRgbTo32BitCairo(const BitmapBuffer* 
         {
 #if ENABLE_CAIRO_RGBA
             static_assert(SVP_CAIRO_FORMAT == ScanlineFormat::N32BitTcRgba,
-                          "Expected SVP_CAIRO_FORMAT set to N32BitTcBgra");
+                          "Expected SVP_CAIRO_FORMAT set to N32BitTcRgba");
             static_assert(SVP_24BIT_FORMAT == ScanlineFormat::N24BitTcRgb,
                           "Expected SVP_24BIT_FORMAT set to N24BitTcRgb");
             pD[0] = pS[0];
@@ -2031,7 +2031,7 @@ std::optional<BitmapBuffer> FastConvert24BitRgbTo32BitCairo(const BitmapBuffer* 
             pD[3] = 0xff; // Alpha
 #elif defined OSL_BIGENDIAN
             static_assert(SVP_CAIRO_FORMAT == ScanlineFormat::N32BitTcArgb,
-                          "Expected SVP_CAIRO_FORMAT set to N32BitTcBgra");
+                          "Expected SVP_CAIRO_FORMAT set to N32BitTcArgb");
             static_assert(SVP_24BIT_FORMAT == ScanlineFormat::N24BitTcRgb,
                           "Expected SVP_24BIT_FORMAT set to N24BitTcRgb");
             pD[0] = 0xff; // Alpha
