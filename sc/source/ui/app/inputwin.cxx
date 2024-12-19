@@ -2252,7 +2252,7 @@ void ScTextWnd::TextGrabFocus()
 
 // Position window
 ScPosWnd::ScPosWnd(vcl::Window* pParent, ScTabViewShell* pViewShell)
-    : InterimItemWindow(pParent, u"modules/scalc/ui/posbox.ui"_ustr, u"PosBox"_ustr, false,
+    : InterimItemWindow(pParent, u"modules/scalc/ui/posbox.ui"_ustr, u"PosBox"_ustr, true,
                         reinterpret_cast<sal_uInt64>(pViewShell))
     , m_xWidget(m_xBuilder->weld_combo_box(u"pos_window"_ustr))
     , m_nAsyncGetFocusId(nullptr)
