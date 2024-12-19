@@ -229,7 +229,7 @@ sal_uInt16 Window::getDefaultAccessibleRole() const
     sal_uInt16 nRole = accessibility::AccessibleRole::UNKNOWN;
     switch (GetType())
     {
-        case WindowType::MESSBOX: // MT: Would be nice to have special roles!
+        case WindowType::MESSBOX:
         case WindowType::INFOBOX:
         case WindowType::WARNINGBOX:
         case WindowType::ERRORBOX:
