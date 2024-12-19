@@ -193,8 +193,7 @@ void AccTopWindowListener::windowClosed( const css::lang::EventObject& e )
     }
 
     m_aAccObjectManager.DeleteChildrenAccObj(xAccessible.get());
-    if( role != css::accessibility::AccessibleRole::POPUP_MENU )
-        m_aAccObjectManager.DeleteAccObj(xAccessible.get());
+    m_aAccObjectManager.DeleteAccObj(xAccessible.get());
 }
 
 void AccTopWindowListener::windowMinimized( const css::lang::EventObject& )
