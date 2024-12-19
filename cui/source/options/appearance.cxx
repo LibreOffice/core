@@ -35,7 +35,7 @@ struct BitmapData
 
 std::vector<BitmapData> const& getBitmapList()
 {
-    static std::vector<BitmapData> m_aBitmapList = {
+    static const std::vector<BitmapData> aBitmapList = {
         { CuiResId(BMP_FUZZY_LIGHTGREY), "fuzzy-lightgrey.jpg" },
         { CuiResId(BMP_ICE_LIGHT), "ice-light.jpg" },
         { CuiResId(BMP_PAINTED_WHITE), "painted-white.jpg" },
@@ -82,7 +82,7 @@ std::vector<BitmapData> const& getBitmapList()
         { CuiResId(BMP_TIGER), "tiger.jpg" },
         { CuiResId(BMP_ZEBRA), "zebra.png" },
     };
-    return m_aBitmapList;
+    return aBitmapList;
 }
 }
 
@@ -120,9 +120,6 @@ void SvxAppearanceTabPage::UpdateControlsState()
 {
     // in case of AUTOMATIC_COLOR_SCHEME, disable all the controls
     bool bEnableControls = m_xSchemeList->get_active_id() != AUTOMATIC_COLOR_SCHEME;
-    m_xAppearanceSystem->set_sensitive(bEnableControls);
-    m_xAppearanceLight->set_sensitive(bEnableControls);
-    m_xAppearanceDark->set_sensitive(bEnableControls);
     m_xColorEntryBtn->set_sensitive(bEnableControls);
     m_xColorChangeBtn->set_sensitive(bEnableControls);
     m_xShowInDocumentChkBtn->set_sensitive(bEnableControls);
@@ -184,6 +181,12 @@ bool SvxAppearanceTabPage::FillItemSet(SfxItemSet* /* rSet */)
     {
         MiscSettings::SetAppColorMode(static_cast<int>(eCurrentAppearanceMode));
         m_bRestartRequired = true;
+        // for automatic scheme, restart is not required as customizations section is disabled
+        if (pColorConfig->GetCurrentSchemeName() == AUTOMATIC_COLOR_SCHEME)
+        {
+            UpdateOldAppearance();
+            m_bRestartRequired = false;
+        }
     }
 
     // commit ColorConfig
@@ -563,6 +566,26 @@ void SvxAppearanceTabPage::UpdateColorDropdown()
         m_xColorChangeBtn->SelectEntry(rCurrentEntryColor.nLightColor);
 }
 
+// if the user changes appearance options for automatic theme, then follow the old behaviour
+// and change the document colors to light/dark based on the choice.
+void SvxAppearanceTabPage::UpdateOldAppearance()
+{
+    if (pColorConfig->GetCurrentSchemeName() != AUTOMATIC_COLOR_SCHEME)
+        return;
+
+    ColorConfigValue aValue;
+    bool bIsDarkModeEnabled = IsDarkModeEnabled();
+    for (size_t i = 0; i < WINDOWCOLOR; ++i)
+    {
+        if (bIsDarkModeEnabled)
+            aValue.nDarkColor = ColorConfig::GetDefaultColor(static_cast<ColorConfigEntry>(i), 1);
+        else
+            aValue.nLightColor = ColorConfig::GetDefaultColor(static_cast<ColorConfigEntry>(i), 0);
+
+        pColorConfig->SetColorValue(static_cast<ColorConfigEntry>(i), aValue);
+    }
+}
+
 bool SvxAppearanceTabPage::IsDarkModeEnabled()
 {
     return eCurrentAppearanceMode == Appearance::DARK
@@ -571,7 +594,7 @@ bool SvxAppearanceTabPage::IsDarkModeEnabled()
 
 void SvxAppearanceTabPage::FillItemsList()
 {
-    static std::map<ColorConfigEntry, OUString> m_aRegistryEntries
+    static const std::map<ColorConfigEntry, OUString> aRegistryEntries
         = { { DOCCOLOR, CuiResId(REG_DOCCOLOR) },
             { DOCBOUNDARIES, CuiResId(REG_DOCBOUNDARIES) },
             { APPBACKGROUND, CuiResId(REG_APPBACKGROUND) },
@@ -667,45 +690,45 @@ void SvxAppearanceTabPage::FillItemsList()
 
     for (size_t i = DOCCOLOR; i <= SHADOWCOLOR; ++i)
         m_xColorEntryBtn->append(OUString(cNames[i].cName),
-                                 m_aRegistryEntries[static_cast<ColorConfigEntry>(i)]);
+                                 aRegistryEntries.at(static_cast<ColorConfigEntry>(i)));
     m_xColorEntryBtn->append_separator("SeparatorID");
 
     for (size_t i = WRITERTEXTGRID; i <= WRITERNONPRINTCHARS; ++i)
         m_xColorEntryBtn->append(OUString(cNames[i].cName),
-                                 m_aRegistryEntries[static_cast<ColorConfigEntry>(i)]);
+                                 aRegistryEntries.at(static_cast<ColorConfigEntry>(i)));
     m_xColorEntryBtn->append_separator("SeparatorID");
 
     for (size_t i = HTMLSGML; i <= HTMLUNKNOWN; ++i)
         m_xColorEntryBtn->append(OUString(cNames[i].cName),
-                                 m_aRegistryEntries[static_cast<ColorConfigEntry>(i)]);
+                                 aRegistryEntries.at(static_cast<ColorConfigEntry>(i)));
     m_xColorEntryBtn->append_separator("SeparatorID");
 
     for (size_t i = CALCGRID; i <= CALCPROTECTEDBACKGROUND; ++i)
         m_xColorEntryBtn->append(OUString(cNames[i].cName),
-                                 m_aRegistryEntries[static_cast<ColorConfigEntry>(i)]);
+                                 aRegistryEntries.at(static_cast<ColorConfigEntry>(i)));
     m_xColorEntryBtn->append_separator("SeparatorID");
 
-    m_xColorEntryBtn->append(OUString(cNames[DRAWGRID].cName), m_aRegistryEntries[DRAWGRID]);
+    m_xColorEntryBtn->append(OUString(cNames[DRAWGRID].cName), aRegistryEntries.at(DRAWGRID));
     m_xColorEntryBtn->append_separator("SeparatorID");
 
     for (size_t i = AUTHOR1; i <= AUTHOR9; ++i)
         m_xColorEntryBtn->append(OUString(cNames[i].cName),
-                                 m_aRegistryEntries[static_cast<ColorConfigEntry>(i)]);
+                                 aRegistryEntries.at(static_cast<ColorConfigEntry>(i)));
     m_xColorEntryBtn->append_separator("SeparatorID");
 
     for (size_t i = BASICEDITOR; i <= BASICERROR; ++i)
         m_xColorEntryBtn->append(OUString(cNames[i].cName),
-                                 m_aRegistryEntries[static_cast<ColorConfigEntry>(i)]);
+                                 aRegistryEntries.at(static_cast<ColorConfigEntry>(i)));
     m_xColorEntryBtn->append_separator("SeparatorID");
 
     for (size_t i = SQLIDENTIFIER; i <= SQLCOMMENT; ++i)
         m_xColorEntryBtn->append(OUString(cNames[i].cName),
-                                 m_aRegistryEntries[static_cast<ColorConfigEntry>(i)]);
+                                 aRegistryEntries.at(static_cast<ColorConfigEntry>(i)));
     m_xColorEntryBtn->append_separator("SeparatorID");
 
     for (size_t i = WINDOWCOLOR; i <= INACTIVEBORDERCOLOR; ++i)
         m_xColorEntryBtn->append(OUString(cNames[i].cName),
-                                 m_aRegistryEntries[static_cast<ColorConfigEntry>(i)]);
+                                 aRegistryEntries.at(static_cast<ColorConfigEntry>(i)));
 }
 
 size_t SvxAppearanceTabPage::GetActiveEntry()
