@@ -1650,20 +1650,6 @@ bool ImpEditEngine::IsInputSequenceCheckingRequired( sal_Unicode nChar, const Ed
     return bIsSequenceChecking;
 }
 
-static  bool lcl_HasStrongLTR ( std::u16string_view rTxt, sal_Int32 nStart, sal_Int32 nEnd )
- {
-     for( sal_Int32 nCharIdx = nStart; nCharIdx < nEnd; ++nCharIdx )
-     {
-         const UCharDirection nCharDir = u_charDirection ( rTxt[ nCharIdx ] );
-         if ( nCharDir == U_LEFT_TO_RIGHT ||
-              nCharDir == U_LEFT_TO_RIGHT_EMBEDDING ||
-              nCharDir == U_LEFT_TO_RIGHT_OVERRIDE )
-             return true;
-     }
-     return false;
- }
-
-
 void ImpEditEngine::InitScriptTypes( sal_Int32 nPara )
 {
     ParaPortion* pParaPortion = GetParaPortions().SafeGetObject( nPara );
@@ -1716,8 +1702,10 @@ void ImpEditEngine::InitScriptTypes( sal_Int32 nPara )
         pField = pField->GetEnd() ? pNode->GetCharAttribs().FindNextAttrib( EE_FEATURE_FIELD, pField->GetEnd() ) : nullptr;
     }
 
+    const UBiDiLevel nInitialBidiLevel = IsRightToLeft(nPara) ? 1 /*RTL*/ : 0 /*LTR*/;
+    auto pDirScanner = i18nutil::MakeDirectionChangeScanner(aText, nInitialBidiLevel);
     auto pScriptScanner = i18nutil::MakeScriptChangeScanner(
-        aText, SvtLanguageOptions::GetI18NScriptTypeOfLanguage(GetDefaultLanguage()));
+        aText, SvtLanguageOptions::GetI18NScriptTypeOfLanguage(GetDefaultLanguage()), *pDirScanner);
     while (!pScriptScanner->AtEnd() || rTypes.empty())
     {
         auto stChange = pScriptScanner->Peek();
@@ -1730,47 +1718,6 @@ void ImpEditEngine::InitScriptTypes( sal_Int32 nPara )
     WritingDirectionInfos& rDirInfos = pParaPortion->getWritingDirectionInfos();
     if (rDirInfos.empty())
         InitWritingDirections( nPara );
-
-    // i89825: Use CTL font for numbers embedded into an RTL run:
-    for (const WritingDirectionInfo & rDirInfo : rDirInfos)
-    {
-        const sal_Int32 nStart = rDirInfo.nStartPos;
-        const sal_Int32 nEnd   = rDirInfo.nEndPos;
-        const sal_uInt8 nCurrDirType = rDirInfo.nType;
-
-        if ( nCurrDirType % 2 == UBIDI_RTL  || // text in RTL run
-            ( nCurrDirType > UBIDI_LTR && !lcl_HasStrongLTR( aText, nStart, nEnd ) ) ) // non-strong text in embedded LTR run
-        {
-            size_t nIdx = 0;
-
-            // Skip entries in ScriptArray which are not inside the RTL run:
-            while ( nIdx < rTypes.size() && rTypes[nIdx].nStartPos < nStart )
-                ++nIdx;
-
-            // Remove any entries *inside* the current run:
-            while (nIdx < rTypes.size() && rTypes[nIdx].nEndPos <= nEnd)
-            {
-                // coverity[use_iterator] - we're protected from a bad iterator by the above condition
-                rTypes.erase(rTypes.begin() + nIdx);
-            }
-
-            // special case:
-            if(nIdx < rTypes.size() && rTypes[nIdx].nStartPos < nStart && rTypes[nIdx].nEndPos > nEnd)
-            {
-                rTypes.insert( rTypes.begin()+nIdx, ScriptTypePosInfo( rTypes[nIdx].nScriptType, nEnd, rTypes[nIdx].nEndPos ) );
-                rTypes[nIdx].nEndPos = nStart;
-            }
-
-            if( nIdx )
-                rTypes[nIdx - 1].nEndPos = nStart;
-
-            rTypes.insert( rTypes.begin()+nIdx, ScriptTypePosInfo( i18n::ScriptType::COMPLEX, nStart, nEnd) );
-            ++nIdx;
-
-            if( nIdx < rTypes.size() )
-                rTypes[nIdx].nStartPos = nEnd;
-        }
-    }
 }
 
 namespace {

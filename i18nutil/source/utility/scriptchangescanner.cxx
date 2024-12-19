@@ -11,6 +11,7 @@
 #include <i18nutil/unicode.hxx>
 #include <i18nutil/scriptclass.hxx>
 #include <unicode/uchar.h>
+#include <unicode/ubidi.h>
 #include <sal/log.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/CharType.hpp>
@@ -24,10 +25,112 @@ namespace
 {
 constexpr sal_uInt32 CHAR_NNBSP = 0x202f;
 
+class IcuDirectionChangeScanner : public DirectionChangeScanner
+{
+private:
+    const OUString& m_rText;
+    UBiDi* m_pBidi;
+    DirectionChange m_stCurr;
+    UBiDiLevel m_nInitialDirection;
+    int32_t m_nCurrIndex = 0;
+    int m_nCount = 0;
+    int m_nCurr = 0;
+    bool m_bAtEnd = false;
+
+    bool RangeHasStrongLTR(sal_Int32 nStart, sal_Int32 nEnd)
+    {
+        for (sal_Int32 nCharIdx = nStart; nCharIdx < nEnd; ++nCharIdx)
+        {
+            auto nCharDir = u_charDirection(m_rText[nCharIdx]);
+            if (nCharDir == U_LEFT_TO_RIGHT || nCharDir == U_LEFT_TO_RIGHT_EMBEDDING
+                || nCharDir == U_LEFT_TO_RIGHT_OVERRIDE)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    void PopulateCurr()
+    {
+        int32_t nEndIndex = 0;
+        UBiDiLevel nCurrLevel = 0;
+        ubidi_getLogicalRun(m_pBidi, m_nCurrIndex, &nEndIndex, &nCurrLevel);
+
+        bool bHasEmbeddedStrongLTR = false;
+        if ((nCurrLevel % 2) == UBIDI_LTR && nCurrLevel > UBIDI_RTL)
+        {
+            bHasEmbeddedStrongLTR = RangeHasStrongLTR(m_nCurrIndex, nEndIndex);
+        }
+
+        m_stCurr = { m_nCurrIndex, nEndIndex, nCurrLevel, bHasEmbeddedStrongLTR };
+
+        m_nCurrIndex = nEndIndex;
+        ++m_nCurr;
+
+        m_bAtEnd = false;
+    }
+
+public:
+    IcuDirectionChangeScanner(const OUString& rText, UBiDiLevel nInitialDirection)
+        : m_rText(rText)
+        , m_nInitialDirection(nInitialDirection)
+    {
+        UErrorCode nError = U_ZERO_ERROR;
+        m_pBidi = ubidi_openSized(rText.getLength(), 0, &nError);
+        nError = U_ZERO_ERROR;
+
+        ubidi_setPara(m_pBidi, reinterpret_cast<const UChar*>(rText.getStr()), rText.getLength(),
+                      nInitialDirection, nullptr, &nError);
+        nError = U_ZERO_ERROR;
+
+        m_nCount = ubidi_countRuns(m_pBidi, &nError);
+        Reset();
+    }
+
+    ~IcuDirectionChangeScanner() override { ubidi_close(m_pBidi); }
+
+    void Reset() override
+    {
+        m_nCurrIndex = 0;
+        m_nCurr = 0;
+        m_stCurr = { /*start*/ 0, /*end*/ 0, /*level*/ m_nInitialDirection,
+                     /*has embedded strong LTR*/ false };
+        m_bAtEnd = true;
+
+        if (m_nCurr < m_nCount)
+        {
+            PopulateCurr();
+        }
+    }
+
+    bool AtEnd() const override { return m_bAtEnd; }
+
+    void Advance() override
+    {
+        if (m_nCurr >= m_nCount)
+        {
+            m_bAtEnd = true;
+            return;
+        }
+
+        PopulateCurr();
+    }
+
+    DirectionChange Peek() const override { return m_stCurr; }
+
+    UBiDiLevel GetLevelAt(sal_Int32 nIndex) const override
+    {
+        return ubidi_getLevelAt(m_pBidi, nIndex);
+    }
+};
+
 class GreedyScriptChangeScanner : public ScriptChangeScanner
 {
 private:
     ScriptChange m_stCurr;
+    DirectionChangeScanner* m_pDirScanner;
     const OUString& m_rText;
     sal_Int16 m_nPrevScript;
     sal_Int32 m_nIndex = 0;
@@ -35,8 +138,10 @@ private:
     bool m_bApplyAsianToWeakQuotes = false;
 
 public:
-    GreedyScriptChangeScanner(const OUString& rText, sal_Int16 nDefaultScriptType)
-        : m_rText(rText)
+    GreedyScriptChangeScanner(const OUString& rText, sal_Int16 nDefaultScriptType,
+                              DirectionChangeScanner* pDirScanner)
+        : m_pDirScanner(pDirScanner)
+        , m_rText(rText)
         , m_nPrevScript(nDefaultScriptType)
     {
         // tdf#66791: For compatibility with other programs, the Asian script is
@@ -95,9 +200,40 @@ public:
         while (m_nIndex < m_rText.getLength())
         {
             auto nPrevIndex = m_nIndex;
+            auto nBidiLevel = m_pDirScanner->GetLevelAt(m_nIndex);
+
+            bool bCharIsRtl = (nBidiLevel % 2 == UBIDI_RTL);
+            bool bCharIsRtlOrEmbedded = (nBidiLevel > UBIDI_LTR);
+            bool bRunHasStrongEmbeddedLTR = false;
+
+            while (bCharIsRtlOrEmbedded && !m_pDirScanner->AtEnd())
+            {
+                const auto stDirRun = m_pDirScanner->Peek();
+                if (m_nIndex >= stDirRun.m_nStartIndex && m_nIndex < stDirRun.m_nEndIndex)
+                {
+                    bRunHasStrongEmbeddedLTR = stDirRun.m_bHasEmbeddedStrongLTR;
+                    break;
+                }
+
+                m_pDirScanner->Advance();
+            }
+
             auto nChar = m_rText.iterateCodePoints(&m_nIndex);
             nScript = GetScriptClass(nChar);
-            if (nScript == css::i18n::ScriptType::WEAK)
+
+            // #i16354# Change script type for RTL text to CTL:
+            // 1. All text in RTL runs will use the CTL font
+            // #i89825# change the script type also to CTL (hennerdrewes)
+            // 2. Text in embedded LTR runs that does not have any strong LTR characters (numbers!)
+            // tdf#163660 Asian-script characters inside RTL runs should still use Asian font
+            if (bCharIsRtl || (bCharIsRtlOrEmbedded && !bRunHasStrongEmbeddedLTR))
+            {
+                if (nScript != css::i18n::ScriptType::ASIAN)
+                {
+                    nScript = css::i18n::ScriptType::COMPLEX;
+                }
+            }
+            else if (nScript == css::i18n::ScriptType::WEAK)
             {
                 nScript = m_nPrevScript;
                 if (m_bApplyAsianToWeakQuotes)
@@ -151,10 +287,17 @@ public:
 }
 }
 
-std::unique_ptr<i18nutil::ScriptChangeScanner>
-i18nutil::MakeScriptChangeScanner(const OUString& rText, sal_Int16 nDefaultScriptType)
+std::unique_ptr<i18nutil::DirectionChangeScanner>
+i18nutil::MakeDirectionChangeScanner(const OUString& rText, sal_uInt8 nInitialDirection)
 {
-    return std::make_unique<GreedyScriptChangeScanner>(rText, nDefaultScriptType);
+    return std::make_unique<IcuDirectionChangeScanner>(rText, nInitialDirection);
+}
+
+std::unique_ptr<i18nutil::ScriptChangeScanner>
+i18nutil::MakeScriptChangeScanner(const OUString& rText, sal_Int16 nDefaultScriptType,
+                                  DirectionChangeScanner& rDirScanner)
+{
+    return std::make_unique<GreedyScriptChangeScanner>(rText, nDefaultScriptType, &rDirScanner);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

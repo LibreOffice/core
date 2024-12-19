@@ -86,19 +86,6 @@
 using namespace ::com::sun::star;
 using namespace i18n::ScriptType;
 
-static  bool lcl_HasStrongLTR ( std::u16string_view rText, sal_Int32 nStart, sal_Int32 nEnd )
- {
-     for( sal_Int32 nCharIdx = nStart; nCharIdx < nEnd; ++nCharIdx )
-     {
-         const UCharDirection nCharDir = u_charDirection ( rText[ nCharIdx ] );
-         if ( nCharDir == U_LEFT_TO_RIGHT ||
-              nCharDir == U_LEFT_TO_RIGHT_EMBEDDING ||
-              nCharDir == U_LEFT_TO_RIGHT_OVERRIDE )
-             return true;
-     }
-     return false;
- }
-
 // This is (meant to be) functionally equivalent to 'delete m_pNext' where
 // deleting a SwLineLayout recursively deletes the owned m_pNext SwLineLayout.
 //
@@ -1412,8 +1399,9 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
     m_Kashida.erase(m_Kashida.begin() + nCntKash, m_Kashida.end());
 
     // Construct the script change scanner and advance it to the change range
+    auto pDirScanner = i18nutil::MakeDirectionChangeScanner(rText, m_nDefaultDir);
     auto pScriptScanner = i18nutil::MakeScriptChangeScanner(
-        rText, SvtLanguageOptions::GetI18NScriptTypeOfLanguage(GetAppLanguage()));
+        rText, SvtLanguageOptions::GetI18NScriptTypeOfLanguage(GetAppLanguage()), *pDirScanner);
     while (!pScriptScanner->AtEnd())
     {
         if (pScriptScanner->Peek().m_nStartIndex <= static_cast<sal_Int32>(nChg))
@@ -1581,109 +1569,15 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
     m_DirectionChanges.clear();
 
     // Perform Unicode Bidi Algorithm for text direction information
+    pDirScanner->Reset();
+    while (!pDirScanner->AtEnd())
     {
-        UpdateBidiInfo( rText );
+        auto stDirChange = pDirScanner->Peek();
+        m_DirectionChanges.emplace_back(TextFrameIndex{ stDirChange.m_nEndIndex },
+                                        stDirChange.m_nLevel);
 
-        // #i16354# Change script type for RTL text to CTL:
-        // 1. All text in RTL runs will use the CTL font
-        // #i89825# change the script type also to CTL (hennerdrewes)
-        // 2. Text in embedded LTR runs that does not have any strong LTR characters (numbers!)
-        for (size_t nDirIdx = 0; nDirIdx < m_DirectionChanges.size(); ++nDirIdx)
-        {
-            const sal_uInt8 nCurrDirType = GetDirType( nDirIdx );
-                // nStart is start of RTL run:
-            const TextFrameIndex nStart = nDirIdx > 0 ? GetDirChg(nDirIdx - 1) : TextFrameIndex(0);
-                // nEnd is end of RTL run:
-            const TextFrameIndex nEnd = GetDirChg( nDirIdx );
-
-            if ( nCurrDirType % 2 == UBIDI_RTL  || // text in RTL run
-                (nCurrDirType > UBIDI_LTR && // non-strong text in embedded LTR run
-                 !lcl_HasStrongLTR(rText, sal_Int32(nStart), sal_Int32(nEnd))))
-            {
-                // nScriptIdx points into the ScriptArrays:
-                size_t nScriptIdx = 0;
-
-                // Skip entries in ScriptArray which are not inside the RTL run:
-                // Make nScriptIdx become the index of the script group with
-                // 1. nStartPosOfGroup <= nStart and
-                // 2. nEndPosOfGroup > nStart
-                while ( GetScriptChg( nScriptIdx ) <= nStart )
-                    ++nScriptIdx;
-
-                const TextFrameIndex nStartPosOfGroup = nScriptIdx
-                        ? GetScriptChg(nScriptIdx - 1)
-                        : TextFrameIndex(0);
-                const sal_uInt8 nScriptTypeOfGroup = GetScriptType( nScriptIdx );
-
-                SAL_WARN_IF( nStartPosOfGroup > nStart || GetScriptChg( nScriptIdx ) <= nStart,
-                        "sw.core", "Script override with CTL font trouble" );
-
-                // Check if we have to insert a new script change at
-                // position nStart. If nStartPosOfGroup < nStart,
-                // we have to insert a new script change:
-                if (nStart > TextFrameIndex(0) && nStartPosOfGroup < nStart)
-                {
-                    m_ScriptChanges.insert(m_ScriptChanges.begin() + nScriptIdx,
-                                          ScriptChangeInfo(nStart, nScriptTypeOfGroup) );
-                    ++nScriptIdx;
-                }
-
-                // Remove entries in ScriptArray which end inside the RTL run:
-                while (nScriptIdx < m_ScriptChanges.size()
-                       && GetScriptChg(nScriptIdx) <= nEnd)
-                {
-                    m_ScriptChanges.erase(m_ScriptChanges.begin() + nScriptIdx);
-                }
-
-                // Insert a new entry in ScriptArray for the end of the RTL run:
-                m_ScriptChanges.insert(m_ScriptChanges.begin() + nScriptIdx,
-                                      ScriptChangeInfo(nEnd, i18n::ScriptType::COMPLEX) );
-
-#if OSL_DEBUG_LEVEL > 1
-                // Check that ScriptChangeInfos are in increasing order of
-                // position and that we don't have "empty" changes.
-                sal_uInt8 nLastTyp = i18n::ScriptType::WEAK;
-                TextFrameIndex nLastPos = TextFrameIndex(0);
-                for (const auto& rScriptChange : m_ScriptChanges)
-                {
-                    SAL_WARN_IF( nLastTyp == rScriptChange.type ||
-                            nLastPos >= rScriptChange.position,
-                            "sw.core", "Heavy InitScriptType() confusion" );
-                    nLastPos = rScriptChange.position;
-                    nLastTyp = rScriptChange.type;
-                }
-#endif
-            }
-        }
+        pDirScanner->Advance();
     }
-}
-
-void SwScriptInfo::UpdateBidiInfo( const OUString& rText )
-{
-    // remove invalid entries from direction information arrays
-    m_DirectionChanges.clear();
-
-    // Bidi functions from icu 2.0
-
-    UErrorCode nError = U_ZERO_ERROR;
-    UBiDi* pBidi = ubidi_openSized( rText.getLength(), 0, &nError );
-    nError = U_ZERO_ERROR;
-
-    ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(rText.getStr()), rText.getLength(),
-                   m_nDefaultDir, nullptr, &nError );
-    nError = U_ZERO_ERROR;
-    int nCount = ubidi_countRuns( pBidi, &nError );
-    int32_t nStart = 0;
-    int32_t nEnd;
-    UBiDiLevel nCurrDir;
-    for ( int nIdx = 0; nIdx < nCount; ++nIdx )
-    {
-        ubidi_getLogicalRun( pBidi, nStart, &nEnd, &nCurrDir );
-        m_DirectionChanges.emplace_back(TextFrameIndex(nEnd), nCurrDir);
-        nStart = nEnd;
-    }
-
-    ubidi_close( pBidi );
 }
 
 // returns the position of the next character which belongs to another script
