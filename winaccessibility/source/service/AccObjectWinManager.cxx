@@ -717,13 +717,11 @@ AccObjectWinManager::CreateAccEventListener(XAccessible* pXAcc)
             pRet = new AccDialogEventListener(pXAcc, *this);
             break;
         case AccessibleRole::FRAME:
+        case AccessibleRole::ROOT_PANE:
             pRet = new AccFrameEventListener(pXAcc, *this);
             break;
         case AccessibleRole::WINDOW:
             pRet = new AccWindowEventListener(pXAcc, *this);
-            break;
-        case AccessibleRole::ROOT_PANE:
-            pRet = new AccFrameEventListener(pXAcc, *this);
             break;
             //Container
         case AccessibleRole::CANVAS:
