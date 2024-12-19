@@ -1307,7 +1307,16 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
 
     rOutMtf.Clear();
 
+#ifdef MACOSX
+    // tdf#164354 skip unnecessary transparency removal
+    // On macOS, there are no known problems drawing semi-transparent
+    // shapes, fill, text, and bitmaps so only do this sometimes very
+    // expensive step when both reduce transparency and no
+    // transparency are true.
+    if(bReduceTransparency && !bTransparencyAutoMode)
+#else
     if(!bReduceTransparency || bTransparencyAutoMode)
+#endif
         bTransparent = rInMtf.HasTransparentActions();
 
     // #i10613# Determine set of connected components containing transparent objects. These are
