@@ -44,7 +44,7 @@ using namespace ::com::sun::star;
 
 ImplAccessibleInfos::ImplAccessibleInfos()
 {
-    nAccessibleRole = 0xFFFF;
+    nAccessibleRole = accessibility::AccessibleRole::UNKNOWN;
     pLabeledByWindow = nullptr;
     pLabelForWindow = nullptr;
 }
@@ -220,13 +220,13 @@ void Window::SetAccessibleRole( sal_uInt16 nRole )
     if ( !mpWindowImpl->mpAccessibleInfos )
         mpWindowImpl->mpAccessibleInfos.reset( new ImplAccessibleInfos );
 
-    SAL_WARN_IF( mpWindowImpl->mpAccessibleInfos->nAccessibleRole != 0xFFFF, "vcl", "AccessibleRole already set!" );
+    SAL_WARN_IF( mpWindowImpl->mpAccessibleInfos->nAccessibleRole != accessibility::AccessibleRole::UNKNOWN, "vcl", "AccessibleRole already set!" );
     mpWindowImpl->mpAccessibleInfos->nAccessibleRole = nRole;
 }
 
 sal_uInt16 Window::getDefaultAccessibleRole() const
 {
-    sal_uInt16 nRole = 0xFFFF;
+    sal_uInt16 nRole = accessibility::AccessibleRole::UNKNOWN;
     switch (GetType())
     {
         case WindowType::MESSBOX: // MT: Would be nice to have special roles!
@@ -413,8 +413,10 @@ sal_uInt16 Window::GetAccessibleRole() const
     if (!mpWindowImpl)
         return accessibility::AccessibleRole::UNKNOWN;
 
-    sal_uInt16 nRole = mpWindowImpl->mpAccessibleInfos ? mpWindowImpl->mpAccessibleInfos->nAccessibleRole : 0xFFFF;
-    if ( nRole == 0xFFFF )
+    sal_uInt16 nRole = mpWindowImpl->mpAccessibleInfos
+                           ? mpWindowImpl->mpAccessibleInfos->nAccessibleRole
+                           : accessibility::AccessibleRole::UNKNOWN;
+    if (nRole == accessibility::AccessibleRole::UNKNOWN)
         nRole = getDefaultAccessibleRole();
     return nRole;
 }
