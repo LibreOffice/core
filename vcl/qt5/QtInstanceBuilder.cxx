@@ -28,6 +28,7 @@
 #include <QtInstanceNotebook.hxx>
 #include <QtInstanceProgressBar.hxx>
 #include <QtInstanceRadioButton.hxx>
+#include <QtInstanceScale.hxx>
 #include <QtInstanceScrolledWindow.hxx>
 #include <QtInstanceSpinButton.hxx>
 #include <QtInstanceTextView.hxx>
@@ -246,10 +247,12 @@ std::unique_ptr<weld::CheckButton> QtInstanceBuilder::weld_check_button(const OU
     return xRet;
 }
 
-std::unique_ptr<weld::Scale> QtInstanceBuilder::weld_scale(const OUString&)
+std::unique_ptr<weld::Scale> QtInstanceBuilder::weld_scale(const OUString& rId)
 {
-    assert(false && "Not implemented yet");
-    return nullptr;
+    QSlider* pSlider = m_xBuilder->get<QSlider>(rId);
+    std::unique_ptr<weld::Scale> xRet(pSlider ? std::make_unique<QtInstanceScale>(pSlider)
+                                              : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::ProgressBar> QtInstanceBuilder::weld_progress_bar(const OUString& rId)

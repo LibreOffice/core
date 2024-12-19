@@ -35,6 +35,7 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QRadioButton>
 #include <QtWidgets/QScrollArea>
+#include <QtWidgets/QSlider>
 #include <QtWidgets/QSplitter>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QToolButton>
@@ -298,6 +299,10 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
         QFrame* pFrame = new QFrame(pParentWidget);
         pFrame->setFrameShape(bVertical ? QFrame::VLine : QFrame::HLine);
         pObject = pFrame;
+    }
+    else if (sName == u"GtkScale")
+    {
+        pObject = new QSlider(pParentWidget);
     }
     else if (sName == u"GtkSpinButton")
     {
