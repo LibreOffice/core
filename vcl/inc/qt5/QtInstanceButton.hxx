@@ -12,14 +12,14 @@
 #include "QtInstanceWidget.hxx"
 
 #include <QtCore/QObject>
-#include <QtWidgets/QPushButton>
+#include <QtWidgets/QAbstractButton>
 
 class QtInstanceButton : public QtInstanceWidget, public virtual weld::Button
 {
-    QPushButton* m_pButton;
+    QAbstractButton* m_pButton;
 
 public:
-    QtInstanceButton(QPushButton* pButton);
+    QtInstanceButton(QAbstractButton* pButton);
 
     virtual void set_label(const OUString& rText) override;
     virtual void set_image(VirtualDevice* pDevice) override;

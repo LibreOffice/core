@@ -12,17 +12,17 @@
 #include <vcl/qt/QtUtils.hxx>
 
 // Name of QObject property to indicate whether a click handler
-// was set on the QPushButton: If that property is set and has a value
+// was set on the button: If that property is set and has a value
 // of true, then a custom click handler is set, otherwise not.
 const char* const PROPERTY_CLICK_HANDLER_SET = "click-handler-set";
 
-QtInstanceButton::QtInstanceButton(QPushButton* pButton)
+QtInstanceButton::QtInstanceButton(QAbstractButton* pButton)
     : QtInstanceWidget(pButton)
     , m_pButton(pButton)
 {
     assert(m_pButton);
 
-    connect(m_pButton, &QPushButton::clicked, this, &QtInstanceButton::buttonClicked);
+    connect(m_pButton, &QAbstractButton::clicked, this, &QtInstanceButton::buttonClicked);
 }
 
 void QtInstanceButton::set_label(const OUString& rText)
