@@ -228,6 +228,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 
     // for LibreOfficeKit - choosing a shape should construct it directly
     bool bCreateDirectly = false;
+    bool bRectangle = false;
 
     switch ( nSId )
     {
@@ -455,6 +456,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         case SID_INSERT_SIGNATURELINE:
         {
             bCreateDirectly = comphelper::LibreOfficeKit::isActive();
+            bRectangle = true;
             SetCurrentFunction( FuConstructRectangle::Create( this, GetActiveWindow(), mpDrawView.get(), GetDoc(), rReq, bPermanent ) );
             rReq.Done();
         }
@@ -673,6 +675,11 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
             GetView()->SdrBeginTextEdit(static_cast<SdrTextObj*>(pObjTmp), pPageView);
             break;
         }
+    }
+
+    if (bRectangle && !bPermanent)
+    {
+        GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
     }
 }
 
