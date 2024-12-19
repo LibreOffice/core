@@ -130,17 +130,6 @@ $(eval $(call gb_Module_add_slowcheck_targets,sc, \
 	CppunitTest_sc_spreadsheet_functions_test \
 	CppunitTest_sc_statistical_functions_test \
 	CppunitTest_sc_text_functions_test \
-))
-endif
-
-$(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
-	JunitTest_sc_complex \
-	JunitTest_sc_unoapi_1 \
-	JunitTest_sc_unoapi_2 \
-	JunitTest_sc_unoapi_3 \
-	JunitTest_sc_unoapi_4 \
-	JunitTest_sc_unoapi_6 \
-	JunitTest_sc_unoapi_7 \
 	CppunitTest_sc_annotationobj \
 	CppunitTest_sc_annotationshapeobj \
 	CppunitTest_sc_annotationsobj \
@@ -217,8 +206,6 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	CppunitTest_sc_modelobj \
 	CppunitTest_sc_namedrangeobj \
 	CppunitTest_sc_namedrangesobj \
-	CppunitTest_sc_opencl-1 \
-	CppunitTest_sc_opencl-2 \
 	CppunitTest_sc_outlineobj \
 	CppunitTest_sc_recentfunctionsobj \
 	CppunitTest_sc_recordchanges \
@@ -249,6 +236,19 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	CppunitTest_sc_uniquecellformatsenumeration \
 	CppunitTest_sc_uniquecellformatsobj \
 	CppunitTest_sc_viewpaneobj \
+))
+endif
+
+$(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
+	JunitTest_sc_complex \
+	JunitTest_sc_unoapi_1 \
+	JunitTest_sc_unoapi_2 \
+	JunitTest_sc_unoapi_3 \
+	JunitTest_sc_unoapi_4 \
+	JunitTest_sc_unoapi_6 \
+	JunitTest_sc_unoapi_7 \
+	CppunitTest_sc_opencl-1 \
+	CppunitTest_sc_opencl-2 \
 ))
 
 $(eval $(call gb_Module_add_perfcheck_targets,sc,\
