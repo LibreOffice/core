@@ -39,14 +39,19 @@ void QtInstanceButton::set_label(const OUString& rText)
     m_pButton->setText(toQString(rText));
 }
 
-void QtInstanceButton::set_image(VirtualDevice* /*pDevice*/)
+void QtInstanceButton::set_image(VirtualDevice* pDevice)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+    GetQtInstance().RunInMainThread([&] {
+        if (pDevice)
+            m_pButton->setIcon(toQPixmap(*pDevice));
+    });
 }
 
-void QtInstanceButton::set_image(const css::uno::Reference<css::graphic::XGraphic>& /*rImage*/)
+void QtInstanceButton::set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+    GetQtInstance().RunInMainThread([&] { m_pButton->setIcon(toQPixmap(rImage)); });
 }
 
 void QtInstanceButton::set_from_icon_name(const OUString& rIconName)
