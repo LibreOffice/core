@@ -961,13 +961,13 @@ bool Dialog::ImplStartExecute()
             if (o3tl::IsRunningUnitTest())
             { // helps starbasic unit tests show their errors
                 std::cerr << "Dialog \"" << ImplGetDialogText(this)
-                          << "\"cancelled in silent mode";
+                          << "\" cancelled in silent mode\n";
             }
 
             SAL_INFO(
                 "vcl",
                 "Dialog \"" << ImplGetDialogText(this)
-                    << "\"cancelled in silent mode");
+                    << "\" cancelled in silent mode");
             return false;
 
         case DialogCancelMode::LOKSilent:
