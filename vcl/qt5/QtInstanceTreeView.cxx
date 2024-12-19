@@ -703,9 +703,15 @@ void QtInstanceTreeView::columns_autosize()
     });
 }
 
-void QtInstanceTreeView::set_column_fixed_widths(const std::vector<int>&)
+void QtInstanceTreeView::set_column_fixed_widths(const std::vector<int>& rWidths)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        assert(rWidths.size() <= o3tl::make_unsigned(m_pModel->columnCount()));
+        for (size_t i = 0; i < rWidths.size(); ++i)
+            m_pTreeView->setColumnWidth(i, rWidths.at(i));
+    });
 }
 
 void QtInstanceTreeView::set_column_editables(const std::vector<bool>&)
@@ -713,10 +719,14 @@ void QtInstanceTreeView::set_column_editables(const std::vector<bool>&)
     assert(false && "Not implemented yet");
 }
 
-int QtInstanceTreeView::get_column_width(int) const
+int QtInstanceTreeView::get_column_width(int nCol) const
 {
-    assert(false && "Not implemented yet");
-    return 0;
+    SolarMutexGuard g;
+
+    int nWidth = 0;
+    GetQtInstance().RunInMainThread([&] { nWidth = m_pTreeView->columnWidth(nCol); });
+
+    return nWidth;
 }
 
 void QtInstanceTreeView::set_centered_column(int) { assert(false && "Not implemented yet"); }
