@@ -1773,8 +1773,11 @@ void SdPage::NotifyPagePropertyChanges()
     GetPageInfo(jsonWriter);
 
     OString out = jsonWriter.finishAndGetAsOString();
-    SfxViewShell::Current()->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, out);
-    SfxViewShell::Current()->NotifyOtherViews(LOK_CALLBACK_STATE_CHANGED, ".uno:PageSetup"_ostr, out);
+    if (SfxViewShell* pViewShell = SfxViewShell::Current())
+    {
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, out);
+        pViewShell->NotifyOtherViews(LOK_CALLBACK_STATE_CHANGED, ".uno:PageSetup"_ostr, out);
+    }
 }
 
 void SdPage::SetSize(const Size& aSize)
