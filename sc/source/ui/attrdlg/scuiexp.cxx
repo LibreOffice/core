@@ -21,7 +21,12 @@
 
 #include "scdlgfact.hxx"
 #include <sal/types.h>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 /// anonymous implementation namespace
 namespace
