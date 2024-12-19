@@ -85,6 +85,7 @@ private:
     void UpdateRemoveBtnState();
     void EnableImageControls(bool bEnabled);
     void UpdateColorDropdown();
+    void UpdateOldAppearance();
     bool IsDarkModeEnabled();
     void FillItemsList();
     size_t GetActiveEntry();
