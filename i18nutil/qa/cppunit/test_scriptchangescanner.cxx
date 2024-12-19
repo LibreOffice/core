@@ -33,6 +33,11 @@ public:
     void testSmartQuoteCompatibilityCJ();
     void testSmartQuoteCompatibilityComplexAndCJ();
     void testSmartQuoteCJAtStart();
+    void testRtlRunTrivial();
+    void testRtlRunEmbeddedComplex();
+    void testRtlRunEmbeddedLtrStrong();
+    void testRtlRunEmbeddedLtrWeakComplex();
+    void testRtlRunOverrideCJKAsian();
 
     CPPUNIT_TEST_SUITE(ScriptChangeScannerTest);
     CPPUNIT_TEST(testEmpty);
@@ -45,13 +50,19 @@ public:
     CPPUNIT_TEST(testSmartQuoteCompatibilityCJ);
     CPPUNIT_TEST(testSmartQuoteCompatibilityComplexAndCJ);
     CPPUNIT_TEST(testSmartQuoteCJAtStart);
+    CPPUNIT_TEST(testRtlRunTrivial);
+    CPPUNIT_TEST(testRtlRunEmbeddedComplex);
+    CPPUNIT_TEST(testRtlRunEmbeddedLtrStrong);
+    CPPUNIT_TEST(testRtlRunEmbeddedLtrWeakComplex);
+    CPPUNIT_TEST(testRtlRunOverrideCJKAsian);
     CPPUNIT_TEST_SUITE_END();
 };
 
 void ScriptChangeScannerTest::testEmpty()
 {
     auto aText = u""_ustr;
-    auto pScanner = MakeScriptChangeScanner(aText, css::i18n::ScriptType::LATIN);
+    auto pDirScanner = MakeDirectionChangeScanner(aText, 0);
+    auto pScanner = MakeScriptChangeScanner(aText, css::i18n::ScriptType::LATIN, *pDirScanner);
     CPPUNIT_ASSERT(pScanner->AtEnd());
     CPPUNIT_ASSERT_EQUAL(css::i18n::ScriptType::LATIN, pScanner->Peek().m_nScriptType);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pScanner->Peek().m_nStartIndex);
@@ -61,7 +72,8 @@ void ScriptChangeScannerTest::testEmpty()
 void ScriptChangeScannerTest::testTrivial()
 {
     auto aText = u"Trivial case with a single span of a script"_ustr;
-    auto pScanner = MakeScriptChangeScanner(aText, css::i18n::ScriptType::LATIN);
+    auto pDirScanner = MakeDirectionChangeScanner(aText, 0);
+    auto pScanner = MakeScriptChangeScanner(aText, css::i18n::ScriptType::LATIN, *pDirScanner);
 
     CPPUNIT_ASSERT(!pScanner->AtEnd());
     CPPUNIT_ASSERT_EQUAL(css::i18n::ScriptType::LATIN, pScanner->Peek().m_nScriptType);
@@ -75,7 +87,8 @@ void ScriptChangeScannerTest::testTrivial()
 void ScriptChangeScannerTest::testTrivialAppLang()
 {
     auto aText = u"Trivial case with a single span of a script"_ustr;
-    auto pScanner = MakeScriptChangeScanner(aText, css::i18n::ScriptType::ASIAN);
+    auto pDirScanner = MakeDirectionChangeScanner(aText, 0);
+    auto pScanner = MakeScriptChangeScanner(aText, css::i18n::ScriptType::ASIAN, *pDirScanner);
 
     CPPUNIT_ASSERT(!pScanner->AtEnd());
     CPPUNIT_ASSERT_EQUAL(css::i18n::ScriptType::LATIN, pScanner->Peek().m_nScriptType);
@@ -89,7 +102,8 @@ void ScriptChangeScannerTest::testTrivialAppLang()
 void ScriptChangeScannerTest::testWeakAtStart()
 {
     auto aText = u"“x”"_ustr;
-    auto pScanner = MakeScriptChangeScanner(aText, css::i18n::ScriptType::COMPLEX);
+    auto pDirScanner = MakeDirectionChangeScanner(aText, 0);
+    auto pScanner = MakeScriptChangeScanner(aText, css::i18n::ScriptType::COMPLEX, *pDirScanner);
 
     CPPUNIT_ASSERT(!pScanner->AtEnd());
     CPPUNIT_ASSERT_EQUAL(css::i18n::ScriptType::COMPLEX, pScanner->Peek().m_nScriptType);
@@ -111,7 +125,8 @@ void ScriptChangeScannerTest::testWeakAtStart()
 void ScriptChangeScannerTest::testStrongChange()
 {
     auto aText = u"wide 廣 vast"_ustr;
-    auto pScanner = MakeScriptChangeScanner(aText, css::i18n::ScriptType::LATIN);
+    auto pDirScanner = MakeDirectionChangeScanner(aText, 0);
+    auto pScanner = MakeScriptChangeScanner(aText, css::i18n::ScriptType::LATIN, *pDirScanner);
 
     CPPUNIT_ASSERT(!pScanner->AtEnd());
     CPPUNIT_ASSERT_EQUAL(css::i18n::ScriptType::LATIN, pScanner->Peek().m_nScriptType);
@@ -141,7 +156,8 @@ void ScriptChangeScannerTest::testMongolianAfterNNBSP()
 {
     // NNBSP before Mongolian text should be part of the Mongolian run
     auto aText = u"Before\u202f\u1822\u1822After"_ustr;
-    auto pScanner = MakeScriptChangeScanner(aText, css::i18n::ScriptType::LATIN);
+    auto pDirScanner = MakeDirectionChangeScanner(aText, 0);
+    auto pScanner = MakeScriptChangeScanner(aText, css::i18n::ScriptType::LATIN, *pDirScanner);
 
     CPPUNIT_ASSERT(!pScanner->AtEnd());
     CPPUNIT_ASSERT_EQUAL(css::i18n::ScriptType::LATIN, pScanner->Peek().m_nScriptType);
@@ -172,7 +188,8 @@ void ScriptChangeScannerTest::testNonspacingMark()
     // A preceding weak character should be included in the run
     // of a following non-spacing mark
     auto aText = u"Before \u0944\u0911\u0911 After"_ustr;
-    auto pScanner = MakeScriptChangeScanner(aText, css::i18n::ScriptType::LATIN);
+    auto pDirScanner = MakeDirectionChangeScanner(aText, 0);
+    auto pScanner = MakeScriptChangeScanner(aText, css::i18n::ScriptType::LATIN, *pDirScanner);
 
     CPPUNIT_ASSERT(!pScanner->AtEnd());
     CPPUNIT_ASSERT_EQUAL(css::i18n::ScriptType::LATIN, pScanner->Peek().m_nScriptType);
@@ -204,7 +221,8 @@ void ScriptChangeScannerTest::testSmartQuoteCompatibilityCJ()
     // containing CJ characters should be treated as Asian script
 
     auto aText = u"Before \u201c水\u201d After"_ustr;
-    auto pScanner = MakeScriptChangeScanner(aText, css::i18n::ScriptType::LATIN);
+    auto pDirScanner = MakeDirectionChangeScanner(aText, 0);
+    auto pScanner = MakeScriptChangeScanner(aText, css::i18n::ScriptType::LATIN, *pDirScanner);
 
     CPPUNIT_ASSERT(!pScanner->AtEnd());
     CPPUNIT_ASSERT_EQUAL(css::i18n::ScriptType::LATIN, pScanner->Peek().m_nScriptType);
@@ -236,7 +254,8 @@ void ScriptChangeScannerTest::testSmartQuoteCompatibilityComplexAndCJ()
     // quotes are assigned in the usual greedy way.
 
     auto aText = u"Before \u201c水\u201d After \u05d0"_ustr;
-    auto pScanner = MakeScriptChangeScanner(aText, css::i18n::ScriptType::LATIN);
+    auto pDirScanner = MakeDirectionChangeScanner(aText, 0);
+    auto pScanner = MakeScriptChangeScanner(aText, css::i18n::ScriptType::LATIN, *pDirScanner);
 
     CPPUNIT_ASSERT(!pScanner->AtEnd());
     CPPUNIT_ASSERT_EQUAL(css::i18n::ScriptType::LATIN, pScanner->Peek().m_nScriptType);
@@ -272,12 +291,288 @@ void ScriptChangeScannerTest::testSmartQuoteCompatibilityComplexAndCJ()
 void ScriptChangeScannerTest::testSmartQuoteCJAtStart()
 {
     auto aText = u"“廣”"_ustr;
-    auto pScanner = MakeScriptChangeScanner(aText, css::i18n::ScriptType::LATIN);
+    auto pDirScanner = MakeDirectionChangeScanner(aText, 0);
+    auto pScanner = MakeScriptChangeScanner(aText, css::i18n::ScriptType::LATIN, *pDirScanner);
 
     CPPUNIT_ASSERT(!pScanner->AtEnd());
     CPPUNIT_ASSERT_EQUAL(css::i18n::ScriptType::ASIAN, pScanner->Peek().m_nScriptType);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pScanner->Peek().m_nStartIndex);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pScanner->Peek().m_nEndIndex);
+
+    pScanner->Advance();
+
+    CPPUNIT_ASSERT(pScanner->AtEnd());
+}
+
+void ScriptChangeScannerTest::testRtlRunTrivial()
+{
+    auto aText = u"Before אאאאאא after"_ustr;
+    auto pDirScanner = MakeDirectionChangeScanner(aText, 0);
+
+    CPPUNIT_ASSERT(!pDirScanner->AtEnd());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(0), pDirScanner->Peek().m_nLevel);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pDirScanner->Peek().m_nStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7), pDirScanner->Peek().m_nEndIndex);
+    CPPUNIT_ASSERT(!pDirScanner->Peek().m_bHasEmbeddedStrongLTR);
+
+    pDirScanner->Advance();
+
+    CPPUNIT_ASSERT(!pDirScanner->AtEnd());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(1), pDirScanner->Peek().m_nLevel);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7), pDirScanner->Peek().m_nStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(13), pDirScanner->Peek().m_nEndIndex);
+    CPPUNIT_ASSERT(!pDirScanner->Peek().m_bHasEmbeddedStrongLTR);
+
+    pDirScanner->Advance();
+
+    CPPUNIT_ASSERT(!pDirScanner->AtEnd());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(0), pDirScanner->Peek().m_nLevel);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(13), pDirScanner->Peek().m_nStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(19), pDirScanner->Peek().m_nEndIndex);
+    CPPUNIT_ASSERT(!pDirScanner->Peek().m_bHasEmbeddedStrongLTR);
+
+    pDirScanner->Advance();
+
+    CPPUNIT_ASSERT(pDirScanner->AtEnd());
+
+    pDirScanner->Reset();
+
+    auto pScanner = MakeScriptChangeScanner(aText, css::i18n::ScriptType::LATIN, *pDirScanner);
+
+    CPPUNIT_ASSERT(!pScanner->AtEnd());
+    CPPUNIT_ASSERT_EQUAL(css::i18n::ScriptType::LATIN, pScanner->Peek().m_nScriptType);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pScanner->Peek().m_nStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7), pScanner->Peek().m_nEndIndex);
+
+    pScanner->Advance();
+
+    CPPUNIT_ASSERT(!pScanner->AtEnd());
+    CPPUNIT_ASSERT_EQUAL(css::i18n::ScriptType::COMPLEX, pScanner->Peek().m_nScriptType);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7), pScanner->Peek().m_nStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(14), pScanner->Peek().m_nEndIndex);
+
+    pScanner->Advance();
+
+    CPPUNIT_ASSERT(!pScanner->AtEnd());
+    CPPUNIT_ASSERT_EQUAL(css::i18n::ScriptType::LATIN, pScanner->Peek().m_nScriptType);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(14), pScanner->Peek().m_nStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(19), pScanner->Peek().m_nEndIndex);
+
+    pScanner->Advance();
+
+    CPPUNIT_ASSERT(pScanner->AtEnd());
+}
+
+void ScriptChangeScannerTest::testRtlRunEmbeddedComplex()
+{
+    auto aText = u"Before אא(א\"א)אא after"_ustr;
+    auto pDirScanner = MakeDirectionChangeScanner(aText, 0);
+
+    CPPUNIT_ASSERT(!pDirScanner->AtEnd());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(0), pDirScanner->Peek().m_nLevel);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pDirScanner->Peek().m_nStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7), pDirScanner->Peek().m_nEndIndex);
+    CPPUNIT_ASSERT(!pDirScanner->Peek().m_bHasEmbeddedStrongLTR);
+
+    pDirScanner->Advance();
+
+    CPPUNIT_ASSERT(!pDirScanner->AtEnd());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(1), pDirScanner->Peek().m_nLevel);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7), pDirScanner->Peek().m_nStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(16), pDirScanner->Peek().m_nEndIndex);
+    CPPUNIT_ASSERT(!pDirScanner->Peek().m_bHasEmbeddedStrongLTR);
+
+    pDirScanner->Advance();
+
+    CPPUNIT_ASSERT(!pDirScanner->AtEnd());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(0), pDirScanner->Peek().m_nLevel);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(16), pDirScanner->Peek().m_nStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(22), pDirScanner->Peek().m_nEndIndex);
+    CPPUNIT_ASSERT(!pDirScanner->Peek().m_bHasEmbeddedStrongLTR);
+
+    pDirScanner->Advance();
+
+    CPPUNIT_ASSERT(pDirScanner->AtEnd());
+
+    pDirScanner->Reset();
+
+    auto pScanner = MakeScriptChangeScanner(aText, css::i18n::ScriptType::LATIN, *pDirScanner);
+
+    CPPUNIT_ASSERT(!pScanner->AtEnd());
+    CPPUNIT_ASSERT_EQUAL(css::i18n::ScriptType::LATIN, pScanner->Peek().m_nScriptType);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pScanner->Peek().m_nStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7), pScanner->Peek().m_nEndIndex);
+
+    pScanner->Advance();
+
+    CPPUNIT_ASSERT(!pScanner->AtEnd());
+    CPPUNIT_ASSERT_EQUAL(css::i18n::ScriptType::COMPLEX, pScanner->Peek().m_nScriptType);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7), pScanner->Peek().m_nStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(17), pScanner->Peek().m_nEndIndex);
+
+    pScanner->Advance();
+
+    CPPUNIT_ASSERT(!pScanner->AtEnd());
+    CPPUNIT_ASSERT_EQUAL(css::i18n::ScriptType::LATIN, pScanner->Peek().m_nScriptType);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(17), pScanner->Peek().m_nStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(22), pScanner->Peek().m_nEndIndex);
+
+    pScanner->Advance();
+
+    CPPUNIT_ASSERT(pScanner->AtEnd());
+}
+
+void ScriptChangeScannerTest::testRtlRunEmbeddedLtrStrong()
+{
+    auto aText = u"אאא Inside אאא"_ustr;
+    auto pDirScanner = MakeDirectionChangeScanner(aText, 1);
+
+    CPPUNIT_ASSERT(!pDirScanner->AtEnd());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(1), pDirScanner->Peek().m_nLevel);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pDirScanner->Peek().m_nStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pDirScanner->Peek().m_nEndIndex);
+    CPPUNIT_ASSERT(!pDirScanner->Peek().m_bHasEmbeddedStrongLTR);
+
+    pDirScanner->Advance();
+
+    CPPUNIT_ASSERT(!pDirScanner->AtEnd());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(2), pDirScanner->Peek().m_nLevel);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pDirScanner->Peek().m_nStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10), pDirScanner->Peek().m_nEndIndex);
+    CPPUNIT_ASSERT(pDirScanner->Peek().m_bHasEmbeddedStrongLTR);
+
+    pDirScanner->Advance();
+
+    CPPUNIT_ASSERT(!pDirScanner->AtEnd());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(1), pDirScanner->Peek().m_nLevel);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10), pDirScanner->Peek().m_nStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(14), pDirScanner->Peek().m_nEndIndex);
+    CPPUNIT_ASSERT(!pDirScanner->Peek().m_bHasEmbeddedStrongLTR);
+
+    pDirScanner->Advance();
+
+    CPPUNIT_ASSERT(pDirScanner->AtEnd());
+
+    pDirScanner->Reset();
+
+    auto pScanner = MakeScriptChangeScanner(aText, css::i18n::ScriptType::COMPLEX, *pDirScanner);
+
+    CPPUNIT_ASSERT(!pScanner->AtEnd());
+    CPPUNIT_ASSERT_EQUAL(css::i18n::ScriptType::COMPLEX, pScanner->Peek().m_nScriptType);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pScanner->Peek().m_nStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pScanner->Peek().m_nEndIndex);
+
+    pScanner->Advance();
+
+    CPPUNIT_ASSERT(!pScanner->AtEnd());
+    CPPUNIT_ASSERT_EQUAL(css::i18n::ScriptType::LATIN, pScanner->Peek().m_nScriptType);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pScanner->Peek().m_nStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10), pScanner->Peek().m_nEndIndex);
+
+    pScanner->Advance();
+
+    CPPUNIT_ASSERT(!pScanner->AtEnd());
+    CPPUNIT_ASSERT_EQUAL(css::i18n::ScriptType::COMPLEX, pScanner->Peek().m_nScriptType);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10), pScanner->Peek().m_nStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(14), pScanner->Peek().m_nEndIndex);
+
+    pScanner->Advance();
+
+    CPPUNIT_ASSERT(pScanner->AtEnd());
+}
+
+void ScriptChangeScannerTest::testRtlRunEmbeddedLtrWeakComplex()
+{
+    auto aText = u"אאא 123 אאא"_ustr;
+    auto pDirScanner = MakeDirectionChangeScanner(aText, 1);
+
+    CPPUNIT_ASSERT(!pDirScanner->AtEnd());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(1), pDirScanner->Peek().m_nLevel);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pDirScanner->Peek().m_nStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pDirScanner->Peek().m_nEndIndex);
+    CPPUNIT_ASSERT(!pDirScanner->Peek().m_bHasEmbeddedStrongLTR);
+
+    pDirScanner->Advance();
+
+    CPPUNIT_ASSERT(!pDirScanner->AtEnd());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(2), pDirScanner->Peek().m_nLevel);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pDirScanner->Peek().m_nStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7), pDirScanner->Peek().m_nEndIndex);
+    CPPUNIT_ASSERT(!pDirScanner->Peek().m_bHasEmbeddedStrongLTR);
+
+    pDirScanner->Advance();
+
+    CPPUNIT_ASSERT(!pDirScanner->AtEnd());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(1), pDirScanner->Peek().m_nLevel);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7), pDirScanner->Peek().m_nStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(11), pDirScanner->Peek().m_nEndIndex);
+    CPPUNIT_ASSERT(!pDirScanner->Peek().m_bHasEmbeddedStrongLTR);
+
+    pDirScanner->Advance();
+
+    CPPUNIT_ASSERT(pDirScanner->AtEnd());
+
+    pDirScanner->Reset();
+
+    auto pScanner = MakeScriptChangeScanner(aText, css::i18n::ScriptType::LATIN, *pDirScanner);
+
+    CPPUNIT_ASSERT(!pScanner->AtEnd());
+    CPPUNIT_ASSERT_EQUAL(css::i18n::ScriptType::COMPLEX, pScanner->Peek().m_nScriptType);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pScanner->Peek().m_nStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(11), pScanner->Peek().m_nEndIndex);
+
+    pScanner->Advance();
+
+    CPPUNIT_ASSERT(pScanner->AtEnd());
+}
+
+void ScriptChangeScannerTest::testRtlRunOverrideCJKAsian()
+{
+    // tdf#163660: Asian-script characters following an RTL override should
+    // still be treated as Asian script, rather than Complex script
+    auto aText = u"一二\u202e三四五"_ustr;
+    auto pDirScanner = MakeDirectionChangeScanner(aText, 0);
+
+    CPPUNIT_ASSERT(!pDirScanner->AtEnd());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(0), pDirScanner->Peek().m_nLevel);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pDirScanner->Peek().m_nStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pDirScanner->Peek().m_nEndIndex);
+    CPPUNIT_ASSERT(!pDirScanner->Peek().m_bHasEmbeddedStrongLTR);
+
+    pDirScanner->Advance();
+
+    CPPUNIT_ASSERT(!pDirScanner->AtEnd());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(1), pDirScanner->Peek().m_nLevel);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pDirScanner->Peek().m_nStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), pDirScanner->Peek().m_nEndIndex);
+    CPPUNIT_ASSERT(!pDirScanner->Peek().m_bHasEmbeddedStrongLTR);
+
+    pDirScanner->Advance();
+
+    CPPUNIT_ASSERT(pDirScanner->AtEnd());
+
+    pDirScanner->Reset();
+
+    auto pScanner = MakeScriptChangeScanner(aText, css::i18n::ScriptType::LATIN, *pDirScanner);
+
+    CPPUNIT_ASSERT(!pScanner->AtEnd());
+    CPPUNIT_ASSERT_EQUAL(css::i18n::ScriptType::ASIAN, pScanner->Peek().m_nScriptType);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pScanner->Peek().m_nStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pScanner->Peek().m_nEndIndex);
+
+    pScanner->Advance();
+
+    CPPUNIT_ASSERT(!pScanner->AtEnd());
+    CPPUNIT_ASSERT_EQUAL(css::i18n::ScriptType::COMPLEX, pScanner->Peek().m_nScriptType);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pScanner->Peek().m_nStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pScanner->Peek().m_nEndIndex);
+
+    pScanner->Advance();
+
+    CPPUNIT_ASSERT(!pScanner->AtEnd());
+    CPPUNIT_ASSERT_EQUAL(css::i18n::ScriptType::ASIAN, pScanner->Peek().m_nScriptType);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pScanner->Peek().m_nStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), pScanner->Peek().m_nEndIndex);
 
     pScanner->Advance();
 

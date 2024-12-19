@@ -89,7 +89,6 @@ private:
     TextFrameIndex m_nInvalidityPos;
     sal_uInt8 m_nDefaultDir;
 
-    void UpdateBidiInfo( const OUString& rText );
     bool IsKashidaValid(size_t nKashPos) const;
     // returns true if nKashPos is newly marked invalid
     bool MarkKashidaInvalid(size_t nKashPos);
