@@ -35,6 +35,7 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QRadioButton>
 #include <QtWidgets/QScrollArea>
+#include <QtWidgets/QSplitter>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QToolButton>
 #include <QtWidgets/QTreeView>
@@ -278,6 +279,10 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
     {
         pObject = new QTabWidget(pParentWidget);
     }
+    else if (sName == u"GtkPaned")
+    {
+        pObject = new QSplitter(pParentWidget);
+    }
     else if (sName == u"GtkRadioButton")
     {
         pObject = new QRadioButton(pParentWidget);
@@ -347,8 +352,14 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
     if (!pWidget)
         pWidget = pLayoutParentWidget;
 
-    QTabWidget* pParentTabWidget = qobject_cast<QTabWidget*>(pParentWidget);
-    if (pParentTabWidget)
+    if (QSplitter* pSplitterParent = qobject_cast<QSplitter*>(pParentWidget))
+    {
+        assert(pWidget);
+        pSplitterParent->addWidget(pWidget);
+        // unset to not create a layout below
+        pParentWidget = nullptr;
+    }
+    else if (QTabWidget* pParentTabWidget = qobject_cast<QTabWidget*>(pParentWidget))
     {
         // remove QTabWidget child widget, set via QTabWidget::addTab instead
         assert(pWidget);
@@ -660,11 +671,23 @@ void QtBuilder::replaceWidget(QWidget* pOldWidget, QWidget* pNewWidget)
 {
     QWidget* pParent = pOldWidget->parentWidget();
     assert(pParent);
-    QLayout* pParentLayout = pParent->layout();
-    assert(pParentLayout && "New parent widget has no layout - not supported (yet)");
 
-    // replace old with new widget and mark old widget for removal
-    std::unique_ptr<QLayoutItem> pOldItem(pParentLayout->replaceWidget(pOldWidget, pNewWidget));
+    // replace old with new widget and mark old widget for deletion
+    if (QLayout* pParentLayout = pParent->layout())
+    {
+        std::unique_ptr<QLayoutItem> pOldItem(pParentLayout->replaceWidget(pOldWidget, pNewWidget));
+    }
+    else if (QSplitter* pSplitter = qobject_cast<QSplitter*>(pParent))
+    {
+        const int nIndex = pSplitter->indexOf(pOldWidget);
+        assert(nIndex >= 0 && "old widget not a child of the splitter");
+        pSplitter->replaceWidget(nIndex, pNewWidget);
+    }
+    else
+    {
+        assert(false && "Unhandled case in replaceWidget - not implemented (yet)");
+    }
+
     deleteObject(pOldWidget);
 }
 
