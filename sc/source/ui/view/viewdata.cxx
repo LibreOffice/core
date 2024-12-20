@@ -459,26 +459,39 @@ void ScBoundsProvider::GeIndexBackwards(
 }
 
 void ScBoundsProvider::GetIndexTowards(
-            index_type nNearestIndex, tools::Long nNearestPosition,
-            tools::Long nBound, index_type& nFoundIndex, tools::Long& nPosition, bool bTowards)
+            index_type nNearestIndex, tools::Long nNearestPositionPx,
+            tools::Long nBoundPx, index_type& nFoundIndex, tools::Long& nPosition, bool bTowards)
 {
     nFoundIndex = -2;
-    for (index_type nIndex = nNearestIndex + 1; nIndex <= MAX_INDEX; ++nIndex)
+    if (bColumnHeader)
     {
-        const tools::Long nSizePx = GetSize(nIndex);
-        nNearestPosition += nSizePx;
-
-        if (nNearestPosition > nBound)
+        for (index_type nIndex = nNearestIndex + 1; nIndex <= MAX_INDEX; ++nIndex)
         {
-            nFoundIndex = nIndex; // first index whose nPosition is greater than nBound
-            nPosition = nNearestPosition;
-            break;
+            const sal_uInt16 nSize = rDoc.GetColWidth(nIndex, nTab);
+            const tools::Long nSizePx = ScViewData::ToPixel(nSize, mfPPTX);
+            nNearestPositionPx += nSizePx;
+
+            if (nNearestPositionPx > nBoundPx)
+            {
+                nFoundIndex = nIndex; // first index whose nPosition is greater than nBoundPx
+                nPosition = nNearestPositionPx;
+                break;
+            }
+        }
+    }
+    else
+    {
+        SCROW nFoundRow = rDoc.GetRowForHeightPixels(nTab, nNearestIndex, nNearestPositionPx, nBoundPx, mfPPTY);
+        if (nFoundRow != -1)
+        {
+            nFoundIndex = nFoundRow; // first index whose nPosition is greater than nBound
+            nPosition = nNearestPositionPx;
         }
     }
     if (nFoundIndex == -2)
     {
         nFoundIndex = MAX_INDEX;
-        nPosition = nNearestPosition;
+        nPosition = nNearestPositionPx;
     }
     else if (bTowards)
     {

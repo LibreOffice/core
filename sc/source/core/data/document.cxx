@@ -4248,6 +4248,11 @@ SCROW ScDocument::GetRowForHeight( SCTAB nTab, tools::Long nHeight ) const
     return maTabs[nTab]->GetRowForHeight(nHeight);
 }
 
+SCROW ScDocument::GetRowForHeightPixels( SCTAB nTab, SCROW nStartRow, tools::Long& rStartRowHeightPx, tools::Long nHeightPx, double fPPTY ) const
+{
+    return maTabs[nTab]->GetRowForHeightPixels(nStartRow, rStartRowHeightPx, nHeightPx, fPPTY);
+}
+
 tools::Long ScDocument::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow,
         SCTAB nTab, double fScale ) const
 {
