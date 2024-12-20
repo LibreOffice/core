@@ -1806,6 +1806,11 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
     }
 
     OSL_ENSURE( aModelData.GetMediaDescr().find( OUString( "Password" ) ) == aModelData.GetMediaDescr().end(), "The Password property of MediaDescriptor should not be used here!" );
+
+    // Fetch the current view early, saving may spin the main loop, which may change the current
+    // view.
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+
     if ( officecfg::Office::Common::Save::Document::EditProperty::get()
       && ( !aModelData.GetStorable()->hasLocation()
           || INetURLObject( aModelData.GetStorable()->getLocation() ) != aURL ) )
@@ -1891,10 +1896,10 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
 
     if ( comphelper::LibreOfficeKit::isActive() )
     {
-        if ( SfxViewShell* pShell = SfxViewShell::Current() )
+        if ( pViewShell )
         {
             OUString sURL = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
-            pShell->libreOfficeKitViewCallback( LOK_CALLBACK_EXPORT_FILE, sURL.toUtf8() );
+            pViewShell->libreOfficeKitViewCallback( LOK_CALLBACK_EXPORT_FILE, sURL.toUtf8() );
         }
     }
 
