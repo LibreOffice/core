@@ -110,7 +110,7 @@ public:
     SwCompareConfig();
     virtual ~SwCompareConfig() override;
 
-    virtual void    Notify( const css::uno::Sequence< OUString >& ) override { };
+    virtual void    Notify( const css::uno::Sequence< OUString >& ) override;
     void            Load();
     using ConfigItem::SetModified;
 };
