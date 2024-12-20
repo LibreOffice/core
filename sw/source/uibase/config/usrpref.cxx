@@ -83,7 +83,6 @@ SwMasterUsrPref::SwMasterUsrPref(bool bWeb) :
     }
 
     m_aLayoutConfig.Load();
-    m_aCursorConfig.Load();
     if(m_pWebColorConfig)
         m_pWebColorConfig->Load();
     m_aFmtAidsAutoComplConfig.Load();
@@ -567,10 +566,12 @@ Sequence<OUString> SwCursorConfig::GetPropertyNames()
     return aNames;
 }
 
-SwCursorConfig::SwCursorConfig(SwMasterUsrPref& rPar) :
-    ConfigItem(u"Office.Writer/Cursor"_ustr, ConfigItemMode::ReleaseTree),
-    m_rParent(rPar)
+SwCursorConfig::SwCursorConfig(SwMasterUsrPref& rPar)
+    : ConfigItem(u"Office.Writer/Cursor"_ustr)
+    , m_rParent(rPar)
 {
+    Load();
+    EnableNotification(GetPropertyNames());
 }
 
 SwCursorConfig::~SwCursorConfig()
@@ -626,7 +627,10 @@ void SwCursorConfig::Load()
     }
 }
 
-void SwCursorConfig::Notify( const css::uno::Sequence< OUString >& ) {}
+void SwCursorConfig::Notify(const css::uno::Sequence<OUString>& )
+{
+    Load();
+}
 
 Sequence<OUString> SwFmtAidsAutoComplConfig::GetPropertyNames()
 {
