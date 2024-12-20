@@ -1739,7 +1739,7 @@ public:
         if (const SwNode* pStartFly = pCurrent->FindFlyStartNode())
         {
             const SwFrameFormat* pFormat = pStartFly->GetFlyFormat();
-            if (!pFormat || pFormat->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
+            if (pFormat)
                 return;
         }
 
