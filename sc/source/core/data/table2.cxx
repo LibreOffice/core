@@ -4377,6 +4377,91 @@ SCROW ScTable::GetRowForHeight(tools::Long nHeight) const
     return -1;
 }
 
+// same as the one in viewdata.hxx
+static tools::Long ToPixel( sal_uInt16 nTwips, double nFactor )
+{
+    tools::Long nRet = static_cast<tools::Long>( nTwips * nFactor );
+    if ( !nRet && nTwips )
+        nRet = 1;
+    return nRet;
+}
+
+SCROW ScTable::GetRowForHeightPixels(SCROW nStartRow, tools::Long& rStartRowHeightPx, tools::Long nHeightPx, double fPPTY) const
+{
+    assert(nStartRow >= -1);
+    assert(rStartRowHeightPx >= 0);
+    assert(nHeightPx >= 0);
+
+    // We are iterating over two data arrays here, each of which
+    // is a range/compressed view of the underlying data.
+    tools::Long nSumPx = rStartRowHeightPx;
+
+    ScFlatBoolRowSegments::RangeData aHiddenRange;
+    aHiddenRange.mnRow1 = -1;
+    aHiddenRange.mnRow2 = -1;
+    aHiddenRange.mbValue = false; // silence MSVC C4701
+    ScFlatUInt16RowSegments::RangeData aRowHeightRange;
+    aRowHeightRange.mnRow1 = -1;
+    aRowHeightRange.mnRow2 = -1;
+    aRowHeightRange.mnValue = 1; // silence MSVC C4701
+
+    for (SCROW nRow = nStartRow + 1; nRow <= rDocument.MaxRow(); ++nRow)
+    {
+        // fetch hidden data range if necessary
+        if (aHiddenRange.mnRow2 < nRow)
+        {
+            if (!mpHiddenRows->getRangeData(nRow, aHiddenRange))
+                // Failed to fetch the range data for whatever reason.
+                break;
+        }
+
+        if (aHiddenRange.mbValue)
+        {
+            // This row is hidden.  Skip ahead all hidden rows.
+            nRow = aHiddenRange.mnRow2;
+            continue;
+        }
+
+        // fetch height data range if necessary
+        if (aRowHeightRange.mnRow2 < nRow)
+        {
+            if (!mpRowHeights->getRangeData(nRow, aRowHeightRange))
+                // Failed to fetch the range data for whatever reason.
+                break;
+        }
+
+        assert(aHiddenRange.mnRow1 <= nRow && aHiddenRange.mnRow2 >= nRow && "the current hidden-row span should overlap the current row");
+        assert(!aHiddenRange.mbValue && "the current hidden-row span should have visible==true");
+        assert(aRowHeightRange.mnRow1 <= nRow && aRowHeightRange.mnRow2 >= nRow && "the current height span should overlap the current row");
+
+        // find the last common row between hidden & height spans
+        SCROW nLastCommon = std::min(aHiddenRange.mnRow2, aRowHeightRange.mnRow2);
+        SCROW nCommonRows = nLastCommon - nRow + 1;
+        // height of common span
+        tools::Long nRowHeightPx = ToPixel(aRowHeightRange.mnValue, fPPTY);
+        tools::Long nCommonPixels = nRowHeightPx * nCommonRows;
+
+        // is the target height inside the common span ?
+        if (nSumPx + nCommonPixels > nHeightPx)
+        {
+            // calculate how many rows to skip inside the common span
+            SCROW nRowsInside = (nHeightPx - nSumPx) / nRowHeightPx;
+            nRow += nRowsInside;
+
+            assert(aHiddenRange.mnRow1 <= nRow && aHiddenRange.mnRow2 >= nRow && "the current hidden-row span should overlap the current row");
+            assert(aRowHeightRange.mnRow1 <= nRow && aRowHeightRange.mnRow2 >= nRow && "the current height span should overlap the current row");
+
+            rStartRowHeightPx = nSumPx + ((nRowsInside + 1) * nRowHeightPx);
+            return nRow;
+        }
+
+        // skip the range and keep hunting
+        nSumPx += nCommonPixels;
+        nRow = nLastCommon;
+    }
+    return -1;
+}
+
 tools::Long ScTable::GetColOffset( SCCOL nCol, bool bHiddenAsZero ) const
 {
     tools::Long n = 0;

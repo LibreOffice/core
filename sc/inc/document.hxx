@@ -2061,6 +2061,16 @@ public:
      * specified height.
      */
     SCROW                       GetRowForHeight( SCTAB nTab, tools::Long nHeight ) const;
+    /**
+     * Given the height i.e. total vertical distance from the top of the sheet
+     * grid, return the first visible row whose top position is below the
+     * specified height and after the specified row.
+     * Note that this variant uses pixels, not twips.
+     * @param nStartRow the row to start searching at.
+     * @param rStartRowHeightPx this is both the height at nStartRow, and returns the height of the first row
+     *        which has height > nHeight
+     */
+    SCROW                       GetRowForHeightPixels( SCTAB nTab, SCROW nStartRow, tools::Long& rStartRowHeightPx, tools::Long nHeightPx, double fPPTY ) const;
     tools::Long                 GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, double fScale ) const;
     SC_DLLPUBLIC tools::Long    GetColOffset( SCCOL nCol, SCTAB nTab, bool bHiddenAsZero = true ) const;
     SC_DLLPUBLIC tools::Long    GetRowOffset( SCROW nRow, SCTAB nTab, bool bHiddenAsZero = true ) const;
