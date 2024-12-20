@@ -50,7 +50,7 @@ QtInstanceTreeView::QtInstanceTreeView(QTreeView* pTreeView)
             &QtInstanceTreeView::handleSelectionChanged);
 }
 
-void QtInstanceTreeView::insert(const weld::TreeIter* pParent, int pos, const OUString* pStr,
+void QtInstanceTreeView::insert(const weld::TreeIter* pParent, int nPos, const OUString* pStr,
                                 const OUString* pId, const OUString* pIconName,
                                 VirtualDevice* pImageSurface, bool bChildrenOnDemand,
                                 weld::TreeIter* pRet)
@@ -59,18 +59,14 @@ void QtInstanceTreeView::insert(const weld::TreeIter* pParent, int pos, const OU
     // assert only these are used at the moment and implement remaining cases
     // when needed to support more dialogs, then adjust/remove asserts below
     assert(!pParent && "Not implemented yet");
-    assert(pos == -1 && "Not implemented yet");
     assert(!pIconName && "Not implemented yet");
     assert(!pImageSurface && "Not implemented yet");
     assert(!bChildrenOnDemand && "Not implemented yet");
-    assert(!pRet && "Not implemented yet");
     // avoid -Werror=unused-parameter for release build
     (void)pParent;
-    (void)pos;
     (void)pIconName;
     (void)pImageSurface;
     (void)bChildrenOnDemand;
-    (void)pRet;
 
     SolarMutexGuard g;
     GetQtInstance().RunInMainThread([&] {
@@ -79,7 +75,13 @@ void QtInstanceTreeView::insert(const weld::TreeIter* pParent, int pos, const OU
             pItem->setText(toQString(*pStr));
         if (pId)
             pItem->setData(toQString(*pId), ROLE_ID);
-        m_pModel->appendRow(pItem);
+
+        if (nPos == -1)
+            nPos = m_pModel->rowCount();
+        m_pModel->insertRow(nPos, pItem);
+
+        if (pRet)
+            static_cast<QtInstanceTreeIter*>(pRet)->m_aModelIndex = modelIndex(nPos);
     });
 }
 

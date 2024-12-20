@@ -25,7 +25,7 @@ class QtInstanceTreeView : public QtInstanceWidget, public virtual weld::TreeVie
 public:
     QtInstanceTreeView(QTreeView* pTreeView);
 
-    virtual void insert(const weld::TreeIter* pParent, int pos, const OUString* pStr,
+    virtual void insert(const weld::TreeIter* pParent, int nPos, const OUString* pStr,
                         const OUString* pId, const OUString* pIconName,
                         VirtualDevice* pImageSurface, bool bChildrenOnDemand,
                         weld::TreeIter* pRet) override;
