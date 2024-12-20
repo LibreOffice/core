@@ -230,7 +230,7 @@ const Sequence<OUString>& SwRevisionConfig::GetPropertyNames()
 }
 
 SwRevisionConfig::SwRevisionConfig()
-    : ConfigItem(u"Office.Writer/Revision"_ustr, ConfigItemMode::ReleaseTree)
+    : ConfigItem(u"Office.Writer/Revision"_ustr)
     , m_nMarkAlign(0)
 {
     m_aInsertAttr.m_nItemId = SID_ATTR_CHAR_UNDERLINE;
@@ -245,6 +245,7 @@ SwRevisionConfig::SwRevisionConfig()
     m_aFormatAttr.m_nAttr = WEIGHT_BOLD;
     m_aFormatAttr.m_nColor = COL_BLACK;
     Load();
+    EnableNotification(GetPropertyNames());
 }
 
 SwRevisionConfig::~SwRevisionConfig()
@@ -277,7 +278,10 @@ static sal_Int32 lcl_ConvertAttrToCfg(const AuthorCharAttr& rAttr)
     return nRet;
 }
 
-void SwRevisionConfig::Notify( const css::uno::Sequence< OUString >& ) {}
+void SwRevisionConfig::Notify(const css::uno::Sequence<OUString>&)
+{
+    Load();
+}
 
 void SwRevisionConfig::ImplCommit()
 {
@@ -561,8 +565,7 @@ const Sequence<OUString>& SwInsertConfig::GetPropertyNames() const
 }
 
 SwInsertConfig::SwInsertConfig(bool bWeb) :
-    ConfigItem(bWeb ? u"Office.WriterWeb/Insert"_ustr : u"Office.Writer/Insert"_ustr,
-        ConfigItemMode::ReleaseTree),
+    ConfigItem(bWeb ? u"Office.WriterWeb/Insert"_ustr : u"Office.Writer/Insert"_ustr),
     m_bInsWithCaption( false ),
     m_bCaptionOrderNumberingFirst( false ),
     m_aInsTableOpts(SwInsertTableFlags::NONE,0),
@@ -577,6 +580,7 @@ SwInsertConfig::SwInsertConfig(bool bWeb) :
         m_pCapOptions.reset(new InsCaptionOptArr);
 
     Load();
+    EnableNotification(GetPropertyNames());
 }
 
 SwInsertConfig::~SwInsertConfig()
@@ -602,7 +606,10 @@ static void lcl_WriteOpt(const InsCaptionOpt& rOpt, Any* pValues, sal_Int32 nPro
     }
 }
 
-void SwInsertConfig::Notify( const css::uno::Sequence< OUString >& ) {}
+void SwInsertConfig::Notify(const css::uno::Sequence<OUString>&)
+{
+    Load();
+}
 
 void SwInsertConfig::ImplCommit()
 {
@@ -1083,8 +1090,7 @@ const Sequence<OUString>& SwTableConfig::GetPropertyNames()
 }
 
 SwTableConfig::SwTableConfig(bool bWeb)
-    : ConfigItem(bWeb ? u"Office.WriterWeb/Table"_ustr : u"Office.Writer/Table"_ustr,
-        ConfigItemMode::ReleaseTree)
+    : ConfigItem(bWeb ? u"Office.WriterWeb/Table"_ustr : u"Office.Writer/Table"_ustr)
     , m_nTableHMove(0)
     , m_nTableVMove(0)
     , m_nTableHInsert(0)
@@ -1096,13 +1102,17 @@ SwTableConfig::SwTableConfig(bool bWeb)
     , m_bSplitVerticalByDefault(false)
 {
     Load();
+    EnableNotification(GetPropertyNames());
 }
 
 SwTableConfig::~SwTableConfig()
 {
 }
 
-void SwTableConfig::Notify( const css::uno::Sequence< OUString >& ) {}
+void SwTableConfig::Notify(const css::uno::Sequence<OUString>&)
+{
+    Load();
+}
 
 void SwTableConfig::ImplCommit()
 {
@@ -1156,7 +1166,7 @@ void SwTableConfig::Load()
 }
 
 SwMiscConfig::SwMiscConfig() :
-    ConfigItem(u"Office.Writer"_ustr, ConfigItemMode::ReleaseTree),
+    ConfigItem(u"Office.Writer"_ustr),
     m_bDefaultFontsInCurrDocOnly(false),
     m_bShowIndexPreview(false),
     m_bGrfToGalleryAsLnk(true),
@@ -1167,6 +1177,7 @@ SwMiscConfig::SwMiscConfig() :
     m_nMailingFormats(MailTextFormats::NONE)
 {
     Load();
+    EnableNotification(GetPropertyNames());
 }
 
 SwMiscConfig::~SwMiscConfig()
@@ -1194,7 +1205,10 @@ const Sequence<OUString>& SwMiscConfig::GetPropertyNames()
     return aNames;
 }
 
-void SwMiscConfig::Notify( const css::uno::Sequence< OUString >& ) {}
+void SwMiscConfig::Notify(const css::uno::Sequence<OUString>&)
+{
+    EnableNotification(GetPropertyNames());
+}
 
 void SwMiscConfig::ImplCommit()
 {
@@ -1273,9 +1287,9 @@ const Sequence<OUString>& SwCompareConfig::GetPropertyNames()
     return aNames;
 }
 
-SwCompareConfig::SwCompareConfig() :
-    ConfigItem(u"Office.Writer/Comparison"_ustr, ConfigItemMode::ReleaseTree)
-    ,m_bStoreRsid(true)
+SwCompareConfig::SwCompareConfig()
+    : ConfigItem(u"Office.Writer/Comparison"_ustr)
+    , m_bStoreRsid(true)
 {
     m_eCmpMode = SwCompareMode::Auto;
     m_bUseRsid = false;
@@ -1283,6 +1297,7 @@ SwCompareConfig::SwCompareConfig() :
     m_nPieceLen = 1;
 
     Load();
+    EnableNotification(GetPropertyNames());
 }
 
 SwCompareConfig::~SwCompareConfig()
@@ -1327,6 +1342,11 @@ void SwCompareConfig::Load()
             }
         }
     }
+}
+
+void SwCompareConfig::Notify(const css::uno::Sequence<OUString>&)
+{
+    Load();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
