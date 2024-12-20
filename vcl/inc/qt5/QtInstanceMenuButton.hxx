@@ -11,12 +11,16 @@
 
 #include "QtInstanceToggleButton.hxx"
 
+#include <QtWidgets/QToolButton>
+
 class QtInstanceMenuButton : public QtInstanceToggleButton, public virtual weld::MenuButton
 {
     Q_OBJECT
 
+    QToolButton* m_pToolButton;
+
 public:
-    QtInstanceMenuButton(QAbstractButton* pButton);
+    QtInstanceMenuButton(QToolButton* pButton);
 
     virtual void insert_item(int pos, const OUString& rId, const OUString& rStr,
                              const OUString* pIconName, VirtualDevice* pImageSurface,
@@ -32,6 +36,10 @@ public:
     virtual void set_item_visible(const OUString& rIdent, bool bVisible) override;
 
     virtual void set_popover(weld::Widget* pPopover) override;
+
+private:
+    QMenu& getMenu() const;
+    QAction* getAction(const OUString& rIdent) const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

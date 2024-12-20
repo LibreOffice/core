@@ -208,7 +208,7 @@ std::unique_ptr<weld::Button> QtInstanceBuilder::weld_button(const OUString& rId
 
 std::unique_ptr<weld::MenuButton> QtInstanceBuilder::weld_menu_button(const OUString& rId)
 {
-    QAbstractButton* pButton = m_xBuilder->get<QAbstractButton>(rId);
+    QToolButton* pButton = m_xBuilder->get<QToolButton>(rId);
     std::unique_ptr<weld::MenuButton> xRet(pButton ? std::make_unique<QtInstanceMenuButton>(pButton)
                                                    : nullptr);
     return xRet;

@@ -10,10 +10,17 @@
 #include <QtInstanceMenuButton.hxx>
 #include <QtInstanceMenuButton.moc>
 
-QtInstanceMenuButton::QtInstanceMenuButton(QAbstractButton* pButton)
+#include <QtTools.hxx>
+
+#include <vcl/qt/QtUtils.hxx>
+
+#include <QtWidgets/QMenu>
+
+QtInstanceMenuButton::QtInstanceMenuButton(QToolButton* pButton)
     : QtInstanceToggleButton(pButton)
+    , m_pToolButton(pButton)
 {
-    assert(pButton);
+    assert(m_pToolButton);
 }
 
 void QtInstanceMenuButton::insert_item(int, const OUString&, const OUString&, const OUString*,
@@ -27,36 +34,95 @@ void QtInstanceMenuButton::insert_separator(int, const OUString&)
     assert(false && "Not implemented yet");
 }
 
-void QtInstanceMenuButton::remove_item(const OUString&) { assert(false && "Not implemented yet"); }
-
-void QtInstanceMenuButton::clear() { assert(false && "Not implemented yet"); }
-
-void QtInstanceMenuButton::set_item_sensitive(const OUString&, bool)
+void QtInstanceMenuButton::remove_item(const OUString& rId)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        if (QAction* pAction = getAction(rId))
+            getMenu().removeAction(pAction);
+    });
 }
 
-void QtInstanceMenuButton::set_item_active(const OUString&, bool)
+void QtInstanceMenuButton::clear()
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] { getMenu().clear(); });
 }
 
-void QtInstanceMenuButton::set_item_label(const OUString&, const OUString&)
+void QtInstanceMenuButton::set_item_sensitive(const OUString& rIdent, bool bSensitive)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        if (QAction* pAction = getAction(rIdent))
+            pAction->setEnabled(bSensitive);
+    });
 }
 
-OUString QtInstanceMenuButton::get_item_label(const OUString&) const
+void QtInstanceMenuButton::set_item_active(const OUString& rIdent, bool bActive)
 {
-    assert(false && "Not implemented yet");
-    return OUString();
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        if (QAction* pAction = getAction(rIdent))
+            pAction->setChecked(bActive);
+    });
 }
 
-void QtInstanceMenuButton::set_item_visible(const OUString&, bool)
+void QtInstanceMenuButton::set_item_label(const OUString& rIdent, const OUString& rLabel)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        if (QAction* pAction = getAction(rIdent))
+            pAction->setText(toQString(rLabel));
+    });
+}
+
+OUString QtInstanceMenuButton::get_item_label(const OUString& rIdent) const
+{
+    SolarMutexGuard g;
+
+    OUString sLabel;
+    GetQtInstance().RunInMainThread([&] {
+        if (QAction* pAction = getAction(rIdent))
+            sLabel = toOUString(pAction->text());
+    });
+
+    return sLabel;
+}
+
+void QtInstanceMenuButton::set_item_visible(const OUString& rIdent, bool bVisible)
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        if (QAction* pAction = getAction(rIdent))
+            pAction->setVisible(bVisible);
+    });
 }
 
 void QtInstanceMenuButton::set_popover(weld::Widget*) { assert(false && "Not implemented yet"); }
+
+QMenu& QtInstanceMenuButton::getMenu() const
+{
+    QMenu* pMenu = m_pToolButton->menu();
+    assert(pMenu);
+    return *pMenu;
+}
+
+QAction* QtInstanceMenuButton::getAction(const OUString& rIdent) const
+{
+    QList<QAction*> aActions = getMenu().actions();
+    for (QAction* pAction : aActions)
+    {
+        if (pAction && pAction->objectName() == toQString(rIdent))
+            return pAction;
+    }
+
+    return nullptr;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
