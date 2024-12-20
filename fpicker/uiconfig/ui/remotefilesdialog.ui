@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="fps">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">svx/res/galicon.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/galicon.png</property>
   </object>
   <object class="GtkImage" id="image2">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">svx/res/listview.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">svx/res/listview.png</property>
   </object>
   <object class="GtkImage" id="image3">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">fpicker/res/fp014.png</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">fpicker/res/fp014.png</property>
   </object>
   <object class="GtkTreeStore" id="liststore1">
     <columns>
@@ -53,66 +53,63 @@
   </object>
   <object class="GtkMenu" id="service_edit_menu">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <child>
       <object class="GtkMenuItem" id="add_service">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="label" translatable="yes" context="remotefilesdialog|edit_service">_Add service</property>
-        <property name="use_underline">True</property>
+        <property name="use-underline">True</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="edit_service">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="label" translatable="yes" context="remotefilesdialog|edit_service">_Edit service</property>
-        <property name="use_underline">True</property>
+        <property name="use-underline">True</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="delete_service">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="label" translatable="yes" context="remotefilesdialog|delete_service">_Delete service</property>
-        <property name="use_underline">True</property>
+        <property name="use-underline">True</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="change_password">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="label" translatable="yes" context="remotefilesdialog|change_password">_Change password</property>
-        <property name="use_underline">True</property>
+        <property name="use-underline">True</property>
       </object>
     </child>
   </object>
   <object class="GtkDialog" id="RemoteFilesDialog">
-    <property name="can_focus">False</property>
-    <property name="border_width">6</property>
+    <property name="can-focus">False</property>
+    <property name="border-width">6</property>
     <property name="title" translatable="yes" context="remotefilesdialog|RemoteFilesDialog">Remote Files</property>
     <property name="modal">True</property>
-    <property name="default_width">0</property>
-    <property name="default_height">0</property>
-    <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
+    <property name="default-width">0</property>
+    <property name="default-height">0</property>
+    <property name="type-hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
+            <property name="can-focus">False</property>
+            <property name="layout-style">end</property>
             <child>
               <object class="GtkButton" id="help">
                 <property name="label" translatable="yes" context="stock">_Help</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -126,9 +123,9 @@
               <object class="GtkButton" id="cancel">
                 <property name="label" translatable="yes" context="stock">_Cancel</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">False</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="receives-default">False</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -141,11 +138,11 @@
               <object class="GtkButton" id="ok">
                 <property name="label" translatable="yes" context="remotefilesdialog|open">_Open</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="has_default">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_underline">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="has-default">True</property>
+                <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
                 <style>
                   <class name="suggested-action"/>
                 </style>
@@ -166,12 +163,12 @@
         <child>
           <object class="GtkBox" id="box1">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="spacing">6</property>
             <child>
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="remotefilesdialog|label1">Service:</property>
                 <accessibility>
                   <relation type="label-for" target="services_lb"/>
@@ -186,7 +183,7 @@
             <child>
               <object class="GtkComboBoxText" id="services_lb">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="valign">center</property>
                 <accessibility>
                   <relation type="labelled-by" target="label1"/>
@@ -202,11 +199,12 @@
               <object class="GtkMenuButton" id="add_service_btn">
                 <property name="label" translatable="yes" context="remotefilesdialog|add_service_btn">_Manage services</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="use_underline">True</property>
-                <property name="draw_indicator">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
                 <property name="popup">service_edit_menu</property>
-                <property name="use_popover">False</property>
+                <property name="use-popover">False</property>
                 <child>
                   <placeholder/>
                 </child>
@@ -227,12 +225,12 @@
         <child>
           <object class="GtkBox" id="box2">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="spacing">6</property>
             <child>
               <object class="GtkBox" id="breadcrumb_container">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="valign">center</property>
                 <property name="hexpand">True</property>
                 <child>
@@ -248,9 +246,9 @@
             <child>
               <object class="GtkToggleButton" id="list_view">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes" context="remotefilesdialog|list_view|tooltip_text">List view</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="tooltip-text" translatable="yes" context="remotefilesdialog|list_view|tooltip_text">List view</property>
                 <property name="image">image2</property>
                 <property name="active">True</property>
               </object>
@@ -263,9 +261,9 @@
             <child>
               <object class="GtkToggleButton" id="icon_view">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes" context="remotefilesdialog|icon_view|tooltip_text">Icon view</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="tooltip-text" translatable="yes" context="remotefilesdialog|icon_view|tooltip_text">Icon view</property>
                 <property name="image">image1</property>
               </object>
               <packing>
@@ -276,15 +274,15 @@
             </child>
             <child>
               <object class="GtkButton" id="new_folder">
-                <property name="width_request">25</property>
-                <property name="height_request">25</property>
+                <property name="width-request">25</property>
+                <property name="height-request">25</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes" context="remotefilesdialog|new_folder|tooltip_text">Create New Folder</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="tooltip-text" translatable="yes" context="remotefilesdialog|new_folder|tooltip_text">Create New Folder</property>
                 <property name="margin-start">6</property>
                 <property name="image">image3</property>
-                <property name="always_show_image">True</property>
+                <property name="always-show-image">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -302,32 +300,32 @@
         <child>
           <object class="GtkBox" id="container">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkPaned">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can-focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <child>
                   <object class="GtkScrolledWindow">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can-focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
-                    <property name="shadow_type">in</property>
+                    <property name="shadow-type">in</property>
                     <child>
                       <object class="GtkTreeView" id="foldertree">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
+                        <property name="can-focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
                         <property name="model">liststore1</property>
-                        <property name="headers_visible">False</property>
-                        <property name="headers_clickable">False</property>
+                        <property name="headers-visible">False</property>
+                        <property name="headers-clickable">False</property>
                         <child internal-child="selection">
                           <object class="GtkTreeSelection" id="Macro Library List-selection1"/>
                         </child>
@@ -360,25 +358,25 @@
                 <child>
                   <object class="GtkBox">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
                     <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkScrolledWindow">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
+                        <property name="can-focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
-                        <property name="shadow_type">in</property>
+                        <property name="shadow-type">in</property>
                         <child>
                           <object class="GtkTreeView" id="fileview">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
+                            <property name="can-focus">True</property>
                             <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
                             <property name="model">liststore3</property>
-                            <property name="show_expanders">False</property>
+                            <property name="show-expanders">False</property>
                             <child internal-child="selection">
                               <object class="GtkTreeSelection" id="Macro Library List-selection2"/>
                             </child>
@@ -441,21 +439,21 @@
                     </child>
                     <child>
                       <object class="GtkScrolledWindow">
-                        <property name="can_focus">True</property>
-                        <property name="no_show_all">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="no-show-all">True</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
-                        <property name="shadow_type">in</property>
+                        <property name="shadow-type">in</property>
                         <child>
                           <object class="GtkIconView" id="iconview">
-                            <property name="can_focus">True</property>
-                            <property name="no_show_all">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="no-show-all">True</property>
                             <property name="margin">6</property>
                             <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
                             <property name="model">liststore2</property>
-                            <property name="pixbuf_column">0</property>
-                            <property name="text_column">1</property>
+                            <property name="pixbuf-column">0</property>
+                            <property name="text-column">1</property>
                           </object>
                         </child>
                       </object>
@@ -486,62 +484,62 @@
           </packing>
         </child>
         <child>
-          <!-- n-columns=1 n-rows=1 -->
+          <!-- n-columns=2 n-rows=2 -->
           <object class="GtkGrid" id="grid1">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="row_spacing">6</property>
-            <property name="column_spacing">6</property>
+            <property name="can-focus">False</property>
+            <property name="row-spacing">6</property>
+            <property name="column-spacing">6</property>
             <child>
               <object class="GtkLabel" id="filterLabel">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="remotefilesdialog|filterLabel">Filter</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">filter_lb</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">filter_lb</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel" id="nameLabel">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="remotefilesdialog|nameLabel">File name</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">filename</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">filename</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkComboBoxText" id="filter_lb">
-                <property name="width_request">200</property>
+                <property name="width-request">200</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="hexpand">True</property>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkEntry" id="filename">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can-focus">True</property>
+                <property name="activates-default">True</property>
                 <property name="truncate-multiline">True</property>
-                <property name="activates_default">True</property>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">1</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">1</property>
               </packing>
             </child>
           </object>
