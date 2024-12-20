@@ -73,9 +73,6 @@ SwMasterUsrPref::SwMasterUsrPref(bool bWeb) :
         m_nDefTabInMm100 = 1250;
         return;
     }
-
-    if(m_pWebColorConfig)
-        m_pWebColorConfig->Load();
 }
 
 SwMasterUsrPref::~SwMasterUsrPref()
@@ -585,11 +582,13 @@ void SwCursorConfig::Notify(const css::uno::Sequence<OUString>& )
 }
 
 SwWebColorConfig::SwWebColorConfig(SwMasterUsrPref& rPar) :
-    ConfigItem("Office.WriterWeb/Background", ConfigItemMode::ReleaseTree),
+    ConfigItem("Office.WriterWeb/Background"),
     m_rParent(rPar),
     m_aPropNames(1)
 {
     m_aPropNames.getArray()[0] = "Color";
+    Load();
+    EnableNotification(m_aPropNames);
 }
 
 SwWebColorConfig::~SwWebColorConfig()
@@ -610,7 +609,10 @@ void SwWebColorConfig::ImplCommit()
     PutProperties(m_aPropNames, aValues);
 }
 
-void SwWebColorConfig::Notify( const css::uno::Sequence< OUString >& ) {}
+void SwWebColorConfig::Notify(const css::uno::Sequence<OUString>&)
+{
+    Load();
+}
 
 void SwWebColorConfig::Load()
 {
