@@ -22,8 +22,6 @@
 #include <vcl/weld.hxx>
 #include <memory>
 
-namespace com::sun::star::chart2 { class XChartDocument; }
-namespace com::sun::star::uno { class XComponentContext; }
 class BuilderPage;
 
 namespace chart

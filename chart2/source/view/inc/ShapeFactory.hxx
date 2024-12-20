@@ -34,12 +34,10 @@ namespace chart { struct VLineProperties; }
 namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::chart2 { class XFormattedString; }
 namespace com::sun::star::drawing { class XShape; }
-namespace com::sun::star::drawing { class XShapes; }
 namespace com::sun::star::drawing { struct HomogenMatrix; }
 namespace com::sun::star::drawing { struct PolyPolygonShape3D; }
 namespace com::sun::star::drawing { struct Position3D; }
 namespace com::sun::star::graphic { class XGraphic; }
-namespace com::sun::star::lang { class XMultiServiceFactory; }
 namespace com::sun::star::drawing { struct Direction3D; }
 
 namespace chart

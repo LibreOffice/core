@@ -24,7 +24,6 @@ namespace weld {
     class CheckButton;
     class MetricSpinButton;
     class RadioButton;
-    class ToggleButton;
     class Widget;
 }
 

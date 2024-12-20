@@ -24,11 +24,6 @@
 
 #include "res_ErrorBar.hxx"
 
-namespace com::sun::star::frame
-{
-class XModel;
-}
-
 namespace chart
 {
 class ChartView;

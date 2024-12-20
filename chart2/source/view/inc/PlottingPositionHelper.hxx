@@ -34,14 +34,11 @@
 #include <rtl/ref.hxx>
 #include <svx/unoshape.hxx>
 
-namespace com::sun::star::drawing { class XShapes; }
 namespace com::sun::star::drawing { struct HomogenMatrix; }
 namespace com::sun::star::drawing { struct PolyPolygonShape3D; }
 
 namespace chart
 {
-
-class ShapeFactory;
 
 /** allows the transformation of numeric values from one
      coordinate-system into another.  Values may be transformed using

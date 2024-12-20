@@ -28,10 +28,6 @@
 #include <vector>
 
 namespace com::sun::star::beans { class XPropertySet; }
-namespace com::sun::star::chart2 { class XChartType; }
-namespace com::sun::star::chart2 { class XCoordinateSystem; }
-namespace com::sun::star::chart2 { class XDataSeries; }
-namespace com::sun::star::chart2 { class XDiagram; }
 namespace com::sun::star::chart2::data { class XDataSequence; }
 namespace com::sun::star::chart2::data { class XDataSource; }
 namespace com::sun::star::chart2::data { class XLabeledDataSequence; }
@@ -42,7 +38,6 @@ namespace chart { class ChartType; }
 namespace chart { class DataSource; }
 namespace chart { class Diagram; }
 namespace chart { class DataSeries; }
-namespace chart { class LabeledDataSequence; }
 
 namespace chart::DataSeriesHelper
 {

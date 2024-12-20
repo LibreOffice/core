@@ -28,8 +28,6 @@ namespace weld {
     class CustomWeld;
     class Label;
     class RadioButton;
-    class SpinButton;
-    class ToggleButton;
 }
 
 namespace chart

@@ -26,7 +26,6 @@
 #include "charttoolsdllapi.hxx"
 
 namespace com::sun::star::beans { struct PropertyValue; }
-namespace com::sun::star::chart2 { class XChartDocument; }
 
 namespace com::sun::star {
     namespace sheet{

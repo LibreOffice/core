@@ -21,11 +21,6 @@
 #include <vcl/weld.hxx>
 #include <ControllerLockGuard.hxx>
 
-namespace com::sun::star::frame
-{
-class XModel;
-}
-
 namespace chart
 {
 class ThreeD_SceneGeometry_TabPage;

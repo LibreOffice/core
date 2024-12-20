@@ -24,8 +24,6 @@
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <rtl/ref.hxx>
 
-namespace com::sun::star::frame { class XModel; }
-namespace com::sun::star::util { class XModifiable; }
 namespace com::sun::star::view { class XSelectionSupplier; }
 
 namespace chart

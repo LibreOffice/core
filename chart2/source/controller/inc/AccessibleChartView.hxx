@@ -28,8 +28,6 @@
 
 namespace com::sun::star::accessibility { class XAccessible; }
 namespace com::sun::star::awt { class XWindow; }
-namespace com::sun::star::frame { class XModel; }
-namespace com::sun::star::view { class XSelectionSupplier; }
 
 namespace accessibility
 {

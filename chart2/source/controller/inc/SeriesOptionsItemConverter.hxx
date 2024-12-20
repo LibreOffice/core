@@ -22,8 +22,6 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <rtl/ref.hxx>
 
-namespace com::sun::star::chart2 { class XCoordinateSystem; }
-namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::uno { class XComponentContext; }
 namespace chart { class ChartModel; }
 namespace chart { class BaseCoordinateSystem; }

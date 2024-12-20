@@ -21,7 +21,6 @@
 
 #include <ObjectIdentifier.hxx>
 
-namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::awt { struct Rectangle; }
 
 namespace chart

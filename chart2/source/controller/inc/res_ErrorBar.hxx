@@ -25,7 +25,6 @@
 #include <RangeSelectionListener.hxx>
 #include <rtl/ref.hxx>
 
-namespace com::sun::star::chart2 { class XChartDocument; }
 namespace weld { class Builder; }
 namespace weld { class Button; }
 namespace weld { class CheckButton; }

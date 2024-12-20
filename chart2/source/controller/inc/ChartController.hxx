@@ -43,7 +43,6 @@
 #include <string_view>
 
 namespace com::sun::star::accessibility { class XAccessible; }
-namespace com::sun::star::accessibility { class XAccessibleContext; }
 namespace com::sun::star::awt { class XFocusListener; }
 namespace com::sun::star::awt { class XKeyListener; }
 namespace com::sun::star::awt { class XMouseListener; }
@@ -56,9 +55,7 @@ namespace com::sun::star::document { class XUndoManager; }
 namespace com::sun::star::frame { class XDispatch; }
 namespace com::sun::star::frame { class XLayoutManagerEventBroadcaster; }
 namespace com::sun::star::graphic { class XGraphic; }
-namespace com::sun::star::lang { class XInitialization; }
 namespace com::sun::star::uno { class XComponentContext; }
-namespace com::sun::star::util { class XCloseable; }
 namespace com::sun::star::view { class XSelectionSupplier; }
 
 class SdrModel;
@@ -86,7 +83,6 @@ class ChartView;
 class ChartWindow;
 class DrawModelWrapper;
 class DrawViewWrapper;
-class ViewElementListProvider;
 class ViewElementListProvider;
 class Diagram;
 class AccessibleChartView;

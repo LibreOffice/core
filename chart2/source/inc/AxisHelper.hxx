@@ -29,12 +29,6 @@
 namespace chart { class ChartModel; }
 namespace chart { class ExplicitCategoriesProvider; }
 namespace chart { class ReferenceSizeProvider; }
-namespace com::sun::star::beans { class XPropertySet; }
-namespace com::sun::star::chart2 { class XAxis; }
-namespace com::sun::star::chart2 { class XChartDocument; }
-namespace com::sun::star::chart2 { class XChartType; }
-namespace com::sun::star::chart2 { class XCoordinateSystem; }
-namespace com::sun::star::chart2 { class XDiagram; }
 namespace com::sun::star::chart2 { class XScaling; }
 namespace com::sun::star::uno { class XComponentContext; }
 

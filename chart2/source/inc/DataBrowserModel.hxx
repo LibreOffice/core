@@ -28,12 +28,8 @@
 #include <utility>
 #include <vector>
 
-namespace com::sun::star::chart2 { class XChartDocument; }
-namespace com::sun::star::uno { class XComponentContext; }
-
 namespace com::sun::star::chart2 {
     class XDataSeries;
-    class XChartType;
 }
 
 namespace chart
@@ -41,8 +37,6 @@ namespace chart
 
 class DialogModel;
 class ChartModel;
-class ChartType;
-class DataSeries;
 
 class OOO_DLLPUBLIC_CHARTTOOLS DataBrowserModel final
 {

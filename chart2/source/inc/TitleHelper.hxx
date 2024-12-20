@@ -26,8 +26,6 @@
 
 namespace chart { class ChartModel; }
 namespace chart { class ReferenceSizeProvider; }
-namespace com::sun::star::chart2 { class XTitle; }
-namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::uno { class XComponentContext; }
 
 namespace chart

@@ -25,7 +25,6 @@
 
 #include "res_LegendPosition.hxx"
 
-namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::uno { class XComponentContext; }
 
 namespace chart

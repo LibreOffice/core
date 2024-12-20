@@ -24,8 +24,6 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
-namespace com::sun::star::awt { class XWindow; }
-
 namespace chart
 {
 using namespace ::com::sun::star;

@@ -28,7 +28,6 @@
 namespace chart { struct AxisProperties; }
 namespace chart { struct TickmarkProperties; }
 namespace com::sun::star::chart2 { class XScaling; }
-namespace com::sun::star::drawing { class XShape; }
 
 namespace chart {
 

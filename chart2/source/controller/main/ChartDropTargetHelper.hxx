@@ -21,12 +21,6 @@
 #include <vcl/transfer.hxx>
 #include <rtl/ref.hxx>
 
-namespace com::sun::star {
-    namespace chart2 {
-        class XChartDocument;
-    }
-}
-
 namespace chart
 {
 class ChartModel;

@@ -24,7 +24,6 @@
 #include <rtl/ref.hxx>
 
 namespace com::sun::star::chart2 { class XInternalDataProvider; }
-namespace com::sun::star::frame { class XModel; }
 
 namespace chart
 {

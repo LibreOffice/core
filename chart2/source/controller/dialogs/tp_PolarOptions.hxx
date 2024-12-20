@@ -25,7 +25,6 @@ namespace weld {
     class CheckButton;
     class CustomWeld;
     class Frame;
-    class SpinButton;
 }
 
 namespace chart

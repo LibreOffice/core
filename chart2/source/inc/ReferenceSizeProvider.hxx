@@ -28,7 +28,6 @@ namespace com::sun::star {
     namespace chart2 {
         class XTitle;
         class XTitled;
-        class XChartDocument;
     }
     namespace beans {
         class XPropertySet;

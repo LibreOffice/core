@@ -24,8 +24,6 @@
 
 namespace com::sun::star::drawing { struct HomogenMatrix; }
 namespace com::sun::star::drawing { struct Position3D; }
-namespace com::sun::star::drawing { class XShapes; }
-namespace com::sun::star::lang { class XMultiServiceFactory; }
 
 namespace chart { struct ExplicitScaleData; }
 
@@ -33,7 +31,6 @@ namespace chart
 {
 
 class PlottingPositionHelper;
-class ShapeFactory;
 
 /** This class provides methods for setting axis scales and for performing
  *  scene to screen transformations. It is used as the base class for all

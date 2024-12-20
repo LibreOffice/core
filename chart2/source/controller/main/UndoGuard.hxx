@@ -25,7 +25,6 @@
 #include <memory>
 
 namespace com::sun::star::document { class XUndoManager; }
-namespace com::sun::star::frame { class XModel; }
 
 namespace chart
 {

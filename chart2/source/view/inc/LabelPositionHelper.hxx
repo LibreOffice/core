@@ -26,9 +26,7 @@
 #include <svx/unoshape.hxx>
 
 namespace com::sun::star::drawing { struct Position3D; }
-namespace com::sun::star::drawing { class XShapes; }
 namespace com::sun::star::awt { struct Size; }
-namespace com::sun::star::drawing { class XShape; }
 
 namespace chart
 {

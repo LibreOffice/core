@@ -26,7 +26,6 @@
 
 namespace com::sun::star {
     namespace chart2 {
-        class XDiagram;
         class XDataSeries;
         class XAxis;
     }

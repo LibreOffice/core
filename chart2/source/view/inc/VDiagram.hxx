@@ -25,16 +25,10 @@
 #include <svx/unoshape.hxx>
 #include <rtl/ref.hxx>
 
-namespace com::sun::star::beans { class XPropertySet; }
-namespace com::sun::star::chart2 { class XDiagram; }
-namespace com::sun::star::lang { class XMultiServiceFactory; }
-namespace com::sun::star::drawing { class XShape; }
-
 
 namespace chart
 {
 class Diagram;
-class ShapeFactory;
 
 /** The VDiagram is responsible to generate the visible parts of the Diagram
 that is wall, floor, axes and data series.

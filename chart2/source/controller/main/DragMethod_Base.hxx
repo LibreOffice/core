@@ -23,7 +23,6 @@
 #include <unotools/weakref.hxx>
 
 namespace chart { class DrawViewWrapper; }
-namespace com::sun::star::frame { class XModel; }
 
 namespace chart
 {

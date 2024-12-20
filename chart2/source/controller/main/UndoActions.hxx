@@ -26,8 +26,6 @@
 
 #include <memory>
 
-namespace com::sun::star::frame { class XModel; }
-
 class SdrUndoAction;
 
 namespace chart

@@ -75,9 +75,6 @@
 #include <utility>
 #include <comphelper/diagnose_ex.hxx>
 
-namespace com::sun::star::chart2 { class XChartType; }
-namespace com::sun::star::chart2 { class XDataSeries; }
-
 namespace chart
 {
 

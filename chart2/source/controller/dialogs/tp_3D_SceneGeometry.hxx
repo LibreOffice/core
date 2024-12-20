@@ -22,7 +22,6 @@
 #include <vcl/weld.hxx>
 #include <rtl/ref.hxx>
 
-namespace com::sun::star::beans { class XPropertySet; }
 namespace chart { class ControllerLockHelper; }
 
 namespace chart

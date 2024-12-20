@@ -26,8 +26,6 @@
 
 #include <algorithm>
 
-namespace com::sun::star::beans { class XPropertySetInfo; }
-
 using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;

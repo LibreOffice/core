@@ -26,7 +26,6 @@
 
 namespace com::sun::star::frame { class XController; }
 namespace com::sun::star::frame { class XDispatch; }
-namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::frame { struct DispatchDescriptor; }
 namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::util { struct URL; }

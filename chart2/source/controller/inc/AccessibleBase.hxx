@@ -37,8 +37,6 @@
 #include <memory>
 
 namespace com::sun::star::awt { class XWindow; }
-namespace com::sun::star::chart2 { class XChartDocument; }
-namespace com::sun::star::view { class XSelectionSupplier; }
 
 
 class SdrView;

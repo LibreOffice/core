@@ -33,10 +33,7 @@
 #include <map>
 
 namespace com::sun::star::beans { class XPropertySet; }
-namespace com::sun::star::chart2 { class XChartType; }
-namespace com::sun::star::chart2 { class XDataSeries; }
 namespace com::sun::star::chart2::data { class XDataSequence; }
-namespace com::sun::star::drawing { class XShapes; }
 
 namespace chart
 {

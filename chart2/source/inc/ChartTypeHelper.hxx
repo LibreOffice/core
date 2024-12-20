@@ -25,9 +25,6 @@
 #include "ChartType.hxx"
 #include <rtl/ref.hxx>
 
-namespace com::sun::star::chart2 { class XChartType; }
-namespace com::sun::star::chart2 { class XDataSeries; }
-
 namespace chart
 {
 class ChartType;

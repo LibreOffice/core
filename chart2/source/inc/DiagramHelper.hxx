@@ -25,29 +25,14 @@
 #include <rtl/ref.hxx>
 
 namespace chart { class ChartModel; }
-namespace com::sun::star::chart2 { class XAxis; }
-namespace com::sun::star::chart2 { class XChartDocument; }
-namespace com::sun::star::chart2 { class XChartType; }
-namespace com::sun::star::chart2 { class XCoordinateSystem; }
-namespace com::sun::star::chart2 { class XDiagram; }
-namespace com::sun::star::chart2 { class XDataSeries; }
-namespace com::sun::star::chart2::data { class XLabeledDataSequence; }
-namespace com::sun::star::frame { class XModel; }
-namespace com::sun::star::lang { class XMultiServiceFactory; }
-namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::util { class XNumberFormats; }
 namespace com::sun::star::util { class XNumberFormatsSupplier; }
 
 namespace chart
 {
-class Axis;
 class BaseCoordinateSystem;
 class ChartType;
-class ChartTypeManager;
-class ChartTypeTemplate;
 class DataSeries;
-class Diagram;
-class LabeledDataSequence;
 
 class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) DiagramHelper
 {

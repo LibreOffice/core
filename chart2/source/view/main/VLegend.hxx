@@ -28,16 +28,11 @@
 namespace chart { class ChartModel; }
 namespace com::sun::star::awt { struct Rectangle; }
 namespace com::sun::star::awt { struct Size; }
-namespace com::sun::star::chart2 { class XLegend; }
-namespace com::sun::star::drawing { class XShape; }
-namespace com::sun::star::drawing { class XShapes; }
-namespace com::sun::star::lang { class XMultiServiceFactory; }
 namespace com::sun::star::uno { class XComponentContext; }
 
 namespace chart
 {
 
-class Legend;
 class LegendEntryProvider;
 
 class VLegend

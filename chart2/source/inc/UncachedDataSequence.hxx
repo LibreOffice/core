@@ -37,7 +37,6 @@
 #include <com/sun/star/util/XModifiable.hpp>
 
 namespace com::sun::star::beans { class XPropertySetInfo; }
-namespace com::sun::star::chart2 { class XInternalDataProvider; }
 
 namespace chart
 {

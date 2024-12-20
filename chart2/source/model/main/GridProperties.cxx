@@ -26,7 +26,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-namespace com::sun::star::beans { class XPropertySetInfo; }
 namespace com::sun::star::uno { class XComponentContext; }
 
 using namespace ::com::sun::star;

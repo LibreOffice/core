@@ -24,7 +24,6 @@
 #include <vector>
 
 namespace com::sun::star::awt { struct KeyEvent; }
-namespace com::sun::star::chart2 { class XChartDocument; }
 
 namespace chart
 {

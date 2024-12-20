@@ -26,10 +26,6 @@
 
 #include "charttoolsdllapi.hxx"
 
-namespace com::sun::star::frame
-{
-class XModel;
-}
 namespace chart
 {
 class ControllerLockGuardUNO;

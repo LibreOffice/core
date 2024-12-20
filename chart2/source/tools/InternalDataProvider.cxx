@@ -47,8 +47,6 @@
 #include <vector>
 #include <algorithm>
 
-namespace com::sun::star::chart2 { class XChartDocument; }
-
 using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;

@@ -22,7 +22,6 @@
 #include <tools/link.hxx>
 #include <rtl/ref.hxx>
 
-namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::uno { class XComponentContext; }
 namespace weld { class Builder; }
 namespace weld { class CheckButton; }

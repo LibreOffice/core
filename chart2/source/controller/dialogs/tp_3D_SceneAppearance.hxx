@@ -21,7 +21,6 @@
 #include <vcl/weld.hxx>
 
 namespace chart { class ControllerLockHelper; }
-namespace com::sun::star::frame { class XModel; }
 
 namespace chart
 {

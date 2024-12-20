@@ -33,10 +33,7 @@
 #include <tools/link.hxx>
 
 namespace com::sun::star::awt { class XWindow; }
-namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::uno { class XComponentContext; }
-
-class VclWindowEvent;
 
 namespace chart
 {

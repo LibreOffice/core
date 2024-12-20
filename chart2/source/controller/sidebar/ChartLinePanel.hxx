@@ -16,10 +16,6 @@
 #include "ChartSidebarSelectionListener.hxx"
 #include "ChartColorWrapper.hxx"
 
-class XLineDashItem;
-class XLineEndItem;
-class XLineStartItem;
-class XLineStyleItem;
 class XLineTransparenceItem;
 class XLineWidthItem;
 

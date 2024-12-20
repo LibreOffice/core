@@ -29,8 +29,6 @@
 
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::chart2 { class XChartType; }
-namespace com::sun::star::chart2 { class XCoordinateSystem; }
-namespace com::sun::star::chart2 { class XCoordinateSystemContainer; }
 namespace com::sun::star::chart2 { class XDataSeries; }
 namespace com::sun::star::chart2 { class XDiagram; }
 namespace com::sun::star::chart2::data { class XDataSource; }
@@ -43,7 +41,6 @@ class BaseCoordinateSystem;
 class ChartType;
 class DataSeries;
 class Diagram;
-class LabeledDataSequence;
 
 /** For creating diagrams and modifying existing diagrams.  A base class that
     implements XChartTypeTemplate and offers some tooling for classes that

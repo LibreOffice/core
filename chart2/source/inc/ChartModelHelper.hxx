@@ -26,22 +26,12 @@
 #include <vector>
 
 namespace chart { class ChartModel; }
-namespace com::sun::star::chart2 { class XChartDocument; }
-namespace com::sun::star::chart2 { class XChartType; }
-namespace com::sun::star::chart2 { class XCoordinateSystem; }
-namespace com::sun::star::chart2 { class XDataSeries; }
-namespace com::sun::star::chart2 { class XDiagram; }
-namespace com::sun::star::chart2::data { class XDataProvider; }
-namespace com::sun::star::chart2::data { class XRangeHighlighter; }
-namespace com::sun::star::frame { class XModel; }
-namespace com::sun::star::view { class XSelectionSupplier; }
 
 namespace chart
 {
 class BaseCoordinateSystem;
 class ChartType;
 class DataSeries;
-class Diagram;
 class InternalDataProvider;
 
 class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) ChartModelHelper

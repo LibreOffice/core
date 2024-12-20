@@ -25,9 +25,6 @@
 
 namespace com::sun::star::lang { class XMultiServiceFactory; }
 namespace com::sun::star::frame { class XModel; }
-namespace com::sun::star::drawing { class XDrawPage; }
-namespace com::sun::star::drawing { class XShape; }
-namespace com::sun::star::drawing { class XShapes; }
 
 class SdrObjList;
 class SdrObject;

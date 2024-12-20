@@ -27,15 +27,7 @@
 #include <memory>
 
 namespace com::sun::star::beans { class XPropertySet; }
-namespace com::sun::star::chart2 { class XAxis; }
-namespace com::sun::star::chart2 { class XChartDocument; }
-namespace com::sun::star::chart2 { class XCoordinateSystem; }
-namespace com::sun::star::chart2 { class XDataSeries; }
-namespace com::sun::star::chart2 { class XDiagram; }
-namespace com::sun::star::drawing { class XShape; }
-namespace com::sun::star::uno { class XInterface; }
 namespace com::sun::star::uno { template <typename > class Reference; }
-namespace com::sun::star::uno { template <typename > class Sequence; }
 namespace com::sun::star::util { class XNumberFormatsSupplier; }
 namespace com::sun::star::awt { struct Rectangle; }
 class SvxShape;

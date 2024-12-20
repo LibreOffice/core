@@ -22,9 +22,6 @@
 #include <ObjectIdentifier.hxx>
 #include <TitleHelper.hxx>
 
-namespace com::sun::star::chart2 { class XChartDocument; }
-namespace com::sun::star::frame { class XModel; }
-
 namespace chart
 {
 

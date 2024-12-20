@@ -21,7 +21,6 @@
 #include "ItemConverter.hxx"
 #include <rtl/ref.hxx>
 
-namespace com::sun::star::frame { class XModel; }
 namespace chart { class ChartModel; }
 
 namespace chart::wrapper

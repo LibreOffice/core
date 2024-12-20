@@ -27,9 +27,6 @@
 
 namespace com::sun::star::awt { struct Point; }
 namespace com::sun::star::chart2 { class XTitle; }
-namespace com::sun::star::drawing { class XShape; }
-namespace com::sun::star::drawing { class XShapes; }
-namespace com::sun::star::lang { class XMultiServiceFactory; }
 class SvxShapeText;
 
 namespace chart

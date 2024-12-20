@@ -23,10 +23,6 @@
 #include <com/sun/star/sheet/XRangeSelectionListener.hpp>
 #include <rtl/ref.hxx>
 
-namespace com::sun::star::frame
-{
-class XModel;
-}
 namespace weld
 {
 class DialogController;

@@ -26,8 +26,6 @@
 #include <utility>
 #include <vector>
 
-namespace com::sun::star::chart2 { class XDataSeries; }
-
 namespace chart::wrapper
 {
 

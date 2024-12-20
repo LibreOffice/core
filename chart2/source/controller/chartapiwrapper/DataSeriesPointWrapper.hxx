@@ -29,7 +29,6 @@
 #include <rtl/ref.hxx>
 #include <memory>
 
-namespace com::sun::star::chart2 { class XDataSeries; }
 namespace chart { class DataSeries; }
 
 namespace chart::wrapper

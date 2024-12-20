@@ -22,7 +22,6 @@
 #include <sal/types.h>
 #include <vector>
 
-namespace com::sun::star::drawing { struct PolyPolygonShape3D; }
 namespace com::sun::star::drawing { struct Position3D; }
 
 namespace chart

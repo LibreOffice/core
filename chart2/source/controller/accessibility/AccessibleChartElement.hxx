@@ -22,8 +22,6 @@
 #include <com/sun/star/accessibility/XAccessibleExtendedComponent.hpp>
 
 namespace com::sun::star::accessibility { class XAccessible; }
-namespace com::sun::star::accessibility { class XAccessibleContext; }
-namespace com::sun::star::awt { class XFont; }
 
 namespace chart
 {

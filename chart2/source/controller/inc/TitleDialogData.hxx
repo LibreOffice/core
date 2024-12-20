@@ -22,7 +22,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ref.hxx>
 
-namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::uno { class XComponentContext; }
 
 namespace chart

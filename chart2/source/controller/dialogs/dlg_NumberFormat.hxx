@@ -20,11 +20,6 @@
 
 #include <sfx2/basedlgs.hxx>
 
-namespace weld
-{
-class Window;
-class Container;
-}
 class SfxItemSet;
 class SfxItemPool;
 

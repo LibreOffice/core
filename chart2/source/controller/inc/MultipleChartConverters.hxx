@@ -23,7 +23,6 @@
 #include <rtl/ref.hxx>
 #include <optional>
 
-namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::lang { class XMultiServiceFactory; }
 namespace chart { class ChartModel; }
 class SdrModel;

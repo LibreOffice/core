@@ -26,8 +26,6 @@ namespace weld {
     class CheckButton;
     class CustomWeld;
     class Label;
-    class SpinButton;
-    class ToggleButton;
 }
 
 namespace chart

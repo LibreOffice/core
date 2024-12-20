@@ -28,7 +28,6 @@
 #include <vector>
 
 namespace chart { class ChartModel; }
-namespace com::sun::star::chart2 { class XCoordinateSystem; }
 namespace com::sun::star::chart2::data { class XDataSequence; }
 namespace com::sun::star::chart2::data { class XLabeledDataSequence; }
 namespace com::sun::star::uno { class Any; }
@@ -36,7 +35,6 @@ namespace com::sun::star::uno { class Any; }
 namespace chart
 {
 class BaseCoordinateSystem;
-class LabeledDataSequence;
 
 struct OOO_DLLPUBLIC_CHARTTOOLS ComplexCategory
 {

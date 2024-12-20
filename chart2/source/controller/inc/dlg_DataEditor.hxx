@@ -23,13 +23,6 @@
 #include <rtl/ref.hxx>
 
 namespace com::sun::star::uno { class XComponentContext; }
-namespace comphelper { template <class Tp, class Arg> class mem_fun1_t; }
-
-namespace com::sun::star {
-    namespace chart2 {
-        class XChartDocument;
-    }
-}
 
 namespace chart
 {

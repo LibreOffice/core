@@ -28,9 +28,7 @@
 
 namespace chart
 {
-class DataSeries;
 class DataSource;
-class LabeledDataSequence;
 
 /** offers tooling to interpret different data sources in a structural
      and chart-type-dependent way.

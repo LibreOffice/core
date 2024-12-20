@@ -28,7 +28,6 @@
 
 namespace chart
 {
-class LabeledDataSequence;
 
 class UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) DataSource final : public
     ::cppu::WeakImplHelper<

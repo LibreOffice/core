@@ -21,7 +21,6 @@
 #include "ItemConverter.hxx"
 #include <rtl/ref.hxx>
 
-namespace com::sun::star::chart2 { class XRegressionCurveContainer; }
 namespace com::sun::star::lang { class XMultiServiceFactory; }
 namespace chart { class DataSeries; }
 class SdrModel;
