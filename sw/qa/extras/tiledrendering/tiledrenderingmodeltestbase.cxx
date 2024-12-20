@@ -294,6 +294,7 @@ public:
     boost::property_tree::ptree m_aComment;
     std::vector<OString> m_aStateChanges;
     TestLokCallbackWrapper m_callbackWrapper;
+    OString m_aExportFile;
 
     ViewCallback(SfxViewShell* pViewShell = nullptr,
                  std::function<void(ViewCallback&)> const& rBeforeInstallFunc = {})
@@ -469,6 +470,11 @@ public:
             case LOK_CALLBACK_DOCUMENT_BACKGROUND_COLOR:
             {
                 m_aDocColor = aPayload;
+                break;
+            }
+            case LOK_CALLBACK_EXPORT_FILE:
+            {
+                m_aExportFile = aPayload;
                 break;
             }
         }
