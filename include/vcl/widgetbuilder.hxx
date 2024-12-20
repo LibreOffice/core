@@ -55,7 +55,7 @@ public:
         for (auto const& menu : m_aMenus)
         {
             if (menu.m_sID == sID)
-                return menu.m_pMenu.get();
+                return menu.m_pMenu;
         }
 
         return nullptr;
