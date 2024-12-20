@@ -316,7 +316,7 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
     {
         pObject = new QPlainTextEdit(pParentWidget);
     }
-    else if (sName == u"GtkToggleButton")
+    else if (sName == u"GtkToggleButton" || sName == u"GtkMenuButton")
     {
         pObject = new QToolButton(pParentWidget);
     }

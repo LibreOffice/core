@@ -24,6 +24,7 @@
 #include <QtInstanceLevelBar.hxx>
 #include <QtInstanceLinkButton.hxx>
 #include <QtInstanceIconView.hxx>
+#include <QtInstanceMenuButton.hxx>
 #include <QtInstanceMessageDialog.hxx>
 #include <QtInstanceNotebook.hxx>
 #include <QtInstanceProgressBar.hxx>
@@ -204,10 +205,12 @@ std::unique_ptr<weld::Button> QtInstanceBuilder::weld_button(const OUString& rId
     return xRet;
 }
 
-std::unique_ptr<weld::MenuButton> QtInstanceBuilder::weld_menu_button(const OUString&)
+std::unique_ptr<weld::MenuButton> QtInstanceBuilder::weld_menu_button(const OUString& rId)
 {
-    assert(false && "Not implemented yet");
-    return nullptr;
+    QAbstractButton* pButton = m_xBuilder->get<QAbstractButton>(rId);
+    std::unique_ptr<weld::MenuButton> xRet(pButton ? std::make_unique<QtInstanceMenuButton>(pButton)
+                                                   : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::MenuToggleButton> QtInstanceBuilder::weld_menu_toggle_button(const OUString&)
