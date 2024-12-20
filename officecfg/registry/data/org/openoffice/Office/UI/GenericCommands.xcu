@@ -7212,6 +7212,11 @@ bit 3 (0x8): #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON 8
           <value xml:lang="en-US">Language for All Text</value>
         </prop>
       </node>
+      <node oor:name=".uno:AddToWordbook" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Add To Dictionary</value>
+        </prop>
+      </node>
       <node oor:name=".uno:MoreDictionaries" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">More Dictionaries Online...</value>
