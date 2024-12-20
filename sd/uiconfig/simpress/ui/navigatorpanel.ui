@@ -66,7 +66,7 @@
             <child internal-child="accessible">
               <object class="AtkObject" id="documents-atkobject">
                 <property name="AtkObject::accessible-name" translatable="yes" context="navigatorpanel|documents-atkobject">Active Window</property>
-                <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|documents">Lists currently open documents.</property>
+                <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|documents">Lists currently open presentations or drawings.</property>
               </object>
             </child>
           </object>
