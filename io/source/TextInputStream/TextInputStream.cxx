@@ -228,8 +228,7 @@ OUString OTextInputStream::implReadString( const Sequence< sal_Unicode >& Delimi
         aRetStr = OUString( mvBuffer.data(), nCopyLen );
 
     // Copy rest of buffer
-    memmove( mvBuffer.data(), mvBuffer.data() + nBufferReadPos,
-        (mnCharsInBuffer - nBufferReadPos) * sizeof( sal_Unicode ) );
+    std::copy(mvBuffer.data() + nBufferReadPos, mvBuffer.data() + mnCharsInBuffer, mvBuffer.data());
     mnCharsInBuffer -= nBufferReadPos;
 
     return aRetStr;
