@@ -587,7 +587,10 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, StringMap
                         pTreeView->scroll_to_row(*itEntry);
 
                         tools::Rectangle aRect = pTreeView->get_row_area(*itEntry);
-                        CommandEvent aCommand(aRect.Center(), CommandEventId::ContextMenu);
+                        Point aPoint = aRect.Center();
+                        assert(aPoint.getX() >= 0 && aPoint.getY() >= 0);
+
+                        CommandEvent aCommand(aPoint, CommandEventId::ContextMenu);
 
                         LOKTrigger::trigger_popup_menu(*pTreeView, aCommand);
                     }
