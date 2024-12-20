@@ -908,6 +908,16 @@ public:
      * @return SCROW last row of the range within specified height.
      */
     SCROW       GetRowForHeight(tools::Long nHeight) const;
+    /**
+     * Given the height i.e. total vertical distance from the top of the sheet
+     * grid, return the first visible row whose top position is below the
+     * specified height.
+     * Note that this variant uses pixels, not twips.
+     * @param nStartRow the row to start searching at.
+     * @param rStartRowHeightPx this is both the height at nStartRow, and returns the height of the first row
+     *        which has height > nHeight
+     */
+    SCROW       GetRowForHeightPixels( SCROW nStartRow, tools::Long& rStartRowHeightPx, tools::Long nHeightPx, double fPPTY ) const;
 
     sal_uInt16      GetOriginalWidth( SCCOL nCol ) const;
     sal_uInt16      GetOriginalHeight( SCROW nRow ) const;

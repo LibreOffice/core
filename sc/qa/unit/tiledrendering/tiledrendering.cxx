@@ -2008,6 +2008,10 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInsertDeletePageInvalidation)
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testGetRowColumnHeadersInvalidation)
 {
+    // NOTE NOTE NOTE
+    // If you run this test in isolation using CPPUNIT_TEST_NAME=, it will fail because the invalidations
+    // will be different.
+
     ScModelObj* pModelObj = createDoc("empty.ods");
     ScViewData* pViewData = ScDocShell::GetViewData();
     CPPUNIT_ASSERT(pViewData);
