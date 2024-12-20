@@ -107,7 +107,7 @@ def parse_details_and_get_info(url, gitRepo):
         print("Timeout")
         raise
 
-    details = soup.find("div", {"id": "details"}).tbody
+    details = soup.find("div", {"id": "details-tab-panel"}).tbody
     tr_list = details.find_all("tr")
     reason = tr_list[8].td.text.strip()
 
@@ -144,7 +144,7 @@ def parse_details_and_get_info(url, gitRepo):
         #multiline
         codeLine = "\"" + codeLine + "\""
 
-    metadata = soup.find("div", {"id": "metadata"}).tbody
+    metadata = soup.find("div", {"id": "metadata-tab-panel"}).tbody
     tr_list = metadata.find_all("tr")
     unoCommands = ""
     for tr in tr_list:
@@ -201,5 +201,5 @@ if __name__ == '__main__':
                             crashID, crashReason, crashOS, crashStack, codeLine, unoCommands, '\n'])
                     f.write(line)
                     f.flush()
-                except (requests.exceptions.Timeout, AttributeError):
+                except (requests.exceptions.Timeout):
                     continue
