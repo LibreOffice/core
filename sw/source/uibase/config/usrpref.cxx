@@ -82,7 +82,6 @@ SwMasterUsrPref::SwMasterUsrPref(bool bWeb) :
         return;
     }
 
-    m_aLayoutConfig.Load();
     if(m_pWebColorConfig)
         m_pWebColorConfig->Load();
     m_aFmtAidsAutoComplConfig.Load();
@@ -342,11 +341,12 @@ Sequence<OUString> SwLayoutViewConfig::GetPropertyNames() const
 }
 
 SwLayoutViewConfig::SwLayoutViewConfig(bool bIsWeb, SwMasterUsrPref& rPar) :
-    ConfigItem(bIsWeb ? u"Office.WriterWeb/Layout"_ustr :  u"Office.Writer/Layout"_ustr,
-        ConfigItemMode::ReleaseTree),
+    ConfigItem(bIsWeb ? u"Office.WriterWeb/Layout"_ustr :  u"Office.Writer/Layout"_ustr),
     m_rParent(rPar),
     m_bWeb(bIsWeb)
 {
+    Load();
+    EnableNotification(GetPropertyNames());
 }
 
 SwLayoutViewConfig::~SwLayoutViewConfig()
@@ -453,7 +453,10 @@ void SwLayoutViewConfig::Load()
     }
 }
 
-void SwLayoutViewConfig::Notify( const css::uno::Sequence< OUString >& ) {}
+void SwLayoutViewConfig::Notify(const css::uno::Sequence<OUString>&)
+{
+    Load();
+}
 
 Sequence<OUString> SwGridConfig::GetPropertyNames()
 {
