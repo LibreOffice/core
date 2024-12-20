@@ -90,6 +90,7 @@ protected:
     static bool extractEntry(stringmap& rMap);
     static OUString extractIconName(stringmap& rMap);
     static OUString extractLabel(stringmap& rMap);
+    static OUString extractPopupMenu(stringmap& rMap);
     static bool extractShowExpanders(stringmap& rMap);
     static OUString extractTitle(stringmap& rMap);
     static OUString extractTooltipText(stringmap& rMap);

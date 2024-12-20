@@ -278,6 +278,18 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
 
         pObject = pLabel;
     }
+    else if (sName == u"GtkMenuButton")
+    {
+        QToolButton* pMenuButton = new QToolButton(pParentWidget);
+        const OUString sMenu = extractPopupMenu(rMap);
+        if (!sMenu.isEmpty())
+        {
+            QMenu* pMenu = get_menu(sMenu);
+            assert(pMenu && "menu button references non-existing menu");
+            pMenuButton->setMenu(pMenu);
+        }
+        pObject = pMenuButton;
+    }
     else if (sName == u"GtkNotebook")
     {
         pObject = new QTabWidget(pParentWidget);
@@ -318,7 +330,7 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
     {
         pObject = new QPlainTextEdit(pParentWidget);
     }
-    else if (sName == u"GtkToggleButton" || sName == u"GtkMenuButton")
+    else if (sName == u"GtkToggleButton")
     {
         pObject = new QToolButton(pParentWidget);
     }

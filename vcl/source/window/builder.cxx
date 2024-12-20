@@ -878,11 +878,6 @@ namespace
         return extractBoolEntry(rMap, u"draw-value"_ustr, true);
     }
 
-    OUString extractPopupMenu(VclBuilder::stringmap& rMap)
-    {
-        return extractStringEntry(rMap, u"popup"_ustr);
-    }
-
     OUString extractWidgetName(VclBuilder::stringmap& rMap)
     {
         return extractStringEntry(rMap, u"name"_ustr);
@@ -3405,6 +3400,11 @@ OUString BuilderBase::extractIconName(VclBuilder::stringmap &rMap)
 OUString BuilderBase::extractLabel(VclBuilder::stringmap& rMap)
 {
     return extractStringEntry(rMap, u"label"_ustr);
+}
+
+OUString BuilderBase::extractPopupMenu(stringmap& rMap)
+{
+    return extractStringEntry(rMap, u"popup"_ustr);
 }
 
 bool BuilderBase::extractResizable(stringmap& rMap)
