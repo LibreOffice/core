@@ -24,6 +24,7 @@
 #include <QtInstanceLevelBar.hxx>
 #include <QtInstanceLinkButton.hxx>
 #include <QtInstanceIconView.hxx>
+#include <QtInstanceMenu.hxx>
 #include <QtInstanceMenuButton.hxx>
 #include <QtInstanceMessageDialog.hxx>
 #include <QtInstanceNotebook.hxx>
@@ -387,10 +388,11 @@ QtInstanceBuilder::weld_drawing_area(const OUString& rId, const a11yref&, Factor
     return xRet;
 }
 
-std::unique_ptr<weld::Menu> QtInstanceBuilder::weld_menu(const OUString&)
+std::unique_ptr<weld::Menu> QtInstanceBuilder::weld_menu(const OUString& rId)
 {
-    assert(false && "Not implemented yet");
-    return nullptr;
+    QMenu* pMenu = m_xBuilder->get<QMenu>(rId);
+    std::unique_ptr<weld::Menu> xRet(pMenu ? std::make_unique<QtInstanceMenu>(pMenu) : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::Popover> QtInstanceBuilder::weld_popover(const OUString&)
