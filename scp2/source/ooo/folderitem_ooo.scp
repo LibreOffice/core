@@ -32,7 +32,7 @@ FolderItem gid_Folderitem_LibreOffice
     WkDir = gid_Brand_Dir_Program;
     Parameter = "";
     Styles = (NON_ADVERTISED);
-    ALL_LANG(Tooltip, STR_FI_TOOLTIP_SOFFICE);
+    ALL_LANG(Tooltip, STR_FI_TOOLTIP_COFFICE);
 End
 
 FolderItemProperty gid_Fip_LibreOffice_AppID
@@ -56,7 +56,7 @@ FolderItem gid_Folderitem_Soffice_Desktop
     WkDir = gid_Brand_Dir_Program;
     Parameter = "";
     Styles = (NON_ADVERTISED,USE_HELPER_FILENAME);
-    ALL_LANG(Tooltip, STR_FI_TOOLTIP_SOFFICE);
+    ALL_LANG(Tooltip, STR_FI_TOOLTIP_COFFICE);
     ComponentCondition = "CREATEDESKTOPLINK=1";
 End
 
@@ -80,7 +80,7 @@ FolderItem gid_Folderitem_LibreOffice_SafeMode
     WkDir = gid_Brand_Dir_Program;
     Parameter = "--safe-mode";
     Styles = (NON_ADVERTISED);
-    ALL_LANG(Tooltip, STR_FI_TOOLTIP_SOFFICE);
+    ALL_LANG(Tooltip, STR_FI_TOOLTIP_COFFICE);
 End
 
 FolderItemProperty gid_Fip_LibreOffice_SafeMode
