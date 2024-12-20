@@ -302,7 +302,9 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
     }
     else if (sName == u"GtkScale")
     {
-        pObject = new QSlider(pParentWidget);
+        QSlider* pSlider = new QSlider(pParentWidget);
+        setScaleProperties(*pSlider, rMap);
+        pObject = pSlider;
     }
     else if (sName == u"GtkSpinButton")
     {
@@ -792,6 +794,32 @@ void QtBuilder::setLabelProperties(QLabel& rLabel, stringmap& rProps)
             rLabel.setText(convertAccelerator(rValue));
         else if (rKey == u"wrap")
             rLabel.setWordWrap(toBool(rValue));
+    }
+}
+
+void QtBuilder::setScaleProperties(QSlider& rSlider, stringmap& rProps)
+{
+    if (!hasOrientationVertical(rProps))
+        rSlider.setOrientation(Qt::Horizontal);
+
+    auto aAdjustmentIt = rProps.find("adjustment");
+    if (aAdjustmentIt != rProps.end())
+    {
+        const Adjustment* pAdjustment = get_adjustment_by_name(aAdjustmentIt->second);
+        assert(pAdjustment && "referenced adjustment doesn't exist");
+        for (auto const & [ rKey, rValue ] : *pAdjustment)
+        {
+            if (rKey == u"upper")
+                rSlider.setMaximum(rValue.toInt32());
+            else if (rKey == u"lower")
+                rSlider.setMinimum(rValue.toInt32());
+            else if (rKey == "value")
+                rSlider.setValue(rValue.toInt32());
+            else if (rKey == "page-increment")
+                rSlider.setPageStep(rValue.toInt32());
+            else if (rKey == "step-increment")
+                rSlider.setSingleStep(rValue.toInt32());
+        }
     }
 }
 

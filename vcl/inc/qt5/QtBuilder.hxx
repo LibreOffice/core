@@ -19,6 +19,7 @@
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMessageBox>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QSlider>
 
 #include <rtl/ustring.hxx>
 #include <unotools/resmgr.hxx>
@@ -96,6 +97,7 @@ private:
     static void replaceWidget(QWidget* pOldWidget, QWidget* pNewWidget);
     void setProperties(QObject* obj, stringmap& rProps);
     static void setLabelProperties(QLabel& rLabel, stringmap& rProps);
+    void setScaleProperties(QSlider& rSlider, stringmap& rProps);
     void setSpinButtonProperties(QDoubleSpinBox& rSpinBox, stringmap& rProps);
     static QWidget* windowForObject(QObject* pObject);
     static QDialogButtonBox* findButtonBox(QDialog* pDialog);
