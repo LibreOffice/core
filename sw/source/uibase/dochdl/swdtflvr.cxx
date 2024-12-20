@@ -2174,7 +2174,6 @@ bool CanSkipInvalidateNumRules(const SwPosition& rInsertPosition)
 bool SwTransferable::PasteFileContent( const TransferableDataHelper& rData,
                                     SwWrtShell& rSh, SotClipboardFormatId nFormat, bool bMsg, bool bIgnoreComments )
 {
-    TranslateId pResId = STR_CLPBRD_FORMAT_ERROR;
     bool bRet = false;
 
     MSE40HTMLClipFormatObj aMSE40ClpObj;
@@ -2246,6 +2245,7 @@ bool SwTransferable::PasteFileContent( const TransferableDataHelper& rData,
         break;
     }
 
+    TranslateId pResId;
     if( pStream && pRead )
     {
         Link<LinkParamNone*,void> aOldLink( rSh.GetChgLnk() );
