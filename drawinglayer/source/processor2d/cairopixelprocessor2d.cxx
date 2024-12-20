@@ -1259,7 +1259,7 @@ void CairoPixelProcessor2D::paintBitmapAlpha(const BitmapEx& rBitmapEx,
     // against COL_BLACK what might give strange gray lines at borders
     // of white-on-white bitmaps (used e.g. when painting controls).
     // NOTE: CAIRO_EXTEND_REPEAT also works with clipping and might be
-    // broader supported by CVairo implementations
+    // broader supported by Cairo implementations
     cairo_pattern_set_extend(sourcepattern, CAIRO_EXTEND_PAD);
 
     cairo_pattern_set_matrix(sourcepattern, &aMatrix);
