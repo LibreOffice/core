@@ -729,7 +729,7 @@ void GetDocStructureDocProps(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShe
         auto aDocumentStatisticsNode = rJsonWriter.startNode("DocumentStatistics");
         for (int i = 0; i < aDocumentStatistics.getLength(); i++)
         {
-            // Todo check: do all stast are integer numbers?
+            // Todo check: do all stats are integer numbers?
             sal_Int32 nValue = 0;
             aDocumentStatistics[i].Value >>= nValue;
             std::string aStr(OUStringToOString(aDocumentStatistics[i].Name, RTL_TEXTENCODING_UTF8));
