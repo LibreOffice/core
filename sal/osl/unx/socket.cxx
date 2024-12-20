@@ -862,66 +862,67 @@ void SAL_CALL osl_destroyHostAddr (oslHostAddr pAddr)
 
 namespace
 {
-oslSocketResult lcl_getLocalHostname(rtl_uString **ustrLocalHostname, bool bUseFQDN)
+std::pair<oslSocketResult, OUString> lcl_getLocalHostname(bool bUseFQDN)
 {
-    static auto const init = [bUseFQDN]() -> std::pair<oslSocketResult, OUString> {
-            char LocalHostname[256] = "";
+    char LocalHostname[256] = "";
 
 #ifdef SYSV
-            struct utsname uts;
+    struct utsname uts;
 
-            if (uname(&uts) < 0)
-                return {osl_Socket_Error, OUString()};
+    if (uname(&uts) < 0)
+        return {osl_Socket_Error, OUString()};
 
-            if ((strlen(uts.nodename) + 1) > nBufLen)
-                return {osl_Socket_Error, OUString()};
+    if ((strlen(uts.nodename) + 1) > nBufLen)
+        return {osl_Socket_Error, OUString()};
 
-            strncpy(LocalHostname, uts.nodename, sizeof( LocalHostname ));
+    strncpy(LocalHostname, uts.nodename, sizeof( LocalHostname ));
 #else  /* BSD compatible */
-            if (gethostname(LocalHostname, sizeof(LocalHostname)-1) != 0)
-                return {osl_Socket_Error, OUString()};
+    if (gethostname(LocalHostname, sizeof(LocalHostname)-1) != 0)
+        return {osl_Socket_Error, OUString()};
 #endif /* SYSV */
+    LocalHostname[sizeof(LocalHostname)-1] = 0;
+
+    /* check if we have an FQDN */
+    if (bUseFQDN && strchr(LocalHostname, '.') == nullptr)
+    {
+        oslHostAddr Addr;
+
+        /* no, determine it via dns */
+        Addr = osl_psz_createHostAddrByName(LocalHostname);
+
+        const char *pStr;
+        if ((pStr = osl_psz_getHostnameOfHostAddr(Addr)) != nullptr)
+        {
+            strncpy(LocalHostname, pStr, sizeof( LocalHostname ));
             LocalHostname[sizeof(LocalHostname)-1] = 0;
+        }
+        osl_destroyHostAddr(Addr);
+    }
 
-            /* check if we have an FQDN */
-            if (bUseFQDN && strchr(LocalHostname, '.') == nullptr)
-            {
-                oslHostAddr Addr;
+    if (LocalHostname[0] != '\0')
+    {
+        return {osl_Socket_Ok, OUString::createFromAscii(LocalHostname)};
+    }
 
-                /* no, determine it via dns */
-                Addr = osl_psz_createHostAddrByName(LocalHostname);
-
-                const char *pStr;
-                if ((pStr = osl_psz_getHostnameOfHostAddr(Addr)) != nullptr)
-                {
-                    strncpy(LocalHostname, pStr, sizeof( LocalHostname ));
-                    LocalHostname[sizeof(LocalHostname)-1] = 0;
-                }
-                osl_destroyHostAddr(Addr);
-            }
-
-            if (LocalHostname[0] != '\0')
-            {
-                return {osl_Socket_Ok, OUString::createFromAscii(LocalHostname)};
-            }
-
-            return {osl_Socket_Error, OUString()};
-        }();
-
-    rtl_uString_assign(ustrLocalHostname,init.second.pData);
-
-    return init.first;
+    return {osl_Socket_Error, OUString()};
 }
-}
+
+} // anonymous namespace
 
 oslSocketResult SAL_CALL osl_getLocalHostname(rtl_uString **ustrLocalHostname)
 {
-    return lcl_getLocalHostname(ustrLocalHostname, false);
+    static auto const init = lcl_getLocalHostname(/*bUseFQDN*/false);
+
+    rtl_uString_assign(ustrLocalHostname,init.second.pData);
+    return init.first;
 }
 
 oslSocketResult osl_getLocalHostnameFQDN(rtl_uString **ustrLocalHostname)
 {
-    return lcl_getLocalHostname(ustrLocalHostname, true);
+    static auto const init = lcl_getLocalHostname(/*bUseFQDN*/true);
+
+    rtl_uString_assign(ustrLocalHostname,init.second.pData);
+    return init.first;
 }
 
 oslSocketAddr SAL_CALL osl_resolveHostname(rtl_uString *ustrHostname)
