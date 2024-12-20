@@ -1989,6 +1989,8 @@ OUString JSMenu::popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rR
         std::unique_ptr<weld::TreeIter> itEntry(pTree->make_iterator());
         if (pTree->get_dest_row_at_pos(rRect.Center(), itEntry.get(), false, false))
             sCancelId = pTree->get_text(*itEntry);
+        else
+            SAL_WARN("vcl", "No entry detected in JSMenu::popup_at_rect");
     }
 
     m_pSender->sendMenu(m_pPopupMenu, pParent ? pParent->get_buildable_name() : "", sCancelId);
