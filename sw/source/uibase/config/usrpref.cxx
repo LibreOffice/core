@@ -43,10 +43,21 @@ void SwMasterUsrPref::SetUsrPref(const SwViewOption &rCopy)
     *static_cast<SwViewOption*>(this) = rCopy;
 }
 
+static FieldUnit lclGetFieldUnit()
+{
+    if (comphelper::IsFuzzing())
+        return FieldUnit::CM;
+    MeasurementSystem eSystem = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
+    return MeasurementSystem::Metric == eSystem ? FieldUnit::CM : FieldUnit::INCH;
+}
+
 SwMasterUsrPref::SwMasterUsrPref(bool bWeb) :
     m_eFieldUpdateFlags(AUTOUPD_OFF),
     m_nLinkUpdateMode(0),
+    m_eUserMetric(lclGetFieldUnit()),
+    m_eHScrollMetric(m_eUserMetric),
     m_bIsHScrollMetricSet(false),
+    m_eVScrollMetric(m_eUserMetric),
     m_bIsVScrollMetricSet(false),
     m_nDefTabInMm100( 2000 ), // 2 cm
     m_bIsSquaredPageMode(false),
@@ -64,16 +75,12 @@ SwMasterUsrPref::SwMasterUsrPref(bool bWeb) :
 {
     if (comphelper::IsFuzzing())
     {
-        m_eHScrollMetric = m_eVScrollMetric = m_eUserMetric = FieldUnit::CM;
         // match defaults
         SetCore2Option(true, ViewOptCoreFlags2::CursorInProt);
         SetCore2Option(false, ViewOptCoreFlags2::HiddenPara);
         m_nDefTabInMm100 = 1250;
         return;
     }
-    MeasurementSystem eSystem = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
-    m_eUserMetric = MeasurementSystem::Metric == eSystem ? FieldUnit::CM : FieldUnit::INCH;
-    m_eHScrollMetric = m_eVScrollMetric = m_eUserMetric;
 
     m_aLayoutConfig.Load();
     m_aCursorConfig.Load();
