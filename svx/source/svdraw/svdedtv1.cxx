@@ -1571,8 +1571,6 @@ static Point ImpGetPoint(const tools::Rectangle& rRect, RectPoint eRP)
 
 void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr, bool addPageMargin)
 {
-    const bool bTiledRendering = comphelper::LibreOfficeKit::isActive();
-
     tools::Rectangle aRect(GetMarkedObjRect());
 
     if(GetSdrPageView())
@@ -1655,11 +1653,24 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr, bool addPageMargin
         bChgSiz=true;
         bChgHgt=true;
     }
-    if (bChgSiz) {
-        if (bTiledRendering && SfxItemState::SET != rAttr.GetItemState(SID_ATTR_TRANSFORM_SIZE_POINT))
+
+    if (bChgSiz)
+    {
+        // tdf#164285 the item was accessed even when not being set if
+        // false == comphelper::LibreOfficeKit::isActive(). For SlotIDs
+        // like SID_ATTR_TRANSFORM_SIZE_POINT this will crash by asserting
+        // due to SlotIDs having no defaults (see
+        // SfxItemPool::GetUserOrPoolDefaultItem line 725)
+        if (const SfxUInt16Item* pPoolItem = rAttr.GetItemIfSet(SID_ATTR_TRANSFORM_SIZE_POINT))
+            eSizePoint = static_cast<RectPoint>(pPoolItem->GetValue());
+        else if (comphelper::LibreOfficeKit::isActive())
+            // for TiledRendering the default which is set at the start of
+            // this method to RectPoint::MM seems purposely being changed to
+            // RectPoint::LT here - from a change 6 years ago. Note that this
+            // will make chosing another definition point in the UI for the
+            // PosSizeDialog except TopLeft not working when
+            // comphelper::LibreOfficeKit *is* active.
             eSizePoint = RectPoint::LT;
-        else
-            eSizePoint = static_cast<RectPoint>(rAttr.Get(SID_ATTR_TRANSFORM_SIZE_POINT).GetValue());
     }
 
     // rotation
