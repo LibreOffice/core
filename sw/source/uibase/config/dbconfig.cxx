@@ -41,7 +41,7 @@ const Sequence<OUString>& SwDBConfig::GetPropertyNames()
 SwDBConfig::SwDBConfig() :
     ConfigItem(u"Office.DataAccess"_ustr, ConfigItemMode::ReleaseTree)
 {
-};
+}
 
 SwDBConfig::~SwDBConfig()
 {
