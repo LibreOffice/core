@@ -12,6 +12,7 @@
 #include <QtDoubleSpinBox.hxx>
 #include <QtExpander.hxx>
 #include <QtInstanceLinkButton.hxx>
+#include <QtInstanceMenu.hxx>
 #include <QtInstanceMessageDialog.hxx>
 #include <QtInstanceNotebook.hxx>
 #include <QtTools.hxx>
@@ -568,16 +569,32 @@ bool QtBuilder::isHorizontalTabControl(QObject* pObject)
            || ePosition == QTabWidget::TabPosition::South;
 }
 
-QMenu* QtBuilder::createMenu(const OUString&)
+QMenu* QtBuilder::createMenu(const OUString& rId)
 {
-    assert(false && "Not implemented yet");
-    return nullptr;
+    QMenu* pMenu = new QMenu;
+    pMenu->setObjectName(toQString(rId));
+    return pMenu;
 }
 
-void QtBuilder::insertMenuObject(QMenu*, QMenu*, const OUString&, const OUString&, stringmap&,
-                                 stringmap&, accelmap&)
+void QtBuilder::insertMenuObject(QMenu* pParent, QMenu* pSubMenu, const OUString& rClass,
+                                 const OUString& rID, stringmap& rProps, stringmap&, accelmap&)
 {
-    assert(false && "Not implemented yet");
+    assert(!pSubMenu && "Handling not implemented yet");
+    (void)pSubMenu;
+
+    if (rClass == "GtkMenuItem")
+    {
+        const OUString sLabel = extractLabel(rProps);
+        QAction* pAction = pParent->addAction(toQString(sLabel));
+        pAction->setObjectName(toQString(rID));
+
+        const OUString sActionName(extractActionName(rProps));
+        QtInstanceMenu::setActionName(*pAction, sActionName);
+    }
+    else
+    {
+        assert(false && "Not implemented yet");
+    }
 }
 
 void QtBuilder::applyAtkProperties(QObject* pObject, const stringmap& rProperties, bool)

@@ -47,7 +47,13 @@ public:
 
     virtual int n_children() const override;
 
-    virtual OUString get_id(int pos) const override;
+    virtual OUString get_id(int nPos) const override;
+
+    static void setActionName(QAction& rAction, const OUString& rActionName);
+
+private:
+    // get action with the given ID
+    QAction* getAction(const OUString& rIdent) const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
