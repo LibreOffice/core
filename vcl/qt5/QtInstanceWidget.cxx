@@ -495,7 +495,23 @@ void QtInstanceWidget::freeze(){};
 
 void QtInstanceWidget::thaw(){};
 
-void QtInstanceWidget::set_busy_cursor(bool) { assert(false && "Not implemented yet"); }
+void QtInstanceWidget::set_busy_cursor(bool bBusy)
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        if (bBusy)
+            ++m_nBusyCount;
+        else
+            --m_nBusyCount;
+        assert(m_nBusyCount >= 0);
+
+        if (m_nBusyCount == 1)
+            m_pWidget->setCursor(Qt::BusyCursor);
+        else if (m_nBusyCount == 0)
+            m_pWidget->unsetCursor();
+    });
+}
 
 std::unique_ptr<weld::Container> QtInstanceWidget::weld_parent() const
 {

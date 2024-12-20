@@ -25,6 +25,8 @@ class QtInstanceWidget : public QObject, public virtual weld::Widget
 
     QWidget* m_pWidget;
 
+    int m_nBusyCount = 0;
+
 public:
     QtInstanceWidget(QWidget* pWidget);
 
@@ -133,7 +135,7 @@ public:
 
     virtual void thaw() override;
 
-    virtual void set_busy_cursor(bool) override;
+    virtual void set_busy_cursor(bool bBusy) override;
 
     virtual std::unique_ptr<weld::Container> weld_parent() const override;
 
