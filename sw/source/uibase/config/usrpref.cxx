@@ -81,8 +81,6 @@ SwMasterUsrPref::SwMasterUsrPref(bool bWeb) :
         m_nDefTabInMm100 = 1250;
         return;
     }
-
-    m_aFmtAidsAutoComplConfig.Load();
 }
 
 SwMasterUsrPref::~SwMasterUsrPref()
@@ -647,9 +645,11 @@ Sequence<OUString> SwFmtAidsAutoComplConfig::GetPropertyNames()
 }
 
 SwFmtAidsAutoComplConfig::SwFmtAidsAutoComplConfig(SwMasterUsrPref& rPar)
-    : ConfigItem(u"Office.Writer/FmtAidsAutocomplete"_ustr, ConfigItemMode::ReleaseTree)
+    : ConfigItem(u"Office.Writer/FmtAidsAutocomplete"_ustr)
     , m_rParent(rPar)
 {
+    Load();
+    EnableNotification(GetPropertyNames());
 }
 
 SwFmtAidsAutoComplConfig::~SwFmtAidsAutoComplConfig() {}
@@ -700,7 +700,10 @@ void SwFmtAidsAutoComplConfig::Load()
     }
 }
 
-void SwFmtAidsAutoComplConfig::Notify(const css::uno::Sequence<OUString>&) {}
+void SwFmtAidsAutoComplConfig::Notify(const css::uno::Sequence<OUString>&)
+{
+    Load();
+}
 
 SwWebColorConfig::SwWebColorConfig(SwMasterUsrPref& rPar)
     : ConfigItem(u"Office.WriterWeb/Background"_ustr)
