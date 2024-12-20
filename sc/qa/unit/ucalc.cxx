@@ -793,20 +793,44 @@ CPPUNIT_TEST_FIXTURE(Test, testRowForHeight)
     };
 
     std::vector<Check> aChecks = {
-        {   1, 1 },
-        {  99, 1 },
-        { 120, 2 },
-        { 330, 7 },
-        { 420, 13 },
-        { 780, 15 },
-        { 1860, 20 },
-        { 4020, 28 },
+        { -2000, -1 },
+        { -1000, -1 },
+        {    -1,  0 },
+        {     0,  0 }, // row 0 begins
+        {     1,  1 },
+        {    99,  1 }, // row 0 ends
+        {   100,  1 }, // row 1 begins
+        {   101,  2 },
+        {   120,  2 },
+        {   199,  2 }, // row 1 ends
+        {   200,  2 }, // row 2 begins
+        {   201,  6 },
+        {   299,  6 }, // row 2 ends
+        {   300,  6 }, // row 6 begins, because 3-5 are hidden
+        {   330,  7 },
+        {   399,  7 }, // row 6 ends
+        {   400,  7 }, // row 7 begins
+        {   401, 13 },
+        {   420, 13 },
+        {   499, 13 }, // row 7 ends
+        {   500, 13 }, // row 13 begins, because 8-12 are hidden
+        {   501, 14 },
+        {   599, 14 },
+        {   600, 14 },
+        {   699, 14 }, // row 13 ends (row 13 is 200 pixels high)
+        {   700, 14 }, // row 14 begins
+        {   780, 15 },
+        {   899, 15 }, // row 14 ends (row 14 is 200 pixels high)
+        {   900, 15 }, // row 15 begins
+        {  1860, 20 },
+        {  4020, 28 },
     };
 
     for (const Check& rCheck : aChecks)
     {
         SCROW nRow = m_pDoc->GetRowForHeight(0, rCheck.nHeight);
-        CPPUNIT_ASSERT_EQUAL(rCheck.nRow, nRow);
+        OString sMessage = "for height " + OString::number(rCheck.nHeight) + " we expect row " + OString::number(rCheck.nRow);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), rCheck.nRow, nRow);
     }
 }
 
