@@ -118,7 +118,8 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
         return nullptr;
 
     // nothing to do for these
-    if (sName == u"GtkCellRendererText" || sName == u"GtkTreeSelection")
+    if (sName == u"GtkCellRendererPixbuf" || sName == u"GtkCellRendererText"
+        || sName == u"GtkTreeSelection")
         return nullptr;
 
     QWidget* pParentWidget = qobject_cast<QWidget*>(pParent);
