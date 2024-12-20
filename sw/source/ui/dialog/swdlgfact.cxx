@@ -1209,8 +1209,7 @@ VclPtr<AbstractSwAutoFormatDlg> SwAbstractDialogFactory_Impl::CreateSwAutoFormat
     SwWrtShell* pShell, bool bSetAutoFormat, const SwTableAutoFormat* pSelFormat)
 {
     return VclPtr<AbstractSwAutoFormatDlg_Impl>::Create(
-                std::unique_ptr<SwAutoFormatDlg, o3tl::default_delete<SwAutoFormatDlg>>(
-                    new SwAutoFormatDlg(pParent, pShell, bSetAutoFormat, pSelFormat)));
+            std::make_shared<SwAutoFormatDlg>(pParent, pShell, bSetAutoFormat, pSelFormat));
 }
 
 VclPtr<SfxAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwBorderDlg(weld::Window* pParent, SfxItemSet& rSet, SwBorderModes nType )
