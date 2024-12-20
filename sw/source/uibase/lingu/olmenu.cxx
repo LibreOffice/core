@@ -771,9 +771,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
     }
     else if ((MN_DICTIONARIES_START <= nId && nId <= MN_DICTIONARIES_END) || nId == m_nAddId)
     {
-        OUString sWord( m_xSpellAlt->getWord() );
         OUString aDicName;
-
         if (MN_DICTIONARIES_START <= nId && nId <= MN_DICTIONARIES_END)
         {
             PopupMenu *pMenu = m_xPopupMenu->GetPopupMenu(m_nAddMenuId);
@@ -782,24 +780,8 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
         else
             aDicName = m_aDicNameSingle;
 
-        uno::Reference< linguistic2::XDictionary >      xDic;
-        uno::Reference< linguistic2::XSearchableDictionaryList >  xDicList( LinguMgr::GetDictionaryList() );
-        if (xDicList.is())
-            xDic = xDicList->getDictionaryByName( aDicName );
-
-        if (xDic.is())
-        {
-            linguistic::DictionaryError nAddRes = linguistic::AddEntryToDic(xDic, sWord, false, OUString());
-            // save modified user-dictionary if it is persistent
-            uno::Reference< frame::XStorable >  xSavDic( xDic, uno::UNO_QUERY );
-            if (xSavDic.is())
-                xSavDic->store();
-
-            if (linguistic::DictionaryError::NONE != nAddRes && !xDic->getEntry(sWord).is())
-            {
-                SvxDicError(m_pSh->GetView().GetFrameWeld(), nAddRes);
-            }
-        }
+        SfxStringItem aDictString(FN_PARAM_1, aDicName);
+        m_pSh->GetView().GetViewFrame().GetDispatcher()->ExecuteList(SID_ADD_TO_WORDBOOK, SfxCallMode::SYNCHRON, { &aDictString });
     }
     else if ( nId == MN_EXPLANATION_LINK && !m_sExplanationLink.isEmpty() )
     {

@@ -460,7 +460,7 @@ class XFillGradientItem;
 #define SID_ATTR_TEXTCOLUMNS_SPACING                    ( SID_SVX_START + 341 )
 
 #define SID_SET_SMALL_CAPS                              ( SID_SVX_START + 342 )
-// FREE                                                 ( SID_SVX_START + 343 )
+#define SID_ADD_TO_WORDBOOK                             ( SID_SVX_START + 343 )
 // FREE                                                 ( SID_SVX_START + 344 )
 // FREE                                                 ( SID_SVX_START + 345 )
 
