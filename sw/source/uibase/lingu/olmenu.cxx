@@ -361,6 +361,7 @@ SwSpellPopup::SwSpellPopup(
             }
         }
     }
+
     m_xPopupMenu->EnableItem(m_nAddMenuId, (nItemId - MN_DICTIONARIES_START) > 1);
     m_xPopupMenu->EnableItem(m_nAddId, (nItemId - MN_DICTIONARIES_START) == 1);
 
@@ -595,9 +596,8 @@ void SwSpellPopup::InitItemCommands(const css::uno::Sequence< OUString >& aSugge
         m_xPopupMenu->SetItemCommand(nItemId, sCommandString);
     }
 
-    PopupMenu *pMenu = m_xPopupMenu->GetPopupMenu(m_nLangSelectionMenuId);
     m_xPopupMenu->SetItemCommand(m_nLangSelectionMenuId, ".uno:SetSelectionLanguageMenu");
-    if(pMenu)
+    if (PopupMenu *pMenu = m_xPopupMenu->GetPopupMenu(m_nLangSelectionMenuId))
     {
         for (const auto& item : m_aLangTable_Text)
         {
@@ -610,9 +610,8 @@ void SwSpellPopup::InitItemCommands(const css::uno::Sequence< OUString >& aSugge
         pMenu->SetItemCommand(MN_SET_SELECTION_MORE, ".uno:FontDialog?Page:string=font");
     }
 
-    pMenu = m_xPopupMenu->GetPopupMenu(m_nLangParaMenuId);
     m_xPopupMenu->SetItemCommand(m_nLangParaMenuId, ".uno:SetParagraphLanguageMenu");
-    if(pMenu)
+    if (PopupMenu* pMenu = m_xPopupMenu->GetPopupMenu(m_nLangParaMenuId))
     {
         for (const auto& item : m_aLangTable_Paragraph)
         {
@@ -623,6 +622,20 @@ void SwSpellPopup::InitItemCommands(const css::uno::Sequence< OUString >& aSugge
         pMenu->SetItemCommand(MN_SET_PARA_NONE, ".uno:LanguageStatus?Language:string=Paragraph_LANGUAGE_NONE");
         pMenu->SetItemCommand(MN_SET_PARA_RESET, ".uno:LanguageStatus?Language:string=Paragraph_RESET_LANGUAGES");
         pMenu->SetItemCommand(MN_SET_PARA_MORE, ".uno:FontDialogForParagraph");
+    }
+
+    OUString sCommandString = ".uno:AddToWordbook?Wordbook:string=" + m_aDicNameSingle;
+    m_xPopupMenu->SetItemCommand(m_nAddId, sCommandString);
+    m_xPopupMenu->SetItemCommand(m_nAddMenuId, sCommandString);
+    if (PopupMenu *pMenu = m_xPopupMenu->GetPopupMenu(m_nAddMenuId))
+    {
+        for (sal_uInt16 i = 0, nItemCount = pMenu->GetItemCount(); i < nItemCount; ++i)
+        {
+            sal_uInt16 nItemId = pMenu->GetItemId(i);
+            OUString sDict = pMenu->GetItemText(nItemId);
+            sCommandString = ".uno:AddToWordbook?Wordbook:string=" + sDict;
+            pMenu->SetItemCommand(nItemId, sCommandString);
+        }
     }
 }
 
