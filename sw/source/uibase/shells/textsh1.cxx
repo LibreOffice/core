@@ -22,6 +22,8 @@
 #include <config_features.h>
 
 #include <com/sun/star/i18n/WordType.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #include <com/sun/star/text/XContentControlsSupplier.hpp>
 
@@ -937,6 +939,26 @@ bool lcl_DeleteChartColumns(const uno::Reference<chart2::XChartDocument>& xChart
 {
     return lcl_ChangeChartColumnCount(xChartDoc, nId, false);
 }
+}
+
+static bool AddWordToWordbook(const uno::Reference<linguistic2::XDictionary>& xDictionary, SwWrtShell &rWrtSh)
+{
+    if (!xDictionary)
+        return false;
+
+    SwRect aToFill;
+    uno::Reference<linguistic2::XSpellAlternatives>  xSpellAlt(rWrtSh.GetCorrection(nullptr, aToFill));
+    if (!xSpellAlt.is())
+        return false;
+
+    OUString sWord = xSpellAlt->getWord();
+    linguistic::DictionaryError nAddRes = linguistic::AddEntryToDic(xDictionary, sWord, false, OUString());
+    if (linguistic::DictionaryError::NONE != nAddRes && xDictionary.is() && !xDictionary->getEntry(sWord).is())
+    {
+        SvxDicError(rWrtSh.GetView().GetFrameWeld(), nAddRes);
+        return false;
+    }
+    return true;
 }
 
 void SwTextShell::Execute(SfxRequest &rReq)
@@ -2224,19 +2246,26 @@ void SwTextShell::Execute(SfxRequest &rReq)
         }
         else if (sApplyText == "Spelling")
         {
-            SwRect aToFill;
-            uno::Reference<linguistic2::XSpellAlternatives>  xSpellAlt(rWrtSh.GetCorrection(nullptr, aToFill));
-            if (!xSpellAlt.is())
-                return;
-            uno::Reference< linguistic2::XDictionary > xDictionary = LinguMgr::GetIgnoreAllList();
-            OUString sWord(xSpellAlt->getWord());
-            linguistic::DictionaryError nAddRes = linguistic::AddEntryToDic( xDictionary,
-                    sWord, false, OUString() );
-            if (linguistic::DictionaryError::NONE != nAddRes && xDictionary.is() && !xDictionary->getEntry(sWord).is())
-            {
-                SvxDicError(rWrtSh.GetView().GetFrameWeld(), nAddRes);
-            }
+            AddWordToWordbook(LinguMgr::GetIgnoreAllList(), rWrtSh);
         }
+    }
+    break;
+    case SID_ADD_TO_WORDBOOK:
+    {
+        OUString aDicName;
+        if (const SfxStringItem* pItem1 = rReq.GetArg<SfxStringItem>(FN_PARAM_1))
+            aDicName = pItem1->GetValue();
+
+        uno::Reference<linguistic2::XSearchableDictionaryList> xDicList(LinguMgr::GetDictionaryList());
+        uno::Reference<linguistic2::XDictionary> xDic = xDicList.is() ? xDicList->getDictionaryByName(aDicName) : nullptr;
+        if (AddWordToWordbook(xDic, rWrtSh))
+        {
+            // save modified user-dictionary if it is persistent
+            uno::Reference<frame::XStorable> xSavDic(xDic, uno::UNO_QUERY);
+            if (xSavDic.is())
+                xSavDic->store();
+        }
+        break;
     }
     break;
     case SID_SPELLCHECK_APPLY_SUGGESTION:

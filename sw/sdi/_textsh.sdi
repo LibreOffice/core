@@ -1910,6 +1910,12 @@ interface BaseText
         StateMethod = GetState ;
     ]
 
+    SID_ADD_TO_WORDBOOK
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
     SID_SPELLCHECK_APPLY_SUGGESTION
     [
         ExecMethod = Execute ;
