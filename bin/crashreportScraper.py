@@ -18,6 +18,39 @@ import os
 from datetime import datetime
 import urllib.parse
 import re
+import git
+
+tableHeader = ["", "Name", "Ratio", "Count", "First report", "Last Report",
+          "OS", "Stack", "Reason", "Last 4 UNO Commands"]
+
+HtmlHeader = \
+'<!DOCTYPE html> \
+<html lang=\"en\"> \
+<head> \
+    <title>%VERSION% crashes</title> \
+    <style> \
+        table { \
+            width: 100%; \
+            border-collapse: collapse; \
+        } \
+        a { text-decoration:none; color: inherit; } \
+        th, #td1 { \
+            padding: 8px 12px; \
+            border: 1px solid #ccc; \
+            text-align: left; \
+        } \
+        th { \
+            cursor: pointer; \
+            background-color: #f2f2f2; \
+        } \
+        th:hover { \
+            background-color: #ddd; \
+        } \
+    </style> \
+</head> \
+<body> \
+<h2>%VERSION% crashes</h2> \
+<script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>'
 
 def convert_str_to_date(value):
     value = value.replace('.', '')
@@ -60,11 +93,12 @@ def parse_reports_and_get_most_recent_report_from_last_page(url):
         raise
 
     count = 0
+    ID, OS = "", ""
     try:
         os_tab = soup.find("table", {"id": "os_tab"}).tbody
     except AttributeError:
         print("os_tab not found")
-        raise
+        return count, ID, OS
 
     tr_list = os_tab.find_all("tr")
     for tr in tr_list:
@@ -72,9 +106,8 @@ def parse_reports_and_get_most_recent_report_from_last_page(url):
         count += int(td_list[1].text.strip())
 
     reports = soup.find("div", {"id": "reports"}).tbody
-    ID, currentID = "", ""
     version, currentVersion = 0, 0
-    OS, currentOS = "", ""
+    currentID, currentOS = "", ""
 
     tr_list = reports.find_all("tr")
     for tr in tr_list:
@@ -99,7 +132,7 @@ def parse_reports_and_get_most_recent_report_from_last_page(url):
 
     return count, ID, OS
 
-def parse_details_and_get_info(url, gitRepo):
+def parse_details_and_get_info(url, gitRepo, gitBranch):
     try:
         html_text = requests.get(url, timeout=200).text
         soup = BeautifulSoup(html_text, 'html.parser')
@@ -111,8 +144,7 @@ def parse_details_and_get_info(url, gitRepo):
     tr_list = details.find_all("tr")
     reason = tr_list[8].td.text.strip()
 
-    stack = ""
-    codeLine = ""
+    stackTable = "<table>"
 
     count = 0
     frames = soup.find("div", {"id": "frames"}).tbody
@@ -121,28 +153,25 @@ def parse_details_and_get_info(url, gitRepo):
         source = td_list[3].text.strip()
         if source and count <= 10:
             source = source.replace("\\", "/").replace("C:/cygwin64/home/buildslave/source/libo-core/", "")
-            stack += source + "\n"
-            count += 1
 
             codeFile = source.split(":")[0]
             codeNumber = source.split(":")[1]
+            codeLine = "<tr><td>"
             try:
                 with open(os.path.join(gitRepo, codeFile)) as f:
                     lines = f.readlines()
                     for index, line in enumerate(lines):
                         if index + 1 == int(codeNumber):
-                            codeLine += line.strip().replace("\"", "'") + "\n"
+                            urlLink = "https://git.libreoffice.org/core/+/" + \
+                                gitBranch + "/" + codeFile + "#" + str(codeNumber)
+                            codeLine += str(count) + ": <a href=\"" + urlLink + "\">" + line.strip().replace("\"", "'") + "</a>"
+                            count += 1
             except FileNotFoundError:
-                codeLine += "\n"
                 continue
+            codeLine += "</tr></td>"
+            stackTable += codeLine
 
-    if stack:
-        #multiline
-        stack = "\"" + stack + "\""
-
-    if codeLine:
-        #multiline
-        codeLine = "\"" + codeLine + "\""
+    stackTable += "</table>"
 
     metadata = soup.find("div", {"id": "metadata-tab-panel"}).tbody
     tr_list = metadata.find_all("tr")
@@ -151,8 +180,7 @@ def parse_details_and_get_info(url, gitRepo):
         if tr.th.text.strip() == "Last-4-Uno-Commands":
             unoCommands = tr.td.text.strip()
 
-    return reason, stack, codeLine, unoCommands
-
+    return reason, stackTable, unoCommands
 
 if __name__ == '__main__':
 
@@ -163,43 +191,61 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
+    gitBranch = git.Repo(args.repository).active_branch.name
+
     crashes = parse_version_url(
             "https://crashreport.libreoffice.org/stats/version/" + args.version + "?limit=1000&days=30")
 
     print(str(len(crashes)) + " crash reports in version " + args.version)
 
     crashesInFile = []
-    fileName = "crashes_" + args.version.replace(".", "_") + ".csv"
+    fileName = "crashes_" + args.version.replace(".", "_") + ".html"
     print("Using " + fileName)
 
-    bInsertHeader = False
-    if os.path.exists(fileName):
-        with open(fileName, "r") as f:
-            lines = f.readlines()
-            for line in lines:
-                crashesInFile.append(line.split("\t")[0])
-    else:
-        bInsertHeader = True
+    with open(fileName, "w") as f:
+        f.write(HtmlHeader.replace("%VERSION%", args.version))
+        f.write("<table class=\"sortable\">")
+        f.write("<thead>")
+        f.write("<tr>")
+        for name in tableHeader:
+            f.write("<th>" + name + "</th>")
+        f.write("</tr>")
+        f.write("</thead>")
+        f.flush()
 
-    with open(fileName, "a") as f:
-        if bInsertHeader:
-            line = '\t'.join(["Name", "Ratio", "Count", "First report", "Last Report",
-                "ID", "Reason", "OS", "Stack", "Code Lines", "Last 4 UNO Commands", '\n'])
-            f.write(line)
-            f.flush()
-
+        f.write("<tbody>")
+        count = 0
         for k, lDate in crashes.items():
             if k not in crashesInFile:
                 print("Parsing " + k)
+                f.write("<tr>")
                 try:
                     crashCount, crashID, crashOS = parse_reports_and_get_most_recent_report_from_last_page(
                             "https://crashreport.libreoffice.org/stats/signature/" + urllib.parse.quote(k))
-                    crashReason, crashStack, codeLine, unoCommands = parse_details_and_get_info(
-                            "https://crashreport.libreoffice.org/stats/crash_details/" + crashID, args.repository)
+                    if crashCount == 0:
+                        continue
+
+                    crashReason, codeStack, unoCommands = parse_details_and_get_info(
+                            "https://crashreport.libreoffice.org/stats/crash_details/" + crashID, args.repository, gitBranch)
                     ratio = round(crashCount / ((lDate[2] - lDate[1]).days + 1), 2)
-                    line = '\t'.join([k, str(ratio), str(crashCount) , lDate[1].strftime('%y/%m/%d'), lDate[2].strftime('%y/%m/%d'),
-                            crashID, crashReason, crashOS, crashStack, codeLine, unoCommands, '\n'])
-                    f.write(line)
-                    f.flush()
+                    count += 1
+                    f.write("<td id=\"td1\">" + str(count) + "</td>")
+                    f.write("<td id=\"td1\"><b><a href=\"https://crashreport.libreoffice.org/stats/crash_details/"
+                        + crashID + "\">" + k + "</a></b></td>")
+                    f.write("<td id=\"td1\">" + str(ratio) + "</td>")
+                    f.write("<td id=\"td1\">" + str(crashCount) + "</td>")
+                    f.write("<td id=\"td1\">" + lDate[1].strftime('%Y/%m/%d') + "</td>")
+                    f.write("<td id=\"td1\">" + lDate[2].strftime('%Y/%m/%d') + "</td>")
+                    f.write("<td id=\"td1\">" + crashOS + "</td>")
+                    f.write("<td id=\"td1\">" + codeStack + "</td>")
+                    f.write("<td id=\"td1\">" + crashReason + "</td>")
+                    f.write("<td id=\"td1\">" + unoCommands + "</td>")
                 except (requests.exceptions.Timeout):
                     continue
+                f.write("</tr>")
+                f.flush()
+
+        f.write("</tbody>")
+        f.write("</table>")
+        f.write("</body>")
+        f.write("</html>")
