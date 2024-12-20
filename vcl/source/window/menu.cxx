@@ -2980,11 +2980,12 @@ sal_uInt16 PopupMenu::ImplExecute(const VclPtr<vcl::Window>& pParentWin, const t
     }
 
     // In certain cases this might be misdetected with a height of 0, leading to menus not being displayed.
-    // So assume that the available screen size matches at least the system requirements
-    SAL_WARN_IF(nMaxHeight < 768, "vcl",
+    // So assume that the available screen size matches at least the system requirements. With menu origin
+    // in the middle, nMaxHeight will be at least half of screen height.
+    SAL_WARN_IF(nMaxHeight < 768 / 2, "vcl",
                 "Available height misdetected as " << nMaxHeight
-                                                   << "px. Setting to 768px instead.");
-    nMaxHeight = std::max(nMaxHeight, tools::Long(768));
+                                                   << "px. Setting to 384px instead.");
+    nMaxHeight = std::max(nMaxHeight, tools::Long(768 / 2));
 
     if (pStartedFrom && pStartedFrom->IsMenuBar())
         nMaxHeight -= pParentWin->GetSizePixel().Height();
