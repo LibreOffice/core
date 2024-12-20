@@ -60,6 +60,7 @@ using namespace ::com::sun::star;
 namespace
 {
 
+#if HAVE_FEATURE_POPPLER
     class TestSink : public ContentSink
     {
     public:
@@ -462,6 +463,7 @@ namespace
         bool                      m_bDashedLineSeen;
         bool                      m_bImageSeen;
     };
+#endif
 
     class PDFITest : public test::BootstrapFixture, public XmlTestTools
     {
