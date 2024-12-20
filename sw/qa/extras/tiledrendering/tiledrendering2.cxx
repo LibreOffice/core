@@ -19,6 +19,7 @@
 #include <sfx2/msgpool.hxx>
 #include <vcl/scheduler.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/dispatchcommand.hxx>
 
 #include <view.hxx>
 #include <IDocumentLayoutAccess.hxx>
@@ -267,6 +268,43 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testFormatInsertStartList)
     // Without the accompanying fix in place, this test fails with:
     // - Expected: Calibri
     // - Actual  : MS Sans Serif
+}
+
+/// Job on the main loop that switches to the first view.
+class ViewSwitcher
+{
+public:
+    DECL_STATIC_LINK(ViewSwitcher, SwitchView, void*, void);
+};
+
+IMPL_STATIC_LINK_NOARG(ViewSwitcher, SwitchView, void*, void) { SfxLokHelper::setView(0); }
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPDFExportViewSwitch)
+{
+    // Given a document with 2 views:
+    SwXTextDocument* pXTextDocument = createDoc("to-pdf.odt");
+    SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
+    ViewCallback aView1;
+    SfxLokHelper::createView();
+    ViewCallback aView2;
+    SwView* pView2 = pDoc->GetDocShell()->GetView();
+    uno::Reference<frame::XFrame> xFrame2 = pView2->GetViewFrame().GetFrame().GetFrameInterface();
+
+    // When exporting to PDF on the second view and a job on the main loop that switches to the
+    // first view:
+    uno::Sequence<beans::PropertyValue> aPropertyValues = {
+        comphelper::makePropertyValue("SynchronMode", false),
+        comphelper::makePropertyValue("URL", maTempFile.GetURL()),
+    };
+    comphelper::dispatchCommand(".uno:ExportDirectToPDF", xFrame2, aPropertyValues);
+    Application::PostUserEvent(LINK(nullptr, ViewSwitcher, SwitchView), nullptr);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then make sure the callback is invoked exactly on the second view:
+    // Without the accompanying fix in place, this test failed, as the callback was invoked on the
+    // first view.
+    CPPUNIT_ASSERT(aView1.m_aExportFile.isEmpty());
+    CPPUNIT_ASSERT(!aView2.m_aExportFile.isEmpty());
 }
 }
 
