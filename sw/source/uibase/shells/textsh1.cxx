@@ -2631,7 +2631,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                 }
                                 else if (aItem3.first == "AutoloadURL")
                                 {
-                                    // Warning: wrong data here, can froze LO.
+                                    // Warning: wrong data here, can freeze LO.
                                     xDocProps->setAutoloadURL(
                                         OStringToOUString(aItem3.second.get_value<std::string>(),
                                                           RTL_TEXTENCODING_UTF8));
