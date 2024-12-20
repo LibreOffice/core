@@ -117,11 +117,12 @@ std::string FieldUnitToString(FieldUnit unit)
 
 sal_Int64 ImplPower10( sal_uInt16 n )
 {
-    sal_uInt16  i;
-    sal_Int64   nValue = 1;
+    sal_Int64 nValue = 1;
 
-    for ( i=0; i < n; i++ )
+    for (sal_uInt16 i = 0; i < n; i++)
+    {
         nValue *= 10;
+    }
 
     return nValue;
 }
