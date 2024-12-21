@@ -42,9 +42,9 @@ constexpr OUString SN_HH_CONV_DICTIONARY = u"com.sun.star.linguistic2.HangulHanj
 
 
 
-#define SCRIPT_OTHERS   0
-#define SCRIPT_HANJA    1
-#define SCRIPT_HANGUL   2
+constexpr sal_Int16 SCRIPT_OTHERS = 0;
+constexpr sal_Int16 SCRIPT_HANJA  = 1;
+constexpr sal_Int16 SCRIPT_HANGUL = 2;
 
 // from i18npool/source/textconversion/textconversion_ko.cxx
 /// @throws RuntimeException

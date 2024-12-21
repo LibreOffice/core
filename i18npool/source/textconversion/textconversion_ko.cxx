@@ -37,9 +37,9 @@ using namespace com::sun::star::uno;
 
 namespace i18npool {
 
-#define SCRIPT_OTHERS   0
-#define SCRIPT_HANJA    1
-#define SCRIPT_HANGUL   2
+constexpr sal_Int16 SCRIPT_OTHERS = 0;
+constexpr sal_Int16 SCRIPT_HANJA  = 1;
+constexpr sal_Int16 SCRIPT_HANGUL = 2;
 
 TextConversion_ko::TextConversion_ko( const Reference < XComponentContext >& xContext )
     : TextConversionService("com.sun.star.i18n.TextConversion_ko")
