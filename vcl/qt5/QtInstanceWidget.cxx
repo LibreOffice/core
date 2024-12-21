@@ -233,10 +233,15 @@ int QtInstanceWidget::get_text_height() const
     return nHeight;
 }
 
-Size QtInstanceWidget::get_pixel_size(const OUString&) const
+Size QtInstanceWidget::get_pixel_size(const OUString& rText) const
 {
-    assert(false && "Not implemented yet");
-    return Size();
+    SolarMutexGuard g;
+
+    Size aSize;
+    GetQtInstance().RunInMainThread(
+        [&] { aSize = toSize(m_pWidget->fontMetrics().boundingRect(toQString(rText)).size()); });
+
+    return aSize;
 }
 
 vcl::Font QtInstanceWidget::get_font()

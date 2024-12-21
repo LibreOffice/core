@@ -64,7 +64,7 @@ public:
 
     virtual int get_text_height() const override;
 
-    virtual Size get_pixel_size(const OUString&) const override;
+    virtual Size get_pixel_size(const OUString& rText) const override;
 
     virtual vcl::Font get_font() override;
 
