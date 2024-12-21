@@ -39,24 +39,48 @@ void QtInstanceScrolledWindow::hadjustment_configure(int, int, int, int, int, in
 
 int QtInstanceScrolledWindow::hadjustment_get_value() const
 {
-    assert(false && "Not implemented yet");
-    return 0;
+    SolarMutexGuard g;
+
+    int nValue = 0;
+    GetQtInstance().RunInMainThread([&] {
+        if (QScrollBar* pScrollBar = m_pScrollArea->horizontalScrollBar())
+            nValue = pScrollBar->value();
+    });
+
+    return nValue;
 }
 
-void QtInstanceScrolledWindow::hadjustment_set_value(int)
+void QtInstanceScrolledWindow::hadjustment_set_value(int nValue)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        if (QScrollBar* pScrollBar = m_pScrollArea->horizontalScrollBar())
+            pScrollBar->setValue(nValue);
+    });
 }
 
 int QtInstanceScrolledWindow::hadjustment_get_upper() const
 {
-    assert(false && "Not implemented yet");
-    return 0;
+    SolarMutexGuard g;
+
+    int nMax = 0;
+    GetQtInstance().RunInMainThread([&] {
+        if (QScrollBar* pScrollBar = m_pScrollArea->horizontalScrollBar())
+            nMax = pScrollBar->maximum();
+    });
+
+    return nMax;
 }
 
-void QtInstanceScrolledWindow::hadjustment_set_upper(int)
+void QtInstanceScrolledWindow::hadjustment_set_upper(int nUpper)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        if (QScrollBar* pScrollBar = m_pScrollArea->horizontalScrollBar())
+            pScrollBar->setMaximum(nUpper);
+    });
 }
 
 int QtInstanceScrolledWindow::hadjustment_get_page_size() const
@@ -70,14 +94,24 @@ void QtInstanceScrolledWindow::hadjustment_set_page_size(int)
     assert(false && "Not implemented yet");
 }
 
-void QtInstanceScrolledWindow::hadjustment_set_page_increment(int)
+void QtInstanceScrolledWindow::hadjustment_set_page_increment(int nSize)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        if (QScrollBar* pScrollBar = m_pScrollArea->horizontalScrollBar())
+            pScrollBar->setPageStep(nSize);
+    });
 }
 
-void QtInstanceScrolledWindow::hadjustment_set_step_increment(int)
+void QtInstanceScrolledWindow::hadjustment_set_step_increment(int nSize)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        if (QScrollBar* pScrollBar = m_pScrollArea->horizontalScrollBar())
+            pScrollBar->setSingleStep(nSize);
+    });
 }
 
 void QtInstanceScrolledWindow::set_hpolicy(VclPolicyType eHPolicy)
@@ -106,24 +140,48 @@ void QtInstanceScrolledWindow::vadjustment_configure(int, int, int, int, int, in
 
 int QtInstanceScrolledWindow::vadjustment_get_value() const
 {
-    assert(false && "Not implemented yet");
-    return 0;
+    SolarMutexGuard g;
+
+    int nValue = 0;
+    GetQtInstance().RunInMainThread([&] {
+        if (QScrollBar* pScrollBar = m_pScrollArea->verticalScrollBar())
+            nValue = pScrollBar->value();
+    });
+
+    return nValue;
 }
 
-void QtInstanceScrolledWindow::vadjustment_set_value(int)
+void QtInstanceScrolledWindow::vadjustment_set_value(int nValue)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        if (QScrollBar* pScrollBar = m_pScrollArea->verticalScrollBar())
+            pScrollBar->setValue(nValue);
+    });
 }
 
 int QtInstanceScrolledWindow::vadjustment_get_upper() const
 {
-    assert(false && "Not implemented yet");
-    return 0;
+    SolarMutexGuard g;
+
+    int nMax = 0;
+    GetQtInstance().RunInMainThread([&] {
+        if (QScrollBar* pScrollBar = m_pScrollArea->verticalScrollBar())
+            nMax = pScrollBar->maximum();
+    });
+
+    return nMax;
 }
 
-void QtInstanceScrolledWindow::vadjustment_set_upper(int)
+void QtInstanceScrolledWindow::vadjustment_set_upper(int nUpper)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        if (QScrollBar* pScrollBar = m_pScrollArea->verticalScrollBar())
+            pScrollBar->setMaximum(nUpper);
+    });
 }
 
 int QtInstanceScrolledWindow::vadjustment_get_page_size() const
@@ -137,9 +195,14 @@ void QtInstanceScrolledWindow::vadjustment_set_page_size(int)
     assert(false && "Not implemented yet");
 }
 
-void QtInstanceScrolledWindow::vadjustment_set_page_increment(int)
+void QtInstanceScrolledWindow::vadjustment_set_page_increment(int nSize)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        if (QScrollBar* pScrollBar = m_pScrollArea->verticalScrollBar())
+            pScrollBar->setPageStep(nSize);
+    });
 }
 
 void QtInstanceScrolledWindow::vadjustment_set_step_increment(int nSize)
@@ -154,13 +217,25 @@ void QtInstanceScrolledWindow::vadjustment_set_step_increment(int nSize)
 
 int QtInstanceScrolledWindow::vadjustment_get_lower() const
 {
-    assert(false && "Not implemented yet");
-    return 0;
+    SolarMutexGuard g;
+
+    int nMin = 0;
+    GetQtInstance().RunInMainThread([&] {
+        if (QScrollBar* pScrollBar = m_pScrollArea->verticalScrollBar())
+            nMin = pScrollBar->minimum();
+    });
+
+    return nMin;
 }
 
-void QtInstanceScrolledWindow::vadjustment_set_lower(int)
+void QtInstanceScrolledWindow::vadjustment_set_lower(int nLower)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        if (QScrollBar* pScrollBar = m_pScrollArea->verticalScrollBar())
+            pScrollBar->setMinimum(nLower);
+    });
 }
 
 void QtInstanceScrolledWindow::set_vpolicy(VclPolicyType eVPolicy)

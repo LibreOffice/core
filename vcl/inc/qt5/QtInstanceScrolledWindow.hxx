@@ -30,28 +30,28 @@ public:
     virtual void hadjustment_configure(int value, int lower, int upper, int step_increment,
                                        int page_increment, int page_size) override;
     virtual int hadjustment_get_value() const override;
-    virtual void hadjustment_set_value(int value) override;
+    virtual void hadjustment_set_value(int nValue) override;
     virtual int hadjustment_get_upper() const override;
-    virtual void hadjustment_set_upper(int upper) override;
+    virtual void hadjustment_set_upper(int nUpper) override;
     virtual int hadjustment_get_page_size() const override;
-    virtual void hadjustment_set_page_size(int size) override;
-    virtual void hadjustment_set_page_increment(int size) override;
-    virtual void hadjustment_set_step_increment(int size) override;
+    virtual void hadjustment_set_page_size(int nSize) override;
+    virtual void hadjustment_set_page_increment(int nSize) override;
+    virtual void hadjustment_set_step_increment(int nSize) override;
     virtual void set_hpolicy(VclPolicyType eHPolicy) override;
     virtual VclPolicyType get_hpolicy() const override;
 
     virtual void vadjustment_configure(int value, int lower, int upper, int step_increment,
                                        int page_increment, int page_size) override;
     virtual int vadjustment_get_value() const override;
-    virtual void vadjustment_set_value(int value) override;
+    virtual void vadjustment_set_value(int nValue) override;
     virtual int vadjustment_get_upper() const override;
-    virtual void vadjustment_set_upper(int upper) override;
+    virtual void vadjustment_set_upper(int nUpper) override;
     virtual int vadjustment_get_page_size() const override;
-    virtual void vadjustment_set_page_size(int size) override;
-    virtual void vadjustment_set_page_increment(int size) override;
+    virtual void vadjustment_set_page_size(int nSize) override;
+    virtual void vadjustment_set_page_increment(int nSize) override;
     virtual void vadjustment_set_step_increment(int nSize) override;
     virtual int vadjustment_get_lower() const override;
-    virtual void vadjustment_set_lower(int upper) override;
+    virtual void vadjustment_set_lower(int nLower) override;
     virtual void set_vpolicy(VclPolicyType eVPolicy) override;
     virtual VclPolicyType get_vpolicy() const override;
     virtual int get_scroll_thickness() const override;
