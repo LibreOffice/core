@@ -144,13 +144,11 @@ AquaSalGraphics::AquaSalGraphics(bool bPrinter)
     // always disable Skia for print graphics contexts.
     if(!bPrinter && SkiaHelper::isVCLSkiaEnabled())
         mpBackend.reset(new AquaSkiaSalGraphicsImpl(*this, maShared));
+    else
 #else
     (void)bPrinter;
-    if(false)
-        ;
 #endif
-    else
-        mpBackend.reset(new AquaGraphicsBackend(maShared));
+    mpBackend.reset(new AquaGraphicsBackend(maShared));
 
     for (int i = 0; i < MAX_FALLBACK; ++i)
         mpFont[i] = nullptr;

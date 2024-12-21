@@ -95,6 +95,7 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
+#include <com/sun/star/view/PaperOrientation.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <sfx2/linkmgr.hxx>
 #include <svx/unofill.hxx>
@@ -2864,10 +2865,22 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
                 nPrinterPaperTray = aIt->second;
         }
 
+        // TODO/mba: we really need a generic way to get the SwViewShell!
+        SwViewShell* pVwSh = nullptr;
+        SwView* pSwView = dynamic_cast<SwView*>( pView );
+        if ( pSwView )
+            pVwSh = pSwView->GetWrtShellPtr();
+        else
+            pVwSh = static_cast<SwPagePreview*>(pView)->GetViewShell();
+
         awt::Size aPageSize;
         awt::Point aPagePos;
         awt::Size aPreferredPageSize;
         Size aTmpSize;
+#ifdef MACOSX
+        bool bChangeOrientation = false;
+        css::view::PaperOrientation nNewOrientation = css::view::PaperOrientation::PaperOrientation_PORTRAIT;
+#endif
         if (bIsSwSrcView || bPrintProspect)
         {
             // for printing of HTML source code and prospect printing we should use
@@ -2889,19 +2902,50 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
                 aTmpSize = OutputDevice::LogicToLogic( aTmpSize,
                             pPrinter->GetMapMode(), MapMode( MapUnit::Map100thMM ));
                 aPageSize = awt::Size( aTmpSize.Width(), aTmpSize.Height() );
-                #if 0
-                // #i115048# it seems users didn't like getting double the formatted page size
-                // revert to "old" behavior scaling to the current paper size of the printer
+#ifdef MACOSX
+                // Related: tdf#163126 when brochure printing on macOS, set the
+                // printer's page size to match the preferred page size. Unlike
+                // most other platforms, the native print dialog is always
+                // displayed on macOS and it displays a preview of the print
+                // output which the user can make layout changes to. The user
+                // can also change the printer or even send the print output
+                // to PDF instead of a printer from within the native print
+                // dialog so set the printer's paper to the preferred size so
+                // that the initial preview more closely matches the page size
+                // and rotation that LibreOffice expects.
                 if (bPrintProspect)
                 {
                     // we just state what output size we would need
                     // which may cause vcl to set that page size on the printer
                     // (if available and not overridden by the user)
-                    aTmpSize = pVwSh->GetPageSize( nPage, bIsSkipEmptyPages );
-                    aPreferredPageSize = awt::Size ( convertTwipToMm100( 2 * aTmpSize.Width() ),
-                                                     convertTwipToMm100( aTmpSize.Height() ));
+                    if( pVwSh )
+                        aTmpSize = pVwSh->GetPageSize( nPage, bIsSkipEmptyPages );
+
+                    // Related: tdf#163126 set both page size properties as
+                    // they do two different things. The preferred page size
+                    // tells the printer to set its paper size. But the page
+                    // size is the size that LibreOffice will actually draw.
+                    // Fortunately on macOS, there is a good chance that the
+                    // print output will closely match the preferred page size
+                    // since there is no problem printing to a page size not
+                    // supported by an underlying physical printer. In such
+                    // cases, the native print dialog will display at the
+                    // requested paper size as will saving to PDF or opening
+                    // in the Preview application.
+                    aPreferredPageSize = aPageSize = awt::Size( convertTwipToMm100( 2 * aTmpSize.Width() ),
+                                                                convertTwipToMm100( aTmpSize.Height() ));
+
+                    // Related: tdf#163126 try to match any paper rotations in
+                    // the native printing code in vcl.
+                    bChangeOrientation = true;
+                    if( aPageSize.Width < aPageSize.Height )
+                        nNewOrientation = css::view::PaperOrientation::PaperOrientation_PORTRAIT;
+                    else
+                        nNewOrientation = css::view::PaperOrientation::PaperOrientation_LANDSCAPE;
                 }
-                #else
+#else
+                // #i115048# it seems users didn't like getting double the formatted page size
+                // revert to "old" behavior scaling to the current paper size of the printer
                 if( bPrintProspect )
                 {
                     // just switch to an appropriate portrait/landscape format
@@ -2914,19 +2958,11 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
                         aPreferredPageSize.Height = aPageSize.Width;
                     }
                 }
-                #endif
+#endif
             }
         }
         else
         {
-            // TODO/mba: we really need a generic way to get the SwViewShell!
-            SwViewShell* pVwSh = nullptr;
-            SwView* pSwView = dynamic_cast<SwView*>( pView );
-            if ( pSwView )
-                pVwSh = pSwView->GetWrtShellPtr();
-            else
-                pVwSh = static_cast<SwPagePreview*>(pView)->GetViewShell();
-
             if (pVwSh)
             {
                 aTmpSize = pVwSh->GetPageSize( nPage, bIsSkipEmptyPages );
@@ -2957,6 +2993,16 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
             pRenderer[ nLen - 1 ].Name  = "PrinterPaperTray";
             pRenderer[ nLen - 1 ].Value <<= nPrinterPaperTray;
         }
+#ifdef MACOSX
+        if (bChangeOrientation)
+        {
+            ++nLen;
+            aRenderer.realloc( nLen );
+            auto pRenderer = aRenderer.getArray();
+            pRenderer[ nLen - 1 ].Name  = "PaperOrientation";
+            pRenderer[ nLen - 1 ].Value <<= nNewOrientation;
+        }
+#endif
     }
 
     // #i117783#
@@ -3209,7 +3255,12 @@ void SAL_CALL SwXTextDocument::render(
     if( bLastPage )
     {
         // tdf#144989 enable DoIdleJobs() again after last page
-        pDoc->getIDocumentTimerAccess().UnblockIdling();
+        // Related: tdf#163126 on macOS, if the the "print selection only"
+        // checkbox is changed and then the restarted print dialog is
+        // cancelled, idling will have already been unblocked so check
+        // if it is blocked before unblocking it.
+        if( pDoc->getIDocumentTimerAccess().IsIdlingBlocked() )
+            pDoc->getIDocumentTimerAccess().UnblockIdling();
         m_pRenderData.reset();
         m_pPrintUIOptions.reset();
     }
