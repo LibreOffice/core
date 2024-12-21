@@ -663,7 +663,11 @@ void SfxCommonTemplateDialog_Impl::ActionSelect(const OUString& rEntry, StyleLis
                 static_cast<sal_uInt16>(m_aStyleList.GetFamilyItem()->GetFamily()), rStyleList);
     }
     else if (rEntry == "load")
-        SfxGetpApp()->GetDispatcher_Impl()->Execute(SID_TEMPLATE_LOAD);
+    {
+        SfxViewFrame* pViewFrame = pBindings->GetDispatcher_Impl()->GetFrame();
+        SfxFrameItem aFrameItem(SID_DOCFRAME, pViewFrame);
+        SfxGetpApp()->GetDispatcher_Impl()->ExecuteList(SID_TEMPLATE_LOAD, SfxCallMode::SLOT, { &aFrameItem });
+    }
     else
         SAL_WARN("sfx", "not implemented: " << rEntry);
 }
