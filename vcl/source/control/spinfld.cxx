@@ -543,13 +543,9 @@ bool SpinField::EventNotify(NotifyEvent& rNEvt)
     {
         if ((rNEvt.GetCommandEvent()->GetCommand() == CommandEventId::Wheel) && !IsReadOnly())
         {
+            const tools::Rectangle aRect(Point(0, 0), GetSizePixel());
             const Point& rMousePos = rNEvt.GetCommandEvent()->GetMousePosPixel();
-            bool bMouseHovered = maUpperRect.Contains(rMousePos) || maLowerRect.Contains(rMousePos);
-            if (!bMouseHovered && mpEdit)
-            {
-                const tools::Rectangle aEditRect(mpEdit->GetPosPixel(), mpEdit->GetSizePixel());
-                bMouseHovered = aEditRect.Contains(rMousePos);
-            }
+            const bool bMouseHovered = aRect.Contains(rMousePos);
 
             MouseWheelBehaviour nWheelBehavior(GetSettings().GetMouseSettings().GetWheelBehavior());
             if (bMouseHovered
