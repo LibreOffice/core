@@ -73,7 +73,7 @@ public:
 
     virtual void                Reset( const SfxItemSet* ) override;
 
-    void                        DisplayAppEvents( bool appEvents);
+    void                        DisplayAppEvents(bool appEvents, int nSelectIndex);
     void                        SetReadOnly( bool bSet );
     bool                        IsReadOnly() const override;
 };

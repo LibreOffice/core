@@ -263,7 +263,7 @@ void SvxMacroTabPage_::Reset( const SfxItemSet* )
     catch (const Exception&)
     {
     }
-    DisplayAppEvents(bAppEvents);
+    DisplayAppEvents(bAppEvents, 0);
 }
 
 void SvxMacroTabPage_::SetReadOnly( bool bSet )
@@ -307,7 +307,7 @@ namespace
 }
 
 // displays the app events if appEvents=true, otherwise displays the doc events
-void SvxMacroTabPage_::DisplayAppEvents( bool appEvents)
+void SvxMacroTabPage_::DisplayAppEvents(bool appEvents, int nSelectIndex)
 {
     bAppEvents = appEvents;
 
@@ -363,7 +363,7 @@ void SvxMacroTabPage_::DisplayAppEvents( bool appEvents)
 
     if (mpImpl->xEventLB->n_children())
     {
-        mpImpl->xEventLB->select(0);
+        mpImpl->xEventLB->select(nSelectIndex);
         mpImpl->xEventLB->scroll_to_row(0);
     }
 
@@ -661,8 +661,7 @@ SvxMacroTabPage::SvxMacroTabPage(weld::Container* pPage, weld::DialogController*
     }
 
     InitAndSetHandler( xNameReplace, Reference< container::XNameReplace>(nullptr), Reference< util::XModifiable >(nullptr));
-    DisplayAppEvents(true);
-    mpImpl->xEventLB->select(nSelectedIndex);
+    DisplayAppEvents(true, nSelectedIndex);
 }
 
 SvxMacroAssignDlg::SvxMacroAssignDlg(weld::Window* pParent, const Reference< frame::XFrame >& _rxDocumentFrame, const SfxItemSet& rSet,
