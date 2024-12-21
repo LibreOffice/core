@@ -1676,7 +1676,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr, bool addPageMargin
             // for TiledRendering the default which is set at the start of
             // this method to RectPoint::MM seems purposely being changed to
             // RectPoint::LT here - from a change 6 years ago. Note that this
-            // will make chosing another definition point in the UI for the
+            // will make choosing another definition point in the UI for the
             // PosSizeDialog except TopLeft not working when
             // comphelper::LibreOfficeKit *is* active.
             eSizePoint = RectPoint::LT;
