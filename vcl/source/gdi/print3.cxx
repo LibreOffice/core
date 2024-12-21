@@ -47,6 +47,7 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/view/DuplexMode.hpp>
+#include <com/sun/star/view/PaperOrientation.hpp>
 
 #include <unordered_map>
 #include <unordered_set>
@@ -958,6 +959,12 @@ PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( cons
             rProp.Value >>= nBin;
             if( nBin >= 0 && o3tl::make_unsigned(nBin) < mxPrinter->GetPaperBinCount() )
                 nPaperBin = nBin;
+        }
+        else if ( rProp.Name == "PaperOrientation" )
+        {
+            css::view::PaperOrientation nOrientation = css::view::PaperOrientation::PaperOrientation_PORTRAIT;
+            rProp.Value >>= nOrientation;
+            mxPrinter->SetOrientation( nOrientation == css::view::PaperOrientation::PaperOrientation_LANDSCAPE ? Orientation::Landscape : Orientation::Portrait );
         }
     }
 

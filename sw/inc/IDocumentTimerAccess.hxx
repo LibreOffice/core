@@ -64,6 +64,11 @@ public:
      */
     virtual bool IsDocIdle() const = 0;
 
+    /**
+     * Is idling blocked?
+     */
+    virtual bool IsIdlingBlocked() const = 0;
+
 protected:
     virtual ~IDocumentTimerAccess(){};
 };
