@@ -793,37 +793,37 @@ CPPUNIT_TEST_FIXTURE(Test, testRowForHeight)
     };
 
     std::vector<Check> aChecks = {
-        { -2000, -1 },
-        { -1000, -1 },
+        { -2000,  0 },
+        { -1000,  0 },
         {    -1,  0 },
         {     0,  0 }, // row 0 begins
-        {     1,  1 },
-        {    99,  1 }, // row 0 ends
+        {     1,  0 },
+        {    99,  0 }, // row 0 ends
         {   100,  1 }, // row 1 begins
-        {   101,  2 },
-        {   120,  2 },
-        {   199,  2 }, // row 1 ends
+        {   101,  1 },
+        {   120,  1 },
+        {   199,  1 }, // row 1 ends
         {   200,  2 }, // row 2 begins
-        {   201,  6 },
-        {   299,  6 }, // row 2 ends
+        {   201,  2 },
+        {   299,  2 }, // row 2 ends
         {   300,  6 }, // row 6 begins, because 3-5 are hidden
-        {   330,  7 },
-        {   399,  7 }, // row 6 ends
+        {   330,  6 },
+        {   399,  6 }, // row 6 ends
         {   400,  7 }, // row 7 begins
-        {   401, 13 },
-        {   420, 13 },
-        {   499, 13 }, // row 7 ends
+        {   401,  7 },
+        {   420,  7 },
+        {   499,  7 }, // row 7 ends
         {   500, 13 }, // row 13 begins, because 8-12 are hidden
-        {   501, 14 },
-        {   599, 14 },
-        {   600, 14 },
-        {   699, 14 }, // row 13 ends (row 13 is 200 pixels high)
+        {   501, 13 },
+        {   599, 13 },
+        {   600, 13 },
+        {   699, 13 }, // row 13 ends (row 13 is 200 pixels high)
         {   700, 14 }, // row 14 begins
-        {   780, 15 },
-        {   899, 15 }, // row 14 ends (row 14 is 200 pixels high)
+        {   780, 14 },
+        {   899, 14 }, // row 14 ends (row 14 is 200 pixels high)
         {   900, 15 }, // row 15 begins
-        {  1860, 20 },
-        {  4020, 28 },
+        {  1860, 19 },
+        {  4020, 27 },
     };
 
     for (const Check& rCheck : aChecks)

@@ -4255,27 +4255,41 @@ tools::Long ScTable::GetRowOffset( SCROW nRow, bool bHiddenAsZero ) const
 
 SCROW ScTable::GetRowForHeight(tools::Long nHeight) const
 {
+    // clamp bad data
+    if (nHeight < 0)
+        return 0;
+
+    // We are iterating over two data arrays here, each of which
+    // is a range/compressed view of the underlying data.
     tools::Long nSum = 0;
 
-    ScFlatBoolRowSegments::RangeData aData;
-
+    ScFlatBoolRowSegments::RangeData aHiddenRange;
+    aHiddenRange.mnRow1 = -1;
+    aHiddenRange.mnRow2 = -1;
+    aHiddenRange.mbValue = false; // silence MSVC C4701
     ScFlatUInt16RowSegments::RangeData aRowHeightRange;
+    aRowHeightRange.mnRow1 = -1;
     aRowHeightRange.mnRow2 = -1;
     aRowHeightRange.mnValue = 1; // silence MSVC C4701
 
     for (SCROW nRow = 0; nRow <= rDocument.MaxRow(); ++nRow)
     {
-        if (!mpHiddenRows->getRangeData(nRow, aData))
-            // Failed to fetch the range data for whatever reason.
-            break;
+        // fetch hidden data range if necessary
+        if (aHiddenRange.mnRow2 < nRow)
+        {
+            if (!mpHiddenRows->getRangeData(nRow, aHiddenRange))
+                // Failed to fetch the range data for whatever reason.
+                break;
+        }
 
-        if (aData.mbValue)
+        if (aHiddenRange.mbValue)
         {
             // This row is hidden.  Skip ahead all hidden rows.
-            nRow = aData.mnRow2;
+            nRow = aHiddenRange.mnRow2;
             continue;
         }
 
+        // fetch height data range if necessary
         if (aRowHeightRange.mnRow2 < nRow)
         {
             if (!mpRowHeights->getRangeData(nRow, aRowHeightRange))
@@ -4283,34 +4297,26 @@ SCROW ScTable::GetRowForHeight(tools::Long nHeight) const
                 break;
         }
 
+        assert(aHiddenRange.mnRow1 <= nRow && aHiddenRange.mnRow2 >= nRow && "the current hidden-row span should overlap the current row");
+        assert(!aHiddenRange.mbValue && "the current hidden-row span should have visible==true");
+        assert(aRowHeightRange.mnRow1 <= nRow && aRowHeightRange.mnRow2 >= nRow && "the current height span should overlap the current row");
+
         // find the last common row between hidden & height spans
-        SCROW nLastCommon = std::min(aData.mnRow2, aRowHeightRange.mnRow2);
-        assert (nLastCommon >= nRow);
-        SCROW nCommon = nLastCommon - nRow + 1;
+        SCROW nLastCommon = std::min(aHiddenRange.mnRow2, aRowHeightRange.mnRow2);
+        SCROW nCommonRows = nLastCommon - nRow + 1;
+        // height of common span
+        tools::Long nCommonPixels = static_cast<tools::Long>(aRowHeightRange.mnValue) * nCommonRows;
 
-        // how much further to go ?
-        tools::Long nPixelsLeft = nHeight - nSum;
-        tools::Long nCommonPixels = static_cast<tools::Long>(aRowHeightRange.mnValue) * nCommon;
-
-        // are we in the zone ?
-        if (nCommonPixels > nPixelsLeft)
+        // is the target height inside the common span ?
+        if (nSum + nCommonPixels > nHeight)
         {
-            nRow += (nPixelsLeft + aRowHeightRange.mnValue - 1) / aRowHeightRange.mnValue;
+            // calculate how many rows to skip inside the common span
+            nRow += (nHeight - nSum) / aRowHeightRange.mnValue;
 
-            // FIXME: finding this next row is far from elegant,
-            // we have a single caller, which subtracts one as well(!?)
-            if (nRow >= rDocument.MaxRow())
-                return rDocument.MaxRow();
+            assert(aHiddenRange.mnRow1 <= nRow && aHiddenRange.mnRow2 >= nRow && "the current hidden-row span should overlap the current row");
+            assert(aRowHeightRange.mnRow1 <= nRow && aRowHeightRange.mnRow2 >= nRow && "the current height span should overlap the current row");
 
-            if (!mpHiddenRows->getRangeData(nRow, aData))
-                // Failed to fetch the range data for whatever reason.
-                break;
-
-            if (aData.mbValue)
-                // These rows are hidden.
-                nRow = aData.mnRow2 + 1;
-
-            return nRow <= rDocument.MaxRow() ? nRow : rDocument.MaxRow();
+            return nRow;
         }
 
         // skip the range and keep hunting
