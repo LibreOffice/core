@@ -69,7 +69,7 @@ interface BaseTextDocument
     SID_TEMPLATE_LOAD
     [
         ExecMethod = Execute ;
-        StateMethod = NoState ;
+        StateMethod = GetState;
     ]
 
     SID_GET_COLORLIST
