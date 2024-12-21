@@ -1473,10 +1473,9 @@ bool ScDrawLayer::GetPrintArea( ScRange& rRange, bool bSetHor, bool bSetVer ) co
             nStartY = o3tl::toTwips(nStartY, o3tl::Length::mm100);
             nEndY = o3tl::toTwips(nEndY, o3tl::Length::mm100);
             SCROW nRow = pDoc->GetRowForHeight( nTab, nStartY);
-            rRange.aStart.SetRow( nRow>0 ? (nRow-1) : 0);
+            rRange.aStart.SetRow( nRow);
             nRow = pDoc->GetRowForHeight( nTab, nEndY);
-            rRange.aEnd.SetRow( nRow == pDoc->MaxRow() ? pDoc->MaxRow() :
-                    (nRow>0 ? (nRow-1) : 0));
+            rRange.aEnd.SetRow( nRow );
         }
     }
     else
