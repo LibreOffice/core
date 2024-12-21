@@ -184,11 +184,30 @@ VclPolicyType QtInstanceScrolledWindow::get_vpolicy() const
 
 int QtInstanceScrolledWindow::get_scroll_thickness() const
 {
-    assert(false && "Not implemented yet");
-    return 0;
+    SolarMutexGuard g;
+
+    int nThickness = 0;
+    GetQtInstance().RunInMainThread([&] {
+        if (QScrollBar* pVerticalScrollBar = m_pScrollArea->verticalScrollBar())
+            nThickness = pVerticalScrollBar->width();
+        else if (QScrollBar* pHorizontalScrollBar = m_pScrollArea->horizontalScrollBar())
+            nThickness = pHorizontalScrollBar->height();
+    });
+
+    return nThickness;
 }
 
-void QtInstanceScrolledWindow::set_scroll_thickness(int) { assert(false && "Not implemented yet"); }
+void QtInstanceScrolledWindow::set_scroll_thickness(int nThickness)
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        if (QScrollBar* pVerticalScrollBar = m_pScrollArea->verticalScrollBar())
+            pVerticalScrollBar->resize(nThickness, pVerticalScrollBar->height());
+        else if (QScrollBar* pHorizontalScrollBar = m_pScrollArea->horizontalScrollBar())
+            pHorizontalScrollBar->resize(pHorizontalScrollBar->width(), nThickness);
+    });
+}
 
 void QtInstanceScrolledWindow::customize_scrollbars(const Color&, const Color&, const Color&)
 {
