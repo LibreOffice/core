@@ -58,11 +58,22 @@ AquaSalInfoPrinter::AquaSalInfoPrinter( const SalPrinterQueueInfo& i_rQueue ) :
     mnCurPageRangeStart( 0 ),
     mnCurPageRangeCount( 0 )
 {
+    NSPrintInfo* pShared = [NSPrintInfo sharedPrintInfo];
+
     NSString* pStr = CreateNSString( i_rQueue.maPrinterName );
     mpPrinter = [NSPrinter printerWithName: pStr];
     [pStr release];
 
-    NSPrintInfo* pShared = [NSPrintInfo sharedPrintInfo];
+    // Related: tdf#163126 a printer is not needed to use the native
+    // macOS print dialog so if the printer is nil, use the native
+    // default printer instead.
+    if( !mpPrinter )
+        mpPrinter = [NSPrintInfo defaultPrinter];
+    if( !mpPrinter && pShared )
+        mpPrinter = [pShared printer];
+    if( mpPrinter )
+        [mpPrinter retain];
+
     if( pShared )
     {
         mpPrintInfo = [pShared copy];
@@ -89,6 +100,8 @@ AquaSalInfoPrinter::AquaSalInfoPrinter( const SalPrinterQueueInfo& i_rQueue ) :
 AquaSalInfoPrinter::~AquaSalInfoPrinter()
 {
     delete mpGraphics;
+    if( mpPrinter )
+        [mpPrinter release];
     if( mpPrintInfo )
         [mpPrintInfo release];
     if( mrContext )
@@ -101,8 +114,8 @@ void AquaSalInfoPrinter::SetupPrinterGraphics( CGContextRef i_rContext ) const
     {
         if( mpPrintInfo )
         {
-            // FIXME: get printer resolution
-            sal_Int32 nDPIX = 720, nDPIY = 720;
+            sal_Int32 nDPIX = 72, nDPIY = 72;
+            mpGraphics->GetResolution( nDPIX, nDPIY );
             NSSize aPaperSize = [mpPrintInfo paperSize];
 
             NSRect aImageRect = [mpPrintInfo imageablePageBounds];
@@ -666,8 +679,14 @@ const PaperInfo* AquaSalInfoPrinter::matchPaper( tools::Long i_nWidth, tools::Lo
     {
         for( size_t i = 0; i < m_aPaperFormats.size(); i++ )
         {
-            if( std::abs( m_aPaperFormats[i].getWidth() - i_nWidth ) < 50 &&
-                std::abs( m_aPaperFormats[i].getHeight() - i_nHeight ) < 50 )
+            // Related: tdf#163126 expand match range to 1/10th of an inch
+            // The A4 page size in Apple's "no printer installed" printer
+            // can differ from LibreOffice's A4 page size by more than a
+            // millimeter so increase the match range to 1/10th of an inch
+            // since an A4 match would fail when using the previous 0.5
+            // millimeter match range.
+            if( std::abs( m_aPaperFormats[i].getWidth() - i_nWidth ) < 254 &&
+                std::abs( m_aPaperFormats[i].getHeight() - i_nHeight ) < 254 )
             {
                 pMatch = &m_aPaperFormats[i];
                 return pMatch;
