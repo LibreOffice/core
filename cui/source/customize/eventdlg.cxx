@@ -125,7 +125,7 @@ IMPL_LINK_NOARG( SvxEventConfigPage, SelectHdl_Impl, weld::ComboBox&, void )
     if (bApp)
     {
         SetReadOnly( false );
-        SvxMacroTabPage_::DisplayAppEvents( true );
+        SvxMacroTabPage_::DisplayAppEvents(true, 0);
     }
     else
     {
@@ -151,7 +151,7 @@ IMPL_LINK_NOARG( SvxEventConfigPage, SelectHdl_Impl, weld::ComboBox&, void )
         }
 
         SetReadOnly( isReadonly );
-        SvxMacroTabPage_::DisplayAppEvents( false );
+        SvxMacroTabPage_::DisplayAppEvents(false, 0);
     }
 }
 
