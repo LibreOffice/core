@@ -477,7 +477,7 @@ public:
     virtual void vadjustment_set_page_increment(int size) = 0;
     virtual void vadjustment_set_step_increment(int size) = 0;
     virtual int vadjustment_get_lower() const = 0;
-    virtual void vadjustment_set_lower(int upper) = 0;
+    virtual void vadjustment_set_lower(int lower) = 0;
     virtual void set_vpolicy(VclPolicyType eVPolicy) = 0;
     virtual VclPolicyType get_vpolicy() const = 0;
     void connect_vadjustment_changed(const Link<ScrolledWindow&, void>& rLink)
