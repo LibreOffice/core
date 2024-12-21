@@ -60,6 +60,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile)
     static std::unordered_set<OUString> aSupportedUIFiles = {
         u"cui/ui/aboutdialog.ui"_ustr,
         u"cui/ui/insertrowcolumn.ui"_ustr,
+        u"cui/ui/namedialog.ui"_ustr,
         u"cui/ui/objecttitledescdialog.ui"_ustr,
         u"cui/ui/optnewdictionarydialog.ui"_ustr,
         u"cui/ui/password.ui"_ustr,
