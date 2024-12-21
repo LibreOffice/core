@@ -80,15 +80,23 @@ void QtInstanceScrolledWindow::hadjustment_set_step_increment(int)
     assert(false && "Not implemented yet");
 }
 
-void QtInstanceScrolledWindow::set_hpolicy(VclPolicyType)
+void QtInstanceScrolledWindow::set_hpolicy(VclPolicyType eHPolicy)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread(
+        [&] { m_pScrollArea->setHorizontalScrollBarPolicy(toQtPolicy(eHPolicy)); });
 }
 
 VclPolicyType QtInstanceScrolledWindow::get_hpolicy() const
 {
-    assert(false && "Not implemented yet");
-    return VclPolicyType::ALWAYS;
+    SolarMutexGuard g;
+
+    VclPolicyType ePolicy = VclPolicyType::AUTOMATIC;
+    GetQtInstance().RunInMainThread(
+        [&] { ePolicy = toVclPolicy(m_pScrollArea->horizontalScrollBarPolicy()); });
+
+    return ePolicy;
 }
 
 void QtInstanceScrolledWindow::vadjustment_configure(int, int, int, int, int, int)
@@ -155,15 +163,23 @@ void QtInstanceScrolledWindow::vadjustment_set_lower(int)
     assert(false && "Not implemented yet");
 }
 
-void QtInstanceScrolledWindow::set_vpolicy(VclPolicyType)
+void QtInstanceScrolledWindow::set_vpolicy(VclPolicyType eVPolicy)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread(
+        [&] { m_pScrollArea->setVerticalScrollBarPolicy(toQtPolicy(eVPolicy)); });
 }
 
 VclPolicyType QtInstanceScrolledWindow::get_vpolicy() const
 {
-    assert(false && "Not implemented yet");
-    return VclPolicyType::ALWAYS;
+    SolarMutexGuard g;
+
+    VclPolicyType ePolicy = VclPolicyType::AUTOMATIC;
+    GetQtInstance().RunInMainThread(
+        [&] { ePolicy = toVclPolicy(m_pScrollArea->verticalScrollBarPolicy()); });
+
+    return ePolicy;
 }
 
 int QtInstanceScrolledWindow::get_scroll_thickness() const
@@ -177,6 +193,38 @@ void QtInstanceScrolledWindow::set_scroll_thickness(int) { assert(false && "Not 
 void QtInstanceScrolledWindow::customize_scrollbars(const Color&, const Color&, const Color&)
 {
     assert(false && "Not implemented yet");
+}
+
+Qt::ScrollBarPolicy QtInstanceScrolledWindow::toQtPolicy(VclPolicyType eVclPolicy)
+{
+    switch (eVclPolicy)
+    {
+        case VclPolicyType::ALWAYS:
+            return Qt::ScrollBarAlwaysOn;
+        case VclPolicyType::AUTOMATIC:
+            return Qt::ScrollBarAsNeeded;
+        case VclPolicyType::NEVER:
+            return Qt::ScrollBarAlwaysOff;
+        default:
+            assert(false && "Unhandled scroll bar policy");
+            return Qt::ScrollBarAsNeeded;
+    }
+}
+
+VclPolicyType QtInstanceScrolledWindow::toVclPolicy(Qt::ScrollBarPolicy eQtPolicy)
+{
+    switch (eQtPolicy)
+    {
+        case Qt::ScrollBarAlwaysOn:
+            return VclPolicyType::ALWAYS;
+        case Qt::ScrollBarAsNeeded:
+            return VclPolicyType::AUTOMATIC;
+        case Qt::ScrollBarAlwaysOff:
+            return VclPolicyType::NEVER;
+        default:
+            assert(false && "Unhandled scroll bar policy");
+            return VclPolicyType::AUTOMATIC;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -59,6 +59,10 @@ public:
 
     virtual void customize_scrollbars(const Color& rBackgroundColor, const Color& rShadowColor,
                                       const Color& rFaceColor) override;
+
+private:
+    static Qt::ScrollBarPolicy toQtPolicy(VclPolicyType eVclPolicy);
+    static VclPolicyType toVclPolicy(Qt::ScrollBarPolicy eQtPolicy);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
