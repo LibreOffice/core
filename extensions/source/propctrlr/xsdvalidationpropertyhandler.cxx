@@ -598,15 +598,10 @@ namespace pcr
                 PROPERTY_XSD_MIN_EXCLUSIVE_DATE_TIME
             };
 
-            size_t i=0;
-            const OUString* pLoop = nullptr;
-            for ( i = 0, pLoop = aFacets;
-                  i < SAL_N_ELEMENTS( aFacets );
-                  ++i, ++pLoop
-                )
+            for ( const auto& rFacet : aFacets)
             {
-                showPropertyUI( _rxInspectorUI, *pLoop, xDataType.is() && xDataType->hasFacet( *pLoop ) );
-                _rxInspectorUI->enablePropertyUI( *pLoop, !bIsBasicType );
+                showPropertyUI( _rxInspectorUI, rFacet, xDataType.is() && xDataType->hasFacet( rFacet ) );
+                _rxInspectorUI->enablePropertyUI( rFacet, !bIsBasicType );
             }
         }
         break;
