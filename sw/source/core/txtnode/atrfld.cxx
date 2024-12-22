@@ -316,12 +316,10 @@ void SwFormatField::SwClientNotify( const SwModify& rModify, const SfxHint& rHin
 
 namespace
 {
-    bool lcl_ExpandField(const SwFieldIds eId, const bool bHiddenParaPrint)
+    bool lcl_ExpandField(const SwFieldIds eId)
     {
         switch(eId)
         {
-            case SwFieldIds::HiddenPara:
-                return !bHiddenParaPrint;
             case SwFieldIds::DbSetNumber:
             case SwFieldIds::DbNumSet:
             case SwFieldIds::DbNextSet:
@@ -385,7 +383,7 @@ void SwFormatField::ForceUpdateTextNode()
     lcl_EnsureUserFieldValid(*pType);
     if(lcl_TriggerNode(pType->Which()))
         pTextNd->TriggerNodeUpdate(sw::LegacyModifyHint(nullptr, nullptr));
-    if(!lcl_ExpandField(pType->Which(), false))
+    if(!lcl_ExpandField(pType->Which()))
         return;
 
     // Force notify was added for conditional text fields,
@@ -403,7 +401,25 @@ void SwFormatField::UpdateDocPos(const SwTwips nDocPos)
 }
 void SwFormatField::UpdateTextNode(const SfxHint& rHint)
 {
-    if(SfxHintId::SwRemoveUnoObject == rHint.GetId())
+    if(SfxHintId::SwHiddenParaPrint == rHint.GetId())
+    {
+        if (!IsFieldInDoc())
+            return;
+        auto pType = mpField->GetTyp();
+        lcl_EnsureUserFieldValid(*pType);
+        bool bTriggerNode = lcl_TriggerNode(pType->Which());
+        bool bExpand = lcl_ExpandField(pType->Which());
+        if(bTriggerNode)
+        {
+            SwTextNode* pTextNd = &mpTextField->GetTextNode();
+            OSL_ENSURE(pTextNd, "Where is my Node?");
+            pTextNd->TriggerNodeUpdate(sw::LegacyModifyHint(nullptr, nullptr));
+        }
+        if(bExpand)
+            mpTextField->ExpandTextField(false);
+        return;
+    }
+    else if(SfxHintId::SwRemoveUnoObject == rHint.GetId())
     {   // invalidate cached UNO object
         m_wXTextField.clear();
         // ??? why does this Modify method not already do this?
@@ -445,7 +461,7 @@ void SwFormatField::UpdateTextNode(const SfxHint& rHint)
                 auto pType = mpField->GetTyp();
                 lcl_EnsureUserFieldValid(*pType);
                 bTriggerNode = lcl_TriggerNode(pType->Which());
-                bExpand = lcl_ExpandField(pType->Which(), pOld && pOld->Which() == RES_HIDDENPARA_PRINT);
+                bExpand = lcl_ExpandField(pType->Which());
                 pOld = nullptr;
             }
         }

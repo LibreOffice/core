@@ -316,6 +316,11 @@ public:
     const BroadcastingModify* m_pObject;
     RemoveUnoObjectHint(const BroadcastingModify* pObject) : SfxHint(SfxHintId::SwRemoveUnoObject), m_pObject(pObject) {}
 };
+class PrintHiddenParaHint final : public SfxHint
+{
+public:
+    PrintHiddenParaHint() : SfxHint(SfxHintId::SwHiddenParaPrint) {}
+};
 }
 
 class SwUpdateAttr final : public SwMsgPoolItem

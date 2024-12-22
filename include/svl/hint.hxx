@@ -230,6 +230,7 @@ enum class SfxHintId {
     SwFindUnoTextTableRowInstance,
     SwFindUnoCellInstance,
     SwRemoveUnoObject,
+    SwHiddenParaPrint,
 
     ThisIsAnSdrHint,
     ThisIsAnSfxEventHint

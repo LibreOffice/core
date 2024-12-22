@@ -149,8 +149,7 @@ void SwFieldType::PutValue( const uno::Any& , sal_uInt16 )
 
 void SwFieldType::PrintHiddenPara()
 {
-    const SwMsgPoolItem aHint(RES_HIDDENPARA_PRINT);
-    SwClientNotify(*this, sw::LegacyModifyHint(&aHint, nullptr));
+    SwClientNotify(*this, sw::PrintHiddenParaHint());
 }
 
 void SwFieldType::dumpAsXml(xmlTextWriterPtr pWriter) const
