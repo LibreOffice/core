@@ -33,8 +33,6 @@
 
 #include <limits>
 
-using namespace ::com::sun::star::lang;
-
 // hmm. No support for regular expression. Well, I always (not really :) wanted to write a finite automat
 // so here comes a finite automat ...
 
