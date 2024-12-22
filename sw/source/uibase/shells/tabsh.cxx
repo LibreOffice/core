@@ -697,16 +697,12 @@ void SwTableShell::Execute(SfxRequest &rReq)
                      aBoxSet( *pCoreSet->GetPool() );
                 rSh.GetTableBoxFormulaAttrs( aBoxSet );
 
-                SfxItemState eState = aBoxSet.GetItemState(RES_BOXATR_FORMAT);
-                if(eState == SfxItemState::DEFAULT)
-                {
-                    pCoreSet->Put( SfxUInt32Item( SID_ATTR_NUMBERFORMAT_VALUE,
-                    pFormatter->GetFormatIndex(NF_TEXT, LANGUAGE_SYSTEM)));
-                }
-                else
-                    pCoreSet->Put( SfxUInt32Item( SID_ATTR_NUMBERFORMAT_VALUE,
-                                    aBoxSet.Get(
-                                    RES_BOXATR_FORMAT ).GetValue() ));
+                // tdf#132111: if RES_BOXATR_FORMAT state is DEFAULT (no number format set to cell
+                // explicitly), it's not equal to any specific format (the rules are special, e.g.
+                // it's considered numeric for empty or number text in SwTableBox::HasNumContent).
+                // For multiselection, it's INVALID, also not equal to any single format.
+                if (auto pFormat = aBoxSet.GetItemIfSet(RES_BOXATR_FORMAT))
+                    pCoreSet->Put(SfxUInt32Item(SID_ATTR_NUMBERFORMAT_VALUE, pFormat->GetValue()));
 
                 pCoreSet->Put( SvxNumberInfoItem( pFormatter,
                                     aBoxSet.Get(
