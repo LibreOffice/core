@@ -221,11 +221,8 @@ void SvxAppearanceTabPage::Reset(const SfxItemSet* /* rSet */)
     eCurrentAppearanceMode = static_cast<Appearance>(MiscSettings::GetAppColorMode());
 
     // reset ColorConfig
-    if (pColorConfig)
-    {
-        pColorConfig->ClearModified();
-        pColorConfig->DisableBroadcast();
-    }
+    pColorConfig->ClearModified();
+    pColorConfig->DisableBroadcast();
     pColorConfig.reset(new EditableColorConfig);
 }
 
