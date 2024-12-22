@@ -230,6 +230,9 @@ IMPL_LINK_NOARG(SvxAppearanceTabPage, ShowInDocumentHdl, weld::Toggleable&, void
 {
     // get selected entry index and ColorConfigValue
     ColorConfigEntry nEntry = GetActiveEntry();
+    if (nEntry == ColorConfigEntryCount)
+        return;
+
     ColorConfigValue aCurrentEntryColor = pColorConfig->GetColorValue(nEntry);
 
     // set colorconfig value
@@ -254,6 +257,9 @@ IMPL_LINK_NOARG(SvxAppearanceTabPage, ColorEntryChgHdl, weld::ComboBox&, void)
 {
     // get selected entry index and ColorConfigValue
     ColorConfigEntry nEntry = GetActiveEntry();
+    if (nEntry == ColorConfigEntryCount)
+        return;
+
     const ColorConfigValue& rCurrentEntryColor = pColorConfig->GetColorValue(nEntry);
 
     // set automatic colors
@@ -304,6 +310,9 @@ IMPL_LINK_NOARG(SvxAppearanceTabPage, ColorValueChgHdl, ColorListBox&, void)
 {
     // get the active entry
     ColorConfigEntry nEntry = GetActiveEntry();
+    if (nEntry == ColorConfigEntryCount)
+        return;
+
     ColorConfigValue aCurrentEntryColor = pColorConfig->GetColorValue(nEntry);
 
     // restart only for the UI colors
@@ -405,6 +414,9 @@ IMPL_LINK_NOARG(SvxAppearanceTabPage, ColorImageToggleHdl, weld::Toggleable&, vo
 {
     // get the active entry
     ColorConfigEntry nEntry = GetActiveEntry();
+    if (nEntry == ColorConfigEntryCount)
+        return;
+
     ColorConfigValue aCurrentEntryColor = pColorConfig->GetColorValue(nEntry);
 
     aCurrentEntryColor.bUseBitmapBackground = !m_xColorRadioBtn->get_active();
@@ -416,6 +428,9 @@ IMPL_LINK_NOARG(SvxAppearanceTabPage, StretchedTiledToggleHdl, weld::Toggleable&
 {
     // get the active entry
     ColorConfigEntry nEntry = GetActiveEntry();
+    if (nEntry == ColorConfigEntryCount)
+        return;
+
     ColorConfigValue aCurrentEntryColor = pColorConfig->GetColorValue(nEntry);
 
     aCurrentEntryColor.bIsBitmapStretched = m_xStretchedRadioBtn->get_active();
@@ -428,6 +443,9 @@ IMPL_LINK_NOARG(SvxAppearanceTabPage, BitmapChangeHdl, weld::ComboBox&, void)
 {
     // get the active entry
     ColorConfigEntry nEntry = GetActiveEntry();
+    if (nEntry == ColorConfigEntryCount)
+        return;
+
     ColorConfigValue aCurrentEntryColor = pColorConfig->GetColorValue(nEntry);
 
     // save the bitmap file name
@@ -543,6 +561,9 @@ void SvxAppearanceTabPage::UpdateColorDropdown()
 
     // update color to light/dark
     ColorConfigEntry nEntry = GetActiveEntry();
+    if (nEntry == ColorConfigEntryCount)
+        return;
+
     const ColorConfigValue& rCurrentEntryColor = pColorConfig->GetColorValue(nEntry);
 
     // set automatic colors
