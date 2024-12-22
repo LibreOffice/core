@@ -17,32 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/debug.hxx>
-#include <boost/property_tree/json_parser.hpp>
+#include <rtl/math.hxx>
+#include <svl/numformat.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
-#include <unotools/localedatawrapper.hxx>
+#include <tools/debug.hxx>
+
 #include <vcl/builder.hxx>
 #include <vcl/event.hxx>
-#include <vcl/settings.hxx>
 #include <vcl/commandevent.hxx>
-#include <svl/zformat.hxx>
-#include <vcl/toolkit/field.hxx>
 #include <vcl/toolkit/fmtfield.hxx>
-#include <vcl/uitest/uiobject.hxx>
 #include <vcl/uitest/formattedfielduiobject.hxx>
-#include <vcl/weld.hxx>
 #include <vcl/weldutils.hxx>
-#include <i18nlangtag/languagetag.hxx>
-#include <unotools/syslocale.hxx>
+#include <svl/zformat.hxx>
+
 #include <limits>
-#include <map>
-#include <rtl/math.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <sal/log.hxx>
-#include <svl/numformat.hxx>
-#include <osl/diagnose.h>
-#include <tools/json_writer.hxx>
 
 using namespace ::com::sun::star::lang;
 
