@@ -1775,6 +1775,7 @@ void SwCreateAuthEntryDlg_Impl::SetFields(const OUString pFields[], bool bNewEnt
             OUString aText = pFields[aCurInfo.nToxField], aUrl;
             if (int nPageNumber; AUTH_FIELD_LOCAL_URL == aCurInfo.nToxField && SplitUrlAndPage(aText, aUrl, nPageNumber))
             {
+                assert(m_xLocalPageCB && m_xLocalPageSB);
                 m_pEdits[nIndex]->set_text(aUrl);
                 m_xLocalPageCB->set_active(true);
                 m_xLocalPageSB->set_sensitive(true);
