@@ -28,6 +28,7 @@
 #include <QtInstanceMenuButton.hxx>
 #include <QtInstanceMessageDialog.hxx>
 #include <QtInstanceNotebook.hxx>
+#include <QtInstancePopover.hxx>
 #include <QtInstanceProgressBar.hxx>
 #include <QtInstanceRadioButton.hxx>
 #include <QtInstanceScale.hxx>
@@ -395,10 +396,12 @@ std::unique_ptr<weld::Menu> QtInstanceBuilder::weld_menu(const OUString& rId)
     return xRet;
 }
 
-std::unique_ptr<weld::Popover> QtInstanceBuilder::weld_popover(const OUString&)
+std::unique_ptr<weld::Popover> QtInstanceBuilder::weld_popover(const OUString& rId)
 {
-    assert(false && "Not implemented yet");
-    return nullptr;
+    QWidget* pWidget = m_xBuilder->get<QWidget>(rId);
+    std::unique_ptr<weld::Popover> xRet(pWidget ? std::make_unique<QtInstancePopover>(pWidget)
+                                                : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::Toolbar> QtInstanceBuilder::weld_toolbar(const OUString&)

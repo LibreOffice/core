@@ -33,6 +33,7 @@ $(call gb_CustomTarget_get_target,vcl/qt5) : \
 	$(gb_CustomTarget_workdir)/vcl/qt5/QtInstanceMenuButton.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt5/QtInstanceMessageDialog.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt5/QtInstanceNotebook.moc \
+	$(gb_CustomTarget_workdir)/vcl/qt5/QtInstancePopover.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt5/QtInstanceProgressBar.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt5/QtInstanceRadioButton.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt5/QtInstanceScale.moc \

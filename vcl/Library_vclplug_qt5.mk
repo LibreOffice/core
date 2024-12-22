@@ -119,6 +119,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_qt5,\
     vcl/qt5/QtInstanceMenuButton \
     vcl/qt5/QtInstanceMessageDialog \
     vcl/qt5/QtInstanceNotebook \
+    vcl/qt5/QtInstancePopover \
     vcl/qt5/QtInstanceProgressBar \
     vcl/qt5/QtInstanceRadioButton \
     vcl/qt5/QtInstanceScale \

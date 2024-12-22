@@ -298,6 +298,12 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
     {
         pObject = new QSplitter(pParentWidget);
     }
+    else if (sName == u"GtkPopover")
+    {
+        QWidget* pWidget = new QWidget(pParentWidget, Qt::Popup);
+        pWidget->setLayout(new QVBoxLayout);
+        pObject = pWidget;
+    }
     else if (sName == u"GtkRadioButton")
     {
         pObject = new QRadioButton(pParentWidget);

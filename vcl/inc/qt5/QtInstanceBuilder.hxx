@@ -75,7 +75,7 @@ public:
                       FactoryFunction pUITestFactoryFunction = nullptr,
                       void* pUserData = nullptr) override;
     virtual std::unique_ptr<weld::Menu> weld_menu(const OUString& rId) override;
-    virtual std::unique_ptr<weld::Popover> weld_popover(const OUString&) override;
+    virtual std::unique_ptr<weld::Popover> weld_popover(const OUString& rId) override;
     virtual std::unique_ptr<weld::Toolbar> weld_toolbar(const OUString&) override;
     virtual std::unique_ptr<weld::Scrollbar> weld_scrollbar(const OUString&) override;
     virtual std::unique_ptr<weld::SizeGroup> create_size_group() override;
