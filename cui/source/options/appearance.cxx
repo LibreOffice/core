@@ -124,7 +124,7 @@ void SvxAppearanceTabPage::UpdateControlsState()
     m_xColorChangeBtn->set_sensitive(bEnableControls);
     m_xShowInDocumentChkBtn->set_sensitive(bEnableControls);
     m_xColorRadioBtn->set_sensitive(bEnableControls);
-    EnableImageControls(bEnableControls && GetActiveEntry() == static_cast<int>(APPBACKGROUND));
+    EnableImageControls(bEnableControls && GetActiveEntry() == APPBACKGROUND);
 }
 
 void SvxAppearanceTabPage::LoadSchemeList()
@@ -229,13 +229,12 @@ void SvxAppearanceTabPage::Reset(const SfxItemSet* /* rSet */)
 IMPL_LINK_NOARG(SvxAppearanceTabPage, ShowInDocumentHdl, weld::Toggleable&, void)
 {
     // get selected entry index and ColorConfigValue
-    size_t nEntry = GetActiveEntry();
-    ColorConfigValue aCurrentEntryColor
-        = pColorConfig->GetColorValue(static_cast<ColorConfigEntry>(nEntry));
+    ColorConfigEntry nEntry = GetActiveEntry();
+    ColorConfigValue aCurrentEntryColor = pColorConfig->GetColorValue(nEntry);
 
     // set colorconfig value
     aCurrentEntryColor.bIsVisible = m_xShowInDocumentChkBtn->get_active();
-    pColorConfig->SetColorValue(static_cast<ColorConfigEntry>(nEntry), aCurrentEntryColor);
+    pColorConfig->SetColorValue(nEntry, aCurrentEntryColor);
 }
 
 IMPL_LINK_NOARG(SvxAppearanceTabPage, AppearanceChangeHdl, weld::Toggleable&, void)
@@ -254,13 +253,11 @@ IMPL_LINK_NOARG(SvxAppearanceTabPage, AppearanceChangeHdl, weld::Toggleable&, vo
 IMPL_LINK_NOARG(SvxAppearanceTabPage, ColorEntryChgHdl, weld::ComboBox&, void)
 {
     // get selected entry index and ColorConfigValue
-    size_t nEntry = GetActiveEntry();
-    const ColorConfigValue& rCurrentEntryColor
-        = pColorConfig->GetColorValue(static_cast<ColorConfigEntry>(nEntry));
+    ColorConfigEntry nEntry = GetActiveEntry();
+    const ColorConfigValue& rCurrentEntryColor = pColorConfig->GetColorValue(nEntry);
 
     // set automatic colors
-    m_xColorChangeBtn->SetAutoDisplayColor(
-        ColorConfig::GetDefaultColor(static_cast<ColorConfigEntry>(nEntry)));
+    m_xColorChangeBtn->SetAutoDisplayColor(ColorConfig::GetDefaultColor(nEntry));
     // set values for the entry
     if (IsDarkModeEnabled())
         m_xColorChangeBtn->SelectEntry(rCurrentEntryColor.nDarkColor);
@@ -306,9 +303,8 @@ IMPL_LINK_NOARG(SvxAppearanceTabPage, ColorEntryChgHdl, weld::ComboBox&, void)
 IMPL_LINK_NOARG(SvxAppearanceTabPage, ColorValueChgHdl, ColorListBox&, void)
 {
     // get the active entry
-    size_t nEntry = GetActiveEntry();
-    ColorConfigValue aCurrentEntryColor
-        = pColorConfig->GetColorValue(static_cast<ColorConfigEntry>(nEntry));
+    ColorConfigEntry nEntry = GetActiveEntry();
+    ColorConfigValue aCurrentEntryColor = pColorConfig->GetColorValue(nEntry);
 
     // restart only for the UI colors
     if (nEntry >= WINDOWCOLOR)
@@ -325,7 +321,7 @@ IMPL_LINK_NOARG(SvxAppearanceTabPage, ColorValueChgHdl, ColorListBox&, void)
     // making the whole thing super slow (comparatively).
     aCurrentEntryColor.nColor = m_xColorChangeBtn->GetSelectEntryColor();
 
-    pColorConfig->SetColorValue(static_cast<ColorConfigEntry>(nEntry), aCurrentEntryColor);
+    pColorConfig->SetColorValue(nEntry, aCurrentEntryColor);
 }
 
 IMPL_LINK_NOARG(SvxAppearanceTabPage, SchemeChangeHdl, weld::ComboBox&, void)
@@ -408,40 +404,37 @@ IMPL_LINK(SvxAppearanceTabPage, AddRemoveSchemeHdl, weld::Button&, rButton, void
 IMPL_LINK_NOARG(SvxAppearanceTabPage, ColorImageToggleHdl, weld::Toggleable&, void)
 {
     // get the active entry
-    size_t nEntry = GetActiveEntry();
-    ColorConfigValue aCurrentEntryColor
-        = pColorConfig->GetColorValue(static_cast<ColorConfigEntry>(nEntry));
+    ColorConfigEntry nEntry = GetActiveEntry();
+    ColorConfigValue aCurrentEntryColor = pColorConfig->GetColorValue(nEntry);
 
     aCurrentEntryColor.bUseBitmapBackground = !m_xColorRadioBtn->get_active();
-    pColorConfig->SetColorValue(static_cast<ColorConfigEntry>(nEntry), aCurrentEntryColor);
+    pColorConfig->SetColorValue(nEntry, aCurrentEntryColor);
     m_bRestartRequired = true;
 }
 
 IMPL_LINK_NOARG(SvxAppearanceTabPage, StretchedTiledToggleHdl, weld::Toggleable&, void)
 {
     // get the active entry
-    size_t nEntry = GetActiveEntry();
-    ColorConfigValue aCurrentEntryColor
-        = pColorConfig->GetColorValue(static_cast<ColorConfigEntry>(nEntry));
+    ColorConfigEntry nEntry = GetActiveEntry();
+    ColorConfigValue aCurrentEntryColor = pColorConfig->GetColorValue(nEntry);
 
     aCurrentEntryColor.bIsBitmapStretched = m_xStretchedRadioBtn->get_active();
 
-    pColorConfig->SetColorValue(static_cast<ColorConfigEntry>(nEntry), aCurrentEntryColor);
+    pColorConfig->SetColorValue(nEntry, aCurrentEntryColor);
     m_bRestartRequired = true;
 }
 
 IMPL_LINK_NOARG(SvxAppearanceTabPage, BitmapChangeHdl, weld::ComboBox&, void)
 {
     // get the active entry
-    size_t nEntry = GetActiveEntry();
-    ColorConfigValue aCurrentEntryColor
-        = pColorConfig->GetColorValue(static_cast<ColorConfigEntry>(nEntry));
+    ColorConfigEntry nEntry = GetActiveEntry();
+    ColorConfigValue aCurrentEntryColor = pColorConfig->GetColorValue(nEntry);
 
     // save the bitmap file name
     aCurrentEntryColor.sBitmapFileName
         = getBitmapList()[m_xBitmapDropDownBtn->get_active()].aBitmapFileName;
 
-    pColorConfig->SetColorValue(static_cast<ColorConfigEntry>(nEntry), aCurrentEntryColor);
+    pColorConfig->SetColorValue(nEntry, aCurrentEntryColor);
     m_bRestartRequired = true;
 }
 
@@ -549,13 +542,11 @@ void SvxAppearanceTabPage::UpdateColorDropdown()
     }
 
     // update color to light/dark
-    size_t nEntry = GetActiveEntry();
-    const ColorConfigValue& rCurrentEntryColor
-        = pColorConfig->GetColorValue(static_cast<ColorConfigEntry>(nEntry));
+    ColorConfigEntry nEntry = GetActiveEntry();
+    const ColorConfigValue& rCurrentEntryColor = pColorConfig->GetColorValue(nEntry);
 
     // set automatic colors
-    m_xColorChangeBtn->SetAutoDisplayColor(
-        ColorConfig::GetDefaultColor(static_cast<ColorConfigEntry>(nEntry)));
+    m_xColorChangeBtn->SetAutoDisplayColor(ColorConfig::GetDefaultColor(nEntry));
     // set values for the entry
     if (IsDarkModeEnabled())
         m_xColorChangeBtn->SelectEntry(rCurrentEntryColor.nDarkColor);
@@ -728,16 +719,15 @@ void SvxAppearanceTabPage::FillItemsList()
                                  aRegistryEntries.at(static_cast<ColorConfigEntry>(i)));
 }
 
-size_t SvxAppearanceTabPage::GetActiveEntry()
+ColorConfigEntry SvxAppearanceTabPage::GetActiveEntry()
 {
     OUString sEntryId = m_xColorEntryBtn->get_active_id();
-    int nEntry = 0;
-    for (; nEntry < ColorConfigEntryCount; ++nEntry)
+    for (int nEntry = 0; nEntry < ColorConfigEntryCount; ++nEntry)
     {
         if (sEntryId == cNames[nEntry].cName)
-            break;
+            return static_cast<ColorConfigEntry>(nEntry);
     }
-    return nEntry;
+    return ColorConfigEntryCount;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

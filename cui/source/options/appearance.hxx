@@ -88,7 +88,7 @@ private:
     void UpdateOldAppearance();
     bool IsDarkModeEnabled();
     void FillItemsList();
-    size_t GetActiveEntry();
+    ColorConfigEntry GetActiveEntry();
 
 public:
     SvxAppearanceTabPage(weld::Container* pPage, weld::DialogController* pController,
