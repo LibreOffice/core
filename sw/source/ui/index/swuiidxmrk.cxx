@@ -1752,6 +1752,7 @@ void SwCreateAuthEntryDlg_Impl::SetFields(const OUString pFields[], bool bNewEnt
             }
             break;
         case AUTH_FIELD_TARGET_TYPE:
+            assert(m_xTargetTypeListBox && "No TargetType ListBox");
             if (!pFields[aCurInfo.nToxField].isEmpty())
             {
                 m_xTargetTypeListBox->set_active(pFields[aCurInfo.nToxField].toInt32());
