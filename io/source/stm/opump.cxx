@@ -61,6 +61,7 @@ namespace io_stm {
         static void static_run( void* pObject );
 
         void close();
+        void joinWithThread();
         void fireClose();
         void fireStarted();
         void fireTerminated();
@@ -198,7 +199,6 @@ void Pump::fireTerminated()
     }
 }
 
-
 void Pump::close()
 {
     // close streams and release references
@@ -236,6 +236,14 @@ void Pump::close()
             // go down calm
         }
     }
+}
+
+void Pump::joinWithThread()
+{
+    std::unique_lock guard( m_aMutex );
+    // wait for the worker to die
+    if( m_aThread )
+        osl_joinWithThread( m_aThread );
 }
 
 void Pump::static_run( void* pObject )
@@ -367,19 +375,15 @@ void Pump::start()
 
 }
 
-
 void Pump::terminate()
 {
     close();
 
-    // wait for the worker to die
-    if( m_aThread )
-        osl_joinWithThread( m_aThread );
+    joinWithThread();
 
     fireTerminated();
     fireClose();
 }
-
 
 /*
  * XActiveDataSink
