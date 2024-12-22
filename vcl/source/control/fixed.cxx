@@ -66,8 +66,7 @@ static Point ImplCalcPos( WinBits nStyle, const Point& rPos,
     else
         nY = (rWinSize.Height()-rObjSize.Height())/2;
 
-    Point aPos( nX+rPos.X(), nY+rPos.Y() );
-    return aPos;
+    return Point(nX + rPos.X(), nY + rPos.Y());
 }
 
 void FixedText::ImplInit( vcl::Window* pParent, WinBits nStyle )
