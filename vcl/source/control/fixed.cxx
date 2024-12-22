@@ -83,14 +83,14 @@ WinBits FixedText::ImplInitStyle( WinBits nStyle )
     return nStyle;
 }
 
-const vcl::Font& FixedText::GetCanonicalFont( const StyleSettings& _rStyle ) const
+const vcl::Font& FixedText::GetCanonicalFont(const StyleSettings& rStyle) const
 {
-    return _rStyle.GetLabelFont();
+    return rStyle.GetLabelFont();
 }
 
-const Color& FixedText::GetCanonicalTextColor( const StyleSettings& _rStyle ) const
+const Color& FixedText::GetCanonicalTextColor(const StyleSettings& rStyle) const
 {
-    return _rStyle.GetLabelTextColor();
+    return rStyle.GetLabelTextColor();
 }
 
 FixedText::FixedText(vcl::Window* pParent, WinBits nStyle, WindowType eType)
