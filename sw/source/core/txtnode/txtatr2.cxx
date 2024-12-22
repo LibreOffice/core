@@ -75,11 +75,10 @@ SwTextCharFormat::~SwTextCharFormat( )
 void SwTextCharFormat::TriggerNodeUpdate(const sw::LegacyModifyHint& rHint)
 {
     const auto nWhich = rHint.GetWhich();
-    SAL_WARN_IF(
-            !isCHRATR(nWhich) &&
-            RES_OBJECTDYING != nWhich &&
-            RES_ATTRSET_CHG != nWhich &&
-            RES_FMT_CHG != nWhich, "sw.core", "SwTextCharFormat::TriggerNodeUpdate: unknown hint type");
+    assert( (isCHRATR(nWhich) ||
+             RES_OBJECTDYING == nWhich ||
+             RES_ATTRSET_CHG == nWhich ||
+             RES_FMT_CHG == nWhich) && "SwTextCharFormat::TriggerNodeUpdate: unknown hint type");
 
     if(m_pTextNode)
     {
@@ -185,8 +184,8 @@ void SwTextINetFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
         return;
     auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
     const auto nWhich = pLegacy->GetWhich();
-    OSL_ENSURE(isCHRATR(nWhich) || (RES_OBJECTDYING == nWhich)
-            || (RES_ATTRSET_CHG == nWhich) || (RES_FMT_CHG == nWhich),
+    assert((isCHRATR(nWhich) || (RES_OBJECTDYING == nWhich)
+            || (RES_ATTRSET_CHG == nWhich) || (RES_FMT_CHG == nWhich)) &&
             "SwTextINetFormat::SwClientNotify: unknown hint.");
     if(!m_pTextNode)
         return;
@@ -225,10 +224,10 @@ void SwTextRuby::SwClientNotify(const SwModify&, const SfxHint& rHint)
         return;
     auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
     const auto nWhich = pLegacy->GetWhich();
-    SAL_WARN_IF( !isCHRATR(nWhich)
-            && (RES_OBJECTDYING == nWhich)
-            && (RES_ATTRSET_CHG == nWhich)
-            && (RES_FMT_CHG == nWhich), "sw.core", "SwTextRuby::SwClientNotify(): unknown legacy hint");
+    assert( (isCHRATR(nWhich)
+             || (RES_OBJECTDYING == nWhich)
+             || (RES_ATTRSET_CHG == nWhich)
+             || (RES_FMT_CHG == nWhich)) && "SwTextRuby::SwClientNotify(): unknown legacy hint");
     if(!m_pTextNode)
         return;
     SwUpdateAttr aUpdateAttr(GetStart(), *GetEnd(), nWhich);
