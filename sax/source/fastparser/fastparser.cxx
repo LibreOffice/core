@@ -198,6 +198,7 @@ struct Entity : public ParserData
     void characters( const OUString& sChars );
     void endElement();
     void processingInstruction( const OUString& rTarget, const OUString& rData );
+    void transferUsedEvents();
     EventList& getEventList();
     Event& getEvent( CallbackType aType );
 };
@@ -534,18 +535,23 @@ void Entity::processingInstruction( const OUString& rTarget, const OUString& rDa
     }
 }
 
+void Entity::transferUsedEvents()
+{
+    std::unique_lock aGuard(maEventProtector);
+    if (!maUsedEvents.empty())
+    {
+        mxProducedEvents = std::move(maUsedEvents.front());
+        maUsedEvents.pop();
+        aGuard.unlock(); // unlock
+        mnProducedEventsSize = 0;
+    }
+}
+
 EventList& Entity::getEventList()
 {
     if (!mxProducedEvents)
     {
-        std::unique_lock aGuard(maEventProtector);
-        if (!maUsedEvents.empty())
-        {
-            mxProducedEvents = std::move(maUsedEvents.front());
-            maUsedEvents.pop();
-            aGuard.unlock(); // unlock
-            mnProducedEventsSize = 0;
-        }
+        transferUsedEvents();
         if (!mxProducedEvents)
         {
             mxProducedEvents.emplace();
@@ -992,10 +998,11 @@ void FastSaxParserImpl::produce( bool bForceFlush )
     }
 
     rEntity.maPendingEvents.push(std::move(*rEntity.mxProducedEvents));
-    rEntity.mxProducedEvents.reset();
-    assert(!rEntity.mxProducedEvents);
 
     aGuard.unlock(); // unlock
+
+    rEntity.mxProducedEvents.reset();
+    assert(!rEntity.mxProducedEvents);
 
     rEntity.maConsumeResume.set();
 }
