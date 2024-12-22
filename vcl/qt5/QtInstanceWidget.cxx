@@ -527,7 +527,12 @@ std::unique_ptr<weld::Container> QtInstanceWidget::weld_parent() const
     return std::make_unique<QtInstanceContainer>(pParentWidget);
 }
 
-void QtInstanceWidget::queue_resize() { assert(false && "Not implemented yet"); }
+void QtInstanceWidget::queue_resize()
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] { m_pWidget->adjustSize(); });
+}
 
 void QtInstanceWidget::help_hierarchy_foreach(const std::function<bool(const OUString&)>&)
 {
