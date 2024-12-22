@@ -46,8 +46,8 @@ constexpr auto FIXEDIMAGE_VIEW_STYLE = WB_3DLOOK |
                                  WB_TOP | WB_VCENTER | WB_BOTTOM |
                                  WB_SCALE;
 
-static Point ImplCalcPos( WinBits nStyle, const Point& rPos,
-                          const Size& rObjSize, const Size& rWinSize )
+static Point lcl_CalcPos(WinBits nStyle, const Point& rPos,
+                         const Size& rObjSize, const Size& rWinSize)
 {
     tools::Long    nX;
     tools::Long    nY;
@@ -697,7 +697,7 @@ void FixedBitmap::ImplDraw( OutputDevice* pDev, const Point& rPos, const Size& r
             pDev->DrawBitmapEx( rPos, rSize, maBitmap );
         else
         {
-            Point aPos = ImplCalcPos( GetStyle(), rPos, maBitmap.GetSizePixel(), rSize );
+            Point aPos = lcl_CalcPos( GetStyle(), rPos, maBitmap.GetSizePixel(), rSize );
             pDev->DrawBitmapEx( aPos, maBitmap );
         }
     }
@@ -838,7 +838,7 @@ void FixedImage::ImplDraw( OutputDevice* pDev,
             pDev->DrawImage( rPos, rSize, *pImage, nStyle );
         else
         {
-            Point aPos = ImplCalcPos( GetStyle(), rPos, pImage->GetSizePixel(), rSize );
+            Point aPos = lcl_CalcPos( GetStyle(), rPos, pImage->GetSizePixel(), rSize );
             pDev->DrawImage( aPos, *pImage, nStyle );
         }
     }
