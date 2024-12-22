@@ -1671,7 +1671,9 @@ void SwXStyle::SetPropertyValue<sal_uInt16(RES_PAPER_BIN)>(const SfxItemProperty
 {
     if (!rValue.has<OUString>() && !rValue.has<sal_Int32>())
         throw lang::IllegalArgumentException();
+
     SfxPrinter* pPrinter = m_pDoc->getIDocumentDeviceAccess().getPrinter(true);
+    assert(pPrinter && "getPrinter(true) always returns a non-null SfxPrinter");
 
     // PAPER_BINs have no meaning when there is no actual printer
     if (pPrinter->IsDisplayPrinter())
@@ -1684,7 +1686,7 @@ void SwXStyle::SetPropertyValue<sal_uInt16(RES_PAPER_BIN)>(const SfxItemProperty
         OUString sValue(rValue.get<OUString>());
         if(sValue == "[From printer settings]")
             nBin = std::numeric_limits<printeridx_t>::max()-1;
-        else if(pPrinter)
+        else
         {
             for(printeridx_t i=0, nEnd = pPrinter->GetPaperBinCount(); i < nEnd; ++i)
             {
@@ -1696,7 +1698,7 @@ void SwXStyle::SetPropertyValue<sal_uInt16(RES_PAPER_BIN)>(const SfxItemProperty
             }
         }
     }
-    else if (rValue.has<sal_Int32>() && pPrinter)
+    else if (rValue.has<sal_Int32>())
     {
         sal_Int32 nValue (rValue.get<sal_Int32>());
         nBin = pPrinter->GetPaperBinBySourceIndex(nValue);
