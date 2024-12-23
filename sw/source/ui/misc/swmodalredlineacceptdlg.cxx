@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <o3tl/deleter.hxx>
 #include <svx/ctredlin.hxx>
 #include <unotools/viewoptions.hxx>
 
@@ -43,7 +44,7 @@ SwModalRedlineAcceptDlg::SwModalRedlineAcceptDlg(weld::Window *pParent)
     m_xImplDlg->Activate();   // for data's initialisation
 }
 
-SwModalRedlineAcceptDlg::~SwModalRedlineAcceptDlg()
+void SwModalRedlineAcceptDlg::ImplDestroy()
 {
     AcceptAll(false);   // refuse everything remaining
 
@@ -53,6 +54,11 @@ SwModalRedlineAcceptDlg::~SwModalRedlineAcceptDlg()
     aDlgOpt.SetUserItem(u"UserItem"_ustr, css::uno::Any(sExtraData));
 
     m_xDialog->set_modal(false);
+}
+
+SwModalRedlineAcceptDlg::~SwModalRedlineAcceptDlg()
+{
+    suppress_fun_call_w_exception(ImplDestroy());
 }
 
 void SwModalRedlineAcceptDlg::Activate()

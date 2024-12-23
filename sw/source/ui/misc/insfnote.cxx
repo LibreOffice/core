@@ -183,12 +183,17 @@ SwInsFootNoteDlg::SwInsFootNoteDlg(weld::Window *pParent, SwWrtShell &rShell, bo
     }
 }
 
-SwInsFootNoteDlg::~SwInsFootNoteDlg() COVERITY_NOEXCEPT_FALSE
+void SwInsFootNoteDlg::ImplDestroy()
 {
     SwViewShell::SetCareDialog(nullptr);
 
     if (m_bEdit)
         m_rSh.ResetSelect(nullptr, false);
+}
+
+SwInsFootNoteDlg::~SwInsFootNoteDlg()
+{
+    suppress_fun_call_w_exception(ImplDestroy());
 }
 
 void SwInsFootNoteDlg::Init()
