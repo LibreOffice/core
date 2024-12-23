@@ -2875,7 +2875,7 @@ void ScInputHandler::UpdateFormulaMode()
 
     if ( bIsFormula )
     {
-        if (!bFormulaMode)
+        if (!bFormulaMode && pActiveViewSh)
         {
             pActiveViewSh->GetViewData().SetEditHighlight(true);
             bFormulaMode = true;
