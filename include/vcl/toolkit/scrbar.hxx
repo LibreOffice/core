@@ -81,6 +81,12 @@ private:
     SAL_DLLPRIVATE Size         getCurrentCalcSize() const;
     DECL_DLLPRIVATE_LINK( ImplAutoTimerHdl, Timer*, void );
 
+    bool ImplHitTestBtn1(const Point& rPt) const;
+    bool ImplHitTestBtn2(const Point& rPt) const;
+    bool ImplHitTestPageUp(const Point& rPt) const;
+    bool ImplHitTestPageDown(const Point& rPt) const;
+    bool ImplHitTestThumb(const Point& rPt) const;
+
 public:
     explicit        ScrollBar( vcl::Window* pParent, WinBits nStyle = WB_VERT );
     virtual         ~ScrollBar() override;
@@ -136,6 +142,9 @@ public:
     virtual Size    GetOptimalSize() const override;
 
     void            SetSwapArrows( bool bSwap ) { mbSwapArrows = bSwap; }
+
+    bool            IsHorizontal() const;
+    tools::Rectangle GetScrollbarRegion() const;
 };
 
 
