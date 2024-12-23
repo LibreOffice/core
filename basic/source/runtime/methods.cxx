@@ -2066,16 +2066,11 @@ void SbRtl_Hour(StarBASIC *, SbxArray & rPar, bool)
 
 void SbRtl_Minute(StarBASIC *, SbxArray & rPar, bool)
 {
-    if (rPar.Count() < 2)
-    {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-    }
-    else
-    {
-        double nArg = rPar.Get(1)->GetDate();
-        sal_Int16 nMin = implGetMinute( nArg );
-        rPar.Get(0)->PutInteger(nMin);
-    }
+    if (rPar.Count() != 2)
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+    double nArg = rPar.Get(1)->GetDate();
+    sal_Int16 nMin = implGetMinute( nArg );
+    rPar.Get(0)->PutInteger(nMin);
 }
 
 void SbRtl_Month(StarBASIC *, SbxArray & rPar, bool)
