@@ -1668,26 +1668,14 @@ sal_uInt32 ScPatternAttr::GetNumberFormat( SvNumberFormatter* pFormatter,
                                            const SfxItemSet* pCondSet ) const
 {
     assert(pFormatter);
-    if (!pCondSet)
+    if (!pCondSet || !pCondSet->HasItem(ATTR_VALUE_FORMAT))
         return GetNumberFormat(pFormatter);
 
     // Conditional format takes precedence over style and even hard format.
 
-    sal_uInt32 nFormat;
-    LanguageType eLang;
-    if (pCondSet->GetItemState(ATTR_VALUE_FORMAT) == SfxItemState::SET )
-    {
-        nFormat = getNumberFormatKey(*pCondSet);
-        if (pCondSet->GetItemState(ATTR_LANGUAGE_FORMAT) == SfxItemState::SET)
-            eLang = getLanguageType(*pCondSet);
-        else
-            eLang = GetLanguageType();
-    }
-    else
-    {
-        nFormat = GetNumberFormatKey();
-        eLang = GetLanguageType();
-    }
+    sal_uInt32 nFormat = getNumberFormatKey(*pCondSet);
+    LanguageType eLang = pCondSet->HasItem(ATTR_LANGUAGE_FORMAT) ? getLanguageType(*pCondSet)
+                                                                 : GetLanguageType();
 
     return pFormatter->GetFormatForLanguageIfBuiltIn(nFormat, eLang);
 }
@@ -1695,26 +1683,14 @@ sal_uInt32 ScPatternAttr::GetNumberFormat( SvNumberFormatter* pFormatter,
 sal_uInt32 ScPatternAttr::GetNumberFormat( const ScInterpreterContext& rContext,
                                            const SfxItemSet* pCondSet ) const
 {
-    if (!pCondSet)
+    if (!pCondSet || !pCondSet->HasItem(ATTR_VALUE_FORMAT))
         return GetNumberFormat(rContext);
 
     // Conditional format takes precedence over style and even hard format.
 
-    sal_uInt32 nFormat;
-    LanguageType eLang;
-    if (pCondSet->GetItemState(ATTR_VALUE_FORMAT) == SfxItemState::SET )
-    {
-        nFormat = getNumberFormatKey(*pCondSet);
-        if (pCondSet->GetItemState(ATTR_LANGUAGE_FORMAT) == SfxItemState::SET)
-            eLang = getLanguageType(*pCondSet);
-        else
-            eLang = GetLanguageType();
-    }
-    else
-    {
-        nFormat = GetNumberFormatKey();
-        eLang = GetLanguageType();
-    }
+    sal_uInt32 nFormat = getNumberFormatKey(*pCondSet);
+    LanguageType eLang = pCondSet->HasItem(ATTR_LANGUAGE_FORMAT) ? getLanguageType(*pCondSet)
+                                                                 : GetLanguageType();
 
     return rContext.NFGetFormatForLanguageIfBuiltIn(nFormat, eLang);
 }
