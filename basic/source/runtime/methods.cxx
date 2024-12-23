@@ -2065,15 +2065,10 @@ void SbRtl_Minute(StarBASIC *, SbxArray & rPar, bool)
 
 void SbRtl_Month(StarBASIC *, SbxArray & rPar, bool)
 {
-    if (rPar.Count() < 2)
-    {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-    }
-    else
-    {
-        sal_Int16 nMonth = implGetDateMonth(rPar.Get(1)->GetDate());
-        rPar.Get(0)->PutInteger(nMonth);
-    }
+    if (rPar.Count() != 2)
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+    sal_Int16 nMonth = implGetDateMonth(rPar.Get(1)->GetDate());
+    rPar.Get(0)->PutInteger(nMonth);
 }
 
 sal_Int16 implGetSecond( double dDate )
