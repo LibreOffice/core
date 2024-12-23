@@ -3419,7 +3419,7 @@ void SwWW8ImplReader::emulateMSWordAddTextToParagraph(const OUString& rAddString
             {
                 const SvxFontItem *pSourceFont = GetFormatAttr(nForceFromFontId);
 
-                for (size_t i = 0; i < SAL_N_ELEMENTS(aIds); ++i)
+                for (size_t i = 0; i < std::size(aIds); ++i)
                 {
                     const SvxFontItem *pDestFont = GetFormatAttr(aIds[i]);
                     aForced[i] = aIds[i] != nForceFromFontId && *pSourceFont != *pDestFont;
@@ -3438,7 +3438,7 @@ void SwWW8ImplReader::emulateMSWordAddTextToParagraph(const OUString& rAddString
 
         simpleAddTextToParagraph(sChunk);
 
-        for (size_t i = 0; i < SAL_N_ELEMENTS(aIds); ++i)
+        for (size_t i = 0; i < std::size(aIds); ++i)
         {
             if (aForced[i])
             {
