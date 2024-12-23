@@ -27,7 +27,7 @@
 #include <vcl/weld.hxx>
 #include <avmedia/MediaControlBase.hxx>
 
-#define AVMEDIA_CONTROLOFFSET 6
+constexpr sal_Int32 AVMEDIA_CONTROLOFFSET = 6;
 
 namespace avmedia
 {
