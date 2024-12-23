@@ -60,14 +60,15 @@ SwFormatLineBreak* SwFormatLineBreak::Clone(SfxItemPool*) const
 
 void SwFormatLineBreak::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
+    if (SfxHintId::SwRemoveUnoObject == rHint.GetId())
+    {
+        CallSwClientNotify(rHint);
+        SetXLineBreak(nullptr);
+        return;
+    }
     if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
-    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
     CallSwClientNotify(rHint);
-    if (RES_REMOVE_UNO_OBJECT == pLegacy->GetWhich())
-    {
-        SetXLineBreak(nullptr);
-    }
 }
 
 sal_uInt16 SwFormatLineBreak::GetValueCount() const

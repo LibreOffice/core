@@ -71,6 +71,7 @@ class SwField;
 
 namespace sw {
     class TextNodeNotificationSuppressor;
+    class RemoveUnoObjectHint;
     namespace mark { enum class RestoreMode; }
 }
 
@@ -241,6 +242,7 @@ public:
     void UpdateDocPos(const SwTwips nDocPos, const sal_uInt32 nIndex);
     /// for hanging TextFormatCollections somewhere else (Outline-Numbering!)
     void TriggerNodeUpdate(const sw::LegacyModifyHint&);
+    void TriggerNodeUpdate(const sw::RemoveUnoObjectHint&);
 
     const OUString& GetText() const { return m_Text; }
 

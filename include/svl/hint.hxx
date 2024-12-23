@@ -229,6 +229,7 @@ enum class SfxHintId {
     SwGrfRereadAndInCache,
     SwFindUnoTextTableRowInstance,
     SwFindUnoCellInstance,
+    SwRemoveUnoObject,
 
     ThisIsAnSdrHint,
     ThisIsAnSfxEventHint

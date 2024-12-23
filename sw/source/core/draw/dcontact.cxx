@@ -1415,7 +1415,13 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
     SwClient::SwClientNotify(rMod, rHint); // needed as SwContact::SwClientNotify doesn't explicitly call SwClient::SwClientNotify
     SwContact::SwClientNotify(rMod, rHint);
-    if (rHint.GetId() == SfxHintId::SwLegacyModify)
+    if(SfxHintId::SwRemoveUnoObject == rHint.GetId())
+    {
+        // nothing to do
+        // #i51474#
+        GetAnchoredObj(nullptr)->ResetLayoutProcessBools();
+    }
+    else if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
         auto pLegacyHint = static_cast<const sw::LegacyModifyHint*>(&rHint);
         SAL_WARN_IF(mbDisconnectInProgress, "sw.core", "<SwDrawContact::Modify(..)> called during disconnection.");
@@ -1464,8 +1470,6 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
             else
                 DisconnectFromLayout();
         }
-        else if (nWhich == RES_REMOVE_UNO_OBJECT)
-        {} // nothing to do
         // --> #i62875# - no further notification, if not connected to Writer layout
         else if ( maAnchoredDrawObj.GetAnchorFrame() &&
                   maAnchoredDrawObj.GetDrawObj()->GetUserCall() )

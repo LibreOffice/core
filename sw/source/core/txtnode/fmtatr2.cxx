@@ -718,16 +718,19 @@ void Meta::NotifyChangeTextNode(SwTextNode *const pTextNode)
 
 void Meta::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    if (rHint.GetId() != SfxHintId::SwLegacyModify)
-        return;
-    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
-    CallSwClientNotify(rHint);
-    GetNotifier().Broadcast(SfxHint(SfxHintId::DataChanged));
-    if(RES_REMOVE_UNO_OBJECT == pLegacy->GetWhich())
-    {   // invalidate cached uno object
+    if(SfxHintId::SwRemoveUnoObject == rHint.GetId())
+    {
+        CallSwClientNotify(rHint);
+        GetNotifier().Broadcast(SfxHint(SfxHintId::DataChanged));
+        // invalidate cached uno object
         SetXMeta(nullptr);
         GetNotifier().Broadcast(SfxHint(SfxHintId::Deinitializing));
+        return;
     }
+    if (rHint.GetId() != SfxHintId::SwLegacyModify)
+        return;
+    CallSwClientNotify(rHint);
+    GetNotifier().Broadcast(SfxHint(SfxHintId::DataChanged));
 }
 
 // sfx2::Metadatable

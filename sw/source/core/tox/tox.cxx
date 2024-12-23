@@ -167,12 +167,14 @@ SwTOXMark* SwTOXMark::Clone( SfxItemPool* ) const
 
 void SwTOXMark::Notify(const SfxHint& rHint)
 {
-    if (rHint.GetId() == SfxHintId::SwLegacyModify)
+    if(SfxHintId::SwRemoveUnoObject == rHint.GetId())
     {
-        auto pLegacyHint = static_cast<const sw::LegacyModifyHint*>(&rHint);
         CallSwClientNotify(rHint);
-        if (pLegacyHint->m_pOld && (RES_REMOVE_UNO_OBJECT == pLegacyHint->m_pOld->Which()))
-            SetXTOXMark(nullptr);
+        SetXTOXMark(nullptr);
+    }
+    else if (rHint.GetId() == SfxHintId::SwLegacyModify)
+    {
+        CallSwClientNotify(rHint);
     }
     else if (rHint.GetId() == SfxHintId::SwCollectTextMarks)
     {
@@ -206,8 +208,7 @@ void SwTOXMark::Notify(const SfxHint& rHint)
 
 void SwTOXMark::InvalidateTOXMark()
 {
-    const SwPtrMsgPoolItem aMsgHint(RES_REMOVE_UNO_OBJECT, &static_cast<sw::BroadcastingModify&>(*this));
-    CallSwClientNotify(sw::LegacyModifyHint(&aMsgHint, &aMsgHint));
+    CallSwClientNotify(sw::RemoveUnoObjectHint(this));
 }
 
 OUString SwTOXMark::GetText(SwRootFrame const*const pLayout) const
