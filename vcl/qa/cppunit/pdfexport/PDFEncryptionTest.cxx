@@ -88,7 +88,7 @@ std::vector<sal_uInt8> parseHex(std::string_view rString)
 
 CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testEncryptionRoundtrip_PDF_1_7)
 {
-    loadFromFile(u"BrownFoxLazyDog.odt");
+    loadFromURL(u"private:factory/swriter"_ustr);
 
     // Save PDF
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
@@ -109,7 +109,7 @@ CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testEncryptionRoundtrip_PDF_1_7)
 
 CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testEncryptionRoundtrip_PDF_2_0)
 {
-    loadFromFile(u"BrownFoxLazyDog.odt");
+    loadFromURL(u"private:factory/swriter"_ustr);
 
     // Save PDF
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);

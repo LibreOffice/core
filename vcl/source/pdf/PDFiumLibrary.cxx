@@ -528,7 +528,7 @@ void PDFiumImpl::setLastError(OUString const& rErrorString)
     if (!rErrorString.isEmpty())
     {
         // Report what error was set (useful in test failures)
-        SAL_WARN("vcl.filter", "PDFiumImpl Error: '" << rErrorString << "' Error numner: "
+        SAL_WARN("vcl.filter", "PDFiumImpl Error: '" << rErrorString << "' Error number: "
                                                      << sal_Int32(getLastErrorCode()));
     }
     maLastError = rErrorString;
