@@ -1626,6 +1626,11 @@ LanguageType getLanguageType(const SfxItemSet& rSet)
 
 }
 
+bool ScPatternAttr::HasNumberFormat() const
+{
+    return GetItemSet().HasItem(ATTR_VALUE_FORMAT);
+}
+
 sal_uInt32 ScPatternAttr::GetNumberFormatKey() const
 {
     if (!mxNumberFormatKey.has_value())
