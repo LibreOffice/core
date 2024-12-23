@@ -48,12 +48,6 @@ void collectUIInformation( const OUString& aID, const OUString& aPos)
 }
 }
 
-/*****************************************************************************
-|
-| class : SvxIconChoiceCtrlEntry
-|
-\*****************************************************************************/
-
 SvxIconChoiceCtrlEntry::SvxIconChoiceCtrlEntry( OUString _aText,
                                                 Image _aImage )
     : aImage(std::move(_aImage))
@@ -68,12 +62,6 @@ OUString SvxIconChoiceCtrlEntry::GetDisplayText() const
 {
     return MnemonicGenerator::EraseAllMnemonicChars( aText );
 }
-
-/*****************************************************************************
-|
-| class : SvtIconChoiceCtrl
-|
-\*****************************************************************************/
 
 SvtIconChoiceCtrl::SvtIconChoiceCtrl( vcl::Window* pParent, WinBits nWinStyle ) :
 
