@@ -617,9 +617,9 @@ void SdrObjList::sort( std::vector<sal_Int32>& sortOrder)
 
     // no duplicates
     std::vector<bool> aNoDuplicates(sortOrder.size(), false);
-    for (size_t i = 0; i < sortOrder.size(); ++i )
+    for (const auto& nSortOrder : sortOrder )
     {
-        size_t idx =  static_cast<size_t>( sortOrder[i] );
+        size_t idx =  static_cast<size_t>( nSortOrder );
 
         if ( aNoDuplicates[idx] )
             throw css::lang::IllegalArgumentException(u"duplicate index of shape"_ustr, nullptr, 2);
