@@ -291,7 +291,7 @@ sw::ClientIteratorBase* sw::ClientIteratorBase::s_pClientIters = nullptr;
 
 void SwModify::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    if (rHint.GetId() != SfxHintId::SwLegacyModify)
+    if (rHint.GetId() != SfxHintId::SwLegacyModify && rHint.GetId() != SfxHintId::SwRemoveUnoObject)
         return;
 
     DBG_TESTSOLARMUTEX();

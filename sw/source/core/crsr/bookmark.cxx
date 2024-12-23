@@ -361,13 +361,9 @@ namespace sw::mark
     void MarkBase::SwClientNotify(const SwModify&, const SfxHint& rHint)
     {
         CallSwClientNotify(rHint);
-        if (rHint.GetId() != SfxHintId::SwLegacyModify)
-            return;
-        auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
-        if(RES_REMOVE_UNO_OBJECT == pLegacy->GetWhich())
-        {   // invalidate cached uno object
+        if(SfxHintId::SwRemoveUnoObject == rHint.GetId())
+           // invalidate cached uno object
             SetXBookmark(nullptr);
-        }
     }
 
     auto MarkBase::InvalidateFrames() -> void

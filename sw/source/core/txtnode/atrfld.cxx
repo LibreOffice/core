@@ -218,8 +218,7 @@ SwFormatField* SwFormatField::Clone( SfxItemPool* ) const
 
 void SwFormatField::InvalidateField()
 {
-    const SwPtrMsgPoolItem aItem(RES_REMOVE_UNO_OBJECT, &static_cast<sw::BroadcastingModify&>(*this));
-    CallSwClientNotify(sw::LegacyModifyHint{ &aItem, &aItem });
+    CallSwClientNotify(sw::RemoveUnoObjectHint(this));
 }
 
 void SwFormatField::SwClientNotify( const SwModify& rModify, const SfxHint& rHint )
@@ -404,6 +403,13 @@ void SwFormatField::UpdateDocPos(const SwTwips nDocPos)
 }
 void SwFormatField::UpdateTextNode(const SfxHint& rHint)
 {
+    if(SfxHintId::SwRemoveUnoObject == rHint.GetId())
+    {   // invalidate cached UNO object
+        m_wXTextField.clear();
+        // ??? why does this Modify method not already do this?
+        CallSwClientNotify(rHint);
+        return;
+    }
     if(SfxHintId::SwLegacyModify != rHint.GetId())
         return;
     auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
@@ -412,13 +418,6 @@ void SwFormatField::UpdateTextNode(const SfxHint& rHint)
     if (pOld == nullptr && pNew == nullptr)
     {
         ForceUpdateTextNode();
-        return;
-    }
-    else if (pOld && (RES_REMOVE_UNO_OBJECT == pOld->Which()))
-    {   // invalidate cached UNO object
-        m_wXTextField.clear();
-        // ??? why does this Modify method not already do this?
-        CallSwClientNotify(sw::LegacyModifyHint(pOld, pNew));
         return;
     }
 

@@ -2749,7 +2749,13 @@ bool SwFrameFormat::supportsFullDrawingLayerFillAttributeSet() const
 
 void SwFrameFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
-    if (rHint.GetId() != SfxHintId::SwLegacyModify)
+    if(SfxHintId::SwRemoveUnoObject == rHint.GetId())
+    {
+        SetXObject(nullptr);
+        SwFormat::SwClientNotify(rMod, rHint);
+        return;
+    }
+    else if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
     auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
     const sal_uInt16 nNewWhich = pLegacy->m_pNew ? pLegacy->m_pNew->Which() : 0;
@@ -2823,9 +2829,6 @@ void SwFrameFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         }
         case RES_ANCHOR:
             pOldAnchorNode = static_cast<const SwFormatAnchor*>(pLegacy->m_pOld)->GetAnchorNode();
-            break;
-        case RES_REMOVE_UNO_OBJECT:
-            SetXObject(nullptr);
             break;
     }
 
