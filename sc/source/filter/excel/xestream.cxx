@@ -955,14 +955,14 @@ sax_fastparser::FSHelperPtr XclExpXmlStream::CreateOutputStream (
     std::u16string_view sRelativeStream,
     const uno::Reference< XOutputStream >& xParentRelation,
     const char* sContentType,
-    std::u16string_view sRelationshipType,
+    const OUString& sRelationshipType,
     OUString* pRelationshipId )
 {
     OUString sRelationshipId;
     if (xParentRelation.is())
-        sRelationshipId = addRelation( xParentRelation, OUString(sRelationshipType), sRelativeStream );
+        sRelationshipId = addRelation( xParentRelation, sRelationshipType, sRelativeStream );
     else
-        sRelationshipId = addRelation( OUString(sRelationshipType), sRelativeStream );
+        sRelationshipId = addRelation( sRelationshipType, sRelativeStream );
 
     if( pRelationshipId )
         *pRelationshipId = sRelationshipId;
