@@ -50,8 +50,6 @@ BreakIteratorImpl::~BreakIteratorImpl()
 {
 }
 
-#define LBI getLocaleSpecificBreakIterator(rLocale)
-
 sal_Int32 SAL_CALL BreakIteratorImpl::nextCharacters( const OUString& Text, sal_Int32 nStartPos,
         const Locale &rLocale, sal_Int16 nCharacterIteratorMode, sal_Int32 nCount, sal_Int32& nDone )
 {
@@ -59,7 +57,7 @@ sal_Int32 SAL_CALL BreakIteratorImpl::nextCharacters( const OUString& Text, sal_
         throw RuntimeException("BreakIteratorImpl::nextCharacters: expected nCount >=0, got "
                                + OUString::number(nCount));
 
-    return LBI->nextCharacters( Text, nStartPos, rLocale, nCharacterIteratorMode, nCount, nDone);
+    return getLocaleSpecificBreakIterator(rLocale)->nextCharacters( Text, nStartPos, rLocale, nCharacterIteratorMode, nCount, nDone);
 }
 
 sal_Int32 SAL_CALL BreakIteratorImpl::previousCharacters( const OUString& Text, sal_Int32 nStartPos,
@@ -69,7 +67,7 @@ sal_Int32 SAL_CALL BreakIteratorImpl::previousCharacters( const OUString& Text, 
         throw RuntimeException("BreakIteratorImpl::previousCharacters: expected nCount >=0, got "
                                + OUString::number(nCount));
 
-    return LBI->previousCharacters( Text, nStartPos, rLocale, nCharacterIteratorMode, nCount, nDone);
+    return getLocaleSpecificBreakIterator(rLocale)->previousCharacters( Text, nStartPos, rLocale, nCharacterIteratorMode, nCount, nDone);
 }
 
 #define isZWSP(c) (ch == 0x200B)
@@ -129,7 +127,7 @@ Boundary SAL_CALL BreakIteratorImpl::nextWord( const OUString& Text, sal_Int32 n
     else if (nStartPos >= len)
         result.endPos = result.startPos = len;
     else {
-        result = LBI->nextWord(Text, nStartPos, rLocale, rWordType);
+        result = getLocaleSpecificBreakIterator(rLocale)->nextWord(Text, nStartPos, rLocale, rWordType);
 
         nStartPos = skipSpace(Text, result.startPos, len, rWordType, true);
 
@@ -137,7 +135,7 @@ Boundary SAL_CALL BreakIteratorImpl::nextWord( const OUString& Text, sal_Int32 n
             if( nStartPos >= len )
                 result.startPos = result.endPos = len;
             else {
-                result = LBI->getWordBoundary(Text, nStartPos, rLocale, rWordType, true);
+                result = getLocaleSpecificBreakIterator(rLocale)->getWordBoundary(Text, nStartPos, rLocale, rWordType, true);
                 // i88041: avoid startPos goes back to nStartPos when switching between Latin and CJK scripts
                 if (result.startPos < nStartPos) result.startPos = nStartPos;
             }
@@ -172,7 +170,7 @@ Boundary SAL_CALL BreakIteratorImpl::previousWord( const OUString& Text, sal_Int
         return result;
     }
 
-    return LBI->previousWord(Text, result.startPos, rLocale, rWordType);
+    return getLocaleSpecificBreakIterator(rLocale)->previousWord(Text, result.startPos, rLocale, rWordType);
 }
 
 
@@ -203,7 +201,7 @@ Boundary SAL_CALL BreakIteratorImpl::getWordBoundary( const OUString& Text, sal_
                 else
                     nPos = bDirection ? next : prev;
             }
-            result = LBI->getWordBoundary(Text, nPos, rLocale, rWordType, bDirection);
+            result = getLocaleSpecificBreakIterator(rLocale)->getWordBoundary(Text, nPos, rLocale, rWordType, bDirection);
         }
     }
     return result;
@@ -247,7 +245,7 @@ sal_Int32 SAL_CALL BreakIteratorImpl::beginOfSentence( const OUString& Text, sal
     if (nStartPos < 0 || nStartPos > Text.getLength())
         return -1;
     if (Text.isEmpty()) return 0;
-    return LBI->beginOfSentence(Text, nStartPos, rLocale);
+    return getLocaleSpecificBreakIterator(rLocale)->beginOfSentence(Text, nStartPos, rLocale);
 }
 
 sal_Int32 SAL_CALL BreakIteratorImpl::endOfSentence( const OUString& Text, sal_Int32 nStartPos,
@@ -256,14 +254,14 @@ sal_Int32 SAL_CALL BreakIteratorImpl::endOfSentence( const OUString& Text, sal_I
     if (nStartPos < 0 || nStartPos > Text.getLength())
         return -1;
     if (Text.isEmpty()) return 0;
-    return LBI->endOfSentence(Text, nStartPos, rLocale);
+    return getLocaleSpecificBreakIterator(rLocale)->endOfSentence(Text, nStartPos, rLocale);
 }
 
 LineBreakResults SAL_CALL BreakIteratorImpl::getLineBreak( const OUString& Text, sal_Int32 nStartPos,
         const Locale& rLocale, sal_Int32 nMinBreakPos, const LineBreakHyphenationOptions& hOptions,
         const LineBreakUserOptions& bOptions )
 {
-    return LBI->getLineBreak(Text, nStartPos, rLocale, nMinBreakPos, hOptions, bOptions);
+    return getLocaleSpecificBreakIterator(rLocale)->getLineBreak(Text, nStartPos, rLocale, nMinBreakPos, hOptions, bOptions);
 }
 
 sal_Int16 SAL_CALL BreakIteratorImpl::getScriptType( const OUString& Text, sal_Int32 nPos )
