@@ -164,7 +164,7 @@ def parse_details_and_get_info(url, gitRepo, gitBranch):
                         if index + 1 == int(codeNumber):
                             urlLink = "https://git.libreoffice.org/core/+/" + \
                                 gitBranch + "/" + codeFile + "#" + str(codeNumber)
-                            codeLine += str(count) + ": <a href=\"" + urlLink + "\">" + line.strip().replace("\"", "'") + "</a>"
+                            codeLine += str(count) + ": <a target=\"_blank\" href=\"" + urlLink + "\">" + line.strip().replace("\"", "'") + "</a>"
                             count += 1
             except FileNotFoundError:
                 continue
@@ -230,7 +230,7 @@ if __name__ == '__main__':
                     ratio = round(crashCount / ((lDate[2] - lDate[1]).days + 1), 2)
                     count += 1
                     f.write("<td id=\"td1\">" + str(count) + "</td>")
-                    f.write("<td id=\"td1\"><b><a href=\"https://crashreport.libreoffice.org/stats/crash_details/"
+                    f.write("<td id=\"td1\"><b><a target=\"_blank\" href=\"https://crashreport.libreoffice.org/stats/crash_details/"
                         + crashID + "\">" + k + "</a></b></td>")
                     f.write("<td id=\"td1\">" + str(ratio) + "</td>")
                     f.write("<td id=\"td1\">" + str(crashCount) + "</td>")
