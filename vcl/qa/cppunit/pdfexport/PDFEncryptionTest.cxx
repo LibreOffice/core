@@ -387,7 +387,7 @@ std::vector<sal_uInt8> decrypt_AES_256_CBC(std::vector<sal_uInt8>& rKey,
 
 CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testFileEncryption_checkDifferentIV)
 {
-    // Check each call to encrypt is usign a different IV (initialization vector)
+    // Check each call to encrypt is using a different IV (initialization vector)
 
     std::vector<sal_uInt8> aKey
         = parseHex("90e657b78c0315610f3f421bd396ff635fa8fe3cf2ea399e7e1ae23e6185b4fc");
