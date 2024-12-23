@@ -130,7 +130,7 @@ static SbxVariableRef Operand
     {
         // A number could be scanned in directly!
         sal_uInt16 nLen;
-        if( !refVar->Scan( OUString( p ), &nLen ) )
+        if (!refVar->Scan(p, &nLen))
         {
             refVar.clear();
         }

@@ -70,7 +70,7 @@ static bool ImpStrChr( std::u16string_view str, sal_Unicode c ) { return str.fin
 // but exponent may also be a D, so data type is SbxDOUBLE
 // conversion error if data type is fixed and it doesn't fit
 
-ErrCode ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
+ErrCode ImpScan( std::u16string_view rWSrc, double& nVal, SbxDataType& rType,
                   sal_uInt16* pLen, bool bOnlyIntntl )
 {
     sal_Unicode cDecSep, cGrpSep, cDecSepAlt;
@@ -88,30 +88,27 @@ ErrCode ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
         cDecSepAlt = 0;
     }
 
-    const sal_Unicode* const pStart = rWSrc.getStr();
-    const sal_Unicode* p = pStart;
-    OUStringBuffer aBuf( rWSrc.getLength());
-    bool bRes = true;
+    auto const pStart = rWSrc.begin();
+    auto p = pStart;
     bool bMinus = false;
     nVal = 0;
     SbxDataType eScanType = SbxSINGLE;
-    while( *p == ' ' || *p == '\t' )
+    while (p != rWSrc.end() && (*p == ' ' || *p == '\t'))
         p++;
-    if (*p == '+')
+    if (p != rWSrc.end() && *p == '+')
         p++;
-    else if( *p == '-' )
+    else if (p != rWSrc.end() && *p == '-')
     {
         p++;
         bMinus = true;
     }
-    if (rtl::isAsciiDigit(*p)
-        || ((*p == cDecSep || (cGrpSep && *p == cGrpSep) || (cDecSepAlt && *p == cDecSepAlt))
-            && rtl::isAsciiDigit(*(p + 1))))
+    if (p != rWSrc.end()
+        && (rtl::isAsciiDigit(*p)
+            || ((*p == cDecSep || (cGrpSep && *p == cGrpSep) || (cDecSepAlt && *p == cDecSepAlt))
+                && p + 1 != rWSrc.end() && rtl::isAsciiDigit(*(p + 1)))))
     {
-        // tdf#118442: Whitespace and minus are skipped; store the position to calculate index
-        const sal_Unicode* const pDigitsStart = p;
-        short exp = 0;
-        short decsep = 0;
+        bool exp = false;
+        bool decsep = false;
         short ndig = 0;
         short ncdig = 0;    // number of digits after decimal point
         OUStringBuffer aSearchStr("0123456789DEde" + OUStringChar(cDecSep));
@@ -119,61 +116,59 @@ ErrCode ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
             aSearchStr.append(cDecSepAlt);
         if (cGrpSep)
             aSearchStr.append(cGrpSep);
-        const OUString pSearchStr = aSearchStr.makeStringAndClear();
-        static constexpr OUStringLiteral pDdEe = u"DdEe";
-        while( ImpStrChr( pSearchStr, *p ) )
+        OUStringBuffer aBuf(rWSrc.end() - p);
+        for (; p != rWSrc.end() && ImpStrChr(aSearchStr, *p); ++p)
         {
-            aBuf.append( *p );
-            if (cGrpSep && *p == cGrpSep)
+            if (rtl::isAsciiDigit(*p))
             {
-                p++;
-                continue;
-            }
-            if (*p == cDecSep || (cDecSepAlt && *p == cDecSepAlt))
-            {
-                // Use the separator that is passed to stringToDouble()
-                aBuf[p - pDigitsStart] = cDecSep;
-                p++;
-                if( ++decsep > 1 )
-                    continue;
-            }
-            else if( ImpStrChr( pDdEe, *p ) )
-            {
-                if( ++exp > 1 )
+                aBuf.append(*p);
+                if (!exp)
                 {
-                    p++;
-                    continue;
+                    ndig++;
+                    if (decsep)
+                        ncdig++;
                 }
+            }
+            else if (cGrpSep && *p == cGrpSep)
+            {
+                aBuf.append(*p);
+            }
+            else if (*p == cDecSep || (cDecSepAlt && *p == cDecSepAlt))
+            {
+                if (decsep)
+                    return ERRCODE_BASIC_CONVERSION;
+                decsep = true;
+
+                // Use the separator that is passed to stringToDouble()
+                aBuf.append(cDecSep);
+            }
+            else // DdEe
+            {
+                if (exp)
+                    return ERRCODE_BASIC_CONVERSION;
+                exp = true;
+
                 if( *p == 'D' || *p == 'd' )
                     eScanType = SbxDOUBLE;
-                aBuf[p - pDigitsStart] = 'E';
-                p++;
-                if (*p == '+')
-                    ++p;
-                else if (*p == '-')
+                aBuf.append('E');
+                if (auto pNext = p + 1; pNext != rWSrc.end())
                 {
-                    aBuf.append('-');
-                    ++p;
+                    if (*pNext == '+')
+                        ++p;
+                    else if (*pNext == '-')
+                    {
+                        aBuf.append('-');
+                        ++p;
+                    }
                 }
             }
-            else
-            {
-                p++;
-                if( decsep && !exp )
-                    ncdig++;
-            }
-            if( !exp )
-                ndig++;
         }
-
-        if( decsep > 1 || exp > 1 )
-            bRes = false;
 
         rtl_math_ConversionStatus eStatus = rtl_math_ConversionStatus_Ok;
         sal_Int32 nParseEnd = 0;
         nVal = rtl::math::stringToDouble(aBuf, cDecSep, cGrpSep, &eStatus, &nParseEnd);
         if( eStatus != rtl_math_ConversionStatus_Ok || nParseEnd != aBuf.getLength() )
-            bRes = false;
+            return ERRCODE_BASIC_CONVERSION;
 
         if( !decsep && !exp )
         {
@@ -183,29 +178,29 @@ ErrCode ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
                 eScanType = SbxLONG;
         }
 
-        ndig = ndig - decsep;
         // too many numbers for SINGLE?
         if( ndig > 15 || ncdig > 6 )
             eScanType = SbxDOUBLE;
 
         // type detection?
-        static constexpr OUStringLiteral pTypes = u"%!&#";
-        if( ImpStrChr( pTypes, *p ) )
+        static constexpr std::u16string_view pTypes = u"%!&#";
+        if (p != rWSrc.end() && ImpStrChr(pTypes, *p))
             p++;
     }
     // hex/octal number? read in and convert:
-    else if( *p == '&' )
+    else if (p != rWSrc.end() && *p == '&')
     {
-        p++;
+        if (++p == rWSrc.end())
+            return ERRCODE_BASIC_CONVERSION;
         eScanType = SbxLONG;
-        OUString aCmp( u"0123456789ABCDEF"_ustr );
+        auto isValidDigit = rtl::isAsciiHexDigit<sal_Unicode>;
         char base = 16;
         char ndig = 8;
         switch( *p++ )
         {
             case 'O':
             case 'o':
-                aCmp = "01234567";
+                isValidDigit = rtl::isAsciiOctalDigit<sal_Unicode>;
                 base = 8;
                 ndig = 11;
                 break;
@@ -213,29 +208,18 @@ ErrCode ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
             case 'h':
                 break;
             default :
-                bRes = false;
+                return ERRCODE_BASIC_CONVERSION;
         }
-        while( rtl::isAsciiAlphanumeric( *p ) )    /* XXX: really munge all alnum also when error? */
+        const auto pDigitsStart = p;
+        for (; p != rWSrc.end() && rtl::isAsciiAlphanumeric(*p); ++p)
         {
-            sal_Unicode ch = rtl::toAsciiUpperCase(*p);
-            if( ImpStrChr( aCmp, ch ) )
-                aBuf.append( ch );
-            else
-                bRes = false;
-            p++;
+            if (!isValidDigit(*p))
+                return ERRCODE_BASIC_CONVERSION;
         }
-        OUString aBufStr( aBuf.makeStringAndClear());
-        sal_Int32 l = 0;
-        for( const sal_Unicode* q = aBufStr.getStr(); bRes && *q; q++ )
-        {
-            int i = *q - '0';
-            if( i > 9 )
-                i -= 7;     // 'A'-'0' = 17 => 10, ...
-            l = ( l * base ) + i;
-            if( !ndig-- )
-                bRes = false;
-        }
-        if( *p == '&' )
+        if (p - pDigitsStart > ndig)
+                return ERRCODE_BASIC_CONVERSION;
+        sal_Int32 l = o3tl::toInt32(rWSrc.substr(pDigitsStart - pStart, p - pDigitsStart), base);
+        if (p != rWSrc.end() && *p == '&')
             p++;
         nVal = static_cast<double>(l);
         if( l >= SbxMININT && l <= SbxMAXINT )
@@ -248,19 +232,17 @@ ErrCode ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
     }
 #endif
     // tdf#146672 - skip whitespaces and tabs at the end of the scanned string
-    while (*p == ' ' || *p == '\t')
+    while (p != rWSrc.end() && (*p == ' ' || *p == '\t'))
         p++;
     if( pLen )
         *pLen = static_cast<sal_uInt16>( p - pStart );
-    if( !bRes )
-        return ERRCODE_BASIC_CONVERSION;
     if( bMinus )
         nVal = -nVal;
     rType = eScanType;
     return ERRCODE_NONE;
 }
 
-ErrCode ImpScan(const OUString& rSrc, double& nVal, SbxDataType& rType, sal_uInt16* pLen)
+ErrCode ImpScan(std::u16string_view rSrc, double& nVal, SbxDataType& rType, sal_uInt16* pLen)
 {
     using namespace officecfg::Office::Scripting;
     static const bool bEnv = std::getenv("LIBREOFFICE6FLOATINGPOINTMODE") != nullptr;
@@ -397,7 +379,7 @@ static void printfmtstr(std::u16string_view rStr, OUString& rRes, std::u16string
 }
 
 
-bool SbxValue::Scan( const OUString& rSrc, sal_uInt16* pLen )
+bool SbxValue::Scan(std::u16string_view rSrc, sal_uInt16* pLen)
 {
     ErrCode eRes = ERRCODE_NONE;
     if( !CanWrite() )
