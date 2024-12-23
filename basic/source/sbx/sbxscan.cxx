@@ -107,7 +107,7 @@ ErrCode ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
         bMinus = true;
     }
     if( rtl::isAsciiDigit( *p ) || ((*p == cNonIntntlDecSep || *p == cIntntlDecSep ||
-                    (cIntntlDecSep && *p == cIntntlGrpSep) || (cIntntlDecSepAlt && *p == cIntntlDecSepAlt)) &&
+                    (cIntntlGrpSep && *p == cIntntlGrpSep) || (cIntntlDecSepAlt && *p == cIntntlDecSepAlt)) &&
                 rtl::isAsciiDigit( *(p+1) )))
     {
         // tdf#118442: Whitespace and minus are skipped; store the position to calculate index
