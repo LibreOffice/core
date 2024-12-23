@@ -327,8 +327,6 @@ void SvxIconChoiceCtrl_Impl::ImpArrange()
     SetOrigin( Point() );
     VisRectChanged();
     RecalcAllBoundingRectsSmart();
-    // TODO: the invalidation in the detail view should be more intelligent
-    //if( !(nWinBits & WB_DETAILS ))
     pView->Invalidate( InvalidateFlags::NoChildren );
     nFlags &= ~IconChoiceFlags::Arranging;
     ShowCursor( true );
