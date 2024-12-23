@@ -920,14 +920,20 @@ const FunctionData saFuncTableOOoLO[] =
     { "ORG.OPENOFFICE.ERRORTYPE",   "ORG.OPENOFFICE.ERRORTYPE",     NOID,   NOID,   1,  1,  V, { VR }, FuncFlags::MACROCALL_NEW  },
     { "ORG.OPENOFFICE.MULTIRANGE",  "ORG.OPENOFFICE.MULTIRANGE",    NOID,   NOID,   1, MX,  V, { RX }, FuncFlags::MACROCALL_NEW },
     { "ORG.OPENOFFICE.GOALSEEK",    "ORG.OPENOFFICE.GOALSEEK",      NOID,   NOID,   3,  3,  V, { VR }, FuncFlags::MACROCALL_NEW },
-    { "ORG.OPENOFFICE.EASTERSUNDAY","ORG.OPENOFFICE.EASTERSUNDAY",  NOID,   NOID,   1,  1,  V, { VR }, FuncFlags::MACROCALL_NEW },
+    // EASTERSUNDAY is defined as of ODFF 1.4 (was ORG.OPENOFFICE.EASTERSUNDAY).
+    // Note that we still write it as _xlfn.ORG.OPENOFFICE.EASTERSUNDAY through
+    // RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML because Excel _might_ expect it
+    // (does it?).
+    { "EASTERSUNDAY",               "EASTERSUNDAY",                 NOID,   NOID,   1,  1,  V, { VR }, FuncFlags::MACROCALL_NEW },
+    { "EASTERSUNDAY",               "ORG.OPENOFFICE.EASTERSUNDAY",  NOID,   NOID,   1,  1,  V, { VR }, FuncFlags::MACROCALL_NEW | FuncFlags::IMPORTONLY },
     { "ORG.OPENOFFICE.CURRENT",     "ORG.OPENOFFICE.CURRENT",       NOID,   NOID,   0,  0,  V, { VR }, FuncFlags::MACROCALL_NEW },
     { "ORG.OPENOFFICE.STYLE",       "ORG.OPENOFFICE.STYLE",         NOID,   NOID,   1,  3,  V, { VR }, FuncFlags::MACROCALL_NEW },
     // And the import for the wrongly written functions even without _xlfn.
     { "ORG.OPENOFFICE.ERRORTYPE",   "ERRORTYPE",    NOID,   NOID,   1,  1,  V, { VR }, FuncFlags::IMPORTONLY },
     { "ORG.OPENOFFICE.MULTIRANGE",  "MULTIRANGE",   NOID,   NOID,   1, MX,  V, { RX }, FuncFlags::IMPORTONLY },
     { "ORG.OPENOFFICE.GOALSEEK",    "GOALSEEK",     NOID,   NOID,   3,  3,  V, { VR }, FuncFlags::IMPORTONLY },
-    { "ORG.OPENOFFICE.EASTERSUNDAY","EASTERSUNDAY", NOID,   NOID,   1,  1,  V, { VR }, FuncFlags::IMPORTONLY },
+    // EASTERSUNDAY is defined as of ODFF 1.4
+    { "EASTERSUNDAY",               "EASTERSUNDAY", NOID,   NOID,   1,  1,  V, { VR }, FuncFlags::IMPORTONLY },
     { "ORG.OPENOFFICE.CURRENT",     "CURRENT",      NOID,   NOID,   0,  0,  V, { VR }, FuncFlags::IMPORTONLY },
     { "ORG.OPENOFFICE.STYLE",       "STYLE",        NOID,   NOID,   1,  3,  V, { VR }, FuncFlags::IMPORTONLY },
     // Other functions.
