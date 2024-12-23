@@ -32,8 +32,6 @@ namespace vcl
         virtual void        GetFocus() override;
         virtual void        LoseFocus() override;
 
-        void                implInit();
-
         using FixedText::CalcMinimumSize;
 
     public:

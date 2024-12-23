@@ -32,7 +32,13 @@ namespace vcl
         , bInteractive(false)
         , m_bHyperMode(false)
     {
-        implInit();
+        ToggleBackgroundColor( COL_TRANSPARENT );
+
+        WinBits nWinStyle = GetStyle();
+        nWinStyle |= WB_EXTRAOFFSET;
+        SetStyle( nWinStyle );
+
+        Show();
     }
 
     Size const & HyperLabel::CalcMinimumSize( tools::Long nMaxWidth )
@@ -43,17 +49,6 @@ namespace vcl
         m_aMinSize.AdjustHeight(2 );
         m_aMinSize.AdjustWidth(1 );
         return m_aMinSize;
-    }
-
-    void HyperLabel::implInit()
-    {
-        ToggleBackgroundColor( COL_TRANSPARENT );
-
-        WinBits nWinStyle = GetStyle();
-        nWinStyle |= WB_EXTRAOFFSET;
-        SetStyle( nWinStyle );
-
-        Show();
     }
 
     void HyperLabel::ToggleBackgroundColor( const Color& _rGBColor )
