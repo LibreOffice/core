@@ -14554,6 +14554,7 @@ vcl/source/cnttype/mcnttype.hxx
 vcl/source/components/dtranscomp.cxx
 vcl/source/components/factory.cxx
 vcl/source/components/fontident.cxx
+vcl/source/control/FormattedField.cxx
 vcl/source/control/button.cxx
 vcl/source/control/calendar.cxx
 vcl/source/control/combobox.cxx
