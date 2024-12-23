@@ -495,6 +495,7 @@ private:
     PDFiumImpl& operator=(const PDFiumImpl&) = delete;
 
     OUString maLastError;
+    void setLastError(OUString const& rErrorString);
 
 public:
     PDFiumImpl();
@@ -522,10 +523,21 @@ PDFiumImpl::PDFiumImpl()
 
 PDFiumImpl::~PDFiumImpl() { FPDF_DestroyLibrary(); }
 
+void PDFiumImpl::setLastError(OUString const& rErrorString)
+{
+    if (!rErrorString.isEmpty())
+    {
+        // Report what error was set (useful in test failures)
+        SAL_WARN("vcl.filter", "PDFiumImpl Error: '" << rErrorString << "' Error numner: "
+                                                     << sal_Int32(getLastErrorCode()));
+    }
+    maLastError = rErrorString;
+}
+
 std::unique_ptr<PDFiumDocument> PDFiumImpl::openDocument(const void* pData, int nSize,
                                                          const OString& rPassword)
 {
-    maLastError = OUString();
+    setLastError(u""_ustr);
     std::unique_ptr<PDFiumDocument> pPDFiumDocument;
 
     FPDF_BYTESTRING pPassword = nullptr;
@@ -540,27 +552,28 @@ std::unique_ptr<PDFiumDocument> PDFiumImpl::openDocument(const void* pData, int 
         switch (FPDF_GetLastError())
         {
             case FPDF_ERR_SUCCESS:
-                maLastError = "Success";
+                setLastError(u"Success"_ustr);
                 break;
             case FPDF_ERR_UNKNOWN:
-                maLastError = "Unknown error";
+                setLastError(u"Unknown error"_ustr);
                 break;
             case FPDF_ERR_FILE:
-                maLastError = "File not found";
+                setLastError(u"File not found"_ustr);
                 break;
             case FPDF_ERR_FORMAT:
-                maLastError = "Input is not a PDF format";
+                setLastError(u"Input is not a PDF format"_ustr);
                 break;
             case FPDF_ERR_PASSWORD:
-                maLastError = "Incorrect password or password is required";
+                setLastError(u"Incorrect password or password is required"_ustr);
                 break;
             case FPDF_ERR_SECURITY:
-                maLastError = "Security error";
+                setLastError(u"Security error"_ustr);
                 break;
             case FPDF_ERR_PAGE:
-                maLastError = "Content error";
+                setLastError(u"Content error"_ustr);
                 break;
             default:
+                setLastError(u"Unknown error number"_ustr);
                 break;
         }
     }
@@ -605,8 +618,7 @@ std::unique_ptr<PDFiumBitmap> PDFiumImpl::createBitmap(int& nWidth, int& nHeight
 
     if (!pPdfBitmap)
     {
-        maLastError = "Failed to create bitmap";
-        SAL_WARN("vcl.filter", "PDFiumImpl: " << getLastError());
+        setLastError(u"Failed to create bitmap"_ustr);
     }
     else
     {
