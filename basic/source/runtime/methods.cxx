@@ -2031,15 +2031,10 @@ void SbRtl_Day(StarBASIC *, SbxArray & rPar, bool)
 
 void SbRtl_Year(StarBASIC *, SbxArray & rPar, bool)
 {
-    if (rPar.Count() < 2)
-    {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-    }
-    else
-    {
-        sal_Int16 nYear = implGetDateYear(rPar.Get(1)->GetDate());
-        rPar.Get(0)->PutInteger(nYear);
-    }
+    if (rPar.Count() != 2)
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+    sal_Int16 nYear = implGetDateYear(rPar.Get(1)->GetDate());
+    rPar.Get(0)->PutInteger(nYear);
 }
 
 sal_Int16 implGetHour( double dDate )
