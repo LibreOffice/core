@@ -819,7 +819,7 @@ bool SwCursorShell::CheckTableBoxContent( const SwPosition* pPos )
     }
     else
     {
-        pSttNd = pPos->GetNode().FindSttNodeByType( SwTableBoxStartNode );
+        pSttNd = pPos->GetNode().FindStartNodeByType( SwTableBoxStartNode );
         if( pSttNd)
             pChkBox = pSttNd->FindTableNode()->GetTable().GetTableBox( pSttNd->GetIndex() );
     }
@@ -871,7 +871,7 @@ void SwCursorShell::SaveTableBoxContent( const SwPosition* pPos )
     if( !pPos )
         pPos = m_pCurrentCursor->GetPoint();
 
-    SwStartNode* pSttNd = pPos->GetNode().FindSttNodeByType( SwTableBoxStartNode );
+    SwStartNode* pSttNd = pPos->GetNode().FindStartNodeByType( SwTableBoxStartNode );
 
     bool bCheckBox = false;
     if( pSttNd && m_pBoxIdx )

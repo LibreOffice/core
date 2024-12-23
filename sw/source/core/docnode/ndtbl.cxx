@@ -4293,7 +4293,7 @@ void SwDoc::ClearLineNumAttrs( SwPosition const & rPos )
 
 void SwDoc::ClearBoxNumAttrs( SwNode& rNode )
 {
-    SwStartNode* pSttNd = rNode.FindSttNodeByType( SwTableBoxStartNode );
+    SwStartNode* pSttNd = rNode.FindStartNodeByType( SwTableBoxStartNode );
     if( nullptr == pSttNd ||
         SwNodeOffset(2) != pSttNd->EndOfSectionIndex() - pSttNd->GetIndex())
         return;

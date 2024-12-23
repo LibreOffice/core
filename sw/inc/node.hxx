@@ -214,19 +214,19 @@ public:
                     SwSectionNode *FindSectionNode();
     inline    const   SwSectionNode *FindSectionNode() const;
 
-    SwStartNode* FindSttNodeByType( SwStartNodeType eTyp );
-    inline const SwStartNode* FindSttNodeByType( SwStartNodeType eTyp ) const;
+    SwStartNode* FindStartNodeByType( SwStartNodeType eTyp );
+    inline const SwStartNode* FindStartNodeByType( SwStartNodeType eTyp ) const;
 
     const SwStartNode* FindTableBoxStartNode() const
-                        { return FindSttNodeByType( SwTableBoxStartNode ); }
+                        { return FindStartNodeByType( SwTableBoxStartNode ); }
     const SwStartNode* FindFlyStartNode() const
-                        { return FindSttNodeByType( SwFlyStartNode ); }
+                        { return FindStartNodeByType( SwFlyStartNode ); }
     const SwStartNode* FindFootnoteStartNode() const
-                        { return FindSttNodeByType( SwFootnoteStartNode ); }
+                        { return FindStartNodeByType( SwFootnoteStartNode ); }
     const SwStartNode* FindHeaderStartNode() const
-                        { return FindSttNodeByType( SwHeaderStartNode ); }
+                        { return FindStartNodeByType( SwHeaderStartNode ); }
     const SwStartNode* FindFooterStartNode() const
-                        { return FindSttNodeByType( SwFooterStartNode ); }
+                        { return FindStartNodeByType( SwFooterStartNode ); }
 
     /// Node is in which nodes-array/doc?
     inline          SwNodes& GetNodes();
@@ -674,9 +674,9 @@ inline const SwContentNode *SwNode::GetContentNode() const
      return IsContentNode() ? static_cast<const SwContentNode*>(this) : nullptr;
 }
 
-inline const SwStartNode* SwNode::FindSttNodeByType( SwStartNodeType eTyp ) const
+inline const SwStartNode* SwNode::FindStartNodeByType( SwStartNodeType eTyp ) const
 {
-    return const_cast<SwNode*>(this)->FindSttNodeByType( eTyp );
+    return const_cast<SwNode*>(this)->FindStartNodeByType( eTyp );
 }
 inline const SwTableNode* SwNode::FindTableNode() const
 {

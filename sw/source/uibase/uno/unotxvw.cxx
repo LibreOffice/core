@@ -1004,7 +1004,7 @@ void SwXTextViewCursor::gotoRange(
         eSearchNodeType = SwFootnoteStartNode;
 
     const SwStartNode* pOwnStartNode = aOwnPaM.GetPointNode().
-                                            FindSttNodeByType(eSearchNodeType);
+                                            FindStartNodeByType(eSearchNodeType);
 
     const SwNode* pSrcNode = nullptr;
     if(pCursor && pCursor->GetPaM())
@@ -1023,7 +1023,7 @@ void SwXTextViewCursor::gotoRange(
     {
         pSrcNode = pPara->GetTextNode();
     }
-    const SwStartNode* pTmp = pSrcNode ? pSrcNode->FindSttNodeByType(eSearchNodeType) : nullptr;
+    const SwStartNode* pTmp = pSrcNode ? pSrcNode->FindStartNodeByType(eSearchNodeType) : nullptr;
 
     //Skip SectionNodes
     while(pTmp && pTmp->IsSectionNode())

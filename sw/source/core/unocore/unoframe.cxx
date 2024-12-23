@@ -3206,7 +3206,7 @@ rtl::Reference<SwXTextCursor>  SwXTextFrame::createXTextCursor()
     //save current start node to be able to check if there is content after the table -
     //otherwise the cursor would be in the body text!
     const SwNode& rNode = pFormat->GetContent().GetContentIdx()->GetNode();
-    const SwStartNode* pOwnStartNode = rNode.FindSttNodeByType(SwFlyStartNode);
+    const SwStartNode* pOwnStartNode = rNode.FindStartNodeByType(SwFlyStartNode);
 
     SwPaM aPam(rNode);
     aPam.Move(fnMoveForward, GoInNode);
@@ -3219,7 +3219,7 @@ rtl::Reference<SwXTextCursor>  SwXTextFrame::createXTextCursor()
     }
 
     const SwStartNode* pNewStartNode =
-        aPam.GetPointNode().FindSttNodeByType(SwFlyStartNode);
+        aPam.GetPointNode().FindStartNodeByType(SwFlyStartNode);
     if(!pNewStartNode || pNewStartNode != pOwnStartNode)
     {
         throw uno::RuntimeException(u"no text available"_ustr);

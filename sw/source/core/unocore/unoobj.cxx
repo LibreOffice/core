@@ -1212,7 +1212,7 @@ SwXTextCursor::gotoRangeImpl(
             ;
         }
 
-        const SwStartNode* pOwnStartNode = rOwnCursor.GetPointNode().FindSttNodeByType(eSearchNodeType);
+        const SwStartNode* pOwnStartNode = rOwnCursor.GetPointNode().FindStartNodeByType(eSearchNodeType);
         while ( pOwnStartNode != nullptr
                 && pOwnStartNode->IsSectionNode())
         {
@@ -1220,7 +1220,7 @@ SwXTextCursor::gotoRangeImpl(
         }
 
         const SwStartNode* pTmp =
-            pPam->GetPointNode().FindSttNodeByType(eSearchNodeType);
+            pPam->GetPointNode().FindStartNodeByType(eSearchNodeType);
         while ( pTmp != nullptr
                 && pTmp->IsSectionNode() )
         {

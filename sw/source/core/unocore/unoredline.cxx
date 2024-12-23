@@ -115,7 +115,7 @@ rtl::Reference< SwXTextCursor > SwXRedlineText::createXTextCursor()
         SwContentNode* pContentNode = SwNodes::GoNext(rUnoCursor.GetPoint());
         pTableNode = pContentNode->FindTableNode();
     }
-    if( bTable && rUnoCursor.GetPointNode().FindSttNodeByType( SwNormalStartNode )
+    if( bTable && rUnoCursor.GetPointNode().FindStartNodeByType( SwNormalStartNode )
                                                             != GetStartNode() )
     {
         // We have gone too far and have left our own redline. This means that

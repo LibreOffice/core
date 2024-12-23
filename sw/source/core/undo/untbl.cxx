@@ -2133,7 +2133,7 @@ void SwUndoTableNumFormat::UndoImpl(::sw::UndoRedoContext & rContext)
 
     SwDoc & rDoc = rContext.GetDoc();
     SwStartNode* pSttNd = rDoc.GetNodes()[ m_nNode ]->
-                            FindSttNodeByType( SwTableBoxStartNode );
+                            FindStartNodeByType( SwTableBoxStartNode );
     assert(pSttNd && "without StartNode no TableBox");
     SwTableBox* pBox = pSttNd->FindTableNode()->GetTable().GetTableBox(
                                     pSttNd->GetIndex() );
@@ -2234,7 +2234,7 @@ void SwUndoTableNumFormat::RedoImpl(::sw::UndoRedoContext & rContext)
     pPam->GetPoint()->Assign( m_nNode );
 
     SwNode * pNd = & pPam->GetPoint()->GetNode();
-    SwStartNode* pSttNd = pNd->FindSttNodeByType( SwTableBoxStartNode );
+    SwStartNode* pSttNd = pNd->FindStartNodeByType( SwTableBoxStartNode );
     assert(pSttNd && "without StartNode no TableBox");
     SwTableBox* pBox = pSttNd->FindTableNode()->GetTable().GetTableBox(
                                     pSttNd->GetIndex() );

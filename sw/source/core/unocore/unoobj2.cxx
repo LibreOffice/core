@@ -1249,7 +1249,7 @@ lcl_IsStartNodeInFormat(const bool bHeader, SwStartNode const *const pSttNode,
             if ( !rFlyContent.GetContentIdx() )
                 return false;
             const SwNode& rNode = rFlyContent.GetContentIdx()->GetNode();
-            SwStartNode const*const pCurSttNode = rNode.FindSttNodeByType(
+            SwStartNode const*const pCurSttNode = rNode.FindStartNodeByType(
                 bHeader ? SwHeaderStartNode : SwFooterStartNode);
             if (pCurSttNode && (pCurSttNode == pSttNode))
             {
@@ -1361,7 +1361,7 @@ CreateParentXText(SwDoc & rDoc, const SwPosition& rPos)
                 const SwFormatFootnote& rFormatFootnote = pTextFootnote->GetFootnote();
                 assert(pTextFootnote == rFormatFootnote.GetTextFootnote());
                 assert(&pTextFootnote->GetStartNode()->GetNode() == pTextFootnote->GetStartNode()->GetNode().
-                                    FindSttNodeByType(SwFootnoteStartNode));
+                                    FindStartNodeByType(SwFootnoteStartNode));
 
                 if (pSttNode == &pTextFootnote->GetStartNode()->GetNode())
                 {

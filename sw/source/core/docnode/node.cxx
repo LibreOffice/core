@@ -785,7 +785,7 @@ SwTableBox* SwNode::GetTableBox() const
     return pBox;
 }
 
-SwStartNode* SwNode::FindSttNodeByType( SwStartNodeType eTyp )
+SwStartNode* SwNode::FindStartNodeByType( SwStartNodeType eTyp )
 {
     SwStartNode* pTmp = IsStartNode() ? static_cast<SwStartNode*>(this) : m_pStartOfSection;
 

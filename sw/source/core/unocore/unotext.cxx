@@ -483,7 +483,7 @@ SwXText::insertTextContent(
     }
 
     const SwStartNode* pTmp =
-        aPam.GetPointNode().FindSttNodeByType(eSearchNodeType);
+        aPam.GetPointNode().FindStartNodeByType(eSearchNodeType);
 
     // ignore SectionNodes
     while (pTmp && pTmp->IsSectionNode())
@@ -880,7 +880,7 @@ bool SwXText::CheckForOwnMember(const SwPaM & rPaM)
     }
 
     const SwNode& rSrcNode = rPaM.GetPointNode();
-    const SwStartNode* pTmp = rSrcNode.FindSttNodeByType(eSearchNodeType);
+    const SwStartNode* pTmp = rSrcNode.FindStartNodeByType(eSearchNodeType);
 
     // skip SectionNodes / TableNodes to be able to compare across table/section boundaries
     while (pTmp
@@ -1762,7 +1762,7 @@ SwXText::convertToTextFrame(
             else
             {
                 // In case the frame has a table only, the cursor points to the end of the first cell of the table.
-                SwPaM aPaM(*xFrameTextCursor->GetPaM()->GetPointNode().FindSttNodeByType(SwFlyStartNode)->EndOfSectionNode());
+                SwPaM aPaM(*xFrameTextCursor->GetPaM()->GetPointNode().FindStartNodeByType(SwFlyStartNode)->EndOfSectionNode());
                 // Now we have the end of the frame -- the node before that will be the paragraph we want to remove.
                 aPaM.GetPoint()->Adjust(SwNodeOffset(-1));
                 m_pDoc->getIDocumentContentOperations().DelFullPara(aPaM);
@@ -2657,7 +2657,7 @@ rtl::Reference<SwXTextCursor> SwXHeadFootText::CreateTextCursor(const bool bIgno
 
     // save current start node to be able to check if there is content
     // after the table - otherwise the cursor would be in the body text!
-    SwStartNode const*const pOwnStartNode = rNode.FindSttNodeByType(
+    SwStartNode const*const pOwnStartNode = rNode.FindStartNodeByType(
             (m_pImpl->m_bIsHeader) ? SwHeaderStartNode : SwFooterStartNode);
 
     if (!bIgnoreTables)
@@ -2671,7 +2671,7 @@ rtl::Reference<SwXTextCursor> SwXHeadFootText::CreateTextCursor(const bool bIgno
             pTableNode = pCont->FindTableNode();
         }
     }
-    SwStartNode const*const pNewStartNode = rUnoCursor.GetPointNode().FindSttNodeByType(
+    SwStartNode const*const pNewStartNode = rUnoCursor.GetPointNode().FindStartNodeByType(
             (m_pImpl->m_bIsHeader) ? SwHeaderStartNode : SwFooterStartNode);
     if (!pNewStartNode || (pNewStartNode != pOwnStartNode))
     {
@@ -2706,9 +2706,9 @@ rtl::Reference< SwXTextCursor > SwXHeadFootText::createXTextCursorByRangeImpl(
     SwPosition aPos(rNode);
     SwPaM aHFPam(aPos);
     aHFPam.Move(fnMoveForward, GoInNode);
-    SwStartNode* const pOwnStartNode = aHFPam.GetPointNode().FindSttNodeByType(
+    SwStartNode* const pOwnStartNode = aHFPam.GetPointNode().FindStartNodeByType(
             (m_pImpl->m_bIsHeader) ? SwHeaderStartNode : SwFooterStartNode);
-    SwStartNode* const p1 = rPam.GetPointNode().FindSttNodeByType(
+    SwStartNode* const p1 = rPam.GetPointNode().FindStartNodeByType(
             (m_pImpl->m_bIsHeader) ? SwHeaderStartNode : SwFooterStartNode);
     if (p1 == pOwnStartNode)
     {
