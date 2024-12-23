@@ -599,8 +599,9 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OUString &rNam
     xOldSet->Put( *aLineInner );
 
     // Generate NumberFormat Value from Value and Language and box it.
-    xOldSet->Put( SfxUInt32Item( ATTR_VALUE_FORMAT,
-        pOldAttrs->GetNumberFormat( rDoc.GetFormatTable() ) ) );
+    if (pOldAttrs->HasNumberFormat()) // tdf#42989: don't set it for multi-format selection
+        xOldSet->Put(
+            SfxUInt32Item(ATTR_VALUE_FORMAT, pOldAttrs->GetNumberFormat(rDoc.GetFormatTable())));
 
     std::unique_ptr<SvxNumberInfoItem> pNumberInfoItem = MakeNumberInfoItem(rDoc, GetViewData());
     xOldSet->MergeRange( SID_ATTR_NUMBERFORMAT_INFO, SID_ATTR_NUMBERFORMAT_INFO );

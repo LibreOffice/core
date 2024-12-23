@@ -261,6 +261,7 @@ public:
                                 with text encoding RTL_TEXTENC_SYMBOL */
     bool                    IsSymbolFont() const;
 
+    bool                    HasNumberFormat() const; // Returns false e.g. for multiformat selection
     SC_DLLPUBLIC sal_uInt32              GetNumberFormat( SvNumberFormatter* ) const;
     sal_uInt32              GetNumberFormat( const ScInterpreterContext& rContext ) const;
     sal_uInt32              GetNumberFormat( SvNumberFormatter* pFormatter,
