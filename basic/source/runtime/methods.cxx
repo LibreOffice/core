@@ -2015,18 +2015,13 @@ void SbRtl_TimeValue(StarBASIC *, SbxArray & rPar, bool)
 
 void SbRtl_Day(StarBASIC *, SbxArray & rPar, bool)
 {
-    if (rPar.Count() < 2)
-    {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-    }
-    else
-    {
-        SbxVariableRef pArg = rPar.Get(1);
-        double aDate = pArg->GetDate();
+    if (rPar.Count() != 2)
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+    SbxVariableRef pArg = rPar.Get(1);
+    double aDate = pArg->GetDate();
 
-        sal_Int16 nDay = implGetDateDay( aDate );
-        rPar.Get(0)->PutInteger(nDay);
-    }
+    sal_Int16 nDay = implGetDateDay( aDate );
+    rPar.Get(0)->PutInteger(nDay);
 }
 
 void SbRtl_Year(StarBASIC *, SbxArray & rPar, bool)
