@@ -336,46 +336,6 @@ void SvxIconChoiceCtrl_Impl::ImpArrange()
 
 void SvxIconChoiceCtrl_Impl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
 {
-#if defined(OV_DRAWGRID)
-    Color aOldColor (rRenderContext.GetLineColor());
-    Color aCOL_BLACK);
-    rRenderContext.SetLineColor( aColor );
-    Point aOffs(rRenderContext.GetMapMode().GetOrigin());
-    Size aXSize(GetOutputSizePixel());
-    {
-        Point aStart(LROFFS_WINBORDER, 0);
-        Point aEnd(LROFFS_WINBORDER, aXSize.Height());
-        aStart -= aOffs;
-        aEnd -= aOffs;
-        rRenderContext.DrawLine(aStart, aEnd);
-    }
-    {
-        Point aStart(0, TBOFFS_WINBORDER);
-        Point aEnd(aXSize.Width(), TBOFFS_WINBORDER);
-        aStart -= aOffs;
-        aEnd -= aOffs;
-        rRenderContext.DrawLine(aStart, aEnd);
-    }
-
-    for (tools::Long nDX = nGridDX; nDX <= aXSize.Width(); nDX += nGridDX)
-    {
-        Point aStart( nDX+LROFFS_WINBORDER, 0 );
-        Point aEnd( nDX+LROFFS_WINBORDER, aXSize.Height());
-        aStart -= aOffs;
-        aEnd -= aOffs;
-        rRenderContext.DrawLine(aStart, aEnd);
-    }
-    for (tools::Long nDY = nGridDY; nDY <= aXSize.Height(); nDY += nGridDY)
-    {
-        Point aStart(0, nDY + TBOFFS_WINBORDER);
-        Point aEnd(aXSize.Width(), nDY + TBOFFS_WINBORDER);
-        aStart -= aOffs;
-        aEnd -= aOffs;
-        rRenderContext.DrawLine(aStart, aEnd);
-    }
-    rRenderContext.SetLineColor(aOldColor);
-#endif
-
     if (!maEntries.size())
         return;
     if (!pCursor)
