@@ -154,9 +154,9 @@ namespace vcl
     {
         FixedText::DataChanged( rDCEvt );
 
-        if ((( rDCEvt.GetType() == DataChangedEventType::SETTINGS )   ||
-            ( rDCEvt.GetType() == DataChangedEventType::DISPLAY   ))  &&
-            ( rDCEvt.GetFlags() & AllSettingsFlags::STYLE        ))
+        if ((rDCEvt.GetType() == DataChangedEventType::SETTINGS
+             || rDCEvt.GetType() == DataChangedEventType::DISPLAY)
+            && rDCEvt.GetFlags() & AllSettingsFlags::STYLE)
         {
             const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
             if (GetControlBackground() != COL_TRANSPARENT)
