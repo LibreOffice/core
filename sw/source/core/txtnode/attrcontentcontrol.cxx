@@ -262,19 +262,20 @@ void SwContentControl::NotifyChangeTextNode(SwTextNode* pTextNode)
 
 void SwContentControl::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    if (rHint.GetId() != SfxHintId::SwLegacyModify)
-        return;
-
-    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
-    CallSwClientNotify(rHint);
-    GetNotifier().Broadcast(SfxHint(SfxHintId::DataChanged));
-
-    if (pLegacy->GetWhich() == RES_REMOVE_UNO_OBJECT)
+    if (SfxHintId::SwRemoveUnoObject == rHint.GetId())
     {
+        CallSwClientNotify(rHint);
+        GetNotifier().Broadcast(SfxHint(SfxHintId::DataChanged));
         // Invalidate cached uno object.
         SetXContentControl(nullptr);
         GetNotifier().Broadcast(SfxHint(SfxHintId::Deinitializing));
+        return;
     }
+    if (rHint.GetId() != SfxHintId::SwLegacyModify)
+        return;
+
+    CallSwClientNotify(rHint);
+    GetNotifier().Broadcast(SfxHint(SfxHintId::DataChanged));
 }
 
 std::optional<size_t> SwContentControl::GetSelectedListItem(bool bCheckDocModel) const

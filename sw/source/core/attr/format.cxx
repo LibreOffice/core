@@ -209,6 +209,11 @@ SwFormat::~SwFormat()
 
 void SwFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
+    if (rHint.GetId() == SfxHintId::SwRemoveUnoObject)
+    {
+        SwModify::SwClientNotify(*this, rHint);
+        return;
+    }
     if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
     auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
@@ -743,8 +748,8 @@ drawinglayer::attribute::SdrAllFillAttributesHelperPtr SwFormat::getSdrAllFillAt
 
 void SwFormat::RemoveAllUnos()
 {
-    SwPtrMsgPoolItem aMsgHint(RES_REMOVE_UNO_OBJECT, this);
-    SwClientNotify(*this, sw::LegacyModifyHint(&aMsgHint, &aMsgHint));
+    sw::RemoveUnoObjectHint aMsgHint(this);
+    SwClientNotify(*this, aMsgHint);
 }
 
 bool SwFormat::IsUsed() const

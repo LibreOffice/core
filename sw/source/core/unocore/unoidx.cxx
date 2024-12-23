@@ -359,12 +359,8 @@ public:
 
 void SwXDocumentIndex::Impl::Notify(const SfxHint& rHint)
 {
-    if (rHint.GetId() == SfxHintId::SwLegacyModify)
-    {
-        auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
-        if(pLegacy->m_pOld && pLegacy->m_pOld->Which() == RES_REMOVE_UNO_OBJECT)
-            m_pFormat = nullptr;
-    }
+    if(SfxHintId::SwRemoveUnoObject == rHint.GetId())
+        m_pFormat = nullptr;
     else if(rHint.GetId() == SfxHintId::Dying)
         m_pFormat = nullptr;
     if(!m_pFormat)

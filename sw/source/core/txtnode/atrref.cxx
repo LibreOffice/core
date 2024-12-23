@@ -74,19 +74,20 @@ SwFormatRefMark* SwFormatRefMark::Clone( SfxItemPool* ) const
 
 void SwFormatRefMark::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
+    if(SfxHintId::SwRemoveUnoObject == rHint.GetId())
+    {
+        CallSwClientNotify(rHint);
+        SetXRefMark(nullptr);
+        return;
+    }
     if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
-    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
     CallSwClientNotify(rHint);
-    if(RES_REMOVE_UNO_OBJECT == pLegacy->GetWhich())
-        SetXRefMark(nullptr);
 }
 
 void SwFormatRefMark::InvalidateRefMark()
 {
-    SwPtrMsgPoolItem const item(RES_REMOVE_UNO_OBJECT,
-            &static_cast<sw::BroadcastingModify&>(*this)); // cast to base class (void*)
-    CallSwClientNotify(sw::LegacyModifyHint(&item, &item));
+    CallSwClientNotify(sw::RemoveUnoObjectHint(this));
 }
 
 void SwFormatRefMark::dumpAsXml(xmlTextWriterPtr pWriter) const

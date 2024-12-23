@@ -116,6 +116,14 @@ struct SwCallMouseEvent final
 
     virtual void SwClientNotify(const SwModify& rMod, const SfxHint& rHint) override
     {
+        if(SfxHintId::SwRemoveUnoObject == rHint.GetId())
+        {
+            assert(EVENT_OBJECT_IMAGE == eType || EVENT_OBJECT_URLITEM == eType || EVENT_OBJECT_IMAGEMAP == eType);
+            SwClient::SwClientNotify(rMod, rHint);
+            if (!GetRegisteredIn() || static_cast<const sw::RemoveUnoObjectHint&>(rHint).m_pObject == PTR.pFormat)
+                Clear();
+            return;
+        }
         if (rHint.GetId() != SfxHintId::SwLegacyModify)
             return;
         auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
@@ -127,8 +135,6 @@ struct SwCallMouseEvent final
             case RES_FMT_CHG:
                 bClear |= pLegacy->m_pOld->StaticWhichCast(RES_FMT_CHG).pChangedFormat == PTR.pFormat;
                 break;
-            case RES_REMOVE_UNO_OBJECT:
-                bClear |= pLegacy->m_pOld->StaticWhichCast(RES_REMOVE_UNO_OBJECT).pObject == PTR.pFormat;
         }
         if(bClear)
             Clear();

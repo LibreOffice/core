@@ -5587,10 +5587,19 @@ void SwTextNode::TriggerNodeUpdate(const sw::LegacyModifyHint& rHint)
             rDoc.GetNodes().UpdateOutlineNode(*this);
         }
     }
+}
 
-    if (pOldValue && (RES_REMOVE_UNO_OBJECT == pOldValue->Which()))
-    {   // invalidate cached uno object
-        SetXParagraph(nullptr);
+void SwTextNode::TriggerNodeUpdate(const sw::RemoveUnoObjectHint& rHint)
+{
+    sw::TextNodeNotificationSuppressor(*this);
+
+    SwContentNode::SwClientNotify(*this, rHint);
+
+    SwDoc& rDoc = GetDoc();
+    // #125329# - assure that text node is in document nodes array
+    if ( !rDoc.IsInDtor() && &rDoc.GetNodes() == &GetNodes() )
+    {
+        rDoc.GetNodes().UpdateOutlineNode(*this);
     }
 }
 
@@ -5599,6 +5608,10 @@ void SwTextNode::SwClientNotify( const SwModify& rModify, const SfxHint& rHint )
     if(rHint.GetId() == SfxHintId::SwAutoFormatUsedHint)
     {
         static_cast<const sw::AutoFormatUsedHint&>(rHint).CheckNode(this);
+    }
+    else if(SfxHintId::SwRemoveUnoObject == rHint.GetId())
+    {
+        TriggerNodeUpdate(static_cast<const sw::RemoveUnoObjectHint&>(rHint));
     }
     else if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {

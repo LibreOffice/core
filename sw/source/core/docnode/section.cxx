@@ -704,7 +704,15 @@ void SwSectionFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
             return;
         GetNotifier().Broadcast(rSectionHidden);
         return;
-    } else if (rHint.GetId() != SfxHintId::SwLegacyModify)
+    }
+    else if(SfxHintId::SwRemoveUnoObject == rHint.GetId())
+    {
+        SwFrameFormat::SwClientNotify(rMod, rHint);
+        // invalidate cached uno object
+        SetXTextSection(nullptr);
+        return;
+    }
+    else if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
     auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
     sal_uInt16 nWhich = pLegacy->GetWhich();
@@ -787,11 +795,6 @@ void SwSectionFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         break;
     }
     SwFrameFormat::SwClientNotify(rMod, rHint);
-
-    if (pOld && (RES_REMOVE_UNO_OBJECT == pOld->Which()))
-    {   // invalidate cached uno object
-        SetXTextSection(nullptr);
-    }
 }
 
 void SwSectionFormat::SetXTextSection(rtl::Reference<SwXTextSection> const& xTextSection)

@@ -310,6 +310,12 @@ public:
     void SetUsed() const { m_isUsed = true; }
     void CheckNode(const SwNode*) const;
 };
+class RemoveUnoObjectHint final : public SfxHint
+{
+public:
+    const BroadcastingModify* m_pObject;
+    RemoveUnoObjectHint(const BroadcastingModify* pObject) : SfxHint(SfxHintId::SwRemoveUnoObject), m_pObject(pObject) {}
+};
 }
 
 class SwUpdateAttr final : public SwMsgPoolItem
