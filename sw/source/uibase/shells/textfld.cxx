@@ -124,7 +124,7 @@ static bool lcl_canUserModifyAnnotation(const SwView& rView, std::u16string_view
 static bool lcl_canUserModifyAnnotation(const SwView& rView,
                                         const sw::annotation::SwAnnotationWin* pAnnotationWin)
 {
-    return lcl_canUserModifyAnnotation(rView, pAnnotationWin->GetAuthor());
+    return pAnnotationWin && lcl_canUserModifyAnnotation(rView, pAnnotationWin->GetAuthor());
 }
 
 static bool lcl_canUserModifyAnnotation(const SwView& rView, sal_uInt32 nPostItId)
