@@ -73,21 +73,19 @@ static bool ImpStrChr( std::u16string_view str, sal_Unicode c ) { return str.fin
 ErrCode ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
                   sal_uInt16* pLen, bool bOnlyIntntl )
 {
-    sal_Unicode cIntntlDecSep, cIntntlGrpSep, cIntntlDecSepAlt;
-    sal_Unicode cNonIntntlDecSep = '.';
+    sal_Unicode cDecSep, cGrpSep, cDecSepAlt;
     if( bOnlyIntntl )
     {
-        ImpGetIntntlSep( cIntntlDecSep, cIntntlGrpSep, cIntntlDecSepAlt );
-        cNonIntntlDecSep = cIntntlDecSep;
+        ImpGetIntntlSep(cDecSep, cGrpSep, cDecSepAlt);
         // Ensure that the decimal separator alternative is really one.
-        if (cIntntlDecSepAlt && cIntntlDecSepAlt == cNonIntntlDecSep)
-            cIntntlDecSepAlt = 0;
+        if (cDecSepAlt == cDecSep)
+            cDecSepAlt = 0;
     }
     else
     {
-        cIntntlDecSep = cNonIntntlDecSep;
-        cIntntlGrpSep = 0;  // no group separator accepted in non-i18n
-        cIntntlDecSepAlt = 0;
+        cDecSep = '.';
+        cGrpSep = 0;  // no group separator accepted in non-i18n
+        cDecSepAlt = 0;
     }
 
     const sal_Unicode* const pStart = rWSrc.getStr();
@@ -106,9 +104,9 @@ ErrCode ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
         p++;
         bMinus = true;
     }
-    if( rtl::isAsciiDigit( *p ) || ((*p == cNonIntntlDecSep || *p == cIntntlDecSep ||
-                    (cIntntlGrpSep && *p == cIntntlGrpSep) || (cIntntlDecSepAlt && *p == cIntntlDecSepAlt)) &&
-                rtl::isAsciiDigit( *(p+1) )))
+    if (rtl::isAsciiDigit(*p)
+        || ((*p == cDecSep || (cGrpSep && *p == cGrpSep) || (cDecSepAlt && *p == cDecSepAlt))
+            && rtl::isAsciiDigit(*(p + 1))))
     {
         // tdf#118442: Whitespace and minus are skipped; store the position to calculate index
         const sal_Unicode* const pDigitsStart = p;
@@ -116,27 +114,25 @@ ErrCode ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
         short decsep = 0;
         short ndig = 0;
         short ncdig = 0;    // number of digits after decimal point
-        OUStringBuffer aSearchStr(OUString::Concat("0123456789DEde") + OUStringChar(cNonIntntlDecSep));
-        if( cIntntlDecSep != cNonIntntlDecSep )
-            aSearchStr.append(cIntntlDecSep);
-        if( cIntntlDecSepAlt && cIntntlDecSepAlt != cNonIntntlDecSep )
-            aSearchStr.append(cIntntlDecSepAlt);
-        if( bOnlyIntntl )
-            aSearchStr.append(cIntntlGrpSep);
+        OUStringBuffer aSearchStr("0123456789DEde" + OUStringChar(cDecSep));
+        if (cDecSepAlt)
+            aSearchStr.append(cDecSepAlt);
+        if (cGrpSep)
+            aSearchStr.append(cGrpSep);
         const OUString pSearchStr = aSearchStr.makeStringAndClear();
         static constexpr OUStringLiteral pDdEe = u"DdEe";
         while( ImpStrChr( pSearchStr, *p ) )
         {
             aBuf.append( *p );
-            if( bOnlyIntntl && *p == cIntntlGrpSep )
+            if (cGrpSep && *p == cGrpSep)
             {
                 p++;
                 continue;
             }
-            if( *p == cNonIntntlDecSep || *p == cIntntlDecSep || (cIntntlDecSepAlt && *p == cIntntlDecSepAlt) )
+            if (*p == cDecSep || (cDecSepAlt && *p == cDecSepAlt))
             {
                 // Use the separator that is passed to stringToDouble()
-                aBuf[p - pDigitsStart] = cIntntlDecSep;
+                aBuf[p - pDigitsStart] = cDecSep;
                 p++;
                 if( ++decsep > 1 )
                     continue;
@@ -175,7 +171,7 @@ ErrCode ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
 
         rtl_math_ConversionStatus eStatus = rtl_math_ConversionStatus_Ok;
         sal_Int32 nParseEnd = 0;
-        nVal = rtl::math::stringToDouble( aBuf, cIntntlDecSep, cIntntlGrpSep, &eStatus, &nParseEnd );
+        nVal = rtl::math::stringToDouble(aBuf, cDecSep, cGrpSep, &eStatus, &nParseEnd);
         if( eStatus != rtl_math_ConversionStatus_Ok || nParseEnd != aBuf.getLength() )
             bRes = false;
 
