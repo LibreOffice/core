@@ -2085,16 +2085,11 @@ sal_Int32 implGetNanoSecond(double dDate)
 
 void SbRtl_Second(StarBASIC *, SbxArray & rPar, bool)
 {
-    if (rPar.Count() < 2)
-    {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-    }
-    else
-    {
-        double nArg = rPar.Get(1)->GetDate();
-        sal_Int16 nSecond = implGetSecond( nArg );
-        rPar.Get(0)->PutInteger(nSecond);
-    }
+    if (rPar.Count() != 2)
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+    double nArg = rPar.Get(1)->GetDate();
+    sal_Int16 nSecond = implGetSecond( nArg );
+    rPar.Get(0)->PutInteger(nSecond);
 }
 
 double Now_Impl()
