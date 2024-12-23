@@ -5623,7 +5623,7 @@ bool SwRowFrame::ShouldRowKeepWithNext( const bool bCheckParents ) const
         return false;
 
     const SwCellFrame* pCell = static_cast<const SwCellFrame*>(Lower());
-    const SwFrame* pText = pCell->Lower();
+    const SwFrame* pText = pCell ? pCell->Lower() : nullptr;
 
     return pText && pText->IsTextFrame() && !pText->IsHiddenNow() &&
            static_cast<const SwTextFrame*>(pText)->GetTextNodeForParaProps()->GetSwAttrSet().GetKeep(bCheckParents).GetValue();
