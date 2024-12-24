@@ -299,6 +299,15 @@ void SwNumFormat::SetCharFormat( SwCharFormat* pChFormat)
 
 void SwNumFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
+    if (rHint.GetId() == SfxHintId::SwFormatChange)
+    {
+        // Look for the NumRules object in the Doc where this NumFormat is set.
+        // The format does not need to exist!
+        const SwCharFormat* pFormat = GetCharFormat();
+        if(pFormat && !pFormat->GetDoc()->IsInDtor())
+            UpdateNumNodes(*const_cast<SwDoc*>(pFormat->GetDoc()));
+        return;
+    }
     if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
     auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
@@ -308,7 +317,6 @@ void SwNumFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
     switch(pLegacy->GetWhich())
     {
         case RES_ATTRSET_CHG:
-        case RES_FMT_CHG:
             pFormat = GetCharFormat();
             break;
     }

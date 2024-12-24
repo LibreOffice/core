@@ -68,6 +68,7 @@ struct SwDocStat;
 enum class ExpandMode;
 enum class SwFieldIds : sal_uInt16;
 class SwField;
+class SwFormatChangeHint;
 
 namespace sw {
     class TextNodeNotificationSuppressor;
@@ -243,6 +244,7 @@ public:
     /// for hanging TextFormatCollections somewhere else (Outline-Numbering!)
     void TriggerNodeUpdate(const sw::LegacyModifyHint&);
     void TriggerNodeUpdate(const sw::RemoveUnoObjectHint&);
+    void TriggerNodeUpdate(const SwFormatChangeHint&);
 
     const OUString& GetText() const { return m_Text; }
 

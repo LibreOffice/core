@@ -100,6 +100,13 @@ void SwFlyInContentFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rH
         static_cast<const sw::AutoFormatUsedHint&>(rHint).SetUsed();
         return;
     }
+    if (rHint.GetId() == SfxHintId::SwFormatChange)
+    {
+        SwFlyFrame::SwClientNotify(rMod, rHint);
+        if(GetAnchorFrame())
+            AnchorFrame()->Prepare(PrepareHint::FlyFrameAttributesChanged, GetFormat());
+        return;
+    }
     if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
     auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);

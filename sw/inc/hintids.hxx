@@ -428,7 +428,8 @@ inline constexpr sal_uInt16 RES_FMT_END(167);
 // ID's for Messages in the Formats
 inline constexpr sal_uInt16 RES_FORMAT_MSG_BEGIN(RES_FMT_END);
 inline constexpr TypedWhichId<SwPtrMsgPoolItem> RES_OBJECTDYING(RES_FORMAT_MSG_BEGIN); // 167
-inline constexpr TypedWhichId<SwFormatChg> RES_FMT_CHG(168);
+inline constexpr sal_uInt16 RES_UPDATEATTR_FMT_CHG(
+    168); // used by SwUpdateAttr just as an ID to communicate what has changed
 inline constexpr TypedWhichId<SwAttrSetChg> RES_ATTRSET_CHG(169);
 inline constexpr TypedWhichId<SwUpdateAttr> RES_UPDATE_ATTR(170);
 inline constexpr TypedWhichId<SwMsgPoolItem> RES_HIDDENPARA_PRINT(178);

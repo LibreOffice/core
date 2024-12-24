@@ -44,6 +44,7 @@ public:
     virtual ~SwTextCharFormat( ) override;
 
     void TriggerNodeUpdate(const sw::LegacyModifyHint&);
+    void TriggerNodeUpdate(const SwFormatChangeHint&);
 
     // get and set TextNode pointer
     void ChgTextNode( SwTextNode* pNew ) { m_pTextNode = pNew; }

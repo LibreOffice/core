@@ -90,7 +90,7 @@ SwFormat &SwFormat::operator=(const SwFormat& rFormat)
     m_nPoolHelpId = rFormat.GetPoolHelpId();
     m_nPoolHlpFileId = rFormat.GetPoolHlpFileId();
 
-    InvalidateInSwCache(RES_OBJECTDYING);
+    InvalidateInSwCache();
 
     // copy only array with attributes delta
     SwAttrSet aOld( *m_aSet.GetPool(), m_aSet.GetRanges() ),
@@ -150,8 +150,8 @@ void SwFormat::SetFormatName( const OUString& rNewName, bool bBroadcast )
 void SwFormat::CopyAttrs( const SwFormat& rFormat )
 {
     // copy only array with attributes delta
-    InvalidateInSwCache(RES_ATTRSET_CHG);
-    InvalidateInSwFntCache(RES_ATTRSET_CHG);
+    InvalidateInSwCache();
+    InvalidateInSwFntCache();
 
     // special treatments for some attributes
     SwAttrSet* pChgSet = const_cast<SwAttrSet*>(&rFormat.m_aSet);
@@ -211,6 +211,26 @@ void SwFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
     if (rHint.GetId() == SfxHintId::SwRemoveUnoObject)
     {
+        SwModify::SwClientNotify(*this, rHint);
+        return;
+    }
+    if (rHint.GetId() == SfxHintId::SwFormatChange)
+    {
+        auto pChangeHint = static_cast<const SwFormatChangeHint*>(&rHint);
+
+        InvalidateInSwCache();
+
+        // if the format parent will be moved so register my attribute set at
+        // the new one
+
+        // skip my own Modify
+        // NB: this still notifies depends even if this condition is not met, which seems non-obvious
+        if(pChangeHint->m_pOldFormat != this && pChangeHint->m_pNewFormat == GetRegisteredIn())
+        {
+            // attach Set to new parent
+            m_aSet.SetParent(DerivedFrom() ? &DerivedFrom()->m_aSet : nullptr);
+        }
+        InvalidateInSwFntCache();
         SwModify::SwClientNotify(*this, rHint);
         return;
     }
@@ -274,22 +294,6 @@ void SwFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
             }
             break;
         }
-        case RES_FMT_CHG:
-        {
-            // if the format parent will be moved so register my attribute set at
-            // the new one
-
-            // skip my own Modify
-            // NB: this still notifies depends even if this condition is not met, which seems non-obvious
-            auto pOldFormatChg = static_cast<const SwFormatChg*>(pLegacy->m_pOld);
-            auto pNewFormatChg = static_cast<const SwFormatChg*>(pLegacy->m_pNew);
-            if(pOldFormatChg && pNewFormatChg && pOldFormatChg->pChangedFormat != this && pNewFormatChg->pChangedFormat == GetRegisteredIn())
-            {
-                // attach Set to new parent
-                m_aSet.SetParent(DerivedFrom() ? &DerivedFrom()->m_aSet : nullptr);
-            }
-            break;
-        }
         default:
             // attribute is defined in this format
             if(SfxItemState::SET == m_aSet.GetItemState(nWhich, false))
@@ -335,15 +339,13 @@ bool SwFormat::SetDerivedFrom(SwFormat *pDerFrom)
             || (Which()==RES_FLYFRMFMT && pDerFrom->Which()==RES_FRMFMT)
             );
 
-    InvalidateInSwCache(RES_ATTRSET_CHG);
-    InvalidateInSwFntCache(RES_ATTRSET_CHG);
+    InvalidateInSwCache();
+    InvalidateInSwFntCache();
 
     pDerFrom->Add(*this);
     m_aSet.SetParent( &pDerFrom->m_aSet );
 
-    SwFormatChg aOldFormat( this );
-    SwFormatChg aNewFormat( this );
-    const sw::LegacyModifyHint aHint(&aOldFormat, &aNewFormat);
+    const SwFormatChangeHint aHint(this, this);
     SwClientNotify(*this, aHint);
 
     return true;
@@ -519,8 +521,8 @@ bool SwFormat::SetFormatAttr( const SfxItemSet& rSet )
     if( !rSet.Count() )
         return false;
 
-    InvalidateInSwCache(RES_ATTRSET_CHG);
-    InvalidateInSwFntCache(RES_ATTRSET_CHG);
+    InvalidateInSwCache();
+    InvalidateInSwFntCache();
 
     bool bRet = false;
 
@@ -639,8 +641,8 @@ sal_uInt16 SwFormat::ResetAllFormatAttr()
     if( !m_aSet.Count() )
         return 0;
 
-    InvalidateInSwCache(RES_ATTRSET_CHG);
-    InvalidateInSwFntCache(RES_ATTRSET_CHG);
+    InvalidateInSwCache();
+    InvalidateInSwFntCache();
 
     // if Modify is locked then no modifications will be sent
     if( IsModifyLocked() )
@@ -659,8 +661,8 @@ void SwFormat::DelDiffs( const SfxItemSet& rSet )
     if( !m_aSet.Count() )
         return;
 
-    InvalidateInSwCache(RES_ATTRSET_CHG);
-    InvalidateInSwFntCache(RES_ATTRSET_CHG);
+    InvalidateInSwCache();
+    InvalidateInSwFntCache();
 
     // if Modify is locked then no modifications will be sent
     if( IsModifyLocked() )

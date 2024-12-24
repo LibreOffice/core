@@ -2260,6 +2260,12 @@ std::unique_ptr<SwFieldType> SwRefPageGetFieldType::Copy() const
 
 void SwRefPageGetFieldType::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
+    if (rHint.GetId() == SfxHintId::SwFormatChange)
+    {
+        // forward to text fields, they "expand" the text
+        CallSwClientNotify(rHint);
+        return;
+    }
     if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
     auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);

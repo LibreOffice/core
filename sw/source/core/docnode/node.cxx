@@ -369,7 +369,7 @@ SwNode::SwNode( SwNodes& rNodes, SwNodeOffset nPos, const SwNodeType nNdType )
 SwNode::~SwNode()
 {
     assert(m_aAnchoredFlys.empty() || GetDoc().IsInDtor()); // must all be deleted
-    InvalidateInSwCache(RES_OBJECTDYING);
+    InvalidateInSwCache();
     assert(!IsInCache());
 }
 
@@ -1096,7 +1096,7 @@ SwContentNode::~SwContentNode()
 
     if ( mpAttrSet && mbSetModifyAtAttr )
         const_cast<SwAttrSet*>(mpAttrSet.get())->SetModifyAtAttr( nullptr );
-    InvalidateInSwCache(RES_OBJECTDYING);
+    InvalidateInSwCache();
 }
 
 void SwContentNode::UpdateAttr(const SwUpdateAttr& rUpdate)
@@ -1110,7 +1110,30 @@ void SwContentNode::UpdateAttr(const SwUpdateAttr& rUpdate)
 
 void SwContentNode::SwClientNotify( const SwModify&, const SfxHint& rHint)
 {
-    if (rHint.GetId() == SfxHintId::SwLegacyModify)
+    if (rHint.GetId() == SfxHintId::SwFormatChange)
+    {
+        auto pChangeHint = static_cast<const SwFormatChangeHint*>(&rHint);
+        InvalidateInSwCache();
+
+        // If the Format parent was switched, register the Attrset at the new one
+        // Skip own Modify!
+        bool bSetParent = false;
+        bool bCalcHidden = false;
+        SwFormatColl* pFormatColl = nullptr;
+        if(GetpSwAttrSet()
+                && pChangeHint->m_pNewFormat == GetRegisteredIn())
+        {
+            pFormatColl = GetFormatColl();
+            bSetParent = true;
+        }
+
+        if(bSetParent && GetpSwAttrSet())
+            AttrSetHandleHelper::SetParent(mpAttrSet, *this, pFormatColl, pFormatColl);
+        if(bCalcHidden)
+            static_cast<SwTextNode*>(this)->SetCalcHiddenCharFlags();
+        CallSwClientNotify(rHint);
+    }
+    else if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
         auto pLegacyHint = static_cast<const sw::LegacyModifyHint*>(&rHint);
         const sal_uInt16 nWhich = pLegacyHint->GetWhich();
@@ -1134,18 +1157,6 @@ void SwContentNode::SwClientNotify( const SwModify&, const SfxHint& rHint)
                         // reach this point.
                         assert(false);
                     }
-                }
-                break;
-
-            case RES_FMT_CHG:
-                // If the Format parent was switched, register the Attrset at the new one
-                // Skip own Modify!
-                if(GetpSwAttrSet()
-                        && pLegacyHint->m_pNew
-                        && static_cast<const SwFormatChg*>(pLegacyHint->m_pNew)->pChangedFormat == GetRegisteredIn())
-                {
-                    pFormatColl = GetFormatColl();
-                    bSetParent = true;
                 }
                 break;
 
@@ -1269,12 +1280,10 @@ SwFormatColl *SwContentNode::ChgFormatColl( SwFormatColl *pNewColl )
         {
             assert(dynamic_cast<SwTextFormatColl*>(pNewColl));
             ChkCondColl(static_cast<SwTextFormatColl*>(pNewColl));
-            SwFormatChg aTmp1( pOldColl );
-            SwFormatChg aTmp2( pNewColl );
-            CallSwClientNotify( sw::LegacyModifyHint(&aTmp1, &aTmp2) );
+            CallSwClientNotify( SwFormatChangeHint(pOldColl, pNewColl) );
         }
     }
-    InvalidateInSwCache(RES_ATTRSET_CHG);
+    InvalidateInSwCache();
     return pOldColl;
 }
 
@@ -1574,7 +1583,7 @@ bool SwContentNode::SetAttr(const SfxPoolItem& rAttr )
 
     OSL_ENSURE( GetpSwAttrSet(), "Why did't we create an AttrSet?");
 
-    InvalidateInSwCache(RES_ATTRSET_CHG);
+    InvalidateInSwCache();
 
     bool bRet = false;
     // If Modify is locked, we do not send any Modifys
@@ -1596,7 +1605,7 @@ bool SwContentNode::SetAttr(const SfxPoolItem& rAttr )
 
 bool SwContentNode::SetAttr( const SfxItemSet& rSet )
 {
-    InvalidateInSwCache(RES_ATTRSET_CHG);
+    InvalidateInSwCache();
 
     if( const SwFormatAutoFormat* pFnd = rSet.GetItemIfSet( RES_AUTO_STYLE, false ) )
     {
@@ -1667,7 +1676,7 @@ bool SwContentNode::ResetAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
     if( !GetpSwAttrSet() )
         return false;
 
-    InvalidateInSwCache(RES_ATTRSET_CHG);
+    InvalidateInSwCache();
 
     // If Modify is locked, do not send out any Modifys
     if( IsModifyLocked() )
@@ -1708,7 +1717,7 @@ bool SwContentNode::ResetAttr( const std::vector<sal_uInt16>& rWhichArr )
     if( !GetpSwAttrSet() )
         return false;
 
-    InvalidateInSwCache(RES_ATTRSET_CHG);
+    InvalidateInSwCache();
     // If Modify is locked, do not send out any Modifys
     sal_uInt16 nDel = 0;
     if( IsModifyLocked() )
@@ -1736,7 +1745,7 @@ sal_uInt16 SwContentNode::ResetAllAttr()
 {
     if( !GetpSwAttrSet() )
         return 0;
-    InvalidateInSwCache(RES_ATTRSET_CHG);
+    InvalidateInSwCache();
 
     // If Modify is locked, do not send out any Modifys
     if( IsModifyLocked() )
@@ -1912,11 +1921,9 @@ void SwContentNode::SetCondFormatColl(SwFormatColl* pColl)
 
     if(!IsModifyLocked())
     {
-        SwFormatChg aTmp1(pOldColl ? pOldColl : GetFormatColl());
-        SwFormatChg aTmp2(pColl ? pColl : GetFormatColl());
-        CallSwClientNotify(sw::LegacyModifyHint(&aTmp1, &aTmp2));
+        CallSwClientNotify(SwFormatChangeHint(pOldColl ? pOldColl : GetFormatColl(), pColl ? pColl : GetFormatColl()));
     }
-    InvalidateInSwCache(RES_ATTRSET_CHG);
+    InvalidateInSwCache();
 }
 
 bool SwContentNode::IsAnyCondition( SwCollCondition& rTmp ) const

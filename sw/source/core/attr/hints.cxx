@@ -28,13 +28,6 @@
 #include <vcl/outdev.hxx>
 #include <osl/diagnose.h>
 
-SwFormatChg::SwFormatChg( SwFormat* pFormat )
-    : SwMsgPoolItem( RES_FMT_CHG ), pChangedFormat( pFormat )
-{
-}
-
-
-
 namespace sw {
 
 InsertText::InsertText(const sal_Int32 nP, const sal_Int32 nL, const bool isInFMCommand, const bool isInFMResult)

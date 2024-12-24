@@ -743,6 +743,13 @@ void SwFlyLayFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         static_cast<const sw::AutoFormatUsedHint&>(rHint).SetUsed();
         return;
     }
+    if (rHint.GetId() == SfxHintId::SwFormatChange)
+    {
+        auto pChangeHint = static_cast<const SwFormatChangeHint*>(&rHint);
+        if(pChangeHint->m_pNewFormat)
+            SwFlyFrame::SwClientNotify(rMod, rHint);
+        return;
+    }
     if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
     auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);

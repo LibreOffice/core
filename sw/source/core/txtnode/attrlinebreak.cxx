@@ -64,11 +64,10 @@ void SwFormatLineBreak::SwClientNotify(const SwModify&, const SfxHint& rHint)
     {
         CallSwClientNotify(rHint);
         SetXLineBreak(nullptr);
-        return;
     }
-    if (rHint.GetId() != SfxHintId::SwLegacyModify)
-        return;
-    CallSwClientNotify(rHint);
+    else if (rHint.GetId() == SfxHintId::SwLegacyModify
+             || rHint.GetId() == SfxHintId::SwFormatChange)
+        CallSwClientNotify(rHint);
 }
 
 sal_uInt16 SwFormatLineBreak::GetValueCount() const

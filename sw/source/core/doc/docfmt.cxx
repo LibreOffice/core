@@ -651,9 +651,9 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
             aOld.ClearItem( RES_PARATR_TABSTOP );
             if( bChg )
             {
-                SwFormatChg aChgFormat( mpDfltCharFormat.get() );
+                SwFormatChangeHint aChgFormat( mpDfltCharFormat.get(), mpDfltCharFormat.get() );
                 // notify the frames
-                aCallMod.CallSwClientNotify(sw::LegacyModifyHint( &aChgFormat, &aChgFormat ));
+                aCallMod.CallSwClientNotify(aChgFormat);
             }
         }
     }

@@ -26,7 +26,6 @@ void BorderCacheOwner::InvalidateInSwCache(const sal_uInt16 nWhich)
     switch (nWhich)
     {
         case RES_OBJECTDYING:
-        case RES_FMT_CHG:
         case RES_ATTRSET_CHG:
         case RES_UL_SPACE:
         case RES_MARGIN_FIRSTLINE:
@@ -43,6 +42,15 @@ void BorderCacheOwner::InvalidateInSwCache(const sal_uInt16 nWhich)
                 SwFrame::GetCache().Delete(this);
                 m_bInCache = false;
             }
+    }
+}
+
+void BorderCacheOwner::InvalidateInSwCache()
+{
+    if (m_bInCache)
+    {
+        SwFrame::GetCache().Delete(this);
+        m_bInCache = false;
     }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

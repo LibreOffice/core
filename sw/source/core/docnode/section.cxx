@@ -720,6 +720,21 @@ void SwSectionFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         SetXTextSection(nullptr);
         return;
     }
+    else if (rHint.GetId() == SfxHintId::SwFormatChange)
+    {
+        auto pChangeHint = static_cast<const SwFormatChangeHint*>(&rHint);
+        if( !GetDoc()->IsInDtor() &&
+            pChangeHint->m_pNewFormat == static_cast<void*>(GetRegisteredIn()) &&
+            dynamic_cast<const SwSectionFormat*>(pChangeHint->m_pNewFormat) != nullptr )
+        {
+            // My Parent will be changed, thus I need to update
+            SwFrameFormat::SwClientNotify(rMod, rHint);
+            UpdateParent();
+            return;
+        }
+        SwFrameFormat::SwClientNotify(rMod, rHint);
+        return;
+    }
     else if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
     auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
@@ -790,17 +805,6 @@ void SwSectionFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         }
         break;
 
-    case RES_FMT_CHG:
-        if( !GetDoc()->IsInDtor() &&
-            static_cast<const SwFormatChg*>(pNew)->pChangedFormat == static_cast<void*>(GetRegisteredIn()) &&
-            dynamic_cast<const SwSectionFormat*>(static_cast<const SwFormatChg*>(pNew)->pChangedFormat) != nullptr )
-        {
-            // My Parent will be changed, thus I need to update
-            SwFrameFormat::SwClientNotify(rMod, rHint);
-            UpdateParent();
-            return;
-        }
-        break;
     }
     SwFrameFormat::SwClientNotify(rMod, rHint);
 }

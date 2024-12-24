@@ -290,7 +290,12 @@ void SwPageDesc::RegisterChange()
 /// special handling if the style of the grid alignment changes
 void SwPageDesc::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
 {
-    if (rHint.GetId() == SfxHintId::SwLegacyModify)
+    if (rHint.GetId() == SfxHintId::SwFormatChange)
+    {
+        CallSwClientNotify(rHint);
+        RegisterChange();
+    }
+    else if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
         auto pLegacyHint = static_cast<const sw::LegacyModifyHint*>(&rHint);
         const sal_uInt16 nWhich = pLegacyHint->m_pOld
@@ -300,7 +305,6 @@ void SwPageDesc::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
                 : 0;
         CallSwClientNotify(rHint);
         if((RES_ATTRSET_CHG == nWhich)
-                || (RES_FMT_CHG == nWhich)
                 || isCHRATR(nWhich)
                 || (RES_PARATR_LINESPACING == nWhich))
             RegisterChange();

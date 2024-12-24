@@ -2186,6 +2186,7 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
     sw::DeleteChar const* pDeleteChar(nullptr);
     sw::RedlineDelText const* pRedlineDelText(nullptr);
     sw::RedlineUnDelText const* pRedlineUnDelText(nullptr);
+    SwFormatChangeHint const * pFormatChangedHint(nullptr);
 
     sal_uInt16 nWhich = 0;
     if (rHint.GetId() == SfxHintId::SwLegacyModify)
@@ -2242,6 +2243,10 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
     {
         pRedlineUnDelText = static_cast<sw::RedlineUnDelText const*>(&rHint);
     }
+    else if (rHint.GetId() == SfxHintId::SwFormatChange)
+    {
+        pFormatChangedHint = static_cast<const SwFormatChangeHint*>(&rHint);
+    }
     else
     {
         assert(!"unexpected hint");
@@ -2255,7 +2260,7 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
     SwTextNode const& rNode(static_cast<SwTextNode const&>(rModify));
 
     // modifications concerning frame attributes are processed by the base class
-    if( IsInRange( aFrameFormatSetRange, nWhich ) || RES_FMT_CHG == nWhich )
+    if( IsInRange( aFrameFormatSetRange, nWhich ) || pFormatChangedHint )
     {
         if (m_pMergedPara)
         {   // ignore item set changes that don't apply
@@ -2269,7 +2274,7 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
             }
         }
         SwContentFrame::SwClientNotify(rModify, sw::LegacyModifyHint(pOld, pNew));
-        if( nWhich == RES_FMT_CHG && getRootFrame()->GetCurrShell() )
+        if( pFormatChangedHint && getRootFrame()->GetCurrShell() )
         {
             // collection has changed
             Prepare();
@@ -2495,7 +2500,7 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
                 const sal_uInt16 nTmp = pNewUpdate->getWhichAttr();
 
                 if( ! nTmp || RES_TXTATR_CHARFMT == nTmp || RES_TXTATR_INETFMT == nTmp || RES_TXTATR_AUTOFMT == nTmp ||
-                    RES_FMT_CHG == nTmp || RES_ATTRSET_CHG == nTmp )
+                    RES_UPDATEATTR_FMT_CHG == nTmp || RES_ATTRSET_CHG == nTmp )
                 {
                     lcl_SetWrong( *this, rNode, nNPos, nNPos + nNLen, false );
                     lcl_SetScriptInval( *this, nPos );

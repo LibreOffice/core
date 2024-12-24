@@ -252,12 +252,15 @@ void SwEndNoteInfo::SwClientNotify( const SwModify& rModify, const SfxHint& rHin
         switch(pLegacyHint->GetWhich())
         {
             case RES_ATTRSET_CHG:
-            case RES_FMT_CHG:
                 UpdateFormatOrAttr();
                 break;
             default:
                 CheckRegistration( pLegacyHint->m_pOld );
         }
+    }
+    else if (rHint.GetId() == SfxHintId::SwFormatChange)
+    {
+        UpdateFormatOrAttr();
     }
     else if (rHint.GetId() == SfxHintId::SwModifyChanged)
     {

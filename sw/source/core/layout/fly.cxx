@@ -798,29 +798,38 @@ bool SwFlyFrame::FrameSizeChg( const SwFormatFrameSize &rFrameSize )
 
 void SwFlyFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
-    if (rHint.GetId() == SfxHintId::SwLegacyModify)
+    if (rHint.GetId() == SfxHintId::SwFormatChange ||
+        rHint.GetId() == SfxHintId::SwLegacyModify)
     {
-        auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
         SwFlyFrameInvFlags eInvFlags = SwFlyFrameInvFlags::NONE;
-        if(pLegacy->m_pNew && pLegacy->m_pOld && RES_ATTRSET_CHG == pLegacy->m_pNew->Which())
+        if (rHint.GetId() == SfxHintId::SwFormatChange)
         {
-            SfxItemIter aNIter(*static_cast<const SwAttrSetChg*>(pLegacy->m_pNew)->GetChgSet());
-            SfxItemIter aOIter(*static_cast<const SwAttrSetChg*>(pLegacy->m_pOld)->GetChgSet());
-            const SfxPoolItem* pNItem = aNIter.GetCurItem();
-            const SfxPoolItem* pOItem = aOIter.GetCurItem();
-            SwAttrSetChg aOldSet(*static_cast<const SwAttrSetChg*>(pLegacy->m_pOld));
-            SwAttrSetChg aNewSet(*static_cast<const SwAttrSetChg*>(pLegacy->m_pNew));
-            do
-            {
-                UpdateAttr_(pOItem, pNItem, eInvFlags, &aOldSet, &aNewSet);
-                pNItem = aNIter.NextItem();
-                pOItem = aOIter.NextItem();
-            } while(pNItem);
-            if(aOldSet.Count() || aNewSet.Count())
-                SwLayoutFrame::SwClientNotify(rMod, sw::LegacyModifyHint(&aOldSet, &aNewSet));
+            auto pChangeHint = static_cast<const SwFormatChangeHint*>(&rHint);
+            UpdateAttrForFormatChange(pChangeHint->m_pOldFormat, pChangeHint->m_pNewFormat, eInvFlags);
         }
-        else
-            UpdateAttr_(pLegacy->m_pOld, pLegacy->m_pNew, eInvFlags);
+        else // rHint.GetId() == SfxHintId::SwLegacyModify
+        {
+            auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
+            if(pLegacy->m_pNew && pLegacy->m_pOld && RES_ATTRSET_CHG == pLegacy->m_pNew->Which())
+            {
+                SfxItemIter aNIter(*static_cast<const SwAttrSetChg*>(pLegacy->m_pNew)->GetChgSet());
+                SfxItemIter aOIter(*static_cast<const SwAttrSetChg*>(pLegacy->m_pOld)->GetChgSet());
+                const SfxPoolItem* pNItem = aNIter.GetCurItem();
+                const SfxPoolItem* pOItem = aOIter.GetCurItem();
+                SwAttrSetChg aOldSet(*static_cast<const SwAttrSetChg*>(pLegacy->m_pOld));
+                SwAttrSetChg aNewSet(*static_cast<const SwAttrSetChg*>(pLegacy->m_pNew));
+                do
+                {
+                    UpdateAttr_(pOItem, pNItem, eInvFlags, &aOldSet, &aNewSet);
+                    pNItem = aNIter.NextItem();
+                    pOItem = aOIter.NextItem();
+                } while(pNItem);
+                if(aOldSet.Count() || aNewSet.Count())
+                    SwLayoutFrame::SwClientNotify(rMod, sw::LegacyModifyHint(&aOldSet, &aNewSet));
+            }
+            else
+                UpdateAttr_(pLegacy->m_pOld, pLegacy->m_pNew, eInvFlags);
+        }
 
         if(eInvFlags == SwFlyFrameInvFlags::NONE)
             return;
@@ -963,7 +972,6 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             break;
 
         case RES_FRM_SIZE:
-        case RES_FMT_CHG:
         case RES_FLY_SPLIT:
         {
             const SwFormatFrameSize &rNew = GetFormat()->GetFrameSize();
@@ -974,45 +982,12 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                          | SwFlyFrameInvFlags::SetCompletePaint
                          | SwFlyFrameInvFlags::InvalidateBrowseWidth
                          | SwFlyFrameInvFlags::ClearContourCache;
-            if (pOld && RES_FMT_CHG == nWhich)
-            {
-                SwRect aNew( GetObjRectWithSpaces() );
-                SwRect aOld( getFrameArea() );
-                const SvxULSpaceItem &rUL = static_cast<const SwFormatChg*>(pOld)->pChangedFormat->GetULSpace();
-                aOld.Top( std::max( aOld.Top() - tools::Long(rUL.GetUpper()), tools::Long(0) ) );
-                aOld.AddHeight(rUL.GetLower() );
-                const SvxLRSpaceItem &rLR = static_cast<const SwFormatChg*>(pOld)->pChangedFormat->GetLRSpace();
-                aOld.Left(std::max(aOld.Left() - rLR.ResolveLeft({}), tools::Long(0)));
-                aOld.AddWidth(rLR.ResolveRight({}));
-                aNew.Union( aOld );
-                NotifyBackground( FindPageFrame(), aNew, PrepareHint::Clear );
-
-                // Special case:
-                // When assigning a template we cannot rely on the old column
-                // attribute. As there need to be at least enough for ChgColumns,
-                // we need to create a temporary attribute.
-                SwFormatCol aCol;
-                if ( Lower() && Lower()->IsColumnFrame() )
-                {
-                    sal_uInt16 nCol = 0;
-                    SwFrame *pTmp = Lower();
-                    do
-                    {   ++nCol;
-                        pTmp = pTmp->GetNext();
-                    } while ( pTmp );
-                    aCol.Init( nCol, 0, 1000 );
-                }
-                ChgColumns( aCol, GetFormat()->GetCol() );
-            }
 
             SwFormatURL aURL( GetFormat()->GetURL() );
 
             SwFormatFrameSize *pNewFormatFrameSize = nullptr;
-            SwFormatChg *pOldFormatChg = nullptr;
             if (nWhich == RES_FRM_SIZE)
                 pNewFormatFrameSize = const_cast<SwFormatFrameSize*>(static_cast<const SwFormatFrameSize*>(pNew));
-            else if (nWhich == RES_FMT_CHG)
-                pOldFormatChg = const_cast<SwFormatChg*>(static_cast<const SwFormatChg*>(pOld));
             else if (nWhich == RES_FLY_SPLIT)
             {
                 // If the fly frame has a table lower, invalidate that, so it joins its follow tab
@@ -1023,11 +998,9 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 }
             }
 
-            if (aURL.GetMap() && (pNewFormatFrameSize || pOldFormatChg))
+            if (aURL.GetMap() && pNewFormatFrameSize)
             {
-                const SwFormatFrameSize &rOld = pNewFormatFrameSize ?
-                                *pNewFormatFrameSize :
-                                pOldFormatChg->pChangedFormat->GetFrameSize();
+                const SwFormatFrameSize &rOld = *pNewFormatFrameSize;
                 //#35091# Can be "times zero", when loading the template
                 if ( rOld.GetWidth() && rOld.GetHeight() )
                 {
@@ -1243,6 +1216,116 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
         SwModify aMod;
         SwLayoutFrame::SwClientNotify(aMod, sw::LegacyModifyHint(pOld, pNew));
     }
+}
+
+void SwFlyFrame::UpdateAttrForFormatChange( SwFormat *pOldFormat, SwFormat *pNewFormat,
+                            SwFlyFrameInvFlags &rInvFlags )
+{
+    SwViewShell *pSh = getRootFrame()->GetCurrShell();
+    {
+        const SwFormatFrameSize &rNew = GetFormat()->GetFrameSize();
+        if ( FrameSizeChg( rNew ) )
+            NotifyDrawObj();
+        rInvFlags |= SwFlyFrameInvFlags::InvalidatePos | SwFlyFrameInvFlags::InvalidateSize
+                     | SwFlyFrameInvFlags::InvalidatePrt | SwFlyFrameInvFlags::SetNotifyBack
+                     | SwFlyFrameInvFlags::SetCompletePaint
+                     | SwFlyFrameInvFlags::InvalidateBrowseWidth
+                     | SwFlyFrameInvFlags::ClearContourCache;
+        {
+            SwRect aNew( GetObjRectWithSpaces() );
+            SwRect aOld( getFrameArea() );
+            const SvxULSpaceItem &rUL = pOldFormat->GetULSpace();
+            aOld.Top( std::max( aOld.Top() - tools::Long(rUL.GetUpper()), tools::Long(0) ) );
+            aOld.AddHeight(rUL.GetLower() );
+            const SvxLRSpaceItem &rLR = pOldFormat->GetLRSpace();
+            aOld.Left(std::max(aOld.Left() - rLR.ResolveLeft({}), tools::Long(0)));
+            aOld.AddWidth(rLR.ResolveRight({}));
+            aNew.Union( aOld );
+            NotifyBackground( FindPageFrame(), aNew, PrepareHint::Clear );
+
+            // Special case:
+            // When assigning a template we cannot rely on the old column
+            // attribute. As there need to be at least enough for ChgColumns,
+            // we need to create a temporary attribute.
+            SwFormatCol aCol;
+            if ( Lower() && Lower()->IsColumnFrame() )
+            {
+                sal_uInt16 nCol = 0;
+                SwFrame *pTmp = Lower();
+                do
+                {   ++nCol;
+                    pTmp = pTmp->GetNext();
+                } while ( pTmp );
+                aCol.Init( nCol, 0, 1000 );
+            }
+            ChgColumns( aCol, GetFormat()->GetCol() );
+        }
+
+        SwFormatURL aURL( GetFormat()->GetURL() );
+
+        if (aURL.GetMap() && pOldFormat)
+        {
+            const SwFormatFrameSize &rOld = pOldFormat->GetFrameSize();
+            //#35091# Can be "times zero", when loading the template
+            if ( rOld.GetWidth() && rOld.GetHeight() )
+            {
+
+                Fraction aScaleX( rOld.GetWidth(), rNew.GetWidth() );
+                Fraction aScaleY( rOld.GetHeight(), rOld.GetHeight() );
+                aURL.GetMap()->Scale( aScaleX, aScaleY );
+                SwFrameFormat *pFormat = GetFormat();
+                pFormat->LockModify();
+                pFormat->SetFormatAttr( aURL );
+                pFormat->UnlockModify();
+            }
+        }
+        const SvxProtectItem &rP = GetFormat()->GetProtect();
+        GetVirtDrawObj()->SetMoveProtect( rP.IsPosProtected()    );
+        GetVirtDrawObj()->SetResizeProtect( rP.IsSizeProtected() );
+
+        if ( pSh )
+            pSh->InvalidateWindows( getFrameArea() );
+        const IDocumentDrawModelAccess& rIDDMA = GetFormat()->getIDocumentDrawModelAccess();
+        const IDocumentSettingAccess& rIDSA = GetFormat()->getIDocumentSettingAccess();
+        bool isPaintHellOverHF = rIDSA.get(DocumentSettingId::PAINT_HELL_OVER_HEADER_FOOTER);
+        SdrLayerID nHellId = rIDDMA.GetHellId();
+
+        if (isPaintHellOverHF && !GetAnchorFrame()->FindFooterOrHeader())
+        {
+            nHellId = rIDDMA.GetHeaderFooterHellId();
+        }
+        bool bNoClippingWithWrapPolygon = rIDSA.get(DocumentSettingId::NO_CLIPPING_WITH_WRAP_POLYGON);
+        SdrLayerID nId = nHellId;
+        if (GetFormat()->GetOpaque().GetValue() &&
+            !(bNoClippingWithWrapPolygon && GetFrameFormat()->GetSurround().IsContour()))
+            nId = rIDDMA.GetHeavenId();
+        GetVirtDrawObj()->SetLayer( nId );
+
+        if ( Lower() )
+        {
+            // Delete contour in the Node if necessary
+            if( Lower()->IsNoTextFrame() &&
+                 !GetFormat()->GetSurround().IsContour() )
+            {
+                SwNoTextNode *pNd = static_cast<SwNoTextNode*>(static_cast<SwNoTextFrame*>(Lower())->GetNode());
+                if ( pNd->HasContour() )
+                    pNd->SetContour( nullptr );
+            }
+            else if( !Lower()->IsColumnFrame() )
+            {
+                SwFrame* pFrame = GetLastLower();
+                if( pFrame->IsTextFrame() && static_cast<SwTextFrame*>(pFrame)->IsUndersized() )
+                    pFrame->Prepare( PrepareHint::AdjustSizeWithoutFormatting );
+            }
+        }
+
+        // #i28701# - perform reorder of object lists
+        // at anchor frame and at page frame.
+        rInvFlags |= SwFlyFrameInvFlags::UpdateObjInSortedList;
+    }
+
+    SwModify aMod;
+    SwLayoutFrame::SwClientNotify(aMod, SwFormatChangeHint(pOldFormat, pNewFormat));
 }
 
 void SwFlyFrame::Invalidate_( SwPageFrame const *pPage )
