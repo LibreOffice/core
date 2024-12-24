@@ -110,7 +110,7 @@ SfxVoidItem AddPrintArea SID_ADD_PRINTAREA
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -543,7 +543,7 @@ SfxVoidItem ChangePrintArea SID_CHANGE_PRINTAREA
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -1309,7 +1309,7 @@ SfxVoidItem DefinePrintArea SID_DEFINE_PRINTAREA
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -1417,7 +1417,7 @@ SfxVoidItem DeletePrintArea SID_DELETE_PRINTAREA
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -1579,7 +1579,7 @@ SfxVoidItem EditPrintArea SID_OPENDLG_EDIT_PRINTAREA
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -1966,7 +1966,7 @@ SfxVoidItem FreezePanes SID_WINDOW_FIX
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -1983,7 +1983,7 @@ SfxPointItem FreezePanesColumn SID_WINDOW_FIX_COL
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -2000,7 +2000,7 @@ SfxPointItem FreezePanesRow SID_WINDOW_FIX_ROW
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -2017,7 +2017,7 @@ SfxVoidItem FunctionBox FID_FUNCTION_BOX
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = TRUE,
     RecordAbsolute = FALSE,
