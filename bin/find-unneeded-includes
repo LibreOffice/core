@@ -410,10 +410,10 @@ def processIWYUOutput(iwyuOutput, moduleRules, fileName, noexclude, checknamespa
                     subprocess.run(["git", "grep", "-n", "namespace.*[^a-zA-Z]"+nameSpace+" *;", fileName])
 
     if removefwdd:
-        for remove in sorted(toRemove):
+        for remove in sorted(toRemove, key=lambda x: int(x.split(":")[1])):
             print("ERROR: %s: remove not needed forward declaration" % remove)
     else:
-        for remove in sorted(toRemove):
+        for remove in sorted(toRemove, key=lambda x: int(x.split(":")[1])):
             print("ERROR: %s: remove not needed include" % remove)
     return len(toRemove)
 
