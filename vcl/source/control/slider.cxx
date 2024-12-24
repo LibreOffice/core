@@ -76,18 +76,18 @@ void Slider::ImplInitSettings()
         SetParentClipMode( ParentClipMode::NoClip );
         SetPaintTransparent( true );
         SetBackground();
-    }
-    else
-    {
-        EnableChildTransparentMode( false );
-        SetParentClipMode();
-        SetPaintTransparent( false );
 
-        if ( IsControlBackground() )
-            SetBackground( GetControlBackground() );
-        else
-            SetBackground( pParent->GetBackground() );
+        return;
     }
+
+    EnableChildTransparentMode( false );
+    SetParentClipMode();
+    SetPaintTransparent( false );
+
+    if ( IsControlBackground() )
+        SetBackground( GetControlBackground() );
+    else
+        SetBackground( pParent->GetBackground() );
 }
 
 void Slider::ImplUpdateRects( bool bUpdate )
