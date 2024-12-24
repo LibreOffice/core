@@ -69,9 +69,6 @@ extern ErrCode ImpScan
 extern ErrCode ImpScan
     ( std::u16string_view rSrc, double& nVal, SbxDataType& rType, sal_uInt16* pLen );
 
-// with advanced evaluation (International, "TRUE"/"FALSE")
-extern bool ImpConvStringExt( OUString& rSrc, SbxDataType eTargetType );
-
 void ImpGetIntntlSep( sal_Unicode& rcDecimalSep, sal_Unicode& rcThousandSep, sal_Unicode& rcDecimalSepAlt );
 
 // SBXINT.CXX

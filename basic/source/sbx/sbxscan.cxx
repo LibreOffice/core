@@ -254,9 +254,8 @@ ErrCode ImpScan(std::u16string_view rSrc, double& nVal, SbxDataType& rType, sal_
 // port for CDbl in the Basic
 ErrCode SbxValue::ScanNumIntnl( const OUString& rSrc, double& nVal, bool bSingle )
 {
-    SbxDataType t;
     sal_uInt16 nLen = 0;
-    ErrCode nRetError = ImpScan( rSrc, nVal, t, &nLen,
+    ErrCode nRetError = ImpScan( rSrc, nVal, o3tl::temporary(SbxDataType()), &nLen,
         /*bOnlyIntntl*/true );
     // read completely?
     if( nRetError == ERRCODE_NONE && nLen != rSrc.getLength() )
@@ -288,65 +287,7 @@ void ImpCvtNum( double nNum, short nPrec, OUString& rRes, bool bCoreString )
     rRes = rtl::math::doubleToUString(nNum, rtl_math_StringFormat_Automatic, nPrec, cDecimalSep, true);
 }
 
-bool ImpConvStringExt( OUString& rSrc, SbxDataType eTargetType )
-{
-    bool bChanged = false;
-    OUString aNewString;
-
-    // only special cases are handled, nothing on default
-    switch( eTargetType )
-    {
-        // consider international for floating point
-        case SbxSINGLE:
-        case SbxDOUBLE:
-        case SbxCURRENCY:
-        {
-            sal_Unicode cDecimalSep, cThousandSep, cDecimalSepAlt;
-            ImpGetIntntlSep( cDecimalSep, cThousandSep, cDecimalSepAlt );
-            aNewString = rSrc;
-
-            if( cDecimalSep != '.' || (cDecimalSepAlt && cDecimalSepAlt != '.') )
-            {
-                sal_Int32 nPos = aNewString.indexOf( cDecimalSep );
-                if( nPos == -1 && cDecimalSepAlt )
-                    nPos = aNewString.indexOf( cDecimalSepAlt );
-                if( nPos != -1 )
-                {
-                    sal_Unicode* pStr = const_cast<sal_Unicode*>(aNewString.getStr());
-                    pStr[nPos] = '.';
-                    bChanged = true;
-                }
-            }
-            break;
-        }
-
-        // check as string in case of sal_Bool sal_True and sal_False
-        case SbxBOOL:
-        {
-            if( rSrc.equalsIgnoreAsciiCase("true") )
-            {
-                aNewString = OUString::number( SbxTRUE );
-                bChanged = true;
-            }
-            else if( rSrc.equalsIgnoreAsciiCase("false") )
-            {
-                aNewString = OUString::number( SbxFALSE );
-                bChanged = true;
-            }
-            break;
-        }
-        default: break;
-    }
-
-    if( bChanged )
-        rSrc = aNewString;
-    return bChanged;
-}
-
-
 // formatted number output
-// the return value is the number of characters used
-// from the format
 
 static void printfmtstr(std::u16string_view rStr, OUString& rRes, std::u16string_view rFmt)
 {
