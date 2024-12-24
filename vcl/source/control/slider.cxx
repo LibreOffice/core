@@ -36,7 +36,8 @@
 
 #define SLIDER_VIEW_STYLE           (WB_3DLOOK | WB_HORZ | WB_VERT)
 
-void Slider::ImplInit( vcl::Window* pParent, WinBits nStyle )
+Slider::Slider(vcl::Window* pParent, WinBits nStyle)
+    : Control(WindowType::SLIDER)
 {
     mnThumbPixOffset    = 0;
     mnThumbPixRange     = 0;
@@ -59,12 +60,6 @@ void Slider::ImplInit( vcl::Window* pParent, WinBits nStyle )
 
     ImplInitSettings();
     SetSizePixel( CalcWindowSizePixel() );
-}
-
-Slider::Slider( vcl::Window* pParent, WinBits nStyle ) :
-    Control(WindowType::SLIDER)
-{
-    ImplInit( pParent, nStyle );
 }
 
 Slider::~Slider()

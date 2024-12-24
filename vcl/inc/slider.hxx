@@ -49,7 +49,6 @@ private:
 
     using Control::ImplInitSettings;
     using Window::ImplInit;
-    void ImplInit( vcl::Window* pParent, WinBits nStyle );
     void ImplInitSettings();
     void ImplUpdateRects( bool bUpdate = true );
     tools::Long ImplCalcThumbPos( tools::Long nPixPos ) const;
