@@ -183,6 +183,12 @@ namespace {
             aAnnotation.put("textRange", sRects.getStr());
             aAnnotation.put("layoutStatus", pItem->mLayoutStatus);
         }
+        if (nType == CommentNotificationType::Remove && comphelper::LibreOfficeKit::isActive())
+        {
+            // Redline author is basically the author which has made the modification rather than author of the comments
+            // This is important to know who removed the comment
+            aAnnotation.put("author", SwModule::get()->GetRedlineAuthor(SwModule::get()->GetRedlineAuthor()));
+        }
 
         boost::property_tree::ptree aTree;
         aTree.add_child("comment", aAnnotation);
