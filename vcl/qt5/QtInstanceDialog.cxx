@@ -22,12 +22,17 @@ QtInstanceDialog::QtInstanceDialog(QDialog* pDialog)
     , m_pContentArea(nullptr)
     , m_aRunAsyncFunc(nullptr)
 {
+    assert(m_pDialog);
 }
 
 QtInstanceDialog::~QtInstanceDialog()
 {
     SolarMutexGuard g;
-    GetQtInstance().RunInMainThread([&] { m_pDialog.reset(); });
+
+    GetQtInstance().RunInMainThread([&] {
+        m_pDialog->hide();
+        m_pDialog->deleteLater();
+    });
 }
 
 bool QtInstanceDialog::runAsync(const std::shared_ptr<weld::DialogController>& rxOwner,
@@ -46,7 +51,7 @@ bool QtInstanceDialog::runAsync(const std::shared_ptr<weld::DialogController>& r
 
     m_xRunAsyncDialogController = rxOwner;
     m_aRunAsyncFunc = func;
-    connect(m_pDialog.get(), &QDialog::finished, this, &QtInstanceDialog::dialogFinished);
+    connect(m_pDialog, &QDialog::finished, this, &QtInstanceDialog::dialogFinished);
     m_pDialog->open();
 
     return true;
@@ -69,7 +74,7 @@ bool QtInstanceDialog::runAsync(std::shared_ptr<Dialog> const& rxSelf,
 
     m_xRunAsyncDialog = rxSelf;
     m_aRunAsyncFunc = func;
-    connect(m_pDialog.get(), &QDialog::finished, this, &QtInstanceDialog::dialogFinished);
+    connect(m_pDialog, &QDialog::finished, this, &QtInstanceDialog::dialogFinished);
     m_pDialog->open();
 
     return true;
@@ -182,7 +187,7 @@ void QtInstanceDialog::dialogFinished(int nResult)
         return;
     }
 
-    disconnect(m_pDialog.get(), &QDialog::finished, this, &QtInstanceDialog::dialogFinished);
+    disconnect(m_pDialog, &QDialog::finished, this, &QtInstanceDialog::dialogFinished);
 
     // use local variables for these, as members might have got de-allocated by the time they're reset
     std::shared_ptr<weld::Dialog> xRunAsyncDialog = m_xRunAsyncDialog;
