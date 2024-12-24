@@ -253,7 +253,7 @@ void SwFormatField::SwClientNotify( const SwModify& rModify, const SfxHint& rHin
         rDoc.getIDocumentContentOperations().DeleteRange( *pPaM );
         rDoc.getIDocumentContentOperations().InsertString( *pPaM, aEntry );
     }
-    else if (rHint.GetId() == SfxHintId::SwLegacyModify)
+    else if (rHint.GetId() == SfxHintId::SwLegacyModify || rHint.GetId() == SfxHintId::SwFormatChange)
     {
         if(!mpTextField)
             return;
@@ -430,6 +430,20 @@ void SwFormatField::UpdateTextNode(const SfxHint& rHint)
         CallSwClientNotify(rHint);
         return;
     }
+    if (rHint.GetId() == SfxHintId::SwFormatChange)
+    {
+        auto pChangeHint = static_cast<const SwFormatChangeHint*>(&rHint);
+        if (!IsFieldInDoc())
+            return;
+
+        SwTextNode* pTextNd = &mpTextField->GetTextNode();
+        OSL_ENSURE(pTextNd, "Where is my Node?");
+
+        bool bTriggerNode = pChangeHint->m_pNewFormat != nullptr;
+        if(bTriggerNode)
+            pTextNd->TriggerNodeUpdate(*pChangeHint);
+        return;
+    }
     if(SfxHintId::SwLegacyModify != rHint.GetId())
         return;
     auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
@@ -458,7 +472,6 @@ void SwFormatField::UpdateTextNode(const SfxHint& rHint)
         switch(pNew->Which())
         {
         case RES_ATTRSET_CHG:
-        case RES_FMT_CHG:
             break;
         default:
             {

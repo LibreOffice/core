@@ -88,6 +88,7 @@ class SAL_DLLPUBLIC_RTTI SwFlyFrame : public SwLayoutFrame, public SwAnchoredObj
 
     void UpdateAttr_( const SfxPoolItem*, const SfxPoolItem*, SwFlyFrameInvFlags &,
                       SwAttrSetChg *pa = nullptr, SwAttrSetChg *pb = nullptr );
+    void UpdateAttrForFormatChange( SwFormat* pOldFormat, SwFormat* pNewFormat, SwFlyFrameInvFlags & );
 
     using SwLayoutFrame::CalcRel;
 

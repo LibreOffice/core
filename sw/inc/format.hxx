@@ -64,6 +64,7 @@ class SW_DLLPUBLIC SwFormat : public sw::BorderCacheOwner, public sw::Broadcasti
     bool m_bHidden : 1;
     std::shared_ptr<SfxGrabBagItem> m_pGrabBagItem; ///< Style InteropGrabBag.
     virtual void InvalidateInSwFntCache(sal_uInt16) {};
+    virtual void InvalidateInSwFntCache() {};
 
 protected:
     SwFormat( SwAttrPool& rPool, const OUString& rFormatNm,

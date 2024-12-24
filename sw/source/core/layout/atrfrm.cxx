@@ -2757,6 +2757,14 @@ void SwFrameFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         SwFormat::SwClientNotify(rMod, rHint);
         return;
     }
+    else if (rHint.GetId() == SfxHintId::SwFormatChange)
+    {
+        // reset fill information on format change (e.g. style changed)
+        if(maFillAttributes && supportsFullDrawingLayerFillAttributeSet())
+            maFillAttributes.reset();
+        SwFormat::SwClientNotify(rMod, rHint);
+        return;
+    }
     else if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
     auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
@@ -2793,13 +2801,6 @@ void SwFrameFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
                 assert(pNewAnchorNode == nullptr || // style's set must not contain position!
                         pNewAttrSetChg->GetTheChgdSet() == &m_aSet);
             }
-            break;
-        }
-        case RES_FMT_CHG:
-        {
-            // reset fill information on format change (e.g. style changed)
-            if(maFillAttributes && supportsFullDrawingLayerFillAttributeSet())
-                maFillAttributes.reset();
             break;
         }
         case RES_HEADER:

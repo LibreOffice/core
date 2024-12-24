@@ -2731,31 +2731,38 @@ void SwSectionFrame::Notify(SfxHint const& rHint)
 
 void SwSectionFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
-    if (rHint.GetId() == SfxHintId::SwLegacyModify)
+    if (rHint.GetId() == SfxHintId::SwLegacyModify || rHint.GetId() == SfxHintId::SwFormatChange)
     {
-        auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
         SwSectionFrameInvFlags eInvFlags = SwSectionFrameInvFlags::NONE;
-        if(pLegacy->m_pNew && RES_ATTRSET_CHG == pLegacy->m_pNew->Which())
+        if (rHint.GetId() == SfxHintId::SwLegacyModify)
         {
-            auto& rOldSetChg = *static_cast<const SwAttrSetChg*>(pLegacy->m_pOld);
-            auto& rNewSetChg = *static_cast<const SwAttrSetChg*>(pLegacy->m_pNew);
-            SfxItemIter aOIter(*rOldSetChg.GetChgSet());
-            SfxItemIter aNIter(*rNewSetChg.GetChgSet());
-            const SfxPoolItem* pOItem = aOIter.GetCurItem();
-            const SfxPoolItem* pNItem = aNIter.GetCurItem();
-            SwAttrSetChg aOldSet(rOldSetChg);
-            SwAttrSetChg aNewSet(rNewSetChg);
-            do
+            auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
+            if(pLegacy->m_pNew && RES_ATTRSET_CHG == pLegacy->m_pNew->Which())
             {
-                UpdateAttr_(pOItem, pNItem, eInvFlags, &aOldSet, &aNewSet);
-                pNItem = aNIter.NextItem();
-                pOItem = aOIter.NextItem();
-            } while (pNItem);
-            if(aOldSet.Count() || aNewSet.Count())
-                SwLayoutFrame::SwClientNotify(rMod, sw::LegacyModifyHint(&aOldSet, &aNewSet));
+                auto& rOldSetChg = *static_cast<const SwAttrSetChg*>(pLegacy->m_pOld);
+                auto& rNewSetChg = *static_cast<const SwAttrSetChg*>(pLegacy->m_pNew);
+                SfxItemIter aOIter(*rOldSetChg.GetChgSet());
+                SfxItemIter aNIter(*rNewSetChg.GetChgSet());
+                const SfxPoolItem* pOItem = aOIter.GetCurItem();
+                const SfxPoolItem* pNItem = aNIter.GetCurItem();
+                SwAttrSetChg aOldSet(rOldSetChg);
+                SwAttrSetChg aNewSet(rNewSetChg);
+                do
+                {
+                    UpdateAttr_(pOItem, pNItem, eInvFlags, &aOldSet, &aNewSet);
+                    pNItem = aNIter.NextItem();
+                    pOItem = aOIter.NextItem();
+                } while (pNItem);
+                if(aOldSet.Count() || aNewSet.Count())
+                    SwLayoutFrame::SwClientNotify(rMod, sw::LegacyModifyHint(&aOldSet, &aNewSet));
+            }
+            else
+                UpdateAttr_(pLegacy->m_pOld, pLegacy->m_pNew, eInvFlags);
         }
-        else
-            UpdateAttr_(pLegacy->m_pOld, pLegacy->m_pNew, eInvFlags);
+        else // rHint.GetId() == SfxHintId::SwFormatChange)
+        {
+            UpdateAttrForFormatChange(eInvFlags);
+        }
 
         if (eInvFlags != SwSectionFrameInvFlags::NONE)
         {
@@ -2884,43 +2891,7 @@ void SwSectionFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pN
     bool bClear = true;
     const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
     switch( nWhich )
-    {   // Suppress multi columns in foot notes
-        case RES_FMT_CHG:
-        {
-            const SwFormatCol& rNewCol = GetFormat()->GetCol();
-            if( !IsInFootnote() )
-            {
-                // Nasty case. When allocating a template we can not count
-                // on the old column attribute. We're left with creating a
-                // temporary attribute here.
-                SwFormatCol aCol;
-                SwFrame* pLower = Lower();
-                if ( pLower && pLower->IsColumnFrame() )
-                {
-                    sal_uInt16 nCol = 0;
-                    SwFrame *pTmp = pLower;
-                    do
-                    {   ++nCol;
-                        pTmp = pTmp->GetNext();
-                    } while ( pTmp );
-                    aCol.Init( nCol, 0, 1000 );
-                }
-                bool bChgFootnote = IsFootnoteAtEnd();
-                bool const bChgEndn = IsEndnAtEnd();
-                bool const bChgMyEndn = IsEndnoteAtMyEnd();
-                CalcFootnoteAtEndFlag();
-                CalcEndAtEndFlag();
-                bChgFootnote = ( bChgFootnote != IsFootnoteAtEnd() ) ||
-                          ( bChgEndn != IsEndnAtEnd() ) ||
-                          ( bChgMyEndn != IsEndnoteAtMyEnd() );
-                ChgColumns( aCol, rNewCol, bChgFootnote );
-                rInvFlags |= SwSectionFrameInvFlags::SetCompletePaint;
-            }
-            rInvFlags |= SwSectionFrameInvFlags::InvalidateSize;
-            bClear = false;
-        }
-            break;
-
+    {
         case RES_COL:
             if( !IsInFootnote() )
             {
@@ -2998,6 +2969,41 @@ void SwSectionFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pN
         SwModify aMod;
         SwLayoutFrame::SwClientNotify(aMod, sw::LegacyModifyHint(pOld, pNew));
     }
+}
+
+void SwSectionFrame::UpdateAttrForFormatChange( SwSectionFrameInvFlags &rInvFlags )
+{
+    // Suppress multi columns in foot notes
+    const SwFormatCol& rNewCol = GetFormat()->GetCol();
+    if( !IsInFootnote() )
+    {
+        // Nasty case. When allocating a template we can not count
+        // on the old column attribute. We're left with creating a
+        // temporary attribute here.
+        SwFormatCol aCol;
+        SwFrame* pLower = Lower();
+        if ( pLower && pLower->IsColumnFrame() )
+        {
+            sal_uInt16 nCol = 0;
+            SwFrame *pTmp = pLower;
+            do
+            {   ++nCol;
+                pTmp = pTmp->GetNext();
+            } while ( pTmp );
+            aCol.Init( nCol, 0, 1000 );
+        }
+        bool bChgFootnote = IsFootnoteAtEnd();
+        bool const bChgEndn = IsEndnAtEnd();
+        bool const bChgMyEndn = IsEndnoteAtMyEnd();
+        CalcFootnoteAtEndFlag();
+        CalcEndAtEndFlag();
+        bChgFootnote = ( bChgFootnote != IsFootnoteAtEnd() ) ||
+                  ( bChgEndn != IsEndnAtEnd() ) ||
+                  ( bChgMyEndn != IsEndnoteAtMyEnd() );
+        ChgColumns( aCol, rNewCol, bChgFootnote );
+        rInvFlags |= SwSectionFrameInvFlags::SetCompletePaint;
+    }
+    rInvFlags |= SwSectionFrameInvFlags::InvalidateSize;
 }
 
 /// A follow or a ftncontainer at the end of the page causes a maximal Size of the sectionframe.

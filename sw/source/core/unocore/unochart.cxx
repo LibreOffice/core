@@ -2150,7 +2150,7 @@ void SwChartDataSequence::Notify( const SfxHint& rHint)
         m_pTableCursor.reset(nullptr);
         dispose();
     }
-    else if (rHint.GetId() == SfxHintId::SwLegacyModify)
+    else if (rHint.GetId() == SfxHintId::SwLegacyModify || rHint.GetId() == SfxHintId::SwFormatChange)
     {
         setModified( true );
     }

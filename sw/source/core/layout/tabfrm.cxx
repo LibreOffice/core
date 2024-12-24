@@ -6261,7 +6261,10 @@ void SwCellFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         ReinitializeFrameSizeAttrFlags();
         SetDerivedVert(false);
         CheckDirChange();
-        return;
+    }
+    else if (rHint.GetId() == SfxHintId::SwFormatChange)
+    {
+        SwLayoutFrame::SwClientNotify(rMod, rHint);
     }
     else if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {

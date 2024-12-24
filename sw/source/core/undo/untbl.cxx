@@ -951,7 +951,7 @@ void SaveTable::RestoreAttr( SwTable& rTable, bool bMdfyBox )
     rFormatSet.ClearItem();
     rFormatSet.Put(m_aTableSet);
 
-    pFormat->InvalidateInSwCache(RES_ATTRSET_CHG);
+    pFormat->InvalidateInSwCache();
 
     // table without table frame
     bool bHiddenTable = true;
@@ -1024,7 +1024,7 @@ void SaveTable::CreateNew( SwTable& rTable, bool bCreateFrames,
     rFormatSet.ClearItem();
     rFormatSet.Put(m_aTableSet);
 
-    pFormat->InvalidateInSwCache(RES_ATTRSET_CHG);
+    pFormat->InvalidateInSwCache();
 
     // SwTableBox must have a format - the SwTableBox takes ownership of it
     SwTableBoxFormat *const pNewFormat(pFormat->GetDoc()->MakeTableBoxFormat());

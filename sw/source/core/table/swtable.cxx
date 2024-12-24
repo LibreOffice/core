@@ -2750,14 +2750,14 @@ SwTableBox* SwTableBoxFormat::SwTableBoxFormat::GetTableBox()
 // for detection of modifications (mainly TableBoxAttribute)
 void SwTableBoxFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
-    if(rHint.GetId() != SfxHintId::SwLegacyModify)
+    if(rHint.GetId() != SfxHintId::SwLegacyModify && rHint.GetId() != SfxHintId::SwFormatChange)
         return;
-    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
-    if(IsModifyLocked() || !GetDoc() || GetDoc()->IsInDtor())
+    if(IsModifyLocked() || !GetDoc() || GetDoc()->IsInDtor() || rHint.GetId() == SfxHintId::SwFormatChange)
     {
         SwFrameFormat::SwClientNotify(rMod, rHint);
         return;
     }
+    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
     const SwTableBoxNumFormat* pNewFormat = nullptr;
     const SwTableBoxFormula* pNewFormula = nullptr;
     const SwTableBoxValue* pNewVal = nullptr;

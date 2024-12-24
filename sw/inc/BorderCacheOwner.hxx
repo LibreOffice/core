@@ -41,6 +41,7 @@ public:
     ~BorderCacheOwner();
     bool IsInCache() const { return m_bInCache; }
     void InvalidateInSwCache(const sal_uInt16);
+    void InvalidateInSwCache();
 };
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

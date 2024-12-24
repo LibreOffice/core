@@ -60,6 +60,7 @@ class SAL_DLLPUBLIC_RTTI SwSectionFrame final: public SwLayoutFrame, public SwFl
 
     void UpdateAttr_( const SfxPoolItem*, const SfxPoolItem*, SwSectionFrameInvFlags &,
                       SwAttrSetChg *pa = nullptr, SwAttrSetChg *pb = nullptr );
+    void UpdateAttrForFormatChange( SwSectionFrameInvFlags & );
     void Cut_( bool bRemove );
     // Is there a FootnoteContainer?
     // An empty sectionfrm without FootnoteCont is superfluous

@@ -277,7 +277,7 @@ SwTextNode::~SwTextNode()
 #else
     ResetAttr(RES_PAGEDESC);
 #endif
-    InvalidateInSwCache(RES_OBJECTDYING);
+    InvalidateInSwCache();
 }
 
 void SwTextNode::FileLoadedInitHints()
@@ -590,7 +590,7 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
             }
         }
 
-        InvalidateInSwCache(RES_ATTRSET_CHG);
+        InvalidateInSwCache();
 
         if ( HasHints() )
         {
@@ -2926,8 +2926,7 @@ void SwTextNode::GCAttr()
             0);
 
         CallSwClientNotify(sw::LegacyModifyHint(nullptr, &aHint));
-        SwFormatChg aNew( GetTextColl() );
-        CallSwClientNotify(sw::LegacyModifyHint(nullptr, &aNew));
+        CallSwClientNotify(SwFormatChangeHint(nullptr, GetTextColl()));
     }
 }
 
@@ -3091,7 +3090,7 @@ SwTextNode* SwTextNode::MakeNewTextNode( SwNode& rPosNd, bool bNext,
 
         if( !bNext && bRemoveFromCache )
         {
-            InvalidateInSwCache(RES_OBJECTDYING);
+            InvalidateInSwCache();
         }
     }
     SwNodes& rNds = GetNodes();
@@ -3132,7 +3131,7 @@ SwTextNode* SwTextNode::MakeNewTextNode( SwNode& rPosNd, bool bNext,
         {
             if ( ClearItemsFromAttrSet( { RES_PARATR_NUMRULE } ) != 0 )
             {
-                InvalidateInSwCache(RES_ATTRSET_CHG);
+                InvalidateInSwCache();
             }
         }
     }
@@ -3926,6 +3925,8 @@ namespace {
         rTextNode.GetDoc().ResetAttrs( aPam, false, aAttrs, false );
     }
 
+    void HandleApplyTextNodeFormatChange( SwTextNode& rTextNode, std::u16string_view sNumRule, std::u16string_view sOldNumRule, bool bNumRuleSet, bool bParagraphStyleChanged );
+
     // Helper method for special handling of modified attributes at text node.
     // The following is handled:
     // (1) on changing the paragraph style - RES_FMT_CHG:
@@ -3947,34 +3948,6 @@ namespace {
         OUString sOldNumRule;
         switch ( nWhich )
         {
-            case RES_FMT_CHG:
-            {
-                bParagraphStyleChanged = true;
-                if( rTextNode.GetNodes().IsDocNodes() )
-                {
-                    const SwNumRule* pFormerNumRuleAtTextNode =
-                        rTextNode.GetNum() ? rTextNode.GetNum()->GetNumRule() : nullptr;
-                    if ( pFormerNumRuleAtTextNode )
-                    {
-                        sOldNumRule = pFormerNumRuleAtTextNode->GetName();
-                    }
-                    if ( rTextNode.IsEmptyListStyleDueToSetOutlineLevelAttr() )
-                    {
-                        const SwNumRuleItem& rNumRuleItem = rTextNode.GetTextColl()->GetNumRule();
-                        if ( !rNumRuleItem.GetValue().isEmpty() )
-                        {
-                            rTextNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
-                        }
-                    }
-                    const SwNumRule* pNumRuleAtTextNode = rTextNode.GetNumRule();
-                    if ( pNumRuleAtTextNode )
-                    {
-                        bNumRuleSet = true;
-                        sNumRule = pNumRuleAtTextNode->GetName();
-                    }
-                }
-                break;
-            }
             case RES_ATTRSET_CHG:
             {
                 const SwNumRule* pFormerNumRuleAtTextNode =
@@ -4029,11 +4002,54 @@ namespace {
                 break;
             }
         }
+        HandleApplyTextNodeFormatChange(rTextNode, sNumRule, sOldNumRule, bNumRuleSet, bParagraphStyleChanged);
+    }
+    // End of method <HandleModifyAtTextNode>
+
+    // Helper method for special handling of modified attributes at text node.
+    // The following is handled:
+    // (1) on changing the paragraph style - RES_FMT_CHG:
+    // Check, if list style of the text node is changed. If yes, add respectively
+    // remove the text node to the corresponding list.
+    void HandleModifyAtTextNodeFormatChange( SwTextNode& rTextNode )
+    {
+        bool bNumRuleSet = false;
+        bool bParagraphStyleChanged = true;
+        OUString sNumRule;
+        OUString sOldNumRule;
+        if( rTextNode.GetNodes().IsDocNodes() )
+        {
+            const SwNumRule* pFormerNumRuleAtTextNode =
+                rTextNode.GetNum() ? rTextNode.GetNum()->GetNumRule() : nullptr;
+            if ( pFormerNumRuleAtTextNode )
+            {
+                sOldNumRule = pFormerNumRuleAtTextNode->GetName();
+            }
+            if ( rTextNode.IsEmptyListStyleDueToSetOutlineLevelAttr() )
+            {
+                const SwNumRuleItem& rNumRuleItem = rTextNode.GetTextColl()->GetNumRule();
+                if ( !rNumRuleItem.GetValue().isEmpty() )
+                {
+                    rTextNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
+                }
+            }
+            const SwNumRule* pNumRuleAtTextNode = rTextNode.GetNumRule();
+            if ( pNumRuleAtTextNode )
+            {
+                bNumRuleSet = true;
+                sNumRule = pNumRuleAtTextNode->GetName();
+            }
+        }
+        HandleApplyTextNodeFormatChange(rTextNode, sNumRule, sOldNumRule, bNumRuleSet, bParagraphStyleChanged);
+    }
+
+    void HandleApplyTextNodeFormatChange( SwTextNode& rTextNode, std::u16string_view sNumRule, std::u16string_view sOldNumRule, bool bNumRuleSet, bool bParagraphStyleChanged )
+    {
         if ( sNumRule != sOldNumRule )
         {
             if ( bNumRuleSet )
             {
-                if (sNumRule.isEmpty())
+                if (sNumRule.empty())
                 {
                     rTextNode.RemoveFromList();
                     if ( bParagraphStyleChanged )
@@ -4075,12 +4091,11 @@ namespace {
                 }
             }
         }
-        else if (!sNumRule.isEmpty() && !rTextNode.IsInList())
+        else if (!sNumRule.empty() && !rTextNode.IsInList())
         {
             rTextNode.AddToList();
         }
     }
-    // End of method <HandleModifyAtTextNode>
 }
 
 SwFormatColl* SwTextNode::ChgFormatColl( SwFormatColl *pNewColl )
@@ -4097,9 +4112,7 @@ SwFormatColl* SwTextNode::ChgFormatColl( SwFormatColl *pNewColl )
                 "DEBUG OSL_ENSURE(ON - <SwTextNode::ChgFormatColl(..)> called during <Set/ResetAttr(..)>" );
         if ( !mbInSetOrResetAttr )
         {
-            SwFormatChg aTmp1( pOldColl );
-            SwFormatChg aTmp2( pNewColl );
-            HandleModifyAtTextNode( *this, &aTmp1, &aTmp2  );
+            HandleModifyAtTextNodeFormatChange( *this  );
         }
 
         // reset fill information on parent style change
@@ -5524,33 +5537,13 @@ void SwTextNode::TriggerNodeUpdate(const sw::LegacyModifyHint& rHint)
     {
         sw::TextNodeNotificationSuppressor(*this);
 
-        // Override Modify so that deleting styles works properly (outline
-        // numbering!).
-        // Never call ChgTextCollUpdateNum for Nodes in Undo.
-        if( pOldValue
-                && pNewValue
-                && RES_FMT_CHG == pOldValue->Which()
-                && GetRegisteredIn() == static_cast<const SwFormatChg*>(pNewValue)->pChangedFormat
-                && GetNodes().IsDocNodes() )
-        {
-            assert(dynamic_cast<const SwTextFormatColl*>(
-                static_cast<const SwFormatChg*>(pNewValue)->pChangedFormat));
-            if (const SwTextFormatColl* pTxtFmtColOld = dynamic_cast<const SwTextFormatColl*>(
-                    static_cast<const SwFormatChg*>(pOldValue)->pChangedFormat))
-            {
-                ChgTextCollUpdateNum(
-                    pTxtFmtColOld, static_cast<const SwTextFormatColl*>(
-                                    static_cast<const SwFormatChg*>(pNewValue)->pChangedFormat));
-            }
-        }
-
         // reset fill information
         if (maFillAttributes && pNewValue)
         {
             const sal_uInt16 nWhich = pNewValue->Which();
-            bool bReset(RES_FMT_CHG == nWhich); // ..on format change (e.g. style changed)
+            bool bReset(false);
 
-            if(!bReset && RES_ATTRSET_CHG == nWhich) // ..on ItemChange from DrawingLayer FillAttributes
+            if(RES_ATTRSET_CHG == nWhich) // ..on ItemChange from DrawingLayer FillAttributes
             {
                 SfxItemIter aIter(*static_cast<const SwAttrSetChg*>(pNewValue)->GetChgSet());
 
@@ -5596,6 +5589,51 @@ void SwTextNode::TriggerNodeUpdate(const sw::RemoveUnoObjectHint& rHint)
     }
 }
 
+void SwTextNode::TriggerNodeUpdate(const SwFormatChangeHint& rHint)
+{
+    assert(!rHint.m_pOldFormat || dynamic_cast<const SwTextFormatColl*>(rHint.m_pOldFormat));
+    assert(!rHint.m_pNewFormat || dynamic_cast<const SwTextFormatColl*>(rHint.m_pNewFormat));
+    const SwTextFormatColl* pTxtFmtColOld = static_cast<const SwTextFormatColl*>(
+            rHint.m_pOldFormat);
+    const SwTextFormatColl* pTxtFmtColNew = static_cast<const SwTextFormatColl*>(
+            rHint.m_pNewFormat);
+    {
+        sw::TextNodeNotificationSuppressor(*this);
+
+        // Override Modify so that deleting styles works properly (outline
+        // numbering!).
+        // Never call ChgTextCollUpdateNum for Nodes in Undo.
+        if( GetRegisteredIn() == rHint.m_pNewFormat
+                && GetNodes().IsDocNodes() )
+        {
+            if (pTxtFmtColOld)
+            {
+                ChgTextCollUpdateNum(pTxtFmtColOld, pTxtFmtColNew);
+            }
+        }
+
+        // reset fill information
+        if (maFillAttributes)
+        {
+            maFillAttributes.reset();
+        }
+
+        if ( !mbInSetOrResetAttr )
+        {
+            HandleModifyAtTextNodeFormatChange( *this );
+        }
+
+        SwContentNode::SwClientNotify(*this, rHint);
+
+        SwDoc& rDoc = GetDoc();
+        // #125329# - assure that text node is in document nodes array
+        if ( !rDoc.IsInDtor() && &rDoc.GetNodes() == &GetNodes() )
+        {
+            rDoc.GetNodes().UpdateOutlineNode(*this);
+        }
+    }
+}
+
 void SwTextNode::SwClientNotify( const SwModify& rModify, const SfxHint& rHint )
 {
     if(rHint.GetId() == SfxHintId::SwAutoFormatUsedHint)
@@ -5610,6 +5648,11 @@ void SwTextNode::SwClientNotify( const SwModify& rModify, const SfxHint& rHint )
     {
         auto pLegacyHint = static_cast<const sw::LegacyModifyHint*>(&rHint);
         TriggerNodeUpdate(*pLegacyHint);
+    }
+    else if (rHint.GetId() == SfxHintId::SwFormatChange)
+    {
+        auto pChangeHint = static_cast<const SwFormatChangeHint*>(&rHint);
+        TriggerNodeUpdate(*pChangeHint);
     }
     else if (rHint.GetId() == SfxHintId::SwVirtPageNumHint)
     {

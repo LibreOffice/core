@@ -765,6 +765,13 @@ void SwNoTextFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint
         OnGraphicArrived();
         return;
     }
+    else if (rHint.GetId() == SfxHintId::SwFormatChange)
+    {
+        ClearCache();
+        InvalidatePrt();
+        SetCompletePaint();
+        return;
+    }
     else if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
     auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
@@ -781,8 +788,6 @@ void SwNoTextFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint
         if (GetNode()->GetNodeType() != SwNodeType::Grf) {
             break;
         }
-        [[fallthrough]];
-    case RES_FMT_CHG:
         ClearCache();
         break;
 

@@ -1421,6 +1421,11 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         // #i51474#
         GetAnchoredObj(nullptr)->ResetLayoutProcessBools();
     }
+    else if(SfxHintId::SwFormatChange == rHint.GetId())
+    {
+        // #i51474#
+        GetAnchoredObj(nullptr)->ResetLayoutProcessBools();
+    }
     else if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
         auto pLegacyHint = static_cast<const sw::LegacyModifyHint*>(&rHint);
