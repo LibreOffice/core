@@ -492,31 +492,69 @@ bool SbxValue::Put( const SbxValues& rVal )
     return bRes;
 }
 
+// with advanced evaluation (International, "TRUE"/"FALSE")
+static OUString ImpConvStringExt(const OUString& rSrc, SbxDataType eTargetType)
+{
+    // only special cases are handled, nothing on default
+    switch (eTargetType)
+    {
+        // Consider international for floating point. Following default conversion (SbxValue::Put)
+        // assumes internationalized strings, but the input may use standard decimal dot.
+        case SbxSINGLE:
+        case SbxDOUBLE:
+        case SbxCURRENCY:
+        {
+            sal_Unicode cDecimalSep, cThousandSep, cDecimalSepAlt;
+            ImpGetIntntlSep(cDecimalSep, cThousandSep, cDecimalSepAlt);
+
+            // 1. If any of the returned decimal separators is dot, do nothing
+            if (cDecimalSep == '.' || cDecimalSepAlt == '.')
+                break;
+
+            // 2. If there are internationalized separators already, do nothing
+            if (rSrc.indexOf(cDecimalSep) >= 0 || rSrc.indexOf(cDecimalSepAlt) >= 0)
+                break;
+
+            // 3. Replace all dots with the primary separator. This resolves possible ambiguity with
+            // dot as thousand separator, in favor of decimal dot; unlike "only change one dot"
+            // approach, this prevents inconsistency like converting "234.567" to a number with
+            // floating point 234.567, while "1.234.567" to a whole number 1234567. The latter will
+            // be rejected now.
+            return rSrc.replaceAll(".", OUStringChar(cDecimalSep));
+        }
+
+        // check as string in case of sal_Bool sal_True and sal_False
+        case SbxBOOL:
+            if (rSrc.equalsIgnoreAsciiCase("true"))
+                return OUString::number(SbxTRUE);
+            if (rSrc.equalsIgnoreAsciiCase("false"))
+                return OUString::number(SbxFALSE);
+            break;
+
+        default:
+            break;
+    }
+
+    return rSrc;
+}
+
 // From 1996-03-28:
 // Method to execute a pretreatment of the strings at special types.
 // In particular necessary for BASIC-IDE, so that
 // the output in the Watch-Window can be written back with PutStringExt,
-// if Float were declared with ',' as the decimal separator or BOOl
-// explicit with "TRUE" or "FALSE".
-// Implementation in ImpConvStringExt (SBXSCAN.CXX)
+// if Float were declared with either '.' or locale-specific decimal
+// separator, or BOOl explicit with "TRUE" or "FALSE".
+// Implementation in ImpConvStringExt
 void SbxValue::PutStringExt( const OUString& r )
 {
-    // Copy; if it is Unicode convert it immediately
-    OUString aStr( r );
-
     // Identify the own type (not as in Put() with TheRealValue(),
     // Objects are not handled anyway)
     SbxDataType eTargetType = SbxDataType( aData.eType & 0x0FFF );
+    OUString aStr(ImpConvStringExt(r, eTargetType));
 
     // tinker a Source-Value
     SbxValues aRes(SbxSTRING);
-
-    // Only if really something was converted, take the copy,
-    // otherwise take the original (Unicode remains)
-    if( ImpConvStringExt( aStr, eTargetType ) )
-        aRes.pOUString = &aStr;
-    else
-        aRes.pOUString = const_cast<OUString*>(&r);
+    aRes.pOUString = &aStr;
 
     // #34939: For Strings which contain a number, and if this has a Num-Type,
     // set a Fixed flag so that the type will not be changed
