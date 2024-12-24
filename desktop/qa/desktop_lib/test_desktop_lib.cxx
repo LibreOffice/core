@@ -199,6 +199,8 @@ public:
     void testCommentsCallbacksWriter();
     void testCommentsAddEditDeleteDraw();
     void testCommentsInReadOnlyMode();
+    void testCalcValidityDropdown();
+    void testCalcValidityDropdownInReadonlyMode();
     void testRunMacro();
     void testExtractParameter();
     void testGetSignatureState_NonSigned();
@@ -270,6 +272,8 @@ public:
     CPPUNIT_TEST(testCommentsCallbacksWriter);
     CPPUNIT_TEST(testCommentsAddEditDeleteDraw);
     CPPUNIT_TEST(testCommentsInReadOnlyMode);
+    CPPUNIT_TEST(testCalcValidityDropdown);
+    CPPUNIT_TEST(testCalcValidityDropdownInReadonlyMode);
     CPPUNIT_TEST(testRunMacro);
     CPPUNIT_TEST(testExtractParameter);
     CPPUNIT_TEST(testGetSignatureState_Signed);
@@ -2136,6 +2140,7 @@ class ViewCallback
     int mnView;
 public:
     OString m_aCellFormula;
+    boost::property_tree::ptree m_JSONDialog;
     int m_nTableSelectionCount;
     int m_nColorPaletteCallbackCount = 0;
     bool m_bEmptyTableSelection;
@@ -2218,6 +2223,13 @@ public:
             std::stringstream aStream(pPayload);
             boost::property_tree::read_json(aStream, m_aColorPaletteCallbackResult);
             ++m_nColorPaletteCallbackCount;
+        }
+        break;
+        case LOK_CALLBACK_JSDIALOG:
+        {
+            m_JSONDialog.clear();
+            std::stringstream aStream(pPayload);
+            boost::property_tree::read_json(aStream, m_JSONDialog);
         }
         break;
         }
@@ -2736,6 +2748,72 @@ void DesktopLOKTest::testCommentsInReadOnlyMode()
     // We received a LOK_CALLBACK_COMMENT callback with comment 'Remove' action
     //CPPUNIT_ASSERT_EQUAL(std::string("Remove"), aView.m_aCommentCallbackResult.get<std::string>("action"));
     //CPPUNIT_ASSERT_EQUAL(nCommentId, aView.m_aCommentCallbackResult.get<int>("id"));
+}
+
+void DesktopLOKTest::testCalcValidityDropdown()
+{
+    LibLODocument_Impl* pDocument = loadDoc("validity.ods");
+    Scheduler::ProcessEventsToIdle();
+    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    Scheduler::ProcessEventsToIdle();
+
+    ViewCallback aView(pDocument);
+    Scheduler::ProcessEventsToIdle();
+
+    // Select row 1 from column 1.
+    pDocument->pClass->postMouseEvent(pDocument, LOK_MOUSEEVENT_MOUSEBUTTONDOWN, 1000, 150, 1, 1, 0);
+    Scheduler::ProcessEventsToIdle();
+    pDocument->pClass->postMouseEvent(pDocument, LOK_MOUSEEVENT_MOUSEBUTTONUP, 1000, 150, 1, 1, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // Open dropdown.
+    pDocument->pClass->postMouseEvent(pDocument, LOK_MOUSEEVENT_MOUSEBUTTONDOWN, 1380, 150, 1, 1, 0);
+    Scheduler::ProcessEventsToIdle();
+    pDocument->pClass->postMouseEvent(pDocument, LOK_MOUSEEVENT_MOUSEBUTTONUP, 1380, 150, 1, 1, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // Select some value from dropdown.
+    pDocument->pClass->sendDialogEvent(pDocument, aView.m_JSONDialog.get_child("id").get_value<int>(), "{\"id\":\"list\", \"cmd\": \"select\", \"data\": \"3\", \"type\": \"treeview\"}");
+    Scheduler::ProcessEventsToIdle();
+
+    // Activate the selected value.
+    pDocument->pClass->sendDialogEvent(pDocument, aView.m_JSONDialog.get_child("id").get_value<int>(), "{\"id\":\"list\", \"cmd\": \"activate\", \"data\": \"3\", \"type\": \"treeview\"}");
+    Scheduler::ProcessEventsToIdle();
+
+    // Check the content of the current cell. The selected value of the dropdown was 1. It should be 4 now.
+    char* pCellContent = pDocument->pClass->getTextSelection(pDocument, "text/plain;charset=utf-8", nullptr);
+    CPPUNIT_ASSERT_EQUAL("4"_ostr, OString(pCellContent));
+    free(pCellContent);
+}
+
+void DesktopLOKTest::testCalcValidityDropdownInReadonlyMode()
+{
+    LibLODocument_Impl* pDocument = loadDoc("validity.ods");
+    Scheduler::ProcessEventsToIdle();
+    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    Scheduler::ProcessEventsToIdle();
+
+    ViewCallback aView(pDocument);
+    Scheduler::ProcessEventsToIdle();
+
+    int viewId = pDocument->m_pDocumentClass->getView(pDocument);
+    SfxLokHelper::setViewReadOnly(viewId, true);
+    Scheduler::ProcessEventsToIdle();
+
+    // Select row 1 from column 1.
+    pDocument->pClass->postMouseEvent(pDocument, LOK_MOUSEEVENT_MOUSEBUTTONDOWN, 1000, 150, 1, 1, 0);
+    Scheduler::ProcessEventsToIdle();
+    pDocument->pClass->postMouseEvent(pDocument, LOK_MOUSEEVENT_MOUSEBUTTONUP, 1000, 150, 1, 1, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // Attempt to open dropdown.
+    pDocument->pClass->postMouseEvent(pDocument, LOK_MOUSEEVENT_MOUSEBUTTONDOWN, 1380, 150, 1, 1, 0);
+    Scheduler::ProcessEventsToIdle();
+    pDocument->pClass->postMouseEvent(pDocument, LOK_MOUSEEVENT_MOUSEBUTTONUP, 1380, 150, 1, 1, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // Dropdown should not open in readonly mode.
+    CPPUNIT_ASSERT_EQUAL(true, aView.m_JSONDialog.empty());
 }
 
 void DesktopLOKTest::testRunMacro()
