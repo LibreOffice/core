@@ -4393,6 +4393,7 @@ SCROW ScTable::GetRowForHeightPixels(SCROW nStartRow, tools::Long& rStartRowHeig
         // is the target height inside the common span ?
         if (nSumPx + nCommonPixels > nHeightPx)
         {
+            assert(nRowHeightPx != 0);
             // calculate how many rows to skip inside the common span
             SCROW nRowsInside = (nHeightPx - nSumPx) / nRowHeightPx;
             nRow += nRowsInside;
