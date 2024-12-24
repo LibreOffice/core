@@ -669,8 +669,7 @@ void SwTextNode::RstTextAttr(
         0);
 
     CallSwClientNotify(sw::LegacyModifyHint(nullptr, &aHint));
-    SwFormatChg aNew( GetFormatColl() );
-    CallSwClientNotify(sw::LegacyModifyHint(nullptr, &aNew));
+    CallSwClientNotify(SwFormatChangeHint(nullptr, GetFormatColl()));
 }
 
 static sal_Int32 clipIndexBounds(std::u16string_view aStr, sal_Int32 nPos)

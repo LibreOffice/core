@@ -1714,7 +1714,7 @@ void SwRangeRedline::InvalidateRange(Invalidation const eWhy)
             SwUpdateAttr aHt(
                 n == nSttNd ? nSttCnt : 0,
                 n == nEndNd ? nEndCnt : pNd->GetText().getLength(),
-                RES_FMT_CHG);
+                RES_UPDATEATTR_FMT_CHG);
 
             pNd->TriggerNodeUpdate(sw::LegacyModifyHint(&aHt, &aHt));
 

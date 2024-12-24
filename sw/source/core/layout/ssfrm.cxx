@@ -410,12 +410,11 @@ SwFrameFormat * SwLayoutFrame::GetFormat()
 
 void SwLayoutFrame::SetFrameFormat(SwFrameFormat* pNew)
 {
-    if(pNew == GetFormat())
+    SwFrameFormat* pOldFormat = GetFormat();
+    if(pNew == pOldFormat)
         return;
-    const SwFormatChg aOldFormat(GetFormat());
     pNew->Add(*this);
-    const SwFormatChg aNewFormat(pNew);
-    SwClientNotify(*pNew, sw::LegacyModifyHint(&aOldFormat, &aNewFormat));
+    SwClientNotify(*pNew, SwFormatChangeHint(pOldFormat, pNew));
 }
 
 SwContentFrame::SwContentFrame( SwContentNode * const pContent, SwFrame* pSib ) :

@@ -2900,6 +2900,16 @@ void SwCursorShell::SwClientNotify(const SwModify&, const SfxHint& rHint)
         m_aGrfArrivedLnk.Call(*this);
         return;
     }
+    if (rHint.GetId() == SfxHintId::SwFormatChange)
+    {
+        if( m_bCallChgLnk )
+            // messages are not forwarded
+            // #i6681#: RES_UPDATE_ATTR is implicitly unset in
+            // SwTextNode::Insert(SwTextHint*, sal_uInt16); we react here and thus do
+            // not need to send the expensive RES_FMT_CHG in Insert.
+            CallChgLnk();
+        return;
+    }
     if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
     auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
@@ -2908,7 +2918,6 @@ void SwCursorShell::SwClientNotify(const SwModify&, const SfxHint& rHint)
         nWhich = RES_OBJECTDYING;
     if( m_bCallChgLnk &&
         ( !isFormatMessage(nWhich)
-                || nWhich == RES_FMT_CHG
                 || nWhich == RES_UPDATE_ATTR
                 || nWhich == RES_ATTRSET_CHG ))
         // messages are not forwarded

@@ -537,34 +537,42 @@ void SwPageFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
         static_cast<const sw::AutoFormatUsedHint&>(rHint).SetUsed();
         return;
     }
-    else if (rHint.GetId() == SfxHintId::SwLegacyModify)
+    else if (rHint.GetId() == SfxHintId::SwLegacyModify || rHint.GetId() == SfxHintId::SwFormatChange)
     {
-        auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
         if(auto pSh = getRootFrame()->GetCurrShell())
             pSh->SetFirstVisPageInvalid();
 
         SwPageFrameInvFlags eInvFlags = SwPageFrameInvFlags::NONE;
-        if(pLegacy->m_pNew && RES_ATTRSET_CHG == pLegacy->m_pNew->Which())
+        if (rHint.GetId() == SfxHintId::SwLegacyModify)
         {
-            auto& rOldSetChg = *static_cast<const SwAttrSetChg*>(pLegacy->m_pOld);
-            auto& rNewSetChg = *static_cast<const SwAttrSetChg*>(pLegacy->m_pNew);
-            SfxItemIter aOIter(*rOldSetChg.GetChgSet());
-            SfxItemIter aNIter(*rNewSetChg.GetChgSet());
-            const SfxPoolItem* pOItem = aOIter.GetCurItem();
-            const SfxPoolItem* pNItem = aNIter.GetCurItem();
-            SwAttrSetChg aOldSet(rOldSetChg);
-            SwAttrSetChg aNewSet(rNewSetChg);
-            do
+            auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
+            if(pLegacy->m_pNew && RES_ATTRSET_CHG == pLegacy->m_pNew->Which())
             {
-                UpdateAttr_(pOItem, pNItem, eInvFlags, &aOldSet, &aNewSet);
-                pOItem = aOIter.NextItem();
-                pNItem = aNIter.NextItem();
-            } while(pNItem);
-            if(aOldSet.Count() || aNewSet.Count())
-                SwLayoutFrame::SwClientNotify(rModify, sw::LegacyModifyHint(&aOldSet, &aNewSet));
+                auto& rOldSetChg = *static_cast<const SwAttrSetChg*>(pLegacy->m_pOld);
+                auto& rNewSetChg = *static_cast<const SwAttrSetChg*>(pLegacy->m_pNew);
+                SfxItemIter aOIter(*rOldSetChg.GetChgSet());
+                SfxItemIter aNIter(*rNewSetChg.GetChgSet());
+                const SfxPoolItem* pOItem = aOIter.GetCurItem();
+                const SfxPoolItem* pNItem = aNIter.GetCurItem();
+                SwAttrSetChg aOldSet(rOldSetChg);
+                SwAttrSetChg aNewSet(rNewSetChg);
+                do
+                {
+                    UpdateAttr_(pOItem, pNItem, eInvFlags, &aOldSet, &aNewSet);
+                    pOItem = aOIter.NextItem();
+                    pNItem = aNIter.NextItem();
+                } while(pNItem);
+                if(aOldSet.Count() || aNewSet.Count())
+                    SwLayoutFrame::SwClientNotify(rModify, sw::LegacyModifyHint(&aOldSet, &aNewSet));
+            }
+            else
+                UpdateAttr_(pLegacy->m_pOld, pLegacy->m_pNew, eInvFlags);
         }
-        else
-            UpdateAttr_(pLegacy->m_pOld, pLegacy->m_pNew, eInvFlags);
+        else // rHint.GetId() == SfxHintId::SwFormatChange
+        {
+            auto pChangeHint = static_cast<const SwFormatChangeHint*>(&rHint);
+            UpdateAttrForFormatChange(pChangeHint->m_pOldFormat, pChangeHint->m_pNewFormat, eInvFlags);
+        }
 
         if (eInvFlags == SwPageFrameInvFlags::NONE)
             return;
@@ -594,60 +602,6 @@ void SwPageFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
     const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
     switch( nWhich )
     {
-        case RES_FMT_CHG:
-        {
-            // state of m_bEmptyPage needs to be determined newly
-            const bool bNewState(GetFormat() == GetFormat()->GetDoc()->GetEmptyPageFormat());
-
-            if(m_bEmptyPage != bNewState)
-            {
-                // copy new state
-                m_bEmptyPage = bNewState;
-
-                if(nullptr == GetLower())
-                {
-                    // if we were an empty page before there is not yet a BodyArea in the
-                    // form of a SwBodyFrame, see constructor
-                    SwViewShell* pSh(getRootFrame()->GetCurrShell());
-                    vcl::RenderContext* pRenderContext(pSh ? pSh->GetOut() : nullptr);
-                    Calc(pRenderContext); // so that the PrtArea is correct
-                    SwBodyFrame* pBodyFrame = new SwBodyFrame(GetFormat(), this);
-                    pBodyFrame->ChgSize(getFramePrintArea().SSize());
-                    pBodyFrame->Paste(this);
-                    pBodyFrame->InvalidatePos();
-                }
-            }
-
-            // If the frame format is changed, several things might also change:
-            // 1. columns:
-            assert(pOld && pNew); //FMT_CHG Missing Format
-            const SwFormat *const pOldFormat = static_cast<const SwFormatChg*>(pOld)->pChangedFormat;
-            const SwFormat *const pNewFormat = static_cast<const SwFormatChg*>(pNew)->pChangedFormat;
-            assert(pOldFormat && pNewFormat); //FMT_CHG Missing Format
-            const SwFormatCol &rOldCol = pOldFormat->GetCol();
-            const SwFormatCol &rNewCol = pNewFormat->GetCol();
-            if( rOldCol != rNewCol )
-            {
-                SwLayoutFrame *pB = FindBodyCont();
-                assert(pB && "Page without Body.");
-                pB->ChgColumns( rOldCol, rNewCol );
-                rInvFlags |= SwPageFrameInvFlags::CheckGrid;
-            }
-
-            // 2. header and footer:
-            const SwFormatHeader &rOldH = pOldFormat->GetHeader();
-            const SwFormatHeader &rNewH = pNewFormat->GetHeader();
-            if( rOldH != rNewH )
-                rInvFlags |= SwPageFrameInvFlags::PrepareHeader;
-
-            const SwFormatFooter &rOldF = pOldFormat->GetFooter();
-            const SwFormatFooter &rNewF = pNewFormat->GetFooter();
-            if( rOldF != rNewF )
-                rInvFlags |= SwPageFrameInvFlags::PrepareFooter;
-            CheckDirChange();
-
-            [[fallthrough]];
-        }
         case RES_FRM_SIZE:
         {
             const SwRect aOldPageFrameRect( getFrameArea() );
@@ -668,16 +622,6 @@ void SwPageFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             }
             else if (pNew)
             {
-                const SwFormatFrameSize &rSz = nWhich == RES_FMT_CHG ?
-                        static_cast<const SwFormatChg*>(pNew)->pChangedFormat->GetFrameSize() :
-                        static_cast<const SwFormatFrameSize&>(*pNew);
-
-                {
-                    SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
-                    aFrm.Height( std::max( rSz.GetHeight(), tools::Long(MINLAY) ) );
-                    aFrm.Width ( std::max( rSz.GetWidth(),  tools::Long(MINLAY) ) );
-                }
-
                 if ( GetUpper() )
                 {
                     static_cast<SwRootFrame*>(GetUpper())->CheckViewLayout( nullptr, nullptr );
@@ -743,6 +687,106 @@ void SwPageFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
         SwModify aMod;
         SwLayoutFrame::SwClientNotify(aMod, sw::LegacyModifyHint(pOld, pNew));
     }
+}
+
+void SwPageFrame::UpdateAttrForFormatChange( SwFormat* pOldFormat, SwFormat* pNewFormat,
+                             SwPageFrameInvFlags &rInvFlags )
+{
+    // state of m_bEmptyPage needs to be determined newly
+    const bool bNewState(GetFormat() == GetFormat()->GetDoc()->GetEmptyPageFormat());
+
+    if(m_bEmptyPage != bNewState)
+    {
+        // copy new state
+        m_bEmptyPage = bNewState;
+
+        if(nullptr == GetLower())
+        {
+            // if we were an empty page before there is not yet a BodyArea in the
+            // form of a SwBodyFrame, see constructor
+            SwViewShell* pSh(getRootFrame()->GetCurrShell());
+            vcl::RenderContext* pRenderContext(pSh ? pSh->GetOut() : nullptr);
+            Calc(pRenderContext); // so that the PrtArea is correct
+            SwBodyFrame* pBodyFrame = new SwBodyFrame(GetFormat(), this);
+            pBodyFrame->ChgSize(getFramePrintArea().SSize());
+            pBodyFrame->Paste(this);
+            pBodyFrame->InvalidatePos();
+        }
+    }
+
+    // If the frame format is changed, several things might also change:
+    // 1. columns:
+    assert(pOldFormat && pNewFormat); //FMT_CHG Missing Format
+    const SwFormatCol &rOldCol = pOldFormat->GetCol();
+    const SwFormatCol &rNewCol = pNewFormat->GetCol();
+    if( rOldCol != rNewCol )
+    {
+        SwLayoutFrame *pB = FindBodyCont();
+        assert(pB && "Page without Body.");
+        pB->ChgColumns( rOldCol, rNewCol );
+        rInvFlags |= SwPageFrameInvFlags::CheckGrid;
+    }
+
+    // 2. header and footer:
+    const SwFormatHeader &rOldH = pOldFormat->GetHeader();
+    const SwFormatHeader &rNewH = pNewFormat->GetHeader();
+    if( rOldH != rNewH )
+        rInvFlags |= SwPageFrameInvFlags::PrepareHeader;
+
+    const SwFormatFooter &rOldF = pOldFormat->GetFooter();
+    const SwFormatFooter &rNewF = pNewFormat->GetFooter();
+    if( rOldF != rNewF )
+        rInvFlags |= SwPageFrameInvFlags::PrepareFooter;
+    CheckDirChange();
+
+    const SwRect aOldPageFrameRect( getFrameArea() );
+    SwViewShell *pSh = getRootFrame()->GetCurrShell();
+    if( pSh && pSh->GetViewOptions()->getBrowseMode() )
+    {
+        setFrameAreaSizeValid(false);
+        // OD 28.10.2002 #97265# - Don't call <SwPageFrame::MakeAll()>
+        // Calculation of the page is not necessary, because its size is
+        // invalidated here and further invalidation is done in the
+        // calling method <SwPageFrame::Modify(..)> and probably by calling
+        // <SwLayoutFrame::SwClientNotify(..)> at the end.
+        // It can also causes inconsistences, because the lowers are
+        // adjusted, but not calculated, and a <SwPageFrame::MakeAll()> of
+        // a next page is called. This is performed on the switch to the
+        // online layout.
+        //MakeAll();
+    }
+    else if (pNewFormat)
+    {
+        const SwFormatFrameSize &rSz = pNewFormat->GetFrameSize();
+
+        {
+            SwFrameAreaDefinition::FrameAreaWriteAccess aFrm(*this);
+            aFrm.Height( std::max( rSz.GetHeight(), tools::Long(MINLAY) ) );
+            aFrm.Width ( std::max( rSz.GetWidth(),  tools::Long(MINLAY) ) );
+        }
+
+        if ( GetUpper() )
+        {
+            static_cast<SwRootFrame*>(GetUpper())->CheckViewLayout( nullptr, nullptr );
+        }
+    }
+    // cleanup Window
+    if( pSh && pSh->GetWin() && aOldPageFrameRect.HasArea() )
+    {
+        // #i9719# - consider border and shadow of
+        // page frame for determine 'old' rectangle - it's used for invalidating.
+        const bool bRightSidebar = (SidebarPosition() == sw::sidebarwindows::SidebarPosition::RIGHT);
+        SwRect aOldRectWithBorderAndShadow;
+        SwPageFrame::GetBorderAndShadowBoundRect( aOldPageFrameRect, pSh, pSh->GetOut(), aOldRectWithBorderAndShadow,
+            IsLeftShadowNeeded(), IsRightShadowNeeded(), bRightSidebar );
+        pSh->InvalidateWindows( aOldRectWithBorderAndShadow );
+    }
+    rInvFlags |= SwPageFrameInvFlags::InvalidatePrt | SwPageFrameInvFlags::SetCompletePaint;
+    if ( aOldPageFrameRect.Height() != getFrameArea().Height() )
+        rInvFlags |= SwPageFrameInvFlags::InvalidateNextPos;
+
+    SwModify aMod;
+    SwLayoutFrame::SwClientNotify(aMod, SwFormatChangeHint(pOldFormat, pNewFormat));
 }
 
 void  SwPageFrame::SetPageDesc( SwPageDesc *pNew, SwFrameFormat *pFormat )

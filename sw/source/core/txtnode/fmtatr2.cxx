@@ -95,13 +95,19 @@ void SwFormatCharFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
     {
         if(m_pTextAttribute)
             m_pTextAttribute->HandleAutoFormatUsedHint(static_cast<const sw::AutoFormatUsedHint&>(rHint));
-        return;
     }
-    if (rHint.GetId() != SfxHintId::SwLegacyModify)
-        return;
-    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
-    if(m_pTextAttribute)
-        m_pTextAttribute->TriggerNodeUpdate(*pLegacy);
+    else if (rHint.GetId() == SfxHintId::SwFormatChange)
+    {
+        auto pChangeHint = static_cast<const SwFormatChangeHint*>(&rHint);
+        if(m_pTextAttribute)
+            m_pTextAttribute->TriggerNodeUpdate(*pChangeHint);
+    }
+    else if (rHint.GetId() == SfxHintId::SwLegacyModify)
+    {
+        auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
+        if(m_pTextAttribute)
+            m_pTextAttribute->TriggerNodeUpdate(*pLegacy);
+    }
 }
 
 bool SwFormatCharFormat::QueryValue( uno::Any& rVal, sal_uInt8 ) const
@@ -725,12 +731,12 @@ void Meta::SwClientNotify(const SwModify&, const SfxHint& rHint)
         // invalidate cached uno object
         SetXMeta(nullptr);
         GetNotifier().Broadcast(SfxHint(SfxHintId::Deinitializing));
-        return;
     }
-    if (rHint.GetId() != SfxHintId::SwLegacyModify)
-        return;
-    CallSwClientNotify(rHint);
-    GetNotifier().Broadcast(SfxHint(SfxHintId::DataChanged));
+    else if (rHint.GetId() == SfxHintId::SwLegacyModify || rHint.GetId() == SfxHintId::SwFormatChange)
+    {
+        CallSwClientNotify(rHint);
+        GetNotifier().Broadcast(SfxHint(SfxHintId::DataChanged));
+    }
 }
 
 // sfx2::Metadatable

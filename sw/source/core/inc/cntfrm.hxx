@@ -70,6 +70,7 @@ class SW_DLLPUBLIC SwContentFrame: public SwFrame, public SwFlowFrame
 
     void UpdateAttr_( const SfxPoolItem*, const SfxPoolItem*, SwContentFrameInvFlags &,
                       SwAttrSetChg *pa = nullptr, SwAttrSetChg *pb = nullptr );
+    void UpdateAttrForFormatChange( SwFormat*, SwFormat*, SwContentFrameInvFlags & );
 
     virtual bool ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool& ) override;
 

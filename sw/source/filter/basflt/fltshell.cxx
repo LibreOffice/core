@@ -898,13 +898,10 @@ void SwFltAnchorListener::Notify(const SfxHint& rHint)
             return;
         m_pFltAnchor->SetFrameFormat(nullptr);
     }
-    else if (rHint.GetId() == SfxHintId::SwLegacyModify)
+    else if (rHint.GetId() == SfxHintId::SwFormatChange)
     {
-        auto pLegacyHint = static_cast<const sw::LegacyModifyHint*>(&rHint);
-        if(pLegacyHint->m_pNew->Which() != RES_FMT_CHG)
-            return;
-        auto pFormatChg = dynamic_cast<const SwFormatChg*>(pLegacyHint->m_pNew);
-        auto pFrameFormat = pFormatChg ? dynamic_cast<SwFrameFormat*>(pFormatChg->pChangedFormat) : nullptr;
+        auto pChangeHint = static_cast<const SwFormatChangeHint*>(&rHint);
+        auto pFrameFormat = dynamic_cast<SwFrameFormat*>(pChangeHint->m_pNewFormat);
         if(pFrameFormat)
             m_pFltAnchor->SetFrameFormat(pFrameFormat);
     }

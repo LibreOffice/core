@@ -148,12 +148,15 @@ public:
             switch(nWhich)
             {
                 case RES_OBJECTDYING:
-                case RES_FMT_CHG:
                 case RES_ATTRSET_CHG:
                     m_bInSwFntCache = false;
             }
         }
     };
+    virtual void InvalidateInSwFntCache() override
+    {
+        m_bInSwFntCache = false;
+    }
 };
 
 class SwGrfFormatColl final : public SwFormatColl

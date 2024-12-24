@@ -87,6 +87,7 @@ class SW_DLLPUBLIC SwPageFrame final: public SwFootnoteBossFrame
 
     void UpdateAttr_( const SfxPoolItem*, const SfxPoolItem*, SwPageFrameInvFlags &,
                       SwAttrSetChg *pa = nullptr, SwAttrSetChg *pb = nullptr );
+    void UpdateAttrForFormatChange( SwFormat* pOldFormat, SwFormat* pNewFormat, SwPageFrameInvFlags & );
 
     /// Adapt the max. footnote height in each single column
     void SetColMaxFootnoteHeight();

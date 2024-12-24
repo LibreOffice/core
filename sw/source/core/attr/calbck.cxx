@@ -111,9 +111,7 @@ void SwClient::CheckRegistrationFormat(SwFormat& rOld)
     SAL_INFO("sw.core", "reparenting " << typeid(*this).name() << " at " << this << " from " << typeid(rOld).name() << " at " << &rOld << " to "  << typeid(*pNew).name() << " at " << pNew);
     assert(pNew);
     pNew->Add(*this);
-    const SwFormatChg aOldFormat(&rOld);
-    const SwFormatChg aNewFormat(pNew);
-    const sw::LegacyModifyHint aHint(&aOldFormat, &aNewFormat);
+    const SwFormatChangeHint aHint(&rOld, pNew);
     SwClientNotify(rOld, aHint);
 }
 
@@ -291,7 +289,7 @@ sw::ClientIteratorBase* sw::ClientIteratorBase::s_pClientIters = nullptr;
 
 void SwModify::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    if (rHint.GetId() != SfxHintId::SwLegacyModify && rHint.GetId() != SfxHintId::SwRemoveUnoObject)
+    if (rHint.GetId() != SfxHintId::SwLegacyModify && rHint.GetId() != SfxHintId::SwRemoveUnoObject && rHint.GetId() != SfxHintId::SwRemoveUnoObject)
         return;
 
     DBG_TESTSOLARMUTEX();

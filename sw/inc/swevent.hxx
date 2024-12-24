@@ -124,18 +124,20 @@ struct SwCallMouseEvent final
                 Clear();
             return;
         }
+        if(SfxHintId::SwFormatChange == rHint.GetId())
+        {
+            auto pChgHint = static_cast<const SwFormatChangeHint*>(&rHint);
+            assert(EVENT_OBJECT_IMAGE == eType || EVENT_OBJECT_URLITEM == eType || EVENT_OBJECT_IMAGEMAP == eType);
+            SwClient::SwClientNotify(rMod, rHint);
+            if (!GetRegisteredIn() || pChgHint->m_pOldFormat == PTR.pFormat)
+                Clear();
+            return;
+        }
         if (rHint.GetId() != SfxHintId::SwLegacyModify)
             return;
-        auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
         assert(EVENT_OBJECT_IMAGE == eType || EVENT_OBJECT_URLITEM == eType || EVENT_OBJECT_IMAGEMAP == eType);
         SwClient::SwClientNotify(rMod, rHint);
         bool bClear = !GetRegisteredIn();
-        switch(pLegacy->GetWhich())
-        {
-            case RES_FMT_CHG:
-                bClear |= pLegacy->m_pOld->StaticWhichCast(RES_FMT_CHG).pChangedFormat == PTR.pFormat;
-                break;
-        }
         if(bClear)
             Clear();
     }

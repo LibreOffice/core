@@ -68,17 +68,15 @@ public:
 };
 
 /**
- * SwFormatChg is sent when a format has changed to another format. 2 Hints are always sent
- * the old and the new format
- *
- * This is typically owned by an sw::LegacyModifyHint, which knows if this pool item is the old or
- * the new format.
+ * SwFormatChg is sent when a format has changed to another format.
  */
-class SwFormatChg final : public SwMsgPoolItem
+class SwFormatChangeHint final : public SfxHint
 {
 public:
-    SwFormat *pChangedFormat;
-    SwFormatChg( SwFormat *pFormat );
+    SwFormat *m_pOldFormat;
+    SwFormat *m_pNewFormat;
+    SwFormatChangeHint(SwFormat* pOldFormat, SwFormat* pNewFormat)
+        : SfxHint(SfxHintId::SwFormatChange), m_pOldFormat(pOldFormat), m_pNewFormat(pNewFormat) {}
 };
 
 

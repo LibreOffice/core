@@ -2634,8 +2634,7 @@ void SwTextNode::FormatToTextAttr( SwTextNode* pNd )
 
             if( aNdSet.Count() )
             {
-                SwFormatChg aTmp1( pNd->GetFormatColl() );
-                pNd->CallSwClientNotify(sw::LegacyModifyHint(&aTmp1, &aTmp1));
+                pNd->CallSwClientNotify(SwFormatChangeHint(pNd->GetFormatColl(), pNd->GetFormatColl()));
             }
         }
     }
