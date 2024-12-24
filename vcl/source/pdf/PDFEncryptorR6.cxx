@@ -235,7 +235,7 @@ std::vector<sal_uInt8> computeHashR6(const sal_uInt8* pPassword, size_t nPasswor
     }
     // Step e) and f)
     // We stop iteration if we do at least 64 rounds and (the last element of E <= round number - 32)
-    while (nRound < 64 || E.back() > (nRound - 32));
+    while (nRound <= 64 || E.back() > (nRound - 32));
 
     // Output - first 32 bytes
     return std::vector<sal_uInt8>(K.begin(), K.begin() + 32);

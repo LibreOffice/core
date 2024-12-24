@@ -107,8 +107,6 @@ CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testEncryptionRoundtrip_PDF_1_7)
     CPPUNIT_ASSERT_EQUAL(17, nFileVersion);
 }
 
-/* Temporary comment out to not cause more random test failures
-
 CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testEncryptionRoundtrip_PDF_2_0)
 {
     loadFromURL(u"private:factory/swriter"_ustr);
@@ -129,7 +127,6 @@ CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testEncryptionRoundtrip_PDF_2_0)
     int nFileVersion = pPdfDocument->getFileVersion();
     CPPUNIT_ASSERT_EQUAL(20, nFileVersion);
 }
-*/
 
 CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testComputeHashForR6)
 {
