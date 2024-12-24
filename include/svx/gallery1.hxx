@@ -86,7 +86,6 @@ public:
 };
 
 class SfxListener;
-class GalleryTheme;
 class GalleryThemeCacheEntry;
 
 

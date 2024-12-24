@@ -56,7 +56,6 @@ class Formatter;
 class InputContext;
 class KeyEvent;
 class MouseEvent;
-class SvNumberFormatter;
 class TransferDataContainer;
 class OutputDevice;
 class VirtualDevice;

@@ -32,7 +32,6 @@
 namespace tools { class Rectangle; }
 
 class Point;
-class SvStream;
 class GDIMetaFile;
 
 class VCL_DLLPUBLIC Gradient

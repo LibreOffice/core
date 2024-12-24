@@ -28,7 +28,6 @@
 
 class Point;
 class Fraction;
-class SvStream;
 
 class SAL_WARN_UNUSED VCL_DLLPUBLIC MapMode
 {

@@ -22,8 +22,6 @@ class XmlWriter;
 class GDIMetaFile;
 class SvStream;
 
-enum class MetaActionType;
-
 /**
  * Class that is used for testing of the decomposition into shapes.  Used like
  * this:

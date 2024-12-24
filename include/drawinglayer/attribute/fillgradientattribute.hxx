@@ -25,8 +25,6 @@
 
 namespace basegfx
 {
-class BColorStop;
-class BColor;
 class BColorStops;
 }
 

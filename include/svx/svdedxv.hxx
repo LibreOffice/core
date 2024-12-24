@@ -33,7 +33,6 @@ class SdrOutliner;
 class OutlinerView;
 class EditStatus;
 class EditFieldInfo;
-class ImpSdrEditPara;
 struct PasteOrDropInfos;
 class SdrUndoManager;
 class TextChainCursorManager;

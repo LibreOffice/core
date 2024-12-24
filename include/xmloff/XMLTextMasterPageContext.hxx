@@ -25,6 +25,8 @@
 
 #include <xmloff/xmlstyle.hxx>
 
+struct ContextID_Index_Pair;
+
 namespace com::sun::star {
     namespace style { class XStyle; }
 }
@@ -70,8 +72,6 @@ public:
 
     virtual void Finish( bool bOverwrite ) override;
 };
-
-struct ContextID_Index_Pair;
 
 XMLOFF_DLLPUBLIC extern ContextID_Index_Pair const g_MasterPageContextIDs[];
 XMLOFF_DLLPUBLIC extern XmlStyleFamily const g_MasterPageFamilies[];

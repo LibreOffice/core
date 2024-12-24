@@ -26,8 +26,6 @@
 
 class SdrPageView;
 
-namespace vcl { class Region; }
-
 namespace sdr::animation {
     class PrimitiveAnimation;
 }
@@ -38,7 +36,6 @@ namespace sdr::contact {
 class DisplayInfo;
 class ObjectContact;
 class ViewContact;
-class ViewObjectContactRedirector;
 
 class SVXCORE_DLLPUBLIC ViewObjectContact
 {

@@ -26,7 +26,6 @@
 #include <sfx2/dllapi.h>
 #include <rtl/ref.hxx>
 
-namespace com::sun::star::accessibility { class XAccessible; }
 namespace drawinglayer::primitive2d { class Primitive2DContainer; }
 class ThumbnailViewItemAcc;
 

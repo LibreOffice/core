@@ -19,10 +19,6 @@
 #ifndef INCLUDED_SVX_TABLINE_HXX
 #define INCLUDED_SVX_TABLINE_HXX
 
-class SvxBrushItem;
-class SdrModel;
-class SdrObject;
-
 //defines for the symbol selection on the page
 //Positive value (0,...n) declares the index in pSymbollist, else:
 #define SVX_SYMBOLTYPE_NONE (-3) //symbol hidden

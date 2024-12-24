@@ -28,9 +28,6 @@ namespace svx {
     class ToolboxButtonLineStyleUpdater;
 }
 
-class XLineStyleItem;
-class XLineDashItem;
-
 typedef std::function<bool(const OUString&, const css::uno::Any&)> LineStyleSelectFunction;
 typedef std::function<void(bool)> LineStyleIsNoneFunction;
 

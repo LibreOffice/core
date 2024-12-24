@@ -61,7 +61,6 @@ class SfxItemSet;
 class SdrModel;
 class SvxDrawPage;
 class SvGlobalName;
-class Pair;
 
 // Dimension arrows change size/position on save/reload (#i59051#)
 namespace basegfx
@@ -71,8 +70,6 @@ namespace basegfx
 
 struct SvxShapeImpl;
 class SvxShapeMaster;
-class SvxItemPropertySet;
-class SfxItemSet;
 
 void SVXCORE_DLLPUBLIC SvxItemPropertySet_setPropertyValue( const SfxItemPropertyMapEntry* pMap,
         const css::uno::Any& rVal, SfxItemSet& rSet );

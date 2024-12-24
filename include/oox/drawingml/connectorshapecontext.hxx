@@ -28,7 +28,6 @@
 #include <vector>
 
 namespace oox { class AttributeList; }
-namespace oox::core { class ContextHandler2Helper; }
 
 namespace oox::drawingml {
 

@@ -25,8 +25,6 @@
 #include <svl/itemprop.hxx>
 #include <vector>
 
-namespace com::sun::star::beans { class XPropertySetInfo; }
-
 class SfxItemSet;
 class SvxItemPropertySetUsrAnys;
 

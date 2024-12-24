@@ -59,7 +59,6 @@ class SvHeaderTabListBox;
 class SvtIconChoiceCtrl;
 class ToolBox;
 class SvTreeListBox;
-class VCLXWindow;
 class TextEngine;
 class TextView;
 

@@ -51,8 +51,6 @@ namespace com::sun::star::awt {
     class XToolkit;
     class XFont;
     class XControlContainer;
-    struct Size;
-    struct Point;
     struct SimpleFontMetric;
     struct FontDescriptor;
     struct Rectangle;

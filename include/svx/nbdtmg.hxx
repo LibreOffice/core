@@ -24,6 +24,8 @@
 #include <editeng/numitem.hxx>
 #include <vcl/font.hxx>
 
+class SfxItemSet;
+
 namespace svx::sidebar {
 
 #define DEFAULT_BULLET_TYPES                            8

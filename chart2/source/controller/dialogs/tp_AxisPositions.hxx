@@ -20,6 +20,8 @@
 
 #include <sfx2/tabdlg.hxx>
 
+class SvNumberFormatter;
+
 namespace chart
 {
 class AxisPositionsTabPage : public SfxTabPage

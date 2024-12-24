@@ -25,10 +25,6 @@
 
 class Menu;
 
-namespace com::sun::star::accessibility {
-    class XAccessible;
-}
-
 namespace vcl
 {
     class Window;

@@ -38,12 +38,10 @@
 #include <unordered_set>
 
 class SfxBroadcaster;
-class AutoTimer;
 class E3dObject;
 class E3dScene;
 class OutlinerParaObject;
 class Outliner;
-class SdrOutliner;
 class SdrDragStat;
 class SdrHdl;
 class SdrHdlList;
@@ -55,20 +53,11 @@ class SdrOle2Obj;
 class SdrPage;
 class SdrPageView;
 class SdrTextObj;
-class SdrView;
 class SfxItemSet;
 class SfxGrabBagItem;
-class SfxSetItem;
 class SfxStyleSheet;
-class SfxUndoAction;
-class XFillAttrSetItem;
-class XLineAttrSetItem;
 class SfxItemPool;
-namespace tools { class PolyPolygon; }
-class SfxPoolItem;
 class SdrVirtObj;
-class SdrDragView;
-class SdrObjUserDataList;
 class SdrObjPlusData;
 class SdrGluePoint;
 class SdrGluePointList;

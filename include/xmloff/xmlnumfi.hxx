@@ -31,7 +31,6 @@
 
 namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::util { class XNumberFormatsSupplier; }
-namespace com::sun::star::xml::sax { class XAttributeList; }
 
 inline constexpr OUString XML_NUMBERSTYLES = u"NumberStyles"_ustr;
 

@@ -60,7 +60,6 @@ class Help;
 class OutputDevice;
 namespace vcl {
     class KeyCode;
-    class ILibreOfficeKitNotifier;
     class Window;
 }
 

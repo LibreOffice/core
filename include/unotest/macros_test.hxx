@@ -37,10 +37,6 @@ namespace test
 {
 class Directories;
 }
-namespace utl
-{
-class TempFileNamed;
-}
 
 namespace com::sun::star::security
 {

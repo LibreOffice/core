@@ -39,8 +39,6 @@
 
 class SfxTabPage;
 class SfxBaseController;
-class Size;
-class Point;
 class Fraction;
 namespace weld {
     class Container;
@@ -63,7 +61,6 @@ class VCLXPopupMenu;
 namespace rtl { class OStringBuffer; }
 namespace vcl { class PrinterController; }
 
-namespace com::sun::star::awt{ class XPopupMenu; }
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::datatransfer::clipboard { class XClipboardListener; }
 namespace com::sun::star::datatransfer::clipboard { class XClipboardNotifier; }
@@ -74,7 +71,6 @@ namespace com::sun::star::ui { class XContextMenuInterceptor; }
 namespace com::sun::star::ui { struct ContextMenuExecuteEvent; }
 namespace com::sun::star::view { class XRenderable; }
 namespace com::sun::star::security { class XCertificate; }
-namespace tools { class Rectangle; }
 namespace svtools { enum ColorConfigEntry : int; }
 
 enum class SfxPrinterChangeFlags

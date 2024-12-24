@@ -18,8 +18,6 @@
 
 namespace tools { class Rectangle; }
 
-class SfxItemSet;
-
 namespace vcl
 {
 

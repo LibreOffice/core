@@ -31,7 +31,6 @@
 
 class SvXMLStylesContext_Impl;
 class SvXMLImportPropertyMapper;
-class SvXMLTokenMap;
 
 namespace com::sun::star {
 namespace container { class XNameContainer; }

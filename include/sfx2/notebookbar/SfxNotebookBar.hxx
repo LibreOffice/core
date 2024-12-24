@@ -32,7 +32,6 @@ class SfxBindings;
 class SfxViewFrame;
 class SfxViewShell;
 class SystemWindow;
-class ViewInstanceManager;
 
 namespace sfx2
 {

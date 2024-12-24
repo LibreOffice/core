@@ -33,9 +33,6 @@ namespace com::sun::star::i18n {
     class XBreakIterator;
     class XCharacterClassification;
 }
-namespace com::sun::star::accessibility {
-    struct AccessibleEventObject;
-}
 
 namespace vcl::unohelper
 {

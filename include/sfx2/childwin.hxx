@@ -37,7 +37,6 @@ class SfxWorkWindow;
 class SfxModule;
 class SfxChildWindow;
 class SfxBindings;
-class SfxModelessDialogController;
 
 enum class SfxChildWindowFlags
 {

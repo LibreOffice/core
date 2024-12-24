@@ -31,14 +31,6 @@
 #include <condition_variable>
 #include <mutex>
 
-namespace com::sun::star::lang
-{
-class XMultiServiceFactory;
-}
-namespace com::sun::star::lang
-{
-class XSingleServiceFactory;
-}
 namespace com::sun::star::uno
 {
 class XComponentContext;

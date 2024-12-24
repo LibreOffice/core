@@ -27,11 +27,7 @@
 #include <svx/svdundo.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
-class SfxUndoAction;
-class SdrUndoAction;
-class SdrUndoGroup;
 class SfxStyleSheet;
-class SdrLayer;
 class SvdProgressInfo;
 
 enum class SdrHorAlign  {

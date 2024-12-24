@@ -25,7 +25,6 @@
 #include <xmloff/dllapi.h>
 #include <xmloff/xmlictxt.hxx>
 
-namespace com::sun::star::xml::sax { class XAttributeList; }
 namespace com::sun::star::io { class XOutputStream; }
 
 class XMLOFF_DLLPUBLIC XMLBase64ImportContext final : public SvXMLImportContext

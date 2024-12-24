@@ -32,7 +32,6 @@
 namespace basegfx { class B2DHomMatrix; }
 
 namespace com::sun::star {
-    namespace awt { struct Rectangle; }
     namespace drawing { class XShapes; }
 }
 

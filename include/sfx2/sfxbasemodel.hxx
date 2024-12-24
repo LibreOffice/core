@@ -65,7 +65,6 @@
 
 #include <memory>
 
-class ErrCode;
 class ErrCodeMsg;
 class SfxMedium;
 class   SfxObjectShell                      ;

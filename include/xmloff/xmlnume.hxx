@@ -33,7 +33,6 @@ namespace com::sun::star::uno { template <class E> class Sequence; }
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 class SvXMLExport;
-class XMLTextListAutoStylePool;
 
 class XMLOFF_DLLPUBLIC SvxXMLNumRuleExport final
 {

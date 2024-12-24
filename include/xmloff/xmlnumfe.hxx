@@ -37,7 +37,6 @@ inline constexpr OUString XML_WRITTENNUMBERSTYLES = u"WrittenNumberStyles"_ustr;
 
 class Color;
 class LocaleDataWrapper;
-class CharClass;
 class SvXMLExport;
 class SvNumberFormatter;
 class SvNumberformat;

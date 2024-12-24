@@ -28,7 +28,6 @@
 
 namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::drawing { class XDrawPage; }
-namespace com::sun::star::xml::sax { class XAttributeList; }
 namespace com::sun::star::xml::sax { class XFastAttributeList; }
 
 class SvXMLImport;

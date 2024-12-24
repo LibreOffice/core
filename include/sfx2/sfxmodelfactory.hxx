@@ -26,10 +26,7 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <functional>
 
-namespace com::sun::star::lang { class XMultiServiceFactory; }
-namespace com::sun::star::lang { class XSingleServiceFactory; }
 namespace com::sun::star::uno { class XInterface; }
-namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::uno { template <class E> class Sequence; }
 
 enum class SfxModelFlags

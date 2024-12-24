@@ -37,8 +37,6 @@ namespace utl {
 
 namespace comphelper::string { class NaturalStringSorter; }
 
-class Point;
-class SvViewDataEntry;
 class SvtCalendarBox;
 
 enum class SvxRedlinDateMode

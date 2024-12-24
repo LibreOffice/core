@@ -34,7 +34,6 @@ namespace com::sun::star {
 
 namespace oox {
     class BinaryInputStream;
-    class SequenceInputStream;
 }
 
 namespace oox::core { class FilterBase; }

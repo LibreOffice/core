@@ -31,6 +31,8 @@ struct ImplWizPageData
     VclPtr<TabPage>     mpPage;
 };
 
+struct ImplWizButtonData;
+
 namespace vcl
 {
     struct RoadmapWizardImpl;

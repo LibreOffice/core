@@ -24,8 +24,6 @@
 #include <tools/gen.hxx>
 #include <tools/debug.hxx>
 
-class SvStream;
-
 class SVL_DLLPUBLIC SfxPointItem final : public SfxPoolItem
 {
     Point                    aVal;

@@ -24,9 +24,6 @@
 #include <svx/svxdllapi.h>
 #include <memory>
 
-class XLineAttrSetItem;
-class XFillAttrSetItem;
-class SdrEdgeObj;
 class SdrObjConnection;
 
 class ImplConnectMarkerOverlay;

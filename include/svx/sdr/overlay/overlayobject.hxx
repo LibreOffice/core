@@ -29,17 +29,9 @@
 
 #include <vector>
 
-class OutputDevice;
-
 namespace sdr::overlay
 {
     class OverlayManager;
-}
-namespace basegfx
-{
-    class B2DPolygon;
-    class B2DPolyPolygon;
-    class B2DRange;
 }
 
 namespace sdr::overlay

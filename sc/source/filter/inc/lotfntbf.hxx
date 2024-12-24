@@ -24,6 +24,7 @@
 #include <optional>
 
 // Code in fontbuff.cxx (excel)
+class SfxItemSet;
 
 class LotusFontBuffer
 {

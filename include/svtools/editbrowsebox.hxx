@@ -30,8 +30,6 @@
 #include <vcl/weldutils.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
-class BrowserDataWin;
-
 // EditBrowseBoxFlags (EBBF)
 enum class EditBrowseBoxFlags
 {

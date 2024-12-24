@@ -28,7 +28,6 @@
 #include <ostream>
 #include <o3tl/unit_conversion.hxx>
 
-class SvStream;
 namespace rtl
 {
     class OString;
@@ -71,8 +70,6 @@ inline bool equal(Pair const & p1, Pair const & p2)
 }
 
 // Point
-
-class RectangleTemplateBase;
 
 class TOOLS_DLLPUBLIC PointTemplateBase : protected Pair
 {
@@ -165,7 +162,6 @@ public:
 
 class Size;
 class AbsoluteScreenPixelSize;
-class Point;
 class AbsoluteScreenPixelPoint;
 namespace tools { class Rectangle; }
 class AbsoluteScreenPixelRectangle;
@@ -180,7 +176,6 @@ public:
 };
 
 // A point relative to top-level parent or screen, in screen pixels
-class AbsoluteScreenPixelSize;
 class SAL_WARN_UNUSED AbsoluteScreenPixelPoint : public PointTemplate<AbsoluteScreenPixelPoint, AbsoluteScreenPixelSize> {
 public:
     constexpr AbsoluteScreenPixelPoint() {}

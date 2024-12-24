@@ -33,7 +33,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <memory>
 
-class VirtualDevice;
 struct ImplSVEvent;
 struct ImplWinData;
 struct ImplFrameData;
@@ -44,7 +43,6 @@ class ImplBorderWindow;
 class Timer;
 class DockingManager;
 class Scrollable;
-class ScrollBar;
 class FixedText;
 class MouseEvent;
 class KeyEvent;
@@ -52,7 +50,6 @@ class CommandEvent;
 class TrackingEvent;
 class HelpEvent;
 class DataChangedEvent;
-class VclSimpleEvent;
 class NotifyEvent;
 class SystemWindow;
 class SalFrame;
@@ -69,18 +66,10 @@ enum class PointerStyle;
 
 namespace com::sun::star {
     namespace accessibility {
-        struct AccessibleRelation;
         class XAccessible;
-    }
-    namespace rendering {
-        class XCanvas;
-        class XSpriteCanvas;
     }
     namespace awt {
         class XVclWindowPeer;
-    }
-    namespace uno {
-        class Any;
     }
     namespace datatransfer::clipboard {
         class XClipboard;

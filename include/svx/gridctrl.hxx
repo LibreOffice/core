@@ -35,10 +35,8 @@ namespace comphelper { class OPropertyChangeMultiplexer; }
 namespace com::sun::star::beans { struct PropertyChangeEvent; }
 namespace com::sun::star::container { class XIndexAccess; }
 namespace com::sun::star::sdbc { class XRowSet; }
-namespace com::sun::star::sdb { class XRowsChangeListener; }
 namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::util { class XNumberFormatter; }
-namespace weld { class Menu; }
 
 class CursorWrapper;
 class GridFieldValueListener;

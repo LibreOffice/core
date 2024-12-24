@@ -43,7 +43,6 @@ struct SfxDispatcher_Impl;
 class VCLXPopupMenu;
 class SfxPoolItemHolder;
 
-namespace com::sun::star::awt { class XPopupMenu; }
 namespace vcl { class Window; }
 
 enum class SfxDispatcherPopFlags

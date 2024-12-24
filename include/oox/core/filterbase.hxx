@@ -39,7 +39,6 @@
 
 namespace com::sun::star {
     namespace beans { struct PropertyValue; }
-    namespace drawing { class XShape; }
     namespace frame { class XFrame; }
     namespace frame { class XModel; }
     namespace io { class XInputStream; }

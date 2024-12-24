@@ -25,6 +25,8 @@
 
 class SdPage;
 
+template <typename Arg, typename Ret> class Link;
+
 namespace sd::sidebar
 {
 class MasterPageDescriptor;

@@ -44,6 +44,7 @@ namespace com::sun::star::animations {
 
 class SfxStyleSheet;
 class SdDrawDocument;
+class SdrOutliner;
 class SdrTextObj;
 class SdPageLink;
 class SfxItemSet;

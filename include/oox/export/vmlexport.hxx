@@ -50,7 +50,6 @@ namespace sax_fastparser {
     class FastAttributeList;
 }
 
-class Point;
 namespace tools { class Rectangle; }
 class SdrObject;
 

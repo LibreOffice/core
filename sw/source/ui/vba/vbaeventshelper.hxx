@@ -22,6 +22,8 @@
 
 #include <vbahelper/vbaeventshelperbase.hxx>
 
+namespace com::sun::star::uno { class XComponentContext; };
+
 class SwVbaEventsHelper : public VbaEventsHelperBase
 {
 public:

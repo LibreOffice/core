@@ -26,7 +26,6 @@
 
 // Forward declarations
 class SdrObjGroup;
-class SdrHdlList;
 
 namespace svx { namespace diagram {
 

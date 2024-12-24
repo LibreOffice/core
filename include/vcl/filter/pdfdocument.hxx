@@ -21,16 +21,6 @@
 
 #include <vcl/filter/pdfobjectcontainer.hxx>
 
-namespace com::sun::star::security
-{
-class XCertificate;
-}
-
-namespace com::sun::star::uno
-{
-template <class interface_type> class Reference;
-}
-
 namespace tools
 {
 class Rectangle;

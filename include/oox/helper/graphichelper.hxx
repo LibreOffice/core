@@ -40,12 +40,9 @@ class OutputDevice;
 namespace com::sun::star {
     namespace awt { struct Point; }
     namespace awt { struct Size; }
-    namespace awt { class XUnitConversion; }
     namespace io { class XInputStream; }
     namespace frame { class XFrame; }
     namespace graphic { class XGraphic; }
-    namespace graphic { class XGraphicObject; }
-    namespace graphic { class XGraphicProvider; }
     namespace uno { class XComponentContext; }
 }
 

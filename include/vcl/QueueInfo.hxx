@@ -25,8 +25,6 @@
 #include <vcl/dllapi.h>
 #include <vcl/prntypes.hxx>
 
-class Printer;
-
 class VCL_DLLPUBLIC QueueInfo
 {
     friend class Printer;

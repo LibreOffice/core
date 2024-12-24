@@ -23,13 +23,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/builderpage.hxx>
 
-namespace weld {
-    class Builder;
-    class Container;
-}
-
 struct WizPageData;
-struct ImplWizButtonData;
 
 // wizard states
 #define WZS_INVALID_STATE (::vcl::WizardTypes::WizardState(-1))

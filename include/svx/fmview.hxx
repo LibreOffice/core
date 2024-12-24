@@ -32,6 +32,8 @@ namespace com::sun::star {
     }
 }
 
+namespace com::sun::star::awt { class XControlContainer; };
+
 class OutputDevice;
 class FmFormObj;
 class FmFormPage;

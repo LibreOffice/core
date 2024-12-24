@@ -22,7 +22,6 @@
 #include <vcl/commandevent.hxx>
 #include <set>
 
-class HelpEvent;
 class ScrollBar;
 class ScrollBarBox;
 class Splitter;

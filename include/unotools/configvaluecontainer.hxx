@@ -28,7 +28,6 @@
 
 namespace com::sun::star::uno { template <typename > class Reference; }
 namespace com::sun::star::uno { class XComponentContext; }
-namespace osl { class Mutex; }
 
 namespace utl
 {

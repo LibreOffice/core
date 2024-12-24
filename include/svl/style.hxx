@@ -80,7 +80,6 @@ namespace o3tl {
 class SfxItemSet;
 class SfxItemPool;
 class SfxStyleSheetBasePool;
-class SvStream;
 
 namespace svl { class IndexedStyleSheets; }
 /*

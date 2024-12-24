@@ -24,7 +24,6 @@
 #include <vcl/weld.hxx>
 #include <vcl/timer.hxx>
 
-class Printer;
 class QueueInfo;
 class VclSimpleEvent;
 

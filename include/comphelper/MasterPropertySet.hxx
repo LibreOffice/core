@@ -33,7 +33,6 @@ namespace comphelper { struct PropertyInfo; }
 namespace comphelper
 {
     class MasterPropertySetInfo;
-    class ChainablePropertySet;
     struct SlaveData
     {
         rtl::Reference < ChainablePropertySet > mxSlave;

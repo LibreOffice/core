@@ -23,8 +23,6 @@
 #include <svl/svldllapi.h>
 #include <tools/debug.hxx>
 
-class SvStream;
-
 class SVL_DLLPUBLIC SfxFlagItem: public SfxPoolItem
 {
     sal_uInt16                   nVal;

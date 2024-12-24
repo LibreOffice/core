@@ -42,6 +42,7 @@
 #include "unobaseclass.hxx"
 
 class SfxItemPropertySet;
+class SfxItemSet;
 struct SfxItemPropertyMapEntry;
 class SwPaM;
 class SwUnoCursor;

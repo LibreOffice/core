@@ -33,7 +33,6 @@
 
 class XMLTextListsHelper;
 class SvXMLImportContext;
-class SvXMLTokenMap;
 class SvXMLImportPropertyMapper;
 class SvXMLImport;
 class SvXMLStylesContext;
@@ -58,7 +57,6 @@ namespace text {
 namespace frame { class XModel; }
 namespace container { class XNameContainer; class XIndexReplace; }
 namespace beans { class XPropertySet; }
-namespace xml::sax { class XAttributeList; }
 namespace xml::sax { class XFastAttributeList; }
 namespace util { struct DateTime; }
 }

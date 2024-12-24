@@ -138,9 +138,6 @@
 #include <memory>
 
 // important in the tbxctrls.hxx created with HeDaBu !!!
-class SvxLineItem;
-class SvxBoxInfoItem;
-class SvxFontItem;
 class SfxStyleControllerItem_Impl;
 class SfxStyleSheetBasePool;
 class SfxTemplateItem;

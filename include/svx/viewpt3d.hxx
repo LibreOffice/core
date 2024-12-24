@@ -26,9 +26,6 @@
 #include <basegfx/vector/b3dvector.hxx>
 #include <tools/gen.hxx>
 
-// predefines
-namespace basegfx { class B3DRange; } // end of namespace basegfx
-
 /*************************************************************************
 |*
 |* enums for projection

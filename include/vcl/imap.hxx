@@ -30,7 +30,6 @@
 class Point;
 class Size;
 class Fraction;
-class IMapObject;
 
 class VCL_DLLPUBLIC ImageMap final
 {

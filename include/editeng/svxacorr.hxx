@@ -43,7 +43,6 @@ class SvxAutoCorrect;
 class SfxObjectShell;
 namespace vcl { class Window; }
 namespace com::sun::star::embed { class XStorage; }
-namespace tools { template <typename T> class SvRef; }
 
 struct CompareSvStringsISortDtor
 {

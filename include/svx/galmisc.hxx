@@ -35,7 +35,6 @@ namespace com::sun::star::awt { class XProgressBar; }
 
 class INetURLObject;
 class GalleryTheme;
-class SotStorageStream;
 
 struct ExchangeData
 {

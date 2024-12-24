@@ -30,8 +30,6 @@
 #include <vector>
 
 namespace tools { class Rectangle; }
-class SdrPage;
-class SdrObjList;
 class SdrObject;
 class SdrPageView;
 

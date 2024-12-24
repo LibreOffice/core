@@ -26,8 +26,6 @@
 
 #include <vector>
 
-struct XMLDocumentSettingsContext_Data;
-
 class XMLOFF_DLLPUBLIC XMLDocumentSettingsContext final : public SvXMLImportContext
 {
     struct SettingsGroup

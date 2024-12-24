@@ -25,8 +25,6 @@
 #include <svx/svxdllapi.h>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 
-class SdrLayerIDSet;
-namespace tools { class Rectangle; }
 class SdrPageView;
 class OutputDevice;
 
@@ -36,7 +34,6 @@ namespace vcl {
 
 namespace basegfx {
     class B2DRange;
-    class B2DHomMatrix;
 }
 
 namespace sdr::contact {

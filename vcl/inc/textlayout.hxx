@@ -30,6 +30,7 @@
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 
 class Control;
+class ImplMultiTextLineInfo;
 
 namespace vcl
 {

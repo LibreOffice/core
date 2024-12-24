@@ -22,9 +22,6 @@
 #include <svl/whichranges.hxx>
 #include <svl/itemset.hxx>
 
-class SfxPoolItem;
-enum class SfxItemState;
-
 /**
  * Iterates over the which ids and the pool items arrays together (which are stored in parallel arrays).
  * Primarily so that we can call GetItemSet on the SfxItemSet and pass in a hint, which avoids

@@ -22,9 +22,6 @@
 #include <svx/svxdllapi.h>
 #include <svl/itempool.hxx>
 
-class XLineAttrSetItem;
-class XFillAttrSetItem;
-
 class SVXCORE_DLLPUBLIC SdrItemPool final : public SfxItemPool
 {
 public:

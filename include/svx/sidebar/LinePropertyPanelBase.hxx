@@ -28,14 +28,8 @@
 #include <com/sun/star/frame/XFrame.hpp>
 
 class ToolbarUnoDispatcher;
-class XLineStyleItem;
-class XLineDashItem;
-class XLineStartItem;
 class XLineWidthItem;
-class XLineEndItem;
-class XLineEndList;
 class XLineTransparenceItem;
-class XDashList;
 
 namespace svx::sidebar
 {

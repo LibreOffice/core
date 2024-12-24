@@ -29,13 +29,11 @@
 #include <svx/svxdllapi.h>
 #include <deque>
 
-class OutputDevice;
 class SdrHdlList;
 class SdrMarkView;
 class SdrObject;
 class SdrPageView;
 class MouseEvent;
-class HelpEvent;
 
 namespace sdr::contact {
     class ObjectContact;

@@ -26,8 +26,6 @@
 #include <svx/svxdllapi.h>
 #include <svx/xit.hxx>
 
-class XColorList;
-
 class SVXCORE_DLLPUBLIC XColorItem : public NameOrIndex
 {
     Color   m_aColor;

@@ -29,30 +29,17 @@
 #include <svx/svxdllapi.h>
 #include <vector>
 
-namespace sd {
-    class View;
-}
-
 namespace com::sun::star::linguistic2 {
     class XDictionary;
-    class XSpellChecker1;
-    class XSpellChecker;
-    class XThesaurus;
-    class XHyphenator;
 }
 class SdrModel;
 class SdrView;
-class SvxSpellWrapper;
 enum class TransliterationFlags;
 struct ExchangeData;
-class INetURLObject;
 class GalleryTheme;
-class SvxHyperlinkTabPageBase;
 class SearchAttrItemList;
-class FmFormShell;
 class Graphic;
 class SdrObject;
-class SvxSpellWrapper;
 struct FmSearchContext;
 
 typedef const WhichRangesContainer & (*DialogGetRanges)();

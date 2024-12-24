@@ -50,7 +50,6 @@ class SvxWeightItem;
 class SvxPostureItem;
 class SvxTextLineItem;
 class SvxCrossedOutItem;
-class SvxShadowedItem;
 class SvxColorItem;
 class SvxBoxItem;
 class SvxLineItem;

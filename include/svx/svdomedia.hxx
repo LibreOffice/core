@@ -24,8 +24,6 @@
 #include <avmedia/mediaitem.hxx>
 #include <svx/svxdllapi.h>
 
-class Graphic;
-
 namespace sdr::contact { class ViewContactOfSdrMediaObj; }
 namespace com::sun::star::graphic { class XGraphic; }
 

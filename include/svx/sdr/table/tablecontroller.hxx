@@ -31,7 +31,6 @@
 #include <unotools/weakref.hxx>
 
 struct ImplSVEvent;
-class SdrView;
 class SdrObject;
 class SfxItemSet;
 class SvxBoxInfoItem;

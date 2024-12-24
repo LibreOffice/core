@@ -34,9 +34,7 @@ class SdrObject;
 class SfxItemSet;
 class SfxPoolItem;
 class SfxStyleSheet;
-class Fraction;
 class SfxItemPool;
-class SdrModel;
 
 namespace sdr::properties
 {

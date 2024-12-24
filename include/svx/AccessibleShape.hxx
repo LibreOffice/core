@@ -55,7 +55,6 @@ namespace com::sun::star {
     namespace beans { struct PropertyValue; }
     namespace document { struct EventObject; }
     namespace drawing { class XShape; }
-    namespace uno { class XInterface; }
 }
 
 class SdrObject;

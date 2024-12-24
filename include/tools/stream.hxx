@@ -30,8 +30,6 @@
 #include <memory>
 #include <string_view>
 
-class StreamData;
-
 inline rtl_TextEncoding GetStoreCharSet( rtl_TextEncoding eEncoding )
 {
     if ( eEncoding == RTL_TEXTENCODING_ISO_8859_1 )

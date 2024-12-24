@@ -46,7 +46,6 @@
 #include <span>
 
 class OutputDevice;
-class SvStream;
 enum class DrawTextFlags;
 
 struct ImplMetaReadData

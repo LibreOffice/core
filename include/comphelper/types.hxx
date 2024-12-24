@@ -30,7 +30,6 @@ namespace com::sun::star::awt {
 }
 
 namespace com::sun::star::uno { class Any; }
-namespace com::sun::star::uno { class XInterface; }
 
 
 namespace comphelper

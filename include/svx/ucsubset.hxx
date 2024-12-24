@@ -27,8 +27,6 @@
 
 #include <vector>
 
-class FontCharMap;
-
 // TODO: should be moved into Font Attributes territory,
 // we let them mature here though because this is currently the only use
 

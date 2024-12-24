@@ -68,7 +68,6 @@ namespace com::sun::star::xml::sax { class XExtendedDocumentHandler; }
 namespace com::sun::star::xml::sax { class XLocator; }
 
 class SvXMLNamespaceMap;
-class SvtSecurityMapPersonalInfo;
 class SvXMLExport_Impl;
 class ProgressBarHelper;
 class XMLEventExport;

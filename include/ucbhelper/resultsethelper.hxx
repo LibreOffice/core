@@ -30,10 +30,6 @@
 
 namespace com::sun::star::uno { class XComponentContext; }
 
-namespace cppu {
-    class OInterfaceContainerHelper;
-}
-
 namespace ucbhelper {
 
 

@@ -37,7 +37,6 @@ class INetURLObject;
 
 class FilterConfigCache;
 class SvStream;
-struct WmfExternal;
 struct ConvertData;
 
 #define ERRCODE_GRFILTER_OPENERROR    ErrCode(ErrCodeArea::Vcl, ErrCodeClass::General, 1)

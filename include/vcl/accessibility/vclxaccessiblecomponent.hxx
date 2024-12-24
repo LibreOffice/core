@@ -31,7 +31,6 @@
 namespace com::sun::star::accessibility { class XAccessible; }
 
 namespace vcl { class Window; }
-class VCLXWindow;
 class VclWindowEvent;
 
 namespace utl {

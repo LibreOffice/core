@@ -24,8 +24,6 @@
 #include <unotools/options.hxx>
 #include <memory>
 
-namespace osl { class Mutex; }
-
 // define ----------------------------------------------------------------
 enum class UserOptToken
 {

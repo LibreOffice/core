@@ -60,7 +60,6 @@ class SvxBulletItem;
 class SvxNumBulletItem;
 class SvxJustifyMethodItem;
 class SvxVerJustifyItem;
-class SfxVoidItem;
 
 /*
  * NOTE: Changes in this file will probably require

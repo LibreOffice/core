@@ -33,12 +33,10 @@
 
 namespace com::sun::star {
     namespace document { class XDocumentProperties; }
+    namespace drawing { class XShape; }
     namespace io { class XInputStream; }
     namespace io { class XOutputStream; }
     namespace io { class XStream; }
-    namespace text { class XText; }
-    namespace text { class XTextCursor; }
-    namespace text { class XTextField; }
     namespace uno { class XComponentContext; }
     namespace xml::dom { class XDocument; }
     namespace xml::sax { class XFastSAXSerializable; }

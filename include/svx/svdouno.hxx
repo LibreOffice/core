@@ -30,8 +30,6 @@
 
 // Forward declaration
 class SdrView;
-class SdrPageWindow;
-class SdrControlEventListenerImpl;
 
 namespace sdr::contact {
     class ViewContactOfUnoControl;

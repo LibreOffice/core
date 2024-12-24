@@ -22,13 +22,6 @@
 #include <svx/svdobj.hxx>
 #include <svx/svxdllapi.h>
 
-//   Initial Declarations
-class SfxPoolItem;
-class SfxSetItem;
-class SdrOutliner;
-class SfxItemSet;
-class SfxItemPool;
-
 //   SdrAttrObj. This is an abstract class, we only instantiate its subclasses.
 class SVXCORE_DLLPUBLIC SdrAttrObj : public SdrObject
 {

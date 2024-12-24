@@ -47,7 +47,6 @@ namespace tools
 class Time;
 class Duration;
 }
-class CalendarWrapper;
 
 enum class DateOrder {
     Invalid = -1,

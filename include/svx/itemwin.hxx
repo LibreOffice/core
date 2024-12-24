@@ -24,7 +24,6 @@
 #include <svx/xtable.hxx>
 #include <vcl/customweld.hxx>
 
-class SfxObjectShell;
 class ValueSet;
 class SvxLineStyleToolBoxControl;
 

@@ -37,10 +37,8 @@ namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::drawing { class XShape; }
 namespace com::sun::star::drawing { class XShapes; }
 namespace com::sun::star::frame { class XModel; }
-namespace com::sun::star::xml::sax { class XAttributeList; }
 
 class SvXMLImport;
-class SvXMLTokenMap;
 class SvXMLStylesContext;
 class XMLSdPropHdlFactory;
 class SvXMLImportPropertyMapper;

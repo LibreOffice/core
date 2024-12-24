@@ -24,7 +24,6 @@
 #include <svl/intitem.hxx>
 #include <tools/degree.hxx>
 
-struct SfxImageItem_Impl;
 class SVL_DLLPUBLIC SfxImageItem final : public SfxInt16Item
 {
 public:

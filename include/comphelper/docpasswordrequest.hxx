@@ -26,8 +26,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 
-namespace com::sun::star::task { class XInteractionAbort; }
-
 namespace comphelper {
 
 class PasswordContinuation;

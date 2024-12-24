@@ -24,8 +24,6 @@
 #include <svx/svdxcgv.hxx>
 #include <memory>
 
-class SdrUndoGeoObj;
-
 class SVXCORE_DLLPUBLIC SdrDragView : public SdrExchangeView
 {
     friend class                SdrPageView;

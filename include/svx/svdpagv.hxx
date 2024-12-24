@@ -36,16 +36,11 @@ namespace vcl { class Region; }
 class SdrObjList;
 class SdrObject;
 class SdrPage;
-class SdrUnoObj;
 class SdrPaintWindow;
 class SdrView;
-class SdrPageObj;
-class SdrPageView;
 
 namespace sdr::contact
 {
-    class ViewObjectContactRedirector;
-    class DisplayInfo;
     class ViewObjectContactRedirector;
 }
 

@@ -22,8 +22,6 @@
 
 #include <rtl/ref.hxx>
 
-class SfxViewShell;
-
 namespace svt { class AcceleratorExecute; }
 
 namespace sfx2::sidebar {

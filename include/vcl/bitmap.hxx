@@ -43,8 +43,6 @@ inline sal_uInt8 GAMMA(double _def_cVal, double _def_InvGamma)
 
 class Color;
 
-template <typename Arg, typename Ret> class Link;
-
 enum class BmpMirrorFlags
 {
     NONE             = 0x00,
@@ -85,11 +83,7 @@ enum class BmpConversion
     N8BitNoConversion // make 8bit without color conversion (e.g. take the red channel)
 };
 
-class   BitmapInfoAccess;
-class   BitmapReadAccess;
-class   BitmapWriteAccess;
 class   BitmapPalette;
-class   GDIMetaFile;
 class   AlphaMask;
 class   OutputDevice;
 class   SalBitmap;

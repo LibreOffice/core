@@ -20,8 +20,6 @@
 
 #include <sfx2/ctrlitem.hxx>
 
-namespace com::sun::star::lang { class XComponent; }
-
 
 namespace sfx2::sidebar {
 

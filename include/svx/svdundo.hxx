@@ -35,11 +35,9 @@
 #include <svx/svxdllapi.h>
 #include <unotools/resmgr.hxx>
 
-class SfxItemSet;
 class SfxPoolItem;
 class SfxStyleSheet;
 class SdrView;
-class SdrPageView;
 class SdrModel;
 class SdrObject;
 class SdrPage;
@@ -47,7 +45,6 @@ class SdrObjList;
 class SdrLayer;
 class SdrLayerAdmin;
 class SdrObjGeoData;
-class OutlinerParaObject;
 
 namespace svx { namespace diagram {
     class DiagramDataState;

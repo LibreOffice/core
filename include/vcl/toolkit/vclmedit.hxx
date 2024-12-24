@@ -33,6 +33,7 @@
 
 class ImpVclMEdit;
 class ExtTextEngine;
+class ScrollBar;
 class TextView;
 
 class TextWindow final : public vcl::Window

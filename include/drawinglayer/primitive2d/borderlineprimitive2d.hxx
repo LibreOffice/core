@@ -25,8 +25,6 @@
 #include <drawinglayer/attribute/lineattribute.hxx>
 #include <drawinglayer/attribute/strokeattribute.hxx>
 
-enum class SvxBorderLineStyle : sal_Int16;
-
 namespace drawinglayer::primitive2d
 {
 /** BorderLine class

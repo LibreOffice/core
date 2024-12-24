@@ -31,8 +31,6 @@
 #include <xmloff/namespacemap.hxx>
 #include <optional>
 
-namespace com::sun::star::xml::sax { class XAttributeList; }
-
 class SvXMLImport;
 
 class SvXMLImportContext;

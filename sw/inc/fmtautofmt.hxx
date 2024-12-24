@@ -23,6 +23,8 @@
 #include <svl/poolitem.hxx>
 #include <memory>
 
+class SfxItemSet;
+
 /// Has a shared reference to an "auto-style", i.e. a not named collection of character formats. It
 /// is owned by an SwTextAttrEnd, which is then stored in the SwpHints of an SwTextNode.
 ///

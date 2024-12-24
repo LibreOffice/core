@@ -25,8 +25,6 @@
 #include <ostream>
 #include <type_traits>
 
-class SvStream;
-
 class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Fraction final
 {
     /// these two fields form a boost::rational, but I didn't want to put more boost headers into the global space

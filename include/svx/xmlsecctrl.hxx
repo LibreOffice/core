@@ -23,8 +23,6 @@
 #include <sfx2/stbitem.hxx>
 #include <svx/svxdllapi.h>
 
-class  SvxSizeItem;
-
 class SVX_DLLPUBLIC XmlSecStatusBarControl final : public SfxStatusBarControl
 {
 private:

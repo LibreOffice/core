@@ -31,7 +31,6 @@ namespace weld { class Window; }
 
 class ErrorHandler;
 class ErrorContext;
-enum class DialogMask;
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) ErrorStringFactory
 {

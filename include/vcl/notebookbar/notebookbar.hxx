@@ -15,11 +15,8 @@
 #include <vcl/settings.hxx>
 #include <vector>
 
-namespace com::sun::star::ui { class XContextChangeEventListener; }
-
 class NotebookBarContextChangeEventListener;
 class NotebookbarContextControl;
-class SystemWindow;
 class SfxViewShell;
 
 /// This implements Widget Layout-based notebook-like menu bar.

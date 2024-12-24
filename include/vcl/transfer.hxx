@@ -48,7 +48,6 @@ namespace com::sun::star::datatransfer::dnd { class XDragGestureRecognizer; }
 namespace com::sun::star::io { class XInputStream; }
 namespace com::sun::star::datatransfer::dnd { class XDropTarget; }
 
-namespace tools { template <typename T> class SvRef; }
 template <typename Arg, typename Ret> class Link;
 
 class BitmapEx;
@@ -58,7 +57,6 @@ class ImageMap;
 class INetBookmark;
 class INetImage;
 class FileList;
-class SotStorageStream;
 namespace vcl { class Window; }
 
 // Drag&Drop defines

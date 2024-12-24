@@ -24,8 +24,6 @@
 #include <svl/svldllapi.h>
 #include <svl/poolitem.hxx>
 
-class SvStream;
-
 
 class UNLESS_MERGELIBS_MORE(SVL_DLLPUBLIC) SfxRangeItem final : public SfxPoolItem
 {

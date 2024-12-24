@@ -27,7 +27,6 @@
 
 namespace rtl {
     class OString;
-    class OUString;
 }
 
 namespace codemaker::cpp {

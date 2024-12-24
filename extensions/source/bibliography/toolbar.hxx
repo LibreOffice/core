@@ -28,6 +28,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <vector>
 
+class VclSimpleEvent;
 class BibDataManager;
 class BibToolBar;
 

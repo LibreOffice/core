@@ -22,6 +22,8 @@
 #include <sfx2/tabdlg.hxx>
 #include <vcl/graph.hxx>
 
+class SvNumberFormatter;
+
 namespace com::sun::star::util { class XNumberFormatsSupplier; }
 
 namespace chart

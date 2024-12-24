@@ -32,7 +32,6 @@ namespace com::sun::star::uno { template <class interface_type> class Reference;
 
 namespace com::sun::star::frame { class XModel; }
 
-class Dialog;
 class BitmapEx;
 class SdrObjGroup;
 namespace weld

@@ -24,6 +24,8 @@
 class GDIMetaFile;
 class BitmapEx;
 
+template <typename Arg, typename Ret> class Link;
+
 namespace vcl
 {
 

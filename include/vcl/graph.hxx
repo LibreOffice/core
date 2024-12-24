@@ -42,9 +42,7 @@ enum class GraphicType
 namespace com::sun::star::graphic { class XGraphic; }
 namespace vcl { class Font; }
 
-class Bitmap;
 class GDIMetaFile;
-class SvStream;
 class ImpGraphic;
 class OutputDevice;
 

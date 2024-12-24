@@ -44,6 +44,7 @@ class SfxBindings;
 class SfxDispatcher;
 class SfxViewFrame;
 class StarBASIC;
+class VclSimpleEvent;
 
 namespace sd
 {

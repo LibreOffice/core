@@ -23,17 +23,10 @@
 #include <svx/sdr/properties/defaultproperties.hxx>
 #include <svx/svxdllapi.h>
 
-class OutlinerParaObject;
 class SdrOutliner;
 class SdrTextObj;
-class SdrModel;
 class SfxItemSet;
 enum class OutlinerMode;
-
-namespace sdr::properties
-{
-class TextProperties;
-}
 
 /** This class stores information about one text inside a shape.
 */

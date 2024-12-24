@@ -42,8 +42,6 @@ public:
 };
 
 class FmFormView;
-class SdrObject;
-class SdrGrafObj;
 
 class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC SdrExternalToolEdit final
 :   public ExternalToolEdit

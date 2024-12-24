@@ -39,9 +39,6 @@ namespace com::sun::star {
     namespace container{
         class XHierarchicalNameAccess;
     }
-    namespace util{
-        class XChangesListener;
-    }
 }
 
 enum class ConfigItemMode

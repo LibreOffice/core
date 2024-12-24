@@ -32,7 +32,6 @@
 
 class SvxSearchItem;
 class SfxStyleSheetBasePool;
-class SvxJSearchOptionsPage;
 class SvxSearchController;
 class VclAbstractDialog;
 struct SearchDlg_Impl;

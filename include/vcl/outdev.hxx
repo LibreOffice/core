@@ -76,12 +76,10 @@ struct ImplOutDevData;
 class LogicalFontInstance;
 struct SystemGraphicsData;
 class ImplFontCache;
-class ImplMultiTextLineInfo;
 class SalGraphics;
 class Gradient;
 class Hatch;
 class BitmapReadAccess;
-class BitmapEx;
 class Image;
 class TextRectInfo;
 class FontMetric;
@@ -98,7 +96,6 @@ class VirtualDevice;
 struct SalTwoRect;
 class Printer;
 class VCLXGraphics;
-class OutDevStateStack;
 class SalLayoutGlyphs;
 
 namespace vcl
@@ -122,8 +119,6 @@ namespace vcl
 
 namespace basegfx {
     class B2DHomMatrix;
-    class B2DPolygon;
-    class B2IVector;
     class B2ISize;
 }
 
@@ -134,12 +129,6 @@ namespace com::sun::star::awt {
 namespace com::sun::star::rendering {
     class XCanvas;
     class XSpriteCanvas;
-}
-namespace com::sun::star::linguistic2 {
-    class XHyphenator;
-}
-namespace com::sun::star::i18n {
-    class XBreakIterator;
 }
 
 // OutputDevice-Types

@@ -28,9 +28,7 @@
 
 namespace com::sun::star {
     namespace io { class XInputStream; }
-    namespace uno { class XComponentContext; }
     namespace xml::sax { class XFastDocumentHandler; }
-    namespace xml::sax { class XFastParser; }
     namespace xml::sax { class XFastTokenHandler; }
     namespace xml::sax { struct InputSource; }
 }

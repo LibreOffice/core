@@ -39,6 +39,8 @@
 
 #include <cppuhelper/implbase.hxx>
 
+class VclSimpleEvent;
+
 namespace framework
 {
 

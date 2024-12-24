@@ -21,6 +21,8 @@
 #include <sfx2/tabdlg.hxx>
 #include <unotools/resmgr.hxx>
 
+class SvNumberFormatter;
+
 namespace chart
 {
 

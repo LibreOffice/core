@@ -45,8 +45,6 @@ class SdrView;
 class SdrPageView;
 class SdrObject;
 class SvxShape;
-class SvxShapeGroup;
-class SvxShapeConnector;
 enum class SdrInventor : sal_uInt32;
 
 class SVXCORE_DLLPUBLIC SvxDrawPage :

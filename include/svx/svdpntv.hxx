@@ -35,25 +35,12 @@
 
 
 // Pre defines
-class SdrPageWindow;
-
-namespace com::sun::star::awt {
-    class XControlContainer;
-}
 namespace sdr::overlay { class OverlayManager; }
 
 class SdrPage;
-class SdrView;
-class SfxItemSet;
 class SfxStyleSheet;
 class SdrOle2Obj;
 class SdrModel;
-class SdrObject;
-enum class GraphicManagerDrawFlags;
-
-namespace sdr::contact {
-    class ViewObjectContactRedirector;
-}
 
 // Defines for AnimationMode
 enum class SdrAnimationMode
@@ -62,7 +49,6 @@ enum class SdrAnimationMode
     Disable
 };
 
-class SdrPaintView;
 namespace sdr::contact { class ViewObjectContactRedirector; }
 
 namespace vcl {

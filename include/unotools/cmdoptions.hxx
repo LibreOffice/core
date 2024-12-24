@@ -34,10 +34,6 @@ namespace com::sun::star::frame
 {
 class XFrame;
 }
-namespace osl
-{
-class Mutex;
-}
 
 /*-************************************************************************************************************
     @descr          The method GetList() returns a list of property values.

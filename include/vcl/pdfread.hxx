@@ -21,12 +21,6 @@
 #include <vcl/pdf/PDFAnnotationSubType.hxx>
 #include <vcl/pdf/PDFAnnotationMarker.hxx>
 
-namespace com::sun::star::uno
-{
-template <typename> class Sequence;
-}
-class Bitmap;
-
 namespace vcl
 {
 /// Fills the rBitmaps vector with rendered pages.

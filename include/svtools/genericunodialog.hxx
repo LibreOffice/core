@@ -34,8 +34,6 @@
 namespace com :: sun :: star :: awt { class XWindow; }
 namespace com :: sun :: star :: uno { class XComponentContext; }
 
-class VclWindowEvent;
-
 
 namespace svt
 {

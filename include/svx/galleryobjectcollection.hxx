@@ -28,8 +28,6 @@
 #include <optional>
 #include <vector>
 
-class GalleryObjectStorage;
-
 struct SVXCORE_DLLPUBLIC GalleryObject
 {
     std::optional<INetURLObject> m_oStorageUrl;

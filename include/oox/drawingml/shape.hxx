@@ -57,10 +57,6 @@ namespace oox::vml {
     struct OleObjectInfo;
 }
 
-namespace svx::diagram {
-    class IDiagramHelper;
-}
-
 namespace oox::drawingml {
 
 class Theme;

@@ -28,8 +28,6 @@
 
 #include <functional>
 
-class SdrMarkView;
-
 
 namespace svx::sidebar {
 

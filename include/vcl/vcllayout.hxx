@@ -31,7 +31,6 @@
 
 class LogicalFontInstance;
 namespace vcl::text { class ImplLayoutArgs; }
-namespace vcl::font { class PhysicalFontFace; }
 namespace basegfx { class BColor; }
 class SalGraphics;
 class GlyphItem;

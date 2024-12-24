@@ -33,12 +33,6 @@
 #include <memory>
 
 using namespace ::com::sun::star;
-class SubsetMap;
-
-namespace svx
-{
-struct SvxShowCharSetItem;
-}
 
 /// Provides the show characters or texts in a drawing area with special sizes and fonts.
 class SVX_DLLPUBLIC SvxShowText final : public weld::CustomWidgetController

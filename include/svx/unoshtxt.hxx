@@ -24,18 +24,7 @@
 #include <editeng/unoedsrc.hxx>
 #include <svx/svxdllapi.h>
 
-namespace com::sun::star {
-    namespace uno {
-        class XInterface;
-    }
-    namespace accessibility {
-        struct TextSegment;
-    }
-}
-
-class SvxTextForwarder;
 class SdrObject;
-class SdrModel;
 class SdrView;
 class OutputDevice;
 class SvxTextEditSourceImpl;

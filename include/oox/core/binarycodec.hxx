@@ -25,10 +25,6 @@
 #include <oox/dllapi.h>
 #include <sal/types.h>
 
-namespace com::sun::star {
-    namespace beans { struct NamedValue; }
-}
-
 namespace oox { class AttributeList; }
 
 namespace oox::core::CodecHelper

@@ -29,10 +29,6 @@ namespace com::sun::star::uno
 {
 class XInterface;
 }
-namespace osl
-{
-class Mutex;
-}
 
 namespace comphelper
 {

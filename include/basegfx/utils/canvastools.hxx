@@ -52,11 +52,9 @@ namespace basegfx
 {
     class B2DHomMatrix;
     class B3DHomMatrix;
-    class B2DVector;
     class B2DPoint;
     class B2DRange;
     class B3DRange;
-    class B2IVector;
     class B2IRange;
     class B2DPolygon;
     class B2DPolyPolygon;

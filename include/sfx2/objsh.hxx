@@ -101,7 +101,6 @@ namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::document { struct CmisVersion; }
 namespace com::sun::star::document { class XDocumentProperties; }
 namespace com::sun::star::embed { class XStorage; }
-namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::graphic { class XGraphic; }
 namespace com::sun::star::io { class XStream; }
 namespace com::sun::star::script { class XLibraryContainer; }

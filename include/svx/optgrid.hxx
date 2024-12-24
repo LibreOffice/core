@@ -26,7 +26,6 @@
 namespace weld { class CheckButton; }
 namespace weld { class MetricSpinButton; }
 namespace weld { class SpinButton; }
-namespace weld { class ToggleButton; }
 namespace weld { class Widget; }
 
 class SVX_DLLPUBLIC SvxOptionsGrid

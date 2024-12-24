@@ -33,8 +33,6 @@
 namespace com::sun::star {
     namespace sheet { struct FormulaOpCodeMapEntry; }
     namespace sheet { struct FormulaToken; }
-    namespace uno { class XComponentContext; }
-    namespace uno { class XInterface; }
 }
 
 namespace formula

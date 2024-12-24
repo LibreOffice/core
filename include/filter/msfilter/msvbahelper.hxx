@@ -37,8 +37,6 @@
 
 namespace com::sun::star {
     namespace frame { class XModel; }
-    namespace uno { class XComponentContext; }
-    namespace uno { class XInterface; }
 }
 
 class SfxObjectShell;

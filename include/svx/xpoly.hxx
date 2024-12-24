@@ -27,12 +27,9 @@
 
 class Point;
 namespace tools { class Rectangle; }
-class SvStream;
 namespace tools {
     class Polygon;
-    class PolyPolygon;
 }
-class OutputDevice;
 
 #define XPOLY_APPEND         0xFFFF
 

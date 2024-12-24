@@ -39,10 +39,6 @@ namespace vcl
 {
 class Font;
 }
-namespace vcl::font
-{
-class EmphasisMark;
-}
 namespace tools
 {
 class Rectangle;

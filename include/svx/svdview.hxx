@@ -48,6 +48,7 @@
 //         SdrView         View
 
 class SvxURLField;
+class SdrPageWindow;
 namespace sdr::contact { class ObjectContact; }
 
 enum class SdrViewContext {

@@ -39,7 +39,6 @@
 
 using namespace oox::core;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::xml::sax;
 
 namespace oox::ppt {

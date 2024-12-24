@@ -30,8 +30,6 @@ namespace com::sun::star {
 
 namespace awt { class XWindow; }
 
-namespace datatransfer { class XTransferable; }
-
 namespace embed { class XEmbeddedObject; }
 
 namespace frame { class XModel; }

@@ -40,6 +40,7 @@
 #include <map>
 #include <climits>
 
+class SfxItemSet;
 class ScDocument;
 
 /**

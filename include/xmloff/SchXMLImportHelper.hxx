@@ -31,11 +31,6 @@ namespace com::sun::star {
     namespace frame {
         class XModel;
     }
-    namespace xml {
-        namespace sax {
-            class XAttributeList;
-        }
-    }
     namespace chart2 {
         class XChartDocument;
         class XDataSeries;

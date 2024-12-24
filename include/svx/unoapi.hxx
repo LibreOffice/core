@@ -31,8 +31,6 @@
 class SvxShape;
 class SdrObject;
 class SdrPage;
-class SvxNumBulletItem;
-class SfxItemPool;
 enum class SdrInventor : sal_uInt32;
 enum class SdrObjKind  : sal_uInt16;
 

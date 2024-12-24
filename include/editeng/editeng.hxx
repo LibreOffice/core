@@ -71,7 +71,6 @@ struct SpellPortion;
 typedef std::vector<SpellPortion> SpellPortions;
 }
 
-class SfxUndoManager;
 namespace basegfx { class B2DPolyPolygon; }
 namespace editeng {
     struct MisspellRanges;

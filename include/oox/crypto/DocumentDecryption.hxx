@@ -18,7 +18,6 @@
 
 namespace com::sun::star {
     namespace beans { struct NamedValue; }
-    namespace io { class XInputStream; }
     namespace io { class XStream; }
     namespace uno { class XComponentContext; }
     namespace packages { class XPackageEncryption; }

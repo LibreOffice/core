@@ -25,8 +25,6 @@
 #include <vcl/virdev.hxx>
 #include <svx/svxdllapi.h>
 
-class Edit;
-
 namespace svx {
 
 

@@ -28,6 +28,8 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
+namespace com::sun::star::uno { class XComponentContext; }
+
 namespace formula
 {
     using namespace ::com::sun::star;

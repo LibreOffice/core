@@ -52,7 +52,6 @@ Not considered are:
 */
 
 class SdrView;
-class SdrModel;
 class SdrPage;
 class SdrObject;
 

@@ -534,7 +534,6 @@ SVL_DLLPUBLIC void listAllocatedSfxPoolItems();
 #endif
 
 class SfxItemPool;
-class SfxItemSet;
 typedef struct _xmlTextWriter* xmlTextWriterPtr;
 class ItemInstanceManager;
 

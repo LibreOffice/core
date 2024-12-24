@@ -44,6 +44,8 @@
 // GetItemSurrogates impl that will mention that
 #define SFX_ITEMINFOFLAG_SUPPORT_SURROGATE  0x0001
 
+class SfxItemSet;
+
 class SVL_DLLPUBLIC ItemInfo
 {
     sal_uInt16          m_nWhich;

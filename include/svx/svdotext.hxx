@@ -38,17 +38,13 @@
 
 //   forward declarations
 
-class OutlinerParaObject;
-class OverflowingText;
 class SdrOutliner;
 class SdrPathObj;
-class SdrTextObj;
 class SdrTextObjTest;
 class SvxFieldItem;
 class ImpSdrObjTextLink;
 class EditStatus;
 class TextChain;
-class TextChainFlow;
 
 enum class EEAnchorMode;
 enum class EETextFormat;

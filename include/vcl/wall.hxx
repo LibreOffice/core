@@ -27,10 +27,6 @@
 #include <vcl/dllapi.h>
 #include <optional>
 
-class Gradient;
-class BitmapEx;
-class ImplWallpaper;
-
 enum class WallpaperStyle
 {
     NONE,

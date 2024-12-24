@@ -34,7 +34,6 @@ template <typename> class Reference;
 
 class AnimExpImpl;
 class SvXMLExport;
-class XMLShapeExport;
 
 class XMLAnimationsExporter final : public salhelper::SimpleReferenceObject
 {

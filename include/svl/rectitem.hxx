@@ -23,8 +23,6 @@
 #include <tools/gen.hxx>
 #include <svl/poolitem.hxx>
 
-class SvStream;
-
 class SVL_DLLPUBLIC SfxRectangleItem final : public SfxPoolItem
 {
     tools::Rectangle                maVal;

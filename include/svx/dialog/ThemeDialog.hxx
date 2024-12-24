@@ -20,8 +20,6 @@ namespace model
 class Theme;
 }
 
-class ColorListBox;
-
 namespace svx
 {
 class SVX_DLLPUBLIC ThemeDialog final : public weld::GenericDialogController

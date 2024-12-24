@@ -32,7 +32,6 @@
 #include <sfx2/basedlgs.hxx>
 #include <tools/gen.hxx>
 
-class NotifyEvent;
 class SfxBindings;
 class SfxChildWindow;
 

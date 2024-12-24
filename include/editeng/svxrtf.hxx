@@ -33,7 +33,6 @@
 #include <map>
 #include <memory>
 
-struct SvxRTFStyleType;
 class SvxRTFItemStackType;
 class SvxRTFItemStackList : public std::vector<std::unique_ptr<SvxRTFItemStackType>> {};
 

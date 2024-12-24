@@ -36,10 +36,8 @@ namespace com::sun::star::lang { struct Locale; }
 namespace com::sun::star::util { class XTextSearch2; }
 namespace com::sun::star::util { struct SearchResult; }
 namespace i18nutil {
-    struct SearchOptions;
     struct SearchOptions2;
 }
-enum class TransliterationFlags;
 
 namespace utl
 {

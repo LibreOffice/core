@@ -28,11 +28,7 @@
 #include <vector>
 
 class MouseEvent;
-class TrackingEvent;
-class HelpEvent;
 class KeyEvent;
-class DataChangedEvent;
-class ScrollBar;
 class UserDrawEvent;
 class VirtualDevice;
 class ValueSetAcc;

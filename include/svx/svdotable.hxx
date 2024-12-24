@@ -28,17 +28,11 @@
 #include <boost/property_tree/ptree_fwd.hpp>
 
 class SvStream;
-class SfxStyleSheet;
 class SdrUndoAction;
-
-namespace sdr::contact {
-    class ViewContactOfTableObj;
-}
 
 namespace sdr::table {
 
 class TableLayouter;
-struct ImplTableShadowPaintInfo;
 class TableModel;
 
 #ifndef CellRef
