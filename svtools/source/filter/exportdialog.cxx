@@ -922,29 +922,21 @@ void ExportDialog::updateControls()
         }
         else
         {
+            double x = double(maSize.Width) / maResolution.Width; // pixels -> meters
+            x = o3tl::convert(x, o3tl::Length::m, MapToO3tlLength(aMapUnit));
             mxMfSizeX->set_digits( 2 );
+            mxMfSizeX->set_value(x * weld::SpinButton::Power10(mxMfSizeX->get_digits()) + 0.5);
+            double y = double(maSize.Height) / maResolution.Height; // pixels -> meters
+            y = o3tl::convert(y, o3tl::Length::m, MapToO3tlLength(aMapUnit));
             mxMfSizeY->set_digits( 2 );
-            double fRatio;
-            switch( GetMapUnit( mxLbSizeX->get_active() ) )
-            {
-                case MapUnit::MapInch : fRatio = static_cast< double >( maResolution.Width ) * 0.0254; break;
-                case MapUnit::MapMM :   fRatio = static_cast< double >( maResolution.Width ) * 0.001; break;
-                case MapUnit::MapPoint :fRatio = ( static_cast< double >( maResolution.Width ) * 0.0254 ) / 72.0; break;
-                default:
-                case MapUnit::MapCM :   fRatio = static_cast< double >( maResolution.Width ) * 0.01; break;
-            }
-            mxMfSizeX->set_value( static_cast< sal_Int32 >( ( static_cast< double >( maSize.Width * 100 ) / fRatio ) + 0.5 ) );
-            mxMfSizeY->set_value( static_cast< sal_Int32 >( ( static_cast< double >( maSize.Height * 100 ) / fRatio ) + 0.5 ) );
+            mxMfSizeY->set_value(y * weld::SpinButton::Power10(mxMfSizeY->get_digits()) + 0.5);
         }
     }
-    sal_Int32 nResolution = 0;
-    switch( mxLbResolution->get_active() )
-    {
-        case 0 : nResolution = maResolution.Width / 100; break;     // pixels / cm
-        case 2 : nResolution = maResolution.Width; break;           // pixels / meter
-        default:
-        case 1 : nResolution = static_cast< sal_Int32 >(maResolution.Width * 0.0254); break;    // pixels / inch
-    }
+    sal_Int32 nResolution = maResolution.Width;
+    if (mxLbResolution->get_active() == 0) // pixels / cm
+        nResolution = o3tl::convert(nResolution, o3tl::Length::cm, o3tl::Length::m); // reverse
+    else if (mxLbResolution->get_active() == 1) // pixels / inch
+        nResolution = o3tl::convert(nResolution, o3tl::Length::in, o3tl::Length::m); // reverse
     mxNfResolution->set_value( nResolution );
 
     if (mpSbCompression && mpSbCompression->get_visible() && mpNfCompression)
@@ -1048,14 +1040,18 @@ IMPL_LINK_NOARG(ExportDialog, UpdateHdlMtfSizeX, weld::SpinButton&, void)
 
     if ( mbIsPixelFormat )
     {
-        switch( GetMapUnit( mxLbSizeX->get_active() ) )
+        const MapUnit unit = GetMapUnit(mxLbSizeX->get_active());
+        if (unit == MapUnit::MapPixel)
         {
-            case MapUnit::MapInch :     maSize.Width = static_cast< sal_Int32 >( static_cast< double >( maResolution.Width ) * 0.0254 * mxMfSizeX->get_value() / 100.0 + 0.5 ); break;
-            case MapUnit::MapCM :       maSize.Width = static_cast< sal_Int32 >( static_cast< double >( maResolution.Width ) * 0.01 * mxMfSizeX->get_value() / 100.0 + 0.5 ); break;
-            case MapUnit::MapMM :       maSize.Width = static_cast< sal_Int32 >( static_cast< double >( maResolution.Width ) * 0.001 * mxMfSizeX->get_value() / 100.0 + 0.5 ); break;
-            case MapUnit::MapPoint :    maSize.Width = static_cast< sal_Int32 >( static_cast< double >( maResolution.Width ) * 0.0254 * mxMfSizeX->get_value() / 100.0 * 72 + 0.5 ); break;
-            default:
-            case MapUnit::MapPixel :    maSize.Width = mxMfSizeX->get_value(); break;
+            maSize.Width = mxMfSizeX->get_value();
+        }
+        else
+        {
+            double val = mxMfSizeX->get_value()
+                         / static_cast<double>(weld::SpinButton::Power10(mxMfSizeX->get_digits()));
+            // Convert to meters, since resolution is in pixels per meter
+            val = o3tl::convert(val, MapToO3tlLength(unit), o3tl::Length::m);
+            maSize.Width = static_cast<sal_Int32>(maResolution.Width * val + 0.5);
         }
         maSize.Height = static_cast< sal_Int32 >( fRatio * maSize.Width + 0.5 );
     }
@@ -1080,14 +1076,18 @@ IMPL_LINK_NOARG(ExportDialog, UpdateHdlMtfSizeY, weld::SpinButton&, void)
 
     if ( mbIsPixelFormat )
     {
-        switch( GetMapUnit( mxLbSizeX->get_active() ) )
+        const MapUnit unit = GetMapUnit(mxLbSizeX->get_active());
+        if (unit == MapUnit::MapPixel)
         {
-            case MapUnit::MapInch :     maSize.Height = static_cast< sal_Int32 >( static_cast< double >( maResolution.Height ) * 0.0254 * mxMfSizeY->get_value() / 100.0 + 0.5 ); break;
-            case MapUnit::MapCM :       maSize.Height = static_cast< sal_Int32 >( static_cast< double >( maResolution.Height ) * 0.01 * mxMfSizeY->get_value() / 100.0 + 0.5 ); break;
-            case MapUnit::MapMM :       maSize.Height = static_cast< sal_Int32 >( static_cast< double >( maResolution.Height ) * 0.001 * mxMfSizeY->get_value() / 100.0 + 0.5 ); break;
-            case MapUnit::MapPoint :    maSize.Height = static_cast< sal_Int32 >( static_cast< double >( maResolution.Height ) * 0.0254 * mxMfSizeY->get_value() / 100.0 * 72 + 0.5 ); break;
-            default:
-            case MapUnit::MapPixel :    maSize.Height = mxMfSizeY->get_value(); break;
+            maSize.Height = mxMfSizeY->get_value();
+        }
+        else
+        {
+            double val = mxMfSizeY->get_value()
+                         / static_cast<double>(weld::SpinButton::Power10(mxMfSizeY->get_digits()));
+            // Convert to meters, since resolution is in pixels per meter
+            val = o3tl::convert(val, MapToO3tlLength(unit), o3tl::Length::m);
+            maSize.Height = static_cast<sal_Int32>(maResolution.Height * val + 0.5);
         }
         maSize.Width = static_cast< sal_Int32 >( fRatio * maSize.Height + 0.5 );
     }
@@ -1110,9 +1110,9 @@ IMPL_LINK_NOARG(ExportDialog, UpdateHdlNfResolution, weld::SpinButton&, void)
 {
     auto nResolution = mxNfResolution->get_value();
     if ( mxLbResolution->get_active() == 0 )      // pixels / cm
-        nResolution *= 100;
+        nResolution = o3tl::convert(nResolution, o3tl::Length::m, o3tl::Length::cm); // reverse
     else if ( mxLbResolution->get_active() == 1 ) // pixels / inch
-        nResolution = static_cast< sal_Int32 >( ( ( static_cast< double >( nResolution ) + 0.5 ) / 0.0254 ) );
+        nResolution = o3tl::convert(nResolution, o3tl::Length::m, o3tl::Length::in); // reverse
     maResolution.Width = nResolution;
     maResolution.Height= nResolution;
 
