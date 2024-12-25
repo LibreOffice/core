@@ -2479,6 +2479,13 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
             aShadowColor.DecreaseLuminance(64);
         aStyleSet.SetShadowColor(aShadowColor);
 
+        ::Color aDisabledColor(aBackFieldColor);
+        if (aBackFieldColor.GetLuminance() > aBackColor.GetLuminance())
+            aDisabledColor.IncreaseLuminance(8);
+        else
+            aDisabledColor.DecreaseLuminance(8);
+        aStyleSet.SetDisableColor(aDisabledColor);
+
         aContextState.restore();
 #if !GTK_CHECK_VERSION(4, 0, 0)
         g_object_unref( pCStyle );
