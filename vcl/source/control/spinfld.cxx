@@ -30,7 +30,7 @@
 
 namespace {
 
-void ImplGetSpinbuttonValue(vcl::Window* pWin,
+void lcl_GetSpinbuttonValue(vcl::Window* pWin,
                             const tools::Rectangle& rUpperRect, const tools::Rectangle& rLowerRect,
                             bool bUpperIn, bool bLowerIn, bool bUpperEnabled, bool bLowerEnabled,
                             bool bHorz, SpinbuttonValue& rValue )
@@ -69,7 +69,7 @@ void ImplGetSpinbuttonValue(vcl::Window* pWin,
     rValue.mnLowerPart = bHorz ? ControlPart::ButtonRight : ControlPart::ButtonDown;
 }
 
-bool ImplDrawNativeSpinfield(vcl::RenderContext& rRenderContext, vcl::Window const * pWin, const SpinbuttonValue& rSpinbuttonValue)
+bool lcl_DrawNativeSpinfield(vcl::RenderContext& rRenderContext, vcl::Window const * pWin, const SpinbuttonValue& rSpinbuttonValue)
 {
     bool bNativeOK = false;
 
@@ -137,7 +137,7 @@ bool ImplDrawNativeSpinfield(vcl::RenderContext& rRenderContext, vcl::Window con
     return bNativeOK;
 }
 
-bool ImplDrawNativeSpinbuttons(vcl::RenderContext& rRenderContext, const SpinbuttonValue& rSpinbuttonValue)
+bool lcl_DrawNativeSpinbuttons(vcl::RenderContext& rRenderContext, const SpinbuttonValue& rSpinbuttonValue)
 {
     bool bNativeOK = false;
 
@@ -183,14 +183,14 @@ void ImplDrawSpinButton(vcl::RenderContext& rRenderContext, vcl::Window* pWindow
         }
 
         SpinbuttonValue aValue;
-        ImplGetSpinbuttonValue(pWindow, rUpperRect, rLowerRect,
+        lcl_GetSpinbuttonValue(pWindow, rUpperRect, rLowerRect,
                                bUpperIn, bLowerIn, bUpperEnabled, bLowerEnabled,
                                bHorz, aValue);
 
         if( aControl == ControlType::Spinbox )
-            bNativeOK = ImplDrawNativeSpinfield(rRenderContext, pWindow, aValue);
+            bNativeOK = lcl_DrawNativeSpinfield(rRenderContext, pWindow, aValue);
         else if( aControl == ControlType::SpinButtons )
-            bNativeOK = ImplDrawNativeSpinbuttons(rRenderContext, aValue);
+            bNativeOK = lcl_DrawNativeSpinbuttons(rRenderContext, aValue);
     }
 
     if (bNativeOK)
