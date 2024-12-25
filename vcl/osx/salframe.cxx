@@ -91,7 +91,8 @@ AquaSalFrame::AquaSalFrame( SalFrame* pParent, SalFrameStyleFlags salFrameStyle 
     mrClippingPath( nullptr ),
     mnICOptions( InputContextFlags::NONE ),
     mnBlinkCursorDelay( nMinBlinkCursorDelay ),
-    mbForceFlush( false ),
+    mbForceFlushScrolling( false ),
+    mbForceFlushProgressBar( false ),
     mbInternalFullScreen( false ),
     maInternalFullScreenRestoreRect( NSZeroRect ),
     maInternalFullScreenExpectedRect( NSZeroRect ),
@@ -1107,15 +1108,6 @@ void AquaSalFrame::SetPointerPos( tools::Long nX, tools::Long nY )
     CGDisplayMoveCursorToPoint( mainDisplayID, aPoint );
 }
 
-static bool lcl_ShouldDisplayInsteadOFFlush()
-{
-    bool bRet = false;
-#if HAVE_FEATURE_SKIA
-    bRet = SkiaHelper::isVCLSkiaEnabled() && SkiaHelper::renderMethodToUse() != SkiaHelper::RenderRaster;
-#endif
-    return bRet;
-}
-
 void AquaSalFrame::Flush()
 {
     if( !(mbGraphics && mpGraphics && mpNSView && mbShown) )
@@ -1128,36 +1120,8 @@ void AquaSalFrame::Flush()
     // outside of the application's event loop (e.g. IntroWindow)
     // nothing would trigger paint event handling
     // => fall back to synchronous painting
-    if( mbForceFlush || ImplGetSVData()->maAppData.mnDispatchLevel <= 0 )
-    {
-        mbForceFlush = false;
-
-        // Related: tdf#163945 don't directly flush graphics with Skia/Metal
-        // When dragging a selection box on an empty background in
-        // Impress and only with Skia/Metal, the selection box
-        // would not keep up with the pointer. The selection box
-        // would repaint sporadically or not at all if the pointer
-        // was dragged rapidly and the status bar was visible.
-        // Apparently, flushing a graphics doesn't actually do much
-        // of anything with Skia/Raster and Skia disabled so the
-        // selection box repaints without any noticeable delay.
-        // However, with Skia/Metal every flush of a graphics
-        // creates and queues a new CAMetalLayer drawable. During
-        // rapid dragging, this can lead to creating and queueing
-        // up to 200 drawables per second leaving no spare time for
-        // the Impress selection box painting timer to fire.
-        // So with Skia/Metal, throttle the rate of flushing by
-        // calling display on the view.
-        bool bDisplay = lcl_ShouldDisplayInsteadOFFlush();
-        if (!bDisplay)
-            mpGraphics->Flush();
-
-        // Related: tdf#155266 skip redisplay of the view when forcing flush
-        // It appears that calling -[NSView display] overwhelms some Intel Macs
-        // so only flush the graphics and skip immediate redisplay of the view.
-        if( bDisplay || ImplGetSVData()->maAppData.mnDispatchLevel <= 0 )
-            [mpNSView display];
-    }
+    if( doFlush() )
+        [mpNSView display];
 }
 
 void AquaSalFrame::Flush( const tools::Rectangle& rRect )
@@ -1174,10 +1138,16 @@ void AquaSalFrame::Flush( const tools::Rectangle& rRect )
     // outside of the application's event loop (e.g. IntroWindow)
     // nothing would trigger paint event handling
     // => fall back to synchronous painting
-    if( mbForceFlush || ImplGetSVData()->maAppData.mnDispatchLevel <= 0 )
-    {
-        mbForceFlush = false;
+    if( doFlush() )
+        [mpNSView displayRect: aNSRect];
+}
 
+bool AquaSalFrame::doFlush()
+{
+    bool bRet = false;
+
+    if( mbForceFlushScrolling || mbForceFlushProgressBar || ImplGetSVData()->maAppData.mnDispatchLevel <= 0 )
+    {
         // Related: tdf#163945 don't directly flush graphics with Skia/Metal
         // When dragging a selection box on an empty background in
         // Impress and only with Skia/Metal, the selection box
@@ -1194,16 +1164,24 @@ void AquaSalFrame::Flush( const tools::Rectangle& rRect )
         // the Impress selection box painting timer to fire.
         // So with Skia/Metal, throttle the rate of flushing by
         // calling display on the view.
-        bool bDisplay = lcl_ShouldDisplayInsteadOFFlush();
+        bool bDisplay = false;
+#if HAVE_FEATURE_SKIA
+        // tdf#164428 Skia/Metal needs flush after drawing progress bar
+        bDisplay = !mbForceFlushProgressBar && SkiaHelper::isVCLSkiaEnabled() && SkiaHelper::renderMethodToUse() != SkiaHelper::RenderRaster;
+#endif
         if (!bDisplay)
             mpGraphics->Flush();
 
         // Related: tdf#155266 skip redisplay of the view when forcing flush
         // It appears that calling -[NSView display] overwhelms some Intel Macs
         // so only flush the graphics and skip immediate redisplay of the view.
-        if( bDisplay || ImplGetSVData()->maAppData.mnDispatchLevel <= 0 )
-            [mpNSView displayRect: aNSRect];
+        bRet = bDisplay || ImplGetSVData()->maAppData.mnDispatchLevel <= 0;
+
+        mbForceFlushScrolling = false;
+        mbForceFlushProgressBar = false;
     }
+
+    return bRet;
 }
 
 void AquaSalFrame::SetInputContext( SalInputContext* pContext )

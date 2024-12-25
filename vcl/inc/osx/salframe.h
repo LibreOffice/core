@@ -96,7 +96,9 @@ public:
     int                             mnBlinkCursorDelay;
 
     // tdf#155266 force flush after scrolling
-    bool                            mbForceFlush;
+    bool                            mbForceFlushScrolling;
+    // tdf#164428 force flush after drawing a progress bar
+    bool                            mbForceFlushProgressBar;
 
     // Is window in LibreOffice full screen mode
     bool                            mbInternalFullScreen;
@@ -224,6 +226,8 @@ private: // methods
     void doShowFullScreen( bool bFullScreen, sal_Int32 nDisplay );
 
     void doResetClipRegion();
+
+    bool doFlush();
 
 private: // data
     static AquaSalFrame*       s_pCaptureFrame;
