@@ -1394,6 +1394,7 @@ GtkStyleContext* GtkSalGraphics::createStyleContext(GtkControlPart ePart)
             GtkWidgetPath *path = gtk_widget_path_copy(gtk_style_context_get_path(mpWindowStyle));
             gtk_widget_path_append_type(path, GTK_TYPE_MENU_BAR);
             gtk_widget_path_iter_set_object_name(path, -1, "menubar");
+            gtk_widget_path_iter_add_class(path, -1, "background");
             return makeContext(path, mpWindowStyle);
         }
         case GtkControlPart::MenuBarItem:
@@ -2435,6 +2436,7 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
         ::Color aHighlightTextColor = getColor( text_color );
         aStyleSet.SetAccentColor( aHighlightColor ); // https://debugpointnews.com/gnome-native-accent-colour-announcement/
         aStyleSet.SetHighlightColor( aHighlightColor );
+        aStyleSet.SetMenuHighlightColor( aHighlightColor );
         aStyleSet.SetHighlightTextColor( aHighlightTextColor );
         aStyleSet.SetListBoxWindowHighlightColor( aHighlightColor );
         aStyleSet.SetListBoxWindowHighlightTextColor( aHighlightTextColor );
@@ -2511,6 +2513,9 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
     style_context_set_state(mpMenuBarStyle, GTK_STATE_FLAG_NORMAL);
     aBackColor = style_context_get_background_color(mpMenuBarStyle);
     aStyleSet.SetMenuBarColor( aBackColor );
+
+    style_context_set_state(mpMenuBarStyle, GTK_STATE_FLAG_SELECTED);
+    aBackColor = style_context_get_background_color(mpMenuBarStyle);
     aStyleSet.SetMenuBarRolloverColor( aBackColor );
 
     style_context_set_state(mpMenuBarItemStyle, GTK_STATE_FLAG_NORMAL);
@@ -2531,9 +2536,6 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
     aStyleSet.SetMenuTextColor(aTextColor);
 
     style_context_set_state(mpMenuItemLabelStyle, GTK_STATE_FLAG_PRELIGHT);
-    ::Color aHighlightColor = style_context_get_background_color(mpMenuItemLabelStyle);
-    aStyleSet.SetMenuHighlightColor( aHighlightColor );
-
     style_context_get_color(mpMenuItemLabelStyle, &color);
     ::Color aHighlightTextColor = getColor( color );
     aStyleSet.SetMenuHighlightTextColor( aHighlightTextColor );
