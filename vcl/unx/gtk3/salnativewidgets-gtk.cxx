@@ -2338,6 +2338,7 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
     // background colors
     ::Color aBackColor = style_context_get_background_color(pStyle);
     aStyleSet.BatchSetBackgrounds( aBackColor );
+    aStyleSet.SetWindowColor(aBackColor);
 
     // UI font
 #if GTK_CHECK_VERSION(4, 0, 0)
@@ -2451,8 +2452,6 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
         style_context_set_state(pCStyle, GTK_STATE_FLAG_NORMAL);
         ::Color aBackFieldColor = style_context_get_background_color(pCStyle);
         aStyleSet.SetFieldColor( aBackFieldColor );
-        // This baby is the default page/paper color
-        aStyleSet.SetWindowColor( aBackFieldColor );
         // listbox background color
         aStyleSet.SetListBoxWindowBackgroundColor( aBackFieldColor );
 
