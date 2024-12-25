@@ -2705,6 +2705,7 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
     // High contrast
     aStyleSet.SetHighContrastMode(g_strcmp0(pThemeName, "HighContrast") == 0);
     g_free(pThemeName);
+    aStyleSet.SetSystemColorsLoaded(true);
 
     // finally update the collected settings
     rSettings.SetStyleSettings( aStyleSet );

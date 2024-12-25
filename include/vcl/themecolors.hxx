@@ -18,6 +18,7 @@ enum class ThemeState
 {
     DISABLED = 0,
     ENABLED = 1,
+    RESET = 2,
 };
 
 class VCL_DLLPUBLIC ThemeColors
@@ -42,13 +43,13 @@ public:
 
     static bool IsThemeDisabled() { return GetThemeState() == ThemeState::DISABLED; };
     static bool IsThemeEnabled() { return GetThemeState() == ThemeState::ENABLED; };
+    static bool IsThemeReset() { return GetThemeState() == ThemeState::RESET; }
+    static void ResetTheme() { SetThemeState(ThemeState::RESET); }
 
     // !IsThemeCached means that the ThemeColors object doesn't have the colors from the registry yet.
-    static bool VclPluginCanUseThemeColors()
-    {
-        return IsThemeCached()
-               && !ThemeColors::IsAutomaticTheme(ThemeColors::GetThemeColors().GetThemeName());
-    };
+    // IsThemeReset means that the user pressed the Reset All  button and the UI colors in the registry
+    //      are not valid anymore => read from the system again
+    static bool VclPluginCanUseThemeColors() { return IsThemeCached() && !IsThemeReset(); };
 
     void SetWindowColor(const Color& rColor) { m_aWindowColor = rColor; }
     void SetWindowTextColor(const Color& rColor) { m_aWindowTextColor = rColor; }

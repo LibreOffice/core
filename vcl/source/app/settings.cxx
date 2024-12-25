@@ -233,6 +233,7 @@ struct ImplStyleData
     bool mbSkipDisabledInMenus : 1;
     bool mbHideDisabledMenuItems : 1;
     bool mbPreferredContextMenuShortcuts : 1;
+    bool mbSystemColorsLoaded : 1;
     //mbPrimaryButtonWarpsSlider == true for "jump to here" behavior for primary button, otherwise
     //primary means scroll by single page. Secondary button takes the alternative behaviour
     bool mbPrimaryButtonWarpsSlider : 1;
@@ -589,6 +590,7 @@ void ImplStyleData::SetStandardStyles()
     mbSkipDisabledInMenus           = false;
     mbHideDisabledMenuItems         = false;
     mbPreferredContextMenuShortcuts = true;
+    mbSystemColorsLoaded            = false;
     mbPrimaryButtonWarpsSlider      = false;
 }
 
@@ -601,6 +603,18 @@ void
 StyleSettings::SetFaceColor( const Color& rColor )
 {
     mxData->maColors.maFaceColor = rColor;
+}
+
+void
+StyleSettings::SetSystemColorsLoaded( bool bLoaded )
+{
+    mxData->mbSystemColorsLoaded = bLoaded;
+}
+
+bool
+StyleSettings::GetSystemColorsLoaded() const
+{
+    return mxData->mbSystemColorsLoaded;
 }
 
 const Color&
@@ -2233,6 +2247,7 @@ bool ImplStyleData::operator==(const ImplStyleData& rSet) const
            (mbSkipDisabledInMenus             == rSet.mbSkipDisabledInMenus)              &&
            (mbHideDisabledMenuItems           == rSet.mbHideDisabledMenuItems)            &&
            (mbPreferredContextMenuShortcuts   == rSet.mbPreferredContextMenuShortcuts)    &&
+           (mbSystemColorsLoaded              == rSet.mbSystemColorsLoaded)               &&
            (meContextMenuShortcuts            == rSet.meContextMenuShortcuts)             &&
            (mbPrimaryButtonWarpsSlider        == rSet.mbPrimaryButtonWarpsSlider)         &&
            (mnEdgeBlending                    == rSet.mnEdgeBlending)                     &&
