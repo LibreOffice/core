@@ -24,7 +24,10 @@
 
 #include <spin.hxx>
 
-void SpinButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
+SpinButton::SpinButton( vcl::Window* pParent, WinBits nStyle )
+    : Control(WindowType::SPINBUTTON)
+    , maRepeatTimer("SpinButton maRepeatTimer")
+    , mbUpperIsFocused(false)
 {
     mbUpperIn     = false;
     mbLowerIn     = false;
@@ -47,14 +50,6 @@ void SpinButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
         mbHorz = false;
 
     Control::ImplInit( pParent, nStyle, nullptr );
-}
-
-SpinButton::SpinButton( vcl::Window* pParent, WinBits nStyle )
-    : Control(WindowType::SPINBUTTON)
-    , maRepeatTimer("SpinButton maRepeatTimer")
-    , mbUpperIsFocused(false)
-{
-    ImplInit(pParent, nStyle);
 }
 
 IMPL_LINK(SpinButton, ImplTimeout, Timer*, pTimer, void)
