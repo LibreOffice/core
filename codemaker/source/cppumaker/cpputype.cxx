@@ -2819,16 +2819,7 @@ void ExceptionType::dumpHdlFile(
     if (name_ == "com.sun.star.uno.Exception")
     {
         includes.addCustom(u"#if defined(LIBO_INTERNAL_ONLY) && !defined(NDEBUG)"_ustr);
-        includes.addCustom(u"#if __has_include(<version>)"_ustr);
-        includes.addCustom(u"#include <version>"_ustr);
-        includes.addCustom(u"#endif"_ustr);
-        includes.addCustom(u"#if defined(__cpp_lib_source_location) && __cpp_lib_source_location >= 201907"_ustr);
-        includes.addCustom(u"#include <source_location>"_ustr);
-        includes.addCustom(u"#define LIBO_USE_SOURCE_LOCATION std"_ustr);
-        includes.addCustom(u"#elif __has_include(<experimental/source_location>)"_ustr);
-        includes.addCustom(u"#include <experimental/source_location>"_ustr);
-        includes.addCustom(u"#define LIBO_USE_SOURCE_LOCATION std::experimental"_ustr);
-        includes.addCustom(u"#endif"_ustr);
+        includes.addCustom(u"#include <o3tl/source_location.hxx>"_ustr);
         includes.addCustom(u"#endif"_ustr);
         includes.addCustom(u"#if defined LIBO_USE_SOURCE_LOCATION"_ustr);
         includes.addCustom(u"#include <o3tl/runtimetooustring.hxx>"_ustr);
@@ -2870,9 +2861,9 @@ void ExceptionType::dumpHppFile(
     // default constructor
     out << "\ninline " << id_ << "::" << id_ << "(\n";
     out << "#if defined LIBO_USE_SOURCE_LOCATION\n";
-    out << "    LIBO_USE_SOURCE_LOCATION::source_location location\n";
+    out << "    o3tl::source_location location\n";
     out << "#endif\n";
-    out << "    )\n";
+    out << ")\n";
     inc();
     OUString base(entity_->getDirectBase());
     bool bFirst = true;
@@ -2925,7 +2916,7 @@ void ExceptionType::dumpHppFile(
             bFirst = false;
         }
         out << "\n#if defined LIBO_USE_SOURCE_LOCATION\n";
-        out << "    " << (bFirst ? "" : ", ") << "LIBO_USE_SOURCE_LOCATION::source_location location\n";
+        out << "    " << (bFirst ? "" : ", ") << "o3tl::source_location location\n";
         out << "#endif\n";
         out << ")\n";
         inc();
@@ -3186,9 +3177,9 @@ void ExceptionType::dumpDeclaration(FileStream & out)
     // default constructor
     out << indent() << "inline CPPU_GCC_DLLPRIVATE " << id_ << "(\n";
     out << "#if defined LIBO_USE_SOURCE_LOCATION\n";
-    out << "    LIBO_USE_SOURCE_LOCATION::source_location location = LIBO_USE_SOURCE_LOCATION::source_location::current()\n";
-    out << "#endif\n\n";
-    out << "    );\n";
+    out << "        o3tl::source_location location = o3tl::source_location::current()\n";
+    out << "#endif\n";
+    out << "    );\n\n";
 
     // constructor that initializes data members
     if (!entity_->getDirectMembers().empty() || getInheritedMemberCount() > 0) {
@@ -3204,7 +3195,7 @@ void ExceptionType::dumpDeclaration(FileStream & out)
             bFirst = false;
         }
         out << "\n#if defined LIBO_USE_SOURCE_LOCATION\n";
-        out << ", LIBO_USE_SOURCE_LOCATION::source_location location = LIBO_USE_SOURCE_LOCATION::source_location::current()\n";
+        out << "        , o3tl::source_location location = o3tl::source_location::current()\n";
         out << "#endif\n";
         out << "    );\n\n";
     }
