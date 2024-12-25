@@ -1738,6 +1738,18 @@ void ToolBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
             if (!IsItemEnabled(nId))
                 rJsonWriter.put("enabled", false);
 
+            OUString sAccName = GetAccessibleName();
+            OUString sAccDesc = GetAccessibleDescription();
+
+            if (!sAccName.isEmpty() || !sAccDesc.isEmpty())
+            {
+                auto aAria = rJsonWriter.startNode("aria");
+                if (!sAccName.isEmpty())
+                    rJsonWriter.put("label", sAccName);
+                if (!sAccDesc.isEmpty())
+                    rJsonWriter.put("description", sAccDesc);
+            }
+
             Image aImage = GetItemImage(nId);
             if (!sCommand.startsWith(".uno:") && !!aImage)
             {

@@ -77,6 +77,11 @@
                 <property name="homogeneous">True</property>
               </packing>
             </child>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="cellbordertype-atkobject">
+                <property name="AtkObject::accessible-name" translatable="yes" context="sidebarcellappearance|cellbordertype-atkobject">Border Style</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left-attach">0</property>
