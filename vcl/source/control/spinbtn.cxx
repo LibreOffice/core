@@ -414,14 +414,15 @@ void SpinButton::ImplCalcFocusRect( bool _bUpper )
     mbUpperIsFocused = _bUpper;
 }
 
-tools::Rectangle* SpinButton::ImplFindPartRect( const Point& rPt )
+tools::Rectangle* SpinButton::ImplFindPartRect(const Point& rPt)
 {
-    if( maUpperRect.Contains( rPt ) )
+    if (maUpperRect.Contains(rPt))
         return &maUpperRect;
-    else if( maLowerRect.Contains( rPt ) )
+
+    if (maLowerRect.Contains(rPt))
         return &maLowerRect;
-    else
-        return nullptr;
+
+    return nullptr;
 }
 
 bool SpinButton::PreNotify( NotifyEvent& rNEvt )
