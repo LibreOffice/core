@@ -96,7 +96,7 @@
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="summarybelow-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="subtotaloptionspage|extended_tip|summarybelow">Decide if the subtotals below or above the data. Reposition subtotals when you change the summary below data options.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="subtotaloptionspage|extended_tip|summarybelow">Specify if the subtotals are positioned below or above the data.</property>
                   </object>
                 </child>
               </object>
