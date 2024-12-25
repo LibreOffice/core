@@ -195,7 +195,7 @@ OString CreateStyleString()
         "}"
 
         "treeview.view.expander:disabled {"
-        "  color: #" + aThemeColors.GetInactiveColor().AsRGBHexString() + ";"
+        "  color: #" + aThemeColors.GetDisabledColor().AsRGBHexString() + ";"
         "}"
 
         // this part is still left
@@ -209,7 +209,7 @@ OString CreateStyleString()
 
         "treeview.view header button,"
         "treeview.view header button:disabled {"
-        "  background-color: #" + aThemeColors.GetInactiveColor().AsRGBHexString() + ";"
+        "  background-color: #" + aThemeColors.GetDisabledColor().AsRGBHexString() + ";"
         "}"
 
         "treeview.view header button:last-child {"
@@ -342,7 +342,7 @@ OString CreateStyleString()
         "}"
 
         "scrollbar slider:disabled {"
-        "  background-color: #" + aThemeColors.GetInactiveColor().AsRGBHexString() + ";"
+        "  background-color: #" + aThemeColors.GetDisabledColor().AsRGBHexString() + ";"
         "}"
 
         "scrollbar.overlay-indicator:not(.dragging):not(.hovering) {"
@@ -355,7 +355,7 @@ OString CreateStyleString()
 
         "check:disabled,"
         "radio:disabled {"
-        "  background-color: #" + aThemeColors.GetInactiveColor().AsRGBHexString() + ";"
+        "  background-color: #" + aThemeColors.GetDisabledColor().AsRGBHexString() + ";"
         "}"
 
         "check:checked,"
@@ -387,7 +387,7 @@ OString CreateStyleString()
         "radio:checked:disabled,"
         "radio:indeterminate:disabled {"
         "  color: rgba(17, 17, 27, 0.38);"
-        "  background-color: #" + aThemeColors.GetInactiveColor().AsRGBHexString() + ";"
+        "  background-color: #" + aThemeColors.GetDisabledColor().AsRGBHexString() + ";"
         "}"
 
         /***************
@@ -453,7 +453,7 @@ OString CreateStyleString()
         "}"
 
         "button:disabled {"
-        "  background-color: #" + aThemeColors.GetInactiveColor().AsRGBHexString() + ";"
+        "  background-color: #" + aThemeColors.GetDisabledColor().AsRGBHexString() + ";"
         "  color: #" + aThemeColors.GetInactiveTextColor().AsRGBHexString() + ";"
         "  border: 1px solid #" + aThemeColors.GetInactiveBorderColor().AsRGBHexString() + ";"
         "}"
@@ -516,7 +516,7 @@ OString CreateStyleString()
 
         "button.combo:only-child:disabled {"
         "  box-shadow: 0 0 0 2px transparent;"
-        "  background-color: #" + aThemeColors.GetInactiveColor().AsRGBHexString() + ";"
+        "  background-color: #" + aThemeColors.GetDisabledColor().AsRGBHexString() + ";"
         "  color: #" + aThemeColors.GetInactiveTextColor().AsRGBHexString() + ";"
         "}"
 
