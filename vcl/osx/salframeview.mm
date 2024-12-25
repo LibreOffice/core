@@ -1094,7 +1094,7 @@ static void updateMenuBarVisibility( const AquaSalFrame *pFrame )
 
         // tdf#155266 force flush after scrolling
         if (nButton == MOUSE_LEFT && nEvent == SalEvent::MouseMove)
-            mpFrame->mbForceFlush = true;
+            mpFrame->mbForceFlushScrolling = true;
     }
 }
 
@@ -1337,7 +1337,7 @@ static void updateMenuBarVisibility( const AquaSalFrame *pFrame )
         }
 
         // tdf#155266 force flush after scrolling
-        mpFrame->mbForceFlush = true;
+        mpFrame->mbForceFlushScrolling = true;
     }
 }
 
@@ -1417,7 +1417,7 @@ static void updateMenuBarVisibility( const AquaSalFrame *pFrame )
         }
 
         // tdf#155266 force flush after scrolling
-        mpFrame->mbForceFlush = true;
+        mpFrame->mbForceFlushScrolling = true;
     }
 }
 
