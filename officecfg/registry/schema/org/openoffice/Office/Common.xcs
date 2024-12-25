@@ -5185,8 +5185,13 @@
               <desc>Enabled</desc>
             </info>
           </enumeration>
+          <enumeration oor:value="2">
+            <info>
+              <desc>Reset</desc>
+            </info>
+          </enumeration>
         </constraints>
-        <value>0</value>
+        <value>1</value>
       </prop>
       <prop oor:name="ApplicationAppearance" oor:type="xs:short" oor:nillable="false">
         <info>

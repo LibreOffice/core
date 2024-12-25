@@ -423,7 +423,9 @@ IMPL_LINK( ColorConfig_Impl, DataChangedEventListener, VclSimpleEvent&, rEvent, 
     }
 }
 
-// Loads the ThemeColors (ExpertConfig Colors) into static ThemeColors::maThemeColors
+// caches registry colors into the static ThemeColors::m_aThemeColors object. if the color
+// value is set to COL_AUTO, the ColorConfig::GetColorValue function calls ColorConfig::GetDefaultColor()
+// which returns some hard coded colors for the document, and StyleSettings colors for the UI (lcl_GetDefaultUIColor).
 void ColorConfig::LoadThemeColorsFromRegistry()
 {
     ThemeColors& rThemeColors = ThemeColors::GetThemeColors();
@@ -472,13 +474,25 @@ void ColorConfig::LoadThemeColorsFromRegistry()
 
 void ColorConfig::SetupTheme()
 {
-    if (ThemeColors::IsThemeDisabled()
-        || ThemeColors::IsAutomaticTheme(GetCurrentSchemeName()))
+    if (ThemeColors::IsThemeDisabled())
     {
         ThemeColors::SetThemeCached(false);
         return;
     }
 
+    // When the theme is set to RESET, the IsThemeReset conditional doesn't let the theme to be loaded
+    // as explained above, and returns if the StyleSettings doesn't have system colors loaded. IsThemeReset
+    // is also used in VclPluginCanUseThemeColors where it prevents the VCL_PLUGINs from using theme colors.
+    if (ThemeColors::IsThemeReset())
+    {
+        if (!Application::GetSettings().GetStyleSettings().GetSystemColorsLoaded())
+            return;
+        ThemeColors::SetThemeState(ThemeState::ENABLED);
+    }
+
+    // When the application is started for the first time, themes is set to ENABLED.
+    // that would skip the first two checks for IsThemeDisabled and IsThemeReset in the
+    // ColorConfig::SetupTheme function and call LoadThemeColorsFromRegistry();
     if (!ThemeColors::IsThemeCached())
     {
         // registry to ColorConfig::m_pImpl

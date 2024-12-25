@@ -1733,6 +1733,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
     if (ThemeColors::VclPluginCanUseThemeColors())
         lcl_LoadColorsFromTheme(aStyleSettings);
+    aStyleSettings.SetSystemColorsLoaded(true);
 
     rSettings.SetStyleSettings( aStyleSettings );
 

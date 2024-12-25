@@ -54,6 +54,7 @@ private:
     std::unique_ptr<weld::ComboBox> m_xColorEntryBtn;
     std::unique_ptr<ColorListBox> m_xColorChangeBtn;
     std::unique_ptr<weld::CheckButton> m_xShowInDocumentChkBtn;
+    std::unique_ptr<weld::Button> m_xResetAllBtn;
 
     std::unique_ptr<weld::RadioButton> m_xColorRadioBtn;
     std::unique_ptr<weld::RadioButton> m_xImageRadioBtn;
@@ -74,6 +75,7 @@ private:
     DECL_LINK(ColorImageToggleHdl, weld::Toggleable&, void);
     DECL_LINK(StretchedTiledToggleHdl, weld::Toggleable&, void);
     DECL_LINK(BitmapChangeHdl, weld::ComboBox&, void);
+    DECL_LINK(ResetAllBtnHdl, weld::Button&, void);
 
     void InitThemes();
     void InitAppearance();
@@ -84,7 +86,7 @@ private:
     void UpdateRemoveBtnState();
     void EnableImageControls(bool bEnabled);
     void UpdateColorDropdown();
-    void UpdateOldAppearance();
+    void UpdateDocumentAppearance();
     bool IsDarkModeEnabled();
     void FillItemsList();
     ColorConfigEntry GetActiveEntry();

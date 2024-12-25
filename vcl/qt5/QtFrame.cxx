@@ -1230,6 +1230,7 @@ void QtFrame::UpdateSettings(AllSettings& rSettings)
     // Cursor blink interval
     int nFlashTime = QApplication::cursorFlashTime();
     style.SetCursorBlinkTime(nFlashTime != 0 ? nFlashTime / 2 : STYLE_CURSOR_NOBLINKTIME);
+    style.SetSystemColorsLoaded(true);
 
     rSettings.SetStyleSettings(style);
 }

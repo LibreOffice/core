@@ -104,6 +104,7 @@ SvxAppearanceTabPage::SvxAppearanceTabPage(weld::Container* pPage,
     , m_xColorChangeBtn((new ColorListBox(m_xBuilder->weld_menu_button(u"colorsdropdownbtn"_ustr),
                                           [this] { return GetFrameWeld(); })))
     , m_xShowInDocumentChkBtn(m_xBuilder->weld_check_button(u"showindocumentchkbtn"_ustr))
+    , m_xResetAllBtn(m_xBuilder->weld_button(u"resetallbtn"_ustr))
     , m_xColorRadioBtn(m_xBuilder->weld_radio_button(u"colorradiobtn"_ustr))
     , m_xImageRadioBtn(m_xBuilder->weld_radio_button(u"imageradiobtn"_ustr))
     , m_xStretchedRadioBtn(m_xBuilder->weld_radio_button(u"stretchedradiobtn"_ustr))
@@ -113,18 +114,6 @@ SvxAppearanceTabPage::SvxAppearanceTabPage(weld::Container* pPage,
     InitThemes();
     InitAppearance();
     InitCustomization();
-    UpdateControlsState();
-}
-
-void SvxAppearanceTabPage::UpdateControlsState()
-{
-    // in case of AUTOMATIC_COLOR_SCHEME, disable all the controls
-    bool bEnableControls = m_xSchemeList->get_active_id() != AUTOMATIC_COLOR_SCHEME;
-    m_xColorEntryBtn->set_sensitive(bEnableControls);
-    m_xColorChangeBtn->set_sensitive(bEnableControls);
-    m_xShowInDocumentChkBtn->set_sensitive(bEnableControls);
-    m_xColorRadioBtn->set_sensitive(bEnableControls);
-    EnableImageControls(bEnableControls && GetActiveEntry() == APPBACKGROUND);
 }
 
 void SvxAppearanceTabPage::LoadSchemeList()
@@ -176,31 +165,18 @@ OUString SvxAppearanceTabPage::GetAllStrings()
 
 bool SvxAppearanceTabPage::FillItemSet(SfxItemSet* /* rSet */)
 {
-    // commit appearance value
+    // commit appearance value if changed
     if (eCurrentAppearanceMode != static_cast<Appearance>(MiscSettings::GetAppColorMode()))
     {
         MiscSettings::SetAppColorMode(static_cast<int>(eCurrentAppearanceMode));
-        m_bRestartRequired = true;
-        // for automatic scheme, restart is not required as customizations section is disabled
-        if (pColorConfig->GetCurrentSchemeName() == AUTOMATIC_COLOR_SCHEME)
-        {
-            UpdateOldAppearance();
-            m_bRestartRequired = false;
-        }
+        // if themes disabled then change the document colors as per the new appearance mode.
+        if (ThemeColors::IsThemeDisabled())
+            UpdateDocumentAppearance();
     }
 
     // commit ColorConfig
     if (pColorConfig->IsModified())
         pColorConfig->Commit();
-
-    // commit LibreOfficeTheme, enable it if the current scheme is not Automatic
-    if (m_xSchemeList->get_value_changed_from_saved())
-    {
-        ThemeState eLibreOfficeThemeState = m_xSchemeList->get_active_id() != AUTOMATIC_COLOR_SCHEME
-                                                ? ThemeState::ENABLED
-                                                : ThemeState::DISABLED;
-        ThemeColors::SetThemeState(eLibreOfficeThemeState);
-    }
 
     return true;
 }
@@ -248,6 +224,12 @@ IMPL_LINK_NOARG(SvxAppearanceTabPage, AppearanceChangeHdl, weld::Toggleable&, vo
     if (m_xAppearanceDark->get_state() == TRISTATE_TRUE)
         eCurrentAppearanceMode = Appearance::DARK;
     // set the extension theme on light/dark
+
+    // restart iff appearance was toggled and theme was enabled
+    m_bRestartRequired = false;
+    if (eCurrentAppearanceMode != static_cast<Appearance>(MiscSettings::GetAppColorMode())
+        && !ThemeColors::IsThemeDisabled())
+        m_bRestartRequired = true;
 
     UpdateColorDropdown();
 }
@@ -339,10 +321,9 @@ IMPL_LINK_NOARG(SvxAppearanceTabPage, SchemeChangeHdl, weld::ComboBox&, void)
     else
         pColorConfig->LoadScheme(m_xSchemeList->get_active_text());
 
-    if (m_xSchemeList->get_value_changed_from_saved())
+    if (m_xSchemeList->get_value_changed_from_saved() && !ThemeColors::IsThemeDisabled())
         m_bRestartRequired = true;
 
-    UpdateControlsState();
     UpdateRemoveBtnState();
 }
 
@@ -455,6 +436,28 @@ IMPL_LINK_NOARG(SvxAppearanceTabPage, BitmapChangeHdl, weld::ComboBox&, void)
     m_bRestartRequired = true;
 }
 
+IMPL_LINK_NOARG(SvxAppearanceTabPage, ResetAllBtnHdl, weld::Button&, void)
+{
+    // load default document colors
+    ColorConfigValue aValue;
+    for (size_t i = 0; i < ColorConfigEntryCount; ++i)
+    {
+        aValue.nDarkColor = COL_AUTO;
+        aValue.nLightColor = COL_AUTO;
+        pColorConfig->SetColorValue(static_cast<ColorConfigEntry>(i), aValue);
+    }
+    pColorConfig->Commit();
+
+    // RESET state for themes just prevents the theme colors from being used before
+    // they are realoaded from the StyleSettings, please read the comment above
+    // ColorConfig::SetupTheme()'s definition
+    if (!ThemeColors::IsThemeDisabled())
+    {
+        ThemeColors::ResetTheme();
+        m_bRestartRequired = true;
+    }
+}
+
 void SvxAppearanceTabPage::InitThemes()
 {
     // init schemes combobox
@@ -498,6 +501,7 @@ void SvxAppearanceTabPage::InitCustomization()
     m_xColorChangeBtn->SetSelectHdl(LINK(this, SvxAppearanceTabPage, ColorValueChgHdl));
     m_xShowInDocumentChkBtn->connect_toggled(LINK(this, SvxAppearanceTabPage, ShowInDocumentHdl));
     m_xBitmapDropDownBtn->connect_changed(LINK(this, SvxAppearanceTabPage, BitmapChangeHdl));
+    m_xResetAllBtn->connect_clicked(LINK(this, SvxAppearanceTabPage, ResetAllBtnHdl));
 
     m_xColorRadioBtn->connect_toggled(LINK(this, SvxAppearanceTabPage, ColorImageToggleHdl));
     m_xStretchedRadioBtn->connect_toggled(
@@ -558,11 +562,8 @@ void SvxAppearanceTabPage::UpdateColorDropdown()
 
 // if the user changes appearance options for automatic theme, then follow the old behaviour
 // and change the document colors to light/dark based on the choice.
-void SvxAppearanceTabPage::UpdateOldAppearance()
+void SvxAppearanceTabPage::UpdateDocumentAppearance()
 {
-    if (pColorConfig->GetCurrentSchemeName() != AUTOMATIC_COLOR_SCHEME)
-        return;
-
     ColorConfigValue aValue;
     bool bIsDarkModeEnabled = IsDarkModeEnabled();
     for (size_t i = 0; i < WINDOWCOLOR; ++i)
@@ -716,9 +717,11 @@ void SvxAppearanceTabPage::FillItemsList()
                                  aRegistryEntries.at(static_cast<ColorConfigEntry>(i)));
     m_xColorEntryBtn->append_separator("SeparatorID");
 
-    for (size_t i = WINDOWCOLOR; i <= INACTIVEBORDERCOLOR; ++i)
-        m_xColorEntryBtn->append(OUString(cNames[i].cName),
-                                 aRegistryEntries.at(static_cast<ColorConfigEntry>(i)));
+    // don't show UI customization options if theme is disabled
+    if (!ThemeColors::IsThemeDisabled())
+        for (size_t i = WINDOWCOLOR; i <= INACTIVEBORDERCOLOR; ++i)
+            m_xColorEntryBtn->append(OUString(cNames[i].cName),
+                                     aRegistryEntries.at(static_cast<ColorConfigEntry>(i)));
 }
 
 ColorConfigEntry SvxAppearanceTabPage::GetActiveEntry()

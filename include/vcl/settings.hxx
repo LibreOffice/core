@@ -228,6 +228,9 @@ public:
 
     SAL_DLLPRIVATE void             Set3DColors( const Color& rColor );
 
+    void                            SetSystemColorsLoaded( bool bLoaded );
+    bool                            GetSystemColorsLoaded() const;
+
     void                            SetFaceColor( const Color& rColor );
     const Color&                    GetFaceColor() const;
 
@@ -252,7 +255,7 @@ public:
     const Color&                    GetDarkShadowColor() const;
 
     void                            SetDefaultButtonTextColor( const Color& rColor );
-    SAL_DLLPRIVATE const Color&     GetDefaultButtonTextColor() const;
+    const Color&                    GetDefaultButtonTextColor() const;
 
     void                            SetButtonTextColor( const Color& rColor );
     const Color&                    GetButtonTextColor() const;
@@ -384,7 +387,7 @@ public:
     const Color&                    GetMenuBarColor() const;
 
     void                            SetMenuBarRolloverColor( const Color& rColor );
-    SAL_DLLPRIVATE const Color&     GetMenuBarRolloverColor() const;
+    const Color&                    GetMenuBarRolloverColor() const;
 
     void                            SetMenuBorderColor( const Color& rColor );
     const Color&                    GetMenuBorderColor() const;
@@ -396,7 +399,7 @@ public:
     const Color&                    GetMenuBarTextColor() const;
 
     void                            SetMenuBarRolloverTextColor( const Color& rColor );
-    SAL_DLLPRIVATE const Color&     GetMenuBarRolloverTextColor() const;
+    const Color&                    GetMenuBarRolloverTextColor() const;
 
     void                            SetMenuBarHighlightTextColor( const Color& rColor );
     const Color&                    GetMenuBarHighlightTextColor() const;

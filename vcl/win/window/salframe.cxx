@@ -3002,6 +3002,7 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetMenuColor(aStyleSettings.GetWindowColor());
     if (ThemeColors::VclPluginCanUseThemeColors())
         lcl_LoadColorsFromTheme(aStyleSettings);
+    aStyleSettings.SetSystemColorsLoaded(true);
 
     rSettings.SetMouseSettings( aMouseSettings );
     rSettings.SetStyleSettings( aStyleSettings );
