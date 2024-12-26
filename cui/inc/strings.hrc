@@ -448,9 +448,6 @@
 #define BMP_TIGER                                   NC_("BMP_TIGER", "Tiger")
 #define BMP_ZEBRA                                   NC_("BMP_ZEBRA", "Zebra")
 
-#define LIGHT_COLOR_LBL                             NC_("LIGHT_COLOR_LBL", "Light")
-#define DARK_COLOR_LBL                              NC_("DARK_COLOR_LBL", "Dark")
-
 // Translated Registry Entries
 #define REG_DOCCOLOR                        NC_("REG_DOCCOLOR", "Document background")
 #define REG_DOCBOUNDARIES                   NC_("REG_DOCBOUNDARIES", "Document boundaries")
