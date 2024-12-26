@@ -53,7 +53,6 @@ private:
     std::unique_ptr<weld::RadioButton> m_xAppearanceDark;
     std::unique_ptr<weld::ComboBox> m_xColorEntryBtn;
     std::unique_ptr<ColorListBox> m_xColorChangeBtn;
-    std::unique_ptr<weld::Label> m_xColorLbl;
     std::unique_ptr<weld::CheckButton> m_xShowInDocumentChkBtn;
 
     std::unique_ptr<weld::RadioButton> m_xColorRadioBtn;

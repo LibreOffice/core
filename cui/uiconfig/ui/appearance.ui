@@ -257,7 +257,7 @@
                     <property name="orientation">vertical</property>
                     <property name="spacing">3</property>
                     <child>
-                      <!-- n-columns=2 n-rows=7 -->
+                      <!-- n-columns=2 n-rows=4 -->
                       <object class="GtkGrid">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
@@ -311,21 +311,6 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="colorlbl">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="halign">start</property>
-                            <property name="margin-start">18</property>
-                            <property name="label" translatable="no" context="appearancetabpage|colorlbl">colorlbl</property>
-                            <property name="use-underline">True</property>
-                            <property name="mnemonic-widget">colorsdropdownbtn</property>
-                          </object>
-                          <packing>
-                            <property name="left-attach">0</property>
-                            <property name="top-attach">2</property>
-                          </packing>
-                        </child>
-                        <child>
                           <object class="GtkMenuButton" id="colorsdropdownbtn">
                             <property name="label" translatable="no" context="appearancetabpage|colorsdropdownbtn"></property>
                             <property name="visible">True</property>
@@ -339,7 +324,7 @@
                           </object>
                           <packing>
                             <property name="left-attach">1</property>
-                            <property name="top-attach">2</property>
+                            <property name="top-attach">1</property>
                           </packing>
                         </child>
                         <child>
@@ -352,7 +337,7 @@
                           </object>
                           <packing>
                             <property name="left-attach">1</property>
-                            <property name="top-attach">3</property>
+                            <property name="top-attach">2</property>
                           </packing>
                         </child>
                         <child>
@@ -366,37 +351,25 @@
                           </object>
                           <packing>
                             <property name="left-attach">0</property>
-                            <property name="top-attach">4</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkComboBoxText" id="bitmapdropdown">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="halign">start</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="bitmapdropdown-atkobject">
-                                <property name="AtkObject::accessible-name" translatable="yes" context="appearancetabpage|bitmapdropdown">bitmapdropdown</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left-attach">1</property>
-                            <property name="top-attach">5</property>
+                            <property name="top-attach">3</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkBox">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
+                            <property name="halign">start</property>
+                            <property name="spacing">3</property>
                             <child>
-                              <object class="GtkRadioButton" id="stretchedradiobtn">
-                                <property name="label" translatable="yes" context="appearancetabpage|stretchedradiobtn">Stretched</property>
+                              <object class="GtkComboBoxText" id="bitmapdropdown">
                                 <property name="visible">True</property>
-                                <property name="can-focus">True</property>
-                                <property name="receives-default">False</property>
-                                <property name="draw-indicator">True</property>
-                                <property name="group">tiledradiobtn</property>
+                                <property name="can-focus">False</property>
+                                <property name="halign">start</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="bitmapdropdown-atkobject">
+                                    <property name="AtkObject::accessible-name" translatable="yes" context="appearancetabpage|bitmapdropdown">bitmapdropdown</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -405,13 +378,40 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkRadioButton" id="tiledradiobtn">
-                                <property name="label" translatable="yes" context="appearancetabpage|tiledradiobtn">Tiled</property>
+                              <object class="GtkBox">
                                 <property name="visible">True</property>
-                                <property name="can-focus">True</property>
-                                <property name="receives-default">False</property>
-                                <property name="active">True</property>
-                                <property name="draw-indicator">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="spacing">3</property>
+                                <child>
+                                  <object class="GtkRadioButton" id="stretchedradiobtn">
+                                    <property name="label" translatable="yes" context="appearancetabpage|stretchedradiobtn">Stretched</property>
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">True</property>
+                                    <property name="receives-default">False</property>
+                                    <property name="draw-indicator">True</property>
+                                    <property name="group">tiledradiobtn</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkRadioButton" id="tiledradiobtn">
+                                    <property name="label" translatable="yes" context="appearancetabpage|tiledradiobtn">Tiled</property>
+                                    <property name="visible">True</property>
+                                    <property name="can-focus">True</property>
+                                    <property name="receives-default">False</property>
+                                    <property name="active">True</property>
+                                    <property name="draw-indicator">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -422,20 +422,8 @@
                           </object>
                           <packing>
                             <property name="left-attach">1</property>
-                            <property name="top-attach">6</property>
+                            <property name="top-attach">3</property>
                           </packing>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
                         </child>
                         <child>
                           <placeholder/>

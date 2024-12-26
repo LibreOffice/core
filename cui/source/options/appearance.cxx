@@ -103,7 +103,6 @@ SvxAppearanceTabPage::SvxAppearanceTabPage(weld::Container* pPage,
     , m_xColorEntryBtn(m_xBuilder->weld_combo_box(u"registrydropdown"_ustr))
     , m_xColorChangeBtn((new ColorListBox(m_xBuilder->weld_menu_button(u"colorsdropdownbtn"_ustr),
                                           [this] { return GetFrameWeld(); })))
-    , m_xColorLbl(m_xBuilder->weld_label(u"colorlbl"_ustr))
     , m_xShowInDocumentChkBtn(m_xBuilder->weld_check_button(u"showindocumentchkbtn"_ustr))
     , m_xColorRadioBtn(m_xBuilder->weld_radio_button(u"colorradiobtn"_ustr))
     , m_xImageRadioBtn(m_xBuilder->weld_radio_button(u"imageradiobtn"_ustr))
@@ -541,24 +540,6 @@ void SvxAppearanceTabPage::EnableImageControls(bool bEnabled)
 
 void SvxAppearanceTabPage::UpdateColorDropdown()
 {
-    switch (eCurrentAppearanceMode)
-    {
-        case Appearance::LIGHT:
-            m_xColorLbl->set_label(CuiResId(LIGHT_COLOR_LBL));
-            break;
-        case Appearance::DARK:
-            m_xColorLbl->set_label(CuiResId(DARK_COLOR_LBL));
-            break;
-        case Appearance::SYSTEM:
-        {
-            if (IsDarkModeEnabled())
-                m_xColorLbl->set_label(CuiResId(DARK_COLOR_LBL));
-            else
-                m_xColorLbl->set_label(CuiResId(LIGHT_COLOR_LBL));
-        }
-        break;
-    }
-
     // update color to light/dark
     ColorConfigEntry nEntry = GetActiveEntry();
     if (nEntry == ColorConfigEntryCount)
