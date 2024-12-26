@@ -18,25 +18,19 @@
  */
 
 #include <sal/config.h>
-#include <sal/log.hxx>
 
-#include <vcl/notebookbar/notebookbar.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
-#include <vcl/event.hxx>
-#include <vcl/menu.hxx>
-#include <vcl/toolkit/button.hxx>
-#include <vcl/tabpage.hxx>
-#include <vcl/tabctrl.hxx>
-#include <vcl/toolbox.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/notebookbar/notebookbar.hxx>
+#include <vcl/tabctrl.hxx>
+#include <vcl/tabpage.hxx>
+#include <vcl/toolbox.hxx>
+#include <vcl/toolkit/button.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/toolkit/lstbox.hxx>
-#include <vcl/settings.hxx>
 #include <vcl/uitest/uiobject.hxx>
-#include <bitmaps.hlst>
-#include <tools/json_writer.hxx>
 
+#include <bitmaps.hlst>
 #include <svdata.hxx>
 #include <window.h>
 
