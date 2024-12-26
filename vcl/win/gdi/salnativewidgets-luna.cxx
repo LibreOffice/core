@@ -543,25 +543,28 @@ static bool drawThemedControl(HDC hDC, ControlType nType, int iPart, int iState,
         if (iPart == BP_PUSHBUTTON)
         {
             Color aButtonColor = ThemeColors::GetThemeColors().GetButtonColor();
-            const Color& rButtonRectColor = ThemeColors::GetThemeColors().GetDisabledColor();
+            Color aButtonRectColor = ThemeColors::GetThemeColors().GetDisabledColor();
 
             if (iState == PBS_PRESSED)
-                aButtonColor.Merge(rButtonRectColor, 230);
+                aButtonColor.Merge(aButtonRectColor, 230);
             else if (iState == PBS_DISABLED)
-                aButtonColor = ThemeColors::GetThemeColors().GetDisabledColor();
+                if (UseDarkMode())
+                    aButtonRectColor.DecreaseLuminance(150);
+                else
+                    aButtonRectColor.IncreaseLuminance(150);
             else if (iState == PBS_HOT)
-                aButtonColor.Merge(rButtonRectColor, 170);
+                aButtonColor.Merge(aButtonRectColor, 170);
             else if (iState == PBS_DEFAULTED)
-                aButtonColor.Merge(rButtonRectColor, 150);
+                aButtonColor.Merge(aButtonRectColor, 150);
 
             ScopedHBRUSH hbrush(CreateSolidBrush(RGB(aButtonColor.GetRed(),
                                                      aButtonColor.GetGreen(),
                                                      aButtonColor.GetBlue())));
             FillRect(hDC, &rc, hbrush.get());
 
-            hbrush = ScopedHBRUSH(CreateSolidBrush(RGB(rButtonRectColor.GetRed(),
-                                                       rButtonRectColor.GetGreen(),
-                                                       rButtonRectColor.GetBlue())));
+            hbrush = ScopedHBRUSH(CreateSolidBrush(RGB(aButtonRectColor.GetRed(),
+                                                       aButtonRectColor.GetGreen(),
+                                                       aButtonRectColor.GetBlue())));
             FrameRect(hDC, &rc, hbrush.get());
             return true;
         }
