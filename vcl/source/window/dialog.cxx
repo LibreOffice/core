@@ -925,18 +925,22 @@ bool Dialog::ImplStartExecute()
     {
         if (bKitActive && !GetLOKNotifier())
         {
-#ifdef IOS
-            // gh#5908 handle pasting disallowed clipboard contents on iOS
-            // When another app owns the current clipboard contents, pasting
-            // will display a "allow or disallow" dialog. If the disallow
-            // option is selected, the data from the UIPasteboard will be
-            // garbage and we will find ourselves here. Since calling
-            // SetLOKNotifier() with a nullptr aborts in an assert(), fix
-            // the crash by failing gracefully.
-            return false;
-#else
-            SetLOKNotifier(mpDialogImpl->m_aInstallLOKNotifierHdl.Call(nullptr));
-#endif
+            if (auto pNotifier = mpDialogImpl->m_aInstallLOKNotifierHdl.Call(nullptr))
+                SetLOKNotifier(pNotifier);
+            else
+            {
+                // gh#5908 handle pasting disallowed clipboard contents on iOS
+                // When another app owns the current clipboard contents, pasting
+                // will display a "allow or disallow" dialog. If the disallow
+                // option is selected, the data from the UIPasteboard will be
+                // garbage and we will find ourselves here. Since calling
+                // SetLOKNotifier() with a nullptr aborts in an assert(), fix
+                // the crash by failing gracefully.
+
+                // Also pNotifier may be nullptr when a dialog (e.g., "update
+                // links?") is to be shown when loading a document.
+                return false;
+            }
         }
 
         switch ( Application::GetDialogCancelMode() )
