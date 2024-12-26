@@ -169,12 +169,12 @@ void SwTOXMark::Notify(const SfxHint& rHint)
 {
     if(SfxHintId::SwRemoveUnoObject == rHint.GetId())
     {
-        CallSwClientNotify(rHint);
+        GetNotifier().Broadcast(rHint);
         SetXTOXMark(nullptr);
     }
     else if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
-        CallSwClientNotify(rHint);
+        GetNotifier().Broadcast(rHint);
     }
     else if (rHint.GetId() == SfxHintId::SwCollectTextMarks)
     {
@@ -208,7 +208,7 @@ void SwTOXMark::Notify(const SfxHint& rHint)
 
 void SwTOXMark::InvalidateTOXMark()
 {
-    CallSwClientNotify(sw::RemoveUnoObjectHint(this));
+    GetNotifier().Broadcast(sw::RemoveUnoObjectHint(this));
 }
 
 OUString SwTOXMark::GetText(SwRootFrame const*const pLayout) const

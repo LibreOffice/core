@@ -313,8 +313,8 @@ public:
 class RemoveUnoObjectHint final : public SfxHint
 {
 public:
-    const BroadcastingModify* m_pObject;
-    RemoveUnoObjectHint(const BroadcastingModify* pObject) : SfxHint(SfxHintId::SwRemoveUnoObject), m_pObject(pObject) {}
+    const BroadcasterMixin* m_pObject;
+    RemoveUnoObjectHint(const BroadcasterMixin* pObject) : SfxHint(SfxHintId::SwRemoveUnoObject), m_pObject(pObject) {}
 };
 class PrintHiddenParaHint final : public SfxHint
 {
