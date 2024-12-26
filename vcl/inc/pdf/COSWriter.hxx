@@ -33,7 +33,7 @@ public:
     COSWriter(EncryptionParams aParams = EncryptionParams(),
               std::shared_ptr<IPDFEncryptor> const& pPDFEncryptor = nullptr)
         : mpPDFEncryptor(pPDFEncryptor)
-        , maParams(aParams)
+        , maParams(std::move(aParams))
         , maLine(1024)
         , mrBuffer(maLine)
     {
@@ -42,7 +42,7 @@ public:
     COSWriter(OStringBuffer& rBuffer, EncryptionParams aParams = EncryptionParams(),
               std::shared_ptr<IPDFEncryptor> const& pPDFEncryptor = nullptr)
         : mpPDFEncryptor(pPDFEncryptor)
-        , maParams(aParams)
+        , maParams(std::move(aParams))
         , mrBuffer(rBuffer)
     {
     }
