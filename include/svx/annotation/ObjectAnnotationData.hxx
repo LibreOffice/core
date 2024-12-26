@@ -19,9 +19,6 @@ namespace sdr::annotation
 class ObjectAnnotationData
 {
 public:
-    /// Does the (sdr) object represent an annotation
-    bool mbIsAnnotation : 1 = false;
-
     /// The annotation
     rtl::Reference<sdr::annotation::Annotation> mxAnnotation;
 
@@ -31,7 +28,7 @@ public:
     /// Open popup for the annotation
     void openPopup()
     {
-        if (mbIsAnnotation && mpAnnotationPopup)
+        if (mpAnnotationPopup)
             mpAnnotationPopup->openPopup();
     }
 };

@@ -338,7 +338,6 @@ SdrObject::SdrObject(SdrModel& rSdrModel)
     : mpFillGeometryDefiningShape(nullptr)
     , mrSdrModelFromSdrObject(rSdrModel)
     , m_pUserCall(nullptr)
-    , mpAnnotationData(new sdr::annotation::ObjectAnnotationData)
     , mpImpl(new Impl)
     , mpParentOfSdrObject(nullptr)
     , m_nOrdNum(0)
@@ -374,7 +373,6 @@ SdrObject::SdrObject(SdrModel& rSdrModel, SdrObject const & rSource)
     : mpFillGeometryDefiningShape(nullptr)
     , mrSdrModelFromSdrObject(rSdrModel)
     , m_pUserCall(nullptr)
-    , mpAnnotationData(new sdr::annotation::ObjectAnnotationData)
     , mpImpl(new Impl)
     , mpParentOfSdrObject(nullptr)
     , m_nOrdNum(0)
@@ -854,14 +852,10 @@ bool SdrObject::IsDecorative() const
     return m_pPlusData == nullptr ? false : m_pPlusData->isDecorative;
 }
 
-bool SdrObject::isAnnotationObject() const
+void SdrObject::setAsAnnotationObject()
 {
-    return mpAnnotationData->mbIsAnnotation;
-}
-
-void SdrObject::setAsAnnotationObject(bool bSetAnnotation)
-{
-    mpAnnotationData->mbIsAnnotation = bSetAnnotation;
+    if (!mpAnnotationData)
+        mpAnnotationData = std::make_unique<sdr::annotation::ObjectAnnotationData>();
 }
 
 std::unique_ptr<sdr::annotation::ObjectAnnotationData>& SdrObject::getAnnotationData()

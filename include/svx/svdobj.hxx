@@ -361,8 +361,8 @@ public:
     virtual bool IsDecorative() const;
 
     // Object representing an annotation
-    bool isAnnotationObject() const;
-    void setAsAnnotationObject(bool bSetAnnotation);
+    bool isAnnotationObject() const { return bool(mpAnnotationData); }
+    void setAsAnnotationObject();
     std::unique_ptr<sdr::annotation::ObjectAnnotationData>& getAnnotationData();
 
     // for group objects

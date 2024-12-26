@@ -138,7 +138,7 @@ AnnotationObject::AnnotationObject(SdrModel& rSdrModel, tools::Rectangle const& 
 
 void AnnotationObject::setup()
 {
-    setAsAnnotationObject(true);
+    setAsAnnotationObject();
     mbTextFrame = true; // need this so the frame can be adjusted to the text
     bool bLOK = comphelper::LibreOfficeKit::isActive();
     SetVisible(getSdrModelFromSdrObject().IsPDFDocument() || !bLOK);
