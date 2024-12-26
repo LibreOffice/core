@@ -186,7 +186,7 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
             aCloneList.AddPair(pSourceObject.get(), pTargetObject.get());
             if (pSourceObject->isAnnotationObject())
             {
-                pTargetObject->setAsAnnotationObject(true);
+                pTargetObject->setAsAnnotationObject();
                 pTargetObject->SetPrintable(false);
                 rtl::Reference<sdr::annotation::Annotation> xNewAnnotation;
                 SdrPage* pPage = pTargetObject->getSdrPageFromSdrObject();

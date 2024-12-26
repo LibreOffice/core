@@ -949,7 +949,7 @@ namespace
 
 void applyAnnotationCommon(SdrObject& rObject, rtl::Reference<sdr::annotation::Annotation> const& xAnnotation)
 {
-    rObject.setAsAnnotationObject(true);
+    rObject.setAsAnnotationObject();
     auto& xAnnotationData = rObject.getAnnotationData();
     xAnnotationData->mpAnnotationPopup.reset(new AnnotationPopup(xAnnotation));
     xAnnotationData->mxAnnotation = xAnnotation;
