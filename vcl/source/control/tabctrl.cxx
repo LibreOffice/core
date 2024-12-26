@@ -165,18 +165,18 @@ void TabControl::ImplInitSettings( bool bBackground )
         SetPaintTransparent( true );
         SetBackground();
         ImplGetWindowImpl()->mbUseNativeFocus = ImplGetSVData()->maNWFData.mbNoFocusRects;
-    }
-    else
-    {
-        EnableChildTransparentMode( false );
-        SetParentClipMode();
-        SetPaintTransparent( false );
 
-        if ( IsControlBackground() )
-            SetBackground( GetControlBackground() );
-        else
-            SetBackground( pParent->GetBackground() );
+        return;
     }
+
+    EnableChildTransparentMode( false );
+    SetParentClipMode();
+    SetPaintTransparent( false );
+
+    if ( IsControlBackground() )
+        SetBackground( GetControlBackground() );
+    else
+        SetBackground( pParent->GetBackground() );
 }
 
 TabControl::TabControl( vcl::Window* pParent, WinBits nStyle ) :
