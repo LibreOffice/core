@@ -80,7 +80,8 @@ public:
         , m_bIsDescriptor(nullptr == pFootnote)
         , m_pFormatFootnote(pFootnote)
     {
-        m_pFormatFootnote && StartListening(m_pFormatFootnote->GetNotifier());
+        if (m_pFormatFootnote)
+            StartListening(*m_pFormatFootnote);
     }
 
     const SwFormatFootnote* GetFootnoteFormat() const {
@@ -98,7 +99,6 @@ public:
     void Invalidate();
 protected:
     void Notify(const SfxHint& rHint) override;
-
 };
 
 void SwXFootnote::Impl::Invalidate()
@@ -120,6 +120,11 @@ void SwXFootnote::Impl::Notify(const SfxHint& rHint)
 {
     if(rHint.GetId() == SfxHintId::Dying)
         Invalidate();
+}
+
+void SwXFootnote::OnFormatFootnoteDeleted()
+{
+    Invalidate();
 }
 
 SwXFootnote::SwXFootnote(const bool bEndnote)
@@ -319,7 +324,7 @@ SwXFootnote::attach(const uno::Reference< text::XTextRange > & xTextRange)
         m_pImpl->EndListeningAll();
         SwFormatFootnote* pFootnote = const_cast<SwFormatFootnote*>(&pTextAttr->GetFootnote());
         m_pImpl->m_pFormatFootnote = pFootnote;
-        m_pImpl->StartListening(pFootnote->GetNotifier());
+        m_pImpl->StartListening(*pFootnote);
         // force creation of sequence id - is used for references
         if (pNewDoc->IsInReading())
         {

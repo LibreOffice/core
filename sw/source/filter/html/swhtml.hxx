@@ -1041,7 +1041,7 @@ public:
     SwHTMLTextFootnote(OUString rName, SwTextFootnote* pInTextFootnote)
         : m_sName(std::move(rName))
         , m_pTextFootnote(pInTextFootnote)
-        , m_xDeleteListener(new SvtDeleteListener(static_cast<SwFormatFootnote&>(pInTextFootnote->GetAttr()).GetNotifier()))
+        , m_xDeleteListener(new SvtDeleteListener(static_cast<SwFormatFootnote&>(pInTextFootnote->GetAttr())))
     {
     }
     const OUString& GetName() const
