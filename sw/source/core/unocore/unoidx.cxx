@@ -1542,11 +1542,8 @@ public:
         , m_bMainEntry(false)
         , m_nLevel(0)
     {
-        auto pMarkNonConst = const_cast<SwTOXMark*>(m_pTOXMark);
         auto pTypeNonConst = const_cast<SwTOXType*>(m_pTOXType);
 
-        if(pMarkNonConst)
-            StartListening(pMarkNonConst->GetNotifier());
         if(pTypeNonConst)
             StartListening(pTypeNonConst->GetNotifier());
     }
@@ -1610,9 +1607,6 @@ void SwXDocumentIndexMark::Impl::Notify(const SfxHint& rHint)
         auto pModifyChangedHint = static_cast<const sw::ModifyChangedHint*>(&rHint);
         if(auto pNewType = dynamic_cast<const SwTOXType*>(pModifyChangedHint->m_pNew))
             m_pTOXType = pNewType;
-
-        else
-            Invalidate();
     }
 }
 
@@ -1630,6 +1624,12 @@ SwXDocumentIndexMark::SwXDocumentIndexMark(SwDoc & rDoc,
 
 SwXDocumentIndexMark::~SwXDocumentIndexMark()
 {
+}
+
+// called when the associated SwTOXMark is deleted
+void SwXDocumentIndexMark::OnSwTOXMarkDeleted()
+{
+    m_pImpl->Invalidate();
 }
 
 rtl::Reference<SwXDocumentIndexMark>
@@ -1941,7 +1941,6 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
     m_pTOXMark = &pNewTextAttr->GetTOXMark();
     m_pTOXType = &rTOXType;
     EndListeningAll();
-    StartListening(const_cast<SwTOXMark*>(m_pTOXMark)->GetNotifier());
     StartListening(const_cast<SwTOXType*>(m_pTOXType)->GetNotifier());
 }
 

@@ -167,16 +167,7 @@ SwTOXMark* SwTOXMark::Clone( SfxItemPool* ) const
 
 void SwTOXMark::Notify(const SfxHint& rHint)
 {
-    if(SfxHintId::SwRemoveUnoObject == rHint.GetId())
-    {
-        GetNotifier().Broadcast(rHint);
-        SetXTOXMark(nullptr);
-    }
-    else if (rHint.GetId() == SfxHintId::SwLegacyModify)
-    {
-        GetNotifier().Broadcast(rHint);
-    }
-    else if (rHint.GetId() == SfxHintId::SwCollectTextMarks)
+    if (rHint.GetId() == SfxHintId::SwCollectTextMarks)
     {
         auto pCollectHint = static_cast<const sw::CollectTextMarksHint*>(&rHint);
         if(GetTextTOXMark())
@@ -208,7 +199,11 @@ void SwTOXMark::Notify(const SfxHint& rHint)
 
 void SwTOXMark::InvalidateTOXMark()
 {
-    GetNotifier().Broadcast(sw::RemoveUnoObjectHint(this));
+    if (auto xUnoIndexMark = m_wXDocumentIndexMark.get())
+    {
+        xUnoIndexMark->OnSwTOXMarkDeleted();
+        m_wXDocumentIndexMark.clear();
+    }
 }
 
 OUString SwTOXMark::GetText(SwRootFrame const*const pLayout) const

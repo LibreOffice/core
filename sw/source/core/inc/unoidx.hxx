@@ -206,6 +206,9 @@ public:
     virtual OUString SAL_CALL getMarkEntry() override;
     virtual void SAL_CALL setMarkEntry(const OUString& rIndexEntry) override;
 
+    // called when the associated SwTOXMark is deleted
+    void OnSwTOXMarkDeleted();
+
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

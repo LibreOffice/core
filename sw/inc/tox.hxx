@@ -78,7 +78,6 @@ extern const sal_Unicode C_END_PAGE_NUM;
 
 class SW_DLLPUBLIC SwTOXMark final
     : public SfxPoolItem
-    , public sw::BroadcasterMixin
     , public SvtListener
 {
     friend void InitCore();
