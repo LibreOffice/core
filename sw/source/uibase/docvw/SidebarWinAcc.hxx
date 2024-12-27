@@ -23,8 +23,8 @@
 #include <vcl/accessibility/vclxaccessiblecomponent.hxx>
 
 class SwViewShell;
-class SwSidebarItem;
 class SwFrame;
+class SwAnnotationItem;
 namespace sw::annotation
 {
 class SwAnnotationWin;
@@ -37,7 +37,7 @@ class SidebarWinAccessible
 {
 public:
     explicit SidebarWinAccessible(sw::annotation::SwAnnotationWin& rSidebarWin,
-                                  SwViewShell& rViewShell, const SwSidebarItem& rSidebarItem);
+                                  SwViewShell& rViewShell, const SwAnnotationItem& rSidebarItem);
     virtual ~SidebarWinAccessible() override;
 
     virtual css::uno::Reference<css::accessibility::XAccessibleContext>
@@ -47,7 +47,7 @@ public:
         SAL_CALL getAccessibleParent() override;
     virtual sal_Int64 SAL_CALL getAccessibleIndexInParent() override;
 
-    void ChangeSidebarItem(const SwSidebarItem& rSidebarItem);
+    void ChangeSidebarItem(const SwAnnotationItem& rSidebarItem);
 
 private:
     SwViewShell& mrViewShell;

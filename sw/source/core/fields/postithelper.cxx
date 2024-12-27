@@ -113,16 +113,17 @@ SwAnchoredObject* GetAnchoredObjectOfAnnotationMark(const sw::mark::MarkBase& rA
 }
 }
 
-SwSidebarItem::SwSidebarItem(const bool aFocus)
+SwAnnotationItem::SwAnnotationItem(SwFormatField& rFormatField, const bool aFocus)
     : mpPostIt(nullptr)
     , mbShow(true)
     , mbFocus(aFocus)
     , mbPendingLayout(false)
     , mLayoutStatus(SwPostItHelper::INVISIBLE)
+    , mrFormatField( rFormatField )
 {
 }
 
-SwSidebarItem::~SwSidebarItem() {}
+SwAnnotationItem::~SwAnnotationItem() {}
 
 SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos(
     SwLayoutInfo& o_rInfo,

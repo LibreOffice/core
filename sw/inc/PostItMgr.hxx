@@ -48,7 +48,7 @@ class SfxItemSet;
 class SvxSearchItem;
 namespace sw::annotation { class SwAnnotationWin; }
 namespace sw::sidebarwindows { class SwFrameSidebarWinContainer; }
-class SwSidebarItem;
+class SwAnnotationItem;
 class SwFrame;
 namespace vcl { class Window; }
 struct ImplSVEvent;
@@ -64,7 +64,7 @@ struct SwPostItPageItem
     sw::sidebarwindows::SidebarPosition eSidebarPosition;
     tools::Long lOffset;
     SwRect mPageRect;
-    std::vector<SwSidebarItem*> mvSidebarItems;
+    std::vector<SwAnnotationItem*> mvSidebarItems;
     SwPostItPageItem(): bScrollbar(false), eSidebarPosition( sw::sidebarwindows::SidebarPosition::NONE ), lOffset(0)
     {
     }
@@ -87,7 +87,7 @@ class SAL_DLLPUBLIC_RTTI SwPostItMgr final : public SfxListener,
         SwView*                         mpView;
         SwWrtShell*                     mpWrtShell;
         VclPtr<SwEditWin>               mpEditWin;
-        std::vector<std::unique_ptr<SwSidebarItem>>     mvPostItFields;
+        std::vector<std::unique_ptr<SwAnnotationItem>>  mvPostItFields;
         std::vector<std::unique_ptr<SwPostItPageItem>>  mPages;
         ImplSVEvent *                   mnEventId;
         bool                            mbWaitingForCalcRects;
@@ -128,19 +128,19 @@ class SAL_DLLPUBLIC_RTTI SwPostItMgr final : public SfxListener,
 
         sw::annotation::SwAnnotationWin* GetSidebarWin(const SfxBroadcaster* pBroadcaster) const;
 
-        SwSidebarItem*  InsertItem( SfxBroadcaster* pItem, bool bCheckExistence, bool bFocus);
+        SwAnnotationItem*  InsertItem( SfxBroadcaster* pItem, bool bCheckExistence, bool bFocus);
         void            RemoveItem( SfxBroadcaster* pBroadcast );
 
-        VclPtr<sw::annotation::SwAnnotationWin> GetOrCreateAnnotationWindow(SwSidebarItem& rItem);
+        VclPtr<sw::annotation::SwAnnotationWin> GetOrCreateAnnotationWindow(SwAnnotationItem& rItem);
 
     public:
         SwPostItMgr(SwView* aDoc);
         virtual ~SwPostItMgr() override;
 
-        typedef std::vector< std::unique_ptr<SwSidebarItem> >::const_iterator const_iterator;
+        typedef std::vector< std::unique_ptr<SwAnnotationItem> >::const_iterator const_iterator;
         const_iterator begin()  const { return mvPostItFields.begin(); }
         const_iterator end()    const { return mvPostItFields.end();  }
-        const std::vector<std::unique_ptr<SwSidebarItem>>& GetPostItFields() { return mvPostItFields; }
+        const std::vector<std::unique_ptr<SwAnnotationItem>>& GetPostItFields() { return mvPostItFields; }
 
         void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 

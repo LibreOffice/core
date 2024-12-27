@@ -108,7 +108,7 @@ namespace sw::annotation {
 // see AnnotationContents in sd for something similar
 SwAnnotationWin::SwAnnotationWin( SwEditWin& rEditWin,
                                   SwPostItMgr& aMgr,
-                                  SwSidebarItem& rSidebarItem,
+                                  SwAnnotationItem& rSidebarItem,
                                   SwFormatField* aField )
     : InterimItemWindow(&rEditWin, u"modules/swriter/ui/annotation.ui"_ustr, u"Annotation"_ustr)
     , mrMgr(aMgr)
@@ -122,7 +122,7 @@ SwAnnotationWin::SwAnnotationWin( SwEditWin& rEditWin,
     , mLayoutStatus(SwPostItHelper::INVISIBLE)
     , mbReadonly(false)
     , mbIsFollow(false)
-    , mrSidebarItem(rSidebarItem)
+    , mpSidebarItem(&rSidebarItem)
     , mpAnchorFrame(rSidebarItem.maLayoutInfo.mpAnchorFrame)
     , mpFormatField(aField)
     , mpField( static_cast<SwPostItField*>(aField->GetField()))
@@ -141,7 +141,7 @@ SwAnnotationWin::SwAnnotationWin( SwEditWin& rEditWin,
     if (rSidebarItem.maLayoutInfo.mpAnchorFrame)
     {
         mrMgr.ConnectSidebarWinToFrame( *(rSidebarItem.maLayoutInfo.mpAnchorFrame),
-                                      mrSidebarItem.GetFormatField(),
+                                      mpSidebarItem->GetFormatField(),
                                       *this );
     }
 #endif
@@ -160,7 +160,7 @@ SwAnnotationWin::~SwAnnotationWin()
 void SwAnnotationWin::dispose()
 {
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
-    mrMgr.DisconnectSidebarWinFromFrame( *(mrSidebarItem.maLayoutInfo.mpAnchorFrame),
+    mrMgr.DisconnectSidebarWinFromFrame( *(mpSidebarItem->maLayoutInfo.mpAnchorFrame),
                                        *this );
 #endif
     Disable();
@@ -241,7 +241,7 @@ void SwAnnotationWin::SetResolved(bool resolved)
     if (SwWrtShell* pWrtShell = mrView.GetWrtShellPtr())
     {
         const SwViewOption* pVOpt = pWrtShell->GetViewOptions();
-        mrSidebarItem.mbShow = !IsResolved() || (pVOpt->IsResolvedPostIts());
+        mpSidebarItem->mbShow = !IsResolved() || (pVOpt->IsResolvedPostIts());
     }
 
     mpTextRangeOverlay.reset();

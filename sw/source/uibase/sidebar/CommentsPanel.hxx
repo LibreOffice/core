@@ -45,7 +45,7 @@ class SwFormatField;
 class SwAnnotationWin;
 class SfxBroadcaster;
 class SwPostItMgr;
-class SwSidebarItem;
+class SwAnnotationItem;
 
 namespace sw::sidebar
 {

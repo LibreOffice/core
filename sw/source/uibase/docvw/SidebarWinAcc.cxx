@@ -30,7 +30,7 @@ namespace sw::sidebarwindows
 {
 SidebarWinAccessible::SidebarWinAccessible(sw::annotation::SwAnnotationWin& rSidebarWin,
                                            SwViewShell& rViewShell,
-                                           const SwSidebarItem& rSidebarItem)
+                                           const SwAnnotationItem& rSidebarItem)
     : ImplInheritanceHelper(&rSidebarWin)
     , mrViewShell(rViewShell)
     , mpAnchorFrame(rSidebarItem.maLayoutInfo.mpAnchorFrame)
@@ -40,7 +40,7 @@ SidebarWinAccessible::SidebarWinAccessible(sw::annotation::SwAnnotationWin& rSid
 
 SidebarWinAccessible::~SidebarWinAccessible() {}
 
-void SidebarWinAccessible::ChangeSidebarItem(const SwSidebarItem& rSidebarItem)
+void SidebarWinAccessible::ChangeSidebarItem(const SwAnnotationItem& rSidebarItem)
 {
     SolarMutexGuard aGuard;
 

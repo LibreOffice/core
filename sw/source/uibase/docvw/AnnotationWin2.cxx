@@ -677,21 +677,21 @@ void SwAnnotationWin::SetPosAndSize()
 
     // text range overlay
     maAnnotationTextRanges.clear();
-    if ( mrSidebarItem.maLayoutInfo.mnStartNodeIdx != SwNodeOffset(0)
-         && mrSidebarItem.maLayoutInfo.mnStartContent != -1 )
+    if ( mpSidebarItem->maLayoutInfo.mnStartNodeIdx != SwNodeOffset(0)
+         && mpSidebarItem->maLayoutInfo.mnStartContent != -1 )
     {
         const SwTextAnnotationField* pTextAnnotationField =
-            dynamic_cast< const SwTextAnnotationField* >( mrSidebarItem.GetFormatField().GetTextField() );
+            dynamic_cast< const SwTextAnnotationField* >( mpSidebarItem->GetFormatField().GetTextField() );
         SwTextNode* pTextNode = pTextAnnotationField ? pTextAnnotationField->GetpTextNode() : nullptr;
         SwContentNode* pContentNd = nullptr;
         if (pTextNode)
         {
             SwNodes& rNds = pTextNode->GetDoc().GetNodes();
-            pContentNd = rNds[mrSidebarItem.maLayoutInfo.mnStartNodeIdx]->GetContentNode();
+            pContentNd = rNds[mpSidebarItem->maLayoutInfo.mnStartNodeIdx]->GetContentNode();
         }
         if (pContentNd)
         {
-            SwPosition aStartPos( *pContentNd, mrSidebarItem.maLayoutInfo.mnStartContent );
+            SwPosition aStartPos( *pContentNd, mpSidebarItem->maLayoutInfo.mnStartContent );
             SwShellCursor* pTmpCursor = nullptr;
             const bool bTableCursorNeeded = pTextNode->FindTableBoxStartNode() != pContentNd->FindTableBoxStartNode();
             if ( bTableCursorNeeded )
@@ -717,7 +717,7 @@ void SwAnnotationWin::SetPosAndSize()
             if (bDisableMapMode)
                 EditWin().EnableMapMode(false);
 
-            if (mrSidebarItem.maLayoutInfo.mPositionFromCommentAnchor)
+            if (mpSidebarItem->maLayoutInfo.mPositionFromCommentAnchor)
                 pTmpCursorForAnnotationTextRange->FillRects();
 
             if (bDisableMapMode)
@@ -1421,7 +1421,7 @@ bool SwAnnotationWin::IsScrollbarVisible() const
     return HasScrollbar() && mxVScrollbar->get_vpolicy() == VclPolicyType::ALWAYS;
 }
 
-void SwAnnotationWin::ChangeSidebarItem( SwSidebarItem const & rSidebarItem )
+void SwAnnotationWin::ChangeSidebarItem( SwAnnotationItem & rSidebarItem )
 {
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
     const bool bAnchorChanged = mpAnchorFrame != rSidebarItem.maLayoutInfo.mpAnchorFrame;
@@ -1431,18 +1431,18 @@ void SwAnnotationWin::ChangeSidebarItem( SwSidebarItem const & rSidebarItem )
     }
 #endif
 
-    mrSidebarItem = rSidebarItem;
-    mpAnchorFrame = mrSidebarItem.maLayoutInfo.mpAnchorFrame;
+    mpSidebarItem = &rSidebarItem;
+    mpAnchorFrame = mpSidebarItem->maLayoutInfo.mpAnchorFrame;
     assert(mpAnchorFrame);
 
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
     if (mxSidebarWinAccessible)
-        mxSidebarWinAccessible->ChangeSidebarItem( mrSidebarItem );
+        mxSidebarWinAccessible->ChangeSidebarItem( *mpSidebarItem );
 
     if ( bAnchorChanged )
     {
-        mrMgr.ConnectSidebarWinToFrame( *(mrSidebarItem.maLayoutInfo.mpAnchorFrame),
-                                      mrSidebarItem.GetFormatField(),
+        mrMgr.ConnectSidebarWinToFrame( *(mpSidebarItem->maLayoutInfo.mpAnchorFrame),
+                                      mpSidebarItem->GetFormatField(),
                                       *this );
     }
 #endif
@@ -1454,7 +1454,7 @@ css::uno::Reference< css::accessibility::XAccessible > SwAnnotationWin::CreateAc
     if (!mxSidebarWinAccessible)
         mxSidebarWinAccessible = new SidebarWinAccessible( *this,
                                                           mrView.GetWrtShell(),
-                                                          mrSidebarItem );
+                                                          *mpSidebarItem );
 #endif
     return mxSidebarWinAccessible;
 }

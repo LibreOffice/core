@@ -2443,7 +2443,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf89720)
     createSwDoc("tdf89720.odt");
     SwView* pView = getSwDocShell()->GetView();
     SwPostItMgr* pPostItMgr = pView->GetPostItMgr();
-    for (std::unique_ptr<SwSidebarItem> const& pItem : *pPostItMgr)
+    for (std::unique_ptr<SwAnnotationItem> const& pItem : *pPostItMgr)
     {
         if (pItem->mpPostIt->IsFollow())
             // This was non-0: reply comments had a text range overlay,

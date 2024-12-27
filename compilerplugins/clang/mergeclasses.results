@@ -248,7 +248,6 @@ merge SwImpBlocks with SwXMLTextBlocks
 merge SwInterHyphInfo with (anonymous namespace)::SwHyphArgs
 merge SwNumberTreeNode with SwNodeNum
 merge SwSelPaintRects with SwShellCursor
-merge SwSidebarItem with SwAnnotationItem
 merge SwTextAdjuster with SwTextCursor
 merge SwUndoTextFormatCollCreate with SwUndoCondTextFormatCollCreate
 maybe merge SwXFrame with cppu::ImplInheritanceHelper, in modules sw and cppuhelper

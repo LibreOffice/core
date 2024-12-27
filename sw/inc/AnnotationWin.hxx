@@ -61,7 +61,7 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin final : public InterimItemWindow
     public:
         SwAnnotationWin( SwEditWin& rEditWin,
                          SwPostItMgr& aMgr,
-                         SwSidebarItem& rSidebarItem,
+                         SwAnnotationItem& rSidebarItem,
                          SwFormatField* aField );
         virtual ~SwAnnotationWin() override;
         virtual void dispose() override;
@@ -105,7 +105,7 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin final : public InterimItemWindow
         void ResetAnchorRectChanged() { mbAnchorRectChanged = false; }
         const std::vector<basegfx::B2DRange>& GetAnnotationTextRanges() const { return maAnnotationTextRanges; }
         SwEditWin& EditWin();
-        SwSidebarItem& GetSidebarItem() { return mrSidebarItem; }
+        SwAnnotationItem& GetSidebarItem() { return *mpSidebarItem; }
 
         OutlinerView* GetOutlinerView() { return mpOutlinerView.get();}
         const OutlinerView* GetOutlinerView() const { return mpOutlinerView.get();}
@@ -175,7 +175,7 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin final : public InterimItemWindow
 
         bool IsMouseOverSidebarWin() const { return mbMouseOver; }
 
-        void ChangeSidebarItem( SwSidebarItem const & rSidebarItem );
+        void ChangeSidebarItem( SwAnnotationItem & rSidebarItem );
         virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 
         void DrawForPage(OutputDevice* pDev, const Point& rPos);
@@ -276,7 +276,7 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin final : public InterimItemWindow
         bool            mbReadonly;
         bool            mbIsFollow;
 
-        SwSidebarItem& mrSidebarItem;
+        SwAnnotationItem* mpSidebarItem;
         const SwFrame* mpAnchorFrame;
 
         SwFormatField*       mpFormatField;

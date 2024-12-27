@@ -94,63 +94,41 @@ namespace SwPostItHelper
     void ImportHTML(Outliner& rOutliner, const OUString& rHtml);
 }
 
-class SAL_DLLPUBLIC_RTTI SwSidebarItem
+class SwAnnotationItem final
 {
 public:
     VclPtr<sw::annotation::SwAnnotationWin> mpPostIt;
     bool mbShow;
     bool mbFocus;
     bool mbPendingLayout;
-
     SwPostItHelper::SwLayoutStatus mLayoutStatus;
     SwLayoutInfo maLayoutInfo;
 
-    SwSidebarItem( const bool aFocus);
-
-    virtual ~SwSidebarItem();
-
-    SwSidebarItem(SwSidebarItem const &) = default;
-    SwSidebarItem(SwSidebarItem &&) = default;
-    SwSidebarItem & operator =(SwSidebarItem const &) = default;
-    SwSidebarItem & operator =(SwSidebarItem &&) = default;
-
-    virtual SwPosition GetAnchorPosition() const = 0;
-    virtual bool UseElement(SwRootFrame const&, IDocumentRedlineAccess const&) = 0;
-    virtual const SwFormatField& GetFormatField() const = 0;
-    virtual SwFormatField& GetFormatField() = 0;
-    virtual const SfxBroadcaster* GetBroadcaster() const = 0;
-    virtual VclPtr<sw::annotation::SwAnnotationWin> GetSidebarWindow( SwEditWin& rEditWin,
-                                                                SwPostItMgr& aMgr) = 0;
-};
-
-class SwAnnotationItem final : public SwSidebarItem
-{
-public:
     SwAnnotationItem(
         SwFormatField& rFormatField,
-        const bool aFocus)
-        : SwSidebarItem( aFocus )
-        , mrFormatField( rFormatField )
-    {
-    }
+        const bool aFocus);
+    virtual ~SwAnnotationItem();
 
-    virtual SwPosition GetAnchorPosition() const override;
-    virtual bool UseElement(SwRootFrame const&, IDocumentRedlineAccess const&) override;
-    virtual const SwFormatField& GetFormatField() const override
+    SwAnnotationItem(SwAnnotationItem const &) = default;
+    SwAnnotationItem(SwAnnotationItem &&) = default;
+
+    SwPosition GetAnchorPosition() const;
+    bool UseElement(SwRootFrame const&, IDocumentRedlineAccess const&);
+    const SwFormatField& GetFormatField() const
     {
         return mrFormatField;
     }
-    SwFormatField& GetFormatField() override
+    SwFormatField& GetFormatField()
     {
         return mrFormatField;
     }
-    virtual const SfxBroadcaster* GetBroadcaster() const override
+    const SfxBroadcaster* GetBroadcaster() const
     {
         return &mrFormatField;
     }
-    virtual VclPtr<sw::annotation::SwAnnotationWin> GetSidebarWindow(
+    VclPtr<sw::annotation::SwAnnotationWin> GetSidebarWindow(
         SwEditWin& rEditWin,
-        SwPostItMgr& aMgr ) override;
+        SwPostItMgr& aMgr );
 
 private:
     SwFormatField& mrFormatField;
