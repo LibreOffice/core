@@ -251,7 +251,7 @@ sal_uInt16 SwWW8ImplReader::End_Footnote()
 
         SwFormatFootnote& rFormatFootnote = static_cast<SwFormatFootnote&>(pFN->GetAttr());
 
-        SvtDeleteListener aDeleteListener(rFormatFootnote.GetNotifier());
+        SvtDeleteListener aDeleteListener(rFormatFootnote);
 
         // read content of Ft-/End-Note
         Read_HdFtFootnoteText( pSttIdx, rDesc.mnStartCp, rDesc.mnLen, rDesc.meType);
