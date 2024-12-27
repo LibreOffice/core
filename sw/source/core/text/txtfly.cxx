@@ -178,10 +178,11 @@ SwRect SwContourCache::CalcBoundRect( const SwAnchoredObject* pAnchoredObj,
         }
     }
 
-    const SwFrame* pLower = static_cast<const SwFlyFrame*>(pAnchoredObj)->Lower();
+    const SwFlyFrame* pFlyFrame = pAnchoredObj->DynCastFlyFrame();
+    const SwFrame* pLower = pFlyFrame
+        ? static_cast<const SwFlyFrame*>(pAnchoredObj)->Lower() : nullptr;
     if( bHandleContour &&
-        ( pAnchoredObj->DynCastFlyFrame() ==  nullptr ||
-          ( pLower && pLower->IsNoTextFrame() ) ) )
+        ( !pFlyFrame || ( pLower && pLower->IsNoTextFrame() ) ) )
     {
         aRet = pAnchoredObj->GetObjRectWithSpaces();
         if( aRet.Overlaps( rLine ) )
