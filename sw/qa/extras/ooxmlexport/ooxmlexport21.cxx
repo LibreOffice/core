@@ -1204,6 +1204,30 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf164065)
     CPPUNIT_ASSERT_EQUAL(u"a"_ustr, xCell->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf164474)
+{
+    // Given a document with a table inside a frame anchored to an empty section
+    createSwDoc("tdf164474.docx");
+
+    // The table must not get lost on import
+    {
+        auto xTextTablesSupplier(mxComponent.queryThrow<text::XTextTablesSupplier>());
+        auto xTables(xTextTablesSupplier->getTextTables().queryThrow<container::XIndexAccess>());
+        // Without the fix, this would fail with
+        // - Expected: 1
+        // - Actual  : 0
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+    }
+
+    // Test also after save-and-reload:
+    saveAndReload(u"Office Open XML Text"_ustr);
+    {
+        auto xTextTablesSupplier(mxComponent.queryThrow<text::XTextTablesSupplier>());
+        auto xTables(xTextTablesSupplier->getTextTables().queryThrow<container::XIndexAccess>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+    }
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

@@ -1682,6 +1682,7 @@ SwXText::convertToTextFrame(
         assert(pTextNode);
         if (!pTextNode || !pTextNode->Len()) // don't remove if it contains text!
         {
+            bool bDel = false;
             {   // has to be in a block to remove the SwContentIndexes before
                 // DelFullPara is called
                 SwPaM aMovePam( pStartPam->GetPointNode() );
@@ -1729,9 +1730,11 @@ SwXText::convertToTextFrame(
                             }
                         }
                     }
+                    bDel = true; // Only delete the ex-anchor, if the frame is moved successfully
                 }
             }
-            m_pDoc->getIDocumentContentOperations().DelFullPara(*pStartPam);
+            if (bDel)
+                m_pDoc->getIDocumentContentOperations().DelFullPara(*pStartPam);
         }
     }
     catch (const lang::IllegalArgumentException& rIllegal)
