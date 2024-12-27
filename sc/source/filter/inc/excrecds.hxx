@@ -373,7 +373,8 @@ private:
     sal_uInt16              nFlags;
     bool                    bHasBlankValue;
     ExcFilterCondition      aCond[ 2 ];
-    std::vector<std::pair<OUString, bool>> maMultiValues; // first->values, second->bDateFormat
+    std::vector<OUString> maMultiValues; // CT_Filter values
+    std::vector<OUString> maDateValues; // CT_DateGroupItem values
     std::vector<std::pair<::Color, bool>> maColorValues; // first->Color, second->bIsBackgroundColor (vs. TextColor)
 
     bool                    AddCondition( ScQueryConnect eConn, sal_uInt8 nType,
