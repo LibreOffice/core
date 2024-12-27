@@ -48,7 +48,7 @@ void GenericTypeSerializer::readColor(Color& rColor)
     }
     else
     {
-        static const std::vector<Color> staticColorArray = {
+        static constexpr Color staticColorArray[] = {
             COL_BLACK, // COL_BLACK
             COL_BLUE, // COL_BLUE
             COL_GREEN, // COL_GREEN
@@ -82,7 +82,7 @@ void GenericTypeSerializer::readColor(Color& rColor)
             COL_BLACK // COL_FIELDTEXT
         };
 
-        if (nColorNameID < staticColorArray.size())
+        if (nColorNameID < std::size(staticColorArray))
             rColor = staticColorArray[nColorNameID];
         else
             rColor = COL_BLACK;
