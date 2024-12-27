@@ -790,8 +790,10 @@ void XclExpAutofilter::AddMultiValueEntry( const ScQueryEntry& rEntry )
     {
         if( rItem.maString.isEmpty() )
             bHasBlankValue = true;
+        else if (rItem.meType == ScQueryEntry::ByDate)
+            maDateValues.push_back(rItem.maString.getString());
         else
-            maMultiValues.push_back(std::make_pair(rItem.maString.getString(), rItem.meType == ScQueryEntry::ByDate));
+            maMultiValues.push_back(rItem.maString.getString());
     }
 }
 
@@ -891,32 +893,31 @@ void XclExpAutofilter::SaveXml( XclExpXmlStream& rStrm )
             else
                 rWorksheet->startElement(XML_filters);
 
+            // CT_Filters
             for (const auto& rMultiValue : maMultiValues)
             {
-                if( !rMultiValue.second )
+                rWorksheet->singleElement(XML_filter, XML_val, rMultiValue);
+            }
+            // CT_DateGroupItems
+            for (const auto& rDateValue : maDateValues)
+            {
+                OString aStr = OUStringToOString(rDateValue, RTL_TEXTENCODING_UTF8);
+                rtl::Reference<sax_fastparser::FastAttributeList> pAttrList = sax_fastparser::FastSerializerHelper::createAttrList();
+                sal_Int32 aDateGroup[3] = { XML_year, XML_month, XML_day };
+                sal_Int32 idx = 0;
+                for (size_t i = 0; idx >= 0 && i < 3; i++)
                 {
-                    rWorksheet->singleElement(XML_filter, XML_val, rMultiValue.first);
-                }
-                else
-                {
-                    OString aStr = OUStringToOString(rMultiValue.first, RTL_TEXTENCODING_UTF8);
-                    rtl::Reference<sax_fastparser::FastAttributeList> pAttrList = sax_fastparser::FastSerializerHelper::createAttrList();
-                    sal_Int32 aDateGroup[3] = { XML_year, XML_month, XML_day };
-                    sal_Int32 idx = 0;
-                    for (size_t i = 0; idx >= 0 && i < 3; i++)
+                    OString kw = aStr.getToken(0, '-', idx);
+                    kw = kw.trim();
+                    if (!kw.isEmpty())
                     {
-                        OString kw = aStr.getToken(0, '-', idx);
-                        kw = kw.trim();
-                        if (!kw.isEmpty())
-                        {
-                            pAttrList->add(aDateGroup[i], kw);
-                        }
+                        pAttrList->add(aDateGroup[i], kw);
                     }
-                    // TODO: date filter can only handle YYYY-MM-DD date formats, so XML_dateTimeGrouping value
-                    // will be "day" as default, until date filter cannot handle HH:MM:SS.
-                    pAttrList->add(XML_dateTimeGrouping, "day");
-                    rWorksheet->singleElement(XML_dateGroupItem, pAttrList);
                 }
+                // TODO: date filter can only handle YYYY-MM-DD date formats, so XML_dateTimeGrouping value
+                // will be "day" as default, until date filter cannot handle HH:MM:SS.
+                pAttrList->add(XML_dateTimeGrouping, "day");
+                rWorksheet->singleElement(XML_dateGroupItem, pAttrList);
             }
             rWorksheet->endElement(XML_filters);
         }
