@@ -117,12 +117,12 @@ public:
     /** returns true if a substream with name exists */
     bool existsSubStream(const char* name) override
     {
-        return name && m_nameToPathMap.find(name) != m_nameToPathMap.end();
+        return name && m_nameToPathMap.contains(name);
     }
     /** return a new stream for an OLE zone */
     librevenge::RVNGInputStream* getSubStreamByName(const char* name) override
     {
-        if (m_nameToPathMap.find(name) == m_nameToPathMap.end() || !m_xContent.is())
+        if (!m_nameToPathMap.contains(name) || !m_xContent.is())
             return nullptr;
 
         try
