@@ -191,6 +191,8 @@ public:
             const css::uno::Reference< css::beans::XPropertySet > & xFieldMaster) override;
     virtual css::uno::Reference< css::beans::XPropertySet> SAL_CALL getTextFieldMaster() override;
 
+    void OnFormatFieldDelete();
+
 };
 
 typedef ::cppu::WeakImplHelper

@@ -1103,8 +1103,6 @@ public:
                 : nServiceId)
         , m_pProps(pFormat ? nullptr : new SwFieldProperties_Impl)
     {
-        if(m_pFormatField)
-            StartListening(m_pFormatField->GetNotifier());
     }
 
     virtual ~Impl() override
@@ -1122,7 +1120,6 @@ public:
         if(m_pFormatField)
         {
             EndListeningAll();
-            StartListening(m_pFormatField->GetNotifier());
         }
     }
     SwFormatField* GetFormatField()
@@ -2649,8 +2646,6 @@ void SwXTextField::Impl::Notify(const SfxHint& rHint)
 
     if(rHint.GetId() == SfxHintId::Dying)
         Invalidate();
-    else if(SfxHintId::SwRemoveUnoObject == rHint.GetId())
-        Invalidate();
     else if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
         auto pLegacyHint = static_cast<const sw::LegacyModifyHint*>(&rHint);
@@ -2667,6 +2662,12 @@ const SwField* SwXTextField::Impl::GetField() const
 {
     return m_pFormatField ? m_pFormatField->GetField() : nullptr;
 }
+
+void SwXTextField::OnFormatFieldDelete()
+{
+    m_pImpl->Invalidate();
+}
+
 
 OUString SwXTextFieldMasters::getImplementationName()
 {

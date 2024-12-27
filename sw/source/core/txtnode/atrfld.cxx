@@ -218,7 +218,11 @@ SwFormatField* SwFormatField::Clone( SfxItemPool* ) const
 
 void SwFormatField::InvalidateField()
 {
-    CallSwClientNotify(sw::RemoveUnoObjectHint(this));
+    if (auto xUnoField = m_wXTextField.get())
+    {
+        xUnoField->OnFormatFieldDelete();
+        m_wXTextField.clear();
+    }
 }
 
 void SwFormatField::SwClientNotify( const SwModify& rModify, const SfxHint& rHint )
