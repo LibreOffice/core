@@ -44,7 +44,7 @@ class SwXTextRange;
 /// for the footnote content is defined by m_pTextAttr.
 class SW_DLLPUBLIC SwFormatFootnote final
     : public SfxPoolItem
-    , public sw::BroadcastingModify
+    , public SvtBroadcaster
 {
     friend class SwTextFootnote;
     SwTextFootnote* m_pTextAttr;   ///< My TextAttribute.
@@ -65,8 +65,6 @@ public:
     /// "Pure virtual methods" of SfxPoolItem.
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SwFormatFootnote* Clone( SfxItemPool* pPool = nullptr ) const override;
-
-    virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
     void InvalidateFootnote();
 

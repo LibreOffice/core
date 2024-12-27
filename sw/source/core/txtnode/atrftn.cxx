@@ -125,7 +125,6 @@ namespace {
 
 SwFormatFootnote::SwFormatFootnote( bool bEndNote )
     : SfxPoolItem( RES_TXTATR_FTN, SfxItemType::SwFormatFootnoteType )
-    , sw::BroadcastingModify()
     , m_pTextAttr(nullptr)
     , m_nNumber(0)
     , m_nNumberRLHidden(0)
@@ -156,22 +155,13 @@ SwFormatFootnote* SwFormatFootnote::Clone( SfxItemPool* ) const
     return pNew;
 }
 
-void SwFormatFootnote::SwClientNotify(const SwModify&, const SfxHint& rHint)
-{
-    if(SfxHintId::SwRemoveUnoObject == rHint.GetId())
-    {
-        CallSwClientNotify(rHint);
-        SetXFootnote(nullptr);
-        return;
-    }
-    if (rHint.GetId() != SfxHintId::SwLegacyModify)
-        return;
-    CallSwClientNotify(rHint);
-}
-
 void SwFormatFootnote::InvalidateFootnote()
 {
-    CallSwClientNotify(sw::RemoveUnoObjectHint(this));
+    if (auto xUnoFootnote = m_wXFootnote.get())
+    {
+        xUnoFootnote->OnFormatFootnoteDeleted();
+        m_wXFootnote.clear();
+    }
 }
 
 void SwFormatFootnote::SetEndNote( bool b )
