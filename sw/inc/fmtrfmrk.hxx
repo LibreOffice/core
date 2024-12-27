@@ -37,9 +37,7 @@ class SwXReferenceMark;
 /// SwTextRefMark.
 ///
 /// It's Insert -> Cross-reference -> Cross-references -> set reference on the UI.
-class SAL_DLLPUBLIC_RTTI SwFormatRefMark final
-    : public SfxPoolItem
-    , public sw::BroadcastingModify
+class SAL_DLLPUBLIC_RTTI SwFormatRefMark final : public SfxPoolItem
 {
     friend class SwTextRefMark;
     SwTextRefMark* m_pTextAttr;
@@ -57,9 +55,6 @@ public:
     /// "Pure virtual methods" of SfxPoolItem.
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SwFormatRefMark* Clone( SfxItemPool* pPool = nullptr ) const override;
-
-    // SwClient
-    virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
     void InvalidateRefMark();
 

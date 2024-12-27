@@ -100,6 +100,8 @@ public:
             const css::uno::Reference< css::text::XTextRange > & xTextRange) override;
     virtual css::uno::Reference< css::text::XTextRange > SAL_CALL getAnchor() override;
 
+    void OnFormatRefMarkDeleted();
+
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

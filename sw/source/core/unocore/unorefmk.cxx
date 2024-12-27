@@ -60,7 +60,6 @@
 using namespace ::com::sun::star;
 
 class SwXReferenceMark::Impl
-    : public SvtListener
 {
 public:
     unotools::WeakReference<SwXReferenceMark> m_wThis;
@@ -78,7 +77,6 @@ public:
     {
         if (pRefMark)
         {
-            StartListening(pRefMark->GetNotifier());
             m_sMarkName = pRefMark->GetRefName();
         }
     }
@@ -86,14 +84,10 @@ public:
     bool IsValid() const { return m_pMarkFormat; }
     void InsertRefMark( SwPaM & rPam, SwXTextCursor const*const pCursor );
     void Invalidate();
-protected:
-    virtual void Notify(const SfxHint&) override;
-
 };
 
 void SwXReferenceMark::Impl::Invalidate()
 {
-    EndListeningAll();
     m_pDoc = nullptr;
     m_pMarkFormat = nullptr;
     uno::Reference<uno::XInterface> const xThis(m_wThis);
@@ -106,10 +100,9 @@ void SwXReferenceMark::Impl::Invalidate()
     m_EventListeners.disposeAndClear(aGuard, ev);
 }
 
-void SwXReferenceMark::Impl::Notify(const SfxHint& rHint)
+void SwXReferenceMark::OnFormatRefMarkDeleted()
 {
-    if(rHint.GetId() == SfxHintId::Dying)
-        Invalidate();
+    m_pImpl->Invalidate();
 }
 
 SwXReferenceMark::SwXReferenceMark(
@@ -245,8 +238,7 @@ void SwXReferenceMark::Impl::InsertRefMark(SwPaM& rPam,
     }
 
     m_pMarkFormat = &pTextAttr->GetRefMark();
-    EndListeningAll();
-    StartListening(const_cast<SwFormatRefMark*>(m_pMarkFormat)->GetNotifier());
+    const_cast<SwFormatRefMark*>(m_pMarkFormat)->SetXRefMark(m_wThis.get());
 }
 
 void SAL_CALL
