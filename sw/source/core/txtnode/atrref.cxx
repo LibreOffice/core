@@ -42,7 +42,6 @@ SwFormatRefMark::~SwFormatRefMark( )
 
 SwFormatRefMark::SwFormatRefMark( OUString aName )
     : SfxPoolItem(RES_TXTATR_REFMARK, SfxItemType::SwFormatRefMarkType)
-    , sw::BroadcastingModify()
     , m_pTextAttr(nullptr)
     , m_aRefName(std::move(aName))
 {
@@ -51,7 +50,6 @@ SwFormatRefMark::SwFormatRefMark( OUString aName )
 
 SwFormatRefMark::SwFormatRefMark( const SwFormatRefMark& rAttr )
     : SfxPoolItem(RES_TXTATR_REFMARK, SfxItemType::SwFormatRefMarkType)
-    , sw::BroadcastingModify()
     , m_pTextAttr(nullptr)
     , m_aRefName(rAttr.m_aRefName)
 {
@@ -72,22 +70,13 @@ SwFormatRefMark* SwFormatRefMark::Clone( SfxItemPool* ) const
     return new SwFormatRefMark( *this );
 }
 
-void SwFormatRefMark::SwClientNotify(const SwModify&, const SfxHint& rHint)
-{
-    if(SfxHintId::SwRemoveUnoObject == rHint.GetId())
-    {
-        CallSwClientNotify(rHint);
-        SetXRefMark(nullptr);
-        return;
-    }
-    if (rHint.GetId() != SfxHintId::SwLegacyModify)
-        return;
-    CallSwClientNotify(rHint);
-}
-
 void SwFormatRefMark::InvalidateRefMark()
 {
-    CallSwClientNotify(sw::RemoveUnoObjectHint(this));
+    if (auto xUnoRefMark = m_wXReferenceMark.get())
+    {
+        xUnoRefMark->OnFormatRefMarkDeleted();
+        m_wXReferenceMark.clear();
+    }
 }
 
 void SwFormatRefMark::dumpAsXml(xmlTextWriterPtr pWriter) const
