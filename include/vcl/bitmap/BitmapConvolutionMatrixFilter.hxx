@@ -12,8 +12,6 @@
 
 #include <vcl/bitmap/BitmapFilter.hxx>
 
-class BitmapEx;
-
 /** Filter image based on a 3x3 convolution matrix
  */
 class VCL_DLLPUBLIC BitmapConvolutionMatrixFilter : public BitmapFilter

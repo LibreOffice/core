@@ -34,9 +34,7 @@
 class Color;
 class ImpSvNumberformatScan;
 class ImpSvNumberInputScan;
-class SvNumberFormatterRegistry_Impl;
 class SvNumberFormatter;
-class NfCurrencyTable;
 
 class SVL_DLLPUBLIC SvNFLanguageData
 {

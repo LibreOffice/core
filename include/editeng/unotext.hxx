@@ -162,7 +162,6 @@ struct SfxItemPropertyMapEntry;
     { UNO_NAME_EDIT_PARA_IS_FORBIDDEN_RULES,    EE_PARA_FORBIDDENRULES,     cppu::UnoType<bool>::get(),                0 ,0 },\
     {u"WritingMode"_ustr,              EE_PARA_WRITINGDIR, ::cppu::UnoType<sal_Int16>::get(),            0, 0 }
 
-class SvxFieldItem;
 class SvxFieldData;
 
 EDITENG_DLLPUBLIC void GetSelection( struct ESelection& rSel, SvxTextForwarder const * pForwarder ) noexcept;

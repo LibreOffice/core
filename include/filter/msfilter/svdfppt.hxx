@@ -50,14 +50,12 @@
 #include <salhelper/simplereferenceobject.hxx>
 
 namespace com::sun::star {
-    namespace awt { struct Size; }
     namespace drawing { class XShape; }
     namespace form { class XFormComponent; }
     namespace frame { class XModel; }
 }
 
 class SdrPage;
-class SdrObject;
 class SvStream;
 class SfxItemSet;
 class SdrOutliner;

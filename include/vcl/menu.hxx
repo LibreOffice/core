@@ -52,7 +52,6 @@ class SalMenu;
 class MenuBarWindow;
 class VclMenuEvent;
 struct SystemMenuData;
-enum class FloatWinPopupFlags;
 enum class VclEventId;
 
 namespace com::sun::star::awt { class XPopupMenu; }
@@ -63,7 +62,6 @@ namespace vcl
 class Window;
 struct MenuLayoutData;
 typedef OutputDevice RenderContext; // same as in include/vcl/outdev.hxx
-class ILibreOfficeKitNotifier;
 }
 
 constexpr sal_uInt16 MENU_APPEND = 0xFFFF;

@@ -25,7 +25,6 @@
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <memory>
 
-class SdrDragView;
 class SdrDragStat;
 
 class SAL_DLLPUBLIC_RTTI SdrDragEntry

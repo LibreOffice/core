@@ -26,7 +26,6 @@
 
 class SdrTextObj;
 class SdrPage;
-enum class SdrCompatibilityFlag;
 
 class SVXCORE_DLLPUBLIC SdrOutliner : public Outliner
 {

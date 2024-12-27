@@ -24,10 +24,6 @@
 
 namespace com::sun::star::uno
 {
-class Any;
-}
-namespace com::sun::star::uno
-{
 class Type;
 }
 

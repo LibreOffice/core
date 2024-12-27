@@ -12,8 +12,6 @@
 
 #include <vcl/bitmap/BitmapFilter.hxx>
 
-class BitmapEx;
-
 class BitmapDuoToneFilter final : public BitmapFilter
 {
 public:

@@ -28,7 +28,6 @@
 #include <vector>
 
 namespace com::sun::star {
-    namespace xml::sax { class XAttributeList; }
     namespace beans { struct PropertyValue; }
     namespace container { class XNameReplace; }
     namespace document { class XEventsSupplier; }

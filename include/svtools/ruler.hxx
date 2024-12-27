@@ -31,9 +31,6 @@
 #include <vcl/glyphitem.hxx>
 
 class MouseEvent;
-class TrackingEvent;
-class DataChangedEvent;
-class SvtRulerAccessible;
 
 /*************************************************************************
 

@@ -35,15 +35,11 @@
 #include <sal/types.h>
 
 namespace com::sun::star {
-    namespace beans { struct PropertyValue; }
     namespace uno { class XComponentContext; }
 }
 
 namespace oox {
-    class GraphicHelper;
     namespace drawingml::chart { class ChartConverter; }
-    namespace ole { class VbaProject; }
-    namespace vml { class Drawing; }
 }
 
 namespace oox::ppt {

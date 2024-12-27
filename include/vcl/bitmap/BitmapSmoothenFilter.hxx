@@ -12,8 +12,6 @@
 
 #include <vcl/bitmap/BitmapFilter.hxx>
 
-class BitmapEx;
-
 class VCL_DLLPUBLIC BitmapSmoothenFilter final : public BitmapFilter
 {
 public:

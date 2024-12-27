@@ -29,16 +29,6 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-namespace com::sun::star {
-    namespace xml::sax { class XFastAttributeList; }
-    namespace xml::sax { class XFastContextHandler; }
-}
-
-namespace oox {
-    class AttributeList;
-    class SequenceInputStream;
-}
-
 namespace oox::core {
 
 class XmlFilterBase;

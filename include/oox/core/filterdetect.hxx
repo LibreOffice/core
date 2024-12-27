@@ -34,12 +34,8 @@
 #include <sal/types.h>
 
 namespace com::sun::star {
-    namespace beans { struct PropertyValue; }
     namespace io { class XInputStream; }
     namespace uno { class XComponentContext; }
-    namespace xml::sax { class XFastAttributeList; }
-    namespace xml::sax { class XFastContextHandler; }
-    namespace xml::sax { class XLocator; }
 }
 
 namespace utl { class MediaDescriptor; }

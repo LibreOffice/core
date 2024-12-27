@@ -24,7 +24,6 @@
 #include <tools/link.hxx>
 #include <mutex>
 
-class Timer;
 struct ImplSVEvent;
 
 namespace svtools {

@@ -27,14 +27,6 @@ namespace com::sun::star::ui
 {
 class XContextChangeEventMultiplexer;
 }
-namespace com::sun::star::ui
-{
-struct ContextChangeEventObject;
-}
-namespace vcl
-{
-class Window;
-}
 
 namespace svx
 {

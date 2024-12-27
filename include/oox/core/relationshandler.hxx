@@ -25,11 +25,6 @@
 #include <oox/core/relations.hxx>
 #include <sal/types.h>
 
-namespace com::sun::star {
-    namespace xml::sax { class XFastAttributeList; }
-    namespace xml::sax { class XFastContextHandler; }
-}
-
 namespace oox::core {
 
 class XmlFilterBase;

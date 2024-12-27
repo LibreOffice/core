@@ -28,10 +28,6 @@
 #include <svx/svx3ditems.hxx>
 #include <memory>
 
-namespace sdr::properties {
-    class BaseProperties;
-}
-
 /*************************************************************************
 |*
 |* GeoData relevant for undo actions

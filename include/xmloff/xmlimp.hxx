@@ -61,7 +61,6 @@ namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::util { class XNumberFormatsSupplier; }
 namespace com::sun::star::xml::sax { class XAttributeList; }
 namespace com::sun::star::xml::sax { class XFastAttributeList; }
-namespace com::sun::star::xml::sax { class XFastContextHandler; }
 namespace com::sun::star {
     namespace frame { class XModel; }
     namespace io { class XOutputStream; }
@@ -79,7 +78,6 @@ namespace xmloff::token {
 }
 class EmbeddedFontsHelper;
 class ProgressBarHelper;
-class SvXMLNamespaceMap;
 class SvXMLImport_Impl;
 class SvXMLUnitConverter;
 class SvXMLNumFmtHelper;
@@ -87,7 +85,6 @@ class XMLFontStylesContext;
 class XMLEventImportHelper;
 class XMLErrors;
 class StyleMap;
-enum class SvXMLErrorFlags;
 
 constexpr sal_Int32 LAST_NAMESPACE = 121; // last value in xmloff/xmnspe.hxx
 constexpr size_t NMSP_SHIFT = 16;

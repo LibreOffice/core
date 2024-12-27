@@ -44,13 +44,11 @@ namespace sdr::contact { class ViewContact; }
 namespace sdr::annotation { class Annotation; }
 class SdrPage;
 class SdrModel;
-class SfxItemPool;
 class SdrPageView;
 class SdrLayerAdmin;
 class SdrLayerIDSet;
 class Color;
 class SfxStyleSheet;
-class SvxUnoDrawPagesAccess;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //

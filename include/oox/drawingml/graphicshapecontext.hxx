@@ -27,7 +27,6 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-namespace oox { class AttributeList; }
 namespace oox::core { class ContextHandler2Helper; }
 namespace oox::vml { struct OleObjectInfo; }
 

@@ -27,9 +27,6 @@
 #include <svx/svxdllapi.h>
 #include <tools/degree.hxx>
 
-class IntlWrapper;
-class SfxItemPool;
-
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxOrientationItem final : public SfxEnumItem<SvxCellOrientation>
 {
 public:

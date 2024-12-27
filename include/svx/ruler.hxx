@@ -26,7 +26,6 @@
 
 #include <memory>
 
-class Menu;
 class SvxProtectItem;
 class SvxRulerItem;
 class SfxBindings;

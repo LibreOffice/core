@@ -34,9 +34,7 @@
 namespace com::sun::star {
     namespace document { class XDocumentProperties; }
     namespace drawing { class XShape; }
-    namespace io { class XInputStream; }
     namespace io { class XOutputStream; }
-    namespace io { class XStream; }
     namespace uno { class XComponentContext; }
     namespace xml::dom { class XDocument; }
     namespace xml::sax { class XFastSAXSerializable; }
@@ -59,8 +57,6 @@ namespace sax_fastparser {
 
     typedef std::shared_ptr< FastSerializerHelper > FSHelperPtr;
 }
-
-namespace utl { class MediaDescriptor; }
 
 namespace oox::drawingml
 {

@@ -14,7 +14,6 @@
 
 #include <vector>
 
-class BitmapEx;
 class BitmapReadAccess;
 
 class BitmapGaussianSeparableBlurFilter final : public BitmapFilter

@@ -28,8 +28,6 @@
 #include <vcl/vclptr.hxx>
 #include <unordered_map>
 
-namespace svx { struct SvxShowCharSetItem; }
-namespace tools { class Rectangle; }
 namespace weld { class ScrolledWindow; }
 
 class Subset;

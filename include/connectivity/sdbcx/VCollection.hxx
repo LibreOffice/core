@@ -37,8 +37,6 @@
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <memory>
 
-namespace com::sun::star::container { class XEnumeration; }
-
 
 namespace connectivity::sdbcx
     {

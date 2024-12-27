@@ -12,8 +12,6 @@
 
 #include <vcl/bitmap/BitmapFilter.hxx>
 
-class BitmapEx;
-
 /** Separable Unsharpen Mask filter is actually a subtracted blurred
     image from the original image.
  */

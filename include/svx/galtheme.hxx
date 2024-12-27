@@ -34,7 +34,6 @@
 class GalleryFileStorage;
 class GalleryThemeEntry;
 class SgaObject;
-class SotStorageStream;
 class FmFormModel;
 class Gallery;
 namespace unogallery

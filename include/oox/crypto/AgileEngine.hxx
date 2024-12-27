@@ -18,11 +18,6 @@
 #include <sal/types.h>
 #include <comphelper/crypto/Crypto.hxx>
 
-namespace oox {
-    class BinaryXInputStream;
-    class BinaryXOutputStream;
-}
-
 namespace oox::crypto {
 
 struct OOX_DLLPUBLIC AgileEncryptionInfo

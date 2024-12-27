@@ -23,7 +23,6 @@
 #include <svx/svxdllapi.h>
 #include <editeng/measfld.hxx>
 
-class SdrOutliner;
 struct ImpMeasureRec;
 struct ImpMeasurePoly;
 

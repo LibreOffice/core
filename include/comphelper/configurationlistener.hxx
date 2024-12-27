@@ -19,7 +19,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/configurationhelper.hxx>
 
-namespace com::sun::star::beans { struct PropertyChangeEvent; }
 namespace com::sun::star::uno { class XComponentContext; }
 
 namespace comphelper {

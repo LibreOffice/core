@@ -28,9 +28,7 @@
 
 namespace com::sun::star::datatransfer::dnd {
     struct DragGestureEvent;
-    struct DragSourceDragEvent;
     struct DragSourceDropEvent;
-    struct DragSourceEvent;
     struct DropTargetDragEvent;
     struct DropTargetDragEnterEvent;
     struct DropTargetDropEvent;

@@ -28,7 +28,6 @@
 #include <svl/poolitem.hxx>
 #include <svx/svxdllapi.h>
 
-class SfxItemPool;
 struct SvxClipboardFormatItem_Impl;
 
 class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC SvxClipboardFormatItem final : public SfxPoolItem

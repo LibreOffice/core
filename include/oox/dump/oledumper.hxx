@@ -35,10 +35,6 @@
 
 #ifdef DBG_UTIL
 
-namespace com::sun::star {
-    namespace io { class XInputStream; }
-}
-
 namespace oox::dump {
 
 

@@ -25,8 +25,6 @@
 #include <oox/ppt/slidepersist.hxx>
 #include <sal/types.h>
 
-namespace oox { class AttributeList; }
-
 namespace oox::ppt {
 
 class SlideMasterTextStylesContext final : public oox::core::FragmentHandler2

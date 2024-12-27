@@ -42,7 +42,6 @@ namespace com::sun::star::drawing { class XShapes; }
 
 class XMLTableExport;
 namespace comphelper { class AttributeList; }
-class XMLPropertyHandlerFactory;
 
 // shape export features are bits used for the nFeature
 // parameter of XMLShapeExport::exportShape

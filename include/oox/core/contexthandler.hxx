@@ -34,7 +34,6 @@
 #include <sal/types.h>
 
 namespace com::sun::star {
-    namespace xml::sax { class XFastAttributeList; }
     namespace xml::sax { class XLocator; }
 }
 

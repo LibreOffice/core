@@ -32,21 +32,14 @@
 #  undef check
 #endif
 
-class Button;
 class ComboBox;
 class FormattedField;
 class ListBox;
-class Menu;
 class MessageDialog;
 class NumericFormatter;
-class SalInstanceBuilder;
-class ScreenshotTest;
 class ScrollBar;
 class SvTabListBox;
 class Slider;
-class DateField;
-class TimeField;
-class ToolBox;
 class VclExpander;
 class VclMultiLineEdit;
 struct NotebookBarAddonsItem;

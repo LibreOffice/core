@@ -13,11 +13,7 @@
 #include <sfx2/StyleManager.hxx>
 #include <svx/svxdllapi.h>
 
-namespace sfx2 { class StylePreviewRenderer; }
-
-class OutputDevice;
 class SfxObjectShell;
-class SfxStyleSheetBase;
 
 namespace svx
 {

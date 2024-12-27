@@ -27,9 +27,6 @@
 #include <memory>
 #include <vector>
 
-class DataChangedEvent;
-class HelpEvent;
-class MouseEvent;
 class UserDrawEvent;
 struct ImplStatusItem;
 

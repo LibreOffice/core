@@ -24,7 +24,6 @@
 #include <oox/core/fragmenthandler2.hxx>
 #include <sal/types.h>
 
-namespace oox { class AttributeList; }
 namespace oox::drawingml { struct FillProperties; }
 
 namespace oox::ppt {

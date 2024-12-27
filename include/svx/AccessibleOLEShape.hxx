@@ -30,10 +30,6 @@
 #include <svx/AccessibleShape.hxx>
 #include <svx/svxdllapi.h>
 
-namespace com::sun::star {
-    namespace accessibility { class XAccessibleKeyBinding; }
-}
-
 namespace accessibility {
 
 class AccessibleShapeInfo;

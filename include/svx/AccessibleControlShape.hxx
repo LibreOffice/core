@@ -34,19 +34,13 @@
 #include <svx/AccessibleShape.hxx>
 
 namespace com::sun::star {
-    namespace accessibility { class XAccessible; }
     namespace accessibility { class XAccessibleContext; }
-    namespace accessibility { struct AccessibleEventObject; }
-    namespace accessibility { class XAccessibleRelationSet; }
     namespace awt { class XControl; }
     namespace beans { class XPropertySet; }
     namespace beans { class XPropertySetInfo; }
-    namespace beans { struct PropertyChangeEvent; }
-    namespace container { struct ContainerEvent; }
     namespace lang { class XComponent; }
     namespace lang { class XTypeProvider; }
     namespace uno { class XAggregation; }
-    namespace util { struct ModeChangeEvent; }
 }
 
 namespace comphelper

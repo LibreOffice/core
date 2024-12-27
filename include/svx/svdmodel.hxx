@@ -47,31 +47,16 @@
 class OutputDevice;
 class SdrOutliner;
 class SdrLayerAdmin;
-class SdrObjList;
 class SdrObject;
 class SdrPage;
-class SdrPageView;
 class SdrTextObj;
 class SdrUndoAction;
 class SdrUndoGroup;
-class AutoTimer;
 class SfxItemPool;
 class SfxItemSet;
-class SfxRepeatTarget;
-class SfxStyleSheet;
-class SfxUndoAction;
-class SfxUndoManager;
-class XBitmapList;
-class XColorList;
-class XDashList;
-class XGradientList;
-class XHatchList;
-class XLineEndList;
 class SvxForbiddenCharactersTable;
-class SvNumberFormatter;
 class SdrOutlinerCache;
 class SdrUndoFactory;
-class ImageMap;
 class TextChain;
 enum class CharCompressType;
 enum class SdrCompatibilityFlag;
@@ -91,11 +76,6 @@ namespace com::sun::star::beans {
 namespace model
 {
 class Theme;
-}
-
-namespace svx
-{
-class IThemeColorChanger;
 }
 
 constexpr const sal_Unicode DEGREE_CHAR = u'\x00B0'; /* U+00B0 DEGREE SIGN */

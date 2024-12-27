@@ -25,8 +25,6 @@
 #include <oox/ppt/timenode.hxx>
 #include <sal/types.h>
 
-namespace oox { class AttributeList; }
-
 namespace oox::ppt {
 
 class SlideTimingContext final : public ::oox::core::FragmentHandler2

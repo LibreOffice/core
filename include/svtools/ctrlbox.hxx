@@ -31,7 +31,6 @@
 namespace weld { class CustomWeld; }
 
 class BitmapEx;
-class BorderWidthImpl;
 class FontList;
 class VclSimpleEvent;
 class VirtualDevice;

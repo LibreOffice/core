@@ -37,7 +37,6 @@ namespace svt {
     class AcceleratorExecute;
 }
 
-class NotifyEvent;
 namespace tools { class Rectangle; }
 
 namespace dbaui

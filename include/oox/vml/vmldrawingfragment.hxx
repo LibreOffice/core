@@ -27,11 +27,6 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-namespace com::sun::star {
-    namespace io { class XInputStream; }
-}
-
-namespace oox { class AttributeList; }
 namespace oox::core { class XmlFilterBase; }
 
 namespace oox::vml {

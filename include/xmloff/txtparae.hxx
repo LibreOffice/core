@@ -49,9 +49,8 @@ class SvXMLExportPropertyMapper;
 
 namespace com::sun::star
 {
-    namespace beans { class XPropertySet; class XPropertyState;
-                      class XPropertySetInfo; }
-    namespace container { class XEnumeration; class XIndexAccess; class XNameReplace; }
+    namespace beans { class XPropertySet; class XPropertySetInfo; }
+    namespace container { class XEnumeration; class XIndexAccess; }
     namespace drawing { class XShape; }
     namespace text { class XTextContent; class XTextRange; class XText;
                      class XFootnote; class XTextFrame; class XTextSection;

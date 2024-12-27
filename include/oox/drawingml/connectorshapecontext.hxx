@@ -27,8 +27,6 @@
 #include <sal/types.h>
 #include <vector>
 
-namespace oox { class AttributeList; }
-
 namespace oox::drawingml {
 
     struct ConnectorShapeProperties

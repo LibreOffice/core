@@ -27,8 +27,6 @@
 #include <memory>
 #include <vector>
 
-class MouseEvent;
-class KeyEvent;
 class UserDrawEvent;
 class VirtualDevice;
 class ValueSetAcc;

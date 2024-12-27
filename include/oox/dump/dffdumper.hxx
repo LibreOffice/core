@@ -25,8 +25,6 @@
 
 #ifdef DBG_UTIL
 
-namespace oox { class BinaryInputStream; }
-
 namespace oox::dump {
 
 

@@ -29,10 +29,8 @@
 #include <memory>
 #include <set>
 
-namespace com::sun::star::uno { class XComponentContext; }
 namespace svx { class ToolboxButtonColorUpdaterBase; }
 namespace weld { class Window; }
-namespace model { class ColorSet; }
 namespace tools { class JsonWriter; }
 
 class SVXCORE_DLLPUBLIC PaletteManager : public std::enable_shared_from_this<PaletteManager>

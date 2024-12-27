@@ -48,7 +48,6 @@
 #include <tools/poly.hxx>
 #include <vcl/graph.hxx>
 
-class Color;
 class GDIMetaFile;
 class SotStorage;
 class SvStream;

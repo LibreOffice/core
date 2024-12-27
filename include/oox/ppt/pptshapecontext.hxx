@@ -26,7 +26,6 @@
 #include <oox/ppt/slidepersist.hxx>
 #include <sal/types.h>
 
-namespace oox { class AttributeList; }
 namespace oox::core { class ContextHandler2Helper; }
 
 namespace oox::ppt {

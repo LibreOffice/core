@@ -27,7 +27,6 @@
 #include <sal/types.h>
 #include <docmodel/theme/Theme.hxx>
 
-namespace oox { class AttributeList; }
 namespace oox::core { class XmlFilterBase; }
 
 namespace oox::drawingml

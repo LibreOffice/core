@@ -16,8 +16,6 @@ enum TemplateViewMode
     eListView,
     eThumbnailView
 };
-class SfxDocumentTemplates;
-class TemplateContainerItem;
 struct ListViewItem;
 
 class ListView

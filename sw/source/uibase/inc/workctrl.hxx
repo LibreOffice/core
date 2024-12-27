@@ -24,6 +24,7 @@
 #include <vcl/InterimItemWindow.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
+class Menu;
 class PopupMenu;
 class SwView;
 

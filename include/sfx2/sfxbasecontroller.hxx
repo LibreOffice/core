@@ -41,15 +41,6 @@
 
 #include <sfx2/groupid.hxx>
 
-namespace com::sun::star::awt { class XKeyHandler; }
-namespace com::sun::star::awt { class XMouseClickHandler; }
-namespace com::sun::star::frame { class XDispatch; }
-namespace com::sun::star::frame { class XFrame; }
-namespace com::sun::star::frame { class XModel; }
-namespace com::sun::star::frame { struct DispatchDescriptor; }
-namespace com::sun::star::ui { class XContextMenuInterceptor; }
-namespace com::sun::star::ui { class XSidebarProvider; }
-namespace com::sun::star::util { struct URL; }
 namespace weld { class Button; }
 
 struct  IMPL_SfxBaseController_DataContainer    ;   // impl. struct to hold member of class SfxBaseController

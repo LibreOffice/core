@@ -34,7 +34,6 @@
 
 namespace com::sun::star {
     namespace io { class XInputStream; }
-    namespace xml::sax { class XFastAttributeList; }
     namespace xml::sax { class XFastContextHandler; }
     namespace xml::sax { class XLocator; }
 }

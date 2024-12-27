@@ -50,7 +50,6 @@ namespace com::sun::star {
 }
 
 struct CustomProperty;
-class SvtCalendarBox;
 
 // class SfxDocumentInfoItem ---------------------------------------------
 
@@ -276,9 +275,6 @@ public:
     void AddFontTabPage();
 };
 
-// class CustomPropertiesRemoveButton ------------------------------------
-struct CustomPropertyLine;
-
 class CustomPropertiesDateField
 {
 private:
@@ -292,11 +288,6 @@ public:
     void set_date(const Date& rDate);
     ~CustomPropertiesDateField();
 };
-
-namespace weld
-{
-    class TimeFormatter;
-}
 
 class CustomPropertiesTimeField
 {

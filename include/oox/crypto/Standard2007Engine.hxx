@@ -17,11 +17,6 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-namespace oox {
-    class BinaryXInputStream;
-    class BinaryXOutputStream;
-}
-
 namespace oox::crypto {
 
 class OOX_DLLPUBLIC Standard2007Engine final : public CryptoEngine

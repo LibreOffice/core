@@ -25,8 +25,6 @@
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <sal/types.h>
 
-namespace oox { class AttributeList; }
-
 namespace oox::drawingml {
 
 class OOX_DLLPUBLIC ShapeGroupContext : public ::oox::core::FragmentHandler2

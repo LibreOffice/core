@@ -22,6 +22,7 @@
 #include <vcl/gdimtf.hxx>
 
 class SvStream;
+struct ImplMetaReadData;
 
 class SvmReader
 {

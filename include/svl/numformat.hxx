@@ -22,6 +22,9 @@
 
 #include <svl/nfengine.hxx>
 
+class SvNumberFormatterRegistry_Impl;
+class NfCurrencyTable;
+
 class SVL_DLLPUBLIC SvNumberFormatter
 {
     friend class SvNumberFormatterRegistry_Impl;

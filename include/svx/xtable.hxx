@@ -148,13 +148,13 @@ enum class XPropertyListType {
 
 typedef rtl::Reference< class XPropertyList > XPropertyListRef;
 
-class XDashList ; typedef rtl::Reference< class XDashList > XDashListRef;
-class XHatchList ; typedef rtl::Reference< class XHatchList > XHatchListRef;
-class XColorList ; typedef rtl::Reference< class XColorList > XColorListRef;
-class XBitmapList ; typedef rtl::Reference< class XBitmapList > XBitmapListRef;
-class XPatternList ; typedef rtl::Reference< class XPatternList > XPatternListRef;
-class XLineEndList ; typedef rtl::Reference< class XLineEndList > XLineEndListRef;
-class XGradientList ; typedef rtl::Reference< class XGradientList > XGradientListRef;
+typedef rtl::Reference< class XDashList > XDashListRef;
+typedef rtl::Reference< class XHatchList > XHatchListRef;
+typedef rtl::Reference< class XColorList > XColorListRef;
+typedef rtl::Reference< class XBitmapList > XBitmapListRef;
+typedef rtl::Reference< class XPatternList > XPatternListRef;
+typedef rtl::Reference< class XLineEndList > XLineEndListRef;
+typedef rtl::Reference< class XGradientList > XGradientListRef;
 
 class SVXCORE_DLLPUBLIC XPropertyList : public cppu::OWeakObject
 {

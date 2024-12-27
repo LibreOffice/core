@@ -26,7 +26,6 @@
 #include <comphelper/comphelperdllapi.h>
 
 namespace com::sun::star::task { class XInteractionHandler; }
-namespace com::sun::star::task { class XInteractionRequest; }
 
 
 namespace comphelper{

@@ -42,12 +42,7 @@
 
 class SdrOutliner;
 class SdrModel;
-class SvtSysLocale;
 class LocaleDataWrapper;
-
-namespace com::sun::star::lang {
-    struct Locale;
-}
 
 /**
  * Create an Outliner with the engine-global default settings on the heap.

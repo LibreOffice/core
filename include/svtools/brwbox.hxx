@@ -41,10 +41,6 @@ class BrowserHeader;
 class ScrollAdaptor;
 class MeasureStatusBar;
 
-namespace svt {
-    class BrowseBoxImpl;
-}
-
 namespace weld {
     class Scrollbar;
 }

@@ -39,8 +39,6 @@ namespace com::sun::star {
     namespace accessibility { class XAccessible; }
 }
 
-namespace com::sun::star::uno { class XComponentContext; }
-
 using namespace ::com::sun::star;
 
 #define COLUMN_COUNT    16

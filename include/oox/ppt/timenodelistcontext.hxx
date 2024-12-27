@@ -30,8 +30,6 @@ namespace com::sun::star {
     namespace xml::sax { class XFastAttributeList; }
 }
 
-namespace oox { class AttributeList; }
-
 namespace oox::ppt {
 
 

@@ -26,10 +26,6 @@
 
 namespace com::sun::star::frame { class XFrame; }
 
-namespace svt { class AcceleratorExecute; }
-
-namespace weld { class Toolbar; }
-
 namespace sfx2::sidebar {
 
 class FocusManager;

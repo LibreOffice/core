@@ -65,24 +65,16 @@
 #include <sfx2/userinputinterception.hxx>
 
 namespace com::sun::star {
-    namespace awt { class XKeyHandler; }
-    namespace awt { class XMouseClickHandler; }
     namespace awt { class XWindow; }
     namespace beans { struct PropertyValue; }
-    namespace frame { class XController; }
     namespace frame { class XDispatchProvider; }
     namespace frame { class XFrame; }
     namespace frame { class XFrameActionListener; }
     namespace frame { class XModel; }
     namespace frame { class XStatusListener; }
-    namespace frame { class XTitleChangeListener; }
-    namespace frame { struct DispatchDescriptor; }
-    namespace frame { struct FrameActionEvent; }
-    namespace lang { class XEventListener; }
     namespace sdb { class XDatabaseContext; }
     namespace sdbc { class XConnection; }
     namespace sdbc { class XDataSource; }
-    namespace ui { class XSidebarProvider; }
     namespace uno { class XComponentContext; }
     namespace util { class XURLTransformer; }
 }
@@ -90,7 +82,6 @@ namespace com::sun::star {
 namespace vcl { class Window; }
 namespace weld { class Window; }
 namespace framework { class TitleHelper; }
-class NotifyEvent;
 
 namespace dbaui
 {

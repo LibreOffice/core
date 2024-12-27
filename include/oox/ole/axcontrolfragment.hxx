@@ -26,7 +26,6 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-namespace oox { class AttributeList; }
 namespace oox::core { class XmlFilterBase; }
 
 namespace oox::ole {

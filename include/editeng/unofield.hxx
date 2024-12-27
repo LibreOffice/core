@@ -30,8 +30,6 @@
 #include <memory>
 #include <string_view>
 
-namespace com::sun::star::beans { class XPropertySetInfo; }
-
 class SvxUnoFieldData_Impl;
 class SfxItemPropertySet;
 class SvxFieldData;

@@ -32,10 +32,6 @@ namespace com::sun::star {
     namespace uno { class XComponentContext; }
 }
 
-namespace oox {
-    class BinaryInputStream;
-}
-
 namespace oox::core { class FilterBase; }
 
 namespace oox::dump::xlsb {

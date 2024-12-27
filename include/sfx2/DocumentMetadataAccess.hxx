@@ -39,9 +39,6 @@
     protected externally.
  */
 
-namespace com::sun::star::embed {
-    class XStorage;
-}
 namespace com::sun::star::frame {
     class XModel;
 }

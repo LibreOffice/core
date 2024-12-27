@@ -302,7 +302,6 @@ enum TabBarAllowRenamingReturnCode {
 };
 
 class MouseEvent;
-class DataChangedEvent;
 
 struct ImplTabBarItem;
 struct TabBar_Impl;

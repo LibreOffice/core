@@ -33,7 +33,6 @@
 
 namespace com::sun::star::xml::sax { class XFastTokenHandler; }
 namespace com::sun::star::xml { struct Attribute; }
-namespace com::sun::star::xml { struct FastAttribute; }
 
 namespace sax_fastparser
 {

@@ -27,7 +27,6 @@
 #include <sal/types.h>
 
 namespace oox {
-    class AttributeList;
     class PropertyMap;
 }
 

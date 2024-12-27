@@ -26,9 +26,6 @@
 #include <svl/poolitem.hxx>
 #include <svx/svxdllapi.h>
 
-class IntlWrapper;
-class SfxItemPool;
-
 enum class SvxChartTextOrder
 {
     SideBySide,

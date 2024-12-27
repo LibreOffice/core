@@ -32,7 +32,6 @@
 class E3dScene;
 
 namespace sdr::properties {
-    class BaseProperties;
     class E3dCompoundProperties;
     class E3dExtrudeProperties;
     class E3dLatheProperties;

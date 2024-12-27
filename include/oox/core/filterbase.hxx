@@ -44,7 +44,6 @@ namespace com::sun::star {
     namespace io { class XInputStream; }
     namespace io { class XOutputStream; }
     namespace io { class XStream; }
-    namespace lang { class XComponent; }
     namespace lang { class XMultiServiceFactory; }
     namespace task { class XStatusIndicator; }
     namespace uno { class XComponentContext; }

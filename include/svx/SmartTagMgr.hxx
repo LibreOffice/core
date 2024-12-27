@@ -52,7 +52,6 @@ namespace com::sun::star::i18n {
 
 namespace com::sun::star::lang {
     struct Locale;
-    struct EventObject;
 }
 
 namespace com::sun::star::beans {

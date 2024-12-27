@@ -23,7 +23,6 @@
 #include <vcl/dllapi.h>
 #include <vcl/window.hxx>
 
-struct SystemEnvData;
 struct SystemWindowData;
 
 class VCL_DLLPUBLIC SystemChildWindow : public vcl::Window

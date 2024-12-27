@@ -109,6 +109,9 @@ excludelist:
     - cppuhelper/typeprovider.hxx
     - cppuhelper/supportsservice.hxx
     - cppuhelper/factory.hxx
+    include/ucbhelper/propertyvalueset.hxx:
+    # needed in --fwdecl mode
+    - namespace ucbhelper_impl { struct PropertyValue; }
     include/comphelper/accessiblekeybindinghelper.hxx:
     # base class has to be a complete type
     - com/sun/star/accessibility/XAccessibleKeyBinding.hpp
@@ -243,6 +246,12 @@ excludelist:
     include/sot/exchange.hxx:
     # Used in a macro #define
     - com/sun/star/datatransfer/dnd/DNDConstants.hpp
+    include/package/Inflater.hxx:
+    # Needed in --fwdecl mode
+    - struct z_stream_s
+    include/package/Deflater.hxx:
+    # Needed in --fwdecl mode
+    - struct z_stream_s
     include/tools/debug.hxx:
     # Used behind #ifndef
     - tools/toolsdllapi.h
@@ -419,6 +428,9 @@ excludelist:
     - com/sun/star/lang/XUnoTunnel.hpp
     - com/sun/star/xml/sax/XFastDocumentHandler.hpp
     - com/sun/star/xml/sax/XFastParser.hpp
+    include/xmloff/XMLTextMasterPageContext.hxx:
+    # needed in --fwdecl mode
+    - struct ContextID_Index_Pair
     include/svtools/cliplistener.hxx:
     # base class has to be a complete type
     - com/sun/star/datatransfer/clipboard/XClipboardListener.hpp
@@ -814,6 +826,12 @@ excludelist:
     include/svx/svxids.hrc:
     # Used in macro definition
     - svl/typedwhich.hxx
+    include/svx/sdr/properties/properties.hxx:
+    # Needed for fwdecl mode
+    - struct _xmlTextWriter
+    include/svx/sdr/properties/defaultproperties.hxx:
+    # Needed for fwdecl mode
+    - struct _xmlTextWriter
     include/svx/unopage.hxx:
     # Don't propose hxx -> h change in URE libs
     - cppuhelper/interfacecontainer.hxx

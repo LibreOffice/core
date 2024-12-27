@@ -30,7 +30,6 @@
 
 class OutputDevice;
 class MetaAction;
-class SvStream;
 class Color;
 class BitmapEx;
 namespace tools {
@@ -38,7 +37,6 @@ namespace tools {
     class PolyPolygon;
 }
 class Gradient;
-struct ImplMetaReadData;
 
 #define GDI_METAFILE_END                (size_t(0xFFFFFFFF))
 

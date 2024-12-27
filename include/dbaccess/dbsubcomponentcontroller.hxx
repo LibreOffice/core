@@ -37,13 +37,10 @@
 
 namespace com::sun::star {
     namespace beans { class XPropertySet; }
-    namespace beans { struct PropertyValue; }
-    namespace document { class XEmbeddedScripts; }
     namespace frame { class XModel; }
     namespace sdbc { class XConnection; }
     namespace sdbc { class XDatabaseMetaData; }
     namespace uno { class XComponentContext; }
-    namespace util { class XModifyListener; }
     namespace util { class XNumberFormatter; }
 }
 

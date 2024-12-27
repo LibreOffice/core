@@ -48,12 +48,6 @@
 #include <memory>
 
 namespace com::sun::star {
-    namespace accessibility { class XAccessible; }
-    namespace accessibility { class XAccessibleEventListener; }
-    namespace accessibility { class XAccessibleHyperlink; }
-    namespace accessibility { class XAccessibleRelationSet; }
-    namespace beans { struct PropertyValue; }
-    namespace document { struct EventObject; }
     namespace drawing { class XShape; }
 }
 

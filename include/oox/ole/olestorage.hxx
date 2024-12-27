@@ -29,9 +29,7 @@
 
 namespace com::sun::star {
     namespace container { class XNameContainer; }
-    namespace embed { class XStorage; }
     namespace io { class XInputStream; }
-    namespace io { class XOutputStream; }
     namespace io { class XStream; }
     namespace uno { class XComponentContext; }
 }

@@ -30,11 +30,6 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
-namespace com::sun::star {
-    namespace sheet { struct FormulaOpCodeMapEntry; }
-    namespace sheet { struct FormulaToken; }
-}
-
 namespace formula
 {
 

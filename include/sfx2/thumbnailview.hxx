@@ -19,10 +19,6 @@
 #include <vcl/customweld.hxx>
 
 class BitmapEx;
-class MouseEvent;
-class KeyEvent;
-class DataChangedEvent;
-class ScrollBar;
 class ThumbnailViewItem;
 typedef ::std::vector< ThumbnailViewItem* > ThumbnailValueItemList;
 class ThumbnailViewAcc;

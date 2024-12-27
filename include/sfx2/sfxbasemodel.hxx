@@ -76,17 +76,9 @@ namespace sfx::intern {
 }
 
 namespace com::sun::star::beans { struct PropertyValue; }
-namespace com::sun::star::container { class XNameContainer; }
-namespace com::sun::star::container { class XNameReplace; }
-namespace com::sun::star::document { class XEventListener; }
-namespace com::sun::star::document { struct CmisProperty; }
-namespace com::sun::star::document { struct CmisVersion; }
 namespace com::sun::star::document { struct EventObject; }
 namespace com::sun::star::frame { class XController2; }
-namespace com::sun::star::task { class XInteractionHandler; }
 namespace com::sun::star::ui { class XUIConfigurationManager2; }
-namespace com::sun::star::util { class XCloseListener; }
-namespace com::sun::star::util { class XModifyListener; }
 
 
 

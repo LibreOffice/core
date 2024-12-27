@@ -25,7 +25,6 @@
 #include <comphelper/comphelperdllapi.h>
 
 
-namespace com::sun::star::uno { class Any; }
 namespace com::sun::star::uno { class Type; }
 
 namespace comphelper

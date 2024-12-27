@@ -23,11 +23,6 @@
 #include <com/sun/star/accessibility/XAccessibleExtendedComponent.hpp>
 #include <editeng/editengdllapi.h>
 
-namespace com::sun::star::accessibility
-{
-class XAccessible;
-}
-
 namespace accessibility
 {
 /** @descr

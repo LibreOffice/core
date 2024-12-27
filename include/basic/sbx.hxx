@@ -33,8 +33,6 @@
 
 class SvStream;
 
-class SfxBroadcaster;
-
 // Parameter information
 struct SbxParamInfo
 {

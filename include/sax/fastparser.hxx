@@ -28,11 +28,6 @@
 #include <sax/saxdllapi.h>
 #include <memory>
 
-namespace com::sun::star::xml::sax {
-    class XFastDocumentHandler;
-    class XFastTokenHandler;
-}
-
 namespace sax_fastparser {
 
 
