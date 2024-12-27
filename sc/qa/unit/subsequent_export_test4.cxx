@@ -2113,6 +2113,21 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testSheetProtections)
     verify();
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf164417)
+{
+    createScDoc("xlsx/tdf164417.xlsx");
+
+    save(u"Calc Office Open XML"_ustr);
+
+    xmlDocUniquePtr pSheet1 = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet1);
+
+    CPPUNIT_ASSERT_EQUAL(
+        0, getXPathPosition(pSheet1, "//x:autoFilter/x:filterColumn/x:filters", "filter"));
+    CPPUNIT_ASSERT_EQUAL(
+        1, getXPathPosition(pSheet1, "//x:autoFilter/x:filterColumn/x:filters", "dateGroupItem"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
