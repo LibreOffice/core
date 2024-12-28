@@ -353,6 +353,12 @@ OString CreateStyleString()
            * Check n Radio *
            * ***************/
 
+        "check,"
+        "radio {"
+        "  background-image: none;"
+        "  border: 1px solid #" + aThemeColors.GetSeparatorColor().AsRGBHexString() + ";"
+        "}"
+
         "check:disabled,"
         "radio:disabled {"
         "  background-color: #" + aThemeColors.GetDisabledColor().AsRGBHexString() + ";"
