@@ -3255,7 +3255,7 @@ void SAL_CALL SwXTextDocument::render(
     if( bLastPage )
     {
         // tdf#144989 enable DoIdleJobs() again after last page
-        // Related: tdf#163126 on macOS, if the the "print selection only"
+        // Related: tdf#163126 on macOS, if the "print selection only"
         // checkbox is changed and then the restarted print dialog is
         // cancelled, idling will have already been unblocked so check
         // if it is blocked before unblocking it.
