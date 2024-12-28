@@ -1324,9 +1324,6 @@ namespace svxform
 
         m_xInstanceBtn->set_item_active(u"instancesdetails"_ustr, m_bShowDetails);
 
-        m_xTabCtrl->set_current_page(sPageId);
-        ActivatePageHdl(sPageId);
-
         // get our frame
         assert(pBindings != nullptr &&
                     "DataNavigatorWindow::LoadModels(): no SfxBindings; can't get frame");
@@ -1338,6 +1335,12 @@ namespace svxform
 
         // load xforms models of the current document
         LoadModels();
+
+        // tdf#154683 Select the current page after loading the Models, the default
+        // Instance page needs to be selected at LoadModel time in order to get its
+        // tab text updated automatically.
+        m_xTabCtrl->set_current_page(sPageId);
+        ActivatePageHdl(sPageId);
 
         // tdf#154322 select the first entry of the current page by default
         if (XFormsPage* pPage = GetPage(sPageId))
