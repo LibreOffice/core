@@ -2984,7 +2984,12 @@ void SAL_CALL SdMasterPage::setName( const OUString& rName )
     GetPage()->SetName( rName );
 
     if( pDoc )
-        pDoc->RenameLayoutTemplate( GetPage()->GetLayoutName(), rName );
+    {
+        // tdf#164463 we need to pass a copy of the LayoutName here, a
+        // reference means it can get updated to rName during the function.
+        OUString aOldPageLayoutName = GetPage()->GetLayoutName();
+        pDoc->RenameLayoutTemplate(aOldPageLayoutName, rName);
+    }
 
     // fake a mode change to repaint the page tab bar
     ::sd::DrawDocShell* pDocSh = GetModel()->GetDocShell();

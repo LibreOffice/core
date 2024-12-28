@@ -106,10 +106,9 @@ void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc
             // about this
             if( bRenameDuplicates && aTest != SdResId( STR_LAYOUT_DEFAULT_NAME ) && !(pTestPage->Equals(*pBMMPage)) )
             {
-                pBookmarkDoc->RenameLayoutTemplate(
-                    pBMMPage->GetLayoutName(), pBMMPage->GetName() + "_");
+                OUString aOldPageLayoutName = pBMMPage->GetLayoutName();
+                pBookmarkDoc->RenameLayoutTemplate(aOldPageLayoutName, pBMMPage->GetName() + "_");
                 aLayout = pBMMPage->GetName();
-
                 break;
             }
             else
