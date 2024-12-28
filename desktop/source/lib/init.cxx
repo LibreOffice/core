@@ -7693,8 +7693,9 @@ static void lo_setDocumentPassword(LibreOfficeKit* pThis,
     assert(pThis);
     assert(pURL);
     LibLibreOffice_Impl *const pLib = static_cast<LibLibreOffice_Impl*>(pThis);
-    assert(pLib->mInteractionMap.contains(OString(pURL)));
-    pLib->mInteractionMap.find(OString(pURL))->second->SetPassword(pPassword);
+    auto it = pLib->mInteractionMap.find(OString(pURL));
+    assert(it != pLib->mInteractionMap.end());
+    it->second->SetPassword(pPassword);
 }
 
 static char* lo_getVersionInfo(SAL_UNUSED_PARAMETER LibreOfficeKit* /*pThis*/)
