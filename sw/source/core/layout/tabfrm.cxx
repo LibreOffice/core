@@ -440,6 +440,7 @@ static void lcl_MoveRowContent( SwRowFrame& rSourceLine, SwRowFrame& rDestLine )
     // Move content of follow cells into master cells
     while ( pCurrSourceCell )
     {
+        assert(pCurrDestCell);
         SwFrame* pLower = pCurrSourceCell->Lower();
         if ( pLower && pLower->IsRowFrame() )
         {
@@ -482,7 +483,7 @@ static void lcl_MoveRowContent( SwRowFrame& rSourceLine, SwRowFrame& rDestLine )
             {
                 // NEW TABLES
                 SwCellFrame* pDestCell = pCurrDestCell;
-                if ( pDestCell && pDestCell->GetTabBox()->getRowSpan() < 1 )
+                if ( pDestCell->GetTabBox()->getRowSpan() < 1 )
                     pDestCell = & const_cast<SwCellFrame&>(pDestCell->FindStartEndOfRowSpanCell( true ));
 
                 // Find last content
