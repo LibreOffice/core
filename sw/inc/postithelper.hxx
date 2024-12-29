@@ -94,7 +94,7 @@ namespace SwPostItHelper
     void ImportHTML(Outliner& rOutliner, const OUString& rHtml);
 }
 
-class SwAnnotationItem final
+class SAL_DLLPUBLIC_RTTI SwAnnotationItem final
 {
 public:
     VclPtr<sw::annotation::SwAnnotationWin> mpPostIt;
