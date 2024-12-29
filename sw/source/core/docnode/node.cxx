@@ -1118,7 +1118,6 @@ void SwContentNode::SwClientNotify( const SwModify&, const SfxHint& rHint)
         // If the Format parent was switched, register the Attrset at the new one
         // Skip own Modify!
         bool bSetParent = false;
-        bool bCalcHidden = false;
         SwFormatColl* pFormatColl = nullptr;
         if(GetpSwAttrSet()
                 && pChangeHint->m_pNewFormat == GetRegisteredIn())
@@ -1129,8 +1128,6 @@ void SwContentNode::SwClientNotify( const SwModify&, const SfxHint& rHint)
 
         if(bSetParent && GetpSwAttrSet())
             AttrSetHandleHelper::SetParent(mpAttrSet, *this, pFormatColl, pFormatColl);
-        if(bCalcHidden)
-            static_cast<SwTextNode*>(this)->SetCalcHiddenCharFlags();
         CallSwClientNotify(rHint);
     }
     else if (rHint.GetId() == SfxHintId::SwLegacyModify)
@@ -1139,9 +1136,7 @@ void SwContentNode::SwClientNotify( const SwModify&, const SfxHint& rHint)
         const sal_uInt16 nWhich = pLegacyHint->GetWhich();
         InvalidateInSwCache(nWhich);
 
-        bool bSetParent = false;
         bool bCalcHidden = false;
-        SwFormatColl* pFormatColl = nullptr;
         switch(nWhich)
         {
             case RES_OBJECTDYING:
@@ -1188,8 +1183,6 @@ void SwContentNode::SwClientNotify( const SwModify&, const SfxHint& rHint)
                 UpdateAttr(rUpdateAttr);
                 return;
         }
-        if(bSetParent && GetpSwAttrSet())
-            AttrSetHandleHelper::SetParent(mpAttrSet, *this, pFormatColl, pFormatColl);
         if(bCalcHidden)
             static_cast<SwTextNode*>(this)->SetCalcHiddenCharFlags();
         CallSwClientNotify(rHint);
