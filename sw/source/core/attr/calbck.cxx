@@ -20,7 +20,6 @@
 
 #include <algorithm>
 #include <format.hxx>
-#include <frmfmt.hxx>
 #include <hintids.hxx>
 #include <hints.hxx>
 #include <osl/diagnose.h>
@@ -56,8 +55,7 @@ namespace sw
 
 sw::LegacyModifyHint::~LegacyModifyHint() {}
 
-template<typename T>
-sw::ClientBase<T>::ClientBase(sw::ClientBase<T>&& o) noexcept
+SwClient::SwClient(SwClient&& o) noexcept
     : m_pRegisteredIn(nullptr)
 {
     if(o.m_pRegisteredIn)
@@ -67,8 +65,7 @@ sw::ClientBase<T>::ClientBase(sw::ClientBase<T>&& o) noexcept
     }
 }
 
-template<typename T>
-sw::ClientBase<T>::~ClientBase()
+SwClient::~SwClient()
 {
     if(GetRegisteredIn())
         DBG_TESTSOLARMUTEX();
@@ -77,8 +74,7 @@ sw::ClientBase<T>::~ClientBase()
         m_pRegisteredIn->Remove(*this);
 }
 
-template<typename T>
-std::optional<sw::ModifyChangedHint> sw::ClientBase<T>::CheckRegistration( const SfxPoolItem* pOld )
+std::optional<sw::ModifyChangedHint> SwClient::CheckRegistration( const SfxPoolItem* pOld )
 {
     DBG_TESTSOLARMUTEX();
     // this method only handles notification about dying SwModify objects
@@ -108,8 +104,7 @@ std::optional<sw::ModifyChangedHint> sw::ClientBase<T>::CheckRegistration( const
     return sw::ModifyChangedHint(pAbove);
 }
 
-template<typename T>
-void sw::ClientBase<T>::CheckRegistrationFormat(SwFormat& rOld)
+void SwClient::CheckRegistrationFormat(SwFormat& rOld)
 {
     assert(GetRegisteredIn() == &rOld);
     auto pNew = rOld.DerivedFrom();
@@ -120,8 +115,7 @@ void sw::ClientBase<T>::CheckRegistrationFormat(SwFormat& rOld)
     SwClientNotify(rOld, aHint);
 }
 
-template<typename T>
-void sw::ClientBase<T>::SwClientNotify(const SwModify&, const SfxHint& rHint)
+void SwClient::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
     if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
@@ -129,8 +123,7 @@ void sw::ClientBase<T>::SwClientNotify(const SwModify&, const SfxHint& rHint)
     CheckRegistration(pLegacyHint->m_pOld);
 };
 
-template<typename T>
-void sw::ClientBase<T>::StartListeningToSameModifyAs(const sw::ClientBase<T>& other)
+void SwClient::StartListeningToSameModifyAs(const SwClient& other)
 {
     if(other.m_pRegisteredIn)
         other.m_pRegisteredIn->Add(*this);
@@ -138,8 +131,7 @@ void sw::ClientBase<T>::StartListeningToSameModifyAs(const sw::ClientBase<T>& ot
         EndListeningAll();
 }
 
-template<typename T>
-void sw::ClientBase<T>::EndListeningAll()
+void SwClient::EndListeningAll()
 {
     if(m_pRegisteredIn)
         m_pRegisteredIn->Remove(*this);
@@ -175,6 +167,85 @@ bool SwModify::GetInfo( SwFindNearestNode& rInfo ) const
     return true;
 }
 
+void SwModify::Add(SwClient& rDepend)
+{
+    DBG_TESTSOLARMUTEX();
+#ifdef DBG_UTIL
+    // You should not EVER use SwModify directly in new code:
+    // - Preexisting SwModifys should only ever be used via sw::BroadcastingModify.
+    //   This includes sw::BroadcastMixin, which is the long-term target (without
+    //   SwModify).
+    // - New classes should use sw::BroadcastMixin alone.
+    if(!dynamic_cast<sw::BroadcastingModify*>(this))
+    {
+        auto pBT = sal::backtrace_get(20);
+        SAL_WARN("sw.core", "Modify that is not broadcasting used!\n" << sal::backtrace_to_string(pBT.get()));
+    }
+#endif
+
+    if (rDepend.m_pRegisteredIn == this)
+        return;
+
+    // deregister new client in case it is already registered elsewhere
+    if( rDepend.m_pRegisteredIn != nullptr )
+        rDepend.m_pRegisteredIn->Remove(rDepend);
+
+    if( !m_pWriterListeners )
+    {
+        // first client added
+        m_pWriterListeners = &rDepend;
+        m_pWriterListeners->m_pLeft = nullptr;
+        m_pWriterListeners->m_pRight = nullptr;
+    }
+    else
+    {
+        // append client
+        rDepend.m_pRight = m_pWriterListeners->m_pRight;
+        m_pWriterListeners->m_pRight = &rDepend;
+        rDepend.m_pLeft = m_pWriterListeners;
+        if( rDepend.m_pRight )
+            rDepend.m_pRight->m_pLeft = &rDepend;
+    }
+
+    // connect client to me
+    rDepend.m_pRegisteredIn = this;
+}
+
+void SwModify::Remove(SwClient& rDepend)
+{
+    DBG_TESTSOLARMUTEX();
+    assert(rDepend.m_pRegisteredIn == this);
+
+    // SwClient is my listener
+    // remove it from my list
+    ::sw::WriterListener* pR = rDepend.m_pRight;
+    ::sw::WriterListener* pL = rDepend.m_pLeft;
+    if( m_pWriterListeners == &rDepend )
+        m_pWriterListeners = pL ? pL : pR;
+
+    if( pL )
+        pL->m_pRight = pR;
+    if( pR )
+        pR->m_pLeft = pL;
+
+    // update ClientIterators
+    if(sw::ClientIteratorBase::s_pClientIters)
+    {
+        for(auto& rIter : sw::ClientIteratorBase::s_pClientIters->GetRingContainer())
+        {
+            if (&rIter.m_rRoot == this &&
+                (rIter.m_pCurrent == &rDepend || rIter.m_pPosition == &rDepend))
+            {
+                // if object being removed is the current or next object in an
+                // iterator, advance this iterator
+                rIter.m_pPosition = pR;
+            }
+        }
+    }
+    rDepend.m_pLeft = nullptr;
+    rDepend.m_pRight = nullptr;
+    rDepend.m_pRegisteredIn = nullptr;
+}
 
 sw::WriterMultiListener::WriterMultiListener(SwClient& rToTell)
     : m_rToTell(rToTell)
@@ -238,22 +309,6 @@ void SwModify::CallSwClientNotify( const SfxHint& rHint ) const
         pClient->SwClientNotify( *this, rHint );
 }
 
-void SwModify::EnsureBroadcasting()
-{
-#ifdef DBG_UTIL
-    // You should not EVER use SwModify directly in new code:
-    // - Preexisting SwModifys should only ever be used via sw::BroadcastingModify.
-    //   This includes sw::BroadcastMixin, which is the long-term target (without
-    //   SwModify).
-    // - New classes should use sw::BroadcastMixin alone.
-    if(!dynamic_cast<sw::BroadcastingModify*>(this))
-    {
-        auto pBT = sal::backtrace_get(20);
-        SAL_WARN("sw.core", "Modify that is not broadcasting used!\n" << sal::backtrace_to_string(pBT.get()));
-    }
-#endif
-}
-
 void sw::BroadcastingModify::CallSwClientNotify(const SfxHint& rHint) const
 {
     SwModify::CallSwClientNotify(rHint);
@@ -267,7 +322,4 @@ void sw::ClientNotifyAttrChg(SwModify& rModify, const SwAttrSet& aSet, SwAttrSet
     const sw::LegacyModifyHint aHint(&aChgOld, &aChgNew);
     rModify.SwClientNotify(rModify, aHint);
 }
-
-template class sw::ClientBase<SwModify>;
-template class sw::ClientBase<SwFrameFormat>;
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
