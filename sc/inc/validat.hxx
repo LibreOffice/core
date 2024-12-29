@@ -161,7 +161,8 @@ public:
         OUString& rStrResult, double& nVal, sal_uInt32& nFormat, bool& bIsVal) const;
 
                     // TRUE -> break
-    bool DoError(weld::Window* pParent, const OUString& rInput, const ScAddress& rPos) const;
+    void DoError(weld::Window* pParent, const OUString& rInput, const ScAddress& rPos,
+                 std::function<void(bool forget)> callback) const;
     void DoCalcError( ScFormulaCell* pCell ) const;
 
     bool IsEmpty() const;

@@ -3138,13 +3138,6 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode, bool bBeforeSavingInL
 
     ImplCreateEditEngine();
 
-    bool bMatrix = ( nBlockMode == ScEnterMode::MATRIX );
-
-    SfxApplication* pSfxApp     = SfxGetpApp();
-    std::unique_ptr<EditTextObject> pObject;
-    std::unique_ptr<ScPatternAttr> pCellAttrs;
-    bool            bForget     = false; // Remove due to validity?
-
     OUString aString = GetEditText(mpEditEngine.get());
     OUString aPreAutoCorrectString(aString);
     EditView* pActiveView = pTopView ? pTopView : pTableView;
@@ -3213,12 +3206,24 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode, bool bBeforeSavingInL
                     return;
                 }
 
-                if (pData->DoError(pActiveViewSh->GetFrameWeld(), aString, aCursorPos))
-                    bForget = true;                 // Do not take over input
-
+                pData->DoError(
+                    pActiveViewSh->GetFrameWeld(), aString, aCursorPos,
+                    [this, nBlockMode, aString, aPreAutoCorrectString](bool bForget)
+                    { EnterHandler2(nBlockMode, bForget, aString, aPreAutoCorrectString); });
+                return;
             }
         }
     }
+    EnterHandler2(nBlockMode, false, aString, aPreAutoCorrectString);
+}
+
+void ScInputHandler::EnterHandler2(ScEnterMode nBlockMode, bool bForget, OUString aString,
+                                   OUString aPreAutoCorrectString)
+{
+    std::unique_ptr<EditTextObject> pObject;
+    std::unique_ptr<ScPatternAttr> pCellAttrs;
+    bool bMatrix = (nBlockMode == ScEnterMode::MATRIX);
+    SfxApplication* pSfxApp = SfxGetpApp();
 
     // Check for input into DataPilot table
     if ( bModified && !bForget )
