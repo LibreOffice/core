@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_INC_RING_HXX
 #define INCLUDED_SW_INC_RING_HXX
 
+#include <cassert>
 #include <utility>
 #include <sal/types.h>
 #include <iterator>
