@@ -473,7 +473,8 @@ static void lcl_MoveRowContent( SwRowFrame& rSourceLine, SwRowFrame& rDestLine )
                     pTmpSourceRow->InsertBefore( pCurrDestCell, nullptr );
                 }
 
-                pTmpSourceRow = static_cast<SwRowFrame*>(pLower);
+                // RemoveFromLayout invalidates Lower() so it must be refetched
+                pTmpSourceRow = static_cast<SwRowFrame*>(pCurrSourceCell->Lower());
             }
         }
         else
