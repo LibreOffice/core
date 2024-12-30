@@ -2925,7 +2925,7 @@ void SwTextNode::GCAttr()
             nMax,
             0);
 
-        CallSwClientNotify(sw::LegacyModifyHint(nullptr, &aHint));
+        CallSwClientNotify(sw::LegacyModifyHint(&aHint, &aHint));
         CallSwClientNotify(SwFormatChangeHint(nullptr, GetTextColl()));
     }
 }
