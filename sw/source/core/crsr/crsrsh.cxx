@@ -2917,9 +2917,10 @@ SwContentFrame *SwCursorShell::GetCurrFrame( const bool bCalcFrame ) const
 */
 void SwCursorShell::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    if (rHint.GetId() == SfxHintId::SwPostGraphicArrived && m_aGrfArrivedLnk.IsSet())
+    if (rHint.GetId() == SfxHintId::SwPostGraphicArrived)
     {
-        m_aGrfArrivedLnk.Call(*this);
+        if (m_aGrfArrivedLnk.IsSet())
+            m_aGrfArrivedLnk.Call(*this);
         return;
     }
     if (rHint.GetId() == SfxHintId::SwFormatChange)
