@@ -52,6 +52,11 @@
 #include <unordered_map>
 #include <unordered_set>
 
+#ifdef MACOSX
+#include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
+#include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
+#endif
+
 using namespace vcl;
 
 namespace {
@@ -253,7 +258,7 @@ PrinterController::PrinterController(const VclPtr<Printer>& i_xPrinter, weld::Wi
     mpImplData->mpWindow = i_pWindow;
 }
 
-static OUString queryFile( Printer const * pPrinter )
+static OUString queryFile( Printer const * pPrinter, const OUString & rJobName )
 {
     OUString aResult;
 
@@ -262,6 +267,27 @@ static OUString queryFile( Printer const * pPrinter )
 
     try
     {
+#ifdef MACOSX
+        // Try to mimic the save dialog behavior when using the native
+        // print dialog to save to PDF.
+        if( pPrinter )
+        {
+            // Set the suggested file name if possible
+            if( !rJobName.isEmpty() )
+                xFilePicker->setDefaultName( rJobName );
+
+            // macOS normally saves only to PDF
+            if( pPrinter->GetCapabilities( PrinterCapType::PDF ) )
+            {
+                xFilePicker->appendFilter( u"Portable Document Format"_ustr, u"*.pdf"_ustr );
+
+                css::uno::Reference< css::ui::dialogs::XFilePickerControlAccess > xControlAccess( xFilePicker, css::uno::UNO_QUERY );
+                if( xControlAccess.is() )
+                    xControlAccess->setValue( css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, css::uno::Any( true ) );
+            }
+        }
+#else
+        (void)rJobName;
 #ifdef UNX
         // add PostScript and PDF
         bool bPS = true, bPDF = true;
@@ -282,6 +308,7 @@ static OUString queryFile( Printer const * pPrinter )
 #endif
         // add arbitrary files
         xFilePicker->appendFilter(VclResId(SV_STDTEXT_ALLFILETYPES), u"*.*"_ustr);
+#endif
     }
     catch (const css::lang::IllegalArgumentException&)
     {
@@ -522,7 +549,11 @@ bool Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
             }
             if (aDlg.isPrintToFile())
             {
-                OUString aFile = queryFile( xController->getPrinter().get() );
+                OUString aJobName;
+                css::beans::PropertyValue* pJobNameVal = xController->getValue( u"JobName"_ustr );
+                if( pJobNameVal )
+                    pJobNameVal->Value >>= aJobName;
+                OUString aFile = queryFile( xController->getPrinter().get(), aJobName );
                 if( aFile.isEmpty() )
                 {
                     xController->abortJob();
