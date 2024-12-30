@@ -2017,7 +2017,8 @@ void ScOutputData::DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
 
     if ( nRefStartX == nRefEndX && nRefStartY == nRefEndY )
         mpDoc->ExtendMerge( nRefStartX, nRefStartY, nRefEndX, nRefEndY, nTab );
-    else if (mpDoc->HasAttrib(nRefEndX, nRefEndY, nTab, HasAttrFlags::Merged))
+    else if (mpDoc->ValidCol(nRefEndX) && mpDoc->ValidRow(nRefEndY) &&
+             mpDoc->HasAttrib(nRefEndX, nRefEndY, nTab, HasAttrFlags::Merged))
         mpDoc->ExtendMerge(nRefEndX, nRefEndY, nRefEndX, nRefEndY, nTab);
 
     if ( !(nRefStartX <= nVisX2 && nRefEndX >= nVisX1 &&
