@@ -161,6 +161,7 @@ public class SQLQueryComposer
     private void appendSortingCriterion(int _SortIndex, boolean _baddAliasFieldNames) throws SQLException
     {
         String sSortValue = CurDBMetaData.getSortFieldNames()[_SortIndex][0];
+        String currentOrder = m_queryComposer.getOrder();
         XPropertySet xColumn = CurDBMetaData.getColumnObjectByFieldName(sSortValue, _baddAliasFieldNames);
 
         String sSort = "ASC";
@@ -168,8 +169,9 @@ public class SQLQueryComposer
         {
             sSort = CurDBMetaData.getSortFieldNames()[_SortIndex][1];
         }
-        boolean bascend = !(sSort.equals("DESC"));
-        m_queryComposer.appendOrderByColumn(xColumn, bascend);
+        String tablePrefixedFieldName = getComposedAliasDisplayName(sSortValue);
+        currentOrder += (!currentOrder.isEmpty() ? ", " : "") + tablePrefixedFieldName + " " + sSort;
+        m_queryComposer.setOrder(currentOrder);
     }
 
     private void appendSortingcriteria(boolean _baddAliasFieldNames) throws SQLException
