@@ -1802,7 +1802,7 @@ void SwTextNode::DeleteAttribute( SwTextAttr * const pAttr )
 
         m_pSwpHints->Delete( pAttr );
         SwTextAttr::Destroy( pAttr );
-        CallSwClientNotify(sw::LegacyModifyHint(&aHint, &aHint));
+        CallSwClientNotify(sw::LegacyModifyHint(nullptr, &aHint));
 
         TryDeleteSwpHints();
     }
@@ -1877,7 +1877,7 @@ void SwTextNode::DeleteAttributes(
 
                 m_pSwpHints->DeleteAtPos( nPos );
                 SwTextAttr::Destroy( pTextHt );
-                CallSwClientNotify(sw::LegacyModifyHint(&aHint, &aHint));
+                CallSwClientNotify(sw::LegacyModifyHint(nullptr, &aHint));
             }
         }
     }

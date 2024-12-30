@@ -668,7 +668,7 @@ void SwTextNode::RstTextAttr(
         nMax,
         0);
 
-    CallSwClientNotify(sw::LegacyModifyHint(&aHint, &aHint));
+    CallSwClientNotify(sw::LegacyModifyHint(nullptr, &aHint));
     CallSwClientNotify(SwFormatChangeHint(nullptr, GetFormatColl()));
 }
 

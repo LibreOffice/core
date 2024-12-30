@@ -1164,9 +1164,23 @@ void SwContentNode::SwClientNotify( const SwModify&, const SfxHint& rHint)
                 break;
 
             case RES_UPDATE_ATTR:
-                assert(pLegacyHint->m_pNew && pLegacyHint->m_pNew == pLegacyHint->m_pOld);
+                // RES_UPDATE_ATTR _should_ always contain a SwUpdateAttr hint in old and new.
+                // However, faking one with just a basic SfxPoolItem setting a WhichId has been observed.
+                // This makes the crude "WhichId" type divert from the true type, which is bad.
+                // Thus we are asserting here, but falling back to an proper
+                // hint instead. so that we at least will not spread such poison further.
+#ifdef DBG_UTIL
+                if (!SfxPoolItem::areSame(pLegacyHint->m_pNew, pLegacyHint->m_pOld))
+                {
+                    auto pBT = sal::backtrace_get(20);
+                    SAL_WARN("sw.core", "UpdateAttr not matching! " << sal::backtrace_to_string(pBT.get()));
+                }
+#endif
+                assert(SfxPoolItem::areSame(pLegacyHint->m_pNew, pLegacyHint->m_pOld));
                 assert(dynamic_cast<const SwUpdateAttr*>(pLegacyHint->m_pNew));
-                UpdateAttr(*static_cast<const SwUpdateAttr*>(pLegacyHint->m_pNew));
+                const SwUpdateAttr aFallbackHint(0,0,0);
+                const SwUpdateAttr& rUpdateAttr = pLegacyHint->m_pNew ? *static_cast<const SwUpdateAttr*>(pLegacyHint->m_pNew) : aFallbackHint;
+                UpdateAttr(rUpdateAttr);
                 return;
         }
         if(bCalcHidden)
