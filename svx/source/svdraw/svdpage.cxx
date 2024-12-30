@@ -617,7 +617,7 @@ void SdrObjList::sort( std::vector<sal_Int32>& sortOrder)
 
     // no duplicates
     std::vector<bool> aNoDuplicates(sortOrder.size(), false);
-    for (const auto& nSortOrder : sortOrder )
+    for (const sal_Int32 nSortOrder : sortOrder )
     {
         size_t idx =  static_cast<size_t>( nSortOrder );
 
