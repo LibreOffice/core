@@ -849,11 +849,20 @@ void PrintDialog::setPaperSizes()
     VclPtr<Printer> aPrt( maPController->getPrinter() );
     mePaper = aPrt->GetPaper();
 
+    // Related: tdf#159995 allow setting the page size when printing to file
+    // On macOS, printing to file just saves to PDF using a native print
+    // job just like the native print dialog's PDF > Save as PDF... option.
+    // Also, as noted in tdf#163558, the native print dialog could support
+    // changing the page size eventually (and already does in Apple's
+    // Safari and TextEdit applications) so allow changing of the page
+    // size in the non-native print dialog on macOS as well.
+#ifndef MACOSX
     if ( isPrintToFile() )
     {
         mxPaperSizeBox->set_sensitive( false );
     }
     else
+#endif
     {
         Size aSizeOfPaper = aPrt->GetSizeOfPaper();
         PaperInfo aPaperInfo(aSizeOfPaper.getWidth(), aSizeOfPaper.getHeight());
@@ -2007,6 +2016,15 @@ IMPL_LINK( PrintDialog, SelectHdl, weld::ComboBox&, rBox, void )
 
         updatePageSize(mxOrientationBox->get_active());
         setupPaperSidesBox();
+
+        // Related: tdf#159995 changing a listbox's active item does not
+        // trigger an update to the preview so force an update to the
+        // preview by calling each active listbox's select handler after
+        // changing the active printer.
+        if ( mxOrientationBox->get_sensitive() )
+            LINK( this, PrintDialog, SelectHdl ).Call( *mxOrientationBox );
+        if ( mxPaperSizeBox->get_sensitive() )
+            LINK( this, PrintDialog, SelectHdl ).Call( *mxPaperSizeBox );
     }
     else if ( &rBox == mxPaperSidesBox.get() )
     {
