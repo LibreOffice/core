@@ -428,7 +428,7 @@ bool AquaSalInfoPrinter::StartJob( const OUString* i_pFileName,
                 // non-native print dialog uses the correct paper size.
                 // Note: to use LibreOffice's non-native print dialog,
                 // set "UseSystemPrintDialog" to "false" in LibreOffice's
-                // Expert Conguration dialog and restart.
+                // Expert Configuration dialog and restart.
                 GDIMetaFile aPageFile;
                 mnCurPageRangeCount = 1;
                 aCurSize = i_rController.getFilteredPageFile( mnCurPageRangeStart, aPageFile ).aSize;
