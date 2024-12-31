@@ -20,7 +20,7 @@
         <prop oor:name="URLPattern"/>
         <prop oor:name="Extensions"><value>docx</value></prop>
         <prop oor:name="MediaType"><value>application/msword</value></prop>
-        <prop oor:name="Preferred"><value>true</value></prop>
+        <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>MS Word 2007 XML</value></prop>
         <prop oor:name="UIName"><value xml:lang="en-US">Word 2007</value></prop>
         <prop oor:name="ClipboardFormat"><value>MSWordDoc</value></prop>
