@@ -14213,14 +14213,15 @@ dnl ===================================================================
 dnl Test whether we need bzip2
 dnl ===================================================================
 SYSTEM_BZIP2=
-if test "$ENABLE_ONLINE_UPDATE_MAR" = "TRUE" -o "$enable_python" = internal; then
+if test "$ENABLE_ONLINE_UPDATE_MAR" = TRUE -o "$enable_python" = internal; then
     AC_MSG_CHECKING([whether to use system bzip2])
     if test "$with_system_bzip2" = yes; then
         SYSTEM_BZIP2=TRUE
         AC_MSG_RESULT([yes])
-        PKG_CHECK_MODULES(BZIP2, bzip2)
-        FilterLibs "${BZIP2_LIBS}"
-        BZIP2_LIBS="${filteredlibs}"
+        AC_CHECK_HEADER(bzlib.h, [],
+            [AC_MSG_ERROR(bzlib.h not found. install bzip2)], [])
+        AC_CHECK_LIB(bz2, BZ2_bzDecompressInit, [BZIP2_LIBS=-lbz2],
+            [AC_MSG_ERROR(bzip2 not found or functional)], [])
     else
         AC_MSG_RESULT([no])
         BUILD_TYPE="$BUILD_TYPE BZIP2"
