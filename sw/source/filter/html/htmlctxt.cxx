@@ -692,17 +692,17 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
             break;
         case RES_CHRATR_FONTSIZE:
             // don't set attributes with a % property
-            if( static_cast<const SvxFontHeightItem *>(pItem)->GetProp() == 100 )
+            if( pItem->StaticWhichCast(RES_CHRATR_FONTSIZE).GetProp() == 100 )
                 ppAttr = &m_xAttrTab->pFontHeight;
             break;
         case RES_CHRATR_CJK_FONTSIZE:
             // don't set attributes with a % property
-            if( static_cast<const SvxFontHeightItem *>(pItem)->GetProp() == 100 )
+            if( pItem->StaticWhichCast(RES_CHRATR_CJK_FONTSIZE).GetProp() == 100 )
                 ppAttr = &m_xAttrTab->pFontHeightCJK;
             break;
         case RES_CHRATR_CTL_FONTSIZE:
             // don't set attributes with a % property
-            if( static_cast<const SvxFontHeightItem *>(pItem)->GetProp() == 100 )
+            if( pItem->StaticWhichCast(RES_CHRATR_CTL_FONTSIZE).GetProp() == 100 )
                 ppAttr = &m_xAttrTab->pFontHeightCTL;
             break;
 

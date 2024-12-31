@@ -63,7 +63,7 @@ PaletteManager::PaletteManager() :
     {
         const SfxPoolItem* pItem = nullptr;
         if( nullptr != ( pItem = pDocSh->GetItem(SID_COLOR_TABLE) ) )
-            pColorList = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
+            pColorList = pItem->StaticWhichCast(SID_COLOR_TABLE).GetColorList();
     }
     if(!pColorList.is())
         pColorList = XColorList::CreateStdColorList();
@@ -344,7 +344,7 @@ OUString PaletteManager::GetPaletteName()
         {
             const SfxPoolItem* pItem = nullptr;
             if( nullptr != ( pItem = pDocSh->GetItem(SID_COLOR_TABLE) ) )
-                pColorList = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
+                pColorList = pItem->StaticWhichCast(SID_COLOR_TABLE).GetColorList();
         }
     }
     return aNames[mnCurrentPalette];

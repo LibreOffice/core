@@ -1076,7 +1076,7 @@ void MSWord_SdrAttrIter::SetCharSet(const EECharAttrib& rAttr, bool bStart)
 
     if( bStart )
     {
-        rtl_TextEncoding eChrSet = static_cast<const SvxFontItem&>(rItem).GetCharSet();
+        rtl_TextEncoding eChrSet = rItem.StaticWhichCast(EE_CHAR_FONTINFO).GetCharSet();
         m_aChrSetArr.push_back( eChrSet );
         m_aChrTextAtrArr.push_back( &rAttr );
     }
