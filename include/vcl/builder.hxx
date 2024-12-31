@@ -304,7 +304,7 @@ namespace BuilderUtils
     void reorderWithinParent(vcl::Window &rWindow, sal_uInt16 nNewPosition);
 
     //Convert an accessibility role name to accessibility role number
-    sal_Int16 getRoleFromName(const OUString& roleName);
+    sal_Int16 getRoleFromName(std::u16string_view roleName);
 }
 
 //sID may not exist, but must be of type T if it does
