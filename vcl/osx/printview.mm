@@ -73,7 +73,7 @@
     // Notes:
     // - Page count is 1 based
     // - Print jobs with different paper sizes are broken up into a separate
-    //   NSPrintOperation for each set of continguous pages with the same size
+    //   NSPrintOperation for each set of contiguous pages with the same size
     //   so the page number needs to be offset by the current page start range
     if( nPage - 1 < (mpInfoPrinter->getCurPageRangeStart() + mpInfoPrinter->getCurPageRangeCount() ) )
         mpController->printFilteredPage( mpInfoPrinter->getCurPageRangeStart() + nPage - 1 );
