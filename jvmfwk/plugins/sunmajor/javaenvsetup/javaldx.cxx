@@ -27,6 +27,7 @@
 #include <sal/main.h>
 #include <sal/types.h>
 #include <osl/thread.h>
+#include <sal/log.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/byteseq.hxx>
 #include <jvmfwk/framework.hxx>
@@ -65,7 +66,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         }
         else if (errcode != JFW_E_NONE && errcode != JFW_E_DIRECT_MODE)
         {
-            fprintf(stderr,"javaldx failed!\n");
+            SAL_WARN("jvmfwk.javaenvsetup", "javaldx failed!");
             return -1;
         }
 
@@ -74,7 +75,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
         if (errcode != JFW_E_NONE && errcode != JFW_E_INVALID_SETTINGS)
         {
-            fprintf(stderr,"javaldx failed!\n");
+            SAL_WARN("jvmfwk.javaenvsetup", "javaldx failed!");
             return -1;
         }
 
@@ -95,7 +96,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             }
             else
             {
-                fprintf(stderr, "javaldx: Could not determine if JRE still exist\n");
+                SAL_WARN("jvmfwk.javaenvsetup", "javaldx: Could not determine if JRE still exist");
                 return -1;
             }
         }
@@ -145,12 +146,12 @@ static bool findAndSelect(std::unique_ptr<JavaInfo> * ppInfo)
     javaFrameworkError errcode = jfw_findAndSelectJRE(ppInfo);
     if (errcode == JFW_E_NO_JAVA_FOUND)
     {
-        fprintf(stderr,"javaldx: Could not find a Java Runtime Environment!\n");
+        SAL_WARN("jvmfwk.javaenvsetup", "javaldx: Could not find a Java Runtime Environment!");
         return false;
     }
     else if (errcode != JFW_E_NONE && errcode != JFW_E_DIRECT_MODE)
     {
-        fprintf(stderr,"javaldx failed!\n");
+        SAL_WARN("jvmfwk.javaenvsetup", "javaldx failed!");
         return false;
     }
     return true;

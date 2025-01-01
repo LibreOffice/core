@@ -316,6 +316,7 @@ certain functionality.
 @li @c jfw
 @li @c jfw.level1
 @li @c jfw.level2
+@li @c jvmfwk.javaenvsetup
 
 @section LanguageTool
 
