@@ -30,6 +30,7 @@
 #include <editeng/flditem.hxx>
 
 #include <svl/sharedstringpool.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #include <libxml/xmlwriter.h>
 #include <algorithm>
@@ -396,6 +397,26 @@ OUString EditTextObjectImpl::GetText(sal_Int32 nPara) const
         return OUString();
 
     return maContents[nPara]->GetText();
+}
+
+OUString EditTextObjectImpl::GetText(LineEnd eEnd) const
+{
+    const size_t nParas = maContents.size();
+    if (nParas == 0)
+        return OUString();
+
+    const OUString aSep = EditDoc::GetSepStr(eEnd);
+
+    OUStringBuffer aBuffer;
+
+    for (size_t nPara = 0; nPara < nParas; ++nPara)
+    {
+        if (!aSep.isEmpty() && nPara > 0)
+            aBuffer.append(aSep);
+        aBuffer.append(maContents[nPara]->GetText());
+    }
+
+    return aBuffer.makeStringAndClear();
 }
 
 sal_Int32 EditTextObjectImpl::GetTextLen(sal_Int32 nPara ) const

@@ -2583,7 +2583,7 @@ void DesktopLOKTest::testCommentsCallbacksWriter()
     CPPUNIT_ASSERT_EQUAL(nCommentId2, aView2.m_aCommentCallbackResult.get<int>("id"));
 
     // Reply to nCommentId1 again
-    aCommandArgs = "{ \"Id\": { \"type\": \"string\", \"value\": \"" + OString::number(nCommentId1) + "\" }, \"Text\": { \"type\": \"string\", \"value\": \"Reply comment again\" } }";
+    aCommandArgs = "{ \"Id\": { \"type\": \"string\", \"value\": \"" + OString::number(nCommentId1) + "\" }, \"Html\": { \"type\": \"string\", \"value\": \"Reply comment again\" } }";
     pDocument->pClass->postUnoCommand(pDocument, ".uno:ReplyComment", aCommandArgs.getStr(), false);
     Scheduler::ProcessEventsToIdle();
 
@@ -2592,6 +2592,15 @@ void DesktopLOKTest::testCommentsCallbacksWriter()
     CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(nCommentId1, aView1.m_aCommentCallbackResult.get<int>("parentId"));
     CPPUNIT_ASSERT_EQUAL(nCommentId1, aView2.m_aCommentCallbackResult.get<int>("parentId"));
+    CPPUNIT_ASSERT_EQUAL(std::string("<div>Reply comment again</div>"), aView1.m_aCommentCallbackResult.get<std::string>("html"));
+    CPPUNIT_ASSERT_EQUAL(std::string("<div>Reply comment again</div>"), aView2.m_aCommentCallbackResult.get<std::string>("html"));
+
+    // Ensure that an undo and redo restores the html contents
+    aView1.m_aCommentCallbackResult.clear();
+    aView2.m_aCommentCallbackResult.clear();
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:Undo", "", false);
+    pDocument->pClass->postUnoCommand(pDocument, ".uno:Redo", "", false);
+    Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(std::string("<div>Reply comment again</div>"), aView1.m_aCommentCallbackResult.get<std::string>("html"));
     CPPUNIT_ASSERT_EQUAL(std::string("<div>Reply comment again</div>"), aView2.m_aCommentCallbackResult.get<std::string>("html"));
 
