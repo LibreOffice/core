@@ -258,7 +258,7 @@ void OpSqrtPi::GenerateCode( outputstream& ss ) const
 
 void OpDeg::GenerateCode( outputstream& ss ) const
 {
-    ss << "    return arg0 / M_PI * 180;;\n";
+    ss << "    return arg0 / M_PI * 180;\n";
 }
 
 void OpFact::GenerateCode( outputstream& ss ) const
@@ -571,7 +571,7 @@ void OpLog::GenSlidingWindowFunction(outputstream &ss,
     ss << "    int gid0 = get_global_id(0);\n";
     GenerateArg( "arg0", 0, vSubArguments, ss );
     GenerateArgWithDefault( "arg1", 1, 10, vSubArguments, ss );
-    ss << "    return log10(arg0)/log10(arg1);;\n";
+    ss << "    return log10(arg0)/log10(arg1);\n";
     ss << "}";
 }
 
