@@ -225,6 +225,7 @@ public:
 
     virtual sal_Int32 GetParagraphCount() const override;
     virtual OUString GetText(sal_Int32 nParagraph) const override;
+    virtual OUString GetText(LineEnd eEnd = LINEEND_LF) const override;
 
     virtual void ClearPortionInfo() override;
 

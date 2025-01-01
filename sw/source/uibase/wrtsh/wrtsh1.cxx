@@ -36,6 +36,7 @@
 #include <tools/bigint.hxx>
 #include <svtools/insdlg.hxx>
 #include <sfx2/ipclient.hxx>
+#include <editeng/editeng.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/formatbreakitem.hxx>
 #include <editeng/svxacorr.hxx>
@@ -2267,6 +2268,7 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq)
             Outliner aOutliner(&pDocSh->GetPool(), OutlinerMode::TextObject);
             SwPostItHelper::ImportHTML(aOutliner, pHtmlItem->GetValue());
             oTextPara = aOutliner.CreateParaObject();
+            sText = aOutliner.GetEditEngine().GetText();
         }
 
         // If we have a text already registered for answer, use that
@@ -2280,7 +2282,10 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq)
             }
             const EditTextObject& rTextObject = pAnswer->GetTextObject();
             if (rTextObject.GetParagraphCount() != 1 || !rTextObject.GetText(0).isEmpty())
+            {
                 oTextPara = *pAnswer;
+                sText = rTextObject.GetText();
+            }
         }
 
         if ( HasSelection() && !IsTableMode() )
