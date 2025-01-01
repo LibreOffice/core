@@ -24,6 +24,7 @@
 #include <editeng/editengdllapi.h>
 #include <editeng/macros.hxx>
 #include <svl/languageoptions.hxx>
+#include <tools/lineend.hxx>
 
 #include <com/sun/star/text/textfield/Type.hpp>
 
@@ -86,6 +87,8 @@ public:
     virtual sal_Int32 GetParagraphCount() const = 0;
 
     virtual OUString GetText(sal_Int32 nPara) const = 0;
+
+    virtual OUString GetText(LineEnd eEnd = LINEEND_LF) const = 0;
 
     virtual sal_Int32 GetTextLen(sal_Int32 nPara) const = 0;
 
