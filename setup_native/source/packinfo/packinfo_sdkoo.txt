@@ -23,7 +23,7 @@ solarisrequires = "%BASISPACKAGEPREFIX-core, SUNWbtool (Name="CCS tools bundled 
 packagename = "%BASISPACKAGEPREFIX-sdk"
 freebsdrequires = "%BASISPACKAGEPREFIX-core"
 requires = "%BASISPACKAGEPREFIX-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
-copyright = "2024 Collabora Productivity Ltd."
+copyright = "2025 Collabora Productivity Ltd."
 solariscopyright = "solariscopyrightfile"
 vendor = "Collabora Productivity Ltd."
 description = "Software Development Kit for LibreOffice %PRODUCTVERSION"
