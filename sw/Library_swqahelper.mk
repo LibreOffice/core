@@ -12,6 +12,7 @@ $(eval $(call gb_Library_Library,swqahelper))
 $(eval $(call gb_Library_set_include,swqahelper,\
 	-I$(SRCDIR)/sw/inc \
 	-I$(SRCDIR)/sw/source/core/inc \
+	-I$(SRCDIR)/sw/source/uibase/inc \
 	-I$(SRCDIR)/sw/qa/inc \
 	$$(INCLUDE) \
 ))
@@ -66,6 +67,7 @@ $(eval $(call gb_Library_use_libraries,swqahelper,\
 
 $(eval $(call gb_Library_add_exception_objects,swqahelper,\
 	sw/qa/unit/swmodeltestbase \
+	sw/qa/unit/swtiledrenderingtest \
 ))
 
 # vim: set noet sw=4 ts=4:
