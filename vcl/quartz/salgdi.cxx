@@ -145,10 +145,11 @@ AquaSalGraphics::AquaSalGraphics(bool bPrinter)
     if(!bPrinter && SkiaHelper::isVCLSkiaEnabled())
         mpBackend.reset(new AquaSkiaSalGraphicsImpl(*this, maShared));
     else
+        mpBackend.reset(new AquaGraphicsBackend(maShared));
 #else
     (void)bPrinter;
-#endif
     mpBackend.reset(new AquaGraphicsBackend(maShared));
+#endif
 
     for (int i = 0; i < MAX_FALLBACK; ++i)
         mpFont[i] = nullptr;
