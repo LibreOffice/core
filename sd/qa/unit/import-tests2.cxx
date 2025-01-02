@@ -1370,6 +1370,24 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf149206)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aCrop.Right);
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testtdf163852)
+{
+    // Check that the svg image is cropped
+    createSdImpressDoc("pptx/tdf163852.pptx");
+
+    uno::Reference<beans::XPropertySet> xPropertySet(getShapeFromPage(/*nShape=*/1, /*nPage=*/0));
+    text::GraphicCrop aCrop;
+    xPropertySet->getPropertyValue(u"GraphicCrop"_ustr) >>= aCrop;
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aCrop.Top);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aCrop.Left);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aCrop.Right);
+    // Without the fix in place, this test would have failed with
+    // - Expected: 702
+    // - Actual  : 0
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(702), aCrop.Bottom);
+}
+
 CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf149785)
 {
     // Without the fix in place, this test would have failed to load the file
