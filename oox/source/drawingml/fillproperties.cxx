@@ -832,6 +832,19 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
         {
             geometry::IntegerRectangle2D oClipRect( maBlipProps.moClipRect.value() );
             awt::Size aOriginalSize( rGraphicHelper.getOriginalSize( xGraphic ) );
+
+            if (aOriginalSize.Width <= 0 || aOriginalSize.Height <= 0)
+            {
+                // VectorGraphic Objects need the correct object size for cropping
+                Graphic aGraphic(xGraphic);
+                if (aGraphic.getVectorGraphicData())
+                {
+                    Size aPrefSize = aGraphic.GetPrefSize();
+                    aOriginalSize.Height = static_cast<sal_Int32>(aPrefSize.getHeight());
+                    aOriginalSize.Width = static_cast<sal_Int32>(aPrefSize.getWidth());
+                }
+            }
+
             if (aOriginalSize.Width > 0 && aOriginalSize.Height > 0)
             {
                 text::GraphicCrop aGraphCrop( 0, 0, 0, 0 );
