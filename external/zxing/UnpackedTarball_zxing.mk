@@ -13,11 +13,8 @@ $(eval $(call gb_UnpackedTarball_set_tarball,zxing,$(ZXING_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,zxing,1))
 
-# * external/zxing/include.patch.0 sent upstream as
-#   <https://github.com/zxing-cpp/zxing-cpp/pull/864> "Missing include (for std::nullptr_t)":
 $(eval $(call gb_UnpackedTarball_add_patches,zxing, \
 	external/zxing/0001-add-ZXVersion-h.patch \
-	external/zxing/include.patch.0 \
 ))
 
 # vim: set noet sw=4 ts=4:
