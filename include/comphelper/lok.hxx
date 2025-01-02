@@ -137,6 +137,13 @@ COMPHELPER_DLLPUBLIC void setBlockedCommandList(const char* blockedCommandList);
 COMPHELPER_DLLPUBLIC void setAnyInputCallback(const std::function<bool(void*)>& pAnyInputCallback,
                                               void* pData);
 COMPHELPER_DLLPUBLIC bool anyInput();
+
+// These allow setting callbacks, so that set/get of a LOK view is possible even in code that is
+// below sfx2.
+COMPHELPER_DLLPUBLIC void setViewSetter(std::function<void(int)> pViewSetter);
+COMPHELPER_DLLPUBLIC void setView(int nView);
+COMPHELPER_DLLPUBLIC void setViewGetter(std::function<int()> pViewGetter);
+COMPHELPER_DLLPUBLIC int getView();
 }
 
 #endif // INCLUDED_COMPHELPER_LOK_HXX
