@@ -222,7 +222,7 @@ void AquaSalInfoPrinter::setPaperSize( tools::Long i_nWidth, tools::Long i_nHeig
     {
         // If the paper name is empty, fallback to setting the paper size
         // using the specified width and height.
-        const rtl::OString &rPaperName( PaperInfo::toPSName( pPaper->getPaper() ) );
+        const rtl::OString rPaperName( PaperInfo::toPSName( pPaper->getPaper() ) );
         if( !rPaperName.isEmpty() )
         {
             NSString* pPaperName = [CreateNSString( OStringToOUString( rPaperName, RTL_TEXTENCODING_ASCII_US ) ) autorelease];
