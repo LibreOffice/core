@@ -1105,6 +1105,16 @@ void SfxLokHelper::notifyOtherViewsUpdatePerViewId(SfxViewShell const* pThisView
     }
 }
 
+void SfxLokHelper::registerViewCallbacks()
+{
+    comphelper::LibreOfficeKit::setViewSetter([](int nView) {
+        SfxLokHelper::setView(nView);
+    });
+    comphelper::LibreOfficeKit::setViewGetter([]() -> int {
+        return SfxLokHelper::getView();
+    });
+}
+
 namespace
 {
     struct LOKAsyncEventData

@@ -300,6 +300,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPDFExportViewSwitch)
 {
     // Given a document with 2 views:
     SwXTextDocument* pXTextDocument = createDoc("to-pdf.odt");
+    SfxLokHelper::registerViewCallbacks();
     SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
     SwTestViewCallback aView1;
     SfxLokHelper::createView();

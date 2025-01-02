@@ -255,6 +255,8 @@ public:
     static void getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand);
     /// Parses key-value parameters of rCommand.
     static std::map<OUString, OUString> parseCommandParameters(std::u16string_view rCommand);
+    /// Registers function pointers in comphelper/ to set/get of the current LOK view.
+    static void registerViewCallbacks();
 
 private:
     static int createView(SfxViewFrame& rViewFrame, ViewShellDocId docId);

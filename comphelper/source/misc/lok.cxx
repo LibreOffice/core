@@ -40,6 +40,9 @@ static Compat g_eCompatFlags(Compat::none);
 static std::function<bool(void*)> g_pAnyInputCallback;
 static void* g_pAnyInputCallbackData;
 
+static std::function<void(int)> g_pViewSetter;
+static std::function<int()> g_pViewGetter;
+
 namespace
 {
 
@@ -335,6 +338,36 @@ bool anyInput()
     }
 
     return bRet;
+}
+
+void setViewSetter(std::function<void(int)> pViewSetter)
+{
+    g_pViewSetter = pViewSetter;
+}
+
+void setView(int nView)
+{
+    if (!g_pViewSetter)
+    {
+        return;
+    }
+
+    g_pViewSetter(nView);
+}
+
+void setViewGetter(std::function<int()> pViewGetter)
+{
+    g_pViewGetter = pViewGetter;
+}
+
+int getView()
+{
+    if (!g_pViewGetter)
+    {
+        return -1;
+    }
+
+    return g_pViewGetter();
 }
 
 } // namespace
