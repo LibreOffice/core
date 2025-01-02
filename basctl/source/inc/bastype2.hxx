@@ -28,6 +28,9 @@
 #include <vcl/weld.hxx>
 #include <basctl/sbxitem.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <vcl/commandevent.hxx>
+#include <vcl/svapp.hxx>
+
 
 class SbModule;
 class SbxVariable;
@@ -156,6 +159,8 @@ public:
 
     EntryType               GetType() const { return m_eType; }
     void                    SetType( EntryType eType ) { m_eType = eType; }
+
+    friend bool operator==(const basctl::EntryDescriptor& aDesc1, const basctl::EntryDescriptor& aDesc2) = default;
 };
 
 
@@ -184,6 +189,8 @@ private:
 protected:
     DECL_LINK(RequestingChildrenHdl, const weld::TreeIter&, bool);
     DECL_LINK(OpenCurrentHdl, weld::TreeView&, bool);
+    // Creates popup menu to select between alphabetic or unsorted view in Macro List Tree
+    DECL_LINK(ContextMenuHdl, const CommandEvent&, bool);
     void                    ImpCreateLibEntries(const weld::TreeIter& rShellRootEntry, const ScriptDocument& rDocument, LibraryLocation eLocation);
     void                    ImpCreateLibSubEntries(const weld::TreeIter& rLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName);
     void                    ImpCreateLibSubEntriesInVBAMode(const weld::TreeIter& rLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName );
@@ -208,6 +215,15 @@ public:
     void            ScanEntry( const ScriptDocument& rDocument, LibraryLocation eLocation );
     void            ScanAllEntries();
     void            UpdateEntries();
+    /**
+     * Removes then reloads all items in tree, restoring expansion state of entries
+     *
+     * @see SbTreeListBox::UpdateEntries()
+     * @see SbTreeListBox::FindRootEntry(const ScriptDocument&, LibraryLocation, weld::TreeIter&)
+     * @param None
+     * @return None
+     */
+    void            ReloadAllEntries();
 
     bool            IsEntryProtected(const weld::TreeIter* pEntry);
 
@@ -277,4 +293,25 @@ private:
 
 } // namespace basctl
 
+
+namespace std {
+template<> class hash<basctl::EntryDescriptor>
+{
+    public:
+    std::size_t operator()(const basctl::EntryDescriptor& rDesc) const noexcept
+    {
+        // Serialize EntryDescriptor as OUString
+        OUString sDescSerial =
+            OUString::number(rDesc.GetDocument().hashCode())    + "|" +
+            OUString::number(rDesc.GetLocation())               + "|" +
+            rDesc.GetLibName()                                  + "|" +
+            rDesc.GetLibSubName()                               + "|" +
+            rDesc.GetName()                                     + "|" +
+            rDesc.GetMethodName()                               + "|" +
+            OUString::number(rDesc.GetType());
+
+        return sDescSerial.hashCode();
+    }
+};
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

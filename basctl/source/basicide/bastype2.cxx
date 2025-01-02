@@ -168,6 +168,7 @@ SbTreeListBox::SbTreeListBox(std::unique_ptr<weld::TreeView> xControl, weld::Win
 {
     m_xControl->connect_row_activated(LINK(this, SbTreeListBox, OpenCurrentHdl));
     m_xControl->connect_expanding(LINK(this, SbTreeListBox, RequestingChildrenHdl));
+    m_xControl->connect_popup_menu(LINK(this, SbTreeListBox, ContextMenuHdl));
     nMode = BrowseMode::All;   // everything
 }
 
@@ -443,6 +444,99 @@ void SbTreeListBox::ImpCreateLibSubSubEntriesInVBAMode(const weld::TreeIter& rLi
     catch ( const container::NoSuchElementException& )
     {
         DBG_UNHANDLED_EXCEPTION("basctl.basicide");
+    }
+}
+
+IMPL_LINK(SbTreeListBox, ContextMenuHdl, const CommandEvent&, rCEvt, bool)
+{
+    weld::TreeView& rTreeView = get_widget();
+
+    if (rCEvt.GetCommand() != CommandEventId::ContextMenu || !rTreeView.n_children())
+        return false;
+
+    // Build popup menu
+    std::unique_ptr<weld::Builder> xBuilder(
+        Application::CreateBuilder(&rTreeView, u"modules/BasicIDE/ui/sortmenu.ui"_ustr));
+    std::unique_ptr<weld::Menu> xPopup(xBuilder->weld_menu(u"sortmenu"_ustr));
+    std::unique_ptr<weld::Menu> xDropMenu(xBuilder->weld_menu(u"sortsubmenu"_ustr));
+
+    // Check the currently selected sort mode
+    bool bAlphabetical = rTreeView.get_sort_order();
+    xDropMenu->set_active(u"alphabetically"_ustr, bAlphabetical);
+    xDropMenu->set_active(u"properorder"_ustr, !bAlphabetical);
+
+    // Display completed popup menu at user mouse location
+    OUString sCommand(
+        xPopup->popup_at_rect(&rTreeView, tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1, 1))));
+
+    // Return early if user cancels action
+    if (sCommand.isEmpty())
+        return true;
+
+    assert((sCommand == u"alphabetically" || sCommand == u"properorder") && "Unknown context menu action!");
+
+    bool bValidIter = m_xControl->get_selected(m_xScratchIter.get());
+    EntryDescriptor aCurDesc(GetEntryDescriptor(bValidIter ? m_xScratchIter.get() : nullptr));
+
+    if (sCommand == u"alphabetically")
+    {
+        rTreeView.make_sorted();
+    }
+    else if (sCommand == u"properorder")
+    {
+        rTreeView.make_unsorted();
+
+        // make_unsorted() does not reorder; macros must be reloaded for changes to take effect
+        ReloadAllEntries();
+    }
+
+    // Set the entry so that selected module is in window after sort
+    SetCurrentEntry(aCurDesc);
+
+    return true;
+}
+
+void SbTreeListBox::ReloadAllEntries()
+{
+    // List of modules to expand; stored as an OUString signature
+    std::unordered_set<EntryDescriptor> aExpandedRows;
+
+    // Find all instances of expanded rows in tree so they can be re-expanded later
+    bool bValidIter = m_xControl->get_iter_first(*m_xScratchIter);
+    while (bValidIter)
+    {
+        if (m_xControl->get_row_expanded(*m_xScratchIter)) {
+            EntryDescriptor aDesc = GetEntryDescriptor(m_xScratchIter.get());
+
+            aExpandedRows.insert(aDesc);
+        }
+
+        bValidIter = m_xControl->iter_next(*m_xScratchIter);
+    }
+
+    // Remove all entries in treelist
+    bValidIter = m_xControl->get_iter_first(*m_xScratchIter);
+    while (bValidIter)
+    {
+        RemoveEntry(*m_xScratchIter);
+
+        bValidIter = m_xControl->get_iter_first(*m_xScratchIter);
+    }
+
+    // Load in all macros in unsorted order
+    UpdateEntries();
+
+    // Re-expand previously expanded items
+    bValidIter = m_xControl->get_iter_first(*m_xScratchIter);
+    while (bValidIter)
+    {
+        EntryDescriptor aDesc = GetEntryDescriptor(m_xScratchIter.get());
+
+        if (aExpandedRows.contains(aDesc)) {
+            m_xControl->expand_row(*m_xScratchIter);
+        }
+
+        bValidIter = m_xControl->iter_next(*m_xScratchIter);
     }
 }
 
