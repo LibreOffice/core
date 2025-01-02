@@ -412,7 +412,22 @@ bool Application::Reschedule( bool i_bAllEvents )
         SAL_WARN("vcl.schedule", "Application::Reschedule(" << i_bAllEvents << ")");
         std::abort();
     }
-    return ImplYield(false, i_bAllEvents);
+    int nOldView = -1;
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        nOldView = comphelper::LibreOfficeKit::getView();
+    }
+    bool bRet = ImplYield(false, i_bAllEvents);
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        int nNewView = comphelper::LibreOfficeKit::getView();
+        if (nOldView != -1 && nNewView != -1 && nOldView != nNewView)
+        {
+            // Yield changed the current view, restore the old value.
+            comphelper::LibreOfficeKit::setView(nOldView);
+        }
+    }
+    return bRet;
 }
 
 bool Application::IsOnSystemEventLoop()

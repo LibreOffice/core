@@ -7842,6 +7842,7 @@ static void lo_runLoop(LibreOfficeKit* /*pThis*/,
         SolarMutexGuard aGuard;
 
         vcl::lok::registerPollCallbacks(pPollCallback, pWakeCallback, pData);
+        SfxLokHelper::registerViewCallbacks();
         Application::UpdateMainThread();
         soffice_main();
     }
