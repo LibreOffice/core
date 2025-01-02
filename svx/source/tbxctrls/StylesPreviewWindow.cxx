@@ -59,10 +59,8 @@
 
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
 
 #include <vcl/commandevent.hxx>
-#include <tools/json_writer.hxx>
 
 namespace
 {

@@ -22,7 +22,6 @@
 #include <sal/types.h>
 #include <vcl/event.hxx>
 #include <vcl/toolbox.hxx>
-#include <sfx2/bindings.hxx>
 #include <svtools/toolbarmenu.hxx>
 #include <svx/dialmgr.hxx>
 #include <lboxctrl.hxx>

@@ -92,9 +92,7 @@
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <svl/currencytable.hxx>
-#include <svl/zformat.hxx>
 #include <svtools/langtab.hxx>
-#include <cppu/unotype.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <o3tl/temporary.hxx>

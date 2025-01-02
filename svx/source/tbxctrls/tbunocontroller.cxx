@@ -20,7 +20,6 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/status/FontHeight.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 

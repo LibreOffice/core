@@ -46,7 +46,6 @@
 
 #include <tools/UnitConversion.hxx>
 
-#include <algorithm>
 #include <memory>
 
 #include <svx/strings.hrc>

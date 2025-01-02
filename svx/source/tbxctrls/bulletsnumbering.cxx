@@ -16,8 +16,6 @@
 #include <officecfg/Office/Common.hxx>
 #include <svtools/popupwindowcontroller.hxx>
 #include <svtools/toolbarmenu.hxx>
-#include <svx/strings.hrc>
-#include <svx/dialmgr.hxx>
 #include <svx/numvset.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/toolbox.hxx>

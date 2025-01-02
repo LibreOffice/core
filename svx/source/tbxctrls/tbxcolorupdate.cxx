@@ -42,8 +42,6 @@
 #include <comphelper/string.hxx>
 #include <o3tl/string_view.hxx>
 
-#include <frozen/bits/defines.h>
-#include <frozen/bits/elsa_std.h>
 #include <frozen/unordered_map.h>
 
 namespace svx
