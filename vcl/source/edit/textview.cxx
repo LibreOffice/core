@@ -59,6 +59,8 @@
 
 #include <sot/exchange.hxx>
 
+#include "TextLine.hxx"
+
 #include <algorithm>
 #include <cstddef>
 

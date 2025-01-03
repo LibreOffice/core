@@ -25,8 +25,9 @@
 
 #include <utility>
 #include <vcl/textdata.hxx>
-#include "textdat2.hxx"
 
+#include "TextLine.hxx"
+#include "textdat2.hxx"
 
 TextSelection::TextSelection()
 {

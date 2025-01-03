@@ -35,6 +35,8 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 
+#include "TextLine.hxx"
+
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>

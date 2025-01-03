@@ -28,6 +28,7 @@
 #include <limits>
 #include <vector>
 
+class TextLine;
 class TextNode;
 class TextView;
 
@@ -108,64 +109,6 @@ struct TEWritingDirectionInfo
         , nEndPos {End}
     {}
 };
-
-class TextLine
-{
-private:
-    sal_Int32           mnStart;
-    sal_Int32           mnEnd;
-    std::size_t         mnStartPortion;
-    std::size_t         mnEndPortion;
-
-    short               mnStartX;
-
-    bool                mbInvalid;  // for clever formatting/output
-
-public:
-                    TextLine()
-                        : mnStart {0}
-                        , mnEnd {0}
-                        , mnStartPortion {0}
-                        , mnEndPortion {0}
-                        , mnStartX {0}
-                        , mbInvalid {true}
-                    {}
-
-    bool            IsIn( sal_Int32 nIndex, bool bInclEnd ) const
-                        { return nIndex >= mnStart && ( bInclEnd ? nIndex <= mnEnd : nIndex < mnEnd ); }
-
-    void            SetStart( sal_Int32 n )         { mnStart = n; }
-    sal_Int32       GetStart() const                { return mnStart; }
-
-    void            SetEnd( sal_Int32 n )           { mnEnd = n; }
-    sal_Int32       GetEnd() const                  { return mnEnd; }
-
-    void            SetStartPortion( std::size_t n ) { mnStartPortion = n; }
-    std::size_t     GetStartPortion() const         { return mnStartPortion; }
-
-    void            SetEndPortion( std::size_t n )  { mnEndPortion = n; }
-    std::size_t     GetEndPortion() const           { return mnEndPortion; }
-
-    sal_Int32       GetLen() const                  { return mnEnd - mnStart; }
-
-    bool            IsInvalid() const               { return mbInvalid; }
-    bool            IsValid() const                 { return !mbInvalid; }
-    void            SetInvalid()                    { mbInvalid = true; }
-    void            SetValid()                      { mbInvalid = false; }
-
-    short           GetStartX() const               { return mnStartX; }
-    void            SetStartX( short n )            { mnStartX = n; }
-
-    inline bool operator == ( const TextLine& rLine ) const;
-};
-
-inline bool TextLine::operator == ( const TextLine& rLine ) const
-{
-    return mnStart == rLine.mnStart &&
-           mnEnd == rLine.mnEnd &&
-           mnStartPortion == rLine.mnStartPortion &&
-           mnEndPortion == rLine.mnEndPortion;
-}
 
 class TEParaPortion
 {
