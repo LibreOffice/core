@@ -17,19 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/toolkit/throbber.hxx>
-#include <vcl/svapp.hxx>
-
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/graphic/GraphicProvider.hpp>
-#include <com/sun/star/graphic/XGraphicProvider.hpp>
-#include <com/sun/star/awt/ImageScaleMode.hpp>
-
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <sal/log.hxx>
-#include <tools/urlobj.hxx>
+
+#include <vcl/svapp.hxx>
+#include <vcl/toolkit/throbber.hxx>
+
+#include <com/sun/star/graphic/GraphicProvider.hpp>
+#include <com/sun/star/awt/ImageScaleMode.hpp>
 
 #include <limits>
 
