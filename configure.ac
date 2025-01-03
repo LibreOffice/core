@@ -15608,6 +15608,7 @@ elif test "$with_keep_awake" = "yes"; then
     fi
 else
     AC_MSG_RESULT([yes (custom command: $with_keep_awake)])
+    KEEP_AWAKE_CMD=$with_keep_awake
 fi
 AC_SUBST(KEEP_AWAKE_CMD)
 
