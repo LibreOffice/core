@@ -2818,7 +2818,7 @@ void ExceptionType::dumpHdlFile(
 {
     if (name_ == "com.sun.star.uno.Exception")
     {
-        includes.addCustom(u"#if defined(LIBO_INTERNAL_ONLY) && !defined(NDEBUG)"_ustr);
+        includes.addCustom(u"#if defined(LIBO_INTERNAL_ONLY) && OSL_DEBUG_LEVEL > 0"_ustr);
         includes.addCustom(u"#include <o3tl/source_location.hxx>"_ustr);
         includes.addCustom(u"#endif"_ustr);
         includes.addCustom(u"#if defined LIBO_USE_SOURCE_LOCATION"_ustr);
