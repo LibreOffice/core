@@ -26,6 +26,7 @@ class Window;
 }
 class SdrView;
 class SfxObjectShell;
+class SfxViewShell;
 
 namespace svx::SignatureLineHelper
 {
@@ -39,7 +40,7 @@ SVX_DLLPUBLIC OUString getSignatureImage(const OUString& rType = OUString());
  * Choose a signature for signature line purposes.
  */
 SVX_DLLPUBLIC css::uno::Reference<css::security::XCertificate>
-getSignatureCertificate(SfxObjectShell* pShell, weld::Window* pParent);
+getSignatureCertificate(SfxObjectShell* pShell, SfxViewShell* pViewShell, weld::Window* pParent);
 
 /**
  * Get a signer name out of a certificate.

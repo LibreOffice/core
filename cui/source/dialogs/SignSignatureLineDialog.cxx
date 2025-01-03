@@ -158,7 +158,7 @@ IMPL_LINK_NOARG(SignSignatureLineDialog, chooseCertificate, weld::Button&, void)
         return;
 
     Reference<XCertificate> xSignCertificate
-        = svx::SignatureLineHelper::getSignatureCertificate(pShell, m_xDialog.get());
+        = svx::SignatureLineHelper::getSignatureCertificate(pShell, nullptr, m_xDialog.get());
 
     if (xSignCertificate.is())
     {
