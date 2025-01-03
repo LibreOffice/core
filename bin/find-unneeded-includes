@@ -226,6 +226,9 @@ def processIWYUOutput(iwyuOutput, moduleRules, fileName, noexclude, checknamespa
                 match = re.match("- (.*;(?: })*)*  // lines (.*)-.*", line)
                 if match:
                     fwdDecl = match.group(1)
+                    # Bug: IWYU 0.23 gives "-   // lines 76-76" on basctl/source/inc/layout.hxx in --fwdecl mode
+                    if fwdDecl is None:
+                        continue
                     if fwdDecl.endswith(";"):
                         # Remove trailing semicolon.
                         fwdDecl = fwdDecl[:-1]
