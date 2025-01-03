@@ -36,6 +36,7 @@
 #include <osl/diagnose.h>
 
 #include "TextLine.hxx"
+#include "IdleFormatter.hxx"
 
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 

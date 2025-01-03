@@ -14589,6 +14589,8 @@ vcl/source/control/tabctrl.cxx
 vcl/source/control/throbber.cxx
 vcl/source/control/wizardmachine.cxx
 vcl/source/control/wizimpldata.hxx
+vcl/source/edit/IdleFormatter.cxx
+vcl/source/edit/IdleFormatter.hxx
 vcl/source/edit/TextLine.hxx
 vcl/source/edit/textdat2.hxx
 vcl/source/edit/textdata.cxx

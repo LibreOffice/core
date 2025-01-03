@@ -19,10 +19,9 @@
 
 #pragma once
 
-#include <vcl/seleng.hxx>
+#include <tools/long.hxx>
+
 #include <vcl/cursor.hxx>
-#include <vcl/idle.hxx>
-#include <vcl/textdata.hxx>
 
 #include <cstddef>
 #include <limits>
@@ -186,21 +185,6 @@ public:
 
     virtual void    DeselectAtPoint( const Point& ) override;
     virtual void    DestroyAnchor() override;
-};
-
-class IdleFormatter : public Idle
-{
-private:
-    TextView*   mpView;
-    sal_uInt16      mnRestarts;
-
-public:
-                IdleFormatter();
-                virtual ~IdleFormatter() override;
-
-    void        DoIdleFormat( TextView* pV, sal_uInt16 nMaxRestarts );
-    void        ForceTimeout();
-    TextView*   GetView()       { return mpView; }
 };
 
 struct TextDDInfo

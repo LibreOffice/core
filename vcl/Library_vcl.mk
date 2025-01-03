@@ -263,6 +263,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/control/tabctrl \
     vcl/source/control/throbber \
     vcl/source/control/wizardmachine \
+    vcl/source/edit/IdleFormatter \
     vcl/source/edit/vclmedit \
     vcl/source/edit/textdata \
     vcl/source/edit/textdoc \
