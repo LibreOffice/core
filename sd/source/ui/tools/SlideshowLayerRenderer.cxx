@@ -463,7 +463,7 @@ void SlideshowLayerRenderer::resolveEffect(CustomAnimationEffectPtr const& rEffe
             aAnimationInfo.moObjectInfo = aLayerInfo;
     }
 
-    maRenderState.maAnimationRenderInfoList[pObject] = aAnimationInfo;
+    maRenderState.maAnimationRenderInfoList[pObject] = std::move(aAnimationInfo);
 }
 
 void SlideshowLayerRenderer::setupAnimations()
