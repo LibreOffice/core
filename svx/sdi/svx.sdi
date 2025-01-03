@@ -12364,7 +12364,7 @@ SfxVoidItem AnchorMenu SID_ANCHOR_MENU
 ]
 
 SfxVoidItem InsertSignatureLine SID_INSERT_SIGNATURELINE
-()
+(SfxStringItem SignatureCert FN_PARAM_1, SfxStringItem SignatureKey FN_PARAM_2)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,

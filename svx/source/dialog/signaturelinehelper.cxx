@@ -33,6 +33,7 @@
 #include <unotools/streamwrap.hxx>
 #include <unotools/syslocale.hxx>
 #include <vcl/weld.hxx>
+#include <sfx2/digitalsignatures.hxx>
 
 using namespace com::sun::star;
 
@@ -57,8 +58,8 @@ OUString getSignatureImage(const OUString& rType)
     return OUString::fromUtf8(svg);
 }
 
-uno::Reference<security::XCertificate> getSignatureCertificate(SfxObjectShell* pShell,
-                                                               weld::Window* pParent)
+uno::Reference<security::XCertificate>
+getSignatureCertificate(SfxObjectShell* pShell, SfxViewShell* pViewShell, weld::Window* pParent)
 {
     if (!pShell)
     {
@@ -91,8 +92,10 @@ uno::Reference<security::XCertificate> getSignatureCertificate(SfxObjectShell* p
     {
         certificateKind = security::CertificateKind_X509;
     }
+    auto xModelSigner = dynamic_cast<sfx2::DigitalSignatures*>(xSigner.get());
+    assert(xModelSigner);
     uno::Reference<security::XCertificate> xSignCertificate
-        = xSigner->selectSigningCertificateWithType(certificateKind, aDescription);
+        = xModelSigner->SelectSigningCertificateWithType(pViewShell, certificateKind, aDescription);
     return xSignCertificate;
 }
 
