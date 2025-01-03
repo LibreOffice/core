@@ -1011,6 +1011,7 @@ void AnnotationManagerImpl::SyncAnnotationObjects()
         if (pObject)
         {
             nIndex++;
+            pObject->SetVisible(mbShowAnnotations);
             continue;
         }
 
@@ -1116,6 +1117,7 @@ void AnnotationManagerImpl::SyncAnnotationObjects()
         }
 
         pNewObject->SetRelativePos(aRectangle.TopLeft());
+        pNewObject->SetVisible(mbShowAnnotations);
 
         pView->InsertObjectAtView(pNewObject.get(), *pView->GetSdrPageView());
 
