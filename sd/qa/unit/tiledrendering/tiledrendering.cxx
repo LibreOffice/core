@@ -1469,7 +1469,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeImpress)
 
     CPPUNIT_ASSERT(!aView1.m_aCommentCallbackResult.get<std::string>("parthash").empty());
     CPPUNIT_ASSERT_EQUAL(std::string("Comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
-    CPPUNIT_ASSERT_EQUAL(std::string("0, 0, 705, 365"), aView1.m_aCommentCallbackResult.get<std::string>("rectangle"));
+    CPPUNIT_ASSERT_EQUAL(std::string("0, 0, 478, 280"), aView1.m_aCommentCallbackResult.get<std::string>("rectangle"));
 
     // Edit this annotation now
     aArgs = comphelper::InitPropertySequence(
@@ -1482,7 +1482,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeImpress)
 
     CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(std::string("Comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
-    CPPUNIT_ASSERT_EQUAL(std::string("10, 20, 705, 365"), aView1.m_aCommentCallbackResult.get<std::string>("rectangle"));
+    CPPUNIT_ASSERT_EQUAL(std::string("10, 20, 478, 280"), aView1.m_aCommentCallbackResult.get<std::string>("rectangle"));
 
     comphelper::LibreOfficeKit::setTiledAnnotations(true);
 }
@@ -1515,7 +1515,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeDraw)
 
     CPPUNIT_ASSERT(!aView1.m_aCommentCallbackResult.get<std::string>("parthash").empty());
     CPPUNIT_ASSERT_EQUAL(std::string("Comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
-    CPPUNIT_ASSERT_EQUAL(std::string("0, 0, 705, 365"), aView1.m_aCommentCallbackResult.get<std::string>("rectangle"));
+    CPPUNIT_ASSERT_EQUAL(std::string("0, 0, 478, 280"), aView1.m_aCommentCallbackResult.get<std::string>("rectangle"));
 
     // Edit this annotation now
     aArgs = comphelper::InitPropertySequence(
@@ -1528,7 +1528,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeDraw)
 
     CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(std::string("Comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
-    CPPUNIT_ASSERT_EQUAL(std::string("10, 20, 705, 365"), aView1.m_aCommentCallbackResult.get<std::string>("rectangle"));
+    CPPUNIT_ASSERT_EQUAL(std::string("10, 20, 478, 280"), aView1.m_aCommentCallbackResult.get<std::string>("rectangle"));
 
     comphelper::LibreOfficeKit::setTiledAnnotations(true);
 }
