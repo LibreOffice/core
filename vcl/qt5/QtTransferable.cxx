@@ -73,6 +73,19 @@ css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL QtTransferable::getTr
         if (rMimeType == QStringLiteral("text/plain;charset=unicode"))
             continue;
 
+        // At least the Qt6 Wasm implementation may announce text/uri-list even though the actual
+        // list of URLs is empty (presumably since
+        // <https://github.com/qt/qtbase/commit/0ffe8050bd5b55d64da37f5177a7e20dd9d14232> "wasm:
+        // implement async drag-and-drop" unconditionally calls setUrls in
+        // DataTransfer::toMimeDataWithFile's MimeContext::deref):
+        if (rMimeType == QStringLiteral("text/uri-list"))
+        {
+            if (m_pMimeData->urls().empty())
+            {
+                continue;
+            }
+        }
+
         // LO doesn't like 'text/plain', so we have to provide UTF-16
         bool bIsNoCharset = false, bIsUTF16 = false, bIsUTF8 = false;
         if (lcl_textMimeInfo(toOUString(rMimeType), bIsNoCharset, bIsUTF16, bIsUTF8))
