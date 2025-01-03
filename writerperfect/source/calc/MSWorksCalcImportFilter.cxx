@@ -122,7 +122,11 @@ public:
     /** return a new stream for an OLE zone */
     librevenge::RVNGInputStream* getSubStreamByName(const char* name) override
     {
-        if (!m_nameToPathMap.contains(name) || !m_xContent.is())
+        if (!m_xContent.is())
+            return nullptr;
+
+        auto aIter = m_nameToPathMap.find(name);
+        if (aIter == m_nameToPathMap.end())
             return nullptr;
 
         try
@@ -133,7 +137,7 @@ public:
                 const uno::Reference<ucb::XContentAccess> xContentAccess(xResultSet,
                                                                          uno::UNO_QUERY_THROW);
                 const uno::Reference<sdbc::XRow> xRow(xResultSet, uno::UNO_QUERY_THROW);
-                OUString lPath = m_nameToPathMap.find(name)->second;
+                OUString lPath = aIter->second;
                 do
                 {
                     const OUString aTitle(xRow->getString(1));
