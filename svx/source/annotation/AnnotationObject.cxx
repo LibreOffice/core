@@ -27,6 +27,7 @@
 #include <svx/sdooitm.hxx>
 #include <svx/sdtagitm.hxx>
 #include <svx/sdasitm.hxx>
+#include <svx/sdtditm.hxx>
 #include <svtools/colorcfg.hxx>
 
 #include <vcl/settings.hxx>
@@ -184,6 +185,10 @@ void AnnotationObject::ApplyAnnotationName()
     aItemSet.Put(makeSdrTextWordWrapItem(false));
     aItemSet.Put(makeSdrTextAutoGrowWidthItem(true));
     aItemSet.Put(makeSdrTextAutoGrowHeightItem(true));
+    aItemSet.Put(makeSdrTextLeftDistItem(50));
+    aItemSet.Put(makeSdrTextRightDistItem(50));
+    aItemSet.Put(makeSdrTextUpperDistItem(50));
+    aItemSet.Put(makeSdrTextLowerDistItem(50));
 
     SetMergedItemSet(aItemSet);
 
