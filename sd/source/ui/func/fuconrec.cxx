@@ -514,6 +514,7 @@ void FuConstructRectangle::Deactivate()
 
     uno::Reference<security::XCertificate> xCertificate
         = svx::SignatureLineHelper::getSignatureCertificate(mpViewShell->GetObjectShell(),
+                mpViewShell->GetViewShell(),
                 mpViewShell->GetFrameWeld());
     if (!xCertificate.is())
     {

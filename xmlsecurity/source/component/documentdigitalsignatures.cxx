@@ -99,7 +99,7 @@ private:
                          DocumentSignatureMode eMode);
 
     css::uno::Sequence<css::uno::Reference<css::security::XCertificate>>
-    chooseCertificatesImpl(std::map<OUString, OUString>& rProperties, const CertificateChooserUserAction eAction,
+    chooseCertificatesImpl(SfxViewShell* pViewShell, std::map<OUString, OUString>& rProperties, const CertificateChooserUserAction eAction,
                            const CertificateKind certificateKind=CertificateKind_NONE);
 
     bool
@@ -207,6 +207,12 @@ public:
     /// See sfx2::DigitalSignatures::SetSignScriptingContent().
     void SetSignScriptingContent(
         const css::uno::Reference<css::io::XStream>& xScriptingSignStream) override;
+
+    /// See sfx2::DigitalSignatures::SelectSigningCertificateWithType().
+    css::uno::Reference<css::security::XCertificate>
+    SelectSigningCertificateWithType(SfxViewShell* pViewShell,
+                                     const css::security::CertificateKind certificateKind,
+                                     OUString& rDescription) override;
 };
 
 }
@@ -639,7 +645,8 @@ sal_Bool DocumentDigitalSignatures::isAuthorTrusted(
 }
 
 uno::Sequence<Reference<css::security::XCertificate>>
-DocumentDigitalSignatures::chooseCertificatesImpl(std::map<OUString, OUString>& rProperties,
+DocumentDigitalSignatures::chooseCertificatesImpl(SfxViewShell* pViewShell,
+                                                  std::map<OUString, OUString>& rProperties,
                                                   const CertificateChooserUserAction eAction,
                                                   const CertificateKind certificateKind)
 {
@@ -654,7 +661,7 @@ DocumentDigitalSignatures::chooseCertificatesImpl(std::map<OUString, OUString>& 
             xSecContexts.push_back(aSignatureManager.getGpgSecurityContext());
     }
 
-    std::shared_ptr<CertificateChooser> aChooser = CertificateChooser::getInstance(Application::GetFrameWeld(mxParentWindow), nullptr, std::move(xSecContexts), eAction);
+    std::shared_ptr<CertificateChooser> aChooser = CertificateChooser::getInstance(Application::GetFrameWeld(mxParentWindow), pViewShell, std::move(xSecContexts), eAction);
 
     if (aChooser->run() != RET_OK)
         return { Reference< css::security::XCertificate >(nullptr) };
@@ -674,7 +681,7 @@ Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertif
 Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseSigningCertificate(OUString& rDescription)
 {
     std::map<OUString, OUString> aProperties;
-    Reference< css::security::XCertificate > xCert = chooseCertificatesImpl( aProperties, CertificateChooserUserAction::Sign )[0];
+    Reference< css::security::XCertificate > xCert = chooseCertificatesImpl( nullptr, aProperties, CertificateChooserUserAction::Sign )[0];
     rDescription = aProperties[u"Description"_ustr];
     return xCert;
 }
@@ -682,7 +689,7 @@ Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseSignin
 Reference< css::security::XCertificate > DocumentDigitalSignatures::selectSigningCertificate(OUString& rDescription)
 {
     std::map<OUString, OUString> aProperties;
-    Reference< css::security::XCertificate > xCert = chooseCertificatesImpl( aProperties, CertificateChooserUserAction::SelectSign )[0];
+    Reference< css::security::XCertificate > xCert = chooseCertificatesImpl( nullptr, aProperties, CertificateChooserUserAction::SelectSign )[0];
     rDescription = aProperties[u"Description"_ustr];
     return xCert;
 }
@@ -691,9 +698,15 @@ Reference<css::security::XCertificate>
 DocumentDigitalSignatures::selectSigningCertificateWithType(const CertificateKind certificateKind,
                                                             OUString& rDescription)
 {
+    return SelectSigningCertificateWithType(nullptr, certificateKind, rDescription);
+}
+
+Reference<css::security::XCertificate>
+DocumentDigitalSignatures::SelectSigningCertificateWithType(SfxViewShell* pViewShell, const CertificateKind certificateKind, OUString& rDescription)
+{
     std::map<OUString, OUString> aProperties;
     Reference<css::security::XCertificate> xCert
-        = chooseCertificatesImpl(aProperties, CertificateChooserUserAction::SelectSign, certificateKind)[0];
+        = chooseCertificatesImpl(pViewShell, aProperties, CertificateChooserUserAction::SelectSign, certificateKind)[0];
     rDescription = aProperties[u"Description"_ustr];
     return xCert;
 }
@@ -703,7 +716,7 @@ DocumentDigitalSignatures::chooseEncryptionCertificate(const CertificateKind cer
 {
     std::map<OUString, OUString> aProperties;
     uno::Sequence< Reference< css::security::XCertificate > > aCerts=
-        chooseCertificatesImpl( aProperties, CertificateChooserUserAction::Encrypt , certificateKind );
+        chooseCertificatesImpl( nullptr, aProperties, CertificateChooserUserAction::Encrypt , certificateKind );
     if (aCerts.getLength() == 1 && !aCerts[0].is())
         // our error case contract is: empty sequence, so map that!
         return uno::Sequence< Reference< css::security::XCertificate > >();
@@ -714,7 +727,7 @@ DocumentDigitalSignatures::chooseEncryptionCertificate(const CertificateKind cer
 css::uno::Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertificateWithProps(Sequence<css::beans::PropertyValue>& rProperties)
 {
     std::map<OUString, OUString> aProperties;
-    auto xCert = chooseCertificatesImpl( aProperties, CertificateChooserUserAction::Sign )[0];
+    auto xCert = chooseCertificatesImpl( nullptr, aProperties, CertificateChooserUserAction::Sign )[0];
 
     std::vector<css::beans::PropertyValue> vec;
     vec.reserve(aProperties.size());

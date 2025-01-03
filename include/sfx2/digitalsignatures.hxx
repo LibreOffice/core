@@ -15,6 +15,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
+#include <com/sun/star/security/CertificateKind.hpp>
 
 #include <sal/types.h>
 
@@ -54,6 +55,13 @@ public:
     /// Create a scripting signature before creating a document signature.
     virtual void
     SetSignScriptingContent(const css::uno::Reference<css::io::XStream>& xScriptingSignStream)
+        = 0;
+
+    /// View-aware replacement for selectSigningCertificateWithType().
+    virtual css::uno::Reference<css::security::XCertificate>
+    SelectSigningCertificateWithType(SfxViewShell* pViewShell,
+                                     const css::security::CertificateKind certificateKind,
+                                     OUString& rDescription)
         = 0;
 
 protected:

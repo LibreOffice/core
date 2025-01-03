@@ -98,6 +98,7 @@
 #include <basegfx/utils/zoomtools.hxx>
 #include <officecfg/Office/Draw.hxx>
 #include <officecfg/Office/Impress.hxx>
+#include <sfx2/lokhelper.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -455,6 +456,36 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         case SID_CONNECTOR_LINES_CIRCLES:
         case SID_INSERT_SIGNATURELINE:
         {
+            if (nSId == SID_INSERT_SIGNATURELINE)
+            {
+                // See if a signing cert is passed as a parameter: if so, parse that.
+                std::string aSignatureCert;
+                std::string aSignatureKey;
+                const SfxStringItem* pSignatureCert = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
+                if (pSignatureCert)
+                {
+                    aSignatureCert = pSignatureCert->GetValue().toUtf8();
+                }
+                const SfxStringItem* pSignatureKey = rReq.GetArg<SfxStringItem>(FN_PARAM_2);
+                if (pSignatureKey)
+                {
+                    aSignatureKey = pSignatureKey->GetValue().toUtf8();
+                }
+
+                SfxViewFrame* pFrame = GetFrame();
+                SfxViewShell* pViewShell = pFrame ? pFrame->GetViewShell() : nullptr;
+                if (pViewShell)
+                {
+                    uno::Reference<security::XCertificate> xSigningCertificate;
+                    if (!aSignatureCert.empty() && !aSignatureKey.empty())
+                    {
+                        xSigningCertificate = SfxLokHelper::getSigningCertificate(aSignatureCert, aSignatureKey);
+                    }
+                    // Always set the signing certificate, to clear data from a previous dispatch.
+                    pViewShell->SetSigningCertificate(xSigningCertificate);
+                }
+            }
+
             bCreateDirectly = comphelper::LibreOfficeKit::isActive();
             bRectangle = true;
             SetCurrentFunction( FuConstructRectangle::Create( this, GetActiveWindow(), mpDrawView.get(), GetDoc(), rReq, bPermanent ) );
