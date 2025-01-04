@@ -142,7 +142,11 @@ void AquaSalTimer::callTimerCallback()
 
 void AquaSalTimer::handleTimerElapsed()
 {
-    if ( m_bDirectTimeout || ImplGetSVData()->mpWinData->mbIsLiveResize || ImplGetSVData()->mpWinData->mbIsWaitingForNativeEvent )
+    // tdf#164564 don't stop the timer while waiting for a native event
+    // If only ImplGetSVData()->mpWinData->mbIsWaitingForNativeEvent is
+    // true, stopping the timer will also stop animation when using
+    // Skia/Raster or Skia is disabled.
+    if ( m_bDirectTimeout || ImplGetSVData()->mpWinData->mbIsLiveResize )
     {
         // Stop the timer, as it is just invalidated after the firing function
         Stop();
