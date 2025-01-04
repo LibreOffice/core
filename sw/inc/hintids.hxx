@@ -30,7 +30,6 @@
 class SfxStringItem;
 class SwFormatChg;
 class SwUpdateAttr;
-class SwAttrSetChg;
 class SwFormatMeta;
 class SwFormatContentControl;
 class SvXMLAttrContainerItem;
@@ -430,7 +429,8 @@ inline constexpr sal_uInt16 RES_FORMAT_MSG_BEGIN(RES_FMT_END);
 inline constexpr TypedWhichId<SwPtrMsgPoolItem> RES_OBJECTDYING(RES_FORMAT_MSG_BEGIN); // 167
 inline constexpr sal_uInt16 RES_UPDATEATTR_FMT_CHG(
     168); // used by SwUpdateAttr just as an ID to communicate what has changed
-inline constexpr TypedWhichId<SwAttrSetChg> RES_ATTRSET_CHG(169);
+inline constexpr sal_uInt16 RES_UPDATEATTR_ATTRSET_CHG(
+    169); // used by SwUpdateAttr just as an ID to communicate what has changed
 inline constexpr TypedWhichId<SwUpdateAttr> RES_UPDATE_ATTR(170);
 // empty
 inline constexpr sal_uInt16 RES_FORMAT_MSG_END(190);

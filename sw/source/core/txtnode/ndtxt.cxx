@@ -3948,32 +3948,6 @@ namespace {
         OUString sOldNumRule;
         switch ( nWhich )
         {
-            case RES_ATTRSET_CHG:
-            {
-                const SwNumRule* pFormerNumRuleAtTextNode =
-                    rTextNode.GetNum() ? rTextNode.GetNum()->GetNumRule() : nullptr;
-                if ( pFormerNumRuleAtTextNode )
-                {
-                    sOldNumRule = pFormerNumRuleAtTextNode->GetName();
-                }
-
-                const SwAttrSetChg* pSet = dynamic_cast<const SwAttrSetChg*>(pNewValue);
-                if ( pSet && pSet->GetChgSet()->GetItemState( RES_PARATR_NUMRULE, false ) ==
-                        SfxItemState::SET )
-                {
-                    // #i70748#
-                    rTextNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
-                    bNumRuleSet = true;
-                }
-                // #i70748#
-                // The new list style set at the paragraph.
-                const SwNumRule* pNumRuleAtTextNode = rTextNode.GetNumRule();
-                if ( pNumRuleAtTextNode )
-                {
-                    sNumRule = pNumRuleAtTextNode->GetName();
-                }
-                break;
-            }
             case RES_PARATR_NUMRULE:
             {
                 if ( rTextNode.GetNodes().IsDocNodes() )
@@ -4005,6 +3979,37 @@ namespace {
         HandleApplyTextNodeFormatChange(rTextNode, sNumRule, sOldNumRule, bNumRuleSet, bParagraphStyleChanged);
     }
     // End of method <HandleModifyAtTextNode>
+
+    void HandleModifyAtTextNode( SwTextNode& rTextNode,
+                                const SwAttrSetChg* /*pOldValue*/,
+                                const SwAttrSetChg* pNewValue )
+    {
+        bool bNumRuleSet = false;
+        OUString sNumRule;
+        OUString sOldNumRule;
+        const SwNumRule* pFormerNumRuleAtTextNode =
+            rTextNode.GetNum() ? rTextNode.GetNum()->GetNumRule() : nullptr;
+        if ( pFormerNumRuleAtTextNode )
+        {
+            sOldNumRule = pFormerNumRuleAtTextNode->GetName();
+        }
+
+        if ( pNewValue && pNewValue->GetChgSet()->GetItemState( RES_PARATR_NUMRULE, false ) ==
+                SfxItemState::SET )
+        {
+            // #i70748#
+            rTextNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
+            bNumRuleSet = true;
+        }
+        // #i70748#
+        // The new list style set at the paragraph.
+        const SwNumRule* pNumRuleAtTextNode = rTextNode.GetNumRule();
+        if ( pNumRuleAtTextNode )
+        {
+            sNumRule = pNumRuleAtTextNode->GetName();
+        }
+        HandleApplyTextNodeFormatChange(rTextNode, sNumRule, sOldNumRule, bNumRuleSet, /*bParagraphStyleChanged*/false);
+    }
 
     // Helper method for special handling of modified attributes at text node.
     // The following is handled:
@@ -5537,20 +5542,40 @@ void SwTextNode::TriggerNodeUpdate(const sw::LegacyModifyHint& rHint)
     {
         sw::TextNodeNotificationSuppressor(*this);
 
+        if ( !mbInSetOrResetAttr )
+        {
+            HandleModifyAtTextNode( *this, pOldValue, pNewValue );
+        }
+
+        SwContentNode::SwClientNotify(*this, rHint);
+
+        SwDoc& rDoc = GetDoc();
+        // #125329# - assure that text node is in document nodes array
+        if ( !rDoc.IsInDtor() && &rDoc.GetNodes() == &GetNodes() )
+        {
+            rDoc.GetNodes().UpdateOutlineNode(*this);
+        }
+    }
+}
+
+void SwTextNode::TriggerNodeUpdate(const sw::AttrSetChangeHint& rHint)
+{
+    const SwAttrSetChg* pOldValue = rHint.m_pOld;
+    const SwAttrSetChg* pNewValue = rHint.m_pNew;
+    {
+        sw::TextNodeNotificationSuppressor(*this);
+
         // reset fill information
         if (maFillAttributes && pNewValue)
         {
-            const sal_uInt16 nWhich = pNewValue->Which();
             bool bReset(false);
 
-            if(RES_ATTRSET_CHG == nWhich) // ..on ItemChange from DrawingLayer FillAttributes
-            {
-                SfxItemIter aIter(*static_cast<const SwAttrSetChg*>(pNewValue)->GetChgSet());
+            // ..on ItemChange from DrawingLayer FillAttributes
+            SfxItemIter aIter(*pNewValue->GetChgSet());
 
-                for(const SfxPoolItem* pItem = aIter.GetCurItem(); pItem && !bReset; pItem = aIter.NextItem())
-                {
-                    bReset = !IsInvalidItem(pItem) && pItem->Which() >= XATTR_FILL_FIRST && pItem->Which() <= XATTR_FILL_LAST;
-                }
+            for(const SfxPoolItem* pItem = aIter.GetCurItem(); pItem && !bReset; pItem = aIter.NextItem())
+            {
+                bReset = !IsInvalidItem(pItem) && pItem->Which() >= XATTR_FILL_FIRST && pItem->Which() <= XATTR_FILL_LAST;
             }
 
             if(bReset)
@@ -5648,6 +5673,11 @@ void SwTextNode::SwClientNotify( const SwModify& rModify, const SfxHint& rHint )
     {
         auto pLegacyHint = static_cast<const sw::LegacyModifyHint*>(&rHint);
         TriggerNodeUpdate(*pLegacyHint);
+    }
+    else if (rHint.GetId() == SfxHintId::SwAttrSetChange)
+    {
+        auto pChangeHint = static_cast<const sw::AttrSetChangeHint*>(&rHint);
+        TriggerNodeUpdate(*pChangeHint);
     }
     else if (rHint.GetId() == SfxHintId::SwFormatChange)
     {

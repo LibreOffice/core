@@ -114,7 +114,9 @@ void SwLineNumberInfo::SetCharFormat( SwCharFormat *pChFormat )
 
 void SwLineNumberInfo::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    if (rHint.GetId() != SfxHintId::SwLegacyModify && rHint.GetId() != SfxHintId::SwFormatChange)
+    if (rHint.GetId() != SfxHintId::SwLegacyModify
+        && rHint.GetId() != SfxHintId::SwFormatChange
+        && rHint.GetId() != SfxHintId::SwAttrSetChange)
         return;
     if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {

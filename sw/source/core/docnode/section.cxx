@@ -403,19 +403,63 @@ void SwSection::Notify(SfxHint const& rHint)
         auto rSectionHidden = static_cast<const sw::SectionHidden&>(rHint);
         m_Data.SetHiddenFlag(rSectionHidden.m_isHidden || (m_Data.IsHidden() && m_Data.IsCondHidden()));
         return;
-    } else if (rHint.GetId() != SfxHintId::SwLegacyModify)
+    } else if (rHint.GetId() != SfxHintId::SwLegacyModify && rHint.GetId() != SfxHintId::SwAttrSetChange)
         return;
-    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
-    auto pOld = pLegacy->m_pOld;
-    auto pNew = pLegacy->m_pNew;
+
     bool bUpdateFootnote = false;
-    switch(pLegacy->GetWhich())
+    if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
-    case RES_ATTRSET_CHG:
+        auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
+        auto pOld = pLegacy->m_pOld;
+        auto pNew = pLegacy->m_pNew;
+        switch(pLegacy->GetWhich())
+        {
+        case RES_PROTECT:
+            if( pNew )
+            {
+                bool bNewFlag =
+                    static_cast<const SvxProtectItem*>(pNew)->IsContentProtected();
+                // this used to inherit the flag from the parent, but then there is
+                // no way to turn it off in an inner section
+                m_Data.SetProtectFlag( bNewFlag );
+            }
+            return;
+        // edit in readonly sections
+        case RES_EDIT_IN_READONLY:
+            if( pNew )
+            {
+                const bool bNewFlag =
+                    static_cast<const SwFormatEditInReadonly*>(pNew)->GetValue();
+                m_Data.SetEditInReadonlyFlag( bNewFlag );
+            }
+            return;
+
+        case RES_COL:
+            // Is handled by the Layout, if appropriate
+            break;
+
+        case RES_FTN_AT_TXTEND:
+        case RES_END_AT_TXTEND:
+            if( pNew && pOld )
+            {
+                bUpdateFootnote = true;
+            }
+            break;
+
+        default:
+            CheckRegistration( pOld );
+            break;
+        }
+    }
+    else // rHint.GetId() == SfxHintId::SwAttrSetChange
+    {
+        auto pChangeHint = static_cast<const sw::AttrSetChangeHint*>(&rHint);
+        const SwAttrSetChg* pOld = pChangeHint->m_pOld;
+        const SwAttrSetChg* pNew = pChangeHint->m_pNew;
         if (pNew && pOld)
         {
-            SfxItemSet* pNewSet = const_cast<SwAttrSetChg*>(static_cast<const SwAttrSetChg*>(pNew))->GetChgSet();
-            SfxItemSet* pOldSet = const_cast<SwAttrSetChg*>(static_cast<const SwAttrSetChg*>(pOld))->GetChgSet();
+            SfxItemSet* pNewSet = const_cast<SwAttrSetChg*>(pNew)->GetChgSet();
+            SfxItemSet* pOldSet = const_cast<SwAttrSetChg*>(pOld)->GetChgSet();
 
             if( const SvxProtectItem* pItem = pNewSet->GetItemIfSet(
                         RES_PROTECT, false ) )
@@ -445,43 +489,6 @@ void SwSection::Notify(SfxHint const& rHint)
             if( !pNewSet->Count() )
                 return;
         }
-        break;
-
-    case RES_PROTECT:
-        if( pNew )
-        {
-            bool bNewFlag =
-                static_cast<const SvxProtectItem*>(pNew)->IsContentProtected();
-            // this used to inherit the flag from the parent, but then there is
-            // no way to turn it off in an inner section
-            m_Data.SetProtectFlag( bNewFlag );
-        }
-        return;
-    // edit in readonly sections
-    case RES_EDIT_IN_READONLY:
-        if( pNew )
-        {
-            const bool bNewFlag =
-                static_cast<const SwFormatEditInReadonly*>(pNew)->GetValue();
-            m_Data.SetEditInReadonlyFlag( bNewFlag );
-        }
-        return;
-
-    case RES_COL:
-        // Is handled by the Layout, if appropriate
-        break;
-
-    case RES_FTN_AT_TXTEND:
-    case RES_END_AT_TXTEND:
-        if( pNew && pOld )
-        {
-            bUpdateFootnote = true;
-        }
-        break;
-
-    default:
-        CheckRegistration( pOld );
-        break;
     }
 
     if( bUpdateFootnote )
@@ -727,19 +734,15 @@ void SwSectionFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         SwFrameFormat::SwClientNotify(rMod, rHint);
         return;
     }
-    else if (rHint.GetId() != SfxHintId::SwLegacyModify)
-        return;
-    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
-    sal_uInt16 nWhich = pLegacy->GetWhich();
-    auto pOld = pLegacy->m_pOld;
-    auto pNew = pLegacy->m_pNew;
-    switch( nWhich )
+    else if (rHint.GetId() == SfxHintId::SwAttrSetChange)
     {
-    case RES_ATTRSET_CHG:
+        auto pChangeHint = static_cast<const sw::AttrSetChangeHint*>(&rHint);
+        const SwAttrSetChg* pOld = pChangeHint->m_pOld;
+        const SwAttrSetChg* pNew = pChangeHint->m_pNew;
         if (HasWriterListeners() && pOld && pNew)
         {
-            SfxItemSet* pNewSet = const_cast<SwAttrSetChg*>(static_cast<const SwAttrSetChg*>(pNew))->GetChgSet();
-            SfxItemSet* pOldSet = const_cast<SwAttrSetChg*>(static_cast<const SwAttrSetChg*>(pOld))->GetChgSet();
+            SfxItemSet* pNewSet = const_cast<SwAttrSetChg*>(pNew)->GetChgSet();
+            SfxItemSet* pOldSet = const_cast<SwAttrSetChg*>(pOld)->GetChgSet();
             const SfxPoolItem *pItem;
             if( SfxItemState::SET == pNewSet->GetItemState(
                                         RES_PROTECT, false, &pItem ))
@@ -772,11 +775,20 @@ void SwSectionFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
                 pNewSet->ClearItem( RES_END_AT_TXTEND );
                 pOldSet->ClearItem( RES_END_AT_TXTEND );
             }
-            if( !static_cast<const SwAttrSetChg*>(pOld)->GetChgSet()->Count() )
+            if( !pOld->GetChgSet()->Count() )
                 return;
         }
-        break;
-
+        SwFrameFormat::SwClientNotify(rMod, rHint);
+        return;
+    }
+    else if (rHint.GetId() != SfxHintId::SwLegacyModify)
+        return;
+    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
+    sal_uInt16 nWhich = pLegacy->GetWhich();
+    auto pOld = pLegacy->m_pOld;
+    auto pNew = pLegacy->m_pNew;
+    switch( nWhich )
+    {
     case RES_FTN_AT_TXTEND:
     case RES_END_AT_TXTEND:
     case RES_PROTECT:

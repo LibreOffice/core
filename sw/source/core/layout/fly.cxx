@@ -801,7 +801,8 @@ bool SwFlyFrame::FrameSizeChg( const SwFormatFrameSize &rFrameSize )
 void SwFlyFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
     if (rHint.GetId() == SfxHintId::SwFormatChange ||
-        rHint.GetId() == SfxHintId::SwLegacyModify)
+        rHint.GetId() == SfxHintId::SwLegacyModify ||
+        rHint.GetId() == SfxHintId::SwAttrSetChange)
     {
         SwFlyFrameInvFlags eInvFlags = SwFlyFrameInvFlags::NONE;
         if (rHint.GetId() == SfxHintId::SwFormatChange)
@@ -809,17 +810,17 @@ void SwFlyFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
             auto pChangeHint = static_cast<const SwFormatChangeHint*>(&rHint);
             UpdateAttrForFormatChange(pChangeHint->m_pOldFormat, pChangeHint->m_pNewFormat, eInvFlags);
         }
-        else // rHint.GetId() == SfxHintId::SwLegacyModify
+        else if (rHint.GetId() == SfxHintId::SwAttrSetChange)
         {
-            auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
-            if(pLegacy->m_pNew && pLegacy->m_pOld && RES_ATTRSET_CHG == pLegacy->m_pNew->Which())
+            auto pChangeHint = static_cast<const sw::AttrSetChangeHint*>(&rHint);
+            if(pChangeHint->m_pNew && pChangeHint->m_pOld)
             {
-                SfxItemIter aNIter(*static_cast<const SwAttrSetChg*>(pLegacy->m_pNew)->GetChgSet());
-                SfxItemIter aOIter(*static_cast<const SwAttrSetChg*>(pLegacy->m_pOld)->GetChgSet());
+                SfxItemIter aNIter(*pChangeHint->m_pNew->GetChgSet());
+                SfxItemIter aOIter(*pChangeHint->m_pOld->GetChgSet());
                 const SfxPoolItem* pNItem = aNIter.GetCurItem();
                 const SfxPoolItem* pOItem = aOIter.GetCurItem();
-                SwAttrSetChg aOldSet(*static_cast<const SwAttrSetChg*>(pLegacy->m_pOld));
-                SwAttrSetChg aNewSet(*static_cast<const SwAttrSetChg*>(pLegacy->m_pNew));
+                SwAttrSetChg aOldSet(*pChangeHint->m_pOld);
+                SwAttrSetChg aNewSet(*pChangeHint->m_pNew);
                 do
                 {
                     UpdateAttr_(pOItem, pNItem, eInvFlags, &aOldSet, &aNewSet);
@@ -827,10 +828,13 @@ void SwFlyFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
                     pOItem = aOIter.NextItem();
                 } while(pNItem);
                 if(aOldSet.Count() || aNewSet.Count())
-                    SwLayoutFrame::SwClientNotify(rMod, sw::LegacyModifyHint(&aOldSet, &aNewSet));
+                    SwLayoutFrame::SwClientNotify(rMod, sw::AttrSetChangeHint(&aOldSet, &aNewSet));
             }
-            else
-                UpdateAttr_(pLegacy->m_pOld, pLegacy->m_pNew, eInvFlags);
+        }
+        else // rHint.GetId() == SfxHintId::SwLegacyModify
+        {
+            auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
+            UpdateAttr_(pLegacy->m_pOld, pLegacy->m_pNew, eInvFlags);
         }
 
         if(eInvFlags == SwFlyFrameInvFlags::NONE)
@@ -3500,13 +3504,16 @@ const SwFormatAnchor* SwFlyFrame::GetAnchorFromPoolItem(const SfxPoolItem& rItem
 {
     switch(rItem.Which())
     {
-        case RES_ATTRSET_CHG:
-            return rItem.StaticWhichCast(RES_ATTRSET_CHG).GetChgSet()->GetItem(RES_ANCHOR, false);
         case RES_ANCHOR:
             return static_cast<const SwFormatAnchor*>(&rItem);
         default:
             return nullptr;
     }
+}
+
+const SwFormatAnchor* SwFlyFrame::GetAnchorFromPoolItem(const SwAttrSetChg& rItem)
+{
+    return rItem.GetChgSet()->GetItem(RES_ANCHOR, false);
 }
 
 const SwFlyFrame* SwFlyFrame::DynCastFlyFrame() const

@@ -1103,7 +1103,7 @@ void SwContentNode::UpdateAttr(const SwUpdateAttr& rUpdate)
 {
     if (GetNodes().IsDocNodes()
             && IsTextNode()
-            && RES_ATTRSET_CHG == rUpdate.getWhichAttr())
+            && RES_UPDATEATTR_ATTRSET_CHG == rUpdate.getWhichAttr())
         static_cast<SwTextNode*>(this)->SetCalcHiddenCharFlags();
     CallSwClientNotify(sw::LegacyModifyHint(&rUpdate, &rUpdate));
 }
@@ -1130,13 +1130,23 @@ void SwContentNode::SwClientNotify( const SwModify&, const SfxHint& rHint)
             AttrSetHandleHelper::SetParent(mpAttrSet, *this, pFormatColl, pFormatColl);
         CallSwClientNotify(rHint);
     }
+    else if (rHint.GetId() == SfxHintId::SwAttrSetChange)
+    {
+        auto pChangeHint = static_cast<const sw::AttrSetChangeHint*>(&rHint);
+        InvalidateInSwCache();
+        if (GetNodes().IsDocNodes()
+                && IsTextNode()
+                && pChangeHint->m_pOld
+                && SfxItemState::SET == pChangeHint->m_pOld->GetChgSet()->GetItemState(RES_CHRATR_HIDDEN, false))
+            static_cast<SwTextNode*>(this)->SetCalcHiddenCharFlags();
+        CallSwClientNotify(rHint);
+    }
     else if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
         auto pLegacyHint = static_cast<const sw::LegacyModifyHint*>(&rHint);
         const sal_uInt16 nWhich = pLegacyHint->GetWhich();
         InvalidateInSwCache(nWhich);
 
-        bool bCalcHidden = false;
         switch(nWhich)
         {
             case RES_OBJECTDYING:
@@ -1153,14 +1163,6 @@ void SwContentNode::SwClientNotify( const SwModify&, const SfxHint& rHint)
                         assert(false);
                     }
                 }
-                break;
-
-            case RES_ATTRSET_CHG:
-                if (GetNodes().IsDocNodes()
-                        && IsTextNode()
-                        && pLegacyHint->m_pOld
-                        && SfxItemState::SET == pLegacyHint->m_pOld->StaticWhichCast(RES_ATTRSET_CHG).GetChgSet()->GetItemState(RES_CHRATR_HIDDEN, false))
-                    bCalcHidden = true;
                 break;
 
             case RES_UPDATE_ATTR:
@@ -1183,8 +1185,6 @@ void SwContentNode::SwClientNotify( const SwModify&, const SfxHint& rHint)
                 UpdateAttr(rUpdateAttr);
                 return;
         }
-        if(bCalcHidden)
-            static_cast<SwTextNode*>(this)->SetCalcHiddenCharFlags();
         CallSwClientNotify(rHint);
     }
     else if (rHint.GetId() == SfxHintId::SwAutoFormatUsedHint)

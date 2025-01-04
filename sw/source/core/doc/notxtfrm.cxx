@@ -756,95 +756,97 @@ void SwNoTextFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint
             InvalidatePrt();
             SetCompletePaint();
         }
-        return;
     }
-    if(rHint.GetId() == SfxHintId::SwPreGraphicArrived
+    else if(rHint.GetId() == SfxHintId::SwPreGraphicArrived
             || rHint.GetId() == SfxHintId::SwGraphicPieceArrived
             || rHint.GetId() == SfxHintId::SwLinkedGraphicStreamArrived)
     {
         OnGraphicArrived();
-        return;
     }
     else if (rHint.GetId() == SfxHintId::SwFormatChange)
     {
         ClearCache();
         InvalidatePrt();
         SetCompletePaint();
-        return;
     }
-    else if (rHint.GetId() != SfxHintId::SwLegacyModify)
-        return;
-    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
-    sal_uInt16 nWhich = pLegacy->GetWhich();
-
-    SwContentFrame::SwClientNotify(rModify, rHint);
-
-    switch( nWhich )
+    else if (rHint.GetId() == SfxHintId::SwAttrSetChange)
     {
-    case RES_OBJECTDYING:
-        break;
+        auto pChangeHint = static_cast<const sw::AttrSetChangeHint*>(&rHint);
+        SwContentFrame::SwClientNotify(rModify, rHint);
 
-    case RES_UPDATE_ATTR:
-        if (GetNode()->GetNodeType() != SwNodeType::Grf) {
-            break;
-        }
-        ClearCache();
-        break;
+        sal_uInt16 n;
+        for( n = RES_GRFATR_BEGIN; n < RES_GRFATR_END; ++n )
+            if( SfxItemState::SET == pChangeHint->m_pOld->GetChgSet()->
+                            GetItemState( n, false ))
+            {
+                ClearCache();
 
-    case RES_ATTRSET_CHG:
-        {
-            sal_uInt16 n;
-            for( n = RES_GRFATR_BEGIN; n < RES_GRFATR_END; ++n )
-                if( SfxItemState::SET == static_cast<const SwAttrSetChg*>(pLegacy->m_pOld)->GetChgSet()->
-                                GetItemState( n, false ))
+                if(RES_GRFATR_ROTATION == n)
                 {
-                    ClearCache();
-
-                    if(RES_GRFATR_ROTATION == n)
+                    // RotGrfFlyFrame: Update Handles in view, these may be rotation-dependent
+                    // (e.g. crop handles) and need a visualisation update
+                    if ( GetNode()->GetNodeType() == SwNodeType::Grf )
                     {
-                        // RotGrfFlyFrame: Update Handles in view, these may be rotation-dependent
-                        // (e.g. crop handles) and need a visualisation update
-                        if ( GetNode()->GetNodeType() == SwNodeType::Grf )
+                        SwGrfNode* pNd = static_cast<SwGrfNode*>( GetNode());
+                        SwViewShell *pVSh = pNd->GetDoc().getIDocumentLayoutAccess().GetCurrentViewShell();
+
+                        if(pVSh)
                         {
-                            SwGrfNode* pNd = static_cast<SwGrfNode*>( GetNode());
-                            SwViewShell *pVSh = pNd->GetDoc().getIDocumentLayoutAccess().GetCurrentViewShell();
+                            SdrView* pDrawView = pVSh->GetDrawView();
 
-                            if(pVSh)
+                            if(pDrawView)
                             {
-                                SdrView* pDrawView = pVSh->GetDrawView();
-
-                                if(pDrawView)
-                                {
-                                    pDrawView->AdjustMarkHdl(nullptr);
-                                }
+                                pDrawView->AdjustMarkHdl(nullptr);
                             }
-
-                            // RotateFlyFrame3 - invalidate needed for ContentFrame (inner, this)
-                            // and LayoutFrame (outer, GetUpper). It is possible to only invalidate
-                            // the outer frame, but that leads to an in-between state that gets
-                            // potentially painted
-                            if(GetUpper())
-                            {
-                                GetUpper()->InvalidateAll_();
-                            }
-
-                            InvalidateAll_();
                         }
+
+                        // RotateFlyFrame3 - invalidate needed for ContentFrame (inner, this)
+                        // and LayoutFrame (outer, GetUpper). It is possible to only invalidate
+                        // the outer frame, but that leads to an in-between state that gets
+                        // potentially painted
+                        if(GetUpper())
+                        {
+                            GetUpper()->InvalidateAll_();
+                        }
+
+                        InvalidateAll_();
                     }
-                    break;
                 }
-            if( RES_GRFATR_END == n )           // not found
-                return ;
-        }
-        break;
+                break;
+            }
+        if( RES_GRFATR_END == n )           // not found
+            return ;
 
-    default:
-        if ( !pLegacy->m_pNew || !isGRFATR(nWhich) )
-            return;
+        InvalidatePrt();
+        SetCompletePaint();
     }
+    else if (rHint.GetId() == SfxHintId::SwLegacyModify)
+    {
+        auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
+        sal_uInt16 nWhich = pLegacy->GetWhich();
 
-    InvalidatePrt();
-    SetCompletePaint();
+        SwContentFrame::SwClientNotify(rModify, rHint);
+
+        switch( nWhich )
+        {
+        case RES_OBJECTDYING:
+            break;
+
+        case RES_UPDATE_ATTR:
+            if (GetNode()->GetNodeType() != SwNodeType::Grf) {
+                break;
+            }
+            ClearCache();
+            break;
+
+        default:
+            if ( !pLegacy->m_pNew || !isGRFATR(nWhich) )
+                return;
+        }
+
+        InvalidatePrt();
+        SetCompletePaint();
+    }
 }
 
 static void lcl_correctlyAlignRect( SwRect& rAlignedGrfArea, const SwRect& rInArea, vcl::RenderContext const * pOut )

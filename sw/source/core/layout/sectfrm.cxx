@@ -2731,16 +2731,22 @@ void SwSectionFrame::Notify(SfxHint const& rHint)
 
 void SwSectionFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
-    if (rHint.GetId() == SfxHintId::SwLegacyModify || rHint.GetId() == SfxHintId::SwFormatChange)
+    if (rHint.GetId() == SfxHintId::SwLegacyModify || rHint.GetId() == SfxHintId::SwFormatChange
+        || rHint.GetId() == SfxHintId::SwAttrSetChange)
     {
         SwSectionFrameInvFlags eInvFlags = SwSectionFrameInvFlags::NONE;
         if (rHint.GetId() == SfxHintId::SwLegacyModify)
         {
             auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
-            if(pLegacy->m_pNew && RES_ATTRSET_CHG == pLegacy->m_pNew->Which())
+            UpdateAttr_(pLegacy->m_pOld, pLegacy->m_pNew, eInvFlags);
+        }
+        else if (rHint.GetId() == SfxHintId::SwAttrSetChange)
+        {
+            auto pChangeHint = static_cast<const sw::AttrSetChangeHint*>(&rHint);
+            if(pChangeHint->m_pNew)
             {
-                auto& rOldSetChg = *static_cast<const SwAttrSetChg*>(pLegacy->m_pOld);
-                auto& rNewSetChg = *static_cast<const SwAttrSetChg*>(pLegacy->m_pNew);
+                const SwAttrSetChg& rOldSetChg = *pChangeHint->m_pOld;
+                const SwAttrSetChg& rNewSetChg = *pChangeHint->m_pNew;
                 SfxItemIter aOIter(*rOldSetChg.GetChgSet());
                 SfxItemIter aNIter(*rNewSetChg.GetChgSet());
                 const SfxPoolItem* pOItem = aOIter.GetCurItem();
@@ -2754,10 +2760,8 @@ void SwSectionFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
                     pOItem = aOIter.NextItem();
                 } while (pNItem);
                 if(aOldSet.Count() || aNewSet.Count())
-                    SwLayoutFrame::SwClientNotify(rMod, sw::LegacyModifyHint(&aOldSet, &aNewSet));
+                    SwLayoutFrame::SwClientNotify(rMod, sw::AttrSetChangeHint(&aOldSet, &aNewSet));
             }
-            else
-                UpdateAttr_(pLegacy->m_pOld, pLegacy->m_pNew, eInvFlags);
         }
         else // rHint.GetId() == SfxHintId::SwFormatChange)
         {
