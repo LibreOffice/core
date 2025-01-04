@@ -34,8 +34,6 @@
 class SfxViewFactory;
 class SdrView;
 class TabBar;
-class SbxObject;
-class SbModule;
 class StarBASIC;
 
 namespace basctl
@@ -51,8 +49,6 @@ class ModulWindow;
 class ModulWindowLayout;
 class DialogWindow;
 class DialogWindowLayout;
-class TabBar;
-class BaseWindow;
 class LocalizationMgr;
 class BasicColorConfig;
 class ContainerListenerImpl;

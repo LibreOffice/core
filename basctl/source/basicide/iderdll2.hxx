@@ -20,7 +20,6 @@
 #pragma once
 
 class StarBASIC;
-class SvxSearchItem;
 
 
 #include <bastypes.hxx>

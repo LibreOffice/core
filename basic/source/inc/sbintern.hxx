@@ -31,10 +31,6 @@ namespace utl
 {
     class TransliterationWrapper;
 }
-class SbUnoFactory;
-class SbTypeFactory;
-class SbOLEFactory;
-class SbFormFactory;
 class SbiInstance;
 class SbModule;
 class BasicManager;

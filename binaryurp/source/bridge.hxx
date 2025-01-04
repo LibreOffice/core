@@ -55,12 +55,9 @@ namespace com::sun::star {
     namespace lang { class XEventListener; }
     namespace uno {
         class Any;
-        class TypeDescription;
         class UnoInterfaceReference;
-        class XInterface;
     }
 }
-namespace rtl { class ByteSequence; }
 
 namespace binaryurp {
 

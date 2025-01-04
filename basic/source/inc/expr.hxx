@@ -31,7 +31,6 @@ class SbiExprList;
 class SbiParser;
 class SbiCodeGen;
 class SbiSymDef;
-class SbiProcDef;
 
 
 typedef std::unique_ptr<SbiExprList> SbiExprListPtr;

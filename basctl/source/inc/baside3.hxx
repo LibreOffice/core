@@ -26,16 +26,11 @@
 #include <svl/undo.hxx>
 #include <memory>
 
-class Printer;
-class StarBASIC;
-class SfxItemSet;
-class SfxUndoManager;
 class SdrUndoAction;
 
 namespace basctl
 {
 
-class DlgEditor;
 class DlgEdModel;
 class DlgEdPage;
 class DlgEdView;

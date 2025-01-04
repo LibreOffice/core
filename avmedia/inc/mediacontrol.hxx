@@ -32,8 +32,6 @@ constexpr sal_Int32 AVMEDIA_CONTROLOFFSET = 6;
 namespace avmedia
 {
 
-class MediaItem;
-
 class MediaControl : public InterimItemWindow, public MediaControlBase
 {
 public:

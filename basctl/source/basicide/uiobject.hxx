@@ -13,8 +13,6 @@
 
 namespace basctl
 {
-class EditorWindow;
-
 class EditorWindowUIObject : public WindowUIObject
 {
     VclPtr<basctl::EditorWindow> mxEditorWindow;

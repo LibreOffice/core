@@ -29,7 +29,6 @@
 #include <vector>
 
 class SbxFactory;
-class SbxVariable;
 class SbxBasicFormater;
 
 // AppData structure for SBX:

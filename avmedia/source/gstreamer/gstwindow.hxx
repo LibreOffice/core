@@ -27,8 +27,6 @@
 
 namespace avmedia::gstreamer {
 
-class Player;
-
 class Window : public ::cppu::WeakImplHelper< css::media::XPlayerWindow,
                                               css::lang::XServiceInfo >
 {

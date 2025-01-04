@@ -48,7 +48,6 @@
 
 class ExtTextEngine;
 class TextView;
-class SvxSearchItem;
 namespace com::sun::star::beans { class XMultiPropertySet; }
 
 namespace basctl

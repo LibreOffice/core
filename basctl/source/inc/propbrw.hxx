@@ -30,7 +30,6 @@
 #include <svx/svdmark.hxx>
 #include "bastypes.hxx"
 
-class SfxBindings;
 class SdrView;
 class SfxViewShell;
 

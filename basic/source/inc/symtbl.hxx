@@ -26,7 +26,6 @@
 class SbiConstDef;
 class SbiParser;
 class SbiProcDef;
-class SbiStringPool;
 class SbiSymDef;                    // base class
 
 enum SbiSymScope { SbLOCAL, SbPARAM, SbPUBLIC, SbGLOBAL, SbRTL };

@@ -31,14 +31,6 @@
 #include <cppuhelper/compbase.hxx>
 #include <sal/types.h>
 
-namespace com::sun::star {
-    namespace connection { class XConnection; }
-    namespace uno {
-        class XComponentContext;
-        class XInterface;
-    }
-}
-
 namespace binaryurp {
 
 // That BridgeFactory derives from XComponent appears to be a historic mistake;

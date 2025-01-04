@@ -30,7 +30,6 @@
 #include <string_view>
 #include <unordered_map>
 
-class SbModule;
 class SfxItemSet;
 class SfxRequest;
 class SvxSearchItem;
@@ -47,8 +46,6 @@ namespace basctl
 {
 
 class Layout;
-class ModulWindow;
-class DialogWindow;
 
 constexpr auto LINE_SEP_CR = 0x0D;
 constexpr auto LINE_SEP = 0x0A;

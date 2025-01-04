@@ -28,7 +28,6 @@ class SbxVariable;
 class StarBASIC;
 class SfxUInt16Item;
 class SfxBindings;
-class SfxDispatcher;
 namespace weld { class Widget; class Window; }
 
 namespace basctl

@@ -41,7 +41,6 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <tools/wldcrd.hxx>
 
-class SbiInstance;                  // active StarBASIC process
 class SbiRuntime;                   // active StarBASIC procedure instance
 
 struct SbiArgv;                     // Argv stack element
