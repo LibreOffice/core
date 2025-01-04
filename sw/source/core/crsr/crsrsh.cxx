@@ -2907,7 +2907,7 @@ void SwCursorShell::SwClientNotify(const SwModify&, const SfxHint& rHint)
             m_aGrfArrivedLnk.Call(*this);
         return;
     }
-    if (rHint.GetId() == SfxHintId::SwFormatChange)
+    if (rHint.GetId() == SfxHintId::SwFormatChange || rHint.GetId() == SfxHintId::SwAttrSetChange)
     {
         if( m_bCallChgLnk )
             // messages are not forwarded
@@ -2925,8 +2925,7 @@ void SwCursorShell::SwClientNotify(const SwModify&, const SfxHint& rHint)
         nWhich = RES_OBJECTDYING;
     if( m_bCallChgLnk &&
         ( !isFormatMessage(nWhich)
-                || nWhich == RES_UPDATE_ATTR
-                || nWhich == RES_ATTRSET_CHG ))
+                || nWhich == RES_UPDATE_ATTR ))
         // messages are not forwarded
         // #i6681#: RES_UPDATE_ATTR is implicitly unset in
         // SwTextNode::Insert(SwTextHint*, sal_uInt16); we react here and thus do
@@ -2936,7 +2935,6 @@ void SwCursorShell::SwClientNotify(const SwModify&, const SfxHint& rHint)
     {
         EndListeningAll();
     }
-
 }
 
 /** Does the current cursor create a selection?

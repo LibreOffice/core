@@ -249,16 +249,9 @@ void SwEndNoteInfo::SwClientNotify( const SwModify& rModify, const SfxHint& rHin
     if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
         auto pLegacyHint = static_cast<const sw::LegacyModifyHint*>(&rHint);
-        switch(pLegacyHint->GetWhich())
-        {
-            case RES_ATTRSET_CHG:
-                UpdateFormatOrAttr();
-                break;
-            default:
-                CheckRegistration( pLegacyHint->m_pOld );
-        }
+        CheckRegistration( pLegacyHint->m_pOld );
     }
-    else if (rHint.GetId() == SfxHintId::SwFormatChange)
+    else if (rHint.GetId() == SfxHintId::SwFormatChange || rHint.GetId() == SfxHintId::SwAttrSetChange)
     {
         UpdateFormatOrAttr();
     }

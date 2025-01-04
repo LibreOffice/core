@@ -2266,9 +2266,14 @@ void SwRefPageGetFieldType::SwClientNotify(const SwModify&, const SfxHint& rHint
         CallSwClientNotify(rHint);
         return;
     }
-    if (rHint.GetId() != SfxHintId::SwLegacyModify)
+    if (rHint.GetId() != SfxHintId::SwLegacyModify && rHint.GetId() != SfxHintId::SwAttrSetChange)
         return;
-    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
+    const sw::LegacyModifyHint* pLegacy = nullptr;
+    const sw::AttrSetChangeHint* pChangeHint = nullptr;
+    if (rHint.GetId() == SfxHintId::SwLegacyModify)
+        pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
+    else // rHint.GetId() == SfxHintId::SwAttrSetChange
+        pChangeHint = static_cast<const sw::AttrSetChangeHint*>(&rHint);
     auto const ModifyImpl = [this](SwRootFrame const*const pLayout)
     {
         // first collect all SetPageRefFields
@@ -2283,7 +2288,8 @@ void SwRefPageGetFieldType::SwClientNotify(const SwModify&, const SfxHint& rHint
     };
 
     // update all GetReference fields
-    if( !pLegacy->m_pNew && !pLegacy->m_pOld && HasWriterListeners() )
+    if( (pLegacy && !pLegacy->m_pNew && !pLegacy->m_pOld && HasWriterListeners())
+        || (!pChangeHint->m_pNew && !pChangeHint->m_pOld && HasWriterListeners()))
     {
         SwRootFrame const* pLayout(nullptr);
         SwRootFrame const* pLayoutRLHidden(nullptr);

@@ -68,6 +68,25 @@ SwUndoFormatAttrHelper::SwUndoFormatAttrHelper(SwFormat& rFormat, bool bSvDrwPt)
 
 void SwUndoFormatAttrHelper::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
+    if (rHint.GetId() == SfxHintId::SwAttrSetChange)
+    {
+        auto pChangeHint = static_cast<const sw::AttrSetChangeHint*>(&rHint);
+        if(!pChangeHint->m_pOld)
+            return;
+        if(!pChangeHint->m_pNew)
+            return;
+        const SwDoc& rDoc = *m_rFormat.GetDoc();
+        auto pOld = pChangeHint->m_pOld;
+        auto& rChgSet = *pOld->GetChgSet();
+        if(!GetUndo())
+            m_pUndo.reset(new SwUndoFormatAttr(SfxItemSet(rChgSet), m_rFormat, m_bSaveDrawPt));
+        else {
+            SfxItemIter aIter(rChgSet);
+            for(auto pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+                m_pUndo->PutAttr(*pItem, rDoc);
+        }
+        return;
+    }
     if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
     auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
@@ -78,20 +97,12 @@ void SwUndoFormatAttrHelper::SwClientNotify(const SwModify&, const SfxHint& rHin
         return;
     const SwDoc& rDoc = *m_rFormat.GetDoc();
     auto pOld = pLegacy->m_pOld;
-    if(POOLATTR_END >= pLegacy->m_pOld->Which()) {
+    if(POOLATTR_END >= pLegacy->m_pOld->Which())
+    {
         if(!GetUndo())
             m_pUndo.reset(new SwUndoFormatAttr(*pOld, m_rFormat, m_bSaveDrawPt));
         else
             m_pUndo->PutAttr(*pOld, rDoc);
-    } else if(RES_ATTRSET_CHG == pOld->Which()) {
-        auto& rChgSet = *static_cast<const SwAttrSetChg*>(pOld)->GetChgSet();
-        if(!GetUndo())
-            m_pUndo.reset(new SwUndoFormatAttr(SfxItemSet(rChgSet), m_rFormat, m_bSaveDrawPt));
-        else {
-            SfxItemIter aIter(rChgSet);
-            for(auto pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
-                m_pUndo->PutAttr(*pItem, rDoc);
-        }
     }
 }
 

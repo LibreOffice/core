@@ -511,17 +511,23 @@ void SwTextFrame::CheckDirection( bool bVert )
 
 void SwFrame::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    if (rHint.GetId() != SfxHintId::SwLegacyModify && rHint.GetId() != SfxHintId::SwFormatChange)
+    if (rHint.GetId() != SfxHintId::SwLegacyModify && rHint.GetId() != SfxHintId::SwFormatChange
+        && rHint.GetId() != SfxHintId::SwAttrSetChange)
         return;
 
     SwFrameInvFlags eInvFlags = SwFrameInvFlags::NONE;
     if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
         auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
-        if(pLegacy->m_pOld && pLegacy->m_pNew && RES_ATTRSET_CHG == pLegacy->m_pNew->Which())
+        UpdateAttrFrame(pLegacy->m_pOld, pLegacy->m_pNew, eInvFlags);
+    }
+    else if (rHint.GetId() == SfxHintId::SwAttrSetChange)
+    {
+        auto pChangeHint = static_cast<const sw::AttrSetChangeHint*>(&rHint);
+        if(pChangeHint->m_pOld && pChangeHint->m_pNew)
         {
-            SfxItemIter aNIter(*static_cast<const SwAttrSetChg*>(pLegacy->m_pNew)->GetChgSet());
-            SfxItemIter aOIter(*static_cast<const SwAttrSetChg*>(pLegacy->m_pOld)->GetChgSet());
+            SfxItemIter aNIter(*pChangeHint->m_pNew->GetChgSet());
+            SfxItemIter aOIter(*pChangeHint->m_pOld->GetChgSet());
             const SfxPoolItem* pNItem = aNIter.GetCurItem();
             const SfxPoolItem* pOItem = aOIter.GetCurItem();
             do
@@ -531,8 +537,6 @@ void SwFrame::SwClientNotify(const SwModify&, const SfxHint& rHint)
                 pOItem = aOIter.NextItem();
             } while (pNItem);
         }
-        else
-            UpdateAttrFrame(pLegacy->m_pOld, pLegacy->m_pNew, eInvFlags);
     }
     else // rHint.GetId() == SfxHintId::SwFormatChange
     {
@@ -2407,17 +2411,23 @@ SwTwips SwContentFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
 
 void SwContentFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
-    if (rHint.GetId() != SfxHintId::SwLegacyModify && rHint.GetId() != SfxHintId::SwFormatChange)
+    if (rHint.GetId() != SfxHintId::SwLegacyModify && rHint.GetId() != SfxHintId::SwFormatChange
+        && rHint.GetId() != SfxHintId::SwAttrSetChange)
         return;
 
     SwContentFrameInvFlags eInvFlags = SwContentFrameInvFlags::NONE;
     if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
         auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
-        if(pLegacy->m_pNew && RES_ATTRSET_CHG == pLegacy->m_pNew->Which() && pLegacy->m_pOld)
+        UpdateAttr_(pLegacy->m_pOld, pLegacy->m_pNew, eInvFlags);
+    }
+    else if (rHint.GetId() == SfxHintId::SwAttrSetChange)
+    {
+        auto pChangeHint = static_cast<const sw::AttrSetChangeHint*>(&rHint);
+        if(pChangeHint->m_pNew && pChangeHint->m_pOld)
         {
-            auto& rOldSetChg = *static_cast<const SwAttrSetChg*>(pLegacy->m_pOld);
-            auto& rNewSetChg = *static_cast<const SwAttrSetChg*>(pLegacy->m_pNew);
+            const SwAttrSetChg& rOldSetChg = *pChangeHint->m_pOld;
+            const SwAttrSetChg& rNewSetChg = *pChangeHint->m_pNew;
             SfxItemIter aOIter(*rOldSetChg.GetChgSet());
             SfxItemIter aNIter(*rNewSetChg.GetChgSet());
             const SfxPoolItem* pNItem = aNIter.GetCurItem();
@@ -2431,10 +2441,8 @@ void SwContentFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
                 pOItem = aOIter.NextItem();
             } while(pNItem);
             if(aOldSet.Count() || aNewSet.Count())
-                SwFrame::SwClientNotify(rMod, sw::LegacyModifyHint(&aOldSet, &aNewSet));
+                SwFrame::SwClientNotify(rMod, sw::AttrSetChangeHint(&aOldSet, &aNewSet));
         }
-        else
-            UpdateAttr_(pLegacy->m_pOld, pLegacy->m_pNew, eInvFlags);
     }
     else // rHint.GetId() == SfxHintId::SwFormatChange
     {

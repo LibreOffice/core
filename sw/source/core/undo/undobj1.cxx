@@ -700,19 +700,23 @@ void SwUndoSetFlyFormat::PutAttr( sal_uInt16 nWhich, const SfxPoolItem* pItem )
 
 void SwUndoSetFlyFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    if (rHint.GetId() != SfxHintId::SwLegacyModify)
-        return;
-    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
-    if(!pLegacy->m_pOld)
-        return;
-    const sal_uInt16 nWhich = pLegacy->m_pOld->Which();
-    if(nWhich < POOLATTR_END)
-        PutAttr(nWhich, pLegacy->m_pOld);
-    else if(RES_ATTRSET_CHG == nWhich)
+    if (rHint.GetId() == SfxHintId::SwAttrSetChange)
     {
-        SfxItemIter aIter(*static_cast<const SwAttrSetChg*>(pLegacy->m_pOld)->GetChgSet());
+        auto pChangeHint = static_cast<const sw::AttrSetChangeHint*>(&rHint);
+        if(!pChangeHint->m_pOld)
+            return;
+        SfxItemIter aIter(*pChangeHint->m_pOld->GetChgSet());
         for(const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
             PutAttr(pItem->Which(), pItem);
+    }
+    else if (rHint.GetId() == SfxHintId::SwLegacyModify)
+    {
+        auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
+        if(!pLegacy->m_pOld)
+            return;
+        const sal_uInt16 nWhich = pLegacy->m_pOld->Which();
+        if(nWhich < POOLATTR_END)
+            PutAttr(nWhich, pLegacy->m_pOld);
     }
 }
 

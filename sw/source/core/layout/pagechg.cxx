@@ -539,7 +539,8 @@ void SwPageFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
         static_cast<const sw::AutoFormatUsedHint&>(rHint).SetUsed();
         return;
     }
-    else if (rHint.GetId() == SfxHintId::SwLegacyModify || rHint.GetId() == SfxHintId::SwFormatChange)
+    else if (rHint.GetId() == SfxHintId::SwLegacyModify || rHint.GetId() == SfxHintId::SwFormatChange
+            || rHint.GetId() == SfxHintId::SwAttrSetChange)
     {
         if(auto pSh = getRootFrame()->GetCurrShell())
             pSh->SetFirstVisPageInvalid();
@@ -548,10 +549,15 @@ void SwPageFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
         if (rHint.GetId() == SfxHintId::SwLegacyModify)
         {
             auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
-            if(pLegacy->m_pNew && RES_ATTRSET_CHG == pLegacy->m_pNew->Which())
+            UpdateAttr_(pLegacy->m_pOld, pLegacy->m_pNew, eInvFlags);
+        }
+        else if (rHint.GetId() == SfxHintId::SwAttrSetChange)
+        {
+            auto pChangeHint = static_cast<const sw::AttrSetChangeHint*>(&rHint);
+            if(pChangeHint->m_pNew)
             {
-                auto& rOldSetChg = *static_cast<const SwAttrSetChg*>(pLegacy->m_pOld);
-                auto& rNewSetChg = *static_cast<const SwAttrSetChg*>(pLegacy->m_pNew);
+                const SwAttrSetChg& rOldSetChg = *pChangeHint->m_pOld;
+                const SwAttrSetChg& rNewSetChg = *pChangeHint->m_pNew;
                 SfxItemIter aOIter(*rOldSetChg.GetChgSet());
                 SfxItemIter aNIter(*rNewSetChg.GetChgSet());
                 const SfxPoolItem* pOItem = aOIter.GetCurItem();
@@ -565,10 +571,8 @@ void SwPageFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
                     pNItem = aNIter.NextItem();
                 } while(pNItem);
                 if(aOldSet.Count() || aNewSet.Count())
-                    SwLayoutFrame::SwClientNotify(rModify, sw::LegacyModifyHint(&aOldSet, &aNewSet));
+                    SwLayoutFrame::SwClientNotify(rModify, sw::AttrSetChangeHint(&aOldSet, &aNewSet));
             }
-            else
-                UpdateAttr_(pLegacy->m_pOld, pLegacy->m_pNew, eInvFlags);
         }
         else // rHint.GetId() == SfxHintId::SwFormatChange
         {

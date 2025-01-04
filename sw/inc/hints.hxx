@@ -40,6 +40,7 @@ class SwTableBoxFormat;
 class SwTableLine;
 class SwTableLineFormat;
 class SwTableBox;
+class SwAttrSetChg;
 
 // Base class for all Message-Hints:
 // "Overhead" of SfxPoolItem is handled here
@@ -319,7 +320,14 @@ class PrintHiddenParaHint final : public SfxHint
 public:
     PrintHiddenParaHint() : SfxHint(SfxHintId::SwHiddenParaPrint) {}
 };
-}
+class AttrSetChangeHint final : public SfxHint
+{
+public:
+    const SwAttrSetChg* m_pOld;
+    const SwAttrSetChg* m_pNew;
+    AttrSetChangeHint(const SwAttrSetChg* pOld, const SwAttrSetChg* pNew) : SfxHint(SfxHintId::SwAttrSetChange), m_pOld(pOld), m_pNew(pNew) {}
+};
+} // namespace sw
 
 class SwUpdateAttr final : public SwMsgPoolItem
 {
@@ -383,7 +391,7 @@ public:
  * SwAttrSetChg is sent when something has changed in the SwAttrSet rTheChgdSet.
  * 2 Hints are always sent, the old and the new items in the rTheChgdSet.
  */
-class SwAttrSetChg final : public SwMsgPoolItem
+class SwAttrSetChg final
 {
     bool m_bDelSet;
     SwAttrSet* m_pChgSet;           ///< what has changed
@@ -391,7 +399,7 @@ class SwAttrSetChg final : public SwMsgPoolItem
 public:
     SwAttrSetChg( const SwAttrSet& rTheSet, SwAttrSet& rSet );
     SwAttrSetChg( const SwAttrSetChg& );
-    virtual ~SwAttrSetChg() override;
+    ~SwAttrSetChg();
 
     /// What has changed
     const SwAttrSet* GetChgSet() const     { return m_pChgSet; }

@@ -662,7 +662,7 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
     {
         SwAttrSetChg aChgOld( aOld, aOld );
         SwAttrSetChg aChgNew( aNew, aNew );
-        aCallMod.CallSwClientNotify(sw::LegacyModifyHint( &aChgOld, &aChgNew ));      // all changed are sent
+        aCallMod.CallSwClientNotify(sw::AttrSetChangeHint( &aChgOld, &aChgNew ));      // all changed are sent
     }
 
     // remove the default formats from the object again
