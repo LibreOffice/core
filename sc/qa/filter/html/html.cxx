@@ -14,6 +14,7 @@
 #include <com/sun/star/table/XCellRange.hpp>
 
 #include <editeng/crossedoutitem.hxx>
+#include <editeng/udlnitem.hxx>
 
 #include <comphelper/propertyvalue.hxx>
 #include <svl/numformat.hxx>
@@ -229,6 +230,29 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf79298_strikeout_variants)
         const SvxCrossedOutItem& rCrossedOutItem = pAttr->GetItem(ATTR_FONT_CROSSEDOUT);
         CPPUNIT_ASSERT_EQUAL(FontStrikeout::STRIKEOUT_SINGLE, rCrossedOutItem.GetStrikeout());
     }
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf132770_inserted_text)
+{
+    // Given a document with an inserted text tag <ins>
+    OUString aURL = createFileURL(u"tdf132770_inserted_text.html");
+
+    // When loading that document to Calc:
+    uno::Sequence<beans::PropertyValue> aParams = {
+        comphelper::makePropertyValue(u"DocumentService"_ustr,
+                                      u"com.sun.star.sheet.SpreadsheetDocument"_ustr),
+    };
+    loadWithParams(aURL, aParams);
+
+    // Verify HTML inserted text tag <ins>
+    ScDocument* pDoc = getScDoc();
+    const ScPatternAttr* pAttr = pDoc->GetPattern(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT_MESSAGE("Failed to get cell attribute.", pAttr);
+    const SvxUnderlineItem& rUnderlineItem = pAttr->GetItem(ATTR_FONT_UNDERLINE);
+    // Without the accompanying fix in place, this tests would have failed with:
+    // - Expected: 1 (FontLineStyle::LINESTYLE_SINGLE)
+    // - Actual  : 0 (FontLineStyle::NONE)
+    CPPUNIT_ASSERT_EQUAL(FontLineStyle::LINESTYLE_SINGLE, rUnderlineItem.GetLineStyle());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCopyText)

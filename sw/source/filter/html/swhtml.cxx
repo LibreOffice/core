@@ -1897,6 +1897,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
         break;
 
     case HtmlTokenId::UNDERLINE_ON:
+    case HtmlTokenId::INSERTEDTEXT_ON:
         {
             NewStdAttr( HtmlTokenId::UNDERLINE_ON, &m_xAttrTab->pUnderline,
                         SvxUnderlineItem(LINESTYLE_SINGLE, RES_CHRATR_UNDERLINE) );
@@ -1974,7 +1975,6 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
     case HtmlTokenId::PERSON_ON:
     case HtmlTokenId::ACRONYM_ON:
     case HtmlTokenId::ABBREVIATION_ON:
-    case HtmlTokenId::INSERTEDTEXT_ON:
 
     case HtmlTokenId::TELETYPE_ON:
         NewCharFormat( nToken );

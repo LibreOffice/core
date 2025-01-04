@@ -395,6 +395,18 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf79298StrikeoutVariants)
         getProperty<sal_Int16>(getRun(getParagraph(3), 1), u"CharStrikeout"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf132770InsertedText)
+{
+    createSwWebDoc("tdf132770-inserted-text.html");
+
+    // Without the accompanying fix in place, this tests would have failed with:
+    // - Expected: 1 (FontLineStyle::LINESTYLE_SINGLE)
+    // - Actual  : 0 (FontLineStyle::NONE)
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Underline for <ins> missing", sal_Int16(awt::FontUnderline::SINGLE),
+        getProperty<sal_Int16>(getRun(getParagraph(1), 1), u"CharUnderline"_ustr));
+}
+
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf142781)
 {
     // FIXME: the DPI check should be removed when either (1) the test is fixed to work with
