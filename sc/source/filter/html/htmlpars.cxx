@@ -1804,6 +1804,7 @@ void ScHTMLLayoutParser::ProcToken( HtmlImportInfo* pInfo )
         }
         break;
         case HtmlTokenId::UNDERLINE_ON :
+        case HtmlTokenId::INSERTEDTEXT_ON:
         {
             if ( IsAtBeginningOfText( pInfo ) )
                 mxActEntry->aItemSet.Put( SvxUnderlineItem( LINESTYLE_SINGLE,
@@ -3099,6 +3100,7 @@ void ScHTMLQueryParser::ProcessToken( const HtmlImportInfo& rInfo )
         break;
 
         case HtmlTokenId::UNDERLINE_ON:     // <u>
+        case HtmlTokenId::INSERTEDTEXT_ON:  // <ins>
             mpCurrTable->PutItem( SvxUnderlineItem( LINESTYLE_SINGLE, ATTR_FONT_UNDERLINE ) );
         break;
         default: break;
