@@ -295,6 +295,10 @@ void SwPageDesc::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
         CallSwClientNotify(rHint);
         RegisterChange();
     }
+    else if (rHint.GetId() == SfxHintId::SwObjectDying)
+    {
+        CallSwClientNotify(rHint);
+    }
     else if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
         auto pLegacyHint = static_cast<const sw::LegacyModifyHint*>(&rHint);

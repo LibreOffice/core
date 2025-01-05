@@ -2917,21 +2917,23 @@ void SwCursorShell::SwClientNotify(const SwModify&, const SfxHint& rHint)
             CallChgLnk();
         return;
     }
+    if (rHint.GetId() == SfxHintId::SwObjectDying)
+    {
+        EndListeningAll();
+        return;
+    }
     if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
     auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
     auto nWhich = pLegacy->GetWhich();
-    if(!nWhich)
-        nWhich = RES_OBJECTDYING;
     if( m_bCallChgLnk &&
-        ( !isFormatMessage(nWhich)
-                || nWhich == RES_UPDATE_ATTR ))
+        ( nWhich == 0 || !isFormatMessage(nWhich) || nWhich == RES_UPDATE_ATTR ))
         // messages are not forwarded
         // #i6681#: RES_UPDATE_ATTR is implicitly unset in
         // SwTextNode::Insert(SwTextHint*, sal_uInt16); we react here and thus do
         // not need to send the expensive RES_FMT_CHG in Insert.
         CallChgLnk();
-    if( nWhich == RES_OBJECTDYING )
+    if( nWhich == 0 )
     {
         EndListeningAll();
     }

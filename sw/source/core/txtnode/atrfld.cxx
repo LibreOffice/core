@@ -255,7 +255,8 @@ void SwFormatField::SwClientNotify( const SwModify& rModify, const SfxHint& rHin
     }
     else if (rHint.GetId() == SfxHintId::SwLegacyModify
             || rHint.GetId() == SfxHintId::SwFormatChange
-            || rHint.GetId() == SfxHintId::SwAttrSetChange)
+            || rHint.GetId() == SfxHintId::SwAttrSetChange
+            || rHint.GetId() == SfxHintId::SwObjectDying)
     {
         if(!mpTextField)
             return;
@@ -464,6 +465,10 @@ void SwFormatField::UpdateTextNode(const SfxHint& rHint)
         if(bTriggerNode)
             pTextNd->TriggerNodeUpdate(sw::AttrSetChangeHint(pOld, pNew));
     }
+    else if(SfxHintId::SwObjectDying == rHint.GetId())
+    {
+        assert(false && "do not expect this, might need to restore some code");
+    }
     else if(SfxHintId::SwLegacyModify == rHint.GetId())
     {
         auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
@@ -476,10 +481,6 @@ void SwFormatField::UpdateTextNode(const SfxHint& rHint)
         }
 
         if (!IsFieldInDoc())
-            return;
-
-        // don't do anything, especially not expand!
-        if( pNew && pNew->Which() == RES_OBJECTDYING )
             return;
 
         SwTextNode* pTextNd = &mpTextField->GetTextNode();

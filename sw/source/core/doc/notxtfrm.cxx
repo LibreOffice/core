@@ -820,6 +820,12 @@ void SwNoTextFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint
         InvalidatePrt();
         SetCompletePaint();
     }
+    else if (rHint.GetId() == SfxHintId::SwObjectDying)
+    {
+        SwContentFrame::SwClientNotify(rModify, rHint);
+        InvalidatePrt();
+        SetCompletePaint();
+    }
     else if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
         auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
@@ -829,9 +835,6 @@ void SwNoTextFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint
 
         switch( nWhich )
         {
-        case RES_OBJECTDYING:
-            break;
-
         case RES_UPDATE_ATTR:
             if (GetNode()->GetNodeType() != SwNodeType::Grf) {
                 break;

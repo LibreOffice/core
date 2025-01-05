@@ -67,7 +67,8 @@ void SwFormatLineBreak::SwClientNotify(const SwModify&, const SfxHint& rHint)
     }
     else if (rHint.GetId() == SfxHintId::SwLegacyModify
              || rHint.GetId() == SfxHintId::SwFormatChange
-             || rHint.GetId() == SfxHintId::SwAttrSetChange)
+             || rHint.GetId() == SfxHintId::SwAttrSetChange
+             || rHint.GetId() == SfxHintId::SwObjectDying)
         CallSwClientNotify(rHint);
 }
 

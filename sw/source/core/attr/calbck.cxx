@@ -37,17 +37,12 @@ namespace sw
         { return m_pToTell == nullptr || m_pToTell->GetInfo( rInfo ); }
     void ListenerEntry::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
     {
-        if (rHint.GetId() == SfxHintId::SwLegacyModify)
+        if (rHint.GetId() == SfxHintId::SwObjectDying)
         {
-            auto pLegacyHint = static_cast<const sw::LegacyModifyHint*>(&rHint);
-            if (pLegacyHint->m_pNew && pLegacyHint->m_pNew->Which() == RES_OBJECTDYING)
-            {
-                auto pModifyChanged = CheckRegistration(pLegacyHint->m_pOld);
-                if (pModifyChanged)
-                    m_pToTell->SwClientNotify(rModify, *pModifyChanged);
-            }
-            else if (m_pToTell)
-                m_pToTell->SwClientNotify(rModify, rHint);
+            auto pDyingHint = static_cast<const sw::ObjectDyingHint*>(&rHint);
+            auto pModifyChanged = CheckRegistration(*pDyingHint);
+            if (pModifyChanged)
+                m_pToTell->SwClientNotify(rModify, *pModifyChanged);
         }
         else if (m_pToTell)
             m_pToTell->SwClientNotify(rModify, rHint);
@@ -78,16 +73,11 @@ sw::ClientBase<T>::~ClientBase()
 }
 
 template<typename T>
-std::optional<sw::ModifyChangedHint> sw::ClientBase<T>::CheckRegistration( const SfxPoolItem* pOld )
+std::optional<sw::ModifyChangedHint> sw::ClientBase<T>::CheckRegistration( const sw::ObjectDyingHint& rHint )
 {
     DBG_TESTSOLARMUTEX();
-    // this method only handles notification about dying SwModify objects
-    if( !pOld || pOld->Which() != RES_OBJECTDYING )
-        return {};
 
-    assert(dynamic_cast<const SwPtrMsgPoolItem*>(pOld));
-    const SwPtrMsgPoolItem* pDead = static_cast<const SwPtrMsgPoolItem*>(pOld);
-    if(pDead->pObject != m_pRegisteredIn)
+    if(rHint.m_pDying != m_pRegisteredIn)
     {
         // we should only care received death notes from objects we are following
         return {};
@@ -123,10 +113,10 @@ void sw::ClientBase<T>::CheckRegistrationFormat(SwFormat& rOld)
 template<typename T>
 void sw::ClientBase<T>::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    if (rHint.GetId() != SfxHintId::SwLegacyModify)
+    if (rHint.GetId() != SfxHintId::SwObjectDying)
         return;
-    auto pLegacyHint = static_cast<const sw::LegacyModifyHint*>(&rHint);
-    CheckRegistration(pLegacyHint->m_pOld);
+    auto pDyingHint = static_cast<const sw::ObjectDyingHint*>(&rHint);
+    CheckRegistration(*pDyingHint);
 };
 
 template<typename T>
@@ -151,15 +141,15 @@ SwModify::~SwModify()
     OSL_ENSURE( !IsModifyLocked(), "Modify destroyed but locked." );
 
     // notify all clients that they shall remove themselves
-    SwPtrMsgPoolItem aDyObject( RES_OBJECTDYING, this );
-    SwModify::SwClientNotify(*this, sw::LegacyModifyHint(&aDyObject, &aDyObject));
+    sw::ObjectDyingHint aDyObject( this );
+    SwModify::SwClientNotify(*this, aDyObject);
 
     const bool hasListenersOnDeath = m_pWriterListeners;
     (void)hasListenersOnDeath;
     while(m_pWriterListeners)
     {
         SAL_WARN("sw.core", "lost a client of type: " << typeid(*m_pWriterListeners).name() << " at " << m_pWriterListeners << " still registered on type: " << typeid(*this).name() << " at " << this << ".");
-        static_cast<SwClient*>(m_pWriterListeners)->CheckRegistration(&aDyObject);
+        static_cast<SwClient*>(m_pWriterListeners)->CheckRegistration(aDyObject);
     }
     assert(!hasListenersOnDeath);
 }
@@ -220,7 +210,8 @@ void SwModify::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
     if (rHint.GetId() != SfxHintId::SwLegacyModify
         && rHint.GetId() != SfxHintId::SwRemoveUnoObject
-        && rHint.GetId() != SfxHintId::SwAttrSetChange)
+        && rHint.GetId() != SfxHintId::SwAttrSetChange
+        && rHint.GetId() != SfxHintId::SwObjectDying)
         return;
 
     DBG_TESTSOLARMUTEX();

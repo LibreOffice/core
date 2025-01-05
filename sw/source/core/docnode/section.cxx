@@ -403,7 +403,14 @@ void SwSection::Notify(SfxHint const& rHint)
         auto rSectionHidden = static_cast<const sw::SectionHidden&>(rHint);
         m_Data.SetHiddenFlag(rSectionHidden.m_isHidden || (m_Data.IsHidden() && m_Data.IsCondHidden()));
         return;
-    } else if (rHint.GetId() != SfxHintId::SwLegacyModify && rHint.GetId() != SfxHintId::SwAttrSetChange)
+    }
+    if (rHint.GetId() == SfxHintId::SwObjectDying)
+    {
+        auto pDyingHint = static_cast<const sw::ObjectDyingHint*>(&rHint);
+        CheckRegistration( *pDyingHint );
+        return;
+    }
+    if (rHint.GetId() != SfxHintId::SwLegacyModify && rHint.GetId() != SfxHintId::SwAttrSetChange)
         return;
 
     bool bUpdateFootnote = false;
@@ -444,10 +451,6 @@ void SwSection::Notify(SfxHint const& rHint)
             {
                 bUpdateFootnote = true;
             }
-            break;
-
-        default:
-            CheckRegistration( pOld );
             break;
         }
     }
@@ -780,6 +783,20 @@ void SwSectionFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         }
         SwFrameFormat::SwClientNotify(rMod, rHint);
     }
+    else if (rHint.GetId() == SfxHintId::SwObjectDying)
+    {
+        auto pDyingHint = static_cast<const sw::ObjectDyingHint*>(&rHint);
+        if( !GetDoc()->IsInDtor() &&
+            pDyingHint->m_pDying == GetRegisteredIn() )
+        {
+            // My Parents will be destroyed, so get the Parent's Parent
+            // and update
+            SwFrameFormat::SwClientNotify(rMod, rHint);
+            UpdateParent();
+            return;
+        }
+        SwFrameFormat::SwClientNotify(rMod, rHint);
+    }
     else if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
     auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
@@ -795,19 +812,6 @@ void SwSectionFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         // Pass through these Messages until the End of the tree!
         GetNotifier().Broadcast(sw::LegacyModifyHint(pOld, pNew));
         return; // That's it!
-
-    case RES_OBJECTDYING:
-        if( !GetDoc()->IsInDtor() && pOld &&
-            static_cast<const SwPtrMsgPoolItem *>(pOld)->pObject == static_cast<void*>(GetRegisteredIn()) )
-        {
-            // My Parents will be destroyed, so get the Parent's Parent
-            // and update
-            SwFrameFormat::SwClientNotify(rMod, rHint);
-            UpdateParent();
-            return;
-        }
-        break;
-
     }
     SwFrameFormat::SwClientNotify(rMod, rHint);
 }

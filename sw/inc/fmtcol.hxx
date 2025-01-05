@@ -143,14 +143,6 @@ public:
         {
             m_bInSwFntCache = false;
         }
-        else
-        {
-            switch(nWhich)
-            {
-                case RES_OBJECTDYING:
-                    m_bInSwFntCache = false;
-            }
-        }
     };
     virtual void InvalidateInSwFntCache() override
     {

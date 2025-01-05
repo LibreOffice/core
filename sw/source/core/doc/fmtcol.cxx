@@ -140,7 +140,7 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
         return;
     }
     else if (rHint.GetId() != SfxHintId::SwLegacyModify && rHint.GetId() != SfxHintId::SwFormatChange
-             && rHint.GetId() != SfxHintId::SwAttrSetChange)
+             && rHint.GetId() != SfxHintId::SwAttrSetChange && rHint.GetId() != SfxHintId::SwObjectDying)
         return;
     if(GetDoc()->IsInDtor())
     {
@@ -217,7 +217,7 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
             pNewNumRuleItem = pNewChgSet->GetChgSet()->GetItemIfSet( RES_PARATR_NUMRULE, false );
         }
     }
-    else // rHint.GetId() == SfxHintId::SwFormatChange
+    else if (rHint.GetId() == SfxHintId::SwFormatChange)
     {
         if( GetAttrSet().GetParent() )
         {
@@ -362,7 +362,7 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
     }
 
     // if the parent changed, we can't know how many properties are involved: always notify a change
-    if (rHint.GetId() == SfxHintId::SwLegacyModify)
+    if (rHint.GetId() == SfxHintId::SwLegacyModify || rHint.GetId() == SfxHintId::SwObjectDying)
     {
         if (bNewParent || !nNoNotify)
             SwFormatColl::SwClientNotify(rModify, rHint);
@@ -375,7 +375,7 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
         if (bNewParent || !nNoNotify || (pOldChgSet && pOldChgSet->GetChgSet()->Count() > nNoNotify))
             SwFormatColl::SwClientNotify(rModify, rHint);
     }
-    else // rHint.GetId() == SfxHintId::SwFormatChange
+    else if (rHint.GetId() == SfxHintId::SwFormatChange)
     {
         if (bNewParent || !nNoNotify)
             SwFormatColl::SwClientNotify(rModify, rHint);

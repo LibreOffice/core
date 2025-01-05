@@ -2711,6 +2711,8 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
         }
 #endif
     }
+    else if (rHint.GetId() == SfxHintId::SwObjectDying)
+        ; // do nothing
     else switch (nWhich)
     {
         case RES_LINENUMBER:
@@ -2760,8 +2762,6 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
             }
 #endif
         }
-        break;
-        case RES_OBJECTDYING:
         break;
 
         case RES_PARATR_LINESPACING:

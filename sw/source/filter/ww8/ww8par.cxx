@@ -4764,14 +4764,12 @@ TextNodeListener::~TextNodeListener()
 
 void TextNodeListener::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
 {
-    if (rHint.GetId() != SfxHintId::SwLegacyModify)
+    if (rHint.GetId() != SfxHintId::SwObjectDying)
         return;
-    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
     // ofz#41398 drop a para scheduled for deletion if something else deletes it
     // before wwExtraneousParas gets its chance to do so. Not the usual scenario,
     // indicates an underlying bug.
-    if (pLegacy->GetWhich() == RES_OBJECTDYING)
-        removed(const_cast<SwModify*>(&rModify));
+    removed(const_cast<SwModify*>(&rModify));
 }
 
 void TextNodeListener::StopListening(SwModify* pTextNode)
