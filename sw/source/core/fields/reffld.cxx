@@ -1159,7 +1159,7 @@ void SwGetRefFieldType::UpdateStyleReferences()
 
 void SwGetRefFieldType::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    if (rHint.GetId() == SfxHintId::SwFormatChange)
+    if (rHint.GetId() == SfxHintId::SwFormatChange || rHint.GetId() == SfxHintId::SwObjectDying)
     {
         // forward to text fields, they "expand" the text
         CallSwClientNotify(rHint);

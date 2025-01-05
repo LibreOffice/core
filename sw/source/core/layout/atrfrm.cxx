@@ -760,14 +760,10 @@ void SwFormatPageDesc::SwClientNotify(const SwModify&, const SfxHint& rHint)
             // there could be an Undo-copy
             RegisterToPageDesc(*pDesc);
     }
-    else if (rHint.GetId() == SfxHintId::SwLegacyModify)
+    else if (rHint.GetId() == SfxHintId::SwObjectDying)
     {
-        auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
-        if(RES_OBJECTDYING == pLegacy->GetWhich())
-        {
-            m_pDefinedIn = nullptr;
-            EndListeningAll();
-        }
+        m_pDefinedIn = nullptr;
+        EndListeningAll();
     }
 }
 
@@ -2752,6 +2748,11 @@ void SwFrameFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         // reset fill information on format change (e.g. style changed)
         if(maFillAttributes && supportsFullDrawingLayerFillAttributeSet())
             maFillAttributes.reset();
+        SwFormat::SwClientNotify(rMod, rHint);
+        return;
+    }
+    else if (rHint.GetId() == SfxHintId::SwObjectDying)
+    {
         SwFormat::SwClientNotify(rMod, rHint);
         return;
     }

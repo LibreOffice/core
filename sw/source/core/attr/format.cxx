@@ -262,53 +262,50 @@ void SwFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
         }
         return;
     }
+    if (rHint.GetId() == SfxHintId::SwObjectDying)
+    {
+        auto pDyingHint = static_cast<const sw::ObjectDyingHint*>(&rHint);
+        InvalidateInSwCache();
+        // If the dying object is the parent format of this format so
+        // attach this to the parent of the parent
+
+        // do not move if this is the topmost format
+        if(GetRegisteredIn() && GetRegisteredIn() == pDyingHint->m_pDying)
+        {
+            if(pDyingHint->m_pDying->GetRegisteredIn())
+            {
+                SwFormat* pFormat = static_cast<SwFormat*>(pDyingHint->m_pDying);
+                // if parent so register in new parent
+                pFormat->DerivedFrom()->Add(*this);
+                m_aSet.SetParent(&DerivedFrom()->m_aSet);
+            }
+            else
+            {
+                // otherwise de-register at least from dying one
+                EndListeningAll();
+                m_aSet.SetParent(nullptr);
+            }
+        }
+        InvalidateInSwFntCache();
+        SwModify::SwClientNotify(*this, rHint);
+        return;
+    }
     if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
     auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
 
-    std::optional<SwAttrSetChg> oOldClientChg, oNewClientChg;
     std::optional<sw::LegacyModifyHint> oDependsHint(std::in_place, pLegacy->m_pOld, pLegacy->m_pNew);
     const sal_uInt16 nWhich = pLegacy->GetWhich();
     InvalidateInSwCache(nWhich);
-    switch(nWhich)
+    if(nWhich != 0)
     {
-        case 0:
-            break;
-        case RES_OBJECTDYING:
+        // attribute is defined in this format
+        if(SfxItemState::SET == m_aSet.GetItemState(nWhich, false))
         {
-            // NB: this still notifies depends even if pLegacy->m_pNew is nullptr, which seems non-obvious
-            if(!pLegacy->m_pNew)
-                break;
-            // If the dying object is the parent format of this format so
-            // attach this to the parent of the parent
-            SwFormat* pFormat = static_cast<SwFormat*>(pLegacy->m_pNew->StaticWhichCast(RES_OBJECTDYING).pObject);
-
-            // do not move if this is the topmost format
-            if(GetRegisteredIn() && GetRegisteredIn() == pFormat)
-            {
-                if(pFormat->GetRegisteredIn())
-                {
-                    // if parent so register in new parent
-                    pFormat->DerivedFrom()->Add(*this);
-                    m_aSet.SetParent(&DerivedFrom()->m_aSet);
-                }
-                else
-                {
-                    // otherwise de-register at least from dying one
-                    EndListeningAll();
-                    m_aSet.SetParent(nullptr);
-                }
-            }
-            break;
+            // DropCaps might come into this block
+            SAL_WARN_IF(RES_PARATR_DROP != nWhich, "sw.core", "Hint was sent without sender");
+            oDependsHint.reset();
         }
-        default:
-            // attribute is defined in this format
-            if(SfxItemState::SET == m_aSet.GetItemState(nWhich, false))
-            {
-                // DropCaps might come into this block
-                SAL_WARN_IF(RES_PARATR_DROP != nWhich, "sw.core", "Hint was sent without sender");
-                oDependsHint.reset();
-            }
     }
     if(oDependsHint)
     {

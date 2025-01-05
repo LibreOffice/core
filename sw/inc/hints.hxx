@@ -55,19 +55,6 @@ public:
     virtual SwMsgPoolItem*  Clone( SfxItemPool* pPool = nullptr ) const override;
 };
 
-// SwPtrMsgPoolItem (old SwObjectDying!)
-
-class SwPtrMsgPoolItem final : public SwMsgPoolItem
-{
-public:
-    void * pObject;
-
-    DECLARE_ITEM_TYPE_FUNCTION(SwPtrMsgPoolItem)
-    SwPtrMsgPoolItem( sal_uInt16 nId, void * pObj )
-        : SwMsgPoolItem( nId ), pObject( pObj )
-    {}
-};
-
 /**
  * SwFormatChg is sent when a format has changed to another format.
  */
@@ -328,6 +315,12 @@ public:
     const SwAttrSetChg* m_pOld;
     const SwAttrSetChg* m_pNew;
     AttrSetChangeHint(const SwAttrSetChg* pOld, const SwAttrSetChg* pNew) : SfxHint(SfxHintId::SwAttrSetChange), m_pOld(pOld), m_pNew(pNew) {}
+};
+class ObjectDyingHint final : public SfxHint
+{
+public:
+    SwModify* m_pDying;
+    ObjectDyingHint(SwModify* pDead) : SfxHint(SfxHintId::SwObjectDying), m_pDying(pDead) {}
 };
 } // namespace sw
 

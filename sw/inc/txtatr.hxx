@@ -46,6 +46,7 @@ public:
     void TriggerNodeUpdate(const sw::LegacyModifyHint&);
     void TriggerNodeUpdate(const SwFormatChangeHint&);
     void TriggerNodeUpdate(const sw::AttrSetChangeHint&);
+    void TriggerNodeUpdate(const sw::ObjectDyingHint&);
 
     // get and set TextNode pointer
     void ChgTextNode( SwTextNode* pNew ) { m_pTextNode = pNew; }

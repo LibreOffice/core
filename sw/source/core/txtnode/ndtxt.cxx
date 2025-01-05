@@ -5558,6 +5558,20 @@ void SwTextNode::TriggerNodeUpdate(const sw::LegacyModifyHint& rHint)
     }
 }
 
+void SwTextNode::TriggerNodeUpdate(const sw::ObjectDyingHint& rHint)
+{
+    sw::TextNodeNotificationSuppressor(*this);
+
+    SwContentNode::SwClientNotify(*this, rHint);
+
+    SwDoc& rDoc = GetDoc();
+    // #125329# - assure that text node is in document nodes array
+    if ( !rDoc.IsInDtor() && &rDoc.GetNodes() == &GetNodes() )
+    {
+        rDoc.GetNodes().UpdateOutlineNode(*this);
+    }
+}
+
 void SwTextNode::TriggerNodeUpdate(const sw::AttrSetChangeHint& rHint)
 {
     const SwAttrSetChg* pOldValue = rHint.m_pOld;
@@ -5668,6 +5682,11 @@ void SwTextNode::SwClientNotify( const SwModify& rModify, const SfxHint& rHint )
     else if(SfxHintId::SwRemoveUnoObject == rHint.GetId())
     {
         TriggerNodeUpdate(static_cast<const sw::RemoveUnoObjectHint&>(rHint));
+    }
+    else if (rHint.GetId() == SfxHintId::SwObjectDying)
+    {
+        auto pDyingHint = static_cast<const sw::ObjectDyingHint*>(&rHint);
+        TriggerNodeUpdate(*pDyingHint);
     }
     else if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {

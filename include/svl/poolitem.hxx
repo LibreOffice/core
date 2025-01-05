@@ -486,7 +486,6 @@ enum class SfxItemType : sal_uInt16
     SwPaMItemType,
     SwParaConnectBorderItemType,
     SwPtrItemType,
-    SwPtrMsgPoolItemType,
     SwRegisterItemType,
     SwRotationGrfType,
     SwShadowCursorItemType,

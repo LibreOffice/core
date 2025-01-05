@@ -751,6 +751,11 @@ void SwFlyLayFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
             SwFlyFrame::SwClientNotify(rMod, rHint);
         return;
     }
+    if (rHint.GetId() == SfxHintId::SwObjectDying)
+    {
+        SwFlyFrame::SwClientNotify(rMod, rHint);
+        return;
+    }
     if (rHint.GetId() != SfxHintId::SwLegacyModify && rHint.GetId() != SfxHintId::SwAttrSetChange)
         return;
 
