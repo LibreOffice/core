@@ -23,10 +23,8 @@
 #include <utility>
 
 // forward-declarations
-struct IconChoicePageData;
 class SvxHpLinkDlg;
 class IconChoicePage;
-class SfxItemPool;
 class SfxItemSet;
 
 // Create-Function

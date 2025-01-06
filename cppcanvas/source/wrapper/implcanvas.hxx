@@ -27,12 +27,6 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
 
-namespace basegfx
-{
-    class B2DHomMatrix;
-    class B2DPolyPolygon;
-}
-
 namespace com::sun::star::rendering
 {
     class  XCanvas;

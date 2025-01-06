@@ -30,7 +30,6 @@
 
 #include <atomic>
 
-class AdditionsDialog;
 class SearchAndParseThread;
 class AdditionsItem;
 

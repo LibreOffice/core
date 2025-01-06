@@ -33,8 +33,6 @@
 #include <vcl/weld.hxx>
 #include <config_features.h>
 
-class Button;
-class SaveInData;
 #if HAVE_FEATURE_SCRIPTING
 class SfxMacroInfoItem;
 #endif

@@ -27,11 +27,6 @@
 
 #include <optional>
 
-namespace com::sun::star::rendering
-{
-    class  XGraphicDevice;
-}
-
 
 /* Definition of CanvasGraphicHelper class */
 

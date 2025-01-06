@@ -26,7 +26,6 @@
 namespace com::sun::star{
     namespace linguistic2{
         class XDictionary;
-        class XSpellChecker1;
     }
 }
 

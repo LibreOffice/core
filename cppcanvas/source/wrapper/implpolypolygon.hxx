@@ -26,11 +26,6 @@
 #include <cppcanvas/polypolygon.hxx>
 #include <canvasgraphichelper.hxx>
 
-namespace com::sun::star::rendering
-{
-    struct RealPoint2D;
-}
-
 
 namespace cppcanvas::internal
 {

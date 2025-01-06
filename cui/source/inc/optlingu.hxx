@@ -25,9 +25,6 @@
 #include <com/sun/star/configuration/ReadWriteAccess.hpp>
 
 namespace com::sun::star{
-    namespace beans{
-        class XPropertySet;
-    }
     namespace linguistic2{
         class XDictionary;
         class XDictionaryList;

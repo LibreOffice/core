@@ -27,7 +27,6 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <memory>
 
-class SfxMacroTabPage_;
 class SfxMacroTabPage_Impl;
 class Timer;
 

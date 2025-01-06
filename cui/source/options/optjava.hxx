@@ -41,8 +41,6 @@ typedef void* JavaInfo;
 
 class   SvxJavaParameterDlg;
 class   SvxJavaClassPathDlg;
-class   SvxJavaListBox;
-class   OfaTreeOptionsDialog;
 
 // class SvxJavaOptionsPage ----------------------------------------------
 

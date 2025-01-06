@@ -34,9 +34,6 @@
 #if HAVE_FEATURE_SCRIPTING
 class SfxMacroInfoItem;
 #endif
-class CuiConfigFunctionListBox;
-class SfxAcceleratorConfigPage;
-class SfxStringItem;
 
 // class SfxAcceleratorConfigPage ----------------------------------------
 

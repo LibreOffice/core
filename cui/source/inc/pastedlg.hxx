@@ -25,7 +25,6 @@
 #include <vcl/transfer.hxx>
 #include <vcl/weld.hxx>
 
-struct TransferableObjectDescriptor;
 class TransferableDataHelper;
 
 class SvPasteObjectDialog : public weld::GenericDialogController

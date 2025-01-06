@@ -26,8 +26,6 @@
 #include <vcl/weld.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
 
-class INetURLObject;
-
 class InsertObjectDialog_Impl : public weld::GenericDialogController
 {
 protected:

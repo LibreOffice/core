@@ -17,8 +17,6 @@
 
 #include <vector>
 
-class CuiAboutConfigTabPage;
-class CuiAboutConfigValueDialog;
 struct Prop_Impl;
 struct UserData;
 

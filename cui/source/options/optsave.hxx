@@ -33,8 +33,6 @@ enum AppType
     APP_COUNT             =  7,
 };
 
-namespace com::sun::star::beans { struct PropertyValue; }
-
 // class SvxSaveTabPage --------------------------------------------------
 
 struct SvxSaveTabPage_Impl;

@@ -32,8 +32,6 @@
 
 typedef std::unordered_map < OUString, OUString > Selection_hash;
 
-class SFEntry;
-
 enum class InputDialogMode {
     NEWLIB        = 1,
     NEWMACRO      = 2,

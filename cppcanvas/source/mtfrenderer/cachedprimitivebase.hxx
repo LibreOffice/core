@@ -27,8 +27,6 @@
 
 #include <action.hxx>
 
-namespace basegfx { class B2DHomMatrix; }
-
 
 /* Definition of internal::CachedPrimitiveBase class */
 

@@ -112,9 +112,6 @@ namespace com::sun::star::frame { class XFrame; }
 namespace com::sun::star::awt { class XContainerWindowProvider; }
 
 struct OptionsPageInfo;
-struct Module;
-class ExtensionsTabPage;
-class SvxColorTabPage;
 struct OptionsGroupInfo;
 struct OptionsPageIdInfo;
 

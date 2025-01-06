@@ -22,6 +22,8 @@
 #include <i18nutil/searchopt.hxx>
 #include "cfgutil.hxx"
 
+class SaveInData;
+
 class CommandCategoryListBox
 {
     SfxGroupInfoArr_Impl m_aGroupInfo;

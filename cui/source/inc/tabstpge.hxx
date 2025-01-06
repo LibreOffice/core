@@ -25,8 +25,6 @@
 #include <editeng/tstpitem.hxx>
 #include <svx/flagsdef.hxx>
 
-class SvxTabulatorTabPage;
-
 // class TabWin_Impl -----------------------------------------------------
 
 class TabWin_Impl : public weld::CustomWidgetController

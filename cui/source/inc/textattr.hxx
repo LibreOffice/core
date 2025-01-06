@@ -21,8 +21,6 @@
 #include <svx/dlgctrl.hxx>
 #include <svx/svdobjkind.hxx>
 
-class SdrView;
-
 /*************************************************************************
 |*
 |* Dialog for changing TextAttributes

@@ -28,7 +28,6 @@
 
 class SvxNumberFormatShell;
 class SvxNumberInfoItem;
-class vector;
 
 
 class SvxNumberPreview : public weld::CustomWidgetController

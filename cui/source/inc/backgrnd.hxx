@@ -22,10 +22,6 @@
 
 #include "cuitabarea.hxx"
 
-class BackgroundPreviewImpl;
-class SvxOpenGraphicDialog;
-class SvxBrushItem;
-
 /** class SvxBackgroundTabPage --------------------------------------------
 
     [Description]
