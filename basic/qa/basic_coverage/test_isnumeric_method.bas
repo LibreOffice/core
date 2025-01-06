@@ -24,6 +24,11 @@ Sub verify_IsNumeric
     TestUtil.Assert(IsNumeric(" 0 "), "IsNumeric("" 0 "")")
     TestUtil.Assert(IsNumeric(" +0 "), "IsNumeric("" +0 "")")
     TestUtil.Assert(IsNumeric(" -0 "), "IsNumeric("" -0 "")")
+
+    ' Note: the following test behaves different in VBA;
+    ' should it be unified maybe in non-VBA, too (a breaking change)?
+    TestUtil.Assert(Not IsNumeric(True), "Not IsNumeric(True)")
+
     TestUtil.Assert(Not IsNumeric(""), "Not IsNumeric("""")")
     TestUtil.Assert(Not IsNumeric(" "), "Not IsNumeric("" "")")
     TestUtil.Assert(Not IsNumeric(" + "), "Not IsNumeric("" + "")")

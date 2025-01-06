@@ -1358,7 +1358,7 @@ void SbRtl_Str(StarBASIC *, SbxArray & rPar, bool)
         pArg->Format( aStr );
 
         // Numbers start with a space
-        if( pArg->IsNumericRTL() )
+        if (pArg->GetType() != SbxBOOL && pArg->IsNumericRTL())
         {
             // replace commas by points so that it's symmetric to Val!
             aStr = aStr.replaceFirst( ",", "." );
