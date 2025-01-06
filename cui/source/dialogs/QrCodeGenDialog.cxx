@@ -19,7 +19,11 @@
 #include <vcl/svapp.hxx>
 
 #if ENABLE_ZXING
+#if __has_include(<Version.h>)
 #include <Version.h>
+#else
+#include <ZXVersion.h>
+#endif
 #include <rtl/strbuf.hxx>
 
 #ifdef __GNUC__
