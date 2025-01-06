@@ -26,11 +26,6 @@
 #include <comphelper/propmultiplex.hxx>
 #include <rtl/ref.hxx>
 
-namespace comphelper
-{
-    class OPropertyChangeMultiplexer;
-}
-
 
 namespace pcr
 {

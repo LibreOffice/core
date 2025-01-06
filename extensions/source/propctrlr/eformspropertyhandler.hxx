@@ -32,7 +32,6 @@ namespace pcr
 
     //= EFormsPropertyHandler
 
-    class EFormsPropertyHandler;
     class EFormsPropertyHandler : public PropertyHandlerComponent
     {
     private:

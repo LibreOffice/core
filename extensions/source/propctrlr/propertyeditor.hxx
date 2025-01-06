@@ -31,9 +31,7 @@ namespace pcr
 {
     class IPropertyLineListener;
     class IPropertyControlObserver;
-    class OBrowserPage;
     struct OLineDescriptor;
-    class OBrowserListBox;
 
     //= OPropertyEditor
     class OPropertyEditor final

@@ -37,7 +37,6 @@ namespace weld { class Window; }
 
 namespace bib
 {
-    class BibView;
     class BibBeamer;
 }
 

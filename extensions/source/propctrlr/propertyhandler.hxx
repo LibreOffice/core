@@ -42,13 +42,6 @@
 #include <memory>
 #include <vector>
 
-namespace com::sun::star {
-    namespace inspection {
-        struct LineDescriptor;
-        class XPropertyControlFactory;
-    }
-}
-
 namespace weld { class Window; }
 
 namespace pcr

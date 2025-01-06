@@ -27,8 +27,6 @@ namespace pcr
 
 
     //= EditPropertyHandler
-
-    class EditPropertyHandler;
     /** a property handler for any virtual string properties
     */
     class EditPropertyHandler : public PropertyHandlerComponent

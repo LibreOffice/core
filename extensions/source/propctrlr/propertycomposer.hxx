@@ -121,7 +121,6 @@ namespace pcr
         }
 
     private:
-        class MethodGuard;
         friend class MethodGuard;
         class MethodGuard : public ::osl::MutexGuard
         {

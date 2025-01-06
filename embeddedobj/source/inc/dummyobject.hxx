@@ -35,13 +35,6 @@ namespace com::sun::star {
     namespace embed {
         class XStorage;
     }
-    namespace util {
-        class XCloseListener;
-    }
-    namespace beans {
-        struct PropertyValue;
-        struct NamedValue;
-    }
 }
 
 /**

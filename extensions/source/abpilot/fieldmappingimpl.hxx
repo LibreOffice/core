@@ -25,9 +25,6 @@
 #include "addresssettings.hxx"
 
 namespace com::sun::star {
-    namespace lang {
-        class XMultiServiceFactory;
-    }
     namespace uno {
         class XComponentContext;
     }

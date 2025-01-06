@@ -47,12 +47,6 @@ namespace com::sun::star {
     namespace embed {
         class XStorage;
     }
-    namespace lang {
-        class XMultiServiceFactory;
-    }
-    namespace util {
-        class XCloseListener;
-    }
     namespace beans {
         struct PropertyValue;
         struct NamedValue;
@@ -71,8 +65,6 @@ namespace comphelper {
 // #define NUM_SUPPORTED_VERBS 5
 
 #include "docholder.hxx"
-
-namespace embeddedobj { class Interceptor; }
 
 /**
  * Represents an OLE object that has native data and we loaded that data into a

@@ -33,7 +33,6 @@ namespace pcr
 
     //= PropertyControlExtender
 
-    struct PropertyControlExtender_Data;
     typedef ::cppu::WeakImplHelper <   css::awt::XKeyListener
                                     >   PropertyControlExtender_Base;
     class PropertyControlExtender : public PropertyControlExtender_Base

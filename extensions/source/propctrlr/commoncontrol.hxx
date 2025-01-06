@@ -27,7 +27,6 @@
 #include <vcl/weld.hxx>
 #include <vcl/weldutils.hxx>
 
-class NotifyEvent;
 class ColorListBox;
 class SvtCalendarBox;
 

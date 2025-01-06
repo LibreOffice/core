@@ -25,8 +25,6 @@
 class   BibGeneralPage;
 class   BibDataManager;
 
-namespace com::sun::star::awt{ class XFocusListener;}
-
 namespace bib
 {
     class BibView;
