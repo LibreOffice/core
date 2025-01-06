@@ -2260,7 +2260,9 @@ std::unique_ptr<SwFieldType> SwRefPageGetFieldType::Copy() const
 
 void SwRefPageGetFieldType::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    if (rHint.GetId() == SfxHintId::SwFormatChange || rHint.GetId() == SfxHintId::SwObjectDying)
+    if (rHint.GetId() == SfxHintId::SwFormatChange
+        || rHint.GetId() == SfxHintId::SwObjectDying
+        || rHint.GetId() == SfxHintId::SwUpdateAttr)
     {
         // forward to text fields, they "expand" the text
         CallSwClientNotify(rHint);

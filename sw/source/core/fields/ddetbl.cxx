@@ -88,7 +88,8 @@ void SwDDETable::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
     if (rHint.GetId() == SfxHintId::SwLegacyModify
         || rHint.GetId() == SfxHintId::SwAutoFormatUsedHint
         || rHint.GetId() == SfxHintId::SwAttrSetChange
-        || rHint.GetId() == SfxHintId::SwObjectDying)
+        || rHint.GetId() == SfxHintId::SwObjectDying
+        || rHint.GetId() == SfxHintId::SwUpdateAttr)
     {
         SwTable::SwClientNotify(rModify, rHint);
     }

@@ -83,7 +83,7 @@ void SwTextCharFormat::TriggerNodeUpdate(const sw::LegacyModifyHint& rHint)
             GetStart(),
             *GetEnd(),
             nWhich);
-        m_pTextNode->TriggerNodeUpdate(sw::LegacyModifyHint(&aUpdateAttr, &aUpdateAttr));
+        m_pTextNode->TriggerNodeUpdate(sw::UpdateAttrHint(&aUpdateAttr, &aUpdateAttr));
     }
 }
 
@@ -95,7 +95,7 @@ void SwTextCharFormat::TriggerNodeUpdate(const sw::ObjectDyingHint& /*rHint*/)
             GetStart(),
             *GetEnd(),
             RES_UPDATEATTR_OBJECTDYING);
-        m_pTextNode->TriggerNodeUpdate(sw::LegacyModifyHint(&aUpdateAttr, &aUpdateAttr));
+        m_pTextNode->TriggerNodeUpdate(sw::UpdateAttrHint(&aUpdateAttr, &aUpdateAttr));
     }
 }
 
@@ -107,7 +107,7 @@ void SwTextCharFormat::TriggerNodeUpdate(const sw::AttrSetChangeHint& /*rHint*/)
             GetStart(),
             *GetEnd(),
             RES_UPDATEATTR_ATTRSET_CHG);
-        m_pTextNode->TriggerNodeUpdate(sw::LegacyModifyHint(&aUpdateAttr, &aUpdateAttr));
+        m_pTextNode->TriggerNodeUpdate(sw::UpdateAttrHint(&aUpdateAttr, &aUpdateAttr));
     }
 }
 
@@ -119,7 +119,7 @@ void SwTextCharFormat::TriggerNodeUpdate(const SwFormatChangeHint&)
             GetStart(),
             *GetEnd(),
             RES_UPDATEATTR_FMT_CHG);
-        m_pTextNode->TriggerNodeUpdate(sw::LegacyModifyHint(&aUpdateAttr, &aUpdateAttr));
+        m_pTextNode->TriggerNodeUpdate(sw::UpdateAttrHint(&aUpdateAttr, &aUpdateAttr));
     }
 }
 
@@ -218,21 +218,21 @@ void SwTextINetFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
         if(!m_pTextNode)
             return;
         const SwUpdateAttr aUpdateAttr(GetStart(), *GetEnd(), RES_UPDATEATTR_FMT_CHG);
-        m_pTextNode->TriggerNodeUpdate(sw::LegacyModifyHint(&aUpdateAttr, &aUpdateAttr));
+        m_pTextNode->TriggerNodeUpdate(sw::UpdateAttrHint(&aUpdateAttr, &aUpdateAttr));
     }
     else if (rHint.GetId() == SfxHintId::SwAttrSetChange)
     {
         if(!m_pTextNode)
             return;
         const SwUpdateAttr aUpdateAttr(GetStart(), *GetEnd(), RES_UPDATEATTR_ATTRSET_CHG);
-        m_pTextNode->TriggerNodeUpdate(sw::LegacyModifyHint(&aUpdateAttr, &aUpdateAttr));
+        m_pTextNode->TriggerNodeUpdate(sw::UpdateAttrHint(&aUpdateAttr, &aUpdateAttr));
     }
     else if (rHint.GetId() == SfxHintId::SwObjectDying)
     {
         if(!m_pTextNode)
             return;
         const SwUpdateAttr aUpdateAttr(GetStart(), *GetEnd(), RES_UPDATEATTR_OBJECTDYING);
-        m_pTextNode->TriggerNodeUpdate(sw::LegacyModifyHint(&aUpdateAttr, &aUpdateAttr));
+        m_pTextNode->TriggerNodeUpdate(sw::UpdateAttrHint(&aUpdateAttr, &aUpdateAttr));
     }
     else if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
@@ -242,7 +242,7 @@ void SwTextINetFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
         if(!m_pTextNode)
             return;
         const SwUpdateAttr aUpdateAttr(GetStart(), *GetEnd(), nWhich);
-        m_pTextNode->TriggerNodeUpdate(sw::LegacyModifyHint(&aUpdateAttr, &aUpdateAttr));
+        m_pTextNode->TriggerNodeUpdate(sw::UpdateAttrHint(&aUpdateAttr, &aUpdateAttr));
     }
 }
 
@@ -277,21 +277,21 @@ void SwTextRuby::SwClientNotify(const SwModify&, const SfxHint& rHint)
         if(!m_pTextNode)
             return;
         SwUpdateAttr aUpdateAttr(GetStart(), *GetEnd(), RES_UPDATEATTR_FMT_CHG);
-        m_pTextNode->TriggerNodeUpdate(sw::LegacyModifyHint(&aUpdateAttr, &aUpdateAttr));
+        m_pTextNode->TriggerNodeUpdate(sw::UpdateAttrHint(&aUpdateAttr, &aUpdateAttr));
     }
     else if (rHint.GetId() == SfxHintId::SwAttrSetChange)
     {
         if(!m_pTextNode)
             return;
         SwUpdateAttr aUpdateAttr(GetStart(), *GetEnd(), RES_UPDATEATTR_ATTRSET_CHG);
-        m_pTextNode->TriggerNodeUpdate(sw::LegacyModifyHint(&aUpdateAttr, &aUpdateAttr));
+        m_pTextNode->TriggerNodeUpdate(sw::UpdateAttrHint(&aUpdateAttr, &aUpdateAttr));
     }
     else if (rHint.GetId() == SfxHintId::SwObjectDying)
     {
         if(!m_pTextNode)
             return;
         SwUpdateAttr aUpdateAttr(GetStart(), *GetEnd(), RES_UPDATEATTR_OBJECTDYING);
-        m_pTextNode->TriggerNodeUpdate(sw::LegacyModifyHint(&aUpdateAttr, &aUpdateAttr));
+        m_pTextNode->TriggerNodeUpdate(sw::UpdateAttrHint(&aUpdateAttr, &aUpdateAttr));
     }
     else if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
@@ -301,7 +301,7 @@ void SwTextRuby::SwClientNotify(const SwModify&, const SfxHint& rHint)
         if(!m_pTextNode)
             return;
         SwUpdateAttr aUpdateAttr(GetStart(), *GetEnd(), nWhich);
-        m_pTextNode->TriggerNodeUpdate(sw::LegacyModifyHint(&aUpdateAttr, &aUpdateAttr));
+        m_pTextNode->TriggerNodeUpdate(sw::UpdateAttrHint(&aUpdateAttr, &aUpdateAttr));
     }
 }
 

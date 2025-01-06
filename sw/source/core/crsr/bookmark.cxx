@@ -263,7 +263,7 @@ namespace
     auto InvalidatePosition(SwPosition const& rPos) -> void
     {
         SwUpdateAttr const aHint(rPos.GetContentIndex(), rPos.GetContentIndex(), 0);
-        rPos.GetNode().GetTextNode()->CallSwClientNotify(sw::LegacyModifyHint(&aHint, &aHint));
+        rPos.GetNode().GetTextNode()->CallSwClientNotify(sw::UpdateAttrHint(&aHint, &aHint));
     }
 }
 

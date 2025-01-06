@@ -223,6 +223,12 @@ void SwUserFieldType::SwClientNotify(const SwModify&, const SfxHint& rHint)
         if (!pLegacy->m_pOld && !pLegacy->m_pNew)
             m_bValidValue = false;
     }
+    else if (rHint.GetId() == SfxHintId::SwUpdateAttr)
+    {
+        auto pUpdateHint = static_cast<const sw::UpdateAttrHint*>(&rHint);
+        if (!pUpdateHint->m_pOld && !pUpdateHint->m_pNew)
+            m_bValidValue = false;
+    }
     else if (rHint.GetId() == SfxHintId::SwAttrSetChange)
     {
         auto pChangeHint = static_cast<const sw::AttrSetChangeHint*>(&rHint);

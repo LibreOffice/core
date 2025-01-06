@@ -2907,7 +2907,9 @@ void SwCursorShell::SwClientNotify(const SwModify&, const SfxHint& rHint)
             m_aGrfArrivedLnk.Call(*this);
         return;
     }
-    if (rHint.GetId() == SfxHintId::SwFormatChange || rHint.GetId() == SfxHintId::SwAttrSetChange)
+    if (rHint.GetId() == SfxHintId::SwFormatChange
+        || rHint.GetId() == SfxHintId::SwAttrSetChange
+        || rHint.GetId() == SfxHintId::SwUpdateAttr)
     {
         if( m_bCallChgLnk )
             // messages are not forwarded
@@ -2927,7 +2929,7 @@ void SwCursorShell::SwClientNotify(const SwModify&, const SfxHint& rHint)
     auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
     auto nWhich = pLegacy->GetWhich();
     if( m_bCallChgLnk &&
-        ( nWhich == 0 || !isFormatMessage(nWhich) || nWhich == RES_UPDATE_ATTR ))
+        ( nWhich == 0 || !isFormatMessage(nWhich) ))
         // messages are not forwarded
         // #i6681#: RES_UPDATE_ATTR is implicitly unset in
         // SwTextNode::Insert(SwTextHint*, sal_uInt16); we react here and thus do

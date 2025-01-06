@@ -116,7 +116,8 @@ void SwLineNumberInfo::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
     if (rHint.GetId() != SfxHintId::SwLegacyModify
         && rHint.GetId() != SfxHintId::SwFormatChange
-        && rHint.GetId() != SfxHintId::SwAttrSetChange)
+        && rHint.GetId() != SfxHintId::SwAttrSetChange
+        && rHint.GetId() != SfxHintId::SwUpdateAttr)
         return;
     if (rHint.GetId() == SfxHintId::SwObjectDying)
     {

@@ -6273,7 +6273,9 @@ void SwCellFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         SetDerivedVert(false);
         CheckDirChange();
     }
-    else if (rHint.GetId() == SfxHintId::SwFormatChange || rHint.GetId() == SfxHintId::SwObjectDying)
+    else if (rHint.GetId() == SfxHintId::SwFormatChange
+            || rHint.GetId() == SfxHintId::SwObjectDying
+            || rHint.GetId() == SfxHintId::SwUpdateAttr)
     {
         SwLayoutFrame::SwClientNotify(rMod, rHint);
     }

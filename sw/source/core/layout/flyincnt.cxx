@@ -139,7 +139,8 @@ void SwFlyInContentFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rH
         }
         return;
     }
-    if (rHint.GetId() == SfxHintId::SwObjectDying)
+    if (rHint.GetId() == SfxHintId::SwObjectDying
+        || rHint.GetId() == SfxHintId::SwUpdateAttr)
     {
         SwFlyFrame::SwClientNotify(rMod, rHint);
         if(GetAnchorFrame())

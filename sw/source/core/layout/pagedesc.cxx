@@ -295,7 +295,8 @@ void SwPageDesc::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
         CallSwClientNotify(rHint);
         RegisterChange();
     }
-    else if (rHint.GetId() == SfxHintId::SwObjectDying)
+    else if (rHint.GetId() == SfxHintId::SwObjectDying
+            || rHint.GetId() == SfxHintId::SwUpdateAttr)
     {
         CallSwClientNotify(rHint);
     }

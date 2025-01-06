@@ -2188,6 +2188,7 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
     sw::RedlineUnDelText const* pRedlineUnDelText(nullptr);
     SwFormatChangeHint const * pFormatChangedHint(nullptr);
     sw::AttrSetChangeHint const* pAttrSetChangeHint(nullptr);
+    sw::UpdateAttrHint const* pUpdateAttrHint(nullptr);
 
     sal_uInt16 nWhich = 0;
     if (rHint.GetId() == SfxHintId::SwLegacyModify)
@@ -2196,6 +2197,10 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
         pOld = pHint->m_pOld;
         pNew = pHint->m_pNew;
         nWhich = pHint->GetWhich();
+    }
+    else if (rHint.GetId() == SfxHintId::SwUpdateAttr)
+    {
+        pUpdateAttrHint = static_cast<const sw::UpdateAttrHint*>(&rHint);
     }
     else if (rHint.GetId() == SfxHintId::SwInsertText)
     {
@@ -2713,54 +2718,53 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
     }
     else if (rHint.GetId() == SfxHintId::SwObjectDying)
         ; // do nothing
+    else if (pUpdateAttrHint)
+    {
+        const SwUpdateAttr* pNewUpdate = pUpdateAttrHint->m_pNew;
+
+        sal_Int32 const nNPos = pNewUpdate->getStart();
+        sal_Int32 const nNLen = pNewUpdate->getEnd() - nNPos;
+        nPos = MapModelToView(&rNode, nNPos);
+        nLen = MapModelToView(&rNode, nNPos + nNLen) - nPos;
+        if( IsIdxInside( nPos, nLen ) )
+        {
+            // We need to reformat anyways, even if the invalidated
+            // range is empty.
+            // E.g.: empty line, set 14 pt!
+
+            // FootnoteNumbers need to be formatted
+            if( !nLen )
+                nLen = TextFrameIndex(1);
+
+            InvalidateRange_( SwCharRange( nPos, nLen) );
+            const sal_uInt16 nTmp = pNewUpdate->getWhichAttr();
+
+            if( ! nTmp || RES_TXTATR_CHARFMT == nTmp || RES_TXTATR_INETFMT == nTmp || RES_TXTATR_AUTOFMT == nTmp ||
+                RES_UPDATEATTR_FMT_CHG == nTmp || RES_UPDATEATTR_ATTRSET_CHG == nTmp )
+            {
+                lcl_SetWrong( *this, rNode, nNPos, nNPos + nNLen, false );
+                lcl_SetScriptInval( *this, nPos );
+            }
+        }
+
+#if !ENABLE_WASM_STRIP_ACCESSIBILITY
+        if( isA11yRelevantAttribute( pNewUpdate->getWhichAttr() ) &&
+            hasA11yRelevantAttribute( pNewUpdate->getFmtAttrs() ) )
+        {
+            SwViewShell* pViewSh = getRootFrame() ? getRootFrame()->GetCurrShell() : nullptr;
+            if ( pViewSh  )
+            {
+                pViewSh->InvalidateAccessibleParaAttrs( *this );
+            }
+        }
+#endif
+    }
     else switch (nWhich)
     {
         case RES_LINENUMBER:
         {
             assert(false); // should have been forwarded to SwContentFrame
             InvalidateLineNum();
-        }
-        break;
-        case RES_UPDATE_ATTR:
-        {
-            const SwUpdateAttr* pNewUpdate = static_cast<const SwUpdateAttr*>(pNew);
-
-            sal_Int32 const nNPos = pNewUpdate->getStart();
-            sal_Int32 const nNLen = pNewUpdate->getEnd() - nNPos;
-            nPos = MapModelToView(&rNode, nNPos);
-            nLen = MapModelToView(&rNode, nNPos + nNLen) - nPos;
-            if( IsIdxInside( nPos, nLen ) )
-            {
-                // We need to reformat anyways, even if the invalidated
-                // range is empty.
-                // E.g.: empty line, set 14 pt!
-
-                // FootnoteNumbers need to be formatted
-                if( !nLen )
-                    nLen = TextFrameIndex(1);
-
-                InvalidateRange_( SwCharRange( nPos, nLen) );
-                const sal_uInt16 nTmp = pNewUpdate->getWhichAttr();
-
-                if( ! nTmp || RES_TXTATR_CHARFMT == nTmp || RES_TXTATR_INETFMT == nTmp || RES_TXTATR_AUTOFMT == nTmp ||
-                    RES_UPDATEATTR_FMT_CHG == nTmp || RES_UPDATEATTR_ATTRSET_CHG == nTmp )
-                {
-                    lcl_SetWrong( *this, rNode, nNPos, nNPos + nNLen, false );
-                    lcl_SetScriptInval( *this, nPos );
-                }
-            }
-
-#if !ENABLE_WASM_STRIP_ACCESSIBILITY
-            if( isA11yRelevantAttribute( pNewUpdate->getWhichAttr() ) &&
-                hasA11yRelevantAttribute( pNewUpdate->getFmtAttrs() ) )
-            {
-                SwViewShell* pViewSh = getRootFrame() ? getRootFrame()->GetCurrShell() : nullptr;
-                if ( pViewSh  )
-                {
-                    pViewSh->InvalidateAccessibleParaAttrs( *this );
-                }
-            }
-#endif
         }
         break;
 

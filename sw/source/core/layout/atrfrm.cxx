@@ -2751,7 +2751,8 @@ void SwFrameFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         SwFormat::SwClientNotify(rMod, rHint);
         return;
     }
-    else if (rHint.GetId() == SfxHintId::SwObjectDying)
+    else if (rHint.GetId() == SfxHintId::SwObjectDying
+            || rHint.GetId() == SfxHintId::SwUpdateAttr)
     {
         SwFormat::SwClientNotify(rMod, rHint);
         return;

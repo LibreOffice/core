@@ -431,7 +431,6 @@ inline constexpr sal_uInt16 RES_UPDATEATTR_ATTRSET_CHG(
     168); // used by SwUpdateAttr just as an ID to communicate what has changed
 inline constexpr sal_uInt16 RES_UPDATEATTR_OBJECTDYING(
     169); // used by SwUpdateAttr just as an ID to communicate what has changed
-inline constexpr TypedWhichId<SwUpdateAttr> RES_UPDATE_ATTR(170);
 // empty
 inline constexpr sal_uInt16 RES_FORMAT_MSG_END(190);
 

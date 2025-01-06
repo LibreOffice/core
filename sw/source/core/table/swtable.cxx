@@ -2754,7 +2754,9 @@ SwTableBox* SwTableBoxFormat::SwTableBoxFormat::GetTableBox()
 // for detection of modifications (mainly TableBoxAttribute)
 void SwTableBoxFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
-    if(rHint.GetId() == SfxHintId::SwFormatChange || rHint.GetId() == SfxHintId::SwObjectDying)
+    if(rHint.GetId() == SfxHintId::SwFormatChange
+        || rHint.GetId() == SfxHintId::SwObjectDying
+        || rHint.GetId() == SfxHintId::SwUpdateAttr)
     {
         SwFrameFormat::SwClientNotify(rMod, rHint);
         return;

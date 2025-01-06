@@ -826,6 +826,14 @@ void SwNoTextFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint
         InvalidatePrt();
         SetCompletePaint();
     }
+    else if (rHint.GetId() == SfxHintId::SwUpdateAttr)
+    {
+        SwContentFrame::SwClientNotify(rModify, rHint);
+        if (GetNode()->GetNodeType() == SwNodeType::Grf)
+            ClearCache();
+        InvalidatePrt();
+        SetCompletePaint();
+    }
     else if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
         auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
@@ -833,19 +841,8 @@ void SwNoTextFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint
 
         SwContentFrame::SwClientNotify(rModify, rHint);
 
-        switch( nWhich )
-        {
-        case RES_UPDATE_ATTR:
-            if (GetNode()->GetNodeType() != SwNodeType::Grf) {
-                break;
-            }
-            ClearCache();
-            break;
-
-        default:
-            if ( !pLegacy->m_pNew || !isGRFATR(nWhich) )
-                return;
-        }
+        if ( !pLegacy->m_pNew || !isGRFATR(nWhich) )
+            return;
 
         InvalidatePrt();
         SetCompletePaint();

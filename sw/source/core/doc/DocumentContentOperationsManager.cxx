@@ -2848,7 +2848,7 @@ bool DocumentContentOperationsManager::Overwrite( const SwPaM &rRg, const OUStri
     if( nOldAttrCnt != nNewAttrCnt )
     {
         const SwUpdateAttr aHint(0,0,0);
-        pNode->TriggerNodeUpdate(sw::LegacyModifyHint(&aHint, &aHint));
+        pNode->TriggerNodeUpdate(sw::UpdateAttrHint(&aHint, &aHint));
     }
 
     if (!m_rDoc.GetIDocumentUndoRedo().DoesUndo() &&

@@ -133,7 +133,8 @@ struct SwCallMouseEvent final
         }
         else if (rHint.GetId() == SfxHintId::SwLegacyModify
                 || SfxHintId::SwAttrSetChange == rHint.GetId()
-                || SfxHintId::SwObjectDying == rHint.GetId())
+                || SfxHintId::SwObjectDying == rHint.GetId()
+                || SfxHintId::SwUpdateAttr == rHint.GetId())
         {
             assert(EVENT_OBJECT_IMAGE == eType || EVENT_OBJECT_URLITEM == eType || EVENT_OBJECT_IMAGEMAP == eType);
             SwClient::SwClientNotify(rMod, rHint);

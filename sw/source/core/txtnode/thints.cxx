@@ -1802,7 +1802,7 @@ void SwTextNode::DeleteAttribute( SwTextAttr * const pAttr )
 
         m_pSwpHints->Delete( pAttr );
         SwTextAttr::Destroy( pAttr );
-        CallSwClientNotify(sw::LegacyModifyHint(nullptr, &aHint));
+        CallSwClientNotify(sw::UpdateAttrHint(nullptr, &aHint));
 
         TryDeleteSwpHints();
     }
@@ -1877,7 +1877,7 @@ void SwTextNode::DeleteAttributes(
 
                 m_pSwpHints->DeleteAtPos( nPos );
                 SwTextAttr::Destroy( pTextHt );
-                CallSwClientNotify(sw::LegacyModifyHint(nullptr, &aHint));
+                CallSwClientNotify(sw::UpdateAttrHint(nullptr, &aHint));
             }
         }
     }
@@ -3296,7 +3296,7 @@ bool SwpHints::TryInsertHint(
                 nHtStart,
                 nWhich);
 
-            rNode.TriggerNodeUpdate(sw::LegacyModifyHint(&aHint, &aHint));
+            rNode.TriggerNodeUpdate(sw::UpdateAttrHint(&aHint, &aHint));
         }
 
         return true;
@@ -3373,7 +3373,7 @@ bool SwpHints::TryInsertHint(
     if ( rNode.HasWriterListeners() )
     {
         const SwUpdateAttr aHint(nHtStart, nHintEnd, nWhich, std::move(aWhichSublist));
-        rNode.TriggerNodeUpdate(sw::LegacyModifyHint(&aHint, &aHint));
+        rNode.TriggerNodeUpdate(sw::UpdateAttrHint(&aHint, &aHint));
     }
 
 #ifdef DBG_UTIL

@@ -41,6 +41,7 @@ class SwTableLine;
 class SwTableLineFormat;
 class SwTableBox;
 class SwAttrSetChg;
+class SwUpdateAttr;
 
 // Base class for all Message-Hints:
 // "Overhead" of SfxPoolItem is handled here
@@ -322,9 +323,16 @@ public:
     SwModify* m_pDying;
     ObjectDyingHint(SwModify* pDead) : SfxHint(SfxHintId::SwObjectDying), m_pDying(pDead) {}
 };
+class UpdateAttrHint final : public SfxHint
+{
+public:
+    const SwUpdateAttr* m_pOld;
+    const SwUpdateAttr* m_pNew;
+    UpdateAttrHint(const SwUpdateAttr* pOld, const SwUpdateAttr* pNew) : SfxHint(SfxHintId::SwUpdateAttr), m_pOld(pOld), m_pNew(pNew) {}
+};
 } // namespace sw
 
-class SwUpdateAttr final : public SwMsgPoolItem
+class SwUpdateAttr final
 {
 private:
     sal_Int32 m_nStart;
@@ -333,7 +341,6 @@ private:
     std::vector<sal_uInt16> m_aWhichFmtAttrs; // attributes changed inside RES_TXTATR_AUTOFMT
 
 public:
-    DECLARE_ITEM_TYPE_FUNCTION(SwUpdateAttr)
     SwUpdateAttr( sal_Int32 nS, sal_Int32 nE, sal_uInt16 nW );
     SwUpdateAttr( sal_Int32 nS, sal_Int32 nE, sal_uInt16 nW, std::vector<sal_uInt16> aW );
 

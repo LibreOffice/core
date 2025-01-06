@@ -252,7 +252,7 @@ bool SwGrfNode::ReRead(
     if( bReadGrf && bNewGrf )
     {
         const SwUpdateAttr aHint(0,0,0);
-        CallSwClientNotify(sw::LegacyModifyHint(&aHint, &aHint));
+        CallSwClientNotify(sw::UpdateAttrHint(&aHint, &aHint));
     }
 
     return bReadGrf;

@@ -74,6 +74,7 @@ namespace sw {
     class TextNodeNotificationSuppressor;
     class RemoveUnoObjectHint;
     class AttrSetChangeHint;
+    class UpdateAttrHint;
     namespace mark { enum class RestoreMode; }
 }
 
@@ -245,8 +246,7 @@ public:
     /// for hanging TextFormatCollections somewhere else (Outline-Numbering!)
     void TriggerNodeUpdate(const sw::LegacyModifyHint&);
     void TriggerNodeUpdate(const sw::AttrSetChangeHint&);
-    void TriggerNodeUpdate(const sw::RemoveUnoObjectHint&);
-    void TriggerNodeUpdate(const sw::ObjectDyingHint&);
+    void TriggerNodeUpdate(const SfxHint&);
     void TriggerNodeUpdate(const SwFormatChangeHint&);
 
     const OUString& GetText() const { return m_Text; }

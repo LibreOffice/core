@@ -496,7 +496,6 @@ enum class SfxItemType : sal_uInt16
     SwTOXMarkType,
     SwTransparencyGrfType,
     SwUINumRuleItemType,
-    SwUpdateAttrType,
     SwWrtShellItemType,
     XColorItemType,
     XFillAttrSetItemType,

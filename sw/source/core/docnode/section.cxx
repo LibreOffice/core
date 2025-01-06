@@ -799,6 +799,11 @@ void SwSectionFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
             SwFrameFormat::SwClientNotify(rMod, rHint);
         return;
     }
+    else if (rHint.GetId() == SfxHintId::SwUpdateAttr)
+    {
+        SwFrameFormat::SwClientNotify(rMod, rHint);
+        return;
+    }
     else if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
     auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);

@@ -1374,7 +1374,7 @@ void SwPaM::InvalidatePaM()
                     ? End()->GetContentIndex() - nStart
                     : pTextNode->Len() - nStart,
                 0);
-            pTextNode->TriggerNodeUpdate(sw::LegacyModifyHint(&aHint, &aHint));
+            pTextNode->TriggerNodeUpdate(sw::UpdateAttrHint(&aHint, &aHint));
         }
         // other node types not invalidated
     }

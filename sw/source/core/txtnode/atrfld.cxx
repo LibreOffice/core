@@ -256,7 +256,8 @@ void SwFormatField::SwClientNotify( const SwModify& rModify, const SfxHint& rHin
     else if (rHint.GetId() == SfxHintId::SwLegacyModify
             || rHint.GetId() == SfxHintId::SwFormatChange
             || rHint.GetId() == SfxHintId::SwAttrSetChange
-            || rHint.GetId() == SfxHintId::SwObjectDying)
+            || rHint.GetId() == SfxHintId::SwObjectDying
+            || rHint.GetId() == SfxHintId::SwUpdateAttr)
     {
         if(!mpTextField)
             return;
@@ -468,6 +469,38 @@ void SwFormatField::UpdateTextNode(const SfxHint& rHint)
     else if(SfxHintId::SwObjectDying == rHint.GetId())
     {
         assert(false && "do not expect this, might need to restore some code");
+    }
+    else if(SfxHintId::SwUpdateAttr == rHint.GetId())
+    {
+        auto pUpdateHint = static_cast<const sw::UpdateAttrHint*>(&rHint);
+        auto pOld = pUpdateHint->m_pOld;
+        auto pNew = pUpdateHint->m_pNew;
+        if (pOld == nullptr && pNew == nullptr)
+        {
+            ForceUpdateTextNode();
+            return;
+        }
+
+        if (!IsFieldInDoc())
+            return;
+
+        SwTextNode* pTextNd = &mpTextField->GetTextNode();
+        OSL_ENSURE(pTextNd, "Where is my Node?");
+
+        bool bTriggerNode = pNew != nullptr;
+        bool bExpand = false;
+        if(pNew)
+        {
+            auto pType = mpField->GetTyp();
+            lcl_EnsureUserFieldValid(*pType);
+            bTriggerNode = lcl_TriggerNode(pType->Which());
+            bExpand = lcl_ExpandField(pType->Which());
+            pOld = nullptr;
+        }
+        if(bTriggerNode)
+            pTextNd->TriggerNodeUpdate(sw::UpdateAttrHint(pOld, pNew));
+        if(bExpand)
+            mpTextField->ExpandTextField(false);
     }
     else if(SfxHintId::SwLegacyModify == rHint.GetId())
     {

@@ -1105,7 +1105,7 @@ void SwContentNode::UpdateAttr(const SwUpdateAttr& rUpdate)
             && IsTextNode()
             && RES_UPDATEATTR_ATTRSET_CHG == rUpdate.getWhichAttr())
         static_cast<SwTextNode*>(this)->SetCalcHiddenCharFlags();
-    CallSwClientNotify(sw::LegacyModifyHint(&rUpdate, &rUpdate));
+    CallSwClientNotify(sw::UpdateAttrHint(&rUpdate, &rUpdate));
 }
 
 void SwContentNode::SwClientNotify( const SwModify&, const SfxHint& rHint)
@@ -1161,30 +1161,28 @@ void SwContentNode::SwClientNotify( const SwModify&, const SfxHint& rHint)
         auto pLegacyHint = static_cast<const sw::LegacyModifyHint*>(&rHint);
         const sal_uInt16 nWhich = pLegacyHint->GetWhich();
         InvalidateInSwCache(nWhich);
-
-        switch(nWhich)
-        {
-            case RES_UPDATE_ATTR:
-                // RES_UPDATE_ATTR _should_ always contain a SwUpdateAttr hint in old and new.
-                // However, faking one with just a basic SfxPoolItem setting a WhichId has been observed.
-                // This makes the crude "WhichId" type divert from the true type, which is bad.
-                // Thus we are asserting here, but falling back to an proper
-                // hint instead. so that we at least will not spread such poison further.
-#ifdef DBG_UTIL
-                if (!SfxPoolItem::areSame(pLegacyHint->m_pNew, pLegacyHint->m_pOld))
-                {
-                    auto pBT = sal::backtrace_get(20);
-                    SAL_WARN("sw.core", "UpdateAttr not matching! " << sal::backtrace_to_string(pBT.get()));
-                }
-#endif
-                assert(SfxPoolItem::areSame(pLegacyHint->m_pNew, pLegacyHint->m_pOld));
-                assert(dynamic_cast<const SwUpdateAttr*>(pLegacyHint->m_pNew));
-                const SwUpdateAttr aFallbackHint(0,0,0);
-                const SwUpdateAttr& rUpdateAttr = pLegacyHint->m_pNew ? *static_cast<const SwUpdateAttr*>(pLegacyHint->m_pNew) : aFallbackHint;
-                UpdateAttr(rUpdateAttr);
-                return;
-        }
         CallSwClientNotify(rHint);
+    }
+    else if (rHint.GetId() == SfxHintId::SwUpdateAttr)
+    {
+        auto pUpdateAttrHint = static_cast<const sw::UpdateAttrHint*>(&rHint);
+
+        // RES_UPDATE_ATTR _should_ always contain a SwUpdateAttr hint in old and new.
+        // However, faking one with just a basic SfxPoolItem setting a WhichId has been observed.
+        // This makes the crude "WhichId" type divert from the true type, which is bad.
+        // Thus we are asserting here, but falling back to an proper
+        // hint instead. so that we at least will not spread such poison further.
+#ifdef DBG_UTIL
+        if (pUpdateAttrHint->m_pNew != pUpdateAttrHint->m_pOld)
+        {
+            auto pBT = sal::backtrace_get(20);
+            SAL_WARN("sw.core", "UpdateAttr not matching! " << sal::backtrace_to_string(pBT.get()));
+        }
+#endif
+        assert(pUpdateAttrHint->m_pNew == pUpdateAttrHint->m_pOld);
+        const SwUpdateAttr aFallbackHint(0,0,0);
+        const SwUpdateAttr& rUpdateAttr = pUpdateAttrHint->m_pNew ? *pUpdateAttrHint->m_pNew : aFallbackHint;
+        UpdateAttr(rUpdateAttr);
     }
     else if (rHint.GetId() == SfxHintId::SwAutoFormatUsedHint)
     {

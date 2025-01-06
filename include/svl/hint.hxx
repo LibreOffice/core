@@ -234,6 +234,7 @@ enum class SfxHintId {
     SwFormatChange,
     SwAttrSetChange,
     SwObjectDying,
+    SwUpdateAttr,
 
     ThisIsAnSdrHint,
     ThisIsAnSfxEventHint

@@ -1420,7 +1420,8 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         // #i51474#
         GetAnchoredObj(nullptr)->ResetLayoutProcessBools();
     }
-    else if(SfxHintId::SwFormatChange == rHint.GetId())
+    else if(SfxHintId::SwFormatChange == rHint.GetId()
+            || SfxHintId::SwUpdateAttr == rHint.GetId())
     {
         // #i51474#
         GetAnchoredObj(nullptr)->ResetLayoutProcessBools();

@@ -207,7 +207,8 @@ SwFormat::~SwFormat()
 
 void SwFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    if (rHint.GetId() == SfxHintId::SwRemoveUnoObject)
+    if (rHint.GetId() == SfxHintId::SwRemoveUnoObject
+        || rHint.GetId() == SfxHintId::SwUpdateAttr)
     {
         SwModify::SwClientNotify(*this, rHint);
         return;
