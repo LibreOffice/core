@@ -21,7 +21,6 @@
 
 namespace oglcanvas
 {
-    class SpriteCanvas;
 
     typedef ::comphelper::WeakComponentImplHelper< css::rendering::XCanvasFont > CanvasFontBaseT;
 

@@ -38,7 +38,6 @@ namespace basegfx {
 
 namespace cairocanvas
 {
-    class SpriteCanvas;
 
     enum Operation {
         Stroke,

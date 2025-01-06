@@ -30,7 +30,6 @@
 
 namespace vclcanvas
 {
-    class SpriteCanvas;
 
     /** Helper class for basic canvas functionality. Also offers
         optional backbuffer painting, when providing it with a second

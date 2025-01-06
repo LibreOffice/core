@@ -29,8 +29,6 @@
 
 #include "parser.hxx"
 
-namespace xmlreader { struct Span; }
-
 namespace configmgr {
 
 struct Data;

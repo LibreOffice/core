@@ -57,7 +57,6 @@
 
 namespace com::sun::star {
     namespace beans {
-        class XHierarchicalPropertySetInfo;
         class XPropertiesChangeListener;
         class XPropertyChangeListener;
         class XVetoableChangeListener;
@@ -68,7 +67,6 @@ namespace com::sun::star {
     namespace uno {
         class Any;
         class Type;
-        class XInterface;
     }
     namespace util { struct ElementChange; }
 }

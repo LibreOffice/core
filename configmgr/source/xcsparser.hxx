@@ -33,8 +33,6 @@
 #include "parser.hxx"
 #include "valueparser.hxx"
 
-namespace xmlreader { struct Span; }
-
 namespace configmgr {
 
 class SetNode;

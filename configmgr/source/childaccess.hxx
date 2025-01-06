@@ -33,12 +33,6 @@
 
 #include "access.hxx"
 
-namespace com::sun::star::uno {
-    class Any;
-    class Type;
-    class XInterface;
-}
-
 namespace configmgr {
 
 class Components;

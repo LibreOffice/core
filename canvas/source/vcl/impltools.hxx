@@ -31,35 +31,11 @@
 #include "outdevprovider.hxx"
 
 
-class OutputDevice;
 class Point;
-class Size;
-
-namespace basegfx
-{
-    namespace matrix
-    {
-        class B2DHomMatrix;
-    }
-}
-
-namespace com::sun::star::awt
-{
-    struct Point;
-    struct Size;
-    struct Rectangle;
-}
-
-namespace com::sun::star::drawing
-{
-    struct HomogenMatrix3;
-}
 
 namespace com::sun::star::geometry
 {
     struct RealPoint2D;
-    struct RealSize2D;
-    struct RealRectangle2D;
     struct Matrix2D;
 }
 

@@ -22,10 +22,6 @@
 #include <sal/config.h>
 #include <string_view>
 
-namespace rtl
-{
-class OUString;
-}
 class FileStream;
 
 namespace codemaker::cppumaker

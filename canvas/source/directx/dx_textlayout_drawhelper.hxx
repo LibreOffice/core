@@ -37,7 +37,6 @@ namespace Gdiplus { class Graphics; }
 
 namespace dxcanvas
 {
-    struct Bitmap;
     class TextLayoutDrawHelper
     {
     public:

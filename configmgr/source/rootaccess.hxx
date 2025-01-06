@@ -34,16 +34,11 @@
 #include "modifications.hxx"
 
 namespace com::sun::star {
-    namespace uno {
-        class Any;
-        class Type;
-    }
     namespace util { class XChangesListener; }
 }
 
 namespace configmgr {
 
-class Broadcaster;
 class Components;
 class Node;
 
