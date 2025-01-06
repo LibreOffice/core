@@ -71,7 +71,7 @@ static bool ImpStrChr( std::u16string_view str, sal_Unicode c ) { return str.fin
 // conversion error if data type is fixed and it doesn't fit
 
 ErrCode ImpScan( std::u16string_view rWSrc, double& nVal, SbxDataType& rType,
-                  sal_uInt16* pLen, bool* pHasNumber, bool bOnlyIntntl )
+                 sal_Int32* pLen, bool* pHasNumber, bool bOnlyIntntl )
 {
     sal_Unicode cDecSep, cGrpSep, cDecSepAlt;
     if( bOnlyIntntl )
@@ -237,7 +237,7 @@ ErrCode ImpScan( std::u16string_view rWSrc, double& nVal, SbxDataType& rType,
     while (p != rWSrc.end() && (*p == ' ' || *p == '\t'))
         p++;
     if( pLen )
-        *pLen = static_cast<sal_uInt16>( p - pStart );
+        *pLen = p - pStart;
     if (pHasNumber)
         *pHasNumber = pNumberEnd > pNumberStart;
     if( bMinus )
@@ -246,7 +246,7 @@ ErrCode ImpScan( std::u16string_view rWSrc, double& nVal, SbxDataType& rType,
     return ERRCODE_NONE;
 }
 
-ErrCode ImpScan(std::u16string_view rSrc, double& nVal, SbxDataType& rType, sal_uInt16* pLen)
+ErrCode ImpScan(std::u16string_view rSrc, double& nVal, SbxDataType& rType, sal_Int32* pLen)
 {
     using namespace officecfg::Office::Scripting;
     static const bool bEnv = std::getenv("LIBREOFFICE6FLOATINGPOINTMODE") != nullptr;
@@ -258,7 +258,7 @@ ErrCode ImpScan(std::u16string_view rSrc, double& nVal, SbxDataType& rType, sal_
 // port for CDbl in the Basic
 ErrCode SbxValue::ScanNumIntnl( const OUString& rSrc, double& nVal, bool bSingle )
 {
-    sal_uInt16 nLen = 0;
+    sal_Int32 nLen = 0;
     ErrCode nRetError = ImpScan( rSrc, nVal, o3tl::temporary(SbxDataType()), &nLen, nullptr,
         /*bOnlyIntntl*/true );
     // read completely?
@@ -324,7 +324,7 @@ static void printfmtstr(std::u16string_view rStr, OUString& rRes, std::u16string
 }
 
 
-bool SbxValue::Scan(std::u16string_view rSrc, sal_uInt16* pLen)
+bool SbxValue::Scan(std::u16string_view rSrc, sal_Int32* pLen)
 {
     ErrCode eRes = ERRCODE_NONE;
     if( !CanWrite() )

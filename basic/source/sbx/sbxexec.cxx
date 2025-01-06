@@ -129,7 +129,7 @@ static SbxVariableRef Operand
                    || *p == '&' ) )
     {
         // A number could be scanned in directly!
-        sal_uInt16 nLen;
+        sal_Int32 nLen;
         if (!refVar->Scan(p, &nLen))
         {
             refVar.clear();

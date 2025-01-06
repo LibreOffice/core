@@ -2521,7 +2521,7 @@ void SbiRuntime::StepINPUT()
         // then with a string value
         if( !pVar->IsFixed() || pVar->IsNumeric() )
         {
-            sal_uInt16 nLen = 0;
+            sal_Int32 nLen = 0;
             if( !pVar->Scan( s, &nLen ) )
             {
                 err = SbxBase::GetError();

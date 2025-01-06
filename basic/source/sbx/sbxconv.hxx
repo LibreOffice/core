@@ -63,11 +63,11 @@ inline auto ImpDoubleToSalInt64(double d)
 // SBXSCAN.CXX
 extern void ImpCvtNum( double nNum, short nPrec, OUString& rRes, bool bCoreString=false );
 extern ErrCode ImpScan
-    ( std::u16string_view rSrc, double& nVal, SbxDataType& rType, sal_uInt16* pLen,
+    ( std::u16string_view rSrc, double& nVal, SbxDataType& rType, sal_Int32* pLen,
       bool* pHasNumber, bool bOnlyIntntl );
 // A version that uses defaults / compatibility settings for bOnlyIntntl
 extern ErrCode ImpScan
-    ( std::u16string_view rSrc, double& nVal, SbxDataType& rType, sal_uInt16* pLen );
+    ( std::u16string_view rSrc, double& nVal, SbxDataType& rType, sal_Int32* pLen );
 
 void ImpGetIntntlSep( sal_Unicode& rcDecimalSep, sal_Unicode& rcThousandSep, sal_Unicode& rcDecimalSepAlt );
 

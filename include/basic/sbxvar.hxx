@@ -189,7 +189,7 @@ public:
     SAL_DLLPRIVATE bool Convert( SbxDataType );
     bool Compute( SbxOperator, const SbxValue& );
     bool Compare( SbxOperator, const SbxValue& ) const;
-    SAL_DLLPRIVATE bool Scan( std::u16string_view, sal_uInt16* );
+    SAL_DLLPRIVATE bool Scan( std::u16string_view, sal_Int32* );
     SAL_DLLPRIVATE void Format( OUString&, const OUString* = nullptr ) const;
 
     // The following operators are defined for easier handling.
