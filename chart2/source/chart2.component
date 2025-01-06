@@ -137,11 +137,6 @@
     <service name="com.sun.star.chart2.ChartType"/>
     <service name="com.sun.star.chart2.ColumnChartType"/>
   </implementation>
-    <implementation name="com.sun.star.comp.chart.HistogramChartType"
-    constructor="com_sun_star_comp_chart_HistogramChartType_get_implementation">
-    <service name="com.sun.star.chart2.ChartType"/>
-    <service name="com.sun.star.chart2.HistogramChartType"/>
-  </implementation>
   <implementation name="com.sun.star.comp.chart.DataSeries"
     constructor="com_sun_star_comp_chart_DataSeries_get_implementation">
     <service name="com.sun.star.beans.PropertySet"/>

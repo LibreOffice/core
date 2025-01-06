@@ -450,8 +450,6 @@ bool ChartType::isSupportingOverlapAndGapWidthProperties(sal_Int32 nDimensionCou
     if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BAR))
         return true;
 
-    if (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_HISTOGRAM))
-        return true;
     return false;
 }
 
@@ -589,8 +587,7 @@ bool ChartType::isSupportingCategoryPositioning(sal_Int32 nDimensionCount)
     }
     else if (nDimensionCount == 2 &&
             (aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN) ||
-             aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BAR) ||
-             aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_HISTOGRAM)))
+             aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BAR)))
     {
         return true;
     }

@@ -52,7 +52,6 @@ enum TypeId
     TYPEID_BUBBLE,                  /// Bubble chart.
     TYPEID_SURFACE,                 /// Surface chart.
     TYPEID_FUNNEL,                  /// Funnel chart.
-    TYPEID_HISTO,                   /// Histogram chart.
     TYPEID_UNKNOWN,                 /// Default for unknown chart types.
 };
 
@@ -66,7 +65,6 @@ enum TypeCategory
     TYPECATEGORY_SCATTER,           /// Scatter and bubble charts.
     TYPECATEGORY_SURFACE,           /// Surface charts.
     TYPECATEGORY_FUNNEL,            /// Funnel charts. TODO: can this be BAR?
-    TYPECATEGORY_HISTO,             /// Histogram charts.
 };
 
 /** Enumerates modes for varying point colors in a series. */

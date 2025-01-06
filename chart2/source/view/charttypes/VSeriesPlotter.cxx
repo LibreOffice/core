@@ -53,7 +53,6 @@
 
 //only for creation: @todo remove if all plotter are uno components and instantiated via servicefactory
 #include "BarChart.hxx"
-#include "HistogramChart.hxx"
 #include "PieChart.hxx"
 #include "AreaChart.hxx"
 #include "CandleStickChart.hxx"
@@ -2242,7 +2241,6 @@ const ROrderPair pairList[] = {
     ROrderPair(CHART2_SERVICE_NAME_CHARTTYPE_AREA, 0),
     ROrderPair(CHART2_SERVICE_NAME_CHARTTYPE_BAR, 6),   // bar & column are same
     ROrderPair(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN, 6),
-    ROrderPair(CHART2_SERVICE_NAME_CHARTTYPE_HISTOGRAM, 9),
     ROrderPair(CHART2_SERVICE_NAME_CHARTTYPE_LINE, 8),
     ROrderPair(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER, 5),
     ROrderPair(CHART2_SERVICE_NAME_CHARTTYPE_PIE, 1),
@@ -2882,8 +2880,6 @@ VSeriesPlotter* VSeriesPlotter::createSeriesPlotter(
         pRet = new BarChart(xChartTypeModel,nDimensionCount);
     else if( aChartType.equalsIgnoreAsciiCase( CHART2_SERVICE_NAME_CHARTTYPE_BAR ) )
         pRet = new BarChart(xChartTypeModel,nDimensionCount);
-    else if( aChartType.equalsIgnoreAsciiCase( CHART2_SERVICE_NAME_CHARTTYPE_HISTOGRAM ) )
-        pRet = new HistogramChart(xChartTypeModel, nDimensionCount);
     else if( aChartType.equalsIgnoreAsciiCase( CHART2_SERVICE_NAME_CHARTTYPE_AREA ) )
         pRet = new AreaChart(xChartTypeModel,nDimensionCount,true);
     else if( aChartType.equalsIgnoreAsciiCase( CHART2_SERVICE_NAME_CHARTTYPE_LINE ) )
