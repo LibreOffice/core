@@ -699,6 +699,10 @@ bool SbxValue::ImpIsNumeric( bool bOnlyIntntl ) const
         }
         return false;
     }
+#if HAVE_FEATURE_SCRIPTING
+    else if (t == SbxBOOL && bOnlyIntntl && SbiRuntime::isVBAEnabled())
+        return true;
+#endif
     else
         return t == SbxEMPTY
             || ( t >= SbxINTEGER && t <= SbxCURRENCY )
