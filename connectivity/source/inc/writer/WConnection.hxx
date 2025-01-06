@@ -30,10 +30,6 @@ namespace com::sun::star::text
 {
 class XTextDocument;
 }
-namespace utl
-{
-class CloseVeto;
-}
 
 namespace connectivity::writer
 {

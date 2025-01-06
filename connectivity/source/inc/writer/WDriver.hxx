@@ -21,11 +21,6 @@
 
 #include <file/FDriver.hxx>
 
-namespace com::sun::star::lang
-{
-class XMultiServiceFactory;
-}
-
 namespace connectivity::writer
 {
 class ODriver : public file::OFileDriver

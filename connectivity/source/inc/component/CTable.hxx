@@ -21,14 +21,6 @@
 
 #include <file/FTable.hxx>
 
-namespace com::sun::star::sheet {
-    class XSpreadsheet;
-}
-
-namespace com::sun::star::util {
-    class XNumberFormats;
-}
-
 
 namespace connectivity::component
 {

@@ -30,8 +30,6 @@ namespace com::sun::star {
     namespace sheet { class XSpreadsheetDocument; }
 }
 
-namespace utl { class CloseVeto; }
-
 
 namespace connectivity::calc
 {

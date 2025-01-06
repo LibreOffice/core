@@ -23,7 +23,6 @@
 
 namespace connectivity::flat
 {
-    class OConnection;
     class OFlatStatement : public file::OStatement
     {
     protected:

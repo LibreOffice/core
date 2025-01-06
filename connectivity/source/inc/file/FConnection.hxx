@@ -32,7 +32,6 @@ namespace connectivity::sdbcx { class OCatalog; }
 
 namespace connectivity::file
 {
-    class ODatabaseMetaData;
     class OFileDriver;
 
     class OOO_DLLPUBLIC_FILE OConnection : public connectivity::OMetaConnection

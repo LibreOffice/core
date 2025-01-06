@@ -48,8 +48,6 @@
 namespace pq_sdbc_driver
 {
 
-class Columns;
-
 class Table : public ReflectionBase,
               public css::sdbcx::XColumnsSupplier,
               public css::sdbcx::XIndexesSupplier,

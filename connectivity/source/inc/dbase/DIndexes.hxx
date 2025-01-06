@@ -24,8 +24,6 @@
 
 namespace connectivity::dbase
 {
-    class ODbaseTable;
-
     typedef sdbcx::OCollection ODbaseIndexes_BASE;
 
     class ODbaseIndexes : public ODbaseIndexes_BASE

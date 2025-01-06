@@ -37,7 +37,6 @@ namespace connectivity
     };
 
     class OKeySet;
-    class OKeyValue;                // simple class which holds a sal_Int32 and a std::vector<ORowSetValueDecoratorRef>
 
     /**
         The class OSortIndex can be used to implement a sorted index.

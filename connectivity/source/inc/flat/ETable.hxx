@@ -29,7 +29,6 @@
 namespace connectivity::flat
 {
     typedef file::OFileTable OFlatTable_BASE;
-    class OFlatConnection;
 
     typedef std::pair<sal_Int32, sal_Int32> TRowPositionInFile;
 

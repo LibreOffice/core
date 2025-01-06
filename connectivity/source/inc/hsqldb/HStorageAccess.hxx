@@ -30,11 +30,6 @@
 #pragma clang diagnostic pop
 #endif
 
-namespace connectivity::hsqldb
-{
-    class DataLogFile;
-}
-
 jint read_from_storage_stream( JNIEnv * env, jstring name, jstring key );
 jint read_from_storage_stream_into_buffer( JNIEnv * env, jstring name, jstring key, jbyteArray buffer, jint off, jint len );
 void write_to_storage_stream_from_buffer( JNIEnv* env, jstring name, jstring key, jbyteArray buffer, jint off, jint len );

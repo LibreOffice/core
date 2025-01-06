@@ -26,8 +26,6 @@ namespace connectivity
     class OSQLParseNode;
     namespace file
     {
-        class OCode;
-        class OOperand;
         class OSQLAnalyzer;
         typedef std::vector<std::unique_ptr<OCode>> OCodeList;
 

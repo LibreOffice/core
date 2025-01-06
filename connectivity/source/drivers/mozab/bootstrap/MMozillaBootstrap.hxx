@@ -32,7 +32,6 @@ namespace connectivity::mozab
     typedef ::cppu::WeakComponentImplHelper<   css::mozilla::XMozillaBootstrap,
                                                css::lang::XServiceInfo > OMozillaBootstrap_BASE;
     class ProfileAccess;
-    class ProfileManager;
     class MozillaBootstrap : public OMozillaBootstrap_BASE
     {
     private:

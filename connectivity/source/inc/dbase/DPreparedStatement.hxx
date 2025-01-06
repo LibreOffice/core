@@ -23,7 +23,6 @@
 
 namespace connectivity::dbase
 {
-    class OConnection;
     class ODbasePreparedStatement : public file::OPreparedStatement
     {
     protected:

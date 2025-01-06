@@ -25,10 +25,6 @@ namespace com::sun::star::text
 {
 class XTextTable;
 }
-namespace com::sun::star::util
-{
-class XNumberFormats;
-}
 
 namespace connectivity::writer
 {

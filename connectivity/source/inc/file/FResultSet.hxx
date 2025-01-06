@@ -45,8 +45,6 @@
 
 namespace connectivity::file
 {
-    class OResultSetMetaData;
-
     typedef ::cppu::WeakComponentImplHelper<  css::sdbc::XResultSet,
                                               css::sdbc::XRow,
                                               css::sdbc::XResultSetMetaDataSupplier,

@@ -23,7 +23,6 @@
 
 namespace connectivity::component
 {
-    class OConnection;
     /// Statement implementation for Writer tables and Calc sheets.
     class OOO_DLLPUBLIC_FILE OComponentStatement : public file::OStatement
     {

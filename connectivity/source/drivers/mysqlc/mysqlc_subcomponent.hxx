@@ -23,15 +23,6 @@
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 
-namespace cppu
-{
-class IPropertyArrayHelper;
-}
-namespace com::sun::star::lang
-{
-class XComponent;
-}
-
 namespace connectivity::mysqlc
 {
 /// @throws css::lang::DisposedException
