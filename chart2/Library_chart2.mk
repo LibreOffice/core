@@ -251,7 +251,6 @@ $(eval $(call gb_Library_add_exception_objects,chart2,\
     chart2/source/view/charttypes/BubbleChart \
     chart2/source/view/charttypes/CandleStickChart \
     chart2/source/view/charttypes/CategoryPositionHelper \
-    chart2/source/view/charttypes/HistogramChart \
     chart2/source/view/charttypes/NetChart \
     chart2/source/view/charttypes/PieChart \
     chart2/source/view/charttypes/Splines \
@@ -322,10 +321,6 @@ $(eval $(call gb_Library_add_exception_objects,chart2,\
     chart2/source/model/template/FilledNetChartType \
     chart2/source/model/template/FunnelChartType \
     chart2/source/model/template/FunnelChartTypeTemplate \
-    chart2/source/model/template/HistogramChartType \
-    chart2/source/model/template/HistogramChartTypeTemplate \
-    chart2/source/model/template/HistogramDataInterpreter \
-    chart2/source/model/template/HistogramCalculator \
     chart2/source/model/template/LineChartType \
     chart2/source/model/template/LineChartTypeTemplate \
     chart2/source/model/template/NetChartType \
@@ -363,7 +358,6 @@ $(eval $(call gb_Library_add_exception_objects,chart2,\
     chart2/source/tools/ExponentialRegressionCurveCalculator \
     chart2/source/tools/FillProperties \
     chart2/source/tools/FormattedStringHelper \
-    chart2/source/tools/HistogramDataSequence \
     chart2/source/tools/InternalData \
     chart2/source/tools/InternalDataProvider \
     chart2/source/tools/LabeledDataSequence \

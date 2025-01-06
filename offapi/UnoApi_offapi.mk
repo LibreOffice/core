@@ -625,7 +625,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/chart,\
 	Dim3DDiagram \
 	DonutDiagram \
 	FilledNetDiagram \
-	HistogramDiagram \
 	LineDiagram \
 	NetDiagram \
 	PieDiagram \

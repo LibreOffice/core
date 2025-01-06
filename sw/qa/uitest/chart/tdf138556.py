@@ -27,7 +27,7 @@ class tdf138556( UITestCase ):
             #TODO: test other subtypes
             with self.ui_test.execute_dialog_through_action( xChart, "COMMAND", mkPropertyValues({ "COMMAND" : "DiagramType" })) as xDialog:
                 xChartType = xDialog.getChild( "charttype" )
-                xStockType = xChartType.getChild( "10" )
+                xStockType = xChartType.getChild( "9" )
                 xStockType.executeAction( "SELECT", tuple())
 
             #Insert Data Series

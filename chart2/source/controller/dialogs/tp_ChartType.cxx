@@ -99,7 +99,6 @@ ChartTypeTabPage::ChartTypeTabPage(weld::Container* pPage, weld::DialogControlle
 
     m_aChartTypeDialogControllerList.push_back(std::make_unique<ColumnChartDialogController>());
     m_aChartTypeDialogControllerList.push_back(std::make_unique<BarChartDialogController>());
-    m_aChartTypeDialogControllerList.push_back(std::make_unique<HistogramChartDialogController>());
     m_aChartTypeDialogControllerList.push_back(std::make_unique<PieChartDialogController>());
     m_aChartTypeDialogControllerList.push_back(std::make_unique<OfPieChartDialogController>());
     m_aChartTypeDialogControllerList.push_back(std::make_unique<AreaChartDialogController>());
