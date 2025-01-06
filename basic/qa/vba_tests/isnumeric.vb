@@ -26,6 +26,14 @@ rem    TestUtil.Assert(IsNumeric(True), "IsNumeric(True)")
     TestUtil.Assert(IsNumeric("123"),   "IsNumeric(""123"")")
     TestUtil.Assert(IsNumeric("+123"),  "IsNumeric(""+123"")")
 
+    TestUtil.Assert(Not IsNumeric(""), "Not IsNumeric("""")")
+    TestUtil.Assert(Not IsNumeric(" "), "Not IsNumeric("" "")")
+    TestUtil.Assert(Not IsNumeric(" + "), "Not IsNumeric("" + "")")
+    TestUtil.Assert(Not IsNumeric(" - "), "Not IsNumeric("" - "")")
+
+    TestUtil.Assert(IsNumeric(" + 0 "), "IsNumeric("" + 0 "")")
+    TestUtil.Assert(IsNumeric(" - 0 "), "IsNumeric("" - 0 "")")
+
     Exit Sub
 errorHandler:
     TestUtil.ReportErrorHandler("verify_testIsNumeric", Err, Error$, Erl)

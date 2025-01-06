@@ -102,6 +102,13 @@ ErrCode ImpScan( std::u16string_view rWSrc, double& nVal, SbxDataType& rType,
         p++;
         bMinus = true;
     }
+#if HAVE_FEATURE_SCRIPTING
+    if (SbiRuntime::isVBAEnabled())
+    {
+        while (p != rWSrc.end() && (*p == ' ' || *p == '\t'))
+            p++;
+    }
+#endif
     const auto pNumberStart = p;
     if (p != rWSrc.end()
         && (rtl::isAsciiDigit(*p)

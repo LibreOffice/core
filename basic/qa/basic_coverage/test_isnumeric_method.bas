@@ -28,7 +28,7 @@ Sub verify_IsNumeric
     TestUtil.Assert(Not IsNumeric(" "), "Not IsNumeric("" "")")
     TestUtil.Assert(Not IsNumeric(" + "), "Not IsNumeric("" + "")")
     TestUtil.Assert(Not IsNumeric(" - "), "Not IsNumeric("" - "")")
-    ' Note: the two following tests should behave different in VBA (TODO/FIXME);
+    ' Note: the two following tests behave different in VBA;
     ' should it be unified maybe in non-VBA, too (a breaking change)?
     TestUtil.Assert(Not IsNumeric(" + 0 "), "Not IsNumeric("" + 0 "")")
     TestUtil.Assert(Not IsNumeric(" - 0 "), "Not IsNumeric("" - 0 "")")
