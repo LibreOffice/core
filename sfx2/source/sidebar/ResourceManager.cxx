@@ -518,7 +518,7 @@ void ResourceManager::ReadContextList (
             }
             else
             {
-                OSL_FAIL("expecting three or four values per ContextList entry, separated by comma");
+                SAL_WARN("sfx.sidebar", "expecting three or four values per ContextList entry, separated by comma, entries: " << aValues);
                 continue;
             }
         }
@@ -526,7 +526,7 @@ void ResourceManager::ReadContextList (
         const OUString sContextName(o3tl::trim(o3tl::getToken(sValue, 0, ',', nCharacterIndex)));
         if (nCharacterIndex < 0)
         {
-            OSL_FAIL("expecting three or four values per ContextList entry, separated by comma");
+            SAL_WARN("sfx.sidebar", "expecting three or four values per ContextList entry, separated by comma");
             continue;
         }
 
@@ -617,7 +617,7 @@ void ResourceManager::ReadContextList (
             bIsInitiallyVisible = false;
         else
         {
-            OSL_FAIL("unrecognized state");
+            SAL_WARN("sfx.sidebar", "unrecognized state");
             continue;
         }
 

@@ -20,7 +20,7 @@
 #include <utility>
 #include <xmloff/ProgressBarHelper.hxx>
 
-#include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 
@@ -99,7 +99,7 @@ void ProgressBarHelper::SetValue(sal_Int32 nTempValue)
 #ifdef DBG_UTIL
     else if (!m_bFailure)
     {
-        OSL_FAIL("tried to set a wrong value on the progressbar");
+        SAL_WARN("xmloff", "tried to set a wrong value (" << nTempValue << ") on the progressbar");
         m_bFailure = true;
     }
 #endif
