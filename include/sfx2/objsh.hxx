@@ -814,6 +814,8 @@ public:
     /// Gets the certificate that is already picked by the user but not yet used for signing.
     css::uno::Reference<css::security::XCertificate> GetSignPDFCertificate() const;
 
+    void ResetSignPDFCertificate();
+
     /// Gets grab-bagged password info to unprotect change tracking with verification
     css::uno::Sequence< css::beans::PropertyValue > GetDocumentProtectionFromGrabBag() const;
 
