@@ -168,7 +168,7 @@ void XMLSettingsExportHelper::CallTypeFunction(const uno::Any& rAny,
                 exportSymbolDescriptors(aProps, rName);
             }
             else {
-                OSL_FAIL("this type is not implemented now");
+                SAL_WARN("xmloff", "this type (" << aType.getTypeName() << ") is not implemented now");
             }
         }
         break;
