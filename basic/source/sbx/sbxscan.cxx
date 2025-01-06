@@ -71,7 +71,7 @@ static bool ImpStrChr( std::u16string_view str, sal_Unicode c ) { return str.fin
 // conversion error if data type is fixed and it doesn't fit
 
 ErrCode ImpScan( std::u16string_view rWSrc, double& nVal, SbxDataType& rType,
-                  sal_uInt16* pLen, bool bOnlyIntntl )
+                  sal_uInt16* pLen, bool* pHasNumber, bool bOnlyIntntl )
 {
     sal_Unicode cDecSep, cGrpSep, cDecSepAlt;
     if( bOnlyIntntl )
@@ -102,6 +102,7 @@ ErrCode ImpScan( std::u16string_view rWSrc, double& nVal, SbxDataType& rType,
         p++;
         bMinus = true;
     }
+    const auto pNumberStart = p;
     if (p != rWSrc.end()
         && (rtl::isAsciiDigit(*p)
             || ((*p == cDecSep || (cGrpSep && *p == cGrpSep) || (cDecSepAlt && *p == cDecSepAlt))
@@ -231,11 +232,14 @@ ErrCode ImpScan( std::u16string_view rWSrc, double& nVal, SbxDataType& rType,
         return ERRCODE_BASIC_CONVERSION;
     }
 #endif
+    const auto pNumberEnd = p;
     // tdf#146672 - skip whitespaces and tabs at the end of the scanned string
     while (p != rWSrc.end() && (*p == ' ' || *p == '\t'))
         p++;
     if( pLen )
         *pLen = static_cast<sal_uInt16>( p - pStart );
+    if (pHasNumber)
+        *pHasNumber = pNumberEnd > pNumberStart;
     if( bMinus )
         nVal = -nVal;
     rType = eScanType;
@@ -248,14 +252,14 @@ ErrCode ImpScan(std::u16string_view rSrc, double& nVal, SbxDataType& rType, sal_
     static const bool bEnv = std::getenv("LIBREOFFICE6FLOATINGPOINTMODE") != nullptr;
     bool bMode = bEnv || Basic::Compatibility::UseLibreOffice6FloatingPointConversion::get();
 
-    return ImpScan(rSrc, nVal, rType, pLen, !bMode);
+    return ImpScan(rSrc, nVal, rType, pLen, nullptr, !bMode);
 }
 
 // port for CDbl in the Basic
 ErrCode SbxValue::ScanNumIntnl( const OUString& rSrc, double& nVal, bool bSingle )
 {
     sal_uInt16 nLen = 0;
-    ErrCode nRetError = ImpScan( rSrc, nVal, o3tl::temporary(SbxDataType()), &nLen,
+    ErrCode nRetError = ImpScan( rSrc, nVal, o3tl::temporary(SbxDataType()), &nLen, nullptr,
         /*bOnlyIntntl*/true );
     // read completely?
     if( nRetError == ERRCODE_NONE && nLen != rSrc.getLength() )

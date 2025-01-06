@@ -8,13 +8,32 @@
 
 Option Explicit
 
-Function doUnitTest as String
+Function doUnitTest() As String
+    TestUtil.TestInit
+    verify_IsNumeric
+    doUnitTest = TestUtil.GetResult()
+End Function
+
+Sub verify_IsNumeric
+    On Error GoTo errorHandler
+
     dim aVariant as Variant
     aVariant = 3
-    ' ISNUMERIC
-    If ( IsNumeric( aVariant ) = False ) Then
-        doUnitTest = "FAIL"
-    Else
-        doUnitTest = "OK"
-    End If
-End Function
+    TestUtil.Assert(IsNumeric(aVariant), "IsNumeric(aVariant)")
+
+    TestUtil.Assert(IsNumeric(" 0 "), "IsNumeric("" 0 "")")
+    TestUtil.Assert(IsNumeric(" +0 "), "IsNumeric("" +0 "")")
+    TestUtil.Assert(IsNumeric(" -0 "), "IsNumeric("" -0 "")")
+    TestUtil.Assert(Not IsNumeric(""), "Not IsNumeric("""")")
+    TestUtil.Assert(Not IsNumeric(" "), "Not IsNumeric("" "")")
+    TestUtil.Assert(Not IsNumeric(" + "), "Not IsNumeric("" + "")")
+    TestUtil.Assert(Not IsNumeric(" - "), "Not IsNumeric("" - "")")
+    ' Note: the two following tests should behave different in VBA (TODO/FIXME);
+    ' should it be unified maybe in non-VBA, too (a breaking change)?
+    TestUtil.Assert(Not IsNumeric(" + 0 "), "Not IsNumeric("" + 0 "")")
+    TestUtil.Assert(Not IsNumeric(" - 0 "), "Not IsNumeric("" - 0 "")")
+
+    Exit Sub
+errorHandler:
+    TestUtil.ReportErrorHandler("verify_IsNumeric", Err, Error$, Erl)
+End Sub
