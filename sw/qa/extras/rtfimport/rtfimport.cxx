@@ -17,6 +17,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/BreakType.hpp>
@@ -1947,6 +1948,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf152839)
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xTable->getCellNames().getLength());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, test153192Tdf)
+{
+    createSwDoc("read-only-protect.rtf");
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xStorable->isReadonly());
+}
+
 // tests should only be added to rtfIMPORT *if* they fail round-tripping in rtfEXPORT
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
