@@ -30,11 +30,6 @@
 #include <vector>
 #include <stack>
 
-namespace com::sun::star {
-    namespace xml::sax { class XAttributeList; }
-    namespace beans { struct PropertyValue; }
-}
-
 enum ImportState
 {
     e_Root,

@@ -26,14 +26,11 @@
 #include <vector>
 #include "cgmtypes.hxx"
 
-class   Graphic;
 class   SvStream;
 class   CGMChart;
 class   CGMBitmap;
 class   CGMImpressOutAct;
 class   CGMElements;
-class   GDIMetaFile;
-class   VirtualDevice;
 
 class CGM
 {

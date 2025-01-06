@@ -43,7 +43,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::task;
 
 constexpr o3tl::Length geUnitsSrc(o3tl::Length::mm100);
 // PowerPoint: 576 dpi, WinWord: 1440 dpi, Excel: 1440 dpi

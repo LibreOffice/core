@@ -33,8 +33,6 @@
 class GDIMetaFile;
 class Size;
 
-namespace vcl { class PDFWriter; }
-
 class PDFExport
 {
 private:

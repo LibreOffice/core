@@ -30,7 +30,6 @@
 #include <com/sun/star/lang/XComponent.hpp>
 
 class ImpPDFTabGeneralPage;
-class ImpPDFTabViewerPage;
 class ImpPDFTabOpnFtrPage;
 class ImpPDFTabLinksPage;
 
@@ -52,7 +51,6 @@ public:
 
 
 class ImpPDFTabSecurityPage;
-class ImpPDFTabLinksPage;
 
 
 /// Class tabbed dialog

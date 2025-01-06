@@ -88,11 +88,7 @@ public:
 class EscherEx;
 namespace com::sun::star {
     namespace drawing {
-        class XDrawPage;
         class XShape;
-    }
-    namespace task {
-        class XStatusIndicator;
     }
 }
 class EscherExHostAppData;

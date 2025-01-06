@@ -181,11 +181,6 @@ struct SVGShapeDescriptor
 };
 
 
-class SVGAttributeWriter;
-class SVGExport;
-class GDIMetaFile;
-
-
 struct BulletListItemInfo
 {
     vcl::Font aFont;

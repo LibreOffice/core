@@ -52,8 +52,6 @@ struct DataNode
     }
 };
 
-class CGM;
-class CGMImpressOutAct;
 class CGMChart final
 {
     friend class CGM;

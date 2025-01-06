@@ -35,7 +35,6 @@
 #include <array>
 #include <memory>
 
-class CGM;
 class CGMBitmapDescriptor;
 
 class CGMImpressOutAct
