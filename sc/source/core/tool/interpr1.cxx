@@ -10010,7 +10010,9 @@ void ScInterpreter::ScIndex()
                     SetError(FormulaError::IllegalArgument);
                 sal_uInt16 nOldSp = sp;
                 ScMatrixRef pMat = GetMatrix();
-                if (pMat)
+                if (!pMat)
+                    PushError(FormulaError::NoRef);
+                else
                 {
                     SCSIZE nC, nR;
                     pMat->GetDimensions(nC, nR);
