@@ -17,6 +17,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/BreakType.hpp>
@@ -1957,6 +1958,13 @@ CPPUNIT_TEST_FIXTURE(Test, test162198Tdf)
     sal_Int32 nRightDistance = getProperty<sal_Int32>(xCellPropSet, u"LeftBorderDistance"_ustr);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("left cell spacing to contents", sal_Int32(9), nLeftDistance);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("right cell spacing to contents", sal_Int32(9), nRightDistance);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, test153192Tdf)
+{
+    createSwDoc("read-only-protect.rtf");
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xStorable->isReadonly());
 }
 
 // tests should only be added to rtfIMPORT *if* they fail round-tripping in rtfEXPORT
