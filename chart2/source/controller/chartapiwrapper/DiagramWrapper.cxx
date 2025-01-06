@@ -525,11 +525,8 @@ OUString lcl_getDiagramType( std::u16string_view rTemplateServiceName )
         // "PercentStackedLine" "LineSymbol" "StackedLineSymbol"
         // "PercentStackedLineSymbol" "ThreeDLine" "StackedThreeDLine"
         // "PercentStackedThreeDLine" "ThreeDLineDeep"
-        if( aName.find(u"Line") != std::u16string_view::npos || aName.find( u"Symbol" ) != std::u16string_view::npos )
+        if( aName.find( u"Line" ) != std::u16string_view::npos || aName.find( u"Symbol" ) != std::u16string_view::npos )
             return u"com.sun.star.chart.LineDiagram"_ustr;
-
-        if (aName.find(u"Histogram") != std::u16string_view::npos)
-            return u"com.sun.star.chart.HistogramDiagram"_ustr;
 
         OSL_FAIL( "unknown template" );
     }
@@ -545,7 +542,6 @@ const tMakeStringStringMap& lcl_getChartTypeNameMap()
         {"com.sun.star.chart2.LineChartType", "com.sun.star.chart.LineDiagram"},
         {"com.sun.star.chart2.AreaChartType", "com.sun.star.chart.AreaDiagram"},
         {"com.sun.star.chart2.ColumnChartType", "com.sun.star.chart.BarDiagram"},
-        {"com.sun.star.chart2.HistogramChartType", "com.sun.star.chart.HistogramDiagram"},
         {"com.sun.star.chart2.PieChartType", "com.sun.star.chart.PieDiagram"},
         {"com.sun.star.chart2.DonutChartType", "com.sun.star.chart.DonutDiagram"},
         {"com.sun.star.chart2.ScatterChartType", "com.sun.star.chart.XYDiagram"},

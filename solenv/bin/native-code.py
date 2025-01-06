@@ -52,7 +52,6 @@ core_constructor_list = [
     "com_sun_star_comp_chart_CandleStickChartType_get_implementation",
     "com_sun_star_comp_chart_ChartTypeManager_get_implementation",
     "com_sun_star_comp_chart_ColumnChartType_get_implementation",
-    "com_sun_star_comp_chart_HistogramChartType_get_implementation",
     "com_sun_star_comp_chart_DataSeries_get_implementation",
     "com_sun_star_comp_chart_DataSource_get_implementation",
     "com_sun_star_comp_chart_FilledNetChartType_get_implementation",

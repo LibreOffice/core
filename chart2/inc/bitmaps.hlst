@@ -11,7 +11,6 @@
 
 inline constexpr OUString BMP_TYPE_COLUMN = u"chart2/res/typecolumn_16.png"_ustr;
 inline constexpr OUString BMP_TYPE_BAR = u"chart2/res/typebar_16.png"_ustr;
-inline constexpr OUString BMP_TYPE_HISTOGRAM = u"chart2/res/typehistogram_16.png"_ustr;
 inline constexpr OUString BMP_TYPE_PIE = u"chart2/res/typepie_16.png"_ustr;
 inline constexpr OUString BMP_TYPE_OFPIE = u"chart2/res/typeofpie_16.png"_ustr;
 inline constexpr OUString BMP_TYPE_LINE = u"chart2/res/typepointline_16.png"_ustr;
@@ -53,7 +52,6 @@ inline constexpr OUString BMP_COLUMNS_3D = u"chart2/res/columns3ddeep_52x60.png"
 inline constexpr OUString BMP_COLUMNS_3D_1 = u"chart2/res/columns3d_52x60.png"_ustr;
 inline constexpr OUString BMP_COLUMNS_3D_2 = u"chart2/res/columnstack3d_52x60.png"_ustr;
 inline constexpr OUString BMP_COLUMNS_3D_3 = u"chart2/res/columnpercent3d_52x60.png"_ustr;
-inline constexpr OUString BMP_HISTOGRAM = u"chart2/res/histogram_52x60.png"_ustr;
 inline constexpr OUString BMP_KEGELQ_3D_1 = u"chart2/res/conehori_52x60.png"_ustr;
 inline constexpr OUString BMP_KEGELQ_3D_2 = u"chart2/res/conehoristack_52x60.png"_ustr;
 inline constexpr OUString BMP_KEGELQ_3D_3 = u"chart2/res/conehoripercent_52x60.png"_ustr;

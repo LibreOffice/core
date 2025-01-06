@@ -158,8 +158,6 @@
 
 #define STR_TYPE_COLUMN                             NC_("STR_TYPE_COLUMN", "Column")
 #define STR_TYPE_BAR                                NC_("STR_TYPE_BAR", "Bar")
-#define STR_TYPE_HISTOGRAM                          NC_("STR_TYPE_HISTOGRAM", "Histogram")
-#define STR_HISTOGRAM                               NC_("STR_HISTOGRAM", "Histogram Chart")
 #define STR_TYPE_AREA                               NC_("STR_TYPE_AREA", "Area")
 #define STR_TYPE_PIE                                NC_("STR_TYPE_PIE", "Pie")
 #define STR_TYPE_OFPIE                              NC_("STR_TYPE_PIE", "Of-Pie")

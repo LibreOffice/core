@@ -67,7 +67,6 @@ const char SERVICE_CHART2_PIE[]       = "com.sun.star.chart2.PieChartType";
 const char SERVICE_CHART2_SCATTER[]   = "com.sun.star.chart2.ScatterChartType";
 const char SERVICE_CHART2_BUBBLE[]    = "com.sun.star.chart2.BubbleChartType";
 const char SERVICE_CHART2_SURFACE[]   = "com.sun.star.chart2.ColumnChartType";    // Todo
-const char SERVICE_CHART2_HISTO[]     = "com.sun.star.chart2.HistogramChartType";
 
 namespace csscd = css::chart::DataLabelPlacement;
 
@@ -76,7 +75,6 @@ const TypeGroupInfo spTypeInfos[] =
     // type-id          type-category         service                   varied-point-color   default label pos     polar  area2d 1stvis xcateg swap   stack  picopt
     { TYPEID_BAR,       TYPECATEGORY_BAR,     SERVICE_CHART2_COLUMN,    VARPOINTMODE_SINGLE, csscd::OUTSIDE,       false, true,  false, true,  false, true,  true  },
     { TYPEID_HORBAR,    TYPECATEGORY_BAR,     SERVICE_CHART2_COLUMN,    VARPOINTMODE_SINGLE, csscd::OUTSIDE,       false, true,  false, true,  true,  true,  true  },
-    { TYPEID_HISTO,     TYPECATEGORY_HISTO,   SERVICE_CHART2_HISTO,     VARPOINTMODE_SINGLE, csscd::OUTSIDE,       false, true,  false, true,  true,  true,  true  },
     { TYPEID_LINE,      TYPECATEGORY_LINE,    SERVICE_CHART2_LINE,      VARPOINTMODE_SINGLE, csscd::RIGHT,         false, false, false, true,  false, true,  false },
     { TYPEID_AREA,      TYPECATEGORY_LINE,    SERVICE_CHART2_AREA,      VARPOINTMODE_NONE,   csscd::CENTER,        false, true,  false, true,  false, true,  false },
     { TYPEID_STOCK,     TYPECATEGORY_LINE,    SERVICE_CHART2_CANDLE,    VARPOINTMODE_NONE,   csscd::RIGHT,         false, false, false, true,  false, true,  false },
