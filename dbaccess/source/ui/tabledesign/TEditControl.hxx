@@ -24,7 +24,6 @@
 #include <TableRow.hxx>
 #include <TypeInfo.hxx>
 
-class Edit;
 class SfxUndoManager;
 namespace dbaui
 {

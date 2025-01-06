@@ -66,7 +66,6 @@ namespace dbaccess
 
         /** a class which automatically resets m_eDoingCurrently in its destructor
         */
-        class OAutoActionReset; // just for the following friend declaration
         friend class OAutoActionReset;
         class OAutoActionReset
         {

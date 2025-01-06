@@ -36,12 +36,6 @@
 
 class SvNumberFormatter;
 
-namespace com::sun::star {
-    namespace lang {
-        class XMultiServiceFactory;
-    }
-}
-
 namespace dbaui
 {
     struct SbaURLCompare
@@ -49,7 +43,6 @@ namespace dbaui
         bool operator() (const css::util::URL& x, const css::util::URL& y) const { return x.Complete == y.Complete; }
     };
 
-    class SbaXStatusMultiplexer;
     class SbaXGridControl
                 :public FmXGridControl
                 ,public css::frame::XDispatch

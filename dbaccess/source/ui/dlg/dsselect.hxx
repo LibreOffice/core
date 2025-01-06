@@ -25,7 +25,6 @@
 #include <memory>
 #include <set>
 
-class SfxItemSet;
 namespace dbaui
 {
 // ODatasourceSelector

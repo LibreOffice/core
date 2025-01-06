@@ -23,16 +23,6 @@
 #include <vcl/weld.hxx>
 #include <memory>
 
-// some forwards
-namespace com::sun::star {
-    namespace sdb {
-        class SQLContext;
-    }
-    namespace sdbc {
-        class SQLException;
-    }
-}
-
 namespace dbaui
 {
 

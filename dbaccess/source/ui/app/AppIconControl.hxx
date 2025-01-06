@@ -28,7 +28,6 @@ class MnemonicGenerator;
 namespace dbaui
 {
     class IControlActionListener;
-    class IconControl;
     class OApplicationIconControlDropTarget;
 
     class OApplicationIconControl final : public ThumbnailView

@@ -47,7 +47,6 @@ namespace com::sun::star::container { class XNameContainer; }
 
 namespace dbaui
 {
-    struct DBTreeEditedEntry;
     struct DBTreeListUserData;
     class ImageProvider;
 

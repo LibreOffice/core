@@ -32,8 +32,6 @@
 #include <map>
 #include <vector>
 
-struct AcceptDropEvent;
-struct ExecuteDropEvent;
 class SfxUndoAction;
 
 namespace dbaui
@@ -42,7 +40,6 @@ namespace dbaui
     class OTableWindow;
     struct OJoinExchangeData;
     class OJoinDesignView;
-    class OTableWindowData;
     class OJoinDesignViewAccess;
 
     // this class contains only the scrollbars to avoid that

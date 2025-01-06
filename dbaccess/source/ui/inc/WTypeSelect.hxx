@@ -27,7 +27,6 @@ class SvStream;
 namespace dbaui
 {
     class OWizTypeSelect;
-    class OTableDesignHelpBar;
     // OWizTypeSelectControl
     class OWizTypeSelectControl final : public OFieldDescControl
     {

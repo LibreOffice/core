@@ -28,7 +28,6 @@
 #include <com/sun/star/sdbcx/XAuthorizable.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-class Edit;
 namespace dbaui
 {
 

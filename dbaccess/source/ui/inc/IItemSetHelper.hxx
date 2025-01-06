@@ -28,9 +28,6 @@ namespace com::sun::star {
         class XConnection;
         class XDriver;
     }
-    namespace lang {
-        class XMultiServiceFactory;
-    }
 }
 
 class SfxItemSet;

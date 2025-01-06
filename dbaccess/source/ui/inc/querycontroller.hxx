@@ -41,8 +41,6 @@ namespace comphelper
 
 namespace dbaui
 {
-    class OQueryContainerWindow;
-
     typedef ::comphelper::OPropertyContainer                            OQueryController_PBase;
     typedef ::comphelper::OPropertyArrayUsageHelper< OQueryController > OQueryController_PABase;
     class OQueryController  :public OJoinController

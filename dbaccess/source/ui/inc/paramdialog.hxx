@@ -30,11 +30,6 @@
 #include <svx/ParseContext.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
-namespace connectivity
-{
-    class OSQLParseNode;
-}
-
 enum class VisitFlags {
     NONE        = 0x00,
     Visited     = 0x01,

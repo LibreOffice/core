@@ -28,11 +28,6 @@
 
 #include <connectivity/sdbcx/VCollection.hxx>
 
-namespace dbtools
-{
-    class WarningsContainer;
-}
-
 namespace dbaccess
 {
     class IRefreshListener;

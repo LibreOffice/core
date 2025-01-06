@@ -31,11 +31,6 @@
 
 #include "FilteredContainer.hxx"
 
-namespace dbtools
-{
-    class WarningsContainer;
-}
-
 namespace dbaccess
 {
     // OViewContainer

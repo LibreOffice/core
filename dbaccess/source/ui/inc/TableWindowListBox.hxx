@@ -22,8 +22,6 @@
 #include <vcl/InterimItemWindow.hxx>
 #include "callbacks.hxx"
 
-struct AcceptDropEvent;
-struct ExecuteDropEvent;
 namespace dbaui
 {
     class OTableWindowListBox;

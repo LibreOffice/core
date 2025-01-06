@@ -80,7 +80,6 @@ namespace sdbtools
                 getConnection() const { return m_xConnection; }
 
     public:
-    struct GuardAccess;
     friend struct GuardAccess;
         /** helper for granting exclusive access to various other methods
         */

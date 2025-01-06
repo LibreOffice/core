@@ -45,11 +45,6 @@
 struct FmFoundRecordInformation;
 struct FmSearchContext;
 
-namespace dbtools
-{
-    class SQLExceptionInfo;
-}
-
 namespace dbaui
 {
 

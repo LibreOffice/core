@@ -46,7 +46,6 @@ class SvStream;
 namespace dbaui
 {
     // ODatabaseImportExport base class for import/export
-    class ODatabaseExport;
     class ODatabaseImportExport : public ::cppu::WeakImplHelper< css::lang::XEventListener>
     {
     protected:

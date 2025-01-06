@@ -29,8 +29,6 @@
 //   tables                     holds the nameaccess for the tables
 //     table                    holds the table
 
-namespace com::sun::star::lang { class XMultiServiceFactory; }
-
 namespace dbaui
 {
     struct DBTreeListUserData

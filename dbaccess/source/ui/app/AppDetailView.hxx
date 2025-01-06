@@ -34,7 +34,6 @@ namespace dbaui
     class OAppBorderWindow;
     class OApplicationDetailView;
     class OAppDetailPageHelper;
-    class OTasksWindow;
     class TreeListBox;
 
     struct TaskEntry

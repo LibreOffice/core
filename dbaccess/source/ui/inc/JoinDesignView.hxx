@@ -21,8 +21,6 @@
 
 #include <dbaccess/dataview.hxx>
 
-class Splitter;
-
 namespace dbaui
 {
     class OJoinController;

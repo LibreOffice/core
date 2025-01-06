@@ -48,11 +48,6 @@
 
 #include <span>
 
-namespace comphelper
-{
-    class NamedValueCollection;
-}
-
 namespace dbaccess
 {
 class OCommandContainer;

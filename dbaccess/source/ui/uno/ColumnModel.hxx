@@ -40,8 +40,6 @@ typedef ::cppu::WeakAggComponentImplHelper4 <   css::awt::XControlModel
                                         ,   css::io::XPersistObject
                                         >   OColumnControlModel_BASE;
 
-class OColumnControlModel;
-
 class OColumnControlModel :  public ::comphelper::OMutexAndBroadcastHelper
                             ,public ::comphelper::OPropertyContainer
                             ,public ::comphelper::OPropertyArrayUsageHelper< OColumnControlModel >

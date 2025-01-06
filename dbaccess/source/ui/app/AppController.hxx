@@ -41,7 +41,6 @@
 
 #include <memory>
 
-class TransferableHelper;
 class TransferableClipboardListener;
 
 namespace com::sun::star {
@@ -67,9 +66,7 @@ namespace weld
 namespace dbaui
 {
     class ODataClipboard;
-    class TreeListBox;
     class SubComponentManager;
-    class OApplicationController;
     class OApplicationView;
     class OLinkedDocumentsAccess;
     class SelectionNotifier;

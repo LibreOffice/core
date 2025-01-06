@@ -24,7 +24,6 @@
 
 namespace dbaui
 {
-    class OQueryTableConnection;
     class OQueryTableView;
     class OQueryTabConnUndoAction : public OQueryDesignUndoAction
     {

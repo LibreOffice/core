@@ -35,14 +35,12 @@
 
 namespace com::sun::star::awt   { class XWindow; }
 namespace com::sun::star::frame { class XFrame2; }
-namespace com::sun::star::io    { class XPersist; }
 
 namespace dbaui
 {
     class OAppBorderWindow;
     class ODocumentInfoPreview;
     class DBTreeViewBase;
-    class TreeListBox;
 
     class OPreviewWindow final : public weld::CustomWidgetController
     {

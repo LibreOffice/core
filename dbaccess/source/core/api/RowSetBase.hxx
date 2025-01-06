@@ -41,11 +41,6 @@
 
 #include <functional>
 
-namespace com::sun::star {
-    namespace sdb { struct RowChangeEvent; }
-    namespace lang { struct Locale; }
-}
-
 namespace dbaccess
 {
     class OEmptyCollection;
@@ -62,7 +57,6 @@ namespace dbaccess
 
     class ORowSetCache;
     class ORowSetDataColumns;
-    class ORowSetCacheIterator;
     class ORowSetDataColumn;
     class ORowSetBase : public ORowSetBase_BASE,
                         public ::comphelper::OPropertyStateContainer,

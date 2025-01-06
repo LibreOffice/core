@@ -43,7 +43,6 @@ public:
 typedef std::deque< OTableIndex >  TableIndexList;
 
 // OTableInfo
-class ODbaseIndexDialog;
 /** holds the INF file of a table
 */
 class OTableInfo

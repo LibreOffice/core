@@ -26,7 +26,6 @@
 #include "dbtreelistbox.hxx"
 
 namespace com::sun::star::awt {
-    class XControl;
     class XControlContainer;
     class XControlModel;
 }

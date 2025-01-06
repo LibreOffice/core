@@ -24,18 +24,6 @@
 #include <vcl/wizardmachine.hxx>
 #include <memory>
 
-namespace com::sun::star {
-    namespace beans {
-        class XPropertySet;
-    }
-    namespace sdbc {
-        class XConnection;
-    }
-    namespace lang {
-        class XMultiServiceFactory;
-    }
-}
-
 using vcl::WizardTypes::WizardState;
 
 namespace dbaccess

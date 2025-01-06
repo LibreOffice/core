@@ -39,15 +39,6 @@
 #include <basic/basicmanagerrepository.hxx>
 #include <cppuhelper/compbase.hxx>
 
-// needed for registration
-namespace com::sun::star {
-    namespace lang
-    {
-        class XMultiServiceFactory;
-        class IllegalArgumentException;
-    }
-}
-
 namespace dbaccess
 {
 class DatabaseDocumentLoader;

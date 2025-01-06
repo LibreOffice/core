@@ -27,8 +27,6 @@ namespace dbaui
 {
     // OQueryTabWinUndoAct - undo base class for all which is concerned with insert/remove TabWins
 
-    class OQueryTableWindow;
-    class OTableConnection;
     class OQueryTableView;
     class OQueryTabWinUndoAct : public OQueryDesignUndoAction
     {

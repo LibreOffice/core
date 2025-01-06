@@ -28,8 +28,6 @@
 #include <IClipBoardTest.hxx>
 #include <AppElementType.hxx>
 
-namespace com::sun::star::beans    { class XPropertySet; }
-
 class MnemonicGenerator;
 
 namespace dbaui

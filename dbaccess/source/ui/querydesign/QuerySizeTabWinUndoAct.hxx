@@ -26,7 +26,6 @@ namespace dbaui
 {
 
     // OQuerySizeTabWinUndoAct - undo class to change size of TabWins
-    class OTableWindow;
     class OJoinSizeTabWinUndoAct final : public OQueryDesignUndoAction
     {
         Point           m_ptNextPosition;

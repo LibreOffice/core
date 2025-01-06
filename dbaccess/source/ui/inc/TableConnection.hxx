@@ -28,7 +28,6 @@ namespace tools { class Rectangle; }
 
 namespace dbaui
 {
-    class OTableConnectionData;
     class OTableWindow;
     class OJoinTableView;
     class OConnectionLine;

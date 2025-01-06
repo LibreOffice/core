@@ -25,7 +25,6 @@
 
 namespace dbaui
 {
-    class OJoinTableView;
     /** the class OJoinDesignViewAccess represents the accessible object for join views
         like the QueryDesign and the RelationDesign
     */

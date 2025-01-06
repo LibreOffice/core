@@ -44,11 +44,6 @@ namespace com::sun::star {
     {
         class XEventListener;
     }
-    namespace awt
-    {
-        struct FontDescriptor;
-        class XWindow;
-    }
     namespace sdbc
     {
         class XDatabaseMetaData;
@@ -56,7 +51,6 @@ namespace com::sun::star {
     }
     namespace util
     {
-        struct URL;
         class XNumberFormatter;
     }
     namespace ucb { class XContent; }
@@ -73,8 +67,6 @@ namespace weld {
     class Widget;
     class Window;
 }
-class ToolBox;
-namespace vcl { class Font; }
 class SvNumberFormatter;
 class SfxFilter;
 

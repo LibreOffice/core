@@ -48,7 +48,6 @@ namespace dbaui
 {
     class OJoinDesignView;
     class OJoinTableView;
-    class OTableWindowAccess;
 
     class OTableWindow : public ::cppu::BaseMutex
                         ,public ::comphelper::OContainerListener

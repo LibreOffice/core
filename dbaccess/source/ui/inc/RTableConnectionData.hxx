@@ -28,7 +28,6 @@ namespace dbaui
         Undefined, OneMany, ManyOne, OneOne
     };
 
-    class OConnectionLineData;
     class ORelationTableConnectionData final : public OTableConnectionData
     {
         friend bool operator==(const ORelationTableConnectionData& lhs, const ORelationTableConnectionData& rhs);

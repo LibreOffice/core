@@ -29,7 +29,6 @@ using css::accessibility::AccessibleRelationType;
 
 namespace dbaui
 {
-    class OTableConnection;
     /** the class OConnectionLineAccess represents the accessible object for the connection between two table windows
         like they are used in the QueryDesign and the RelationDesign
     */

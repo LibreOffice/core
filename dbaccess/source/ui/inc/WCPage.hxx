@@ -22,8 +22,6 @@
 
 namespace dbaui
 {
-    class OWizColumnSelect;
-    class OWizNormalExtend;
     class OCopyTable final : public OWizardPage
     {
         bool               m_bPKeyAllowed;

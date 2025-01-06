@@ -34,8 +34,6 @@ namespace comphelper
     class NamedValueCollection;
 }
 
-namespace vcl { class Window; }
-
 namespace dbaui
 {
     class OTableFieldDesc : public ::salhelper::SimpleReferenceObject

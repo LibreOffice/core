@@ -29,7 +29,6 @@ using css::accessibility::AccessibleRelationType;
 
 namespace dbaui
 {
-    class OTableWindow;
     /** the class OTableWindowAccess represents the accessible object for table windows
         like they are used in the QueryDesign and the RelationDesign
     */

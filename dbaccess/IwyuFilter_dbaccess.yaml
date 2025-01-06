@@ -56,6 +56,12 @@ excludelist:
     dbaccess/source/filter/xml/xmlExport.cxx:
     # Needed for template
     - com/sun/star/frame/XModel.hpp
+    dbaccess/source/ui/inc/dsitems.hxx:
+    # Needed in fwdecl mode
+    - class OptionalBoolItem
+    - class SfxBoolItem
+    - class SfxInt32Item
+    - class SfxStringItem
     dbaccess/source/ui/app/AppDetailPageHelper.cxx:
     # Actually used
     - com/sun/star/sdbc/XConnection.hpp
