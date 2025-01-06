@@ -693,8 +693,9 @@ bool SbxValue::ImpIsNumeric( bool bOnlyIntntl ) const
             double n;
             SbxDataType t2;
             sal_uInt16 nLen = 0;
-            if( ImpScan( s, n, t2, &nLen, bOnlyIntntl ) == ERRCODE_NONE )
-                return nLen == s.getLength();
+            bool bHasNumber = false;
+            if( ImpScan( s, n, t2, &nLen, &bHasNumber, bOnlyIntntl ) == ERRCODE_NONE )
+                return nLen == s.getLength() && bHasNumber;
         }
         return false;
     }

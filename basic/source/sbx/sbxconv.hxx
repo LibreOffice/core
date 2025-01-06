@@ -64,7 +64,7 @@ inline auto ImpDoubleToSalInt64(double d)
 extern void ImpCvtNum( double nNum, short nPrec, OUString& rRes, bool bCoreString=false );
 extern ErrCode ImpScan
     ( std::u16string_view rSrc, double& nVal, SbxDataType& rType, sal_uInt16* pLen,
-      bool bOnlyIntntl );
+      bool* pHasNumber, bool bOnlyIntntl );
 // A version that uses defaults / compatibility settings for bOnlyIntntl
 extern ErrCode ImpScan
     ( std::u16string_view rSrc, double& nVal, SbxDataType& rType, sal_uInt16* pLen );
