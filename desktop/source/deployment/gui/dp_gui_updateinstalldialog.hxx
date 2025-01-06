@@ -37,7 +37,6 @@ namespace com::sun::star::uno {
 namespace dp_gui {
 
     struct UpdateData;
-    class UpdateCommandEnv;
 
 
 /**

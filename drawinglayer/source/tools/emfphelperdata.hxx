@@ -27,7 +27,6 @@
 #include <map>
 
 // predefines
-class SvStream;
 namespace basegfx { class B2DPolyPolygon; }
 
 namespace emfplushelper

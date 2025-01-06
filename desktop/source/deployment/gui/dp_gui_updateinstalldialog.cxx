@@ -58,6 +58,7 @@
 #include <vector>
 
 using dp_misc::StrTitle;
+namespace dp_gui { class UpdateCommandEnv; };
 
 namespace dp_gui {
 

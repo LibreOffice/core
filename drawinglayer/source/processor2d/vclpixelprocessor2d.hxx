@@ -29,13 +29,10 @@ namespace drawinglayer::primitive2d
 class PolyPolygonColorPrimitive2D;
 class PolygonHairlinePrimitive2D;
 class PolygonStrokePrimitive2D;
-class WrongSpellPrimitive2D;
-class TextSimplePortionPrimitive;
 class BitmapPrimitive2D;
 class PolyPolygonGradientPrimitive2D;
 class UnifiedTransparencePrimitive2D;
 class ControlPrimitive2D;
-class PolygonStrokePrimitive2D;
 class FillHatchPrimitive2D;
 class BackgroundColorPrimitive2D;
 class BorderLinePrimitive2D;

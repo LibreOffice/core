@@ -25,11 +25,6 @@
 #include "dp_misc_api.hxx"
 #include <ucbhelper/content.hxx>
 
-namespace ucbhelper
-{
-class Content;
-}
-
 namespace dp_misc {
 
 struct DESKTOP_DEPLOYMENTMISC_DLLPUBLIC StrTitle

@@ -33,8 +33,6 @@
 
 namespace com::sun::star::uno { class XComponentContext; }
 
-class INetURLObject;
-
 
 namespace migration
 {

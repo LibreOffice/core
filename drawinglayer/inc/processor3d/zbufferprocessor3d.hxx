@@ -30,7 +30,6 @@ namespace basegfx {
 namespace drawinglayer::attribute {
         class SdrSceneAttribute;
         class SdrLightingAttribute;
-        class MaterialAttribute3D;
 }
 
 

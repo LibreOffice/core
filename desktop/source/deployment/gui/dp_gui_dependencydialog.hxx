@@ -25,11 +25,6 @@
 
 #include <vector>
 
-namespace vcl
-{
-class Window;
-}
-
 namespace dp_gui
 {
 class DependencyDialog : public weld::GenericDialogController

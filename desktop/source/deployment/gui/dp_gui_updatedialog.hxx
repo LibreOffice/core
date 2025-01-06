@@ -33,11 +33,6 @@
 
 /// @HTML
 
-class Image;
-class KeyEvent;
-class MouseEvent;
-class ResId;
-
 namespace com::sun::star {
     namespace deployment { class XExtensionManager;
                            class XPackage; }

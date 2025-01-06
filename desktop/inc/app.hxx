@@ -42,7 +42,6 @@ namespace desktop
  --------------------------------------------------------------------*/
 class CommandLineArgs;
 class Lockfile;
-struct ConvertData;
 class Desktop final : public Application
 {
     int doShutdown();
