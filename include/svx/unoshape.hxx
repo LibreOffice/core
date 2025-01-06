@@ -847,7 +847,7 @@ private:
     bool getPropertyStateImpl(const SfxItemPropertyMapEntry* pProperty,
                               css::beans::PropertyState& rState) override;
 
-    OUString referer_;
+    OUString m_referer;
 };
 
 #endif

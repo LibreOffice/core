@@ -789,7 +789,7 @@ bool SvxFrameShape::getPropertyValueImpl(const OUString& rName, const SfxItemPro
 
 SvxMediaShape::SvxMediaShape(SdrObject* pObj, OUString referer)
 :   SvxShape( pObj, getSvxMapProvider().GetMap(SVXMAP_MEDIA), getSvxMapProvider().GetPropertySet(SVXMAP_MEDIA, SdrObject::GetGlobalDrawObjectItemPool()) ),
-    referer_(std::move(referer))
+    m_referer(std::move(referer))
 {
     SetShapeType( u"com.sun.star.drawing.MediaShape"_ustr );
 }
@@ -835,7 +835,7 @@ bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPr
                         aItem.setFallbackURL(aFallbackURL);
                     }
                 }
-                aItem.setURL( aURL, u""_ustr, referer_ );
+                aItem.setURL( aURL, u""_ustr, m_referer );
             }
         }
 #endif
