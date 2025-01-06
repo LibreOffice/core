@@ -127,35 +127,83 @@ namespace svgio::svgreader
         void SvgSymbolNode::decomposeSvgNode(drawinglayer::primitive2d::Primitive2DContainer& rTarget, bool bReferenced) const
         {
             // decompose children
-            SvgNode::decomposeSvgNode(rTarget, bReferenced);
+            drawinglayer::primitive2d::Primitive2DContainer aContent;
+            SvgNode::decomposeSvgNode(aContent, bReferenced);
 
-            if (rTarget.empty())
+            // no geometry provided, done
+            if (aContent.empty())
                 return;
 
-            if(getViewBox())
+            // if no ViewBox append aContent without embedding
+            if(nullptr == getViewBox())
             {
-                // create mapping
-                const SvgAspectRatio& rRatio = getSvgAspectRatio();
-
-                const double fX(maX.solve(*this, NumberType::xcoordinate));
-                const double fY(maY.solve(*this, NumberType::ycoordinate));
-                const double fWidth(maWidth.solve(*this, NumberType::xcoordinate));
-                const double fHeight(maHeight.solve(*this, NumberType::ycoordinate));
-                const basegfx::B2DRange aRange(fX, fY, fX + fWidth, fY + fHeight);
-
-                // let mapping be created from SvgAspectRatio
-                const basegfx::B2DHomMatrix aEmbeddingTransform(
-                    rRatio.createMapping(aRange, *getViewBox()));
-
-                // prepare embedding in transformation
-                // create embedding group element with transformation
-                const drawinglayer::primitive2d::Primitive2DReference xRef(
-                    new drawinglayer::primitive2d::TransformPrimitive2D(
-                        aEmbeddingTransform,
-                        drawinglayer::primitive2d::Primitive2DContainer(rTarget)));
-
-                rTarget.push_back(xRef);
+                rTarget.append(aContent);
+                return;
             }
+
+            // prepare range of imported geometry
+            // tdf#164434 CAUTION: There *are* svg files which do not define
+            // all needed data, e.g. x/y/w/h might be missing in any combination.
+            // As fallback, use size of imported geometry. Do this separate for
+            // position and size to do the best if only one value pair is provided
+            basegfx::B2DRange aImportedRange;
+            basegfx::B2DPoint aPosition;
+            basegfx::B2DVector aSize;
+
+            // evaluate position
+            if (maX.isSet() && maY.isSet())
+            {
+                // use values from imported svg if both provided
+                aPosition = basegfx::B2DPoint(
+                    maX.solve(*this, NumberType::xcoordinate),
+                    maY.solve(*this, NumberType::ycoordinate));
+            }
+            else
+            {
+                // fallback to imported geometry
+                drawinglayer::geometry::ViewInformation2D aViewInfo;
+                aImportedRange = aContent.getB2DRange(aViewInfo);
+                aPosition = aImportedRange.getMinimum();
+            }
+
+            // evaluate size
+            if (maWidth.isSet() && maHeight.isSet())
+            {
+                // use values from imported svg if both provided
+                aSize = basegfx::B2DVector(
+                    maWidth.solve(*this, NumberType::xcoordinate),
+                    maHeight.solve(*this, NumberType::ycoordinate));
+            }
+            else
+            {
+                // fallback to imported geometry
+                if (aImportedRange.isEmpty())
+                {
+                    drawinglayer::geometry::ViewInformation2D aViewInfo;
+                    aImportedRange = aContent.getB2DRange(aViewInfo);
+                }
+
+                aSize = aImportedRange.getRange();
+            }
+
+            // tdf#164434 no size, no geometry, done
+            if (0.0 == aSize.getX() || 0.0 == aSize.getY())
+                return;
+
+            // create mapping using SvgAspectRatio
+            const SvgAspectRatio& rRatio = getSvgAspectRatio();
+            const basegfx::B2DHomMatrix aEmbeddingTransform(
+                rRatio.createMapping(basegfx::B2DRange(aPosition, aPosition + aSize), *getViewBox()));
+
+            // prepare embedding in transformation
+            // create embedding group element with transformation
+            const drawinglayer::primitive2d::Primitive2DReference xRef(
+                new drawinglayer::primitive2d::TransformPrimitive2D(
+                    aEmbeddingTransform,
+                    drawinglayer::primitive2d::Primitive2DContainer(aContent)));
+
+            // add embedded geometry to result
+            rTarget.push_back(xRef);
         }
 
 } // end of namespace svgio::svgreader
