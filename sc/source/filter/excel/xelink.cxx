@@ -1266,7 +1266,7 @@ void XclExpCrn::SaveXml( XclExpXmlStream& rStrm )
         {
             pFS->startElement(XML_cell, XML_r, XclXmlUtils::ToOString(rStrm.GetRoot().GetDoc(), aAdr), XML_t, "str");
             pFS->startElement(XML_v);
-            pFS->write( rValue.get< OUString >() );
+            pFS->writeEscaped( rValue.get< OUString >() );
         }
         else if( rValue.has< bool >() )
         {
