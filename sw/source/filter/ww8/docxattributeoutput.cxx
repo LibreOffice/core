@@ -2340,33 +2340,29 @@ void DocxAttributeOutput::DoWritePermissionTagStart(std::u16string_view permissi
 {
     std::u16string_view permissionIdAndName;
 
+    sal_Int32 nFSNS;
+
     if (o3tl::starts_with(permission, u"permission-for-group:", &permissionIdAndName))
     {
-        const std::size_t separatorIndex = permissionIdAndName.find(u':');
-        assert(separatorIndex != std::u16string_view::npos);
-        const OUString permissionId(permissionIdAndName.substr(0, separatorIndex));
-        const OUString permissionName(permissionIdAndName.substr(separatorIndex + 1));
-
-        m_pSerializer->singleElementNS(XML_w, XML_permStart,
-            FSNS(XML_w, XML_id), GetExport().BookmarkToWord(permissionId),
-            FSNS(XML_w, XML_edGrp), GetExport().BookmarkToWord(permissionName));
+        nFSNS = FSNS(XML_w, XML_edGrp);
     }
     else
     {
         auto const ok = o3tl::starts_with(
             permission, u"permission-for-user:", &permissionIdAndName);
         assert(ok); (void)ok;
-        const std::size_t separatorIndex = permissionIdAndName.find(u':');
-        assert(separatorIndex != std::u16string_view::npos);
-        const OUString permissionId(permissionIdAndName.substr(0, separatorIndex));
-        const OUString permissionName(permissionIdAndName.substr(separatorIndex + 1));
-
-        m_pSerializer->singleElementNS(XML_w, XML_permStart,
-            FSNS(XML_w, XML_id), GetExport().BookmarkToWord(permissionId),
-            FSNS(XML_w, XML_ed), GetExport().BookmarkToWord(permissionName));
+        nFSNS = FSNS(XML_w, XML_ed);
     }
-}
 
+    const std::size_t separatorIndex = permissionIdAndName.find(u':');
+    assert(separatorIndex != std::u16string_view::npos);
+    const OUString permissionId(permissionIdAndName.substr(0, separatorIndex));
+    const OUString permissionName(permissionIdAndName.substr(separatorIndex + 1));
+
+    m_pSerializer->singleElementNS(XML_w, XML_permStart,
+        FSNS(XML_w, XML_id), GetExport().BookmarkToWord(permissionId),
+        nFSNS, GetExport().BookmarkToWord(permissionName));
+}
 
 // For construction of the special bookmark name template for permissions:
 // see, PermInsertPosition::createBookmarkName()
