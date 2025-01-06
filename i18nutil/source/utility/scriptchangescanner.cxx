@@ -132,7 +132,7 @@ private:
     ScriptChange m_stCurr;
     DirectionChangeScanner* m_pDirScanner;
     const OUString& m_rText;
-    sal_Int16 m_nPrevScript;
+    sal_Int16 m_nPrevScript = css::i18n::ScriptType::WEAK;
     sal_Int32 m_nIndex = 0;
     bool m_bAtEnd = false;
     bool m_bApplyAsianToWeakQuotes = false;
@@ -142,16 +142,23 @@ public:
                               DirectionChangeScanner* pDirScanner)
         : m_pDirScanner(pDirScanner)
         , m_rText(rText)
-        , m_nPrevScript(nDefaultScriptType)
     {
         // tdf#66791: For compatibility with other programs, the Asian script is
         // applied to any weak-script quote characters if the enclosing paragraph
         // contains Chinese- or Japanese-script characters.
+        // In the original Writer algorithm, the application language is used for
+        // all leading weak characters (#94331#). This implementation deviates by
+        // instead using the first-seen non-weak script.
         sal_Int32 nCjBase = 0;
         while (nCjBase < m_rText.getLength())
         {
             auto nChar = m_rText.iterateCodePoints(&nCjBase);
             auto nScript = GetScriptClass(nChar);
+            if (m_nPrevScript == css::i18n::ScriptType::WEAK)
+            {
+                m_nPrevScript = nScript;
+            }
+
             if (nScript == css::i18n::ScriptType::COMPLEX)
             {
                 m_bApplyAsianToWeakQuotes = false;
@@ -172,12 +179,18 @@ public:
             }
         }
 
-        // In the original Writer algorithm, the application language is used for
-        // all leading weak characters. Make a change record for those characters.
+        // Fall back to the application language for leading weak characters if a
+        // better candidate was not found.
+        if (m_nPrevScript == css::i18n::ScriptType::WEAK)
+        {
+            m_nPrevScript = nDefaultScriptType;
+        }
+
+        // Make a change record for leading weak characters.
         Advance();
         if (m_stCurr.m_nStartIndex == m_stCurr.m_nEndIndex)
         {
-            // The text does not start with application-language leading characters.
+            // The text does not start with weak characters.
             // Initialize with a non-empty record.
             Advance();
         }

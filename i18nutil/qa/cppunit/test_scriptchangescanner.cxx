@@ -27,6 +27,7 @@ public:
     void testTrivial();
     void testTrivialAppLang();
     void testWeakAtStart();
+    void testOnlyWeak();
     void testStrongChange();
     void testMongolianAfterNNBSP();
     void testNonspacingMark();
@@ -44,6 +45,7 @@ public:
     CPPUNIT_TEST(testTrivial);
     CPPUNIT_TEST(testTrivialAppLang);
     CPPUNIT_TEST(testWeakAtStart);
+    CPPUNIT_TEST(testOnlyWeak);
     CPPUNIT_TEST(testStrongChange);
     CPPUNIT_TEST(testMongolianAfterNNBSP);
     CPPUNIT_TEST(testNonspacingMark);
@@ -101,21 +103,32 @@ void ScriptChangeScannerTest::testTrivialAppLang()
 
 void ScriptChangeScannerTest::testWeakAtStart()
 {
+    // The first-seen script type is used for weak characters at the start
     auto aText = u"“x”"_ustr;
+    auto pDirScanner = MakeDirectionChangeScanner(aText, 0);
+    auto pScanner = MakeScriptChangeScanner(aText, css::i18n::ScriptType::COMPLEX, *pDirScanner);
+
+    CPPUNIT_ASSERT(!pScanner->AtEnd());
+    CPPUNIT_ASSERT_EQUAL(css::i18n::ScriptType::LATIN, pScanner->Peek().m_nScriptType);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pScanner->Peek().m_nStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pScanner->Peek().m_nEndIndex);
+
+    pScanner->Advance();
+
+    CPPUNIT_ASSERT(pScanner->AtEnd());
+}
+
+void ScriptChangeScannerTest::testOnlyWeak()
+{
+    // The application language is used for text containing only weak characters
+    auto aText = u"“”"_ustr;
     auto pDirScanner = MakeDirectionChangeScanner(aText, 0);
     auto pScanner = MakeScriptChangeScanner(aText, css::i18n::ScriptType::COMPLEX, *pDirScanner);
 
     CPPUNIT_ASSERT(!pScanner->AtEnd());
     CPPUNIT_ASSERT_EQUAL(css::i18n::ScriptType::COMPLEX, pScanner->Peek().m_nScriptType);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pScanner->Peek().m_nStartIndex);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pScanner->Peek().m_nEndIndex);
-
-    pScanner->Advance();
-
-    CPPUNIT_ASSERT(!pScanner->AtEnd());
-    CPPUNIT_ASSERT_EQUAL(css::i18n::ScriptType::LATIN, pScanner->Peek().m_nScriptType);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pScanner->Peek().m_nStartIndex);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pScanner->Peek().m_nEndIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pScanner->Peek().m_nEndIndex);
 
     pScanner->Advance();
 
