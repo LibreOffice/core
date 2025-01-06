@@ -430,27 +430,30 @@ bool SfxObjectShell::IsSignPDF() const
     return false;
 }
 
-uno::Reference<security::XCertificate> SfxObjectShell::GetSignPDFCertificate() const
+namespace
 {
-    uno::Reference<frame::XModel> xModel = GetBaseModel();
+uno::Reference<beans::XPropertySet> GetSelectedShapeOfModel(const uno::Reference<frame::XModel>& xModel)
+{
     if (!xModel.is())
     {
-        return uno::Reference<security::XCertificate>();
+        return uno::Reference<beans::XPropertySet>();
     }
 
     uno::Reference<drawing::XShapes> xShapes(xModel->getCurrentSelection(), uno::UNO_QUERY);
     if (!xShapes.is() || xShapes->getCount() < 1)
     {
-        return uno::Reference<security::XCertificate>();
+        return uno::Reference<beans::XPropertySet>();
     }
 
     uno::Reference<beans::XPropertySet> xShapeProps(xShapes->getByIndex(0), uno::UNO_QUERY);
-    if (!xShapeProps.is())
-    {
-        return uno::Reference<security::XCertificate>();
-    }
+    return xShapeProps;
+}
+}
 
-    if (!xShapeProps->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
+uno::Reference<security::XCertificate> SfxObjectShell::GetSignPDFCertificate() const
+{
+    uno::Reference<beans::XPropertySet> xShapeProps = GetSelectedShapeOfModel(GetBaseModel());
+    if (!xShapeProps.is() || !xShapeProps->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
     {
         return uno::Reference<security::XCertificate>();
     }
@@ -463,6 +466,27 @@ uno::Reference<security::XCertificate> SfxObjectShell::GetSignPDFCertificate() c
     }
 
     return uno::Reference<security::XCertificate>(it->second, uno::UNO_QUERY);
+}
+
+void SfxObjectShell::ResetSignPDFCertificate()
+{
+    uno::Reference<beans::XPropertySet> xShapeProps = GetSelectedShapeOfModel(GetBaseModel());
+    if (!xShapeProps->getPropertySetInfo()->hasPropertyByName("InteropGrabBag"))
+    {
+        return;
+    }
+
+    comphelper::SequenceAsHashMap aMap(xShapeProps->getPropertyValue("InteropGrabBag"));
+    auto it = aMap.find("SignatureCertificate");
+    if (it == aMap.end())
+    {
+        return;
+    }
+
+    aMap.erase(it);
+    xShapeProps->setPropertyValue("InteropGrabBag", uno::Any(aMap.getAsConstPropertyValueList()));
+    // The shape's property is now reset, so the doc model is no longer modified.
+    SetModified(false);
 }
 
 static void sendErrorToLOK(const ErrCodeMsg& error)
@@ -585,26 +609,15 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 aSigningContext.m_xCertificate = std::move(xCertificate);
                 bHaveWeSigned |= SignDocumentContentUsingCertificate(aSigningContext);
 
-                // Reload to show how the PDF actually looks like after signing. This also
-                // changes "finish signing" on the infobar back to "sign document" as a side
-                // effect.
+                // Reset the picked certificate for PDF signing, then recheck signatures to show how
+                // the PDF actually looks like after signing.  Also change the "finish signing" on
+                // the infobar back to "sign document".
                 if (SfxViewFrame* pFrame = GetFrame())
                 {
-                    // Store current page before reload.
-                    SfxAllItemSet aSet(SfxGetpApp()->GetPool());
-                    uno::Reference<drawing::XDrawView> xController(
-                        GetBaseModel()->getCurrentController(), uno::UNO_QUERY);
-                    uno::Reference<beans::XPropertySet> xPage(xController->getCurrentPage(),
-                                                              uno::UNO_QUERY);
-                    sal_Int32 nPage{};
-                    xPage->getPropertyValue(u"Number"_ustr) >>= nPage;
-                    if (nPage > 0)
-                    {
-                        // nPage is 1-based.
-                        aSet.Put(SfxInt32Item(SID_PAGE_NUMBER, nPage - 1));
-                    }
-                    SfxRequest aReq(SID_RELOAD, SfxCallMode::SLOT, aSet);
-                    pFrame->ExecReload_Impl(aReq);
+                    ResetSignPDFCertificate();
+                    RecheckSignature(false);
+                    pFrame->RemoveInfoBar(u"readonly");
+                    pFrame->AppendReadOnlyInfobar();
                 }
             }
             else
@@ -2248,6 +2261,13 @@ bool SfxObjectShell::SignDocumentContentUsingCertificate(svl::crypto::SigningCon
 
     // the document is not new and is not modified
     OUString aODFVersion(comphelper::OStorageHelper::GetODFVersionFromStorage(GetStorage()));
+
+    if (IsModified() && IsSignPDF())
+    {
+        // When signing a PDF, then adding/resizing/moving the signature line would nominally modify
+        // the document, but ignore that for signing.
+        SetModified(false);
+    }
 
     if (IsModified() || !GetMedium() || GetMedium()->GetName().isEmpty()
       || (GetMedium()->GetFilter()->IsOwnFormat() && aODFVersion.compareTo(ODFVER_012_TEXT) < 0 && !bHasSign))
