@@ -2336,8 +2336,12 @@ void DocxAttributeOutput::DoWriteBookmarksEnd(std::vector<OUString>& rEnds)
 // - "permission-for-user:<permission-id>:<permission-user-name>"
 // - "permission-for-group:<permission-id>:<permission-group-name>"
 //
-void DocxAttributeOutput::DoWritePermissionTagStart(std::u16string_view permission)
+void DocxAttributeOutput::DoWritePermissionTagStart(const OUString& permission)
 {
+    if (m_aOpenedPermissions.find(permission) != m_aOpenedPermissions.end())
+        return;
+    m_aOpenedPermissions.insert(permission);
+
     std::u16string_view permissionIdAndName;
 
     sal_Int32 nFSNS;
@@ -2371,8 +2375,11 @@ void DocxAttributeOutput::DoWritePermissionTagStart(std::u16string_view permissi
 // - "permission-for-user:<permission-id>:<permission-user-name>"
 // - "permission-for-group:<permission-id>:<permission-group-name>"
 //
-void DocxAttributeOutput::DoWritePermissionTagEnd(std::u16string_view permission)
+void DocxAttributeOutput::DoWritePermissionTagEnd(const OUString& permission)
 {
+    if (m_aOpenedPermissions.find(permission) == m_aOpenedPermissions.end())
+        return;
+
     std::u16string_view permissionIdAndName;
 
     auto const ok = o3tl::starts_with(permission, u"permission-for-group:", &permissionIdAndName) ||
@@ -2385,6 +2392,7 @@ void DocxAttributeOutput::DoWritePermissionTagEnd(std::u16string_view permission
 
     m_pSerializer->singleElementNS(XML_w, XML_permEnd,
         FSNS(XML_w, XML_id), GetExport().BookmarkToWord(permissionId));
+    m_aOpenedPermissions.erase(permission);
 }
 
 /// Write the start permissions

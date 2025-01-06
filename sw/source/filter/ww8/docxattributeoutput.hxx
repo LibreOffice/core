@@ -783,8 +783,8 @@ private:
     void DoWriteBookmarkStartIfExist(sal_Int32 nRunPos);
     void DoWriteBookmarkEndIfExist(sal_Int32 nRunPos);
 
-    void DoWritePermissionTagStart(std::u16string_view permission);
-    void DoWritePermissionTagEnd(std::u16string_view permission);
+    void DoWritePermissionTagStart(const OUString& permission);
+    void DoWritePermissionTagEnd(const OUString& permission);
     void DoWritePermissionsStart();
     void DoWritePermissionsEnd();
 
@@ -926,6 +926,9 @@ private:
 
     /// Name of the last opened annotation mark.
     OUString m_sLastOpenedAnnotationMark;
+
+    /// Set of currently opened permissions
+    std::unordered_set<OUString> m_aOpenedPermissions;
 
     /// If there are bookmarks around sequence fields, this map contains the
     /// names of these bookmarks for each sequence.
