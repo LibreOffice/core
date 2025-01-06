@@ -23,7 +23,6 @@
 #include <editeng/forbiddencharacterstable.hxx>
 #include <vcl/virdev.hxx>
 
-class SfxPoolItem;
 class VirtualDevice;
 
 namespace editeng

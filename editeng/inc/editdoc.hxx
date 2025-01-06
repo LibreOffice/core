@@ -44,7 +44,6 @@
 #include <string_view>
 #include <vector>
 
-class ImpEditEngine;
 enum class TextRotation;
 
 
@@ -56,8 +55,6 @@ sal_uInt16 GetScriptItemId( sal_uInt16 nItemId, SvtScriptType nScriptType );
 bool IsScriptItemValid( sal_uInt16 nItemId, short nScriptType );
 
 EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sal_Int32 nS, sal_Int32 nE );
-
-class EditDoc;
 
 class ContentAttribsInfo
 {

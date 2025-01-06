@@ -61,10 +61,6 @@
 #include <string_view>
 #include <vector>
 
-class EditView;
-class EditEngine;
-class OutlinerSearchable;
-
 class SvxSearchItem;
 class SvxLRSpaceItem;
 struct SvxFontUnitMetrics;

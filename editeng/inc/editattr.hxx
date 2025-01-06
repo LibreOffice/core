@@ -28,29 +28,7 @@
 #include <svl/itemset.hxx>
 
 class SvxFont;
-class SvxFontItem;
-class SvxWeightItem;
-class SvxPostureItem;
-class SvxShadowedItem;
-class SvxEscapementItem;
-class SvxContourItem;
-class SvxCrossedOutItem;
-class SvxUnderlineItem;
-class SvxOverlineItem;
-class SvxFontHeightItem;
-class SvxCharScaleWidthItem;
-class SvxColorItem;
-class SvxAutoKernItem;
-class SvxKerningItem;
-class SvxWordLineModeItem;
-class SvxFieldItem;
-class SvxLanguageItem;
-class SvxEmphasisMarkItem;
-class SvxCharReliefItem;
-class SfxVoidItem;
 class OutputDevice;
-class SvxCaseMapItem;
-class SfxGrabBagItem;
 
 #define CH_FEATURE      u'\x0001'
 #define CH_SOFTHYPHEN   u'\x00AD'

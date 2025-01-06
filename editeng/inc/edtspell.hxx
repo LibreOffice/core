@@ -24,10 +24,6 @@
 #include <editeng/svxenum.hxx>
 #include <editeng/misspellrange.hxx>
 
-namespace com::sun::star::linguistic2 {
-    class XSpellChecker1;
-}
-
 
 class EditView;
 class EditEngine;

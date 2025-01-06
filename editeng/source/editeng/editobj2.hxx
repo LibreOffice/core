@@ -32,12 +32,6 @@
 #include <memory>
 #include <vector>
 
-namespace editeng {
-
-struct Section;
-
-}
-
 namespace svl {
 
 class SharedStringPool;

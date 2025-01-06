@@ -29,7 +29,6 @@
 #include <o3tl/safeint.hxx>
 #include <tools/link.hxx>
 
-class Paragraph;
 typedef struct _xmlTextWriter* xmlTextWriterPtr;
 
 class ParagraphList
