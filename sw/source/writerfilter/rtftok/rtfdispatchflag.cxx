@@ -1269,6 +1269,16 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTFKeyword::MNOR:
             m_bMathNor = true;
             break;
+        case RTFKeyword::READPROT:
+        {
+            RTFSprms aAttributes;
+            aAttributes.set(NS_ooxml::LN_CT_DocProtect_edit,
+                            new RTFValue(NS_ooxml::LN_Value_doc_ST_DocProtect_readOnly));
+            aAttributes.set(NS_ooxml::LN_CT_DocProtect_enforcement, new RTFValue(1));
+            m_aSettingsTableSprms.set(NS_ooxml::LN_CT_Settings_documentProtection,
+                                      new RTFValue(aAttributes));
+        }
+        break;
         case RTFKeyword::REVISIONS:
             m_aSettingsTableSprms.set(NS_ooxml::LN_CT_Settings_trackRevisions, new RTFValue(1));
             break;
