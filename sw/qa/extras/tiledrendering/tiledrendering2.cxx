@@ -44,12 +44,12 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testStatusBarPageNumber)
     int nView2 = SfxLokHelper::getView();
     pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     SfxLokHelper::setView(nView1);
-    ViewCallback aView1;
+    SwTestViewCallback aView1;
     pWrtShell1->SttEndDoc(/*bStt=*/true);
     pWrtShell1->Insert(u"start"_ustr);
     pWrtShell1->GetView().SetVisArea(pPage1->getFrameArea().SVRect());
     SfxLokHelper::setView(nView2);
-    ViewCallback aView2;
+    SwTestViewCallback aView2;
     SwWrtShell* pWrtShell2 = getSwDocShell()->GetWrtShell();
     pWrtShell2->SttEndDoc(/*bStt=*/false);
     pWrtShell2->Insert(u"end"_ustr);
@@ -156,7 +156,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testAsyncLayout)
 {
     // Given a document with 3 pages, the first page is visible:
     createDoc();
-    ViewCallback aView;
+    SwTestViewCallback aView;
     SwDocShell* pDocShell = getSwDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     pWrtShell->InsertPageBreak();
@@ -192,7 +192,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testAnyInput)
 {
     // Given a document with 3 pages, the first page is visible:
     createDoc();
-    ViewCallback aView;
+    SwTestViewCallback aView;
     SwDocShell* pDocShell = getSwDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     pWrtShell->InsertPageBreak();
@@ -284,9 +284,9 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPDFExportViewSwitch)
     // Given a document with 2 views:
     SwXTextDocument* pXTextDocument = createDoc("to-pdf.odt");
     SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
-    ViewCallback aView1;
+    SwTestViewCallback aView1;
     SfxLokHelper::createView();
-    ViewCallback aView2;
+    SwTestViewCallback aView2;
     SwView* pView2 = pDoc->GetDocShell()->GetView();
     uno::Reference<frame::XFrame> xFrame2 = pView2->GetViewFrame().GetFrame().GetFrameInterface();
 

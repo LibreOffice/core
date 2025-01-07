@@ -68,6 +68,7 @@ $(eval $(call gb_Library_use_libraries,swqahelper,\
 $(eval $(call gb_Library_add_exception_objects,swqahelper,\
 	sw/qa/unit/swmodeltestbase \
 	sw/qa/unit/swtiledrenderingtest \
+	sw/qa/unit/swtestviewcallback \
 ))
 
 # vim: set noet sw=4 ts=4:
