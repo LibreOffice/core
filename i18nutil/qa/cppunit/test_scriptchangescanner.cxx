@@ -39,6 +39,7 @@ public:
     void testRtlRunEmbeddedLtrStrong();
     void testRtlRunEmbeddedLtrWeakComplex();
     void testRtlRunOverrideCJKAsian();
+    void testTdf164493InfiniteLoop();
 
     CPPUNIT_TEST_SUITE(ScriptChangeScannerTest);
     CPPUNIT_TEST(testEmpty);
@@ -57,6 +58,7 @@ public:
     CPPUNIT_TEST(testRtlRunEmbeddedLtrStrong);
     CPPUNIT_TEST(testRtlRunEmbeddedLtrWeakComplex);
     CPPUNIT_TEST(testRtlRunOverrideCJKAsian);
+    CPPUNIT_TEST(testTdf164493InfiniteLoop);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -586,6 +588,27 @@ void ScriptChangeScannerTest::testRtlRunOverrideCJKAsian()
     CPPUNIT_ASSERT_EQUAL(css::i18n::ScriptType::ASIAN, pScanner->Peek().m_nScriptType);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pScanner->Peek().m_nStartIndex);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6), pScanner->Peek().m_nEndIndex);
+
+    pScanner->Advance();
+
+    CPPUNIT_ASSERT(pScanner->AtEnd());
+}
+
+void ScriptChangeScannerTest::testTdf164493InfiniteLoop()
+{
+    // tdf#164493: Tests a case causing an infinite loop due to interaction
+    // between right-to-left override and a CJK combining mark.
+
+    // U+202E: RIGHT-TO-LEFT OVERRIDE
+    // U+302E: HANGUL SINGLE DOT TONE MARK
+    auto aText = u"\u202e\u302e"_ustr;
+    auto pDirScanner = MakeDirectionChangeScanner(aText, 0);
+    auto pScanner = MakeScriptChangeScanner(aText, css::i18n::ScriptType::LATIN, *pDirScanner);
+
+    CPPUNIT_ASSERT(!pScanner->AtEnd());
+    CPPUNIT_ASSERT_EQUAL(css::i18n::ScriptType::ASIAN, pScanner->Peek().m_nScriptType);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pScanner->Peek().m_nStartIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pScanner->Peek().m_nEndIndex);
 
     pScanner->Advance();
 
