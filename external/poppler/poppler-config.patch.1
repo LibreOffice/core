@@ -29,7 +29,7 @@ index 0fbd336a..451213f8 100644
 +/* #undef ENABLE_LIBOPENJPEG */
 +
 +/* Build against libtiff. */
-+/* #define ENABLE_LIBTIFF 1 */
++/* #undef ENABLE_LIBTIFF */
 +
 +/* Build against libpng. */
 +/* #define ENABLE_LIBPNG 1 */
@@ -41,16 +41,16 @@ index 0fbd336a..451213f8 100644
 +/* #undef ENABLE_ZLIB_UNCOMPRESS */
 +
 +/* Build against libnss3 for digital signature validation */
-+/* #define ENABLE_NSS3 1 */
++/* #undef ENABLE_NSS3 */
 +
 +/* Build against libgpgme for digital signature validation */
 +/* #undef ENABLE_GPGME */
 +
 +/* Signatures enabled */
-+/* #define ENABLE_SIGNATURES 1 */
++/* #undef ENABLE_SIGNATURES */
 +
 +/* Default signature backend */
-+/* #define DEFAULT_SIGNATURE_BACKEND "NSS" */
++#define DEFAULT_SIGNATURE_BACKEND "None"
 +
 +/* Use cairo for rendering. */
 +/* #define HAVE_CAIRO 1 */
@@ -179,7 +179,7 @@ index 0fbd336a..451213f8 100644
 +#define PACKAGE_NAME "poppler"
 +
 +/* Define to the full name and version of this package. */
-+#define PACKAGE_STRING "poppler 24.06.0"
++#define PACKAGE_STRING "poppler 25.01.0"
 +
 +/* Define to the one symbol short name of this package. */
 +#define PACKAGE_TARNAME "poppler"
@@ -188,7 +188,7 @@ index 0fbd336a..451213f8 100644
 +#define PACKAGE_URL ""
 +
 +/* Define to the version of this package. */
-+#define PACKAGE_VERSION "24.06.0"
++#define PACKAGE_VERSION "25.01.0"
 +
 +/* Poppler data dir */
 +#define POPPLER_DATADIR "/usr/local/share/poppler"
@@ -206,7 +206,7 @@ index 0fbd336a..451213f8 100644
 +/* #undef USE_FLOAT */
 +
 +/* Version number of package */
-+#define VERSION "24.06.0"
++#define VERSION "25.01.0"
 +
 +#if defined(__APPLE__)
 +#elif defined (_WIN32)
@@ -290,7 +290,7 @@ index 0fbd336a..451213f8 100644
 +
 +/* Defines the poppler version. */
 +#ifndef POPPLER_VERSION
-+#define POPPLER_VERSION "24.06.0"
++#define POPPLER_VERSION "25.01.0"
 +#endif
 +
 +/* Use single precision arithmetic in the Splash backend */
@@ -320,7 +320,7 @@ index 0fbd336a..451213f8 100644
 +
 +/* Build against libtiff. */
 +#ifndef ENABLE_LIBTIFF
-+/* #define ENABLE_LIBTIFF 1 */
++/* #undef ENABLE_LIBTIFF */
 +#endif
 +
 +/* Build against libpng. */
@@ -377,7 +377,7 @@ index 0fbd336a..451213f8 100644
 +//------------------------------------------------------------------------
 +
 +// copyright notice
-+#define popplerCopyright "Copyright 2005-2023 The Poppler Developers - http://poppler.freedesktop.org"
++#define popplerCopyright "Copyright 2005-2025 The Poppler Developers - http://poppler.freedesktop.org"
 +#define xpdfCopyright "Copyright 1996-2011, 2022 Glyph & Cog, LLC"
 +
 +//------------------------------------------------------------------------
@@ -437,9 +437,9 @@ index 0fbd336a..451213f8 100644
 +
 +#include "poppler-global.h"
 +
-+#define POPPLER_VERSION "24.06.0"
-+#define POPPLER_VERSION_MAJOR 24
-+#define POPPLER_VERSION_MINOR 6
++#define POPPLER_VERSION "25.01.0"
++#define POPPLER_VERSION_MAJOR 25
++#define POPPLER_VERSION_MINOR 1
 +#define POPPLER_VERSION_MICRO 0
 +
 +namespace poppler

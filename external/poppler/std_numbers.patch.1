@@ -1,0 +1,30 @@
+remove C++20 std::numbers
+
+--- poppler/poppler/Annot.cc.orig	2025-01-09 17:42:27.108725610 +0100
++++ poppler/poppler/Annot.cc	2025-01-09 17:44:32.213373330 +0100
+@@ -70,7 +70,6 @@
+ #include <cstdlib>
+ #include <cmath>
+ #include <cassert>
+-#include <numbers>
+ #include "goo/gmem.h"
+ #include "goo/gstrtod.h"
+ #include "Error.h"
+@@ -1762,7 +1762,7 @@
+ {
+     double r2;
+ 
+-    r2 = r / std::numbers::sqrt2;
++    r2 = r / sqrt(2.0);
+     appearBuf->appendf("{0:.2f} {1:.2f} m\n", cx + r2, cy + r2);
+     appearBuf->appendf("{0:.2f} {1:.2f} {2:.2f} {3:.2f} {4:.2f} {5:.2f} c\n", cx + (1 - bezierCircle) * r2, cy + (1 + bezierCircle) * r2, cx - (1 - bezierCircle) * r2, cy + (1 + bezierCircle) * r2, cx - r2, cy + r2);
+     appearBuf->appendf("{0:.2f} {1:.2f} {2:.2f} {3:.2f} {4:.2f} {5:.2f} c\n", cx - (1 + bezierCircle) * r2, cy + (1 - bezierCircle) * r2, cx - (1 + bezierCircle) * r2, cy - (1 - bezierCircle) * r2, cx - r2, cy - r2);
+@@ -1775,7 +1775,7 @@
+ {
+     double r2;
+ 
+-    r2 = r / std::numbers::sqrt2;
++    r2 = r / sqrt(2.0);
+     appearBuf->appendf("{0:.2f} {1:.2f} m\n", cx - r2, cy - r2);
+     appearBuf->appendf("{0:.2f} {1:.2f} {2:.2f} {3:.2f} {4:.2f} {5:.2f} c\n", cx - (1 - bezierCircle) * r2, cy - (1 + bezierCircle) * r2, cx + (1 - bezierCircle) * r2, cy - (1 + bezierCircle) * r2, cx + r2, cy - r2);
+     appearBuf->appendf("{0:.2f} {1:.2f} {2:.2f} {3:.2f} {4:.2f} {5:.2f} c\n", cx + (1 + bezierCircle) * r2, cy - (1 - bezierCircle) * r2, cx + (1 + bezierCircle) * r2, cy + (1 - bezierCircle) * r2, cx + r2, cy + r2);

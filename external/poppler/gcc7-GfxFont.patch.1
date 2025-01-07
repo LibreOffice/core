@@ -58,7 +58,7 @@ index cc2ce038..b0d0d610 100644
      //----- external font file (fontFile, fontDir)
 @@ -708,7 +708,7 @@ std::optional<GfxFontLoc> GfxFont::locateFont(XRef *xref, PSOutputDev *ps)
                  fontLoc.fontType = fontCIDType2;
-                 fontLoc.setPath(path);
+                 fontLoc.path = *path;
                  fontLoc.fontNum = fontNum;
 -                return fontLoc;
 +                return std::move(fontLoc); // std::move only required to please g++-7
@@ -72,8 +72,8 @@ index cc2ce038..b0d0d610 100644
 -            return fontLoc;
 +            return std::move(fontLoc); // std::move only required to please g++-7
          }
-         delete path;
      }
+ 
 @@ -749,7 +749,7 @@ std::optional<GfxFontLoc> GfxFont::locateFont(XRef *xref, PSOutputDev *ps)
              fontLoc.fontType = fontType1;
              fontLoc.path = substName;
@@ -86,7 +86,7 @@ index cc2ce038..b0d0d610 100644
 @@ -811,7 +811,7 @@ std::optional<GfxFontLoc> GfxFont::getExternalFont(GooString *path, bool cid)
      fontLoc.locType = gfxFontLocExternal;
      fontLoc.fontType = fontType;
-     fontLoc.setPath(path);
+     fontLoc.path = path;
 -    return fontLoc;
 +    return std::move(fontLoc); // std::move only required to please g++-7
  }

@@ -36,3 +36,15 @@ replace C++20 std::span with o3tl::span
  #include "FoFiBase.h"
  #include "poppler_private_export.h"
  
+--- poppler/poppler/UnicodeMap.h.orig	2025-01-09 15:49:23.405887878 +0100
++++ poppler/poppler/UnicodeMap.h	2025-01-09 15:49:15.094853934 +0100
+@@ -38,7 +38,8 @@
+ #include <string>
+ #include <vector>
+ #include <variant>
+-#include <span>
++#include <o3tl/span.hxx>
++namespace std { using o3tl::span; }
+ 
+ //------------------------------------------------------------------------
+ 

@@ -53,17 +53,6 @@ remove C++20 starts_with
          // for now we only support ttf, ttc, otf fonts
          return false;
      }
---- poppler/poppler/GfxFont.cc.orig	2025-01-09 11:26:07.863484064 +0100
-+++ poppler/poppler/GfxFont.cc	2025-01-09 11:31:47.164550059 +0100
-@@ -1252,7 +1252,7 @@
- 
-     // pass 1: use the name-to-Unicode mapping table
-     missing = hex = false;
--    bool isZapfDingbats = name && name->ends_with("ZapfDingbats");
-+    bool isZapfDingbats = name && GooString::endsWith(*name, "ZapfDingbats");
-     for (int code = 0; code < 256; ++code) {
-         if ((charName = enc[code])) {
-             if (isZapfDingbats) {
 --- poppler/poppler/Form.cc.orig2	2025-01-09 11:33:42.284911742 +0100
 +++ poppler/poppler/Form.cc	2025-01-09 11:34:46.013111945 +0100
 @@ -2818,7 +2818,7 @@
@@ -86,3 +75,36 @@ remove C++20 starts_with
          i = 3;
          step = 2;
      } else {
+--- poppler/poppler/GfxFont.cc.orig2	2025-01-09 15:28:44.912394819 +0100
++++ poppler/poppler/GfxFont.cc	2025-01-09 15:29:01.903477753 +0100
+@@ -1085,7 +1085,7 @@
+     baseEnc = nullptr;
+     baseEncFromFontFile = false;
+     obj1 = fontDict->lookup("Encoding");
+-    bool isZapfDingbats = name && name->ends_with("ZapfDingbats");
++    bool isZapfDingbats = name && GooString::endsWith(*name, "ZapfDingbats");
+     if (isZapfDingbats) {
+         baseEnc = zapfDingbatsEncoding;
+         hasEncoding = true;
+--- poppler/poppler/UTF.h.orig2	2025-01-09 15:46:59.275299177 +0100
++++ poppler/poppler/UTF.h	2025-01-09 15:47:32.502434901 +0100
+@@ -74,7 +74,7 @@
+ // check whether string starts with Big-Endian byte order mark and string length is even
+ inline bool hasUnicodeByteOrderMarkAndLengthIsEven(const std::string &s)
+ {
+-    return s.starts_with(unicodeByteOrderMark) && s.length() % 2 == 0;
++    return hasUnicodeByteOrderMark(s) && s.length() % 2 == 0;
+ }
+ 
+ // is a unicode whitespace character
+--- poppler/poppler/GlobalParamsWin.cc.orig	2025-01-10 09:54:56.256775789 +0100
++++ poppler/poppler/GlobalParamsWin.cc	2025-01-10 09:55:02.001792823 +0100
+@@ -488,7 +488,7 @@
+             path = fontFile->second;
+             if (substituteFontName)
+                 substituteFontName->Set(path.c_str());
+-            if (path.ends_with(".ttc")) {
++            if (GooString::endsWith(path, ".ttc")) {
+                 *type = sysFontTTC;
+             } else {
+                 *type = sysFontTTF;

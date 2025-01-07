@@ -1,0 +1,394 @@
+clang jenkins bot fails with:
+
+In file included from /home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/workdir/UnpackedTarball/poppler/splash/SplashFontEngine.cc:38:
+In file included from /opt/rh/gcc-toolset-12/root/usr/lib/gcc/x86_64-redhat-linux/12/../../../../include/c++/12/algorithm:60:
+In file included from /opt/rh/gcc-toolset-12/root/usr/lib/gcc/x86_64-redhat-linux/12/../../../../include/c++/12/bits/stl_algobase.h:65:
+In file included from /opt/rh/gcc-toolset-12/root/usr/lib/gcc/x86_64-redhat-linux/12/../../../../include/c++/12/bits/stl_iterator_base_types.h:71:
+/opt/rh/gcc-toolset-12/root/usr/lib/gcc/x86_64-redhat-linux/12/../../../../include/c++/12/bits/iterator_concepts.h:982:13: error: no matching function for call to '__begin'
+        = decltype(ranges::__cust_access::__begin(std::declval<_Tp&>()));
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/opt/rh/gcc-toolset-12/root/usr/lib/gcc/x86_64-redhat-linux/12/../../../../include/c++/12/bits/ranges_base.h:595:5: note: in instantiation of template type alias '__range_iter_t' requested here
+    using iterator_t = std::__detail::__range_iter_t<_Tp>;
+    ^
+/opt/rh/gcc-toolset-12/root/usr/lib/gcc/x86_64-redhat-linux/12/../../../../include/c++/12/bits/ranges_util.h:121:36: note: in instantiation of template type alias 'iterator_t' requested here
+      requires contiguous_iterator<iterator_t<_Derived>>
+                                   ^
+/opt/rh/gcc-toolset-12/root/usr/lib/gcc/x86_64-redhat-linux/12/../../../../include/c++/12/bits/ranges_util.h:228:29: note: in instantiation of template class 'std::ranges::view_interface<std::ranges::subrange<SplashFont **, SplashFont **, std::ranges::subrange_kind::sized>>' requested here
+    class subrange : public view_interface<subrange<_It, _Sent, _Kind>>
+                            ^
+/opt/rh/gcc-toolset-12/root/usr/lib/gcc/x86_64-redhat-linux/12/../../../../include/c++/12/bits/ranges_algo.h:1499:7: note: in instantiation of template class 'std::ranges::subrange<SplashFont **, SplashFont **, std::ranges::subrange_kind::sized>' requested here
+      operator()(_Range&& __r, iterator_t<_Range> __middle) const
+      ^
+/home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/workdir/UnpackedTarball/poppler/splash/SplashFontEngine.cc:246:24: note: in instantiation of function template specialization 'std::ranges::__rotate_fn::operator()<std::array<SplashFont *, 16> &>' requested here
+    std::ranges::rotate(fontCache, fontCache.end() - 1);
+                       ^
+/opt/rh/gcc-toolset-12/root/usr/lib/gcc/x86_64-redhat-linux/12/../../../../include/c++/12/bits/iterator_concepts.h:966:7: note: candidate template ignored: constraints not satisfied [with _Tp = std::ranges::subrange<SplashFont **, SplashFont **, std::ranges::subrange_kind::sized>]
+      __begin(_Tp& __t)
+      ^
+/opt/rh/gcc-toolset-12/root/usr/lib/gcc/x86_64-redhat-linux/12/../../../../include/c++/12/bits/iterator_concepts.h:964:16: note: because 'is_array_v<std::ranges::subrange<SplashFont **, SplashFont **, std::ranges::subrange_kind::sized> >' evaluated to false
+      requires is_array_v<_Tp> || __member_begin<_Tp&> || __adl_begin<_Tp&>
+               ^
+/opt/rh/gcc-toolset-12/root/usr/lib/gcc/x86_64-redhat-linux/12/../../../../include/c++/12/bits/iterator_concepts.h:964:35: note: and 'std::ranges::subrange<SplashFont **, SplashFont **, std::ranges::subrange_kind::sized> &' does not satisfy '__member_begin'
+      requires is_array_v<_Tp> || __member_begin<_Tp&> || __adl_begin<_Tp&>
+                                  ^
+/opt/rh/gcc-toolset-12/root/usr/lib/gcc/x86_64-redhat-linux/12/../../../../include/c++/12/bits/iterator_concepts.h:947:23: note: because '__decay_copy(__t.begin())' would be invalid: no member named 'begin' in 'std::ranges::subrange<SplashFont **, SplashFont **, std::ranges::subrange_kind::sized>'
+          { __decay_copy(__t.begin()) } -> input_or_output_iterator;
+                             ^
+/opt/rh/gcc-toolset-12/root/usr/lib/gcc/x86_64-redhat-linux/12/../../../../include/c++/12/bits/iterator_concepts.h:964:59: note: and 'std::ranges::subrange<SplashFont **, SplashFont **, std::ranges::subrange_kind::sized> &' does not satisfy '__adl_begin'
+      requires is_array_v<_Tp> || __member_begin<_Tp&> || __adl_begin<_Tp&>
+                                                          ^
+/opt/rh/gcc-toolset-12/root/usr/lib/gcc/x86_64-redhat-linux/12/../../../../include/c++/12/bits/iterator_concepts.h:958:19: note: because '__decay_copy(begin(__t))' would be invalid: call to deleted function 'begin'
+          { __decay_copy(begin(__t)) } -> input_or_output_iterator;
+                         ^
+
+--- poppler/splash/SplashFontEngine.cc.orig2	2025-01-08 10:58:44.891336796 +0100
++++ poppler/splash/SplashFontEngine.cc	2025-01-08 11:02:24.548166442 +0100
+@@ -243,7 +243,11 @@
+     if (fontCache.back()) {
+         delete fontCache.back();
+     }
++#if 0//ndef __clang__
+     std::ranges::rotate(fontCache, fontCache.end() - 1);
++#else
++    std::rotate(fontCache.begin(), fontCache.end() - 1, fontCache.end());
++#endif
+ 
+     fontCache[0] = newFont;
+     return fontCache[0];
+--- poppler/fofi/FoFiTrueType.cc.orig	2025-01-08 12:26:45.256494256 +0100
++++ poppler/fofi/FoFiTrueType.cc	2025-01-08 12:22:26.462723118 +0100
+@@ -1160,12 +1160,20 @@
+             locaTable[i].origOffset = glyfTableLen;
+         }
+     }
++#if 0//ndef __clang__
+     std::ranges::sort(locaTable, cmpTrueTypeLocaOffsetFunctor());
++#else
++    std::sort(locaTable.begin(), locaTable.end(), cmpTrueTypeLocaOffsetFunctor());
++#endif
+     for (i = 0; i < nGlyphs; ++i) {
+         locaTable[i].len = locaTable[i + 1].origOffset - locaTable[i].origOffset;
+     }
+     locaTable[nGlyphs].len = 0;
++#if 0//ndef __clang__
+     std::ranges::sort(locaTable, cmpTrueTypeLocaIdxFunctor());
++#else
++    std::sort(locaTable.begin(), locaTable.end(), cmpTrueTypeLocaIdxFunctor());
++#endif
+     pos = 0;
+     for (i = 0; i <= nGlyphs; ++i) {
+         locaTable[i].newOffset = pos;
+--- poppler/poppler/CIDFontsWidthsBuilder.h.orig	2025-01-08 12:34:25.458714665 +0100
++++ poppler/poppler/CIDFontsWidthsBuilder.h	2025-01-08 12:35:05.809036940 +0100
+@@ -89,7 +89,11 @@
+         // How many elements at the end has this
+         int uniqueElementsFromEnd(int value)
+         {
++#if 0//ndef __clang__
+             auto lastDifferent = std::ranges::find_if(std::ranges::reverse_view(m_values), [value](auto &&element) { return element != value; });
++#else
++            auto lastDifferent = std::find_if(m_values.rbegin(), m_values.rend(), [value](auto &&element) { return element != value; });
++#endif
+             return std::distance(m_values.rbegin(), lastDifferent);
+         }
+ 
+--- poppler/poppler/Dict.cc.orig	2025-01-08 12:17:07.701541557 +0100
++++ poppler/poppler/Dict.cc	2025-01-08 12:29:29.609619053 +0100
+@@ -125,7 +125,11 @@
+             return &*pos;
+         }
+     } else {
++#if 0//ndef __clang__
+         const auto pos = std::ranges::find_if(std::ranges::reverse_view(entries), [key](const DictEntry &entry) { return entry.first == key; });
++#else
++        const auto pos = std::find_if(entries.rbegin(), entries.rend(), [key](const DictEntry &entry) { return entry.first == key; });
++#endif
+         if (pos != entries.rend()) {
+             return &*pos;
+         }
+--- poppler/poppler/CIDFontsWidthsBuilder.h.orig2	2025-01-08 13:26:29.167797754 +0100
++++ poppler/poppler/CIDFontsWidthsBuilder.h	2025-01-08 13:27:03.165988989 +0100
+@@ -152,7 +152,11 @@
+             if (differentValues || m_values.size() < 4) {
+                 std::vector<int> savedValues;
+                 if (m_values.size() >= 4) {
++#if 0//ndef __clang__
+                     auto lastDifferent = std::ranges::find_if(std::ranges::reverse_view(m_values), [value = m_values.back()](auto &&element) { return element != value; });
++#else
++                    auto lastDifferent = std::find_if(m_values.rbegin(), m_values.rend(), [value = m_values.back()](auto &&element) { return element != value; });
++#endif
+                     if (std::distance(m_values.rbegin(), lastDifferent) >= 3) {
+                         savedValues.push_back(m_values.back());
+                         m_values.pop_back();
+--- poppler/poppler/Dict.cc.orig	2025-01-09 17:07:59.770799229 +0100
++++ poppler/poppler/Dict.cc	2025-01-09 17:04:28.369931616 +0100
+@@ -113,14 +113,22 @@
+             if (!sorted) {
+                 Dict *that = const_cast<Dict *>(this);
+ 
++#if 0//ndef __clang__
+                 std::ranges::sort(that->entries, CmpDictEntry {});
++#else
++                std::sort(that->entries.begin(), that->entries.end(), CmpDictEntry {});
++#endif
+                 that->sorted = true;
+             }
+         }
+     }
+ 
+     if (sorted) {
++#if 0//ndef __clang__
+         const auto pos = std::ranges::lower_bound(entries, key, std::less<> {}, &DictEntry::first);
++#else
++        const auto pos = std::lower_bound(entries.begin(), entries.end(), key, CmpDictEntry {});
++#endif
+         if (pos != entries.end() && pos->first == key) {
+             return &*pos;
+         }
+--- poppler/poppler/GlobalParams.cc.orig	2025-01-02 01:28:08.000000000 +0100
++++ poppler/poppler/GlobalParams.cc	2025-01-09 17:13:51.367905376 +0100
+@@ -366,7 +366,11 @@
+     for (const SysFontInfo *f : fonts) {
+         fi = f;
+         if (fi->match(name2, bold, italic, oblique, fixedWidth)) {
++#if 0//ndef __clang__
+             if (std::ranges::find(filesToIgnore, fi->path->toStr()) == filesToIgnore.end()) {
++#else
++            if (std::find(filesToIgnore.begin(), filesToIgnore.end(), fi->path->toStr()) == filesToIgnore.end()) {
++#endif
+                 break;
+             }
+         }
+@@ -377,7 +381,11 @@
+         for (const SysFontInfo *f : fonts) {
+             fi = f;
+             if (fi->match(name2, false, italic)) {
++#if 0//ndef __clang__
+                 if (std::ranges::find(filesToIgnore, fi->path->toStr()) == filesToIgnore.end()) {
++#else
++                if (std::find(filesToIgnore.begin(), filesToIgnore.end(), fi->path->toStr()) == filesToIgnore.end()) {
++#endif
+                     break;
+                 }
+             }
+@@ -389,7 +397,11 @@
+         for (const SysFontInfo *f : fonts) {
+             fi = f;
+             if (fi->match(name2, false, false)) {
++#if 0//ndef __clang__
+                 if (std::ranges::find(filesToIgnore, fi->path->toStr()) == filesToIgnore.end()) {
++#else
++                if (std::find(filesToIgnore.begin(), filesToIgnore.end(), fi->path->toStr()) == filesToIgnore.end()) {
++#endif
+                     break;
+                 }
+             }
+@@ -737,7 +749,11 @@
+ 
+     // remove the - from the names, for some reason, Fontconfig does not
+     // understand "MS-Mincho" but does with "MS Mincho"
++#if 0//ndef __clang__
+     std::ranges::replace(fontName, '-', ' ');
++#else
++    std::replace(fontName.begin(), fontName.end(), '-', ' ');
++#endif
+ 
+     size_t start = std::string::npos;
+     findModifier(fontName, modStart, "Regular", start);
+@@ -1120,7 +1136,11 @@
+                     FcPatternGetInteger(fontSet->fonts[i], FC_INDEX, 0, &faceIndex);
+ 
+                     const std::string sFilePath = reinterpret_cast<char *>(fcFilePath);
++#if 0//ndef __clang__
+                     if (std::ranges::find(filesToIgnore, sFilePath) == filesToIgnore.end()) {
++#else
++                    if (std::find(filesToIgnore.begin(), filesToIgnore.end(), sFilePath) == filesToIgnore.end()) {
++#endif
+                         return FamilyStyleFontSearchResult(sFilePath, faceIndex);
+                     }
+                 }
+--- poppler/poppler/Catalog.cc.orig	2025-01-09 17:19:48.592089218 +0100
++++ poppler/poppler/Catalog.cc	2025-01-09 17:19:36.361030948 +0100
+@@ -705,7 +705,11 @@
+     RefRecursionChecker seen;
+     parse(tree, seen);
+     if (!entries.empty()) {
++#if 0//ndef __clang__
+         std::ranges::sort(entries, [](const auto &first, const auto &second) { return first->name.cmp(&second->name) < 0; });
++#else
++        std::sort(entries.begin(), entries.end(), [](const auto &first, const auto &second) { return first->name.cmp(&second->name) < 0; });
++#endif
+     }
+ }
+ 
+@@ -754,7 +758,11 @@
+ 
+ Object NameTree::lookup(const GooString *name)
+ {
++#if 0//ndef __clang__
+     auto entry = std::ranges::lower_bound(entries, name, EntryGooStringComparer {});
++#else
++    auto entry = std::lower_bound(entries.begin(), entries.end(), name, [](const auto &element, const GooString *n) { return element->name.cmp(n) < 0; });
++#endif
+ 
+     if (entry != entries.end() && (*entry)->name.cmp(name) == 0) {
+         return (*entry)->value.fetch(xref);
+--- poppler/poppler/GfxFont.cc.orig2	2025-01-09 17:26:15.227421640 +0100
++++ poppler/poppler/GfxFont.cc	2025-01-09 17:27:06.930929833 +0100
+@@ -1868,7 +1868,11 @@
+                 ++i;
+             }
+         }
++#if 0//ndef __clang__
+         std::ranges::sort(widths.exceps, cmpWidthExcepFunctor());
++#else
++        std::sort(widths.exceps.begin(), widths.exceps.end(), cmpWidthExcepFunctor());
++#endif
+     }
+ 
+     // default metrics for vertical font
+@@ -1916,7 +1920,11 @@
+                 ++i;
+             }
+         }
++#if 0//ndef __clang__
+         std::ranges::sort(widths.excepsV, cmpWidthExcepVFunctor());
++#else
++        std::sort(widths.excepsV.begin(), widths.excepsV.end(), cmpWidthExcepVFunctor());
++#endif
+     }
+ 
+     ok = true;
+--- poppler/poppler/Gfx.cc.orig	2025-01-09 17:31:05.423273919 +0100
++++ poppler/poppler/Gfx.cc	2025-01-09 17:31:07.340292763 +0100
+@@ -2545,7 +2545,11 @@
+         bboxIntersections[1] = ((xMin - x0) * dx + (yMax - y0) * dy) * mul;
+         bboxIntersections[2] = ((xMax - x0) * dx + (yMin - y0) * dy) * mul;
+         bboxIntersections[3] = ((xMax - x0) * dx + (yMax - y0) * dy) * mul;
++#if 0//ndef __clang__
+         std::ranges::sort(bboxIntersections);
++#else
++        std::sort(std::begin(bboxIntersections), std::end(bboxIntersections));
++#endif
+         tMin = bboxIntersections[0];
+         tMax = bboxIntersections[3];
+         if (tMin < 0 && !shading->getExtend0()) {
+@@ -2646,7 +2650,11 @@
+         s[1] = (yMax - ty) / dx;
+         s[2] = (xMin - tx) / -dy;
+         s[3] = (xMax - tx) / -dy;
++#if 0//ndef __clang__
+         std::ranges::sort(s);
++#else
++        std::sort(std::begin(s), std::end(s));
++#endif
+         sMin = s[1];
+         sMax = s[2];
+     }
+@@ -2787,7 +2795,11 @@
+             s[1] = (yMax - ty) / dx;
+             s[2] = (xMin - tx) / -dy;
+             s[3] = (xMax - tx) / -dy;
++#if 0//ndef __clang__
+             std::ranges::sort(s);
++#else
++            std::sort(std::begin(s), std::end(s));
++#endif
+             sMin = s[1];
+             sMax = s[2];
+         }
+--- poppler/poppler/TextOutputDev.cc.orig	2025-01-09 17:37:28.163110149 +0100
++++ poppler/poppler/TextOutputDev.cc	2025-01-09 17:36:48.827864411 +0100
+@@ -4574,7 +4574,11 @@
+     if (!words.empty()) {
+         // Reverse word order for RTL text. Fixes #53 for glib backend (Evince)
+         if (!page->primaryLR) {
++#if 0//ndef __clang__
+             std::ranges::reverse(words);
++#else
++            std::reverse(words.begin(), words.end());
++#endif
+         }
+ 
+         lines.push_back(std::move(words));
+@@ -5456,7 +5460,11 @@
+         for (word = rawWords; word; word = word->next) {
+             s.clear();
+             uText.resize(word->len());
++#if 0//ndef __clang__
+             std::ranges::transform(word->chars, uText.begin(), [](auto &c) { return c.text; });
++#else
++            std::transform(word->chars.begin(), word->chars.end(), uText.begin(), [](auto &c) { return c.text; });
++#endif
+             dumpFragment(uText.data(), uText.size(), uMap, &s);
+             (*outputFunc)(outputStream, s.c_str(), s.getLength());
+ 
+--- poppler/poppler/PDFDoc.cc.orig	2025-01-09 17:38:49.498598893 +0100
++++ poppler/poppler/PDFDoc.cc	2025-01-09 17:38:22.459449316 +0100
+@@ -596,7 +596,11 @@
+                 if (fw->getType() == formSignature) {
+                     assert(fw->getField()->getType() == formSignature);
+                     FormFieldSignature *ffs = static_cast<FormFieldSignature *>(fw->getField());
++#if 0//ndef __clang__
+                     if (std::ranges::find(res, ffs) == res.end()) {
++#else
++                    if (std::find(res.begin(), res.end(), ffs) == res.end()) {
++#endif
+                         res.push_back(ffs);
+                     }
+                 }
+--- poppler/poppler/Annot.cc.orig	2025-01-09 17:40:31.125125064 +0100
++++ poppler/poppler/Annot.cc	2025-01-09 17:40:14.021036519 +0100
+@@ -7499,7 +7499,11 @@
+ 
+ bool Annots::removeAnnot(Annot *annot)
+ {
++#if 0//ndef __clang__
+     auto idx = std::ranges::find(annots, annot);
++#else
++    auto idx = std::find(annots.begin(), annots.end(), annot);
++#endif
+ 
+     if (idx == annots.end()) {
+         return false;
+--- poppler/poppler/Dict.cc.orig	2025-01-09 18:35:56.796874707 +0100
++++ poppler/poppler/Dict.cc	2025-01-09 18:36:22.159050403 +0100
+@@ -32,7 +32,9 @@
+ #include <config.h>
+ 
+ #include <algorithm>
++#if 0//ndef __clang__
+ #include <ranges>
++#endif
+ 
+ #include "XRef.h"
+ #include "Dict.h"
+--- poppler/poppler/CIDFontsWidthsBuilder.h.orig	2025-01-09 18:37:58.541718087 +0100
++++ poppler/poppler/CIDFontsWidthsBuilder.h	2025-01-09 18:38:02.766747356 +0100
+@@ -15,7 +15,9 @@
+ #include <vector>
+ #include <variant>
+ #include <algorithm>
++#if 0//ndef __clang__
+ #include <ranges>
++#endif
+ #include <cassert>
+ 
+ /** Class to help build the widths array as defined in
+--- poppler/poppler/Catalog.cc.orig	2025-01-10 09:09:33.713016092 +0100
++++ poppler/poppler/Catalog.cc	2025-01-10 09:10:36.719237223 +0100
+@@ -749,12 +749,14 @@
+     }
+ }
+ 
++#if 0//ndef __clang__
+ struct EntryGooStringComparer
+ {
+     static constexpr const GooString *get(const GooString *string) { return string; };
+     static constexpr const GooString *get(const auto &entry) { return &entry->name; }
+     auto operator()(const auto &lhs, const auto &rhs) { return get(lhs)->cmp(get(rhs)) < 0; }
+ };
++#endif
+ 
+ Object NameTree::lookup(const GooString *name)
+ {
