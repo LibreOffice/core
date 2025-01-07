@@ -96,6 +96,12 @@ IMPL_LINK(SfxPasswordDialog, InsertTextHdl, OUString&, rTest, bool)
         // discarded
         m_xOnlyAsciiFT->set_label_type(weld::LabelType::Warning);
     }
+    else
+    {
+        // tdf#161412: downgrade from "Warning" to "Normal" if a valid
+        // letter was discarded after an invalid letter.
+        m_xOnlyAsciiFT->set_label_type(weld::LabelType::Normal);
+    }
 
     return true;
 }
