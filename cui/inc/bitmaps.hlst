@@ -56,6 +56,9 @@ inline constexpr OUString RID_SVXBMP_LOCK = u"res/lock.png"_ustr;
 inline constexpr OUString RID_SVXBMP_LOCKED = u"res/locked.png"_ustr;
 inline constexpr OUString RID_SVXBMP_UNLOCKED = u"res/unlocked.png"_ustr;
 
+inline constexpr OUString RID_SVXBMP_HIDEPASS = u"res/hidepass.png"_ustr;
+inline constexpr OUString RID_SVXBMP_SHOWPASS = u"res/showpass.png"_ustr;
+
 inline constexpr OUString RID_SVXBMP_THEME_NORMAL_BIG = u"svx/res/galnorl.png"_ustr;
 inline constexpr OUString RID_SVXBMP_THEME_READONLY_BIG = u"svx/res/galrdol.png"_ustr;
 inline constexpr OUString RID_SVXBMP_THEME_DEFAULT_BIG = u"svx/res/galdefl.png"_ustr;

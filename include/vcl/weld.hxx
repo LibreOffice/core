@@ -1810,6 +1810,7 @@ public:
     virtual int get_position() const = 0;
     virtual void set_editable(bool bEditable) = 0;
     virtual bool get_editable() const = 0;
+    virtual void set_visibility(bool bVisible) = 0;
     virtual void set_message_type(EntryMessageType eType) = 0;
     virtual void set_placeholder_text(const OUString& rText) = 0;
 

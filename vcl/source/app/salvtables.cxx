@@ -3454,6 +3454,11 @@ void SalInstanceEntry::set_editable(bool bEditable) { m_xEntry->SetReadOnly(!bEd
 
 bool SalInstanceEntry::get_editable() const { return !m_xEntry->IsReadOnly(); }
 
+void SalInstanceEntry::set_visibility(bool bVisible)
+{
+    m_xEntry->set_property(u"visibility"_ustr, OUString::boolean(bVisible));
+}
+
 void SalInstanceEntry::set_overwrite_mode(bool bOn) { m_xEntry->SetInsertMode(!bOn); }
 
 bool SalInstanceEntry::get_overwrite_mode() const { return !m_xEntry->IsInsertMode(); }

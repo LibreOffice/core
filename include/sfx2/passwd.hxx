@@ -67,6 +67,8 @@ private:
 
     std::unique_ptr<weld::Button> m_xOKBtn;
 
+    std::array<std::unique_ptr<weld::ToggleButton>, 4> m_xPass;
+
     std::shared_ptr<weld::MessageDialog> m_xConfirmFailedDialog;
 
     OUString        maMinLenPwdStr;
@@ -79,6 +81,7 @@ private:
 
     bool            mbAsciiOnly;
     DECL_DLLPRIVATE_LINK(OKHdl, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(ShowHdl, weld::Toggleable&, void);
     DECL_DLLPRIVATE_LINK(InsertTextHdl, OUString&, bool);
     DECL_DLLPRIVATE_LINK(EditModifyHdl, weld::Entry&, void);
     void            ModifyHdl();

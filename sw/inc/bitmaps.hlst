@@ -120,6 +120,9 @@ inline constexpr OUString RID_BMP_QUERYINSMODE = u"res/queryinsmode.png"_ustr;
 inline constexpr OUString RID_SVXBMP_LOCKED = u"res/locked.png"_ustr;
 inline constexpr OUString RID_SVXBMP_UNLOCKED = u"res/unlocked.png"_ustr;
 
+inline constexpr OUString RID_SVXBMP_HIDEPASS = u"res/hidepass.png"_ustr;
+inline constexpr OUString RID_SVXBMP_SHOWPASS = u"res/showpass.png"_ustr;
+
 inline constexpr OUString RID_BMP_LINEBREAK_NONE = u"sw/res/linebreak_none.png"_ustr;
 inline constexpr OUString RID_BMP_LINEBREAK_LEFT = u"sw/res/linebreak_left.png"_ustr;
 inline constexpr OUString RID_BMP_LINEBREAK_RIGHT = u"sw/res/linebreak_right.png"_ustr;

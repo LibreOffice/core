@@ -97,4 +97,7 @@ inline constexpr OUString BMP_MENU_EXPORT = u"cmd/sc_exportto.png"_ustr;
 
 inline constexpr OUString BMP_DONATE = u"res/donate.png"_ustr;
 
+inline constexpr OUString RID_SVXBMP_HIDEPASS = u"res/hidepass.png"_ustr;
+inline constexpr OUString RID_SVXBMP_SHOWPASS = u"res/showpass.png"_ustr;
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

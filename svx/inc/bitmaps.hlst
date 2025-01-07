@@ -280,4 +280,7 @@ inline constexpr OUString RID_UNODRAW_GRAPHICS = u"svx/res/graphic.png"_ustr;
 inline constexpr OUString RID_SVXBMP_LOCKED = u"res/locked.png"_ustr;
 inline constexpr OUString RID_SVXBMP_UNLOCKED = u"res/unlocked.png"_ustr;
 
+inline constexpr OUString RID_SVXBMP_HIDEPASS = u"res/hidepass.png"_ustr;
+inline constexpr OUString RID_SVXBMP_SHOWPASS = u"res/showpass.png"_ustr;
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

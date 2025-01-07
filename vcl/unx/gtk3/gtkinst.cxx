@@ -13467,6 +13467,11 @@ public:
         return gtk_editable_get_editable(m_pEditable);
     }
 
+    virtual void set_visibility(bool bVisible) override
+    {
+        gtk_entry_set_visibility(GTK_ENTRY(m_pDelegate), bVisible);
+    }
+
     virtual void set_overwrite_mode(bool bOn) override
     {
 #if GTK_CHECK_VERSION(4, 0, 0)

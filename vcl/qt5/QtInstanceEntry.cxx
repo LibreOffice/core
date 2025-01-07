@@ -120,6 +120,13 @@ bool QtInstanceEntry::get_editable() const
     return bEditable;
 }
 
+void QtInstanceEntry::set_visibility(bool bVisible)
+{
+    SolarMutexGuard g;
+    GetQtInstance().RunInMainThread(
+        [&] { m_pLineEdit->setEchoMode(!bVisible ? QLineEdit::Password : QLineEdit::Normal); });
+}
+
 void QtInstanceEntry::setMessageType(QLineEdit& rLineEdit, weld::EntryMessageType eType)
 {
     SolarMutexGuard g;

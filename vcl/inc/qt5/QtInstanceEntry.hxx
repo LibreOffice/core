@@ -34,6 +34,7 @@ public:
     virtual int get_position() const override;
     virtual void set_editable(bool bEditable) override;
     virtual bool get_editable() const override;
+    virtual void set_visibility(bool bVisible) override;
     virtual void set_message_type(weld::EntryMessageType eType) override;
     virtual void set_placeholder_text(const OUString& rText) override;
 

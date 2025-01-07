@@ -639,6 +639,8 @@ public:
 
     virtual bool get_editable() const override;
 
+    virtual void set_visibility(bool bVisible) override;
+
     virtual void set_overwrite_mode(bool bOn) override;
 
     virtual bool get_overwrite_mode() const override;
