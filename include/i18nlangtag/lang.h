@@ -793,7 +793,7 @@ namespace o3tl
 #define LANGUAGE_USER_MORISYEN              LanguageType(0x06B2)
 #define LANGUAGE_USER_SANTALI_OLCHIKI_INDIA LanguageType(0x06B3)
 #define LANGUAGE_USER_FRENCH_GUINEA         LanguageType(0x940C)  /* makeLangID( 0x25, getPrimaryLanguage( LANGUAGE_FRENCH)) */
-
+#define LANGUAGE_USER_ABKHAZ                LanguageType(0x06B4)
 
 /* XXX Add new user defined LCIDs ^^^ there.
  * Note that we run out of IDs with sublanguage ID 0x01 after 0x07DF ... */

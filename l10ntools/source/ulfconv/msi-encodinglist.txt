@@ -20,6 +20,7 @@
 # 2nd field used to be the ANSI codepage,
 # but now we are using UTF-8 everywhere.
 # comment lines begin with hash
+ab       0  1716   # Abkhaz, fake LCID
 af       0  1078   # Afrikaans
 am       0  1118   # Amharic
 ar       0  1025

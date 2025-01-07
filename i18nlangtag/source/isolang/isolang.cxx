@@ -683,6 +683,7 @@ IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_SARAIKI,               "skr", "PK", k0    },
     { LANGUAGE_USER_MORISYEN,              "mfe", "MU", k0    },
     { LANGUAGE_USER_FRENCH_GUINEA,          "fr", "GN", k0    },
+    { LANGUAGE_USER_ABKHAZ,                 "ab", ""  , k0    },
     // Add new languages ^^^ there.
     { LANGUAGE_MULTIPLE,                   "mul", ""  , k0    },    // multiple languages, many languages are used
     { LANGUAGE_UNDETERMINED,               "und", ""  , k0    },    // undetermined language, language cannot be identified
@@ -1183,6 +1184,7 @@ css::lang::Locale MsLangId::Conversion::lookupFallbackLocale(
             {
                 if (rEntry.mnLang.anyOf(
                     // These are known to have no country assigned.
+                    LANGUAGE_USER_ABKHAZ,
                     LANGUAGE_USER_ESPERANTO,
                     LANGUAGE_USER_INTERLINGUA,
                     LANGUAGE_USER_INTERLINGUE,
