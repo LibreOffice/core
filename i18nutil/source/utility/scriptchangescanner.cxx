@@ -132,84 +132,28 @@ private:
     ScriptChange m_stCurr;
     DirectionChangeScanner* m_pDirScanner;
     const OUString& m_rText;
-    sal_Int16 m_nPrevScript = css::i18n::ScriptType::WEAK;
     sal_Int32 m_nIndex = 0;
+    sal_Int32 m_nNextStart = 0;
+    sal_Int16 m_nPrevScript = css::i18n::ScriptType::WEAK;
     bool m_bAtEnd = false;
     bool m_bApplyAsianToWeakQuotes = false;
 
-public:
-    GreedyScriptChangeScanner(const OUString& rText, sal_Int16 nDefaultScriptType,
-                              DirectionChangeScanner* pDirScanner)
-        : m_pDirScanner(pDirScanner)
-        , m_rText(rText)
+    void AdvanceOnce()
     {
-        // tdf#66791: For compatibility with other programs, the Asian script is
-        // applied to any weak-script quote characters if the enclosing paragraph
-        // contains Chinese- or Japanese-script characters.
-        // In the original Writer algorithm, the application language is used for
-        // all leading weak characters (#94331#). This implementation deviates by
-        // instead using the first-seen non-weak script.
-        sal_Int32 nCjBase = 0;
-        while (nCjBase < m_rText.getLength())
-        {
-            auto nChar = m_rText.iterateCodePoints(&nCjBase);
-            auto nScript = GetScriptClass(nChar);
-            if (m_nPrevScript == css::i18n::ScriptType::WEAK)
-            {
-                m_nPrevScript = nScript;
-            }
+        m_stCurr
+            = ScriptChange{ /*start*/ m_nNextStart, /*end*/ m_nNextStart, /*type*/ m_nPrevScript };
 
-            if (nScript == css::i18n::ScriptType::COMPLEX)
-            {
-                m_bApplyAsianToWeakQuotes = false;
-                break;
-            }
-
-            auto nUnicodeScript = u_getIntPropertyValue(nChar, UCHAR_SCRIPT);
-            switch (nUnicodeScript)
-            {
-                case USCRIPT_HAN:
-                case USCRIPT_HIRAGANA:
-                case USCRIPT_KATAKANA:
-                    m_bApplyAsianToWeakQuotes = true;
-                    break;
-
-                default:
-                    break;
-            }
-        }
-
-        // Fall back to the application language for leading weak characters if a
-        // better candidate was not found.
-        if (m_nPrevScript == css::i18n::ScriptType::WEAK)
-        {
-            m_nPrevScript = nDefaultScriptType;
-        }
-
-        // Make a change record for leading weak characters.
-        Advance();
-        if (m_stCurr.m_nStartIndex == m_stCurr.m_nEndIndex)
-        {
-            // The text does not start with weak characters.
-            // Initialize with a non-empty record.
-            Advance();
-        }
-    }
-
-    bool AtEnd() const override { return m_bAtEnd; }
-
-    void Advance() override
-    {
-        m_stCurr = ScriptChange{ /*start*/ 0, /*end*/ 0, /*type*/ m_nPrevScript };
-
-        if (m_nIndex >= m_rText.getLength())
+        if (m_nNextStart >= m_rText.getLength())
         {
             m_bAtEnd = true;
             return;
         }
 
-        auto nRunStart = m_nIndex;
+        auto nRunStart = m_nNextStart;
+        m_nNextStart = m_nIndex;
+
         auto nScript = m_nPrevScript;
+
         while (m_nIndex < m_rText.getLength())
         {
             auto nPrevIndex = m_nIndex;
@@ -262,23 +206,25 @@ public:
 
             if (nScript != m_nPrevScript)
             {
-                m_nIndex = nPrevIndex;
+                m_nNextStart = nPrevIndex;
                 break;
             }
+
+            m_nNextStart = m_nIndex;
         }
 
-        if (m_nIndex > 0)
+        if (m_nNextStart > 0)
         {
             // special case for dotted circle since it can be used with complex
             // before a mark, so we want it associated with the mark's script
             // tdf#112594: another special case for NNBSP followed by a Mongolian
             // character, since NNBSP has special uses in Mongolian (tdf#112594)
-            auto nPrevPos = m_nIndex;
+            auto nPrevPos = m_nNextStart;
             auto nPrevChar = m_rText.iterateCodePoints(&nPrevPos, -1);
-            if (m_nIndex < m_rText.getLength()
+            if (m_nNextStart < m_rText.getLength()
                 && css::i18n::ScriptType::WEAK == GetScriptClass(nPrevChar))
             {
-                auto nChar = m_rText.iterateCodePoints(&m_nIndex, 0);
+                auto nChar = m_rText.iterateCodePoints(&m_nNextStart, 0);
                 auto nType = unicode::getUnicodeType(nChar);
                 if (nType == css::i18n::UnicodeType::NON_SPACING_MARK
                     || nType == css::i18n::UnicodeType::ENCLOSING_MARK
@@ -286,13 +232,75 @@ public:
                     || (nPrevChar == CHAR_NNBSP
                         && u_getIntPropertyValue(nChar, UCHAR_SCRIPT) == USCRIPT_MONGOLIAN))
                 {
-                    m_nIndex = nPrevPos;
+                    m_nNextStart = nPrevPos;
                 }
             }
         }
 
-        m_stCurr = ScriptChange{ nRunStart, m_nIndex, m_nPrevScript };
+        m_stCurr = ScriptChange{ nRunStart, m_nNextStart, m_nPrevScript };
         m_nPrevScript = nScript;
+    }
+
+public:
+    GreedyScriptChangeScanner(const OUString& rText, sal_Int16 nDefaultScriptType,
+                              DirectionChangeScanner* pDirScanner)
+        : m_pDirScanner(pDirScanner)
+        , m_rText(rText)
+    {
+        // tdf#66791: For compatibility with other programs, the Asian script is
+        // applied to any weak-script quote characters if the enclosing paragraph
+        // contains Chinese- or Japanese-script characters.
+        // In the original Writer algorithm, the application language is used for
+        // all leading weak characters (#94331#). This implementation deviates by
+        // instead using the first-seen non-weak script.
+        sal_Int32 nCjBase = 0;
+        while (nCjBase < m_rText.getLength())
+        {
+            auto nChar = m_rText.iterateCodePoints(&nCjBase);
+            auto nScript = GetScriptClass(nChar);
+            if (m_nPrevScript == css::i18n::ScriptType::WEAK)
+            {
+                m_nPrevScript = nScript;
+            }
+
+            if (nScript == css::i18n::ScriptType::COMPLEX)
+            {
+                m_bApplyAsianToWeakQuotes = false;
+                break;
+            }
+
+            auto nUnicodeScript = u_getIntPropertyValue(nChar, UCHAR_SCRIPT);
+            switch (nUnicodeScript)
+            {
+                case USCRIPT_HAN:
+                case USCRIPT_HIRAGANA:
+                case USCRIPT_KATAKANA:
+                    m_bApplyAsianToWeakQuotes = true;
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        // Fall back to the application language for leading weak characters if a
+        // better candidate was not found.
+        if (m_nPrevScript == css::i18n::ScriptType::WEAK)
+        {
+            m_nPrevScript = nDefaultScriptType;
+        }
+
+        Advance();
+    }
+
+    bool AtEnd() const override { return m_bAtEnd; }
+
+    void Advance() override
+    {
+        do
+        {
+            AdvanceOnce();
+        } while (!AtEnd() && (m_stCurr.m_nStartIndex == m_stCurr.m_nEndIndex));
     }
 
     ScriptChange Peek() const override { return m_stCurr; }
