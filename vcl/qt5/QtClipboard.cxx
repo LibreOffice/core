@@ -158,14 +158,31 @@ void QtClipboard::handleChanged(QClipboard::Mode aMode)
 
     osl::ClearableMutexGuard aGuard(m_aMutex);
 
-    // QtWayland will send a second change notification (seemingly without any
-    // trigger). And any C'n'P operation in the Qt file picker emits a signal,
-    // with LO still holding the clipboard ownership, but internally having lost
-    // it. So ignore any signal, which still delivers the internal QtMimeData
-    // as the clipboard content and is no "advertised" change.
-    if (!m_bOwnClipboardChange && isOwner(aMode)
-        && qobject_cast<const QtMimeData*>(QApplication::clipboard()->mimeData(aMode)))
-        return;
+    if (!m_bOwnClipboardChange && isOwner(aMode))
+    {
+        auto const mimeData = QApplication::clipboard()->mimeData(aMode);
+
+        // QtWayland will send a second change notification (seemingly without any
+        // trigger). And any C'n'P operation in the Qt file picker emits a signal,
+        // with LO still holding the clipboard ownership, but internally having lost
+        // it. So ignore any signal, which still delivers the internal QtMimeData
+        // as the clipboard content and is no "advertised" change.
+        if (qobject_cast<const QtMimeData*>(mimeData))
+            return;
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) && defined EMSCRIPTEN
+        // At least for the Qt5 Wasm backend, copying text from LO and then pasting it back into LO
+        // will, for whatever reason, call here with an empty text/plain mimeData; while that
+        // doesn't seem to be an issue at least with the current upstream Qt6 dev branch (again, for
+        // whatever reason), for at least our Qt 5.15.2+wasm branch the below m_aContents.clear()
+        // would make us lose the text just copied from LO into the clipboard and thus make us paste
+        // an empty text into LO, so, as a hack, filter out this unhelpful event here:
+        if (mimeData != nullptr && mimeData->hasText() && mimeData->text().isEmpty())
+        {
+            return;
+        }
+#endif
+    }
 
     css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner> xOldOwner(m_aOwner);
     css::uno::Reference<css::datatransfer::XTransferable> xOldContents(m_aContents);
@@ -251,7 +268,22 @@ bool QtClipboard::isOwner(const QClipboard::Mode aMode)
             return pClipboard->ownsFindBuffer();
 
         case QClipboard::Clipboard:
-            return pClipboard->ownsClipboard();
+            if (pClipboard->ownsClipboard())
+            {
+                return true;
+            }
+#if defined EMSCRIPTEN
+            // QWasmClipboard::ownsMode (in qtbase/src/plugins/platforms/wasm/qwasmclipboard.cpp,
+            // which is the actual implementation of the above ownsClipboard call) unconditionally
+            // returns false, so as a hack use "m_aContents is a LO-internal XTransferable type" as
+            // a poor approximation of "LO owns the clipboard":
+            if (m_aContents.is()
+                && dynamic_cast<QtClipboardTransferable*>(m_aContents.get()) == nullptr)
+            {
+                return true;
+            }
+#endif
+            return false;
     }
     return false;
 }
