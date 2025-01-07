@@ -869,10 +869,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
             {
                 auto* pDrawViewShell = dynamic_cast<DrawViewShell*>(mpViewShell);
                 if (pDrawViewShell && pDrawViewShell->getAnnotationManagerPtr())
-                {
-                    pDrawViewShell->getAnnotationManagerPtr()->SelectAnnotation(pAnnotationData->mxAnnotation);
-                }
-                pAnnotationData->openPopup();
+                    pDrawViewShell->getAnnotationManagerPtr()->SelectAnnotation(pAnnotationData->mxAnnotation, true);
             }
             return true;
         }
