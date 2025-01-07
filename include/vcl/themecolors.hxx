@@ -11,6 +11,15 @@
 #include <vcl/dllapi.h>
 #include <svtools/colorcfg.hxx>
 
+/* ThemeState represents registry values for "LibreOfficeTheme" enumeration
+ * in officecfg/registry/schema/org/openoffice/Office/Common.xcs, which means
+ * that the associations here have a meaning. Please don't change it. */
+enum class ThemeState
+{
+    DISABLED = 0,
+    ENABLED = 1,
+};
+
 class VCL_DLLPUBLIC ThemeColors
 {
     ThemeColors() {}
@@ -28,6 +37,13 @@ public:
         return rThemeName == svtools::AUTOMATIC_COLOR_SCHEME;
     }
 
+    static ThemeState GetThemeState();
+    static void SetThemeState(ThemeState eState);
+
+    static bool IsThemeDisabled() { return GetThemeState() == ThemeState::DISABLED; };
+    static bool IsThemeEnabled() { return GetThemeState() == ThemeState::ENABLED; };
+
+    // !IsThemeCached means that the ThemeColors object doesn't have the colors from the registry yet.
     static bool VclPluginCanUseThemeColors()
     {
         return IsThemeCached()
