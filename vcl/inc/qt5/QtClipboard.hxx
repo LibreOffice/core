@@ -50,7 +50,7 @@ class QtClipboard final
     css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner> m_aOwner;
     std::vector<css::uno::Reference<css::datatransfer::clipboard::XClipboardListener>> m_aListeners;
 
-    static bool isOwner(const QClipboard::Mode aMode);
+    bool isOwner(const QClipboard::Mode aMode);
     static bool isSupported(const QClipboard::Mode aMode);
 
     explicit QtClipboard(OUString aModeString, const QClipboard::Mode aMode);
