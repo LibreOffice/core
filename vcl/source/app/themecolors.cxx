@@ -9,6 +9,6 @@
 #include <vcl/themecolors.hxx>
 
 ThemeColors ThemeColors::m_aThemeColors;
-bool ThemeColors::m_bIsThemeLoaded = false;
+bool ThemeColors::m_bIsThemeCached = false;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -18,7 +18,7 @@
 void QtCustomStyle::drawPrimitive(PrimitiveElement element, const QStyleOption* option,
                                   QPainter* painter, const QWidget* widget) const
 {
-    if (!ThemeColors::IsThemeLoaded() || IsSystemThemeChanged())
+    if (!ThemeColors::IsThemeCached() || IsSystemThemeChanged())
     {
         QProxyStyle::drawPrimitive(element, option, painter, widget);
         return;
@@ -45,7 +45,7 @@ void QtCustomStyle::drawPrimitive(PrimitiveElement element, const QStyleOption* 
 
 QPalette QtCustomStyle::customPalette()
 {
-    if (!ThemeColors::IsThemeLoaded())
+    if (!ThemeColors::IsThemeCached())
         return QApplication::palette();
 
     const ThemeColors& aThemeColors = ThemeColors::GetThemeColors();
@@ -75,7 +75,7 @@ QPalette QtCustomStyle::customPalette()
 
 QPalette QtCustomStyle::GetMenuBarPalette()
 {
-    if (!ThemeColors::IsThemeLoaded() || IsSystemThemeChanged())
+    if (!ThemeColors::IsThemeCached() || IsSystemThemeChanged())
         return QApplication::palette();
 
     QPalette aPal;
@@ -92,7 +92,7 @@ QPalette QtCustomStyle::GetMenuBarPalette()
 
 QPalette QtCustomStyle::GetMenuPalette()
 {
-    if (!ThemeColors::IsThemeLoaded() || IsSystemThemeChanged())
+    if (!ThemeColors::IsThemeCached() || IsSystemThemeChanged())
         return QApplication::palette();
 
     QPalette aPal;

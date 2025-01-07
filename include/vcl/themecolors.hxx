@@ -14,15 +14,15 @@
 class VCL_DLLPUBLIC ThemeColors
 {
     ThemeColors() {}
-    static bool m_bIsThemeLoaded;
+    static bool m_bIsThemeCached;
     static ThemeColors m_aThemeColors;
 
 public:
     static ThemeColors& GetThemeColors() { return m_aThemeColors; }
     static void SetThemeColors(const ThemeColors& rThemeColors) { m_aThemeColors = rThemeColors; }
 
-    static bool IsThemeLoaded() { return m_bIsThemeLoaded; }
-    static void SetThemeLoaded(bool bLoaded) { m_bIsThemeLoaded = bLoaded; }
+    static bool IsThemeCached() { return m_bIsThemeCached; }
+    static void SetThemeCached(bool bCached) { m_bIsThemeCached = bCached; }
     static bool IsAutomaticTheme(std::u16string_view rThemeName)
     {
         return rThemeName == svtools::AUTOMATIC_COLOR_SCHEME;
@@ -30,7 +30,7 @@ public:
 
     static bool VclPluginCanUseThemeColors()
     {
-        return IsThemeLoaded()
+        return IsThemeCached()
                && !ThemeColors::IsAutomaticTheme(ThemeColors::GetThemeColors().GetThemeName());
     };
 

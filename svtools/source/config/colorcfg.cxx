@@ -475,7 +475,7 @@ void ColorConfig::LoadThemeColorsFromRegistry()
     rThemeColors.SetAppBackBitmapStretched(
         m_pImpl->GetColorConfigValue(svtools::APPBACKGROUND).bIsBitmapStretched);
 
-    ThemeColors::SetThemeLoaded(true);
+    ThemeColors::SetThemeCached(true);
 }
 
 void ColorConfig::SetupTheme()
@@ -483,17 +483,17 @@ void ColorConfig::SetupTheme()
     if (!officecfg::Office::Common::Appearance::LibreOfficeTheme::get()
         || ThemeColors::IsAutomaticTheme(GetCurrentSchemeName()))
     {
-        ThemeColors::SetThemeLoaded(false);
+        ThemeColors::SetThemeCached(false);
         return;
     }
 
-    if (!ThemeColors::IsThemeLoaded())
+    if (!ThemeColors::IsThemeCached())
     {
-        // extension to registry
+        // registry to ColorConfig::m_pImpl
         m_pImpl->Load(GetCurrentSchemeName());
         m_pImpl->CommitCurrentSchemeName();
 
-        // registry to theme
+        // ColorConfig::m_pImpl to static ThemeColors::m_aThemeColors
         LoadThemeColorsFromRegistry();
     }
 }
@@ -774,7 +774,7 @@ IMPL_LINK( ColorConfig, DataChangedHdl, VclSimpleEvent&, rEvent, void )
         if (pData->GetType() == DataChangedEventType::SETTINGS &&
             pData->GetFlags() & AllSettingsFlags::STYLE)
         {
-            ThemeColors::SetThemeLoaded(false);
+            ThemeColors::SetThemeCached(false);
             SetupTheme();
         }
     }

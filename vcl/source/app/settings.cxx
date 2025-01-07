@@ -2369,8 +2369,8 @@ void MiscSettings::SetAppColorMode(int nMode)
     //    is disabled during this step to stop SalFrame::UpdateSettings()
     //    from adding the current theme's colors which are still set to
     //    the previous light/dark mode's colors.
-    if (ThemeColors::IsThemeLoaded())
-        ThemeColors::SetThemeLoaded(false);
+    if (ThemeColors::IsThemeCached())
+        ThemeColors::SetThemeCached(false);
     AllSettings aSettings = Application::GetSettings();
     Application::MergeSystemSettings(aSettings);
     Application *pApp = GetpApp();
