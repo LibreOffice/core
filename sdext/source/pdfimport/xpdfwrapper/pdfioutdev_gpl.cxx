@@ -1020,7 +1020,12 @@ void PDFOutDev::drawImageMask(GfxState* pState, Object*, Stream* str,
 
     int bitsPerComponent = 1;
     StreamColorSpaceMode csMode = streamCSNone;
+#if POPPLER_CHECK_VERSION(24, 12, 0)
+    bool hasAlpha;
+    str->getImageParams( &bitsPerComponent, &csMode, &hasAlpha );
+#else
     str->getImageParams( &bitsPerComponent, &csMode );
+#endif
     if( bitsPerComponent == 1 && (csMode == streamCSNone || csMode == streamCSDeviceGray) )
     {
         GfxRGB oneColor = { dblToCol( 1.0 ), dblToCol( 1.0 ), dblToCol( 1.0 ) };
