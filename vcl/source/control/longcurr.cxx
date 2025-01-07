@@ -221,7 +221,13 @@ namespace weld
     {
         const LocaleDataWrapper& rLocaleDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
         const OUString& rCurrencySymbol = !m_aCurrencySymbol.isEmpty() ? m_aCurrencySymbol : rLocaleDataWrapper.getCurrSymbol();
-        double fValue = GetValue() * weld::SpinButton::Power10(GetDecimalDigits());
+        double fValue = GetValue();
+        sal_uInt16 nDecimalDigits = GetDecimalDigits();
+        if (nDecimalDigits)
+        {
+            // tdf#158669 round to decimal digits
+            fValue = std::round(fValue * weld::SpinButton::Power10(nDecimalDigits));
+        }
         OUString aText = ImplGetCurr(rLocaleDataWrapper, fValue, GetDecimalDigits(), rCurrencySymbol, m_bThousandSep);
         ImplSetTextImpl(aText, nullptr);
         return true;
