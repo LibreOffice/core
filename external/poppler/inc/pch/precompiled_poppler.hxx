@@ -13,11 +13,11 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2024-06-10 17:25:06 using:
- ./bin/update_pch external/poppler poppler --cutoff=1 --exclude:system --include:module --include:local
+ Generated on 2025-01-08 10:27:46 using:
+ ../master/bin/update_pch ../master/external/poppler poppler --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./external/poppler/inc/pch/precompiled_poppler.hxx "make external/poppler.build" --find-conflicts
+ ./bin/update_pch_bisect ./../master/external/poppler/inc/pch/precompiled_poppler.hxx "make ../master/external/poppler.build" --find-conflicts
 */
 
 #include <sal/config.h>
@@ -69,13 +69,16 @@
 #include <iostream>
 #include <limits>
 #include <memory>
+#include <numbers>
 #include <optional>
 #include <poppler-config.h>
 #include <random>
+#include <ranges>
 #include <regex>
 #include <set>
 #include <sstream>
 #include <unordered_set>
+#include <variant>
 #include <vector>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2

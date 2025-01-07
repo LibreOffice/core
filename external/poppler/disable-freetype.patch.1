@@ -8,16 +8,17 @@ disable freetype dependent code
  #include <cctype>
 -#include "goo/ft_utils.h"
 +//#include "goo/ft_utils.h"
- #include "goo/gmem.h"
  #include "goo/gfile.h"
  #include "goo/GooString.h"
-@@ -78,8 +78,8 @@
+ #include "Error.h"
+@@ -78,9 +78,9 @@
  #include "fofi/FoFiTrueType.h"
  #include "fofi/FoFiIdentifier.h"
  
 -#include <ft2build.h>
--#include FT_FREETYPE_H
 +//#include <ft2build.h>
+ #include <variant>
+-#include FT_FREETYPE_H
 +//#include FT_FREETYPE_H
  #include <unordered_set>
  
