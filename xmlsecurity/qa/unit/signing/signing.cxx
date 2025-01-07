@@ -102,7 +102,7 @@ void SigningTest::setUp()
     mxSEInitializer = xml::crypto::SEInitializer::create(m_xContext);
     mxSecurityContext = mxSEInitializer->createSecurityContext(OUString());
 #if USE_CRYPTO_NSS
-#ifdef NSS_USE_ALG_IN_ANY_SIGNATURE
+#ifdef NSS_USE_ALG_IN_SIGNATURE
     // policy may disallow using SHA1 for signatures but unit test documents
     // have such existing signatures (call this after createSecurityContext!)
     NSS_SetAlgorithmPolicy(SEC_OID_SHA1, NSS_USE_ALG_IN_SIGNATURE, 0);

@@ -13,6 +13,7 @@
 
 #if USE_CRYPTO_NSS
 #include <secoid.h>
+#include <nss.h>
 #endif
 
 #include <test/unoapixml_test.hxx>
@@ -62,10 +63,12 @@ void SigningTest2::setUp()
     mxSEInitializer = xml::crypto::SEInitializer::create(m_xContext);
     mxSecurityContext = mxSEInitializer->createSecurityContext(OUString());
 #if USE_CRYPTO_NSS
-#ifdef NSS_USE_ALG_IN_ANY_SIGNATURE
+#ifdef NSS_USE_ALG_IN_SIGNATURE
     // policy may disallow using SHA1 for signatures but unit test documents
     // have such existing signatures (call this after createSecurityContext!)
-    NSS_SetAlgorithmPolicy(SEC_OID_SHA1, NSS_USE_ALG_IN_ANY_SIGNATURE, 0);
+    NSS_SetAlgorithmPolicy(SEC_OID_SHA1, NSS_USE_ALG_IN_SIGNATURE, 0);
+    // the minimum is 2048 in Fedora 40
+    NSS_OptionSet(NSS_RSA_MIN_KEY_SIZE, 1024);
 #endif
 #endif
 }

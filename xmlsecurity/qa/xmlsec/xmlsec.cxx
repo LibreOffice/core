@@ -7,6 +7,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_crypto.h>
+
+#if USE_CRYPTO_NSS
+#include <secoid.h>
+#include <nss.h>
+#endif
+
 #include <test/unoapi_test.hxx>
 
 #include <com/sun/star/embed/XStorage.hpp>
@@ -25,6 +32,10 @@ namespace
 /// Covers xmlsecurity/source/xmlsec/ fixes.
 class Test : public UnoApiTest
 {
+protected:
+    uno::Reference<xml::crypto::XSEInitializer> mxSEInitializer;
+    uno::Reference<xml::crypto::XXMLSecurityContext> mxSecurityContext;
+
 public:
     Test()
         : UnoApiTest("/xmlsecurity/qa/xmlsec/data/")
@@ -35,6 +46,19 @@ public:
     {
         UnoApiTest::setUp();
         MacrosTest::setUpX509(m_directories, "xmlsecurity_xmlsec");
+
+        // Initialize crypto after setting up the environment variables.
+        mxSEInitializer = xml::crypto::SEInitializer::create(m_xContext);
+        mxSecurityContext = mxSEInitializer->createSecurityContext(OUString());
+#if USE_CRYPTO_NSS
+#ifdef NSS_USE_ALG_IN_SIGNATURE
+        // policy may disallow using SHA1 for signatures but unit test documents
+        // have such existing signatures (call this after createSecurityContext!)
+        NSS_SetAlgorithmPolicy(SEC_OID_SHA1, NSS_USE_ALG_IN_SIGNATURE, 0);
+        // the minimum is 2048 in Fedora 40
+        NSS_OptionSet(NSS_RSA_MIN_KEY_SIZE, 1024);
+#endif
+#endif
     }
 };
 
@@ -47,10 +71,6 @@ OString ReadToString(const OUString& rUrl)
 CPPUNIT_TEST_FIXTURE(Test, testInsertPrivateKey)
 {
     // Given a view that has CA/cert/key data associated:
-    uno::Reference<xml::crypto::XSEInitializer> mxSEInitializer
-        = xml::crypto::SEInitializer::create(getComponentContext());
-    uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext
-        = mxSEInitializer->createSecurityContext(OUString());
     loadFromURL("private:factory/swriter");
     save("writer8");
     DocumentSignatureManager aManager(getComponentContext(), DocumentSignatureMode::Content);
@@ -79,7 +99,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertPrivateKey)
 
     // When getting the certificate flags and signing:
     uno::Reference<xml::crypto::XSecurityEnvironment> xSecurityEnvironment
-        = xSecurityContext->getSecurityEnvironment();
+        = mxSecurityContext->getSecurityEnvironment();
     // Get the certificate flags, the certificate chooser dialog does this:
     xSecurityEnvironment->getCertificateCharacters(xCertificate);
     OUString aDescription;
@@ -87,7 +107,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertPrivateKey)
     svl::crypto::SigningContext aSigningContext;
     aSigningContext.m_xCertificate = xCertificate;
     CPPUNIT_ASSERT(
-        aManager.add(aSigningContext, xSecurityContext, aDescription, nSecurityId, false));
+        aManager.add(aSigningContext, mxSecurityContext, aDescription, nSecurityId, false));
 
     // Then make sure that signing succeeds:
     aManager.read(/*bUseTempStream=*/true);

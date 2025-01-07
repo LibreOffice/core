@@ -15,6 +15,15 @@ $(eval $(call gb_CppunitTest_use_externals,xmlsecurity_xmlsec,\
     boost_headers \
 ))
 
+ifneq ($(OS),WNT)
+ifneq (,$(ENABLE_NSS))
+$(eval $(call gb_CppunitTest_use_externals,xmlsecurity_xmlsec,\
+    nssutil3 \
+    nss3 \
+))
+endif
+endif
+
 $(eval $(call gb_CppunitTest_add_exception_objects,xmlsecurity_xmlsec, \
     xmlsecurity/qa/xmlsec/xmlsec \
 ))
