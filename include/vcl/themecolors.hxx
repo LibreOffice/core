@@ -28,6 +28,12 @@ public:
         return rThemeName == svtools::AUTOMATIC_COLOR_SCHEME;
     }
 
+    static bool VclPluginCanUseThemeColors()
+    {
+        return IsThemeLoaded()
+               && !ThemeColors::IsAutomaticTheme(ThemeColors::GetThemeColors().GetThemeName());
+    };
+
     void SetWindowColor(const Color& rColor) { m_aWindowColor = rColor; }
     void SetWindowTextColor(const Color& rColor) { m_aWindowTextColor = rColor; }
     void SetBaseColor(const Color& rColor) { m_aBaseColor = rColor; }

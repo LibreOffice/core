@@ -129,8 +129,7 @@ bool QtCustomStyle::IsSystemThemeChanged()
 
 void QtCustomStyle::LoadCustomStyle(bool bDarkMode)
 {
-    if (!ThemeColors::IsThemeLoaded()
-        || ThemeColors::IsAutomaticTheme(ThemeColors::GetThemeColors().GetThemeName()))
+    if (!ThemeColors::VclPluginCanUseThemeColors())
         return;
 
     // don't set custom palette in case the system theme has been changed.
