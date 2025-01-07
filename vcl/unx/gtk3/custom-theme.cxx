@@ -95,8 +95,7 @@ void ApplyCustomTheme(GdkDisplay* pGdkDisplay, GtkCssProvider** pCustomThemeProv
 void ApplyCustomTheme(GdkScreen* pScreen, GtkCssProvider** pCustomThemeProvider)
 #endif
 {
-    if (!ThemeColors::IsThemeLoaded()
-        || ThemeColors::IsAutomaticTheme(ThemeColors::GetThemeColors().GetThemeName()))
+    if (!ThemeColors::VclPluginCanUseThemeColors())
         return;
 
     if ((*pCustomThemeProvider) == nullptr)

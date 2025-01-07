@@ -1557,7 +1557,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     StyleSettings aStyleSettings = rSettings.GetStyleSettings();
 
     bool bUseDarkMode(GetUseDarkMode());
-    if (!ThemeColors::IsThemeLoaded())
+    if (!ThemeColors::VclPluginCanUseThemeColors())
     {
         OUString sThemeName(!bUseDarkMode ? u"sukapura_svg" : u"sukapura_dark_svg");
         aStyleSettings.SetPreferredIconTheme(sThemeName, bUseDarkMode);
@@ -1731,7 +1731,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     aStyleSettings.SetHideDisabledMenuItems( true );
     aStyleSettings.SetPreferredContextMenuShortcuts( false );
 
-    if (ThemeColors::IsThemeLoaded())
+    if (ThemeColors::VclPluginCanUseThemeColors())
         lcl_LoadColorsFromTheme(aStyleSettings);
 
     rSettings.SetStyleSettings( aStyleSettings );

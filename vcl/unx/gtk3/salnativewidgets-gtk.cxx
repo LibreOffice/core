@@ -2670,7 +2670,7 @@ bool GtkSalGraphics::updateSettings(AllSettings& rSettings)
     aStyleSet.SetMinThumbSize(min_slider_length);
 
     // preferred icon style
-    if (!ThemeColors::IsThemeLoaded())
+    if (!ThemeColors::VclPluginCanUseThemeColors())
     {
         gchar* pIconThemeName = nullptr;
         gboolean bDarkIconTheme = false;

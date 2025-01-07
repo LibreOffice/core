@@ -2758,7 +2758,7 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     }
 
     const bool bUseDarkMode(UseDarkMode());
-    if (!ThemeColors::IsThemeLoaded())
+    if (!ThemeColors::VclPluginCanUseThemeColors())
     {
         OUString sThemeName(!bUseDarkMode ? u"colibre" : u"colibre_dark");
         aStyleSettings.SetPreferredIconTheme(sThemeName, bUseDarkMode);
@@ -3000,7 +3000,7 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
 
     // otherwise, menu shows up as white in dark mode
     aStyleSettings.SetMenuColor(aStyleSettings.GetWindowColor());
-    if (ThemeColors::IsThemeLoaded())
+    if (ThemeColors::VclPluginCanUseThemeColors())
         lcl_LoadColorsFromTheme(aStyleSettings);
 
     rSettings.SetMouseSettings( aMouseSettings );
