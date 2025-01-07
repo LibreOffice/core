@@ -27,6 +27,10 @@ $(eval $(call gb_Library_use_system_win32_libs,syssh,\
 
 $(eval $(call gb_Library_set_componentfile,syssh,shell/source/win32/syssh,services))
 
+$(eval $(call gb_Library_use_libraries,syssh,\
+	tl \
+))
+
 $(eval $(call gb_Library_add_exception_objects,syssh,\
 	shell/source/win32/SysShExec \
 ))

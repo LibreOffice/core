@@ -38,6 +38,7 @@
 #include <o3tl/runtimetooustring.hxx>
 #include <o3tl/safeCoInitUninit.hxx>
 #include <o3tl/string_view.hxx>
+#include <tools/urlobj.hxx>
 
 #include <prewin.h>
 #include <Shlobj.h>
@@ -359,6 +360,14 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
                             {});
                     }
                 }
+            }
+        } else {
+            // Filter out input that technically is a non-file URI, but could be interpreted by
+            // ShellExecuteExW as a file system pathname.
+            if (INetURLObject(aCommand, INetProtocol::File).GetProtocol() == INetProtocol::File) {
+                throw css::lang::IllegalArgumentException(
+                    "XSystemShellExecute.execute URIS_ONLY with non-URI pathname " + aCommand,
+                    static_cast< XSystemShellExecute* >(this), 0);
             }
         }
     }
