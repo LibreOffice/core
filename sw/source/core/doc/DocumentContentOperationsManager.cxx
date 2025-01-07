@@ -488,6 +488,8 @@ namespace
     {
         const SwTextNode* pTextNd = rPam.Start()->GetNode().GetTextNode();
         const SwTextNode* pEndTextNd = rPam.End()->GetNode().GetTextNode();
+        if (pTextNd == nullptr || pEndTextNd == nullptr)
+            return false;
         bool bRet = pTextNd->IsInListFromStyle();
         //single paragraphs are preferred only if it's a has a list from style
         if (pTextNd == pEndTextNd)
