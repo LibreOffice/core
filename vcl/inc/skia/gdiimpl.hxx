@@ -292,7 +292,10 @@ protected:
     void performDrawPolyPolygon(const basegfx::B2DPolyPolygon& polygon, double transparency,
                                 bool useAA);
 
-    BmpScaleFlag goodScalingQuality() const { return SkiaHelper::goodScalingQuality(isGPU()); }
+    BmpScaleFlag goodScalingQuality(bool isUpscale = false) const
+    {
+        return SkiaHelper::goodScalingQuality(isGPU(), isUpscale);
+    }
     SkSamplingOptions makeSamplingOptions(const SalTwoRect& rPosAry, int scalingFactor,
                                           int srcScalingFactor = 1)
     {
@@ -300,7 +303,9 @@ protected:
     }
     SkSamplingOptions makeSamplingOptions(const SkMatrix& matrix, int scalingFactor)
     {
-        return SkiaHelper::makeSamplingOptions(goodScalingQuality(), matrix, scalingFactor);
+        bool isUpscale = (matrix.getScaleX() > 1.0 || matrix.getScaleY() > 1.0);
+        return SkiaHelper::makeSamplingOptions(goodScalingQuality(isUpscale), matrix,
+                                               scalingFactor);
     }
 
     // Create SkPaint to use when drawing to the surface. It is not to be used
