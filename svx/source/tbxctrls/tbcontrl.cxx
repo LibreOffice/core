@@ -3898,16 +3898,13 @@ namespace
     {
     private:
         rtl::Reference<SvxCurrencyToolBoxControl> m_xControl;
-        std::unique_ptr<weld::Label> m_xLabel;
         std::unique_ptr<weld::TreeView> m_xCurrencyLb;
-        std::unique_ptr<weld::Button> m_xOkBtn;
         OUString&       m_rSelectedFormat;
         LanguageType&   m_eSelectedLanguage;
 
         std::vector<OUString> m_aFormatEntries;
         LanguageType          m_eFormatLanguage;
         DECL_LINK(RowActivatedHdl, weld::TreeView&, bool);
-        DECL_LINK(OKHdl, weld::Button&, void);
 
         virtual void GrabFocus() override;
 
@@ -3915,9 +3912,7 @@ namespace
         SvxCurrencyList_Impl(SvxCurrencyToolBoxControl* pControl, weld::Widget* pParent, OUString& rSelectedFormat, LanguageType& eSelectedLanguage)
             : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/currencywindow.ui", "CurrencyWindow")
             , m_xControl(pControl)
-            , m_xLabel(m_xBuilder->weld_label("label"))
             , m_xCurrencyLb(m_xBuilder->weld_tree_view("currency"))
-            , m_xOkBtn(m_xBuilder->weld_button("ok"))
             , m_rSelectedFormat(rSelectedFormat)
             , m_eSelectedLanguage(eSelectedLanguage)
         {
@@ -3984,9 +3979,7 @@ namespace
             // enable multiple selection enabled so we can start with nothing selected
             m_xCurrencyLb->set_selection_mode(SelectionMode::Multiple);
             m_xCurrencyLb->connect_row_activated( LINK( this, SvxCurrencyList_Impl, RowActivatedHdl ) );
-            m_xLabel->set_label(SvxResId(RID_SVXSTR_TBLAFMT_CURRENCY));
             m_xCurrencyLb->select( nSelectedPos );
-            m_xOkBtn->connect_clicked(LINK(this, SvxCurrencyList_Impl, OKHdl));
 
             // gtk will initially make a best guess depending on the first few entries, so copy the probable
             // longest entry to the start temporarily and force in the width at this point
@@ -3999,11 +3992,6 @@ namespace
     void SvxCurrencyList_Impl::GrabFocus()
     {
         m_xCurrencyLb->grab_focus();
-    }
-
-    IMPL_LINK_NOARG(SvxCurrencyList_Impl, OKHdl, weld::Button&, void)
-    {
-        RowActivatedHdl(*m_xCurrencyLb);
     }
 
     IMPL_LINK_NOARG(SvxCurrencyList_Impl, RowActivatedHdl, weld::TreeView&, bool)
