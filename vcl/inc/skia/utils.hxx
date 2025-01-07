@@ -159,8 +159,23 @@ inline bool isUnitTestRunning(const char* name = nullptr)
 // In that case use only BmpScaleFlag::Default, which is bilinear+mipmap,
 // which should be good enough (and that's what the "super" bitmap scaling
 // algorithm done by VCL does as well).
-inline BmpScaleFlag goodScalingQuality(bool isGPU)
+inline BmpScaleFlag goodScalingQuality(bool isGPU, bool isUpscale = false)
 {
+#ifdef MACOSX
+    // tdf#161480 use BmpScaleFlag::NearestNeighbor when upscaling on macOS
+    // On macOS, due to Retina window scaling, it is very common to
+    // have Skia surfaces that are 2 times the size of their respective
+    // output device sizes so upscaling is often the default state.
+    // But when upscaling bitmaps on macOS with either Skia/Metal or
+    // Skia/Raster, some distortion to color and/or alpha values is
+    // introduced and only BmpScaleFlag::NearestNeighbor will upscale
+    // the bitmap correctly.
+    if (isUpscale)
+        return BmpScaleFlag::NearestNeighbor;
+#else
+    (void)isUpscale;
+#endif
+
     return isGPU ? BmpScaleFlag::BestQuality : BmpScaleFlag::Default;
 }
 
@@ -235,7 +250,12 @@ inline SkSamplingOptions makeSamplingOptions(const SalTwoRect& rPosAry, int scal
     if (srcScalingFactor != 1)
         srcSize *= srcScalingFactor;
     if (srcSize != destSize)
-        return makeSamplingOptions(goodScalingQuality(isGPU), srcSize, destSize, 1);
+    {
+        bool isUpscale
+            = (srcSize.Width() < destSize.Width() || srcSize.Height() < destSize.Height());
+        BmpScaleFlag scalingType = goodScalingQuality(isGPU, isUpscale);
+        return makeSamplingOptions(scalingType, srcSize, destSize, 1);
+    }
     return SkSamplingOptions(); // none
 }
 
