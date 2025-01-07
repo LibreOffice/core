@@ -34,6 +34,7 @@
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <o3tl/runtimetooustring.hxx>
 #include <rtl/uri.hxx>
+#include <tools/urlobj.hxx>
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -437,6 +438,14 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
                             0);
                     }
                 }
+            }
+        } else {
+            // Filter out input that technically is a non-file URI, but could be interpreted by
+            // ShellExecuteExW as a file system pathname.
+            if (INetURLObject(aCommand, INetProtocol::File).GetProtocol() == INetProtocol::File) {
+                throw css::lang::IllegalArgumentException(
+                    "XSystemShellExecute.execute URIS_ONLY with non-URI pathname " + aCommand,
+                    static_cast< XSystemShellExecute* >(this), 0);
             }
         }
     }
