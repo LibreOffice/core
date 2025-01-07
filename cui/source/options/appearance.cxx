@@ -21,6 +21,7 @@
 #include <tools/debug.hxx>
 #include <unotools/resmgr.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/themecolors.hxx>
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <map>
@@ -196,11 +197,10 @@ bool SvxAppearanceTabPage::FillItemSet(SfxItemSet* /* rSet */)
     // commit LibreOfficeTheme, enable it if the current scheme is not Automatic
     if (m_xSchemeList->get_value_changed_from_saved())
     {
-        bool bIsLibreOfficeThemeEnabled = m_xSchemeList->get_active_id() != AUTOMATIC_COLOR_SCHEME;
-        auto pChange(comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Appearance::LibreOfficeTheme::set(bIsLibreOfficeThemeEnabled,
-                                                                     pChange);
-        pChange->commit();
+        ThemeState eLibreOfficeThemeState = m_xSchemeList->get_active_id() != AUTOMATIC_COLOR_SCHEME
+                                                ? ThemeState::ENABLED
+                                                : ThemeState::DISABLED;
+        ThemeColors::SetThemeState(eLibreOfficeThemeState);
     }
 
     return true;

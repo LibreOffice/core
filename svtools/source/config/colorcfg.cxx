@@ -472,7 +472,7 @@ void ColorConfig::LoadThemeColorsFromRegistry()
 
 void ColorConfig::SetupTheme()
 {
-    if (!officecfg::Office::Common::Appearance::LibreOfficeTheme::get()
+    if (ThemeColors::IsThemeDisabled()
         || ThemeColors::IsAutomaticTheme(GetCurrentSchemeName()))
     {
         ThemeColors::SetThemeCached(false);
