@@ -1513,10 +1513,9 @@ void PowerPointExport::FindEquivalentMasterPages()
     css::uno::Reference<css::drawing::XDrawPages> xDrawPages(
         mXMasterPagesSupplier->getMasterPages());
     maMastersLayouts.resize(mnMasterPages);
-    maEquivalentMasters.resize(mnMasterPages);
+    maEquivalentMasters.resize(mnMasterPages, SAL_MAX_UINT32);
     for (sal_uInt32 i = 0; i < mnMasterPages; i++)
     {
-        maEquivalentMasters[i] = i;
         css::uno::Reference<css::drawing::XDrawPage> xDrawPage;
         uno::Any aAny(xDrawPages->getByIndex(i));
         aAny >>= xDrawPage;
@@ -1537,11 +1536,11 @@ void PowerPointExport::FindEquivalentMasterPages()
 
     for (sal_uInt32 i = 0; i < mnMasterPages; i++)
     {
-        if (!maMastersLayouts[i].first || maEquivalentMasters[i] != i)
+        if (!maMastersLayouts[i].first || maEquivalentMasters[i] != SAL_MAX_UINT32)
             continue;
         for (sal_uInt32 j = i + 1; j < mnMasterPages; j++)
         {
-            if (!maMastersLayouts[j].first || maEquivalentMasters[j] != j)
+            if (!maMastersLayouts[j].first || maEquivalentMasters[j] != SAL_MAX_UINT32)
                 continue;
 
             if (lcl_ComparePageProperties(maMastersLayouts[i].first, maMastersLayouts[j].first)
@@ -1550,6 +1549,7 @@ void PowerPointExport::FindEquivalentMasterPages()
                 // If both masters have the same properties and objects,
                 // we assume they are the same and only export the first one
                 maEquivalentMasters[j] = i;
+                maEquivalentMasters[i] = i;
             }
         }
     }
@@ -1564,17 +1564,28 @@ sal_uInt32 PowerPointExport::GetEquivalentMasterPage(sal_uInt32 nMasterPage)
 
 void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPropertySet > const& aXBackgroundPropSet)
 {
-    if (nPageNum != GetEquivalentMasterPage(nPageNum))
+    SAL_INFO("sd.eppt", "write master slide: " << nPageNum << "\n--------------");
+
+    if (nPageNum != GetEquivalentMasterPage(nPageNum)
+        && GetEquivalentMasterPage(nPageNum) != SAL_MAX_UINT32)
     {
-        // We already exported it's layout on an equivalent master so do nothing
+        // It's equivalent to an already written master, write only the layout file
+        if (maMastersLayouts[nPageNum].second != -1)
+        {
+            OUString aSlideName;
+            Reference<XNamed> xNamed(mXDrawPage, UNO_QUERY);
+            if (xNamed.is())
+                aSlideName = xNamed->getName();
+            ImplWritePPTXLayoutWithContent(maMastersLayouts[nPageNum].second, nPageNum, aSlideName,
+                                           aXBackgroundPropSet);
+        }
+
         // Close the list tag if it was the last one
         if (nPageNum == mnMasterPages - 1)
             mPresentationFS->endElementNS(XML_p, XML_sldMasterIdLst);
 
         return;
     }
-
-    SAL_INFO("sd.eppt", "write master slide: " << nPageNum << "\n--------------");
 
     // slides list
     if (nPageNum == 0)
@@ -1614,9 +1625,19 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
 
     pFS->startElementNS(XML_p, XML_cSld);
 
-    if (aXBackgroundPropSet)
-        ImplWriteBackground(pFS, aXBackgroundPropSet);
-    WriteShapeTree(pFS, MASTER, true);
+    if (GetEquivalentMasterPage(nPageNum) != nPageNum)
+    {
+        if (aXBackgroundPropSet)
+            ImplWriteBackground(pFS, aXBackgroundPropSet);
+        WriteShapeTree(pFS, MASTER, true);
+    }
+    else
+    {
+        // Minimal shape tree, the actual one will be written in the layout file.
+        pFS->startElementNS(XML_p, XML_spTree);
+        pFS->write(MAIN_GROUP);
+        pFS->endElementNS(XML_p, XML_spTree);
+    }
 
     pFS->endElementNS(XML_p, XML_cSld);
 
@@ -1733,16 +1754,24 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
 
     for (auto nLayout : aLayouts)
     {
-        ImplWritePPTXLayout(nLayout, nPageNum, aSlideName);
+        if (GetEquivalentMasterPage(nPageNum) == nPageNum)
+            ImplWritePPTXLayoutWithContent(nLayout, nPageNum, aSlideName, aXBackgroundPropSet);
+        else
+            ImplWritePPTXLayout(nLayout, nPageNum, aSlideName);
         AddLayoutIdAndRelation(pFS, GetLayoutFileId(nLayout, nPageNum));
     }
 
-    // Export layouts of other Impress masters that came from a sinlge pptx master with multiple layouts
+    // Add layouts of other Impress masters that came from a single pptx master with multiple layouts
     for (sal_uInt32 i = 0; i < mnMasterPages; i++)
     {
         if (i != nPageNum && maEquivalentMasters[i] == nPageNum && maMastersLayouts[i].second != -1)
         {
-            ImplWritePPTXLayout(maMastersLayouts[i].second, i, aSlideName);
+            // Reserve layout file Id to be writen later
+            if (mLayoutInfo[maMastersLayouts[i].second].mnFileIdArray.size() < mnMasterPages)
+                mLayoutInfo[maMastersLayouts[i].second].mnFileIdArray.resize(mnMasterPages);
+            mLayoutInfo[maMastersLayouts[i].second].mnFileIdArray[i] = mnLayoutFileIdMax;
+            mnLayoutFileIdMax++;
+
             AddLayoutIdAndRelation(pFS, GetLayoutFileId(maMastersLayouts[i].second, i));
         }
     }
@@ -1800,9 +1829,9 @@ void PowerPointExport::ImplWritePPTXLayout(sal_Int32 nOffset, sal_uInt32 nMaster
                                            u"application/vnd.openxmlformats-officedocument.presentationml.slideLayout+xml"_ustr);
 
     // add implicit relation of slide layout to slide master
-    addRelation(pFS->getOutputStream(), oox::getRelationship(Relationship::SLIDEMASTER),
-                Concat2View("../slideMasters/slideMaster"
-                            + OUString::number(GetEquivalentMasterPage(nMasterNum) + 1) + ".xml"));
+    addRelation(
+        pFS->getOutputStream(), oox::getRelationship(Relationship::SLIDEMASTER),
+        Concat2View("../slideMasters/slideMaster" + OUString::number(nMasterNum + 1) + ".xml"));
 
     pFS->startElementNS(XML_p, XML_sldLayout,
                         PNMSS,
@@ -1831,6 +1860,57 @@ void PowerPointExport::ImplWritePPTXLayout(sal_Int32 nOffset, sal_uInt32 nMaster
     mnLayoutFileIdMax ++;
 
     xDrawPages->remove(xSlide);
+
+    pFS->endDocument();
+}
+
+void PowerPointExport::ImplWritePPTXLayoutWithContent(
+    sal_Int32 nOffset, sal_uInt32 nMasterNum, const OUString& aSlideName,
+    Reference<XPropertySet> const& aXBackgroundPropSet)
+{
+    SAL_INFO("sd.eppt", "write layout: " << nOffset);
+
+    if (mLayoutInfo[nOffset].mnFileIdArray.size() < mnMasterPages)
+    {
+        mLayoutInfo[nOffset].mnFileIdArray.resize(mnMasterPages);
+    }
+
+    if (mLayoutInfo[nOffset].mnFileIdArray[nMasterNum] == 0)
+    {
+        mLayoutInfo[nOffset].mnFileIdArray[nMasterNum] = mnLayoutFileIdMax;
+        mnLayoutFileIdMax++;
+    }
+    sal_Int32 nLayoutFileId = mLayoutInfo[nOffset].mnFileIdArray[nMasterNum];
+
+    FSHelperPtr pFS = openFragmentStreamWithSerializer(
+        "ppt/slideLayouts/slideLayout" + OUString::number(nLayoutFileId) + ".xml",
+        "application/vnd.openxmlformats-officedocument.presentationml.slideLayout+xml");
+
+    // add implicit relation of slide layout to slide master
+    addRelation(pFS->getOutputStream(), oox::getRelationship(Relationship::SLIDEMASTER),
+                Concat2View("../slideMasters/slideMaster"
+                            + OUString::number(GetEquivalentMasterPage(nMasterNum) + 1) + ".xml"));
+
+    pFS->startElementNS(XML_p, XML_sldLayout, PNMSS, XML_type, aLayoutInfo[nOffset].sType,
+                        XML_preserve, "1");
+
+    if (!aSlideName.isEmpty())
+    {
+        pFS->startElementNS(XML_p, XML_cSld, XML_name, aSlideName);
+    }
+    else
+    {
+        pFS->startElementNS(XML_p, XML_cSld, XML_name, aLayoutInfo[nOffset].sName);
+    }
+
+    if (aXBackgroundPropSet)
+        ImplWriteBackground(pFS, aXBackgroundPropSet);
+
+    WriteShapeTree(pFS, MASTER, true);
+
+    pFS->endElementNS(XML_p, XML_cSld);
+
+    pFS->endElementNS(XML_p, XML_sldLayout);
 
     pFS->endDocument();
 }
@@ -2457,25 +2537,26 @@ Reference<XShape> PowerPointExport::GetReferencedPlaceholderXShape(const Placeho
     }
     if (ePresObjKind != PresObjKind::NONE)
     {
-        SdPage* pMasterPage;
+        SdrPage* pPage;
         if (ePageType == LAYOUT)
         {
             // since Layout pages do not have drawpages themselves - mXDrawPage is still the master they reference to..
-            pMasterPage = SdPage::getImplementation(mXDrawPage);
+            pPage = SdPage::getImplementation(mXDrawPage);
         }
         else
         {
-            SdrPage* pPage = &SdPage::getImplementation(mXDrawPage)->TRG_GetMasterPage();
-            for (sal_uInt32 i = 0; i < mnMasterPages; i++)
-            {
-                if (maMastersLayouts[i].first == pPage)
-                {
-                    pPage = maMastersLayouts[maEquivalentMasters[i]].first;
-                    break;
-                }
-            }
-            pMasterPage = dynamic_cast<SdPage*>(pPage);
+            pPage = &SdPage::getImplementation(mXDrawPage)->TRG_GetMasterPage();
         }
+        for (sal_uInt32 i = 0; i < mnMasterPages; i++)
+        {
+            if (maMastersLayouts[i].first == pPage)
+            {
+                if (maEquivalentMasters[i] < mnMasterPages)
+                    pPage = maMastersLayouts[maEquivalentMasters[i]].first;
+                break;
+            }
+        }
+        SdPage* pMasterPage = dynamic_cast<SdPage*>(pPage);
         if (SdrObject* pMasterFooter
             = (pMasterPage ? pMasterPage->GetPresObj(ePresObjKind) : nullptr))
             return GetXShapeForSdrObject(pMasterFooter);
