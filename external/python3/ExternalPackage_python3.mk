@@ -37,6 +37,8 @@ python3_EXTENSION_MODULES= \
 	PCbuild/$(python_arch_subdir)_queue$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)_socket$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)_ssl$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
+	PCbuild/$(python_arch_subdir)_uuid$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
+	PCbuild/$(python_arch_subdir)_zoneinfo$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)pyexpat$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)select$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)unicodedata$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
@@ -89,6 +91,7 @@ python3_EXTENSION_MODULES= \
 	LO_lib/_heapq.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	LO_lib/_json.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	LO_lib/_lsprof.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/_lzma.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	LO_lib/math.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	LO_lib/_md5.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	LO_lib/mmap.$(python3_EXTENSION_MODULE_SUFFIX).so \
@@ -118,12 +121,14 @@ python3_EXTENSION_MODULES= \
 	LO_lib/syslog.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	LO_lib/termios.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	LO_lib/unicodedata.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	$(if $(ENABLE_DBGUTIL),, \
-		LO_lib/xxlimited.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	)\
+	LO_lib/_uuid.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/xxlimited_35.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/xxlimited.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	LO_lib/_xxsubinterpreters.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	LO_lib/_xxtestfuzz.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	LO_lib/zlib.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/_zoneinfo.$(python3_EXTENSION_MODULE_SUFFIX).so \
+
 
 $(eval $(call gb_ExternalPackage_add_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/lib-dynload,\
 	$(python3_EXTENSION_MODULES) \
