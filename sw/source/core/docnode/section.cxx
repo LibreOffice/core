@@ -713,14 +713,12 @@ void SwSectionFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         if(!pSect || rSectionHidden.m_isHidden == pSect->IsHiddenFlag()) // already at target state, skipping.
             return;
         GetNotifier().Broadcast(rSectionHidden);
-        return;
     }
     else if(SfxHintId::SwRemoveUnoObject == rHint.GetId())
     {
         SwFrameFormat::SwClientNotify(rMod, rHint);
         // invalidate cached uno object
         SetXTextSection(nullptr);
-        return;
     }
     else if (rHint.GetId() == SfxHintId::SwFormatChange)
     {
@@ -735,7 +733,6 @@ void SwSectionFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
             return;
         }
         SwFrameFormat::SwClientNotify(rMod, rHint);
-        return;
     }
     else if (rHint.GetId() == SfxHintId::SwAttrSetChange)
     {
@@ -797,23 +794,24 @@ void SwSectionFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         }
         SwFrameFormat::SwClientNotify(rMod, rHint);
     }
-    else if (rHint.GetId() != SfxHintId::SwLegacyModify)
-        return;
-    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
-    sal_uInt16 nWhich = pLegacy->GetWhich();
-    auto pOld = pLegacy->m_pOld;
-    auto pNew = pLegacy->m_pNew;
-    switch( nWhich )
+    else if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
-    case RES_FTN_AT_TXTEND:
-    case RES_END_AT_TXTEND:
-    case RES_PROTECT:
-    case RES_EDIT_IN_READONLY: // edit in readonly sections
-        // Pass through these Messages until the End of the tree!
-        GetNotifier().Broadcast(sw::LegacyModifyHint(pOld, pNew));
-        return; // That's it!
+        auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
+        sal_uInt16 nWhich = pLegacy->GetWhich();
+        auto pOld = pLegacy->m_pOld;
+        auto pNew = pLegacy->m_pNew;
+        switch( nWhich )
+        {
+        case RES_FTN_AT_TXTEND:
+        case RES_END_AT_TXTEND:
+        case RES_PROTECT:
+        case RES_EDIT_IN_READONLY: // edit in readonly sections
+            // Pass through these Messages until the End of the tree!
+            GetNotifier().Broadcast(sw::LegacyModifyHint(pOld, pNew));
+            return; // That's it!
+        }
+        SwFrameFormat::SwClientNotify(rMod, rHint);
     }
-    SwFrameFormat::SwClientNotify(rMod, rHint);
 }
 
 void SwSectionFormat::SetXTextSection(rtl::Reference<SwXTextSection> const& xTextSection)
