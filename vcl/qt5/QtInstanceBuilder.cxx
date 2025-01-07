@@ -36,6 +36,7 @@
 #include <QtInstanceSpinButton.hxx>
 #include <QtInstanceTextView.hxx>
 #include <QtInstanceToggleButton.hxx>
+#include <QtInstanceToolbar.hxx>
 #include <QtInstanceTreeView.hxx>
 
 #include <QtWidgets/QToolButton>
@@ -405,10 +406,12 @@ std::unique_ptr<weld::Popover> QtInstanceBuilder::weld_popover(const OUString& r
     return xRet;
 }
 
-std::unique_ptr<weld::Toolbar> QtInstanceBuilder::weld_toolbar(const OUString&)
+std::unique_ptr<weld::Toolbar> QtInstanceBuilder::weld_toolbar(const OUString& rId)
 {
-    assert(false && "Not implemented yet");
-    return nullptr;
+    QToolBar* pToolBar = m_xBuilder->get<QToolBar>(rId);
+    std::unique_ptr<weld::Toolbar> xRet(pToolBar ? std::make_unique<QtInstanceToolbar>(pToolBar)
+                                                 : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::Scrollbar> QtInstanceBuilder::weld_scrollbar(const OUString&)

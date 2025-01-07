@@ -39,6 +39,7 @@
 #include <QtWidgets/QSlider>
 #include <QtWidgets/QSplitter>
 #include <QtWidgets/QTabWidget>
+#include <QtWidgets/QToolBar>
 #include <QtWidgets/QToolButton>
 #include <QtWidgets/QTreeView>
 
@@ -339,6 +340,10 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
     else if (sName == u"GtkToggleButton")
     {
         pObject = new QToolButton(pParentWidget);
+    }
+    else if (sName == u"GtkToolbar")
+    {
+        pObject = new QToolBar(pParentWidget);
     }
     else if (sName == u"GtkTreeView")
     {
