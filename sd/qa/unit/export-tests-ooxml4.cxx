@@ -1274,6 +1274,43 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testPlaceHolderFitHeightToText)
     CPPUNIT_ASSERT_MESSAGE("PlaceHolder Fit height to text should be true.", bTextAutoGrowHeight);
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testDeduplicateMasters)
+{
+    createSdImpressDoc("pptx/onemaster-twolayouts.pptx");
+    saveAndReload("Impress Office Open XML");
+
+    // Check that the document still has one master and two layouts
+    xmlDocUniquePtr pXmlDocContent = parseExport("ppt/presentation.xml");
+    assertXPath(pXmlDocContent, "/p:presentation/p:sldMasterIdLst/p:sldMasterId"_ostr, 1);
+    pXmlDocContent = parseExport("ppt/slideMasters/slideMaster1.xml");
+    assertXPath(pXmlDocContent, "/p:sldMaster/p:sldLayoutIdLst/p:sldLayoutId"_ostr, 2);
+
+    // Check that both background colors have been preserved
+    uno::Reference<drawing::XMasterPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDoc.is());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xDoc->getMasterPages()->getCount());
+
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getMasterPages()->getByIndex(0),
+                                             uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xPropSet(xPage, uno::UNO_QUERY);
+    uno::Any aAny = xPropSet->getPropertyValue("Background");
+    CPPUNIT_ASSERT(aAny.hasValue());
+    uno::Reference<beans::XPropertySet> aXBackgroundPropSet;
+    aAny >>= aXBackgroundPropSet;
+    Color nColor;
+    CPPUNIT_ASSERT(aXBackgroundPropSet->getPropertyValue("FillColor") >>= nColor);
+    CPPUNIT_ASSERT_EQUAL(Color(0x0E2841), nColor);
+
+    uno::Reference<drawing::XDrawPage> xPage1(xDoc->getMasterPages()->getByIndex(1),
+                                              uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xPropSet1(xPage1, uno::UNO_QUERY);
+    aAny = xPropSet1->getPropertyValue("Background");
+    CPPUNIT_ASSERT(aAny.hasValue());
+    aAny >>= aXBackgroundPropSet;
+    CPPUNIT_ASSERT(aXBackgroundPropSet->getPropertyValue("FillColor") >>= nColor);
+    CPPUNIT_ASSERT_EQUAL(Color(0x000000), nColor);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

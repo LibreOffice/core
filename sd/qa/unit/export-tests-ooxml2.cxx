@@ -1316,7 +1316,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf106867)
                 "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/p:par/"
                 "p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:cmd/"
                 "p:cBhvr/p:tgtEl/p:spTgt",
-                "spid", u"14");
+                "spid", u"59");
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf112280)
@@ -1889,10 +1889,10 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf59323_slideFooters)
     }
 
     // Test placeholder indexes
-    xmlDocUniquePtr pXmlDocMaster = parseExport(u"ppt/slideMasters/slideMaster1.xml"_ustr);
-    assertXPath(pXmlDocMaster, "//p:ph [@type='dt']", "idx", u"1");
-    assertXPath(pXmlDocMaster, "//p:ph [@type='ftr']", "idx", u"2");
-    assertXPath(pXmlDocMaster, "//p:ph [@type='sldNum']", "idx", u"3");
+    xmlDocUniquePtr pXmlDocLayout = parseExport(u"ppt/slideLayouts/slideLayout1.xml"_ustr);
+    assertXPath(pXmlDocLayout, "//p:ph [@type='dt']", "idx", u"1");
+    assertXPath(pXmlDocLayout, "//p:ph [@type='ftr']", "idx", u"2");
+    assertXPath(pXmlDocLayout, "//p:ph [@type='sldNum']", "idx", u"3");
 
     xmlDocUniquePtr pXmlDocSlide1 = parseExport(u"ppt/slides/slide1.xml"_ustr);
     assertXPath(pXmlDocSlide1, "//p:ph [@type='dt']", "idx", u"1");

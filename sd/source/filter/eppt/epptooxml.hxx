@@ -90,6 +90,9 @@ private:
     virtual void ImplWriteNotes( sal_uInt32 nPageNum ) override;
     virtual void ImplWriteSlideMaster( sal_uInt32 nPageNum, css::uno::Reference< css::beans::XPropertySet > const & aXBackgroundPropSet ) override;
     void ImplWritePPTXLayout( sal_Int32 nOffset, sal_uInt32 nMasterNum, const OUString& aSlideName );
+    void ImplWritePPTXLayoutWithContent(
+        sal_Int32 nOffset, sal_uInt32 nMasterNum, const OUString& aSlideName,
+        css::uno::Reference<css::beans::XPropertySet> const& aXBackgroundPropSet);
     static void WriteDefaultColorSchemes(const FSHelperPtr& pFS);
     void WriteTheme( sal_Int32 nThemeNum, model::Theme* pTheme );
 
@@ -145,7 +148,7 @@ private:
     LayoutInfo mLayoutInfo[OOXML_LAYOUT_SIZE];
     // Pairs of masters and layouts as used by Impress
     std::vector<std::pair<SdrPage*, sal_Int32>> maMastersLayouts;
-    // For each Impress master, which master will represent it on the exported file (themselves by default)
+    // For each Impress master, which master will represent it on the exported file (SAL_MAX_UINT32 if not in an equivalency group)
     std::vector<sal_uInt32> maEquivalentMasters;
     std::unique_ptr<SvtSecurityMapPersonalInfo> mpAuthorIDs; // map authors to remove personal info
     std::vector< ::sax_fastparser::FSHelperPtr > mpSlidesFSArray;
