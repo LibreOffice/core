@@ -274,6 +274,12 @@ en-US = "Zulu"
 [STR_DESC_MODULE_LANGPACK_ZU]
 en-US = "Installs the Zulu user interface"
 
+[STR_NAME_MODULE_LANGPACK_AB]
+en-US = "Abkhaz"
+
+[STR_DESC_MODULE_LANGPACK_AB]
+en-US = "Installs the Abkhazian user interface"
+
 [STR_NAME_MODULE_LANGPACK_AF]
 en-US = "Afrikaans"
 
