@@ -1082,6 +1082,7 @@ void ScModelObj::setClientZoom(int nTilePixelWidth_, int nTilePixelHeight_, int 
         pHdl->SetRefScale(pViewData->GetZoomX(), pViewData->GetZoomY());
 
     // refresh our view's take on other view's cursors & selections
+    pViewData->GetActiveWin()->UpdateEditViewPos();
     pViewData->GetActiveWin()->updateKitOtherCursors();
     pViewData->GetActiveWin()->updateOtherKitSelections();
 
