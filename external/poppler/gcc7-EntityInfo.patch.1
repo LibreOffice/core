@@ -40,8 +40,8 @@ workdir/UnpackedTarball/poppler/poppler/CertificateInfo.h:58:24: note: ‘X509Ce
 -GfxFontLoc &GfxFontLoc::operator=(GfxFontLoc &&other) noexcept = default;
 +GfxFontLoc &GfxFontLoc::operator=(GfxFontLoc &&other) /*noexcept*/ = default;
  
- void GfxFontLoc::setPath(GooString *pathA)
- {
+ //------------------------------------------------------------------------
+ // GfxFont
 --- poppler/poppler/GfxFont.h.orig	2022-09-14 20:24:30.784608340 +0200
 +++ poppler/poppler/GfxFont.h	2022-09-14 20:25:08.850586861 +0200
 @@ -124,7 +124,7 @@
@@ -51,5 +51,5 @@ workdir/UnpackedTarball/poppler/poppler/CertificateInfo.h:58:24: note: ‘X509Ce
 -    GfxFontLoc &operator=(GfxFontLoc &&other) noexcept;
 +    GfxFontLoc &operator=(GfxFontLoc &&other) /*noexcept*/;
  
-     // Set the 'path' string from a GooString on the heap.
-     // Ownership of the object is taken.
+     GfxFontLocType locType;
+     GfxFontType fontType;
