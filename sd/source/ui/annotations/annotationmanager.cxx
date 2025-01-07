@@ -1010,17 +1010,12 @@ void AnnotationManagerImpl::SyncAnnotationObjects()
     if (!mxCurrentPage.is() || !mpDoc)
         return;
 
-    sd::DrawDocShell* pDocShell = dynamic_cast<sd::DrawDocShell*>(SfxObjectShell::Current());
-    sd::ViewShell* pViewShell = pDocShell ? pDocShell->GetViewShell() : nullptr;
+    std::shared_ptr<DrawViewShell> pDrawViewShell = std::dynamic_pointer_cast<DrawViewShell>(mrBase.GetMainViewShell());
 
-    if (!pViewShell)
-    {
-        pViewShell = mrBase.GetMainViewShell().get();
-        if (!pViewShell)
-            return;
-    }
+    if (!pDrawViewShell)
+        return;
 
-    auto* pView = pViewShell->GetView();
+    auto* pView = pDrawViewShell->GetView();
     if (!pView)
         return;
 
