@@ -132,6 +132,17 @@ using namespace ::com::sun::star::document;
 using namespace ::cppu;
 
 
+static css::uno::Any getODFVersionAny(SvtSaveOptions::ODFSaneDefaultVersion v)
+{
+    if (v >= SvtSaveOptions::ODFSaneDefaultVersion::ODFSVER_014)
+        return css::uno::Any(ODFVER_014_TEXT);
+    else if (v >= SvtSaveOptions::ODFSaneDefaultVersion::ODFSVER_013)
+        return css::uno::Any(ODFVER_013_TEXT);
+    else
+        return css::uno::Any(ODFVER_012_TEXT);
+}
+
+
 void impl_addToModelCollection(const css::uno::Reference< css::frame::XModel >& xModel)
 {
     if (!xModel.is())
@@ -346,22 +357,7 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
         try
         {
             // older versions can not have this property set, it exists only starting from ODF1.2
-            uno::Reference<frame::XModule> const xModule(GetModel(), uno::UNO_QUERY);
-            bool const isBaseForm(xModule.is() &&
-                xModule->getIdentifier() == "com.sun.star.sdb.FormDesign");
-            SAL_INFO_IF(isBaseForm, "sfx.doc", "tdf#138209 force form export to ODF 1.2");
-            if (!isBaseForm && SvtSaveOptions::ODFSVER_014 <= nDefVersion)
-            {
-                xProps->setPropertyValue(u"Version"_ustr, uno::Any(ODFVER_014_TEXT));
-            }
-            else if (!isBaseForm && SvtSaveOptions::ODFSVER_013 <= nDefVersion)
-            {
-                xProps->setPropertyValue(u"Version"_ustr, uno::Any(ODFVER_013_TEXT));
-            }
-            else
-            {
-                xProps->setPropertyValue(u"Version"_ustr, uno::Any(ODFVER_012_TEXT));
-            }
+            xProps->setPropertyValue(u"Version"_ustr, getODFVersionAny(nDefVersion));
         }
         catch( uno::Exception& )
         {
@@ -1330,18 +1326,7 @@ bool SfxObjectShell::DoSave()
             {
                 try // tdf#134582 set Version on embedded objects as they
                 {   // could have been loaded with a different/old version
-                    uno::Reference<frame::XModule> const xModule(GetModel(), uno::UNO_QUERY);
-                    bool const isBaseForm(xModule.is() &&
-                        xModule->getIdentifier() == "com.sun.star.sdb.FormDesign");
-                    SAL_INFO_IF(isBaseForm, "sfx.doc", "tdf#138209 force form export to ODF 1.2");
-                    if (!isBaseForm && SvtSaveOptions::ODFSVER_013 <= nDefVersion)
-                    {
-                        xProps->setPropertyValue(u"Version"_ustr, uno::Any(ODFVER_013_TEXT));
-                    }
-                    else
-                    {
-                        xProps->setPropertyValue(u"Version"_ustr, uno::Any(ODFVER_012_TEXT));
-                    }
+                    xProps->setPropertyValue(u"Version"_ustr, getODFVersionAny(nDefVersion));
                 }
                 catch (uno::Exception&)
                 {
