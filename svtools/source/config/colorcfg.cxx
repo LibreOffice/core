@@ -446,7 +446,8 @@ void ColorConfig::LoadThemeColorsFromRegistry()
     rThemeColors.SetMenuBarColor(GetColorValue(svtools::MENUBARCOLOR).nColor);
     rThemeColors.SetMenuBarTextColor(GetColorValue(svtools::MENUBARTEXTCOLOR).nColor);
     rThemeColors.SetMenuBarHighlightColor(GetColorValue(svtools::MENUBARHIGHLIGHTCOLOR).nColor);
-    rThemeColors.SetMenuBarHighlightTextColor(GetColorValue(svtools::MENUBARHIGHLIGHTTEXTCOLOR).nColor);
+    rThemeColors.SetMenuBarHighlightTextColor(
+        GetColorValue(svtools::MENUBARHIGHLIGHTTEXTCOLOR).nColor);
     rThemeColors.SetMenuColor(GetColorValue(svtools::MENUCOLOR).nColor);
     rThemeColors.SetMenuTextColor(GetColorValue(svtools::MENUTEXTCOLOR).nColor);
     rThemeColors.SetMenuHighlightColor(GetColorValue(svtools::MENUHIGHLIGHTCOLOR).nColor);
@@ -459,9 +460,12 @@ void ColorConfig::LoadThemeColorsFromRegistry()
 
     // as more controls support it, we might want to have ColorConfigValue entries in ThemeColors
     // instead of just colors. for now that seems overkill for just one control.
-    rThemeColors.SetAppBackBitmapFileName(m_pImpl->GetColorConfigValue(svtools::APPBACKGROUND).sBitmapFileName);
-    rThemeColors.SetAppBackUseBitmap(m_pImpl->GetColorConfigValue(svtools::APPBACKGROUND).bUseBitmapBackground);
-    rThemeColors.SetAppBackBitmapStretched(m_pImpl->GetColorConfigValue(svtools::APPBACKGROUND).bIsBitmapStretched);
+    rThemeColors.SetAppBackBitmapFileName(
+        m_pImpl->GetColorConfigValue(svtools::APPBACKGROUND).sBitmapFileName);
+    rThemeColors.SetAppBackUseBitmap(
+        m_pImpl->GetColorConfigValue(svtools::APPBACKGROUND).bUseBitmapBackground);
+    rThemeColors.SetAppBackBitmapStretched(
+        m_pImpl->GetColorConfigValue(svtools::APPBACKGROUND).bIsBitmapStretched);
 
     ThemeColors::SetThemeLoaded(true);
 }
