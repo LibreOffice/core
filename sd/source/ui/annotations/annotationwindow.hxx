@@ -105,6 +105,7 @@ private:
 public:
     AnnotationWindow(weld::Window* pParent, const ::tools::Rectangle& rRect, DrawDocShell* pDocShell,
                      const rtl::Reference<sdr::annotation::Annotation>& xAnnotation);
+    ~AnnotationWindow();
 
     void connect_closed(const Link<weld::Popover&, void>& rLink) { mxPopover->connect_closed(rLink); }
 
@@ -131,7 +132,6 @@ public:
 
     OutlinerView* GetOutlinerView() { return mpOutlinerView.get();}
     ::Outliner* GetOutliner() { return mpOutliner.get();}
-    ~AnnotationWindow();
 
     void SetColor();
 };

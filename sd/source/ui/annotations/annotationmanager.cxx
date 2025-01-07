@@ -25,6 +25,7 @@
 #include <com/sun/star/office/XAnnotationAccess.hpp>
 #include <comphelper/lok.hxx>
 #include <svx/svxids.hrc>
+#include <svx/svditer.hxx>
 
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -208,6 +209,22 @@ void AnnotationManagerImpl::init()
 // WeakComponentImplHelper
 void AnnotationManagerImpl::disposing (std::unique_lock<std::mutex>&)
 {
+    for (sal_uInt16 i = 0; i < mpDoc->GetPageCount(); i++)
+    {
+        SdrPage* pPage = mpDoc->GetPage(i);
+        SdrObjListIter aIterator(pPage, SdrIterMode::DeepWithGroups);
+        while (aIterator.IsMore())
+        {
+            SdrObject* pObject = aIterator.Next();
+            if (pObject)
+            {
+                auto& xAnnotationData = pObject->getAnnotationData();
+                if (xAnnotationData)
+                    xAnnotationData->closePopup();
+            }
+        }
+    }
+
     try
     {
         uno::Reference<document::XEventBroadcaster> xModel (mrBase.GetDocShell()->GetModel(), uno::UNO_QUERY_THROW);
@@ -875,9 +892,19 @@ void AnnotationManagerImpl::SelectNextAnnotation(bool bForward)
     while( true );
 }
 
-void AnnotationManagerImpl::SelectAnnotation(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation, bool /*bEdit*/)
+void AnnotationManagerImpl::SelectAnnotation(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation, bool bEdit)
 {
     mxSelectedAnnotation = xAnnotation;
+    if (bEdit)
+    {
+        SdrObject* pObject = xAnnotation->findAnnotationObject();
+        if (pObject)
+        {
+            auto& pAnnotationData = pObject->getAnnotationData();
+            if (pAnnotationData)
+                pAnnotationData->openPopup();
+        }
+    }
 }
 
 void AnnotationManagerImpl::GetSelectedAnnotation( rtl::Reference<sdr::annotation::Annotation>& xAnnotation )
@@ -1287,9 +1314,9 @@ void AnnotationManager::GetAnnotationState(SfxItemSet& rItemSet)
     mxImpl->GetAnnotationState(rItemSet);
 }
 
-void AnnotationManager::SelectAnnotation(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation)
+void AnnotationManager::SelectAnnotation(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation, bool bEdit)
 {
-    mxImpl->SelectAnnotation(xAnnotation);
+    mxImpl->SelectAnnotation(xAnnotation, bEdit);
 }
 
 } // end sd

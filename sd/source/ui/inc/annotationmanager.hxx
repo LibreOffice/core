@@ -42,7 +42,8 @@ public:
 
     void ExecuteAnnotation(SfxRequest const& rRequest);
     void GetAnnotationState(SfxItemSet& rItemSet);
-    void SelectAnnotation(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation);
+    void SelectAnnotation(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation,
+                          bool bEdit = false);
 
 private:
     ::rtl::Reference<AnnotationManagerImpl> mxImpl;

@@ -19,6 +19,8 @@ namespace sdr::annotation
 class ObjectAnnotationData
 {
 public:
+    ~ObjectAnnotationData() { closePopup(); }
+
     /// The annotation
     rtl::Reference<sdr::annotation::Annotation> mxAnnotation;
 
@@ -30,6 +32,13 @@ public:
     {
         if (mpAnnotationPopup)
             mpAnnotationPopup->openPopup();
+    }
+
+    /// Close popup for the annotation
+    void closePopup()
+    {
+        if (mpAnnotationPopup)
+            mpAnnotationPopup->closePopup();
     }
 };
 }
