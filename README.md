@@ -38,8 +38,8 @@ run and compile LibreOffice, also used by the TDF builds:
     * Runtime: Windows 10
     * Build: Cygwin + Visual Studio 2019 version 16.10
 * macOS:
-    * Runtime: 10.15
-    * Build: 12 (13 for aarch64) + Xcode 14
+    * Runtime: 10.15 (11 for aarch64)
+    * Build: 12 + Xcode 14.2 or later (using latest version available for a given version of macOS)
 * Linux:
     * Runtime: RHEL 8 or CentOS 8 and comparable
     * Build: either GCC 12; or Clang 12 with libstdc++ 10
