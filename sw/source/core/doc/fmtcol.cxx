@@ -139,8 +139,7 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
         CallSwClientNotify(rHint);
         return;
     }
-    else if (rHint.GetId() != SfxHintId::SwLegacyModify && rHint.GetId() != SfxHintId::SwFormatChange
-             && rHint.GetId() != SfxHintId::SwAttrSetChange)
+    else if (rHint.GetId() != SfxHintId::SwLegacyModify && rHint.GetId() != SfxHintId::SwFormatChange)
         return;
     if(GetDoc()->IsInDtor())
     {
@@ -161,9 +160,30 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
     {
         auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
         const auto pNew = pLegacy->m_pNew;
+        const SwAttrSetChg *pNewChgSet = nullptr;
 
         switch( pLegacy->GetWhich() )
         {
+        case RES_ATTRSET_CHG:
+            // Only recalculate if we're not the sender!
+            pNewChgSet = &pNew->StaticWhichCast(RES_ATTRSET_CHG);
+            pNewFirstLineIndent = pNewChgSet->GetChgSet()->GetItemIfSet(RES_MARGIN_FIRSTLINE, false);
+            pNewTextLeftMargin = pNewChgSet->GetChgSet()->GetItemIfSet(RES_MARGIN_TEXTLEFT, false);
+            pNewRightMargin = pNewChgSet->GetChgSet()->GetItemIfSet(RES_MARGIN_RIGHT, false);
+            pNewULSpace = pNewChgSet->GetChgSet()->GetItemIfSet( RES_UL_SPACE, false );
+            aFontSizeArr[0] = pNewChgSet->GetChgSet()->GetItemIfSet( RES_CHRATR_FONTSIZE, false );
+            aFontSizeArr[1] = pNewChgSet->GetChgSet()->GetItemIfSet( RES_CHRATR_CJK_FONTSIZE, false );
+            aFontSizeArr[2] = pNewChgSet->GetChgSet()->GetItemIfSet( RES_CHRATR_CTL_FONTSIZE, false );
+            // #i70223#, #i84745#
+            // check, if attribute set is applied to this paragraph style
+            if ( bAssignedToListLevelOfOutlineStyle &&
+                 pNewChgSet->GetTheChgdSet() == &GetAttrSet() )
+            {
+                pNewNumRuleItem = pNewChgSet->GetChgSet()->GetItemIfSet( RES_PARATR_NUMRULE, false );
+            }
+
+            break;
+
         case RES_MARGIN_FIRSTLINE:
             pNewFirstLineIndent = &pNew->StaticWhichCast(RES_MARGIN_FIRSTLINE);
             break;
@@ -194,27 +214,6 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
             break;
         default:
             break;
-        }
-    }
-    else if (rHint.GetId() == SfxHintId::SwAttrSetChange)
-    {
-        auto pChangeHint = static_cast<const sw::AttrSetChangeHint*>(&rHint);
-        const SwAttrSetChg *pNewChgSet = pChangeHint->m_pNew;
-
-        // Only recalculate if we're not the sender!
-        pNewFirstLineIndent = pNewChgSet->GetChgSet()->GetItemIfSet(RES_MARGIN_FIRSTLINE, false);
-        pNewTextLeftMargin = pNewChgSet->GetChgSet()->GetItemIfSet(RES_MARGIN_TEXTLEFT, false);
-        pNewRightMargin = pNewChgSet->GetChgSet()->GetItemIfSet(RES_MARGIN_RIGHT, false);
-        pNewULSpace = pNewChgSet->GetChgSet()->GetItemIfSet( RES_UL_SPACE, false );
-        aFontSizeArr[0] = pNewChgSet->GetChgSet()->GetItemIfSet( RES_CHRATR_FONTSIZE, false );
-        aFontSizeArr[1] = pNewChgSet->GetChgSet()->GetItemIfSet( RES_CHRATR_CJK_FONTSIZE, false );
-        aFontSizeArr[2] = pNewChgSet->GetChgSet()->GetItemIfSet( RES_CHRATR_CTL_FONTSIZE, false );
-        // #i70223#, #i84745#
-        // check, if attribute set is applied to this paragraph style
-        if ( bAssignedToListLevelOfOutlineStyle &&
-             pNewChgSet->GetTheChgdSet() == &GetAttrSet() )
-        {
-            pNewNumRuleItem = pNewChgSet->GetChgSet()->GetItemIfSet( RES_PARATR_NUMRULE, false );
         }
     }
     else // rHint.GetId() == SfxHintId::SwFormatChange
@@ -364,13 +363,12 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
     // if the parent changed, we can't know how many properties are involved: always notify a change
     if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
-        if (bNewParent || !nNoNotify)
-            SwFormatColl::SwClientNotify(rModify, rHint);
-    }
-    else if (rHint.GetId() == SfxHintId::SwAttrSetChange)
-    {
-        auto pChangeHint = static_cast<const sw::AttrSetChangeHint*>(&rHint);
-        const SwAttrSetChg *pOldChgSet = pChangeHint->m_pOld;
+        auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
+        const auto pOld = pLegacy->m_pOld;
+        const SwAttrSetChg *pOldChgSet = nullptr;
+
+        if( pLegacy->GetWhich() == RES_ATTRSET_CHG)
+            pOldChgSet = &pOld->StaticWhichCast(RES_ATTRSET_CHG);
 
         if (bNewParent || !nNoNotify || (pOldChgSet && pOldChgSet->GetChgSet()->Count() > nNoNotify))
             SwFormatColl::SwClientNotify(rModify, rHint);

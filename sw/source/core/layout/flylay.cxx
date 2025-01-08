@@ -751,24 +751,12 @@ void SwFlyLayFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
             SwFlyFrame::SwClientNotify(rMod, rHint);
         return;
     }
-    if (rHint.GetId() != SfxHintId::SwLegacyModify && rHint.GetId() != SfxHintId::SwAttrSetChange)
+    if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
-
-    const SwFormatAnchor* pAnch;
-    if (rHint.GetId() == SfxHintId::SwLegacyModify)
-    {
-        auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
-        if(!pLegacy->m_pNew)
-            return;
-        pAnch = GetAnchorFromPoolItem(*pLegacy->m_pNew);
-    }
-    else // rHint.GetId() == SfxHintId::SwAttrSetChange
-    {
-        auto pChangeHint = static_cast<const sw::AttrSetChangeHint*>(&rHint);
-        if(!pChangeHint->m_pNew)
-            return;
-        pAnch = GetAnchorFromPoolItem(*pChangeHint->m_pNew);
-    }
+    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
+    if(!pLegacy->m_pNew)
+        return;
+    const auto pAnch = GetAnchorFromPoolItem(*pLegacy->m_pNew);
 
     if(!pAnch)
     {

@@ -148,6 +148,7 @@ public:
             switch(nWhich)
             {
                 case RES_OBJECTDYING:
+                case RES_ATTRSET_CHG:
                     m_bInSwFntCache = false;
             }
         }

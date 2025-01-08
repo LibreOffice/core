@@ -223,12 +223,6 @@ void SwUserFieldType::SwClientNotify(const SwModify&, const SfxHint& rHint)
         if (!pLegacy->m_pOld && !pLegacy->m_pNew)
             m_bValidValue = false;
     }
-    else if (rHint.GetId() == SfxHintId::SwAttrSetChange)
-    {
-        auto pChangeHint = static_cast<const sw::AttrSetChangeHint*>(&rHint);
-        if (!pChangeHint->m_pOld && !pChangeHint->m_pNew)
-            m_bValidValue = false;
-    }
 
     CallSwClientNotify(rHint);
     // update input fields that might be connected to the user field

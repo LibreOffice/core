@@ -85,14 +85,16 @@ SwTableFormulaUpdate::SwTableFormulaUpdate(const SwTable* pNewTable)
 }
 
 SwAttrSetChg::SwAttrSetChg( const SwAttrSet& rTheSet, SwAttrSet& rSet )
-  : m_bDelSet( false ),
+    : SwMsgPoolItem( RES_ATTRSET_CHG ),
+    m_bDelSet( false ),
     m_pChgSet( &rSet ),
     m_pTheChgdSet( &rTheSet )
 {
 }
 
 SwAttrSetChg::SwAttrSetChg( const SwAttrSetChg& rChgSet )
-  : m_bDelSet( true ),
+    : SwMsgPoolItem( RES_ATTRSET_CHG ),
+    m_bDelSet( true ),
     m_pTheChgdSet( rChgSet.m_pTheChgdSet )
 {
     m_pChgSet = new SwAttrSet( *rChgSet.m_pChgSet );

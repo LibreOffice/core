@@ -253,9 +253,7 @@ void SwFormatField::SwClientNotify( const SwModify& rModify, const SfxHint& rHin
         rDoc.getIDocumentContentOperations().DeleteRange( *pPaM );
         rDoc.getIDocumentContentOperations().InsertString( *pPaM, aEntry );
     }
-    else if (rHint.GetId() == SfxHintId::SwLegacyModify
-            || rHint.GetId() == SfxHintId::SwFormatChange
-            || rHint.GetId() == SfxHintId::SwAttrSetChange)
+    else if (rHint.GetId() == SfxHintId::SwLegacyModify || rHint.GetId() == SfxHintId::SwFormatChange)
     {
         if(!mpTextField)
             return;
@@ -423,14 +421,16 @@ void SwFormatField::UpdateTextNode(const SfxHint& rHint)
         }
         if(bExpand)
             mpTextField->ExpandTextField(false);
+        return;
     }
     else if(SfxHintId::SwRemoveUnoObject == rHint.GetId())
     {   // invalidate cached UNO object
         m_wXTextField.clear();
         // ??? why does this Modify method not already do this?
         CallSwClientNotify(rHint);
+        return;
     }
-    else if (rHint.GetId() == SfxHintId::SwFormatChange)
+    if (rHint.GetId() == SfxHintId::SwFormatChange)
     {
         auto pChangeHint = static_cast<const SwFormatChangeHint*>(&rHint);
         if (!IsFieldInDoc())
@@ -442,64 +442,51 @@ void SwFormatField::UpdateTextNode(const SfxHint& rHint)
         bool bTriggerNode = pChangeHint->m_pNewFormat != nullptr;
         if(bTriggerNode)
             pTextNd->TriggerNodeUpdate(*pChangeHint);
+        return;
     }
-    else if (rHint.GetId() == SfxHintId::SwAttrSetChange)
+    if(SfxHintId::SwLegacyModify != rHint.GetId())
+        return;
+    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
+    auto pOld = pLegacy->m_pOld;
+    auto pNew = pLegacy->m_pNew;
+    if (pOld == nullptr && pNew == nullptr)
     {
-        auto pChangeHint = static_cast<const sw::AttrSetChangeHint*>(&rHint);
-        auto pOld = pChangeHint->m_pOld;
-        auto pNew = pChangeHint->m_pNew;
-        if (pOld == nullptr && pNew == nullptr)
-        {
-            ForceUpdateTextNode();
-            return;
-        }
-
-        if (!IsFieldInDoc())
-            return;
-
-        SwTextNode* pTextNd = &mpTextField->GetTextNode();
-        OSL_ENSURE(pTextNd, "Where is my Node?");
-
-        bool bTriggerNode = pNew != nullptr;
-        if(bTriggerNode)
-            pTextNd->TriggerNodeUpdate(sw::AttrSetChangeHint(pOld, pNew));
+        ForceUpdateTextNode();
+        return;
     }
-    else if(SfxHintId::SwLegacyModify == rHint.GetId())
+
+    if (!IsFieldInDoc())
+        return;
+
+    // don't do anything, especially not expand!
+    if( pNew && pNew->Which() == RES_OBJECTDYING )
+        return;
+
+    SwTextNode* pTextNd = &mpTextField->GetTextNode();
+    OSL_ENSURE(pTextNd, "Where is my Node?");
+
+    bool bTriggerNode = pNew != nullptr;
+    bool bExpand = false;
+    if(pNew)
     {
-        auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
-        auto pOld = pLegacy->m_pOld;
-        auto pNew = pLegacy->m_pNew;
-        if (pOld == nullptr && pNew == nullptr)
+        switch(pNew->Which())
         {
-            ForceUpdateTextNode();
-            return;
+        case RES_ATTRSET_CHG:
+            break;
+        default:
+            {
+                auto pType = mpField->GetTyp();
+                lcl_EnsureUserFieldValid(*pType);
+                bTriggerNode = lcl_TriggerNode(pType->Which());
+                bExpand = lcl_ExpandField(pType->Which());
+                pOld = nullptr;
+            }
         }
-
-        if (!IsFieldInDoc())
-            return;
-
-        // don't do anything, especially not expand!
-        if( pNew && pNew->Which() == RES_OBJECTDYING )
-            return;
-
-        SwTextNode* pTextNd = &mpTextField->GetTextNode();
-        OSL_ENSURE(pTextNd, "Where is my Node?");
-
-        bool bTriggerNode = pNew != nullptr;
-        bool bExpand = false;
-        if(pNew)
-        {
-            auto pType = mpField->GetTyp();
-            lcl_EnsureUserFieldValid(*pType);
-            bTriggerNode = lcl_TriggerNode(pType->Which());
-            bExpand = lcl_ExpandField(pType->Which());
-            pOld = nullptr;
-        }
-        if(bTriggerNode)
-            pTextNd->TriggerNodeUpdate(sw::LegacyModifyHint(pOld, pNew));
-        if(bExpand)
-            mpTextField->ExpandTextField(false);
     }
+    if(bTriggerNode)
+        pTextNd->TriggerNodeUpdate(sw::LegacyModifyHint(pOld, pNew));
+    if(bExpand)
+        mpTextField->ExpandTextField(false);
 }
 
 bool SwFormatField::IsFieldInDoc() const

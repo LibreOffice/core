@@ -271,8 +271,7 @@ void SwContentControl::SwClientNotify(const SwModify&, const SfxHint& rHint)
         GetNotifier().Broadcast(SfxHint(SfxHintId::Deinitializing));
     }
     else if (rHint.GetId() == SfxHintId::SwLegacyModify
-             || rHint.GetId() == SfxHintId::SwFormatChange
-             || rHint.GetId() == SfxHintId::SwAttrSetChange)
+             || rHint.GetId() == SfxHintId::SwFormatChange)
     {
         CallSwClientNotify(rHint);
         GetNotifier().Broadcast(SfxHint(SfxHintId::DataChanged));

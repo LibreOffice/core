@@ -1165,19 +1165,6 @@ void SwGetRefFieldType::SwClientNotify(const SwModify&, const SfxHint& rHint)
         CallSwClientNotify(rHint);
         return;
     }
-    if (rHint.GetId() == SfxHintId::SwAttrSetChange)
-    {
-        auto pChangeHint = static_cast<const sw::AttrSetChangeHint*>(&rHint);
-        if(!pChangeHint->m_pNew && !pChangeHint->m_pOld)
-            // update to all GetReference fields
-            // hopefully, this codepath is soon dead code, and
-            // UpdateGetReferences gets only called directly
-            UpdateGetReferences();
-        else
-            // forward to text fields, they "expand" the text
-            CallSwClientNotify(rHint);
-        return;
-    }
     if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
     auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);

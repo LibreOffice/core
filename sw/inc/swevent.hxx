@@ -122,23 +122,24 @@ struct SwCallMouseEvent final
             SwClient::SwClientNotify(rMod, rHint);
             if (!GetRegisteredIn() || static_cast<const sw::RemoveUnoObjectHint&>(rHint).m_pObject == PTR.pFormat)
                 Clear();
+            return;
         }
-        else if(SfxHintId::SwFormatChange == rHint.GetId())
+        if(SfxHintId::SwFormatChange == rHint.GetId())
         {
             auto pChgHint = static_cast<const SwFormatChangeHint*>(&rHint);
             assert(EVENT_OBJECT_IMAGE == eType || EVENT_OBJECT_URLITEM == eType || EVENT_OBJECT_IMAGEMAP == eType);
             SwClient::SwClientNotify(rMod, rHint);
             if (!GetRegisteredIn() || pChgHint->m_pOldFormat == PTR.pFormat)
                 Clear();
+            return;
         }
-        else if (rHint.GetId() == SfxHintId::SwLegacyModify || SfxHintId::SwAttrSetChange == rHint.GetId())
-        {
-            assert(EVENT_OBJECT_IMAGE == eType || EVENT_OBJECT_URLITEM == eType || EVENT_OBJECT_IMAGEMAP == eType);
-            SwClient::SwClientNotify(rMod, rHint);
-            bool bClear = !GetRegisteredIn();
-            if(bClear)
-                Clear();
-        }
+        if (rHint.GetId() != SfxHintId::SwLegacyModify)
+            return;
+        assert(EVENT_OBJECT_IMAGE == eType || EVENT_OBJECT_URLITEM == eType || EVENT_OBJECT_IMAGEMAP == eType);
+        SwClient::SwClientNotify(rMod, rHint);
+        bool bClear = !GetRegisteredIn();
+        if(bClear)
+            Clear();
     }
 };
 

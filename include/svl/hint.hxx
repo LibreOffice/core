@@ -232,7 +232,6 @@ enum class SfxHintId {
     SwRemoveUnoObject,
     SwHiddenParaPrint,
     SwFormatChange,
-    SwAttrSetChange,
 
     ThisIsAnSdrHint,
     ThisIsAnSfxEventHint

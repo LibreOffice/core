@@ -171,7 +171,7 @@ void SwFormat::CopyAttrs( const SwFormat& rFormat )
 
             SwAttrSetChg aChgOld( m_aSet, aOld );
             SwAttrSetChg aChgNew( m_aSet, aNew );
-            SwClientNotify(*this, sw::AttrSetChangeHint(&aChgOld, &aChgNew)); // send all modified ones
+            SwClientNotify(*this, sw::LegacyModifyHint(&aChgOld, &aChgNew)); // send all modified ones
         }
     }
 
@@ -234,36 +234,6 @@ void SwFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
         SwModify::SwClientNotify(*this, rHint);
         return;
     }
-    if (rHint.GetId() == SfxHintId::SwAttrSetChange)
-    {
-        auto pChangeHint = static_cast<const sw::AttrSetChangeHint*>(&rHint);
-        std::optional<SwAttrSetChg> oOldClientChg, oNewClientChg;
-        std::optional<sw::AttrSetChangeHint> oDependsHint(std::in_place, pChangeHint->m_pOld, pChangeHint->m_pNew);
-        InvalidateInSwCache();
-        // NB: this still notifies depends even if this condition is not met, which seems non-obvious
-        auto pOldAttrSetChg = pChangeHint->m_pOld;
-        auto pNewAttrSetChg = pChangeHint->m_pNew;
-        if (pOldAttrSetChg && pNewAttrSetChg && pOldAttrSetChg->GetTheChgdSet() != &m_aSet)
-        {
-            // pass only those that are not set...
-            oNewClientChg.emplace(*pNewAttrSetChg);
-            oNewClientChg->GetChgSet()->Differentiate(m_aSet);
-            if(oNewClientChg->Count()) // ... if any
-            {
-                oOldClientChg.emplace(*pOldAttrSetChg);
-                oOldClientChg->GetChgSet()->Differentiate(m_aSet);
-                oDependsHint.emplace(&*oOldClientChg, &*oNewClientChg);
-            }
-            else
-                oDependsHint.reset();
-        }
-        if(oDependsHint)
-        {
-            InvalidateInSwFntCache();
-            SwModify::SwClientNotify(*this, *oDependsHint);
-        }
-        return;
-    }
     if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
     auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
@@ -300,6 +270,27 @@ void SwFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
                     EndListeningAll();
                     m_aSet.SetParent(nullptr);
                 }
+            }
+            break;
+        }
+        case RES_ATTRSET_CHG:
+        {
+            // NB: this still notifies depends even if this condition is not met, which seems non-obvious
+            auto pOldAttrSetChg = static_cast<const SwAttrSetChg*>(pLegacy->m_pOld);
+            auto pNewAttrSetChg = static_cast<const SwAttrSetChg*>(pLegacy->m_pNew);
+            if (pOldAttrSetChg && pNewAttrSetChg && pOldAttrSetChg->GetTheChgdSet() != &m_aSet)
+            {
+                // pass only those that are not set...
+                oNewClientChg.emplace(*pNewAttrSetChg);
+                oNewClientChg->GetChgSet()->Differentiate(m_aSet);
+                if(oNewClientChg->Count()) // ... if any
+                {
+                    oOldClientChg.emplace(*pOldAttrSetChg);
+                    oOldClientChg->GetChgSet()->Differentiate(m_aSet);
+                    oDependsHint.emplace(&*oOldClientChg, &*oNewClientChg);
+                }
+                else
+                    oDependsHint.reset();
             }
             break;
         }

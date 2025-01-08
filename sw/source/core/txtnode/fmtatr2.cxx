@@ -102,12 +102,6 @@ void SwFormatCharFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
         if(m_pTextAttribute)
             m_pTextAttribute->TriggerNodeUpdate(*pChangeHint);
     }
-    else if (rHint.GetId() == SfxHintId::SwAttrSetChange)
-    {
-        auto pChangeHint = static_cast<const sw::AttrSetChangeHint*>(&rHint);
-        if(m_pTextAttribute)
-            m_pTextAttribute->TriggerNodeUpdate(*pChangeHint);
-    }
     else if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
         auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
@@ -738,9 +732,7 @@ void Meta::SwClientNotify(const SwModify&, const SfxHint& rHint)
         SetXMeta(nullptr);
         GetNotifier().Broadcast(SfxHint(SfxHintId::Deinitializing));
     }
-    else if (rHint.GetId() == SfxHintId::SwLegacyModify
-            || rHint.GetId() == SfxHintId::SwFormatChange
-            || rHint.GetId() == SfxHintId::SwAttrSetChange)
+    else if (rHint.GetId() == SfxHintId::SwLegacyModify || rHint.GetId() == SfxHintId::SwFormatChange)
     {
         CallSwClientNotify(rHint);
         GetNotifier().Broadcast(SfxHint(SfxHintId::DataChanged));

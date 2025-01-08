@@ -107,44 +107,36 @@ void SwFlyInContentFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rH
             AnchorFrame()->Prepare(PrepareHint::FlyFrameAttributesChanged, GetFormat());
         return;
     }
-    if (rHint.GetId() == SfxHintId::SwAttrSetChange)
-    {
-        auto pChangeHint = static_cast<const sw::AttrSetChangeHint*>(&rHint);
-        std::pair<std::unique_ptr<SwAttrSetChg>, std::unique_ptr<SwAttrSetChg>> aTweakedChgs;
-        std::pair<const SwAttrSetChg*, const SwAttrSetChg*> aSuperArgs(nullptr, nullptr);
-        const SwAttrSetChg* pOldAttrSetChg = pChangeHint->m_pOld;
-        const SwAttrSetChg* pNewAttrSetChg = pChangeHint->m_pNew;
-        if(pOldAttrSetChg
-                && pNewAttrSetChg
-                && ((SfxItemState::SET == pNewAttrSetChg->GetChgSet()->GetItemState(RES_SURROUND, false))
-                || (SfxItemState::SET == pNewAttrSetChg->GetChgSet()->GetItemState(RES_FRMMACRO, false))))
-        {
-            aTweakedChgs.second = std::make_unique<SwAttrSetChg>(*pOldAttrSetChg);
-            aTweakedChgs.second->ClearItem(RES_SURROUND);
-            aTweakedChgs.second->ClearItem(RES_FRMMACRO);
-            if(aTweakedChgs.second->Count())
-            {
-                aTweakedChgs.first = std::make_unique<SwAttrSetChg>(*pOldAttrSetChg);
-                aTweakedChgs.first->ClearItem(RES_SURROUND);
-                aTweakedChgs.first->ClearItem(RES_FRMMACRO);
-                aSuperArgs = std::pair<const SwAttrSetChg*, const SwAttrSetChg*>(aTweakedChgs.first.get(), aTweakedChgs.second.get());
-            }
-        } else if (pNewAttrSetChg && pNewAttrSetChg->GetChgSet()->Count())
-            aSuperArgs = std::pair<const SwAttrSetChg*, const SwAttrSetChg*>(pChangeHint->m_pOld, pChangeHint->m_pNew);
-        if(aSuperArgs.second)
-        {
-            SwFlyFrame::SwClientNotify(rMod, sw::AttrSetChangeHint(aSuperArgs.first, aSuperArgs.second));
-            if(GetAnchorFrame())
-                AnchorFrame()->Prepare(PrepareHint::FlyFrameAttributesChanged, GetFormat());
-        }
-        return;
-    }
     if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
     auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
+    std::pair<std::unique_ptr<SwAttrSetChg>, std::unique_ptr<SwAttrSetChg>> aTweakedChgs;
     std::pair<const SfxPoolItem*, const SfxPoolItem*> aSuperArgs(nullptr, nullptr);
     switch(pLegacy->GetWhich())
     {
+        case RES_ATTRSET_CHG:
+        {
+            auto pOldAttrSetChg = static_cast<const SwAttrSetChg*>(pLegacy->m_pOld);
+            auto pNewAttrSetChg = static_cast<const SwAttrSetChg*>(pLegacy->m_pNew);
+            if(pOldAttrSetChg
+                    && pNewAttrSetChg
+                    && ((SfxItemState::SET == pNewAttrSetChg->GetChgSet()->GetItemState(RES_SURROUND, false))
+                    || (SfxItemState::SET == pNewAttrSetChg->GetChgSet()->GetItemState(RES_FRMMACRO, false))))
+            {
+                aTweakedChgs.second = std::make_unique<SwAttrSetChg>(*pOldAttrSetChg);
+                aTweakedChgs.second->ClearItem(RES_SURROUND);
+                aTweakedChgs.second->ClearItem(RES_FRMMACRO);
+                if(aTweakedChgs.second->Count())
+                {
+                    aTweakedChgs.first = std::make_unique<SwAttrSetChg>(*pOldAttrSetChg);
+                    aTweakedChgs.first->ClearItem(RES_SURROUND);
+                    aTweakedChgs.first->ClearItem(RES_FRMMACRO);
+                    aSuperArgs = std::pair<const SfxPoolItem*, const SfxPoolItem*>(aTweakedChgs.first.get(), aTweakedChgs.second.get());
+                }
+            } else if (pNewAttrSetChg && pNewAttrSetChg->GetChgSet()->Count())
+                aSuperArgs = std::pair<const SfxPoolItem*, const SfxPoolItem*>(pLegacy->m_pOld, pLegacy->m_pNew);
+            break;
+        }
         case RES_SURROUND:
         case RES_FRMMACRO:
             break;

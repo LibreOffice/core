@@ -1398,15 +1398,16 @@ namespace
     {
         sal_uInt16 nWhich = _rItem.Which();
         const SwFormatAnchor* pAnchorFormat = nullptr;
-        if ( RES_ANCHOR == nWhich )
+        if ( RES_ATTRSET_CHG == nWhich )
+        {
+            pAnchorFormat = static_cast<const SwAttrSetChg&>(_rItem).GetChgSet()->
+                GetItemIfSet( RES_ANCHOR, false );
+        }
+        else if ( RES_ANCHOR == nWhich )
         {
             pAnchorFormat = &static_cast<const SwFormatAnchor&>(_rItem);
         }
         return pAnchorFormat;
-    }
-    const SwFormatAnchor* lcl_getAnchorFormat( const SwAttrSetChg& _rItem )
-    {
-        return _rItem.GetChgSet()->GetItemIfSet( RES_ANCHOR, false );
     }
 }
 
@@ -1425,30 +1426,14 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         // #i51474#
         GetAnchoredObj(nullptr)->ResetLayoutProcessBools();
     }
-    else if (rHint.GetId() == SfxHintId::SwLegacyModify || rHint.GetId() == SfxHintId::SwAttrSetChange)
+    else if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
+        auto pLegacyHint = static_cast<const sw::LegacyModifyHint*>(&rHint);
         SAL_WARN_IF(mbDisconnectInProgress, "sw.core", "<SwDrawContact::Modify(..)> called during disconnection.");
 
-        const SwFormatAnchor* pNewAnchorFormat = nullptr;
-        const SwFormatAnchor* pOldAnchorFormat = nullptr;
-        if (rHint.GetId() == SfxHintId::SwLegacyModify)
-        {
-            auto pLegacyHint = static_cast<const sw::LegacyModifyHint*>(&rHint);
-            if (pLegacyHint->m_pNew)
-                pNewAnchorFormat = lcl_getAnchorFormat(*pLegacyHint->m_pNew);
-            if (pLegacyHint->m_pOld)
-                pOldAnchorFormat = lcl_getAnchorFormat(*pLegacyHint->m_pOld);
-        }
-        else // rHint.GetId() == SfxHintId::SwAttrSetChange)
-        {
-            auto pChangeHint = static_cast<const sw::AttrSetChangeHint*>(&rHint);
-            if (pChangeHint->m_pNew)
-                pNewAnchorFormat = lcl_getAnchorFormat(*pChangeHint->m_pNew);
-            if (pChangeHint->m_pOld)
-                pOldAnchorFormat = lcl_getAnchorFormat(*pChangeHint->m_pOld);
-        }
-
-        if(pNewAnchorFormat)
+        const SfxPoolItem* pNew = pLegacyHint->m_pNew;
+        sal_uInt16 nWhich = pNew ? pNew->Which() : 0;
+        if(const SwFormatAnchor* pNewAnchorFormat = pNew ? lcl_getAnchorFormat(*pNew) : nullptr)
         {
             // Do not respond to a Reset Anchor!
             if(GetFormat()->GetAttrSet().GetItemState(RES_ANCHOR, false) == SfxItemState::SET)
@@ -1473,6 +1458,7 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
                     lcl_NotifyBackgroundOfObj(*this, *GetMaster(), pOldRect);
                     NotifyBackgroundOfAllVirtObjs(pOldRect);
 
+                    const SwFormatAnchor* pOldAnchorFormat = pLegacyHint->m_pOld ? lcl_getAnchorFormat(*pLegacyHint->m_pOld) : nullptr;
                     if(!pOldAnchorFormat || (pOldAnchorFormat->GetAnchorId() != pNewAnchorFormat->GetAnchorId()))
                     {
                         if(maAnchoredDrawObj.DrawObj())
@@ -1494,40 +1480,34 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
                   maAnchoredDrawObj.GetDrawObj()->GetUserCall() )
         {
             bool bUpdateSortedObjsList(false);
-            if (rHint.GetId() == SfxHintId::SwLegacyModify)
+            switch(nWhich)
             {
-                auto pLegacyHint = static_cast<const sw::LegacyModifyHint*>(&rHint);
-                sal_uInt16 nWhich = pLegacyHint->m_pNew ? pLegacyHint->m_pNew->Which() : 0;
-                switch(nWhich)
-                {
-                    case RES_UL_SPACE:
-                    case RES_LR_SPACE:
-                    case RES_HORI_ORIENT:
-                    case RES_VERT_ORIENT:
-                    case RES_FOLLOW_TEXT_FLOW: // #i28701# - add attribute 'Follow text flow'
-                        break;
-                    case RES_SURROUND:
-                    case RES_OPAQUE:
-                    case RES_WRAP_INFLUENCE_ON_OBJPOS:
-                        // --> #i28701# - on change of wrapping style, hell|heaven layer,
-                        // or wrapping style influence an update of the <SwSortedObjs> list,
-                        // the drawing object is registered in, has to be performed. This is triggered
-                        // by the 1st parameter of method call <InvalidateObjs_(..)>.
-                        bUpdateSortedObjsList = true;
-                        break;
-                    default:
-                        assert(!"<SwDraw Contact::Modify(..)> - unhandled attribute?");
-                }
-            }
-            else // rHint.GetId() == SfxHintId::SwAttrSetChange)
-            {
-                // #i35443#
-                auto pChangeHint = static_cast<const sw::AttrSetChangeHint*>(&rHint);
-                auto pChgSet = pChangeHint->m_pNew->GetChgSet();
-                if(pChgSet->GetItemState(RES_SURROUND, false) == SfxItemState::SET ||
-                        pChgSet->GetItemState(RES_OPAQUE, false) == SfxItemState::SET ||
-                        pChgSet->GetItemState(RES_WRAP_INFLUENCE_ON_OBJPOS, false) == SfxItemState::SET)
+                case RES_UL_SPACE:
+                case RES_LR_SPACE:
+                case RES_HORI_ORIENT:
+                case RES_VERT_ORIENT:
+                case RES_FOLLOW_TEXT_FLOW: // #i28701# - add attribute 'Follow text flow'
+                    break;
+                case RES_SURROUND:
+                case RES_OPAQUE:
+                case RES_WRAP_INFLUENCE_ON_OBJPOS:
+                    // --> #i28701# - on change of wrapping style, hell|heaven layer,
+                    // or wrapping style influence an update of the <SwSortedObjs> list,
+                    // the drawing object is registered in, has to be performed. This is triggered
+                    // by the 1st parameter of method call <InvalidateObjs_(..)>.
                     bUpdateSortedObjsList = true;
+                    break;
+                case RES_ATTRSET_CHG: // #i35443#
+                {
+                    auto pChgSet = static_cast<const SwAttrSetChg*>(pNew)->GetChgSet();
+                    if(pChgSet->GetItemState(RES_SURROUND, false) == SfxItemState::SET ||
+                            pChgSet->GetItemState(RES_OPAQUE, false) == SfxItemState::SET ||
+                            pChgSet->GetItemState(RES_WRAP_INFLUENCE_ON_OBJPOS, false) == SfxItemState::SET)
+                        bUpdateSortedObjsList = true;
+                }
+                break;
+                default:
+                    assert(!"<SwDraw Contact::Modify(..)> - unhandled attribute?");
             }
             lcl_NotifyBackgroundOfObj(*this, *GetMaster(), nullptr);
             NotifyBackgroundOfAllVirtObjs(nullptr);

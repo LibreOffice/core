@@ -322,46 +322,41 @@ static void lcl_ModifyBoxes( SwTableBoxes &rBoxes, const tools::Long nOld,
 
 void SwTable::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    if(rHint.GetId() == SfxHintId::SwAutoFormatUsedHint)
-    {
+    if(rHint.GetId() == SfxHintId::SwAutoFormatUsedHint) {
         auto& rAutoFormatUsedHint = static_cast<const sw::AutoFormatUsedHint&>(rHint);
         rAutoFormatUsedHint.CheckNode(GetTableNode());
+        return;
     }
-    else if (rHint.GetId() == SfxHintId::SwAttrSetChange)
+    if (rHint.GetId() != SfxHintId::SwLegacyModify)
+        return;
+    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
+    // catch SSize changes, to adjust the lines/boxes
+    const sal_uInt16 nWhich = pLegacy->GetWhich();
+    const SwFormatFrameSize* pNewSize = nullptr, *pOldSize = nullptr;
+    switch(nWhich)
     {
-        auto pChangeHint = static_cast<const sw::AttrSetChangeHint*>(&rHint);
-        // catch SSize changes, to adjust the lines/boxes
-        const SwFormatFrameSize* pNewSize = nullptr, *pOldSize = nullptr;
-        if (pChangeHint->m_pOld && pChangeHint->m_pNew
-                && (pNewSize = pChangeHint->m_pNew->GetChgSet()->GetItemIfSet(
-                        RES_FRM_SIZE,
-                        false)))
+        case RES_ATTRSET_CHG:
         {
-            pOldSize = &pChangeHint->m_pOld->GetChgSet()->GetFrameSize();
-        }
-        if (pOldSize && pNewSize && !m_bModifyLocked)
-            AdjustWidths(pOldSize->GetWidth(), pNewSize->GetWidth());
-    }
-    else if (rHint.GetId() == SfxHintId::SwLegacyModify)
-    {
-        auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
-        // catch SSize changes, to adjust the lines/boxes
-        const sal_uInt16 nWhich = pLegacy->GetWhich();
-        const SwFormatFrameSize* pNewSize = nullptr, *pOldSize = nullptr;
-        switch(nWhich)
-        {
-            case RES_FRM_SIZE:
+            if (pLegacy->m_pOld && pLegacy->m_pNew
+                    && (pNewSize = static_cast<const SwAttrSetChg*>(pLegacy->m_pNew)->GetChgSet()->GetItemIfSet(
+                            RES_FRM_SIZE,
+                            false)))
             {
-                pOldSize = static_cast<const SwFormatFrameSize*>(pLegacy->m_pOld);
-                pNewSize = static_cast<const SwFormatFrameSize*>(pLegacy->m_pNew);
+                pOldSize = &static_cast<const SwAttrSetChg*>(pLegacy->m_pOld)->GetChgSet()->GetFrameSize();
             }
-            break;
-            default:
-                CheckRegistration(pLegacy->m_pOld);
         }
-        if (pOldSize && pNewSize && !m_bModifyLocked)
-            AdjustWidths(pOldSize->GetWidth(), pNewSize->GetWidth());
+        break;
+        case RES_FRM_SIZE:
+        {
+            pOldSize = static_cast<const SwFormatFrameSize*>(pLegacy->m_pOld);
+            pNewSize = static_cast<const SwFormatFrameSize*>(pLegacy->m_pNew);
+        }
+        break;
+        default:
+            CheckRegistration(pLegacy->m_pOld);
     }
+    if (pOldSize && pNewSize && !m_bModifyLocked)
+        AdjustWidths(pOldSize->GetWidth(), pNewSize->GetWidth());
 }
 
 void SwTable::AdjustWidths( const tools::Long nOld, const tools::Long nNew )
@@ -2755,45 +2750,41 @@ SwTableBox* SwTableBoxFormat::SwTableBoxFormat::GetTableBox()
 // for detection of modifications (mainly TableBoxAttribute)
 void SwTableBoxFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
-    if(rHint.GetId() != SfxHintId::SwLegacyModify && rHint.GetId() != SfxHintId::SwFormatChange
-        && rHint.GetId() != SfxHintId::SwAttrSetChange)
+    if(rHint.GetId() != SfxHintId::SwLegacyModify && rHint.GetId() != SfxHintId::SwFormatChange)
         return;
     if(IsModifyLocked() || !GetDoc() || GetDoc()->IsInDtor() || rHint.GetId() == SfxHintId::SwFormatChange)
     {
         SwFrameFormat::SwClientNotify(rMod, rHint);
         return;
     }
+    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
     const SwTableBoxNumFormat* pNewFormat = nullptr;
     const SwTableBoxFormula* pNewFormula = nullptr;
     const SwTableBoxValue* pNewVal = nullptr;
     sal_uLong nOldFormat = getSwDefaultTextFormat();
 
-    if(rHint.GetId() == SfxHintId::SwLegacyModify)
+    switch(pLegacy->m_pNew ? pLegacy->m_pNew->Which() : 0)
     {
-        auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
-        switch(pLegacy->m_pNew ? pLegacy->m_pNew->Which() : 0)
+        case RES_ATTRSET_CHG:
         {
-            case RES_BOXATR_FORMAT:
-                pNewFormat = static_cast<const SwTableBoxNumFormat*>(pLegacy->m_pNew);
-                nOldFormat = static_cast<const SwTableBoxNumFormat*>(pLegacy->m_pOld)->GetValue();
-                break;
-            case RES_BOXATR_FORMULA:
-                pNewFormula = static_cast<const SwTableBoxFormula*>(pLegacy->m_pNew);
-                break;
-            case RES_BOXATR_VALUE:
-                pNewVal = static_cast<const SwTableBoxValue*>(pLegacy->m_pNew);
-                break;
+            const SfxItemSet& rSet = *static_cast<const SwAttrSetChg*>(pLegacy->m_pNew)->GetChgSet();
+            pNewFormat = rSet.GetItemIfSet( RES_BOXATR_FORMAT, false);
+            if(pNewFormat)
+                nOldFormat = static_cast<const SwAttrSetChg*>(pLegacy->m_pOld)->GetChgSet()->Get(RES_BOXATR_FORMAT).GetValue();
+            pNewFormula = rSet.GetItemIfSet(RES_BOXATR_FORMULA, false);
+            pNewVal = rSet.GetItemIfSet(RES_BOXATR_VALUE, false);
+            break;
         }
-    }
-    else // rHint.GetId() == SfxHintId::SwAttrSetChange
-    {
-        auto pChangeHint = static_cast<const sw::AttrSetChangeHint*>(&rHint);
-        const SfxItemSet& rSet = *pChangeHint->m_pNew->GetChgSet();
-        pNewFormat = rSet.GetItemIfSet( RES_BOXATR_FORMAT, false);
-        if(pNewFormat)
-            nOldFormat = pChangeHint->m_pOld->GetChgSet()->Get(RES_BOXATR_FORMAT).GetValue();
-        pNewFormula = rSet.GetItemIfSet(RES_BOXATR_FORMULA, false);
-        pNewVal = rSet.GetItemIfSet(RES_BOXATR_VALUE, false);
+        case RES_BOXATR_FORMAT:
+            pNewFormat = static_cast<const SwTableBoxNumFormat*>(pLegacy->m_pNew);
+            nOldFormat = static_cast<const SwTableBoxNumFormat*>(pLegacy->m_pOld)->GetValue();
+            break;
+        case RES_BOXATR_FORMULA:
+            pNewFormula = static_cast<const SwTableBoxFormula*>(pLegacy->m_pNew);
+            break;
+        case RES_BOXATR_VALUE:
+            pNewVal = static_cast<const SwTableBoxValue*>(pLegacy->m_pNew);
+            break;
     }
 
     // something changed and some BoxAttribute remained in the set!

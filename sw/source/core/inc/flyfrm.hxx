@@ -96,7 +96,6 @@ protected:
     // Predecessor/Successor for chaining with text flow
     SwFlyFrame *m_pPrevLink, *m_pNextLink;
    static const SwFormatAnchor* GetAnchorFromPoolItem(const SfxPoolItem& rItem);
-   static const SwFormatAnchor* GetAnchorFromPoolItem(const SwAttrSetChg& rItem);
 
 private:
     // It must be possible to block Content-bound flys so that they will be not

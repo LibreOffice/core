@@ -2187,7 +2187,6 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
     sw::RedlineDelText const* pRedlineDelText(nullptr);
     sw::RedlineUnDelText const* pRedlineUnDelText(nullptr);
     SwFormatChangeHint const * pFormatChangedHint(nullptr);
-    sw::AttrSetChangeHint const* pAttrSetChangeHint(nullptr);
 
     sal_uInt16 nWhich = 0;
     if (rHint.GetId() == SfxHintId::SwLegacyModify)
@@ -2248,10 +2247,6 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
     {
         pFormatChangedHint = static_cast<const SwFormatChangeHint*>(&rHint);
     }
-    else if (rHint.GetId() == SfxHintId::SwAttrSetChange)
-    {
-        pAttrSetChangeHint = static_cast<const sw::AttrSetChangeHint*>(&rHint);
-    }
     else
     {
         assert(!"unexpected hint");
@@ -2278,7 +2273,7 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
                 return;
             }
         }
-        SwContentFrame::SwClientNotify(rModify, rHint);
+        SwContentFrame::SwClientNotify(rModify, sw::LegacyModifyHint(pOld, pNew));
         if( pFormatChangedHint && getRootFrame()->GetCurrShell() )
         {
             // collection has changed
@@ -2475,242 +2470,6 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
             lcl_ModifyOfst(*this, nPos, nLen, &o3tl::operator-<sal_Int32, Tag_TextFrameIndex>);
         }
     }
-    else if (pAttrSetChangeHint)
-    {
-        InvalidateLineNum();
-
-        const SwAttrSet& rNewSet = *pAttrSetChangeHint->m_pNew->GetChgSet();
-        int nClear = 0;
-        sal_uInt16 nCount = rNewSet.Count();
-
-        if( const SwFormatFootnote* pItem = rNewSet.GetItemIfSet( RES_TXTATR_FTN, false ) )
-        {
-            nPos = MapModelToView(&rNode, pItem->GetTextFootnote()->GetStart());
-            if (IsIdxInside(nPos, TextFrameIndex(1)))
-                Prepare( PrepareHint::FootnoteInvalidation, pAttrSetChangeHint->m_pNew );
-            nClear = 0x01;
-            --nCount;
-        }
-
-        if( const SwFormatField* pItem = rNewSet.GetItemIfSet( RES_TXTATR_FIELD, false ) )
-        {
-            nPos = MapModelToView(&rNode, pItem->GetTextField()->GetStart());
-            if (IsIdxInside(nPos, TextFrameIndex(1)))
-            {
-                const SwFormatField* pOldItem = pAttrSetChangeHint->m_pOld ?
-                    &(pAttrSetChangeHint->m_pOld->GetChgSet()->Get(RES_TXTATR_FIELD)) : nullptr;
-                if (SfxPoolItem::areSame( pItem, pOldItem ))
-                {
-                    InvalidatePage();
-                    SetCompletePaint();
-                }
-                else
-                    InvalidateRange_(SwCharRange(nPos, TextFrameIndex(1)));
-            }
-            nClear |= 0x02;
-            --nCount;
-        }
-        bool bLineSpace = SfxItemState::SET == rNewSet.GetItemState(
-                                        RES_PARATR_LINESPACING, false ),
-                 bRegister  = SfxItemState::SET == rNewSet.GetItemState(
-                                        RES_PARATR_REGISTER, false );
-        if ( bLineSpace || bRegister )
-        {
-            if (!m_pMergedPara || m_pMergedPara->pParaPropsNode == &rModify)
-            {
-                Prepare( bRegister ? PrepareHint::Register : PrepareHint::AdjustSizeWithoutFormatting );
-                CalcLineSpace();
-                InvalidateSize();
-                InvalidatePrt_();
-
-                // i#11859
-                //  (1) Also invalidate next frame on next page/column.
-                //  (2) Skip empty sections and hidden paragraphs
-                //  Thus, use method <InvalidateNextPrtArea()>
-                InvalidateNextPrtArea();
-
-                SetCompletePaint();
-            }
-            nClear |= 0x04;
-            if ( bLineSpace )
-            {
-                --nCount;
-                if ((!m_pMergedPara || m_pMergedPara->pParaPropsNode == &rModify)
-                    && IsInSct() && !GetPrev())
-                {
-                    SwSectionFrame *pSect = FindSctFrame();
-                    if( pSect->ContainsAny() == this )
-                        pSect->InvalidatePrt();
-                }
-            }
-            if ( bRegister )
-                --nCount;
-        }
-        if ( SfxItemState::SET == rNewSet.GetItemState( RES_PARATR_SPLIT,
-                                                   false ))
-        {
-            if (!m_pMergedPara || m_pMergedPara->pParaPropsNode == &rModify)
-            {
-                if (GetPrev())
-                    CheckKeep();
-                Prepare();
-                InvalidateSize();
-            }
-            nClear |= 0x08;
-            --nCount;
-        }
-
-        if( SfxItemState::SET == rNewSet.GetItemState( RES_BACKGROUND, false)
-            && (!m_pMergedPara || m_pMergedPara->pParaPropsNode == &rModify)
-            && !IsFollow() && GetDrawObjs() )
-        {
-            SwSortedObjs *pObjs = GetDrawObjs();
-            for ( size_t i = 0; GetDrawObjs() && i < pObjs->size(); ++i )
-            {
-                SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
-                if ( auto pFly = pAnchoredObj->DynCastFlyFrame() )
-                {
-                    if( !pFly->IsFlyInContentFrame() )
-                    {
-                        const SvxBrushItem &rBack =
-                            pFly->GetAttrSet()->GetBackground();
-                        //     #GetTransChg#
-                        //     following condition determines, if the fly frame
-                        //     "inherites" the background color of text frame.
-                        //     This is the case, if fly frame background
-                        //     color is "no fill"/"auto fill" and if the fly frame
-                        //     has no background graphic.
-                        //     Thus, check complete fly frame background
-                        //     color and *not* only its transparency value
-                        if ( (rBack.GetColor() == COL_TRANSPARENT)  &&
-                            rBack.GetGraphicPos() == GPOS_NONE )
-                        {
-                            pFly->SetCompletePaint();
-                            pFly->InvalidatePage();
-                        }
-                    }
-                }
-            }
-        }
-
-        if ( SfxItemState::SET ==
-             rNewSet.GetItemState( RES_TXTATR_CHARFMT, false ) )
-        {
-            lcl_SetWrong( *this, rNode, 0, COMPLETE_STRING, false );
-            lcl_SetScriptInval( *this, TextFrameIndex(0) );
-        }
-        else if ( SfxItemState::SET ==
-                  rNewSet.GetItemState( RES_CHRATR_LANGUAGE, false ) ||
-                  SfxItemState::SET ==
-                  rNewSet.GetItemState( RES_CHRATR_CJK_LANGUAGE, false ) ||
-                  SfxItemState::SET ==
-                  rNewSet.GetItemState( RES_CHRATR_CTL_LANGUAGE, false ) )
-            lcl_SetWrong( *this, rNode, 0, COMPLETE_STRING, false );
-        else if ( SfxItemState::SET ==
-                  rNewSet.GetItemState( RES_CHRATR_FONT, false ) ||
-                  SfxItemState::SET ==
-                  rNewSet.GetItemState( RES_CHRATR_CJK_FONT, false ) ||
-                  SfxItemState::SET ==
-                  rNewSet.GetItemState( RES_CHRATR_CTL_FONT, false ) )
-            lcl_SetScriptInval( *this, TextFrameIndex(0) );
-        else if ( SfxItemState::SET ==
-                  rNewSet.GetItemState( RES_FRAMEDIR, false )
-            && (!m_pMergedPara || m_pMergedPara->pParaPropsNode == &rModify))
-        {
-            SetDerivedR2L( false );
-            CheckDirChange();
-            // Force complete paint due to existing indents.
-            SetCompletePaint();
-        }
-
-        if( nCount )
-        {
-            if( getRootFrame()->GetCurrShell() )
-            {
-                Prepare();
-                InvalidatePrt_();
-            }
-
-            if (nClear || (m_pMergedPara &&
-                    (m_pMergedPara->pParaPropsNode != &rModify ||
-                     m_pMergedPara->pFirstNode != &rModify)))
-            {
-                assert(pAttrSetChangeHint->m_pOld);
-                SwAttrSetChg aOldSet( *pAttrSetChangeHint->m_pOld );
-                SwAttrSetChg aNewSet( *pAttrSetChangeHint->m_pNew );
-
-                if (m_pMergedPara && m_pMergedPara->pParaPropsNode != &rModify)
-                {
-                    for (sal_uInt16 i = RES_PARATR_BEGIN; i != RES_FRMATR_END; ++i)
-                    {
-                        if (i != RES_BREAK && i != RES_PAGEDESC)
-                        {
-                            aOldSet.ClearItem(i);
-                            aNewSet.ClearItem(i);
-                        }
-                    }
-                    for (sal_uInt16 i = XATTR_FILL_FIRST; i <= XATTR_FILL_LAST; ++i)
-                    {
-                        aOldSet.ClearItem(i);
-                        aNewSet.ClearItem(i);
-                    }
-                }
-                if (m_pMergedPara && m_pMergedPara->pFirstNode != &rModify)
-                {
-                    aOldSet.ClearItem(RES_BREAK);
-                    aNewSet.ClearItem(RES_BREAK);
-                    aOldSet.ClearItem(RES_PAGEDESC);
-                    aNewSet.ClearItem(RES_PAGEDESC);
-                }
-
-                if( 0x01 & nClear )
-                {
-                    aOldSet.ClearItem( RES_TXTATR_FTN );
-                    aNewSet.ClearItem( RES_TXTATR_FTN );
-                }
-                if( 0x02 & nClear )
-                {
-                    aOldSet.ClearItem( RES_TXTATR_FIELD );
-                    aNewSet.ClearItem( RES_TXTATR_FIELD );
-                }
-                if ( 0x04 & nClear )
-                {
-                    if ( bLineSpace )
-                    {
-                        aOldSet.ClearItem( RES_PARATR_LINESPACING );
-                        aNewSet.ClearItem( RES_PARATR_LINESPACING );
-                    }
-                    if ( bRegister )
-                    {
-                        aOldSet.ClearItem( RES_PARATR_REGISTER );
-                        aNewSet.ClearItem( RES_PARATR_REGISTER );
-                    }
-                }
-                if ( 0x08 & nClear )
-                {
-                    aOldSet.ClearItem( RES_PARATR_SPLIT );
-                    aNewSet.ClearItem( RES_PARATR_SPLIT );
-                }
-                if (aOldSet.Count() || aNewSet.Count())
-                {
-                    SwContentFrame::SwClientNotify(rModify, sw::AttrSetChangeHint(&aOldSet, &aNewSet));
-                }
-            }
-            else
-                SwContentFrame::SwClientNotify(rModify, rHint);
-        }
-
-#if !ENABLE_WASM_STRIP_ACCESSIBILITY
-        if (isA11yRelevantAttribute(nWhich))
-        {
-            SwViewShell* pViewSh = getRootFrame() ? getRootFrame()->GetCurrShell() : nullptr;
-            if ( pViewSh  )
-            {
-                pViewSh->InvalidateAccessibleParaAttrs( *this );
-            }
-        }
-#endif
-    }
     else switch (nWhich)
     {
         case RES_LINENUMBER:
@@ -2741,7 +2500,7 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
                 const sal_uInt16 nTmp = pNewUpdate->getWhichAttr();
 
                 if( ! nTmp || RES_TXTATR_CHARFMT == nTmp || RES_TXTATR_INETFMT == nTmp || RES_TXTATR_AUTOFMT == nTmp ||
-                    RES_UPDATEATTR_FMT_CHG == nTmp || RES_UPDATEATTR_ATTRSET_CHG == nTmp )
+                    RES_UPDATEATTR_FMT_CHG == nTmp || RES_ATTRSET_CHG == nTmp )
                 {
                     lcl_SetWrong( *this, rNode, nNPos, nNPos + nNLen, false );
                     lcl_SetScriptInval( *this, nPos );
@@ -2828,6 +2587,243 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
             break;
         }
 
+        case RES_ATTRSET_CHG:
+        {
+            InvalidateLineNum();
+
+            const SwAttrSet& rNewSet = *static_cast<const SwAttrSetChg*>(pNew)->GetChgSet();
+            int nClear = 0;
+            sal_uInt16 nCount = rNewSet.Count();
+
+            if( const SwFormatFootnote* pItem = rNewSet.GetItemIfSet( RES_TXTATR_FTN, false ) )
+            {
+                nPos = MapModelToView(&rNode, pItem->GetTextFootnote()->GetStart());
+                if (IsIdxInside(nPos, TextFrameIndex(1)))
+                    Prepare( PrepareHint::FootnoteInvalidation, pNew );
+                nClear = 0x01;
+                --nCount;
+            }
+
+            if( const SwFormatField* pItem = rNewSet.GetItemIfSet( RES_TXTATR_FIELD, false ) )
+            {
+                nPos = MapModelToView(&rNode, pItem->GetTextField()->GetStart());
+                if (IsIdxInside(nPos, TextFrameIndex(1)))
+                {
+                    const SfxPoolItem* pOldItem = pOld ?
+                        &(static_cast<const SwAttrSetChg*>(pOld)->GetChgSet()->Get(RES_TXTATR_FIELD)) : nullptr;
+                    if (SfxPoolItem::areSame( pItem, pOldItem ))
+                    {
+                        InvalidatePage();
+                        SetCompletePaint();
+                    }
+                    else
+                        InvalidateRange_(SwCharRange(nPos, TextFrameIndex(1)));
+                }
+                nClear |= 0x02;
+                --nCount;
+            }
+            bool bLineSpace = SfxItemState::SET == rNewSet.GetItemState(
+                                            RES_PARATR_LINESPACING, false ),
+                     bRegister  = SfxItemState::SET == rNewSet.GetItemState(
+                                            RES_PARATR_REGISTER, false );
+            if ( bLineSpace || bRegister )
+            {
+                if (!m_pMergedPara || m_pMergedPara->pParaPropsNode == &rModify)
+                {
+                    Prepare( bRegister ? PrepareHint::Register : PrepareHint::AdjustSizeWithoutFormatting );
+                    CalcLineSpace();
+                    InvalidateSize();
+                    InvalidatePrt_();
+
+                    // i#11859
+                    //  (1) Also invalidate next frame on next page/column.
+                    //  (2) Skip empty sections and hidden paragraphs
+                    //  Thus, use method <InvalidateNextPrtArea()>
+                    InvalidateNextPrtArea();
+
+                    SetCompletePaint();
+                }
+                nClear |= 0x04;
+                if ( bLineSpace )
+                {
+                    --nCount;
+                    if ((!m_pMergedPara || m_pMergedPara->pParaPropsNode == &rModify)
+                        && IsInSct() && !GetPrev())
+                    {
+                        SwSectionFrame *pSect = FindSctFrame();
+                        if( pSect->ContainsAny() == this )
+                            pSect->InvalidatePrt();
+                    }
+                }
+                if ( bRegister )
+                    --nCount;
+            }
+            if ( SfxItemState::SET == rNewSet.GetItemState( RES_PARATR_SPLIT,
+                                                       false ))
+            {
+                if (!m_pMergedPara || m_pMergedPara->pParaPropsNode == &rModify)
+                {
+                    if (GetPrev())
+                        CheckKeep();
+                    Prepare();
+                    InvalidateSize();
+                }
+                nClear |= 0x08;
+                --nCount;
+            }
+
+            if( SfxItemState::SET == rNewSet.GetItemState( RES_BACKGROUND, false)
+                && (!m_pMergedPara || m_pMergedPara->pParaPropsNode == &rModify)
+                && !IsFollow() && GetDrawObjs() )
+            {
+                SwSortedObjs *pObjs = GetDrawObjs();
+                for ( size_t i = 0; GetDrawObjs() && i < pObjs->size(); ++i )
+                {
+                    SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
+                    if ( auto pFly = pAnchoredObj->DynCastFlyFrame() )
+                    {
+                        if( !pFly->IsFlyInContentFrame() )
+                        {
+                            const SvxBrushItem &rBack =
+                                pFly->GetAttrSet()->GetBackground();
+                            //     #GetTransChg#
+                            //     following condition determines, if the fly frame
+                            //     "inherites" the background color of text frame.
+                            //     This is the case, if fly frame background
+                            //     color is "no fill"/"auto fill" and if the fly frame
+                            //     has no background graphic.
+                            //     Thus, check complete fly frame background
+                            //     color and *not* only its transparency value
+                            if ( (rBack.GetColor() == COL_TRANSPARENT)  &&
+                                rBack.GetGraphicPos() == GPOS_NONE )
+                            {
+                                pFly->SetCompletePaint();
+                                pFly->InvalidatePage();
+                            }
+                        }
+                    }
+                }
+            }
+
+            if ( SfxItemState::SET ==
+                 rNewSet.GetItemState( RES_TXTATR_CHARFMT, false ) )
+            {
+                lcl_SetWrong( *this, rNode, 0, COMPLETE_STRING, false );
+                lcl_SetScriptInval( *this, TextFrameIndex(0) );
+            }
+            else if ( SfxItemState::SET ==
+                      rNewSet.GetItemState( RES_CHRATR_LANGUAGE, false ) ||
+                      SfxItemState::SET ==
+                      rNewSet.GetItemState( RES_CHRATR_CJK_LANGUAGE, false ) ||
+                      SfxItemState::SET ==
+                      rNewSet.GetItemState( RES_CHRATR_CTL_LANGUAGE, false ) )
+                lcl_SetWrong( *this, rNode, 0, COMPLETE_STRING, false );
+            else if ( SfxItemState::SET ==
+                      rNewSet.GetItemState( RES_CHRATR_FONT, false ) ||
+                      SfxItemState::SET ==
+                      rNewSet.GetItemState( RES_CHRATR_CJK_FONT, false ) ||
+                      SfxItemState::SET ==
+                      rNewSet.GetItemState( RES_CHRATR_CTL_FONT, false ) )
+                lcl_SetScriptInval( *this, TextFrameIndex(0) );
+            else if ( SfxItemState::SET ==
+                      rNewSet.GetItemState( RES_FRAMEDIR, false )
+                && (!m_pMergedPara || m_pMergedPara->pParaPropsNode == &rModify))
+            {
+                SetDerivedR2L( false );
+                CheckDirChange();
+                // Force complete paint due to existing indents.
+                SetCompletePaint();
+            }
+
+            if( nCount )
+            {
+                if( getRootFrame()->GetCurrShell() )
+                {
+                    Prepare();
+                    InvalidatePrt_();
+                }
+
+                if (nClear || (m_pMergedPara &&
+                        (m_pMergedPara->pParaPropsNode != &rModify ||
+                         m_pMergedPara->pFirstNode != &rModify)))
+                {
+                    assert(pOld);
+                    SwAttrSetChg aOldSet( *static_cast<const SwAttrSetChg*>(pOld) );
+                    SwAttrSetChg aNewSet( *static_cast<const SwAttrSetChg*>(pNew) );
+
+                    if (m_pMergedPara && m_pMergedPara->pParaPropsNode != &rModify)
+                    {
+                        for (sal_uInt16 i = RES_PARATR_BEGIN; i != RES_FRMATR_END; ++i)
+                        {
+                            if (i != RES_BREAK && i != RES_PAGEDESC)
+                            {
+                                aOldSet.ClearItem(i);
+                                aNewSet.ClearItem(i);
+                            }
+                        }
+                        for (sal_uInt16 i = XATTR_FILL_FIRST; i <= XATTR_FILL_LAST; ++i)
+                        {
+                            aOldSet.ClearItem(i);
+                            aNewSet.ClearItem(i);
+                        }
+                    }
+                    if (m_pMergedPara && m_pMergedPara->pFirstNode != &rModify)
+                    {
+                        aOldSet.ClearItem(RES_BREAK);
+                        aNewSet.ClearItem(RES_BREAK);
+                        aOldSet.ClearItem(RES_PAGEDESC);
+                        aNewSet.ClearItem(RES_PAGEDESC);
+                    }
+
+                    if( 0x01 & nClear )
+                    {
+                        aOldSet.ClearItem( RES_TXTATR_FTN );
+                        aNewSet.ClearItem( RES_TXTATR_FTN );
+                    }
+                    if( 0x02 & nClear )
+                    {
+                        aOldSet.ClearItem( RES_TXTATR_FIELD );
+                        aNewSet.ClearItem( RES_TXTATR_FIELD );
+                    }
+                    if ( 0x04 & nClear )
+                    {
+                        if ( bLineSpace )
+                        {
+                            aOldSet.ClearItem( RES_PARATR_LINESPACING );
+                            aNewSet.ClearItem( RES_PARATR_LINESPACING );
+                        }
+                        if ( bRegister )
+                        {
+                            aOldSet.ClearItem( RES_PARATR_REGISTER );
+                            aNewSet.ClearItem( RES_PARATR_REGISTER );
+                        }
+                    }
+                    if ( 0x08 & nClear )
+                    {
+                        aOldSet.ClearItem( RES_PARATR_SPLIT );
+                        aNewSet.ClearItem( RES_PARATR_SPLIT );
+                    }
+                    if (aOldSet.Count() || aNewSet.Count())
+                    {
+                        SwContentFrame::SwClientNotify(rModify, sw::LegacyModifyHint(&aOldSet, &aNewSet));
+                    }
+                }
+                else
+                    SwContentFrame::SwClientNotify(rModify, sw::LegacyModifyHint(pOld, pNew));
+            }
+
+#if !ENABLE_WASM_STRIP_ACCESSIBILITY
+            if (isA11yRelevantAttribute(nWhich))
+            {
+                SwViewShell* pViewSh = getRootFrame() ? getRootFrame()->GetCurrShell() : nullptr;
+                if ( pViewSh  )
+                {
+                    pViewSh->InvalidateAccessibleParaAttrs( *this );
+                }
+            }
+#endif
+        }
+        break;
         case RES_PARATR_SPLIT:
             if ( GetPrev() )
                 CheckKeep();

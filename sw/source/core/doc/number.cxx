@@ -308,20 +308,23 @@ void SwNumFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
             UpdateNumNodes(*const_cast<SwDoc*>(pFormat->GetDoc()));
         return;
     }
-    if (rHint.GetId() == SfxHintId::SwAttrSetChange)
-    {
-        // Look for the NumRules object in the Doc where this NumFormat is set.
-        // The format does not need to exist!
-        const SwCharFormat* pFormat = GetCharFormat();
-
-        if(pFormat && !pFormat->GetDoc()->IsInDtor())
-            UpdateNumNodes(*const_cast<SwDoc*>(pFormat->GetDoc()));
-        return;
-    }
     if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
     auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
-    CheckRegistration(pLegacy->m_pOld);
+    // Look for the NumRules object in the Doc where this NumFormat is set.
+    // The format does not need to exist!
+    const SwCharFormat* pFormat = nullptr;
+    switch(pLegacy->GetWhich())
+    {
+        case RES_ATTRSET_CHG:
+            pFormat = GetCharFormat();
+            break;
+    }
+
+    if(pFormat && !pFormat->GetDoc()->IsInDtor())
+        UpdateNumNodes(*const_cast<SwDoc*>(pFormat->GetDoc()));
+    else
+        CheckRegistration(pLegacy->m_pOld);
 }
 
 OUString SwNumFormat::GetCharFormatName() const

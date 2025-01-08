@@ -4005,6 +4005,7 @@ void SwTabFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
     if(rHint.GetId() == SfxHintId::SwTableHeadingChange)
     {
         HandleTableHeadlineChange();
+        return;
     }
     else if(rHint.GetId() == SfxHintId::SwVirtPageNumHint)
     {
@@ -4013,39 +4014,36 @@ void SwTabFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
             return;
         if(const SwPageFrame* pPage = FindPageFrame())
             pPage->UpdateVirtPageNumInfo(rVirtPageNumHint, this);
+        return;
     }
-    else if (rHint.GetId() == SfxHintId::SwAttrSetChange)
+    else if (rHint.GetId() != SfxHintId::SwLegacyModify)
+        return;
+    auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
+    SwTabFrameInvFlags eInvFlags = SwTabFrameInvFlags::NONE;
+    bool bAttrSetChg = pLegacy->m_pNew && RES_ATTRSET_CHG == pLegacy->m_pNew->Which();
+
+    if(bAttrSetChg)
     {
-        auto pChangeHint = static_cast<const sw::AttrSetChangeHint*>(&rHint);
-        SwTabFrameInvFlags eInvFlags = SwTabFrameInvFlags::NONE;
-        if(pChangeHint->m_pNew)
+        auto& rOldSetChg = *static_cast<const SwAttrSetChg*>(pLegacy->m_pOld);
+        auto& rNewSetChg = *static_cast<const SwAttrSetChg*>(pLegacy->m_pNew);
+        SfxItemIter aOIter(*rOldSetChg.GetChgSet());
+        SfxItemIter aNIter(*rNewSetChg.GetChgSet());
+        const SfxPoolItem* pOItem = aOIter.GetCurItem();
+        const SfxPoolItem* pNItem = aNIter.GetCurItem();
+        SwAttrSetChg aOldSet(rOldSetChg);
+        SwAttrSetChg aNewSet(rNewSetChg);
+        do
         {
-            const SwAttrSetChg& rOldSetChg = *pChangeHint->m_pOld;
-            const SwAttrSetChg& rNewSetChg = *pChangeHint->m_pNew;
-            SfxItemIter aOIter(*rOldSetChg.GetChgSet());
-            SfxItemIter aNIter(*rNewSetChg.GetChgSet());
-            const SfxPoolItem* pOItem = aOIter.GetCurItem();
-            const SfxPoolItem* pNItem = aNIter.GetCurItem();
-            SwAttrSetChg aOldSet(rOldSetChg);
-            SwAttrSetChg aNewSet(rNewSetChg);
-            do
-            {
-                UpdateAttr_(pOItem, pNItem, eInvFlags, &aOldSet, &aNewSet);
-                pNItem = aNIter.NextItem();
-                pOItem = aOIter.NextItem();
-            } while(pNItem);
-            if(aOldSet.Count() || aNewSet.Count())
-                SwLayoutFrame::SwClientNotify(rMod, sw::AttrSetChangeHint(&aOldSet, &aNewSet));
-        }
-        Invalidate(eInvFlags);
+            UpdateAttr_(pOItem, pNItem, eInvFlags, &aOldSet, &aNewSet);
+            pNItem = aNIter.NextItem();
+            pOItem = aOIter.NextItem();
+        } while(pNItem);
+        if(aOldSet.Count() || aNewSet.Count())
+            SwLayoutFrame::SwClientNotify(rMod, sw::LegacyModifyHint(&aOldSet, &aNewSet));
     }
-    else if (rHint.GetId() == SfxHintId::SwLegacyModify)
-    {
-        auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
-        SwTabFrameInvFlags eInvFlags = SwTabFrameInvFlags::NONE;
+    else
         UpdateAttr_(pLegacy->m_pOld, pLegacy->m_pNew, eInvFlags);
-        Invalidate(eInvFlags);
-    }
+    Invalidate(eInvFlags);
 }
 
 void SwTabFrame::HandleTableHeadlineChange()
@@ -4665,26 +4663,6 @@ void SwRowFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
         ReinitializeFrameSizeAttrFlags();
         return;
     }
-    else if (rHint.GetId() == SfxHintId::SwAttrSetChange)
-    {
-        auto pChangeHint = static_cast<const sw::AttrSetChangeHint*>(&rHint);
-        if(!pChangeHint->m_pNew)
-        {
-            // possibly not needed?
-            SwLayoutFrame::SwClientNotify(rModify, rHint);
-            return;
-        }
-        const SwAttrSet* pChgSet = pChangeHint->m_pNew->GetChgSet();
-        const SfxPoolItem* pItem = nullptr;
-        pChgSet->GetItemState(RES_FRM_SIZE, false, &pItem);
-        if(!pItem)
-            pChgSet->GetItemState(RES_ROW_SPLIT, false, &pItem);
-        if(pItem)
-            OnFrameSize(*pItem);
-        else
-            SwLayoutFrame::SwClientNotify(rModify, rHint); // possibly not needed?
-        return;
-    }
     if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
     auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
@@ -4696,6 +4674,19 @@ void SwRowFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
     }
     switch(pLegacy->m_pNew->Which())
     {
+        case RES_ATTRSET_CHG:
+        {
+            const SwAttrSet* pChgSet = static_cast<const SwAttrSetChg*>(pLegacy->m_pNew)->GetChgSet();
+            const SfxPoolItem* pItem = nullptr;
+            pChgSet->GetItemState(RES_FRM_SIZE, false, &pItem);
+            if(!pItem)
+                pChgSet->GetItemState(RES_ROW_SPLIT, false, &pItem);
+            if(pItem)
+                OnFrameSize(*pItem);
+            else
+                SwLayoutFrame::SwClientNotify(rModify, rHint); // possibly not needed?
+            return;
+       }
        case RES_FRM_SIZE:
        case RES_ROW_SPLIT:
             OnFrameSize(*static_cast<const SwFormatFrameSize*>(pLegacy->m_pNew));
@@ -6277,46 +6268,43 @@ void SwCellFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
     {
         SwLayoutFrame::SwClientNotify(rMod, rHint);
     }
-    else if (rHint.GetId() == SfxHintId::SwLegacyModify || rHint.GetId() == SfxHintId::SwAttrSetChange)
+    else if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
+        auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
         const SfxPoolItem* pVertOrientItem = nullptr;
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
         const SfxPoolItem* pProtectItem = nullptr;
 #endif
         const SfxPoolItem* pFrameDirItem = nullptr;
         const SfxPoolItem* pBoxItem = nullptr;
-        if (rHint.GetId() == SfxHintId::SwLegacyModify)
+        const auto nWhich = pLegacy->m_pNew ? pLegacy->m_pNew->Which() : 0;
+        switch(nWhich)
         {
-            auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
-            const auto nWhich = pLegacy->m_pNew ? pLegacy->m_pNew->Which() : 0;
-            switch(nWhich)
+            case RES_ATTRSET_CHG:
             {
-                case RES_VERT_ORIENT:
-                    pVertOrientItem = pLegacy->m_pNew;
-                    break;
-                case RES_PROTECT:
-        #if !ENABLE_WASM_STRIP_ACCESSIBILITY
-                    pProtectItem = pLegacy->m_pNew;
-        #endif
-                    break;
-                case RES_FRAMEDIR:
-                    pFrameDirItem = pLegacy->m_pNew;
-                    break;
-                case RES_BOX:
-                    pBoxItem = pLegacy->m_pNew;
-                    break;
-            }
-        }
-        else // rHint.GetId() == SfxHintId::SwAttrSetChange
-        {
-            auto pChangeHint = static_cast<const sw::AttrSetChangeHint*>(&rHint);
-            auto& rChgSet = *pChangeHint->m_pNew->GetChgSet();
-            pVertOrientItem = rChgSet.GetItemIfSet(RES_VERT_ORIENT, false);
+                auto& rChgSet = *static_cast<const SwAttrSetChg*>(pLegacy->m_pNew)->GetChgSet();
+                pVertOrientItem = rChgSet.GetItemIfSet(RES_VERT_ORIENT, false);
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
-            pProtectItem = rChgSet.GetItemIfSet(RES_PROTECT, false);
+                pProtectItem = rChgSet.GetItemIfSet(RES_PROTECT, false);
 #endif
-            pFrameDirItem = rChgSet.GetItemIfSet(RES_FRAMEDIR, false);
-            pBoxItem = rChgSet.GetItemIfSet(RES_BOX, false);
+                pFrameDirItem = rChgSet.GetItemIfSet(RES_FRAMEDIR, false);
+                pBoxItem = rChgSet.GetItemIfSet(RES_BOX, false);
+                break;
+            }
+            case RES_VERT_ORIENT:
+                pVertOrientItem = pLegacy->m_pNew;
+                break;
+            case RES_PROTECT:
+#if !ENABLE_WASM_STRIP_ACCESSIBILITY
+                pProtectItem = pLegacy->m_pNew;
+#endif
+                break;
+            case RES_FRAMEDIR:
+                pFrameDirItem = pLegacy->m_pNew;
+                break;
+            case RES_BOX:
+                pBoxItem = pLegacy->m_pNew;
+                break;
         }
         if(pVertOrientItem)
         {

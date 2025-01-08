@@ -1388,37 +1388,6 @@ SwRegHistory::SwRegHistory( const SwNode& rNd, SwHistory* pHst )
 
 void SwRegHistory::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    if (rHint.GetId() == SfxHintId::SwAttrSetChange)
-    {
-        auto pChangeHint = static_cast<const sw::AttrSetChangeHint*>(&rHint);
-        if ( !(m_pHistory && pChangeHint->m_pNew && pChangeHint->m_pOld != pChangeHint->m_pNew) )
-            return;
-        if (pChangeHint->m_pOld)
-        {
-            std::unique_ptr<SwHistoryHint> pNewHstr;
-            const SfxItemSet& rSet = *pChangeHint->m_pOld->GetChgSet();
-
-            if ( 1 < rSet.Count() )
-            {
-                pNewHstr.reset( new SwHistorySetAttrSet( rSet, m_nNodeIndex, m_WhichIdSet ) );
-            }
-            else if (const SfxPoolItem* pItem = SfxItemIter(rSet).GetCurItem())
-            {
-                if ( m_WhichIdSet.count( pItem->Which() ) )
-                {
-                    pNewHstr.reset( new SwHistorySetFormat( pItem, m_nNodeIndex ) );
-                }
-                else
-                {
-                    pNewHstr.reset( new SwHistoryResetFormat( pItem, m_nNodeIndex ) );
-                }
-            }
-
-            if (pNewHstr)
-                m_pHistory->m_SwpHstry.push_back( std::move(pNewHstr) );
-        }
-        return;
-    }
     if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
     auto pLegacyHint = static_cast<const sw::LegacyModifyHint*>(&rHint);
@@ -1435,6 +1404,30 @@ void SwRegHistory::SwClientNotify(const SwModify&, const SfxHint& rHint)
         {
             OSL_ENSURE(false, "Unexpected update attribute (!)");
         }
+    }
+    else if (pLegacyHint->m_pOld && RES_ATTRSET_CHG == pLegacyHint->m_pNew->Which())
+    {
+        std::unique_ptr<SwHistoryHint> pNewHstr;
+        const SfxItemSet& rSet = *static_cast< const SwAttrSetChg* >(pLegacyHint->m_pOld)->GetChgSet();
+
+        if ( 1 < rSet.Count() )
+        {
+            pNewHstr.reset( new SwHistorySetAttrSet( rSet, m_nNodeIndex, m_WhichIdSet ) );
+        }
+        else if (const SfxPoolItem* pItem = SfxItemIter(rSet).GetCurItem())
+        {
+            if ( m_WhichIdSet.count( pItem->Which() ) )
+            {
+                pNewHstr.reset( new SwHistorySetFormat( pItem, m_nNodeIndex ) );
+            }
+            else
+            {
+                pNewHstr.reset( new SwHistoryResetFormat( pItem, m_nNodeIndex ) );
+            }
+        }
+
+        if (pNewHstr)
+            m_pHistory->m_SwpHstry.push_back( std::move(pNewHstr) );
     }
 }
 

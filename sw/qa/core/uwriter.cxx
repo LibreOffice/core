@@ -1681,8 +1681,6 @@ namespace
                 ++m_nNotifyCount;
             else if(dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
                 ++m_nModifyCount;
-            else if(dynamic_cast<const sw::AttrSetChangeHint*>(&rHint))
-                ++m_nModifyCount;
             else if(auto pModifyChangedHint = dynamic_cast<const sw::ModifyChangedHint*>(&rHint))
             {
                 ++m_nModifyChangedCount;
@@ -1697,8 +1695,6 @@ namespace
         virtual void SwClientNotify(const SwModify&, const SfxHint& rHint) override
         {
             if(dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
-                ++m_nModifyCount;
-            else if(dynamic_cast<const sw::AttrSetChangeHint*>(&rHint))
                 ++m_nModifyCount;
         }
     };
