@@ -92,6 +92,7 @@
 #include <mmresultdialogs.hxx>
 #include <formatlinebreak.hxx>
 #include <translatelangselect.hxx>
+#include <copyfielddlg.hxx>
 
 using namespace ::com::sun::star;
 using namespace css::frame;
@@ -1005,6 +1006,16 @@ std::optional<SwLanguageListItem> AbstractSwTranslateLangSelectDlg_Impl::GetSele
 #endif
 }
 
+short AbstractCopyFieldDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
+bool AbstractCopyFieldDlg_Impl::StartExecuteAsync(AsyncContext &rCtx)
+{
+    return weld::GenericDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
+
 short AbstractChangeDbDialog_Impl::Execute()
 {
     assert(false);
@@ -1258,6 +1269,12 @@ VclPtr<AbstractSwRenameXNamedDlg> SwAbstractDialogFactory_Impl::CreateSwRenameXN
 VclPtr<AbstractSwModalRedlineAcceptDlg> SwAbstractDialogFactory_Impl::CreateSwModalRedlineAcceptDlg(weld::Window *pParent)
 {
     return VclPtr<AbstractSwModalRedlineAcceptDlg_Impl>::Create(std::make_unique<SwModalRedlineAcceptDlg>(pParent));
+}
+
+VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateCopyFieldDlg(weld::Widget* pParent,
+    const rtl::OUString& rFieldValue)
+{
+    return VclPtr<AbstractCopyFieldDlg_Impl>::Create(std::make_unique<CopyFieldDlg>(pParent, rFieldValue));
 }
 
 VclPtr<AbstractSwPageNumberDlg> SwAbstractDialogFactory_Impl::CreateSwPageNumberDlg(weld::Window *pParent)

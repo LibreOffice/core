@@ -58,6 +58,7 @@
 #include <o3tl/deleter.hxx>
 #include <pagenumberdlg.hxx>
 #include <changedb.hxx>
+#include <copyfielddlg.hxx>
 
 
 class SwInsertAbstractDlg;
@@ -766,6 +767,18 @@ public:
 };
 
 
+class AbstractCopyFieldDlg_Impl : public VclAbstractDialog
+{
+    std::shared_ptr<CopyFieldDlg> m_xDlg;
+public:
+    explicit AbstractCopyFieldDlg_Impl(std::shared_ptr<CopyFieldDlg> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
+    virtual bool StartExecuteAsync(AsyncContext &rCtx) override;
+};
+
 //AbstractDialogFactory_Impl implementations
 class SwAbstractDialogFactory_Impl : public SwAbstractDialogFactory
 {
@@ -906,6 +919,8 @@ public:
 
     virtual GlossaryGetCurrGroup        GetGlossaryCurrGroupFunc() override;
     virtual GlossarySetActGroup         SetGlossaryActGroupFunc() override;
+
+    virtual VclPtr<VclAbstractDialog> CreateCopyFieldDlg(weld::Widget* pParent, const rtl::OUString& rFieldValue ) override;
 
     // For TabPage
     virtual CreateTabPage               GetTabPageCreatorFunc( sal_uInt16 nId ) override;

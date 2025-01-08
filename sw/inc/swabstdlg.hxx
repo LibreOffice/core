@@ -368,6 +368,16 @@ public:
 };
 
 /**
+ * Interface for copy field value dialog in read only documents. It's implemented by
+ * AbstractCopyFieldDlg_Impl
+ */
+class AbstractCopyFieldDlg : public VclAbstractDialog
+{
+protected:
+    virtual ~AbstractCopyFieldDlg() override = default;
+};
+
+/**
  * Interface for e.g. the form -> content control -> properties -> add dialog. It's implemented by
  * AbstractSwContentControlListItemDlg_Impl, but SwContentControlDlg only knows about this interface
  * and the SwAbstractDialogFactory::CreateSwContentControlListItemDlg() factory.
@@ -548,6 +558,9 @@ public:
     virtual VclPtr<AbstractSwRenameXNamedDlg> CreateSwRenameXNamedDlg(weld::Widget* pParent,
         css::uno::Reference< css::container::XNamed > & xNamed,
         css::uno::Reference< css::container::XNameAccess > & xNameAccess) = 0;
+
+    virtual VclPtr<VclAbstractDialog> CreateCopyFieldDlg(weld::Widget* pParent, const rtl::OUString& rFieldValue ) = 0;
+
     virtual VclPtr<AbstractSwModalRedlineAcceptDlg> CreateSwModalRedlineAcceptDlg(weld::Window *pParent) = 0;
     virtual VclPtr<AbstractSwPageNumberDlg> CreateSwPageNumberDlg(weld::Window* pParent) = 0;
 

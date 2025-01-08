@@ -1023,6 +1023,11 @@ interface BaseText
         StateMethod = StateField ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
+    FN_COPY_FIELD // status()
+    [
+        ExecMethod = ExecField;
+        StateMethod = StateField;
+    ]
     FN_UPDATE_SEL_FIELD
     [
         ExecMethod = ExecField ;

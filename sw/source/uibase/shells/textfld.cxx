@@ -178,6 +178,24 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             }
             break;
         }
+        case FN_COPY_FIELD:
+        {
+            //call copy field dialog with field string - if there is any!
+            SwField* pField = rSh.GetCurField(true);
+            if( pField && pField->GetFieldName().getLength())
+            {
+                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+                VclPtr<VclAbstractDialog> pDlg(pFact->CreateCopyFieldDlg(
+                    GetView().GetFrameWeld(), pField->ExpandField(true, nullptr)));
+                pDlg->StartExecuteAsync(
+                    [pDlg] (sal_Int32 /*nResult*/)->void
+                    {
+                        pDlg->disposeOnce();
+                    }
+                );
+            }
+            break;
+        }
         case FN_UPDATE_SEL_FIELD:
         {
             SwField *pField = rSh.GetCurField();
@@ -1504,7 +1522,19 @@ void SwTextShell::StateField( SfxItemSet &rSet )
                 }
             }
             break;
-
+        case FN_COPY_FIELD:
+            {
+                if( !bGetField )
+                {
+                    pField = rSh.GetCurField(true);
+                    bGetField = true;
+                }
+                SwFieldIds nTempWhich = pField ? pField->GetTyp()->Which() : SwFieldIds::Unknown;
+                if (SwFieldIds::Unknown == nTempWhich
+                    || !pField->ExpandField(true, nullptr).getLength())
+                    rSet.DisableItem( nWhich );
+            }
+            break;
         case FN_UPDATE_SEL_FIELD:
             {
                 pField = rSh.GetCurField();

@@ -138,6 +138,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/contentcontroldropdown \
 	sw/uiconfig/swriter/ui/contentcontrollistitemdlg \
 	sw/uiconfig/swriter/ui/converttexttable \
+	sw/uiconfig/swriter/ui/copyfielddialog \
 	sw/uiconfig/swriter/ui/createaddresslist \
 	sw/uiconfig/swriter/ui/createauthorentry \
 	sw/uiconfig/swriter/ui/createautomarkdialog \
