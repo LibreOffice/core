@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <office:document-styles xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0" xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:css3t="http://www.w3.org/TR/css3-text/" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:rpt="http://openoffice.org/2005/report" xmlns:officeooo="http://openoffice.org/2009/office" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" office:version="1.2">
   <office:font-face-decls>
     <style:font-face style:name="DejaVu Sans" svg:font-family="'DejaVu Sans'" style:font-adornments="Book" style:font-family-generic="swiss" style:font-pitch="variable"/>
@@ -933,6 +933,10 @@
       <style:graphic-properties draw:fill="solid" draw:fill-color="#f10d0c"/>
       <style:text-properties fo:color="#dddddd" loext:opacity="100%"/>
     </style:style>
+    <style:style style:name="Mgr4" style:family="graphic" style:parent-style-name="Filled_20_Orange">
+      <style:graphic-properties draw:fill="solid" draw:fill-color="#ea7500" draw:stroke="none"/>
+      <style:text-properties fo:color="#dddddd" loext:opacity="100%"/>
+    </style:style>
     <style:style style:name="Mgr5" style:family="graphic" style:parent-style-name="Filled_20_Yellow">
       <style:graphic-properties draw:fill="solid" draw:fill-color="#e8a202"/>
       <style:text-properties fo:color="#dddddd" loext:opacity="100%"/>
@@ -943,6 +947,10 @@
     </style:style>
     <style:style style:name="Mgr7" style:family="graphic" style:parent-style-name="Filled_20_Blue">
       <style:graphic-properties draw:fill="solid" draw:fill-color="#3465a4"/>
+      <style:text-properties fo:color="#dddddd" loext:opacity="100%"/>
+    </style:style>
+    <style:style style:name="Mgr8" style:family="graphic" style:parent-style-name="Filled_20_Purple">
+      <style:graphic-properties draw:fill="solid" draw:fill-color="#780373" draw:stroke="none"/>
       <style:text-properties fo:color="#dddddd" loext:opacity="100%"/>
     </style:style>
     <style:style style:name="Mpr8" style:family="presentation" style:parent-style-name="Focus-backgroundobjects">
@@ -1036,11 +1044,11 @@
     </style:handout-master>
     <style:master-page style:name="Focus" style:page-layout-name="PM1" draw:style-name="Mdp1">
       <draw:polygon draw:style-name="Mgr3" draw:layer="backgroundobjects" svg:width="13.5cm" svg:height="8cm" svg:x="0cm" svg:y="0cm" svg:viewBox="0 0 13500 8000" draw:points="0,0 0,500 10404,8000 13500,0"/>
-      <draw:polygon draw:style-name="Filled_20_Orange" draw:layer="backgroundobjects" svg:width="16cm" svg:height="6cm" svg:x="12cm" svg:y="0cm" svg:viewBox="0 0 16000 6000" draw:points="16000,0 2500,0 0,6000 16000,2500"/>
+      <draw:polygon draw:style-name="Mgr4" draw:layer="backgroundobjects" svg:width="16cm" svg:height="6cm" svg:x="12cm" svg:y="0cm" svg:viewBox="0 0 16000 6000" draw:points="16000,0 2500,0 0,6000 16000,2500"/>
       <draw:polygon draw:style-name="Mgr5" draw:layer="backgroundobjects" svg:width="12.5cm" svg:height="10.5cm" svg:x="15.5cm" svg:y="3.5cm" svg:viewBox="0 0 12500 10500" draw:points="12500,10500 12500,0 0,2500"/>
       <draw:polygon draw:style-name="Mgr6" draw:layer="backgroundobjects" svg:width="12.5cm" svg:height="7.25cm" svg:x="15.5cm" svg:y="8.5cm" svg:viewBox="0 0 12500 7250" draw:points="12500,7250 12500,6500 2000,0 0,7250"/>
       <draw:polygon draw:style-name="Mgr7" draw:layer="backgroundobjects" svg:width="16cm" svg:height="5.3cm" svg:x="0cm" svg:y="10.45cm" svg:viewBox="0 0 16000 5292" draw:points="0,5292 14500,5292 16000,0 0,2542"/>
-      <draw:polygon draw:style-name="Filled_20_Purple" draw:layer="backgroundobjects" svg:width="12cm" svg:height="10.5cm" svg:x="0cm" svg:y="1.5cm" svg:viewBox="0 0 12000 10500" draw:points="0,0 0,10500 12000,8500"/>
+      <draw:polygon draw:style-name="Mgr8" draw:layer="backgroundobjects" svg:width="12cm" svg:height="10.5cm" svg:x="0cm" svg:y="1.5cm" svg:viewBox="0 0 12000 10500" draw:points="0,0 0,10500 12000,8500"/>
       <draw:frame presentation:style-name="Focus-backgroundobjects" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="6.5cm" svg:height="1cm" svg:x="1cm" svg:y="14.5cm" presentation:class="date-time">
         <draw:text-box>
           <text:p>
