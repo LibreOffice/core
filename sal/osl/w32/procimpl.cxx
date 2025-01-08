@@ -576,6 +576,8 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
 
             return osl_Process_E_None;
         }
+        else
+            CloseHandle(process_info.hProcess);
     }
 
     /* if an error occurred we have to close the server side pipe ends too */

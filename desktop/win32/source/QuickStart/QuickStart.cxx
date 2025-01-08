@@ -68,6 +68,8 @@ static bool launchSoffice( )
         if ( !bSuccess )
             return false;
 
+        CloseHandle(aProcessInfo.hProcess);
+        CloseHandle(aProcessInfo.hThread);
         return true;
     }
     else
