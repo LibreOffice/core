@@ -168,6 +168,7 @@ $(eval $(call gb_Library_add_exception_objects,swui,\
     sw/source/ui/table/tabledlg \
     sw/source/ui/table/tautofmt \
     sw/source/ui/utlui/swrenamexnameddlg \
+    sw/source/ui/utlui/copyfielddlg \
 ))
 
 ifneq (,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))

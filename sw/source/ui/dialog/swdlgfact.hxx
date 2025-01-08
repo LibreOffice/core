@@ -58,6 +58,7 @@
 #include <o3tl/deleter.hxx>
 #include <pagenumberdlg.hxx>
 #include <changedb.hxx>
+#include <copyfielddlg.hxx>
 
 //AbstractDialogFactory_Impl implementations
 class SwAbstractDialogFactory_Impl : public SwAbstractDialogFactory
@@ -199,6 +200,8 @@ public:
 
     virtual GlossaryGetCurrGroup        GetGlossaryCurrGroupFunc() override;
     virtual GlossarySetActGroup         SetGlossaryActGroupFunc() override;
+
+    virtual VclPtr<AbstractCopyFieldDlg> CreateCopyFieldDlg(weld::Widget* pParent, const rtl::OUString& rFieldValue ) override;
 
     // For TabPage
     virtual CreateTabPage               GetTabPageCreatorFunc( sal_uInt16 nId ) override;

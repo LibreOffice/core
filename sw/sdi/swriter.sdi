@@ -8856,3 +8856,21 @@ SfxVoidItem OutlineLevelsShown FN_OUTLINE_LEVELS_SHOWN
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::View;
 ]
+
+SfxVoidItem CopyFieldDialog FN_COPY_FIELD
+()
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Edit;
+]

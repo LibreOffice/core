@@ -93,6 +93,7 @@
 #include <mmresultdialogs.hxx>
 #include <formatlinebreak.hxx>
 #include <translatelangselect.hxx>
+#include <copyfielddlg.hxx>
 
 using namespace css::frame;
 using namespace css::uno;
@@ -757,6 +758,22 @@ VclPtr<AbstractSwModalRedlineAcceptDlg> SwAbstractDialogFactory_Impl::CreateSwMo
     using AbstractSwModalRedlineAcceptDlg_Impl
         = AbstractDialogImpl_NoSync<AbstractSwModalRedlineAcceptDlg, SwModalRedlineAcceptDlg>;
     return VclPtr<AbstractSwModalRedlineAcceptDlg_Impl>::Create(pParent);
+}
+
+namespace
+{
+class AbstractCopyFieldDlg_Impl
+    : public vcl::AbstractDialogImpl_Async<AbstractCopyFieldDlg, CopyFieldDlg>
+{
+public:
+    using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
+};
+}
+
+VclPtr<AbstractCopyFieldDlg> SwAbstractDialogFactory_Impl::CreateCopyFieldDlg(weld::Widget* pParent,
+    const rtl::OUString& rFieldValue)
+{
+    return VclPtr<AbstractCopyFieldDlg_Impl>::Create(pParent, rFieldValue);
 }
 
 namespace

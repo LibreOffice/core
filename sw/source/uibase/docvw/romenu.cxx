@@ -96,6 +96,7 @@ SwReadOnlyPopup::SwReadOnlyPopup(const Point &rDPos, SwView &rV)
     , m_nReadonlyLoadGraphic(m_xMenu->GetItemId(u"loadgraphic"))
     , m_nReadonlyGraphicoff(m_xMenu->GetItemId(u"imagesoff"))
     , m_nReadonlyFullscreen(m_xMenu->GetItemId(u"fullscreen"))
+    , m_nReadonlyCopyField(m_xMenu->GetItemId(u"copyfield"))
     , m_nReadonlyCopy(m_xMenu->GetItemId(u"copy"))
     , m_rView(rV)
     , m_xBrushItem(std::make_unique<SvxBrushItem>(RES_BACKGROUND))
@@ -213,7 +214,8 @@ SwReadOnlyPopup::SwReadOnlyPopup(const Point &rDPos, SwView &rV)
         m_xMenu->EnableItem(m_nReadonlyCopylink, false);
     }
     Check(m_nReadonlyFullscreen, SID_WIN_FULLSCREEN, rDis);
-
+    eState = rVFrame.GetBindings().QueryState(FN_COPY_FIELD, pState);
+    m_xMenu->EnableItem(m_nReadonlyCopyField, eState > SfxItemState::DISABLED);
     m_xMenu->RemoveDisabledEntries( true );
 }
 
@@ -284,6 +286,8 @@ void SwReadOnlyPopup::Execute( vcl::Window* pWin, sal_uInt16 nId )
         nExecId = SID_BROWSE_FORWARD;
     else if (nId == m_nReadonlySourceview)
         nExecId = SID_SOURCEVIEW;
+    else if (nId == m_nReadonlyCopyField)
+        nExecId = FN_COPY_FIELD;
     else if (nId == m_nReadonlySaveGraphic || nId == m_nReadonlySaveBackground)
         SaveGraphic(nId);
     else if (nId == m_nReadonlyCopylink)
