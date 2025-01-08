@@ -1830,7 +1830,7 @@ Color SdrPage::GetPageBackgroundColor( SdrPageView const * pView, bool bScreenDi
                     See sdrmasterpagedescriptor.cxx: e.g. the Notes MasterPage has no StyleSheet set (and there maybe others).
                 */
 
-                // This is a notes page. Try to get itemset from standart page's master.
+                // This is a notes page. Try to get itemset from standard page's master.
                 if (getSdrModelFromSdrPage().GetPage(GetPageNum() - 1))
                     pBackgroundFill = &getSdrModelFromSdrPage().GetPage(GetPageNum() - 1)->TRG_GetMasterPage().getSdrPageProperties().GetItemSet();
                 else
