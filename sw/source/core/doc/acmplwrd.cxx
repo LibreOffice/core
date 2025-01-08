@@ -148,9 +148,18 @@ void SwAutoCompleteClient::Notify(const SfxHint& rHint)
         case SfxHintId::SwRemoveUnoObject:
             DocumentDying();
             return;
-        case SfxHintId::SwObjectDying:
-            DocumentDying();
-            return;
+        case SfxHintId::SwLegacyModify:
+        {
+            auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
+            switch(pLegacy->GetWhich())
+            {
+                case RES_OBJECTDYING:
+                    DocumentDying();
+                    return;
+                default:
+                    return;
+            }
+        }
         default:
             return;
     }

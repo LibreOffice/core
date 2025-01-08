@@ -1141,21 +1141,6 @@ void SwContentNode::SwClientNotify( const SwModify&, const SfxHint& rHint)
             static_cast<SwTextNode*>(this)->SetCalcHiddenCharFlags();
         CallSwClientNotify(rHint);
     }
-    else if (rHint.GetId() == SfxHintId::SwObjectDying)
-    {
-        auto pDyingHint = static_cast<const sw::ObjectDyingHint*>(&rHint);
-        InvalidateInSwCache();
-        const SwFormat* pFormat = static_cast<const SwFormat*>(pDyingHint->m_pDying);
-        // Do not mangle pointers if it is the upper-most format!
-        if(pFormat && GetRegisteredIn() == pFormat)
-        {
-            // As ~SwFormat calls CheckRegistrationFormat before
-            // ~SwModify, which sends the RES_OBJECTDYING, we should never
-            // reach this point.
-            assert(false);
-        }
-        CallSwClientNotify(rHint);
-    }
     else if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
         auto pLegacyHint = static_cast<const sw::LegacyModifyHint*>(&rHint);
@@ -1164,6 +1149,22 @@ void SwContentNode::SwClientNotify( const SwModify&, const SfxHint& rHint)
 
         switch(nWhich)
         {
+            case RES_OBJECTDYING:
+                {
+                    SwFormat* pFormat = pLegacyHint->m_pNew
+                            ? static_cast<SwFormat*>(static_cast<const SwPtrMsgPoolItem*>(pLegacyHint->m_pNew)->pObject)
+                            : nullptr;
+                    // Do not mangle pointers if it is the upper-most format!
+                    if(pFormat && GetRegisteredIn() == pFormat)
+                    {
+                        // As ~SwFormat calls CheckRegistrationFormat before
+                        // ~SwModify, which sends the RES_OBJECTDYING, we should never
+                        // reach this point.
+                        assert(false);
+                    }
+                }
+                break;
+
             case RES_UPDATE_ATTR:
                 // RES_UPDATE_ATTR _should_ always contain a SwUpdateAttr hint in old and new.
                 // However, faking one with just a basic SfxPoolItem setting a WhichId has been observed.

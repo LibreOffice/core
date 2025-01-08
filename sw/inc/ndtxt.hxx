@@ -246,7 +246,6 @@ public:
     void TriggerNodeUpdate(const sw::LegacyModifyHint&);
     void TriggerNodeUpdate(const sw::AttrSetChangeHint&);
     void TriggerNodeUpdate(const sw::RemoveUnoObjectHint&);
-    void TriggerNodeUpdate(const sw::ObjectDyingHint&);
     void TriggerNodeUpdate(const SwFormatChangeHint&);
 
     const OUString& GetText() const { return m_Text; }

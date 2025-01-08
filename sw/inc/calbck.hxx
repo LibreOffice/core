@@ -70,7 +70,6 @@ namespace sw
 {
     class ClientIteratorBase;
     class ListenerEntry;
-    class ObjectDyingHint;
     enum class IteratorMode { Exact, UnwrapMulti };
 }
 
@@ -171,7 +170,7 @@ namespace sw
 
         // in case an SwModify object is destroyed that itself is registered in another SwModify,
         // its SwClient objects can decide to get registered to the latter instead by calling this method
-        std::optional<sw::ModifyChangedHint> CheckRegistration( const sw::ObjectDyingHint& rHint );
+        std::optional<sw::ModifyChangedHint> CheckRegistration( const SfxPoolItem* pOldValue );
         // SwFormat wants to die different than the rest: It wants to reparent every client to its parent
         // and then send a SwFormatChg hint.
         void CheckRegistrationFormat(SwFormat& rOld);

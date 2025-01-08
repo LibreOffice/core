@@ -1425,9 +1425,7 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         // #i51474#
         GetAnchoredObj(nullptr)->ResetLayoutProcessBools();
     }
-    else if (rHint.GetId() == SfxHintId::SwLegacyModify
-            || rHint.GetId() == SfxHintId::SwAttrSetChange
-            || rHint.GetId() == SfxHintId::SwObjectDying)
+    else if (rHint.GetId() == SfxHintId::SwLegacyModify || rHint.GetId() == SfxHintId::SwAttrSetChange)
     {
         SAL_WARN_IF(mbDisconnectInProgress, "sw.core", "<SwDrawContact::Modify(..)> called during disconnection.");
 
@@ -1441,7 +1439,7 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
             if (pLegacyHint->m_pOld)
                 pOldAnchorFormat = lcl_getAnchorFormat(*pLegacyHint->m_pOld);
         }
-        else if (rHint.GetId() == SfxHintId::SwAttrSetChange)
+        else // rHint.GetId() == SfxHintId::SwAttrSetChange)
         {
             auto pChangeHint = static_cast<const sw::AttrSetChangeHint*>(&rHint);
             if (pChangeHint->m_pNew)
@@ -1521,7 +1519,7 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
                         assert(!"<SwDraw Contact::Modify(..)> - unhandled attribute?");
                 }
             }
-            else if (rHint.GetId() == SfxHintId::SwAttrSetChange)
+            else // rHint.GetId() == SfxHintId::SwAttrSetChange)
             {
                 // #i35443#
                 auto pChangeHint = static_cast<const sw::AttrSetChangeHint*>(&rHint);

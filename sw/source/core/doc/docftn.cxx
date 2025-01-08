@@ -246,10 +246,10 @@ void SwEndNoteInfo::UpdateFormatOrAttr()
 
 void SwEndNoteInfo::SwClientNotify( const SwModify& rModify, const SfxHint& rHint)
 {
-    if (rHint.GetId() == SfxHintId::SwObjectDying)
+    if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
-        auto pDyingHint = static_cast<const sw::ObjectDyingHint*>(&rHint);
-        CheckRegistration( *pDyingHint );
+        auto pLegacyHint = static_cast<const sw::LegacyModifyHint*>(&rHint);
+        CheckRegistration( pLegacyHint->m_pOld );
     }
     else if (rHint.GetId() == SfxHintId::SwFormatChange || rHint.GetId() == SfxHintId::SwAttrSetChange)
     {

@@ -87,8 +87,12 @@ WriterInspectorTextPanel::WriterInspectorTextPanel(weld::Widget* pParent)
 
 void WriterInspectorTextPanel::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
 {
-    if (rHint.GetId() == SfxHintId::SwObjectDying)
-        m_pShell = nullptr;
+    if (rHint.GetId() == SfxHintId::SwLegacyModify)
+    {
+        const sw::LegacyModifyHint& rLegacy = static_cast<const sw::LegacyModifyHint&>(rHint);
+        if (rLegacy.GetWhich() == RES_OBJECTDYING)
+            m_pShell = nullptr;
+    }
     SwClient::SwClientNotify(rModify, rHint);
 }
 

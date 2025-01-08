@@ -20,7 +20,10 @@ private:
 
     virtual void SwClientNotify(const SwModify&, const SfxHint& rHint) override
     {
-        if (rHint.GetId() == SfxHintId::SwObjectDying)
+        if (rHint.GetId() != SfxHintId::SwLegacyModify)
+            return;
+        auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
+        if (pLegacy->GetWhich() == RES_OBJECTDYING)
         {
             m_pModify->Remove(*this);
             m_pModify = nullptr;

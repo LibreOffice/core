@@ -2646,8 +2646,16 @@ void SwXTextField::Impl::Notify(const SfxHint& rHint)
 
     if(rHint.GetId() == SfxHintId::Dying)
         Invalidate();
-    else if (rHint.GetId() == SfxHintId::SwObjectDying)
-        Invalidate();
+    else if (rHint.GetId() == SfxHintId::SwLegacyModify)
+    {
+        auto pLegacyHint = static_cast<const sw::LegacyModifyHint*>(&rHint);
+        switch(pLegacyHint->m_pOld ? pLegacyHint->m_pOld->Which() : 0)
+        {
+            case RES_OBJECTDYING:
+                Invalidate();
+                break;
+        }
+    }
 }
 
 const SwField* SwXTextField::Impl::GetField() const

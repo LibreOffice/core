@@ -118,10 +118,10 @@ void SwLineNumberInfo::SwClientNotify(const SwModify&, const SfxHint& rHint)
         && rHint.GetId() != SfxHintId::SwFormatChange
         && rHint.GetId() != SfxHintId::SwAttrSetChange)
         return;
-    if (rHint.GetId() == SfxHintId::SwObjectDying)
+    if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
-        auto pDyingHint = static_cast<const sw::ObjectDyingHint*>(&rHint);
-        CheckRegistration( *pDyingHint );
+        auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
+        CheckRegistration( pLegacy->m_pOld );
     }
     SwDoc *pDoc = static_cast<SwCharFormat*>(GetRegisteredIn())->GetDoc();
     SwRootFrame* pRoot = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();

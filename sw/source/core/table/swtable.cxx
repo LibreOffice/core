@@ -342,24 +342,25 @@ void SwTable::SwClientNotify(const SwModify&, const SfxHint& rHint)
         if (pOldSize && pNewSize && !m_bModifyLocked)
             AdjustWidths(pOldSize->GetWidth(), pNewSize->GetWidth());
     }
-    else if (rHint.GetId() == SfxHintId::SwObjectDying)
-    {
-        auto pDyingHint = static_cast<const sw::ObjectDyingHint*>(&rHint);
-        CheckRegistration( *pDyingHint );
-    }
     else if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
         auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
         // catch SSize changes, to adjust the lines/boxes
         const sal_uInt16 nWhich = pLegacy->GetWhich();
-        if (nWhich == RES_FRM_SIZE)
+        const SwFormatFrameSize* pNewSize = nullptr, *pOldSize = nullptr;
+        switch(nWhich)
         {
-            const SwFormatFrameSize* pNewSize = nullptr, *pOldSize = nullptr;
-            pOldSize = static_cast<const SwFormatFrameSize*>(pLegacy->m_pOld);
-            pNewSize = static_cast<const SwFormatFrameSize*>(pLegacy->m_pNew);
-            if (pOldSize && pNewSize && !m_bModifyLocked)
-                AdjustWidths(pOldSize->GetWidth(), pNewSize->GetWidth());
+            case RES_FRM_SIZE:
+            {
+                pOldSize = static_cast<const SwFormatFrameSize*>(pLegacy->m_pOld);
+                pNewSize = static_cast<const SwFormatFrameSize*>(pLegacy->m_pNew);
+            }
+            break;
+            default:
+                CheckRegistration(pLegacy->m_pOld);
         }
+        if (pOldSize && pNewSize && !m_bModifyLocked)
+            AdjustWidths(pOldSize->GetWidth(), pNewSize->GetWidth());
     }
 }
 
@@ -2754,14 +2755,10 @@ SwTableBox* SwTableBoxFormat::SwTableBoxFormat::GetTableBox()
 // for detection of modifications (mainly TableBoxAttribute)
 void SwTableBoxFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
-    if(rHint.GetId() == SfxHintId::SwFormatChange || rHint.GetId() == SfxHintId::SwObjectDying)
-    {
-        SwFrameFormat::SwClientNotify(rMod, rHint);
+    if(rHint.GetId() != SfxHintId::SwLegacyModify && rHint.GetId() != SfxHintId::SwFormatChange
+        && rHint.GetId() != SfxHintId::SwAttrSetChange)
         return;
-    }
-    if(rHint.GetId() != SfxHintId::SwLegacyModify && rHint.GetId() != SfxHintId::SwAttrSetChange)
-        return;
-    if(IsModifyLocked() || !GetDoc() || GetDoc()->IsInDtor())
+    if(IsModifyLocked() || !GetDoc() || GetDoc()->IsInDtor() || rHint.GetId() == SfxHintId::SwFormatChange)
     {
         SwFrameFormat::SwClientNotify(rMod, rHint);
         return;

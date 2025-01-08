@@ -139,13 +139,6 @@ void SwFlyInContentFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rH
         }
         return;
     }
-    if (rHint.GetId() == SfxHintId::SwObjectDying)
-    {
-        SwFlyFrame::SwClientNotify(rMod, rHint);
-        if(GetAnchorFrame())
-            AnchorFrame()->Prepare(PrepareHint::FlyFrameAttributesChanged, GetFormat());
-        return;
-    }
     if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
     auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);

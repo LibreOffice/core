@@ -222,6 +222,7 @@ excludelist:
     - class SwFormatChg
     - class SwFormatMeta
     - class SwMsgPoolItem
+    - class SwPtrMsgPoolItem
     - class SwUpdateAttr
     - class SfxBoolItem
     - class SvxCharSetColorItem
