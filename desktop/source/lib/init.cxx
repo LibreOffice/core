@@ -5378,13 +5378,23 @@ static bool isCommandAllowed(OUString& command) {
         return true;
     else
     {
-        if (command == u".uno:Save"_ustr && SfxViewShell::Current() && SfxViewShell::Current()->IsAllowChangeComments())
+        SfxViewShell* pViewShell = SfxViewShell::Current();
+        if (command == u".uno:Save"_ustr && pViewShell && pViewShell->IsAllowChangeComments())
             return true;
 
         for (size_t i = 0; i < std::size(nonAllowedList); i++)
         {
             if (nonAllowedList[i] == command)
-                return false;
+            {
+                bool bRet = false;
+                if (pViewShell && command == u".uno:TransformDialog"_ustr)
+                {
+                    // If the just added signature line shape is selected, allow moving it.
+                    SfxObjectShell* pDocShell = pViewShell->GetObjectShell();
+                    bRet = pDocShell->GetSignPDFCertificate().is();
+                }
+                return bRet;
+            }
         }
         return true;
     }
