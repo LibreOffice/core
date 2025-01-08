@@ -15,13 +15,12 @@
 
 /**
  * Launch a child process with the specified arguments.
+ * argv must be terminated by a null pointer, similar to execv.
  * @note argv[0] is ignored
  */
 BOOL
-WinLaunchChild(const wchar_t *exePath, int argc,
+WinLaunchChild(const wchar_t *exePath,
                wchar_t **argv, HANDLE userToken = nullptr,
                HANDLE *hProcess = nullptr);
-
-wchar_t* MakeCommandLine(int argc, wchar_t **argv);
 
 #endif

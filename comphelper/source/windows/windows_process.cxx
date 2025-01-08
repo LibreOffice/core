@@ -126,17 +126,14 @@ static wchar_t* ArgToString(wchar_t *d, const wchar_t *s)
 /**
  * Creates a command line from a list of arguments. The returned
  * string is allocated with "malloc" and should be "free"d.
- *
- * argv is UTF8
  */
-wchar_t*
-MakeCommandLine(int argc, wchar_t **argv)
+static wchar_t* MakeCommandLine(wchar_t **argv)
 {
     int i;
     int len = 0;
 
     // The + 1 of the last argument handles the allocation for null termination
-    for (i = 0; i < argc && argv[i]; ++i)
+    for (i = 0; argv[i]; ++i)
         len += ArgStrLen(argv[i]) + 1;
 
     // Protect against callers that pass 0 arguments
@@ -148,10 +145,10 @@ MakeCommandLine(int argc, wchar_t **argv)
         return nullptr;
 
     wchar_t *c = s;
-    for (i = 0; i < argc && argv[i]; ++i)
+    for (i = 0; argv[i]; ++i)
     {
         c = ArgToString(c, argv[i]);
-        if (i + 1 != argc)
+        if (argv[i + 1])
         {
             *c = ' ';
             ++c;
@@ -165,7 +162,6 @@ MakeCommandLine(int argc, wchar_t **argv)
 
 BOOL
 WinLaunchChild(const wchar_t *exePath,
-               int argc,
                wchar_t **argv,
                HANDLE userToken,
                HANDLE *hProcess)
@@ -173,7 +169,7 @@ WinLaunchChild(const wchar_t *exePath,
     wchar_t *cl;
     bool ok;
 
-    cl = MakeCommandLine(argc, argv);
+    cl = MakeCommandLine(argv);
     if (!cl)
     {
         return FALSE;
