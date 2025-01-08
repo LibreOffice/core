@@ -33,9 +33,6 @@ QtInstanceComboBox::QtInstanceComboBox(QComboBox* pComboBox)
 void QtInstanceComboBox::insert(int nPos, const OUString& rStr, const OUString* pId,
                                 const OUString* pIconName, VirtualDevice* pImageSurface)
 {
-    if (pIconName || pImageSurface)
-        assert(false && "Handling for these not implemented yet");
-
     SolarMutexGuard g;
     GetQtInstance().RunInMainThread([&] {
         QVariant aUserData;
@@ -43,6 +40,12 @@ void QtInstanceComboBox::insert(int nPos, const OUString& rStr, const OUString* 
             aUserData = QVariant::fromValue(toQString(*pId));
 
         m_pComboBox->insertItem(nPos, toQString(rStr), aUserData);
+
+        if (pIconName)
+            m_pComboBox->setItemIcon(nPos, loadQPixmapIcon(*pIconName));
+        else if (pImageSurface)
+            m_pComboBox->setItemIcon(nPos, toQPixmap(*pImageSurface));
+
         if (m_bSorted)
             sortItems();
     });
