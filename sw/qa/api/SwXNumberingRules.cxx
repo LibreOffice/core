@@ -16,7 +16,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-
+#include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -26,6 +26,7 @@
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <com/sun/star/style/NumberingType.hpp>
 
 using namespace css;
 using namespace css::uno;
@@ -110,6 +111,53 @@ public:
 
         return Reference<XInterface>(xNumRules, UNO_QUERY_THROW);
     }
+    //tdf#135335
+    void testBulletFontName()
+    {
+        loadFromURL(u"private:factory/swriter"_ustr);
+        Reference<text::XTextDocument> xTextDoc(mxComponent, UNO_QUERY_THROW);
+        Reference<text::XText> xText = xTextDoc->getText();
+        Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+
+        xText->insertString(xCursor, u"Test List Item"_ustr, false);
+        xText->insertControlCharacter(xCursor, text::ControlCharacter::PARAGRAPH_BREAK, false);
+
+        Reference<beans::XPropertySet> xParaProps(xCursor, UNO_QUERY_THROW);
+        Reference<lang::XMultiServiceFactory> xFactory(mxComponent, UNO_QUERY_THROW);
+
+        Reference<container::XIndexReplace> xNumRules(
+            xFactory->createInstance(u"com.sun.star.text.NumberingRules"_ustr), UNO_QUERY_THROW);
+
+        beans::PropertyValue props[4]
+            = { { u"NumberingType"_ustr, 0, Any(style::NumberingType::CHAR_SPECIAL),
+                  beans::PropertyState_DIRECT_VALUE },
+                { u"BulletChar"_ustr, 0, Any(OUString(OUStringChar(u'\u2022'))),
+                  beans::PropertyState_DIRECT_VALUE },
+                { u"Prefix"_ustr, 0, Any(OUString()), beans::PropertyState_DIRECT_VALUE },
+                { u"BulletFontName"_ustr, 0, Any(u"OpenSymbol"_ustr),
+                  beans::PropertyState_DIRECT_VALUE } };
+        Sequence<beans::PropertyValue> levelProps(props, 4);
+        xNumRules->replaceByIndex(0, Any(levelProps));
+
+        xParaProps->setPropertyValue(u"NumberingRules"_ustr, Any(xNumRules));
+
+        Reference<container::XIndexReplace> xAppliedRules;
+        xParaProps->getPropertyValue(u"NumberingRules"_ustr) >>= xAppliedRules;
+        Sequence<beans::PropertyValue> appliedLevelProps;
+        xAppliedRules->getByIndex(0) >>= appliedLevelProps;
+        OUString bulletFontName;
+        for (const auto& prop : appliedLevelProps)
+        {
+            if (prop.Name == "BulletFontName")
+            {
+                prop.Value >>= bulletFontName;
+                break;
+            }
+        }
+        CPPUNIT_ASSERT_MESSAGE("Bullet font name must not be empty", !bulletFontName.isEmpty());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Bullet font should be OpenSymbol", u"OpenSymbol"_ustr,
+                                     bulletFontName);
+    }
 
     CPPUNIT_TEST_SUITE(SwXNumberingRules);
     CPPUNIT_TEST(testGetElementType);
@@ -122,6 +170,7 @@ public:
     CPPUNIT_TEST(testPropertyChangeListener);
     CPPUNIT_TEST(testVetoableChangeListener);
     CPPUNIT_TEST(testNumberingRulesProperties);
+    CPPUNIT_TEST(testBulletFontName);
     CPPUNIT_TEST_SUITE_END();
 };
 
