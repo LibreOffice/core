@@ -275,6 +275,21 @@ QStringList QtMimeData::formats() const
     if (!m_aMimeTypeList.isEmpty())
         return m_aMimeTypeList;
 
+    // For the Qt6 Wasm backend, as a hack report only a single format for now: "text/plain" if
+    // aFormsts contains any "text/plain" entries, or else (randomly) the first entry (if any) of
+    // aFormats.  This is for two reasons:  For one,
+    // <https://github.com/qt/qtbase/commit/f0be152896471aa392bb1b2b649b66feb31480cc> "wasm: improve
+    // clipboard support" has a commented-out "break;" ("Clipboard write is only supported with one
+    // ClipboardItem at the moment but somehow this still works?") in the loop in
+    // QWasmClipboard::writeToClipboardApi, and multiple formats would make that not work and would
+    // indeed cause a NotAllowedError ("Failed to execute 'write' on 'Clipboard': Support for
+    // multiple ClipboardItems is not implemented.") at least with Chrome 131.  And for another,
+    // <https://github.com/qt/qtbase/commit/f0be152896471aa392bb1b2b649b66feb31480cc> "wasm: improve
+    // clipboard support" also has code to "prefer html over text" in
+    // QWasmClipboard::writeToClipboardApi, so if we reported both "text/plain" and "text/html",
+    // that code would pick "text/html", but the HTML provided by LO apparently always contains a
+    // trailing "</p>", so would always add a newline when pasted.
+
     const css::uno::Sequence<css::datatransfer::DataFlavor> aFormats
         = m_aContents->getTransferDataFlavors();
     QStringList aList;
@@ -282,20 +297,32 @@ QStringList QtMimeData::formats() const
 
     for (const auto& rFlavor : aFormats)
     {
+#if !(QT_VERSION >= QT_VERSION_CHECK(6, 0, 0) && defined EMSCRIPTEN)
         aList << toQString(rFlavor.MimeType);
+#endif
         lcl_textMimeInfo(rFlavor.MimeType, m_bHaveNoCharset, bHaveUTF16, m_bHaveUTF8);
     }
 
     // we provide a locale encoded and a UTF-8 variant, if missing
     if (m_bHaveNoCharset || bHaveUTF16 || m_bHaveUTF8)
     {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0) && defined EMSCRIPTEN
+        aList << QStringLiteral("text/plain");
+#else
         // if there is a text representation from LO point of view, it'll be UTF-16
         assert(bHaveUTF16);
         if (!m_bHaveUTF8)
             aList << QStringLiteral("text/plain;charset=utf-8");
         if (!m_bHaveNoCharset)
             aList << QStringLiteral("text/plain");
+#endif
     }
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0) && defined EMSCRIPTEN
+    else if (aFormats.hasElements())
+    {
+        aList << toQString(aFormats[0].MimeType);
+    }
+#endif
 
     m_aMimeTypeList = aList;
     return m_aMimeTypeList;
