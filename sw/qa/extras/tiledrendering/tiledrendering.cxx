@@ -7,10 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "tiledrenderingmodeltestbase.cxx"
+#include <swtiledrenderingtest.hxx>
 
 #include <string>
 #include <string_view>
+
+#include <boost/property_tree/json_parser.hpp>
 
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -18,6 +20,8 @@
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/AuthorDisplayFormat.hpp>
 #include <com/sun/star/datatransfer/XTransferable2.hpp>
+#include <com/sun/star/frame/XDispatchResultListener.hpp>
+#include <com/sun/star/frame/DispatchResultState.hpp>
 
 #include <test/helper/transferable.hxx>
 #include <comphelper/dispatchcommand.hxx>
@@ -47,6 +51,10 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <unotools/searchopt.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <sfx2/lokhelper.hxx>
+#include <comphelper/lok.hxx>
+#include <comphelper/string.hxx>
 
 #include <drawdoc.hxx>
 #include <ndtxt.hxx>
@@ -61,7 +69,11 @@
 #include <txtfrm.hxx>
 #include <rootfrm.hxx>
 #include <fmtanchr.hxx>
+#include <docsh.hxx>
+#include <wrtsh.hxx>
+#include <unotxdoc.hxx>
 #include <textcontentcontrol.hxx>
+#include <swtestviewcallback.hxx>
 
 static std::ostream& operator<<(std::ostream& os, ViewShellId id)
 {
@@ -1709,6 +1721,30 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPaintCallbacks)
     aView1.m_bCalled = false;
     pXTextDocument->paintTile(*pDevice, nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0, /*nTilePosY=*/0, /*nTileWidth=*/3840, /*nTileHeight=*/3840);
     CPPUNIT_ASSERT(!aView1.m_bCalled);
+}
+
+namespace
+{
+class TestResultListener : public cppu::WeakImplHelper<css::frame::XDispatchResultListener>
+{
+public:
+    sal_uInt32 m_nDocRepair;
+
+    TestResultListener()
+        : m_nDocRepair(0)
+    {
+    }
+
+    virtual void SAL_CALL dispatchFinished(const css::frame::DispatchResultEvent& rEvent) override
+    {
+        if (rEvent.State == frame::DispatchResultState::SUCCESS)
+        {
+            rEvent.Result >>= m_nDocRepair;
+        }
+    }
+
+    virtual void SAL_CALL disposing(const css::lang::EventObject&) override {}
+};
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoRepairResult)
