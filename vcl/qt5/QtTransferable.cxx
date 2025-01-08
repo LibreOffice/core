@@ -274,7 +274,7 @@ QStringList QtMimeData::formats() const
         return m_aMimeTypeList;
 
     // For the Qt6 Wasm backend, as a hack report only a single format for now: "text/plain" if
-    // aFormsts contains any "text/plain" entries, or else (randomly) the first entry (if any) of
+    // aFormats contains any "text/plain" entries, or else (randomly) the first entry (if any) of
     // aFormats.  This is for two reasons:  For one,
     // <https://github.com/qt/qtbase/commit/f0be152896471aa392bb1b2b649b66feb31480cc> "wasm: improve
     // clipboard support" has a commented-out "break;" ("Clipboard write is only supported with one
