@@ -15,10 +15,4 @@ $(eval $(call gb_UnpackedTarball_add_files,libpng,.,\
 	external/libpng/configs/pnglibconf.h \
 ))
 
-$(eval $(call gb_UnpackedTarball_add_patches,libpng,\
-	external/libpng/0001-ACES-AP0-adjusted-fixes.patch.1 \
-	external/libpng/0001-libpng16-fix-Correct-the-function-png_fp_sub-in-png.patch.1 \
-	external/libpng/0001-fix-Avoid-integer-overflows-in-function-png_xy_from_.patch.1 \
-))
-
 # vim: set noet sw=4 ts=4:
