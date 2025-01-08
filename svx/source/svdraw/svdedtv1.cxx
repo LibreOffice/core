@@ -69,6 +69,7 @@
 #include <sfx2/viewsh.hxx>
 #include <comphelper/lok.hxx>
 #include <osl/diagnose.h>
+#include <sfx2/objsh.hxx>
 
 // EditView
 
@@ -1825,7 +1826,15 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr, bool addPageMargin
     }
 
     // change position
-    if (bChgPos && m_bMoveAllowed) {
+    bool bMoveAllowed = m_bMoveAllowed;
+    SfxViewShell* pViewShell = GetSfxViewShell();
+    SfxObjectShell* pObjectShell = pViewShell ? pViewShell->GetObjectShell() : nullptr;
+    if (!bMoveAllowed && pObjectShell && pObjectShell->GetSignPDFCertificate().is())
+    {
+        // If the just added signature line shape is selected, allow moving it.
+        bMoveAllowed = true;
+    }
+    if (bChgPos && bMoveAllowed) {
         MoveMarkedObj(Size(nPosDX,nPosDY));
     }
 
