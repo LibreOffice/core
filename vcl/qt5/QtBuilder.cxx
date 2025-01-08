@@ -201,7 +201,7 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
     {
         pObject = new QCheckBox(pParentWidget);
     }
-    else if (sName == u"GtkComboBoxText")
+    else if (sName == u"GtkComboBox" || sName == u"GtkComboBoxText")
     {
         QComboBox* pComboBox = new QComboBox(pParentWidget);
         pComboBox->setEditable(extractEntry(rMap));
