@@ -10,6 +10,8 @@
 #include <QtInstanceDrawingArea.hxx>
 #include <QtInstanceDrawingArea.moc>
 
+#include <QtData.hxx>
+
 #include <vcl/qt/QtUtils.hxx>
 
 QtInstanceDrawingArea::QtInstanceDrawingArea(QLabel* pLabel)
@@ -39,7 +41,12 @@ void QtInstanceDrawingArea::enable_drag_source(rtl::Reference<TransferDataContai
     assert(false && "Not implemented yet");
 }
 
-void QtInstanceDrawingArea::set_cursor(PointerStyle) { assert(false && "Not implemented yet"); }
+void QtInstanceDrawingArea::set_cursor(PointerStyle ePointerStyle)
+{
+    SolarMutexGuard g;
+    GetQtInstance().RunInMainThread(
+        [&] { getQWidget()->setCursor(GetQtData()->getCursor(ePointerStyle)); });
+}
 
 Point QtInstanceDrawingArea::get_pointer_position() const
 {
