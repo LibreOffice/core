@@ -5206,6 +5206,10 @@ bool PDFWriterImpl::emitCatalog()
         aWriter.startObject(rAttachedFile.mnObjectId);
         aWriter.startDict();
         aWriter.write("/Type", "/Filespec");
+        if (PDFWriter::PDFVersion::PDF_2_0 <= m_aContext.Version)
+        {
+            aWriter.write("/AFRelationship", "/Source");
+        }
         aWriter.writeKeyAndUnicodeEncrypt("/F", rAttachedFile.maFilename, rAttachedFile.mnObjectId);
         if (PDFWriter::PDFVersion::PDF_1_7 <= m_aContext.Version)
         {
