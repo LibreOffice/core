@@ -162,8 +162,7 @@ void RegDLL(MSIHANDLE hInst, const std::wstring& sArgs, bool bUnreg)
         sCmd += sArgs;
         WriteLog(hInst, "Prepared regsvr32 command:", sCmd);
 
-        STARTUPINFOW si{};
-        si.cb = sizeof(si);
+        STARTUPINFOW si{ .cb = sizeof(si) };
         PROCESS_INFORMATION pi{};
         if (!CreateProcessW(sRegSvr32.c_str(), const_cast<LPWSTR>(sCmd.c_str()), nullptr, nullptr,
                             FALSE, CREATE_NO_WINDOW, nullptr, nullptr, &si, &pi))

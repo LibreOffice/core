@@ -126,10 +126,7 @@ DWORD LOStart(const wchar_t* sModeArg, const wchar_t* sFilePath)
                         + o3tl::toU(sFilePath) + "\"";
     LPWSTR pCmdLine = const_cast<LPWSTR>(o3tl::toW(sCmdLine.getStr()));
 
-    STARTUPINFOW si = {};
-    si.cb = sizeof si;
-    si.dwFlags = STARTF_USESHOWWINDOW;
-    si.wShowWindow = SW_SHOW;
+    STARTUPINFOW si{ .cb = sizeof(si), .dwFlags = STARTF_USESHOWWINDOW, .wShowWindow = SW_SHOW };
     PROCESS_INFORMATION pi{};
     if (!CreateProcessW(nullptr, pCmdLine, nullptr, nullptr, FALSE, 0, nullptr, nullptr, &si, &pi))
     {

@@ -29,7 +29,7 @@ extern "C" int APIENTRY wWinMain( HINSTANCE, HINSTANCE, LPWSTR, int )
 {
     // Retrieve startup info
 
-    STARTUPINFOW aStartupInfo{ sizeof(aStartupInfo) };
+    STARTUPINFOW aStartupInfo{ .cb = sizeof(aStartupInfo) };
     GetStartupInfoW( &aStartupInfo );
 
     // Retrieve command line

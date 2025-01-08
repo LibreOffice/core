@@ -206,9 +206,7 @@ int officeloader_impl(bool bAllowConsole)
 {
     const auto& [szTargetFileName, szIniDirectory] = extendLoaderEnvironment();
 
-    STARTUPINFOW aStartupInfo;
-    ZeroMemory(&aStartupInfo, sizeof(aStartupInfo));
-    aStartupInfo.cb = sizeof(aStartupInfo);
+    STARTUPINFOW aStartupInfo{ .cb = sizeof(aStartupInfo) };
 
     // Create process with same command line, environment and stdio handles which
     // are directed to the created pipes
@@ -380,8 +378,7 @@ int unopkgloader_impl(bool bAllowConsole)
 {
     const auto& [szTargetFileName, szIniDirectory] = extendLoaderEnvironment();
 
-    STARTUPINFOW aStartupInfo{};
-    aStartupInfo.cb = sizeof(aStartupInfo);
+    STARTUPINFOW aStartupInfo{ .cb = sizeof(aStartupInfo) };
     GetStartupInfoW(&aStartupInfo);
 
     DWORD   dwExitCode = DWORD(-1);

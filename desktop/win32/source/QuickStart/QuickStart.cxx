@@ -59,10 +59,7 @@ static bool launchSoffice( )
         imagename[_MAX_PATH] = 0;
         _snwprintf(imagename, _MAX_PATH, L"\"%s\" --quickstart", filename );
 
-        STARTUPINFOW aStartupInfo;
-        ZeroMemory(&aStartupInfo, sizeof(aStartupInfo));
-        aStartupInfo.cb = sizeof(aStartupInfo);
-        aStartupInfo.wShowWindow = SW_SHOW;
+        STARTUPINFOW aStartupInfo{ .cb = sizeof(aStartupInfo), .wShowWindow = SW_SHOW };
         PROCESS_INFORMATION aProcessInfo;
         bool bSuccess = CreateProcessW(filename, imagename, nullptr, nullptr, TRUE, 0, nullptr, nullptr, &aStartupInfo, &aProcessInfo);
         if ( !bSuccess )

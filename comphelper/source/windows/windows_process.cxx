@@ -179,12 +179,8 @@ WinLaunchChild(const wchar_t *exePath,
         return FALSE;
     }
 
-    STARTUPINFOW si;
-    std::memset(&si, 0, sizeof si);
-    si.cb = sizeof(STARTUPINFOW);
-    si.lpDesktop = const_cast<LPWSTR>(L"winsta0\\Default");
-    PROCESS_INFORMATION pi;
-    std::memset(&pi, 0, sizeof pi);
+    STARTUPINFOW si{ .cb = sizeof(si), .lpDesktop = const_cast<LPWSTR>(L"winsta0\\Default") };
+    PROCESS_INFORMATION pi{};
 
     if (userToken == nullptr)
     {

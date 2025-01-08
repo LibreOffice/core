@@ -189,9 +189,7 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
             exit(EXIT_FAILURE);
         }
     }
-    STARTUPINFOW startinfo;
-    ZeroMemory(&startinfo, sizeof (STARTUPINFOW));
-    startinfo.cb = sizeof (STARTUPINFOW);
+    STARTUPINFOW startinfo{ .cb = sizeof(startinfo) };
     PROCESS_INFORMATION procinfo;
     if (!CreateProcessW(
             pythonexe.data(), cl, nullptr, nullptr, FALSE, CREATE_UNICODE_ENVIRONMENT, nullptr,

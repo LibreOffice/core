@@ -264,8 +264,7 @@ void Twain::ShimListenerThread::execute()
             // We need a WinAPI HANDLE of the process to be able to wait on it and detect the process
             // termination; so use WinAPI to start the process, not osl_executeProcess.
 
-            STARTUPINFOW si{};
-            si.cb = sizeof(si);
+            STARTUPINFOW si{ .cb = sizeof(si) };
             PROCESS_INFORMATION pi;
 
             if (!CreateProcessW(nullptr, const_cast<LPWSTR>(o3tl::toW(sCmdLine.getStr())), nullptr,

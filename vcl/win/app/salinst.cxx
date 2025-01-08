@@ -332,8 +332,7 @@ VCLPLUG_WIN_PUBLIC SalInstance* create_SalInstance()
 {
     SalData* pSalData = new SalData();
 
-    STARTUPINFOW aSI;
-    aSI.cb = sizeof( aSI );
+    STARTUPINFOW aSI{ .cb = sizeof(aSI) };
     GetStartupInfoW( &aSI );
     pSalData->mhInst = GetModuleHandleW( nullptr );
     pSalData->mnCmdShow = aSI.wShowWindow;

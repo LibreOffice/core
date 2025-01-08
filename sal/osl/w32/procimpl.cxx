@@ -467,10 +467,9 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
     if ((Options & osl_Process_DETACHED) && !(flags & CREATE_NEW_CONSOLE))
         flags |= DETACHED_PROCESS;
 
-    STARTUPINFOW startup_info = {};
-    startup_info.cb        = sizeof(startup_info);
-    startup_info.dwFlags   = STARTF_USESHOWWINDOW;
-    startup_info.lpDesktop = const_cast<LPWSTR>(L"");
+    STARTUPINFOW startup_info{ .cb = sizeof(startup_info),
+                               .lpDesktop = const_cast<LPWSTR>(L""),
+                               .dwFlags = STARTF_USESHOWWINDOW };
 
     /* Create pipes for redirected IO */
     HANDLE hInputRead  = nullptr;
