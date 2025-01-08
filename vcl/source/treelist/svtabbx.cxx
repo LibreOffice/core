@@ -644,7 +644,9 @@ void SvHeaderTabListBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     for(sal_uInt16 i = 0; i < pHeaderBar->GetItemCount(); i++)
     {
         auto aNode = rJsonWriter.startStruct();
-        rJsonWriter.put("text", pHeaderBar->GetItemText(pHeaderBar->GetItemId(i)));
+        sal_uInt16 nItemId = pHeaderBar->GetItemId(i);
+        rJsonWriter.put("text", pHeaderBar->GetItemText(nItemId));
+        rJsonWriter.put("sortable", !!(pHeaderBar->GetItemBits(nItemId) & HeaderBarItemBits::CLICKABLE));
     }
 }
 
