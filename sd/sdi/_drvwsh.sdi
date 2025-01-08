@@ -227,6 +227,7 @@ interface DrawView
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
+        ReadOnlyDoc = TRUE ;
     ]
 
     SID_ATTR_TRANSFORM_WIDTH // ole : no, status : ?
