@@ -458,7 +458,7 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
             rDesc.GetLeft().ResetFormatAttr(RES_FOOTER);
             rDesc.GetFirstLeft().ResetFormatAttr(RES_FOOTER);
 
-            auto lDelHFFormat = [this](sw::ClientBase<SwFrameFormat>* pToRemove, SwFrameFormat* pFormat)
+            auto lDelHFFormat = [this](SwClient* pToRemove, SwFrameFormat* pFormat)
             {
                 // Code taken from lcl_DelHFFormat
                 pFormat->Remove(*pToRemove);

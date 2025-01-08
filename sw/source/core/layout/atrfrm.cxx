@@ -134,9 +134,7 @@ bool GetAtPageRelOrientation(sal_Int16 & rOrientation, bool const isIgnorePrintA
     }
 }
 
-
 } // namespace sw
-
 
 SfxPoolItem* SwFormatLineNumber::CreateDefault() { return new SwFormatLineNumber; }
 
@@ -148,7 +146,7 @@ static sal_Int16 lcl_IntToRelation(const uno::Any& rVal)
     return nVal;
 }
 
-static void lcl_DelHFFormat( sw::FrameFormatClient *pToRemove, SwFrameFormat *pFormat )
+static void lcl_DelHFFormat( SwClient *pToRemove, SwFrameFormat *pFormat )
 {
     //If the client is the last one who uses this format, then we have to delete
     //it - before this is done, we may need to delete the content-section.
@@ -511,21 +509,21 @@ sal_uInt16  SwFormatFillOrder::GetValueCount() const
 // Partially implemented inline in hxx
 SwFormatHeader::SwFormatHeader( SwFrameFormat *pHeaderFormat )
     : SfxPoolItem( RES_HEADER, SfxItemType::SwFormatHeaderType ),
-    sw::FrameFormatClient( pHeaderFormat ),
+    SwClient( pHeaderFormat ),
     m_bActive( pHeaderFormat )
 {
 }
 
 SwFormatHeader::SwFormatHeader( const SwFormatHeader &rCpy )
     : SfxPoolItem( RES_HEADER, SfxItemType::SwFormatHeaderType ),
-    sw::FrameFormatClient( const_cast<SwFrameFormat*>(rCpy.GetRegisteredIn()) ),
+    SwClient( const_cast<sw::BroadcastingModify*>(static_cast<const sw::BroadcastingModify*>(rCpy.GetRegisteredIn())) ),
     m_bActive( rCpy.IsActive() )
 {
 }
 
 SwFormatHeader::SwFormatHeader( bool bOn )
     : SfxPoolItem( RES_HEADER, SfxItemType::SwFormatHeaderType ),
-    sw::FrameFormatClient( nullptr ),
+    SwClient( nullptr ),
     m_bActive( bOn )
 {
 }
@@ -548,7 +546,7 @@ SwFormatHeader* SwFormatHeader::Clone( SfxItemPool* ) const
     return new SwFormatHeader( *this );
 }
 
-void SwFormatHeader::RegisterToFormat( SwFrameFormat& rFormat )
+void SwFormatHeader::RegisterToFormat( SwFormat& rFormat )
 {
     rFormat.Add(*this);
 }
@@ -570,21 +568,21 @@ void SwFormatHeader::dumpAsXml(xmlTextWriterPtr pWriter) const
 // Partially implemented inline in hxx
 SwFormatFooter::SwFormatFooter( SwFrameFormat *pFooterFormat )
     : SfxPoolItem( RES_FOOTER, SfxItemType::SwFormatFooterType ),
-    sw::FrameFormatClient( pFooterFormat ),
+    SwClient( pFooterFormat ),
     m_bActive( pFooterFormat )
 {
 }
 
 SwFormatFooter::SwFormatFooter( const SwFormatFooter &rCpy )
     : SfxPoolItem( RES_FOOTER, SfxItemType::SwFormatFooterType ),
-    sw::FrameFormatClient( const_cast<SwFrameFormat*>(rCpy.GetRegisteredIn()) ),
+    SwClient( const_cast<sw::BroadcastingModify*>(static_cast<const sw::BroadcastingModify*>(rCpy.GetRegisteredIn())) ),
     m_bActive( rCpy.IsActive() )
 {
 }
 
 SwFormatFooter::SwFormatFooter( bool bOn )
     : SfxPoolItem( RES_FOOTER, SfxItemType::SwFormatFooterType ),
-    sw::FrameFormatClient( nullptr ),
+    SwClient( nullptr ),
     m_bActive( bOn )
 {
 }
