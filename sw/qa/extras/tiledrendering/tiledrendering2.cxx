@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "tiledrenderingmodeltestbase.cxx"
+#include <swtiledrenderingtest.hxx>
 
 #include <com/sun/star/util/URLTransformer.hpp>
 
@@ -20,11 +20,17 @@
 #include <vcl/scheduler.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/dispatchcommand.hxx>
+#include <sfx2/lokhelper.hxx>
+#include <comphelper/lok.hxx>
+#include <unotxdoc.hxx>
 
 #include <view.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
+#include <docsh.hxx>
+#include <wrtsh.hxx>
+#include <swtestviewcallback.hxx>
 
 namespace
 {
@@ -187,6 +193,17 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testAsyncLayout)
     CPPUNIT_ASSERT(!pPage2->IsInvalidContent());
     CPPUNIT_ASSERT(!pPage3->IsInvalidContent());
 }
+
+/// Test callback that works with comphelper::LibreOfficeKit::setAnyInputCallback().
+class AnyInputCallback final
+{
+public:
+    static bool callback(void* /*pData*/) { return true; }
+
+    AnyInputCallback() { comphelper::LibreOfficeKit::setAnyInputCallback(&callback, this); }
+
+    ~AnyInputCallback() { comphelper::LibreOfficeKit::setAnyInputCallback(nullptr, nullptr); }
+};
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testAnyInput)
 {
