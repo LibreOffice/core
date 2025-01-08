@@ -320,7 +320,7 @@ bool update()
             bSuccess = false;
         }
 #elif defined(_WIN32)
-        bSuccess = WinLaunchChild((wchar_t*)aUpdaterPath.getStr(), argc, pArgs);
+        bSuccess = WinLaunchChild(o3tl::toW(aUpdaterPath.getStr()), argc, pArgs);
 #endif
     }
     else
