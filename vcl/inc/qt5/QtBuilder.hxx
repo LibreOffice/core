@@ -95,7 +95,8 @@ private:
     static void deleteObject(QObject* pObject);
     // remove pOldWidget from the widget hierarchy and set (child widget) pNewWidget in its place
     static void replaceWidget(QWidget* pOldWidget, QWidget* pNewWidget);
-    void setProperties(QObject* obj, stringmap& rProps);
+    static void setProperties(QObject* obj, stringmap& rProps);
+    void setButtonProperties(QPushButton& rButton, stringmap& rProps);
     static void setLabelProperties(QLabel& rLabel, stringmap& rProps);
     void setScaleProperties(QSlider& rSlider, stringmap& rProps);
     void setSpinButtonProperties(QDoubleSpinBox& rSpinBox, stringmap& rProps);

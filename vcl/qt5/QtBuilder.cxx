@@ -184,9 +184,10 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
     }
     else if (sName == u"GtkButton")
     {
+        QPushButton* pButton = nullptr;
         if (QDialogButtonBox* pButtonBox = qobject_cast<QDialogButtonBox*>(pParentWidget))
         {
-            pObject = pButtonBox->addButton("", QDialogButtonBox::NoRole);
+            pButton = pButtonBox->addButton("", QDialogButtonBox::NoRole);
 
             // for message boxes, avoid implicit standard buttons in addition to those explicitly added
             if (QMessageBox* pMessageBox = qobject_cast<QMessageBox*>(pParentWidget->window()))
@@ -194,8 +195,11 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
         }
         else
         {
-            pObject = new QPushButton(pParentWidget);
+            pButton = new QPushButton(pParentWidget);
         }
+
+        setButtonProperties(*pButton, rMap);
+        pObject = pButton;
     }
     else if (sName == u"GtkCheckButton")
     {
@@ -801,28 +805,29 @@ void QtBuilder::setProperties(QObject* pObject, stringmap& rProps)
                 pTextEdit->setTabChangesFocus(!toBool(rValue));
         }
     }
-    else if (QPushButton* pButton = qobject_cast<QPushButton*>(pObject))
+}
+
+void QtBuilder::setButtonProperties(QPushButton& rButton, stringmap& rProps)
+{
+    for (auto const & [ rKey, rValue ] : rProps)
     {
-        for (auto const & [ rKey, rValue ] : rProps)
+        if (rKey == u"image")
         {
-            if (rKey == u"image")
-            {
-                QLabel* pImageLabel = get<QLabel>(rValue);
-                assert(pImageLabel && "Button has non-existent image set");
+            QLabel* pImageLabel = get<QLabel>(rValue);
+            assert(pImageLabel && "Button has non-existent image set");
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-                pButton->setIcon(QIcon(pImageLabel->pixmap()));
+            rButton.setIcon(QIcon(pImageLabel->pixmap()));
 #else
-                pButton->setIcon(QIcon(pImageLabel->pixmap(Qt::ReturnByValue)));
+            rButton.setIcon(QIcon(pImageLabel->pixmap(Qt::ReturnByValue)));
 #endif
-                // parentless GtkImage in .ui file is only used for setting button
-                // image, so the object is no longer needed after doing so
-                if (!pImageLabel->parent())
-                    deleteObject(pImageLabel);
-            }
-            else if (rKey == u"label")
-            {
-                pButton->setText(convertAccelerator(rValue));
-            }
+            // parentless GtkImage in .ui file is only used for setting button
+            // image, so the object is no longer needed after doing so
+            if (!pImageLabel->parent())
+                deleteObject(pImageLabel);
+        }
+        else if (rKey == u"label")
+        {
+            rButton.setText(convertAccelerator(rValue));
         }
     }
 }
