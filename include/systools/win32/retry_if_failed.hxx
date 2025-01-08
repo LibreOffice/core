@@ -18,19 +18,19 @@ namespace sal::systools
 {
 // Some system calls (e.g., clipboard access functions) may fail first time, because the resource
 // may only be accessed by one process at a time. This function allows to retry failed call up to
-// specified number of times with a specified timeout (in ms), until the call succeeds or the limit
+// specified number of times with a specified interval (in ms), until the call succeeds or the limit
 // of attempts is exceeded.
 // Usage:
 //     HRESULT hr = sal::systools::RetryIfFailed(10, 100, []{ return OleFlushClipboard(); });
 template <typename Func>
 std::enable_if_t<std::is_same_v<std::invoke_result_t<Func>, HRESULT>, HRESULT>
-RetryIfFailed(unsigned times, unsigned msTimeout, Func func)
+RetryIfFailed(unsigned times, unsigned msInterval, Func func)
 {
     for (unsigned i = 0;; ++i)
     {
         if (HRESULT hr = func(); SUCCEEDED(hr) || i >= times)
             return hr;
-        Sleep(msTimeout);
+        Sleep(msInterval);
     }
 }
 }
