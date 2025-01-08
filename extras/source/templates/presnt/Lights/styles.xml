@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <office:document-styles xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:rpt="http://openoffice.org/2005/report" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:css3t="http://www.w3.org/TR/css3-text/" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0" xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0" xmlns:officeooo="http://openoffice.org/2009/office" office:version="1.2">
   <office:font-face-decls>
     <style:font-face style:name="Liberation Sans" svg:font-family="'Liberation Sans'" style:font-family-generic="swiss" style:font-pitch="variable"/>
@@ -761,7 +761,25 @@
     <style:style style:name="Mgr2" style:family="graphic" style:parent-style-name="standard">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-vertical-align="bottom" draw:auto-grow-height="false" fo:min-height="1.485cm"/>
     </style:style>
-    <style:style style:name="Mpr13" style:family="presentation" style:parent-style-name="Lights-backgroundobjects">
+    <style:style style:name="Mgr3" style:family="graphic" style:parent-style-name="Gradient_20_6">
+      <style:graphic-properties draw:fill="gradient" draw:fill-gradient-name="Gradient_20_6" draw:gradient-step-count="0"/>
+    </style:style>
+    <style:style style:name="Mgr10" style:family="graphic" style:parent-style-name="Lights_20_10">
+      <style:graphic-properties draw:fill="solid" draw:fill-color="#ffffff" draw:stroke="none" draw:opacity="10%"/>
+    </style:style>
+    <style:style style:name="Mgr15" style:family="graphic" style:parent-style-name="Lights_20_15">
+      <style:graphic-properties draw:fill="solid" draw:fill-color="#ffffff" draw:stroke="none" draw:opacity="15%"/>
+    </style:style>
+    <style:style style:name="Mgr20" style:family="graphic" style:parent-style-name="Lights_20_20">
+      <style:graphic-properties draw:fill="solid" draw:fill-color="#ffffff" draw:stroke="none" draw:opacity="20%"/>
+    </style:style>
+    <style:style style:name="Mgr25" style:family="graphic" style:parent-style-name="Lights_20_25">
+      <style:graphic-properties draw:fill="solid" draw:fill-color="#ffffff" draw:stroke="none" draw:opacity="25%"/>
+    </style:style>
+    <style:style style:name="Mgr30" style:family="graphic" style:parent-style-name="Lights_20_30">
+      <style:graphic-properties draw:fill="solid" draw:fill-color="#ffffff" draw:stroke="none" draw:opacity="30%"/>
+    </style:style>
+   <style:style style:name="Mpr13" style:family="presentation" style:parent-style-name="Lights-backgroundobjects">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-vertical-align="top" draw:auto-grow-height="false" fo:min-height="1.485cm"/>
     </style:style>
     <style:style style:name="Mpr27" style:family="presentation" style:parent-style-name="Lights1-backgroundobjects">
@@ -841,7 +859,7 @@
       <draw:page-thumbnail draw:layer="backgroundobjects" svg:width="8.999cm" svg:height="5.061cm" svg:x="11cm" svg:y="20.894cm"/>
     </style:handout-master>
     <style:master-page style:name="Lights" style:page-layout-name="PM1" draw:style-name="Mdp3">
-      <draw:custom-shape draw:style-name="Gradient_20_6" draw:layer="backgroundobjects" svg:width="28cm" svg:height="15.75cm" svg:x="0cm" svg:y="0cm">
+      <draw:custom-shape draw:style-name="Mgr3" draw:layer="backgroundobjects" svg:width="28cm" svg:height="15.75cm" svg:x="0cm" svg:y="0cm">
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
       </draw:custom-shape>
       <draw:frame presentation:style-name="Lights-title" draw:layer="backgroundobjects" svg:width="25cm" svg:height="2.75cm" svg:x="1.5cm" svg:y="4cm" presentation:class="title" presentation:placeholder="true">
@@ -871,37 +889,37 @@
           </text:p>
         </draw:text-box>
       </draw:frame>
-      <draw:custom-shape draw:style-name="Lights_20_30" draw:layer="backgroundobjects" svg:width="4cm" svg:height="3.5cm" svg:x="4cm" svg:y="3cm">
+      <draw:custom-shape draw:style-name="Mgr30" draw:layer="backgroundobjects" svg:width="4cm" svg:height="3.5cm" svg:x="4cm" svg:y="3cm">
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
       </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Lights_20_30" draw:layer="backgroundobjects" svg:width="4cm" svg:height="3.5cm" svg:x="20.5cm" svg:y="11cm">
+      <draw:custom-shape draw:style-name="Mgr30" draw:layer="backgroundobjects" svg:width="4cm" svg:height="3.5cm" svg:x="20.5cm" svg:y="11cm">
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
       </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Lights_20_20" draw:layer="backgroundobjects" svg:width="3.5cm" svg:height="3cm" svg:x="25cm" svg:y="7.5cm">
+      <draw:custom-shape draw:style-name="Mgr20" draw:layer="backgroundobjects" svg:width="3.5cm" svg:height="3cm" svg:x="25cm" svg:y="7.5cm">
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
       </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Lights_20_20" draw:layer="backgroundobjects" svg:width="4cm" svg:height="3.75cm" svg:x="-0.5cm" svg:y="6.75cm">
+      <draw:custom-shape draw:style-name="Mgr20" draw:layer="backgroundobjects" svg:width="4cm" svg:height="3.75cm" svg:x="-0.5cm" svg:y="6.75cm">
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
       </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Lights_20_20" draw:layer="backgroundobjects" svg:width="2cm" svg:height="2cm" svg:x="1.5cm" svg:y="3cm">
+      <draw:custom-shape draw:style-name="Mgr20" draw:layer="backgroundobjects" svg:width="2cm" svg:height="2cm" svg:x="1.5cm" svg:y="3cm">
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
       </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Lights_20_10" draw:layer="backgroundobjects" svg:width="2cm" svg:height="2cm" svg:x="0cm" svg:y="3.5cm">
+      <draw:custom-shape draw:style-name="Mgr10" draw:layer="backgroundobjects" svg:width="2cm" svg:height="2cm" svg:x="0cm" svg:y="3.5cm">
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
       </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Lights_20_15" draw:layer="backgroundobjects" svg:width="4.5cm" svg:height="3.5cm" svg:x="0cm" svg:y="14.5cm">
+      <draw:custom-shape draw:style-name="Mgr15" draw:layer="backgroundobjects" svg:width="4.5cm" svg:height="3.5cm" svg:x="0cm" svg:y="14.5cm">
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
       </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Lights_20_30" draw:layer="backgroundobjects" svg:width="2cm" svg:height="2cm" svg:x="27cm" svg:y="13cm">
+      <draw:custom-shape draw:style-name="Mgr30" draw:layer="backgroundobjects" svg:width="2cm" svg:height="2cm" svg:x="27cm" svg:y="13cm">
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
       </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Lights_20_10" draw:layer="backgroundobjects" svg:width="2cm" svg:height="2cm" svg:x="26.5cm" svg:y="9.5cm">
+      <draw:custom-shape draw:style-name="Mgr10" draw:layer="backgroundobjects" svg:width="2cm" svg:height="2cm" svg:x="26.5cm" svg:y="9.5cm">
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
       </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Lights_20_20" draw:layer="backgroundobjects" svg:width="3cm" svg:height="2.34cm" svg:x="22.5cm" svg:y="13cm">
+      <draw:custom-shape draw:style-name="Mgr20" draw:layer="backgroundobjects" svg:width="3cm" svg:height="2.34cm" svg:x="22.5cm" svg:y="13cm">
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
       </draw:custom-shape>
-      <draw:custom-shape draw:style-name="Lights_20_25" draw:layer="backgroundobjects" svg:width="2.5cm" svg:height="2.5cm" svg:x="22cm" svg:y="15cm">
+      <draw:custom-shape draw:style-name="Mgr25" draw:layer="backgroundobjects" svg:width="2.5cm" svg:height="2.5cm" svg:x="22cm" svg:y="15cm">
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 3163 3163 0 10800 3163 18437 10800 21600 18437 18437 21600 10800 18437 3163" draw:text-areas="3163 3163 18437 18437" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
       </draw:custom-shape>
       <presentation:notes style:page-layout-name="PM0">
