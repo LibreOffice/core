@@ -17,6 +17,9 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
+#include <com/sun/star/drawing/XDrawView.hpp>
+#include <com/sun/star/xml/crypto/SEInitializer.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 
 #include <drawinglayer/tools/primitive2dxmldump.hxx>
 #include <rtl/ustring.hxx>
@@ -35,6 +38,10 @@
 #include <svl/itempool.hxx>
 #include <svx/svdomedia.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <comphelper/sequenceashashmap.hxx>
+#include <sfx2/sfxbasemodel.hxx>
+#include <svx/signaturelinehelper.hxx>
+#include <sfx2/objsh.hxx>
 
 #include <sdr/contact/objectcontactofobjlistpainter.hxx>
 
@@ -45,15 +52,34 @@ namespace
 /// Tests for svx/source/svdraw/ code.
 class SvdrawTest : public UnoApiXmlTest
 {
+private:
+    uno::Reference<xml::crypto::XSEInitializer> mxSEInitializer;
+    uno::Reference<xml::crypto::XXMLSecurityContext> mxSecurityContext;
+
 public:
     SvdrawTest()
         : UnoApiXmlTest("svx/qa/unit/data/")
     {
     }
 
+    void setUp() override;
+    uno::Reference<xml::crypto::XXMLSecurityContext>& getSecurityContext()
+    {
+        return mxSecurityContext;
+    }
+
 protected:
     SdrPage* getFirstDrawPageWithAssert();
 };
+
+void SvdrawTest::setUp()
+{
+    UnoApiTest::setUp();
+    MacrosTest::setUpX509(m_directories, "svx_unit");
+
+    mxSEInitializer = xml::crypto::SEInitializer::create(mxComponentContext);
+    mxSecurityContext = mxSEInitializer->createSecurityContext(OUString());
+}
 
 SdrPage* SvdrawTest::getFirstDrawPageWithAssert()
 {
@@ -753,6 +779,62 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testClipVerticalTextOverflow)
     assertXPathContent(pDocument, "count((//sdrblocktext)[7]//textsimpleportion)"_ostr, "3");
     assertXPath(pDocument, "((//sdrblocktext)[7]//textsimpleportion)[1]"_ostr, "x"_ostr, "25417");
     assertXPath(pDocument, "((//sdrblocktext)[7]//textsimpleportion)[3]"_ostr, "x"_ostr, "23893");
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testVisualSignResize)
+{
+    // Given a read-only document with a just inserted signature line:
+    uno::Sequence<beans::PropertyValue> aArgs = { comphelper::makePropertyValue("ReadOnly", true) };
+    loadWithParams(createFileURL(u"empty.pdf"), aArgs);
+    SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    CPPUNIT_ASSERT(pBaseModel);
+    SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
+    CPPUNIT_ASSERT(pObjectShell);
+    CPPUNIT_ASSERT(pObjectShell->IsReadOnly());
+    // Add a signature line to the 2nd page.
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(
+        xFactory->createInstance("com.sun.star.drawing.GraphicObjectShape"), uno::UNO_QUERY);
+    xShape->setPosition(awt::Point(1000, 1000));
+    xShape->setSize(awt::Size(10000, 10000));
+    uno::Reference<drawing::XDrawPagesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPages> xDrawPages = xSupplier->getDrawPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xDrawPages->getCount());
+
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawView> xController(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(0), uno::UNO_QUERY);
+    xController->setCurrentPage(xDrawPage);
+    xDrawPage->add(xShape);
+    // Select it and assign a certificate.
+    uno::Reference<view::XSelectionSupplier> xSelectionSupplier(pBaseModel->getCurrentController(),
+                                                                uno::UNO_QUERY);
+    xSelectionSupplier->select(uno::Any(xShape));
+    auto xEnv = getSecurityContext()->getSecurityEnvironment();
+    auto xCert = GetValidCertificate(xEnv->getPersonalCertificates(), xEnv);
+    if (!xCert)
+    {
+        return;
+    }
+    SdrView* pView = SfxViewShell::Current()->GetDrawView();
+    svx::SignatureLineHelper::setShapeCertificate(pView, xCert);
+    pObjectShell->SetModified(false);
+
+    // When resizing the shape by moving the bottom right (last) handle towards top right:
+    aArgs = {
+        comphelper::makePropertyValue("HandleNum", static_cast<sal_Int32>(7)),
+        comphelper::makePropertyValue("NewPosX", static_cast<sal_Int32>(1500)),
+        comphelper::makePropertyValue("NewPosY", static_cast<sal_Int32>(1500)),
+    };
+    dispatchCommand(mxComponent, ".uno:MoveShapeHandle", aArgs);
+
+    // Then make sure the size decreases:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected less than: 10000
+    // - Actual  : 10000
+    // i.e. you could not resize even a just inserted signature line in a read-only view.
+    CPPUNIT_ASSERT_LESS(static_cast<sal_Int32>(10000), xShape->getSize().Width);
+    CPPUNIT_ASSERT_LESS(static_cast<sal_Int32>(10000), xShape->getSize().Height);
 }
 }
 
