@@ -1007,17 +1007,12 @@ void DocxExport::WriteDocVars(const sax_fastparser::FSHelperPtr& pFS)
 }
 
 static auto
-WriteCompat(SwDoc const& rDoc, ::sax_fastparser::FSHelperPtr const& rpFS,
-        sal_Int32 & rTargetCompatibilityMode) -> void
+WriteCompat(SwDoc const& rDoc, ::sax_fastparser::FSHelperPtr const& rpFS) -> void
 {
     const IDocumentSettingAccess& rIDSA = rDoc.getIDocumentSettingAccess();
     if (!rIDSA.get(DocumentSettingId::ADD_EXT_LEADING))
     {
         rpFS->singleElementNS(XML_w, XML_noLeading);
-        if (rTargetCompatibilityMode > 14)
-        {   // Word ignores noLeading in compatibilityMode 15
-            rTargetCompatibilityMode = 14;
-        }
     }
     // Do not justify lines with manual break
     if (rIDSA.get(DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK))
@@ -1271,24 +1266,6 @@ void DocxExport::WriteSettings()
             bWriterWantsToProtect = bWriterWantsToProtectRedline = true;
     }
 
-    /* Compatibility Mode (tdf#131304)
-     * 11:  .doc level    [Word 97-2003]
-     * 12:  .docx default [Word 2007]  [LO < 7.0] [ECMA 376 1st ed.]
-     * 14:                [Word 2010]
-     * 15:                [Word 2013/2016/2019]  [LO >= 7.0]
-     *
-     * The PRIMARY purpose of compatibility mode does not seem to be related to layout etc.
-     * Its focus is on sharing files between multiple users, tracking the lowest supported mode in the group.
-     * It is to BENEFIT older programs by not using certain new features that they don't understand.
-     *
-     * The next time the compat mode needs to be changed, I foresee the following steps:
-     * 1.) Accept the new mode: Start round-tripping the new value, indicating we understand that format.
-     * 2.) Many years later, change the TargetCompatilityMode for new documents, when we no longer care
-     *     about working with perfect compatibility with older versions of MS Word.
-     */
-    sal_Int32 nTargetCompatibilityMode =
-        (GetFilter().getVersion() == oox::core::ECMA_376_1ST_EDITION)
-        ? 12 : 15; //older versions might not open our files well
     bool bHasCompatibilityMode = false;
     const OUString aGrabBagName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
     if ( xPropSetInfo->hasPropertyByName( aGrabBagName ) )
@@ -1321,7 +1298,7 @@ void DocxExport::WriteSettings()
             {
                 pFS->startElementNS(XML_w, XML_compat);
 
-                WriteCompat(m_rDoc, pFS, nTargetCompatibilityMode);
+                WriteCompat(m_rDoc, pFS);
 
                 uno::Sequence< beans::PropertyValue > aCompatSettingsSequence;
                 rProp.Value >>= aCompatSettingsSequence;
@@ -1346,13 +1323,7 @@ void DocxExport::WriteSettings()
                     if ( aName == "compatibilityMode" )
                     {
                         bHasCompatibilityMode = true;
-                        // Among the group of programs sharing this document, the lowest mode is retained.
-                        // Reduce this number if we are not comfortable with the new/unknown mode yet.
-                        // Step 1 in accepting a new mode would be to comment out the following clause
-                        // and roundtrip the new value instead of overwriting with the older number.
-                        // There are no newer modes at the time this code was written.
-                        if ( aValue.toInt32() > nTargetCompatibilityMode )
-                            aValue = OUString::number(nTargetCompatibilityMode);
+                        aValue = OUString::number(getWordCompatibilityMode());
                     }
 
                     pFS->singleElementNS( XML_w, XML_compatSetting,
@@ -1366,7 +1337,7 @@ void DocxExport::WriteSettings()
                     pFS->singleElementNS( XML_w, XML_compatSetting,
                         FSNS( XML_w, XML_name ), "compatibilityMode",
                         FSNS( XML_w, XML_uri ),  "http://schemas.microsoft.com/office/word",
-                        FSNS( XML_w, XML_val ),  OString::number(nTargetCompatibilityMode));
+                        FSNS( XML_w, XML_val ),  OString::number(getWordCompatibilityMode()));
                     bHasCompatibilityMode = true;
                 }
 
@@ -1451,12 +1422,13 @@ void DocxExport::WriteSettings()
     {
         pFS->startElementNS(XML_w, XML_compat);
 
-        WriteCompat(m_rDoc, pFS, nTargetCompatibilityMode);
+        WriteCompat(m_rDoc, pFS);
 
+        const sal_Int32 nWordCompatibilityMode = getWordCompatibilityMode();
         pFS->singleElementNS( XML_w, XML_compatSetting,
             FSNS( XML_w, XML_name ), "compatibilityMode",
             FSNS( XML_w, XML_uri ),  "http://schemas.microsoft.com/office/word",
-            FSNS( XML_w, XML_val ),  OString::number(nTargetCompatibilityMode));
+            FSNS( XML_w, XML_val ),  OString::number(nWordCompatibilityMode));
 
         const IDocumentSettingAccess& rIDSA = m_rDoc.getIDocumentSettingAccess();
         if (rIDSA.get(DocumentSettingId::ALLOW_TEXT_AFTER_FLOATING_TABLE_BREAK))
@@ -1471,7 +1443,7 @@ void DocxExport::WriteSettings()
 
         // export useWord2013TrackBottomHyphenation and
         // allowHyphenationAtTrackBottom for Word 2013/2016/2019
-        if ( nTargetCompatibilityMode >= 12 )
+        if (nWordCompatibilityMode >= 12)
         {
             pFS->singleElementNS(XML_w, XML_compatSetting,
                     FSNS(XML_w, XML_name), "useWord2013TrackBottomHyphenation",
@@ -2123,17 +2095,36 @@ sal_Int32 DocxExport::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt
 
 //Keep this function in-sync with the one in writerfilter/.../SettingsTable.cxx
 //Since this is not import code, "-1" needs to be handled as the mode that LO will save as.
-//To identify how your code should handle a "-1", look in DocxExport::WriteSettings().
-sal_Int32 DocxExport::getWordCompatibilityModeFromGrabBag() const
+sal_Int32 DocxExport::getWordCompatibilityMode()
 {
-    sal_Int32 nWordCompatibilityMode = -1;
+    if (m_nWordCompatibilityMode > 0)
+        return m_nWordCompatibilityMode; // cached result
+
+    /* Compatibility Mode (tdf#131304)
+     * 11:  .doc level    [Word 97-2003]
+     * 12:  .docx default [Word 2007]  [LO < 7.0] [ECMA 376 1st ed.]
+     * 14:                [Word 2010]
+     * 15:                [Word 2013/2016/2019/2021/2024]  [LO >= 7.0]
+     *
+     * The PRIMARY purpose of compatibility mode does not seem to be related to layout etc.
+     * Its focus is on sharing files between multiple users, tracking the LOWEST supported mode in the group.
+     * It is to BENEFIT older programs by not using certain new features that they don't understand.
+     *
+     * The next time the compat mode needs to be changed, I foresee the following steps:
+     * 1.) Accept the new mode: Start round-tripping the new value, indicating we understand that format.
+     * 2.) Many years later, change the initial m_nWordCompatibilityMode for new documents,
+     *     when we no longer care about working with perfect compatibility with older versions of MS Word.
+     */
+    m_nWordCompatibilityMode = 15; //older versions might not open our files well
     rtl::Reference< SwXTextDocument > xPropSet(m_rDoc.GetDocShell()->GetBaseModel());
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
+    // Round-trip the existing compatibilityMode
     if (xPropSetInfo->hasPropertyByName(UNO_NAME_MISC_OBJ_INTEROPGRABBAG))
     {
         uno::Sequence< beans::PropertyValue > propList;
         xPropSet->getPropertyValue( UNO_NAME_MISC_OBJ_INTEROPGRABBAG ) >>= propList;
 
+        sal_Int32 nImportedWordCompatbilityMode = -1;
         for (const auto& rProp : propList)
         {
             if (rProp.Name == "CompatSettings")
@@ -2161,16 +2152,35 @@ sal_Int32 DocxExport::getWordCompatibilityModeFromGrabBag() const
                     {
                         const sal_Int32 nValidMode = sVal.toInt32();
                         // if repeated, highest mode wins in MS Word. 11 is the first valid mode.
-                        if (nValidMode > 10 && nValidMode > nWordCompatibilityMode)
-                            nWordCompatibilityMode = nValidMode;
-
+                        if (nValidMode > 10 && nValidMode > nImportedWordCompatbilityMode)
+                            nImportedWordCompatbilityMode = nValidMode;
                     }
                 }
             }
         }
+        // Keep the imported compatiblity mode (unless it is unknown / unsupported)
+        const bool bPreventRoundTrippingUnknownMode
+            = nImportedWordCompatbilityMode > m_nWordCompatibilityMode;
+        assert(!bPreventRoundTrippingUnknownMode && "create a new meta bug for new compat mode");
+        if (nImportedWordCompatbilityMode > 0 && !bPreventRoundTrippingUnknownMode)
+            m_nWordCompatibilityMode = nImportedWordCompatbilityMode;
     }
 
-    return nWordCompatibilityMode;
+    // Note: up to this point, WordCompatibilityMode is allowed to be increased.
+    // Place any maximum compatibility mode restrictions after this comment.
+    if (m_nWordCompatibilityMode > 12)
+    {
+        // If this is a Word 2007-only format, don't allow a compatibility mode greater than that
+        if (GetFilter().getVersion() == oox::core::ECMA_376_1ST_EDITION)
+            m_nWordCompatibilityMode = 12;
+    }
+    if (m_nWordCompatibilityMode > 14)
+    {
+        // Word ignores noLeading in compatibilityMode 15
+        if (!m_rDoc.getIDocumentSettingAccess().get(DocumentSettingId::ADD_EXT_LEADING))
+            m_nWordCompatibilityMode = 14;
+    }
+    return m_nWordCompatibilityMode;
 }
 
 void DocxExport::SetFS( ::sax_fastparser::FSHelperPtr const & pFS )
@@ -2190,6 +2200,7 @@ DocxExport::DocxExport(DocxExportFilter& rFilter, SwDoc& rDocument,
       m_nHeadersFootersInSection(0),
       m_bDocm(bDocm),
       m_bTemplate(bTemplate),
+      m_nWordCompatibilityMode(-1),
       m_pAuthorIDs(new SvtSecurityMapPersonalInfo)
 {
     // Write the document properties

@@ -782,7 +782,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
     else // other objects than frames. pObj exists.
     {
         // Word 2007 makes no width-height-swap for images. Detect this situation.
-        sal_Int32 nMode = m_pImpl->getExport().getWordCompatibilityModeFromGrabBag();
+        sal_Int32 nMode = m_pImpl->getExport().getWordCompatibilityMode();
         bool bIsWord2007Image(nMode > 0 && nMode < 14
                               && pObj->GetObjIdentifier() == SdrObjKind::Graphic);
 

@@ -119,6 +119,7 @@ class DocxExport : public MSWordExportBase
     bool const m_bTemplate;
 
     DocxSettingsData m_aSettings;
+    sal_Int32 m_nWordCompatibilityMode;
 
     /// Pointer to the Frame of a floating table it is nested in
     const ww8::Frame *m_pFloatingTableFrame = nullptr;
@@ -319,8 +320,7 @@ public:
     // Get author id to remove personal info
     size_t GetInfoID( const OUString& sPersonalInfo ) const { return m_pAuthorIDs->GetInfoID(sPersonalInfo); }
 
-    // needed in docxsdrexport.cxx and docxattributeoutput.cxx
-    sal_Int32 getWordCompatibilityModeFromGrabBag() const;
+    sal_Int32 getWordCompatibilityMode();
 
     /// return true if Page Layout is set as Mirrored
     bool isMirroredMargin();

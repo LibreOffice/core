@@ -64,25 +64,6 @@ OString lcl_padStartToLength(OString const& aString, sal_Int32 nLen, char cFill)
         return aString;
 }
 
-//Keep this function in-sync with the one in writerfilter/.../SettingsTable.cxx
-//Since this is not import code, "-1" needs to be handled as the mode that LO will save as.
-//To identify how your code should handle a "-1", look in DocxExport::WriteSettings().
-sal_Int32 lcl_getWordCompatibilityMode(const DocxExport& rDocExport)
-{
-    sal_Int32 nWordCompatibilityMode = rDocExport.getWordCompatibilityModeFromGrabBag();
-
-    // TODO: this is duplicated, better store it in DocxExport member?
-    if (!rDocExport.m_rDoc.getIDocumentSettingAccess().get(DocumentSettingId::ADD_EXT_LEADING))
-    {
-        if (nWordCompatibilityMode == -1 || 14 < nWordCompatibilityMode)
-        {
-            nWordCompatibilityMode = 14;
-        }
-    }
-
-    return nWordCompatibilityMode;
-}
-
 void CollectFloatingTableAttributes(DocxExport& rExport, const ww8::Frame& rFrame,
                                     ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner,
                                     rtl::Reference<FastAttributeList>& pAttributes)
@@ -137,7 +118,7 @@ void CollectFloatingTableAttributes(DocxExport& rExport, const ww8::Frame& rFram
         const SwTableBox* pTabBox = pTableTextNodeInfoInner->getTableBox();
         const SwFrameFormat* pFrameFormat = pTabBox->GetFrameFormat();
         const SvxBoxItem& rBox = pFrameFormat->GetBox();
-        sal_Int32 nMode = lcl_getWordCompatibilityMode(rExport);
+        sal_Int32 nMode = rExport.getWordCompatibilityMode();
         if (nMode < 15)
         {
             sal_uInt16 nLeftDistance = rBox.GetDistance(SvxBoxItemLine::LEFT);
@@ -469,7 +450,7 @@ void DocxAttributeOutput::TableDefinition(
             // tdf#106742: since MS Word 2013 (compatibilityMode >= 15), top-level tables are handled the same as nested tables;
             // if no compatibilityMode is defined (which now should only happen on a new export to .docx),
             // LO uses a higher compatibility than 2010's 14.
-            sal_Int32 nMode = lcl_getWordCompatibilityMode(m_rExport);
+            sal_Int32 nMode = m_rExport.getWordCompatibilityMode();
 
             const SwFrameFormat* pFrameFormat
                 = pTableTextNodeInfoInner->getTableBox()->GetFrameFormat();
