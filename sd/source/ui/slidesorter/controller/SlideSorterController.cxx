@@ -379,8 +379,19 @@ bool SlideSorterController::Command (
                 return false;
             if (pData->IsMod1())
             {
-                // We do not support zooming with control+mouse wheel.
-                return false;
+                sal_Int32 nColumnCount = mrSlideSorter.GetView().GetLayouter().GetColumnCount();
+                if (0L > pData->GetDelta())
+                {
+                    if (nColumnCount < MAX_PAGES_PER_ROW)
+                        ++nColumnCount;
+                }
+                else if (nColumnCount > 1)
+                    --nColumnCount;
+                mrSlideSorter.GetView().GetLayouter().SetColumnCount (
+                        nColumnCount, nColumnCount);
+                Rearrange(true);
+                mrSlideSorter.GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_PAGES_PER_ROW);
+                bEventHasBeenHandled = true;
             }
             // tdf#119745: ScrollLines gives accurate distance scrolled on touchpad. NotchDelta sign
             // gives direction. Default is 3 lines at a time, so factor that out.

@@ -30,6 +30,7 @@
 #include <strings.hrc>
 
 #include <diactrl.hxx>
+#include <SlideSorter.hxx>
 
 #include <sdresid.hxx>
 #include <app.hrc>
@@ -61,7 +62,7 @@ SdPagesField::SdPagesField( vcl::Window* pParent,
 
     // set parameter of MetricFields
     m_xWidget->set_digits(0);
-    m_xWidget->set_range(1, 15);
+    m_xWidget->set_range(1, MAX_PAGES_PER_ROW);
     m_xWidget->set_increments(1, 5);
     m_xWidget->connect_value_changed(LINK(this, SdPagesField, ModifyHdl));
     m_xWidget->connect_output(LINK(this, SdPagesField, OutputHdl));
