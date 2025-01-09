@@ -1219,7 +1219,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                         {
                             const SfxItemSet& rOldSet = pSelAttrs->GetItemSet();
                             SfxItemPool* pItemPool = rOldSet.GetPool();
-                            auto pNewSet = std::make_shared<SfxItemSet>(rOldSet);
+                            auto pNewSet = std::make_shared<SfxItemSet>(*pItemPool);
 
                             if (aLangText == "LANGUAGE_NONE")
                             {
