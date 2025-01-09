@@ -3411,7 +3411,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
             return;
 
         if ( pPDFExtOutDevData )
-            pPDFExtOutDevData->WrapBeginStructureElement(vcl::PDFWriter::Paragraph);
+            pPDFExtOutDevData->WrapBeginStructureElement(vcl::pdf::StructElement::Paragraph);
 
         const tools::Long nParaHeight = pPortion->GetHeight();
         if ( pPortion->IsVisible() && (

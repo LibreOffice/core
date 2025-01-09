@@ -1159,7 +1159,7 @@ bool SwContentControlPortion::DescribePDFControl(const SwTextPaintInfo& rInf) co
     }
     pDescriptor->Location = aRect;
 
-    pPDFExtOutDevData->WrapBeginStructureElement(vcl::PDFWriter::Form);
+    pPDFExtOutDevData->WrapBeginStructureElement(vcl::pdf::StructElement::Form);
     pPDFExtOutDevData->CreateControl(*pDescriptor);
     pPDFExtOutDevData->EndStructureElement();
 

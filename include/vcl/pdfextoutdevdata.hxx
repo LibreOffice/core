@@ -383,9 +383,9 @@ public:
     @returns
     the id of the newly created structural element
      */
-    sal_Int32 WrapBeginStructureElement(PDFWriter::StructElement eType, const OUString& rAlias = OUString());
+    sal_Int32 WrapBeginStructureElement(vcl::pdf::StructElement eType, const OUString& rAlias = OUString());
     sal_Int32 EnsureStructureElement(void const* key);
-    void InitStructureElement(sal_Int32 id, PDFWriter::StructElement eType, const OUString& rAlias);
+    void InitStructureElement(sal_Int32 id, vcl::pdf::StructElement eType, const OUString& rAlias);
     void BeginStructureElement(sal_Int32 id);
 
     /** end a logical structure element

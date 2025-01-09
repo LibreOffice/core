@@ -1354,7 +1354,7 @@ void PDFExport::ImplWriteWatermark( vcl::PDFWriter& rWriter, const Size& rPageSi
     rWriter.Push();
     // tdf#152235 tag around the reference to the XObject on the page
     sal_Int32 const id = rWriter.EnsureStructureElement();
-    rWriter.InitStructureElement(id, vcl::PDFWriter::NonStructElement, ::std::u16string_view());
+    rWriter.InitStructureElement(id, vcl::pdf::StructElement::NonStructElement, ::std::u16string_view());
     rWriter.BeginStructureElement(id);
     rWriter.SetStructureAttribute(vcl::PDFWriter::Type, vcl::PDFWriter::Pagination);
     rWriter.SetStructureAttribute(vcl::PDFWriter::Subtype, vcl::PDFWriter::Watermark);
@@ -1452,7 +1452,7 @@ void PDFExport::ImplWriteTiledWatermark( vcl::PDFWriter& rWriter, const Size& rP
     rWriter.Push();
     // tdf#152235 tag around the reference to the XObject on the page
     sal_Int32 const id = rWriter.EnsureStructureElement();
-    rWriter.InitStructureElement(id, vcl::PDFWriter::NonStructElement, ::std::u16string_view());
+    rWriter.InitStructureElement(id, vcl::pdf::StructElement::NonStructElement, ::std::u16string_view());
     rWriter.BeginStructureElement(id);
     rWriter.SetStructureAttribute(vcl::PDFWriter::Type, vcl::PDFWriter::Pagination);
     rWriter.SetStructureAttribute(vcl::PDFWriter::Subtype, vcl::PDFWriter::Watermark);

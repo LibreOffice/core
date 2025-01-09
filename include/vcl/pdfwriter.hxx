@@ -153,6 +153,33 @@ struct PDFEncryptionProperties
     }
 };
 
+namespace pdf
+{
+// for a definition of structural element types please refer to
+// PDF Reference, 3rd ed. section 9.7.4
+enum class StructElement
+{
+    // special element to place outside the structure hierarchy
+    NonStructElement,
+    // Grouping elements
+    Document, Part, Article, Section, Division, BlockQuote,
+    Caption, TOC, TOCI, Index,
+
+    // block level elements
+    Paragraph, Heading, H1, H2, H3, H4, H5, H6,
+    List, ListItem, LILabel, LIBody,
+    Table, TableRow, TableHeader, TableData,
+
+    // inline level elements
+    Span, Quote, Note, Reference, BibEntry, Code, Link, Annot,
+    Ruby, RB, RT, RP, Warichu, WT, WP,
+
+    // illustration elements
+    Figure, Formula, Form
+};
+
+}
+
 class VCL_DLLPUBLIC PDFWriter
 {
     ScopedVclPtr<PDFWriterImpl> xImplementation;
@@ -201,29 +228,6 @@ public:
     // for the meaning of DestAreaType please look at PDF Reference Manual
     // version 1.4 section 8.2.1, page 475
     enum class DestAreaType { XYZ, FitRectangle };
-
-    // for a definition of structural element types please refer to
-    // PDF Reference, 3rd ed. section 9.7.4
-    enum StructElement
-    {
-        // special element to place outside the structure hierarchy
-        NonStructElement,
-        // Grouping elements
-        Document, Part, Article, Section, Division, BlockQuote,
-        Caption, TOC, TOCI, Index,
-
-        // block level elements
-        Paragraph, Heading, H1, H2, H3, H4, H5, H6,
-        List, ListItem, LILabel, LIBody,
-        Table, TableRow, TableHeader, TableData,
-
-        // inline level elements
-        Span, Quote, Note, Reference, BibEntry, Code, Link, Annot,
-        Ruby, RB, RT, RP, Warichu, WT, WP,
-
-        // illustration elements
-        Figure, Formula, Form
-    };
 
     enum StructAttribute
     {
@@ -1154,7 +1158,7 @@ public:
      */
     void BeginStructureElement(sal_Int32 id);
     sal_Int32 EnsureStructureElement();
-    void InitStructureElement(sal_Int32 id, PDFWriter::StructElement eType, std::u16string_view rAlias);
+    void InitStructureElement(sal_Int32 id, vcl::pdf::StructElement eType, std::u16string_view rAlias);
 
     /** end the current logical structure element
 
