@@ -27,7 +27,7 @@ using namespace com::sun::star;
 namespace drawinglayer::primitive2d
 {
         StructureTagPrimitive2D::StructureTagPrimitive2D(
-            const vcl::PDFWriter::StructElement& rStructureElement,
+            const vcl::pdf::StructElement& rStructureElement,
             bool bBackground,
             bool bIsImage,
             bool bIsDecorative,

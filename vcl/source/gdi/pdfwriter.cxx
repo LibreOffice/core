@@ -395,7 +395,7 @@ sal_Int32 PDFWriter::EnsureStructureElement()
 }
 
 void PDFWriter::InitStructureElement(sal_Int32 const id,
-        PDFWriter::StructElement const eType, std::u16string_view const rAlias)
+        vcl::pdf::StructElement const eType, std::u16string_view const rAlias)
 {
     return xImplementation->initStructureElement(id, eType, rAlias);
 }

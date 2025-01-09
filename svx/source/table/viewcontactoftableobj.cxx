@@ -360,8 +360,8 @@ namespace sdr::contact
                                 // first row, assume that it's a header row
                                 auto const eType(
                                    aCellPos.mnRow == 0 && rTableObj.getTableStyleSettings().mbUseFirstRow
-                                       ? vcl::PDFWriter::TableHeader
-                                       : vcl::PDFWriter::TableData);
+                                       ? vcl::pdf::StructElement::TableHeader
+                                       : vcl::pdf::StructElement::TableData);
                                 cell = drawinglayer::primitive2d::Primitive2DContainer {
                                     new drawinglayer::primitive2d::StructureTagPrimitive2D(
                                         eType,
@@ -377,7 +377,7 @@ namespace sdr::contact
                         {
                             row = drawinglayer::primitive2d::Primitive2DContainer {
                                 new drawinglayer::primitive2d::StructureTagPrimitive2D(
-                                    vcl::PDFWriter::TableRow,
+                                    vcl::pdf::StructElement::TableRow,
                                     pPage->IsMasterPage(),
                                     false,
                                     false,

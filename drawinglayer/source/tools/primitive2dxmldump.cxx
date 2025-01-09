@@ -1008,8 +1008,7 @@ void Primitive2dXmlDump::decomposeAndWrite(
                     = static_cast<const StructureTagPrimitive2D&>(*pBasePrimitive);
                 rWriter.startElement("structuretag");
                 rWriter.attribute("structureelement",
-                                  rStructureTagPrimitive2D.getStructureElement());
-
+                                  sal_Int32(rStructureTagPrimitive2D.getStructureElement()));
                 decomposeAndWrite(rStructureTagPrimitive2D.getChildren(), rWriter);
                 rWriter.endElement();
             }

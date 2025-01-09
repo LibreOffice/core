@@ -355,7 +355,7 @@ public:
 
     void    SetSnapPixel();
 
-    bool    ReopenPDFStructureElement(vcl::PDFWriter::StructElement aType, SCROW nRow = -1,
+    bool    ReopenPDFStructureElement(vcl::pdf::StructElement aType, SCROW nRow = -1,
                                       SCCOL nCol = -1);
 
     void    DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool bPage, bool bMergeCover = false);

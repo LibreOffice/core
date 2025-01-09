@@ -1969,7 +1969,7 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
     assert(rEle.m_nOwnElement == 0 || rEle.m_oType);
     if (rEle.m_nOwnElement != rEle.m_nParentElement // emit the struct tree root
        // do not emit NonStruct and its children
-        && *rEle.m_oType == PDFWriter::NonStructElement)
+        && *rEle.m_oType == vcl::pdf::StructElement::NonStructElement)
     {
         return 0;
     }
@@ -1979,7 +1979,7 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
         if( child > 0 && o3tl::make_unsigned(child) < m_aStructure.size() )
         {
             PDFStructureElement& rChild = m_aStructure[ child ];
-            if (*rChild.m_oType != PDFWriter::NonStructElement)
+            if (*rChild.m_oType != vcl::pdf::StructElement::NonStructElement)
             {
                 if( rChild.m_nParentElement == rEle.m_nOwnElement )
                     emitStructure( rChild );
@@ -2123,7 +2123,7 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
             auto const it(m_aLinkPropertyMap.find(id));
             assert(it != m_aLinkPropertyMap.end());
 
-            if (*rEle.m_oType == PDFWriter::Form)
+            if (*rEle.m_oType == vcl::pdf::StructElement::Form)
             {
                 assert(0 <= it->second && o3tl::make_unsigned(it->second) < m_aWidgets.size());
                 AppendAnnotKid(rEle, m_aWidgets[it->second]);
@@ -10788,68 +10788,67 @@ void PDFWriterImpl::setOutlineItemDest( sal_Int32 nItem, sal_Int32 nDestID )
     m_aOutline[nItem].m_nDestID = nDestID;
 }
 
-const char* PDFWriterImpl::getStructureTag( PDFWriter::StructElement eType )
+const char* PDFWriterImpl::getStructureTag(vcl::pdf::StructElement eType )
 {
-    static constexpr auto aTagStrings = frozen::make_unordered_map<PDFWriter::StructElement, const char*>({
-        { PDFWriter::NonStructElement, "NonStruct" },
-        { PDFWriter::Document, "Document" },
-        { PDFWriter::Part,         "Part" },
-        { PDFWriter::Article,      "Art" },
-        { PDFWriter::Section,     "Sect" },
-        { PDFWriter::Division,    "Div" },
-        { PDFWriter::BlockQuote,  "BlockQuote" },
-        { PDFWriter::Caption,     "Caption" },
-        { PDFWriter::TOC,         "TOC" },
-        { PDFWriter::TOCI,        "TOCI" },
-        { PDFWriter::Index,       "Index" },
-        { PDFWriter::Paragraph,   "P" },
-        { PDFWriter::Heading,     "H" },
-        { PDFWriter::H1,          "H1" },
-        { PDFWriter::H2,          "H2" },
-        { PDFWriter::H3,          "H3" },
-        { PDFWriter::H4,          "H4" },
-        { PDFWriter::H5,          "H5" },
-        { PDFWriter::H6,          "H6" },
-        { PDFWriter::List,        "L" },
-        { PDFWriter::ListItem,    "LI" },
-        { PDFWriter::LILabel,     "Lbl" },
-        { PDFWriter::LIBody,      "LBody" },
-        { PDFWriter::Table,       "Table" },
-        { PDFWriter::TableRow,    "TR" },
-        { PDFWriter::TableHeader, "TH" },
-        { PDFWriter::TableData,   "TD" },
-        { PDFWriter::Span,        "Span" },
-        { PDFWriter::Quote,       "Quote" },
-        { PDFWriter::Note,        "Note" },
-        { PDFWriter::Reference,   "Reference" },
-        { PDFWriter::BibEntry,    "BibEntry" },
-        { PDFWriter::Code,        "Code" },
-        { PDFWriter::Link,        "Link" },
-        { PDFWriter::Annot,       "Annot" },
-        { PDFWriter::Ruby,        "Ruby" },
-        { PDFWriter::RB,          "RB" },
-        { PDFWriter::RT,          "RT" },
-        { PDFWriter::RP,          "RP" },
-        { PDFWriter::Warichu,     "Warichu" },
-        { PDFWriter::WT,          "WT" },
-        { PDFWriter::WP,          "WP" },
-        { PDFWriter::Figure,      "Figure" },
-        { PDFWriter::Formula,     "Formula"},
-        { PDFWriter::Form,        "Form" }
+    using namespace vcl::pdf;
+
+    static constexpr auto constTagStrings = frozen::make_unordered_map<StructElement, const char*>({
+        { StructElement::NonStructElement, "NonStruct" },
+        { StructElement::Document,    "Document" },
+        { StructElement::Part,        "Part" },
+        { StructElement::Article,     "Art" },
+        { StructElement::Section,     "Sect" },
+        { StructElement::Division,    "Div" },
+        { StructElement::BlockQuote,  "BlockQuote" },
+        { StructElement::Caption,     "Caption" },
+        { StructElement::TOC,         "TOC" },
+        { StructElement::TOCI,        "TOCI" },
+        { StructElement::Index,       "Index" },
+        { StructElement::Paragraph,   "P" },
+        { StructElement::Heading,     "H" },
+        { StructElement::H1,          "H1" },
+        { StructElement::H2,          "H2" },
+        { StructElement::H3,          "H3" },
+        { StructElement::H4,          "H4" },
+        { StructElement::H5,          "H5" },
+        { StructElement::H6,          "H6" },
+        { StructElement::List,        "L" },
+        { StructElement::ListItem,    "LI" },
+        { StructElement::LILabel,     "Lbl" },
+        { StructElement::LIBody,      "LBody" },
+        { StructElement::Table,       "Table" },
+        { StructElement::TableRow,    "TR" },
+        { StructElement::TableHeader, "TH" },
+        { StructElement::TableData,   "TD" },
+        { StructElement::Span,        "Span" },
+        { StructElement::Quote,       "Quote" },
+        { StructElement::Note,        "Note" },
+        { StructElement::Reference,   "Reference" },
+        { StructElement::BibEntry,    "BibEntry" },
+        { StructElement::Code,        "Code" },
+        { StructElement::Link,        "Link" },
+        { StructElement::Annot,       "Annot" },
+        { StructElement::Ruby,        "Ruby" },
+        { StructElement::RB,          "RB" },
+        { StructElement::RT,          "RT" },
+        { StructElement::RP,          "RP" },
+        { StructElement::Warichu,     "Warichu" },
+        { StructElement::WT,          "WT" },
+        { StructElement::WP,          "WP" },
+        { StructElement::Figure,      "Figure" },
+        { StructElement::Formula,     "Formula"},
+        { StructElement::Form,        "Form" }
     });
 
-    if (eType == PDFWriter::Annot
-        && m_aContext.Version < PDFWriter::PDFVersion::PDF_1_5)
-    {
+    if (m_aContext.Version < PDFWriter::PDFVersion::PDF_1_5 && eType == StructElement::Annot)
         return "Figure"; // fallback
-    }
 
-    auto it = aTagStrings.find( eType );
+    auto iterator = constTagStrings.find(eType);
 
-    return it != aTagStrings.end() ? it->second : "Div";
+    return iterator != constTagStrings.end() ? iterator->second : "Div";
 }
 
-void PDFWriterImpl::addRoleMap(const OString& aAlias, PDFWriter::StructElement eType)
+void PDFWriterImpl::addRoleMap(const OString& aAlias, vcl::pdf::StructElement eType)
 {
     OString aTag = getStructureTag(eType);
     // For PDF/UA it's not allowed to map an alias with the same name.
@@ -10866,7 +10865,7 @@ void PDFWriterImpl::beginStructureElementMCSeq()
         // Document = SwPageFrame => this is not *inside* the page content
         // stream so do not emit MCID!
         m_aStructure[m_nCurrentStructElement].m_oType &&
-        *m_aStructure[m_nCurrentStructElement].m_oType != PDFWriter::Document &&
+        *m_aStructure[m_nCurrentStructElement].m_oType != vcl::pdf::StructElement::Document &&
         ! m_aStructure[ m_nCurrentStructElement ].m_bOpenMCSeq // already opened sequence
         )
     {
@@ -10897,7 +10896,7 @@ void PDFWriterImpl::beginStructureElementMCSeq()
     else if( ! m_bEmitStructure && m_aContext.Tagged &&
                m_nCurrentStructElement > 0 &&
                m_aStructure[m_nCurrentStructElement].m_oType &&
-               *m_aStructure[m_nCurrentStructElement].m_oType == PDFWriter::NonStructElement &&
+               *m_aStructure[m_nCurrentStructElement].m_oType == vcl::pdf::StructElement::NonStructElement &&
              ! m_aStructure[ m_nCurrentStructElement ].m_bOpenMCSeq // already opened sequence
              )
     {
@@ -10930,7 +10929,7 @@ void PDFWriterImpl::endStructureElementMCSeq(EndMode const endMode)
         && m_aStructure[m_nCurrentStructElement].m_oType
         && (m_bEmitStructure
             || (endMode != EndMode::OnlyStruct
-                && m_aStructure[m_nCurrentStructElement].m_oType == PDFWriter::NonStructElement))
+                && m_aStructure[m_nCurrentStructElement].m_oType == vcl::pdf::StructElement::NonStructElement))
         && m_aStructure[m_nCurrentStructElement].m_bOpenMCSeq)
     {
         writeBuffer( "EMC\n" );
@@ -10948,7 +10947,7 @@ bool PDFWriterImpl::checkEmitStructure()
         while( nEle > 0 && o3tl::make_unsigned(nEle) < m_aStructure.size() )
         {
             if (m_aStructure[nEle].m_oType
-                && *m_aStructure[nEle].m_oType == PDFWriter::NonStructElement)
+                && *m_aStructure[nEle].m_oType == vcl::pdf::StructElement::NonStructElement)
             {
                 bEmit = false;
                 break;
@@ -10974,13 +10973,13 @@ sal_Int32 PDFWriterImpl::ensureStructureElement()
 }
 
 void PDFWriterImpl::initStructureElement(sal_Int32 const id,
-        PDFWriter::StructElement const eType, std::u16string_view const rAlias)
+        vcl::pdf::StructElement const eType, std::u16string_view const rAlias)
 {
     if( ! m_aContext.Tagged )
         return;
 
     if( m_nCurrentStructElement == 0 &&
-        eType != PDFWriter::Document && eType != PDFWriter::NonStructElement )
+        eType != vcl::pdf::StructElement::Document && eType != vcl::pdf::StructElement::NonStructElement )
     {
         // struct tree root hit, but not beginning document
         // this might happen with setCurrentStructureElement
@@ -10991,7 +10990,7 @@ void PDFWriterImpl::initStructureElement(sal_Int32 const id,
             auto it = std::find_if(rRootChildren.begin(), rRootChildren.end(),
                 [&](sal_Int32 nElement) {
                     return m_aStructure[nElement].m_oType
-                        && *m_aStructure[nElement].m_oType == PDFWriter::Document; });
+                        && *m_aStructure[nElement].m_oType == vcl::pdf::StructElement::Document; });
             if( it != rRootChildren.end() )
             {
                 m_nCurrentStructElement = *it;
@@ -11019,7 +11018,7 @@ void PDFWriterImpl::initStructureElement(sal_Int32 const id,
     m_aStructure[m_nCurrentStructElement].m_aChildren.push_back(id);
 
     // handle alias names
-    if( !rAlias.empty() && eType != PDFWriter::NonStructElement )
+    if( !rAlias.empty() && eType != vcl::pdf::StructElement::NonStructElement )
     {
         OStringBuffer aNameBuf( rAlias.size() );
         COSWriter::appendName( rAlias, aNameBuf );
@@ -11028,13 +11027,13 @@ void PDFWriterImpl::initStructureElement(sal_Int32 const id,
         addRoleMap(aAliasName, eType);
     }
 
-    if (m_bEmitStructure && eType != PDFWriter::NonStructElement) // don't create nonexistent objects
+    if (m_bEmitStructure && eType != vcl::pdf::StructElement::NonStructElement) // don't create nonexistent objects
     {
         rEle.m_nObject      = createObject();
         // update parent's kids list
         m_aStructure[ rEle.m_nParentElement ].m_aKids.emplace_back(ObjReference{rEle.m_nObject});
         // ISO 14289-1:2014, Clause: 7.9
-        if (*rEle.m_oType == PDFWriter::Note)
+        if (*rEle.m_oType == vcl::pdf::StructElement::Note)
         {
             m_StructElemObjsWithID.insert(rEle.m_nObject);
         }
@@ -11179,7 +11178,7 @@ void removePlaceholderSE(std::vector<PDFStructureElement> & rStructure, PDFStruc
 void PDFWriterImpl::addInternalStructureContainer( PDFStructureElement& rEle )
 {
     if (rEle.m_nOwnElement != rEle.m_nParentElement
-        && *rEle.m_oType == PDFWriter::NonStructElement)
+        && *rEle.m_oType == vcl::pdf::StructElement::NonStructElement)
     {
         return;
     }
@@ -11190,7 +11189,7 @@ void PDFWriterImpl::addInternalStructureContainer( PDFStructureElement& rEle )
         if( child > 0 && o3tl::make_unsigned(child) < m_aStructure.size() )
         {
             PDFStructureElement& rChild = m_aStructure[ child ];
-            if (*rChild.m_oType != PDFWriter::NonStructElement)
+            if (*rChild.m_oType != vcl::pdf::StructElement::NonStructElement)
             {
                 //triggered when a child of the rEle element is found
                 assert(rChild.m_nParentElement == rEle.m_nOwnElement);
@@ -11225,7 +11224,7 @@ void PDFWriterImpl::addInternalStructureContainer( PDFStructureElement& rEle )
 
     // add Div in RoleMap, in case no one else did (TODO: is it needed? Is it dangerous?)
     OString aAliasName("Div"_ostr);
-    addRoleMap(aAliasName, PDFWriter::Division);
+    addRoleMap(aAliasName, vcl::pdf::StructElement::Division);
 
     while( rEle.m_aKids.size() > ncMaxPDFArraySize )
     {
@@ -11234,7 +11233,7 @@ void PDFWriterImpl::addInternalStructureContainer( PDFStructureElement& rEle )
         m_aStructure.emplace_back( );
         PDFStructureElement& rEleNew = m_aStructure.back();
         rEleNew.m_aAlias            = aAliasName;
-        rEleNew.m_oType.emplace(PDFWriter::Division); // a new Div type container
+        rEleNew.m_oType.emplace(vcl::pdf::StructElement::Division); // a new Div type container
         rEleNew.m_nOwnElement       = nNewId;
         rEleNew.m_nParentElement    = nCurrentStructElement;
         //inherit the same page as the first child to be reparented
@@ -11317,9 +11316,9 @@ bool PDFWriterImpl::setStructureAttribute( enum PDFWriter::StructAttribute eAttr
             || (m_aContext.Tagged
                 && (0 == m_aStructure[m_nCurrentStructElement].m_nParentElement
                     || !m_aStructure[m_aStructure[m_nCurrentStructElement].m_nParentElement].m_oType
-                    || *m_aStructure[m_aStructure[m_nCurrentStructElement].m_nParentElement].m_oType != PDFWriter::NonStructElement))))
+                    || *m_aStructure[m_aStructure[m_nCurrentStructElement].m_nParentElement].m_oType != vcl::pdf::StructElement::NonStructElement))))
     {
-        PDFWriter::StructElement const eType = *m_aStructure[m_nCurrentStructElement].m_oType;
+        vcl::pdf::StructElement const eType = *m_aStructure[m_nCurrentStructElement].m_oType;
         switch( eAttr )
         {
             case PDFWriter::Placement:
@@ -11344,22 +11343,22 @@ bool PDFWriterImpl::setStructureAttribute( enum PDFWriter::StructAttribute eAttr
                     eVal == PDFWriter::End          ||
                     eVal == PDFWriter::Justify )
                 {
-                    if( eType == PDFWriter::Paragraph   ||
-                        eType == PDFWriter::Heading     ||
-                        eType == PDFWriter::H1          ||
-                        eType == PDFWriter::H2          ||
-                        eType == PDFWriter::H3          ||
-                        eType == PDFWriter::H4          ||
-                        eType == PDFWriter::H5          ||
-                        eType == PDFWriter::H6          ||
-                        eType == PDFWriter::List        ||
-                        eType == PDFWriter::ListItem    ||
-                        eType == PDFWriter::LILabel     ||
-                        eType == PDFWriter::LIBody      ||
-                        eType == PDFWriter::Table       ||
-                        eType == PDFWriter::TableRow    ||
-                        eType == PDFWriter::TableHeader ||
-                        eType == PDFWriter::TableData )
+                    if (eType == vcl::pdf::StructElement::Paragraph   ||
+                        eType == vcl::pdf::StructElement::Heading     ||
+                        eType == vcl::pdf::StructElement::H1          ||
+                        eType == vcl::pdf::StructElement::H2          ||
+                        eType == vcl::pdf::StructElement::H3          ||
+                        eType == vcl::pdf::StructElement::H4          ||
+                        eType == vcl::pdf::StructElement::H5          ||
+                        eType == vcl::pdf::StructElement::H6          ||
+                        eType == vcl::pdf::StructElement::List        ||
+                        eType == vcl::pdf::StructElement::ListItem    ||
+                        eType == vcl::pdf::StructElement::LILabel     ||
+                        eType == vcl::pdf::StructElement::LIBody      ||
+                        eType == vcl::pdf::StructElement::Table       ||
+                        eType == vcl::pdf::StructElement::TableRow    ||
+                        eType == vcl::pdf::StructElement::TableHeader ||
+                        eType == vcl::pdf::StructElement::TableData)
                     {
                         bInsert = true;
                     }
@@ -11369,12 +11368,12 @@ bool PDFWriterImpl::setStructureAttribute( enum PDFWriter::StructAttribute eAttr
             case PDFWriter::Height:
                 if( eVal == PDFWriter::Auto )
                 {
-                    if( eType == PDFWriter::Figure      ||
-                        eType == PDFWriter::Formula     ||
-                        eType == PDFWriter::Form        ||
-                        eType == PDFWriter::Table       ||
-                        eType == PDFWriter::TableHeader ||
-                        eType == PDFWriter::TableData )
+                    if (eType == vcl::pdf::StructElement::Figure      ||
+                        eType == vcl::pdf::StructElement::Formula     ||
+                        eType == vcl::pdf::StructElement::Form        ||
+                        eType == vcl::pdf::StructElement::Table       ||
+                        eType == vcl::pdf::StructElement::TableHeader ||
+                        eType == vcl::pdf::StructElement::TableData)
                     {
                         bInsert = true;
                     }
@@ -11386,8 +11385,8 @@ bool PDFWriterImpl::setStructureAttribute( enum PDFWriter::StructAttribute eAttr
                     eVal == PDFWriter::After        ||
                     eVal == PDFWriter::Justify )
                 {
-                    if( eType == PDFWriter::TableHeader ||
-                        eType == PDFWriter::TableData )
+                    if (eType == vcl::pdf::StructElement::TableHeader ||
+                        eType == vcl::pdf::StructElement::TableData)
                     {
                         bInsert = true;
                     }
@@ -11398,8 +11397,8 @@ bool PDFWriterImpl::setStructureAttribute( enum PDFWriter::StructAttribute eAttr
                     eVal == PDFWriter::Center       ||
                     eVal == PDFWriter::End )
                 {
-                    if( eType == PDFWriter::TableHeader ||
-                        eType == PDFWriter::TableData )
+                    if (eType == vcl::pdf::StructElement::TableHeader ||
+                        eType == vcl::pdf::StructElement::TableData)
                     {
                         bInsert = true;
                     }
@@ -11410,29 +11409,29 @@ bool PDFWriterImpl::setStructureAttribute( enum PDFWriter::StructAttribute eAttr
                     eVal == PDFWriter::Auto )
                 {
                     // only for ILSE and BLSE
-                    if( eType == PDFWriter::Paragraph   ||
-                        eType == PDFWriter::Heading     ||
-                        eType == PDFWriter::H1          ||
-                        eType == PDFWriter::H2          ||
-                        eType == PDFWriter::H3          ||
-                        eType == PDFWriter::H4          ||
-                        eType == PDFWriter::H5          ||
-                        eType == PDFWriter::H6          ||
-                        eType == PDFWriter::List        ||
-                        eType == PDFWriter::ListItem    ||
-                        eType == PDFWriter::LILabel     ||
-                        eType == PDFWriter::LIBody      ||
-                        eType == PDFWriter::Table       ||
-                        eType == PDFWriter::TableRow    ||
-                        eType == PDFWriter::TableHeader ||
-                        eType == PDFWriter::TableData   ||
-                        eType == PDFWriter::Span        ||
-                        eType == PDFWriter::Quote       ||
-                        eType == PDFWriter::Note        ||
-                        eType == PDFWriter::Reference   ||
-                        eType == PDFWriter::BibEntry    ||
-                        eType == PDFWriter::Code        ||
-                        eType == PDFWriter::Link )
+                    if (eType == vcl::pdf::StructElement::Paragraph   ||
+                        eType == vcl::pdf::StructElement::Heading     ||
+                        eType == vcl::pdf::StructElement::H1          ||
+                        eType == vcl::pdf::StructElement::H2          ||
+                        eType == vcl::pdf::StructElement::H3          ||
+                        eType == vcl::pdf::StructElement::H4          ||
+                        eType == vcl::pdf::StructElement::H5          ||
+                        eType == vcl::pdf::StructElement::H6          ||
+                        eType == vcl::pdf::StructElement::List        ||
+                        eType == vcl::pdf::StructElement::ListItem    ||
+                        eType == vcl::pdf::StructElement::LILabel     ||
+                        eType == vcl::pdf::StructElement::LIBody      ||
+                        eType == vcl::pdf::StructElement::Table       ||
+                        eType == vcl::pdf::StructElement::TableRow    ||
+                        eType == vcl::pdf::StructElement::TableHeader ||
+                        eType == vcl::pdf::StructElement::TableData   ||
+                        eType == vcl::pdf::StructElement::Span        ||
+                        eType == vcl::pdf::StructElement::Quote       ||
+                        eType == vcl::pdf::StructElement::Note        ||
+                        eType == vcl::pdf::StructElement::Reference   ||
+                        eType == vcl::pdf::StructElement::BibEntry    ||
+                        eType == vcl::pdf::StructElement::Code        ||
+                        eType == vcl::pdf::StructElement::Link)
                     {
                         bInsert = true;
                     }
@@ -11445,29 +11444,29 @@ bool PDFWriterImpl::setStructureAttribute( enum PDFWriter::StructAttribute eAttr
                     eVal == PDFWriter::LineThrough )
                 {
                     // only for ILSE and BLSE
-                    if( eType == PDFWriter::Paragraph   ||
-                        eType == PDFWriter::Heading     ||
-                        eType == PDFWriter::H1          ||
-                        eType == PDFWriter::H2          ||
-                        eType == PDFWriter::H3          ||
-                        eType == PDFWriter::H4          ||
-                        eType == PDFWriter::H5          ||
-                        eType == PDFWriter::H6          ||
-                        eType == PDFWriter::List        ||
-                        eType == PDFWriter::ListItem    ||
-                        eType == PDFWriter::LILabel     ||
-                        eType == PDFWriter::LIBody      ||
-                        eType == PDFWriter::Table       ||
-                        eType == PDFWriter::TableRow    ||
-                        eType == PDFWriter::TableHeader ||
-                        eType == PDFWriter::TableData   ||
-                        eType == PDFWriter::Span        ||
-                        eType == PDFWriter::Quote       ||
-                        eType == PDFWriter::Note        ||
-                        eType == PDFWriter::Reference   ||
-                        eType == PDFWriter::BibEntry    ||
-                        eType == PDFWriter::Code        ||
-                        eType == PDFWriter::Link )
+                    if (eType == vcl::pdf::StructElement::Paragraph   ||
+                        eType == vcl::pdf::StructElement::Heading     ||
+                        eType == vcl::pdf::StructElement::H1          ||
+                        eType == vcl::pdf::StructElement::H2          ||
+                        eType == vcl::pdf::StructElement::H3          ||
+                        eType == vcl::pdf::StructElement::H4          ||
+                        eType == vcl::pdf::StructElement::H5          ||
+                        eType == vcl::pdf::StructElement::H6          ||
+                        eType == vcl::pdf::StructElement::List        ||
+                        eType == vcl::pdf::StructElement::ListItem    ||
+                        eType == vcl::pdf::StructElement::LILabel     ||
+                        eType == vcl::pdf::StructElement::LIBody      ||
+                        eType == vcl::pdf::StructElement::Table       ||
+                        eType == vcl::pdf::StructElement::TableRow    ||
+                        eType == vcl::pdf::StructElement::TableHeader ||
+                        eType == vcl::pdf::StructElement::TableData   ||
+                        eType == vcl::pdf::StructElement::Span        ||
+                        eType == vcl::pdf::StructElement::Quote       ||
+                        eType == vcl::pdf::StructElement::Note        ||
+                        eType == vcl::pdf::StructElement::Reference   ||
+                        eType == vcl::pdf::StructElement::BibEntry    ||
+                        eType == vcl::pdf::StructElement::Code        ||
+                        eType == vcl::pdf::StructElement::Link)
                     {
                         bInsert = true;
                     }
@@ -11476,7 +11475,7 @@ bool PDFWriterImpl::setStructureAttribute( enum PDFWriter::StructAttribute eAttr
             case PDFWriter::Scope:
                 if (eVal == PDFWriter::Row || eVal == PDFWriter::Column || eVal == PDFWriter::Both)
                 {
-                    if (eType == PDFWriter::TableHeader
+                    if (eType == vcl::pdf::StructElement::TableHeader
                         && PDFWriter::PDFVersion::PDF_1_5 <= m_aContext.Version)
                     {
                         bInsert = true;
@@ -11487,7 +11486,7 @@ bool PDFWriterImpl::setStructureAttribute( enum PDFWriter::StructAttribute eAttr
                 if (eVal == PDFWriter::Pagination || eVal == PDFWriter::Layout || eVal == PDFWriter::Page)
                     // + Background for PDF >= 1.7
                 {
-                    if (eType == PDFWriter::NonStructElement)
+                    if (eType == vcl::pdf::StructElement::NonStructElement)
                     {
                         bInsert = true;
                     }
@@ -11496,7 +11495,7 @@ bool PDFWriterImpl::setStructureAttribute( enum PDFWriter::StructAttribute eAttr
             case PDFWriter::Subtype:
                 if (eVal == PDFWriter::Header || eVal == PDFWriter::Footer || eVal == PDFWriter::Watermark)
                 {
-                    if (eType == PDFWriter::NonStructElement
+                    if (eType == vcl::pdf::StructElement::NonStructElement
                         && PDFWriter::PDFVersion::PDF_1_7 <= m_aContext.Version)
                     {
                         bInsert = true;
@@ -11506,7 +11505,7 @@ bool PDFWriterImpl::setStructureAttribute( enum PDFWriter::StructAttribute eAttr
             case PDFWriter::Role:
                 if (eVal == PDFWriter::Rb || eVal == PDFWriter::Cb || eVal == PDFWriter::Pb || eVal == PDFWriter::Tv)
                 {
-                    if (eType == PDFWriter::Form
+                    if (eType == vcl::pdf::StructElement::Form
                         && PDFWriter::PDFVersion::PDF_1_7 <= m_aContext.Version)
                     {
                         bInsert = true;
@@ -11516,7 +11515,7 @@ bool PDFWriterImpl::setStructureAttribute( enum PDFWriter::StructAttribute eAttr
             case PDFWriter::RubyAlign:
                 if (eVal == PDFWriter::RStart || eVal == PDFWriter::RCenter || eVal == PDFWriter::REnd || eVal == PDFWriter::RJustify || eVal == PDFWriter::RDistribute)
                 {
-                    if (eType == PDFWriter::RT
+                    if (eType == vcl::pdf::StructElement::RT
                         && PDFWriter::PDFVersion::PDF_1_5 <= m_aContext.Version)
                     {
                         bInsert = true;
@@ -11526,7 +11525,7 @@ bool PDFWriterImpl::setStructureAttribute( enum PDFWriter::StructAttribute eAttr
             case PDFWriter::RubyPosition:
                 if (eVal == PDFWriter::RBefore || eVal == PDFWriter::RAfter || eVal == PDFWriter::RWarichu || eVal == PDFWriter::RInline)
                 {
-                    if (eType == PDFWriter::RT
+                    if (eType == vcl::pdf::StructElement::RT
                         && PDFWriter::PDFVersion::PDF_1_5 <= m_aContext.Version)
                     {
                         bInsert = true;
@@ -11544,7 +11543,7 @@ bool PDFWriterImpl::setStructureAttribute( enum PDFWriter::StructAttribute eAttr
                     eVal == PDFWriter::UpperAlpha   ||
                     eVal == PDFWriter::LowerAlpha )
                 {
-                    if( eType == PDFWriter::List )
+                    if( eType == vcl::pdf::StructElement::List )
                         bInsert = true;
                 }
                 break;
@@ -11580,7 +11579,7 @@ bool PDFWriterImpl::setStructureAttributeNumerical( enum PDFWriter::StructAttrib
             return true;
         }
 
-        PDFWriter::StructElement const eType = *m_aStructure[m_nCurrentStructElement].m_oType;
+        vcl::pdf::StructElement const eType = *m_aStructure[m_nCurrentStructElement].m_oType;
         switch( eAttr )
         {
             case PDFWriter::SpaceBefore:
@@ -11588,52 +11587,52 @@ bool PDFWriterImpl::setStructureAttributeNumerical( enum PDFWriter::StructAttrib
             case PDFWriter::StartIndent:
             case PDFWriter::EndIndent:
                 // just for BLSE
-                if( eType == PDFWriter::Paragraph   ||
-                    eType == PDFWriter::Heading     ||
-                    eType == PDFWriter::H1          ||
-                    eType == PDFWriter::H2          ||
-                    eType == PDFWriter::H3          ||
-                    eType == PDFWriter::H4          ||
-                    eType == PDFWriter::H5          ||
-                    eType == PDFWriter::H6          ||
-                    eType == PDFWriter::List        ||
-                    eType == PDFWriter::ListItem    ||
-                    eType == PDFWriter::LILabel     ||
-                    eType == PDFWriter::LIBody      ||
-                    eType == PDFWriter::Table       ||
-                    eType == PDFWriter::TableRow    ||
-                    eType == PDFWriter::TableHeader ||
-                    eType == PDFWriter::TableData )
+                if (eType == vcl::pdf::StructElement::Paragraph   ||
+                    eType == vcl::pdf::StructElement::Heading     ||
+                    eType == vcl::pdf::StructElement::H1          ||
+                    eType == vcl::pdf::StructElement::H2          ||
+                    eType == vcl::pdf::StructElement::H3          ||
+                    eType == vcl::pdf::StructElement::H4          ||
+                    eType == vcl::pdf::StructElement::H5          ||
+                    eType == vcl::pdf::StructElement::H6          ||
+                    eType == vcl::pdf::StructElement::List        ||
+                    eType == vcl::pdf::StructElement::ListItem    ||
+                    eType == vcl::pdf::StructElement::LILabel     ||
+                    eType == vcl::pdf::StructElement::LIBody      ||
+                    eType == vcl::pdf::StructElement::Table       ||
+                    eType == vcl::pdf::StructElement::TableRow    ||
+                    eType == vcl::pdf::StructElement::TableHeader ||
+                    eType == vcl::pdf::StructElement::TableData)
                 {
                     bInsert = true;
                 }
                 break;
             case PDFWriter::TextIndent:
                 // paragraph like BLSE and additional elements
-                if( eType == PDFWriter::Paragraph   ||
-                    eType == PDFWriter::Heading     ||
-                    eType == PDFWriter::H1          ||
-                    eType == PDFWriter::H2          ||
-                    eType == PDFWriter::H3          ||
-                    eType == PDFWriter::H4          ||
-                    eType == PDFWriter::H5          ||
-                    eType == PDFWriter::H6          ||
-                    eType == PDFWriter::LILabel     ||
-                    eType == PDFWriter::LIBody      ||
-                    eType == PDFWriter::TableHeader ||
-                    eType == PDFWriter::TableData )
+                if (eType == vcl::pdf::StructElement::Paragraph   ||
+                    eType == vcl::pdf::StructElement::Heading     ||
+                    eType == vcl::pdf::StructElement::H1          ||
+                    eType == vcl::pdf::StructElement::H2          ||
+                    eType == vcl::pdf::StructElement::H3          ||
+                    eType == vcl::pdf::StructElement::H4          ||
+                    eType == vcl::pdf::StructElement::H5          ||
+                    eType == vcl::pdf::StructElement::H6          ||
+                    eType == vcl::pdf::StructElement::LILabel     ||
+                    eType == vcl::pdf::StructElement::LIBody      ||
+                    eType == vcl::pdf::StructElement::TableHeader ||
+                    eType == vcl::pdf::StructElement::TableData)
                 {
                     bInsert = true;
                 }
                 break;
             case PDFWriter::Width:
             case PDFWriter::Height:
-                if( eType == PDFWriter::Figure      ||
-                    eType == PDFWriter::Formula     ||
-                    eType == PDFWriter::Form        ||
-                    eType == PDFWriter::Table       ||
-                    eType == PDFWriter::TableHeader ||
-                    eType == PDFWriter::TableData )
+                if (eType == vcl::pdf::StructElement::Figure      ||
+                    eType == vcl::pdf::StructElement::Formula     ||
+                    eType == vcl::pdf::StructElement::Form        ||
+                    eType == vcl::pdf::StructElement::Table       ||
+                    eType == vcl::pdf::StructElement::TableHeader ||
+                    eType == vcl::pdf::StructElement::TableData)
                 {
                     bInsert = true;
                 }
@@ -11641,29 +11640,29 @@ bool PDFWriterImpl::setStructureAttributeNumerical( enum PDFWriter::StructAttrib
             case PDFWriter::LineHeight:
             case PDFWriter::BaselineShift:
                 // only for ILSE and BLSE
-                if( eType == PDFWriter::Paragraph   ||
-                    eType == PDFWriter::Heading     ||
-                    eType == PDFWriter::H1          ||
-                    eType == PDFWriter::H2          ||
-                    eType == PDFWriter::H3          ||
-                    eType == PDFWriter::H4          ||
-                    eType == PDFWriter::H5          ||
-                    eType == PDFWriter::H6          ||
-                    eType == PDFWriter::List        ||
-                    eType == PDFWriter::ListItem    ||
-                    eType == PDFWriter::LILabel     ||
-                    eType == PDFWriter::LIBody      ||
-                    eType == PDFWriter::Table       ||
-                    eType == PDFWriter::TableRow    ||
-                    eType == PDFWriter::TableHeader ||
-                    eType == PDFWriter::TableData   ||
-                    eType == PDFWriter::Span        ||
-                    eType == PDFWriter::Quote       ||
-                    eType == PDFWriter::Note        ||
-                    eType == PDFWriter::Reference   ||
-                    eType == PDFWriter::BibEntry    ||
-                    eType == PDFWriter::Code        ||
-                    eType == PDFWriter::Link )
+                if (eType == vcl::pdf::StructElement::Paragraph   ||
+                    eType == vcl::pdf::StructElement::Heading     ||
+                    eType == vcl::pdf::StructElement::H1          ||
+                    eType == vcl::pdf::StructElement::H2          ||
+                    eType == vcl::pdf::StructElement::H3          ||
+                    eType == vcl::pdf::StructElement::H4          ||
+                    eType == vcl::pdf::StructElement::H5          ||
+                    eType == vcl::pdf::StructElement::H6          ||
+                    eType == vcl::pdf::StructElement::List        ||
+                    eType == vcl::pdf::StructElement::ListItem    ||
+                    eType == vcl::pdf::StructElement::LILabel     ||
+                    eType == vcl::pdf::StructElement::LIBody      ||
+                    eType == vcl::pdf::StructElement::Table       ||
+                    eType == vcl::pdf::StructElement::TableRow    ||
+                    eType == vcl::pdf::StructElement::TableHeader ||
+                    eType == vcl::pdf::StructElement::TableData   ||
+                    eType == vcl::pdf::StructElement::Span        ||
+                    eType == vcl::pdf::StructElement::Quote       ||
+                    eType == vcl::pdf::StructElement::Note        ||
+                    eType == vcl::pdf::StructElement::Reference   ||
+                    eType == vcl::pdf::StructElement::BibEntry    ||
+                    eType == vcl::pdf::StructElement::Code        ||
+                    eType == vcl::pdf::StructElement::Link)
                 {
                         bInsert = true;
                 }
@@ -11671,18 +11670,18 @@ bool PDFWriterImpl::setStructureAttributeNumerical( enum PDFWriter::StructAttrib
             case PDFWriter::RowSpan:
             case PDFWriter::ColSpan:
                 // only for table cells
-                if( eType == PDFWriter::TableHeader ||
-                    eType == PDFWriter::TableData )
+                if (eType == vcl::pdf::StructElement::TableHeader ||
+                    eType == vcl::pdf::StructElement::TableData)
                 {
                     bInsert = true;
                 }
                 break;
             case PDFWriter::LinkAnnotation:
-                if( eType == PDFWriter::Link )
+                if (eType == vcl::pdf::StructElement::Link)
                     bInsert = true;
                 break;
             case PDFWriter::NoteAnnotation:
-                if (eType == PDFWriter::Annot)
+                if (eType == vcl::pdf::StructElement::Annot)
                     bInsert = true;
                 break;
             default: break;
@@ -11712,12 +11711,12 @@ void PDFWriterImpl::setStructureBoundingBox( const tools::Rectangle& rRect )
         return;
 
     assert(m_aStructure[m_nCurrentStructElement].m_oType);
-    PDFWriter::StructElement const eType = *m_aStructure[m_nCurrentStructElement].m_oType;
-    if( eType == PDFWriter::Figure      ||
-        eType == PDFWriter::Formula     ||
-        eType == PDFWriter::Form        ||
-        eType == PDFWriter::Division    ||
-        eType == PDFWriter::Table )
+    vcl::pdf::StructElement const eType = *m_aStructure[m_nCurrentStructElement].m_oType;
+    if (eType == vcl::pdf::StructElement::Figure ||
+        eType == vcl::pdf::StructElement::Formula ||
+        eType == vcl::pdf::StructElement::Form ||
+        eType == vcl::pdf::StructElement::Division ||
+        eType == vcl::pdf::StructElement::Table)
     {
         m_aStructure[ m_nCurrentStructElement ].m_aBBox = rRect;
         // convert to default user space now, since the mapmode may change

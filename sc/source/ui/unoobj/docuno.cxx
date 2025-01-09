@@ -2249,7 +2249,7 @@ static void lcl_PDFExportHelper(const OutputDevice* pDev, const OUString& rTabNa
         if (pPDF->GetIsExportTaggedPDF())
         {
             if (bIsFirstPage)
-                pPDF->WrapBeginStructureElement(vcl::PDFWriter::Document, u"Workbook"_ustr);
+                pPDF->WrapBeginStructureElement(vcl::pdf::StructElement::Document, u"Workbook"_ustr);
             else
             {   // if there is a new worksheet(not first), delete and add new ScPDFState
                 assert(pPDF->GetScPDFState());

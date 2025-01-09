@@ -298,13 +298,13 @@ void ScOutputData::SetSyntaxMode( bool bNewMode )
     }
 }
 
-bool ScOutputData::ReopenPDFStructureElement(vcl::PDFWriter::StructElement aType, SCROW nRow, SCCOL nCol)
+bool ScOutputData::ReopenPDFStructureElement(vcl::pdf::StructElement aType, SCROW nRow, SCCOL nCol)
 {
     bool bReopenTag = false;
     vcl::PDFExtOutDevData* pPDF = dynamic_cast<vcl::PDFExtOutDevData*>(mpDev->GetExtOutDevData());
     if (pPDF)
     {
-        if (aType == vcl::PDFWriter::Part) // Worksheet
+        if (aType == vcl::pdf::StructElement::Part) // Worksheet
         {
             if (pPDF->GetScPDFState()->m_WorksheetId != -1)
             {
@@ -313,7 +313,7 @@ bool ScOutputData::ReopenPDFStructureElement(vcl::PDFWriter::StructElement aType
                 bReopenTag = true;
             }
         }
-        else if (aType == vcl::PDFWriter::Table)
+        else if (aType == vcl::pdf::StructElement::Table)
         {
             if (pPDF->GetScPDFState()->m_TableId != -1)
             {
@@ -322,7 +322,7 @@ bool ScOutputData::ReopenPDFStructureElement(vcl::PDFWriter::StructElement aType
                 bReopenTag = true;
             }
         }
-        else if (aType == vcl::PDFWriter::TableRow)
+        else if (aType == vcl::pdf::StructElement::TableRow)
         {
             const auto aIter = pPDF->GetScPDFState()->m_TableRowMap.find(nRow);
             if (aIter != pPDF->GetScPDFState()->m_TableRowMap.end() && nRow == aIter->first)
@@ -332,7 +332,7 @@ bool ScOutputData::ReopenPDFStructureElement(vcl::PDFWriter::StructElement aType
                 bReopenTag = true;
             }
         }
-        else if (aType == vcl::PDFWriter::TableData)
+        else if (aType == vcl::pdf::StructElement::TableData)
         {
             const std::pair<SCROW, SCCOL> keyToFind = std::make_pair(nRow, nCol);
             const auto aIter = pPDF->GetScPDFState()->m_TableDataMap.find(keyToFind);
@@ -1128,7 +1128,7 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
             else
             {
                 if (bTaggedPDF)
-                    pPDF->WrapBeginStructureElement(vcl::PDFWriter::NonStructElement);
+                    pPDF->WrapBeginStructureElement(vcl::pdf::StructElement::NonStructElement);
 
                 // scan for rows with the same background:
                 SCSIZE nSkip = 0;
@@ -1298,7 +1298,7 @@ void ScOutputData::DrawExtraShadow(bool bLeft, bool bTop, bool bRight, bool bBot
                     if ( pAttr && !bSkipX )
                     {
                         if (bTaggedPDF)
-                            pPDF->WrapBeginStructureElement(vcl::PDFWriter::NonStructElement);
+                            pPDF->WrapBeginStructureElement(vcl::pdf::StructElement::NonStructElement);
 
                         ScShadowPart ePart = nPass ?
                                 pThisRowInfo->cellInfo(nCol).eVShadowPart :
@@ -1461,7 +1461,7 @@ void ScOutputData::DrawFrame(vcl::RenderContext& rRenderContext)
     vcl::PDFExtOutDevData* pPDF = dynamic_cast<vcl::PDFExtOutDevData*>(mpDev->GetExtOutDevData());
     bool bTaggedPDF = pPDF && pPDF->GetIsExportTaggedPDF();
     if (bTaggedPDF)
-        pPDF->WrapBeginStructureElement(vcl::PDFWriter::NonStructElement);
+        pPDF->WrapBeginStructureElement(vcl::pdf::StructElement::NonStructElement);
 
     DrawModeFlags nOldDrawMode = rRenderContext.GetDrawMode();
 

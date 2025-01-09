@@ -154,11 +154,11 @@ class SwTaggedPDFHelper
     const Por_Info* mpPorInfo;
 
     void OpenTagImpl(void const* pKey);
-    sal_Int32 BeginTagImpl(void const* pKey,vcl::PDFWriter::StructElement aTagRole, const OUString& rTagName);
-    void BeginTag( vcl::PDFWriter::StructElement aTagRole, const OUString& rTagName );
+    sal_Int32 BeginTagImpl(void const* pKey,vcl::pdf::StructElement aTagRole, const OUString& rTagName);
+    void BeginTag(vcl::pdf::StructElement aTagRole, const OUString& rTagName);
     void EndTag();
 
-    void SetAttributes( vcl::PDFWriter::StructElement eType );
+    void SetAttributes(vcl::pdf::StructElement eType);
 
     // These functions are called by the c'tor, d'tor
     void BeginNumberedListStructureElements();
