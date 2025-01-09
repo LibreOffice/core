@@ -328,12 +328,13 @@ void CWinClipboard::handleClipboardContentChanged()
                                                             rXTransf);
         maClipboardListeners.notifyEach(
             aGuard, &datatransfer::clipboard::XClipboardListener::changedContents, aClipbEvent);
+        aGuard.unlock(); // for XTransferable dtor, that may delegate to another thread
     }
     catch (const lang::DisposedException&)
     {
         OSL_FAIL("Service Manager disposed");
-
-        aGuard.unlock();
+        if (aGuard.owns_lock())
+            aGuard.unlock();
         // no further clipboard changed notifications
         unregisterClipboardViewer();
     }
