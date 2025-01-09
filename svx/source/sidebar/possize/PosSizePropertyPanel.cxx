@@ -532,8 +532,6 @@ void PosSizePropertyPanel::NotifyItemUpdate(
                     break;
                 }
             }
-
-            mxMtrWidth->set_text( "" );
             mbMtrWidthBlanked = true;
             break;
 
@@ -558,8 +556,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
                     break;
                 }
             }
-
-            mxMtrHeight->set_text( "");
+            mbMtrHeightBlanked = true;
             break;
 
         case SID_ATTR_TRANSFORM_POS_X:
@@ -582,8 +579,6 @@ void PosSizePropertyPanel::NotifyItemUpdate(
                     break;
                 }
             }
-
-            mxMtrPosX->set_text( "" );
             mbMtrPosXBlanked = true;
             break;
 
@@ -607,8 +602,6 @@ void PosSizePropertyPanel::NotifyItemUpdate(
                     break;
                 }
             }
-
-            mxMtrPosY->set_text( "" );
             mbMtrPosYBlanked = true;
             break;
 
@@ -715,8 +708,6 @@ void PosSizePropertyPanel::NotifyItemUpdate(
                     break;
                 }
             }
-
-            mxMtrAngle->set_text( "" );
             mbMtrAngleBlanked = true;
             mxCtrlDial->SetRotation( 0_deg100 );
             break;
@@ -914,7 +905,6 @@ void PosSizePropertyPanel::MetricState(SfxItemState eState, const SfxPoolItem* p
     SetFieldUnit( *mxMtrPosX, meDlgUnit, true );
     if (bPosXBlank)
     {
-        mxMtrPosX->set_text(OUString());
         mbMtrPosXBlanked = true;
     }
 
@@ -923,7 +913,6 @@ void PosSizePropertyPanel::MetricState(SfxItemState eState, const SfxPoolItem* p
     SetFieldUnit( *mxMtrPosY, meDlgUnit, true );
     if (bPosYBlank)
     {
-        mxMtrPosY->set_text(OUString());
         mbMtrPosYBlanked = true;
     }
 
@@ -934,7 +923,6 @@ void PosSizePropertyPanel::MetricState(SfxItemState eState, const SfxPoolItem* p
     SetFieldUnit( *mxMtrWidth, meDlgUnit, true );
     if (bWidthBlank)
     {
-        mxMtrWidth->set_text(OUString());
         mbMtrWidthBlanked = true;
     }
 
@@ -943,7 +931,6 @@ void PosSizePropertyPanel::MetricState(SfxItemState eState, const SfxPoolItem* p
     SetFieldUnit( *mxMtrHeight, meDlgUnit, true );
     if (bHeightBlank)
     {
-        mxMtrHeight->set_text(OUString());
         mbMtrHeightBlanked = true;
     }
 }
