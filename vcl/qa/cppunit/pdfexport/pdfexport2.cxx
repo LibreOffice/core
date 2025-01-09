@@ -851,7 +851,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testMultiPagePDF)
         CPPUNIT_ASSERT(aZCodec.EndCompression());
 
         // Just check that the size of the page stream is what is expected.
-        CPPUNIT_ASSERT_EQUAL(sal_uInt64(1236), aUncompressed.Tell());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt64(1218), aUncompressed.Tell());
     }
 
     { // embedded PDF page 2
@@ -886,7 +886,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testMultiPagePDF)
         CPPUNIT_ASSERT(aZCodec.EndCompression());
 
         // Just check that the size of the page stream is what is expected.
-        CPPUNIT_ASSERT_EQUAL(sal_uInt64(3911), aUncompressed.Tell());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt64(3893), aUncompressed.Tell());
     }
 
     { // embedded PDF page 3
@@ -921,7 +921,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testMultiPagePDF)
         CPPUNIT_ASSERT(aZCodec.EndCompression());
 
         // Just check that the size of the page stream is what is expected.
-        CPPUNIT_ASSERT_EQUAL(sal_uInt64(373), aUncompressed.Tell());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt64(355), aUncompressed.Tell());
     }
 #endif
 }
