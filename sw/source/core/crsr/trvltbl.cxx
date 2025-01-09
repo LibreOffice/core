@@ -825,8 +825,14 @@ bool SwCursorShell::CheckTableBoxContent( const SwPosition* pPos )
     }
 
     // box has more than one paragraph
-    if( pChkBox && pSttNd->GetIndex() + SwNodeOffset(2) != pSttNd->EndOfSectionIndex() )
+    if (pChkBox && pSttNd->GetIndex() + SwNodeOffset(2) != pSttNd->EndOfSectionIndex())
+    {
+        ClearTableBoxContent();
+        StartAction();
+        GetDoc()->ChkBoxNumFormat( *pChkBox, true );
+        EndAction();
         pChkBox = nullptr;
+    }
 
     // destroy pointer before next action starts
     if( !pPos && !pChkBox )

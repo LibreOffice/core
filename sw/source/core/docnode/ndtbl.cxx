@@ -4093,7 +4093,7 @@ void SwDoc::ChkBoxNumFormat( SwTableBox& rBox, bool bCallUpdate )
     // Optimization: If the Box says it's Text, it remains Text
     const SwTableBoxNumFormat* pNumFormatItem = rBox.GetFrameFormat()->GetItemIfSet( RES_BOXATR_FORMAT,
         false );
-    if( pNumFormatItem && GetNumberFormatter()->IsTextFormat(pNumFormatItem->GetValue()) )
+    if (pNumFormatItem && GetNumberFormatter()->IsTextFormat(pNumFormatItem->GetValue()))
         return ;
 
     std::unique_ptr<SwUndoTableNumFormat> pUndo;
@@ -4202,10 +4202,7 @@ void SwDoc::ChkBoxNumFormat( SwTableBox& rBox, bool bCallUpdate )
             bChgd = false;
     }
 
-    if( !bChgd )
-        return;
-
-    if( pUndo )
+    if( bChgd && pUndo )
     {
         pUndo->SetBox( rBox );
         GetIDocumentUndoRedo().AppendUndo(std::move(pUndo));
@@ -4222,7 +4219,8 @@ void SwDoc::ChkBoxNumFormat( SwTableBox& rBox, bool bCallUpdate )
         if (AUTOUPD_FIELD_AND_CHARTS == GetDocumentSettingManager().getFieldUpdateFlags(true))
             pTableNd->GetTable().UpdateCharts();
     }
-    getIDocumentState().SetModified();
+    if( bChgd )
+        getIDocumentState().SetModified();
 }
 
 void SwDoc::SetTableBoxFormulaAttrs( SwTableBox& rBox, const SfxItemSet& rSet )
