@@ -20,6 +20,7 @@
 #include <sdr/contact/viewcontactofsdrpage.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/svdmodel.hxx>
 #include <sdr/contact/viewobjectcontactofsdrpage.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -346,9 +347,9 @@ void ViewContactOfInnerPageBorder::createViewIndependentPrimitive2DSequence(draw
     }
     else
     {
-        svtools::ColorConfigValue aBorderConfig = aColorConfig.GetColorValue(svtools::DOCBOUNDARIES);
-        aBorderColor = aBorderConfig.bIsVisible ? aBorderConfig.nColor :
-                           aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor;
+        const bool bShowMargin = rPage.getSdrModelFromSdrPage().IsShowMargin();
+        aBorderColor = bShowMargin ? aColorConfig.GetColorValue(svtools::DOCBOUNDARIES).nColor
+                                   : aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor;
     }
 
     // create page outer border primitive
