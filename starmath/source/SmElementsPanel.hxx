@@ -35,8 +35,10 @@ namespace sm::sidebar
 class SmElementsPanel : public PanelLayout
 {
 public:
-    static std::unique_ptr<PanelLayout> Create(weld::Widget& rParent, const SfxBindings& rBindings);
-    SmElementsPanel(weld::Widget& rParent, const SfxBindings& rBindings);
+    static std::unique_ptr<PanelLayout> Create(weld::Widget& rParent, const SfxBindings& rBindings,
+                                               sal_uInt64 nWindowId);
+
+    SmElementsPanel(weld::Widget& rParent, const SfxBindings& rBindings, sal_uInt64 nWindowId);
     ~SmElementsPanel();
 
 private:
