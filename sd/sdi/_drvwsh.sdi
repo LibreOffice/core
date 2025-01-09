@@ -2962,6 +2962,7 @@ interface DrawView
     SID_MOVE_SHAPE_HANDLE
     [
         ExecMethod = FuTemporary ;
+        ReadOnlyDoc = TRUE ;
     ]
     SID_ATTR_TEXTCOLUMNS_NUMBER
     [
