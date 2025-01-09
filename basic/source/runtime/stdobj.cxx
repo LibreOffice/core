@@ -34,34 +34,37 @@
 // does NOT impose a limit on User defined procedures ). This changes is to
 // allow us space for a flag to denylist some functions in vba mode
 
-#define ARGSMASK_   0x003F  // 63 Arguments
-
-#define COMPATONLY_ 0x0080  // procedure is visible in vba mode only
-#define NORMONLY_   0x0040  // procedure is visible in normal mode only
-#define COMPTMASK_  (COMPATONLY_ | NORMONLY_)  // COMPATIBILITY mask
-
-#define READ_       0x0100  // parameter allows read
-#define WRITE_      0x0200  // parameter allows write
-#define OPT_        0x0400  // parameter is optional
-#define CONST_      0x0800  // property is const
-#define RWMASK_     (READ_ | WRITE_ | OPT_ | CONST_) // mask for R/W-bits
-
-#define FUNC_TYPE_  0x1000  // functional type
-#define SUB_TYPE_   0x2000  // sub type
-#define METHOD_     (FUNC_TYPE_ | SUB_TYPE_)
-#define PROPERTY_   0x4000
-#define OBJECT_     0x8000
-#define TYPEMASK_   (METHOD_ | PROPERTY_ | OBJECT_) // mask for the entry's type
-
-                            // combination of bits above:
-#define FUNCTION_   (FUNC_TYPE_ | READ_)
-#define LFUNCTION_  (FUNC_TYPE_ | READ_ | WRITE_) // mask for function which also works as Lvalue (statement)
-#define SUB_        (SUB_TYPE_)
-#define ROPROP_     (PROPERTY_ | READ_) // mask Read Only-Property
-#define RWPROP_     (PROPERTY_ | READ_ | WRITE_) // mask Read/Write-Property
-#define CPROP_      (PROPERTY_ | READ_ | CONST_) // mask for constant
-
 namespace {
+
+enum Flags
+{
+    ARGSMASK_ = 0x003F,  // 63 Arguments
+
+    NORMONLY_   = 0x0040,  // procedure is visible in normal mode only
+    COMPATONLY_ = 0x0080,  // procedure is visible in vba mode only
+    COMPTMASK_  = (COMPATONLY_ | NORMONLY_),  // COMPATIBILITY mask
+
+    READ_       = 0x0100,  // parameter allows read
+    WRITE_      = 0x0200,  // parameter allows write
+    OPT_        = 0x0400,  // parameter is optional
+    CONST_      = 0x0800,  // property is const
+    RWMASK_     = (READ_ | WRITE_ | OPT_ | CONST_), // mask for R/W-bits
+
+    FUNC_TYPE_  = 0x1000,  // functional type
+    SUB_TYPE_   = 0x2000,  // sub type
+    METHOD_     = (FUNC_TYPE_ | SUB_TYPE_),
+    PROPERTY_   = 0x4000,
+    OBJECT_     = 0x8000,
+    TYPEMASK_   = (METHOD_ | PROPERTY_ | OBJECT_), // mask for the entry's type
+
+    // combination of bits above
+    FUNCTION_   = (FUNC_TYPE_ | READ_),
+    LFUNCTION_  = (FUNC_TYPE_ | READ_ | WRITE_), // mask for function which also works as Lvalue (statement)
+    SUB_        = SUB_TYPE_,
+    ROPROP_     = (PROPERTY_ | READ_), // mask Read Only-Property
+    RWPROP_     = (PROPERTY_ | READ_ | WRITE_), // mask Read/Write-Property
+    CPROP_      = (PROPERTY_ | READ_ | CONST_) // mask for constant
+};
 
 struct Method {
     RtlCall     pFunc;
