@@ -28,6 +28,8 @@ namespace vcl { class Window; }
 namespace com::sun::star::frame { class XController; }
 namespace rtl { template <class reference_type> class Reference; }
 
+#define MAX_PAGES_PER_ROW 15
+
 namespace sd {
 class ViewShell;
 class ViewShellBase;
