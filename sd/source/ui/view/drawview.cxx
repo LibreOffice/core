@@ -27,6 +27,7 @@
 #include <svl/whiter.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
+#include <officecfg/Office/Draw.hxx>
 
 #include <svx/svdundo.hxx>
 #include <svx/strings.hrc>
@@ -505,6 +506,12 @@ void DrawView::CompleteRedraw(OutputDevice* pOutDev, const vcl::Region& rReg, sd
                     return;
             }
         }
+    }
+    else if( pDoc && pDoc->GetDocumentType() == DocumentType::Draw)
+    {
+        //tdf#164185 & tdf#89420
+        bool bShowMargin(officecfg::Office::Draw::Misc::TextObject::ShowBoundary::get());
+        pDoc->SetShowMargin(bShowMargin);
     }
 
     ::sd::View::CompleteRedraw(pOutDev, rReg, pRedirector);

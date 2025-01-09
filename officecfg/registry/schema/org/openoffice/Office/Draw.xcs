@@ -339,6 +339,13 @@
           </info>
           <value>false</value>
         </prop>
+        <prop oor:name="ShowBoundary" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Indicates whether margins get a virtual frame.</desc>
+            <label>Show boundary for margins</label>
+          </info>
+          <value>true</value>
+        </prop>
       </group>
       <group oor:name="CrossFading">
         <info>
