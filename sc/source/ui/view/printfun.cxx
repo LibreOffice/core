@@ -554,11 +554,11 @@ void ScPrintFunc::DrawToDev(ScDocument& rDoc, OutputDevice* pDev, double /* nPri
     bool bTaggedPDF = pPDF && pPDF->GetIsExportTaggedPDF();
     if (bTaggedPDF)
     {
-        bool bReopen = aOutputData.ReopenPDFStructureElement(vcl::PDFWriter::Part);
+        bool bReopen = aOutputData.ReopenPDFStructureElement(vcl::pdf::StructElement::Part);
         if (!bReopen)
         {
             sal_Int32 nId = pPDF->EnsureStructureElement(nullptr);
-            pPDF->InitStructureElement(nId, vcl::PDFWriter::Part, u"Worksheet"_ustr);
+            pPDF->InitStructureElement(nId, vcl::pdf::StructElement::Part, u"Worksheet"_ustr);
             pPDF->BeginStructureElement(nId);
             pPDF->GetScPDFState()->m_WorksheetId = nId;
         }
@@ -1624,11 +1624,11 @@ void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
     bool bTaggedPDF = pPDF && pPDF->GetIsExportTaggedPDF();
     if (bTaggedPDF)
     {
-        bool bReopen = aOutputData.ReopenPDFStructureElement(vcl::PDFWriter::Part);
+        bool bReopen = aOutputData.ReopenPDFStructureElement(vcl::pdf::StructElement::Part);
         if (!bReopen)
         {
             sal_Int32 nId = pPDF->EnsureStructureElement(nullptr);
-            pPDF->InitStructureElement(nId, vcl::PDFWriter::Part, u"Worksheet"_ustr);
+            pPDF->InitStructureElement(nId, vcl::pdf::StructElement::Part, u"Worksheet"_ustr);
             pPDF->BeginStructureElement(nId);
             pPDF->GetScPDFState()->m_WorksheetId = nId;
         }
@@ -1786,7 +1786,7 @@ void ScPrintFunc::PrintHF( tools::Long nPageNo, bool bHeader, tools::Long nStart
     vcl::PDFExtOutDevData* pPDF = dynamic_cast<vcl::PDFExtOutDevData*>(pDev->GetExtOutDevData());
     bool bTaggedPDF = pPDF && pPDF->GetIsExportTaggedPDF();
     if (bTaggedPDF)
-        pPDF->WrapBeginStructureElement(vcl::PDFWriter::NonStructElement);
+        pPDF->WrapBeginStructureElement(vcl::pdf::StructElement::NonStructElement);
 
     const ScPrintHFParam& rParam = bHeader ? aHdr : aFtr;
 

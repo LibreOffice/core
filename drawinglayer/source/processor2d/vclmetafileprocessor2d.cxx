@@ -500,7 +500,7 @@ void VclMetafileProcessor2D::impEndSvtGraphicStroke(SvtGraphicStroke const* pSvt
     }
 }
 
-void VclMetafileProcessor2D::popStructureElement(vcl::PDFWriter::StructElement eElem)
+void VclMetafileProcessor2D::popStructureElement(vcl::pdf::StructElement eElem)
 {
     if (!maListElements.empty() && maListElements.top() == eElem)
     {
@@ -511,14 +511,14 @@ void VclMetafileProcessor2D::popStructureElement(vcl::PDFWriter::StructElement e
 
 void VclMetafileProcessor2D::popListItem()
 {
-    popStructureElement(vcl::PDFWriter::LIBody);
-    popStructureElement(vcl::PDFWriter::ListItem);
+    popStructureElement(vcl::pdf::StructElement::LIBody);
+    popStructureElement(vcl::pdf::StructElement::ListItem);
 }
 
 void VclMetafileProcessor2D::popList()
 {
     popListItem();
-    popStructureElement(vcl::PDFWriter::List);
+    popStructureElement(vcl::pdf::StructElement::List);
 }
 
 VclMetafileProcessor2D::VclMetafileProcessor2D(const geometry::ViewInformation2D& rViewInformation,
@@ -1131,7 +1131,7 @@ void VclMetafileProcessor2D::processControlPrimitive2D(
                                                    mpOutputDevice->GetMapMode());
             pPDFControl->TextFont.SetFontSize(aFontSize);
 
-            mpPDFExtOutDevData->WrapBeginStructureElement(vcl::PDFWriter::Form);
+            mpPDFExtOutDevData->WrapBeginStructureElement(vcl::pdf::StructElement::Form);
             vcl::PDFWriter::StructAttributeValue role;
             switch (pPDFControl->Type)
             {
@@ -1183,9 +1183,10 @@ void VclMetafileProcessor2D::processControlPrimitive2D(
     if (mpPDFExtOutDevData)
     { // no corresponding PDF Form, use Figure instead
         if (!bDecorative)
-            mpPDFExtOutDevData->WrapBeginStructureElement(vcl::PDFWriter::Figure);
+            mpPDFExtOutDevData->WrapBeginStructureElement(vcl::pdf::StructElement::Figure);
         else
-            mpPDFExtOutDevData->WrapBeginStructureElement(vcl::PDFWriter::NonStructElement);
+            mpPDFExtOutDevData->WrapBeginStructureElement(
+                vcl::pdf::StructElement::NonStructElement);
         mpPDFExtOutDevData->SetStructureAttribute(vcl::PDFWriter::Placement, vcl::PDFWriter::Block);
         auto const range(rControlPrimitive.getB2DRange(getViewInformation2D()));
         tools::Rectangle const aLogicRect(basegfx::fround<tools::Long>(range.getMinX()),
@@ -1330,8 +1331,8 @@ void VclMetafileProcessor2D::processTextHierarchyBulletPrimitive2D(
     // this is a part of list item, start LILabel ( = bullet)
     if (mbInListItem)
     {
-        maListElements.push(vcl::PDFWriter::LILabel);
-        mpPDFExtOutDevData->WrapBeginStructureElement(vcl::PDFWriter::LILabel);
+        maListElements.push(vcl::pdf::StructElement::LILabel);
+        mpPDFExtOutDevData->WrapBeginStructureElement(vcl::pdf::StructElement::LILabel);
     }
 
     // process recursively and add MetaFile comment
@@ -1342,7 +1343,7 @@ void VclMetafileProcessor2D::processTextHierarchyBulletPrimitive2D(
 
     if (mbInListItem)
     {
-        if (maListElements.top() == vcl::PDFWriter::LILabel)
+        if (maListElements.top() == vcl::pdf::StructElement::LILabel)
         {
             maListElements.pop();
             mpPDFExtOutDevData->EndStructureElement(); // end LILabel
@@ -1370,7 +1371,7 @@ void VclMetafileProcessor2D::processTextHierarchyParagraphPrimitive2D(
     {
         // No Tagged PDF -> Dump as Paragraph
         // Emulate data handling from old ImpEditEngine::Paint
-        mpPDFExtOutDevData->WrapBeginStructureElement(vcl::PDFWriter::Paragraph);
+        mpPDFExtOutDevData->WrapBeginStructureElement(vcl::pdf::StructElement::Paragraph);
 
         // Process recursively and add MetaFile comment
         process(rParagraphPrimitive);
@@ -1395,8 +1396,8 @@ void VclMetafileProcessor2D::processTextHierarchyParagraphPrimitive2D(
             // increase List level
             for (sal_Int16 a(mnCurrentOutlineLevel); a != nNewOutlineLevel; ++a)
             {
-                maListElements.push(vcl::PDFWriter::List);
-                mpPDFExtOutDevData->WrapBeginStructureElement(vcl::PDFWriter::List);
+                maListElements.push(vcl::pdf::StructElement::List);
+                mpPDFExtOutDevData->WrapBeginStructureElement(vcl::pdf::StructElement::List);
             }
         }
         else // if(nNewOutlineLevel < mnCurrentOutlineLevel)
@@ -1426,14 +1427,14 @@ void VclMetafileProcessor2D::processTextHierarchyParagraphPrimitive2D(
     if (bDumpAsListItem)
     {
         // Dump as ListItem
-        maListElements.push(vcl::PDFWriter::ListItem);
-        mpPDFExtOutDevData->WrapBeginStructureElement(vcl::PDFWriter::ListItem);
+        maListElements.push(vcl::pdf::StructElement::ListItem);
+        mpPDFExtOutDevData->WrapBeginStructureElement(vcl::pdf::StructElement::ListItem);
         mbInListItem = true;
     }
     else
     {
         // Dump as Paragraph
-        mpPDFExtOutDevData->WrapBeginStructureElement(vcl::PDFWriter::Paragraph);
+        mpPDFExtOutDevData->WrapBeginStructureElement(vcl::pdf::StructElement::Paragraph);
     }
 
     // Process recursively and add MetaFile comment
@@ -1476,8 +1477,8 @@ void VclMetafileProcessor2D::processTextSimplePortionPrimitive2D(
     // bullet has been already processed, start LIBody
     if (mbInListItem && mbBulletPresent)
     {
-        maListElements.push(vcl::PDFWriter::LIBody);
-        mpPDFExtOutDevData->WrapBeginStructureElement(vcl::PDFWriter::LIBody);
+        maListElements.push(vcl::pdf::StructElement::LIBody);
+        mpPDFExtOutDevData->WrapBeginStructureElement(vcl::pdf::StructElement::LIBody);
     }
 
     // directdraw of text simple portion; use default processing
@@ -2592,8 +2593,8 @@ void VclMetafileProcessor2D::processStructureTagPrimitive2D(
     ::comphelper::ValueRestorationGuard const g(mpCurrentStructureTag, &rStructureTagCandidate);
 
     // structured tag primitive
-    const vcl::PDFWriter::StructElement& rTagElement(rStructureTagCandidate.getStructureElement());
-    bool bTagUsed((vcl::PDFWriter::NonStructElement != rTagElement));
+    const vcl::pdf::StructElement& rTagElement(rStructureTagCandidate.getStructureElement());
+    bool bTagUsed((vcl::pdf::StructElement::NonStructElement != rTagElement));
     ::std::optional<sal_Int32> oAnchorParent;
 
     if (!rStructureTagCandidate.isTaggedSdrObject())
@@ -2616,26 +2617,26 @@ void VclMetafileProcessor2D::processStructureTagPrimitive2D(
             mpPDFExtOutDevData->WrapBeginStructureElement(rTagElement);
             switch (rTagElement)
             {
-                case vcl::PDFWriter::H1:
-                case vcl::PDFWriter::H2:
-                case vcl::PDFWriter::H3:
-                case vcl::PDFWriter::H4:
-                case vcl::PDFWriter::H5:
-                case vcl::PDFWriter::H6:
-                case vcl::PDFWriter::Paragraph:
-                case vcl::PDFWriter::Heading:
-                case vcl::PDFWriter::Caption:
-                case vcl::PDFWriter::BlockQuote:
-                case vcl::PDFWriter::Table:
-                case vcl::PDFWriter::TableRow:
-                case vcl::PDFWriter::Formula:
-                case vcl::PDFWriter::Figure:
-                case vcl::PDFWriter::Annot:
+                case vcl::pdf::StructElement::H1:
+                case vcl::pdf::StructElement::H2:
+                case vcl::pdf::StructElement::H3:
+                case vcl::pdf::StructElement::H4:
+                case vcl::pdf::StructElement::H5:
+                case vcl::pdf::StructElement::H6:
+                case vcl::pdf::StructElement::Paragraph:
+                case vcl::pdf::StructElement::Heading:
+                case vcl::pdf::StructElement::Caption:
+                case vcl::pdf::StructElement::BlockQuote:
+                case vcl::pdf::StructElement::Table:
+                case vcl::pdf::StructElement::TableRow:
+                case vcl::pdf::StructElement::Formula:
+                case vcl::pdf::StructElement::Figure:
+                case vcl::pdf::StructElement::Annot:
                     mpPDFExtOutDevData->SetStructureAttribute(vcl::PDFWriter::Placement,
                                                               vcl::PDFWriter::Block);
                     break;
-                case vcl::PDFWriter::TableData:
-                case vcl::PDFWriter::TableHeader:
+                case vcl::pdf::StructElement::TableData:
+                case vcl::pdf::StructElement::TableHeader:
                     mpPDFExtOutDevData->SetStructureAttribute(vcl::PDFWriter::Placement,
                                                               vcl::PDFWriter::Inline);
                     break;
@@ -2644,10 +2645,10 @@ void VclMetafileProcessor2D::processStructureTagPrimitive2D(
             }
             switch (rTagElement)
             {
-                case vcl::PDFWriter::Table:
-                case vcl::PDFWriter::Formula:
-                case vcl::PDFWriter::Figure:
-                case vcl::PDFWriter::Annot:
+                case vcl::pdf::StructElement::Table:
+                case vcl::pdf::StructElement::Formula:
+                case vcl::pdf::StructElement::Figure:
+                case vcl::pdf::StructElement::Annot:
                 {
                     auto const range(rStructureTagCandidate.getB2DRange(getViewInformation2D()));
                     tools::Rectangle const aLogicRect(
@@ -2661,11 +2662,11 @@ void VclMetafileProcessor2D::processStructureTagPrimitive2D(
                 default:
                     break;
             }
-            if (rTagElement == vcl::PDFWriter::Annot)
+            if (rTagElement == vcl::pdf::StructElement::Annot)
             {
                 mpPDFExtOutDevData->SetStructureAnnotIds(rStructureTagCandidate.GetAnnotIds());
             }
-            if (rTagElement == vcl::PDFWriter::TableHeader)
+            if (rTagElement == vcl::pdf::StructElement::TableHeader)
             {
                 mpPDFExtOutDevData->SetStructureAttribute(vcl::PDFWriter::Scope,
                                                           vcl::PDFWriter::Column);
@@ -2676,7 +2677,8 @@ void VclMetafileProcessor2D::processStructureTagPrimitive2D(
         {
             // background image: tag as artifact
             if (rStructureTagCandidate.isImage())
-                mpPDFExtOutDevData->WrapBeginStructureElement(vcl::PDFWriter::NonStructElement);
+                mpPDFExtOutDevData->WrapBeginStructureElement(
+                    vcl::pdf::StructElement::NonStructElement);
             // any other background object: do not tag
             else
                 assert(false);

@@ -414,7 +414,7 @@ SwTaggedPDFHelper::SwTaggedPDFHelper( const Num_Info* pNumInfo,
     else if ( mpPorInfo )
         BeginInlineStructureElements();
     else
-        BeginTag( vcl::PDFWriter::NonStructElement, OUString() );
+        BeginTag( vcl::pdf::StructElement::NonStructElement, OUString() );
 
 #if OSL_DEBUG_LEVEL > 1
     nCurrentStruct = mpPDFExtOutDevData->GetCurrentStructureElement();
@@ -540,7 +540,7 @@ void SwTaggedPDFHelper::OpenTagImpl(void const*const pKey)
 }
 
 sal_Int32 SwTaggedPDFHelper::BeginTagImpl(void const*const pKey,
-    vcl::PDFWriter::StructElement const eType, const OUString& rString)
+    vcl::pdf::StructElement const eType, const OUString& rString)
 {
     // write new tag
     const sal_Int32 nId = mpPDFExtOutDevData->EnsureStructureElement(pKey);
@@ -555,7 +555,7 @@ sal_Int32 SwTaggedPDFHelper::BeginTagImpl(void const*const pKey,
     return nId;
 }
 
-void SwTaggedPDFHelper::BeginTag( vcl::PDFWriter::StructElement eType, const OUString& rString )
+void SwTaggedPDFHelper::BeginTag(vcl::pdf::StructElement eType, const OUString& rString)
 {
     void const* pKey(nullptr);
 
@@ -598,12 +598,12 @@ void SwTaggedPDFHelper::BeginTag( vcl::PDFWriter::StructElement eType, const OUS
         SwTextNode const*const pTextNd = rTextFrame.GetTextNodeForParaProps();
         const SwNodeNum* pNodeNum = pTextNd->GetNum(rTextFrame.getRootFrame());
 
-        if ( vcl::PDFWriter::List == eType )
+        if (vcl::pdf::StructElement::List == eType)
         {
             NumListIdMap& rNumListIdMap(mpPDFExtOutDevData->GetSwPDFState()->m_NumListIdMap);
             rNumListIdMap[ pNodeNum ] = nId;
         }
-        else if ( vcl::PDFWriter::LIBody == eType )
+        else if (vcl::pdf::StructElement::LIBody == eType)
         {
             NumListBodyIdMap& rNumListBodyIdMap(mpPDFExtOutDevData->GetSwPDFState()->m_NumListBodyIdMap);
             rNumListBodyIdMap[ pNodeNum ] = nId;
@@ -640,7 +640,7 @@ namespace {
 }
 
 // Sets the attributes according to the structure type.
-void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
+void SwTaggedPDFHelper::SetAttributes(vcl::pdf::StructElement eType)
 {
     sal_Int32 nVal;
 
@@ -669,17 +669,17 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
 
         // Check which attributes to set:
 
-        switch ( eType )
+        switch (eType)
         {
-            case vcl::PDFWriter::Document :
+            case vcl::pdf::StructElement::Document:
                 bWritingMode = true;
                 break;
 
-            case vcl::PDFWriter::Note:
+            case vcl::pdf::StructElement::Note:
                 bPlacement = true;
                 break;
 
-            case vcl::PDFWriter::Table :
+            case vcl::pdf::StructElement::Table:
                 bPlacement =
                 bWritingMode =
                 bSpaceBefore =
@@ -691,15 +691,15 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
                 bBox = true;
                 break;
 
-            case vcl::PDFWriter::TableRow :
+            case vcl::pdf::StructElement::TableRow:
                 bPlacement =
                 bWritingMode = true;
                 break;
 
-            case vcl::PDFWriter::TableHeader :
+            case vcl::pdf::StructElement::TableHeader:
                 mpPDFExtOutDevData->SetStructureAttribute(vcl::PDFWriter::Scope, vcl::PDFWriter::Column);
                 [[fallthrough]];
-            case vcl::PDFWriter::TableData :
+            case vcl::pdf::StructElement::TableData:
                 bPlacement =
                 bWritingMode =
                 bWidth =
@@ -707,21 +707,21 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
                 bRowSpan = true;
                 break;
 
-            case vcl::PDFWriter::Caption:
+            case vcl::pdf::StructElement::Caption:
                 if (pFrame->IsSctFrame())
                 {
                     break;
                 }
                 [[fallthrough]];
-            case vcl::PDFWriter::H1 :
-            case vcl::PDFWriter::H2 :
-            case vcl::PDFWriter::H3 :
-            case vcl::PDFWriter::H4 :
-            case vcl::PDFWriter::H5 :
-            case vcl::PDFWriter::H6 :
-            case vcl::PDFWriter::Paragraph :
-            case vcl::PDFWriter::Heading :
-            case vcl::PDFWriter::BlockQuote :
+            case vcl::pdf::StructElement::H1:
+            case vcl::pdf::StructElement::H2:
+            case vcl::pdf::StructElement::H3:
+            case vcl::pdf::StructElement::H4:
+            case vcl::pdf::StructElement::H5:
+            case vcl::pdf::StructElement::H6:
+            case vcl::pdf::StructElement::Paragraph:
+            case vcl::pdf::StructElement::Heading:
+            case vcl::pdf::StructElement::BlockQuote:
 
                 bPlacement =
                 bWritingMode =
@@ -733,8 +733,8 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
                 bTextAlign = true;
                 break;
 
-            case vcl::PDFWriter::Formula :
-            case vcl::PDFWriter::Figure :
+            case vcl::pdf::StructElement::Formula:
+            case vcl::pdf::StructElement::Figure:
                 bAltText =
                 bPlacement =
                 bWidth =
@@ -742,7 +742,7 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
                 bBox = true;
                 break;
 
-            case vcl::PDFWriter::Division:
+            case vcl::pdf::StructElement::Division:
                 if (pFrame->IsFlyFrame()) // this can be something else too
                 {
                     bAltText = true;
@@ -750,7 +750,7 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
                 }
                 break;
 
-            case vcl::PDFWriter::NonStructElement:
+            case vcl::pdf::StructElement::NonStructElement:
                 if (pFrame->IsHeaderFrame() || pFrame->IsFooterFrame())
                 {
                     // ISO 14289-1:2014, Clause: 7.8
@@ -771,7 +771,7 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
         if ( bPlacement )
         {
             bool bIsFigureInline = false;
-            if (vcl::PDFWriter::Figure == eType)
+            if (vcl::pdf::StructElement::Figure == eType)
             {
                 const SwFrame* pKeyFrame = static_cast<const SwFlyFrame&>(*pFrame).GetAnchorFrame();
                 if (const SwLayoutFrame* pUpperFrame = pKeyFrame->GetUpper())
@@ -779,8 +779,9 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
                         bIsFigureInline = true;
             }
 
-            eVal = vcl::PDFWriter::TableHeader == eType || vcl::PDFWriter::TableData == eType
-                           || bIsFigureInline
+            eVal = vcl::pdf::StructElement::TableHeader == eType
+                || vcl::pdf::StructElement::TableData == eType
+                || bIsFigureInline
                        ? vcl::PDFWriter::Inline
                        : vcl::PDFWriter::Block;
 
@@ -891,10 +892,10 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
         if ( bBox )
         {
             // BBox only for non-split tables:
-            if ( vcl::PDFWriter::Table != eType ||
+            if (vcl::pdf::StructElement::Table != eType ||
                  ( pFrame->IsTabFrame() &&
                    !static_cast<const SwTabFrame*>(pFrame)->IsFollow() &&
-                   !static_cast<const SwTabFrame*>(pFrame)->HasFollow() ) )
+                   !static_cast<const SwTabFrame*>(pFrame)->HasFollow() ))
             {
                 mpPDFExtOutDevData->SetStructureBoundingBox(pFrame->getFrameArea().SVRect());
             }
@@ -956,11 +957,11 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
 
         // Check which attributes to set:
 
-        switch ( eType )
+        switch (eType)
         {
-            case vcl::PDFWriter::Span :
-            case vcl::PDFWriter::Quote :
-            case vcl::PDFWriter::Code :
+            case vcl::pdf::StructElement::Span:
+            case vcl::pdf::StructElement::Quote:
+            case vcl::pdf::StructElement::Code:
                 if( PortionType::HyphenStr == pPor->GetWhichPor() || PortionType::SoftHyphenStr == pPor->GetWhichPor() ||
                     PortionType::Hyphen == pPor->GetWhichPor() || PortionType::SoftHyphen == pPor->GetWhichPor() )
                     bActualText = true;
@@ -972,15 +973,15 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
                 }
                 break;
 
-            case vcl::PDFWriter::Link :
-            case vcl::PDFWriter::BibEntry :
+            case vcl::pdf::StructElement::Link:
+            case vcl::pdf::StructElement::BibEntry:
                 bTextDecorationType =
                 bBaselineShift =
                 bLinkAttribute =
                 bLanguage = true;
                 break;
 
-            case vcl::PDFWriter::RT:
+            case vcl::pdf::StructElement::RT:
                 {
                     SwRubyPortion const*const pRuby(static_cast<SwRubyPortion const*>(pPor));
                     vcl::PDFWriter::StructAttributeValue nAlign = {};
@@ -1025,7 +1026,7 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
                 }
                 break;
 
-            case vcl::PDFWriter::Annot:
+            case vcl::pdf::StructElement::Annot:
                 bAnnotAttribute =
                 bLanguage = true;
                 break;
@@ -1104,7 +1105,7 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
             }
         }
     }
-    else if (mpNumInfo && eType == vcl::PDFWriter::List)
+    else if (mpNumInfo && eType == vcl::pdf::StructElement::List)
     {
         SwTextFrame const& rFrame(mpNumInfo->mrFrame);
         SwTextNode const& rNode(*rFrame.GetTextNodeForParaProps());
@@ -1288,16 +1289,16 @@ void SwTaggedPDFHelper::BeginNumberedListStructureElements()
     const bool bNewItemTag = bNewListTag || pTextNd->IsCountedInList(); // If the text node is not counted, we do not start a new list item:
 
     if ( bNewListTag )
-        BeginTag( vcl::PDFWriter::List, aListString );
+        BeginTag(vcl::pdf::StructElement::List, aListString);
 
     if ( bNewItemTag )
     {
-        BeginTag( vcl::PDFWriter::ListItem, aListItemString );
+        BeginTag(vcl::pdf::StructElement::ListItem, aListItemString);
         assert(rTextFrame.GetPara());
         // check whether to open LBody now or delay until after Lbl
         if (!rTextFrame.GetPara()->HasNumberingPortion(SwParaPortion::OnlyNumbering))
         {
-            BeginTag(vcl::PDFWriter::LIBody, aListBodyString);
+            BeginTag(vcl::pdf::StructElement::LIBody, aListBodyString);
         }
     }
 }
@@ -1329,7 +1330,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
 
             // Document: Document
 
-            nPDFType = vcl::PDFWriter::Document;
+            nPDFType = sal_uInt16(vcl::pdf::StructElement::Document);
             aPDFType = aDocumentString;
             break;
 
@@ -1338,14 +1339,14 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
 
             // Header, Footer: NonStructElement
 
-            nPDFType = vcl::PDFWriter::NonStructElement;
+            nPDFType = sal_uInt16(vcl::pdf::StructElement::NonStructElement);
             break;
 
         case SwFrameType::FtnCont :
 
             // Footnote container: Division
 
-            nPDFType = vcl::PDFWriter::Division;
+            nPDFType = sal_uInt16(vcl::pdf::StructElement::Division);
             aPDFType = aDivString;
             break;
 
@@ -1355,7 +1356,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
 
             // Note: vcl::PDFWriter::Note is actually a ILSE. Nevertheless
             // we treat it like a grouping element!
-            nPDFType = vcl::PDFWriter::Note;
+            nPDFType = sal_uInt16(vcl::pdf::StructElement::Note);
             aPDFType = aNoteString;
             break;
 
@@ -1391,7 +1392,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 }
                 else if (SectionType::ToxHeader == pSection->GetType())
                 {
-                    nPDFType = vcl::PDFWriter::Caption;
+                    nPDFType = sal_uInt16(vcl::pdf::StructElement::Caption);
                     aPDFType = aCaptionString;
                 }
                 else if (SectionType::ToxContent == pSection->GetType())
@@ -1401,19 +1402,19 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                     {
                         if ( TOX_INDEX == pTOXBase->GetType() )
                         {
-                            nPDFType = vcl::PDFWriter::Index;
+                            nPDFType = sal_uInt16(vcl::pdf::StructElement::Index);
                             aPDFType = aIndexString;
                         }
                         else
                         {
-                            nPDFType = vcl::PDFWriter::TOC;
+                            nPDFType = sal_uInt16(vcl::pdf::StructElement::TOC);
                             aPDFType = aTOCString;
                         }
                     }
                 }
                 else if ( SectionType::Content == pSection->GetType() )
                 {
-                    nPDFType = vcl::PDFWriter::Section;
+                    nPDFType = sal_uInt16(vcl::pdf::StructElement::Section);
                     aPDFType = aSectString;
                 }
             }
@@ -1432,7 +1433,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 if (!pTextNd->IsOutline()
                     && rTextFrame.GetPara()->HasNumberingPortion(SwParaPortion::OnlyNumbering))
                 {
-                    sal_Int32 const nId = BeginTagImpl(nullptr, vcl::PDFWriter::LIBody, aListBodyString);
+                    sal_Int32 const nId = BeginTagImpl(nullptr, vcl::pdf::StructElement::LIBody, aListBodyString);
                     SwNodeNum const*const pNodeNum(pTextNd->GetNum(rTextFrame.getRootFrame()));
                     NumListBodyIdMap& rNumListBodyIdMap(mpPDFExtOutDevData->GetSwPDFState()->m_NumListBodyIdMap);
                     rNumListBodyIdMap[ pNodeNum ] = nId;
@@ -1452,14 +1453,14 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 // This is the default. If the paragraph could not be mapped to
                 // any of the standard pdf tags, we write a user defined tag
                 // <stylename> with role = P
-                nPDFType = vcl::PDFWriter::Paragraph;
+                nPDFType = sal_uInt16(vcl::pdf::StructElement::Paragraph);
                 aPDFType = sStyleName;
 
                 // Quotations: BlockQuote
 
                 if (sStyleName == aQuotations)
                 {
-                    nPDFType = vcl::PDFWriter::BlockQuote;
+                    nPDFType = sal_uInt16(vcl::pdf::StructElement::BlockQuote);
                     aPDFType = aBlockQuoteString;
                 }
 
@@ -1467,7 +1468,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
 
                 else if (sStyleName == aCaption)
                 {
-                    nPDFType = vcl::PDFWriter::Caption;
+                    nPDFType = sal_uInt16(vcl::pdf::StructElement::Caption);
                     aPDFType = aCaptionString;
                 }
 
@@ -1475,7 +1476,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
 
                 else if (sParentStyleName == aCaption)
                 {
-                    nPDFType = vcl::PDFWriter::Caption;
+                    nPDFType = sal_uInt16(vcl::pdf::StructElement::Caption);
                     aPDFType = sStyleName + aCaptionString;
                 }
 
@@ -1483,7 +1484,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
 
                 else if (sStyleName == aHeading)
                 {
-                    nPDFType = vcl::PDFWriter::Heading;
+                    nPDFType = sal_uInt16(vcl::pdf::StructElement::Heading);
                     aPDFType = aHString;
                 }
 
@@ -1535,7 +1536,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                     // ... and apparently the extra H7.. must be declared in
                     // RoleMap, or veraPDF complains.
                     nRealLevel = std::min(nRealLevel, 5);
-                    nPDFType =  o3tl::narrowing<sal_uInt16>(vcl::PDFWriter::H1 + nRealLevel);
+                    nPDFType =  o3tl::narrowing<sal_uInt16>(sal_uInt16(vcl::pdf::StructElement::H1) + nRealLevel);
                 }
 
                 // Section: TOCI
@@ -1551,7 +1552,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                         if ( pTOXBase && TOX_INDEX != pTOXBase->GetType() )
                         {
                             // Special case: Open additional TOCI tag:
-                            BeginTagImpl(nullptr, vcl::PDFWriter::TOCI, aTOCIString);
+                            BeginTagImpl(nullptr, vcl::pdf::StructElement::TOCI, aTOCIString);
                         }
                     }
                 }
@@ -1562,7 +1563,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
 
             // TabFrame: Table
 
-            nPDFType = vcl::PDFWriter::Table;
+            nPDFType = sal_uInt16(vcl::pdf::StructElement::Table);
             aPDFType = aTableString;
 
             {
@@ -1616,12 +1617,12 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
 
             if ( !static_cast<const SwRowFrame*>(pFrame)->IsRepeatedHeadline() )
             {
-                nPDFType = vcl::PDFWriter::TableRow;
+                nPDFType = sal_uInt16(vcl::pdf::StructElement::TableRow);
                 aPDFType = aTRString;
             }
             else
             {
-                nPDFType = vcl::PDFWriter::NonStructElement;
+                nPDFType = sal_uInt16(vcl::pdf::StructElement::NonStructElement);
             }
             break;
 
@@ -1633,12 +1634,12 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 const SwTabFrame* pTable = static_cast<const SwCellFrame*>(pFrame)->FindTabFrame();
                 if ( pTable->IsInHeadline( *pFrame ) || lcl_IsHeadlineCell( *static_cast<const SwCellFrame*>(pFrame) ) )
                 {
-                    nPDFType = vcl::PDFWriter::TableHeader;
+                    nPDFType = sal_uInt16(vcl::pdf::StructElement::TableHeader);
                     aPDFType = aTHString;
                 }
                 else
                 {
-                    nPDFType = vcl::PDFWriter::TableData;
+                    nPDFType = sal_uInt16(vcl::pdf::StructElement::TableData);
                     aPDFType = aTDString;
                 }
             }
@@ -1654,7 +1655,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
             // fly in content or fly at page
             if (mpFrameInfo->m_isLink)
             {   // tdf#154939 additional inner link element for flys
-                nPDFType = vcl::PDFWriter::Link;
+                nPDFType = sal_uInt16(vcl::pdf::StructElement::Link);
                 aPDFType = aLinkString;
             }
             else
@@ -1663,7 +1664,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 if (pFly->GetAnchorFrame()->FindFooterOrHeader() != nullptr
                     || pFly->GetFrameFormat()->GetAttrSet().Get(RES_DECORATIVE).GetValue())
                 {
-                    nPDFType = vcl::PDFWriter::NonStructElement;
+                    nPDFType = sal_uInt16(vcl::pdf::StructElement::NonStructElement);
                 }
                 else if (pFly->Lower() && pFly->Lower()->IsNoTextFrame())
                 {
@@ -1682,18 +1683,18 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                     }
                     if ( bFormula )
                     {
-                        nPDFType = vcl::PDFWriter::Formula;
+                        nPDFType = sal_uInt16(vcl::pdf::StructElement::Formula);
                         aPDFType = aFormulaString;
                     }
                     else
                     {
-                        nPDFType = vcl::PDFWriter::Figure;
+                        nPDFType = sal_uInt16(vcl::pdf::StructElement::Figure);
                         aPDFType = aFigureString;
                     }
                 }
                 else
                 {
-                    nPDFType = vcl::PDFWriter::Division;
+                    nPDFType = sal_uInt16(vcl::pdf::StructElement::Division);
                     aPDFType = aDivString;
                 }
             }
@@ -1704,7 +1705,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
 
     if ( USHRT_MAX != nPDFType )
     {
-        BeginTag( static_cast<vcl::PDFWriter::StructElement>(nPDFType), aPDFType );
+        BeginTag(vcl::pdf::StructElement(nPDFType), aPDFType );
     }
 }
 
@@ -1869,7 +1870,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
         case PortionType::PostIts:
             if (!mpPDFExtOutDevData->GetSwPDFState()->m_NoteIdMap.empty())
             {
-                nPDFType = vcl::PDFWriter::Annot;
+                nPDFType = sal_uInt16(vcl::pdf::StructElement::Annot);
                 aPDFType = aAnnotString;
             }
             break;
@@ -1879,7 +1880,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
         // Check for alternative spelling:
         case PortionType::HyphenStr :
         case PortionType::SoftHyphenStr :
-            nPDFType = vcl::PDFWriter::Span;
+            nPDFType = sal_uInt16(vcl::pdf::StructElement::Span);
             aPDFType = aSpanString;
             break;
 
@@ -1903,7 +1904,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                 {
                     if (!isContinueSpan)
                     {
-                        nPDFType = vcl::PDFWriter::Link;
+                        nPDFType = sal_uInt16(vcl::pdf::StructElement::Link);
                         aPDFType = aLinkString;
                         assert(!mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink);
                         mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink.emplace(pInetFormatAttr);
@@ -1916,7 +1917,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                 {
                     if (!isContinueSpan)
                     {
-                        nPDFType = vcl::PDFWriter::Quote;
+                        nPDFType = sal_uInt16(vcl::pdf::StructElement::Quote);
                         aPDFType = aQuoteString;
                         CreateCurrentSpan(rInf, sStyleName);
                     }
@@ -1925,7 +1926,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                 {
                     if (!isContinueSpan)
                     {
-                        nPDFType = vcl::PDFWriter::Code;
+                        nPDFType = sal_uInt16(vcl::pdf::StructElement::Code);
                         aPDFType = aCodeString;
                         CreateCurrentSpan(rInf, sStyleName);
                     }
@@ -1945,7 +1946,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                          nCurrentLanguage  != nDefaultLang ||
                          !sStyleName.isEmpty())
                     {
-                        nPDFType = vcl::PDFWriter::Span;
+                        nPDFType = sal_uInt16(vcl::pdf::StructElement::Span);
                         if (!sStyleName.isEmpty())
                             aPDFType = sStyleName;
                         else
@@ -1957,7 +1958,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
             break;
 
         case PortionType::Footnote :
-            nPDFType = vcl::PDFWriter::Link;
+            nPDFType = sal_uInt16(vcl::pdf::StructElement::Link);
             aPDFType = aLinkString;
             break;
 
@@ -1973,12 +1974,12 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                     const SwField* pField = pHint->GetFormatField().GetField();
                     if ( SwFieldIds::GetRef == pField->Which() )
                     {
-                        nPDFType = vcl::PDFWriter::Link;
+                        nPDFType = sal_uInt16(vcl::pdf::StructElement::Link);
                         aPDFType = aLinkString;
                     }
                     else if ( SwFieldIds::TableOfAuthorities == pField->Which() )
                     {
-                        nPDFType = vcl::PDFWriter::BibEntry;
+                        nPDFType = sal_uInt16(vcl::pdf::StructElement::BibEntry);
                         aPDFType = aBibEntryString;
                     }
                 }
@@ -1994,15 +1995,15 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                     switch (mpPorInfo->m_Mode)
                     {
                         case 0:
-                            nPDFType = vcl::PDFWriter::Ruby;
+                            nPDFType = sal_uInt16(vcl::pdf::StructElement::Ruby);
                             aPDFType = "Ruby";
                         break;
                         case 1:
-                            nPDFType = vcl::PDFWriter::RT;
+                            nPDFType = sal_uInt16(vcl::pdf::StructElement::RT);
                             aPDFType = "RT";
                         break;
                         case 2:
-                            nPDFType = vcl::PDFWriter::RB;
+                            nPDFType = sal_uInt16(vcl::pdf::StructElement::RB);
                             aPDFType = "RB";
                         break;
                     }
@@ -2013,15 +2014,15 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                     switch (mpPorInfo->m_Mode)
                     {
                         case 0:
-                            nPDFType = vcl::PDFWriter::Warichu;
+                            nPDFType = sal_uInt16(vcl::pdf::StructElement::Warichu);
                             aPDFType = "Warichu";
                         break;
                         case 1:
-                            nPDFType = vcl::PDFWriter::WP;
+                            nPDFType = sal_uInt16(vcl::pdf::StructElement::WP);
                             aPDFType = "WP";
                         break;
                         case 2:
-                            nPDFType = vcl::PDFWriter::WT;
+                            nPDFType = sal_uInt16(vcl::pdf::StructElement::WT);
                             aPDFType = "WT";
                         break;
                     }
@@ -2035,7 +2036,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
             assert(!isContinueSpan); // is at start
             if (mpPorInfo->m_Mode == 0)
             {   // tdf#152218 link both directions
-                nPDFType = vcl::PDFWriter::Link;
+                nPDFType = sal_uInt16(vcl::pdf::StructElement::Link);
                 aPDFType = aLinkString;
                 break;
             }
@@ -2046,7 +2047,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
             assert(!isContinueSpan); // is at start
             if (mpPorInfo->m_Mode == 1)
             {   // only works for multiple lines via wrapper from PaintSwFrame
-                nPDFType = vcl::PDFWriter::LILabel;
+                nPDFType = sal_uInt16(vcl::pdf::StructElement::LILabel);
                 aPDFType = aListLabelString;
             }
             break;
@@ -2055,14 +2056,14 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
         case PortionType::TabRight :
         case PortionType::TabCenter :
         case PortionType::TabDecimal :
-            nPDFType = vcl::PDFWriter::NonStructElement;
+            nPDFType = sal_uInt16(vcl::pdf::StructElement::NonStructElement);
             break;
         default: break;
     }
 
     if ( USHRT_MAX != nPDFType )
     {
-        BeginTag( static_cast<vcl::PDFWriter::StructElement>(nPDFType), aPDFType );
+        BeginTag( static_cast<vcl::pdf::StructElement>(nPDFType), aPDFType );
     }
 }
 

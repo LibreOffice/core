@@ -105,8 +105,9 @@ struct SetPageTransition {
     sal_Int32 mnPage;
 };
 struct EnsureStructureElement { sal_Int32 mnId; };
-struct InitStructureElement {
-    PDFWriter::StructElement mParaStructElement;
+struct InitStructureElement
+{
+    vcl::pdf::StructElement mParaStructElement;
     OUString maAlias;
     sal_Int32 mnId;
 };
@@ -768,7 +769,7 @@ sal_Int32 PDFExtOutDevData::EnsureStructureElement(void const*const key)
 }
 
 void PDFExtOutDevData::InitStructureElement(sal_Int32 const id,
-        PDFWriter::StructElement const eType, const OUString& rAlias)
+        vcl::pdf::StructElement const eType, const OUString& rAlias)
 {
     mpPageSyncData->PushAction(mrOutDev, vcl::InitStructureElement{ eType, rAlias, id });
     // update parent: required for hell fly anchor frames in sw, so that on the actual
@@ -783,7 +784,7 @@ void PDFExtOutDevData::BeginStructureElement(sal_Int32 const id)
 }
 
 sal_Int32 PDFExtOutDevData::WrapBeginStructureElement(
-        PDFWriter::StructElement const eType, const OUString& rAlias)
+        vcl::pdf::StructElement const eType, const OUString& rAlias)
 {
     sal_Int32 const id = EnsureStructureElement(nullptr);
     InitStructureElement(id, eType, rAlias);

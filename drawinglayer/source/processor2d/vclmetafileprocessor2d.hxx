@@ -107,7 +107,7 @@ private:
                                    const attribute::LineStartEndAttribute* pEnd);
     void impStartSvtGraphicStroke(SvtGraphicStroke const* pSvtGraphicStroke);
     void impEndSvtGraphicStroke(SvtGraphicStroke const* pSvtGraphicStroke);
-    void popStructureElement(vcl::PDFWriter::StructElement eElem);
+    void popStructureElement(vcl::pdf::StructElement eElem);
     void popListItem();
     void popList();
 
@@ -186,7 +186,7 @@ private:
     bool mbInListItem;
     bool mbBulletPresent;
 
-    std::stack<vcl::PDFWriter::StructElement> maListElements;
+    std::stack<vcl::pdf::StructElement> maListElements;
 
     primitive2d::StructureTagPrimitive2D const* mpCurrentStructureTag = nullptr;
 

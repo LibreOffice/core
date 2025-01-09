@@ -375,7 +375,7 @@ void ViewObjectContact::createStructureTag(drawinglayer::primitive2d::Primitive2
     {
         if (nullptr != pSdrObj && !pSdrObj->IsDecorative())
         {
-            vcl::PDFWriter::StructElement eElement(vcl::PDFWriter::NonStructElement);
+            vcl::pdf::StructElement eElement(vcl::pdf::StructElement::NonStructElement);
             const SdrInventor nInventor(pSdrObj->GetObjInventor());
             const SdrObjKind nIdentifier(pSdrObj->GetObjIdentifier());
             const bool bIsTextObj(nullptr != DynCastSdrTextObj(pSdrObj));
@@ -387,22 +387,22 @@ void ViewObjectContact::createStructureTag(drawinglayer::primitive2d::Primitive2
             if ( nInventor == SdrInventor::Default )
             {
                 if ( nIdentifier == SdrObjKind::Group )
-                    eElement = vcl::PDFWriter::Figure;
+                    eElement = vcl::pdf::StructElement::Figure;
                 else if (nIdentifier == SdrObjKind::Table)
-                    eElement = vcl::PDFWriter::Table;
+                    eElement = vcl::pdf::StructElement::Table;
                 else if (nIdentifier == SdrObjKind::Media)
-                    eElement = vcl::PDFWriter::Annot;
+                    eElement = vcl::pdf::StructElement::Annot;
                 else if ( nIdentifier == SdrObjKind::TitleText )
-                    eElement = vcl::PDFWriter::Heading;
+                    eElement = vcl::pdf::StructElement::Heading;
                 else if ( nIdentifier == SdrObjKind::OutlineText )
-                    eElement = vcl::PDFWriter::Division;
+                    eElement = vcl::pdf::StructElement::Division;
                 else if ( !bIsTextObj || !static_cast<const SdrTextObj&>(*pSdrObj).HasText() )
-                    eElement = vcl::PDFWriter::Figure;
+                    eElement = vcl::pdf::StructElement::Figure;
                 else
-                    eElement = vcl::PDFWriter::Division;
+                    eElement = vcl::pdf::StructElement::Division;
             }
 
-            if(vcl::PDFWriter::NonStructElement != eElement)
+            if(vcl::pdf::StructElement::NonStructElement != eElement)
             {
                 SdrPage* pSdrPage(pSdrObj->getSdrPageFromSdrObject());
 
@@ -418,7 +418,7 @@ void ViewObjectContact::createStructureTag(drawinglayer::primitive2d::Primitive2
                     }
 
                     ::std::vector<sal_Int32> annotIds;
-                    if (eElement == vcl::PDFWriter::Annot
+                    if (eElement == vcl::pdf::StructElement::Annot
                         && !static_cast<SdrMediaObj*>(pSdrObj)->getURL().isEmpty())
                     {
                         auto const pPDFExtOutDevData(GetObjectContact().GetPDFExtOutDevData());
@@ -445,7 +445,7 @@ void ViewObjectContact::createStructureTag(drawinglayer::primitive2d::Primitive2
             rNewPrimitiveSequence = drawinglayer::primitive2d::Primitive2DContainer {
                     new drawinglayer::primitive2d::StructureTagPrimitive2D(
                         // lies to force silly VclMetafileProcessor2D to emit NonStructElement
-                        vcl::PDFWriter::Division,
+                        vcl::pdf::StructElement::Division,
                         true,
                         true,
                         true, // Decorative

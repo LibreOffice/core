@@ -3357,7 +3357,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
             return;
 
         if ( pPDFExtOutDevData )
-            pPDFExtOutDevData->WrapBeginStructureElement(vcl::PDFWriter::Paragraph);
+            pPDFExtOutDevData->WrapBeginStructureElement(vcl::pdf::StructElement::Paragraph);
 
         const tools::Long nParaHeight = rParaPortion.GetHeight();
         if (rParaPortion.IsVisible() && (
@@ -3903,7 +3903,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                                     auto pUrlField = dynamic_cast<const SvxURLField*>(pFieldData);
                                                     if (pUrlField)
                                                         if (pPDFExtOutDevData->GetIsExportTaggedPDF())
-                                                            pPDFExtOutDevData->WrapBeginStructureElement(vcl::PDFWriter::Link, u"Link"_ustr);
+                                                            pPDFExtOutDevData->WrapBeginStructureElement(vcl::pdf::StructElement::Link, u"Link"_ustr);
                                                 }
                                             }
                                         }

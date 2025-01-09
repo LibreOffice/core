@@ -1444,7 +1444,7 @@ bool SwJumpFieldPortion::DescribePDFControl(const SwTextPaintInfo& rInf) const
     if (!m_sHelp.isEmpty())
         aDescriptor.Description = m_sHelp;
 
-    pPDFExtOutDevData->WrapBeginStructureElement(vcl::PDFWriter::Form);
+    pPDFExtOutDevData->WrapBeginStructureElement(vcl::pdf::StructElement::Form);
     pPDFExtOutDevData->CreateControl(aDescriptor);
     pPDFExtOutDevData->EndStructureElement();
 
