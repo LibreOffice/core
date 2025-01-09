@@ -218,7 +218,7 @@ struct SwHTMLTextCollOutputInfo
         bOutDiv( false )
     {}
 
-    bool HasParaToken() const { return aToken.getLength()==1 && aToken[0]=='P'; }
+    bool HasParaToken() const { return aToken == OOO_STRING_SVTOOLS_HTML_parabreak; }
     bool ShouldOutputToken() const { return bOutPara || !HasParaToken(); }
 };
 
