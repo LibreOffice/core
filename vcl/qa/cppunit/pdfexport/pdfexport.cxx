@@ -90,6 +90,50 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testPopupRectangleSize)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf160051)
+{
+    // A tagged PDF file which containing artifacts was added to the sample file as an image.
+    // When the sample file exporting as a tagged PDF, these artifacts are placed into a structure
+    // element (e.g.:figure) which is not allowed.
+
+    uno::Sequence<beans::PropertyValue> aFilterData(
+        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) },
+                                           { "SelectPdfVersion", uno::Any(sal_Int32(17)) } }));
+    aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
+
+    vcl::filter::PDFDocument aDocument;
+    load(u"tdf160051.odt", aDocument);
+
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+
+    // Directly go to the inner XObject Im7.
+    auto pInnerIm = aDocument.LookupObject(7);
+    CPPUNIT_ASSERT(pInnerIm);
+
+    vcl::filter::PDFStreamElement* pStream = pInnerIm->GetStream();
+    CPPUNIT_ASSERT(pStream);
+    SvMemoryStream& rObjectStream = pStream->GetMemory();
+
+    // Uncompress it.
+    SvMemoryStream aUncompressed;
+    ZCodec aZCodec;
+    aZCodec.BeginCompression();
+    rObjectStream.Seek(0);
+    aZCodec.Decompress(rObjectStream, aUncompressed);
+    CPPUNIT_ASSERT(aZCodec.EndCompression());
+
+    auto pStart = static_cast<const char*>(aUncompressed.GetData());
+    const char* pEnd = pStart + aUncompressed.GetSize();
+    OString aStr("/Artifact"_ostr);
+    auto pArtifact = std::search(pStart, pEnd, aStr.getStr(), aStr.getStr() + aStr.getLength());
+
+    // Without the fix in place, this test would have failed with
+    // Expected: The content stream does not contain "/Artifact" element
+    // Actual:   The content stream contains "/Artifact" element
+    CPPUNIT_ASSERT_EQUAL(pArtifact, pEnd);
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testCommentAnnotation)
 {
     // Enable PDF/UA and Comment as PDF annotations

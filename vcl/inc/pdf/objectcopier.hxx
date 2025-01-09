@@ -57,7 +57,8 @@ public:
 
     /// Copies page one or more page streams from rContentStreams into rStream.
     static sal_Int32 copyPageStreams(std::vector<filter::PDFObjectElement*>& rContentStreams,
-                                     SvMemoryStream& rStream, bool& rCompressed);
+                                     SvMemoryStream& rStream, bool& rCompressed,
+                                     bool bIsTaggedNonReferenceXObject = false);
 };
 }
 

@@ -9305,7 +9305,9 @@ void PDFWriterImpl::writeReferenceXObject(const ReferenceXObjectEmit& rEmit)
 
         SvMemoryStream aStream;
         bool bCompressed = false;
-        sal_Int32 nLength = PDFObjectCopier::copyPageStreams(aContentStreams, aStream, bCompressed);
+        bool bIsTaggedNonReferenceXObject = m_aContext.Tagged && !m_aContext.UseReferenceXObject;
+        sal_Int32 nLength = PDFObjectCopier::copyPageStreams(aContentStreams, aStream, bCompressed,
+                                                             bIsTaggedNonReferenceXObject);
         aLine.append(nLength);
 
         aLine.append(">>\nstream\n");

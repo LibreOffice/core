@@ -19,6 +19,8 @@
 #include <pdf/objectcopier.hxx>
 #include <pdf/pdfwriter_impl.hxx>
 
+#include <o3tl/string_view.hxx>
+
 namespace vcl
 {
 PDFObjectCopier::PDFObjectCopier(PDFObjectContainer& rContainer)
@@ -304,7 +306,8 @@ void PDFObjectCopier::copyPageResources(filter::PDFObjectElement* pPage, OString
 }
 
 sal_Int32 PDFObjectCopier::copyPageStreams(std::vector<filter::PDFObjectElement*>& rContentStreams,
-                                           SvMemoryStream& rStream, bool& rCompressed)
+                                           SvMemoryStream& rStream, bool& rCompressed,
+                                           bool bIsTaggedNonReferenceXObject)
 {
     for (auto pContent : rContentStreams)
     {
@@ -344,7 +347,60 @@ sal_Int32 PDFObjectCopier::copyPageStreams(std::vector<filter::PDFObjectElement*
                 continue;
             }
 
-            rStream.WriteBytes(aMemoryStream.GetData(), aMemoryStream.GetSize());
+            bool bHasArtifact = false;
+            if (bIsTaggedNonReferenceXObject)
+            {
+                auto pStart = static_cast<const char*>(aMemoryStream.GetData());
+                const char* const pEnd = pStart + aMemoryStream.GetSize();
+                std::string_view aStreamView(pStart, pEnd - pStart);
+
+                std::string_view sArtifact = "/Artifact";
+                std::size_t nPosArtifact = aStreamView.find(sArtifact);
+                if (nPosArtifact != std::string_view::npos)
+                {
+                    bHasArtifact = true;
+                    SvMemoryStream aTmpStream;
+                    std::string_view sBMC = "BMC";
+                    std::string_view sBDC = "BDC";
+                    std::string_view sEMC = "EMC";
+
+                    while (!aStreamView.empty())
+                    {
+                        aTmpStream.WriteOString(aStreamView.substr(0, nPosArtifact));
+                        aStreamView.remove_prefix(nPosArtifact + sArtifact.size());
+
+                        std::size_t nPosBMC = aStreamView.find(sBMC);
+                        std::size_t nPosBDC = aStreamView.find(sBDC);
+                        std::size_t nPos = std::min(nPosBMC, nPosBDC);
+
+                        if (nPos != std::string_view::npos)
+                        {
+                            if (nPos == nPosBMC)
+                                aStreamView.remove_prefix(nPos + sBMC.size() + 1);
+                            else
+                                aStreamView.remove_prefix(nPos + sBDC.size() + 1);
+
+                            std::size_t nPosEMC = aStreamView.find(sEMC);
+                            if (nPosEMC != std::string_view::npos)
+                            {
+                                aTmpStream.WriteOString(aStreamView.substr(0, nPosEMC));
+                                aStreamView.remove_prefix(nPosEMC + sEMC.size() + 1);
+                            }
+                        }
+
+                        nPosArtifact = aStreamView.find(sArtifact);
+                        if (nPosArtifact == std::string_view::npos)
+                        {
+                            aTmpStream.WriteOString(aStreamView);
+                            break;
+                        }
+                    }
+                    rStream.WriteBytes(aTmpStream.GetData(), aTmpStream.GetSize());
+                }
+            }
+
+            if (!bHasArtifact)
+                rStream.WriteBytes(aMemoryStream.GetData(), aMemoryStream.GetSize());
         }
         else
         {
