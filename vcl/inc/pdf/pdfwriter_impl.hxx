@@ -570,7 +570,7 @@ typedef ::std::variant<ObjReference, ObjReferenceObj, MCIDReference> PDFStructur
 struct PDFStructureElement
 {
     sal_Int32                                           m_nObject;
-    ::std::optional<PDFWriter::StructElement>           m_oType;
+    std::optional<vcl::pdf::StructElement> m_oType;
     OString                                        m_aAlias;
     sal_Int32                                           m_nOwnElement; // index into structure vector
     sal_Int32                                           m_nParentElement; // index into structure vector
@@ -683,8 +683,8 @@ class PDFWriterImpl final : public VirtualDevice, public PDFObjectContainer
 public:
     friend struct vcl::pdf::PDFPage;
 
-    const char* getStructureTag( PDFWriter::StructElement );
-    static const char* getAttributeTag( PDFWriter::StructAttribute eAtr );
+    const char* getStructureTag(vcl::pdf::StructElement eElement);
+    static const char* getAttributeTag(PDFWriter::StructAttribute eAtr );
     static const char* getAttributeValueTag( PDFWriter::StructAttributeValue eVal );
 
     // returns true if compression was done
@@ -844,7 +844,7 @@ private:
     /* the buffer where the data are encrypted, dynamically allocated */
     std::vector<sal_uInt8>                  m_vEncryptionBuffer;
 
-    void addRoleMap(OString aAlias, PDFWriter::StructElement eType);
+    void addRoleMap(OString aAlias, vcl::pdf::StructElement eType);
 
     void checkAndEnableStreamEncryption( sal_Int32 nObject ) override;
 
@@ -1282,7 +1282,7 @@ public:
     void createNote( const tools::Rectangle& rRect, const PDFNote& rNote, sal_Int32 nPageNr );
     // structure elements
     sal_Int32 ensureStructureElement();
-    void initStructureElement(sal_Int32 id, PDFWriter::StructElement eType, std::u16string_view rAlias);
+    void initStructureElement(sal_Int32 id, vcl::pdf::StructElement eType, std::u16string_view rAlias);
     void beginStructureElement(sal_Int32 id);
     void endStructureElement();
     bool setCurrentStructureElement( sal_Int32 nElement );

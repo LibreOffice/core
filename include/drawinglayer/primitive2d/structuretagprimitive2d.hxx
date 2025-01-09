@@ -43,7 +43,7 @@ namespace drawinglayer::primitive2d
         {
         private:
             /// the PDF structure element this grouping represents
-            vcl::PDFWriter::StructElement           maStructureElement;
+            vcl::pdf::StructElement maStructureElement;
 
             /// flag for background object
             bool                                    mbBackground;
@@ -57,7 +57,7 @@ namespace drawinglayer::primitive2d
         public:
             /// constructor
             StructureTagPrimitive2D(
-                const vcl::PDFWriter::StructElement& rStructureElement,
+                const vcl::pdf::StructElement& rStructureElement,
                 bool bBackground,
                 bool bIsImage,
                 Primitive2DContainer&& aChildren,
@@ -65,7 +65,7 @@ namespace drawinglayer::primitive2d
                 ::std::vector<sal_Int32> const* pAnnotIds = nullptr);
 
             /// data read access
-            const vcl::PDFWriter::StructElement& getStructureElement() const { return maStructureElement; }
+            const vcl::pdf::StructElement& getStructureElement() const { return maStructureElement; }
             bool isBackground() const { return mbBackground; }
             bool isImage() const { return mbIsImage; }
             bool isTaggedSdrObject() const;
