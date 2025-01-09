@@ -38,6 +38,8 @@
 #include <unotools/configmgr.hxx>
 #include <comphelper/lok.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/viewsh.hxx>
 
 using namespace sdr;
 
@@ -410,7 +412,15 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                             }
                             else
                             {
-                                if(!IsResizeAllowed(true))
+                                bool bResizeAllowed = IsResizeAllowed(true);
+                                SfxViewShell* pViewShell = GetSfxViewShell();
+                                SfxObjectShell* pObjectShell = pViewShell ? pViewShell->GetObjectShell() : nullptr;
+                                if (!bResizeAllowed && pObjectShell && pObjectShell->GetSignPDFCertificate().is())
+                                {
+                                    // If the just added signature line shape is selected, allow resizing it.
+                                    bResizeAllowed = true;
+                                }
+                                if(!bResizeAllowed)
                                 {
                                     return false;
                                 }
