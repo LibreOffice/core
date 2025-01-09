@@ -822,8 +822,8 @@ bool SwTransferable::WriteObject( SvStream& rOStream,
         xWrt->SetShowProgress(false);
 
 #if defined(DEBUGPASTE)
-        SvFileStream aPasteDebug(OUString(
-            "PASTEBUFFER.debug"), StreamMode::WRITE|StreamMode::TRUNC);
+        SvFileStream aPasteDebug(
+            u"PASTEBUFFER.debug"_ustr, StreamMode::WRITE|StreamMode::TRUNC);
         SwWriter aDbgWrt( aPasteDebug, *pDoc );
         aDbgWrt.Write( xWrt );
 #endif
