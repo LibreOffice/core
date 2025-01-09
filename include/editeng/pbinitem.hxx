@@ -37,7 +37,7 @@ class EDITENG_DLLPUBLIC SvxPaperBinItem final : public SfxByteItem
 {
 public:
     static SfxPoolItem* CreateDefault();
-
+    DECLARE_ITEM_TYPE_FUNCTION(SvxPaperBinItem)
     explicit inline SvxPaperBinItem( const sal_uInt16 nId ,
                             const sal_uInt8 nTray = PAPERBIN_PRINTER_SETTINGS );
 
@@ -50,7 +50,7 @@ public:
 };
 
 inline SvxPaperBinItem::SvxPaperBinItem( const sal_uInt16 nId, const sal_uInt8 nT )
-    : SfxByteItem( nId, nT, SfxItemType::SvxPaperBinItemType )
+    : SfxByteItem( nId, nT )
 {}
 
 #endif

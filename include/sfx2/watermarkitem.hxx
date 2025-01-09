@@ -17,6 +17,7 @@ class SFX2_DLLPUBLIC SfxWatermarkItem final : public SfxPoolItem
 {
 public:
     static SfxPoolItem* CreateDefault();
+    DECLARE_ITEM_TYPE_FUNCTION(SfxWatermarkItem)
     SfxWatermarkItem();
     virtual SfxWatermarkItem* Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;

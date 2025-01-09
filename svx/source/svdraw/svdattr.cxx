@@ -1485,7 +1485,7 @@ bool SdrTextAniAmountItem::GetPresentation(
 
 
 SdrTextFixedCellHeightItem::SdrTextFixedCellHeightItem( bool bUseFixedCellHeight )
-    : SfxBoolItem( SDRATTR_TEXT_USEFIXEDCELLHEIGHT, bUseFixedCellHeight, SfxItemType::SdrTextFixedCellHeightItemType )
+    : SfxBoolItem( SDRATTR_TEXT_USEFIXEDCELLHEIGHT, bUseFixedCellHeight )
 {
 }
 bool SdrTextFixedCellHeightItem::GetPresentation( SfxItemPresentation ePres,

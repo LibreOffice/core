@@ -24,7 +24,7 @@ namespace dbaui
 
     // OptionalBoolItem
     OptionalBoolItem::OptionalBoolItem( sal_uInt16 _nWhich )
-        :SfxPoolItem( _nWhich, SfxItemType::OptionalBoolItemType )
+        :SfxPoolItem( _nWhich )
     {
     }
 

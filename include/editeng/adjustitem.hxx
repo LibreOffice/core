@@ -50,6 +50,7 @@ protected:
 public:
     static SfxPoolItem* CreateDefault();
 
+    DECLARE_ITEM_TYPE_FUNCTION(SvxAdjustItem)
     SvxAdjustItem( const SvxAdjust eAdjst /*= SvxAdjust::Left*/,
                    const sal_uInt16 nId );
 

@@ -32,6 +32,7 @@
 class SVXCORE_DLLPUBLIC XFillTransparenceItem final : public SfxUInt16Item
 {
 public:
+                            DECLARE_ITEM_TYPE_FUNCTION(XFillTransparenceItem)
                             XFillTransparenceItem(sal_uInt16 nFillTransparence = 0);
     virtual XFillTransparenceItem* Clone(SfxItemPool* pPool = nullptr) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,

@@ -47,6 +47,7 @@ public:
     // writer? => Rather have a crooked vales as the default, but the
     // programmer sees that there's something special happening.
 
+    DECLARE_ITEM_TYPE_FUNCTION(SvxLineSpacingItem)
     SvxLineSpacingItem( sal_uInt16 nLineHeight /*= LINE_SPACE_DEFAULT_HEIGHT*/, const sal_uInt16 nId  );
 
     // "pure virtual Methods" from SfxPoolItem

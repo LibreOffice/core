@@ -31,6 +31,7 @@ class SFX2_DLLPUBLIC SfxObjectItem final : public SfxPoolItem
 
 public:
                              static SfxPoolItem* CreateDefault();
+                             DECLARE_ITEM_TYPE_FUNCTION(SfxObjectItem)
                              SfxObjectItem( sal_uInt16 nWhich=0, SfxShell *pSh=nullptr );
 
     virtual bool             operator==( const SfxPoolItem& ) const override;

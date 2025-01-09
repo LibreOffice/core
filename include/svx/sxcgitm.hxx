@@ -29,8 +29,9 @@
 class SdrCaptionGapItem final : public SdrMetricItem
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SdrCaptionGapItem)
     SdrCaptionGapItem(tools::Long nGap = 0)
-        : SdrMetricItem(SDRATTR_CAPTIONGAP, nGap, SfxItemType::SdrCaptionGapItemType)
+        : SdrMetricItem(SDRATTR_CAPTIONGAP, nGap)
     {
     }
     virtual SdrCaptionGapItem* Clone(SfxItemPool*) const override

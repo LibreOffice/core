@@ -28,12 +28,12 @@ class SVL_DLLPUBLIC SfxStringItem: public SfxPoolItem
 {
 public:
     static SfxPoolItem* CreateDefault();
+    DECLARE_ITEM_TYPE_FUNCTION(SfxStringItem)
+    SfxStringItem(sal_uInt16 which = 0)
+        : SfxPoolItem(which) {}
 
-    SfxStringItem(sal_uInt16 which = 0, SfxItemType eItemType = SfxItemType::SfxStringItemType)
-        : SfxPoolItem(which, eItemType) {}
-
-    SfxStringItem(sal_uInt16 which, const OUString & rValue, SfxItemType eItemType = SfxItemType::SfxStringItemType):
-        SfxPoolItem(which, eItemType), m_aValue(rValue) {}
+    SfxStringItem(sal_uInt16 which, const OUString & rValue):
+        SfxPoolItem(which), m_aValue(rValue) {}
 
     virtual bool operator ==(const SfxPoolItem & rItem) const override;
     // Note that all the subclasses are currently marked as false since we haven't check them to

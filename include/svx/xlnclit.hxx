@@ -29,7 +29,8 @@ class SVXCORE_DLLPUBLIC XLineColorItem final : public XColorItem
 {
 public:
             static SfxPoolItem* CreateDefault();
-            XLineColorItem() : XColorItem(SfxItemType::XLineColorItemType) {}
+            DECLARE_ITEM_TYPE_FUNCTION(XLineColorItem)
+            XLineColorItem() : XColorItem() {}
             XLineColorItem(sal_Int32 nIndex, const Color& rTheColor);
             XLineColorItem(const OUString& rName, const Color& rTheColor);
 

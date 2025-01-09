@@ -30,6 +30,7 @@ class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC SvxColorListItem final : public SfxPoolI
 public:
                             static SfxPoolItem* CreateDefault();
 
+                            DECLARE_ITEM_TYPE_FUNCTION(SvxColorListItem)
                             SvxColorListItem();
                             SvxColorListItem( XColorListRef pTable,
                                     TypedWhichId<SvxColorListItem> nWhich  );
@@ -55,6 +56,7 @@ class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC SvxGradientListItem final : public SfxPo
 public:
                             static SfxPoolItem* CreateDefault();
 
+                            DECLARE_ITEM_TYPE_FUNCTION(SvxGradientListItem)
                             SvxGradientListItem();
                             SvxGradientListItem( XGradientListRef pList,
                                     TypedWhichId<SvxGradientListItem> nWhich  );
@@ -79,6 +81,7 @@ class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC SvxHatchListItem final : public SfxPoolI
 
 public:
                             static SfxPoolItem* CreateDefault();
+                            DECLARE_ITEM_TYPE_FUNCTION(SvxHatchListItem)
                             SvxHatchListItem();
                             SvxHatchListItem( XHatchListRef pList,
                                     TypedWhichId<SvxHatchListItem> nWhich  );
@@ -104,6 +107,7 @@ class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC SvxBitmapListItem final : public SfxPool
 public:
                             static SfxPoolItem* CreateDefault();
 
+                            DECLARE_ITEM_TYPE_FUNCTION(SvxBitmapListItem)
                             SvxBitmapListItem();
                             SvxBitmapListItem( XBitmapListRef pBL,
                                     TypedWhichId<SvxBitmapListItem> nWhich  );
@@ -129,6 +133,7 @@ class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC SvxPatternListItem final : public SfxPoo
 public:
                             static SfxPoolItem* CreateDefault();
 
+                            DECLARE_ITEM_TYPE_FUNCTION(SvxPatternListItem)
                             SvxPatternListItem();
                             SvxPatternListItem( XPatternListRef pBL,
                                    TypedWhichId<SvxPatternListItem> nWhich   );
@@ -153,6 +158,7 @@ class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC SvxDashListItem final : public SfxPoolIt
 public:
                             static SfxPoolItem* CreateDefault();
 
+                            DECLARE_ITEM_TYPE_FUNCTION(SvxDashListItem)
                             SvxDashListItem();
                             SvxDashListItem( XDashListRef pList,
                                     TypedWhichId<SvxDashListItem> nWhich  );
@@ -178,6 +184,7 @@ class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC SvxLineEndListItem final : public SfxPoo
 public:
                             static SfxPoolItem* CreateDefault();
 
+                            DECLARE_ITEM_TYPE_FUNCTION(SvxLineEndListItem)
                             SvxLineEndListItem();
                             SvxLineEndListItem( XLineEndListRef pList,
                                     TypedWhichId<SvxLineEndListItem> nWhich  );

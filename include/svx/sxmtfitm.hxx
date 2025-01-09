@@ -29,7 +29,8 @@
 // Abrogate TextUpsideDown, TextRota90 and TextAutoAngle. (n.i.)
 class SdrMeasureTextIsFixedAngleItem final : public SdrYesNoItem {
 public:
-    SdrMeasureTextIsFixedAngleItem(bool bOn=false): SdrYesNoItem(SDRATTR_MEASURETEXTISFIXEDANGLE,bOn, SfxItemType::SdrMeasureTextIsFixedAngleItemType) {}
+    DECLARE_ITEM_TYPE_FUNCTION(SdrMeasureTextIsFixedAngleItem)
+    SdrMeasureTextIsFixedAngleItem(bool bOn=false): SdrYesNoItem(SDRATTR_MEASURETEXTISFIXEDANGLE,bOn) {}
     virtual ~SdrMeasureTextIsFixedAngleItem() override;
     virtual SdrMeasureTextIsFixedAngleItem* Clone(SfxItemPool* pPool=nullptr) const override;
 
@@ -42,8 +43,9 @@ public:
 //Angle of the text in 1/100deg. 0=horizontal; read from left to right. (n.i.)
 class SdrMeasureTextFixedAngleItem final : public SdrAngleItem {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SdrMeasureTextFixedAngleItem)
     SdrMeasureTextFixedAngleItem(Degree100 nVal=0_deg100)
-        : SdrAngleItem(SDRATTR_MEASURETEXTFIXEDANGLE,nVal, SfxItemType::SdrMeasureTextFixedAngleItemType)  {}
+        : SdrAngleItem(SDRATTR_MEASURETEXTFIXEDANGLE,nVal)  {}
     virtual ~SdrMeasureTextFixedAngleItem() override;
     virtual SdrMeasureTextFixedAngleItem* Clone(SfxItemPool* pPool=nullptr) const override;
 
@@ -56,8 +58,9 @@ public:
 // The decimal places used for the measure value
 class SVXCORE_DLLPUBLIC SdrMeasureDecimalPlacesItem final : public SfxInt16Item {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SdrMeasureDecimalPlacesItem)
     SdrMeasureDecimalPlacesItem(sal_Int16 nVal=2)
-        : SfxInt16Item(SDRATTR_MEASUREDECIMALPLACES, nVal, SfxItemType::SdrMeasureDecimalPlacesItemType)  {}
+        : SfxInt16Item(SDRATTR_MEASUREDECIMALPLACES, nVal)  {}
     virtual ~SdrMeasureDecimalPlacesItem() override;
     virtual SdrMeasureDecimalPlacesItem* Clone(SfxItemPool* pPool=nullptr) const override;
 

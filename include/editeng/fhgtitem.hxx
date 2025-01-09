@@ -50,6 +50,7 @@ protected:
 public:
     static SfxPoolItem* CreateDefault();
 
+    DECLARE_ITEM_TYPE_FUNCTION(SvxFontHeightItem)
     SvxFontHeightItem( const sal_uInt32 nSz /*= 240*/, const sal_uInt16 nPropHeight /*= 100*/,
                        const sal_uInt16 nId  );
 

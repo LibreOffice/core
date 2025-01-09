@@ -30,7 +30,7 @@ class EDITENG_DLLPUBLIC SvxOrphansItem final : public SfxByteItem
 {
 public:
     static SfxPoolItem* CreateDefault();
-
+    DECLARE_ITEM_TYPE_FUNCTION(SvxOrphansItem)
     SvxOrphansItem( const sal_uInt8 nL /*= 0*/, const sal_uInt16 nId  );
 
     // "pure virtual Methods" from SfxPoolItem

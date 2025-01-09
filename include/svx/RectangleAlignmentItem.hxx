@@ -27,6 +27,7 @@ class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SvxRectangleAlignmentItem final
     : public SfxEnumItem<model::RectangleAlignment>
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SvxRectangleAlignmentItem)
     SvxRectangleAlignmentItem(sal_uInt16 nWhich, model::RectangleAlignment nValue);
     virtual ~SvxRectangleAlignmentItem() override;
 

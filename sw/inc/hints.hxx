@@ -46,6 +46,7 @@ class SwTableBox;
 class SwMsgPoolItem : public SfxPoolItem
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwMsgPoolItem)
     SwMsgPoolItem( sal_uInt16 nWhich );
 
     // "Overhead" of SfxPoolItem
@@ -60,6 +61,7 @@ class SwPtrMsgPoolItem final : public SwMsgPoolItem
 public:
     void * pObject;
 
+    DECLARE_ITEM_TYPE_FUNCTION(SwPtrMsgPoolItem)
     SwPtrMsgPoolItem( sal_uInt16 nId, void * pObj )
         : SwMsgPoolItem( nId ), pObject( pObj )
     {}
@@ -327,6 +329,7 @@ private:
     std::vector<sal_uInt16> m_aWhichFmtAttrs; // attributes changed inside RES_TXTATR_AUTOFMT
 
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwUpdateAttr)
     SwUpdateAttr( sal_Int32 nS, sal_Int32 nE, sal_uInt16 nW );
     SwUpdateAttr( sal_Int32 nS, sal_Int32 nE, sal_uInt16 nW, std::vector<sal_uInt16> aW );
 
@@ -386,6 +389,7 @@ class SwAttrSetChg final : public SwMsgPoolItem
     SwAttrSet* m_pChgSet;           ///< what has changed
     const SwAttrSet* m_pTheChgdSet; ///< is only used to compare
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwAttrSetChg)
     SwAttrSetChg( const SwAttrSet& rTheSet, SwAttrSet& rSet );
     SwAttrSetChg( const SwAttrSetChg& );
     virtual ~SwAttrSetChg() override;

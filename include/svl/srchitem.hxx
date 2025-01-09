@@ -92,6 +92,7 @@ class SVL_DLLPUBLIC SvxSearchItem final :
 public:
     static SfxPoolItem* CreateDefault();
 
+    DECLARE_ITEM_TYPE_FUNCTION(SvxSearchItem)
     explicit SvxSearchItem( const sal_uInt16 nId );
     SvxSearchItem( const SvxSearchItem& rItem );
     virtual ~SvxSearchItem() override;

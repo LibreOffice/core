@@ -22,7 +22,7 @@
 #include <editeng/bulletitem.hxx>
 
 SvxBulletItem::SvxBulletItem( sal_uInt16 _nWhich )
-    : SfxPoolItem(_nWhich, SfxItemType::SvxBulletItemType)
+    : SfxPoolItem(_nWhich)
     , aFont(OutputDevice::GetDefaultFont( DefaultFontType::FIXED, LANGUAGE_SYSTEM, GetDefaultFontFlags::NONE ))
     , nStart(1)
     , nStyle(SvxBulletStyle::N123)

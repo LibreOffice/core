@@ -48,7 +48,7 @@ class SW_DLLPUBLIC SwFormatFootnoteEndAtTextEnd : public SfxEnumItem<SwFootnoteE
 
 protected:
     SwFormatFootnoteEndAtTextEnd( sal_uInt16 nWhichL, SwFootnoteEndPosEnum ePos )
-        : SfxEnumItem( nWhichL, SfxItemType::SwFormatFootnoteEndAtTextEndType, ePos ), m_nOffset( 0 )
+        : SfxEnumItem( nWhichL, ePos ), m_nOffset( 0 )
     {}
 
 public:
@@ -91,6 +91,7 @@ public:
 class SW_DLLPUBLIC SwFormatFootnoteAtTextEnd final : public SwFormatFootnoteEndAtTextEnd
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwFormatFootnoteAtTextEnd)
     SwFormatFootnoteAtTextEnd( SwFootnoteEndPosEnum ePos = FTNEND_ATPGORDOCEND )
         : SwFormatFootnoteEndAtTextEnd( RES_FTN_AT_TXTEND, ePos )
     {}
@@ -103,6 +104,7 @@ public:
 class SW_DLLPUBLIC SwFormatEndAtTextEnd final : public SwFormatFootnoteEndAtTextEnd
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwFormatEndAtTextEnd)
     SwFormatEndAtTextEnd( SwFootnoteEndPosEnum ePos = FTNEND_ATPGORDOCEND )
         : SwFormatFootnoteEndAtTextEnd( RES_END_AT_TXTEND, ePos )
     {

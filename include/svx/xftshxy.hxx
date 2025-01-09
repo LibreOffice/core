@@ -33,7 +33,7 @@ class SVXCORE_DLLPUBLIC XFormTextShadowXValItem final : public SfxMetricItem
 {
 public:
                             static SfxPoolItem* CreateDefault();
-
+                            DECLARE_ITEM_TYPE_FUNCTION(XFormTextShadowXValItem)
                             XFormTextShadowXValItem(tools::Long nVal = 0);
     virtual XFormTextShadowXValItem* Clone(SfxItemPool* pPool = nullptr) const override;
 };
@@ -48,6 +48,7 @@ class SVXCORE_DLLPUBLIC XFormTextShadowYValItem final : public SfxMetricItem
 {
 public:
                             static SfxPoolItem* CreateDefault();
+                            DECLARE_ITEM_TYPE_FUNCTION(XFormTextShadowYValItem)
                             XFormTextShadowYValItem(tools::Long nVal = 0);
     virtual XFormTextShadowYValItem* Clone(SfxItemPool* pPool = nullptr) const override;
 };

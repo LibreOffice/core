@@ -26,6 +26,7 @@
 class EDITENG_DLLPUBLIC SvxNoHyphenItem final : public SfxBoolItem
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SvxNoHyphenItem)
     SvxNoHyphenItem( const bool bNoHyphen, const sal_uInt16 nId  );
 
     // "pure virtual Methods" from SfxPoolItem

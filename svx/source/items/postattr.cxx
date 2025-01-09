@@ -66,13 +66,13 @@ SvxPostItAuthorItem* SvxPostItAuthorItem::Clone( SfxItemPool * ) const
 }
 
 SvxPostItDateItem::SvxPostItDateItem( TypedWhichId<SvxPostItDateItem> _nWhich )
-    : SfxStringItem(_nWhich, SfxItemType::SvxPostItDateItemType)
+    : SfxStringItem(_nWhich)
 {
 }
 
 
 SvxPostItDateItem::SvxPostItDateItem( const OUString& rDate, TypedWhichId<SvxPostItDateItem> _nWhich ) :
-    SfxStringItem( _nWhich, rDate, SfxItemType::SvxPostItDateItemType )
+    SfxStringItem( _nWhich, rDate )
 {
 }
 

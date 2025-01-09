@@ -31,6 +31,7 @@ private:
 
 public:
     static SfxPoolItem* CreateDefault();
+    DECLARE_ITEM_TYPE_FUNCTION(SfxScriptOrganizerItem)
     SfxScriptOrganizerItem();
 
     virtual SfxScriptOrganizerItem* Clone( SfxItemPool* pPool = nullptr ) const override;

@@ -24,7 +24,7 @@
 SfxPoolItem* SfxVoidItem::CreateDefault() { return new SfxVoidItem(0); }
 
 SfxVoidItem::SfxVoidItem(sal_uInt16 which)
-    : SfxPoolItem(which, SfxItemType::SfxVoidItemType)
+    : SfxPoolItem(which)
 {
 #ifdef DBG_UTIL
     if (0 == which)
@@ -33,7 +33,7 @@ SfxVoidItem::SfxVoidItem(sal_uInt16 which)
 }
 
 SfxVoidItem::SfxVoidItem(const SfxVoidItem& rCopy)
-    : SfxPoolItem(rCopy.Which(), SfxItemType::SfxVoidItemType)
+    : SfxPoolItem(rCopy.Which())
 {
 }
 

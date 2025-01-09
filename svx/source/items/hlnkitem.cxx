@@ -44,7 +44,7 @@ SvxHyperlinkItem::SvxHyperlinkItem( const SvxHyperlinkItem& rHyperlinkItem ):
 SvxHyperlinkItem::SvxHyperlinkItem( TypedWhichId<SvxHyperlinkItem> _nWhich, OUString aName, OUString aURL,
                                     OUString aTarget, OUString aIntName, SvxLinkInsertMode eTyp,
                                     HyperDialogEvent nEvents, SvxMacroTableDtor const *pMacroTbl, OUString aReplacementText):
-    SfxPoolItem (_nWhich, SfxItemType::SvxHyperlinkItemType ),
+    SfxPoolItem (_nWhich ),
     sName       (std::move(aName)),
     sURL        (std::move(aURL)),
     sTarget     (std::move(aTarget)),

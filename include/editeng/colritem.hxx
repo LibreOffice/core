@@ -37,6 +37,7 @@ private:
 public:
     static SfxPoolItem* CreateDefault();
 
+    DECLARE_ITEM_TYPE_FUNCTION(SvxColorItem)
     explicit SvxColorItem(const sal_uInt16 nId);
     SvxColorItem(const Color& aColor, const sal_uInt16 nId);
     SvxColorItem(const Color& aColor, model::ComplexColor const& rComplexColor, const sal_uInt16 nId);

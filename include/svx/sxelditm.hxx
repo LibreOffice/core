@@ -24,13 +24,13 @@
 
 class SAL_DLLPUBLIC_RTTI SdrEdgeLineDeltaCountItem final : public SfxUInt16Item
 {
+    DECLARE_ITEM_TYPE_FUNCTION(SdrEdgeLineDeltaCountItem)
     SdrEdgeLineDeltaCountItem(SdrEdgeLineDeltaCountItem const&) = default;
     void operator=(SdrEdgeLineDeltaCountItem const&) = delete;
 
 public:
     SdrEdgeLineDeltaCountItem(sal_uInt16 nVal = 0)
-        : SfxUInt16Item(SDRATTR_EDGELINEDELTACOUNT, nVal,
-                        SfxItemType::SdrEdgeLineDeltaCountItemType)
+        : SfxUInt16Item(SDRATTR_EDGELINEDELTACOUNT, nVal)
     {
     }
     virtual ~SdrEdgeLineDeltaCountItem() override;

@@ -32,9 +32,9 @@ class IntlWrapper;
 class SW_DLLPUBLIC SwFormatFollowTextFlow final : public SfxBoolItem
 {
 public:
-
+    DECLARE_ITEM_TYPE_FUNCTION(SwFormatFollowTextFlow)
     SwFormatFollowTextFlow( bool bFlag = false )
-        : SfxBoolItem( RES_FOLLOW_TEXT_FLOW, bFlag, SfxItemType::SwFormatFollowTextFlowType )
+        : SfxBoolItem( RES_FOLLOW_TEXT_FLOW, bFlag )
         {}
 
     /// "pure virtual methods" of SfxPoolItem

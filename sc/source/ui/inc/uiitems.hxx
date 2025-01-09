@@ -51,6 +51,7 @@ class ScInputStatusItem : public SfxPoolItem
 
 public:
 
+                            DECLARE_ITEM_TYPE_FUNCTION(ScInputStatusItem)
                             ScInputStatusItem( sal_uInt16 nWhich,
                                                const ScAddress& rCurPos,
                                                const ScAddress& rStartPos,
@@ -127,6 +128,7 @@ public:
 class SC_DLLPUBLIC ScSortItem : public SfxPoolItem
 {
 public:
+                            DECLARE_ITEM_TYPE_FUNCTION(ScSortItem)
                             ScSortItem( sal_uInt16              nWhich,
                                         ScViewData*         ptrViewData,
                                         const ScSortParam*  pSortData );
@@ -148,6 +150,7 @@ private:
 class SC_DLLPUBLIC ScQueryItem : public SfxPoolItem
 {
 public:
+                            DECLARE_ITEM_TYPE_FUNCTION(ScQueryItem)
                             ScQueryItem( sal_uInt16                 nWhich,
                                          ScViewData*            ptrViewData,
                                          const ScQueryParam*    pQueryData );
@@ -175,6 +178,7 @@ private:
 class SC_DLLPUBLIC ScSubTotalItem : public SfxPoolItem
 {
 public:
+                DECLARE_ITEM_TYPE_FUNCTION(ScSubTotalItem)
                 ScSubTotalItem( sal_uInt16                  nWhich,
                                 ScViewData*             ptrViewData,
                                 const ScSubTotalParam*  pSubTotalData );
@@ -194,6 +198,7 @@ private:
 class SC_DLLPUBLIC ScUserListItem : public SfxPoolItem
 {
 public:
+                DECLARE_ITEM_TYPE_FUNCTION(ScUserListItem)
                 ScUserListItem( sal_uInt16 nWhich );
                 ScUserListItem( const ScUserListItem& rItem );
                 virtual ~ScUserListItem() override;
@@ -211,6 +216,7 @@ private:
 class ScConsolidateItem : public SfxPoolItem
 {
 public:
+                DECLARE_ITEM_TYPE_FUNCTION(ScConsolidateItem)
                 ScConsolidateItem( sal_uInt16                    nWhich,
                                    const ScConsolidateParam* pParam );
 
@@ -226,6 +232,7 @@ private:
 class ScPivotItem : public SfxPoolItem
 {
 public:
+                DECLARE_ITEM_TYPE_FUNCTION(ScPivotItem)
                 ScPivotItem( sal_uInt16 nWhich, const ScDPSaveData* pData,
                              const ScRange* pRange, bool bNew );
                 ScPivotItem( const ScPivotItem& rItem );
@@ -247,6 +254,7 @@ private:
 class ScSolveItem : public SfxPoolItem
 {
 public:
+                DECLARE_ITEM_TYPE_FUNCTION(ScSolveItem)
                 ScSolveItem( sal_uInt16              nWhich,
                              const ScSolveParam* pParam );
 
@@ -262,6 +270,7 @@ private:
 class ScTabOpItem : public SfxPoolItem
 {
 public:
+                DECLARE_ITEM_TYPE_FUNCTION(ScTabOpItem)
                 ScTabOpItem( sal_uInt16              nWhich,
                              const ScTabOpParam* pParam );
 

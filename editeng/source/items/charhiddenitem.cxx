@@ -24,7 +24,7 @@
 
 
 SvxCharHiddenItem::SvxCharHiddenItem( const bool bHidden, const sal_uInt16 nId ) :
-    SfxBoolItem( nId, bHidden, SfxItemType::SvxCharHiddenItemType )
+    SfxBoolItem( nId, bHidden )
 {
 }
 

@@ -81,6 +81,7 @@ public:
 class SC_DLLPUBLIC ScTpFormulaItem final : public SfxPoolItem
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(ScTpFormulaItem)
     ScTpFormulaItem( ScFormulaOptions aOpt );
     virtual ~ScTpFormulaItem() override;
 

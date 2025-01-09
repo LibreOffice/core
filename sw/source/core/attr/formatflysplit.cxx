@@ -22,7 +22,7 @@
 #include <libxml/xmlwriter.h>
 
 SwFormatFlySplit::SwFormatFlySplit(bool bSplit)
-    : SfxBoolItem(RES_FLY_SPLIT, bSplit, SfxItemType::SwFormatFlySplitType)
+    : SfxBoolItem(RES_FLY_SPLIT, bSplit)
 {
     // Once this pool item is true, a floating table (text frame + table inside it) is meant to
     // split across multiple pages.

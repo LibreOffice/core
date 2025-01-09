@@ -135,6 +135,7 @@ public:
                               const ScDocOptions& rOpt );
                 virtual ~ScTpCalcItem() override;
 
+    DECLARE_ITEM_TYPE_FUNCTION(ScTpCalcItem)
     ScTpCalcItem(ScTpCalcItem const &) = default;
     ScTpCalcItem(ScTpCalcItem &&) = default;
     ScTpCalcItem & operator =(ScTpCalcItem const &) = delete; // due to SfxPoolItem

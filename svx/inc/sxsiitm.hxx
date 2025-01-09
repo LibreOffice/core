@@ -22,9 +22,9 @@
 
 class SdrScaleItem: public SdrFractionItem {
 public:
-    SdrScaleItem(sal_uInt16 nId, const Fraction& rVal,
-        SfxItemType eItemType = SfxItemType::SdrScaleItemType)
-        : SdrFractionItem(nId,rVal, eItemType) {}
+    DECLARE_ITEM_TYPE_FUNCTION(SdrScaleItem)
+    SdrScaleItem(sal_uInt16 nId, const Fraction& rVal)
+        : SdrFractionItem(nId,rVal) {}
     virtual bool GetPresentation(SfxItemPresentation ePresentation, MapUnit eCoreMetric, MapUnit ePresentationMetric, OUString &rText, const IntlWrapper&) const override;
     virtual SdrScaleItem* Clone(SfxItemPool *pPool=nullptr) const override;
 };

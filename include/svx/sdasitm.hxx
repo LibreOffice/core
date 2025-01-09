@@ -61,6 +61,7 @@ private:
     public:
 
             SAL_DLLPRIVATE SdrCustomShapeGeometryItem();
+            DECLARE_ITEM_TYPE_FUNCTION(SdrCustomShapeGeometryItem)
             SdrCustomShapeGeometryItem( const css::uno::Sequence< css::beans::PropertyValue >& );
             virtual ~SdrCustomShapeGeometryItem() override;
 

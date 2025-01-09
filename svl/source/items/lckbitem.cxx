@@ -28,7 +28,7 @@ SfxPoolItem* SfxLockBytesItem::CreateDefault() { return new SfxLockBytesItem; }
 
 
 SfxLockBytesItem::SfxLockBytesItem()
-    : SfxPoolItem(0, SfxItemType::SfxLockBytesItemType)
+    : SfxPoolItem(0)
 {
 }
 

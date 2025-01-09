@@ -41,7 +41,7 @@ using namespace ::com::sun::star;
 SfxPoolItem* SvxPageItem::CreateDefault() { return new SvxPageItem(TypedWhichId<SvxPageItem>(0));}
 
 SvxPageItem::SvxPageItem( const TypedWhichId<SvxPageItem> nId )
-    : SfxPoolItem( nId, SfxItemType::SvxPageItemType ),
+    : SfxPoolItem( nId ),
 
     eNumType    ( SVX_NUM_ARABIC ),
     bLandscape  ( false ),

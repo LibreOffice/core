@@ -31,7 +31,7 @@ class EDITENG_DLLPUBLIC SfxHyphenRegionItem final : public SfxPoolItem
     sal_uInt8 nMinTrail;
 
 public:
-
+    DECLARE_ITEM_TYPE_FUNCTION(SfxHyphenRegionItem)
     SfxHyphenRegionItem( const sal_uInt16 nId  );
 
     virtual bool             operator==( const SfxPoolItem& ) const override;

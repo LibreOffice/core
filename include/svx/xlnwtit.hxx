@@ -29,6 +29,7 @@ class SVXCORE_DLLPUBLIC XLineWidthItem final : public SfxMetricItem
 {
 public:
                             static SfxPoolItem* CreateDefault();
+                            DECLARE_ITEM_TYPE_FUNCTION(XLineWidthItem)
                             XLineWidthItem(tools::Long nWidth = 0);
     virtual XLineWidthItem* Clone(SfxItemPool* pPool = nullptr) const override;
 

@@ -30,6 +30,7 @@
 class SW_DLLPUBLIC SwFormatWrapTextAtFlyStart final : public SfxBoolItem
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwFormatWrapTextAtFlyStart)
     SwFormatWrapTextAtFlyStart(bool bAtStart = false);
 
     SwFormatWrapTextAtFlyStart* Clone(SfxItemPool* pPool = nullptr) const override;

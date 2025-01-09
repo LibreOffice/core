@@ -32,6 +32,7 @@
 class SVXCORE_DLLPUBLIC XGradientStepCountItem final : public SfxUInt16Item
 {
 public:
+                            DECLARE_ITEM_TYPE_FUNCTION(XGradientStepCountItem)
                             XGradientStepCountItem( sal_uInt16 nStepCount = 0 );
     virtual XGradientStepCountItem* Clone( SfxItemPool* pPool = nullptr ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,

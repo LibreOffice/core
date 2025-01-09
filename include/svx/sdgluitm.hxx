@@ -31,9 +31,9 @@
 class SVXCORE_DLLPUBLIC SdrGrafLuminanceItem final : public SdrSignedPercentItem
 {
 public:
-
+    DECLARE_ITEM_TYPE_FUNCTION(SdrGrafLuminanceItem)
     SdrGrafLuminanceItem( short nLuminancePercent = 0 )
-        : SdrSignedPercentItem( SDRATTR_GRAFLUMINANCE, nLuminancePercent, SfxItemType::SdrGrafLuminanceItemType ) {}
+        : SdrSignedPercentItem( SDRATTR_GRAFLUMINANCE, nLuminancePercent ) {}
 
     virtual SdrGrafLuminanceItem* Clone( SfxItemPool* pPool = nullptr ) const override;
 };
@@ -45,9 +45,9 @@ public:
 class SVXCORE_DLLPUBLIC SdrGrafContrastItem final : public SdrSignedPercentItem
 {
 public:
-
+    DECLARE_ITEM_TYPE_FUNCTION(SdrGrafContrastItem)
     SdrGrafContrastItem( short nContrastPercent = 0 )
-        : SdrSignedPercentItem( SDRATTR_GRAFCONTRAST, nContrastPercent, SfxItemType::SdrGrafContrastItemType ) {}
+        : SdrSignedPercentItem( SDRATTR_GRAFCONTRAST, nContrastPercent ) {}
 
     virtual SdrGrafContrastItem* Clone( SfxItemPool* pPool = nullptr ) const override;
 };

@@ -105,7 +105,16 @@ enum class SfxItemState {
     SET      = 0x0040
 };
 
-enum class SfxItemType : sal_uInt16 {
+/**
+ * These defines SfxItemType. Each derivation from SfxPoolItem needs one
+ * unique value that is returned in the call to ItemType(). This is done
+ * using DECLARE_ITEM_TYPE_FUNCTION in the public section of each definition
+ * of a derivation of SfxItemType, also for types derived deeper than one
+ * step. It overloads virtual SfxItemType ItemType() with the secified
+ * type, see that macro.
+*/
+enum class SfxItemType : sal_uInt16
+{
     AffineMatrixItemType,
     CntByteItemType,
     CntInt32ItemType,
@@ -117,11 +126,11 @@ enum class SfxItemType : sal_uInt16 {
     InvalidOrDisabledItemType,
     MediaItemType,
     NameOrIndexType,
-    OStringListItemType,
     OfaPtrItemType,
     OfaXColorListItemType,
     OptionalBoolItemType,
-    RectangleAlignmentType,
+    OStringListItemType,
+    SampleItemType,
     SbxItemType,
     ScCondFormatItemType,
     ScConsolidateItemType,
@@ -130,6 +139,7 @@ enum class SfxItemType : sal_uInt16 {
     ScInputStatusItemType,
     ScLineBreakCellType,
     ScMergeAttrType,
+    ScMergeFlagAttrType,
     ScPageHFItemType,
     ScPageScaleToItemType,
     ScPivotItemType,
@@ -149,6 +159,7 @@ enum class SfxItemType : sal_uInt16 {
     ScUserListItemType,
     ScVerticalStackCellType,
     ScViewObjectModeItemType,
+    SdOptionsGridItemType,
     SdOptionsMiscItemType,
     SdOptionsPrintItemType,
     SdrAllPositionXItemType,
@@ -157,12 +168,12 @@ enum class SfxItemType : sal_uInt16 {
     SdrAllSizeWidthItemType,
     SdrAngleItemType,
     SdrCaptionAngleItemType,
-    SdrCaptionGapItemType,
     SdrCaptionEscAbsItemType,
     SdrCaptionEscDirItemType,
-    SdrCaptionEscRelItemType,
     SdrCaptionEscIsRelItemType,
+    SdrCaptionEscRelItemType,
     SdrCaptionFitLineLenItemType,
+    SdrCaptionGapItemType,
     SdrCaptionLineLenItemType,
     SdrCaptionTypeItemType,
     SdrCircKindItemType,
@@ -178,21 +189,23 @@ enum class SfxItemType : sal_uInt16 {
     SdrFractionItemType,
     SdrGrafBlueItemType,
     SdrGrafContrastItemType,
-    SdrGrafCropType,
+    SdrGrafCropItemType,
     SdrGrafGamma100ItemType,
     SdrGrafGreenItemType,
-    SdrGrafLuminanceItemType,
-    SdrGrafRedItemType,
     SdrGrafInvertItemType,
-    SdrGrafModeItem_Base,
+    SdrGrafLuminanceItemType,
+    SdrGrafModeItemType,
+    SdrGrafModeItem_BaseType,
+    SdrGrafRedItemType,
     SdrGrafTransparenceItemType,
+    SdrHorzShearAllItemType,
+    SdrHorzShearOneItemType,
     SdrLayerIdItemType,
     SdrLayerNameItemType,
     SdrLogicSizeHeightItemType,
     SdrLogicSizeWidthItemType,
     SdrMeasureBelowRefEdgeItemType,
     SdrMeasureDecimalPlacesItemType,
-    SdrMeasureFormatStringItemType,
     SdrMeasureKindItemType,
     SdrMeasureOverhangItemType,
     SdrMeasureScaleItemType,
@@ -229,30 +242,30 @@ enum class SfxItemType : sal_uInt16 {
     SdrTextAniCountItemType,
     SdrTextAniDelayItemType,
     SdrTextAniDirectionItemType,
+    SdrTextAniKindItemType,
     SdrTextAniStartInsideItemType,
     SdrTextAniStopInsideItemType,
-    SdrTextAniKindItemType,
     SdrTextFitToSizeTypeItemType,
     SdrTextFixedCellHeightItemType,
-    SdrTextHorzAdjustType,
-    SdrTextVertAdjustType,
+    SdrTextHorzAdjustItemType,
+    SdrTextVertAdjustItemType,
     SdrTransformRef1XItemType,
     SdrTransformRef1YItemType,
     SdrTransformRef2XItemType,
     SdrTransformRef2YItemType,
-    SdrHorzShearAllItemType,
     SdrVertShearAllItemType,
-    SdrHorzShearOneItemType,
     SdrVertShearOneItemType,
     SdrYesNoItemType,
     SfxBoolItemType,
     SfxByteItemType,
     SfxDocumentInfoItemType,
+    SfxEnumItemInterfaceType,
     SfxEventNamesItemType,
     SfxFlagItemType,
     SfxFrameItemType,
     SfxGlobalNameItemType,
     SfxGrabBagItemType,
+    SfxHyphenRegionItemType,
     SfxImageItemType,
     SfxInt16ItemType,
     SfxInt32ItemType,
@@ -261,13 +274,11 @@ enum class SfxItemType : sal_uInt16 {
     SfxLinkItemType,
     SfxLockBytesItemType,
     SfxMacroInfoItemType,
-    SfxMetricItemType,
     SfxObjectItemType,
     SfxObjectShellItemType,
     SfxPointItemType,
     SfxRangeItemType,
     SfxRectangleItemType,
-    SfxRegionItemType,
     SfxScriptOrganizerItemType,
     SfxSetItemType,
     SfxStringItemType,
@@ -282,7 +293,6 @@ enum class SfxItemType : sal_uInt16 {
     SfxVisibilityItemType,
     SfxVoidItemType,
     SfxWatermarkItemType,
-    SfxZoomItemType,
     Svx3DCharacterModeItemType,
     Svx3DCloseBackItemType,
     Svx3DCloseFrontItemType,
@@ -296,7 +306,6 @@ enum class SfxItemType : sal_uInt16 {
     Svx3DTextureModeItemType,
     Svx3DTextureProjectionXItemType,
     Svx3DTextureProjectionYItemType,
-    SvXMLAttrContainerItemType,
     SvxAdjustItemType,
     SvxAutoKernItemType,
     SvxB3DVectorItemType,
@@ -333,6 +342,8 @@ enum class SfxItemType : sal_uInt16 {
     SvxFontListItemType,
     SvxForbiddenRuleItemType,
     SvxFormatBreakItemType,
+    SvxFormatKeepItemType,
+    SvxFormatSplitItemType,
     SvxFrameDirectionItemType,
     SvxGalleryItemType,
     SvxGradientListItemType,
@@ -348,42 +359,50 @@ enum class SfxItemType : sal_uInt16 {
     SvxHyphenZoneItemType,
     SvxJustifyMethodItemType,
     SvxKerningItemType,
-    SvxLRSpaceItemType,
     SvxLanguageItemType,
+    SvxLanguageItem_BaseType,
     SvxLeftMarginItemType,
     SvxLineEndListItemType,
     SvxLineItemType,
     SvxLineSpacingItemType,
     SvxLongLRSpaceItemType,
     SvxLongULSpaceItemType,
+    SvxLRSpaceItemType,
     SvxMacroItemType,
     SvxMarginItemType,
+    SvXMLAttrContainerItemType,
     SvxNoHyphenItemType,
-    SvxNumBulletItemType,
     SvxNumberInfoItemType,
+    SvxNumBulletItemType,
     SvxObjectItemType,
     SvxOpaqueItemType,
     SvxOrientationItemType,
     SvxOrphansItemType,
     SvxOverlineItemType,
     SvxPageItemType,
+    SvxPageModelItemType,
     SvxPagePosSizeItemType,
     SvxPaperBinItemType,
     SvxParaGridItemType,
     SvxParaVertAlignItemType,
     SvxPatternListItemType,
+    SvxPostItAuthorItemType,
     SvxPostItDateItemType,
+    SvxPostItIdItemType,
+    SvxPostItTextItemType,
     SvxPostureItemType,
     SvxPrintItemType,
     SvxProtectItemType,
+    SvxRectangleAlignmentItemType,
     SvxRightMarginItemType,
     SvxRotateModeItemType,
     SvxRsidItemType,
     SvxScriptSetItemType,
     SvxScriptSpaceItemType,
     SvxSearchItemType,
-    SvxShadowItemType,
+    SvxSetItemType,
     SvxShadowedItemType,
+    SvxShadowItemType,
     SvxSizeItemType,
     SvxSmartTagItemType,
     SvxStatusItemType,
@@ -392,22 +411,26 @@ enum class SfxItemType : sal_uInt16 {
     SvxTextLineItemType,
     SvxTextRotateItemType,
     SvxTwoLinesItemType,
-    SvxUnderlineItemType,
     SvxULSpaceItemType,
+    SvxUnderlineItemType,
     SvxVerJustifyItemType,
     SvxViewLayoutItemType,
     SvxWeightItemType,
     SvxWidowsItemType,
-    SvxWordLineItemType,
+    SvxWordLineModeItemType,
     SvxWritingModeItemType,
+    SvxZoomItemType,
     SvxZoomSliderItemType,
     SwAddPrinterItemType,
-    SwChannelGrfType,
+    SwAttrSetChgType,
+    SwChannelBGrfType,
+    SwChannelGGrfType,
+    SwChannelRGrfType,
     SwCondCollItemType,
     SwContrastGrfType,
     SwCropGrfType,
     SwDocDisplayItemType,
-    SwDrawModeGrf_BaseType,
+    SwDrawModeGrfType,
     SwElemItemType,
     SwEnvItemType,
     SwFltAnchorType,
@@ -421,25 +444,26 @@ enum class SfxItemType : sal_uInt16 {
     SwFormatChainType,
     SwFormatCharFormatType,
     SwFormatColType,
-    SwFormatContentControlType,
     SwFormatContentType,
+    SwFormatContentControlType,
     SwFormatDropType,
-    SwFormatEditInReadonly,
+    SwFormatEditInReadonlyType,
+    SwFormatEndAtTextEndType,
     SwFormatFieldType,
-    SwFormatFrameSizeType,
     SwFormatFillOrderType,
     SwFormatFlyCntType,
     SwFormatFlySplitType,
     SwFormatFollowTextFlowType,
     SwFormatFooterType,
-    SwFormatFootnoteEndAtTextEndType,
     SwFormatFootnoteType,
+    SwFormatFootnoteAtTextEndType,
+    SwFormatFrameSizeType,
     SwFormatHeaderType,
     SwFormatHoriOrientType,
     SwFormatINetFormatType,
     SwFormatLayoutSplitType,
+    SwFormatLineBreakType,
     SwFormatLineNumberType,
-    SwFormatLinebreakType,
     SwFormatMetaType,
     SwFormatNoBalancedColumnsType,
     SwFormatPageDescType,
@@ -449,7 +473,7 @@ enum class SfxItemType : sal_uInt16 {
     SwFormatSurroundType,
     SwFormatURLType,
     SwFormatVertOrientType,
-    SwFormatWrapInfluenceOnOjPosType,
+    SwFormatWrapInfluenceOnObjPosType,
     SwFormatWrapTextAtFlyStartType,
     SwGammaGrfType,
     SwHeaderAndFooterEatSpacingItemType,
@@ -459,18 +483,22 @@ enum class SfxItemType : sal_uInt16 {
     SwMirrorGrfType,
     SwMsgPoolItemType,
     SwNumRuleItemType,
-    SwPaMItemType,
     SwPageFootnoteInfoItemType,
+    SwPaMItemType,
+    SwParaConnectBorderItemType,
     SwPtrItemType,
+    SwPtrMsgPoolItemType,
+    SwRegisterItemType,
     SwRotationGrfType,
     SwShadowCursorItemType,
-    SwTOXMarkType,
+    SwTableBoxFormulaType,
     SwTableBoxNumFormatType,
     SwTableBoxValueType,
-    SwTableFormulaType,
     SwTextGridItemType,
+    SwTOXMarkType,
     SwTransparencyGrfType,
     SwUINumRuleItemType,
+    SwUpdateAttrType,
     SwWrtShellItemType,
     XColorItemType,
     XFillAttrSetItemType,
@@ -514,7 +542,7 @@ enum class SfxItemType : sal_uInt16 {
     XLineEndItemType,
     XLineEndWidthItemType,
     XLineJointItemType,
-    XLineStartCenterItem,
+    XLineStartCenterItemType,
     XLineStartItemType,
     XLineStartWidthItemType,
     XLineStyleItemType,
@@ -538,6 +566,9 @@ class SfxItemSet;
 typedef struct _xmlTextWriter* xmlTextWriterPtr;
 class ItemInstanceManager;
 
+#define DECLARE_ITEM_TYPE_FUNCTION(T) \
+    virtual SfxItemType ItemType() const override { return SfxItemType::T##Type; }
+
 class SVL_DLLPUBLIC SfxPoolItem
 {
     friend class SfxItemPool;
@@ -552,7 +583,6 @@ class SVL_DLLPUBLIC SfxPoolItem
 
     mutable sal_uInt32 m_nRefCount;
     sal_uInt16  m_nWhich;
-    SfxItemType m_eItemType;
 
 #ifdef DBG_UTIL
     // for debugging add a serial number, will be set in the constructor
@@ -641,10 +671,11 @@ private:
     }
 
 protected:
-
-                             explicit SfxPoolItem( sal_uInt16 nWhich, SfxItemType );
-                             SfxPoolItem( const SfxPoolItem& rCopy)
-                                 : SfxPoolItem(rCopy.m_nWhich, rCopy.m_eItemType) {}
+    // costructors are protected; SfxPoolItem is a base
+    // class and ought bot to be constructed (also guaranteed
+    // by pure virtual function ItemType now)
+    explicit SfxPoolItem(sal_uInt16 nWhich);
+    SfxPoolItem(const SfxPoolItem& rCopy) : SfxPoolItem(rCopy.m_nWhich) {}
 
 public:
     virtual                  ~SfxPoolItem();
@@ -655,8 +686,8 @@ public:
                                  assert(m_nRefCount==0);
                                  m_nWhich = nId;
                              }
-    sal_uInt16               Which() const { return m_nWhich; }
-    SfxItemType              ItemType() const { return m_eItemType;}
+    sal_uInt16 Which() const { return m_nWhich; }
+    virtual SfxItemType ItemType() const = 0;
 
     // StaticWhichCast asserts if the TypedWhichId is not matching its type, otherwise it returns a reference.
     // You can use StaticWhichCast when you are sure about the type at compile time -- like a static_cast.
@@ -758,7 +789,7 @@ private:
 // each SfxPoolItem (except when !isShareable()). It just
 // uses an unordered_set holding ptrs to SfxPoolItems added
 // and SfxPoolItem::operator== to linearly search for one.
-// Thus this is not the fastest, but as fast as old 'poooled'
+// Thus this is not the fastest, but as fast as old 'pooled'
 // stuff - better use an intelligent, pro-Item implementation
 // that does e.g. hashing or whatever might be feasible for
 // that specific Item (see other derivations)

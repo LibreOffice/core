@@ -50,6 +50,7 @@ namespace com::sun::star::frame { class XFrame; }
 class SFX2_DLLPUBLIC SfxTabDialogItem final : public SfxSetItem
 {
 public:
+                            DECLARE_ITEM_TYPE_FUNCTION(SfxTabDialogItem)
                             SfxTabDialogItem( sal_uInt16 nId, const SfxItemSet& rItemSet );
                             SfxTabDialogItem(const SfxTabDialogItem& rAttr, SfxItemPool* pItemPool);
     virtual SfxTabDialogItem* Clone(SfxItemPool* pToPool = nullptr) const override;

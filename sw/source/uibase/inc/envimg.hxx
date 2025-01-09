@@ -53,6 +53,7 @@ public:
     sal_Int32       m_nShiftRight;     // shift to right (twips)
     sal_Int32       m_nShiftDown;      // shift down (twips)
 
+    DECLARE_ITEM_TYPE_FUNCTION(SwEnvItem)
     SwEnvItem();
 
     static SfxPoolItem* CreateDefault();

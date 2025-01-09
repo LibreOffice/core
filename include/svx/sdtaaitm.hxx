@@ -25,7 +25,8 @@
 
 class SVXCORE_DLLPUBLIC SdrTextAniAmountItem final : public SfxInt16Item {
 public:
-    SdrTextAniAmountItem(sal_Int16 nVal=0): SfxInt16Item(SDRATTR_TEXT_ANIAMOUNT, nVal, SfxItemType::SdrTextAniAmountItemType) {}
+    DECLARE_ITEM_TYPE_FUNCTION(SdrTextAniAmountItem)
+    SdrTextAniAmountItem(sal_Int16 nVal=0): SfxInt16Item(SDRATTR_TEXT_ANIAMOUNT, nVal) {}
     virtual SdrTextAniAmountItem* Clone(SfxItemPool* pPool=nullptr) const override;
     virtual bool HasMetrics() const override;
     virtual void ScaleMetrics(tools::Long nMul, tools::Long nDiv) override;

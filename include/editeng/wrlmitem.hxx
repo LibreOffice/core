@@ -34,7 +34,7 @@ class EDITENG_DLLPUBLIC SvxWordLineModeItem final : public SfxBoolItem
 {
 public:
     static SfxPoolItem* CreateDefault();
-
+    DECLARE_ITEM_TYPE_FUNCTION(SvxWordLineModeItem)
     SvxWordLineModeItem( const bool bWordLineMode /*= false*/,
                      const sal_uInt16 nId  );
 

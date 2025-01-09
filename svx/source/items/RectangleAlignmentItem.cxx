@@ -12,7 +12,7 @@
 
 SvxRectangleAlignmentItem::SvxRectangleAlignmentItem(sal_uInt16 nWhich,
                                                      model::RectangleAlignment nValue)
-    : SfxEnumItem<model::RectangleAlignment>(nWhich, SfxItemType::RectangleAlignmentType, nValue)
+    : SfxEnumItem<model::RectangleAlignment>(nWhich, nValue)
 {
 }
 

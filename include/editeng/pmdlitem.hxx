@@ -36,7 +36,7 @@ private:
 
 public:
     static SfxPoolItem* CreateDefault();
-
+    DECLARE_ITEM_TYPE_FUNCTION(SvxPageModelItem)
     explicit inline SvxPageModelItem( TypedWhichId<SvxPageModelItem> nWh  );
     inline SvxPageModelItem( const OUString& rModel, bool bA /*= false*/,
                              TypedWhichId<SvxPageModelItem> nWh  );

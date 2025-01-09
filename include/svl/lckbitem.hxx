@@ -33,6 +33,7 @@ public:
                             SfxLockBytesItem();
                             virtual ~SfxLockBytesItem() override;
 
+    DECLARE_ITEM_TYPE_FUNCTION(SfxLockBytesItem)
     SfxLockBytesItem(SfxLockBytesItem const &) = default;
     SfxLockBytesItem(SfxLockBytesItem &&) = default;
     SfxLockBytesItem & operator =(SfxLockBytesItem const &) = delete; // due to SfxPoolItem

@@ -73,6 +73,7 @@ class SW_DLLPUBLIC SwFormatFrameSize final : public SvxSizeItem
     bool HasMetrics() const override;
 
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwFormatFrameSize)
     SwFormatFrameSize( SwFrameSize eSize = SwFrameSize::Variable,
                   SwTwips nWidth = 0, SwTwips nHeight = 0 );
 

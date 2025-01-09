@@ -38,6 +38,7 @@ protected:
 public:
     static SfxPoolItem* CreateDefault();
 
+    DECLARE_ITEM_TYPE_FUNCTION(SvxPostureItem)
     SvxPostureItem( const FontItalic ePost /*= ITALIC_NONE*/,
                     const sal_uInt16 nId  );
 

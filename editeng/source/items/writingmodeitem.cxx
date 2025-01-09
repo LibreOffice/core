@@ -26,7 +26,7 @@ using namespace ::com::sun::star::text;
 
 
 SvxWritingModeItem::SvxWritingModeItem( WritingMode eValue, TypedWhichId<SvxWritingModeItem> _nWhich )
-    : SfxUInt16Item( _nWhich, static_cast<sal_uInt16>(eValue), SfxItemType::SvxWritingModeItemType )
+    : SfxUInt16Item( _nWhich, static_cast<sal_uInt16>(eValue) )
 {
 }
 

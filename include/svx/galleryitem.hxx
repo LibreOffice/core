@@ -47,6 +47,7 @@ class SVXCORE_DLLPUBLIC SvxGalleryItem final : public SfxPoolItem
 public:
     static SfxPoolItem* CreateDefault();
 
+    DECLARE_ITEM_TYPE_FUNCTION(SvxGalleryItem)
     SvxGalleryItem();
     SvxGalleryItem( const SvxGalleryItem& );
     virtual ~SvxGalleryItem() override;

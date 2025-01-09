@@ -27,8 +27,9 @@
 
 class SVXCORE_DLLPUBLIC SdrMeasureTextHPosItem final : public SfxEnumItem<css::drawing::MeasureTextHorzPos> {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SdrMeasureTextHPosItem)
     SdrMeasureTextHPosItem(css::drawing::MeasureTextHorzPos ePos = css::drawing::MeasureTextHorzPos::MeasureTextHorzPos_AUTO)
-        : SfxEnumItem(SDRATTR_MEASURETEXTHPOS, SfxItemType::SdrMeasureTextHPosItemType, ePos)
+        : SfxEnumItem(SDRATTR_MEASURETEXTHPOS, ePos)
     {
     }
     SAL_DLLPRIVATE virtual SdrMeasureTextHPosItem* Clone(SfxItemPool* pPool=nullptr) const override;
@@ -43,8 +44,9 @@ public:
 
 class SVXCORE_DLLPUBLIC SdrMeasureTextVPosItem final : public SfxEnumItem<css::drawing::MeasureTextVertPos> {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SdrMeasureTextVPosItem)
     SdrMeasureTextVPosItem(css::drawing::MeasureTextVertPos ePos = css::drawing::MeasureTextVertPos_AUTO)
-        : SfxEnumItem(SDRATTR_MEASURETEXTVPOS, SfxItemType::SdrMeasureTextVPosItemType, ePos)
+        : SfxEnumItem(SDRATTR_MEASURETEXTVPOS, ePos)
     {
     }
     SAL_DLLPRIVATE virtual SdrMeasureTextVPosItem* Clone(SfxItemPool* pPool=nullptr) const override;

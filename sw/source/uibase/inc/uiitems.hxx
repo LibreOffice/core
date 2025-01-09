@@ -35,6 +35,7 @@ class SW_DLLPUBLIC SwPageFootnoteInfoItem final : public SfxPoolItem
 
 public:
 
+    DECLARE_ITEM_TYPE_FUNCTION(SwPageFootnoteInfoItem)
     SwPageFootnoteInfoItem(SwPageFootnoteInfo const & rInfo);
     virtual ~SwPageFootnoteInfoItem() override;
 
@@ -63,6 +64,7 @@ class SW_DLLPUBLIC SwPtrItem final : public SfxPoolItem
     void* m_pMisc;
 
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwPtrItem)
     SwPtrItem( const sal_uInt16 nId, void* pPtr);
 
     virtual SwPtrItem*      Clone( SfxItemPool *pPool = nullptr ) const override;
@@ -76,6 +78,7 @@ class SW_DLLPUBLIC SwUINumRuleItem final : public SfxPoolItem
     std::unique_ptr<SwNumRule> m_pRule;
 
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwUINumRuleItem)
     SwUINumRuleItem( const SwNumRule& rRule );
     SwUINumRuleItem( const SwUINumRuleItem& rItem );
     virtual ~SwUINumRuleItem() override;
@@ -95,6 +98,7 @@ class SwPaMItem final : public SfxPoolItem
     SwPaM* m_pPaM;
 
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwPaMItem)
     SwPaMItem( const sal_uInt16 nId, SwPaM* pPaM);
 
     virtual SwPaMItem*      Clone( SfxItemPool *pPool = nullptr ) const override;

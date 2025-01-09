@@ -39,6 +39,7 @@ class EDITENG_DLLPUBLIC SvxULSpaceItem final : public SfxPoolItem
 public:
     static SfxPoolItem* CreateDefault();
 
+    DECLARE_ITEM_TYPE_FUNCTION(SvxULSpaceItem)
     explicit SvxULSpaceItem( const sal_uInt16 nId  );
     SvxULSpaceItem( const sal_uInt16 nUp, const sal_uInt16 nLow,
                     const sal_uInt16 nId  );

@@ -130,7 +130,7 @@ void XOBitmap::Array2Bitmap()
 SfxPoolItem* XFillBitmapItem::CreateDefault() { return new XFillBitmapItem; }
 
 XFillBitmapItem::XFillBitmapItem(const OUString& rName, const GraphicObject& rGraphicObject)
-:   NameOrIndex(XATTR_FILLBITMAP, rName, SfxItemType::XFillBitmapItemType),
+:   NameOrIndex(XATTR_FILLBITMAP, rName),
     maGraphicObject(rGraphicObject)
 {
 }
@@ -142,7 +142,7 @@ XFillBitmapItem::XFillBitmapItem(const XFillBitmapItem& rItem)
 }
 
 XFillBitmapItem::XFillBitmapItem(const GraphicObject& rGraphicObject)
-    : NameOrIndex(XATTR_FILLBITMAP, -1, SfxItemType::XFillBitmapItemType)
+    : NameOrIndex(XATTR_FILLBITMAP, -1)
     , maGraphicObject(rGraphicObject)
 {
 }

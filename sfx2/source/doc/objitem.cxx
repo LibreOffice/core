@@ -69,7 +69,7 @@ bool SfxObjectShellItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMembe
 }
 
 SfxObjectItem::SfxObjectItem( sal_uInt16 nWhichId, SfxShell *pSh )
-:   SfxPoolItem( nWhichId, SfxItemType::SfxObjectItemType ),
+:   SfxPoolItem( nWhichId ),
     _pSh( pSh )
 {}
 

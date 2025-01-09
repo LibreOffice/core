@@ -36,7 +36,7 @@ class EDITENG_DLLPUBLIC SvxParaVertAlignItem final : public SfxUInt16Item
 public:
     enum class Align { Automatic, Baseline, Top, Center, Bottom };
     static SfxPoolItem* CreateDefault();
-
+    DECLARE_ITEM_TYPE_FUNCTION(SvxParaVertAlignItem)
     SvxParaVertAlignItem( Align nValue /*= 0*/, TypedWhichId<SvxParaVertAlignItem> nId  );
 
     virtual SvxParaVertAlignItem* Clone( SfxItemPool *pPool = nullptr ) const override;

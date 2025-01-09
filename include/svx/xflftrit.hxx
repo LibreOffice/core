@@ -36,6 +36,7 @@ private:
 public:
 
                             static SfxPoolItem* CreateDefault();
+                            DECLARE_ITEM_TYPE_FUNCTION(XFillFloatTransparenceItem)
                             XFillFloatTransparenceItem();
                             XFillFloatTransparenceItem(const OUString& rName, const basegfx::BGradient& rGradient, bool bEnable = true );
                             XFillFloatTransparenceItem( const basegfx::BGradient& rTheGradient, bool bEnable = true );

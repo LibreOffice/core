@@ -22,6 +22,7 @@ private:
     std::map<OUString, css::uno::Any> m_aMap;
 
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SfxGrabBagItem)
     SfxGrabBagItem();
     SfxGrabBagItem(sal_uInt16 nWhich);
     SfxGrabBagItem(sal_uInt16 nWhich, std::map<OUString, css::uno::Any> aMap);

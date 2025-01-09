@@ -29,6 +29,7 @@ class SVL_DLLPUBLIC SfxImageItem final : public SfxInt16Item
 {
 public:
                             static SfxPoolItem* CreateDefault();
+                            DECLARE_ITEM_TYPE_FUNCTION(SfxImageItem)
                             SfxImageItem( sal_uInt16 nWhich = 0 );
                             SfxImageItem( const SfxImageItem& );
     virtual                 ~SfxImageItem() override;

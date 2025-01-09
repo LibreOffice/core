@@ -317,6 +317,7 @@ class EDITENG_DLLPUBLIC SvxNumBulletItem final : public SfxPoolItem
 {
     SvxNumRule maNumRule;
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SvxNumBulletItem)
     explicit SvxNumBulletItem(SvxNumRule const & rRule);
     explicit SvxNumBulletItem(SvxNumRule && rRule);
     SvxNumBulletItem(SvxNumRule const & rRule, sal_uInt16 nWhich );

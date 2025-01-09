@@ -37,6 +37,7 @@ protected:
 public:
     static SfxPoolItem* CreateDefault();
 
+    DECLARE_ITEM_TYPE_FUNCTION(SvxCrossedOutItem)
     SvxCrossedOutItem( const FontStrikeout eSt /*= STRIKEOUT_NONE*/,
                        const sal_uInt16 nId  );
 

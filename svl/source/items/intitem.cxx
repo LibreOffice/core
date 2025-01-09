@@ -159,8 +159,8 @@ boost::property_tree::ptree SfxUInt32Item::dumpAsJSON() const
     return aTree;
 }
 
-SfxMetricItem::SfxMetricItem(sal_uInt16 which, sal_Int32 nValue,SfxItemType eItemType):
-    SfxInt32Item(which, nValue, eItemType)
+SfxMetricItem::SfxMetricItem(sal_uInt16 which, sal_Int32 nValue):
+    SfxInt32Item(which, nValue)
 {
 }
 

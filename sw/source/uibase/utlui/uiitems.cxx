@@ -36,7 +36,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 SwPageFootnoteInfoItem::SwPageFootnoteInfoItem( SwPageFootnoteInfo const & rInfo) :
-    SfxPoolItem( FN_PARAM_FTN_INFO, SfxItemType::SwPageFootnoteInfoItemType ),
+    SfxPoolItem( FN_PARAM_FTN_INFO ),
     m_aFootnoteInfo(rInfo)
 {
 }
@@ -191,7 +191,7 @@ bool SwPageFootnoteInfoItem::PutValue(const Any& rVal, sal_uInt8 nMemberId)
 }
 
 SwPtrItem::SwPtrItem( const sal_uInt16 nId, void* pPtr ) :
-    SfxPoolItem( nId, SfxItemType::SwPtrItemType ),
+    SfxPoolItem( nId ),
     m_pMisc(pPtr)
 {
 }
@@ -212,7 +212,7 @@ bool SwPtrItem::operator==( const SfxPoolItem& rAttr ) const
 // SwUINumRuleItem for the NumTabPages of the FormatNumRule/Styleists
 
 SwUINumRuleItem::SwUINumRuleItem( const SwNumRule& rRul )
-    : SfxPoolItem( FN_PARAM_ACT_NUMBER, SfxItemType::SwUINumRuleItemType )
+    : SfxPoolItem( FN_PARAM_ACT_NUMBER )
     , m_pRule( new SwNumRule( rRul ) )
 {
 }
@@ -259,7 +259,7 @@ bool SwUINumRuleItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 }
 
 SwPaMItem::SwPaMItem( const sal_uInt16 nId, SwPaM* pPaM ) :
-    SfxPoolItem( nId, SfxItemType::SwPaMItemType ),
+    SfxPoolItem( nId ),
     m_pPaM(pPaM)
 {
 }

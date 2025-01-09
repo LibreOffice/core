@@ -30,7 +30,7 @@ class SVX_DLLPUBLIC SvxViewLayoutItem final : public SfxUInt16Item
 
 public:
     static SfxPoolItem* CreateDefault();
-
+    DECLARE_ITEM_TYPE_FUNCTION(SvxViewLayoutItem)
     SvxViewLayoutItem( sal_uInt16 nColumns = 0, bool bBookMode = false, TypedWhichId<SvxViewLayoutItem> nWhich = SID_ATTR_VIEWLAYOUT );
     SvxViewLayoutItem( const SvxViewLayoutItem& );
     virtual ~SvxViewLayoutItem() override;

@@ -43,6 +43,7 @@ class SW_DLLPUBLIC SwCondCollItem final : public SfxPoolItem
     OUString                    m_sStyles[COND_COMMAND_COUNT];
 
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwCondCollItem)
     SwCondCollItem();
     virtual ~SwCondCollItem() override;
 

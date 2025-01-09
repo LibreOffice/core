@@ -30,7 +30,7 @@ class EDITENG_DLLPUBLIC SvXMLAttrContainerItem final : public SfxPoolItem
     SvXMLAttrContainerData maContainerData;
 
 public:
-
+    DECLARE_ITEM_TYPE_FUNCTION(SvXMLAttrContainerItem)
     SvXMLAttrContainerItem( sal_uInt16 nWhich = 0 );
     SvXMLAttrContainerItem( const SvXMLAttrContainerItem& );
     virtual ~SvXMLAttrContainerItem() override;

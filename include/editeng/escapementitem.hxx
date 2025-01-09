@@ -44,6 +44,7 @@ class EDITENG_DLLPUBLIC SvxEscapementItem final : public SfxEnumItemInterface
 public:
     static SfxPoolItem* CreateDefault();
 
+    DECLARE_ITEM_TYPE_FUNCTION(SvxEscapementItem)
     explicit SvxEscapementItem( const sal_uInt16 nId  );
     SvxEscapementItem( const SvxEscapement eEscape,
                    const sal_uInt16 nId  );

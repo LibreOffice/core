@@ -57,6 +57,7 @@ class EDITENG_DLLPUBLIC SvxBulletItem final : public SfxPoolItem
     sal_Unicode     cSymbol;
 
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SvxBulletItem)
     explicit SvxBulletItem( sal_uInt16 nWhich );
     SvxBulletItem( const SvxBulletItem& );
     virtual ~SvxBulletItem() override;

@@ -58,6 +58,7 @@ private:
 public:
 
     static SfxPoolItem* CreateDefault();
+    DECLARE_ITEM_TYPE_FUNCTION(SvxPageItem)
     SvxPageItem( const TypedWhichId<SvxPageItem> nId );
     SvxPageItem( const SvxPageItem& rItem );
 
@@ -97,6 +98,7 @@ public:
 class SVX_DLLPUBLIC SvxSetItem final : public SfxSetItem
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SvxSetItem)
     SvxSetItem( const TypedWhichId<SvxSetItem> nId, const SfxItemSet& rSet );
     SvxSetItem( const SvxSetItem& rItem, SfxItemPool* pPool = nullptr );
     SvxSetItem( const TypedWhichId<SvxSetItem> nId, SfxItemSet&& pSet );

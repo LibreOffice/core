@@ -35,13 +35,13 @@ SfxPoolItem* SfxPointItem::CreateDefault() { return new SfxPointItem; }
 
 
 SfxPointItem::SfxPointItem()
-    : SfxPoolItem(0, SfxItemType::SfxPointItemType)
+    : SfxPoolItem(0)
 {
 }
 
 
 SfxPointItem::SfxPointItem( sal_uInt16 nW, const Point& rVal ) :
-    SfxPoolItem( nW, SfxItemType::SfxPointItemType ),
+    SfxPoolItem( nW ),
     aVal( rVal )
 {
 }

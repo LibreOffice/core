@@ -40,6 +40,7 @@ protected:
 public:
     static SfxPoolItem* CreateDefault();
 
+    DECLARE_ITEM_TYPE_FUNCTION(SvxFontItem)
     explicit SvxFontItem(const sal_uInt16 nId);
     SvxFontItem(const FontFamily eFam, OUString aFamilyName,
                 OUString aStyleName,

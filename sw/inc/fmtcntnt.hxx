@@ -35,6 +35,7 @@ class SAL_DLLPUBLIC_RTTI SwFormatContent final : public SfxPoolItem
     SwFormatContent &operator=( const SwFormatContent & ) = delete;
 
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwFormatContent)
     SwFormatContent( const SwStartNode* pStartNode = nullptr );
     SwFormatContent( const SwFormatContent &rCpy );
     virtual ~SwFormatContent() override;

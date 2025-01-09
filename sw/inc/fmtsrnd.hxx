@@ -36,6 +36,7 @@ class SW_DLLPUBLIC SwFormatSurround final : public SfxEnumItem<css::text::WrapTe
     bool    m_bContour    :1;
     bool    m_bOutside    :1;
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwFormatSurround)
     SwFormatSurround( css::text::WrapTextMode eNew = css::text::WrapTextMode_PARALLEL );
 
     // "Pure virtual Methods" of SfxPoolItem.

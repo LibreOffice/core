@@ -61,8 +61,9 @@ class SVX_DLLPUBLIC SvxHyperlinkItem final : public SfxPoolItem
 public:
     static SfxPoolItem* CreateDefault();
 
+    DECLARE_ITEM_TYPE_FUNCTION(SvxHyperlinkItem)
     SvxHyperlinkItem( TypedWhichId<SvxHyperlinkItem> _nWhich = SID_HYPERLINK_GETLINK ):
-                SfxPoolItem(_nWhich, SfxItemType::SvxHyperlinkItemType)
+                SfxPoolItem(_nWhich )
     { eType = HLINK_DEFAULT; nMacroEvents=HyperDialogEvent::NONE; };
     SvxHyperlinkItem( const SvxHyperlinkItem& rHyperlinkItem );
     SvxHyperlinkItem( TypedWhichId<SvxHyperlinkItem> nWhich, OUString aName, OUString aURL,

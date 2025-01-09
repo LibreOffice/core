@@ -29,8 +29,9 @@
 
 class SVXCORE_DLLPUBLIC SdrOnOffItem: public SfxBoolItem {
 public:
-    SdrOnOffItem(TypedWhichId<SdrOnOffItem> nId, bool bOn, SfxItemType eItemType = SfxItemType::SdrOnOffItemType)
-        : SfxBoolItem(nId, bOn, eItemType) {}
+    DECLARE_ITEM_TYPE_FUNCTION(SdrOnOffItem)
+    SdrOnOffItem(TypedWhichId<SdrOnOffItem> nId, bool bOn)
+        : SfxBoolItem(nId, bOn) {}
     virtual SdrOnOffItem* Clone(SfxItemPool* pPool=nullptr) const override;
 
     virtual OUString GetValueTextByVal(bool bVal) const override;

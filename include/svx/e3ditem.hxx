@@ -30,6 +30,7 @@ class SAL_WARN_UNUSED UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SvxB3DVectorItem final
     basegfx::B3DVector  m_aVal;
 
 public:
+                            DECLARE_ITEM_TYPE_FUNCTION(SvxB3DVectorItem)
                             SvxB3DVectorItem( TypedWhichId<SvxB3DVectorItem> nWhich, const basegfx::B3DVector& rVal );
                             SvxB3DVectorItem( const SvxB3DVectorItem& );
                             virtual ~SvxB3DVectorItem() override;

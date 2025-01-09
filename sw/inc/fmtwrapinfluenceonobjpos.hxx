@@ -44,6 +44,7 @@ private:
 public:
 
     // #i35017# - constant name has changed
+    DECLARE_ITEM_TYPE_FUNCTION(SwFormatWrapInfluenceOnObjPos)
     SwFormatWrapInfluenceOnObjPos(
             sal_Int16 _nWrapInfluenceOnPosition = css::text::WrapInfluenceOnPosition::ONCE_CONCURRENT );
     virtual ~SwFormatWrapInfluenceOnObjPos() override;

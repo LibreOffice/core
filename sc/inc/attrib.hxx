@@ -60,6 +60,7 @@ class SC_DLLPUBLIC ScMergeAttr final : public SfxPoolItem
     SCCOL       nColMerge;
     SCROW       nRowMerge;
 public:
+                DECLARE_ITEM_TYPE_FUNCTION(ScMergeAttr)
                 ScMergeAttr();
                 ScMergeAttr( SCCOL nCol, SCROW nRow );
                 ScMergeAttr( const ScMergeAttr& );
@@ -90,6 +91,7 @@ public:
             ScMergeFlagAttr(ScMF nFlags);
             virtual ~ScMergeFlagAttr() override;
 
+    DECLARE_ITEM_TYPE_FUNCTION(ScMergeFlagAttr)
     ScMergeFlagAttr(ScMergeFlagAttr const &) = default;
     ScMergeFlagAttr(ScMergeFlagAttr &&) = default;
     ScMergeFlagAttr & operator =(ScMergeFlagAttr const &) = delete; // due to SfxInt16Item
@@ -123,6 +125,7 @@ class SC_DLLPUBLIC ScProtectionAttr final : public SfxPoolItem
     bool        bHidePrint;     ///< don't print cell
 public:
                             static SfxPoolItem* CreateDefault();
+                            DECLARE_ITEM_TYPE_FUNCTION(ScProtectionAttr)
                             ScProtectionAttr();
                             ScProtectionAttr(   bool bProtect,
                                                 bool bHFormula = false,
@@ -177,6 +180,7 @@ class SC_DLLPUBLIC ScPageHFItem final : public SfxPoolItem
     std::unique_ptr<EditTextObject> pRightArea;
 
 public:
+                DECLARE_ITEM_TYPE_FUNCTION(ScPageHFItem)
                 ScPageHFItem( sal_uInt16 nWhich );
                 ScPageHFItem( const ScPageHFItem& rItem );
                 virtual ~ScPageHFItem() override;
@@ -202,6 +206,7 @@ public:
 class SC_DLLPUBLIC ScViewObjectModeItem final : public SfxEnumItem<ScVObjMode>
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(ScViewObjectModeItem)
                 ScViewObjectModeItem( sal_uInt16 nWhich );
                 ScViewObjectModeItem( sal_uInt16 nWhich, ScVObjMode eMode );
                 virtual ~ScViewObjectModeItem() override;
@@ -230,6 +235,7 @@ class SC_DLLPUBLIC ScPageScaleToItem final : public SfxPoolItem
 {
 public:
     /** Default c'tor sets the width and height to 0. */
+    DECLARE_ITEM_TYPE_FUNCTION(ScPageScaleToItem)
     explicit                    ScPageScaleToItem();
     explicit                    ScPageScaleToItem( sal_uInt16 nWidth, sal_uInt16 nHeight );
 
@@ -272,6 +278,7 @@ typedef o3tl::sorted_vector<sal_uInt32> ScCondFormatIndexes;
 class SAL_DLLPUBLIC_RTTI ScCondFormatItem final : public SfxPoolItem
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(ScCondFormatItem)
     explicit ScCondFormatItem();
     explicit ScCondFormatItem(sal_uInt32 nIndex);
     explicit ScCondFormatItem(const ScCondFormatIndexes& );
@@ -293,6 +300,7 @@ private:
 class SC_DLLPUBLIC ScRotateValueItem final : public SdrAngleItem
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(ScRotateValueItem)
     ScRotateValueItem(Degree100 nAngle);
     virtual ScRotateValueItem* Clone(SfxItemPool* pPool=nullptr) const override;
 
@@ -305,6 +313,7 @@ public:
 class SC_DLLPUBLIC ScShrinkToFitCell final : public SfxBoolItem
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(ScShrinkToFitCell)
     ScShrinkToFitCell(bool bShrink = false);
     virtual ScShrinkToFitCell* Clone(SfxItemPool *pPool = nullptr) const override;
     virtual bool GetPresentation(SfxItemPresentation ePres,
@@ -317,6 +326,7 @@ public:
 class SC_DLLPUBLIC ScVerticalStackCell final : public SfxBoolItem
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(ScVerticalStackCell)
     ScVerticalStackCell(bool bStack = false);
     virtual ScVerticalStackCell* Clone(SfxItemPool *pPool = nullptr) const override;
     virtual bool GetPresentation(SfxItemPresentation ePres,
@@ -329,6 +339,7 @@ public:
 class SC_DLLPUBLIC ScLineBreakCell final : public SfxBoolItem
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(ScLineBreakCell)
     ScLineBreakCell(bool bLineBreak = false);
     virtual ScLineBreakCell* Clone(SfxItemPool *pPool = nullptr) const override;
     virtual bool GetPresentation(SfxItemPresentation ePres,
@@ -341,6 +352,7 @@ public:
 class ScHyphenateCell final : public SfxBoolItem
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(ScHyphenateCell)
     ScHyphenateCell(bool bHyphenate= false);
     virtual ScHyphenateCell* Clone(SfxItemPool *pPool = nullptr) const override;
     virtual bool GetPresentation(SfxItemPresentation ePres,
@@ -353,6 +365,7 @@ public:
 class SC_DLLPUBLIC ScIndentItem final : public SfxUInt16Item
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(ScIndentItem)
     ScIndentItem(sal_uInt16 nIndent = 0);
     virtual ScIndentItem* Clone(SfxItemPool* pPool=nullptr) const override;
 

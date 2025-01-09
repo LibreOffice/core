@@ -31,6 +31,7 @@ class SVXCORE_DLLPUBLIC XLineJointItem final : public SfxEnumItem<css::drawing::
 {
 public:
                             static SfxPoolItem* CreateDefault();
+                            DECLARE_ITEM_TYPE_FUNCTION(XLineJointItem)
                             XLineJointItem( css::drawing::LineJoint eLineJoint = css::drawing::LineJoint_ROUND );
 
     virtual XLineJointItem* Clone( SfxItemPool* pPool = nullptr ) const override;

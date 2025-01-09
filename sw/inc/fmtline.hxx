@@ -35,6 +35,7 @@ class SW_DLLPUBLIC SwFormatLineNumber final : public SfxPoolItem
     bool      m_bCountLines   :1;  ///< Also count lines of paragraph.
 
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwFormatLineNumber)
     SwFormatLineNumber();
     virtual ~SwFormatLineNumber() override;
 

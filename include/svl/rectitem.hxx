@@ -31,6 +31,7 @@ class SVL_DLLPUBLIC SfxRectangleItem final : public SfxPoolItem
 
 public:
                              static SfxPoolItem* CreateDefault();
+                             DECLARE_ITEM_TYPE_FUNCTION(SfxRectangleItem)
                              SfxRectangleItem();
                              SfxRectangleItem( sal_uInt16 nWhich, const tools::Rectangle& rVal );
 

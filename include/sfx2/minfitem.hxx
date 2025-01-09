@@ -40,6 +40,7 @@ class SFX2_DLLPUBLIC SfxMacroInfoItem final : public SfxPoolItem
 
 public:
     static SfxPoolItem* CreateDefault();
+    DECLARE_ITEM_TYPE_FUNCTION(SfxMacroInfoItem)
     SfxMacroInfoItem( sal_uInt16 nWhich,
                     const BasicManager* pMgr,
                     OUString aLibName,

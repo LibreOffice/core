@@ -32,6 +32,7 @@ namespace dbaui
         ::std::optional< bool >   m_aValue;
 
     public:
+        DECLARE_ITEM_TYPE_FUNCTION(OptionalBoolItem)
         explicit OptionalBoolItem( sal_uInt16 nWhich );
 
         virtual bool             operator==( const SfxPoolItem& _rItem ) const override;

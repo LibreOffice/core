@@ -43,6 +43,7 @@ class SW_DLLPUBLIC SwFormatPageDesc final : public SfxPoolItem, public SwClient
     virtual void SwClientNotify( const SwModify&, const SfxHint& rHint ) override;
 
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwFormatPageDesc)
     explicit SwFormatPageDesc( const SwPageDesc *pDesc = nullptr );
     SwFormatPageDesc( const SwFormatPageDesc &rCpy );
     SwFormatPageDesc &operator=( const SwFormatPageDesc &rCpy );

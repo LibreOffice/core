@@ -63,12 +63,14 @@ inline SfxBoolItem makeSvx3DDoubleSidedItem(bool bVal) {
 // Added extra Item (Bool) for chart2 to be able to show reduced line geometry
 class Svx3DReducedLineGeometryItem final : public SfxBoolItem {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(Svx3DReducedLineGeometryItem)
     Svx3DReducedLineGeometryItem(bool bVal = false);
     Svx3DReducedLineGeometryItem* Clone(SfxItemPool * = nullptr) const override;
 };
 
 class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) Svx3DNormalsKindItem final : public SfxUInt16Item {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(Svx3DNormalsKindItem)
     Svx3DNormalsKindItem(sal_uInt16 nVal = 0);
 
     // use drawing::NormalsKind
@@ -83,6 +85,7 @@ inline SfxBoolItem makeSvx3DNormalsInvertItem(bool bVal) {
 
 class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) Svx3DTextureProjectionXItem final : public SfxUInt16Item {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(Svx3DTextureProjectionXItem)
     Svx3DTextureProjectionXItem(sal_uInt16 nVal = 0);
 
     // use drawing::TextureProjectionMode
@@ -93,6 +96,7 @@ public:
 
 class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) Svx3DTextureProjectionYItem final : public SfxUInt16Item {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(Svx3DTextureProjectionYItem)
     Svx3DTextureProjectionYItem(sal_uInt16 nVal = 0);
 
     // use drawing::TextureProjectionMode
@@ -119,6 +123,7 @@ inline SfxUInt16Item makeSvx3DMaterialSpecularIntensityItem(sal_uInt16 nVal) {
 
 class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) Svx3DTextureKindItem final : public SfxUInt16Item {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(Svx3DTextureKindItem)
     Svx3DTextureKindItem(sal_uInt16 nVal = 2);
 
     // use drawing::TextureKind2
@@ -129,6 +134,7 @@ public:
 
 class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) Svx3DTextureModeItem final : public SfxUInt16Item {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(Svx3DTextureModeItem)
     Svx3DTextureModeItem(sal_uInt16 nVal = 2);
 
     // use drawing:TextureMode
@@ -144,6 +150,7 @@ inline SfxBoolItem makeSvx3DTextureFilterItem(bool bVal) {
 // Svx3D _3DSCENE_ Items
 class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) Svx3DPerspectiveItem final : public SfxUInt16Item {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(Svx3DPerspectiveItem)
     Svx3DPerspectiveItem(ProjectionType nVal = ProjectionType::Perspective);
 
     // use drawing::ProjectionMode
@@ -270,6 +277,7 @@ inline SfxUInt16Item makeSvx3DShadowSlantItem(sal_uInt16 nVal) {
 
 class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) Svx3DShadeModeItem final : public SfxUInt16Item {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(Svx3DShadeModeItem)
     Svx3DShadeModeItem(sal_uInt16 nVal = 2);
 
     // use drawing::ShadeMode
@@ -282,6 +290,7 @@ public:
 // #107245# Item to replace bExtrudeSmoothed and bLatheSmoothed
 class Svx3DSmoothNormalsItem final : public SfxBoolItem {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(Svx3DSmoothNormalsItem)
     Svx3DSmoothNormalsItem(bool bVal = true);
     Svx3DSmoothNormalsItem* Clone(SfxItemPool * = nullptr) const override;
 };
@@ -289,6 +298,7 @@ public:
 // #107245# Item to replace bExtrudeSmoothFrontBack and bLatheSmoothFrontBack
 class Svx3DSmoothLidsItem final : public SfxBoolItem {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(Svx3DSmoothLidsItem)
     Svx3DSmoothLidsItem(bool bVal = false);
     Svx3DSmoothLidsItem* Clone(SfxItemPool * = nullptr) const override;
 };
@@ -296,6 +306,7 @@ public:
 // #107245# Item to replace bExtrudeCharacterMode and bLatheCharacterMode
 class Svx3DCharacterModeItem final : public SfxBoolItem {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(Svx3DCharacterModeItem)
     Svx3DCharacterModeItem(bool bVal = false);
     Svx3DCharacterModeItem* Clone(SfxItemPool * = nullptr) const override;
 };
@@ -303,6 +314,7 @@ public:
 // #107245# Item to replace bExtrudeCloseFront and bLatheCloseFront
 class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) Svx3DCloseFrontItem final : public SfxBoolItem {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(Svx3DCloseFrontItem)
     Svx3DCloseFrontItem(bool bVal = true);
     Svx3DCloseFrontItem* Clone(SfxItemPool * = nullptr) const override;
 };
@@ -310,6 +322,7 @@ public:
 // #107245# Item to replace bExtrudeCloseBack and bLatheCloseBack
 class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) Svx3DCloseBackItem final : public SfxBoolItem {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(Svx3DCloseBackItem)
     Svx3DCloseBackItem(bool bVal = true);
     Svx3DCloseBackItem* Clone(SfxItemPool * = nullptr) const override;
 };

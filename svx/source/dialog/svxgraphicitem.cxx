@@ -22,7 +22,7 @@
 #include <utility>
 
 SvxGraphicItem::SvxGraphicItem( Graphic _aGraphic )
-    : SfxPoolItem( SID_GRAPHIC, SfxItemType::SvxGraphicItemType ), aGraphic(std::move( _aGraphic ))
+    : SfxPoolItem( SID_GRAPHIC ), aGraphic(std::move( _aGraphic ))
 {
 
 }

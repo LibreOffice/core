@@ -56,6 +56,7 @@ class SW_DLLPUBLIC SwFormatLineBreak final : public SfxEnumItem<SwLineBreakClear
     SwFormatLineBreak(const SwFormatLineBreak&) = delete;
 
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwFormatLineBreak)
     SwFormatLineBreak(SwLineBreakClear eClear);
     virtual ~SwFormatLineBreak() override;
 

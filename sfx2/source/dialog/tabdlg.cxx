@@ -81,7 +81,7 @@ SfxTabDialogItem::SfxTabDialogItem( const SfxTabDialogItem& rAttr, SfxItemPool* 
 }
 
 SfxTabDialogItem::SfxTabDialogItem( sal_uInt16 nId, const SfxItemSet& rItemSet )
-    : SfxSetItem( nId, rItemSet, SfxItemType::SfxTabDialogItemType )
+    : SfxSetItem( nId, rItemSet )
 {
 }
 

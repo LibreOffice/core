@@ -64,7 +64,7 @@ namespace svx
         DatabaseRegistrations   m_aRegistrations;
 
     public:
-
+        DECLARE_ITEM_TYPE_FUNCTION(DatabaseMapItem)
         DatabaseMapItem( sal_uInt16 _nId, DatabaseRegistrations&& _rRegistrations );
 
         virtual bool             operator==( const SfxPoolItem& ) const override;

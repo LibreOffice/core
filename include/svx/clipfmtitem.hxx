@@ -38,6 +38,7 @@ class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC SvxClipboardFormatItem final : public Sf
 
 public:
     static SfxPoolItem* CreateDefault();
+    DECLARE_ITEM_TYPE_FUNCTION(SvxClipboardFormatItem)
     SvxClipboardFormatItem(TypedWhichId<SvxClipboardFormatItem> nId);
     SvxClipboardFormatItem(const SvxClipboardFormatItem&);
     virtual ~SvxClipboardFormatItem() override;
