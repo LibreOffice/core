@@ -32,6 +32,10 @@
 #include <tools/link.hxx>
 #include <memory>
 
+#ifdef MACOSX
+#include <vcl/menu.hxx>
+#endif
+
 extern "C" {
 
 void SAL_DLLPUBLIC_EXPORT plugin_init_sys_tray();
@@ -101,6 +105,7 @@ class ShutdownIcon : public ShutdownIconServiceBase
         static void OpenURL( const OUString& aURL, const OUString& rTarget, const css::uno::Sequence< css::beans::PropertyValue >& =
             css::uno::Sequence< css::beans::PropertyValue >( 0 ) );
         static void FromTemplate();
+        static void FromCommand( const OUString& rCommand );
 
         static void SetAutostart( bool bActivate );
         static bool GetAutostart();
@@ -139,6 +144,8 @@ class ShutdownIcon : public ShutdownIconServiceBase
 #ifdef _WIN32
         static void EnableAutostartW32( const OUString &aShortcutName );
         static OUString GetAutostartFolderNameW32();
+#elif defined MACOSX
+        static void SetDefaultMenuBar( MenuBar *pMenuBar );
 #endif
 };
 

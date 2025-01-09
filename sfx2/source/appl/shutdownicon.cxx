@@ -20,7 +20,7 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
-#include "shutdownicon.hxx"
+#include <shutdownicon.hxx>
 #include <sfx2/strings.hrc>
 #include <sfx2/app.hxx>
 #include <svtools/imagemgr.hxx>
@@ -204,6 +204,11 @@ void ShutdownIcon::FileOpen()
 
 void ShutdownIcon::FromTemplate()
 {
+    ShutdownIcon::FromCommand( ".uno:NewDoc" );
+}
+
+void ShutdownIcon::FromCommand( const OUString& rCommand )
+{
     if ( !getInstance() || !getInstance()->m_xDesktop.is() )
         return;
 
@@ -213,7 +218,7 @@ void ShutdownIcon::FromTemplate()
         xFrame = xDesktop;
 
     URL aTargetURL;
-    aTargetURL.Complete = ".uno:NewDoc";
+    aTargetURL.Complete = rCommand;
     css::uno::Reference< util::XURLTransformer > xTrans( util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
     xTrans->parseStrict( aTargetURL );
 
