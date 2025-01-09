@@ -120,3 +120,298 @@ In file included from /opt/rh/gcc-toolset-12/root/usr/lib/gcc/x86_64-redhat-linu
                      if (std::distance(m_values.rbegin(), lastDifferent) >= 3) {
                          savedValues.push_back(m_values.back());
                          m_values.pop_back();
+--- poppler/poppler/Dict.cc.orig	2025-01-09 17:07:59.770799229 +0100
++++ poppler/poppler/Dict.cc	2025-01-09 17:04:28.369931616 +0100
+@@ -113,14 +113,22 @@
+             if (!sorted) {
+                 Dict *that = const_cast<Dict *>(this);
+ 
++#ifndef __clang__
+                 std::ranges::sort(that->entries, CmpDictEntry {});
++#else
++                std::sort(that->entries.begin(), that->entries.end(), CmpDictEntry {});
++#endif
+                 that->sorted = true;
+             }
+         }
+     }
+ 
+     if (sorted) {
++#ifndef __clang__
+         const auto pos = std::ranges::lower_bound(entries, key, std::less<> {}, &DictEntry::first);
++#else
++        const auto pos = std::lower_bound(entries.begin(), entries.end(), key, CmpDictEntry {});
++#endif
+         if (pos != entries.end() && pos->first == key) {
+             return &*pos;
+         }
+--- poppler/poppler/GlobalParams.cc.orig	2025-01-02 01:28:08.000000000 +0100
++++ poppler/poppler/GlobalParams.cc	2025-01-09 17:13:51.367905376 +0100
+@@ -366,7 +366,11 @@
+     for (const SysFontInfo *f : fonts) {
+         fi = f;
+         if (fi->match(name2, bold, italic, oblique, fixedWidth)) {
++#ifndef __clang__
+             if (std::ranges::find(filesToIgnore, fi->path->toStr()) == filesToIgnore.end()) {
++#else
++            if (std::find(filesToIgnore.begin(), filesToIgnore.end(), fi->path->toStr()) == filesToIgnore.end()) {
++#endif
+                 break;
+             }
+         }
+@@ -377,7 +381,11 @@
+         for (const SysFontInfo *f : fonts) {
+             fi = f;
+             if (fi->match(name2, false, italic)) {
++#ifndef __clang__
+                 if (std::ranges::find(filesToIgnore, fi->path->toStr()) == filesToIgnore.end()) {
++#else
++                if (std::find(filesToIgnore.begin(), filesToIgnore.end(), fi->path->toStr()) == filesToIgnore.end()) {
++#endif
+                     break;
+                 }
+             }
+@@ -389,7 +397,11 @@
+         for (const SysFontInfo *f : fonts) {
+             fi = f;
+             if (fi->match(name2, false, false)) {
++#ifndef __clang__
+                 if (std::ranges::find(filesToIgnore, fi->path->toStr()) == filesToIgnore.end()) {
++#else
++                if (std::find(filesToIgnore.begin(), filesToIgnore.end(), fi->path->toStr()) == filesToIgnore.end()) {
++#endif
+                     break;
+                 }
+             }
+@@ -737,7 +749,11 @@
+ 
+     // remove the - from the names, for some reason, Fontconfig does not
+     // understand "MS-Mincho" but does with "MS Mincho"
++#ifndef __clang__
+     std::ranges::replace(fontName, '-', ' ');
++#else
++    std::replace(fontName.begin(), fontName.end(), '-', ' ');
++#endif
+ 
+     size_t start = std::string::npos;
+     findModifier(fontName, modStart, "Regular", start);
+@@ -1120,7 +1136,11 @@
+                     FcPatternGetInteger(fontSet->fonts[i], FC_INDEX, 0, &faceIndex);
+ 
+                     const std::string sFilePath = reinterpret_cast<char *>(fcFilePath);
++#ifndef __clang__
+                     if (std::ranges::find(filesToIgnore, sFilePath) == filesToIgnore.end()) {
++#else
++                    if (std::find(filesToIgnore.begin(), filesToIgnore.end(), sFilePath) == filesToIgnore.end()) {
++#endif
+                         return FamilyStyleFontSearchResult(sFilePath, faceIndex);
+                     }
+                 }
+--- poppler/poppler/Catalog.cc.orig	2025-01-09 17:19:48.592089218 +0100
++++ poppler/poppler/Catalog.cc	2025-01-09 17:19:36.361030948 +0100
+@@ -705,7 +705,11 @@
+     RefRecursionChecker seen;
+     parse(tree, seen);
+     if (!entries.empty()) {
++#ifndef __clang__
+         std::ranges::sort(entries, [](const auto &first, const auto &second) { return first->name.cmp(&second->name) < 0; });
++#else
++        std::sort(entries.begin(), entries.end(), [](const auto &first, const auto &second) { return first->name.cmp(&second->name) < 0; });
++#endif
+     }
+ }
+ 
+@@ -754,7 +758,11 @@
+ 
+ Object NameTree::lookup(const GooString *name)
+ {
++#ifndef __clang__
+     auto entry = std::ranges::lower_bound(entries, name, EntryGooStringComparer {});
++#else
++    auto entry = std::lower_bound(entries.begin(), entries.end(), name, [](const auto &element, const GooString *n) { return element->name.cmp(n) < 0; });
++#endif
+ 
+     if (entry != entries.end() && (*entry)->name.cmp(name) == 0) {
+         return (*entry)->value.fetch(xref);
+--- poppler/poppler/GfxFont.cc.orig2	2025-01-09 17:26:15.227421640 +0100
++++ poppler/poppler/GfxFont.cc	2025-01-09 17:27:06.930929833 +0100
+@@ -1868,7 +1868,11 @@
+                 ++i;
+             }
+         }
++#ifndef __clang__
+         std::ranges::sort(widths.exceps, cmpWidthExcepFunctor());
++#else
++        std::sort(widths.exceps.begin(), widths.exceps.end(), cmpWidthExcepFunctor());
++#endif
+     }
+ 
+     // default metrics for vertical font
+@@ -1916,7 +1920,11 @@
+                 ++i;
+             }
+         }
++#ifndef __clang__
+         std::ranges::sort(widths.excepsV, cmpWidthExcepVFunctor());
++#else
++        std::sort(widths.excepsV.begin(), widths.excepsV.end(), cmpWidthExcepVFunctor());
++#endif
+     }
+ 
+     ok = true;
+--- poppler/poppler/Gfx.cc.orig	2025-01-09 17:31:05.423273919 +0100
++++ poppler/poppler/Gfx.cc	2025-01-09 17:31:07.340292763 +0100
+@@ -2545,7 +2545,11 @@
+         bboxIntersections[1] = ((xMin - x0) * dx + (yMax - y0) * dy) * mul;
+         bboxIntersections[2] = ((xMax - x0) * dx + (yMin - y0) * dy) * mul;
+         bboxIntersections[3] = ((xMax - x0) * dx + (yMax - y0) * dy) * mul;
++#ifndef __clang__
+         std::ranges::sort(bboxIntersections);
++#else
++        std::sort(std::begin(bboxIntersections), std::end(bboxIntersections));
++#endif
+         tMin = bboxIntersections[0];
+         tMax = bboxIntersections[3];
+         if (tMin < 0 && !shading->getExtend0()) {
+@@ -2646,7 +2650,11 @@
+         s[1] = (yMax - ty) / dx;
+         s[2] = (xMin - tx) / -dy;
+         s[3] = (xMax - tx) / -dy;
++#ifndef __clang__
+         std::ranges::sort(s);
++#else
++        std::sort(std::begin(s), std::end(s));
++#endif
+         sMin = s[1];
+         sMax = s[2];
+     }
+@@ -2787,7 +2795,11 @@
+             s[1] = (yMax - ty) / dx;
+             s[2] = (xMin - tx) / -dy;
+             s[3] = (xMax - tx) / -dy;
++#ifndef __clang__
+             std::ranges::sort(s);
++#else
++            std::sort(std::begin(s), std::end(s));
++#endif
+             sMin = s[1];
+             sMax = s[2];
+         }
+--- poppler/poppler/TextOutputDev.cc.orig	2025-01-09 17:37:28.163110149 +0100
++++ poppler/poppler/TextOutputDev.cc	2025-01-09 17:36:48.827864411 +0100
+@@ -4574,7 +4574,11 @@
+     if (!words.empty()) {
+         // Reverse word order for RTL text. Fixes #53 for glib backend (Evince)
+         if (!page->primaryLR) {
++#ifndef __clang__
+             std::ranges::reverse(words);
++#else
++            std::reverse(words.begin(), words.end());
++#endif
+         }
+ 
+         lines.push_back(std::move(words));
+@@ -5456,7 +5460,11 @@
+         for (word = rawWords; word; word = word->next) {
+             s.clear();
+             uText.resize(word->len());
++#ifndef __clang__
+             std::ranges::transform(word->chars, uText.begin(), [](auto &c) { return c.text; });
++#else
++            std::transform(word->chars.begin(), word->chars.end(), uText.begin(), [](auto &c) { return c.text; });
++#endif
+             dumpFragment(uText.data(), uText.size(), uMap, &s);
+             (*outputFunc)(outputStream, s.c_str(), s.getLength());
+ 
+--- poppler/poppler/PDFDoc.cc.orig	2025-01-09 17:38:49.498598893 +0100
++++ poppler/poppler/PDFDoc.cc	2025-01-09 17:38:22.459449316 +0100
+@@ -596,7 +596,11 @@
+                 if (fw->getType() == formSignature) {
+                     assert(fw->getField()->getType() == formSignature);
+                     FormFieldSignature *ffs = static_cast<FormFieldSignature *>(fw->getField());
++#ifndef __clang__
+                     if (std::ranges::find(res, ffs) == res.end()) {
++#else
++                    if (std::find(res.begin(), res.end(), ffs) == res.end()) {
++#endif
+                         res.push_back(ffs);
+                     }
+                 }
+--- poppler/poppler/Annot.cc.orig	2025-01-09 17:40:31.125125064 +0100
++++ poppler/poppler/Annot.cc	2025-01-09 17:40:14.021036519 +0100
+@@ -7499,7 +7499,11 @@
+ 
+ bool Annots::removeAnnot(Annot *annot)
+ {
++#ifndef __clang__
+     auto idx = std::ranges::find(annots, annot);
++#else
++    auto idx = std::find(annots.begin(), annots.end(), annot);
++#endif
+ 
+     if (idx == annots.end()) {
+         return false;
+--- poppler/poppler/Dict.cc.orig	2025-01-09 18:35:56.796874707 +0100
++++ poppler/poppler/Dict.cc	2025-01-09 18:36:22.159050403 +0100
+@@ -32,7 +32,9 @@
+ #include <config.h>
+ 
+ #include <algorithm>
++#ifndef __clang__
+ #include <ranges>
++#endif
+ 
+ #include "XRef.h"
+ #include "Dict.h"
+--- poppler/poppler/CIDFontsWidthsBuilder.h.orig	2025-01-09 18:37:58.541718087 +0100
++++ poppler/poppler/CIDFontsWidthsBuilder.h	2025-01-09 18:38:02.766747356 +0100
+@@ -15,7 +15,9 @@
+ #include <vector>
+ #include <variant>
+ #include <algorithm>
++#ifndef __clang__
+ #include <ranges>
++#endif
+ #include <cassert>
+ 
+ /** Class to help build the widths array as defined in
+--- poppler/splash/SplashFontEngine.cc.orig2	2025-01-13 13:54:15.234884955 +0100
++++ poppler/splash/SplashFontEngine.cc	2025-01-13 13:55:16.961211421 +0100
+@@ -52,7 +52,11 @@
+ 
+ SplashFontEngine::SplashFontEngine(bool enableFreeType, bool enableFreeTypeHinting, bool enableSlightHinting, bool aa)
+ {
++#ifndef __clang__
+     std::ranges::fill(fontCache, nullptr);
++#else
++    std::fill(fontCache.begin(), fontCache.end(), nullptr);
++#endif
+ 
+     if (enableFreeType) {
+         ftEngine = SplashFTFontEngine::init(aa, enableFreeTypeHinting, enableSlightHinting);
+@@ -230,7 +234,11 @@
+     }
+ 
+     // Try to find the font in the cache
++#ifndef __clang__
+     auto fontIt = std::ranges::find_if(fontCache, [&](const SplashFont *font) { return font && font->matches(fontFile, mat, textMat); });
++#else
++    auto fontIt = std::find_if(fontCache.begin(), fontCache.end(), [&](const SplashFont *font) { return font && font->matches(fontFile, mat, textMat); });
++#endif
+ 
+     // The requested font has been found in the cache
+     if (fontIt != fontCache.end()) {
+--- poppler/splash/SplashXPathScanner.cc.orig2	2025-01-13 13:56:58.560748715 +0100
++++ poppler/splash/SplashXPathScanner.cc	2025-01-13 13:56:12.643505904 +0100
+@@ -318,7 +318,11 @@
+         }
+     }
+     for (auto &line : allIntersections) {
++#ifndef __clang__
+         std::ranges::sort(line, [](const SplashIntersect i0, const SplashIntersect i1) { return i0.x0 < i1.x0; });
++#else
++        std::sort(line.begin(), line.end(), [](const SplashIntersect i0, const SplashIntersect i1) { return i0.x0 < i1.x0; });
++#endif
+     }
+ }
+ 
