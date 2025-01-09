@@ -10187,7 +10187,6 @@ sfx2/source/appl/preventduplicateinteraction.cxx
 sfx2/source/appl/sfxhelp.cxx
 sfx2/source/appl/sfxpicklist.cxx
 sfx2/source/appl/shutdownicon.cxx
-sfx2/source/appl/shutdownicon.hxx
 sfx2/source/appl/shutdowniconw32.cxx
 sfx2/source/appl/workwin.cxx
 sfx2/source/appl/xpackcreator.cxx
@@ -10309,6 +10308,7 @@ sfx2/source/inc/objshimp.hxx
 sfx2/source/inc/partwnd.hxx
 sfx2/source/inc/recfloat.hxx
 sfx2/source/inc/sfxurlrelocator.hxx
+sfx2/source/inc/shutdownicon.hxx
 sfx2/source/inc/slotserv.hxx
 sfx2/source/inc/splitwin.hxx
 sfx2/source/inc/statcach.hxx

@@ -25,7 +25,7 @@
 #undef WB_LEFT
 #undef WB_RIGHT
 
-#include "shutdownicon.hxx"
+#include <shutdownicon.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/strings.hrc>
 #include <shlobj.h>
