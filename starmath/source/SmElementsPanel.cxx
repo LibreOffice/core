@@ -35,15 +35,16 @@
 namespace sm::sidebar
 {
 // static
-std::unique_ptr<PanelLayout> SmElementsPanel::Create(weld::Widget& rParent,
-                                                     const SfxBindings& rBindings)
+std::unique_ptr<PanelLayout>
+SmElementsPanel::Create(weld::Widget& rParent, const SfxBindings& rBindings, sal_uInt64 nWindowId)
 {
-    return std::make_unique<SmElementsPanel>(rParent, rBindings);
+    return std::make_unique<SmElementsPanel>(rParent, rBindings, nWindowId);
 }
 
-SmElementsPanel::SmElementsPanel(weld::Widget& rParent, const SfxBindings& rBindings)
+SmElementsPanel::SmElementsPanel(weld::Widget& rParent, const SfxBindings& rBindings,
+                                 sal_uInt64 nWindowId)
     : PanelLayout(&rParent, u"MathElementsPanel"_ustr,
-                  u"modules/smath/ui/sidebarelements_math.ui"_ustr)
+                  u"modules/smath/ui/sidebarelements_math.ui"_ustr, nWindowId)
     , mrBindings(rBindings)
     , mxCategoryList(m_xBuilder->weld_combo_box(u"categorylist"_ustr))
     , mxElementsControl(std::make_unique<SmElementsControl>(

@@ -28,6 +28,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
 #include <vcl/weldutils.hxx>
+#include <view.hxx>
 
 #include "SmElementsPanel.hxx"
 #include "SmPropertiesPanel.hxx"
@@ -91,7 +92,9 @@ css::uno::Reference<css::ui::XUIElement> SAL_CALL SmPanelFactory::createUIElemen
         }
         else if (ResourceURL.endsWith("/MathElementsPanel"))
         {
-            pPanel = sm::sidebar::SmElementsPanel::Create(*pParent, *pBindings);
+            SfxViewShell* pViewShell = SfxViewShell::Get(xFrame->getController());
+            pPanel = sm::sidebar::SmElementsPanel::Create(*pParent, *pBindings,
+                                                          reinterpret_cast<sal_uInt64>(pViewShell));
             aLayoutSize = { 300, -1, -1 };
         }
 
