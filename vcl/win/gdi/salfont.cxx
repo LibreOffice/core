@@ -725,35 +725,14 @@ void ImplGetLogFontFromFontSelect( const vcl::font::FontSelectPattern& rFont,
         rLogFont.lfQuality = bAntiAliased ? ANTIALIASED_QUALITY : NONANTIALIASED_QUALITY;
 }
 
-std::tuple<HFONT,bool,sal_Int32> WinSalGraphics::ImplDoSetFont(HDC hDC, vcl::font::FontSelectPattern const & i_rFont,
-                                    const vcl::font::PhysicalFontFace * i_pFontFace,
-                                    HFONT& o_rOldFont)
+std::tuple<HFONT, HFONT, sal_Int32>
+WinSalGraphics::ImplDoSetFont(HDC hDC, vcl::font::FontSelectPattern const& i_rFont,
+                              const vcl::font::PhysicalFontFace* i_pFontFace, HFONT& o_rOldFont)
 {
     HFONT hNewFont = nullptr;
 
     LOGFONTW aLogFont;
     ImplGetLogFontFromFontSelect( i_rFont, i_pFontFace, aLogFont, getAntiAlias());
-
-    bool    bIsCJKVerticalFont = false;
-    // select vertical mode for printing if requested and available
-    if ( i_rFont.mbVertical && mbPrinter )
-    {
-        constexpr size_t nLen = sizeof(aLogFont.lfFaceName) - sizeof(aLogFont.lfFaceName[0]);
-        // vertical fonts start with an '@'
-        memmove( &aLogFont.lfFaceName[1], &aLogFont.lfFaceName[0], nLen );
-        aLogFont.lfFaceName[0] = '@';
-        aLogFont.lfFaceName[LF_FACESIZE - 1] = 0;
-
-        // check availability of vertical mode for this font
-        EnumFontFamiliesExW( getHDC(), &aLogFont, SalEnumQueryFontProcExW,
-                reinterpret_cast<LPARAM>(&bIsCJKVerticalFont), 0 );
-        if( !bIsCJKVerticalFont )
-        {
-            // restore non-vertical name if not vertical mode isn't available
-            memcpy( &aLogFont.lfFaceName[0], &aLogFont.lfFaceName[1], nLen );
-            aLogFont.lfFaceName[LF_FACESIZE - 1] = 0;
-        }
-    }
 
     hNewFont = ::CreateFontIndirectW( &aLogFont );
     o_rOldFont = ::SelectFont(hDC, hNewFont);
@@ -769,10 +748,19 @@ std::tuple<HFONT,bool,sal_Int32> WinSalGraphics::ImplDoSetFont(HDC hDC, vcl::fon
         SelectFont(hDC, hNewFont2);
         DeleteFont( hNewFont );
         hNewFont = hNewFont2;
-        bIsCJKVerticalFont = false;
     }
 
-    return std::make_tuple(hNewFont, bIsCJKVerticalFont, static_cast<sal_Int32>(aTextMetricW.tmDescent));
+    // Optionally create a secondary font for non-rotated CJK glyphs in vertical context
+    HFONT hNewVerticalFont = nullptr;
+    if (i_rFont.mbVertical && mbPrinter)
+    {
+        aLogFont.lfEscapement = 0;
+        aLogFont.lfOrientation = 0;
+        hNewVerticalFont = ::CreateFontIndirectW(&aLogFont);
+    }
+
+    return std::make_tuple(hNewFont, hNewVerticalFont,
+                           static_cast<sal_Int32>(aTextMetricW.tmDescent));
 }
 
 void WinSalGraphics::SetFont(LogicalFontInstance* pFont, int nFallbackLevel)

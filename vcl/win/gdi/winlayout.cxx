@@ -88,35 +88,26 @@ bool ExTextOutRenderer::operator()(GenericSalLayout const& rLayout, SalGraphics&
     basegfx::B2DPoint aPos;
     const GlyphItem* pGlyph;
     const WinFontInstance* pWinFont = static_cast<const WinFontInstance*>(&rLayout.GetFont());
-    UINT nTextAlign = GetTextAlign(hDC);
-    UINT nCurTextAlign = nTextAlign;
-    sal_Int32 nGlyphOffset = -pWinFont->GetTmDescent();
+
+    bool bVertFontSelected = false;
+    auto fnUseVertFont = [&](bool bValue) {
+        if (bVertFontSelected != bValue)
+        {
+            bVertFontSelected = bValue;
+            SelectFont(hDC,
+                       bVertFontSelected ? pWinFont->GetVerticalHFONT() : pWinFont->GetHFONT());
+        }
+    };
 
     while (rLayout.GetNextGlyph(&pGlyph, aPos, nStart))
     {
         wchar_t glyphWStr = pGlyph->glyphId();
-        UINT32 nNewTextAlign = nCurTextAlign;
-        sal_Int32 nYOffset = 0;
 
-        if (pWinFont->IsCJKVerticalFont() && pGlyph->IsVertical())
-        {
-            nNewTextAlign = VTA_CENTER | TA_BOTTOM;
-            nYOffset = nGlyphOffset;
-        }
-        else
-            nNewTextAlign = nTextAlign;
+        fnUseVertFont(pWinFont->IsCJKVerticalFont() && pGlyph->IsVertical());
 
-        if (nCurTextAlign != nNewTextAlign)
-            SetTextAlign(hDC, nNewTextAlign);
-
-        ExtTextOutW(hDC, aPos.getX(), aPos.getY() + nYOffset, ETO_GLYPH_INDEX, nullptr, &glyphWStr,
-                    1, nullptr);
-
-        nCurTextAlign = nNewTextAlign;
+        ExtTextOutW(hDC, aPos.getX(), aPos.getY(), ETO_GLYPH_INDEX, nullptr, &glyphWStr, 1,
+                    nullptr);
     }
-
-    if (nCurTextAlign != nTextAlign)
-        SetTextAlign(hDC, nTextAlign);
 
     return true;
 }
@@ -137,7 +128,7 @@ WinFontInstance::WinFontInstance(const WinFontFace& rPFF, const vcl::font::FontS
     : LogicalFontInstance(rPFF, rFSP)
     , m_pGraphics(nullptr)
     , m_hFont(nullptr)
-    , m_bIsCJKVerticalFont(false)
+    , m_hVerticalFont(nullptr)
     , m_nTmDescent(0)
 {
 }
@@ -146,6 +137,11 @@ WinFontInstance::~WinFontInstance()
 {
     if (m_hFont)
         ::DeleteFont(m_hFont);
+
+    if (m_hVerticalFont)
+    {
+        ::DeleteFont(m_hVerticalFont);
+    }
 }
 
 float WinFontInstance::getHScale() const
@@ -191,7 +187,7 @@ void WinFontInstance::SetGraphics(WinSalGraphics* pGraphics)
         return;
     HFONT hOrigFont;
     HDC hDC = m_pGraphics->getHDC();
-    std::tie(m_hFont, m_bIsCJKVerticalFont, m_nTmDescent)
+    std::tie(m_hFont, m_hVerticalFont, m_nTmDescent)
         = m_pGraphics->ImplDoSetFont(hDC, GetFontSelectPattern(), GetFontFace(), hOrigFont);
     SelectObject(hDC, hOrigFont);
 }
