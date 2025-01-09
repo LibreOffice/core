@@ -216,21 +216,17 @@ void AquaSalInfoPrinter::setPaperSize( tools::Long i_nWidth, tools::Long i_nHeig
 
     Orientation ePaperOrientation = Orientation::Portrait;
     const PaperInfo* pPaper = matchPaper( i_nWidth, i_nHeight, ePaperOrientation );
-    bool bPaperSet = false;
-
     if( pPaper )
     {
-        // If the paper name is empty, fallback to setting the paper size
-        // using the specified width and height.
+        // Don't set the print info's paper name if it is empty
         const rtl::OString rPaperName( PaperInfo::toPSName( pPaper->getPaper() ) );
         if( !rPaperName.isEmpty() )
         {
             NSString* pPaperName = [CreateNSString( OStringToOUString( rPaperName, RTL_TEXTENCODING_ASCII_US ) ) autorelease];
             [mpPrintInfo setPaperName: pPaperName];
-            bPaperSet = true;
         }
     }
-    if( !bPaperSet && i_nWidth > 0 && i_nHeight > 0 )
+    if( i_nWidth > 0 && i_nHeight > 0 )
     {
         NSSize aPaperSize = { static_cast<CGFloat>(TenMuToPt(i_nWidth)), static_cast<CGFloat>(TenMuToPt(i_nHeight)) };
         [mpPrintInfo setPaperSize: aPaperSize];
@@ -522,7 +518,8 @@ bool AquaSalInfoPrinter::StartJob( const OUString* i_pFileName,
 
             // When the last page has a page size change, one more loop
             // still needs to run so set mnCurPageRangeCount to zero.
-            mnCurPageRangeStart += mnCurPageRangeCount;
+            if( !aAccViewState.bNeedRestart )
+                mnCurPageRangeStart += mnCurPageRangeCount;
             mnCurPageRangeCount = 0;
         } while( ( !bWasAborted || aAccViewState.bNeedRestart ) && mnCurPageRangeStart + mnCurPageRangeCount < nAllPages );
     }
