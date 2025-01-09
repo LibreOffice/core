@@ -30,6 +30,17 @@
  all_ins(PyObject *m)
  {
  #ifdef F_OK
+--- Objects/dictobject.c
++++ Objects/dictobject.c
+@@ -1497,7 +1497,7 @@
+             if (unicode) { // combined unicode -> combined unicode
+                 PyDictUnicodeEntry *newentries = DK_UNICODE_ENTRIES(mp->ma_keys);
+                 if (oldkeys->dk_nentries == numentries && mp->ma_keys->dk_kind == DICT_KEYS_UNICODE) {
+-                    memcpy(newentries, oldentries, numentries * sizeof(PyDictUnicodeEntry));
++                    memcpy(newentries, (void *) oldentries, numentries * sizeof(PyDictUnicodeEntry));
+                 }
+                 else {
+                     PyDictUnicodeEntry *ep = oldentries;
 --- Objects/listobject.c
 +++ Objects/listobject.c
 @@ -554,7 +554,7 @@
