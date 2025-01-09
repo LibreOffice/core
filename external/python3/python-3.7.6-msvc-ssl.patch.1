@@ -12,3 +12,14 @@ No use for applink.c OPENSSL_Applink, everything is compiled with the same MSVC
    </ItemGroup>
    <ItemGroup>
      <ResourceCompile Include="..\PC\python_nt.rc" />
+--- python3/PCbuild/openssl.props.orig	2019-12-23 16:20:34.588135900 +0100
++++ python3/PCbuild/openssl.props	2019-12-23 16:20:51.074001300 +0100
+@@ -11,8 +11,6 @@
+   </ItemDefinitionGroup>
+   <PropertyGroup>
+     <_DLLSuffix>-3</_DLLSuffix>
+-    <_DLLSuffix Condition="$(Platform) == 'ARM'">$(_DLLSuffix)-arm</_DLLSuffix>
+-    <_DLLSuffix Condition="$(Platform) == 'ARM64'">$(_DLLSuffix)-arm64</_DLLSuffix>
+     <OpenSSLDLLSuffix Condition="$(OpenSSLDLLSuffix) == ''">$(_DLLSuffix)</OpenSSLDLLSuffix>
+   </PropertyGroup>
+   <ItemGroup>
