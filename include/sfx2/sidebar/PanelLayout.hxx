@@ -37,6 +37,9 @@ private:
 public:
     PanelLayout(weld::Widget* pParent, const OUString& rID, const OUString& rUIXMLDescription);
 
+    PanelLayout(weld::Widget* pParent, const OUString& rID, const OUString& rUIXMLDescription,
+                sal_uInt64 nWindowId);
+
     void SetPanel(sfx2::sidebar::Panel* pPanel);
 
     virtual ~PanelLayout();
