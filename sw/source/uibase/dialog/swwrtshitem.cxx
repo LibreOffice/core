@@ -21,7 +21,7 @@
 #include <globals.hrc>
 
 SwWrtShellItem::SwWrtShellItem( SwWrtShell* pSh )
-    : SfxPoolItem( SID_WRT_SHELL, SfxItemType::SwWrtShellItemType )
+    : SfxPoolItem( SID_WRT_SHELL )
     , m_pWrtSh( pSh )
 {
 

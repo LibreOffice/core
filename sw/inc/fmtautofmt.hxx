@@ -32,10 +32,8 @@ class SW_DLLPUBLIC SwFormatAutoFormat final : public SfxPoolItem
     std::shared_ptr<SfxItemSet> mpHandle;
 
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwFormatAutoFormat)
     SwFormatAutoFormat( sal_uInt16 nWhich = RES_TXTATR_AUTOFMT );
-
-public:
-
 
     /// "pure virtual methods" of SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const override;

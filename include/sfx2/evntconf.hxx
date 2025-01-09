@@ -69,9 +69,9 @@ class SFX2_DLLPUBLIC SfxEventNamesItem final : public SfxPoolItem
     SfxEventNamesList aEventsList;
 
 public:
-
+    DECLARE_ITEM_TYPE_FUNCTION(SfxEventNamesItem)
     SfxEventNamesItem ( const sal_uInt16 nId )
-        : SfxPoolItem( nId, SfxItemType::SfxEventNamesItemType ) {}
+        : SfxPoolItem( nId ) {}
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,

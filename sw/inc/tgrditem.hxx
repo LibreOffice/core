@@ -47,6 +47,7 @@ private:
     bool m_bSquaredMode;
 
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwTextGridItem)
     SwTextGridItem();
     virtual ~SwTextGridItem() override;
 

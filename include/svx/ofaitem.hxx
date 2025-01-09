@@ -30,6 +30,7 @@ private:
     void* pPtr;
 
 public:
+                             DECLARE_ITEM_TYPE_FUNCTION(OfaPtrItem)
                              OfaPtrItem( sal_uInt16 nWhich, void *pPtr );
 
     virtual bool             operator==( const SfxPoolItem& ) const override;
@@ -43,6 +44,7 @@ class SVX_DLLPUBLIC OfaXColorListItem final : public SfxPoolItem
  private:
     rtl::Reference<XColorList> mxRef;
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(OfaXColorListItem)
     OfaXColorListItem( sal_uInt16 _nWhich, rtl::Reference<XColorList> xRef );
 
     virtual bool operator==( const SfxPoolItem& rItem ) const override;

@@ -110,6 +110,7 @@ This item describes a Macro table.
 class SVL_DLLPUBLIC SvxMacroItem final : public SfxPoolItem
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SvxMacroItem)
     explicit inline SvxMacroItem ( const sal_uInt16 nId );
 
     // "pure virtual methods" of SfxPoolItem
@@ -135,7 +136,7 @@ private:
 };
 
 inline SvxMacroItem::SvxMacroItem( const sal_uInt16 nId )
-    : SfxPoolItem( nId, SfxItemType::SvxMacroItemType )
+    : SfxPoolItem( nId )
 {}
 
 inline bool SvxMacroItem::HasMacro( SvMacroItemId nEvent ) const

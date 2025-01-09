@@ -63,6 +63,7 @@ public:
     /// This method must be called when the hint is actually copied.
     void DoCopy(SwTextNode& rTargetTextNode);
 
+    DECLARE_ITEM_TYPE_FUNCTION(SwFormatContentControl)
     explicit SwFormatContentControl(sal_uInt16 nWhich);
 
     explicit SwFormatContentControl(const std::shared_ptr<SwContentControl>& pContentControl,

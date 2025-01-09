@@ -37,7 +37,7 @@ SfxPoolItem* SwRegisterItem::CreateDefault() { return new SwRegisterItem; }
 SfxPoolItem* SwNumRuleItem::CreateDefault() { return new SwNumRuleItem; }
 
 SwFormatDrop::SwFormatDrop()
-    : SfxPoolItem( RES_PARATR_DROP, SfxItemType::SwFormatDropType ),
+    : SfxPoolItem( RES_PARATR_DROP ),
     SwClient( nullptr ),
     m_pDefinedIn( nullptr ),
     m_nDistance( 0 ),
@@ -49,7 +49,7 @@ SwFormatDrop::SwFormatDrop()
 }
 
 SwFormatDrop::SwFormatDrop( const SwFormatDrop &rCpy )
-    : SfxPoolItem( RES_PARATR_DROP, SfxItemType::SwFormatDropType ),
+    : SfxPoolItem( RES_PARATR_DROP ),
     SwClient( rCpy.GetRegisteredInNonConst() ),
     m_pDefinedIn( nullptr ),
     m_nDistance( rCpy.GetDistance() ),

@@ -31,7 +31,7 @@ SbxItem::SbxItem (
     OUString aName,
     SbxItemType eSbxType
 ) :
-    SfxPoolItem(nWhichItem, SfxItemType::SbxItemType),
+    SfxPoolItem(nWhichItem),
     m_aDocument(std::move(aDocument)),
     m_aLibName(std::move(aLibName)),
     m_aName(std::move(aName)),
@@ -46,7 +46,7 @@ SbxItem::SbxItem (
     OUString aMethodName,
     SbxItemType eSbxType
 ) :
-    SfxPoolItem(nWhichItem, SfxItemType::SbxItemType),
+    SfxPoolItem(nWhichItem),
     m_aDocument(std::move(aDocument)),
     m_aLibName(std::move(aLibName)),
     m_aName(std::move(aName)),

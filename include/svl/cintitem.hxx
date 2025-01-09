@@ -29,9 +29,9 @@ class SVL_DLLPUBLIC CntByteItem: public SfxPoolItem
     sal_uInt8 m_nValue;
 
 public:
-
-    CntByteItem(sal_uInt16 which, sal_uInt8 nTheValue, SfxItemType eItemType = SfxItemType::CntByteItemType):
-        SfxPoolItem(which, eItemType), m_nValue(nTheValue) {}
+    DECLARE_ITEM_TYPE_FUNCTION(CntByteItem)
+    CntByteItem(sal_uInt16 which, sal_uInt8 nTheValue):
+        SfxPoolItem(which), m_nValue(nTheValue) {}
 
     virtual bool operator ==(const SfxPoolItem & rItem) const override;
 
@@ -62,9 +62,9 @@ class SVL_DLLPUBLIC CntUInt16Item: public SfxPoolItem
     sal_uInt16 m_nValue;
 
 public:
-
-    CntUInt16Item(sal_uInt16 which, sal_uInt16 nTheValue, SfxItemType eItemType = SfxItemType::CntUInt16ItemType):
-        SfxPoolItem(which, eItemType), m_nValue(nTheValue)
+    DECLARE_ITEM_TYPE_FUNCTION(CntUInt16Item)
+    CntUInt16Item(sal_uInt16 which, sal_uInt16 nTheValue):
+        SfxPoolItem(which), m_nValue(nTheValue)
     {}
 
     virtual bool operator ==(const SfxPoolItem & rItem) const override;
@@ -97,9 +97,9 @@ class SVL_DLLPUBLIC CntInt32Item: public SfxPoolItem
     sal_Int32 m_nValue;
 
 public:
-
-    CntInt32Item(sal_uInt16 which, sal_Int32 nTheValue, SfxItemType eItemType = SfxItemType::CntInt32ItemType):
-        SfxPoolItem(which, eItemType), m_nValue(nTheValue)
+    DECLARE_ITEM_TYPE_FUNCTION(CntInt32Item)
+    CntInt32Item(sal_uInt16 which, sal_Int32 nTheValue):
+        SfxPoolItem(which), m_nValue(nTheValue)
     {}
 
     virtual bool operator ==(const SfxPoolItem & rItem) const override;
@@ -132,9 +132,9 @@ class SVL_DLLPUBLIC CntUInt32Item: public SfxPoolItem
     sal_uInt32 m_nValue;
 
 public:
-
-    CntUInt32Item(sal_uInt16 which, sal_uInt32 nTheValue, SfxItemType eItemType = SfxItemType::CntUInt32ItemType):
-        SfxPoolItem(which, eItemType), m_nValue(nTheValue)
+    DECLARE_ITEM_TYPE_FUNCTION(CntUInt32Item)
+    CntUInt32Item(sal_uInt16 which, sal_uInt32 nTheValue):
+        SfxPoolItem(which), m_nValue(nTheValue)
     {}
 
     virtual bool operator ==(const SfxPoolItem & rItem) const override;

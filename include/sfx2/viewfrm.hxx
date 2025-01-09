@@ -267,8 +267,9 @@ class SFX2_DLLPUBLIC SfxViewFrameItem final : public SfxPoolItem
     SfxViewFrame*           pFrame;
 
 public:
+                            DECLARE_ITEM_TYPE_FUNCTION(SfxViewFrameItem)
                             SfxViewFrameItem( SfxViewFrame *pViewFrame ):
-                                SfxPoolItem( 0, SfxItemType::SfxViewFrameItemType ),
+                                SfxPoolItem( 0 ),
                                 pFrame( pViewFrame)
                             {}
 

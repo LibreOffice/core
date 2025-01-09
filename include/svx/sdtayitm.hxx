@@ -25,7 +25,8 @@
 
 class SVXCORE_DLLPUBLIC SdrTextAniDelayItem final : public SfxUInt16Item {
 public:
-    SdrTextAniDelayItem(sal_uInt16 nVal=0): SfxUInt16Item(SDRATTR_TEXT_ANIDELAY, nVal, SfxItemType::SdrTextAniDelayItemType) {}
+    DECLARE_ITEM_TYPE_FUNCTION(SdrTextAniDelayItem)
+    SdrTextAniDelayItem(sal_uInt16 nVal=0): SfxUInt16Item(SDRATTR_TEXT_ANIDELAY, nVal) {}
     virtual SdrTextAniDelayItem* Clone(SfxItemPool* pPool=nullptr) const override;
     virtual bool GetPresentation(SfxItemPresentation ePres, MapUnit eCoreMetric, MapUnit ePresMetric, OUString& rText, const IntlWrapper&) const override;
 };

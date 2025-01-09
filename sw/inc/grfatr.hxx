@@ -41,8 +41,9 @@ class SW_DLLPUBLIC SwMirrorGrf final : public SfxEnumItem<MirrorGraph>
     bool m_bGrfToggle; // Flip graphics on even pages.
 
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwMirrorGrf)
     SwMirrorGrf( MirrorGraph eMiro = MirrorGraph::Dont )
-        : SfxEnumItem( RES_GRFATR_MIRRORGRF, SfxItemType::SwMirrorGrfType, eMiro ), m_bGrfToggle( false )
+        : SfxEnumItem( RES_GRFATR_MIRRORGRF, eMiro ), m_bGrfToggle( false )
     {}
 
     // pure virtual methods of SfxPoolItem
@@ -69,6 +70,7 @@ public:
 class SW_DLLPUBLIC SwCropGrf final : public SvxGrfCrop
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwCropGrf)
     SwCropGrf();
     SwCropGrf(  sal_Int32 nLeft,    sal_Int32 nRight,
                 sal_Int32 nTop,     sal_Int32 nBottom );
@@ -87,8 +89,9 @@ private:
     static Degree10 checkAndCorrectValue(Degree10 nValue);
 
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwRotationGrf)
     SwRotationGrf()
-        : SfxUInt16Item( RES_GRFATR_ROTATION, 0, SfxItemType::SwRotationGrfType )
+        : SfxUInt16Item( RES_GRFATR_ROTATION, 0 )
     {}
     SwRotationGrf( Degree10 nVal, const Size& rSz );
 
@@ -113,8 +116,9 @@ public:
 class SW_DLLPUBLIC SwLuminanceGrf final : public SfxInt16Item
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwLuminanceGrf)
     SwLuminanceGrf( sal_Int16 nVal = 0 )
-        : SfxInt16Item( RES_GRFATR_LUMINANCE, nVal, SfxItemType::SwLuminanceGrfType )
+        : SfxInt16Item( RES_GRFATR_LUMINANCE, nVal )
     {}
 
     // pure virtual methods from SfxInt16Item
@@ -129,8 +133,9 @@ public:
 class SW_DLLPUBLIC SwContrastGrf final : public SfxInt16Item
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwContrastGrf)
     SwContrastGrf( sal_Int16 nVal = 0 )
-        : SfxInt16Item( RES_GRFATR_CONTRAST, nVal, SfxItemType::SwContrastGrfType )
+        : SfxInt16Item( RES_GRFATR_CONTRAST, nVal )
     {}
 
     // pure virtual methods from SfxInt16Item
@@ -146,7 +151,7 @@ class SwChannelGrf : public SfxInt16Item
 {
 protected:
     SwChannelGrf( sal_Int16 nVal, sal_uInt16 nWhichL )
-        : SfxInt16Item( nWhichL, nVal, SfxItemType::SwChannelGrfType )
+        : SfxInt16Item( nWhichL, nVal )
     {}
 
 public:
@@ -161,6 +166,7 @@ public:
 class SwChannelRGrf final : public SwChannelGrf
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwChannelRGrf)
     SwChannelRGrf( sal_Int16 nVal = 0 )
         : SwChannelGrf( nVal, RES_GRFATR_CHANNELR )
     {}
@@ -169,6 +175,7 @@ public:
 class SwChannelGGrf final : public SwChannelGrf
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwChannelGGrf)
     SwChannelGGrf( sal_Int16 nVal = 0 )
         : SwChannelGrf( nVal, RES_GRFATR_CHANNELG )
     {}
@@ -177,6 +184,7 @@ public:
 class SwChannelBGrf final : public SwChannelGrf
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwChannelBGrf)
     SwChannelBGrf( sal_Int16 nVal = 0 )
         : SwChannelGrf( nVal, RES_GRFATR_CHANNELB )
     {}
@@ -187,11 +195,12 @@ class SW_DLLPUBLIC SwGammaGrf final : public SfxPoolItem
 {
     double m_nValue;
 public:
-    SwGammaGrf() : SfxPoolItem( RES_GRFATR_GAMMA, SfxItemType::SwGammaGrfType ), m_nValue( 1.0 )
+    DECLARE_ITEM_TYPE_FUNCTION(SwGammaGrf)
+    SwGammaGrf() : SfxPoolItem( RES_GRFATR_GAMMA ), m_nValue( 1.0 )
     {}
 
     SwGammaGrf( const double& rVal )
-        : SfxPoolItem( RES_GRFATR_GAMMA, SfxItemType::SwGammaGrfType ), m_nValue( rVal )
+        : SfxPoolItem( RES_GRFATR_GAMMA ), m_nValue( rVal )
     {}
 
     // pure virtual methods from SfxEnumItem
@@ -216,8 +225,9 @@ public:
 class SwInvertGrf final : public SfxBoolItem
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwInvertGrf)
     SwInvertGrf( bool bVal = false )
-        : SfxBoolItem( RES_GRFATR_INVERT, bVal, SfxItemType::SwInvertGrfType )
+        : SfxBoolItem( RES_GRFATR_INVERT, bVal )
     {}
 
     // pure virtual methods from SfxInt16Item
@@ -232,8 +242,9 @@ public:
 class SwTransparencyGrf final : public SfxByteItem
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwTransparencyGrf)
     SwTransparencyGrf( sal_Int8 nVal = 0 )
-        : SfxByteItem( RES_GRFATR_TRANSPARENCY, nVal, SfxItemType::SwTransparencyGrfType )
+        : SfxByteItem( RES_GRFATR_TRANSPARENCY, nVal )
     {}
 
     // pure virtual methods from SfxInt16Item
@@ -253,12 +264,13 @@ public:
 class SwDrawModeGrf_Base: public SfxEnumItem<GraphicDrawMode> {
 protected:
     SwDrawModeGrf_Base(GraphicDrawMode nMode):
-        SfxEnumItem(RES_GRFATR_DRAWMODE, SfxItemType::SwDrawModeGrf_BaseType, nMode) {}
+        SfxEnumItem(RES_GRFATR_DRAWMODE, nMode) {}
 };
 
 class SW_DLLPUBLIC SwDrawModeGrf final : public SwDrawModeGrf_Base
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwDrawModeGrf)
     SwDrawModeGrf( GraphicDrawMode nMode = GraphicDrawMode::Standard )
         : SwDrawModeGrf_Base( nMode )
     {}

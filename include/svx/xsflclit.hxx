@@ -25,6 +25,7 @@
 class SVXCORE_DLLPUBLIC XSecondaryFillColorItem final : public XColorItem
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(XSecondaryFillColorItem)
     XSecondaryFillColorItem(const OUString& rName, const Color& rTheColor);
 
     SVX_DLLPRIVATE virtual XSecondaryFillColorItem* Clone(SfxItemPool* pPool = nullptr) const override;

@@ -37,7 +37,7 @@
 #include <osl/diagnose.h>
 
 SwFormatFlyCnt::SwFormatFlyCnt( SwFrameFormat *pFrameFormat )
-    : SfxPoolItem( RES_TXTATR_FLYCNT, SfxItemType::SwFormatFlyCntType ),
+    : SfxPoolItem( RES_TXTATR_FLYCNT ),
     m_pTextAttr( nullptr ),
     m_pFormat( pFrameFormat )
 {

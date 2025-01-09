@@ -35,7 +35,7 @@ struct SvxClipboardFormatItem_Impl
 SfxPoolItem* SvxClipboardFormatItem::CreateDefault() { return new  SvxClipboardFormatItem(TypedWhichId<SvxClipboardFormatItem>(0)); };
 
 SvxClipboardFormatItem::SvxClipboardFormatItem( TypedWhichId<SvxClipboardFormatItem> nId )
-    : SfxPoolItem( nId, SfxItemType::SvxClipboardFormatItemType ), pImpl( new SvxClipboardFormatItem_Impl )
+    : SfxPoolItem( nId ), pImpl( new SvxClipboardFormatItem_Impl )
 {
 }
 

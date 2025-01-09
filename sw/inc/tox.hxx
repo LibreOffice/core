@@ -112,6 +112,7 @@ class SW_DLLPUBLIC SwTOXMark final
 public:
 
     // single argument ctors shall be explicit.
+    DECLARE_ITEM_TYPE_FUNCTION(SwTOXMark)
     explicit SwTOXMark( const SwTOXType* pTyp );
     virtual ~SwTOXMark() override;
 

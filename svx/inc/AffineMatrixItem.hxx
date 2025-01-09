@@ -30,6 +30,7 @@ private:
     css::geometry::AffineMatrix2D maMatrix;
 
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(AffineMatrixItem)
     AffineMatrixItem(const css::geometry::AffineMatrix2D* pMatrix);
     AffineMatrixItem(const AffineMatrixItem&);
     virtual ~AffineMatrixItem() override;

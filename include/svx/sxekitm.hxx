@@ -30,8 +30,9 @@ enum class SdrEdgeKind
 
 class SVXCORE_DLLPUBLIC SdrEdgeKindItem final : public SfxEnumItem<SdrEdgeKind> {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SdrEdgeKindItem)
     SdrEdgeKindItem(SdrEdgeKind eStyle=SdrEdgeKind::OrthoLines)
-       : SfxEnumItem(SDRATTR_EDGEKIND, SfxItemType::SdrEdgeKindItemType, eStyle) {}
+       : SfxEnumItem(SDRATTR_EDGEKIND, eStyle) {}
     SAL_DLLPRIVATE virtual SdrEdgeKindItem* Clone(SfxItemPool* pPool=nullptr) const override;
     virtual sal_uInt16   GetValueCount() const override; // { return 5; }
     SAL_DLLPRIVATE virtual bool         QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;

@@ -215,7 +215,7 @@ void SvxChartOptions::SetDefaultColors( const SvxChartColorTable& rDefColors )
 
 
 SvxChartColorTableItem::SvxChartColorTableItem( sal_uInt16 nWhich_, SvxChartColorTable aTable ) :
-    SfxPoolItem( nWhich_, SfxItemType::SvxChartColorTableItemType ),
+    SfxPoolItem( nWhich_ ),
     m_aColorTable(std::move( aTable ))
 {
 }

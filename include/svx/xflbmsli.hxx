@@ -26,6 +26,7 @@
 class SVXCORE_DLLPUBLIC XFillBmpSizeLogItem final : public SfxBoolItem
 {
 public:
+                            DECLARE_ITEM_TYPE_FUNCTION(XFillBmpSizeLogItem)
                             XFillBmpSizeLogItem( bool bLog = true );
 
     SVX_DLLPRIVATE virtual XFillBmpSizeLogItem* Clone( SfxItemPool* pPool = nullptr ) const override;

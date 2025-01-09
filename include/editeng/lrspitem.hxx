@@ -108,6 +108,7 @@ public:
 
     sal_uInt16 GetPropLeft() const { return m_nPropLeftMargin; }
 
+    DECLARE_ITEM_TYPE_FUNCTION(SvxLeftMarginItem)
     explicit SvxLeftMarginItem(const sal_uInt16 nId);
     SvxLeftMarginItem(const tools::Long nLeft, const sal_uInt16 nId);
     SvxLeftMarginItem(SvxLeftMarginItem const &) = default; // SfxPoolItem copy function dichotomy
@@ -153,6 +154,7 @@ public:
     sal_Int32 ResolveTextLeft(const SvxFontUnitMetrics& rMetrics) const;
     SvxIndentValue GetTextLeft() const;
 
+    DECLARE_ITEM_TYPE_FUNCTION(SvxTextLeftMarginItem)
     explicit SvxTextLeftMarginItem(const sal_uInt16 nId);
     SvxTextLeftMarginItem(SvxIndentValue stLeft, const sal_uInt16 nId);
     SvxTextLeftMarginItem(SvxTextLeftMarginItem const &) = default; // SfxPoolItem copy function dichotomy
@@ -199,6 +201,7 @@ public:
     SvxIndentValue GetTextFirstLineOffset() const;
     sal_Int32 ResolveTextFirstLineOffset(const SvxFontUnitMetrics& rMetrics) const;
 
+    DECLARE_ITEM_TYPE_FUNCTION(SvxFirstLineIndentItem)
     explicit SvxFirstLineIndentItem(const sal_uInt16 nId);
     SvxFirstLineIndentItem(SvxIndentValue stValue, const sal_uInt16 nId);
     SvxFirstLineIndentItem(SvxFirstLineIndentItem const &) = default; // SfxPoolItem copy function dichotomy
@@ -243,6 +246,7 @@ public:
 
     sal_uInt16 GetPropRight() const;
 
+    DECLARE_ITEM_TYPE_FUNCTION(SvxRightMarginItem)
     explicit SvxRightMarginItem(const sal_uInt16 nId);
     SvxRightMarginItem(SvxIndentValue stRight, const sal_uInt16 nId);
     SvxRightMarginItem(SvxRightMarginItem const &) = default; // SfxPoolItem copy function dichotomy
@@ -279,6 +283,7 @@ public:
     void SetGutterMargin(const tools::Long nGutterMargin) { m_nGutterMargin = nGutterMargin; }
     tools::Long GetGutterMargin() const { return m_nGutterMargin; }
 
+    DECLARE_ITEM_TYPE_FUNCTION(SvxGutterLeftMarginItem)
     explicit SvxGutterLeftMarginItem(const sal_uInt16 nId);
     SvxGutterLeftMarginItem(SvxGutterLeftMarginItem const &) = default; // SfxPoolItem copy function dichotomy
 
@@ -311,6 +316,7 @@ private:
 public:
     tools::Long GetRightGutterMargin() const { return m_nRightGutterMargin; }
 
+    DECLARE_ITEM_TYPE_FUNCTION(SvxGutterRightMarginItem)
     explicit SvxGutterRightMarginItem(const sal_uInt16 nId);
     SvxGutterRightMarginItem(SvxGutterRightMarginItem const &) = default; // SfxPoolItem copy function dichotomy
 
@@ -354,6 +360,7 @@ public:
 
     static SfxPoolItem* CreateDefault();
 
+    DECLARE_ITEM_TYPE_FUNCTION(SvxLRSpaceItem)
     explicit SvxLRSpaceItem( const sal_uInt16 nId  );
     SvxLRSpaceItem(SvxIndentValue stLeft, SvxIndentValue stRight, SvxIndentValue stValue,
                    const sal_uInt16 nId);

@@ -25,7 +25,8 @@
 // Number of loops. 0=infinite.
 class SAL_DLLPUBLIC_RTTI SdrTextAniCountItem final : public SfxUInt16Item {
 public:
-    SdrTextAniCountItem(sal_uInt16 nVal=0): SfxUInt16Item(SDRATTR_TEXT_ANICOUNT, nVal, SfxItemType::SdrTextAniCountItemType) {}
+    DECLARE_ITEM_TYPE_FUNCTION(SdrTextAniCountItem)
+    SdrTextAniCountItem(sal_uInt16 nVal=0): SfxUInt16Item(SDRATTR_TEXT_ANICOUNT, nVal) {}
 
     virtual SdrTextAniCountItem* Clone(SfxItemPool * = nullptr) const override
     { return new SdrTextAniCountItem(*this); }

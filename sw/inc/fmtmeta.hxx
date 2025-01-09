@@ -109,6 +109,7 @@ private:
 
 public:
     /// takes ownership
+    DECLARE_ITEM_TYPE_FUNCTION(SwFormatMeta)
     explicit SwFormatMeta( std::shared_ptr< ::sw::Meta > i_pMeta,
                         const sal_uInt16 i_nWhich );
     virtual ~SwFormatMeta() override;

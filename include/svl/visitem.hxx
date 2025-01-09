@@ -30,8 +30,9 @@ class SVL_DLLPUBLIC SfxVisibilityItem final : public SfxPoolItem
 
 public:
 
+    DECLARE_ITEM_TYPE_FUNCTION(SfxVisibilityItem)
     explicit SfxVisibilityItem(sal_uInt16 which, bool bVisible):
-        SfxPoolItem(which, SfxItemType::SfxVisibilityItemType)
+        SfxPoolItem(which)
     {
         m_nValue.bVisible = bVisible;
     }

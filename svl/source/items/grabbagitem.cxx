@@ -18,17 +18,17 @@
 using namespace com::sun::star;
 
 SfxGrabBagItem::SfxGrabBagItem()
-    : SfxPoolItem(0, SfxItemType::SfxGrabBagItemType)
+    : SfxPoolItem(0)
 {
 }
 
 SfxGrabBagItem::SfxGrabBagItem(sal_uInt16 nWhich)
-    : SfxPoolItem(nWhich, SfxItemType::SfxGrabBagItemType)
+    : SfxPoolItem(nWhich)
 {
 }
 
 SfxGrabBagItem::SfxGrabBagItem(sal_uInt16 nWhich, std::map<OUString, css::uno::Any> aMap)
-    : SfxPoolItem(nWhich, SfxItemType::SfxGrabBagItemType)
+    : SfxPoolItem(nWhich)
     , m_aMap(std::move(aMap))
 {
 }

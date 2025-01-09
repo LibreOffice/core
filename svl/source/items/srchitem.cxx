@@ -91,7 +91,7 @@ static Sequence< OUString > lcl_GetNotifyNames()
 
 SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
 
-    SfxPoolItem( nId, SfxItemType::SvxSearchItemType ),
+    SfxPoolItem( nId ),
     ConfigItem( CFG_ROOT_NODE ),
 
     m_aSearchOpt      ( SearchFlags::LEV_RELAXED,

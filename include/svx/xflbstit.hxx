@@ -26,6 +26,7 @@
 class SVXCORE_DLLPUBLIC XFillBmpStretchItem final : public SfxBoolItem
 {
 public:
+                            DECLARE_ITEM_TYPE_FUNCTION(XFillBmpStretchItem)
                             XFillBmpStretchItem( bool bStretch = true );
 
     virtual XFillBmpStretchItem* Clone( SfxItemPool* pPool = nullptr ) const override;

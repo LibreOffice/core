@@ -34,6 +34,7 @@ protected:
     virtual ItemInstanceManager* getItemInstanceManager() const override;
 
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SvxFrameDirectionItem)
     SvxFrameDirectionItem( SvxFrameDirection nValue, sal_uInt16 nWhich  );
     virtual ~SvxFrameDirectionItem() override;
 

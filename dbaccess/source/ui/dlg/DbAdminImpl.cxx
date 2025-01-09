@@ -1079,7 +1079,7 @@ void ODbDataSourceAdministrationHelper::setDataSourceOrName( const Any& _rDataSo
 
 // DbuTypeCollectionItem
 DbuTypeCollectionItem::DbuTypeCollectionItem(sal_Int16 _nWhich, ::dbaccess::ODsnTypeCollection* _pCollection)
-    :SfxPoolItem(_nWhich, SfxItemType::DbuTypeCollectionItemType)
+    :SfxPoolItem(_nWhich )
     ,m_pCollection(_pCollection)
 {
 }

@@ -35,6 +35,7 @@ class SW_DLLPUBLIC SwFormatHeader final : public SfxPoolItem, public SwClient
     bool m_bActive;       ///< Only for controlling (creation of content).
 
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwFormatHeader)
     SwFormatHeader( bool bOn = false );
     SwFormatHeader( SwFrameFormat *pHeaderFormat );
     SwFormatHeader( const SwFormatHeader &rCpy );
@@ -67,6 +68,7 @@ class SW_DLLPUBLIC SwFormatFooter final : public SfxPoolItem, public SwClient
     bool m_bActive;       // Only for controlling (creation of content).
 
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwFormatFooter)
     SwFormatFooter( bool bOn = false );
     SwFormatFooter( SwFrameFormat *pFooterFormat );
     SwFormatFooter( const SwFormatFooter &rCpy );

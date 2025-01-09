@@ -36,7 +36,7 @@ class EDITENG_DLLPUBLIC SvxKerningItem final : public SfxInt16Item
 {
 public:
     static SfxPoolItem* CreateDefault();
-
+    DECLARE_ITEM_TYPE_FUNCTION(SvxKerningItem)
     SvxKerningItem( const short nKern /*= 0*/, const sal_uInt16 nId  );
 
     // "pure virtual Methods" from SfxPoolItem

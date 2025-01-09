@@ -81,6 +81,7 @@ enum class SvxChartRegress
 class SAL_WARN_UNUSED UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SvxChartRegressItem final : public SfxEnumItem<SvxChartRegress>
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SvxChartRegressItem)
     SvxChartRegressItem(SvxChartRegress eRegress /*= SvxChartRegress::Linear*/,
                         TypedWhichId<SvxChartRegressItem> nId );
 
@@ -92,6 +93,7 @@ public:
 class SAL_WARN_UNUSED UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SvxChartTextOrderItem final : public SfxEnumItem<SvxChartTextOrder>
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SvxChartTextOrderItem)
     SvxChartTextOrderItem(SvxChartTextOrder eOrder /*= SvxChartTextOrder::SideBySide*/,
                           TypedWhichId<SvxChartTextOrderItem> nId );
 
@@ -106,6 +108,7 @@ public:
 class SAL_WARN_UNUSED UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SvxChartKindErrorItem final : public SfxEnumItem<SvxChartKindError>
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SvxChartKindErrorItem)
     SvxChartKindErrorItem(SvxChartKindError /*eOrient = SvxChartKindError::NONE*/,
                            TypedWhichId<SvxChartKindErrorItem> nId );
 
@@ -117,6 +120,7 @@ public:
 class SAL_WARN_UNUSED UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SvxChartIndicateItem final : public SfxEnumItem<SvxChartIndicate>
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SvxChartIndicateItem)
     SvxChartIndicateItem(SvxChartIndicate eOrient /*= SvxChartIndicate::NONE*/,
                            TypedWhichId<SvxChartIndicateItem> nId );
 
@@ -131,6 +135,7 @@ class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC SvxDoubleItem final : public SfxPoolItem
 
 public:
     static SfxPoolItem* CreateDefault();
+    DECLARE_ITEM_TYPE_FUNCTION(SvxDoubleItem)
     SvxDoubleItem(double fValue /*= 0.0*/, TypedWhichId<SvxDoubleItem> nId );
     SvxDoubleItem(const SvxDoubleItem& rItem);
 

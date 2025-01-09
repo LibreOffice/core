@@ -39,6 +39,7 @@ protected:
 public:
     static SfxPoolItem* CreateDefault();
 
+    DECLARE_ITEM_TYPE_FUNCTION(SvxCharReliefItem)
     SvxCharReliefItem( FontRelief eValue /*= FontRelief::NONE*/,
                        const sal_uInt16 nId );
 

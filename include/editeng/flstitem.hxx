@@ -42,6 +42,7 @@ private:
     css::uno::Sequence< OUString >  aFontNameSeq;
 
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SvxFontListItem)
     SvxFontListItem( const FontList* pFontLst,
                      const sal_uInt16 nId  );
 

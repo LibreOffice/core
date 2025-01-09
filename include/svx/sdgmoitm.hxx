@@ -28,13 +28,15 @@
 // MSVC hack:
 class SAL_DLLPUBLIC_RTTI SdrGrafModeItem_Base: public SfxEnumItem<GraphicDrawMode> {
 protected:
+    DECLARE_ITEM_TYPE_FUNCTION(SdrGrafModeItem_Base)
     SdrGrafModeItem_Base(GraphicDrawMode eMode):
-        SfxEnumItem(SDRATTR_GRAFMODE, SfxItemType::SdrGrafModeItem_Base, eMode) {}
+        SfxEnumItem(SDRATTR_GRAFMODE, eMode) {}
 };
 
 class SVXCORE_DLLPUBLIC SdrGrafModeItem final : public SdrGrafModeItem_Base
 {
 public:
+                            DECLARE_ITEM_TYPE_FUNCTION(SdrGrafModeItem)
                             SdrGrafModeItem( GraphicDrawMode eMode = GraphicDrawMode::Standard ) : SdrGrafModeItem_Base( eMode ) {}
 
     SAL_DLLPRIVATE virtual SdrGrafModeItem* Clone( SfxItemPool* pPool = nullptr ) const override;

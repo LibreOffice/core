@@ -70,6 +70,7 @@ class EDITENG_DLLPUBLIC SvxFieldItem final : public SfxPoolItem
 {
     std::unique_ptr<SvxFieldData>  mpField;
 public:
+            DECLARE_ITEM_TYPE_FUNCTION(SvxFieldItem)
             SvxFieldItem( std::unique_ptr<SvxFieldData> pField, const sal_uInt16 nId  );
             SvxFieldItem( const SvxFieldData& rField, const sal_uInt16 nId  );
             SvxFieldItem( const SvxFieldItem& rItem );

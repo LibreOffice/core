@@ -32,6 +32,7 @@
 class EDITENG_DLLPUBLIC SvxForbiddenRuleItem final : public SfxBoolItem
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SvxForbiddenRuleItem)
     SvxForbiddenRuleItem( bool bOn /*= false*/,
                         const sal_uInt16 nId  );
 

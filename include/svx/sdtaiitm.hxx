@@ -24,7 +24,8 @@
 
 class SVXCORE_DLLPUBLIC SdrTextAniStartInsideItem final : public SdrYesNoItem {
 public:
-    SdrTextAniStartInsideItem(bool bOn=false): SdrYesNoItem(SDRATTR_TEXT_ANISTARTINSIDE,bOn, SfxItemType::SdrTextAniStartInsideItemType) {}
+    DECLARE_ITEM_TYPE_FUNCTION(SdrTextAniStartInsideItem)
+    SdrTextAniStartInsideItem(bool bOn=false): SdrYesNoItem(SDRATTR_TEXT_ANISTARTINSIDE,bOn) {}
     virtual ~SdrTextAniStartInsideItem() override;
     virtual SdrTextAniStartInsideItem* Clone(SfxItemPool* pPool=nullptr) const override;
 
@@ -36,7 +37,8 @@ public:
 
 class SVXCORE_DLLPUBLIC SdrTextAniStopInsideItem final : public SdrYesNoItem {
 public:
-    SdrTextAniStopInsideItem(bool bOn=false): SdrYesNoItem(SDRATTR_TEXT_ANISTOPINSIDE,bOn, SfxItemType::SdrTextAniStopInsideItemType) {}
+    DECLARE_ITEM_TYPE_FUNCTION(SdrTextAniStopInsideItem)
+    SdrTextAniStopInsideItem(bool bOn=false): SdrYesNoItem(SDRATTR_TEXT_ANISTOPINSIDE,bOn) {}
     virtual ~SdrTextAniStopInsideItem() override;
     virtual SdrTextAniStopInsideItem* Clone(SfxItemPool* pPool=nullptr) const override;
 

@@ -25,7 +25,7 @@
 SfxPoolItem* SfxImageItem::CreateDefault() { return new SfxImageItem; }
 
 SfxImageItem::SfxImageItem( sal_uInt16 which )
-    : SfxInt16Item( which, 0, SfxItemType::SfxImageItemType ), mnAngle(0), mbMirrored(false)
+    : SfxInt16Item( which, 0 ), mnAngle(0), mbMirrored(false)
 {
 }
 

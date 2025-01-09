@@ -27,6 +27,7 @@ class SVL_DLLPUBLIC SfxVoidItem final : public SfxPoolItem
 public:
     static SfxPoolItem* CreateDefault();
 
+    DECLARE_ITEM_TYPE_FUNCTION(SfxVoidItem)
     explicit SfxVoidItem(sal_uInt16 nWhich);
     SfxVoidItem(const SfxVoidItem& rCopy);
     SfxVoidItem(SfxVoidItem&& rOrig);

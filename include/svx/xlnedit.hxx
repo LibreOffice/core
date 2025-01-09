@@ -34,6 +34,7 @@ class SVXCORE_DLLPUBLIC XLineEndItem final : public NameOrIndex
 
 public:
             static SfxPoolItem* CreateDefault();
+            DECLARE_ITEM_TYPE_FUNCTION(XLineEndItem)
             XLineEndItem(sal_Int32 nIndex = -1);
             XLineEndItem(const OUString& rName, basegfx::B2DPolyPolygon aPolyPolygon);
             XLineEndItem(basegfx::B2DPolyPolygon aPolyPolygon);

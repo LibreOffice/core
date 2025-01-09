@@ -33,6 +33,7 @@
 class EDITENG_DLLPUBLIC SvxScriptSpaceItem final : public SfxBoolItem
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SvxScriptSpaceItem)
     SvxScriptSpaceItem( bool bOn /*= false*/,
                         const sal_uInt16 nId  );
 

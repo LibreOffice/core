@@ -36,13 +36,13 @@ using namespace ::com::sun::star;
 
 
 SvxHorJustifyItem::SvxHorJustifyItem( const sal_uInt16 nId ) :
-    SfxEnumItem( nId, SfxItemType::SvxHorJustifyItemType, SvxCellHorJustify::Standard )
+    SfxEnumItem( nId, SvxCellHorJustify::Standard )
 {
 }
 
 SvxHorJustifyItem::SvxHorJustifyItem( const SvxCellHorJustify eJustify,
                                       const sal_uInt16 nId ) :
-    SfxEnumItem( nId, SfxItemType::SvxHorJustifyItemType, eJustify )
+    SfxEnumItem( nId, eJustify )
 {
 }
 
@@ -173,13 +173,13 @@ sal_uInt16 SvxHorJustifyItem::GetValueCount() const
 
 
 SvxVerJustifyItem::SvxVerJustifyItem( const sal_uInt16 nId ) :
-    SfxEnumItem( nId, SfxItemType::SvxVerJustifyItemType, SvxCellVerJustify::Standard )
+    SfxEnumItem( nId, SvxCellVerJustify::Standard )
 {
 }
 
 SvxVerJustifyItem::SvxVerJustifyItem( const SvxCellVerJustify eJustify,
                                       const sal_uInt16 nId ) :
-    SfxEnumItem( nId, SfxItemType::SvxVerJustifyItemType, eJustify )
+    SfxEnumItem( nId, eJustify )
 {
 }
 
@@ -298,7 +298,7 @@ sal_uInt16 SvxVerJustifyItem::GetValueCount() const
 
 SvxJustifyMethodItem::SvxJustifyMethodItem( const SvxCellJustifyMethod eJustify,
                                       const sal_uInt16 nId ) :
-    SfxEnumItem( nId, SfxItemType::SvxJustifyMethodItemType, eJustify )
+    SfxEnumItem( nId, eJustify )
 {
 }
 

@@ -10,7 +10,7 @@
 #include <svl/int64item.hxx>
 
 SfxInt64Item::SfxInt64Item( sal_uInt16 nWhich, sal_Int64 nVal ) :
-    SfxPoolItem(nWhich, SfxItemType::SfxInt64ItemType), mnValue(nVal)
+    SfxPoolItem(nWhich), mnValue(nVal)
 {
 }
 

@@ -28,6 +28,7 @@ class SW_DLLPUBLIC SwWrtShellItem final : public SfxPoolItem
     SwWrtShell*         m_pWrtSh;
 
 public:
+                            DECLARE_ITEM_TYPE_FUNCTION(SwWrtShellItem)
                             SwWrtShellItem( SwWrtShell* pWrtSh );
 
     virtual bool            operator==( const SfxPoolItem& ) const override;

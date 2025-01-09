@@ -50,6 +50,7 @@ class SVX_DLLPUBLIC SvxSmartTagItem final : public SfxPoolItem
 public:
     static SfxPoolItem* CreateDefault();
 
+    DECLARE_ITEM_TYPE_FUNCTION(SvxSmartTagItem)
     SvxSmartTagItem( const TypedWhichId<SvxSmartTagItem> nId,
                      const css::uno::Sequence < css::uno::Sequence< css::uno::Reference< css::smarttags::XSmartTagAction > > >& rActionComponentsSequence,
                      const css::uno::Sequence < css::uno::Sequence< sal_Int32 > >& rActionIndicesSequence,

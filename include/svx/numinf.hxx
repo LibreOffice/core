@@ -29,7 +29,7 @@
 class SVX_DLLPUBLIC SvxNumberInfoItem final : public SfxPoolItem
 {
 public:
-
+    DECLARE_ITEM_TYPE_FUNCTION(SvxNumberInfoItem)
     SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
                        const TypedWhichId<SvxNumberInfoItem> nId  );
     SvxNumberInfoItem( SvNumberFormatter* pNumFormatter, OUString aVal,

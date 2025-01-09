@@ -59,7 +59,7 @@ class SFX2_DLLPUBLIC SvxZoomItem final : public SfxUInt16Item
 
 public:
     static SfxPoolItem* CreateDefault();
-
+    DECLARE_ITEM_TYPE_FUNCTION(SvxZoomItem)
     SvxZoomItem( SvxZoomType eZoomType = SvxZoomType::PERCENT,
                  sal_uInt16 nVal = 0, TypedWhichId<SvxZoomItem> nWhich = SID_ATTR_ZOOM );
 

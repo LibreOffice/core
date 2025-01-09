@@ -97,15 +97,15 @@ using namespace ::com::sun::star;
 
 typedef std::map<OUString, OUString> StringMap;
 
-NameOrIndex::NameOrIndex(TypedWhichId<NameOrIndex> _nWhich, sal_Int32 nIndex, SfxItemType eItemType) :
-    SfxStringItem(_nWhich, OUString(), eItemType),
+NameOrIndex::NameOrIndex(TypedWhichId<NameOrIndex> _nWhich, sal_Int32 nIndex) :
+    SfxStringItem(_nWhich, OUString()),
     m_nPalIndex(nIndex)
 {
     setNameOrIndex();
 }
 
-NameOrIndex::NameOrIndex(TypedWhichId<NameOrIndex> _nWhich, const OUString& rName, SfxItemType eItemType) :
-    SfxStringItem(_nWhich, rName, eItemType),
+NameOrIndex::NameOrIndex(TypedWhichId<NameOrIndex> _nWhich, const OUString& rName) :
+    SfxStringItem(_nWhich, rName),
     m_nPalIndex(-1)
 {
     setNameOrIndex();
@@ -272,22 +272,22 @@ void NameOrIndex::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterEndElement(pWriter);
 }
 
-SfxPoolItem* XColorItem::CreateDefault() { return new XColorItem(SfxItemType::XColorItemType); }
+SfxPoolItem* XColorItem::CreateDefault() { return new XColorItem(); }
 
-XColorItem::XColorItem(TypedWhichId<XColorItem> _nWhich, sal_Int32 nIndex, const Color& rTheColor, SfxItemType eItemType) :
-    NameOrIndex(_nWhich, nIndex, eItemType),
+XColorItem::XColorItem(TypedWhichId<XColorItem> _nWhich, sal_Int32 nIndex, const Color& rTheColor) :
+    NameOrIndex(_nWhich, nIndex),
     m_aColor(rTheColor)
 {
 }
 
-XColorItem::XColorItem(TypedWhichId<XColorItem> _nWhich, const OUString& rName, const Color& rTheColor, SfxItemType eItemType) :
-    NameOrIndex(_nWhich, rName, eItemType),
+XColorItem::XColorItem(TypedWhichId<XColorItem> _nWhich, const OUString& rName, const Color& rTheColor) :
+    NameOrIndex(_nWhich, rName),
     m_aColor(rTheColor)
 {
 }
 
-XColorItem::XColorItem(TypedWhichId<XColorItem> _nWhich, const Color& rTheColor, SfxItemType eItemType)
-    : NameOrIndex(_nWhich, OUString(), eItemType)
+XColorItem::XColorItem(TypedWhichId<XColorItem> _nWhich, const Color& rTheColor)
+    : NameOrIndex(_nWhich, OUString())
     , m_aColor(rTheColor)
 {
 }
@@ -427,7 +427,7 @@ void XColorItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 SfxPoolItem* XLineStyleItem::CreateDefault() { return new XLineStyleItem; }
 
 XLineStyleItem::XLineStyleItem(css::drawing::LineStyle eTheLineStyle) :
-    SfxEnumItem(XATTR_LINESTYLE, SfxItemType::XLineStyleItemType, eTheLineStyle)
+    SfxEnumItem(XATTR_LINESTYLE, eTheLineStyle)
 {
 }
 
@@ -664,7 +664,7 @@ double XDash::CreateDotDashArray(::std::vector< double >& rDotDashArray, double 
 SfxPoolItem* XLineDashItem::CreateDefault() {return new XLineDashItem;}
 
 XLineDashItem::XLineDashItem(const OUString& rName, const XDash& rTheDash) :
-    NameOrIndex(XATTR_LINEDASH, rName, SfxItemType::XLineDashItemType),
+    NameOrIndex(XATTR_LINEDASH, rName),
     aDash(rTheDash)
 {
 }
@@ -676,7 +676,7 @@ XLineDashItem::XLineDashItem(const XLineDashItem& rItem) :
 }
 
 XLineDashItem::XLineDashItem(const XDash& rTheDash)
-:   NameOrIndex( XATTR_LINEDASH, -1, SfxItemType::XLineDashItemType ),
+:   NameOrIndex( XATTR_LINEDASH, -1 ),
     aDash(rTheDash)
 {
 }
@@ -980,7 +980,7 @@ std::unique_ptr<XLineDashItem> XLineDashItem::checkForUniqueItem( SdrModel& rMod
 SfxPoolItem* XLineWidthItem::CreateDefault() {return new XLineWidthItem;}
 
 XLineWidthItem::XLineWidthItem(tools::Long nWidth) :
-    SfxMetricItem(XATTR_LINEWIDTH, nWidth, SfxItemType::XLineWidthItemType)
+    SfxMetricItem(XATTR_LINEWIDTH, nWidth)
 {
 }
 
@@ -1027,12 +1027,12 @@ bool XLineWidthItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
 SfxPoolItem* XLineColorItem::CreateDefault() { return new XLineColorItem; }
 
 XLineColorItem::XLineColorItem(sal_Int32 nIndex, const Color& rTheColor) :
-    XColorItem(XATTR_LINECOLOR, nIndex, rTheColor, SfxItemType::XLineColorItemType)
+    XColorItem(XATTR_LINECOLOR, nIndex, rTheColor)
 {
 }
 
 XLineColorItem::XLineColorItem(const OUString& rName, const Color& rTheColor) :
-    XColorItem(XATTR_LINECOLOR, rName, rTheColor, SfxItemType::XLineColorItemType)
+    XColorItem(XATTR_LINECOLOR, rName, rTheColor)
 {
 }
 
@@ -1122,12 +1122,12 @@ bool XLineColorItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId)
 SfxPoolItem* XLineStartItem::CreateDefault() {return new XLineStartItem;}
 
 XLineStartItem::XLineStartItem(sal_Int32 nIndex)
-:   NameOrIndex(XATTR_LINESTART, nIndex, SfxItemType::XLineStartItemType)
+:   NameOrIndex(XATTR_LINESTART, nIndex)
 {
 }
 
 XLineStartItem::XLineStartItem(const OUString& rName, basegfx::B2DPolyPolygon aPolyPolygon)
-:   NameOrIndex(XATTR_LINESTART, rName, SfxItemType::XLineStartItemType),
+:   NameOrIndex(XATTR_LINESTART, rName),
     maPolyPolygon(std::move(aPolyPolygon))
 {
 }
@@ -1139,7 +1139,7 @@ XLineStartItem::XLineStartItem(const XLineStartItem& rItem)
 }
 
 XLineStartItem::XLineStartItem(basegfx::B2DPolyPolygon aPolyPolygon)
-:   NameOrIndex( XATTR_LINESTART, -1, SfxItemType::XLineStartItemType ),
+:   NameOrIndex( XATTR_LINESTART, -1 ),
     maPolyPolygon(std::move(aPolyPolygon))
 {
 }
@@ -1425,12 +1425,12 @@ std::unique_ptr<XLineStartItem> XLineStartItem::checkForUniqueItem( SdrModel& rM
 SfxPoolItem* XLineEndItem::CreateDefault() {return new XLineEndItem;}
 
 XLineEndItem::XLineEndItem(sal_Int32 nIndex)
-:   NameOrIndex(XATTR_LINEEND, nIndex, SfxItemType::XLineEndItemType)
+:   NameOrIndex(XATTR_LINEEND, nIndex)
 {
 }
 
 XLineEndItem::XLineEndItem(const OUString& rName, basegfx::B2DPolyPolygon aPolyPolygon)
-:   NameOrIndex(XATTR_LINEEND, rName, SfxItemType::XLineEndItemType),
+:   NameOrIndex(XATTR_LINEEND, rName),
     maPolyPolygon(std::move(aPolyPolygon))
 {
 }
@@ -1442,7 +1442,7 @@ XLineEndItem::XLineEndItem(const XLineEndItem& rItem)
 }
 
 XLineEndItem::XLineEndItem(basegfx::B2DPolyPolygon aPolyPolygon)
-:   NameOrIndex( XATTR_LINEEND, -1, SfxItemType::XLineEndItemType ),
+:   NameOrIndex( XATTR_LINEEND, -1 ),
     maPolyPolygon(std::move(aPolyPolygon))
 {
 }
@@ -1726,7 +1726,7 @@ bool XLineEndItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
 }
 
 XLineStartWidthItem::XLineStartWidthItem(tools::Long nWidth) :
-    SfxMetricItem(XATTR_LINESTARTWIDTH, nWidth, SfxItemType::XLineStartWidthItemType)
+    SfxMetricItem(XATTR_LINESTARTWIDTH, nWidth)
 {
 }
 
@@ -1764,7 +1764,7 @@ bool XLineStartWidthItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemb
 }
 
 XLineEndWidthItem::XLineEndWidthItem(tools::Long nWidth) :
-   SfxMetricItem(XATTR_LINEENDWIDTH, nWidth, SfxItemType::XLineEndWidthItemType)
+   SfxMetricItem(XATTR_LINEENDWIDTH, nWidth)
 {
 }
 
@@ -1802,7 +1802,7 @@ bool XLineEndWidthItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMember
 }
 
 XLineStartCenterItem::XLineStartCenterItem(bool bStartCenter) :
-    SfxBoolItem(XATTR_LINESTARTCENTER, bStartCenter, SfxItemType::XLineStartCenterItem)
+    SfxBoolItem(XATTR_LINESTARTCENTER, bStartCenter)
 {
 }
 
@@ -1841,7 +1841,7 @@ bool XLineStartCenterItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMem
 }
 
 XLineEndCenterItem::XLineEndCenterItem(bool bEndCenter) :
-    SfxBoolItem(XATTR_LINEENDCENTER, bEndCenter, SfxItemType::XLineEndCenterItemType)
+    SfxBoolItem(XATTR_LINEENDCENTER, bEndCenter)
 {
 }
 
@@ -1885,7 +1885,7 @@ bool XLineEndCenterItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMembe
 SfxPoolItem* XFillStyleItem::CreateDefault() { return new XFillStyleItem; }
 
 XFillStyleItem::XFillStyleItem(drawing::FillStyle eFillStyle) :
-    SfxEnumItem(XATTR_FILLSTYLE, SfxItemType::XFillStyleItemType, eFillStyle)
+    SfxEnumItem(XATTR_FILLSTYLE, eFillStyle)
 {
 }
 
@@ -2014,12 +2014,12 @@ boost::property_tree::ptree XFillStyleItem::dumpAsJSON() const
 SfxPoolItem* XFillColorItem::CreateDefault() { return new XFillColorItem; }
 
 XFillColorItem::XFillColorItem(sal_Int32 nIndex, const Color& rTheColor) :
-    XColorItem(XATTR_FILLCOLOR, nIndex, rTheColor, SfxItemType::XFillColorItemType)
+    XColorItem(XATTR_FILLCOLOR, nIndex, rTheColor)
 {
 }
 
 XFillColorItem::XFillColorItem(const OUString& rName, const Color& rTheColor) :
-    XColorItem(XATTR_FILLCOLOR, rName, rTheColor, SfxItemType::XFillColorItemType)
+    XColorItem(XATTR_FILLCOLOR, rName, rTheColor)
 {
 }
 
@@ -2184,7 +2184,7 @@ boost::property_tree::ptree XFillColorItem::dumpAsJSON() const
 }
 
 XSecondaryFillColorItem::XSecondaryFillColorItem(const OUString& rName, const Color& rTheColor) :
-    XColorItem(XATTR_SECONDARYFILLCOLOR, rName, rTheColor, SfxItemType::XSecondaryFillColorItemType)
+    XColorItem(XATTR_SECONDARYFILLCOLOR, rName, rTheColor)
 {
 }
 
@@ -2209,18 +2209,16 @@ SfxPoolItem* XFillGradientItem::CreateDefault() { return new XFillGradientItem; 
 
 XFillGradientItem::XFillGradientItem(sal_Int32 nIndex,
                                    const basegfx::BGradient& rTheGradient,
-                                   TypedWhichId<XFillGradientItem> nWhich,
-                                   SfxItemType eItemType) :
-    NameOrIndex(nWhich, nIndex, eItemType),
+                                   TypedWhichId<XFillGradientItem> nWhich) :
+    NameOrIndex(nWhich, nIndex),
     m_aGradient(rTheGradient)
 {
 }
 
 XFillGradientItem::XFillGradientItem(const OUString& rName,
                                    const basegfx::BGradient& rTheGradient,
-                                   TypedWhichId<XFillGradientItem> nWhich,
-                                   SfxItemType eItemType)
-    : NameOrIndex(nWhich, rName, eItemType)
+                                   TypedWhichId<XFillGradientItem> nWhich)
+    : NameOrIndex(nWhich, rName)
     , m_aGradient(rTheGradient)
 {
 }
@@ -2232,9 +2230,8 @@ XFillGradientItem::XFillGradientItem(const XFillGradientItem& rItem) :
 }
 
 XFillGradientItem::XFillGradientItem( const basegfx::BGradient& rTheGradient,
-                                    TypedWhichId<XFillGradientItem> nWhich,
-                                    SfxItemType eItemType )
-:   NameOrIndex( nWhich, -1, eItemType ),
+                                    TypedWhichId<XFillGradientItem> nWhich)
+:   NameOrIndex( nWhich, -1 ),
     m_aGradient(rTheGradient)
 {
 }
@@ -2508,13 +2505,13 @@ boost::property_tree::ptree XFillGradientItem::dumpAsJSON() const
 SfxPoolItem* XFillFloatTransparenceItem::CreateDefault() { return new XFillFloatTransparenceItem; }
 
 XFillFloatTransparenceItem::XFillFloatTransparenceItem() :
-    XFillGradientItem(XATTR_FILLFLOATTRANSPARENCE, SfxItemType::XFillFloatTransparenceItemType),
+    XFillGradientItem(XATTR_FILLFLOATTRANSPARENCE),
     bEnabled( false )
 {
 }
 
 XFillFloatTransparenceItem::XFillFloatTransparenceItem(const OUString& rName, const basegfx::BGradient& rGradient, bool bEnable ) :
-    XFillGradientItem   ( rName, rGradient, XATTR_FILLFLOATTRANSPARENCE, SfxItemType::XFillFloatTransparenceItemType ),
+    XFillGradientItem   ( rName, rGradient, XATTR_FILLFLOATTRANSPARENCE ),
     bEnabled            ( bEnable )
 {
 }
@@ -2526,7 +2523,7 @@ XFillFloatTransparenceItem::XFillFloatTransparenceItem( const XFillFloatTranspar
 }
 
 XFillFloatTransparenceItem::XFillFloatTransparenceItem(const basegfx::BGradient& rTheGradient, bool bEnable )
-:   XFillGradientItem   ( -1, rTheGradient, XATTR_FILLFLOATTRANSPARENCE, SfxItemType::XFillFloatTransparenceItemType ),
+:   XFillGradientItem   ( -1, rTheGradient, XATTR_FILLFLOATTRANSPARENCE ),
     bEnabled            ( bEnable )
 {
 }
@@ -2663,7 +2660,7 @@ SfxPoolItem* XFillHatchItem::CreateDefault() { return new XFillHatchItem; }
 
 XFillHatchItem::XFillHatchItem(const OUString& rName,
                              const XHatch& rTheHatch) :
-    NameOrIndex(XATTR_FILLHATCH, rName, SfxItemType::XFillHatchItemType),
+    NameOrIndex(XATTR_FILLHATCH, rName),
     m_aHatch(rTheHatch)
 {
 }
@@ -2675,7 +2672,7 @@ XFillHatchItem::XFillHatchItem(const XFillHatchItem& rItem) :
 }
 
 XFillHatchItem::XFillHatchItem(const XHatch& rTheHatch)
-:   NameOrIndex( XATTR_FILLHATCH, -1, SfxItemType::XFillHatchItemType ),
+:   NameOrIndex( XATTR_FILLHATCH, -1 ),
     m_aHatch(rTheHatch)
 {
 }
@@ -2888,7 +2885,7 @@ std::unique_ptr<XFillHatchItem> XFillHatchItem::checkForUniqueItem( SdrModel& rM
 SfxPoolItem* XFormTextStyleItem::CreateDefault() { return new XFormTextStyleItem; }
 
 XFormTextStyleItem::XFormTextStyleItem(XFormTextStyle eTheStyle) :
-    SfxEnumItem(XATTR_FORMTXTSTYLE, SfxItemType::XFormTextStyleItemType, eTheStyle)
+    SfxEnumItem(XATTR_FORMTXTSTYLE, eTheStyle)
 {
 }
 
@@ -2921,7 +2918,7 @@ bool XFormTextStyleItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/
 SfxPoolItem* XFormTextAdjustItem::CreateDefault() { return new XFormTextAdjustItem; }
 
 XFormTextAdjustItem::XFormTextAdjustItem(XFormTextAdjust eTheAdjust) :
-    SfxEnumItem(XATTR_FORMTXTADJUST, SfxItemType::XFormTextAdjustItemType, eTheAdjust)
+    SfxEnumItem(XATTR_FORMTXTADJUST, eTheAdjust)
 {
 }
 
@@ -2954,7 +2951,7 @@ bool XFormTextAdjustItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*
 SfxPoolItem* XFormTextDistanceItem::CreateDefault() { return new XFormTextDistanceItem; }
 
 XFormTextDistanceItem::XFormTextDistanceItem(tools::Long nDist) :
-    SfxMetricItem(XATTR_FORMTXTDISTANCE, nDist, SfxItemType::XFormTextDistanceItemType)
+    SfxMetricItem(XATTR_FORMTXTDISTANCE, nDist)
 {
 }
 
@@ -2966,7 +2963,7 @@ XFormTextDistanceItem* XFormTextDistanceItem::Clone(SfxItemPool* /*pPool*/) cons
 SfxPoolItem* XFormTextStartItem::CreateDefault() { return new XFormTextStartItem; }
 
 XFormTextStartItem::XFormTextStartItem(tools::Long nStart) :
-    SfxMetricItem(XATTR_FORMTXTSTART, nStart, SfxItemType::XFormTextStartItemType)
+    SfxMetricItem(XATTR_FORMTXTSTART, nStart)
 {
 }
 
@@ -2978,7 +2975,7 @@ XFormTextStartItem* XFormTextStartItem::Clone(SfxItemPool* /*pPool*/) const
 SfxPoolItem* XFormTextMirrorItem::CreateDefault() { return new XFormTextMirrorItem; }
 
 XFormTextMirrorItem::XFormTextMirrorItem(bool bMirror) :
-    SfxBoolItem(XATTR_FORMTXTMIRROR, bMirror, SfxItemType::XFormTextMirrorItemType)
+    SfxBoolItem(XATTR_FORMTXTMIRROR, bMirror)
 {
 }
 
@@ -2990,7 +2987,7 @@ XFormTextMirrorItem* XFormTextMirrorItem::Clone(SfxItemPool* /*pPool*/) const
 SfxPoolItem* XFormTextOutlineItem::CreateDefault() { return new XFormTextOutlineItem; }
 
 XFormTextOutlineItem::XFormTextOutlineItem(bool bOutline) :
-    SfxBoolItem(XATTR_FORMTXTOUTLINE, bOutline, SfxItemType::XFormTextOutlineItemType)
+    SfxBoolItem(XATTR_FORMTXTOUTLINE, bOutline)
 {
 }
 
@@ -3002,7 +2999,7 @@ XFormTextOutlineItem* XFormTextOutlineItem::Clone(SfxItemPool* /*pPool*/) const
 SfxPoolItem* XFormTextShadowItem::CreateDefault() { return new XFormTextShadowItem; }
 
 XFormTextShadowItem::XFormTextShadowItem(XFormTextShadow eFormTextShadow) :
-    SfxEnumItem(XATTR_FORMTXTSHADOW, SfxItemType::XFormTextShadowItemType, eFormTextShadow)
+    SfxEnumItem(XATTR_FORMTXTSHADOW, eFormTextShadow)
 {
 }
 
@@ -3036,7 +3033,7 @@ SfxPoolItem* XFormTextShadowColorItem::CreateDefault() { return new XFormTextSha
 
 XFormTextShadowColorItem::XFormTextShadowColorItem(const OUString& rName,
                                                      const Color& rTheColor) :
-    XColorItem(XATTR_FORMTXTSHDWCOLOR, rName, rTheColor, SfxItemType::XFormTextShadowColorItemType)
+    XColorItem(XATTR_FORMTXTSHDWCOLOR, rName, rTheColor)
 {
 }
 
@@ -3048,7 +3045,7 @@ XFormTextShadowColorItem* XFormTextShadowColorItem::Clone(SfxItemPool* /*pPool*/
 SfxPoolItem* XFormTextShadowXValItem::CreateDefault() { return new XFormTextShadowXValItem; }
 
 XFormTextShadowXValItem::XFormTextShadowXValItem(tools::Long nVal) :
-    SfxMetricItem(XATTR_FORMTXTSHDWXVAL, nVal, SfxItemType::XFormTextShadowXValItemType)
+    SfxMetricItem(XATTR_FORMTXTSHDWXVAL, nVal)
 {
 }
 
@@ -3060,7 +3057,7 @@ XFormTextShadowXValItem* XFormTextShadowXValItem::Clone(SfxItemPool* /*pPool*/) 
 SfxPoolItem* XFormTextShadowYValItem::CreateDefault() { return new XFormTextShadowYValItem; }
 
 XFormTextShadowYValItem::XFormTextShadowYValItem(tools::Long nVal) :
-    SfxMetricItem(XATTR_FORMTXTSHDWYVAL, nVal, SfxItemType::XFormTextShadowYValItemType)
+    SfxMetricItem(XATTR_FORMTXTSHDWYVAL, nVal)
 {
 }
 
@@ -3072,7 +3069,7 @@ XFormTextShadowYValItem* XFormTextShadowYValItem::Clone(SfxItemPool* /*pPool*/) 
 SfxPoolItem* XFormTextHideFormItem::CreateDefault() { return new XFormTextHideFormItem; }
 
 XFormTextHideFormItem::XFormTextHideFormItem(bool bHide) :
-    SfxBoolItem(XATTR_FORMTXTHIDEFORM, bHide, SfxItemType::XFormTextHideFormItemType)
+    SfxBoolItem(XATTR_FORMTXTHIDEFORM, bHide)
 {
 }
 
@@ -3086,14 +3083,13 @@ XFormTextHideFormItem* XFormTextHideFormItem::Clone(SfxItemPool* /*pPool*/) cons
 
 /// a line attribute set item
 XLineAttrSetItem::XLineAttrSetItem( SfxItemSet&& pItemSet ) :
-    SfxSetItem( XATTRSET_LINE, std::move(pItemSet), SfxItemType::XLineAttrSetItemType)
+    SfxSetItem( XATTRSET_LINE, std::move(pItemSet))
 {
 }
 
 XLineAttrSetItem::XLineAttrSetItem( SfxItemPool* pItemPool ) :
     SfxSetItem( XATTRSET_LINE,
-        SfxItemSetFixed<XATTR_LINE_FIRST, XATTR_LINE_LAST>( *pItemPool ),
-        SfxItemType::XLineAttrSetItemType)
+        SfxItemSetFixed<XATTR_LINE_FIRST, XATTR_LINE_LAST>( *pItemPool ))
 {
 }
 
@@ -3115,14 +3111,13 @@ XLineAttrSetItem* XLineAttrSetItem::Clone( SfxItemPool* pPool ) const
 
 /// fill attribute set item
 XFillAttrSetItem::XFillAttrSetItem( SfxItemSet&& pItemSet ) :
-    SfxSetItem( XATTRSET_FILL, std::move(pItemSet), SfxItemType::XFillAttrSetItemType)
+    SfxSetItem( XATTRSET_FILL, std::move(pItemSet))
 {
 }
 
 XFillAttrSetItem::XFillAttrSetItem( SfxItemPool* pItemPool ) :
     SfxSetItem( XATTRSET_FILL,
-        SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST>( *pItemPool ),
-        SfxItemType::XFillAttrSetItemType)
+        SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST>( *pItemPool ))
 {
 }
 

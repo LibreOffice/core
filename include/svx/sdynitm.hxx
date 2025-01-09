@@ -29,8 +29,9 @@
 //-------------------------------------------------- ----------
 class SVXCORE_DLLPUBLIC SdrYesNoItem: public SfxBoolItem {
 public:
-    SdrYesNoItem(TypedWhichId<SdrYesNoItem> nId, bool bOn, SfxItemType eItemType = SfxItemType::SdrYesNoItemType)
-        : SfxBoolItem(nId, bOn, eItemType) {}
+    DECLARE_ITEM_TYPE_FUNCTION(SdrYesNoItem)
+    SdrYesNoItem(TypedWhichId<SdrYesNoItem> nId, bool bOn)
+        : SfxBoolItem(nId, bOn) {}
     virtual SdrYesNoItem* Clone(SfxItemPool* pPool=nullptr) const override;
     virtual OUString GetValueTextByVal(bool bVal) const override;
     virtual bool GetPresentation(SfxItemPresentation ePres, MapUnit eCoreMetric, MapUnit ePresMetric, OUString& rText, const IntlWrapper&) const override;

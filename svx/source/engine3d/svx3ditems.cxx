@@ -31,8 +31,7 @@ using namespace ::com::sun::star;
 // Added extra Item (Bool) for chart2 to be able to show reduced line geometry
 
 Svx3DReducedLineGeometryItem::Svx3DReducedLineGeometryItem(bool bVal)
-    : SfxBoolItem(SDRATTR_3DOBJ_REDUCED_LINE_GEOMETRY, bVal,
-                  SfxItemType::Svx3DReducedLineGeometryItemType)
+    : SfxBoolItem(SDRATTR_3DOBJ_REDUCED_LINE_GEOMETRY, bVal)
 {
 }
 
@@ -42,45 +41,42 @@ Svx3DReducedLineGeometryItem* Svx3DReducedLineGeometryItem::Clone(SfxItemPool*) 
 }
 
 Svx3DNormalsKindItem::Svx3DNormalsKindItem(sal_uInt16 nVal)
-    : SfxUInt16Item(SDRATTR_3DOBJ_NORMALS_KIND, nVal, SfxItemType::Svx3DNormalsKindItemType)
+    : SfxUInt16Item(SDRATTR_3DOBJ_NORMALS_KIND, nVal)
 {
 }
 
 Svx3DTextureProjectionXItem::Svx3DTextureProjectionXItem(sal_uInt16 nVal)
-    : SfxUInt16Item(SDRATTR_3DOBJ_TEXTURE_PROJ_X, nVal,
-                    SfxItemType::Svx3DTextureProjectionXItemType)
+    : SfxUInt16Item(SDRATTR_3DOBJ_TEXTURE_PROJ_X, nVal)
 {
 }
 
 Svx3DTextureProjectionYItem::Svx3DTextureProjectionYItem(sal_uInt16 nVal)
-    : SfxUInt16Item(SDRATTR_3DOBJ_TEXTURE_PROJ_Y, nVal,
-                    SfxItemType::Svx3DTextureProjectionYItemType)
+    : SfxUInt16Item(SDRATTR_3DOBJ_TEXTURE_PROJ_Y, nVal)
 {
 }
 
 Svx3DTextureKindItem::Svx3DTextureKindItem(sal_uInt16 nVal)
-    : SfxUInt16Item(SDRATTR_3DOBJ_TEXTURE_KIND, nVal, SfxItemType::Svx3DTextureKindItemType)
+    : SfxUInt16Item(SDRATTR_3DOBJ_TEXTURE_KIND, nVal)
 {
 }
 
 Svx3DTextureModeItem::Svx3DTextureModeItem(sal_uInt16 nVal)
-    : SfxUInt16Item(SDRATTR_3DOBJ_TEXTURE_MODE, nVal, SfxItemType::Svx3DTextureModeItemType)
+    : SfxUInt16Item(SDRATTR_3DOBJ_TEXTURE_MODE, nVal)
 {
 }
 
 Svx3DPerspectiveItem::Svx3DPerspectiveItem(ProjectionType nVal)
-    : SfxUInt16Item(SDRATTR_3DSCENE_PERSPECTIVE, static_cast<sal_uInt16>(nVal),
-                    SfxItemType::Svx3DPerspectiveItemType)
+    : SfxUInt16Item(SDRATTR_3DSCENE_PERSPECTIVE, static_cast<sal_uInt16>(nVal))
 {
 }
 
 Svx3DShadeModeItem::Svx3DShadeModeItem(sal_uInt16 nVal)
-    : SfxUInt16Item(SDRATTR_3DSCENE_SHADE_MODE, nVal, SfxItemType::Svx3DShadeModeItemType)
+    : SfxUInt16Item(SDRATTR_3DSCENE_SHADE_MODE, nVal)
 {
 }
 
 Svx3DSmoothNormalsItem::Svx3DSmoothNormalsItem(bool bVal)
-    : SfxBoolItem(SDRATTR_3DOBJ_SMOOTH_NORMALS, bVal, SfxItemType::Svx3DSmoothNormalsItemType)
+    : SfxBoolItem(SDRATTR_3DOBJ_SMOOTH_NORMALS, bVal)
 {
 }
 
@@ -90,7 +86,7 @@ Svx3DSmoothNormalsItem* Svx3DSmoothNormalsItem::Clone(SfxItemPool*) const
 }
 
 Svx3DSmoothLidsItem::Svx3DSmoothLidsItem(bool bVal)
-    : SfxBoolItem(SDRATTR_3DOBJ_SMOOTH_LIDS, bVal, SfxItemType::Svx3DSmoothLidsItemType)
+    : SfxBoolItem(SDRATTR_3DOBJ_SMOOTH_LIDS, bVal)
 {
 }
 
@@ -100,7 +96,7 @@ Svx3DSmoothLidsItem* Svx3DSmoothLidsItem::Clone(SfxItemPool*) const
 }
 
 Svx3DCharacterModeItem::Svx3DCharacterModeItem(bool bVal)
-    : SfxBoolItem(SDRATTR_3DOBJ_CHARACTER_MODE, bVal, SfxItemType::Svx3DCharacterModeItemType)
+    : SfxBoolItem(SDRATTR_3DOBJ_CHARACTER_MODE, bVal)
 {
 }
 
@@ -110,7 +106,7 @@ Svx3DCharacterModeItem* Svx3DCharacterModeItem::Clone(SfxItemPool*) const
 }
 
 Svx3DCloseFrontItem::Svx3DCloseFrontItem(bool bVal)
-    : SfxBoolItem(SDRATTR_3DOBJ_CLOSE_FRONT, bVal, SfxItemType::Svx3DCloseFrontItemType)
+    : SfxBoolItem(SDRATTR_3DOBJ_CLOSE_FRONT, bVal)
 {
 }
 
@@ -120,7 +116,7 @@ Svx3DCloseFrontItem* Svx3DCloseFrontItem::Clone(SfxItemPool*) const
 }
 
 Svx3DCloseBackItem::Svx3DCloseBackItem(bool bVal)
-    : SfxBoolItem(SDRATTR_3DOBJ_CLOSE_BACK, bVal, SfxItemType::Svx3DCloseBackItemType)
+    : SfxBoolItem(SDRATTR_3DOBJ_CLOSE_BACK, bVal)
 {
 }
 

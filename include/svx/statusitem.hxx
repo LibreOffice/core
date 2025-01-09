@@ -29,6 +29,7 @@ private:
     StatusCategory m_eCategory;
 
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SvxStatusItem)
     SvxStatusItem(TypedWhichId<SvxStatusItem> nWhich, const OUString& rString,
                   StatusCategory eStatusCategory);
 

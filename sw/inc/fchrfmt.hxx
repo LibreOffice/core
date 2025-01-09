@@ -36,6 +36,7 @@ class SW_DLLPUBLIC SwFormatCharFormat final : public SfxPoolItem, public SwClien
 
 public:
     /// single argument ctors shall be explicit.
+    DECLARE_ITEM_TYPE_FUNCTION(SwFormatCharFormat)
     explicit SwFormatCharFormat( SwCharFormat *pFormat );
     virtual ~SwFormatCharFormat() override;
 

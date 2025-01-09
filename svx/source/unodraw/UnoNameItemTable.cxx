@@ -44,9 +44,10 @@ namespace
     class SampleItem : public NameOrIndex
     {
     public:
-        SampleItem(sal_uInt16 nWhich, const OUString& rName) : NameOrIndex(TypedWhichId<NameOrIndex>(nWhich), rName, SfxItemType::NameOrIndexType) {}
+        DECLARE_ITEM_TYPE_FUNCTION(SampleItem)
+        SampleItem(sal_uInt16 nWhich, const OUString& rName) : NameOrIndex(TypedWhichId<NameOrIndex>(nWhich), rName) {}
 
-        bool operator==(const SfxPoolItem& rCmp) const
+        bool operator==(const SfxPoolItem& rCmp) const override
         {
             assert(dynamic_cast<const NameOrIndex*>(&rCmp) && "comparing different pool item subclasses");
             auto const & rOther = static_cast<const NameOrIndex&>(rCmp);

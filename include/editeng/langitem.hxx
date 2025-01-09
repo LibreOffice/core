@@ -33,8 +33,9 @@
 // MSVC hack:
 class SAL_DLLPUBLIC_RTTI SvxLanguageItem_Base: public SfxEnumItem<LanguageType> {
 protected:
-    explicit SvxLanguageItem_Base(sal_uInt16 nWhich, SfxItemType eItemType, LanguageType nValue):
-        SfxEnumItem(nWhich, eItemType, nValue)
+    DECLARE_ITEM_TYPE_FUNCTION(SvxLanguageItem_Base)
+    explicit SvxLanguageItem_Base(sal_uInt16 nWhich, LanguageType nValue):
+        SfxEnumItem(nWhich, nValue)
     {}
 };
 
@@ -45,7 +46,7 @@ protected:
 
 public:
     static SfxPoolItem* CreateDefault();
-
+    DECLARE_ITEM_TYPE_FUNCTION(SvxLanguageItem)
     SvxLanguageItem( const LanguageType eLang /*= LANGUAGE_GERMAN*/,
                      const sal_uInt16 nId  );
 

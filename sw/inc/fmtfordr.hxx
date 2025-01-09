@@ -39,6 +39,7 @@ enum SwFillOrder
 class SwFormatFillOrder final : public SfxEnumItem<SwFillOrder>
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwFormatFillOrder)
     SwFormatFillOrder( SwFillOrder = ATT_TOP_DOWN );
 
     /// "Pure virtual methods" of SfxPoolItem.

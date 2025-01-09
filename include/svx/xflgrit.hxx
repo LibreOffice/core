@@ -34,20 +34,17 @@ class SVXCORE_DLLPUBLIC XFillGradientItem : public NameOrIndex
 
 public:
     static SfxPoolItem* CreateDefault();
-    XFillGradientItem(TypedWhichId<XFillGradientItem> nWhich = XATTR_FILLGRADIENT,
-            SfxItemType eItemType = SfxItemType::XFillGradientItemType)
-        : NameOrIndex(nWhich, -1, eItemType) {}
+    DECLARE_ITEM_TYPE_FUNCTION(XFillGradientItem)
+    XFillGradientItem(TypedWhichId<XFillGradientItem> nWhich = XATTR_FILLGRADIENT)
+        : NameOrIndex(nWhich, -1) {}
     XFillGradientItem(sal_Int32 nIndex,
             const basegfx::BGradient& rTheGradient,
-            TypedWhichId<XFillGradientItem> nWhich = XATTR_FILLGRADIENT,
-            SfxItemType eItemType = SfxItemType::XFillGradientItemType);
+            TypedWhichId<XFillGradientItem> nWhich = XATTR_FILLGRADIENT);
     XFillGradientItem(const OUString& rName,
             const basegfx::BGradient& rTheGradient,
-            TypedWhichId<XFillGradientItem> nWhich = XATTR_FILLGRADIENT,
-            SfxItemType eItemType = SfxItemType::XFillGradientItemType);
+            TypedWhichId<XFillGradientItem> nWhich = XATTR_FILLGRADIENT);
     XFillGradientItem(const basegfx::BGradient& rTheGradient,
-            TypedWhichId<XFillGradientItem> nWhich = XATTR_FILLGRADIENT,
-            SfxItemType eItemType = SfxItemType::XFillGradientItemType);
+            TypedWhichId<XFillGradientItem> nWhich = XATTR_FILLGRADIENT);
     XFillGradientItem(const XFillGradientItem& rItem);
 
     virtual bool            operator==(const SfxPoolItem& rItem) const override;

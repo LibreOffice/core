@@ -32,6 +32,7 @@
 class SVXCORE_DLLPUBLIC XFillBackgroundItem final : public SfxBoolItem
 {
 public:
+                            DECLARE_ITEM_TYPE_FUNCTION(XFillBackgroundItem)
                             XFillBackgroundItem( bool bFill = false );
 
     SVX_DLLPRIVATE virtual XFillBackgroundItem* Clone( SfxItemPool* pPool = nullptr ) const override;

@@ -140,9 +140,9 @@ bool SvxPaperBinItem::GetPresentation
 }
 
 
-SvxSizeItem::SvxSizeItem( const sal_uInt16 nId, const Size& rSize, SfxItemType eItemType ) :
+SvxSizeItem::SvxSizeItem( const sal_uInt16 nId, const Size& rSize ) :
 
-    SfxPoolItem( nId, eItemType ),
+    SfxPoolItem( nId ),
 
     m_aSize( rSize )
 {
@@ -225,7 +225,7 @@ bool SvxSizeItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
 SvxSizeItem::SvxSizeItem( const sal_uInt16 nId ) :
 
-    SfxPoolItem( nId, SfxItemType::SvxSizeItemType )
+    SfxPoolItem( nId )
 {
 }
 
@@ -405,7 +405,7 @@ bool lcl_FillRelativeMeasureAny(const SvxIndentValue& rIndent, uno::Any& rVal)
 }
 
 SvxLRSpaceItem::SvxLRSpaceItem(const sal_uInt16 nId)
-    : SfxPoolItem(nId, SfxItemType::SvxLRSpaceItemType)
+    : SfxPoolItem(nId)
     , m_nGutterMargin(0)
     , m_nRightGutterMargin(0),
     nPropFirstLineOffset( 100 ),
@@ -419,7 +419,7 @@ SvxLRSpaceItem::SvxLRSpaceItem(const sal_uInt16 nId)
 
 SvxLRSpaceItem::SvxLRSpaceItem(SvxIndentValue stLeft, SvxIndentValue stRight,
                                SvxIndentValue stOffset, const sal_uInt16 nId)
-    : SfxPoolItem(nId, SfxItemType::SvxLRSpaceItemType)
+    : SfxPoolItem(nId)
     , m_nGutterMargin(0)
     , m_nRightGutterMargin(0)
     , nPropFirstLineOffset(100)
@@ -880,12 +880,12 @@ sal_Int32 SvxLRSpaceItem::ResolveTextLeft(const SvxFontUnitMetrics& rMetrics) co
 }
 
 SvxLeftMarginItem::SvxLeftMarginItem(const sal_uInt16 nId)
-    : SfxPoolItem(nId, SfxItemType::SvxLeftMarginItemType)
+    : SfxPoolItem(nId)
 {
 }
 
 SvxLeftMarginItem::SvxLeftMarginItem(const tools::Long nLeft, const sal_uInt16 nId)
-    : SfxPoolItem(nId, SfxItemType::SvxLeftMarginItemType)
+    : SfxPoolItem(nId)
     , m_nLeftMargin(nLeft)
 {
 }
@@ -1048,12 +1048,12 @@ boost::property_tree::ptree SvxLeftMarginItem::dumpAsJSON() const
 }
 
 SvxTextLeftMarginItem::SvxTextLeftMarginItem(const sal_uInt16 nId)
-    : SfxPoolItem(nId, SfxItemType::SvxTextLeftMarginItemType)
+    : SfxPoolItem(nId)
 {
 }
 
 SvxTextLeftMarginItem::SvxTextLeftMarginItem(SvxIndentValue stLeft, const sal_uInt16 nId)
-    : SfxPoolItem(nId, SfxItemType::SvxTextLeftMarginItemType)
+    : SfxPoolItem(nId)
 {
     SetTextLeft(stLeft);
 }
@@ -1265,7 +1265,7 @@ boost::property_tree::ptree SvxTextLeftMarginItem::dumpAsJSON() const
 }
 
 SvxFirstLineIndentItem::SvxFirstLineIndentItem(const sal_uInt16 nId)
-    : SfxPoolItem(nId, SfxItemType::SvxFirstLineIndentItemType)
+    : SfxPoolItem(nId)
 {
 }
 
@@ -1527,12 +1527,12 @@ boost::property_tree::ptree SvxFirstLineIndentItem::dumpAsJSON() const
 }
 
 SvxRightMarginItem::SvxRightMarginItem(const sal_uInt16 nId)
-    : SfxPoolItem(nId, SfxItemType::SvxRightMarginItemType)
+    : SfxPoolItem(nId)
 {
 }
 
 SvxRightMarginItem::SvxRightMarginItem(SvxIndentValue stRight, const sal_uInt16 nId)
-    : SfxPoolItem(nId, SfxItemType::SvxRightMarginItemType)
+    : SfxPoolItem(nId)
 {
     SetRight(stRight);
 }
@@ -1741,7 +1741,7 @@ boost::property_tree::ptree SvxRightMarginItem::dumpAsJSON() const
 }
 
 SvxGutterLeftMarginItem::SvxGutterLeftMarginItem(const sal_uInt16 nId)
-    : SfxPoolItem(nId, SfxItemType::SvxGutterLeftMarginItemType)
+    : SfxPoolItem(nId)
 {
 }
 
@@ -1850,7 +1850,7 @@ boost::property_tree::ptree SvxGutterLeftMarginItem::dumpAsJSON() const
 }
 
 SvxGutterRightMarginItem::SvxGutterRightMarginItem(const sal_uInt16 nId)
-    : SfxPoolItem(nId, SfxItemType::SvxGutterRightMarginItemType)
+    : SfxPoolItem(nId)
 {
 }
 
@@ -2179,7 +2179,7 @@ boost::property_tree::ptree SvxLRSpaceItem::dumpAsJSON() const
 
 
 SvxULSpaceItem::SvxULSpaceItem( const sal_uInt16 nId )
-    : SfxPoolItem(nId, SfxItemType::SvxULSpaceItemType)
+    : SfxPoolItem(nId)
     , nUpper(0)
     , nLower(0)
     , bContext(false)
@@ -2191,7 +2191,7 @@ SvxULSpaceItem::SvxULSpaceItem( const sal_uInt16 nId )
 
 SvxULSpaceItem::SvxULSpaceItem( const sal_uInt16 nUp, const sal_uInt16 nLow,
                                 const sal_uInt16 nId )
-    : SfxPoolItem(nId, SfxItemType::SvxULSpaceItemType)
+    : SfxPoolItem(nId)
     , nUpper(nUp)
     , nLower(nLow)
     , bContext(false)
@@ -2565,7 +2565,7 @@ void SvxProtectItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 SvxShadowItem::SvxShadowItem( const sal_uInt16 nId,
                  const Color *pColor, const sal_uInt16 nW,
                  const SvxShadowLocation eLoc ) :
-    SfxEnumItemInterface( nId, SfxItemType::SvxShadowItemType ),
+    SfxEnumItemInterface( nId ),
     aShadowColor(COL_GRAY),
     nWidth      ( nW ),
     eLocation   ( eLoc )
@@ -2849,7 +2849,7 @@ SvxBoxItem::SvxBoxItem(const SvxBoxItem& rCopy)
 
 
 SvxBoxItem::SvxBoxItem(const sal_uInt16 nId)
-    : SfxPoolItem(nId, SfxItemType::SvxBoxItemType)
+    : SfxPoolItem(nId)
 {
 }
 
@@ -3811,7 +3811,7 @@ bool SvxBoxItem::HasBorder( bool bTreatPaddingAsBorder ) const
 // class SvxBoxInfoItem --------------------------------------------------
 
 SvxBoxInfoItem::SvxBoxInfoItem(const sal_uInt16 nId)
-    : SfxPoolItem(nId, SfxItemType::SvxBoxInfoItemType)
+    : SfxPoolItem(nId)
     , mbDistance(false)
     , mbMinimumDistance(false)
 {
@@ -4401,7 +4401,7 @@ void SvxFormatKeepItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 }
 
 SvxLineItem::SvxLineItem( const sal_uInt16 nId ) :
-    SfxPoolItem ( nId, SfxItemType::SvxLineItemType )
+    SfxPoolItem ( nId )
 {
 }
 
@@ -4539,7 +4539,7 @@ ItemInstanceManager* SvxBrushItem::getItemInstanceManager() const
 }
 
 SvxBrushItem::SvxBrushItem(sal_uInt16 _nWhich)
-    : SfxPoolItem(_nWhich, SfxItemType::SvxBrushItemType)
+    : SfxPoolItem(_nWhich )
     , aColor(COL_TRANSPARENT)
     , aFilterColor(COL_TRANSPARENT)
     , nShadingValue(ShadingPattern::CLEAR)
@@ -4550,7 +4550,7 @@ SvxBrushItem::SvxBrushItem(sal_uInt16 _nWhich)
 }
 
 SvxBrushItem::SvxBrushItem(const Color& rColor, sal_uInt16 _nWhich)
-    : SfxPoolItem(_nWhich, SfxItemType::SvxBrushItemType)
+    : SfxPoolItem(_nWhich )
     , aColor(rColor)
     , aFilterColor(COL_TRANSPARENT)
     , nShadingValue(ShadingPattern::CLEAR)
@@ -4561,7 +4561,7 @@ SvxBrushItem::SvxBrushItem(const Color& rColor, sal_uInt16 _nWhich)
 }
 
 SvxBrushItem::SvxBrushItem(Color const& rColor, model::ComplexColor const& rComplexColor, sal_uInt16 nWhich)
-    : SfxPoolItem(nWhich, SfxItemType::SvxBrushItemType)
+    : SfxPoolItem(nWhich)
     , aColor(rColor)
     , maComplexColor(rComplexColor)
     , aFilterColor(COL_TRANSPARENT)
@@ -4573,7 +4573,7 @@ SvxBrushItem::SvxBrushItem(Color const& rColor, model::ComplexColor const& rComp
 }
 
 SvxBrushItem::SvxBrushItem(const Graphic& rGraphic, SvxGraphicPosition ePos, sal_uInt16 _nWhich)
-    : SfxPoolItem(_nWhich, SfxItemType::SvxBrushItemType)
+    : SfxPoolItem(_nWhich)
     , aColor(COL_TRANSPARENT)
     , aFilterColor(COL_TRANSPARENT)
     , nShadingValue(ShadingPattern::CLEAR)
@@ -4586,7 +4586,7 @@ SvxBrushItem::SvxBrushItem(const Graphic& rGraphic, SvxGraphicPosition ePos, sal
 }
 
 SvxBrushItem::SvxBrushItem(const GraphicObject& rGraphicObj, SvxGraphicPosition ePos, sal_uInt16 _nWhich)
-    : SfxPoolItem(_nWhich, SfxItemType::SvxBrushItemType)
+    : SfxPoolItem(_nWhich)
     , aColor(COL_TRANSPARENT)
     , aFilterColor(COL_TRANSPARENT)
     , nShadingValue(ShadingPattern::CLEAR)
@@ -4600,7 +4600,7 @@ SvxBrushItem::SvxBrushItem(const GraphicObject& rGraphicObj, SvxGraphicPosition 
 
 SvxBrushItem::SvxBrushItem(OUString aLink, OUString aFilter,
                            SvxGraphicPosition ePos, sal_uInt16 _nWhich)
-    : SfxPoolItem(_nWhich, SfxItemType::SvxBrushItemType)
+    : SfxPoolItem(_nWhich)
     , aColor(COL_TRANSPARENT)
     , aFilterColor(COL_TRANSPARENT)
     , nShadingValue(ShadingPattern::CLEAR)
@@ -5178,7 +5178,7 @@ ItemInstanceManager* SvxFrameDirectionItem::getItemInstanceManager() const
 
 SvxFrameDirectionItem::SvxFrameDirectionItem( SvxFrameDirection nValue ,
                                             sal_uInt16 _nWhich )
-    : SfxEnumItem<SvxFrameDirection>( _nWhich, SfxItemType::SvxFrameDirectionItemType, nValue )
+    : SfxEnumItem<SvxFrameDirection>( _nWhich, nValue )
 {
 }
 

@@ -39,12 +39,12 @@ SfxPoolItem* SvxMarginItem::CreateDefault() { return new  SvxMarginItem(TypedWhi
 
 SvxOrientationItem::SvxOrientationItem( const SvxCellOrientation eOrientation,
                                         const TypedWhichId<SvxOrientationItem> nId):
-    SfxEnumItem( nId, SfxItemType::SvxOrientationItemType, eOrientation )
+    SfxEnumItem( nId, eOrientation )
 {
 }
 
 SvxOrientationItem::SvxOrientationItem( Degree100 nRotation, bool bStacked, const TypedWhichId<SvxOrientationItem> nId ) :
-    SfxEnumItem( nId, SfxItemType::SvxOrientationItemType, SvxCellOrientation::Standard )
+    SfxEnumItem( nId, SvxCellOrientation::Standard )
 {
     if( bStacked )
     {
@@ -144,7 +144,7 @@ Degree100 SvxOrientationItem::GetRotation( Degree100 nStdAngle ) const
 
 SvxMarginItem::SvxMarginItem( const TypedWhichId<SvxMarginItem> nId ) :
 
-    SfxPoolItem( nId, SfxItemType::SvxMarginItemType ),
+    SfxPoolItem( nId ),
 
     nLeftMargin  ( 20 ),
     nTopMargin   ( 20 ),
@@ -159,7 +159,7 @@ SvxMarginItem::SvxMarginItem( sal_Int16 nLeft,
                               sal_Int16 nRight,
                               sal_Int16 nBottom,
                               const TypedWhichId<SvxMarginItem> nId ) :
-    SfxPoolItem( nId, SfxItemType::SvxMarginItemType ),
+    SfxPoolItem( nId ),
 
     nLeftMargin  ( nLeft ),
     nTopMargin   ( nTop ),

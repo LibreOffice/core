@@ -60,6 +60,7 @@ class SW_DLLPUBLIC SwDocDisplayItem final : public SfxPoolItem
     sal_Int32 m_xDefaultAnchor;
 
 public:
+                                DECLARE_ITEM_TYPE_FUNCTION(SwDocDisplayItem)
                                 SwDocDisplayItem();
                                 SwDocDisplayItem( const SwViewOption& rVOpt );
 
@@ -96,6 +97,7 @@ class SW_DLLPUBLIC SwElemItem final : public SfxPoolItem
     friend class SwContentOptPage;
 
 public:
+                            DECLARE_ITEM_TYPE_FUNCTION(SwElemItem)
                             SwElemItem();
                             SwElemItem(const SwViewOption& rVOpt);
 
@@ -122,6 +124,7 @@ class SW_DLLPUBLIC SwAddPrinterItem final : public SfxPoolItem, public SwPrintDa
     using  SwPrintData::operator ==;
 
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwAddPrinterItem)
     SwAddPrinterItem();
     SwAddPrinterItem( const SwPrintData& rPrtData );
 
@@ -136,6 +139,7 @@ class SW_DLLPUBLIC SwShadowCursorItem final : public SfxPoolItem
     SwFillMode m_eMode;
     bool m_bOn;
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwShadowCursorItem)
     SwShadowCursorItem();
     SwShadowCursorItem( const SwViewOption& rVOpt );
 
@@ -159,6 +163,7 @@ class SW_DLLPUBLIC SwFmtAidsAutoComplItem final : public SfxPoolItem
     bool m_bEncloseWithCharactersOn;
 
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwFmtAidsAutoComplItem)
     SwFmtAidsAutoComplItem();
     SwFmtAidsAutoComplItem(const SwViewOption& rVOpt);
 
@@ -190,7 +195,8 @@ class SW_DLLPUBLIC SwTestItem final : public SfxPoolItem
     bool    m_bTest10:1;
 
 public:
-                            SwTestItem() : SfxPoolItem(FN_PARAM_SWTEST, SfxItemType::SwTestItemType) {};
+                            DECLARE_ITEM_TYPE_FUNCTION(SwTestItem)
+                            SwTestItem() : SfxPoolItem(FN_PARAM_SWTEST) {};
 
     virtual SwTestItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;

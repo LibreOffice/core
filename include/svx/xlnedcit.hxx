@@ -29,6 +29,7 @@ class SVXCORE_DLLPUBLIC XLineEndCenterItem final : public SfxBoolItem
 {
 public:
                             XLineEndCenterItem(bool bEndCenter = false);
+                            DECLARE_ITEM_TYPE_FUNCTION(XLineEndCenterItem)
     virtual XLineEndCenterItem* Clone(SfxItemPool* pPool = nullptr) const override;
 
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;

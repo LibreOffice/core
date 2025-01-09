@@ -152,7 +152,7 @@ class SFX2_DLLPUBLIC SfxFrameItem final : public SfxPoolItem
     SfxFrameWeakRef         wFrame;
 
 public:
-
+                            DECLARE_ITEM_TYPE_FUNCTION(SfxFrameItem)
                             SfxFrameItem( sal_uInt16 nWhich, SfxViewFrame const *p );
                             SfxFrameItem( sal_uInt16 nWhich, SfxFrame *p );
 
@@ -170,6 +170,7 @@ class SFX2_DLLPUBLIC SfxUnoAnyItem final : public SfxPoolItem
     css::uno::Any  aValue;
 public:
                                 static SfxPoolItem* CreateDefault();
+                                DECLARE_ITEM_TYPE_FUNCTION(SfxUnoAnyItem)
                                 SfxUnoAnyItem( sal_uInt16 nWhich, const css::uno::Any& rAny );
     const css::uno::Any&        GetValue() const
                                 { return aValue; }
@@ -186,6 +187,7 @@ class SFX2_DLLPUBLIC SfxUnoFrameItem final : public SfxPoolItem
 
 public:
                                 static SfxPoolItem* CreateDefault();
+                                DECLARE_ITEM_TYPE_FUNCTION(SfxUnoFrameItem)
                                 SfxUnoFrameItem();
                                 SfxUnoFrameItem( sal_uInt16 nWhich, css::uno::Reference< css::frame::XFrame > i_xFrame );
     const css::uno::Reference< css::frame::XFrame >&

@@ -33,6 +33,7 @@
 class EDITENG_DLLPUBLIC SvxBlinkItem final : public SfxBoolItem
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SvxBlinkItem)
     SvxBlinkItem( const bool bBlink /*= false*/, const sal_uInt16 nId  );
 
     // "pure virtual Methods" from SfxPoolItem

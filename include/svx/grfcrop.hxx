@@ -27,11 +27,11 @@ class SVXCORE_DLLPUBLIC SvxGrfCrop : public SfxPoolItem
 {
     sal_Int32   m_nLeft, m_nRight, m_nTop, m_nBottom;
 public:
-    SvxGrfCrop( TypedWhichId<SvxGrfCrop>, SfxItemType eType = SfxItemType::SvxGrfCropType );
+    DECLARE_ITEM_TYPE_FUNCTION(SvxGrfCrop)
+    SvxGrfCrop( TypedWhichId<SvxGrfCrop>);
     SvxGrfCrop( sal_Int32 nLeft,    sal_Int32 nRight,
                 sal_Int32 nTop,     sal_Int32 nBottom,
-                TypedWhichId<SvxGrfCrop>,
-                SfxItemType eItemType = SfxItemType::SvxGrfCropType );
+                TypedWhichId<SvxGrfCrop> );
     virtual ~SvxGrfCrop() override;
 
     SvxGrfCrop(SvxGrfCrop const &) = default;

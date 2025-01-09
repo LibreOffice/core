@@ -36,7 +36,7 @@ constexpr OUString ZOOMSLIDER_PARAM_MAXZOOM = u"MaxValue"_ustr;
 
 
 SvxZoomSliderItem::SvxZoomSliderItem( sal_uInt16 nCurrentZoom, sal_uInt16 nMinZoom, sal_uInt16 nMaxZoom, TypedWhichId<SvxZoomSliderItem> _nWhich )
-:   SfxUInt16Item( _nWhich, nCurrentZoom, SfxItemType::SvxZoomSliderItemType ), mnMinZoom( nMinZoom ), mnMaxZoom( nMaxZoom )
+:   SfxUInt16Item( _nWhich, nCurrentZoom ), mnMinZoom( nMinZoom ), mnMaxZoom( nMaxZoom )
 {
 }
 

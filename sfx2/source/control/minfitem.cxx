@@ -35,7 +35,7 @@ SfxMacroInfoItem::SfxMacroInfoItem(
     OUString _aMethodName,
     OUString _aComment,
     OUString _aLocationName) :
-    SfxPoolItem(nWhichId, SfxItemType::SfxMacroInfoItemType),
+    SfxPoolItem(nWhichId),
     pBasicManager(pMgr),
     aLibName(std::move(_aLibName)),
     aModuleName(std::move(_aModuleName)),

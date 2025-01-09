@@ -60,6 +60,7 @@ protected:
 public:
     static SfxPoolItem* CreateDefault();
 
+    DECLARE_ITEM_TYPE_FUNCTION(SvxBrushItem)
     explicit SvxBrushItem( sal_uInt16 nWhich );
     SvxBrushItem(Color const& rColor, sal_uInt16 nWhich);
     SvxBrushItem(Color const& rColor, model::ComplexColor const& rComplexColor, sal_uInt16 nWhich);

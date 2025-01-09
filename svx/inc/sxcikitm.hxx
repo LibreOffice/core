@@ -25,8 +25,9 @@
 
 class SdrCircKindItem final : public SfxEnumItem<SdrCircKind> {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SdrCircKindItem)
     SdrCircKindItem(SdrCircKind eKind=SdrCircKind::Full)
-        : SfxEnumItem(SDRATTR_CIRCKIND, SfxItemType::SdrCircKindItemType, eKind) {}
+        : SfxEnumItem(SDRATTR_CIRCKIND, eKind) {}
     virtual SdrCircKindItem* Clone(SfxItemPool* pPool=nullptr) const override;
     virtual sal_uInt16   GetValueCount() const override; // { return 4; }
 

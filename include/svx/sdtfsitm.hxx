@@ -35,8 +35,9 @@ class SVXCORE_DLLPUBLIC SdrTextFitToSizeTypeItem final
 {
 public:
     static SfxPoolItem* CreateDefault();
+    DECLARE_ITEM_TYPE_FUNCTION(SdrTextFitToSizeTypeItem)
     SdrTextFitToSizeTypeItem(css::drawing::TextFitToSizeType const eFit = css::drawing::TextFitToSizeType_NONE)
-        : SfxEnumItem(SDRATTR_TEXT_FITTOSIZE, SfxItemType::SdrTextFitToSizeTypeItemType, eFit)
+        : SfxEnumItem(SDRATTR_TEXT_FITTOSIZE, eFit)
     {
     }
 

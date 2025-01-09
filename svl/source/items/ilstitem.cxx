@@ -28,18 +28,18 @@
 SfxPoolItem* SfxIntegerListItem::CreateDefault() { return new SfxIntegerListItem; }
 
 SfxIntegerListItem::SfxIntegerListItem()
-    : SfxPoolItem(0, SfxItemType::SfxIntegerListItemType)
+    : SfxPoolItem(0)
 {
 }
 
 SfxIntegerListItem::SfxIntegerListItem( sal_uInt16 which, ::std::vector < sal_Int32 >&& rList )
-    : SfxPoolItem( which, SfxItemType::SfxIntegerListItemType )
+    : SfxPoolItem( which )
     , m_aList( std::move(rList) )
 {
 }
 
 SfxIntegerListItem::SfxIntegerListItem( sal_uInt16 which, const css::uno::Sequence < sal_Int32 >& rList )
-    : SfxPoolItem( which, SfxItemType::SfxIntegerListItemType )
+    : SfxPoolItem( which )
 {
     comphelper::sequenceToContainer(m_aList, rList);
 }

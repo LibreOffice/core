@@ -92,6 +92,7 @@ class SW_DLLPUBLIC SwFormatCol final : public SfxPoolItem
     SAL_DLLPRIVATE void Calc( sal_uInt16 nGutterWidth, sal_uInt16 nAct );
 
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwFormatCol)
     SwFormatCol();
     SwFormatCol( const SwFormatCol& );
     virtual ~SwFormatCol() override;

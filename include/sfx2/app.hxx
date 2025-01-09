@@ -83,8 +83,9 @@ class SFX2_DLLPUBLIC SfxLinkItem final : public SfxPoolItem
     void operator =(SfxLinkItem const &) = delete;
 
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SfxLinkItem)
     SfxLinkItem( sal_uInt16 nWhichId, const Link<SfxPoolItem const *, void>& rValue )
-        : SfxPoolItem( nWhichId, SfxItemType::SfxLinkItemType )
+        : SfxPoolItem( nWhichId )
     {   aLink = rValue; }
 
     virtual ~SfxLinkItem() override;

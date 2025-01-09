@@ -97,6 +97,7 @@ class EDITENG_DLLPUBLIC SvxTabStopItem final : public SfxPoolItem
 public:
     static SfxPoolItem* CreateDefault();
 
+    DECLARE_ITEM_TYPE_FUNCTION(SvxTabStopItem)
     explicit SvxTabStopItem( sal_uInt16 nWhich  );
     SvxTabStopItem( const sal_uInt16 nTabs,
                     const sal_uInt16 nDist,

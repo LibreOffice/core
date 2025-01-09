@@ -92,6 +92,7 @@ private:
 
 public:
     static SfxPoolItem* CreateDefault();
+    DECLARE_ITEM_TYPE_FUNCTION(SfxDocumentInfoItem)
     SfxDocumentInfoItem();
     SfxDocumentInfoItem( const OUString &rFileName,
         const css::uno::Reference< css::document::XDocumentProperties> & i_xDocProps,

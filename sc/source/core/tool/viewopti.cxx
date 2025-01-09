@@ -169,7 +169,7 @@ std::unique_ptr<SvxGridItem> ScViewOptions::CreateGridItem() const
 //      ScTpViewItem - data for the ViewOptions TabPage
 
 ScTpViewItem::ScTpViewItem( const ScViewOptions& rOpt )
-    :   SfxPoolItem ( SID_SCVIEWOPTIONS, SfxItemType::ScTpViewItemType ),
+    :   SfxPoolItem ( SID_SCVIEWOPTIONS ),
         theOptions  ( rOpt )
 {
 }

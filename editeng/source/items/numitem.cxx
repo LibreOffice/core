@@ -1083,25 +1083,25 @@ void SvxNumRule::UnLinkGraphics()
 }
 
 SvxNumBulletItem::SvxNumBulletItem(SvxNumRule const & rRule) :
-    SfxPoolItem(SID_ATTR_NUMBERING_RULE, SfxItemType::SvxNumBulletItemType),
+    SfxPoolItem(SID_ATTR_NUMBERING_RULE),
     maNumRule(rRule)
 {
 }
 
 SvxNumBulletItem::SvxNumBulletItem(SvxNumRule && rRule) :
-    SfxPoolItem(SID_ATTR_NUMBERING_RULE, SfxItemType::SvxNumBulletItemType),
+    SfxPoolItem(SID_ATTR_NUMBERING_RULE),
     maNumRule(std::move(rRule))
 {
 }
 
 SvxNumBulletItem::SvxNumBulletItem(SvxNumRule const & rRule, sal_uInt16 _nWhich ) :
-    SfxPoolItem(_nWhich, SfxItemType::SvxNumBulletItemType),
+    SfxPoolItem(_nWhich),
     maNumRule(rRule)
 {
 }
 
 SvxNumBulletItem::SvxNumBulletItem(SvxNumRule && rRule, sal_uInt16 _nWhich ) :
-    SfxPoolItem(_nWhich, SfxItemType::SvxNumBulletItemType),
+    SfxPoolItem(_nWhich),
     maNumRule(std::move(rRule))
 {
 }

@@ -26,11 +26,12 @@
 class SVL_DLLPUBLIC SfxEnumItemInterface: public SfxPoolItem
 {
 protected:
-    explicit SfxEnumItemInterface(sal_uInt16 which, SfxItemType eItemType): SfxPoolItem(which, eItemType) {}
+    explicit SfxEnumItemInterface(sal_uInt16 which): SfxPoolItem(which) {}
 
     SfxEnumItemInterface(const SfxEnumItemInterface &) = default;
 
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SfxEnumItemInterface)
 
     virtual bool operator ==(const SfxPoolItem & rItem) const override;
 

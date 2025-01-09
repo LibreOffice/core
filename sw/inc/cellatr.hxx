@@ -38,6 +38,7 @@ constexpr sal_uInt32 getSwDefaultTextFormat() { return NF_STANDARD_FORMAT_TEXT; 
 class SW_DLLPUBLIC SwTableBoxNumFormat final : public SfxUInt32Item
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwTableBoxNumFormat)
     SwTableBoxNumFormat( sal_uInt32 nFormat = getSwDefaultTextFormat() );
 
     // "pure virtual methods" of SfxPoolItem
@@ -57,6 +58,7 @@ class SW_DLLPUBLIC SwTableBoxFormula final : public SfxPoolItem, public SwTableF
                             // can only be TableBoxFormat
 
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwTableBoxFormula)
     SwTableBoxFormula( const OUString& rFormula );
 
     // "pure virtual methods" of SfxPoolItem
@@ -96,6 +98,7 @@ class SW_DLLPUBLIC SwTableBoxValue final : public SfxPoolItem
 {
     double m_nValue;
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwTableBoxValue)
     SwTableBoxValue();
     SwTableBoxValue( const double aVal );
 

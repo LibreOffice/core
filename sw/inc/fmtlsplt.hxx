@@ -31,7 +31,8 @@ class IntlWrapper;
 class SW_DLLPUBLIC SwFormatLayoutSplit final : public SfxBoolItem
 {
 public:
-    SwFormatLayoutSplit( bool bSplit = true ) : SfxBoolItem( RES_LAYOUT_SPLIT, bSplit, SfxItemType::SwFormatLayoutSplitType ) {}
+    DECLARE_ITEM_TYPE_FUNCTION(SwFormatLayoutSplit)
+    SwFormatLayoutSplit( bool bSplit = true ) : SfxBoolItem( RES_LAYOUT_SPLIT, bSplit ) {}
 
     /// "pure virtual methods" of SfxPoolItem
     virtual SwFormatLayoutSplit* Clone( SfxItemPool *pPool = nullptr ) const override;

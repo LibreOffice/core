@@ -33,6 +33,7 @@ class SVXCORE_DLLPUBLIC XFormTextDistanceItem final : public SfxMetricItem
 {
 public:
                             static SfxPoolItem* CreateDefault();
+                            DECLARE_ITEM_TYPE_FUNCTION(XFormTextDistanceItem)
                             XFormTextDistanceItem(tools::Long nDist = 0);
     virtual XFormTextDistanceItem* Clone(SfxItemPool* pPool = nullptr) const override;
 };

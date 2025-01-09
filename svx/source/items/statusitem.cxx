@@ -19,7 +19,7 @@ constexpr int STATUS_PARAMS = 2;
 
 SvxStatusItem::SvxStatusItem(TypedWhichId<SvxStatusItem> nWhich, const OUString& rString,
                              StatusCategory eCategory)
-    : SfxStringItem(nWhich, rString, SfxItemType::SvxStatusItemType)
+    : SfxStringItem(nWhich, rString)
     , m_eCategory(eCategory)
 {
 }
