@@ -28,7 +28,7 @@ using namespace ::com::sun::star::uno;
 
 
 SwFormatWrapInfluenceOnObjPos::SwFormatWrapInfluenceOnObjPos( sal_Int16 _nWrapInfluenceOnPosition )
-    : SfxPoolItem( RES_WRAP_INFLUENCE_ON_OBJPOS, SfxItemType::SwFormatWrapInfluenceOnOjPosType ),
+    : SfxPoolItem( RES_WRAP_INFLUENCE_ON_OBJPOS ),
     mnWrapInfluenceOnPosition( _nWrapInfluenceOnPosition )
 {
 }

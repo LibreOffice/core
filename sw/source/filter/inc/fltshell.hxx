@@ -169,6 +169,7 @@ class SW_DLLPUBLIC SwFltAnchor final : public SfxPoolItem
     std::unique_ptr<SwFltAnchorListener> m_pListener;
 
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwFltAnchor)
     SwFltAnchor(SwFrameFormat* pFlyFormat);
     SwFltAnchor(const SwFltAnchor&);
     virtual ~SwFltAnchor() override;
@@ -197,10 +198,11 @@ public:
     RedlineType     m_eType;
     std::size_t     m_nAutorNo;
 
+    DECLARE_ITEM_TYPE_FUNCTION(SwFltRedline)
     SwFltRedline(RedlineType   eType_,
                  std::size_t     nAutorNo_,
                  const DateTime& rStamp_)
-        : SfxPoolItem(RES_FLTR_REDLINE, SfxItemType::SwFltRedlineType)
+        : SfxPoolItem(RES_FLTR_REDLINE)
         , m_aStamp(rStamp_),
         m_eType(eType_),
         m_nAutorNo(nAutorNo_)
@@ -222,6 +224,7 @@ private:
     bool mbIsTOCBookmark;
 
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwFltBookmark)
     SwFltBookmark( const OUString& rNa,
                    OUString aVa,
                    tools::Long nHand,
@@ -247,6 +250,7 @@ class SW_DLLPUBLIC SwFltRDFMark final : public SfxPoolItem
     std::vector< std::pair<OUString, OUString> > m_aAttributes;
 
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwFltRDFMark)
     SwFltRDFMark();
 
     virtual bool operator==(const SfxPoolItem&) const override;
@@ -264,6 +268,7 @@ class SW_DLLPUBLIC SwFltTOX final : public SfxPoolItem
     bool m_bHadBreakItem; // there was a break item BEFORE insertion of the TOX
     bool m_bHadPageDescItem;
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwFltTOX)
     SwFltTOX(std::shared_ptr<SwTOXBase> xBase);
     // "purely virtual methods" of SfxPoolItem
     virtual bool operator==(const SfxPoolItem&) const override;

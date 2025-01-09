@@ -240,6 +240,7 @@ class SD_DLLPUBLIC SdOptionsMiscItem final : public SfxPoolItem
 {
 public:
 
+                            DECLARE_ITEM_TYPE_FUNCTION(SdOptionsMiscItem)
                             explicit SdOptionsMiscItem();
                             SdOptionsMiscItem( SdOptions const * pOpts, ::sd::FrameView const * pView );
 
@@ -292,6 +293,7 @@ class SdOptionsGridItem final : public SvxGridItem
 {
 
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SdOptionsGridItem)
     explicit                SdOptionsGridItem( SdOptions const * pOpts );
 
     void                    SetOptions( SdOptions* pOpts ) const;
@@ -384,6 +386,7 @@ class SD_DLLPUBLIC SdOptionsPrintItem final : public SfxPoolItem
 {
 public:
 
+                            DECLARE_ITEM_TYPE_FUNCTION(SdOptionsPrintItem)
                             explicit SdOptionsPrintItem();
     explicit                SdOptionsPrintItem( SdOptions const * pOpts );
 

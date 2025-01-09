@@ -80,19 +80,19 @@ bool ScHasPriority( const ::editeng::SvxBorderLine* pThis, const ::editeng::SvxB
  * Merge
  */
 ScMergeAttr::ScMergeAttr():
-    SfxPoolItem(ATTR_MERGE, SfxItemType::ScMergeAttrType),
+    SfxPoolItem(ATTR_MERGE),
     nColMerge(0),
     nRowMerge(0)
 {}
 
 ScMergeAttr::ScMergeAttr( SCCOL nCol, SCROW nRow):
-    SfxPoolItem(ATTR_MERGE, SfxItemType::ScMergeAttrType),
+    SfxPoolItem(ATTR_MERGE),
     nColMerge(nCol),
     nRowMerge(nRow)
 {}
 
 ScMergeAttr::ScMergeAttr(const ScMergeAttr& rItem):
-    SfxPoolItem(ATTR_MERGE, SfxItemType::ScMergeAttrType)
+    SfxPoolItem(ATTR_MERGE)
 {
     nColMerge = rItem.nColMerge;
     nRowMerge = rItem.nRowMerge;
@@ -183,7 +183,7 @@ void ScMergeFlagAttr::dumpAsXml(xmlTextWriterPtr pWriter) const
  * Protection
  */
 ScProtectionAttr::ScProtectionAttr():
-    SfxPoolItem(ATTR_PROTECTION, SfxItemType::ScProtectionAttrType),
+    SfxPoolItem(ATTR_PROTECTION),
     bProtection(true),
     bHideFormula(false),
     bHideCell(false),
@@ -193,7 +193,7 @@ ScProtectionAttr::ScProtectionAttr():
 
 ScProtectionAttr::ScProtectionAttr( bool bProtect, bool bHFormula,
                                     bool bHCell, bool bHPrint):
-    SfxPoolItem(ATTR_PROTECTION, SfxItemType::ScProtectionAttrType),
+    SfxPoolItem(ATTR_PROTECTION),
     bProtection(bProtect),
     bHideFormula(bHFormula),
     bHideCell(bHCell),
@@ -202,7 +202,7 @@ ScProtectionAttr::ScProtectionAttr( bool bProtect, bool bHFormula,
 }
 
 ScProtectionAttr::ScProtectionAttr(const ScProtectionAttr& rItem):
-    SfxPoolItem(ATTR_PROTECTION, SfxItemType::ScProtectionAttrType)
+    SfxPoolItem(ATTR_PROTECTION)
 {
     bProtection  = rItem.bProtection;
     bHideFormula = rItem.bHideFormula;
@@ -392,7 +392,7 @@ void ScProtectionAttr::dumpAsXml(xmlTextWriterPtr pWriter) const
  * ScPageHFItem - Dates from the Head and Foot lines
  */
 ScPageHFItem::ScPageHFItem( sal_uInt16 nWhichP )
-    :   SfxPoolItem( nWhichP, SfxItemType::ScPageHFItemType )
+    :   SfxPoolItem( nWhichP )
 {
 }
 
@@ -518,12 +518,12 @@ void ScPageHFItem::dumpAsXml(xmlTextWriterPtr pWriter) const
  * ScViewObjectModeItem - Display Mode of View Objects
  */
 ScViewObjectModeItem::ScViewObjectModeItem( sal_uInt16 nWhichP )
-    : SfxEnumItem( nWhichP, SfxItemType::ScViewObjectModeItemType, VOBJ_MODE_SHOW )
+    : SfxEnumItem( nWhichP, VOBJ_MODE_SHOW )
 {
 }
 
 ScViewObjectModeItem::ScViewObjectModeItem( sal_uInt16 nWhichP, ScVObjMode eMode )
-    : SfxEnumItem( nWhichP, SfxItemType::ScViewObjectModeItemType, eMode )
+    : SfxEnumItem( nWhichP, eMode )
 {
 }
 
@@ -588,14 +588,14 @@ ScViewObjectModeItem* ScViewObjectModeItem::Clone( SfxItemPool* ) const
 }
 
 ScPageScaleToItem::ScPageScaleToItem() :
-    SfxPoolItem( ATTR_PAGE_SCALETO, SfxItemType::ScPageScaleToItemType ),
+    SfxPoolItem( ATTR_PAGE_SCALETO ),
     mnWidth( 0 ),
     mnHeight( 0 )
 {
 }
 
 ScPageScaleToItem::ScPageScaleToItem( sal_uInt16 nWidth, sal_uInt16 nHeight ) :
-    SfxPoolItem( ATTR_PAGE_SCALETO, SfxItemType::ScPageScaleToItemType ),
+    SfxPoolItem( ATTR_PAGE_SCALETO ),
     mnWidth( nWidth ),
     mnHeight( nHeight )
 {
@@ -695,24 +695,24 @@ void ScPageScaleToItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 }
 
 ScCondFormatItem::ScCondFormatItem():
-    SfxPoolItem( ATTR_CONDITIONAL, SfxItemType::ScCondFormatItemType )
+    SfxPoolItem( ATTR_CONDITIONAL )
 {
 }
 
 ScCondFormatItem::ScCondFormatItem( sal_uInt32 nIndex ):
-    SfxPoolItem( ATTR_CONDITIONAL, SfxItemType::ScCondFormatItemType )
+    SfxPoolItem( ATTR_CONDITIONAL )
 {
     maIndex.insert(nIndex);
 }
 
 ScCondFormatItem::ScCondFormatItem( const ScCondFormatIndexes& rIndex ):
-    SfxPoolItem( ATTR_CONDITIONAL, SfxItemType::ScCondFormatItemType ),
+    SfxPoolItem( ATTR_CONDITIONAL ),
     maIndex( rIndex )
 {
 }
 
 ScCondFormatItem::ScCondFormatItem( ScCondFormatIndexes&& aIndex ) noexcept:
-    SfxPoolItem( ATTR_CONDITIONAL, SfxItemType::ScCondFormatItemType ),
+    SfxPoolItem( ATTR_CONDITIONAL ),
     maIndex( std::move(aIndex) )
 {
 }
@@ -751,7 +751,7 @@ void ScCondFormatItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 }
 
 ScRotateValueItem::ScRotateValueItem(Degree100 nAngle)
-    : SdrAngleItem(ATTR_ROTATE_VALUE, nAngle, SfxItemType::ScRotateValueItemType)
+    : SdrAngleItem(ATTR_ROTATE_VALUE, nAngle)
 {
 }
 
@@ -772,7 +772,7 @@ bool ScRotateValueItem::GetPresentation(SfxItemPresentation ePresentation,
 }
 
 ScShrinkToFitCell::ScShrinkToFitCell(bool bShrink)
-    : SfxBoolItem(ATTR_SHRINKTOFIT, bShrink, SfxItemType::ScShrinkToFitCellType)
+    : SfxBoolItem(ATTR_SHRINKTOFIT, bShrink)
 {
 }
 
@@ -792,7 +792,7 @@ bool ScShrinkToFitCell::GetPresentation(SfxItemPresentation,
 }
 
 ScVerticalStackCell::ScVerticalStackCell(bool bStack)
-    : SfxBoolItem(ATTR_STACKED, bStack, SfxItemType::ScVerticalStackCellType)
+    : SfxBoolItem(ATTR_STACKED, bStack)
 {
 }
 
@@ -812,7 +812,7 @@ bool ScVerticalStackCell::GetPresentation(SfxItemPresentation,
 }
 
 ScLineBreakCell::ScLineBreakCell(bool bStack)
-    : SfxBoolItem(ATTR_LINEBREAK, bStack, SfxItemType::ScLineBreakCellType)
+    : SfxBoolItem(ATTR_LINEBREAK, bStack)
 {
 }
 
@@ -832,7 +832,7 @@ bool ScLineBreakCell::GetPresentation(SfxItemPresentation,
 }
 
 ScHyphenateCell::ScHyphenateCell(bool bHyphenate)
-    : SfxBoolItem(ATTR_HYPHENATE, bHyphenate, SfxItemType::ScHyphenateCellType)
+    : SfxBoolItem(ATTR_HYPHENATE, bHyphenate)
 {
 }
 
@@ -852,7 +852,7 @@ bool ScHyphenateCell::GetPresentation(SfxItemPresentation,
 }
 
 ScIndentItem::ScIndentItem(sal_uInt16 nIndent)
-    : SfxUInt16Item(ATTR_INDENT, nIndent, SfxItemType::ScIndentItemType)
+    : SfxUInt16Item(ATTR_INDENT, nIndent)
 {
 }
 

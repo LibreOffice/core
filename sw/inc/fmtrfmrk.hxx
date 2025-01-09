@@ -48,6 +48,7 @@ class SAL_DLLPUBLIC_RTTI SwFormatRefMark final : public SfxPoolItem
     unotools::WeakReference<SwXReferenceMark> m_wXReferenceMark;
 
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwFormatRefMark)
     SwFormatRefMark( OUString aText );
     SwFormatRefMark( const SwFormatRefMark& rRefMark );
     virtual ~SwFormatRefMark( ) override;

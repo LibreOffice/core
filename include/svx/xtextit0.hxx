@@ -34,6 +34,7 @@ class SVXCORE_DLLPUBLIC XFormTextStyleItem final : public SfxEnumItem<XFormTextS
 {
 public:
                             static SfxPoolItem* CreateDefault();
+                            DECLARE_ITEM_TYPE_FUNCTION(XFormTextStyleItem)
                             XFormTextStyleItem(XFormTextStyle = XFormTextStyle::NONE);
     virtual XFormTextStyleItem* Clone(SfxItemPool* pPool = nullptr) const override;
     virtual sal_uInt16      GetValueCount() const override;
@@ -52,6 +53,7 @@ class SVXCORE_DLLPUBLIC XFormTextHideFormItem final : public SfxBoolItem
 {
 public:
                             static SfxPoolItem* CreateDefault();
+                            DECLARE_ITEM_TYPE_FUNCTION(XFormTextHideFormItem)
                             XFormTextHideFormItem(bool bHide = false);
     virtual XFormTextHideFormItem* Clone(SfxItemPool* pPool = nullptr) const override;
 };

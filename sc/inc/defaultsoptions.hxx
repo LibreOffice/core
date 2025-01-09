@@ -44,6 +44,7 @@ public:
 class SC_DLLPUBLIC ScTpDefaultsItem final : public SfxPoolItem
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(ScTpDefaultsItem)
     ScTpDefaultsItem( ScDefaultsOptions aOpt );
     virtual ~ScTpDefaultsItem() override;
 

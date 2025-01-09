@@ -33,7 +33,7 @@ class EDITENG_DLLPUBLIC SvxAutoKernItem final : public SfxBoolItem
 {
 public:
     static SfxPoolItem* CreateDefault();
-
+    DECLARE_ITEM_TYPE_FUNCTION(SvxAutoKernItem)
     SvxAutoKernItem( const bool bAutoKern /*= false*/,
                      const sal_uInt16 nId );
 

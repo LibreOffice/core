@@ -30,13 +30,13 @@
 SfxPoolItem* SfxStringListItem::CreateDefault() { return new SfxStringListItem; }
 
 SfxStringListItem::SfxStringListItem() :
-    SfxPoolItem( 0, SfxItemType::SfxStringListItemType )
+    SfxPoolItem( 0 )
 {
 }
 
 
 SfxStringListItem::SfxStringListItem( sal_uInt16 which, const std::vector<OUString>* pList ) :
-    SfxPoolItem( which, SfxItemType::SfxStringListItemType )
+    SfxPoolItem( which )
 {
     // FIXME: Putting an empty list does not work
     // Therefore the query after the count is commented out

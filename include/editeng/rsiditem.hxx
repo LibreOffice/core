@@ -19,7 +19,8 @@
 class EDITENG_DLLPUBLIC SvxRsidItem final : public SfxUInt32Item
 {
 public:
-    SvxRsidItem( sal_uInt32 nRsid, sal_uInt16 nId ) : SfxUInt32Item( nId, nRsid, SfxItemType::SvxRsidItemType ) {}
+    DECLARE_ITEM_TYPE_FUNCTION(SvxRsidItem)
+    SvxRsidItem( sal_uInt32 nRsid, sal_uInt16 nId ) : SfxUInt32Item( nId, nRsid ) {}
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,

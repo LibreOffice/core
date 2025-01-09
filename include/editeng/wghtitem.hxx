@@ -38,6 +38,7 @@ protected:
 public:
     static SfxPoolItem* CreateDefault();
 
+    DECLARE_ITEM_TYPE_FUNCTION(SvxWeightItem)
     SvxWeightItem(  const FontWeight eWght /*= WEIGHT_NORMAL*/,
                     const sal_uInt16 nId  );
 

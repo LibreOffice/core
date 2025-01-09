@@ -24,7 +24,8 @@
 
 class SdrMoveXItem final : public SdrMetricItem {
 public:
-    SdrMoveXItem(): SdrMetricItem(SDRATTR_MOVEX, 0, SfxItemType::SdrMoveXItemType) {}
+    DECLARE_ITEM_TYPE_FUNCTION(SdrMoveXItem)
+    SdrMoveXItem(): SdrMetricItem(SDRATTR_MOVEX, 0) {}
     SdrMoveXItem* Clone(SfxItemPool*) const override
     {
         return new SdrMoveXItem(*this);
@@ -33,7 +34,8 @@ public:
 
 class SdrMoveYItem final : public SdrMetricItem {
 public:
-    SdrMoveYItem(): SdrMetricItem(SDRATTR_MOVEY, 0, SfxItemType::SdrMoveYItemType) {}
+    DECLARE_ITEM_TYPE_FUNCTION(SdrMoveYItem)
+    SdrMoveYItem(): SdrMetricItem(SDRATTR_MOVEY, 0) {}
     SdrMoveYItem* Clone(SfxItemPool*) const override
     {
         return new SdrMoveYItem(*this);

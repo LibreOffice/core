@@ -28,6 +28,7 @@
 class EDITENG_DLLPUBLIC SvxWritingModeItem final : public SfxUInt16Item
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SvxWritingModeItem)
     SvxWritingModeItem( css::text::WritingMode eValue /*= css::text::WritingMode_LR_TB*/,
                 TypedWhichId<SvxWritingModeItem> nWhich /*= SDRATTR_TEXTDIRECTION*/ );
     virtual ~SvxWritingModeItem() override;

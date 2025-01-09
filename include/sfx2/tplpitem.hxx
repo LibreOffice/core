@@ -31,6 +31,7 @@ class SFX2_DLLPUBLIC SfxTemplateItem final : public SfxFlagItem
     OUString aStyleIdentifier;
 public:
     static SfxPoolItem* CreateDefault();
+    DECLARE_ITEM_TYPE_FUNCTION(SfxTemplateItem)
     SfxTemplateItem();
     SfxTemplateItem( sal_uInt16 nWhich,
                      OUString aStyle,

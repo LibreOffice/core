@@ -17,6 +17,7 @@
 class SVXCORE_DLLPUBLIC XFillUseSlideBackgroundItem final : public SfxBoolItem
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(XFillUseSlideBackgroundItem)
     XFillUseSlideBackgroundItem(bool bFill = false);
 
     virtual XFillUseSlideBackgroundItem* Clone(SfxItemPool* pPool = nullptr) const override;

@@ -32,6 +32,7 @@
 class EDITENG_DLLPUBLIC SvxHangingPunctuationItem final : public SfxBoolItem
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SvxHangingPunctuationItem)
     SvxHangingPunctuationItem( bool bOn /*= false*/, const sal_uInt16 nId  );
 
     virtual SvxHangingPunctuationItem* Clone( SfxItemPool *pPool = nullptr ) const override;

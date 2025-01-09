@@ -943,13 +943,14 @@ class SFX2_DLLPUBLIC SfxObjectShellItem final : public SfxPoolItem
 public:
                             static SfxPoolItem* CreateDefault();
 
+                            DECLARE_ITEM_TYPE_FUNCTION(SfxObjectShellItem)
                             SfxObjectShellItem() :
-                                SfxPoolItem( 0, SfxItemType::SfxObjectShellItemType ),
+                                SfxPoolItem( 0 ),
                                 pObjSh( nullptr )
                             {}
                             SfxObjectShellItem( sal_uInt16 nWhichId,
                                                 SfxObjectShell *pObjShell ):
-                                SfxPoolItem( nWhichId, SfxItemType::SfxObjectShellItemType ),
+                                SfxPoolItem( nWhichId ),
                                 pObjSh( pObjShell )
                             {}
 

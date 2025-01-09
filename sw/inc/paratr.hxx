@@ -75,6 +75,7 @@ class SW_DLLPUBLIC SwFormatDrop final : public SfxPoolItem, public SwClient
 public:
     static SfxPoolItem* CreateDefault();
 
+    DECLARE_ITEM_TYPE_FUNCTION(SwFormatDrop)
     SwFormatDrop();
     virtual ~SwFormatDrop() override;
 
@@ -133,7 +134,7 @@ class SwRegisterItem final : public SfxBoolItem
 {
 public:
     static SfxPoolItem* CreateDefault();
-
+    DECLARE_ITEM_TYPE_FUNCTION(SwRegisterItem)
     inline SwRegisterItem( const bool bRegister = false );
 
     /// "pure virtual methods" of SfxPoolItem
@@ -153,12 +154,12 @@ class SW_DLLPUBLIC SwNumRuleItem final : public SfxStringItem
 {
 public:
     static SfxPoolItem* CreateDefault();
-
+    DECLARE_ITEM_TYPE_FUNCTION(SwNumRuleItem)
     SwNumRuleItem()
-        : SfxStringItem( RES_PARATR_NUMRULE, OUString(), SfxItemType::SwNumRuleItemType ) {}
+        : SfxStringItem( RES_PARATR_NUMRULE, OUString() ) {}
 
     SwNumRuleItem( const OUString& rRuleName )
-        : SfxStringItem( RES_PARATR_NUMRULE, rRuleName, SfxItemType::SwNumRuleItemType ) {}
+        : SfxStringItem( RES_PARATR_NUMRULE, rRuleName ) {}
 
     SwNumRuleItem(SwNumRuleItem const &) = default; // SfxPoolItem copy function dichotomy
 
@@ -183,7 +184,7 @@ public:
 class SwParaConnectBorderItem final : public SfxBoolItem
 {
 public:
-
+    DECLARE_ITEM_TYPE_FUNCTION(SwParaConnectBorderItem)
     inline SwParaConnectBorderItem( const bool bConnect = true );
 
     /// "pure virtual methods" of SfxPoolItem

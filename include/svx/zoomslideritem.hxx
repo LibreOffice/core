@@ -33,7 +33,7 @@ class SVX_DLLPUBLIC SvxZoomSliderItem final : public SfxUInt16Item
 
 public:
     static SfxPoolItem* CreateDefault();
-
+    DECLARE_ITEM_TYPE_FUNCTION(SvxZoomSliderItem)
     SvxZoomSliderItem( sal_uInt16 nCurrentZoom = 100, sal_uInt16 nMinZoom = 20, sal_uInt16 nMaxZoom = 600, TypedWhichId<SvxZoomSliderItem> nWhich = SID_ATTR_ZOOMSLIDER );
 
     void AddSnappingPoint( sal_Int32 nNew );

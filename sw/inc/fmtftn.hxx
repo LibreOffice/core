@@ -59,6 +59,7 @@ class SW_DLLPUBLIC SwFormatFootnote final
     SwFormatFootnote( const SwFormatFootnote& ) = delete;
 
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwFormatFootnote)
     SwFormatFootnote( bool bEndNote = false );
     virtual ~SwFormatFootnote() override;
 

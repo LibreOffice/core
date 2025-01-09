@@ -30,8 +30,8 @@ class SAL_DLLPUBLIC_RTTI SfxEnumItem : public SfxEnumItemInterface
     EnumT m_nValue;
 
 protected:
-    explicit SfxEnumItem(sal_uInt16 const nWhich, SfxItemType eItemType, EnumT const nValue)
-        : SfxEnumItemInterface(nWhich, eItemType)
+    explicit SfxEnumItem(sal_uInt16 const nWhich, EnumT const nValue)
+        : SfxEnumItemInterface(nWhich)
         , m_nValue(nValue)
     { }
 
@@ -84,10 +84,9 @@ protected:
 
 public:
     static SfxPoolItem* CreateDefault();
-
-    explicit SfxBoolItem(sal_uInt16 const nWhich = 0, bool const bValue = false,
-            SfxItemType eItemType = SfxItemType::SfxBoolItemType)
-        : SfxPoolItem(nWhich, eItemType)
+    DECLARE_ITEM_TYPE_FUNCTION(SfxBoolItem)
+    explicit SfxBoolItem(sal_uInt16 const nWhich = 0, bool const bValue = false)
+        : SfxPoolItem(nWhich)
         , m_bValue(bValue)
     { }
 

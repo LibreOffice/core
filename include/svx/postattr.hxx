@@ -29,7 +29,7 @@ class SVX_DLLPUBLIC SvxPostItAuthorItem final : public SfxStringItem
 {
 public:
     static SfxPoolItem* CreateDefault();
-
+    DECLARE_ITEM_TYPE_FUNCTION(SvxPostItAuthorItem)
     SvxPostItAuthorItem( TypedWhichId<SvxPostItAuthorItem> nWhich  );
 
     SvxPostItAuthorItem( const OUString& rAuthor, TypedWhichId<SvxPostItAuthorItem> nWhich  );
@@ -49,7 +49,7 @@ class SVX_DLLPUBLIC SvxPostItDateItem final : public SfxStringItem
 {
 public:
     static SfxPoolItem* CreateDefault();
-
+    DECLARE_ITEM_TYPE_FUNCTION(SvxPostItDateItem)
     SvxPostItDateItem( TypedWhichId<SvxPostItDateItem> nWhich  );
 
     SvxPostItDateItem( const OUString& rDate, TypedWhichId<SvxPostItDateItem> nWhich  );
@@ -68,7 +68,7 @@ class SVX_DLLPUBLIC SvxPostItTextItem final : public SfxStringItem
 {
 public:
     static SfxPoolItem* CreateDefault();
-
+    DECLARE_ITEM_TYPE_FUNCTION(SvxPostItTextItem)
     SvxPostItTextItem( TypedWhichId<SvxPostItTextItem> nWhich  );
 
     SvxPostItTextItem( const OUString& rText, TypedWhichId<SvxPostItTextItem> nWhich  );
@@ -89,7 +89,7 @@ class SVX_DLLPUBLIC SvxPostItIdItem final : public SfxStringItem
 {
 public:
     static SfxPoolItem* CreateDefault();
-
+    DECLARE_ITEM_TYPE_FUNCTION(SvxPostItIdItem)
     SvxPostItIdItem( TypedWhichId<SvxPostItIdItem>  nWhich );
 
     virtual SvxPostItIdItem* Clone( SfxItemPool *pPool = nullptr ) const override;

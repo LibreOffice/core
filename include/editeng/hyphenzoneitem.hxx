@@ -47,6 +47,7 @@ class EDITENG_DLLPUBLIC SvxHyphenZoneItem final : public SfxPoolItem
 public:
     static SfxPoolItem* CreateDefault();
 
+    DECLARE_ITEM_TYPE_FUNCTION(SvxHyphenZoneItem)
     SvxHyphenZoneItem( const bool bHyph /*= false*/,
                        const sal_uInt16 nId  );
 

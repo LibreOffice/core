@@ -30,6 +30,7 @@ class EDITENG_DLLPUBLIC SvxHorJustifyItem final : public SfxEnumItem<SvxCellHorJ
 public:
     static SfxPoolItem* CreateDefault();
 
+    DECLARE_ITEM_TYPE_FUNCTION(SvxHorJustifyItem)
     explicit SvxHorJustifyItem( const sal_uInt16 nId );
 
     SvxHorJustifyItem(
@@ -57,6 +58,7 @@ class EDITENG_DLLPUBLIC SvxVerJustifyItem final : public SfxEnumItem<SvxCellVerJ
 public:
     static SfxPoolItem* CreateDefault();
 
+    DECLARE_ITEM_TYPE_FUNCTION(SvxVerJustifyItem)
     explicit SvxVerJustifyItem( const sal_uInt16 nId  );
 
     SvxVerJustifyItem(
@@ -82,6 +84,7 @@ public:
 class EDITENG_DLLPUBLIC SvxJustifyMethodItem final : public SfxEnumItem<SvxCellJustifyMethod>
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SvxJustifyMethodItem)
     SvxJustifyMethodItem(
         const SvxCellJustifyMethod eMethod,
         const sal_uInt16 nId );

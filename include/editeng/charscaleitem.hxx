@@ -36,7 +36,7 @@ class EDITENG_DLLPUBLIC SvxCharScaleWidthItem final : public SfxUInt16Item
 {
 public:
     static SfxPoolItem* CreateDefault();
-
+    DECLARE_ITEM_TYPE_FUNCTION(SvxCharScaleWidthItem)
     SvxCharScaleWidthItem( sal_uInt16 nValue /*= 100*/,
                         TypedWhichId<SvxCharScaleWidthItem> nId );
 

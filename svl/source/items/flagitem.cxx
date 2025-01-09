@@ -26,8 +26,8 @@
 #include <sal/log.hxx>
 
 
-SfxFlagItem::SfxFlagItem( sal_uInt16 nW, sal_uInt16 nV, SfxItemType eItemType ) :
-    SfxPoolItem( nW, eItemType ),
+SfxFlagItem::SfxFlagItem( sal_uInt16 nW, sal_uInt16 nV ) :
+    SfxPoolItem( nW ),
     nVal(nV)
 {
 }

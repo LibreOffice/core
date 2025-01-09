@@ -46,7 +46,7 @@
 
 // constructor for default item in attribute-pool
 SwFormatField::SwFormatField( sal_uInt16 nWhich )
-    : SfxPoolItem( nWhich, SfxItemType::SwFormatFieldType )
+    : SfxPoolItem( nWhich )
     , SfxBroadcaster()
     , mpTextField( nullptr )
 {
@@ -54,7 +54,7 @@ SwFormatField::SwFormatField( sal_uInt16 nWhich )
 }
 
 SwFormatField::SwFormatField( const SwField &rField )
-    : SfxPoolItem( RES_TXTATR_FIELD, SfxItemType::SwFormatFieldType )
+    : SfxPoolItem( RES_TXTATR_FIELD )
     , SfxBroadcaster()
     , mpField( rField.CopyField() )
     , mpTextField( nullptr )

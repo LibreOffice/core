@@ -30,6 +30,7 @@
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxOrientationItem final : public SfxEnumItem<SvxCellOrientation>
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SvxOrientationItem)
     SvxOrientationItem(
         const SvxCellOrientation eOrientation,
         const TypedWhichId<SvxOrientationItem> nId );
@@ -64,6 +65,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxMarginItem final : public SfxPoolItem
     sal_Int16       nBottomMargin;
 public:
     static SfxPoolItem* CreateDefault();
+    DECLARE_ITEM_TYPE_FUNCTION(SvxMarginItem)
     SvxMarginItem( const TypedWhichId<SvxMarginItem> nId  );
     SvxMarginItem( sal_Int16 nLeft, sal_Int16 nTop /*= 0*/,
                    sal_Int16 nRight /*= 0*/, sal_Int16 nBottom /*= 0*/,

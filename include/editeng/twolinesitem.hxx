@@ -28,6 +28,7 @@ class EDITENG_DLLPUBLIC SvxTwoLinesItem final : public SfxPoolItem
     sal_Unicode cStartBracket, cEndBracket;
     bool bOn;
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SvxTwoLinesItem)
     SvxTwoLinesItem( bool bOn /*= true*/,
                      sal_Unicode nStartBracket /*= 0*/,
                      sal_Unicode nEndBracket /*= 0*/,

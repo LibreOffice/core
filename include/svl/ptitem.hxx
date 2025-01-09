@@ -30,6 +30,7 @@ class SVL_DLLPUBLIC SfxPointItem final : public SfxPoolItem
 
 public:
                              static SfxPoolItem* CreateDefault();
+                             DECLARE_ITEM_TYPE_FUNCTION(SfxPointItem)
                              SfxPointItem();
                              SfxPointItem( sal_uInt16 nWhich, const Point& rVal );
 

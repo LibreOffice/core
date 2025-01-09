@@ -35,7 +35,8 @@ class SVXCORE_DLLPUBLIC XFillHatchItem final : public NameOrIndex
 
 public:
                             static SfxPoolItem* CreateDefault();
-                            XFillHatchItem() : NameOrIndex(XATTR_FILLHATCH, -1, SfxItemType::XFillHatchItemType) {}
+                            DECLARE_ITEM_TYPE_FUNCTION(XFillHatchItem)
+                            XFillHatchItem() : NameOrIndex(XATTR_FILLHATCH, -1) {}
                             XFillHatchItem(const OUString& rName, const XHatch& rTheHatch);
                             XFillHatchItem(const XHatch& rTheHatch);
                             XFillHatchItem(const XFillHatchItem& rItem);

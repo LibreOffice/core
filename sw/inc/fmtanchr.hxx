@@ -46,6 +46,7 @@ class SW_DLLPUBLIC SwFormatAnchor final : public SfxPoolItem
     static sal_uInt32 s_nOrderCounter;
 
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwFormatAnchor)
     SwFormatAnchor( RndStdIds eRnd = RndStdIds::FLY_AT_PAGE, sal_uInt16 nPageNum = 0 );
     SwFormatAnchor( const SwFormatAnchor &rCpy );
     virtual ~SwFormatAnchor() override;

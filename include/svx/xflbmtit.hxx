@@ -26,6 +26,7 @@
 class SVXCORE_DLLPUBLIC XFillBmpTileItem final : public SfxBoolItem
 {
 public:
+                            DECLARE_ITEM_TYPE_FUNCTION(XFillBmpTileItem)
                             XFillBmpTileItem( bool bTile = true );
 
     virtual XFillBmpTileItem* Clone( SfxItemPool* pPool = nullptr ) const override;

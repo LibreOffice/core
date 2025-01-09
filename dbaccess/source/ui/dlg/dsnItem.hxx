@@ -35,6 +35,7 @@ namespace dbaui
         ::dbaccess::ODsnTypeCollection* m_pCollection;
 
     public:
+        DECLARE_ITEM_TYPE_FUNCTION(DbuTypeCollectionItem)
         DbuTypeCollectionItem(sal_Int16 nWhich, ::dbaccess::ODsnTypeCollection* _pCollection);
         DbuTypeCollectionItem(const DbuTypeCollectionItem& _rSource);
 

@@ -29,6 +29,7 @@ class SVXCORE_DLLPUBLIC XLineStartCenterItem final : public SfxBoolItem
 {
 public:
                             XLineStartCenterItem(bool bStartCenter = false);
+                            DECLARE_ITEM_TYPE_FUNCTION(XLineStartCenterItem)
     virtual XLineStartCenterItem* Clone(SfxItemPool* pPool = nullptr) const override;
 
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;

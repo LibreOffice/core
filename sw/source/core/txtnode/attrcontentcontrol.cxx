@@ -47,7 +47,7 @@ SwFormatContentControl* SwFormatContentControl::CreatePoolDefault(sal_uInt16 nWh
 }
 
 SwFormatContentControl::SwFormatContentControl(sal_uInt16 nWhich)
-    : SfxPoolItem(nWhich, SfxItemType::SwFormatContentControlType)
+    : SfxPoolItem(nWhich)
     , m_pTextAttr(nullptr)
 {
     setNonShareable();
@@ -55,7 +55,7 @@ SwFormatContentControl::SwFormatContentControl(sal_uInt16 nWhich)
 
 SwFormatContentControl::SwFormatContentControl(
     const std::shared_ptr<SwContentControl>& pContentControl, sal_uInt16 nWhich)
-    : SfxPoolItem(nWhich, SfxItemType::SwFormatContentControlType)
+    : SfxPoolItem(nWhich)
     , m_pContentControl(pContentControl)
     , m_pTextAttr(nullptr)
 {

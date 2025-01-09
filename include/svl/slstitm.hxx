@@ -34,6 +34,7 @@ class SVL_DLLPUBLIC SfxStringListItem final : public SfxPoolItem
 public:
     static SfxPoolItem* CreateDefault();
 
+    DECLARE_ITEM_TYPE_FUNCTION(SfxStringListItem)
     SfxStringListItem();
     SfxStringListItem( sal_uInt16 nWhich, const std::vector<OUString> *pList=nullptr );
     virtual ~SfxStringListItem() override;

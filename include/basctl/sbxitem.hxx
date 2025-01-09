@@ -45,6 +45,7 @@ class BASCTL_DLLPUBLIC SbxItem : public SfxPoolItem
 
 public:
     static SfxPoolItem* CreateDefault();
+    DECLARE_ITEM_TYPE_FUNCTION(SbxItem)
     SbxItem(sal_uInt16 nWhich, ScriptDocument aDocument, OUString aLibName, OUString aName, SbxItemType);
     SbxItem(sal_uInt16 nWhich, ScriptDocument aDocument, OUString aLibName, OUString aName, OUString aMethodName, SbxItemType eSbxType);
 

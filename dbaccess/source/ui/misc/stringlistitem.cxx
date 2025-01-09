@@ -25,7 +25,7 @@ using namespace ::com::sun::star::uno;
 
 // OStringListItem
 OStringListItem::OStringListItem(sal_Int16 _nWhich, const Sequence<OUString>& _rList)
-    : SfxPoolItem(_nWhich, SfxItemType::OStringListItemType)
+    : SfxPoolItem(_nWhich)
     , m_aList(_rList)
 {
 }

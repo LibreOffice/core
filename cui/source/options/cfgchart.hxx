@@ -65,6 +65,7 @@ namespace SvxChartOptions
 class SvxChartColorTableItem : public SfxPoolItem
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SvxChartColorTableItem)
     SvxChartColorTableItem( sal_uInt16 nWhich, SvxChartColorTable );
 
     virtual SvxChartColorTableItem* Clone( SfxItemPool *pPool = nullptr ) const override;

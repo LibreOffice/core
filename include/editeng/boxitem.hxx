@@ -76,6 +76,7 @@ class EDITENG_DLLPUBLIC SvxBoxItem final : public SfxPoolItem
 public:
     static SfxPoolItem* CreateDefault();
 
+    DECLARE_ITEM_TYPE_FUNCTION(SvxBoxItem)
     explicit SvxBoxItem( const sal_uInt16 nId );
     SvxBoxItem( const SvxBoxItem &rCpy );
     virtual ~SvxBoxItem() override;
@@ -227,6 +228,7 @@ class EDITENG_DLLPUBLIC SvxBoxInfoItem final : public SfxPoolItem
 public:
     static SfxPoolItem* CreateDefault();
 
+    DECLARE_ITEM_TYPE_FUNCTION(SvxBoxInfoItem)
     explicit SvxBoxInfoItem( const sal_uInt16 nId );
     SvxBoxInfoItem( const SvxBoxInfoItem &rCpy );
     virtual ~SvxBoxInfoItem() override;

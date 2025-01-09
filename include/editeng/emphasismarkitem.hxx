@@ -37,7 +37,7 @@ protected:
 
 public:
     static SfxPoolItem* CreateDefault();
-
+    DECLARE_ITEM_TYPE_FUNCTION(SvxEmphasisMarkItem)
     SvxEmphasisMarkItem(  const FontEmphasisMark eVal /*= FontEmphasisMark::NONE*/,
                           TypedWhichId<SvxEmphasisMarkItem> nId  );
 

@@ -253,7 +253,7 @@ bool SwFormatFrameSize::HasMetrics() const {
 
 // Partially implemented inline in hxx
 SwFormatFrameSize::SwFormatFrameSize( SwFrameSize eSize, SwTwips nWidth, SwTwips nHeight )
-    : SvxSizeItem( RES_FRM_SIZE, {nWidth, nHeight}, SfxItemType::SwFormatFrameSizeType ),
+    : SvxSizeItem( RES_FRM_SIZE, {nWidth, nHeight} ),
     m_eFrameHeightType( eSize ),
     m_eFrameWidthType( SwFrameSize::Fixed )
 {
@@ -493,7 +493,7 @@ void SwFormatFrameSize::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 // Partially implemented inline in hxx
 SwFormatFillOrder::SwFormatFillOrder( SwFillOrder nFO )
-    : SfxEnumItem( RES_FILL_ORDER, SfxItemType::SwFormatFillOrderType, nFO )
+    : SfxEnumItem( RES_FILL_ORDER, nFO )
 {}
 
 SwFormatFillOrder* SwFormatFillOrder::Clone( SfxItemPool* ) const
@@ -508,21 +508,21 @@ sal_uInt16  SwFormatFillOrder::GetValueCount() const
 
 // Partially implemented inline in hxx
 SwFormatHeader::SwFormatHeader( SwFrameFormat *pHeaderFormat )
-    : SfxPoolItem( RES_HEADER, SfxItemType::SwFormatHeaderType ),
+    : SfxPoolItem( RES_HEADER ),
     SwClient( pHeaderFormat ),
     m_bActive( pHeaderFormat )
 {
 }
 
 SwFormatHeader::SwFormatHeader( const SwFormatHeader &rCpy )
-    : SfxPoolItem( RES_HEADER, SfxItemType::SwFormatHeaderType ),
+    : SfxPoolItem( RES_HEADER ),
     SwClient( const_cast<sw::BroadcastingModify*>(static_cast<const sw::BroadcastingModify*>(rCpy.GetRegisteredIn())) ),
     m_bActive( rCpy.IsActive() )
 {
 }
 
 SwFormatHeader::SwFormatHeader( bool bOn )
-    : SfxPoolItem( RES_HEADER, SfxItemType::SwFormatHeaderType ),
+    : SfxPoolItem( RES_HEADER ),
     SwClient( nullptr ),
     m_bActive( bOn )
 {
@@ -567,21 +567,21 @@ void SwFormatHeader::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 // Partially implemented inline in hxx
 SwFormatFooter::SwFormatFooter( SwFrameFormat *pFooterFormat )
-    : SfxPoolItem( RES_FOOTER, SfxItemType::SwFormatFooterType ),
+    : SfxPoolItem( RES_FOOTER ),
     SwClient( pFooterFormat ),
     m_bActive( pFooterFormat )
 {
 }
 
 SwFormatFooter::SwFormatFooter( const SwFormatFooter &rCpy )
-    : SfxPoolItem( RES_FOOTER, SfxItemType::SwFormatFooterType ),
+    : SfxPoolItem( RES_FOOTER ),
     SwClient( const_cast<sw::BroadcastingModify*>(static_cast<const sw::BroadcastingModify*>(rCpy.GetRegisteredIn())) ),
     m_bActive( rCpy.IsActive() )
 {
 }
 
 SwFormatFooter::SwFormatFooter( bool bOn )
-    : SfxPoolItem( RES_FOOTER, SfxItemType::SwFormatFooterType ),
+    : SfxPoolItem( RES_FOOTER ),
     SwClient( nullptr ),
     m_bActive( bOn )
 {
@@ -626,14 +626,14 @@ void SwFormatFooter::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 // Partially implemented inline in hxx
 SwFormatContent::SwFormatContent( const SwFormatContent &rCpy )
-    : SfxPoolItem( RES_CNTNT, SfxItemType::SwFormatContentType )
+    : SfxPoolItem( RES_CNTNT )
     , m_oStartNode( rCpy.m_oStartNode )
 {
     setNonShareable();
 }
 
 SwFormatContent::SwFormatContent( const SwStartNode *pStartNd )
-    : SfxPoolItem( RES_CNTNT, SfxItemType::SwFormatContentType )
+    : SfxPoolItem( RES_CNTNT )
 {
     setNonShareable();
     if (pStartNd)
@@ -680,7 +680,7 @@ void SwFormatContent::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 // Partially implemented inline in hxx
 SwFormatPageDesc::SwFormatPageDesc( const SwFormatPageDesc &rCpy )
-    : SfxPoolItem( RES_PAGEDESC, SfxItemType::SwFormatPageDescType ),
+    : SfxPoolItem( RES_PAGEDESC ),
     SwClient( const_cast<SwPageDesc*>(rCpy.GetPageDesc()) ),
     m_oNumOffset( rCpy.m_oNumOffset ),
     m_pDefinedIn( nullptr )
@@ -689,7 +689,7 @@ SwFormatPageDesc::SwFormatPageDesc( const SwFormatPageDesc &rCpy )
 }
 
 SwFormatPageDesc::SwFormatPageDesc( const SwPageDesc *pDesc )
-    : SfxPoolItem( RES_PAGEDESC, SfxItemType::SwFormatPageDescType ),
+    : SfxPoolItem( RES_PAGEDESC ),
     SwClient( const_cast<SwPageDesc*>(pDesc) ),
     m_pDefinedIn( nullptr )
 {
@@ -902,7 +902,7 @@ void SwColumn::dumpAsXml(xmlTextWriterPtr pWriter) const
 }
 
 SwFormatCol::SwFormatCol( const SwFormatCol& rCpy )
-    : SfxPoolItem( RES_COL, SfxItemType::SwFormatColType ),
+    : SfxPoolItem( RES_COL ),
     m_eLineStyle( rCpy.m_eLineStyle ),
     m_nLineWidth( rCpy.m_nLineWidth),
     m_aLineColor( rCpy.m_aLineColor),
@@ -944,7 +944,7 @@ SwFormatCol& SwFormatCol::operator=( const SwFormatCol& rCpy )
 }
 
 SwFormatCol::SwFormatCol()
-    : SfxPoolItem( RES_COL, SfxItemType::SwFormatColType )
+    : SfxPoolItem( RES_COL )
     , m_eLineStyle( SvxBorderLineStyle::NONE)
     ,
     m_nLineWidth(0),
@@ -1332,7 +1332,7 @@ void SwFormatCol::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 // Partially implemented inline in hxx
 SwFormatSurround::SwFormatSurround( css::text::WrapTextMode eFly ) :
-    SfxEnumItem( RES_SURROUND, SfxItemType::SwFormatSurroundType, eFly )
+    SfxEnumItem( RES_SURROUND, eFly )
 {
     m_bAnchorOnly = m_bContour = m_bOutside = false;
 }
@@ -1453,7 +1453,7 @@ size_t SwFormatVertOrient::hashCode() const
 // Partially implemented inline in hxx
 SwFormatVertOrient::SwFormatVertOrient( SwTwips nY, sal_Int16 eVert,
                                   sal_Int16 eRel )
-    : SfxPoolItem( RES_VERT_ORIENT, SfxItemType::SwFormatVertOrientType ),
+    : SfxPoolItem( RES_VERT_ORIENT ),
     m_nYPos( nY ),
     m_eOrient( eVert ),
     m_eRelation( eRel )
@@ -1561,7 +1561,7 @@ size_t SwFormatHoriOrient::hashCode() const
 // Partially implemented inline in hxx
 SwFormatHoriOrient::SwFormatHoriOrient( SwTwips nX, sal_Int16 eHori,
                               sal_Int16 eRel, bool bPos )
-    : SfxPoolItem( RES_HORI_ORIENT, SfxItemType::SwFormatHoriOrientType ),
+    : SfxPoolItem( RES_HORI_ORIENT ),
     m_nXPos( nX ),
     m_eOrient( eHori ),
     m_eRelation( eRel ),
@@ -1661,7 +1661,7 @@ void SwFormatHoriOrient::dumpAsXml(xmlTextWriterPtr pWriter) const
 }
 
 SwFormatAnchor::SwFormatAnchor( RndStdIds nRnd, sal_uInt16 nPage )
-    : SfxPoolItem( RES_ANCHOR, SfxItemType::SwFormatAnchorType ),
+    : SfxPoolItem( RES_ANCHOR ),
     m_eAnchorId( nRnd ),
     m_nPageNumber( nPage ),
     // OD 2004-05-05 #i28701# - get always new increased order number
@@ -1678,7 +1678,7 @@ SwFormatAnchor::SwFormatAnchor( RndStdIds nRnd, sal_uInt16 nPage )
 }
 
 SwFormatAnchor::SwFormatAnchor( const SwFormatAnchor &rCpy )
-    : SfxPoolItem( RES_ANCHOR, SfxItemType::SwFormatAnchorType )
+    : SfxPoolItem( RES_ANCHOR )
     , m_oContentAnchor( rCpy.m_oContentAnchor )
     , m_eAnchorId( rCpy.m_eAnchorId )
     , m_nPageNumber( rCpy.m_nPageNumber )
@@ -1930,13 +1930,13 @@ void SwFormatAnchor::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 // Partially implemented inline in hxx
 SwFormatURL::SwFormatURL() :
-    SfxPoolItem( RES_URL, SfxItemType::SwFormatURLType ),
+    SfxPoolItem( RES_URL ),
     m_bIsServerMap( false )
 {
 }
 
 SwFormatURL::SwFormatURL( const SwFormatURL &rURL) :
-    SfxPoolItem( RES_URL, SfxItemType::SwFormatURLType ),
+    SfxPoolItem( RES_URL ),
     m_sTargetFrameName( rURL.GetTargetFrameName() ),
     m_sURL( rURL.GetURL() ),
     m_sName( rURL.GetName() ),
@@ -2264,7 +2264,7 @@ bool SwFormatChain::operator==( const SfxPoolItem &rAttr ) const
 }
 
 SwFormatChain::SwFormatChain( const SwFormatChain &rCpy ) :
-    SfxPoolItem( RES_CHAIN, SfxItemType::SwFormatChainType )
+    SfxPoolItem( RES_CHAIN )
 {
     setNonShareable();
     SetPrev( rCpy.GetPrev() );
@@ -2320,7 +2320,7 @@ bool SwFormatChain::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 }
 
 SwFormatLineNumber::SwFormatLineNumber() :
-    SfxPoolItem( RES_LINENUMBER, SfxItemType::SwFormatLineNumberType )
+    SfxPoolItem( RES_LINENUMBER )
 {
     m_nStartValue = 0;
     m_bCountLines = true;
@@ -2390,7 +2390,7 @@ bool SwFormatLineNumber::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 }
 
 SwTextGridItem::SwTextGridItem()
-    : SfxPoolItem( RES_TEXTGRID, SfxItemType::SwTextGridItemType )
+    : SfxPoolItem( RES_TEXTGRID )
     , m_aColor( COL_LIGHTGRAY ), m_nLines( 20 )
     , m_nBaseHeight( 400 ), m_nRubyHeight( 200 ), m_eGridType( GRID_NONE )
     , m_bRubyTextBelow( false ), m_bPrintGrid( true ), m_bDisplayGrid( true )

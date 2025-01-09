@@ -68,8 +68,9 @@ class SVX_DLLPUBLIC SvxGridItem : public SvxOptionsGrid, public SfxPoolItem
     friend class SvxGridTabPage;
 
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SvxGridItem)
     SvxGridItem( TypedWhichId<SvxGridItem> _nWhich)
-        : SfxPoolItem(_nWhich, SfxItemType::SvxGridItemType){};
+        : SfxPoolItem(_nWhich){};
 
     virtual SvxGridItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;

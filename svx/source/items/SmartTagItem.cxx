@@ -39,7 +39,7 @@ SvxSmartTagItem::SvxSmartTagItem( const TypedWhichId<SvxSmartTagItem> nId,
                                   css::lang::Locale aLocale,
                                   OUString aApplicationName,
                                   OUString aRangeText ) :
-    SfxPoolItem( nId, SfxItemType::SvxSmartTagItemType ),
+    SfxPoolItem( nId ),
     maActionComponentsSequence( rActionComponentsSequence ),
     maActionIndicesSequence( rActionIndicesSequence ),
     maStringKeyMaps( rStringKeyMaps ),

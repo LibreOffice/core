@@ -118,7 +118,7 @@ const CommandStruct SwCondCollItem::s_aCmds[] =
 
 // Item for the transport of the condition table
 SwCondCollItem::SwCondCollItem() :
-    SfxPoolItem(FN_COND_COLL, SfxItemType::SwCondCollItemType)
+    SfxPoolItem(FN_COND_COLL)
 {
 }
 

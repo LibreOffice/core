@@ -60,7 +60,7 @@ using namespace ::com::sun::star;
 SfxPoolItem* SwFormatINetFormat::CreateDefault() { return new SwFormatINetFormat; }
 
 SwFormatCharFormat::SwFormatCharFormat( SwCharFormat *pFormat )
-    : SfxPoolItem( RES_TXTATR_CHARFMT, SfxItemType::SwFormatCharFormatType ),
+    : SfxPoolItem( RES_TXTATR_CHARFMT ),
     SwClient(pFormat),
     m_pTextAttribute( nullptr )
 {
@@ -68,7 +68,7 @@ SwFormatCharFormat::SwFormatCharFormat( SwCharFormat *pFormat )
 }
 
 SwFormatCharFormat::SwFormatCharFormat( const SwFormatCharFormat& rAttr )
-    : SfxPoolItem( RES_TXTATR_CHARFMT, SfxItemType::SwFormatCharFormatType ),
+    : SfxPoolItem( RES_TXTATR_CHARFMT ),
     SwClient( rAttr.GetCharFormat() ),
     m_pTextAttribute( nullptr )
 {
@@ -136,7 +136,7 @@ void SwFormatCharFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
 }
 
 SwFormatAutoFormat::SwFormatAutoFormat( sal_uInt16 nInitWhich )
-    : SfxPoolItem( nInitWhich, SfxItemType::SwFormatAutoFormatType  )
+    : SfxPoolItem( nInitWhich  )
 {
     setNonShareable();
 }
@@ -177,7 +177,7 @@ void SwFormatAutoFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
 }
 
 SwFormatINetFormat::SwFormatINetFormat()
-    : SfxPoolItem( RES_TXTATR_INETFMT, SfxItemType::SwFormatINetFormatType  )
+    : SfxPoolItem( RES_TXTATR_INETFMT  )
     , msURL()
     , msTargetFrame()
     , msINetFormatName()
@@ -191,7 +191,7 @@ SwFormatINetFormat::SwFormatINetFormat()
 }
 
 SwFormatINetFormat::SwFormatINetFormat( OUString aURL, OUString aTarget )
-    : SfxPoolItem( RES_TXTATR_INETFMT, SfxItemType::SwFormatINetFormatType )
+    : SfxPoolItem( RES_TXTATR_INETFMT )
     , msURL( std::move(aURL) )
     , msTargetFrame( std::move(aTarget) )
     , msINetFormatName()
@@ -207,7 +207,7 @@ SwFormatINetFormat::SwFormatINetFormat( OUString aURL, OUString aTarget )
 }
 
 SwFormatINetFormat::SwFormatINetFormat( const SwFormatINetFormat& rAttr )
-    : SfxPoolItem( RES_TXTATR_INETFMT, SfxItemType::SwFormatINetFormatType  )
+    : SfxPoolItem( RES_TXTATR_INETFMT  )
     , sw::BroadcasterMixin()
     , msURL( rAttr.GetValue() )
     , msTargetFrame( rAttr.msTargetFrame )
@@ -415,7 +415,7 @@ bool SwFormatINetFormat::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 }
 
 SwFormatRuby::SwFormatRuby( OUString aRubyText )
-    : SfxPoolItem( RES_TXTATR_CJK_RUBY, SfxItemType::SwFormatRubyType  ),
+    : SfxPoolItem( RES_TXTATR_CJK_RUBY  ),
     m_sRubyText( std::move(aRubyText) ),
     m_pTextAttr( nullptr ),
     m_nCharFormatId( 0 ),
@@ -426,7 +426,7 @@ SwFormatRuby::SwFormatRuby( OUString aRubyText )
 }
 
 SwFormatRuby::SwFormatRuby( const SwFormatRuby& rAttr )
-    : SfxPoolItem( RES_TXTATR_CJK_RUBY, SfxItemType::SwFormatRubyType  ),
+    : SfxPoolItem( RES_TXTATR_CJK_RUBY  ),
     m_sRubyText( rAttr.m_sRubyText ),
     m_sCharFormatName( rAttr.m_sCharFormatName ),
     m_pTextAttr( nullptr ),
@@ -575,7 +575,7 @@ SwFormatMeta * SwFormatMeta::CreatePoolDefault(const sal_uInt16 i_nWhich)
 }
 
 SwFormatMeta::SwFormatMeta(const sal_uInt16 i_nWhich)
-    : SfxPoolItem( i_nWhich, SfxItemType::SwFormatMetaType )
+    : SfxPoolItem( i_nWhich )
     , m_pMeta()
     , m_pTextAttr( nullptr )
 {
@@ -586,7 +586,7 @@ SwFormatMeta::SwFormatMeta(const sal_uInt16 i_nWhich)
 
 SwFormatMeta::SwFormatMeta( std::shared_ptr< ::sw::Meta > i_pMeta,
                         const sal_uInt16 i_nWhich )
-    : SfxPoolItem( i_nWhich, SfxItemType::SwFormatMetaType  )
+    : SfxPoolItem( i_nWhich  )
     , m_pMeta( std::move(i_pMeta) )
     , m_pTextAttr( nullptr )
 {

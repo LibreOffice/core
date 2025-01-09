@@ -26,7 +26,7 @@
 class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SdrTextFixedCellHeightItem final : public SfxBoolItem
 {
 public:
-
+    DECLARE_ITEM_TYPE_FUNCTION(SdrTextFixedCellHeightItem)
     SdrTextFixedCellHeightItem( bool bUseFixedCellHeight = false );
 
     SVX_DLLPRIVATE virtual bool GetPresentation(SfxItemPresentation ePresentation,

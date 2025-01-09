@@ -38,8 +38,9 @@ class EDITENG_DLLPUBLIC SvxSizeItem : public SfxPoolItem
 public:
     static SfxPoolItem* CreateDefault();
 
+    DECLARE_ITEM_TYPE_FUNCTION(SvxSizeItem)
     explicit SvxSizeItem( const sal_uInt16 nId );
-    SvxSizeItem( const sal_uInt16 nId, const Size& rSize, SfxItemType eItemType = SfxItemType::SvxSizeItemType);
+    SvxSizeItem( const sal_uInt16 nId, const Size& rSize);
 
     // "pure virtual Methods" from SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const override;

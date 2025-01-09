@@ -29,6 +29,7 @@
 class SVXCORE_DLLPUBLIC XLineAttrSetItem final : public SfxSetItem
 {
 public:
+                            DECLARE_ITEM_TYPE_FUNCTION(XLineAttrSetItem)
                             XLineAttrSetItem(SfxItemSet&& pItemSet );
                             XLineAttrSetItem(SfxItemPool* pItemPool);
                             XLineAttrSetItem(const XLineAttrSetItem& rAttr);

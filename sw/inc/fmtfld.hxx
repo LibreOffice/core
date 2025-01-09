@@ -117,6 +117,7 @@ class SW_DLLPUBLIC SwFormatField final
 public:
 
     /// Single argument constructors shall be explicit.
+    DECLARE_ITEM_TYPE_FUNCTION(SwFormatField)
     explicit SwFormatField( const SwField &rField );
 
     SwFormatField( const SwFormatField& rAttr );

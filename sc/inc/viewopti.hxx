@@ -138,6 +138,7 @@ public:
                 ScTpViewItem( const ScViewOptions& rOpt );
                 virtual ~ScTpViewItem() override;
 
+    DECLARE_ITEM_TYPE_FUNCTION(ScTpViewItem)
     ScTpViewItem(ScTpViewItem const &) = default;
     ScTpViewItem(ScTpViewItem &&) = default;
     ScTpViewItem & operator =(ScTpViewItem const &) = delete; // due to SfxPoolItem

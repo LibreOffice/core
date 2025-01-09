@@ -26,18 +26,20 @@
 
 class SdrLayerIdItem final : public SfxInt16Item {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SdrLayerIdItem)
     SdrLayerIdItem(SdrLayerID nId):
-        SfxInt16Item(SDRATTR_LAYERID,nId.get(), SfxItemType::SdrLayerIdItemType)  {}
+        SfxInt16Item(SDRATTR_LAYERID,nId.get())  {}
     SdrLayerID GetValue() const { return SdrLayerID(SfxInt16Item::GetValue()); }
     virtual SdrLayerIdItem* Clone(SfxItemPool* pPool=nullptr) const override;
 };
 
 class SdrLayerNameItem final : public SfxStringItem {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SdrLayerNameItem)
     SdrLayerNameItem()
-        : SfxStringItem(SDRATTR_LAYERNAME, SfxItemType::SdrLayerNameItemType) {}
+        : SfxStringItem(SDRATTR_LAYERNAME) {}
     SdrLayerNameItem(const OUString& rStr)
-        : SfxStringItem(SDRATTR_LAYERNAME, rStr, SfxItemType::SdrLayerNameItemType) {}
+        : SfxStringItem(SDRATTR_LAYERNAME, rStr) {}
     virtual SdrLayerNameItem* Clone(SfxItemPool* pPool=nullptr) const override;
 };
 

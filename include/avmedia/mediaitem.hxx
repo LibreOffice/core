@@ -72,6 +72,7 @@ class AVMEDIA_DLLPUBLIC MediaItem final : public SfxPoolItem
 public:
                             static SfxPoolItem* CreateDefault();
 
+    DECLARE_ITEM_TYPE_FUNCTION(MediaItem)
     explicit                MediaItem( sal_uInt16 i_nWhich = 0,
                                        AVMediaSetMask nMaskSet = AVMediaSetMask::NONE );
                             MediaItem( const MediaItem& rMediaItem );

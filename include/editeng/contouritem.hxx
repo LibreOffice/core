@@ -32,7 +32,7 @@ class EDITENG_DLLPUBLIC SvxContourItem final : public SfxBoolItem
 {
 public:
     static SfxPoolItem* CreateDefault();
-
+    DECLARE_ITEM_TYPE_FUNCTION(SvxContourItem)
     SvxContourItem( const bool bContoured /*= false*/,
                     const sal_uInt16 nId );
 

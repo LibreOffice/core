@@ -33,7 +33,7 @@ SfxPoolItem* SvxRotateModeItem::CreateDefault() { return new  SvxRotateModeItem(
 
 
 SvxRotateModeItem::SvxRotateModeItem( SvxRotateMode eMode, TypedWhichId<SvxRotateModeItem> _nWhich )
-    : SfxEnumItem( _nWhich, SfxItemType::SvxRotateModeItemType, eMode )
+    : SfxEnumItem( _nWhich, eMode )
 {
 }
 

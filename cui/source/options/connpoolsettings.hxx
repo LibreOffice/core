@@ -71,7 +71,7 @@ namespace offapp
         DriverPoolingSettings   m_aSettings;
 
     public:
-
+        DECLARE_ITEM_TYPE_FUNCTION(DriverPoolingSettingsItem)
         DriverPoolingSettingsItem( sal_uInt16 _nId, DriverPoolingSettings _aSettings );
 
         virtual bool             operator==( const SfxPoolItem& ) const override;

@@ -34,6 +34,7 @@ class OStringListItem : public SfxPoolItem
     css::uno::Sequence<OUString> m_aList;
 
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(OStringListItem)
     OStringListItem(sal_Int16 nWhich, const css::uno::Sequence<OUString>& _rList);
     OStringListItem(const OStringListItem& _rSource);
 

@@ -43,6 +43,7 @@ class EDITENG_DLLPUBLIC SvxShadowItem final : public SfxEnumItemInterface
 public:
     static SfxPoolItem* CreateDefault();
 
+    DECLARE_ITEM_TYPE_FUNCTION(SvxShadowItem)
     explicit SvxShadowItem( const sal_uInt16 nId ,
                  const Color *pColor = nullptr, const sal_uInt16 nWidth = 100 /*5pt*/,
                  const SvxShadowLocation eLoc = SvxShadowLocation::NONE );

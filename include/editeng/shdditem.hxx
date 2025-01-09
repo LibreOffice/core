@@ -33,7 +33,7 @@ class EDITENG_DLLPUBLIC SvxShadowedItem final : public SfxBoolItem
 {
 public:
     static SfxPoolItem* CreateDefault();
-
+    DECLARE_ITEM_TYPE_FUNCTION(SvxShadowedItem)
     SvxShadowedItem( const bool bShadowed /*= false*/,
                      const sal_uInt16 nId  );
 

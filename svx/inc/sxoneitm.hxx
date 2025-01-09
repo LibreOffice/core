@@ -24,7 +24,8 @@
 
 class SdrOnePositionXItem final : public SdrMetricItem {
 public:
-    SdrOnePositionXItem(tools::Long nPosX=0): SdrMetricItem(SDRATTR_ONEPOSITIONX, nPosX, SfxItemType::SdrOnePositionXItemType) {}
+    DECLARE_ITEM_TYPE_FUNCTION(SdrOnePositionXItem)
+    SdrOnePositionXItem(tools::Long nPosX=0): SdrMetricItem(SDRATTR_ONEPOSITIONX, nPosX) {}
     virtual SdrOnePositionXItem* Clone(SfxItemPool*) const override
     {
         return new SdrOnePositionXItem(*this);
@@ -33,7 +34,8 @@ public:
 
 class SdrOnePositionYItem final : public SdrMetricItem {
 public:
-    SdrOnePositionYItem(tools::Long nPosY=0): SdrMetricItem(SDRATTR_ONEPOSITIONY, nPosY, SfxItemType::SdrOnePositionYItemType) {}
+    DECLARE_ITEM_TYPE_FUNCTION(SdrOnePositionYItem)
+    SdrOnePositionYItem(tools::Long nPosY=0): SdrMetricItem(SDRATTR_ONEPOSITIONY, nPosY) {}
     virtual SdrOnePositionYItem* Clone(SfxItemPool*) const override
     {
         return new SdrOnePositionYItem(*this);
@@ -42,7 +44,8 @@ public:
 
 class SdrOneSizeWidthItem final : public SdrMetricItem {
 public:
-    SdrOneSizeWidthItem(tools::Long nWdt=0): SdrMetricItem(SDRATTR_ONESIZEWIDTH, nWdt, SfxItemType::SdrOneSizeWidthItemType)  {}
+    DECLARE_ITEM_TYPE_FUNCTION(SdrOneSizeWidthItem)
+    SdrOneSizeWidthItem(tools::Long nWdt=0): SdrMetricItem(SDRATTR_ONESIZEWIDTH, nWdt)  {}
     virtual SdrOneSizeWidthItem* Clone(SfxItemPool*) const override
     {
         return new SdrOneSizeWidthItem(*this);
@@ -51,7 +54,8 @@ public:
 
 class SdrOneSizeHeightItem final : public SdrMetricItem {
 public:
-    SdrOneSizeHeightItem(tools::Long nHgt=0): SdrMetricItem(SDRATTR_ONESIZEHEIGHT, nHgt, SfxItemType::SdrOneSizeHeightItemType)  {}
+    DECLARE_ITEM_TYPE_FUNCTION(SdrOneSizeHeightItem)
+    SdrOneSizeHeightItem(tools::Long nHgt=0): SdrMetricItem(SDRATTR_ONESIZEHEIGHT, nHgt)  {}
     virtual SdrOneSizeHeightItem* Clone(SfxItemPool*) const override
     {
         return new SdrOneSizeHeightItem(*this);

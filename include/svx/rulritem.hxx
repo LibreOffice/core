@@ -42,6 +42,7 @@ class SVX_DLLPUBLIC SvxLongLRSpaceItem final : public SfxPoolItem
 
 public:
     static SfxPoolItem* CreateDefault();
+    DECLARE_ITEM_TYPE_FUNCTION(SvxLongLRSpaceItem)
     SvxLongLRSpaceItem(tools::Long lLeft, tools::Long lRight, TypedWhichId<SvxLongLRSpaceItem> nId);
     SvxLongLRSpaceItem();
     SvxLongLRSpaceItem(SvxLongLRSpaceItem const &) = default;
@@ -72,6 +73,7 @@ class SVX_DLLPUBLIC SvxLongULSpaceItem final : public SfxPoolItem
 
 public:
     static SfxPoolItem* CreateDefault();
+    DECLARE_ITEM_TYPE_FUNCTION(SvxLongULSpaceItem)
     SvxLongULSpaceItem(tools::Long lUpper, tools::Long lLower, TypedWhichId<SvxLongULSpaceItem> nId);
     SvxLongULSpaceItem();
     SvxLongULSpaceItem(SvxLongULSpaceItem const &) = default;
@@ -105,6 +107,7 @@ private:
     const SvxPagePosSizeItem& operator=(const SvxPagePosSizeItem &) = delete;
 public:
     static SfxPoolItem* CreateDefault();
+    DECLARE_ITEM_TYPE_FUNCTION(SvxPagePosSizeItem)
     SvxPagePosSizeItem(const Point &rPos, tools::Long lWidth, tools::Long lHeight);
     SvxPagePosSizeItem();
     SvxPagePosSizeItem(SvxPagePosSizeItem const &) = default;
@@ -170,6 +173,7 @@ public:
     static SfxPoolItem* CreateDefault();
     // right edge of the surrounding frame
     // nLeft, nRight each the distance to the surrounding frame
+    DECLARE_ITEM_TYPE_FUNCTION(SvxColumnItem)
     SvxColumnItem(sal_uInt16 nAct = 0);
     SvxColumnItem(sal_uInt16 nActCol, sal_uInt16 nLeft, sal_uInt16 nRight); // Table with borders
 
@@ -216,6 +220,7 @@ class SVX_DLLPUBLIC SvxObjectItem final : public SfxPoolItem
 
 public:
     static SfxPoolItem* CreateDefault();
+    DECLARE_ITEM_TYPE_FUNCTION(SvxObjectItem)
     SvxObjectItem(tools::Long nStartX, tools::Long nEndX,
                   tools::Long nStartY, tools::Long nEndY);
     SvxObjectItem(SvxObjectItem const &) = default;

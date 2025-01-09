@@ -31,8 +31,8 @@
 class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SdrGrafRedItem final : public SdrSignedPercentItem
 {
 public:
-
-    SdrGrafRedItem( short nRedPercent = 0 ) : SdrSignedPercentItem( SDRATTR_GRAFRED, nRedPercent, SfxItemType::SdrGrafRedItemType ) {}
+    DECLARE_ITEM_TYPE_FUNCTION(SdrGrafRedItem)
+    SdrGrafRedItem( short nRedPercent = 0 ) : SdrSignedPercentItem( SDRATTR_GRAFRED, nRedPercent ) {}
 
     virtual SdrGrafRedItem* Clone( SfxItemPool* pPool = nullptr ) const override;
 };
@@ -44,8 +44,8 @@ public:
 class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SdrGrafGreenItem final : public SdrSignedPercentItem
 {
 public:
-
-    SdrGrafGreenItem( short nGreenPercent = 0 ) : SdrSignedPercentItem( SDRATTR_GRAFGREEN, nGreenPercent, SfxItemType::SdrGrafGreenItemType ) {}
+    DECLARE_ITEM_TYPE_FUNCTION(SdrGrafGreenItem)
+    SdrGrafGreenItem( short nGreenPercent = 0 ) : SdrSignedPercentItem( SDRATTR_GRAFGREEN, nGreenPercent ) {}
 
     virtual SdrGrafGreenItem* Clone( SfxItemPool* pPool = nullptr ) const override;
 };
@@ -57,8 +57,8 @@ public:
 class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SdrGrafBlueItem final : public SdrSignedPercentItem
 {
 public:
-
-    SdrGrafBlueItem( short nBluePercent = 0 ) : SdrSignedPercentItem( SDRATTR_GRAFBLUE, nBluePercent, SfxItemType::SdrGrafBlueItemType ) {}
+    DECLARE_ITEM_TYPE_FUNCTION(SdrGrafBlueItem)
+    SdrGrafBlueItem( short nBluePercent = 0 ) : SdrSignedPercentItem( SDRATTR_GRAFBLUE, nBluePercent ) {}
 
     virtual SdrGrafBlueItem* Clone( SfxItemPool* pPool = nullptr ) const override;
 };

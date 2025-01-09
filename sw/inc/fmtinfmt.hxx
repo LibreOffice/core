@@ -48,6 +48,7 @@ class SW_DLLPUBLIC SwFormatINetFormat final
     sal_uInt16 mnINetFormatId;
     sal_uInt16 mnVisitedFormatId;
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwFormatINetFormat)
     SwFormatINetFormat( OUString aURL, OUString aTarget );
     SwFormatINetFormat( const SwFormatINetFormat& rAttr );
     SwFormatINetFormat();                     ///< For TypeInfo.

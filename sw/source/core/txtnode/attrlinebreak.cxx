@@ -33,7 +33,7 @@
 using namespace com::sun::star;
 
 SwFormatLineBreak::SwFormatLineBreak(SwLineBreakClear eClear)
-    : SfxEnumItem(RES_TXTATR_LINEBREAK, SfxItemType::SwFormatLinebreakType, eClear)
+    : SfxEnumItem(RES_TXTATR_LINEBREAK, eClear)
     , sw::BroadcastingModify()
     , m_pTextAttr(nullptr)
 {

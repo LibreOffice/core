@@ -53,6 +53,7 @@ public:
                 ScTpPrintItem( const ScPrintOptions& rOpt );
                 virtual ~ScTpPrintItem() override;
 
+    DECLARE_ITEM_TYPE_FUNCTION(ScTpPrintItem)
     ScTpPrintItem(ScTpPrintItem const &) = default;
     ScTpPrintItem(ScTpPrintItem &&) = default;
     ScTpPrintItem & operator =(ScTpPrintItem const &) = delete; // due to SfxPoolItem

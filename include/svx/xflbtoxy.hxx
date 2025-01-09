@@ -26,6 +26,7 @@
 class SVXCORE_DLLPUBLIC XFillBmpTileOffsetXItem final : public SfxUInt16Item
 {
 public:
+                            DECLARE_ITEM_TYPE_FUNCTION(XFillBmpTileOffsetXItem)
                             XFillBmpTileOffsetXItem( sal_uInt16 nOffX = 0 );
 
     SVX_DLLPRIVATE virtual XFillBmpTileOffsetXItem* Clone( SfxItemPool* pPool = nullptr ) const override;
@@ -39,6 +40,7 @@ public:
 class SVXCORE_DLLPUBLIC XFillBmpTileOffsetYItem final : public SfxUInt16Item
 {
 public:
+                            DECLARE_ITEM_TYPE_FUNCTION(XFillBmpTileOffsetYItem)
                             XFillBmpTileOffsetYItem( sal_uInt16 nOffX = 0 );
 
     SVX_DLLPRIVATE virtual XFillBmpTileOffsetYItem* Clone( SfxItemPool* pPool = nullptr ) const override;

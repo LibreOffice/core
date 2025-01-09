@@ -33,7 +33,7 @@ class SVXCORE_DLLPUBLIC XFormTextStartItem final : public SfxMetricItem
 {
 public:
                             static SfxPoolItem* CreateDefault();
-
+                            DECLARE_ITEM_TYPE_FUNCTION(XFormTextStartItem)
                             XFormTextStartItem(tools::Long nStart = 0);
     virtual XFormTextStartItem* Clone(SfxItemPool* pPool = nullptr) const override;
 };

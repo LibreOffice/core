@@ -29,6 +29,7 @@
 class SW_DLLPUBLIC SwFormatFlySplit final : public SfxBoolItem
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwFormatFlySplit)
     SwFormatFlySplit(bool bSplit = false);
 
     SwFormatFlySplit* Clone(SfxItemPool* pPool = nullptr) const override;

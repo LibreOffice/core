@@ -29,10 +29,9 @@ class SVL_DLLPUBLIC SfxByteItem: public CntByteItem
 {
 public:
     static SfxPoolItem* CreateDefault();
-
-    explicit SfxByteItem(sal_uInt16 which = 0, sal_uInt8 nValue = 0,
-        SfxItemType eItemType = SfxItemType::SfxByteItemType):
-        CntByteItem(which, nValue, eItemType) {}
+    DECLARE_ITEM_TYPE_FUNCTION(SfxByteItem)
+    explicit SfxByteItem(sal_uInt16 which = 0, sal_uInt8 nValue = 0):
+        CntByteItem(which, nValue) {}
 
     virtual SfxByteItem* Clone(SfxItemPool * = nullptr) const override
     { return new SfxByteItem(*this); }
@@ -44,10 +43,9 @@ class SVL_DLLPUBLIC SfxInt16Item: public SfxPoolItem
 
 public:
     static SfxPoolItem* CreateDefault();
-
-    explicit SfxInt16Item(sal_uInt16 which = 0, sal_Int16 nTheValue = 0,
-        SfxItemType eItemType = SfxItemType::SfxInt16ItemType):
-        SfxPoolItem(which, eItemType), m_nValue(nTheValue)
+    DECLARE_ITEM_TYPE_FUNCTION(SfxInt16Item)
+    explicit SfxInt16Item(sal_uInt16 which = 0, sal_Int16 nTheValue = 0):
+        SfxPoolItem(which), m_nValue(nTheValue)
     {}
 
     virtual bool operator ==(const SfxPoolItem & rItem) const override;
@@ -80,10 +78,9 @@ class SVL_DLLPUBLIC SfxUInt16Item: public CntUInt16Item
 {
 public:
     static SfxPoolItem* CreateDefault();
-
-    explicit SfxUInt16Item(sal_uInt16 which = 0, sal_uInt16 nValue = 0,
-        SfxItemType eItemType = SfxItemType::SfxUInt16ItemType):
-        CntUInt16Item(which, nValue, eItemType) {}
+    DECLARE_ITEM_TYPE_FUNCTION(SfxUInt16Item)
+    explicit SfxUInt16Item(sal_uInt16 which = 0, sal_uInt16 nValue = 0):
+        CntUInt16Item(which, nValue) {}
 
     virtual SfxUInt16Item* Clone(SfxItemPool * = nullptr) const override
     { return new SfxUInt16Item(*this); }
@@ -98,9 +95,9 @@ class SVL_DLLPUBLIC SfxInt32Item: public CntInt32Item
 public:
     static SfxPoolItem* CreateDefault();
 
-    explicit SfxInt32Item(sal_uInt16 which = 0, sal_Int32 nValue = 0,
-        SfxItemType eItemType = SfxItemType::SfxInt32ItemType):
-        CntInt32Item(which, nValue, eItemType) {}
+    DECLARE_ITEM_TYPE_FUNCTION(SfxInt32Item)
+    explicit SfxInt32Item(sal_uInt16 which = 0, sal_Int32 nValue = 0):
+        CntInt32Item(which, nValue) {}
 
     virtual SfxInt32Item* Clone(SfxItemPool * = nullptr) const override
     { return new SfxInt32Item(*this); }
@@ -114,9 +111,9 @@ class SVL_DLLPUBLIC SfxUInt32Item: public CntUInt32Item
 {
 public:
     static SfxPoolItem* CreateDefault();
-
-    explicit SfxUInt32Item(sal_uInt16 which = 0, sal_uInt32 nValue = 0, SfxItemType eItemType = SfxItemType::SfxUInt32ItemType):
-        CntUInt32Item(which, nValue, eItemType) {}
+    DECLARE_ITEM_TYPE_FUNCTION(SfxUInt32Item)
+    explicit SfxUInt32Item(sal_uInt16 which = 0, sal_uInt32 nValue = 0):
+        CntUInt32Item(which, nValue) {}
 
     virtual SfxUInt32Item* Clone(SfxItemPool * = nullptr) const override
     { return new SfxUInt32Item(*this); }

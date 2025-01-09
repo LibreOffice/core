@@ -41,6 +41,7 @@ class SW_DLLPUBLIC SwFormatURL final : public SfxPoolItem
     bool      m_bIsServerMap;     ///< A ServerSideImageMap with the URL.
 
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwFormatURL)
     SwFormatURL();
 
     SwFormatURL( const SwFormatURL& );

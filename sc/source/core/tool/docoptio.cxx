@@ -106,7 +106,7 @@ void ScDocOptions::SetFormulaWildcardsEnabled( bool bVal )
 //      ScTpCalcItem - data for the CalcOptions TabPage
 
 ScTpCalcItem::ScTpCalcItem( sal_uInt16 nWhichP, const ScDocOptions& rOpt )
-    :   SfxPoolItem ( nWhichP, SfxItemType::ScTpCalcItemType ),
+    :   SfxPoolItem ( nWhichP ),
         theOptions  ( rOpt )
 {
 }

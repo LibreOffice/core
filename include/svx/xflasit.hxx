@@ -29,6 +29,7 @@
 class SVXCORE_DLLPUBLIC XFillAttrSetItem final : public SfxSetItem
 {
 public:
+                            DECLARE_ITEM_TYPE_FUNCTION(XFillAttrSetItem)
                             XFillAttrSetItem(SfxItemSet&& pItemSet );
                             XFillAttrSetItem(SfxItemPool* pItemPool);
                             XFillAttrSetItem(const XFillAttrSetItem& rAttr);

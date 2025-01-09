@@ -34,9 +34,9 @@ class EDITENG_DLLPUBLIC SvxTextLineItem : public SfxEnumItem<FontLineStyle>
     model::ComplexColor maComplexColor;
 
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SvxTextLineItem)
     SvxTextLineItem( const FontLineStyle eSt,
-                     const sal_uInt16 nId,
-                     SfxItemType eItemType = SfxItemType::SvxTextLineItemType);
+                     const sal_uInt16 nId);
 
     // "pure virtual Methods" from SfxPoolItem
     virtual bool GetPresentation( SfxItemPresentation ePres,
@@ -94,6 +94,7 @@ protected:
 public:
     static SfxPoolItem* CreateDefault();
 
+    DECLARE_ITEM_TYPE_FUNCTION(SvxUnderlineItem)
     SvxUnderlineItem( const FontLineStyle eSt,
                       const sal_uInt16 nId );
 
@@ -113,6 +114,7 @@ protected:
 public:
     static SfxPoolItem* CreateDefault();
 
+    DECLARE_ITEM_TYPE_FUNCTION(SvxOverlineItem)
     SvxOverlineItem( const FontLineStyle eSt,
                      const sal_uInt16 nId );
 

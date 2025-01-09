@@ -35,6 +35,7 @@ class EDITENG_DLLPUBLIC SvxCaseMapItem final : public SfxEnumItem<SvxCaseMap>
 public:
     static SfxPoolItem* CreateDefault();
 
+    DECLARE_ITEM_TYPE_FUNCTION(SvxCaseMapItem)
     SvxCaseMapItem( const SvxCaseMap eMap /*= SvxCaseMap::NotMapped*/,
                     const sal_uInt16 nId );
 

@@ -28,8 +28,9 @@
 class SW_DLLPUBLIC SwFormatNoBalancedColumns final : public SfxBoolItem
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwFormatNoBalancedColumns)
     SwFormatNoBalancedColumns( bool bFlag = false )
-        : SfxBoolItem( RES_COLUMNBALANCE, bFlag, SfxItemType::SwFormatNoBalancedColumnsType ) {}
+        : SfxBoolItem( RES_COLUMNBALANCE, bFlag ) {}
 
     /// "pure virtual methods" of SfxPoolItem
     virtual SwFormatNoBalancedColumns* Clone( SfxItemPool *pPool = nullptr ) const override;

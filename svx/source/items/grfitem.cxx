@@ -26,15 +26,14 @@
 
 using namespace ::com::sun::star;
 
-SvxGrfCrop::SvxGrfCrop( TypedWhichId<SvxGrfCrop> nItemId, SfxItemType eType )
-    : SfxPoolItem( nItemId, eType ),
+SvxGrfCrop::SvxGrfCrop( TypedWhichId<SvxGrfCrop> nItemId )
+    : SfxPoolItem( nItemId ),
     m_nLeft( 0 ), m_nRight( 0 ), m_nTop( 0 ), m_nBottom( 0 )
 {}
 
 SvxGrfCrop::SvxGrfCrop( sal_Int32 nL, sal_Int32 nR,
-                        sal_Int32 nT, sal_Int32 nB, TypedWhichId<SvxGrfCrop> nItemId,
-                        SfxItemType eItemType )
-    : SfxPoolItem( nItemId, eItemType ),
+                        sal_Int32 nT, sal_Int32 nB, TypedWhichId<SvxGrfCrop> nItemId)
+    : SfxPoolItem( nItemId ),
     m_nLeft( nL ), m_nRight( nR ), m_nTop( nT ), m_nBottom( nB )
 {}
 

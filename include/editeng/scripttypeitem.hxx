@@ -26,6 +26,7 @@
 class EDITENG_DLLPUBLIC SvxScriptSetItem final : public SfxSetItem
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SvxScriptSetItem)
     SvxScriptSetItem( sal_uInt16 nSlotId, SfxItemPool& rPool );
 
     virtual SvxScriptSetItem* Clone( SfxItemPool *pPool = nullptr ) const override;

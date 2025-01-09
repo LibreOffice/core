@@ -31,6 +31,7 @@ class SW_DLLPUBLIC SwLabItem final : public SfxPoolItem
 
 public:
 
+    DECLARE_ITEM_TYPE_FUNCTION(SwLabItem)
     SwLabItem();
 
     SwLabItem& operator =(const SwLabItem& rItem);

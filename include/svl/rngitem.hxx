@@ -31,6 +31,7 @@ private:
     sal_uInt16                  nFrom;
     sal_uInt16                  nTo;
 public:
+                                DECLARE_ITEM_TYPE_FUNCTION(SfxRangeItem)
                                 SfxRangeItem( sal_uInt16 nWID, sal_uInt16 nFrom, sal_uInt16 nTo );
     virtual bool                operator==( const SfxPoolItem& ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,

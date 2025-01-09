@@ -37,6 +37,7 @@ class SAL_DLLPUBLIC_RTTI SwFormatFlyCnt final : public SfxPoolItem
     SwFormatFlyCnt& operator=(const SwFormatFlyCnt& rFlyCnt) = delete;
 
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SwFormatFlyCnt)
     SwFormatFlyCnt( SwFrameFormat *pFrameFormat );
     /// "Pure virtual methods" of SfxPoolItem.
     virtual bool            operator==( const SfxPoolItem& ) const override;

@@ -33,6 +33,7 @@ class SVXCORE_DLLPUBLIC XFillStyleItem final : public SfxEnumItem<css::drawing::
 public:
                             static SfxPoolItem* CreateDefault();
 
+                            DECLARE_ITEM_TYPE_FUNCTION(XFillStyleItem)
                             XFillStyleItem(css::drawing::FillStyle = css::drawing::FillStyle_SOLID);
 
     virtual XFillStyleItem* Clone(SfxItemPool* pPool = nullptr) const override;

@@ -18,6 +18,7 @@ class SVL_DLLPUBLIC SfxInt64Item final : public SfxPoolItem
     sal_Int64 mnValue;
 
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SfxInt64Item)
     SfxInt64Item( sal_uInt16 nWhich, sal_Int64 nVal );
 
     virtual ~SfxInt64Item() override;

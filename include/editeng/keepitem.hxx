@@ -34,7 +34,7 @@ class EDITENG_DLLPUBLIC SvxFormatKeepItem final : public SfxBoolItem
 {
 public:
     static SfxPoolItem* CreateDefault();
-
+    DECLARE_ITEM_TYPE_FUNCTION(SvxFormatKeepItem)
     inline SvxFormatKeepItem( const bool bKeep /*= false*/,
                            const sal_uInt16 _nWhich  );
     SvxFormatKeepItem(SvxFormatKeepItem const &) = default; // SfxPoolItem copy function dichotomy

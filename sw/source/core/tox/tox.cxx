@@ -91,7 +91,7 @@ void lcl_FillAuthPattern(SwFormTokens &rAuthTokens, sal_uInt16 nTypeId)
 
 /// pool default constructor
 SwTOXMark::SwTOXMark()
-    : SfxPoolItem(RES_TXTATR_TOXMARK, SfxItemType::SwTOXMarkType)
+    : SfxPoolItem(RES_TXTATR_TOXMARK)
     , m_pType(nullptr)
     , m_pTextAttr(nullptr)
     , m_nLevel(0)
@@ -102,7 +102,7 @@ SwTOXMark::SwTOXMark()
 }
 
 SwTOXMark::SwTOXMark(const SwTOXType* pType)
-    : SfxPoolItem(RES_TXTATR_TOXMARK, SfxItemType::SwTOXMarkType)
+    : SfxPoolItem(RES_TXTATR_TOXMARK)
     , m_pType(pType)
     , m_pTextAttr(nullptr)
     , m_nLevel(0)
@@ -114,7 +114,7 @@ SwTOXMark::SwTOXMark(const SwTOXType* pType)
 }
 
 SwTOXMark::SwTOXMark(const SwTOXMark& rCopy)
-    : SfxPoolItem(RES_TXTATR_TOXMARK, SfxItemType::SwTOXMarkType)
+    : SfxPoolItem(RES_TXTATR_TOXMARK)
     , SvtListener()
     , m_pType(rCopy.m_pType)
     , m_aPrimaryKey(rCopy.m_aPrimaryKey)

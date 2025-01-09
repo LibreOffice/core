@@ -25,8 +25,9 @@
 class SdrRotateAllItem final : public SdrAngleItem
 {
 public:
+    DECLARE_ITEM_TYPE_FUNCTION(SdrRotateAllItem)
     SdrRotateAllItem()
-        : SdrAngleItem(SDRATTR_ROTATEALL, 0_deg100, SfxItemType::SdrRotateAllItemType)
+        : SdrAngleItem(SDRATTR_ROTATEALL, 0_deg100)
     {
     }
     virtual SdrRotateAllItem* Clone(SfxItemPool*) const override

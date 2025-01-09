@@ -41,6 +41,7 @@ class EDITENG_DLLPUBLIC SvxLineItem final : public SfxPoolItem
 public:
     static SfxPoolItem* CreateDefault();
 
+    DECLARE_ITEM_TYPE_FUNCTION(SvxLineItem)
     explicit SvxLineItem( const sal_uInt16 nId );
     SvxLineItem( const SvxLineItem& rCpy );
     virtual ~SvxLineItem() override;
