@@ -51,8 +51,6 @@ namespace vcl { struct NameRecord; }
 class GenericUnixSalData;
 
 namespace psp {
-class PPDParser;
-
 typedef int fontID;
 
 // a class to manage printable fonts
