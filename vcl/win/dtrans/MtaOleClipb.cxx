@@ -45,6 +45,7 @@
 
 #include <systools/win32/comtools.hxx>
 #include <systools/win32/retry_if_failed.hxx>
+#include <systools/win32/wait_for_multiple_objects.hxx>
 
 #include <comphelper/windowserrorstring.hxx>
 
@@ -67,8 +68,6 @@ namespace /* private */
     const bool INIT_NONSIGNALED = false;
 
     /*  Similar to osl conditions, with two condition objects passed to the Wait function.
-        COM Proxy-Stub communication uses SendMessages for
-        synchronization purposes.
     */
     class Win32Condition
     {
@@ -81,37 +80,15 @@ namespace /* private */
         // leave messages sent through
         bool wait(HANDLE hEvtAbort)
         {
-            HANDLE hWaitArray[2] = { m_hEvent, hEvtAbort };
-            while (true)
+            const HANDLE hWaitArray[2] = { m_hEvent, hEvtAbort };
+            switch (sal::systools::WaitForMultipleObjects_COMDispatch(2, hWaitArray, INFINITE))
             {
-                DWORD dwResult;
-                HRESULT hr = CoWaitForMultipleHandles(COWAIT_DISPATCH_CALLS, INFINITE, 2,
-                                                      hWaitArray, &dwResult);
-                if (FAILED(hr))
-                    return false;
-
-                switch (dwResult)
-                {
                     case WAIT_OBJECT_0: // wait successful
                         return true;
 
                     case WAIT_OBJECT_0 + 1: // wait aborted
-                        return false;
-
-                    case WAIT_OBJECT_0 + 2:
-                    {
-                        /* PeekMessage processes all messages in the SendMessage
-                           queue that's what we want, messages from the PostMessage
-                           queue stay untouched */
-                        MSG msg;
-                        PeekMessageW(&msg, nullptr, 0, 0, PM_NOREMOVE);
-
-                        break;
-                    }
-
                     default: // WAIT_FAILED?
                         return false;
-                }
             }
         }
 

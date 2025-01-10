@@ -22,6 +22,7 @@
 #include <osl/conditn.h>
 #include <osl/diagnose.h>
 #include <osl/time.h>
+#include <systools/win32/wait_for_multiple_objects.hxx>
 
 /*
     under WIN32, we use the void* oslCondition
@@ -75,39 +76,17 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition,
 
     /* It's necessary to process SendMessage calls to the current thread to give other threads
         access to COM objects instantiated in this thread */
-
-    while ( true )
+    switch (sal::systools::WaitForMultipleObjects_COMDispatch(
+        1, reinterpret_cast<HANDLE*>(&Condition), timeout))
     {
-        DWORD index;
-        /* Only wake up if a SendMessage / COM call to the threads message loop is detected */
-        HRESULT hr = CoWaitForMultipleHandles(COWAIT_DISPATCH_CALLS, timeout, 1,
-                                              reinterpret_cast<HANDLE*>(&Condition), &index);
-        if (hr == RPC_S_CALLPENDING)
+        case WAIT_OBJECT_0:
+            return osl_cond_result_ok;
+
+        case WAIT_TIMEOUT:
             return osl_cond_result_timeout;
-        if (FAILED(hr))
+
+        default:
             return osl_cond_result_error;
-        switch (index)
-        {
-            case WAIT_OBJECT_0 + 1:
-                {
-                MSG msg;
-
-                /* We Must not dispatch the message. PM_NOREMOVE leaves the message queue untouched
-                 but dispatches SendMessage calls automatically */
-
-                PeekMessageW( &msg, nullptr, 0, 0, PM_NOREMOVE );
-                }
-                break;
-
-            case WAIT_OBJECT_0:
-                return osl_cond_result_ok;
-
-            case WAIT_TIMEOUT:
-                return osl_cond_result_timeout;
-
-            default:
-                return osl_cond_result_error;
-        }
     }
 }
 
