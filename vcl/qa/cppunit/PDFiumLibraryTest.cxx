@@ -486,6 +486,151 @@ CPPUNIT_TEST_FIXTURE(PDFiumLibraryTest, testTools)
     CPPUNIT_ASSERT_EQUAL(false, bool(aDateTime.IsUTC));
 }
 
+CPPUNIT_TEST_FIXTURE(PDFiumLibraryTest, testStructureTree)
+{
+    OUString aURL = getFullUrl(u"StructureTreeExampleDocument.pdf");
+    SvFileStream aStream(aURL, StreamMode::READ);
+    GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
+    Graphic aGraphic = rGraphicFilter.ImportUnloadedGraphic(aStream);
+    auto pVectorGraphicData = aGraphic.getVectorGraphicData();
+    CPPUNIT_ASSERT(pVectorGraphicData);
+    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Pdf, pVectorGraphicData->getType());
+    auto& rDataContainer = pVectorGraphicData->getBinaryDataContainer();
+
+    auto pPdfium = vcl::pdf::PDFiumLibrary::get();
+    CPPUNIT_ASSERT(pPdfium);
+
+    auto pDocument
+        = pPdfium->openDocument(rDataContainer.getData(), rDataContainer.getSize(), OString());
+    CPPUNIT_ASSERT(pDocument);
+
+    CPPUNIT_ASSERT_EQUAL(1, pDocument->getPageCount());
+
+    auto pPage = pDocument->openPage(0);
+    CPPUNIT_ASSERT(pPage);
+
+    auto pTree = pPage->getStructureTree();
+    CPPUNIT_ASSERT(pTree);
+    CPPUNIT_ASSERT_EQUAL(1, pTree->getNumberOfChildren());
+
+    // Check the structure
+    {
+        auto pChildDocument = pTree->getChild(0);
+        CPPUNIT_ASSERT(pChildDocument);
+        CPPUNIT_ASSERT_EQUAL(5, pChildDocument->getNumberOfChildren());
+
+        CPPUNIT_ASSERT_EQUAL(u""_ustr, pChildDocument->getAltText());
+        CPPUNIT_ASSERT_EQUAL(u""_ustr, pChildDocument->getActualText());
+        CPPUNIT_ASSERT_EQUAL(u""_ustr, pChildDocument->getID());
+        CPPUNIT_ASSERT_EQUAL(u""_ustr, pChildDocument->getLang());
+        CPPUNIT_ASSERT_EQUAL(u""_ustr, pChildDocument->getTitle());
+        CPPUNIT_ASSERT_EQUAL(u"Document"_ustr, pChildDocument->getType());
+        CPPUNIT_ASSERT_EQUAL(u"StructElem"_ustr, pChildDocument->getObjectType());
+
+        {
+            auto pThis = pChildDocument->getChild(0);
+            CPPUNIT_ASSERT(pThis);
+            CPPUNIT_ASSERT_EQUAL(u"P"_ustr, pThis->getType());
+            CPPUNIT_ASSERT_EQUAL(1, pThis->getNumberOfChildren());
+            CPPUNIT_ASSERT_EQUAL(0, pThis->getChildMarkedContentID(0));
+        }
+
+        {
+            auto pThis = pChildDocument->getChild(1);
+            CPPUNIT_ASSERT(pThis);
+            CPPUNIT_ASSERT_EQUAL(u"H1"_ustr, pThis->getType());
+            CPPUNIT_ASSERT_EQUAL(2, pThis->getNumberOfChildren());
+            CPPUNIT_ASSERT_EQUAL(1, pThis->getChildMarkedContentID(0));
+            CPPUNIT_ASSERT_EQUAL(2, pThis->getChildMarkedContentID(1));
+        }
+
+        {
+            auto pThis = pChildDocument->getChild(2);
+            CPPUNIT_ASSERT(pThis);
+            CPPUNIT_ASSERT_EQUAL(u"P"_ustr, pThis->getType());
+            CPPUNIT_ASSERT_EQUAL(13, pThis->getNumberOfChildren());
+            CPPUNIT_ASSERT_EQUAL(3, pThis->getChildMarkedContentID(0));
+            {
+                auto pChild = pThis->getChild(1);
+                CPPUNIT_ASSERT_EQUAL(u"Code"_ustr, pChild->getType());
+                CPPUNIT_ASSERT_EQUAL(4, pChild->getChildMarkedContentID(0));
+
+                // Check getParent
+                auto pThis2 = pChild->getParent();
+                CPPUNIT_ASSERT_EQUAL(u"P"_ustr, pThis2->getType());
+                CPPUNIT_ASSERT_EQUAL(13, pThis2->getNumberOfChildren());
+            }
+            CPPUNIT_ASSERT_EQUAL(5, pThis->getChildMarkedContentID(2));
+            CPPUNIT_ASSERT_EQUAL(6, pThis->getChildMarkedContentID(3));
+            {
+                auto pChild = pThis->getChild(4);
+                CPPUNIT_ASSERT_EQUAL(u"Span"_ustr, pChild->getType());
+                CPPUNIT_ASSERT_EQUAL(7, pChild->getChildMarkedContentID(0));
+            }
+            CPPUNIT_ASSERT_EQUAL(8, pThis->getChildMarkedContentID(5));
+            CPPUNIT_ASSERT_EQUAL(9, pThis->getChildMarkedContentID(6));
+            {
+                auto pChild = pThis->getChild(7);
+                CPPUNIT_ASSERT_EQUAL(u"Span"_ustr, pChild->getType());
+                CPPUNIT_ASSERT_EQUAL(10, pChild->getChildMarkedContentID(0));
+            }
+            CPPUNIT_ASSERT_EQUAL(11, pThis->getChildMarkedContentID(8));
+            CPPUNIT_ASSERT_EQUAL(12, pThis->getChildMarkedContentID(9));
+            {
+                auto pChild = pThis->getChild(10);
+                CPPUNIT_ASSERT_EQUAL(u"Span"_ustr, pChild->getType());
+                CPPUNIT_ASSERT_EQUAL(13, pChild->getChildMarkedContentID(0));
+            }
+            CPPUNIT_ASSERT_EQUAL(14, pThis->getChildMarkedContentID(11));
+            {
+                auto pChild = pThis->getChild(12);
+                CPPUNIT_ASSERT_EQUAL(u"Span"_ustr, pChild->getType());
+                CPPUNIT_ASSERT_EQUAL(15, pChild->getChildMarkedContentID(0));
+            }
+        }
+
+        {
+            auto pThis = pChildDocument->getChild(3);
+            CPPUNIT_ASSERT(pThis);
+            CPPUNIT_ASSERT_EQUAL(u"P"_ustr, pThis->getType());
+            CPPUNIT_ASSERT_EQUAL(4, pThis->getNumberOfChildren());
+            CPPUNIT_ASSERT_EQUAL(16, pThis->getChildMarkedContentID(0));
+            {
+                auto pChild = pThis->getChild(1);
+                CPPUNIT_ASSERT_EQUAL(u"Quote"_ustr, pChild->getType());
+                CPPUNIT_ASSERT_EQUAL(17, pChild->getChildMarkedContentID(0));
+            }
+            CPPUNIT_ASSERT_EQUAL(18, pThis->getChildMarkedContentID(2));
+            {
+                auto pChild = pThis->getChild(3);
+                // Rectangle
+                CPPUNIT_ASSERT_EQUAL(u"Div"_ustr, pChild->getType());
+                CPPUNIT_ASSERT_EQUAL(u"Only Text! - The Alt Text!"_ustr, pChild->getAltText());
+                CPPUNIT_ASSERT_EQUAL(20, pChild->getChildMarkedContentID(0));
+                {
+                    // Text in rectangle
+                    auto pRectangleElement = pChild->getChild(1);
+                    CPPUNIT_ASSERT_EQUAL(u"P"_ustr, pRectangleElement->getType());
+                    CPPUNIT_ASSERT_EQUAL(21, pRectangleElement->getChildMarkedContentID(0));
+                }
+            }
+        }
+
+        {
+            auto pThis = pChildDocument->getChild(4);
+            CPPUNIT_ASSERT(pThis);
+            CPPUNIT_ASSERT_EQUAL(u"P"_ustr, pThis->getType());
+            CPPUNIT_ASSERT_EQUAL(1, pThis->getNumberOfChildren());
+            CPPUNIT_ASSERT_EQUAL(19, pThis->getChildMarkedContentID(0));
+        }
+
+        {
+            auto pThis = pChildDocument->getChild(5);
+            CPPUNIT_ASSERT(!pThis);
+        }
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

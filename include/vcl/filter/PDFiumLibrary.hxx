@@ -183,6 +183,34 @@ public:
     virtual basegfx::B2DRectangle getCharBox(int nIndex, double fPageHeight) = 0;
 };
 
+class VCL_DLLPUBLIC PDFiumStructureElement
+{
+public:
+    virtual ~PDFiumStructureElement() = default;
+
+    virtual OUString getAltText() = 0;
+    virtual OUString getActualText() = 0;
+    virtual OUString getID() = 0;
+    virtual OUString getLang() = 0;
+    virtual OUString getTitle() = 0;
+    virtual OUString getType() = 0;
+    virtual OUString getObjectType() = 0;
+
+    virtual int getNumberOfChildren() = 0;
+    virtual int getChildMarkedContentID(int nIndex) = 0;
+    virtual std::unique_ptr<PDFiumStructureElement> getChild(int nIndex) = 0;
+    virtual std::unique_ptr<PDFiumStructureElement> getParent() = 0;
+};
+
+class VCL_DLLPUBLIC PDFiumStructureTree
+{
+public:
+    virtual ~PDFiumStructureTree() = default;
+
+    virtual int getNumberOfChildren() = 0;
+    virtual std::unique_ptr<PDFiumStructureElement> getChild(int nIndex) = 0;
+};
+
 class VCL_DLLPUBLIC PDFiumPage
 {
 public:
@@ -197,6 +225,7 @@ public:
     virtual std::unique_ptr<PDFiumAnnotation> getAnnotation(int nIndex) = 0;
 
     virtual std::unique_ptr<PDFiumTextPage> getTextPage() = 0;
+    virtual std::unique_ptr<PDFiumStructureTree> getStructureTree() = 0;
 
     /// Get bitmap checksum of the page, without annotations/commenting.
     virtual BitmapChecksum getChecksum(int nMDPPerm) = 0;
