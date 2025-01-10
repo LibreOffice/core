@@ -219,13 +219,17 @@ public:
     void            InitPrt( OutputDevice *pOutDev );
 
     // Bracketing of actions belonging together.
-    inline void StartAction();
+    virtual void StartAction();
     SW_DLLPUBLIC void ImplStartAction();
-    inline void EndAction( const bool bIdleEnd = false );
+    virtual void EndAction(const bool bIdleEnd = false);
     SW_DLLPUBLIC void ImplEndAction( const bool bIdleEnd );
     sal_uInt16 ActionCount() const { return mnStartAction; }
     bool ActionPend() const { return mnStartAction != 0; }
     bool IsInEndAction() const { return mbInEndAction; }
+
+    /// For all views of this document.
+    SW_DLLPUBLIC void StartAllAction();
+    SW_DLLPUBLIC void EndAllAction();
 
     // The ActionCount for all Shells is temporarily set to zero and then
     // restored at the RootFrame via UNO.
@@ -636,19 +640,6 @@ public:
 inline void SwViewShell::ResetInvalidRect()
 {
     maInvalidRect.Clear();
-}
-
-inline void SwViewShell::StartAction()
-{
-    if ( !mnStartAction++ )
-        ImplStartAction();
-}
-
-inline void SwViewShell::EndAction( const bool bIdleEnd )
-{
-    if( 0 == (mnStartAction - 1) )
-        ImplEndAction( bIdleEnd );
-    --mnStartAction;
 }
 
 inline void SwViewShell::LockPaint(LockPaintReason eReason)

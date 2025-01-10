@@ -367,9 +367,9 @@ public:
     inline SwPaM* GetStackCursor() const;
 
     // start parenthesing, hide SV-Cursor and selected areas
-    SW_DLLPUBLIC void StartAction();
+    SW_DLLPUBLIC virtual void StartAction() override;
     // end parenthesing, show SV-Cursor and selected areas
-    SW_DLLPUBLIC void EndAction( const bool bIdleEnd = false );
+    SW_DLLPUBLIC virtual void EndAction(const bool bIdleEnd = false) override;
 
     // basic cursor travelling
     tools::Long GetUpDownX() const             { return m_nUpDownX; }

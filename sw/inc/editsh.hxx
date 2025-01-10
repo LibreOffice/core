@@ -616,10 +616,6 @@ public:
     SW_DLLPUBLIC void Redo(sal_uInt16 const nCount = 1);
     void Repeat(sal_uInt16 const nCount);
 
-    /// For all views of this document.
-    SW_DLLPUBLIC void StartAllAction();
-    SW_DLLPUBLIC void EndAllAction();
-
     /// To enable set up of StartActions and EndActions.
     SW_DLLPUBLIC virtual void CalcLayout() override;
 

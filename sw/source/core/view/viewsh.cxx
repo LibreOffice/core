@@ -264,6 +264,35 @@ void SwViewShell::DLPostPaint2(bool bPaintFormLayer)
 }
 // end of Pre/PostPaints
 
+void SwViewShell::StartAllAction()
+{
+    for (SwViewShell & rCurrentShell : GetRingContainer())
+    {
+        rCurrentShell.StartAction();
+    }
+}
+
+void SwViewShell::EndAllAction()
+{
+    for (SwViewShell & rCurrentShell : GetRingContainer())
+    {
+        rCurrentShell.EndAction();
+    }
+}
+
+void SwViewShell::StartAction()
+{
+    if (!mnStartAction++)
+        ImplStartAction();
+}
+
+void SwViewShell::EndAction(const bool bIdleEnd)
+{
+    if (0 == (mnStartAction - 1))
+        ImplEndAction(bIdleEnd);
+    --mnStartAction;
+}
+
 void SwViewShell::ImplEndAction( const bool bIdleEnd )
 {
     // Nothing to do for the printer?
@@ -668,9 +697,9 @@ void SwViewShell::MakeVisible( const SwRect &rRect )
         tools::Long nOldH;
         do{
             nOldH = pRoot->getFrameArea().Height();
-            StartAction();
+            SwViewShell::StartAction();
             ScrollMDI( this, rRect, USHRT_MAX, USHRT_MAX );
-            EndAction();
+            SwViewShell::EndAction(); // DO NOT call virtual here!
         } while( nOldH != pRoot->getFrameArea().Height() && nLoopCnt-- );
     }
 #if OSL_DEBUG_LEVEL > 0
@@ -730,18 +759,11 @@ void SwViewShell::UpdateFields(bool bCloseDB, bool bSetModified)
 {
     CurrShell aCurr( this );
 
-    auto pCursorShell = dynamic_cast<SwCursorShell*>( this );
-    if ( pCursorShell )
-        pCursorShell->StartAction();
-    else
-        StartAction();
+    StartAction();
 
     GetDoc()->getIDocumentFieldsAccess().UpdateFields(bCloseDB, bSetModified);
 
-    if ( pCursorShell )
-        pCursorShell->EndAction();
-    else
-        EndAction();
+    EndAction();
 }
 
 void SwViewShell::UpdateOleObjectPreviews()
@@ -836,16 +858,9 @@ void SwViewShell::LayoutIdle()
 
 static void lcl_InvalidateAllContent( SwViewShell& rSh, SwInvalidateFlags nInv )
 {
-    auto pCursorShell = dynamic_cast<SwCursorShell*>( &rSh);
-    if ( pCursorShell )
-        pCursorShell->StartAction();
-    else
-        rSh.StartAction();
+    rSh.StartAction();
     rSh.GetLayout()->InvalidateAllContent( nInv );
-    if ( pCursorShell )
-        pCursorShell->EndAction();
-    else
-        rSh.EndAction();
+    rSh.EndAction();
 
     rSh.GetDoc()->getIDocumentState().SetModified();
 }
@@ -856,18 +871,11 @@ static void lcl_InvalidateAllContent( SwViewShell& rSh, SwInvalidateFlags nInv )
  */
 static void lcl_InvalidateAllObjPos( SwViewShell &_rSh )
 {
-    auto pCursorShell = dynamic_cast<SwCursorShell*>( &_rSh);
-    if ( pCursorShell )
-        pCursorShell->StartAction();
-    else
-        _rSh.StartAction();
+    _rSh.StartAction();
 
     _rSh.GetLayout()->InvalidateAllObjPos();
 
-    if ( pCursorShell )
-        pCursorShell->EndAction();
-    else
-        _rSh.EndAction();
+    _rSh.EndAction();
 
     _rSh.GetDoc()->getIDocumentState().SetModified();
 }
@@ -1044,14 +1052,14 @@ void SwViewShell::SetEmptyDbFieldHidesPara(bool bEmptyDbFieldHidesPara)
 
     SwWait aWait(*GetDoc()->GetDocShell(), true);
     rIDSA.set(DocumentSettingId::EMPTY_DB_FIELD_HIDES_PARA, bEmptyDbFieldHidesPara);
-    StartAction();
+    SwViewShell::StartAction();
     GetDoc()->getIDocumentState().SetModified();
     for (auto const & pFieldType : *GetDoc()->getIDocumentFieldsAccess().GetFieldTypes())
     {
         if(pFieldType->Which() == SwFieldIds::Database)
             pFieldType->UpdateFields();
     }
-    EndAction();
+    SwViewShell::EndAction();
 }
 
 void SwViewShell::SetNoGapAfterNoteNumber(bool bNew)
@@ -1108,9 +1116,9 @@ void SwViewShell::SetContinuousEndnotes(bool bContinuousEndnotes)
     {
         SwWait aWait(*GetDoc()->GetDocShell(), true);
         rIDSA.set(DocumentSettingId::CONTINUOUS_ENDNOTES, bContinuousEndnotes);
-        StartAction();
+        SwViewShell::StartAction();
         GetLayout()->RemoveFootnotes(/*pPage=*/nullptr, /*pPageOnly=*/false, /*bEndNotes=*/true);
-        EndAction();
+        SwViewShell::EndAction();
         GetDoc()->getIDocumentState().SetModified();
     }
 }
@@ -1154,9 +1162,9 @@ void SwViewShell::Reformat()
 
     if( GetLayout()->IsCallbackActionEnabled() )
     {
-        StartAction();
+        SwViewShell::StartAction();
         GetLayout()->InvalidateAllContent( SwInvalidateFlags::Size | SwInvalidateFlags::Pos | SwInvalidateFlags::PrtArea );
-        EndAction();
+        SwViewShell::EndAction();
     }
 }
 
@@ -2241,7 +2249,7 @@ void SwViewShell::InvalidateLayout( bool bSizeChanged )
     }
 
     LockPaint(LockPaintReason::InvalidateLayout);
-    StartAction();
+    SwViewShell::StartAction();
 
     SwPageFrame *pPg = static_cast<SwPageFrame*>(GetLayout()->Lower());
     do
@@ -2268,7 +2276,7 @@ void SwViewShell::InvalidateLayout( bool bSizeChanged )
 
     SwFrame::CheckPageDescs( static_cast<SwPageFrame*>(GetLayout()->Lower()) );
 
-    EndAction();
+    SwViewShell::EndAction();
     UnlockPaint();
 }
 
@@ -2317,7 +2325,7 @@ SfxItemPool& SwViewShell::GetAttrPool()
 void SwViewShell::ApplyViewOptions( const SwViewOption &rOpt )
 {
     for(SwViewShell& rSh : GetRingContainer())
-        rSh.StartAction();
+        rSh.SwViewShell::StartAction();
 
     ImplApplyViewOptions( rOpt );
 
@@ -2337,7 +2345,7 @@ void SwViewShell::ApplyViewOptions( const SwViewOption &rOpt )
     // End of disabled multiple window
 
     for(SwViewShell& rSh : GetRingContainer())
-        rSh.EndAction();
+        rSh.SwViewShell::EndAction();
 }
 
 static bool
@@ -2525,9 +2533,9 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
     {
         // Nothing helps, we need to send all ContentFrames a
         // Prepare, we format anew:
-        StartAction();
+        SwViewShell::StartAction();
         Reformat();
-        EndAction();
+        SwViewShell::EndAction();
     }
 
     if (isToggleFieldNames)
@@ -2595,11 +2603,11 @@ void SwViewShell::SetReadonlyOption(bool bSet)
 
     if( bReformat )
     {
-        StartAction();
+        SwViewShell::StartAction();
         Reformat();
         if ( GetWin() && !comphelper::LibreOfficeKit::isActive() )
             GetWin()->Invalidate();
-        EndAction();
+        SwViewShell::EndAction();
     }
     else if ( GetWin() && !comphelper::LibreOfficeKit::isActive() )
         GetWin()->Invalidate();

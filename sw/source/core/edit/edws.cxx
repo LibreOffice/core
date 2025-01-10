@@ -83,28 +83,6 @@ void SwEditShell::SetUndoNoResetModified()
     GetDoc()->GetIDocumentUndoRedo().SetUndoNoResetModified();
 }
 
-void SwEditShell::StartAllAction()
-{
-    for(SwViewShell& rCurrentShell : GetRingContainer())
-    {
-        if (SwEditShell* pEditShell = dynamic_cast<SwEditShell*>(&rCurrentShell))
-            pEditShell->StartAction();
-        else
-            rCurrentShell.StartAction();
-    }
-}
-
-void SwEditShell::EndAllAction()
-{
-    for(SwViewShell& rCurrentShell : GetRingContainer())
-    {
-        if( auto pEditShell = dynamic_cast<SwEditShell *>(&rCurrentShell))
-            pEditShell->EndAction();
-        else
-            rCurrentShell.EndAction();
-    }
-}
-
 void SwEditShell::CalcLayout()
 {
     StartAllAction();
