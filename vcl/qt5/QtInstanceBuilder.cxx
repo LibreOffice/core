@@ -74,6 +74,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile)
         u"cui/ui/toolbarmodedialog.ui"_ustr,
         u"modules/scalc/ui/inputstringdialog.ui"_ustr,
         u"modules/scalc/ui/insertcells.ui"_ustr,
+        u"modules/scalc/ui/movecopysheet.ui"_ustr,
         u"modules/scalc/ui/selectsource.ui"_ustr,
         u"modules/scalc/ui/showsheetdialog.ui"_ustr,
         u"modules/schart/ui/insertaxisdlg.ui"_ustr,
