@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list">
+<block-list:block block-list:abbreviated-name=".* च" block-list:name="च" />
+<block-list:block block-list:abbreviated-name=".* चं" block-list:name="चं" />
+<block-list:block block-list:abbreviated-name=".* चा" block-list:name="चा" />
+<block-list:block block-list:abbreviated-name=".* ची" block-list:name="ची" />
+<block-list:block block-list:abbreviated-name=".* चे" block-list:name="चे" />
+<block-list:block block-list:abbreviated-name=".* च्या" block-list:name="च्या" />
+<block-list:block block-list:abbreviated-name=".* तलं" block-list:name="तलं" />
+<block-list:block block-list:abbreviated-name=".* तला" block-list:name="तला" />
+<block-list:block block-list:abbreviated-name=".* तली" block-list:name="तली" />
+<block-list:block block-list:abbreviated-name=".* तले" block-list:name="तले" />
+<block-list:block block-list:abbreviated-name=".* तल्या" block-list:name="तल्या" />
+<block-list:block block-list:abbreviated-name=".* ता" block-list:name="ता" />
+<block-list:block block-list:abbreviated-name=".* तील" block-list:name="तील" />
+<block-list:block block-list:abbreviated-name=".* तून" block-list:name="तून" />
+<block-list:block block-list:abbreviated-name=".* पणा" block-list:name="पणा" />
+<block-list:block block-list:abbreviated-name=".* पणे" block-list:name="पणे" />
+<block-list:block block-list:abbreviated-name=".* सकट" block-list:name="सकट" />
+<block-list:block block-list:abbreviated-name=".* सुद्धा" block-list:name="सुद्धा" />
+<block-list:block block-list:abbreviated-name=".* हून" block-list:name="हून" />
+<block-list:block block-list:abbreviated-name=".*अा.*" block-list:name="आ" />
+<block-list:block block-list:abbreviated-name=".*अॅ.*" block-list:name="ॲ" />
+<block-list:block block-list:abbreviated-name=".*आॅ.*" block-list:name="ऑ" />
+<block-list:block block-list:abbreviated-name=".*आे.*" block-list:name="ओ" />
+<block-list:block block-list:abbreviated-name=".*आै.*" block-list:name="औ" />
+<block-list:block block-list:abbreviated-name=".*ईतक.*" block-list:name="इतक" />
+<block-list:block block-list:abbreviated-name=".*उपर्या.*" block-list:name="उपऱ्या"/>
+<block-list:block block-list:abbreviated-name=".*ऎ.*" block-list:name="ऐ" />
+<block-list:block block-list:abbreviated-name=".*ऐवढ.*" block-list:name="एवढ" />
+<block-list:block block-list:abbreviated-name=".*कडिल.*" block-list:name="कडील" />
+<block-list:block block-list:abbreviated-name=".*कडुन.*" block-list:name="कडून" />
+<block-list:block block-list:abbreviated-name=".*करीता.*" block-list:name="करिता" />
+<block-list:block block-list:abbreviated-name=".*करुन.*" block-list:name="करून" />
+<block-list:block block-list:abbreviated-name=".*कारभार्या.*" block-list:name="कारभाऱ्या"/>
+<block-list:block block-list:abbreviated-name=".*किनार्या.*" block-list:name="किनाऱ्या"/>
+<block-list:block block-list:abbreviated-name=".*किय.*" block-list:name="कीय" />
+<block-list:block block-list:abbreviated-name=".*कोपर्या.*" block-list:name="कोपऱ्या"/>
+<block-list:block block-list:abbreviated-name=".*कोपर्या.*" block-list:name="कोपऱ्या"/>
+<block-list:block block-list:abbreviated-name=".*कोर्या.*" block-list:name="कोऱ्या"/>
+<block-list:block block-list:abbreviated-name=".*क्रुत.*" block-list:name="कृत" />
+<block-list:block block-list:abbreviated-name=".*क्रुप.*" block-list:name="कृप" />
+<block-list:block block-list:abbreviated-name=".*क्रुष.*" block-list:name="कृष" />
+<block-list:block block-list:abbreviated-name=".*खर्या.*" block-list:name="खऱ्या"/>
+<block-list:block block-list:abbreviated-name=".*खार्या.*" block-list:name="खाऱ्या"/>
+<block-list:block block-list:abbreviated-name=".*खेरिज" block-list:name="खेरीज" />
+<block-list:block block-list:abbreviated-name=".*खोर्या.*" block-list:name="खोऱ्या"/>
+<block-list:block block-list:abbreviated-name=".*गाभार्या.*" block-list:name="गाभाऱ्या"/>
+<block-list:block block-list:abbreviated-name=".*गोर्या.*" block-list:name="गोऱ्या"/>
+<block-list:block block-list:abbreviated-name=".*गोवर्या.*" block-list:name="गोवऱ्या"/>
+<block-list:block block-list:abbreviated-name=".*ग्रुत.*" block-list:name="गृत" />
+<block-list:block block-list:abbreviated-name=".*ग्रुह.*" block-list:name="गृह" />
+<block-list:block block-list:abbreviated-name=".*टपर्या.*" block-list:name="टपऱ्या"/>
+<block-list:block block-list:abbreviated-name=".*तार्या.*" block-list:name="ताऱ्या"/>
+<block-list:block block-list:abbreviated-name=".*तिल" block-list:name="तील" />
+<block-list:block block-list:abbreviated-name=".*त्रुत.*" block-list:name="तृत" />
+<block-list:block block-list:abbreviated-name=".*त्रुप.*" block-list:name="तृप" />
+<block-list:block block-list:abbreviated-name=".*दूर्.*" block-list:name="दुर्" />
+<block-list:block block-list:abbreviated-name=".*द्रुश.*" block-list:name="दृश" />
+<block-list:block block-list:abbreviated-name=".*द्रुष.*" block-list:name="दृष" />
+<block-list:block block-list:abbreviated-name=".*धार्या.*" block-list:name="धाऱ्या"/>
+<block-list:block block-list:abbreviated-name=".*धिकार्या.*" block-list:name="धिकाऱ्या"/>
+<block-list:block block-list:abbreviated-name=".*ध्द.*" block-list:name="द्ध" />
+<block-list:block block-list:abbreviated-name=".*नवर्या.*" block-list:name="नवऱ्या"/>
+<block-list:block block-list:abbreviated-name=".*नीर्.*" block-list:name="निर्" />
+<block-list:block block-list:abbreviated-name=".*न्रुत.*" block-list:name="नृत" />
+<block-list:block block-list:abbreviated-name=".*परिक्ष.*" block-list:name="परीक्ष" />
+<block-list:block block-list:abbreviated-name=".*पार्या.*" block-list:name="पाऱ्या"/>
+<block-list:block block-list:abbreviated-name=".*पासुन.*" block-list:name="पासून" />
+<block-list:block block-list:abbreviated-name=".*पुर्या.*" block-list:name="पुऱ्या"/>
+<block-list:block block-list:abbreviated-name=".*पुर्वी.*" block-list:name="पूर्वी" />
+<block-list:block block-list:abbreviated-name=".*पूढच.*" block-list:name="पुढच" />
+<block-list:block block-list:abbreviated-name=".*पूरत.*" block-list:name="पुरत" />
+<block-list:block block-list:abbreviated-name=".*प्रुथ.*" block-list:name="पृथ" />
+<block-list:block block-list:abbreviated-name=".*प्रुष.*" block-list:name="पृष" />
+<block-list:block block-list:abbreviated-name=".*बर्या.*" block-list:name="बऱ्या"/>
+<block-list:block block-list:abbreviated-name=".*भोवर्या.*" block-list:name="भोवऱ्या"/>
+<block-list:block block-list:abbreviated-name=".*मंदीर.*" block-list:name="मंदिर" />
+<block-list:block block-list:abbreviated-name=".*मधुन.*" block-list:name="मधून" />
+<block-list:block block-list:abbreviated-name=".*मागुन.*" block-list:name="मागून" />
+<block-list:block block-list:abbreviated-name=".*मार्या.*" block-list:name="माऱ्या"/>
+<block-list:block block-list:abbreviated-name=".*मोर्या.*" block-list:name="मोऱ्या"/>
+<block-list:block block-list:abbreviated-name=".*म्रुग.*" block-list:name="मृग" />
+<block-list:block block-list:abbreviated-name=".*म्रुत.*" block-list:name="मृत" />
+<block-list:block block-list:abbreviated-name=".*म्रुद.*" block-list:name="मृद" />
+<block-list:block block-list:abbreviated-name=".*यर्या.*" block-list:name="यऱ्या"/>
+<block-list:block block-list:abbreviated-name=".*रूण.*" block-list:name="रुण" />
+<block-list:block block-list:abbreviated-name=".*र्‍य.*" block-list:name="ऱ्य" />
+<block-list:block block-list:abbreviated-name=".*र्‍ह.*" block-list:name="ऱ्ह" />
+<block-list:block block-list:abbreviated-name=".*वरुन.*" block-list:name="वरून" />
+<block-list:block block-list:abbreviated-name=".*वार्या.*" block-list:name="वाऱ्या"/>
+<block-list:block block-list:abbreviated-name=".*विरूद्ध.*" block-list:name="विरुद्ध" />
+<block-list:block block-list:abbreviated-name=".*व्दार.*" block-list:name="द्वार" />
+<block-list:block block-list:abbreviated-name=".*व्यतिरीक्त.*" block-list:name="व्यतिरिक्त" />
+<block-list:block block-list:abbreviated-name=".*व्रुं.*" block-list:name="वृं" />
+<block-list:block block-list:abbreviated-name=".*व्रुक.*" block-list:name="वृक" />
+<block-list:block block-list:abbreviated-name=".*व्रुत.*" block-list:name="वृत" />
+<block-list:block block-list:abbreviated-name=".*व्रुद.*" block-list:name="वृद" />
+<block-list:block block-list:abbreviated-name=".*व्रुष.*" block-list:name="वृष" />
+<block-list:block block-list:abbreviated-name=".*शीवाय" block-list:name="शिवाय" />
+<block-list:block block-list:abbreviated-name=".*श्रुं.*" block-list:name="शृं" />
+<block-list:block block-list:abbreviated-name=".*सर्या.*" block-list:name="सऱ्या"/>
+<block-list:block block-list:abbreviated-name=".*स्रुष.*" block-list:name="सृष" />
+<block-list:block block-list:abbreviated-name=".*हिर्या.*" block-list:name="हिऱ्या"/>
+<block-list:block block-list:abbreviated-name=".*ह्रुद.*" block-list:name="हृद" />
+<block-list:block block-list:abbreviated-name=".*ाॅ.*" block-list:name="ॉ" />
+<block-list:block block-list:abbreviated-name=".*ाे.*" block-list:name="ो" />
+<block-list:block block-list:abbreviated-name=".*िकरण.*" block-list:name="ीकरण" />
+<block-list:block block-list:abbreviated-name=".*ु" block-list:name="ू" />
+<block-list:block block-list:abbreviated-name=".*ुन" block-list:name="ून" />
+<block-list:block block-list:abbreviated-name=".*ॅं.*" block-list:name="ँ" />
+<block-list:block block-list:abbreviated-name=".*ॉं.*" block-list:name="ाँ" />
+<block-list:block block-list:abbreviated-name="अंकूर.*" block-list:name="अंकुर" />
+<block-list:block block-list:abbreviated-name="अंकूश.*" block-list:name="अंकुश" />
+<block-list:block block-list:abbreviated-name="अंगि.*" block-list:name="अंगी" />
+<block-list:block block-list:abbreviated-name="अंधार्या.*" block-list:name="अंधाऱ्या"/>
+<block-list:block block-list:abbreviated-name="अचुक.*" block-list:name="अचूक" />
+<block-list:block block-list:abbreviated-name="अती.*" block-list:name="अति" />
+<block-list:block block-list:abbreviated-name="अधी.*" block-list:name="अधि" />
+<block-list:block block-list:abbreviated-name="अन" block-list:name="अन्" />
+<block-list:block block-list:abbreviated-name="अनी.*" block-list:name="अनि" />
+<block-list:block block-list:abbreviated-name="अनू.*" block-list:name="अनु" />
+<block-list:block block-list:abbreviated-name="अभी.*" block-list:name="अभि" />
+<block-list:block block-list:abbreviated-name="अवी.*" block-list:name="अवि" />
+<block-list:block block-list:abbreviated-name="अस्तित्त्व.*" block-list:name="अस्तित्व" />
+<block-list:block block-list:abbreviated-name="आणी" block-list:name="आणि" />
+<block-list:block block-list:abbreviated-name="आदी.*" block-list:name="आदि" />
+<block-list:block block-list:abbreviated-name="आयू.*" block-list:name="आयु" />
+<block-list:block block-list:abbreviated-name="आशिर.*" block-list:name="आशीर" />
+<block-list:block block-list:abbreviated-name="इती.*" block-list:name="इति" />
+<block-list:block block-list:abbreviated-name="इत्यादि.*" block-list:name="इत्यादी" />
+<block-list:block block-list:abbreviated-name="ऊप.*" block-list:name="उप" />
+<block-list:block block-list:abbreviated-name="कचर्या.*" block-list:name="कचऱ्या"/>
+<block-list:block block-list:abbreviated-name="कचेर्या.*" block-list:name="कचेऱ्या"/>
+<block-list:block block-list:abbreviated-name="करणार्या.*" block-list:name="करणाऱ्या"/>
+<block-list:block block-list:abbreviated-name="कर्मचार्या.*" block-list:name="कर्मचाऱ्या"/>
+<block-list:block block-list:abbreviated-name="कर्हाड.*" block-list:name="कऱ्हाड" />
+<block-list:block block-list:abbreviated-name="कील.*" block-list:name="किल" />
+<block-list:block block-list:abbreviated-name="कॅमेर्या.*" block-list:name="कॅमेऱ्या"/>
+<block-list:block block-list:abbreviated-name="कैर्या.*" block-list:name="कैऱ्या"/>
+<block-list:block block-list:abbreviated-name="क्रिड.*" block-list:name="क्रीड" />
+<block-list:block block-list:abbreviated-name="क्रीय.*" block-list:name="क्रिय" />
+<block-list:block block-list:abbreviated-name="खावून" block-list:name="खाऊन" />
+<block-list:block block-list:abbreviated-name="ख्री.*" block-list:name="ख्रि" />
+<block-list:block block-list:abbreviated-name="गावकर्या.*" block-list:name="गावकऱ्या"/>
+<block-list:block block-list:abbreviated-name="गावून" block-list:name="गाऊन" />
+<block-list:block block-list:abbreviated-name="गिर्हाइक.*" block-list:name="गिऱ्हाइक" />
+<block-list:block block-list:abbreviated-name="गिर्हाईक.*" block-list:name="गिऱ्हाईक" />
+<block-list:block block-list:abbreviated-name="घू.*" block-list:name="घु" />
+<block-list:block block-list:abbreviated-name="घेवून" block-list:name="घेऊन" />
+<block-list:block block-list:abbreviated-name="चतू.*" block-list:name="चतु" />
+<block-list:block block-list:abbreviated-name="चरी.*" block-list:name="चरि" />
+<block-list:block block-list:abbreviated-name="चाऊन" block-list:name="चावून" />
+<block-list:block block-list:abbreviated-name="चातू.*" block-list:name="चातु" />
+<block-list:block block-list:abbreviated-name="चेहर्या.*" block-list:name="चेहऱ्या"/>
+<block-list:block block-list:abbreviated-name="चोर्या.*" block-list:name="चोऱ्या"/>
+<block-list:block block-list:abbreviated-name="जबाबदार्या.*" block-list:name="जबाबदाऱ्या"/>
+<block-list:block block-list:abbreviated-name="जादु.*" block-list:name="जादू" />
+<block-list:block block-list:abbreviated-name="जावून" block-list:name="जाऊन" />
+<block-list:block block-list:abbreviated-name="जेऊन" block-list:name="जेवून" />
+<block-list:block block-list:abbreviated-name="ठेउन" block-list:name="ठेवून" />
+<block-list:block block-list:abbreviated-name="ठेऊन" block-list:name="ठेवून" />
+<block-list:block block-list:abbreviated-name="डावखुर्या.*" block-list:name="डावखुऱ्या"/>
+<block-list:block block-list:abbreviated-name="तत्व.*" block-list:name="तत्त्व" />
+<block-list:block block-list:abbreviated-name="तर्ह.*" block-list:name="तऱ्ह" />
+<block-list:block block-list:abbreviated-name="तिर्हा.*" block-list:name="तिऱ्हा"/>
+<block-list:block block-list:abbreviated-name="त्री.*" block-list:name="त्रि" />
+<block-list:block block-list:abbreviated-name="दक्षी.*" block-list:name="दक्षि" />
+<block-list:block block-list:abbreviated-name="देवून" block-list:name="देऊन" />
+<block-list:block block-list:abbreviated-name="दौर्या.*" block-list:name="दौऱ्या"/>
+<block-list:block block-list:abbreviated-name="धाऊन" block-list:name="धावून" />
+<block-list:block block-list:abbreviated-name="धुवून" block-list:name="धुऊन" />
+<block-list:block block-list:abbreviated-name="नेतृत्त्व.*" block-list:name="नेतृत्व" />
+<block-list:block block-list:abbreviated-name="नेवून" block-list:name="नेऊन" />
+<block-list:block block-list:abbreviated-name="नोकर्या.*" block-list:name="नोकऱ्या"/>
+<block-list:block block-list:abbreviated-name="पांढर्या.*" block-list:name="पांढऱ्या"/>
+<block-list:block block-list:abbreviated-name="पिंजर्या.*" block-list:name="पिंजऱ्या"/>
+<block-list:block block-list:abbreviated-name="पिवून" block-list:name="पिऊन" />
+<block-list:block block-list:abbreviated-name="प्रती.*" block-list:name="प्रति" />
+<block-list:block block-list:abbreviated-name="फेर्या.*" block-list:name="फेऱ्या"/>
+<block-list:block block-list:abbreviated-name="बकर्या.*" block-list:name="बकऱ्या"/>
+<block-list:block block-list:abbreviated-name="बजाऊन" block-list:name="बजावून" />
+<block-list:block block-list:abbreviated-name="बहीर.*" block-list:name="बहिर" />
+<block-list:block block-list:abbreviated-name="बिचार्या.*" block-list:name="बिचाऱ्या"/>
+<block-list:block block-list:abbreviated-name="बोचर्या.*" block-list:name="बोचऱ्या"/>
+<block-list:block block-list:abbreviated-name="भाकर्या.*" block-list:name="भाकऱ्या"/>
+<block-list:block block-list:abbreviated-name="भिवून" block-list:name="भिऊन" />
+<block-list:block block-list:abbreviated-name="महत्व.*" block-list:name="महत्त्व" />
+<block-list:block block-list:abbreviated-name="महीन.*" block-list:name="महिन" />
+<block-list:block block-list:abbreviated-name="महील.*" block-list:name="महिल" />
+<block-list:block block-list:abbreviated-name="येवून" block-list:name="येऊन" />
+<block-list:block block-list:abbreviated-name="रागाऊन" block-list:name="रागावून" />
+<block-list:block block-list:abbreviated-name="रोऊन" block-list:name="रोवून" />
+<block-list:block block-list:abbreviated-name="वर्हाड.*" block-list:name="वऱ्हाड" />
+<block-list:block block-list:abbreviated-name="व्यक्तिमत्व.*" block-list:name="व्यक्तिमत्त्व" />
+<block-list:block block-list:abbreviated-name="शेतकर्या.*" block-list:name="शेतकऱ्या"/>
+<block-list:block block-list:abbreviated-name="समजाऊन" block-list:name="समजावून" />
+<block-list:block block-list:abbreviated-name="साजर्या.*" block-list:name="साजऱ्या"/>
+<block-list:block block-list:abbreviated-name="सार्या.*" block-list:name="साऱ्या"/>
+<block-list:block block-list:abbreviated-name="स्वाक्षर्या.*" block-list:name="स्वाक्षऱ्या"/>
+<block-list:block block-list:abbreviated-name="स्विक.*" block-list:name="स्वीक" />
+<block-list:block block-list:abbreviated-name="हळुहळु" block-list:name="हळूहळू" />
+<block-list:block block-list:abbreviated-name="हि" block-list:name="ही" />
+</block-list:block-list>
