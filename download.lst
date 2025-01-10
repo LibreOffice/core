@@ -595,6 +595,11 @@ PYTHON_TARBALL := Python-3.11.11.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
+PYTHON_BOOTSTRAP_SHA256SUM := 406856be971d957e0bee7a5cefe20a5ec78d70a495e9e33cd0e53d31faec049d
+PYTHON_BOOTSTRAP_TARBALL := python.3.12.8.nupkg
+# three static lines
+# so that git cherry-pick
+# will not run into conflicts
 QXP_SHA256SUM := e137b6b110120a52c98edd02ebdc4095ee08d0d5295a94316a981750095a945c
 QXP_TARBALL := libqxp-0.0.2.tar.xz
 # three static lines

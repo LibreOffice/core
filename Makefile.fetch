@@ -225,6 +225,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_$(gb_Side).mk $(SRCDIR)/download.lst $(S
 		$(call fetch_Optional,POPPLER,POPPLER_DATA_TARBALL) \
 		$(call fetch_Optional,POSTGRESQL,POSTGRESQL_TARBALL) \
 		$(call fetch_Optional,PYTHON,PYTHON_TARBALL) \
+		$(if $(filter WNT,$(OS)),PYTHON_BOOTSTRAP_TARBALL) \
 		$(call fetch_Optional,QXP,QXP_TARBALL) \
 		$(call fetch_Optional,REDLAND,RAPTOR_TARBALL) \
 		$(call fetch_Optional,REDLAND,RASQAL_TARBALL) \

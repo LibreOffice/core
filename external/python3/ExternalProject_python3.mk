@@ -33,15 +33,9 @@ ifeq ($(OS),WNT)
 
 # at least for MSVC 2008 it is necessary to clear MAKEFLAGS because
 # nmake is invoked
-#
-# Since Python 3.11, _freeze_module.vcxproj needs python.exe to build
-# deepfreeze.c. At the moment target _RebuildDeepFrozen is called, python.exe
-# doesn't exist yet so it needs to be downloaded using nuget.
-# Call find_python.bat first to have nuget.exe and python.exe ready before building
 $(call gb_ExternalProject_get_state_target,python3,build) :
 	$(call gb_Trace_StartRange,python3,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		cmd /c $(gb_UnpackedTarball_workdir)/python3/PCbuild/find_python.bat -q && \
 		MAKEFLAGS= MSBuild.exe pcbuild.sln /t:Build $(gb_MSBUILD_CONFIG_AND_PLATFORM) \
 			/p:bz2Dir=$(gb_UnpackedTarball_workdir)/bzip2 \
 			/p:opensslIncludeDir=$(gb_UnpackedTarball_workdir)/openssl/include \

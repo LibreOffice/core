@@ -11,6 +11,16 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,python3))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,python3,$(PYTHON_TARBALL),,python3))
 
+# Since Python 3.11, _freeze_module.vcxproj needs python.exe to build deepfreeze.c
+# on Windows
+ifeq ($(OS),WNT)
+$(eval $(call gb_UnpackedTarball_set_pre_action,python3,\
+       mkdir -p externals/pythonx86 && \
+       unzip -q -d externals/pythonx86 -o $(gb_UnpackedTarget_TARFILE_LOCATION)/$(PYTHON_BOOTSTRAP_TARBALL) && \
+       chmod +x externals/pythonx86/tools/* \
+))
+endif
+
 $(eval $(call gb_UnpackedTarball_fix_end_of_line,python3,\
 	PCbuild/libffi.props \
 	PCbuild/pcbuild.sln \
@@ -25,7 +35,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,python3,\
 	external/python3/i100492-freebsd.patch.1 \
 	external/python3/python-3.3.0-darwin.patch.1 \
 	external/python3/python-3.7.6-msvc-ssl.patch.1 \
-	external/python3/replace-powershell-with-wget.patch.1 \
 	external/python3/python-3.5.4-msvc-disable.patch.1 \
 	external/python3/ubsan.patch.0 \
 	external/python3/python-3.5.tweak.strip.soabi.patch \
