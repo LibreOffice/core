@@ -964,6 +964,39 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf128375)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf164621)
+{
+    createSwDoc("tdf164621.odt");
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
+                                                         uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+
+    //Use selectAll 3 times in a row
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+
+    // Without the fix in place, this test would have crashed here
+    for (sal_Int32 i = 0; i < 5; ++i)
+    {
+        dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+    }
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), xIndexAccess->getCount());
+
+    for (sal_Int32 i = 0; i < 5; ++i)
+    {
+        // Without the fix in place, this test would have crashed here
+        dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    }
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135061)
 {
     createSwDoc("tdf135061.odt");
