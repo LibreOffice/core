@@ -156,6 +156,7 @@ bool QtInstanceWidget::has_child_focus() const
     {
         if (pParent == m_pWidget)
             return true;
+        pParent = pParent->parentWidget();
     }
     return false;
 }
