@@ -113,7 +113,6 @@ struct PPDKeyhash
 
 class PPDParser
 {
-    friend class PPDContext;
     friend class CUPSManager;
     friend class CPDManager;
     friend class PPDCache;
