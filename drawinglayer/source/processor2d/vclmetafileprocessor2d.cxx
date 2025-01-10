@@ -2625,6 +2625,7 @@ void VclMetafileProcessor2D::processStructureTagPrimitive2D(
                 case vcl::pdf::StructElement::H6:
                 case vcl::pdf::StructElement::Paragraph:
                 case vcl::pdf::StructElement::Heading:
+                case vcl::pdf::StructElement::Title:
                 case vcl::pdf::StructElement::Caption:
                 case vcl::pdf::StructElement::BlockQuote:
                 case vcl::pdf::StructElement::Table:

@@ -10717,7 +10717,7 @@ void PDFWriterImpl::setOutlineItemDest( sal_Int32 nItem, sal_Int32 nDestID )
     m_aOutline[nItem].m_nDestID = nDestID;
 }
 
-const char* PDFWriterImpl::getStructureTag(vcl::pdf::StructElement eType )
+const char* PDFWriterImpl::getStructureTag(vcl::pdf::StructElement eType)
 {
     using namespace vcl::pdf;
 
@@ -10766,15 +10766,35 @@ const char* PDFWriterImpl::getStructureTag(vcl::pdf::StructElement eType )
         { StructElement::WP,          "WP" },
         { StructElement::Figure,      "Figure" },
         { StructElement::Formula,     "Formula"},
-        { StructElement::Form,        "Form" }
+        { StructElement::Form,        "Form" },
+        { StructElement::Title, "Title" },
     });
 
+    // First handle fallbacks for elements that were added in a certain PDF version
+
+    // PDF 1.5 fallbacks
     if (m_aContext.Version < PDFWriter::PDFVersion::PDF_1_5 && eType == StructElement::Annot)
-        return "Figure"; // fallback
+        eType = StructElement::Figure;
+
+    // PDF 2.0 fallbacks
+    if (m_aContext.Version < PDFWriter::PDFVersion::PDF_2_0)
+    {
+        switch(eType)
+        {
+            case StructElement::Title:
+                eType = StructElement::Paragraph;
+                break;
+            default:
+                break;
+        }
+    }
 
     auto iterator = constTagStrings.find(eType);
 
-    return iterator != constTagStrings.end() ? iterator->second : "Div";
+    if (iterator == constTagStrings.end())
+        return "Div";
+
+    return iterator->second;
 }
 
 void PDFWriterImpl::addRoleMap(const OString& aAlias, vcl::pdf::StructElement eType)
@@ -11273,6 +11293,7 @@ bool PDFWriterImpl::setStructureAttribute( enum PDFWriter::StructAttribute eAttr
                     eVal == PDFWriter::Justify )
                 {
                     if (eType == vcl::pdf::StructElement::Paragraph   ||
+                        eType == vcl::pdf::StructElement::Title ||
                         eType == vcl::pdf::StructElement::Heading     ||
                         eType == vcl::pdf::StructElement::H1          ||
                         eType == vcl::pdf::StructElement::H2          ||
@@ -11339,6 +11360,7 @@ bool PDFWriterImpl::setStructureAttribute( enum PDFWriter::StructAttribute eAttr
                 {
                     // only for ILSE and BLSE
                     if (eType == vcl::pdf::StructElement::Paragraph   ||
+                        eType == vcl::pdf::StructElement::Title ||
                         eType == vcl::pdf::StructElement::Heading     ||
                         eType == vcl::pdf::StructElement::H1          ||
                         eType == vcl::pdf::StructElement::H2          ||
@@ -11374,6 +11396,7 @@ bool PDFWriterImpl::setStructureAttribute( enum PDFWriter::StructAttribute eAttr
                 {
                     // only for ILSE and BLSE
                     if (eType == vcl::pdf::StructElement::Paragraph   ||
+                        eType == vcl::pdf::StructElement::Title ||
                         eType == vcl::pdf::StructElement::Heading     ||
                         eType == vcl::pdf::StructElement::H1          ||
                         eType == vcl::pdf::StructElement::H2          ||
@@ -11517,6 +11540,7 @@ bool PDFWriterImpl::setStructureAttributeNumerical( enum PDFWriter::StructAttrib
             case PDFWriter::EndIndent:
                 // just for BLSE
                 if (eType == vcl::pdf::StructElement::Paragraph   ||
+                    eType == vcl::pdf::StructElement::Title ||
                     eType == vcl::pdf::StructElement::Heading     ||
                     eType == vcl::pdf::StructElement::H1          ||
                     eType == vcl::pdf::StructElement::H2          ||
@@ -11539,6 +11563,7 @@ bool PDFWriterImpl::setStructureAttributeNumerical( enum PDFWriter::StructAttrib
             case PDFWriter::TextIndent:
                 // paragraph like BLSE and additional elements
                 if (eType == vcl::pdf::StructElement::Paragraph   ||
+                    eType == vcl::pdf::StructElement::Title ||
                     eType == vcl::pdf::StructElement::Heading     ||
                     eType == vcl::pdf::StructElement::H1          ||
                     eType == vcl::pdf::StructElement::H2          ||
@@ -11570,6 +11595,7 @@ bool PDFWriterImpl::setStructureAttributeNumerical( enum PDFWriter::StructAttrib
             case PDFWriter::BaselineShift:
                 // only for ILSE and BLSE
                 if (eType == vcl::pdf::StructElement::Paragraph   ||
+                    eType == vcl::pdf::StructElement::Title ||
                     eType == vcl::pdf::StructElement::Heading     ||
                     eType == vcl::pdf::StructElement::H1          ||
                     eType == vcl::pdf::StructElement::H2          ||
