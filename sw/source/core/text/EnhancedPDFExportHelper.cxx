@@ -180,6 +180,8 @@ constexpr OUString aHeading           = u"Heading"_ustr;
 constexpr OUString aQuotation         = u"Quotation"_ustr;
 constexpr OUString aSourceText        = u"Source Text"_ustr;
 constexpr OUString constTitleStyleName = u"Title"_ustr;
+constexpr OUString constEmphasisStyleName = u"Emphasis"_ustr;
+constexpr OUString constStrongEmphasisStyleName = u"Strong Emphasis"_ustr;
 
 // PDF Tag Names:
 constexpr OUStringLiteral aDocumentString = u"Document";
@@ -1919,6 +1921,26 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                         mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink.emplace(pInetFormatAttr);
                         // leave it open to let next portion decide to merge or close
                         --m_nEndStructureElement;
+                    }
+                }
+                // Emphasis
+                else if (sStyleName == constEmphasisStyleName)
+                {
+                    if (!isContinueSpan)
+                    {
+                        nPDFType = sal_uInt16(vcl::pdf::StructElement::Emphasis);
+                        aPDFType = constEmphasisStyleName;
+                        CreateCurrentSpan(rInf, sStyleName);
+                    }
+                }
+                // Strong
+                else if (sStyleName == constStrongEmphasisStyleName)
+                {
+                    if (!isContinueSpan)
+                    {
+                        nPDFType = sal_uInt16(vcl::pdf::StructElement::Strong);
+                        aPDFType = constStrongEmphasisStyleName;
+                        CreateCurrentSpan(rInf, sStyleName);
                     }
                 }
                 // Check for Quote/Code character style:
