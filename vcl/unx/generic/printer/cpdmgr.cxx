@@ -435,11 +435,11 @@ const PPDParser* CPDManager::createCPDParser(const OUString& rPrinter)
                     {
                         rContext.setValue(key, p1Value, true);
                         SAL_INFO("vcl.unx.print",
-                                 "key " << pKey->getKey() << " is set to " << *defit);
+                                 "key " << key->getKey() << " is set to " << *defit);
                     }
                     else
                         SAL_INFO("vcl.unx.print",
-                                 "key " << pKey->getKey() << " is defaulted to " << *defit);
+                                 "key " << key->getKey() << " is defaulted to " << *defit);
                 }
                 ++defit;
             }
