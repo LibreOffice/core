@@ -21,6 +21,7 @@
 #include <fpdf_signature.h>
 #include <fpdf_formfill.h>
 #include <fpdf_attachment.h>
+#include <fpdf_structtree.h>
 
 #include <osl/endian.h>
 #include <vcl/bitmap.hxx>
@@ -338,6 +339,47 @@ public:
     int getOptionCount(PDFiumDocument* pDoc) override;
 };
 
+class PDFiumStructureElementImpl final : public PDFiumStructureElement
+{
+private:
+    FPDF_STRUCTELEMENT mpStructureElement;
+
+    PDFiumStructureElementImpl(const PDFiumStructureElementImpl&) = delete;
+    PDFiumStructureElementImpl& operator=(const PDFiumStructureElementImpl&) = delete;
+
+public:
+    PDFiumStructureElementImpl(FPDF_STRUCTELEMENT pStructureElement);
+
+    OUString getAltText() override;
+    OUString getActualText() override;
+    OUString getID() override;
+    OUString getLang() override;
+    OUString getTitle() override;
+    OUString getType() override;
+    OUString getObjectType() override;
+
+    int getNumberOfChildren() override;
+    int getChildMarkedContentID(int nIndex) override;
+    std::unique_ptr<PDFiumStructureElement> getChild(int nIndex) override;
+    std::unique_ptr<PDFiumStructureElement> getParent() override;
+};
+
+class PDFiumStructureTreeImpl final : public PDFiumStructureTree
+{
+private:
+    FPDF_STRUCTTREE mpStructureTree;
+
+    PDFiumStructureTreeImpl(const PDFiumStructureTreeImpl&) = delete;
+    PDFiumStructureTreeImpl& operator=(const PDFiumStructureTreeImpl&) = delete;
+
+public:
+    PDFiumStructureTreeImpl(FPDF_STRUCTTREE pStructureTree);
+    ~PDFiumStructureTreeImpl();
+
+    int getNumberOfChildren() override;
+    std::unique_ptr<PDFiumStructureElement> getChild(int nIndex) override;
+};
+
 class PDFiumPageObjectImpl final : public PDFiumPageObject
 {
 private:
@@ -462,6 +504,8 @@ public:
     std::unique_ptr<PDFiumAnnotation> getAnnotation(int nIndex) override;
 
     std::unique_ptr<PDFiumTextPage> getTextPage() override;
+
+    std::unique_ptr<PDFiumStructureTree> getStructureTree() override;
 
     BitmapChecksum getChecksum(int nMDPPerm) override;
 
@@ -960,6 +1004,17 @@ std::unique_ptr<PDFiumTextPage> PDFiumPageImpl::getTextPage()
         pPDFiumTextPage = std::make_unique<PDFiumTextPageImpl>(pTextPage);
     }
     return pPDFiumTextPage;
+}
+
+std::unique_ptr<PDFiumStructureTree> PDFiumPageImpl::getStructureTree()
+{
+    std::unique_ptr<PDFiumStructureTree> pPDFiumStructureTree;
+    FPDF_STRUCTTREE pStructTree = FPDF_StructTree_GetForPage(mpPage);
+    if (pStructTree)
+    {
+        pPDFiumStructureTree = std::make_unique<PDFiumStructureTreeImpl>(pStructTree);
+    }
+    return pPDFiumStructureTree;
 }
 
 bool PDFiumPageImpl::hasLinks()
@@ -1596,6 +1651,119 @@ std::unique_ptr<PDFiumPageObject> PDFiumAnnotationImpl::getObject(int nIndex)
         pPDFiumPageObject = std::make_unique<PDFiumPageObjectImpl>(pPageObject);
     }
     return pPDFiumPageObject;
+}
+
+PDFiumStructureElementImpl::PDFiumStructureElementImpl(FPDF_STRUCTELEMENT pStructureElement)
+    : mpStructureElement(pStructureElement)
+{
+}
+
+OUString PDFiumStructureElementImpl::getAltText()
+{
+    return getUnicodeString([this](FPDF_WCHAR* buffer, unsigned long length) {
+        return FPDF_StructElement_GetAltText(mpStructureElement, buffer, length);
+    });
+}
+
+OUString PDFiumStructureElementImpl::getActualText()
+{
+    return getUnicodeString([this](FPDF_WCHAR* buffer, unsigned long length) {
+        return FPDF_StructElement_GetActualText(mpStructureElement, buffer, length);
+    });
+}
+
+OUString PDFiumStructureElementImpl::getID()
+{
+    return getUnicodeString([this](FPDF_WCHAR* buffer, unsigned long length) {
+        return FPDF_StructElement_GetID(mpStructureElement, buffer, length);
+    });
+}
+
+OUString PDFiumStructureElementImpl::getLang()
+{
+    return getUnicodeString([this](FPDF_WCHAR* buffer, unsigned long length) {
+        return FPDF_StructElement_GetLang(mpStructureElement, buffer, length);
+    });
+}
+
+OUString PDFiumStructureElementImpl::getType()
+{
+    return getUnicodeString([this](FPDF_WCHAR* buffer, unsigned long length) {
+        return FPDF_StructElement_GetType(mpStructureElement, buffer, length);
+    });
+}
+
+OUString PDFiumStructureElementImpl::getObjectType()
+{
+    return getUnicodeString([this](FPDF_WCHAR* buffer, unsigned long length) {
+        return FPDF_StructElement_GetObjType(mpStructureElement, buffer, length);
+    });
+}
+
+int PDFiumStructureElementImpl::getChildMarkedContentID(int nIndex)
+{
+    return FPDF_StructElement_GetChildMarkedContentID(mpStructureElement, nIndex);
+}
+
+OUString PDFiumStructureElementImpl::getTitle()
+{
+    return getUnicodeString([this](FPDF_WCHAR* buffer, unsigned long length) {
+        return FPDF_StructElement_GetTitle(mpStructureElement, buffer, length);
+    });
+}
+
+int PDFiumStructureElementImpl::getNumberOfChildren()
+{
+    return FPDF_StructElement_CountChildren(mpStructureElement);
+}
+
+std::unique_ptr<PDFiumStructureElement> PDFiumStructureElementImpl::getChild(int nIndex)
+{
+    std::unique_ptr<PDFiumStructureElement> pPDFiumStructureElement;
+    FPDF_STRUCTELEMENT pElement = FPDF_StructElement_GetChildAtIndex(mpStructureElement, nIndex);
+    if (pElement)
+    {
+        pPDFiumStructureElement = std::make_unique<PDFiumStructureElementImpl>(pElement);
+    }
+    return pPDFiumStructureElement;
+}
+
+std::unique_ptr<PDFiumStructureElement> PDFiumStructureElementImpl::getParent()
+{
+    std::unique_ptr<PDFiumStructureElement> pPDFiumStructureElement;
+    FPDF_STRUCTELEMENT pElement = FPDF_StructElement_GetParent(mpStructureElement);
+    if (pElement)
+    {
+        pPDFiumStructureElement = std::make_unique<PDFiumStructureElementImpl>(pElement);
+    }
+    return pPDFiumStructureElement;
+}
+
+PDFiumStructureTreeImpl::PDFiumStructureTreeImpl(FPDF_STRUCTTREE pStructureTree)
+    : mpStructureTree(pStructureTree)
+{
+}
+
+PDFiumStructureTreeImpl::~PDFiumStructureTreeImpl()
+{
+    if (mpStructureTree)
+        FPDF_StructTree_Close(mpStructureTree);
+}
+
+int PDFiumStructureTreeImpl::getNumberOfChildren()
+{
+    return FPDF_StructTree_CountChildren(mpStructureTree);
+}
+
+std::unique_ptr<PDFiumStructureElement> PDFiumStructureTreeImpl::getChild(int nIndex)
+{
+    std::unique_ptr<PDFiumStructureElement> pPDFiumStructureElement;
+    FPDF_STRUCTELEMENT pElement = FPDF_StructTree_GetChildAtIndex(mpStructureTree, nIndex);
+    if (pElement)
+    {
+        pPDFiumStructureElement = std::make_unique<PDFiumStructureElementImpl>(pElement);
+    }
+    return pPDFiumStructureElement;
 }
 
 PDFiumTextPageImpl::PDFiumTextPageImpl(FPDF_TEXTPAGE pTextPage)
