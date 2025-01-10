@@ -1309,19 +1309,20 @@ void SwFlyFrame::UpdateAttrForFormatChange( SwFormat *pOldFormat, SwFormat *pNew
             nId = rIDDMA.GetHeavenId();
         GetVirtDrawObj()->SetLayer( nId );
 
-        if ( Lower() )
+        SwFrame* pFrame = Lower();
+        if ( pFrame )
         {
             // Delete contour in the Node if necessary
-            if( Lower()->IsNoTextFrame() &&
+            if( pFrame->IsNoTextFrame() &&
                  !GetFormat()->GetSurround().IsContour() )
             {
-                SwNoTextNode *pNd = static_cast<SwNoTextNode*>(static_cast<SwNoTextFrame*>(Lower())->GetNode());
+                SwNoTextNode *pNd = static_cast<SwNoTextNode*>(static_cast<SwNoTextFrame*>(pFrame)->GetNode());
                 if ( pNd->HasContour() )
                     pNd->SetContour( nullptr );
             }
-            else if( !Lower()->IsColumnFrame() )
+            else if( !pFrame->IsColumnFrame() )
             {
-                SwFrame* pFrame = GetLastLower();
+                pFrame = GetLastLower();
                 if( pFrame->IsTextFrame() && static_cast<SwTextFrame*>(pFrame)->IsUndersized() )
                     pFrame->Prepare( PrepareHint::AdjustSizeWithoutFormatting );
             }
