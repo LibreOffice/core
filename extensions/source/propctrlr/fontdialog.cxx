@@ -226,10 +226,16 @@ namespace pcr
 
             // if PROPERTY_STANDARD_THEME is set, use style settings independent of platform (theme)
             // KEEP IN SYNC WITH UnoControl::createPeer
-            bool bStandardTheme = false;
-            css::uno::Any aAnyStandardTheme = _rxModel->getPropertyValue(PROPERTY_STANDARD_THEME);
-            if ((aAnyStandardTheme >>= bStandardTheme) && bStandardTheme)
-                aStyleSettings.SetStandardStyles();
+            css::uno::Reference<css::beans::XPropertySetInfo> xPropSetInfo
+                = _rxModel->getPropertySetInfo();
+            if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(PROPERTY_STANDARD_THEME))
+            {
+                bool bStandardTheme = false;
+                css::uno::Any aAnyStandardTheme
+                    = _rxModel->getPropertyValue(PROPERTY_STANDARD_THEME);
+                if ((aAnyStandardTheme >>= bStandardTheme) && bStandardTheme)
+                    aStyleSettings.SetStandardStyles();
+            }
 
             const vcl::Font aDefaultVCLFont = aStyleSettings.GetAppFont();
             css::awt::FontDescriptor aDefaultFont = VCLUnoHelper::CreateFontDescriptor(aDefaultVCLFont);
