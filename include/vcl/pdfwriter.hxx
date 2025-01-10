@@ -176,6 +176,7 @@ enum class StructElement
     // Inline level elements
     Span, Quote, Note, Reference, BibEntry, Code, Link, Annot,
     Ruby, RB, RT, RP, Warichu, WT, WP,
+    Emphasis, Strong, // PDF 2.0
 
     // Illustration elements
     Figure, Formula, Form

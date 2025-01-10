@@ -10839,6 +10839,8 @@ const char* PDFWriterImpl::getStructureTag(vcl::pdf::StructElement eType)
         { StructElement::Formula,     "Formula"},
         { StructElement::Form,        "Form" },
         { StructElement::Title, "Title" },
+        { StructElement::Emphasis, "Em" },
+        { StructElement::Strong, "Strong" },
     });
 
     // First handle fallbacks for elements that were added in a certain PDF version
@@ -10850,11 +10852,14 @@ const char* PDFWriterImpl::getStructureTag(vcl::pdf::StructElement eType)
     // PDF 2.0 fallbacks
     if (m_aContext.Version < PDFWriter::PDFVersion::PDF_2_0)
     {
-        switch(eType)
+        switch (eType)
         {
             case StructElement::Title:
-                eType = StructElement::Paragraph;
-                break;
+                eType = StructElement::Paragraph; break;
+            case StructElement::Emphasis:
+                eType = StructElement::Span; break;
+            case StructElement::Strong:
+                eType = StructElement::Span; break;
             default:
                 break;
         }
@@ -11449,6 +11454,8 @@ bool PDFWriterImpl::setStructureAttribute( enum PDFWriter::StructAttribute eAttr
                         eType == vcl::pdf::StructElement::TableData   ||
                         eType == vcl::pdf::StructElement::Span        ||
                         eType == vcl::pdf::StructElement::Quote       ||
+                        eType == vcl::pdf::StructElement::Emphasis ||
+                        eType == vcl::pdf::StructElement::Strong ||
                         eType == vcl::pdf::StructElement::Note        ||
                         eType == vcl::pdf::StructElement::Reference   ||
                         eType == vcl::pdf::StructElement::BibEntry    ||
@@ -11485,6 +11492,8 @@ bool PDFWriterImpl::setStructureAttribute( enum PDFWriter::StructAttribute eAttr
                         eType == vcl::pdf::StructElement::TableData   ||
                         eType == vcl::pdf::StructElement::Span        ||
                         eType == vcl::pdf::StructElement::Quote       ||
+                        eType == vcl::pdf::StructElement::Emphasis ||
+                        eType == vcl::pdf::StructElement::Strong ||
                         eType == vcl::pdf::StructElement::Note        ||
                         eType == vcl::pdf::StructElement::Reference   ||
                         eType == vcl::pdf::StructElement::BibEntry    ||
@@ -11684,6 +11693,8 @@ bool PDFWriterImpl::setStructureAttributeNumerical( enum PDFWriter::StructAttrib
                     eType == vcl::pdf::StructElement::TableData   ||
                     eType == vcl::pdf::StructElement::Span        ||
                     eType == vcl::pdf::StructElement::Quote       ||
+                    eType == vcl::pdf::StructElement::Emphasis ||
+                    eType == vcl::pdf::StructElement::Strong ||
                     eType == vcl::pdf::StructElement::Note        ||
                     eType == vcl::pdf::StructElement::Reference   ||
                     eType == vcl::pdf::StructElement::BibEntry    ||
