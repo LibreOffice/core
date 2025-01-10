@@ -179,6 +179,7 @@ constexpr OUString aCaption           = u"Caption"_ustr;
 constexpr OUString aHeading           = u"Heading"_ustr;
 constexpr OUString aQuotation         = u"Quotation"_ustr;
 constexpr OUString aSourceText        = u"Source Text"_ustr;
+constexpr OUString constTitleStyleName = u"Title"_ustr;
 
 // PDF Tag Names:
 constexpr OUStringLiteral aDocumentString = u"Document";
@@ -722,7 +723,7 @@ void SwTaggedPDFHelper::SetAttributes(vcl::pdf::StructElement eType)
             case vcl::pdf::StructElement::Paragraph:
             case vcl::pdf::StructElement::Heading:
             case vcl::pdf::StructElement::BlockQuote:
-
+            case vcl::pdf::StructElement::Title:
                 bPlacement =
                 bWritingMode =
                 bSpaceBefore =
@@ -1455,6 +1456,14 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 // <stylename> with role = P
                 nPDFType = sal_uInt16(vcl::pdf::StructElement::Paragraph);
                 aPDFType = sStyleName;
+
+                // Title
+
+                if (sStyleName == constTitleStyleName)
+                {
+                    nPDFType = sal_uInt16(vcl::pdf::StructElement::Title);
+                    aPDFType = constTitleStyleName;
+                }
 
                 // Quotations: BlockQuote
 
