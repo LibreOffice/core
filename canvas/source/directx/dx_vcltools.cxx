@@ -258,6 +258,10 @@ namespace dxcanvas::tools
                         case ScanlineFormat::N32BitTcArgb:
                         case ScanlineFormat::N32BitTcBgra:
                         case ScanlineFormat::N32BitTcRgba:
+                        case ScanlineFormat::N32BitTcXbgr:
+                        case ScanlineFormat::N32BitTcXrgb:
+                        case ScanlineFormat::N32BitTcBgrx:
+                        case ScanlineFormat::N32BitTcRgbx:
                         default:
                             ENSURE_OR_THROW( false,
                                             "::dxcanvas::tools::bitmapFromVCLBitmapEx(): "

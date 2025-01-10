@@ -620,10 +620,12 @@ Bitmap BitmapFilterStackBlur::filter(Bitmap const& rBitmap) const
     if (nScanlineFormat == ScanlineFormat::N24BitTcRgb
         || nScanlineFormat == ScanlineFormat::N24BitTcBgr
         || nScanlineFormat == ScanlineFormat::N32BitTcMask
-        || nScanlineFormat == ScanlineFormat::N32BitTcBgra)
+        || nScanlineFormat == ScanlineFormat::N32BitTcBgra
+        || nScanlineFormat == ScanlineFormat::N32BitTcBgrx)
     {
         int nComponentWidth = (nScanlineFormat == ScanlineFormat::N32BitTcMask
-                               || nScanlineFormat == ScanlineFormat::N32BitTcBgra)
+                               || nScanlineFormat == ScanlineFormat::N32BitTcBgra
+                               || nScanlineFormat == ScanlineFormat::N32BitTcBgrx)
                                   ? 4
                                   : 3;
 

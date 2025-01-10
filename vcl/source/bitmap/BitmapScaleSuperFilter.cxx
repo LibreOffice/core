@@ -968,6 +968,10 @@ BitmapEx BitmapScaleSuperFilter::execute(BitmapEx const& rBitmap) const
                 case ScanlineFormat::N32BitTcBgra:
                 case ScanlineFormat::N32BitTcArgb:
                 case ScanlineFormat::N32BitTcAbgr:
+                case ScanlineFormat::N32BitTcRgbx:
+                case ScanlineFormat::N32BitTcBgrx:
+                case ScanlineFormat::N32BitTcXrgb:
+                case ScanlineFormat::N32BitTcXbgr:
                     pScaleRangeFn = bScaleUp ? scaleUp<32> : scaleDown<32>;
                     break;
                 default:

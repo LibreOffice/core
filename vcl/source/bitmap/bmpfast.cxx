@@ -347,12 +347,16 @@ static bool ImplConvertFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc 
             return ImplConvertToBitmap<ScanlineFormat::N24BitTcRgb>( aSrcType, rDst, rSrc );
 
         case ScanlineFormat::N32BitTcAbgr:
+        case ScanlineFormat::N32BitTcXbgr:
             return ImplConvertToBitmap<ScanlineFormat::N32BitTcAbgr>( aSrcType, rDst, rSrc );
         case ScanlineFormat::N32BitTcArgb:
+        case ScanlineFormat::N32BitTcXrgb:
             return ImplConvertToBitmap<ScanlineFormat::N32BitTcArgb>( aSrcType, rDst, rSrc );
         case ScanlineFormat::N32BitTcBgra:
+        case ScanlineFormat::N32BitTcBgrx:
             return ImplConvertToBitmap<ScanlineFormat::N32BitTcBgra>( aSrcType, rDst, rSrc );
         case ScanlineFormat::N32BitTcRgba:
+        case ScanlineFormat::N32BitTcRgbx:
             return ImplConvertToBitmap<ScanlineFormat::N32BitTcRgba>( aSrcType, rDst, rSrc );
         default: break;
     }
@@ -435,12 +439,16 @@ bool ImplFastBitmapConversion( BitmapBuffer& rDst, const BitmapBuffer& rSrc,
             return ImplConvertFromBitmap<ScanlineFormat::N24BitTcRgb>( rDst, rSrc );
 
         case ScanlineFormat::N32BitTcAbgr:
+        case ScanlineFormat::N32BitTcXbgr:
             return ImplConvertFromBitmap<ScanlineFormat::N32BitTcAbgr>( rDst, rSrc );
         case ScanlineFormat::N32BitTcArgb:
+        case ScanlineFormat::N32BitTcXrgb:
             return ImplConvertFromBitmap<ScanlineFormat::N32BitTcArgb>( rDst, rSrc );
         case ScanlineFormat::N32BitTcBgra:
+        case ScanlineFormat::N32BitTcBgrx:
             return ImplConvertFromBitmap<ScanlineFormat::N32BitTcBgra>( rDst, rSrc );
         case ScanlineFormat::N32BitTcRgba:
+        case ScanlineFormat::N32BitTcRgbx:
             return ImplConvertFromBitmap<ScanlineFormat::N32BitTcRgba>( rDst, rSrc );
         default: break;
     }
@@ -489,12 +497,16 @@ static bool ImplCopyFromScanline( tools::Long nY, BitmapBuffer& rDst, ConstScanl
             return ImplCopyToScanline<ScanlineFormat::N24BitTcRgb>( nY, rDst, aSrcType, nSrcWidth );
 
         case ScanlineFormat::N32BitTcAbgr:
+        case ScanlineFormat::N32BitTcXbgr:
             return ImplCopyToScanline<ScanlineFormat::N32BitTcAbgr>( nY, rDst, aSrcType, nSrcWidth );
         case ScanlineFormat::N32BitTcArgb:
+        case ScanlineFormat::N32BitTcXrgb:
             return ImplCopyToScanline<ScanlineFormat::N32BitTcArgb>( nY, rDst, aSrcType, nSrcWidth );
         case ScanlineFormat::N32BitTcBgra:
+        case ScanlineFormat::N32BitTcBgrx:
             return ImplCopyToScanline<ScanlineFormat::N32BitTcBgra>( nY, rDst, aSrcType, nSrcWidth );
         case ScanlineFormat::N32BitTcRgba:
+        case ScanlineFormat::N32BitTcRgbx:
             return ImplCopyToScanline<ScanlineFormat::N32BitTcRgba>( nY, rDst, aSrcType, nSrcWidth );
         default:
             break;
@@ -528,12 +540,16 @@ bool ImplFastCopyScanline( tools::Long nY, BitmapBuffer& rDst, ConstScanline aSr
             return ImplCopyFromScanline<ScanlineFormat::N24BitTcRgb>( nY, rDst, aSrcScanline, nSrcScanlineSize / 3 );
 
         case ScanlineFormat::N32BitTcAbgr:
+        case ScanlineFormat::N32BitTcXbgr:
             return ImplCopyFromScanline<ScanlineFormat::N32BitTcAbgr>( nY, rDst, aSrcScanline, nSrcScanlineSize / 4 );
         case ScanlineFormat::N32BitTcArgb:
+        case ScanlineFormat::N32BitTcXrgb:
             return ImplCopyFromScanline<ScanlineFormat::N32BitTcArgb>( nY, rDst, aSrcScanline, nSrcScanlineSize / 4 );
         case ScanlineFormat::N32BitTcBgra:
+        case ScanlineFormat::N32BitTcBgrx:
             return ImplCopyFromScanline<ScanlineFormat::N32BitTcBgra>( nY, rDst, aSrcScanline, nSrcScanlineSize / 4 );
         case ScanlineFormat::N32BitTcRgba:
+        case ScanlineFormat::N32BitTcRgbx:
             return ImplCopyFromScanline<ScanlineFormat::N32BitTcRgba>( nY, rDst, aSrcScanline, nSrcScanlineSize / 4 );
         default:
             break;
@@ -647,12 +663,16 @@ static bool ImplBlendFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc, c
             return ImplBlendToBitmap<ScanlineFormat::N24BitTcRgb>( aSrcType, rDst, rSrc, rMsk );
 
         case ScanlineFormat::N32BitTcAbgr:
+        case ScanlineFormat::N32BitTcXbgr:
             return ImplBlendToBitmap<ScanlineFormat::N32BitTcAbgr>( aSrcType, rDst, rSrc, rMsk );
         case ScanlineFormat::N32BitTcArgb:
+        case ScanlineFormat::N32BitTcXrgb:
             return ImplBlendToBitmap<ScanlineFormat::N32BitTcArgb>( aSrcType, rDst, rSrc, rMsk );
         case ScanlineFormat::N32BitTcBgra:
+        case ScanlineFormat::N32BitTcBgrx:
             return ImplBlendToBitmap<ScanlineFormat::N32BitTcBgra>( aSrcType, rDst, rSrc, rMsk );
         case ScanlineFormat::N32BitTcRgba:
+        case ScanlineFormat::N32BitTcRgbx:
             return ImplBlendToBitmap<ScanlineFormat::N32BitTcRgba>( aSrcType, rDst, rSrc, rMsk );
         default: break;
     }
@@ -739,12 +759,16 @@ bool ImplFastBitmapBlending( BitmapWriteAccess const & rDstWA,
             return ImplBlendFromBitmap<ScanlineFormat::N24BitTcRgb>( rDst, rSrc, rMsk );
 
         case ScanlineFormat::N32BitTcAbgr:
+        case ScanlineFormat::N32BitTcXbgr:
             return ImplBlendFromBitmap<ScanlineFormat::N32BitTcAbgr>( rDst, rSrc, rMsk );
         case ScanlineFormat::N32BitTcArgb:
+        case ScanlineFormat::N32BitTcXrgb:
             return ImplBlendFromBitmap<ScanlineFormat::N32BitTcArgb>( rDst, rSrc, rMsk );
         case ScanlineFormat::N32BitTcBgra:
+        case ScanlineFormat::N32BitTcBgrx:
             return ImplBlendFromBitmap<ScanlineFormat::N32BitTcBgra>( rDst, rSrc, rMsk );
         case ScanlineFormat::N32BitTcRgba:
+        case ScanlineFormat::N32BitTcRgbx:
             return ImplBlendFromBitmap<ScanlineFormat::N32BitTcRgba>( rDst, rSrc, rMsk );
         default: break;
     }
@@ -806,6 +830,10 @@ bool ImplFastEraseBitmap( BitmapBuffer& rDst, const BitmapColor& rColor )
         case ScanlineFormat::N32BitTcArgb:
         case ScanlineFormat::N32BitTcBgra:
         case ScanlineFormat::N32BitTcRgba:
+        case ScanlineFormat::N32BitTcXbgr:
+        case ScanlineFormat::N32BitTcXrgb:
+        case ScanlineFormat::N32BitTcBgrx:
+        case ScanlineFormat::N32BitTcRgbx:
             break;
 
         default:

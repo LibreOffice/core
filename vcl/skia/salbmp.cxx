@@ -300,8 +300,14 @@ BitmapBuffer* SkiaSalBitmap::AcquireBuffer(BitmapAccessMode nMode)
                                                       : ScanlineFormat::N24BitTcRgb;
             break;
         case 32:
+#if SKIA_USE_BITMAP32
+            // this tracks the m_bSupportsBitmap32 field
             buffer->meFormat = kN32_SkColorTypeIsBGRA ? ScanlineFormat::N32BitTcBgra
                                                       : ScanlineFormat::N32BitTcRgba;
+#else
+            buffer->meFormat = kN32_SkColorTypeIsBGRA ? ScanlineFormat::N32BitTcBgrx
+                                                      : ScanlineFormat::N32BitTcRgbx;
+#endif
             break;
         default:
             abort();

@@ -180,6 +180,7 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
             break;
 
         case ScanlineFormat::N32BitTcAbgr:
+        case ScanlineFormat::N32BitTcXbgr:
         {
             m_bPalette           = false;
             m_nBitsPerInputPixel = 32;
@@ -203,6 +204,7 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
         break;
 
         case ScanlineFormat::N32BitTcArgb:
+        case ScanlineFormat::N32BitTcXrgb:
         {
             m_bPalette           = false;
             m_nBitsPerInputPixel = 32;
@@ -226,6 +228,7 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
         break;
 
         case ScanlineFormat::N32BitTcBgra:
+        case ScanlineFormat::N32BitTcBgrx:
         {
             m_bPalette           = false;
             m_nBitsPerInputPixel = 32;
@@ -249,6 +252,7 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
         break;
 
         case ScanlineFormat::N32BitTcRgba:
+        case ScanlineFormat::N32BitTcRgbx:
         {
             m_bPalette           = false;
             m_nBitsPerInputPixel = 32;

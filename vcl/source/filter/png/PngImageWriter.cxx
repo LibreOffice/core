@@ -247,11 +247,13 @@ static bool pngWrite(SvStream& rStream, const Graphic& rGraphic, int nCompressio
                 break;
             }
             case ScanlineFormat::N32BitTcBgra:
+            case ScanlineFormat::N32BitTcBgrx:
             {
                 png_set_bgr(pPng);
                 [[fallthrough]];
             }
             case ScanlineFormat::N32BitTcRgba:
+            case ScanlineFormat::N32BitTcRgbx:
             {
                 colorType = PNG_COLOR_TYPE_RGBA;
                 bitDepth = 8;

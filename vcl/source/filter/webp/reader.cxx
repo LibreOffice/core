@@ -110,14 +110,17 @@ static bool readWebp(SvStream& stream, Graphic& graphic)
         {
             // Our bitmap32 code expects premultiplied.
             case ScanlineFormat::N32BitTcRgba:
+            case ScanlineFormat::N32BitTcRgbx:
                 config.output.colorspace = MODE_rgbA;
                 pixelMode = PixelMode::DirectRead;
                 break;
             case ScanlineFormat::N32BitTcBgra:
+            case ScanlineFormat::N32BitTcBgrx:
                 config.output.colorspace = MODE_bgrA;
                 pixelMode = PixelMode::DirectRead;
                 break;
             case ScanlineFormat::N32BitTcArgb:
+            case ScanlineFormat::N32BitTcXrgb:
                 config.output.colorspace = MODE_Argb;
                 pixelMode = PixelMode::DirectRead;
                 break;

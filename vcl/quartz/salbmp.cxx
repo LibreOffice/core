@@ -281,7 +281,7 @@ void QuartzSalBitmap::ConvertBitmapData( sal_uInt32 nWidth, sal_uInt32 nHeight,
         aSrcBuf.mnBitCount = nSrcBits;
         aSrcBuf.mnScanlineSize = nSrcBytesPerRow;
         BitmapBuffer aDstBuf;
-        aDstBuf.meFormat = ScanlineFormat::N32BitTcArgb;
+        aDstBuf.meFormat = ImplGetSVData()->mpDefInst->supportsBitmap32() ? ScanlineFormat::N32BitTcArgb : ScanlineFormat::N32BitTcXrgb;
         aDstBuf.mpBits = pDestData;
         aDstBuf.mnBitCount = nDestBits;
         aDstBuf.mnScanlineSize = nDestBytesPerRow;
@@ -445,7 +445,7 @@ BitmapBuffer* QuartzSalBitmap::AcquireBuffer( BitmapAccessMode /*nMode*/ )
             break;
         case 32:
         {
-            pBuffer->meFormat = ScanlineFormat::N32BitTcArgb;
+            pBuffer->meFormat = ImplGetSVData()->mpDefInst->supportsBitmap32() ? ScanlineFormat::N32BitTcArgb : ScanlineFormat::N32BitTcXrgb;
             ColorMaskElement aRedMask(k32BitRedColorMask);
             aRedMask.CalcMaskShift();
             ColorMaskElement aGreenMask(k32BitGreenColorMask);

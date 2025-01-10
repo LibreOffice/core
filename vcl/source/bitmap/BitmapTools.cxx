@@ -886,6 +886,7 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, un
             }
             break;
         case ScanlineFormat::N32BitTcBgra:
+        case ScanlineFormat::N32BitTcBgrx:
             pReadScan = pBitmapReadAcc->GetScanline( nY );
             if( pAlphaReadAcc )
                 if( readAlpha( pAlphaReadAcc.get(), nY, nWidth, data, nOff ) )
@@ -928,6 +929,7 @@ void CanvasCairoExtractBitmapData( BitmapEx const & aBmpEx, Bitmap & aBitmap, un
             }
             break;
         case ScanlineFormat::N32BitTcRgba:
+        case ScanlineFormat::N32BitTcRgbx:
             pReadScan = pBitmapReadAcc->GetScanline( nY );
             if( pAlphaReadAcc )
                 if( readAlpha( pAlphaReadAcc.get(), nY, nWidth, data, nOff ) )

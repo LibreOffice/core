@@ -28,6 +28,8 @@
 #include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 #include <tools/helpers.hxx>
+#include <svdata.hxx>
+#include <salinst.hxx>
 
 QtBitmap::QtBitmap() {}
 
@@ -137,9 +139,13 @@ BitmapBuffer* QtBitmap::AcquireBuffer(BitmapAccessMode /*nMode*/)
         case 32:
         {
 #ifdef OSL_BIGENDIAN
-            pBuffer->meFormat = ScanlineFormat::N32BitTcArgb;
+            pBuffer->meFormat = ImplGetSVData()->mpDefInst->supportsBitmap32()
+                                    ? ScanlineFormat::N32BitTcArgb
+                                    : ScanlineFormat::N32BitTcXrgb;
 #else
-            pBuffer->meFormat = ScanlineFormat::N32BitTcBgra;
+            pBuffer->meFormat = ImplGetSVData()->mpDefInst->supportsBitmap32()
+                                    ? ScanlineFormat::N32BitTcBgra
+                                    : ScanlineFormat::N32BitTcBgrx;
 #endif
             pBuffer->maPalette = aEmptyPalette;
             break;

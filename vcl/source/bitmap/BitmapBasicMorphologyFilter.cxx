@@ -353,6 +353,7 @@ Bitmap BitmapBasicMorphologyFilter::filter(Bitmap const& rBitmap) const
             break;
         case ScanlineFormat::N32BitTcMask:
         case ScanlineFormat::N32BitTcBgra:
+        case ScanlineFormat::N32BitTcBgrx:
             runFilter<32>(bitmapCopy, m_eOp, m_nRadius, m_bUseValueOutside, m_nValueOutside);
             break;
         case ScanlineFormat::N8BitPal:

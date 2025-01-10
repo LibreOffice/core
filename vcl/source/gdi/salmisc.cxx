@@ -255,9 +255,13 @@ std::optional<BitmapBuffer> StretchAndConvert(
         IMPL_CASE_SET_FORMAT( N24BitTcBgr, 24 );
         IMPL_CASE_SET_FORMAT( N24BitTcRgb, 24 );
         IMPL_CASE_SET_FORMAT( N32BitTcAbgr, 32 );
+        IMPL_CASE_SET_FORMAT( N32BitTcXbgr, 32 );
         IMPL_CASE_SET_FORMAT( N32BitTcArgb, 32 );
+        IMPL_CASE_SET_FORMAT( N32BitTcXrgb, 32 );
         IMPL_CASE_SET_FORMAT( N32BitTcBgra, 32 );
+        IMPL_CASE_SET_FORMAT( N32BitTcBgrx, 32 );
         IMPL_CASE_SET_FORMAT( N32BitTcRgba, 32 );
+        IMPL_CASE_SET_FORMAT( N32BitTcRgbx, 32 );
         IMPL_CASE_SET_FORMAT( N32BitTcMask, 32 );
 
         default:
@@ -266,7 +270,7 @@ std::optional<BitmapBuffer> StretchAndConvert(
             // least likely to crash
             pFncSetPixel = BitmapReadAccess::SetPixelForN1BitMsbPal;
             pDstBuffer->mnBitCount = 1;
-            OSL_FAIL( "unknown write format" );
+            assert(false && "unknown write format" );
         break;
     }
 

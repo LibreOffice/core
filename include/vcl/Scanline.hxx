@@ -36,10 +36,14 @@ enum class ScanlineFormat : sal_uInt8
     N24BitTcBgr,
     N24BitTcRgb,
     // 32 Bit
-    N32BitTcAbgr,
-    N32BitTcArgb,
-    N32BitTcBgra,
-    N32BitTcRgba,
+    N32BitTcAbgr, // premultiplied
+    N32BitTcXbgr, // ignore alpha channel
+    N32BitTcArgb, // premultiplied
+    N32BitTcXrgb, // ignore alpha channel
+    N32BitTcBgra, // premultiplied
+    N32BitTcBgrx, // ignore alpha channel
+    N32BitTcRgba, // premultiplied
+    N32BitTcRgbx, // ignore alpha channel
     N32BitTcMask,
 };
 
