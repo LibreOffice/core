@@ -175,6 +175,7 @@ const char aCaption[]           = "Caption";
 const char aHeading[]           = "Heading";
 const char aQuotation[]         = "Quotation";
 const char aSourceText[]        = "Source Text";
+constexpr OUString constTitleStyleName = u"Title"_ustr;
 
 // PDF Tag Names:
 constexpr OUStringLiteral aDocumentString = u"Document";
@@ -717,7 +718,7 @@ void SwTaggedPDFHelper::SetAttributes(vcl::pdf::StructElement eType)
             case vcl::pdf::StructElement::Paragraph:
             case vcl::pdf::StructElement::Heading:
             case vcl::pdf::StructElement::BlockQuote:
-
+            case vcl::pdf::StructElement::Title:
                 bPlacement =
                 bWritingMode =
                 bSpaceBefore =
@@ -1423,6 +1424,14 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 // <stylename> with role = P
                 nPDFType = sal_uInt16(vcl::pdf::StructElement::Paragraph);
                 aPDFType = sStyleName;
+
+                // Title
+
+                if (sStyleName == constTitleStyleName)
+                {
+                    nPDFType = sal_uInt16(vcl::pdf::StructElement::Title);
+                    aPDFType = constTitleStyleName;
+                }
 
                 // Quotations: BlockQuote
 
