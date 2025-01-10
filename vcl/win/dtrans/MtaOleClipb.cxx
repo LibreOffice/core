@@ -66,11 +66,7 @@ namespace /* private */
     const bool MANUAL_RESET = true;
     const bool INIT_NONSIGNALED = false;
 
-    /*  Cannot use osl conditions because they are blocking
-        without waking up on messages sent by another thread
-        this leads to deadlocks because we are blocking the
-        communication between inter-thread marshalled COM
-        pointers.
+    /*  Similar to osl conditions, with two condition objects passed to the Wait function.
         COM Proxy-Stub communication uses SendMessages for
         synchronization purposes.
     */
@@ -85,11 +81,14 @@ namespace /* private */
         // leave messages sent through
         bool wait(HANDLE hEvtAbort)
         {
-            const HANDLE hWaitArray[2] = { m_hEvent, hEvtAbort };
+            HANDLE hWaitArray[2] = { m_hEvent, hEvtAbort };
             while (true)
             {
-                DWORD dwResult
-                    = MsgWaitForMultipleObjects(2, hWaitArray, FALSE, INFINITE, QS_SENDMESSAGE);
+                DWORD dwResult;
+                HRESULT hr = CoWaitForMultipleHandles(COWAIT_DISPATCH_CALLS, INFINITE, 2,
+                                                      hWaitArray, &dwResult);
+                if (FAILED(hr))
+                    return false;
 
                 switch (dwResult)
                 {
