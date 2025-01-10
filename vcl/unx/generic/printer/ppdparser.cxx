@@ -627,8 +627,10 @@ PPDParser::PPDParser(OUString aFile, const std::vector<PPDKey*>& keys)
         for (int i = 0; i < pKey->countValues(); i++) {
             const PPDValue* pValue = pKey -> getValue(i);
             OUString aValueName = pValue -> m_aOption;
-            PPDValue* pImageableAreaValue = pImageableAreas -> insertValue( aValueName, eQuoted );
-            PPDValue* pPaperDimensionValue = pPaperDimensions -> insertValue( aValueName, eQuoted );
+            PPDValue* pImageableAreaValue
+                = pImageableAreas->insertValue(aValueName, PPDValueType::Quoted);
+            PPDValue* pPaperDimensionValue
+                = pPaperDimensions->insertValue(aValueName, PPDValueType::Quoted);
             rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
             OString o = OUStringToOString( aValueName, aEncoding );
             pwg_media_t *pPWGMedia = pwgMediaForPWG(o.pData->buffer);
@@ -778,11 +780,21 @@ PPDParser::PPDParser( OUString aFile ) :
             char const* pVType = "<unknown>";
             switch( pValue->m_eType )
             {
-                case eInvocation:       pVType = "invocation";break;
-                case eQuoted:           pVType = "quoted";break;
-                case eString:           pVType = "string";break;
-                case eSymbol:           pVType = "symbol";break;
-                case eNo:               pVType = "no";break;
+                case PPDValueType::Invocation:
+                    pVType = "invocation";
+                    break;
+                case PPDValueType::Quoted:
+                    pVType = "quoted";
+                    break;
+                case PPDValueType::String:
+                    pVType = "string";
+                    break;
+                case PPDValueType::Symbol:
+                    pVType = "symbol";
+                    break;
+                case PPDValueType::No:
+                    pVType = "no";
+                    break;
                 default: break;
             }
             SAL_INFO("vcl.unx.print", "\t\t"
@@ -1015,7 +1027,7 @@ void PPDParser::parse( ::std::vector< OString >& rLines )
             if(keyit != m_aKeys.end())
             {
                 PPDKey* pKey = keyit->second.get();
-                pKey->insertValue(u"Custom"_ustr, eInvocation, true);
+                pKey->insertValue(u"Custom"_ustr, PPDValueType::Invocation, true);
             }
             continue;
         }
@@ -1066,7 +1078,7 @@ void PPDParser::parse( ::std::vector< OString >& rLines )
                 aOption = aOption.copy(0,  nTransPos);
         }
 
-        PPDValueType eType = eNo;
+        PPDValueType eType = PPDValueType::No;
         OUString aValue;
         OUString aOptionTranslation;
         OUString aValueTranslation;
@@ -1099,9 +1111,9 @@ void PPDParser::parse( ::std::vector< OString >& rLines )
             {
                 if( !aOption.isEmpty() &&
                     !aUniKey.startsWith( "JCL" ) )
-                    eType = eInvocation;
+                    eType = PPDValueType::Invocation;
                 else
-                    eType = eQuoted;
+                    eType = PPDValueType::Quoted;
             }
             // check for invocation or quoted value
             else if(aLine[0] == '"')
@@ -1119,16 +1131,16 @@ void PPDParser::parse( ::std::vector< OString >& rLines )
                 // check for quoted value
                 if( !aOption.isEmpty() &&
                     !aUniKey.startsWith( "JCL" ) )
-                    eType = eInvocation;
+                    eType = PPDValueType::Invocation;
                 else
-                    eType = eQuoted;
+                    eType = PPDValueType::Quoted;
             }
             // check for symbol value
             else if(aLine[0] == '^')
             {
                 aLine = aLine.copy(1);
                 aValue = OStringToOUString(aLine, RTL_TEXTENCODING_MS_1252);
-                eType = eSymbol;
+                eType = PPDValueType::Symbol;
             }
             else
             {
@@ -1143,7 +1155,7 @@ void PPDParser::parse( ::std::vector< OString >& rLines )
                 aValue = OStringToOUString(aLine.subView(0, nTransPos), RTL_TEXTENCODING_MS_1252);
                 if (nTransPos+1 < aLine.getLength())
                     aValueTranslation = handleTranslation( aLine.copy( nTransPos+1 ), bIsGlobalizedLine );
-                eType = eString;
+                eType = PPDValueType::String;
             }
         }
 
@@ -1175,7 +1187,7 @@ void PPDParser::parse( ::std::vector< OString >& rLines )
         else
             pKey = keyit->second.get();
 
-        if( eType == eNo && bQuery )
+        if (eType == PPDValueType::No && bQuery)
             continue;
 
         PPDValue* pValue = pKey->insertValue( aOption, eType );
@@ -1225,7 +1237,7 @@ void PPDParser::parse( ::std::vector< OString >& rLines )
                     // (example: DefaultResolution)
                     // so invent that key here and have a default value
                     std::unique_ptr<PPDKey> pKey(new PPDKey( aKey ));
-                    pKey->insertValue( aOption, eInvocation /*or what ?*/ );
+                    pKey->insertValue(aOption, PPDValueType::Invocation /*or what ?*/);
                     pKey->m_pDefaultValue = pKey->getValue( aOption );
                     insertKey( std::move(pKey) );
                 }

@@ -41,7 +41,14 @@ enum class orientation;
 class PPDCache;
 class PPDTranslator;
 
-enum PPDValueType { eInvocation, eQuoted, eSymbol, eString, eNo };
+enum class PPDValueType
+{
+    Invocation,
+    Quoted,
+    Symbol,
+    String,
+    No
+};
 
 struct VCL_DLLPUBLIC PPDValue
 {

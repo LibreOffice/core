@@ -383,7 +383,7 @@ const PPDParser* CPDManager::createCPDParser(const OUString& rPrinter)
                         }
                     }
 
-                    pValue = pKey->insertValue(aValueName, eQuoted);
+                    pValue = pKey->insertValue(aValueName, PPDValueType::Quoted);
                     if (!pValue)
                         continue;
                     pValue->m_aValue = aValueName;
@@ -397,7 +397,7 @@ const PPDParser* CPDManager::createCPDParser(const OUString& rPrinter)
                 // This could be done to ensure default values also appear as options:
                 if (!bDefaultFound && pKey->m_bUIOption)
                 {
-                    //     pValue = pKey->insertValue( aDefaultValue, eQuoted );
+                    //     pValue = pKey->insertValue( aDefaultValue, PPDValueType::Quoted );
                     //     if( pValue )
                     //         pValue->m_aValue = aDefaultValue;
                 }
@@ -406,7 +406,7 @@ const PPDParser* CPDManager::createCPDParser(const OUString& rPrinter)
 
             pKey = new PPDKey(u"ModelName"_ustr);
             aValueName = OStringToOUString("", aEncoding);
-            pValue = pKey->insertValue(aValueName, eQuoted);
+            pValue = pKey->insertValue(aValueName, PPDValueType::Quoted);
             if (pValue)
                 pValue->m_aValue = aValueName;
             pKey->m_pDefaultValue = pValue;
@@ -414,7 +414,7 @@ const PPDParser* CPDManager::createCPDParser(const OUString& rPrinter)
 
             pKey = new PPDKey(u"NickName"_ustr);
             aValueName = OStringToOUString(pDest->name, aEncoding);
-            pValue = pKey->insertValue(aValueName, eQuoted);
+            pValue = pKey->insertValue(aValueName, PPDValueType::Quoted);
             if (pValue)
                 pValue->m_aValue = aValueName;
             pKey->m_pDefaultValue = pValue;

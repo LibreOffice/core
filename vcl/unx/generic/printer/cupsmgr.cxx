@@ -639,7 +639,7 @@ void CUPSManager::getOptionsFromDocumentSetup(const JobData& rJob, bool bBanner,
             const PPDKey* pKey = aKeys[i];
             const PPDValue* pValue = rJob.m_aContext.getValue( pKey );
             OUString sPayLoad;
-            if (pValue && pValue->m_eType == eInvocation)
+            if (pValue && pValue->m_eType == PPDValueType::Invocation)
             {
                 sPayLoad = pValue->m_bCustomOption ? pValue->m_aCustomOption : pValue->m_aOption;
             }
