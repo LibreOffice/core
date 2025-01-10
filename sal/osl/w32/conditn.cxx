@@ -78,8 +78,15 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition,
 
     while ( true )
     {
-        /* Only wake up if a SendMessage call to the threads message loop is detected */
-        switch( MsgWaitForMultipleObjects( 1, reinterpret_cast<HANDLE *>(&Condition), FALSE, timeout, QS_SENDMESSAGE ) )
+        DWORD index;
+        /* Only wake up if a SendMessage / COM call to the threads message loop is detected */
+        HRESULT hr = CoWaitForMultipleHandles(COWAIT_DISPATCH_CALLS, timeout, 1,
+                                              reinterpret_cast<HANDLE*>(&Condition), &index);
+        if (hr == RPC_S_CALLPENDING)
+            return osl_cond_result_timeout;
+        if (FAILED(hr))
+            return osl_cond_result_error;
+        switch (index)
         {
             case WAIT_OBJECT_0 + 1:
                 {
