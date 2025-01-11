@@ -40,6 +40,11 @@
                       <object class="GtkComboBoxText" id="scheme">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="scheme-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|scheme">Select an available theme scheme in the list.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">True</property>
@@ -55,6 +60,11 @@
                         <property name="tooltip-text" translatable="yes" context="optappearancepage|morethemes">Add more themes.</property>
                         <property name="image">morethemes_image</property>
                         <property name="always-show-image">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="morethemesbtn-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|morethemesbtn">Click to select and download more themes from the extensions website.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -82,6 +92,11 @@
                         <property name="can-focus">True</property>
                         <property name="receives-default">True</property>
                         <property name="margin-end">3</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="newschemebtn-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|newschemebutton">Click to add a new theme to the list. </property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">True</property>
@@ -96,6 +111,11 @@
                         <property name="can-focus">True</property>
                         <property name="receives-default">True</property>
                         <property name="margin-start">3</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="removeschemebtn-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|removeschemebtn">Click to remove the applied scheme. The theme is reset to Automatic.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">True</property>
@@ -117,7 +137,7 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="margin-bottom">6</property>
-                <property name="label" translatable="yes" context="appearancetabpage|libreofficethemeslb">LibreOffice Themes</property>
+                <property name="label" translatable="yes" context="appearancetabpage|libreofficethemeslb">%PRODUCTNAME Themes</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -178,6 +198,11 @@
                             <property name="receives-default">False</property>
                             <property name="active">True</property>
                             <property name="draw-indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="system-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|system">The application and document appearance depends on the desktop environment theme.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -193,6 +218,11 @@
                             <property name="receives-default">False</property>
                             <property name="draw-indicator">True</property>
                             <property name="group">system</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="light-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|light">Light theme colors are used.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -208,6 +238,11 @@
                             <property name="receives-default">False</property>
                             <property name="draw-indicator">True</property>
                             <property name="group">system</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="dark-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|dark">Dark theme colors are used.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -286,6 +321,7 @@
                             <child internal-child="accessible">
                               <object class="AtkObject" id="registrydropdown-atkobject">
                                 <property name="AtkObject::accessible-name" translatable="yes" context="appearancetabpage|registrycolorslist">registrycolorslist</property>
+                                <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|registrydropdown">Select the item to customize color or render with an image.</property>
                               </object>
                             </child>
                           </object>
@@ -304,6 +340,11 @@
                             <property name="active">True</property>
                             <property name="draw-indicator">True</property>
                             <property name="group">imageradiobtn</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="colorradiobtn-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|colorradiobtn">Apply color to the item.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left-attach">0</property>
@@ -312,7 +353,6 @@
                         </child>
                         <child>
                           <object class="GtkMenuButton" id="colorsdropdownbtn">
-                            <property name="label" translatable="no" context="appearancetabpage|colorsdropdownbtn"></property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="focus-on-click">False</property>
@@ -320,6 +360,11 @@
                             <property name="halign">start</property>
                             <child>
                               <placeholder/>
+                            </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="colorsdropdownbtn-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|colorsdropdownbtn">Select the color of the item.</property>
+                              </object>
                             </child>
                           </object>
                           <packing>
@@ -334,6 +379,11 @@
                             <property name="can-focus">True</property>
                             <property name="receives-default">False</property>
                             <property name="draw-indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="showindocumentchkbtn-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|showindocumentchkbtn">Immediately display the color choice in the document.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left-attach">1</property>
@@ -348,6 +398,11 @@
                             <property name="receives-default">False</property>
                             <property name="active">True</property>
                             <property name="draw-indicator">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="imageradiobtn-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|imageradiobtn">Apply an image to the item</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left-attach">0</property>
@@ -368,6 +423,7 @@
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="bitmapdropdown-atkobject">
                                     <property name="AtkObject::accessible-name" translatable="yes" context="appearancetabpage|bitmapdropdown">bitmapdropdown</property>
+                                    <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|bitmapdropdown">Select the image for the item, if supported.</property>
                                   </object>
                                 </child>
                               </object>
@@ -390,6 +446,11 @@
                                     <property name="receives-default">False</property>
                                     <property name="draw-indicator">True</property>
                                     <property name="group">tiledradiobtn</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="stretchedradiobtn-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|stretchedradiobtn">Stretches the image to fill the area of the item.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -405,6 +466,11 @@
                                     <property name="receives-default">False</property>
                                     <property name="active">True</property>
                                     <property name="draw-indicator">True</property>
+                                    <child internal-child="accessible">
+                                      <object class="AtkObject" id="tiledradiobtn-atkobject">
+                                        <property name="AtkObject::accessible-description" translatable="yes" context="appearance|extended_tip|tiledradiobtn">Tiles the image to fill the area of the item.</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
