@@ -237,8 +237,9 @@ public:
         {
             sal_Int32 oldCount = bparr.Count();
 
-            delete bparr[0]; // release content
+            auto p = bparr[0];
             bparr.Remove(0); // remove item from container
+            delete p; // release content
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
@@ -272,8 +273,9 @@ public:
         for (int i = NUM_ENTRIES - 1; i >= 0; i--)
         {
             sal_Int32 oldCount = bparr.Count();
-            delete bparr[i];
+            auto p = bparr[i];
             bparr.Remove(i);
+            delete p;
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
@@ -309,8 +311,9 @@ public:
             sal_Int32 oldCount = bparr.Count();
             sal_Int32 oldElement = static_cast<BigPtrEntryMock*>(bparr[bparr.Count() / 2])->getCount();
 
-            delete bparr[bparr.Count() / 2];
+            auto p = bparr[bparr.Count() / 2];
             bparr.Remove(bparr.Count() / 2);
+            delete p;
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
@@ -346,10 +349,14 @@ public:
             sal_Int32 nRemove = std::min<sal_Int32>(bparr.Count(), 3);
             sal_Int32 oldCount = bparr.Count();
 
+            std::vector<BigPtrEntry*> vToDelete;
             for (sal_Int32 i = 0; i < nRemove; i++)
-                delete bparr[i];
+                vToDelete.push_back(bparr[i]);
 
             bparr.Remove(0, nRemove);
+
+            for (auto p : vToDelete)
+                delete p;
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
@@ -371,8 +378,14 @@ public:
 
         fillBigPtrArray(bparr, NUM_ENTRIES);
 
-        releaseBigPtrArrayContent(bparr);
+        std::vector<BigPtrEntry*> vToDelete;
+        for (sal_Int32 i = 0; i < bparr.Count(); i++)
+            vToDelete.push_back(bparr[i]);
+
         bparr.Remove(0, bparr.Count());
+
+        for (auto p : vToDelete)
+            delete p;
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE
         (
@@ -488,8 +501,9 @@ public:
 
         for (sal_Int32 i = 0, j = NUM_ENTRIES - 1; i < NUM_ENTRIES; i++, j--)
         {
-            delete bparr[i];
+            auto p = bparr[i];
             bparr.Replace(i, new BigPtrEntryMock(j));
+            delete p;
         }
 
         for (sal_Int32 i = 0; i < NUM_ENTRIES; i++)

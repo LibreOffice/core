@@ -1604,12 +1604,14 @@ SwTextNode* SwGetRefFieldType::FindAnchorRefStyleOther(SwDoc* pDoc,
     // For references, styleref acts from the position of the reference not the field
     // Happily, the previous code saves either one into pReference, so the following is generic for both
 
-    SwNodeOffset nReference = pReference->GetIndex();
     const SwNodes& nodes = pDoc->GetNodes();
 
     // It is possible to end up here, with a pReference pointer which points to a node which has already been
     // removed from the nodes array, which means that calling GetIndex() returns an incorrect index.
-    if (nReference >= nodes.Count() || nodes[nReference] != pReference)
+    SwNodeOffset nReference;
+    if (!pReference->IsDisconnected())
+        nReference = pReference->GetIndex();
+    else
         nReference = nodes.Count() - 1;
 
     SwTextNode* pTextNd = nullptr;

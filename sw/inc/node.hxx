@@ -116,6 +116,9 @@ public:
     }
     void SetRedlineMergeFlag(Merge const eMerge) { m_eMerge = eMerge; }
     Merge GetRedlineMergeFlag() const { return m_eMerge; }
+
+    using BigPtrEntry::IsDisconnected; // make this public
+
 private:
     Merge m_eMerge;
 

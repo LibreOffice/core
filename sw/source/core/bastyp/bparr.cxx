@@ -75,7 +75,7 @@ void BigPtrArray::Move( sal_Int32 from, sal_Int32 to )
         BlockInfo* p = m_ppInf[ cur ];
         BigPtrEntry* pElem = p->mvData[ from - p->nStart ];
         Insert( pElem, to ); // insert first, then delete!
-        Remove( ( to < from ) ? ( from + 1 ) : from );
+        ImplRemove( ( to < from ) ? ( from + 1 ) : from, 1, /*bClearElement*/false );
     }
 }
 
@@ -305,6 +305,11 @@ void BigPtrArray::Insert( BigPtrEntry* pElem, sal_Int32 pos )
 
 void BigPtrArray::Remove( sal_Int32 pos, sal_Int32 n )
 {
+    ImplRemove(pos, n, true);
+}
+
+void BigPtrArray::ImplRemove( sal_Int32 pos, sal_Int32 n, bool bClearElement )
+{
     CHECKIDX( m_ppInf.get(), m_nBlock, m_nSize, m_nCur );
 
     sal_uInt16 nBlkdel = 0;              // deleted blocks
@@ -320,6 +325,13 @@ void BigPtrArray::Remove( sal_Int32 pos, sal_Int32 n )
         sal_uInt16 nel = p->nElem - sal_uInt16(pos);
         if( sal_Int32(nel) > nElem )
             nel = sal_uInt16(nElem);
+        // clear the back-pointers from the node back to node array. helps to flush out stale accesses.
+        if (bClearElement)
+            for(sal_uInt16 i=0; i < nel; ++i)
+            {
+                p->mvData[pos+i]->m_pBlock = nullptr;
+                p->mvData[pos+i]->m_nOffset = 0;
+            }
         // move elements if needed
         if( ( pos + nel ) < sal_Int32(p->nElem) )
         {
@@ -389,11 +401,25 @@ void BigPtrArray::Remove( sal_Int32 pos, sal_Int32 n )
 
 void BigPtrArray::Replace( sal_Int32 idx, BigPtrEntry* pElem)
 {
+    ImplReplace(idx, pElem, /*bClearElement*/ true);
+}
+
+void BigPtrArray::ImplReplace( sal_Int32 idx, BigPtrEntry* pElem, bool bClearElement)
+{
     assert(idx < m_nSize); // Index out of bounds
     m_nCur = Index2Block( idx );
     BlockInfo* p = m_ppInf[ m_nCur ];
     pElem->m_nOffset = sal_uInt16(idx - p->nStart);
     pElem->m_pBlock = p;
+
+    // clear the back-pointers from the old element back to element array. helps to flush out stale accesses.
+    if (bClearElement)
+    {
+        p->mvData[idx - p->nStart]->m_pBlock = nullptr;
+        p->mvData[idx - p->nStart]->m_nOffset = 0;
+    }
+
+    // update with new element
     p->mvData[ idx - p->nStart ] = pElem;
 }
 
@@ -419,7 +445,7 @@ BigPtrEntry* BigPtrArray::ReplaceTheOneAfter( BigPtrEntry* pNotTheOne, BigPtrEnt
     else
     {
         // slow path
-        BigPtrArray::Replace( pNotTheOne->GetPos()+1, pNewEntry );
+        BigPtrArray::ImplReplace( pNotTheOne->GetPos()+1, pNewEntry, /*bClearElement*/false );
     }
 
     // if the previous node is inside the current block
