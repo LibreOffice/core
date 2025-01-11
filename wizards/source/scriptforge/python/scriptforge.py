@@ -121,7 +121,7 @@ class ScriptForge(object, metaclass = _Singleton):
     # Class constants
     # #########################################################################
     library = 'ScriptForge'
-    Version = '25.2'  # Version number of the LibreOffice release containing the actual file
+    Version = '25.8'  # Version number of the LibreOffice release containing the actual file
     #
     # Basic dispatcher for Python scripts (@scope#library.module.function)
     basicdispatcher = '@application#ScriptForge.SF_PythonHelper._PythonDispatcher'

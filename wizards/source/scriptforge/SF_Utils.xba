@@ -21,7 +21,7 @@ REM ===================================================================== GLOBAL
 Global _SF_		As Variant		&apos;	SF_Root (Basic) object)
 
 &apos;&apos;&apos;	ScriptForge version
-Const SF_Version = &quot;25.2&quot;
+Const SF_Version = &quot;25.8&quot;
 
 &apos;&apos;&apos;	Standard symbolic names for VarTypes
 &apos;				V_EMPTY			= 0
