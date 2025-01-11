@@ -110,7 +110,7 @@ enum class SfxItemState {
  * unique value that is returned in the call to ItemType(). This is done
  * using DECLARE_ITEM_TYPE_FUNCTION in the public section of each definition
  * of a derivation of SfxItemType, also for types derived deeper than one
- * step. It overloads virtual SfxItemType ItemType() with the secified
+ * step. It overloads virtual SfxItemType ItemType() with the specified
  * type, see that macro.
 */
 enum class SfxItemType : sal_uInt16
