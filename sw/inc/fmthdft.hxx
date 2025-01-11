@@ -25,12 +25,16 @@
 #include "calbck.hxx"
 #include "frmfmt.hxx"
 
+namespace sw {
+    typedef ClientBase<::SwFrameFormat> FrameFormatClient;
+}
+
 class IntlWrapper;
 
  /** Header, for PageFormats
  Client of FrameFormat describing the header. */
 
-class SW_DLLPUBLIC SwFormatHeader final : public SfxPoolItem, public SwClient
+class SW_DLLPUBLIC SwFormatHeader final : public SfxPoolItem, public sw::FrameFormatClient
 {
     bool m_bActive;       ///< Only for controlling (creation of content).
 
@@ -52,10 +56,10 @@ public:
                                   OUString &rText,
                                   const IntlWrapper& rIntl ) const override;
 
-    const SwFrameFormat *GetHeaderFormat() const { return static_cast<const SwFrameFormat*>(GetRegisteredIn()); }
-          SwFrameFormat *GetHeaderFormat()       { return static_cast<SwFrameFormat*>(GetRegisteredIn()); }
+    const SwFrameFormat *GetHeaderFormat() const { return GetRegisteredIn(); }
+          SwFrameFormat *GetHeaderFormat()       { return GetRegisteredIn(); }
 
-    void RegisterToFormat( SwFormat& rFormat );
+    void RegisterToFormat( SwFrameFormat& rFormat );
     bool IsActive() const { return m_bActive; }
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
@@ -63,7 +67,7 @@ public:
  /**Footer, for pageformats
  Client of FrameFormat describing the footer */
 
-class SW_DLLPUBLIC SwFormatFooter final : public SfxPoolItem, public SwClient
+class SW_DLLPUBLIC SwFormatFooter final : public SfxPoolItem, public sw::FrameFormatClient
 {
     bool m_bActive;       // Only for controlling (creation of content).
 
@@ -85,8 +89,8 @@ public:
                                   OUString &rText,
                                   const IntlWrapper& rIntl ) const override;
 
-    const SwFrameFormat *GetFooterFormat() const { return static_cast<const SwFrameFormat*>(GetRegisteredIn()); }
-          SwFrameFormat *GetFooterFormat()       { return static_cast<SwFrameFormat*>(GetRegisteredIn()); }
+    const SwFrameFormat *GetFooterFormat() const { return GetRegisteredIn(); }
+          SwFrameFormat *GetFooterFormat()       { return GetRegisteredIn(); }
 
     void RegisterToFormat( SwFormat& rFormat );
     bool IsActive() const { return m_bActive; }

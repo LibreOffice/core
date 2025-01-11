@@ -196,9 +196,7 @@ void SwFormat::Destr()
                      << GetName());
         return;
     }
-    SwIterator<SwClient, SwFormat> aIter(*this);
-    for (SwClient* pClient = aIter.First(); pClient; pClient = aIter.Next())
-        pClient->CheckRegistrationFormat(*this);
+    PrepareFormatDeath(SwFormatChangeHint(this, DerivedFrom()));
     assert(!HasWriterListeners());
 }
 

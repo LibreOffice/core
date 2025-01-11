@@ -134,7 +134,9 @@ bool GetAtPageRelOrientation(sal_Int16 & rOrientation, bool const isIgnorePrintA
     }
 }
 
+
 } // namespace sw
+
 
 SfxPoolItem* SwFormatLineNumber::CreateDefault() { return new SwFormatLineNumber; }
 
@@ -146,7 +148,7 @@ static sal_Int16 lcl_IntToRelation(const uno::Any& rVal)
     return nVal;
 }
 
-static void lcl_DelHFFormat( SwClient *pToRemove, SwFrameFormat *pFormat )
+static void lcl_DelHFFormat( sw::FrameFormatClient *pToRemove, SwFrameFormat *pFormat )
 {
     //If the client is the last one who uses this format, then we have to delete
     //it - before this is done, we may need to delete the content-section.
@@ -159,17 +161,7 @@ static void lcl_DelHFFormat( SwClient *pToRemove, SwFrameFormat *pFormat )
     }
 
     // Anything other than frames registered?
-    bool bDel = true;
-    {
-        // nested scope because DTOR of SwClientIter resets the flag bTreeChg.
-        // It's suboptimal if the format is deleted beforehand.
-        SwIterator<SwClient,SwFrameFormat> aIter(*pFormat);
-        for(SwClient* pLast = aIter.First(); bDel && pLast; pLast = aIter.Next())
-            if (dynamic_cast<const SwFrame*>(pLast) == nullptr)
-                bDel = false;
-    }
-
-    if ( !bDel )
+    if(!pFormat->HasOnlySpecificWriterListeners<SwFrame>())
         return;
 
     // If there is a Cursor registered in one of the nodes, we need to call the
@@ -509,21 +501,21 @@ sal_uInt16  SwFormatFillOrder::GetValueCount() const
 // Partially implemented inline in hxx
 SwFormatHeader::SwFormatHeader( SwFrameFormat *pHeaderFormat )
     : SfxPoolItem( RES_HEADER ),
-    SwClient( pHeaderFormat ),
+    sw::FrameFormatClient( pHeaderFormat ),
     m_bActive( pHeaderFormat )
 {
 }
 
 SwFormatHeader::SwFormatHeader( const SwFormatHeader &rCpy )
     : SfxPoolItem( RES_HEADER ),
-    SwClient( const_cast<sw::BroadcastingModify*>(static_cast<const sw::BroadcastingModify*>(rCpy.GetRegisteredIn())) ),
+    sw::FrameFormatClient( const_cast<SwFrameFormat*>(rCpy.GetRegisteredIn()) ),
     m_bActive( rCpy.IsActive() )
 {
 }
 
 SwFormatHeader::SwFormatHeader( bool bOn )
     : SfxPoolItem( RES_HEADER ),
-    SwClient( nullptr ),
+    sw::FrameFormatClient( nullptr ),
     m_bActive( bOn )
 {
 }
@@ -546,7 +538,7 @@ SwFormatHeader* SwFormatHeader::Clone( SfxItemPool* ) const
     return new SwFormatHeader( *this );
 }
 
-void SwFormatHeader::RegisterToFormat( SwFormat& rFormat )
+void SwFormatHeader::RegisterToFormat( SwFrameFormat& rFormat )
 {
     rFormat.Add(*this);
 }
@@ -568,21 +560,21 @@ void SwFormatHeader::dumpAsXml(xmlTextWriterPtr pWriter) const
 // Partially implemented inline in hxx
 SwFormatFooter::SwFormatFooter( SwFrameFormat *pFooterFormat )
     : SfxPoolItem( RES_FOOTER ),
-    SwClient( pFooterFormat ),
+    sw::FrameFormatClient( pFooterFormat ),
     m_bActive( pFooterFormat )
 {
 }
 
 SwFormatFooter::SwFormatFooter( const SwFormatFooter &rCpy )
     : SfxPoolItem( RES_FOOTER ),
-    SwClient( const_cast<sw::BroadcastingModify*>(static_cast<const sw::BroadcastingModify*>(rCpy.GetRegisteredIn())) ),
+    sw::FrameFormatClient( const_cast<SwFrameFormat*>(rCpy.GetRegisteredIn()) ),
     m_bActive( rCpy.IsActive() )
 {
 }
 
 SwFormatFooter::SwFormatFooter( bool bOn )
     : SfxPoolItem( RES_FOOTER ),
-    SwClient( nullptr ),
+    sw::FrameFormatClient( nullptr ),
     m_bActive( bOn )
 {
 }
