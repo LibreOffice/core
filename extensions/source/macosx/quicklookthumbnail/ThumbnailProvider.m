@@ -33,7 +33,7 @@
         [importer release];
 
         if (image) {
-            // The handler() function appears to run the drwaing block asyncronously
+            // The handler() function appears to run the drawing block asynchronously
             // so retain the image and release it in the drawing block.
             [image retain];
             NSSize imageSize = [image size];
