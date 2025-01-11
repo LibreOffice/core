@@ -937,7 +937,8 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, TextFrameIndex const nOfst,
                         // give the wrong width if nOfst is in e.g. the middle
                         // of a ligature. See SwFntObj::DrawText().
                         TextFrameIndex const nOldLen = pPor->GetLen();
-                        aInf.SetLen( pPor->GetLen() );
+                        TextFrameIndex nMaxLen = TextFrameIndex(aInf.GetText().getLength()) - aInf.GetIdx();
+                        aInf.SetLen( std::min(nMaxLen, pPor->GetLen()) );
                         pPor->SetLen( nOfst - aInf.GetIdx() );
                         aInf.SetMeasureLen(pPor->GetLen());
                         if (aInf.GetLen() < aInf.GetMeasureLen())
