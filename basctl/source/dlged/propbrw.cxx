@@ -43,6 +43,7 @@
 #include <vcl/weld.hxx>
 
 #include <memory>
+#include <comphelper/sequence.hxx>
 
 namespace basctl
 {
@@ -241,7 +242,6 @@ bool PropBrw::Close()
 Sequence< Reference< XInterface > >
     PropBrw::CreateMultiSelectionSequence( const SdrMarkList& _rMarkList )
 {
-    Sequence< Reference< XInterface > > aSeq;
     InterfaceArray aInterfaces;
 
     const size_t nMarkCount = _rMarkList.GetMarkCount();
@@ -271,13 +271,7 @@ Sequence< Reference< XInterface > >
         }
     }
 
-    sal_Int32 nCount = aInterfaces.size();
-    aSeq.realloc( nCount );
-    Reference< XInterface >* pInterfaces = aSeq.getArray();
-    for( sal_Int32 i = 0 ; i < nCount ; i++ )
-        pInterfaces[i] = aInterfaces[i];
-
-    return aSeq;
+    return comphelper::containerToSequence(aInterfaces);
 }
 
 
