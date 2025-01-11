@@ -1689,7 +1689,11 @@ Public Function Methods() As Variant
 					, &quot;AppendColumn&quot; _
 					, &quot;AppendRow&quot; _
 					, &quot;Contains&quot; _
+					, &quot;ConvertFromDataArray&quot; _
+					, &quot;ConvertToDataArray&quot; _
 					, &quot;ConvertToDictionary&quot; _
+					, &quot;ConvertToRange&quot; _
+					, &quot;Copy&quot; _
 					, &quot;CountDims&quot; _
 					, &quot;Difference&quot; _
 					, &quot;ExportToTextFile&quot; _
@@ -1708,6 +1712,7 @@ Public Function Methods() As Variant
 					, &quot;RangeInit&quot; _
 					, &quot;Reverse&quot; _
 					, &quot;Shuffle&quot; _
+					, &quot;Slice&quot; _
 					, &quot;Sort&quot; _
 					, &quot;SortColumns&quot; _
 					, &quot;SortRows&quot; _
