@@ -67,7 +67,7 @@
                 key = MEDIA_TYPE_PDF;
             }
             else if (![mediaType length]) {
-                // NeoOffice sometimes adds PDF thumbnails with an emopty mime type
+                // NeoOffice sometimes adds PDF thumbnails with an empty mime type
                 if ([path hasSuffix:@".pdf"])
                     key = MEDIA_TYPE_PDF;
                 // Just to be safe, add any PNG thumbnails
