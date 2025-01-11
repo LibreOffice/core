@@ -21,6 +21,10 @@
 # include <stdint.h>
 #endif
 
+#ifdef __APPLE__
+#include <TargetConditionals.h>
+#endif
+
 #include "LibreOfficeKitTypes.h"
 
 #ifdef __cplusplus
