@@ -670,7 +670,7 @@ private:
     }
 
 protected:
-    // costructors are protected; SfxPoolItem is a base
+    // constructors are protected; SfxPoolItem is a base
     // class and ought bot to be constructed (also guaranteed
     // by pure virtual function ItemType now)
     explicit SfxPoolItem(sal_uInt16 nWhich);
