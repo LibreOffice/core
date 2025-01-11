@@ -22,8 +22,7 @@
  * (C) 1999 Mizi Research, All rights are reserved
  */
 
-#ifndef INCLUDED_HWPFILTER_SOURCE_HIODEV_H
-#define INCLUDED_HWPFILTER_SOURCE_HIODEV_H
+#pragma once
 
 #include <sal/config.h>
 
@@ -157,6 +156,5 @@ class HMemIODev final: public HIODev
     private:
         virtual void init() override;
 };
-#endif // INCLUDED_HWPFILTER_SOURCE_HIODEV_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

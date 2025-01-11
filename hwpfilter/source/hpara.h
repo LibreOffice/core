@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_HWPFILTER_SOURCE_HPARA_H
-#define INCLUDED_HWPFILTER_SOURCE_HPARA_H
+#pragma once
 
 #include "hwplib.h"
 #include "hwpfile.h"
@@ -127,7 +126,5 @@ class DLLEXPORT HWPPara
     private:
         std::unique_ptr<HBox> readHBox(HWPFile &);
 };
-
-#endif // INCLUDED_HWPFILTER_SOURCE_HPARA_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

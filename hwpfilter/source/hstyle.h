@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_HWPFILTER_SOURCE_HSTYLE_H
-#define INCLUDED_HWPFILTER_SOURCE_HSTYLE_H
+#pragma once
 
 #include <stdlib.h>
 #include <string.h>
@@ -50,7 +49,6 @@ class DLLEXPORT HWPStyle
 
         void Read( HWPFile &hwpf );
 };
-#endif
 /* _HWPSTYLE+H_ */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

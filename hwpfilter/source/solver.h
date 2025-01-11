@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_HWPFILTER_SOURCE_SOLVER_H
-#define INCLUDED_HWPFILTER_SOURCE_SOLVER_H
+#pragma once
 
 class mgcLinearSystemD
 {
@@ -35,7 +34,5 @@ public:
     //     A[N][N] is inverse matrix
     //     b[N] is solution x to Ax = b
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
