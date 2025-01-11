@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_ACTIVITIES_ACCUMULATION_HXX
-#define INCLUDED_SLIDESHOW_SOURCE_ENGINE_ACTIVITIES_ACCUMULATION_HXX
+#pragma once
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
@@ -78,7 +77,5 @@ namespace slideshow::internal
         }
 
 }
-
-#endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ACTIVITIES_ACCUMULATION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
