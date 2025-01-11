@@ -1599,6 +1599,12 @@ SwTextNode* SwGetRefFieldType::FindAnchorRefStyleOther(SwDoc* pDoc,
 
     SwNodeOffset nReference = pReference->GetIndex();
     const SwNodes& nodes = pDoc->GetNodes();
+
+    // It is possible to end up here, with a pReference pointer which points to a node which has already been
+    // removed from the nodes array, which means that calling GetIndex() returns an incorrect index.
+    if (nReference >= nodes.Count() || nodes[nReference] != pReference)
+        nReference = nodes.Count() - 1;
+
     SwTextNode* pTextNd = nullptr;
 
     // 1. Search up until we hit the top of the document
