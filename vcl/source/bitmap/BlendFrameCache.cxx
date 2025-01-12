@@ -127,9 +127,6 @@ BlendFrameCache::BlendFrameCache(Size const& rSize, sal_uInt8 nAlpha, Color cons
         }
     }
 
-    pContent.reset();
-    pAlpha.reset();
-
     m_aLastResult = BitmapEx(aContent, aAlpha);
 }
 
