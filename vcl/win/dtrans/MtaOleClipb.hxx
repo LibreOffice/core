@@ -57,16 +57,8 @@ private:
     // guarantee synchronization
     void createMtaOleReqWnd( );
 
-    // message support
-    bool     postMessage( UINT msg, WPARAM wParam = 0, LPARAM lParam = 0 );
-    void sendMessage(UINT msg, WPARAM wParam = 0, LPARAM lParam = 0);
-
     // message handler functions; remember these functions are called
     // from a different thread context!
-
-    static void onSetClipboard(IDataObject* pIDataObject);
-    static HRESULT onGetClipboard( LPSTREAM* ppStream );
-    static HRESULT onFlushClipboard( );
     void onRegisterClipViewer(LPFNC_CLIPVIEWER_CALLBACK_t pfncClipViewerCallback);
 
     // win32 clipboard listener support
@@ -98,8 +90,6 @@ private:
     sal_Int32                   m_ClipboardChangedEventCount;
 
     std::mutex                  m_pfncClipViewerCallbackMutex;
-
-    static CMtaOleClipboard*    s_theMtaOleClipboardInst;
 
     CMtaOleClipboard( const CMtaOleClipboard& ) = delete;
     CMtaOleClipboard& operator=( const CMtaOleClipboard& ) = delete;
