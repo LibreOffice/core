@@ -793,6 +793,9 @@
     <style:style style:name="Mgr6" style:family="graphic" style:parent-style-name="Accent_20_1">
       <style:graphic-properties draw:fill="hatch" draw:fill-color="#009eda" draw:fill-hatch-name="Hatching_20_6" draw:fill-hatch-solid="true" fo:min-height="0.05cm" fo:min-width="27.8cm" draw:shadow-offset-y="-0.03cm"/>
     </style:style>
+    <style:style style:name="Mgr7" style:family="graphic" style:parent-style-name="Accent_20_2">
+      <style:graphic-properties draw:stroke="none" draw:fill="hatch" draw:fill-hatch-name="Hatching_20_6" draw:fill-color="#009eda" draw:fill-hatch-solid="true" draw:shadow="visible" draw:shadow-offset-x="0cm" draw:shadow-offset-y="-0.07cm" draw:shadow-color="#f49100"/>
+    </style:style>
     <style:style style:name="Mpr3" style:family="presentation" style:parent-style-name="Vivid-backgroundobjects">
       <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:textarea-vertical-align="bottom" draw:auto-grow-height="false" fo:min-height="1.397cm"/>
     </style:style>
@@ -862,7 +865,7 @@
       <draw:page-thumbnail draw:layer="backgroundobjects" svg:width="9.294cm" svg:height="5.227cm" svg:x="1cm" svg:y="19.403cm"/>
     </style:handout-master>
     <style:master-page style:name="Vivid" style:page-layout-name="PM1" draw:style-name="Mdp1">
-      <draw:custom-shape draw:style-name="Accent_20_2" draw:layer="backgroundobjects" svg:width="28cm" svg:height="5.25cm" svg:x="0cm" svg:y="10.5cm">
+      <draw:custom-shape draw:style-name="Mgr7" draw:layer="backgroundobjects" svg:width="28cm" svg:height="5.25cm" svg:x="0cm" svg:y="10.5cm">
         <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:mirror-horizontal="false" draw:mirror-vertical="false" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
       </draw:custom-shape>
       <draw:frame presentation:style-name="Vivid-backgroundobjects" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="6.5cm" svg:height="1.25cm" svg:x="1.4cm" svg:y="14.25cm" presentation:class="date-time">
