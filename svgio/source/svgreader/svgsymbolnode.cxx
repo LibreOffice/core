@@ -200,7 +200,7 @@ namespace svgio::svgreader
             const drawinglayer::primitive2d::Primitive2DReference xRef(
                 new drawinglayer::primitive2d::TransformPrimitive2D(
                     aEmbeddingTransform,
-                    drawinglayer::primitive2d::Primitive2DContainer(aContent)));
+                    drawinglayer::primitive2d::Primitive2DContainer(std::move(aContent))));
 
             // add embedded geometry to result
             rTarget.push_back(xRef);
