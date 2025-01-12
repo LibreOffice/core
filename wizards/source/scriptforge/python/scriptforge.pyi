@@ -164,6 +164,7 @@ try:
     from com.sun.star.sheet import XSheetCellCursor
     from com.sun.star.sheet import XSpreadsheet
     from com.sun.star.table import XCellRange
+    from com.sun.star.awt import XRectangle
     from com.sun.star.table import XTableChart
     from com.sun.star.uno import XComponentContext
     from com.sun.star.uno import XInterface
@@ -194,6 +195,7 @@ except ImportError:
     XSheetCellCursor = NewType('XSheetCellCursor', UNO)
     XSpreadsheet = NewType('XSpreadsheet', UNO)
     XCellRange = NewType('XCellRange', UNO)
+    XRectangle = NewType('XRectangle', UNO)
     XTableChart = NewType('XTableChart', UNO)
     XComponentContext = NewType('XComponentContext', UNO)
     XInterface = NewType('XInterface', UNO)
@@ -5039,6 +5041,10 @@ class SFDocuments:
             ...
         def XCellRange(self, rangename: RANGE) -> XCellRange:
             """ A ``com.sun.star.Table.XCellRange`` UNO object. """
+            ...
+        def XRectangle(self, rangename: RANGE) -> XRectangle:
+            """ A ``com.sun.star.awt.XRectangle`` UNO structure describing the area in pixels on the screen
+            where the range is located. """
             ...
         def XSheetCellCursor(self, rangename: str) -> XSheetCellCursor:
             """ A ``com.sun.star.sheet.XSheetCellCursor`` UNO object. """

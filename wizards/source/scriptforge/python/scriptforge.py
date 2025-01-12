@@ -2502,6 +2502,9 @@ class SFDocuments:
         def XCellRange(self, rangename):
             return self.ExecMethod(self.vbGet + self.flgUno, 'XCellRange', rangename)
 
+        def XRectangle(self, rangename):
+            return self.ExecMethod(self.vbGet + self.flgUno, 'XRectangle', rangename)
+
         def XSheetCellCursor(self, rangename):
             return self.ExecMethod(self.vbGet + self.flgUno, 'XSheetCellCursor', rangename)
 

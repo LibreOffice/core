@@ -314,6 +314,14 @@ Property Get XCellRange(Optional ByVal RangeName As Variant) As Variant
 End Property	&apos;	SFDocuments.SF_Calc.XCellRange
 
 REM -----------------------------------------------------------------------------
+Property Get XRectangle(Optional ByVal RangeName As Variant) As Variant
+&apos;&apos;&apos;	Returns a UNO structure of type com.sun.star.awt.Rectangle
+&apos;&apos;&apos;	describing the area in pixels on the screen where the range is located.
+&apos;&apos;&apos;	Useful in the context of running mouse events and widgets like popup menus
+	XRectangle = _PropertyGet(&quot;XRectangle&quot;, RangeName)
+End Property	&apos;	SFDocuments.SF_Calc.XRectangle
+
+REM -----------------------------------------------------------------------------
 Property Get XSheetCellCursor(Optional ByVal RangeName As Variant) As Variant
 &apos;&apos;&apos;	Returns a UNO object of type com.sun.star.sheet.XSheetCellCursor
 &apos;&apos;	After having moved the cursor (gotoNext(), ...) the resulting range can be got
@@ -2582,6 +2590,7 @@ Public Function Properties() As Variant
 					, &quot;XCellRange&quot; _
 					, &quot;XComponent&quot; _
 					, &quot;XDocumentSettings&quot; _
+					, &quot;XRectangle&quot; _
 					, &quot;XSheetCellCursor&quot; _
 					, &quot;XSpreadsheet&quot; _
 					)
@@ -4493,6 +4502,13 @@ Const cstSubArgs = &quot;&quot;
 				If Not ScriptForge.SF_Utils._Validate(pvArg, &quot;Range&quot;, V_STRING) Then GoTo Finally
 				Set _PropertyGet = _ParseAddress(pvArg).XCellRange
 			End If
+		Case UCase(&quot;XRectangle&quot;)
+			If IsMissing(pvArg) Or IsEmpty(pvArg) Then
+				Set _PropertyGet = Nothing
+			Else
+				If Not ScriptForge.SF_Utils._Validate(pvArg, &quot;Range&quot;, V_STRING) Then GoTo Finally
+				Set _PropertyGet = _RangePosition(pvArg)
+			End If
 		Case UCase(&quot;XSheetCellCursor&quot;)
 			If IsMissing(pvArg) Or IsEmpty(pvArg) Then
 				Set _PropertyGet = Nothing
@@ -4549,6 +4565,54 @@ Finally:
 	_QuoteSheetName = sSheetName
 	Exit Function
 End Function	&apos;	SFDocuments.SF_Calc._QuoteSheetName
+
+REM -----------------------------------------------------------------------------
+Private Function _RangePosition(ByVal psRange As String) As Object
+&apos;&apos;&apos;	Determine a best guess of the coordinates (in pixels) of the given range
+&apos;&apos;&apos;	Inspired (and enhanced) from https://forum.openoffice.org/en/forum/viewtopic.php?p=308693#p308693
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		psRange: the range as a string
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		a com.sun.star.awt.Rectangle UNO structure
+
+Dim oRectOnScreen As New com.sun.star.awt.Rectangle	&apos;	Range position versus top-left screen corner (return value)
+Dim oRect As New com.sun.star.awt.Rectangle			&apos;	Range position versus the A1 cell
+Dim oLocation As Object								&apos;	com.sun.star.awt.Rectangle
+Dim oController As Object							&apos;	Current controller
+Dim oXRange As Object								&apos;	com.sun.star.Table.CellRange
+
+Check:
+	On Local Error GoTo Finally
+
+Try:
+	Set oController = _Component.CurrentController
+	Set oXRange = _ParseAddress(psRange).XCellRange
+	&apos;	Grab the window location on the screen
+	Set oLocation = oController.ComponentWindow.AccessibleContext.LocationOnScreen
+
+	With oRect
+		.X = oXRange.Position.X
+		.Y = oXRange.Position.Y
+		.Width = oXRange.Size.Width
+		.Height = oXRange.Size.Height
+	End With
+
+	&apos;Compute the rectangle in pixels (empirical computation)
+	With oController
+		oRectOnScreen.X = .VisibleAreaOnScreen.X _
+				+ .VisibleAreaOnScreen.Width * (oRect.X - .VisibleArea.X) / .VisibleArea.Width _
+				- oLocation.X
+		oRectOnScreen.Y = .VisibleAreaOnScreen.Y _
+				+ .VisibleAreaOnScreen.Height * (oRect.Y - .VisibleArea.Y) / .VisibleArea.Height _
+				- oLocation.Y
+		oRectOnScreen.Width = oRect.Width * .VisibleAreaOnScreen.Width / .VisibleArea.Width
+		oRectOnScreen.Height = oRect.Height * .VisibleAreaOnScreen.Height / .VisibleArea.Height
+	End With
+
+Finally:
+	Set _RangePosition = oRectOnScreen
+	Exit Function
+End Function	&apos;	SFDocuments.SF_Calc._RangePosition
 
 REM -----------------------------------------------------------------------------
 Private Function _Repr() As String
