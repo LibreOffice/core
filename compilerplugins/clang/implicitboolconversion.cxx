@@ -558,7 +558,7 @@ bool ImplicitBoolConversion::TraverseBinaryOperator(BinaryOperator * expr) {
             if (me != nullptr) {
                 FieldDecl const * fd = dyn_cast<FieldDecl>(me->getMemberDecl());
                 if (fd != nullptr && fd->isBitField()
-                    && fd->getBitWidthValue(compiler.getASTContext()) == 1)
+                    && compat::getBitWidthValue(fd, compiler.getASTContext()) == 1)
                 {
                     auto const check = loplugin::TypeCheck(fd->getType());
                     bExt = check.Typedef("guint").GlobalNamespace()

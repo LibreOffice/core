@@ -269,6 +269,15 @@ inline bool isUnnamedBitField(clang::FieldDecl const * decl) {
 #endif
 }
 
+inline unsigned getBitWidthValue(clang::FieldDecl const * decl, clang::ASTContext const & context) {
+#if CLANG_VERSION >= 200000
+    (void) context;
+    return decl->getBitWidthValue();
+#else
+    return decl->getBitWidthValue(context);
+#endif
+}
+
 inline clang::TemplateTypeParmDecl const * getReplacedParameter(
     clang::SubstTemplateTypeParmType const * type)
 {
