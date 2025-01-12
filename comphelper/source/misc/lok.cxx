@@ -340,7 +340,7 @@ bool anyInput()
     return bRet;
 }
 
-void setViewSetter(std::function<void(int)> pViewSetter)
+void setViewSetter(const std::function<void(int)>& pViewSetter)
 {
     g_pViewSetter = pViewSetter;
 }
@@ -355,7 +355,7 @@ void setView(int nView)
     g_pViewSetter(nView);
 }
 
-void setViewGetter(std::function<int()> pViewGetter)
+void setViewGetter(const std::function<int()>& pViewGetter)
 {
     g_pViewGetter = pViewGetter;
 }

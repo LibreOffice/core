@@ -140,9 +140,9 @@ COMPHELPER_DLLPUBLIC bool anyInput();
 
 // These allow setting callbacks, so that set/get of a LOK view is possible even in code that is
 // below sfx2.
-COMPHELPER_DLLPUBLIC void setViewSetter(std::function<void(int)> pViewSetter);
+COMPHELPER_DLLPUBLIC void setViewSetter(const std::function<void(int)>& pViewSetter);
 COMPHELPER_DLLPUBLIC void setView(int nView);
-COMPHELPER_DLLPUBLIC void setViewGetter(std::function<int()> pViewGetter);
+COMPHELPER_DLLPUBLIC void setViewGetter(const std::function<int()>& pViewGetter);
 COMPHELPER_DLLPUBLIC int getView();
 }
 
