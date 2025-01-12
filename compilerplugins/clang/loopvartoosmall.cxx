@@ -143,7 +143,7 @@ void LoopVarTooSmall::checkSubExpr(Expr const * expr, bool positive) {
             if (fd->isBitField()) {
                 qt1BitWidth = std::max(
                     qt1BitWidth,
-                    fd->getBitWidthValue(compiler.getASTContext()));
+                    compat::getBitWidthValue(fd, compiler.getASTContext()));
             }
         } else {
             return;
@@ -184,7 +184,7 @@ void LoopVarTooSmall::checkSubExpr(Expr const * expr, bool positive) {
                 if (fd->isBitField()) {
                     qt2BitWidth = std::max(
                         qt2BitWidth,
-                        fd->getBitWidthValue(compiler.getASTContext()));
+                        compat::getBitWidthValue(fd, compiler.getASTContext()));
                 }
             }
         }
