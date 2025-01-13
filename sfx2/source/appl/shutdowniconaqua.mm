@@ -177,7 +177,7 @@ struct RecentMenuEntry
     else if ( m_aCommand == ".uno:ConfigureDialog" )
     {
         // Selecting some menu items will cause a crash if there are
-        // no visibile windows
+        // no visible windows
         ShutdownIcon::OpenURL( STARTMODULE_URL, "_default" );
     }
     else if ( m_aCommand == UNO_TOGGLECURRENTMODULE_COMMAND )
