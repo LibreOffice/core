@@ -21,6 +21,7 @@
 #include <math.h>
 
 #include <o3tl/safeint.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <osl/file.h>
 #include <sal/log.hxx>
 #include <tools/stream.hxx>
@@ -747,9 +748,9 @@ bool Sane::Start( BitmapTransporter& rBitmap )
                 if( ! fResl )
                     fResl = 300; // if all else fails that's a good guess
                 if( ! nWidthMM )
-                    nWidthMM = static_cast<int>((static_cast<double>(nWidth) / fResl) * 25.4);
+                    nWidthMM = o3tl::convert(nWidth / fResl, o3tl::Length::in, o3tl::Length::mm);
                 if( ! nHeightMM )
-                    nHeightMM = static_cast<int>((static_cast<double>(nHeight) / fResl) * 25.4);
+                    nHeightMM = o3tl::convert(nHeight / fResl, o3tl::Length::in, o3tl::Length::mm);
                 SAL_INFO("extensions.scanner", "set dimensions to(" << nWidth << ", " << nHeight << ") Pixel, (" << nWidthMM << ", " << nHeightMM <<
                     ") mm, resolution is " << fResl);
 
