@@ -895,13 +895,8 @@ void SvtFileDialog::OpenHdl_Impl(void const * pVoid)
                     OUString sError(FpsResId(RID_FILEOPEN_NOTEXISTENTFILE));
 
                     OUString sInvalidFile( aFileObj.GetMainURL( INetURLObject::DecodeMechanism::ToIUri ) );
-                    if ( INetProtocol::File == aFileObj.GetProtocol() )
-                    {   // if it's a file URL, transform the URL into system notation
-                        OUString sURL( sInvalidFile );
-                        OUString sSystem;
-                        osl_getSystemPathFromFileURL( sURL.pData, &sSystem.pData );
-                        sInvalidFile = sSystem;
-                    }
+                    // transform the URL into system notation
+                    osl_getSystemPathFromFileURL(sInvalidFile.pData, &sInvalidFile.pData);
                     sError = sError.replaceFirst( "$name$", sInvalidFile );
 
                     std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
