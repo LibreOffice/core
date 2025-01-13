@@ -665,13 +665,13 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 SfxViewShell* pViewShell = pFrame ? pFrame->GetViewShell() : nullptr;
                 if (pViewShell)
                 {
-                    uno::Reference<security::XCertificate> xSigningCertificate;
+                    svl::crypto::CertificateOrName aCertificateOrName;
                     if (!aSignatureCert.empty() && !aSignatureKey.empty())
                     {
-                        xSigningCertificate = SfxLokHelper::getSigningCertificate(aSignatureCert, aSignatureKey);
+                        aCertificateOrName.m_xCertificate = SfxLokHelper::getSigningCertificate(aSignatureCert, aSignatureKey);
                     }
                     // Always set the signing certificate, to clear data from a previous dispatch.
-                    pViewShell->SetSigningCertificate(xSigningCertificate);
+                    pViewShell->SetSigningCertificate(aCertificateOrName);
                 }
 
                 // Async, all code before return has to go into the callback.

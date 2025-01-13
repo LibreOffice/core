@@ -61,6 +61,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
 #include <osl/diagnose.h>
+#include <svl/cryptosign.hxx>
 
 #include <DrawViewShell.hxx>
 #include <slideshow.hxx>
@@ -471,18 +472,28 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
                 {
                     aSignatureKey = pSignatureKey->GetValue().toUtf8();
                 }
+                bool bExternal = false;
+                const SfxBoolItem* pExternal = rReq.GetArg<SfxBoolItem>(FN_PARAM_3);
+                if (pExternal)
+                {
+                    bExternal = pExternal->GetValue();
+                }
 
                 SfxViewFrame* pFrame = GetFrame();
                 SfxViewShell* pViewShell = pFrame ? pFrame->GetViewShell() : nullptr;
                 if (pViewShell)
                 {
-                    uno::Reference<security::XCertificate> xSigningCertificate;
+                    svl::crypto::CertificateOrName aCertificateOrName;
                     if (!aSignatureCert.empty() && !aSignatureKey.empty())
                     {
-                        xSigningCertificate = SfxLokHelper::getSigningCertificate(aSignatureCert, aSignatureKey);
+                        aCertificateOrName.m_xCertificate = SfxLokHelper::getSigningCertificate(aSignatureCert, aSignatureKey);
+                    }
+                    else if (bExternal)
+                    {
+                        aCertificateOrName.m_aName = mpDrawView->GetAuthor();
                     }
                     // Always set the signing certificate, to clear data from a previous dispatch.
-                    pViewShell->SetSigningCertificate(xSigningCertificate);
+                    pViewShell->SetSigningCertificate(aCertificateOrName);
                 }
             }
 

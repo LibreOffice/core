@@ -99,10 +99,16 @@ getSignatureCertificate(SfxObjectShell* pShell, SfxViewShell* pViewShell, weld::
     return xSignCertificate;
 }
 
-OUString getSignerName(const css::uno::Reference<css::security::XCertificate>& xCertificate)
+OUString getSignerName(const svl::crypto::CertificateOrName& rCertificateOrName)
 {
-    return comphelper::xmlsec::GetContentPart(xCertificate->getSubjectName(),
-                                              xCertificate->getCertificateKind());
+    if (rCertificateOrName.m_xCertificate.is())
+    {
+        return comphelper::xmlsec::GetContentPart(
+            rCertificateOrName.m_xCertificate->getSubjectName(),
+            rCertificateOrName.m_xCertificate->getCertificateKind());
+    }
+
+    return rCertificateOrName.m_aName;
 }
 
 OUString getLocalizedDate()
@@ -130,7 +136,7 @@ uno::Reference<graphic::XGraphic> importSVG(std::u16string_view rSVG)
 }
 
 void setShapeCertificate(const SdrView* pView,
-                         const css::uno::Reference<css::security::XCertificate>& xCertificate)
+                         const svl::crypto::CertificateOrName& rCertificateOrName)
 {
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     if (rMarkList.GetMarkCount() < 1)
@@ -149,15 +155,21 @@ void setShapeCertificate(const SdrView* pView,
     uno::Reference<drawing::XShape> xShape = pSignatureLine->getUnoShape();
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     comphelper::SequenceAsHashMap aMap(xShapeProps->getPropertyValue(u"InteropGrabBag"_ustr));
-    aMap[u"SignatureCertificate"_ustr] <<= xCertificate;
-    xShapeProps->setPropertyValue(u"InteropGrabBag"_ustr,
-                                  uno::Any(aMap.getAsConstPropertyValueList()));
+    if (rCertificateOrName.m_xCertificate.is())
+    {
+        aMap[u"SignatureCertificate"_ustr] <<= rCertificateOrName.m_xCertificate;
+    }
+    else
+    {
+        aMap[u"SignatureCertificate"_ustr] <<= rCertificateOrName.m_aName;
+    }
+    xShapeProps->setPropertyValue("InteropGrabBag", uno::Any(aMap.getAsConstPropertyValueList()));
 
     // Read svg and replace placeholder texts.
     OUString aSvgImage(
         svx::SignatureLineHelper::getSignatureImage(u"signature-line-draw.svg"_ustr));
     aSvgImage = aSvgImage.replaceAll("[SIGNED_BY]", SvxResId(RID_SVXSTR_SIGNATURELINE_DSIGNED_BY));
-    OUString aSignerName = svx::SignatureLineHelper::getSignerName(xCertificate);
+    OUString aSignerName = svx::SignatureLineHelper::getSignerName(rCertificateOrName);
     aSvgImage = aSvgImage.replaceAll("[SIGNER_NAME]", aSignerName);
     OUString aDate = svx::SignatureLineHelper::getLocalizedDate();
     aDate = SvxResId(RID_SVXSTR_SIGNATURELINE_DATE).replaceFirst("%1", aDate);

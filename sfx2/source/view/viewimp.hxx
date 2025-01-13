@@ -28,6 +28,7 @@
 #include <svtools/acceleratorexecute.hxx>
 #include <rtl/ref.hxx>
 #include <vcl/print.hxx>
+#include <svl/cryptosign.hxx>
 #include <chrono>
 #include <vector>
 
@@ -59,7 +60,7 @@ struct SfxViewShell_Impl
     static sal_uInt32 m_nLastViewShellId;
     const ViewShellId m_nViewShellId;
     const ViewShellDocId m_nDocId;
-    css::uno::Reference<css::security::XCertificate> m_xSigningCertificate;
+    svl::crypto::CertificateOrName m_aSigningCertificate;
 
     explicit SfxViewShell_Impl(SfxViewShellFlags const nFlags, ViewShellDocId nDocId);
     ~SfxViewShell_Impl();

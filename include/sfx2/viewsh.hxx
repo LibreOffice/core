@@ -72,6 +72,7 @@ namespace com::sun::star::ui { struct ContextMenuExecuteEvent; }
 namespace com::sun::star::view { class XRenderable; }
 namespace com::sun::star::security { class XCertificate; }
 namespace svtools { enum ColorConfigEntry : int; }
+namespace svl::crypto { class CertificateOrName; }
 
 enum class SfxPrinterChangeFlags
 {
@@ -492,8 +493,8 @@ public:
 
     OUString getA11yFocusedParagraph() const;
     int getA11yCaretPosition() const;
-    void SetSigningCertificate(const css::uno::Reference<css::security::XCertificate>& xCertificate);
-    const css::uno::Reference<css::security::XCertificate> & GetSigningCertificate() const;
+    void SetSigningCertificate(const svl::crypto::CertificateOrName& rCertificateOrName);
+    svl::crypto::CertificateOrName GetSigningCertificate() const;
 };
 
 #endif // INCLUDED_SFX2_VIEWSH_HXX

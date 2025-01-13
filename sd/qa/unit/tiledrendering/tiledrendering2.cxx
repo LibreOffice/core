@@ -11,6 +11,11 @@
 
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <vcl/scheduler.hxx>
+#include <comphelper/propertyvalue.hxx>
+#include <comphelper/sequenceashashmap.hxx>
+
+#include <DrawDocShell.hxx>
+#include <ViewShell.hxx>
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSidebarSwitchDeck)
 {
@@ -34,6 +39,33 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSidebarSwitchDeck)
     CPPUNIT_ASSERT_EQUAL(std::string("false"), aTree.get_child("state").get_value<std::string>());
     it = aView.m_aStateChanges.find(".uno:MasterSlidesPanel");
     CPPUNIT_ASSERT(it != aView.m_aStateChanges.end());
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertSignatureLineExternal)
+{
+    // Given a PDF to be signed:
+    uno::Sequence<beans::PropertyValue> aArgs = { comphelper::makePropertyValue("ReadOnly", true) };
+    loadWithParams(createFileURL(u"empty.pdf"), aArgs);
+    SdXImpressDocument* pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+    sd::View* pView = pViewShell->GetView();
+    pView->SetAuthor("myauthor");
+
+    // When insrerting a signature line for electronic (extrenal) signing:
+    aArgs = {
+        comphelper::makePropertyValue("External", true),
+    };
+    // Without the accompanying fix in place, this test would hang here in the certificate chooser
+    // dialog.
+    dispatchCommand(mxComponent, ".uno:InsertSignatureLine", aArgs);
+
+    // Then make sure the shape is marked as a signature line:
+    std::vector<SdrObject*> aMarkedObjects = pView->GetMarkedObjects();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aMarkedObjects.size());
+    uno::Any aAny;
+    aMarkedObjects[0]->GetGrabBagItem(aAny);
+    comphelper::SequenceAsHashMap aMap(aAny);
+    CPPUNIT_ASSERT(aMap.contains("SignatureCertificate"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
