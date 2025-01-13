@@ -1189,6 +1189,24 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf100691)
     CPPUNIT_ASSERT_EQUAL(u"Text\t1"_ustr, pNext->GetText());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf164620)
+{
+    createSwDoc("tdf164620.docx");
+
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, u".uno:Delete"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf134404)
 {
     createSwDoc("tdf134404.odt");
