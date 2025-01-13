@@ -401,7 +401,7 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
             pBack->get_height_request() + nMenuHeight));
 
 #ifdef MACOSX
-    SystemWindow *pSysWin = static_cast<SystemWindow*>(pParent.get());
+    SystemWindow *pSysWin = pParent.get();
     if (pSysWin)
         ShutdownIcon::SetDefaultMenuBar(pSysWin->GetMenuBar());
 #endif
