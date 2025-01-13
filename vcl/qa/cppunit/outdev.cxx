@@ -511,7 +511,7 @@ CPPUNIT_TEST_FIXTURE(VclOutdevTest, testTransparentFillColor)
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, pVDev->GetFillColor());
 
     pVDev->SetFillColor(COL_TRANSPARENT);
-    CPPUNIT_ASSERT(!pVDev->IsFillColor());
+    CPPUNIT_ASSERT(pVDev->IsFillColor());
     CPPUNIT_ASSERT_EQUAL(COL_TRANSPARENT, pVDev->GetFillColor());
     MetaAction* pAction = aMtf.GetAction(0);
     CPPUNIT_ASSERT_EQUAL(MetaActionType::FILLCOLOR, pAction->GetType());

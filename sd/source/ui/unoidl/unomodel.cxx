@@ -3612,7 +3612,7 @@ void SdXImpressDocument::paintTile( VirtualDevice& rDevice,
 
     rDevice.SetMapMode( aMapMode );
 
-    rDevice.SetOutputSizePixel( Size(nOutputWidth, nOutputHeight) );
+    rDevice.SetOutputSizePixel( Size(nOutputWidth, nOutputHeight), /*bErase*/false );
 
     Point aPoint(nTilePosXHMM, nTilePosYHMM);
     Size aSize(nTileWidthHMM, nTileHeightHMM);

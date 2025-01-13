@@ -241,7 +241,7 @@ void LokChartHelper::PaintAllChartsOnTile(VirtualDevice& rDevice,
         return;
 
     // Resizes the virtual device so to contain the entries context
-    rDevice.SetOutputSizePixel(Size(nOutputWidth, nOutputHeight));
+    rDevice.SetOutputSizePixel(Size(nOutputWidth, nOutputHeight), /*bErase*/false);
 
     rDevice.Push(vcl::PushFlags::MAPMODE);
     MapMode aMapMode(rDevice.GetMapMode());

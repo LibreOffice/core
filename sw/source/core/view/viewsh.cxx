@@ -2112,7 +2112,7 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
     mpOut = &rDevice;
 
     // resizes the virtual device so to contain the entries context
-    rDevice.SetOutputSizePixel(Size(contextWidth, contextHeight));
+    rDevice.SetOutputSizePixel(Size(contextWidth, contextHeight), /*bErase*/false);
 
     // setup the output device to draw the tile
     MapMode aMapMode(rDevice.GetMapMode());

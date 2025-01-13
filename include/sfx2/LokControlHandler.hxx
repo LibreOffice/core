@@ -152,7 +152,7 @@ public:
             = o3tl::convert(rTileRect, o3tl::Length::twip, o3tl::Length::mm100);
 
         // Resizes the virtual device so to contain the entries context
-        rDevice.SetOutputSizePixel(aOutputSize);
+        rDevice.SetOutputSizePixel(aOutputSize, /*bErase*/ false);
 
         rDevice.Push(vcl::PushFlags::MAPMODE);
         MapMode aDeviceMapMode(rDevice.GetMapMode());
