@@ -860,6 +860,13 @@ void SvtFileDialog::OpenHdl_Impl(void const * pVoid)
                         return;
                     }
                 }
+                else if (aFileObj.GetProtocol() == INetProtocol::File)
+                {
+                    // The protocol is 'file', but getSystemPathFromFileURL failed -> invalid
+                    // file name (e.g., '|' in the name)
+                    ErrorHandler::HandleError(ERRCODE_IO_INVALIDCHAR);
+                    return;
+                }
             }
         }
         break;
