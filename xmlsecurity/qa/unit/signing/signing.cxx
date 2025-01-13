@@ -770,7 +770,9 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPDFAddVisibleSignature)
         return;
     }
     SdrView* pView = SfxViewShell::Current()->GetDrawView();
-    svx::SignatureLineHelper::setShapeCertificate(pView, aCertificates[0]);
+    svl::crypto::CertificateOrName aCertificateOrName;
+    aCertificateOrName.m_xCertificate = aCertificates[0];
+    svx::SignatureLineHelper::setShapeCertificate(pView, aCertificateOrName);
 
     // the document is modified now, but Sign function can't show SaveAs dialog
     // in unit test, so just clear the modified

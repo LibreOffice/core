@@ -16,6 +16,7 @@
 
 #include <rtl/ustring.hxx>
 #include <svx/svxdllapi.h>
+#include <svl/cryptosign.hxx>
 
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
@@ -45,8 +46,7 @@ getSignatureCertificate(SfxObjectShell* pShell, SfxViewShell* pViewShell, weld::
 /**
  * Get a signer name out of a certificate.
  */
-SVX_DLLPUBLIC OUString
-getSignerName(const css::uno::Reference<css::security::XCertificate>& xCertificate);
+SVX_DLLPUBLIC OUString getSignerName(const svl::crypto::CertificateOrName& rCertificateOrName);
 
 /**
  * Gets a localized date string.
@@ -61,9 +61,8 @@ SVX_DLLPUBLIC css::uno::Reference<css::graphic::XGraphic> importSVG(std::u16stri
 /**
  * Sets xCertificate as the signing certificate of the selected shape on pView.
  */
-SVX_DLLPUBLIC void
-setShapeCertificate(const SdrView* pView,
-                    const css::uno::Reference<css::security::XCertificate>& xCertificate);
+SVX_DLLPUBLIC void setShapeCertificate(const SdrView* pView,
+                                       const svl::crypto::CertificateOrName& rCertificateOrName);
 }
 
 #endif

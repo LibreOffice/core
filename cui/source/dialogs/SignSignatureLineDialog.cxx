@@ -165,8 +165,10 @@ IMPL_LINK_NOARG(SignSignatureLineDialog, chooseCertificate, weld::Button&, void)
     if (xSignCertificate.is())
     {
         m_xSelectedCertifate = xSignCertificate;
+        svl::crypto::CertificateOrName aCertificateOrName;
+        aCertificateOrName.m_xCertificate = xSignCertificate;
         m_xBtnChooseCertificate->set_label(
-            svx::SignatureLineHelper::getSignerName(xSignCertificate));
+            svx::SignatureLineHelper::getSignerName(aCertificateOrName));
     }
     ValidateFields();
 }
@@ -212,9 +214,11 @@ css::uno::Reference<css::graphic::XGraphic> SignSignatureLineDialog::getSignedGr
     aSvgImage = aSvgImage.replaceAll("[SIGNER_NAME]", getCDataString(m_aSuggestedSignerName));
     aSvgImage = aSvgImage.replaceAll("[SIGNER_TITLE]", getCDataString(m_aSuggestedSignerTitle));
 
+    svl::crypto::CertificateOrName aCertificateOrName;
+    aCertificateOrName.m_xCertificate = m_xSelectedCertifate;
     OUString aIssuerLine
         = CuiResId(RID_CUISTR_SIGNATURELINE_SIGNED_BY)
-              .replaceFirst("%1", svx::SignatureLineHelper::getSignerName(m_xSelectedCertifate));
+              .replaceFirst("%1", svx::SignatureLineHelper::getSignerName(aCertificateOrName));
     aSvgImage = aSvgImage.replaceAll("[SIGNED_BY]", getCDataString(aIssuerLine));
     if (bValid)
         aSvgImage = aSvgImage.replaceAll("[INVALID_SIGNATURE]", "");

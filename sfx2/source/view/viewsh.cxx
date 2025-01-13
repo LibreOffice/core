@@ -2812,14 +2812,14 @@ int SfxViewShell::getA11yCaretPosition() const
     return rDocFocusListener.getCaretPosition();
 }
 
-void SfxViewShell::SetSigningCertificate(const uno::Reference<security::XCertificate>& xCertificate)
+void SfxViewShell::SetSigningCertificate(const svl::crypto::CertificateOrName& rCertificate)
 {
-    pImpl->m_xSigningCertificate = xCertificate;
+    pImpl->m_aSigningCertificate = rCertificate;
 }
 
-uno::Reference<security::XCertificate> SfxViewShell::GetSigningCertificate() const
+svl::crypto::CertificateOrName SfxViewShell::GetSigningCertificate() const
 {
-    return pImpl->m_xSigningCertificate;
+    return pImpl->m_aSigningCertificate;
 }
 
 bool SfxViewShell::PrepareClose

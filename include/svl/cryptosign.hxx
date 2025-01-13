@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#pragma once
+
 #include <sal/types.h>
 
 #include <utility>
@@ -114,6 +116,17 @@ public:
     std::vector<unsigned char> m_aDigest;
     /// PKCS#7 data, produced externally.
     std::vector<unsigned char> m_aSignatureValue;
+};
+
+/// Used for visual signing: an XCertificate or a signer name.
+class SVL_DLLPUBLIC CertificateOrName
+{
+public:
+    /// If set, the certificate used for signing.
+    css::uno::Reference<css::security::XCertificate> m_xCertificate;
+    /// Otherwise we don't have a certificate but have a name to be featured on the visual
+    /// signature.
+    OUString m_aName;
 };
 
 }
