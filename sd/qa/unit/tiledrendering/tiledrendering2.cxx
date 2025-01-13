@@ -51,7 +51,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertSignatureLineExternal)
     sd::View* pView = pViewShell->GetView();
     pView->SetAuthor("myauthor");
 
-    // When insrerting a signature line for electronic (extrenal) signing:
+    // When inserting a signature line for electronic (external) signing:
     aArgs = {
         comphelper::makePropertyValue("External", true),
     };
