@@ -833,7 +833,18 @@ void SvtFileDialog::OpenHdl_Impl(void const * pVoid)
     {
         case FILEDLG_MODE_SAVE:
         {
-            if ( ::utl::UCBContentHelper::Exists( aFileObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) )
+            bool exists;
+            try
+            {
+                exists = utl::UCBContentHelper::Exists( aFileObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
+            }
+            catch (const Exception&)
+            {
+                DBG_UNHANDLED_EXCEPTION("fpicker.office");
+                ErrorHandler::HandleError(ERRCODE_IO_GENERAL);
+                return;
+            }
+            if (exists)
             {
                 OUString aMsg = FpsResId(STR_SVT_ALREADYEXISTOVERWRITE);
                 aMsg = aMsg.replaceFirst(
