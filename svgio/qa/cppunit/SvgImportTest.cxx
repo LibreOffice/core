@@ -176,6 +176,17 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf155819)
     assertXPath(pDocument, "/primitive2D/transform/transform", 4);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf164434)
+{
+    xmlDocUniquePtr pDocument = dumpAndParseSvg(u"/svgio/qa/cppunit/data/tdf164434.svg");
+
+    assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor", 1);
+    assertXPath(pDocument, "/primitive2D/transform/polypolygoncolor", "color", u"#000000");
+    assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor", 0);
+    assertXPath(pDocument, "/primitive2D/transform/transform/transform/polypolygoncolor", 1);
+    assertXPath(pDocument, "/primitive2D/transform/transform/transform/polypolygoncolor", "color", u"#000000");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testNormalBlend)
 {
     xmlDocUniquePtr pDocument = dumpAndParseSvg(u"/svgio/qa/cppunit/data/normalBlend.svg");
