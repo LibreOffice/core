@@ -4513,7 +4513,9 @@ static void doc_initializeForRendering(LibreOfficeKitDocument* pThis,
             uno::Reference<security::XCertificate> xCertificate = SfxLokHelper::getSigningCertificate(aSignatureCert, aSignatureKey);
             if (SfxViewShell* pViewShell = SfxViewShell::Current())
             {
-                pViewShell->SetSigningCertificate(xCertificate);
+                svl::crypto::CertificateOrName aCertificateOrName;
+                aCertificateOrName.m_xCertificate = xCertificate;
+                pViewShell->SetSigningCertificate(aCertificateOrName);
             }
         }
 

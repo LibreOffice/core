@@ -28,6 +28,7 @@
 #include <comphelper/xmlsechelper.hxx>
 #include <comphelper/lok.hxx>
 #include <sfx2/viewsh.hxx>
+#include <svl/cryptosign.hxx>
 
 #include <com/sun/star/security/NoPasswordException.hpp>
 #include <com/sun/star/security/CertificateCharacters.hpp>
@@ -227,9 +228,9 @@ void CertificateChooser::ImplInitialize(bool mbSearch)
                     if (comphelper::LibreOfficeKit::isActive())
                     {
                         // The LOK case takes the signing certificate from the view.
-                        if (m_pViewShell && m_pViewShell->GetSigningCertificate().is())
+                        if (m_pViewShell && m_pViewShell->GetSigningCertificate().m_xCertificate.is())
                         {
-                            xCerts = { m_pViewShell->GetSigningCertificate() };
+                            xCerts = { m_pViewShell->GetSigningCertificate().m_xCertificate };
                         }
                     }
                     else
