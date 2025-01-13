@@ -76,13 +76,12 @@ namespace dxcanvas
         ENSURE_OR_THROW( hDC,
                           "DeviceHelper::getPhysicalResolution(): cannot retrieve HDC from window" );
 
-        const int nHorzRes( GetDeviceCaps( hDC,
-                                           LOGPIXELSX ) );
-        const int nVertRes( GetDeviceCaps( hDC,
-                                           LOGPIXELSY ) );
+        const double nHorzRes(GetDeviceCaps(hDC, LOGPIXELSX));
+        const double nVertRes(GetDeviceCaps(hDC, LOGPIXELSY));
 
-        return geometry::RealSize2D( nHorzRes*25.4,
-                                     nVertRes*25.4 );
+        // Converted units are in the denominator in px/in -> px/mm => conversion is inverted
+        return geometry::RealSize2D(o3tl::convert(nHorzRes, o3tl::Length::mm, o3tl::Length::in),
+                                    o3tl::convert(nVertRes, o3tl::Length::mm, o3tl::Length::in));
     }
 
     geometry::RealSize2D DeviceHelper::getPhysicalSize()
