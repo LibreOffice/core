@@ -481,7 +481,7 @@ static void appendRecentMenu( NSMenu* i_pMenu, const OUString& i_rTitle )
     [pItem setSubmenu: pRecentMenu];
 }
 
-void setKeyEquivalent( const vcl::KeyCode &rKeyCode, NSMenuItem *pNSMenuItem )
+static void setKeyEquivalent( const vcl::KeyCode &rKeyCode, NSMenuItem *pNSMenuItem )
 {
     if ( !pNSMenuItem )
         return;
