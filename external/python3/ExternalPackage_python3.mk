@@ -91,7 +91,6 @@ python3_EXTENSION_MODULES= \
 	LO_lib/_heapq.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	LO_lib/_json.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	LO_lib/_lsprof.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/_lzma.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	LO_lib/math.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	LO_lib/_md5.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	LO_lib/mmap.$(python3_EXTENSION_MODULE_SUFFIX).so \
