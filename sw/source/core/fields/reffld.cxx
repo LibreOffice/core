@@ -1606,6 +1606,9 @@ SwTextNode* SwGetRefFieldType::FindAnchorRefStyleOther(SwDoc* pDoc,
     SwNodeOffset nReference = pReference->GetIndex();
     const SwNodes& nodes = pDoc->GetNodes();
 
+    if (&nodes != &pReference->GetNodes())
+        return nullptr;
+
     // It is possible to end up here, with a pReference pointer which points to a node which has already been
     // removed from the nodes array, which means that calling GetIndex() returns an incorrect index.
     if (nReference >= nodes.Count() || nodes[nReference] != pReference)
