@@ -328,7 +328,7 @@ const PPDParser* CPDManager::createCPDParser(const OUString& rPrinter)
             OUString aValueName;
             PPDValue* pValue;
             std::vector<PPDKey*> keys;
-            std::vector<OUString> default_values;
+            std::unordered_map<OUString, OUString> aOptionDefaults;
             for (int i = 0; i < num_attribute; i++)
             {
                 char *name, *default_value;
@@ -352,7 +352,7 @@ const PPDParser* CPDManager::createCPDParser(const OUString& rPrinter)
                     // PageSize key is used in many places
                     aOptionName = u"PageSize"_ustr;
                 }
-                default_values.push_back(aDefaultValue);
+                aOptionDefaults[aOptionName] = aDefaultValue;
                 pKey = new PPDKey(aOptionName);
 
                 // If number of values are 0, this is not settable via UI
@@ -425,23 +425,26 @@ const PPDParser* CPDManager::createCPDParser(const OUString& rPrinter)
             PPDContext& rContext = m_aDefaultContexts[aPrinter];
             rContext.setParser(pNewParser);
             setDefaultPaper(rContext);
-            std::vector<OUString>::iterator defit = default_values.begin();
-            for (auto const& key : keys)
+
+            for (const auto & [ rKey, rDefValue ] : aOptionDefaults)
             {
-                const PPDValue* p1Value = key->getValue(*defit);
-                if (p1Value)
+                const PPDKey* key = pNewParser->getKey(rKey);
+                if (key)
                 {
-                    if (p1Value != key->getDefaultValue())
+                    const PPDValue* p1Value = key->getValue(rDefValue);
+                    if (p1Value)
                     {
-                        rContext.setValue(key, p1Value, true);
-                        SAL_INFO("vcl.unx.print",
-                                 "key " << key->getKey() << " is set to " << *defit);
+                        if (p1Value != key->getDefaultValue())
+                        {
+                            rContext.setValue(key, p1Value, true);
+                            SAL_INFO("vcl.unx.print",
+                                     "key " << key->getKey() << " is set to " << rDefValue);
+                        }
+                        else
+                            SAL_INFO("vcl.unx.print",
+                                     "key " << key->getKey() << " is defaulted to " << rDefValue);
                     }
-                    else
-                        SAL_INFO("vcl.unx.print",
-                                 "key " << key->getKey() << " is defaulted to " << *defit);
                 }
-                ++defit;
             }
 
             rInfo.m_pParser = pNewParser;
