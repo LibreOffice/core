@@ -587,7 +587,7 @@ public:
 class UNLESS_MERGELIBS_MORE(SVXCORE_DLLPUBLIC) SvxOle2Shape : public SvxShapeText
 {
 private:
-    OUString referer_;
+    OUString m_referer;
 protected:
     // override these for special property handling in subcasses. Return true if property is handled
     virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue ) override;

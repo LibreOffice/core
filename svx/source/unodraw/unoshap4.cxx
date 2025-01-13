@@ -67,13 +67,13 @@ using namespace ::com::sun::star::beans;
 SvxOle2Shape::SvxOle2Shape(SdrObject* pObject, OUString referer)
     : SvxShapeText(pObject, getSvxMapProvider().GetMap(SVXMAP_OLE2),
                 getSvxMapProvider().GetPropertySet(SVXMAP_OLE2,SdrObject::GetGlobalDrawObjectItemPool()))
-    , referer_(std::move(referer))
+    , m_referer(std::move(referer))
 {
 }
 
 SvxOle2Shape::SvxOle2Shape(SdrObject* pObject, OUString referer, std::span<const SfxItemPropertyMapEntry> pPropertyMap, const SvxItemPropertySet* pPropertySet)
     : SvxShapeText(pObject, pPropertyMap, pPropertySet)
-    , referer_(std::move(referer))
+    , m_referer(std::move(referer))
 {
 }
 
@@ -452,7 +452,7 @@ void SvxOle2Shape::createLink( const OUString& aLinkURL )
 
     uno::Sequence< beans::PropertyValue > aMediaDescr{
         comphelper::makePropertyValue(u"URL"_ustr, aLinkURL),
-        comphelper::makePropertyValue(u"Referer"_ustr, referer_)
+        comphelper::makePropertyValue(u"Referer"_ustr, m_referer)
     };
 
     uno::Reference< task::XInteractionHandler > xInteraction = pPersist->getInteractionHandler();
