@@ -145,18 +145,6 @@ struct RecentMenuEntry
     OUString aPassword;
 };
 
-class RecentFilesStringLength : public ::cppu::WeakImplHelper< css::util::XStringWidth >
-{
-    public:
-        RecentFilesStringLength() {}
-
-        // XStringWidth
-        sal_Int32 SAL_CALL queryStringWidth( const OUString& aString ) override
-        {
-            return aString.getLength();
-        }
-};
-
 }
 
 @interface QSCommandMenuItem : NSMenuItem
