@@ -66,17 +66,11 @@ MSFILTER_DLLPUBLIC OUString ConvertColorOU( const Color &rColor );
 
 
 /** Paper size in 1/100 millimeters. */
-struct MSFILTER_DLLPUBLIC ApiPaperSize
-{
-    sal_Int32           mnWidth;
-    sal_Int32           mnHeight;
-};
-
 class MSFILTER_DLLPUBLIC PaperSizeConv
 {
 public:
     static sal_Int32 getMSPaperSizeIndex( const css::awt::Size& rSize );
-    static const ApiPaperSize& getApiSizeForMSPaperSizeIndex( sal_Int32 nMSOPaperIndex );
+    static css::awt::Size getApiSizeForMSPaperSizeIndex(sal_Int32 nMSOPaperIndex);
 };
 
 MSFILTER_DLLPUBLIC OUString CreateDOCXStyleId(std::u16string_view aName);

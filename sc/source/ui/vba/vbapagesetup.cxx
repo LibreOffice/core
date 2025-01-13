@@ -608,10 +608,7 @@ void SAL_CALL ScVbaPageSetup::setPaperSize( sal_Int32 papersize )
 {
     if ( papersize != excel::XlPaperSize::xlPaperUser )
     {
-        awt::Size aPaperSize;
-        const msfilter::util::ApiPaperSize& rConvertedSize = msfilter::util::PaperSizeConv::getApiSizeForMSPaperSizeIndex( papersize );
-        aPaperSize.Height = rConvertedSize.mnHeight;
-        aPaperSize.Width = rConvertedSize.mnWidth;
+        awt::Size aPaperSize = msfilter::util::PaperSizeConv::getApiSizeForMSPaperSizeIndex( papersize );
         if ( mbIsLandscape )
             ::std::swap( aPaperSize.Width, aPaperSize.Height );
         mxPageProps->setPropertyValue( u"Size"_ustr, uno::Any( aPaperSize ) );
