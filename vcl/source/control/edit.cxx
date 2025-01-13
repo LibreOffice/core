@@ -1837,6 +1837,11 @@ void Edit::GetFocus()
 {
     Control::GetFocus();
 
+    // tdf#164127 for an Edit in the UNO control property browser, above call to Control::GetFocus
+    // can result in it getting disposed - return early in that case
+    if (isDisposed())
+        return;
+
     if ( mpSubEdit )
         mpSubEdit->ImplGrabFocus( GetGetFocusFlags() );
     else if ( !mbActivePopup )
