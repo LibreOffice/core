@@ -939,9 +939,8 @@ void PageSettingsConverter::writePageSettingsProperties(
 
         if( 0 < rModel.mnPaperSize )
         {
-            const msfilter::util::ApiPaperSize& rPaperSize = msfilter::util::PaperSizeConv::getApiSizeForMSPaperSizeIndex(  rModel.mnPaperSize );
-            aSize = awt::Size( rPaperSize.mnWidth, rPaperSize.mnHeight );
-            bValid = ( rPaperSize.mnWidth != 0 && rPaperSize.mnHeight != 0 );
+            aSize = msfilter::util::PaperSizeConv::getApiSizeForMSPaperSizeIndex(rModel.mnPaperSize);
+            bValid = (aSize.Width != 0 && aSize.Height != 0);
         }
         if( rModel.mnPaperWidth > 0 && rModel.mnPaperHeight > 0 )
         {

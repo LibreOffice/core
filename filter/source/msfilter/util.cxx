@@ -167,11 +167,19 @@ OUString ConvertColorOU( const Color &rColor )
     return OUString( pBuffer );
 }
 
-#define IN2MM100( v )    static_cast< sal_Int32 >( (v) * 2540.0 + 0.5 )
-#define MM2MM100( v )    static_cast< sal_Int32 >( (v) * 100.0 + 0.5 )
+namespace
+{
+struct ApiPaperSize
+{
+    sal_Int32 mnWidth;
+    sal_Int32 mnHeight;
+};
+
+constexpr sal_Int32 IN2MM100(double v) { return o3tl::convert(v, o3tl::Length::in, o3tl::Length::mm100) + 0.5; }
+constexpr sal_Int32 MM2MM100(double v) { return o3tl::convert(v, o3tl::Length::mm, o3tl::Length::mm100) + 0.5; }
 
 // see XclPaperSize pPaperSizeTable in calc and aDinTab in i18nutil
-const ApiPaperSize spPaperSizeTable[] =
+constexpr ApiPaperSize spPaperSizeTable[] =
 {
     { 0, 0 },                                                //  0 - (undefined)
     { IN2MM100( 8.5 ),       IN2MM100( 11 )      },          //  1 - Letter paper
@@ -248,7 +256,7 @@ const ApiPaperSize spPaperSizeTable[] =
     { MM2MM100( 297 ),       MM2MM100( 420 )     },          // 67 - A3 transverse paper
     { MM2MM100( 322 ),       MM2MM100( 445 )     },          // 68 - A3 extra transverse paper
     { MM2MM100( 200 ),       MM2MM100( 148 )     },          // 69 - Japanese double postcard
-    { MM2MM100( 105 ),       MM2MM100( 148 ),    },          // 70 - A6 paper
+    { MM2MM100( 105 ),       MM2MM100( 148 )     },          // 70 - A6 paper
     { 0, 0 },                                                // 71 - Japanese Envelope Kaku #2
     { 0, 0 },                                                // 72 - Japanese Envelope Kaku #3
     { 0, 0 },                                                // 73 - Japanese Envelope Chou #3
@@ -268,48 +276,38 @@ const ApiPaperSize spPaperSizeTable[] =
     { 0, 0 },                                                // 87 - Japanese Envelope Chou #4 Rotated
     { MM2MM100( 128 ),       MM2MM100( 182 )     },          // 88 - B6 (JIS)
     { MM2MM100( 182 ),       MM2MM100( 128 )     },          // 89 - B6 (JIS) Rotated
-    { IN2MM100( 12 ),        IN2MM100( 11 )      }           // 90 - 12x11
+    { IN2MM100( 12 ),        IN2MM100( 11 )      },          // 90 - 12x11
 };
+} // unnamed namespace
 
 sal_Int32 PaperSizeConv::getMSPaperSizeIndex( const css::awt::Size& rSize )
 {
     // Need to find the best match for current size
-    sal_Int32 nDeltaWidth = 0;
-    sal_Int32 nDeltaHeight = 0;
+    sal_Int32 nDeltaWidth = rSize.Width;
+    sal_Int32 nDeltaHeight = rSize.Height;
+    sal_Int32 nTol = 10; // hmm not sure is this the best way
 
     sal_Int32 nPaperSizeIndex = 0; // Undefined
-    const ApiPaperSize* pItem = spPaperSizeTable;
-    const ApiPaperSize* pEnd =  spPaperSizeTable + std::size( spPaperSizeTable );
-    for ( ; pItem != pEnd; ++pItem )
+    for (size_t i = 1; i < std::size(spPaperSizeTable); ++i)
     {
-        sal_Int32 nCurDeltaHeight = std::abs( pItem->mnHeight - rSize.Height );
-        sal_Int32 nCurDeltaWidth = std::abs( pItem->mnWidth - rSize.Width );
-        if ( pItem == spPaperSizeTable ) // initialize delta with first item
+        sal_Int32 nCurDeltaHeight = std::abs(spPaperSizeTable[i].mnHeight - rSize.Height);
+        sal_Int32 nCurDeltaWidth = std::abs(spPaperSizeTable[i].mnWidth - rSize.Width);
+        if (nCurDeltaWidth <= nTol && nCurDeltaHeight <= nTol
+            && nCurDeltaWidth + nCurDeltaHeight < nDeltaWidth + nDeltaHeight)
         {
             nDeltaWidth = nCurDeltaWidth;
             nDeltaHeight = nCurDeltaHeight;
-        }
-        else
-        {
-            if ( nCurDeltaWidth < nDeltaWidth && nCurDeltaHeight < nDeltaHeight )
-            {
-                nDeltaWidth = nCurDeltaWidth;
-                nDeltaHeight = nCurDeltaHeight;
-                nPaperSizeIndex = (pItem - spPaperSizeTable);
-            }
+            nPaperSizeIndex = i;
         }
     }
-    sal_Int32 nTol = 10; // hmm not sure is this the best way
-    if ( nDeltaWidth <= nTol && nDeltaHeight <= nTol )
-        return nPaperSizeIndex;
-    return 0;
+    return nPaperSizeIndex;
 }
 
-const ApiPaperSize& PaperSizeConv::getApiSizeForMSPaperSizeIndex( sal_Int32 nMSOPaperIndex )
+css::awt::Size PaperSizeConv::getApiSizeForMSPaperSizeIndex(sal_Int32 nMSOPaperIndex)
 {
-    if ( nMSOPaperIndex  < 0 || nMSOPaperIndex > std::ssize( spPaperSizeTable ) - 1 )
-        return spPaperSizeTable[ 0 ];
-    return spPaperSizeTable[ nMSOPaperIndex ];
+    if (nMSOPaperIndex < 0 || nMSOPaperIndex >= std::ssize(spPaperSizeTable))
+        nMSOPaperIndex = 0;
+    return { spPaperSizeTable[nMSOPaperIndex].mnWidth, spPaperSizeTable[nMSOPaperIndex].mnHeight };
 }
 
 OUString CreateDOCXStyleId(std::u16string_view const aName)
