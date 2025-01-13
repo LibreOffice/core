@@ -339,9 +339,9 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
         ++nNoNotify;
     }
 
-    for (size_t nC = 0; nC < SAL_N_ELEMENTS(aFontSizeArr); ++nC)
+    for (const SvxFontHeightItem *pFSize : aFontSizeArr)
     {
-        const SvxFontHeightItem *pFSize = aFontSizeArr[ nC ], *pOldFSize;
+        const SvxFontHeightItem *pOldFSize;
         if( pFSize && (SfxItemState::SET == GetItemState(
             pFSize->Which(), false, reinterpret_cast<const SfxPoolItem**>(&pOldFSize) )) &&
             // Avoid recursion (SetAttr!)
