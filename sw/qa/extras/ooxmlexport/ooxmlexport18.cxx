@@ -192,6 +192,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf104394_lostTextbox, "tdf104394_lostTextbox.docx"
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf164500_framePrBeforeTable, "tdf164500_framePrBeforeTable.docx")
+{
+    // Should be only one page (but was two because the frame was anchored inside cell A1,
+    // and thus the width was limited by the cell width. It must be anchored before the table.
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    CPPUNIT_ASSERT_EQUAL(1, getShapes()); // one text frame
+
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTables->getCount());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf146984_anchorInShape, "tdf146984_anchorInShape.docx")
 {
     // This was only one page b/c the page break was missing.

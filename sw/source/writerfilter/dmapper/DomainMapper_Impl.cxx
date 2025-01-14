@@ -2565,6 +2565,35 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
 
                         CheckUnregisteredFrameConversion(bPreventOverlap);
 
+                        // If a table is starting and the table itself is not framed (!bIsFrameMode)
+                        // but the paragraph before the table needs to be (m_xFrameEndRange.is())
+                        // then an empty paragraph is needed after the to-be-converted-to-frame
+                        // paragraphs in order for the new frame to be anchored before the table.
+                        // That is because convertToTextFrame just points the anchor to the node
+                        // where the moved-to-frame paragraphs were,
+                        // and these paragraphs-that-will-become-table-cells
+                        // are going to end up at that node.
+                        // Thus a blank node needs to be inserted after the to-be-deleted nodes,
+                        // since LO cannot anchor a frame to a table node itself (which Word does).
+                        if (!bIsFrameMode && m_xFrameEndRange.is()
+                            && m_StreamStateStack.top().nTableCellDepth > 0
+                            && hasTableManager() && !getTableManager().isInTable())
+                        {
+                            uno::Reference<text::XTextCursor> xCursor
+                                = xTextAppend->createTextCursorByRange(m_xFrameEndRange);
+                            xTextAppend->insertControlCharacter(
+                                xCursor, text::ControlCharacter::APPEND_PARAGRAPH,
+                                /*bAbsorb*/false);
+
+                            // remove any inherited properties from the placeholder anchor-paragraph
+                            uno::Reference<beans::XMultiPropertyStates> xMPS(xCursor,
+                                                                             uno::UNO_QUERY);
+                            xMPS->setAllPropertiesToDefault();
+                            uno::Reference<beans::XPropertySet> xPS(xCursor, uno::UNO_QUERY);
+                            xPS->setPropertyValue(u"ParaStyleName"_ustr,
+                                                  uno::Any(u"Standard"_ustr));
+                        }
+
                         // If different frame properties are set on this paragraph, keep them.
                         if (!bIsDropCap && bIsFrameMode)
                         {
