@@ -513,6 +513,7 @@ enum OpCode : sal_uInt16
         ocSortBy            = SC_OPCODE_SORTBY,
         ocMatSequence       = SC_OPCODE_MAT_SEQUENCE,
         ocRandArray         = SC_OPCODE_RANDARRAY,
+        ocToCol             = SC_OPCODE_TOCOL,
         ocUnique            = SC_OPCODE_UNIQUE,
     // internal stuff
         ocInternalBegin     = SC_OPCODE_INTERNAL_BEGIN,
@@ -998,6 +999,7 @@ inline std::string OpCodeEnumToString(OpCode eCode)
     case ocFilter: return "Filter";
     case ocSort: return "Sort";
     case ocSortBy: return "SortBy";
+    case ocToCol: return "ToCol";
     case ocUnique: return "Unique";
     case ocLet: return "Let";
     case ocTTT: return "TTT";

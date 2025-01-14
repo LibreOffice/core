@@ -58,6 +58,7 @@ struct ScRefCellValue;
 
 enum MatchMode{ exactorNA=0, exactorS=-1, exactorG=1, wildcard=2, regex=3 };
 enum SearchMode{ searchfwd=1, searchrev=-1, searchbasc=2, searchbdesc=-2 };
+enum IgnoreValues{ DEFAULT=0, BLANKS=1, ERRORS=2, ALL=3 };
 
 struct VectorSearchArguments
 {
@@ -723,6 +724,7 @@ private:
     void ScFilter();
     void ScSort();
     void ScSortBy();
+    void ScToCol();
     void ScUnique();
     void ScLet();
     void ScSubTotal();

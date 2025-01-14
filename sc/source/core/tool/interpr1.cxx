@@ -8799,6 +8799,125 @@ void ScInterpreter::ScSortBy()
         PushIllegalParameter();
 }
 
+void ScInterpreter::ScToCol()
+{
+    sal_uInt8 nParamCount = GetByte();
+    if (!MustHaveParamCount(nParamCount, 1, 3))
+        return;
+
+    // 3rd argument optional - Scan_by_column: default FALSE
+    bool bByColumn = false;
+    if (nParamCount == 3)
+        bByColumn = GetBoolWithDefault(false);
+
+    // 2nd argument optional - Ignore: default keep all values
+    IgnoreValues eIgnoreValues = IgnoreValues::DEFAULT;
+    if (nParamCount >= 2)
+    {
+        sal_Int32 k = GetInt32WithDefault(0);
+        if (k >= 0 && k <= 3)
+            eIgnoreValues = static_cast<IgnoreValues>(k);
+        else
+        {
+            PushIllegalParameter();
+            return;
+        }
+    }
+
+    // 1st argument: take unique search range
+    ScMatrixRef pMatSource = nullptr;
+    SCSIZE nsC = 0, nsR = 0;
+    switch (GetStackType())
+    {
+        case svSingleRef:
+        case svDoubleRef:
+        case svMatrix:
+        case svExternalSingleRef:
+        case svExternalDoubleRef:
+        {
+            pMatSource = GetMatrix();
+            if (!pMatSource)
+            {
+                PushIllegalParameter();
+                return;
+            }
+
+            pMatSource->GetDimensions(nsC, nsR);
+        }
+        break;
+
+        default:
+            PushIllegalParameter();
+            return;
+    }
+
+    if (nGlobalError != FormulaError::NONE || nsC < 1 || nsR < 1)
+    {
+        PushIllegalArgument();
+        return;
+    }
+
+    std::vector<std::pair<SCSIZE, SCSIZE>> aResPos;
+    SCSIZE nOut = bByColumn ? nsC : nsR;
+    SCSIZE nIn = bByColumn ? nsR : nsC;
+
+    for (SCSIZE i = 0; i < nOut; i++)
+    {
+        for (SCSIZE j = 0; j < nIn; j++)
+        {
+            SCSIZE nCol = bByColumn ? i : j;
+            SCSIZE nRow = bByColumn ? j : i;
+            if ((eIgnoreValues == IgnoreValues::ALL || eIgnoreValues == IgnoreValues::BLANKS) && pMatSource->IsEmptyCell(nCol, nRow))
+                continue; // Nothing to do
+            else if ((eIgnoreValues == IgnoreValues::ALL || eIgnoreValues == IgnoreValues::ERRORS) && pMatSource->GetError(nCol, nRow) != FormulaError::NONE)
+                continue; // Nothing to do
+            else
+                aResPos.emplace_back(nCol, nRow);
+        }
+
+    }
+    // No result
+    if (aResPos.size() == 0)
+    {
+        if (nGlobalError != FormulaError::NONE)
+        {
+            PushIllegalArgument();
+        }
+        else
+        {
+            PushNA();
+        }
+        return;
+    }
+
+    // fill result matrix to the same column
+    ScMatrixRef pResMat = GetNewMat(1, aResPos.size(), /*bEmpty*/true);
+    for (SCSIZE iPos = 0; iPos < aResPos.size(); ++iPos)
+    {
+        if (pMatSource->IsEmptyCell(aResPos[iPos].first, aResPos[iPos].second))
+        {
+            pResMat->PutEmpty(0, iPos);
+        }
+        else if (!pMatSource->IsStringOrEmpty(aResPos[iPos].first, aResPos[iPos].second))
+        {
+            pResMat->PutDouble(pMatSource->GetDouble(aResPos[iPos].first, aResPos[iPos].second), 0, iPos);
+        }
+        else
+        {
+            pResMat->PutString(pMatSource->GetString(aResPos[iPos].first, aResPos[iPos].second), 0, iPos);
+        }
+    }
+
+    if (!pResMat)
+    {
+        PushIllegalArgument();
+    }
+    else
+    {
+        PushMatrix(pResMat);
+    }
+}
+
 void ScInterpreter::ScUnique()
 {
     sal_uInt8 nParamCount = GetByte();

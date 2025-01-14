@@ -4159,6 +4159,7 @@ StackVar ScInterpreter::Interpret()
                     case ocFilter           : ScFilter();                   break;
                     case ocSort             : ScSort();                     break;
                     case ocSortBy           : ScSortBy();                   break;
+                    case ocToCol            : ScToCol();                    break;
                     case ocUnique           : ScUnique();                   break;
                     case ocLet              : ScLet();                      break;
                     case ocTrue             : ScTrue();                     break;
