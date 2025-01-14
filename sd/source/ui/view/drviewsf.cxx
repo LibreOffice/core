@@ -704,8 +704,15 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 }
                 if (bEnable)
                 {
-                    rSet.Put(SfxBoolItem(FN_NUM_BULLET_ON, false));
-                    rSet.Put(SfxBoolItem(FN_NUM_NUMBERING_ON, false));
+                    bool bIsBullet = false;
+                    bool bIsNumbering = false;
+                    OutlinerView* pOlView = mpDrawView->GetTextEditOutlinerView();
+                    if (pOlView)
+                    {
+                        pOlView->IsBulletOrNumbering(bIsBullet, bIsNumbering);
+                    }
+                    rSet.Put(SfxBoolItem(FN_NUM_BULLET_ON, bIsBullet));
+                    rSet.Put(SfxBoolItem(FN_NUM_NUMBERING_ON, bIsNumbering));
                 }
                 else
                 {

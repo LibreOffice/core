@@ -53,6 +53,7 @@
 #include <sfx2/objface.hxx>
 
 #include <drawdoc.hxx>
+#include <drawview.hxx>
 #include <DrawDocShell.hxx>
 #include <DrawViewShell.hxx>
 #include <OutlineViewShell.hxx>
@@ -444,6 +445,49 @@ void TextObjectBar::GetAttrStateImpl(ViewShell* mpViewShell, ::sd::View* mpView,
             }
             break;
 
+            case FN_NUM_BULLET_ON:
+            case FN_NUM_NUMBERING_ON:
+            {
+                bool bEnable = false;
+                const DrawViewShell* pDrawViewShell = dynamic_cast< DrawViewShell* >(mpViewShell);
+                if (pDrawViewShell)
+                {
+                    SdrView* pDrawView = pDrawViewShell->GetDrawView();
+                    //TODO: is pDrawView always available?
+                    const SdrMarkList& rMarkList = pDrawView->GetMarkedObjectList();
+                    const size_t nMarkCount = rMarkList.GetMarkCount();
+                    for (size_t nIndex = 0; nIndex < nMarkCount; ++nIndex)
+                    {
+                        SdrTextObj* pTextObj = DynCastSdrTextObj(rMarkList.GetMark(nIndex)->GetMarkedSdrObj());
+                        if (pTextObj && pTextObj->GetObjInventor() == SdrInventor::Default)
+                        {
+                            if (pTextObj->GetObjIdentifier() != SdrObjKind::OLE2)
+                            {
+                                bEnable = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (bEnable)
+                    {
+                        bool bIsBullet = false;
+                        bool bIsNumbering = false;
+                        OutlinerView* pOlView = pDrawView->GetTextEditOutlinerView();
+                        if (pOlView)
+                        {
+                            pOlView->IsBulletOrNumbering(bIsBullet, bIsNumbering);
+                        }
+                        rSet.Put(SfxBoolItem(FN_NUM_BULLET_ON, bIsBullet));
+                        rSet.Put(SfxBoolItem(FN_NUM_NUMBERING_ON, bIsNumbering));
+                    }
+                    else
+                    {
+                        rSet.DisableItem(FN_NUM_BULLET_ON);
+                        rSet.DisableItem(FN_NUM_NUMBERING_ON);
+                    }
+                }
+            }
+            break;
             default:
             break;
         }
