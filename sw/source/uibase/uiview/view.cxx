@@ -1697,7 +1697,7 @@ void SwView::ShowCursor( bool bOn )
 
     if( !bOn )
         m_pWrtShell->HideCursor();
-    else if( !m_pWrtShell->IsFrameSelected() && !m_pWrtShell->IsObjSelected() )
+    else if( !m_pWrtShell->IsFrameSelected() && !m_pWrtShell->GetSelectedObjCount() )
         m_pWrtShell->ShowCursor();
 
     if( bUnlockView )

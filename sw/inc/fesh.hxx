@@ -517,7 +517,9 @@ public:
     // RotGrfFlyFrame: check if RotationMode is possible
     bool IsRotationOfSwGrfNodePossible() const;
 
-    SW_DLLPUBLIC size_t IsObjSelected() const;   ///< @return object count, but doesn't count the objects in groups.
+    /// @return object count, but doesn't count the objects in groups.
+    SW_DLLPUBLIC size_t GetSelectedObjCount() const;
+
     bool IsObjSelected( const SdrObject& rObj ) const;
     bool IsObjSameLevelWithMarked(const SdrObject* pObj) const;
     const SdrMarkList* GetMarkList() const{ return GetMarkList_(); };

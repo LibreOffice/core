@@ -389,7 +389,7 @@ void SwDrawBaseShell::Execute(SfxRequest& rReq)
 
         case SID_DELETE:
         case FN_BACKSPACE:
-            if (pSh->IsObjSelected() && !pSdrView->IsTextEdit())
+            if (pSh->GetSelectedObjCount() && !pSdrView->IsTextEdit())
             {
                 bDone = true;
 
@@ -428,7 +428,7 @@ void SwDrawBaseShell::Execute(SfxRequest& rReq)
             break;
 
         case SID_GROUP:
-            if (pSh->IsObjSelected() > 1 && pSh->IsGroupAllowed())
+            if (pSh->GetSelectedObjCount() > 1 && pSh->IsGroupAllowed())
             {
                 pSh->GroupSelection();
                 rBind.Invalidate(SID_UNGROUP);
@@ -797,11 +797,11 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
             case FN_FRAME_DOWN:
             case SID_DELETE:
             case FN_BACKSPACE:
-                if( bProtected || !rSh.IsObjSelected() )
+                if( bProtected || !rSh.GetSelectedObjCount() )
                     rSet.DisableItem( nWhich );
                 break;
             case SID_GROUP:
-                if ( rSh.IsObjSelected() < 2 || bProtected || !rSh.IsGroupAllowed() )
+                if ( rSh.GetSelectedObjCount() < 2 || bProtected || !rSh.IsGroupAllowed() )
                     rSet.DisableItem( nWhich );
                 break;
             case SID_UNGROUP:

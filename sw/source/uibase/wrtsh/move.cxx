@@ -482,7 +482,7 @@ bool SwWrtShell::PushCursor(SwTwips lOffset, bool bSelect)
             EndSelect();
 
         bIsFrameSel = IsFrameSelected();
-        bool bIsObjSel = 0 != IsObjSelected();
+        bool bIsObjSel = 0 != GetSelectedObjCount();
 
         // unselect frame
         if( bIsFrameSel || bIsObjSel )

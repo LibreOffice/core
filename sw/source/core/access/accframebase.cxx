@@ -252,7 +252,7 @@ SwPaM* SwAccessibleFrameBase::GetCursor()
     {
         SwFEShell *pFESh = dynamic_cast<SwFEShell*>( pCursorShell);
         if( !pFESh ||
-            !(pFESh->IsFrameSelected() || pFESh->IsObjSelected() > 0) )
+            !(pFESh->IsFrameSelected() || pFESh->GetSelectedObjCount() > 0) )
         {
             // get the selection, and test whether it affects our text node
             pCursor = pCursorShell->GetCursor( false /* ??? */ );

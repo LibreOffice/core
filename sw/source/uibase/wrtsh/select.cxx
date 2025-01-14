@@ -612,7 +612,7 @@ void SwWrtShell::AssureStdMode()
         Point aPt(LONG_MIN, LONG_MIN);
         SelectObj(aPt, SW_LEAVE_FRAME);
     }
-    if (IsSelFrameMode() || IsObjSelected())
+    if (IsSelFrameMode() || GetSelectedObjCount())
     {
         UnSelectFrame();
         LeaveSelFrameMode();
@@ -1046,7 +1046,7 @@ void SwWrtShell::SelectNextPrevHyperlink( bool bNext )
     EndAction();
 
     bool bCreateXSelection = false;
-    const bool bFrameSelected = IsFrameSelected() || IsObjSelected();
+    const bool bFrameSelected = IsFrameSelected() || GetSelectedObjCount();
     if( IsSelection() )
     {
         if ( bFrameSelected )

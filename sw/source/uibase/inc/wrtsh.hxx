@@ -145,7 +145,7 @@ public:
     void    SetInSelect() { m_bInSelect = true; }
         // is there a text- or frameselection?
     bool    HasSelection() const { return SwCursorShell::HasSelection() ||
-                                        IsMultiSelection() || IsSelFrameMode() || IsObjSelected(); }
+                                        IsMultiSelection() || IsSelFrameMode() || GetSelectedObjCount(); }
     bool    Pop(SwCursorShell::PopMode, ::std::optional<SwCallLink>& roLink);
     SW_DLLPUBLIC bool Pop(SwCursorShell::PopMode = SwCursorShell::PopMode::DeleteStack);
 

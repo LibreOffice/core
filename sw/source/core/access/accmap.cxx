@@ -314,7 +314,7 @@ std::unique_ptr<SwAccessibleObjShape_Impl[]>
     std::unique_ptr<SwAccessibleObjShape_Impl[]> pShapes;
     SwAccessibleObjShape_Impl *pSelShape = nullptr;
 
-    size_t nSelShapes = pFESh ? pFESh->IsObjSelected() : 0;
+    size_t nSelShapes = pFESh ? pFESh->GetSelectedObjCount() : 0;
     rSize = maMap.size();
 
     if( rSize > 0 )
@@ -1473,7 +1473,7 @@ void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=fa
 
     const SwViewShell *pVSh = GetShell();
     const SwFEShell *pFESh = dynamic_cast<const SwFEShell*>(pVSh);
-    const size_t nSelShapes = pFESh ? pFESh->IsObjSelected() : 0;
+    const size_t nSelShapes = pFESh ? pFESh->GetSelectedObjCount() : 0;
 
     //when InvalidateFocus Call this function ,and the current selected shape count is not 1 ,
     //return
@@ -2465,7 +2465,7 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrame *pFrame )
                         "cursor is not contained in fly frame" );
                 aFrameOrObj = pFlyFrame;
             }
-            else if( pFESh->IsObjSelected() > 0 )
+            else if( pFESh->GetSelectedObjCount() > 0 )
             {
                 bShapeSelected = true;
                 aFrameOrObj = static_cast<const SwFrame *>( nullptr );
@@ -3166,7 +3166,7 @@ std::unique_ptr<SwAccessibleSelectedParas_Impl> SwAccessibleMap::BuildSelectedPa
             SwFEShell* pFEShell = dynamic_cast<SwFEShell*>(pCursorShell);
             if ( !pFEShell ||
                  ( !pFEShell->IsFrameSelected() &&
-                   pFEShell->IsObjSelected() == 0 ) )
+                   pFEShell->GetSelectedObjCount() == 0 ) )
             {
                 // get cursor without updating an existing table cursor.
                 pCursor = pCursorShell->GetCursor( false );

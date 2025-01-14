@@ -6830,7 +6830,7 @@ void SwContentTree::GotoContent(const SwContent* pCnt)
     }
     else
     {
-        if (m_pActiveShell->IsFrameSelected() || m_pActiveShell->IsObjSelected())
+        if (m_pActiveShell->IsFrameSelected() || m_pActiveShell->GetSelectedObjCount())
         {
             m_pActiveShell->HideCursor();
             m_pActiveShell->EnterSelFrameMode();
@@ -6845,7 +6845,7 @@ void SwContentTree::GotoContent(const SwContent* pCnt)
         // (tdf#147041) Always show the navigated outline at the top of the visible view area.
         if (pCnt->GetParent()->GetType() == ContentTypeId::OUTLINE ||
                 (!m_pActiveShell->IsCursorVisible() && !m_pActiveShell->IsFrameSelected() &&
-                 !m_pActiveShell->IsObjSelected()))
+                 !m_pActiveShell->GetSelectedObjCount()))
         {
             Point aPoint(rView.GetVisArea().getX(), m_pActiveShell->GetCursorDocPos().getY());
             rView.SetVisArea(aPoint);

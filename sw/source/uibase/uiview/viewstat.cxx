@@ -170,7 +170,7 @@ void SwView::GetState(SfxItemSet &rSet)
                     {
                         rSet.DisableItem(nWhich);
                     }
-                    else if((m_pWrtShell->IsObjSelected() || m_pWrtShell->IsFrameSelected()) &&
+                    else if((m_pWrtShell->GetSelectedObjCount() || m_pWrtShell->IsFrameSelected()) &&
                         (m_pWrtShell->IsSelObjProtected( FlyProtectFlags::Parent) != FlyProtectFlags::NONE ||
                         m_pWrtShell->IsSelObjProtected( FlyProtectFlags::Content ) != FlyProtectFlags::NONE))
                     {

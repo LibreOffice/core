@@ -1754,7 +1754,7 @@ SelectionType SwWrtShell::GetSelectionType() const
     // Inserting a frame is not a DrawMode
     SelectionType nCnt;
     if ( !_rView.GetEditWin().IsFrameAction() &&
-        (IsObjSelected() || (_rView.IsDrawMode() && !IsFrameSelected()) ))
+        (GetSelectedObjCount() || (_rView.IsDrawMode() && !IsFrameSelected()) ))
     {
         if (GetDrawView()->IsTextEdit())
             nCnt = SelectionType::DrawObjectEditMode;
@@ -1893,7 +1893,7 @@ void SwWrtShell::addCurrentPosition() {
 
 void SwWrtShell::SetPageStyle(const OUString &rCollName)
 {
-    if( !SwCursorShell::HasSelection() && !IsSelFrameMode() && !IsObjSelected() )
+    if( !SwCursorShell::HasSelection() && !IsSelFrameMode() && !GetSelectedObjCount() )
     {
         SwPageDesc* pDesc = FindPageDescByName( rCollName, true );
         if( pDesc )
@@ -2086,7 +2086,7 @@ bool SwWrtShell::CanInsert()
         return false;
     }
 
-    if(IsObjSelected())
+    if(GetSelectedObjCount())
     {
         return false;
     }

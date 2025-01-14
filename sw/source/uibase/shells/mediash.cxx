@@ -57,7 +57,7 @@ void SwMediaShell::ExecMedia(SfxRequest const& rReq)
     switch (rReq.GetSlot())
     {
         case SID_DELETE:
-            if (pSh->IsObjSelected())
+            if (pSh->GetSelectedObjCount())
             {
                 pSh->SetModified();
                 pSh->DelSelectedObj();
@@ -70,7 +70,7 @@ void SwMediaShell::ExecMedia(SfxRequest const& rReq)
             break;
 
         case SID_AVMEDIA_TOOLBOX:
-            if (pSh->IsObjSelected())
+            if (pSh->GetSelectedObjCount())
                 MediaShellHelpers::Execute(pSdrView, rReq);
             break;
 

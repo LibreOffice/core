@@ -171,7 +171,7 @@ void SwFEShell::Copy( SwDoc& rClpDoc, const OUString* pNewClpText )
             }
         }
     }
-    else if ( IsObjSelected() )
+    else if ( GetSelectedObjCount() )
     {
         SwPosition aPos( aSttIdx, pTextNd, 0 );
         const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
@@ -447,7 +447,7 @@ bool SwFEShell::Copy( SwFEShell& rDestShell, const Point& rSttPt,
 {
     bool bRet = false;
 
-    OSL_ENSURE( this == &rDestShell || !rDestShell.IsObjSelected(),
+    OSL_ENSURE( this == &rDestShell || !rDestShell.GetSelectedObjCount(),
             "Dest-Shell cannot be in Obj-Mode" );
 
     CurrShell aCurr( &rDestShell );
@@ -566,7 +566,7 @@ bool SwFEShell::Copy( SwFEShell& rDestShell, const Point& rSttPt,
                 rDestShell.Imp()->GetDrawView()->hideMarkHandles();
         }
     }
-    else if ( IsObjSelected() )
+    else if ( GetSelectedObjCount() )
         bRet = CopyDrawSel( rDestShell, rSttPt, rInsPt, bIsMove, bSelectInsert );
     else if( IsTableMode() )
     {

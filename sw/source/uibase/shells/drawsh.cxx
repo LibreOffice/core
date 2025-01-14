@@ -188,7 +188,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
     switch (nSlotId)
     {
         case SID_OBJECT_ROTATE:
-            if (rSh.IsObjSelected() && pSdrView->IsRotateAllowed())
+            if (rSh.GetSelectedObjCount() && pSdrView->IsRotateAllowed())
             {
                 if (GetView().IsDrawRotate())
                     rSh.SetDragMode(SdrDragMode::Move);
@@ -239,7 +239,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
             break;
 
         case SID_OBJECT_HELL:
-            if (rSh.IsObjSelected())
+            if (rSh.GetSelectedObjCount())
             {
                 rSh.StartUndo( SwUndoId::START );
                 SetWrapMode(FN_FRAME_WRAPTHRU_TRANSP);
@@ -250,7 +250,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
             break;
 
         case SID_OBJECT_HEAVEN:
-            if (rSh.IsObjSelected())
+            if (rSh.GetSelectedObjCount())
             {
                 rSh.StartUndo( SwUndoId::START );
                 SetWrapMode(FN_FRAME_WRAPTHRU);
@@ -261,7 +261,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
             break;
 
         case FN_TOOL_HIERARCHIE:
-            if (rSh.IsObjSelected())
+            if (rSh.GetSelectedObjCount())
             {
                 rSh.StartUndo( SwUndoId::START );
                 if (rSh.GetLayerId() == SdrLayerID(0))
@@ -417,17 +417,17 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
         switch( nWhich )
         {
             case SID_OBJECT_HELL:
-                if ( !rSh.IsObjSelected() || rSh.GetLayerId() == SdrLayerID(0) || bProtected )
+                if ( !rSh.GetSelectedObjCount() || rSh.GetLayerId() == SdrLayerID(0) || bProtected )
                     rSet.DisableItem( nWhich );
                 break;
 
             case SID_OBJECT_HEAVEN:
-                if ( !rSh.IsObjSelected() || rSh.GetLayerId() == SdrLayerID(1) || bProtected )
+                if ( !rSh.GetSelectedObjCount() || rSh.GetLayerId() == SdrLayerID(1) || bProtected )
                     rSet.DisableItem( nWhich );
                 break;
 
             case FN_TOOL_HIERARCHIE:
-                if ( !rSh.IsObjSelected() || bProtected )
+                if ( !rSh.GetSelectedObjCount() || bProtected )
                     rSet.DisableItem( nWhich );
                 break;
 

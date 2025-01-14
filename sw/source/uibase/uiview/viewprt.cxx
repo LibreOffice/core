@@ -234,7 +234,7 @@ void SwView::ExecutePrint(SfxRequest& rReq)
             }
             else if( rReq.GetSlot() == SID_PRINTDOCDIRECT && ! bSilent )
             {
-                if( pSh->IsSelection() || pSh->IsFrameSelected() || pSh->IsObjSelected() )
+                if( pSh->IsSelection() || pSh->IsFrameSelected() || pSh->GetSelectedObjCount() )
                 {
                     SvxPrtQryBox aBox(GetEditWin().GetFrameWeld());
                     short nBtn = aBox.run();

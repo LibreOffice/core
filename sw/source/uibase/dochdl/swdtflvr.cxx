@@ -1043,7 +1043,7 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
     }
     // Is there anything to provide anyway?
     else if ( m_pWrtShell->IsSelection() || m_pWrtShell->IsFrameSelected() ||
-              m_pWrtShell->IsObjSelected() )
+              m_pWrtShell->GetSelectedObjCount() )
     {
         std::optional<SwWait> oWait;
         if( m_pWrtShell->ShouldWait() )
@@ -1071,7 +1071,7 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
             SwTransferable::InitOle( m_aDocShellRef );
         rTmpDoc.SetTmpDocShell( nullptr );
 
-        if( m_pWrtShell->IsObjSelected() )
+        if( m_pWrtShell->GetSelectedObjCount() )
             m_eBufferType = TransferBufferType::Drawing;
         else
         {
@@ -1098,7 +1098,7 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
 #endif
 
         //put RTF ahead of  the OLE's Metafile to have less loss
-        if( !m_pWrtShell->IsObjSelected() )
+        if( !m_pWrtShell->GetSelectedObjCount() )
         {
             AddFormat( SotClipboardFormatId::RTF );
 #if HAVE_FEATURE_DESKTOP
@@ -2561,7 +2561,7 @@ bool SwTransferable::PasteTargetURL( const TransferableDataHelper& rData,
                     break;
 
                 case SwPasteSdr::Replace:
-                    if( rSh.IsObjSelected() )
+                    if( rSh.GetSelectedObjCount() )
                     {
                         rSh.ReplaceSdrObj( sURL, &aGraphic );
                         Point aPt( pPt ? *pPt : rSh.GetCursorDocPos() );
@@ -2572,7 +2572,7 @@ bool SwTransferable::PasteTargetURL( const TransferableDataHelper& rData,
                     break;
 
                 case SwPasteSdr::SetAttr:
-                    if( rSh.IsObjSelected() )
+                    if( rSh.GetSelectedObjCount() )
                         rSh.Paste( aGraphic, OUString() );
                     else if( OBJCNT_GRF == rSh.GetObjCntTypeOfSelection() )
                         rSh.ReRead(sURL, OUString(), &aGraphic);
@@ -2628,7 +2628,7 @@ void SwTransferable::SetSelInShell( SwWrtShell& rSh, bool bSelectFrame,
     }
     else
     {
-        if( rSh.IsFrameSelected() || rSh.IsObjSelected() )
+        if( rSh.IsFrameSelected() || rSh.GetSelectedObjCount() )
         {
             rSh.UnSelectFrame();
             rSh.LeaveSelFrameMode();
@@ -2974,7 +2974,7 @@ bool SwTransferable::PasteGrf( const TransferableDataHelper& rData, SwWrtShell& 
 
             case SwPasteSdr::Replace:
             {
-                if( rSh.IsObjSelected() )
+                if( rSh.GetSelectedObjCount() )
                 {
                     // #i123922# for D&D on draw objects, do for now the same for
                     // SwPasteSdr::Replace (D&D) as for SwPasteSdr::SetAttr (D&D and
@@ -3009,7 +3009,7 @@ bool SwTransferable::PasteGrf( const TransferableDataHelper& rData, SwWrtShell& 
                         rSh.SetFlyFrameAttr( aSet );
                     }
                 }
-                else if( rSh.IsObjSelected() )
+                else if( rSh.GetSelectedObjCount() )
                 {
                     // set as attribute at DrawObject
                     rSh.Paste( aGraphic, sURL );
@@ -3646,9 +3646,9 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
     }
     //Is there anything to provide anyway?
     else if ( m_pWrtShell->IsSelection() || m_pWrtShell->IsFrameSelected() ||
-              m_pWrtShell->IsObjSelected() )
+              m_pWrtShell->GetSelectedObjCount() )
     {
-        if( m_pWrtShell->IsObjSelected() )
+        if( m_pWrtShell->GetSelectedObjCount() )
             m_eBufferType = TransferBufferType::Drawing;
         else
         {
@@ -3664,7 +3664,7 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
         AddFormat( SotClipboardFormatId::EMBED_SOURCE );
 
         //put RTF ahead of the OLE's Metafile for less loss
-        if( !m_pWrtShell->IsObjSelected() )
+        if( !m_pWrtShell->GetSelectedObjCount() )
         {
             AddFormat( SotClipboardFormatId::RTF );
             AddFormat( SotClipboardFormatId::RICHTEXT );
@@ -3785,7 +3785,7 @@ void SwTransferable::DragFinished( sal_Int8 nAction )
                 m_pWrtShell->DeleteTableSel();
             else
             {
-                if ( !(m_pWrtShell->IsSelFrameMode() || m_pWrtShell->IsObjSelected()) )
+                if ( !(m_pWrtShell->IsSelFrameMode() || m_pWrtShell->GetSelectedObjCount()) )
                     //SmartCut, take one of the blanks along
                     m_pWrtShell->IntelligentCut( m_pWrtShell->GetSelectionType() );
                 m_pWrtShell->DelRight();
@@ -4196,7 +4196,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
         if ( bMove && rSrcSh.HasWholeTabSelection() )
             bTableMove = true;
     }
-    else if( rSrcSh.IsSelFrameMode() || rSrcSh.IsObjSelected() )
+    else if( rSrcSh.IsSelFrameMode() || rSrcSh.GetSelectedObjCount() )
     {
         // don't move position-protected objects!
         if( bMove && rSrcSh.IsSelObjProtected( FlyProtectFlags::Pos ) != FlyProtectFlags::NONE )
@@ -4382,7 +4382,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
     rSh.EndUndo();
 
         // put the shell in the right state
-    if( &rSrcSh != &rSh && ( rSh.IsFrameSelected() || rSh.IsObjSelected() ))
+    if( &rSrcSh != &rSh && ( rSh.IsFrameSelected() || rSh.GetSelectedObjCount() ))
         rSh.EnterSelFrameMode();
 
     rSrcSh.EndAction();

@@ -502,7 +502,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
                             // (i.e., position is not protected).
                             bool bMovable =
                                 (!bNotInSelObj) &&
-                                (rSh.IsObjSelected() || rSh.IsFrameSelected()) &&
+                                (rSh.GetSelectedObjCount() || rSh.IsFrameSelected()) &&
                                 (rSh.IsSelObjProtected(FlyProtectFlags::Pos) == FlyProtectFlags::NONE);
 
                             SdrObject* pSelectableObj = rSh.GetObjAt(rLPt);
@@ -544,7 +544,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
     }
     if ( bPrefSdrPointer )
     {
-        if (bIsViewReadOnly || (rSh.IsObjSelected() && rSh.IsSelObjProtected(FlyProtectFlags::Content) != FlyProtectFlags::NONE))
+        if (bIsViewReadOnly || (rSh.GetSelectedObjCount() && rSh.IsSelObjProtected(FlyProtectFlags::Content) != FlyProtectFlags::NONE))
             SetPointer( PointerStyle::NotAllowed );
         else
         {
@@ -1487,7 +1487,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
 
     KeyEvent aKeyEvent( rKEvt );
     // look for vertical mappings
-    if( !bIsViewReadOnly && !rSh.IsSelFrameMode() && !rSh.IsObjSelected() )
+    if( !bIsViewReadOnly && !rSh.IsSelFrameMode() && !rSh.GetSelectedObjCount() )
     {
         if( KEY_UP == nKey || KEY_DOWN == nKey ||
             KEY_LEFT == nKey || KEY_RIGHT == nKey )
@@ -3269,7 +3269,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
             case MOUSE_LEFT:
             case MOUSE_LEFT + KEY_SHIFT:
             case MOUSE_LEFT + KEY_MOD2:
-                if( rSh.IsObjSelected() )
+                if( rSh.GetSelectedObjCount() )
                 {
                     SdrHdl* pHdl;
                     if( !bIsViewReadOnly &&
@@ -4327,7 +4327,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                 EnterArea();
             return;
         }
-        else if(!rSh.IsFrameSelected() && !rSh.IsObjSelected())
+        else if(!rSh.IsFrameSelected() && !rSh.GetSelectedObjCount())
         {
             SfxBindings &rBnd = rSh.GetView().GetViewFrame().GetBindings();
             Point aRelPos = rSh.GetRelativePagePosition(aDocPt);
@@ -4831,7 +4831,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                 }
             }
 
-            if ( rSh.IsObjSelected() )
+            if ( rSh.GetSelectedObjCount() )
             {
                 rSh.EnterSelFrameMode();
                 if (!m_rView.GetDrawFuncPtr())
@@ -4869,7 +4869,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                 {
                     m_rView.GetDrawFuncPtr()->Deactivate();
                     m_rView.AttrChangedNotify(nullptr);
-                    if ( rSh.IsObjSelected() )
+                    if ( rSh.GetSelectedObjCount() )
                         rSh.EnterSelFrameMode();
                     if ( m_rView.GetDrawFuncPtr() && m_bInsFrame )
                         StopInsFrame();
@@ -5633,7 +5633,7 @@ bool SwEditWin::EnterDrawMode(const MouseEvent& rMEvt, const Point& aDocPos)
 
         rSh.EndTextEdit(); // clicked aside, end Edit
         rSh.SelectObj( aDocPos );
-        if ( !rSh.IsObjSelected() && !rSh.IsFrameSelected() )
+        if ( !rSh.GetSelectedObjCount() && !rSh.IsFrameSelected() )
             rSh.LeaveSelFrameMode();
         else
         {

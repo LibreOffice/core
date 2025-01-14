@@ -182,7 +182,7 @@ bool SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
 
                 g_bNoInterrupt = true;
 
-                if (m_pSh->IsObjSelected())
+                if (m_pSh->GetSelectedObjCount())
                 {
                     if (!rMEvt.IsShift())
                     {
@@ -332,7 +332,7 @@ bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
                     m_pSh->SelectObj(aPnt, ( rMEvt.IsShift() &&
                                    m_pSh->IsSelFrameMode()) ? SW_ADD_SELECT : 0);
 
-                    if (!m_pSh->IsObjSelected())
+                    if (!m_pSh->GetSelectedObjCount())
                     {
                         m_pView->LeaveDrawCreate();    // Switch to selection mode
 
@@ -345,7 +345,7 @@ bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
 
                     bCheckShell = true; // if necessary turn on BezierShell
                 }
-                else if (!m_pSh->IsObjSelected() && !m_pWin->IsDrawAction())
+                else if (!m_pSh->GetSelectedObjCount() && !m_pWin->IsDrawAction())
                 {
                     if (m_pSh->IsObjSelectable(aPnt))
                         m_pSh->SelectObj(aPnt, ( rMEvt.IsShift() &&
@@ -390,7 +390,7 @@ bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
                                        m_pSh->IsSelFrameMode()) ? SW_ADD_SELECT :0);
                     }
 
-                    if (!m_pSh->IsObjSelected())
+                    if (!m_pSh->GetSelectedObjCount())
                     {
                         m_pView->LeaveDrawCreate();    // Switch to selection mode
 
@@ -407,7 +407,7 @@ bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
 
             SetDrawPointer();
 
-            if (!m_pSh->IsObjSelected() && !m_pWin->IsDrawAction())
+            if (!m_pSh->GetSelectedObjCount() && !m_pWin->IsDrawAction())
             {
                 m_pView->LeaveDrawCreate();
                 if (m_pSh->IsSelFrameMode())
@@ -490,7 +490,7 @@ void SwDrawBase::EnterSelectMode(const MouseEvent& rMEvt)
 {
     m_pWin->SetDrawAction(false);
 
-    if (m_pSh->IsObjSelected() || m_pWin->IsDrawAction())
+    if (m_pSh->GetSelectedObjCount() || m_pWin->IsDrawAction())
         return;
 
     Point aPnt(m_pWin->PixelToLogic(rMEvt.GetPosPixel()));
@@ -498,7 +498,7 @@ void SwDrawBase::EnterSelectMode(const MouseEvent& rMEvt)
     if (m_pSh->IsObjSelectable(aPnt))
     {
         m_pSh->SelectObj(aPnt);
-        if (rMEvt.GetModifier() == KEY_SHIFT || !m_pSh->IsObjSelected())
+        if (rMEvt.GetModifier() == KEY_SHIFT || !m_pSh->GetSelectedObjCount())
         {
             m_pView->LeaveDrawCreate();    // Switch to selection mode
 

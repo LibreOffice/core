@@ -215,7 +215,7 @@ void SwView::ExecDraw(const SfxRequest& rReq)
             SetDrawFuncPtr(nullptr);
         }
 
-        if (m_pWrtShell->IsObjSelected() && !m_pWrtShell->IsSelFrameMode())
+        if (m_pWrtShell->GetSelectedObjCount() && !m_pWrtShell->IsSelFrameMode())
             m_pWrtShell->EnterSelFrameMode();
         LeaveDrawCreate();
 
@@ -374,7 +374,7 @@ void SwView::ExecDraw(const SfxRequest& rReq)
     }
     else
     {
-        if (m_pWrtShell->IsObjSelected() && !m_pWrtShell->IsSelFrameMode())
+        if (m_pWrtShell->GetSelectedObjCount() && !m_pWrtShell->IsSelFrameMode())
             m_pWrtShell->EnterSelFrameMode();
     }
 

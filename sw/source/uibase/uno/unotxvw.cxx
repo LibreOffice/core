@@ -1697,7 +1697,7 @@ void SAL_CALL SwXTextView::insertTransferable( const uno::Reference< datatransfe
         if ( SwTransferable::IsPaste( rSh, aDataHelper ) )
         {
             SwTransferable::Paste( rSh, aDataHelper );
-            if( rSh.IsFrameSelected() || rSh.IsObjSelected() )
+            if( rSh.IsFrameSelected() || rSh.GetSelectedObjCount() )
                 rSh.EnterSelFrameMode();
             GetView()->AttrChangedNotify(nullptr);
         }

@@ -75,7 +75,7 @@ void SwBezierShell::Execute(SfxRequest const &rReq)
     {
         case SID_DELETE:
         case FN_BACKSPACE:
-            if (pSh->IsObjSelected())
+            if (pSh->GetSelectedObjCount())
             {
                 if (pSdrView->HasMarkedPoints())
                     pSh->GetView().GetViewFrame().GetDispatcher()->Execute(SID_BEZIER_DELETE);

@@ -51,7 +51,7 @@ using namespace ::com::sun::star::i18n;
 
 static void lcl_ActivateTextShell( SwWrtShell & rWrtSh )
 {
-    if( rWrtSh.IsSelFrameMode() || rWrtSh.IsObjSelected() )
+    if( rWrtSh.IsSelFrameMode() || rWrtSh.GetSelectedObjCount() )
         rWrtSh.EnterStdMode();
 }
 

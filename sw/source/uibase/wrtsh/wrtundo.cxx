@@ -60,7 +60,7 @@ void SwWrtShell::Do(DoType eDoType, sal_uInt16 nCnt, sal_uInt16 nOffset)
     DoUndo(bSaveDoesUndo);
 
     bool bCreateXSelection = false;
-    const bool bFrameSelected = IsFrameSelected() || IsObjSelected();
+    const bool bFrameSelected = IsFrameSelected() || GetSelectedObjCount();
     if ( IsSelection() )
     {
         if ( bFrameSelected )

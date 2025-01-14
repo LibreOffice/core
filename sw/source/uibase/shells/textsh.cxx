@@ -136,7 +136,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
 
-    OSL_ENSURE( !rSh.IsObjSelected() && !rSh.IsFrameSelected(),
+    OSL_ENSURE( !rSh.GetSelectedObjCount() && !rSh.IsFrameSelected(),
             "wrong shell on dispatcher" );
 
     const SfxItemSet *pArgs = rReq.GetArgs();

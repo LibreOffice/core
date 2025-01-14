@@ -114,7 +114,7 @@ void SwBaseShell::InsertURLButton(const OUString& rURL, const OUString& rTarget,
 #endif
         }
 
-        if (rSh.IsObjSelected())
+        if (rSh.GetSelectedObjCount())
         {
             rSh.UnSelectFrame();
         }

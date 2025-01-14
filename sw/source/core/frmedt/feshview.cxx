@@ -1180,7 +1180,7 @@ void SwFEShell::SelectionToHell()
     ChangeOpaque( getIDocumentDrawModelAccess().GetHellId() );
 }
 
-size_t SwFEShell::IsObjSelected() const
+size_t SwFEShell::GetSelectedObjCount() const
 {
     if ( IsFrameSelected() || !Imp()->HasDrawView() )
         return 0;
@@ -2426,7 +2426,7 @@ Point SwFEShell::GetObjAbsPos() const
 
 bool SwFEShell::IsGroupSelected(bool bAllowDiagams)
 {
-    if ( IsObjSelected() )
+    if ( GetSelectedObjCount() )
     {
         const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
         for ( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )
@@ -2482,7 +2482,7 @@ namespace
 bool SwFEShell::IsGroupAllowed() const
 {
     bool bIsGroupAllowed = false;
-    if ( IsObjSelected() > 1 )
+    if ( GetSelectedObjCount() > 1 )
     {
         bIsGroupAllowed = true;
         const SdrObject* pUpGroup = nullptr;
@@ -2588,7 +2588,7 @@ void SwFEShell::UnGroupSelection()
 void SwFEShell::MirrorSelection( bool bHorizontal )
 {
     SdrView *pView = Imp()->GetDrawView();
-    if ( IsObjSelected() && pView->IsMirrorAllowed() )
+    if ( GetSelectedObjCount() && pView->IsMirrorAllowed() )
     {
         if ( bHorizontal )
             pView->MirrorAllMarkedHorizontal();
@@ -2752,7 +2752,7 @@ FlyProtectFlags SwFEShell::IsSelObjProtected( FlyProtectFlags eType ) const
 
 bool SwFEShell::GetObjAttr( SfxItemSet &rSet ) const
 {
-    if ( !IsObjSelected() )
+    if ( !GetSelectedObjCount() )
         return false;
 
     const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();

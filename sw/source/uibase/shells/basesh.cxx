@@ -377,7 +377,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                         bIgnoreComments = pIgnoreComments->GetValue();
                     SwTransferable::Paste(rSh, aDataHelper, nAnchorType, bIgnoreComments, ePasteTable);
 
-                    if( rSh.IsFrameSelected() || rSh.IsObjSelected() )
+                    if( rSh.IsFrameSelected() || rSh.GetSelectedObjCount() )
                         rSh.EnterSelFrameMode();
                     pView->AttrChangedNotify(nullptr);
 
@@ -411,7 +411,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                         //Done() has to be called before the shell has been removed
                         rReq.Done();
                         bIgnore = true;
-                        if( rSh.IsFrameSelected() || rSh.IsObjSelected())
+                        if( rSh.IsFrameSelected() || rSh.GetSelectedObjCount())
                             rSh.EnterSelFrameMode();
                         pView->AttrChangedNotify(nullptr);
 
@@ -446,7 +446,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                         }
                     }
 
-                    if (rSh.IsFrameSelected() || rSh.IsObjSelected())
+                    if (rSh.IsFrameSelected() || rSh.GetSelectedObjCount())
                         rSh.EnterSelFrameMode();
                     pView->AttrChangedNotify(nullptr);
 
@@ -504,7 +504,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                                     }
                                 }
 
-                                if (rSh.IsFrameSelected() || rSh.IsObjSelected())
+                                if (rSh.IsFrameSelected() || rSh.GetSelectedObjCount())
                                     rSh.EnterSelFrameMode();
                                 pView->AttrChangedNotify(nullptr);
 
@@ -1398,7 +1398,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                                             ? RndStdIds::FLY_AS_CHAR
                                             : RndStdIds::FLY_AT_CHAR;
             rSh.StartUndo();
-            if (rSh.IsObjSelected())
+            if (rSh.GetSelectedObjCount())
                 rSh.ChgAnchor(eSet);
             else if (rSh.IsFrameSelected())
             {
@@ -1718,7 +1718,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
         switch ( nWhich )
         {
             case SID_GALLERY_FORMATS:
-                if ( rSh.IsObjSelected() ||
+                if ( rSh.GetSelectedObjCount() ||
                      (rSh.IsSelFrameMode() &&
                       !(rSh.GetSelectionType() & SelectionType::Graphic)) )
                     rSet.DisableItem( nWhich );
@@ -1954,7 +1954,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
             case FN_TOOL_ANCHOR_AT_CHAR:
             case FN_TOOL_ANCHOR_FRAME:
             {
-                bool bObj = 0 != rSh.IsObjSelected();
+                bool bObj = 0 != rSh.GetSelectedObjCount();
                 bool bParentCntProt = rSh.IsSelObjProtected( FlyProtectFlags::Content|FlyProtectFlags::Parent ) != FlyProtectFlags::NONE;
 
                 if( !bParentCntProt && (bObj || rSh.IsFrameSelected()))
@@ -2005,7 +2005,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
             case FN_FRAME_WRAP_LEFT:
             case FN_FRAME_WRAP_RIGHT:
             {
-                bool bObj = 0 != rSh.IsObjSelected();
+                bool bObj = 0 != rSh.GetSelectedObjCount();
                 bool bParentCntProt = rSh.IsSelObjProtected( FlyProtectFlags::Content|FlyProtectFlags::Parent ) != FlyProtectFlags::NONE;
 
                 if( !bParentCntProt && (bObj || rSh.IsFrameSelected()))
@@ -2208,7 +2208,7 @@ void SwBaseShell::StateStyle( SfxItemSet &rSet )
 void SwBaseShell::SetWrapMode( sal_uInt16 nSlot )
 {
     SwWrtShell &rSh = GetShell();
-    bool bObj = 0 != rSh.IsObjSelected();
+    bool bObj = 0 != rSh.GetSelectedObjCount();
     if( !bObj && !rSh.IsFrameSelected())
         return;
 
@@ -2319,7 +2319,7 @@ void SwBaseShell::SetFrameMode(FlyMode eMode, SwWrtShell *pSh )
     s_eFrameMode = eMode;
     SfxBindings &rBnd = pSh->GetView().GetViewFrame().GetBindings();
 
-    if( eMode == FLY_DRAG || pSh->IsFrameSelected() || pSh->IsObjSelected() )
+    if( eMode == FLY_DRAG || pSh->IsFrameSelected() || pSh->GetSelectedObjCount() )
     {
         const SfxPointItem aTmp1( SID_ATTR_POSITION, pSh->GetAnchorObjDiff());
         const SvxSizeItem  aTmp2( SID_ATTR_SIZE,     pSh->GetObjSize());

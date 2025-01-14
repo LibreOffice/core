@@ -180,7 +180,7 @@ void SwAccessibleSelectionHelper::selectAllAccessibleChildren(  )
     {
         const SdrObject* pObj = rChild.GetDrawObject();
         const SwFrame* pFrame = rChild.GetSwFrame();
-        if( pObj && !(pFrame != nullptr && pFEShell->IsObjSelected()) )
+        if( pObj && !(pFrame != nullptr && pFEShell->GetSelectedObjCount()) )
         {
             m_rContext.Select( const_cast< SdrObject *>( pObj ), nullptr==pFrame );
             if( pFrame )
@@ -205,7 +205,7 @@ sal_Int64 SwAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
         }
         else
         {
-            const size_t nSelObjs = pFEShell->IsObjSelected();
+            const size_t nSelObjs = pFEShell->GetSelectedObjCount();
             if( nSelObjs > 0 )
             {
                 std::list< SwAccessibleChild > aChildren;
@@ -278,7 +278,7 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
     }
     else
     {
-        const size_t nSelObjs = pFEShell->IsObjSelected();
+        const size_t nSelObjs = pFEShell->GetSelectedObjCount();
         if( 0 == nSelObjs || o3tl::make_unsigned(nSelectedChildIndex) >= nSelObjs )
             throwIndexOutOfBoundsException();
 

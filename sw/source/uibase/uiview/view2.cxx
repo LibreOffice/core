@@ -2013,7 +2013,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
             case SID_ATTR_POSITION:
             case SID_ATTR_SIZE:
             {
-                if( !rShell.IsFrameSelected() && !rShell.IsObjSelected() )
+                if( !rShell.IsFrameSelected() && !rShell.GetSelectedObjCount() )
                     SwBaseShell::SetFrameMode_( FLY_DRAG_END );
                 else
                 {
@@ -2032,7 +2032,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
             break;
             case SID_TABLE_CELL:
 
-            if( rShell.IsFrameSelected() || rShell.IsObjSelected() )
+            if( rShell.IsFrameSelected() || rShell.GetSelectedObjCount() )
             {
                 // #i39171# Don't put a SvxSizeItem into a slot which is defined as SfxStringItem.
                 // SvxPosSizeStatusBarControl no longer resets to empty display if only one slot
@@ -2358,7 +2358,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                 }
                 else if( rSh.IsFrameSelected() )
                     nId = FN_FORMAT_FRAME_DLG;
-                else if( rSh.IsObjSelected() )
+                else if( rSh.GetSelectedObjCount() )
                     nId = SID_ATTR_TRANSFORM;
             }
             if( nId )
@@ -2696,7 +2696,7 @@ bool SwView::JumpToSwMark( std::u16string_view rMark )
         // reset ViewStatus
         SetCursorAtTop( bSaveCT, bSaveCC );
 
-        if(!m_pWrtShell->IsFrameSelected() && !m_pWrtShell->IsObjSelected())
+        if(!m_pWrtShell->IsFrameSelected() && !m_pWrtShell->GetSelectedObjCount())
             m_pWrtShell->ShowCursor();
 
         if( !bHasShFocus )

@@ -229,7 +229,7 @@ static void ResizeFrameCols(SwFormatCol& rCol,
 void SwView::ExecTabWin( SfxRequest const & rReq )
 {
     SwWrtShell &rSh         = GetWrtShell();
-    const FrameTypeFlags nFrameType   = rSh.IsObjSelected() ?
+    const FrameTypeFlags nFrameType   = rSh.GetSelectedObjCount() ?
                                     FrameTypeFlags::DRAWOBJ :
                                         rSh.GetFrameType(nullptr,true);
     const bool bFrameSelection = rSh.IsFrameSelected();
@@ -1390,7 +1390,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
     SwWrtShell &rSh = GetWrtShell();
 
     const Point* pPt = IsTabColFromDoc() || IsTabRowFromDoc() ? &m_aTabColFromDocPos : nullptr;
-    const FrameTypeFlags nFrameType   = rSh.IsObjSelected()
+    const FrameTypeFlags nFrameType   = rSh.GetSelectedObjCount()
                 ? FrameTypeFlags::DRAWOBJ
                 : rSh.GetFrameType( pPt, true );
 
