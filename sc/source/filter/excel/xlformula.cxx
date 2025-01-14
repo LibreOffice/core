@@ -609,7 +609,7 @@ const XclFunctionInfo saFuncTable_2021[] =
     EXC_FUNCENTRY_V_VR(  ocMatSequence,1,  4,  0,  "SEQUENCE" ),
     EXC_FUNCENTRY_V_VR(  ocRandArray,  0,  5,  0,  "RANDARRAY" ),
     EXC_FUNCENTRY_V_VR(  ocUnique,     1,  3,  0,  "UNIQUE" ),
-    EXC_FUNCENTRY_V_VR(  ocLet,        3,  3,  0,  "SORTBY")
+    EXC_FUNCENTRY_V_VR(  ocLet,        3,  3,  0,  "LET")
 };
 
 
