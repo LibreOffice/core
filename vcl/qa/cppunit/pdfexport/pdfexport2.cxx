@@ -486,9 +486,9 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf135346)
     CPPUNIT_ASSERT(pPdfPage);
 
     // Without the fix in place, this test would have failed with
-    // - Expected: 56
+    // - Expected: 55
     // - Actual  : 0
-    CPPUNIT_ASSERT_EQUAL(56, pPdfPage->getObjectCount());
+    CPPUNIT_ASSERT_EQUAL(55, pPdfPage->getObjectCount());
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf147164)

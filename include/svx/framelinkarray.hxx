@@ -131,28 +131,28 @@ public:
         Returns the style only if visible (i.e. at left border of a merged range).
         @return
             The left frame style or an invisible style for invalid cell addresses. */
-    SAL_DLLPRIVATE const Style& GetCellStyleLeft( sal_Int32 nCol, sal_Int32 nRow ) const;
+    const Style& GetCellStyleLeft(sal_Int32 nCol, sal_Int32 nRow) const;
 
     /** Returns the right frame style of the cell (nCol,nRow).
         Returns thicker of own right style or left style of the cell to the right.
         Returns the style only if visible (i.e. at right border of a merged range).
         @return
             The left frame style or an invisible style for invalid cell addresses. */
-    SAL_DLLPRIVATE const Style& GetCellStyleRight( sal_Int32 nCol, sal_Int32 nRow ) const;
+    const Style& GetCellStyleRight(sal_Int32 nCol, sal_Int32 nRow) const;
 
     /** Returns the top frame style of the cell (nCol,nRow).
         Returns thicker of own top style or bottom style of the cell above.
         Returns the style only if visible (i.e. at top border of a merged range).
         @return
             The top frame style or an invisible style for invalid cell addresses. */
-    SAL_DLLPRIVATE const Style& GetCellStyleTop( sal_Int32 nCol, sal_Int32 nRow ) const;
+    const Style& GetCellStyleTop(sal_Int32 nCol, sal_Int32 nRow) const;
 
     /** Returns the top frame style of the cell (nCol,nRow).
         Returns thicker of own top style or bottom style of the cell above.
         Returns the style only if visible (i.e. at top border of a merged range).
         @return
             The top frame style or an invisible style for invalid cell addresses. */
-    SAL_DLLPRIVATE const Style& GetCellStyleBottom( sal_Int32 nCol, sal_Int32 nRow ) const;
+    const Style& GetCellStyleBottom(sal_Int32 nCol, sal_Int32 nRow) const;
 
     /** Returns the top-left to bottom-right frame style of the cell (nCol,nRow).
         Ignores merged ranges;
