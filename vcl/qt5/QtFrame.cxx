@@ -717,14 +717,14 @@ void QtFrame::ShowFullScreen(bool bFullScreen, sal_Int32 nScreen)
         m_nRestoreScreen = std::max(sal_Int32(0), screenNumber());
         SetScreenNumber(m_bFullScreenSpanAll ? m_nRestoreScreen : nScreen);
         if (!m_bFullScreenSpanAll)
-            windowHandle()->showFullScreen();
+            m_pTopLevel->showFullScreen();
         else
-            windowHandle()->showNormal();
+            m_pTopLevel->showNormal();
     }
     else
     {
         SetScreenNumber(m_nRestoreScreen);
-        windowHandle()->showNormal();
+        m_pTopLevel->showNormal();
         m_pTopLevel->setGeometry(m_aRestoreGeometry);
     }
 }
