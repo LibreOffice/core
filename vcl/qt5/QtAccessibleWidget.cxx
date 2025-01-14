@@ -51,6 +51,7 @@
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <comphelper/AccessibleImplementationHelper.hxx>
@@ -1858,11 +1859,22 @@ QAccessibleInterface* QtAccessibleWidget::selectedItem(int nSelectionIndex) cons
         return nullptr;
     }
 
-    Reference<XAccessible> xChild = xSelection->getSelectedAccessibleChild(nSelectionIndex);
-    if (!xChild)
-        return nullptr;
+    try
+    {
+        Reference<XAccessible> xChild = xSelection->getSelectedAccessibleChild(nSelectionIndex);
+        if (xChild)
+            return QAccessible::queryAccessibleInterface(QtAccessibleRegistry::getQObject(xChild));
+    }
+    catch (const css::lang::IndexOutOfBoundsException&)
+    {
+        // tdf#163335: temporarily work around inconsistency in
+        // SwAccessibleSelectionHelper::getSelectedAccessibleChildCount
+        // returning a larger number of selected items than
+        // SwAccessibleSelectionHelper::getSelectedAccessibleChild supports
+        SAL_WARN("vcl.qt", "QtAccessibleWidget::selectedItem triggered an exception");
+    }
 
-    return QAccessible::queryAccessibleInterface(QtAccessibleRegistry::getQObject(xChild));
+    return nullptr;
 }
 
 bool QtAccessibleWidget::isSelected(QAccessibleInterface* pItem) const
