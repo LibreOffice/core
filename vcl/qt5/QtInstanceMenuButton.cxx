@@ -23,10 +23,27 @@ QtInstanceMenuButton::QtInstanceMenuButton(QToolButton* pButton)
     assert(m_pToolButton);
 }
 
-void QtInstanceMenuButton::insert_item(int, const OUString&, const OUString&, const OUString*,
-                                       VirtualDevice*, TriState)
+void QtInstanceMenuButton::insert_item(int nPos, const OUString& rId, const OUString& rStr,
+                                       const OUString* pIconName, VirtualDevice* pImageSurface,
+                                       TriState eCheckRadioFalse)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    assert(eCheckRadioFalse == TRISTATE_INDET && "Param not handled yet");
+    (void)eCheckRadioFalse;
+
+    GetQtInstance().RunInMainThread([&] {
+        if (nPos == -1)
+            nPos = getMenu().actions().count();
+
+        QAction* pAction = getMenu().addAction(vclToQtStringWithAccelerator(rStr));
+        pAction->setObjectName(toQString(rId));
+
+        if (pIconName)
+            pAction->setIcon(loadQPixmapIcon(*pIconName));
+        else if (pImageSurface)
+            pAction->setIcon(toQPixmap(*pImageSurface));
+    });
 }
 
 void QtInstanceMenuButton::insert_separator(int, const OUString&)

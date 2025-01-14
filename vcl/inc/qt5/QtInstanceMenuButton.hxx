@@ -22,7 +22,7 @@ class QtInstanceMenuButton : public QtInstanceToggleButton, public virtual weld:
 public:
     QtInstanceMenuButton(QToolButton* pButton);
 
-    virtual void insert_item(int pos, const OUString& rId, const OUString& rStr,
+    virtual void insert_item(int nPos, const OUString& rId, const OUString& rStr,
                              const OUString* pIconName, VirtualDevice* pImageSurface,
                              TriState eCheckRadioFalse) override;
 
