@@ -316,6 +316,7 @@ public:
         or disables bullets/numbering for the selected paragraphs if the bullets/numbering of the first paragraph is on
     */
     void ToggleBullets();
+    bool IsBulletOrNumbering(bool& bBullets, bool& bNumbering);
 
     void ToggleBulletsNumbering(
         const bool bToggle,

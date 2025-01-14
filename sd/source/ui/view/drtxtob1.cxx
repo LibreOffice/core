@@ -464,6 +464,9 @@ void TextObjectBar::ExecuteImpl(ViewShell* mpViewShell, ::sd::View* mpView, SfxR
                         }
                     }
                 }
+                SfxBindings& rBindings = mpViewShell->GetViewFrame()->GetBindings();
+                rBindings.Invalidate( FN_NUM_BULLET_ON );
+                rBindings.Invalidate( FN_NUM_NUMBERING_ON );
             }
             break;
         }

@@ -926,6 +926,45 @@ void OutlinerView::ToggleBullets()
     pOwner->UndoActionEnd();
 }
 
+bool OutlinerView::IsBulletOrNumbering(bool& bBullets, bool& bNumbering)
+{
+    //TODO: returns true if the same list is active in the selection,
+    // sets bBullets/bNumbering if the related list type is found
+    bool bBulletFound = false;
+    bool bNumberingFound = false;
+
+    ESelection aSel( pEditView->GetSelection() );
+    aSel.Adjust();
+    for (sal_Int32 nPara = aSel.start.nPara; nPara <= aSel.end.nPara; nPara++)
+    {
+        Paragraph* pPara = pOwner->pParaList->GetParagraph( nPara );
+        DBG_ASSERT(pPara, "OutlinerView::IsBulletOrNumbering(), illegal selection?");
+
+        if( pPara )
+        {
+            if (pOwner->GetDepth(nPara) < 0)
+                return false;
+            const SvxNumberFormat* pFmt = pOwner ->GetNumberFormat(nPara);
+            if (pFmt)
+            {
+                sal_Int16 nNumType = pFmt->GetNumberingType();
+                if (nNumType != SVX_NUM_BITMAP && nNumType != SVX_NUM_CHAR_SPECIAL)
+                    bNumberingFound = true;
+                else
+                    bBulletFound = true;
+            }
+        }
+    }
+    if (bNumberingFound)
+    {
+        if (bBulletFound)
+            return false;
+        bNumbering = true;
+    }
+    else
+        bBullets = true;
+    return true;
+}
 
 void OutlinerView::ToggleBulletsNumbering(
     const bool bToggle,
