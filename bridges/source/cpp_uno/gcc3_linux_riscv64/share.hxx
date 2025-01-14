@@ -24,8 +24,8 @@
 #include <exception>
 #include <cstddef>
 
-#define MAX_GP_REGS (8)
-#define MAX_FP_REGS (8)
+constexpr auto MAX_GP_REGS = 8;
+constexpr auto MAX_FP_REGS = 8;
 
 namespace CPPU_CURRENT_NAMESPACE
 {

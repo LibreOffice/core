@@ -77,8 +77,8 @@ struct MenuLayoutData : public ControlLayoutData
 
 using namespace vcl;
 
-#define EXTRAITEMHEIGHT     4
-#define SPACE_AROUND_TITLE  4
+constexpr auto EXTRAITEMHEIGHT = 4;
+constexpr auto SPACE_AROUND_TITLE = 4;
 
 static bool ImplAccelDisabled()
 {

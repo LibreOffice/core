@@ -81,7 +81,7 @@ enum x86_64_reg_class
 
 }
 
-#define MAX_CLASSES 4
+constexpr auto MAX_CLASSES = 4;
 
 /* x86-64 register passing implementation.  See x86-64 ABI for details.  Goal
    of this code is to classify each 8bytes of incoming argument by the register
