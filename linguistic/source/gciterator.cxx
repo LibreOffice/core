@@ -55,6 +55,7 @@
 #include <comphelper/diagnose_ex.hxx>
 
 #include <map>
+#include <algorithm>
 
 #include <linguistic/misc.hxx>
 
@@ -120,17 +121,10 @@ const sal_Unicode aWhiteSpaces[] =
    const sal_Int32 PROOFINFO_GET_PROOFRESULT = 1;
    const sal_Int32 PROOFINFO_MARK_PARAGRAPH = 2;
 
-const int nWhiteSpaces = SAL_N_ELEMENTS( aWhiteSpaces );
-
 static bool lcl_IsWhiteSpace( sal_Unicode cChar )
 {
-    bool bFound = false;
-    for (int i = 0;  i < nWhiteSpaces && !bFound;  ++i)
-    {
-        if (cChar == aWhiteSpaces[i])
-            bFound = true;
-    }
-    return bFound;
+    return std::any_of(std::begin(aWhiteSpaces), std::end(aWhiteSpaces),
+        [&cChar](const sal_Unicode c) { return c == cChar; });
 }
 
 static sal_Int32 lcl_SkipWhiteSpaces( const OUString &rText, sal_Int32 nStartPos )
