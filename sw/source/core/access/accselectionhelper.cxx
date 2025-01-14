@@ -204,12 +204,12 @@ sal_Int64 SwAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
         return 1;
 
     sal_Int64 nCount = 0;
+    std::list<SwAccessibleChild> aChildren;
+    m_rContext.GetChildren(*(m_rContext.GetMap()), aChildren);
+
     const size_t nSelObjs = pFEShell->GetSelectedObjCount();
     if( nSelObjs > 0 )
     {
-        std::list< SwAccessibleChild > aChildren;
-        m_rContext.GetChildren( *(m_rContext.GetMap()), aChildren );
-
         for( const SwAccessibleChild& rChild : aChildren )
         {
             if( rChild.GetDrawObject() && !rChild.GetSwFrame() &&
@@ -228,8 +228,6 @@ sal_Int64 SwAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
     //we should check whether it is selected in the selection cursor.
     if( nCount == 0 )
     {
-        std::list< SwAccessibleChild > aChildren;
-        m_rContext.GetChildren( *(m_rContext.GetMap()), aChildren );
         nCount = static_cast<sal_Int32>(std::count_if(aChildren.begin(), aChildren.end(),
             [this](const SwAccessibleChild& aChild) { return lcl_getSelectedState(aChild, &m_rContext, m_rContext.GetMap()); }));
     }
