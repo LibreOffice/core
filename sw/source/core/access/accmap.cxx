@@ -1352,9 +1352,8 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
         }
     }
 
-    typedef std::vector< SwAccessibleContext* > VEC_PARA;
-    VEC_PARA vecAdd;
-    VEC_PARA vecRemove;
+    std::vector<SwAccessibleContext*> vecAdd;
+    std::vector<SwAccessibleContext*> vecRemove;
     //Checked for Paras.
     bool bMarkChanged = false;
     SwAccessibleContextMap_Impl mapTemp;
