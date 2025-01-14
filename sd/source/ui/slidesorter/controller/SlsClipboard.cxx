@@ -312,17 +312,12 @@ sal_Int32 Clipboard::PasteTransferable (sal_Int32 nInsertPosition)
         const SolarMutexGuard aGuard;
 
         nInsertPageCount = static_cast<sal_uInt16>(rBookmarkList.size());
-        rModel.GetDocument()->InsertBookmarkAsPage(
+        rModel.GetDocument()->PasteBookmarkAsPage(
             rBookmarkList,
             nullptr,
-            false,
-            false,
             nInsertIndex,
-            false,
             pClipTransferable->GetPageDocShell(),
-            true,
-            bMergeMasterPages,
-            false);
+            bMergeMasterPages);
     }
     else
     {
@@ -337,17 +332,12 @@ sal_Int32 Clipboard::PasteTransferable (sal_Int32 nInsertPosition)
 
             bMergeMasterPages = (pDataDoc != rModel.GetDocument());
             nInsertPageCount = pDataDoc->GetSdPageCount( PageKind::Standard );
-            rModel.GetDocument()->InsertBookmarkAsPage(
+            rModel.GetDocument()->PasteBookmarkAsPage(
                 std::vector<OUString>(),
                 nullptr,
-                false,
-                false,
                 nInsertIndex,
-                false,
                 pDataDocSh,
-                true,
-                bMergeMasterPages,
-                false);
+                bMergeMasterPages);
         }
     }
     mrController.HandleModelChange();
@@ -966,9 +956,8 @@ bool Clipboard::PasteSlidesFromSystemClipboard()
 
         auto insertPos = mrSlideSorter.GetModel().GetCoreIndex(
             mrSlideSorter.GetController().GetClipboard().GetInsertionPosition());
-        pDocument->InsertBookmarkAsPage(aBookmarkList, &aExchangeList, false /*bLink*/,
-                                        false /*bReplace*/, insertPos /*nPos*/, true,
-                                        xDocShRef.get(), true, true, false);
+        pDocument->PasteBookmarkAsPage(aBookmarkList, &aExchangeList, insertPos /*nPos*/,
+                                       xDocShRef.get(), true);
 
         std::vector<OUString> aObjectBookmarkList;
         pDocument->InsertBookmarkAsObject(aObjectBookmarkList, aExchangeList, xDocShRef.get(),

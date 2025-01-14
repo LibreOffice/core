@@ -64,7 +64,8 @@ public:
 
     void HandleSlotCall (SfxRequest& rRequest);
 
-    void DoCut ();
+    // Exported for unit test
+    SD_DLLPUBLIC void DoCut ();
     // Exported for unit test
     SD_DLLPUBLIC void DoCopy();
     // Exported for unit test

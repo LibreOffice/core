@@ -216,17 +216,25 @@ sal_uInt16 ViewClipboard::InsertSlides (
         if( bWait )
             pWin->LeaveWait();
 
-        rDoc.InsertBookmarkAsPage(
-            pBookmarkList ? *pBookmarkList : std::vector<OUString>(),
-            nullptr,
-            false,
-            false,
-            nInsertPosition,
-            (&rTransferable == SdModule::get()->pTransferDrag),
-            pDataDocSh,
-            true,
-            bMergeMasterPages,
-            false);
+        if (&rTransferable == SdModule::get()->pTransferDrag)
+        {
+            // This is a drag and drop operation
+            rDoc.DropBookmarkAsPage(
+                pBookmarkList ? *pBookmarkList : std::vector<OUString>(),
+                nInsertPosition,
+                pDataDocSh,
+                bMergeMasterPages);
+        }
+        else
+        {
+            // This is a regular paste operation
+            rDoc.PasteBookmarkAsPage(
+                pBookmarkList ? *pBookmarkList : std::vector<OUString>(),
+                nullptr,
+                nInsertPosition,
+                pDataDocSh,
+                bMergeMasterPages);
+        }
 
         if( bWait )
             pWin->EnterWait();

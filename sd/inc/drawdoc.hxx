@@ -30,9 +30,12 @@
 #include <memory>
 #include <optional>
 #include <string_view>
+#include <map>
+#include <utility>
 
 #include "sddllapi.h"
 #include "pres.hxx"
+#include "stlpool.hxx"
 
 namespace com::sun::star::xml::dom { class XNode; }
 namespace com::sun::star::uno { class XInterface; }
@@ -118,6 +121,230 @@ namespace sd
     };
 }
 
+/**
+ * Type aliases for commonly used data structures
+ */
+typedef std::vector<OUString> PageNameList;            // List of page/bookmark names
+typedef std::vector<OUString> SlideLayoutNameList;     // List of slide layout names
+typedef std::map<OUString, sal_Int32> SlideLayoutMap;  // Map of slide layout names to indices
+typedef std::map<OUString, std::shared_ptr<model::Theme>> ThemeMap; // Map of theme names to theme objects
+
+/**
+ * Context for style sheet transfers during page operations
+ *
+ * This structure contains all data required for transferring styles (graphic, cell, table)
+ * between documents or pages. It maintains collections of styles that need to be
+ * transferred and manages pointers to source and destination style sheet pools.
+ */
+struct StyleTransferContext
+{
+    // Style collections to be transferred
+    StyleSheetCopyResultVector aGraphicStyles;  // Graphic styles to be transferred
+    StyleSheetCopyResultVector aCellStyles;     // Cell styles to be transferred
+    XStyleVector aTableStyles;                  // Table styles to be transferred
+    OUString aRenameString;                     // String for style renaming operations
+
+    // Layout information
+    SlideLayoutMap aSlideLayouts;               // Layouts to be transferred
+    ThemeMap aThemes;                           // Themes to be transferred
+
+    // Style sheet pools (optional, set by the caller)
+    SdStyleSheetPool* pSourceStyleSheetPool;    // Source style sheet pool
+    SdStyleSheetPool* pDestStyleSheetPool;      // Destination style sheet pool
+
+    StyleTransferContext()
+        : pSourceStyleSheetPool(nullptr)
+        , pDestStyleSheetPool(nullptr)
+    {}
+
+    // Constructor with style sheet pools
+    StyleTransferContext(SdStyleSheetPool* pSource, SdStyleSheetPool* pDest)
+        : pSourceStyleSheetPool(pSource)
+        , pDestStyleSheetPool(pDest)
+    {}
+
+    // Set style sheet pools
+    void setStyleSheetPools(SdStyleSheetPool* pSource, SdStyleSheetPool* pDest) {
+        pSourceStyleSheetPool = pSource;
+        pDestStyleSheetPool = pDest;
+    }
+
+    // Reset/clear all collections
+    void clear() {
+        aGraphicStyles.clear();
+        aCellStyles.clear();
+        aTableStyles.clear();
+        aRenameString.clear();
+        aSlideLayouts.clear();
+        aThemes.clear();
+        // Don't clear pointers to style sheet pools
+    }
+};
+
+/**
+ * Options for inserting bookmarks as pages
+ *
+ * This structure defines all parameters for controlling how pages/bookmarks
+ * are inserted into documents. It covers operations like linking, replacing,
+ * and various flags to control the behavior during page insertion.
+ */
+struct InsertBookmarkOptions
+{
+    bool bLink;               // Insert bookmarks as links
+    bool bReplace;            // Replace pages instead of inserting
+    bool bNoDialogs;          // No dialogs allowed
+    bool bCopy;               // Copy source document
+    bool bMergeMasterPages;   // Merge master pages
+    bool bPreservePageNames;  // Preserve page names
+    bool bIsClipboardOperation; // Operation triggered by clipboard
+    bool bIsDragAndDropOperation; // Operation triggered by drag and drop
+    bool bIsSameDocumentOperation; // Operation within the same document
+    bool bIsFileDocument;     // Operation involves a file document
+
+    InsertBookmarkOptions()
+        : bLink(false), bReplace(false), bNoDialogs(false),
+          bCopy(true), bMergeMasterPages(true), bPreservePageNames(false),
+          bIsClipboardOperation(false), bIsDragAndDropOperation(false),
+          bIsSameDocumentOperation(false), bIsFileDocument(false)
+    {}
+
+    // Preset for paste operation
+    static InsertBookmarkOptions ForPaste(bool bMergeMasterPages) {
+        InsertBookmarkOptions options;
+        options.bIsClipboardOperation = true;
+        options.bMergeMasterPages = bMergeMasterPages;
+        // All defaults are fine for paste
+        return options;
+    }
+
+    // Preset for file insert operation
+    static InsertBookmarkOptions ForFileInsert(bool bLinkPages) {
+        InsertBookmarkOptions options;
+        options.bLink = bLinkPages;
+        options.bIsFileDocument = true;
+        return options;
+    }
+
+    // Preset for drag and drop operation
+    static InsertBookmarkOptions ForDragDrop(bool bMergeMasterPages) {
+        InsertBookmarkOptions options;
+        options.bIsDragAndDropOperation = true;
+        options.bNoDialogs = true;
+        options.bMergeMasterPages = bMergeMasterPages;
+        return options;
+    }
+
+    // Preset for page link resolution
+    static InsertBookmarkOptions ForPageLinks(bool bCopySource, bool bNoDialogs) {
+        InsertBookmarkOptions options;
+        options.bLink = true;
+        options.bReplace = true;
+        options.bPreservePageNames = true;
+        options.bCopy = bCopySource;
+        options.bNoDialogs = bNoDialogs;
+        return options;
+    }
+
+    // Preset for internal document operations
+    static InsertBookmarkOptions ForInternalOps(bool bPreserveNames) {
+        InsertBookmarkOptions options;
+        options.bNoDialogs = true;
+        options.bMergeMasterPages = false;
+        options.bPreservePageNames = bPreserveNames;
+        options.bIsSameDocumentOperation = true;
+        return options;
+    }
+
+    // Preset for document import operations
+    static InsertBookmarkOptions ForDocumentImport() {
+        InsertBookmarkOptions options;
+        options.bLink = false;            // No linking for document import
+        options.bReplace = true;          // Replace pages when importing document
+        options.bNoDialogs = true;        // No dialogs for document import
+        options.bCopy = true;             // Always copy when importing document
+        options.bMergeMasterPages = true; // Always merge master pages
+        options.bPreservePageNames = false; // Don't preserve page names
+        options.bIsFileDocument = true;   // This is a file document operation
+        return options;
+    }
+};
+
+/**
+ * Properties of a document page, used for page insertion and scaling operations
+ *
+ * This structure stores the geometric properties of a page including size, margins,
+ * orientation, and a pointer to the page object itself. Used primarily during
+ * page insertion and scaling operations.
+ */
+struct PageProperties
+{
+    Size         size;        // Page size dimensions
+    sal_Int32    left;        // Left margin
+    sal_Int32    right;       // Right margin
+    sal_Int32    upper;       // Upper (top) margin
+    sal_Int32    lower;       // Lower (bottom) margin
+    Orientation  orientation; // Page orientation (portrait/landscape)
+    SdPage*      pPage;       // Pointer to the page object
+};
+
+/**
+ * Document page count information
+ *
+ * Tracks counts of different page types during document operations,
+ * particularly useful during page insertion and master page handling.
+ */
+struct DocumentPageCounts
+{
+    sal_uInt16 nDestPageCount;     // Count of standard pages in destination document
+    sal_uInt16 nSourcePageCount;   // Count of standard pages in source document
+    sal_uInt16 nMasterPageCount;   // Count of master pages in destination document
+    sal_uInt16 nNewMPageCount;     // Count of new master pages after processing
+
+    DocumentPageCounts(sal_uInt16 destCount, sal_uInt16 sourceCount, sal_uInt16 masterCount)
+        : nDestPageCount(destCount)
+        , nSourcePageCount(sourceCount)
+        , nMasterPageCount(masterCount)
+        , nNewMPageCount(0)
+    {}
+
+    // Check if all counts are valid (non-zero)
+    bool areValid() const {
+        return !(nDestPageCount == 0 || nSourcePageCount == 0 || nMasterPageCount == 0);
+    }
+};
+
+/**
+ * Parameters related to page insertion operations
+ *
+ * Collects all parameters needed for page insertion operations including
+ * insertion position, bookmark name, replacement count, undo status, scaling options,
+ * and property information for both main and notes pages.
+ */
+struct PageInsertionParams
+{
+    sal_uInt16 nInsertPos;           // Position where to insert pages
+    OUString aBookmarkName;          // Name of the bookmark for insertion
+    sal_uInt16 nReplacedStandardPages; // Number of replaced standard pages
+    bool bUndo;                      // Whether undo is enabled
+    bool bScaleObjects;              // Whether to scale objects
+    PageNameList* pExchangeList;     // List of pages for exchange operations
+    SdDrawDocument* pBookmarkDoc;    // Source document for page insertion
+    PageProperties mainProps;        // Properties of main pages (size, borders, etc.)
+    PageProperties notesProps;       // Properties of notes pages (size, borders, etc.)
+
+    PageInsertionParams(sal_uInt16 a_nInsertPos, PageNameList* a_pExchangeList = nullptr, SdDrawDocument* a_pBookmarkDoc = nullptr)
+        : nInsertPos(a_nInsertPos)
+        , aBookmarkName(OUString())
+        , nReplacedStandardPages(0)
+        , bUndo(true)
+        , bScaleObjects(false)
+        , pExchangeList(a_pExchangeList)
+        , pBookmarkDoc(a_pBookmarkDoc)
+        // mainProps and notesProps are default-initialized
+    {}
+};
+
+
 // SdDrawDocument
 class SD_DLLPUBLIC SdDrawDocument final : public FmFormModel
 {
@@ -197,6 +424,97 @@ private:
 
 public:
 
+    /**
+     * Initialize the bookmark document for page/object operations
+     */
+    bool initBookmarkDoc(::sd::DrawDocShell* pBookmarkDocSh, SdDrawDocument*& pBookmarkDoc, OUString& aBookmarkName);
+
+    /**
+     * Get page properties from the first standard and notes pages
+     */
+    void getPageProperties(PageProperties& mainProps, PageProperties& notesProps, sal_uInt16 nSdPageCount);
+
+    // --- Page insertion and document handling operations ---
+
+    /**
+     * Insert specific pages selected from the bookmark list
+     */
+    void insertSelectedPages(const PageNameList& rBookmarkList,
+        PageInsertionParams& rParams,
+        InsertBookmarkOptions rOptions);
+
+    /**
+     * Insert all pages from the source document
+     */
+    void insertAllPages(PageInsertionParams& rParams,
+        const InsertBookmarkOptions& rOptions,
+        const sal_uInt16& nBMSdPageCount);
+
+    /**
+     * Determine whether objects should be scaled during insertion
+     */
+    bool determineScaleObjects(bool bNoDialogs,
+        const PageNameList& rBookmarkList,
+        PageInsertionParams& rParams);
+
+    /**
+     * Collect layouts that need to be transferred from source document
+     */
+    void collectLayoutsToTransfer(const PageNameList& rBookmarkList,
+        SdDrawDocument* pBookmarkDoc,
+        SlideLayoutNameList& rLayoutsToTransfer,
+        const sal_uInt16& nBMSdPageCount);
+
+    /**
+     * Transfer layout styles from source document to destination
+     */
+    void transferLayoutStyles(const SlideLayoutNameList& layoutsToTransfer,
+        SdDrawDocument* pBookmarkDoc,
+        SfxUndoManager* pUndoMgr,
+        StyleTransferContext& rStyleContext);
+
+    /**
+     * Copy styles between documents with options for replacement and dialog suppression
+     */
+    static void copyStyles(bool bReplace, bool bNoDialogs,
+        StyleTransferContext& rStyleContext);
+
+    /**
+     * Remove duplicate master pages after insertion
+     */
+    void removeDuplicateMasterPages(PageInsertionParams& rParams,
+        DocumentPageCounts& rPageCounts);
+
+    /**
+     * Update pages after insertion with proper styles and properties
+     */
+    void updateInsertedPages(PageInsertionParams& rParams,
+        const InsertBookmarkOptions& rOptions,
+        DocumentPageCounts& rPageCounts,
+        StyleTransferContext& rStyleContext);
+
+    /**
+     * Rename object styles if needed after page insertion
+     */
+    void renameObjectStylesIfNeeded(sal_uInt32 nInsertPos,
+        StyleTransferContext& rStyleContext,
+        sal_uInt32 nBMSdPageCount);
+
+    /**
+     * Clean up unused styles after page insertion
+     */
+    void cleanupStyles(SfxUndoManager* pUndoMgr,
+        StyleTransferContext& rStyleContext);
+
+    /**
+     * Begin an undoable action for page operations
+     */
+    SfxUndoManager* beginUndoAction();
+
+    /**
+     * End an undoable action for page operations
+     */
+    void endUndoAction(bool bUndo, SfxUndoManager* pUndoMgr);
 
     SAL_DLLPRIVATE SdDrawDocument(DocumentType eType, SfxObjectShell* pDocSh);
     SAL_DLLPRIVATE virtual ~SdDrawDocument() override;
@@ -305,61 +623,125 @@ public:
     SAL_DLLPRIVATE void InitObjectVector();
     /// return reference to vector of master presentation object definitions
     SAL_DLLPRIVATE const std::vector<css::uno::Reference<css::xml::dom::XNode> >& GetObjectVector() const { return maPresObjectInfo; }
-    /** Insert pages into this document
 
-        This method inserts whole pages into this document, either
-        selected ones (specified via pBookmarkList/pExchangeList), or
-        all from the source document.
 
-        @attention Beware! This method in its current state does not
-        handle all combinations of their input parameters
-        correctly. For example, for pBookmarkList=NULL, bReplace=true
-        is ignored (no replace happens).
-
-        @param pBookmarkList
-        A list of strings, denoting the names of the pages to be copied
-
-        @param pExchangeList
-        A list of strings, denoting the names of the pages to be renamed
-
-        @param bLink
-        Whether the inserted pages should be linked to the bookmark document
-
-        @param bReplace
-        Whether the pages should not be inserted, but replace the pages in
-        the destination document
-
-        @param nPgPos
-        Insertion point/start of replacement
-
-        @param bNoDialogs
-        Whether query dialogs are allowed (e.g. for page scaling)
-
-        @param pBookmarkDocSh
-        DocShell of the source document (used e.g. to extract the filename
-        for linked pages)
-
-        @param bCopy
-        Whether the source document should be treated as immutable (i.e.
-        inserted pages are not removed from it, but cloned)
-
-        @param bMergeMasterPages
-        Whether the source document's master pages should be copied, too.
-
-        @param bPreservePageNames
-        Whether the replace operation should take the name from the new
-        page, or preserve the old name
+    /**
+     * Paste pages from clipboard - handles regular paste operations
+     *
+     * This method is called when the user performs a paste operation from the clipboard.
+     * It handles the insertion of pages that were previously copied or cut to the clipboard.
+     *
+     * @param rBookmarkList List of page names to be pasted
+     * @param pExchangeList Optional list of names to use for the pasted pages
+     * @param nInsertPos Position where pages should be inserted
+     * @param pBookmarkDocSh Source document shell
+     * @param bMergeMasterPages Whether to merge master pages from source
+     * @return true if operation was successful
      */
+    bool PasteBookmarkAsPage(
+        const PageNameList &rBookmarkList,
+        PageNameList *pExchangeList,
+        sal_uInt16 nInsertPos,
+        ::sd::DrawDocShell* pBookmarkDocSh,
+        bool bMergeMasterPages);
 
-    bool InsertBookmarkAsPage(const std::vector<OUString> &rBookmarkList,
-                              std::vector<OUString> *pExchangeList,
-                              bool bLink, bool bReplace, sal_uInt16 nPgPos,
-                              bool bNoDialogs, ::sd::DrawDocShell* pBookmarkDocSh,
-                              bool bCopy, bool bMergeMasterPages,
-                              bool bPreservePageNames);
+    /**
+     * Insert pages from external files
+     *
+     * This method is called when inserting pages from external files, either through
+     * the Insert > Page from File menu command or when handling file links.
+     * It manages the transfer of pages from an external document to the current one.
+     *
+     * @param rBookmarkList List of page names to be inserted
+     * @param pExchangeList Optional list of names to use for the inserted pages
+     * @param bLink Whether to link to the source pages instead of copying
+     * @param nInsertPos Position where pages should be inserted
+     * @param pBookmarkDocSh Source document shell
+     * @return true if operation was successful
+     */
+    bool InsertFileAsPage(
+        const PageNameList &rBookmarkList,
+        PageNameList *pExchangeList,
+        bool bLink,
+        sal_uInt16 nInsertPos,
+        ::sd::DrawDocShell* pBookmarkDocSh);
 
-    SAL_DLLPRIVATE bool InsertBookmarkAsObject(const std::vector<OUString> &rBookmarkList,
-                                    const std::vector<OUString> &rExchangeList,
+    /**
+     * Handle drag and drop operations
+     *
+     * This method is called when pages are dragged and dropped, either within
+     * the same document or from another document. It processes the dropped pages
+     * and inserts them at the specified position.
+     *
+     * @param rBookmarkList List of page names to be dropped
+     * @param nInsertPos Position where pages should be inserted
+     * @param pBookmarkDocSh Source document shell
+     * @param bMergeMasterPages Whether to merge master pages from source
+     * @return true if operation was successful
+     */
+    bool DropBookmarkAsPage(
+        const PageNameList &rBookmarkList,
+        sal_uInt16 nInsertPos,
+        ::sd::DrawDocShell* pBookmarkDocSh,
+        bool bMergeMasterPages);
+
+    /**
+     * Resolve page links
+     *
+     * This method is called when linked pages need to be resolved, typically
+     * when a document with linked pages is opened or when the user chooses
+     * to update or break links to external pages.
+     *
+     * @param rBookmarkList List of page names to resolve links for
+     * @param nInsertPos Position where resolved pages should be inserted
+     * @param bNoDialogs Whether to suppress dialogs during operation
+     * @param bCopy Whether to copy the linked pages
+     * @return true if operation was successful
+     */
+    bool ResolvePageLinks(
+        const PageNameList &rBookmarkList,
+        sal_uInt16 nInsertPos,
+        bool bNoDialogs,
+        bool bCopy);
+
+    /**
+     * Copy or move pages within the same document
+     *
+     * This method is called for internal page operations such as duplicating pages
+     * or moving pages within the same document. It handles the copying or moving
+     * of pages while maintaining proper references and styles.
+     *
+     * @param rBookmarkList List of page names to be copied or moved
+     * @param pExchangeList Optional list of names to use for the destination pages
+     * @param nInsertPos Position where pages should be inserted
+     * @param bPreservePageNames Whether to preserve original page names
+     * @return true if operation was successful
+     */
+    bool CopyOrMovePagesWithinDocument(
+        const PageNameList &rBookmarkList,
+        PageNameList *pExchangeList,
+        sal_uInt16 nInsertPos,
+        bool bPreservePageNames);
+
+    /**
+     * Import a whole document
+     *
+     * This method is called when importing an entire document, such as when
+     * using Insert > Document or when merging presentations. It handles the
+     * transfer of all pages and associated resources from the source document.
+     *
+     * @param rBookmarkList List of page names to be imported (empty for all pages)
+     * @param nInsertPos Position where imported pages should be inserted
+     * @param pBookmarkDocSh Source document shell
+     * @return true if operation was successful
+     */
+    bool ImportDocumentPages(
+        const PageNameList &rBookmarkList,
+        sal_uInt16 nInsertPos,
+        ::sd::DrawDocShell* pBookmarkDocSh);
+
+    SAL_DLLPRIVATE bool InsertBookmarkAsObject(const PageNameList &rBookmarkList,
+                                    const PageNameList &rExchangeList,
                                     ::sd::DrawDocShell* pBookmarkDocSh,
                                     Point const * pObjPos, bool bCalcObjCount);
 
