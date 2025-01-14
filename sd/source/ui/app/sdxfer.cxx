@@ -673,8 +673,7 @@ void SdTransferable::SetPageBookmarks( std::vector<OUString> && rPageBookmarks, 
     if( bPersistent )
     {
         mpSdDrawDocument->CreateFirstPages(mpSourceDoc);
-        mpSdDrawDocument->InsertBookmarkAsPage( rPageBookmarks, nullptr, false, true, 1, true,
-                                                mpSourceDoc->GetDocSh(), true, true, false );
+        mpSdDrawDocument->ImportDocumentPages(rPageBookmarks, 1, mpSourceDoc->GetDocSh());
     }
     else
     {

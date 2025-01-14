@@ -373,9 +373,8 @@ bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
             bNameOK = mpView->GetExchangeList( aExchangeList, aBookmarkList, 0 );
 
             if( bNameOK )
-                bOK = mpDoc->InsertBookmarkAsPage( aBookmarkList, &aExchangeList,
-                                    bLink, false/*bReplace*/, nPos,
-                                    false, nullptr, true, true, false );
+                bOK = mpDoc->InsertFileAsPage( aBookmarkList, &aExchangeList,
+                                    bLink, nPos, nullptr );
 
             aBookmarkList.clear();
             aExchangeList.clear();

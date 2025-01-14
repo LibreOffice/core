@@ -100,8 +100,7 @@ SdPageLink::~SdPageLink()
                 bCopy = true;
             }
 
-            pDoc->InsertBookmarkAsPage(aBookmarkList, nullptr, true/*bLink*/, true/*bReplace*/,
-                                       nInsertPos, bNoDialogs, nullptr, bCopy, true, true);
+            pDoc->ResolvePageLinks(aBookmarkList, nInsertPos, bNoDialogs, bCopy);
 
             if (!SdDrawDocument::s_pDocLockedInsertingLinks)
                 pDoc->CloseBookmarkDoc();

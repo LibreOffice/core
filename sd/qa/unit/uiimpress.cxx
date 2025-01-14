@@ -542,6 +542,44 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf96206)
     CPPUNIT_ASSERT_EQUAL(nMasterPageCnt1, nMasterPageCnt2);
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentCut)
+{
+    // Test cutting slides and verifying the document state afterwards
+    createSdImpressDoc("odp/tdf96206.odp");
+
+    // Get the slide sorter and controller
+    sd::slidesorter::SlideSorterViewShell* pSSVS = getSlideSorterViewShell();
+    auto& rSSController = pSSVS->GetSlideSorter().GetController();
+
+    // Get document and initial page count
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+
+    // Get initial page count
+    const sal_uInt16 nInitialPageCount = pDoc->GetSdPageCount(PageKind::Standard);
+    CPPUNIT_ASSERT(nInitialPageCount > 0);
+
+    // Select all slides
+    rSSController.GetPageSelector().SelectAllPages();
+
+    // Check that slides are selected
+    CPPUNIT_ASSERT(rSSController.GetPageSelector().GetSelectedPageCount() > 0);
+
+    // Cut the selected slides
+    rSSController.GetClipboard().DoCut();
+
+    // Paste the cut slides
+    rSSController.GetClipboard().DoPaste();
+
+    // After pasting, we should have at least the initial number of pages
+    const sal_uInt16 nPageCountAfterPaste = pDoc->GetSdPageCount(PageKind::Standard);
+    CPPUNIT_ASSERT(nPageCountAfterPaste >= nInitialPageCount);
+
+    // Verify that master page count remains unchanged throughout the operation
+    const sal_uInt16 nMasterPageCount = pDoc->GetMasterSdPageCount(PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), nMasterPageCount);
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf96708)
 {
     createSdImpressDoc("odp/tdf96708.odp");
