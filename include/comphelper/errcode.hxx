@@ -27,15 +27,10 @@
 #include <compare>
 
 #if defined(DBG_UTIL)
-#if __has_include(<version>)
-#include <version>
-#endif
-#if defined(__cpp_lib_source_location) && __cpp_lib_source_location >= 201907
-#include <source_location>
-#define LIBO_ERRMSG_USE_SOURCE_LOCATION std
-#elif __has_include(<experimental/source_location>)
-#include <experimental/source_location>
-#define LIBO_ERRMSG_USE_SOURCE_LOCATION std::experimental
+#include <o3tl/source_location.hxx>
+#ifdef LIBO_USE_SOURCE_LOCATION
+// LIBO_USE_SOURCE_LOCATION may be defined without DBG_UTIL, so a separate define is needed
+#define LIBO_ERRMSG_USE_SOURCE_LOCATION
 #endif
 #endif
 
@@ -185,15 +180,15 @@ class SAL_WARN_UNUSED ErrCodeMsg
 public:
     ErrCodeMsg() : mnCode(0), mnDialogMask(DialogMask::NONE) {}
 #ifdef LIBO_ERRMSG_USE_SOURCE_LOCATION
-    ErrCodeMsg(ErrCode code, const OUString& arg, LIBO_ERRMSG_USE_SOURCE_LOCATION::source_location loc = LIBO_ERRMSG_USE_SOURCE_LOCATION::source_location::current())
+    ErrCodeMsg(ErrCode code, const OUString& arg, o3tl::source_location loc = o3tl::source_location::current())
         : mnCode(code), maArg1(arg),  mnDialogMask(DialogMask::NONE), moLoc(loc) {}
-    ErrCodeMsg(ErrCode code, const OUString& arg1, const OUString& arg2, LIBO_ERRMSG_USE_SOURCE_LOCATION::source_location loc = LIBO_ERRMSG_USE_SOURCE_LOCATION::source_location::current())
+    ErrCodeMsg(ErrCode code, const OUString& arg1, const OUString& arg2, o3tl::source_location loc = o3tl::source_location::current())
         : mnCode(code), maArg1(arg1), maArg2(arg2), mnDialogMask(DialogMask::NONE), moLoc(loc) {}
-    ErrCodeMsg(ErrCode code, LIBO_ERRMSG_USE_SOURCE_LOCATION::source_location loc = LIBO_ERRMSG_USE_SOURCE_LOCATION::source_location::current())
+    ErrCodeMsg(ErrCode code, o3tl::source_location loc = o3tl::source_location::current())
         : mnCode(code), mnDialogMask(DialogMask::NONE), moLoc(loc) {}
-    ErrCodeMsg(ErrCode code, const OUString& arg, DialogMask mask, LIBO_ERRMSG_USE_SOURCE_LOCATION::source_location loc = LIBO_ERRMSG_USE_SOURCE_LOCATION::source_location::current())
+    ErrCodeMsg(ErrCode code, const OUString& arg, DialogMask mask, o3tl::source_location loc = o3tl::source_location::current())
         : mnCode(code), maArg1(arg), mnDialogMask(mask), moLoc(loc) {}
-    ErrCodeMsg(ErrCode code, const OUString& arg1, const OUString& arg2, DialogMask mask, LIBO_ERRMSG_USE_SOURCE_LOCATION::source_location loc = LIBO_ERRMSG_USE_SOURCE_LOCATION::source_location::current())
+    ErrCodeMsg(ErrCode code, const OUString& arg1, const OUString& arg2, DialogMask mask, o3tl::source_location loc = o3tl::source_location::current())
         : mnCode(code), maArg1(arg1), maArg2(arg2), mnDialogMask(mask), moLoc(loc) {}
 #else
     ErrCodeMsg(ErrCode code, const OUString& arg)
@@ -214,7 +209,7 @@ public:
     DialogMask GetDialogMask() const { return mnDialogMask; }
 
 #ifdef LIBO_ERRMSG_USE_SOURCE_LOCATION
-    const std::optional<LIBO_ERRMSG_USE_SOURCE_LOCATION::source_location> & GetSourceLocation() const { return moLoc; }
+    const std::optional<o3tl::source_location>& GetSourceLocation() const { return moLoc; }
 #endif
 
     /** convert to ERRCODE_NONE if it's a warning, else return the error */
@@ -235,7 +230,7 @@ private:
     OUString maArg2;
     DialogMask mnDialogMask;
 #ifdef LIBO_ERRMSG_USE_SOURCE_LOCATION
-    std::optional<LIBO_ERRMSG_USE_SOURCE_LOCATION::source_location> moLoc;
+    std::optional<o3tl::source_location> moLoc;
 #endif
 };
 
