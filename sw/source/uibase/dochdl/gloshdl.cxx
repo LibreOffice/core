@@ -440,7 +440,10 @@ bool SwGlossaryHdl::Expand(weld::Window* pParent, const OUString& rShortName,
                 ScopedVclPtr<AbstractSwSelGlossaryDlg> pDlg(pFact->CreateSwSelGlossaryDlg(pParent, aShortName));
                 for(const TextBlockInfo_Impl & i : aFoundArr)
                 {
-                    pDlg->InsertGlos(i.sTitle, i.sLongName);
+                    if (i.sTitle == "My AutoText")
+                        pDlg->InsertGlos(SwResId(STR_MY_AUTOTEXT), i.sLongName);
+                    else
+                        pDlg->InsertGlos(i.sTitle, i.sLongName);
                 }
                 pDlg->SelectEntryPos(0);
                 const sal_Int32 nRet = RET_OK == pDlg->Execute() ?
