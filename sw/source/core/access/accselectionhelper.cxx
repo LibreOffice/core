@@ -274,27 +274,48 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
     }
     else
     {
+        std::list<SwAccessibleChild> aChildren;
+        m_rContext.GetChildren(*(m_rContext.GetMap()), aChildren);
+
         const size_t nSelObjs = pFEShell->GetSelectedObjCount();
-        if( 0 == nSelObjs || o3tl::make_unsigned(nSelectedChildIndex) >= nSelObjs )
-            throwIndexOutOfBoundsException();
-
-        std::list< SwAccessibleChild > aChildren;
-        m_rContext.GetChildren( *(m_rContext.GetMap()), aChildren );
-
-        for( const SwAccessibleChild& rChild : aChildren )
+        if (nSelObjs > 0)
         {
-            if( rChild.GetDrawObject() && !rChild.GetSwFrame() &&
-                SwAccessibleFrame::GetParent(rChild, m_rContext.IsInPagePreview()) ==
-                    m_rContext.GetFrame() &&
-                pFEShell->IsObjSelected( *rChild.GetDrawObject() ) )
+            if (o3tl::make_unsigned(nSelectedChildIndex) >= nSelObjs)
+                throwIndexOutOfBoundsException();
+
+            for( const SwAccessibleChild& rChild : aChildren )
             {
-                if( 0 == nSelectedChildIndex )
-                    aChild = rChild;
-                else
-                    --nSelectedChildIndex;
+                if( rChild.GetDrawObject() && !rChild.GetSwFrame() &&
+                    SwAccessibleFrame::GetParent(rChild, m_rContext.IsInPagePreview()) ==
+                        m_rContext.GetFrame() &&
+                    pFEShell->IsObjSelected( *rChild.GetDrawObject() ) )
+                {
+                    if( 0 == nSelectedChildIndex )
+                        aChild = rChild;
+                    else
+                        --nSelectedChildIndex;
+                }
+                if (aChild.IsValid())
+                    break;
             }
-            if (aChild.IsValid())
-                break;
+        }
+
+        // check children selected by the selection cursor
+        if (!aChild.IsValid())
+        {
+            sal_Int64 nCount = 0;
+            for (const SwAccessibleChild& rChild : aChildren)
+            {
+                if (lcl_getSelectedState(rChild, &m_rContext, m_rContext.GetMap()))
+                {
+                    if (nCount == nSelectedChildIndex)
+                    {
+                        aChild = rChild;
+                        break;
+                    }
+                    nCount++;
+                }
+            }
         }
     }
 
