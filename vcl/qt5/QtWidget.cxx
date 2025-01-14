@@ -245,21 +245,10 @@ void QtWidget::showEvent(QShowEvent*)
     m_rFrame.CallCallback(SalEvent::Paint, &aPaintEvt);
 }
 
-void QtWidget::hideEvent(QHideEvent* pEvent)
+void QtWidget::hideEvent(QHideEvent*)
 {
-    if (m_rFrame.isPopup())
-    {
-        if (GetQtInstance().activePopup() == &m_rFrame)
-            GetQtInstance().setActivePopup(nullptr);
-
-        // destroy the QWindow as the popup would otherwise still show up
-        // as a top-level child of the app on the a11y level
-        // (Qt explicitly filters out widgets of type Qt::Popup, but
-        // Qt::ToolTip is currently used for popups to work around another
-        // issue, s. the QtFrame ctor)
-        if (!pEvent->spontaneous())
-            destroy();
-    }
+    if (m_rFrame.isPopup() && GetQtInstance().activePopup() == &m_rFrame)
+        GetQtInstance().setActivePopup(nullptr);
 }
 
 void QtWidget::closeEvent(QCloseEvent* /*pEvent*/)

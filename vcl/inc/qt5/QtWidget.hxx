@@ -70,7 +70,7 @@ class QtWidget : public QWidget
     virtual void paintEvent(QPaintEvent*) override;
     virtual void resizeEvent(QResizeEvent*) override;
     virtual void showEvent(QShowEvent*) override;
-    virtual void hideEvent(QHideEvent* pEvent) override;
+    virtual void hideEvent(QHideEvent*) override;
     virtual void wheelEvent(QWheelEvent*) override;
     virtual void closeEvent(QCloseEvent*) override;
     virtual void changeEvent(QEvent*) override;
