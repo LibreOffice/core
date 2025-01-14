@@ -1147,15 +1147,13 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
     if( mpShapeMap )
         pShapes = mpShapeMap->Copy( nShapes, pFESh, &pSelShape );
 
-    bool bIsSelAll =IsDocumentSelAll();
-
     if( mpShapeMap )
     {
         //Checked for shapes.
         SwAccessibleShapeMap_Impl::const_iterator aIter = mpShapeMap->cbegin();
         SwAccessibleShapeMap_Impl::const_iterator aEndIter = mpShapeMap->cend();
 
-        if( bIsSelAll)
+        if (IsDocumentSelAll())
         {
             while( aIter != aEndIter )
             {
