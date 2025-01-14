@@ -1370,8 +1370,8 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                     SwFrame *pFrame = nullptr;
                     if(nStartIndex.GetNode().IsContentNode())
                     {
-                        SwContentNode* pCNd = static_cast<SwContentNode*>(&(nStartIndex.GetNode()));
-                        pFrame = SwIterator<SwFrame, SwContentNode, sw::IteratorMode::UnwrapMulti>(*pCNd).First();
+                        SwContentNode& rCNd = static_cast<SwContentNode&>(nStartIndex.GetNode());
+                        pFrame = SwIterator<SwFrame, SwContentNode, sw::IteratorMode::UnwrapMulti>(rCNd).First();
                         if (mapTemp.find(pFrame) != mapTemp.end())
                         {
                             continue; // sw_redlinehide: once is enough
@@ -1379,8 +1379,8 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                     }
                     else if( nStartIndex.GetNode().IsTableNode() )
                     {
-                        SwTableNode * pTable = static_cast<SwTableNode *>(&(nStartIndex.GetNode()));
-                        SwTableFormat* pFormat = pTable->GetTable().GetFrameFormat();
+                        SwTableNode& rTable = static_cast<SwTableNode&>(nStartIndex.GetNode());
+                        SwTableFormat* pFormat = rTable.GetTable().GetFrameFormat();
                         pFrame = SwIterator<SwFrame, SwTableFormat>(*pFormat).First();
                     }
 
