@@ -37,6 +37,7 @@
 #include <unotools/ucbhelper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/viewoptions.hxx>
+#include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
 
 #include <fpicker/strings.hrc>
@@ -892,16 +893,14 @@ void SvtFileDialog::OpenHdl_Impl(void const * pVoid)
 
                 if ( !bExists )
                 {
-                    OUString sError(FpsResId(RID_FILEOPEN_NOTEXISTENTFILE));
-
                     OUString sInvalidFile( aFileObj.GetMainURL( INetURLObject::DecodeMechanism::ToIUri ) );
                     // transform the URL into system notation
                     osl_getSystemPathFromFileURL(sInvalidFile.pData, &sInvalidFile.pData);
-                    sError = sError.replaceFirst( "$name$", sInvalidFile );
-
-                    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
-                                                              VclMessageType::Warning, VclButtonsType::Ok, sError));
-                    xBox->run();
+                    static constexpr ErrMsgCode ids[]
+                        = { { RID_FILEOPEN_NOTEXISTENTFILE, ERRCODE_IO_NOTEXISTS }, { {}, {} } };
+                    SfxErrorHandler handler(ids, ErrCodeArea::Io, ErrCodeArea::Io, FpsResLocale());
+                    ErrorHandler::HandleError({ ERRCODE_IO_NOTEXISTS, sInvalidFile },
+                                              m_xDialog.get());
                     return;
                 }
             }
@@ -1489,10 +1488,10 @@ bool SvtFileDialog::PrepareExecute()
                 = aCnt.createCursor( aProps, ::ucbhelper::INCLUDE_FOLDERS_ONLY );
             if ( xResultSet.is() && !xResultSet->next() )
             {
-                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
-                                                          VclMessageType::Warning, VclButtonsType::Ok,
-                                                          FpsResId(STR_SVT_NOREMOVABLEDEVICE)));
-                xBox->run();
+                static constexpr ErrMsgCode ids[]
+                    = { { STR_SVT_NOREMOVABLEDEVICE, ERRCODE_IO_INVALIDDEVICE }, { {}, {} } };
+                SfxErrorHandler handler(ids, ErrCodeArea::Io, ErrCodeArea::Io, FpsResLocale());
+                ErrorHandler::HandleError(ERRCODE_IO_INVALIDDEVICE, m_xDialog.get());
                 return false;
             }
         }

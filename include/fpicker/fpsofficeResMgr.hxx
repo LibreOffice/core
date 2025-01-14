@@ -10,6 +10,7 @@
 
 #include <unotools/resmgr.hxx>
 
-inline OUString FpsResId(TranslateId aId) { return Translate::get(aId, Translate::Create("fps")); };
+inline std::locale FpsResLocale() { return Translate::Create("fps"); }
+inline OUString FpsResId(TranslateId aId) { return Translate::get(aId, FpsResLocale()); };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -29,7 +29,7 @@
 #define STR_BUTTONSELECT                            NC_("STR_BUTTONSELECT", "~Select")
 #define STR_PREVIEW                                 NC_("STR_PREVIEW", "File Preview")
 #define STR_DEFAULT_DIRECTORY                       NC_("STR_DEFAULT_DIRECTORY", "My Documents")
-#define RID_FILEOPEN_NOTEXISTENTFILE                NC_("RID_FILEOPEN_NOTEXISTENTFILE", "The file $name$ does not exist.\nMake sure you have entered the correct file name.")
+#define RID_FILEOPEN_NOTEXISTENTFILE                NC_("RID_FILEOPEN_NOTEXISTENTFILE", "The file $(ARG1) does not exist.\nMake sure you have entered the correct file name.")
 #define STR_SVT_NEW_FOLDER                          NC_("STR_SVT_NEW_FOLDER", "Folder")
 #define STR_SVT_NOREMOVABLEDEVICE                   NC_("STR_SVT_NOREMOVABLEDEVICE", "No removable storage device detected.\nMake sure it is plugged in properly and try again.")
 
