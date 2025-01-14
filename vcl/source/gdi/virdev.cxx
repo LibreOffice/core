@@ -351,10 +351,9 @@ void VirtualDevice::ImplFillOpaqueRectangle( const tools::Rectangle& rRect )
     Pop();
 }
 
-bool VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, bool bErase,
-                                            sal_uInt8 *const pBuffer, bool bAlphaMaskTransparent )
+bool VirtualDevice::SetOutputSizePixel( const Size& rNewSize, bool bErase, bool bAlphaMaskTransparent )
 {
-    if( InnerImplSetOutputSizePixel(rNewSize, bErase, pBuffer) )
+    if( InnerImplSetOutputSizePixel(rNewSize, bErase, /*pBuffer*/nullptr) )
     {
         if (meFormatAndAlpha != DeviceFormat::WITHOUT_ALPHA)
         {
@@ -402,11 +401,6 @@ void VirtualDevice::EnableRTL( bool bEnable )
     OutputDevice::EnableRTL(bEnable);
 }
 
-bool VirtualDevice::SetOutputSizePixel( const Size& rNewSize, bool bErase, bool bAlphaMaskTransparent )
-{
-    return ImplSetOutputSizePixel(rNewSize, bErase, nullptr, bAlphaMaskTransparent);
-}
-
 bool VirtualDevice::SetOutputSizePixelScaleOffsetAndLOKBuffer(
     const Size& rNewSize, const Fraction& rScale, const Point& rNewOffset,
     sal_uInt8 *const pBuffer)
@@ -420,7 +414,22 @@ bool VirtualDevice::SetOutputSizePixelScaleOffsetAndLOKBuffer(
     mm.SetScaleX( rScale );
     mm.SetScaleY( rScale );
     SetMapMode( mm );
-    return ImplSetOutputSizePixel(rNewSize, true, pBuffer);
+
+    assert(meFormatAndAlpha == DeviceFormat::WITHOUT_ALPHA);
+    assert(mpVirDev);
+    assert( rNewSize != GetOutputSizePixel() &&  "Trying to re-use a VirtualDevice but this time using a pre-allocated buffer");
+    assert( rNewSize.Width() >= 1 );
+    assert( rNewSize.Height() >= 1 );
+
+    bool bRet = mpVirDev->SetSizeUsingBuffer( rNewSize.Width(), rNewSize.Height(), pBuffer );
+    if ( bRet )
+    {
+        mnOutWidth  = rNewSize.Width();
+        mnOutHeight = rNewSize.Height();
+    }
+
+    return bRet;
+
 }
 
 void VirtualDevice::SetReferenceDevice( RefDevMode i_eRefDevMode )
