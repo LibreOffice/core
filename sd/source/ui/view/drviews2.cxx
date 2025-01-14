@@ -1521,6 +1521,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             SetCurrentFunction( FuBulletAndPosition::Create( this, GetActiveWindow(), mpDrawView.get(), GetDoc(), rReq ) );
             Cancel();
+            SfxBindings& rBindings = GetViewFrame()->GetBindings();
+            rBindings.Invalidate( FN_NUM_BULLET_ON );
+            rBindings.Invalidate( FN_NUM_NUMBERING_ON );
         }
         break;
 

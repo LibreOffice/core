@@ -2830,10 +2830,13 @@ sal_uInt16 SdrObjEditView::GetSelectionLevel() const
     for (sal_Int32 nPara = nStartPara; nPara <= nEndPara; nPara++)
     {
         sal_Int16 nDepth = mpTextEditOutliner->GetDepth(nPara);
-        assert(nDepth >= 0 && nDepth <= 15);
-        sal_uInt16 nParaDepth = 1 << static_cast<sal_uInt16>(nDepth);
-        if (!(nLevel & nParaDepth))
-            nLevel += nParaDepth;
+        assert(nDepth <= 15);
+        if (nDepth >= 0)
+        {
+            sal_uInt16 nParaDepth = 1 << static_cast<sal_uInt16>(nDepth);
+            if (!(nLevel & nParaDepth))
+                nLevel += nParaDepth;
+        }
     }
     //reduce one level for Outliner Object
     //if( nLevel > 0 && GetTextEditObject()->GetObjIdentifier() == OBJ_OUTLINETEXT )
