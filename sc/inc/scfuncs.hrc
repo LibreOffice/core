@@ -4251,6 +4251,18 @@ const TranslateId SC_OPCODE_RANDARRAY_ARY[] =
     NC_("SC_OPCODE_RANDARRAY", "Return integer (TRUE) or decimal (FALSE) values.")
 };
 
+// -=*# Resource for function TOCOL #*=-
+const TranslateId SC_OPCODE_TOCOL_ARY[] =
+{
+    NC_("SC_OPCODE_TOCOL", "transforms an array into a single column."),
+    NC_("SC_OPCODE_TOCOL", "Array"),
+    NC_("SC_OPCODE_TOCOL", "The range or array to return as a column."),
+    NC_("SC_OPCODE_TOCOL", "Ignore"),
+    NC_("SC_OPCODE_TOCOL", "Whether to ignore certain types of values. 0 or omitted - keep all values (default). 1 - ignore blanks. 2 - ignore errors. 3 - ignore blanks and errors."),
+    NC_("SC_OPCODE_TOCOL", "Scan by column"),
+    NC_("SC_OPCODE_TOCOL", "Scan the array by column. FALSE or omitted (default) - the array is scanned by row. TRUE - the array is scanned by column.")
+};
+
 // -=*# Resource for function UNIQUE #*=-
 const TranslateId SC_OPCODE_UNIQUE_ARY[] =
 {
