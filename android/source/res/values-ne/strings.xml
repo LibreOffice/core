@@ -20,4 +20,5 @@
     <string name="default_document_name">शीर्षक नभएको</string>
     <string name="about_license">इजाजतपत्र देखाउनुहोस्</string>
     <string name="title_browser">सबै फाइलहरू</string>
+    <string name="create_file">नयाँ फाइल बनाउनुहोस</string>
 </resources>

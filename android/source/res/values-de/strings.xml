@@ -38,7 +38,7 @@
     <string name="message_saved">Speichern beendet</string>
     <string name="message_saving">Dokument wird gespeichert…</string>
     <string name="message_saving_failed">Speichern des Dokuments ist fehlgeschlagen.</string>
-    <string name="password">Passwort</string>
+    <string name="password">Kennwort</string>
     <string name="action_undo">Rückgängig</string>
     <string name="action_redo">Wiederherstellen</string>
     <!-- Save Alert dialog strings -->
@@ -68,7 +68,7 @@
     <!-- Password dialog strings -->
     <string name="action_pwd_dialog_OK">OK</string>
     <string name="action_pwd_dialog_cancel">Abbrechen</string>
-    <string name="action_pwd_dialog_title">Bitte Passwort eingeben</string>
+    <string name="action_pwd_dialog_title">Bitte Kennwort eingeben</string>
     <!-- Insert Image Strings -->
     <string name="take_photo">Foto Machen</string>
     <string name="select_photo">Foto Auswählen</string>
