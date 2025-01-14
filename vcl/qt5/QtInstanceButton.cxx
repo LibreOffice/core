@@ -28,15 +28,8 @@ QtInstanceButton::QtInstanceButton(QAbstractButton* pButton)
 void QtInstanceButton::set_label(const OUString& rText)
 {
     SolarMutexGuard g;
-    QtInstance& rQtInstance = GetQtInstance();
-    if (!rQtInstance.IsMainThread())
-    {
-        rQtInstance.RunInMainThread([&] { set_label(rText); });
-        return;
-    }
-
-    assert(m_pButton);
-    m_pButton->setText(toQString(rText));
+    GetQtInstance().RunInMainThread(
+        [&] { m_pButton->setText(vclToQtStringWithAccelerator(rText)); });
 }
 
 void QtInstanceButton::set_image(VirtualDevice* pDevice)
