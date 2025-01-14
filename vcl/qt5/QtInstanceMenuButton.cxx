@@ -21,8 +21,11 @@ QtInstanceMenuButton::QtInstanceMenuButton(QToolButton* pButton)
     , m_pToolButton(pButton)
 {
     assert(m_pToolButton);
-
     m_pToolButton->setPopupMode(QToolButton::InstantPopup);
+
+    assert(m_pToolButton->menu());
+    connect(m_pToolButton->menu(), &QMenu::triggered, this,
+            &QtInstanceMenuButton::handleMenuItemTriggered);
 }
 
 void QtInstanceMenuButton::insert_item(int nPos, const OUString& rId, const OUString& rStr,
@@ -142,6 +145,14 @@ QAction* QtInstanceMenuButton::getAction(const OUString& rIdent) const
     }
 
     return nullptr;
+}
+
+void QtInstanceMenuButton::handleMenuItemTriggered(QAction* pAction)
+{
+    SolarMutexGuard g;
+
+    assert(pAction);
+    signal_selected(toOUString(pAction->objectName()));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

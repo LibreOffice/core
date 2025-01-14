@@ -40,6 +40,9 @@ public:
 private:
     QMenu& getMenu() const;
     QAction* getAction(const OUString& rIdent) const;
+
+private Q_SLOTS:
+    void handleMenuItemTriggered(QAction* pAction);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
