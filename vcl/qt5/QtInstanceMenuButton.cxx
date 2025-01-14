@@ -21,6 +21,8 @@ QtInstanceMenuButton::QtInstanceMenuButton(QToolButton* pButton)
     , m_pToolButton(pButton)
 {
     assert(m_pToolButton);
+
+    m_pToolButton->setPopupMode(QToolButton::InstantPopup);
 }
 
 void QtInstanceMenuButton::insert_item(int nPos, const OUString& rId, const OUString& rStr,
