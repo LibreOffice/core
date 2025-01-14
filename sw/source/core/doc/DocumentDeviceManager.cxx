@@ -205,11 +205,11 @@ void DocumentDeviceManager::setJobsetup(/*[in]*/ const JobSetup &rJobSetup )
     if( !mpPrt )
     {
         //The ItemSet is deleted by Sfx!
-        auto pSet = std::make_unique<SfxItemSetFixed<
-                SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
-                SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
-                SID_HTML_MODE, SID_HTML_MODE,
-                FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER>>(m_rDoc.GetAttrPool());
+        auto pSet = std::make_unique<SfxItemSet>(SfxItemSet::makeFixedSfxItemSet<
+                        SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
+                        SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
+                        SID_HTML_MODE, SID_HTML_MODE,
+                        FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER>(m_rDoc.GetAttrPool()));
         VclPtr<SfxPrinter> p = VclPtr<SfxPrinter>::Create( std::move(pSet), rJobSetup );
         if ( bCheckPageDescs )
             setPrinter( p, true, true );
@@ -284,12 +284,11 @@ SfxPrinter& DocumentDeviceManager::CreatePrinter_() const
 
     // We create a default SfxPrinter.
     // The ItemSet is deleted by Sfx!
-    auto pSet = std::make_unique<SfxItemSetFixed<
-            SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
-            SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
-            SID_HTML_MODE, SID_HTML_MODE,
-            FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER>>(m_rDoc.GetAttrPool());
-
+    auto pSet = std::make_unique<SfxItemSet>(SfxItemSet::makeFixedSfxItemSet<
+                    SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
+                    SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
+                    SID_HTML_MODE, SID_HTML_MODE,
+                    FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER>(m_rDoc.GetAttrPool()));
     VclPtr<SfxPrinter> pNewPrt = VclPtr<SfxPrinter>::Create( std::move(pSet) );
 
     // assign PrintData to newly created printer

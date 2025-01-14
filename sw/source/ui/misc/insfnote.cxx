@@ -50,7 +50,7 @@ void SwInsFootNoteDlg::Apply()
         if (m_rSh.SetCurFootnote( aNote ) && m_bExtCharAvailable)
         {
             m_rSh.Right(SwCursorSkipMode::Chars, true, 1, false );
-            SfxItemSetFixed<RES_CHRATR_FONT, RES_CHRATR_FONT> aSet(m_rSh.GetAttrPool());
+            SfxItemSet aSet(SfxItemSet::makeFixedSfxItemSet<RES_CHRATR_FONT, RES_CHRATR_FONT>(m_rSh.GetAttrPool()));
             m_rSh.GetCurAttr(aSet);
             const SvxFontItem &rFont = aSet.Get( RES_CHRATR_FONT );
             SvxFontItem aFont( rFont.GetFamily(), m_aFontName,
@@ -92,7 +92,7 @@ IMPL_LINK_NOARG(SwInsFootNoteDlg, NumberExtCharHdl, weld::Button&, void)
 {
     m_xNumberCharBtn->set_active(true);
 
-    SfxItemSetFixed<RES_CHRATR_FONT, RES_CHRATR_FONT> aSet(m_rSh.GetAttrPool());
+    SfxItemSet aSet(SfxItemSet::makeFixedSfxItemSet<RES_CHRATR_FONT, RES_CHRATR_FONT>(m_rSh.GetAttrPool()));
     m_rSh.GetCurAttr( aSet );
     const SvxFontItem &rFont = aSet.Get( RES_CHRATR_FONT );
 
@@ -212,7 +212,7 @@ void SwInsFootNoteDlg::Init()
             sNumStr = aFootnoteNote.GetNumStr();
 
             m_rSh.Right(SwCursorSkipMode::Chars, true, 1, false );
-            SfxItemSetFixed<RES_CHRATR_FONT, RES_CHRATR_FONT> aSet(m_rSh.GetAttrPool());
+            SfxItemSet aSet(SfxItemSet::makeFixedSfxItemSet<RES_CHRATR_FONT, RES_CHRATR_FONT>(m_rSh.GetAttrPool()));
             m_rSh.GetCurAttr(aSet);
             const SvxFontItem &rFont = aSet.Get( RES_CHRATR_FONT );
             aFont = m_xNumberCharEdit->get_font();

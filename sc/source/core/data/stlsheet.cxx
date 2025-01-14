@@ -144,13 +144,12 @@ SfxItemSet& ScStyleSheet::GetItemSet()
                     // (== Standard page template)
 
                     SfxItemPool& rItemPool = GetPool()->GetPool();
-                    pSet = new SfxItemSetFixed<
-                            ATTR_USERDEF, ATTR_USERDEF,
-                            ATTR_WRITINGDIR, ATTR_WRITINGDIR,
-                            ATTR_BACKGROUND, ATTR_BACKGROUND,
-                            ATTR_BORDER, ATTR_SHADOW,
-                            ATTR_LRSPACE, ATTR_PAGE_SCALETO>(rItemPool);
-
+                    pSet = new SfxItemSet(rItemPool, WhichRangesContainer(svl::Items<
+                        ATTR_USERDEF, ATTR_USERDEF,
+                        ATTR_WRITINGDIR, ATTR_WRITINGDIR,
+                        ATTR_BACKGROUND, ATTR_BACKGROUND,
+                        ATTR_BORDER, ATTR_SHADOW,
+                        ATTR_LRSPACE, ATTR_PAGE_SCALETO>));
                     //  If being loaded also the set is then filled in from the file,
                     //  so the defaults do not need to be set.
                     //  GetPrinter would then also create a new printer,
@@ -233,20 +232,21 @@ SfxItemSet& ScStyleSheet::GetItemSet()
                     pItemPool = pItemPool->GetSecondaryPool();
                 assert(pItemPool);
 
-                pSet = new SfxItemSetFixed<
-                        XATTR_LINE_FIRST, XATTR_LINE_LAST,
-                        XATTR_FILL_FIRST, XATTR_FILL_LAST,
-                        SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST,
-                        SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_WORDWRAP,
-                        SDRATTR_EDGE_FIRST, SDRATTR_MEASURE_LAST,
-                        SDRATTR_3D_FIRST, SDRATTR_3D_LAST,
-                        EE_PARA_START, EE_CHAR_END>(*pItemPool);
+                pSet = new SfxItemSet(*pItemPool, WhichRangesContainer(svl::Items<
+                            XATTR_LINE_FIRST, XATTR_LINE_LAST,
+                            XATTR_FILL_FIRST, XATTR_FILL_LAST,
+                            SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST,
+                            SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_WORDWRAP,
+                            SDRATTR_EDGE_FIRST, SDRATTR_MEASURE_LAST,
+                            SDRATTR_3D_FIRST, SDRATTR_3D_LAST,
+                            EE_PARA_START, EE_CHAR_END>));
             }
             break;
 
             case SfxStyleFamily::Para:
             default:
-                pSet = new SfxItemSetFixed<ATTR_PATTERN_START, ATTR_PATTERN_END>( GetPool()->GetPool() );
+                pSet = new SfxItemSet(GetPool()->GetPool(), WhichRangesContainer(svl::Items<
+                            ATTR_PATTERN_START, ATTR_PATTERN_END>));
                 break;
         }
         bMySet = true;

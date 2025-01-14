@@ -328,7 +328,7 @@ void TextObjectBar::ExecuteImpl(ViewShell* mpViewShell, ::sd::View* mpView, SfxR
             SvxLRSpaceItem aLRSpace = static_cast<const SvxLRSpaceItem&>(pArgs->Get(
                 SID_ATTR_PARA_LRSPACE));
 
-            SfxItemSetFixed<EE_PARA_LRSPACE, EE_PARA_LRSPACE> aEditAttr(mpView->GetDoc().GetPool());
+            SfxItemSet aEditAttr(SfxItemSet::makeFixedSfxItemSet<EE_PARA_LRSPACE, EE_PARA_LRSPACE>(mpView->GetDoc().GetPool()));
             aLRSpace.SetWhich( EE_PARA_LRSPACE );
 
             aEditAttr.Put( aLRSpace );
@@ -341,7 +341,7 @@ void TextObjectBar::ExecuteImpl(ViewShell* mpViewShell, ::sd::View* mpView, SfxR
 
         case SID_HANGING_INDENT:
         {
-            SfxItemSetFixed<EE_PARA_LRSPACE, EE_PARA_LRSPACE> aLRSpaceSet(mpView->GetDoc().GetPool());
+            SfxItemSet aLRSpaceSet(SfxItemSet::makeFixedSfxItemSet<EE_PARA_LRSPACE, EE_PARA_LRSPACE>(mpView->GetDoc().GetPool()));
             mpView->GetAttributes( aLRSpaceSet );
             SvxLRSpaceItem aParaMargin( aLRSpaceSet.Get( EE_PARA_LRSPACE ) );
 
@@ -398,7 +398,7 @@ void TextObjectBar::ExecuteImpl(ViewShell* mpViewShell, ::sd::View* mpView, SfxR
             // tdf#131571: SdrEndTextEdit invalidates pTextEditOutlinerView, the pointer retrieved for pOLV
             // so reinitialize pOLV
             pOLV=mpView->GetTextEditOutlinerView();
-            SfxItemSetFixed<SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION> aAttr( mpView->GetDoc().GetPool() );
+            SfxItemSet aAttr(SfxItemSet::makeFixedSfxItemSet<SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION>(mpView->GetDoc().GetPool()));
             aAttr.Put( SvxWritingModeItem(
                 nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT ?
                     css::text::WritingMode_LR_TB : css::text::WritingMode_TB_RL,

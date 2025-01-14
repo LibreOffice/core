@@ -456,11 +456,11 @@ std::optional<SfxItemSet> SdModule::CreateItemSet( sal_uInt16 nSlot )
     SfxItemPool& rPool = GetPool();
     rPool.SetDefaultMetric( MapUnit::Map100thMM );
 
-    SfxItemSetFixed<
-            SID_ATTR_GRID_OPTIONS, SID_ATTR_GRID_OPTIONS,
-            SID_ATTR_METRIC, SID_ATTR_METRIC,
-            SID_ATTR_DEFTABSTOP, SID_ATTR_DEFTABSTOP,
-            ATTR_OPTIONS_LAYOUT, ATTR_OPTIONS_SCALE_END>  aRet(rPool);
+    SfxItemSet aRet(SfxItemSet::makeFixedSfxItemSet<
+                SID_ATTR_GRID_OPTIONS, SID_ATTR_GRID_OPTIONS,
+                SID_ATTR_METRIC, SID_ATTR_METRIC,
+                SID_ATTR_DEFTABSTOP, SID_ATTR_DEFTABSTOP,
+                ATTR_OPTIONS_LAYOUT, ATTR_OPTIONS_SCALE_END>(rPool));
 
     sal_uInt16 nDefTab = 0;
     SvtSysLocale aSysLocale;
@@ -674,9 +674,10 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
         bMiscOptions = true;
     }
 
-    SfxItemSetFixed<SID_PRINTER_NOTFOUND_WARN,  SID_PRINTER_NOTFOUND_WARN,
-                    SID_PRINTER_CHANGESTODOC,   SID_PRINTER_CHANGESTODOC,
-                    ATTR_OPTIONS_PRINT,         ATTR_OPTIONS_PRINT>  aPrintSet( GetPool() );
+    SfxItemSet aPrintSet(SfxItemSet::makeFixedSfxItemSet<
+                SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
+                SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
+                ATTR_OPTIONS_PRINT, ATTR_OPTIONS_PRINT>(GetPool()));
 
     // Print
     const SdOptionsPrintItem* pPrintItem = rSet.GetItemIfSet( ATTR_OPTIONS_PRINT, false);

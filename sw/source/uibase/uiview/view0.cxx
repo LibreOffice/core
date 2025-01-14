@@ -787,7 +787,7 @@ void SwView::ExecFormatFootnote()
 
 void SwView::ExecNumberingOutline(SfxItemPool & rPool)
 {
-    SfxItemSetFixed<FN_PARAM_1, FN_PARAM_1> aTmp(rPool);
+    SfxItemSet aTmp(SfxItemSet::makeFixedSfxItemSet<FN_PARAM_1, FN_PARAM_1>(rPool));
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateOutlineTabDialog(GetFrameWeld(), &aTmp, GetWrtShell()));
     pDlg->StartExecuteAsync(

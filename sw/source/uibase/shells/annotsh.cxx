@@ -499,7 +499,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebView*>( pView) !=  nullptr );
                 SwModule::get()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, eMetric));
                 */
-                SfxItemSetFixed<XATTR_FILLSTYLE, XATTR_FILLCOLOR, EE_ITEMS_START, EE_ITEMS_END> aDlgAttr(GetPool());
+                SfxItemSet aDlgAttr(SfxItemSet::makeFixedSfxItemSet<XATTR_FILLSTYLE, XATTR_FILLCOLOR, EE_ITEMS_START, EE_ITEMS_END>(GetPool()));
 
                 // util::Language does not exist in the EditEngine! Therefore not included in the set.
 
@@ -552,10 +552,9 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebView*>( pView) !=  nullptr );
                 SwModule::get()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, eMetric));
                 */
-                SfxItemSetFixed<
-                        EE_ITEMS_START, EE_ITEMS_END,
-                        SID_ATTR_PARA_HYPHENZONE, SID_ATTR_PARA_WIDOWS>
-                    aDlgAttr( GetPool() );
+                SfxItemSet aDlgAttr(SfxItemSet::makeFixedSfxItemSet<
+                    EE_ITEMS_START, EE_ITEMS_END,
+                    SID_ATTR_PARA_HYPHENZONE, SID_ATTR_PARA_WIDOWS>(GetPool()));
 
                 aDlgAttr.Put(aEditAttr);
 
@@ -597,10 +596,9 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 if( !static_cast<const SfxBoolItem*>(pPoolItem)->GetValue() )
                     bLeftToRight = !bLeftToRight;
             }
-            SfxItemSetFixed<
-                    EE_PARA_WRITINGDIR, EE_PARA_WRITINGDIR,
-                    EE_PARA_JUST, EE_PARA_JUST>
-                aAttr( *aNewAttr.GetPool() );
+            SfxItemSet aAttr(SfxItemSet::makeFixedSfxItemSet<
+                EE_PARA_WRITINGDIR, EE_PARA_WRITINGDIR,
+                EE_PARA_JUST, EE_PARA_JUST>(*aNewAttr.GetPool()));
 
             SvxAdjust nAdjust = SvxAdjust::Left;
             if( const SvxAdjustItem* pAdjustItem = aEditAttr.GetItemIfSet(EE_PARA_JUST ) )
@@ -1867,10 +1865,9 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
     pOutliner->SetUpdateLayout(false);
 
     SfxItemSet aOldSet( pOLV->GetAttribs() );
-    SfxItemSetFixed<
-            EE_CHAR_FONTINFO, EE_CHAR_FONTINFO,
-            EE_CHAR_FONTINFO_CJK, EE_CHAR_FONTINFO_CTL>
-        aFontSet( *aOldSet.GetPool() );
+    SfxItemSet aFontSet(SfxItemSet::makeFixedSfxItemSet<
+        EE_CHAR_FONTINFO, EE_CHAR_FONTINFO, EE_CHAR_FONTINFO_CJK,
+        EE_CHAR_FONTINFO_CTL>(*aOldSet.GetPool()));
     aFontSet.Set( aOldSet );
 
     // Insert string

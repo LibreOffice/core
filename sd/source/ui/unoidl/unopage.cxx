@@ -2481,7 +2481,7 @@ void SdDrawPage::setBackground( const Any& rValue )
     // is it our own implementation?
     SdUnoPageBackground* pBack = dynamic_cast<SdUnoPageBackground*>( xSet.get() );
 
-    SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST> aSet( GetModel()->GetDoc()->GetPool() );
+    SfxItemSet aSet(SfxItemSet::makeFixedSfxItemSet<XATTR_FILL_FIRST, XATTR_FILL_LAST>(GetModel()->GetDoc()->GetPool()));
 
     if( pBack )
     {
@@ -2850,7 +2850,7 @@ void SdMasterPage::setBackground( const Any& rValue )
             // is it our own implementation?
             SdUnoPageBackground* pBack = dynamic_cast<SdUnoPageBackground*>( xInputSet.get() );
 
-            SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST> aSet( GetModel()->GetDoc()->GetPool() );
+            SfxItemSet aSet(SfxItemSet::makeFixedSfxItemSet<XATTR_FILL_FIRST, XATTR_FILL_LAST>(GetModel()->GetDoc()->GetPool()));
 
             if( pBack )
             {

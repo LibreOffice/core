@@ -199,14 +199,11 @@ void FuPage::ExecuteAsyncDialog(weld::Window* pParent, const SfxRequest& rReq)
         return;
     }
 
-    std::shared_ptr<SfxItemSet> aNewAttr = std::make_shared<
-        SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST,
-                        EE_PARA_WRITINGDIR, EE_PARA_WRITINGDIR,
-                        SID_ATTR_BORDER_OUTER, SID_ATTR_BORDER_OUTER,
-                        SID_ATTR_BORDER_SHADOW, SID_ATTR_BORDER_SHADOW,
-                        SID_ATTR_PAGE, SID_ATTR_PAGE_SHARED,
-                        SID_ATTR_CHAR_GRABBAG, SID_ATTR_CHAR_GRABBAG,
-                        SID_ATTR_PAGE_COLOR, SID_ATTR_PAGE_FILLSTYLE>>(mpDoc->GetPool());
+    std::shared_ptr<SfxItemSet> aNewAttr = std::make_shared<SfxItemSet>(SfxItemSet::makeFixedSfxItemSet<
+        XATTR_FILL_FIRST, XATTR_FILL_LAST, EE_PARA_WRITINGDIR, EE_PARA_WRITINGDIR,
+        SID_ATTR_BORDER_OUTER, SID_ATTR_BORDER_OUTER, SID_ATTR_BORDER_SHADOW,
+        SID_ATTR_BORDER_SHADOW, SID_ATTR_PAGE, SID_ATTR_PAGE_SHARED, SID_ATTR_CHAR_GRABBAG,
+        SID_ATTR_CHAR_GRABBAG, SID_ATTR_PAGE_COLOR, SID_ATTR_PAGE_FILLSTYLE>(mpDoc->GetPool()));
     // Keep it sorted
     aNewAttr->MergeRange(mpDoc->GetPool().GetWhichIDFromSlotID(SID_ATTR_LRSPACE),
                          mpDoc->GetPool().GetWhichIDFromSlotID(SID_ATTR_ULSPACE));
@@ -335,7 +332,7 @@ void FuPage::ExecuteAsyncDialog(weld::Window* pParent, const SfxRequest& rReq)
             tempSet.Put( XFillStyleItem( drawing::FillStyle_BITMAP ) );
 
             // MigrateItemSet makes sure the XFillBitmapItem will have a unique name
-            SfxItemSetFixed<XATTR_FILLBITMAP, XATTR_FILLBITMAP> aMigrateSet( mpDoc->GetPool() );
+            SfxItemSet aMigrateSet(SfxItemSet::makeFixedSfxItemSet<XATTR_FILLBITMAP, XATTR_FILLBITMAP>(mpDoc->GetPool()));
             aMigrateSet.Put(XFillBitmapItem(u"background"_ustr, std::move(aGraphic)));
             SdrModel::MigrateItemSet( &aMigrateSet, &tempSet, *mpDoc );
 
@@ -408,7 +405,7 @@ void FuPage::ApplyItemSet(SdStyleSheet& styleSheet, const std::shared_ptr<SfxIte
         if (pTempGradItem && pTempGradItem->GetName().isEmpty())
         {
             // MigrateItemSet guarantees unique gradient names
-            SfxItemSetFixed<XATTR_FILLGRADIENT, XATTR_FILLGRADIENT> aMigrateSet( mpDoc->GetPool() );
+            SfxItemSet aMigrateSet(SfxItemSet::makeFixedSfxItemSet<XATTR_FILLGRADIENT, XATTR_FILLGRADIENT>(mpDoc->GetPool()));
             aMigrateSet.Put( XFillGradientItem(u"gradient"_ustr, pTempGradItem->GetGradientValue()) );
             SdrModel::MigrateItemSet( &aMigrateSet, &tempSet, *mpDoc);
         }
@@ -417,7 +414,7 @@ void FuPage::ApplyItemSet(SdStyleSheet& styleSheet, const std::shared_ptr<SfxIte
         if (pTempHatchItem && pTempHatchItem->GetName().isEmpty())
         {
             // MigrateItemSet guarantees unique hatch names
-            SfxItemSetFixed<XATTR_FILLHATCH, XATTR_FILLHATCH> aMigrateSet( mpDoc->GetPool() );
+            SfxItemSet aMigrateSet(SfxItemSet::makeFixedSfxItemSet<XATTR_FILLHATCH, XATTR_FILLHATCH>(mpDoc->GetPool()));
             aMigrateSet.Put( XFillHatchItem(u"hatch"_ustr, pTempHatchItem->GetHatchValue()) );
             SdrModel::MigrateItemSet( &aMigrateSet, &tempSet, *mpDoc);
         }

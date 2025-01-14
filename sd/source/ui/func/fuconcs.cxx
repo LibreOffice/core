@@ -187,18 +187,14 @@ void FuConstructCustomShape::SetAttributes( SdrObject* pObj )
                             if( pSourceObj )
                             {
                                 const SfxItemSet& rSource = pSourceObj->GetMergedItemSet();
-                                SfxItemSetFixed<
-                                        // Ranges from SdrAttrObj:
-                                        SDRATTR_START, SDRATTR_SHADOW_LAST,
-                                        SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
-                                        SDRATTR_TEXTDIRECTION,
-                                            SDRATTR_TEXTDIRECTION,
-                                        // Graphic attributes, 3D properties,
-                                        // CustomShape properties:
-                                        SDRATTR_GRAF_FIRST,
-                                            SDRATTR_CUSTOMSHAPE_LAST,
-                                        // Range from SdrTextObj:
-                                        EE_ITEMS_START, EE_ITEMS_END> aDest(pObj->getSdrModelFromSdrObject().GetItemPool());
+                                SfxItemSet aDest(SfxItemSet::makeFixedSfxItemSet<
+                                    // Ranges from SdrAttrObj:
+                                    SDRATTR_START, SDRATTR_SHADOW_LAST, SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST, SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
+                                    // Graphic attributes, 3D properties,
+                                    // CustomShape properties:
+                                    SDRATTR_GRAF_FIRST, SDRATTR_CUSTOMSHAPE_LAST,
+                                    // Range from SdrTextObj:
+                                    EE_ITEMS_START, EE_ITEMS_END>(pObj->getSdrModelFromSdrObject().GetItemPool()));
                                 aDest.Set( rSource );
                                 pObj->SetMergedItemSet( aDest );
                                 // Enables Word-wrap by default (tdf#134369)

@@ -161,8 +161,9 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
         case SID_CELL_FORMAT_RESET:
         case SID_TEXT_STANDARD:
             {
-                SfxItemSetFixed<SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_MINFRAMEHEIGHT,
-                                SDRATTR_TEXT_MAXFRAMEHEIGHT, SDRATTR_TEXT_MAXFRAMEWIDTH> aEmptyAttr(GetPool());
+                SfxItemSet aEmptyAttr(SfxItemSet::makeFixedSfxItemSet<
+                            SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_MINFRAMEHEIGHT,
+                            SDRATTR_TEXT_MAXFRAMEHEIGHT, SDRATTR_TEXT_MAXFRAMEWIDTH>(GetPool()));
 
                 if (ScDrawLayer::IsNoteCaption(pSingleSelectedObj))
                     aEmptyAttr.Put(pView->GetAttrFromMarked(true));
@@ -429,7 +430,9 @@ void ScDrawShell::ExecuteMacroAssign(SdrObject* pObj, weld::Window* pWin)
     }
 
     // create empty itemset for macro-dlg
-    auto xItemSet = std::make_unique<SfxItemSetFixed<SID_ATTR_MACROITEM, SID_ATTR_MACROITEM, SID_EVENTCONFIG, SID_EVENTCONFIG>>( SfxGetpApp()->GetPool() );
+    auto xItemSet = std::make_unique<SfxItemSet>(SfxItemSet::makeFixedSfxItemSet<
+                        SID_ATTR_MACROITEM, SID_ATTR_MACROITEM,
+                        SID_EVENTCONFIG, SID_EVENTCONFIG>(SfxGetpApp()->GetPool()));
     xItemSet->Put ( aItem );
 
     SfxEventNamesItem aNamesItem(SID_EVENTCONFIG);

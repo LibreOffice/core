@@ -95,7 +95,7 @@ bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
         // at SetParaAttribs(), all attributes contained in the parent become
         // attributed hard to the paragraph.
         const SfxItemSet& rSet = GetObjectItemSet();
-        SfxItemSetFixed<EE_ITEMS_START, EE_ITEMS_END> aFilteredSet(*rSet.GetPool());
+        SfxItemSet aFilteredSet(SfxItemSet::makeFixedSfxItemSet<EE_ITEMS_START, EE_ITEMS_END>(*rSet.GetPool()));
         aFilteredSet.Put(rSet);
         rOutl.SetParaAttribs(0, aFilteredSet);
     }

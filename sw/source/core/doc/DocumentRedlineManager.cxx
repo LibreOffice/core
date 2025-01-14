@@ -429,11 +429,10 @@ namespace
 
             // using Undo, remove direct paragraph formatting of the "To" paragraph,
             // and apply here direct paragraph formatting of the "From" paragraph
-            SfxItemSetFixed<
-                    RES_PARATR_BEGIN, RES_PARATR_END - 3, // skip RSID and GRABBAG
-                    RES_PARATR_LIST_BEGIN, RES_UL_SPACE,  // skip PAGEDESC and BREAK
-                    RES_CNTNT, RES_FRMATR_END - 1>
-                 aTmp(rDoc.GetAttrPool());
+            SfxItemSet aTmp(SfxItemSet::makeFixedSfxItemSet<
+                        RES_PARATR_BEGIN, RES_PARATR_END - 3, // skip RSID and GRABBAG
+                        RES_PARATR_LIST_BEGIN, RES_UL_SPACE, // skip PAGEDESC and BREAK
+                        RES_CNTNT, RES_FRMATR_END - 1>(rDoc.GetAttrPool()));
             SfxItemSet aTmp2(aTmp);
 
             pToNode->GetParaAttr(aTmp, 0, 0);

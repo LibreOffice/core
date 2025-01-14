@@ -755,7 +755,8 @@ const SfxItemSet& ImpEditEngine::GetEmptyItemSet() const
 {
     if ( !pEmptyItemSet )
     {
-        pEmptyItemSet = std::make_unique<SfxItemSetFixed<EE_ITEMS_START, EE_ITEMS_END>>(const_cast<SfxItemPool&>(maEditDoc.GetItemPool()));
+        pEmptyItemSet = std::make_unique<SfxItemSet>(SfxItemSet::makeFixedSfxItemSet<
+                            EE_ITEMS_START, EE_ITEMS_END>(const_cast<SfxItemPool&>(maEditDoc.GetItemPool())));
         for ( sal_uInt16 nWhich = EE_ITEMS_START; nWhich <= EE_CHAR_END; nWhich++)
         {
             pEmptyItemSet->ClearItem( nWhich );

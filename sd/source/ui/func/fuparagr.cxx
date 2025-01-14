@@ -67,9 +67,10 @@ void FuParagraph::DoExecute( SfxRequest& rReq )
         SfxItemSet aEditAttr( mpDoc->GetPool() );
         mpView->GetAttributes( aEditAttr );
         SfxItemPool *pPool =  aEditAttr.GetPool();
-        SfxItemSetFixed<EE_ITEMS_START, EE_ITEMS_END,
-                         SID_ATTR_TABSTOP_OFFSET, SID_ATTR_TABSTOP_OFFSET,
-                         ATTR_PARANUMBERING_START, ATTR_PARANUMBERING_END>  aNewAttr( *pPool );
+        SfxItemSet aNewAttr(SfxItemSet::makeFixedSfxItemSet<
+                    EE_ITEMS_START, EE_ITEMS_END,
+                    SID_ATTR_TABSTOP_OFFSET, SID_ATTR_TABSTOP_OFFSET,
+                    ATTR_PARANUMBERING_START, ATTR_PARANUMBERING_END>(*pPool));
 
         aNewAttr.Put( aEditAttr );
 

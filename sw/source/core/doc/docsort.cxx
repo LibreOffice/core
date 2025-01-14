@@ -872,10 +872,9 @@ void FlatFndBox::FillFlat(const FndBox_& rBox, bool bLastBox)
                     SfxItemState::SET == pFormat->GetItemState( RES_BOXATR_FORMULA ) ||
                     SfxItemState::SET == pFormat->GetItemState( RES_BOXATR_VALUE ) )
                 {
-                    SfxItemSetFixed<
-                            RES_VERT_ORIENT, RES_VERT_ORIENT,
-                            RES_BOXATR_FORMAT, RES_BOXATR_VALUE>
-                        aSet(m_pDoc->GetAttrPool());
+                    SfxItemSet aSet(SfxItemSet::makeFixedSfxItemSet<
+                        RES_VERT_ORIENT, RES_VERT_ORIENT,
+                        RES_BOXATR_FORMAT, RES_BOXATR_VALUE>(m_pDoc->GetAttrPool()));
                     aSet.Put( pFormat->GetAttrSet() );
                     if( m_vItemSets.empty() )
                     {

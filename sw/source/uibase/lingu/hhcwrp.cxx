@@ -312,7 +312,7 @@ void SwHHCWrapper::ChangeText_impl( const OUString &rNewText, bool bKeepAttribut
     if (bKeepAttributes)
     {
         // get item set with all relevant attributes
-        SfxItemSetFixed<RES_CHRATR_BEGIN, RES_FRMATR_END> aItemSet( m_rWrtShell.GetAttrPool() );
+        SfxItemSet aItemSet(SfxItemSet::makeFixedSfxItemSet<RES_CHRATR_BEGIN, RES_FRMATR_END>(m_rWrtShell.GetAttrPool()));
         // get all attributes spanning the whole selection in order to
         // restore those for the new text
         m_rWrtShell.GetCurAttr( aItemSet );
@@ -461,10 +461,9 @@ void SwHHCWrapper::ReplaceUnit(
             OSL_ENSURE( GetTargetLanguage() == LANGUAGE_CHINESE_SIMPLIFIED || GetTargetLanguage() == LANGUAGE_CHINESE_TRADITIONAL,
                     "SwHHCWrapper::ReplaceUnit : unexpected target language" );
 
-            SfxItemSetFixed<
-                    RES_CHRATR_CJK_FONT,     RES_CHRATR_CJK_FONT,
-                    RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CJK_LANGUAGE>
-                 aSet( m_rWrtShell.GetAttrPool() );
+            SfxItemSet aSet(SfxItemSet::makeFixedSfxItemSet<
+                            RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_FONT,
+                            RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CJK_LANGUAGE>(m_rWrtShell.GetAttrPool()));
             if (pNewUnitLanguage)
             {
                 aSet.Put( SvxLanguageItem( *pNewUnitLanguage, RES_CHRATR_CJK_LANGUAGE ) );
