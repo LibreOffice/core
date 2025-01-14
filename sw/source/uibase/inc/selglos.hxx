@@ -37,7 +37,7 @@ public:
 
     void InsertGlos(std::u16string_view rRegion, std::u16string_view rGlosName)
     {
-        const OUString aTmp = OUString::Concat(rRegion) + ":" + rGlosName;
+        const OUString aTmp = OUString::Concat(rRegion) + " - " + rGlosName;
         m_xGlosBox->append_text(aTmp);
     }
     sal_Int32 GetSelectedIdx() const
