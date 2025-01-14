@@ -26,6 +26,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,svx_unit, \
 	svx/qa/unit/svdraw/test_SdrTextObject \
 	svx/qa/unit/customshapes \
     svx/qa/unit/classicshapes \
+	svx/qa/unit/framelinkarray \
     svx/qa/unit/gluepointTest \
 	svx/qa/unit/sdr \
 	svx/qa/unit/svdraw \
