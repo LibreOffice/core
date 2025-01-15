@@ -21,6 +21,7 @@
 
 #include <editeng/outliner.hxx>
 #include <sfx2/request.hxx>
+#include <svx/ehdl.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdotext.hxx>
 #include <editeng/eeitem.hxx>
@@ -62,8 +63,7 @@ rtl::Reference<FuPoor> FuThesaurus::Create( ViewShell* pViewSh, ::sd::Window* pW
 
 void FuThesaurus::DoExecute(SfxRequest& rReq)
 {
-    SfxErrorContext aContext(ERRCTX_SVX_LINGU_THESAURUS, OUString(),
-                             mpWindow->GetFrameWeld(), RID_SVXERRCTX, SvxResLocale());
+    SvxErrorContext aContext(ERRCTX_SVX_LINGU_THESAURUS, OUString(), mpWindow->GetFrameWeld());
 
     if (dynamic_cast< DrawViewShell *>( mpViewShell ))
     {

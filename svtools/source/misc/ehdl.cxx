@@ -230,8 +230,8 @@ bool SfxErrorHandler::GetErrorString(ErrCode lErrId, OUString &rStr) const
 }
 
 SfxErrorContext::SfxErrorContext(
-    sal_uInt16 nCtxIdP, weld::Window *pWindow, const ErrMsgCode* pIdsP, const std::locale& rResLocaleP)
-:   ErrorContext(pWindow), nCtxId(nCtxIdP), pIds(pIdsP), aResLocale(rResLocaleP)
+    sal_uInt16 nCtxIdP, weld::Window *pWindow, const ErrMsgCode* pIdsP)
+:   ErrorContext(pWindow), nCtxId(nCtxIdP), pIds(pIdsP)
 {
     if (!pIds)
         pIds = RID_ERRCTX;
@@ -240,12 +240,17 @@ SfxErrorContext::SfxErrorContext(
 
 SfxErrorContext::SfxErrorContext(
     sal_uInt16 nCtxIdP, OUString aArg1P, weld::Window *pWindow,
-    const ErrMsgCode* pIdsP, const std::locale& rResLocaleP)
-:   ErrorContext(pWindow), nCtxId(nCtxIdP), pIds(pIdsP), aResLocale(rResLocaleP),
+    const ErrMsgCode* pIdsP)
+:   ErrorContext(pWindow), nCtxId(nCtxIdP), pIds(pIdsP),
     aArg1(std::move(aArg1P))
 {
     if (!pIds)
         pIds = RID_ERRCTX;
+}
+
+OUString SfxErrorContext::Translate(TranslateId aId) const
+{
+    return SvtResId(aId);
 }
 
 bool SfxErrorContext::GetString(const ErrCodeMsg& nErr, OUString &rStr)
@@ -261,7 +266,7 @@ bool SfxErrorContext::GetString(const ErrCodeMsg& nErr, OUString &rStr)
     {
         if (sal_uInt32(pItem->second) == nCtxId)
         {
-            rStr = Translate::get(pItem->first, aResLocale);
+            rStr = Translate(pItem->first);
             rStr = rStr.replaceAll("$(ARG1)", aArg1);
             bRet = true;
             break;
@@ -277,7 +282,7 @@ bool SfxErrorContext::GetString(const ErrCodeMsg& nErr, OUString &rStr)
         {
             if (sal_uInt32(pItem->second) == nId)
             {
-                rStr = rStr.replaceAll("$(ERR)", Translate::get(pItem->first, aResLocale));
+                rStr = rStr.replaceAll("$(ERR)", Translate(pItem->first));
                 break;
             }
         }
