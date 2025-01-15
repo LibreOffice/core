@@ -105,6 +105,7 @@ constexpr struct {
     { "en_KE",  DataLocaleLibrary::EN },
     { "en_DK",  DataLocaleLibrary::EN },
     { "en_MU",  DataLocaleLibrary::EN },
+    { "en_GY",  DataLocaleLibrary::EN },
 
     { "es_ES",  DataLocaleLibrary::ES },
     { "es_AR",  DataLocaleLibrary::ES },
