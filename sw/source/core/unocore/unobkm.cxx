@@ -193,7 +193,8 @@ void SwXBookmark::attachToRangeEx(
 {
     if (m_pImpl->m_pRegisteredBookmark)
     {
-        throw uno::RuntimeException();
+        throw uno::RuntimeException(
+            u"SwXBookmark::attachToRange(..): a Mark is already present"_ustr);
     }
 
     SwXTextRange* pRange = dynamic_cast<SwXTextRange*>(xTextRange.get());
@@ -260,7 +261,8 @@ uno::Reference< text::XTextRange > SAL_CALL SwXBookmark::getAnchor()
 
     if (!m_pImpl->m_pRegisteredBookmark)
     {
-        throw uno::RuntimeException();
+        throw uno::RuntimeException(
+            u"SwXBookmark::getAnchor(): Mark is empty"_ustr);
     }
     return SwXTextRange::CreateXTextRange(
             *m_pImpl->m_pDoc,
@@ -320,8 +322,9 @@ void SAL_CALL SwXBookmark::setName(const OUString& rName)
         m_pImpl->m_pDoc->getIDocumentMarkAccess();
     if(pMarkAccess->findMark(rName) != pMarkAccess->getAllMarksEnd())
     {
-        throw uno::RuntimeException(u"setName(): name already in use"_ustr,
-                getXWeak());
+        throw uno::RuntimeException(
+            u"SwXBookmark::setName(): name already in use"_ustr,
+            getXWeak());
     }
 
     SwPaM aPam(m_pImpl->m_pRegisteredBookmark->GetMarkPos());
@@ -570,7 +573,8 @@ void SwXFieldmarkParameters::Notify(const SfxHint& rHint)
 Fieldmark::parameter_map_t* SwXFieldmarkParameters::getCoreParameters()
 {
     if(!m_pFieldmark)
-        throw uno::RuntimeException();
+        throw uno::RuntimeException(
+            u"SwXFieldmarkParameters::getCoreParameters(): Mark is empty"_ustr);
     return m_pFieldmark->GetParameters();
 }
 
@@ -616,8 +620,10 @@ OUString SwXFieldmark::getFieldType()
 {
     SolarMutexGuard aGuard;
     const Fieldmark *pBkm = dynamic_cast<const Fieldmark*>(GetBookmark());
+    assert( GetBookmark() == nullptr || pBkm != nullptr );
     if(!pBkm)
-        throw uno::RuntimeException();
+        throw uno::RuntimeException(
+            u"SwXFieldmark::getFieldType()>: Mark is empty"_ustr);
     return pBkm->GetFieldname();
 }
 
@@ -625,8 +631,10 @@ void SwXFieldmark::setFieldType(const OUString & fieldType)
 {
     SolarMutexGuard aGuard;
     Fieldmark *pBkm = dynamic_cast<Fieldmark*>(GetBookmark());
+    assert( GetBookmark() == nullptr || pBkm != nullptr );
     if(!pBkm)
-        throw uno::RuntimeException();
+        throw uno::RuntimeException(
+            u"SwXFieldmark::setFieldType(..): Mark is empty"_ustr);
 
     OUString const oldFieldType(getFieldType());
     if (fieldType == oldFieldType)
@@ -653,15 +661,18 @@ void SwXFieldmark::setFieldType(const OUString & fieldType)
          return;
     }
 
-    throw uno::RuntimeException(u"changing to that type isn't implemented"_ustr);
+    throw uno::RuntimeException(
+        u"SwXFieldmark::setFieldType(..): changing to that type isn't implemented"_ustr);
 }
 
 uno::Reference<container::XNameContainer> SwXFieldmark::getParameters()
 {
     SolarMutexGuard aGuard;
     Fieldmark *pBkm = dynamic_cast<Fieldmark*>(GetBookmark());
+    assert( GetBookmark() == nullptr || pBkm != nullptr );
     if(!pBkm)
-        throw uno::RuntimeException();
+        throw uno::RuntimeException(
+            u"SwXFieldmark::getParameters(): Mark is empty"_ustr);
     return uno::Reference<container::XNameContainer>(new SwXFieldmarkParameters(pBkm));
 }
 
@@ -725,7 +736,8 @@ SwXFieldmark::setPropertyValue(const OUString& PropertyName,
         ::sw::mark::CheckboxFieldmark* pCheckboxFm = getCheckboxFieldmark();
         bool bChecked( false );
         if ( !(pCheckboxFm && ( rValue >>= bChecked )) )
-            throw uno::RuntimeException();
+            throw uno::RuntimeException(
+                u"SwXFieldmark::setPropertyValue(..): either Mark is empty or property value is not assignable to bool"_ustr);
 
         pCheckboxFm->SetChecked( bChecked );
     }
@@ -750,7 +762,8 @@ uno::Any SAL_CALL SwXFieldmark::getPropertyValue(const OUString& rPropertyName)
     {
         ::sw::mark::CheckboxFieldmark* pCheckboxFm = getCheckboxFieldmark();
         if ( !pCheckboxFm )
-            throw uno::RuntimeException();
+            throw uno::RuntimeException(
+                u"SwXFieldmark::getPropertyValue(..): Mark is empty"_ustr);
 
         return uno::Any( pCheckboxFm->IsChecked() );
     }
