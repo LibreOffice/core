@@ -448,7 +448,7 @@ const std::pair<TranslateId, LanguageType> STR_ARR_SVT_LANGUAGE_TABLE[] =
     { NC_("STR_ARR_SVT_LANGUAGE_TABLE", "Santali, Ol Chiki") , LANGUAGE_USER_SANTALI_OLCHIKI_INDIA },
     { NC_("STR_ARR_SVT_LANGUAGE_TABLE", "French (Republic of Guinea)") , LANGUAGE_USER_FRENCH_GUINEA },
     { NC_("STR_ARR_SVT_LANGUAGE_TABLE", "Abkhaz") , LANGUAGE_USER_ABKHAZ },
-    { NC_("STR_ARR_SVT_LANGUAGE_TABLE", "English (Guayana)") , LANGUAGE_USER_ENGLISH_GUYANA }
+    { NC_("STR_ARR_SVT_LANGUAGE_TABLE", "English (Guyana)") , LANGUAGE_USER_ENGLISH_GUYANA }
 };
 
 
