@@ -321,6 +321,8 @@ OUString XclExpName::GetWithDefaultRangeSeparator( const OUString& rSymbol ) con
             }
         }
     }
+    if (rSymbol.isEmpty())
+        return u"#NAME?"_ustr;
     return rSymbol;
 }
 
