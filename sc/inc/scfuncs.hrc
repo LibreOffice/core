@@ -4263,6 +4263,18 @@ const TranslateId SC_OPCODE_TOCOL_ARY[] =
     NC_("SC_OPCODE_TOCOL", "Scan the array by column. FALSE or omitted (default) - the array is scanned by row. TRUE - the array is scanned by column.")
 };
 
+// -=*# Resource for function TOROW #*=-
+const TranslateId SC_OPCODE_TOROW_ARY[] =
+{
+    NC_("SC_OPCODE_TOROW", "transforms an array into a single row."),
+    NC_("SC_OPCODE_TOROW", "Array"),
+    NC_("SC_OPCODE_TOROW", "The range or array to return as a row."),
+    NC_("SC_OPCODE_TOROW", "Ignore"),
+    NC_("SC_OPCODE_TOROW", "Whether to ignore certain types of values. 0 or omitted - keep all values (default). 1 - ignore blanks. 2 - ignore errors. 3 - ignore blanks and errors."),
+    NC_("SC_OPCODE_TOROW", "Scan by column"),
+    NC_("SC_OPCODE_TOROW", "Scan the array by column. FALSE or omitted (default) - the array is scanned by row. TRUE - the array is scanned by column.")
+};
+
 // -=*# Resource for function UNIQUE #*=-
 const TranslateId SC_OPCODE_UNIQUE_ARY[] =
 {

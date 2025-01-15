@@ -282,6 +282,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF[] =
     { "COM.MICROSOFT.SORT" , SC_OPCODE_SORT },
     { "COM.MICROSOFT.SORTBY" , SC_OPCODE_SORTBY },
     { "COM.MICROSOFT.TOCOL" , SC_OPCODE_TOCOL },
+    { "COM.MICROSOFT.TOROW" , SC_OPCODE_TOROW },
     { "COM.MICROSOFT.UNIQUE" , SC_OPCODE_UNIQUE },
     { "COM.MICROSOFT.LET" , SC_OPCODE_LET },
     { "_xlpm." , SC_OPCODE_STRINGNAME },
@@ -740,6 +741,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML[] =
     { "_xlfn._xlws.SORT" , SC_OPCODE_SORT },
     { "_xlfn.SORTBY" , SC_OPCODE_SORTBY },
     { "_xlfn.TOCOL" , SC_OPCODE_TOCOL },
+    { "_xlfn.TOROW" , SC_OPCODE_TOROW },
     { "_xlfn.UNIQUE" , SC_OPCODE_UNIQUE },
     { "_xlfn.LET" , SC_OPCODE_LET },
     { "_xlpm." , SC_OPCODE_STRINGNAME },
@@ -1201,6 +1203,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_PODF[] =
     { "SORT" , SC_OPCODE_SORT },
     { "SORTBY" , SC_OPCODE_SORTBY },
     { "TOCOL" , SC_OPCODE_TOCOL },
+    { "TOROW" , SC_OPCODE_TOROW },
     { "UNIQUE" , SC_OPCODE_UNIQUE },
     { "LET" , SC_OPCODE_LET },
     { "MULTIRANGE" , SC_OPCODE_MULTI_AREA },    // legacy for range list (union)
@@ -1662,6 +1665,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_API[] =
     { "SORT" , SC_OPCODE_SORT },
     { "SORTBY" , SC_OPCODE_SORTBY },
     { "TOCOL" , SC_OPCODE_TOCOL },
+    { "TOROW" , SC_OPCODE_TOROW },
     { "UNIQUE" , SC_OPCODE_UNIQUE },
     { "LET" , SC_OPCODE_LET },
     { "MULTIRANGE" , SC_OPCODE_MULTI_AREA },    // legacy for range list (union)
@@ -2121,6 +2125,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH[] =
     { "SORT" , SC_OPCODE_SORT },
     { "SORTBY" , SC_OPCODE_SORTBY },
     { "TOCOL" , SC_OPCODE_TOCOL },
+    { "TOROW" , SC_OPCODE_TOROW },
     { "UNIQUE" , SC_OPCODE_UNIQUE },
     { "LET" , SC_OPCODE_LET },
     { "MULTIRANGE" , SC_OPCODE_MULTI_AREA },
@@ -2561,6 +2566,7 @@ const std::pair<TranslateId, int> RID_STRLIST_FUNCTION_NAMES[] =
     { NC_("RID_STRLIST_FUNCTION_NAMES", "SORT") , SC_OPCODE_SORT },
     { NC_("RID_STRLIST_FUNCTION_NAMES", "SORTBY") , SC_OPCODE_SORTBY },
     { NC_("RID_STRLIST_FUNCTION_NAMES", "TOCOL") , SC_OPCODE_TOCOL },
+    { NC_("RID_STRLIST_FUNCTION_NAMES", "TOROW") , SC_OPCODE_TOROW },
     { NC_("RID_STRLIST_FUNCTION_NAMES", "UNIQUE") , SC_OPCODE_UNIQUE },
     { NC_("RID_STRLIST_FUNCTION_NAMES", "LET") , SC_OPCODE_LET },
     { NC_("RID_STRLIST_FUNCTION_NAMES", "MULTIRANGE") , SC_OPCODE_MULTI_AREA }, // legacy for range list (union)
