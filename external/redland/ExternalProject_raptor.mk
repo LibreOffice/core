@@ -37,7 +37,7 @@ $(call gb_ExternalProject_get_state_target,raptor,build):
 		CPPFLAGS="$(if $(SYSBASE),-I$(SYSBASE)/usr/include) $(gb_EMSCRIPTEN_CPPFLAGS)" \
 		ICU_LIBS='$(if $(filter-out MACOSX,$(OS)),$(ICU_LIBS))' \
 		$(gb_RUN_CONFIGURE) ./configure --disable-gtk-doc \
-			--enable-parsers="rdfxml ntriples turtle trig guess rss-tag-soup" \
+			--enable-parsers="rdfxml" \
 			--without-www \
 			--without-xslt-config \
 			$(gb_CONFIGURE_PLATFORMS) \
