@@ -153,10 +153,11 @@ else
 		$(if $(filter gdb,$(CPPUNITTRACE)),\
 			PYTHONWARNINGS=default) \
 		LO_RUNNING_UNIT_TEST=1 \
-		$(ICECREAM_RUN) $(gb_CppunitTest_coredumpctl_run) $(gb_CppunitTest_GDBTRACE) $(gb_CppunitTest_VALGRINDTOOL) $(gb_CppunitTest_RR) \
+		$(ICECREAM_RUN) $(gb_CppunitTest_coredumpctl_run) \
 		$(if $(filter gdb,$(gb_CppunitTest_GDBTRACE)),,\
 			$(if $(filter lldb,$(gb_CppunitTest_GDBTRACE)),,\
 			env $(gb_CppunitTest_CPPTESTPRECOMMAND))) \
+		$(gb_CppunitTest_GDBTRACE) $(gb_CppunitTest_VALGRINDTOOL) $(gb_CppunitTest_RR) \
 			$(gb_CppunitTest_CPPTESTCOMMAND) \
 		$(call gb_CppunitTest_get_linktarget_target,$*) \
 		$(call gb_CppunitTest__make_args) "-env:CPPUNITTESTTARGET=$@" \
