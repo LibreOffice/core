@@ -372,14 +372,14 @@ void Application::Execute()
     GetpApp()->Shutdown();
 }
 
-static bool ImplYield(bool i_bWait, bool i_bAllEvents)
+static bool InnerYield(bool i_bWait, bool i_bAllEvents)
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    SAL_INFO("vcl.schedule", "Enter ImplYield: " << (i_bWait ? "wait" : "no wait") <<
+    SAL_INFO("vcl.schedule", "Enter InnerYield: " << (i_bWait ? "wait" : "no wait") <<
              ": " << (i_bAllEvents ? "all events" : "one event"));
 
-    // there's a data race here on WNT only because ImplYield may be
+    // there's a data race here on WNT only because InnerYield may be
     // called without SolarMutex; but the only remaining use of mnDispatchLevel
     // is in OSX specific code
     pSVData->maAppData.mnDispatchLevel++;
@@ -393,7 +393,7 @@ static bool ImplYield(bool i_bWait, bool i_bAllEvents)
 
     DBG_TESTSOLARMUTEX(); // must be locked on return from Yield
 
-    SAL_INFO("vcl.schedule", "Leave ImplYield with return " << bProcessedEvent );
+    SAL_INFO("vcl.schedule", "Leave InnerYield with return " << bProcessedEvent );
     return bProcessedEvent;
 }
 
@@ -412,7 +412,7 @@ bool Application::Reschedule( bool i_bAllEvents )
         nOldView = comphelper::LibreOfficeKit::getView();
         nOldDocId = comphelper::LibreOfficeKit::getDocId();
     }
-    bool bRet = ImplYield(false, i_bAllEvents);
+    bool bRet = InnerYield(false, i_bAllEvents);
     if (comphelper::LibreOfficeKit::isActive())
     {
         // Yield may have changed the current docId, restore the old value,
@@ -446,7 +446,7 @@ void Scheduler::ProcessEventsToIdle()
         assert(pSVData->maSchedCtx.mnIdlesLockCount == 0);
 #endif
     int nSanity = 1;
-    while (ImplYield(false, true))
+    while (InnerYield(false, true))
     {
         if (0 == ++nSanity % 1000)
         {
@@ -499,7 +499,7 @@ void Application::Yield()
         SAL_WARN("vcl.schedule", "Application::Yield()");
         std::abort();
     }
-    ImplYield(true, false);
+    InnerYield(true, false);
 }
 
 IMPL_STATIC_LINK_NOARG( ImplSVAppData, ImplQuitMsg, void*, void )
