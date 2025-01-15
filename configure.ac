@@ -6038,6 +6038,8 @@ if test "$cross_compiling" = "yes"; then
         sysui/desktop/macosx/lo.xcent.in \
         .vscode/vs-code-template.code-workspace.in \
         solenv/lockfile/autoconf.h.in \
+        extensions/source/macosx/quicklookpreview/appex/Info.plist.in \
+        extensions/source/macosx/quicklookthumbnail/appex/Info.plist.in \
         ) \
     | (cd CONF-FOR-BUILD && tar xf -)
     cp configure CONF-FOR-BUILD
@@ -15875,6 +15877,8 @@ AC_CONFIG_FILES([
                  sysui/desktop/macosx/Info.plist
                  hardened_runtime.xcent:sysui/desktop/macosx/hardened_runtime.xcent.in
                  lo.xcent:sysui/desktop/macosx/lo.xcent.in
+                 extensions/source/macosx/quicklookpreview/appex/Info.plist
+                 extensions/source/macosx/quicklookthumbnail/appex/Info.plist
                  ])
 # map unix-style mount dirs to windows directories: /mnt/c/foobar -> C:/foobar
 # easier to do it in a postprocessing command than to modify every single variable
