@@ -194,6 +194,7 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/form/tbxform \
     svx/source/items/algitem \
     svx/source/items/autoformathelper \
+	svx/source/items/ehdl \
     svx/source/items/hlnkitem \
     svx/source/items/numfmtsh \
     svx/source/items/legacyitem \

@@ -31,11 +31,11 @@
 #include <comphelper/scopeguard.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/weld.hxx>
-#include <svtools/ehdl.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/request.hxx>
 #include <svx/dialmgr.hxx>
+#include <svx/ehdl.hxx>
 #include <svx/svxerr.hxx>
 #include <svx/svxdlg.hxx>
 #include <osl/diagnose.h>
@@ -408,8 +408,7 @@ void SwView::HyphenateDocument()
         return;
     }
 
-    SfxErrorContext aContext( ERRCTX_SVX_LINGU_HYPHENATION, OUString(), m_pEditWin->GetFrameWeld(),
-         RID_SVXERRCTX, SvxResLocale() );
+    SvxErrorContext aContext(ERRCTX_SVX_LINGU_HYPHENATION, OUString(), m_pEditWin->GetFrameWeld());
 
     Reference< XHyphenator >  xHyph( ::GetHyphenator() );
     if (!xHyph.is())
@@ -532,8 +531,7 @@ void SwView::StartThesaurus()
     if (!IsValidSelectionForThesaurus())
         return;
 
-    SfxErrorContext aContext( ERRCTX_SVX_LINGU_THESAURUS, OUString(), m_pEditWin->GetFrameWeld(),
-         RID_SVXERRCTX, SvxResLocale() );
+    SvxErrorContext aContext(ERRCTX_SVX_LINGU_THESAURUS, OUString(), m_pEditWin->GetFrameWeld());
 
     // Determine language
     LanguageType eLang = m_pWrtShell->GetCurLang();

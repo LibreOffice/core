@@ -29,21 +29,21 @@ SVT_DLLPUBLIC extern const ErrMsgCode RID_ERRCTX[];
 
 namespace weld { class Window; }
 
-class SVT_DLLPUBLIC SfxErrorContext final : private ErrorContext
+class SVT_DLLPUBLIC SfxErrorContext : private ErrorContext
 {
 public:
     SfxErrorContext(
             sal_uInt16 nCtxIdP, weld::Window *pWin=nullptr,
-            const ErrMsgCode* pIds = nullptr, const std::locale& rResLocaleP = SvtResLocale());
+            const ErrMsgCode* pIds = nullptr);
     SfxErrorContext(
             sal_uInt16 nCtxIdP, OUString aArg1, weld::Window *pWin=nullptr,
-            const ErrMsgCode* pIds = nullptr, const std::locale& rResLocaleP = SvtResLocale());
+            const ErrMsgCode* pIds = nullptr);
     bool GetString(const ErrCodeMsg& nErrId, OUString &rStr) override;
-
+private:
+    virtual OUString Translate(TranslateId aId) const;
 private:
     sal_uInt16 nCtxId;
     const ErrMsgCode* pIds;
-    std::locale aResLocale;
     OUString aArg1;
 };
 
