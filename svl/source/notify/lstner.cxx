@@ -59,13 +59,10 @@ SfxListener::~SfxListener() COVERITY_NOEXCEPT_FALSE
 
 void SfxListener::RemoveBroadcaster_Impl( SfxBroadcaster& rBroadcaster )
 {
-    auto it = std::find( maBCs.begin(), maBCs.end(), &rBroadcaster );
-    if (it != maBCs.end()) {
-        maBCs.erase( it );
+    std::erase(maBCs, &rBroadcaster);
 #ifdef DBG_UTIL
-        maCallStacks.erase( &rBroadcaster );
+    maCallStacks.erase( &rBroadcaster );
 #endif
-    }
 }
 
 
