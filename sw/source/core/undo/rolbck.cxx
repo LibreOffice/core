@@ -1419,23 +1419,6 @@ void SwRegHistory::SwClientNotify(const SwModify&, const SfxHint& rHint)
         }
         return;
     }
-    if (rHint.GetId() != SfxHintId::SwLegacyModify)
-        return;
-    auto pLegacyHint = static_cast<const sw::LegacyModifyHint*>(&rHint);
-    if ( !(m_pHistory && pLegacyHint->m_pNew && !areSfxPoolItemPtrsEqual(pLegacyHint->m_pOld, pLegacyHint->m_pNew) ) )
-        return;
-
-    if ( pLegacyHint->m_pNew->Which() < POOLATTR_END )
-    {
-        if(RES_UPDATE_ATTR == pLegacyHint->m_pNew->Which())
-        {
-            m_pHistory->AddPoolItem(pLegacyHint->m_pOld, pLegacyHint->m_pNew, m_nNodeIndex);
-        }
-        else
-        {
-            OSL_ENSURE(false, "Unexpected update attribute (!)");
-        }
-    }
 }
 
 void SwRegHistory::AddHint( SwTextAttr* pHt, const bool bNew )
