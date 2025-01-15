@@ -643,7 +643,7 @@ void SwHistoryBookmark::SetInDoc( SwDoc* pDoc, bool )
 {
     ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
-    SwNodes& rNds = pDoc->GetNodes();
+    const SwNodes& rNds = pDoc->GetNodes();
     IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
     std::optional<SwPaM> oPam;
     ::sw::mark::IMark* pMark = nullptr;
@@ -657,15 +657,21 @@ void SwHistoryBookmark::SetInDoc( SwDoc* pDoc, bool )
     if(m_bSavePos)
     {
         SwContentNode* const pContentNd = rNds[m_nNode]->GetContentNode();
-        assert(pContentNd);
+        assert(pContentNd && "A bookmark position must always be on a content node");
         oPam.emplace(*pContentNd, m_nContent);
     }
     else
     {
         assert(pMark);
-        oPam.emplace(pMark->GetMarkPos());
+        if (pMark != nullptr)
+            oPam.emplace(pMark->GetMarkPos());
     }
     assert(oPam);
+    if (!oPam)
+    {
+        // Nothing to do without a valid SwPaM.
+        return;
+    }
 
     if(m_bSaveOtherPos)
     {
