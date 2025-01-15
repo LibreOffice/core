@@ -110,6 +110,7 @@ namespace com::sun::star::security { struct DocumentSignatureInformation; }
 namespace com::sun::star::task { class XInteractionHandler; }
 namespace com::sun::star::lang { class XComponent; }
 namespace com::sun::star::text { class XTextRange; }
+namespace svl::crypto { class CertificateOrName; }
 
 #define SFX_TITLE_TITLE    0
 #define SFX_TITLE_FILENAME 1
@@ -812,7 +813,7 @@ public:
     bool IsSignPDF() const;
 
     /// Gets the certificate that is already picked by the user but not yet used for signing.
-    css::uno::Reference<css::security::XCertificate> GetSignPDFCertificate() const;
+    svl::crypto::CertificateOrName GetSignPDFCertificate() const;
 
     void ResetSignPDFCertificate();
 

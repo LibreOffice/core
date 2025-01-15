@@ -61,6 +61,7 @@
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
+#include <svl/cryptosign.hxx>
 
 using namespace ::com::sun::star;
 
@@ -204,7 +205,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             bTextEdit = true;
 
         bool bPreventModify = mpDocSh->IsReadOnly();
-        if (bPreventModify && mpDocSh->GetSignPDFCertificate().is())
+        if (bPreventModify && mpDocSh->GetSignPDFCertificate().Is())
         {
             // If the just added signature line shape is selected, allow moving / resizing it.
             bPreventModify = false;
