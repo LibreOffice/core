@@ -38,7 +38,7 @@ class ContentAttribs
 {
 private:
     SfxStyleSheet* mpStyle = nullptr;
-    SfxItemSetFixed<EE_PARA_START, EE_CHAR_END> maAttribSet;
+    SfxItemSet maAttribSet;
 
 public:
     ContentAttribs(SfxItemPool& rItemPool);

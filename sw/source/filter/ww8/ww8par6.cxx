@@ -2178,12 +2178,12 @@ void WW8SwFlyPara::SetFlyFormat(SwFlyFrameFormat* pNewFlyFormat)
         m_xFlyFormat.reset();
 }
 
-// The class WW8FlySet is derived from SfxItemSetFixed and does not
+// The class WW8FlySet is derived from SfxItemSet and does not
 // provide more, but is easier to handle for me.
 // WW8FlySet-ctor for Apos and graphics Apos
 WW8FlySet::WW8FlySet(SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
     const WW8SwFlyPara* pFS, bool bGraf)
-    : SfxItemSetFixed(rReader.m_rDoc.GetAttrPool())
+    : SfxItemSet(rReader.m_rDoc.GetAttrPool(), WhichRangesContainer(svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END-1>))
 {
     Reader::ResetFrameFormatAttrs(*this);    // remove distance/border
                                             // position
@@ -2240,7 +2240,7 @@ WW8FlySet::WW8FlySet(SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
 // WW8FlySet-ctor for character bound graphics
 WW8FlySet::WW8FlySet( SwWW8ImplReader& rReader, const SwPaM* pPaM,
     const WW8_PIC& rPic, tools::Long nWidth, tools::Long nHeight )
-    : SfxItemSetFixed<RES_FRMATR_BEGIN,RES_FRMATR_END-1>(rReader.m_rDoc.GetAttrPool())
+    : SfxItemSet(rReader.m_rDoc.GetAttrPool(), WhichRangesContainer(svl::Items<RES_FRMATR_BEGIN,RES_FRMATR_END-1>))
 {
     Init(rReader, pPaM);
 
@@ -2293,8 +2293,8 @@ void WW8FlySet::Init(const SwWW8ImplReader& rReader, const SwPaM* pPaM)
 
 WW8DupProperties::WW8DupProperties(SwDoc &rDoc, SwWW8FltControlStack *pStack)
     : m_pCtrlStck(pStack),
-    m_aChrSet(rDoc.GetAttrPool()),
-    m_aParSet(rDoc.GetAttrPool())
+    m_aChrSet(SfxItemSet::makeFixedSfxItemSet<RES_CHRATR_BEGIN, RES_CHRATR_END - 1>(rDoc.GetAttrPool())),
+    m_aParSet(SfxItemSet::makeFixedSfxItemSet<RES_CHRATR_BEGIN, RES_CHRATR_END - 1>(rDoc.GetAttrPool()))
 {
     //Close any open character properties and duplicate them inside the
     //first table cell

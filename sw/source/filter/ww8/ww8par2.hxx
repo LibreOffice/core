@@ -39,7 +39,7 @@ private:
     WW8DupProperties(const WW8DupProperties&) = delete;
     WW8DupProperties& operator=(const WW8DupProperties&) = delete;
     SwWW8FltControlStack* m_pCtrlStck;
-    SfxItemSetFixed<RES_CHRATR_BEGIN, RES_CHRATR_END - 1> m_aChrSet,m_aParSet;
+    SfxItemSet m_aChrSet, m_aParSet;
 };
 
 struct WW8SwFlyPara
@@ -140,7 +140,7 @@ public:
     SprmResult HasParaSprm(sal_uInt16 nId) const;
 };
 
-class WW8FlySet: public SfxItemSetFixed<RES_FRMATR_BEGIN,RES_FRMATR_END-1>
+class WW8FlySet: public SfxItemSet
 {
 private:
     const WW8FlySet& operator=(const WW8FlySet&) = delete;

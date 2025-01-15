@@ -649,7 +649,7 @@ void ContentNode::checkAndDeleteEmptyAttribs() const
 }
 
 ContentAttribs::ContentAttribs( SfxItemPool& rPool )
-    : maAttribSet(rPool)
+    : maAttribSet(SfxItemSet::makeFixedSfxItemSet<EE_PARA_START, EE_CHAR_END>(rPool))
 {
 }
 

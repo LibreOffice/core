@@ -125,7 +125,7 @@ private:
 
     std::vector<XEditAttribute> maCharAttribs;
     SfxStyleFamily      eFamily;
-    SfxItemSetFixed<EE_PARA_START, EE_CHAR_END> aParaAttribs;
+    SfxItemSet aParaAttribs;
     std::unique_ptr<WrongList>
                         mpWrongs;
 

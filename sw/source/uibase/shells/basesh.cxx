@@ -176,7 +176,7 @@ static void lcl_UpdateIMapDlg( SwWrtShell& rSh )
     TargetList aList;
     SfxFrame::GetDefaultTargetList(aList);
 
-    SfxItemSetFixed<RES_URL, RES_URL> aSet( rSh.GetAttrPool() );
+    SfxItemSet aSet(SfxItemSet::makeFixedSfxItemSet<RES_URL, RES_URL>(rSh.GetAttrPool()));
     rSh.GetFlyFrameAttr( aSet );
     const SwFormatURL &rURL = aSet.Get( RES_URL );
     SvxIMapDlgChildWindow::UpdateIMapDlg(
@@ -1302,7 +1302,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             if ( rSh.IsFrameSelected() &&
                  pDlg->GetEditingObject() == rSh.GetIMapInventor() )
             {
-                    SfxItemSetFixed<RES_URL, RES_URL> aSet( rSh.GetAttrPool() );
+                    SfxItemSet aSet(SfxItemSet::makeFixedSfxItemSet<RES_URL, RES_URL>(rSh.GetAttrPool()));
                     rSh.GetFlyFrameAttr( aSet );
                     SwFormatURL aURL( aSet.Get( RES_URL ) );
                     aURL.SetMap( &pDlg->GetImageMap() );
@@ -1355,7 +1355,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 if (pDlg && pDlg->GetEditingObject() == rSh.GetIMapInventor())
                 {
                     rSh.StartAction();
-                    SfxItemSetFixed<RES_SURROUND, RES_SURROUND> aSet( rSh.GetAttrPool() );
+                    SfxItemSet aSet(SfxItemSet::makeFixedSfxItemSet<RES_SURROUND, RES_SURROUND>(rSh.GetAttrPool()));
                     rSh.GetFlyFrameAttr( aSet );
                     SwFormatSurround aSur( aSet.Get( RES_SURROUND ) );
                     if ( !aSur.IsContour() )
@@ -1417,7 +1417,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             sal_uInt16 nHtmlMode = ::GetHtmlMode(GetView().GetDocShell());
             if( nHtmlMode )
             {
-                SfxItemSetFixed<RES_SURROUND, RES_HORI_ORIENT> aSet(GetPool());
+                SfxItemSet aSet(SfxItemSet::makeFixedSfxItemSet<RES_SURROUND, RES_HORI_ORIENT>(GetPool()));
                 rSh.GetFlyFrameAttr(aSet);
 
                 const SwFormatSurround& rSurround = aSet.Get(RES_SURROUND);
@@ -1670,7 +1670,7 @@ IMPL_LINK_NOARG(SwBaseShell, GraphicArrivedHdl, SwCursorShell&, void)
         case FN_FRAME_WRAP_CONTOUR:
             if( !bProtect )
             {
-                SfxItemSetFixed<RES_SURROUND, RES_SURROUND> aSet(GetPool());
+                SfxItemSet aSet(SfxItemSet::makeFixedSfxItemSet<RES_SURROUND, RES_SURROUND>(GetPool()));
                 rSh.GetFlyFrameAttr(aSet);
                 const SwFormatSurround& rWrap = aSet.Get(RES_SURROUND);
                 bSetState = true;
@@ -1777,7 +1777,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
             break;
             case RES_SHADOW:
             {
-                SfxItemSetFixed<RES_SHADOW, RES_SHADOW> aSet( rSh.GetAttrPool());
+                SfxItemSet aSet(SfxItemSet::makeFixedSfxItemSet<RES_SHADOW, RES_SHADOW>(rSh.GetAttrPool()));
 
                 // Table cell(s) selected?
                 if ( rSh.IsTableMode() )
@@ -1959,7 +1959,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
 
                 if( !bParentCntProt && (bObj || rSh.IsFrameSelected()))
                 {
-                    SfxItemSetFixed<RES_ANCHOR, RES_ANCHOR> aSet(GetPool());
+                    SfxItemSet aSet(SfxItemSet::makeFixedSfxItemSet<RES_ANCHOR, RES_ANCHOR>(GetPool()));
                     if(bObj)
                         rSh.GetObjAttr(aSet);
                     else
@@ -2010,7 +2010,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
 
                 if( !bParentCntProt && (bObj || rSh.IsFrameSelected()))
                 {
-                    SfxItemSetFixed<RES_OPAQUE, RES_ANCHOR> aSet(GetPool());
+                    SfxItemSet aSet(SfxItemSet::makeFixedSfxItemSet<RES_OPAQUE, RES_ANCHOR>(GetPool()));
                     RndStdIds nAnchorType;
                     if(bObj)
                     {
@@ -2212,7 +2212,7 @@ void SwBaseShell::SetWrapMode( sal_uInt16 nSlot )
     if( !bObj && !rSh.IsFrameSelected())
         return;
 
-    SfxItemSetFixed<RES_OPAQUE, RES_SURROUND> aSet(GetPool());
+    SfxItemSet aSet(SfxItemSet::makeFixedSfxItemSet<RES_OPAQUE, RES_SURROUND>(GetPool()));
     if(bObj)
         rSh.GetObjAttr(aSet);
     else
@@ -2370,10 +2370,10 @@ void SwBaseShell::ExecTextCtrl( SfxRequest& rReq )
         SfxItemPool& rPool = rSh.GetAttrPool();
         sal_uInt16 nWhich = rPool.GetWhichIDFromSlotID( nSlot );
         SvtScriptType nScripts = SvtScriptType::LATIN | SvtScriptType::ASIAN | SvtScriptType::COMPLEX;
-        SfxItemSetFixed<RES_CHRATR_FONTSIZE, RES_CHRATR_FONTSIZE,
-                        RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CJK_FONTSIZE,
-                        RES_CHRATR_CTL_FONTSIZE, RES_CHRATR_CTL_FONTSIZE>
-            aHeightSet( GetPool() );
+        SfxItemSet aHeightSet(SfxItemSet::makeFixedSfxItemSet<
+                                            RES_CHRATR_FONTSIZE, RES_CHRATR_FONTSIZE,
+                                            RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CJK_FONTSIZE,
+                                            RES_CHRATR_CTL_FONTSIZE, RES_CHRATR_CTL_FONTSIZE>(GetPool()));
 
         switch( nSlot )
         {
@@ -2415,10 +2415,10 @@ void SwBaseShell::ExecTextCtrl( SfxRequest& rReq )
                     sal_uInt32 nHeight = static_cast< const SvxFontHeightItem& >(pArgs->Get( nWhich )).GetHeight();
                     SwStdFontConfig* pStdFont = SwModule::get()->GetStdFontConfig();
 
-                    SfxItemSetFixed<RES_CHRATR_LANGUAGE, RES_CHRATR_LANGUAGE,
-                                    RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CJK_LANGUAGE,
-                                    RES_CHRATR_CTL_LANGUAGE, RES_CHRATR_CTL_LANGUAGE>
-                            aLangSet( GetPool() );
+                    SfxItemSet aLangSet(SfxItemSet::makeFixedSfxItemSet<
+                                            RES_CHRATR_LANGUAGE, RES_CHRATR_LANGUAGE,
+                                            RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CJK_LANGUAGE,
+                                            RES_CHRATR_CTL_LANGUAGE, RES_CHRATR_CTL_LANGUAGE>(GetPool()));
                     rSh.GetCurAttr( aLangSet );
 
                     sal_Int32 nWesternSize =
@@ -2593,7 +2593,7 @@ void SwBaseShell::GetBckColState(SfxItemSet &rSet)
     else
     {
         // Adapt to new DrawingLayer FillStyle; use a parent which has XFILL_NONE set
-        SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST> aCoreSet(GetPool());
+        SfxItemSet aCoreSet(SfxItemSet::makeFixedSfxItemSet<XATTR_FILL_FIRST, XATTR_FILL_LAST>(GetPool()));
 
         aCoreSet.SetParent(&GetView().GetDocShell()->GetDoc()->GetDfltFrameFormat()->GetAttrSet());
 
@@ -2657,7 +2657,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
     else
     {
         // Adapt to new DrawingLayer FillStyle; use a parent which has XFILL_NONE set
-        SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST> aCoreSet(GetPool());
+        SfxItemSet aCoreSet(SfxItemSet::makeFixedSfxItemSet<XATTR_FILL_FIRST, XATTR_FILL_LAST>(GetPool()));
 
         aCoreSet.SetParent(&GetView().GetDocShell()->GetDoc()->GetDfltFrameFormat()->GetAttrSet());
 
@@ -2725,7 +2725,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
     else
     {
         // Adapt to new DrawingLayer FillStyle; use a parent which has XFILL_NONE set
-        SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST> aCoreSet(GetPool());
+        SfxItemSet aCoreSet(SfxItemSet::makeFixedSfxItemSet<XATTR_FILL_FIRST, XATTR_FILL_LAST>(GetPool()));
 
         aCoreSet.SetParent(&GetView().GetDocShell()->GetDoc()->GetDfltFrameFormat()->GetAttrSet());
         setSvxBrushItemAsFillAttributesToTargetSet(*aBrushItem, aCoreSet);
@@ -2770,8 +2770,9 @@ void SwBaseShell::GetBorderState(SfxItemSet &rSet)
     bool bTableMode = rSh.IsTableMode();
     if ( bTableMode )
     {
-        SfxItemSetFixed<RES_BOX, RES_BOX,
-                         SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER>  aCoreSet( GetPool() );
+        SfxItemSet aCoreSet(SfxItemSet::makeFixedSfxItemSet<
+                                RES_BOX, RES_BOX, SID_ATTR_BORDER_INNER,
+                                SID_ATTR_BORDER_INNER>(GetPool()));
         SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
         aCoreSet.Put( aBoxInfo );
         rSh.GetTabBorders( aCoreSet );
@@ -2857,8 +2858,8 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
         break;
         case FN_FORMAT_BORDER_DLG:
         {
-            SfxItemSetFixed<RES_BOX             , RES_SHADOW,
-                           SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER> aSet( rSh.GetAttrPool() );
+            SfxItemSet aSet(SfxItemSet::makeFixedSfxItemSet<
+                RES_BOX, RES_SHADOW, SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER>(rSh.GetAttrPool()));
             ScopedVclPtr<SfxAbstractDialog> pDlg;
             // Table cell(s) selected?
             if ( rSh.IsTableMode() )
@@ -2912,8 +2913,9 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
         break;
         case FN_FORMAT_BACKGROUND_DLG:
         {
-            SfxItemSetFixed<RES_BACKGROUND, RES_BACKGROUND,
-                            XATTR_FILL_FIRST, XATTR_FILL_LAST>  aSet( rSh.GetAttrPool() );
+            SfxItemSet aSet(SfxItemSet::makeFixedSfxItemSet<
+                            RES_BACKGROUND, RES_BACKGROUND,
+                            XATTR_FILL_FIRST, XATTR_FILL_LAST>(rSh.GetAttrPool()));
 
             ScopedVclPtr<SfxAbstractDialog> pDlg;
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
@@ -3312,7 +3314,7 @@ void SwBaseShell::ExecuteGallery(SfxRequest &rReq)
                 rSh.SetBoxBackground( aBrush );
             else if ( nPos == nFramePos || nPos == nGraphicPos || nPos == nOlePos )
             {
-                SfxItemSetFixed<RES_BACKGROUND, RES_BACKGROUND> aCoreSet(GetPool());
+                SfxItemSet aCoreSet(SfxItemSet::makeFixedSfxItemSet<RES_BACKGROUND, RES_BACKGROUND>(GetPool()));
                 aCoreSet.Put( aBrush );
                 rSh.SetFlyFrameAttr( aCoreSet );
             }

@@ -1240,12 +1240,12 @@ bool SwFEShell::SetFlyFrameAttr( SfxItemSet& rSet )
     return bRet;
 }
 
-SfxItemSetFixed<RES_VERT_ORIENT, RES_ANCHOR> SwFEShell::makeItemSetFromFormatAnchor(SfxItemPool& rPool, const SwFormatAnchor &rAnchor)
+SfxItemSet SwFEShell::makeItemSetFromFormatAnchor(SfxItemPool& rPool, const SwFormatAnchor &rAnchor)
 {
     // The set also includes VERT/HORI_ORIENT, because the align
     // shall be changed in FEShell::SetFlyFrameAttr/SetFlyFrameAnchor,
     // possibly as a result of the anchor change.
-    SfxItemSetFixed<RES_VERT_ORIENT, RES_ANCHOR> aSet(rPool);
+    SfxItemSet aSet(SfxItemSet::makeFixedSfxItemSet<RES_VERT_ORIENT, RES_ANCHOR>(rPool));
     aSet.Put(rAnchor);
     return aSet;
 }
