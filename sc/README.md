@@ -83,6 +83,7 @@ https://docs.oasis-open.org/office/OpenDocument/v1.3/os/part4-formula/OpenDocume
   * SORT
   * SORTBY
   * TOCOL
+  * TOROW
   * UNIQUE
 * Mathematical Functions
   * RANDARRAY

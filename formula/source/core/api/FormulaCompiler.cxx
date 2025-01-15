@@ -1280,6 +1280,7 @@ bool FormulaCompiler::IsMatrixFunction( OpCode eOpCode )
         case ocSortBy :
         case ocRandArray :
         case ocToCol :
+        case ocToRow :
         case ocUnique :
         case ocLet :
             return true;
