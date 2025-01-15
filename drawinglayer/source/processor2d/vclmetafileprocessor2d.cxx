@@ -2247,6 +2247,12 @@ void VclMetafileProcessor2D::processMaskPrimitive2D(
 
     if (aMask.count())
     {
+        // A clipping path is a set of closed vector path that may consist of an arbitrary number
+        // of straight and curved segments. The region(s) enclosed by the path define(s) the visible area,
+        // i.e. after applying a clipping path, only those portions of the subsequently drawn graphics that
+        // fall inside the enclosed area are visible, everything else is cut away.
+        if (!aMask.isClosed())
+            aMask.setClosed(true);
         // prepare new mask polygon and rescue current one
         aMask.transform(maCurrentTransformation);
         const basegfx::B2DPolyPolygon aLastClipPolyPolygon(maClipPolyPolygon);

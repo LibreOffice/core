@@ -424,6 +424,40 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf152906_AdjustToContour)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf164622)
+{
+    xmlDocUniquePtr pXmlDoc = load("pptx/tdf164622.pptx");
+
+    // Without the fix, the test fails with:
+    // - Expected: 8998
+    // - Actual  : 892
+    // - In <>, attribute 'y' of '/metafile/push[1]/push[1]/push[2]/push[1]/clipregion/polygon/point[4]'
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[2]/push[1]/clipregion/polygon/point[1]",
+                "x", u"7556");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[2]/push[1]/clipregion/polygon/point[1]",
+                "y", u"892");
+
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[2]/push[1]/clipregion/polygon/point[2]",
+                "x", u"20440");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[2]/push[1]/clipregion/polygon/point[2]",
+                "y", u"892");
+
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[2]/push[1]/clipregion/polygon/point[3]",
+                "x", u"20440");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[2]/push[1]/clipregion/polygon/point[3]",
+                "y", u"8998");
+
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[2]/push[1]/clipregion/polygon/point[4]",
+                "x", u"7556");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[2]/push[1]/clipregion/polygon/point[4]",
+                "y", u"8998");
+
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[2]/push[1]/clipregion/polygon/point[5]",
+                "x", u"7556");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[2]/push[1]/clipregion/polygon/point[5]",
+                "y", u"892");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
