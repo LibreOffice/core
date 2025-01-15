@@ -102,14 +102,9 @@ void SearchResultsDlg::FillResults( ScDocument& rDoc, const ScRangeList &rMatche
     std::vector<OUString> aTabNames = rDoc.GetAllTableNames();
     SCTAB nTabCount = aTabNames.size();
 
-    // tdf#92160 - too many results blow the widget's mind
-    size_t nMatchMax = rMatchedRanges.size();
-    if (nMatchMax > ListWrapper::mnMaximum)
-        nMatchMax = ListWrapper::mnMaximum;
-
     if (bCellNotes || bEmptyCells)
     {
-        for (size_t i = 0, n = nMatchMax; i < n; ++i)
+        for (size_t i = 0, n = rMatchedRanges.size(); i < n; ++i)
         {
             ScRange const & rRange( rMatchedRanges[i] );
             // Bear in mind that mostly the range is one address position
@@ -144,7 +139,7 @@ void SearchResultsDlg::FillResults( ScDocument& rDoc, const ScRangeList &rMatche
     }
     else
     {
-        for (size_t i = 0, n = nMatchMax; i < n; ++i)
+        for (size_t i = 0, n = rMatchedRanges.size(); i < n; ++i)
         {
             ScCellIterator aIter(rDoc, rMatchedRanges[i]);
             for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
