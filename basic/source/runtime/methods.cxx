@@ -785,79 +785,77 @@ void SbRtl_InStr(StarBASIC *, SbxArray & rPar, bool)
 {
     const sal_uInt32 nArgCount = rPar.Count() - 1;
     if ( nArgCount < 2 )
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+        return StarBASIC::Error(ERRCODE_BASIC_BAD_ARGUMENT);
+
+    sal_Int32 nStartPos = 1;
+    sal_Int32 nFirstStringPos = 1;
+
+    if ( nArgCount >= 3 )
+    {
+        nStartPos = rPar.Get(1)->GetLong();
+        if( nStartPos <= 0 )
+        {
+            StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+            nStartPos = 1;
+        }
+        nFirstStringPos++;
+    }
+
+    SbiInstance* pInst = GetSbData()->pInst;
+    bool bTextMode;
+    bool bCompatibility = ( pInst && pInst->IsCompatibility() );
+    if( bCompatibility )
+    {
+        SbiRuntime* pRT = pInst->pRun;
+        bTextMode = pRT && pRT->IsImageFlag( SbiImageFlags::COMPARETEXT );
+    }
     else
     {
-        sal_Int32 nStartPos = 1;
-        sal_Int32 nFirstStringPos = 1;
+        bTextMode = true;
+    }
+    if ( nArgCount == 4 )
+    {
+        bTextMode = rPar.Get(4)->GetInteger();
+    }
+    sal_Int32 nPos;
+    const OUString aToken = rPar.Get(nFirstStringPos + 1)->GetOUString();
 
-        if ( nArgCount >= 3 )
+    // #97545 Always find empty string
+    if( aToken.isEmpty() )
+    {
+        nPos = nStartPos;
+    }
+    else
+    {
+        const OUString aStr1 = rPar.Get(nFirstStringPos)->GetOUString();
+        const sal_Int32 nrStr1Len = aStr1.getLength();
+        if (nStartPos > nrStr1Len)
         {
-            nStartPos = rPar.Get(1)->GetLong();
-            if( nStartPos <= 0 )
-            {
-                StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-                nStartPos = 1;
-            }
-            nFirstStringPos++;
-        }
-
-        SbiInstance* pInst = GetSbData()->pInst;
-        bool bTextMode;
-        bool bCompatibility = ( pInst && pInst->IsCompatibility() );
-        if( bCompatibility )
-        {
-            SbiRuntime* pRT = pInst->pRun;
-            bTextMode = pRT && pRT->IsImageFlag( SbiImageFlags::COMPARETEXT );
+            // Start position is greater than the string being searched
+            nPos = 0;
         }
         else
         {
-            bTextMode = true;
-        }
-        if ( nArgCount == 4 )
-        {
-            bTextMode = rPar.Get(4)->GetInteger();
-        }
-        sal_Int32 nPos;
-        const OUString aToken = rPar.Get(nFirstStringPos + 1)->GetOUString();
-
-        // #97545 Always find empty string
-        if( aToken.isEmpty() )
-        {
-            nPos = nStartPos;
-        }
-        else
-        {
-            const OUString aStr1 = rPar.Get(nFirstStringPos)->GetOUString();
-            const sal_Int32 nrStr1Len = aStr1.getLength();
-            if (nStartPos > nrStr1Len)
+            if( !bTextMode )
             {
-                // Start position is greater than the string being searched
-                nPos = 0;
+                nPos = aStr1.indexOf( aToken, nStartPos - 1 ) + 1;
             }
             else
             {
-                if( !bTextMode )
-                {
-                    nPos = aStr1.indexOf( aToken, nStartPos - 1 ) + 1;
-                }
-                else
-                {
-                    // tdf#139840 - case-insensitive operation for non-ASCII characters
-                    i18nutil::SearchOptions2 aSearchOptions;
-                    aSearchOptions.searchString = aToken;
-                    aSearchOptions.AlgorithmType2 = util::SearchAlgorithms2::ABSOLUTE;
-                    aSearchOptions.transliterateFlags |= TransliterationFlags::IGNORE_CASE;
-                    utl::TextSearch textSearch(aSearchOptions);
+                // tdf#139840 - case-insensitive operation for non-ASCII characters
+                i18nutil::SearchOptions2 aSearchOptions;
+                aSearchOptions.searchString = aToken;
+                aSearchOptions.AlgorithmType2 = util::SearchAlgorithms2::ABSOLUTE;
+                aSearchOptions.transliterateFlags |= TransliterationFlags::IGNORE_CASE;
+                utl::TextSearch textSearch(aSearchOptions);
 
-                    sal_Int32 nStart = nStartPos - 1;
-                    sal_Int32 nEnd = nrStr1Len;
-                    nPos = textSearch.SearchForward(aStr1, &nStart, &nEnd) ? nStart + 1 : 0;
-                }
+                sal_Int32 nStart = nStartPos - 1;
+                sal_Int32 nEnd = nrStr1Len;
+                nPos = textSearch.SearchForward(aStr1, &nStart, &nEnd) ? nStart + 1 : 0;
             }
         }
-        rPar.Get(0)->PutLong(nPos);
     }
+    rPar.Get(0)->PutLong(nPos);
 }
 
 
@@ -1041,101 +1039,96 @@ void SbRtl_Mid(StarBASIC *, SbxArray & rPar, bool bWrite)
     int nArgCount = rPar.Count() - 1;
     if ( nArgCount < 2 )
     {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+        return StarBASIC::Error(ERRCODE_BASIC_BAD_ARGUMENT);
     }
-    else
+    // #23178: replicate the functionality of Mid$ as a command
+    // by adding a replacement-string as a fourth parameter.
+    // In contrast to the original the third parameter (nLength)
+    // can't be left out here. That's considered in bWrite already.
+    if( nArgCount == 4 )
     {
-        // #23178: replicate the functionality of Mid$ as a command
-        // by adding a replacement-string as a fourth parameter.
-        // In contrast to the original the third parameter (nLength)
-        // can't be left out here. That's considered in bWrite already.
-        if( nArgCount == 4 )
+        bWrite = true;
+    }
+    OUString aArgStr = rPar.Get(1)->GetOUString();
+    sal_Int32 nStartPos = rPar.Get(2)->GetLong();
+    if ( nStartPos < 1 )
+    {
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+    }
+
+    nStartPos--;
+    sal_Int32 nLen = -1;
+    bool bWriteNoLenParam = false;
+    if ( nArgCount == 3 || bWrite )
+    {
+        sal_Int32 n = rPar.Get(3)->GetLong();
+        if( bWrite && n == -1 )
         {
-            bWrite = true;
+            bWriteNoLenParam = true;
         }
-        OUString aArgStr = rPar.Get(1)->GetOUString();
-        sal_Int32 nStartPos = rPar.Get(2)->GetLong();
-        if ( nStartPos < 1 )
+        nLen = n;
+    }
+    if ( bWrite )
+    {
+        sal_Int32 nArgLen = aArgStr.getLength();
+        if( nStartPos > nArgLen )
         {
-            StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+            SbiInstance* pInst = GetSbData()->pInst;
+            bool bCompatibility = ( pInst && pInst->IsCompatibility() );
+            if( bCompatibility )
+            {
+                return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+            }
+            nStartPos = nArgLen;
+        }
+
+        OUString aReplaceStr = rPar.Get(4)->GetOUString();
+        sal_Int32 nReplaceStrLen = aReplaceStr.getLength();
+        sal_Int32 nReplaceLen;
+        if( bWriteNoLenParam )
+        {
+            nReplaceLen = nArgLen - nStartPos;
         }
         else
         {
-            nStartPos--;
-            sal_Int32 nLen = -1;
-            bool bWriteNoLenParam = false;
-            if ( nArgCount == 3 || bWrite )
+            nReplaceLen = nLen;
+            if( nReplaceLen < 0 || nReplaceLen > nArgLen - nStartPos )
             {
-                sal_Int32 n = rPar.Get(3)->GetLong();
-                if( bWrite && n == -1 )
-                {
-                    bWriteNoLenParam = true;
-                }
-                nLen = n;
-            }
-            if ( bWrite )
-            {
-                sal_Int32 nArgLen = aArgStr.getLength();
-                if( nStartPos > nArgLen )
-                {
-                    SbiInstance* pInst = GetSbData()->pInst;
-                    bool bCompatibility = ( pInst && pInst->IsCompatibility() );
-                    if( bCompatibility )
-                    {
-                        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-                    }
-                    nStartPos = nArgLen;
-                }
-
-                OUString aReplaceStr = rPar.Get(4)->GetOUString();
-                sal_Int32 nReplaceStrLen = aReplaceStr.getLength();
-                sal_Int32 nReplaceLen;
-                if( bWriteNoLenParam )
-                {
-                    nReplaceLen = nArgLen - nStartPos;
-                }
-                else
-                {
-                    nReplaceLen = nLen;
-                    if( nReplaceLen < 0 || nReplaceLen > nArgLen - nStartPos )
-                    {
-                        nReplaceLen = nArgLen - nStartPos;
-                    }
-                }
-
-                OUStringBuffer aResultStr(aArgStr);
-                sal_Int32 nErase = nReplaceLen;
-                aResultStr.remove( nStartPos, nErase );
-                aResultStr.insert(
-                    nStartPos, aReplaceStr.getStr(), std::min(nReplaceLen, nReplaceStrLen));
-
-                rPar.Get(1)->PutString(aResultStr.makeStringAndClear());
-            }
-            else
-            {
-                OUString aResultStr;
-                if (nStartPos > aArgStr.getLength())
-                {
-                    // do nothing
-                }
-                else if(nArgCount == 2)
-                {
-                    aResultStr = aArgStr.copy( nStartPos);
-                }
-                else
-                {
-                    if (nLen < 0)
-                        nLen = 0;
-                    if(nStartPos + nLen > aArgStr.getLength())
-                    {
-                        nLen = aArgStr.getLength() - nStartPos;
-                    }
-                    if (nLen > 0)
-                        aResultStr = aArgStr.copy( nStartPos, nLen );
-                }
-                rPar.Get(0)->PutString(aResultStr);
+                nReplaceLen = nArgLen - nStartPos;
             }
         }
+
+        OUStringBuffer aResultStr(aArgStr);
+        sal_Int32 nErase = nReplaceLen;
+        aResultStr.remove( nStartPos, nErase );
+        aResultStr.insert(
+            nStartPos, aReplaceStr.getStr(), std::min(nReplaceLen, nReplaceStrLen));
+
+        rPar.Get(1)->PutString(aResultStr.makeStringAndClear());
+    }
+    else
+    {
+        OUString aResultStr;
+        if (nStartPos > aArgStr.getLength())
+        {
+            // do nothing
+        }
+        else if(nArgCount == 2)
+        {
+            aResultStr = aArgStr.copy( nStartPos);
+        }
+        else
+        {
+            if (nLen < 0)
+                nLen = 0;
+            if(nStartPos + nLen > aArgStr.getLength())
+            {
+                nLen = aArgStr.getLength() - nStartPos;
+            }
+            if (nLen > 0)
+                aResultStr = aArgStr.copy( nStartPos, nLen );
+        }
+        rPar.Get(0)->PutString(aResultStr);
     }
 }
 
@@ -1313,96 +1306,87 @@ void SbRtl_Space(StarBASIC *, SbxArray & rPar, bool)
 {
     if (rPar.Count() < 2)
     {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+        return StarBASIC::Error(ERRCODE_BASIC_BAD_ARGUMENT);
     }
-    else
-    {
-        const sal_Int32 nCount = rPar.Get(1)->GetLong();
-        OUStringBuffer aBuf(nCount);
-        string::padToLength(aBuf, nCount, ' ');
-        rPar.Get(0)->PutString(aBuf.makeStringAndClear());
-    }
+
+    const sal_Int32 nCount = rPar.Get(1)->GetLong();
+    OUStringBuffer aBuf(nCount);
+    string::padToLength(aBuf, nCount, ' ');
+    rPar.Get(0)->PutString(aBuf.makeStringAndClear());
 }
 
 void SbRtl_Sqr(StarBASIC *, SbxArray & rPar, bool)
 {
     if (rPar.Count() < 2)
     {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+        return StarBASIC::Error(ERRCODE_BASIC_BAD_ARGUMENT);
     }
-    else
+
+    double aDouble = rPar.Get(1)->GetDouble();
+    if ( aDouble < 0 )
     {
-        double aDouble = rPar.Get(1)->GetDouble();
-        if ( aDouble >= 0 )
-        {
-            rPar.Get(0)->PutDouble(sqrt(aDouble));
-        }
-        else
-        {
-            StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-        }
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
+    rPar.Get(0)->PutDouble(sqrt(aDouble));
 }
 
 void SbRtl_Str(StarBASIC *, SbxArray & rPar, bool)
 {
     if (rPar.Count() < 2)
     {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+        return StarBASIC::Error(ERRCODE_BASIC_BAD_ARGUMENT);
     }
-    else
+
+    OUString aStr;
+    OUString aStrNew(u""_ustr);
+    SbxVariableRef pArg = rPar.Get(1);
+    pArg->Format( aStr );
+
+    // Numbers start with a space
+    if (pArg->GetType() != SbxBOOL && pArg->IsNumericRTL())
     {
-        OUString aStr;
-        OUString aStrNew(u""_ustr);
-        SbxVariableRef pArg = rPar.Get(1);
-        pArg->Format( aStr );
+        // replace commas by points so that it's symmetric to Val!
+        aStr = aStr.replaceFirst( ",", "." );
 
-        // Numbers start with a space
-        if (pArg->GetType() != SbxBOOL && pArg->IsNumericRTL())
+        SbiInstance* pInst = GetSbData()->pInst;
+        bool bCompatibility = ( pInst && pInst->IsCompatibility() );
+        if( bCompatibility )
         {
-            // replace commas by points so that it's symmetric to Val!
-            aStr = aStr.replaceFirst( ",", "." );
+            sal_Int32 nLen = aStr.getLength();
 
-            SbiInstance* pInst = GetSbData()->pInst;
-            bool bCompatibility = ( pInst && pInst->IsCompatibility() );
-            if( bCompatibility )
+            const sal_Unicode* pBuf = aStr.getStr();
+
+            bool bNeg = ( pBuf[0] == '-' );
+            sal_Int32 iZeroSearch = 0;
+            if( bNeg )
             {
-                sal_Int32 nLen = aStr.getLength();
-
-                const sal_Unicode* pBuf = aStr.getStr();
-
-                bool bNeg = ( pBuf[0] == '-' );
-                sal_Int32 iZeroSearch = 0;
-                if( bNeg )
-                {
-                    aStrNew += "-";
-                    iZeroSearch++;
-                }
-                else
-                {
-                    if( pBuf[0] != ' ' )
-                    {
-                        aStrNew += " ";
-                    }
-                }
-                sal_Int32 iNext = iZeroSearch + 1;
-                if( pBuf[iZeroSearch] == '0' && nLen > iNext && pBuf[iNext] == '.' )
-                {
-                    iZeroSearch += 1;
-                }
-                aStrNew += aStr.subView(iZeroSearch);
+                aStrNew += "-";
+                iZeroSearch++;
             }
             else
             {
-                aStrNew = " " + aStr;
+                if( pBuf[0] != ' ' )
+                {
+                    aStrNew += " ";
+                }
             }
+            sal_Int32 iNext = iZeroSearch + 1;
+            if( pBuf[iZeroSearch] == '0' && nLen > iNext && pBuf[iNext] == '.' )
+            {
+                iZeroSearch += 1;
+            }
+            aStrNew += aStr.subView(iZeroSearch);
         }
         else
         {
-            aStrNew = aStr;
+            aStrNew = " " + aStr;
         }
-        rPar.Get(0)->PutString(aStrNew);
     }
+    else
+    {
+        aStrNew = aStr;
+    }
+    rPar.Get(0)->PutString(aStrNew);
 }
 
 void SbRtl_StrComp(StarBASIC *, SbxArray & rPar, bool)
@@ -1474,70 +1458,64 @@ void SbRtl_String(StarBASIC *, SbxArray & rPar, bool)
 {
     if (rPar.Count() < 2)
     {
+        return StarBASIC::Error(ERRCODE_BASIC_BAD_ARGUMENT);
+    }
+
+    sal_Unicode aFiller;
+    sal_Int32 lCount = rPar.Get(1)->GetLong();
+    if( lCount < 0 || lCount > 0xffff )
+    {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+    }
+    if (rPar.Get(2)->GetType() == SbxINTEGER)
+    {
+        aFiller = static_cast<sal_Unicode>(rPar.Get(2)->GetInteger());
     }
     else
     {
-        sal_Unicode aFiller;
-        sal_Int32 lCount = rPar.Get(1)->GetLong();
-        if( lCount < 0 || lCount > 0xffff )
-        {
-            StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-        }
-        if (rPar.Get(2)->GetType() == SbxINTEGER)
-        {
-            aFiller = static_cast<sal_Unicode>(rPar.Get(2)->GetInteger());
-        }
-        else
-        {
-            const OUString aStr = rPar.Get(2)->GetOUString();
-            aFiller = aStr[0];
-        }
-        OUStringBuffer aBuf(lCount);
-        string::padToLength(aBuf, lCount, aFiller);
-        rPar.Get(0)->PutString(aBuf.makeStringAndClear());
+        const OUString aStr = rPar.Get(2)->GetOUString();
+        aFiller = aStr[0];
     }
+    OUStringBuffer aBuf(lCount);
+    string::padToLength(aBuf, lCount, aFiller);
+    rPar.Get(0)->PutString(aBuf.makeStringAndClear());
 }
 
 void SbRtl_Tab(StarBASIC *, SbxArray & rPar, bool)
 {
     if (rPar.Count() < 2)
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-    else
     {
-        const sal_Int32 nCount = std::max(rPar.Get(1)->GetLong(), sal_Int32(0));
-        OUStringBuffer aStr(nCount);
-        comphelper::string::padToLength(aStr, nCount, '\t');
-        rPar.Get(0)->PutString(aStr.makeStringAndClear());
+        return StarBASIC::Error(ERRCODE_BASIC_BAD_ARGUMENT);
     }
+
+    const sal_Int32 nCount = std::max(rPar.Get(1)->GetLong(), sal_Int32(0));
+    OUStringBuffer aStr(nCount);
+    comphelper::string::padToLength(aStr, nCount, '\t');
+    rPar.Get(0)->PutString(aStr.makeStringAndClear());
 }
 
 void SbRtl_Tan(StarBASIC *, SbxArray & rPar, bool)
 {
     if (rPar.Count() < 2)
     {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+        return StarBASIC::Error(ERRCODE_BASIC_BAD_ARGUMENT);
     }
-    else
-    {
-        SbxVariableRef pArg = rPar.Get(1);
-        rPar.Get(0)->PutDouble(tan(pArg->GetDouble()));
-    }
+
+    SbxVariableRef pArg = rPar.Get(1);
+    rPar.Get(0)->PutDouble(tan(pArg->GetDouble()));
 }
 
 void SbRtl_UCase(StarBASIC *, SbxArray & rPar, bool)
 {
     if (rPar.Count() < 2)
     {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+        return StarBASIC::Error(ERRCODE_BASIC_BAD_ARGUMENT);
     }
-    else
-    {
-        const CharClass& rCharClass = GetCharClass();
-        OUString aStr(rPar.Get(1)->GetOUString());
-        aStr = rCharClass.uppercase( aStr );
-        rPar.Get(0)->PutString(aStr);
-    }
+
+    const CharClass& rCharClass = GetCharClass();
+    OUString aStr(rPar.Get(1)->GetOUString());
+    aStr = rCharClass.uppercase( aStr );
+    rPar.Get(0)->PutString(aStr);
 }
 
 
@@ -1545,55 +1523,52 @@ void SbRtl_Val(StarBASIC *, SbxArray & rPar, bool)
 {
     if (rPar.Count() < 2)
     {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+        return StarBASIC::Error(ERRCODE_BASIC_BAD_ARGUMENT);
+    }
+    double nResult = 0.0;
+    char* pEndPtr;
+
+    OUString aStr(rPar.Get(1)->GetOUString());
+
+    FilterWhiteSpace( aStr );
+    if ( aStr.getLength() > 1 && aStr[0] == '&' )
+    {
+        int nRadix = 10;
+        char aChar = static_cast<char>(aStr[1]);
+        if ( aChar == 'h' || aChar == 'H' )
+        {
+            nRadix = 16;
+        }
+        else if ( aChar == 'o' || aChar == 'O' )
+        {
+            nRadix = 8;
+        }
+        if ( nRadix != 10 )
+        {
+            OString aByteStr(OUStringToOString(aStr, osl_getThreadTextEncoding()));
+            sal_Int16 nlResult = static_cast<sal_Int16>(strtol( aByteStr.getStr()+2, &pEndPtr, nRadix));
+            nResult = static_cast<double>(nlResult);
+        }
     }
     else
     {
-        double nResult = 0.0;
-        char* pEndPtr;
-
-        OUString aStr(rPar.Get(1)->GetOUString());
-
-        FilterWhiteSpace( aStr );
-        if ( aStr.getLength() > 1 && aStr[0] == '&' )
-        {
-            int nRadix = 10;
-            char aChar = static_cast<char>(aStr[1]);
-            if ( aChar == 'h' || aChar == 'H' )
-            {
-                nRadix = 16;
-            }
-            else if ( aChar == 'o' || aChar == 'O' )
-            {
-                nRadix = 8;
-            }
-            if ( nRadix != 10 )
-            {
-                OString aByteStr(OUStringToOString(aStr, osl_getThreadTextEncoding()));
-                sal_Int16 nlResult = static_cast<sal_Int16>(strtol( aByteStr.getStr()+2, &pEndPtr, nRadix));
-                nResult = static_cast<double>(nlResult);
-            }
-        }
-        else
-        {
-            rtl_math_ConversionStatus eStatus = rtl_math_ConversionStatus_Ok;
-            sal_Int32 nParseEnd = 0;
-            nResult = ::rtl::math::stringToDouble( aStr, '.', ',', &eStatus, &nParseEnd );
-            if ( eStatus != rtl_math_ConversionStatus_Ok )
-                StarBASIC::Error( ERRCODE_BASIC_MATH_OVERFLOW );
-            /* TODO: we should check whether all characters were parsed here,
-             * but earlier code silently ignored trailing nonsense such as "1x"
-             * resulting in 1 with the side effect that any alpha-only-string
-             * like "x" resulted in 0. Not changing that now (2013-03-22) as
-             * user macros may rely on it. */
+        rtl_math_ConversionStatus eStatus = rtl_math_ConversionStatus_Ok;
+        sal_Int32 nParseEnd = 0;
+        nResult = ::rtl::math::stringToDouble( aStr, '.', ',', &eStatus, &nParseEnd );
+        if ( eStatus != rtl_math_ConversionStatus_Ok )
+            StarBASIC::Error( ERRCODE_BASIC_MATH_OVERFLOW );
+        /* TODO: we should check whether all characters were parsed here,
+         * but earlier code silently ignored trailing nonsense such as "1x"
+         * resulting in 1 with the side effect that any alpha-only-string
+         * like "x" resulted in 0. Not changing that now (2013-03-22) as
+         * user macros may rely on it. */
 #if 0
-            else if ( nParseEnd != aStr.getLength() )
-                StarBASIC::Error( ERRCODE_BASIC_CONVERSION );
+        else if ( nParseEnd != aStr.getLength() )
+            StarBASIC::Error( ERRCODE_BASIC_CONVERSION );
 #endif
-        }
-
-        rPar.Get(0)->PutDouble(nResult);
     }
+
+    rPar.Get(0)->PutDouble(nResult);
 }
 
 
