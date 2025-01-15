@@ -132,6 +132,7 @@
 #include "impviewframe.hxx"
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/svapp.hxx>
+#include <svl/cryptosign.hxx>
 
 #define ShellClass_SfxViewFrame
 #include <sfxslots.hxx>
@@ -1275,7 +1276,7 @@ void SfxViewFrame::AppendReadOnlyInfobar()
     if (bSignPDF)
     {
         SfxObjectShell* pObjectShell = GetObjectShell();
-        uno::Reference<security::XCertificate> xCertificate = pObjectShell->GetSignPDFCertificate();
+        uno::Reference<security::XCertificate> xCertificate = pObjectShell->GetSignPDFCertificate().m_xCertificate;
         bSignWithCert = xCertificate.is();
     }
 

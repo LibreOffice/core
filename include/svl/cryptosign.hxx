@@ -127,6 +127,9 @@ public:
     /// Otherwise we don't have a certificate but have a name to be featured on the visual
     /// signature.
     OUString m_aName;
+
+    /// Returns if a certificate or a name is set.
+    bool Is();
 };
 
 }

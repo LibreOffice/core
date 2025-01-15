@@ -21,6 +21,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequence.hxx>
+#include <svl/cryptosign.hxx>
 
 using namespace com::sun::star;
 

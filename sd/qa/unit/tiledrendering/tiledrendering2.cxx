@@ -47,9 +47,11 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertSignatureLineExternal)
     uno::Sequence<beans::PropertyValue> aArgs = { comphelper::makePropertyValue("ReadOnly", true) };
     loadWithParams(createFileURL(u"empty.pdf"), aArgs);
     SdXImpressDocument* pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    pImpressDocument->initializeForTiledRendering({});
     sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
     sd::View* pView = pViewShell->GetView();
     pView->SetAuthor("myauthor");
+    ViewCallback aView;
 
     // When insrerting a signature line for electronic (extrenal) signing:
     aArgs = {
@@ -66,6 +68,28 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertSignatureLineExternal)
     aMarkedObjects[0]->GetGrabBagItem(aAny);
     comphelper::SequenceAsHashMap aMap(aAny);
     CPPUNIT_ASSERT(aMap.contains("SignatureCertificate"));
+    // Also verify that this is exposed at a LOK level:
+    OString aShapeSelection = "[" + aView.m_ShapeSelection + "]";
+    const char* pShapeSelectionStr = aShapeSelection.getStr();
+    std::stringstream aStream(pShapeSelectionStr);
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    int nCount = 0;
+    bool bSignature = false;
+    for (const auto& i : aTree)
+    {
+        ++nCount;
+        if (nCount <= 5)
+        {
+            // x, y, w, h, part
+            continue;
+        }
+        boost::property_tree::ptree aProps = i.second;
+        // Without the accompanying fix in place, this test would have failed with:
+        // - No such node (isSignature)
+        bSignature = aProps.get<bool>("isSignature");
+    }
+    CPPUNIT_ASSERT(bSignature);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
