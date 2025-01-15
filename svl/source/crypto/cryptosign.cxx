@@ -2400,6 +2400,11 @@ void Signing::appendHex(sal_Int8 nInt, OStringBuffer& rBuffer)
     rBuffer.append( pHexDigits[ (nInt >> 4) & 15 ] );
     rBuffer.append( pHexDigits[ nInt & 15 ] );
 }
+
+bool CertificateOrName::Is()
+{
+    return m_xCertificate.is() || !m_aName.isEmpty();
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

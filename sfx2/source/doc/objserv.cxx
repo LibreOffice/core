@@ -451,22 +451,31 @@ uno::Reference<beans::XPropertySet> GetSelectedShapeOfModel(const uno::Reference
 }
 }
 
-uno::Reference<security::XCertificate> SfxObjectShell::GetSignPDFCertificate() const
+svl::crypto::CertificateOrName SfxObjectShell::GetSignPDFCertificate() const
 {
     uno::Reference<beans::XPropertySet> xShapeProps = GetSelectedShapeOfModel(GetBaseModel());
     if (!xShapeProps.is() || !xShapeProps->getPropertySetInfo()->hasPropertyByName("InteropGrabBag"))
     {
-        return uno::Reference<security::XCertificate>();
+        return {};
     }
 
     comphelper::SequenceAsHashMap aMap(xShapeProps->getPropertyValue("InteropGrabBag"));
     auto it = aMap.find("SignatureCertificate");
     if (it == aMap.end())
     {
-        return uno::Reference<security::XCertificate>();
+        return {};
     }
 
-    return uno::Reference<security::XCertificate>(it->second, uno::UNO_QUERY);
+    svl::crypto::CertificateOrName aCertificateOrName;
+    if (it->second.has<uno::Reference<security::XCertificate>>())
+    {
+        it->second >>= aCertificateOrName.m_xCertificate;
+    }
+    else
+    {
+        it->second >>= aCertificateOrName.m_aName;
+    }
+    return aCertificateOrName;
 }
 
 void SfxObjectShell::ResetSignPDFCertificate()
@@ -611,7 +620,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
         if (SID_SIGNATURE == nId)
         {
-            uno::Reference<security::XCertificate> xCertificate = GetSignPDFCertificate();
+            uno::Reference<security::XCertificate> xCertificate = GetSignPDFCertificate().m_xCertificate;
             if (xCertificate.is())
             {
 

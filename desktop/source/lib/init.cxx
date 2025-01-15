@@ -5205,7 +5205,7 @@ static bool isCommandAllowed(OUString& command) {
                 {
                     // If the just added signature line shape is selected, allow moving it.
                     SfxObjectShell* pDocShell = pViewShell->GetObjectShell();
-                    bRet = pDocShell->GetSignPDFCertificate().is();
+                    bRet = pDocShell->GetSignPDFCertificate().Is();
                 }
                 return bRet;
             }
