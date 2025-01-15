@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,extensions_quicklookpreviewappex,$(SRCDIR)/extensions/source/macosx/quicklookpreview/appex))
+$(eval $(call gb_Package_Package,extensions_quicklookpreviewappex,$(BUILDDIR)/extensions/source/macosx/quicklookpreview/appex))
 
 $(eval $(call gb_Package_add_files,extensions_quicklookpreviewappex,PlugIns/QuickLookPreview.appex/Contents,\
     Info.plist \

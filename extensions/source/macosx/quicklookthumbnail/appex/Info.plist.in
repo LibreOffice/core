@@ -12,15 +12,15 @@
     <key>CFBundleDevelopmentRegion</key>
     <string>en</string>
     <key>CFBundleDisplayName</key>
-    <string>LibreOffice Quick Look Preview</string>
+    <string>@PRODUCTNAME@ Quick Look Thumbnail</string>
     <key>CFBundleExecutable</key>
-    <string>QuickLookPreview</string>
+    <string>QuickLookThumbnail</string>
     <key>CFBundleIdentifier</key>
-    <string>org.libreoffice.quicklookpreview</string>
+    <string>@MACOSX_BUNDLE_IDENTIFIER@.quicklookthumbnail</string>
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
     <key>CFBundleName</key>
-    <string>QuickLookPreview</string>
+    <string>@PRODUCTNAME_WITHOUT_SPACES@QuickLookThumbnail</string>
     <key>CFBundlePackageType</key>
     <string>XPC!</string>
     <key>CFBundleShortVersionString</key>
@@ -32,13 +32,15 @@
     <key>CFBundleVersion</key>
     <string>1</string>
     <key>LSMinimumSystemVersion</key>
-    <string>12.0</string>
+    <string>@MACOSX_DEPLOYMENT_TARGET@.0</string>
+    <key>DTXcodeBuild</key>
+    <string>@MACOSX_XCODE_BUILD_VERSION@</string>
+    <key>DTSDKBuild</key>
+    <string>@MACOSX_SDK_BUILD_VERSION@</string>
     <key>NSExtension</key>
     <dict>
         <key>NSExtensionAttributes</key>
         <dict>
-            <key>QLIsDataBasedPreview</key>
-            <false/>
             <key>QLSupportedContentTypes</key>
             <array>
                 <string>org.openoffice.text</string>
@@ -63,13 +65,13 @@
                 <string>org.oasis-open.opendocument.graphics-template</string>
                 <string>org.oasis-open.opendocument.database</string>
             </array>
-            <key>QLSupportsSearchableItems</key>
-            <false/>
+            <key>QLThumbnailMinimumDimension</key>
+            <integer>0</integer>
         </dict>
         <key>NSExtensionPointIdentifier</key>
-        <string>com.apple.quicklook.preview</string>
+        <string>com.apple.quicklook.thumbnail</string>
         <key>NSExtensionPrincipalClass</key>
-        <string>PreviewViewController</string>
+        <string>ThumbnailProvider</string>
     </dict>
 </dict>
 </plist>
