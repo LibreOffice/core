@@ -1339,12 +1339,14 @@ bool SwContentNode::GoNext(SwContentIndex * pIdx, SwCursorSkipMode nMode ) const
 bool SwContentNode::GoPrevious(SwContentIndex * pIdx, SwCursorSkipMode nMode ) const
 {
     bool bRet = true;
-    if( pIdx->GetIndex() > 0 )
+    assert(pIdx != nullptr && "Invalid SwContentIndex* argument to SwContentNode::GoPrevious()");
+    if (pIdx && pIdx->GetIndex() > 0)
     {
         if( !IsTextNode() )
             --(*pIdx);
         else
         {
+            assert(GetTextNode() != nullptr && "Expected valid GetTextNode() with IsTextNode()");
             const SwTextNode& rTNd = *GetTextNode();
             sal_Int32 nPos = pIdx->GetIndex();
             assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
