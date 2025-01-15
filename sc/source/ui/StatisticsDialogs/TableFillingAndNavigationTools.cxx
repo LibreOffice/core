@@ -13,6 +13,9 @@
 #include <editeng/editobj.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/eeitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/borderline.hxx>
+#include <editeng/justifyitem.hxx>
 
 #include <editutil.hxx>
 
@@ -20,6 +23,8 @@
 #include <formulacell.hxx>
 #include <docfunc.hxx>
 #include <docsh.hxx>
+
+using namespace ::editeng;
 
 FormulaTemplate::FormulaTemplate(ScDocument* pDoc)
     : mpDoc(pDoc)
@@ -213,7 +218,9 @@ void AddressWalkerWriter::writeBoldString(const OUString& aString)
     rEngine.SetTextCurrentDefaults(aString);
     SfxItemSet aItemSet = rEngine.GetEmptyItemSet();
     SvxWeightItem aWeight(WEIGHT_BOLD, EE_CHAR_WEIGHT);
+    SvxHorJustifyItem aJustify(SvxCellHorJustify::Center, ATTR_HOR_JUSTIFY);
     aItemSet.Put(aWeight);
+    aItemSet.Put(aJustify);
     rEngine.QuickSetAttribs(aItemSet, ESelection(0, 0, 0, aString.getLength()) );
     std::unique_ptr<EditTextObject> pEditText(rEngine.CreateTextObject());
     mpDocShell->GetDocFunc().SetEditCell(mCurrentAddress, *pEditText, true);
@@ -222,6 +229,47 @@ void AddressWalkerWriter::writeBoldString(const OUString& aString)
 void AddressWalkerWriter::writeValue(double aValue)
 {
     mpDocShell->GetDocFunc().SetValueCell(mCurrentAddress, aValue, true);
+}
+
+// Applies a column header format to the current cell and subsequent (nCols - 1) columns
+// Header format = bold font, horizontally centered, text wrap and top/bottom borders
+void AddressWalkerWriter::formatAsColumnHeader(SCCOL nCols)
+{
+    ScPatternAttr aPattern(mrDocument.getCellAttributeHelper());
+    SvxHorJustifyItem aHJustify(SvxCellHorJustify::Center, ATTR_HOR_JUSTIFY);
+    SvxVerJustifyItem aVJustify(SvxCellVerJustify::Center, ATTR_VER_JUSTIFY);
+    SvxWeightItem aWeight(WEIGHT_BOLD, ATTR_FONT_WEIGHT);
+    ScLineBreakCell aWrap(true);
+    SvxBoxItem aBorderOuter(ATTR_BORDER);
+    SvxBorderLine aLine;
+    aLine.GuessLinesWidths(aLine.GetBorderLineStyle(), SvxBorderLineWidth::Thin);
+    aBorderOuter.SetLine(&aLine, SvxBoxItemLine::TOP);
+    aBorderOuter.SetLine(&aLine, SvxBoxItemLine::BOTTOM);
+
+    aPattern.GetItemSet().Put(aHJustify);
+    aPattern.GetItemSet().Put(aVJustify);
+    aPattern.GetItemSet().Put(aWeight);
+    aPattern.GetItemSet().Put(aWrap);
+    aPattern.GetItemSet().Put(aBorderOuter);
+
+    mrDocument.ApplyPatternAreaTab(mCurrentAddress.Col(), mCurrentAddress.Row(),
+                                   mCurrentAddress.Col() + nCols - 1, mCurrentAddress.Row(),
+                                   mCurrentAddress.Tab(), aPattern);
+}
+
+// Formats as the bottom end of a table with a bottom line
+// Starts in the current cell and formats nCols in total
+void AddressWalkerWriter::formatTableBottom(SCCOL nCols)
+{
+    ScPatternAttr aPattern(mrDocument.getCellAttributeHelper());
+    SvxBoxItem aBorderOuter(ATTR_BORDER);
+    SvxBorderLine aLine;
+    aLine.GuessLinesWidths(aLine.GetBorderLineStyle(), SvxBorderLineWidth::Thin);
+    aBorderOuter.SetLine(&aLine, SvxBoxItemLine::BOTTOM);
+    aPattern.GetItemSet().Put(aBorderOuter);
+    mrDocument.ApplyPatternAreaTab(mCurrentAddress.Col(), mCurrentAddress.Row(),
+                                   mCurrentAddress.Col() + nCols - 1, mCurrentAddress.Row(),
+                                   mCurrentAddress.Tab(), aPattern);
 }
 
 // DataCellIterator

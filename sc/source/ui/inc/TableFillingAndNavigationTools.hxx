@@ -86,6 +86,8 @@ public:
     void writeString(const char* aCharArray);
     void writeBoldString(const OUString& aString);
     void writeValue(double aValue);
+    void formatAsColumnHeader(SCCOL nCols = 1);
+    void formatTableBottom(SCCOL nCols = 1);
 };
 
 class DataCellIterator final

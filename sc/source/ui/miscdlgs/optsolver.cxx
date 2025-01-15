@@ -39,6 +39,7 @@
 #include <optsolver.hxx>
 #include <table.hxx>
 #include <TableFillingAndNavigationTools.hxx>
+#include <tabvwsh.hxx>
 
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/sheet/SolverConstraint.hpp>
@@ -1258,10 +1259,12 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
             // Objective cell section
             aOutput.writeBoldString(ScResId(STR_SENSITIVITY_OBJCELL));
             aOutput.newLine();
+            aOutput.formatAsColumnHeader(2);
             aOutput.writeString(ScResId(STR_SENSITIVITY_CELL));
             aOutput.nextColumn();
             aOutput.writeString(ScResId(STR_SENSITIVITY_FINALVALUE));
             aOutput.newLine();
+            aOutput.formatTableBottom(2);
             aOutput.writeString(GetCellStrAddress(xSolver->getObjective()));
             aOutput.nextColumn();
             aOutput.writeValue(xSolver->getResultValue());
@@ -1271,6 +1274,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
             // Variable cell section
             aOutput.writeBoldString(ScResId(STR_SENSITIVITY_VARCELLS));
             aOutput.newLine();
+            aOutput.formatAsColumnHeader(6);
             aOutput.writeString(ScResId(STR_SENSITIVITY_CELL));
             aOutput.nextColumn();
             aOutput.writeString(ScResId(STR_SENSITIVITY_FINALVALUE));
@@ -1289,8 +1293,11 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
             uno::Sequence<double> aObjReducedCosts = aSensitivity.ObjReducedCosts;
             uno::Sequence<double> aObjAllowableDecreases = aSensitivity.ObjAllowableDecreases;
             uno::Sequence<double> aObjAllowableIncreases = aSensitivity.ObjAllowableIncreases;
-            for (sal_Int32 i = 0; i < aVariables.getLength(); i++)
+            sal_Int32 nRows = aVariables.getLength();
+            for (sal_Int32 i = 0; i < nRows; i++)
             {
+                if (i == nRows - 1)
+                    aOutput.formatTableBottom(6);
                 aOutput.writeString(GetCellStrAddress(aVariables[i]));
                 aOutput.nextColumn();
                 aOutput.writeValue(aSolution[i]);
@@ -1309,6 +1316,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
             // Constraints section
             aOutput.writeBoldString(ScResId(STR_SENSITIVITY_CONSTRAINTS));
             aOutput.newLine();
+            aOutput.formatAsColumnHeader(6);
             aOutput.writeString(ScResId(STR_SENSITIVITY_CELL));
             aOutput.nextColumn();
             aOutput.writeString(ScResId(STR_SENSITIVITY_FINALVALUE));
@@ -1327,8 +1335,11 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
             uno::Sequence<double> aConstrShadowPrices = aSensitivity.ConstrShadowPrices;
             uno::Sequence<double> aConstrAllowableDecreases = aSensitivity.ConstrAllowableDecreases;
             uno::Sequence<double> aConstrAllowableIncreases = aSensitivity.ConstrAllowableIncreases;
-            for (sal_Int32 i = 0; i < aConstraints.getLength(); i++)
+            nRows = aConstraints.getLength();
+            for (sal_Int32 i = 0; i < nRows; i++)
             {
+                if (i == nRows - 1)
+                    aOutput.formatTableBottom(6);
                 aOutput.writeString(GetCellStrAddress(aConstraints[i].Left));
                 aOutput.nextColumn();
                 aOutput.writeValue(aConstrValues[i]);
@@ -1342,6 +1353,12 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
                 aOutput.writeValue(aConstrAllowableIncreases[i]);
                 aOutput.newLine();
             }
+
+            // Disable grid lines in the sensitivity report
+            ScViewData& aData = ScTabViewShell::GetActiveViewShell()->GetViewData();
+            aData.SetTabNo(nReportTab);
+            aData.SetShowGrid(false);
+            aData.SetTabNo(mnCurTab);
         }
     }
 
