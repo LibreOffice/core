@@ -20,6 +20,7 @@
 #include <editeng/unolingu.hxx>
 #include <o3tl/safeint.hxx>
 #include <svx/dialmgr.hxx>
+#include <svx/ehdl.hxx>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/linguistic2/XDictionary.hpp>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
@@ -183,8 +184,7 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl, weld::Button&, void)
     {
         m_xNewDic = nullptr;
         // error: couldn't create new dictionary
-        SfxErrorContext aContext( ERRCTX_SVX_LINGU_DICTIONARY, OUString(),
-            m_xDialog.get(), RID_SVXERRCTX, SvxResLocale() );
+        SvxErrorContext aContext(ERRCTX_SVX_LINGU_DICTIONARY, OUString(), m_xDialog.get());
         ErrorHandler::HandleError( ErrCodeMsg(
                 ERRCODE_SVX_LINGU_DICT_NOTWRITEABLE, sDict ) );
         m_xDialog->response(RET_CANCEL);
