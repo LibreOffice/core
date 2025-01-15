@@ -11,13 +11,17 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,python3))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,python3,$(PYTHON_TARBALL),,python3))
 
-# Since Python 3.11, _freeze_module.vcxproj needs python.exe to build deepfreeze.c
-# on Windows
-ifeq ($(OS),WNT)
+# Since Python 3.11, _freeze_module.vcxproj needs python.exe to build deepfreeze.c on Windows
+# Since a wheel file is just a zip file, unzil them to the Lib directory with the other libraries
+ifneq ($(OS),MACOSX)
 $(eval $(call gb_UnpackedTarball_set_pre_action,python3,\
-       mkdir -p externals/pythonx86 && \
-       unzip -q -d externals/pythonx86 -o $(gb_UnpackedTarget_TARFILE_LOCATION)/$(PYTHON_BOOTSTRAP_TARBALL) && \
-       chmod +x externals/pythonx86/tools/* \
+	$(if $(filter WNT,$(OS)), \
+		mkdir -p externals/pythonx86 && \
+		unzip -q -d externals/pythonx86 -o $(gb_UnpackedTarget_TARFILE_LOCATION)/$(PYTHON_BOOTSTRAP_TARBALL) && \
+		chmod +x externals/pythonx86/tools/* && \
+	) \
+	unzip -q -d Lib/ -o Lib/ensurepip/_bundled/setuptools-65.5.0-py3-none-any.whl && \
+	unzip -q -d Lib/ -o Lib/ensurepip/_bundled/pip-24.0-py3-none-any.whl \
 ))
 endif
 

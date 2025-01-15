@@ -7,10 +7,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_UnpackedTarball_UnpackedTarball,lxml))
+$(eval $(call gb_PythonTest_PythonTest,pyuno_pytests_testpip))
 
-$(eval $(call gb_UnpackedTarball_set_tarball,lxml,$(LXML_TARBALL)))
-
-$(eval $(call gb_UnpackedTarball_set_patchlevel,lxml,0))
+$(eval $(call gb_PythonTest_add_modules,pyuno_pytests_testpip,$(SRCDIR)/pyuno/qa/pytests,\
+    testpip \
+))
 
 # vim: set noet sw=4 ts=4:
