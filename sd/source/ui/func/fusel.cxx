@@ -205,7 +205,8 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             bTextEdit = true;
 
         bool bPreventModify = mpDocSh->IsReadOnly();
-        if (bPreventModify && mpDocSh->GetSignPDFCertificate().Is())
+        SfxViewShell* pViewShell = mpViewShell->GetViewShell();
+        if (bPreventModify && pViewShell && pViewShell->GetSignPDFCertificate().Is())
         {
             // If the just added signature line shape is selected, allow moving / resizing it.
             bPreventModify = false;

@@ -5174,8 +5174,7 @@ static bool isCommandAllowed(OUString& command) {
                 if (pViewShell && command == u".uno:TransformDialog"_ustr)
                 {
                     // If the just added signature line shape is selected, allow moving it.
-                    SfxObjectShell* pDocShell = pViewShell->GetObjectShell();
-                    bRet = pDocShell->GetSignPDFCertificate().Is();
+                    bRet = pViewShell->GetSignPDFCertificate().Is();
                 }
                 return bRet;
             }

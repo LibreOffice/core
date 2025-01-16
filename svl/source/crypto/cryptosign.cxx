@@ -2404,7 +2404,7 @@ void Signing::appendHex(sal_Int8 nInt, OStringBuffer& rBuffer)
     rBuffer.append( pHexDigits[ nInt & 15 ] );
 }
 
-bool CertificateOrName::Is()
+bool CertificateOrName::Is() const
 {
     return m_xCertificate.is() || !m_aName.isEmpty();
 }

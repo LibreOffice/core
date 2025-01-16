@@ -862,10 +862,11 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testVisualSignResize)
     {
         return;
     }
-    SdrView* pView = SfxViewShell::Current()->GetDrawView();
+    SfxViewShell* pViewShell
+        = SfxViewShell::Get(uno::Reference<frame::XController>(xController, uno::UNO_QUERY));
     svl::crypto::CertificateOrName aCertificateOrName;
     aCertificateOrName.m_xCertificate = xCert;
-    svx::SignatureLineHelper::setShapeCertificate(pView, aCertificateOrName);
+    svx::SignatureLineHelper::setShapeCertificate(pViewShell, aCertificateOrName);
     pObjectShell->SetModified(false);
 
     // When resizing the shape by moving the bottom right (last) handle towards top right:
