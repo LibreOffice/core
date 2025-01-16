@@ -48,6 +48,33 @@
 
 #include <drawinglayer/tools/primitive2dxmldump.hxx>
 
+#ifdef IOS
+#include <vcl/sysdata.hxx>
+namespace CoreGraphics
+{ // Namespace here because iOS redefines Point and Size
+#import <CoreGraphics/CoreGraphics.h>
+
+SystemGraphicsData getiOSGraphicsData(unsigned char* pBuffer, long width, long height)
+{
+    double fDPIScale = 1.0;
+
+    // Onine uses the LOK_TILEMODE_RGBA by default so flip the normal flags
+    // to kCGImageAlphaPremultipliedLast | kCGImageByteOrder32Big
+    CGContextRef pCGContext
+        = CGBitmapContextCreate(pBuffer, width, height, 8, width * 4, CGColorSpaceCreateDeviceRGB(),
+                                kCGImageAlphaPremultipliedLast | kCGImageByteOrder32Big);
+
+    CGContextTranslateCTM(pCGContext, 0, height);
+    CGContextScaleCTM(pCGContext, fDPIScale, -fDPIScale);
+
+    SystemGraphicsData aData;
+    aData.rCGContext = reinterpret_cast<CGContextRef>(pCGContext);
+
+    return aData;
+}
+}
+#endif
+
 using namespace ::com::sun::star;
 
 namespace sd
@@ -69,7 +96,13 @@ public:
                   const Fraction& rScale)
         : mrModel(rModel)
         , maScale(rScale)
+#if defined(IOS)
+        , maVirtualDevice(
+              CoreGraphics::getiOSGraphicsData(pBuffer, rSlideSize.Width(), rSlideSize.Height()),
+              Size(1, 1), DeviceFormat::WITHOUT_ALPHA)
+#else
         , maVirtualDevice(DeviceFormat::WITHOUT_ALPHA)
+#endif
     {
         SdrOutliner& rOutliner = mrModel.GetDrawOutliner();
 
@@ -105,6 +138,10 @@ public:
         SdrOutliner& rOutliner = mrModel.GetDrawOutliner();
         rOutliner.SetControlWord(mnSavedControlBits);
         rOutliner.SetBackgroundColor(maSavedBackgroundColor);
+
+#ifdef IOS
+        CoreGraphics::CGContextRelease(maVirtualDevice->GetSystemGfxData().rCGContext);
+#endif
     }
 };
 
