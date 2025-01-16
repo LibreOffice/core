@@ -22,6 +22,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequence.hxx>
 #include <svl/cryptosign.hxx>
+#include <sfx2/viewsh.hxx>
 
 using namespace com::sun::star;
 
@@ -53,14 +54,14 @@ CPPUNIT_TEST_FIXTURE(Test, testNoGrabBagShape)
     xController->select(aShape);
 
     // See if it has a signing certificate associated.
-    auto pBaseModel = dynamic_cast<SfxBaseModel*>(xModel.get());
-    CPPUNIT_ASSERT(pBaseModel);
-    SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
+    SfxViewShell* pViewShell
+        = SfxViewShell::Get(uno::Reference<frame::XController>(xController, uno::UNO_QUERY));
+    CPPUNIT_ASSERT(pViewShell);
 
     // Without the accompanying fix in place, this test would have failed with:
     // An uncaught exception of type com.sun.star.beans.UnknownPropertyException
     // which was not caught later, resulting in a crash.
-    pObjectShell->GetSignPDFCertificate();
+    pViewShell->GetSignPDFCertificate();
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTempFilePath)

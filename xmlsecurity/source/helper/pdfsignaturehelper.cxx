@@ -33,6 +33,7 @@
 #include <vcl/checksum.hxx>
 #include <svl/cryptosign.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <sfx2/viewsh.hxx>
 
 using namespace ::com::sun::star;
 
@@ -70,21 +71,14 @@ void GetSignatureLineShape(const uno::Reference<frame::XModel>& xModel, sal_Int3
         return;
     }
 
+    SfxViewShell* pViewShell = SfxViewShell::Get(xModel->getCurrentController());
+    if (!pViewShell || !pViewShell->GetSignPDFCertificate().Is())
+    {
+        return;
+    }
+
     uno::Reference<drawing::XShapes> xShapes(xModel->getCurrentSelection(), uno::UNO_QUERY);
     if (!xShapes.is() || xShapes->getCount() < 1)
-    {
-        return;
-    }
-
-    uno::Reference<beans::XPropertySet> xShapeProps(xShapes->getByIndex(0), uno::UNO_QUERY);
-    if (!xShapeProps.is())
-    {
-        return;
-    }
-
-    comphelper::SequenceAsHashMap aMap(xShapeProps->getPropertyValue(u"InteropGrabBag"_ustr));
-    auto it = aMap.find(u"SignatureCertificate"_ustr);
-    if (it == aMap.end())
     {
         return;
     }

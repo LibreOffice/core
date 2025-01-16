@@ -512,7 +512,8 @@ void FuConstructRectangle::Deactivate()
         return;
     }
 
-    svl::crypto::CertificateOrName aCertificateOrName = mpViewShell->GetViewShell()->GetSigningCertificate();
+    SfxViewShell* pViewShell = mpViewShell->GetViewShell();
+    svl::crypto::CertificateOrName aCertificateOrName = pViewShell->GetSigningCertificate();
     if (aCertificateOrName.m_aName.isEmpty())
     {
         aCertificateOrName.m_xCertificate = svx::SignatureLineHelper::getSignatureCertificate(
@@ -524,7 +525,7 @@ void FuConstructRectangle::Deactivate()
         }
     }
 
-    svx::SignatureLineHelper::setShapeCertificate(mpView, aCertificateOrName);
+    svx::SignatureLineHelper::setShapeCertificate(pViewShell, aCertificateOrName);
 
     // Update infobar to offer "finish signing".
     SfxViewFrame* pFrame = mpViewShell->GetViewFrame();

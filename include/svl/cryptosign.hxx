@@ -129,7 +129,7 @@ public:
     OUString m_aName;
 
     /// Returns if a certificate or a name is set.
-    bool Is();
+    bool Is() const;
 };
 
 }

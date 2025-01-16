@@ -1274,8 +1274,8 @@ void SfxViewFrame::AppendReadOnlyInfobar()
     bool bSignWithCert = false;
     if (bSignPDF)
     {
-        SfxObjectShell* pObjectShell = GetObjectShell();
-        uno::Reference<security::XCertificate> xCertificate = pObjectShell->GetSignPDFCertificate().m_xCertificate;
+        SfxViewShell* pViewShell = GetViewShell();
+        uno::Reference<security::XCertificate> xCertificate = pViewShell->GetSignPDFCertificate().m_xCertificate;
         bSignWithCert = xCertificate.is();
     }
 

@@ -1829,8 +1829,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr, bool addPageMargin
     // change position
     bool bMoveAllowed = m_bMoveAllowed;
     SfxViewShell* pViewShell = GetSfxViewShell();
-    SfxObjectShell* pObjectShell = pViewShell ? pViewShell->GetObjectShell() : nullptr;
-    if (!bMoveAllowed && pObjectShell && pObjectShell->GetSignPDFCertificate().Is())
+    if (!bMoveAllowed && pViewShell && pViewShell->GetSignPDFCertificate().Is())
     {
         // If the just added signature line shape is selected, allow moving it.
         bMoveAllowed = true;
