@@ -683,14 +683,6 @@ NSSCMSMessage *CreateCMSMessage(const PRTime* time,
         return nullptr;
     }
 
-    if (NSS_CMSSignedData_AddCertificate(*cms_sd, cert) != SECSuccess)
-    {
-        SAL_WARN("svl.crypto", "NSS_CMSSignedData_AddCertificate failed");
-        NSS_CMSSignedData_Destroy(*cms_sd);
-        NSS_CMSMessage_Destroy(result);
-        return nullptr;
-    }
-
     if (NSS_CMSSignedData_AddSignerInfo(*cms_sd, *cms_signer) != SECSuccess)
     {
         SAL_WARN("svl.crypto", "NSS_CMSSignedData_AddSignerInfo failed");
