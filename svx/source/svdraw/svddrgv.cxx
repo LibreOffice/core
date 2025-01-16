@@ -415,8 +415,7 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                             {
                                 bool bResizeAllowed = IsResizeAllowed(true);
                                 SfxViewShell* pViewShell = GetSfxViewShell();
-                                SfxObjectShell* pObjectShell = pViewShell ? pViewShell->GetObjectShell() : nullptr;
-                                if (!bResizeAllowed && pObjectShell && pObjectShell->GetSignPDFCertificate().Is())
+                                if (!bResizeAllowed && pViewShell && pViewShell->GetSignPDFCertificate().Is())
                                 {
                                     // If the just added signature line shape is selected, allow resizing it.
                                     bResizeAllowed = true;

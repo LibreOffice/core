@@ -47,6 +47,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardListener.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/view/XRenderable.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
@@ -2820,6 +2821,83 @@ void SfxViewShell::SetSigningCertificate(const svl::crypto::CertificateOrName& r
 svl::crypto::CertificateOrName SfxViewShell::GetSigningCertificate() const
 {
     return pImpl->m_aSigningCertificate;
+}
+
+namespace
+{
+uno::Reference<beans::XPropertySet>
+GetSelectedShapeOfView(const uno::Reference<frame::XController>& xController)
+{
+    uno::Reference<view::XSelectionSupplier> xSelectionSupplier(xController, uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes> xShapes(xSelectionSupplier->getSelection(), uno::UNO_QUERY);
+    if (!xShapes.is() || xShapes->getCount() != 1)
+    {
+        return {};
+    }
+
+    return uno::Reference<beans::XPropertySet>(xShapes->getByIndex(0), uno::UNO_QUERY);
+}
+}
+
+void SfxViewShell::SetSignPDFCertificate(const svl::crypto::CertificateOrName& rCertificateOrName)
+{
+    uno::Reference<beans::XPropertySet> xShape = GetSelectedShapeOfView(GetController());
+    if (!xShape.is() || !xShape->getPropertySetInfo()->hasPropertyByName("InteropGrabBag"))
+    {
+        return;
+    }
+
+    comphelper::SequenceAsHashMap aMap(xShape->getPropertyValue("InteropGrabBag"));
+
+    auto it = aMap.find("SignatureCertificate");
+    if (rCertificateOrName.Is())
+    {
+        if (rCertificateOrName.m_xCertificate.is())
+        {
+            aMap["SignatureCertificate"] <<= rCertificateOrName.m_xCertificate;
+        }
+        else
+        {
+            aMap["SignatureCertificate"] <<= rCertificateOrName.m_aName;
+        }
+    }
+    else if (it != aMap.end())
+    {
+        aMap.erase(it);
+    }
+    xShape->setPropertyValue("InteropGrabBag", uno::Any(aMap.getAsConstPropertyValueList()));
+    if (!rCertificateOrName.Is())
+    {
+        // The shape's property is now reset, so the doc model is no longer modified.
+        GetObjectShell()->SetModified(false);
+    }
+}
+
+svl::crypto::CertificateOrName SfxViewShell::GetSignPDFCertificate() const
+{
+    uno::Reference<beans::XPropertySet> xShape = GetSelectedShapeOfView(GetController());
+    if (!xShape.is() || !xShape->getPropertySetInfo()->hasPropertyByName("InteropGrabBag"))
+    {
+        return {};
+    }
+
+    comphelper::SequenceAsHashMap aMap(xShape->getPropertyValue("InteropGrabBag"));
+    auto it = aMap.find("SignatureCertificate");
+    if (it == aMap.end())
+    {
+        return {};
+    }
+
+    svl::crypto::CertificateOrName aCertificateOrName;
+    if (it->second.has<uno::Reference<security::XCertificate>>())
+    {
+        it->second >>= aCertificateOrName.m_xCertificate;
+    }
+    else
+    {
+        it->second >>= aCertificateOrName.m_aName;
+    }
+    return aCertificateOrName;
 }
 
 bool SfxViewShell::PrepareClose

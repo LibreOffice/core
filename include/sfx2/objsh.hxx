@@ -806,11 +806,6 @@ public:
     /// Is this read-only object shell opened via .uno:SignPDF?
     bool IsSignPDF() const;
 
-    /// Gets the certificate that is already picked by the user but not yet used for signing.
-    svl::crypto::CertificateOrName GetSignPDFCertificate() const;
-
-    void ResetSignPDFCertificate();
-
     /// Gets grab-bagged password info to unprotect change tracking with verification
     css::uno::Sequence< css::beans::PropertyValue > GetDocumentProtectionFromGrabBag() const;
 

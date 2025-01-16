@@ -34,6 +34,7 @@
 #include <unotools/syslocale.hxx>
 #include <vcl/weld.hxx>
 #include <sfx2/digitalsignatures.hxx>
+#include <sfx2/viewsh.hxx>
 
 using namespace com::sun::star;
 
@@ -134,9 +135,10 @@ uno::Reference<graphic::XGraphic> importSVG(std::u16string_view rSVG)
     return xGraphic;
 }
 
-void setShapeCertificate(const SdrView* pView,
+void setShapeCertificate(SfxViewShell* pViewShell,
                          const svl::crypto::CertificateOrName& rCertificateOrName)
 {
+    const SdrView* pView = pViewShell->GetDrawView();
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     if (rMarkList.GetMarkCount() < 1)
     {
@@ -153,16 +155,7 @@ void setShapeCertificate(const SdrView* pView,
     // Remember the selected certificate.
     uno::Reference<drawing::XShape> xShape = pSignatureLine->getUnoShape();
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    comphelper::SequenceAsHashMap aMap(xShapeProps->getPropertyValue("InteropGrabBag"));
-    if (rCertificateOrName.m_xCertificate.is())
-    {
-        aMap["SignatureCertificate"] <<= rCertificateOrName.m_xCertificate;
-    }
-    else
-    {
-        aMap["SignatureCertificate"] <<= rCertificateOrName.m_aName;
-    }
-    xShapeProps->setPropertyValue("InteropGrabBag", uno::Any(aMap.getAsConstPropertyValueList()));
+    pViewShell->SetSignPDFCertificate(rCertificateOrName);
 
     // Read svg and replace placeholder texts.
     OUString aSvgImage(svx::SignatureLineHelper::getSignatureImage("signature-line-draw.svg"));

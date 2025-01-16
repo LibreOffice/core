@@ -1111,7 +1111,7 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
             else
             {
                 SfxObjectShell* pObjectShell = pViewShell ? pViewShell->GetObjectShell() : nullptr;
-                if (pObjectShell && pObjectShell->IsSignPDF() && pObjectShell->GetSignPDFCertificate().Is())
+                if (pObjectShell && pObjectShell->IsSignPDF() && pViewShell && pViewShell->GetSignPDFCertificate().Is())
                 {
                     // Expose the info that this is the special signature widget that is OK to
                     // move/resize.
