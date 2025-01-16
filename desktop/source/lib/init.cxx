@@ -7775,6 +7775,19 @@ static void preloadData()
     }
     std::cerr << "\n";
 
+    // preload all available hyphenators
+    css::uno::Reference<linguistic2::XHyphenator> xHyphenator(xLngSvcMgr->getHyphenator());
+    css::uno::Reference<linguistic2::XSupportedLocales> xHyphLocales(xHyphenator, css::uno::UNO_QUERY_THROW);
+    aLocales = xHyphLocales->getLocales();
+    std::cerr << "Preloading local hyphenators: ";
+    for (auto &it : std::as_const(aLocales))
+    {
+        std::cerr << LanguageTag::convertToBcp47(it) << " ";
+        css::beans::PropertyValues aNone;
+        xHyphenator->createPossibleHyphens(u"forcefed"_ustr, it, aNone);
+    }
+    std::cerr << "\n";
+
     std::cerr << "Preloading breakiterator\n";
     if (aLocales.getLength())
     {

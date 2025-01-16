@@ -19,6 +19,7 @@
 
 #include <com/sun/star/uno/Reference.h>
 
+#include <comphelper/lok.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -138,6 +139,8 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
             {
                 for (const auto& rLocaleName : dict.aLocaleNames)
                 {
+                    if (!comphelper::LibreOfficeKit::isAllowlistedLanguage(rLocaleName))
+                        continue;
                     aLocaleNamesSet.insert( rLocaleName );
                 }
             }
