@@ -1594,6 +1594,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case ocToCol:
             case ocToRow:
             case ocUnique:
+            case ocWrapCols:
             // Don't change the state.
             break;
             default:

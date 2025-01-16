@@ -516,6 +516,7 @@ enum OpCode : sal_uInt16
         ocToCol             = SC_OPCODE_TOCOL,
         ocToRow             = SC_OPCODE_TOROW,
         ocUnique            = SC_OPCODE_UNIQUE,
+        ocWrapCols          = SC_OPCODE_WRAPCOLS,
     // internal stuff
         ocInternalBegin     = SC_OPCODE_INTERNAL_BEGIN,
         ocTTT               = SC_OPCODE_TTT,
@@ -1004,6 +1005,7 @@ inline std::string OpCodeEnumToString(OpCode eCode)
     case ocToRow: return "ToRow";
     case ocUnique: return "Unique";
     case ocLet: return "Let";
+    case ocWrapCols: return "WrapCols";
     case ocTTT: return "TTT";
     case ocDebugVar: return "DebugVar";
     case ocDataToken1: return "DataToken1";

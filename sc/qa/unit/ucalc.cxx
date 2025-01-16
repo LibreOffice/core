@@ -3123,6 +3123,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFunctionLists)
         "TOROW",
         "UNIQUE",
         "VLOOKUP",
+        "WRAPCOLS",
         "XLOOKUP",
         "XMATCH",
         nullptr

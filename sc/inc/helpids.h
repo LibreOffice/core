@@ -604,5 +604,6 @@ inline constexpr OUString HID_FUNC_TOCOL_MS = u"SC_HID_FUNC_TOCOL_MS"_ustr;
 inline constexpr OUString HID_FUNC_TOROW_MS = u"SC_HID_FUNC_TOROW_MS"_ustr;
 inline constexpr OUString HID_FUNC_UNIQUE_MS = u"SC_HID_FUNC_UNIQUE_MS"_ustr;
 inline constexpr OUString HID_FUNC_LET_MS = u"SC_HID_FUNC_LET_MS"_ustr;
+inline constexpr OUString HID_FUNC_WRAPCOLS_MS = u"SC_HID_FUNC_WRAPCOLS_MS"_ustr;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

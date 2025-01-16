@@ -886,6 +886,7 @@ const FunctionData saFuncTable2021[] =
     { "COM.MICROSOFT.TOROW",               "TOROW",               NOID,   NOID,   1,  3,  A, { VO }, FuncFlags::MACROCALL_NEW },
     { "COM.MICROSOFT.UNIQUE",              "UNIQUE",              NOID,   NOID,   1,  3,  A, { VO }, FuncFlags::MACROCALL_NEW },
     { "COM.MICROSOFT.LET",                 "LET",                 NOID,   NOID,   3,  MX, R, { VR, VR, VA }, FuncFlags::MACROCALL_NEW | FuncFlags::PARAMPAIRS },
+    { "COM.MICROSOFT.WRAPCOLS",            "WRAPCOLS",            NOID,   NOID,   3,  MX, R, { VR, VR, VA }, FuncFlags::MACROCALL_NEW | FuncFlags::PARAMPAIRS },
 };
 
 
