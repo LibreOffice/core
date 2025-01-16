@@ -40,7 +40,6 @@ struct VCL_DLLPUBLIC BitmapBuffer
     BitmapPalette   maPalette;
     sal_uInt8*      mpBits;
     ScanlineFormat  meFormat = ScanlineFormat::NONE;
-    ScanlineDirection meDirection = ScanlineDirection::BottomUp;
     ColorMask       maColorMask;
     sal_uInt16      mnBitCount;
 };

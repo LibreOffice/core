@@ -268,13 +268,7 @@ static bool ImplCopyImage( BitmapBuffer& rDstBuffer, const BitmapBuffer& rSrcBuf
     const PIXBYTE* pRawSrc = rSrcBuffer.mpBits;
     PIXBYTE* pRawDst = rDstBuffer.mpBits;
 
-    // source and destination don't match upside down
-    if (rSrcBuffer.meDirection != rDstBuffer.meDirection)
-    {
-        pRawDst += (rSrcBuffer.mnHeight - 1) * nDstLinestep;
-        nDstLinestep = -rDstBuffer.mnScanlineSize;
-    }
-    else if( nSrcLinestep == nDstLinestep )
+    if( nSrcLinestep == nDstLinestep )
     {
         memcpy( pRawDst, pRawSrc, rSrcBuffer.mnHeight * nDstLinestep );
         return true;
@@ -307,13 +301,6 @@ static bool ImplConvertToBitmap( TrueColorPixelPtr<SRCFMT>& rSrcLine,
     int nDstLinestep = rDstBuffer.mnScanlineSize;
 
     TrueColorPixelPtr<DSTFMT> aDstLine; aDstLine.SetRawPtr( rDstBuffer.mpBits );
-
-    // source and destination don't match upside down
-    if (rSrcBuffer.meDirection != rDstBuffer.meDirection)
-    {
-        aDstLine.AddByteOffset( (rSrcBuffer.mnHeight - 1) * nDstLinestep );
-        nDstLinestep = -nDstLinestep;
-    }
 
     for( int y = rSrcBuffer.mnHeight; --y >= 0; )
     {
@@ -379,7 +366,6 @@ bool ImplFastBitmapConversion( BitmapBuffer& rDst, const BitmapBuffer& rSrc,
         return false;
     // vertical mirroring
     if( rTR.mnDestHeight < 0 )
-        // TODO: rDst.meDirection != ScanlineDirection::TopDown;
         return false;
 
     // offsetted conversion is not implemented yet
@@ -463,10 +449,7 @@ bool ImplFastBitmapConversion( BitmapBuffer& rDst, const BitmapBuffer& rSrc,
 
 static inline ConstScanline ImplGetScanline( const BitmapBuffer& rBuf, tools::Long nY )
 {
-    if (rBuf.meDirection == ScanlineDirection::TopDown)
-        return rBuf.mpBits + nY * rBuf.mnScanlineSize;
-    else
-        return rBuf.mpBits + (rBuf.mnHeight - 1 - nY) * rBuf.mnScanlineSize;
+    return rBuf.mpBits + nY * rBuf.mnScanlineSize;
 }
 
 static inline Scanline ImplGetScanline( BitmapBuffer& rBuf, tools::Long nY )
@@ -584,20 +567,6 @@ static bool ImplBlendToBitmap( TrueColorPixelPtr<SRCFMT>& rSrcLine,
     if( rMskBuffer.mnHeight == 1 )
         nMskLinestep = 0;
 
-    // source and mask don't match: upside down
-    if (rSrcBuffer.meDirection != rMskBuffer.meDirection)
-    {
-        aMskLine.AddByteOffset( (rSrcBuffer.mnHeight - 1) * nMskLinestep );
-        nMskLinestep = -nMskLinestep;
-    }
-
-    // source and destination don't match: upside down
-    if (rSrcBuffer.meDirection != rDstBuffer.meDirection)
-    {
-        aDstLine.AddByteOffset( (rDstBuffer.mnHeight - 1) * nDstLinestep );
-        nDstLinestep = -nDstLinestep;
-    }
-
     assert(rDstBuffer.mnHeight <= rSrcBuffer.mnHeight && "not sure about that?");
     for (int y = rDstBuffer.mnHeight; --y >= 0;)
     {
@@ -700,7 +669,6 @@ bool ImplFastBitmapBlending( BitmapWriteAccess const & rDstWA,
         return false;
     // vertical mirroring
     if( rTR.mnDestHeight < 0 )
-        // TODO: rDst.meDirection != ScanlineDirection::TopDown;
         return false;
 
     // offsetted blending is not implemented yet

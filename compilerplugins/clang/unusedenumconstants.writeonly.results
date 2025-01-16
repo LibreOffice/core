@@ -4066,8 +4066,6 @@ include/vcl/salnativewidgets.hxx:198
     enum ControlPart BackgroundDialog
 include/vcl/salnativewidgets.hxx:237
     enum ButtonValue DontKnow
-include/vcl/Scanline.hxx:48
-    enum ScanlineDirection BottomUp
 include/vcl/sysdata.hxx:54
     enum SystemEnvData::Toolkit Qt
 include/vcl/syswin.hxx:50

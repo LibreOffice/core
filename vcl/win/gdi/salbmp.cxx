@@ -251,7 +251,6 @@ std::shared_ptr<Gdiplus::Bitmap> WinSalBitmap::ImplCreateGdiPlusBitmap()
         {
             sal_uInt8* pSrcRGB(pRGB->mpBits);
             const sal_uInt32 nExtraRGB(pRGB->mnScanlineSize - (nW * 3));
-            const bool bTopDown(pRGB->meDirection == ScanlineDirection::TopDown);
             const Gdiplus::Rect aAllRect(0, 0, nW, nH);
             Gdiplus::BitmapData aGdiPlusBitmapData;
             pRetval->LockBits(&aAllRect, Gdiplus::ImageLockModeWrite, PixelFormat24bppRGB, &aGdiPlusBitmapData);
@@ -259,8 +258,7 @@ std::shared_ptr<Gdiplus::Bitmap> WinSalBitmap::ImplCreateGdiPlusBitmap()
             // copy data to Gdiplus::Bitmap; format is BGR here in both cases, so memcpy is possible
             for(sal_uInt32 y(0); y < nH; y++)
             {
-                const sal_uInt32 nYInsert(bTopDown ? y : nH - y - 1);
-                sal_uInt8* targetPixels = static_cast<sal_uInt8*>(aGdiPlusBitmapData.Scan0) + (nYInsert * aGdiPlusBitmapData.Stride);
+                sal_uInt8* targetPixels = static_cast<sal_uInt8*>(aGdiPlusBitmapData.Scan0) + (y * aGdiPlusBitmapData.Stride);
 
                 memcpy(targetPixels, pSrcRGB, nW * 3);
                 pSrcRGB += nW * 3 + nExtraRGB;
@@ -370,7 +368,6 @@ std::shared_ptr<Gdiplus::Bitmap> WinSalBitmap::ImplCreateGdiPlusBitmap(const Win
             sal_uInt8* pSrcA(pA->mpBits);
             const sal_uInt32 nExtraRGB(pRGB->mnScanlineSize - (nW * 3));
             const sal_uInt32 nExtraA(pA->mnScanlineSize - nW);
-            const bool bTopDown(pRGB->meDirection == ScanlineDirection::TopDown);
             const Gdiplus::Rect aAllRect(0, 0, nW, nH);
             Gdiplus::BitmapData aGdiPlusBitmapData;
             pRetval->LockBits(&aAllRect, Gdiplus::ImageLockModeWrite, PixelFormat32bppARGB, &aGdiPlusBitmapData);
@@ -379,8 +376,7 @@ std::shared_ptr<Gdiplus::Bitmap> WinSalBitmap::ImplCreateGdiPlusBitmap(const Win
             // A from alpha, so inner loop is needed (who invented BitmapEx..?)
             for(sal_uInt32 y(0); y < nH; y++)
             {
-                const sal_uInt32 nYInsert(bTopDown ? y : nH - y - 1);
-                sal_uInt8* targetPixels = static_cast<sal_uInt8*>(aGdiPlusBitmapData.Scan0) + (nYInsert * aGdiPlusBitmapData.Stride);
+                sal_uInt8* targetPixels = static_cast<sal_uInt8*>(aGdiPlusBitmapData.Scan0) + (y * aGdiPlusBitmapData.Stride);
 
                 for(sal_uInt32 x(0); x < nW; x++)
                 {

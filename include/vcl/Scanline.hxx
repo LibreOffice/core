@@ -47,10 +47,4 @@ enum class ScanlineFormat : sal_uInt8
     N32BitTcMask,
 };
 
-enum class ScanlineDirection : sal_uInt8
-{
-    BottomUp,
-    TopDown
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

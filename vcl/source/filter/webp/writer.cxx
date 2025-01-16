@@ -99,7 +99,7 @@ static bool writeWebp(SvStream& rStream, const BitmapEx& bitmapEx, bool lossless
     BitmapScopedReadAccess access(bitmap);
     BitmapScopedReadAccess accessAlpha(bitmapAlpha);
     bool dataDone = false;
-    if (!access->IsBottomUp() && bitmapAlpha.IsEmpty())
+    if (bitmapAlpha.IsEmpty())
     {
         // Try to directly copy the bitmap data.
         switch (access->GetScanlineFormat())

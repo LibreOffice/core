@@ -1979,7 +1979,6 @@ std::optional<BitmapBuffer> FastConvert24BitRgbTo32BitCairo(const BitmapBuffer* 
     const tools::Long nHeight = pSrc->mnHeight;
     std::optional<BitmapBuffer> pDst(std::in_place);
     pDst->meFormat = ScanlineFormat::N32BitTcArgb;
-    pDst->meDirection = ScanlineDirection::TopDown;
     pDst->mnWidth = nWidth;
     pDst->mnHeight = nHeight;
     pDst->mnBitCount = 32;
