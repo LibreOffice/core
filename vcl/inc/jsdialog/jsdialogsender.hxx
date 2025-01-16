@@ -57,16 +57,16 @@ public:
 
     virtual ~JSDialogSender() COVERITY_NOEXCEPT_FALSE;
 
-    virtual void sendFullUpdate(bool bForce = false);
+    void sendFullUpdate(bool bForce = false);
     void sendClose();
     void sendUpdate(const VclPtr<vcl::Window>& pWindow, bool bForce = false);
-    virtual void sendAction(const VclPtr<vcl::Window>& pWindow,
-                            std::unique_ptr<jsdialog::ActionDataMap> pData);
-    virtual void sendPopup(const VclPtr<vcl::Window>& pWindow, const OUString& sParentId,
-                           const OUString& sCloseId);
-    virtual void sendMenu(const VclPtr<PopupMenu>& pMenu, const OUString& sParentId,
-                          const OUString& sCloseId);
-    virtual void sendClosePopup(vcl::LOKWindowId nWindowId);
+    void sendAction(const VclPtr<vcl::Window>& pWindow,
+                    std::unique_ptr<jsdialog::ActionDataMap> pData);
+    void sendPopup(const VclPtr<vcl::Window>& pWindow, const OUString& sParentId,
+                   const OUString& sCloseId);
+    void sendMenu(const VclPtr<PopupMenu>& pMenu, const OUString& sParentId,
+                  const OUString& sCloseId);
+    void sendClosePopup(vcl::LOKWindowId nWindowId);
     void flush() { mpIdleNotify->Invoke(); }
 
 protected:

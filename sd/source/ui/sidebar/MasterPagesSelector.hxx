@@ -108,7 +108,7 @@ protected:
     */
     void AssignMasterPageToSelectedSlides (SdPage* pMasterPage);
 
-    virtual void AssignMasterPageToPageList (
+    void AssignMasterPageToPageList (
         SdPage* pMasterPage,
         const std::shared_ptr<std::vector<SdPage*>>& rPageList);
 

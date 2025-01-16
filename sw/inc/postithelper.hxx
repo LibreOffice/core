@@ -107,7 +107,7 @@ public:
     SwAnnotationItem(
         SwFormatField& rFormatField,
         const bool aFocus);
-    virtual ~SwAnnotationItem();
+    ~SwAnnotationItem();
 
     SwAnnotationItem(SwAnnotationItem const &) = default;
     SwAnnotationItem(SwAnnotationItem &&) = default;
