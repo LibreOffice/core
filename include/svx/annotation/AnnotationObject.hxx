@@ -32,7 +32,6 @@ private:
     sdr::annotation::AnnotationViewData maViewData;
 
 public:
-    AnnotationObject(SdrModel& rSdrModel);
     AnnotationObject(SdrModel& rSdrModel, AnnotationObject const& rSource);
     AnnotationObject(SdrModel& rSdrModel, tools::Rectangle const& rRectangle,
                      sdr::annotation::AnnotationViewData const& aAnnotationViewData);

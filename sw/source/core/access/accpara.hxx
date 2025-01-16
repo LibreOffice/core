@@ -235,8 +235,6 @@ public:
     SwAccessibleParagraph( std::shared_ptr<SwAccessibleMap> const& pInitMap,
                            const SwTextFrame& rTextFrame );
 
-    inline operator css::accessibility::XAccessibleText *();
-
     virtual bool HasCursor() override;   // required by map to remember that object
 
     css::uno::Sequence< css::style::TabStop > GetCurrentTabStop( sal_Int32 nIndex  );
@@ -373,11 +371,6 @@ public:
     virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getDefaultAttributes( const css::uno::Sequence< OUString >& aRequestedAttributes ) override;
     virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getRunAttributes( sal_Int32 nIndex, const css::uno::Sequence< OUString >& aRequestedAttributes ) override;
 };
-
-inline SwAccessibleParagraph::operator css::accessibility::XAccessibleText *()
-{
-    return static_cast< css::accessibility::XAccessibleEditableText * >( this );
-}
 
 #endif
 

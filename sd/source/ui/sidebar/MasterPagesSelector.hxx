@@ -57,8 +57,6 @@ public:
 
     virtual void LateInit();
 
-    sal_Int32 GetPreferredHeight (sal_Int32 nWidth);
-
     /** Make the selector empty.  This method clear the value set from any
         entries. Override this method to add functionality, especially to
         destroy objects set as data items at the value set.

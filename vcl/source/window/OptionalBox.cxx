@@ -57,6 +57,4 @@ void OptionalBox::ShowContent()
     }
 }
 
-bool OptionalBox::IsHidden() { return !m_bInFullView; }
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

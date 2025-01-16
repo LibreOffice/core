@@ -39,7 +39,6 @@ public:
 
     void HideContent() override;
     void ShowContent() override;
-    bool IsHidden() override;
 
 private:
     DECL_LINK(PBClickHdl, Button*, void);

@@ -126,9 +126,6 @@ namespace CharacterProperties
     UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) void AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap );
 
     UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) bool IsCharacterPropertyHandle( sal_Int32 nHandle );
-
-    UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS) css::awt::FontDescriptor createFontDescriptorFromPropertySet(
-        const css::uno::Reference< css::beans::XMultiPropertySet > & xMultiPropSet );
 }
 
 } //  namespace chart

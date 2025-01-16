@@ -65,8 +65,6 @@ void DropdownBox::HideContent()
     }
 }
 
-bool DropdownBox::IsHidden() { return !m_bInFullView; }
-
 void DropdownBox::ShowContent()
 {
     if (!m_bInFullView)

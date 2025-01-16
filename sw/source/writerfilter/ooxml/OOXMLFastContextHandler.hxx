@@ -538,8 +538,6 @@ protected:
     virtual void setToken(Token_t nToken) override;
     virtual Token_t getToken() const override;
 
-    bool isWriterFrameDetected() const { return mbIsWriterFrameDetected;}
-
 private:
     css::uno::Reference<css::xml::sax::XFastContextHandler> mxWrappedContext;
     rtl::Reference<OOXMLFastContextHandlerShape> mxShapeHandler;

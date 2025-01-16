@@ -135,21 +135,6 @@ struct RenderState
     {
         return maObjectsDone.find(pObject) != maObjectsDone.end();
     }
-
-    static std::string getObjectHash(SdrObject* pObject)
-    {
-        css::uno::Reference<css::drawing::XShape> xShape = GetXShapeForSdrObject(pObject);
-        if (xShape.is())
-        {
-            css::uno::Reference<css::uno::XInterface> xRef;
-            css::uno::Any(xShape) >>= xRef;
-            if (xRef.is())
-                return GetInterfaceHash(xRef);
-        }
-
-        SAL_WARN("sd", "RenderState::getObjectHash: failed");
-        return std::string();
-    }
 };
 
 /** Renders a slide */

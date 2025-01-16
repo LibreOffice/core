@@ -120,12 +120,6 @@ namespace slideshow::internal
              */
             bool removeShape( const ShapeSharedPtr& rShape );
 
-            /** Remove all shapes from this object
-
-                This method removes all shapes from the page.
-             */
-            void removeAllShapes();
-
             /** Lookup a Shape from an XShape model object
 
                 This method looks up the internal shape map for one

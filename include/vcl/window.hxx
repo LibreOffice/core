@@ -768,7 +768,6 @@ public:
     SAL_DLLPRIVATE bool                 IsDockingWindow() const;
     bool                                IsDialog() const;
     bool                                IsMenuFloatingWindow() const;
-    bool                                IsToolbarFloatingWindow() const;
     bool                                IsNativeFrame() const;
     bool                                IsTopWindow() const;
     SystemWindow*                       GetSystemWindow() const;

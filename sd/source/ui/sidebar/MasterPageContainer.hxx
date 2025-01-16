@@ -76,10 +76,6 @@ public:
     */
     PreviewSize GetPreviewSize() const { return mePreviewSize; }
 
-    /** Return the preview size in pixels.
-    */
-    Size const& GetPreviewSizePixel() const;
-
     enum PreviewState
     {
         PS_AVAILABLE,

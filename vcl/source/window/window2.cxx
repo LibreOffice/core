@@ -1075,11 +1075,6 @@ bool Window::IsMenuFloatingWindow() const
     return mpWindowImpl && mpWindowImpl->mbMenuFloatingWindow;
 }
 
-bool Window::IsToolbarFloatingWindow() const
-{
-    return mpWindowImpl && mpWindowImpl->mbToolbarFloatingWindow;
-}
-
 bool Window::IsNativeFrame() const
 {
     if( mpWindowImpl->mbFrame )

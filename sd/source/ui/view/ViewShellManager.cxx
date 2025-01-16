@@ -107,7 +107,6 @@ public:
     void ActivateViewShell (
         ViewShell* pViewShell);
     void DeactivateViewShell (const ViewShell& rShell);
-    void ActivateShell (SfxShell& rShell);
     void ActivateLowPriorityShell (SfxShell& rShell);
     void DeactivateShell (const SfxShell& rShell);
     void ActivateShell (const ShellDescriptor& rDescriptor);
@@ -313,12 +312,6 @@ void ViewShellManager::InvalidateAllSubShells (ViewShell const * pViewShell)
         mpImpl->InvalidateAllSubShells(pViewShell);
 }
 
-void ViewShellManager::ActivateShell (SfxShell* pShell)
-{
-    if (mbValid && pShell!=nullptr)
-        mpImpl->ActivateShell(*pShell);
-}
-
 void ViewShellManager::ActivateLowPriorityShell (SfxShell* pShell)
 {
     if (mbValid && pShell!=nullptr)
@@ -493,17 +486,6 @@ void ViewShellManager::Implementation::DeactivateViewShell (const ViewShell& rSh
     }
 
     DestroyViewShell(aDescriptor);
-}
-
-void ViewShellManager::Implementation::ActivateShell (SfxShell& rShell)
-{
-    ::osl::MutexGuard aGuard (maMutex);
-
-    // Create a new shell or recycle on in the cache.
-    ShellDescriptor aDescriptor;
-    aDescriptor.mpShell = &rShell;
-
-    ActivateShell(aDescriptor);
 }
 
 void ViewShellManager::Implementation::ActivateLowPriorityShell (SfxShell& rShell)

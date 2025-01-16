@@ -109,12 +109,6 @@ Color getColorLight(sal_uInt16 aAuthorIndex)
 }
 }
 
-AnnotationObject::AnnotationObject(SdrModel& rSdrModel)
-    : SdrRectObj(rSdrModel)
-{
-    setup();
-}
-
 AnnotationObject::AnnotationObject(SdrModel& rSdrModel, AnnotationObject const& rSource)
     : SdrRectObj(rSdrModel, rSource)
 {

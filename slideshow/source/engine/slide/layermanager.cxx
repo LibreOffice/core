@@ -299,14 +299,6 @@ namespace slideshow::internal
             mbLayerAssociationDirty = true;
         }
 
-        void LayerManager::removeAllShapes()
-        {
-            while( !maAllShapes.empty() )
-            {
-                removeShape(maAllShapes.begin()->first);
-            }
-        }
-
         ShapeSharedPtr LayerManager::lookupShape( const uno::Reference< drawing::XShape >& xShape ) const
         {
             ENSURE_OR_THROW( xShape.is(), "LayerManager::lookupShape(): invalid Shape" );

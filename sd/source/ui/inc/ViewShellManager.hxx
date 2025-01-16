@@ -83,11 +83,6 @@ public:
     void SetOverridingMainShell(const std::shared_ptr<ViewShell>& pViewShell);
     std::shared_ptr<ViewShell> GetOverridingMainShell();
 
-    /** Activate the given shell which is not a view shell.  For view shells
-        use the ActivateViewShell() method.
-    */
-    void ActivateShell(SfxShell* pShell);
-
     /** Activate the given shell, putting it at the bottom of the stack instead of
         the top.
      */

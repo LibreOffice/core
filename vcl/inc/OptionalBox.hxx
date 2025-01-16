@@ -33,7 +33,6 @@ public:
 
     void HideContent() override;
     void ShowContent() override;
-    bool IsHidden() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

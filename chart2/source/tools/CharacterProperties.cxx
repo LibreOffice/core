@@ -418,45 +418,6 @@ bool CharacterProperties::IsCharacterPropertyHandle( sal_Int32 nHandle )
              nHandle < CharacterProperties::FAST_PROPERTY_ID_END_CHAR_PROP );
 }
 
-awt::FontDescriptor CharacterProperties::createFontDescriptorFromPropertySet(
-    const uno::Reference< beans::XMultiPropertySet > & xMultiPropSet )
-{
-    awt::FontDescriptor aResult;
-    // Note: keep this sorted!
-    uno::Sequence< OUString > aPropNameSeq{
-        u"CharFontCharSet"_ustr,   // CharSet
-        u"CharFontFamily"_ustr,    // Family
-        u"CharFontName"_ustr,      // Name
-        u"CharFontPitch"_ustr,     // Pitch
-        u"CharFontStyleName"_ustr, // StyleName
-        u"CharHeight"_ustr,        // Height
-        u"CharPosture"_ustr,       // Slant
-        u"CharStrikeout"_ustr,     // Strikeout
-        u"CharUnderline"_ustr,     // Underline
-        u"CharWeight"_ustr,        // Weight
-        u"CharWordMode"_ustr};     // WordLineMode
-    uno::Sequence< uno::Any > aValues( xMultiPropSet->getPropertyValues( aPropNameSeq ));
-
-    sal_Int32 i=0;
-    // Note keep this sorted according to the list above (comments are the fieldnames)
-    aValues[ i++ ]  >>= aResult.CharSet;
-    aValues[ i++ ]  >>= aResult.Family;
-    aValues[ i++ ]  >>= aResult.Name;
-    aValues[ i++ ]  >>= aResult.Pitch;
-    aValues[ i++ ]  >>= aResult.StyleName;
-    float fCharHeight = 0;
-    aValues[ i++ ]  >>= fCharHeight;
-    aResult.Height = static_cast< sal_Int16 >( fCharHeight );
-    aValues[ i++ ]  >>= aResult.Slant;
-    aValues[ i++ ]  >>= aResult.Strikeout;
-    aValues[ i++ ]  >>= aResult.Underline;
-    aValues[ i++ ]  >>= aResult.Weight;
-    aValues[ i++ ]  >>= aResult.WordLineMode;
-    OSL_ASSERT( i == aValues.getLength());
-
-    return aResult;
-}
-
 } //  namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

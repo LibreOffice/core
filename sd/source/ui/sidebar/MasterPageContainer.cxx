@@ -77,7 +77,6 @@ public:
     void AddChangeListener (const Link<MasterPageContainerChangeEvent&,void>& rLink);
     void RemoveChangeListener (const Link<MasterPageContainerChangeEvent&,void>& rLink);
     void UpdatePreviewSizePixel();
-    const Size& GetPreviewSizePixel (PreviewSize eSize) const;
 
     bool HasToken (Token aToken) const;
     SharedMasterPageDescriptor GetDescriptor (MasterPageContainer::Token aToken) const;
@@ -228,11 +227,6 @@ void MasterPageContainer::SetPreviewSize (PreviewSize eSize)
     mpImpl->FireContainerChange(
         MasterPageContainerChangeEvent::EventType::SIZE_CHANGED,
         NIL_TOKEN);
-}
-
-Size const & MasterPageContainer::GetPreviewSizePixel() const
-{
-    return mpImpl->GetPreviewSizePixel(mePreviewSize);
 }
 
 MasterPageContainer::Token MasterPageContainer::PutMasterPage (
@@ -578,14 +572,6 @@ void MasterPageContainer::Implementation::UpdatePreviewSizePixel()
             MasterPageContainerChangeEvent::EventType::SIZE_CHANGED,
             NIL_TOKEN);
     }
-}
-
-const Size& MasterPageContainer::Implementation::GetPreviewSizePixel (PreviewSize eSize) const
-{
-    if (eSize == SMALL)
-        return maSmallPreviewSizePixel;
-    else
-        return maLargePreviewSizePixel;
 }
 
 MasterPageContainer::Token MasterPageContainer::Implementation::PutMasterPage (
