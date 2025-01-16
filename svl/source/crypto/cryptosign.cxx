@@ -10,6 +10,7 @@
 #include <sal/config.h>
 
 #include <algorithm>
+#include <array>
 
 #include <svl/cryptosign.hxx>
 #include <svl/sigstruct.hxx>
@@ -327,6 +328,11 @@ const SEC_ASN1Template TimeStampReq_Template[] =
     { 0, 0, nullptr, 0 }
 };
 
+// 1.2.840.113549.1.9.16.2.47
+constexpr unsigned char OID_SIGNINGCERTIFICATEV2[] {0x2a, 0x86, 0x48, 0x86, 0xf7, 0x0d, 0x01, 0x09, 0x10, 0x02, 0x2f};
+// 1.2.840.113549.1.9.16.2.14
+constexpr unsigned char OID_TIMESTAMPTOKEN[] {0x2a, 0x86, 0x48, 0x86, 0xf7, 0x0d, 0x01, 0x09, 0x10, 0x02, 0x0e};
+
 size_t AppendToBuffer(char const *ptr, size_t size, size_t nmemb, void *userdata)
 {
     OStringBuffer *pBuffer = static_cast<OStringBuffer*>(userdata);
@@ -372,99 +378,6 @@ OUString PKIStatusInfoToString(const PKIStatusInfo& rStatusInfo)
 
 // SEC_StringToOID() and NSS_CMSSignerInfo_AddUnauthAttr() are
 // not exported from libsmime, so copy them here. Sigh.
-
-SECStatus
-my_SEC_StringToOID(SECItem *to, const char *from, PRUint32 len)
-{
-    PRUint32 decimal_numbers = 0;
-    PRUint32 result_bytes = 0;
-    SECStatus rv;
-    PRUint8 result[1024];
-
-    static const PRUint32 max_decimal = 0xffffffff / 10;
-    static const char OIDstring[] = {"OID."};
-
-    if (!from || !to) {
-        PORT_SetError(SEC_ERROR_INVALID_ARGS);
-        return SECFailure;
-    }
-    if (!len) {
-        len = PL_strlen(from);
-    }
-    if (len >= 4 && !PL_strncasecmp(from, OIDstring, 4)) {
-        from += 4; /* skip leading "OID." if present */
-        len  -= 4;
-    }
-    if (!len) {
-bad_data:
-        PORT_SetError(SEC_ERROR_BAD_DATA);
-        return SECFailure;
-    }
-    do {
-        PRUint32 decimal = 0;
-        while (len > 0 && rtl::isAsciiDigit(static_cast<unsigned char>(*from))) {
-            PRUint32 addend = *from++ - '0';
-            --len;
-            if (decimal > max_decimal)  /* overflow */
-                goto bad_data;
-            decimal = (decimal * 10) + addend;
-            if (decimal < addend)   /* overflow */
-                goto bad_data;
-        }
-        if (len != 0 && *from != '.') {
-            goto bad_data;
-        }
-        if (decimal_numbers == 0) {
-            if (decimal > 2)
-                goto bad_data;
-            result[0] = decimal * 40;
-            result_bytes = 1;
-        } else if (decimal_numbers == 1) {
-            if (decimal > 40)
-                goto bad_data;
-            result[0] += decimal;
-        } else {
-            /* encode the decimal number,  */
-            PRUint8 * rp;
-            PRUint32 num_bytes = 0;
-            PRUint32 tmp = decimal;
-            while (tmp) {
-                num_bytes++;
-                tmp >>= 7;
-            }
-            if (!num_bytes )
-                ++num_bytes;  /* use one byte for a zero value */
-            if (num_bytes + result_bytes > sizeof result)
-                goto bad_data;
-            tmp = num_bytes;
-            rp = result + result_bytes - 1;
-            rp[tmp] = static_cast<PRUint8>(decimal & 0x7f);
-            decimal >>= 7;
-            while (--tmp > 0) {
-                rp[tmp] = static_cast<PRUint8>(decimal | 0x80);
-                decimal >>= 7;
-            }
-            result_bytes += num_bytes;
-        }
-        ++decimal_numbers;
-        if (len > 0) { /* skip trailing '.' */
-            ++from;
-            --len;
-        }
-    } while (len > 0);
-    /* now result contains result_bytes of data */
-    if (to->data && to->len >= result_bytes) {
-        to->len = result_bytes;
-        PORT_Memcpy(to->data, result, to->len);
-        rv = SECSuccess;
-    } else {
-        SECItem result_item = {siBuffer, nullptr, 0 };
-        result_item.data = result;
-        result_item.len  = result_bytes;
-        rv = SECITEM_CopyItem(nullptr, to, &result_item);
-    }
-    return rv;
-}
 
 NSSCMSAttribute *
 my_NSS_CMSAttributeArray_FindAttrByOidTag(NSSCMSAttribute **attrs, SECOidTag oidtag, PRBool only)
@@ -1024,19 +937,14 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
     aAttribute.values = pAttributeValues;
 
     SECOidData aOidData;
-    aOidData.oid.data = nullptr;
+    auto cert_oid_buffer = std::to_array(OID_SIGNINGCERTIFICATEV2);
+    aOidData.oid.data = cert_oid_buffer.data();
+    aOidData.oid.len = cert_oid_buffer.size();
     /*
      * id-aa-signingCertificateV2 OBJECT IDENTIFIER ::=
      * { iso(1) member-body(2) us(840) rsadsi(113549) pkcs(1) pkcs9(9)
      *   smime(16) id-aa(2) 47 }
      */
-    if (my_SEC_StringToOID(&aOidData.oid, "1.2.840.113549.1.9.16.2.47", 0) != SECSuccess)
-    {
-        SAL_WARN("svl.crypto", "my_SEC_StringToOID() failed");
-        return false;
-    }
-    comphelper::ScopeGuard aGuard(
-        [&aOidData] () { SECITEM_FreeItem(&aOidData.oid, false); } );
     aOidData.offset = SEC_OID_UNKNOWN;
     aOidData.desc = "id-aa-signingCertificateV2";
     aOidData.mechanism = CKM_SHA_1;
@@ -1273,15 +1181,12 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
 
         timestamp.values = valuesp;
 
-        typetag.oid.data = nullptr;
+        auto ts_oid_buffer = std::to_array(OID_TIMESTAMPTOKEN);
+        typetag.oid.data = ts_oid_buffer.data();
+        typetag.oid.len = ts_oid_buffer.size();
         // id-aa-timeStampToken OBJECT IDENTIFIER ::= { iso(1)
         // member-body(2) us(840) rsadsi(113549) pkcs(1) pkcs-9(9)
         // smime(16) aa(2) 14 }
-        if (my_SEC_StringToOID(&typetag.oid, "1.2.840.113549.1.9.16.2.14", 0) != SECSuccess)
-        {
-            SAL_WARN("svl.crypto", "SEC_StringToOID failed");
-            return false;
-        }
         typetag.offset = SEC_OID_UNKNOWN; // ???
         typetag.desc = "id-aa-timeStampToken";
         typetag.mechanism = CKM_SHA_1; // ???
@@ -1675,118 +1580,6 @@ NSSCMSAttribute* CMSAttributeArray_FindAttrByOidData(NSSCMSAttribute** attrs, SE
     return attr1;
 }
 
-/// Same as SEC_StringToOID(), which is private to us.
-SECStatus StringToOID(SECItem* to, const char* from, PRUint32 len)
-{
-    PRUint32 decimal_numbers = 0;
-    PRUint32 result_bytes = 0;
-    SECStatus rv;
-    PRUint8 result[1024];
-
-    static const PRUint32 max_decimal = 0xffffffff / 10;
-    static const char OIDstring[] = {"OID."};
-
-    if (!from || !to)
-    {
-        PORT_SetError(SEC_ERROR_INVALID_ARGS);
-        return SECFailure;
-    }
-    if (!len)
-    {
-        len = PL_strlen(from);
-    }
-    if (len >= 4 && !PL_strncasecmp(from, OIDstring, 4))
-    {
-        from += 4; /* skip leading "OID." if present */
-        len  -= 4;
-    }
-    if (!len)
-    {
-bad_data:
-        PORT_SetError(SEC_ERROR_BAD_DATA);
-        return SECFailure;
-    }
-    do
-    {
-        PRUint32 decimal = 0;
-        while (len > 0 && rtl::isAsciiDigit(static_cast<unsigned char>(*from)))
-        {
-            PRUint32 addend = *from++ - '0';
-            --len;
-            if (decimal > max_decimal)  /* overflow */
-                goto bad_data;
-            decimal = (decimal * 10) + addend;
-            if (decimal < addend)   /* overflow */
-                goto bad_data;
-        }
-        if (len != 0 && *from != '.')
-        {
-            goto bad_data;
-        }
-        if (decimal_numbers == 0)
-        {
-            if (decimal > 2)
-                goto bad_data;
-            result[0] = decimal * 40;
-            result_bytes = 1;
-        }
-        else if (decimal_numbers == 1)
-        {
-            if (decimal > 40)
-                goto bad_data;
-            result[0] += decimal;
-        }
-        else
-        {
-            /* encode the decimal number,  */
-            PRUint8* rp;
-            PRUint32 num_bytes = 0;
-            PRUint32 tmp = decimal;
-            while (tmp)
-            {
-                num_bytes++;
-                tmp >>= 7;
-            }
-            if (!num_bytes)
-                ++num_bytes;  /* use one byte for a zero value */
-            if (static_cast<size_t>(num_bytes) + result_bytes > sizeof result)
-                goto bad_data;
-            tmp = num_bytes;
-            rp = result + result_bytes - 1;
-            rp[tmp] = static_cast<PRUint8>(decimal & 0x7f);
-            decimal >>= 7;
-            while (--tmp > 0)
-            {
-                rp[tmp] = static_cast<PRUint8>(decimal | 0x80);
-                decimal >>= 7;
-            }
-            result_bytes += num_bytes;
-        }
-        ++decimal_numbers;
-        if (len > 0)   /* skip trailing '.' */
-        {
-            ++from;
-            --len;
-        }
-    }
-    while (len > 0);
-    /* now result contains result_bytes of data */
-    if (to->data && to->len >= result_bytes)
-    {
-        to->len = result_bytes;
-        PORT_Memcpy(to->data, result, to->len);
-        rv = SECSuccess;
-    }
-    else
-    {
-        SECItem result_item = {siBuffer, nullptr, 0 };
-        result_item.data = result;
-        result_item.len  = result_bytes;
-        rv = SECITEM_CopyItem(nullptr, to, &result_item);
-    }
-    return rv;
-}
-
 #elif USE_CRYPTO_MSCAPI // ends USE_CRYPTO_NSS
 
 /// Verifies a non-detached signature using CryptoAPI.
@@ -2056,17 +1849,14 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
 
     // Check if we have a signing certificate attribute.
     SECOidData aOidData;
-    aOidData.oid.data = nullptr;
+    auto cert_oid_buffer = std::to_array(OID_SIGNINGCERTIFICATEV2);
+    aOidData.oid.data = cert_oid_buffer.data();
+    aOidData.oid.len = cert_oid_buffer.size();
     /*
      * id-aa-signingCertificateV2 OBJECT IDENTIFIER ::=
      * { iso(1) member-body(2) us(840) rsadsi(113549) pkcs(1) pkcs9(9)
      *   smime(16) id-aa(2) 47 }
      */
-    if (StringToOID(&aOidData.oid, "1.2.840.113549.1.9.16.2.47", 0) != SECSuccess)
-    {
-        SAL_WARN("svl.crypto", "StringToOID() failed");
-        return false;
-    }
     aOidData.offset = SEC_OID_UNKNOWN;
     aOidData.desc = "id-aa-signingCertificateV2";
     aOidData.mechanism = CKM_SHA_1;
@@ -2100,7 +1890,6 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
             rInformation.nStatus = xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
 
     // Everything went fine
-    SECITEM_FreeItem(&aOidData.oid, false);
     PORT_Free(pActualResultBuffer);
     HASH_Destroy(pHASHContext);
     NSS_CMSSignerInfo_Destroy(pCMSSignerInfo);
