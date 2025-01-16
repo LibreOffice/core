@@ -44,7 +44,7 @@ enum class SwLineBreakClear
 
 /// SfxPoolItem subclass that wraps an SwLineBreakClear.
 class SW_DLLPUBLIC SwFormatLineBreak final : public SfxEnumItem<SwLineBreakClear>,
-                                             public sw::BroadcastingModify
+                                             public SvtBroadcaster
 {
     /// The SwTextAttr that knows the position of the line break in the doc model.
     SwTextLineBreak* m_pTextAttr;
@@ -65,9 +65,6 @@ public:
 
     /// See SfxPoolItem::Clone().
     SwFormatLineBreak* Clone(SfxItemPool* pPool = nullptr) const override;
-
-    /// See SwModify::SwClientNotify().
-    void SwClientNotify(const SwModify&, const SfxHint&) override;
 
     sal_uInt16 GetValueCount() const override;
 

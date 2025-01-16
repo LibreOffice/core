@@ -49,9 +49,7 @@ public:
         , m_eClear(SwLineBreakClear::NONE)
     {
         if (m_pFormatLineBreak)
-        {
-            StartListening(m_pFormatLineBreak->GetNotifier());
-        }
+            StartListening(*m_pFormatLineBreak);
     }
 
     const SwFormatLineBreak* GetLineBreakFormat() const;
@@ -167,7 +165,7 @@ void SAL_CALL SwXLineBreak::attach(const uno::Reference<text::XTextRange>& xText
         m_pImpl->EndListeningAll();
         auto pLineBreak = const_cast<SwFormatLineBreak*>(&pTextAttr->GetLineBreak());
         m_pImpl->m_pFormatLineBreak = pLineBreak;
-        m_pImpl->StartListening(pLineBreak->GetNotifier());
+        m_pImpl->StartListening(*pLineBreak);
     }
     m_pImpl->m_bIsDescriptor = false;
 }

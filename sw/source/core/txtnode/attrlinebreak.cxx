@@ -34,7 +34,6 @@ using namespace com::sun::star;
 
 SwFormatLineBreak::SwFormatLineBreak(SwLineBreakClear eClear)
     : SfxEnumItem(RES_TXTATR_LINEBREAK, eClear)
-    , sw::BroadcastingModify()
     , m_pTextAttr(nullptr)
 {
     setNonShareable();
@@ -56,20 +55,6 @@ bool SwFormatLineBreak::operator==(const SfxPoolItem& rAttr) const
 SwFormatLineBreak* SwFormatLineBreak::Clone(SfxItemPool*) const
 {
     return new SwFormatLineBreak(GetValue());
-}
-
-void SwFormatLineBreak::SwClientNotify(const SwModify&, const SfxHint& rHint)
-{
-    if (SfxHintId::SwRemoveUnoObject == rHint.GetId())
-    {
-        CallSwClientNotify(rHint);
-        SetXLineBreak(nullptr);
-    }
-    else if (rHint.GetId() == SfxHintId::SwLegacyModify
-             || rHint.GetId() == SfxHintId::SwFormatChange
-             || rHint.GetId() == SfxHintId::SwAttrSetChange
-             || rHint.GetId() == SfxHintId::SwObjectDying)
-        CallSwClientNotify(rHint);
 }
 
 sal_uInt16 SwFormatLineBreak::GetValueCount() const
