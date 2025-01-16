@@ -6015,7 +6015,6 @@ include/ucbhelper/resultset.hxx
 include/ucbhelper/resultsethelper.hxx
 include/ucbhelper/resultsetmetadata.hxx
 include/ucbhelper/simpleauthenticationrequest.hxx
-include/ucbhelper/simplecertificatevalidationrequest.hxx
 include/uno/Enterable.h
 include/uno/EnvDcp.h
 include/uno/any2.h
@@ -13771,7 +13770,6 @@ ucbhelper/source/provider/resultset.cxx
 ucbhelper/source/provider/resultsethelper.cxx
 ucbhelper/source/provider/resultsetmetadata.cxx
 ucbhelper/source/provider/simpleauthenticationrequest.cxx
-ucbhelper/source/provider/simplecertificatevalidationrequest.cxx
 ucbhelper/source/provider/simpleinteractionrequest.cxx
 ucbhelper/source/provider/simpleioerrorrequest.cxx
 ucbhelper/source/provider/simpleioerrorrequest.hxx

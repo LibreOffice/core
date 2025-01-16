@@ -42,7 +42,6 @@ $(eval $(call gb_Library_add_exception_objects,ucbhelper,\
     ucbhelper/source/provider/resultsethelper \
     ucbhelper/source/provider/resultsetmetadata \
     ucbhelper/source/provider/simpleauthenticationrequest \
-    ucbhelper/source/provider/simplecertificatevalidationrequest \
     ucbhelper/source/provider/simpleinteractionrequest \
     ucbhelper/source/provider/simpleioerrorrequest \
     ucbhelper/source/provider/simplenameclashresolverequest \
