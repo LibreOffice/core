@@ -34,10 +34,7 @@ $(eval $(call gb_CppunitTest_use_sdk_api,vcl_app_test))
 $(eval $(call gb_CppunitTest_use_ure,vcl_app_test))
 $(eval $(call gb_CppunitTest_use_vcl,vcl_app_test))
 
-$(eval $(call gb_CppunitTest_use_components,vcl_app_test,\
-    configmgr/source/configmgr \
-    i18npool/util/i18npool \
-))
+$(eval $(call gb_CppunitTest_use_rdb,vcl_app_test,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,vcl_app_test))
 

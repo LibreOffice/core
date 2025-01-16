@@ -13,6 +13,7 @@
 
 #include <rtl/ustring.hxx>
 #include <vcl/IconThemeInfo.hxx>
+#include <vcl/UserResourceScanner.hxx>
 
 #include <memory>
 #include <vector>
@@ -24,16 +25,10 @@ namespace vcl
 {
 /** This class scans a folder for icon themes and provides the results.
  */
-class VCL_DLLPUBLIC IconThemeScanner
+class VCL_DLLPUBLIC IconThemeScanner : public UserResourceScanner
 {
 public:
-    /** Provide a semicolon-separated list of paths to search for IconThemes.
-     *
-     * There are several cases when scan will fail:
-     * - The directory does not exist
-     * - There are no files which match the pattern images_xxx.zip
-     */
-    explicit IconThemeScanner(std::u16string_view paths);
+    IconThemeScanner();
 
     /** This method will return the standard path where icon themes are located.
      */
@@ -53,19 +48,11 @@ public:
     bool IconThemeIsInstalled(const OUString& themeId) const;
 
 private:
-    IconThemeScanner();
-
-    /** Adds the provided icon theme by path.
-     */
-    bool AddIconThemeByPath(const OUString& path);
-
-    /** Scans the provided directory for icon themes.
-     * The returned strings will contain the URLs to the icon themes.
-     */
-    static std::vector<OUString> ReadIconThemesFromPath(const OUString& dir);
+    /** Adds the provided icon theme by path. */
+    bool addResource(const OUString& path) override;
 
     /** Check whether a single file is valid */
-    static bool FileIsValidIconTheme(const OUString&);
+    bool isValidResource(const OUString& rFilename) override;
 
     std::vector<IconThemeInfo> mFoundIconThemes;
 

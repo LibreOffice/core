@@ -478,6 +478,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/app/timer \
     vcl/source/app/unohelp2 \
     vcl/source/app/htmltransferable \
+    vcl/source/app/UserResourceScanner \
     vcl/source/app/unohelp \
     vcl/source/app/vclevent \
     vcl/source/app/watchdog \

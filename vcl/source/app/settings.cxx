@@ -209,8 +209,7 @@ struct ImplStyleData
     ToolbarIconSize                 mnToolbarIconSize = ToolbarIconSize::Unknown;
     StyleSettingsOptions            mnOptions = StyleSettingsOptions::NONE;
     TriState                        meUseImagesInMenus = TRISTATE_INDET;
-    std::optional<vcl::IconThemeScanner> mutable
-                                    mIconThemeScanner;
+    std::shared_ptr<vcl::IconThemeScanner> mutable mpIconThemeScanner;
     vcl::IconThemeSelector          mIconThemeSelector;
 
     OUString                        mIconTheme;
@@ -2789,10 +2788,12 @@ StyleSettings::GetOptions() const
 std::vector<vcl::IconThemeInfo> const &
 StyleSettings::GetInstalledIconThemes() const
 {
-    if (!mxData->mIconThemeScanner) {
-        mxData->mIconThemeScanner.emplace(vcl::IconThemeScanner::GetStandardIconThemePath());
+    if (!mxData->mpIconThemeScanner)
+    {
+        mxData->mpIconThemeScanner.reset(new vcl::IconThemeScanner);
+        mxData->mpIconThemeScanner->addPaths(vcl::IconThemeScanner::GetStandardIconThemePath());
     }
-    return mxData->mIconThemeScanner->GetFoundIconThemes();
+    return mxData->mpIconThemeScanner->GetFoundIconThemes();
 }
 
 OUString
