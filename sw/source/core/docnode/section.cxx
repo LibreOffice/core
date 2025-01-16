@@ -794,9 +794,10 @@ void SwSectionFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
             // and update
             SwFrameFormat::SwClientNotify(rMod, rHint);
             UpdateParent();
-            return;
         }
-        SwFrameFormat::SwClientNotify(rMod, rHint);
+        else
+            SwFrameFormat::SwClientNotify(rMod, rHint);
+        return;
     }
     else if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
