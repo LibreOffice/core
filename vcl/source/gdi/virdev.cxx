@@ -291,6 +291,7 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
     }
     else
     {
+        assert(!pBuffer && "passing pBuffer without bErase is not supported");
         std::unique_ptr<SalVirtualDevice> pNewVirDev;
         ImplSVData*         pSVData = ImplGetSVData();
 

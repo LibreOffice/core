@@ -37,6 +37,7 @@ class VCL_DLLPUBLIC SvpSalVirtualDevice : public SalVirtualDevice
     std::vector< SvpSalGraphics* >      m_aGraphics;
 
     bool CreateSurface(tools::Long nNewDX, tools::Long nNewDY, sal_uInt8 *const pBuffer);
+    bool CreateSurface(tools::Long nNewDX, tools::Long nNewDY);
 
 protected:
     SvpSalGraphics* AddGraphics(SvpSalGraphics* aGraphics);

@@ -44,13 +44,13 @@ public:
     virtual bool            SetSize( tools::Long nNewDX, tools::Long nNewDY ) = 0;
 
     // Set new size using a buffer at the given address
-    virtual bool            SetSizeUsingBuffer( tools::Long nNewDX, tools::Long nNewDY,
-                                                sal_uInt8 * /* pBuffer */)
-        {
-            // Only the headless virtual device has an implementation that uses
-            // pBuffer (and bTopDown).
-            return SetSize( nNewDX, nNewDY );
-        }
+    virtual bool            SetSizeUsingBuffer( tools::Long /*nNewDX*/, tools::Long /*nNewDY*/,
+                                                sal_uInt8 * /*pBuffer*/)
+    {
+        // Only the headless virtual device has an implementation.
+        assert(false && "unsupported");
+        return false;
+    }
 };
 
 #endif // INCLUDED_VCL_INC_SALVD_HXX
