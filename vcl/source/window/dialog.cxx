@@ -939,6 +939,10 @@ bool Dialog::ImplStartExecute()
 
                 // Also pNotifier may be nullptr when a dialog (e.g., "update
                 // links?") is to be shown when loading a document.
+                // Never crash in release builds (assume "cancel"), but allow
+                // to see the not yet async / not properly set up dialogs in
+                // debug builds.
+                assert(!"A dialog without a notifier: make me async / properly set up");
                 return false;
             }
         }
