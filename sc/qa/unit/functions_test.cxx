@@ -37,41 +37,71 @@ bool FunctionsTest::load(const OUString& rFilter, const OUString& rURL,
         // Try to find the actual failure.
         for(SCTAB tab = 1; tab <= rDoc.GetMaxTableNumber(); ++tab)
         {
-            SCROW maxRow = rDoc.GetLastDataRow(tab, 2, 2, rDoc.MaxRow());
-            for(SCROW row = 0; row <= maxRow; ++row)
+            // Column "Function" has the result value, column "Expected" has the expected
+            // value, Column "Correct" has the check result (1 or 0), column "FunctionString" has
+            // the formula text.
+
+            SCCOL nExpectedCol = 0;
+            SCCOL nCorrectCol = 0;
+            SCCOL nFunctStringCol = 0;
+            for(SCCOL col = 0; col <= rDoc.MaxCol(); ++col)
             {
-                // Column A has the result value, column B has the expected
-                // value, Column C has the check result (1 or 0), column D has
-                // the formula text.
-                if(rDoc.HasStringData(2, row, tab) || !rDoc.HasData(2, row, tab))
-                    continue;
-                if (!rtl::math::approxEqual(1.0, rDoc.GetValue(2, row, tab)))
+                if(rDoc.GetString(col, 0, tab) == "Expected")
+                    nExpectedCol = col;
+                else if(rDoc.GetString(col, 0, tab) == "Correct")
+                    nCorrectCol = col;
+                else if(rDoc.GetString(col, 0, tab) == "FunctionString")
                 {
-                    if (rDoc.HasValueData(1, row, tab))
+                    nFunctStringCol = col;
+                    break; // Should be the last one
+                }
+            }
+
+            CPPUNIT_ASSERT_MESSAGE("Column \"Expected\" not found", nExpectedCol != 0);
+            CPPUNIT_ASSERT_MESSAGE("Column \"Correct\" not found", nCorrectCol != 0);
+            CPPUNIT_ASSERT_MESSAGE("Column \"FunctionString\" not found", nFunctStringCol != 0);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                    "Function columns != Expected columns", nExpectedCol, static_cast<SCCOL>(nCorrectCol - nExpectedCol));
+
+            SCROW maxRow = rDoc.GetLastDataRow(tab, nCorrectCol, nCorrectCol, rDoc.MaxRow());
+            for(SCROW row = 1; row <= maxRow; ++row)
+            {
+                if(!rDoc.HasData(nCorrectCol, row, tab))
+                    continue;
+                if (!rtl::math::approxEqual(1.0, rDoc.GetValue(nCorrectCol, row, tab)))
+                {
+                    OUString result;
+                    OUString expected;
+                    for (SCCOL nOffset = 0; nOffset < nExpectedCol; ++ nOffset)
                     {
-                        // snprintf provides requested precision, unlike OUString::number, which
-                        // rounds to 15 decimals
-                        char buf[25];
-                        int len = snprintf(buf, 25, "%.17G", rDoc.GetValue(0, row, tab));
-                        OUString result(OUString::createFromAscii(std::string_view(buf, len)));
-                        len = snprintf(buf, 25, "%.17G", rDoc.GetValue(1, row, tab));
-                        OUString expected(OUString::createFromAscii(std::string_view(buf, len)));
-                        CPPUNIT_FAIL( OUString( "Testing " + rURL + " failed, "
-                                    + rDoc.GetAllTableNames()[tab] + ".A" + OUString::number(row+1)
-                                    + " \'" + rDoc.GetString(3, row, tab) + "\'"
-                                    " result: " + result
-                                    + ", expected: " + expected)
-                                .toUtf8().getStr());
+                        if (rDoc.HasValueData(nExpectedCol + nOffset, row, tab))
+                        {
+                            // snprintf provides requested precision, unlike OUString::number, which
+                            // rounds to 15 decimals
+                            char buf[25];
+                            int len = snprintf(buf, 25, "%.17G", rDoc.GetValue(0 + nOffset, row, tab));
+                            result += OUString::createFromAscii(std::string_view(buf, len));
+                            len = snprintf(buf, 25, "%.17G", rDoc.GetValue(nExpectedCol + nOffset, row, tab));
+                            expected += OUString::createFromAscii(std::string_view(buf, len));
+                        }
+                        else
+                        {
+                            result += rDoc.GetString(0 + nOffset, row, tab);
+                            expected += rDoc.GetString(nExpectedCol + nOffset, row, tab);
+                        }
+
+                        if (nOffset < nExpectedCol - 1)
+                        {
+                            result += ", ";
+                            expected += ", ";
+                        }
                     }
-                    else
-                    {
-                        CPPUNIT_FAIL( OUString( "Testing " + rURL + " failed, "
-                                    + rDoc.GetAllTableNames()[tab] + ".A" + OUString::number(row+1)
-                                    + " \'" + rDoc.GetString(3, row, tab) + "\'"
-                                    " result: " + rDoc.GetString(0, row, tab)
-                                    + ", expected: " + rDoc.GetString(1, row, tab))
-                                .toUtf8().getStr());
-                    }
+                    CPPUNIT_FAIL( OUString( "Testing " + rURL + " failed, "
+                                + rDoc.GetAllTableNames()[tab] + ".A" + OUString::number(row+1)
+                                + " \'" + rDoc.GetString(nFunctStringCol, row, tab) + "\'"
+                                " result: '" + result
+                                + "', expected: '" + expected + "'")
+                            .toUtf8().getStr());
                 }
             }
         }
