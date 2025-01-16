@@ -8927,19 +8927,18 @@ void ScInterpreter::ScToCol()
     // No result
     if (aResPos.size() == 0)
     {
-        if (nGlobalError != FormulaError::NONE)
-        {
-            PushIllegalArgument();
-        }
-        else
-        {
-            PushNA();
-        }
+        PushNA();
+        return;
+    }
+
+    ScMatrixRef pResMat = GetNewMat(1, aResPos.size(), /*bEmpty*/true);
+    if (!pResMat)
+    {
+        PushIllegalArgument();
         return;
     }
 
     // fill result matrix to the same column
-    ScMatrixRef pResMat = GetNewMat(1, aResPos.size(), /*bEmpty*/true);
     for (SCSIZE iPos = 0; iPos < aResPos.size(); ++iPos)
     {
         if (pMatSource->IsEmptyCell(aResPos[iPos].first, aResPos[iPos].second))
@@ -8956,14 +8955,7 @@ void ScInterpreter::ScToCol()
         }
     }
 
-    if (!pResMat)
-    {
-        PushIllegalArgument();
-    }
-    else
-    {
-        PushMatrix(pResMat);
-    }
+    PushMatrix(pResMat);
 }
 
 void ScInterpreter::ScToRow()
@@ -9164,19 +9156,18 @@ void ScInterpreter::ScUnique()
     // No result
     if (aResPos.size() == 0)
     {
-        if (nGlobalError != FormulaError::NONE)
-        {
-            PushIllegalArgument();
-        }
-        else
-        {
-            PushNA();
-        }
+        PushNA();
+        return;
+    }
+
+    ScMatrixRef pResMat = bByRow ? GetNewMat(nsC, aResPos.size(), /*bEmpty*/true) :
+        GetNewMat(aResPos.size(), nsR, /*bEmpty*/true);
+    if (!pResMat)
+    {
+        PushIllegalArgument();
         return;
     }
     // fill result matrix with unique values
-    ScMatrixRef pResMat = bByRow ? GetNewMat(nsC, aResPos.size(), /*bEmpty*/true) :
-        GetNewMat(aResPos.size(), nsR, /*bEmpty*/true);
     for (SCSIZE iPos = 0; iPos < aResPos.size(); iPos++)
     {
         if (bByRow)
@@ -9217,14 +9208,7 @@ void ScInterpreter::ScUnique()
         }
     }
 
-    if (!pResMat)
-    {
-        PushIllegalArgument();
-    }
-    else
-    {
-        PushMatrix(pResMat);
-    }
+    PushMatrix(pResMat);
 }
 
 void ScInterpreter::replaceNamesToResult( const std::unordered_map<OUString, formula::FormulaToken*>& rResultIndexes,
