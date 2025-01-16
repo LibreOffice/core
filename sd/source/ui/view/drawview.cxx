@@ -509,7 +509,7 @@ void DrawView::CompleteRedraw(OutputDevice* pOutDev, const vcl::Region& rReg, sd
     }
     else if( pDoc && pDoc->GetDocumentType() == DocumentType::Draw)
     {
-        //tdf#164185 & tdf#89420
+        // tdf#164605 & tdf#89420
         bool bShowMargin(officecfg::Office::Draw::Misc::TextObject::ShowBoundary::get());
         pDoc->SetShowMargin(bShowMargin);
     }
