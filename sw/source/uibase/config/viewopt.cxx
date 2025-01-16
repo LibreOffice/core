@@ -41,7 +41,6 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/configurationlistener.hxx>
 
-sal_uInt16 SwViewOption::s_nPixelTwips = 0;   // one pixel on the screen
 SwViewColors SwViewOption::s_aInitialColorConfig {};
 
 SwViewColors::SwViewColors() :
@@ -212,7 +211,7 @@ void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect, bool b
     Color aOldLineColor( pOut->GetLineColor() );
     pOut->SetLineColor( COL_GRAY );
     // to make it look nice, we subtract two pixels everywhere
-    SwTwips nPix = s_nPixelTwips * 2;
+    SwTwips nPix = o3tl::narrowing<sal_uInt16>(pOut->PixelToLogic( Size(1,1) ).Height()) * 2;
     if( rRect.Width() <= 2 * nPix || rRect.Height() <= 2 * nPix )
         nPix = 0;
     const Point aTopLeft(  rRect.Left()  + nPix, rRect.Top()    + nPix );
@@ -385,14 +384,6 @@ SwViewOption& SwViewOption::operator=( const SwViewOption &rVOpt )
 
 SwViewOption::~SwViewOption()
 {
-}
-
-void SwViewOption::Init(const OutputDevice* pWin)
-{
-    if( !s_nPixelTwips && pWin )
-    {
-        s_nPixelTwips = o3tl::narrowing<sal_uInt16>(pWin->PixelToLogic( Size(1,1) ).Height());
-    }
 }
 
 bool SwViewOption::IsAutoCompleteWords()

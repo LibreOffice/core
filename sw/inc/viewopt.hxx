@@ -262,8 +262,6 @@ class SwViewOption
     static SwViewColors s_aInitialColorConfig;
     OUString m_sThemeName;
 
-    static sal_uInt16   s_nPixelTwips;// 1 Pixel == ? Twips
-
     OUString          m_sSymbolFont;                // Symbolfont.
     ViewOptFlags1     m_nCoreOptions;               // Bits for SwViewShell.
     ViewOptCoreFlags2 m_nCore2Options;              // Bits for SwViewShell.
@@ -316,8 +314,6 @@ public:
     SW_DLLPUBLIC SwViewOption();                     // CTOR
     SW_DLLPUBLIC SwViewOption(const SwViewOption&);
     SW_DLLPUBLIC ~SwViewOption();
-
-    static void Init(const OutputDevice* pWin);        // Initializing of static data.
 
     inline void     SetUIOptions( const SwViewOption& );
 

@@ -104,7 +104,6 @@ void SwViewShell::Init( const SwViewOption *pNewOpt )
     SAL_INFO( "sw.core", "View::Init - after InitPrt" );
     if( GetWin() )
     {
-        SwViewOption::Init( GetWin()->GetOutDev() );
         GetWin()->GetOutDev()->SetFillColor();
         GetWin()->SetBackground();
         GetWin()->GetOutDev()->SetLineColor();
