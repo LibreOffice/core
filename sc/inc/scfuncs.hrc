@@ -4299,4 +4299,16 @@ const TranslateId SC_OPCODE_LET_ARY[] =
     NC_("SC_OPCODE_LET", "A calculation that uses all names within the LET function. This must be the last argument in the LET function. Or a second Name to assign to a second Name value. If a second Name is specified, Name value 2 and Calculation or Name 3 become required.")
 };
 
+// -=*# Resource for function WRAPCOLS #*=-
+const TranslateId SC_OPCODE_WRAPCOLS_ARY[] =
+{
+    NC_("SC_OPCODE_WRAPCOLS", "Wraps the provided row or column of values by columns after a specified number of elements to form a new array."),
+    NC_("SC_OPCODE_WRAPCOLS", "Range"),
+    NC_("SC_OPCODE_WRAPCOLS", "to range to wrap."),
+    NC_("SC_OPCODE_WRAPCOLS", "Wrap count"),
+    NC_("SC_OPCODE_WRAPCOLS", "The maximum number of values for each column."),
+    NC_("SC_OPCODE_WRAPCOLS", "Pad with"),
+    NC_("SC_OPCODE_WRAPCOLS", "The value with which to pad. The default is #N/A.")
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4163,6 +4163,7 @@ StackVar ScInterpreter::Interpret()
                     case ocToRow            : ScToRow();                    break;
                     case ocUnique           : ScUnique();                   break;
                     case ocLet              : ScLet();                      break;
+                    case ocWrapCols         : ScWrapCols();                 break;
                     case ocTrue             : ScTrue();                     break;
                     case ocFalse            : ScFalse();                    break;
                     case ocGetActDate       : ScGetActDate();               break;
