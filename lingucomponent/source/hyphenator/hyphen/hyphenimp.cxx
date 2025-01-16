@@ -19,6 +19,7 @@
 
 #include <com/sun/star/uno/Reference.h>
 
+#include <comphelper/lok.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>
@@ -150,6 +151,8 @@ void Hyphenator::ensureLocales()
             {
                 for (const auto& rLocaleName : dict.aLocaleNames)
                 {
+                    if (!comphelper::LibreOfficeKit::isAllowlistedLanguage(rLocaleName))
+                        continue;
                     aLocaleNamesSet.insert( rLocaleName );
                 }
             }
