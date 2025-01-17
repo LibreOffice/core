@@ -32,6 +32,7 @@
 
 #include <strings.hrc>
 #include <SwStyleNameMapper.hxx>
+#include <names.hxx>
 
 void SwBreakDlg::rememberResult()
 {
@@ -171,12 +172,12 @@ SwBreakDlg::SwBreakDlg(weld::Window *pParent, SwWrtShell &rS)
     OUString aFormatName;
     for (sal_uInt16 i = RES_POOLPAGE_BEGIN; i < RES_POOLPAGE_END; ++i)
     {
-        aFormatName = SwStyleNameMapper::GetUIName( i, aFormatName );
+        aFormatName = SwStyleNameMapper::GetUIName( i, ProgName() );
         if (m_xPageCollBox->find_text(aFormatName) == -1)
             ::InsertStringSorted(u""_ustr, aFormatName, *m_xPageCollBox, 1 );
     }
     //add landscape page
-    aFormatName = SwStyleNameMapper::GetUIName( RES_POOLPAGE_LANDSCAPE, aFormatName );
+    aFormatName = SwStyleNameMapper::GetUIName( RES_POOLPAGE_LANDSCAPE, ProgName() );
     if (m_xPageCollBox->find_text(aFormatName) == -1)
         ::InsertStringSorted(u""_ustr, aFormatName, *m_xPageCollBox, 1);
     CheckEnable();

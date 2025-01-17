@@ -81,6 +81,7 @@
 #include <unoprnms.hxx>
 #include <editeng/unoprnms.hxx>
 #include <unomap.hxx>
+#include <names.hxx>
 #include <com/sun/star/awt/FontSlant.hpp>
 
 using namespace ::com::sun::star;
@@ -1360,7 +1361,7 @@ void SwTextPaintInfo::DrawCSDFHighlighting(const SwLinePortion &rPor) const
         if (!rCharStylesColorMap.empty())
         {
             OUString sCharStyleDisplayName;
-            sCharStyleDisplayName = SwStyleNameMapper::GetUIName(sCurrentCharStyle,
+            sCharStyleDisplayName = SwStyleNameMapper::GetUIName(ProgName(sCurrentCharStyle),
                                                                  SwGetPoolIdFromName::ChrFmt);
             if (!sCharStyleDisplayName.isEmpty())
             {

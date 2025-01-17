@@ -63,6 +63,7 @@
 #include <sfx2/filedlghelper.hxx>
 #include <toxwrap.hxx>
 #include <chpfld.hxx>
+#include <names.hxx>
 #include <svtools/editbrowsebox.hxx>
 
 #include <cmath>
@@ -1343,12 +1344,12 @@ IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl, weld::ComboBox&, rBox, void)
 
     if( nType & TO_ILLUSTRATION )
     {
-        OUString sName(SwStyleNameMapper::GetUIName(RES_POOLCOLL_LABEL_FIGURE, OUString()));
+        OUString sName(SwStyleNameMapper::GetUIName(RES_POOLCOLL_LABEL_FIGURE, ProgName()));
         m_xCaptionSequenceLB->set_active_text(sName);
     }
     else if( nType & TO_TABLE )
     {
-        OUString sName(SwStyleNameMapper::GetUIName(RES_POOLCOLL_LABEL_TABLE, OUString()));
+        OUString sName(SwStyleNameMapper::GetUIName(RES_POOLCOLL_LABEL_TABLE, ProgName()));
         m_xCaptionSequenceLB->set_active_text(sName);
     }
     else if( nType & TO_USER )
@@ -2739,7 +2740,7 @@ void SwTOXEntryTabPage::SetWrtShell(SwWrtShell& rSh)
         }
     }
     m_xMainEntryStyleLB->set_active_text(SwStyleNameMapper::GetUIName(
-                                           RES_POOLCHR_IDX_MAIN_ENTRY, OUString()));
+                                           RES_POOLCHR_IDX_MAIN_ENTRY, ProgName()));
 }
 
  const TranslateId STR_TOKEN_ARY[] =

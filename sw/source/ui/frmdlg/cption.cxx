@@ -41,6 +41,7 @@
 #include <strings.hrc>
 #include <SwStyleNameMapper.hxx>
 #include <unotxdoc.hxx>
+#include <names.hxx>
 
 using namespace ::com::sun::star;
 
@@ -191,7 +192,7 @@ SwCaptionDialog::SwCaptionDialog(weld::Window *pParent, SwView &rV)
     if( nPoolId )
     {
         if (sString.isEmpty())
-            sString = SwStyleNameMapper::GetUIName(nPoolId, OUString());
+            sString = SwStyleNameMapper::GetUIName(nPoolId, ProgName());
         auto nIndex = m_xCategoryBox->find_text(sString);
         if (nIndex != -1)
             m_xCategoryBox->set_active(nIndex);

@@ -38,6 +38,7 @@ class SwDocShell;
 class SwNumRule;
 class SwNumFormat;
 class SfxItemPropertySet;
+class ProgName;
 namespace com::sun::star::beans { struct PropertyValue; }
 
 class SwXFootnoteProperties final : public cppu::WeakImplHelper
@@ -206,7 +207,7 @@ public:
 
     static css::uno::Sequence<css::beans::PropertyValue> GetPropertiesForNumFormat(
             const SwNumFormat& rFormat, OUString const& rCharFormatName,
-            OUString const* pHeadingStyleName, OUString const & referer);
+            ProgName const* pHeadingStyleName, OUString const & referer);
     static void SetPropertiesToNumFormat(
             SwNumFormat & aFormat,
             OUString & rCharStyleName,
@@ -221,7 +222,7 @@ private:
     css::uno::Any GetNumberingRuleByIndex(const SwNumRule& rNumRule, sal_Int32 nIndex, const OUString& rPropName) const;
     static css::uno::Any GetPropertyForNumFormat(
             const SwNumFormat& rFormat, OUString const& rCharFormatName,
-            OUString const* pHeadingStyleName, OUString const & referer, OUString const & rPropName);
+            ProgName const* pHeadingStyleName, OUString const & referer, OUString const & rPropName);
 };
 
 class SwXChapterNumbering final : public SwXNumberingRules

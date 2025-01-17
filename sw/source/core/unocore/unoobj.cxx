@@ -79,6 +79,7 @@
 #include <comphelper/profilezone.hxx>
 #include <comphelper/flagguard.hxx>
 #include <swmodule.hxx>
+#include <names.hxx>
 
 using namespace ::com::sun::star;
 
@@ -203,7 +204,7 @@ lcl_setCharStyle(SwDoc& rDoc, const uno::Any & rValue, SfxItemSet & rSet)
         throw lang::IllegalArgumentException();
     }
     OUString sStyle;
-    SwStyleNameMapper::FillUIName(uStyle, sStyle,
+    SwStyleNameMapper::FillUIName(ProgName(uStyle), sStyle,
             SwGetPoolIdFromName::ChrFmt);
     SwDocStyleSheet *const pStyle = static_cast<SwDocStyleSheet*>(
         pDocSh->GetStyleSheetPool()->Find(sStyle, SfxStyleFamily::Char));
@@ -250,7 +251,7 @@ SwUnoCursorHelper::SetTextFormatColl(const uno::Any & rAny, SwPaM & rPaM)
     OUString uStyle;
     rAny >>= uStyle;
     OUString sStyle;
-    SwStyleNameMapper::FillUIName(uStyle, sStyle,
+    SwStyleNameMapper::FillUIName(ProgName(uStyle), sStyle,
             SwGetPoolIdFromName::TxtColl );
     SwDocStyleSheet *const pStyle = static_cast<SwDocStyleSheet*>(
             pDocSh->GetStyleSheetPool()->Find(sStyle, SfxStyleFamily::Para));
@@ -289,7 +290,7 @@ SwUnoCursorHelper::SetPageDesc(
         pNewDesc.reset(new SwFormatPageDesc());
     }
     OUString sDescName;
-    SwStyleNameMapper::FillUIName(uDescName, sDescName,
+    SwStyleNameMapper::FillUIName(ProgName(uDescName), sDescName,
             SwGetPoolIdFromName::PageDesc);
     if (!pNewDesc->GetPageDesc() ||
         (pNewDesc->GetPageDesc()->GetName() != sDescName))
@@ -384,7 +385,7 @@ lcl_setDropcapCharStyle(SwPaM const & rPam, SfxItemSet & rItemSet,
         throw lang::IllegalArgumentException();
     }
     OUString sStyle;
-    SwStyleNameMapper::FillUIName(uStyle, sStyle,
+    SwStyleNameMapper::FillUIName(ProgName(uStyle), sStyle,
             SwGetPoolIdFromName::ChrFmt);
     SwDoc& rDoc = rPam.GetDoc();
     //default character style must not be set as default format
@@ -428,7 +429,7 @@ lcl_setRubyCharstyle(SfxItemSet & rItemSet, uno::Any const& rValue)
         pRuby.reset(new SwFormatRuby(OUString()));
     }
     OUString sStyle;
-    SwStyleNameMapper::FillUIName(sTmp, sStyle,
+    SwStyleNameMapper::FillUIName(ProgName(sTmp), sStyle,
             SwGetPoolIdFromName::ChrFmt);
     pRuby->SetCharFormatName(sStyle);
     pRuby->SetCharFormatId(0);

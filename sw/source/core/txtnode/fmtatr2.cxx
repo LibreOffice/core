@@ -49,6 +49,7 @@
 #include <unometa.hxx>
 #include <unotext.hxx>
 #include <docsh.hxx>
+#include <names.hxx>
 #include <osl/diagnose.h>
 
 #include <algorithm>
@@ -124,10 +125,10 @@ void SwFormatCharFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
 
 bool SwFormatCharFormat::QueryValue( uno::Any& rVal, sal_uInt8 ) const
 {
-    OUString sCharFormatName;
+    ProgName sCharFormatName;
     if(GetCharFormat())
         SwStyleNameMapper::FillProgName(GetCharFormat()->GetName(), sCharFormatName,  SwGetPoolIdFromName::ChrFmt );
-    rVal <<= sCharFormatName;
+    rVal <<= sCharFormatName.toString();
     return true;
 }
 bool SwFormatCharFormat::PutValue( const uno::Any& , sal_uInt8   )
@@ -321,10 +322,11 @@ bool SwFormatINetFormat::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             OUString sVal = msVisitedFormatName;
             if (sVal.isEmpty() && mnVisitedFormatId != 0)
                 SwStyleNameMapper::FillUIName(mnVisitedFormatId, sVal);
+            ProgName aRet;
             if (!sVal.isEmpty())
-                SwStyleNameMapper::FillProgName(sVal, sVal,
+                SwStyleNameMapper::FillProgName(sVal, aRet,
                         SwGetPoolIdFromName::ChrFmt);
-            rVal <<= sVal;
+            rVal <<= aRet.toString();
         }
         break;
         case MID_URL_UNVISITED_FMT:
@@ -332,10 +334,11 @@ bool SwFormatINetFormat::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             OUString sVal = msINetFormatName;
             if (sVal.isEmpty() && mnINetFormatId != 0)
                 SwStyleNameMapper::FillUIName(mnINetFormatId, sVal);
+            ProgName aRet;
             if (!sVal.isEmpty())
-                SwStyleNameMapper::FillProgName(sVal, sVal,
+                SwStyleNameMapper::FillProgName(sVal, aRet,
                         SwGetPoolIdFromName::ChrFmt);
-            rVal <<= sVal;
+            rVal <<= aRet.toString();
         }
         break;
         case MID_URL_HYPERLINKEVENTS:
@@ -403,7 +406,7 @@ bool SwFormatINetFormat::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 OUString sVal;
                 rVal >>= sVal;
                 OUString aString;
-                SwStyleNameMapper::FillUIName( sVal, aString, SwGetPoolIdFromName::ChrFmt );
+                SwStyleNameMapper::FillUIName( ProgName(sVal), aString, SwGetPoolIdFromName::ChrFmt );
                 msVisitedFormatName = aString;
                 mnVisitedFormatId = SwStyleNameMapper::GetPoolIdFromUIName( msVisitedFormatName,
                                                SwGetPoolIdFromName::ChrFmt );
@@ -414,7 +417,7 @@ bool SwFormatINetFormat::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 OUString sVal;
                 rVal >>= sVal;
                 OUString aString;
-                SwStyleNameMapper::FillUIName( sVal, aString, SwGetPoolIdFromName::ChrFmt );
+                SwStyleNameMapper::FillUIName( ProgName(sVal), aString, SwGetPoolIdFromName::ChrFmt );
                 msINetFormatName = aString;
                 mnINetFormatId = SwStyleNameMapper::GetPoolIdFromUIName( msINetFormatName, SwGetPoolIdFromName::ChrFmt );
             }
@@ -507,9 +510,9 @@ bool SwFormatRuby::QueryValue( uno::Any& rVal,
         case MID_RUBY_ADJUST:  rVal <<= static_cast<sal_Int16>(m_eAdjustment);    break;
         case MID_RUBY_CHARSTYLE:
         {
-            OUString aString;
+            ProgName aString;
             SwStyleNameMapper::FillProgName(m_sCharFormatName, aString, SwGetPoolIdFromName::ChrFmt );
-            rVal <<= aString;
+            rVal <<= aString.toString();
         }
         break;
         case MID_RUBY_ABOVE:
@@ -572,7 +575,7 @@ bool SwFormatRuby::PutValue( const uno::Any& rVal,
             OUString sTmp;
             bRet = rVal >>= sTmp;
             if(bRet)
-                m_sCharFormatName = SwStyleNameMapper::GetUIName(sTmp, SwGetPoolIdFromName::ChrFmt );
+                m_sCharFormatName = SwStyleNameMapper::GetUIName(ProgName(sTmp), SwGetPoolIdFromName::ChrFmt );
         }
         break;
         default:

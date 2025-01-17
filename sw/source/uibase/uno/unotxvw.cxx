@@ -74,6 +74,7 @@
 #include <tools/UnitConversion.hxx>
 #include <comphelper/dumpxmltostring.hxx>
 #include <fmtanchr.hxx>
+#include <names.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -501,7 +502,7 @@ Sequence< Sequence< PropertyValue > > SwXTextView::getRubyList( sal_Bool /*bAuto
     const sal_uInt16 nCount = SwDoc::FillRubyList( *rSh.GetCursor(), aList );
     Sequence< Sequence< PropertyValue > > aRet(nCount);
     Sequence< PropertyValue >* pRet = aRet.getArray();
-    OUString aString;
+    ProgName aString;
     for(sal_uInt16 n = 0; n < nCount; n++)
     {
         const SwRubyListEntry* pEntry = aList[n].get();
@@ -517,7 +518,7 @@ Sequence< Sequence< PropertyValue > > SwXTextView::getRubyList( sal_Bool /*bAuto
         pValues[1].Value <<= rAttr.GetText();
         pValues[2].Name = UNO_NAME_RUBY_CHAR_STYLE_NAME;
         SwStyleNameMapper::FillProgName(rAttr.GetCharFormatName(), aString, SwGetPoolIdFromName::ChrFmt );
-        pValues[2].Value <<= aString;
+        pValues[2].Value <<= aString.toString();
         pValues[3].Name = UNO_NAME_RUBY_ADJUST;
         pValues[3].Value <<= static_cast<sal_Int16>(rAttr.GetAdjustment());
         pValues[4].Name = UNO_NAME_RUBY_IS_ABOVE;
@@ -566,7 +567,7 @@ void SAL_CALL SwXTextView::setRubyList(
                 if(rProperty.Value >>= sTmp)
                 {
                     OUString sName;
-                    SwStyleNameMapper::FillUIName(sTmp, sName, SwGetPoolIdFromName::ChrFmt );
+                    SwStyleNameMapper::FillUIName(ProgName(sTmp), sName, SwGetPoolIdFromName::ChrFmt );
                     const sal_uInt16 nPoolId = sName.isEmpty() ? 0
                         : SwStyleNameMapper::GetPoolIdFromUIName(sName,
                                 SwGetPoolIdFromName::ChrFmt );

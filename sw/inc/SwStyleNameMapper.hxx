@@ -26,6 +26,8 @@
 #include <unordered_map>
 #include <vector>
 
+class ProgName;
+
 /** This class holds all data about the names of styles used in the user
  * interface (UI names...these are localised into different languages).
  * These UI names are loaded from the resource files on demand.
@@ -77,6 +79,7 @@ class SwStyleNameMapper final
     friend void InitCore();
     friend void FinitCore();
 
+    static void fillProgNameFromId(sal_uInt16 nId, ProgName &rName);
     static void fillNameFromId(sal_uInt16 nId, OUString &rName, bool bProgName);
     static const OUString& getNameFromId(sal_uInt16 nId, const OUString &rName,
                                          bool bProgName);
@@ -88,27 +91,27 @@ class SwStyleNameMapper final
 public:
     // This gets the UI Name from the programmatic name
     SAL_WARN_UNUSED_RESULT
-    static const OUString& GetUIName(const OUString& rName, SwGetPoolIdFromName);
-    static         void FillUIName(const OUString& rName, OUString& rFillName,
+    static const OUString& GetUIName(const ProgName& rName, SwGetPoolIdFromName);
+    static         void FillUIName(const ProgName& rName, OUString& rFillName,
                             SwGetPoolIdFromName);
 
     // Get the programmatic Name from the UI name
     SAL_WARN_UNUSED_RESULT
-    static const OUString& GetProgName(const OUString& rName,
+    static ProgName GetProgName(const OUString& rName,
                                        SwGetPoolIdFromName);
-    static         void FillProgName(const OUString& rName, OUString& rFillName,
+    static         void FillProgName(const OUString& rName, ProgName& rFillName,
                             SwGetPoolIdFromName);
 
     // This gets the UI Name from the Pool ID
     SW_DLLPUBLIC static void FillUIName(sal_uInt16 nId, OUString& rFillName);
     SAL_WARN_UNUSED_RESULT
     SW_DLLPUBLIC static const OUString& GetUIName(sal_uInt16 nId,
-                                                  const OUString& rName);
+                                                  const ProgName& rName);
 
     // This gets the programmatic Name from the Pool ID
-    static         void FillProgName(sal_uInt16 nId, OUString& rFillName);
+    static         void FillProgName(sal_uInt16 nId, ProgName& rFillName);
     SAL_WARN_UNUSED_RESULT
-    SW_DLLPUBLIC static const OUString& GetProgName(sal_uInt16 nId,
+    SW_DLLPUBLIC static ProgName GetProgName(sal_uInt16 nId,
                                                     const OUString& rName);
 
     // This gets the PoolId from the UI Name
@@ -118,7 +121,7 @@ public:
 
     // Get the Pool ID from the programmatic name
     SAL_WARN_UNUSED_RESULT
-    SW_DLLPUBLIC static sal_uInt16 GetPoolIdFromProgName(const OUString& rName,
+    SW_DLLPUBLIC static sal_uInt16 GetPoolIdFromProgName(const ProgName& rName,
                                             SwGetPoolIdFromName);
 
     // used to convert the 4 special ExtraProg/UINames for
@@ -127,10 +130,10 @@ public:
     // forth and back.
     // Non-matching names remain unchanged.
     SAL_WARN_UNUSED_RESULT
-    SW_DLLPUBLIC static const OUString & GetSpecialExtraProgName(
+    SW_DLLPUBLIC static ProgName GetSpecialExtraProgName(
                     const OUString& rExtraUIName);
     SAL_WARN_UNUSED_RESULT
-    static const OUString & GetSpecialExtraUIName(const OUString& rExtraProgName);
+    static const OUString & GetSpecialExtraUIName(const ProgName& rExtraProgName);
 
     static const std::vector<OUString>& GetTextUINameArray();
     static const std::vector<OUString>& GetListsUINameArray();

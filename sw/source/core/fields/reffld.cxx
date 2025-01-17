@@ -58,6 +58,7 @@
 #include <numrule.hxx>
 #include <SwNodeNum.hxx>
 #include <calbck.hxx>
+#include <names.hxx>
 
 #include <cstddef>
 #include <memory>
@@ -953,7 +954,11 @@ bool SwGetRefField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
                 case RES_POOLCOLL_LABEL_FRAME:
                 case RES_POOLCOLL_LABEL_DRAWING:
                 case RES_POOLCOLL_LABEL_FIGURE:
-                    SwStyleNameMapper::FillProgName(nPoolId, sTmp) ;
+                {
+                    ProgName sTmp2(sTmp);
+                    SwStyleNameMapper::FillProgName(nPoolId, sTmp2) ;
+                    sTmp = sTmp2.toString();
+                }
                 break;
             }
         }
@@ -1074,7 +1079,7 @@ void SwGetRefField::ConvertProgrammaticToUIName()
     if (rDoc.getIDocumentFieldsAccess().GetFieldType(SwFieldIds::SetExp, rPar1, false))
         return;
 
-    sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromProgName( rPar1, SwGetPoolIdFromName::TxtColl );
+    sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromProgName( ProgName(rPar1), SwGetPoolIdFromName::TxtColl );
     TranslateId pResId;
     switch( nPoolId )
     {
@@ -1501,7 +1506,7 @@ SwTextNode* SwGetRefFieldType::FindAnchorRefStyle(SwDoc* pDoc, const OUString& r
     // undocumented Word feature: 1 = "Heading 1" etc.
     OUString const styleName(
         (rRefMark.getLength() == 1 && '1' <= rRefMark[0] && rRefMark[0] <= '9')
-        ? SwStyleNameMapper::GetProgName(RES_POOLCOLL_HEADLINE1 + rRefMark[0] - '1', rRefMark)
+        ? SwStyleNameMapper::GetProgName(RES_POOLCOLL_HEADLINE1 + rRefMark[0] - '1', rRefMark).toString()
         : rRefMark);
 
     switch (elementType)

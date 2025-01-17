@@ -73,6 +73,7 @@
 #ifdef DBG_UTIL
 #include <sal/backtrace.hxx>
 #endif
+#include <names.hxx>
 
 using namespace ::com::sun::star::i18n;
 
@@ -130,15 +131,19 @@ static void SetParent( std::shared_ptr<const SwAttrSet>& rpAttrSet,
 
     if ( pParentFormat )
     {
-        OUString sVal;
+        ProgName sVal;
         SwStyleNameMapper::FillProgName( pParentFormat->GetName(), sVal, SwGetPoolIdFromName::TxtColl );
-        const SfxStringItem aAnyFormatColl( RES_FRMATR_STYLE_NAME, sVal );
+        const SfxStringItem aAnyFormatColl( RES_FRMATR_STYLE_NAME, sVal.toString() );
         aNewSet.Put( aAnyFormatColl );
 
         if ( pConditionalFormat != pParentFormat )
-            SwStyleNameMapper::FillProgName( pConditionalFormat->GetName(), sVal, SwGetPoolIdFromName::TxtColl );
+        {
+            ProgName sTmp;
+            SwStyleNameMapper::FillProgName( pConditionalFormat->GetName(), sTmp, SwGetPoolIdFromName::TxtColl );
+            sVal = sTmp;
+        }
 
-        const SfxStringItem aFormatColl( RES_FRMATR_CONDITIONAL_STYLE_NAME, sVal );
+        const SfxStringItem aFormatColl( RES_FRMATR_CONDITIONAL_STYLE_NAME, sVal.toString() );
         aNewSet.Put( aFormatColl );
     }
 

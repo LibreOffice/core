@@ -63,6 +63,7 @@
 #include <svx/rotmodit.hxx>
 #include <legacyitem.hxx>
 #include <unostyle.hxx>
+#include <names.hxx>
 
 #include <memory>
 #include <utility>
@@ -774,7 +775,7 @@ bool SwTableAutoFormat::Load( SvStream& rStream, const SwAfVersions& rVersions )
             // start from 3d because default is added via constructor
             if( m_nStrResId < RES_POOLTABLESTYLE_END - RES_POOLTABLESTYLE_3D )
             {
-                m_aName = SwStyleNameMapper::GetUIName(RES_POOLTABLESTYLE_3D + m_nStrResId, m_aName);
+                m_aName = SwStyleNameMapper::GetUIName(RES_POOLTABLESTYLE_3D + m_nStrResId, ProgName(m_aName));
             }
             else
                 m_nStrResId = USHRT_MAX;
@@ -1027,7 +1028,7 @@ SwTableAutoFormatTable::SwTableAutoFormatTable()
     : m_pImpl(new Impl)
 {
     std::unique_ptr<SwTableAutoFormat> pNew(new SwTableAutoFormat(
-                SwStyleNameMapper::GetUIName(RES_POOLTABLESTYLE_DEFAULT, OUString())));
+                SwStyleNameMapper::GetUIName(RES_POOLTABLESTYLE_DEFAULT, ProgName())));
 
     sal_uInt8 i;
 

@@ -39,6 +39,7 @@ class SwFormatColl;
 struct SwSortOptions;
 class SwDoc;
 class SwRootFrame;
+class ProgName;
 
 namespace sw::mark { class MarkBase; }
 
@@ -84,7 +85,7 @@ namespace SwUnoCursorHelper
                                         , css::beans::PropertyState& eState
                                         , const SwTextNode* pNode = nullptr );
 
-    void                    GetCurPageStyle(SwPaM const & rPaM, OUString &rString);
+    void                    GetCurPageStyle(SwPaM const & rPaM, ProgName &rString);
 
     inline bool             IsStartOfPara(SwPaM& rUnoCursor)
                                         { return rUnoCursor.GetPoint()->GetContentIndex() == 0;}

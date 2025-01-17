@@ -46,6 +46,7 @@
 #include <svx/svdmodel.hxx>
 #include <docmodel/theme/ThemeColorType.hxx>
 #include <docmodel/theme/Theme.hxx>
+#include <names.hxx>
 
 
 using namespace ::com::sun::star::uno;
@@ -94,7 +95,7 @@ void SwXMLExport::ExportFormat(const SwFormat& rFormat, enum XMLTokenEnum eFamil
         if( const SwFormatPageDesc* pItem = rFormat.GetAttrSet().GetItemIfSet( RES_PAGEDESC,
                                                             false ) )
         {
-            OUString sName;
+            ProgName sName;
             const SwPageDesc *pPageDesc = pItem->GetPageDesc();
             if( pPageDesc )
                 SwStyleNameMapper::FillProgName(
@@ -102,7 +103,7 @@ void SwXMLExport::ExportFormat(const SwFormat& rFormat, enum XMLTokenEnum eFamil
                                     sName,
                                     SwGetPoolIdFromName::PageDesc);
             AddAttribute( XML_NAMESPACE_STYLE, XML_MASTER_PAGE_NAME,
-                          EncodeStyleName( sName ) );
+                          EncodeStyleName( sName.toString() ) );
         }
     }
 

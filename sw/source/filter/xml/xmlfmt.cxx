@@ -50,6 +50,7 @@
 #include <cellatr.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <ccoll.hxx>
+#include <names.hxx>
 
 #include <memory>
 
@@ -619,17 +620,18 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
 
     // #i40788# - first determine the display name of the page style,
     // then map this name to the corresponding user interface name.
-    OUString sName = GetImport().GetStyleDisplayName( XmlStyleFamily::MASTER_PAGE,
-                                             m_sMasterPageName );
-    SwStyleNameMapper::FillUIName( sName,
-                                   sName,
+    ProgName sProgName( GetImport().GetStyleDisplayName( XmlStyleFamily::MASTER_PAGE,
+                                             m_sMasterPageName ) );
+    OUString sUIName;
+    SwStyleNameMapper::FillUIName( sProgName,
+                                   sUIName,
                                    SwGetPoolIdFromName::PageDesc);
-    SwPageDesc *pPageDesc = pDoc->FindPageDesc(sName);
+    SwPageDesc *pPageDesc = pDoc->FindPageDesc(sUIName);
     if( !pPageDesc )
     {
         // If the page style is a pool style, then we maybe have to create it
         // first if it hasn't been used by now.
-        const sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( sName, SwGetPoolIdFromName::PageDesc );
+        const sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( sUIName, SwGetPoolIdFromName::PageDesc );
         if( USHRT_MAX != nPoolId )
             pPageDesc = pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool( nPoolId, false );
     }

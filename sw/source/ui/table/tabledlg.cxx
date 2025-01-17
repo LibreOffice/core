@@ -51,6 +51,7 @@
 #include <poolfmt.hxx>
 #include <swtablerep.hxx>
 #include <SwStyleNameMapper.hxx>
+#include <names.hxx>
 
 #include <cmdid.h>
 #include <svx/dialogs.hrc>
@@ -1444,7 +1445,7 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
         OUString aFormatName;
         for (sal_uInt16 i = RES_POOLPAGE_BEGIN; i < RES_POOLPAGE_END; ++i)
         {
-            aFormatName = SwStyleNameMapper::GetUIName(i, aFormatName);
+            aFormatName = SwStyleNameMapper::GetUIName(i, ProgName());
             if (m_xPageCollLB->find_text(aFormatName) == -1)
                 m_xPageCollLB->append_text(aFormatName);
         }

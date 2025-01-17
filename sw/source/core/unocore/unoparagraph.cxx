@@ -42,6 +42,7 @@
 #include <vcl/svapp.hxx>
 #include <docsh.hxx>
 #include <swunohelper.hxx>
+#include <names.hxx>
 
 #include <com/sun/star/beans/SetPropertyTolerantFailed.hpp>
 #include <com/sun/star/beans/GetPropertyTolerantResult.hpp>
@@ -909,7 +910,7 @@ static beans::PropertyState lcl_SwXParagraph_getPropertyState(
         }
         case FN_UNO_PAGE_STYLE:
         {
-            OUString sVal;
+            ProgName sVal;
             SwUnoCursorHelper::GetCurPageStyle( aPam, sVal );
             eRet = !sVal.isEmpty() ? beans::PropertyState_DIRECT_VALUE
                               : beans::PropertyState_AMBIGUOUS_VALUE;

@@ -101,6 +101,7 @@
 
 #include <comphelper/diagnose_ex.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <names.hxx>
 
 constexpr OUString WATERMARK_NAME = u"PowerPlusWaterMarkObject"_ustr;
 #define WATERMARK_AUTO_SIZE sal_uInt32(1)
@@ -133,9 +134,9 @@ std::vector<OUString> lcl_getUsedPageStyles(SwViewShell const * pShell)
         SwPageFrame* pPage = static_cast<SwPageFrame*>(pFrame);
         if (const SwPageDesc *pDesc = pPage->FindPageDesc())
         {
-            OUString sStyleName;
+            ProgName sStyleName;
             SwStyleNameMapper::FillProgName(pDesc->GetName(), sStyleName, SwGetPoolIdFromName::PageDesc);
-            aReturn.push_back(sStyleName);
+            aReturn.push_back(sStyleName.toString());
         }
     }
 

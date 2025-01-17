@@ -33,6 +33,7 @@
 #include <uitool.hxx>
 #include <poolfmt.hxx>
 #include <SwStyleNameMapper.hxx>
+#include <names.hxx>
 #include <memory>
 
 SwFootNoteOptionDlg::SwFootNoteOptionDlg(weld::Window *pParent, SwWrtShell &rS)
@@ -195,7 +196,7 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet* )
 
     // page
     for (sal_uInt16 i = RES_POOLPAGE_BEGIN; i < RES_POOLPAGE_END; ++i)
-        m_xPageTemplBox->append_text(SwStyleNameMapper::GetUIName(i, OUString()));
+        m_xPageTemplBox->append_text(SwStyleNameMapper::GetUIName(i, ProgName()));
 
     const size_t nCount = m_pSh->GetPageDescCnt();
     for(size_t i = 0; i < nCount; ++i)

@@ -28,6 +28,7 @@
 #include <osl/diagnose.h>
 #include <tools/UnitConversion.hxx>
 #include <o3tl/hash_combine.hxx>
+#include <names.hxx>
 
 using namespace ::com::sun::star;
 
@@ -128,11 +129,11 @@ bool SwFormatDrop::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         break;
         case MID_DROPCAP_CHAR_STYLE_NAME :
         {
-            OUString sName;
+            ProgName sName;
             if(GetCharFormat())
                 sName = SwStyleNameMapper::GetProgName(
                         GetCharFormat()->GetName(), SwGetPoolIdFromName::ChrFmt );
-            rVal <<= sName;
+            rVal <<= sName.toString();
         }
         break;
     }
@@ -209,8 +210,8 @@ bool SwNumRuleItem::operator==( const SfxPoolItem& rAttr ) const
 
 bool    SwNumRuleItem::QueryValue( uno::Any& rVal, sal_uInt8 ) const
 {
-    OUString sRet = SwStyleNameMapper::GetProgName(GetValue(), SwGetPoolIdFromName::NumRule );
-    rVal <<= sRet;
+    ProgName sRet = SwStyleNameMapper::GetProgName(GetValue(), SwGetPoolIdFromName::NumRule );
+    rVal <<= sRet.toString();
     return true;
 }
 
@@ -218,7 +219,7 @@ bool    SwNumRuleItem::PutValue( const uno::Any& rVal, sal_uInt8 )
 {
     OUString uName;
     rVal >>= uName;
-    SetValue(SwStyleNameMapper::GetUIName(uName, SwGetPoolIdFromName::NumRule));
+    SetValue(SwStyleNameMapper::GetUIName(ProgName(uName), SwGetPoolIdFromName::NumRule));
     return true;
 }
 

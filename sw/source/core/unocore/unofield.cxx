@@ -86,6 +86,7 @@
 #include <textapi.hxx>
 #include <fmtmeta.hxx>
 #include <annotationmark.hxx>
+#include <names.hxx>
 #include <vector>
 
 using namespace ::com::sun::star;
@@ -804,7 +805,7 @@ SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
     {
         if(rPropertyName == UNO_NAME_NAME)
         {
-            aRet <<= SwXFieldMaster::GetProgrammaticName(*pType, *m_pImpl->m_pDoc);
+            aRet <<= SwXFieldMaster::GetProgrammaticName(*pType, *m_pImpl->m_pDoc).toString();
         }
         else if(rPropertyName == UNO_NAME_DEPENDENT_TEXT_FIELDS)
         {
@@ -986,7 +987,7 @@ void SwXFieldMaster::Impl::Notify(const SfxHint& rHint)
     }
 }
 
-OUString SwXFieldMaster::GetProgrammaticName(const SwFieldType& rType, SwDoc& rDoc)
+ProgName SwXFieldMaster::GetProgrammaticName(const SwFieldType& rType, SwDoc& rDoc)
 {
     const OUString sName(rType.GetName());
     if(SwFieldIds::SetExp == rType.Which())
@@ -1000,7 +1001,7 @@ OUString SwXFieldMaster::GetProgrammaticName(const SwFieldType& rType, SwDoc& rD
             }
         }
     }
-    return sName;
+    return ProgName(sName);
 }
 
 OUString SwXFieldMaster::LocalizeFormula(
@@ -1009,12 +1010,12 @@ OUString SwXFieldMaster::LocalizeFormula(
     bool bQuery)
 {
     const OUString sTypeName(rField.GetTyp()->GetName());
-    const OUString sProgName(
+    const ProgName sProgName(
         SwStyleNameMapper::GetProgName(sTypeName, SwGetPoolIdFromName::TxtColl ));
-    if(sProgName != sTypeName)
+    if(sProgName.toString() != sTypeName)
     {
-        const OUString sSource = bQuery ? sTypeName : sProgName;
-        const OUString sDest = bQuery ? sProgName : sTypeName;
+        const OUString sSource = bQuery ? sTypeName : sProgName.toString();
+        const OUString sDest = bQuery ? sProgName.toString() : sTypeName;
         if(rFormula.startsWith(sSource))
         {
             return sDest + rFormula.subView(sSource.getLength());
@@ -2715,7 +2716,7 @@ static SwFieldIds lcl_GetIdByName( OUString& rName, OUString& rTypeName )
         nResId = SwFieldIds::SetExp;
 
         const OUString sFieldTypName( rName.getToken( 0, '.', nIdx ));
-        const OUString sUIName( SwStyleNameMapper::GetSpecialExtraUIName( sFieldTypName ) );
+        const OUString sUIName( SwStyleNameMapper::GetSpecialExtraUIName( ProgName(sFieldTypName) ) );
 
         if( sUIName != sFieldTypName )
             rName = comphelper::string::setToken(rName, 1, '.', sUIName);
@@ -2779,7 +2780,7 @@ bool SwXTextFieldMasters::getInstanceName(
         break;
 
     case SwFieldIds::SetExp:
-        sField = "SetExpression." + SwStyleNameMapper::GetSpecialExtraProgName( rFieldType.GetName() );
+        sField = "SetExpression." + SwStyleNameMapper::GetSpecialExtraProgName( rFieldType.GetName() ).toString();
         break;
 
     case SwFieldIds::Database:

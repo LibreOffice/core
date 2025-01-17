@@ -62,6 +62,7 @@
 #include <editeng/unoprnms.hxx>
 #include <rootfrm.hxx>
 #include <unomap.hxx>
+#include <names.hxx>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
@@ -144,7 +145,7 @@ bool PSCSDFPropsQuickHelp(const HelpEvent &rEvt, SwWrtShell& rSh)
                 OUString sCharStyle;
                 xRange->getPropertyValue(u"CharStyleName"_ustr) >>= sCharStyle;
                 if (!sCharStyle.isEmpty())
-                    sText = SwStyleNameMapper::GetUIName(sCharStyle, SwGetPoolIdFromName::ChrFmt);
+                    sText = SwStyleNameMapper::GetUIName(ProgName(sCharStyle), SwGetPoolIdFromName::ChrFmt);
             }
 
             if (sText.isEmpty() && rView.IsHighlightCharDF())
@@ -218,7 +219,7 @@ bool PSCSDFPropsQuickHelp(const HelpEvent &rEvt, SwWrtShell& rSh)
                 {
                     OUString sParaStyle;
                     xRange->getPropertyValue(u"ParaStyleName"_ustr) >>= sParaStyle;
-                    sText = SwStyleNameMapper::GetUIName(sParaStyle, SwGetPoolIdFromName::TxtColl);
+                    sText = SwStyleNameMapper::GetUIName(ProgName(sParaStyle), SwGetPoolIdFromName::TxtColl);
                     // check for paragraph direct formatting
                     if (SwDoc::HasParagraphDirectFormatting(aPos))
                         sText = sText + " + " + SwResId(STR_PARAGRAPH_DIRECT_FORMATTING);

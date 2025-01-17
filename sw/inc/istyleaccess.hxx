@@ -24,6 +24,7 @@
 #include <vector>
 
 class SwAttrSet;
+class ProgName;
 
 // Management of (automatic) styles
 class IStyleAccess
@@ -44,7 +45,7 @@ public:
                                                                const OUString* pParentName = nullptr ) = 0;
     virtual std::shared_ptr<SwAttrSet> getAutomaticStyle( const SwAttrSet& rSet,
                                                                SwAutoStyleFamily eFamily,
-                                                               const OUString* pParentName = nullptr ) = 0;
+                                                               const ProgName* pParentName = nullptr ) = 0;
     virtual void getAllStyles( std::vector<std::shared_ptr<SfxItemSet>> &rStyles,
                                                                SwAutoStyleFamily eFamily ) = 0;
     /** It's slow to iterate through a stylepool looking for a special name, but if

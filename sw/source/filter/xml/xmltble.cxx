@@ -54,6 +54,7 @@
 #include <o3tl/sorted_vector.hxx>
 #include <textboxhelper.hxx>
 #include <SwStyleNameMapper.hxx>
+#include <names.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1129,9 +1130,9 @@ void SwXMLExport::ExportTable( const SwTableNode& rTableNd )
     // table:template-name=
     if (!rTable.GetTableStyleName().isEmpty())
     {
-        OUString sStyleName;
+        ProgName sStyleName;
         SwStyleNameMapper::FillProgName(rTable.GetTableStyleName(), sStyleName, SwGetPoolIdFromName::TabStyle);
-        AddAttribute(XML_NAMESPACE_TABLE, XML_TEMPLATE_NAME, sStyleName);
+        AddAttribute(XML_NAMESPACE_TABLE, XML_TEMPLATE_NAME, sStyleName.toString());
     }
 
     SvXMLElementExport aElem(*this, *oPrefix, XML_TABLE, true, true);

@@ -70,6 +70,7 @@
 #include <tblafmt.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <frameformats.hxx>
+#include <names.hxx>
 
 #define NETSCAPE_DFLT_BORDER 1
 #define NETSCAPE_DFLT_CELLSPACING 2
@@ -1484,7 +1485,7 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
             // the same.
             SwTableAutoFormatTable& rTable = m_pParser->GetDoc()->GetTableStyles();
             SwTableAutoFormat* pTableFormat = rTable.FindAutoFormat(
-                SwStyleNameMapper::GetUIName(RES_POOLTABLESTYLE_DEFAULT, OUString()));
+                SwStyleNameMapper::GetUIName(RES_POOLTABLESTYLE_DEFAULT, ProgName()));
             if (pTableFormat)
             {
                 sal_uInt8 nPos = SwTableAutoFormat::CountPos(nCol, m_nCols, nRow, m_nRows);

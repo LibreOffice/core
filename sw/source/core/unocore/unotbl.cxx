@@ -108,6 +108,7 @@
 #include <fesh.hxx>
 #include <itabenum.hxx>
 #include <frameformats.hxx>
+#include <names.hxx>
 #include <o3tl/string_view.hxx>
 
 using namespace ::com::sun::star;
@@ -254,8 +255,9 @@ static void lcl_SetSpecialProperty(SwFrameFormat* pFormat,
             const SwPageDesc* pDesc = nullptr;
             if (!sPageStyle.isEmpty())
             {
-                SwStyleNameMapper::FillUIName(sPageStyle, sPageStyle, SwGetPoolIdFromName::PageDesc);
-                pDesc = SwPageDesc::GetByName(*pFormat->GetDoc(), sPageStyle);
+                OUString sPageStyleUIName;
+                SwStyleNameMapper::FillUIName(ProgName(sPageStyle), sPageStyleUIName, SwGetPoolIdFromName::PageDesc);
+                pDesc = SwPageDesc::GetByName(*pFormat->GetDoc(), sPageStyleUIName);
             }
             SwFormatPageDesc aDesc( pDesc );
             pFormat->GetDoc()->SetAttr(aDesc, *pFormat);
@@ -303,7 +305,7 @@ static uno::Any lcl_GetSpecialProperty(SwFrameFormat* pFormat, const SfxItemProp
             {
                 const SwPageDesc* pDsc = pItem->GetPageDesc();
                 if(pDsc)
-                    return uno::Any(SwStyleNameMapper::GetProgName(pDsc->GetName(), SwGetPoolIdFromName::PageDesc ));
+                    return uno::Any(SwStyleNameMapper::GetProgName(pDsc->GetName(), SwGetPoolIdFromName::PageDesc ).toString());
             }
             return uno::Any(OUString());
         }
@@ -1711,9 +1713,9 @@ uno::Any SwXTextTableCursor::getPropertyValue(const OUString& rPropertyName)
             auto pFormat(SwUnoCursorHelper::GetCurTextFormatColl(rUnoCursor, false));
             if(pFormat)
             {
-                OUString ret;
+                ProgName ret;
                 SwStyleNameMapper::FillProgName(pFormat->GetName(), ret, SwGetPoolIdFromName::TxtColl);
-                aResult <<= ret;
+                aResult <<= ret.toString();
             }
         }
         break;
@@ -1832,11 +1834,12 @@ void SwTableProperties_Impl::ApplyTableAttr(const SwTable& rTable, SwDoc& rDoc)
         pPage = GetProperty(RES_PAGEDESC, 0xff);
     if (pPage)
     {
-        OUString sPageStyle = pPage->get<OUString>();
-        if(!sPageStyle.isEmpty())
+        OUString sPageStyleProgName = pPage->get<OUString>();
+        if(!sPageStyleProgName.isEmpty())
         {
-            SwStyleNameMapper::FillUIName(sPageStyle, sPageStyle, SwGetPoolIdFromName::PageDesc);
-            const SwPageDesc* pDesc = SwPageDesc::GetByName(rDoc, sPageStyle);
+            OUString sPageStyleUIName;
+            SwStyleNameMapper::FillUIName(ProgName(sPageStyleProgName), sPageStyleUIName, SwGetPoolIdFromName::PageDesc);
+            const SwPageDesc* pDesc = SwPageDesc::GetByName(rDoc, sPageStyleUIName);
             if(pDesc)
             {
                 SwFormatPageDesc aDesc(pDesc);
@@ -2700,10 +2703,11 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                 case FN_UNO_TABLE_TEMPLATE_NAME:
                 {
                     SwTable* pTable = SwTable::FindTable(pFormat);
-                    OUString sName;
-                    if (!(aValue >>= sName))
+                    OUString sProgName;
+                    if (!(aValue >>= sProgName))
                         break;
-                    SwStyleNameMapper::FillUIName(sName, sName, SwGetPoolIdFromName::TabStyle);
+                    OUString sName;
+                    SwStyleNameMapper::FillUIName(ProgName(sProgName), sName, SwGetPoolIdFromName::TabStyle);
                     pTable->SetTableStyleName(sName);
                     SwDoc* pDoc = pFormat->GetDoc();
                     if (SwFEShell* pFEShell = pDoc->GetDocShell()->GetFEShell())
@@ -2947,9 +2951,9 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
                 case FN_UNO_TABLE_TEMPLATE_NAME:
                 {
                     SwTable* pTable = SwTable::FindTable(pFormat);
-                    OUString sName;
+                    ProgName sName;
                     SwStyleNameMapper::FillProgName(pTable->GetTableStyleName(), sName, SwGetPoolIdFromName::TabStyle);
-                    aRet <<= sName;
+                    aRet <<= sName.toString();
                 }
                 break;
 
@@ -3492,12 +3496,12 @@ uno::Any SAL_CALL SwXCellRange::getPropertyValue(const OUString& rPropertyName)
             {
                 SwFormatColl *const pTmpFormat =
                     SwUnoCursorHelper::GetCurTextFormatColl(*m_pImpl->m_pTableCursor, false);
-                OUString sRet;
+                ProgName sRet;
                 if (pTmpFormat)
                 {
                     SwStyleNameMapper::FillProgName(pTmpFormat->GetName(), sRet, SwGetPoolIdFromName::TxtColl);
                 }
-                aRet <<= sRet;
+                aRet <<= sRet.toString();
             }
             break;
             case FN_UNO_RANGE_ROW_LABEL:

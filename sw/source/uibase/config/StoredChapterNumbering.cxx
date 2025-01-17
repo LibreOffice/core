@@ -34,6 +34,7 @@
 #include <comphelper/diagnose_ex.hxx>
 
 #include <unosett.hxx>
+#include <names.hxx>
 
 
 using namespace ::com::sun::star;
@@ -125,7 +126,7 @@ public:
             return uno::Any(); // the export will ignore this level, yay
         }
         assert(pCharStyleName);
-        OUString dummy; // pass in empty HeadingStyleName - can't import anyway
+        ProgName dummy; // pass in empty HeadingStyleName - can't import anyway
         uno::Sequence<beans::PropertyValue> const ret(
             SwXNumberingRules::GetPropertiesForNumFormat(
                 *pNumFormat, *pCharStyleName, &dummy, u""_ustr));

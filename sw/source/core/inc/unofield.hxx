@@ -34,6 +34,7 @@
 class SwDoc;
 class SwFormatField;
 class SwSetExpField;
+class ProgName;
 
 typedef ::cppu::WeakImplHelper
 <   css::beans::XPropertySet
@@ -62,7 +63,7 @@ public:
         CreateXFieldMaster(SwDoc * pDoc, SwFieldType * pType,
                 SwFieldIds nResId = SwFieldIds::Unknown);
 
-    static OUString GetProgrammaticName(const SwFieldType& rType, SwDoc& rDoc);
+    static ProgName GetProgrammaticName(const SwFieldType& rType, SwDoc& rDoc);
     static OUString LocalizeFormula(const SwSetExpField& rField, const OUString& rFormula, bool bQuery);
 
     SwFieldType* GetFieldType(bool bDontCreate = false) const;

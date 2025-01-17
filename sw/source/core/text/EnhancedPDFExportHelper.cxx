@@ -89,6 +89,7 @@
 #include <dcontact.hxx>
 #include <PostItMgr.hxx>
 #include <AnnotationWin.hxx>
+#include <names.hxx>
 
 #include <tools/globname.hxx>
 #include <svx/svdobj.hxx>
@@ -232,9 +233,9 @@ bool lcl_IsHeadlineCell( const SwCellFrame& rCellFrame )
         SwTextNode const*const pTextNode = static_cast<const SwTextFrame*>(pCnt)->GetTextNodeForParaProps();
         const SwFormat* pTextFormat = pTextNode->GetFormatColl();
 
-        OUString sStyleName;
+        ProgName sStyleName;
         SwStyleNameMapper::FillProgName( pTextFormat->GetName(), sStyleName, SwGetPoolIdFromName::TxtColl );
-        bRet = sStyleName == aTableHeadingName;
+        bRet = sStyleName.toString() == aTableHeadingName;
     }
 
     // tdf#153935 wild guessing for 1st row based on table autoformat
@@ -1445,8 +1446,8 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 const SwFormat* pTextFormat = pTextNd->GetFormatColl();
                 const SwFormat* pParentTextFormat = pTextFormat ? pTextFormat->DerivedFrom() : nullptr;
 
-                OUString sStyleName;
-                OUString sParentStyleName;
+                ProgName sStyleName;
+                ProgName sParentStyleName;
 
                 if ( pTextFormat)
                     SwStyleNameMapper::FillProgName( pTextFormat->GetName(), sStyleName, SwGetPoolIdFromName::TxtColl );
@@ -1457,7 +1458,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 // any of the standard pdf tags, we write a user defined tag
                 // <stylename> with role = P
                 nPDFType = sal_uInt16(vcl::pdf::StructElement::Paragraph);
-                aPDFType = sStyleName;
+                aPDFType = sStyleName.toString();
 
                 // Title
 
@@ -1488,7 +1489,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 else if (sParentStyleName == aCaption)
                 {
                     nPDFType = sal_uInt16(vcl::pdf::StructElement::Caption);
-                    aPDFType = sStyleName + aCaptionString;
+                    aPDFType = sStyleName.toString() + aCaptionString;
                 }
 
                 // Heading: H
@@ -1858,7 +1859,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
     SwTextAttr const*const pInetFormatAttr =
         pos.first->GetTextAttrAt(pos.second, RES_TXTATR_INETFMT);
 
-    OUString sStyleName;
+    ProgName sStyleName;
     if (!pInetFormatAttr)
     {
         std::vector<SwTextAttr *> const charAttrs(
@@ -1871,7 +1872,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
     }
 
     // note: ILSE may be nested, so only end the span if needed to start new one
-    bool const isContinueSpan(CheckContinueSpan(rInf, sStyleName, pInetFormatAttr));
+    bool const isContinueSpan(CheckContinueSpan(rInf, sStyleName.toString(), pInetFormatAttr));
 
     sal_uInt16 nPDFType = USHRT_MAX;
     OUString aPDFType;
@@ -1930,7 +1931,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                     {
                         nPDFType = sal_uInt16(vcl::pdf::StructElement::Emphasis);
                         aPDFType = constEmphasisStyleName;
-                        CreateCurrentSpan(rInf, sStyleName);
+                        CreateCurrentSpan(rInf, sStyleName.toString());
                     }
                 }
                 // Strong
@@ -1940,7 +1941,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                     {
                         nPDFType = sal_uInt16(vcl::pdf::StructElement::Strong);
                         aPDFType = constStrongEmphasisStyleName;
-                        CreateCurrentSpan(rInf, sStyleName);
+                        CreateCurrentSpan(rInf, sStyleName.toString());
                     }
                 }
                 // Check for Quote/Code character style:
@@ -1950,7 +1951,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                     {
                         nPDFType = sal_uInt16(vcl::pdf::StructElement::Quote);
                         aPDFType = aQuoteString;
-                        CreateCurrentSpan(rInf, sStyleName);
+                        CreateCurrentSpan(rInf, sStyleName.toString());
                     }
                 }
                 else if (sStyleName == aSourceText)
@@ -1959,7 +1960,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                     {
                         nPDFType = sal_uInt16(vcl::pdf::StructElement::Code);
                         aPDFType = aCodeString;
-                        CreateCurrentSpan(rInf, sStyleName);
+                        CreateCurrentSpan(rInf, sStyleName.toString());
                     }
                 }
                 else if (!isContinueSpan)
@@ -1979,10 +1980,10 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                     {
                         nPDFType = sal_uInt16(vcl::pdf::StructElement::Span);
                         if (!sStyleName.isEmpty())
-                            aPDFType = sStyleName;
+                            aPDFType = sStyleName.toString();
                         else
                             aPDFType = aSpanString;
-                        CreateCurrentSpan(rInf, sStyleName);
+                        CreateCurrentSpan(rInf, sStyleName.toString());
                     }
                 }
             }

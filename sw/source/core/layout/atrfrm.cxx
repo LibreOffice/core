@@ -100,6 +100,7 @@
 #include <wrtsh.hxx>
 #include <txtfld.hxx>
 #include <cellatr.hxx>
+#include <names.hxx>
 
 using namespace ::com::sun::star;
 
@@ -798,9 +799,9 @@ bool SwFormatPageDesc::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                 const SwPageDesc* pDesc = GetPageDesc();
                 if( pDesc )
                 {
-                    OUString aString;
+                    ProgName aString;
                     SwStyleNameMapper::FillProgName(pDesc->GetName(), aString, SwGetPoolIdFromName::PageDesc);
-                    rVal <<= aString;
+                    rVal <<= aString.toString();
                 }
                 else
                     rVal.clear();

@@ -40,6 +40,7 @@
 #include <SwStyleNameMapper.hxx>
 #include <swuicnttab.hxx>
 #include <unoidxcoll.hxx>
+#include <names.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
@@ -226,8 +227,8 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_USE_DASH,                    bool(nIdxOptions & SwTOIOptions::Dash             ));
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_USE_UPPER_CASE,              bool(nIdxOptions & SwTOIOptions::InitialCaps     ));
 
-            OUString aTmpName( SwStyleNameMapper::GetSpecialExtraProgName( rDesc.GetSequenceName() ) );
-            lcl_SetProp(xInfo, xIdxProps, UNO_NAME_LABEL_CATEGORY, aTmpName );
+            ProgName aTmpName( SwStyleNameMapper::GetSpecialExtraProgName( rDesc.GetSequenceName() ) );
+            lcl_SetProp(xInfo, xIdxProps, UNO_NAME_LABEL_CATEGORY, aTmpName.toString() );
             lcl_SetBOOLProp(xInfo, xIdxProps, UNO_NAME_CREATE_FROM_LABELS,  !rDesc.IsCreateFromObjectNames());
 
             sal_Int16 nSet = text::ChapterFormat::NAME_NUMBER;

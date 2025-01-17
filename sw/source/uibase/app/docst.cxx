@@ -86,6 +86,7 @@
 #include <svx/svdpage.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <fmtfsize.hxx>
+#include <names.hxx>
 #include <svl/ptitem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <editeng/ulspitem.hxx>
@@ -176,7 +177,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
             case SID_STYLE_FAMILY2:
                 if(!pShell->IsFrameSelected())
                 {
-                    OUString aProgName;
+                    ProgName aProgName;
                     if (pShell->GetSelectionType() == SelectionType::PostIt)
                     {
                         OutlinerView *pOLV = lcl_GetPostItOutlinerView(*pShell);
@@ -193,7 +194,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                         SwStyleNameMapper::FillProgName(nId, aProgName);
                     }
 
-                    SfxTemplateItem aItem(nWhich, aName, aProgName);
+                    SfxTemplateItem aItem(nWhich, aName, aProgName.toString());
 
                     SfxStyleSearchBits nMask = SfxStyleSearchBits::Auto;
                     if (m_xDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE))

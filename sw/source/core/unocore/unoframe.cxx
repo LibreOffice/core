@@ -137,6 +137,7 @@
 #include <fefly.hxx>
 #include <formatflysplit.hxx>
 #include <formatwraptextatflystart.hxx>
+#include <names.hxx>
 
 using namespace ::com::sun::star;
 
@@ -949,12 +950,13 @@ bool SwFrameProperties_Impl::AnyToItemSet(SwDoc *pDoc, SfxItemSet& rSet, SfxItem
 
     if (const uno::Any* pStyleName = GetProperty(FN_UNO_FRAME_STYLE_NAME, 0))
     {
-        OUString sStyle;
-        *pStyleName >>= sStyle;
-        SwStyleNameMapper::FillUIName(sStyle, sStyle, SwGetPoolIdFromName::FrmFmt);
+        OUString sStyleProgName;
+        *pStyleName >>= sStyleProgName;
+        OUString sStyleUIName;
+        SwStyleNameMapper::FillUIName(ProgName(sStyleProgName), sStyleUIName, SwGetPoolIdFromName::FrmFmt);
         if (SwDocShell* pShell = pDoc->GetDocShell())
         {
-            pStyle = static_cast<SwDocStyleSheet*>(pShell->GetStyleSheetPool()->Find(sStyle,
+            pStyle = static_cast<SwDocStyleSheet*>(pShell->GetStyleSheetPool()->Find(sStyleUIName,
                                                         SfxStyleFamily::Frame));
         }
     }
@@ -1031,12 +1033,13 @@ bool SwGraphicProperties_Impl::AnyToItemSet(
 
     if (const uno::Any* pStyleName = GetProperty(FN_UNO_FRAME_STYLE_NAME, 0))
     {
-        OUString sStyle;
-        *pStyleName >>= sStyle;
-        SwStyleNameMapper::FillUIName(sStyle, sStyle, SwGetPoolIdFromName::FrmFmt);
+        OUString sStyleProgName;
+        *pStyleName >>= sStyleProgName;
+        OUString sStyleUIName;
+        SwStyleNameMapper::FillUIName(ProgName(sStyleProgName), sStyleUIName, SwGetPoolIdFromName::FrmFmt);
         if (SwDocShell* pShell = pDoc->GetDocShell())
         {
-            pStyle = static_cast<SwDocStyleSheet*>(pShell->GetStyleSheetPool()->Find(sStyle,
+            pStyle = static_cast<SwDocStyleSheet*>(pShell->GetStyleSheetPool()->Find(sStyleUIName,
                                                         SfxStyleFamily::Frame));
         }
     }
@@ -1322,7 +1325,7 @@ static SwFrameFormat *lcl_GetFrameFormat( const ::uno::Any& rValue, SwDoc *pDoc 
         OUString uTemp;
         rValue >>= uTemp;
         OUString sStyle;
-        SwStyleNameMapper::FillUIName(uTemp, sStyle,
+        SwStyleNameMapper::FillUIName(ProgName(uTemp), sStyle,
                 SwGetPoolIdFromName::FrmFmt);
         SwDocStyleSheet* pStyle =
                 static_cast<SwDocStyleSheet*>(pDocSh->GetStyleSheetPool()->Find(sStyle,
@@ -2095,7 +2098,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
         }
         else if(FN_UNO_FRAME_STYLE_NAME == pEntry->nWID)
         {
-            aAny <<= SwStyleNameMapper::GetProgName(pFormat->DerivedFrom()->GetName(), SwGetPoolIdFromName::FrmFmt );
+            aAny <<= SwStyleNameMapper::GetProgName(pFormat->DerivedFrom()->GetName(), SwGetPoolIdFromName::FrmFmt ).toString();
         }
         // #i73249#
         else if( FN_UNO_TITLE == pEntry->nWID )

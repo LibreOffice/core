@@ -93,6 +93,7 @@
 #include <poolfmt.hxx>
 #include <paratr.hxx>
 #include <sal/log.hxx>
+#include <names.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -395,9 +396,9 @@ bool getCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry
             {
                 if( pAny )
                 {
-                    OUString sVal;
+                    ProgName sVal;
                     SwStyleNameMapper::FillProgName(pFormat->GetName(), sVal, SwGetPoolIdFromName::TxtColl );
-                    *pAny <<= sVal;
+                    *pAny <<= sVal.toString();
                 }
             }
             else
@@ -406,10 +407,10 @@ bool getCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry
         break;
         case FN_UNO_PAGE_STYLE :
         {
-            OUString sVal;
+            ProgName sVal;
             GetCurPageStyle(rPam, sVal);
             if( pAny )
-                *pAny <<= sVal;
+                *pAny <<= sVal.toString();
             if(sVal.isEmpty())
                 eNewState = PropertyState_AMBIGUOUS_VALUE;
         }
@@ -780,7 +781,7 @@ bool getCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry
                             OSL_ENSURE(pAttr->GetCharFormat().GetCharFormat(), "no character format set");
                             aCharStyles.getArray()[aCharStyles.getLength() - 1] =
                                         SwStyleNameMapper::GetProgName(
-                                            pAttr->GetCharFormat().GetCharFormat()->GetName(), SwGetPoolIdFromName::ChrFmt);
+                                            pAttr->GetCharFormat().GetCharFormat()->GetName(), SwGetPoolIdFromName::ChrFmt).toString();
                         }
                     }
 
@@ -964,7 +965,7 @@ void  getNumberingProperty(SwPaM& rPam, PropertyState& eState, Any * pAny )
         eState = PropertyState_DEFAULT_VALUE;
 }
 
-void GetCurPageStyle(SwPaM const & rPaM, OUString &rString)
+void GetCurPageStyle(SwPaM const & rPaM, ProgName &rString)
 {
     if (!rPaM.GetPointContentNode())
         return; // TODO: is there an easy way to get it for tables/sections?
@@ -1390,7 +1391,7 @@ void makeRedline( SwPaM const & rPaM,
                     nStylePoolId = RES_POOLCOLL_STANDARD;
 
                 // tdf#149747 Get UI style name from programmatic style name
-                SwStyleNameMapper::FillUIName(sParaStyleName, sUIStyle,
+                SwStyleNameMapper::FillUIName(ProgName(sParaStyleName), sUIStyle,
                                               SwGetPoolIdFromName::TxtColl);
                 xRedlineExtraData.reset(new SwRedlineExtraData_FormatColl(
                     sUIStyle.isEmpty() ? sParaStyleName : sUIStyle, nStylePoolId, &aItemSet));

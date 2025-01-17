@@ -33,6 +33,7 @@
 #include <SwStyleNameMapper.hxx>
 
 #include <frmfmt.hxx>
+#include <names.hxx>
 
 SwNoTextNode::SwNoTextNode( SwNode& rWhere,
                   const SwNodeType nNdType,
@@ -61,9 +62,9 @@ void SwNoTextNode::NewAttrSet( SwAttrPool& rPool )
 
     // put names of parent style and conditional style:
     const SwFormatColl* pFormatColl = GetFormatColl();
-    OUString sVal;
+    ProgName sVal;
     SwStyleNameMapper::FillProgName( pFormatColl->GetName(), sVal, SwGetPoolIdFromName::TxtColl );
-    SfxStringItem aFormatColl( RES_FRMATR_STYLE_NAME, sVal );
+    SfxStringItem aFormatColl( RES_FRMATR_STYLE_NAME, sVal.toString() );
     aNewAttrSet.Put( aFormatColl );
 
     aNewAttrSet.SetParent( &GetFormatColl()->GetAttrSet() );

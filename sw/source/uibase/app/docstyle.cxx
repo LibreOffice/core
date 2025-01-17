@@ -69,6 +69,7 @@
 #include <svx/xfillit0.hxx>
 #include <svx/xflftrit.hxx>
 #include <svx/drawitem.hxx>
+#include <names.hxx>
 
 using namespace com::sun::star;
 
@@ -500,9 +501,9 @@ static const SwBoxAutoFormat* lcl_FindCellStyle(SwDoc& rDoc, std::u16string_view
             {
                     const sal_uInt32 nBoxIndex = aTableTemplateMap[nBoxFormat];
                     const SwBoxAutoFormat& rBoxFormat = rTableStyle.GetBoxFormat(nBoxIndex);
-                    OUString sBoxFormatName;
-                    SwStyleNameMapper::FillProgName(rTableStyle.GetName(), sBoxFormatName, SwGetPoolIdFromName::TabStyle);
-                    sBoxFormatName += rTableStyle.GetTableTemplateCellSubName(rBoxFormat);
+                    ProgName sBoxFormatProgName;
+                    SwStyleNameMapper::FillProgName(rTableStyle.GetName(), sBoxFormatProgName, SwGetPoolIdFromName::TabStyle);
+                    OUString sBoxFormatName = sBoxFormatProgName.toString() + rTableStyle.GetTableTemplateCellSubName(rBoxFormat);
                     if (rName == sBoxFormatName)
                         pFormat = &rBoxFormat;
             }
@@ -3100,7 +3101,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                 {
                     if( !bIsSearchUsed || rDoc.getIDocumentStylePoolAccess().IsPoolTextCollUsed( *pPoolIds ) )
                     {
-                        s = SwStyleNameMapper::GetUIName( *pPoolIds, s );
+                        s = SwStyleNameMapper::GetUIName( *pPoolIds, ProgName(s) );
                         m_aLst.Append( SfxStyleFamily::Para, s);
                     }
                     ++pPoolIds;
@@ -3245,9 +3246,9 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                 {
                     const sal_uInt32 nBoxIndex = aTableTemplateMap[nBoxFormat];
                     const SwBoxAutoFormat& rBoxFormat = rTableStyle.GetBoxFormat(nBoxIndex);
-                    OUString sBoxFormatName;
-                    SwStyleNameMapper::FillProgName(rTableStyle.GetName(), sBoxFormatName, SwGetPoolIdFromName::TabStyle);
-                    sBoxFormatName += rTableStyle.GetTableTemplateCellSubName(rBoxFormat);
+                    ProgName sBoxFormatProgName;
+                    SwStyleNameMapper::FillProgName(rTableStyle.GetName(), sBoxFormatProgName, SwGetPoolIdFromName::TabStyle);
+                    OUString sBoxFormatName = sBoxFormatProgName.toString() + rTableStyle.GetTableTemplateCellSubName(rBoxFormat);
                     m_aLst.Append( SfxStyleFamily::Cell, sBoxFormatName );
                 }
             }

@@ -88,6 +88,7 @@
 #include <formatflysplit.hxx>
 #include <fmtcntnt.hxx>
 #include <poolfmt.hxx>
+#include <names.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1234,12 +1235,12 @@ void SwTextNode::NewAttrSet( SwAttrPool& rPool )
     // put names of parent style and conditional style:
     const SwFormatColl* pAnyFormatColl = &GetAnyFormatColl();
     const SwFormatColl* pFormatColl = GetFormatColl();
-    OUString sVal;
+    ProgName sVal;
     SwStyleNameMapper::FillProgName( pAnyFormatColl->GetName(), sVal, SwGetPoolIdFromName::TxtColl );
-    SfxStringItem aAnyFormatColl( RES_FRMATR_STYLE_NAME, sVal );
+    SfxStringItem aAnyFormatColl( RES_FRMATR_STYLE_NAME, sVal.toString() );
     if ( pFormatColl != pAnyFormatColl )
         SwStyleNameMapper::FillProgName( pFormatColl->GetName(), sVal, SwGetPoolIdFromName::TxtColl );
-    SfxStringItem aFormatColl( RES_FRMATR_CONDITIONAL_STYLE_NAME, sVal );
+    SfxStringItem aFormatColl( RES_FRMATR_CONDITIONAL_STYLE_NAME, sVal.toString() );
     aNewAttrSet.Put( aAnyFormatColl );
     aNewAttrSet.Put( aFormatColl );
 

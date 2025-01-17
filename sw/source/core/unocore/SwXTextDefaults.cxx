@@ -37,6 +37,7 @@
 #include <unocrsrhelper.hxx>
 #include <hintids.hxx>
 #include <fmtpdsc.hxx>
+#include <names.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -86,7 +87,7 @@ void SAL_CALL SwXTextDefaults::setPropertyValue( const OUString& rPropertyName, 
             throw lang::IllegalArgumentException();
 
         OUString sStyle;
-        SwStyleNameMapper::FillUIName(uStyle, sStyle, SwGetPoolIdFromName::ChrFmt );
+        SwStyleNameMapper::FillUIName(ProgName(uStyle), sStyle, SwGetPoolIdFromName::ChrFmt );
         SwDocStyleSheet* pStyle =
             static_cast<SwDocStyleSheet*>(m_pDoc->GetDocShell()->GetStyleSheetPool()->Find(sStyle, SfxStyleFamily::Char));
         std::unique_ptr<SwFormatDrop> pDrop;

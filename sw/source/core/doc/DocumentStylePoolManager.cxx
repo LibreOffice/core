@@ -71,6 +71,7 @@
 #include <unotools/syslocale.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <comphelper/lok.hxx>
+#include <names.hxx>
 
 using namespace ::editeng;
 using namespace ::com::sun::star;
@@ -604,7 +605,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
             // in online we can have multiple languages, use translated name
             if (comphelper::LibreOfficeKit::isActive())
             {
-                OUString aName = SwStyleNameMapper::GetUIName(nId, OUString());
+                OUString aName = SwStyleNameMapper::GetUIName(nId, ProgName());
                 if (!aName.isEmpty())
                     pNewColl->SetFormatName(aName);
             }

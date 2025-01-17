@@ -45,6 +45,7 @@
 #include <svtools/colorcfg.hxx>
 
 #include <IDocumentOutlineNodes.hxx>
+#include <names.hxx>
 
 using namespace ::com::sun::star;
 
@@ -170,9 +171,10 @@ SwOutlineTabDialog::SwOutlineTabDialog(weld::Window* pParent, const SfxItemSet* 
     for( i = 0; i < MAXLEVEL; ++i )
     {
         // if the style wasn't created yet, it's still at this position
-        if( !m_rWrtSh.GetParaStyle( sHeadline =
+        sHeadline =
             SwStyleNameMapper::GetUIName( static_cast< sal_uInt16 >(RES_POOLCOLL_HEADLINE1 + i),
-                                          sHeadline )) )
+                                          ProgName() );
+        if( !m_rWrtSh.GetParaStyle( sHeadline ) )
             m_aCollNames[i] = sHeadline;
     }
 
@@ -734,7 +736,7 @@ void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
     for (sal_uInt16 i = 0; i < MAXLEVEL; ++i)
     {
         m_xCollBox->append_text( SwStyleNameMapper::GetUIName(
-                                    static_cast< sal_uInt16 >(RES_POOLCOLL_HEADLINE1 + i), OUString()));
+                                    static_cast< sal_uInt16 >(RES_POOLCOLL_HEADLINE1 + i), ProgName()));
         m_xLevelLB->append_text( OUString::number(i + 1) );
     }
     OUString sStr = "1 - " + OUString::number(MAXLEVEL);

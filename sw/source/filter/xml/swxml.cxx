@@ -77,6 +77,7 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <istyleaccess.hxx>
+#include <names.hxx>
 
 #include <sfx2/DocumentMetadataAccess.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -351,13 +352,13 @@ static void lcl_AdjustOutlineStylesForOOo(SwDoc& _rDoc)
     // 'Heading 2', ..., 'Heading 10')
     OUString aDefOutlStyleNames[ MAXLEVEL ];
     {
-        OUString sStyleName;
+        ProgName sStyleName;
         for ( sal_uInt8 i = 0; i < MAXLEVEL; ++i )
         {
             sStyleName =
                 SwStyleNameMapper::GetProgName( RES_POOLCOLL_HEADLINE1 + i,
-                                                sStyleName );
-            aDefOutlStyleNames[i] = sStyleName;
+                                                sStyleName.toString() );
+            aDefOutlStyleNames[i] = sStyleName.toString();
         }
     }
 
