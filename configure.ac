@@ -14395,7 +14395,7 @@ ENABLE_MSVC_ANALYZE=
 AC_MSG_CHECKING([whether to use MSVC /analyze])
 if test -n "$enable_msvc_analyze" -a "$enable_msvc_analyze" != "no"; then
 if test "$_os" = "WINNT"; then
-    ENABLE_MSVC_ANALYZE=Yes
+    ENABLE_MSVC_ANALYZE=yes
     AC_MSG_RESULT([yes])
 else
    AC_MSG_ERROR([--enable-msvc-analyze is only supported on Windows])
