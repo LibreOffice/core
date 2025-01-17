@@ -34,6 +34,7 @@
 
 #include <vcl/errinf.hxx>
 #include <svl/stritem.hxx>
+#include <svl/itemiter.hxx>
 #include <svtools/imap.hxx>
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
@@ -520,7 +521,12 @@ SvParserState SwHTMLParser::CallParser()
         m_xDoc->getIDocumentRedlineAccess().SplitRedline( aInsertionRangePam );
 
         ::std::unique_ptr<SfxItemSet> pSet{new SfxItemSet(m_xDoc->GetAttrPool(),
-                        RES_CHRATR_BEGIN, RES_CHRATR_END-1)};
+                RES_CHRATR_BEGIN, RES_CHRATR_END-1,
+                RES_PARATR_BEGIN, RES_PARATR_NUMRULE-1,
+                RES_PARATR_NUMRULE+1, RES_PARATR_CONNECT_BORDER,
+                RES_LR_SPACE, RES_UL_SPACE,
+                XATTR_FILL_FIRST, XATTR_FILL_LAST,
+                0)};
         if (pPos->nNode.GetNode().GetTextNode()->GetAttr(*pSet, 0, 0, false, false))
         {
             m_pTargetCharAttrs = std::move(pSet);
@@ -4721,7 +4727,23 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
     if (m_pTargetCharAttrs)
     {
         std::unique_ptr<SfxItemSet> const pCharSet(new SfxItemSet(*m_pTargetCharAttrs));
-        pCharSet->Differentiate(pCollToSet->GetAttrSet());
+        std::vector<sal_uInt16> clear;
+        // do not use SfxItemSet::Differentiate(), it doesn't compare values!
+        for (SfxItemIter it{*pCharSet}; !it.IsAtEnd(); it.NextItem())
+        {
+            SfxPoolItem const& rItem{*it.GetCurItem()};
+            if (SfxPoolItem const*const pItem{pCollToSet->GetAttrSet().GetItem(rItem.Which(), true)})
+            {
+                if (rItem == *pItem)
+                {
+                    clear.emplace_back(rItem.Which());
+                }
+            }
+        }
+        for (auto const it : clear)
+        {
+            pCharSet->ClearItem(it);
+        }
         m_xDoc->getIDocumentContentOperations().InsertItemSet(*m_pPam, *pCharSet);
     }
 

@@ -14,6 +14,7 @@
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
 #include <com/sun/star/style/CaseMap.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <vcl/errcode.hxx>
 #include <swmodeltestbase.hxx>
 #include <ndtxt.hxx>
@@ -266,6 +267,7 @@ public:
     void testTdf113877_Standard_style();
     void testPlaceholderHTMLPaste();
     void testPlaceholderHTMLInsert();
+    void testPlaceholderHTMLPasteStyleOverride();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -414,6 +416,7 @@ public:
     CPPUNIT_TEST(testTdf113877_Standard_style);
     CPPUNIT_TEST(testPlaceholderHTMLPaste);
     CPPUNIT_TEST(testPlaceholderHTMLInsert);
+    CPPUNIT_TEST(testPlaceholderHTMLPasteStyleOverride);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -5259,6 +5262,62 @@ void SwUiWriterTest::testPlaceholderHTMLInsert()
     CPPUNIT_ASSERT_EQUAL(
         awt::FontWeight::NORMAL,
         getProperty<float>(getRun(getParagraph(4), 1, " test"), "CharWeight"));
+}
+
+void SwUiWriterTest::testPlaceholderHTMLPasteStyleOverride()
+{
+    {
+        SwDoc *const pDoc = createDoc();
+
+        SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+        pWrtShell->Insert("AAA");
+        pWrtShell->SplitNode();
+        pWrtShell->Insert("BBB");
+
+        lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
+        lcl_dispatchCommand(mxComponent, ".uno:Copy", {});
+    }
+
+    SwDoc *const pDoc = createDoc("placeholder-bold-style-override.fodt");
+
+    // select placeholder field
+    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 15, /*bBasicCall=*/false);
+
+    // Paste special as HTML
+    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+        { { "SelectedFormat", uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::HTML)) } });
+
+    lcl_dispatchCommand(mxComponent, ".uno:ClipboardFormatItems", aPropertyValues);
+
+    // style sets it to bold
+    uno::Reference<style::XStyleFamiliesSupplier> xSFS(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameContainer> xStyles(
+        xSFS->getStyleFamilies()->getByName("ParagraphStyles"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStandard(xStyles->getByName("Standard"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xTextbody(xStyles->getByName("Text body"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xStandard, "CharWeight"));
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xTextbody, "CharWeight"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_CENTER),
+                         getProperty<sal_Int16>(xTextbody, "ParaAdjust"));
+
+    CPPUNIT_ASSERT_EQUAL(int(3), getParagraphs());
+
+    // but hard formatting overrides to normal
+    CPPUNIT_ASSERT_EQUAL(
+        awt::FontWeight::NORMAL,
+        getProperty<float>(getRun(getParagraph(1), 1, "AAA"), "CharWeight"));
+    CPPUNIT_ASSERT_EQUAL(
+        awt::FontWeight::NORMAL,
+        getProperty<float>(getRun(getParagraph(2), 1, "BBB"), "CharWeight"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_LEFT),
+                         getProperty<sal_Int16>(getParagraph(1), "ParaAdjust"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_LEFT),
+                         getProperty<sal_Int16>(getParagraph(2), "ParaAdjust"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Text body"),
+                         getProperty<OUString>(getParagraph(1), "ParaStyleName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Text body"),
+                         getProperty<OUString>(getParagraph(2), "ParaStyleName"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
