@@ -333,6 +333,78 @@ constexpr unsigned char OID_SIGNINGCERTIFICATEV2[] {0x2a, 0x86, 0x48, 0x86, 0xf7
 // 1.2.840.113549.1.9.16.2.14
 constexpr unsigned char OID_TIMESTAMPTOKEN[] {0x2a, 0x86, 0x48, 0x86, 0xf7, 0x0d, 0x01, 0x09, 0x10, 0x02, 0x0e};
 
+struct cms_recode_attribute {
+  SECItem type;
+  SECItem **values;
+};
+
+struct cms_recode_signer_info {
+  SECItem version;
+  SECItem signerIdentifier;
+  SECItem digestAlg;
+  SECItem authAttr;
+  SECItem digestEncAlg;
+  SECItem encDigest;
+  cms_recode_attribute **unAuthAttr;
+};
+
+struct cms_recode_signed_data {
+  SECItem version;
+  SECItem digestAlgorithms;
+  SECItem contentInfo;
+  SECItem rawCerts;
+  SECItem crls;
+  cms_recode_signer_info **signerInfos;
+};
+
+struct cms_recode_message {
+  SECItem contentType;
+  cms_recode_signed_data signedData;
+};
+
+const SEC_ASN1Template recode_attribute_template[] = {
+    { SEC_ASN1_SEQUENCE, 0, nullptr, sizeof(cms_recode_attribute) },
+    { SEC_ASN1_OBJECT_ID, offsetof(cms_recode_attribute, type), nullptr, 0 },
+    { SEC_ASN1_SET_OF, offsetof(cms_recode_attribute, values), SEC_AnyTemplate, 0 },
+    {0, 0, nullptr, 0}};
+
+const SEC_ASN1Template recode_set_of_attribute_template[] = {
+    { SEC_ASN1_SET_OF, 0, recode_attribute_template, 0 }
+};
+
+const SEC_ASN1Template recode_signer_info_template[] = {
+    { SEC_ASN1_SEQUENCE, 0, nullptr, sizeof(cms_recode_signer_info) },
+    { SEC_ASN1_ANY, offsetof(cms_recode_signer_info, version), nullptr, 0 },
+    { SEC_ASN1_ANY, offsetof(cms_recode_signer_info, signerIdentifier), nullptr, 0 },
+    { SEC_ASN1_ANY, offsetof(cms_recode_signer_info, digestAlg), nullptr, 0 },
+    { SEC_ASN1_OPTIONAL | SEC_ASN1_CONSTRUCTED | SEC_ASN1_CONTEXT_SPECIFIC | 0,
+      offsetof(cms_recode_signer_info, authAttr), SEC_AnyTemplate, 0 },
+    { SEC_ASN1_ANY, offsetof(cms_recode_signer_info, digestEncAlg), nullptr, 0 },
+    { SEC_ASN1_ANY, offsetof(cms_recode_signer_info, encDigest), nullptr, 0 },
+    { SEC_ASN1_OPTIONAL | SEC_ASN1_CONSTRUCTED | SEC_ASN1_CONTEXT_SPECIFIC | 1,
+      offsetof(cms_recode_signer_info, unAuthAttr), recode_set_of_attribute_template, 0 },
+    {0, 0, nullptr, 0}};
+
+const SEC_ASN1Template recode_signed_data_template[] = {
+    { SEC_ASN1_SEQUENCE, 0, nullptr, sizeof(cms_recode_signed_data) },
+    { SEC_ASN1_ANY, offsetof(cms_recode_signed_data, version), nullptr, 0 },
+    { SEC_ASN1_ANY, offsetof(cms_recode_signed_data, digestAlgorithms), nullptr, 0 },
+    { SEC_ASN1_ANY, offsetof(cms_recode_signed_data, contentInfo), nullptr, 0 },
+    { SEC_ASN1_OPTIONAL | SEC_ASN1_CONSTRUCTED | SEC_ASN1_CONTEXT_SPECIFIC | 0,
+      offsetof(cms_recode_signed_data, rawCerts), SEC_AnyTemplate, 0 },
+    { SEC_ASN1_OPTIONAL | SEC_ASN1_CONSTRUCTED | SEC_ASN1_CONTEXT_SPECIFIC | 1,
+      offsetof(cms_recode_signed_data, crls), SEC_AnyTemplate, 0 },
+    { SEC_ASN1_SET_OF, offsetof(cms_recode_signed_data, signerInfos), recode_signer_info_template,
+      0 },
+    {0, 0, nullptr, 0}};
+
+const SEC_ASN1Template recode_message_template[] = {
+    { SEC_ASN1_SEQUENCE, 0, nullptr, sizeof(cms_recode_message) },
+    { SEC_ASN1_ANY, offsetof(cms_recode_message, contentType), nullptr, 0 },
+    { SEC_ASN1_EXPLICIT | SEC_ASN1_CONSTRUCTED | SEC_ASN1_CONTEXT_SPECIFIC | 0,
+      offsetof(cms_recode_message, signedData), recode_signed_data_template, 0 },
+    {0, 0, nullptr, 0}};
+
 size_t AppendToBuffer(char const *ptr, size_t size, size_t nmemb, void *userdata)
 {
     OStringBuffer *pBuffer = static_cast<OStringBuffer*>(userdata);
@@ -489,12 +561,6 @@ my_NSS_CMSAttributeArray_AddAttr(PLArenaPool *poolp, NSSCMSAttribute ***attrs, N
 loser:
     PORT_ArenaRelease(poolp, mark);
     return SECFailure;
-}
-
-SECStatus
-my_NSS_CMSSignerInfo_AddUnauthAttr(NSSCMSSignerInfo *signerinfo, NSSCMSAttribute *attr)
-{
-    return my_NSS_CMSAttributeArray_AddAttr(signerinfo->cmsg->poolp, &(signerinfo->unAuthAttr), attr);
 }
 
 SECStatus
@@ -959,52 +1025,47 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
         return false;
     }
 
-    TimeStampReq src;
-    OStringBuffer response_buffer;
-    TimeStampResp response;
-    SECItem response_item;
-    NSSCMSAttribute timestamp;
-    SECItem values[2];
-    SECItem *valuesp[2];
-    valuesp[0] = values;
-    valuesp[1] = nullptr;
-    SECOidData typetag;
+    SECItem cms_output;
+    cms_output.data = nullptr;
+    cms_output.len = 0;
+    PLArenaPool *arena = PORT_NewArena(10000);
+    const ::comphelper::ScopeGuard aScopeGuard(
+        [&arena]() mutable { PORT_FreeArena(arena, true); } );
+    NSSCMSEncoderContext *cms_ecx;
 
-    //NOTE: All signed/authenticated attributes are to be added before the following hash computation
+    // Possibly it would work to even just pass NULL for the password callback function and its
+    // argument here. After all, at least with the hardware token and associated software I tested
+    // with, the software itself pops up a dialog asking for the PIN (password). But I am not going
+    // to test it and risk locking up my token...
+
+    cms_ecx = NSS_CMSEncoder_Start(cms_msg, nullptr, nullptr, &cms_output, arena, PDFSigningPKCS7PasswordCallback,
+                                   const_cast<char*>(pass.getStr()), nullptr, nullptr, nullptr, nullptr);
+
+    if (!cms_ecx)
+    {
+        SAL_WARN("svl.crypto", "NSS_CMSEncoder_Start failed");
+        return false;
+    }
+
+    if (NSS_CMSEncoder_Finish(cms_ecx) != SECSuccess)
+    {
+        SAL_WARN("svl.crypto", "NSS_CMSEncoder_Finish failed");
+        return false;
+    }
+
     if( !m_aSignTSA.isEmpty() )
     {
-        // Create another CMS message with the same contents as cms_msg, because it doesn't seem
-        // possible to encode a message twice (once to get something to timestamp, and then after
-        // adding the timestamp attribute).
+        TimeStampReq src;
+        OStringBuffer response_buffer;
+        TimeStampResp response;
+        SECItem response_item;
+        cms_recode_attribute timestamp;
+        SECItem values[2];
+        SECItem *valuesp[2];
+        valuesp[0] = values;
+        valuesp[1] = nullptr;
 
-        NSSCMSSignedData *ts_cms_sd;
-        NSSCMSSignerInfo *ts_cms_signer;
-        NSSCMSMessage *ts_cms_msg = CreateCMSMessage(&now, &ts_cms_sd, &ts_cms_signer, cert, &digest);
-        if (!ts_cms_msg)
-        {
-            return false;
-        }
-
-        PORT_Memcpy(ts_cms_signer, cms_signer, sizeof(NSSCMSSignerInfo));
-
-        SECItem ts_cms_output;
-        ts_cms_output.data = nullptr;
-        ts_cms_output.len = 0;
-        PLArenaPool *ts_arena = PORT_NewArena(10000);
-        NSSCMSEncoderContext *ts_cms_ecx;
-        ts_cms_ecx = NSS_CMSEncoder_Start(ts_cms_msg, nullptr, nullptr, &ts_cms_output, ts_arena, PDFSigningPKCS7PasswordCallback,
-                                          const_cast<char*>(pass.getStr()), nullptr, nullptr, nullptr, nullptr);
-
-        if (NSS_CMSEncoder_Finish(ts_cms_ecx) != SECSuccess)
-        {
-            SAL_WARN("svl.crypto", "NSS_CMSEncoder_Finish failed");
-            return false;
-        }
-
-        // I have compared the ts_cms_output produced here with the cms_output produced below when
-        // not actually calling my_NSS_CMSSignerInfo_AddUnauthAttr()), and they are identical.
-
-        std::vector<unsigned char> aTsHashResult = comphelper::Hash::calculateHash(ts_cms_signer->encDigest.data, ts_cms_signer->encDigest.len, comphelper::HashType::SHA256);
+        std::vector<unsigned char> aTsHashResult = comphelper::Hash::calculateHash(cms_signer->encDigest.data, cms_signer->encDigest.len, comphelper::HashType::SHA256);
         SECItem ts_digest;
         ts_digest.type = siBuffer;
         ts_digest.data = aTsHashResult.data();
@@ -1182,54 +1243,52 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
         timestamp.values = valuesp;
 
         auto ts_oid_buffer = std::to_array(OID_TIMESTAMPTOKEN);
-        typetag.oid.data = ts_oid_buffer.data();
-        typetag.oid.len = ts_oid_buffer.size();
         // id-aa-timeStampToken OBJECT IDENTIFIER ::= { iso(1)
         // member-body(2) us(840) rsadsi(113549) pkcs(1) pkcs-9(9)
         // smime(16) aa(2) 14 }
-        typetag.offset = SEC_OID_UNKNOWN; // ???
-        typetag.desc = "id-aa-timeStampToken";
-        typetag.mechanism = CKM_SHA_1; // ???
-        typetag.supportedExtension = UNSUPPORTED_CERT_EXTENSION; // ???
-        timestamp.typeTag = &typetag;
 
-        timestamp.type = typetag.oid; // ???
+        timestamp.type.data = ts_oid_buffer.data();
+        timestamp.type.len =  ts_oid_buffer.size();
 
-        timestamp.encoded = PR_TRUE; // ???
+        cms_recode_message decoded_cms_output {};
 
-        if (my_NSS_CMSSignerInfo_AddUnauthAttr(cms_signer, &timestamp) != SECSuccess)
+        if (SEC_ASN1DecodeItem(arena, &decoded_cms_output, recode_message_template, &cms_output) != SECSuccess)
         {
-            SAL_WARN("svl.crypto", "NSS_CMSSignerInfo_AddUnauthAttr failed");
+            SAL_WARN("svl.crypto", "SEC_ASN1DecodeItem failed");
             return false;
         }
-    }
 
-    SECItem cms_output;
-    cms_output.data = nullptr;
-    cms_output.len = 0;
-    PLArenaPool *arena = PORT_NewArena(10000);
-    const ::comphelper::ScopeGuard aScopeGuard(
-        [&arena]() mutable { PORT_FreeArena(arena, true); } );
-    NSSCMSEncoderContext *cms_ecx;
+        // now insert the new attribute
 
-    // Possibly it would work to even just pass NULL for the password callback function and its
-    // argument here. After all, at least with the hardware token and associated software I tested
-    // with, the software itself pops up a dialog asking for the PIN (password). But I am not going
-    // to test it and risk locking up my token...
+        cms_recode_signer_info **decoded_signerinfos = decoded_cms_output.signedData.signerInfos;
+        if (!decoded_signerinfos || !*decoded_signerinfos) {
+            SAL_WARN("svl.crypto", "Decoded signed message invalid");
+            return false;
+        }
 
-    cms_ecx = NSS_CMSEncoder_Start(cms_msg, nullptr, nullptr, &cms_output, arena, PDFSigningPKCS7PasswordCallback,
-                                   const_cast<char*>(pass.getStr()), nullptr, nullptr, nullptr, nullptr);
+        std::vector<cms_recode_attribute *> updated_attrs;
 
-    if (!cms_ecx)
-    {
-        SAL_WARN("svl.crypto", "NSS_CMSEncoder_Start failed");
-        return false;
-    }
+        // there are no unauthenticated attributes at the moment
+        // if this ever changes, make sure to preserve them
+        cms_recode_attribute **existing_attrs = (*decoded_signerinfos)->unAuthAttr ;
 
-    if (NSS_CMSEncoder_Finish(cms_ecx) != SECSuccess)
-    {
-        SAL_WARN("svl.crypto", "NSS_CMSEncoder_Finish failed");
-        return false;
+        if (existing_attrs)
+            while (*existing_attrs)
+                updated_attrs.push_back(*existing_attrs++);
+
+        updated_attrs.push_back(&timestamp);
+        updated_attrs.push_back(nullptr);
+
+        (*decoded_signerinfos)->unAuthAttr = updated_attrs.data();
+
+        SECItem * ts_cms_output = SEC_ASN1EncodeItem(arena, nullptr, &decoded_cms_output, recode_message_template);
+        if (!ts_cms_output)
+        {
+            SAL_WARN("svl.crypto", "SEC_ASN1EncodeItem failed");
+            return false;
+        }
+
+        cms_output = *ts_cms_output;
     }
 
     if (cms_output.len*2 > MAX_SIGNATURE_CONTENT_LENGTH)
