@@ -431,6 +431,18 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf160976_headerFooter)
     verify();
     saveAndReload(mpFilter);
     verify(/*IsExported*/ true);
+
+    //tdf#164748: export must have the all same footer settings as the first page
+    auto xStyles = getStyles(u"PageStyles"_ustr);
+    auto xPara = getParagraph(2, "2");
+    OUString page2StyleName = getProperty<OUString>(xPara, u"PageDescName"_ustr);
+    uno::Reference<beans::XPropertySet> page2Style;
+    page2Style.set(xStyles->getByName(page2StyleName), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(getProperty<bool>(page2Style, u"FooterDynamicSpacing"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(915),
+                         getProperty<sal_Int32>(page2Style, u"FooterBodyDistance"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1016), getProperty<sal_Int32>(page2Style, u"FooterHeight"_ustr));
+
     // note: an unexpected header surfaces on page 3.
 }
 
