@@ -1326,8 +1326,7 @@ void OResultSet::OpenImpl()
     #endif
                         }
 
-                        m_pFileSet->erase(std::remove(m_pFileSet->begin(),m_pFileSet->end(),0)
-                                          ,m_pFileSet->end());
+                        std::erase(*m_pFileSet, 0);
                     }
                 }
             }
