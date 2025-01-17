@@ -683,6 +683,8 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testFirstPageFooterEnabled)
 CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testBnc519228OddBreaks)
 {
     auto verify = [this]() {
+        CPPUNIT_ASSERT_EQUAL(5, getPages()); // logical pages - "blank page" 4 usually not displayed
+
         // Check that all the normal styles are not set as right-only, those should be only those used after odd page breaks.
         auto xStyles = getStyles("PageStyles");
         uno::Reference<beans::XPropertySet> xStyle;
@@ -735,6 +737,9 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testBnc519228OddBreaks)
 
             CPPUNIT_ASSERT_EQUAL(getProperty<sal_Int32>(page1Style, "TopMargin"),
                                  getProperty<sal_Int32>(page2Style, "TopMargin"));
+            //tdf164748
+            CPPUNIT_ASSERT_EQUAL(getProperty<bool>(page1Style, u"HeaderDynamicSpacing"_ustr),
+                                 getProperty<bool>(page2Style, u"HeaderDynamicSpacing"_ustr));
         }
 
         // Page 5
