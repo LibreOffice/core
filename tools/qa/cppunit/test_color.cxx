@@ -27,6 +27,7 @@ public:
     void testInvert();
     void testBColor();
     void testLuminance();
+    void testCreateFromString();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testVariables);
@@ -37,6 +38,7 @@ public:
     CPPUNIT_TEST(testInvert);
     CPPUNIT_TEST(testBColor);
     CPPUNIT_TEST(testLuminance);
+    CPPUNIT_TEST(testCreateFromString);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -243,6 +245,13 @@ void Test::testLuminance()
     CPPUNIT_ASSERT(Color(249, 250, 251).IsBright());
     CPPUNIT_ASSERT(Color(9, 10, 11).IsDark());
     CPPUNIT_ASSERT(COL_WHITE.GetLuminance() > COL_BLACK.GetLuminance());
+}
+
+void Test::testCreateFromString()
+{
+    Color aColor;
+    CPPUNIT_ASSERT(color::createFromString("#00FF00"_ostr, aColor));
+    CPPUNIT_ASSERT_EQUAL(Color(0x00, 0xff, 0x00), aColor);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

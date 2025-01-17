@@ -28,6 +28,7 @@
 #include <tools/helpers.hxx>
 #include <tools/long.hxx>
 #include <o3tl/string_view.hxx>
+#include <o3tl/numeric.hxx>
 #include <basegfx/color/bcolortools.hxx>
 #include <basegfx/numeric/ftools.hxx>
 
@@ -293,6 +294,26 @@ void Color::ApplyLumModOff(sal_Int16 nMod, sal_Int16 nOff)
     R = sal_uInt8(std::lround(aBColor.getRed()   * 255.0));
     G = sal_uInt8(std::lround(aBColor.getGreen() * 255.0));
     B = sal_uInt8(std::lround(aBColor.getBlue()  * 255.0));
+}
+
+namespace color
+{
+bool createFromString(OString const& rString, Color& rColor)
+{
+    if (rString.getLength() != 7)
+        return false;
+
+    const char aChar(rString[0]);
+
+    if (aChar != '#')
+        return false;
+
+    rColor.SetRed(o3tl::convertToHex<sal_Int32>(rString[1], rString[2]));
+    rColor.SetGreen(o3tl::convertToHex<sal_Int32>(rString[3], rString[4]));
+    rColor.SetBlue(o3tl::convertToHex<sal_Int32>(rString[5], rString[6]));
+
+    return true;
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

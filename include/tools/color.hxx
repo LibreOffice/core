@@ -480,6 +480,11 @@ inline std::basic_ostream<charT, traits>& operator <<(std::basic_ostream<charT, 
     return rStream;
 }
 
+namespace color
+{
+TOOLS_DLLPUBLIC bool createFromString(OString const& rString, Color& rColor);
+}
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

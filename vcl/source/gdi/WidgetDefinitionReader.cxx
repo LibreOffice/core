@@ -29,23 +29,6 @@ bool lcl_fileExists(OUString const& sFilename)
     return osl::FileBase::E_None == eRC;
 }
 
-bool readColor(OString const& rString, Color& rColor)
-{
-    if (rString.getLength() != 7)
-        return false;
-
-    const char aChar(rString[0]);
-
-    if (aChar != '#')
-        return false;
-
-    rColor.SetRed(o3tl::convertToHex<sal_Int32>(rString[1], rString[2]));
-    rColor.SetGreen(o3tl::convertToHex<sal_Int32>(rString[3], rString[4]));
-    rColor.SetBlue(o3tl::convertToHex<sal_Int32>(rString[5], rString[6]));
-
-    return true;
-}
-
 bool readSetting(OString const& rInputString, OString& rOutputString)
 {
     if (!rInputString.isEmpty())
@@ -191,9 +174,9 @@ void WidgetDefinitionReader::readDrawingDefinition(
         if (rWalker.name() == "rect")
         {
             Color aStrokeColor;
-            readColor(rWalker.attribute("stroke"_ostr), aStrokeColor);
+            color::createFromString(rWalker.attribute("stroke"_ostr), aStrokeColor);
             Color aFillColor;
-            readColor(rWalker.attribute("fill"_ostr), aFillColor);
+            color::createFromString(rWalker.attribute("fill"_ostr), aFillColor);
             OString sStrokeWidth = rWalker.attribute("stroke-width"_ostr);
             sal_Int32 nStrokeWidth = -1;
             if (!sStrokeWidth.isEmpty())
@@ -227,7 +210,7 @@ void WidgetDefinitionReader::readDrawingDefinition(
         else if (rWalker.name() == "line")
         {
             Color aStrokeColor;
-            readColor(rWalker.attribute("stroke"_ostr), aStrokeColor);
+            color::createFromString(rWalker.attribute("stroke"_ostr), aStrokeColor);
 
             OString sStrokeWidth = rWalker.attribute("stroke-width"_ostr);
             sal_Int32 nStrokeWidth = -1;
@@ -448,7 +431,7 @@ bool WidgetDefinitionReader::read(WidgetDefinition& rWidgetDefinition)
                 auto pair = aStyleColorMap.find(aWalker.name());
                 if (pair != aStyleColorMap.end())
                 {
-                    readColor(aWalker.attribute("value"_ostr), *pair->second);
+                    color::createFromString(aWalker.attribute("value"_ostr), *pair->second);
                 }
                 aWalker.next();
             }
