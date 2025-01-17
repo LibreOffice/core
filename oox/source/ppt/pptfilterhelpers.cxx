@@ -29,20 +29,7 @@
 #include <oox/ppt/pptfilterhelpers.hxx>
 #include <tools/color.hxx>
 #include <o3tl/string_view.hxx>
-
-namespace {
-    int lcl_gethex(int nChar)
-    {
-        if (nChar >= '0' && nChar <= '9')
-            return nChar - '0';
-        else if (nChar >= 'a' && nChar <= 'f')
-            return nChar - 'a' + 10;
-        else if (nChar >= 'A' && nChar <= 'F')
-            return nChar - 'A' + 10;
-        else
-            return 0;
-    }
-}
+#include <o3tl/numeric.hxx>
 
 namespace oox::ppt {
 
@@ -276,12 +263,9 @@ namespace oox::ppt {
                     if (aString.getLength() >= 7 && aString[0] == '#')
                     {
                         Color aColor;
-                        aColor.SetRed(static_cast<sal_uInt8>(lcl_gethex(aString[1]) * 16
-                                                             + lcl_gethex(aString[2])));
-                        aColor.SetGreen(static_cast<sal_uInt8>(lcl_gethex(aString[3]) * 16
-                                                               + lcl_gethex(aString[4])));
-                        aColor.SetBlue(static_cast<sal_uInt8>(lcl_gethex(aString[5]) * 16
-                                                              + lcl_gethex(aString[6])));
+                        aColor.SetRed(o3tl::convertToHex<sal_uInt8>(aString[1], aString[2]));
+                        aColor.SetGreen(o3tl::convertToHex<sal_uInt8>(aString[3], aString[4]));
+                        aColor.SetBlue(o3tl::convertToHex<sal_uInt8>(aString[5], aString[6]));
                         rValue <<= aColor;
                         bRet = true;
                     }

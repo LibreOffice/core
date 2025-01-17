@@ -33,6 +33,7 @@
 #include <sal/log.hxx>
 #include <o3tl/lru_map.hxx>
 #include <o3tl/string_view.hxx>
+#include <o3tl/numeric.hxx>
 
 #include <utility>
 #include <vector>
@@ -851,14 +852,6 @@ void rtl_bootstrap_encode(rtl_uString const * value, rtl_uString ** encoded)
 
 namespace {
 
-int hex(sal_Unicode c)
-{
-    return
-        c >= '0' && c <= '9' ? c - '0' :
-        c >= 'A' && c <= 'F' ? c - 'A' + 10 :
-        c >= 'a' && c <= 'f' ? c - 'a' + 10 : -1;
-}
-
 sal_Unicode read(std::u16string_view text, std::size_t * pos, bool * escaped)
 {
     assert(pos && *pos < text.length() && escaped);
@@ -867,10 +860,10 @@ sal_Unicode read(std::u16string_view text, std::size_t * pos, bool * escaped)
     {
         int n1, n2, n3, n4;
         if (*pos < text.length() - 4 && text[*pos] == 'u' &&
-            ((n1 = hex(text[*pos + 1])) >= 0) &&
-            ((n2 = hex(text[*pos + 2])) >= 0) &&
-            ((n3 = hex(text[*pos + 3])) >= 0) &&
-            ((n4 = hex(text[*pos + 4])) >= 0))
+            ((n1 = o3tl::convertToHex<int>(text[*pos + 1])) >= 0) &&
+            ((n2 = o3tl::convertToHex<int>(text[*pos + 2])) >= 0) &&
+            ((n3 = o3tl::convertToHex<int>(text[*pos + 3])) >= 0) &&
+            ((n4 = o3tl::convertToHex<int>(text[*pos + 4])) >= 0))
         {
             *pos += 5;
             *escaped = true;

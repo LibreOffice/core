@@ -12,6 +12,7 @@
 
 #include <test/unoapi_test.hxx>
 #include <o3tl/string_view.hxx>
+#include <o3tl/numeric.hxx>
 
 #include <unotools/mediadescriptor.hxx>
 #include <comphelper/crypto/Crypto.hxx>
@@ -59,29 +60,13 @@ public:
     }
 };
 
-// TODO: taken from GUID
-sal_uInt8 gethex(char nChar)
-{
-    if (nChar >= '0' && nChar <= '9')
-        return nChar - '0';
-    else if (nChar >= 'a' && nChar <= 'f')
-        return nChar - 'a' + 10;
-    else if (nChar >= 'A' && nChar <= 'F')
-        return nChar - 'A' + 10;
-    else
-        return 0;
-}
-
-// TODO: taken from GUID
-sal_uInt8 convertHexChar(char high, char low) { return (gethex(high) << 4) + gethex(low); }
-
 std::vector<sal_uInt8> parseHex(std::string_view rString)
 {
     std::vector<sal_uInt8> aResult;
     aResult.reserve(rString.size() / 2);
     for (size_t i = 0; i < rString.size(); i += 2)
     {
-        aResult.push_back(convertHexChar(rString[i], rString[i + 1]));
+        aResult.push_back(o3tl::convertToHex<sal_Int32>(rString[i], rString[i + 1]));
     }
     return aResult;
 }

@@ -26,6 +26,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <comphelper/sequence.hxx>
 #include <o3tl/string_view.hxx>
+#include <o3tl/numeric.hxx>
 #include <rtl/math.h>
 #include <rtl/string.h>
 #include <rtl/string.hxx>
@@ -47,21 +48,14 @@ namespace configmgr {
 
 namespace {
 
-bool parseHexDigit(char c, int * value) {
+bool parseHexDigit(char c, int * value)
+{
     assert(value != nullptr);
-    if (c >= '0' && c <= '9') {
-        *value = c - '0';
-        return true;
-    }
-    if (c >= 'A' && c <= 'F') {
-        *value = c - 'A' + 10;
-        return true;
-    }
-    if (c >= 'a' && c <= 'f') {
-        *value = c - 'a' + 10;
-        return true;
-    }
-    return false;
+    int converted = o3tl::convertToHex<int>(c);
+    if (converted < 0)
+        return false;
+    *value = converted;
+    return true;
 }
 
 bool parseValue(xmlreader::Span const & text, sal_Bool * value) {

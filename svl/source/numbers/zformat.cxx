@@ -21,6 +21,7 @@
 
 #include <o3tl/sprintf.hxx>
 #include <o3tl/string_view.hxx>
+#include <o3tl/numeric.hxx>
 #include <comphelper/string.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
@@ -1610,25 +1611,15 @@ SvNumberformat::LocaleType SvNumberformat::ImpGetLocaleType(std::u16string_view 
         cToken = rString[nPos];
         if (cToken == ']')
             break;
-        if ( '0' <= cToken && cToken <= '9' )
-        {
-            nNum *= 16;
-            nNum += cToken - '0';
-        }
-        else if ( 'a' <= cToken && cToken <= 'f' )
-        {
-            nNum *= 16;
-            nNum += cToken - 'a' + 10;
-        }
-        else if ( 'A' <= cToken && cToken <= 'F' )
-        {
-            nNum *= 16;
-            nNum += cToken - 'A' + 10;
-        }
-        else
-        {
+
+        int nValue = o3tl::convertToHex<int>(cToken);
+
+        if (nValue == -1)
             return LocaleType(); // LANGUAGE_DONTKNOW;
-        }
+
+        nNum *= 16;
+        nNum += nValue;
+
         ++nPos;
     }
 

@@ -23,6 +23,7 @@
 #include <rtl/character.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
+#include <o3tl/numeric.hxx>
 
 #include <unordered_map>
 
@@ -217,9 +218,7 @@ inline int INetMIME::getWeight(sal_uInt32 nChar)
 // static
 inline int INetMIME::getHexWeight(sal_uInt32 nChar)
 {
-    return rtl::isAsciiDigit(nChar) ? int(nChar - '0') :
-           nChar >= 'A' && nChar <= 'F' ? int(nChar - 'A' + 10) :
-           nChar >= 'a' && nChar <= 'f' ? int(nChar - 'a' + 10) : -1;
+    return o3tl::convertToHex<int>(nChar);
 }
 
 // static

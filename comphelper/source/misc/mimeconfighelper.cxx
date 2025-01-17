@@ -33,6 +33,7 @@
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <o3tl/numeric.hxx>
 #include <utility>
 
 
@@ -68,20 +69,6 @@ OUString MimeConfigurationHelper::GetStringClassIDRepresentation( const uno::Seq
     return aResult.makeStringAndClear();
 }
 
-
-static sal_uInt8 GetDigit_Impl( char aChar )
-{
-    if ( aChar >= '0' && aChar <= '9' )
-        return aChar - '0';
-    else if ( aChar >= 'a' && aChar <= 'f' )
-        return aChar - 'a' + 10;
-    else if ( aChar >= 'A' && aChar <= 'F' )
-        return aChar - 'A' + 10;
-    else
-        return 16;
-}
-
-
 uno::Sequence< sal_Int8 > MimeConfigurationHelper::GetSequenceClassIDRepresentation( std::u16string_view aClassID )
 {
     size_t nLength = aClassID.size();
@@ -95,10 +82,10 @@ uno::Sequence< sal_Int8 > MimeConfigurationHelper::GetSequenceClassIDRepresentat
         sal_Int32 nSeqInd = 0;
         while( nSeqInd < 16 && nStrPointer + 1U < nLength )
         {
-            sal_uInt8 nDigit1 = GetDigit_Impl( aCharClassID[nStrPointer++] );
-            sal_uInt8 nDigit2 = GetDigit_Impl( aCharClassID[nStrPointer++] );
+            sal_uInt8 nDigit1 = o3tl::convertToHex<sal_uInt8>(aCharClassID[nStrPointer++]);
+            sal_uInt8 nDigit2 = o3tl::convertToHex<sal_uInt8>(aCharClassID[nStrPointer++]);
 
-            if ( nDigit1 > 15 || nDigit2 > 15 )
+            if (nDigit1 > 15 || nDigit2 > 15)
                 break;
 
             pResult[nSeqInd++] = static_cast<sal_Int8>( nDigit1 * 16 + nDigit2 );

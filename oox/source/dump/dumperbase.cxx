@@ -33,6 +33,7 @@
 #include <oox/helper/textinputstream.hxx>
 #include <tools/time.hxx>
 #include <o3tl/string_view.hxx>
+#include <o3tl/numeric.hxx>
 #include <utility>
 
 #ifdef DBG_UTIL
@@ -695,15 +696,10 @@ bool StringHelper::convertFromHex( sal_Int64& ornData, std::u16string_view rData
     for( size_t nPos = 0, nLen = rData.size(); nPos < nLen; ++nPos )
     {
         sal_Unicode cChar = rData[ nPos ];
-        if( ('0' <= cChar) && (cChar <= '9') )
-            cChar -= '0';
-        else if( ('A' <= cChar) && (cChar <= 'F') )
-            cChar -= ('A' - 10);
-        else if( ('a' <= cChar) && (cChar <= 'f') )
-            cChar -= ('a' - 10);
-        else
+        sal_Int32 nValue = o3tl::convertToHex<sal_Int32>(cChar);
+        if (nValue == -1)
             return false;
-        ornData = (ornData << 4) + cChar;
+        ornData = (ornData << 4) + nValue;
     }
     return true;
 }

@@ -14,6 +14,7 @@
 #include <svl/cryptosign.hxx>
 #include <svl/sigstruct.hxx>
 #include <config_crypto.h>
+#include <o3tl/numeric.hxx>
 
 #if USE_CRYPTO_NSS
 #include <systools/curlinit.hxx>
@@ -884,24 +885,6 @@ bool CreateSigningCertificateAttribute(void const * pDerEncoded, int nDerEncoded
 
 namespace svl::crypto {
 
-static int AsHex(char ch)
-{
-    int nRet = 0;
-    if (rtl::isAsciiDigit(static_cast<unsigned char>(ch)))
-        nRet = ch - '0';
-    else
-    {
-        if (ch >= 'a' && ch <= 'f')
-            nRet = ch - 'a';
-        else if (ch >= 'A' && ch <= 'F')
-            nRet = ch - 'A';
-        else
-            return -1;
-        nRet += 10;
-    }
-    return nRet;
-}
-
 std::vector<unsigned char> DecodeHexString(std::string_view rHex)
 {
     std::vector<unsigned char> aRet;
@@ -912,7 +895,7 @@ std::vector<unsigned char> DecodeHexString(std::string_view rHex)
         for (size_t i = 0; i < nHexLen; ++i)
         {
             nByte = nByte << 4;
-            sal_Int8 nParsed = AsHex(rHex[i]);
+            sal_Int8 nParsed = o3tl::convertToHex<int>(rHex[i]);
             if (nParsed == -1)
             {
                 SAL_WARN("svl.crypto", "DecodeHexString: invalid hex value");

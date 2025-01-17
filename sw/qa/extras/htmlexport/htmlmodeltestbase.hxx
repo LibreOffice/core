@@ -12,6 +12,7 @@
 
 #include <comphelper/propertyvalue.hxx>
 #include <filter/msfilter/rtfutil.hxx>
+#include <o3tl/numeric.hxx>
 #include <svtools/parrtf.hxx>
 #include <svtools/rtftoken.h>
 #include <tools/urlobj.hxx>
@@ -81,7 +82,7 @@ bool TestReqIfRtfReader::WriteObjectData(SvStream& rOLE)
         if (ch != 0x0d && ch != 0x0a)
         {
             b = b << 4;
-            sal_Int8 parsed = msfilter::rtfutil::AsHex(ch);
+            sal_Int8 parsed = o3tl::convertToHex<sal_Int8>(ch);
             if (parsed == -1)
                 return false;
             b += parsed;

@@ -15,6 +15,7 @@
 #include <rtl/character.hxx>
 #include <tools/stream.hxx>
 #include <sot/storage.hxx>
+#include <o3tl/numeric.hxx>
 
 namespace
 {
@@ -250,24 +251,6 @@ OString OutStringUpr(std::string_view pToken, std::u16string_view rStr, rtl_Text
            + OutString(rStr, eDestEnc) + "}}}";
 }
 
-int AsHex(char ch)
-{
-    int ret = 0;
-    if (rtl::isAsciiDigit(static_cast<unsigned char>(ch)))
-        ret = ch - '0';
-    else
-    {
-        if (ch >= 'a' && ch <= 'f')
-            ret = ch - 'a';
-        else if (ch >= 'A' && ch <= 'F')
-            ret = ch - 'A';
-        else
-            return -1;
-        ret += 10;
-    }
-    return ret;
-}
-
 OString WriteHex(const sal_uInt8* pData, sal_uInt32 nSize, SvStream* pStream, sal_uInt32 nLimit)
 {
     OStringBuffer aRet;
@@ -313,7 +296,7 @@ bool ExtractOLE2FromObjdata(const OString& rObjdata, SvStream& rOle2)
         if (ch != 0x0d && ch != 0x0a)
         {
             b = b << 4;
-            sal_Int8 parsed = msfilter::rtfutil::AsHex(ch);
+            sal_Int8 parsed = o3tl::convertToHex<sal_Int8>(ch);
             if (parsed == -1)
                 return false;
             b += parsed;

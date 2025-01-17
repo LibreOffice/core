@@ -24,6 +24,7 @@
 
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
+#include <o3tl/numeric.hxx>
 #include <osl/file.h>
 #include <rtl/character.hxx>
 #include <rtl/string.h>
@@ -388,17 +389,12 @@ char const * XmlReader::handleReference(char const * position, char const * end)
         if (*position == 'x') {
             ++position;
             p = position;
-            for (;; ++position) {
-                char c = *position;
-                if (c >= '0' && c <= '9') {
-                    val = 16 * val + (c - '0');
-                } else if (c >= 'A' && c <= 'F') {
-                    val = 16 * val + (c - 'A') + 10;
-                } else if (c >= 'a' && c <= 'f') {
-                    val = 16 * val + (c - 'a') + 10;
-                } else {
+            for (;; ++position)
+            {
+                val = o3tl::convertToHex<sal_uInt32>(*position);
+                if (val >= 16)
                     break;
-                }
+
                 if (!rtl::isUnicodeCodePoint(val)) { // avoid overflow
                     throw css::uno::RuntimeException(
                         "'&#x...' too large in " + fileUrl_ );

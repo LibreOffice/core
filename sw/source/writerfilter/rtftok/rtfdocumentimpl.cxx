@@ -28,6 +28,7 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <filter/msfilter/util.hxx>
 #include <filter/msfilter/rtfutil.hxx>
+#include <o3tl/numeric.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/globname.hxx>
@@ -891,7 +892,7 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
             if (ch != 0x0d && ch != 0x0a && ch != 0x20)
             {
                 b = b << 4;
-                sal_Int8 parsed = msfilter::rtfutil::AsHex(ch);
+                sal_Int8 parsed = o3tl::convertToHex<sal_Int8>(ch);
                 if (parsed == -1)
                     return;
                 b += parsed;
@@ -2640,7 +2641,7 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
                     if (ch != 0x0d && ch != 0x0a)
                     {
                         b = b << 4;
-                        sal_Int8 parsed = msfilter::rtfutil::AsHex(ch);
+                        sal_Int8 parsed = o3tl::convertToHex<sal_Int8>(ch);
                         if (parsed == -1)
                             return RTFError::HEX_INVALID;
                         b += parsed;

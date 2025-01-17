@@ -16,6 +16,7 @@
 #include <algorithm>
 #include <stdio.h>
 #include <cctype>
+#include <o3tl/numeric.hxx>
 
 namespace tools
 {
@@ -25,23 +26,6 @@ private:
     typedef std::array<sal_uInt8, 16> GuidArrayType;
 
     GuidArrayType maGuidArray;
-
-    static sal_uInt8 gethex(char nChar)
-    {
-        if (nChar >= '0' && nChar <= '9')
-            return nChar - '0';
-        else if (nChar >= 'a' && nChar <= 'f')
-            return nChar - 'a' + 10;
-        else if (nChar >= 'A' && nChar <= 'F')
-            return nChar - 'A' + 10;
-        else
-            return 0;
-    }
-
-    static sal_uInt8 covertHexChar(char high, char low)
-    {
-        return (gethex(high) << 4) + gethex(low);
-    }
 
     void parse(std::string_view rString)
     {
@@ -68,26 +52,26 @@ private:
             if (!std::isxdigit(rString[x]))
                 return;
 
-        maGuidArray[0] = covertHexChar(rString[1], rString[2]);
-        maGuidArray[1] = covertHexChar(rString[3], rString[4]);
-        maGuidArray[2] = covertHexChar(rString[5], rString[6]);
-        maGuidArray[3] = covertHexChar(rString[7], rString[8]);
+        maGuidArray[0] = o3tl::convertToHex<sal_uInt8>(rString[1], rString[2]);
+        maGuidArray[1] = o3tl::convertToHex<sal_uInt8>(rString[3], rString[4]);
+        maGuidArray[2] = o3tl::convertToHex<sal_uInt8>(rString[5], rString[6]);
+        maGuidArray[3] = o3tl::convertToHex<sal_uInt8>(rString[7], rString[8]);
 
-        maGuidArray[4] = covertHexChar(rString[10], rString[11]);
-        maGuidArray[5] = covertHexChar(rString[12], rString[13]);
+        maGuidArray[4] = o3tl::convertToHex<sal_uInt8>(rString[10], rString[11]);
+        maGuidArray[5] = o3tl::convertToHex<sal_uInt8>(rString[12], rString[13]);
 
-        maGuidArray[6] = covertHexChar(rString[15], rString[16]);
-        maGuidArray[7] = covertHexChar(rString[17], rString[18]);
+        maGuidArray[6] = o3tl::convertToHex<sal_uInt8>(rString[15], rString[16]);
+        maGuidArray[7] = o3tl::convertToHex<sal_uInt8>(rString[17], rString[18]);
 
-        maGuidArray[8] = covertHexChar(rString[20], rString[21]);
-        maGuidArray[9] = covertHexChar(rString[22], rString[23]);
+        maGuidArray[8] = o3tl::convertToHex<sal_uInt8>(rString[20], rString[21]);
+        maGuidArray[9] = o3tl::convertToHex<sal_uInt8>(rString[22], rString[23]);
 
-        maGuidArray[10] = covertHexChar(rString[25], rString[26]);
-        maGuidArray[11] = covertHexChar(rString[27], rString[28]);
-        maGuidArray[12] = covertHexChar(rString[29], rString[30]);
-        maGuidArray[13] = covertHexChar(rString[31], rString[32]);
-        maGuidArray[14] = covertHexChar(rString[33], rString[34]);
-        maGuidArray[15] = covertHexChar(rString[35], rString[36]);
+        maGuidArray[10] = o3tl::convertToHex<sal_uInt8>(rString[25], rString[26]);
+        maGuidArray[11] = o3tl::convertToHex<sal_uInt8>(rString[27], rString[28]);
+        maGuidArray[12] = o3tl::convertToHex<sal_uInt8>(rString[29], rString[30]);
+        maGuidArray[13] = o3tl::convertToHex<sal_uInt8>(rString[31], rString[32]);
+        maGuidArray[14] = o3tl::convertToHex<sal_uInt8>(rString[33], rString[34]);
+        maGuidArray[15] = o3tl::convertToHex<sal_uInt8>(rString[35], rString[36]);
     }
 
 public:

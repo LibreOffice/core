@@ -33,6 +33,7 @@
 #include <o3tl/string_view.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/unit_conversion.hxx>
+#include <o3tl/numeric.hxx>
 #include <osl/diagnose.h>
 #include <tools/long.hxx>
 #include <tools/time.hxx>
@@ -628,18 +629,6 @@ void Converter::convertMeasurePx( OUStringBuffer& rBuffer, sal_Int32 nValue )
     rBuffer.append( 'x' );
 }
 
-static int lcl_gethex( int nChar )
-{
-    if( nChar >= '0' && nChar <= '9' )
-        return nChar - '0';
-    else if( nChar >= 'a' && nChar <= 'f' )
-        return nChar - 'a' + 10;
-    else if( nChar >= 'A' && nChar <= 'F' )
-        return nChar - 'A' + 10;
-    else
-        return 0;
-}
-
 /** convert string to rgb color */
 template<typename V>
 static bool lcl_convertColor( sal_Int32& rColor, V rValue )
@@ -647,13 +636,13 @@ static bool lcl_convertColor( sal_Int32& rColor, V rValue )
     if( rValue.size() != 7 || rValue[0] != '#' )
         return false;
 
-    rColor = lcl_gethex( rValue[1] ) * 16 + lcl_gethex( rValue[2] );
+    rColor = o3tl::convertToHex<sal_Int32>(rValue[1], rValue[2]);
     rColor <<= 8;
 
-    rColor |= lcl_gethex( rValue[3] ) * 16 + lcl_gethex( rValue[4] );
+    rColor |= o3tl::convertToHex<sal_Int32>(rValue[3], rValue[4]);
     rColor <<= 8;
 
-    rColor |= lcl_gethex( rValue[5] ) * 16 + lcl_gethex( rValue[6] );
+    rColor |= o3tl::convertToHex<sal_Int32>(rValue[5], rValue[6]);
 
     return true;
 }

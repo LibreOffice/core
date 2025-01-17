@@ -9,6 +9,7 @@
 
 #include "rtftokenizer.hxx"
 #include <o3tl/string_view.hxx>
+#include <o3tl/numeric.hxx>
 #include <oox/token/namespaces.hxx>
 #include <tools/stream.hxx>
 #include <svx/dialmgr.hxx>
@@ -2046,7 +2047,7 @@ RTFError RTFTokenizer::resolveParse()
                             || (ch >= 'a' && ch <= 'f') || (ch >= 'A' && ch <= 'F'))
                         {
                             b = b << 4;
-                            sal_Int8 parsed = msfilter::rtfutil::AsHex(ch);
+                            sal_Int8 parsed = o3tl::convertToHex<sal_Int8>(ch);
                             if (parsed == -1)
                                 return RTFError::HEX_INVALID;
                             b += parsed;

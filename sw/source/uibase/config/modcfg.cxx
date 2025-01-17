@@ -20,6 +20,7 @@
 #include <memory>
 #include <comphelper/classids.hxx>
 #include <o3tl/any.hxx>
+#include <o3tl/numeric.hxx>
 #include <tools/fontenum.hxx>
 #include <editeng/svxenum.hxx>
 #include <editeng/editids.hrc>
@@ -155,21 +156,15 @@ OUString SwModuleOptions::ConvertWordDelimiter(std::u16string_view aDelim, bool 
                         for( sal_Int32 n = 0; n < 2 && i < nDelimLen; ++n, ++i )
                         {
                             sal_Unicode nVal = aDelim[i];
-                            if( (nVal >= '0') && ( nVal <= '9') )
-                                nVal -= '0';
-                            else if( (nVal >= 'A') && (nVal <= 'F') )
-                                nVal -= 'A' - 10;
-                            else if( (nVal >= 'a') && (nVal <= 'f') )
-                                nVal -= 'a' - 10;
-                            else
+                            int nConverted = o3tl::convertToHex<int>(nVal);
+                            if (nConverted == -1)
                             {
                                 OSL_FAIL("wrong hex value" );
                                 bValidData = false;
                                 break;
                             }
-
                             nChar <<= 4;
-                            nChar += nVal;
+                            nChar += nConverted;
                         }
                         if( bValidData )
                             sReturn.append(nChar);

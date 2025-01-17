@@ -21,6 +21,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <tools/UnitConversion.hxx>
 #include <osl/diagnose.h>
+#include <o3tl/numeric.hxx>
 #include <com/sun/star/i18n/CharacterClassification.hpp>
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
@@ -1090,26 +1091,14 @@ bool XMLTransformerBase::DecodeStyleName( OUString& rName )
         }
         else if( bWithinHex )
         {
-            sal_Unicode cDigit;
-            if( c >= '0' && c <= '9' )
-            {
-                cDigit = c - '0';
-            }
-            else if( c >= 'a' && c <= 'f' )
-            {
-                cDigit = c - 'a' + 10;
-            }
-            else if( c >= 'A' && c <= 'F' )
-            {
-                cDigit = c - 'A' + 10;
-            }
-            else
+            int nValue = o3tl::convertToHex<int>(c);
+            if (nValue == -1)
             {
                 // error
                 bEncoded = false;
                 break;
             }
-            cEnc = (cEnc << 4) + cDigit;
+            cEnc = (cEnc << 4) + nValue;
         }
         else
         {

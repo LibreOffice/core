@@ -15,6 +15,7 @@
 #include <osl/file.hxx>
 #include <tools/stream.hxx>
 #include <o3tl/string_view.hxx>
+#include <o3tl/numeric.hxx>
 #include <unordered_map>
 
 namespace vcl
@@ -28,18 +29,6 @@ bool lcl_fileExists(OUString const& sFilename)
     return osl::FileBase::E_None == eRC;
 }
 
-int lcl_gethex(char aChar)
-{
-    if (aChar >= '0' && aChar <= '9')
-        return aChar - '0';
-    else if (aChar >= 'a' && aChar <= 'f')
-        return aChar - 'a' + 10;
-    else if (aChar >= 'A' && aChar <= 'F')
-        return aChar - 'A' + 10;
-    else
-        return 0;
-}
-
 bool readColor(OString const& rString, Color& rColor)
 {
     if (rString.getLength() != 7)
@@ -50,9 +39,9 @@ bool readColor(OString const& rString, Color& rColor)
     if (aChar != '#')
         return false;
 
-    rColor.SetRed((lcl_gethex(rString[1]) << 4) | lcl_gethex(rString[2]));
-    rColor.SetGreen((lcl_gethex(rString[3]) << 4) | lcl_gethex(rString[4]));
-    rColor.SetBlue((lcl_gethex(rString[5]) << 4) | lcl_gethex(rString[6]));
+    rColor.SetRed(o3tl::convertToHex<sal_Int32>(rString[1], rString[2]));
+    rColor.SetGreen(o3tl::convertToHex<sal_Int32>(rString[3], rString[4]));
+    rColor.SetBlue(o3tl::convertToHex<sal_Int32>(rString[5], rString[6]));
 
     return true;
 }

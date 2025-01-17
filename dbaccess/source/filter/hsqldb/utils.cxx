@@ -22,34 +22,11 @@
 #include <comphelper/processfactory.hxx>
 #include <connectivity/dbexception.hxx>
 #include <sal/log.hxx>
+#include <o3tl/numeric.hxx>
 
 #include "utils.hxx"
 
 using namespace dbahsql;
-
-namespace
-{
-int getHexValue(sal_Unicode c)
-{
-    if (c >= '0' && c <= '9')
-    {
-        return c - '0';
-    }
-    else if (c >= 'A' && c <= 'F')
-    {
-        return c - 'A' + 10;
-    }
-    else if (c >= 'a' && c <= 'f')
-    {
-        return c - 'a' + 10;
-    }
-    else
-    {
-        return -1;
-    }
-}
-
-} // unnamed namespace
 
 //Convert ascii escaped unicode to utf-8
 OUString utils::convertToUTF8(std::string_view original)
@@ -69,7 +46,7 @@ OUString utils::convertToUTF8(std::string_view original)
             sal_Unicode c = 0;
             for (sal_Int32 j = 0; j != 4; ++j)
             {
-                auto const n = getHexValue(res[i + j]);
+                auto const n = o3tl::convertToHex<int>(res[i + j]);
                 if (n == -1)
                 {
                     escape = false;
