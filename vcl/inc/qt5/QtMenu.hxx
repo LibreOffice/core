@@ -73,6 +73,8 @@ private:
 public:
     QtMenu(bool bMenuBar);
 
+    bool eventFilter(QObject* pObject, QEvent* pEvent) override;
+
     virtual bool VisibleMenuBar() override; // must return TRUE to actually DISPLAY native menu bars
 
     virtual void InsertItem(SalMenuItem* pSalMenuItem, unsigned nPos) override;
@@ -89,6 +91,8 @@ public:
     virtual void ShowItem(unsigned nPos, bool bShow) override;
     virtual void SetItemText(unsigned nPos, SalMenuItem* pSalMenuItem,
                              const OUString& rText) override;
+
+    virtual void SetItemTooltip(SalMenuItem* pSalMenuItem, const OUString& rTooltip) override;
     virtual void SetItemImage(unsigned nPos, SalMenuItem* pSalMenuItem,
                               const Image& rImage) override;
     virtual void SetAccelerator(unsigned nPos, SalMenuItem* pSalMenuItem,

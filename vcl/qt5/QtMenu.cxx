@@ -32,6 +32,7 @@
 #include <QtWidgets/QShortcut>
 #endif
 #include <QtWidgets/QStyle>
+#include <QtWidgets/QToolTip>
 
 #include <o3tl/safeint.hxx>
 #include <vcl/svapp.hxx>
@@ -67,6 +68,37 @@ QtMenu::QtMenu(bool bMenuBar)
     , mpQMenu(nullptr)
     , m_pButtonGroup(nullptr)
 {
+}
+
+bool QtMenu::eventFilter(QObject* pObject, QEvent* pEvent)
+{
+    // manually trigger tooltip if action's tooltip is set,
+    // Qt doesn't do that for menu entries
+    if (pEvent->type() != QEvent::ToolTip)
+        return false;
+
+    QAction* pAction = nullptr;
+    if (QMenu* pMenu = qobject_cast<QMenu*>(pObject))
+        pAction = pMenu->activeAction();
+    else if (QMenuBar* pMenuBar = qobject_cast<QMenuBar*>(pObject))
+        pAction = pMenuBar->activeAction();
+
+    if (!pAction)
+        return false;
+
+    // QAction::toolTip() is by default based on action's text, only display if it differs
+    const QString sToolTip = pAction->toolTip();
+    if (!sToolTip.isEmpty() && sToolTip != QAction(pAction->text()).toolTip())
+    {
+        QHelpEvent* pHelpEvent = static_cast<QHelpEvent*>(pEvent);
+        QToolTip::showText(pHelpEvent->globalPos(), pAction->toolTip());
+    }
+    else
+    {
+        QToolTip::hideText();
+    }
+
+    return false;
 }
 
 bool QtMenu::VisibleMenuBar() { return true; }
@@ -175,6 +207,7 @@ void QtMenu::InsertMenuItem(QtMenuItem* pSalMenuItem, unsigned nPos)
             {
                 // leaf menu
                 QAction* pAction = new QAction(aText, nullptr);
+                pAction->setToolTip(toQString(mpVCLMenu->GetTipHelpText(nId)));
                 pSalMenuItem->mpAction.reset(pAction);
 
                 if ((nPos != MENU_APPEND)
@@ -457,6 +490,7 @@ void QtMenu::SetFrame(const SalFrame* pFrame)
         return;
 
     mpQMenuBar = new QMenuBar();
+    mpQMenuBar->installEventFilter(this);
     pMainWindow->setMenuBar(mpQMenuBar);
 
     // open menu bar on F10, as is common in KF 6 and other toolkits:
@@ -584,6 +618,14 @@ void QtMenu::SetItemImage(unsigned, SalMenuItem* pItem, const Image& rImage)
         return;
 
     pAction->setIcon(QPixmap::fromImage(toQImage(rImage)));
+}
+
+void QtMenu::SetItemTooltip(SalMenuItem* pItem, const OUString& rTooltip)
+{
+    QtMenuItem* pSalMenuItem = static_cast<QtMenuItem*>(pItem);
+
+    if (QAction* pAction = pSalMenuItem->getAction())
+        pAction->setToolTip(toQString(rTooltip));
 }
 
 void QtMenu::SetAccelerator(unsigned, SalMenuItem* pItem, const vcl::KeyCode&,
@@ -818,6 +860,9 @@ void QtMenu::connectHelpSignalSlots(QMenu* pMenu, QtMenuItem* pSalMenuItem)
 
     // connect slot to handle Help key (F1)
     connectHelpShortcut(pMenu);
+
+    // install event filter in order to show tooltip on tooltip event
+    pMenu->installEventFilter(this);
 }
 
 void QtMenu::RemoveMenuBarButton(sal_uInt16 nId) { ImplRemoveMenuBarButton(nId); }

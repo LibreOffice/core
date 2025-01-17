@@ -71,6 +71,7 @@ public:
     virtual void CheckItem( unsigned nPos, bool bCheck ) = 0;
     virtual void EnableItem( unsigned nPos, bool bEnable ) = 0;
     virtual void SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const OUString& rText )= 0;
+    virtual void SetItemTooltip(SalMenuItem* /*pSalMenuItem*/, const OUString& /*rTooltip*/) {};
     virtual void SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage ) = 0;
     virtual void SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const vcl::KeyCode& rKeyCode, const OUString& rKeyName ) = 0;
     virtual void GetSystemMenuData(SystemMenuData& rData);
