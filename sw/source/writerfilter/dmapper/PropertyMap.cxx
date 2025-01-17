@@ -1490,10 +1490,21 @@ void SectionPropertyMap::CreateEvenOddPageStyleCopy(DomainMapper_Impl& rDM_Impl,
 {
     OUString evenOddStyleName = rDM_Impl.GetUnusedPageStyleName();
     rtl::Reference<SwXPageStyle> evenOddStyle = rDM_Impl.GetTextDocument()->createPageStyle();
-    // Unfortunately using setParent() does not work for page styles, so make a deep copy of the page style.
+    rDM_Impl.GetPageStyles()->insertByName(evenOddStyleName,  uno::Any(uno::Reference<style::XStyle>(evenOddStyle)));
+
     rtl::Reference<SwXPageStyle> pageProperties(m_aPageStyle);
     uno::Reference<beans::XPropertySetInfo> pagePropertiesInfo(pageProperties->getPropertySetInfo());
     const uno::Sequence<beans::Property> propertyList(pagePropertiesInfo->getProperties());
+
+    if (rDM_Impl.IsNewDoc())
+    {
+        bool const bEvenAndOdd(rDM_Impl.GetSettingsTable()->GetEvenAndOddHeaders());
+        completeCopyHeaderFooter(pageProperties, evenOddStyle,
+            !rDM_Impl.SeenHeaderFooter(PagePartType::Header, PageType::RIGHT)
+                && (!bEvenAndOdd || !rDM_Impl.SeenHeaderFooter(PagePartType::Header, PageType::LEFT)),
+            !rDM_Impl.SeenHeaderFooter(PagePartType::Footer, PageType::RIGHT)
+                && (!bEvenAndOdd || !rDM_Impl.SeenHeaderFooter(PagePartType::Footer, PageType::LEFT)));
+    }
 
     // Ignore write-only properties.
     static constexpr frozen::unordered_set<std::u16string_view, 14> staticDenylist = {
@@ -1503,6 +1514,7 @@ void SectionPropertyMap::CreateEvenOddPageStyleCopy(DomainMapper_Impl& rDM_Impl,
         u"HeaderText", u"HeaderTextLeft", u"HeaderTextFirst",
         u"FooterText", u"FooterTextLeft", u"FooterTextFirst" };
 
+    // Unfortunately page styles can't inherit from a parent, so make a deep copy of the page style.
     bool isMirrorMargins = PageBreakType::Even == eBreakType && rDM_Impl.GetSettingsTable()->GetMirrorMarginSettings();
     for (const auto& rProperty : propertyList)
     {
@@ -1518,25 +1530,20 @@ void SectionPropertyMap::CreateEvenOddPageStyleCopy(DomainMapper_Impl& rDM_Impl,
                     else if (rProperty.Name == u"RightMargin"_ustr)
                         sSetName = u"LeftMargin"_ustr;
                 }
-                evenOddStyle->setPropertyValue(
-                    sSetName,
-                    pageProperties->getPropertyValue(rProperty.Name));
+                try
+                {
+                    evenOddStyle->setPropertyValue(
+                        sSetName,
+                        pageProperties->getPropertyValue(rProperty.Name));
+                }
+                catch (uno::Exception&)
+                {
+                    DBG_UNHANDLED_EXCEPTION("writerfilter", "failed to copy page style property");
+                }
             }
         }
     }
     evenOddStyle->setPropertyValue(u"FollowStyle"_ustr, uno::Any(m_sPageStyleName));
-
-    rDM_Impl.GetPageStyles()->insertByName(evenOddStyleName, uno::Any(uno::Reference<style::XStyle>(evenOddStyle)));
-
-    if (rDM_Impl.IsNewDoc())
-    {
-        bool const bEvenAndOdd(rDM_Impl.GetSettingsTable()->GetEvenAndOddHeaders());
-        completeCopyHeaderFooter(pageProperties, evenOddStyle,
-            !rDM_Impl.SeenHeaderFooter(PagePartType::Header, PageType::RIGHT)
-                && (!bEvenAndOdd || !rDM_Impl.SeenHeaderFooter(PagePartType::Header, PageType::LEFT)),
-            !rDM_Impl.SeenHeaderFooter(PagePartType::Footer, PageType::RIGHT)
-                && (!bEvenAndOdd || !rDM_Impl.SeenHeaderFooter(PagePartType::Footer, PageType::LEFT)));
-    }
 
     if (eBreakType == PageBreakType::Even)
         evenOddStyle->setPropertyValue(getPropertyName(PROP_PAGE_STYLE_LAYOUT), uno::Any(style::PageStyleLayout_LEFT));
