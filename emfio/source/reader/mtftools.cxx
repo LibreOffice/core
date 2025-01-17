@@ -1634,6 +1634,25 @@ namespace emfio
         }
     }
 
+    static bool AllowDim(tools::Long nDim)
+    {
+        static bool bFuzzing = comphelper::IsFuzzing();
+        if (bFuzzing)
+        {
+            if (nDim > 0x20000000 || nDim < -0x20000000)
+            {
+                SAL_WARN("vcl", "skipping huge dimension: " << nDim);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    static bool AllowPoint(const Point& rPoint)
+    {
+        return AllowDim(rPoint.X()) && AllowDim(rPoint.Y());
+    }
+
     void MtfTools::DrawPolyBezier( tools::Polygon rPolygon, bool bTo, bool bRecordPath )
     {
         sal_uInt16 nPoints = rPolygon.GetSize();
@@ -1861,8 +1880,11 @@ namespace emfio
                 for (sal_Int32 i = 0; i < rText.getLength(); ++i)
                 {
                     Point aCharDisplacement( i ? (*pDXArry)[i-1] : 0, i ? pDYArry[i-1] : 0 );
-                    Point().RotateAround(aCharDisplacement, maFont.GetOrientation());
-                    mpGDIMetaFile->AddAction( new MetaTextArrayAction( rPosition + aCharDisplacement, OUString( rText[i] ), KernArraySpan(), {}, 0, 1 ) );
+                    if (AllowPoint(aCharDisplacement))
+                    {
+                        Point().RotateAround(aCharDisplacement, maFont.GetOrientation());
+                        mpGDIMetaFile->AddAction( new MetaTextArrayAction( rPosition + aCharDisplacement, OUString( rText[i] ), KernArraySpan(), {}, 0, 1 ) );
+                    }
                 }
             }
             else
