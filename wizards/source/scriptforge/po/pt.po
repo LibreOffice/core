@@ -131,14 +131,6 @@ msgstr "        « %1 » deve conter um dos seguintes valores : %2"
 
 #. SF_Utils._Validate error message
 #. %1: Wrong argument name
-#. %2: A regular expression
-#, kde-format
-msgctxt "VALIDATEREGEX"
-msgid "        « %1 » must match next regular expression : %2"
-msgstr "        « %1 » deve corresponder à seguinte expressão regular : %2"
-
-#. SF_Utils._Validate error message
-#. %1: Wrong argument name
 #. %2: The name of a Basic class
 #, kde-format
 msgctxt "VALIDATECLASS"
