@@ -1049,6 +1049,7 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 		Pyuno/mailmerge \
 	) \
 	sfx2_classification \
+	svx_document_themes \
     $(if $(filter OPENCL,$(BUILD_TYPE)),sc_opencl_runtimetest) \
 	$(if $(ENABLE_HTMLHELP),\
 		helpcontent2_html_dynamic \

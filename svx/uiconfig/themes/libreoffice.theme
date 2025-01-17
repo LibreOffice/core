@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<theme name="LibreOffice">
+    <theme-colors name="LibreOffice">
+        <color name="dark1" color="#000000" />
+        <color name="light1" color="#ffffff" />
+        <color name="dark2" color="#000000" />
+        <color name="light2" color="#ffffff" />
+        <color name="accent1" color="#18a303" />
+        <color name="accent2" color="#0369a3" />
+        <color name="accent3" color="#a33e03" />
+        <color name="accent4" color="#8e03a3" />
+        <color name="accent5" color="#c99c00" />
+        <color name="accent6" color="#c9211e" />
+        <color name="hyperlink" color="#0000ee" />
+        <color name="followed-hyperlink" color="#551a8b" />
+    </theme-colors>
+</theme>

@@ -22,6 +22,7 @@ $(eval $(call gb_Module_Module,svx))
 $(eval $(call gb_Module_add_targets,svx,\
     Library_svx \
     Library_svxcore \
+    Package_document_themes \
 ))
 
 ifeq ($(gb_Side),host)
