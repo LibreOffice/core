@@ -199,6 +199,37 @@ diff -ur skia.org/tools/window/MetalWindowContext.mm skia/tools/window/MetalWind
 +}
 +
  }   //namespace skwindow::internal
+diff -ur skia.org/tools/window/unix/GaneshVulkanWindowContext_unix.cpp.orig skia/tools/window/unix/GaneshVulkanWindowContext_unix.cpp
+--- skia.org/tools/window/unix/GaneshVulkanWindowContext_unix.cpp.orig	2025-01-17 09:32:18.346355282 -0700
++++ skia/tools/window/unix/GaneshVulkanWindowContext_unix.cpp	2025-01-17 09:34:12.368151987 -0700
+@@ -23,7 +23,7 @@
+         return nullptr;
+     }
+
+-    auto createVkSurface = [&info, instProc](VkInstance instance) -> VkSurfaceKHR {
++    internal::VulkanWindowContext::CreateVkSurfaceFn createVkSurface = [&info, instProc](VkInstance instance) -> VkSurfaceKHR {
+         static PFN_vkCreateXcbSurfaceKHR createXcbSurfaceKHR = nullptr;
+         if (!createXcbSurfaceKHR) {
+             createXcbSurfaceKHR =
+@@ -47,6 +47,9 @@
+
+         return surface;
+     };
++    // Allow creating just the shared context, without an associated window.
++    if(info.fWindow == 0)
++        createVkSurface = nullptr;
+
+     auto canPresent = [&info, instProc](VkInstance instance,
+                                         VkPhysicalDevice physDev,
+@@ -68,7 +71,7 @@
+     };
+     std::unique_ptr<WindowContext> ctx(new internal::VulkanWindowContext(
+             displayParams, createVkSurface, canPresent, instProc));
+-    if (!ctx->isValid()) {
++    if (!ctx->isValid() && createVkSurface != nullptr) {
+         return nullptr;
+     }
+     return ctx;
 diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanWindowContext.cpp
 --- skia.org/tools/window/VulkanWindowContext.cpp	2024-10-10 14:11:32.362258108 +0200
 +++ skia/tools/window/VulkanWindowContext.cpp	2024-10-10 14:15:27.179546520 +0200
