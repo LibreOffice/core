@@ -157,6 +157,7 @@
 #include <basegfx/utils/zoomtools.hxx>
 
 #include <ndtxt.hxx>
+#include <grfatr.hxx>
 
 #include <svx/srchdlg.hxx>
 #include <o3tl/string_view.hxx>
@@ -330,19 +331,13 @@ ErrCode SwView::InsertGraphic( const OUString &rPath, const OUString &rFilter,
 
     if( ERRCODE_NONE == aResult )
     {
+        Degree10 aRotation;
         GraphicNativeMetadata aMetadata;
         if ( aMetadata.read(aGraphic) )
-        {
-            const Degree10 aRotation = aMetadata.getRotation();
-            if (aRotation)
-            {
-                GraphicNativeTransform aTransform( aGraphic );
-                aTransform.rotate( aRotation );
-            }
-        }
+            aRotation = aMetadata.getRotation();
 
-        SwFlyFrameAttrMgr aFrameManager( true, GetWrtShellPtr(), Frmmgr_Type::GRF, nullptr );
         SwWrtShell& rShell = GetWrtShell();
+        SwFlyFrameAttrMgr aFrameManager( true, &rShell, Frmmgr_Type::GRF, nullptr );
 
         // #i123922# determine if we really want to insert or replace the graphic at a selected object
         const bool bReplaceMode(rShell.HasSelection() && SelectionType::Frame == rShell.GetSelectionType());
@@ -374,6 +369,14 @@ ErrCode SwView::InsertGraphic( const OUString &rPath, const OUString &rFilter,
             else
             {
                 rShell.InsertGraphic( OUString(), OUString(), aGraphic, &aFrameManager );
+            }
+
+            if (aRotation)
+            {
+                SfxItemSetFixed<RES_GRFATR_ROTATION, RES_GRFATR_ROTATION> aSet( rShell.GetAttrPool() );
+                rShell.GetCurAttr( aSet );
+                const SwRotationGrf& rRotation = aSet.Get(RES_GRFATR_ROTATION);
+                aFrameManager.SetRotation(rRotation.GetValue(), aRotation, rRotation.GetUnrotatedSize());
             }
 
             // it is too late after "EndAction" because the Shell can already be destroyed.
