@@ -10,6 +10,7 @@
 
 #pragma once
 
+#include <o3tl/concepts.hxx>
 #include <basegfx/utils/common.hxx>
 #include <basegfx/numeric/ftools.hxx>
 
@@ -68,26 +69,19 @@ public:
 
     // comparators with tolerance
 
-    template <typename T = TYPE, std::enable_if_t<std::is_integral_v<T>, int> = 0>
-    bool equal(const Tuple2D<TYPE>& rTup) const
+    template <o3tl::integral T = TYPE> bool equal(const Tuple2D<TYPE>& rTup) const
     {
         return mnX == rTup.mnX && mnY == rTup.mnY;
     }
 
-    template <typename T = TYPE, std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
-    bool equal(const Tuple2D<TYPE>& rTup) const
+    template <o3tl::floating_point T = TYPE> bool equal(const Tuple2D<TYPE>& rTup) const
     {
         return this == &rTup || (fTools::equal(mnX, rTup.mnX) && fTools::equal(mnY, rTup.mnY));
     }
 
-    template <typename T = TYPE, std::enable_if_t<std::is_integral_v<T>, int> = 0>
-    bool equalZero() const
-    {
-        return mnX == 0 && mnY == 0;
-    }
+    template <o3tl::integral T = TYPE> bool equalZero() const { return mnX == 0 && mnY == 0; }
 
-    template <typename T = TYPE, std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
-    bool equalZero() const
+    template <o3tl::floating_point T = TYPE> bool equalZero() const
     {
         return fTools::equalZero(mnX) && fTools::equalZero(mnY);
     }

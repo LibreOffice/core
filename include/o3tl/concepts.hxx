@@ -23,6 +23,7 @@ namespace o3tl
 using std::integral;
 using std::signed_integral;
 using std::unsigned_integral;
+using std::floating_point;
 }
 
 #else
@@ -38,6 +39,8 @@ template <typename T> concept integral = std::is_integral_v<T>;
 template <typename T> concept signed_integral = integral<T>&& std::is_signed_v<T>;
 
 template <typename T> concept unsigned_integral = integral<T> && !signed_integral<T>;
+
+template <typename T> concept floating_point = std::is_floating_point_v<T>;
 }
 
 #endif
