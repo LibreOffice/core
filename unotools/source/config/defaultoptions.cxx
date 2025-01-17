@@ -93,6 +93,8 @@ OUString GetDefaultPath( SvtPathOptions::Paths nId )
             aRet = aPathOpt.SubstituteVariable(officecfg::Office::Common::Path::Default::Work::get()); break;
         case SvtPathOptions::Paths::Classification:
             aRet = aPathOpt.SubstituteVariable(officecfg::Office::Common::Path::Default::Classification::get()); break;
+        case SvtPathOptions::Paths::DocumentTheme:
+            aRet = aPathOpt.SubstituteVariable(officecfg::Office::Common::Path::Default::DocumentTheme::get()); break;
         default:
             assert(false);
     }

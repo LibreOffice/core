@@ -61,6 +61,7 @@ public:
         Storage,
         Temp,
         Template,
+        DocumentTheme,
         UserConfig,
         Work,
         Classification,
@@ -101,6 +102,7 @@ public:
     const OUString& GetFingerprintPath() const;
     const OUString& GetNumbertextPath() const;
     const OUString& GetClassificationPath() const;
+    const OUString& GetDocumentThemePath() const;
 
     // set the paths
     void            SetAutoTextPath( const OUString& rPath );

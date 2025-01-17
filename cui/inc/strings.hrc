@@ -29,6 +29,7 @@
 #define RID_CUISTR_KEY_GALLERY_DIR                  NC_("RID_SVXSTR_KEY_GALLERY_DIR", "Gallery")
 #define RID_CUISTR_KEY_TEMP_PATH                    NC_("RID_SVXSTR_KEY_TEMP_PATH", "Temporary files")
 #define RID_CUISTR_KEY_CLASSIFICATION_PATH          NC_("RID_SVXSTR_KEY_CLASSIFICATION_PATH", "Classification")
+#define RID_CUISTR_KEY_DOCUMENT_THEME_PATH          NC_("RID_CUISTR_KEY_DOCUMENT_THEME_PATH", "Document Theme")
 #define RID_CUISTR_KEY_AUTOCORRECT_DIR              NC_("RID_SVXSTR_KEY_AUTOCORRECT_DIR", "AutoCorrect")
 #define RID_CUISTR_KEY_LINGUISTIC_DIR               NC_("RID_SVXSTR_KEY_LINGUISTIC_DIR", "Writing aids")
 /* %n will be replaced at runtime by a number starting with 1 and increasing as necessary */

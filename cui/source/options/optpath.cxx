@@ -109,6 +109,7 @@ constexpr Handle2CfgNameMapping_Impl Hdl2CfgMap_Impl[]
     { SvtPathOptions::Paths::Work,        u"Work"_ustr },
     { SvtPathOptions::Paths::Dictionary,     u"Dictionary"_ustr },
     { SvtPathOptions::Paths::Classification, u"Classification"_ustr },
+    { SvtPathOptions::Paths::DocumentTheme, u"DocumentTheme"_ustr },
 #if OSL_DEBUG_LEVEL > 1
     { SvtPathOptions::Paths::Linguistic,     u"Linguistic"_ustr },
 #endif
@@ -280,6 +281,9 @@ void SvxPathTabPage::Reset( const SfxItemSet* )
                 break;
             case SvtPathOptions::Paths::Classification:
                 pId = RID_CUISTR_KEY_CLASSIFICATION_PATH;
+                break;
+            case SvtPathOptions::Paths::DocumentTheme:
+                pId = RID_CUISTR_KEY_DOCUMENT_THEME_PATH;
                 break;
 #if OSL_DEBUG_LEVEL > 1
             case SvtPathOptions::Paths::Linguistic:

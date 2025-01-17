@@ -1583,6 +1583,12 @@
           </info>
           <value>$(insturl)/@LIBO_SHARE_FOLDER@/config/symbol</value>
         </prop>
+        <prop oor:name="DocumentTheme" oor:type="xs:string" oor:nillable="false">
+          <info>
+            <desc>Specifies the default directory where the document themes files.</desc>
+          </info>
+          <value>$(insturl)/@LIBO_SHARE_FOLDER@/themes</value>
+        </prop>
         <prop oor:name="Config" oor:type="xs:string" oor:nillable="false">
           <info>
             <desc>Specifies the default directory where the configuration files
@@ -6315,7 +6321,7 @@
          </info>
          <value>true</value>
        </prop>
-	   <prop oor:name="TextSpaces" oor:type="xs:boolean" oor:nillable="false">
+       <prop oor:name="TextSpaces" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>
             Enables accessibility check of extra spaces for formattings, inside the document
@@ -6325,7 +6331,7 @@
          </info>
          <value>true</value>
        </prop>
-	   <prop oor:name="TextTabs" oor:type="xs:boolean" oor:nillable="false">
+       <prop oor:name="TextTabs" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>
             Enables accessibility check of extra tabs for formattings, inside the document
@@ -6335,7 +6341,7 @@
          </info>
          <value>true</value>
        </prop>
-	   <prop oor:name="TextEmptyNums" oor:type="xs:boolean" oor:nillable="false">
+       <prop oor:name="TextEmptyNums" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>
             Enables accessibility check of empty new line between numberings, inside the document

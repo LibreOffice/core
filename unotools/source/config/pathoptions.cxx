@@ -109,6 +109,7 @@ class SvtPathOptions_Impl
         const OUString& GetFingerprintPath() { return GetPath( SvtPathOptions::Paths::Fingerprint ); }
         const OUString& GetNumbertextPath() { return GetPath( SvtPathOptions::Paths::NumberText ); }
         const OUString& GetClassificationPath() { return GetPath( SvtPathOptions::Paths::Classification ); }
+        const OUString& GetDocumentThemePath() { return GetPath( SvtPathOptions::Paths::DocumentTheme ); }
 
         // set the paths
         void            SetPath( SvtPathOptions::Paths, const OUString& rNewPath );
@@ -170,7 +171,8 @@ constexpr PropertyStruct aPropNames[] =
     { u"UIConfig"_ustr,       SvtPathOptions::Paths::UIConfig       },
     { u"Fingerprint"_ustr,    SvtPathOptions::Paths::Fingerprint    },
     { u"Numbertext"_ustr,     SvtPathOptions::Paths::NumberText     },
-    { u"Classification"_ustr, SvtPathOptions::Paths::Classification }
+    { u"Classification"_ustr, SvtPathOptions::Paths::Classification },
+    { u"DocumentTheme"_ustr, SvtPathOptions::Paths::DocumentTheme },
 };
 
 // Supported variables by the old SvtPathOptions implementation
@@ -568,6 +570,11 @@ const OUString& SvtPathOptions::GetClassificationPath() const
     return pImpl->GetClassificationPath();
 }
 
+const OUString& SvtPathOptions::GetDocumentThemePath() const
+{
+    return pImpl->GetDocumentThemePath();
+}
+
 void SvtPathOptions::SetAutoTextPath( const OUString& rPath )
 {
     pImpl->SetAutoTextPath( rPath );
@@ -675,6 +682,7 @@ bool SvtPathOptions::SearchFile( OUString& rIniFile, SvtPathOptions::Paths ePath
                 case SvtPathOptions::Paths::Fingerprint:  aPath = GetFingerprintPath();   break;
                 case SvtPathOptions::Paths::NumberText:   aPath = GetNumbertextPath();    break;
                 case SvtPathOptions::Paths::Classification: aPath = GetClassificationPath(); break;
+                case SvtPathOptions::Paths::DocumentTheme: aPath = GetDocumentThemePath(); break;
                 // coverity[dead_error_begin] - following conditions exist to avoid compiler warning
                 case SvtPathOptions::Paths::UserConfig:
                 case SvtPathOptions::Paths::LAST:

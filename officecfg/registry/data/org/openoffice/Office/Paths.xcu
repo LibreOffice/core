@@ -217,6 +217,15 @@
         <value>$(work)</value>
       </prop>
     </node>
+    <node oor:name="DocumentTheme" oor:op="fuse" oor:mandatory="true">
+      <node oor:name="InternalPaths">
+        <node oor:name="$(insturl)/@LIBO_SHARE_FOLDER@/themes" oor:op="fuse"/>
+      </node>
+      <prop oor:name="UserPaths" oor:finalized="true"/>
+      <prop oor:name="WritePath">
+        <value>$(userurl)/themes</value>
+      </prop>
+    </node>
     <node oor:name="Classification" oor:op="fuse" oor:mandatory="true">
       <prop oor:name="IsSinglePath" oor:finalized="true">
         <value>true</value>
