@@ -3206,7 +3206,7 @@ void WinSalFrame::SetTaskBarProgress(int nCurrentProgress)
 {
     if (!m_pTaskbarList3)
     {
-        HRESULT hr = CoCreateInstance(CLSID_TaskbarList, NULL, CLSCTX_INPROC_SERVER, IID_ITaskbarList3, (void **)&m_pTaskbarList3);
+        HRESULT hr = CoCreateInstance(CLSID_TaskbarList, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&m_pTaskbarList3));
         if (!SUCCEEDED(hr) || !m_pTaskbarList3)
             return;
     }
@@ -3218,7 +3218,7 @@ void WinSalFrame::SetTaskBarState(VclTaskBarStates eTaskBarState)
 {
     if (!m_pTaskbarList3)
     {
-        HRESULT hr = CoCreateInstance(CLSID_TaskbarList, NULL, CLSCTX_INPROC_SERVER, IID_ITaskbarList3, (void **)&m_pTaskbarList3);
+        HRESULT hr = CoCreateInstance(CLSID_TaskbarList, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&m_pTaskbarList3));
         if (!SUCCEEDED(hr) || !m_pTaskbarList3)
             return;
     }
