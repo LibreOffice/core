@@ -1137,10 +1137,12 @@ void Menu::SetTipHelpText( sal_uInt16 nItemId, const OUString& rStr )
     MenuItemData* pData = pItemList->GetData( nItemId );
 
     if ( pData )
+    {
         pData->aTipHelpText = rStr;
 
-    if (ImplGetSalMenu() && pData->pSalMenuItem)
-        ImplGetSalMenu()->SetItemTooltip(pData->pSalMenuItem.get(), rStr);
+        if (ImplGetSalMenu() && pData->pSalMenuItem)
+            ImplGetSalMenu()->SetItemTooltip(pData->pSalMenuItem.get(), rStr);
+    }
 }
 
 OUString Menu::GetTipHelpText( sal_uInt16 nItemId ) const
