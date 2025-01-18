@@ -32,6 +32,7 @@
 #include <objidl.h>
 #include <osl/diagnose.h>
 #include <osl/thread.h>
+#include <systools/win32/comtools.hxx>
 #include <systools/win32/extended_max_path.hxx>
 #include <systools/win32/qswin32.h>
 #include <comphelper/sequenceashashmap.hxx>
@@ -701,36 +702,22 @@ static HRESULT WINAPI SHCoCreateInstance( LPVOID lpszReserved, REFCLSID clsid, L
 static bool CreateShortcut( const OUString& rAbsObject, const OUString& rAbsObjectPath,
     const OUString& rAbsShortcut, const OUString& rDescription, const OUString& rParameter )
 {
-    HRESULT hres;
-    IShellLinkW* psl;
-    CLSID clsid_ShellLink = CLSID_ShellLink;
-    CLSID clsid_IShellLink = IID_IShellLinkW;
-
-    hres = CoCreateInstance( clsid_ShellLink, nullptr, CLSCTX_INPROC_SERVER,
-                             clsid_IShellLink, reinterpret_cast<void**>(&psl) );
-    if( FAILED(hres) )
-        hres = SHCoCreateInstance( nullptr, clsid_ShellLink, nullptr, clsid_IShellLink, reinterpret_cast<void**>(&psl) );
-
-    if( SUCCEEDED(hres) )
+    try
     {
-        IPersistFile* ppf;
+        sal::systools::COMReference<IShellLinkW> psl(CLSID_ShellLink, nullptr, CLSCTX_INPROC_SERVER);
         psl->SetPath( o3tl::toW(rAbsObject.getStr()) );
         psl->SetWorkingDirectory( o3tl::toW(rAbsObjectPath.getStr()) );
         psl->SetDescription( o3tl::toW(rDescription.getStr()) );
-        if( rParameter.getLength() )
+        if (!rParameter.isEmpty())
             psl->SetArguments( o3tl::toW(rParameter.getStr()) );
 
-        CLSID clsid_IPersistFile = IID_IPersistFile;
-        hres = psl->QueryInterface( clsid_IPersistFile, reinterpret_cast<void**>(&ppf) );
-
-        if( SUCCEEDED(hres) )
-        {
-            hres = ppf->Save( o3tl::toW(rAbsShortcut.getStr()), TRUE );
-            ppf->Release();
-        } else return false;
-        psl->Release();
-    } else return false;
-    return true;
+        sal::systools::COMReference<IPersistFile> ppf(psl, sal::systools::COM_QUERY_THROW);
+        return SUCCEEDED(ppf->Save(o3tl::toW(rAbsShortcut.getStr()), TRUE));
+    }
+    catch (const sal::systools::ComError&)
+    {
+        return false;
+    }
 }
 
 
