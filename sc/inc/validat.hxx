@@ -160,7 +160,7 @@ public:
 
                     // TRUE -> break
     void DoError(weld::Window* pParent, const OUString& rInput, const ScAddress& rPos,
-                 std::function<void(bool forget)> callback) const;
+                 const std::function<void(bool forget)>& callback) const;
     void DoCalcError( ScFormulaCell* pCell ) const;
 
     bool IsEmpty() const;

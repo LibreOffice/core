@@ -374,7 +374,7 @@ IMPL_STATIC_LINK_NOARG(ScValidationData, InstallLOKNotifierHdl, void*, vcl::ILib
     // true -> abort
 
 void ScValidationData::DoError(weld::Window* pParent, const OUString& rInput, const ScAddress& rPos,
-                               std::function<void(bool forget)> callback) const
+                               const std::function<void(bool forget)>& callback) const
 {
     if ( eErrorStyle == SC_VALERR_MACRO ) {
         DoMacro(rPos, rInput, nullptr, pParent);
