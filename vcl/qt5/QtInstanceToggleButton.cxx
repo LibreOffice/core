@@ -15,6 +15,8 @@ QtInstanceToggleButton::QtInstanceToggleButton(QAbstractButton* pButton)
 {
     assert(pButton);
     pButton->setCheckable(true);
+
+    connect(&getButton(), &QAbstractButton::toggled, this, &QtInstanceToggleButton::signalToggled);
 }
 
 void QtInstanceToggleButton::set_active(bool bActive)
@@ -45,5 +47,11 @@ bool QtInstanceToggleButton::get_inconsistent() const
     assert(false && "Not implemented yet");
     return false;
 };
+
+void QtInstanceToggleButton::signalToggled()
+{
+    SolarMutexGuard g;
+    signal_toggled();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -25,6 +25,9 @@ public:
 
     virtual void set_inconsistent(bool bInconsistent) override;
     virtual bool get_inconsistent() const override;
+
+private Q_SLOTS:
+    void signalToggled();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
