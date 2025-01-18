@@ -1526,10 +1526,10 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
             {
                 // #i35443#
                 auto pChangeHint = static_cast<const sw::AttrSetChangeHint*>(&rHint);
-                auto pChgSet = pChangeHint->m_pNew->GetChgSet();
-                if(pChgSet->GetItemState(RES_SURROUND, false) == SfxItemState::SET ||
+                auto pChgSet = pChangeHint->m_pNew ? pChangeHint->m_pNew->GetChgSet() : nullptr;
+                if(pChgSet && (pChgSet->GetItemState(RES_SURROUND, false) == SfxItemState::SET ||
                         pChgSet->GetItemState(RES_OPAQUE, false) == SfxItemState::SET ||
-                        pChgSet->GetItemState(RES_WRAP_INFLUENCE_ON_OBJPOS, false) == SfxItemState::SET)
+                        pChgSet->GetItemState(RES_WRAP_INFLUENCE_ON_OBJPOS, false) == SfxItemState::SET))
                     bUpdateSortedObjsList = true;
             }
             lcl_NotifyBackgroundOfObj(*this, *GetMaster(), nullptr);

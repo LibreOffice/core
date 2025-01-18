@@ -2291,7 +2291,7 @@ void SwRefPageGetFieldType::SwClientNotify(const SwModify&, const SfxHint& rHint
 
     // update all GetReference fields
     if( (pLegacy && !pLegacy->m_pNew && !pLegacy->m_pOld && HasWriterListeners())
-        || (!pChangeHint->m_pNew && !pChangeHint->m_pOld && HasWriterListeners()))
+        || (pChangeHint && !pChangeHint->m_pNew && !pChangeHint->m_pOld && HasWriterListeners()))
     {
         SwRootFrame const* pLayout(nullptr);
         SwRootFrame const* pLayoutRLHidden(nullptr);
