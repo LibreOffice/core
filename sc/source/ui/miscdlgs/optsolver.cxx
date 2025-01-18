@@ -1355,10 +1355,13 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
             }
 
             // Disable grid lines in the sensitivity report
-            ScViewData& aData = ScTabViewShell::GetActiveViewShell()->GetViewData();
-            aData.SetTabNo(nReportTab);
-            aData.SetShowGrid(false);
-            aData.SetTabNo(mnCurTab);
+            if (ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell())
+            {
+                ScViewData& rData = pViewSh->GetViewData();
+                rData.SetTabNo(nReportTab);
+                rData.SetShowGrid(false);
+                rData.SetTabNo(mnCurTab);
+            }
         }
     }
 
