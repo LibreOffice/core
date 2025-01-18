@@ -368,7 +368,7 @@ bool SwDoc::SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry )
                     nWordEnd = nEnd;
             }
         }
-        pTNd->GoNext( pPos, SwCursorSkipMode::Chars );
+        pTNd->GoNext( *pPos, SwCursorSkipMode::Chars );
         nStart = pPos->GetContentIndex();
     }
 
