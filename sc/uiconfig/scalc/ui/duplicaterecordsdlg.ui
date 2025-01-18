@@ -302,7 +302,7 @@
                 <property name="can-focus">False</property>
                 <property name="halign">start</property>
                 <property name="valign">start</property>
-                <property name="label" translatable="no" context="duplicaterecordsdialog|compareby">Compare by:</property>
+                <property name="label" translatable="yes" context="duplicaterecordsdialog|compareby">Compare by:</property>
                 <property name="mnemonic-widget">allcheckbtn</property>
               </object>
               <packing>
