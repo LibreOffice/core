@@ -28,14 +28,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <vcl/roadmapwizard.hxx>
 
-#define OD_DIALOG_WIDTH 330
-#define DIALOG_HEIGHT   210
-#define BUTTON_WIDTH    50
-#define BUTTON_HEIGHT   14
-
-#define PAGE_POS_X      91
-#define PAGE_WIDTH      OD_DIALOG_WIDTH - PAGE_POS_X
-
 #define ITEM_ID_INTRODUCTION            0
 #define ITEM_ID_SLIDES                  1
 #define ITEM_ID_GRAPHIC_OPTIMIZATION    2
