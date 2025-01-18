@@ -933,7 +933,11 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
 
     //get the composed document
     SwView* pTargetView = xConfigItem->GetTargetView();
-    SAL_WARN_IF(!pTargetView, "sw.ui", "No TargetView in SwMailMergeConfigItem");
+    if (!pTargetView)
+    {
+        SAL_WARN("sw.ui", "No TargetView in SwMailMergeConfigItem");
+        return;
+    }
 
     if (xConfigItem->GetMailServer().isEmpty() ||
             !SwMailMergeHelper::CheckMailAddress(xConfigItem->GetMailAddress()) )
@@ -945,8 +949,7 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
         sal_uInt16 nRet = xQueryBox->run();
         if (RET_YES == nRet )
         {
-            SwView* pConfigView = pTargetView ? pTargetView : pView;
-            SfxAllItemSet aSet(pConfigView->GetPool());
+            SfxAllItemSet aSet(pTargetView->GetPool());
             SwMailConfigDlg aDlg(m_xDialog.get(), aSet);
             nRet = aDlg.run();
         }
