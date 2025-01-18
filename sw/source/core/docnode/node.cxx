@@ -1286,26 +1286,26 @@ SwFormatColl *SwContentNode::ChgFormatColl( SwFormatColl *pNewColl )
     return pOldColl;
 }
 
-bool SwContentNode::GoNext(SwPosition* pPos, SwCursorSkipMode nMode ) const
+bool SwContentNode::GoNext(SwPosition& rPos, SwCursorSkipMode nMode ) const
 {
-    if (!GoNext(&pPos->nContent, nMode))
+    if (!GoNext(rPos.nContent, nMode))
         return false;
-    if (pPos->nContent.GetContentNode() != &pPos->GetNode())
-        pPos->nNode.Assign(*pPos->nContent.GetContentNode());
+    if (rPos.nContent.GetContentNode() != &rPos.GetNode())
+        rPos.nNode.Assign(*rPos.nContent.GetContentNode());
     return true;
 }
 
-bool SwContentNode::GoNext(SwContentIndex * pIdx, SwCursorSkipMode nMode ) const
+bool SwContentNode::GoNext(SwContentIndex& rIdx, SwCursorSkipMode nMode ) const
 {
     bool bRet = true;
-    if( pIdx->GetIndex() < Len() )
+    if( rIdx.GetIndex() < Len() )
     {
         if( !IsTextNode() )
-            ++(*pIdx);
+            ++rIdx;
         else
         {
             const SwTextNode& rTNd = *GetTextNode();
-            sal_Int32 nPos = pIdx->GetIndex();
+            sal_Int32 nPos = rIdx.GetIndex();
             assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
             sal_Int32 nDone = 0;
             sal_uInt16 nItrMode = ( SwCursorSkipMode::Cells & nMode ) ?
@@ -1326,7 +1326,7 @@ bool SwContentNode::GoNext(SwContentIndex * pIdx, SwCursorSkipMode nMode ) const
             }
 
             if( 1 == nDone )
-                *pIdx = nPos;
+                rIdx = nPos;
             else
                 bRet = false;
         }
@@ -1336,19 +1336,18 @@ bool SwContentNode::GoNext(SwContentIndex * pIdx, SwCursorSkipMode nMode ) const
     return bRet;
 }
 
-bool SwContentNode::GoPrevious(SwContentIndex * pIdx, SwCursorSkipMode nMode ) const
+bool SwContentNode::GoPrevious(SwContentIndex& rIdx, SwCursorSkipMode nMode ) const
 {
     bool bRet = true;
-    assert(pIdx != nullptr && "Invalid SwContentIndex* argument to SwContentNode::GoPrevious()");
-    if (pIdx && pIdx->GetIndex() > 0)
+    if( rIdx.GetIndex() > 0 )
     {
         if( !IsTextNode() )
-            --(*pIdx);
+            --rIdx;
         else
         {
             assert(GetTextNode() != nullptr && "Expected valid GetTextNode() with IsTextNode()");
             const SwTextNode& rTNd = *GetTextNode();
-            sal_Int32 nPos = pIdx->GetIndex();
+            sal_Int32 nPos = rIdx.GetIndex();
             assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
             sal_Int32 nDone = 0;
             sal_uInt16 nItrMode = ( SwCursorSkipMode::Cells & nMode ) ?
@@ -1369,7 +1368,7 @@ bool SwContentNode::GoPrevious(SwContentIndex * pIdx, SwCursorSkipMode nMode ) c
             }
 
             if( 1 == nDone )
-                *pIdx = nPos;
+                rIdx = nPos;
             else
                 bRet = false;
         }

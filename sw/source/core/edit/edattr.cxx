@@ -683,7 +683,7 @@ SvtScriptType SwEditShell::GetScriptType() const
                     if( nPos )
                     {
                         SwContentIndex aIdx( pStt->GetContentNode(), pStt->GetContentIndex() );
-                        if( pTNd->GoPrevious( &aIdx, SwCursorSkipMode::Chars ) )
+                        if( pTNd->GoPrevious( aIdx, SwCursorSkipMode::Chars ) )
                             nPos = aIdx.GetIndex();
                     }
 

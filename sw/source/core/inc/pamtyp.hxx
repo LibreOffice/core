@@ -54,15 +54,15 @@ void GoEndOfSection( SwPosition*);
 const SwTextAttr* GetFrwrdTextHint( const SwpHints&, size_t&, sal_Int32 );
 const SwTextAttr* GetBkwrdTextHint( const SwpHints&, size_t&, sal_Int32 );
 
-bool GoNext(SwNode* pNd, SwContentIndex * pIdx, SwCursorSkipMode nMode );
-bool GoPrevious(SwNode* pNd, SwContentIndex * pIdx, SwCursorSkipMode nMode );
+bool GoNext(SwNode& rNd, SwContentIndex& rIdx, SwCursorSkipMode nMode );
+bool GoPrevious(SwNode& rNd, SwContentIndex& rIdx, SwCursorSkipMode nMode );
 SwContentNode* GoNextNds( SwNodeIndex * pIdx, bool );
 SwContentNode* GoPreviousNds( SwNodeIndex * pIdx, bool );
 SwContentNode* GoNextPos( SwPosition * pIdx, bool );
 SwContentNode* GoPreviousPos( SwPosition * pIdx, bool );
 
 // type definitions of functions
-typedef bool (*GoNd)( SwNode*, SwContentIndex*, SwCursorSkipMode );
+typedef bool (*GoNd)( SwNode&, SwContentIndex&, SwCursorSkipMode );
 typedef SwContentNode* (*GoNds)( SwNodeIndex*, bool );
 typedef SwContentNode* (*GoPos)( SwPosition*, bool );
 typedef void (*GoDoc)( SwPosition* );

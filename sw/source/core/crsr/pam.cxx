@@ -378,17 +378,17 @@ bool CheckNodesRange( const SwNode& rStt,
     return false; // somewhere in between => error
 }
 
-bool GoNext(SwNode* pNd, SwContentIndex * pIdx, SwCursorSkipMode nMode )
+bool GoNext(SwNode& rNd, SwContentIndex& rIdx, SwCursorSkipMode nMode )
 {
-    if( pNd->IsContentNode() )
-        return static_cast<SwContentNode*>(pNd)->GoNext( pIdx, nMode );
+    if( rNd.IsContentNode() )
+        return static_cast<SwContentNode&>(rNd).GoNext( rIdx, nMode );
     return false;
 }
 
-bool GoPrevious( SwNode* pNd, SwContentIndex * pIdx, SwCursorSkipMode nMode )
+bool GoPrevious( SwNode& rNd, SwContentIndex& rIdx, SwCursorSkipMode nMode )
 {
-    if( pNd->IsContentNode() )
-        return static_cast<SwContentNode*>(pNd)->GoPrevious( pIdx, nMode );
+    if( rNd.IsContentNode() )
+        return static_cast<SwContentNode&>(rNd).GoPrevious( rIdx, nMode );
     return false;
 }
 
@@ -1201,32 +1201,32 @@ bool GoInNode( SwPaM & rPam, SwMoveFnCollection const & fnMove )
 
 bool GoInContent( SwPaM & rPam, SwMoveFnCollection const & fnMove )
 {
-    if( (*fnMove.fnNd)( &rPam.GetPoint()->GetNode(),
-                        &rPam.GetPoint()->nContent, SwCursorSkipMode::Chars ))
+    if( (*fnMove.fnNd)( rPam.GetPoint()->GetNode(),
+                        rPam.GetPoint()->nContent, SwCursorSkipMode::Chars ))
         return true;
     return GoInNode( rPam, fnMove );
 }
 
 bool GoInContentCells( SwPaM & rPam, SwMoveFnCollection const & fnMove )
 {
-    if( (*fnMove.fnNd)( &rPam.GetPoint()->GetNode(),
-                         &rPam.GetPoint()->nContent, SwCursorSkipMode::Cells ))
+    if( (*fnMove.fnNd)( rPam.GetPoint()->GetNode(),
+                        rPam.GetPoint()->nContent, SwCursorSkipMode::Cells ))
         return true;
     return GoInNode( rPam, fnMove );
 }
 
 bool GoInContentSkipHidden( SwPaM & rPam, SwMoveFnCollection const & fnMove )
 {
-    if( (*fnMove.fnNd)( &rPam.GetPoint()->GetNode(),
-                        &rPam.GetPoint()->nContent, SwCursorSkipMode::Chars | SwCursorSkipMode::Hidden ) )
+    if( (*fnMove.fnNd)( rPam.GetPoint()->GetNode(),
+                        rPam.GetPoint()->nContent, SwCursorSkipMode::Chars | SwCursorSkipMode::Hidden ) )
         return true;
     return GoInNode( rPam, fnMove );
 }
 
 bool GoInContentCellsSkipHidden( SwPaM & rPam, SwMoveFnCollection const & fnMove )
 {
-    if( (*fnMove.fnNd)( &rPam.GetPoint()->GetNode(),
-                         &rPam.GetPoint()->nContent, SwCursorSkipMode::Cells | SwCursorSkipMode::Hidden ) )
+    if( (*fnMove.fnNd)( rPam.GetPoint()->GetNode(),
+                        rPam.GetPoint()->nContent, SwCursorSkipMode::Cells | SwCursorSkipMode::Hidden ) )
         return true;
     return GoInNode( rPam, fnMove );
 }
