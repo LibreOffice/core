@@ -29,6 +29,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <systools/win32/extended_max_path.hxx>
 #include <vector>
 
 /*
@@ -161,7 +162,7 @@ sal_Bool SAL_CALL osl_getModuleURLFromAddress( void *pv, rtl_uString **pustrURL 
     if (!hModule)
         return false;
 
-    ::osl::LongPathBuffer<sal_Unicode> aBuffer(MAX_LONG_PATH);
+    osl::LongPathBuffer<sal_Unicode> aBuffer(EXTENDED_MAX_PATH);
 
     DWORD nch = GetModuleFileNameW(hModule, o3tl::toW(aBuffer), aBuffer.getBufSizeInSymbols());
 

@@ -72,6 +72,7 @@
 #include <postwin.h>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <osl/file.hxx>
+#include <systools/win32/extended_max_path.hxx>
 #endif
 
 #include <svx/unomodel.hxx>
@@ -2902,10 +2903,10 @@ bool SwTransferable::PasteGrf( const TransferableDataHelper& rData, SwWrtShell& 
                     // tdf#124500: Convert short path to long path which should be used in links
                     OUString sSysPath;
                     osl::FileBase::getSystemPathFromFileURL(sText, sSysPath);
-                    std::unique_ptr<sal_Unicode[]> aBuf(new sal_Unicode[32767]);
+                    std::unique_ptr<sal_Unicode[]> aBuf(new sal_Unicode[EXTENDED_MAX_PATH]);
                     DWORD nCopied = GetLongPathNameW(o3tl::toW(sSysPath.getStr()),
-                                                     o3tl::toW(aBuf.get()), 32767);
-                    if (nCopied && nCopied < 32767)
+                                                     o3tl::toW(aBuf.get()), EXTENDED_MAX_PATH);
+                    if (nCopied && nCopied < EXTENDED_MAX_PATH)
                         sText = URIHelper::SmartRel2Abs(INetURLObject(), OUString(aBuf.get()),
                                                         Link<OUString*, bool>(), false);
                 }

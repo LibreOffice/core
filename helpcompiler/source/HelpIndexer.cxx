@@ -26,6 +26,7 @@
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <prewin.h>
 #include <postwin.h>
+#include <systools/win32/extended_max_path.hxx>
 #endif
 
 using namespace lucene::document;
@@ -64,7 +65,7 @@ auto TryWithUnicodePathWorkaround(const OUString& ustrPath, const Constructor& c
         // For a workaround, try short name, which should only contain ASCII characters. Would
         // not help (i.e., would return original long name) if short (8.3) file name creation is
         // disabled in OS or volume settings.
-        wchar_t buf[32767];
+        wchar_t buf[EXTENDED_MAX_PATH];
         if (GetShortPathNameW(o3tl::toW(ustrPath.getStr()), buf, std::size(buf)) == 0)
             throw;
         sPath = OUStringToOString(o3tl::toU(buf), eThreadEncoding);

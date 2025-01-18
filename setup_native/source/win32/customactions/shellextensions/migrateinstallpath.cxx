@@ -20,6 +20,7 @@
 #include "shlxtmsi.hxx"
 #include <algorithm>
 #include <sstream>
+#include <systools/win32/extended_max_path.hxx>
 #include <systools/win32/uwinapi.h>
 
 extern "C" __declspec(dllexport) UINT __stdcall MigrateInstallPath(MSIHANDLE handle)
@@ -30,7 +31,7 @@ extern "C" __declspec(dllexport) UINT __stdcall MigrateInstallPath(MSIHANDLE han
 
     auto RegValue = [](HKEY hRoot, const WCHAR* sKey, const WCHAR* sVal) {
         std::wstring sResult;
-        WCHAR buf[32767]; // max longpath
+        WCHAR buf[EXTENDED_MAX_PATH]; // max longpath
         DWORD bufsize = sizeof(buf); // yes, it is the number of bytes
         if (RegGetValueW(hRoot, sKey, sVal, RRF_RT_REG_SZ, nullptr, buf, &bufsize) == ERROR_SUCCESS)
             sResult = buf; // RegGetValueW null-terminates strings

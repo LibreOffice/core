@@ -44,8 +44,6 @@
 #define VALIDATEPATH_ALLOW_RELATIVE         0x0004
 #define VALIDATEPATH_ALLOW_INVALID_SPACE_AND_PERIOD 0x0010
 
-#define MAX_LONG_PATH 32767
-
 DWORD IsValidFilePath (
     const OUString&  path,
     DWORD          dwFlags,

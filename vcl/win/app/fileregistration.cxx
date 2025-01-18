@@ -24,10 +24,9 @@
 #include <prewin.h>
 #include <Shobjidl.h>
 #include <systools/win32/comtools.hxx>
+#include <systools/win32/extended_max_path.hxx>
 #include <versionhelpers.h>
 #include <postwin.h>
-
-#define MAX_LONG_PATH 32767
 
 namespace vcl::fileregistration
 {
@@ -75,25 +74,25 @@ static bool IsDefaultAppInstalledInReg()
 {
     const wchar_t* keyPath = L"SOFTWARE\\LibreOffice\\UNO\\InstallPath";
 
-    WCHAR szRegPath[MAX_LONG_PATH];
-    DWORD cbData = static_cast<DWORD>(MAX_LONG_PATH * sizeof(WCHAR));
-    auto rc = RegGetValueW(HKEY_LOCAL_MACHINE, keyPath, nullptr, RRF_RT_REG_SZ, nullptr,
-                           static_cast<PVOID>(szRegPath), &cbData);
+    WCHAR szRegPath[EXTENDED_MAX_PATH];
+    DWORD cbData = sizeof(szRegPath);
+    auto rc = RegGetValueW(HKEY_LOCAL_MACHINE, keyPath, nullptr, RRF_RT_REG_SZ, nullptr, szRegPath,
+                           &cbData);
     if (rc != ERROR_SUCCESS)
         return false;
 
-    WCHAR szProcPath[MAX_LONG_PATH];
-    if (!GetModuleFileNameW(nullptr, szProcPath, MAX_LONG_PATH))
+    WCHAR szProcPath[EXTENDED_MAX_PATH];
+    if (!GetModuleFileNameW(nullptr, szProcPath, EXTENDED_MAX_PATH))
         return false;
 
-    WCHAR szFullProcPath[MAX_LONG_PATH];
-    if (!GetFullPathNameW(szProcPath, MAX_LONG_PATH, szFullProcPath, nullptr))
+    WCHAR szFullProcPath[EXTENDED_MAX_PATH];
+    if (!GetFullPathNameW(szProcPath, EXTENDED_MAX_PATH, szFullProcPath, nullptr))
         return false;
 
-    if (!GetLongPathNameW(szFullProcPath, szFullProcPath, MAX_LONG_PATH))
+    if (!GetLongPathNameW(szFullProcPath, szFullProcPath, EXTENDED_MAX_PATH))
         return false;
 
-    if (!GetLongPathNameW(szRegPath, szRegPath, MAX_LONG_PATH))
+    if (!GetLongPathNameW(szRegPath, szRegPath, EXTENDED_MAX_PATH))
         return false;
 
     if (wcslen(szRegPath) > 0 && wcsstr(szFullProcPath, szRegPath) != nullptr)

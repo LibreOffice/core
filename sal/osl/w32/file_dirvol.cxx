@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <systools/win32/extended_max_path.hxx>
 #include <systools/win32/uwinapi.h>
 
 #include "file_url.hxx"
@@ -1539,7 +1542,7 @@ oslFileError SAL_CALL osl_getFileStatus(
     {
         if ( !pItemImpl->bFullPathNormalized )
         {
-            ::osl::LongPathBuffer<sal_Unicode> aBuffer(MAX_LONG_PATH);
+            osl::LongPathBuffer<sal_Unicode> aBuffer(EXTENDED_MAX_PATH);
             sal_uInt32 nNewLen = GetLongPathNameW(o3tl::toW(sFullPath.getStr()), o3tl::toW(aBuffer),
                                                  aBuffer.getBufSizeInSymbols());
 

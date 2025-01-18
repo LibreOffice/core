@@ -27,6 +27,7 @@
 #include <osl/mutex.hxx>
 #include <osl/nlsupport.h>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <systools/win32/extended_max_path.hxx>
 
 #include "filetime.hxx"
 #include "nlsupport.hxx"
@@ -282,7 +283,7 @@ oslProcessError bootstrap_getExecutableFile(rtl_uString ** ppFileURL)
 {
     oslProcessError result = osl_Process_E_NotFound;
 
-    ::osl::LongPathBuffer< sal_Unicode > aBuffer( MAX_LONG_PATH );
+    osl::LongPathBuffer<sal_Unicode> aBuffer(EXTENDED_MAX_PATH);
     DWORD buflen = 0;
 
     if ((buflen = GetModuleFileNameW (nullptr, o3tl::toW(aBuffer), aBuffer.getBufSizeInSymbols())) > 0)
@@ -336,7 +337,7 @@ static rtl_uString ** osl_createCommandArgs_Impl (int argc, char **)
         if (ppArgs[0] != nullptr)
         {
             /* Ensure absolute path */
-            ::osl::LongPathBuffer< sal_Unicode > aBuffer( MAX_LONG_PATH );
+            osl::LongPathBuffer<sal_Unicode> aBuffer(EXTENDED_MAX_PATH);
             DWORD dwResult
                 = GetModuleFileNameW(nullptr, o3tl::toW(aBuffer), aBuffer.getBufSizeInSymbols());
             if ((0 < dwResult) && (dwResult < aBuffer.getBufSizeInSymbols()))
@@ -471,7 +472,7 @@ oslProcessError SAL_CALL osl_clearEnvironment(rtl_uString *ustrVar)
 
 oslProcessError SAL_CALL osl_getProcessWorkingDir( rtl_uString **pustrWorkingDir )
 {
-    ::osl::LongPathBuffer< sal_Unicode > aBuffer( MAX_LONG_PATH );
+    osl::LongPathBuffer<sal_Unicode> aBuffer(EXTENDED_MAX_PATH);
     DWORD dwLen = GetCurrentDirectoryW(aBuffer.getBufSizeInSymbols(), o3tl::toW(aBuffer));
 
     if ( dwLen && dwLen < aBuffer.getBufSizeInSymbols() )

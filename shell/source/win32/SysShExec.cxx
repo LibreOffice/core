@@ -43,6 +43,7 @@
 #include <prewin.h>
 #include <Shlobj.h>
 #include <systools/win32/comtools.hxx>
+#include <systools/win32/extended_max_path.hxx>
 #include <postwin.h>
 
 using namespace ::com::sun::star::system::SystemShellExecuteFlags;
@@ -210,13 +211,12 @@ BOOL CALLBACK FindAndActivateProcWnd(HWND hwnd, LPARAM lParam)
 
 OUString checkFile(const OUString& pathname, const OUString& aCommand)
 {
-    const int MAX_LONG_PATH = 32767; // max longpath on WinNT
-    if (pathname.getLength() >= MAX_LONG_PATH)
+    if (pathname.getLength() >= EXTENDED_MAX_PATH)
     {
         throw css::lang::IllegalArgumentException(
             "XSystemShellExecute.execute, path <" + pathname + "> too long", {}, 0);
     }
-    wchar_t path[MAX_LONG_PATH];
+    wchar_t path[EXTENDED_MAX_PATH];
     wcscpy_s(path, o3tl::toW(pathname.getStr()));
     for (int i = 0;; ++i) {
         // tdf#130216: normalize c:\path\to\something\..\else into c:\path\to\else

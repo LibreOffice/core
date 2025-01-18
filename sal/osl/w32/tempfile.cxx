@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <systools/win32/extended_max_path.hxx>
 #include <systools/win32/uwinapi.h>
 
 #include <osl/file.h>
@@ -220,7 +223,7 @@ oslFileError SAL_CALL osl_createTempFile(
 
 oslFileError SAL_CALL osl_getTempDirURL(rtl_uString** pustrTempDir)
 {
-    ::osl::LongPathBuffer< sal_Unicode > aBuffer( MAX_LONG_PATH );
+    osl::LongPathBuffer<sal_Unicode> aBuffer(EXTENDED_MAX_PATH);
     LPWSTR  lpBuffer = o3tl::toW(aBuffer);
     DWORD   nBufferLength = aBuffer.getBufSizeInSymbols() - 1;
 
