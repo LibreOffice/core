@@ -25,7 +25,7 @@ VCL_DLLPUBLIC bool readFileStatus(osl::FileStatus& rStatus, const OUString& rFil
 class VCL_DLLPUBLIC UserResourceScanner
 {
 protected:
-    /** Scans the provided directory for the resoruce.
+    /** Scans the provided directory for the resource.
      *
      * The returned strings will contain the URLs to the resources.
      */
