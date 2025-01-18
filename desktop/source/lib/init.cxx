@@ -323,7 +323,7 @@ constexpr ExtensionMap aWriterExtensionMap[] =
 {
     { "doc",   u"MS Word 97"_ustr },
     { "docm",  u"MS Word 2007 XML VBA"_ustr },
-    { "docx",  u"MS Word 2007 XML"_ustr },
+    { "docx",  u"Office Open XML Text"_ustr },
     { "fodt",  u"OpenDocument Text Flat XML"_ustr },
     { "html",  u"HTML (StarWriter)"_ustr },
     { "odt",   u"writer8"_ustr },
