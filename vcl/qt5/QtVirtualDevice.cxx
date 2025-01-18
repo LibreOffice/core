@@ -70,33 +70,6 @@ bool QtVirtualDevice::SetSize(tools::Long nNewDX, tools::Long nNewDY)
     return true;
 }
 
-bool QtVirtualDevice::SetSizeUsingBuffer(tools::Long nNewDX, tools::Long nNewDY, sal_uInt8* pBuffer)
-{
-    if (nNewDX == 0)
-        nNewDX = 1;
-    if (nNewDY == 0)
-        nNewDY = 1;
-
-    if (m_pImage && m_aFrameSize.width() == nNewDX && m_aFrameSize.height() == nNewDY)
-        return true;
-
-    m_aFrameSize = QSize(nNewDX, nNewDY);
-
-    nNewDX *= m_fScale;
-    nNewDY *= m_fScale;
-
-    m_pImage.reset(new QImage(pBuffer, nNewDX, nNewDY, Qt_DefaultFormat32));
-
-    m_pImage->fill(Qt::transparent);
-    m_pImage->setDevicePixelRatio(m_fScale);
-
-    // update device in existing graphics
-    for (auto pQtGraph : m_aGraphics)
-        pQtGraph->ChangeQImage(m_pImage.get());
-
-    return true;
-}
-
 tools::Long QtVirtualDevice::GetWidth() const { return m_pImage ? m_aFrameSize.width() : 0; }
 
 tools::Long QtVirtualDevice::GetHeight() const { return m_pImage ? m_aFrameSize.height() : 0; }

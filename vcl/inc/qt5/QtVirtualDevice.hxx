@@ -45,8 +45,6 @@ public:
     virtual void ReleaseGraphics(SalGraphics* pGraphics) override;
 
     virtual bool SetSize(tools::Long nNewDX, tools::Long nNewDY) override;
-    virtual bool SetSizeUsingBuffer(tools::Long nNewDX, tools::Long nNewDY,
-                                    sal_uInt8* pBuffer) override;
 
     // SalGeometryProvider
     virtual tools::Long GetWidth() const override;
