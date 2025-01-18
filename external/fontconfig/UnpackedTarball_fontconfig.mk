@@ -15,7 +15,6 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,fontconfig,0))
 
 $(eval $(call gb_UnpackedTarball_add_patches,fontconfig,\
 	external/fontconfig/fontconfig-2.12.1.patch.1 \
-	external/fontconfig/ubsan.patch \
 	external/fontconfig/libfontconfig-bundled-soname.patch.0 \
 ))
 
