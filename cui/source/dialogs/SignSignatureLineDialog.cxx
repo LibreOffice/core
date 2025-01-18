@@ -164,7 +164,7 @@ IMPL_LINK_NOARG(SignSignatureLineDialog, chooseCertificate, weld::Button&, void)
     {
         m_xSelectedCertifate = xSignCertificate;
         svl::crypto::CertificateOrName aCertificateOrName;
-        aCertificateOrName.m_xCertificate = xSignCertificate;
+        aCertificateOrName.m_xCertificate = std::move(xSignCertificate);
         m_xBtnChooseCertificate->set_label(
             svx::SignatureLineHelper::getSignerName(aCertificateOrName));
     }
