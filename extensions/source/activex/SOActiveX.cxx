@@ -146,7 +146,7 @@ CSOActiveX::CSOActiveX()
 , mbDrawLocked( false )
 {
     CLSID const clsFactory = {0x82154420,0x0FBF,0x11d4,{0x83, 0x13,0x00,0x50,0x04,0x52,0x6A,0xB4}};
-    HRESULT hr = CoCreateInstance( clsFactory, nullptr, CLSCTX_ALL, __uuidof(IDispatch), reinterpret_cast<void**>(&mpDispFactory));
+    HRESULT hr = CoCreateInstance(clsFactory, nullptr, CLSCTX_ALL, IID_PPV_ARGS(&mpDispFactory));
     if( !SUCCEEDED( hr ) )
         OutputError_Impl( nullptr, hr );
 
@@ -303,8 +303,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CSOActiveX::Load( LPPROPERTYBAG pPropBag, LPER
 {
     mnVersion = GetVersionConnected();
 
-    IPropertyBag2* pPropBag2;
-    HRESULT hr = pPropBag->QueryInterface( IID_IPropertyBag2, reinterpret_cast<void**>(&pPropBag2) );
+    CComPtr<IPropertyBag2> pPropBag2;
+    HRESULT hr = pPropBag->QueryInterface(&pPropBag2);
     //ATLASSERT( hr >= 0 );
 
     if( !SUCCEEDED( hr ) )
@@ -1096,9 +1096,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CSOActiveX::SetClientSite( IOleClientSite* aCl
 
         if( aServiceProvider )
         {
-            aServiceProvider->QueryService( SID_SInternetExplorer,
-                                            IID_IWebBrowser,
-                                            reinterpret_cast<void**>(&mWebBrowser2) );
+            aServiceProvider->QueryService(SID_SInternetExplorer, IID_PPV_ARGS(&mWebBrowser2));
 //          ATLASSERT( mWebBrowser2 );
             if( mWebBrowser2 )
                 AtlAdvise( mWebBrowser2, GetUnknown(), DIID_DWebBrowserEvents2, &mCookie );
