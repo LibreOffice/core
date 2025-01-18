@@ -334,7 +334,9 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
     }
     else if (sName == u"GtkToggleButton")
     {
-        pObject = new QToolButton(pParentWidget);
+        QToolButton* pButton = new QToolButton(pParentWidget);
+        setButtonProperties(*pButton, rMap);
+        pObject = pButton;
     }
     else if (sName == u"GtkToolbar")
     {
