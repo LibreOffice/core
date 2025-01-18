@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="sfx">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkMenu" id="contextmenu">
@@ -158,40 +158,14 @@
                     <property name="can-focus">False</property>
                     <property name="spacing">12</property>
                     <child>
-                      <object class="GtkBox" id="box7">
+                      <object class="GtkLabel" id="label1">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <child>
-                          <object class="GtkMenuButton" id="action_menu">
-                            <property name="label" translatable="yes" context="templatedlg|action_menu|label">_Manage</property>
-                            <property name="visible">True</property>
-                            <property name="can-focus">True</property>
-                            <property name="receives-default">False</property>
-                            <property name="use-underline">True</property>
-                            <property name="always-show-image">True</property>
-                            <property name="draw-indicator">True</property>
-                            <property name="popup">menu1</property>
-                            <property name="use-popover">False</property>
-                            <child>
-                              <placeholder/>
-                            </child>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="action_menu-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="templatedlg|extended_tip|action_menu">Provides commands to create, rename and delete categories, reset default templates, and refresh the template manager.</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
+                        <property name="label" translatable="yes" context="templatedlg|label1">Filter</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="pack-type">end</property>
                         <property name="position">0</property>
                       </packing>
                     </child>
@@ -239,20 +213,43 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="pack-type">end</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="label1">
+                      <object class="GtkBox" id="box7">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="label" translatable="yes" context="templatedlg|label1">Filter</property>
+                        <child>
+                          <object class="GtkMenuButton" id="action_menu">
+                            <property name="label" translatable="yes" context="templatedlg|action_menu|label">_Manage</property>
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">False</property>
+                            <property name="use-underline">True</property>
+                            <property name="always-show-image">True</property>
+                            <property name="draw-indicator">True</property>
+                            <property name="popup">menu1</property>
+                            <property name="use-popover">False</property>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="action_menu-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="templatedlg|extended_tip|action_menu">Provides commands to create, rename and delete categories, reset default templates, and refresh the template manager.</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="pack-type">end</property>
                         <property name="position">2</property>
                       </packing>
                     </child>
@@ -260,7 +257,6 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="pack-type">end</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
