@@ -757,12 +757,12 @@ bool ShutdownIcon::IsQuickstarterInstalled()
     wchar_t aPath[EXTENDED_MAX_PATH];
     GetModuleFileNameW(nullptr, aPath, std::size(aPath));
 
-    OUString aOfficepath( o3tl::toU(aPath) );
-    int i = aOfficepath.lastIndexOf('\\');
-    if( i != -1 )
-        aOfficepath = aOfficepath.copy(0, i);
+    std::u16string_view aOfficepath(o3tl::toU(aPath));
+    auto i = aOfficepath.find_last_of('\\');
+    if (i != std::u16string_view::npos)
+        aOfficepath = aOfficepath.substr(0, i);
 
-    OUString quickstartExe(aOfficepath + "\\quickstart.exe");
+    OUString quickstartExe(OUString::Concat(aOfficepath) + "\\quickstart.exe");
 
     return FileExistsW( o3tl::toW(quickstartExe.getStr()) );
 }
