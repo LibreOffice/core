@@ -32,6 +32,7 @@
 #include <objidl.h>
 #include <osl/diagnose.h>
 #include <osl/thread.h>
+#include <systools/win32/extended_max_path.hxx>
 #include <systools/win32/qswin32.h>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/windowserrorstring.hxx>
@@ -753,8 +754,8 @@ static bool FileExistsW( LPCWSTR lpPath )
 
 bool ShutdownIcon::IsQuickstarterInstalled()
 {
-    wchar_t aPath[_MAX_PATH];
-    GetModuleFileNameW( nullptr, aPath, _MAX_PATH-1);
+    wchar_t aPath[EXTENDED_MAX_PATH];
+    GetModuleFileNameW(nullptr, aPath, std::size(aPath));
 
     OUString aOfficepath( o3tl::toU(aPath) );
     int i = aOfficepath.lastIndexOf('\\');
@@ -768,8 +769,8 @@ bool ShutdownIcon::IsQuickstarterInstalled()
 
 void ShutdownIcon::EnableAutostartW32( const OUString &aShortcut )
 {
-    wchar_t aPath[_MAX_PATH];
-    GetModuleFileNameW( nullptr, aPath, _MAX_PATH-1);
+    wchar_t aPath[EXTENDED_MAX_PATH];
+    GetModuleFileNameW(nullptr, aPath, std::size(aPath));
 
     OUString aOfficepath( o3tl::toU(aPath) );
     int i = aOfficepath.lastIndexOf('\\');
