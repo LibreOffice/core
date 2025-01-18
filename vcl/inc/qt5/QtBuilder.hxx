@@ -20,6 +20,7 @@
 #include <QtWidgets/QMessageBox>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QSlider>
+#include <QtWidgets/QToolButton>
 
 #include <rtl/ustring.hxx>
 #include <unotools/resmgr.hxx>
@@ -98,6 +99,7 @@ private:
     static void setProperties(QObject* obj, stringmap& rProps);
     void setButtonProperties(QPushButton& rButton, stringmap& rProps);
     static void setLabelProperties(QLabel& rLabel, stringmap& rProps);
+    void setMenuButtonProperties(QToolButton& rButton, stringmap& rProps);
     void setScaleProperties(QSlider& rSlider, stringmap& rProps);
     void setSpinButtonProperties(QDoubleSpinBox& rSpinBox, stringmap& rProps);
     static QWidget* windowForObject(QObject* pObject);
