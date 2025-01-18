@@ -98,6 +98,7 @@ private:
     static void replaceWidget(QWidget* pOldWidget, QWidget* pNewWidget);
     static void setProperties(QObject* obj, stringmap& rProps);
     void setButtonProperties(QAbstractButton& rButton, stringmap& rProps);
+    static void setEntryProperties(QLineEdit& rLineEdit, stringmap& rProps);
     static void setLabelProperties(QLabel& rLabel, stringmap& rProps);
     void setMenuButtonProperties(QToolButton& rButton, stringmap& rProps);
     void setScaleProperties(QSlider& rSlider, stringmap& rProps);

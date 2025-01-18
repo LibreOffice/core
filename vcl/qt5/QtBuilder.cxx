@@ -222,10 +222,7 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, std:
     else if (sName == u"GtkEntry")
     {
         QLineEdit* pLineEdit = new QLineEdit(pParentWidget);
-        auto aIt = rMap.find(u"visibility"_ustr);
-        if (aIt != rMap.end() && !toBool(aIt->second))
-            pLineEdit->setEchoMode(QLineEdit::Password);
-
+        setEntryProperties(*pLineEdit, rMap);
         pObject = pLineEdit;
     }
     else if (sName == u"GtkExpander")
@@ -824,6 +821,17 @@ void QtBuilder::setButtonProperties(QAbstractButton& rButton, stringmap& rProps)
             rButton.setText(convertAccelerator(rValue));
         }
     }
+}
+
+void QtBuilder::setEntryProperties(QLineEdit& rLineEdit, stringmap& rProps)
+{
+    auto aIt = rProps.find(u"placeholder-text"_ustr);
+    if (aIt != rProps.end())
+        rLineEdit.setPlaceholderText(toQString(aIt->second));
+
+    aIt = rProps.find(u"visibility"_ustr);
+    if (aIt != rProps.end() && !toBool(aIt->second))
+        rLineEdit.setEchoMode(QLineEdit::Password);
 }
 
 void QtBuilder::setLabelProperties(QLabel& rLabel, stringmap& rProps)
