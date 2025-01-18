@@ -34,7 +34,11 @@ bool QtInstanceToggleButton::get_active() const
     return bActive;
 };
 
-void QtInstanceToggleButton::set_inconsistent(bool) { assert(false && "Not implemented yet"); };
+void QtInstanceToggleButton::set_inconsistent(bool bInconsistent)
+{
+    assert(!bInconsistent && "Inconsistent state not supported (yet?)");
+    (void)bInconsistent;
+};
 
 bool QtInstanceToggleButton::get_inconsistent() const
 {
