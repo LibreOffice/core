@@ -8,7 +8,7 @@ It is invoked when opening a PDF file, but **not** when inserting
 a PDF into a document.  Inserting a PDF file renders it and inserts
 a non-editable, rendered version.
 
-The parsing is done by the libary [Poppler](https://poppler.freedesktop.org/)
+The parsing is done by the library [Poppler](https://poppler.freedesktop.org/)
 which then calls back into one layer of this code which is built as a
 Poppler output device implementation.
 
