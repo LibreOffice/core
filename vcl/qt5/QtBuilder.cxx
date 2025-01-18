@@ -813,10 +813,8 @@ void QtBuilder::setButtonProperties(QAbstractButton& rButton, stringmap& rProps)
 #else
             rButton.setIcon(QIcon(pImageLabel->pixmap(Qt::ReturnByValue)));
 #endif
-            // parentless GtkImage in .ui file is only used for setting button
-            // image, so the object is no longer needed after doing so
-            if (!pImageLabel->parent())
-                deleteObject(pImageLabel);
+            // mark original label object for deletion
+            deleteObject(pImageLabel);
         }
         else if (rKey == u"label")
         {
