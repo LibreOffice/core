@@ -19,12 +19,13 @@
 
 #pragma once
 
+// Note that the values in this class must line up exactly with the values in css::awt::RasterOperation
 enum class RasterOp
 {
     OverPaint,
     Xor,
-    N0,
-    N1,
+    N0, // All bits which are affected by this operation are set to 0.
+    N1, // All bits which are affected by this operation are set to 1.
     Invert
 };
 
