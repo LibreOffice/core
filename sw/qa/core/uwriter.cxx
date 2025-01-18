@@ -2473,7 +2473,7 @@ void SwDocTest::testSetRubyList()
 
         SwPosition aNewPos{ aPaM.GetPoint()->nNode, aPaM.GetPoint()->nContent };
         const SwTextNode* pTNd = aNewPos.GetNode().GetTextNode();
-        pTNd->GoNext(&aNewPos, SwCursorSkipMode::Chars);
+        pTNd->GoNext(aNewPos, SwCursorSkipMode::Chars);
 
         SwPaM aEmptyPaM{ aNewPos };
         aEmptyPaM.SetMark();
@@ -2544,7 +2544,7 @@ void SwDocTest::testSetRubyList()
 
         SwPosition aNewPos{ aPaM.GetPoint()->nNode, aPaM.GetPoint()->nContent };
         const SwTextNode* pTNd = aNewPos.GetNode().GetTextNode();
-        pTNd->GoNext(&aNewPos, SwCursorSkipMode::Chars);
+        pTNd->GoNext(aNewPos, SwCursorSkipMode::Chars);
 
         SwPaM aEmptyPaM{ aNewPos };
         aEmptyPaM.SetMark();

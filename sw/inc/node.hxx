@@ -436,9 +436,9 @@ public:
     bool CanJoinNext( SwPosition* pIdx ) const;
     SW_DLLPUBLIC bool CanJoinPrev( SwNodeIndex* pIdx =nullptr ) const;
 
-    bool GoNext(SwContentIndex *, SwCursorSkipMode nMode ) const;
-    bool GoNext(SwPosition*, SwCursorSkipMode nMode ) const;
-    bool GoPrevious(SwContentIndex *, SwCursorSkipMode nMode ) const;
+    bool GoNext(SwContentIndex&, SwCursorSkipMode nMode ) const;
+    bool GoNext(SwPosition&, SwCursorSkipMode nMode ) const;
+    bool GoPrevious(SwContentIndex&, SwCursorSkipMode nMode ) const;
 
     /// @see GetFrameOfModify
     SW_DLLPUBLIC SwContentFrame *getLayoutFrame( const SwRootFrame*,
