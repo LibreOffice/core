@@ -3880,6 +3880,9 @@ SalInstanceTreeView::SalInstanceTreeView(SvTabListBox* pTreeView, SalInstanceBui
     m_xTreeView->SetCustomMeasureHdl(LINK(this, SalInstanceTreeView, CustomMeasureHdl));
     const std::vector<tools::Long> aTabPositions{ 0 };
     m_xTreeView->SetTabs(aTabPositions);
+    // by default, 1st one is editable, others not; override with set_column_editables
+    m_xTreeView->SetTabEditable(0, true);
+
     SvHeaderTabListBox* pHeaderBox = dynamic_cast<SvHeaderTabListBox*>(m_xTreeView.get());
 
     if (pHeaderBox)
