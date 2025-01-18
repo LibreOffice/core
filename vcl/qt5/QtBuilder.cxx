@@ -801,7 +801,7 @@ void QtBuilder::setProperties(QObject* pObject, stringmap& rProps)
     }
 }
 
-void QtBuilder::setButtonProperties(QPushButton& rButton, stringmap& rProps)
+void QtBuilder::setButtonProperties(QAbstractButton& rButton, stringmap& rProps)
 {
     for (auto const & [ rKey, rValue ] : rProps)
     {
@@ -846,6 +846,8 @@ void QtBuilder::setMenuButtonProperties(QToolButton& rButton, stringmap& rProps)
         assert(pMenu && "menu button references non-existing menu");
         rButton.setMenu(pMenu);
     }
+
+    setButtonProperties(rButton, rProps);
 }
 
 void QtBuilder::setScaleProperties(QSlider& rSlider, stringmap& rProps)
