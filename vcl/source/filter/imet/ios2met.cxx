@@ -212,6 +212,8 @@ enum PenStyle { PEN_NULL, PEN_SOLID, PEN_DOT, PEN_DASH, PEN_DASHDOT };
 #define GOrdSVwWin 0x27   /* 1 Set viewing window          */
 #define GOrdPVwWin 0x67   /* 1 Push and set viewing window */
 
+constexpr double tau = 2.0 * M_PI;
+
 //============================ OS2METReader ==================================
 
 namespace {
@@ -1124,8 +1126,8 @@ void OS2METReader::ReadArc(bool bGivenPos)
     rx=r/q; ry=r/p;
     // We now have to find out how the starting and the end point
     // have to be chosen so that point no. 2 lies inside the drawn arc:
-    w1=fmod((atan2(x1-cx,y1-cy)-atan2(x2-cx,y2-cy)),6.28318530718); if (w1<0) w1+=6.28318530718;
-    w3=fmod((atan2(x3-cx,y3-cy)-atan2(x2-cx,y2-cy)),6.28318530718); if (w3<0) w3+=6.28318530718;
+    w1=fmod((atan2(x1-cx,y1-cy)-atan2(x2-cx,y2-cy)),tau); if (w1<0) w1+=tau;
+    w3=fmod((atan2(x3-cx,y3-cy)-atan2(x2-cx,y2-cy)),tau); if (w3<0) w3+=tau;
     if (w3<w1) {
         pVirDev->DrawArc(tools::Rectangle(static_cast<sal_Int32>(cx-rx),static_cast<sal_Int32>(cy-ry),
                                    static_cast<sal_Int32>(cx+rx),static_cast<sal_Int32>(cy+ry)),aP1,aP3);
