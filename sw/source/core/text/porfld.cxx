@@ -24,8 +24,9 @@
 #include <utility>
 
 #include <comphelper/string.hxx>
-#include <vcl/graph.hxx>
 #include <editeng/brushitem.hxx>
+#include <o3tl/deleter.hxx>
+#include <vcl/graph.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
@@ -844,7 +845,7 @@ SwGrfNumPortion::SwGrfNumPortion(
     m_bNoPaint = false;
 }
 
-SwGrfNumPortion::~SwGrfNumPortion()
+void SwGrfNumPortion::ImplDestroy()
 {
     if ( IsAnimated() )
     {
@@ -853,6 +854,11 @@ SwGrfNumPortion::~SwGrfNumPortion()
             pGraph->StopAnimation( nullptr, m_nId );
     }
     m_pBrush.reset();
+}
+
+SwGrfNumPortion::~SwGrfNumPortion()
+{
+    suppress_fun_call_w_exception(ImplDestroy());
 }
 
 void SwGrfNumPortion::StopAnimation( const OutputDevice* pOut )

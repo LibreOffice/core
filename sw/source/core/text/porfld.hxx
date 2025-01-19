@@ -34,6 +34,7 @@ class SwFormatVertOrient;
 class SwFieldPortion : public SwExpandPortion
 {
     friend class SwTextFormatter;
+
 protected:
     OUString  m_aExpand;          // The expanded field
     std::unique_ptr<SwFont> m_pFont;  // For multi-line fields
@@ -197,6 +198,8 @@ public:
     SwTwips GetRelPos() const { return m_nYPos; }
     SwTwips GetGrfHeight() const { return m_nGrfHeight; }
     sal_Int16 GetOrient() const { return m_eOrient; }
+private:
+    void ImplDestroy();
 };
 
 /**
