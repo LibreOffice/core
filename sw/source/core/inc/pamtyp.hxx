@@ -56,14 +56,11 @@ const SwTextAttr* GetBkwrdTextHint( const SwpHints&, size_t&, sal_Int32 );
 
 bool GoNext(SwNode& rNd, SwContentIndex& rIdx, SwCursorSkipMode nMode );
 bool GoPrevious(SwNode& rNd, SwContentIndex& rIdx, SwCursorSkipMode nMode );
-SwContentNode* GoNextNds( SwNodeIndex * pIdx, bool );
-SwContentNode* GoPreviousNds( SwNodeIndex * pIdx, bool );
 SwContentNode* GoNextPos( SwPosition * pIdx, bool );
 SwContentNode* GoPreviousPos( SwPosition * pIdx, bool );
 
 // type definitions of functions
 typedef bool (*GoNd)( SwNode&, SwContentIndex&, SwCursorSkipMode );
-typedef SwContentNode* (*GoNds)( SwNodeIndex*, bool );
 typedef SwContentNode* (*GoPos)( SwPosition*, bool );
 typedef void (*GoDoc)( SwPosition* );
 typedef void (*GoSection)( SwPosition* );
@@ -76,7 +73,6 @@ typedef void (*MvSection)( SwPosition * );
 struct SwMoveFnCollection
 {
     GoNd      fnNd;
-    GoNds     fnNds;
     GoPos     fnPos;
     GoDoc     fnDoc;
     GoSection fnSections;

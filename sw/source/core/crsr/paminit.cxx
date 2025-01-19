@@ -23,7 +23,6 @@
 
 const SwMoveFnCollection aFwrd = {
     /* fnNd         */  &GoNext,
-    /* fnNds        */  &GoNextNds,
     /* fnPos        */  &GoNextPos,
     /* fnDoc        */  &GoEndDoc,
     /* fnSections   */  &GoEndSection,
@@ -35,7 +34,6 @@ const SwMoveFnCollection aFwrd = {
 
 const SwMoveFnCollection aBwrd = {
     /* fnNd         */  &GoPrevious,
-    /* fnNds        */  &GoPreviousNds,
     /* fnPos        */  &GoPreviousPos,
     /* fnDoc        */  &GoStartDoc,
     /* fnSections   */  &GoStartSection,

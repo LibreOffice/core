@@ -392,22 +392,7 @@ bool GoPrevious( SwNode& rNd, SwContentIndex& rIdx, SwCursorSkipMode nMode )
     return false;
 }
 
-SwContentNode* GoNextNds( SwNodeIndex* pIdx, bool bChk )
-{
-    SwNodeIndex aIdx( *pIdx );
-    SwContentNode* pNd = SwNodes::GoNext(&aIdx);
-    if( pNd )
-    {
-        if( bChk && SwNodeOffset(1) != aIdx.GetIndex() - pIdx->GetIndex() &&
-            !CheckNodesRange( pIdx->GetNode(), aIdx.GetNode(), true ) )
-                pNd = nullptr;
-        else
-            *pIdx = aIdx;
-    }
-    return pNd;
-}
-
-SwContentNode* GoPreviousNds( SwNodeIndex * pIdx, bool bChk )
+static SwContentNode* GoPreviousNds( SwNodeIndex * pIdx, bool bChk )
 {
     SwNodeIndex aIdx( *pIdx );
     SwContentNode* pNd = SwNodes::GoPrevious( &aIdx );
