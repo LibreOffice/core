@@ -2512,7 +2512,7 @@ class SFDocuments:
             return self.ExecMethod(self.vbGet + self.flgUno, 'XSpreadsheet', sheetname)
 
         # Usual methods
-        def A1Style(self, row1, column1, row2 = 0, column2 = 0, sheetname = '~'):
+        def A1Style(self, row1, column1, row2 = 0, column2 = 0, sheetname = ''):
             return self.ExecMethod(self.vbMethod, 'A1Style', row1, column1, row2, column2, sheetname)
 
         def Activate(self, sheetname = ''):
@@ -2607,6 +2607,9 @@ class SFDocuments:
 
         def InsertSheet(self, sheetname, beforesheet = 32768):
             return self.ExecMethod(self.vbMethod, 'InsertSheet', sheetname, beforesheet)
+
+        def Intersect(self, range1, range2):
+            return self.ExecMethod(self.vbMethod, 'Intersect', range1, range2)
 
         def MoveRange(self, source, destination):
             return self.ExecMethod(self.vbMethod, 'MoveRange', source, destination)

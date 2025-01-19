@@ -422,6 +422,7 @@ Try:
 			Case Else		&apos;	Only superclass
 				Set oDocument = New SF_Document
 				Set oSuperDocument = oDocument
+				Set oSuperDocument.[_SubClass] = oDocument
 		End Select
 		With oDocument		&apos;	Initialize attributes of subclass
 			Set .[Me] = oDocument

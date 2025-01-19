@@ -5655,6 +5655,19 @@ class SFDocuments:
                 """
             ...
 
+        def Intersect(self, range1:RANGE, range2:RANGE) -> RANGE:
+            """
+                Computes the intersection between two ranges, i.e. the range common to both input ranges.
+                    Args
+                        ``range1``: the first range, as a string.
+
+                        ``range2``: the second range, as a string.
+                    Returns
+                        The string representing the intersection between the two input ranges,
+                        or a zero-length string when the intersection is empty.
+                """
+            ...
+
         def MoveRange(self, source: RANGE, destination: RANGE) -> RANGE:
             """
                 Moves a specified source range to a destination cell.

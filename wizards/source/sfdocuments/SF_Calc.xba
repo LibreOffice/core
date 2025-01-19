@@ -372,7 +372,7 @@ Const cstSubArgs = &quot;Row1, Column1, [Row2], [Column2], [SheetName]=&quot;&qu
 Check:
 	If IsMissing(Row2) Or IsEmpty(Row2) Then Row2 = 0
 	If IsMissing(Column2) Or IsEmpty(Column2) Then Column2 = 0
-	If IsMissing(SheetName) Or IsEmpty(SheetName) Then SheetName = &quot;~&quot;
+	If IsMissing(SheetName) Or IsEmpty(SheetName) Then SheetName = &quot;&quot;
 	vSheetName = SheetName
 
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
@@ -388,6 +388,11 @@ Check:
 	If Row2 &gt; MAXROWS Then Row2 = MAXROWS
 	If Column1 &gt; MAXCOLS Then Column1 = MAXCOLS
 	If Column2 &gt; MAXCOLS Then Column2 = MAXCOLS
+	If Row1 &lt;= 0 Or Column1 &lt;= 0 Then GoTo Catch
+	If Row2 = Row1 And Column2 = Column1 Then		&apos;	Single cell
+		Row2 = 0
+		Column2 = 0
+	End If
 
 	If Row2 &gt; 0 And Row2 &lt; Row1 Then
 		lTemp = Row2	:	Row2 = Row1	:	Row1 = lTemp
@@ -398,9 +403,9 @@ Check:
 
 Try:
 	&apos;	Surround the sheet name with single quotes when required by the presence of special characters
-	vSheetName = _QuoteSheetName(vSheetName)
+	If Len(vSheetName) &gt; 0 Then vSheetName = &quot;$&quot; &amp; _QuoteSheetName(vSheetName) &amp; &quot;.&quot;
 	&apos;	Define the new range string
-	sA1Style = &quot;$&quot; &amp; vSheetName &amp; &quot;.&quot; _
+	sA1Style = vSheetName _
 					&amp; &quot;$&quot; &amp; _GetColumnName(Column1) &amp; &quot;$&quot; &amp; CLng(Row1) _
 					&amp; Iif(Row2 &gt; 0 And Column2 &gt; 0, &quot;:$&quot; &amp; _GetColumnName(Column2) &amp; &quot;$&quot; &amp; CLng(Row2), &quot;&quot;)
 
@@ -2088,6 +2093,71 @@ Catch:
 End Function    &apos;   SFDocuments.SF_Calc.InsertSheet
 
 REM -----------------------------------------------------------------------------
+Public Function Intersect(Optional ByVal Range1 As Variant _
+							, Optional ByVal Range2 As Variant _
+							) As String
+&apos;&apos;&apos;	Returns the cell range as a string that is common to the input ranges
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		Range1: a first range as a string
+&apos;&apos;&apos;		Range2: a second range as a string
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		The intersection, as a string, representing the range common to both input ranges,
+&apos;&apos;&apos;		or a zero-length string when the intersection is empty.
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		calc.Intersect(&quot;J7:M11&quot;, &quot;$Sheet2.$L$10:$N$17&quot;)
+&apos;&apos;&apos;			&apos;	$Sheet2.$L$10:$M$11 when Sheet2 is the current sheet, otherwise the empty string
+
+Dim sIntersect As String			&apos;	Return value
+Dim oRangeAddress1 As Object		&apos;	SF_UI._Address type
+Dim oRangeAddress2 As Object		&apos;	SF_UI._Address type
+Dim oRange1 As Object				&apos;	com.sun.star.table.CellRangeAddress
+Dim oRange2 As Object				&apos;	com.sun.star.table.CellRangeAddress
+Dim lStartRow As Long				&apos;	Intersection starting row
+Dim lEndRow As Long					&apos;	Intersection ending row
+Dim lStartColumn As Long			&apos;	Intersection starting column
+Dim lEndColumn As Long				&apos;	Intersection ending column
+
+Const cstThisSub = &quot;SFDocuments.Calc.Intersect&quot;
+Const cstSubArgs = &quot;Range1, Range2&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	sIntersect = &quot;&quot;
+
+Check:
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive(True) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Range1, &quot;Range1&quot;, V_STRING) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Range2, &quot;Range2&quot;, V_STRING) Then GoTo Finally
+	End If
+
+	Set oRangeAddress1 = _ParseAddress(Range1)
+	Set oRange1 = oRangeAddress1.XCellRange.RangeAddress
+	Set oRangeAddress2 = _ParseAddress(Range2)
+	Set oRange2 = oRangeAddress2.XCellRange.RangeAddress
+
+	If oRangeAddress1.SheetName &lt;&gt; oRangeAddress2.SheetName Then GoTo Finally
+
+Try:
+	&apos;	Find the top-left and bottom-right coordinates of the intersection
+	lStartRow = Iif(oRange1.StartRow &gt; oRange2.StartRow, oRange1.StartRow, oRange2.StartRow) + 1
+	lStartColumn = Iif(oRange1.StartColumn &gt; oRange2.StartColumn, oRange1.StartColumn, oRange2.StartColumn) + 1
+	lEndRow = Iif(oRange1.EndRow &lt; oRange2.EndRow, oRange1.EndRow, oRange2.EndRow) + 1
+	lEndColumn = Iif(oRange1.EndColumn &lt; oRange2.EndColumn, oRange1.EndColumn, oRange2.EndColumn) + 1
+
+	&apos;	Check that the 2 ranges overlap each other
+	If lStartRow &lt;= lEndRow And lStartColumn &lt;= lEndColumn Then
+		sIntersect = A1Style(lStartRow, lStartColumn, lEndRow, lEndColumn, oRangeAddress1.SheetName)
+	End If
+
+Finally:
+	Intersect = sIntersect
+	&apos;ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function    &apos;   SFDocuments.SF_Calc.Intersect
+
+REM -----------------------------------------------------------------------------
 Public Function Methods() As Variant
 &apos;&apos;&apos;	Return the list of public methods of the Calc service as an array
 
@@ -2114,6 +2184,7 @@ Public Function Methods() As Variant
 					, &quot;ImportFromCSVFile&quot; _
 					, &quot;ImportFromDatabase&quot; _
 					, &quot;InsertSheet&quot; _
+					, &quot;Intersect&quot; _
 					, &quot;MoveRange&quot; _
 					, &quot;MoveSheet&quot; _
 					, &quot;Offset&quot; _
