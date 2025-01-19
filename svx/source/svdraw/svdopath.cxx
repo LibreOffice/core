@@ -2900,7 +2900,7 @@ void SdrPathObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
 
     // #i75086# Old DrawingLayer (GeoStat and geometry) does not support holding negative scalings
     // in X and Y which equal a 180 degree rotation. Recognize it and react accordingly
-    if(basegfx::fTools::less(aScale.getX(), 0.0) && basegfx::fTools::less(aScale.getY(), 0.0))
+    if(aScale.getX() < 0.0 && aScale.getY() < 0.0)
     {
         aScale.setX(fabs(aScale.getX()));
         aScale.setY(fabs(aScale.getY()));
@@ -2931,8 +2931,8 @@ void SdrPathObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     // #i75086#
     // Given polygon is already scaled (for historical reasons), but not mirrored yet.
     // Thus, when scale is negative in X or Y, apply the needed mirroring accordingly.
-    double fScaleX(basegfx::fTools::less(aScale.getX(), 0.0) ? -1.0 : 1.0);
-    double fScaleY(basegfx::fTools::less(aScale.getY(), 0.0) ? -1.0 : 1.0);
+    double fScaleX(aScale.getX() < 0.0 ? -1.0 : 1.0);
+    double fScaleY(aScale.getY() < 0.0 ? -1.0 : 1.0);
 
     // tdf#98565, tdf#98584. While loading a shape, svg:width and svg:height is used to scale
     // the polygon. But draw:transform might introduce additional scaling factors, which need to
