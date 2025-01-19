@@ -9,9 +9,11 @@ Add-in
 Adobe
 ADSL
 Advanced
+AGI
 AI
 AIX=
 Alibaba
+AlphaFold
 Amazon
 AMD
 Amiga=
@@ -124,6 +126,7 @@ GNOME
 GNU
 Google
 GPS
+GPT
 GroupWise
 GSM=
 GSoC
@@ -177,6 +180,7 @@ LG
 LibreOffice=
 LINE
 Linux
+LLM
 LTE=
 Lubuntu
 Lucid
@@ -226,6 +230,7 @@ NRadius
 Nvidia
 ODBC
 Ogg
+Ollama
 OnDemand
 OnePlus
 Online
@@ -300,6 +305,7 @@ SunHSI=
 SunOS=
 SunSAI=
 SUSE
+SynthID
 Systemd
 Tahr
 TCL
