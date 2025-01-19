@@ -426,7 +426,7 @@ void ScValidationData::DoError(weld::Window* pParent, const OUString& rInput, co
             break;
     }
 
-    xBox->runAsync(xBox, [&, callback](sal_uInt32 result)
+    xBox->runAsync(xBox, [this, callback](sal_Int32 result)
                    { callback(eErrorStyle == SC_VALERR_STOP || result == RET_CANCEL); });
 }
 
