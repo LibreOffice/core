@@ -49,8 +49,8 @@ void GoStartDoc( SwPosition*);
 void GoEndDoc( SwPosition*);
 void GoStartSection( SwPosition*);
 void GoEndSection( SwPosition*);
-void GoStartOfSection( SwPosition*);
-void GoEndOfSection( SwPosition*);
+void GoStartOfSection( SwPosition& );
+void GoEndOfSection( SwPosition& );
 const SwTextAttr* GetFrwrdTextHint( const SwpHints&, size_t&, sal_Int32 );
 const SwTextAttr* GetBkwrdTextHint( const SwpHints&, size_t&, sal_Int32 );
 
@@ -68,7 +68,7 @@ typedef bool (SwPosition::*CmpOp)( const SwPosition& ) const;
 typedef const SwTextAttr* (*GetHint)( const SwpHints&, size_t&, sal_Int32 );
 typedef bool (utl::TextSearch::*SearchText)( const OUString&, sal_Int32*,
                     sal_Int32*, css::util::SearchResult* );
-typedef void (*MvSection)( SwPosition * );
+typedef void (*MvSection)( SwPosition& );
 
 struct SwMoveFnCollection
 {
