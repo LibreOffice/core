@@ -1454,8 +1454,10 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
             return false;
         }
     }
+    CertFreeCertificateContext(pCertContext);
 
     PCRYPT_TIMESTAMP_CONTEXT pTsContext = nullptr;
+    DWORD dwEncodedMessageParamType = CMSG_CONTENT_PARAM;
 
     if( !m_aSignTSA.isEmpty() )
     {
@@ -1469,7 +1471,6 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
         {
             SAL_WARN("svl.crypto", "CryptMsgOpenToDecode failed: " << comphelper::WindowsErrorString(GetLastError()));
             CryptMsgClose(hMsg);
-            CertFreeCertificateContext(pCertContext);
             return false;
         }
 
@@ -1480,7 +1481,6 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
             SAL_WARN("svl.crypto", "CryptMsgGetParam(CMSG_BARE_CONTENT_PARAM) failed: " << comphelper::WindowsErrorString(GetLastError()));
             CryptMsgClose(hDecodedMsg);
             CryptMsgClose(hMsg);
-            CertFreeCertificateContext(pCertContext);
             return false;
         }
 
@@ -1493,16 +1493,15 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
             SAL_WARN("svl.crypto", "CryptMsgGetParam(CMSG_BARE_CONTENT_PARAM) failed: " << comphelper::WindowsErrorString(GetLastError()));
             CryptMsgClose(hDecodedMsg);
             CryptMsgClose(hMsg);
-            CertFreeCertificateContext(pCertContext);
             return false;
         }
+
+        CryptMsgClose(hMsg);
 
         if (!CryptMsgUpdate(hDecodedMsg, pTsSig.get(), nTsSigLen, TRUE))
         {
             SAL_WARN("svl.crypto", "CryptMsgUpdate failed: " << comphelper::WindowsErrorString(GetLastError()));
             CryptMsgClose(hDecodedMsg);
-            CryptMsgClose(hMsg);
-            CertFreeCertificateContext(pCertContext);
             return false;
         }
 
@@ -1511,8 +1510,6 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
         {
             SAL_WARN("svl.crypto", "CryptMsgGetParam(CMSG_SIGNER_INFO_PARAM) failed: " << comphelper::WindowsErrorString(GetLastError()));
             CryptMsgClose(hDecodedMsg);
-            CryptMsgClose(hMsg);
-            CertFreeCertificateContext(pCertContext);
             return false;
         }
 
@@ -1522,8 +1519,6 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
         {
             SAL_WARN("svl.crypto", "CryptMsgGetParam(CMSG_SIGNER_INFO_PARAM) failed: " << comphelper::WindowsErrorString(GetLastError()));
             CryptMsgClose(hDecodedMsg);
-            CryptMsgClose(hMsg);
-            CertFreeCertificateContext(pCertContext);
             return false;
         }
 
@@ -1552,18 +1547,10 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
         {
             SAL_WARN("svl.crypto", "CryptRetrieveTimeStamp failed: " << comphelper::WindowsErrorString(GetLastError()));
             CryptMsgClose(hDecodedMsg);
-            CryptMsgClose(hMsg);
-            CertFreeCertificateContext(pCertContext);
             return false;
         }
 
         SAL_INFO("svl.crypto", "Time stamp size is " << pTsContext->cbEncoded << " bytes");
-
-        // I tried to use CryptMsgControl() with CMSG_CTRL_ADD_SIGNER_UNAUTH_ATTR to add the
-        // timestamp, but that failed with "The parameter is incorrect". Probably it is too late to
-        // modify the message once its data has already been encoded as part of the
-        // CryptMsgGetParam() with CMSG_BARE_CONTENT_PARAM above. So close the message and re-do its
-        // creation steps, but now with an amended aSignerInfo.
 
         CRYPT_INTEGER_BLOB aTimestampBlob;
         aTimestampBlob.cbData = pTsContext->cbEncoded;
@@ -1575,45 +1562,48 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
         aTimestampAttribute.cValue = 1;
         aTimestampAttribute.rgValue = &aTimestampBlob;
 
-        aSignerInfo.cUnauthAttr = 1;
-        aSignerInfo.rgUnauthAttr = &aTimestampAttribute;
-
-        CryptMsgClose(hMsg);
-
-        hMsg = CryptMsgOpenToEncode(PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
-                                    CMSG_DETACHED_FLAG,
-                                    CMSG_SIGNED,
-                                    &aSignedInfo,
-                                    nullptr,
-                                    nullptr);
-
-        for (size_t i = 0; i < m_dataBlocks.size(); ++i)
+        DWORD nEncodedTsAttributeLen = 0;
+        if (!CryptEncodeObject(PKCS_7_ASN_ENCODING, PKCS_ATTRIBUTE, &aTimestampAttribute, nullptr, &nEncodedTsAttributeLen))
         {
-            const bool last = (i == m_dataBlocks.size() - 1);
-            if (!hMsg ||
-                !CryptMsgUpdate(hMsg, static_cast<const BYTE *>(m_dataBlocks[i].first), m_dataBlocks[i].second, last))
-            {
-                SAL_WARN("svl.crypto", "Re-creating the message failed: " << comphelper::WindowsErrorString(GetLastError()));
-                CryptMemFree(pTsContext);
-                CryptMsgClose(hDecodedMsg);
-                CryptMsgClose(hMsg);
-                CertFreeCertificateContext(pCertContext);
-                return false;
-            }
+            SAL_WARN("svl.crypto", "CryptEncodeObject(PKCS_ATTRIBUTE) failed: " << comphelper::WindowsErrorString(GetLastError()));
+            CryptMsgClose(hDecodedMsg);
+            return false;
         }
 
-        CryptMsgClose(hDecodedMsg);
+        std::unique_ptr<BYTE[]> pEncodedTsAttributeBuf(new BYTE[nEncodedTsAttributeLen]);
+
+        CMSG_CTRL_ADD_SIGNER_UNAUTH_ATTR_PARA aAddTsAttrPara;
+        aAddTsAttrPara.dwSignerIndex = 0;
+        aAddTsAttrPara.cbSize = sizeof(aAddTsAttrPara);
+
+        if (!CryptEncodeObject(PKCS_7_ASN_ENCODING, PKCS_ATTRIBUTE, &aTimestampAttribute, pEncodedTsAttributeBuf.get(), &nEncodedTsAttributeLen))
+        {
+            SAL_WARN("svl.crypto", "CryptEncodeObject(PKCS_ATTRIBUTE) failed: " << comphelper::WindowsErrorString(GetLastError()));
+            CryptMsgClose(hDecodedMsg);
+            return false;
+        }
+
+         aAddTsAttrPara.blob.cbData = nEncodedTsAttributeLen;
+         aAddTsAttrPara.blob.pbData = pEncodedTsAttributeBuf.get();
+
+        if (!CryptMsgControl(hDecodedMsg, 0, CMSG_CTRL_ADD_SIGNER_UNAUTH_ATTR, &aAddTsAttrPara))
+        {
+            SAL_WARN("svl.crypto", "CryptMsgControl(CMSG_CTRL_ADD_SIGNER_UNAUTH_ATTR) failed: " << comphelper::WindowsErrorString(GetLastError()));
+            CryptMsgClose(hDecodedMsg);
+            return false;
+        }
+        hMsg = hDecodedMsg;
+        dwEncodedMessageParamType = CMSG_ENCODED_MESSAGE;
     }
 
     DWORD nSigLen = 0;
 
-    if (!CryptMsgGetParam(hMsg, CMSG_CONTENT_PARAM, 0, nullptr, &nSigLen))
+    if (!CryptMsgGetParam(hMsg, dwEncodedMessageParamType, 0, nullptr, &nSigLen))
     {
-        SAL_WARN("svl.crypto", "CryptMsgGetParam(CMSG_CONTENT_PARAM) failed: " << comphelper::WindowsErrorString(GetLastError()));
+        SAL_WARN("svl.crypto", "Reading the encoded message via CryptMsgGetParam() failed: " << comphelper::WindowsErrorString(GetLastError()));
         if (pTsContext)
             CryptMemFree(pTsContext);
         CryptMsgClose(hMsg);
-        CertFreeCertificateContext(pCertContext);
         return false;
     }
 
@@ -1623,20 +1613,18 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
         if (pTsContext)
             CryptMemFree(pTsContext);
         CryptMsgClose(hMsg);
-        CertFreeCertificateContext(pCertContext);
         return false;
     }
 
     SAL_INFO("svl.crypto", "Signature size is " << nSigLen << " bytes");
     std::unique_ptr<BYTE[]> pSig(new BYTE[nSigLen]);
 
-    if (!CryptMsgGetParam(hMsg, CMSG_CONTENT_PARAM, 0, pSig.get(), &nSigLen))
+    if (!CryptMsgGetParam(hMsg, dwEncodedMessageParamType, 0, pSig.get(), &nSigLen))
     {
-        SAL_WARN("svl.crypto", "CryptMsgGetParam(CMSG_CONTENT_PARAM) failed: " << comphelper::WindowsErrorString(GetLastError()));
+        SAL_WARN("svl.crypto", "Reading the encoded message via CryptMsgGetParam() failed: " << comphelper::WindowsErrorString(GetLastError()));
         if (pTsContext)
             CryptMemFree(pTsContext);
         CryptMsgClose(hMsg);
-        CertFreeCertificateContext(pCertContext);
         return false;
     }
 
@@ -1644,7 +1632,6 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
     if (pTsContext)
         CryptMemFree(pTsContext);
     CryptMsgClose(hMsg);
-    CertFreeCertificateContext(pCertContext);
 
     for (unsigned int i = 0; i < nSigLen ; i++)
         appendHex(pSig[i], rCMSHexBuffer);
