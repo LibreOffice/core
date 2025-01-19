@@ -57,15 +57,61 @@ enum class GraphicContentType : sal_Int32
     Vector
 };
 
-class SAL_DLLPUBLIC_RTTI ImpGraphic final  : public vcl::graphic::MemoryManaged
+class SAL_DLLPUBLIC_RTTI BitmapContainer final
+{
+public:
+    BitmapEx maBitmapEx;
+
+    BitmapContainer() = default;
+
+    BitmapContainer(BitmapEx const& rBitmapEx)
+        : maBitmapEx(rBitmapEx)
+    {}
+
+    bool operator==(const BitmapContainer& rOther) const
+    {
+        return maBitmapEx == rOther.maBitmapEx;
+    }
+
+    void createSwapInfo(ImpSwapInfo& rSwapInfo);
+
+    bool isAlpha()
+    {
+        return maBitmapEx.IsAlpha();
+    }
+
+    const BitmapEx& getBitmapExRef() const
+    {
+        return maBitmapEx;
+    }
+
+    Size getPrefSize() const
+    {
+        Size aSize = maBitmapEx.GetPrefSize();
+        if (!aSize.Width() || !aSize.Height())
+            aSize = maBitmapEx.GetSizePixel();
+        return aSize;
+    }
+
+    MapMode getPrefMapMode() const
+    {
+        const Size aSize = maBitmapEx.GetPrefSize();
+        if (aSize.Width() && aSize.Height())
+            return maBitmapEx.GetPrefMapMode();
+        return {};
+    }
+};
+
+class SAL_DLLPUBLIC_RTTI ImpGraphic final : public vcl::graphic::MemoryManaged
 {
     friend class Graphic;
     friend class GraphicID;
 
 private:
+    BitmapEx maCachedBitmap;
+    GDIMetaFile maMetaFile;
+    std::shared_ptr<BitmapContainer> mpBitmapContainer;
 
-    GDIMetaFile                  maMetaFile;
-    BitmapEx                     maBitmapEx;
     /// If maBitmapEx is empty, this preferred size will be set on it when it gets initialized.
     Size                         maExPrefSize;
     ImpSwapInfo                  maSwapInfo;
