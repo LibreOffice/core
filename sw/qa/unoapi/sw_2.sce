@@ -31,6 +31,5 @@
 -o sw.SwXPropertySetInfo
 #i111190 -o sw.SwXShape
 -o sw.SwXStyleFamily
--o sw.SwXTableCellText
 -o sw.SwXTableColumns
 -o sw.SwXTableRows

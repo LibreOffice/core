@@ -151,7 +151,6 @@ job222=sw.SwXPropertySet
 job223=sw.SwXPropertySetInfo
 job226=sw.SwXStyle
 job228=sw.SwXStyleFamily
-job229=sw.SwXTableCellText
 job230=sw.SwXTableRows
 job231=sw.SwXTextColumns
 job232=sw.SwXTextDefaults
