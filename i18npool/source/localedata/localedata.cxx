@@ -258,6 +258,7 @@ constexpr struct {
     { "en_MY",  DataLocaleLibrary::OTHERS },  // needs to be in OTHERS instead of EN because currency inherited from ms_MY
     { "ia",     DataLocaleLibrary::OTHERS },
     { "mn_Cyrl_MN",  DataLocaleLibrary::OTHERS },
+    { "mn_Mong_MN", DataLocaleLibrary::OTHERS },
     { "az_AZ",  DataLocaleLibrary::OTHERS },
     { "sw_TZ",  DataLocaleLibrary::OTHERS },
     { "km_KH",  DataLocaleLibrary::OTHERS },
