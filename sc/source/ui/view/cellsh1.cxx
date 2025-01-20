@@ -2242,28 +2242,23 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 // try to find an existing conditional format
                 const ScPatternAttr* pPattern = rDoc.GetPattern(aPos.Col(), aPos.Row(), aPos.Tab());
                 ScConditionalFormatList* pList = rDoc.GetCondFormList(aPos.Tab());
-                const ScCondFormatIndexes& rCondFormats = pPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData();
-                bool bContainsCondFormat = !rCondFormats.empty();
+                bool bContainsCondFormat = false;
                 bool bCondFormatDlg = false;
-                if(bContainsCondFormat)
+                for (auto nKey : pPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData())
                 {
-                    bContainsCondFormat = false; // maybe all nullptrs?
-                    for (const auto& rCondFormat : rCondFormats)
-                    {
-                        // check if at least one existing conditional format has the same range
-                        const ScConditionalFormat* pCondFormat = pList->GetFormat(rCondFormat);
-                        if(!pCondFormat)
-                            continue;
+                    // check if at least one existing conditional format has the same range
+                    const ScConditionalFormat* pCondFormat = pList->GetFormat(nKey);
+                    if(!pCondFormat)
+                        continue;
 
-                        bContainsCondFormat = true; // found at least one format
-                        const ScRangeList& rCondFormatRange = pCondFormat->GetRange();
-                        if(rCondFormatRange == aRangeList)
-                        {
-                            // found a matching range, edit this conditional format
-                            bCondFormatDlg = true;
-                            nIndex = pCondFormat->GetKey();
-                            break;
-                        }
+                    bContainsCondFormat = true; // found at least one format
+                    const ScRangeList& rCondFormatRange = pCondFormat->GetRange();
+                    if(rCondFormatRange == aRangeList)
+                    {
+                        // found a matching range, edit this conditional format
+                        bCondFormatDlg = true;
+                        nIndex = pCondFormat->GetKey();
+                        break;
                     }
                 }
 
