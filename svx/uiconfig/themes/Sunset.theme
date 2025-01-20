@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<theme name="Sunset">
+    <theme-colors name="Sunset">
+        <color name="dark1" color="#000000" />
+        <color name="light1" color="#FFFFFF" />
+        <color name="dark2" color="#492300" />
+        <color name="light2" color="#F6F9D4" />
+        <color name="accent1" color="#FFFF00" />
+        <color name="accent2" color="#FFBF00" />
+        <color name="accent3" color="#FF8000" />
+        <color name="accent4" color="#FF4000" />
+        <color name="accent5" color="#BF0041" />
+        <color name="accent6" color="#800080" />
+        <color name="hyperlink" color="#0000EE" />
+        <color name="followed-hyperlink" color="#551A8B" />
+    </theme-colors>
+</theme>

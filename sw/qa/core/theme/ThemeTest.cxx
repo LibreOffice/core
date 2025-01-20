@@ -429,7 +429,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testThemeChanging)
     // Change theme colors
     {
         auto const& rColorSets = svx::ColorSets::get();
-        auto pNewColorSet = std::make_shared<model::ColorSet>(rColorSets.getColorSet(0));
+        auto pNewColorSet
+            = std::make_shared<model::ColorSet>(*rColorSets.getColorSet(u"LibreOffice"));
         // check that the theme colors are as expected
         CPPUNIT_ASSERT_EQUAL(u"LibreOffice"_ustr, pNewColorSet->getName());
 

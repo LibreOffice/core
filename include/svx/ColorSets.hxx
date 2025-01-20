@@ -5,11 +5,9 @@
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
- *
  */
 
-#ifndef INCLUDED_SVX_COLORSETS_HXX
-#define INCLUDED_SVX_COLORSETS_HXX
+#pragma once
 
 #include <svx/svxdllapi.h>
 #include <docmodel/theme/ColorSet.hxx>
@@ -39,11 +37,9 @@ public:
 
     model::ColorSet const* getColorSet(std::u16string_view rName) const;
 
-    void insert(model::ColorSet const& rColorSet, IdenticalNameAction eAction = IdenticalNameAction::Overwrite);
+    void insert(model::ColorSet const& rColorSet, IdenticalNameAction eAction);
 };
 
 } // end of namespace svx
-
-#endif // INCLUDED_SVX_COLORSETS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

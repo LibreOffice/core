@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<theme name="Breeze">
+    <theme-colors name="Breeze">
+        <color name="dark1" color="#232629" />
+        <color name="light1" color="#FCFCFC" />
+        <color name="dark2" color="#31363B" />
+        <color name="light2" color="#EFF0F1" />
+        <color name="accent1" color="#DA4453" />
+        <color name="accent2" color="#F47750" />
+        <color name="accent3" color="#FDBC4B" />
+        <color name="accent4" color="#C9CE3B" />
+        <color name="accent5" color="#1CDC9A" />
+        <color name="accent6" color="#2ECC71" />
+        <color name="hyperlink" color="#1D99F3" />
+        <color name="followed-hyperlink" color="#3DAEE9" />
+    </theme-colors>
+</theme>

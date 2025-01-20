@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<theme name="Beach">
+    <theme-colors name="Beach">
+        <color name="dark1" color="#000000" />
+        <color name="light1" color="#FFFFFF" />
+        <color name="dark2" color="#FFBF00" />
+        <color name="light2" color="#333333" />
+        <color name="accent1" color="#FFF5CE" />
+        <color name="accent2" color="#DEE6EF" />
+        <color name="accent3" color="#E8F2A1" />
+        <color name="accent4" color="#FFD7D7" />
+        <color name="accent5" color="#DEE7E5" />
+        <color name="accent6" color="#DDDBB6" />
+        <color name="hyperlink" color="#7777EE" />
+        <color name="followed-hyperlink" color="#EE77D7" />
+    </theme-colors>
+</theme>

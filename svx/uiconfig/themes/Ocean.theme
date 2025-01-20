@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<theme name="Ocean">
+    <theme-colors name="Ocean">
+        <color name="dark1" color="#000000" />
+        <color name="light1" color="#FFFFFF" />
+        <color name="dark2" color="#2A6099" />
+        <color name="light2" color="#CCCCCC" />
+        <color name="accent1" color="#800080" />
+        <color name="accent2" color="#55308D" />
+        <color name="accent3" color="#2A6099" />
+        <color name="accent4" color="#158466" />
+        <color name="accent5" color="#00A933" />
+        <color name="accent6" color="#81D41A" />
+        <color name="hyperlink" color="#0000EE" />
+        <color name="followed-hyperlink" color="#551A8B" />
+    </theme-colors>
+</theme>

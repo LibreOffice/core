@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<theme name="Forest">
+    <theme-colors name="Forest">
+        <color name="dark1" color="#000000" />
+        <color name="light1" color="#FFFFFF" />
+        <color name="dark2" color="#000000" />
+        <color name="light2" color="#FFFFFF" />
+        <color name="accent1" color="#813709" />
+        <color name="accent2" color="#224B12" />
+        <color name="accent3" color="#706E0C" />
+        <color name="accent4" color="#355269" />
+        <color name="accent5" color="#BE480A" />
+        <color name="accent6" color="#BE480A" />
+        <color name="hyperlink" color="#2A6099" />
+        <color name="followed-hyperlink" color="#800080" />
+    </theme-colors>
+</theme>

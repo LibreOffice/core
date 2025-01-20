@@ -10,7 +10,13 @@
 $(eval $(call gb_Package_Package,svx_document_themes,$(SRCDIR)/svx/uiconfig/themes))
 
 $(eval $(call gb_Package_add_files_with_dir,svx_document_themes,$(LIBO_SHARE_FOLDER)/themes,\
-    libreoffice.theme \
+    Beach.theme \
+    Breeze.theme \
+    Forest.theme \
+    Libreoffice.theme \
+    Ocean.theme \
+    Rainbow.theme \
+    Sunset.theme \
 ))
 
 # vim: set noet sw=4 ts=4:

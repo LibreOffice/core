@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<theme name="Rainbow">
+    <theme-colors name="Rainbow">
+        <color name="dark1" color="#000000" />
+        <color name="light1" color="#FFFFFF" />
+        <color name="dark2" color="#1C1C1C" />
+        <color name="light2" color="#DDDDDD" />
+        <color name="accent1" color="#FF0000" />
+        <color name="accent2" color="#FF8000" />
+        <color name="accent3" color="#FFFF00" />
+        <color name="accent4" color="#00A933" />
+        <color name="accent5" color="#2A6099" />
+        <color name="accent6" color="#800080" />
+        <color name="hyperlink" color="#0000EE" />
+        <color name="followed-hyperlink" color="#551A8B" />
+    </theme-colors>
+</theme>
