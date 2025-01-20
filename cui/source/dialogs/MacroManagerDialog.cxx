@@ -41,6 +41,7 @@
 #include <unotools/viewoptions.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/weldutils.hxx>
+#include <dlgname.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -1228,22 +1229,28 @@ void MacroManagerDialog::BasicScriptsCreateLibrary(const basctl::ScriptDocument&
          aLibName = CuiResId(STR_LIBRARY) + OUString::number(++i))
         ;
 
-    InputDialog aInputDlg(m_xDialog.get(), CuiResId(STR_INPUTDIALOG_NEWLIBRARYLABEL));
-    aInputDlg.set_title(CuiResId(STR_INPUTDIALOG_NEWLIBRARYTITLE));
-    aInputDlg.SetEntryText(aLibName);
-    aInputDlg.HideHelpBtn();
-    aInputDlg.setCheckEntry([&](OUString sNewName) {
-        if (sNewName.isEmpty() || rDocument.hasLibrary(basctl::E_SCRIPTS, sNewName)
-            || rDocument.hasLibrary(basctl::E_DIALOGS, sNewName) || sNewName.getLength() > 30
-            || !basctl::IsValidSbxName(sNewName))
-            return false;
-        return true;
-    });
+    OUString aDesc = CuiResId(STR_INPUTDIALOG_NEWLIBRARYLABEL);
 
-    if (!aInputDlg.run())
+    SvxNameDialog aNameDialog(m_xDialog.get(), aLibName, aDesc,
+                              CuiResId(STR_INPUTDIALOG_NEWLIBRARYTITLE));
+
+    aNameDialog.SetCheckNameHdl(Link<SvxNameDialog&, bool>(
+        static_cast<void*>(const_cast<basctl::ScriptDocument*>(&rDocument)),
+        [](void* param, SvxNameDialog& dialog) -> bool {
+            const basctl::ScriptDocument& rDoc = *static_cast<const basctl::ScriptDocument*>(param);
+            OUString sNewName = dialog.GetName();
+            if (sNewName.isEmpty() || rDoc.hasLibrary(basctl::E_SCRIPTS, sNewName)
+                || rDoc.hasLibrary(basctl::E_DIALOGS, sNewName) || sNewName.getLength() > 30
+                || !basctl::IsValidSbxName(sNewName))
+                return false;
+            return true;
+        }));
+    ;
+
+    if (aNameDialog.run() != RET_OK)
         return;
 
-    aLibName = aInputDlg.GetEntryText();
+    aLibName = aNameDialog.GetName();
 
     try
     {
