@@ -44,9 +44,12 @@ $(eval $(call gb_StaticLibrary_add_generated_cobjects,libjpeg-turbo,\
     UnpackedTarball/libjpeg-turbo/jccoefct \
     UnpackedTarball/libjpeg-turbo/jccolor \
     UnpackedTarball/libjpeg-turbo/jcdctmgr \
+    UnpackedTarball/libjpeg-turbo/jcdiffct \
     UnpackedTarball/libjpeg-turbo/jchuff \
     UnpackedTarball/libjpeg-turbo/jcicc \
     UnpackedTarball/libjpeg-turbo/jcinit \
+    UnpackedTarball/libjpeg-turbo/jclhuff \
+    UnpackedTarball/libjpeg-turbo/jclossls \
     UnpackedTarball/libjpeg-turbo/jcmainct \
     UnpackedTarball/libjpeg-turbo/jcmarker \
     UnpackedTarball/libjpeg-turbo/jcmaster \
@@ -64,9 +67,12 @@ $(eval $(call gb_StaticLibrary_add_generated_cobjects,libjpeg-turbo,\
     UnpackedTarball/libjpeg-turbo/jdcoefct \
     UnpackedTarball/libjpeg-turbo/jdcolor \
     UnpackedTarball/libjpeg-turbo/jddctmgr \
+    UnpackedTarball/libjpeg-turbo/jddiffct \
     UnpackedTarball/libjpeg-turbo/jdhuff \
     UnpackedTarball/libjpeg-turbo/jdicc \
     UnpackedTarball/libjpeg-turbo/jdinput \
+    UnpackedTarball/libjpeg-turbo/jdlhuff \
+    UnpackedTarball/libjpeg-turbo/jdlossls \
     UnpackedTarball/libjpeg-turbo/jdmainct \
     UnpackedTarball/libjpeg-turbo/jdmarker \
     UnpackedTarball/libjpeg-turbo/jdmaster \
@@ -194,20 +200,7 @@ $(eval $(call gb_StaticLibrary_add_generated_nasmobjects,libjpeg-turbo,\
     UnpackedTarball/libjpeg-turbo/simd/i386/jquanti-avx2.asm \
 ))
 
-else
-
-$(eval $(call gb_StaticLibrary_add_generated_cobjects,libjpeg-turbo,\
-    UnpackedTarball/libjpeg-turbo/jsimd_none \
-))
-
 endif
-
-else
-
-$(eval $(call gb_StaticLibrary_add_generated_cobjects,libjpeg-turbo,\
-    UnpackedTarball/libjpeg-turbo/jsimd_none \
-))
-
 endif
 
 

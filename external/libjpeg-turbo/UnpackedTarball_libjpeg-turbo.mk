@@ -15,6 +15,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libjpeg-turbo,0))
 
 $(eval $(call gb_UnpackedTarball_add_patches,libjpeg-turbo, \
     external/libjpeg-turbo/include.patch \
+    external/libjpeg-turbo/undefined_references.patch \
 ))
 
 # jconfigint.h and jconfig.h generated via
