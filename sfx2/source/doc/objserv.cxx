@@ -92,6 +92,7 @@
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/lokhelper.hxx>
+#include <comphelper/dispatchcommand.hxx>
 #include <SfxRedactionHelper.hxx>
 
 #include <com/sun/star/util/XCloseable.hpp>
@@ -520,6 +521,17 @@ void SfxObjectShell::AfterSignContent(bool bHaveWeSigned, weld::Window* pDialogP
     }
 }
 
+namespace
+{
+/// Updates the UI so it doesn't try to modify an already finalized signature line shape.
+void ResetSignatureSelection(SfxObjectShell& rObjectShell, SfxViewShell& rViewShell)
+{
+    rViewShell.SetSignPDFCertificate({});
+    comphelper::dispatchCommand(".uno:DeSelect", {});
+    rObjectShell.RecheckSignature(false);
+}
+}
+
 static weld::Window* GetReqDialogParent(SfxRequest &rReq, SfxObjectShell& rShell)
 {
     weld::Window* pDialogParent = rReq.GetFrameWeld();
@@ -563,8 +575,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 // the infobar back to "sign document".
                 if (pViewShell)
                 {
-                    pViewShell->SetSignPDFCertificate({});
-                    RecheckSignature(false);
+                    ResetSignatureSelection(*this, *pViewShell);
                     pFrame->RemoveInfoBar(u"readonly");
                     pFrame->AppendReadOnlyInfobar();
                 }
@@ -606,6 +617,10 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 if (!aSigningContext.m_aSignatureValue.empty())
                 {
                     SignDocumentContentUsingCertificate(aSigningContext);
+                    if (pViewShell)
+                    {
+                        ResetSignatureSelection(*this, *pViewShell);
+                    }
                     rReq.Done();
                     return;
                 }
