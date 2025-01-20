@@ -86,6 +86,8 @@ class DelayStartListeningFormulaCells
     ScColumn& mColumn;
     bool const mbOldValue;
 
+    void ImplDestroy();
+
 public:
     DelayStartListeningFormulaCells(ScColumn& column, bool delay);
     DelayStartListeningFormulaCells(ScColumn& column);

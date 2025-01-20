@@ -26,18 +26,9 @@ public:
 
 private:
     virtual ~Protector() override {
-#if defined(__COVERITY__) && __COVERITY_MAJOR__ <= 2023
-        try {
-#endif
-            DeInitVCL();
-            // for the 6 tests that use it
-            comphelper::ThreadPool::getSharedOptimalPool().shutdown();
-#if defined(__COVERITY__) && __COVERITY_MAJOR__ <= 2023
-        } catch (const std::exception& e) {
-            SAL_WARN("vcl.app", "Fatal exception: " << e.what());
-            std::terminate();
-        }
-#endif
+        DeInitVCL();
+        // for the 6 tests that use it
+        comphelper::ThreadPool::getSharedOptimalPool().shutdown();
     }
 
     virtual bool protect(

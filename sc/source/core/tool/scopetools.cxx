@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <o3tl/deleter.hxx>
 #include <scopetools.hxx>
 #include <document.hxx>
 #include <column.hxx>
@@ -84,20 +85,14 @@ DelayStartListeningFormulaCells::DelayStartListeningFormulaCells(ScColumn& colum
 {
 }
 
+void DelayStartListeningFormulaCells::ImplDestroy()
+{
+    mColumn.GetDoc().EnableDelayStartListeningFormulaCells(&mColumn, mbOldValue);
+}
+
 DelayStartListeningFormulaCells::~DelayStartListeningFormulaCells()
 {
-#if defined(__COVERITY__) && __COVERITY_MAJOR__ <= 2023
-    try
-    {
-        mColumn.GetDoc().EnableDelayStartListeningFormulaCells(&mColumn, mbOldValue);
-    }
-    catch (...)
-    {
-        std::abort();
-    }
-#else
-    mColumn.GetDoc().EnableDelayStartListeningFormulaCells(&mColumn, mbOldValue);
-#endif
+    suppress_fun_call_w_exception(ImplDestroy());
 }
 
 void DelayStartListeningFormulaCells::set()
