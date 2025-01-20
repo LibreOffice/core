@@ -140,7 +140,7 @@ static void SetParent( std::shared_ptr<const SwAttrSet>& rpAttrSet,
         {
             ProgName sTmp;
             SwStyleNameMapper::FillProgName( pConditionalFormat->GetName(), sTmp, SwGetPoolIdFromName::TxtColl );
-            sVal = sTmp;
+            sVal = std::move(sTmp);
         }
 
         const SfxStringItem aFormatColl( RES_FRMATR_CONDITIONAL_STYLE_NAME, sVal.toString() );
