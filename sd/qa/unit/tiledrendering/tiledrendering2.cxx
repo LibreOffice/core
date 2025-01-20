@@ -13,6 +13,7 @@
 #include <vcl/scheduler.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <svl/cryptosign.hxx>
 
 #include <DrawDocShell.hxx>
 #include <ViewShell.hxx>
@@ -61,6 +62,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertSignatureLineExternal)
     // Without the accompanying fix in place, this test would hang here in the certificate chooser
     // dialog.
     dispatchCommand(mxComponent, ".uno:InsertSignatureLine", aArgs);
+    // Signature line is selected right after inserting:
+    CPPUNIT_ASSERT(pViewShell->GetViewShell()->GetSignPDFCertificate().Is());
 
     // Then make sure the shape is marked as a signature line:
     std::vector<SdrObject*> aMarkedObjects = pView->GetMarkedObjects();
@@ -91,6 +94,19 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertSignatureLineExternal)
         bSignature = aProps.get<bool>("isSignature");
     }
     CPPUNIT_ASSERT(bSignature);
+
+    // Make sure there is no leaked selection after signing is finished:
+    OUString aSigUrl = createFileURL(u"signature.pkcs7");
+    SvFileStream aSigStream(aSigUrl, StreamMode::READ);
+    auto aSigValue
+        = OUString::fromUtf8(read_uInt8s_ToOString(aSigStream, aSigStream.remainingSize()));
+    aArgs = {
+        comphelper::makePropertyValue(u"SignatureTime"_ustr, u"1643201995722"_ustr),
+        comphelper::makePropertyValue(u"SignatureValue"_ustr, aSigValue),
+    };
+    dispatchCommand(mxComponent, u".uno:Signature"_ustr, aArgs);
+    // Signature line is not selected after finishing signing:
+    CPPUNIT_ASSERT(!pViewShell->GetViewShell()->GetSignPDFCertificate().Is());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
