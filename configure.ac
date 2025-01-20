@@ -15875,12 +15875,19 @@ AC_CONFIG_FILES([
                  sysui/desktop/macosx/Info.plist
                  hardened_runtime.xcent:sysui/desktop/macosx/hardened_runtime.xcent.in
                  lo.xcent:sysui/desktop/macosx/lo.xcent.in
-                 vs-code.code-workspace.template:.vscode/vs-code-template.code-workspace.in])
+                 ])
 # map unix-style mount dirs to windows directories: /mnt/c/foobar -> C:/foobar
 # easier to do it in a postprocessing command than to modify every single variable
 AC_CONFIG_FILES([config_host.mk], [
     if test -n "$WSL_ONLY_AS_HELPER"; then
         sed -i -e 's#/mnt/\([[:alpha:]]\)/#\u\1:/#g' config_host.mk
+    fi], [WSL_ONLY_AS_HELPER=$WSL_ONLY_AS_HELPER])
+# also use windows paths in the vs-code workspace file (esp. for the launch configurations that use
+# INSTROOT) and also change the default shell from Cygwin to Git Bash
+AC_CONFIG_FILES([vs-code.code-workspace.template:.vscode/vs-code-template.code-workspace.in], [
+    if test -n "$WSL_ONLY_AS_HELPER"; then
+        sed -i -e 's#/mnt/\([[:alpha:]]\)/#\u\1:/#g' \
+               -e '/defaultProfile/s#Cygwin#Git Bash#' vs-code.code-workspace.template
     fi], [WSL_ONLY_AS_HELPER=$WSL_ONLY_AS_HELPER])
 
 AC_CONFIG_HEADERS([config_host/config_atspi.h])
