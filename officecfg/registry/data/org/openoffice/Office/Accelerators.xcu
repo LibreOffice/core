@@ -279,7 +279,8 @@ Ctrl+Shift+u aka U_SHIFT_MOD1 under GTK/IBUS is for unicode key input
       <node oor:name="C_MOD2" oor:op="replace">
         <prop oor:name="Command">
           <value xml:lang="x-no-translate">L10N SHORTCUTS - NO TRANSLATE</value>
-          <value xml:lang="en-US">.uno:FontDialog</value>
+          <value xml:lang="en-US" install:module="unxwnt">.uno:FontDialog</value>
+          <value xml:lang="en-US" install:module="macosx">.uno:FontDialog</value>
           <value xml:lang="de"    install:module="unxwnt">.uno:UnicodeNotationToggle</value>
           <value xml:lang="eu"    install:module="unxwnt">.uno:UnicodeNotationToggle</value>
           <value xml:lang="gl"    install:module="unxwnt">.uno:UnicodeNotationToggle</value>
