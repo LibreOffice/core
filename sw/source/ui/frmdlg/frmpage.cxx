@@ -1351,6 +1351,12 @@ bool SwFramePage::FillItemSet(SfxItemSet *rSet)
             aSz.SetHeightSizeType(SwFrameSize::Minimum);
 
         bRet |= nullptr != rSet->Put( aSz );
+        if (bRet)
+        {
+            SvxSizeItem aGSz(SID_ATTR_GRAF_FRMSIZE);
+            aGSz.SetSize(aSz.GetSize());
+            bRet |= nullptr != rSet->Put(aGSz);
+        }
     }
     if (m_xFollowTextFlowCB->get_state_changed_from_saved())
     {
@@ -2296,7 +2302,14 @@ void SwFramePage::Init(const SfxItemSet& rSet)
         }
     }
 
-    const SwFormatFrameSize& rSize = rSet.Get(RES_FRM_SIZE);
+    SwFormatFrameSize rSize = rSet.Get(RES_FRM_SIZE);
+    // size could already have been set from another (Crop) page
+    if (const SvxSizeItem* pSizeItem = rSet.GetItemIfSet(SID_ATTR_GRAF_FRMSIZE, false))
+    {
+        if (pSizeItem->GetSize() != rSize.GetSize())
+            rSize.SetSize(pSizeItem->GetSize());
+    }
+
     sal_Int64 nWidth  = m_xWidthED->NormalizePercent(rSize.GetWidth());
     sal_Int64 nHeight = m_xHeightED->NormalizePercent(rSize.GetHeight());
 
