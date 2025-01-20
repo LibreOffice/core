@@ -860,6 +860,71 @@ basegfx::B2DRange getDiscreteViewRange(cairo_t* pRT)
     return basegfx::B2DRange(basegfx::B2DPoint(clip_x1, clip_y1),
                              basegfx::B2DPoint(clip_x2, clip_y2));
 }
+
+bool checkCoordinateLimitWorkaroundNeededForUsedCairo()
+{
+    // setup surface and render context
+    cairo_surface_t* pSurface(cairo_image_surface_create(CAIRO_FORMAT_RGB24, 8, 8));
+    if (!pSurface)
+        // got no surface -> be pessimistic
+        return true;
+
+    cairo_t* pRender(cairo_create(pSurface));
+    if (!pRender)
+    {
+        // got no render -> be pessimistic
+        cairo_surface_destroy(pSurface);
+        return true;
+    }
+
+    // set basic values
+    cairo_set_antialias(pRender, CAIRO_ANTIALIAS_NONE);
+    cairo_set_fill_rule(pRender, CAIRO_FILL_RULE_EVEN_ODD);
+    cairo_set_operator(pRender, CAIRO_OPERATOR_OVER);
+    cairo_set_source_rgb(pRender, 1.0, 0.0, 0.0);
+
+    // create a to-be rendered area centered at the fNumCairoMax
+    // spot and 8x8 discrete units in size
+    constexpr double fNumCairoMax(1 << 23);
+    const basegfx::B2DPoint aCenter(fNumCairoMax, fNumCairoMax);
+    const basegfx::B2DPoint aOffset(4, 4);
+    const basegfx::B2DRange aObject(aCenter - aOffset, aCenter + aOffset);
+
+    // create transformation to render that to an aerea with
+    // range(0, 0, 8, 8) and set as transformation
+    const basegfx::B2DHomMatrix aObjectToView(basegfx::utils::createSourceRangeTargetRangeTransform(
+        aObject, basegfx::B2DRange(0, 0, 8, 8)));
+    cairo_matrix_t aMatrix;
+    cairo_matrix_init(&aMatrix, aObjectToView.a(), aObjectToView.b(), aObjectToView.c(),
+                      aObjectToView.d(), aObjectToView.e(), aObjectToView.f());
+    cairo_set_matrix(pRender, &aMatrix);
+
+    // get/create the path for an object exactly filling that area
+    cairo_new_path(pRender);
+    basegfx::B2DPolyPolygon aObjectPolygon(basegfx::utils::createPolygonFromRect(aObject));
+    CairoPathHelper aPathHelper(aObjectPolygon);
+    cairo_append_path(pRender, aPathHelper.getCairoPath());
+
+    // render it and flush since we want to immediately inspect result
+    cairo_fill(pRender);
+    cairo_surface_flush(pSurface);
+
+    // get access to pixel data
+    const sal_uInt32 nStride(cairo_image_surface_get_stride(pSurface));
+    sal_uInt8* pStartPixelData(cairo_image_surface_get_data(pSurface));
+
+    // extract red value for pixels at (1,1) and (7,7)
+    sal_uInt8 aRedAt_1_1((pStartPixelData + (nStride * 1) + 1)[SVP_CAIRO_RED]);
+    sal_uInt8 aRedAt_6_6((pStartPixelData + (nStride * 6) + 6)[SVP_CAIRO_RED]);
+
+    // cleanup
+    cairo_destroy(pRender);
+    cairo_surface_destroy(pSurface);
+
+    // if cairo works or has no 24.8 internal format all pixels
+    // have to be red (255), thus workaround is needed if !=
+    return aRedAt_1_1 != aRedAt_6_6;
+}
 }
 
 namespace drawinglayer::processor2d
@@ -876,6 +941,7 @@ CairoPixelProcessor2D::CairoPixelProcessor2D(const geometry::ViewInformation2D& 
     , mbRenderDecoratedTextDirect(
           officecfg::Office::Common::Drawinglayer::RenderDecoratedTextDirect::get())
     , mnClipRecursionCount(0)
+    , mbCairoCoordinateLimitWorkaroundActive(false)
 {
     if (nWidthPixel <= 0 || nHeightPixel <= 0)
         // no size, invalid
@@ -900,6 +966,9 @@ CairoPixelProcessor2D::CairoPixelProcessor2D(const geometry::ViewInformation2D& 
                                                                     : CAIRO_ANTIALIAS_NONE);
     cairo_set_fill_rule(mpRT, CAIRO_FILL_RULE_EVEN_ODD);
     cairo_set_operator(mpRT, CAIRO_OPERATOR_OVER);
+
+    // evaluate if CairoCoordinateLimitWorkaround is needed
+    evaluateCairoCoordinateLimitWorkaround();
 }
 
 CairoPixelProcessor2D::CairoPixelProcessor2D(const geometry::ViewInformation2D& rViewInformation,
@@ -915,59 +984,63 @@ CairoPixelProcessor2D::CairoPixelProcessor2D(const geometry::ViewInformation2D& 
     , mbRenderDecoratedTextDirect(
           officecfg::Office::Common::Drawinglayer::RenderDecoratedTextDirect::get())
     , mnClipRecursionCount(0)
+    , mbCairoCoordinateLimitWorkaroundActive(false)
 {
-    if (pTarget)
+    // no target, nothing to initialize
+    if (nullptr == pTarget)
+        return;
+
+    bool bClipNeeded(false);
+
+    if (0 != nOffsetPixelX || 0 != nOffsetPixelY || 0 != nWidthPixel || 0 != nHeightPixel)
     {
-        bool bClipNeeded(false);
-
-        if (0 != nOffsetPixelX || 0 != nOffsetPixelY || 0 != nWidthPixel || 0 != nHeightPixel)
+        if (0 != nOffsetPixelX || 0 != nOffsetPixelY)
         {
-            if (0 != nOffsetPixelX || 0 != nOffsetPixelY)
-            {
-                // if offset is used we need initial clip
-                bClipNeeded = true;
-            }
-            else
-            {
-                // no offset used, compare to real pixel size
-                const tools::Long nRealPixelWidth(cairo_image_surface_get_width(pTarget));
-                const tools::Long nRealPixelHeight(cairo_image_surface_get_height(pTarget));
-
-                if (nRealPixelWidth != nWidthPixel || nRealPixelHeight != nHeightPixel)
-                {
-                    // if size differs we need initial clip
-                    bClipNeeded = true;
-                }
-            }
-        }
-
-        if (bClipNeeded)
-        {
-            // optional: if the possibility to add an initial clip relative
-            // to the real pixel dimensions of the target surface is used,
-            // apply it here using that nice existing method of cairo
-            mpOwnedSurface = cairo_surface_create_for_rectangle(
-                pTarget, nOffsetPixelX, nOffsetPixelY, nWidthPixel, nHeightPixel);
-
-            if (nullptr != mpOwnedSurface)
-                mpRT = cairo_create(mpOwnedSurface);
+            // if offset is used we need initial clip
+            bClipNeeded = true;
         }
         else
         {
-            // create RenderTarget for full target
-            mpRT = cairo_create(pTarget);
-        }
+            // no offset used, compare to real pixel size
+            const tools::Long nRealPixelWidth(cairo_image_surface_get_width(pTarget));
+            const tools::Long nRealPixelHeight(cairo_image_surface_get_height(pTarget));
 
-        if (nullptr != mpRT)
-        {
-            // initialize some basic used values/settings
-            cairo_set_antialias(mpRT, rViewInformation.getUseAntiAliasing()
-                                          ? CAIRO_ANTIALIAS_DEFAULT
-                                          : CAIRO_ANTIALIAS_NONE);
-            cairo_set_fill_rule(mpRT, CAIRO_FILL_RULE_EVEN_ODD);
-            cairo_set_operator(mpRT, CAIRO_OPERATOR_OVER);
+            if (nRealPixelWidth != nWidthPixel || nRealPixelHeight != nHeightPixel)
+            {
+                // if size differs we need initial clip
+                bClipNeeded = true;
+            }
         }
     }
+
+    if (bClipNeeded)
+    {
+        // optional: if the possibility to add an initial clip relative
+        // to the real pixel dimensions of the target surface is used,
+        // apply it here using that nice existing method of cairo
+        mpOwnedSurface = cairo_surface_create_for_rectangle(pTarget, nOffsetPixelX, nOffsetPixelY,
+                                                            nWidthPixel, nHeightPixel);
+
+        if (nullptr != mpOwnedSurface)
+            mpRT = cairo_create(mpOwnedSurface);
+    }
+    else
+    {
+        // create RenderTarget for full target
+        mpRT = cairo_create(pTarget);
+    }
+
+    if (nullptr != mpRT)
+    {
+        // initialize some basic used values/settings
+        cairo_set_antialias(mpRT, rViewInformation.getUseAntiAliasing() ? CAIRO_ANTIALIAS_DEFAULT
+                                                                        : CAIRO_ANTIALIAS_NONE);
+        cairo_set_fill_rule(mpRT, CAIRO_FILL_RULE_EVEN_ODD);
+        cairo_set_operator(mpRT, CAIRO_OPERATOR_OVER);
+    }
+
+    // evaluate if CairoCoordinateLimitWorkaround is needed
+    evaluateCairoCoordinateLimitWorkaround();
 }
 
 CairoPixelProcessor2D::~CairoPixelProcessor2D()
@@ -1324,16 +1397,6 @@ void CairoPixelProcessor2D::processPolygonHairlinePrimitive2D(
 
     cairo_save(mpRT);
 
-    // set linear transformation
-    cairo_matrix_t aMatrix;
-    const double fAAOffset(getViewInformation2D().getUseAntiAliasing() ? 0.5 : 0.0);
-    const basegfx::B2DHomMatrix& rObjectToView(
-        getViewInformation2D().getObjectToViewTransformation());
-    cairo_matrix_init(&aMatrix, rObjectToView.a(), rObjectToView.b(), rObjectToView.c(),
-                      rObjectToView.d(), rObjectToView.e() + fAAOffset,
-                      rObjectToView.f() + fAAOffset);
-    cairo_set_matrix(mpRT, &aMatrix);
-
     // determine & set color
     const basegfx::BColor aHairlineColor(
         maBColorModifierStack.getModifiedColor(rPolygonHairlinePrimitive2D.getBColor()));
@@ -1343,11 +1406,40 @@ void CairoPixelProcessor2D::processPolygonHairlinePrimitive2D(
     // set LineWidth, use Cairo's special cairo_set_hairline
     impl_cairo_set_hairline(mpRT, getViewInformation2D());
 
-    // get PathGeometry & paint it
-    cairo_new_path(mpRT);
-    getOrCreatePathGeometry(mpRT, rPolygon, getViewInformation2D(),
-                            getViewInformation2D().getUseAntiAliasing());
-    cairo_stroke(mpRT);
+    if (isCairoCoordinateLimitWorkaroundActive())
+    {
+        // need to fallback to paint in view coordinates, unfortunately
+        // need to transform self (cairo will do it wrong in this coordinate
+        // space), so no need to try to buffer
+        cairo_new_path(mpRT);
+        basegfx::B2DPolygon aAdaptedPolygon(rPolygon);
+        const double fAAOffset(getViewInformation2D().getUseAntiAliasing() ? 0.5 : 0.0);
+        aAdaptedPolygon.transform(basegfx::utils::createTranslateB2DHomMatrix(fAAOffset, fAAOffset)
+                                  * getViewInformation2D().getObjectToViewTransformation());
+        cairo_identity_matrix(mpRT);
+        addB2DPolygonToPathGeometry(mpRT, aAdaptedPolygon);
+        cairo_stroke(mpRT);
+    }
+    else
+    {
+        // set linear transformation. use own, prepared, re-usable
+        // ObjectToViewTransformation and PolyPoylgon data and let
+        // cairo do the transformations
+        cairo_matrix_t aMatrix;
+        const basegfx::B2DHomMatrix& rObjectToView(
+            getViewInformation2D().getObjectToViewTransformation());
+        const double fAAOffset(getViewInformation2D().getUseAntiAliasing() ? 0.5 : 0.0);
+        cairo_matrix_init(&aMatrix, rObjectToView.a(), rObjectToView.b(), rObjectToView.c(),
+                          rObjectToView.d(), rObjectToView.e() + fAAOffset,
+                          rObjectToView.f() + fAAOffset);
+        cairo_set_matrix(mpRT, &aMatrix);
+
+        // get PathGeometry & paint it
+        cairo_new_path(mpRT);
+        getOrCreatePathGeometry(mpRT, rPolygon, getViewInformation2D(),
+                                getViewInformation2D().getUseAntiAliasing());
+        cairo_stroke(mpRT);
+    }
 
     cairo_restore(mpRT);
 }
@@ -1379,14 +1471,6 @@ void CairoPixelProcessor2D::paintPolyPoylgonRGBA(const basegfx::B2DPolyPolygon& 
 
     cairo_save(mpRT);
 
-    // set linear transformation
-    cairo_matrix_t aMatrix;
-    const basegfx::B2DHomMatrix& rObjectToView(
-        getViewInformation2D().getObjectToViewTransformation());
-    cairo_matrix_init(&aMatrix, rObjectToView.a(), rObjectToView.b(), rObjectToView.c(),
-                      rObjectToView.d(), rObjectToView.e(), rObjectToView.f());
-    cairo_set_matrix(mpRT, &aMatrix);
-
     // determine & set color
     const basegfx::BColor aFillColor(maBColorModifierStack.getModifiedColor(rColor));
 
@@ -1397,10 +1481,36 @@ void CairoPixelProcessor2D::paintPolyPoylgonRGBA(const basegfx::B2DPolyPolygon& 
         cairo_set_source_rgb(mpRT, aFillColor.getRed(), aFillColor.getGreen(),
                              aFillColor.getBlue());
 
-    // get PathGeometry & paint it
-    cairo_new_path(mpRT);
-    getOrCreateFillGeometry(mpRT, rPolyPolygon);
-    cairo_fill(mpRT);
+    if (isCairoCoordinateLimitWorkaroundActive())
+    {
+        // need to fallback to paint in view coordinates, unfortunately
+        // need to transform self (cairo will do it wrong in this coordinate
+        // space), so no need to try to buffer
+        cairo_new_path(mpRT);
+        basegfx::B2DPolyPolygon aAdaptedPolyPolygon(rPolyPolygon);
+        aAdaptedPolyPolygon.transform(getViewInformation2D().getObjectToViewTransformation());
+        cairo_identity_matrix(mpRT);
+        for (const auto& rPolygon : aAdaptedPolyPolygon)
+            addB2DPolygonToPathGeometry(mpRT, rPolygon);
+        cairo_fill(mpRT);
+    }
+    else
+    {
+        // set linear transformation. use own, prepared, re-usable
+        // ObjectToViewTransformation and PolyPoylgon data and let
+        // cairo do the transformations
+        cairo_matrix_t aMatrix;
+        const basegfx::B2DHomMatrix& rObjectToView(
+            getViewInformation2D().getObjectToViewTransformation());
+        cairo_matrix_init(&aMatrix, rObjectToView.a(), rObjectToView.b(), rObjectToView.c(),
+                          rObjectToView.d(), rObjectToView.e(), rObjectToView.f());
+        cairo_set_matrix(mpRT, &aMatrix);
+
+        // get PathGeometry & paint it
+        cairo_new_path(mpRT);
+        getOrCreateFillGeometry(mpRT, rPolyPolygon);
+        cairo_fill(mpRT);
+    }
 
     cairo_restore(mpRT);
 }
@@ -1678,24 +1788,41 @@ void CairoPixelProcessor2D::processMaskPrimitive2D(
 
     cairo_save(mpRT);
 
-    // set linear transformation for applying mask. use no fAAOffset for mask
-    cairo_matrix_t aMatrix;
-    const basegfx::B2DHomMatrix& rObjectToView(
-        getViewInformation2D().getObjectToViewTransformation());
-    cairo_matrix_init(&aMatrix, rObjectToView.a(), rObjectToView.b(), rObjectToView.c(),
-                      rObjectToView.d(), rObjectToView.e(), rObjectToView.f());
-    cairo_set_matrix(mpRT, &aMatrix);
+    if (isCairoCoordinateLimitWorkaroundActive())
+    {
+        // need to fallback to paint in view coordinates, unfortunately
+        // need to transform self (cairo will do it wrong in this coordinate
+        // space), so no need to try to buffer
+        cairo_new_path(mpRT);
+        basegfx::B2DPolyPolygon aAdaptedPolyPolygon(rMask);
+        aAdaptedPolyPolygon.transform(getViewInformation2D().getObjectToViewTransformation());
+        for (const auto& rPolygon : aAdaptedPolyPolygon)
+            addB2DPolygonToPathGeometry(mpRT, rPolygon);
 
-    // create path geometry and put mask as path
-    cairo_new_path(mpRT);
-    getOrCreateFillGeometry(mpRT, rMask);
+        // clip to this mask
+        cairo_clip(mpRT);
+    }
+    else
+    {
+        // set linear transformation for applying mask. use no fAAOffset for mask
+        cairo_matrix_t aMatrix;
+        const basegfx::B2DHomMatrix& rObjectToView(
+            getViewInformation2D().getObjectToViewTransformation());
+        cairo_matrix_init(&aMatrix, rObjectToView.a(), rObjectToView.b(), rObjectToView.c(),
+                          rObjectToView.d(), rObjectToView.e(), rObjectToView.f());
+        cairo_set_matrix(mpRT, &aMatrix);
 
-    // clip to this mask
-    cairo_clip(mpRT);
+        // create path geometry and put mask as path
+        cairo_new_path(mpRT);
+        getOrCreateFillGeometry(mpRT, rMask);
 
-    // reset transformation to not have it set when processing
-    // child content below (was only used to set clip path)
-    cairo_identity_matrix(mpRT);
+        // clip to this mask
+        cairo_clip(mpRT);
+
+        // reset transformation to not have it set when processing
+        // child content below (was only used to set clip path)
+        cairo_identity_matrix(mpRT);
+    }
 
     // process sub-content (that shall be masked)
     mnClipRecursionCount++;
@@ -1957,14 +2084,6 @@ void CairoPixelProcessor2D::processPolygonStrokePrimitive2D(
 
     cairo_save(mpRT);
 
-    // set linear transformation
-    cairo_matrix_t aMatrix;
-    const double fAAOffset(getViewInformation2D().getUseAntiAliasing() ? 0.5 : 0.0);
-    cairo_matrix_init(&aMatrix, rObjectToView.a(), rObjectToView.b(), rObjectToView.c(),
-                      rObjectToView.d(), rObjectToView.e() + fAAOffset,
-                      rObjectToView.f() + fAAOffset);
-    cairo_set_matrix(mpRT, &aMatrix);
-
     // setup line attributes
     cairo_line_join_t eCairoLineJoin = CAIRO_LINE_JOIN_MITER;
     switch (rLineAttribute.getLineJoin())
@@ -2015,33 +2134,77 @@ void CairoPixelProcessor2D::processPolygonStrokePrimitive2D(
         aLineColor.setRed(0.5);
     cairo_set_source_rgb(mpRT, aLineColor.getRed(), aLineColor.getGreen(), aLineColor.getBlue());
 
-    // process/set LineWidth
-    const double fObjectLineWidth(
-        bHairline ? (getViewInformation2D().getInverseObjectToViewTransformation()
-                     * basegfx::B2DVector(1.0, 0.0))
-                        .getLength()
-                  : rLineAttribute.getWidth());
-    cairo_set_line_width(mpRT, fObjectLineWidth);
-
     // check stroke
     const attribute::StrokeAttribute& rStrokeAttribute(
         rPolygonStrokeCandidate.getStrokeAttribute());
     const bool bDashUsed(!rStrokeAttribute.isDefault()
                          && !rStrokeAttribute.getDotDashArray().empty()
                          && 0.0 < rStrokeAttribute.getFullDotDashLen());
-    if (bDashUsed)
+    if (isCairoCoordinateLimitWorkaroundActive())
     {
-        const std::vector<double>& rStroke = rStrokeAttribute.getDotDashArray();
-        cairo_set_dash(mpRT, rStroke.data(), rStroke.size(), 0.0);
+        // need to fallback to paint in view coordinates, unfortunately
+        // need to transform self (cairo will do it wrong in this coordinate
+        // space), so no need to try to buffer
+        cairo_new_path(mpRT);
+        basegfx::B2DPolygon aAdaptedPolygon(rPolygon);
+        const double fAAOffset(getViewInformation2D().getUseAntiAliasing() ? 0.5 : 0.0);
+        aAdaptedPolygon.transform(basegfx::utils::createTranslateB2DHomMatrix(fAAOffset, fAAOffset)
+                                  * getViewInformation2D().getObjectToViewTransformation());
+        cairo_identity_matrix(mpRT);
+        addB2DPolygonToPathGeometry(mpRT, aAdaptedPolygon);
+
+        // process/set LineWidth
+        const double fObjectLineWidth(bHairline
+                                          ? 1.0
+                                          : (getViewInformation2D().getObjectToViewTransformation()
+                                             * basegfx::B2DVector(rLineAttribute.getWidth(), 0.0))
+                                                .getLength());
+        cairo_set_line_width(mpRT, fObjectLineWidth);
+
+        if (bDashUsed)
+        {
+            std::vector<double> aStroke(rStrokeAttribute.getDotDashArray());
+            for (auto& rCandidate : aStroke)
+                rCandidate = (getViewInformation2D().getObjectToViewTransformation()
+                              * basegfx::B2DVector(rCandidate, 0.0))
+                                 .getLength();
+            cairo_set_dash(mpRT, aStroke.data(), aStroke.size(), 0.0);
+        }
+
+        cairo_stroke(mpRT);
     }
+    else
+    {
+        // set linear transformation
+        cairo_matrix_t aMatrix;
+        const double fAAOffset(getViewInformation2D().getUseAntiAliasing() ? 0.5 : 0.0);
+        cairo_matrix_init(&aMatrix, rObjectToView.a(), rObjectToView.b(), rObjectToView.c(),
+                          rObjectToView.d(), rObjectToView.e() + fAAOffset,
+                          rObjectToView.f() + fAAOffset);
+        cairo_set_matrix(mpRT, &aMatrix);
 
-    // create path geometry and put mask as path
-    cairo_new_path(mpRT);
-    getOrCreatePathGeometry(mpRT, rPolygon, getViewInformation2D(),
-                            bHairline && getViewInformation2D().getUseAntiAliasing());
+        // create path geometry and put mask as path
+        cairo_new_path(mpRT);
+        getOrCreatePathGeometry(mpRT, rPolygon, getViewInformation2D(),
+                                bHairline && getViewInformation2D().getUseAntiAliasing());
 
-    // render
-    cairo_stroke(mpRT);
+        // process/set LineWidth
+        const double fObjectLineWidth(
+            bHairline ? (getViewInformation2D().getInverseObjectToViewTransformation()
+                         * basegfx::B2DVector(1.0, 0.0))
+                            .getLength()
+                      : rLineAttribute.getWidth());
+        cairo_set_line_width(mpRT, fObjectLineWidth);
+
+        if (bDashUsed)
+        {
+            const std::vector<double>& rStroke = rStrokeAttribute.getDotDashArray();
+            cairo_set_dash(mpRT, rStroke.data(), rStroke.size(), 0.0);
+        }
+
+        // render
+        cairo_stroke(mpRT);
+    }
 
     cairo_restore(mpRT);
 }
@@ -2057,16 +2220,11 @@ void CairoPixelProcessor2D::processLineRectanglePrimitive2D(
 
     cairo_save(mpRT);
 
-    cairo_matrix_t aMatrix;
+    // work in view coordinates
     const double fAAOffset(getViewInformation2D().getUseAntiAliasing() ? 0.5 : 0.0);
-    const basegfx::B2DHomMatrix& rObjectToView(
-        getViewInformation2D().getObjectToViewTransformation());
-    cairo_matrix_init(&aMatrix, rObjectToView.a(), rObjectToView.b(), rObjectToView.c(),
-                      rObjectToView.d(), rObjectToView.e() + fAAOffset,
-                      rObjectToView.f() + fAAOffset);
-
-    // set linear transformation
-    cairo_set_matrix(mpRT, &aMatrix);
+    basegfx::B2DRange aRange(rLineRectanglePrimitive2D.getB2DRange());
+    aRange.transform(getViewInformation2D().getObjectToViewTransformation());
+    cairo_identity_matrix(mpRT);
 
     const basegfx::BColor aHairlineColor(
         maBColorModifierStack.getModifiedColor(rLineRectanglePrimitive2D.getBColor()));
@@ -2078,9 +2236,8 @@ void CairoPixelProcessor2D::processLineRectanglePrimitive2D(
                                         .getLength());
     cairo_set_line_width(mpRT, fDiscreteLineWidth);
 
-    const basegfx::B2DRange& rRange(rLineRectanglePrimitive2D.getB2DRange());
-    cairo_rectangle(mpRT, rRange.getMinX(), rRange.getMinY(), rRange.getWidth(),
-                    rRange.getHeight());
+    cairo_rectangle(mpRT, aRange.getMinX() + fAAOffset, aRange.getMinY() + fAAOffset,
+                    aRange.getWidth(), aRange.getHeight());
     cairo_stroke(mpRT);
 
     cairo_restore(mpRT);
@@ -2097,22 +2254,17 @@ void CairoPixelProcessor2D::processFilledRectanglePrimitive2D(
 
     cairo_save(mpRT);
 
-    cairo_matrix_t aMatrix;
-    const basegfx::B2DHomMatrix& rObjectToView(
-        getViewInformation2D().getObjectToViewTransformation());
-    cairo_matrix_init(&aMatrix, rObjectToView.a(), rObjectToView.b(), rObjectToView.c(),
-                      rObjectToView.d(), rObjectToView.e(), rObjectToView.f());
-
-    // set linear transformation
-    cairo_set_matrix(mpRT, &aMatrix);
+    // work in view coordinates
+    basegfx::B2DRange aRange(rFilledRectanglePrimitive2D.getB2DRange());
+    aRange.transform(getViewInformation2D().getObjectToViewTransformation());
+    cairo_identity_matrix(mpRT);
 
     const basegfx::BColor aFillColor(
         maBColorModifierStack.getModifiedColor(rFilledRectanglePrimitive2D.getBColor()));
     cairo_set_source_rgb(mpRT, aFillColor.getRed(), aFillColor.getGreen(), aFillColor.getBlue());
 
-    const basegfx::B2DRange& rRange(rFilledRectanglePrimitive2D.getB2DRange());
-    cairo_rectangle(mpRT, rRange.getMinX(), rRange.getMinY(), rRange.getWidth(),
-                    rRange.getHeight());
+    cairo_rectangle(mpRT, aRange.getMinX(), aRange.getMinY(), aRange.getWidth(),
+                    aRange.getHeight());
     cairo_fill(mpRT);
 
     cairo_restore(mpRT);
@@ -2132,6 +2284,7 @@ void CairoPixelProcessor2D::processSingleLinePrimitive2D(
         getViewInformation2D().getObjectToViewTransformation());
     const basegfx::B2DPoint aStart(rObjectToView * rSingleLinePrimitive2D.getStart());
     const basegfx::B2DPoint aEnd(rObjectToView * rSingleLinePrimitive2D.getEnd());
+    cairo_identity_matrix(mpRT);
 
     cairo_set_line_width(mpRT, 1.0f);
 
@@ -3715,6 +3868,47 @@ void CairoPixelProcessor2D::processControlPrimitive2D(
     // control. To do so would need the target OutDev which we
     // want to avoid here
     process(rControlPrimitive);
+}
+
+void CairoPixelProcessor2D::evaluateCairoCoordinateLimitWorkaround()
+{
+    static bool bAlreadyCheckedIfNeeded(false);
+    static bool bIsNeeded(false);
+
+    if (!bAlreadyCheckedIfNeeded)
+    {
+        // check once for office runtime: is workarund needed?
+        bAlreadyCheckedIfNeeded = true;
+        bIsNeeded = checkCoordinateLimitWorkaroundNeededForUsedCairo();
+    }
+
+    if (!bIsNeeded)
+    {
+        // we have a working cairo, so workarund is not needed
+        // and mbCairoCoordinateLimitWorkaroundActive can stay false
+        return;
+    }
+
+    // get discrete size (pixels)
+    basegfx::B2DRange aLogicViewRange(getDiscreteViewRange(mpRT));
+
+    // transform to world coordinates -> logic view range
+    basegfx::B2DHomMatrix aInvViewTrans(getViewInformation2D().getViewTransformation());
+    aInvViewTrans.invert();
+    aLogicViewRange.transform(aInvViewTrans);
+
+    // create 1<<23 CairoCoordinate limit from 24.8 internal format
+    // and a range fitting to it (just once, this is static)
+    constexpr double fNumCairoMax(1 << 23);
+    static const basegfx::B2DRange aNumericalCairoLimit(-fNumCairoMax, -fNumCairoMax,
+                                                        fNumCairoMax - 1.0, fNumCairoMax - 1.0);
+
+    if (!aLogicViewRange.isEmpty() && !aNumericalCairoLimit.isInside(aLogicViewRange))
+    {
+        // aLogicViewRange is not completely inside region covered by
+        // 24.8 cairo format, thus workaround is needed, set flag
+        mbCairoCoordinateLimitWorkaroundActive = true;
+    }
 }
 
 void CairoPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
