@@ -583,6 +583,9 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, StringMap
                     std::unique_ptr<weld::TreeIter> itEntry(pTreeView->make_iterator());
                     if (pTreeView->get_iter_abs_pos(*itEntry, nEntryAbsPos))
                     {
+                        // avoid negative coordinates and crash
+                        pTreeView->scroll_to_row(*itEntry);
+
                         tools::Rectangle aRect = pTreeView->get_row_area(*itEntry);
                         Point aPoint = aRect.Center();
                         assert(aPoint.getX() >= 0 && aPoint.getY() >= 0);
