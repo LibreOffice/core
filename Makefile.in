@@ -40,8 +40,10 @@ Makefile $(BUILDDIR)/Makefile: $(BUILDDIR)/config_host.mk $(BUILDDIR)/config_hos
 # run configure in an environment not polluted by config_host.mk
 ifneq ($(MSYSTEM),)
 WSL:=@WSL@
-# wsl needs unix-style path into windows realm
-$(BUILDDIR)/config_host.mk : SRCDIR:=/$(shell $(WSL) wslpath -u $(SRCDIR))
+# wsl needs unix-style path into windows realm, use long form to avoid confusing autogen.sh wrt
+# builddir != srcdir when in actually it is just srcdir-in-shortform vs srcdir-in-longform
+# for the same reason cd to the longform of BUILDDIR
+$(BUILDDIR)/config_host.mk : SRCDIR:=/$(shell $(WSL) wslpath -u $(shell cygpath -ml $(SRCDIR)))
 endif
 $(BUILDDIR)/config_host.mk : $(wildcard \
 		$(SRCDIR)/autogen.sh \
@@ -57,7 +59,7 @@ $(BUILDDIR)/config_host.mk : $(wildcard \
 		$(BUILDDIR)/autogen.lastrun \
 		) \
 		$(shell if test -n '$(JAVA_HOME)' -a ! -d '$(JAVA_HOME)'; then echo force-restart; fi)
-	sh -c "$(if $(MSYSTEM),$(WSL) )$(SRCDIR)/autogen.sh"
+	sh -c "$(if $(MSYSTEM),cd $(shell cygpath -ml $(BUILDDIR)); $(WSL) )$(SRCDIR)/autogen.sh"
 
 else # MAKE_RESTARTS
 
