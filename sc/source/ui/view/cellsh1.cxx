@@ -2245,9 +2245,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 const ScCondFormatIndexes& rCondFormats = pPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData();
                 bool bContainsCondFormat = !rCondFormats.empty();
                 bool bCondFormatDlg = false;
-                bool bContainsExistingCondFormat = false;
                 if(bContainsCondFormat)
                 {
+                    bContainsCondFormat = false; // maybe all nullptrs?
                     for (const auto& rCondFormat : rCondFormats)
                     {
                         // check if at least one existing conditional format has the same range
@@ -2255,7 +2255,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         if(!pCondFormat)
                             continue;
 
-                        bContainsExistingCondFormat = true;
+                        bContainsCondFormat = true; // found at least one format
                         const ScRangeList& rCondFormatRange = pCondFormat->GetRange();
                         if(rCondFormatRange == aRangeList)
                         {
@@ -2426,7 +2426,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                 // if not found a conditional format ask whether we should edit one of the existing
                 // or should create a new overlapping conditional format
-                if(bContainsCondFormat && !bCondFormatDlg && bContainsExistingCondFormat)
+                if (bContainsCondFormat && !bCondFormatDlg)
                 {
                     std::shared_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pTabViewShell->GetFrameWeld(),
                                                                    VclMessageType::Question, VclButtonsType::YesNo,
