@@ -213,18 +213,10 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(std::u16string_view rLayoutName, 
         {
             bCreated = true;
 
-            OUString sParentStyleSheetName;
-            // if we created outline styles, we need to chain them
-            if (nLevel > 1)
-            {
-                OUString aPreviousLevelName( aPrefix + aName + " " + OUString::number( nLevel-1 ) );
-                SfxStyleSheetBase* pParent = Find(aPreviousLevelName, SfxStyleFamily::Page);
-                if (pParent)
-                    sParentStyleSheetName = pParent->GetName();
-            }
-
-            pSheet = &Make(aLevelName, SfxStyleFamily::Page, nUsedMask, sParentStyleSheetName);
+            pSheet = &Make(aLevelName, SfxStyleFamily::Page,nUsedMask);
             pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_OUTLINE + nLevel );
+            pSheet->SetParent( OUString() );
+
 
             // attributing for level 1, the others levels inherit
             if (nLevel == 1)
@@ -304,6 +296,24 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(std::u16string_view rLayoutName, 
             // Line distance (upwards). Stuff around here cleaned up in i35937
             aSvxULSpaceItem.SetUpper(nUpper);
             pSheet->GetItemSet().Put(aSvxULSpaceItem);
+        }
+    }
+
+    // if we created outline styles, we need to chain them
+    if( bCreated )
+    {
+        SfxStyleSheetBase* pParent = nullptr;
+        for (sal_Int32 nLevel = 1; nLevel < 10; nLevel++)
+        {
+            OUString aLevelName( aPrefix + aName + " " + OUString::number( nLevel ) );
+            pSheet = Find(aLevelName, SfxStyleFamily::Page);
+            DBG_ASSERT( pSheet, "missing layout style!");
+            if( pSheet )
+            {
+                if (pParent)
+                    pSheet->SetParent(pParent->GetName());
+                pParent = pSheet;
+            }
         }
     }
 
