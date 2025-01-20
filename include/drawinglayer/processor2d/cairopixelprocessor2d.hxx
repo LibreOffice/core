@@ -86,6 +86,9 @@ class UNLESS_MERGELIBS(DRAWINGLAYER_DLLPUBLIC) CairoPixelProcessor2D final : pub
     // see comment there
     sal_uInt16 mnClipRecursionCount;
 
+    // calculated result of if we are in outsideCairoCoordinateLimits mode
+    bool mbCairoCoordinateLimitWorkaroundActive;
+
     // helpers for direct paints
     void paintPolyPoylgonRGBA(const basegfx::B2DPolyPolygon& rPolyPolygon,
                               const basegfx::BColor& rColor, double fTransparency = 0.0);
@@ -179,12 +182,21 @@ class UNLESS_MERGELIBS(DRAWINGLAYER_DLLPUBLIC) CairoPixelProcessor2D final : pub
     void processFillGradientPrimitive2D_square_rect(
         const primitive2d::FillGradientPrimitive2D& rFillGradientPrimitive2D);
 
+    // check if CairoCoordinateLimitWorkaround is needed
+    void evaluateCairoCoordinateLimitWorkaround();
+
 protected:
     bool hasError() const { return cairo_status(mpRT) != CAIRO_STATUS_SUCCESS; }
     bool hasRenderTarget() const { return nullptr != mpRT; }
 
 public:
     bool valid() const { return hasRenderTarget() && !hasError(); }
+
+    // read access to CairoCoordinateLimitWorkaround mechanism
+    bool isCairoCoordinateLimitWorkaroundActive() const
+    {
+        return mbCairoCoordinateLimitWorkaroundActive;
+    }
 
     // constructor to create a CairoPixelProcessor2D which
     // allocates and owns a cairo surface of given size. You
