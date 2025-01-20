@@ -2161,7 +2161,6 @@ sal_Int32 DocxExport::getWordCompatibilityMode()
         // Keep the imported compatibility mode (unless it is unknown / unsupported)
         const bool bPreventRoundTrippingUnknownMode
             = nImportedWordCompatbilityMode > m_nWordCompatibilityMode;
-        assert(!bPreventRoundTrippingUnknownMode && "create a new meta bug for new compat mode");
         if (nImportedWordCompatbilityMode > 0 && !bPreventRoundTrippingUnknownMode)
             m_nWordCompatibilityMode = nImportedWordCompatbilityMode;
     }
