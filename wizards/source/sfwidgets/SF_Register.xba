@@ -74,7 +74,7 @@ REM ----------------------------------------------------------------------------
 Public Function _NewContextMenu(Optional ByVal pvArgs As Variant) As Object
 &apos;&apos;&apos;	Create a new instance of the SF_ContextMenu class
 &apos;&apos;&apos;	Args:
-&apos;&apos;&apos;		Component: the document&apos;s component requesting a context menu
+&apos;&apos;&apos;		Component: the document&apos;s Component requesting a context menu
 &apos;&apos;&apos;		ContextMenuName: a private:resource/popupmenu/... reference
 &apos;&apos;&apos;		SubmenuChar: Delimiter used in menu trees
 &apos;&apos;&apos;	Returns: the instance or Nothing

@@ -2929,20 +2929,26 @@ class SFWidgets:
 
             A context menu is usually predefined at LibreOffice installation.
             Customization is done statically with the Tools + Customize dialog.
-            The actual service provides a mean to make temporary additions at
-            the bottom of a context menu. Those changes are lost when the document is closed.
+
+            The actual service provides means
+                - to make temporary additions at the bottom of a context menu,
+                - to replace entirely a context menu.
+            Those changes are lost when the document is closed.
             """
         # Mandatory class properties for service registration
         serviceimplementation = 'basic'
         servicename = 'SFWidgets.ContextMenu'
         servicesynonyms = ('contextmenu', 'sfwidgets.contextmenu')
-        serviceproperties = dict(ShortcutCharacter = 0, SubmenuCharacter = 0)
+        serviceproperties = dict(ParentDocument = 0, ShortcutCharacter = 0, SubmenuCharacter = 0)
 
         def Activate(self, enable = True):
             return self.ExecMethod(self.vbMethod, 'Activate', enable)
 
         def AddItem(self, menuitem, command = '', script = ''):
             return self.ExecMethod(self.vbMethod, 'AddItem', menuitem, command, script)
+
+        def RemoveAllItems(self):
+            return self.ExecMethod(self.vbMethod, 'RemoveAllItems')
 
 
     # #########################################################################

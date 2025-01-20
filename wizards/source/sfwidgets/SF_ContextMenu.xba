@@ -14,7 +14,7 @@ Option Explicit
 &apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;&apos;
 &apos;&apos;&apos;	SF_ContextMenu
 &apos;&apos;&apos;	==============
-&apos;&apos;&apos;		Complete a predefined context menu with new items.
+&apos;&apos;&apos;		Complete pr replace a predefined context menu with new items.
 &apos;&apos;&apos;
 &apos;&apos;&apos;		A context menu is obtained by a right-click on several areas of a document.
 &apos;&apos;&apos;		Each area determines its own context menu.
@@ -23,8 +23,13 @@ Option Explicit
 &apos;&apos;&apos;
 &apos;&apos;&apos;		A context menu is usually predefined at LibreOffice installation.
 &apos;&apos;&apos;		Customization is done statically with the Tools + Customize dialog.
-&apos;&apos;&apos;		The actual service provides a mean to make temporary additions at
-&apos;&apos;&apos;		the bottom of a context menu. Those changes are lost when the document is closed.
+&apos;&apos;&apos;		The actual service provides tools to configure a context menu preset in an open document.
+&apos;&apos;&apos;		Context menus configured at LibreOffice installation level are not included.
+&apos;&apos;&apos;		The service provides a mean to
+&apos;&apos;&apos;			- make temporary additions at the bottom of a context menu
+&apos;&apos;&apos;			- replace a context menu.
+&apos;&apos;&apos;		The changes are lost when the document is closed.
+&apos;&apos;&apos;		The context menu may be emptied, which gives the illusion that the right-click is inactive.
 &apos;&apos;&apos;
 &apos;&apos;&apos;		The name of a context menu is the last component of the resource URL:
 &apos;&apos;&apos;			&quot;private:resource/popupmenu/the-name-here&quot;
@@ -36,10 +41,12 @@ Option Explicit
 &apos;&apos;&apos;
 &apos;&apos;&apos;		A context menu is setup in next sequence:
 &apos;&apos;&apos;			1. Define each menu item, submenu or line separator with AddItem(...)
-&apos;&apos;&apos;			2. Activate() the menu to make it visible and active
-&apos;&apos;&apos;			3. If meaningful, it can be temporarily deactivate with Activate(False)
+&apos;&apos;&apos;			2. Activate() the local menu to make it visible and active
+&apos;&apos;&apos;			3. If meaningful, it can be temporarily deactivated with Activate(False)
+&apos;&apos;&apos;			   In that case, the menu defined at LibreOffice level takes the lead.
 &apos;&apos;&apos;			4. Items can be optionally added, and the menu might be made active again
-&apos;&apos;&apos;			5. Dispose() cleans the memory resources
+&apos;&apos;&apos;			5, RemoveAllItems(...) optionally removes all standard and all added items
+&apos;&apos;&apos;			6. Dispose() cleans the memory resources
 &apos;&apos;&apos;
 &apos;&apos;&apos;		Definitions:
 &apos;&apos;&apos;			SubmenuCharacter: the character or the character string that identifies how menus are cascading
@@ -112,6 +119,7 @@ Private ServiceName 		As String
 
 &apos;	Menu descriptors
 Private Component			As Object		&apos; com.sun.star.lang.XComponent
+Private DocumentType		As String		&apos; &quot;Calc&quot;, &quot;Writer&quot;, ...
 Private ResourceURL			As String		&apos; private:resource/popupmenu/...
 Private ConfigManager		As Object		&apos; com.sun.star.ui.XUIConfigurationManager
 Private MenuTree			As Variant		&apos; Dictionary nodename - com.sun.star.ui.ItemDescriptor pair
@@ -133,6 +141,7 @@ Private Sub Class_Initialize()
 	ObjectType = &quot;ContextMenu&quot;
 	ServiceName = &quot;SFWidgets.ContextMenu&quot;
 	Set Component = Nothing
+	DocumentType = &quot;&quot;
 	Set ConfigManager = Nothing
 	ResourceURL = &quot;&quot;
 	Set MenuTree = Nothing
@@ -155,6 +164,12 @@ End Function	&apos;	SFWidgets.SF_ContextMenu Explicit Destructor
 REM ================================================================== PROPERTIES
 
 REM -----------------------------------------------------------------------------
+Property Get ParentDocument() As Variant
+&apos;&apos;&apos;	The ParentDocument property returns a document class (or one of its subclasses) instance
+	ParentDocument = _PropertyGet(&quot;ParentDocument&quot;)
+End Property	&apos;	SFWidgets.SF_ContextMenu.ParentDocument (get)
+
+REM -----------------------------------------------------------------------------
 Property Get ShortcutCharacter() As Variant
 &apos;&apos;&apos;	The ShortcutCharacter property specifies character preceding the underline access key
 	ShortcutCharacter = _PropertyGet(&quot;ShortcutCharacter&quot;)
@@ -171,11 +186,11 @@ REM ===================================================================== METHOD
 
 REM -----------------------------------------------------------------------------
 Public Sub Activate(Optional ByVal Enable As Variant) As Variant
-&apos;&apos;&apos;	Make the added items of the context menu available for execution,
+&apos;&apos;&apos;	Make the added items of the context menu stored in the document available for execution,
 &apos;&apos;&apos;	or, at the opposite, disable them, depending on the argument.
 &apos;&apos;&apos;	Args:
-&apos;&apos;&apos;		Enable: When True (default), the new items of the context menu are made visible.
-&apos;&apos;&apos;			When False, they are suppressed.
+&apos;&apos;&apos;		Enable: When True (default), the local menu stored in the document is made active.
+&apos;&apos;&apos;			When False, the global menu defined at LibreOffice level takes the precedence.
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		None
 &apos;&apos;&apos;	Examples:
@@ -346,8 +361,10 @@ Public Function Methods() As Variant
 &apos;&apos;&apos;	Return the list of public methods of the Model service as an array
 
 	Methods = Array( _
-					&quot;AddItem&quot; _
+					&quot;Activate&quot; _
+					, &quot;AddItem&quot; _
 					, &quot;Execute&quot; _
+					, &quot;RemoveAllItems&quot; _
 					)
 
 End Function	&apos;	SFWidgets.SF_ContextMenu.Methods
@@ -357,11 +374,64 @@ Public Function Properties() As Variant
 &apos;&apos;&apos;	Return the list or properties of the Timer a.AddItem(&quot;B&gt;B1&quot;)class as an array
 
 	Properties = Array( _
-					&quot;ShortcutCharacter&quot; _
+					&quot;ParentDocument&quot; _
+					, &quot;ShortcutCharacter&quot; _
 					, &quot;SubmenuCharacter&quot; _
 					)
 
 End Function	&apos;	SFWidgets.SF_ContextMenu.Properties
+
+REM -----------------------------------------------------------------------------
+Public Sub RemoveAllItems()
+&apos;&apos;&apos;	Remove all items, both
+&apos;&apos;&apos;		- predefined with Tools + Customize and saved in the document
+&apos;&apos;&apos;		- added by contextmenu.AddItem()
+&apos;&apos;&apos;	Adding custom items (AddItem) remains possible.
+&apos;&apos;&apos;	This action cannot be reverted except by closing and reopening the document.
+&apos;&apos;&apos;	Example:	Associate next Sub with the on-right-click event of a sheet.
+&apos;&apos;&apos;			=&gt;	The custom menu appears when right-clicking in column C, otherwise normal behaviour
+&apos;&apos;&apos;		Sub OnRightClick1(Optional XRange)	&apos;	Xrange is a com.sun.star.table.XCellRange
+&apos;&apos;&apos;		Dim calc, menu, bColumn
+&apos;&apos;&apos;			Set calc = CreateScriptService(&quot;Calc&quot;, ThisComponent)
+&apos;&apos;&apos;			Set menu = calc.ContextMenus(&quot;cell&quot;)
+&apos;&apos;&apos;			menu.RemoveAllItems()
+&apos;&apos;&apos;			bColumn =  ( Len(calc.Intersect(&quot;Sheet1.$C:$C&quot;, XRange.AbsoluteName)) &gt; 0 )
+&apos;&apos;&apos;			If bColumn Then
+&apos;&apos;&apos;				menu.AddItem(&quot;A&quot;, Script := &quot;vnd.sun.star.script:Standard.Module1.EnterA?language=Basic&amp;location=document&quot;)
+&apos;&apos;&apos;				...
+&apos;&apos;&apos;			End If
+&apos;&apos;&apos;			menu.Activate(bColumn)
+&apos;&apos;&apos;		End Sub
+
+Dim i As Long
+
+Const cstThisSub = &quot;SFWidgets.ContextMenu.RemoveAllItems&quot;
+Const cstSubArgs = &quot;&quot;
+
+Check:
+	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	SF_Utils._EnterFunction(cstThisSub, cstSubArgs)
+
+Try:
+	For i = MenuContainer.Count - 1 To 0 Step -1
+		MenuContainer.removeByIndex(i)
+	Next i
+
+	With ConfigManager
+		If .hasSettings(ResourceURL) Then
+&apos;			.removeSettings(ResourceURL)
+			.replaceSettings(ResourceURL, MenuContainer)
+		Else
+			.insertSettings(ResourceURL, MenuContainer)
+		End If
+	End With
+
+Finally:
+	SF_Utils._ExitFunction(cstThisSub)
+	Exit Sub
+Catch:
+	GoTo Finally
+End Sub			&apos;	SFWidgets.SF_ContextMenu.RemoveAllItems
 
 REM -----------------------------------------------------------------------------
 Public Function SetProperty(Optional ByVal PropertyName As Variant _
@@ -514,6 +584,7 @@ Private Function _PropertyGet(Optional ByVal psProperty As String) As Variant
 &apos;&apos;&apos;		psProperty: the name of the property
 
 Dim vGet As Variant							&apos;	Return value
+Dim oWindow As Object						&apos;	SF_UI.Window object
 Dim cstThisSub As String
 Const cstSubArgs = &quot;&quot;
 
@@ -524,6 +595,11 @@ Const cstSubArgs = &quot;&quot;
 	_PropertyGet = Null
 
 	Select Case UCase(psProperty)
+		Case UCase(&quot;ParentDocument&quot;)
+			If Not IsNull(Component) Then
+				Set oWindow = ScriptForge.SF_UI._IdentifyWindow(Component)
+				If Not IsNull(oWindow) Then Set _PropertyGet = CreateScriptService(oWindow.DocumentType, Component) Else Set _PropertyGet = Nothing
+			End If
 		Case UCase(&quot;ShortcutCharacter&quot;)
 			_PropertyGet = _UnderlineAccessKeyChar
 		Case UCase(&quot;SubmenuCharacter&quot;)

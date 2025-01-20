@@ -6926,15 +6926,18 @@ class SFWidgets:
         """
             Complete a predefined context menu with new items.
 
-            A context menu is obtained by a right-click on several areas of a document.
+            A context menu is obtained by a right-click on specific areas of a document.
             Each area determines its own context menu.
             (Consider right-clicking on a cell or on a sheet tab in a Calc document).
             Each component model has its own set of context menus.
 
             A context menu is usually predefined at LibreOffice installation.
             Customization is done statically with the Tools + Customize dialog.
-            The actual service provides a mean to make temporary additions at
-            the bottom of a context menu in an active document. Those changes are lost when the document is closed.
+
+            The actual service provides means
+                - to make temporary additions at the bottom of a context menu,
+                - to replace entirely a context menu.
+            Those changes are lost when the document is closed.
 
             The name of a context menu is the last component of the resource URL:
             "private:resource/popupmenu/the-name-here"
@@ -6942,6 +6945,8 @@ class SFWidgets:
             Context menu items are either usual items or line separators. Checkboxes or radio buttons are not supported.
             """
 
+        ParentDocument: Union[DOCUMENT, BASE, CALC, FORMDOCUMENT, WRITER]
+        """ Document class (or one of its subclasses) instance to which the context menu belongs to. """
         ShortcutCharacter: str
         """ Character used to define the access key of a menu item. The default character is "~" (tilde). """
         SubmenuCharacter: str
@@ -6973,11 +6978,11 @@ class SFWidgets:
 
         def Activate(self, enable: bool = ...) -> None:
             """
-                Make the added items of the context menu available for execution, or, at the opposite,
-                disable them, depending on the argument.
+                Make the added items of the context menu stored in the document available for execution,
+                or, at the opposite, disable them, depending on the argument.
                     Args
-                        ``enable``: when ``True`` (default), the new items of the context menu are made visible.
-                        When ``False``, they are suppressed.
+                        ``enable``: when ``True`` (default), the local menu stored in the document is made active.
+                        When False, the global menu defined at LibreOffice level takes the precedence.
                     Returns
                         None
                 """
@@ -7006,6 +7011,19 @@ class SFWidgets:
                         Arguments ``Command`` and ``Script`` are mutually exclusive.
                     Returns
                         None
+                """
+            ...
+
+        def RemoveAllItems(self) -> None:
+            """
+                Remove all items, both
+                    - predefined with ``Tools + Customize`` and saved in the document
+                    - added by ``AddItem()``
+                Adding custom items (``AddItem``) remains possible.
+                This action cannot be reverted except by closing and reopening the document.
+
+                Returns
+                    None
                 """
             ...
 
