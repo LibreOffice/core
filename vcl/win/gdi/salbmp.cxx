@@ -442,9 +442,6 @@ bool WinSalBitmap::Create( HANDLE hBitmap )
             maSize = Size( pBIH->biWidth, pBIH->biHeight );
             mnBitCount = pBIH->biBitCount;
 
-            if( mnBitCount )
-                mnBitCount = ( mnBitCount <= 1 ) ? 1 : ( mnBitCount <= 4 ) ? 4 : ( mnBitCount <= 8 ) ? 8 : 24;
-
             GlobalUnlock( mhDIB );
         }
         else
@@ -458,13 +455,6 @@ bool WinSalBitmap::Create( HANDLE hBitmap )
         {
             maSize = Size( aDDBInfo.bmWidth, aDDBInfo.bmHeight );
             mnBitCount = aDDBInfo.bmPlanes * aDDBInfo.bmBitsPixel;
-
-            if( mnBitCount )
-            {
-                mnBitCount = ( mnBitCount <= 1 ) ? 1 :
-                             ( mnBitCount <= 4 ) ? 4 :
-                             ( mnBitCount <= 8 ) ? 8 : 24;
-            }
         }
         else
         {
