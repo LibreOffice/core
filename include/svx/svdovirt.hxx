@@ -40,7 +40,7 @@ protected:
     virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
 
     rtl::Reference<SdrObject> mxRefObj; // Referenced drawing object
-    tools::Rectangle aSnapRect;
+    tools::Rectangle maSnapRect;
 
 protected:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;

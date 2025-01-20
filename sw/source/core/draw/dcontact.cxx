@@ -2613,16 +2613,16 @@ void SwDrawVirtObj::Shear(const Point& rRef, Degree100 nAngle, double tn, bool b
 
 void SwDrawVirtObj::RecalcSnapRect()
 {
-    aSnapRect = mxRefObj->GetSnapRect();
-    aSnapRect += GetOffset();
+    maSnapRect = mxRefObj->GetSnapRect();
+    maSnapRect += GetOffset();
 }
 
 const tools::Rectangle& SwDrawVirtObj::GetSnapRect() const
 {
-    const_cast<SwDrawVirtObj*>(this)->aSnapRect = mxRefObj->GetSnapRect();
-    const_cast<SwDrawVirtObj*>(this)->aSnapRect += GetOffset();
+    const_cast<SwDrawVirtObj*>(this)->maSnapRect = mxRefObj->GetSnapRect();
+    const_cast<SwDrawVirtObj*>(this)->maSnapRect += GetOffset();
 
-    return aSnapRect;
+    return maSnapRect;
 }
 
 void SwDrawVirtObj::SetSnapRect(const tools::Rectangle& rRect)
@@ -2645,10 +2645,10 @@ void SwDrawVirtObj::NbcSetSnapRect(const tools::Rectangle& rRect)
 
 const tools::Rectangle& SwDrawVirtObj::GetLogicRect() const
 {
-    const_cast<SwDrawVirtObj*>(this)->aSnapRect = mxRefObj->GetLogicRect();
-    const_cast<SwDrawVirtObj*>(this)->aSnapRect += GetOffset();
+    const_cast<SwDrawVirtObj*>(this)->maSnapRect = mxRefObj->GetLogicRect();
+    const_cast<SwDrawVirtObj*>(this)->maSnapRect += GetOffset();
 
-    return aSnapRect;
+    return maSnapRect;
 }
 
 void SwDrawVirtObj::SetLogicRect(const tools::Rectangle& rRect)
