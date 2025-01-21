@@ -1640,7 +1640,8 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
                 if (it != aFrameProperties.end())
                 {
                     it->Value >>= nVertOrientRelation;
-                    if (nVertOrientRelation == text::RelOrientation::PAGE_FRAME)
+                    bool bInHeaderFooter = m_rDMapper_Impl.IsInHeaderFooter();
+                    if (nVertOrientRelation == text::RelOrientation::PAGE_FRAME && bInHeaderFooter)
                     {
                         // If vertical relation is page, follow-text-flow is not useful and causes
                         // unwanted wrap of body text around in-header floating table, so avoid it.
