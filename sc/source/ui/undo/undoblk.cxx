@@ -1626,7 +1626,12 @@ ScDocumentUniquePtr ScUndoConditionalFormat::createUndoRedoData()
     ScDocumentUniquePtr pUndoRedoDoc(new ScDocument(SCDOCMODE_UNDO));
     pUndoRedoDoc->InitUndo(rDoc, mnTab, mnTab);
     if (const auto* pList = rDoc.GetCondFormList(mnTab))
+    {
         pUndoRedoDoc->SetCondFormList(new ScConditionalFormatList(*pUndoRedoDoc, *pList), mnTab);
+        // Save CF keys in cells' attributes
+        for (const auto& range : pList->GetCombinedRange())
+            rDoc.CopyToDocument(range, InsertDeleteFlags::ATTRIB, false, *pUndoRedoDoc);
+    }
     return pUndoRedoDoc;
 }
 
@@ -1654,14 +1659,23 @@ void ScUndoConditionalFormat::DoChange(ScDocument* pSrcDoc)
     // formats with the other formats in the tab, to get the correct state.
     ScRangeList aCombinedRange;
     if (const auto* pOldList = rDoc.GetCondFormList(mnTab))
+    {
         aCombinedRange = pOldList->GetCombinedRange();
+        // Clear all existing CF keys from cells' attributes
+        for (auto& pFormat : *pOldList)
+            rDoc.RemoveCondFormatData(aCombinedRange, mnTab, pFormat->GetKey());
+    }
 
     if (const auto* pNewList = pSrcDoc->GetCondFormList(mnTab))
     {
-        for (const auto& cond : *pNewList)
-            for (const auto& range : cond->GetRange())
-                aCombinedRange.Join(range);
+        ScRangeList aCombinedRange2 = pNewList->GetCombinedRange();
         rDoc.SetCondFormList(new ScConditionalFormatList(rDoc, *pNewList), mnTab);
+        for (const auto& range : aCombinedRange2)
+        {
+            aCombinedRange.Join(range);
+            // Restore the CF keys to cell attributes
+            pSrcDoc->CopyToDocument(range, InsertDeleteFlags::ATTRIB, false, rDoc);
+        }
     }
     else
     {
