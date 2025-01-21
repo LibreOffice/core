@@ -252,6 +252,31 @@ CPPUNIT_TEST_FIXTURE(Test, testTableStyleParaBorderSpacing)
     // i.e. the top and bottom border and its 1pt spacing was not set on the in-table paragraph.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(35), nTopBorderDistance);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testDOCXFloatingTableNestedLayout)
+{
+    // Given a floating table inside an outer table, both in body text:
+    // When loading that document:
+    loadFromFile(u"floattable-nested-layout.docx");
+
+    // Then make sure the inner table stays inside the outer table:
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    css::uno::Reference<qa::XDumper> xDumper(xModel->getCurrentController(), uno::UNO_QUERY);
+    OString aDump = xDumper->dump(u"layout"_ustr).toUtf8();
+    auto pCharBuffer = reinterpret_cast<const xmlChar*>(aDump.getStr());
+    xmlDocUniquePtr pXmlDoc(xmlParseDoc(pCharBuffer));
+    sal_Int32 nFlyTop = getXPath(pXmlDoc, "//fly/infos/bounds", "top").toInt32();
+    sal_Int32 nFlyBottom = getXPath(pXmlDoc, "//fly/infos/bounds", "bottom").toInt32();
+    sal_Int32 nTableTop = getXPath(pXmlDoc, "//page[1]/body/tab/infos/bounds", "top").toInt32();
+    sal_Int32 nTableBottom
+        = getXPath(pXmlDoc, "//page[1]/body/tab/infos/bounds", "bottom").toInt32();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected greater than: 1839
+    // - Actual  : 360
+    // i.e. the floating table was outside the outer table.
+    CPPUNIT_ASSERT_GREATER(nTableTop, nFlyTop);
+    CPPUNIT_ASSERT_LESS(nTableBottom, nFlyBottom);
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
