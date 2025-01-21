@@ -1,0 +1,12 @@
+gidiff -ur libtommath.org/makefile.msvc libtommath/makefile.msvc
+--- makefile.msvc	2025-01-21 18:20:58.440687556 +0100
++++ makefile.msvc	2025-01-21 18:22:04.832057849 +0100
+@@ -14,7 +14,7 @@
+ CFLAGS    = /Ox
+ 
+ #Compilation flags
+-LTM_CFLAGS  = /nologo /I./ /D_CRT_SECURE_NO_WARNINGS /D_CRT_NONSTDC_NO_DEPRECATE /D__STDC_WANT_SECURE_LIB__=1 /D_CRT_HAS_CXX17=0 /Wall /wd4146 /wd4127 /wd4668 /wd4710 /wd4711 /wd4820 /wd5045 /WX $(CFLAGS)
++LTM_CFLAGS  = /nologo /I./ /D_CRT_SECURE_NO_WARNINGS /D_CRT_NONSTDC_NO_DEPRECATE /D__STDC_WANT_SECURE_LIB__=1 /D_CRT_HAS_CXX17=0 /Wall /wd4146 /wd4127 /wd4668 /wd4710 /wd4711 /wd4820 /wd5045 $(CFLAGS)
+ LTM_LDFLAGS = advapi32.lib
+ 
+ #Libraries to be created (this makefile builds only static libraries)
