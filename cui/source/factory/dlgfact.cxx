@@ -98,6 +98,7 @@
 #include <DiagramDialog.hxx>
 #include <fileextcheckdlg.hxx>
 #include <TextColumnsPage.hxx>
+#include <querydialog.hxx>
 
 #include <MacroManagerDialog.hxx>
 
@@ -1606,5 +1607,26 @@ AbstractDialogFactory_Impl::CreateFileExtCheckDialog(weld::Window* pParent, cons
     return VclPtr<CuiAbstractController_Impl<FileExtCheckDialog>>::Create(pParent, sTitle, sMsg);
 }
 #endif
+
+namespace
+{
+class AbstractQueryDialog_Impl final
+    : public vcl::AbstractDialogImpl_Async<AbstractQueryDialog,
+                                           QueryDialog>
+{
+public:
+    using AbstractDialogImpl_BASE::AbstractDialogImpl_BASE;
+    bool ShowAgain() const override { return m_pDlg->ShowAgain(); }
+};
+}
+
+VclPtr<AbstractQueryDialog>
+AbstractDialogFactory_Impl::CreateQueryDialog(
+    weld::Window* pParent,
+    const OUString& sTitle, const OUString& sText, const OUString& sQuestion,
+    bool bShowAgain)
+{
+    return VclPtr<AbstractQueryDialog_Impl>::Create(pParent, sTitle, sText, sQuestion, bShowAgain);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

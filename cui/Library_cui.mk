@@ -144,6 +144,7 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/dialogs/screenshotannotationdlg \
     cui/source/dialogs/pastedlg \
     cui/source/dialogs/postdlg \
+    cui/source/dialogs/querydialog \
     cui/source/dialogs/QrCodeGenDialog \
     cui/source/dialogs/GraphicTestsDialog \
     cui/source/dialogs/ImageViewerDialog \

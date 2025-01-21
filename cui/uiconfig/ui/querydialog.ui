@@ -2,9 +2,8 @@
 <!-- Generated with glade 3.40.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.20"/>
-  <object class="GtkDialog" id="SetInsModeDialog">
+  <object class="GtkDialog" id="QueryDialog">
     <property name="can-focus">False</property>
-    <property name="title" translatable="yes" context="SetInsModeDialog|Dialog_Title">Confirm overwrite mode</property>
     <property name="resizable">False</property>
     <property name="type-hint">dialog</property>
     <child internal-child="vbox">
@@ -23,7 +22,7 @@
             <property name="layout-style">end</property>
             <child>
               <object class="GtkButton" id="btnNo">
-                <property name="label" translatable="yes" context="SetInsModeDialog|Button_No">No</property>
+                <property name="label" translatable="yes" context="QueryDialog|Button_No">No</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
@@ -36,7 +35,7 @@
             </child>
             <child>
               <object class="GtkButton" id="btnYes">
-                <property name="label" translatable="yes" context="SetInsModeDialog|Button_Yes">Yes</property>
+                <property name="label" translatable="yes" context="QueryDialog|Button_Yes">Yes</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
@@ -66,13 +65,16 @@
               <object class="GtkLabel" id="lbTitle">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="hexpand">False</property>
-                <property name="label" translatable="yes" context="SetInsModeDialog|Label_Title">You are switching to the overwrite mode</property>
                 <property name="xalign">0</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                   <attribute name="scale" value="1"/>
                 </attributes>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="lbTitle-atkobject">
+                    <property name="AtkObject::accessible-role">static</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -84,11 +86,15 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="hexpand">False</property>
-                <property name="label" translatable="yes" context="SetInsModeDialog|Label_Info">The overwrite mode allows to type over text. It is indicated by a block cursor and at the statusbar. Press Insert again to switch back.</property>
                 <property name="wrap">True</property>
                 <property name="wrap-mode">word-char</property>
                 <property name="max-width-chars">40</property>
                 <property name="xalign">0</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="lbText-atkobject">
+                    <property name="AtkObject::accessible-role">static</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -100,9 +106,13 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="valign">start</property>
-                <property name="label" translatable="yes" context="SetInsModeDialog|Label_Question">Do you want to continue?</property>
                 <property name="wrap">True</property>
                 <property name="xalign">0</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="lbQuestion-atkobject">
+                    <property name="AtkObject::accessible-role">static</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -110,23 +120,13 @@
               </packing>
             </child>
             <child>
-              <object class="GtkImage" id="imSetInsMode">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">1</property>
-                <property name="height">2</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkCheckButton" id="cbDontShowAgain">
-                <property name="label" translatable="yes" context="SetInsModeDialog|Checkbox">Do not show again</property>
+                <property name="label" translatable="yes" context="QueryDialog|Checkbox">Do show again</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
-                <property name="hexpand">True</property>
+                <property name="halign">start</property>
+                <property name="active">True</property>
                 <property name="draw-indicator">True</property>
               </object>
               <packing>
@@ -135,10 +135,24 @@
               </packing>
             </child>
             <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
+              <object class="GtkImage" id="imQuery">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="pixel-size">150</property>
+                <property name="icon_size">0</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="imQuery-atkobject">
+                    <property name="AtkObject::accessible-role">dialog</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
+                <property name="height">4</property>
+              </packing>
             </child>
           </object>
           <packing>

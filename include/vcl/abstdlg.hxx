@@ -157,6 +157,14 @@ protected:
     virtual ~AbstractDiagramDialog() override = default;
 };
 
+class VCL_DLLPUBLIC AbstractQueryDialog : public VclAbstractDialog
+{
+protected:
+    virtual ~AbstractQueryDialog() override = default;
+public:
+    virtual bool ShowAgain() const = 0;
+};
+
 class VCL_DLLPUBLIC VclAbstractDialogFactory
 {
 public:
@@ -199,6 +207,11 @@ public:
     virtual VclPtr<AbstractDiagramDialog> CreateDiagramDialog(
         weld::Window* pParent,
         SdrObjGroup& rDiagram) = 0;
+
+    virtual VclPtr<AbstractQueryDialog> CreateQueryDialog(
+        weld::Window* pParent,
+        const OUString& sTitle, const OUString& sText, const OUString& sQuestion,
+        bool bShowAgain) = 0;
 
 #ifdef _WIN32
     virtual VclPtr<VclAbstractDialog>

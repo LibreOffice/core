@@ -115,8 +115,6 @@ inline constexpr OUString RID_BMP_PREVIEW_FALLBACK = u"sw/res/image-example.png"
 inline constexpr OUString RID_BMP_A11Y_CHECK_ISSUES_NOT_FOUND = u"svx/res/a11y_check_issues_not_found.png"_ustr;
 inline constexpr OUString RID_BMP_A11Y_CHECK_ISSUES_FOUND = u"svx/res/a11y_check_issues_found.png"_ustr;
 
-inline constexpr OUString RID_BMP_QUERYINSMODE = u"res/queryinsmode.png"_ustr;
-
 inline constexpr OUString RID_SVXBMP_LOCKED = u"res/locked.png"_ustr;
 inline constexpr OUString RID_SVXBMP_UNLOCKED = u"res/unlocked.png"_ustr;
 

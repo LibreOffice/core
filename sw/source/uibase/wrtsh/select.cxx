@@ -41,11 +41,8 @@
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
 
-#include <vcl/weld.hxx>
-#include <vcl/builder.hxx>
 #include <officecfg/Office/Common.hxx>
-#include <unotools/configmgr.hxx>
-#include <bitmaps.hlst>
+#include <strings.hrc>
 
 #include <svx/svdview.hxx>
 
@@ -724,44 +721,27 @@ void SwWrtShell::ImplSetInsMode(bool bOn)
     Invalidate();
 }
 
-namespace
-{
-    class QuerySetInsModeDialog : public weld::GenericDialogController
-    {
-        std::unique_ptr<weld::Image> m_xImage;
-        std::unique_ptr<weld::CheckButton> m_xCheckBox;
-    public:
-        QuerySetInsModeDialog(weld::Window* pParent)
-            : GenericDialogController(pParent, u"cui/ui/querysetinsmodedialog.ui"_ustr, u"SetInsModeDialog"_ustr)
-            , m_xImage(m_xBuilder->weld_image(u"imSetInsMode"_ustr))
-            , m_xCheckBox(m_xBuilder->weld_check_button(u"cbDontShowAgain"_ustr))
-        {
-            m_xImage->set_from_icon_name(RID_BMP_QUERYINSMODE);
-        }
-        bool GetDoNotShowAgain() const
-        {
-            return m_xCheckBox->get_active();
-        }
-    };
-}
-
 void SwWrtShell::SetInsMode( bool bOn )
 {
     const bool bDoAsk = officecfg::Office::Common::Misc::QuerySetInsMode::get();
     if (!bOn && bDoAsk)
     {
-        auto xDialog = std::make_shared<QuerySetInsModeDialog>(GetView().GetFrameWeld());
-        weld::DialogController::runAsync(xDialog, [this, bOn, xDialog](sal_Int32 nResult){
-
-            std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
-                comphelper::ConfigurationChanges::create());
-            officecfg::Office::Common::Misc::QuerySetInsMode::set(!xDialog->GetDoNotShowAgain(), xChanges);
-            xChanges->commit();
-
-            if ( nResult == static_cast<int>(RET_NO) )
-                return;
-
-            ImplSetInsMode(bOn);
+        VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
+        auto pDlg = pFact->CreateQueryDialog(
+            GetView().GetFrameWeld(), SwResId(STR_QUERY_INSMODE_TITLE),
+            SwResId(STR_QUERY_INSMODE_TEXT), SwResId(STR_QUERY_INSMODE_QUESTION), true);
+        pDlg->StartExecuteAsync( [this, pDlg] (sal_Int32 nResult)->void
+        {
+            if (pDlg->ShowAgain() == false)
+            {
+                std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
+                    comphelper::ConfigurationChanges::create());
+                officecfg::Office::Common::Misc::QuerySetInsMode::set(false, xChanges);
+                xChanges->commit();
+            }
+            if (nResult == RET_YES)
+                ImplSetInsMode(false);
+            pDlg->disposeOnce();
         });
         return;
     }

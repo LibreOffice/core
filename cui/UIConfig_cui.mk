@@ -187,12 +187,12 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/querydeletehatchdialog \
 	cui/uiconfig/ui/querydeletelineenddialog \
 	cui/uiconfig/ui/querydeletelinestyledialog \
+	cui/uiconfig/ui/querydialog \
 	cui/uiconfig/ui/queryduplicatedialog \
 	cui/uiconfig/ui/querynoloadedfiledialog \
 	cui/uiconfig/ui/querynosavefiledialog \
 	cui/uiconfig/ui/querysavelistdialog \
 	cui/uiconfig/ui/queryupdategalleryfilelistdialog \
-	cui/uiconfig/ui/querysetinsmodedialog \
 	cui/uiconfig/ui/recordnumberdialog \
 	cui/uiconfig/ui/rotationtabpage \
 	cui/uiconfig/ui/scriptorganizer \
