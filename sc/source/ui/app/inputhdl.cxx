@@ -3188,7 +3188,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode, bool bBeforeSavingInL
 
                 pData->DoError(
                     pActiveViewSh->GetFrameWeld(), aString, aCursorPos,
-                    [this, nBlockMode, &aString, &aPreAutoCorrectString](bool bForget)
+                    [this, nBlockMode, aString, aPreAutoCorrectString](bool bForget)
                     { EnterHandler2(nBlockMode, bForget, aString, aPreAutoCorrectString); });
                 return;
             }
@@ -3197,8 +3197,8 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode, bool bBeforeSavingInL
     EnterHandler2(nBlockMode, false, aString, aPreAutoCorrectString);
 }
 
-void ScInputHandler::EnterHandler2(ScEnterMode nBlockMode, bool bForget, OUString& aString,
-                                   OUString& aPreAutoCorrectString)
+void ScInputHandler::EnterHandler2(ScEnterMode nBlockMode, bool bForget, OUString aString,
+                                   const OUString& aPreAutoCorrectString)
 {
     std::unique_ptr<EditTextObject> pObject;
     std::unique_ptr<ScPatternAttr> pCellAttrs;

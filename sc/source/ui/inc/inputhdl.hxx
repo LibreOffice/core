@@ -198,8 +198,8 @@ public:
 
     bool            KeyInput( const KeyEvent& rKEvt, bool bStartEdit );
     void            EnterHandler( ScEnterMode nBlockMode = ScEnterMode::NORMAL, bool bBeforeSavingInLOK = false );
-    void EnterHandler2(ScEnterMode nBlockMode, bool bForget, OUString& aString,
-                       OUString& aPreAutoCorrectString);
+    void            EnterHandler2(ScEnterMode nBlockMode, bool bForget, OUString aString,
+                       const OUString& aPreAutoCorrectString);
     void            CancelHandler();
     void            SetReference( const ScRange& rRef, const ScDocument& rDoc );
     void            AddRefEntry();
