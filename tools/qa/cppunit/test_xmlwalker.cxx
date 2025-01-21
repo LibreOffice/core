@@ -78,6 +78,19 @@ void XmlWalkerTest::testReadXML()
         {
             CPPUNIT_ASSERT_EQUAL(std::string_view("adobe:ns:meta/"), aWalker.namespaceHref());
             CPPUNIT_ASSERT_EQUAL(std::string_view("xx"), aWalker.namespacePrefix());
+
+            aWalker.children();
+            while (aWalker.isValid())
+            {
+                if (aWalker.name() == "namespace-child")
+                {
+                    CPPUNIT_ASSERT_EQUAL(std::string_view("adobe:ns:meta/"),
+                                         aWalker.namespaceHref());
+                    CPPUNIT_ASSERT_EQUAL(std::string_view("xx"), aWalker.namespacePrefix());
+                }
+                aWalker.next();
+            }
+            aWalker.parent();
         }
         aWalker.next();
     }

@@ -9,5 +9,6 @@
     <child number="3">
     </child>
     <xx:with-namespace xmlns:xx="adobe:ns:meta/">
+        <xx:namespace-child />
     </xx:with-namespace>
 </root>
