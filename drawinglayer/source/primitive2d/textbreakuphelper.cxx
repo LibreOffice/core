@@ -112,11 +112,9 @@ namespace drawinglayer::primitive2d
                 {
                     // DXArray values need to be corrected with the offset, too. Here,
                     // take the scaled offset since the DXArray is scaled
-                    const sal_uInt32 nArraySize(aNewDXArray.size());
-
-                    for(sal_uInt32 a(0); a < nArraySize; a++)
+                    for(double &rNewDX: aNewDXArray)
                     {
-                        aNewDXArray[a] -= fOffset;
+                        rNewDX -= fOffset;
                     }
                 }
             }
