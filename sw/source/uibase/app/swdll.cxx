@@ -176,6 +176,9 @@ sw::Filters & SwDLL::getFilters()
 extern "C" SAL_DLLPUBLIC_EXPORT
 void lok_preload_hook()
 {
+    // msword (any symbol will do)
+    sw::Filters::GetMswordLibSymbol("ImportDOC");
+    // swui
     SwAbstractDialogFactory::Create();
 }
 
