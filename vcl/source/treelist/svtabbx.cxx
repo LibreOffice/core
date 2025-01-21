@@ -288,17 +288,17 @@ void SvTabListBox::dispose()
     SvTreeListBox::dispose();
 }
 
-void SvTabListBox::SetTabs(sal_uInt16 nTabs, tools::Long const pTabPositions[], MapUnit eMapUnit)
+void SvTabListBox::SetTabs(const std::vector<tools::Long>& rTabPositions, MapUnit eMapUnit)
 {
-    assert(0 < nTabs);
-    mvTabList.resize(nTabs);
+    assert(!rTabPositions.empty());
+    mvTabList.resize(rTabPositions.size());
 
     MapMode aMMSource( eMapUnit );
     MapMode aMMDest( MapUnit::MapPixel );
 
-    for( sal_uInt16 nIdx = 0; nIdx < sal_uInt16(mvTabList.size()); nIdx++, pTabPositions++ )
+    for( sal_uInt16 nIdx = 0; nIdx < sal_uInt16(mvTabList.size()); nIdx++)
     {
-        Size aSize( *pTabPositions, 0 );
+        Size aSize(rTabPositions.at(nIdx), 0);
         aSize = LogicToLogic( aSize, &aMMSource, &aMMDest );
         tools::Long nNewTab = aSize.Width();
         mvTabList[nIdx].SetPos( nNewTab );

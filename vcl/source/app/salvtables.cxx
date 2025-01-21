@@ -3875,8 +3875,8 @@ SalInstanceTreeView::SalInstanceTreeView(SvTabListBox* pTreeView, SalInstanceBui
     m_xTreeView->SetPopupMenuHdl(LINK(this, SalInstanceTreeView, PopupMenuHdl));
     m_xTreeView->SetCustomRenderHdl(LINK(this, SalInstanceTreeView, CustomRenderHdl));
     m_xTreeView->SetCustomMeasureHdl(LINK(this, SalInstanceTreeView, CustomMeasureHdl));
-    const tools::Long aTabPositions[] = { 0 };
-    m_xTreeView->SetTabs(SAL_N_ELEMENTS(aTabPositions), aTabPositions);
+    const std::vector<tools::Long> aTabPositions{ 0 };
+    m_xTreeView->SetTabs(aTabPositions);
     LclHeaderTabListBox* pHeaderBox = dynamic_cast<LclHeaderTabListBox*>(m_xTreeView.get());
 
     if (pHeaderBox)
@@ -3956,7 +3956,7 @@ void SalInstanceTreeView::set_column_fixed_widths(const std::vector<int>& rWidth
     std::vector<tools::Long> aTabPositions{ 0 };
     for (size_t i = 0; i < rWidths.size(); ++i)
         aTabPositions.push_back(aTabPositions[i] + rWidths[i]);
-    m_xTreeView->SetTabs(aTabPositions.size(), aTabPositions.data(), MapUnit::MapPixel);
+    m_xTreeView->SetTabs(aTabPositions, MapUnit::MapPixel);
     set_header_item_width(rWidths);
     // call Resize to recalculate based on the new tabs
     m_xTreeView->Resize();
@@ -5341,7 +5341,7 @@ IMPL_LINK(SalInstanceTreeView, EndDragHdl, HeaderBar*, pHeaderBar, void)
     for (int i = 0; i < pHeaderBar->GetItemCount() - 1; ++i)
         aTabPositions.push_back(aTabPositions[i]
                                 + pHeaderBar->GetItemSize(pHeaderBar->GetItemId(i)));
-    m_xTreeView->SetTabs(aTabPositions.size(), aTabPositions.data(), MapUnit::MapPixel);
+    m_xTreeView->SetTabs(aTabPositions, MapUnit::MapPixel);
 }
 
 IMPL_LINK(SalInstanceTreeView, HeaderBarClickedHdl, HeaderBar*, pHeaderBar, void)
