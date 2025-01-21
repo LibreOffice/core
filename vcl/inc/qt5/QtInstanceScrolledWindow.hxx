@@ -27,8 +27,8 @@ public:
     virtual css::uno::Reference<css::awt::XWindow> CreateChildFrame() override;
     virtual void child_grab_focus() override;
 
-    virtual void hadjustment_configure(int value, int lower, int upper, int step_increment,
-                                       int page_increment, int page_size) override;
+    virtual void hadjustment_configure(int nValue, int nLower, int nUpper, int nStepIncrement,
+                                       int nPageIncrement, int nPageSize) override;
     virtual int hadjustment_get_value() const override;
     virtual void hadjustment_set_value(int nValue) override;
     virtual int hadjustment_get_upper() const override;
@@ -40,8 +40,8 @@ public:
     virtual void set_hpolicy(VclPolicyType eHPolicy) override;
     virtual VclPolicyType get_hpolicy() const override;
 
-    virtual void vadjustment_configure(int value, int lower, int upper, int step_increment,
-                                       int page_increment, int page_size) override;
+    virtual void vadjustment_configure(int nValue, int nLower, int nUpper, int nStepIncrement,
+                                       int nPageIncrement, int nPageSize) override;
     virtual int vadjustment_get_value() const override;
     virtual void vadjustment_set_value(int nValue) override;
     virtual int vadjustment_get_upper() const override;
