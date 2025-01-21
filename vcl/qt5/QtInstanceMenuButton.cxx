@@ -19,13 +19,15 @@
 QtInstanceMenuButton::QtInstanceMenuButton(QToolButton* pButton)
     : QtInstanceToggleButton(pButton)
     , m_pToolButton(pButton)
+    , m_pPopover(nullptr)
 {
     assert(m_pToolButton);
-    m_pToolButton->setPopupMode(QToolButton::InstantPopup);
 
-    assert(m_pToolButton->menu());
-    connect(m_pToolButton->menu(), &QMenu::triggered, this,
-            &QtInstanceMenuButton::handleMenuItemTriggered);
+    if (m_pToolButton->menu())
+        connect(m_pToolButton->menu(), &QMenu::triggered, this,
+                &QtInstanceMenuButton::handleMenuItemTriggered);
+
+    connect(m_pToolButton, &QToolButton::clicked, this, &QtInstanceMenuButton::handleButtonClicked);
 }
 
 void QtInstanceMenuButton::insert_item(int nPos, const OUString& rId, const OUString& rStr,
@@ -126,7 +128,11 @@ void QtInstanceMenuButton::set_item_visible(const OUString& rIdent, bool bVisibl
     });
 }
 
-void QtInstanceMenuButton::set_popover(weld::Widget*) { assert(false && "Not implemented yet"); }
+void QtInstanceMenuButton::set_popover(weld::Widget* pPopover)
+{
+    QtInstanceWidget* pPopoverWidget = dynamic_cast<QtInstanceWidget*>(pPopover);
+    m_pPopover = pPopoverWidget ? pPopoverWidget->getQWidget() : nullptr;
+}
 
 QMenu& QtInstanceMenuButton::getMenu() const
 {
@@ -145,6 +151,14 @@ QAction* QtInstanceMenuButton::getAction(const OUString& rIdent) const
     }
 
     return nullptr;
+}
+
+void QtInstanceMenuButton::handleButtonClicked()
+{
+    if (m_pPopover)
+        m_pPopover->show();
+    else
+        m_pToolButton->showMenu();
 }
 
 void QtInstanceMenuButton::handleMenuItemTriggered(QAction* pAction)

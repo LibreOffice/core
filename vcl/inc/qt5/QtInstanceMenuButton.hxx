@@ -18,6 +18,7 @@ class QtInstanceMenuButton : public QtInstanceToggleButton, public virtual weld:
     Q_OBJECT
 
     QToolButton* m_pToolButton;
+    QWidget* m_pPopover;
 
 public:
     QtInstanceMenuButton(QToolButton* pButton);
@@ -42,6 +43,7 @@ private:
     QAction* getAction(const OUString& rIdent) const;
 
 private Q_SLOTS:
+    void handleButtonClicked();
     void handleMenuItemTriggered(QAction* pAction);
 };
 
