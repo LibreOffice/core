@@ -431,61 +431,43 @@ std::shared_ptr<Gdiplus::Bitmap> WinSalBitmap::ImplCreateGdiPlusBitmap(const Win
 
 bool WinSalBitmap::Create( HBITMAP hBitmap )
 {
-    bool bRet = true;
+    assert(hBitmap);
+    assert(!mhDIB && "already created");
+    assert(!mhDDB && "already created");
+
+    BITMAP  aDDBInfo;
+    if( !GetObjectW( hBitmap, sizeof( aDDBInfo ), &aDDBInfo ) )
+        return false;
 
     mhDDB = hBitmap;
+    maSize = Size( aDDBInfo.bmWidth, aDDBInfo.bmHeight );
+    mnBitCount = aDDBInfo.bmPlanes * aDDBInfo.bmBitsPixel;
 
-    if( mhDIB )
-    {
-        if (PBITMAPINFOHEADER pBIH = static_cast<PBITMAPINFOHEADER>(GlobalLock( mhDIB )))
-        {
-            maSize = Size( pBIH->biWidth, pBIH->biHeight );
-            mnBitCount = pBIH->biBitCount;
-
-            GlobalUnlock( mhDIB );
-        }
-        else
-            bRet = false;
-    }
-    else if( mhDDB )
-    {
-        BITMAP  aDDBInfo;
-
-        if( GetObjectW( mhDDB, sizeof( aDDBInfo ), &aDDBInfo ) )
-        {
-            maSize = Size( aDDBInfo.bmWidth, aDDBInfo.bmHeight );
-            mnBitCount = aDDBInfo.bmPlanes * aDDBInfo.bmBitsPixel;
-        }
-        else
-        {
-            mhDDB = nullptr;
-            bRet = false;
-        }
-    }
-    else
-        bRet = false;
-
-    return bRet;
+    return true;
 }
 
 bool WinSalBitmap::Create(const Size& rSize, vcl::PixelFormat ePixelFormat, const BitmapPalette& rPal)
 {
-    bool bRet = false;
+    assert(!mhDIB && "already created");
+    assert(!mhDDB && "already created");
 
-    mhDIB = ImplCreateDIB(rSize, ePixelFormat, rPal);
+    HGLOBAL hDIB = ImplCreateDIB(rSize, ePixelFormat, rPal);
 
-    if( mhDIB )
-    {
-        maSize = rSize;
-        mnBitCount = vcl::pixelFormatBitCount(ePixelFormat);
-        bRet = true;
-    }
+    if( !hDIB )
+        return false;
 
-    return bRet;
+    mhDIB = hDIB;
+    maSize = rSize;
+    mnBitCount = vcl::pixelFormatBitCount(ePixelFormat);
+
+    return true;
 }
 
 bool WinSalBitmap::Create( const SalBitmap& rSSalBitmap )
 {
+    assert(!mhDIB && "already created");
+    assert(!mhDDB && "already created");
+
     bool bRet = false;
     const WinSalBitmap& rSalBitmap = static_cast<const WinSalBitmap&>(rSSalBitmap);
 
@@ -513,6 +495,9 @@ bool WinSalBitmap::Create( const SalBitmap& rSSalBitmap )
 
 bool WinSalBitmap::Create( const SalBitmap& rSSalBmp, SalGraphics* pSGraphics )
 {
+    assert(!mhDIB && "already created");
+    assert(!mhDDB && "already created");
+
     const WinSalBitmap& rSalBmp = static_cast<const WinSalBitmap&>(rSSalBmp);
     if(!rSalBmp.mhDIB)
         return false;
@@ -558,9 +543,14 @@ bool WinSalBitmap::Create( const SalBitmap& rSSalBmp, SalGraphics* pSGraphics )
 
 bool WinSalBitmap::Create(const SalBitmap& rSSalBmp, vcl::PixelFormat eNewPixelFormat)
 {
+    assert(!mhDIB && "already created");
+    assert(!mhDDB && "already created");
+
     bool bRet = false;
 
     const WinSalBitmap& rSalBmp = static_cast<const WinSalBitmap&>(rSSalBmp);
+
+    assert( rSalBmp.mhDDB && "why copy an empty WinSalBitmap");
 
     if( rSalBmp.mhDDB )
     {
@@ -613,7 +603,10 @@ bool WinSalBitmap::Create( const css::uno::Reference< css::rendering::XBitmapCan
     css::uno::Reference< css::beans::XFastPropertySet >
         xFastPropertySet( rBitmapCanvas, css::uno::UNO_QUERY );
 
-    if( xFastPropertySet ) {
+    assert( xFastPropertySet && "creating without an xFastPropertySet?");
+
+    if( xFastPropertySet )
+    {
         css::uno::Sequence< css::uno::Any > args;
 
         if( xFastPropertySet->getFastPropertyValue(bMask ? 2 : 1) >>= args ) {
