@@ -216,8 +216,6 @@ void SvTabListBox::SetTabs()
     if( mvTabList.empty() )
         return;
 
-    DBG_ASSERT(!mvTabList.empty(),"TabList ?");
-
     // The tree listbox has now inserted its tabs into the list. Now we
     // fluff up the list with additional tabs and adjust the rightmost tab
     // of the tree listbox.
