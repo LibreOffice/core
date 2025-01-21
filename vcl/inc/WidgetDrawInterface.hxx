@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_INC_WIDGETDRAWINTERFACE_HXX
-#define INCLUDED_VCL_INC_WIDGETDRAWINTERFACE_HXX
+#pragma once
 
 #include <vcl/dllapi.h>
 #include <vcl/salnativewidgets.hxx>
@@ -120,7 +119,5 @@ bool WidgetDrawInterface::getNativeControlRegion(ControlType, ControlPart, const
 
 bool WidgetDrawInterface::updateSettings(AllSettings&) { return false; }
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
