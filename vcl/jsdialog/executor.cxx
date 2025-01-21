@@ -7,13 +7,68 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <boost/property_tree/json_parser.hpp>
+#include <frozen/bits/defines.h>
+#include <frozen/bits/elsa_std.h>
+#include <frozen/unordered_map.h>
 #include <jsdialog/jsdialogbuilder.hxx>
 #include <o3tl/string_view.hxx>
-#include <vcl/weld.hxx>
-#include <vcl/jsdialog/executor.hxx>
-#include <sal/log.hxx>
 #include <rtl/uri.hxx>
-#include <boost/property_tree/json_parser.hpp>
+#include <sal/log.hxx>
+#include <string_view>
+#include <vcl/jsdialog/executor.hxx>
+
+/// returns true if execution was successful
+using JSWidgetExecutor = bool (*)(weld::Widget&, const StringMap&);
+
+namespace
+{
+bool EmptyExecutor(weld::Widget&, const StringMap&) { return false; };
+
+bool FocusExecutor(weld::Widget& rWidget, const StringMap&)
+{
+    rWidget.grab_focus();
+    return true;
+};
+
+bool CustomRendererExecutor(weld::Widget& rWidget, const StringMap& rData)
+{
+    auto pRenderer = dynamic_cast<OnDemandRenderingHandler*>(&rWidget);
+    if (!pRenderer)
+        return false;
+
+    // pos;dpix;dpiy
+    const OUString& sParams = rData.at("data");
+    const OUString aPos = sParams.getToken(0, ';');
+    const OUString aDpiScaleX = sParams.getToken(1, ';');
+    const OUString aDpiScaleY = sParams.getToken(2, ';');
+
+    pRenderer->render_entry(o3tl::toInt32(aPos), o3tl::toInt32(aDpiScaleX),
+                            o3tl::toInt32(aDpiScaleY));
+    return true;
+};
+
+constexpr auto ActionExecutors
+    = frozen::make_unordered_map<std::u16string_view, const JSWidgetExecutor>({
+        { u"grab_focus", FocusExecutor },
+        { u"render_entry", CustomRendererExecutor },
+    });
+
+} // end of namespace
+
+namespace JSWidgetExecutorSelector
+{
+static JSWidgetExecutor get(const std::u16string_view& /*sControlType*/,
+                            const std::u16string_view& sAction)
+{
+    auto aFound = ActionExecutors.find(sAction);
+    if (aFound != ActionExecutors.end())
+        return aFound->second;
+
+    return EmptyExecutor;
+}
+
+} // end of namespace JSWidgetExecutorSelector
 
 namespace jsdialog
 {
@@ -94,30 +149,13 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, StringMap
     }
     else
     {
-        // shared actions
+        assert(pWidget);
 
-        if (sAction == "grab_focus")
-        {
-            pWidget->grab_focus();
+        const JSWidgetExecutor rExecutor = JSWidgetExecutorSelector::get(sControlType, sAction);
+        if (rExecutor(*pWidget, rData))
             return true;
-        }
-        else if (sAction == "render_entry")
-        {
-            auto pRenderer = dynamic_cast<OnDemandRenderingHandler*>(pWidget);
-            if (pRenderer)
-            {
-                // pos;dpix;dpiy
-                const OUString& sParams = rData["data"];
-                const OUString aPos = sParams.getToken(0, ';');
-                const OUString aDpiScaleX = sParams.getToken(1, ';');
-                const OUString aDpiScaleY = sParams.getToken(2, ';');
 
-                pRenderer->render_entry(o3tl::toInt32(aPos), o3tl::toInt32(aDpiScaleX),
-                                        o3tl::toInt32(aDpiScaleY));
-            }
-            return true;
-        }
-
+        // TODO: convert to executors like above
         // depends on type
 
         if (sControlType == "tabcontrol")
