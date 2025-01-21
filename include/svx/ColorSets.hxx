@@ -19,6 +19,8 @@ class SVXCORE_DLLPUBLIC ColorSets
 {
 private:
     std::vector<model::ColorSet> maColorSets;
+    OUString maUserFolder;
+
     ColorSets();
     void init();
 public:
@@ -38,6 +40,8 @@ public:
     model::ColorSet const* getColorSet(std::u16string_view rName) const;
 
     void insert(model::ColorSet const& rColorSet, IdenticalNameAction eAction);
+    void writeToUserFolder(model::ColorSet const& rNewColorSet);
+
 };
 
 } // end of namespace svx

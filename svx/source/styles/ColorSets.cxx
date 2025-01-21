@@ -15,12 +15,14 @@
 #include <vector>
 
 #include <docmodel/theme/ColorSet.hxx>
+#include <docmodel/theme/ThemeColorType.hxx>
 #include <o3tl/numeric.hxx>
 #include <tools/stream.hxx>
 #include <tools/XmlWalker.hxx>
+#include <tools/XmlWriter.hxx>
 #include <vcl/UserResourceScanner.hxx>
 #include <unotools/pathoptions.hxx>
-#include <docmodel/theme/ThemeColorType.hxx>
+#include <o3tl/enumrange.hxx>
 #include <frozen/bits/defines.h>
 #include <frozen/bits/elsa_std.h>
 #include <frozen/unordered_map.h>
@@ -150,8 +152,15 @@ ColorSets& ColorSets::get()
 void ColorSets::init()
 {
     SvtPathOptions aPathOptions;
+    OUString aURLString = aPathOptions.GetDocumentThemePath();
+
     DocumentThemeScanner aScanner(maColorSets);
-    aScanner.addPaths(aPathOptions.GetDocumentThemePath());
+    aScanner.addPaths(aURLString);
+
+    std::deque<OUString> aURLs;
+    vcl::file::splitPathString(aURLString, aURLs);
+    if (aURLs.size() > 0)
+        maUserFolder = aURLs[0];
 }
 
 model::ColorSet const* ColorSets::getColorSet(std::u16string_view rName) const
@@ -200,6 +209,7 @@ void ColorSets::insert(model::ColorSet const& rNewColorSet, IdenticalNameAction 
         }
         // color set not found, so insert it
         maColorSets.push_back(rNewColorSet);
+        writeToUserFolder(rNewColorSet);
     }
     else if (eAction == IdenticalNameAction::AutoRename)
     {
@@ -211,8 +221,56 @@ void ColorSets::insert(model::ColorSet const& rNewColorSet, IdenticalNameAction 
 
         model::ColorSet aNewColorSet = rNewColorSet;
         aNewColorSet.setName(aName);
+
         maColorSets.push_back(aNewColorSet);
+        writeToUserFolder(aNewColorSet);
     }
+}
+
+void ColorSets::writeToUserFolder(model::ColorSet const& rNewColorSet)
+{
+    static constexpr auto constThemeColorTypeToName = frozen::make_unordered_map<model::ThemeColorType, std::string_view>({
+        { model::ThemeColorType::Dark1, "dark1" },
+        { model::ThemeColorType::Light1, "light1" },
+        { model::ThemeColorType::Dark2, "dark2" },
+        { model::ThemeColorType::Light2, "light2" },
+        { model::ThemeColorType::Accent1, "accent1" },
+        { model::ThemeColorType::Accent2, "accent2" },
+        { model::ThemeColorType::Accent3, "accent3" },
+        { model::ThemeColorType::Accent4, "accent4" },
+        { model::ThemeColorType::Accent5, "accent5" },
+        { model::ThemeColorType::Accent6, "accent6" },
+        { model::ThemeColorType::Hyperlink, "hyperlink" },
+        { model::ThemeColorType::FollowedHyperlink, "followed-hyperlink" }
+    });
+
+    SvFileStream aFileStream(maUserFolder + "/" + rNewColorSet.getName() + ".theme", StreamMode::WRITE | StreamMode::TRUNC);
+
+    tools::XmlWriter aWriter(&aFileStream);
+    aWriter.startDocument();
+    aWriter.startElement("theme");
+    aWriter.attribute("name", rNewColorSet.getName());
+
+    aWriter.startElement("theme-colors");
+    aWriter.attribute("name", rNewColorSet.getName());
+
+    for (auto eThemeColorType : o3tl::enumrange<model::ThemeColorType>())
+    {
+        auto iterator = constThemeColorTypeToName.find(eThemeColorType);
+        if (iterator != constThemeColorTypeToName.end())
+        {
+            Color aColor = rNewColorSet.getColor(eThemeColorType);
+            aWriter.startElement("color");
+            aWriter.attribute("name", OString(iterator->second));
+            aWriter.attribute("color", "#"_ostr + aColor.AsRGBHexString().toUtf8());
+            aWriter.endElement();
+        }
+    }
+
+    aWriter.endElement();
+
+    aWriter.endElement();
+    aWriter.endDocument();
 }
 
 } // end of namespace svx

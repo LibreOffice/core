@@ -13,6 +13,7 @@
 #include <rtl/ustring.hxx>
 #include <memory>
 #include <vector>
+#include <deque>
 #include <osl/file.hxx>
 
 namespace vcl
@@ -20,6 +21,7 @@ namespace vcl
 namespace file
 {
 VCL_DLLPUBLIC bool readFileStatus(osl::FileStatus& rStatus, const OUString& rFile);
+VCL_DLLPUBLIC void splitPathString(std::u16string_view aPathString, std::deque<OUString>& rPaths);
 }
 
 class VCL_DLLPUBLIC UserResourceScanner

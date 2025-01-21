@@ -37,15 +37,6 @@ OUString convertToAbsolutePath(const OUString& path)
     }
     return resolver.m_aStatus.getFileURL();
 }
-
-void splitPathString(std::u16string_view aPathString, std::deque<OUString>& rPaths)
-{
-    sal_Int32 nIndex = 0;
-    do
-    {
-        rPaths.push_front(OUString(o3tl::getToken(aPathString, 0, ';', nIndex)));
-    } while (nIndex >= 0);
-}
 }
 
 namespace file
@@ -68,6 +59,15 @@ bool readFileStatus(osl::FileStatus& status, const OUString& file)
     }
     return true;
 }
+
+void splitPathString(std::u16string_view aPathString, std::deque<OUString>& rPaths)
+{
+    sal_Int32 nIndex = 0;
+    do
+    {
+        rPaths.push_front(OUString(o3tl::getToken(aPathString, 0, ';', nIndex)));
+    } while (nIndex >= 0);
+}
 }
 
 UserResourceScanner::UserResourceScanner() = default;
@@ -75,7 +75,7 @@ UserResourceScanner::UserResourceScanner() = default;
 void UserResourceScanner::addPaths(std::u16string_view aPathString)
 {
     std::deque<OUString> aPaths;
-    splitPathString(aPathString, aPaths);
+    vcl::file::splitPathString(aPathString, aPaths);
 
     for (const auto& path : aPaths)
     {
@@ -86,8 +86,8 @@ void UserResourceScanner::addPaths(std::u16string_view aPathString)
 
         if (!aFileStatus.isDirectory())
         {
-            SAL_INFO("vcl.app",
-                     "Cannot search for icon themes in '" << path << "'. It is not a directory.");
+            SAL_INFO("vcl.app", "Cannot search for resaource files in '"
+                                    << path << "'. It is not a directory.");
             continue;
         }
 
@@ -96,7 +96,7 @@ void UserResourceScanner::addPaths(std::u16string_view aPathString)
         if (aResourcePaths.empty())
         {
             SAL_WARN("vcl.app",
-                     "Could not find any icon themes in the provided directory ('" << path << "'.");
+                     "Could not find any file in the provided directory ('" << path << "'.");
             continue;
         }
 
