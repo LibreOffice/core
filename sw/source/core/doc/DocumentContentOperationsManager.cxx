@@ -491,9 +491,9 @@ namespace
         if (pTextNd == nullptr || pEndTextNd == nullptr)
             return false;
         bool bRet = pTextNd->IsInListFromStyle();
-        //prefer list if it's a single paragraph with list from style
-        if (pTextNd == pEndTextNd && bRet)
-            return true;
+        //single paragraphs are preferred only if it's a has a list from style
+        if (pTextNd == pEndTextNd)
+            return bRet;
 
         if (pTextNd && pTextNd->IsInList() && !pTextNd->IsInListFromStyle() &&
              pEndTextNd && pEndTextNd->IsInList() && !pEndTextNd->IsInListFromStyle())
