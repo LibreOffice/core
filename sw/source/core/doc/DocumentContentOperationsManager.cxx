@@ -489,9 +489,9 @@ namespace
         const SwTextNode* pTextNd = rPam.Start()->GetNode().GetTextNode();
         const SwTextNode* pEndTextNd = rPam.End()->GetNode().GetTextNode();
         bool bRet = pTextNd->IsInListFromStyle();
-        //prefer list if it's a single paragraph with list from style
-        if (pTextNd == pEndTextNd && bRet)
-            return true;
+        //single paragraphs are preferred only if it's a has a list from style
+        if (pTextNd == pEndTextNd)
+            return bRet;
 
         if (pTextNd && pTextNd->IsInList() && !pTextNd->IsInListFromStyle() &&
              pEndTextNd && pEndTextNd->IsInList() && !pEndTextNd->IsInListFromStyle())

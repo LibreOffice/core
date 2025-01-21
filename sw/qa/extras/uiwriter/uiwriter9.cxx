@@ -790,6 +790,33 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf163340)
     CPPUNIT_ASSERT_EQUAL(u"A."_ustr, getProperty<OUString>(xParaCursor, u"ListLabelString"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf163340_2)
+{
+    //selects and copies a single paragraph with a list (bullets)
+    //and pastes it into an empty paragraph with a different list (numbers)
+    //checks that the resulting paragraph keeps that different list
+    createSwDoc("tdf163340_2.odt");
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<view::XSelectionSupplier> xSelSupplier(xModel->getCurrentController(),
+                                                          uno::UNO_QUERY_THROW);
+    uno::Reference<text::XParagraphCursor> xParaCursor(xTextDocument->getText()->createTextCursor(),
+                                                       uno::UNO_QUERY);
+
+    for (int i = 0; i < 2; i++)
+        xParaCursor->gotoNextParagraph(false);
+    xParaCursor->gotoEndOfParagraph(true);
+    xSelSupplier->select(uno::Any(xParaCursor));
+
+    xParaCursor = uno::Reference<text::XParagraphCursor>(xText->createTextCursor(), uno::UNO_QUERY);
+    for (int i = 0; i < 10; i++)
+        xParaCursor->gotoNextParagraph(false);
+    xParaCursor->gotoEndOfParagraph(true);
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(u"5."_ustr, getProperty<OUString>(xParaCursor, u"ListLabelString"_ustr));
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf162326_Pargraph)
 {
     createSwDoc("tdf162326.odt");
