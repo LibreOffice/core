@@ -129,6 +129,7 @@ public:
     bool IsEmphasized() const { return mbEmphasized; }
 
     void SetCustomRender() { mbCustom = true; }
+    bool IsCustomRender() const { return mbCustom; }
 
     const OUString& GetText() const
     {

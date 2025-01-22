@@ -13,7 +13,9 @@
 #include <jsdialog/jsdialogmessages.hxx>
 #include <jsdialog/jsdialogsender.hxx>
 
+#include <tools/stream.hxx>
 #include <utility>
+#include <vcl/cvtgrf.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/virdev.hxx>
 #include <salvtables.hxx>
@@ -24,6 +26,8 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
+
+#include <comphelper/base64.hxx>
 #include <comphelper/compbase.hxx>
 
 #include <list>
@@ -256,6 +260,29 @@ class SAL_LOPLUGIN_ANNOTATE("crosscast") OnDemandRenderingHandler
 {
 public:
     virtual void render_entry(int pos, int dpix, int dpiy) = 0;
+
+    static bool imageToActionData(const BitmapEx& rImage, sal_Int32 nPos,
+                                  jsdialog::ActionDataMap& rMap)
+    {
+        if (rImage.IsEmpty())
+            return false;
+
+        SvMemoryStream aOStm(65535, 65535);
+
+        if (GraphicConverter::Export(aOStm, rImage, ConvertDataFormat::PNG) != ERRCODE_NONE)
+            return false;
+
+        css::uno::Sequence<sal_Int8> aSeq(static_cast<sal_Int8 const*>(aOStm.GetData()),
+                                          aOStm.Tell());
+        OUStringBuffer aBuffer("data:image/png;base64,");
+        ::comphelper::Base64::encode(aBuffer, aSeq);
+
+        rMap[ACTION_TYPE ""_ostr] = "rendered_entry";
+        rMap["pos"_ostr] = OUString::number(nPos);
+        rMap["image"_ostr] = aBuffer;
+
+        return true;
+    }
 };
 
 template <class BaseInstanceClass, class VclClass>
@@ -675,7 +702,8 @@ public:
     virtual void replace_selection(const OUString& rText) override;
 };
 
-class JSTreeView final : public JSWidget<SalInstanceTreeView, ::SvTabListBox>
+class JSTreeView final : public JSWidget<SalInstanceTreeView, ::SvTabListBox>,
+                         public OnDemandRenderingHandler
 {
 public:
     JSTreeView(JSDialogSender* pSender, ::SvTabListBox* pTextView, SalInstanceBuilder* pBuilder,
@@ -721,6 +749,9 @@ public:
 
     void drag_start();
     void drag_end();
+
+    // OnDemandRenderingHandler
+    virtual void render_entry(int pos, int dpix, int dpiy) override;
 };
 
 class JSExpander final : public JSWidget<SalInstanceExpander, ::VclExpander>

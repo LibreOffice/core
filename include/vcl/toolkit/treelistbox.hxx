@@ -188,6 +188,7 @@ class UNLESS_MERGELIBS_MORE(VCL_DLLPUBLIC) SvTreeListBox
     friend class SalInstanceIconView;
     friend class SalInstanceTreeView;
     friend class SalInstanceEntryTreeView;
+    friend class JSTreeView;
 
     std::unique_ptr<SvTreeListBoxImpl> mpImpl;
     Link<SvTreeListBox*,void>  aScrolledHdl;

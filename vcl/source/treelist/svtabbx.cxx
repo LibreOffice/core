@@ -100,9 +100,11 @@ static void lcl_DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter,
                         rJsonWriter.put("text", pStringItem->GetText());
 
                         SvLBoxTab* pTab = pTabListBox->GetTab( pEntry, &rItem );
-                        if ( pTab ) {
+                        if ( pTab )
                             rJsonWriter.put("editable", pTab->IsEditable());
-                        }
+
+                        if (pStringItem->IsCustomRender())
+                            rJsonWriter.put("customEntryRenderer", true);
                     }
                 }
                 else if (rItem.GetType() == SvLBoxItemType::ContextBmp)

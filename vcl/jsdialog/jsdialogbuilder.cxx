@@ -9,9 +9,7 @@
 
 #include <jsdialog/jsdialogbuilder.hxx>
 #include <sal/log.hxx>
-#include <comphelper/base64.hxx>
 #include <iconview.hxx>
-#include <utility>
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
@@ -26,8 +24,7 @@
 #include <memory>
 #include <vcl/jsdialog/executor.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <tools/stream.hxx>
-#include <vcl/cvtgrf.hxx>
+
 #include <wizdlg.hxx>
 #include <jsdialog/enabled.hxx>
 
@@ -1331,20 +1328,9 @@ void JSComboBox::render_entry(int pos, int dpix, int dpiy)
 
     BitmapEx aImage = pDevice->GetBitmapEx(Point(0, 0), aRenderSize);
 
-    SvMemoryStream aOStm(65535, 65535);
-    if (GraphicConverter::Export(aOStm, aImage, ConvertDataFormat::PNG) == ERRCODE_NONE)
-    {
-        css::uno::Sequence<sal_Int8> aSeq(static_cast<sal_Int8 const*>(aOStm.GetData()),
-                                          aOStm.Tell());
-        OUStringBuffer aBuffer("data:image/png;base64,");
-        ::comphelper::Base64::encode(aBuffer, aSeq);
-
-        std::unique_ptr<jsdialog::ActionDataMap> pMap = std::make_unique<jsdialog::ActionDataMap>();
-        (*pMap)[ACTION_TYPE ""_ostr] = "rendered_entry";
-        (*pMap)["pos"_ostr] = OUString::number(pos);
-        (*pMap)["image"_ostr] = aBuffer;
+    std::unique_ptr<jsdialog::ActionDataMap> pMap = std::make_unique<jsdialog::ActionDataMap>();
+    if (OnDemandRenderingHandler::imageToActionData(aImage, pos, *pMap))
         sendAction(std::move(pMap));
-    }
 }
 
 JSNotebook::JSNotebook(JSDialogSender* pSender, ::TabControl* pControl,
@@ -1861,6 +1847,25 @@ void JSTreeView::collapse_row(const weld::TreeIter& rIter)
 
     if (bNotify)
         sendUpdate();
+}
+
+void JSTreeView::render_entry(int pos, int dpix, int dpiy)
+{
+    ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::WITHOUT_ALPHA);
+    pDevice->SetDPIX(96.0 * dpix / 100);
+    pDevice->SetDPIY(96.0 * dpiy / 100);
+
+    SvTreeListEntry* rEntry = m_xTreeView->GetEntryAtAbsPos(pos);
+
+    Size aRenderSize = signal_custom_get_size(*pDevice, get_id(pos));
+    pDevice->SetOutputSize(aRenderSize);
+    m_xTreeView->DrawCustomEntry(*pDevice, tools::Rectangle(Point(0, 0), aRenderSize), *rEntry);
+
+    BitmapEx aImage = pDevice->GetBitmapEx(Point(0, 0), aRenderSize);
+
+    std::unique_ptr<jsdialog::ActionDataMap> pMap = std::make_unique<jsdialog::ActionDataMap>();
+    if (OnDemandRenderingHandler::imageToActionData(aImage, pos, *pMap))
+        sendAction(std::move(pMap));
 }
 
 JSExpander::JSExpander(JSDialogSender* pSender, ::VclExpander* pExpander,
