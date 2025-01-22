@@ -2392,7 +2392,7 @@ void SchXMLExportHelper_Impl::exportAxis(
         lcl_exportNumberFormat( u"NumberFormat"_ustr, rAxisProps, mrExport );
         aPropertyStates = mxExpPropMapper->Filter(mrExport, rAxisProps);
 
-        if (!maSrcShellID.isEmpty() && !maDestShellID.isEmpty() && maSrcShellID != maDestShellID)
+        if (!maDestShellID.isEmpty() && (!maSrcShellID.isEmpty() || maSrcShellID != maDestShellID))
         {
             // Disable link to source number format property when pasting to
             // a different doc shell.  These shell ID's should be both empty
@@ -2809,6 +2809,13 @@ void SchXMLExportHelper_Impl::exportSeries(
 
                                 if( mxExpPropMapper.is())
                                     aPropertyStates = mxExpPropMapper->Filter(mrExport, xPropSet);
+                                if (!maDestShellID.isEmpty() && (!maSrcShellID.isEmpty() || maSrcShellID != maDestShellID))
+                                {
+                                    // Disable link to source number format property when pasting to
+                                    // a different doc shell.  These shell ID's should be both empty
+                                    // during real ODF export.
+                                    disableLinkedNumberFormat(aPropertyStates, mxExpPropMapper->getPropertySetMapper());
+                                }
                             }
 
                             if( bExportContent )

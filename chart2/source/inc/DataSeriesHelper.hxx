@@ -185,6 +185,10 @@ void deleteDataLabelsFromSeriesAndAllPoints( const rtl::Reference< ::chart::Data
 UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS)
 void deleteDataLabelsFromPoint( const css::uno::Reference< css::beans::XPropertySet >& xPointPropertySet );
 
+UNLESS_MERGELIBS(OOO_DLLPUBLIC_CHARTTOOLS)
+sal_Int32 getExplicitNumberFormatKeyForDataLabel(
+    const css::uno::Reference< css::beans::XPropertySet >& xPointPropertySet);
+
 } //  namespace chart::DataSeriesHelper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -485,19 +485,19 @@ bool EmbeddedObjectContainer::StoreEmbeddedObject(
         if ( xPersist.is() )
         {
             uno::Sequence < beans::PropertyValue > aSeq;
+            auto aObjArgs(::comphelper::InitPropertySequence({
+                { "SourceShellID", uno::Any(rSrcShellID) },
+                { "DestinationShellID", uno::Any(rDestShellID) }
+            }));
             if ( bCopy )
             {
-                auto aObjArgs(::comphelper::InitPropertySequence({
-                    { "SourceShellID", uno::Any(rSrcShellID) },
-                    { "DestinationShellID", uno::Any(rDestShellID) }
-                }));
                 xPersist->storeToEntry(pImpl->mxStorage, rName, aSeq, aObjArgs);
             }
             else
             {
                 //TODO/LATER: possible optimization, don't store immediately
                 //xPersist->setPersistentEntry( pImpl->mxStorage, rName, embed::EntryInitModes::ENTRY_NO_INIT, aSeq, aSeq );
-                xPersist->storeAsEntry( pImpl->mxStorage, rName, aSeq, aSeq );
+                xPersist->storeAsEntry( pImpl->mxStorage, rName, aSeq, aObjArgs );
                 xPersist->saveCompleted( true );
             }
         }
@@ -511,11 +511,14 @@ bool EmbeddedObjectContainer::StoreEmbeddedObject(
 
     return true;
 }
-
-bool EmbeddedObjectContainer::InsertEmbeddedObject( const uno::Reference < embed::XEmbeddedObject >& xObj, OUString& rName )
+bool EmbeddedObjectContainer::InsertEmbeddedObject( const uno::Reference < embed::XEmbeddedObject >& xObj, OUString& rName,
+        OUString const* pTargetShellID )
 {
     // store it into the container storage
-    if (StoreEmbeddedObject(xObj, rName, false, OUString(), OUString()))
+    OUString sTargetShellID;
+    if (pTargetShellID)
+        sTargetShellID = *pTargetShellID;
+    if (StoreEmbeddedObject(xObj, rName, false, OUString(), sTargetShellID))
     {
         // remember object
         AddEmbeddedObject( xObj, rName );
