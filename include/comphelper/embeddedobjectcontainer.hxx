@@ -109,7 +109,8 @@ public:
                         OUString const* pBaseURL = nullptr );
 
     // insert an embedded object into the container - objects persistent representation will be added to the storage
-    bool            InsertEmbeddedObject( const css::uno::Reference < css::embed::XEmbeddedObject >&, OUString& );
+    bool            InsertEmbeddedObject( const css::uno::Reference < css::embed::XEmbeddedObject >&, OUString&,
+        OUString const* pTargetShellID = nullptr);
 
     // load an embedded object from a MediaDescriptor and insert it into the container
     // a new object will be created from the new content and returned

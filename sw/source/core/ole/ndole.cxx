@@ -957,7 +957,10 @@ void SwOLEObj::SetNode( SwOLENode* pNode )
     if ( xChild.is() && xChild->getParent() != p->GetModel() )
         // it is possible that the parent was set already
         xChild->setParent( p->GetModel() );
-    if (!p->GetEmbeddedObjectContainer().InsertEmbeddedObject( m_xOLERef.GetObject(), aObjName ) )
+    rtl::OUString sTargetShellID = SfxObjectShell::CreateShellID(rDoc.GetDocShell());
+
+    if (!p->GetEmbeddedObjectContainer().InsertEmbeddedObject( m_xOLERef.GetObject(), aObjName,
+        &sTargetShellID) )
     {
         OSL_FAIL( "InsertObject failed" );
         if ( xChild.is() )
