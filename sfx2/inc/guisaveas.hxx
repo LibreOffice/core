@@ -101,6 +101,7 @@ public:
     static bool WarnUnacceptableFormat(
                                     const css::uno::Reference< css::frame::XModel >& xModel,
                                     std::u16string_view aOldUIName,
+                                    std::u16string_view aExtension,
                                     const OUString& aDefExtension,
                                     bool rDefaultIsAlien );
 

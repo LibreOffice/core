@@ -10,8 +10,8 @@
     <property name="type-hint">dialog</property>
     <property name="skip-taskbar-hint">True</property>
     <property name="message-type">question</property>
-    <property name="text" translatable="yes" context="alienwarndialog|AlienWarnDialog">This document may contain formatting or content that cannot be saved in the currently selected file format “%FORMATNAME”.</property>
-    <property name="secondary-text" translatable="yes" context="alienwarndialog|AlienWarnDialog">Use the default ODF file format to be sure that the document is saved correctly.</property>
+    <property name="text" translatable="yes" context="alienwarndialog|AlienWarnDialog">This document may contain formatting or content that cannot be saved in the currently selected file format “%FORMATNAME (*.%EXTENSION)”.</property>
+    <property name="secondary-text" translatable="yes" context="alienwarndialog|AlienWarnDialog">Use the default ODF file format (*.%EXTENSION) to be sure that the document is saved correctly.</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="messagedialog-vbox">
         <property name="can-focus">False</property>

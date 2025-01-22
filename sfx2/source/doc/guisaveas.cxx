@@ -845,14 +845,16 @@ sal_Int8 ModelData_Impl::CheckFilter( const OUString& aFilterName )
         // the default filter is acceptable and the old filter is alien one
         // so ask to make a saveAs operation
         const OUString aUIName = aFiltPropsHM.getUnpackedValueOrDefault(u"UIName"_ustr, OUString() );
-        const OUString aDefUIName = aDefFiltPropsHM.getUnpackedValueOrDefault(u"UIName"_ustr, OUString() );
+        const OUString aType = aFiltPropsHM.getUnpackedValueOrDefault( u"Type"_ustr, OUString() );
+        const OUString aExtension = GetRecommendedExtension(aType);
         const OUString aPreusedFilterName = GetDocProps().getUnpackedValueOrDefault(u"PreusedFilterName"_ustr, OUString() );
+        const OUString aDefUIName = aDefFiltPropsHM.getUnpackedValueOrDefault(u"UIName"_ustr, OUString() );
         const OUString aDefType = aDefFiltPropsHM.getUnpackedValueOrDefault( u"Type"_ustr, OUString() );
         const OUString aDefExtension = GetRecommendedExtension( aDefType );
 
         if ( aPreusedFilterName != aFilterName && aUIName != aDefUIName )
         {
-            if ( !SfxStoringHelper::WarnUnacceptableFormat( GetModel(), aUIName, aDefExtension,
+            if ( !SfxStoringHelper::WarnUnacceptableFormat( GetModel(), aUIName,aExtension, aDefExtension,
                                                             static_cast<bool>( nDefFiltFlags & SfxFilterFlags::ALIEN ) ) )
                 return STATUS_SAVEAS_STANDARDNAME;
         }
@@ -2090,6 +2092,7 @@ void SfxStoringHelper::SetDocInfoState(
 // static
 bool SfxStoringHelper::WarnUnacceptableFormat( const uno::Reference< frame::XModel >& xModel,
                                                     std::u16string_view aOldUIName,
+                                                    std::u16string_view aExtension,
                                                     const OUString& aDefExtension,
                                                     bool bDefIsAlien )
 {
@@ -2097,7 +2100,7 @@ bool SfxStoringHelper::WarnUnacceptableFormat( const uno::Reference< frame::XMod
         return true;
 
     weld::Window* pWin = SfxStoringHelper::GetModelWindow(xModel);
-    SfxAlienWarningDialog aDlg(pWin, aOldUIName, aDefExtension, bDefIsAlien);
+    SfxAlienWarningDialog aDlg(pWin, aOldUIName,aExtension, aDefExtension, bDefIsAlien);
 
     return aDlg.run() == RET_OK;
 }

@@ -22,6 +22,7 @@
 
 SfxAlienWarningDialog::SfxAlienWarningDialog(weld::Window* pParent,
                                              std::u16string_view _rFormatName,
+                                             std::u16string_view _rExtension,
                                              const OUString& _rDefaultExtension,
                                              bool rDefaultIsAlien)
     : MessageDialogController(pParent, u"sfx/ui/alienwarndialog.ui"_ustr, u"AlienWarnDialog"_ustr,
@@ -32,9 +33,10 @@ SfxAlienWarningDialog::SfxAlienWarningDialog(weld::Window* pParent,
 {
     OUString aExtension = u"ODF"_ustr;
 
-    // replace formatname (text)
+    // replace formatname and extension (text)
     OUString sInfoText = m_xDialog->get_primary_text();
     sInfoText = sInfoText.replaceAll("%FORMATNAME", _rFormatName);
+    sInfoText = sInfoText.replaceAll("%EXTENSION", _rExtension);
     m_xDialog->set_primary_text(sInfoText);
 
     // replace formatname (button)
@@ -48,6 +50,13 @@ SfxAlienWarningDialog::SfxAlienWarningDialog(weld::Window* pParent,
     {
         m_xDialog->set_secondary_text(OUString());
         aExtension = _rDefaultExtension.toAsciiUpperCase();
+    }
+    else
+    {
+        // replace extension (secondary-text)
+        sInfoText = m_xDialog->get_secondary_text();
+        sInfoText = sInfoText.replaceAll("%EXTENSION", _rDefaultExtension);
+        m_xDialog->set_secondary_text(sInfoText);
     }
 
     // replace defaultextension (button)

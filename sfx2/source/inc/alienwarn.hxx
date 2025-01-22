@@ -30,7 +30,8 @@ private:
 
 public:
     SfxAlienWarningDialog(weld::Window* pParent, std::u16string_view _rFormatName,
-                          const OUString& _rDefaultExtension, bool rDefaultIsAlien);
+                          std::u16string_view _rExtension, const OUString& _rDefaultExtension,
+                          bool rDefaultIsAlien);
     virtual ~SfxAlienWarningDialog() override;
 };
 
