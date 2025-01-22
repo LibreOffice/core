@@ -37,7 +37,12 @@ OUString QtInstanceLinkButton::get_label() const
     return sLabel;
 }
 
-void QtInstanceLinkButton::set_label_wrap(bool) { assert(false && "Not implemented yet"); }
+void QtInstanceLinkButton::set_label_wrap(bool bWrap)
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] { m_pLabel->setWordWrap(bWrap); });
+}
 
 void QtInstanceLinkButton::set_uri(const OUString& rUri)
 {
