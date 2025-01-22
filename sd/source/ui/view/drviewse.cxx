@@ -669,6 +669,13 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
     SdOptions* pOptions = SdModule::get()->GetSdOptions(GetDoc()->GetDocumentType());
     sal_uInt32 nDefaultObjectSizeWidth(pOptions->GetDefaultObjectSizeWidth());
     sal_uInt32 nDefaultObjectSizeHeight(pOptions->GetDefaultObjectSizeHeight());
+    if (nSId == SID_INSERT_SIGNATURELINE)
+    {
+        // Half of the default to better match the space available for signatures in many real-world
+        // documents.
+        nDefaultObjectSizeWidth *= 0.5;
+        nDefaultObjectSizeHeight *= 0.5;
+    }
 
     // calc position and size
     ::tools::Rectangle aVisArea = GetActiveWindow()->PixelToLogic(::tools::Rectangle(Point(0,0), GetActiveWindow()->GetOutputSizePixel()));
