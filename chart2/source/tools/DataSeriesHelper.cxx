@@ -675,6 +675,45 @@ void deleteDataLabelsFromPoint( const Reference< beans::XPropertySet >& xPointPr
     }
 }
 
+sal_Int32 getExplicitNumberFormatKeyForDataLabel(
+    const uno::Reference<beans::XPropertySet>& xSeriesOrPointProp)
+{
+    rtl::Reference< ::chart::DataSeries > xDataSeries( dynamic_cast<DataSeries*>(xSeriesOrPointProp.get()) );
+    sal_Int32 nFormat = 0;
+    if (!xDataSeries.is())
+        return nFormat;
+    try
+    {
+
+        bool bLinkToSource = true;
+        xDataSeries->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT) >>= bLinkToSource;
+        xDataSeries->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nFormat;
+
+        if (bLinkToSource && xDataSeries->getDataSequences().getLength())
+        {
+            Reference<data::XLabeledDataSequence> xLabeledSeq(
+                xDataSeries->getDataSequences()[0]);
+            if( xLabeledSeq.is() )
+            {
+                Reference< data::XDataSequence > xSeq( xLabeledSeq->getValues());
+                if( xSeq.is() )
+                {
+                    nFormat = xSeq->getNumberFormatKeyByIndex( -1 );
+                }
+            }
+
+        }
+    }
+    catch (const beans::UnknownPropertyException&)
+    {
+    }
+
+    if (nFormat < 0)
+        nFormat = 0;
+    return nFormat;
+
+}
+
 } //  namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
