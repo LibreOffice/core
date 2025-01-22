@@ -1552,6 +1552,12 @@
 #define STR_QUERY_INSMODE_TITLE NC_("STR_QUERY_INSMODE_TITLE", "You are switching to the overwrite mode")
 #define STR_QUERY_INSMODE_TEXT NC_("STR_QUERY_INSMODE_TEXT", "The overwrite mode allows to type over text. It is indicated by a block cursor and at the statusbar. Press Insert again to switch back.")
 #define STR_QUERY_INSMODE_QUESTION NC_("STR_QUERY_INSMODE_QUESTION", "Do you want to continue?")
+
+// To translators: title and question for confirmation whether to delete all comments / all comments by author; text intentionally empty
+#define STR_QUERY_DELALLCOMMENTS_TITLE NC_("STR_QUERY_DELALLCOMMENTS_TITLE", "Confirm delete")
+#define STR_QUERY_DELALLCOMMENTS_QUESTION NC_("STR_QUERY_DELALLCOMMENTS_QUESTION", "Are you sure you want to delete all comments?")
+#define STR_QUERY_DELALLCOMMENTSAUTHOR_QUESTION NC_("STR_QUERY_DELALLCOMMENTS_QUESTION", "Are you sure you want to delete all comments by %AUTHOR?")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

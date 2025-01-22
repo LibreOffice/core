@@ -82,6 +82,8 @@
 #include <annotsh.hxx>
 #include <swabstdlg.hxx>
 #include <pagefrm.hxx>
+#include <officecfg/Office/Common.hxx>
+
 #include <memory>
 
 // distance between Anchor Y and initial note position
@@ -1584,11 +1586,40 @@ void SwPostItMgr::RemoveSidebarWin()
     PreparePageContainer();
 }
 
+static bool ConfirmDeleteAll(SwView& pView, const OUString& sText)
+{
+    const bool bAsk = officecfg::Office::Common::Misc::QueryDeleteAllComments::get();
+    bool bConfirm = true;
+    if (bAsk)
+    {
+        VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
+        auto pDlg
+            = pFact->CreateQueryDialog(pView.GetFrameWeld(),
+                                       SwResId(STR_QUERY_DELALLCOMMENTS_TITLE), sText, "", true);
+        sal_Int32 nResult = pDlg->Execute();
+        if (pDlg->ShowAgain() == false)
+        {
+            std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
+                comphelper::ConfigurationChanges::create());
+            officecfg::Office::Common::Misc::QueryDeleteAllComments::set(false, xChanges);
+            xChanges->commit();
+        }
+        bConfirm = (nResult == RET_YES);
+        pDlg->disposeOnce();
+    }
+    return bConfirm;
+}
+
 // copy to new vector, otherwise RemoveItem would operate and delete stuff on mvPostItFields as well
 // RemoveItem will clean up the core field and visible postit if necessary
 // we cannot just delete everything as before, as postits could move into change tracking
 void SwPostItMgr::Delete(const OUString& rAuthor)
 {
+    OUString sQuestion = SwResId(STR_QUERY_DELALLCOMMENTSAUTHOR_QUESTION);
+    sQuestion = sQuestion.replaceAll("%AUTHOR", rAuthor);
+    if (!ConfirmDeleteAll(mpWrtShell->GetView(), sQuestion))
+        return;
+
     mpWrtShell->StartAllAction();
     if (HasActiveSidebarWin() && (GetActiveSidebarWin()->GetAuthor() == rAuthor))
     {
@@ -1719,6 +1750,9 @@ void SwPostItMgr::ToggleResolvedForThread(sal_uInt32 nPostItId)
 
 void SwPostItMgr::Delete()
 {
+    if (!ConfirmDeleteAll(mpWrtShell->GetView(), SwResId(STR_QUERY_DELALLCOMMENTS_QUESTION)))
+        return;
+
     mpWrtShell->StartAllAction();
     SetActiveSidebarWin(nullptr);
     SwRewriter aRewriter;

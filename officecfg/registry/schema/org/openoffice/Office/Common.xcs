@@ -5388,11 +5388,16 @@
           <value>-1</value>
       </prop>
       <prop oor:name="QuerySetInsMode" oor:type="xs:boolean" oor:nillable="false">
-        <!-- UIHints: Tools - Options - General -->
         <info>
           <desc>Determines whether to query when switching into the overwrite mode.</desc>
         </info>
         <value>true</value>
+      </prop>
+      <prop oor:name="QueryDeleteAllComments" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Determines whether to confirm delete all comments or all by user.</desc>
+        </info>
+        <value>false</value>
       </prop>
       <prop oor:name="PerformFileExtCheck" oor:type="xs:boolean" oor:nillable="false">
         <!-- UIHints: Tools - Options - General -->
