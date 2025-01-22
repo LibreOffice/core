@@ -128,7 +128,7 @@ done
 # Quick Look plugins will only load if with sandbox entitlements
 find "$APP_BUNDLE" -name 'QuickLook*.appex' -type d |
 while read appex; do
-    codesign --force --prefix=$MACOSX_BUNDLE_IDENTIFIER. --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements_quicklookappex "$appex" || exit 1
+    codesign --force --timestamp --options=runtime --prefix=$MACOSX_BUNDLE_IDENTIFIER. --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements_quicklookappex "$appex"|| exit 1
 done
 
 # Sign executables
