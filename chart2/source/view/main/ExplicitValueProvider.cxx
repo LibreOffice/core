@@ -26,6 +26,7 @@
 #include <BaseCoordinateSystem.hxx>
 #include <TitleHelper.hxx>
 #include <ObjectIdentifier.hxx>
+#include <DataSeriesHelper.hxx>
 
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -78,21 +79,7 @@ sal_Int32 ExplicitValueProvider::getExplicitNumberFormatKeyForAxis(
 sal_Int32 ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel(
     const uno::Reference<beans::XPropertySet>& xSeriesOrPointProp)
 {
-    sal_Int32 nFormat = 0;
-    if (!xSeriesOrPointProp.is())
-        return nFormat;
-
-    try
-    {
-        xSeriesOrPointProp->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nFormat;
-    }
-    catch (const beans::UnknownPropertyException&)
-    {
-    }
-
-    if (nFormat < 0)
-        nFormat = 0;
-    return nFormat;
+    return DataSeriesHelper::getExplicitNumberFormatKeyForDataLabel(xSeriesOrPointProp);
 }
 
 sal_Int32 ExplicitValueProvider::getExplicitPercentageNumberFormatKeyForDataLabel(
