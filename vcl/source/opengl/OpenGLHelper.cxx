@@ -569,8 +569,13 @@ BitmapEx OpenGLHelper::ConvertBufferToBitmapEx(const sal_uInt8* const pBuffer, t
         size_t nCurPos = 0;
         for( tools::Long y = 0; y < nHeight; ++y)
         {
+#ifdef _WIN32
             Scanline pScan = pWriteAccess->GetScanline(y);
             Scanline pAlphaScan = pAlphaWriteAccess->GetScanline(y);
+#else
+            Scanline pScan = pWriteAccess->GetScanline(nHeight-1-y);
+            Scanline pAlphaScan = pAlphaWriteAccess->GetScanline(nHeight-1-y);
+#endif
             for( tools::Long x = 0; x < nWidth; ++x )
             {
                 *pScan++ = pBuffer[nCurPos];

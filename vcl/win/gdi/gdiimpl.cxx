@@ -538,10 +538,11 @@ void ImplDrawBitmap( HDC hDC, const SalTwoRect& rPosAry, const WinSalBitmap& rSa
                                             WinSalBitmap::ImplGetDIBColorCount( hDrawDIB ) * sizeof( RGBQUAD );
                 const int           nOldStretchMode = SetStretchBltMode( hDC, STRETCH_DELETESCANS );
 
+                int nHeight = -pBI->bmiHeader.biHeight; // height is negative for top-down bitmap
                 StretchDIBits( hDC,
                                static_cast<int>(rPosAry.mnDestX), static_cast<int>(rPosAry.mnDestY),
                                static_cast<int>(rPosAry.mnDestWidth), static_cast<int>(rPosAry.mnDestHeight),
-                               static_cast<int>(rPosAry.mnSrcX), static_cast<int>(pBI->bmiHeader.biHeight - rPosAry.mnSrcHeight - rPosAry.mnSrcY),
+                               static_cast<int>(rPosAry.mnSrcX), static_cast<int>(nHeight - rPosAry.mnSrcHeight - rPosAry.mnSrcY),
                                static_cast<int>(rPosAry.mnSrcWidth), static_cast<int>(rPosAry.mnSrcHeight),
                                pBits, pBI, DIB_RGB_COLORS, nDrawMode );
 

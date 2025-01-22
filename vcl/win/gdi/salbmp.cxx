@@ -517,10 +517,11 @@ bool WinSalBitmap::Create( const SalBitmap& rSSalBmp, SalGraphics* pSGraphics )
 
     if( pBI->bmiHeader.biBitCount == 1 )
     {
-        hNewDDB = CreateBitmap( pBI->bmiHeader.biWidth, pBI->bmiHeader.biHeight, 1, 1, nullptr );
+        int nHeight = -pBI->bmiHeader.biHeight; // height is negative for top-down bitmap
+        hNewDDB = CreateBitmap( pBI->bmiHeader.biWidth, nHeight, 1, 1, nullptr );
 
         if( hNewDDB )
-            SetDIBits( hDC, hNewDDB, 0, pBI->bmiHeader.biHeight, pBits, pBI, DIB_RGB_COLORS );
+            SetDIBits( hDC, hNewDDB, 0, nHeight, pBits, pBI, DIB_RGB_COLORS );
     }
     else
         hNewDDB = CreateDIBitmap( hDC, &pBI->bmiHeader, CBM_INIT, pBits, pBI, DIB_RGB_COLORS );
@@ -687,7 +688,7 @@ HGLOBAL WinSalBitmap::ImplCreateDIB(const Size& rSize, vcl::PixelFormat ePixelFo
 
     pBIH->biSize = sizeof( BITMAPINFOHEADER );
     pBIH->biWidth = rSize.Width();
-    pBIH->biHeight = rSize.Height();
+    pBIH->biHeight = -rSize.Height(); // negative for top-down bitmap
     pBIH->biPlanes = 1;
     pBIH->biBitCount = nBits;
     pBIH->biCompression = BI_RGB;

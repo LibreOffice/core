@@ -33,6 +33,8 @@
 
 HBITMAP WinSalVirtualDevice::ImplCreateVirDevBitmap(HDC hDC, tools::Long nDX, tools::Long nDY, sal_uInt16 nBitCount, void **ppData)
 {
+    assert(nDX >= 0);
+    assert(nDY >= 0);
     HBITMAP hBitmap;
 
     if ( nBitCount == 1 )
@@ -52,7 +54,7 @@ HBITMAP WinSalVirtualDevice::ImplCreateVirDevBitmap(HDC hDC, tools::Long nDX, to
         BITMAPINFO aBitmapInfo;
         aBitmapInfo.bmiHeader.biSize = sizeof( BITMAPINFOHEADER );
         aBitmapInfo.bmiHeader.biWidth = nDX;
-        aBitmapInfo.bmiHeader.biHeight = nDY;
+        aBitmapInfo.bmiHeader.biHeight = -nDY; // negative for top-down
         aBitmapInfo.bmiHeader.biPlanes = 1;
         aBitmapInfo.bmiHeader.biBitCount = nBitCount;
         aBitmapInfo.bmiHeader.biCompression = BI_RGB;
