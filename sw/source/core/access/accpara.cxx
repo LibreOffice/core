@@ -1895,8 +1895,8 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
                 if (xComponent.is())
                 {
                     Color cr(ColorTransparency, xComponent->getBackground());
-                    sal_uInt32 crUnderline = sal_uInt32(cr.IsDark() ? COL_WHITE : COL_BLACK);
-                    rValue.Value <<= crUnderline;
+                    underlineColor = cr.IsDark() ? COL_WHITE : COL_BLACK;
+                    rValue.Value <<= underlineColor;
                 }
             }
 
