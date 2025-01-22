@@ -117,6 +117,12 @@ public:
         mrBuffer.append(")");
     }
 
+    void writeKeyAndLiteral(std::string_view key, std::string_view value)
+    {
+        mrBuffer.append(key);
+        writeLiteral(value);
+    }
+
     void writeLiteralEncrypt(std::u16string_view value, sal_Int32 nObject,
                              rtl_TextEncoding nEncoding = RTL_TEXTENCODING_ASCII_US);
 
