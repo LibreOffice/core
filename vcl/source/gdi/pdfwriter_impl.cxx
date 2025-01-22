@@ -5205,6 +5205,13 @@ bool PDFWriterImpl::emitCatalog()
         aWriter.startObject(rAttachedFile.mnObjectId);
         aWriter.startDict();
         aWriter.write("/Type", "/Filespec");
+
+        // Add associated files relationship (since PDF 2.0)
+        if (m_aContext.Version >= PDFWriter::PDFVersion::PDF_2_0 || m_nPDFA_Version == 3)
+        {
+            aWriter.write("/AFRelationship", "/Source");
+        }
+
         aWriter.writeKeyAndUnicodeEncrypt("/F", rAttachedFile.maFilename, rAttachedFile.mnObjectId);
         if (PDFWriter::PDFVersion::PDF_1_7 <= m_aContext.Version)
         {
@@ -5244,6 +5251,16 @@ bool PDFWriterImpl::emitCatalog()
 
     if (!m_aDocumentAttachedFiles.empty())
     {
+        // Write the associated files catalog entry (since PDF 2.0)
+        if (m_aContext.Version >= PDFWriter::PDFVersion::PDF_2_0 || m_nPDFA_Version == 3)
+        {
+            aLine.append("/AF");
+            aLine.append("[");
+            for (auto & rAttachedFile : m_aDocumentAttachedFiles)
+                aWriter.writeReference(rAttachedFile.mnObjectId);
+            aLine.append("]");
+        }
+
         aWriter.startDictWithKey("/Names");
         aWriter.startDictWithKey("/EmbeddedFiles");
         aLine.append("/Names [");
