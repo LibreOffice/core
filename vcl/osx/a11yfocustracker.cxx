@@ -90,7 +90,7 @@ void AquaA11yFocusTracker::WindowEventHandler(void * pThis, VclSimpleEvent& rEve
 }
 
 AquaA11yFocusTracker::AquaA11yFocusTracker() :
-    m_aWindowEventLink(this, WindowEventHandler),
+    m_aWindowEventLink(LINK_NONMEMBER(this, WindowEventHandler)),
     m_xDocumentFocusListener(new DocumentFocusListener(*this))
 {
     Application::AddEventListener(m_aWindowEventLink);

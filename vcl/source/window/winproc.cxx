@@ -792,7 +792,7 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, NotifyEventType n
                         ContextMenuEvent* pEv = new ContextMenuEvent;
                         pEv->pWindow = std::move(pChild);
                         pEv->aChildPos = aChildPos;
-                        Application::PostUserEvent( Link<void*,void>( pEv, ContextMenuEventLink ) );
+                        Application::PostUserEvent( LINK_NONMEMBER( pEv, ContextMenuEventLink ) );
                     }
                     else
                         bRet = ! ImplCallCommand( pChild, CommandEventId::ContextMenu, nullptr, true, &aChildPos );
@@ -2272,7 +2272,7 @@ static void ImplHandleClose( const vcl::Window* pWindow )
     {
         DelayedCloseEvent* pEv = new DelayedCloseEvent;
         pEv->pWindow = pWin;
-        Application::PostUserEvent( Link<void*,void>( pEv, DelayedCloseEventLink ) );
+        Application::PostUserEvent( LINK_NONMEMBER( pEv, DelayedCloseEventLink ) );
     }
 }
 

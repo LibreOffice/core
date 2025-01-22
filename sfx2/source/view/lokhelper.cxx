@@ -1231,7 +1231,7 @@ namespace
             LOKPostAsyncEvent(pEvent, nullptr);
         }
         else
-            Application::PostUserEvent(Link<void*, void>(pEvent, LOKPostAsyncEvent));
+            Application::PostUserEvent(LINK_NONMEMBER(pEvent, LOKPostAsyncEvent));
     }
 }
 

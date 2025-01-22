@@ -71,10 +71,28 @@
 #ifdef DBG_UTIL
 #define LINK(Instance, Class, Member) ::tools::detail::makeLink( \
     ::tools::detail::castTo<Class *>(Instance), &Class::LinkStub##Member, __FILE__ ":" SAL_STRINGIFY(__LINE__), SAL_STRINGIFY(Class::LinkStub##Member))
+#define LINK_NONMEMBER(Instance, Function) ::tools::detail::makeLink( \
+    Instance, &Function, __FILE__ ":" SAL_STRINGIFY(__LINE__), SAL_STRINGIFY(Function))
 #else
 #define LINK(Instance, Class, Member) ::tools::detail::makeLink( \
     ::tools::detail::castTo<Class *>(Instance), &Class::LinkStub##Member)
+#define LINK_NONMEMBER(Instance, Function) ::tools::detail::makeLink(Instance, &Function)
 #endif
+
+template<typename Arg, typename Ret> class SAL_WARN_UNUSED Link;
+
+namespace tools::detail {
+
+#ifdef DBG_UTIL
+template<typename Arg, typename Ret>
+Link<Arg, Ret> makeLink(
+    void * instance, Ret (* function)(void *, Arg), const char* source, const char* target);
+#else
+template<typename Arg, typename Ret>
+Link<Arg, Ret> makeLink(void * instance, Ret (* function)(void *, Arg));
+#endif
+
+}
 
 template<typename Arg, typename Ret>
 class SAL_WARN_UNUSED Link {
@@ -82,20 +100,6 @@ public:
     typedef Ret Stub(void *, Arg);
 
     Link() = default;
-
-#ifdef DBG_UTIL
-    Link(void* instance, Stub* function, const char* const source = "unknown",
-         const char* const target = "unknown")
-        : function_(function)
-        , instance_(instance)
-        , source_(source)
-        , target_(target)
-    {
-    }
-#else
-    Link(void * instance, Stub * function):
-        function_(function), instance_(instance) {}
-#endif
 
     Ret Call(Arg data) const
     { return function_ == nullptr ? Ret() : (*function_)(instance_, data); }
@@ -126,6 +130,28 @@ public:
 #endif
 
 private:
+#ifdef DBG_UTIL
+    template<typename Arg2, typename Ret2> friend Link<Arg2, Ret2> tools::detail::makeLink(
+        void * instance, Ret2 (* function)(void *, Arg2), const char* source, const char* target);
+#else
+    template<typename Arg2, typename Ret2> friend Link<Arg2, Ret2> tools::detail::makeLink(
+        void * instance, Ret2 (* function)(void *, Arg2));
+#endif
+
+#ifdef DBG_UTIL
+    Link(void* instance, Stub* function, const char* const source,
+         const char* const target)
+        : function_(function)
+        , instance_(instance)
+        , source_(source)
+        , target_(target)
+    {
+    }
+#else
+    Link(void * instance, Stub * function):
+        function_(function), instance_(instance) {}
+#endif
+
     Stub* function_ = nullptr;
     void* instance_ = nullptr;
 
@@ -134,8 +160,8 @@ private:
     /// When debugging async events, it's often critical
     /// to find out not only where a link leads (i.e. the target
     /// function), but also where it was created (file:line).
-    const char* source_ = "unknown";
-    const char* target_ = "unknown";
+    const char* source_ = "empty";
+    const char* target_ = "empty";
 #endif
 };
 

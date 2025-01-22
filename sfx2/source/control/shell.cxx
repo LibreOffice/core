@@ -429,7 +429,7 @@ void SfxShell::ExecuteSlot( SfxRequest& rReq, bool bAsync )
     {
         if( !pImpl->pExecuter )
             pImpl->pExecuter.reset( new svtools::AsynchronLink(
-                Link<void*,void>( this, ShellCall_Impl ) ) );
+                LINK_NONMEMBER( this, ShellCall_Impl ) ) );
         pImpl->pExecuter->Call( new SfxRequest( rReq ) );
     }
 }
@@ -672,7 +672,7 @@ void SfxShell::UIFeatureChanged()
         // something may get stuck in the bunkered tools. Asynchronous call to
         // prevent recursion.
         if ( !pImpl->pUpdater )
-            pImpl->pUpdater.reset( new svtools::AsynchronLink( Link<void*,void>( this, DispatcherUpdate_Impl ) ) );
+            pImpl->pUpdater.reset( new svtools::AsynchronLink( LINK_NONMEMBER( this, DispatcherUpdate_Impl ) ) );
 
         // Multiple views allowed
         pImpl->pUpdater->Call( pFrame->GetDispatcher(), true );
