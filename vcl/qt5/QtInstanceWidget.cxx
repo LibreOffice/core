@@ -590,6 +590,17 @@ void QtInstanceWidget::set_toolbar_background() { assert(false && "Not implement
 
 void QtInstanceWidget::set_highlight_background() { assert(false && "Not implemented yet"); }
 
+void QtInstanceWidget::setFontColor(const Color& rFontColor)
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        QPalette aPalette = getQWidget()->palette();
+        aPalette.setColor(getQWidget()->foregroundRole(), toQColor(rFontColor));
+        getQWidget()->setPalette(aPalette);
+    });
+}
+
 void QtInstanceWidget::set_background(const Color& rBackColor)
 {
     SolarMutexGuard g;

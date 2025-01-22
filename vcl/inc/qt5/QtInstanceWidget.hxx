@@ -168,6 +168,7 @@ public:
 
     virtual void set_highlight_background() override;
 
+    void setFontColor(const Color& rFontColor);
     virtual void set_background(const Color& rBackColor) override;
 
     virtual void draw(OutputDevice&, const Point&, const Size&) override;

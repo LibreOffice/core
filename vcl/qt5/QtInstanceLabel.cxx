@@ -49,6 +49,6 @@ void QtInstanceLabel::set_font(const vcl::Font&) { assert(false && "Not implemen
 
 void QtInstanceLabel::set_label_type(weld::LabelType) { assert(false && "Not implemented yet"); }
 
-void QtInstanceLabel::set_font_color(const Color&) { assert(false && "Not implemented yet"); }
+void QtInstanceLabel::set_font_color(const Color& rColor) { setFontColor(rColor); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

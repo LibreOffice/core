@@ -92,7 +92,7 @@ void QtInstanceTextView::set_max_length(int) { assert(false && "Not implemented 
 
 void QtInstanceTextView::set_font(const vcl::Font&) { assert(false && "Not implemented yet"); }
 
-void QtInstanceTextView::set_font_color(const Color&) { assert(false && "Not implemented yet"); }
+void QtInstanceTextView::set_font_color(const Color& rColor) { setFontColor(rColor); }
 
 bool QtInstanceTextView::can_move_cursor_with_up() const
 {

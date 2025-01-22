@@ -175,7 +175,7 @@ bool QtInstanceEntry::get_overwrite_mode() const
 
 void QtInstanceEntry::set_font(const vcl::Font&) { assert(false && "Not implemented yet"); }
 
-void QtInstanceEntry::set_font_color(const Color&) { assert(false && "Not implemented yet"); }
+void QtInstanceEntry::set_font_color(const Color& rColor) { setFontColor(rColor); }
 
 void QtInstanceEntry::cut_clipboard() { assert(false && "Not implemented yet"); }
 
