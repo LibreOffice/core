@@ -2904,6 +2904,36 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf103612)
                 "portion", u"Text after section");
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf121119)
+{
+    createSwGlobalDoc("tdf121119.odm");
+    SwDoc* pDoc = getSwDoc();
+    CPPUNIT_ASSERT_EQUAL(
+        size_t(2), pDoc->getIDocumentLinksAdministration().GetLinkManager().GetLinks().size());
+    pDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks(false, false, nullptr,
+                                                                            u""_ustr);
+
+    uno::Reference<text::XTextGraphicObjectsSupplier> xTextGraphicObjectsSupplier(mxComponent,
+                                                                                  uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(
+        xTextGraphicObjectsSupplier->getGraphicObjects(), uno::UNO_QUERY);
+
+    // This was 0 (missing images anchored at page)
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xIndexAccess->getCount());
+
+    uno::Reference<drawing::XShape> xShape(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_PAGE,
+                         getProperty<text::TextContentAnchorType>(xShape, u"AnchorType"_ustr));
+
+    xmlDocUniquePtr pLayout = parseLayoutDump();
+    // check page numbers of the objects anchored at page
+    assertXPath(pLayout, "/root/page[2]/anchored/fly/SwAnchoredObject", 1);
+    assertXPath(pLayout, "/root/page[4]/anchored/fly/SwAnchoredObject", 1);
+    assertXPath(pLayout, "/root/page[7]/anchored/fly/SwAnchoredObject", 1);
+    assertXPath(pLayout, "/root/page[9]/anchored/fly/SwAnchoredObject", 1);
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf97899)
 {
     createSwDoc();
