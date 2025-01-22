@@ -111,6 +111,8 @@ static bool g_bDebugDisableCompression = getenv("VCL_DEBUG_DISABLE_PDFCOMPRESSIO
 namespace
 {
 
+constexpr std::string_view constNamespacePDF2("http://iso.org/pdf2/ssn");
+
 constexpr sal_Int32 nLog10Divisor = 3;
 constexpr double fDivisor = 1000.0;
 
@@ -1334,6 +1336,12 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext,
         m_aContext.Tagged = true;
     }
 
+    // Add common PDF 2.0 namespace when we are using PDF 2.0
+    if (m_aContext.Version == PDFWriter::PDFVersion::PDF_2_0)
+    {
+        m_aNamespacesMap.emplace(constNamespacePDF2, createObject());
+    }
+
     if( m_aContext.DPIx == 0 || m_aContext.DPIy == 0 )
         SetReferenceDevice( VirtualDevice::RefDevMode::PDF1 );
     else
@@ -1932,6 +1940,30 @@ OString PDFWriterImpl::emitStructureAttributes( PDFStructureElement& i_rEle )
     return aRet.makeStringAndClear();
 }
 
+// Write the namespace objects to the stream
+void PDFWriterImpl::emitNamespaces()
+{
+    if (m_aContext.Version < PDFWriter::PDFVersion::PDF_2_0)
+        return;
+
+    for (auto&[sNamespace, nObject] : m_aNamespacesMap)
+    {
+        if (!updateObject(nObject))
+            return;
+
+        COSWriter aWriter(m_aContext.Encryption.getParams(), m_pPDFEncryptor);
+        aWriter.startObject(nObject);
+        aWriter.startDict();
+        aWriter.write("/Type", "/Namespace");
+        aWriter.writeKeyAndLiteral("/NS", sNamespace);
+        aWriter.endDict();
+        aWriter.endObject();
+
+        if (!writeBuffer(aWriter.getLine()))
+            m_aNamespacesMap[sNamespace] = 0;
+    }
+}
+
 sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
 {
     assert(rEle.m_nOwnElement == 0 || rEle.m_oType);
@@ -1978,10 +2010,21 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
         nParentTree = createObject();
         if (!nParentTree)
             return 0;
-        aLine.append( "/StructTreeRoot\n"
-            "/ParentTree "
-            + OString::number(nParentTree)
-            + " 0 R\n" );
+        aLine.append("/StructTreeRoot\n");
+        aWriter.writeKeyAndReference("/ParentTree", nParentTree);
+
+        // Write the reference to the PDF 2.0 namespace
+        if (m_aContext.Version >= PDFWriter::PDFVersion::PDF_2_0)
+        {
+            auto iterator = m_aNamespacesMap.find(constNamespacePDF2);
+            if (iterator != m_aNamespacesMap.end())
+            {
+                aLine.append("/Namespaces [");
+                aWriter.writeReference(iterator->second);
+                aLine.append("]");
+            }
+        }
+
         if( ! m_aRoleMap.empty() )
         {
             aLine.append( "/RoleMap<<" );
@@ -2001,8 +2044,16 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
     }
     else
     {
-        aLine.append( "/StructElem\n"
-                      "/S/" );
+        aLine.append("/StructElem");
+
+        // Write the reference to the PDF 2.0 namespace
+        if (m_aContext.Version >= PDFWriter::PDFVersion::PDF_2_0)
+        {
+            auto iterator = m_aNamespacesMap.find(constNamespacePDF2);
+            if (iterator != m_aNamespacesMap.end())
+                aWriter.writeKeyAndReference("/NS", iterator->second);
+        }
+        aLine.append("/S/");
         if( !rEle.m_aAlias.isEmpty() )
             aLine.append( rEle.m_aAlias );
         else
@@ -5148,6 +5199,8 @@ bool PDFWriterImpl::emitCatalog()
     // emit metadata
     sal_Int32 nMetadataObject = emitDocumentMetadata();
 
+    emitNamespaces();
+
     sal_Int32 nStructureDict = 0;
     if(m_aStructure.size() > 1)
     {
@@ -5353,12 +5406,13 @@ bool PDFWriterImpl::emitCatalog()
     }
 
     // viewer preferences, if we had some, then emit
-    if( m_aContext.HideViewerToolbar ||
+    if (m_aContext.HideViewerToolbar ||
         (!m_aContext.DocumentInfo.Title.isEmpty() && m_aContext.DisplayPDFDocumentTitle) ||
         m_aContext.HideViewerMenubar ||
         m_aContext.HideViewerWindowControls || m_aContext.FitWindow ||
         m_aContext.CenterWindow || (m_aContext.FirstPageLeft  &&  m_aContext.PageLayout == PDFWriter::ContinuousFacing ) ||
-        m_aContext.OpenInFullScreenMode )
+        m_aContext.OpenInFullScreenMode ||
+        m_bIsPDF_UA)
     {
         aLine.append( "/ViewerPreferences<<" );
         if( m_aContext.HideViewerToolbar )
@@ -5371,7 +5425,8 @@ bool PDFWriterImpl::emitCatalog()
             aLine.append( "/FitWindow true\n" );
         if( m_aContext.CenterWindow )
             aLine.append( "/CenterWindow true\n" );
-        if (!m_aContext.DocumentInfo.Title.isEmpty() && m_aContext.DisplayPDFDocumentTitle)
+        // PDF/UA-2 requires /DisplayDocTitle set to true
+        if ((!m_aContext.DocumentInfo.Title.isEmpty() && m_aContext.DisplayPDFDocumentTitle) || m_bIsPDF_UA)
             aLine.append( "/DisplayDocTitle true\n" );
         if( m_aContext.FirstPageLeft &&  m_aContext.PageLayout == PDFWriter::ContinuousFacing )
             aLine.append( "/Direction/R2L\n" );
@@ -5889,7 +5944,11 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
     if (m_nPDFA_Version > 0)
         aMetadata.mnPDF_A = m_nPDFA_Version;
 
-    aMetadata.mbPDF_UA = m_bIsPDF_UA;
+    if (m_bIsPDF_UA)
+    {
+        // If PDF 2.0+ we need to use PDF/UA-2 otherwise PDF/UA-1
+        aMetadata.mnPDF_UA = (m_aContext.Version >= PDFWriter::PDFVersion::PDF_2_0) ? 2 : 1;
+    }
 
     lcl_assignMeta(m_aContext.DocumentInfo.Title, aMetadata.msTitle);
     lcl_assignMeta(m_aContext.DocumentInfo.Author, aMetadata.msAuthor);

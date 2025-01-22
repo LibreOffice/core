@@ -46,7 +46,7 @@ public:
     OString m_sCreateDate;
 
     sal_Int32 mnPDF_A = 0;
-    bool mbPDF_UA = false;
+    sal_Int32 mnPDF_UA = 0;
 
 public:
     XmpMetadata();

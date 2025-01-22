@@ -206,7 +206,7 @@ void XmpMetadata::write()
         }
 
         // PDF/UA
-        if (mbPDF_UA)
+        if (mnPDF_UA > 0)
         {
             if (mnPDF_A != 0)
             { // tdf#157517 PDF/A extension schema is required
@@ -289,7 +289,7 @@ void XmpMetadata::write()
                 aXmlWriter.endElement(); // pdfaExtension:schemas
                 aXmlWriter.endElement(); // rdf:Description
             }
-            OString sPdfUaVersion = OString::number(1);
+            OString sPdfUaVersion = OString::number(mnPDF_UA);
             aXmlWriter.startElement("rdf:Description");
             aXmlWriter.attribute("rdf:about", ""_ostr);
             aXmlWriter.attribute("xmlns:pdfuaid", "http://www.aiim.org/pdfua/ns/id/"_ostr);
@@ -298,6 +298,12 @@ void XmpMetadata::write()
             aXmlWriter.content(sPdfUaVersion);
             aXmlWriter.endElement();
 
+            if (mnPDF_UA == 2)
+            {
+                aXmlWriter.startElement("pdfuaid:rev");
+                aXmlWriter.content("2024"_ostr);
+                aXmlWriter.endElement();
+            }
             aXmlWriter.endElement();
         }
 
