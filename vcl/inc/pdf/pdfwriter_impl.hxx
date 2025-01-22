@@ -824,6 +824,8 @@ private:
 
     ::comphelper::Hash                      m_DocDigest;
 
+    std::unordered_map<std::string_view, sal_Int32> m_aNamespacesMap;
+
     sal_uInt64 getCurrentFilePosition()
     {
         sal_uInt64 nPosition{};
@@ -974,6 +976,8 @@ private:
     //check if internal dummy container are needed in the structure elements
     void addInternalStructureContainer( PDFStructureElement& rEle );
     //<---i94258
+    // writes namespaces
+    void emitNamespaces();
     // writes document structure
     sal_Int32 emitStructure( PDFStructureElement& rEle );
     // writes structure parent tree
