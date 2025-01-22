@@ -1284,6 +1284,7 @@ bool FormulaCompiler::IsMatrixFunction( OpCode eOpCode )
         case ocUnique :
         case ocLet :
         case ocWrapCols :
+        case ocWrapRows :
             return true;
         default:
         {

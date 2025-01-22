@@ -4304,11 +4304,23 @@ const TranslateId SC_OPCODE_WRAPCOLS_ARY[] =
 {
     NC_("SC_OPCODE_WRAPCOLS", "Wraps the provided row or column of values by columns after a specified number of elements to form a new array."),
     NC_("SC_OPCODE_WRAPCOLS", "Range"),
-    NC_("SC_OPCODE_WRAPCOLS", "to range to wrap."),
+    NC_("SC_OPCODE_WRAPCOLS", "the range to wrap."),
     NC_("SC_OPCODE_WRAPCOLS", "Wrap count"),
     NC_("SC_OPCODE_WRAPCOLS", "The maximum number of values for each column."),
     NC_("SC_OPCODE_WRAPCOLS", "Pad with"),
     NC_("SC_OPCODE_WRAPCOLS", "The value with which to pad. The default is #N/A.")
+};
+
+// -=*# Resource for function WRAPROWS #*=-
+const TranslateId SC_OPCODE_WRAPROWS_ARY[] =
+{
+    NC_("SC_OPCODE_WRAPROWS", "Wraps the provided row or column of values by rows after a specified number of elements to form a new array."),
+    NC_("SC_OPCODE_WRAPROWS", "Range"),
+    NC_("SC_OPCODE_WRAPROWS", "the range to wrap."),
+    NC_("SC_OPCODE_WRAPROWS", "Wrap count"),
+    NC_("SC_OPCODE_WRAPROWS", "The maximum number of values for each row."),
+    NC_("SC_OPCODE_WRAPROWS", "Pad with"),
+    NC_("SC_OPCODE_WRAPROWS", "The value with which to pad. The default is #N/A.")
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

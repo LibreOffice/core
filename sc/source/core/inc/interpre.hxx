@@ -730,6 +730,7 @@ private:
     void ScLet();
     void ScSubTotal();
     void ScWrapCols();
+    void ScWrapRows();
 
     // If upon call rMissingField==true then the database field parameter may be
     // missing (Xcl DCOUNT() syntax), or may be faked as missing by having the

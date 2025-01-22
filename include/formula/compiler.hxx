@@ -521,7 +521,8 @@
 #define SC_OPCODE_TOROW             506
 #define SC_OPCODE_UNIQUE            507
 #define SC_OPCODE_WRAPCOLS          508
-#define SC_OPCODE_STOP_2_PAR        509     /* last function with two or more parameters' OpCode + 1 */
+#define SC_OPCODE_WRAPROWS          509
+#define SC_OPCODE_STOP_2_PAR        510     /* last function with two or more parameters' OpCode + 1 */
 
 #define SC_OPCODE_STOP_FUNCTION     SC_OPCODE_STOP_2_PAR            /* last function's OpCode + 1 */
 #define SC_OPCODE_LAST_OPCODE_ID    (SC_OPCODE_STOP_FUNCTION - 1)   /* last OpCode */
