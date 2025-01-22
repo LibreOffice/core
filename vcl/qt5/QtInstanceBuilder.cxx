@@ -12,6 +12,7 @@
 #include <unordered_set>
 
 #include <QtBuilder.hxx>
+#include <QtInstanceBox.hxx>
 #include <QtInstanceCheckButton.hxx>
 #include <QtInstanceComboBox.hxx>
 #include <QtInstanceDrawingArea.hxx>
@@ -155,10 +156,14 @@ std::unique_ptr<weld::Container> QtInstanceBuilder::weld_container(const OUStrin
     return std::make_unique<QtInstanceContainer>(pWidget);
 }
 
-std::unique_ptr<weld::Box> QtInstanceBuilder::weld_box(const OUString&)
+std::unique_ptr<weld::Box> QtInstanceBuilder::weld_box(const OUString& rId)
 {
-    assert(false && "Not implemented yet");
-    return nullptr;
+    QWidget* pWidget = m_xBuilder->get<QWidget>(rId);
+    if (!pWidget)
+        return nullptr;
+
+    assert(qobject_cast<QBoxLayout*>(pWidget->layout()) && "widget doesn't have a box layout");
+    return std::make_unique<QtInstanceBox>(pWidget);
 }
 
 std::unique_ptr<weld::Grid> QtInstanceBuilder::weld_grid(const OUString& rId)

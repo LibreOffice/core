@@ -35,7 +35,7 @@ public:
     virtual std::unique_ptr<weld::Window> create_screenshot_window() override;
     virtual std::unique_ptr<weld::Widget> weld_widget(const OUString& rId) override;
     virtual std::unique_ptr<weld::Container> weld_container(const OUString& rId) override;
-    virtual std::unique_ptr<weld::Box> weld_box(const OUString&) override;
+    virtual std::unique_ptr<weld::Box> weld_box(const OUString& rId) override;
     virtual std::unique_ptr<weld::Grid> weld_grid(const OUString& rId) override;
     virtual std::unique_ptr<weld::Paned> weld_paned(const OUString&) override;
     virtual std::unique_ptr<weld::Frame> weld_frame(const OUString& rId) override;
