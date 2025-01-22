@@ -1362,80 +1362,74 @@ void ScTable::CopyToTable(
 
     bool bFlagChange = false;
 
-    bool bWidth  = (nRow1==0 && nRow2==rDocument.MaxRow() && mpColWidth && pDestTab->mpColWidth);
-    bool bHeight = (nCol1==0 && nCol2==rDocument.MaxCol() && mpRowHeights && pDestTab->mpRowHeights);
-
-    if (bWidth || bHeight)
+    if (nRow1 == 0 && nRow2 == rDocument.MaxRow() && mpColWidth && pDestTab->mpColWidth)
     {
-        if (bWidth)
+        auto destTabColWidthIt = pDestTab->mpColWidth->begin() + nCol1;
+        auto thisTabColWidthIt = mpColWidth->begin() + nCol1;
+        pDestTab->mpColWidth->CopyFrom(*mpColWidth, nCol1, nCol2);
+        pDestTab->mpColFlags->CopyFrom(*mpColFlags, nCol1, nCol2);
+        for (SCCOL i = nCol1; i <= nCol2; ++i)
         {
-            auto destTabColWidthIt = pDestTab->mpColWidth->begin() + nCol1;
-            auto thisTabColWidthIt = mpColWidth->begin() + nCol1;
-            pDestTab->mpColWidth->CopyFrom(*mpColWidth, nCol1, nCol2);
-            pDestTab->mpColFlags->CopyFrom(*mpColFlags, nCol1, nCol2);
-            for (SCCOL i = nCol1; i <= nCol2; ++i)
-            {
-                bool bThisHidden = ColHidden(i);
-                bool bHiddenChange = (pDestTab->ColHidden(i) != bThisHidden);
-                bool bChange = bHiddenChange || (*destTabColWidthIt != *thisTabColWidthIt);
-                pDestTab->SetColHidden(i, i, bThisHidden);
-                //TODO: collect changes?
-                if (bHiddenChange && pCharts)
-                    pCharts->SetRangeDirty(ScRange( i, 0, nTab, i, rDocument.MaxRow(), nTab ));
-
-                if (bChange)
-                    bFlagChange = true;
-
-                ++destTabColWidthIt;
-                ++thisTabColWidthIt;
-            }
-            pDestTab->SetColManualBreaks( std::set(maColManualBreaks) );
-        }
-
-        if (bHeight)
-        {
-            bool bChange = pDestTab->GetRowHeight(nRow1, nRow2) != GetRowHeight(nRow1, nRow2);
+            bool bThisHidden = ColHidden(i);
+            bool bHiddenChange = (pDestTab->ColHidden(i) != bThisHidden);
+            bool bChange = bHiddenChange || (*destTabColWidthIt != *thisTabColWidthIt);
+            pDestTab->SetColHidden(i, i, bThisHidden);
+            //TODO: collect changes?
+            if (bHiddenChange && pCharts)
+                pCharts->SetRangeDirty(ScRange(i, 0, nTab, i, rDocument.MaxRow(), nTab));
 
             if (bChange)
                 bFlagChange = true;
 
-            pDestTab->CopyRowHeight(*this, nRow1, nRow2, 0);
-            pDestTab->pRowFlags->CopyFrom(*pRowFlags, nRow1, nRow2);
-
-            // Hidden flags.
-            for (SCROW i = nRow1; i <= nRow2; ++i)
-            {
-                SCROW nLastRow;
-                bool bHidden = RowHidden(i, nullptr, &nLastRow);
-                if (nLastRow >= nRow2)
-                    // the last row shouldn't exceed the upper bound the caller specified.
-                    nLastRow = nRow2;
-
-                bool bHiddenChanged = pDestTab->SetRowHidden(i, nLastRow, bHidden);
-                if (bHiddenChanged && pCharts)
-                    // Hidden flags differ.
-                    pCharts->SetRangeDirty(ScRange(0, i, nTab, rDocument.MaxCol(), nLastRow, nTab));
-
-                if (bHiddenChanged)
-                    bFlagChange = true;
-
-                // Jump to the last row of the identical flag segment.
-                i = nLastRow;
-            }
-
-            // Filtered flags.
-            for (SCROW i = nRow1; i <= nRow2; ++i)
-            {
-                SCROW nLastRow;
-                bool bFiltered = RowFiltered(i, nullptr, &nLastRow);
-                if (nLastRow >= nRow2)
-                    // the last row shouldn't exceed the upper bound the caller specified.
-                    nLastRow = nRow2;
-                pDestTab->SetRowFiltered(i, nLastRow, bFiltered);
-                i = nLastRow;
-            }
-            pDestTab->SetRowManualBreaks( std::set(maRowManualBreaks) );
+            ++destTabColWidthIt;
+            ++thisTabColWidthIt;
         }
+        pDestTab->SetColManualBreaks(std::set(maColManualBreaks));
+    }
+
+    if (nCol1 == 0 && nCol2 == rDocument.MaxCol() && mpRowHeights && pDestTab->mpRowHeights)
+    {
+        bool bChange = pDestTab->GetRowHeight(nRow1, nRow2) != GetRowHeight(nRow1, nRow2);
+
+        if (bChange)
+            bFlagChange = true;
+
+        pDestTab->CopyRowHeight(*this, nRow1, nRow2, 0);
+        pDestTab->pRowFlags->CopyFrom(*pRowFlags, nRow1, nRow2);
+
+        // Hidden flags.
+        for (SCROW i = nRow1; i <= nRow2; ++i)
+        {
+            SCROW nLastRow;
+            bool bHidden = RowHidden(i, nullptr, &nLastRow);
+            if (nLastRow >= nRow2)
+                // the last row shouldn't exceed the upper bound the caller specified.
+                nLastRow = nRow2;
+
+            bool bHiddenChanged = pDestTab->SetRowHidden(i, nLastRow, bHidden);
+            if (bHiddenChanged && pCharts)
+                // Hidden flags differ.
+                pCharts->SetRangeDirty(ScRange(0, i, nTab, rDocument.MaxCol(), nLastRow, nTab));
+
+            if (bHiddenChanged)
+                bFlagChange = true;
+
+            // Jump to the last row of the identical flag segment.
+            i = nLastRow;
+        }
+
+        // Filtered flags.
+        for (SCROW i = nRow1; i <= nRow2; ++i)
+        {
+            SCROW nLastRow;
+            bool bFiltered = RowFiltered(i, nullptr, &nLastRow);
+            if (nLastRow >= nRow2)
+                // the last row shouldn't exceed the upper bound the caller specified.
+                nLastRow = nRow2;
+            pDestTab->SetRowFiltered(i, nLastRow, bFiltered);
+            i = nLastRow;
+        }
+        pDestTab->SetRowManualBreaks(std::set(maRowManualBreaks));
     }
 
     if (bFlagChange)
