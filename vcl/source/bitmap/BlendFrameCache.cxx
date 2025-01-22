@@ -57,7 +57,7 @@ BlendFrameCache::BlendFrameCache(Size const& rSize, sal_uInt8 nAlpha, Color cons
         pContent->SetPixelOnData(pScanContent, 0, rColorTopLeft);
         pAlpha->SetPixelOnData(pScanAlpha, 0, BitmapColor(nAlpha));
 
-        tools::Long x(0);
+        tools::Long x;
         const tools::Long nW(rSize.Width());
 
         // y == 0, top line left to right
@@ -78,7 +78,7 @@ BlendFrameCache::BlendFrameCache(Size const& rSize, sal_uInt8 nAlpha, Color cons
             pAlpha->SetPixelOnData(pScanAlpha, x, BitmapColor(nAlpha));
         }
 
-        tools::Long y(0);
+        tools::Long y;
         const tools::Long nH(rSize.Height());
 
         // x == 0 and nW - 1, left and right line top-down
