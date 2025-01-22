@@ -317,15 +317,24 @@ static OUString ConvertUnoToIAccessible2TextAttributes(
             }
         }
 
-        // so far, "ParaAdjust" is the only UNO text attribute that
-        // maps to an object attribute for IAccessible2 ("text-align")
-        if (sAttribute.isEmpty() && (eAttributeType & IA2AttributeType::ObjectAttributes)
-            && prop.Name == "ParaAdjust")
+        // UNO text attributes that map to IAccessible2 object attributes,
+        // see https://github.com/LinuxA11y/IAccessible2/blob/master/spec/objectattributes.md
+        if (sAttribute.isEmpty() && (eAttributeType & IA2AttributeType::ObjectAttributes))
         {
-            sAttribute = "text-align";
-            const css::style::ParagraphAdjust eParaAdjust
-                = static_cast<css::style::ParagraphAdjust>(*o3tl::doAccess<sal_Int16>(prop.Value));
-            sValue = lcl_ConvertParagraphAdjust(eParaAdjust);
+            if (prop.Name == "ParaAdjust")
+            {
+                sAttribute = "text-align";
+                const css::style::ParagraphAdjust eParaAdjust
+                    = static_cast<css::style::ParagraphAdjust>(
+                        *o3tl::doAccess<sal_Int16>(prop.Value));
+                sValue = lcl_ConvertParagraphAdjust(eParaAdjust);
+            }
+            else if (prop.Name == "ParaFirstLineIndent")
+            {
+                sAttribute = u"text-indent"_ustr;
+                const sal_Int32 nFirstLineIndent = *o3tl::doAccess<sal_Int32>(prop.Value);
+                sValue = OUString::number(nFirstLineIndent / 100) + u"mm"_ustr;
+            }
         }
 
         if (!sAttribute.isEmpty() && !sValue.isEmpty())
