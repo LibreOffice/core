@@ -542,24 +542,30 @@ void ResetSignatureSelection(SfxObjectShell& rObjectShell, SfxViewShell& rViewSh
 }
 }
 
-void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
+static weld::Window* GetReqDialogParent(SfxRequest &rReq, SfxObjectShell& rShell)
 {
     weld::Window* pDialogParent = rReq.GetFrameWeld();
     if (!pDialogParent)
     {
-        SfxViewFrame* pFrame = GetFrame();
+        SfxViewFrame* pFrame = rShell.GetFrame();
         if (!pFrame)
-            pFrame = SfxViewFrame::GetFirst(this);
+            pFrame = SfxViewFrame::GetFirst(&rShell);
         if (pFrame)
             pDialogParent = pFrame->GetFrameWeld();
     }
+    return pDialogParent;
+}
 
+void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
+{
     sal_uInt16 nId = rReq.GetSlot();
 
     bool bHaveWeSigned = false;
 
     if( SID_SIGNATURE == nId || SID_MACRO_SIGNATURE == nId )
     {
+        weld::Window* pDialogParent = GetReqDialogParent(rReq, *this);
+
         QueryHiddenInformation(HiddenWarningFact::WhenSigning);
 
         if (SID_SIGNATURE == nId)
@@ -687,6 +693,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             if ( !IsOwnStorageFormat( *GetMedium() ) )
                 return;
 
+            weld::Window* pDialogParent = GetReqDialogParent(rReq, *this);
             SfxVersionDialog aDlg(pDialogParent, pFrame, IsSaveVersionOnClose());
             aDlg.run();
             SetSaveVersionOnClose(aDlg.IsSaveVersionOnClose());
@@ -795,6 +802,8 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
         case SID_AUTOREDACTDOC:
         {
+            weld::Window* pDialogParent = GetReqDialogParent(rReq, *this);
+
             // Actual redaction takes place on a newly generated Draw document
             if (!SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::DRAW))
             {
@@ -834,6 +843,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             // Actual redaction takes place on a newly generated Draw document
             if (!SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::DRAW))
             {
+                weld::Window* pDialogParent = GetReqDialogParent(rReq, *this);
                 std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
                     pDialogParent, VclMessageType::Warning, VclButtonsType::Ok,
                     SfxResId(STR_REDACTION_NO_DRAW_WARNING)));
@@ -1210,6 +1220,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 else if (!(lErr == ERRCODE_IO_GENERAL && bIsPDFExport))
                 {
                     SfxErrorContext aEc(ERRCTX_SFX_SAVEASDOC,GetTitle());
+                    weld::Window* pDialogParent = GetReqDialogParent(rReq, *this);
                     ErrorHandler::HandleError(lErr, pDialogParent);
                 }
             }
@@ -1383,7 +1394,10 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             if (comphelper::LibreOfficeKit::isActive())
                 sendErrorToLOK(lErr);
             else
+            {
+                weld::Window* pDialogParent = GetReqDialogParent(rReq, *this);
                 ErrorHandler::HandleError(lErr, pDialogParent);
+            }
 
             rReq.SetReturnValue( SfxBoolItem(0, true) );
             rReq.Done();
@@ -1396,6 +1410,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         case SID_DOCTEMPLATE:
         {
             // save as document templates
+            weld::Window* pDialogParent = GetReqDialogParent(rReq, *this);
             SfxSaveAsTemplateDialog aDlg(pDialogParent, GetModel());
             (void)aDlg.run();
             break;
