@@ -613,6 +613,7 @@ const XclFunctionInfo saFuncTable_2021[] =
     EXC_FUNCENTRY_V_VR(  ocUnique,     1,  3,  0,  "UNIQUE" ),
     EXC_FUNCENTRY_V_VR(  ocLet,        3,  3,  0,  "LET"),
     EXC_FUNCENTRY_V_VR(  ocWrapCols,   3,  3,  0,  "WRAPCOLS"),
+    EXC_FUNCENTRY_V_VR(  ocWrapRows,   3,  3,  0,  "WRAPROWS"),
 };
 
 

@@ -86,6 +86,7 @@ https://docs.oasis-open.org/office/OpenDocument/v1.3/os/part4-formula/OpenDocume
   * TOROW
   * UNIQUE
   * WRAPCOLS
+  * WRAPROWS
 * Mathematical Functions
   * RANDARRAY
   * SEQUENCE
