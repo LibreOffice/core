@@ -41,6 +41,9 @@ public:
     void        SetCTLFontEnabled( bool _bEnabled );
     static bool IsCTLFontEnabled();
 
+    void SetCTLVerticalText(bool bVertical);
+    static bool IsCTLVerticalText();
+
     void        SetCTLSequenceChecking( bool _bEnabled );
     static bool IsCTLSequenceChecking();
 
@@ -75,7 +78,8 @@ public:
         E_CTLCURSORMOVEMENT,
         E_CTLTEXTNUMERALS,
         E_CTLSEQUENCECHECKINGRESTRICTED,
-        E_CTLSEQUENCECHECKINGTYPEANDREPLACE
+        E_CTLSEQUENCECHECKINGTYPEANDREPLACE,
+        E_CTLVERTICALTEXT
     };
     bool IsReadOnly(EOption eOption) const;
 };

@@ -193,6 +193,7 @@ SvxPageDescPage::SvxPageDescPage(weld::Container* pPage, weld::DialogController*
 
     bool bCJK = SvtCJKOptions::IsAsianTypographyEnabled();
     bool bCTL = SvtCTLOptions::IsCTLFontEnabled();
+    bool bVertCTL = bCTL && SvtCTLOptions::IsCTLVerticalText();
     bool bWeb = false;
 
     const SfxUInt16Item* pHtmlModeItem = rAttr.GetItemIfSet(SID_HTML_MODE, false);
@@ -213,7 +214,7 @@ SvxPageDescPage::SvxPageDescPage(weld::Container* pPage, weld::DialogController*
 
 
     // #109989# do not show vertical directions in Writer/Web
-    if( !bWeb && bCJK )
+    if (!bWeb && (bCJK || bVertCTL))
     {
         m_xTextFlowBox->append(SvxFrameDirection::Vertical_RL_TB, SvxResId(RID_SVXSTR_PAGEDIR_RTL_VERT));
         m_xTextFlowBox->append(SvxFrameDirection::Vertical_LR_TB, SvxResId(RID_SVXSTR_PAGEDIR_LTR_VERT));

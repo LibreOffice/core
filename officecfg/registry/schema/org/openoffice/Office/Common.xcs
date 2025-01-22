@@ -6651,6 +6651,14 @@
           </info>
           <value>false</value>
         </prop>
+        <prop oor:name="CTLVerticalText" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: setup -->
+          <info>
+            <desc>Specifies whether vertical text settings are available (true)
+            or not (false).</desc>
+          </info>
+          <value>false</value>
+        </prop>
         <prop oor:name="CTLSequenceChecking" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: setup -->
           <info>

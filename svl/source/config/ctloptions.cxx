@@ -38,6 +38,7 @@ class SvtCTLOptions_Impl : public utl::ConfigItem
 private:
     bool                        m_bIsLoaded;
     bool                        m_bCTLFontEnabled;
+    bool m_bCTLVerticalText;
     bool                        m_bCTLSequenceChecking;
     bool                        m_bCTLRestricted;
     bool                        m_bCTLTypeAndReplace;
@@ -45,6 +46,7 @@ private:
     SvtCTLOptions::TextNumerals     m_eCTLTextNumerals;
 
     bool                        m_bROCTLFontEnabled;
+    bool m_bROCTLVerticalText;
     bool                        m_bROCTLSequenceChecking;
     bool                        m_bROCTLRestricted;
     bool                        m_bROCTLTypeAndReplace;
@@ -62,6 +64,8 @@ public:
 
     bool            IsLoaded() const { return m_bIsLoaded; }
     void            SetCTLFontEnabled( bool _bEnabled );
+
+    void SetCTLVerticalText(bool bVertical);
 
     void            SetCTLSequenceChecking( bool _bEnabled );
 
@@ -94,6 +98,7 @@ bool SvtCTLOptions_Impl::IsReadOnly(SvtCTLOptions::EOption eOption) const
         case SvtCTLOptions::E_CTLTEXTNUMERALS     : bReadOnly = m_bROCTLTextNumerals      ; break;
         case SvtCTLOptions::E_CTLSEQUENCECHECKINGRESTRICTED: bReadOnly = m_bROCTLRestricted  ; break;
         case SvtCTLOptions::E_CTLSEQUENCECHECKINGTYPEANDREPLACE: bReadOnly = m_bROCTLTypeAndReplace; break;
+        case SvtCTLOptions::E_CTLVERTICALTEXT : bReadOnly = m_bROCTLVerticalText ; break;
         default: assert(false);
     }
     return bReadOnly;
@@ -104,6 +109,7 @@ SvtCTLOptions_Impl::SvtCTLOptions_Impl() :
 
     m_bIsLoaded             ( false ),
     m_bCTLFontEnabled       ( true ),
+    m_bCTLVerticalText      ( true ),
     m_bCTLSequenceChecking  ( false ),
     m_bCTLRestricted        ( false ),
     m_bCTLTypeAndReplace    ( false ),
@@ -111,6 +117,7 @@ SvtCTLOptions_Impl::SvtCTLOptions_Impl() :
     m_eCTLTextNumerals      ( SvtCTLOptions::NUMERALS_ARABIC ),
 
     m_bROCTLFontEnabled     ( CFG_READONLY_DEFAULT ),
+    m_bROCTLVerticalText    ( CFG_READONLY_DEFAULT ),
     m_bROCTLSequenceChecking( CFG_READONLY_DEFAULT ),
     m_bROCTLRestricted      ( CFG_READONLY_DEFAULT ),
     m_bROCTLTypeAndReplace  ( CFG_READONLY_DEFAULT ),
@@ -210,6 +217,16 @@ void SvtCTLOptions_Impl::ImplCommit()
                 }
             }
             break;
+            case 6:
+            {
+                if (!m_bROCTLVerticalText)
+                {
+                    pNames[nRealCount] = pOrgNames[nProp];
+                    pValues[nRealCount] <<= m_bCTLVerticalText;
+                    ++nRealCount;
+                }
+            }
+            break;
         }
     }
     aNames.realloc(nRealCount);
@@ -230,7 +247,8 @@ void SvtCTLOptions_Impl::Load()
             u"CTLCursorMovement"_ustr,
             u"CTLTextNumerals"_ustr,
             u"CTLSequenceCheckingRestricted"_ustr,
-            u"CTLSequenceCheckingTypeAndReplace"_ustr };
+            u"CTLSequenceCheckingTypeAndReplace"_ustr,
+            u"CTLVerticalText"_ustr};
         EnableNotification( rPropertyNames );
     }
     Sequence< Any > aValues = GetProperties( rPropertyNames );
@@ -256,6 +274,7 @@ void SvtCTLOptions_Impl::Load()
                         case 1: { m_bCTLSequenceChecking = bValue; m_bROCTLSequenceChecking = pROStates[nProp]; } break;
                         case 4: { m_bCTLRestricted = bValue; m_bROCTLRestricted = pROStates[nProp]; } break;
                         case 5: { m_bCTLTypeAndReplace = bValue; m_bROCTLTypeAndReplace = pROStates[nProp]; } break;
+                        case 6: { m_bCTLVerticalText = bValue; m_bROCTLVerticalText = pROStates[nProp]; } break;
                     }
                 }
                 else if ( pValues[nProp] >>= nValue )
@@ -277,6 +296,15 @@ void SvtCTLOptions_Impl::SetCTLFontEnabled( bool _bEnabled )
     if(!m_bROCTLFontEnabled && m_bCTLFontEnabled != _bEnabled)
     {
         m_bCTLFontEnabled = _bEnabled;
+        SetModified();
+        NotifyListeners(ConfigurationHints::NONE);
+    }
+}
+void SvtCTLOptions_Impl::SetCTLVerticalText(bool bVertical)
+{
+    if (!m_bROCTLVerticalText && m_bCTLVerticalText != bVertical)
+    {
+        m_bCTLVerticalText = bVertical;
         SetModified();
         NotifyListeners(ConfigurationHints::NONE);
     }
@@ -377,6 +405,17 @@ void SvtCTLOptions::SetCTLFontEnabled( bool _bEnabled )
 bool SvtCTLOptions::IsCTLFontEnabled()
 {
     return officecfg::Office::Common::I18N::CTL::CTLFont::get();
+}
+
+void SvtCTLOptions::SetCTLVerticalText(bool bVertical)
+{
+    assert(m_pImpl->IsLoaded());
+    m_pImpl->SetCTLVerticalText(bVertical);
+}
+
+bool SvtCTLOptions::IsCTLVerticalText()
+{
+    return officecfg::Office::Common::I18N::CTL::CTLVerticalText::get();
 }
 
 void SvtCTLOptions::SetCTLSequenceChecking( bool _bEnabled )

@@ -1544,6 +1544,11 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
             rSet->Put(SvxLanguageItem(MsLangId::resolveSystemLanguageByScriptType(eSelectLang, css::i18n::ScriptType::COMPLEX),
                 SID_ATTR_CHAR_CTL_LANGUAGE));
         }
+
+        // tdf#163228: Mongolian script supports vertical text
+        pLangConfig->aCTLLanguageOptions.SetCTLVerticalText(
+            MsLangId::getPrimaryLanguage(eSelectLang)
+            == MsLangId::getPrimaryLanguage(LANGUAGE_MONGOLIAN_MONGOLIAN_MONGOLIA));
     }
 
     if(m_xAsianSupportCB->get_state_changed_from_saved() )

@@ -55,6 +55,9 @@
       <prop oor:name="CTLFont" install:module="ctl">
         <value>true</value>
       </prop>
+      <prop oor:name="CTLVerticalText" install:module="ctl">
+        <value>true</value>
+      </prop>
       <prop oor:name="CTLSequenceChecking" install:module="ctlseqcheck">
         <value>true</value>
       </prop>
