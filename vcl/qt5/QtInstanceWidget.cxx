@@ -592,10 +592,14 @@ void QtInstanceWidget::set_highlight_background() { assert(false && "Not impleme
 
 void QtInstanceWidget::set_background(const Color& rBackColor)
 {
-    QPalette aPalette = getQWidget()->palette();
-    aPalette.setColor(QPalette::Base, toQColor(rBackColor));
-    getQWidget()->setPalette(aPalette);
-    getQWidget()->setBackgroundRole(QPalette::Base);
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        QPalette aPalette = getQWidget()->palette();
+        aPalette.setColor(getQWidget()->backgroundRole(), toQColor(rBackColor));
+        getQWidget()->setPalette(aPalette);
+        getQWidget()->setAutoFillBackground(true);
+    });
 }
 
 void QtInstanceWidget::draw(OutputDevice&, const Point&, const Size&)
