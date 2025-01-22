@@ -677,12 +677,17 @@ private:
                 CompareScConditionalFormat> ConditionalFormatContainer;
     ConditionalFormatContainer m_ConditionalFormats;
 
+    ScConditionalFormatList(ScDocument& rDoc, const ScConditionalFormatList& rList);
     void operator =(ScConditionalFormatList const &) = delete;
 
 public:
     ScConditionalFormatList() {}
     SC_DLLPUBLIC ScConditionalFormatList(const ScConditionalFormatList& rList);
-    ScConditionalFormatList(ScDocument& rDoc, const ScConditionalFormatList& rList);
+
+    ScConditionalFormatList* Clone(ScDocument& rDestDoc) const
+    {
+        return new ScConditionalFormatList(rDestDoc, *this);
+    }
 
     void    InsertNew( std::unique_ptr<ScConditionalFormat> pNew );
 

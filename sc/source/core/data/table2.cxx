@@ -512,7 +512,7 @@ void ScTable::CopyToClip(
 
     mpCondFormatList->startRendering();
     mpCondFormatList->updateValues();
-    pTable->mpCondFormatList.reset(new ScConditionalFormatList(pTable->rDocument, *mpCondFormatList));
+    pTable->mpCondFormatList.reset(mpCondFormatList->Clone(pTable->rDocument));
     mpCondFormatList->endRendering();
 }
 
@@ -1344,7 +1344,7 @@ void ScTable::CopyToTable(
 
     if (bToUndoDoc && (nFlags & InsertDeleteFlags::ATTRIB))
     {
-        pDestTab->mpCondFormatList.reset(new ScConditionalFormatList(pDestTab->rDocument, *mpCondFormatList));
+        pDestTab->mpCondFormatList.reset(mpCondFormatList->Clone(pDestTab->rDocument));
     }
 
     if (pDBDataNoName)
@@ -1523,7 +1523,7 @@ void ScTable::UndoToTable(
     }
 
     if (nFlags & InsertDeleteFlags::ATTRIB)
-        pDestTab->mpCondFormatList.reset(new ScConditionalFormatList(pDestTab->rDocument, *mpCondFormatList));
+        pDestTab->mpCondFormatList.reset(mpCondFormatList->Clone(pDestTab->rDocument));
 
     if (!(bWidth||bHeight))
         return;

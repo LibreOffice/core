@@ -1626,7 +1626,7 @@ ScDocumentUniquePtr ScUndoConditionalFormat::createUndoRedoData()
     ScDocumentUniquePtr pUndoRedoDoc(new ScDocument(SCDOCMODE_UNDO));
     pUndoRedoDoc->InitUndo(rDoc, mnTab, mnTab);
     if (const auto* pList = rDoc.GetCondFormList(mnTab))
-        pUndoRedoDoc->SetCondFormList(new ScConditionalFormatList(*pUndoRedoDoc, *pList), mnTab);
+        pUndoRedoDoc->SetCondFormList(pList->Clone(*pUndoRedoDoc), mnTab);
     return pUndoRedoDoc;
 }
 
@@ -1670,7 +1670,7 @@ void ScUndoConditionalFormat::DoChange(ScDocument* pSrcDoc)
             for (const auto& range : cond->GetRange())
                 aCombinedRange.Join(range);
         }
-        rDoc.SetCondFormList(new ScConditionalFormatList(rDoc, *pNewList), mnTab);
+        rDoc.SetCondFormList(pNewList->Clone(rDoc), mnTab);
     }
     else
     {
@@ -1734,7 +1734,7 @@ void ScUndoConditionalFormatList::DoChange(const ScDocument* pSrcDoc)
         mpUndoDoc->GetCondFormList(mnTab)->RemoveFromDocument(rDoc);
         mpRedoDoc->GetCondFormList(mnTab)->AddToDocument(rDoc);
     }
-    rDoc.SetCondFormList(new ScConditionalFormatList(rDoc, *pSrcDoc->GetCondFormList(mnTab)), mnTab);
+    rDoc.SetCondFormList(pSrcDoc->GetCondFormList(mnTab)->Clone(rDoc), mnTab);
 
     pDocShell->PostPaintGridAll();
     pDocShell->PostDataChanged();
