@@ -48,6 +48,15 @@ public:
 
     tools::Long Height() const { return mpBuffer ? mpBuffer->mnHeight : 0L; }
 
+    bool IsTopDown() const
+    {
+        assert(mpBuffer && "Access is not valid!");
+
+        return mpBuffer && mpBuffer->meDirection == ScanlineDirection::TopDown;
+    }
+
+    bool IsBottomUp() const { return !IsTopDown(); }
+
     ScanlineFormat GetScanlineFormat() const
     {
         assert(mpBuffer && "Access is not valid!");

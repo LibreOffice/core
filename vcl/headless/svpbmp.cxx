@@ -70,6 +70,7 @@ static std::optional<BitmapBuffer> ImplCreateDIB(
     if (ePixelFormat <= vcl::PixelFormat::N8_BPP)
         nColors = vcl::numberOfColors(ePixelFormat);
 
+    pDIB->meDirection = ScanlineDirection::TopDown;
     pDIB->mnWidth = rSize.Width();
     pDIB->mnHeight = rSize.Height();
     tools::Long nScanlineBase;

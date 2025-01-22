@@ -399,6 +399,11 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getData( rendering::IntegerB
     bitmapLayout.ScanLineStride= aRequestedBytes.getOpenWidth();
 
     sal_Int32 nScanlineStride=bitmapLayout.ScanLineStride;
+    if (m_pBmpAcc->IsBottomUp())
+    {
+        pOutBuf += bitmapLayout.ScanLineStride*(aRequestedBytes.getOpenHeight()-1);
+        nScanlineStride *= -1;
+    }
 
     if( !m_aBmpEx.IsAlpha() )
     {

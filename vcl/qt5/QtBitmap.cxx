@@ -120,6 +120,7 @@ BitmapBuffer* QtBitmap::AcquireBuffer(BitmapAccessMode /*nMode*/)
     pBuffer->mnBitCount = getFormatBits(m_pImage->format());
     pBuffer->mpBits = m_pImage->bits();
     pBuffer->mnScanlineSize = m_pImage->bytesPerLine();
+    pBuffer->meDirection = ScanlineDirection::TopDown;
 
     switch (pBuffer->mnBitCount)
     {

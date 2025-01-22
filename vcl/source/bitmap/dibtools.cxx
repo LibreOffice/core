@@ -499,7 +499,7 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
         {
             // we can't trust arbitrary-sourced index based formats to have correct indexes, so we exclude the pal formats
             // from raw read and force checking their colormap indexes
-            bNative = bTopDown && !bRLE && !bTCMask && ( rAcc.GetScanlineSize() == nAlignedWidth );
+            bNative = ( ( rAcc.IsBottomUp() != bTopDown ) && !bRLE && !bTCMask && ( rAcc.GetScanlineSize() == nAlignedWidth ) );
             break;
         }
 
@@ -1246,8 +1246,13 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess const & rAcc, sal_uLong 
 
         rImageSize = rOStm.Tell();
 
-        for( tools::Long nY = rAcc.Height() - 1, nScanlineSize = rAcc.GetScanlineSize(); nY >= 0; nY-- )
-            rOStm.WriteBytes( rAcc.GetScanline(nY), nScanlineSize );
+        if( rAcc.IsBottomUp() )
+            rOStm.WriteBytes(rAcc.GetBuffer(), rAcc.Height() * rAcc.GetScanlineSize());
+        else
+        {
+            for( tools::Long nY = rAcc.Height() - 1, nScanlineSize = rAcc.GetScanlineSize(); nY >= 0; nY-- )
+                rOStm.WriteBytes( rAcc.GetScanline(nY), nScanlineSize );
+        }
     }
     else if((RLE_4 == nCompression) || (RLE_8 == nCompression))
     {
@@ -1266,60 +1271,88 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess const & rAcc, sal_uLong 
         // (other cases are not written below)
         const auto ePixelFormat(convertToBPP(rAcc.GetBitCount()));
         const sal_uLong nAlignedWidth(AlignedWidth4Bytes(rAcc.Width() * sal_Int32(ePixelFormat)));
+        bool bNative(false);
+
+        switch(rAcc.GetScanlineFormat())
+        {
+            case ScanlineFormat::N1BitMsbPal:
+            case ScanlineFormat::N8BitPal:
+            case ScanlineFormat::N24BitTcBgr:
+            {
+                if(rAcc.IsBottomUp() && (rAcc.GetScanlineSize() == nAlignedWidth))
+                {
+                    bNative = true;
+                }
+
+                break;
+            }
+
+            default:
+            {
+                break;
+            }
+        }
 
         rImageSize = rOStm.Tell();
 
-        const tools::Long nWidth(rAcc.Width());
-        const tools::Long nHeight(rAcc.Height());
-        std::vector<sal_uInt8> aBuf(nAlignedWidth);
-        switch(ePixelFormat)
+        if(bNative)
         {
-            case vcl::PixelFormat::N8_BPP:
+            rOStm.WriteBytes(rAcc.GetBuffer(), nAlignedWidth * rAcc.Height());
+        }
+        else
+        {
+            const tools::Long nWidth(rAcc.Width());
+            const tools::Long nHeight(rAcc.Height());
+            std::vector<sal_uInt8> aBuf(nAlignedWidth);
+            switch(ePixelFormat)
             {
-                for( tools::Long nY = nHeight - 1; nY >= 0; nY-- )
+                case vcl::PixelFormat::N8_BPP:
                 {
-                    sal_uInt8* pTmp = aBuf.data();
-                    Scanline pScanline = rAcc.GetScanline( nY );
-
-                    for( tools::Long nX = 0; nX < nWidth; nX++ )
-                        *pTmp++ = rAcc.GetIndexFromData( pScanline, nX );
-
-                    rOStm.WriteBytes(aBuf.data(), nAlignedWidth);
-                }
-            }
-            break;
-
-            case vcl::PixelFormat::N24_BPP:
-            {
-                //valgrind, zero out the trailing unused alignment bytes
-                size_t nUnusedBytes = nAlignedWidth - nWidth * 3;
-                memset(aBuf.data() + nAlignedWidth - nUnusedBytes, 0, nUnusedBytes);
-            }
-            [[fallthrough]];
-            // #i59239# fallback to 24 bit format, if bitcount is non-default
-            default:
-            {
-                BitmapColor aPixelColor;
-
-                for( tools::Long nY = nHeight - 1; nY >= 0; nY-- )
-                {
-                    sal_uInt8* pTmp = aBuf.data();
-
-                    for( tools::Long nX = 0; nX < nWidth; nX++ )
+                    for( tools::Long nY = nHeight - 1; nY >= 0; nY-- )
                     {
-                        // when alpha is used, this may be non-24bit main bitmap, so use GetColor
-                        // instead of GetPixel to ensure RGB value
-                        aPixelColor = rAcc.GetColor( nY, nX );
+                        sal_uInt8* pTmp = aBuf.data();
+                        Scanline pScanline = rAcc.GetScanline( nY );
 
-                        *pTmp++ = aPixelColor.GetBlue();
-                        *pTmp++ = aPixelColor.GetGreen();
-                        *pTmp++ = aPixelColor.GetRed();
+                        for( tools::Long nX = 0; nX < nWidth; nX++ )
+                            *pTmp++ = rAcc.GetIndexFromData( pScanline, nX );
+
+                        rOStm.WriteBytes(aBuf.data(), nAlignedWidth);
                     }
-
-                    rOStm.WriteBytes(aBuf.data(), nAlignedWidth);
                 }
+                break;
+
+                case vcl::PixelFormat::N24_BPP:
+                {
+                    //valgrind, zero out the trailing unused alignment bytes
+                    size_t nUnusedBytes = nAlignedWidth - nWidth * 3;
+                    memset(aBuf.data() + nAlignedWidth - nUnusedBytes, 0, nUnusedBytes);
+                }
+                [[fallthrough]];
+                // #i59239# fallback to 24 bit format, if bitcount is non-default
+                default:
+                {
+                    BitmapColor aPixelColor;
+
+                    for( tools::Long nY = nHeight - 1; nY >= 0; nY-- )
+                    {
+                        sal_uInt8* pTmp = aBuf.data();
+
+                        for( tools::Long nX = 0; nX < nWidth; nX++ )
+                        {
+                            // when alpha is used, this may be non-24bit main bitmap, so use GetColor
+                            // instead of GetPixel to ensure RGB value
+                            aPixelColor = rAcc.GetColor( nY, nX );
+
+                            *pTmp++ = aPixelColor.GetBlue();
+                            *pTmp++ = aPixelColor.GetGreen();
+                            *pTmp++ = aPixelColor.GetRed();
+                        }
+
+                        rOStm.WriteBytes(aBuf.data(), nAlignedWidth);
+                    }
+                }
+                break;
             }
-            break;
         }
     }
 

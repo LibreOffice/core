@@ -116,10 +116,14 @@ void convertToWinSalBitmap(SalBitmap& rSalBitmap, WinSalBitmap& rWinSalBitmap)
     rWinSalBitmap.Create(rSalBitmap.GetSize(), vcl::bitDepthToPixelFormat(rSalBitmap.GetBitCount()), aBitmapPalette);
     BitmapBuffer* pWrite = rWinSalBitmap.AcquireBuffer(BitmapAccessMode::Write);
 
-    // convert to bottom-up data
-    sal_uInt8* pSource = pRead->mpBits + pRead->mnScanlineSize * (pRead->mnHeight - 1);
+    sal_uInt8* pSource(pRead->mpBits);
     sal_uInt8* pDestination(pWrite->mpBits);
-    tools::Long readRowChange = -pRead->mnScanlineSize;
+    tools::Long readRowChange = pRead->mnScanlineSize;
+    if (pRead->meDirection == ScanlineDirection::TopDown)
+    {
+        pSource += pRead->mnScanlineSize * (pRead->mnHeight - 1);
+        readRowChange = -readRowChange;
+    }
 
     std::unique_ptr<ColorScanlineConverter> pConverter;
 

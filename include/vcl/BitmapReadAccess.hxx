@@ -49,7 +49,11 @@ public:
         assert(mpBuffer && "Access is not valid!");
         assert(nY < mpBuffer->mnHeight && "y-coordinate out of range!");
 
-        return mpBuffer->mpBits + (nY * mpBuffer->mnScanlineSize);
+        if (mpBuffer->meDirection == ScanlineDirection::TopDown)
+        {
+            return mpBuffer->mpBits + (nY * mpBuffer->mnScanlineSize);
+        }
+        return mpBuffer->mpBits + ((mpBuffer->mnHeight - 1 - nY) * mpBuffer->mnScanlineSize);
     }
 
     BitmapColor GetPixelFromData(const sal_uInt8* pData, tools::Long nX) const

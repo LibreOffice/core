@@ -235,6 +235,7 @@ std::optional<BitmapBuffer> StretchAndConvert(
     std::optional<BitmapBuffer> pDstBuffer(std::in_place);
 
 
+    pDstBuffer->meDirection = rSrcBuffer.meDirection;
     // set function for getting pixels
     pFncGetPixel = BitmapReadAccess::GetPixelFunction(rSrcBuffer.meFormat);
     if( !pFncGetPixel )
@@ -378,15 +379,33 @@ std::optional<BitmapBuffer> StretchAndConvert(
     }
 
     // source scanline buffer
-    Scanline pTmpScan = rSrcBuffer.mpBits;
-    tools::Long nOffset = rSrcBuffer.mnScanlineSize;
+    Scanline pTmpScan;
+    tools::Long nOffset;
+    if (rSrcBuffer.meDirection == ScanlineDirection::TopDown)
+    {
+        pTmpScan = rSrcBuffer.mpBits;
+        nOffset = rSrcBuffer.mnScanlineSize;
+    }
+    else
+    {
+        pTmpScan = rSrcBuffer.mpBits + ( rSrcBuffer.mnHeight - 1 ) * rSrcBuffer.mnScanlineSize;
+        nOffset = -rSrcBuffer.mnScanlineSize;
+    }
 
     for (tools::Long i = 0; i < rSrcBuffer.mnHeight; i++, pTmpScan += nOffset)
         pSrcScan[ i ] = pTmpScan;
 
     // destination scanline buffer
-    pTmpScan = pDstBuffer->mpBits;
-    nOffset = pDstBuffer->mnScanlineSize;
+    if (pDstBuffer->meDirection == ScanlineDirection::TopDown)
+    {
+        pTmpScan = pDstBuffer->mpBits;
+        nOffset = pDstBuffer->mnScanlineSize;
+    }
+    else
+    {
+        pTmpScan = pDstBuffer->mpBits + ( pDstBuffer->mnHeight - 1 ) * pDstBuffer->mnScanlineSize;
+        nOffset = -pDstBuffer->mnScanlineSize;
+    }
 
     for (tools::Long i = 0; i < pDstBuffer->mnHeight; i++, pTmpScan += nOffset)
         pDstScan[ i ] = pTmpScan;

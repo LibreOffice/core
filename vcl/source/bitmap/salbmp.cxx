@@ -62,11 +62,19 @@ void SalBitmap::updateChecksum() const
                     break;
             }
         }
-        if( pBuf->mnScanlineSize == lineBitsCount / 8 )
-            nCrc = rtl_crc32(nCrc, pBuf->mpBits, pBuf->mnScanlineSize * pBuf->mnHeight);
-        else // Do not include padding with undefined content in the checksum.
-            for( tools::Long y = 0; y < pBuf->mnHeight; ++y )
+        if (pBuf->meDirection == ScanlineDirection::TopDown)
+        {
+            if( pBuf->mnScanlineSize == lineBitsCount / 8 )
+                nCrc = rtl_crc32(nCrc, pBuf->mpBits, pBuf->mnScanlineSize * pBuf->mnHeight);
+            else // Do not include padding with undefined content in the checksum.
+                for( tools::Long y = 0; y < pBuf->mnHeight; ++y )
+                    nCrc = scanlineChecksum(nCrc, pBuf->mpBits + y * pBuf->mnScanlineSize, lineBitsCount, extraBitsMask);
+        }
+        else // Compute checksum in the order of scanlines, to make it consistent between different bitmap implementations.
+        {
+            for( tools::Long y = pBuf->mnHeight - 1; y >= 0; --y )
                 nCrc = scanlineChecksum(nCrc, pBuf->mpBits + y * pBuf->mnScanlineSize, lineBitsCount, extraBitsMask);
+        }
         pThis->ReleaseBuffer(pBuf, BitmapAccessMode::Read);
         pThis->mnChecksum = nCrc;
         pThis->mbChecksumValid = true;

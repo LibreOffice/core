@@ -312,6 +312,7 @@ BitmapBuffer* SkiaSalBitmap::AcquireBuffer(BitmapAccessMode nMode)
         default:
             abort();
     }
+    buffer->meDirection = ScanlineDirection::TopDown;
     // Refcount all read/write accesses, to catch problems with existing accesses while
     // a bitmap changes, and also to detect when we can free mBuffer if wanted.
     // Write mode implies also reading. It would be probably a good idea to count even
@@ -1146,6 +1147,7 @@ void SkiaSalBitmap::PerformErase()
     if (!ImplFastEraseBitmap(*bitmapBuffer, fastColor))
     {
         FncSetPixel setPixel = BitmapReadAccess::SetPixelFunction(bitmapBuffer->meFormat);
+        assert(bitmapBuffer->meDirection == ScanlineDirection::TopDown);
         // Set first scanline, copy to others.
         Scanline scanline = bitmapBuffer->mpBits;
         for (tools::Long x = 0; x < bitmapBuffer->mnWidth; ++x)

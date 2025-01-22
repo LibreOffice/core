@@ -215,7 +215,23 @@ static bool readWebp(SvStream& stream, Graphic& graphic)
     switch (pixelMode)
     {
         case PixelMode::DirectRead:
+        {
+            // Adjust for IsBottomUp() if necessary.
+            if (access->IsBottomUp())
+            {
+                std::vector<char> tmp;
+                const sal_uInt32 lineSize = access->GetScanlineSize();
+                tmp.resize(lineSize);
+                for (tools::Long y = 0; y < access->Height() / 2; ++y)
+                {
+                    tools::Long otherY = access->Height() - 1 - y;
+                    memcpy(tmp.data(), access->GetScanline(y), lineSize);
+                    memcpy(access->GetScanline(y), access->GetScanline(otherY), lineSize);
+                    memcpy(access->GetScanline(otherY), tmp.data(), lineSize);
+                }
+            }
             break;
+        }
         case PixelMode::Split:
         {
             // Split to normal and alpha bitmaps.

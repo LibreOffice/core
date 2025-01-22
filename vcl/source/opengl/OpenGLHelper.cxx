@@ -561,8 +561,12 @@ BitmapEx OpenGLHelper::ConvertBufferToBitmapEx(const sal_uInt8* const pBuffer, t
         BitmapScopedWriteAccess pAlphaWriteAccess( aAlpha );
 #ifdef _WIN32
         assert(pWriteAccess->GetScanlineFormat() == ScanlineFormat::N24BitTcBgr);
+        assert(pWriteAccess->IsTopDown());
+        assert(pAlphaWriteAccess->IsTopDown());
 #else
         assert(pWriteAccess->GetScanlineFormat() == ScanlineFormat::N24BitTcRgb);
+        assert(!pWriteAccess->IsTopDown());
+        assert(!pAlphaWriteAccess->IsTopDown());
 #endif
         assert(pAlphaWriteAccess->GetScanlineFormat() == ScanlineFormat::N8BitPal);
 
