@@ -32,8 +32,8 @@
  * but others should be reported as object attributes (e.g. text alignment is reported
  * via the "text-align" object attribute on the paragraph object).
  *
- * https://wiki.linuxfoundation.org/accessibility/iaccessible2/textattributes
- * https://wiki.linuxfoundation.org/accessibility/iaccessible2/objectattributes
+ * https://github.com/LinuxA11y/IAccessible2/blob/master/spec/textattributes.md
+ * https://github.com/LinuxA11y/IAccessible2/blob/master/spec/objectattributes.md
  *
  * This enum class is used to specify the type(s) of attributes of interest.
  */
