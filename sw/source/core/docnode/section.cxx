@@ -40,6 +40,9 @@
 #include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentStatistics.hxx>
+#include <docstat.hxx>
+#include <fmtanchr.hxx>
 #include <node.hxx>
 #include <pam.hxx>
 #include <frmatr.hxx>
@@ -95,6 +98,7 @@ namespace {
 SwSectionData::SwSectionData(SectionType const eType, OUString aName)
     : m_eType(eType)
     , m_sSectionName(std::move(aName))
+    , m_nPage(0)
     , m_bHiddenFlag(false)
     , m_bProtectFlag(false)
     , m_bEditInReadonlyFlag(false) // edit in readonly sections
@@ -112,6 +116,7 @@ SwSectionData::SwSectionData(SwSection const& rSection)
     , m_sLinkFileName(rSection.GetLinkFileName())
     , m_sLinkFilePassword(rSection.GetLinkFilePassword())
     , m_Password(rSection.GetPassword())
+    , m_nPage(rSection.GetPageNum())
     , m_bHiddenFlag(rSection.IsHiddenFlag())
     , m_bProtectFlag(rSection.IsProtect())
     // edit in readonly sections
@@ -130,6 +135,7 @@ SwSectionData::SwSectionData(SwSectionData const& rOther)
     , m_sLinkFileName(rOther.m_sLinkFileName)
     , m_sLinkFilePassword(rOther.m_sLinkFilePassword)
     , m_Password(rOther.m_Password)
+    , m_nPage(rOther.GetPageNum())
     , m_bHiddenFlag(rOther.m_bHiddenFlag)
     , m_bProtectFlag(rOther.m_bProtectFlag)
     // edit in readonly sections
@@ -150,6 +156,7 @@ SwSectionData & SwSectionData::operator= (SwSectionData const& rOther)
     m_sLinkFilePassword = rOther.m_sLinkFilePassword;
     m_bConnectFlag = rOther.m_bConnectFlag;
     m_Password = rOther.m_Password;
+    m_nPage = rOther.m_nPage;
 
     m_bEditInReadonlyFlag = rOther.m_bEditInReadonlyFlag;
     m_bProtectFlag = rOther.m_bProtectFlag;
@@ -173,7 +180,8 @@ bool SwSectionData::operator==(SwSectionData const& rOther) const
         && (m_bEditInReadonlyFlag == rOther.m_bEditInReadonlyFlag)
         && (m_sLinkFileName == rOther.m_sLinkFileName)
         && (m_sLinkFilePassword == rOther.m_sLinkFilePassword)
-        && (m_Password == rOther.m_Password);
+        && (m_Password == rOther.m_Password)
+        && (m_nPage == rOther.m_nPage);
     // FIXME: old code ignored m_bCondHiddenFlag m_bHiddenFlag m_bConnectFlag
 }
 
@@ -1255,8 +1263,42 @@ static void lcl_UpdateLinksInSect( const SwBaseLink& rUpdLnk, SwSectionNode& rSe
                     }
                 }
                 else if( pSrcDoc != pDoc )
+                {
+                    // store page count of the source document to calculate
+                    // the physical page number of the objects anchored at page
+                    const SwDocStat& rDStat = pSrcDoc->getIDocumentStatistics().GetDocStat();
+                    m_rSectFormat.GetSection()->SetPageNum(rDStat.nPage);
+
+                    // tdf#121119 keep objects anchored at page
+                    auto pSrcFormats = pSrcDoc->GetSpzFrameFormats();
+                    sal_uInt32 nPrevPages = 0;
+                    for( sw::SpzFrameFormat* pCpyFormat: *pSrcFormats)
+                    {
+                        SwFormatAnchor aAnchor( pCpyFormat->GetAnchor() );
+                        if ( RndStdIds::FLY_AT_PAGE == aAnchor.GetAnchorId() )
+                        {
+                            // sum page counts of the previous sections
+                            if ( nPrevPages == 0 )
+                            {
+                                const SwSectionFormats& rFormats = pDoc->GetSections();
+                                for( size_t n = 0; n < rFormats.size() && rFormats[n] != &m_rSectFormat; ++n )
+                                {
+                                    if ( const SwSection * pGlobalDocSection = rFormats[n]->GetGlobalDocSection() )
+                                        nPrevPages += pGlobalDocSection->GetPageNum();
+                                }
+                            }
+
+                            // set corrected physical page number of the object
+                            aAnchor.SetPageNum( nPrevPages + aAnchor.GetPageNum() );
+
+                            // copy object anchored at page to the target document
+                            pDoc->getIDocumentLayoutAccess().CopyLayoutFormat( *pCpyFormat, aAnchor, true, true );
+                        }
+                    }
+
                     oCpyRg.emplace( pSrcDoc->GetNodes().GetEndOfExtras(), SwNodeOffset(2),
                                           pSrcDoc->GetNodes().GetEndOfContent() );
+                }
 
                 // #i81653#
                 // Update links of extern linked document or extern linked

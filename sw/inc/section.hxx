@@ -67,6 +67,7 @@ private:
     OUString m_sLinkFileName;
     OUString m_sLinkFilePassword; // Must be changed to Sequence.
     css::uno::Sequence <sal_Int8> m_Password;
+    sal_uInt16 m_nPage; // loaded meta page count for page anchored flys in master document
 
     /// It seems this flag caches the current final "hidden" state.
     bool m_bHiddenFlag          : 1;
@@ -132,6 +133,9 @@ public:
 
     bool IsConnectFlag() const                  { return m_bConnectFlag; }
     void SetConnectFlag(bool const bFlag){ m_bConnectFlag = bFlag; }
+
+    sal_uInt16 GetPageNum() const         { return m_nPage; }
+    void SetPageNum(sal_uInt16 nPageNum){ m_nPage = nPageNum; }
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
@@ -212,6 +216,11 @@ public:
     // Get / set password of this section
     css::uno::Sequence<sal_Int8> const& GetPassword() const
                                             { return m_Data.GetPassword(); }
+
+    sal_uInt16 GetPageNum() const
+        { return m_Data.GetPageNum(); }
+    void SetPageNum(sal_uInt16 nPage)
+        { m_Data.SetPageNum(nPage); }
 
     // Data server methods.
     void SetRefObject( SwServerObject* pObj );
