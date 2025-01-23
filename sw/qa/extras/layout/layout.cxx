@@ -236,6 +236,51 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFootnotes)
     CheckRedlineFootnotesHidden();
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTableSplitBug)
+{
+    createDoc("table-split-bug.fodt");
+
+    {
+        xmlDocPtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/section[3]/tab[1]/row[1]/cell[1]//txt[1]/infos/bounds",
+                    "height", u"276");
+        assertXPath(pXmlDoc, "/root/page[1]/body/section[3]/tab[1]/row[1]/cell[1]/infos/bounds",
+                    "height", u"1274");
+        discardDumpedLayout();
+    }
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Down(false, 1);
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    pWrtShell->Delete();
+
+    {
+        xmlDocPtr pXmlDoc = parseLayoutDump();
+        // the problem was that the paragraph in the left cell had height 0
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/section[3]/tab[1]/row[1]/cell[1]//txt[1]/infos/bounds",
+                    "height", u"276");
+        assertXPath(pXmlDoc, "/root/page[1]/body/section[3]/tab[1]/row[1]/cell[1]/infos/bounds",
+                    "height", u"1688");
+        discardDumpedLayout();
+    }
+
+    pWrtShell->Undo();
+
+    {
+        xmlDocPtr pXmlDoc = parseLayoutDump();
+        // the problem was that the paragraph in the left cell had height 0
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/section[3]/tab[1]/row[1]/cell[1]//txt[1]/infos/bounds",
+                    "height", u"276");
+        assertXPath(pXmlDoc, "/root/page[1]/body/section[3]/tab[1]/row[1]/cell[1]/infos/bounds",
+                    "height", u"1274");
+        discardDumpedLayout();
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInBody)
 {
     loadURL("private:factory/swriter", nullptr);

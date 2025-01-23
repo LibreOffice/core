@@ -169,7 +169,7 @@ void SwFrame::SetTopBottomMargins( long nTop, long nBot )
 {
     SwFrameAreaDefinition::FramePrintAreaWriteAccess aPrt(*this);
     aPrt.Top( nTop );
-    aPrt.Height( getFrameArea().Height() - nTop - nBot );
+    aPrt.Height(::std::max<decltype(nTop)>(0, getFrameArea().Height() - nTop - nBot));
 }
 
 void SwFrame::SetLeftRightMargins( long nLeft, long nRight)
