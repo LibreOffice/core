@@ -261,13 +261,6 @@ namespace svt::table
         Select();
     }
 
-
-    ITableControl& TableControl::getTableControlInterface()
-    {
-        return *m_pImpl;
-    }
-
-
     SelectionEngine* TableControl::getSelEngine()
     {
         return m_pImpl->getSelEngine();
@@ -637,6 +630,16 @@ namespace svt::table
                 // TODO: why do we notify this when the *selection* changed? Shouldn't we find a better place for this,
                 // actually, when the active descendant, i.e. the current cell, *really* changed?
         }
+    }
+
+    TableCell TableControl::hitTest(const Point& rPoint) const
+    {
+        return m_pImpl->hitTest(rPoint);
+    }
+
+    void TableControl::invalidate(const TableArea aArea)
+    {
+        return m_pImpl->invalidate(aArea);
     }
 
 } // namespace svt::table

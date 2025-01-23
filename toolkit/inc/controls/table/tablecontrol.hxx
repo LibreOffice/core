@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <controls/table/tablecontrolinterface.hxx>
 #include <controls/table/tablemodel.hxx>
 #include <vcl/accessibletable.hxx>
 
@@ -76,9 +77,6 @@ namespace svt::table
                 not contain any rows or columns.
         */
         sal_Int32 GetCurrentRow() const override;
-
-        ITableControl&
-                getTableControlInterface();
 
         /** retrieves the current column
 
@@ -157,6 +155,8 @@ namespace svt::table
         virtual void SelectRow( sal_Int32 const i_rowIndex, bool const i_select ) override;
         virtual void SelectAllRows( bool const i_select ) override;
 
+        TableCell hitTest(const Point& rPoint) const;
+        void invalidate(const TableArea aArea);
 
     private:
         DECL_LINK( ImplSelectHdl, LinkParamNone*, void );

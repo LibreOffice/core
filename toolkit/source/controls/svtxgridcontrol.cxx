@@ -112,7 +112,7 @@ sal_Int32 SAL_CALL SVTXGridControl::getRowAtPoint(::sal_Int32 x, ::sal_Int32 y)
     VclPtr< TableControl > pTable = GetAsDynamic< TableControl >();
     ENSURE_OR_RETURN( pTable, "SVTXGridControl::getRowAtPoint: no control (anymore)!", -1 );
 
-    TableCell const tableCell = pTable->getTableControlInterface().hitTest( Point( x, y ) );
+    TableCell const tableCell = pTable->hitTest(Point(x, y));
     return ( tableCell.nRow >= 0 ) ? tableCell.nRow : -1;
 }
 
@@ -124,7 +124,7 @@ sal_Int32 SAL_CALL SVTXGridControl::getColumnAtPoint(::sal_Int32 x, ::sal_Int32 
     VclPtr< TableControl > pTable = GetAsDynamic< TableControl >();
     ENSURE_OR_RETURN( pTable, "SVTXGridControl::getColumnAtPoint: no control (anymore)!", -1 );
 
-    TableCell const tableCell = pTable->getTableControlInterface().hitTest( Point( x, y ) );
+    TableCell const tableCell = pTable->hitTest(Point(x, y));
     return ( tableCell.nColumn >= 0 ) ? tableCell.nColumn : -1;
 }
 
@@ -620,7 +620,7 @@ void SAL_CALL SVTXGridControl::dataChanged( const GridDataEvent& i_event )
     // So, just in case, invalidate the column header area, too.
     VclPtr< TableControl > pTable = GetAsDynamic< TableControl >();
     ENSURE_OR_RETURN_VOID( pTable, "SVTXGridControl::dataChanged: no control (anymore)!" );
-    pTable->getTableControlInterface().invalidate( TableArea::ColumnHeaders );
+    pTable->invalidate(TableArea::ColumnHeaders);
 }
 
 
@@ -632,7 +632,7 @@ void SAL_CALL SVTXGridControl::rowHeadingChanged( const GridDataEvent& )
     ENSURE_OR_RETURN_VOID( pTable, "SVTXGridControl::rowHeadingChanged: no control (anymore)!" );
 
     // TODO: we could do better than this - invalidate the header area only
-    pTable->getTableControlInterface().invalidate( TableArea::RowHeaders );
+    pTable->invalidate(TableArea::RowHeaders);
 }
 
 
