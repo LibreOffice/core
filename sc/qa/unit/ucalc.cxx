@@ -3100,6 +3100,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFunctionLists)
         "COLUMN",
         "COLUMNS",
         "DDE",
+        "DROP",
         "ERROR.TYPE",
         "ERRORTYPE",
         "FILTER",
