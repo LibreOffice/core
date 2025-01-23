@@ -1235,6 +1235,19 @@ static void lcl_UpdateLinksInSect( const SwBaseLink& rUpdLnk, SwSectionNode& rSe
                 }
                 else if( pSrcDoc != pDoc )
                 {
+                    // before update, remove obsolete page-anchored flys from the target master document
+                    auto pFormats = pDoc->GetSpzFrameFormats();
+                    for( sal_uInt16 nCnt = pFormats->size(); nCnt; )
+                    {
+                        SwFrameFormat* pFormat = (*pFormats)[ --nCnt ];
+                        SwFormatAnchor aAnchor( pFormat->GetAnchor() );
+                        if ( RndStdIds::FLY_AT_PAGE == aAnchor.GetAnchorId() &&
+                                pFormat->GetName().indexOf(sFileName) > -1 )
+                        {
+                            pDoc->getIDocumentLayoutAccess().DelLayoutFormat( pFormat );
+                        }
+                    }
+
                     // store page count of the source document to calculate
                     // the physical page number of the objects anchored at page
                     const SwDocStat& rDStat = pSrcDoc->getIDocumentStatistics().GetDocStat();
