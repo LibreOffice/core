@@ -32,7 +32,6 @@ namespace svt::table
     */
     class TableDataWindow : public vcl::Window
     {
-        friend class TableFunctionSet;
     private:
         TableControl_Impl&  m_rTableControl;
         Link<LinkParamNone*,void> m_aSelectHdl;
