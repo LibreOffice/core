@@ -44,7 +44,6 @@ namespace svt::table
         bool MouseMove(ITableControl& _rControl, const MouseEvent& rMEvt);
         bool MouseButtonDown(ITableControl& _rControl, const MouseEvent& rMEvt);
         bool MouseButtonUp(ITableControl& _rControl, const MouseEvent& rMEvt);
-        static bool KeyInput(ITableControl& _rControl, const KeyEvent& rKEvt);
 
     private:
         bool delegateMouseEvent( ITableControl& i_control, const MouseEvent& i_event,

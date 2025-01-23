@@ -96,7 +96,48 @@ namespace svt::table
 
     void TableControl::KeyInput( const KeyEvent& rKEvt )
     {
-        if (!m_pImpl || !DefaultInputHandler::KeyInput(*m_pImpl, rKEvt))
+        bool bHandled = false;
+        if (m_pImpl)
+        {
+            const vcl::KeyCode& rKeyCode = rKEvt.GetKeyCode();
+            sal_uInt16 nKeyCode = rKeyCode.GetCode();
+
+            struct ActionMapEntry
+            {
+                sal_uInt16 nKeyCode;
+                sal_uInt16 nKeyModifier;
+                TableControlAction eAction;
+            }
+            static const aKnownActions[] = {
+                      { KEY_DOWN,     0,          TableControlAction::cursorDown },
+                      { KEY_UP,       0,          TableControlAction::cursorUp },
+                      { KEY_LEFT,     0,          TableControlAction::cursorLeft },
+                      { KEY_RIGHT,    0,          TableControlAction::cursorRight },
+                      { KEY_HOME,     0,          TableControlAction::cursorToLineStart },
+                      { KEY_END,      0,          TableControlAction::cursorToLineEnd },
+                      { KEY_PAGEUP,   0,          TableControlAction::cursorPageUp },
+                      { KEY_PAGEDOWN, 0,          TableControlAction::cursorPageDown },
+                      { KEY_PAGEUP,   KEY_MOD1,   TableControlAction::cursorToFirstLine },
+                      { KEY_PAGEDOWN, KEY_MOD1,   TableControlAction::cursorToLastLine },
+                      { KEY_HOME,     KEY_MOD1,   TableControlAction::cursorTopLeft },
+                      { KEY_END,      KEY_MOD1,   TableControlAction::cursorBottomRight },
+                      { KEY_SPACE,    KEY_MOD1,   TableControlAction::cursorSelectRow },
+                      { KEY_UP,       KEY_SHIFT,  TableControlAction::cursorSelectRowUp },
+                      { KEY_DOWN,     KEY_SHIFT,  TableControlAction::cursorSelectRowDown },
+                      { KEY_END,      KEY_SHIFT,  TableControlAction::cursorSelectRowAreaBottom },
+                      { KEY_HOME,     KEY_SHIFT,  TableControlAction::cursorSelectRowAreaTop }
+                  };
+            for (const ActionMapEntry& rAction : aKnownActions)
+            {
+                if ((rAction.nKeyCode == nKeyCode) && (rAction.nKeyModifier == rKeyCode.GetModifier()))
+                {
+                    bHandled = m_pImpl->dispatchAction(rAction.eAction);
+                    break;
+                }
+            }
+        }
+
+        if (!bHandled)
             Control::KeyInput( rKEvt );
         else
         {
