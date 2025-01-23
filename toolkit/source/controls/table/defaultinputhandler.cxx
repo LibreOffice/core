@@ -159,21 +159,6 @@ namespace svt::table
         return bHandled;
     }
 
-
-    bool DefaultInputHandler::GetFocus( ITableControl& _rControl )
-    {
-        _rControl.showCursor();
-        return false;   // continue processing
-    }
-
-
-    bool DefaultInputHandler::LoseFocus( ITableControl& _rControl )
-    {
-        _rControl.hideCursor();
-        return false;   // continue processing
-    }
-
-
 } // namespace svt::table
 
 

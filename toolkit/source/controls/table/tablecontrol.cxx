@@ -78,15 +78,19 @@ namespace svt::table
 
     void TableControl::GetFocus()
     {
-        if (!m_pImpl || !DefaultInputHandler::GetFocus(*m_pImpl))
-            Control::GetFocus();
+        if (m_pImpl)
+            m_pImpl->showCursor();
+
+        Control::GetFocus();
     }
 
 
     void TableControl::LoseFocus()
     {
-        if (!m_pImpl || !DefaultInputHandler::LoseFocus(*m_pImpl))
-            Control::LoseFocus();
+        if (m_pImpl)
+            m_pImpl->hideCursor();
+
+        Control::LoseFocus();
     }
 
 
