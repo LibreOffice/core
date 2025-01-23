@@ -20,7 +20,8 @@
 
 #pragma once
 
-#include <vcl/accessibletable.hxx>
+#include <controls/table/tablecontrol.hxx>
+
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
 #include <tools/gen.hxx>
@@ -62,7 +63,7 @@ public:
         @param eObjType  Type of accessible table control. */
     AccessibleGridControlBase(
         css::uno::Reference< css::accessibility::XAccessible > xParent,
-        ::vcl::table::IAccessibleTable& rTable,
+        svt::table::TableControl& rTable,
         ::vcl::table::AccessibleTableControlObjType  eObjType );
 
 protected:
@@ -240,7 +241,7 @@ protected:
     /** The parent accessible object. */
     css::uno::Reference< css::accessibility::XAccessible > m_xParent;
     /** The SVT Table control. */
-    ::vcl::table::IAccessibleTable& m_aTable;
+    svt::table::TableControl& m_aTable;
     /** The type of this object (for names, descriptions, state sets, ...). */
     ::vcl::table::AccessibleTableControlObjType m_eObjType;
 
@@ -266,7 +267,7 @@ protected:
     */
     GridControlAccessibleElement(
         const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
-        ::vcl::table::IAccessibleTable& rTable,
+        svt::table::TableControl& rTable,
         ::vcl::table::AccessibleTableControlObjType  eObjType );
 
 protected:

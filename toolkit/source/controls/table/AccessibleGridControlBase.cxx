@@ -18,6 +18,7 @@
  */
 
 #include <controls/table/AccessibleGridControlBase.hxx>
+
 #include <utility>
 #include <vcl/accessibletable.hxx>
 #include <vcl/svapp.hxx>
@@ -49,7 +50,7 @@ using namespace com::sun::star::accessibility::AccessibleStateType;
 
 AccessibleGridControlBase::AccessibleGridControlBase(
         css::uno::Reference< css::accessibility::XAccessible > xParent,
-        ::vcl::table::IAccessibleTable& rTable,
+        svt::table::TableControl& rTable,
         ::vcl::table::AccessibleTableControlObjType      eObjType ) :
     AccessibleGridControlImplHelper( m_aMutex ),
     m_xParent(std::move( xParent )),
@@ -428,7 +429,7 @@ sal_Int32 SAL_CALL AccessibleGridControlBase::getBackground(  )
 
 
 GridControlAccessibleElement::GridControlAccessibleElement( const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
-                        ::vcl::table::IAccessibleTable& rTable,
+                        svt::table::TableControl& rTable,
                         ::vcl::table::AccessibleTableControlObjType  eObjType )
     : GridControlAccessibleElement_Base(rxParent, rTable, eObjType)
 {

@@ -21,6 +21,7 @@
 #pragma once
 
 #include <controls/table/AccessibleGridControlTableBase.hxx>
+#include <controls/table/tablecontrol.hxx>
 
 namespace accessibility {
 
@@ -38,7 +39,7 @@ public:
     AccessibleGridControlHeader(
         const css::uno::Reference<
             css::accessibility::XAccessible >& rxParent,
-            ::vcl::table::IAccessibleTable& rTable,
+            svt::table::TableControl& rTable,
             ::vcl::table::AccessibleTableControlObjType  eObjType );
 
 private:

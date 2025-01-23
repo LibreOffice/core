@@ -33,7 +33,7 @@ namespace accessibility
 
 AccessibleGridControlHeaderCell::AccessibleGridControlHeaderCell(sal_Int32 _nColumnRowId,
                                   const Reference< XAccessible >& rxParent,
-                                  IAccessibleTable& rTable,
+                                  svt::table::TableControl& rTable,
                                   AccessibleTableControlObjType  eObjType)
 : AccessibleGridControlCell(rxParent, rTable,
                             (eObjType == AccessibleTableControlObjType::ROWHEADERCELL) ? _nColumnRowId : 0,

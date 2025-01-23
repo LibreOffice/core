@@ -62,14 +62,6 @@ class SvTreeListBox;
 class TextEngine;
 class TextView;
 
-namespace vcl
-{
-    namespace table
-    {
-    class IAccessibleTable;
-    }
-}
-
 class VCL_DLLPUBLIC AccessibleFactory
 {
 public:

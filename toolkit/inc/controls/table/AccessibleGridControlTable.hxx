@@ -40,7 +40,7 @@ class AccessibleGridControlTable final : public AccessibleGridControlTableBase,
 public:
     AccessibleGridControlTable(
         const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
-            ::vcl::table::IAccessibleTable& rTable);
+            svt::table::TableControl& rTable);
 
 private:
     virtual ~AccessibleGridControlTable() override = default;

@@ -19,6 +19,7 @@
 #pragma once
 
 #include <controls/table/AccessibleGridControlBase.hxx>
+#include <controls/table/tablecontrol.hxx>
 
 #include <comphelper/accessibletexthelper.hxx>
 #include <cppuhelper/implbase2.hxx>
@@ -48,7 +49,7 @@ namespace accessibility
     protected:
         AccessibleGridControlCell(
             const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
-            ::vcl::table::IAccessibleTable& _rTable,
+            svt::table::TableControl& _rTable,
             sal_Int32 _nRowPos,
             sal_uInt16 _nColPos,
             ::vcl::table::AccessibleTableControlObjType _eType
@@ -79,7 +80,7 @@ namespace accessibility
 
     public:
         AccessibleGridControlTableCell( const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
-                                    ::vcl::table::IAccessibleTable& _rTable,
+                                    svt::table::TableControl& _rTable,
                                     sal_Int32 _nRowId,
                                     sal_uInt16 _nColId);
 

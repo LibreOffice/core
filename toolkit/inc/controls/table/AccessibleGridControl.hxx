@@ -21,10 +21,10 @@
 
 #include "AccessibleGridControlBase.hxx"
 #include "AccessibleGridControlTable.hxx"
+#include "tablecontrol.hxx"
 
 #include <cppuhelper/weakref.hxx>
 #include <rtl/ref.hxx>
-#include <vcl/accessibletable.hxx>
 
 namespace accessibility {
 
@@ -39,7 +39,7 @@ class AccessibleGridControl final : public AccessibleGridControlBase
     AccessibleGridControl(
         const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
         const css::uno::Reference< css::accessibility::XAccessible >& _rxCreator,
-    ::vcl::table::IAccessibleTable& _rTable
+        svt::table::TableControl& _rTable
     );
 
     virtual ~AccessibleGridControl() override = default;
@@ -165,13 +165,13 @@ class AccessibleGridControlAccess final
 {
 private:
     css::uno::Reference< css::accessibility::XAccessible > m_xParent;
-    ::vcl::table::IAccessibleTable *                       m_pTable;
+    VclPtr<svt::table::TableControl>                       m_xTable;
     rtl::Reference<AccessibleGridControl>                  m_xContext;
 
 public:
     AccessibleGridControlAccess(
         css::uno::Reference< css::accessibility::XAccessible > _xParent,
-        ::vcl::table::IAccessibleTable& _rTable
+        svt::table::TableControl& _rTable
     );
 
     /// returns the AccessibleContext belonging to this Accessible

@@ -21,6 +21,8 @@
 #pragma once
 
 #include <controls/table/AccessibleGridControlBase.hxx>
+#include <controls/table/tablecontrol.hxx>
+
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
 
@@ -44,7 +46,7 @@ public:
         @param eObjType  Type of table control object */
     AccessibleGridControlTableBase(
         const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
-        ::vcl::table::IAccessibleTable& rTable,
+        svt::table::TableControl& rTable,
         ::vcl::table::AccessibleTableControlObjType  eObjType );
 
 protected:

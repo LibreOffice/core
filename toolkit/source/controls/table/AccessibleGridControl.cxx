@@ -41,7 +41,7 @@ using namespace ::vcl::table;
 
 AccessibleGridControl::AccessibleGridControl(
             const css::uno::Reference< css::accessibility::XAccessible >& _rxParent, const css::uno::Reference< css::accessibility::XAccessible >& _rxCreator,
-            ::vcl::table::IAccessibleTable& _rTable )
+            svt::table::TableControl& _rTable )
     : AccessibleGridControlBase(_rxParent, _rTable, AccessibleTableControlObjType::GRIDCONTROL),
       m_aCreator(_rxCreator)
 {
@@ -307,9 +307,9 @@ void AccessibleGridControl::commitTableEvent(sal_Int16 _nEventId,const Any& _rNe
 
 
 AccessibleGridControlAccess::AccessibleGridControlAccess(
-        css::uno::Reference< css::accessibility::XAccessible > xParent, ::vcl::table::IAccessibleTable& rTable )
+        css::uno::Reference<css::accessibility::XAccessible> xParent, svt::table::TableControl& rTable )
     : m_xParent(std::move( xParent ))
-    , m_pTable( & rTable )
+    , m_xTable(& rTable)
 {
 }
 
@@ -323,7 +323,7 @@ void AccessibleGridControlAccess::DisposeAccessImpl()
 {
     SolarMutexGuard g;
 
-    m_pTable = nullptr;
+    m_xTable.clear();
     if (m_xContext.is())
     {
         m_xContext->dispose();
@@ -341,8 +341,8 @@ css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL Accessibl
     if ( m_xContext.is() && !m_xContext->isAlive() )
         m_xContext = nullptr;
 
-    if (!m_xContext.is() && m_pTable)
-        m_xContext = new AccessibleGridControl(m_xParent, this, *m_pTable);
+    if (!m_xContext.is() && m_xTable)
+        m_xContext = new AccessibleGridControl(m_xParent, this, *m_xTable);
 
     return m_xContext;
 }

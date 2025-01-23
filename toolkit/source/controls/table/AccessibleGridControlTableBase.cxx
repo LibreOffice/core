@@ -39,7 +39,7 @@ namespace accessibility {
 
 AccessibleGridControlTableBase::AccessibleGridControlTableBase(
         const Reference< XAccessible >& rxParent,
-        IAccessibleTable& rTable,
+        svt::table::TableControl& rTable,
         AccessibleTableControlObjType eObjType ) :
     AccessibleGridControlTableImplHelper( rxParent, rTable, eObjType )
 {

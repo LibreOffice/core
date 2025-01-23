@@ -52,7 +52,7 @@ namespace accessibility
 
 
     AccessibleGridControlCell::AccessibleGridControlCell(
-            const css::uno::Reference< css::accessibility::XAccessible >& _rxParent, ::vcl::table::IAccessibleTable& _rTable,
+            const css::uno::Reference< css::accessibility::XAccessible >& _rxParent, svt::table::TableControl& _rTable,
             sal_Int32 _nRowPos, sal_uInt16 _nColPos, ::vcl::table::AccessibleTableControlObjType _eType )
         :AccessibleGridControlBase( _rxParent, _rTable, _eType )
         ,m_nRowPos( _nRowPos )
@@ -99,7 +99,7 @@ namespace accessibility
     }
 
     AccessibleGridControlTableCell::AccessibleGridControlTableCell(const css::uno::Reference<XAccessible >& _rxParent,
-                                ::vcl::table::IAccessibleTable& _rTable,
+                                svt::table::TableControl& _rTable,
                                 sal_Int32 _nRowPos,
                                 sal_uInt16 _nColPos)
         :AccessibleGridControlCell(_rxParent, _rTable, _nRowPos, _nColPos, AccessibleTableControlObjType::TABLECELL)
