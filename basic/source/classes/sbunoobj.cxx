@@ -831,9 +831,9 @@ static Type getUnoTypeForSbxBaseType( SbxDataType eType )
         case SbxDATE:       {
                             SbiInstance* pInst = GetSbData()->pInst;
                             if( pInst && pInst->IsCompatibility() )
-                                aRetType = cppu::UnoType<double>::get();
-                            else
                                 aRetType = cppu::UnoType<oleautomation::Date>::get();
+                            else
+                                aRetType = cppu::UnoType<double>::get();
                             }
                             break;
         case SbxSTRING:     aRetType = cppu::UnoType<OUString>::get(); break;
