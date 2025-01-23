@@ -43,7 +43,7 @@
 #include <sal/log.hxx>
 #include <o3tl/string_view.hxx>
 
-#define AVMEDIA_FRAMEGRABBER_DEFAULTFRAME_MEDIATIME 3.0
+constexpr double AVMEDIA_FRAMEGRABBER_DEFAULTFRAME_MEDIATIME = 3.0;
 
 using namespace ::com::sun::star;
 
