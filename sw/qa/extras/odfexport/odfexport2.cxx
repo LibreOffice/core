@@ -42,6 +42,8 @@
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#include <IDocumentLinksAdministration.hxx>
+#include <sfx2/linkmgr.hxx>
 
 namespace
 {
@@ -1751,6 +1753,39 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159027)
     CPPUNIT_ASSERT_EQUAL(u"70"_ustr, xCellD9->getString());
     uno::Reference<text::XTextRange> xCellE9(xTextTable->getCellByName(u"E9"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"6"_ustr, xCellE9->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf121119)
+{
+    createSwGlobalDoc("tdf121119.odm");
+    SwDoc* pDoc = getSwDoc();
+    CPPUNIT_ASSERT_EQUAL(
+        size_t(2), pDoc->getIDocumentLinksAdministration().GetLinkManager().GetLinks().size());
+    pDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks(false, false, nullptr,
+                                                                            u""_ustr);
+
+    uno::Reference<text::XTextGraphicObjectsSupplier> xTextGraphicObjectsSupplier(mxComponent,
+                                                                                  uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(
+        xTextGraphicObjectsSupplier->getGraphicObjects(), uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xIndexAccess->getCount());
+
+    saveAndReload(u"writerglobal8_writer"_ustr);
+    pDoc = getSwDoc();
+
+    CPPUNIT_ASSERT_EQUAL(
+        size_t(2), pDoc->getIDocumentLinksAdministration().GetLinkManager().GetLinks().size());
+    pDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks(false, false, nullptr,
+                                                                            u""_ustr);
+
+    uno::Reference<text::XTextGraphicObjectsSupplier> xTextGraphicObjectsSupplier2(mxComponent,
+                                                                                  uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess2(
+        xTextGraphicObjectsSupplier2->getGraphicObjects(), uno::UNO_QUERY);
+
+    // This was 8 (duplicated images anchored at page)
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xIndexAccess2->getCount());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf163703)
