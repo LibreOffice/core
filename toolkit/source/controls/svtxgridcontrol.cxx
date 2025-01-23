@@ -631,7 +631,6 @@ void SAL_CALL SVTXGridControl::rowHeadingChanged( const GridDataEvent& )
     VclPtr< TableControl > pTable = GetAsDynamic< TableControl >();
     ENSURE_OR_RETURN_VOID( pTable, "SVTXGridControl::rowHeadingChanged: no control (anymore)!" );
 
-    // TODO: we could do better than this - invalidate the header area only
     pTable->invalidate(TableArea::RowHeaders);
 }
 
