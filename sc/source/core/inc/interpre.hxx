@@ -725,6 +725,7 @@ private:
     void ScFilter();
     void ScSort();
     void ScSortBy();
+    void ScTake();
     void ScToCol();
     void ScToRow();
     void ScUnique();

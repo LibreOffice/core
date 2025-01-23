@@ -4251,6 +4251,18 @@ const TranslateId SC_OPCODE_RANDARRAY_ARY[] =
     NC_("SC_OPCODE_RANDARRAY", "Return integer (TRUE) or decimal (FALSE) values.")
 };
 
+// -=*# Resource for function TAKE #*=-
+const TranslateId SC_OPCODE_TAKE_ARY[] =
+{
+    NC_("SC_OPCODE_TAKE", "Returns a specified number of contiguous rows or columns from the start or end of an array."),
+    NC_("SC_OPCODE_TAKE", "Array"),
+    NC_("SC_OPCODE_TAKE", "The array from which to take rows or columns."),
+    NC_("SC_OPCODE_TAKE", "Rows"),
+    NC_("SC_OPCODE_TAKE", "The number of rows to take. A negative value takes from the end of the array."),
+    NC_("SC_OPCODE_TAKE", "Column"),
+    NC_("SC_OPCODE_TAKE", "The number of columns to take. A negative value takes from the end of the array.")
+};
+
 // -=*# Resource for function TOCOL #*=-
 const TranslateId SC_OPCODE_TOCOL_ARY[] =
 {
