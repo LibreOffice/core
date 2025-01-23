@@ -478,17 +478,6 @@
     GetSalData()->mpDockIconClickHandler = pHandler;
 }
 
--(NSImage*)createNSImage: (NSValue*)pImageValue
-{
-    if (pImageValue)
-    {
-        Image *pImage = static_cast<Image*>([pImageValue pointerValue]);
-        if (pImage)
-            return CreateNSImage(*pImage);
-    }
-
-    return nil;
-}
 
 @end
 

@@ -49,7 +49,7 @@
 #include <sfx2/objsh.hxx>
 #include <comphelper/lok.hxx>
 #include <objshimp.hxx>
-#include <shutdownicon.hxx>
+#include "shutdownicon.hxx"
 
 using namespace ::com::sun::star::uno;
 

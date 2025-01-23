@@ -64,7 +64,6 @@ class AquaSalFrame;
 -(BOOL)applicationShouldHandleReopen: (NSApplication*)pApp hasVisibleWindows: (BOOL)bWinVisible;
 -(BOOL)applicationSupportsSecureRestorableState: (NSApplication *)pApp;
 -(void)setDockIconClickHandler: (NSObject*)pHandler;
--(NSImage*)createNSImage: (NSValue*)pImageValue;
 @end
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

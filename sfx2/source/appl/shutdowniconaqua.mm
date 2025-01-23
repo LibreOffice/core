@@ -21,7 +21,6 @@
 #include <unotools/moduleoptions.hxx>
 #include <unotools/dynamicmenuoptions.hxx>
 #include <unotools/historyoptions.hxx>
-#include <officecfg/Office/Common.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/urlobj.hxx>
 #include <osl/file.h>
@@ -32,10 +31,7 @@
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/strings.hrc>
 #include <vcl/svapp.hxx>
-#include <vcl/mnemonic.hxx>
-#include <vcl/image.hxx>
-#include <svtools/imagemgr.hxx>
-#include <shutdownicon.hxx>
+#include "shutdownicon.hxx"
 
 #include <com/sun/star/util/XStringWidth.hpp>
 
@@ -59,8 +55,6 @@
 #define MI_TEMPLATE                8
 #define MI_STARTMODULE             9
 
-#define UNO_TOGGLECURRENTMODULE_COMMAND ".uno:ToggleCurrentModule"
-
 @interface QSMenuExecute : NSObject
 {
 }
@@ -71,8 +65,6 @@
 @implementation QSMenuExecute
 -(void)executeMenuItem: (NSMenuItem*)pItem
 {
-    SolarMutexGuard aGuard;
-
     switch( [pItem tag] )
     {
     case MI_OPEN:
@@ -110,9 +102,6 @@
 -(void)dockIconClicked: (NSObject*)pSender
 {
     (void)pSender;
-
-    SolarMutexGuard aGuard;
-
     // start module
     ShutdownIcon::OpenURL( STARTMODULE_URL, "_default" );
 }
@@ -124,7 +113,6 @@ bool ShutdownIcon::IsQuickstarterInstalled()
     return true;
 }
 
-static NSArray<NSMenuItem*>* pPreferredMenus = nil;
 static NSMenuItem* pDefMenu = nil, *pDockSubMenu = nil;
 static QSMenuExecute* pExecute = nil;
 
@@ -159,63 +147,6 @@ class RecentFilesStringLength : public ::cppu::WeakImplHelper< css::util::XStrin
 
 }
 
-@interface QSCommandMenuItem : NSMenuItem
-{
-    OUString m_aCommand;
-}
--(void)menuItemTriggered: (id)aSender;
--(void)setCommand: (OUString)aCommand;
-@end
-
-@implementation QSCommandMenuItem
-
--(void)menuItemTriggered: (id)aSender
-{
-    if ( m_aCommand.isEmpty() )
-        return;
-
-    SolarMutexGuard aGuard;
-
-    if ( m_aCommand == "vnd.org.libreoffice.recentdocs:ClearRecentFileList" )
-    {
-        // Clearing the recent file list requires an extra step
-        SvtHistoryOptions::Clear( EHistoryType::PickList, false );
-    }
-    else if ( m_aCommand == ".uno:Open" )
-    {
-        ShutdownIcon::FileOpen();
-        return;
-    }
-    else if ( m_aCommand == ".uno:ConfigureDialog" )
-    {
-        // Selecting some menu items will cause a crash if there are
-        // no visibile windows
-        ShutdownIcon::OpenURL( STARTMODULE_URL, "_default" );
-    }
-    else if ( m_aCommand == UNO_TOGGLECURRENTMODULE_COMMAND )
-    {
-        bool bIsExclusive = officecfg::Office::Common::History::ShowCurrentModuleOnly::get();
-        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::History::ShowCurrentModuleOnly::set(!bIsExclusive, batch);
-        batch->commit();
-        [self setState: bIsExclusive ? NSControlStateValueOff : NSControlStateValueOn];
-        return;
-    }
-
-    // "private:" commands are used for menu items in the File > New menu
-    if ( m_aCommand.startsWith( "private:" ) || m_aCommand == STARTMODULE_URL )
-        ShutdownIcon::OpenURL( m_aCommand, "_default" );
-    else
-        ShutdownIcon::FromCommand( m_aCommand );
-}
-
--(void)setCommand: (OUString)aCommand
-{
-    m_aCommand = aCommand;
-}
-
-@end
-
 @interface RecentMenuDelegate : NSObject <NSMenuDelegate>
 {
     std::vector< RecentMenuEntry >* m_pRecentFilesItems;
@@ -244,8 +175,6 @@ class RecentFilesStringLength : public ::cppu::WeakImplHelper< css::util::XStrin
 
 -(void)menuNeedsUpdate:(NSMenu *)menu
 {
-    SolarMutexGuard aGuard;
-
     // clear menu
     int nItems = [menu numberOfItems];
     while( nItems -- )
@@ -273,57 +202,28 @@ class RecentFilesStringLength : public ::cppu::WeakImplHelper< css::util::XStrin
     // insert new recent items
     for ( std::vector<RecentMenuEntry>::size_type i = 0; i < m_pRecentFilesItems->size(); i++ )
     {
-        OUStringBuffer aMenuShortCut;
-        if ( i <= 9 )
-        {
-            if ( i == 9 )
-                aMenuShortCut.append( "1~0. " );
-            else
-            {
-                aMenuShortCut.append( "~N. " );
-                aMenuShortCut[ 1 ] = sal_Unicode( i + '1' );
-            }
-        }
-        else
-        {
-            aMenuShortCut.append( OUString::number(sal_Int32( i + 1 ) ) + ". " );
-        }
-
         OUString   aMenuTitle;
         INetURLObject   aURL( (*m_pRecentFilesItems)[i].aURL );
-        NSImage *pImage = nil;
 
         if ( aURL.GetProtocol() == INetProtocol::File )
         {
-            // Do handle file URL differently: don't show the protocol,
-            // just the file name
-            aMenuTitle = aURL.GetLastName(INetURLObject::DecodeMechanism::WithCharset);
+            // Do handle file URL differently => convert it to a system
+            // path and abbreviate it with a special function:
+            OUString aSystemPath( aURL.getFSysPath( FSysStyle::Detect ) );
+            OUString aCompactedSystemPath;
 
-            if ( [NSApp respondsToSelector: @selector(createNSImage:)] )
-            {
-                BitmapEx aThumbnail(SvFileInformationManager::GetFileImageId(aURL));
-                Size aBmpSize = aThumbnail.GetSizePixel();
-                if ( aBmpSize.Width() > 0 && aBmpSize.Height() > 0 )
-                {
-                    Image aImage( aThumbnail );
-                    NSValue *pImageValue = [NSValue valueWithPointer: &aImage];
-                    pImage = [NSApp performSelector: @selector(createNSImage:) withObject: pImageValue];
-                }
-            }
+            oslFileError nError = osl_abbreviateSystemPath( aSystemPath.pData, &aCompactedSystemPath.pData, 46, nullptr );
+            if ( !nError )
+                aMenuTitle = aCompactedSystemPath;
+            else
+                aMenuTitle = aSystemPath;
         }
         else
         {
-            // In all other URLs show the protocol name before the file name
-            aMenuTitle   = INetURLObject::GetSchemeName(aURL.GetProtocol()) + ": " + aURL.getName();
+            // Use INetURLObject to abbreviate all other URLs
+            css::uno::Reference< css::util::XStringWidth > xStringLength( new RecentFilesStringLength() );
+            aMenuTitle = aURL.getAbbreviated( xStringLength, 46, INetURLObject::DecodeMechanism::Unambiguous );
         }
-
-        aMenuShortCut.append( aMenuTitle );
-        aMenuTitle = MnemonicGenerator::EraseAllMnemonicChars( aMenuShortCut.makeStringAndClear() );
-        if ( aMenuTitle.isEmpty() )
-            continue;
-
-        if ( aMenuTitle.endsWith( "...", &aMenuTitle ) )
-            aMenuTitle += u"\u2026";
 
         NSMenuItem* pNewItem = [[NSMenuItem alloc] initWithTitle: getAutoreleasedString( aMenuTitle )
                                                    action: @selector(executeRecentEntry:)
@@ -331,55 +231,8 @@ class RecentFilesStringLength : public ::cppu::WeakImplHelper< css::util::XStrin
         [pNewItem setTag: i];
         [pNewItem setTarget: self];
         [pNewItem setEnabled: YES];
-        if ( pImage )
-        {
-            [pNewItem setImage: pImage];
-            [pImage release];
-        }
         [menu addItem: pNewItem];
         [pNewItem autorelease];
-    }
-
-    if ( [menu numberOfItems] )
-    {
-        TranslateId aId( "STR_CLEAR_RECENT_FILES", "Clear List" );
-        OUString aClearList = Translate::get( aId, Translate::Create("fwk") );
-        if ( !aClearList.isEmpty() )
-        {
-            [menu addItem: [NSMenuItem separatorItem]];
-
-            QSCommandMenuItem* pNewItem = [[QSCommandMenuItem alloc] initWithTitle: getAutoreleasedString( aClearList ) action: @selector(menuItemTriggered:) keyEquivalent: @""];
-            [pNewItem setCommand: "vnd.org.libreoffice.recentdocs:ClearRecentFileList"];
-            [pNewItem setTarget: pNewItem];
-            [pNewItem setEnabled: YES];
-            [menu addItem: pNewItem];
-            [pNewItem autorelease];
-
-            aId = TranslateId( "STR_TOGGLECURRENTMODULE", "Current Module Only" );
-            OUString aToggleCurrentMode = Translate::get( aId, Translate::Create("fwk") );
-            if ( !aToggleCurrentMode.isEmpty() )
-            {
-                pNewItem = [[QSCommandMenuItem alloc] initWithTitle: getAutoreleasedString( aToggleCurrentMode ) action: @selector(menuItemTriggered:) keyEquivalent: @""];
-                [pNewItem setCommand: UNO_TOGGLECURRENTMODULE_COMMAND];
-                [pNewItem setTarget: pNewItem];
-                [pNewItem setState: officecfg::Office::Common::History::ShowCurrentModuleOnly::get() ? NSControlStateValueOn : NSControlStateValueOff];
-                [pNewItem setEnabled: YES];
-                [menu addItem: pNewItem];
-                [pNewItem autorelease];
-            }
-        }
-    }
-    else
-    {
-        TranslateId aId( "STR_NODOCUMENT", "No Documents" );
-        OUString aNoDocuments = Translate::get( aId, Translate::Create("fwk") );
-        if ( !aNoDocuments.isEmpty() )
-        {
-            NSMenuItem* pNewItem = [[NSMenuItem alloc] initWithTitle: getAutoreleasedString( aNoDocuments ) action: nil keyEquivalent: @""];
-            [pNewItem setEnabled: YES];
-            [menu addItem: pNewItem];
-            [pNewItem autorelease];
-        }
     }
 }
 
@@ -458,7 +311,6 @@ static void appendMenuItem( NSMenu* i_pMenu, NSMenu* i_pDockMenu, const OUString
     [pItem setTarget: pExecute];
     [pItem setEnabled: YES];
     [i_pMenu addItem: pItem];
-    [pItem autorelease];
 
     if( i_pDockMenu )
     {
@@ -471,7 +323,6 @@ static void appendMenuItem( NSMenu* i_pMenu, NSMenu* i_pDockMenu, const OUString
         [pItem setTarget: pExecute];
         [pItem setEnabled: YES];
         [i_pDockMenu addItem: pItem];
-        [pItem autorelease];
     }
 }
 
@@ -491,206 +342,6 @@ static void appendRecentMenu( NSMenu* i_pMenu, const OUString& i_rTitle )
 
     [pRecentMenu setAutoenablesItems: NO];
     [pItem setSubmenu: pRecentMenu];
-}
-
-void setKeyEquivalent( const vcl::KeyCode &rKeyCode, NSMenuItem *pNSMenuItem )
-{
-    if ( !pNSMenuItem )
-        return;
-
-    sal_uInt16 nKeyCode = rKeyCode.GetCode();
-    if ( !nKeyCode )
-        return;
-
-    sal_Unicode nCommandKey = 0;
-    if ((nKeyCode>=KEY_A) && (nKeyCode<=KEY_Z))           // letter A..Z
-        nCommandKey = nKeyCode - KEY_A + 'a';
-    else if ((nKeyCode>=KEY_0) && (nKeyCode<=KEY_9))      // numbers 0..9
-        nCommandKey = nKeyCode - KEY_0 + '0';
-    else if ((nKeyCode>=KEY_F1) && (nKeyCode<=KEY_F26))   // function keys F1..F26
-        nCommandKey = nKeyCode - KEY_F1 + NSF1FunctionKey;
-
-    if ( !nCommandKey )
-        return;
-
-    sal_uInt16 nModifier = rKeyCode.GetModifier();
-    int nItemModifier = 0;
-
-    if ( nModifier & KEY_SHIFT )
-    {
-        nItemModifier |= NSEventModifierFlagShift;   // actually useful only for function keys
-        if ( nKeyCode >= KEY_A && nKeyCode <= KEY_Z )
-            nCommandKey = nKeyCode - KEY_A + 'A';
-    }
-
-    if ( nModifier & KEY_MOD1 )
-        nItemModifier |= NSEventModifierFlagCommand;
-
-    if ( nModifier & KEY_MOD2 )
-        nItemModifier |= NSEventModifierFlagOption;
-
-    if ( nModifier & KEY_MOD3 )
-        nItemModifier |= NSEventModifierFlagControl;
-
-    OUString aCommandKey( &nCommandKey, 1 );
-    NSString *pCommandKey = [NSString stringWithCharacters: reinterpret_cast< unichar const* >(aCommandKey.getStr()) length: aCommandKey.getLength()];
-    [pNSMenuItem setKeyEquivalent: pCommandKey];
-    [pNSMenuItem setKeyEquivalentModifierMask: nItemModifier];
-}
-
-static NSMenu *getNSMenuForVCLMenu( Menu *pMenu )
-{
-    NSMenu *pRet = nil;
-
-    if ( !pMenu )
-        return pRet;
-
-    pMenu->Activate();
-
-    sal_uInt16 nItemCount = pMenu->GetItemCount();
-    if ( nItemCount )
-    {
-        pRet = [[[NSMenu alloc] initWithTitle: @""] autorelease];
-        [pRet setAutoenablesItems: NO];
-        for ( sal_uInt16 i = 0; i < nItemCount; i++ )
-        {
-            sal_uInt16 nId = pMenu->GetItemId( i );
-            if ( nId && pMenu->IsItemEnabled( nId ) )
-            {
-                OUString aText = MnemonicGenerator::EraseAllMnemonicChars( pMenu->GetItemText( nId ) );
-                if ( aText.isEmpty() )
-                    continue;
-
-                if ( aText.endsWith( "...", &aText ) )
-                    aText += u"\u2026";
-
-                // Use a custom menu in place of the Start Center's recent
-                // documents menu so that the list can be dynamically updated
-                OUString aCommand = pMenu->GetItemCommand( nId );
-                if ( aCommand == ".uno:RecentFileList" )
-                {
-                    appendRecentMenu( pRet, aText );
-                    continue;
-                }
-
-                NSString *pText = getAutoreleasedString( aText );
-                // TODO: use the QSMenuExecute class to connect the command
-                // string to one of the existing handler functions
-                QSCommandMenuItem *pNSMenuItem = [[QSCommandMenuItem alloc] initWithTitle: pText action: @selector(menuItemTriggered:) keyEquivalent: @""];
-                NSMenu *pNSSubmenu = getNSMenuForVCLMenu( pMenu->GetPopupMenu( nId ) );
-                if ( pNSSubmenu && [pNSSubmenu numberOfItems] )
-                {
-                    [pNSSubmenu setTitle: pText];
-                    [pNSMenuItem setSubmenu: pNSSubmenu];
-
-                    if ( aCommand == ".uno:AddDirect" )
-                    {
-                        SvtModuleOptions aModuleOptions;
-                        if ( aModuleOptions.IsModuleInstalled( SvtModuleOptions::EModule::STARTMODULE ) )
-                        {
-                            QSCommandMenuItem *pStartModuleMenuItem = [[QSCommandMenuItem alloc] initWithTitle: getAutoreleasedString( SfxResId( STR_QUICKSTART_STARTCENTER ) ) action: @selector(menuItemTriggered:) keyEquivalent: @"n"];
-                            [pStartModuleMenuItem setTarget: pStartModuleMenuItem];
-                            [pStartModuleMenuItem setCommand: STARTMODULE_URL];
-                            [pNSSubmenu insertItem: pStartModuleMenuItem atIndex: 0];
-                            [pStartModuleMenuItem autorelease];
-                        }
-                    }
-                }
-                else if ( !aCommand.isEmpty() )
-                {
-                    [pNSMenuItem setTarget: pNSMenuItem];
-                    [pNSMenuItem setCommand: aCommand];
-
-                    // Use the default menu's special "open new file" shortcuts
-                    if ( aCommand == WRITER_URL )
-                        [pNSMenuItem setKeyEquivalent: @"t"];
-                    else if ( aCommand == CALC_URL )
-                        [pNSMenuItem setKeyEquivalent: @"s"];
-                    else if ( aCommand == IMPRESS_WIZARD_URL )
-                        [pNSMenuItem setKeyEquivalent: @"p"];
-                    else if ( aCommand == DRAW_URL )
-                        [pNSMenuItem setKeyEquivalent: @"d"];
-                    else if ( aCommand == MATH_URL )
-                        [pNSMenuItem setKeyEquivalent: @"f"];
-                    else if ( aCommand == BASE_URL )
-                        [pNSMenuItem setKeyEquivalent: @"a"];
-                    else
-                        setKeyEquivalent( pMenu->GetAccelKey( nId ), pNSMenuItem );
-                }
-
-                [pRet addItem: pNSMenuItem];
-                [pNSMenuItem autorelease];
-            }
-            else if ( pMenu->GetItemType( i ) == MenuItemType::SEPARATOR )
-            {
-                [pRet addItem: [NSMenuItem separatorItem]];
-            }
-        }
-    }
-
-    pMenu->Deactivate();
-
-    return pRet;
-}
-
-static void clearDefaultMenuBar()
-{
-    if( ![NSApp respondsToSelector: @selector(removeFallbackMenuItem:)] )
-        return;
-
-    // Remove previous default menu
-    if ( pDefMenu )
-        [NSApp performSelector:@selector(removeFallbackMenuItem:) withObject: pDefMenu];
-
-    // Remove previous preferred menu
-    if ( pPreferredMenus && [pPreferredMenus count] )
-    {
-        for ( NSMenuItem *pNSMenuItem in pPreferredMenus )
-            [NSApp performSelector:@selector(removeFallbackMenuItem:) withObject: pNSMenuItem];
-    }
-}
-
-static void resetMenuBar()
-{
-    if( ![NSApp respondsToSelector: @selector(addFallbackMenuItem:)] )
-        return;
-
-    clearDefaultMenuBar();
-
-    if ( pPreferredMenus && [pPreferredMenus count] )
-    {
-        for ( NSMenuItem *pNSMenuItem in pPreferredMenus )
-            [NSApp performSelector:@selector(addFallbackMenuItem:) withObject: pNSMenuItem];
-    }
-    else if ( pDefMenu )
-    {
-        [NSApp performSelector:@selector(addFallbackMenuItem:) withObject: pDefMenu];
-    }
-}
-
-void ShutdownIcon::SetDefaultMenuBar( MenuBar *pMenuBar )
-{
-    if ( !pMenuBar )
-        return;
-
-    SolarMutexGuard aGuard;
-
-    clearDefaultMenuBar();
-    if ( pPreferredMenus )
-    {
-        [pPreferredMenus release];
-        pPreferredMenus = nil;
-    }
-
-    NSMenu *pNSMenu = getNSMenuForVCLMenu( pMenuBar );
-    if ( pNSMenu && [pNSMenu numberOfItems] )
-    {
-        pPreferredMenus = [NSMutableArray arrayWithArray: [pNSMenu itemArray]];
-        [pNSMenu removeAllItems];
-        [pPreferredMenus retain];
-    }
-
-    resetMenuBar();
 }
 
 
@@ -793,7 +444,7 @@ void aqua_init_systray()
             appendMenuItem( pMenu, pDockMenu, aTitle, MI_OPEN, aKeyEquiv );
 
             [pDefMenu setSubmenu: pMenu];
-            resetMenuBar();
+            [NSApp performSelector:@selector(addFallbackMenuItem:) withObject: pDefMenu];
 
             if( [NSApp respondsToSelector: @selector(addDockMenuItem:)] )
             {
@@ -803,9 +454,6 @@ void aqua_init_systray()
             }
             else
                 OSL_FAIL( "addDockMenuItem selector failed on NSApp" );
-
-            [pMenu autorelease];
-            [pDockMenu autorelease];
         }
         else
             OSL_FAIL( "addFallbackMenuItem selector failed on NSApp" );
