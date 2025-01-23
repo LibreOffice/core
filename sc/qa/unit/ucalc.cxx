@@ -3119,6 +3119,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFunctionLists)
         "SORT",
         "SORTBY",
         "STYLE",
+        "TAKE",
         "TOCOL",
         "TOROW",
         "UNIQUE",

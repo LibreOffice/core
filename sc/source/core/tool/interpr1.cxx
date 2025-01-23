@@ -8800,6 +8800,142 @@ void ScInterpreter::ScSortBy()
         PushIllegalParameter();
 }
 
+void ScInterpreter::ScTake()
+{
+    sal_uInt8 nParamCount = GetByte();
+    if (!MustHaveParamCount(nParamCount, 1, 3))
+        return;
+
+    // 3rd argument optional - columns
+    std::optional<sal_Int32> nArgCols;
+    if (nParamCount == 3)
+    {
+        if (!IsMissing())
+            nArgCols = GetInt32();
+        else
+            Pop();
+    }
+
+    // 2nd argument optional - rows
+    std::optional<sal_Int32> nArgRows;
+    if (nParamCount >= 2)
+    {
+        if (!IsMissing())
+            nArgRows = GetInt32();
+        else
+            Pop();
+    }
+
+    // 1st argument: take unique search range
+    ScMatrixRef pMatSource = nullptr;
+    SCSIZE nsC = 0, nsR = 0;
+    switch (GetStackType())
+    {
+        case svSingleRef:
+        case svDoubleRef:
+        case svMatrix:
+        case svExternalSingleRef:
+        case svExternalDoubleRef:
+        {
+            pMatSource = GetMatrix();
+            if (!pMatSource)
+            {
+                PushIllegalParameter();
+                return;
+            }
+
+            pMatSource->GetDimensions(nsC, nsR);
+        }
+        break;
+
+        default:
+            PushIllegalParameter();
+            return;
+    }
+
+    if (nGlobalError != FormulaError::NONE || nsC < 1 || nsR < 1)
+    {
+        PushIllegalArgument();
+        return;
+    }
+
+    std::vector<std::pair<SCSIZE, SCSIZE>> aResPos;
+
+    SCSIZE nMinCol = 0;
+    SCSIZE nMaxCol = nsC;
+    if (nArgCols.has_value())
+    {
+        if (o3tl::make_unsigned(std::abs(nArgCols.value())) < nsC)
+        {
+            if (nArgCols.value() < 0)
+                nMinCol = nsC + nArgCols.value();
+            else
+                nMaxCol = nArgCols.value();
+        }
+    }
+
+    SCSIZE nMinRow = 0;
+    SCSIZE nMaxRow = nsR;
+    if (nArgRows.has_value())
+    {
+        if (o3tl::make_unsigned(std::abs(nArgRows.value())) < nsR)
+        {
+            if (nArgRows.value() < 0)
+                nMinRow = nsR + nArgRows.value();
+            else
+                nMaxRow = nArgRows.value();
+        }
+    }
+
+    for (SCSIZE col = nMinCol; col < nMaxCol; col++)
+    {
+        for (SCSIZE row = nMinRow; row < nMaxRow; row++)
+        {
+            aResPos.emplace_back(col, row);
+        }
+    }
+
+    // No result
+    if (aResPos.size() == 0)
+    {
+        PushNA();
+        return;
+    }
+
+    SCSIZE nColumns = nMaxCol - nMinCol;
+    SCSIZE nRows = nMaxRow - nMinRow;
+    ScMatrixRef pResMat = GetNewMat(nColumns, nRows, /*bEmpty*/true);
+    if (!pResMat)
+    {
+        PushIllegalArgument();
+        return;
+    }
+
+    size_t iPos = 0;
+    for (SCSIZE col = 0; col < nColumns; ++col)
+    {
+        for (SCSIZE row = 0; row < nRows; ++row)
+        {
+            if (pMatSource->IsEmptyCell(aResPos[iPos].first, aResPos[iPos].second))
+            {
+                pResMat->PutEmpty(col, row);
+            }
+            else if (!pMatSource->IsStringOrEmpty(aResPos[iPos].first, aResPos[iPos].second))
+            {
+                pResMat->PutDouble(pMatSource->GetDouble(aResPos[iPos].first, aResPos[iPos].second), col, row);
+            }
+            else
+            {
+                pResMat->PutString(pMatSource->GetString(aResPos[iPos].first, aResPos[iPos].second), col, row);
+            }
+
+            ++iPos;
+        }
+    }
+
+    PushMatrix(pResMat);
+}
+
 void ScInterpreter::ScToCol()
 {
     sal_uInt8 nParamCount = GetByte();
