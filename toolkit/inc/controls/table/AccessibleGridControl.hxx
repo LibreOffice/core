@@ -160,7 +160,8 @@ private:
     the context holds this instance weak.</p>
 */
 
-class AccessibleGridControlAccess final : public ::vcl::table::IAccessibleTableControl
+class AccessibleGridControlAccess final
+    : public cppu::WeakImplHelper<css::accessibility::XAccessible>
 {
 private:
     css::uno::Reference< css::accessibility::XAccessible > m_xParent;
@@ -176,35 +177,31 @@ public:
     /// returns the AccessibleContext belonging to this Accessible
     AccessibleGridControl*            getContext()  { return m_xContext.get(); }
 
-private:
-    virtual ~AccessibleGridControlAccess() override;
-
     // XAccessible
     virtual css::uno::Reference< css::accessibility::XAccessibleContext >
         SAL_CALL getAccessibleContext() override;
 
-    // IAccessibleTable
-    void DisposeAccessImpl() override;
-    virtual bool isAlive() const override
-    {
-        return m_xContext.is() && m_xContext->isAlive();
-    }
-    virtual void commitCellEvent( sal_Int16 nEventId,
-         const css::uno::Any& rNewValue, const css::uno::Any& rOldValue ) override
+    void DisposeAccessImpl();
+
+    bool isAlive() const { return m_xContext.is() && m_xContext->isAlive(); }
+
+    void commitCellEvent(sal_Int16 nEventId, const css::uno::Any& rNewValue,
+                         const css::uno::Any& rOldValue)
     {
          AccessibleGridControl* pContext( getContext() );
          if ( pContext )
             pContext->commitCellEvent( nEventId, rNewValue, rOldValue );
     }
-    virtual void commitTableEvent( sal_Int16 nEventId,
-         const css::uno::Any& rNewValue, const css::uno::Any& rOldValue ) override
+
+    void commitTableEvent(sal_Int16 nEventId, const css::uno::Any& rNewValue,
+                          const css::uno::Any& rOldValue)
     {
          AccessibleGridControl* pContext( getContext() );
          if ( pContext )
             pContext->commitTableEvent( nEventId, rNewValue, rOldValue );
     }
-    virtual void commitEvent( sal_Int16 nEventId,
-        const css::uno::Any& rNewValue ) override
+
+    void commitEvent(sal_Int16 nEventId, const css::uno::Any& rNewValue)
     {
         AccessibleGridControl* pContext( getContext() );
         if ( pContext )
@@ -212,6 +209,7 @@ private:
     }
 
 private:
+    virtual ~AccessibleGridControlAccess() override;
     AccessibleGridControlAccess( const AccessibleGridControlAccess& ) = delete;
     AccessibleGridControlAccess& operator=( const AccessibleGridControlAccess& ) = delete;
 };

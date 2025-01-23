@@ -66,8 +66,7 @@ namespace vcl
 {
     namespace table
     {
-        class IAccessibleTable;
-        class IAccessibleTableControl;
+    class IAccessibleTable;
     }
 }
 

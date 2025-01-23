@@ -2368,8 +2368,8 @@ namespace svt::table
             impl_ni_ScrollColumns( _pScrollbar->GetDelta() );
     }
 
-
-    const rtl::Reference<vcl::table::IAccessibleTableControl> & TableControl_Impl::getAccessible( vcl::Window& i_parentWindow )
+    const rtl::Reference<accessibility::AccessibleGridControlAccess>&
+    TableControl_Impl::getAccessible(vcl::Window& i_parentWindow)
     {
         if (m_pAccessibleTable)
             return m_pAccessibleTable;

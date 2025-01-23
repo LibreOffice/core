@@ -19,12 +19,12 @@
 
 #pragma once
 
-#include <com/sun/star/accessibility/XAccessible.hpp>
+#include <controls/table/AccessibleGridControl.hxx>
 #include <controls/table/tablemodel.hxx>
 #include <controls/table/tablecontrolinterface.hxx>
 
+#include <com/sun/star/accessibility/XAccessible.hpp>
 #include <vcl/accessibletable.hxx>
-
 #include <vcl/seleng.hxx>
 
 #include <vector>
@@ -130,7 +130,7 @@ namespace svt::table
         RowPos                  m_nAnchor;
         bool                    m_bUpdatingColWidths;
 
-        rtl::Reference<vcl::table::IAccessibleTableControl> m_pAccessibleTable;
+        rtl::Reference<accessibility::AccessibleGridControlAccess> m_pAccessibleTable;
 
     public:
         void        setModel( const PTableModel& _pModel );
@@ -290,8 +290,8 @@ namespace svt::table
         tools::Rectangle calcCellRect( sal_Int32 nRow, sal_Int32 nCol ) const;
 
         // A11Y
-        const rtl::Reference<vcl::table::IAccessibleTableControl> &
-                        getAccessible( vcl::Window& i_parentWindow );
+        const rtl::Reference<accessibility::AccessibleGridControlAccess>&
+        getAccessible(vcl::Window& i_parentWindow);
         void            disposeAccessible();
 
         bool     isAccessibleAlive() const { return impl_isAccessibleAlive(); }

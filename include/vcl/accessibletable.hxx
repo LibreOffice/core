@@ -105,59 +105,6 @@ protected:
     ~IAccessibleTable() {}
 };
 
-
-/** interface for an implementation of a table control's Accessible component
-*/
-class IAccessibleTableControl : public ::cppu::WeakImplHelper< css::accessibility::XAccessible >
-{
-public:
-
-    /** disposes the accessible implementation, so that it becomes defunc
-    */
-    virtual void DisposeAccessImpl() = 0;
-
-    /** checks whether the accessible implementation, and its context, are still alive
-        @return  <TRUE/>, if the object is not disposed or disposing.
-    */
-    virtual bool isAlive() const = 0;
-
-    /** commits the event at all listeners of the cell
-         @param nEventId
-             the event id
-         @param rNewValue
-             the new value
-          @param rOldValue
-             the old value
-      */
-     virtual void commitCellEvent(
-         sal_Int16 nEventId,
-         const css::uno::Any& rNewValue,
-         const css::uno::Any& rOldValue
-     ) = 0;
-    /** commits the event at all listeners of the table
-         @param nEventId
-             the event id
-         @param rNewValue
-             the new value
-          @param rOldValue
-             the old value
-      */
-     virtual void commitTableEvent(
-         sal_Int16 nEventId,
-         const css::uno::Any& rNewValue,
-         const css::uno::Any& rOldValue
-     ) = 0;
-
-    ///** Commits an event to all listeners. */
-    virtual void commitEvent(
-        sal_Int16 nEventId,
-        const css::uno::Any& rNewValue
-    ) = 0;
-
-protected:
-    ~IAccessibleTableControl() {}
-};
-
 } // namespace vcl::table
 
 #endif // INCLUDED_VCL_ACCESSIBLETABLE_HXX
