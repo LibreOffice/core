@@ -333,7 +333,9 @@ std::unique_ptr<SbiExprNode> SbiExpression::Term( const KeywordSymbolInfo* pKeyw
             // from 16.12.95 (similar cases possible perhaps?!?)
             if( eType == SbxOBJECT && pDef->GetType() == SbxVARIANT )
             {
-                pDef->SetType( SbxOBJECT );
+                // Do not modify the type of procedure arguments
+                if (pDef->GetScope() != SbPARAM)
+                    pDef->SetType(SbxOBJECT);
             }
             else
             {
@@ -352,7 +354,8 @@ std::unique_ptr<SbiExprNode> SbiExpression::Term( const KeywordSymbolInfo* pKeyw
     if( bObj )
     {
         // from 8.1.95: Object may also be of the type SbxVARIANT
-        if( pDef->GetType() == SbxVARIANT )
+        // (but do not modify type of procedure arguments)
+        if (pDef->GetType() == SbxVARIANT && pDef->GetScope() != SbPARAM)
             pDef->SetType( SbxOBJECT );
         // if we scan something with point,
         // the type must be SbxOBJECT
