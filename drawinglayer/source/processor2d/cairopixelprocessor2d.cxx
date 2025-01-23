@@ -3877,14 +3877,14 @@ void CairoPixelProcessor2D::evaluateCairoCoordinateLimitWorkaround()
 
     if (!bAlreadyCheckedIfNeeded)
     {
-        // check once for office runtime: is workarund needed?
+        // check once for office runtime: is workaround needed?
         bAlreadyCheckedIfNeeded = true;
         bIsNeeded = checkCoordinateLimitWorkaroundNeededForUsedCairo();
     }
 
     if (!bIsNeeded)
     {
-        // we have a working cairo, so workarund is not needed
+        // we have a working cairo, so workaround is not needed
         // and mbCairoCoordinateLimitWorkaroundActive can stay false
         return;
     }
