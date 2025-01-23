@@ -34,7 +34,7 @@ $(eval $(call gb_Module_add_targets,pyuno,\
 ))
 endif
 
-ifeq ($(SYSTEM_PYTHON),)
+ifneq ($(SYSTEM_PYTHON),TRUE)
 
 # python-core: python.sh on Unix
 ifneq ($(OS),WNT)
@@ -44,14 +44,14 @@ $(eval $(call gb_Module_add_targets,pyuno,\
 ))
 endif
 
-endif # SYSTEM_PYTHON
-
 $(eval $(call gb_Module_add_check_targets,pyuno, \
     PythonTest_pyuno_pytests_testssl \
     PythonTest_pyuno_pytests_testbz2 \
     PythonTest_pyuno_pytests_testpip \
     PythonTest_pyuno_pytests_testsetuptools \
 ))
+
+endif # !SYSTEM_PYTHON
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,pyuno, \
     PythonTest_pyuno_pytests_testcollections \
