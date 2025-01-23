@@ -1766,7 +1766,7 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
     {
         if (i != nPageNum && maEquivalentMasters[i] == nPageNum && maMastersLayouts[i].second != -1)
         {
-            // Reserve layout file Id to be writen later
+            // Reserve layout file Id to be written later
             if (mLayoutInfo[maMastersLayouts[i].second].mnFileIdArray.size() < mnMasterPages)
                 mLayoutInfo[maMastersLayouts[i].second].mnFileIdArray.resize(mnMasterPages);
             mLayoutInfo[maMastersLayouts[i].second].mnFileIdArray[i] = mnLayoutFileIdMax;
