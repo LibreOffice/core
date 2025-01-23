@@ -608,15 +608,23 @@ const XclFunctionInfo saFuncTable_2021[] =
     EXC_FUNCENTRY_V_VR(  ocSortBy,     2,  3,  0,  "SORTBY" ),
     EXC_FUNCENTRY_V_VR(  ocMatSequence,1,  4,  0,  "SEQUENCE" ),
     EXC_FUNCENTRY_V_VR(  ocRandArray,  0,  5,  0,  "RANDARRAY" ),
+    EXC_FUNCENTRY_V_VR(  ocUnique,     1,  3,  0,  "UNIQUE" ),
+    EXC_FUNCENTRY_V_VR(  ocLet,        3,  3,  0,  "LET"),
+};
+
+/** Functions new in Excel 2024.
+
+
+    @See sc/source/filter/oox/formulabase.cxx saFuncTable2024 for V,VR,RO,...
+ */
+const XclFunctionInfo saFuncTable_2024[] =
+{
     EXC_FUNCENTRY_V_VR(  ocTake,       1,  3,  0,  "TAKE" ),
     EXC_FUNCENTRY_V_VR(  ocToCol,      1,  3,  0,  "TOCOL" ),
     EXC_FUNCENTRY_V_VR(  ocToRow,      1,  3,  0,  "TOROW" ),
-    EXC_FUNCENTRY_V_VR(  ocUnique,     1,  3,  0,  "UNIQUE" ),
-    EXC_FUNCENTRY_V_VR(  ocLet,        3,  3,  0,  "LET"),
-    EXC_FUNCENTRY_V_VR(  ocWrapCols,   3,  3,  0,  "WRAPCOLS"),
-    EXC_FUNCENTRY_V_VR(  ocWrapRows,   3,  3,  0,  "WRAPROWS"),
+    EXC_FUNCENTRY_V_VR(  ocWrapCols,   2,  3,  0,  "WRAPCOLS"),
+    EXC_FUNCENTRY_V_VR(  ocWrapRows,   2,  3,  0,  "WRAPROWS"),
 };
-
 
 #define EXC_FUNCENTRY_ODF( opcode, minparam, maxparam, flags, asciiname ) \
     { opcode, NOID, minparam,     maxparam,     V, { VR },       EXC_FUNCFLAG_IMPORTONLY|(flags), EXC_FUNCNAME_ODF( asciiname ) }, \
@@ -695,6 +703,7 @@ XclFunctionProvider::XclFunctionProvider( const XclRoot& rRoot )
     (this->*pFillFunc)(saFuncTable_2013, std::end(saFuncTable_2013));
     (this->*pFillFunc)(saFuncTable_2016, std::end(saFuncTable_2016));
     (this->*pFillFunc)(saFuncTable_2021, std::end(saFuncTable_2021));
+    (this->*pFillFunc)(saFuncTable_2024, std::end(saFuncTable_2024));
     (this->*pFillFunc)(saFuncTable_Odf, std::end(saFuncTable_Odf));
     (this->*pFillFunc)(saFuncTable_OOoLO, std::end(saFuncTable_OOoLO));
 }
