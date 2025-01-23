@@ -20,9 +20,9 @@
 #pragma once
 
 #include <toolkit/dllapi.h>
+#include <controls/table/defaultinputhandler.hxx>
 #include <controls/table/tabletypes.hxx>
 #include <controls/table/tablerenderer.hxx>
-#include <controls/table/tableinputhandler.hxx>
 
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/style/HorizontalAlignment.hpp>

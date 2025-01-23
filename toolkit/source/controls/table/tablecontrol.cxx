@@ -78,21 +78,21 @@ namespace svt::table
 
     void TableControl::GetFocus()
     {
-        if ( !m_pImpl || !m_pImpl->getInputHandler()->GetFocus( *m_pImpl ) )
+        if (!m_pImpl || !DefaultInputHandler::GetFocus(*m_pImpl))
             Control::GetFocus();
     }
 
 
     void TableControl::LoseFocus()
     {
-        if ( !m_pImpl || !m_pImpl->getInputHandler()->LoseFocus( *m_pImpl ) )
+        if (!m_pImpl || !DefaultInputHandler::LoseFocus(*m_pImpl))
             Control::LoseFocus();
     }
 
 
     void TableControl::KeyInput( const KeyEvent& rKEvt )
     {
-        if ( !m_pImpl->getInputHandler()->KeyInput( *m_pImpl, rKEvt ) )
+        if (!m_pImpl || !DefaultInputHandler::KeyInput(*m_pImpl, rKEvt))
             Control::KeyInput( rKEvt );
         else
         {

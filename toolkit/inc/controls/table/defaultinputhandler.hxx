@@ -20,26 +20,33 @@
 #pragma once
 
 #include <controls/table/mousefunction.hxx>
-#include <controls/table/tableinputhandler.hxx>
 #include <rtl/ref.hxx>
 
+#include <memory>
 #include <vector>
+
+class KeyEvent;
+class MouseEvent;
 
 namespace svt::table
 {
 
-    class DefaultInputHandler final : public ITableInputHandler
+    class DefaultInputHandler final
     {
     public:
         DefaultInputHandler();
-        virtual ~DefaultInputHandler() override;
+        ~DefaultInputHandler();
 
-        virtual bool    MouseMove       ( ITableControl& _rControl, const MouseEvent& rMEvt ) override;
-        virtual bool    MouseButtonDown ( ITableControl& _rControl, const MouseEvent& rMEvt ) override;
-        virtual bool    MouseButtonUp   ( ITableControl& _rControl, const MouseEvent& rMEvt ) override;
-        virtual bool    KeyInput        ( ITableControl& _rControl, const KeyEvent& rKEvt ) override;
-        virtual bool    GetFocus        ( ITableControl& _rControl ) override;
-        virtual bool    LoseFocus       ( ITableControl& _rControl ) override;
+        // all those methods have the same semantics as the equal-named methods of ->Window,
+        // with the additional option to return a boolean value indicating whether
+        // the event should be further processed by the ->Window implementations (<FALSE/>),
+        // or whether it has been sufficiently handled by this class  (<FALSE/>).
+        bool MouseMove(ITableControl& _rControl, const MouseEvent& rMEvt);
+        bool MouseButtonDown(ITableControl& _rControl, const MouseEvent& rMEvt);
+        bool MouseButtonUp(ITableControl& _rControl, const MouseEvent& rMEvt);
+        static bool KeyInput(ITableControl& _rControl, const KeyEvent& rKEvt);
+        static bool GetFocus(ITableControl& _rControl);
+        static bool LoseFocus(ITableControl& _rControl);
 
     private:
         bool delegateMouseEvent( ITableControl& i_control, const MouseEvent& i_event,
@@ -49,6 +56,7 @@ namespace svt::table
         std::vector< rtl::Reference< MouseFunction > >  aMouseFunctions;
     };
 
+    typedef std::shared_ptr<DefaultInputHandler> PTableInputHandler;
 
 } // namespace svt::table
 

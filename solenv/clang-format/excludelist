@@ -13417,7 +13417,6 @@ toolkit/inc/controls/table/defaultinputhandler.hxx
 toolkit/inc/controls/table/gridtablerenderer.hxx
 toolkit/inc/controls/table/tablecontrol.hxx
 toolkit/inc/controls/table/tablecontrolinterface.hxx
-toolkit/inc/controls/table/tableinputhandler.hxx
 toolkit/inc/controls/table/tablemodel.hxx
 toolkit/inc/controls/table/tablerenderer.hxx
 toolkit/inc/controls/table/tablesort.hxx
