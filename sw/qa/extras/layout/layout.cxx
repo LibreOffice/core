@@ -277,6 +277,47 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf136588)
                 u"effectively by modern-day small to ");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTableSplitBug)
+{
+    createSwDoc("table-split-bug.fodt");
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/section[3]/tab[1]/row[1]/cell[1]//txt[1]/infos/bounds",
+                    "height", u"276");
+        assertXPath(pXmlDoc, "/root/page[1]/body/section[3]/tab[1]/row[1]/cell[1]/infos/bounds",
+                    "height", u"1274");
+    }
+
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Down(false, 1);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    pWrtShell->Delete();
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        // the problem was that the paragraph in the left cell had height 0
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/section[3]/tab[1]/row[1]/cell[1]//txt[1]/infos/bounds",
+                    "height", u"276");
+        assertXPath(pXmlDoc, "/root/page[1]/body/section[3]/tab[1]/row[1]/cell[1]/infos/bounds",
+                    "height", u"1688");
+    }
+
+    pWrtShell->Undo();
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        // the problem was that the paragraph in the left cell had height 0
+        assertXPath(pXmlDoc,
+                    "/root/page[1]/body/section[3]/tab[1]/row[1]/cell[1]//txt[1]/infos/bounds",
+                    "height", u"276");
+        assertXPath(pXmlDoc, "/root/page[1]/body/section[3]/tab[1]/row[1]/cell[1]/infos/bounds",
+                    "height", u"1274");
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInBody)
 {
     createSwDoc();
