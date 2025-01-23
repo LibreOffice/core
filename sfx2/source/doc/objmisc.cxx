@@ -2019,7 +2019,15 @@ bool SfxObjectShell::isEditDocLocked() const
     if (officecfg::Office::Common::Misc::ViewerAppMode::get()
         || !officecfg::Office::Common::Misc::AllowEditReadonlyDocs::get())
         return true;
-    return comphelper::NamedValueCollection::getOrDefault(xModel->getArgs2( { u"LockEditDoc"_ustr } ), u"LockEditDoc", false);
+    try
+    {
+        return comphelper::NamedValueCollection::getOrDefault(xModel->getArgs2( { u"LockEditDoc"_ustr } ), u"LockEditDoc", false);
+    }
+    catch (const uno::RuntimeException&)
+    {
+        TOOLS_WARN_EXCEPTION("sfx.appl", "unexpected RuntimeException");
+    }
+    return false;
 }
 
 bool SfxObjectShell::isContentExtractionLocked() const
