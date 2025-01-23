@@ -943,7 +943,8 @@ void SfxViewFrame::StateReload_Impl( SfxItemSet& rSet )
                     rSet.DisableItem( nWhich );
                 else
                 {
-                    const SfxBoolItem* pItem = pSh->GetMedium()->GetItemSet().GetItem(SID_EDITDOC, false);
+                    SfxMedium* pMedium = pSh->GetMedium();
+                    const SfxBoolItem* pItem = pMedium ? pMedium->GetItemSet().GetItem(SID_EDITDOC, false) : nullptr;
                     if ( pItem && !pItem->GetValue() )
                         rSet.DisableItem( nWhich );
                     else
