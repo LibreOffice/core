@@ -1423,7 +1423,7 @@ void CairoPixelProcessor2D::processPolygonHairlinePrimitive2D(
     else
     {
         // set linear transformation. use own, prepared, re-usable
-        // ObjectToViewTransformation and PolyPoylgon data and let
+        // ObjectToViewTransformation and PolyPolygon data and let
         // cairo do the transformations
         cairo_matrix_t aMatrix;
         const basegfx::B2DHomMatrix& rObjectToView(
@@ -1497,7 +1497,7 @@ void CairoPixelProcessor2D::paintPolyPoylgonRGBA(const basegfx::B2DPolyPolygon& 
     else
     {
         // set linear transformation. use own, prepared, re-usable
-        // ObjectToViewTransformation and PolyPoylgon data and let
+        // ObjectToViewTransformation and PolyPolygon data and let
         // cairo do the transformations
         cairo_matrix_t aMatrix;
         const basegfx::B2DHomMatrix& rObjectToView(
