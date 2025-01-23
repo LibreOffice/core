@@ -14,6 +14,7 @@
 #include <unordered_set>
 #include <vector>
 
+#include <comphelper/configuration.hxx>
 #include <docmodel/theme/ColorSet.hxx>
 #include <docmodel/theme/ThemeColorType.hxx>
 #include <o3tl/numeric.hxx>
@@ -151,16 +152,18 @@ ColorSets& ColorSets::get()
 
 void ColorSets::init()
 {
-    SvtPathOptions aPathOptions;
-    OUString aURLString = aPathOptions.GetDocumentThemePath();
-
     DocumentThemeScanner aScanner(maColorSets);
-    aScanner.addPaths(aURLString);
 
-    std::deque<OUString> aURLs;
-    vcl::file::splitPathString(aURLString, aURLs);
-    if (aURLs.size() > 0)
-        maUserFolder = aURLs[0];
+    if (!comphelper::IsFuzzing())
+    {
+        OUString aURLString = SvtPathOptions().GetDocumentThemePath();
+        aScanner.addPaths(aURLString);
+
+        std::deque<OUString> aURLs;
+        vcl::file::splitPathString(aURLString, aURLs);
+        if (aURLs.size() > 0)
+            maUserFolder = aURLs[0];
+    }
 }
 
 model::ColorSet const* ColorSets::getColorSet(std::u16string_view rName) const
