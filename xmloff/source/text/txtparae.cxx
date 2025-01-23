@@ -3339,6 +3339,21 @@ void XMLTextParagraphExport::_exportTextGraphic(
         const Reference < XPropertySet > & rPropSet,
         const Reference < XPropertySetInfo > & rPropSetInfo )
 {
+    // skip objects anchored at page in master documents,
+    // if they are imported from the subdocuments
+    TextContentAnchorType eAnchor;
+    rPropSet->getPropertyValue(u"AnchorType"_ustr) >>= eAnchor;
+    if( TextContentAnchorType_AT_PAGE == eAnchor )
+    {
+        Reference<XServiceInfo> xServiceInfo(GetExport().GetModel(), UNO_QUERY);
+        if( xServiceInfo->supportsService(u"com.sun.star.text.GlobalDocument"_ustr) )
+        {
+            Reference<XNamed> xNamed( rPropSet, UNO_QUERY );
+            if( xNamed.is() && xNamed->getName().indexOf(" (file://") > -1 )
+                return;
+        }
+    }
+
     OUString sStyle;
     if( rPropSetInfo->hasPropertyByName( gsFrameStyleName ) )
     {
