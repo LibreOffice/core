@@ -581,7 +581,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
         {
             ArrayOfArrayProc<uno::Any>::processSequences( pDoc, rArg, aTokenArr, nDocRow, bArgErr, bOverflow );
         }
-        else if (uno::Reference<table::XCellRange> xRange; rArg >>= xRange)
+        else if (uno::Reference<table::XCellRange> xRange; (rArg >>= xRange) && xRange)
         {
             // currently, only our own cell ranges are supported
 
