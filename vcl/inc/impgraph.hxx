@@ -100,6 +100,38 @@ public:
             return maBitmapEx.GetPrefMapMode();
         return {};
     }
+
+    sal_uInt64 getSizeBytes()
+    {
+        return maBitmapEx.GetSizeBytes();
+    }
+};
+
+class SAL_DLLPUBLIC_RTTI AnimationContainer final
+{
+public:
+    Animation maAnimation;
+
+    AnimationContainer() = default;
+
+    AnimationContainer(Animation const& rAnimation)
+        : maAnimation(rAnimation)
+    {}
+
+    bool operator==(const AnimationContainer& rOther) const
+    {
+        return maAnimation == rOther.maAnimation;
+    }
+
+    bool isTransparent() const
+    {
+        return maAnimation.IsTransparent();
+    }
+
+    sal_uInt64 getSizeBytes()
+    {
+        return maAnimation.GetSizeBytes();
+    }
 };
 
 class SAL_DLLPUBLIC_RTTI ImpGraphic final : public vcl::graphic::MemoryManaged
@@ -115,7 +147,7 @@ private:
     /// If maBitmapEx is empty, this preferred size will be set on it when it gets initialized.
     Size                         maExPrefSize;
     ImpSwapInfo                  maSwapInfo;
-    std::unique_ptr<Animation>   mpAnimation;
+    std::shared_ptr<AnimationContainer> mpAnimationContainer;
     std::shared_ptr<ImpSwapFile> mpSwapFile;
     std::shared_ptr<GfxLink>     mpGfxLink;
     std::shared_ptr<VectorGraphicData> maVectorGraphicData;
