@@ -53,9 +53,6 @@ namespace svt::table
 
 
     //= UnoControlTableModel
-#define DBG_CHECK_ME() \
-    DBG_TESTSOLARMUTEX(); \
-
     UnoControlTableModel::UnoControlTableModel()
         :aColumns                       ( )
         ,bHasColumnHeaders              ( true      )
@@ -92,14 +89,14 @@ namespace svt::table
 
     TableSize UnoControlTableModel::getColumnCount() const
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         return static_cast<TableSize>(aColumns.size());
     }
 
 
     TableSize UnoControlTableModel::getRowCount() const
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
 
         TableSize nRowCount = 0;
         try
@@ -118,21 +115,21 @@ namespace svt::table
 
     bool UnoControlTableModel::hasColumnHeaders() const
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         return bHasColumnHeaders;
     }
 
 
     bool UnoControlTableModel::hasRowHeaders() const
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         return bHasRowHeaders;
     }
 
 
     void UnoControlTableModel::setRowHeaders(bool _bRowHeaders)
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         if ( bHasRowHeaders == _bRowHeaders )
             return;
 
@@ -143,7 +140,7 @@ namespace svt::table
 
     void UnoControlTableModel::setColumnHeaders(bool _bColumnHeaders)
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         if ( bHasColumnHeaders == _bColumnHeaders )
             return;
 
@@ -154,7 +151,7 @@ namespace svt::table
 
     PColumnModel UnoControlTableModel::getColumnModel( ColPos column )
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         ENSURE_OR_RETURN( ( column >= 0 ) && ( column < getColumnCount() ),
             "DefaultTableModel::getColumnModel: invalid index!", PColumnModel() );
         return aColumns[ column ];
@@ -163,14 +160,14 @@ namespace svt::table
 
     void UnoControlTableModel::appendColumn( Reference< XGridColumn > const & i_column )
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         insertColumn( aColumns.size(), i_column );
     }
 
 
     void UnoControlTableModel::insertColumn( ColPos const i_position, Reference< XGridColumn > const & i_column )
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         ENSURE_OR_RETURN_VOID( ( i_position >= 0 ) && ( o3tl::make_unsigned( i_position ) <= aColumns.size() ),
             "UnoControlTableModel::insertColumn: illegal position!" );
 
@@ -188,7 +185,7 @@ namespace svt::table
 
     void UnoControlTableModel::removeColumn( ColPos const i_position )
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         ENSURE_OR_RETURN_VOID( ( i_position >= 0 ) && ( o3tl::make_unsigned( i_position ) <= aColumns.size() ),
             "UnoControlTableModel::removeColumn: illegal position!" );
 
@@ -214,7 +211,7 @@ namespace svt::table
 
     void UnoControlTableModel::removeAllColumns()
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         if ( aColumns.empty() )
             return;
 
@@ -253,28 +250,28 @@ namespace svt::table
 
     PTableRenderer UnoControlTableModel::getRenderer() const
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         return pRenderer;
     }
 
 
     PTableInputHandler UnoControlTableModel::getInputHandler() const
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         return pInputHandler;
     }
 
 
     TableMetrics UnoControlTableModel::getRowHeight() const
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         return nRowHeight;
     }
 
 
     void UnoControlTableModel::setRowHeight(TableMetrics _nRowHeight)
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         if ( nRowHeight == _nRowHeight )
             return;
 
@@ -285,7 +282,7 @@ namespace svt::table
 
     TableMetrics UnoControlTableModel::getColumnHeaderHeight() const
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         DBG_ASSERT( hasColumnHeaders(), "DefaultTableModel::getColumnHeaderHeight: invalid call!" );
         return nColumnHeaderHeight;
     }
@@ -293,14 +290,14 @@ namespace svt::table
 
     TableMetrics UnoControlTableModel::getRowHeaderWidth() const
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         DBG_ASSERT( hasRowHeaders(), "DefaultTableModel::getRowHeaderWidth: invalid call!" );
         return nRowHeaderWidth;
     }
 
     void UnoControlTableModel::setColumnHeaderHeight(TableMetrics _nHeight)
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         if ( nColumnHeaderHeight == _nHeight )
             return;
 
@@ -311,7 +308,7 @@ namespace svt::table
 
     void UnoControlTableModel::setRowHeaderWidth(TableMetrics _nWidth)
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         if ( nRowHeaderWidth == _nWidth )
             return;
 
@@ -322,21 +319,21 @@ namespace svt::table
 
     ScrollbarVisibility UnoControlTableModel::getVerticalScrollbarVisibility() const
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         return eVScrollMode;
     }
 
 
     ScrollbarVisibility UnoControlTableModel::getHorizontalScrollbarVisibility() const
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         return eHScrollMode;
     }
 
 
     void UnoControlTableModel::addTableModelListener( const PTableModelListener& i_listener )
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         ENSURE_OR_RETURN_VOID( !!i_listener, "illegal NULL listener" );
         m_aListeners.push_back( i_listener );
     }
@@ -344,7 +341,7 @@ namespace svt::table
 
     void UnoControlTableModel::removeTableModelListener( const PTableModelListener& i_listener )
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         auto lookup = std::find(m_aListeners.begin(), m_aListeners.end(), i_listener);
         if (lookup != m_aListeners.end())
         {
@@ -357,21 +354,21 @@ namespace svt::table
 
     void UnoControlTableModel::setVerticalScrollbarVisibility( ScrollbarVisibility const i_visibility )
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         eVScrollMode = i_visibility;
     }
 
 
     void UnoControlTableModel::setHorizontalScrollbarVisibility( ScrollbarVisibility const i_visibility )
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         eHScrollMode = i_visibility;
     }
 
 
     void UnoControlTableModel::setDataModel( Reference< XGridDataModel > const & i_gridDataModel )
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         m_aDataModel = i_gridDataModel;
         // TODO: register as listener, so we're notified of row/data changes, and can multiplex them to our
         // own listeners
@@ -393,7 +390,7 @@ namespace svt::table
 
     void UnoControlTableModel::setColumnModel( Reference< XGridColumnModel > const & i_gridColumnModel )
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         m_aColumnModel = i_gridColumnModel;
     }
 
@@ -413,7 +410,7 @@ namespace svt::table
 
     void UnoControlTableModel::getCellContent( ColPos const i_col, RowPos const i_row, Any& o_cellContent )
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
 
         o_cellContent.clear();
         try
@@ -451,7 +448,7 @@ namespace svt::table
 
     void UnoControlTableModel::getCellToolTip( ColPos const i_col, RowPos const i_row, Any& o_cellToolTip )
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         try
         {
             Reference< XGridDataModel > const xDataModel( m_aDataModel );
@@ -468,7 +465,7 @@ namespace svt::table
 
     Any UnoControlTableModel::getRowHeading( RowPos const i_rowPos ) const
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
 
         Any aRowHeading;
 
@@ -511,140 +508,140 @@ namespace svt::table
 
     ::std::optional< ::Color > UnoControlTableModel::getLineColor() const
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         return m_aGridLineColor;
     }
 
 
     void UnoControlTableModel::setLineColor( Any const & i_color )
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         lcl_setColor( i_color, m_aGridLineColor );
     }
 
 
     ::std::optional< ::Color > UnoControlTableModel::getHeaderBackgroundColor() const
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         return m_aHeaderBackgroundColor;
     }
 
 
     void UnoControlTableModel::setHeaderBackgroundColor( Any const & i_color )
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         lcl_setColor( i_color, m_aHeaderBackgroundColor );
     }
 
 
     ::std::optional< ::Color > UnoControlTableModel::getHeaderTextColor() const
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         return m_aHeaderTextColor;
     }
 
 
     ::std::optional< ::Color > UnoControlTableModel::getActiveSelectionBackColor() const
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         return m_aActiveSelectionBackColor;
     }
 
 
     ::std::optional< ::Color > UnoControlTableModel::getInactiveSelectionBackColor() const
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         return m_aInactiveSelectionBackColor;
     }
 
 
     ::std::optional< ::Color > UnoControlTableModel::getActiveSelectionTextColor() const
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         return m_aActiveSelectionTextColor;
     }
 
 
     ::std::optional< ::Color > UnoControlTableModel::getInactiveSelectionTextColor() const
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         return m_aInactiveSelectionTextColor;
     }
 
 
     void UnoControlTableModel::setHeaderTextColor( Any const & i_color )
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         lcl_setColor( i_color, m_aHeaderTextColor );
     }
 
 
     void UnoControlTableModel::setActiveSelectionBackColor( Any const & i_color )
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         lcl_setColor( i_color, m_aActiveSelectionBackColor );
     }
 
 
     void UnoControlTableModel::setInactiveSelectionBackColor( Any const & i_color )
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         lcl_setColor( i_color, m_aInactiveSelectionBackColor );
     }
 
 
     void UnoControlTableModel::setActiveSelectionTextColor( Any const & i_color )
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         lcl_setColor( i_color, m_aActiveSelectionTextColor );
     }
 
 
     void UnoControlTableModel::setInactiveSelectionTextColor( Any const & i_color )
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         lcl_setColor( i_color, m_aInactiveSelectionTextColor );
     }
 
 
     ::std::optional< ::Color > UnoControlTableModel::getTextColor() const
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         return m_aTextColor;
     }
 
 
     void UnoControlTableModel::setTextColor( Any const & i_color )
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         lcl_setColor( i_color, m_aTextColor );
     }
 
 
     ::std::optional< ::Color > UnoControlTableModel::getTextLineColor() const
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         return m_aTextColor;
     }
 
 
     void UnoControlTableModel::setTextLineColor( Any const & i_color )
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         lcl_setColor( i_color, m_aTextLineColor );
     }
 
 
     ::std::optional< ::std::vector< ::Color > > UnoControlTableModel::getRowBackgroundColors() const
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         return m_aRowColors;
     }
 
 
     void UnoControlTableModel::setRowBackgroundColors( css::uno::Any const & i_APIValue )
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         Sequence< css::util::Color > aAPIColors;
         if ( !( i_APIValue >>= aAPIColors ) )
             m_aRowColors.reset();
@@ -660,21 +657,21 @@ namespace svt::table
 
     VerticalAlignment UnoControlTableModel::getVerticalAlign() const
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         return  m_eVerticalAlign;
     }
 
 
     void UnoControlTableModel::setVerticalAlign( VerticalAlignment _xAlign )
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         m_eVerticalAlign = _xAlign;
     }
 
 
     ColPos UnoControlTableModel::getColumnPos( UnoGridColumnFacade const & i_column ) const
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         ColPos nPos = 0;
         for (auto const& col : aColumns)
         {
@@ -689,7 +686,7 @@ namespace svt::table
 
     ITableDataSort* UnoControlTableModel::getSortAdapter()
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
 
         Reference< XSortableGridData > const xSortAccess( getDataModel(), UNO_QUERY );
         if ( xSortAccess.is() )
@@ -700,21 +697,21 @@ namespace svt::table
 
     bool UnoControlTableModel::isEnabled() const
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         return bEnabled;
     }
 
 
     void UnoControlTableModel::setEnabled( bool _bEnabled )
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         bEnabled = _bEnabled;
     }
 
 
     void UnoControlTableModel::sortByColumn( ColPos const i_column, ColumnSortDirection const i_sortDirection )
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
 
         try
         {
@@ -730,7 +727,7 @@ namespace svt::table
 
     ColumnSort UnoControlTableModel::getCurrentSortOrder() const
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
 
         ColumnSort currentSort;
         try
@@ -750,7 +747,7 @@ namespace svt::table
 
     void UnoControlTableModel::notifyColumnChange( ColPos const i_columnPos, ColumnAttributeGroup const i_attributeGroup ) const
     {
-        DBG_CHECK_ME();
+        DBG_TESTSOLARMUTEX();
         ENSURE_OR_RETURN_VOID( ( i_columnPos >= 0 ) && ( i_columnPos < getColumnCount() ),
             "UnoControlTableModel::notifyColumnChange: invalid column index!" );
 
