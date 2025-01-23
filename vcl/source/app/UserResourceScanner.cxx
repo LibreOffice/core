@@ -86,7 +86,7 @@ void UserResourceScanner::addPaths(std::u16string_view aPathString)
 
         if (!aFileStatus.isDirectory())
         {
-            SAL_INFO("vcl.app", "Cannot search for resaource files in '"
+            SAL_INFO("vcl.app", "Can not search for resource files in '"
                                     << path << "'. It is not a directory.");
             continue;
         }
