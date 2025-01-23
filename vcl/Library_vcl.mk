@@ -105,13 +105,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/accessibility/AccessibleBrowseBoxTable \
     vcl/source/accessibility/AccessibleBrowseBoxTableBase \
     vcl/source/accessibility/AccessibleBrowseBoxTableCell \
-    vcl/source/accessibility/AccessibleGridControl \
-    vcl/source/accessibility/AccessibleGridControlBase \
-    vcl/source/accessibility/AccessibleGridControlHeader \
-    vcl/source/accessibility/AccessibleGridControlHeaderCell \
-    vcl/source/accessibility/AccessibleGridControlTable \
-    vcl/source/accessibility/AccessibleGridControlTableBase \
-    vcl/source/accessibility/AccessibleGridControlTableCell \
     vcl/source/accessibility/AccessibleTextAttributeHelper \
     vcl/source/accessibility/acc_factory \
     vcl/source/accessibility/accessiblebrowseboxcell \

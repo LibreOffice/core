@@ -17,9 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <accessibility/AccessibleGridControl.hxx>
-#include <accessibility/AccessibleGridControlTable.hxx>
-#include <accessibility/AccessibleGridControlHeader.hxx>
+#include <controls/table/AccessibleGridControl.hxx>
+#include <controls/table/AccessibleGridControlTable.hxx>
+#include <controls/table/AccessibleGridControlHeader.hxx>
+
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
@@ -255,7 +256,7 @@ AccessibleGridControl::implGetFixedChild( sal_Int64 nChildIndex )
 rtl::Reference<AccessibleGridControlTable> AccessibleGridControl::createAccessibleTable()
 {
     css::uno::Reference< css::accessibility::XAccessible > xCreator(m_aCreator);
-    OSL_ENSURE( xCreator.is(), "accessibility/AccessibleGridControl::createAccessibleTable: my creator died - how this?" );
+    OSL_ENSURE(xCreator.is(), "AccessibleGridControl::createAccessibleTable: my creator died - how this?");
     return new AccessibleGridControlTable( xCreator, m_aTable );
 }
 

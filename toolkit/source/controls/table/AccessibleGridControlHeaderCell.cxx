@@ -19,7 +19,7 @@
 
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <accessibility/AccessibleGridControlHeaderCell.hxx>
+#include <controls/table/AccessibleGridControlHeaderCell.hxx>
 #include <vcl/accessibletable.hxx>
 #include <vcl/svapp.hxx>
 

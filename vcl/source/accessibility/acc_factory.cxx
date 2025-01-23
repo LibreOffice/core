@@ -49,7 +49,6 @@
 #include <accessibility/AccessibleBrowseBoxTableCell.hxx>
 #include <accessibility/AccessibleBrowseBoxHeaderCell.hxx>
 #include <accessibility/AccessibleBrowseBoxCheckBoxCell.hxx>
-#include <accessibility/AccessibleGridControl.hxx>
 #include <accessibility/accessibleeditbrowseboxcell.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <vcl/toolkit/lstbox.hxx>
@@ -203,13 +202,6 @@ AccessibleFactory::createAccessibleBrowseBox(const Reference<XAccessible>& _rxPa
                                              vcl::IAccessibleTableProvider& _rBrowseBox)
 {
     return new AccessibleBrowseBoxAccess( _rxParent, _rBrowseBox );
-}
-
-rtl::Reference<IAccessibleTableControl>
-AccessibleFactory::createAccessibleTableControl(const Reference<XAccessible>& _rxParent,
-                                                IAccessibleTable& _rTable)
-{
-    return new AccessibleGridControlAccess( _rxParent, _rTable );
 }
 
 Reference<XAccessible>

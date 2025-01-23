@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <accessibility/AccessibleGridControlTableBase.hxx>
+#include <controls/table/AccessibleGridControlTableBase.hxx>
 
 namespace accessibility {
 

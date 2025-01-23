@@ -111,10 +111,6 @@ public:
     createAccessibleBrowseBox(const css::uno::Reference<css::accessibility::XAccessible>& _rxParent,
                               vcl::IAccessibleTableProvider& _rBrowseBox);
 
-    static rtl::Reference<vcl::table::IAccessibleTableControl> createAccessibleTableControl(
-        const css::uno::Reference<css::accessibility::XAccessible>& _rxParent,
-        vcl::table::IAccessibleTable& _rTable);
-
     static css::uno::Reference<css::accessibility::XAccessible> createAccessibleIconChoiceCtrl(
         SvtIconChoiceCtrl& _rIconCtrl,
         const css::uno::Reference<css::accessibility::XAccessible>& _xParent);

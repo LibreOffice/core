@@ -20,10 +20,11 @@
 
 #pragma once
 
-#include <accessibility/AccessibleGridControlTableBase.hxx>
+#include <controls/table/AccessibleGridControlTableBase.hxx>
+#include <controls/table/AccessibleGridControlTableCell.hxx>
+
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
-#include <accessibility/AccessibleGridControlTableCell.hxx>
 
 
 namespace accessibility {

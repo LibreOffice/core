@@ -19,8 +19,9 @@
 
 #pragma once
 
-#include <accessibility/AccessibleGridControlBase.hxx>
-#include <accessibility/AccessibleGridControlTable.hxx>
+#include "AccessibleGridControlBase.hxx"
+#include "AccessibleGridControlTable.hxx"
+
 #include <cppuhelper/weakref.hxx>
 #include <rtl/ref.hxx>
 #include <vcl/accessibletable.hxx>

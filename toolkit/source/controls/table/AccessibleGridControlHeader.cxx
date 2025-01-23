@@ -17,9 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <controls/table/AccessibleGridControlHeader.hxx>
+#include <controls/table/AccessibleGridControlHeaderCell.hxx>
+
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <accessibility/AccessibleGridControlHeader.hxx>
-#include <accessibility/AccessibleGridControlHeaderCell.hxx>
 #include <vcl/accessibletable.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/unohelp.hxx>
@@ -45,7 +46,7 @@ AccessibleGridControlHeader::AccessibleGridControlHeader(
         AccessibleGridControlTableBase( rxParent, rTable, eObjType )
 {
     OSL_ENSURE( isRowBar() || isColumnBar(),
-        "accessibility/AccessibleGridControlHeaderBar - invalid object type" );
+        "AccessibleGridControlHeaderBar - invalid object type" );
 }
 
 // XAccessibleContext ---------------------------------------------------------

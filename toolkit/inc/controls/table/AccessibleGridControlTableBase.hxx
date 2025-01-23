@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <accessibility/AccessibleGridControlBase.hxx>
+#include <controls/table/AccessibleGridControlBase.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
 

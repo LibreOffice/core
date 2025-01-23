@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <accessibility/AccessibleGridControlTableCell.hxx>
+#include <controls/table/AccessibleGridControlTableCell.hxx>
 
 namespace accessibility
 {

@@ -21,8 +21,8 @@
 #include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>
 #include <com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <accessibility/AccessibleGridControlTable.hxx>
-#include <accessibility/AccessibleGridControlTableCell.hxx>
+#include <controls/table/AccessibleGridControlTable.hxx>
+#include <controls/table/AccessibleGridControlTableCell.hxx>
 #include <vcl/accessibletable.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/unohelp.hxx>

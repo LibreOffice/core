@@ -18,9 +18,10 @@
  */
 #pragma once
 
+#include <controls/table/AccessibleGridControlBase.hxx>
+
 #include <comphelper/accessibletexthelper.hxx>
 #include <cppuhelper/implbase2.hxx>
-#include <accessibility/AccessibleGridControlBase.hxx>
 #include <vcl/accessibletable.hxx>
 #include <com/sun/star/accessibility/AccessibleScrollType.hpp>
 

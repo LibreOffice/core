@@ -97,6 +97,13 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/controls/tkspinbutton \
     toolkit/source/controls/animatedimages \
     toolkit/source/controls/spinningprogress \
+    toolkit/source/controls/table/AccessibleGridControl \
+    toolkit/source/controls/table/AccessibleGridControlBase \
+    toolkit/source/controls/table/AccessibleGridControlHeader \
+    toolkit/source/controls/table/AccessibleGridControlHeaderCell \
+    toolkit/source/controls/table/AccessibleGridControlTable \
+    toolkit/source/controls/table/AccessibleGridControlTableBase \
+    toolkit/source/controls/table/AccessibleGridControlTableCell \
     toolkit/source/controls/table/cellvalueconversion \
     toolkit/source/controls/table/defaultinputhandler \
     toolkit/source/controls/table/gridtablerenderer \

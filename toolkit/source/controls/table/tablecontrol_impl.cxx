@@ -18,6 +18,7 @@
  */
 
 
+#include <controls/table/AccessibleGridControl.hxx>
 #include <controls/table/tablecontrol.hxx>
 #include <controls/table/defaultinputhandler.hxx>
 #include <controls/table/tablemodel.hxx>
@@ -2379,7 +2380,7 @@ namespace svt::table
             Reference< XAccessible > const xAccParent = i_parentWindow.GetAccessible();
             if ( xAccParent.is() )
             {
-                m_pAccessibleTable = AccessibleFactory::createAccessibleTableControl(
+                m_pAccessibleTable = new accessibility::AccessibleGridControlAccess(
                     xAccParent, m_rAntiImpl
                 );
             }
