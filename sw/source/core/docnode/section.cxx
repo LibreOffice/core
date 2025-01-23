@@ -1258,13 +1258,13 @@ static void lcl_UpdateLinksInSect( const SwBaseLink& rUpdLnk, SwSectionNode& rSe
                     sal_uInt32 nPrevPages = 0;
                     for( sw::SpzFrameFormat* pCpyFormat: *pSrcFormats)
                     {
-                        // add file name of the source document to the name of the copied object
-                        // Note: used for the recognition of the copied objects anchored at page
-                        pCpyFormat->SetFormatName( pCpyFormat->GetName() + " (" + sFileName + ")" );
-
                         SwFormatAnchor aAnchor( pCpyFormat->GetAnchor() );
                         if ( RndStdIds::FLY_AT_PAGE == aAnchor.GetAnchorId() )
                         {
+                            // add file name of the source document to the name of the copied object
+                            // Note: used for the recognition of the copied objects anchored at page
+                            pCpyFormat->SetFormatName( pCpyFormat->GetName() + " (" + sFileName + ")" );
+
                             // sum page counts of the previous sections
                             if ( nPrevPages == 0 )
                             {
