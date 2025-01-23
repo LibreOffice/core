@@ -174,9 +174,6 @@ public:
         svt::table::TableControl& _rTable
     );
 
-    /// returns the AccessibleContext belonging to this Accessible
-    AccessibleGridControl*            getContext()  { return m_xContext.get(); }
-
     // XAccessible
     virtual css::uno::Reference< css::accessibility::XAccessibleContext >
         SAL_CALL getAccessibleContext() override;
@@ -188,24 +185,21 @@ public:
     void commitCellEvent(sal_Int16 nEventId, const css::uno::Any& rNewValue,
                          const css::uno::Any& rOldValue)
     {
-         AccessibleGridControl* pContext( getContext() );
-         if ( pContext )
-            pContext->commitCellEvent( nEventId, rNewValue, rOldValue );
+        if (m_xContext.is())
+            m_xContext->commitCellEvent( nEventId, rNewValue, rOldValue );
     }
 
     void commitTableEvent(sal_Int16 nEventId, const css::uno::Any& rNewValue,
                           const css::uno::Any& rOldValue)
     {
-         AccessibleGridControl* pContext( getContext() );
-         if ( pContext )
-            pContext->commitTableEvent( nEventId, rNewValue, rOldValue );
+        if (m_xContext.is())
+            m_xContext->commitTableEvent( nEventId, rNewValue, rOldValue );
     }
 
     void commitEvent(sal_Int16 nEventId, const css::uno::Any& rNewValue)
     {
-        AccessibleGridControl* pContext( getContext() );
-        if ( pContext )
-            pContext->commitEvent( nEventId, rNewValue, css::uno::Any() );
+        if (m_xContext.is())
+            m_xContext->commitEvent( nEventId, rNewValue, css::uno::Any() );
     }
 
 private:
